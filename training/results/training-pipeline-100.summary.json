@@ -1,0 +1,2148 @@
+{
+  "format": "psys2.training-pipeline-diagnosis/1",
+  "complete": true,
+  "model": "2edc5b434cd59224cd44c4a138ab7b8e0770a17934056c211d36bbfca5eeca13",
+  "epoch": 7,
+  "messages": 100,
+  "trainingSamples": 139,
+  "seconds": 29.088016504,
+  "meanSeconds": 0.29088016503999997,
+  "readerInvoked": 100,
+  "changed": 3,
+  "setupComplete": 10,
+  "categoricalHeadMismatchRows": 31,
+  "groups": [
+    {
+      "cause": "admission / routing: proposal not executable",
+      "rows": 96,
+      "examples": [
+        {
+          "id": "data/haiku-v1/drawing/b09a.jsonl:drawing-b09-0097",
+          "text": "ok cool thanks",
+          "detail": [
+            {
+              "reason": "incomplete-model-proposal",
+              "score": 0
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/drawing/b15a.jsonl:drawing-b15-0072",
+          "text": "how many dogs do we have",
+          "detail": [
+            {
+              "reason": "incomplete-provider-coverage",
+              "score": 0
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/drawing/b11b.jsonl:drawing-b11-0241",
+          "text": "seaweed should swing a little to the right, and put three small fish near it",
+          "detail": [
+            {
+              "reason": "incomplete-provider-coverage",
+              "score": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "context: training objects cannot all be instantiated",
+      "rows": 90,
+      "examples": [
+        {
+          "id": "data/haiku-v1/drawing/b11b.jsonl:drawing-b11-0241",
+          "text": "seaweed should swing a little to the right, and put three small fish near it",
+          "detail": [
+            [
+              {
+                "index": 1,
+                "reason": "missing-kind-mapping",
+                "kind": "seaweed"
+              }
+            ]
+          ]
+        },
+        {
+          "id": "data/haiku-v2/drawing/v2b13a.jsonl:drawing-v2b13-0094",
+          "text": "no request here, just wanted to say the picture looks lovely",
+          "detail": [
+            [
+              {
+                "index": 1,
+                "reason": "missing-kind-mapping",
+                "kind": "door"
+              }
+            ]
+          ]
+        },
+        {
+          "id": "data/haiku-v2/drawing/v2b27b.jsonl:drawing-v2b27-0173",
+          "text": "make the bark rough or smooth",
+          "detail": [
+            [
+              {
+                "index": 1,
+                "reason": "missing-kind-mapping",
+                "kind": "bark"
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "binding / graph conversion: incomplete-structural-coverage",
+      "rows": 64,
+      "examples": [
+        {
+          "id": "data/haiku-v1/drawing/b15a.jsonl:drawing-b15-0072",
+          "text": "how many dogs do we have",
+          "detail": [
+            {
+              "path": [
+                "coverage"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/drawing/b11b.jsonl:drawing-b11-0241",
+          "text": "seaweed should swing a little to the right, and put three small fish near it",
+          "detail": [
+            {
+              "path": [
+                "coverage"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/drawing/v2b27b.jsonl:drawing-v2b27-0173",
+          "text": "make the bark rough or smooth",
+          "detail": [
+            {
+              "path": [
+                "coverage"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "execution: action requested but no state change",
+      "rows": 53,
+      "examples": [
+        {
+          "id": "data/haiku-v1/drawing/b11b.jsonl:drawing-b11-0241",
+          "text": "seaweed should swing a little to the right, and put three small fish near it",
+          "detail": [
+            {
+              "reply": "I could not identify an action to apply. Nothing changed.",
+              "reason": "reading",
+              "routing": "incomplete-provider-coverage"
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/drawing/v2b27b.jsonl:drawing-v2b27-0173",
+          "text": "make the bark rough or smooth",
+          "detail": [
+            {
+              "reply": "I could not identify an action to apply. Nothing changed.",
+              "reason": "reading",
+              "routing": "unresolved-canonical-kind-binding"
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/drawing/v2b22a.jsonl:drawing-v2b22-0077",
+          "text": "make the eyes big and make the nose small",
+          "detail": [
+            {
+              "reply": "I could not identify an action to apply. Nothing changed.",
+              "reason": "reading",
+              "routing": "incomplete-provider-coverage"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "binding / graph conversion: unresolved-canonical-property-binding",
+      "rows": 51,
+      "examples": [
+        {
+          "id": "data/haiku-v1/drawing/b11b.jsonl:drawing-b11-0241",
+          "text": "seaweed should swing a little to the right, and put three small fish near it",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "constraints",
+                "c0_0",
+                "concept"
+              ]
+            },
+            {
+              "path": [
+                "requests",
+                1,
+                "constraints",
+                "c1_0",
+                "concept"
+              ]
+            },
+            {
+              "path": [
+                "requests",
+                1,
+                "constraints",
+                "c1_1",
+                "concept"
+              ]
+            },
+            {
+              "path": [
+                "requests",
+                1,
+                "constraints",
+                "c1_2",
+                "concept"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/drawing/v2b27b.jsonl:drawing-v2b27-0173",
+          "text": "make the bark rough or smooth",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "constraints",
+                "c0_0",
+                "concept"
+              ]
+            },
+            {
+              "path": [
+                "requests",
+                0,
+                "constraints",
+                "c0_1",
+                "concept"
+              ]
+            },
+            {
+              "path": [
+                "requests",
+                0,
+                "constraints",
+                "c0_2",
+                "concept"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/drawing/v2b22a.jsonl:drawing-v2b22-0077",
+          "text": "make the eyes big and make the nose small",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "constraints",
+                "c0_0",
+                "concept"
+              ]
+            },
+            {
+              "path": [
+                "requests",
+                1,
+                "constraints",
+                "c1_0",
+                "concept"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "binding / graph conversion: unconsumed-predicted-range",
+      "rows": 50,
+      "examples": [
+        {
+          "id": "data/haiku-v1/drawing/b15a.jsonl:drawing-b15-0072",
+          "text": "how many dogs do we have",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                "0",
+                "target",
+                "kind_span"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/drawing/b11b.jsonl:drawing-b11-0241",
+          "text": "seaweed should swing a little to the right, and put three small fish near it",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                "0",
+                "constraints",
+                "0",
+                "value"
+              ]
+            },
+            {
+              "path": [
+                "requests",
+                "1",
+                "constraints",
+                "0",
+                "value"
+              ]
+            },
+            {
+              "path": [
+                "requests",
+                "1",
+                "constraints",
+                "1",
+                "value"
+              ]
+            },
+            {
+              "path": [
+                "requests",
+                "1",
+                "constraints",
+                "2",
+                "value"
+              ]
+            },
+            {
+              "path": [
+                "requests",
+                "1",
+                "target",
+                "count_span"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/drawing/v2b27b.jsonl:drawing-v2b27-0173",
+          "text": "make the bark rough or smooth",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                "0",
+                "constraints",
+                "0",
+                "value"
+              ]
+            },
+            {
+              "path": [
+                "requests",
+                "0",
+                "constraints",
+                "1",
+                "value"
+              ]
+            },
+            {
+              "path": [
+                "requests",
+                "0",
+                "constraints",
+                "2",
+                "value"
+              ]
+            },
+            {
+              "path": [
+                "requests",
+                "0",
+                "target",
+                "kind_span"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "binding / graph conversion: unresolved-value-representation",
+      "rows": 50,
+      "examples": [
+        {
+          "id": "data/haiku-v1/drawing/b11b.jsonl:drawing-b11-0241",
+          "text": "seaweed should swing a little to the right, and put three small fish near it",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "constraints",
+                "c0_0",
+                "value"
+              ]
+            },
+            {
+              "path": [
+                "requests",
+                1,
+                "constraints",
+                "c1_0",
+                "value"
+              ]
+            },
+            {
+              "path": [
+                "requests",
+                1,
+                "constraints",
+                "c1_1",
+                "value"
+              ]
+            },
+            {
+              "path": [
+                "requests",
+                1,
+                "constraints",
+                "c1_2",
+                "value"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/drawing/v2b27b.jsonl:drawing-v2b27-0173",
+          "text": "make the bark rough or smooth",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "constraints",
+                "c0_0",
+                "value"
+              ]
+            },
+            {
+              "path": [
+                "requests",
+                0,
+                "constraints",
+                "c0_1",
+                "value"
+              ]
+            },
+            {
+              "path": [
+                "requests",
+                0,
+                "constraints",
+                "c0_2",
+                "value"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/drawing/v2b22a.jsonl:drawing-v2b22-0077",
+          "text": "make the eyes big and make the nose small",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "constraints",
+                "c0_0",
+                "value"
+              ]
+            },
+            {
+              "path": [
+                "requests",
+                1,
+                "constraints",
+                "c1_0",
+                "value"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "binding / graph conversion: incomplete-model-coverage",
+      "rows": 48,
+      "examples": [
+        {
+          "id": "data/haiku-v1/drawing/b15a.jsonl:drawing-b15-0072",
+          "text": "how many dogs do we have",
+          "detail": [
+            {
+              "path": [
+                "coverage"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/drawing/b11b.jsonl:drawing-b11-0241",
+          "text": "seaweed should swing a little to the right, and put three small fish near it",
+          "detail": [
+            {
+              "path": [
+                "coverage"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/drawing/v2b22a.jsonl:drawing-v2b22-0077",
+          "text": "make the eyes big and make the nose small",
+          "detail": [
+            {
+              "path": [
+                "coverage"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "binding / graph conversion: unresolved-model-output",
+      "rows": 48,
+      "examples": [
+        {
+          "id": "data/haiku-v1/drawing/b15a.jsonl:drawing-b15-0072",
+          "text": "how many dogs do we have",
+          "detail": [
+            {
+              "path": [
+                "unresolved"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/drawing/b11b.jsonl:drawing-b11-0241",
+          "text": "seaweed should swing a little to the right, and put three small fish near it",
+          "detail": [
+            {
+              "path": [
+                "unresolved"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/drawing/v2b22a.jsonl:drawing-v2b22-0077",
+          "text": "make the eyes big and make the nose small",
+          "detail": [
+            {
+              "path": [
+                "unresolved"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "reader output: presence-span-inconsistent",
+      "rows": 39,
+      "examples": [
+        {
+          "id": "data/haiku-v1/drawing/b15a.jsonl:drawing-b15-0072",
+          "text": "how many dogs do we have",
+          "detail": [
+            {
+              "key": "request.question.asked_key",
+              "path": [
+                "requests",
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/drawing/v2b22a.jsonl:drawing-v2b22-0077",
+          "text": "make the eyes big and make the nose small",
+          "detail": [
+            {
+              "key": "request.target.kind",
+              "path": [
+                "requests",
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/drawing/b11a.jsonl:drawing-b11-0007",
+          "text": "more bubbles pls",
+          "detail": [
+            {
+              "key": "drawing.drawn.relation",
+              "path": [
+                "requests",
+                "0"
+              ]
+            },
+            {
+              "key": "request.target.kind",
+              "path": [
+                "requests",
+                "0"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "binding / graph conversion: unresolved-canonical-kind-binding",
+      "rows": 39,
+      "examples": [
+        {
+          "id": "data/haiku-v1/drawing/b15a.jsonl:drawing-b15-0072",
+          "text": "how many dogs do we have",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "targets",
+                "t0",
+                "kind"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/drawing/b11b.jsonl:drawing-b11-0241",
+          "text": "seaweed should swing a little to the right, and put three small fish near it",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "targets",
+                "t0",
+                "kind"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/drawing/v2b27b.jsonl:drawing-v2b27-0173",
+          "text": "make the bark rough or smooth",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "targets",
+                "t0",
+                "kind"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "context: previous turn is text only, not an executed history",
+      "rows": 36,
+      "examples": [
+        {
+          "id": "data/haiku-v2/drawing/v2b13a.jsonl:drawing-v2b13-0094",
+          "text": "no request here, just wanted to say the picture looks lovely",
+          "detail": [
+            [
+              {
+                "reason": "previous-context-not-replayed",
+                "value": "draw a house with a red door"
+              }
+            ]
+          ]
+        },
+        {
+          "id": "data/haiku-v2/drawing/v2b22a.jsonl:drawing-v2b22-0077",
+          "text": "make the eyes big and make the nose small",
+          "detail": [
+            [
+              {
+                "reason": "previous-context-not-replayed",
+                "value": "draw a cartoon face"
+              }
+            ]
+          ]
+        },
+        {
+          "id": "data/haiku-v1/drawing/b07b.jsonl:drawing-b07-0164",
+          "text": "that looks good now, nice",
+          "detail": [
+            [
+              {
+                "reason": "previous-context-not-replayed",
+                "value": "make both circles bigger"
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "training: target family was masked as unknown",
+      "rows": 32,
+      "examples": [
+        {
+          "id": "data/haiku-v1/drawing/b15a.jsonl:drawing-b15-0072",
+          "text": "how many dogs do we have",
+          "detail": [
+            {
+              "request": 0
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/drawing/b11b.jsonl:drawing-b11-0241",
+          "text": "seaweed should swing a little to the right, and put three small fish near it",
+          "detail": [
+            {
+              "request": 0
+            },
+            {
+              "request": 1
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/drawing/b11a.jsonl:drawing-b11-0007",
+          "text": "more bubbles pls",
+          "detail": [
+            {
+              "request": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "binding / graph conversion: request-dependencies-not-annotated",
+      "rows": 32,
+      "examples": [
+        {
+          "id": "data/haiku-v1/drawing/b11b.jsonl:drawing-b11-0241",
+          "text": "seaweed should swing a little to the right, and put three small fish near it",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "after"
+              ]
+            },
+            {
+              "path": [
+                "requests",
+                1,
+                "after"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/drawing/v2b22a.jsonl:drawing-v2b22-0077",
+          "text": "make the eyes big and make the nose small",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "after"
+              ]
+            },
+            {
+              "path": [
+                "requests",
+                1,
+                "after"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/drawing/b11a.jsonl:drawing-b11-0005",
+          "text": "can u do an octopus hiding under the shipwreck and then make it purple, also add a few tiny fish swimming in front of the octopus",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "after"
+              ]
+            },
+            {
+              "path": [
+                "requests",
+                1,
+                "after"
+              ]
+            },
+            {
+              "path": [
+                "requests",
+                2,
+                "after"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "model: supervised categorical heads differ from training",
+      "rows": 31,
+      "examples": [
+        {
+          "id": "data/haiku-v2/drawing/v2b22a.jsonl:drawing-v2b22-0077",
+          "text": "make the eyes big and make the nose small",
+          "detail": [
+            [
+              {
+                "request": 0,
+                "key": "request.target.fill",
+                "expected": "written",
+                "actual": {
+                  "state": "value",
+                  "value": "context"
+                }
+              },
+              {
+                "request": 1,
+                "key": "request.target.fill",
+                "expected": "written",
+                "actual": {
+                  "state": "value",
+                  "value": "context"
+                }
+              }
+            ]
+          ]
+        },
+        {
+          "id": "data/haiku-v1/drawing/b11a.jsonl:drawing-b11-0007",
+          "text": "more bubbles pls",
+          "detail": [
+            [
+              {
+                "request": 0,
+                "key": "request.target.fill",
+                "expected": "context",
+                "actual": {
+                  "state": "absent"
+                }
+              }
+            ]
+          ]
+        },
+        {
+          "id": "data/haiku-v1/drawing/b11a.jsonl:drawing-b11-0005",
+          "text": "can u do an octopus hiding under the shipwreck and then make it purple, also add a few tiny fish swimming in front of the octopus",
+          "detail": [
+            [
+              {
+                "request": 1,
+                "key": "request.target.fill",
+                "expected": "written",
+                "actual": {
+                  "state": "value",
+                  "value": "context"
+                }
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "binding / graph conversion: context-reference-not-bound",
+      "rows": 19,
+      "examples": [
+        {
+          "id": "data/haiku-v2/drawing/v2b22a.jsonl:drawing-v2b22-0077",
+          "text": "make the eyes big and make the nose small",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "targets",
+                "t0"
+              ]
+            },
+            {
+              "path": [
+                "requests",
+                1,
+                "targets",
+                "t1"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/drawing/b11a.jsonl:drawing-b11-0005",
+          "text": "can u do an octopus hiding under the shipwreck and then make it purple, also add a few tiny fish swimming in front of the octopus",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                1,
+                "targets",
+                "t1"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/drawing/b12a.jsonl:drawing-b12-0039",
+          "text": "no wait, at the front",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "targets",
+                "t0"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "reader output: illegal-I-after-O",
+      "rows": 13,
+      "examples": [
+        {
+          "id": "data/haiku-v1/drawing/b15a.jsonl:drawing-b15-0024",
+          "text": "draw a rabbit with long ears and put a red bow on the hamster",
+          "detail": [
+            {
+              "key": "document.text.about",
+              "path": [
+                "requests",
+                "1"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/diagram/b11b.jsonl:diagram-b11-0140",
+          "text": "make it a timeline of the launch, from concept in January to launch in June. then, also, colour the first two bars light blue",
+          "detail": [
+            {
+              "key": "request.target.name",
+              "path": [
+                "requests",
+                "1"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/document/b11b.jsonl:document-b11-0228",
+          "text": "Can you write a shopping list for next week and also make a meal plan for Monday?",
+          "detail": [
+            {
+              "key": "document.text.about",
+              "path": [
+                "requests",
+                "2"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "reader output: presence-class-inconsistent",
+      "rows": 12,
+      "examples": [
+        {
+          "id": "data/haiku-v1/drawing/b15a.jsonl:drawing-b15-0072",
+          "text": "how many dogs do we have",
+          "detail": [
+            {
+              "key": "request.target.mode",
+              "path": [
+                "requests",
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/drawing/b12a.jsonl:drawing-b12-0039",
+          "text": "no wait, at the front",
+          "detail": [
+            {
+              "key": "conversation.turn.objection",
+              "path": [
+                "requests",
+                "0"
+              ]
+            },
+            {
+              "key": "request.target.determiner",
+              "path": [
+                "requests",
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/diagram/v2b09a.jsonl:diagram-v2b09-0002",
+          "text": "can u flip the bars so they run sideways, the chart is hard to read",
+          "detail": [
+            {
+              "key": "request.target.determiner",
+              "path": [
+                "requests",
+                "0"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "binding / graph conversion: requires-operator-reference-projection",
+      "rows": 11,
+      "examples": [
+        {
+          "id": "data/haiku-v1/drawing/b11b.jsonl:drawing-b11-0241",
+          "text": "seaweed should swing a little to the right, and put three small fish near it",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                1,
+                "constraints",
+                "c1_2"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/drawing/b11a.jsonl:drawing-b11-0005",
+          "text": "can u do an octopus hiding under the shipwreck and then make it purple, also add a few tiny fish swimming in front of the octopus",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "constraints",
+                "c0_1"
+              ]
+            },
+            {
+              "path": [
+                "requests",
+                2,
+                "constraints",
+                "c2_1"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/drawing/v2b24b.jsonl:drawing-v2b24-0183",
+          "text": "draw a city park with a fountain, a pond, joggers and pigeons, then put a row of trees along the path",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                1,
+                "constraints",
+                "c1_0"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "reader output: normalization-requires-declared-proof",
+      "rows": 11,
+      "examples": [
+        {
+          "id": "data/haiku-v1/drawing/b11a.jsonl:drawing-b11-0005",
+          "text": "can u do an octopus hiding under the shipwreck and then make it purple, also add a few tiny fish swimming in front of the octopus",
+          "detail": [
+            {
+              "key": "drawing.drawn.relation",
+              "path": [
+                "requests",
+                "2"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/drawing/b03a.jsonl:drawing-b03-0116",
+          "text": "draw an outdoor cafe with tables and umbrellas, and then make the umbrellas stripy",
+          "detail": [
+            {
+              "key": "drawing.drawn.fill",
+              "path": [
+                "requests",
+                "1"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/diagram/v2b09a.jsonl:diagram-v2b09-0002",
+          "text": "can u flip the bars so they run sideways, the chart is hard to read",
+          "detail": [
+            {
+              "key": "diagram.chart.horizontal",
+              "path": [
+                "requests",
+                "0"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "binding / graph conversion: requires-declared-query-projection",
+      "rows": 10,
+      "examples": [
+        {
+          "id": "data/haiku-v1/drawing/b15a.jsonl:drawing-b15-0072",
+          "text": "how many dogs do we have",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "queries"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/drawing/b12a.jsonl:drawing-b12-0096",
+          "text": "what's on the bench",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "queries"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/diagram/b03b.jsonl:diagram-b03-0231",
+          "text": "remove the votes per option chart, I want a clean page, and then show me what is left",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                1,
+                "queries"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "reader output: metadata-presence-inconsistent",
+      "rows": 9,
+      "examples": [
+        {
+          "id": "data/haiku-v1/diagram/b16b.jsonl:diagram-b16-0205",
+          "text": "less clutter in the bar chart",
+          "detail": [
+            {
+              "key": "request.constraint.character",
+              "path": [
+                "requests",
+                "0"
+              ]
+            },
+            {
+              "key": "request.constraint.operator",
+              "path": [
+                "requests",
+                "0"
+              ]
+            },
+            {
+              "key": "request.constraint.phase",
+              "path": [
+                "requests",
+                "0"
+              ]
+            },
+            {
+              "key": "request.constraint.polarity",
+              "path": [
+                "requests",
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/diagram/v2b22a.jsonl:diagram-v2b22-0092",
+          "text": "supplier at the left, factory in the middle, port at the right. supplier and port: ellipses. factory: a box in the manufacturing group",
+          "detail": [
+            {
+              "key": "request.constraint.scope",
+              "path": [
+                "requests",
+                "3"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/diagram/b16a.jsonl:diagram-b16-0047",
+          "text": "a bit more height on the run pace line",
+          "detail": [
+            {
+              "key": "request.constraint.character",
+              "path": [
+                "requests",
+                "0"
+              ]
+            },
+            {
+              "key": "request.constraint.operator",
+              "path": [
+                "requests",
+                "0"
+              ]
+            },
+            {
+              "key": "request.constraint.phase",
+              "path": [
+                "requests",
+                "0"
+              ]
+            },
+            {
+              "key": "request.constraint.polarity",
+              "path": [
+                "requests",
+                "0"
+              ]
+            },
+            {
+              "key": "request.constraint.step",
+              "path": [
+                "requests",
+                "0"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "reader output: missing-or-ambiguous-act-anchor",
+      "rows": 7,
+      "examples": [
+        {
+          "id": "data/haiku-v1/drawing/b11b.jsonl:drawing-b11-0241",
+          "text": "seaweed should swing a little to the right, and put three small fish near it",
+          "detail": [
+            {
+              "key": "request.request.act",
+              "path": [
+                "requests",
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/diagram/b16a.jsonl:diagram-b16-0047",
+          "text": "a bit more height on the run pace line",
+          "detail": [
+            {
+              "key": "request.request.act",
+              "path": [
+                "requests",
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/document/b11b.jsonl:document-b11-0228",
+          "text": "Can you write a shopping list for next week and also make a meal plan for Monday?",
+          "detail": [
+            {
+              "key": "request.request.act",
+              "path": [
+                "requests",
+                "0"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "binding / graph conversion: missing-or-ambiguous-field-anchor",
+      "rows": 7,
+      "examples": [
+        {
+          "id": "data/haiku-v1/drawing/b11b.jsonl:drawing-b11-0241",
+          "text": "seaweed should swing a little to the right, and put three small fish near it",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "act"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/diagram/b16a.jsonl:diagram-b16-0047",
+          "text": "a bit more height on the run pace line",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "act"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/document/b11b.jsonl:document-b11-0228",
+          "text": "Can you write a shopping list for next week and also make a meal plan for Monday?",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "act"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "binding / graph conversion: description-reference-without-predicate",
+      "rows": 6,
+      "examples": [
+        {
+          "id": "data/haiku-v1/drawing/b03a.jsonl:drawing-b03-0116",
+          "text": "draw an outdoor cafe with tables and umbrellas, and then make the umbrellas stripy",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                1,
+                "targets",
+                "t1"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/diagram/b16b.jsonl:diagram-b16-0205",
+          "text": "less clutter in the bar chart",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "targets",
+                "t0"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/diagram/b13b.jsonl:diagram-b13-0192",
+          "text": "remove the car slice and add a train slice with 6",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "targets",
+                "t0"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "reader output: unsupported-metadata-head",
+      "rows": 5,
+      "examples": [
+        {
+          "id": "data/haiku-v2/document/v2b18b.jsonl:document-v2b18-0129",
+          "text": "shorten it a bit, around 300 words, and bullet the key points",
+          "detail": [
+            {
+              "key": "request.constraint.measure",
+              "path": [
+                "requests",
+                "0"
+              ]
+            },
+            {
+              "key": "request.constraint.unit",
+              "path": [
+                "requests",
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/calendar/v2b03a.jsonl:calendar-v2b03-0025",
+          "text": "give me the common free time for everyone thursday, 40 min",
+          "detail": [
+            {
+              "key": "request.constraint.measure",
+              "path": [
+                "requests",
+                "0"
+              ]
+            },
+            {
+              "key": "request.constraint.unit",
+              "path": [
+                "requests",
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/calendar/b03b.jsonl:calendar-b03-0184",
+          "text": "leonie's final: 45 minutes, no earlier than 2, and also remind me to print her CV",
+          "detail": [
+            {
+              "key": "request.constraint.measure",
+              "path": [
+                "requests",
+                "0"
+              ]
+            },
+            {
+              "key": "request.constraint.unit",
+              "path": [
+                "requests",
+                "0"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "reader output: unknown-class",
+      "rows": 5,
+      "examples": [
+        {
+          "id": "data/haiku-v1/document/b11b.jsonl:document-b11-0132",
+          "text": "could you format the ingredient list as a table and put the nutrition bit last, thanks",
+          "detail": [
+            {
+              "key": "document.inline.format",
+              "path": [
+                "requests",
+                "0"
+              ]
+            },
+            {
+              "key": "document.section.role",
+              "path": [
+                "requests",
+                "0"
+              ]
+            },
+            {
+              "key": "document.section.role",
+              "path": [
+                "requests",
+                "1"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/calendar/v2b03a.jsonl:calendar-v2b03-0025",
+          "text": "give me the common free time for everyone thursday, 40 min",
+          "detail": [
+            {
+              "key": "calendar.meeting.length",
+              "path": [
+                "requests",
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/calendar/b03b.jsonl:calendar-b03-0184",
+          "text": "leonie's final: 45 minutes, no earlier than 2, and also remind me to print her CV",
+          "detail": [
+            {
+              "key": "calendar.meeting.length",
+              "path": [
+                "requests",
+                "0"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "reader output: unresolved-domain-value",
+      "rows": 5,
+      "examples": [
+        {
+          "id": "data/haiku-v1/document/b11b.jsonl:document-b11-0132",
+          "text": "could you format the ingredient list as a table and put the nutrition bit last, thanks",
+          "detail": [
+            {
+              "key": "document.inline.format",
+              "path": [
+                "requests",
+                "0"
+              ]
+            },
+            {
+              "key": "document.section.role",
+              "path": [
+                "requests",
+                "0"
+              ]
+            },
+            {
+              "key": "document.section.role",
+              "path": [
+                "requests",
+                "1"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/calendar/v2b03a.jsonl:calendar-v2b03-0025",
+          "text": "give me the common free time for everyone thursday, 40 min",
+          "detail": [
+            {
+              "key": "calendar.meeting.length",
+              "path": [
+                "requests",
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/calendar/b03b.jsonl:calendar-b03-0184",
+          "text": "leonie's final: 45 minutes, no earlier than 2, and also remind me to print her CV",
+          "detail": [
+            {
+              "key": "calendar.meeting.length",
+              "path": [
+                "requests",
+                "0"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "binding / graph conversion: requires-declared-step-projection",
+      "rows": 4,
+      "examples": [
+        {
+          "id": "data/haiku-v1/diagram/b11b.jsonl:diagram-b11-0140",
+          "text": "make it a timeline of the launch, from concept in January to launch in June. then, also, colour the first two bars light blue",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                1,
+                "constraints",
+                "c1_0",
+                "step"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/document/b03a.jsonl:document-b03-0106",
+          "text": "i'd like the tone to be firmer in the complaint, and make the greeting friendlier",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "constraints",
+                "c0_0",
+                "step"
+              ]
+            },
+            {
+              "path": [
+                "requests",
+                1,
+                "constraints",
+                "c1_1",
+                "step"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/calendar/v2b21b.jsonl:calendar-v2b21-0195",
+          "text": "push kickoff 3 hours later and make it 2 hours long",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "constraints",
+                "c0_1",
+                "step"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "reader output: unresolved-numeric-normalization",
+      "rows": 3,
+      "examples": [
+        {
+          "id": "data/haiku-v1/drawing/b11b.jsonl:drawing-b11-0241",
+          "text": "seaweed should swing a little to the right, and put three small fish near it",
+          "detail": [
+            {
+              "key": "request.target.count",
+              "path": [
+                "requests",
+                "1"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/drawing/v2b21b.jsonl:drawing-v2b21-0144",
+          "text": "make a harbour scene and add a dozen crates",
+          "detail": [
+            {
+              "key": "request.target.count",
+              "path": [
+                "requests",
+                "1"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/diagram/b11b.jsonl:diagram-b11-0140",
+          "text": "make it a timeline of the launch, from concept in January to launch in June. then, also, colour the first two bars light blue",
+          "detail": [
+            {
+              "key": "request.target.count",
+              "path": [
+                "requests",
+                "1"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "binding / graph conversion: unowned-count-span",
+      "rows": 3,
+      "examples": [
+        {
+          "id": "data/haiku-v1/drawing/b11b.jsonl:drawing-b11-0241",
+          "text": "seaweed should swing a little to the right, and put three small fish near it",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                1,
+                "targets",
+                "t1",
+                "count_span"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/drawing/v2b21b.jsonl:drawing-v2b21-0144",
+          "text": "make a harbour scene and add a dozen crates",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                1,
+                "targets",
+                "t1",
+                "count_span"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/diagram/b11b.jsonl:diagram-b11-0140",
+          "text": "make it a timeline of the launch, from concept in January to launch in June. then, also, colour the first two bars light blue",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                1,
+                "targets",
+                "t1",
+                "count_span"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "binding / graph conversion: turn-contract-not-projected",
+      "rows": 3,
+      "examples": [
+        {
+          "id": "data/haiku-v1/drawing/b11a.jsonl:drawing-b11-0007",
+          "text": "more bubbles pls",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "turn"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/diagram/b16a.jsonl:diagram-b16-0047",
+          "text": "a bit more height on the run pace line",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "turn"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/diagram/v2b07a.jsonl:diagram-v2b07-0031",
+          "text": "undo, too big. make it just big",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                1,
+                "turn"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "execution: only part of the request applied",
+      "rows": 3,
+      "examples": [
+        {
+          "id": "data/haiku-v1/drawing/b11a.jsonl:drawing-b11-0007",
+          "text": "more bubbles pls",
+          "detail": [
+            [
+              "I could not apply count more."
+            ]
+          ]
+        },
+        {
+          "id": "data/haiku-v2/drawing/v2b26a.jsonl:drawing-v2b26-0041",
+          "text": "make me a doctor face",
+          "detail": [
+            [
+              "I could not apply style doctor."
+            ]
+          ]
+        },
+        {
+          "id": "data/haiku-v2/drawing/v2b14b.jsonl:drawing-v2b14-0137",
+          "text": "draw a donkey in the field and call it Eeyore",
+          "detail": [
+            [
+              "I could not apply name Eeyore."
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "reader output: cross-area-key-unresolved",
+      "rows": 3,
+      "examples": [
+        {
+          "id": "data/haiku-v1/drawing/b11a.jsonl:drawing-b11-0005",
+          "text": "can u do an octopus hiding under the shipwreck and then make it purple, also add a few tiny fish swimming in front of the octopus",
+          "detail": [
+            {
+              "key": "document.text.about",
+              "path": [
+                "requests",
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/diagram/v2b22a.jsonl:diagram-v2b22-0092",
+          "text": "supplier at the left, factory in the middle, port at the right. supplier and port: ellipses. factory: a box in the manufacturing group",
+          "detail": [
+            {
+              "key": "drawing.drawn.at",
+              "path": [
+                "requests",
+                "1"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/diagram/v2b07a.jsonl:diagram-v2b07-0031",
+          "text": "undo, too big. make it just big",
+          "detail": [
+            {
+              "key": "drawing.drawn.size",
+              "path": [
+                "requests",
+                "1"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "binding / graph conversion: unprojected-population-reference",
+      "rows": 3,
+      "examples": [
+        {
+          "id": "data/haiku-v1/diagram/b03b.jsonl:diagram-b03-0231",
+          "text": "remove the votes per option chart, I want a clean page, and then show me what is left",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                1,
+                "targets",
+                "t1"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/diagram/v2b08b.jsonl:diagram-v2b08-0115",
+          "text": "avg of the red party and blue party",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "targets",
+                "t0"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/document/b04b.jsonl:document-b04-0244",
+          "text": "undo everything and redo the first version",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "targets",
+                "t0"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "binding / graph conversion: quantifier-binder-not-projected",
+      "rows": 2,
+      "examples": [
+        {
+          "id": "data/haiku-v2/diagram/v2b22a.jsonl:diagram-v2b22-0092",
+          "text": "supplier at the left, factory in the middle, port at the right. supplier and port: ellipses. factory: a box in the manufacturing group",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                3,
+                "targets",
+                "t3"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/calendar/b15a.jsonl:calendar-b15-0096",
+          "text": "take all my meetings off wednesday",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "targets",
+                "t0"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "binding / graph conversion: requires-declared-ordinal-projection",
+      "rows": 2,
+      "examples": [
+        {
+          "id": "data/haiku-v1/diagram/b11b.jsonl:diagram-b11-0140",
+          "text": "make it a timeline of the launch, from concept in January to launch in June. then, also, colour the first two bars light blue",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                1,
+                "targets",
+                "t1",
+                "ordinal"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v2/calendar/v2b15a.jsonl:calendar-v2b15-0088",
+          "text": "set the standup to 9:30 every weekday, then the fourth one to 4",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                1,
+                "targets",
+                "t1",
+                "ordinal"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "reader output: missing-unknown-or-cross-area-target-type",
+      "rows": 2,
+      "examples": [
+        {
+          "id": "data/haiku-v2/diagram/v2b07a.jsonl:diagram-v2b07-0031",
+          "text": "undo, too big. make it just big",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                "0"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "data/haiku-v1/document/b11b.jsonl:document-b11-0228",
+          "text": "Can you write a shopping list for next week and also make a meal plan for Monday?",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                "0"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "binding / graph conversion: missing-target-mode",
+      "rows": 1,
+      "examples": [
+        {
+          "id": "data/haiku-v1/drawing/b15a.jsonl:drawing-b15-0072",
+          "text": "how many dogs do we have",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "targets",
+                "t0",
+                "mode"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "binding / graph conversion: requires-declared-group-projection",
+      "rows": 1,
+      "examples": [
+        {
+          "id": "data/haiku-v2/drawing/v2b27b.jsonl:drawing-v2b27-0173",
+          "text": "make the bark rough or smooth",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "constraints",
+                "c0_1",
+                "group"
+              ]
+            },
+            {
+              "path": [
+                "requests",
+                0,
+                "constraints",
+                "c0_2",
+                "group"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "model: request segmentation differs from training",
+      "rows": 1,
+      "examples": [
+        {
+          "id": "data/haiku-v1/document/b11b.jsonl:document-b11-0228",
+          "text": "Can you write a shopping list for next week and also make a meal plan for Monday?",
+          "detail": [
+            {
+              "expected": 2,
+              "actual": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "binding / graph conversion: missing-annotated-field",
+      "rows": 1,
+      "examples": [
+        {
+          "id": "data/haiku-v1/document/b11b.jsonl:document-b11-0228",
+          "text": "Can you write a shopping list for next week and also make a meal plan for Monday?",
+          "detail": [
+            {
+              "path": [
+                "requests",
+                0,
+                "act"
+              ]
+            },
+            {
+              "path": [
+                "requests",
+                0,
+                "mood"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cause": "reader output: ambiguous-global-mention",
+      "rows": 1,
+      "examples": [
+        {
+          "id": "data/haiku-v2/calendar/v2b07b.jsonl:calendar-v2b07-0145",
+          "text": "book lunch with ana tuesday at noon and move the standup to 9:30",
+          "detail": [
+            {
+              "key": "request.target.name",
+              "path": [
+                "requests",
+                "1"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "scope": "100 preselected actual training messages through installed q8 model, real native observed context and normal routing/execution. Setup failures are retained and still inferred, never excluded. Model-vs-training differences under altered context are diagnostics, not a pure training accuracy estimate. Effects are observed, not automatically semantic successes. No fixes applied during the run."
+}
