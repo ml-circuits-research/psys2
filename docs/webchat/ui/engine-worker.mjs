@@ -48,6 +48,7 @@ const absModule = (path, id, kind) => new URL(path, ROOT).href + (ver[`worlds/${
 const snaps = new Map();             // undo id -> engine snapshot (a ring: the last SNAP_KEEP)
 const SNAP_KEEP = 24;
 let lastTurnEnd = 0;
+let readerPrevious=null,readerStatus={state:'unavailable'},readerObservation=null,readerDiagnostics=[];
 const budgetMod = { createBudget: null };
 let btSeq = 0;
 const btPending = new Map();         // id -> { resolve, reject } of a call to the page's browser translator / detector
@@ -74,7 +75,7 @@ function annotateWires(root) {
 const stateOf = () => session.state();
 /** Of the before-turn state, the worlds the turn loaded (not in `had`): the page has the others in its own snapshot, so its what-happened diff needs nothing more. */
 const loadedBefore = (before, had) => Object.fromEntries(Object.entries(before ?? {}).filter(([id]) => !had.has(id)));   // `had`: the worlds whose state the page holds (it sends their ids)
-const metaOf = () => ({ msg: session._msg, lang: session._sessionLang, weakRo: session._weakRo, language: session.language, memory: memoryOf() });
+const metaOf = () => ({ msg: session._msg, lang: session._sessionLang, weakRo: session._weakRo, language: session.language, memory: memoryOf(), readerPrevious });
 /** The discourse / ASTRA memory as JSON, so that a restarted worker gets it back (a failure here must never fail a turn). */
 function memoryOf() { try { return session.memoryJSON(); } catch { return null; } }
 
@@ -153,13 +154,31 @@ async function init(m) {
   session = engine.createSession({ language: lang.normalize(settings.language) });   // LANG-FIXED: always an explicit 'en' | 'ro', never 'auto'
   applySettings(null);
   if (m.restoreState) restoreStates(m.restoreState, m.restoreMeta);
-  return { retiredAreas: worldLoader.index.retiredAreas ?? [], worlds: engine.worlds().map((w) => w.id), known: worldLoader.ids(), worldTabs: Object.fromEntries(worldLoader.ids().map((id) => [id, worldLoader.info(id).tab?.id ?? null]).filter(([, v]) => v)), problems: engine.problems?.() ?? [], state: stateOf(), hasDispatcher: !!dispatcherEnc, hasNormalizer: !!normalizerHost, budget: !!budgetMod.createBudget };
+  await installSopReader(imp);
+  return { retiredAreas: worldLoader.index.retiredAreas ?? [], worlds: engine.worlds().map((w) => w.id), known: worldLoader.ids(), worldTabs: Object.fromEntries(worldLoader.ids().map((id) => [id, worldLoader.info(id).tab?.id ?? null]).filter(([, v]) => v)), problems: engine.problems?.() ?? [], state: stateOf(), hasDispatcher: !!dispatcherEnc, hasNormalizer: !!normalizerHost, budget: !!budgetMod.createBudget, reader: readerStatus };
+}
+
+async function installSopReader(imp){
+  readerStatus={state:'loading'};evt('sop-reader-status',readerStatus);
+  try{
+    const response=await fetch(vurl('models/sop-bert/deployment.json'));if(!response.ok)throw Error('SOP-BERT deployment HTTP '+response.status);
+    const deployment=await response.json();if(deployment.format!=='psys2.browser-reader-deployment/1')throw Error('unsupported-reader-deployment');
+    const [{createBrowserReaderHost},{createAppReaderContext}]=await Promise.all([imp('lib/dialog/browser-reader-host.mjs'),imp('lib/dialog/app-reader-context.mjs')]);
+    const getContext=createAppReaderContext({getState:()=>session.isession.state,getPrevious:()=>readerPrevious,onObservation:value=>{readerObservation=value;}});
+    const host=await createBrowserReaderHost({manifestURL:abs(deployment.manifestPath),manifestSha256:deployment.manifestSha256,tokenizerArtifact:deployment.tokenizerArtifact,bindingsArtifact:deployment.bindingsArtifact,tokenizerConfigArtifact:deployment.tokenizerConfigArtifact,runtimeIdentity:deployment.runtimeIdentity,getContext,resolveURL:rel=>abs(rel),recordDiagnostics:async diagnostic=>{readerDiagnostics.push(diagnostic);if(readerDiagnostics.length>64)readerDiagnostics.shift();}});
+    engine.requestReader=host.provider;readerStatus={state:'ready',verified:host.verified};
+  }catch(error){
+    const reason=String(error?.message??error);readerStatus={state:'unavailable',reason};
+    engine.requestReader={propose:async()=>({candidates:[],coverage:{complete:false,graphProposal:false,executable:false},failures:[{reason:'model-load-failed',detail:reason}]})};
+  }
+  evt('sop-reader-status',readerStatus);
 }
 
 function restoreStates(state, meta) {
   if (state && typeof state === 'object') {
     session.isession.state = { ...session.isession.state, ...structuredClone(state) };   // over the fresh session's initial states: a world loaded since the record was made has none in it (lazy loading)
     if (meta) {
+      readerPrevious=typeof meta.readerPrevious==='string'?meta.readerPrevious:null;
       session._msg = meta.msg ?? session._msg; session._sessionLang = meta.lang ?? session._sessionLang; session._weakRo = meta.weakRo ?? 0;
       if (meta.memory) { try { session.restoreMemory(meta.memory); } catch (e) { console.warn('memory not restored', e); } }
     }
@@ -244,7 +263,9 @@ const handlers = {
         try { return await session.send(m.text, { ...m.opts, language: mods.lang.normalize(m.opts?.language ?? m.settings?.language), signal: ctl.signal, undo: snap, ...(budget ? { budget } : {}) }); }
         catch (e) { if (e?.name === 'TurnAborted' || e?.name === 'BudgetExceeded' || ctl.signal.aborted) { try { session.restore(snap); } catch { /* keep */ } } if (budget && e && typeof e === 'object') e.bySite = { ...budget.bySite }; throw e; }
       };
-      reply = await read();
+      readerDiagnostics=[];readerObservation=null;
+      reply = await read();readerPrevious=m.text;
+      reply.trace={...reply.trace,readerHost:{state:readerStatus.state,reason:readerStatus.reason??null,diagnosticCount:readerDiagnostics.length,area:readerObservation?.area??null}};
       annotateWires(reply);
       noteWorlds(reply);
       return { reply, before: loadedBefore(before, had), state: stateOf(), meta: metaOf(), usage: (translator.usage ?? []).map((u) => ({ ...u })), detection: (translator.detectUsage ?? []).map((u) => ({ ...u })),
@@ -263,7 +284,7 @@ const handlers = {
   },
   async settings(m) { applySettings(m.settings, { prepare: m.prepare }); return null; },
   async option(m) { session[m.key] = m.value; if (m.key === 'formalizer') session.setOption?.('formalizer', m.value); return null; },
-  async prepare() { return { available: false, reason: 'retired-model-runtime' }; },
+  async prepare() { return {available:readerStatus.state==='ready',reader:readerStatus}; },
   async sample() { return { items: [], available: false, reason: 'no-declared-request-sampler' }; },
   async warm() { return null; },
   /** The page needs a world now (its tab opens, the user names it): loads it and answers which worlds are loaded. */

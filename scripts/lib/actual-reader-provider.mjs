@@ -4,6 +4,8 @@ import {resolve,relative,isAbsolute} from 'node:path';
 import {pathToFileURL} from 'node:url';
 import {createHash} from 'node:crypto';
 import {routeNewEngine} from '../../src/dialog/reader-routing.mjs';
+import {bertRuntimeConfiguration} from '../../src/dialog/browser-reader-host.mjs';
+export {bertRuntimeConfiguration};
 import {copyHostData} from '../../worlds/native-tool-host.mjs';
 import {observedReaderContext,REPLAY_CONTEXT_PROFILE} from './reader-context-profile.mjs';
 const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
@@ -27,18 +29,6 @@ export async function runtimeTreeIdentity(directory){
   }
  }
  await walk(root);return {root,sha256:sha(JSON.stringify(rows)),files:rows.length,bytes};
-}
-export function bertRuntimeConfiguration(profile,config){
- const roles={pad_token:'[PAD]',unk_token:'[UNK]',cls_token:'[CLS]',sep_token:'[SEP]',mask_token:'[MASK]'};
- const ids=new Set();
- for(const [key,value]of Object.entries(roles)){
-  if(config[key]!==undefined&&config[key]!==value)throw Error('conflicting-bert-special-role');
-  const matches=profile.added_tokens?.filter(t=>t.content===value&&t.special===true);
-  if(matches?.length!==1||ids.has(matches[0].id)||profile.model?.vocab?.[value]!==matches[0].id)throw Error('missing-declared-bert-special-role');ids.add(matches[0].id);
-  if(key==='unk_token'&&profile.model.unk_token!==value)throw Error('conflicting-bert-unknown-role');
-  if(key==='cls_token'||key==='sep_token'){const declared=profile.post_processor?.special_tokens?.[value];if(JSON.stringify(declared?.ids)!==JSON.stringify([matches[0].id])||JSON.stringify(declared?.tokens)!==JSON.stringify([value]))throw Error('conflicting-bert-processor-role');}
- }
- return {...config,...roles};
 }
 /** Explicit spec paths are local evaluation inputs, never fields from a model or annotation. */
 export async function loadActualReplayReader(spec,{factory}={}){

@@ -1,0 +1,24 @@
+// Bind the shipped browser implementation to the immutable model manifest.
+import {readFile,writeFile,stat} from 'node:fs/promises';import path from 'node:path';import {createHash} from 'node:crypto';
+const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
+export async function refreshBrowserReaderDeployment(outDir){
+ const file=path.join(outDir,'models/sop-bert/deployment.json');if(!await stat(file).then(()=>true,()=>false))return null;
+ const deployment=JSON.parse(await readFile(file,'utf8'));if(deployment.format!=='psys2.browser-reader-deployment/1')throw Error('unsupported-reader-deployment');
+ const groups={
+  appBuildSha256:['ui/engine-worker.mjs','lib/dialog/index.mjs'],
+  readerSha256:['lib/dialog/cutter-inference.mjs','lib/dialog/key-reader-inference.mjs','lib/dialog/bert-source-offsets.mjs'],
+  pipelineSha256:['lib/dialog/key-reader-pipeline.mjs','lib/dialog/verified-reader-provider.mjs','lib/dialog/browser-reader-host.mjs'],
+  packetAdapterSha256:['lib/dialog/key-reader-packet.mjs'],
+  graphDecoderSha256:['lib/dialog/raw-structural-bridge.mjs','lib/dialog/model-graph-decoder.mjs','lib/vendor/sopworld/sopworld.mjs'],
+  executorSha256:['lib/dialog/new-engine.mjs','lib/dialog/reader-routing.mjs','lib/dialog/reader-admission.mjs'],
+  contextSerializationSha256:['lib/dialog/native-reader-context.mjs','lib/dialog/app-reader-context.mjs','lib/dialog/key-reader-inference.mjs'],
+  backendSha256:['vendor/onnxruntime/ort.wasm.bundle.min.mjs','vendor/onnxruntime/ort-wasm-simd-threaded.mjs','vendor/onnxruntime/ort-wasm-simd-threaded.wasm','vendor/sop-tokenizer/bert-tokenizer.mjs']
+ };
+ const sourceInventory={};
+ for(const [key,files]of Object.entries(groups))sourceInventory[key]=await Promise.all(files.map(async name=>({path:name,sha256:sha(await readFile(path.join(outDir,name)))})));
+ deployment.runtimeIdentity=Object.fromEntries(Object.entries(sourceInventory).map(([key,files])=>[key,sha(JSON.stringify(key==='backendSha256'?{files,executionProvider:'wasm',numThreads:1,proxy:false}:files))]));
+ deployment.runtimeIdentity.bindingsSha256=deployment.bindingsArtifact.sha256;
+ deployment.implementation={format:'psys2.browser-reader-implementation/1',sourceInventory,backend:{executionProvider:'wasm',numThreads:1,proxy:false},trust:'application deployment; browser-specific empirical report still required'};
+ deployment.admission=null;
+ await writeFile(file,JSON.stringify(deployment,null,2)+'\n');return deployment;
+}

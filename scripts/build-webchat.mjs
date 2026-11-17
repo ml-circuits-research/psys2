@@ -25,6 +25,7 @@ import { execFileSync } from 'node:child_process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import path from 'node:path';
 import { createDemoLoader } from './lib/demo-composition.mjs';
+import {refreshBrowserReaderDeployment} from './lib/browser-reader-deployment.mjs';
 import { slotDeclarations } from '../src/worlds/describe.mjs';
 
 const REPO = fileURLToPath(new URL('..', import.meta.url));
@@ -378,6 +379,7 @@ export async function buildWebchat({ root = REPO, outDir = path.join(root, 'docs
   if (await exists(path.join(root, 'docs/system-map.html')) && path.resolve(outDir) !== path.resolve(root, 'docs')) await cp(path.join(root, 'docs/system-map.html'), path.join(outDir, 'system-map.html'));
 
   // 3e. the asset manifest and the early block of index.html (it stamps the manifest's version): after every other file of the out dir exists
+  await refreshBrowserReaderDeployment(outDir);
   const assets = await assetHashes(outDir, await moduleVersions(outDir, graph));
   const version = manifestVersion(assets);
   await writeEarlyLoad({ outDir, tabFiles, ids, graph, build: { commit, builtAt, version }, assets });
