@@ -99,7 +99,7 @@ export function renderFace(data, face, opts = {}) {
       const v = variantFor(data, face, slot.name, side, opts.over);
       if (!v) continue;
       const a = face.adj?.[slot.name] ?? {}, k = a.s ?? 1, cx = slot.x + slot.w / 2, cy = slot.y + slot.h / 2;
-      const move = `translate(${f1(cx + (a.dx ?? 0))} ${f1(cy + (a.dy ?? 0))}) scale(${f1(k)}) translate(${f1(-cx)} ${f1(-cy)})`;
+      const move = `translate(${cx + (a.dx ?? 0)} ${cy + (a.dy ?? 0)}) scale(${k}) translate(${-cx} ${-cy})`;
       const flip = side === 'right' ? `matrix(-1 0 0 1 ${fr.w} 0) ` : '';
       const parts = v.parts.map((p) => partSvg(p, partColour(data, face, slot.name, p), side === 'right')).join('');
       out.push(`<g transform="${flip}${move}" data-avatar-slot="${esc(slot.name)}">${parts}</g>`);
@@ -107,7 +107,9 @@ export function renderFace(data, face, opts = {}) {
   }
   const size = opts.size ? ` width="${opts.size}" height="${f1((opts.size * fr.h) / fr.w)}"` : '';
   const bg = opts.bg ? `<rect x="0" y="0" width="${fr.w}" height="${fr.h}" fill="${opts.bg}"/>` : '';
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${fr.w} ${fr.h}"${size} role="img" aria-label="${esc(opts.label ?? 'A drawn face')}">${bg}${out.join('')}</svg>`;
+  const scale=face.adj?.face?.s??1,whole=`translate(${fr.w/2} ${fr.h/2}) scale(${scale}) translate(${-fr.w/2} ${-fr.h/2})`;
+  const padding=Number.isFinite(opts.padding)&&opts.padding>0?opts.padding:0;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${-padding} ${-padding} ${fr.w+padding*2} ${fr.h+padding*2}"${size} role="img" aria-label="${esc(opts.label ?? 'A drawn face')}">${bg}<g data-avatar-face="face" transform="${whole}">${out.join('')}</g></svg>`;
 }
 
 /** A small picture of one variant of one slot, in its place on the face (a thumbnail to tap): the face with that variant, zoomed on the slot's box. */

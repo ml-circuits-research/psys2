@@ -613,7 +613,7 @@ export function partsOf(obj, build = null) {
   return base.filter((p) => !hidden.has(p.n)).map((p) => {
     let color = p.c;
     if (Object.hasOwn(override, p.n)) color = override[p.n];
-    else if (p.m && obj.color) color = obj.color;
+    else if (p.m && obj.color && !obj.shape?.members?.some(member=>member.id===p.memberId&&member.groupColorOverride)) color = obj.color;
     else if (p.alt && obj.color && sameColor(obj.color, p.c)) color = p.alt;
     let hex = colorHex(color);
     if (p.sh) hex = shadeHex(hex, p.sh);
@@ -623,19 +623,27 @@ export function partsOf(obj, build = null) {
       if (obj.mood === 'sad') rest.pts = rest.pts.map(([x, y]) => [x, -1.4 - y]);
       else rest.t = (rest.t ?? 0.015) * 2;
     }
-    return { ...rest, color: canonColor(color) ?? String(color), hex, ...(p.m ? { follows: true } : {}) };
+    return { ...rest, color: canonColor(color) ?? String(color), hex, ...(p.m&&!obj.shape?.members?.some(member=>member.id===p.memberId&&member.groupColorOverride)?{follows:true}:{}) };
   });
 }
 
 // ---- geometry of objects --------------------------------------------------------------------------------------------
+export function multiplyMatrix(a,b){return [a[0]*b[0]+a[2]*b[1],a[1]*b[0]+a[3]*b[1],a[0]*b[2]+a[2]*b[3],a[1]*b[2]+a[3]*b[3],a[0]*b[4]+a[2]*b[5]+a[4],a[1]*b[4]+a[3]*b[5]+a[5]];}
+export function inverseMatrix(m){const det=m[0]*m[3]-m[1]*m[2];return [m[3]/det,-m[1]/det,-m[2]/det,m[0]/det,(m[2]*m[5]-m[3]*m[4])/det,(m[1]*m[4]-m[0]*m[5])/det];}
+export function geometryPoint(m,x,y){return [m[0]*x+m[2]*y+(m[4]??0),m[1]*x+m[3]*y+(m[5]??0)];}
+/** Native linear geometry, separate from position; resize composes a canvas-space affine scale. */
+export function objectMatrix(obj){
+ if(Array.isArray(obj.geometryMatrix))return obj.geometryMatrix;
+ const angle=(obj.rotation??0)*Math.PI/180,flip=obj.flip?-1:1,k=KINDS[kindKey(obj)],sx=obj.width===undefined?1:obj.width/obj.size,sy=obj.height===undefined?1:obj.height/(obj.size*(k?.aspect??1));
+ return [Math.cos(angle)*flip*sx,Math.sin(angle)*flip*sx,-Math.sin(angle)*sy,Math.cos(angle)*sy];
+}
 /** Bounding box of an object in canvas pixels (rotation is taken into account for the box only). */
 export function bbox(obj) {
   ensureCustom(obj);
   const k = KINDS[kindKey(obj)];
-  const w0 = obj.size, h0 = obj.size * (k?.aspect ?? 1);
-  const a = ((obj.rotation ?? 0) * Math.PI) / 180, c = Math.abs(Math.cos(a)), s = Math.abs(Math.sin(a));
-  const w = w0 * c + h0 * s, h = w0 * s + h0 * c;
-  return { x0: obj.x - w / 2, y0: obj.y - h / 2, x1: obj.x + w / 2, y1: obj.y + h / 2, w, h, cx: obj.x, cy: obj.y };
+  const w0=obj.size,h0=obj.size*(k?.aspect??1),[a,b,c,d]=objectMatrix(obj);
+  const w=Math.abs(a)*w0+Math.abs(c)*h0,h=Math.abs(b)*w0+Math.abs(d)*h0;
+  return {x0:obj.x-w/2,y0:obj.y-h/2,x1:obj.x+w/2,y1:obj.y+h/2,w,h,cx:obj.x,cy:obj.y};
 }
 
 // ---- regions ------------------------------------------------------------------------------------------------------
@@ -719,9 +727,9 @@ function xfPart(p, { mirror = false, a = 0, s = 1, tx = 0, ty = 0 }) {
   return out;
 }
 const boxOfTurned = (p) => {
-  if (p.pts) return boxOf(p);
-  const a = ((p.r ?? 0) * PI) / 180, hw = (Math.abs(p.w * Math.cos(a)) + Math.abs(p.h * Math.sin(a))) / 2, hh = (Math.abs(p.w * Math.sin(a)) + Math.abs(p.h * Math.cos(a))) / 2;
-  return { x0: p.x - hw, x1: p.x + hw, y0: p.y - hh, y1: p.y + hh };
+ const a=((p.r??0)*PI)/180,c=Math.cos(a),s=Math.sin(a),corners=p.pts??[[p.x-p.w/2,p.y-p.h/2],[p.x+p.w/2,p.y-p.h/2],[p.x+p.w/2,p.y+p.h/2],[p.x-p.w/2,p.y+p.h/2]],m=p.matrix??[1,0,0,1,0,0];
+ const points=corners.map(([x,y])=>{if(!p.pts){const dx=x-p.x,dy=y-p.y;x=p.x+dx*c-dy*s;y=p.y+dx*s+dy*c;}return [m[0]*x+m[2]*y+m[4],m[1]*x+m[3]*y+m[5]];});
+ return {x0:Math.min(...points.map(q=>q[0])),x1:Math.max(...points.map(q=>q[0])),y0:Math.min(...points.map(q=>q[1])),y1:Math.max(...points.map(q=>q[1]))};
 };
 const unionBox = (parts) => {
   const bs = parts.map(boxOfTurned);
@@ -736,16 +744,12 @@ const bake = (p) => { const { color, hex, follows, ...rest } = p; return { ...re
 export function piecesOf(obj, only = null) {
   const drawn = partsOf(obj);
   const names = [...new Set(drawn.map((p) => p.n))].filter((n) => !only || only.includes(n));
-  const mirror = !!obj.flip, a = ((obj.rotation ?? 0) * PI) / 180;
-  return names.map((name, i) => {
-    const mine = drawn.filter((p) => p.n === name).map((p) => ({ ...xfPart(bake(p), { mirror }), m: 1 }));   // one named part: recolouring the piece recolours all of it
-    const u = unionBox(mine), bw = Math.max(u.x1 - u.x0, 0.02), bh = Math.max(u.y1 - u.y0, 0.02), cx = (u.x0 + u.x1) / 2, cy = (u.y0 + u.y1) / 2;
-    const parts = mine.map((p) => xfPart(p, { s: 1 / bw, tx: -cx / bw, ty: -cy / bw }));
-    const dx = cx * obj.size, dy = cy * obj.size;
-    return {
-      name, shape: { parts, aspect: round(bh / bw), size: Math.max(8, Math.round(bw * obj.size)) },
-      x: round(obj.x + dx * Math.cos(a) - dy * Math.sin(a)), y: round(obj.y + dx * Math.sin(a) + dy * Math.cos(a)), size: Math.max(8, Math.round(bw * obj.size)), rotation: obj.rotation ?? 0, z: (obj.z ?? 0) + i / 100,
-    };
+  const matrix=objectMatrix(obj);
+  return names.map((name,i)=>{
+    const mine=drawn.filter(p=>p.n===name).map(p=>({...bake(p),matrix:multiplyMatrix([...matrix,0,0],p.matrix??[1,0,0,1,0,0])}));
+    const u=unionBox(mine),bw=Math.max(u.x1-u.x0,.02),bh=Math.max(u.y1-u.y0,.02),cx=(u.x0+u.x1)/2,cy=(u.y0+u.y1)/2,normalize=[1/bw,0,0,1/bw,-cx/bw,-cy/bw];
+    const parts=mine.map(p=>({...p,m:1,matrix:multiplyMatrix(normalize,p.matrix)}));
+    return {name,shape:{parts,aspect:bh/bw,size:bw*obj.size},x:obj.x+cx*obj.size,y:obj.y+cy*obj.size,size:bw*obj.size,rotation:0,z:(obj.z??0)+i/100};
   });
 }
 /** The shape of several objects put together (their parts in one frame, colours kept): { shape, x, y, size, z }. */
@@ -755,8 +759,8 @@ export function groupOf(objs) {
   const gw = Math.max(x1 - x0, 8), gh = Math.max(y1 - y0, 8), gx = (x0 + x1) / 2, gy = (y0 + y1) / 2;
   const parts = [];
   for (const o of objs.slice().sort((p, q) => (p.z ?? 0) - (q.z ?? 0))) {
-    const s = o.size / gw;
-    for (const p of partsOf(o)) parts.push(xfPart(bake(p), { mirror: !!o.flip, a: o.rotation ?? 0, s, tx: (o.x - gx) / gw, ty: (o.y - gy) / gw }));
+    const s=o.size/gw,m=objectMatrix(o),outer=[m[0]*s,m[1]*s,m[2]*s,m[3]*s,(o.x-gx)/gw,(o.y-gy)/gw];
+    for(const [memberPart,p] of partsOf(o).entries()){const inner=p.matrix??[1,0,0,1,0,0];parts.push({...bake(p),memberId:o.id,memberPart,memberOrigin:p.memberId?{memberId:p.memberId,memberPart:p.memberPart,memberOrigin:p.memberOrigin??null}:null,matrix:multiplyMatrix(outer,inner)});}
   }
-  return { shape: { parts, aspect: round(gh / gw), size: Math.round(gw) }, x: Math.round(gx), y: Math.round(gy), size: Math.round(gw), z: Math.max(...objs.map((o) => o.z ?? 0)) };
+  return { shape: { parts, aspect: gh / gw, size: gw }, x: gx, y: gy, size: gw, z: Math.max(...objs.map((o) => o.z ?? 0)) };
 }

@@ -305,6 +305,19 @@ const handlers = {
     const restored=await restoreNativeInstances(session,m.records);
     return {...restored,state:stateOf(),meta:metaOf()};
   },
+  async instanceInspection(m) {
+    while(turnRunning())await sleep(20);
+    const {NATIVE_AREAS,createAreaHost}=await import(vurl('lib/dialog/app-reader-context.mjs'));
+    const area=Object.values(NATIVE_AREAS).find(area=>area.world===m.world);
+    if(!area)throw Error('Unknown inspected instance world.');
+    await ensureWorlds([m.world],'inspecting SOP world');
+    const {snapshotNativeInstances}=await import(vurl('lib/dialog/instance-persistence.mjs'));
+    const record=(await snapshotNativeInstances(session,{worlds:[m.world]}))[0];
+    if(!record)throw Error('Instance state unavailable.');
+    const host=await createAreaHost(area,{state:session.isession.state[m.world],instanceId:record.instanceId,loader:engine.loader,knowledge:engine.knowledge});
+    const {inspectInstanceRecord}=await import(vurl('lib/dialog/instance-inspection.mjs'));
+    return inspectInstanceRecord(record,{observation:host.observe()});
+  },
   async instanceFacts(m) {
     while(turnRunning())await sleep(20);
     const {snapshotNativeInstances}=await import(vurl('lib/dialog/instance-persistence.mjs'));

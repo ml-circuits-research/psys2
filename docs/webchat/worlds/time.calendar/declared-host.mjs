@@ -14,6 +14,7 @@ export const CALENDAR_TOOL_BINDINGS=[
   {id:`calendar.${kind}.remove`,act:'remove',on:`time.calendar.${kind}`,params:{id:identity}},
  ]),
  {id:'calendar.meeting.add',act:'make',on:'time.calendar.meeting',params:fields},
+ {id:'calendar.event.select',act:'pick',on:'time.calendar.meeting',params:{id:{...identity,nullable:true}}},
  {id:'calendar.event.add',act:'make',on:'time.calendar.meeting',sample:[{args:{id:{unique:{prefix:'event',separator:'-'}},title:{unique:{prefix:'Event'}},start:{now:{round:86400000,offset:43200000}},duration:{value:3600000}}}],params:{id:identity,title:fields.title,start:fields.start,duration:fields.duration,notes:fields.notes}},
  {id:'calendar.meeting.change',sample:[{args:{id:{ref:{on:'time.calendar.meeting'}},title:{unique:{prefix:'Event'}}}}],act:'change',on:'time.calendar.meeting',params:Object.fromEntries(Object.entries(fields).map(([k,v])=>[k,k==='id'?v:{...v,required:false}]))},
  {id:'calendar.meeting.move',act:'place',on:'time.calendar.meeting',params:{id:identity,start:required('integer')},coordinates:time},
@@ -22,14 +23,15 @@ export const CALENDAR_TOOL_BINDINGS=[
  {id:'calendar.observe',act:'ask',on:'time.calendar',params:{}},
 ].map(op=>({...op,intent:{subject:op.on.endsWith('.calendar')?'personal calendar':op.on.endsWith('.meeting')?'event':op.on.split('.').at(-1),parameters:{calendar:{reference:true,label:'in calendar'},room:{reference:true,label:'in room'},start:{format:'unix-ms',label:'starting at'},duration:{format:'duration-ms',label:'lasting'},participants:{reference:true,label:'with participants',hiddenIfEmpty:true},notes:{label:'with notes',hiddenIfEmpty:true}}}}));
 const groups={calendar:'calendars',person:'people',room:'rooms',meeting:'meetings'};
-export const initialCalendarState=()=>({calendars:[],people:[],rooms:[],meetings:[]});
-const view=state=>Object.entries(groups).flatMap(([kind,key])=>(state[key]??[]).map(row=>({id:row.id,kind,sourceType:`time.calendar.${kind}`,...(kind==='meeting'?{relations:{participants:[...(row.participants??[])],...(row.room?{room:[row.room]}:{}),...(row.calendar?{calendar:[row.calendar]}:{})}}:{}),inputs:Object.entries(row).filter(([k])=>k!=='id').map(([key,value])=>({binding:`calendar.${kind}.${key}`,key,values:value===null?[]:(Array.isArray(value)?[...value].sort():[value]).map(nativeToken),...(key==='start'?time:key==='duration'?{dimension:'time',unit:'millisecond',frame:'duration'}:{})}))})));
+export const initialCalendarState=()=>({calendars:[],people:[],rooms:[],meetings:[],selectedEvent:null});
+const view=state=>Object.entries(groups).flatMap(([kind,key])=>(state[key]??[]).map(row=>({id:row.id,kind,sourceType:`time.calendar.${kind}`,...(kind==='meeting'?{relations:{participants:[...(row.participants??[])],...(row.room?{room:[row.room]}:{}),...(row.calendar?{calendar:[row.calendar]}:{})}}:{}),inputs:Object.entries({...row,...(kind==='meeting'&&Object.hasOwn(state,'selectedEvent')?{selected:state.selectedEvent===row.id}:{})}).filter(([k])=>k!=='id').map(([key,value])=>({binding:`calendar.${kind}.${key}`,key,values:value===null?[]:(Array.isArray(value)?[...value].sort():[value]).map(nativeToken),...(key==='start'?time:key==='duration'?{dimension:'time',unit:'millisecond',frame:'duration'}:{})}))})));
 /** Native full-store adapter. validate is supplied world policy, never inferred scheduling policy. */
 export function createCalendarHost({state=initialCalendarState(),instanceId,validate=null,policySource=null,...limits}={}){
  createCalendar({instanceId,...state});
  const policy=policySource===null?null:createCalendarPolicy({source:policySource}).validate;
  const check=policy&&validate?candidate=>{const p=policy(candidate);return p.ok?validate(candidate):p;}:policy??validate;
  const handlers=Object.fromEntries(CALENDAR_TOOL_BINDINGS.map(binding=>[binding.id,(ctx,args)=>{
+  if(binding.id==='calendar.event.select'){if(args.id!==null&&!ctx.state.meetings.some(event=>event.id===args.id))return {status:'missing',code:'missing-target'};ctx.state.selectedEvent=args.id;return {status:'supported',changed:args.id?[args.id]:[]};}
   if(binding.id==='calendar.observe')return {status:'supported',data:view(ctx.state)};
   const native=createCalendar({instanceId,...ctx.state});
   let result;
@@ -42,6 +44,8 @@ export function createCalendarHost({state=initialCalendarState(),instanceId,vali
   if(!result.ok)return {status:'missing',code:result.issue.code};
   const snapshot=result.observation;
   for(const [kind,key] of Object.entries(groups))ctx.state[key]=snapshot.facts.filter(f=>f.kind===kind).map(({kind,...record})=>record);
+  if(['calendar.event.add','calendar.meeting.add'].includes(binding.id))ctx.state.selectedEvent=args.id;
+  if(ctx.state.selectedEvent&&!ctx.state.meetings.some(event=>event.id===ctx.state.selectedEvent))ctx.state.selectedEvent=null;
   return {status:'supported',changed:args.ids??[args.id]};
  }]));
  return createNativeToolHost({state,instanceId,scope:'calendar.lifecycle-store',operations:CALENDAR_TOOL_BINDINGS,handlers,view,validate:check,...limits});

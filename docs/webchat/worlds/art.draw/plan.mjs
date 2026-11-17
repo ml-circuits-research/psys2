@@ -3,8 +3,8 @@
 // code in this world. The methods are knowledge (k.procedures), the planner is the library's (src/plan/host.mjs); what is left here is what only the board can do: run one act of a plan on the
 // picture (make = the board's add, place at an anchor or a slot = the boxes k.layouts and k.wearables state, in the frame of the thing), all or nothing, one undo step, and say it in words.
 // No kind, scene, role, anchor or slot is named in this file.
-import * as D from './engine.mjs?v=c7be31263c';
-import { kindKey, kindName, W, H } from './scene.mjs?v=5bdf3e5957';
+import * as D from './engine.mjs?v=f2d426cc3a';
+import { kindKey, kindName, W, H } from './scene.mjs?v=dd93a23dcd';
 import { planHostOf } from '../../lib/plan/host.mjs?v=416ebab2c7';
 import { knowsKind } from '../../lib/knowledge/open-words.mjs?v=96ab582d08';
 import { COUNTS } from '../space/space.mjs?v=08fec2feb9';

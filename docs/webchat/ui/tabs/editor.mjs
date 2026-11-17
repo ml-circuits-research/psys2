@@ -1,3 +1,4 @@
+import {mountInspectorSplitter} from '../pane-splitter.mjs';
 // Native document editor: every edit, selection and reorder uses a typed declared tool.
 const WORLD='docs.editor';
 const el=(tag,attrs={},text)=>{const e=document.createElement(tag);for(const [k,v]of Object.entries(attrs)){if(k==='class')e.className=v;else if(k in e)e[k]=v;else e.setAttribute(k,v);}if(text!==undefined)e.textContent=text;return e;};
@@ -9,7 +10,7 @@ function inline(parent,text,marks=[],at='0'){
 function make(holder,host){
  if(!document.getElementById('native-document-css'))document.head.append(el('style',{id:'native-document-css'},CSS));
  Object.assign(holder.style,{padding:'0',height:'100%',minHeight:'0',maxWidth:'none',overflow:'hidden',boxSizing:'border-box'});
- const root=el('section',{class:'nd-editor','aria-label':'Document editor'}),bar=el('div',{class:'nd-toolbar',role:'toolbar','aria-label':'Document tools'}),body=el('div',{class:'nd-body'}),page=el('div',{class:'nd-page'}),inspector=el('aside',{class:'nd-inspector','aria-label':'Block inspector'}),status=el('div',{class:'nd-status',role:'status','aria-live':'polite'}),dock=el('section',{class:'nd-content-form'});holder.append(root);root.append(bar,body,status);body.append(page,inspector);
+ const root=el('section',{class:'nd-editor','aria-label':'Document editor'}),bar=el('div',{class:'nd-toolbar',role:'toolbar','aria-label':'Document tools'}),body=el('div',{class:'nd-body'}),page=el('div',{class:'nd-page'}),inspector=el('aside',{class:'nd-inspector','aria-label':'Block inspector'}),status=el('div',{class:'nd-status',role:'status','aria-live':'polite'}),dock=el('section',{class:'nd-content-form'});holder.append(root);root.append(bar,body,status);body.append(page,inspector);const closeInspectorSplitter=mountInspectorSplitter(body,inspector,{id:'editor',width:245,persist:host.persistent!==false});
  let state=host.state?.(WORLD)??{blocks:[]},selected=null,editing=null,range=null,dragged=null,pending=false,saving=null,destroyed=false;
  const button=(text,action,attrs={})=>{const b=el('button',{type:'button',...attrs},text);b.addEventListener('mousedown',e=>e.preventDefault());b.addEventListener('click',action);return b;};
  const block=()=>state.blocks?.find(b=>b.id===selected);
@@ -53,7 +54,7 @@ function make(holder,host){
   inspector.append(el('div',{class:'nd-selection'},range&&range.id===b.id?`Selected characters ${range.from}–${range.to}`:'Select words while editing to format a range.'));
  }
  function render(){
-  if(destroyed)return;bar.replaceChildren();page.replaceChildren();
+  if(destroyed)return;inspector.dataset.selectedNativeIds=JSON.stringify(state.selection?.type==='blocks'?state.selection.blocks:state.selection?.block?[state.selection.block]:state.focus?[state.focus]:[]);bar.replaceChildren();page.replaceChildren();
   bar.append(button('+ Chapter',()=>addSection(1)),button('+ Subchapter',()=>addSection(2)),button('+ Paragraph',()=>add('paragraph')),button('+ Heading',()=>add('heading')),button('+ Quote',()=>add('quote')),button('+ List',()=>add('list')),button('+ Table',()=>add('table')));
   for(const [label,mark]of [['B','bold'],['I','italic'],['U','underline'],['S','strike'],['Code','code'],['Highlight','highlight']])bar.append(button(label,()=>format(mark),{title:'Apply '+mark,'aria-label':'Apply '+mark}));bar.append(button('Clear format',async()=>{for(const mark of ['bold','italic','underline','strike','code','highlight'])await format(mark,false);}));
   bar.append(button('Clear document',async()=>{if(await saveEditing())await tool('document.block.remove',{ids:state.blocks.map(b=>b.id)});}),button('Undo',()=>tool('document.undo',{})),button('Redo',()=>tool('document.redo',{})));
@@ -71,6 +72,6 @@ function make(holder,host){
   }
   if(selected&&!state.blocks?.some(b=>b.id===selected))selected=null;paintInspector();
  }
- render();return {update(next){state=next??state;if(!editing)render();},destroy(){destroyed=true;root.remove();}};
+ render();return {update(next){state=next??state;if(!editing)render();},destroy(){destroyed=true;closeInspectorSplitter();root.remove();}};
 }
 export default {id:'editor',label:'Documents',world:WORLD,order:20,make};

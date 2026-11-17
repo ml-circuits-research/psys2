@@ -1,3 +1,4 @@
+import {createWorldCodePanel,createObjectCodePanel} from './ui/world-code.mjs';
 import {createInstanceStore} from './ui/instance-store.mjs';
 import {mountPaneSplitter} from './ui/pane-splitter.mjs';
 import {createIntentRecords} from './ui/intent-records.mjs';
@@ -127,6 +128,26 @@ export async function mountPsys2(element, options = {}) {
    * The tab's UI, made on first use: the tab opens, a message makes its world act, or an effect of the tab arrives. Making it loads the tab's world (the engine adds it) and its vendor assets
    * (map shapes, the editor, the chart library): none of them is fetched at boot except the open tab's.
    */
+  const worldViews=new Map();
+  function attachWorldViews(t,panel){
+    const shell=h('div',{class:'p2-world-views'}),holder=h('div',{class:'p2-tabbody p2-active-world',role:'tabpanel',id:`p2-${t.id}-active`});
+    let mode='active',pending=null,pendingEpoch=-1,epoch=0,pane=null,paneObserver=null,discovery=null;
+    const load=()=>{if(!pending||pendingEpoch!==epoch){const request=engineClient.call('instanceInspection',{world:t.world}).finally(()=>{if(pending===request)pending=null;});pending=request;pendingEpoch=epoch;}return pending;};
+    const copy=text=>ALLOW['clipboard.copy']({text});
+    const code=createWorldCodePanel({world:t.world,load,copy}),object=createObjectCodePanel({load,copy});
+    const codeHost=h('div',{class:'p2-world-code-host',role:'tabpanel',id:`p2-${t.id}-code`,hidden:true},code.element);
+    const activeButton=h('button',{type:'button',role:'tab','aria-controls':holder.id,'aria-selected':'true'},'Active');
+    const codeButton=h('button',{type:'button',role:'tab','aria-controls':codeHost.id,'aria-selected':'false',tabindex:'-1'},'Code');
+    const buttons=[activeButton,codeButton],toolbar=h('div',{class:'p2-world-subtabs',role:'tablist','aria-label':`${t.label} view`},...buttons);
+    const selection=()=>{try{return JSON.parse(pane?.dataset.selectedNativeIds??'[]');}catch{return [];}};
+    const refreshObject=()=>{if(pane&&mode==='active'&&view===t.id){if(object.element.parentNode!==pane)pane.append(object.element);void object.refresh(selection());}};
+    const connect=()=>{if(pane)return;pane=holder.querySelector('[data-selected-native-ids]');if(!pane)return;discovery?.disconnect();refreshObject();paneObserver=new MutationObserver(records=>{if(records.some(r=>r.type==='attributes'||[...r.addedNodes,...r.removedNodes].some(n=>n!==object.element)))refreshObject();});paneObserver.observe(pane,{childList:true,attributes:true,attributeFilter:['data-selected-native-ids']});};
+    const choose=next=>{mode=next;holder.hidden=mode!=='active';codeHost.hidden=mode!=='code';buttons.forEach((button,i)=>{const chosen=(i===0)===(mode==='active');button.setAttribute('aria-selected',String(chosen));button.tabIndex=chosen?0:-1;});if(mode==='code')void code.refresh();else{panelUI[t.id]?.ui.show?.();refreshObject();}};
+    buttons.forEach((button,i)=>{button.addEventListener('click',()=>choose(i?'code':'active'));button.addEventListener('keydown',event=>{if(['ArrowLeft','ArrowRight','Home','End'].includes(event.key)){event.preventDefault();const next=event.key==='Home'?0:event.key==='End'?1:1-i;choose(next?'code':'active');buttons[next].focus();}});});
+    shell.append(toolbar,holder,codeHost);panel.append(shell);discovery=new MutationObserver(connect);discovery.observe(holder,{childList:true,subtree:true});
+    const controls={holder,refresh(changed=true){if(changed)epoch++;connect();if(view===t.id){if(mode==='code')void code.refresh();else refreshObject();}},destroy(){discovery?.disconnect();paneObserver?.disconnect();code.destroy();object.destroy();}};
+    worldViews.set(t.world,controls);cleanups.push(()=>controls.destroy());return controls;
+  }
   function makeTab(t) {
     if (!tabKnown.has(t.id)) return Promise.resolve(null);
     if (!tabMade.has(t.id)) tabMade.set(t.id, (async () => {
@@ -135,8 +156,7 @@ export async function mountPsys2(element, options = {}) {
       if (t.file && !t.make) { const m = (await import(new URL(`ui/tabs/${t.file}`, base).href)).default; Object.assign(t, m); }   // the tab's module loads now (with its world modules); vendor assets load when it makes its UI
       if (!options.renderAllTabs && engineClient) { try { const r = await engineClient.call('ensure', { worlds: [t.world], why: 'tab' }); for (const id of r?.added ?? []) loadedWorlds.add(id); } catch (e) { console.warn('could not load the world of the tab', t.world, e); } }
       if (destroyed) return null;
-      const holder = h('div', { class: 'p2-tabbody' });
-      tabBtns[t.id].panel.append(holder);
+      const {holder}=attachWorldViews(t,tabBtns[t.id].panel);
       panelUI[t.id] = { ui: t.make(holder, hostApi) };
       panelUI[t.id].ui.update?.(states[t.world]);
       if (view === t.id) panelUI[t.id].ui.show?.();
@@ -407,15 +427,27 @@ export async function mountPsys2(element, options = {}) {
     syncPageUI();
     refreshSuggestions();
     const def = tabDefs.find((t) => t.id === id);
-    if (def && !panelUI[id]) makeTab(def);
+    if (def && !panelUI[id]) makeTab(def);else if(def)worldViews.get(def.world)?.refresh(false);
   }
 
   // ---------- chat ----------
   let scrollQueued = false;
   function scrollDown() { if (scrollQueued) return; scrollQueued = true; const go = () => { scrollQueued = false; log.scrollTop = log.scrollHeight; }; (typeof requestAnimationFrame === 'function' && document.visibilityState !== 'hidden') ? requestAnimationFrame(go) : go(); }   // one forced layout per frame, not one per message
+  function copyButton(label,getText) {
+    return h('button',{class:'p2-linkbtn p2-copy',type:'button',title:label,'aria-label':label,onclick:async()=>{
+      try{const result=await ALLOW['clipboard.copy']({text:String(getText())});if(result?.ok===false)toast('Copy failed: '+(result.detail??'clipboard unavailable'));}catch{toast('Copy failed');}
+    }},label);
+  }
+  function appendIntent(bubble,wires,label,expandedWires=null) {
+    const detail=h('details',{class:'p2-intent'},h('summary',{'aria-label':label,title:label},h('span',{'aria-hidden':'true'},'⟨/⟩'),' SOP'));
+    detail.append(copyButton('Copy SOP Lang',()=>wires),h('pre',{class:'p2-code'},wires));
+    if(expandedWires&&expandedWires!==wires){const trace=h('details',{class:'p2-execution-details'},h('summary',{},'Execution details'));trace.append(copyButton('Copy execution details',()=>expandedWires),h('pre',{class:'p2-code'},expandedWires));detail.append(trace);}
+    bubble.append(detail);return detail;
+  }
   function addMessage(who, text, { children, className } = {}) {
     const bubble = h('div', { class: 'p2-bubble' }, text, children);
     const meta = h('div', { class: 'p2-meta' }, h('time', {}, time()));
+    if(!/is-typing/.test(className??''))meta.append(copyButton('Copy text',()=>typeof text==='string'?text:(text?.textContent??'')));
     const msg = h('div', { class: `p2-msg is-${who}${className ? ` ${className}` : ''}` }, bubble, meta);
     log.append(msg); scrollDown();
     if (turn && who === 'bot' && !/is-typing/.test(className ?? '')) turn.shown?.push({ bubble, cls: className ?? '' });   // LOG WHAT HAPPENED: every reply shown during the turn
@@ -550,15 +582,17 @@ export async function mountPsys2(element, options = {}) {
     while(instancesSaving)await instancesSaving;
     if(instanceFailure)throw instanceFailure;
   }
+  const renderFailures=new Set();
   function applyState(snapshot) {
     if (!snapshot || typeof snapshot !== 'object') return;
     const changed = [];
     for (const [id, st] of Object.entries(snapshot)) { states[id] = st; changed.push(id); }
-    for (const t of tabDefs) if (changed.includes(t.world)) { if (panelUI[t.id]) panelUI[t.id].ui.update(states[t.world]); else if (tabKnown.has(t.id) && tabsLive) makeTab(t); }
+    for (const t of tabDefs) if (changed.includes(t.world)) { try{if (panelUI[t.id]) panelUI[t.id].ui.update(states[t.world]); else if (tabKnown.has(t.id) && tabsLive) makeTab(t);renderFailures.delete(t.id);}catch(error){console.warn('Editor refresh failed',t.id,error);if(!renderFailures.has(t.id))note(`${t.label} could not refresh. World data is preserved.`);renderFailures.add(t.id);} }
     if (changed.includes('ui.avatar')) avatarUI?.update(states['ui.avatar']);
     if (changed.includes(SHELL)) applyShell(states[SHELL]);
     if (changed.includes('docs.editor')) syncDictation();
     if(changed.some(id=>DEMO_WORLDS.includes(id)))queueInstances();
+    for(const id of changed)worldViews.get(id)?.refresh();
     options.onState?.(states, changed);
   }
   function applyShell(sh) {
@@ -635,14 +669,15 @@ export async function mountPsys2(element, options = {}) {
   };
   /** What tab plugins may use: send a command through the language layer, speak, read/patch world state, load assets. */
   const hostApi = {
+    persistent: options.persist !== false,
     /** RANDOM (spec 25): texts the sampler gives for the tab (mode 'few' | 'actions' | 'one'); a tab shows them in its empty state instead of a list of its own. */
     sample: (mode, extra) => sampleItems(mode, extra).then((items) => items.map((i) => i.text)),
     tools: (options={}) => session.tools(options),
     tool: async (operation,args={},options={}) => {
       if(isBusy())return {ok:false,message:'Please wait for the current action.'};
-      effectsPending++;updateBusy();
-      try{const r=await session.tool(operation,args,options);applyState(r.state);if(r.intentRecord){await trainingPairs.record(r.intentRecord);const row=addMessage('user',r.intentRecord.text),detail=h('details',{open:true,class:'p2-intent'},h('summary',{},'SOP Lang intent'),h('pre',{class:'p2-code'},r.intentRecord.wires));row.bubble.append(detail);addMessage('bot',r.message+' · '+(r.intentRecord.verification?.status??'unverified'));}if(r.ok&&r.changed)events.add('control',operation);await flushInstances();return r;}
-      finally{effectsPending=Math.max(0,effectsPending-1);updateBusy();}
+      const focusBeforeTool=document.activeElement;effectsPending++;updateBusy();
+      try{const r=await session.tool(operation,args,options);applyState(r.state);if(r.intentRecord){await trainingPairs.record(r.intentRecord);const row=addMessage('user',r.intentRecord.text);appendIntent(row.bubble,r.intentRecord.wires,'SOP Lang intent',r.intentRecord.intent?.expandedWires);addMessage('bot',r.message+' · '+(r.intentRecord.verification?.status??'unverified'));}if(r.ok&&r.changed)events.add('control',operation);await flushInstances();return r;}
+      finally{effectsPending=Math.max(0,effectsPending-1);updateBusy();if(focusBeforeTool?.isConnected&&document.activeElement===document.body)focusBeforeTool.focus({preventScroll:true});}
     },
     send: (text) => send(String(text), 'form'),   // a tab's form or control (logged as mode 'form'); ignored (with a hint) while a turn runs
     /** A card or control that moves the person to another tab (a transferred card): logged as a tab opened by a card. */
@@ -903,7 +938,7 @@ export async function mountPsys2(element, options = {}) {
     if (!modelsStarted && ((reply.statuses ?? []).length === 0 || !(reply.statuses ?? []).includes('supported') || (reply.segments ?? []).some((sg) => sg.unparsed))) startModels();   // LAZY-LOAD-3: the rules did not read it cleanly: the reading model is wanted now
     const botMsg = addMessage('bot', answer);
     const requestWires=reply.trace?.reading?.wires??reply.trace?.readerRouting?.admission?.alternatives?.[0]?.wires;
-    if(typeof requestWires==='string'&&requestWires.trim())botMsg.bubble.append(h('details',{open:true,class:'p2-intent'},h('summary',{},'SOP Lang reading'),h('pre',{class:'p2-code'},requestWires)));
+    if(typeof requestWires==='string'&&requestWires.trim())appendIntent(botMsg.bubble,requestWires,'SOP Lang reading');
     if (notUnderstood) {   // MOBILE-VOICE: repeated not-understood voice replies within 20 s are collapsed into one (the first gets a count)
       const nowT = performance.now();
       if (lastNU && nowT - lastNU.at < 20000 && lastNU.el.isConnected) { lastNU.n++; lastNU.at = nowT; lastNU.badge.textContent = ` ×${lastNU.n}`; botMsg.msg.hidden = true; botMsg.msg.classList.add('is-collapsed'); }

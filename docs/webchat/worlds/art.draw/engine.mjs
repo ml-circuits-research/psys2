@@ -18,7 +18,7 @@ import {
   W, H, HORIZON, GROUND_BASE, KINDS, KIND_ORDER, PLURALS, REGIONS, SHADES,
   canonColor, defaultColor, partOfWord, partNames, partLabel, bbox, placeInRegion, regionOf, starField, isKind, kindKey, kindName, thingOfWord, COMPOSITE, thingGroups, partCount,
   registerThings, partGuessed, isThing, ensureCustom, registerShape, piecesOf, groupOf, thingOfKey, partsOf,
-} from './scene.mjs?v=5bdf3e5957';
+} from './scene.mjs?v=dd93a23dcd';
 
 import { colourName, colourNames, basicColourNames } from '../../lib/knowledge/values.mjs?v=8601038efd';   // the one colour reader (k.values)
 import { adviceFor } from '../../lib/knowledge/commonsense.mjs?v=f2f7f64a3a';   // the knowledge tier's common sense (T3): where a kind usually is, when the facts of this world say nothing
@@ -29,10 +29,10 @@ import * as solver from '../space/solver.mjs?v=4b8fc51bea';
 import {
   B, initialState, GROUND_COLOR, ensure as boardEnsure, anchorOf, onGround, byId, effectiveColor, open, rnd, idNum, colorFrom, sizeWord, snapshot, restore, remember, oneStep as boardOneStep,
   crowd, overlapRatio, clampIn, defaultSpot, placeRegion, defaultSpotOn, placeRelative, makeObject, Z_LAYER, addThing as boardAddThing,
-} from './board.mjs?v=7ee7069df4';   // the board itself: state, history, placement, tool primitives (this module builds the word operations on it)
-export { initialState } from './board.mjs?v=7ee7069df4';   // SPACE-2: pieces and the relations kept as facts (s.rels)   // where things are, which one is meant by its place, how far a move goes (shared module, specs/18)
+} from './board.mjs?v=184d8dc039';   // the board itself: state, history, placement, tool primitives (this module builds the word operations on it)
+export { initialState } from './board.mjs?v=184d8dc039';   // SPACE-2: pieces and the relations kept as facts (s.rels)   // where things are, which one is meant by its place, how far a move goes (shared module, specs/18)
 
-export { KINDS, REGIONS, canonColor, colorHex, partsOf, bbox, regionOf, W, H, HORIZON, kindName } from './scene.mjs?v=5bdf3e5957';
+export { KINDS, REGIONS, canonColor, colorHex, partsOf, bbox, regionOf, W, H, HORIZON, kindName } from './scene.mjs?v=dd93a23dcd';
 
 // The turn's step budget (a no-op outside a turn): placement and name resolution are searches whose cost grows with the picture.
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
@@ -2085,4 +2085,4 @@ export function summary(ctx) {
 export { describeWanted, colorFrom, isShade, isColorWord, pluralOfKind, a_, placePhrase, effectiveColor, sameColorName, drawingNP };
 
 /** The tool primitives, the view and the declared search of the request door are the board's (board.mjs); re-exported for the callers of this module. */
-export { startScene, addThings, removeThings, moveThings, setThings, paintSky, toolView, thingAt, newPage, undoStep, redoStep } from './board.mjs?v=7ee7069df4';
+export { startScene, addThings, removeThings, moveThings, setThings, paintSky, toolView, thingAt, newPage, undoStep, redoStep } from './board.mjs?v=184d8dc039';

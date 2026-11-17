@@ -4,11 +4,11 @@ import {nativeKindCandidates} from './native-binding-candidates.mjs?v=965157001c
 import {World,str} from '../vendor/sopworld/sopworld.mjs?v=0a9b998e29';
 import SOURCE from './new-engine-source.mjs?v=e31b4adb7f';
 import {flatRequestProjection} from './request-projection.mjs?v=cd2eefe301';
-import {NATIVE_AREAS,createAreaHost} from './app-reader-context.mjs?v=e9885f1c0a';
+import {NATIVE_AREAS,createAreaHost} from './app-reader-context.mjs?v=f956e7d0ed';
 import {observedReaderContext} from './native-reader-context.mjs?v=a762c82e14';
 import {validateNativeArguments} from '../../worlds/native-tool-host.mjs?v=463e762442';
 import {resolvePropertyValue} from './property-selection.mjs?v=2ac97a325c';
-import {DRAWING_PROPERTY_BINDINGS} from '../../worlds/art.draw/property-host.mjs?v=6f8a2e7bd7';
+import {DRAWING_PROPERTY_BINDINGS} from '../../worlds/art.draw/property-host.mjs?v=ad4de9eb20';
 let knowledge;
 const source=()=>knowledge??=World.fromJSON(SOURCE.snapshot);
 // Explicit application value and creation defaults. These are assumptions, not knowledge facts.

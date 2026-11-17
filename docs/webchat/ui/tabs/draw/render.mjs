@@ -8,11 +8,12 @@ const clamp = (x, a, b) => Math.min(b, Math.max(a, x));
 const OUTLINE = '#3a3040';
 export const PAPER = '#ffffff';
 
-export function createRenderer(rough, scene) {
+export function createRenderer(rough, scene, partTools = null) {
+  const labelledObjects=o=>[o,...(o.shape?.members&&partTools?partTools.restoreMembers(o).flatMap(labelledObjects):[])];
   const gen = rough.generator();
   const cache = new Map();   // object signature -> [{ drawable, alpha, tx, ty, rot }]
 
-  const keyOf = (o) => `${o.kind}|${o.thing ?? ''}|${Math.round(o.size)}|${o.color}|${o.fill}|${JSON.stringify(o.parts ?? {})}|${JSON.stringify(o.hide ?? [])}|${JSON.stringify(o.extra ?? {})}|${o.id}`;
+  const keyOf = (o) => `${o.kind}|${o.thing ?? ''}|${Math.round(o.size)}|${o.color}|${o.fill}|${JSON.stringify(o.parts ?? {})}|${JSON.stringify(o.hide ?? [])}|${JSON.stringify(o.extra ?? {})}|${o.id}|${JSON.stringify(o.shape??null)}`;
 
   /** Rough drawables of one object, in local pixel space (origin = object center). Cached per signature. */
   function drawablesOf(obj) {
@@ -55,7 +56,7 @@ export function createRenderer(rough, scene) {
         return shapeArgs(o);
       };
       const place = rot ? { tx, ty, rot } : { tx: 0, ty: 0, rot: 0 };
-      const push = (drawable, alpha = 1) => { if (drawable) out.push({ drawable, alpha, ...place }); };
+      const push = (drawable, alpha = 1) => { if (drawable) out.push({ drawable, alpha, ...place, matrix:p.matrix }); };
       if (p.s === 'line' || p.s === 'curve' || p.s === 'arc') {
         const w = Math.max(p.t ? p.t * S : baseW, 2);
         push(make({ ...common, stroke: p.hex, strokeWidth: w, fill: undefined }));
@@ -153,13 +154,12 @@ export function createRenderer(rough, scene) {
     const list = drawablesOf(shown);
     ctx.save();
     ctx.translate(pose.x ?? obj.x, pose.y ?? obj.y);
-    ctx.rotate((((pose.rotation ?? obj.rotation) ?? 0) * Math.PI) / 180);
-    const flipX = pose.flipX ?? (obj.flip ? -1 : 1);
-    ctx.scale((size / obj.size) * sc * flipX, (size / obj.size) * sc);
+    const m=scene.objectMatrix({...obj,rotation:pose.rotation??obj.rotation});ctx.transform(m[0],m[1],m[2],m[3],0,0);ctx.scale((size/obj.size)*sc,(size/obj.size)*sc);
     const baseAlpha = pose.alpha ?? 1;
     for (const item of list) {
       ctx.save();
       ctx.globalAlpha = baseAlpha * item.alpha;
+      if(item.matrix){const m=item.matrix;ctx.transform(m[0],m[1],m[2],m[3],m[4]*obj.size,m[5]*obj.size);}
       if (item.tx || item.ty) ctx.translate(item.tx, item.ty);
       if (item.rot) ctx.rotate(item.rot);
       rc.draw(item.drawable);
@@ -193,7 +193,7 @@ export function createRenderer(rough, scene) {
   function drawScene(ctx, rc, scn, { selected = null, poses = null, labelOf = null } = {}) {
     drawBackground(ctx, rc, scn);
     const objs = [...(scn.objects ?? [])].sort((a, b) => (a.z ?? 0) - (b.z ?? 0));
-    for (const o of objs) drawObject(ctx, rc, o, poses?.get(o.id));
+    for(const o of objs){drawObject(ctx,rc,o,poses?.get(o.id));for(const object of labelledObjects(o)){const text=object.label??object.name;if(text){const pose=poses?.get(object.id),b=scene.bbox({...object,x:pose?.x??object.x,y:pose?.y??object.y,size:pose?.size??object.size});ctx.save();ctx.font='500 18px system-ui';ctx.fillStyle='#263646';ctx.textAlign='center';ctx.fillText(text,(b.x0+b.x1)/2,b.y1+24);ctx.restore();}}}
     if (selected) {
       const o = (scn.objects ?? []).find((x) => x.id === selected);
       if (o) drawSelection(ctx, rc, o, poses?.get(o.id), labelOf?.(o) ?? '');
@@ -217,16 +217,16 @@ export function createRenderer(rough, scene) {
     if (scn.ground) layer(groundDrawables(scn.ground, scn.groundColor ?? { grass: 'green', sand: 'yellow', snow: 'white', sea: 'blue' }[scn.ground] ?? 'green'));
     for (const o of [...(scn.objects ?? [])].sort((a, b) => (a.z ?? 0) - (b.z ?? 0))) {
       const g = doc.createElementNS(NS, 'g');
-      g.setAttribute('transform', `translate(${o.x} ${o.y}) rotate(${o.rotation ?? 0}) scale(${o.flip ? -1 : 1} 1)`);
+      const m=scene.objectMatrix(o);g.setAttribute('transform',`matrix(${m[0]} ${m[1]} ${m[2]} ${m[3]} ${o.x} ${o.y})`);
       g.setAttribute('data-id', o.id); g.setAttribute('data-kind', o.thing ?? o.kind);
       for (const item of drawablesOf(o)) {
         const n = rs.draw(item.drawable);
         const wrap = doc.createElementNS(NS, 'g');
-        wrap.setAttribute('transform', `translate(${item.tx} ${item.ty}) rotate(${(item.rot * 180) / Math.PI})`);
+        const pm=item.matrix,affine=pm?`matrix(${pm[0]} ${pm[1]} ${pm[2]} ${pm[3]} ${pm[4]*o.size} ${pm[5]*o.size}) `:'';wrap.setAttribute('transform', `${affine}translate(${item.tx} ${item.ty}) rotate(${(item.rot * 180) / Math.PI})`);
         wrap.setAttribute('opacity', item.alpha);
         wrap.append(n); g.append(wrap);
       }
-      svg.append(g);
+      svg.append(g);for(const object of labelledObjects(o)){const label=object.label??object.name;if(label){const text=doc.createElementNS(NS,'text');text.textContent=label;add(text,{x:object.x,y:scene.bbox(object).y1+24,'text-anchor':'middle','font-family':'system-ui','font-size':18,fill:'#263646'});}}
     }
     return new (doc.defaultView?.XMLSerializer ?? XMLSerializer)().serializeToString(svg);
   }

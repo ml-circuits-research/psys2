@@ -3,6 +3,10 @@
 import { readdirSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 const fixed = [
+  'diagram-editors-native.test.mjs',
+  'avatar-resize-browser.test.mjs',
+  'world-code-panel.test.mjs',
+  'calendar-avatar-selection.test.mjs',
   'avatar-composition.test.mjs', 'calendar-single-editor.test.mjs', 'native-clear-editors.test.mjs', 'native-control-sampler.test.mjs', 'instance-store.test.mjs',
   'demo-tool-profile.test.mjs', 'diagram-charts-composition.test.mjs', 'selected-reader-source.test.mjs', 'declaration-alignments.test.mjs', 'reader-calibration-measurement.test.mjs', 'best-effort-execution.test.mjs',
   'candidate-execution-measurement.test.mjs', 'reader-stage-counts.test.mjs',

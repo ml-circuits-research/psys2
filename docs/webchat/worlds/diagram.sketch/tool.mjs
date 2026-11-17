@@ -53,12 +53,12 @@ export function startDiagram(ctx, { kind, layout = null, links = 0, step = null 
   return done([id]);
 }
 /** n shapes of a kind, in a whole (laid out by its layout) or free (in the layout given, else where the engine puts them). */
-export function addShapes(ctx, { kind, n = 1, whole = null, size = null, colour = null, layout = null, step = null } = {}) {
+export function addShapes(ctx, { kind, label = undefined, n = 1, whole = null, size = null, colour = null, layout = null, step = null } = {}) {
   if (!K) return notReady();
   const s = ensure(ctx), w = wholeOf(s, whole);
   if (size && !ENGINE_SIZES.has(size)) return refuse('no_value');
   const count = Math.max(1, Number(n) || 1);
-  const r = run(ctx, s, [{ id: 'add', type: 'command', args: { action: 'create', shape: kind, count, ...(colour ? { color: String(colour).toLowerCase() } : {}), ...(size ? { size } : {}), ...(!w && layout && count > 1 ? { layout } : {}) } }], step);
+  const r = run(ctx, s, [{ id: 'add', type: 'command', args: { action: 'create', shape: kind, count, ...(label!==undefined?{label}:kind==='text'?{label:'Text'}:{}), ...(colour ? { color: String(colour).toLowerCase() } : {}), ...(size ? { size } : {}), ...(!w && layout && count > 1 ? { layout } : {}) } }], step);
   if (!r?.ok) return refuse('refused');
   const made = madeBy(r);
   if (w) { w.members.push(...made); relay(ctx, s, w, step); }

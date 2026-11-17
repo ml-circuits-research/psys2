@@ -1,3 +1,4 @@
+import {mountInspectorSplitter} from '../pane-splitter.mjs';
 // SPDX-License-Identifier: AGPL-3.0-only
 // Diagram tab (world diagram.sketch): the diagram as SVG. The world holds the state (the engine's DiagramWorld: shapes, edges, groups, rules);
 // this module only draws it. The drawing code (shapes, arrows with their routes, labels, groups, zones and backgrounds, the palette) is a port of
@@ -110,29 +111,26 @@ function make(holder, host) {
   holder.append(board, tools, caption);
   const btn = (label, title, onclick, cls = '') => { const b = html('button', `dg-btn ${cls}`, label); b.type = 'button'; b.title = title; b.setAttribute('aria-label', title); b.addEventListener('click', onclick); return b; };
   const zoomOut = btn('−', 'Zoom out', () => zoomBy(1 / ZSTEP)), zoomIn = btn('+', 'Zoom in', () => zoomBy(ZSTEP)), pct = html('span', 'dg-pct', '100%');
-  const fit = btn('Fit', 'Fit the diagram to the view', () => zoomFit());
-  const zoomBox = html('span', 'dg-zoom'); zoomBox.append(zoomOut, pct, zoomIn, fit);
-  const namesBtn = btn('Names', 'Hide the names above the shapes', () => { showNames = !showNames; namesBtn.setAttribute('aria-pressed', String(showNames)); redraw(); });
-  namesBtn.setAttribute('aria-pressed', 'true');
-  const idsBtn = btn('Ids', 'Hide the short ids of the shapes and arrows (c1, r1, a1)', () => { showIds = !showIds; idsBtn.setAttribute('aria-pressed', String(showIds)); try { localStorage.setItem('p2-diagram-ids', showIds ? '1' : '0'); } catch { /* storage may be off */ } redraw(); });
-  const nodeKind=document.createElement('select');nodeKind.setAttribute('aria-label','Node shape');for(const kind of ['rectangle','circle','ellipse','square','diamond','triangle','hexagon','star']){const option=document.createElement('option');option.value=kind;option.textContent=kind;nodeKind.append(option);}
-  let mode='select',chartDraft=false;
-  const setMode=next=>{mode=next;selectMode.setAttribute('aria-pressed',String(mode==='select'));addMode.setAttribute('aria-pressed',String(mode==='add'));svg.style.cursor=mode==='add'?'crosshair':'default';};
-  const selectMode=btn('Select','Select objects',()=>setMode('select')),addMode=btn('Add node','Place a node on the canvas',()=>setMode('add'));
+  const zoomBox = html('span', 'dg-zoom'); zoomBox.append(zoomOut, pct, zoomIn);
+  const idsBtn=btn('Object ID','Show or hide object IDs',()=>toolCall('diagram.ids.show',{mode:showIds?'off':'always'}));
+  const nodeKind=document.createElement('select');nodeKind.setAttribute('aria-label','Node shape');for(const kind of ['rectangle','circle','ellipse','square','diamond','triangle','hexagon','star','text']){const option=document.createElement('option');option.value=kind;option.textContent=kind;nodeKind.append(option);}
+  let mode='select',chartDraft=false,chooserPoint=null;
+  const setMode=next=>{mode=next;addMode.setAttribute('aria-pressed',String(mode==='add'));svg.style.cursor=mode==='add'?'crosshair':'default';};
+  const nodeChooser=html('div','dg-node-chooser');nodeChooser.hidden=true;nodeChooser.setAttribute('role','group');nodeChooser.setAttribute('aria-label','Choose a node shape');nodeChooser.style.cssText='display:flex;flex-wrap:wrap;gap:5px;max-width:260px';const nodeText=html('input');nodeText.placeholder='Optional label or text';nodeText.setAttribute('aria-label','New node text');nodeText.style.maxWidth='100%';nodeChooser.append(nodeText);const addMode=btn('Add node','Choose a node to place',()=>{chooserPoint=null;nodeChooser.hidden=!nodeChooser.hidden;});for(const option of nodeKind.options)nodeChooser.append(btn(option.textContent,'Place '+option.value,()=>{nodeKind.value=option.value;nodeChooser.hidden=true;if(chooserPoint){const point=chooserPoint;chooserPoint=null;toolCall('diagram.node.make',{kind:nodeKind.value,x:point.x,y:point.y,...(nodeText.value?{label:nodeText.value}:{})});setMode('select');return;}setMode('add');caption.textContent='Click the canvas to place '+option.value+'.';}));
   nodeKind.addEventListener('change',()=>setMode('add'));setMode('select');
   const deleteSelectionButton=btn('Delete selection','Delete selection',()=>deleteSelection());
-  tools.append(selectMode,nodeKind,addMode,deleteSelectionButton,btn('Clear diagram','Clear diagram',()=>toolCall('diagram.page.clear',{})),btn('Chart','Create a chart',()=>{chartDraft=true;syncInspector();chartPanel.open=true;}),zoomBox, namesBtn, idsBtn, html('span', 'dg-spacer'), btn('Undo', 'Undo the last change', () => toolCall('undo')), btn('Redo', 'Do the last undone change again', () => toolCall('redo')), btn('Save SVG', 'Save the diagram as an SVG file', () => api.download({format:'svg'})), btn('Save PNG', 'Save the diagram as a PNG file', () => api.download({format:'png'})));
+  tools.append(addMode,nodeChooser,btn('Clear diagram','Clear diagram',()=>toolCall('diagram.page.clear',{})),btn('Chart','Create a chart',()=>{chartDraft=true;syncInspector();titleInput.focus();}),zoomBox, idsBtn, html('span', 'dg-spacer'), btn('Undo', 'Undo the last change', () => toolCall('undo')), btn('Redo', 'Do the last undone change again', () => toolCall('redo')), btn('Save SVG', 'Save the diagram as an SVG file', () => api.download({format:'svg'})), btn('Save PNG', 'Save the diagram as a PNG file', () => api.download({format:'png'})));
 
-  let K = null, AR = null, VC = null, loading = null, state = EMPTY, destroyed = false, hintIndex = 0, showNames = true, showIds = true, tucked = new Set(), loadError = null, stagePanel = null;
+  let K = null, AR = null, VC = null, loading = null, state = EMPTY, destroyed = false, hintIndex = 0, showNames = false, showIds = true,idTimer=0, tucked = new Set(), loadError = null, stagePanel = null;
   const zv = { k: 1, dx: 0, dy: 0 };
   let vbBase = { x: 0, y: 0, w: 800, h: 500 }, vbNow = vbBase, fitKey = '';
-  try { showIds = localStorage.getItem('p2-diagram-ids') !== '0'; } catch { /* default on */ }
+  function syncIdDisplay(){clearTimeout(idTimer);idTimer=0;const display=state.idDisplay;showIds=!display||display.mode==='always'||display.mode==='temporary'&&Date.now()<display.expiresAt;idsBtn.setAttribute('aria-pressed',String(showIds));if(display?.mode==='temporary'&&showIds)idTimer=setTimeout(()=>{showIds=false;idsBtn.setAttribute('aria-pressed','false');redraw();},Math.max(0,display.expiresAt-Date.now()));}
   idsBtn.setAttribute('aria-pressed', String(showIds));
   const hintTimer = setInterval(() => { hintIndex++; if (!hint.hidden) showHint(); }, 4200);
 
   /** Loads the engine once (lazy: PERF). */
   function load() {
-    loading ??= Promise.all([import(host.asset(ENGINE_ASSET)), import(host.asset(ARROWS_ASSET)), import(host.asset(CHART_ASSET))]).then(([m, a, c]) => { K = m.default; AR = a; VC=c;for(const name of Object.keys(c.PALETTES)){const o=html('option','',name);o.value=name;palette.append(o);}palette.value=active()?.options?.palette??'default'; ensureCss(K); if (!destroyed) redraw(); }).catch((e) => { loadError = e; console.warn('diagram tab: engine failed to load', e); caption.textContent = 'The diagram engine could not be loaded. The commands still work.'; });
+    loading ??= Promise.all([import(host.asset(ENGINE_ASSET)), import(host.asset(ARROWS_ASSET)), import(host.asset(CHART_ASSET))]).then(([m, a, c]) => { K = m.default; AR = a; VC=c; ensureCss(K); if (!destroyed) redraw(); }).catch((e) => { loadError = e; console.warn('diagram tab: engine failed to load', e); caption.textContent = 'The diagram engine could not be loaded. The commands still work.'; });
     return loading;
   }
   ensureCss(null);
@@ -179,25 +177,27 @@ function make(holder, host) {
     }
   }
   function drawShape(g, s, hl) {
-    const grp = el('g', { class: `shp${s.layer ? ` ${s.layer}` : ''}${s.shape === 'text' ? ' txt' : ''}`, 'data-name': s.name, transform: `translate(${s.x} ${s.y})` }, g);
+    const grp = el('g', { tabindex:0,role:'button','aria-label':(s.label?s.label+' · ':'')+s.name,class: `shp${s.layer ? ` ${s.layer}` : ''}${s.shape === 'text' ? ' txt' : ''}`, 'data-name': s.name, transform: `translate(${s.x} ${s.y})` }, g);
     const { w, h } = K.dims(s), tint = K.PALETTE_TINT[s.fill];
     if (s.shape === 'text') {
       const t = el('text', { class: 'ftext', x: 0, y: 0, 'text-anchor': 'middle', 'dominant-baseline': 'central', 'font-size': K.fontOf(s), style: `fill: ${pc(s.color || 'black', 'line')}` }, grp);
       t.textContent = s.label || '';
-      if (idShown(s)) el('text', { class: 'idtag', x: -w / 2, y: -h / 2 - 2, 'text-anchor': 'start' }, grp).textContent = s.id;
+      if (idShown(s)) el('text', { class: 'idtag', x: -w / 2, y: -h / 2 - 2, 'text-anchor': 'start' }, grp).textContent = s.name;
       return;
     }
     const attrs = { class: `body${s.outline ? ' outlined' : ''}`, style: `fill: ${pc(s.color, 'fill')}; stroke: ${s.outline ? pc(s.outline, 'line') : pc(s.color, 'edge')}` };
     if (tint != null) attrs['fill-opacity'] = tint;
     const pts = outlinePts(s);
+    if(s.shape==='sector'){const radius=w/2,inner=radius*(s.innerRadius??0),start=s.startAngle,end=s.endAngle,sweep=Math.max(0,Math.min(Math.PI*2-1e-6,end-start)),finish=start+sweep,p=(angle,r)=>[Math.cos(angle)*r,Math.sin(angle)*r],a=p(start,radius),b=p(finish,radius),c=p(finish,inner),d=p(start,inner),large=sweep>Math.PI?1:0,path=inner?`M ${a} A ${radius},${radius} 0 ${large} 1 ${b} L ${c} A ${inner},${inner} 0 ${large} 0 ${d} Z`:`M 0,0 L ${a} A ${radius},${radius} 0 ${large} 1 ${b} Z`;el('path',{d:path,...attrs},grp);const angle=(start+end)/2,r=radius*(inner?.8:.65);el('text',{x:Math.cos(angle)*r,y:Math.sin(angle)*r,'text-anchor':'middle','font-size':12,fill:pc(s.color,'ink')},grp).textContent=(s.label||'')+' '+s.value+(showIds?' · '+s.name:'');if(hl?.has(s.name))el('circle',{r:radius+6,fill:'none',stroke:'#356ac3','stroke-width':2},grp);return;}
     if (s.shape === 'circle') el('circle', { r: w / 2, ...attrs }, grp);
     else if (s.shape === 'ellipse') el('ellipse', { rx: w / 2, ry: h / 2, ...attrs }, grp);
     else if (pts) el('polygon', { points: pts.map((p) => p.map((v) => v.toFixed(1)).join(',')).join(' '), 'stroke-linejoin': 'round', ...attrs }, grp);
     else el('rect', { x: -w / 2, y: -h / 2, width: w, height: h, rx: 6, ...attrs }, grp);
     if (hl?.has(s.name)) el('rect', { class: 'halo', x: -w / 2 - 7, y: -h / 2 - 7, width: w + 14, height: h + 14, rx: 10 }, grp);
+
     if (s.layer === 'background' || s.layer === 'zone' || !tagShown(s)) el('title', {}, grp).textContent = s.name;
     if (tagShown(s)) el('text', { class: 'tag', x: 0, y: -h / 2 - 7, 'text-anchor': 'middle' }, grp).textContent = s.name;
-    if (idShown(s)) el('text', { class: 'idtag', x: -w / 2, y: -h / 2 - 3, 'text-anchor': 'start' }, grp).textContent = s.id;
+    if (idShown(s)) el('text', { class: 'idtag', x: -w / 2, y: -h / 2 - 3, 'text-anchor': 'start' }, grp).textContent = s.name;
     if(typeof s.value==='number')el('text',{x:0,y:h/2+17,'text-anchor':'middle','font-size':12,fill:'var(--dg-ink)'},grp).textContent=String(s.value);
     if (s.label) {
       const room = ['rectangle', 'square', 'ellipse', 'circle'].includes(s.shape) ? w * 0.84 : w * 0.56;
@@ -210,9 +210,10 @@ function make(holder, host) {
   }
   /** Draws one arrow along the route of arrows.mjs: sides, entry angles, spread, detours; the id on the line, the label off it with a halo. */
   function drawArrow(g, e, r, selected) {
+    e={...e,...e.properties};
     const pts = r.pts.map((p) => [...p]), n = pts.length;
     const col = e.color ? pc(e.color, 'line') : null;
-    const grp = el('g', { class: `edge${selected ? ' sel' : ''}`, 'data-edge': e.id }, g);
+    const grp = el('g', { class: `edge${selected ? ' sel' : ''}`, 'data-edge': e.id,tabindex:0,role:'button','aria-label':'Connection '+e.id }, g);
     const [hx, hy] = r.headDir, [tx, ty] = r.tailDir, head0 = pts[n - 1], tail0 = pts[0];
     const head = (px, py, vx, vy) => { const bx = px - vx * 11, by = py - vy * 11; el('polygon', { class: 'hd', points: `${px},${py} ${bx - vy * 5},${by + vx * 5} ${bx + vy * 5},${by - vx * 5}`, style: col ? `fill:${col}` : '' }, grp); };
     if (e.arrow !== 'none') { pts[n - 1] = [head0[0] - hx * 9, head0[1] - hy * 9]; }
@@ -234,9 +235,9 @@ function make(holder, host) {
       const b = K.groupBox(S, gr);
       if (!b) continue;
       const pad = 12, x = b.x1 - pad, y = b.y1 - pad - 14, w = b.w + 2 * pad, h = b.h + 2 * pad + 14, at = spots.get(gr.name) || { x: x + 10, y: y - 6 };
-      const grp = el('g', { class: 'grp', 'data-group': gr.name }, g);
+      const grp = el('g', { class: 'grp', 'data-group': gr.name,tabindex:0,role:'button','aria-label':(gr.label?gr.label+' · ':'')+gr.name }, g);
       el('rect', { x, y, width: w, height: h, rx: 12, style: 'fill: var(--dg-accent); fill-opacity: .045; stroke: var(--dg-faint); stroke-width: 1.25; stroke-dasharray: 6 5; pointer-events: stroke; cursor: pointer' }, grp);
-      el('text', { x: at.x, y: at.y, style: 'font: 600 12px system-ui, sans-serif; fill: var(--dg-faint); pointer-events: all; cursor: pointer' }, grp).textContent = gr.label??gr.name;
+      el('text', { x: at.x, y: at.y, style: 'font: 600 12px system-ui, sans-serif; fill: var(--dg-faint); pointer-events: all; cursor: pointer' }, grp).textContent = gr.label&&gr.label!==gr.name?gr.label+' · '+gr.name:gr.name;
     }
   }
   const boxOf = (s) => { const d = K.dims(s); return { x1: s.x - d.w / 2, x2: s.x + d.w / 2, y1: s.y - d.h / 2, y2: s.y + d.h / 2 }; };
@@ -295,59 +296,31 @@ function make(holder, host) {
       const b=VC.chartBounds(chart,index),[bx,by,bw,bh]=base;
       base=[Math.min(bx,b.x-20),Math.min(by,b.y-20),Math.max(bx+bw,b.x+b.width+20)-Math.min(bx,b.x-20),Math.max(by+bh,b.y+b.height+20)-Math.min(by,b.y-20)];
     }
+    const handles=el('g',{class:'dg-resize-handles'},target.layer);for(const id of S.selected?.shapes??[]){const node=S.shapes.find(node=>node.name===id);if(!node)continue;const d=K.dims(node);el('rect',{'data-resize-node':id,x:node.x+d.w/2-5,y:node.y+d.h/2-5,width:10,height:10,fill:'#356ac3',stroke:'white',style:'cursor:nwse-resize','pointer-events':'all'},handles);}
     return base;
   }
 
   // Explicit typed UI commands share the instance and undo journal with spoken requests.
   const toolCall=async(operation,args={})=>{try{if(typeof host.tool!=='function')throw Error('The editing tools are not available.');const reply=await host.tool(operation,args);if(reply?.text)caption.textContent=reply.text;return reply;}catch(e){caption.textContent=String(e.message??e);return null;}};
-  const chartPanel=html('details','dg-chart-tools'),summary=html('summary','','Chart tools');chartPanel.append(summary);
-  const form=html('div','dg-chart-form');chartPanel.append(form);holder.append(chartPanel);
-  const input=(label,type,value)=>{const l=html('label','',label),e=html('input');e.type=type;e.value=value;e.setAttribute('aria-label',label);l.append(e);form.append(l);return e;};
-  const select=(label,values)=>{const l=html('label','',label),e=html('select');e.setAttribute('aria-label',label);for(const value of values){const o=html('option','',value);o.value=value;e.append(o);}l.append(e);form.append(l);return e;};
-  const titleInput=input('Chart title','text',''),typeInput=select('Chart type',['bar','line','pie','doughnut','radar','polarArea','scatter']);
-  const dataLabel=html('label','','Values — one label, number per line'),dataInput=html('textarea');dataInput.setAttribute('aria-label','Chart data');dataInput.placeholder='Apples, 5\nPears, 3';dataLabel.append(dataInput);form.append(dataLabel);
-  const parseData=()=>{const labels=[],values=[];for(const line of dataInput.value.split('\n').filter(x=>x.trim())){const at=line.lastIndexOf(',');if(at<1||!line.slice(at+1).trim()||!Number.isFinite(Number(line.slice(at+1))))throw Error('Use one label, number per line.');labels.push(line.slice(0,at).trim());values.push(Number(line.slice(at+1)));}if(!labels.length)throw Error('Enter at least one value.');return {labels,values};};
-  const seriesPanel=html('div','dg-chart-form'),seriesRows=[];chartPanel.append(seriesPanel);
-  const addSeriesRow=(dataset={label:'Series '+(seriesRows.length+1),data:[],color:null})=>{
-    const row=html('div','dg-chart-form'),name=html('input'),numbers=html('input'),colour=html('input'),automatic=html('input');
-    const index=seriesRows.length;name.value=dataset.label;name.setAttribute('aria-label','Series '+(index+1)+' name');name.placeholder='Series name';
-    numbers.value=dataset.data.join(', ');numbers.placeholder=index===0?'Values from the table above':'One value per category';numbers.disabled=index===0;numbers.setAttribute('aria-label','Series '+(index+1)+' values');
-    colour.type='color';colour.value=dataset.color??'#356ac3';colour.setAttribute('aria-label','Series '+(index+1)+' colour');automatic.type='checkbox';automatic.checked=dataset.color==null;
-    const automaticLabel=html('label','','Palette colour');automaticLabel.append(automatic);const entry={row,name,numbers,colour,automatic};seriesRows.push(entry);
-    row.append(name,numbers,colour,automaticLabel,btn('Remove series','Remove this draft series',()=>{if(seriesRows.length===1){caption.textContent='A chart needs at least one series.';return;}const removed=seriesRows.indexOf(entry);seriesRows.splice(removed,1);row.remove();if(removed===0){const replacement=seriesRows[0].numbers.value.split(',').map(v=>v.trim());const labels=dataInput.value.split('\n').filter(v=>v.trim()).map(v=>v.slice(0,v.lastIndexOf(',')).trim());dataInput.value=labels.map((label,i)=>label+', '+(replacement[i]??'')).join('\n');seriesRows[0].numbers.disabled=true;}}));seriesPanel.append(row);
-  };
-  addSeriesRow({label:'Value',data:[],color:null});
-  form.append(btn('Add series','Add another data series to the editor',()=>addSeriesRow()));
-  const readData=()=>{const first=parseData();return {labels:first.labels,datasets:seriesRows.map((r,i)=>{const values=i===0?first.values:r.numbers.value.split(',').map(v=>{if(!v.trim()||!Number.isFinite(Number(v)))throw Error('Each series needs one numeric value per category.');return Number(v);});if(values.length!==first.labels.length)throw Error('Each series needs one value per category.');return {label:r.name.value.trim()||'Series '+(i+1),data:values,color:r.automatic.checked?null:r.colour.value};})};};
-  const create=btn('Add chart','Add a chart to this diagram',async()=>{try{await toolCall('chart.make',{type:typeInput.value,title:titleInput.value.trim()||'Chart',...readData(),source:[]});}catch(e){caption.textContent=e.message;}});form.append(create);
-  const chosen=select('Selected chart',[]),active=()=>state.chartTools?.charts?.find(c=>c.id===chosen.value);
-  chosen.addEventListener('change',()=>toolCall('chart.select',{id:chosen.value}));
-  const update=btn('Update chart','Update selected chart data and title',async()=>{const chart=active();if(!chart)return;try{const data=readData(),title=titleInput.value.trim()||'Chart',type=typeInput.value;const first=await toolCall('chart.datasets.change',{id:chart.id,...data});if(first?.statuses?.includes('unsupported'))return;await toolCall('chart.change',{id:chart.id,title,type});}catch(e){caption.textContent=e.message;}});form.append(update);
-  const left=input('Chart X','number',60),top=input('Chart Y','number',60);left.className=top.className='dg-position';
-  const place=btn('Move','Move selected chart',()=>{const chart=active();if(chart)toolCall('chart.place',{id:chart.id,x:Number(left.value),y:Number(top.value)});});
-  const remove=btn('Delete chart','Delete selected chart',()=>{const chart=active();if(chart)toolCall('chart.remove',{ids:[chart.id]});});form.append(place,remove);
-  const stacked=input('Stacked series','checkbox',''),horizontal=input('Horizontal bars','checkbox',''),legend=input('Show legend','checkbox',''),values=input('Show values','checkbox','');legend.checked=true;
-  for(const [element,key]of [[stacked,'stacked'],[horizontal,'horizontal'],[legend,'showLegend'],[values,'showValues']])element.addEventListener('change',()=>{const chart=active();if(chart)toolCall('chart.change',{id:chart.id,[key]:element.checked});});
-  const order=select('Value order',['none','asc','desc','alpha']);order.addEventListener('change',()=>{const chart=active();if(chart)toolCall('chart.change',{id:chart.id,sort:order.value});});
-  const palette=select('Chart palette',['default']);palette.addEventListener('change',()=>{const chart=active();if(chart)toolCall('chart.change',{id:chart.id,palette:palette.value});});
-  const table=html('table','dg-chart-data'),projectionNote=html('p','dg-empty-selection');chartPanel.append(projectionNote,table);let displayed=null;
-  function syncChartTools(){
-    const charts=state.chartTools?.charts??[],id=state.chartTools?.active;
-    chosen.textContent='';for(const chart of charts){const o=html('option');o.textContent=chart.title||chart.id;o.value=chart.id;chosen.append(o);}chosen.value=id??'';
-    const chart=charts.find(c=>c.id===id);update.disabled=place.disabled=remove.disabled=!chart;
-    stacked.disabled=horizontal.disabled=legend.disabled=values.disabled=order.disabled=palette.disabled=!chart;
-    if(!chart){table.textContent='';projectionNote.textContent='';displayed=null;return;}projectionNote.textContent=chart.projection?.status==='linked'?'Linked to group '+chart.projection.sourceGroup+'. Source labels and values update this chart; editing chart data detaches it.':chart.projection?.status==='detached'?'Detached snapshot from group '+chart.projection.sourceGroup+' ('+chart.projection.reason+').':'';
-    const mark=JSON.stringify(chart);if(mark===displayed)return;displayed=mark;
-    seriesPanel.textContent='';seriesRows.length=0;for(const dataset of chart.datasets)addSeriesRow(dataset);
-    titleInput.value=chart.title;typeInput.value=chart.type;dataInput.value=chart.labels.map((l,i)=>`${l}, ${chart.datasets[0].data[i]}`).join('\n');
-    left.value=chart.placement?.x??60;top.value=chart.placement?.y??60;stacked.checked=chart.options?.stacked===true;palette.value=chart.options?.palette??'default';horizontal.checked=chart.options?.horizontal===true;legend.checked=chart.options?.showLegend!==false;values.checked=chart.options?.showValues===true;order.value=chart.options?.sort??'none';
-    table.textContent='';const head=html('tr');head.append(html('th','','Label'));for(const dataset of chart.datasets){const cell=html('th');cell.textContent=dataset.label;head.append(cell);}table.append(head);for(const [i,label]of chart.labels.entries()){const row=html('tr');const cell=html('td');cell.textContent=label;row.append(cell);for(const dataset of chart.datasets)row.append(html('td','',String(dataset.data[i])));table.append(row);}
-  }
-  const workspace=html('div','dg-workspace'),inspector=html('aside','dg-inspector');chartPanel.open=true;workspace.append(board,inspector);inspector.append(chartPanel);holder.replaceChildren(tools,workspace,caption);const groupTools=makeGroupTools(inspector,{tool:toolCall,asset:host.asset,getState:()=>state,tools:host.tools?()=>host.tools({view:'diagram'}):null});
-  const deleteSelection=()=>{const chart=state.chartTools?.active,ids=state.selected?.shapes??[],edges=state.selected?.edges??[];if(chart)return toolCall('chart.remove',{ids:[chart]});if(ids.length)return toolCall('diagram.node.remove',{ids});if(edges.length)return toolCall('diagram.link.remove',{ids:edges});};
+  // A chart draft creates one actual group and its editable numeric children.
+  const chartPanel=html('section','dg-chart-tools'),summary=html('h3','','New numeric group');chartPanel.append(summary);
+  const form=html('div','dg-chart-form');chartPanel.append(form);
+  const draftField=(label,tag='input')=>{const wrap=html('label','',label),input=html(tag);input.setAttribute('aria-label',label);wrap.append(input);form.append(wrap);return input;};
+  const titleInput=draftField('Numeric group label'),typeInput=draftField('Chart layout','select'),dataInput=draftField('Chart data','textarea');
+  for(const type of ['bar','line','pie','doughnut']){const option=html('option','',type);option.value=type;typeInput.append(option);}dataInput.placeholder='Label, number — one per line';
+  form.append(btn('Create numeric group','Create editable numeric nodes and their group',async()=>{try{const labels=[],values=[];for(const line of dataInput.value.split('\n').filter(line=>line.trim())){const at=line.lastIndexOf(',');if(at<1||!line.slice(at+1).trim()||!Number.isFinite(Number(line.slice(at+1))))throw Error('Use one label, number per line.');labels.push(line.slice(0,at).trim());values.push(Number(line.slice(at+1)));}const result=await toolCall('diagram.group.chart.make',{label:titleInput.value.trim()||'Data group',labels,values,layout:typeInput.value});if(result?.ok){chartDraft=false;syncInspector();}}catch(error){caption.textContent=error.message;}}),btn('Cancel','Cancel numeric group creation',()=>{chartDraft=false;syncInspector();}));
+  const active=()=>state.chartTools?.charts?.find(chart=>chart.id===state.chartTools.active);
+  const legacyPanel=html('section','dg-chart-tools');legacyPanel.append(html('p','dg-empty-selection','This is a saved chart from the earlier editor. Convert its numeric series to editable group members. The original is retained as historical data.'));
+  legacyPanel.append(btn('Convert to editable group','Convert the selected saved chart to real editable members',()=>{const chart=active();if(chart)toolCall('diagram.group.chart.adopt',{id:chart.id});}));
+  const syncChartTools=()=>{legacyPanel.hidden=!active();};
+  const workspace=html('div','dg-workspace'),inspector=html('aside','dg-inspector');chartPanel.hidden=true;workspace.append(board,inspector);inspector.append(chartPanel,legacyPanel,deleteSelectionButton);holder.replaceChildren(tools,workspace,caption);const closeInspectorSplitter=mountInspectorSplitter(workspace,inspector,{id:'diagram',width:300,persist:host.persistent!==false});const groupTools=makeGroupTools(inspector,{tool:toolCall,asset:host.asset,getState:()=>state,tools:host.tools?()=>host.tools({view:'diagram'}):null});
+  const deleteSelection=()=>{const chart=state.chartTools?.active,ids=state.selected?.shapes??[],edges=state.selected?.edges??[];if(chart)return toolCall('chart.remove',{ids:[chart]});if(state.selected?.group)return toolCall('diagram.group.remove',{id:state.selected.group});if(ids.length&&edges.length)return toolCall('diagram.selection.remove',{nodes:ids,links:edges});if(ids.length)return toolCall('diagram.node.remove',{ids});if(edges.length)return toolCall('diagram.link.remove',{ids:edges});};
   let suppressObjectClick=false;
-  svg.addEventListener('click',ev=>{if(suppressObjectClick){suppressObjectClick=false;return;}if(mode==='add')return;const group=ev.target.closest?.('[data-group]');if(group){toolCall('diagram.group.select',{id:group.getAttribute('data-group')});return;}const shape=ev.target.closest?.('.shp[data-name]');if(shape){toolCall('diagram.node.select',{ids:ev.shiftKey?(()=>{const id=shape.getAttribute('data-name'),ids=state.selected?.shapes??[];return ids.includes(id)?ids.filter(x=>x!==id):[...ids,id];})():[shape.getAttribute('data-name')]});return;}const chart=ev.target.closest?.('[data-chart-id]');if(chart){toolCall('chart.select',{id:chart.getAttribute('data-chart-id')});return;}toolCall('diagram.node.select',{ids:[]});});
-  svg.addEventListener('keydown',ev=>{if(!['Enter',' '].includes(ev.key))return;const chart=ev.target.closest?.('[data-chart-id]');if(chart){ev.preventDefault();toolCall('chart.select',{id:chart.getAttribute('data-chart-id')});}});
+  const extendSelection=event=>event.shiftKey||event.ctrlKey||event.metaKey;
+  const selectTarget=event=>{const resize=event.target.closest?.('[data-resize-node]');if(resize)return toolCall('diagram.node.select',{ids:[resize.getAttribute('data-resize-node')]});const group=event.target.closest?.('[data-group]'),shape=event.target.closest?.('.shp[data-name]'),edge=event.target.closest?.('[data-edge]'),chart=event.target.closest?.('[data-chart-id]');if(group)return toolCall('diagram.group.select',{id:group.getAttribute('data-group')});if(shape){const id=shape.getAttribute('data-name'),current=state.selected?.shapes??[],extend=extendSelection(event);return toolCall('diagram.node.select',{ids:extend?(current.includes(id)?current.filter(value=>value!==id):[...current,id]):[id],edges:extend?[...(state.selected?.edges??[])]:[]});}if(edge){const id=edge.getAttribute('data-edge'),current=state.selected?.edges??[],extend=extendSelection(event);return toolCall('diagram.link.select',{ids:extend?(current.includes(id)?current.filter(value=>value!==id):[...current,id]):[id],nodes:extend?[...(state.selected?.shapes??[])]:[]});}if(chart)return toolCall('chart.select',{id:chart.getAttribute('data-chart-id')});return toolCall('diagram.node.select',{ids:[]});};
+  svg.addEventListener('click',event=>{if(suppressObjectClick){suppressObjectClick=false;return;}if(mode==='add')return;selectTarget(event);});
+  svg.addEventListener('keydown',event=>{if(['Enter',' '].includes(event.key)&&event.target.closest?.('[data-name],[data-edge],[data-group],[data-chart-id]')){event.preventDefault();selectTarget(event);}});
+
 
   // ---- view: pan, zoom, fit -------------------------------------------------------------------------------------------------
   const zoomed = () => zv.k !== 1 || zv.dx !== 0 || zv.dy !== 0;
@@ -356,7 +329,6 @@ function make(holder, host) {
     vbNow = { x: cx - w / 2, y: cy - h / 2, w, h };
     svg.setAttribute('viewBox', `${+vbNow.x.toFixed(2)} ${+vbNow.y.toFixed(2)} ${+vbNow.w.toFixed(2)} ${+vbNow.h.toFixed(2)}`);
     pct.textContent = `${Math.round(zv.k * 100)}%`;
-    fit.setAttribute('aria-pressed', String(!zoomed())); if (!zoomed()) fit.classList.remove('hint');
     zoomIn.disabled = zv.k >= ZMAX - 1e-9; zoomOut.disabled = zv.k <= ZMIN + 1e-9;
   }
   function zoomFit() { zv.k = 1; zv.dx = 0; zv.dy = 0; applyZoom(); }
@@ -372,53 +344,66 @@ function make(holder, host) {
   }
   const svgPt = (ev) => { const p = svg.createSVGPoint(); p.x = ev.clientX; p.y = ev.clientY; return p.matrixTransform(svg.getScreenCTM().inverse()); };
   const ptrs = new Map(); let pan = null, pinch = null;
-  svg.addEventListener('pointerdown', (ev) => {
-    ptrs.set(ev.pointerId, { x: ev.clientX, y: ev.clientY });
-    if (ptrs.size === 2) { const [a, b] = [...ptrs.values()]; pinch = { d0: Math.hypot(a.x - b.x, a.y - b.y) || 1, k0: zv.k }; pan = null; return; }
-    if (ev.button !== 0 && ev.pointerType === 'mouse') return;
-    if(mode==='add'){const p=svgPt(ev);suppressObjectClick=true;toolCall('diagram.node.make',{kind:nodeKind.value,x:p.x,y:p.y}).then(()=>setMode('select'));return;}
-    const m = svg.getScreenCTM(),chartElement=ev.target.closest?.('[data-chart-id]'),shapeElement=ev.target.closest?.('.shp[data-name]');
-    const object=chartElement?state.chartTools?.charts?.find(c=>c.id===chartElement.getAttribute('data-chart-id')):shapeElement?state.shapes.find(s=>s.name===shapeElement.getAttribute('data-name')):null;
-    const position=chartElement&&object?VC.chartBounds(object):object;
-    pan = { id: ev.pointerId, x0: ev.clientX, y0: ev.clientY, dx0: zv.dx, dy0: zv.dy, upp: m?.a ? 1 / m.a : 1, moved: false,start:svgPt(ev),shift:ev.shiftKey,object:object?{id:chartElement?object.id:object.name,kind:chartElement?'chart':'node',x:position.x,y:position.y,element:chartElement??shapeElement}:null };
+  svg.addEventListener('pointerdown',event=>{
+    ptrs.set(event.pointerId,{x:event.clientX,y:event.clientY});if(ptrs.size===2){const [a,b]=[...ptrs.values()];pinch={d0:Math.hypot(a.x-b.x,a.y-b.y)||1,k0:zv.k};pan=null;return;}if(event.button!==0&&event.pointerType==='mouse')return;
+    if(mode==='add'){const point=svgPt(event);suppressObjectClick=true;toolCall('diagram.node.make',{kind:nodeKind.value,x:point.x,y:point.y,...(nodeText.value?{label:nodeText.value}:{})}).then(()=>setMode('select'));return;}
+    const matrix=svg.getScreenCTM(),resize=event.target.closest?.('[data-resize-node]'),groupElement=event.target.closest?.('[data-group]'),shape=event.target.closest?.('.shp[data-name]'),chartElement=event.target.closest?.('[data-chart-id]'),node=resize?state.shapes.find(node=>node.name===resize.getAttribute('data-resize-node')):shape?state.shapes.find(node=>node.name===shape.getAttribute('data-name')):null,group=groupElement?state.groups.find(group=>group.name===groupElement.getAttribute('data-group')):state.groups.find(group=>group.name===state.selected?.group&&node&&group.members.includes(node.name));
+    let object=null;
+    if(resize&&node){const dimensions=K.dims(node);object={kind:'resize',id:node.name,x:node.x,y:node.y,width:dimensions.w,height:dimensions.h,uniform:['circle','square','sector'].includes(node.shape)};}
+    else if(group){const nodes=group.members.map(id=>state.shapes.find(node=>node.name===id)).filter(Boolean);object={kind:'group',id:group.name,ids:group.members,x:nodes.reduce((sum,node)=>sum+node.x/nodes.length,0),y:nodes.reduce((sum,node)=>sum+node.y/nodes.length,0),nodes};}
+    else if(node){const ids=(state.selected?.shapes??[]).includes(node.name)?[...state.selected.shapes]:[node.name],nodes=ids.map(id=>state.shapes.find(node=>node.name===id)).filter(Boolean);object={kind:'node',id:node.name,ids,x:nodes.reduce((sum,node)=>sum+node.x/nodes.length,0),y:nodes.reduce((sum,node)=>sum+node.y/nodes.length,0),nodes};}
+    else if(chartElement){const chart=state.chartTools.charts.find(chart=>chart.id===chartElement.getAttribute('data-chart-id')),position=VC.chartBounds(chart);object={kind:'chart',id:chart.id,x:position.x,y:position.y,element:chartElement};}
+    pan={id:event.pointerId,x0:event.clientX,y0:event.clientY,upp:matrix?.a?1/matrix.a:1,moved:false,start:svgPt(event),extend:extendSelection(event),object};
   });
-  svg.addEventListener('pointermove', (ev) => {
-    if (!ptrs.has(ev.pointerId)) return;
-    ptrs.set(ev.pointerId, { x: ev.clientX, y: ev.clientY });
-    if (pinch && ptrs.size >= 2) { const [a, b] = [...ptrs.values()], d = Math.hypot(a.x - b.x, a.y - b.y); zoomBy(pinch.k0 * d / pinch.d0 / zv.k, svgPt({ clientX: (a.x + b.x) / 2, clientY: (a.y + b.y) / 2 })); return; }
-    if (!pan || pan.id !== ev.pointerId) return;
-    const mx = ev.clientX - pan.x0, my = ev.clientY - pan.y0;
-    if (!pan.moved && Math.hypot(mx, my) < 4) return;
-    if (!pan.moved) { pan.moved = true; try { svg.setPointerCapture(ev.pointerId); } catch { /* gone */ } svg.classList.add('panning'); }
-    if(pan.object){pan.object.element.setAttribute('transform',`translate(${pan.object.x+mx*pan.upp} ${pan.object.y+my*pan.upp})`);return;}
-    const p=svgPt(ev);if(!pan.marquee)pan.marquee=el('rect',{class:'dg-marquee'},svg);pan.marquee.setAttribute('x',Math.min(p.x,pan.start.x));pan.marquee.setAttribute('y',Math.min(p.y,pan.start.y));pan.marquee.setAttribute('width',Math.abs(p.x-pan.start.x));pan.marquee.setAttribute('height',Math.abs(p.y-pan.start.y));
-
+  svg.addEventListener('pointermove',event=>{
+    if(!ptrs.has(event.pointerId))return;ptrs.set(event.pointerId,{x:event.clientX,y:event.clientY});if(pinch&&ptrs.size>=2){const [a,b]=[...ptrs.values()],distance=Math.hypot(a.x-b.x,a.y-b.y);zoomBy(pinch.k0*distance/pinch.d0/zv.k,svgPt({clientX:(a.x+b.x)/2,clientY:(a.y+b.y)/2}));return;}if(pan?.id!==event.pointerId)return;
+    const dx=(event.clientX-pan.x0)*pan.upp,dy=(event.clientY-pan.y0)*pan.upp;if(!pan.moved&&Math.hypot(event.clientX-pan.x0,event.clientY-pan.y0)<4)return;if(!pan.moved){pan.moved=true;try{svg.setPointerCapture(event.pointerId);}catch{}svg.classList.add('panning');}
+    if(pan.object){const object=pan.object;if(object.kind==='resize'){let width=Math.min(4096,Math.max(8,object.width+2*dx)),height=Math.min(4096,Math.max(8,object.height+2*dy));if(object.uniform)width=height=Math.max(width,height);object.next={width,height};pan.preview??=el('rect',{class:'dg-marquee','pointer-events':'none'},svg);for(const [key,value]of Object.entries({x:object.x-width/2,y:object.y-height/2,width,height}))pan.preview.setAttribute(key,value);return;}if(object.nodes){for(const node of object.nodes)svg.querySelector('.shp[data-name="'+globalThis.CSS.escape(node.name)+'"]')?.setAttribute('transform',`translate(${node.x+dx} ${node.y+dy})`);}else object.element?.setAttribute('transform',`translate(${object.x+dx} ${object.y+dy})`);return;}
+    const point=svgPt(event);pan.marquee??=el('rect',{class:'dg-marquee','pointer-events':'none'},svg);for(const [key,value]of Object.entries({x:Math.min(point.x,pan.start.x),y:Math.min(point.y,pan.start.y),width:Math.abs(point.x-pan.start.x),height:Math.abs(point.y-pan.start.y)}))pan.marquee.setAttribute(key,value);
   });
-  const endPan = (ev) => { ptrs.delete(ev.pointerId); if (ptrs.size < 2) pinch = null; if (pan?.id === ev.pointerId) {
-    const drag=pan;pan=null;svg.classList.remove('panning');
-    if(drag.marquee){drag.marquee.remove();suppressObjectClick=true;if(ev.type!=='pointercancel'){const p=svgPt(ev),x0=Math.min(p.x,drag.start.x),x1=Math.max(p.x,drag.start.x),y0=Math.min(p.y,drag.start.y),y1=Math.max(p.y,drag.start.y),ids=state.shapes.filter(n=>{const d=K.dims(n);return n.x-d.w/2>=x0&&n.x+d.w/2<=x1&&n.y-d.h/2>=y0&&n.y+d.h/2<=y1;}).map(n=>n.name);toolCall('diagram.node.select',{ids:[...new Set([...(drag.shift?state.selected?.shapes??[]:[]),...ids])]});}return;}
-
-    if(drag.object&&drag.moved){suppressObjectClick=true;const o=drag.object;if(ev.type==='pointercancel'){suppressObjectClick=false;redraw();return;}const x=o.x+(ev.clientX-drag.x0)*drag.upp,y=o.y+(ev.clientY-drag.y0)*drag.upp;toolCall(o.kind==='chart'?'chart.place':'diagram.node.place',o.kind==='chart'?{id:o.id,x,y}:{ids:[o.id],x,y});}
-  } };
-  svg.addEventListener('pointerup', endPan); svg.addEventListener('pointercancel', endPan);
+  const endPan=event=>{ptrs.delete(event.pointerId);if(ptrs.size<2)pinch=null;if(pan?.id!==event.pointerId)return;const drag=pan;pan=null;svg.classList.remove('panning');drag.preview?.remove();
+    if(drag.marquee){drag.marquee.remove();suppressObjectClick=true;if(event.type!=='pointercancel'){const point=svgPt(event),x0=Math.min(point.x,drag.start.x),x1=Math.max(point.x,drag.start.x),y0=Math.min(point.y,drag.start.y),y1=Math.max(point.y,drag.start.y),ids=state.shapes.filter(node=>{const d=K.dims(node);return node.x-d.w/2>=x0&&node.x+d.w/2<=x1&&node.y-d.h/2>=y0&&node.y+d.h/2<=y1;}).map(node=>node.name),nodes=[...new Set([...(drag.extend?state.selected?.shapes??[]:[]),...ids])],edges=state.edges.filter(edge=>ids.includes(edge.from)&&ids.includes(edge.to)).map(edge=>edge.id);toolCall('diagram.node.select',{ids:nodes,edges:[...new Set([...(drag.extend?state.selected?.edges??[]:[]),...edges])]});}return;}
+    if(drag.object&&drag.moved){suppressObjectClick=true;const object=drag.object;if(event.type==='pointercancel'){suppressObjectClick=false;redraw();return;}if(object.kind==='resize'){if(object.next)toolCall('diagram.node.resize',{ids:[object.id],...object.next});return;}const x=object.x+(event.clientX-drag.x0)*drag.upp,y=object.y+(event.clientY-drag.y0)*drag.upp;toolCall(object.kind==='chart'?'chart.place':object.kind==='group'?'diagram.group.place':'diagram.node.place',object.kind==='node'?{ids:object.ids,x,y}:{id:object.id,x,y});}
+  };
+  svg.addEventListener('pointerup',endPan);svg.addEventListener('pointercancel',endPan);
   const editBox=html('form','dg-chart-form');editBox.hidden=true;const editLabel=html('input'),editValue=html('input'),saveLabel=btn('Save label','Save node label',()=>{}),cancelLabel=btn('Cancel','Cancel label edit',()=>{editBox.hidden=true;});saveLabel.type='submit';editLabel.setAttribute('aria-label','Node label');editValue.type='number';editValue.step='any';editValue.placeholder='Numeric value';editValue.setAttribute('aria-label','Node value');editBox.append(editLabel,editValue,saveLabel,cancelLabel);inspector.prepend(editBox);let editingNode=null;
-  const emptyInspector=html('p','dg-empty-selection','Select a node or chart to edit it. Shift-click or drag a rectangle to select several nodes.');inspector.prepend(emptyInspector);
+  const emptyInspector=html('p','dg-empty-selection','Click an object to edit it. Ctrl-click, Command-click or drag a rectangle to select several objects.');inspector.prepend(emptyInspector);const selectedIdentity=html('p');selectedIdentity.setAttribute('data-selected-native-id','');inspector.prepend(selectedIdentity);
   const property=(label,type='text')=>{const l=html('label','',label),e=html(type==='select'?'select':'input');if(type!=='select')e.type=type;e.setAttribute('aria-label',label);l.append(e);editBox.insertBefore(l,saveLabel);return e;};
+  const objectId=property('Object ID');objectId.readOnly=true;const nodeWidth=property('Width','number'),nodeHeight=property('Height','number');nodeWidth.step=nodeHeight.step='any';nodeWidth.min=nodeHeight.min='8';nodeWidth.max=nodeHeight.max='4096';
   const nodeColour=property('Node colour','select'),nodeSize=property('Node size','select'),nodeX=property('Node X','number'),nodeY=property('Node Y','number');nodeX.step=nodeY.step='any';const currentSize=html('option');currentSize.value='__current';currentSize.disabled=true;nodeSize.prepend(currentSize);
-  const deleteNode=btn('Delete node','Delete selected node',()=>{if(editingNode)toolCall('diagram.node.remove',{ids:[editingNode]});});editBox.append(deleteNode);
+  const resizeNodes=event=>{const ids=state.selected?.shapes??[];if(ids.some(id=>['circle','square','sector'].includes(state.shapes.find(node=>node.name===id)?.shape)))nodeWidth.value=nodeHeight.value=event.target.value;if(ids.length&&Number(nodeWidth.value)>0&&Number(nodeHeight.value)>0)toolCall('diagram.node.resize',{ids:[...ids],width:Number(nodeWidth.value),height:Number(nodeHeight.value)});};nodeWidth.addEventListener('change',resizeNodes);nodeHeight.addEventListener('change',resizeNodes);
+  const deleteNode=btn('Delete node','Delete selected node',()=>{if(editingNode)toolCall('diagram.node.remove',{ids:[editingNode]});});deleteNode.hidden=true;editBox.append(deleteNode);
   const labelWrap=html('label','','Label');editLabel.before(labelWrap);labelWrap.append(editLabel);const valueWrap=html('label','','Numeric value');editValue.before(valueWrap);valueWrap.append(editValue);cancelLabel.hidden=true;
-  nodeColour.addEventListener('change',()=>{if(editingNode)toolCall('diagram.node.change',{ids:[editingNode],colour:nodeColour.value});});nodeSize.addEventListener('change',()=>{if(editingNode)toolCall('diagram.node.change',{ids:[editingNode],size:nodeSize.value});});
-  for(const input of [nodeX,nodeY])input.addEventListener('change',()=>{if(editingNode)toolCall('diagram.node.place',{ids:[editingNode],x:Number(nodeX.value),y:Number(nodeY.value)});});
+  nodeColour.addEventListener('change',()=>{if(state.selected?.shapes?.length)toolCall('diagram.node.change',{ids:[...state.selected.shapes],colour:nodeColour.value});});nodeSize.addEventListener('change',()=>{if(state.selected?.shapes?.length)toolCall('diagram.node.change',{ids:[...state.selected.shapes],size:nodeSize.value});});
+  for(const input of [nodeX,nodeY])input.addEventListener('change',()=>{if(state.selected?.shapes?.length)toolCall('diagram.node.place',{ids:[...state.selected.shapes],x:Number(nodeX.value),y:Number(nodeY.value)});});
   (async()=>{const native=await import(host.asset('worlds/diagram.sketch/declared-host.mjs')),h=await native.createDiagramHost({state:native.initialDiagramState(),instanceId:'diagram-property-metadata'}),decl=h.bindings().find(o=>o.id==='diagram.node.change');for(const [input,key]of [[nodeColour,'colour'],[nodeSize,'size']])for(const value of decl.params[key].enum??[]){const option=html('option','',value);option.value=value;input.append(option);}})().catch(()=>{});
-  function syncInspector(){const ids=state.selected?.shapes??[];deleteSelectionButton.disabled=!(ids.length||state.selected?.edges?.length||state.chartTools?.active);const node=ids.length===1?state.shapes.find(n=>n.name===ids[0]):null;editingNode=node?.name??null;editBox.hidden=!node;chartPanel.hidden=!(state.chartTools?.active||chartDraft);emptyInspector.hidden=!!node||ids.length>1||!!state.selected?.group||!chartPanel.hidden;if(node){editLabel.value=node.label??'';editValue.value=node.value??'';nodeColour.value=node.color??'';currentSize.textContent=node.size+' px';nodeSize.value=K?.sizeName?.(node.size)??'__current';nodeX.value=node.x;nodeY.value=node.y;}}
+  const linkPanel=html('section','dg-chart-tools'),linkForm=html('div','dg-chart-form');linkPanel.append(html('h3','','Connections'),linkForm);inspector.append(linkPanel);
+  const linkField=(label,tag='input')=>{const wrap=html('label','',label),input=html(tag);input.setAttribute('aria-label',label);wrap.append(input);linkForm.append(wrap);return input;};
+  const linkId=linkField('Connection Object ID');linkId.readOnly=true;const linkFrom=linkField('From node','select'),linkTo=linkField('To node','select'),linkLabel=linkField('Connection label'),linkColour=linkField('Connection colour','select'),linkStyle=linkField('Line style','select'),linkArrow=linkField('Arrowheads','select'),linkWidth=linkField('Line width');linkWidth.type='number';linkWidth.min='.5';linkWidth.max='12';linkWidth.step='.5';
+  for(const [input,values]of [[linkStyle,['solid','dashed','dotted']],[linkArrow,['forward','both','none']]])for(const value of values){const option=html('option','',value);option.value=value;input.append(option);}
+  const changeLinks=patch=>{const ids=state.selected?.edges??[];if(ids.length)toolCall('diagram.link.change',{ids:[...ids],...patch});};
+  for(const [input,key]of [[linkFrom,'from'],[linkTo,'to'],[linkLabel,'label'],[linkColour,'colour'],[linkStyle,'style'],[linkArrow,'arrow'],[linkWidth,'width']])input.addEventListener('change',()=>{if(key==='width'&&!Number.isFinite(Number(input.value)))return;changeLinks({[key]:key==='width'?Number(input.value):input.value});});
+  const connect=btn('Connect nodes','Connect the chosen nodes',()=>toolCall('diagram.link.make',{from:linkFrom.value,to:linkTo.value}));linkForm.append(connect);
+  function syncLinks(){const edges=state.selected?.edges??[],nodes=state.selected?.shapes??[],edge=edges.length===1?state.edges.find(edge=>edge.id===edges[0]):null;linkPanel.hidden=!edges.length&&nodes.length<2;if(linkPanel.hidden)return;linkId.value=edges.join(', ');for(const [input,target]of [[linkFrom,edge?.from??nodes[0]],[linkTo,edge?.to??nodes[1]]]){input.replaceChildren();for(const node of state.shapes){const option=html('option','',(node.label?node.label+' · ':'')+node.name);option.value=node.name;input.append(option);}input.value=target??'';input.disabled=edges.length>1;}const properties=edge?{...edge,...edge.properties}:{};linkLabel.value=properties.label??'';linkColour.value=properties.color??'';linkStyle.value=properties.style??'solid';linkArrow.value=properties.arrow??'forward';linkWidth.value=properties.width??2;for(const input of [linkId,linkLabel,linkColour,linkStyle,linkArrow,linkWidth])input.closest('label').hidden=!edges.length;connect.hidden=!!edges.length;connect.disabled=!linkFrom.value||!linkTo.value||linkFrom.value===linkTo.value;}
+  (async()=>{const module=await import(host.asset('worlds/diagram.sketch/declared-host.mjs')),declaration=(await module.createDiagramHost({state:module.initialDiagramState(),instanceId:'link-controls'})).bindings().find(operation=>operation.id==='diagram.link.change');for(const value of declaration.params.colour.enum){const option=html('option','',value);option.value=value;linkColour.append(option);}})().catch(()=>{});
+  function syncInspector(){
+    const ids=state.selected?.shapes??[],edges=state.selected?.edges??[],group=state.groups.find(group=>group.name===state.selected?.group),nodes=ids.map(id=>state.shapes.find(node=>node.name===id)).filter(Boolean),node=nodes.length===1?nodes[0]:null;
+    inspector.dataset.selectedNativeIds=JSON.stringify(group?[group.name]:state.chartTools?.active?[state.chartTools.active]:[...ids,...edges]);
+    selectedIdentity.textContent=group?(group.label?group.label+' · ':'')+group.name:node?(node.label?node.label+' · ':'')+node.name:ids.length?ids.join(', '):edges.length?edges.join(', '):active()?(active().title?active().title+' · ':'')+active().id:'';selectedIdentity.hidden=!selectedIdentity.textContent;
+    editingNode=node?.name??null;editBox.hidden=!nodes.length||!!group;labelWrap.hidden=valueWrap.hidden=!node;objectId.value=ids.join(', ');deleteSelectionButton.disabled=!(ids.length||edges.length||state.chartTools?.active);chartPanel.hidden=!chartDraft;legacyPanel.hidden=!active();emptyInspector.hidden=!!(nodes.length||edges.length||group||active()||chartDraft);
+    if(nodes.length){const dims=nodes.map(node=>K?.dims(node)??{w:node.w??node.size,h:node.h??node.size}),same=key=>nodes.every(item=>item[key]===nodes[0][key]);editLabel.value=node?.label??'';editValue.value=node?.value??'';nodeColour.value=same('color')?nodes[0].color??'':'';currentSize.textContent=node?node.size+' px':'Mixed';nodeSize.value=same('size')?(K?.sizeName(nodes[0].size)??'__current'):'__current';nodeWidth.value=dims.every(d=>d.w===dims[0].w)?dims[0].w:'';nodeHeight.value=dims.every(d=>d.h===dims[0].h)?dims[0].h:'';nodeX.value=nodes.reduce((sum,item)=>sum+item.x/nodes.length,0);nodeY.value=nodes.reduce((sum,item)=>sum+item.y/nodes.length,0);}
+    syncLinks();
+  }
 
-  svg.addEventListener('dblclick',ev=>{const node=ev.target.closest?.('.shp[data-name]');if(!node)return;const shape=state.shapes.find(s=>s.name===node.getAttribute('data-name'));if(!shape)return;editingNode=shape.name;editLabel.value=shape.label??'';editValue.value=shape.value??'';editBox.hidden=false;editLabel.focus();editLabel.select();});
+
+  svg.addEventListener('dblclick',ev=>{const node=ev.target.closest?.('.shp[data-name]');if(!node){chooserPoint=svgPt(ev);nodeChooser.hidden=false;nodeText.focus();return;}const shape=state.shapes.find(s=>s.name===node.getAttribute('data-name'));if(!shape)return;editingNode=shape.name;editLabel.value=shape.label??'';editValue.value=shape.value??'';editBox.hidden=false;editLabel.focus();editLabel.select();});
   editBox.addEventListener('submit',async ev=>{ev.preventDefault();if(editingNode){await toolCall('diagram.node.change',{ids:[editingNode],label:editLabel.value,...(editValue.value.trim()&&Number.isFinite(Number(editValue.value))?{value:Number(editValue.value)}:{})});syncInspector();}});
   svg.addEventListener('wheel', (ev) => { if (!ev.ctrlKey && !ev.metaKey) return; ev.preventDefault(); zoomBy(Math.exp(-ev.deltaY * 0.0025), svgPt(ev)); }, { passive: false });
   svg.addEventListener('keydown', (ev) => {
+    if(ev.key==='Escape'){ev.preventDefault();nodeChooser.hidden=true;setMode('select');if(state.selected?.shapes?.length||state.selected?.edges?.length)toolCall('diagram.node.select',{ids:[]});return;}
     if(ev.key==='Delete'||ev.key==='Backspace'){ev.preventDefault();deleteSelection();return;}
     const step = 0.1, d = { ArrowLeft: [-step, 0], ArrowRight: [step, 0], ArrowUp: [0, -step], ArrowDown: [0, step] }[ev.key];
-    if (d) { ev.preventDefault(); zv.dx += d[0] * vbNow.w; zv.dy += d[1] * vbNow.h; applyZoom(); } else if (ev.key === '+' || ev.key === '=') { ev.preventDefault(); zoomBy(ZSTEP); } else if (ev.key === '-' || ev.key === '_') { ev.preventDefault(); zoomBy(1 / ZSTEP); } else if (ev.key === '0') { ev.preventDefault(); zoomFit(); }
+    if (d) { ev.preventDefault();const nodes=(state.selected?.shapes??[]).map(id=>state.shapes.find(node=>node.name===id)).filter(Boolean);if(nodes.length){const amount=ev.shiftKey?1:10,x=nodes.reduce((sum,node)=>sum+node.x/nodes.length,0)+Math.sign(d[0])*amount,y=nodes.reduce((sum,node)=>sum+node.y/nodes.length,0)+Math.sign(d[1])*amount;toolCall(state.selected?.group?'diagram.group.place':'diagram.node.place',state.selected?.group?{id:state.selected.group,x,y}:{ids:nodes.map(node=>node.name),x,y});}else{zv.dx += d[0] * vbNow.w; zv.dy += d[1] * vbNow.h; applyZoom();} } else if (ev.key === '+' || ev.key === '=') { ev.preventDefault(); zoomBy(ZSTEP); } else if (ev.key === '-' || ev.key === '_') { ev.preventDefault(); zoomBy(1 / ZSTEP); } else if (ev.key === '0') { ev.preventDefault(); zoomFit(); }
   });
 
   function describe(S) {
@@ -436,8 +421,7 @@ function make(holder, host) {
     const base = paint(state);
     vbBase = { x: base[0], y: base[1], w: base[2], h: base[3] };
     applyZoom();
-    const out = zoomed() && state.shapes.some((s) => { if (s.layer === 'background') return false; const d = K.dims(s); return s.x + d.w / 2 < vbNow.x || s.x - d.w / 2 > vbNow.x + vbNow.w || s.y + d.h / 2 < vbNow.y || s.y - d.h / 2 > vbNow.y + vbNow.h; });
-    fit.classList.toggle('hint', out); fit.title = out ? 'Some shapes are outside the view: fit the diagram to the view' : 'Fit the diagram to the view';
+
   }
 
   /** A standalone SVG text of the diagram (colours resolved, light theme). */
@@ -467,7 +451,7 @@ function make(holder, host) {
       state = { ...EMPTY, ...(next && typeof next === 'object' ? next : {}) };
       state.shapes ??= []; state.edges ??= []; state.groups ??= [];
       if ((state.shapes.length || state.chartTools?.charts?.length) && !K) load();
-      syncChartTools();
+      syncIdDisplay();syncChartTools();
       redraw();groupTools.update();syncInspector();
     },
     hide() { ptrs.clear(); pan = null; pinch = null; },
@@ -491,7 +475,7 @@ function make(holder, host) {
         return { ok: true, detail: `${base}.png` };
       } catch (e) { return { ok: false, detail: String(e?.message ?? e) }; } finally { URL.revokeObjectURL(url); }
     },
-    destroy() { destroyed = true;groupTools.destroy(); clearInterval(hintTimer); },
+    destroy() { destroyed = true;clearTimeout(idTimer);closeInspectorSplitter();groupTools.destroy(); clearInterval(hintTimer); },
   };
 }
 

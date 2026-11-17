@@ -1,5 +1,7 @@
 // Typed UI intent capture. No language parser, model inference or optimistic effect claims.
+import {budget} from './budget.mjs';
 import {copyHostData,validateNativeArguments} from '../../worlds/native-tool-host.mjs';
+import {compactNativeIntent} from './native-intent-reader.mjs';
 
 export const NATIVE_CONTROL_INTENT_FORMAT='psys2.native-control-intent/1';
 export const NATIVE_CONTROL_INTENT_SCHEMA=`
@@ -44,7 +46,7 @@ function canonical(value,depth=0){
  return Array.isArray(value)?value.map(v=>canonical(v,depth+1)):value&&typeof value==='object'?Object.fromEntries(Object.keys(value).sort().map(k=>[k,canonical(value[k],depth+1)])):value;
 }
 const equal=(a,b)=>JSON.stringify(canonical(a))===JSON.stringify(canonical(b));
-const readable=value=>typeof value==='string'?quote(value):JSON.stringify(value);
+const readable=value=>typeof value==='string'?quote(value):typeof value==='number'&&Object.is(value,-0)?'-0':JSON.stringify(value);
 const words=value=>String(value).replace(/([a-z0-9])([A-Z])/g,'$1 $2').replace(/[._-]+/g,' ').toLowerCase();
 const verbs={group:'Group',ungroup:'Ungroup',make:'Create',change:'Update',place:'Move',remove:'Delete',pick:'Select',ask:'Show',undo:'Undo',redo:'Redo'};
 const validObservation=o=>!!o&&o.complete===true&&typeof o.instanceId==='string'&&typeof o.version==='string'&&Array.isArray(o.objects);
@@ -52,8 +54,8 @@ const resultIdentity=(op,args)=>{const key=Object.hasOwn(op.result??{},'identity
 const selectedIds=(op,args)=>op.act==='make'?[]:typeof args.id==='string'?[args.id]:Array.isArray(args.ids)&&args.ids.every(x=>typeof x==='string')?[...args.ids]:[];
 const observationValue=token=>{try{return {ok:true,value:JSON.parse(token)};}catch{return {ok:false};}};
 
-/** Exact UI gesture -> human command and typed SOP records. Wires describe a tool intent,
- * not an inferred/executable std.request graph. Nested arguments and source ranges are retained. */
+/** Exact UI gesture -> human command and declaration-driven SOP command.
+ * The expanded trace retains nested arguments, observations and source ranges. */
 export function describeNativeControl({operation,args={},before,parameterBindings=[]}={}){
  const op=copyHostData(operation),input=copyHostData(args),observation=before?copyHostData(before):null,bindings=copyHostData(parameterBindings);
  if(!op||typeof op.id!=='string'||typeof op.act!=='string'||typeof op.on!=='string'||!Array.isArray(bindings))throw Error('invalid-native-intent-declaration');
@@ -64,7 +66,7 @@ export function describeNativeControl({operation,args={},before,parameterBinding
  });
  if(op.act==='make')targets.push({mode:'new',on:op.on,...(typeof resultIdentity(op,values)==='string'?{id:resultIdentity(op,values)}:{})});
  const displayName=id=>{
-  const object=objects.find(o=>o.id===id),label=object?.inputs?.find(i=>['label','name','title'].includes(i.key)&&i.values?.length===1&&typeof observationValue(i.values[0]).value==='string'&&observationValue(i.values[0]).value.trim()!==''),decoded=label?observationValue(label.values[0]):null;
+  const object=objects.find(o=>o.id===id),label=['label','title','name'].map(key=>object?.inputs?.find(i=>i.key===key&&i.values?.length===1&&typeof observationValue(i.values[0]).value==='string'&&observationValue(i.values[0]).value.trim()!=='')).find(Boolean),decoded=label?observationValue(label.values[0]):null;
   return decoded?.ok?decoded.value:null;
  };
  const type=op.intent?.subject??words(op.on.split('.').at(-1)),targetText=ids.length?ids.map(id=>readable(displayName(id)??id)).join(', '):`${op.intent?.determiner??(/^[aeiou]/i.test(type)?'an':'a')} ${type}`;
@@ -90,7 +92,7 @@ export function describeNativeControl({operation,args={},before,parameterBinding
   if(kind==='string'){
    attrs+=` string=${quote(value)}`;
    const found=objects.find(o=>o.id===value);if(found)attrs+=` observed.id=${quote(found.id)} observed.source=${quote(found.source)}`;
-  }else if(kind==='number')attrs+=` number=${value}`;
+  }else if(kind==='number')attrs+=` number=${Object.is(value,-0)?'-0':value}`;
   else if(kind==='boolean')attrs+=` boolean=${value}`;
   else if(kind==='array')for(const [index,child]of value.entries())attrs+=` member=$${encode(child,` index=${index}`)}`;
   else if(kind==='object')for(const [key,child]of Object.entries(value))attrs+=` member=$${encode(child,` key=${quote(key)}`)}`;
@@ -102,7 +104,8 @@ export function describeNativeControl({operation,args={},before,parameterBinding
  });
  const targetRows=targets.map((target,index)=>{const id=`control.target.${index}`;lines.push(`@${id} app.control.target ${Object.entries(target).map(([k,v])=>`${k}=${quote(v)}`).join(' ')}`);return id;});
  lines.push(...valueRows,`@control.intent app.control.intent operation=${quote(op.id)} act=${quote(op.act)} mood="do" on=${quote(op.on)} source=$control.source${validObservation(observation)?` instance=${quote(observation.instanceId)} version=${quote(observation.version)}`:''}${argumentsRows.map(id=>` argument=$${id}`).join('')}${targetRows.map(id=>` target=$${id}`).join('')}`);
- return {format:NATIVE_CONTROL_INTENT_FORMAT,text,wires:lines.join('\n'),schema:'app.control.intent',semantics:'exact declared tool intent; not an executable neural request graph',expected:{operation:op.id,act:op.act,sourceType:op.on,args:values,providedArgs:input,defaults:admitted.defaults??[],validArguments:admitted.ok,argumentIssue:admitted.ok?null:admitted.reason,declaration:op,targets,parameterBindings:bindings,before:validObservation(observation)?{instanceId:observation.instanceId,version:observation.version}:null},sourceRanges:ranges};
+ const expandedWires=lines.join('\n'),compact=admitted.ok?compactNativeIntent(op,values,{id:(verbs[op.act]??op.act).toLowerCase()}):null;
+ return {format:NATIVE_CONTROL_INTENT_FORMAT,text,wires:compact??expandedWires,expandedWires,schema:compact?op.id:'app.control.intent',semantics:'exact declared tool command; execution requires its matching declaration',expected:{operation:op.id,act:op.act,sourceType:op.on,args:values,providedArgs:input,defaults:admitted.defaults??[],validArguments:admitted.ok,argumentIssue:admitted.ok?null:admitted.reason,declaration:op,targets,parameterBindings:bindings,before:validObservation(observation)?{instanceId:observation.instanceId,version:observation.version}:null},sourceRanges:ranges};
 }
 
 /** Compare exact intended arguments with independently read native effects.
@@ -151,10 +154,20 @@ export function verifyNativeControlEffect({intent,before,after,receipt}={}){
    add(parameter,same?'met':'failed',{target:target.id,binding:inputs[0].binding,key:inputs[0].key,expected:wanted,actual});
   }
  }
+ const ancestorPolicy=op.effectScope?.ancestors,ancestors=new Set();
+ if(Array.isArray(ancestorPolicy?.via)&&Array.isArray(ancestorPolicy?.keys)){
+  const queue=[...ids],seen=new Set(ids);
+  for(let cursor=0;cursor<queue.length;cursor++){
+   budget.tick('control-effect.ancestors');
+   if(cursor>before.objects.length)throw Error('native-effect-scope-budget');
+   const object=old.get(queue[cursor]);
+   for(const relation of ancestorPolicy.via){const raw=object?.relations?.[relation]??object?.[relation];for(const id of Array.isArray(raw)?raw:raw==null?[]:[raw])if(typeof id==='string'&&old.has(id)&&!seen.has(id)){seen.add(id);ancestors.add(id);queue.push(id);}}
+  }
+ }
  const stateObject=o=>({id:o.id,kind:o.kind,sourceType:o.sourceType,inputs:(o.inputs??[]).map(({source,version,sourceType,...i})=>i)});
  if(ids.length&&op.act!=='remove')for(const object of after.objects)if(object.sourceType===op.on&&!ids.includes(object.id)&&old.has(object.id)&&!equal(stateObject(old.get(object.id)),stateObject(object))){
   const policies=(op.effectScope?.related??[]).filter(r=>r.id===object.id&&(!r.when||Array.isArray(args[r.when.parameter])&&args[r.when.parameter].includes(r.when.includes)&&Object.hasOwn(args,r.when.provided)));
-  const allowed=new Set(policies.flatMap(r=>r.keys??[])),prior=stateObject(old.get(object.id)),current=stateObject(object);
+  const allowed=new Set([...policies.flatMap(r=>r.keys??[]),...(ancestors.has(object.id)?ancestorPolicy.keys:[])]),prior=stateObject(old.get(object.id)),current=stateObject(object);
   const oldInputs=new Map(prior.inputs.map(i=>[i.key,i])),nextInputs=new Map(current.inputs.map(i=>[i.key,i]));
   const changedKeys=[...new Set([...oldInputs.keys(),...nextInputs.keys()])].filter(k=>!equal(oldInputs.get(k)??null,nextInputs.get(k)??null));
   const declared=prior.kind===current.kind&&changedKeys.length>0&&changedKeys.every(k=>allowed.has(k));

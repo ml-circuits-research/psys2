@@ -7,6 +7,7 @@ import {createDrawingHost,initialDrawingState} from '../worlds/art.draw/declared
 import {createDiagramHost,initialDiagramState} from '../worlds/diagram.sketch/declared-host.mjs';
 import {createDocumentHost,initialDocumentState} from '../worlds/docs.editor/declared-host.mjs';
 import {describeNativeControl,verifyNativeControlEffect,NATIVE_CONTROL_INTENT_SCHEMA} from '../src/dialog/native-control-intent.mjs';
+import {readNativeIntent,compactNativeIntent} from '../src/dialog/native-intent-reader.mjs';
 
 const invoke=(host,operation,args)=>host.invoke({invocation:crypto.randomUUID(),expectedVersion:host.observe().version,operation,args});
 function capture(host,id,args,options={}){
@@ -19,7 +20,7 @@ test('Calendar typed intent preserves every argument, Unicode provenance and exa
  const args={id:'event',title:'Plan 🐟\nSecond line',start:1000,duration:100,participants:[],room:null,calendar:'work',notes:'Use "quotes"'};
  const frozen=JSON.stringify(args),r=capture(host,'calendar.meeting.add',args);
  assert.match(r.intent.text,/^Create an event/);
- assert.equal(r.intent.schema,'app.control.intent');assert.match(r.intent.semantics,/not an executable/);
+ assert.equal(r.intent.schema,'app.control.intent');assert.match(r.intent.semantics,/declared tool command/);
  assert.deepEqual(r.intent.expected.providedArgs,args);assert.equal(JSON.stringify(args),frozen);
  assert.equal(r.verification.status,'verified');
  const world=new World();assert.equal(world.load(NATIVE_CONTROL_INTENT_SCHEMA).ok,true);assert.equal(world.tell(r.intent.wires).ok,true);
@@ -128,4 +129,87 @@ test('a declared source identity is retained in text without restricting the new
  const intent=describeNativeControl({operation,args:{id:source.id,label:'Derived'},before});
  assert.match(intent.text,/from source "Original"/);assert.equal(intent.expected.targets[0].id,undefined);
  assert.equal(verifyNativeControlEffect({intent,before,after,receipt:{status:'changed',operation:operation.id}}).status,'verified');
+});
+
+test('selection, move and colour commands use one tool wire with exact primitive values',()=>{
+ const cases=[
+  [{id:'drawing.object.select',act:'pick',on:'art.draw.object',params:{id:{type:'string',required:true}}},{id:'o2'},'@select drawing.object.select id="o2"'],
+  [{id:'drawing.object.place',act:'place',on:'art.draw.object',params:{ids:{type:'array',required:true},x:{type:'number',required:true},y:{type:'number',required:true}}},{ids:['o2'],x:271,y:527},'@move drawing.object.place ids="o2" x=271 y=527'],
+  [{id:'drawing.object.change',act:'change',on:'art.draw.object',params:{ids:{type:'array',required:true},color:{type:'string',required:true}}},{ids:['o2','o9'],color:'#ffeedd'},'@update drawing.object.change ids="o2" ids="o9" color="#ffeedd"']
+ ];
+ for(const [operation,args,wire]of cases){
+  const intent=describeNativeControl({operation,args,before:{complete:true,instanceId:'source-instance',version:'197',objects:[]}});
+  assert.equal(intent.wires,wire);assert.equal(intent.schema,operation.id);
+  assert.deepEqual(readNativeIntent(wire,{operation}).args,args);
+  assert.match(intent.expandedWires,/instance="source-instance" version="197"/);
+  assert.doesNotMatch(wire,/source-instance|197|app\.control|source=/);
+  assert.equal(intent.expected.before.version,'197');
+ }
+ assert.match(describeNativeControl({operation:cases[0][0],args:cases[0][1]}).text,/^Select /);
+ const operation=cases[1][0],args={ids:['o2','o9'],x:271.1234567890123,y:-0},intent=describeNativeControl({operation,args});
+ assert.match(intent.wires,/x=271\.1234567890123 y=-0$/);
+ assert.deepEqual(readNativeIntent(intent.wires,{operation}).args,args);
+ assert.match(intent.text,/271\.1234567890123/);
+});
+
+test('unfamiliar declaration determines scalar and array multiplicity even for one token',()=>{
+ const operation={id:'quasar.sample.record',act:'make',on:'quasar.sample',params:{scalar:{type:'string',required:true},samples:{type:'array',required:true},enabled:{type:'boolean'},count:{type:'integer'}}};
+ const args={scalar:'true',samples:[1,null,false,'$reference','?variable','line\n"quote"'],enabled:true,count:3};
+ const intent=describeNativeControl({operation,args});
+ assert.equal(intent.wires.split('\n').length,1);assert.deepEqual(readNativeIntent(intent.wires,{operation}).args,args);
+ const one='@record quasar.sample.record scalar="one" samples="one"';
+ assert.deepEqual(readNativeIntent(one,{operation}).args,{scalar:'one',samples:['one']});
+ assert.throws(()=>readNativeIntent(one),/declaration-required/);
+ assert.throws(()=>readNativeIntent(one,{operation:{...operation,id:'quasar.other'}}),/operation-mismatch/);
+ assert.throws(()=>readNativeIntent(one+' scalar="two"',{operation}),/duplicate-control-parameter/);
+ assert.throws(()=>readNativeIntent('@record quasar.sample.record scalar=1 samples="one"',{operation}),/argument-type/);
+ assert.throws(()=>readNativeIntent(one+' count=1.5',{operation}),/argument-type/);
+ assert.throws(()=>readNativeIntent(one+' extra="x"',{operation}),/unknown-control-parameter/);
+ assert.throws(()=>readNativeIntent('@record quasar.sample.record samples="one"',{operation}),/missing-argument/);
+ assert.throws(()=>readNativeIntent(one+' enabled=$value',{operation}),/invalid-control-primitive/);
+});
+
+test('a compact move executes the decoded full-precision values on the actual declared host',()=>{
+ const state=initialDrawingState(),host=createDrawingHost({state,instanceId:'compact.draw'});
+ const id=invoke(host,'drawing.object.make',{kind:'triangle'}).changed[0],operation=host.bindings().find(o=>o.id==='drawing.object.place');
+ const before=host.observe(),args={ids:[id],x:271.1234567890123,y:527.9876543210987},intent=describeNativeControl({operation,args,before});
+ const decoded=readNativeIntent(intent.wires,{operation}),receipt=invoke(host,decoded.operation,decoded.args),after=host.observe();
+ assert.equal(receipt.status,'changed');assert.equal(state.objects.find(o=>o.id===id).x,args.x);assert.equal(state.objects.find(o=>o.id===id).y,args.y);
+ assert.equal(verifyNativeControlEffect({intent,before,after,receipt}).status,'verified');
+});
+
+test('nested data, explicit empty arrays and nullable arrays retain the necessary typed representation',()=>{
+ const operation={id:'quasar.sample.make',act:'make',on:'quasar.sample',params:{data:{type:'object'},samples:{type:'array',nullable:true}}};
+ for(const args of [{data:{rows:[{x:2.123456789}],empty:[]}},{samples:[]},{samples:null},{samples:[{nested:true}]}]){
+  const intent=describeNativeControl({operation,args});assert.equal(intent.wires,intent.expandedWires);assert.match(intent.wires,/@control\.intent app\.control\.intent/);
+  assert.deepEqual(readNativeIntent(intent.wires,{operation}).args,args);
+ }
+ const plain=describeNativeControl({operation,args:{samples:[null]}});assert.equal(plain.wires,'@create quasar.sample.make samples=null');assert.deepEqual(readNativeIntent(plain.wires,{operation}).args,{samples:[null]});
+ const scalar={id:'quasar.label.make',act:'make',on:'quasar.label',params:{label:{type:'string'}}},simple=describeNativeControl({operation:scalar,args:{label:'A'}});
+ assert.throws(()=>readNativeIntent(simple.expandedWires,{operation:scalar}),/compact-control-intent-required/);
+});
+
+test('intent codec rejects unsafe declarations, prototype keys, nonfinite values and bounded input excess',()=>{
+ const operation={id:'quasar.sample.make',act:'make',on:'quasar.sample',params:{label:{type:'string'},count:{type:'number'},data:{type:'object'},samples:{type:'array'}}};
+ for(const wire of ['@make quasar.sample.make count=1e999','@make quasar.sample.make __proto__="x"','@make quasar.sample.make prototype="x"','@make quasar.sample.make constructor="x"','?make quasar.sample.make label="x"'])assert.throws(()=>readNativeIntent(wire,{operation}));
+ assert.throws(()=>readNativeIntent(' '.repeat(4000001),{operation}),/invalid-control-intent/);
+ assert.throws(()=>readNativeIntent('@make quasar.sample.make '+Array(10002).fill('samples=1').join(' '),{operation}),/budget/);
+ assert.throws(()=>compactNativeIntent({...operation,params:Object.create(null)},{label:'x'}),/prototype/);
+ const unsafe=JSON.parse('{"constructor":1}'),intent=describeNativeControl({operation,args:{data:unsafe}});
+ assert.throws(()=>readNativeIntent(intent.wires,{operation}),/object-key/);
+});
+
+test('visible labels take priority over legacy object names in captured text',()=>{
+ const operation={id:'toy.select',act:'pick',on:'toy.item',params:{id:{type:'string',required:true}}};
+ const before={instanceId:'actual',version:'0',complete:true,objects:[{id:'o2',sourceType:'toy.item',source:'actual-o2',version:'0',inputs:[{key:'name',values:['"Legacy name"']},{key:'label',values:['"Visible label"']}]}]};
+ const intent=describeNativeControl({operation,args:{id:'o2'},before});assert.equal(intent.text,'Select "Visible label".');assert.match(intent.wires,/id="o2"/);assert.doesNotMatch(intent.wires,/Visible label/);
+});
+
+test('declared containment ancestor changes remain unverified while unrelated sibling mutations still fail',()=>{
+ const operation={id:'novel.item.resize',act:'change',on:'novel.item',params:{id:{type:'string',required:true},width:{type:'number',required:true}},effectScope:{ancestors:{via:['belongsTo'],keys:['width']}}};
+ const object=(id,width,relations={})=>({id,kind:'item',sourceType:'novel.item',source:'actual-'+id,version:'0',relations,inputs:[{key:'width',binding:'novel.width',values:[String(width)]}]});
+ const before={instanceId:'actual',version:'0',complete:true,objects:[object('child',10,{belongsTo:['parent']}),object('parent',20,{belongsTo:['outer']}),object('outer',30),object('sibling',8)]};
+ const intent=describeNativeControl({operation,args:{id:'child',width:15},before}),after=structuredClone(before);after.version='1';after.objects[0].inputs[0].values=['15'];after.objects[1].inputs[0].values=['25'];after.objects[2].inputs[0].values=['35'];
+ assert.equal(verifyNativeControlEffect({intent,before,after,receipt:{status:'changed',operation:operation.id}}).status,'unverified');
+ after.objects[3].inputs[0].values=['9'];assert.equal(verifyNativeControlEffect({intent,before,after,receipt:{status:'changed',operation:operation.id}}).status,'mismatch');
 });
