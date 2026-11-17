@@ -1,10 +1,12 @@
 # Current status
 
-Updated: 2026-11-17, 22:58 UTC. Owner returned with compound-command and mobile failures; active work resumed. No new weights have been promoted.
+Updated: 2026-11-17, 23:12 UTC (2026-11-18 local time). Final verified handover before standby.
 
 ## Public demo
 
-Implementation commit: `af6b83c1` (pushed to `origin/main`; working tree clean at handover). The latest committed UI build is `e54e1f807b`: https://ml-circuits-research.github.io/psys2/webchat/?ui=e54e1f807b . GitHub Pages can take a short time to update after push; the immediate public check still returned `c342d5df70`, so public activation is not yet verified. The deployed SOP-BERT remains the original epoch-7 model. Its replacement has **not** been declared better, exported or deployed.
+Latest build: **`78a45da5bc`**, https://ml-circuits-research.github.io/psys2/webchat/?ui=78a45da5bc . This handover is committed and pushed with the implementation; public activation is checked separately because GitHub Pages updates asynchronously. The preceding `e54e1f807b` build was confirmed live.
+
+The deployed SOP-BERT weights remain the original epoch-7 model. No new-model deployment or completed retraining is claimed.
 
 ## Completed work
 
@@ -23,7 +25,7 @@ The deployed cutter on the fixed 5,218-source comparison achieved **3,728 exact 
 
 ## Checks and integration limits
 
-Latest integrated gate: **568 tests, 565 passed, zero failures, three skipped**; system map and browser assets rebuilt. Actual Chromium checks passed for the explanatory legend, 15px base font and zoom, breadcrumbs preserving map position, full-page Activity log, usable chat, and visibility/focus pause/resume; zero console exceptions. Replay was independently verified not to execute commands again.
+Latest integrated gate: **571 tests, 568 passed, zero failures, three skipped**, including real Chromium touch interaction. Eleven Python key-reader preparation tests also pass.; system map and browser assets rebuilt. Actual Chromium checks passed for the explanatory legend, 15px base font and zoom, breadcrumbs preserving map position, full-page Activity log, usable chat, and visibility/focus pause/resume; zero console exceptions. Replay was independently verified not to execute commands again.
 
 New generic native-interface binding preparation describes 25 families / 144 literal properties in five SOP schemas. Actual gold-request integration changed Avatar base to man and Drawing label to Cabin, with effect verification. This tests the binding/executor mechanism, **not neural recognition**. The overlay is not activated in the deployed model; structured argument codecs and new-model provider-area activation still need integration with the candidate bundle.
 
@@ -39,14 +41,25 @@ The new key reader BIO already finds **both** `tree` and `house` spans. Its sing
 
 Reports: `.session-control/overnight-ui-cutter-after/comparison.json` and `.session-control/overnight-reader-candidate-eval/`. No model promotion or restart occurs until the unresolved contracts are addressed.
 
-## Current implementation batch
+## Delivered implementation and actual runs
 
-Actual Chromium on the built site with deployed reader: both `draw a tree and a house` and the repeated-verb version create both real objects; one Undo restores the pre-command scene; the first retains an extra unapplied tree constraint honestly. Validated requests use refreshed context and one undo group. Operational SOP Worlds now declare scheduling, omitted-argument defaults and knowledge-property joins. Mobile Worlds legend releases space on close; explicit phone navigation opens the visible page. Missing Diagram renderer modules were found in deployment, independently of touch behavior, and added to the runtime closure.
+- `draw a tree and a house` and `draw a tree and draw a house` each create **two real objects** with the deployed model; **one Undo restores both**. The first retains an extra unapplied tree constraint as a partial result. The reader runs once per actual cut rather than doing a redundant full-batch read first. Actual coordinated-reader/proposal events and SOP policy reads appear on the common activity bus.
+- Worlds legend releases the graph width when closed. Mobile explicit navigation opens the visible page. Desktop and 390px Chromium checks pass without horizontal overflow; all actual architecture nodes remain inspectable.
+- Mobile Drawing: actual touch Add, drag/move, explicit multi-selection, grouping/ungrouping and cancellation verified. Mobile Diagram: actual touch Add two nodes, multi-selection, group/ungroup, tap-two-node Connect and pinch without object mutation verified. These controls call the same declared tools and produce SOP records; no new operation inventory was invented.
+- Diagram's missing `arrows.mjs` and `data.charts/vector-svg.mjs` modules are included in the published runtime closure. A generic asset check covers actual lazy editor module constants and the content manifest. Retired standalone Charts UI moved to `legacy/`.
+- Avatar joins Calendar as **canonical SOP state authority**. Session storage owns only `{sop}`; transactions and rendering decode temporary native data. Current composition, shared slot records, colours, geometry, explicit overrides, saved compositions, ordered history/future, options and referents are represented. Current interface bindings are explicit; historical duplicates do not silently become live objects.
+- Built-route Avatar Chromium: visible composition change, exact eye scale 1.2, real eyes feature change and Undo verified. Worlds shows sole SOP carrier, authoritative instance, complete governing schema, exact face/eyes facts and zero identity/console errors. Fresh versus 40-history resize measured 15/87 ms in Node; this is not a claim about all mobile devices.
+- V2 supervision fix narrows **177 mention spans across 175 request cuts** to the lexical value, retaining the outer disambiguating evidence separately. All utterances, raw gold requests and expected native calls remain unchanged. The corrected future union is `.session-control/ui-natural-span-corrected-union/`, explicitly **`trainingReady:false`** pending the documented contracts. Eleven Python and eight targeted Node checks pass.
+- Updated library skills are pushed in **`fba0f38`**. Source and built-library gates each ran 964 tests with zero failures. Historical grammar fixtures are no longer presented as neural application accuracy, and refusal-first/capability-for-free instructions were corrected.
 
-The architecture plan is `specs/plans/worlds-native-reduction.md`. The live graph inventory contains 75 native state properties, nine runtime records, five adapters and seven components; they are not hidden or relabelled as migrated. Avatar typed-state codec preparation roundtrips actual operations, but its authoritative host integration is still pending. Drawing/Diagram touch workflows remain active work. Updated library skills were pushed in `fba0f38` with source/bundle gates each 964 tests, zero failures.
+Architecture plan: `specs/plans/worlds-native-reduction.md`. The initial graph inventory had 75 native state properties, nine runtime records, five adapters and seven components. Those 75 properties were not 75 independent algorithms. This delivery moves real Avatar state and execution policies into SOP; it does **not** relabel the remaining JavaScript algorithms as Worlds or claim to have replaced all native components.
 
 ## Remaining after standby
 
-Finish and verify touch editing and the Avatar state-authority migration; correct lexical-span preparation; preserve unresolved multi-target, unit/measure and reference-normalization contracts explicitly. Publish completed batches, update this handover, then return to standby as requested.
+- Drawing, Diagram and Documents still have authoritative native state and domain algorithms. Their complete semantic schemas/state migrations remain planned; Avatar and Calendar are the completed storage-authority migrations. Native geometry, renderer/DOM, model tensors and typed primitive boundaries remain legitimate implementation components.
+- Repeated target/group/role membership is still absent from the raw reader contract. The candidate cutter's one-cut noun enumeration cannot be repaired merely by running the source-cut scheduler. Preserve the example and the near-a-house counterexample; extend the representation before retraining it.
+- Resolve missing unit/measure output contracts, out-of-bank reference/alias supervision and source normalization before another training run. The corrected span preparer alone does not resolve these. The selected measured epoch-3 checkpoint remains available; no training process remains running.
+- Omitted positions still use native centre defaults and may overlap; no new spatial reasoning success is claimed. Some existing native operations still return generic effect verification `unverified` despite actual effects checked in the browser; keep that distinction visible.
+- Touch flows passed Chromium at 390×844. Broader physical-device/Safari ergonomics and fine resizing/property editing need owner feedback; no claim of universal mobile coverage.
 
-Known limits: Avatar man reading can still fail with the deployed model; recognized requests can retain extra unapplied constraints; omitted positions may overlap at native center defaults. Calendar owns canonical SOP state; Drawing, Diagram, Documents and Avatar still expose native JS authority alongside observed SOP facts. Complete world-based reasoning and universal UI-language execution are not claimed.
+No further training or refactoring is scheduled during standby. Resume on owner return with these concrete remaining contracts and UI feedback.

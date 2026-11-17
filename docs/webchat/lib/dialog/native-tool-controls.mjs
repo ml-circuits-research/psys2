@@ -1,7 +1,7 @@
-import{prepareNativeControlHost}from'./native-control-preparation.mjs?v=c5981d312b';
+import{prepareNativeControlHost}from'./native-control-preparation.mjs?v=03f5c3492c';
 import{invokeObservedNativeTool}from'./native-tool-activity.mjs?v=644ec5af08';
 // Typed UI gestures use the same declared native tools and undo history as model requests.
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=a83ed42db4';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=b5d2aa913a';
 import {describeNativeControl,verifyNativeControlEffect} from './native-control-intent.mjs?v=15a2913b39';
 import {readNativeIntent} from './native-intent-reader.mjs?v=98f8dbde1e';
 

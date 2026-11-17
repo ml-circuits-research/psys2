@@ -1,3 +1,4 @@
+import {toNativeAvatarState} from '../worlds/ui.avatar/canonical-state.mjs';
 import test from'node:test';import assert from'node:assert/strict';import{readFile}from'node:fs/promises';import{createHash}from'node:crypto';
 import{exportNativeReaderBindings}from'../training/sop-bert/export-native-reader-bindings.mjs';
 import{mergeNativeReaderBindings}from'../src/dialog/native-reader-bindings.mjs';
@@ -14,7 +15,7 @@ test('gold requests use actual native family/property declarations for avatar co
  const faceRaw=raw('avatar','face','base','man');faceRaw.requests[0].target.fill='context';
  const initial=bridgeRawStructure(faceRaw,{bindings,bindingSha256:sha});assert.equal(initial.decoded?.candidates.length??0,0);
  const projected=await projectContextAction({raw:faceRaw,coverage:{complete:false},failures:initial.diagnostics},session,{bindings,registry:{},view:'avatar'});assert.ok(projected);
- const faceReply=await executeDeclaredRequest(session,projected.proposal.candidates[0],faceRaw.source.text,{bindings,view:'avatar'});assert.equal(faceReply.statuses[0],'supported',JSON.stringify(faceReply));assert.equal(faceReply.trace.binding.operation,'avatar.face.compose');assert.equal(avatar.face.base,'man');assert.equal(faceReply.trace.effectVerification.status,'verified');
+ const faceReply=await executeDeclaredRequest(session,projected.proposal.candidates[0],faceRaw.source.text,{bindings,view:'avatar'});assert.equal(faceReply.statuses[0],'supported',JSON.stringify(faceReply));assert.equal(faceReply.trace.binding.operation,'avatar.face.compose');assert.equal(toNativeAvatarState(avatar).face.base,'man');assert.equal(faceReply.trace.effectVerification.status,'verified');
  const host=createDrawingHost({state:drawing,instanceId:'fixture'});await host.invoke({invocation:'fixture.make',expectedVersion:host.observe().version,operation:'drawing.object.make',args:{kind:'house'}});
  const drawingRaw=raw('drawing','drawn','label','Cabin'),bridge=bridgeRawStructure(drawingRaw,{bindings,bindingSha256:sha});assert.equal(bridge.decoded?.candidates.length,1,JSON.stringify(bridge.diagnostics));
  const result=await executeDeclaredRequest(session,bridge.decoded.candidates[0],drawingRaw.source.text,{bindings,view:'draw'});assert.equal(result.statuses[0],'supported',JSON.stringify(result));assert.equal(drawing.objects[0].label,'Cabin');assert.equal(result.trace.effectVerification.status,'verified');

@@ -51,7 +51,8 @@ function encode(input){
  const composition=(f,id,extra={})=>{
   budget.tick();
   const n=add(id,'composition',extra),parts=new Map();
-  const part=key=>{if(!parts.has(key)){const p=add(id+'.part.u'+suffix(key),'part');put(p,'id',key);parts.set(key,p);}return parts.get(key);};
+  if(id==='avatar.face'){put(n,'id','face');put(n,'nativeType','ui.avatar.face');}
+  const part=key=>{if(!parts.has(key)){const p=add(id+'.part.u'+suffix(key),'part');put(p,'id',key);if(id==='avatar.face'&&key!=='face'&&(own(f.slots??{},key)||own(f.expressionParts??{},key)))put(p,'nativeType','ui.avatar.part');parts.set(key,p);}return parts.get(key);};
   for(const k of ['v','expression','base','name','label','n','stepGroup'])if(own(f,k))put(n,k,f[k]);
   for(const [map,field]of Object.entries(maps))if(own(f,map)){
    presence(n,map);n.attrs[map]=Object.entries(f[map]).map(([key,v])=>{
@@ -119,4 +120,3 @@ export function toNativeAvatarState(input){
 }
 export function canonicalAvatarState(input){if(input&&own(input,'sop')){toNativeAvatarState(input);return {sop:input.sop};}const carrier={sop:encode(input)};avatarStateWorld(carrier);return carrier;}
 export function adoptCanonicalAvatarState(target,input){const next=canonicalAvatarState(input);for(const k of Object.keys(target))delete target[k];target.sop=next.sop;return target;}
-

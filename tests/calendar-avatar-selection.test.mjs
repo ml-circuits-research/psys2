@@ -1,3 +1,4 @@
+import {toNativeAvatarState,canonicalAvatarState} from '../worlds/ui.avatar/canonical-state.mjs';
 import {toNativeCalendarState,canonicalCalendarState} from '../worlds/time.calendar/canonical-state.mjs';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
@@ -20,12 +21,12 @@ test('calendar event selection is native, observed and reversible without changi
 });
 test('avatar part selection is native and observed, including absent drawable slots',()=>{
  const state=initialAvatarState(),host=createAvatarHost({state,instanceId:'selection-avatar'}),before=host.observe(),operation=host.bindings().find(row=>row.id==='avatar.part.select');
- const face=structuredClone(state.face),intent=describeNativeControl({operation,args:{id:'eyes'},before});assert.match(intent.text,/Select|Pick/i);assert.ok(intent.wires.length);
- assert.equal(invoke(host,operation.id,{id:'eyes'}).status,'changed');assert.equal(state.selectedSlot,'eyes');assert.deepEqual(input(host,'eyes','selected'),['true']);assert.deepEqual(input(host,'face','selectedSlot'),[JSON.stringify('eyes')]);assert.deepEqual(state.face,face);
+ const face=structuredClone(toNativeAvatarState(state).face),intent=describeNativeControl({operation,args:{id:'eyes'},before});assert.match(intent.text,/Select|Pick/i);assert.ok(intent.wires.length);
+ assert.equal(invoke(host,operation.id,{id:'eyes'}).status,'changed');assert.equal(toNativeAvatarState(state).selectedSlot,'eyes');assert.deepEqual(input(host,'eyes','selected'),['true']);assert.deepEqual(input(host,'face','selectedSlot'),[JSON.stringify('eyes')]);assert.deepEqual(toNativeAvatarState(state).face,face);
  assert.ok(nativeObservationObjects(host.observe()).some(row=>row.attributes.selected?.[0]===true));
  const snapshot=structuredClone(state);assert.equal(invoke(host,operation.id,{id:'not-a-slot'}).status,'refused');assert.deepEqual(state,snapshot);
- assert.equal(invoke(host,operation.id,{id:null}).status,'changed');assert.equal(state.selectedSlot,null);assert.deepEqual(input(host,'eyes','selected'),['false']);
- const slot=host.capabilities().slots.find(row=>row.variants.length&&!(state.face.slots[row.id]&&state.face.slots[row.id]!=='none'));
+ assert.equal(invoke(host,operation.id,{id:null}).status,'changed');assert.equal(toNativeAvatarState(state).selectedSlot,null);assert.deepEqual(input(host,'eyes','selected'),['false']);
+ const slot=host.capabilities().slots.find(row=>row.variants.length&&!(toNativeAvatarState(state).face.slots[row.id]&&toNativeAvatarState(state).face.slots[row.id]!=='none'));
  if(slot){assert.equal(invoke(host,operation.id,{id:slot.id}).status,'changed');assert.deepEqual(input(host,'face','selectedSlot'),[JSON.stringify(slot.id)]);}
 });
 
@@ -41,17 +42,18 @@ test('published archives lacking optional selection fields restore and resnapsho
  assert.equal(invoke(host,'calendar.event.add',{id:'legacy-event',title:'Published event',start:0,duration:100}).status,'changed');
  const records=(await snapshotNativeInstances(source)).map(record=>{
   if(record.world==='time.calendar'){const native=toNativeCalendarState({sop:record.wires});delete native.selectedEvent;return {...record,wires:canonicalCalendarState(native).sop};}
+  if(record.world==='ui.avatar'){const native=toNativeAvatarState({sop:record.wires});delete native.selectedSlot;return {...record,wires:canonicalAvatarState(native).sop};}
   const archive=readInstanceState(record.wires);delete archive.projection.selectedEvent;delete archive.projection.selectedSlot;
   for(const object of archive.objects)for(const key of ['selected','selectedSlot']){delete object.attributes[key];if(object.metadata?.inputs)delete object.metadata.inputs[key];}
   return {...record,wires:serializeInstanceState(archive)};
  });
  const target=archiveSession();await restoreNativeInstances(target,records);
- for(const [world,stored]of Object.entries(target.isession.state)){const state=world==='time.calendar'?toNativeCalendarState(stored):stored;assert.equal(Object.hasOwn(state,'selectedEvent'),false);assert.equal(Object.hasOwn(state,'selectedSlot'),false);}
+ for(const [world,stored]of Object.entries(target.isession.state)){const state=world==='time.calendar'?toNativeCalendarState(stored):world==='ui.avatar'?toNativeAvatarState(stored):stored;assert.equal(Object.hasOwn(state,'selectedEvent'),false);assert.equal(Object.hasOwn(state,'selectedSlot'),false);}
  const repeated=await snapshotNativeInstances(target);assert.deepEqual(repeated,records);
  const calendar=createCalendarHost({state:target.isession.state['time.calendar'],instanceId:'selected-calendar'});
  assert.equal(invoke(calendar,'calendar.event.select',{id:'legacy-event'}).status,'changed');assert.deepEqual(input(calendar,'legacy-event','selected'),['true']);
  const avatar=createAvatarHost({state:target.isession.state['ui.avatar'],instanceId:'selected-avatar'});
  assert.equal(invoke(avatar,'avatar.part.select',{id:'eyes'}).status,'changed');assert.deepEqual(input(avatar,'eyes','selected'),['true']);
  const selected=await snapshotNativeInstances(target),restored=archiveSession();await restoreNativeInstances(restored,selected);
- assert.equal(toNativeCalendarState(restored.isession.state['time.calendar']).selectedEvent,'legacy-event');assert.equal(restored.isession.state['ui.avatar'].selectedSlot,'eyes');
+ assert.equal(toNativeCalendarState(restored.isession.state['time.calendar']).selectedEvent,'legacy-event');assert.equal(toNativeAvatarState(restored.isession.state['ui.avatar']).selectedSlot,'eyes');
 });

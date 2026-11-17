@@ -88,6 +88,7 @@ export async function executeDeclaredRequest(session,candidate,text,{bindings,vi
    if(operation.params.title?.required&&!Object.hasOwn(args,'title')){args.title=target.name??mappings[0].lemma;assumptions.push('I used '+JSON.stringify(args.title)+' as the title.');}
    if(operation.params.label?.required&&!Object.hasOwn(args,'label')){args.label=target.name??mappings[0].lemma;assumptions.push('I used '+JSON.stringify(args.label)+' as the name.');}
    const defaults=executionDefaults(operation.id,args);
+   try{session.engine?.onWorldActivity?.({nodeIds:['execution:policy'],phase:'stage',label:'Read omitted-argument defaults',operation:'policy.execution.defaults',tool:operation.id,facts:defaults.evidence,parameters:Object.keys(defaults.values),notices:defaults.notices});}catch{/* Observation cannot change execution. */}
    Object.assign(args,defaults.values);assumptions.push(...defaults.notices);
   }
   for(const rule of operation.defaultsFrom??[])if(rule.method==='ordinal-labels'&&operation.params[rule.parameter]?.type==='array'&&operation.params[rule.lengthOf]?.type==='array'&&(!args[rule.parameter]||args[rule.parameter].length===0)&&Array.isArray(args[rule.lengthOf])&&args[rule.lengthOf].length){args[rule.parameter]=args[rule.lengthOf].map((_,i)=>String(i+1));assumptions.push('I numbered the categories because no labels were supplied.');}

@@ -12,13 +12,14 @@ const page=`<!doctype html><meta charset="utf-8"><style>body{margin:0}#avatar{wi
 import {createAvatar} from '/docs/webchat/ui/avatar.mjs';
 import {createAvatarHost,initialAvatarState,avatarResizeScope} from '/worlds/ui.avatar/declared-host.mjs';
 import {DEFAULT_FACE} from '/worlds/ui.avatar/default-face.mjs';
+import {toNativeAvatarState} from '/worlds/ui.avatar/canonical-state.mjs';
 import {describeNativeControl} from '/src/dialog/native-control-intent.mjs';
 import {readNativeIntent} from '/src/dialog/native-intent-reader.mjs';
 const state=initialAvatarState(),native=createAvatarHost({state,data:DEFAULT_FACE,instanceId:'avatar-browser'}),calls=[];let ui;
 const host={persistent:false,motionSeed:1,asset:p=>p.startsWith('lib/')?'/src/'+p.slice(4):'/'+p,knowledgeUrl:()=>location.origin+'/unavailable-catalog',
- tool:async(operation,args)=>{const declaration=native.bindings().find(op=>op.id===operation),intent=describeNativeControl({operation:declaration,args,before:native.observe()}),decoded=readNativeIntent(intent.wires,{operation:declaration});const receipt=native.invoke({invocation:crypto.randomUUID(),expectedVersion:native.observe().version,operation:decoded.operation,args:decoded.args});calls.push({intent,receipt});ui.update(state);return {ok:receipt.status==='changed'||receipt.status==='unchanged',message:receipt.status,receipt};}};
-ui=createAvatar(document.getElementById('avatar'),host,{editor:true});ui.update(state);ui.setVisible(true);
-window.avatarTest={ui,state,native,calls,target:()=>native.capabilities().slots.filter(slot=>native.observe().objects.some(o=>o.id===slot.id)).sort((a,b)=>avatarResizeScope(DEFAULT_FACE,a.id).length-avatarResizeScope(DEFAULT_FACE,b.id).length)[0]?.id};
+ tool:async(operation,args)=>{const declaration=native.bindings().find(op=>op.id===operation),intent=describeNativeControl({operation:declaration,args,before:native.observe()}),decoded=readNativeIntent(intent.wires,{operation:declaration});const receipt=native.invoke({invocation:crypto.randomUUID(),expectedVersion:native.observe().version,operation:decoded.operation,args:decoded.args});calls.push({intent,receipt});ui.update(toNativeAvatarState(state));return {ok:receipt.status==='changed'||receipt.status==='unchanged',message:receipt.status,receipt};}};
+ui=createAvatar(document.getElementById('avatar'),host,{editor:true});ui.update(toNativeAvatarState(state));ui.setVisible(true);
+window.avatarTest={ui,get state(){return toNativeAvatarState(state);},carrier:state,native,calls,target:()=>native.capabilities().slots.filter(slot=>native.observe().objects.some(o=>o.id===slot.id)).sort((a,b)=>avatarResizeScope(DEFAULT_FACE,a.id).length-avatarResizeScope(DEFAULT_FACE,b.id).length)[0]?.id};
 // The shared browser transport waits on this readiness interface, without starting an app/model.
 window.psys2={engineClient:{info:{fixture:'actual-avatar-ui'},ready:async()=>{while(!document.querySelector('.p2-avatar-layer [data-avatar-slot]'))await new Promise(resolve=>setTimeout(resolve,10));}}};
 </script>`;

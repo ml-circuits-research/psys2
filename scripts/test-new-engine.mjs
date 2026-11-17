@@ -6,6 +6,7 @@ const fixed = [
   'diagram-editors-native.test.mjs',
   'demo-composition.test.mjs',
   'avatar-resize-browser.test.mjs',
+  'mobile-editors-touch-browser.test.mjs',
   'world-code-panel.test.mjs',
   'worlds-explorer.test.mjs',
   'work-files.test.mjs',

@@ -14,6 +14,34 @@ class Tests(unittest.TestCase):
   self.assertEqual(p.span_for('Name it Pipeline','Pipeline','Pipeline'),[8,16])
   self.assertEqual(p.span_for('Use a_thing and thing','thing',None),[16,21])
   self.assertEqual(p.unique('abcd','bc'),[1,3])
+ def test_v2_value_bio_narrows_inside_unique_evidence_anchor(self):
+  text='update the house, coloured red';reg={'drawing.drawn.color':{'role':'domain'}}
+  row={'world':'drawing','source_path':'ui-natural-v1','annotationVersion':'v2','source':{'text':text}}
+  request={'span':text,'constraints':[{'key':'drawn.color','value':'red','value_span':'coloured red'}]}
+  result=p.sample(row,request,reg,{})
+  mention=result['mentions'][0]
+  self.assertEqual(mention['span'],[27,30]);self.assertEqual(text[slice(*mention['span'])],'red')
+  self.assertEqual(mention['evidenceSpan'],[18,30]);self.assertEqual(mention['evidenceText'],'coloured red')
+  self.assertEqual(mention['value'],'red');self.assertEqual(mention['metadata'],{});self.assertEqual(result['diagnostics'],[])
+ def test_v2_outer_anchor_disambiguates_repeated_value_without_guessing(self):
+  text='choose red then replace it with red';reg={'drawing.drawn.color':{'role':'domain'}}
+  row={'world':'drawing','source_path':'ui-natural-v1','annotationVersion':'v2','source':{'text':text}}
+  request={'span':text,'constraints':[{'key':'drawn.color','value':'red','value_span':'with red'}]}
+  mention=p.sample(row,request,reg,{})['mentions'][0]
+  self.assertEqual(mention['span'],[32,35]);self.assertEqual(mention['evidenceSpan'],[27,35])
+  request['constraints'][0]['value_span']='red'
+  result=p.sample(row,request,reg,{})
+  self.assertIsNone(result['mentions'][0]['span']);self.assertEqual(result['unknownBIOKeys'],['drawing.drawn.color'])
+ def test_v2_canonical_alias_retains_real_source_and_quantity_narrows(self):
+  reg={'document.block.align':{'role':'domain'}};text='keep the paragraph centred'
+  row={'world':'document','source_path':'ui-natural-v1','annotationVersion':'v2','source':{'text':text}}
+  request={'span':text,'constraints':[{'key':'block.align','value':'center','value_span':'centred'}]}
+  mention=p.sample(row,request,reg,{})['mentions'][0]
+  self.assertEqual(text[slice(*mention['span'])],'centred');self.assertEqual(mention['value'],'center')
+  text='show IDs for 4 seconds';row.update({'world':'drawing','source':{'text':text}});request={'span':text,'constraints':[{'key':'page.duration','value':'4','value_span':'4 seconds','unit':'second','measure':'4'}]}
+  mention=p.sample(row,request,{'drawing.page.duration':{'role':'domain'}},{})['mentions'][0]
+  self.assertEqual(text[slice(*mention['span'])],'4');self.assertEqual(text[slice(*mention['evidenceSpan'])],'4 seconds')
+  self.assertEqual(mention['metadata']['request.constraint.unit'],'second');self.assertEqual(mention['metadata']['request.constraint.measure'],'4')
  def test_declared_families_include_targets_without_property_heads(self):
   inventory={'request':{'target':{'keys':{'type':{'values':['vessel','empty']}}}},'novel':{'vessel':{'keys':{'weight':{}}},'empty':{'keys':{}}}}
   families=p.target_families(inventory);self.assertEqual(families,{'novel':['vessel','empty']})

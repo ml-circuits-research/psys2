@@ -5,7 +5,7 @@ import {copyHostData} from '../../worlds/native-tool-host.mjs?v=463e762442';
 import {createCutterInference} from './cutter-inference.mjs?v=e3ef21b269';
 import {createKeyReaderInference} from './key-reader-inference.mjs?v=37b7c1826e';
 import {createBertSourceOffsetAuthority} from './bert-source-offsets.mjs?v=9b7b99f458';
-import {createKeyReaderPipeline} from './key-reader-pipeline.mjs?v=e9ec4ab522';
+import {createKeyReaderPipeline} from './key-reader-pipeline.mjs?v=43d7c2a85c';
 
 const hash=x=>typeof x==='string'&&/^[a-f0-9]{64}$/.test(x);
 const object=x=>x!==null&&typeof x==='object'&&!Array.isArray(x);

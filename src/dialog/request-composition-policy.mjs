@@ -9,4 +9,3 @@ export function requestCompositionPolicy(){
  return {enabled:value('independent.order')==='source'&&value('explicit.dependencies')==='preserve',order:value('independent.order'),dependencies:value('explicit.dependencies'),undo:value('undo'),world:'app.request.composition',declaration:'composition.default'};
 }
 export const inspectRequestCompositionPolicy=()=>({loaded:!!world,world:world??null,source:REQUEST_COMPOSITION_POLICY_SOURCE});
-

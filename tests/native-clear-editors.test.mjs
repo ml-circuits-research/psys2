@@ -1,3 +1,4 @@
+import {toNativeAvatarState,canonicalAvatarState} from '../worlds/ui.avatar/canonical-state.mjs';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
@@ -25,18 +26,18 @@ test('Documents clear retains document identity/title and is undoable; section d
  assert.equal((await run(s,'editor','undo')).ok,true);assert.deepEqual(s.isession.state['docs.editor'],before);
 });
 test('Avatar concrete deletion permits required parts, clear is empty/undoable and exact base recomposes',async()=>{
- const s=session('ui.avatar',initialAvatarState()),state=()=>s.isession.state['ui.avatar'];
- const before=structuredClone(state());assert.equal((await run(s,'avatar','avatar.parts.remove',{ids:['head']})).ok,true);assert.equal(state().face.slots.head,'none');assert.equal((await run(s,'avatar','avatar.undo')).ok,true);assert.deepEqual(state(),before);
+ const s=session('ui.avatar',canonicalAvatarState(initialAvatarState())),state=()=>s.isession.state['ui.avatar'];
+ const before=structuredClone(state());assert.equal((await run(s,'avatar','avatar.parts.remove',{ids:['head']})).ok,true);assert.equal(toNativeAvatarState(state()).face.slots.head,'none');assert.equal((await run(s,'avatar','avatar.undo')).ok,true);assert.deepEqual(state(),before);
  const ids=createAvatarHost({state:state(),instanceId:'visible'}).observe().objects.filter(o=>o.sourceType==='ui.avatar.part').map(o=>o.id);
- assert.equal((await run(s,'avatar','avatar.clear',{ids})).ok,true);assert.ok(Object.values(state().face.slots).every(value=>value==='none'));
+ assert.equal((await run(s,'avatar','avatar.clear',{ids})).ok,true);assert.ok(Object.values(toNativeAvatarState(state()).face.slots).every(value=>value==='none'));
  assert.equal((await run(s,'avatar','avatar.clear',{ids:[]})).changed,false);assert.equal((await run(s,'avatar','undo')).ok,true);assert.deepEqual(state(),before);
- await run(s,'avatar','avatar.clear',{ids});assert.equal((await run(s,'avatar','avatar.face.preset',{preset:state().face.base})).ok,true);assert.ok(Object.values(state().face.slots).some(value=>value!=='none'));
+ await run(s,'avatar','avatar.clear',{ids});assert.equal((await run(s,'avatar','avatar.face.preset',{preset:toNativeAvatarState(state()).face.base})).ok,true);assert.ok(Object.values(toNativeAvatarState(state()).face.slots).some(value=>value!=='none'));
 });
 
 test('transient blink/talk overlays cannot introduce parts into a cleared avatar',()=>{
  const state=initialAvatarState(),h=createAvatarHost({state,instanceId:'no-ghosts'}),ids=h.observe().objects.filter(o=>o.sourceType==='ui.avatar.part').map(o=>o.id);
  h.invoke({invocation:'clear',expectedVersion:h.observe().version,operation:'avatar.clear',args:{ids}});
- assert.equal(variantFor(DEFAULT_FACE,state.face,'eyes','left',{eyes:'closed'}),null);assert.equal(variantFor(DEFAULT_FACE,state.face,'mouth','left',{mouth:'talking'}),null);
+ assert.equal(variantFor(DEFAULT_FACE,toNativeAvatarState(state).face,'eyes','left',{eyes:'closed'}),null);assert.equal(variantFor(DEFAULT_FACE,toNativeAvatarState(state).face,'mouth','left',{mouth:'talking'}),null);
  const expressive=h.invoke({invocation:'expression',expectedVersion:h.observe().version,operation:'avatar.face.expression',args:{expression:'happy'}});assert.equal(expressive.status,'changed');
- assert.equal(variantFor(DEFAULT_FACE,state.face,'eyebrows').name,state.face.expressionParts.eyebrows);
+ assert.equal(variantFor(DEFAULT_FACE,toNativeAvatarState(state).face,'eyebrows').name,toNativeAvatarState(state).face.expressionParts.eyebrows);
 });

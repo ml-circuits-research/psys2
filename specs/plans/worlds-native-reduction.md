@@ -29,3 +29,8 @@ The first run must execute a two-object request through the real reader and reta
 ## Alternatives considered
 
 Existing tool declarations and relational policy lookup are the smallest first step: they replace operation-specific native maps without new language parsing. Full typed-state migration is necessary but requires complete domain schemas and broad editor regression checks. Embedding native code in wires would preserve the same algorithm and trust boundary, so it is reserved for explicit host-function interfaces, not counted as removing native behavior. These follow the library's existing `std.tool`, `core.function`, schema and World contracts; no new evaluator or sentence-specific rule is proposed.
+
+
+## Delivered checkpoint, 2026-11-18
+
+Items 1–5 have bounded verified deliveries: source-cut execution with one Undo, operational defaults/value joins/scheduling Worlds, usable mobile Worlds layout/navigation, actual touch Drawing/Diagram add/select/group/connect flows, and updated skills. Avatar in item 6 now stores its complete state as typed SOP facts, with native projections only at primitive/render boundaries; Calendar already did so. Drawing/Diagram/Documents authority and further semantic policy migration remain unfinished. No arbitrary embedded-code evaluator was introduced, and native components were not hidden merely to reduce the diagram count.

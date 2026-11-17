@@ -167,6 +167,11 @@
           "file": "native-interface.sop",
           "role": "native-tool-interface",
           "completeStateSchema": false
+        },
+        {
+          "file": "instance-schema.sop",
+          "role": "authoritative-state-schema",
+          "completeStateSchema": true
         }
       ],
       "nativeInitializer": {

@@ -1,6 +1,7 @@
 // The avatar's native face tools, with choices derived from the supplied knowledge.
 import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs';
 import {compositionBase,compositionOverrides,expressionParts} from './composition.mjs';
+import {toNativeAvatarState,adoptCanonicalAvatarState} from './canonical-state.mjs';
 import {DEFAULT_FACE} from './default-face.mjs';
 import {newFace,mark,wearPreset,putPart,takeOff,setParts,moveParts,toolView,roleOf,neighbours,centre,SCALE_MIN,SCALE_MAX,NONE,PART_SIZE_GRADES,PART_MOVE_DIRECTIONS,undoStep,redoStep} from './face.mjs';
 const text={type:'string',required:true},ids={type:'array',required:true},faceId={type:'string',default:'face',enum:['face']};
@@ -26,7 +27,8 @@ export function createAvatarHost({state=null,instanceId,knowledge=null,data=null
  const variants=[...new Set(capabilities.slots.flatMap(s=>s.variants))];
  const resizeRelated=catalog.slots.flatMap(slot=>{const group=neighbours(catalog,slot);return [...group.inside,...group.riders].map(part=>({when:{parameter:'ids',includes:slot.name,provided:'size'},id:part.name,keys:['dx','dy','scale','place'],relationship:group.inside.includes(part)?'inside':'rests-on'}));});
  state??=initialAvatarState(catalog);
- if(state.face?.v!==2)throw Error('avatar-initialization-required');
+ if(toNativeAvatarState(state).face?.v!==2)throw Error('avatar-initialization-required');
+ adoptCanonicalAvatarState(state,state);
  const operations=[
   {id:'avatar.face.compose',act:'change',on:'ui.avatar.face',intent:{subject:'composition',parameters:{characterKind:{label:'of character kind'},base:{label:'using composition base'}}},params:{id:faceId,characterKind:{type:'string',enum:capabilities.characterKinds},base:{type:'string',enum:capabilities.presets}}},
   {id:'avatar.face.preset',act:'change',on:'ui.avatar.face',intent:{subject:'face',parameters:{preset:{label:'using preset'}}},params:{id:faceId,preset:{...text,enum:capabilities.presets}}},
@@ -48,14 +50,14 @@ export function createAvatarHost({state=null,instanceId,knowledge=null,data=null
   {id:'avatar.undo',act:'undo',on:'ui.avatar.face',params:{}},
   {id:'avatar.redo',act:'redo',on:'ui.avatar.face',params:{}},
  ];
- const view=s=>toolView({state:s,knowledge:{peekFaces:()=>catalog}}).map(row=>({id:row.id,kind:row.kind,sourceType:row.id==='face'?'ui.avatar.face':'ui.avatar.part',inputs:Object.entries({...row,...(row.id==='face'?{name:s.name??'Avatar',...(Object.hasOwn(s,'idDisplay')?s.idDisplay:{}),...(s.face.adj?.face?{scale:s.face.adj.face.s??1}:{}),...(Object.hasOwn(s,'selectedSlot')?{selectedSlot:s.selectedSlot??null}:{}),base:s.face.base,characterKind:catalog.presets[s.face.base]?.kind??null}:{...(Object.hasOwn(s,'selectedSlot')?{selected:s.selectedSlot===row.id}:{}),name:capabilities.slots.find(slot=>slot.id===row.id)?.label??row.id,dx:s.face.adj?.[row.id]?.dx??0,dy:s.face.adj?.[row.id]?.dy??0,scale:s.face.adj?.[row.id]?.s??1,tintRole:roleOf(catalog,row.id)})}).filter(([key])=>!['id','kind'].includes(key)).map(([key,value])=>({binding:`avatar.${row.id==='face'?'face':'part'}.${key}`,key,values:value===null||value===undefined?[]:[nativeToken(value)]}))}));
+ const nativeView=s=>toolView({state:s,knowledge:{peekFaces:()=>catalog}}).map(row=>({id:row.id,kind:row.kind,sourceType:row.id==='face'?'ui.avatar.face':'ui.avatar.part',inputs:Object.entries({...row,...(row.id==='face'?{name:s.name??'Avatar',...(Object.hasOwn(s,'idDisplay')?s.idDisplay:{}),...(s.face.adj?.face?{scale:s.face.adj.face.s??1}:{}),...(Object.hasOwn(s,'selectedSlot')?{selectedSlot:s.selectedSlot??null}:{}),base:s.face.base,characterKind:catalog.presets[s.face.base]?.kind??null}:{...(Object.hasOwn(s,'selectedSlot')?{selected:s.selectedSlot===row.id}:{}),name:capabilities.slots.find(slot=>slot.id===row.id)?.label??row.id,dx:s.face.adj?.[row.id]?.dx??0,dy:s.face.adj?.[row.id]?.dy??0,scale:s.face.adj?.[row.id]?.s??1,tintRole:roleOf(catalog,row.id)})}).filter(([key])=>!['id','kind'].includes(key)).map(([key,value])=>({binding:`avatar.${row.id==='face'?'face':'part'}.${key}`,key,values:value===null||value===undefined?[]:[nativeToken(value)]}))}));
  const context=ctx=>({...ctx,knowledge:{peekFaces:()=>catalog}}),validIds=(ctx,a)=>a.ids.length>0&&new Set(a.ids).size===a.ids.length&&a.ids.every(id=>typeof id==='string'&&(ctx.state.face.expressionParts?.[id]??ctx.state.face.slots[id])&&(ctx.state.face.expressionParts?.[id]??ctx.state.face.slots[id])!==NONE);
  const noteExplicit=(f,args)=>{f.explicit??=compositionOverrides(catalog,f);if(args.variant!==undefined)f.explicit.slots=[...new Set([...f.explicit.slots,...args.ids])];if(args.colour!==undefined)for(const id of args.ids){const role=roleOf(catalog,id);if(role&&catalog.colours[role]?.[args.colour])f.explicit.roles=[...new Set([...f.explicit.roles,role])];else f.explicit.paint=[...new Set([...f.explicit.paint,id])];}};
  const noteExplicitVariant=(face,id)=>{face.explicit??=compositionOverrides(catalog,face);if(!face.explicit.slots.includes(id))face.explicit.slots.push(id);};
  const fail=code=>({status:'missing',code});
  const presentIds=f=>catalog.slots.filter(slot=>(f.expressionParts?.[slot.name]??f.slots[slot.name])&&((f.expressionParts?.[slot.name]??f.slots[slot.name])!==NONE)).map(slot=>slot.name);
  const removeConcrete=(ctx,a,clear=false)=>{const f=ctx.state.face,present=presentIds(f);if(new Set(a.ids).size!==a.ids.length||a.ids.some(id=>!present.includes(id)))return fail('missing-target');if(clear&&(a.ids.length!==present.length||present.some(id=>!a.ids.includes(id))))return fail('incomplete-avatar-scope');if(!a.ids.length)return {status:'supported',changed:[]};mark(f);if(clear||a.ids.some(id=>Object.hasOwn(f.expressionParts??{},id))){Object.assign(f.slots,f.expressionParts??{});f.expression='';f.expressionParts={};}for(const id of a.ids)f.slots[id]=NONE;if(clear)f.explicit={slots:[],roles:[],paint:[]};else for(const id of a.ids)noteExplicitVariant(f,id);return {status:'supported',changed:[...a.ids]};};
- const handlers={
+ const nativeHandlers={
   'avatar.face.compose':(ctx,a)=>{if(a.characterKind===undefined&&a.base===undefined)return fail('missing-composition-property');const f=ctx.state.face,base=compositionBase(catalog,f,{kind:a.characterKind,base:a.base},capabilities.presets);if(!base)return fail('incompatible-composition-base');if(base===f.base)return {status:'supported',changed:[]};const explicit=f.explicit??compositionOverrides(catalog,f),fresh=newFace(catalog,base);mark(f);for(const id of explicit.slots)if(Object.hasOwn(f.slots,id))fresh.slots[id]=f.slots[id];for(const role of explicit.roles)fresh.colours[role]=f.colours[role];fresh.paint={...f.paint};fresh.grade={...f.grade};fresh.adj=structuredClone(f.adj);fresh.explicit=structuredClone(explicit);fresh.expression=f.expression;fresh.expressionParts=f.expression?expressionParts(catalog,{...fresh,expressionParts:f.expressionParts},f.expression)??{}:{};Object.assign(f,{slots:fresh.slots,colours:fresh.colours,paint:fresh.paint,grade:fresh.grade,adj:fresh.adj,explicit:fresh.explicit,expression:fresh.expression,expressionParts:fresh.expressionParts,base});return {status:'supported',changed:['face']};},
 
   'avatar.face.preset':(ctx,a)=>{const result=wearPreset(context(ctx),{preset:a.preset});if(ctx.state.face.stepGroup===undefined)delete ctx.state.face.stepGroup;return result;},
@@ -93,9 +95,15 @@ export function createAvatarHost({state=null,instanceId,knowledge=null,data=null
   'avatar.part.remove':(ctx,a)=>{if(!validIds(ctx,a))return fail('missing-target');ctx.state.face.explicit??=compositionOverrides(catalog,ctx.state.face);const r=takeOff(context(ctx),a);if(r.status==='supported')noteExplicit(ctx.state.face,{...a,variant:NONE});return r;},
   'avatar.parts.remove':(ctx,a)=>removeConcrete(ctx,a),
   'avatar.clear':(ctx,a)=>removeConcrete(ctx,a,true),
-  'avatar.observe':ctx=>({status:'supported',data:view(ctx.state)}),
+  'avatar.observe':ctx=>({status:'supported',data:nativeView(ctx.state)}),
   'avatar.undo':ctx=>undoStep(context(ctx)),
   'avatar.redo':ctx=>redoStep(context(ctx)),
  };
+ const handlers=Object.fromEntries(Object.entries(nativeHandlers).map(([operation,handler])=>[operation,(ctx,args,invocation)=>{
+  const native=toNativeAvatarState(ctx.state),result=handler({...ctx,state:native},args,invocation);
+  if(result?.status==='supported')adoptCanonicalAvatarState(ctx.state,native);
+  return result;
+ }]));
+ const view=carrier=>nativeView(toNativeAvatarState(carrier));
  return {...createNativeToolHost({state,instanceId,scope:'avatar.face-and-parts',operations,handlers,view,...limits}),capabilities:()=>structuredClone(capabilities)};
 }

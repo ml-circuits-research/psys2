@@ -46,7 +46,8 @@ def sample(row,request,reg,v1_aliases):
         global_values[key]={'value':value,'span':span_for(text,value,literal)};covered.add(key)
     def mention(key,value,literal,metadata):
         if key not in reg:diagnostics.append({'reason':'unmapped-raw-key','key':key});return
-        present=value is not MISSING;bounds=unique(text,literal)if row.get('annotationVersion')=='v2'and isinstance(literal,str)else span_for(text,value,literal);value=None if value is MISSING else value;item={'key':key,'value':value,'valuePresent':present,'span':bounds,'metadata':metadata,'trainable':bounds is not None};mentions.append(item);covered.add(key)
+        present=value is not MISSING;bounds=span_for(text,value,literal);value=None if value is MISSING else value;item={'key':key,'value':value,'valuePresent':present,'span':bounds,'metadata':metadata,'trainable':bounds is not None};mentions.append(item);covered.add(key)
+        if version=='v2'and isinstance(literal,str):item.update({'evidenceText':literal,'evidenceSpan':unique(text,literal)})
         if bounds is None:unknown_keys.add(key);diagnostics.append({'reason':'missing-or-ambiguous-mention-span','key':key})
     if request is not None and version=='v2':
         for key,path in GLOBAL.items():

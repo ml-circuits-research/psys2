@@ -199,7 +199,17 @@ async function installSopReader(imp){
     const [{createBrowserReaderHost},{createAppReaderContext}]=await Promise.all([imp('lib/dialog/browser-reader-host.mjs'),imp('lib/dialog/app-reader-context.mjs')]);
     const getContext=createAppReaderContext({getState:()=>session.isession.state,getPrevious:()=>readerPrevious,getInstanceId:world=>{session.nativeInstanceIds??={};return session.nativeInstanceIds[world]??=crypto.randomUUID();},onObservation:value=>{readerObservation=value;if(value.contextSelection)worldActivity(['component:reader',...(value.world?['native:'+value.world]:[])],'stage','Select reader context',{operation:'reader.context.select',world:value.world,contextSelection:value.contextSelection});}});
     const host=await createBrowserReaderHost({manifestURL:abs(deployment.manifestPath),manifestSha256:deployment.manifestSha256,tokenizerArtifact:deployment.tokenizerArtifact,bindingsArtifact:deployment.bindingsArtifact,tokenizerConfigArtifact:deployment.tokenizerConfigArtifact,runtimeIdentity:deployment.runtimeIdentity,getContext,resolveURL:rel=>abs(rel),recordDiagnostics:async diagnostic=>{readerDiagnostics.push(diagnostic);if(readerDiagnostics.length>64)readerDiagnostics.shift();const selection=diagnostic.result?.auxiliary?.contextSelection;if(selection)worldActivity(['component:reader'],'stage','Fit reader context to model budget',{operation:'reader.context.fit',contextSelection:selection});}});
-    engine.requestReader={...host.provider,async propose(text){
+    engine.requestReader={...host.provider,async *proposeRequests(text){
+      const correlationId='reader:'+crypto.randomUUID(),started=performance.now();let index=0;
+      worldActivity(['component:reader'],'start','Read coordinated requests',{operation:'reader.proposeRequests',correlationId,text});
+      try{
+        for await(const result of host.provider.proposeRequests(text)){
+          worldActivity(['component:reader'],'stage','Reader request proposal',{operation:'reader.proposeRequests',correlationId,index:index++,sourceRange:result.composition?.range??null,coverage:result.coverage??null,failures:result.failures??[],proposals:(result.candidates??[]).map(candidate=>({request:candidate.request,wires:candidate.wires}))});
+          yield result;
+        }
+        worldActivity(['component:reader'],'end','Coordinated reading complete',{operation:'reader.proposeRequests',correlationId,requests:index,durationMs:performance.now()-started,timingScope:'iterator lifetime includes execution between request proposals'});
+      }catch(error){worldActivity(['component:reader'],'error','Reader failed',{operation:'reader.proposeRequests',correlationId,durationMs:performance.now()-started,error:String(error?.message??error)});throw error;}
+    },async propose(text){
       const correlationId='reader:'+crypto.randomUUID(),started=performance.now();
       worldActivity(['component:reader'],'start','Read request',{operation:'reader.propose',correlationId,text});
       try{const result=await host.provider.propose(text);worldActivity(['component:reader'],'end','Reader proposal',{operation:'reader.propose',correlationId,durationMs:performance.now()-started,coverage:result.coverage??null,failures:result.failures??[],proposals:(result.candidates??[]).map(candidate=>({request:candidate.request,wires:candidate.wires}))});return result;}
@@ -390,7 +400,7 @@ const handlers = {
     const record=(await observeNativeInstanceWorlds(session,{worlds:[m.world]}))[0];
     if(!record)throw Error('Instance state unavailable.');
     const {inspectInstanceRecord}=await import(vurl('lib/dialog/instance-inspection.mjs'));
-    const data=inspectInstanceRecord({...record,wires:record.carrier},{observation:record.observation,...(record.authoritative?{semanticWires:record.wires}:{})});
+    const data=inspectInstanceRecord({...record,wires:record.carrier},{observation:record.observation,...(record.authoritative?{semanticWires:record.wires,interfaceTypeKey:area.stateInterfaceTypeKey??null}:{})});
     return {...data,wires:record.wires,archiveWires:record.carrier};
   },
   async instanceFacts(m) {

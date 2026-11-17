@@ -16,8 +16,8 @@
 @avatar.schema.composition.name core.slot of=ui.avatar.state.composition key=name kind=string
 @avatar.schema.composition.label core.slot of=ui.avatar.state.composition key=label kind=string
 @avatar.schema.composition.savedKey core.slot of=ui.avatar.state.composition key=savedKey kind=string
-@avatar.schema.composition.v core.slot of=ui.avatar.state.composition key=v kind=number
-@avatar.schema.composition.n core.slot of=ui.avatar.state.composition key=n kind=number
+@avatar.schema.composition.v core.slot of=ui.avatar.state.composition key=v kind=integer enum=2
+@avatar.schema.composition.n core.slot of=ui.avatar.state.composition key=n kind=integer min=0
 @avatar.schema.composition.stepGroup core.slot of=ui.avatar.state.composition key=stepGroup kind=string kind=atom
 @avatar.schema.composition.explicit core.slot of=ui.avatar.state.composition key=explicit type=ui.avatar.state.overrides
 @avatar.schema.composition.options core.slot of=ui.avatar.state.composition key=options kind=atom type=ui.avatar.state.options
@@ -63,3 +63,6 @@
 @avatar.schema.idDisplay.expiresAt core.slot of=ui.avatar.state.idDisplay key=expiresAt kind=number
 @avatar.schema.colour.role core.slot of=ui.avatar.state.colour key=role kind=string
 @avatar.schema.colour.colour core.slot of=ui.avatar.state.colour key=colour kind=string
+@avatar.schema.composition.id core.slot of=ui.avatar.state.composition key=id kind=string
+@avatar.schema.composition.nativeType core.slot of=ui.avatar.state.composition key=nativeType kind=string
+@avatar.schema.part.nativeType core.slot of=ui.avatar.state.part key=nativeType kind=string

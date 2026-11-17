@@ -1,11 +1,11 @@
 // Model-first proposal routing. Calibration authority belongs to host configuration,
 // never to a model output, evaluation annotation or grammar proposal.
-import {requestCompositionPolicy}from './request-composition-policy.mjs?v=f691e6cdc6';
-import {executeRequestCandidate} from './new-engine.mjs?v=7369ac48a4';
-import {invokeNativeControl} from './native-tool-controls.mjs?v=4ffbf11c80';
-import {executeDeclaredRequest} from './declared-execution.mjs?v=7369ac48a4';
-import {projectContextAction} from './project-context-action.mjs?v=767236c471';
-import {projectCreateAction} from './project-create-action.mjs?v=17662c0aac';
+import {requestCompositionPolicy}from './request-composition-policy.mjs?v=2d9a83c780';
+import {executeRequestCandidate} from './new-engine.mjs?v=f68f283f2c';
+import {invokeNativeControl} from './native-tool-controls.mjs?v=8498513578';
+import {executeDeclaredRequest} from './declared-execution.mjs?v=f68f283f2c';
+import {projectContextAction} from './project-context-action.mjs?v=df9ed5d789';
+import {projectCreateAction} from './project-create-action.mjs?v=26879cdb43';
 import {parse,str} from '../vendor/sopworld/sopworld.mjs?v=20fdd56a67';
 import {assessReaderProposal} from './reader-admission.mjs?v=2ae4a44c2e';
 const unavailable=reason=>({candidates:[],coverage:{complete:false,executable:false,graphProposal:false},failures:[{reason}]});
@@ -60,6 +60,7 @@ export async function routeNewEngine(session,text,options={}){
  const provider=session.engine?.requestReader;
  if(typeof text!=='string'||!text.trim()||text.length>65536||options.language&&options.language!=='en')return routeReaderProposal(session,text,options);
  const policy=requestCompositionPolicy();
+ try{session.engine?.onWorldActivity?.({nodeIds:['execution:composition-policy'],phase:'stage',label:'Read request scheduling policy',operation:'policy.request-composition',policy:structuredClone(policy)});}catch{/* Observation cannot change request scheduling. */}
  if(!policy.enabled||typeof provider?.proposeRequests!=='function')return routeReaderProposal(session,text,options);
  const before=structuredClone(session.isession.state),undoBefore=session.newEngineUndo??[],steps=[];
  for await(const proposal of provider.proposeRequests(text)){

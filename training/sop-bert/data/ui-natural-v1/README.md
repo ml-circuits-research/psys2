@@ -1,5 +1,26 @@
 # Natural UI requests, version 1
 
+## Current reader contract status
+
+**The corpus retains all supported UI examples, but is not ready for another training run until the remaining reader representation contracts are resolved.** Structural V2 validity and zero ambiguous-span masks do not establish that every gold value can be emitted by the current neural heads.
+
+The stopped intermediate reader checkpoint is epoch 3, SHA `3192ac283d00977146543dedf94d72234dcb3020dfc77a8862acd105f8086d04`. Actual CPU evaluation of all 1,480 frozen UI request cuts measured 1,037 exact normalized intents (70.07%) and 791 complete reader meanings (53.45%). These are reader measurements, not native tool execution or deployment success. The old direct-tool oracle realizes only 67 of these native recipes, so its tool exactness is a separate compatibility measurement.
+
+A bounded generic preparation correction now uses the existing `span_for(text, value, value_span)` for V2 too. The lexical value is supervised inside its unique outer evidence anchor when it actually occurs there. Prepared mentions preserve `evidenceText` and `evidenceSpan` separately from their BIO `span`; this provenance is outside learned `metadata`. For example, `update the house, coloured red` retains the outer anchor `[18,30]` but supervises `red` at `[27,30]`. A canonical alias absent from the sentence keeps its real source phrase, rather than inventing a canonical literal in the text. Replaying the unchanged UI gold narrows 177 mention spans across 175 request cuts with zero ambiguous/overlap diagnostics.
+
+The corrected union is prepared separately at `../.session-control/ui-natural-span-corrected-union/`; its manifest explicitly marks `trainingReady:false`. The original frozen union and checkpoint remain unchanged. No model was restarted using this partial correction.
+
+| Remaining contract | Actual evidence | Required separation |
+| --- | --- | --- |
+| Raw identity references versus actuator IDs | 69 gold `avatar.face.id` values are the source word `avatar`, while the current classifier bank permits only `face`. | Read the literal reference; resolve the concrete `face` identity against the instance world later. A native argument enum is not automatically a semantic vocabulary for the reader. |
+| Semantic class aliases | Eight section alignments use gold `centred`, eight block alignments use `justified`, and three ID-visibility examples use `briefly`/`visible`/`hide`, outside their present class banks. | Publish the class-normalization contract and preserve raw evidence separately. Do not pretend the native spelling occurred in the sentence. |
+| Quantity unit and amount metadata | Both `request.constraint.unit` and `request.constraint.measure` are absent from the 257-key layout, despite 37 UI and 6,314 old quantity mentions carrying them. | Declare a schema-owned unit representation. All 6,351 current measure annotations equal their numeric domain value; a future declared typed-copy relation could reuse that amount, without a closed bank of memorized numbers. No such rule is silently added here. |
+| Boolean normalization | Fourteen table-header comparisons require a Boolean value while the candidate reader copies phrases such as `with headers`. | Choose and document raw extraction versus Boolean semantic normalization; provide the required declared representation. |
+| Coordinated new objects | The new cutter treats `draw a tree and a house` as one cut; the epoch-3 reader detects both raw kind spans but the singleton target normalizer rejects them. | Preserve coordination/multiplicity through a general reader/world contract. A high aggregate cutter score does not prove this concrete command works. |
+
+These examples remain in the corpus. No class aliases, native identities, source utterances, actual UI calls or gold values were rewritten to hide the gaps. No unrepresented metadata field or out-of-bank value is repaired by guessed runtime mappings.
+
+
 A separate C1-authored corpus for the current Drawing, Diagram (including editable chart groups), Calendar, Documents and Avatar editors. Old datasets and deployed readers are unchanged. No model training or inference runs here.
 
 The generated corpus has **1474 messages**: 1450 individual requests, six compound messages and 18 requests with explicit world-informed completion requirements. **1175 recipes were actually executed** through `invokeNativeControl`, including the six compounds executed sequentially in one fixture. This validates the declared native calls and their effects; it does not measure whether the reader understands the authored language or prove the desired completion reasoning.

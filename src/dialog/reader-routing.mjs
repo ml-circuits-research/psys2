@@ -60,6 +60,7 @@ export async function routeNewEngine(session,text,options={}){
  const provider=session.engine?.requestReader;
  if(typeof text!=='string'||!text.trim()||text.length>65536||options.language&&options.language!=='en')return routeReaderProposal(session,text,options);
  const policy=requestCompositionPolicy();
+ try{session.engine?.onWorldActivity?.({nodeIds:['execution:composition-policy'],phase:'stage',label:'Read request scheduling policy',operation:'policy.request-composition',policy:structuredClone(policy)});}catch{/* Observation cannot change request scheduling. */}
  if(!policy.enabled||typeof provider?.proposeRequests!=='function')return routeReaderProposal(session,text,options);
  const before=structuredClone(session.isession.state),undoBefore=session.newEngineUndo??[],steps=[];
  for await(const proposal of provider.proposeRequests(text)){

@@ -5,7 +5,7 @@ import {parse,serialize} from '../src/vendor/sopworld/sopworld.mjs';
 import {initialAvatarState,createAvatarHost} from '../worlds/ui.avatar/declared-host.mjs';
 import {snap} from '../worlds/ui.avatar/face.mjs';
 import {AVATAR_STATE_SCHEMA,canonicalAvatarState,toNativeAvatarState,avatarStateWorld,adoptCanonicalAvatarState} from '../worlds/ui.avatar/canonical-state.mjs';
-const roundtrip=native=>{const canonical=canonicalAvatarState(native);assert.deepEqual(Object.keys(canonical),['sop']);assert.deepEqual(toNativeAvatarState(canonical),native);return canonical;};
+const roundtrip=native=>{const canonical=canonicalAvatarState(native);assert.deepEqual(Object.keys(canonical),['sop']);assert.deepEqual(toNativeAvatarState(canonical),native.sop?toNativeAvatarState(native):native);return canonical;};
 const invoke=(host,operation,args)=>host.invoke({invocation:crypto.randomUUID(),expectedVersion:host.observe().version,operation,args});
 test('Avatar state schema source is exact and all current fields roundtrip without JSON carriers',()=>{
  assert.equal(AVATAR_STATE_SCHEMA,readFileSync('worlds/ui.avatar/instance-schema.sop','utf8'));
@@ -40,4 +40,12 @@ test('SOP domain edits are authoritative; extra facts and corrupted ownership ar
   const corrupted=parse(c.sop);alter(corrupted);assert.throws(()=>toNativeAvatarState({sop:serialize(corrupted)}));
  }
  assert.throws(()=>toNativeAvatarState({...c,native:initialAvatarState()}),/carrier/);
+});
+
+test('only current face/parts declare native observation bindings; snapshots and face transform do not',()=>{
+ const state=initialAvatarState();state.face.adj.face={s:1.2};state.face.history=[{slots:{eyes:'round'},base:'girl'}];const c=roundtrip(state),nodes=parse(c.sop),bound=nodes.filter(n=>n.attrs.nativeType);
+ assert.equal(bound.filter(n=>n.attrs.nativeType[0]==='"ui.avatar.face"').length,1);
+ assert.equal(bound.find(n=>n.attrs.nativeType[0]==='"ui.avatar.face"').id,'avatar.face');
+ assert(!bound.some(n=>n.id.includes('.history.')));assert(!bound.some(n=>n.attrs.id[0]==='"face"'&&n.type.endsWith('.part')));
+ assert(bound.some(n=>n.attrs.id[0]==='"eyes"'&&n.attrs.nativeType[0]==='"ui.avatar.part"'));
 });
