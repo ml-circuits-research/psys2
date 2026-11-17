@@ -1194,3 +1194,7 @@ A follow-up audit of the frozen v2 TRAIN/CAL annotation corpus confirms why ment
 ### Runtime capability boundary after the cutter/key-reader change
 
 The sole application coordinator still admits the narrow positive property-equality request profile. Even an accurate typed create/remove/check or logical request would currently be refused; declared native hosts and the batch dispatcher are not yet generally wired to this candidate path. Proposed next integration is declaration-driven capability projection across areas, shared target/predicate resolution and explicit consumption of every semantic field, retaining unverified native receipts and unsupported-field refusals. Reader schema validity or improved BIO spans alone must not be reported as functional end-to-end success. No model-gate bypass or sentence dispatch is proposed.
+
+### Offline constrained BIO decoding comparison
+
+The Viterbi helper authored in e2a6adbb is an offline alternative decoder over the same frozen cutter emissions. The strict greedy codec and its reported illegal-transition failures remain the baseline. Comparing legal-path decoding can measure extraction differences, but it cannot create confidence calibration, semantic field accuracy or an active reader codec change. Reader-owned measurement is pending; any later deployment must identify the actual decoder/profile hash explicitly. No extra approval workflow or silent codec replacement is introduced.

@@ -4715,3 +4715,13 @@ browser calibration or complete-command claim. Empty exactness regresses from
 epoch1's76/81, explicitly retained. Any Viterbi comparison is a separately
 versioned offline experiment using the same frozen emissions, not a change to
 this active codec/run.
+
+### Read-only declared lifecycle candidate preparation
+
+Added declaration-driven make/remove plan admission using all four actual native host families. All batch graphs validate before host observation. Canonical kind, operation, argument and exact-token value mappings retain source provenance; explicit native references correlate scope/version/incarnation. Shared .200 target resolution handles named targets and logical selector groups with an injected pure leaf evaluator that must account for every field. Unsupported semantics, missing required native parameters, incomplete populations and stale parent references return zero plans before effects. New-target selectors are rejected both by standard validation and a defensive planner guard; unmapped rootless constraints cannot be marked consumed.
+
+Exported existing native argument rules as pure validateNativeArguments and made invoke reuse them. This checks type/bounds/defaults without handlers, policy or state mutation; plans retain default witnesses and explicitly defer policy/effect verification. Eight new tests cover real four-area make/remove, logical selector/unknown consumption, partial observation, named mismatch, explicit/stale Document parent and parity with native validation refusal. No application executor/model gate was widened. Budgets are independent adapter/per-library-call/copy caps.
+
+Also integrated frozen cutter evidence4873e323 asd749f8ee, preserving root's offline Viterbi helper commit e2a6adbb. Actual CPU FP32 strict-greedy cutter prediction completed all1,853 source-only development rows with pre/post immutable verification. Matrix1,648:1,587 complete,61 illegal-I-after-O refusals; one gold span alignment is ambiguous, leaving1,647 scored. Exact spans:1,139/1,547 nonempty and90/100 empty. Owner201/205 complete spans, but owner span/intent correctness remains unscored. These are extraction metrics only, not complete-command accuracy or effects. Per-class/area counts and frozen hashes are in training/sop-bert/results/request-cutter-v1-development.json. No GPU was used; no checkpoint was activated.
+
+Final combined npm:226 total,224 passed,zero failed,two optional artifact skips. Browser/maps rebuilt including all validator-dependent imports. Actual app replay unchanged:301 eligible honest/zero wrong with1,347 setup exclusions, owner205 honest/zero wrong. Diff check passed. Published as one consistent browser tree with root's helper and the preserved frozen training evidence.

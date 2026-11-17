@@ -37,6 +37,24 @@ function checkOperation(op){
  }
 }
 
+
+/** Pure native parameter admission; policies and handlers are never called. */
+export function validateNativeArguments(operation,input,{maxBytes=4000000}={}) {
+ const fail=reason=>({ok:false,reason,args:null,defaults:[]});
+ try {
+  const op=copyHostData(operation,{maxBytes}),args=copyHostData(input,{maxBytes});checkOperation(op);
+  if(!args||Array.isArray(args)||typeof args!=='object')return fail('invalid-arguments');
+  const defaults=[];
+  for(const key of Object.keys(args))if(!Object.hasOwn(op.params,key))return fail('unknown-argument');
+  for(const [key,p]of Object.entries(op.params)){
+   if(!Object.hasOwn(args,key)){if(Object.hasOwn(p,'default')){args[key]=copyHostData(p.default,{maxBytes});defaults.push({parameter:key,value:copyHostData(p.default,{maxBytes}),operation:op.id});}else if(p.required)return fail('missing-argument');else continue;}
+   if(!matchesType(p,args[key]))return fail('invalid-argument-type');
+   if(!matchesBounds(p,args[key]))return fail('invalid-argument-value');
+  }
+  return {ok:true,args,defaults,policy:'not-evaluated'};
+ }catch{return fail('invalid-native-declaration-or-data');}
+}
+
 export function createNativeToolHost({state,instanceId,scope,operations,handlers,view,validate=null,maxObjects=10000,maxBytes=4000000}={}) {
  if(validate!==null&&typeof validate!=='function')throw new TypeError('invalid-policy-validator');
  if(!Number.isSafeInteger(maxObjects)||maxObjects<1||!Number.isSafeInteger(maxBytes)||maxBytes<1)throw new TypeError('invalid-host-budget');
@@ -60,13 +78,8 @@ export function createNativeToolHost({state,instanceId,scope,operations,handlers
   if(!call||Array.isArray(call)||Object.keys(call).length!==4||!['invocation','expectedVersion','operation','args'].every(k=>Object.hasOwn(call,k))||!text(call.invocation)||!text(call.expectedVersion)||!text(call.operation)||!call.args||Array.isArray(call.args)||typeof call.args!=='object')return refuse('invalid-arguments');
   const payload=JSON.stringify(call),previous=receipts.get(call.invocation);if(previous)return previous.payload===payload?{...copy(previous.receipt),replayed:true}:refuse('invocation-reused');
   if(receipts.size>=10000)return refuse('receipt-budget');const op=byId.get(call.operation);if(!op)return refuse('undeclared-operation');
-  const args=call.args;
-  for(const key of Object.keys(args))if(!Object.hasOwn(op.params,key))return refuse('unknown-argument');
-  for(const [key,p] of Object.entries(op.params)){
-   if(!Object.hasOwn(args,key)){if(Object.hasOwn(p,'default'))args[key]=copy(p.default);else if(p.required)return refuse('missing-argument');else continue;}
-   const value=args[key];if(!matchesType(p,value))return refuse('invalid-argument-type');
-   if(!matchesBounds(p,value))return refuse('invalid-argument-value');
-  }
+  const admitted=validateNativeArguments(op,call.args,{maxBytes});if(!admitted.ok)return refuse(admitted.reason);
+  const args=admitted.args;
   let before,staged,result,validation=null,effects=[];
   try{before=snapshot();if(before.version!==call.expectedVersion)return refuse('stale-observation');staged=copy(state);result=handlers[call.operation]({state:staged,request:(name,args)=>effects.push({name,args}),effect:(name,args)=>effects.push({name,args})},args,call.invocation);if(!result||result.status!=='supported')return refuse(result?.code||result?.reason||'native-refusal');copy(staged);if(validate){validation=copy(validate(copy(staged)));if(typeof validation?.ok!=='boolean')return refuse('invalid-policy-result');if(!validation.ok)return {...refuse(validation.code||'policy-denied'),validation};}if(JSON.stringify(staged).length>maxBytes)return refuse('host-data-budget');const projected=view(copy(staged));if(!Array.isArray(projected)||projected.length>maxObjects)return refuse('host-population-budget');const ids=new Set();for(const row of projected){if(!text(row.id)||!text(row.kind)||!text(row.sourceType)||ids.has(row.id)||(row.inputs!==undefined&&!Array.isArray(row.inputs)))return refuse('invalid-host-identity');ids.add(row.id);}copy(projected);copy(effects);copy(result.changed||[]);copy(result.data??null);}
   catch{return refuse('native-error');}

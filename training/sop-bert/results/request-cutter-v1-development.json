@@ -1,0 +1,669 @@
+{
+  "scope": "Strict greedy BIO cutter only; source-only CPU FP32 actual frozen inference. Span accuracy is not field/request semantic accuracy or effect success. No final holdout. Owner pending span annotations remain unscored.",
+  "manifest": {
+    "format": "sop.request-cutter-prediction-run/1",
+    "complete": true,
+    "frozenInputs": {
+      "checkpoint": "85d1d2ee1e03ee22c355077cf6248fba30cb14c2195151deb36f68cffbe758e0",
+      "config": "64f3e284f6c901329956351e1077a479102683ffd043b6dabda755a739863ad9",
+      "verification": "cd2b02a026f5096fd24a2bf4e197b5478ba765f1a7898b00e0b61fef6e1a73dc",
+      "trainer": "d9422af7ad75e9053f5dfc86c36b0a49ac8f6b52099aa49ac02d95925db1a445",
+      "input": "2c63d872578835093a4914ad70700be4bc0de4bdc95c0aa5fd977af43d3fb9e3",
+      "predictor": "613dc0477a00a37ee750432fb86968685d2f71d03fc9d780321e6a6ef79739d8",
+      "encoder:config.json": "69c94b0222d5d1f4b0ad027ca7416cdafb98378cbbb8305d0bf47c9365c60c83",
+      "encoder:model.safetensors": "5e3f1108e3cb34ee048634875d8482665b65ac713291a7e32396fb18f6ff0063",
+      "encoder:tokenizer.json": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+      "encoder:tokenizer_config.json": "a025160ef0431f1a392f6f050c1310f4c5d9fb6f275932dbccba73c4d214bf10",
+      "encoder:vocab.txt": "07eced375cec144d27c900241f3e339478dec958f92fddbc551f295c992038a3"
+    },
+    "outputSha256": "b4f63c2be55047622250cf597f03f4be416d829ae44d8ea5bed9eb4931a3a6c7",
+    "rows": 1853,
+    "model": {
+      "sha256": "85d1d2ee1e03ee22c355077cf6248fba30cb14c2195151deb36f68cffbe758e0",
+      "tokenizerSha256": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+      "codecSha256": "64fd854a5711acd8f675c7669e2426b12676b200fa3b1a9da6f67ad60e7f8213",
+      "decoderVersion": 1
+    },
+    "device": "cpu",
+    "precision": "float32",
+    "graphConfidence": null,
+    "executionEligible": false
+  },
+  "matrixSourceSha256": "a4e73efe913f1f9946dd6c85851b542f038038a2dbb5a06a10e821838d88b6f4",
+  "matrix": {
+    "rows": 1648,
+    "complete": 1587,
+    "unresolved": {
+      "illegal-I-after-O": 61
+    },
+    "nonempty": 1547,
+    "nonemptyExact": 1139,
+    "empty": 100,
+    "emptyExact": 90,
+    "goldUnalignable": 1
+  },
+  "cells": {
+    "several requests": {
+      "calendar": {
+        "rows": 25,
+        "complete": 25,
+        "unresolved": {},
+        "nonempty": 25,
+        "nonemptyExact": 18
+      },
+      "diagram": {
+        "rows": 25,
+        "complete": 22,
+        "unresolved": {
+          "illegal-I-after-O": 3
+        },
+        "nonempty": 24,
+        "nonemptyExact": 16,
+        "goldUnalignable": 1
+      },
+      "document": {
+        "rows": 25,
+        "complete": 25,
+        "unresolved": {},
+        "nonempty": 25,
+        "nonemptyExact": 17
+      },
+      "drawing": {
+        "rows": 25,
+        "complete": 24,
+        "unresolved": {
+          "illegal-I-after-O": 1
+        },
+        "nonempty": 25,
+        "nonemptyExact": 19
+      }
+    },
+    "sets, or, not": {
+      "calendar": {
+        "rows": 25,
+        "complete": 22,
+        "unresolved": {
+          "illegal-I-after-O": 3
+        },
+        "nonempty": 25,
+        "nonemptyExact": 15
+      },
+      "diagram": {
+        "rows": 25,
+        "complete": 25,
+        "unresolved": {},
+        "nonempty": 25,
+        "nonemptyExact": 21
+      },
+      "document": {
+        "rows": 25,
+        "complete": 25,
+        "unresolved": {},
+        "nonempty": 25,
+        "nonemptyExact": 17
+      },
+      "drawing": {
+        "rows": 25,
+        "complete": 25,
+        "unresolved": {},
+        "nonempty": 25,
+        "nonemptyExact": 23
+      }
+    },
+    "cross-area": {
+      "calendar": {
+        "rows": 25,
+        "complete": 25,
+        "unresolved": {},
+        "nonempty": 25,
+        "nonemptyExact": 23
+      },
+      "diagram": {
+        "rows": 25,
+        "complete": 25,
+        "unresolved": {},
+        "nonempty": 25,
+        "nonemptyExact": 21
+      },
+      "document": {
+        "rows": 25,
+        "complete": 25,
+        "unresolved": {},
+        "nonempty": 25,
+        "nonemptyExact": 17
+      },
+      "drawing": {
+        "rows": 25,
+        "complete": 25,
+        "unresolved": {},
+        "nonempty": 25,
+        "nonemptyExact": 24
+      }
+    },
+    "select by description": {
+      "calendar": {
+        "rows": 25,
+        "complete": 25,
+        "unresolved": {},
+        "nonempty": 25,
+        "nonemptyExact": 20
+      },
+      "diagram": {
+        "rows": 25,
+        "complete": 24,
+        "unresolved": {
+          "illegal-I-after-O": 1
+        },
+        "nonempty": 25,
+        "nonemptyExact": 21
+      },
+      "document": {
+        "rows": 25,
+        "complete": 24,
+        "unresolved": {
+          "illegal-I-after-O": 1
+        },
+        "nonempty": 25,
+        "nonemptyExact": 20
+      },
+      "drawing": {
+        "rows": 25,
+        "complete": 25,
+        "unresolved": {},
+        "nonempty": 25,
+        "nonemptyExact": 25
+      }
+    },
+    "propose": {
+      "calendar": {
+        "rows": 25,
+        "complete": 23,
+        "unresolved": {
+          "illegal-I-after-O": 2
+        },
+        "nonempty": 25,
+        "nonemptyExact": 9
+      },
+      "diagram": {
+        "rows": 25,
+        "complete": 23,
+        "unresolved": {
+          "illegal-I-after-O": 2
+        },
+        "nonempty": 25,
+        "nonemptyExact": 9
+      },
+      "document": {
+        "rows": 25,
+        "complete": 22,
+        "unresolved": {
+          "illegal-I-after-O": 3
+        },
+        "nonempty": 25,
+        "nonemptyExact": 12
+      },
+      "drawing": {
+        "rows": 25,
+        "complete": 25,
+        "unresolved": {},
+        "nonempty": 25,
+        "nonemptyExact": 15
+      }
+    },
+    "remove": {
+      "calendar": {
+        "rows": 25,
+        "complete": 24,
+        "unresolved": {
+          "illegal-I-after-O": 1
+        },
+        "nonempty": 25,
+        "nonemptyExact": 21
+      },
+      "diagram": {
+        "rows": 25,
+        "complete": 25,
+        "unresolved": {},
+        "nonempty": 25,
+        "nonemptyExact": 20
+      },
+      "document": {
+        "rows": 25,
+        "complete": 25,
+        "unresolved": {},
+        "nonempty": 25,
+        "nonemptyExact": 23
+      },
+      "drawing": {
+        "rows": 25,
+        "complete": 24,
+        "unresolved": {
+          "illegal-I-after-O": 1
+        },
+        "nonempty": 25,
+        "nonemptyExact": 23
+      }
+    },
+    "follow-up, undo": {
+      "calendar": {
+        "rows": 25,
+        "complete": 24,
+        "unresolved": {
+          "illegal-I-after-O": 1
+        },
+        "nonempty": 25,
+        "nonemptyExact": 18
+      },
+      "diagram": {
+        "rows": 25,
+        "complete": 24,
+        "unresolved": {
+          "illegal-I-after-O": 1
+        },
+        "nonempty": 24,
+        "nonemptyExact": 13,
+        "goldUnalignable": 1
+      },
+      "document": {
+        "rows": 25,
+        "complete": 25,
+        "unresolved": {},
+        "nonempty": 25,
+        "nonemptyExact": 18
+      },
+      "drawing": {
+        "rows": 25,
+        "complete": 25,
+        "unresolved": {},
+        "nonempty": 25,
+        "nonemptyExact": 22
+      }
+    },
+    "no request": {
+      "calendar": {
+        "rows": 25,
+        "complete": 24,
+        "unresolved": {
+          "illegal-I-after-O": 1
+        },
+        "empty": 25,
+        "emptyExact": 21
+      },
+      "diagram": {
+        "rows": 25,
+        "complete": 24,
+        "unresolved": {
+          "illegal-I-after-O": 1
+        },
+        "empty": 25,
+        "emptyExact": 22
+      },
+      "document": {
+        "rows": 25,
+        "complete": 25,
+        "unresolved": {},
+        "empty": 25,
+        "emptyExact": 24
+      },
+      "drawing": {
+        "rows": 25,
+        "complete": 25,
+        "unresolved": {},
+        "empty": 25,
+        "emptyExact": 23
+      }
+    },
+    "objection": {
+      "calendar": {
+        "rows": 25,
+        "complete": 24,
+        "unresolved": {
+          "illegal-I-after-O": 1
+        },
+        "nonempty": 25,
+        "nonemptyExact": 8
+      },
+      "diagram": {
+        "rows": 25,
+        "complete": 23,
+        "unresolved": {
+          "illegal-I-after-O": 2
+        },
+        "nonempty": 25,
+        "nonemptyExact": 7
+      },
+      "document": {
+        "rows": 25,
+        "complete": 19,
+        "unresolved": {
+          "illegal-I-after-O": 6
+        },
+        "nonempty": 25,
+        "nonemptyExact": 7
+      },
+      "drawing": {
+        "rows": 25,
+        "complete": 25,
+        "unresolved": {},
+        "nonempty": 25,
+        "nonemptyExact": 14
+      }
+    },
+    "check": {
+      "calendar": {
+        "rows": 25,
+        "complete": 24,
+        "unresolved": {
+          "illegal-I-after-O": 1
+        },
+        "nonempty": 25,
+        "nonemptyExact": 22
+      },
+      "diagram": {
+        "rows": 25,
+        "complete": 24,
+        "unresolved": {
+          "illegal-I-after-O": 1
+        },
+        "nonempty": 25,
+        "nonemptyExact": 23
+      },
+      "document": {
+        "rows": 25,
+        "complete": 24,
+        "unresolved": {
+          "illegal-I-after-O": 1
+        },
+        "nonempty": 25,
+        "nonemptyExact": 24
+      },
+      "drawing": {
+        "rows": 25,
+        "complete": 25,
+        "unresolved": {},
+        "nonempty": 25,
+        "nonemptyExact": 20
+      }
+    },
+    "question": {
+      "calendar": {
+        "rows": 25,
+        "complete": 23,
+        "unresolved": {
+          "illegal-I-after-O": 2
+        },
+        "nonempty": 25,
+        "nonemptyExact": 15
+      },
+      "diagram": {
+        "rows": 25,
+        "complete": 24,
+        "unresolved": {
+          "illegal-I-after-O": 1
+        },
+        "nonempty": 25,
+        "nonemptyExact": 21
+      },
+      "document": {
+        "rows": 25,
+        "complete": 25,
+        "unresolved": {},
+        "nonempty": 25,
+        "nonemptyExact": 23
+      },
+      "drawing": {
+        "rows": 25,
+        "complete": 25,
+        "unresolved": {},
+        "nonempty": 25,
+        "nonemptyExact": 25
+      }
+    },
+    "relative change": {
+      "calendar": {
+        "rows": 25,
+        "complete": 25,
+        "unresolved": {},
+        "nonempty": 25,
+        "nonemptyExact": 20
+      },
+      "diagram": {
+        "rows": 25,
+        "complete": 25,
+        "unresolved": {},
+        "nonempty": 25,
+        "nonemptyExact": 19
+      },
+      "document": {
+        "rows": 25,
+        "complete": 24,
+        "unresolved": {
+          "illegal-I-after-O": 1
+        },
+        "nonempty": 25,
+        "nonemptyExact": 14
+      },
+      "drawing": {
+        "rows": 25,
+        "complete": 24,
+        "unresolved": {
+          "illegal-I-after-O": 1
+        },
+        "nonempty": 25,
+        "nonemptyExact": 20
+      }
+    },
+    "create": {
+      "calendar": {
+        "rows": 25,
+        "complete": 25,
+        "unresolved": {},
+        "nonempty": 25,
+        "nonemptyExact": 23
+      },
+      "diagram": {
+        "rows": 25,
+        "complete": 25,
+        "unresolved": {},
+        "nonempty": 25,
+        "nonemptyExact": 20
+      },
+      "document": {
+        "rows": 25,
+        "complete": 25,
+        "unresolved": {},
+        "nonempty": 25,
+        "nonemptyExact": 22
+      },
+      "drawing": {
+        "rows": 25,
+        "complete": 23,
+        "unresolved": {
+          "illegal-I-after-O": 2
+        },
+        "nonempty": 25,
+        "nonemptyExact": 18
+      }
+    },
+    "set property": {
+      "calendar": {
+        "rows": 25,
+        "complete": 24,
+        "unresolved": {
+          "illegal-I-after-O": 1
+        },
+        "nonempty": 25,
+        "nonemptyExact": 18
+      },
+      "diagram": {
+        "rows": 25,
+        "complete": 25,
+        "unresolved": {},
+        "nonempty": 25,
+        "nonemptyExact": 16
+      },
+      "document": {
+        "rows": 25,
+        "complete": 22,
+        "unresolved": {
+          "illegal-I-after-O": 3
+        },
+        "nonempty": 25,
+        "nonemptyExact": 16
+      },
+      "drawing": {
+        "rows": 25,
+        "complete": 21,
+        "unresolved": {
+          "illegal-I-after-O": 4
+        },
+        "nonempty": 25,
+        "nonemptyExact": 17
+      }
+    },
+    "move / place": {
+      "calendar": {
+        "rows": 25,
+        "complete": 22,
+        "unresolved": {
+          "illegal-I-after-O": 3
+        },
+        "nonempty": 25,
+        "nonemptyExact": 18
+      },
+      "diagram": {
+        "rows": 25,
+        "complete": 23,
+        "unresolved": {
+          "illegal-I-after-O": 2
+        },
+        "nonempty": 25,
+        "nonemptyExact": 13
+      },
+      "document": {
+        "rows": 25,
+        "complete": 23,
+        "unresolved": {
+          "illegal-I-after-O": 2
+        },
+        "nonempty": 25,
+        "nonemptyExact": 22
+      },
+      "drawing": {
+        "rows": 25,
+        "complete": 25,
+        "unresolved": {},
+        "nonempty": 25,
+        "nonemptyExact": 23
+      }
+    },
+    "soft wishes": {
+      "calendar": {
+        "rows": 25,
+        "complete": 23,
+        "unresolved": {
+          "illegal-I-after-O": 2
+        },
+        "nonempty": 25,
+        "nonemptyExact": 11
+      },
+      "diagram": {
+        "rows": 25,
+        "complete": 22,
+        "unresolved": {
+          "illegal-I-after-O": 3
+        },
+        "nonempty": 25,
+        "nonemptyExact": 12
+      },
+      "document": {
+        "rows": 25,
+        "complete": 24,
+        "unresolved": {
+          "illegal-I-after-O": 1
+        },
+        "nonempty": 25,
+        "nonemptyExact": 15
+      },
+      "drawing": {
+        "rows": 25,
+        "complete": 25,
+        "unresolved": {},
+        "nonempty": 25,
+        "nonemptyExact": 20
+      }
+    },
+    "arrange / layout": {
+      "calendar": {
+        "rows": 6,
+        "complete": 6,
+        "unresolved": {},
+        "nonempty": 6,
+        "nonemptyExact": 5
+      },
+      "diagram": {
+        "rows": 25,
+        "complete": 25,
+        "unresolved": {},
+        "nonempty": 25,
+        "nonemptyExact": 20
+      },
+      "document": {
+        "rows": 6,
+        "complete": 6,
+        "unresolved": {},
+        "nonempty": 6,
+        "nonemptyExact": 4
+      },
+      "drawing": {
+        "rows": 10,
+        "complete": 10,
+        "unresolved": {},
+        "nonempty": 10,
+        "nonemptyExact": 7
+      }
+    },
+    "connect / group": {
+      "calendar": {
+        "rows": 6,
+        "complete": 6,
+        "unresolved": {},
+        "nonempty": 6,
+        "nonemptyExact": 4
+      },
+      "diagram": {
+        "rows": 25,
+        "complete": 24,
+        "unresolved": {
+          "illegal-I-after-O": 1
+        },
+        "nonempty": 25,
+        "nonemptyExact": 19
+      },
+      "document": {
+        "rows": 12,
+        "complete": 11,
+        "unresolved": {
+          "illegal-I-after-O": 1
+        },
+        "nonempty": 12,
+        "nonemptyExact": 11
+      },
+      "drawing": {
+        "rows": 17,
+        "complete": 17,
+        "unresolved": {},
+        "nonempty": 17,
+        "nonemptyExact": 16
+      }
+    }
+  },
+  "owner": {
+    "rows": 205,
+    "complete": 201,
+    "nonempty": 201,
+    "scored": false
+  },
+  "predictionsLocation": "../.session-control/request-cutter-v1-dev-predictions.jsonl",
+  "goldAlignment": "Published frozen trainer gold_spans unique exact scalar alignment; ambiguous/missing alignment excluded explicitly."
+}

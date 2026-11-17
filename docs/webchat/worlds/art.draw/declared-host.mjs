@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs?v=34e8c452f9';
+import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs?v=463e762442';
 import {initialState,makeObject,remember,removeThings,undoStep,redoStep} from './board.mjs?v=58af133d2e';
 import {KINDS,W,H} from './scene.mjs?v=cd2ed9328d';
 export {initialState as initialDrawingState};

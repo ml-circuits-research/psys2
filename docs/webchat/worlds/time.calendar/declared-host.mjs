@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs?v=34e8c452f9';
+import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs?v=463e762442';
 import {createCalendar} from './calendar-tool.mjs?v=7be76f9245';
 const required=type=>({type,required:true});
 const identity=required('string');

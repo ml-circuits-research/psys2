@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Explicit numeric data only: no text parser, inferred values, or legacy dispatch.
-import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs?v=34e8c452f9';
+import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs?v=463e762442';
 const text={type:'string',required:true},array={type:'array',required:true};
 export const CHART_TOOL_BINDINGS=[
  {id:'chart.make',act:'make',on:'data.charts.chart',params:{type:{type:'string',required:true,enum:['bar','line','pie','doughnut','radar','polarArea','scatter']},title:text,labels:array,values:array,series:{type:'string',required:true},source:array}},

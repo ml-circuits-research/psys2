@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs?v=34e8c452f9';
+import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs?v=463e762442';
 import {initialState,loadEngine,systemFor,writeBack,PREFIX} from './core.mjs?v=e118391175';
 import * as tool from './tool.mjs?v=6a5c4eeb62';
 const array={type:'array',required:true},id={type:'string',required:true};
