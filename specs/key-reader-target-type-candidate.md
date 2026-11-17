@@ -31,7 +31,9 @@ manifest/output checks remain on the baseline preparation path.
 
 ## Explicit candidate formats
 
-Preparation: sop.per-key-supervision/2-target-type-candidate.
+Original reviewed preparation: sop.per-key-supervision/2-target-type-candidate.
+Current compressed training source uses explicit /3 supervision/run profiles;
+see target-type-training-source-v3.md. Tensor model/raw codec remain /2.
 Model: sop.key-reader/2-target-type-candidate.
 Raw codec: sop.key-reader-raw-codec/2-target-type-candidate.
 Run: sop.key-reader-run/2-target-type-candidate.

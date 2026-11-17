@@ -20,7 +20,7 @@ def row(version='v2',area='drawing'):
             'id':'fixture-source','world':area,'source':{'text':'make a circle'},'context':{}}
 def config():
     return train.configuration({'format':prep.CANDIDATE_FORMAT,'registry':prep.registry(INV),
-                                'inventorySha256':SHA,'targetFamilies':prep.target_families(INV)})
+                                'inventorySha256':SHA,'exclusionSha256':'e'*64,'targetFamilies':prep.target_families(INV)})
 class CandidateTests(unittest.TestCase):
     def test_authoritative_inventory_unchanged_and_fifteen_families(self):
         self.assertEqual(hashlib.sha256(INVENTORY.read_bytes()).hexdigest(),SHA)

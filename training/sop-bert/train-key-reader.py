@@ -1,7 +1,7 @@
 """Inventory-key BIO reader with shared per-mention metadata; no slot assignment.
 Gold request cuts are conditional supervision, never an inference argument.
 """
-import argparse,collections,hashlib,json,random,time
+import argparse,collections,gzip,hashlib,importlib.util,json,random,time
 from pathlib import Path
 
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
@@ -17,11 +17,19 @@ def token_interval(offsets,span):
     ids=[i for i,(a,b)in enumerate(offsets)if b>a and a>=span[0]and b<=span[1]]
     return (ids[0],ids[-1]+1)if ids and offsets[ids[0]][0]==span[0]and offsets[ids[-1]][1]==span[1]else None
 
+SELECTION_CRITERION={'format':'sop.key-reader-selection/1','order':['positiveSupervisedBioGlobalExactRate','targetTypePresentClassAccuracy','decodedMentionF1'],'scope':'gold-cut supervised BIO+global subset, not complete graph'}
+
+def selection_rank(report):
+    support=report['positiveBioAndGlobalSupport']
+    if type(support)is not int or support<1:raise ValueError('selection-needs-positive-supervision')
+    kind=report['targetTypePresentClass'];count=kind['support']
+    return (report['positiveBioAndGlobalExact']/support,kind['correct']/count if count else 0.,report['decodedMentionF1'])
+
 def configuration(manifest):
-    if manifest.get('format')!='sop.per-key-supervision/2-target-type-candidate':raise ValueError('candidate-supervision-required')
+    if manifest.get('format')!='sop.per-key-supervision/3-target-type-migration-candidate':raise ValueError('candidate-supervision-required')
     registry=manifest['registry'];keys=list(registry)
     if registry.get('request.target.type',{}).get('bio') is not False:raise ValueError('target-type-must-be-class-only')
-    return {'format':'sop.key-reader/2-target-type-candidate','rawCodecFormat':'sop.key-reader-raw-codec/2-target-type-candidate','candidate':True,'executionEligible':False,'baselineTrainerSha256':'eb0a0ef595e1587da2be4ad4aea3a90ce1ba8829b89385be90ace4b13810d01f','inventorySha256':manifest['inventorySha256'],'targetFamilies':manifest['targetFamilies'],'keys':keys,'registry':registry,'banks':{k:bank(v)for k,v in registry.items()if v.get('values')},'bioKeys':[k for k,v in registry.items()if v['role']in ['domain','global'] and v.get('bio',True)],'metadataKeys':[k for k,v in registry.items()if v['role']=='metadata'and v.get('values')],'maxLength':192,'boundary':'Conditional gold-cut training; predicted BIO mentions at runtime; unrepresented normalizations/candidates unresolved. No observed literal vocabulary.'}
+    return {'format':'sop.key-reader/2-target-type-candidate','rawCodecFormat':'sop.key-reader-raw-codec/2-target-type-candidate','candidate':True,'executionEligible':False,'tensorArchitectureVersion':2,'trainingSourceFormat':'sop.key-reader-source/3-target-type-migration-candidate','selectionCriterion':SELECTION_CRITERION,'baselineTrainerSha256':'eb0a0ef595e1587da2be4ad4aea3a90ce1ba8829b89385be90ace4b13810d01f','inventorySha256':manifest['inventorySha256'],'exclusionSha256':manifest['exclusionSha256'],'targetFamilies':manifest['targetFamilies'],'keys':keys,'registry':registry,'banks':{k:bank(v)for k,v in registry.items()if v.get('values')},'bioKeys':[k for k,v in registry.items()if v['role']in ['domain','global'] and v.get('bio',True)],'metadataKeys':[k for k,v in registry.items()if v['role']=='metadata'and v.get('values')],'maxLength':192,'boundary':'Conditional gold-cut training; predicted BIO mentions at runtime; unrepresented normalizations/candidates unresolved. No observed literal vocabulary.'}
 
 def encode(row,tokenizer,config):
     import torch
@@ -103,6 +111,7 @@ def bio_mentions(tags):
 def evaluate(model,rows,config,device,batch):
     import torch
     report={k:collections.Counter()for k in config['keys']};exact=total=positive_exact=positive_total=0
+    type_classes={entry['value']:{'support':0,'correct':0}for entry in config['banks']['request.target.type']if entry['state']=='value'}
     model.eval()
     with torch.no_grad():
         for start in range(0,len(rows),batch):
@@ -117,14 +126,16 @@ def evaluate(model,rows,config,device,batch):
                     if not valid.any():continue
                     tags=pred[ri,ki].clone();tags[~valid]=-100;expected=bio_mentions(gold.tolist());actual=bio_mentions(tags.tolist());g=set(expected or []);a=set(actual or []);report[key]['mentionTP']+=len(g&a);report[key]['mentionFP']+=len(a-g);report[key]['mentionFN']+=len(g-a);report[key]['invalidBIO']+=actual is None;report[key]['positiveTokens']+=int((gold>0).sum());report[key]['positiveTokenCorrect']+=int(((gold>0)&(gold==tags)).sum());report[key]['absentTokens']+=int((gold==0).sum());report[key]['absentTokenCorrect']+=int(((gold==0)&(tags==0)).sum());rowexact &= actual is not None and a==g;haspositive |= bool(g)
                 for key,target in row['classes'].items():
-                    predicted=int(model.classes[str(config['keys'].index(key))](hidden[ri,0]).argmax());bucket='absent'if target==0 else'unknown'if target==1 else'present';report[key][bucket+'ClassSupport']+=1;report[key][bucket+'ClassCorrect']+=predicted==target;rowexact &= predicted==target
+                    predicted=int(model.classes[str(config['keys'].index(key))](hidden[ri,0]).argmax());bucket='absent'if target==0 else'unknown'if target==1 else'present';report[key][bucket+'ClassSupport']+=1;report[key][bucket+'ClassCorrect']+=predicted==target;rowexact &= predicted==target;haspositive |= target>=2
+                    if key=='request.target.type' and target>=2:
+                        family=config['banks'][key][target]['value'];type_classes[family]['support']+=1;type_classes[family]['correct']+=predicted==target
                 for ki,a,b,targets in row['mentions']:
                     feature=hidden[ri,a:b].mean(0)+model.key.weight[ki]
                     for key,target in targets.items():
                         predicted=int(model.classes[str(config['keys'].index(key))](feature).argmax());bucket='absent'if target==0 else'unknown'if target==1 else'present';report[key]['goldMention'+bucket+'ClassSupport']+=1;report[key]['goldMention'+bucket+'ClassCorrect']+=predicted==target
                 exact+=bool(rowexact);total+=1;positive_exact+=bool(rowexact and haspositive);positive_total+=haspositive
     tp=sum(v['mentionTP']for v in report.values());fp=sum(v['mentionFP']for v in report.values());fn=sum(v['mentionFN']for v in report.values())
-    return {'perKey':{k:dict(v)for k,v in report.items()},'decodedMentionF1':2*tp/max(1,2*tp+fp+fn),'conditionalBioAndGlobalExact':exact,'conditionalBioAndGlobalSupport':total,'positiveBioAndGlobalExact':positive_exact,'positiveBioAndGlobalSupport':positive_total,'scope':'Gold request-cut conditional; mention metadata metrics explicitly gold-mention conditioned; not canonical/full-pipeline graph exact.'}
+    return {'targetTypePresentClass':{'support':sum(v['support']for v in type_classes.values()),'correct':sum(v['correct']for v in type_classes.values())},'targetTypePerClass':{key:{**value,'accuracy':value['correct']/value['support']if value['support']else None}for key,value in type_classes.items()},'perKey':{k:dict(v)for k,v in report.items()},'decodedMentionF1':2*tp/max(1,2*tp+fp+fn),'conditionalBioAndGlobalExact':exact,'conditionalBioAndGlobalSupport':total,'positiveBioAndGlobalExact':positive_exact,'positiveBioAndGlobalSupport':positive_total,'scope':'Gold request-cut conditional; mention metadata metrics explicitly gold-mention conditioned; not canonical/full-pipeline graph exact.'}
 
 def weight_migration_plan(old,new):
     """Semantic row plan only; no checkpoints/tensors are read or written.
@@ -174,42 +185,197 @@ def weight_migration_plan(old,new):
             'optimizerPolicy':'discard; not index-compatible',
             'appliesWeights':False}
 
+def load_candidate_records(data,manifest,split,*,max_decoded_bytes=1073741824,max_record_bytes=2097152):
+    """Verify encoded bytes before decoding; bound every gzip record/output."""
+    if any(type(v)is not int or v<1 for v in (max_decoded_bytes,max_record_bytes)):raise ValueError('invalid-decoding-bounds')
+    if manifest.get('format')!='sop.per-key-supervision/3-target-type-migration-candidate' or split not in ('train','calibration'):
+        raise ValueError('unsupported-data-profile')
+    item=manifest['dataFiles'][split]
+    if type(item)is not dict or set(item)!={'path','encoding','compression','sha256','decodedSha256','encodedBytes','decodedBytes','records'} or any(type(item[k])is not int or item[k]<0 for k in ('encodedBytes','decodedBytes','records')):raise ValueError('invalid-data-file-metadata')
+    if item.get('path')!=split+'.jsonl.gz' or item.get('encoding')!='utf-8' or item.get('compression')!='gzip':
+        raise ValueError('unsupported-data-file')
+    path=Path(data)/item['path']
+    if sha(path)!=item['sha256'] or item['sha256']!=manifest['outputs'][split] or path.stat().st_size!=item['encodedBytes']:
+        raise ValueError('encoded-data-hash-mismatch')
+    if type(item['decodedBytes'])is not int or not 0<=item['decodedBytes']<=max_decoded_bytes:
+        raise ValueError('decoded-data-bound')
+    decoded=hashlib.sha256();size=0;records=[];seen=set()
+    with gzip.open(path,'rb')as source:
+        while True:
+            line=source.readline(max_record_bytes+1)
+            if not line:break
+            if len(line)>max_record_bytes or not line.endswith(b'\n'):raise ValueError('decoded-record-bound')
+            size+=len(line)
+            if size>max_decoded_bytes or size>item['decodedBytes']:raise ValueError('decoded-data-bound')
+            decoded.update(line);row=json.loads(line.decode('utf-8','strict'))
+            if row['split']!=split or row['id']in seen:raise ValueError('duplicate-or-wrong-split-record')
+            seen.add(row['id']);records.append(row)
+    if size!=item['decodedBytes'] or decoded.hexdigest()!=item['decodedSha256'] or len(records)!=item['records'] or sha(path)!=item['sha256']:
+        raise ValueError('decoded-data-provenance-mismatch')
+    return records
+
+def validate_warmstart_spec(spec):
+    names={'checkpoint','config','run','trainer','dataManifest','preparer','helper'}
+    if type(spec)is not dict or set(spec)!={'format','files','elementWorkAllowance','optimizerPolicy'} or spec['format']!='sop.key-reader-frozen-warmstart/1' or spec['optimizerPolicy']!='reset':
+        raise ValueError('invalid-warmstart-spec')
+    if type(spec['elementWorkAllowance'])is not int or spec['elementWorkAllowance']<1 or type(spec['files'])is not dict or set(spec['files'])!=names:
+        raise ValueError('invalid-warmstart-allowance-or-files')
+    for value in spec['files'].values():
+        if type(value)is not dict or set(value)!={'path','sha256'} or type(value['path'])is not str or not value['path'] or type(value['sha256'])is not str or len(value['sha256'])!=64 or any(c not in '0123456789abcdef'for c in value['sha256']):
+            raise ValueError('invalid-warmstart-file-identity')
+
+def verify_warmstart_chain(config,old_config,old_run,old_manifest,spec,verified_hashes,old_configuration):
+    """Pure provenance check; verified_hashes must come from the frozen file loader."""
+    validate_warmstart_spec(spec)
+    expected={key:value['sha256']for key,value in spec['files'].items()}
+    if any(verified_hashes.get(key)!=value for key,value in expected.items()):
+        raise ValueError('warmstart-frozen-hash-mismatch')
+    if old_config.get('format')!='sop.key-reader/1' or old_run.get('format')!='sop.key-reader-run/1' or type(old_run.get('steps'))is not int or old_run['steps']<1:
+        raise ValueError('completed-baseline-run-required')
+    for key in ('checkpoint','config','trainer'):
+        if old_run.get(key+'Sha256')!=expected[key]:raise ValueError('warmstart-run-chain-mismatch')
+    if old_config.get('trainerSha256')!=expected['trainer'] or old_config.get('dataManifestSha256')!=expected['dataManifest'] or old_manifest.get('scriptSha256')!=expected['preparer']:
+        raise ValueError('warmstart-training-source-chain-mismatch')
+    if config.get('format')!='sop.key-reader/2-target-type-candidate' or config.get('tensorArchitectureVersion')!=2:
+        raise ValueError('unsupported-warmstart-target')
+    if old_manifest.get('inventorySha256')!=config['inventorySha256'] or old_manifest.get('sourceManifest',{}).get('exclusion',{}).get('sha256')!=config['exclusionSha256']:
+        raise ValueError('warmstart-inventory-or-exclusion-mismatch')
+    regenerated=old_configuration(old_manifest)
+    if any(old_config.get(key)!=value for key,value in regenerated.items()):
+        raise ValueError('warmstart-trained-layout-mismatch')
+
+def migrate_frozen_state(config,old_config,old_run,old_manifest,spec,verified_hashes,payload,
+                         fresh_state,helper,old_configuration):
+    """Synthetic-testable CPU path; never reads checkpoints or restores optimizer."""
+    verify_warmstart_chain(config,old_config,old_run,old_manifest,spec,verified_hashes,old_configuration)
+    if type(payload)is not dict or payload.get('config')!=old_config or type(payload.get('model'))is not dict:
+        raise ValueError('warmstart-checkpoint-config-mismatch')
+    plan=weight_migration_plan(old_config,config)
+    estimate=helper.estimate_migration_work(payload['model'],fresh_state,plan)
+    if not estimate['ok']:raise ValueError('warmstart-estimate-refused')
+    if estimate['estimatedElements']>spec['elementWorkAllowance']:
+        raise ValueError('warmstart-explicit-work-allowance-too-small')
+    migrated=helper.apply_weight_migration(old_config,config,plan,payload['model'],fresh_state,
+                                           max_elements=spec['elementWorkAllowance'])
+    if not migrated['ok']:raise ValueError('warmstart-semantic-migration-refused:'+migrated['issues'][0]['reason'])
+    return migrated['state'],{'format':'sop.key-reader-warmstart-provenance/1','kind':'semantic-migration',
+            'specSha256':verified_hashes['spec'],'frozenInputs':{key:verified_hashes[key]for key in spec['files']},
+            'sourceModelFormat':old_config['format'],'targetModelFormat':config['format'],
+            'elementWorkAllowance':spec['elementWorkAllowance'],'estimatedElements':estimate['estimatedElements'],
+            'stats':migrated['stats'],'optimizer':'fresh-AdamW','migrationHelperSha256':verified_hashes['helper']}
+
+def load_source(path,name):
+    spec=importlib.util.spec_from_file_location(name,path);module=importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module);return module
+
+def frozen_warmstart_metadata(path,expected_sha,config):
+    """Future CLI only: validates all frozen files before any weights load."""
+    if sha(path)!=expected_sha:raise ValueError('warmstart-spec-hash-mismatch')
+    spec=json.loads(Path(path).read_text(encoding='utf-8'));validate_warmstart_spec(spec)
+    paths={key:Path(value['path'])for key,value in spec['files'].items()}
+    hashes={key:sha(value)for key,value in paths.items()};hashes['spec']=expected_sha
+    if any(hashes[key]!=value['sha256']for key,value in spec['files'].items()):
+        raise ValueError('warmstart-frozen-hash-mismatch')
+    old_config=json.loads(paths['config'].read_text(encoding='utf-8'))
+    old_run=json.loads(paths['run'].read_text(encoding='utf-8'))
+    old_manifest=json.loads(paths['dataManifest'].read_text(encoding='utf-8'))
+    old_trainer=load_source(paths['trainer'],'frozen_baseline_trainer')
+    helper=load_source(paths['helper'],'frozen_cpu_migration_helper')
+    verify_warmstart_chain(config,old_config,old_run,old_manifest,spec,hashes,old_trainer.configuration)
+    return spec,paths,hashes,old_config,old_run,old_manifest,old_trainer,helper
+
 def main():
     import torch
     from transformers import AutoTokenizer
-    p=argparse.ArgumentParser();p.add_argument('--data',type=Path,required=True);p.add_argument('--encoder',required=True);p.add_argument('--init-checkpoint',type=Path);p.add_argument('--out',type=Path,required=True);p.add_argument('--epochs',type=int,default=5);p.add_argument('--batch',type=int,default=8);p.add_argument('--limit',type=int);p.add_argument('--no-save',action='store_true');args=p.parse_args();random.seed(17);torch.manual_seed(17);args.out.mkdir(parents=True,exist_ok=False)
-    manifest=json.loads((args.data/'manifest.json').read_text());config=configuration(manifest);tokenizer=AutoTokenizer.from_pretrained(args.encoder);config['encoder']=args.encoder;config['encoderFiles']={str(p.name):sha(p)for p in Path(args.encoder).iterdir()if p.is_file()};config['initCheckpointSha256']=sha(args.init_checkpoint)if args.init_checkpoint else None;config['dataManifestSha256']=sha(args.data/'manifest.json');config['trainerSha256']=sha(Path(__file__));(args.out/'model-config.json').write_text(json.dumps(config,indent=2)+'\n');datasets={}
-    for split in ['train','calibration']:
-        path=args.data/(split+'.jsonl');assert sha(path)==manifest['outputs'][split];rows=[json.loads(line)for line in path.open()];rows=rows[:args.limit]if args.limit else rows;datasets[split]=[encode(r,tokenizer,config)for r in rows]
-    device='cuda'if torch.cuda.is_available()else'cpu';model=build_model(config,args.encoder)
-    if args.init_checkpoint:
-        state=torch.load(args.init_checkpoint,map_location='cpu',weights_only=False);state=state.get('model',state);enc={k[len('encoder.'):]:v for k,v in state.items()if k.startswith('encoder.')};assert enc;model.encoder.load_state_dict(enc,strict=True)
-    model.to(device);optimizer=torch.optim.AdamW(model.parameters(),lr=3e-5);weights=[]
+    import os,shutil
+    p=argparse.ArgumentParser()
+    p.add_argument('--data',type=Path,required=True);p.add_argument('--encoder',required=True)
+    p.add_argument('--warmstart-spec',type=Path);p.add_argument('--warmstart-spec-sha256')
+    p.add_argument('--out',type=Path,required=True);p.add_argument('--epochs',type=int,default=5)
+    p.add_argument('--batch',type=int,default=8);args=p.parse_args()
+    if args.epochs<3 or args.batch<1 or bool(args.warmstart_spec)!=bool(args.warmstart_spec_sha256):
+        p.error('at least3epochs, positive batch and paired frozen warmstart arguments required')
+    # There is deliberately no subset/limit flag in this source version.
+    random.seed(17);torch.manual_seed(17)
+    data_manifest_path=args.data/'manifest.json';data_sha=sha(data_manifest_path);trainer_sha=sha(Path(__file__))
+    manifest=json.loads(data_manifest_path.read_text(encoding='utf-8'));config=configuration(manifest)
+    tokenizer=AutoTokenizer.from_pretrained(args.encoder,local_files_only=True)
+    if not tokenizer.is_fast:raise ValueError('exact-fast-tokenizer-required')
+    config['encoder']=args.encoder
+    config['encoderFiles']={p.name:sha(p)for p in Path(args.encoder).iterdir()if p.is_file()}
+    config['dataManifestSha256']=data_sha;config['trainerSha256']=trainer_sha
+    config['preparerSha256']=manifest['scriptSha256']
+    datasets={split:[encode(row,tokenizer,config)for row in load_candidate_records(args.data,manifest,split)]
+              for split in ('train','calibration')}
+    warm_meta=frozen_warmstart_metadata(args.warmstart_spec,args.warmstart_spec_sha256,config)if args.warmstart_spec else None
+    model=build_model(config,args.encoder) # remains on CPU through semantic migration
+    warm={'format':'sop.key-reader-warmstart-provenance/1','kind':'pretrained-encoder','specSha256':None,
+          'frozenInputs':{},'sourceModelFormat':None,'targetModelFormat':config['format'],
+          'elementWorkAllowance':None,'estimatedElements':None,'stats':None,
+          'optimizer':'fresh-AdamW','migrationHelperSha256':None}
+    if warm_meta:
+        spec,paths,hashes,old_config,old_run,old_manifest,old_trainer,helper=warm_meta
+        payload=torch.load(paths['checkpoint'],map_location='cpu',weights_only=True)
+        migrated,warm=migrate_frozen_state(config,old_config,old_run,old_manifest,spec,hashes,payload,
+                                           dict(model.state_dict()),helper,old_trainer.configuration)
+        model.load_state_dict(migrated,strict=True);del payload,migrated
+        if hashes!={**{key:sha(path)for key,path in paths.items()},'spec':sha(args.warmstart_spec)}:
+            raise ValueError('warmstart-input-mutated')
+    config['warmstart']=warm
+    # Only fresh optimizer state is constructed, after the CPU migration succeeds.
+    device='cuda'if torch.cuda.is_available()else'cpu';model.to(device)
+    optimizer=torch.optim.AdamW(model.parameters(),lr=3e-5)
+    args.out.mkdir(parents=True,exist_ok=False)
+    (args.out/'model-config.json').write_text(json.dumps(config,indent=2)+'\n',encoding='utf-8')
+    weights=[]
     for ki in range(len(config['bioKeys'])):
         counts=torch.zeros(3)
         for row in datasets['train']:
             values=row['bio'][ki];counts+=torch.bincount(values[values>=0],minlength=3)
         w=(counts.sum()/counts.clamp_min(1)).sqrt();weights.append((w/w.mean()).to(device))
-    steps=0;history=[];best=-1
+    steps=0;history=[];best=None;best_evaluation=None
     for epoch in range(args.epochs):
         model.train();random.shuffle(datasets['train']);total=0
         for start in range(0,len(datasets['train']),args.batch):
+            if sha(Path(__file__))!=trainer_sha:raise ValueError('trainer-source-mutated')
             rows=datasets['train'][start:start+args.batch];optimizer.zero_grad(set_to_none=True)
-            with torch.autocast(device_type=device,dtype=torch.bfloat16,enabled=device=='cuda'):loss,_,_=objective(model,rows,config,device,weights)
-            assert torch.isfinite(loss);loss.backward();torch.nn.utils.clip_grad_norm_(model.parameters(),1);optimizer.step();steps+=1;total+=loss.item()
+            with torch.autocast(device_type=device,dtype=torch.bfloat16,enabled=device=='cuda'):
+                loss,_,_=objective(model,rows,config,device,weights)
+            if not torch.isfinite(loss):raise ValueError('nonfinite-training-loss')
+            loss.backward();torch.nn.utils.clip_grad_norm_(model.parameters(),1);optimizer.step();steps+=1;total+=loss.item()
             if steps%100==0:print(json.dumps({'epoch':epoch+1,'steps':steps,'lastLoss':loss.item()}),flush=True)
-        model.eval();correct=present_correct=present_count=count=0
-        with torch.no_grad():
-            for start in range(0,len(datasets['calibration']),args.batch):
-                with torch.autocast(device_type=device,dtype=torch.bfloat16,enabled=device=='cuda'):_,pred,gold=objective(model,datasets['calibration'][start:start+args.batch],config,device,weights)
-                pred=pred.argmax(-1);valid=gold>=0;positive=gold>0;correct+=int(((pred==gold)&valid).sum());count+=int(valid.sum());present_correct+=int(((pred==gold)&positive).sum());present_count+=int(positive.sum())
         evaluation=evaluate(model,datasets['calibration'],config,device,args.batch)
-        metric={'evaluation':evaluation,'epoch':epoch+1,'steps':steps,'trainLossSum':total,'conditionalBioCorrect':correct,'conditionalBioSupport':count,'positiveTokenCorrect':present_correct,'positiveTokenSupport':present_count,'truncatedTrain':sum(r['truncated']for r in datasets['train']),'truncatedCalibration':sum(r['truncated']for r in datasets['calibration']),'executable':False};history.append(metric);print(json.dumps(metric),flush=True);(args.out/'metrics.json').write_text(json.dumps(history,indent=2)+'\n')
-        if not args.no_save and evaluation['decodedMentionF1']>best:
-            best=evaluation['decodedMentionF1']
-            import os,shutil
+        metric={'evaluation':evaluation,'epoch':epoch+1,'steps':steps,'trainLossSum':total,
+                'truncatedTrain':sum(r['truncated']for r in datasets['train']),
+                'truncatedCalibration':sum(r['truncated']for r in datasets['calibration']),'executable':False}
+        history.append(metric);print(json.dumps(metric),flush=True)
+        (args.out/'metrics.json').write_text(json.dumps(history,indent=2)+'\n',encoding='utf-8')
+        rank=selection_rank(evaluation)
+        if best is None or rank>best:
+            best=rank;best_evaluation=evaluation
             required=sum(v.numel()*2 for v in model.state_dict().values())*2+128*1024**2
-            assert shutil.disk_usage(args.out).free>required,'Insufficient atomic checkpoint reserve'
-            temp=args.out/'checkpoint.tmp';torch.save({'model':{k:v.detach().cpu().to(torch.bfloat16)if v.is_floating_point()else v.cpu()for k,v in model.state_dict().items()},'config':config,'epoch':epoch+1},temp);os.replace(temp,args.out/'checkpoint.pt')
-    (args.out/'run.json').write_text(json.dumps({'format':'sop.key-reader-run/2-target-type-candidate','candidate':True,'executionEligible':False,'configSha256':sha(args.out/'model-config.json'),'trainerSha256':sha(Path(__file__)),'steps':steps,'checkpointSha256':sha(args.out/'checkpoint.pt')if(args.out/'checkpoint.pt').exists()else None,'bestDecodedMentionF1':best,'scope':'conditional gold-cut; not full pipeline or calibrated graph confidence'},indent=2)+'\n')
+            if shutil.disk_usage(args.out).free<=required:raise ValueError('insufficient-atomic-checkpoint-reserve')
+            temp=args.out/'checkpoint.tmp'
+            torch.save({'model':{k:v.detach().cpu().to(torch.bfloat16)if v.is_floating_point()else v.cpu()
+                                for k,v in model.state_dict().items()},'config':config,'epoch':epoch+1},temp)
+            os.replace(temp,args.out/'checkpoint.pt')
+    if sha(Path(__file__))!=trainer_sha or sha(data_manifest_path)!=data_sha:
+        raise ValueError('training-source-mutated')
+    for split,item in manifest['dataFiles'].items():
+        if sha(args.data/item['path'])!=item['sha256']:raise ValueError('training-data-mutated')
+    for name,value in config['encoderFiles'].items():
+        if sha(Path(args.encoder)/name)!=value:raise ValueError('encoder-source-mutated')
+    if warm_meta and hashes!={**{key:sha(path)for key,path in paths.items()},'spec':sha(args.warmstart_spec)}:
+        raise ValueError('warmstart-input-mutated')
+    record={'format':'sop.key-reader-run/3-target-type-migration-candidate','complete':True,'candidate':True,
+            'executionEligible':False,'tensorArchitectureVersion':2,'preparationFormat':manifest['format'],
+            'modelConfigFormat':config['format'],'rawCodecFormat':config['rawCodecFormat'],
+            'configSha256':sha(args.out/'model-config.json'),'trainerSha256':trainer_sha,
+            'dataManifestSha256':data_sha,'preparerSha256':manifest['scriptSha256'],
+            'encodedDataSha256':manifest['outputs'],'epochsCompleted':args.epochs,'steps':steps,
+            'checkpointSha256':sha(args.out/'checkpoint.pt'),'bestDecodedMentionF1':best_evaluation['decodedMentionF1'],
+            'selectionCriterion':SELECTION_CRITERION,'bestSelectionRank':list(best),'warmstart':warm,
+            'scope':'complete retained corpus; conditional gold-cut, not full pipeline or calibrated confidence'}
+    (args.out/'run.json').write_text(json.dumps(record,indent=2)+'\n',encoding='utf-8')
+
 if __name__=='__main__':main()

@@ -4727,3 +4727,28 @@ no implicit admission of a67M-parameter model. Work estimate is not peak memory
 or semantic validation. Tiny fixture proves estimated==actual work, exact
 allowance succeeds, one-less refuses atomically.10/10 CPU fixtures green; no
 actual model/checkpoint reads or migration. Existing13candidate fixtures unchanged.
+
+## 2026-11-17 — Candidate training source v3 readiness
+
+New isolated source version keeps reviewed /2 tensors/raw codec unchanged while
+adding /3 gzip supervision and completed-run provenance. Deterministic UTF-8
+gzip streams have explicit filenames, encoded/decoded hashes, counts and bounds;
+exact source/exclusion/split checks preserve all rows/raw requests and negatives.
+No subset flag or uncompressed duplicate output. Partial owned outputs cleaned
+on refusal, explicit reserve/growth checks remain before actual preparation.
+
+Frozen warmstart specification pins checkpoint/config/final-run/trainer/data
+manifest/preparer/helper plus outer spec hash and explicit work allowance.
+CPU semantic migration verifies old layout/inventory/exclusions, estimates work,
+applies reviewed helper, preserves new rows, resets optimizer and records exact
+provenance. Frozen sources are rechecked before GPU transfer and after training.
+No actual checkpoint or file weights have been read in this task.
+
+New selectionCriterion uses positive supervised BIO+global subset exactness,
+then present target.type class accuracy, then mention F1. Per-family type
+support/correct/accuracy stays separate. This is not complete graph accuracy.
+
+Checks:7new tiny CPU IO/warmstart/selection fixtures pass; prior13candidate and
+10migration fixtures checked. No full corpus preparation, model construction,
+GPU, optimizer run or saved binaries. Exact source/profile review and separate
+disk/memory reserve remain necessary before any real data/model operation.
