@@ -5472,3 +5472,11 @@ Consequences:
 - A follow-up correction ("no, blue", "the other one", "undo") must work as a simple command in every area.
 - Gate (review 29): an acted-on guess the user corrects counts as partly, not wrong; a needless question counts against the turn.
 
+
+## Review 30 — 2026-11-17 08:58 Rome (reviewer)
+
+Reviewed 5997e85a, 9a6a75ad (and KB 49f7854c). Accepted: mechanical alignment over all 1,282 SOP files, honest epoch-7 measurement (matrix raw complete 48 → 63, owner bound 2 → 7), cleanup of 269 MB, short log. This is the right shape of work.
+
+Where the binding gap really is: of the 83 unaligned properties, 48 come from only 6 wire families with no declared family identity: drawing `drawn`, `part`; diagram `diagram`, `node`; document `section`, `inline`. Six family declarations (or aliases) in sop-knowledge-worlds unlock 48 properties at once. Do those first, then the 35 property-level aliases. One declaration per family, in the world's schema, no reader-side mapping table.
+
+Next, in one pass: those declarations → rerun the mechanical exporter → regenerate bindings → implement review 29 (gate maxErrorRate 0.05, real confidence score) and the owner decision "act and state the uncertain reading, do not ask" → rerun matrix and owner replay → report coverage and error per class × area. The owner's 205 rows: tag classes where obvious from the text; keep "unclassified" honest where not.
