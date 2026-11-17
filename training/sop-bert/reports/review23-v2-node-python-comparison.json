@@ -1,0 +1,692 @@
+{
+  "format": "psys2.actual-node-python-probe-parity/1",
+  "cases": 8,
+  "equal": 3,
+  "rows": [
+    {
+      "id": "data/haiku-v2/calendar/v2b01a.jsonl:calendar-v2b01-0004",
+      "area": "calendar",
+      "equal": false,
+      "allDifferencePaths": [
+        "$.readings[0].packet.ranges:length",
+        "$.readings[0].packet.ranges[4].path:length",
+        "$.readings[0].packet.ranges[4].path[0]",
+        "$.readings[0].packet.ranges[4].range[0]",
+        "$.readings[0].packet.ranges[4].range[1]",
+        "$.readings[0].packet.ranges[5].path:length",
+        "$.readings[0].packet.ranges[5].path[0]",
+        "$.readings[0].packet.ranges[5].path[1]",
+        "$.readings[0].packet.request.constraints:length",
+        "$.readings[0].packet.unresolved:length",
+        "$.readings[0].packet.unresolved[0].key"
+      ],
+      "cuts": 1,
+      "rawPackets": 1,
+      "rawComplete": 0,
+      "canonicalCandidates": 0,
+      "rawUnresolved": {
+        "presence-span-inconsistent": 1
+      },
+      "pipelineFailures": {
+        "incomplete-provider-coverage": 1,
+        "provider-unresolved": 1,
+        "incomplete-model-coverage": 1,
+        "unresolved-model-output": 1,
+        "unresolved-canonical-kind-binding": 1,
+        "unresolved-canonical-property-binding": 1,
+        "unresolved-value-representation": 1,
+        "requires-operator-reference-projection": 1,
+        "unconsumed-predicted-range": 1,
+        "incomplete-structural-coverage": 1
+      },
+      "nodeModels": {
+        "cutter": {
+          "sha256": "5c2c545cea87b2618c4209c338bd3e30d1671a0da32139819fe5a6110d61ac6b",
+          "tokenizerSha256": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+          "codecSha256": "64fd854a5711acd8f675c7669e2426b12676b200fa3b1a9da6f67ad60e7f8213",
+          "decoderVersion": 1
+        },
+        "readers": [
+          {
+            "sha256": "db66d42b1daf1e0b19e31751f9c140c124124f587983923cdd9fc16eeebefa2c",
+            "tokenizerSha256": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+            "codecSha256": "e5e8a1d997e8cbd89e116eeed2471e6ca5403406a75130dab9f326ac809c8151",
+            "decoderVersion": 2
+          }
+        ]
+      },
+      "pythonModels": [
+        {
+          "sha256": "177cecee44c811822c65852fac1148a2faa3f9073a44b1677120a9068effb59d",
+          "tokenizerSha256": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+          "codecSha256": "e5e8a1d997e8cbd89e116eeed2471e6ca5403406a75130dab9f326ac809c8151",
+          "decoderVersion": 2
+        }
+      ],
+      "pythonCuts": 1,
+      "pythonRawComplete": 0
+    },
+    {
+      "id": "data/haiku-v2/calendar/v2b01a.jsonl:calendar-v2b01-0013",
+      "area": "calendar",
+      "equal": true,
+      "allDifferencePaths": [],
+      "cuts": 1,
+      "rawPackets": 1,
+      "rawComplete": 0,
+      "canonicalCandidates": 0,
+      "rawUnresolved": {
+        "unknown-class": 1,
+        "unresolved-domain-value": 1,
+        "normalization-requires-declared-proof": 1,
+        "unsupported-metadata-head": 2
+      },
+      "pipelineFailures": {
+        "incomplete-provider-coverage": 1,
+        "provider-unresolved": 5,
+        "incomplete-model-coverage": 1,
+        "unresolved-model-output": 1,
+        "unresolved-canonical-kind-binding": 1,
+        "unresolved-canonical-property-binding": 3,
+        "unresolved-value-representation": 3,
+        "requires-operator-reference-projection": 1,
+        "unconsumed-predicted-range": 2,
+        "incomplete-structural-coverage": 1
+      },
+      "nodeModels": {
+        "cutter": {
+          "sha256": "5c2c545cea87b2618c4209c338bd3e30d1671a0da32139819fe5a6110d61ac6b",
+          "tokenizerSha256": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+          "codecSha256": "64fd854a5711acd8f675c7669e2426b12676b200fa3b1a9da6f67ad60e7f8213",
+          "decoderVersion": 1
+        },
+        "readers": [
+          {
+            "sha256": "db66d42b1daf1e0b19e31751f9c140c124124f587983923cdd9fc16eeebefa2c",
+            "tokenizerSha256": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+            "codecSha256": "e5e8a1d997e8cbd89e116eeed2471e6ca5403406a75130dab9f326ac809c8151",
+            "decoderVersion": 2
+          }
+        ]
+      },
+      "pythonModels": [
+        {
+          "sha256": "177cecee44c811822c65852fac1148a2faa3f9073a44b1677120a9068effb59d",
+          "tokenizerSha256": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+          "codecSha256": "e5e8a1d997e8cbd89e116eeed2471e6ca5403406a75130dab9f326ac809c8151",
+          "decoderVersion": 2
+        }
+      ],
+      "pythonCuts": 1,
+      "pythonRawComplete": 0
+    },
+    {
+      "id": "data/haiku-v2/diagram/v2b01a.jsonl:diagram-v2b01-0006",
+      "area": "diagram",
+      "equal": false,
+      "allDifferencePaths": [
+        "$.readings[0].packet.unresolved:length",
+        "$.readings[0].packet.unresolved[1].key",
+        "$.readings[0].packet.unresolved[2].key"
+      ],
+      "cuts": 1,
+      "rawPackets": 1,
+      "rawComplete": 0,
+      "canonicalCandidates": 0,
+      "rawUnresolved": {
+        "presence-span-inconsistent": 1,
+        "metadata-presence-inconsistent": 2
+      },
+      "pipelineFailures": {
+        "incomplete-provider-coverage": 1,
+        "provider-unresolved": 3,
+        "incomplete-model-coverage": 1,
+        "unresolved-model-output": 1,
+        "unresolved-canonical-kind-binding": 1,
+        "unconsumed-predicted-range": 1,
+        "incomplete-structural-coverage": 1
+      },
+      "nodeModels": {
+        "cutter": {
+          "sha256": "5c2c545cea87b2618c4209c338bd3e30d1671a0da32139819fe5a6110d61ac6b",
+          "tokenizerSha256": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+          "codecSha256": "64fd854a5711acd8f675c7669e2426b12676b200fa3b1a9da6f67ad60e7f8213",
+          "decoderVersion": 1
+        },
+        "readers": [
+          {
+            "sha256": "db66d42b1daf1e0b19e31751f9c140c124124f587983923cdd9fc16eeebefa2c",
+            "tokenizerSha256": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+            "codecSha256": "e5e8a1d997e8cbd89e116eeed2471e6ca5403406a75130dab9f326ac809c8151",
+            "decoderVersion": 2
+          }
+        ]
+      },
+      "pythonModels": [
+        {
+          "sha256": "177cecee44c811822c65852fac1148a2faa3f9073a44b1677120a9068effb59d",
+          "tokenizerSha256": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+          "codecSha256": "e5e8a1d997e8cbd89e116eeed2471e6ca5403406a75130dab9f326ac809c8151",
+          "decoderVersion": 2
+        }
+      ],
+      "pythonCuts": 1,
+      "pythonRawComplete": 0
+    },
+    {
+      "id": "data/haiku-v2/diagram/v2b01a.jsonl:diagram-v2b01-0015",
+      "area": "diagram",
+      "equal": false,
+      "allDifferencePaths": [
+        "$.readings[0].packet.coverage.complete",
+        "$.readings[0].packet.request.target.quantifier:missing",
+        "$.readings[0].packet.unresolved:length"
+      ],
+      "cuts": 1,
+      "rawPackets": 1,
+      "rawComplete": 1,
+      "canonicalCandidates": 0,
+      "rawUnresolved": {},
+      "pipelineFailures": {
+        "unresolved-canonical-kind-binding": 1,
+        "unprojected-population-reference": 1,
+        "incomplete-structural-coverage": 1
+      },
+      "nodeModels": {
+        "cutter": {
+          "sha256": "5c2c545cea87b2618c4209c338bd3e30d1671a0da32139819fe5a6110d61ac6b",
+          "tokenizerSha256": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+          "codecSha256": "64fd854a5711acd8f675c7669e2426b12676b200fa3b1a9da6f67ad60e7f8213",
+          "decoderVersion": 1
+        },
+        "readers": [
+          {
+            "sha256": "db66d42b1daf1e0b19e31751f9c140c124124f587983923cdd9fc16eeebefa2c",
+            "tokenizerSha256": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+            "codecSha256": "e5e8a1d997e8cbd89e116eeed2471e6ca5403406a75130dab9f326ac809c8151",
+            "decoderVersion": 2
+          }
+        ]
+      },
+      "pythonModels": [
+        {
+          "sha256": "177cecee44c811822c65852fac1148a2faa3f9073a44b1677120a9068effb59d",
+          "tokenizerSha256": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+          "codecSha256": "e5e8a1d997e8cbd89e116eeed2471e6ca5403406a75130dab9f326ac809c8151",
+          "decoderVersion": 2
+        }
+      ],
+      "pythonCuts": 1,
+      "pythonRawComplete": 0
+    },
+    {
+      "id": "data/haiku-v2/document/v2b01a.jsonl:document-v2b01-0025",
+      "area": "document",
+      "equal": true,
+      "allDifferencePaths": [],
+      "cuts": 1,
+      "rawPackets": 1,
+      "rawComplete": 0,
+      "canonicalCandidates": 0,
+      "rawUnresolved": {
+        "presence-span-inconsistent": 1,
+        "normalization-requires-declared-proof": 1,
+        "unsupported-metadata-head": 2
+      },
+      "pipelineFailures": {
+        "incomplete-provider-coverage": 1,
+        "provider-unresolved": 4,
+        "incomplete-model-coverage": 1,
+        "unresolved-model-output": 1,
+        "unresolved-canonical-kind-binding": 1,
+        "context-reference-not-bound": 1,
+        "unresolved-canonical-property-binding": 2,
+        "unresolved-value-representation": 2,
+        "requires-operator-reference-projection": 1,
+        "requires-declared-step-projection": 1,
+        "unconsumed-predicted-range": 1,
+        "incomplete-structural-coverage": 1
+      },
+      "nodeModels": {
+        "cutter": {
+          "sha256": "5c2c545cea87b2618c4209c338bd3e30d1671a0da32139819fe5a6110d61ac6b",
+          "tokenizerSha256": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+          "codecSha256": "64fd854a5711acd8f675c7669e2426b12676b200fa3b1a9da6f67ad60e7f8213",
+          "decoderVersion": 1
+        },
+        "readers": [
+          {
+            "sha256": "db66d42b1daf1e0b19e31751f9c140c124124f587983923cdd9fc16eeebefa2c",
+            "tokenizerSha256": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+            "codecSha256": "e5e8a1d997e8cbd89e116eeed2471e6ca5403406a75130dab9f326ac809c8151",
+            "decoderVersion": 2
+          }
+        ]
+      },
+      "pythonModels": [
+        {
+          "sha256": "177cecee44c811822c65852fac1148a2faa3f9073a44b1677120a9068effb59d",
+          "tokenizerSha256": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+          "codecSha256": "e5e8a1d997e8cbd89e116eeed2471e6ca5403406a75130dab9f326ac809c8151",
+          "decoderVersion": 2
+        }
+      ],
+      "pythonCuts": 1,
+      "pythonRawComplete": 0
+    },
+    {
+      "id": "data/haiku-v2/document/v2b01a.jsonl:document-v2b01-0036",
+      "area": "document",
+      "equal": true,
+      "allDifferencePaths": [],
+      "cuts": 1,
+      "rawPackets": 1,
+      "rawComplete": 0,
+      "canonicalCandidates": 0,
+      "rawUnresolved": {
+        "illegal-I-after-O": 1,
+        "missing-or-ambiguous-act-anchor": 1
+      },
+      "pipelineFailures": {
+        "incomplete-provider-coverage": 1,
+        "provider-unresolved": 2,
+        "incomplete-model-coverage": 1,
+        "unresolved-model-output": 1,
+        "missing-or-ambiguous-field-anchor": 1,
+        "unresolved-canonical-kind-binding": 1,
+        "unresolved-canonical-property-binding": 1,
+        "unresolved-value-representation": 1,
+        "unconsumed-predicted-range": 2,
+        "incomplete-structural-coverage": 1
+      },
+      "nodeModels": {
+        "cutter": {
+          "sha256": "5c2c545cea87b2618c4209c338bd3e30d1671a0da32139819fe5a6110d61ac6b",
+          "tokenizerSha256": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+          "codecSha256": "64fd854a5711acd8f675c7669e2426b12676b200fa3b1a9da6f67ad60e7f8213",
+          "decoderVersion": 1
+        },
+        "readers": [
+          {
+            "sha256": "db66d42b1daf1e0b19e31751f9c140c124124f587983923cdd9fc16eeebefa2c",
+            "tokenizerSha256": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+            "codecSha256": "e5e8a1d997e8cbd89e116eeed2471e6ca5403406a75130dab9f326ac809c8151",
+            "decoderVersion": 2
+          }
+        ]
+      },
+      "pythonModels": [
+        {
+          "sha256": "177cecee44c811822c65852fac1148a2faa3f9073a44b1677120a9068effb59d",
+          "tokenizerSha256": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+          "codecSha256": "e5e8a1d997e8cbd89e116eeed2471e6ca5403406a75130dab9f326ac809c8151",
+          "decoderVersion": 2
+        }
+      ],
+      "pythonCuts": 1,
+      "pythonRawComplete": 0
+    },
+    {
+      "id": "data/haiku-v2/drawing/v2b01a.jsonl:drawing-v2b01-0001",
+      "area": "drawing",
+      "equal": false,
+      "allDifferencePaths": [
+        "$.readings[0].packet.unresolved:length",
+        "$.readings[0].packet.unresolved[0].key",
+        "$.readings[0].packet.unresolved[0].reason"
+      ],
+      "cuts": 1,
+      "rawPackets": 1,
+      "rawComplete": 0,
+      "canonicalCandidates": 0,
+      "rawUnresolved": {
+        "presence-class-inconsistent": 1,
+        "presence-span-inconsistent": 1
+      },
+      "pipelineFailures": {
+        "incomplete-provider-coverage": 1,
+        "provider-unresolved": 2,
+        "incomplete-model-coverage": 1,
+        "unresolved-model-output": 1,
+        "unresolved-canonical-property-binding": 5,
+        "unresolved-value-representation": 5,
+        "unconsumed-predicted-range": 5,
+        "incomplete-structural-coverage": 1
+      },
+      "nodeModels": {
+        "cutter": {
+          "sha256": "5c2c545cea87b2618c4209c338bd3e30d1671a0da32139819fe5a6110d61ac6b",
+          "tokenizerSha256": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+          "codecSha256": "64fd854a5711acd8f675c7669e2426b12676b200fa3b1a9da6f67ad60e7f8213",
+          "decoderVersion": 1
+        },
+        "readers": [
+          {
+            "sha256": "db66d42b1daf1e0b19e31751f9c140c124124f587983923cdd9fc16eeebefa2c",
+            "tokenizerSha256": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+            "codecSha256": "e5e8a1d997e8cbd89e116eeed2471e6ca5403406a75130dab9f326ac809c8151",
+            "decoderVersion": 2
+          }
+        ]
+      },
+      "pythonModels": [
+        {
+          "sha256": "177cecee44c811822c65852fac1148a2faa3f9073a44b1677120a9068effb59d",
+          "tokenizerSha256": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+          "codecSha256": "e5e8a1d997e8cbd89e116eeed2471e6ca5403406a75130dab9f326ac809c8151",
+          "decoderVersion": 2
+        }
+      ],
+      "pythonCuts": 1,
+      "pythonRawComplete": 0
+    },
+    {
+      "id": "data/haiku-v2/drawing/v2b01a.jsonl:drawing-v2b01-0003",
+      "area": "drawing",
+      "equal": false,
+      "allDifferencePaths": [
+        "$.readings[0].packet.ranges:length",
+        "$.readings[0].packet.request.target.kind:missing",
+        "$.readings[0].packet.request.target.kind_span:missing",
+        "$.readings[0].packet.unresolved:length"
+      ],
+      "cuts": 1,
+      "rawPackets": 1,
+      "rawComplete": 0,
+      "canonicalCandidates": 0,
+      "rawUnresolved": {
+        "presence-span-inconsistent": 2
+      },
+      "pipelineFailures": {
+        "incomplete-provider-coverage": 1,
+        "provider-unresolved": 2,
+        "incomplete-model-coverage": 1,
+        "unresolved-model-output": 1,
+        "unresolved-canonical-kind-binding": 1,
+        "unresolved-canonical-property-binding": 2,
+        "unresolved-value-representation": 2,
+        "unconsumed-predicted-range": 2,
+        "incomplete-structural-coverage": 1
+      },
+      "nodeModels": {
+        "cutter": {
+          "sha256": "5c2c545cea87b2618c4209c338bd3e30d1671a0da32139819fe5a6110d61ac6b",
+          "tokenizerSha256": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+          "codecSha256": "64fd854a5711acd8f675c7669e2426b12676b200fa3b1a9da6f67ad60e7f8213",
+          "decoderVersion": 1
+        },
+        "readers": [
+          {
+            "sha256": "db66d42b1daf1e0b19e31751f9c140c124124f587983923cdd9fc16eeebefa2c",
+            "tokenizerSha256": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+            "codecSha256": "e5e8a1d997e8cbd89e116eeed2471e6ca5403406a75130dab9f326ac809c8151",
+            "decoderVersion": 2
+          }
+        ]
+      },
+      "pythonModels": [
+        {
+          "sha256": "177cecee44c811822c65852fac1148a2faa3f9073a44b1677120a9068effb59d",
+          "tokenizerSha256": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+          "codecSha256": "e5e8a1d997e8cbd89e116eeed2471e6ca5403406a75130dab9f326ac809c8151",
+          "decoderVersion": 2
+        }
+      ],
+      "pythonCuts": 1,
+      "pythonRawComplete": 0
+    }
+  ],
+  "nodeVerified": {
+    "format": "psys2.verified-reader-provider/1",
+    "manifestSha256": "aa4a549bda7727a24dcef74a0d0a801d5bba277f93498324aa071986e8200c6c",
+    "artifactRole": "trained-unverified",
+    "weightRepresentation": "q8-dynamic",
+    "dtype": "fp32",
+    "files": {
+      "cutter": {
+        "path": "cutter.q8.onnx",
+        "sha256": "f21fb2dc82c52ab85c9436d53be83e0e69e0e9cb746f6ecd8b607b964d476a77",
+        "bytes": 66756266
+      },
+      "encoder": {
+        "path": "encoder.q8.onnx",
+        "sha256": "040c8bc3f0a0c3db619f4fb2a08587eb4fd8fbb1809a7e27977c7ac08897c8b5",
+        "bytes": 67160769
+      },
+      "heads": {
+        "path": "heads.q8.onnx",
+        "sha256": "2c741fe0190066a476ce6c42c3dcfd2637a6c25aa716cd3904530eacb1b21edb",
+        "bytes": 623715
+      },
+      "tokenizer": {
+        "path": "tokenizer.json",
+        "sha256": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+        "bytes": 466062
+      },
+      "bindings": {
+        "path": "bindings.json",
+        "sha256": "07b8094f4c1ababffff579dfd0d249b597afcafcfb26c47bc776887ce03e0798",
+        "bytes": 3737397
+      }
+    },
+    "configSha256": "b7b03ad5c06ebaeec6ff2014e2ac01d26a935e58de62bdbb7589eaf02f28efdb",
+    "cutterConfigSha256": "64f3e284f6c901329956351e1077a479102683ffd043b6dabda755a739863ad9",
+    "tokenizerSha256": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+    "bindingsSha256": "07b8094f4c1ababffff579dfd0d249b597afcafcfb26c47bc776887ce03e0798",
+    "totalAuthenticatedBytes": 138945065,
+    "models": {
+      "cutter": {
+        "format": "sop.request-cutter-computation/1",
+        "artifactRole": "trained-unverified",
+        "model": {
+          "sha256": "5c2c545cea87b2618c4209c338bd3e30d1671a0da32139819fe5a6110d61ac6b",
+          "tokenizerSha256": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+          "codecSha256": "64fd854a5711acd8f675c7669e2426b12676b200fa3b1a9da6f67ad60e7f8213",
+          "decoderVersion": 1
+        },
+        "configSha256": "64f3e284f6c901329956351e1077a479102683ffd043b6dabda755a739863ad9",
+        "checkpointSha256": "85d1d2ee1e03ee22c355077cf6248fba30cb14c2195151deb36f68cffbe758e0",
+        "graphSha256": "f21fb2dc82c52ab85c9436d53be83e0e69e0e9cb746f6ecd8b607b964d476a77",
+        "tokenizerSha256": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+        "trainerSha256": "d9422af7ad75e9053f5dfc86c36b0a49ac8f6b52099aa49ac02d95925db1a445",
+        "codecSha256": "64fd854a5711acd8f675c7669e2426b12676b200fa3b1a9da6f67ad60e7f8213",
+        "dtype": "fp32",
+        "weightRepresentation": "q8-dynamic",
+        "calibration": null,
+        "executionEligible": false
+      },
+      "reader": {
+        "format": "sop.key-reader-runtime/1",
+        "artifactRole": "trained-unverified",
+        "model": {
+          "sha256": "db66d42b1daf1e0b19e31751f9c140c124124f587983923cdd9fc16eeebefa2c",
+          "tokenizerSha256": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+          "codecSha256": "e5e8a1d997e8cbd89e116eeed2471e6ca5403406a75130dab9f326ac809c8151",
+          "decoderVersion": 2
+        },
+        "configSha256": "b7b03ad5c06ebaeec6ff2014e2ac01d26a935e58de62bdbb7589eaf02f28efdb",
+        "encoderSha256": "040c8bc3f0a0c3db619f4fb2a08587eb4fd8fbb1809a7e27977c7ac08897c8b5",
+        "headsSha256": "2c741fe0190066a476ce6c42c3dcfd2637a6c25aa716cd3904530eacb1b21edb",
+        "checkpointSha256": "177cecee44c811822c65852fac1148a2faa3f9073a44b1677120a9068effb59d",
+        "weightRepresentation": "q8-dynamic",
+        "calibration": null,
+        "executionEligible": false
+      }
+    },
+    "pipeline": {
+      "modelSha256": "ff26e88415f28d8a85b2f33db011e458b504a6752236b83b54de0bfda98ef5cb",
+      "decoderVersion": 1,
+      "models": {
+        "cutter": {
+          "sha256": "5c2c545cea87b2618c4209c338bd3e30d1671a0da32139819fe5a6110d61ac6b",
+          "tokenizerSha256": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+          "codecSha256": "64fd854a5711acd8f675c7669e2426b12676b200fa3b1a9da6f67ad60e7f8213",
+          "decoderVersion": 1
+        },
+        "reader": {
+          "sha256": "db66d42b1daf1e0b19e31751f9c140c124124f587983923cdd9fc16eeebefa2c",
+          "tokenizerSha256": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+          "codecSha256": "e5e8a1d997e8cbd89e116eeed2471e6ca5403406a75130dab9f326ac809c8151",
+          "decoderVersion": 2
+        }
+      },
+      "bindingsSha256": "07b8094f4c1ababffff579dfd0d249b597afcafcfb26c47bc776887ce03e0798",
+      "architecture": "source-cutter/request-key-heads",
+      "calibration": null
+    },
+    "offsetAuthority": {
+      "protocol": "bert-component-trace/1",
+      "tokenizerSha256": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+      "verification": "per-input ID/mask/offset parity"
+    },
+    "hostRuntimeAttestation": {
+      "verified": true,
+      "identity": {
+        "appBuildSha256": "3bf762c218730d62c6709bf15244b05e1c671a413e59126f2bbd36f6fb6d3bbb",
+        "readerSha256": "fa218f77fe7d38cea70f0ed2d32e58f1044ee038bc4b841341d66cf12d219328",
+        "pipelineSha256": "4aa4e2bb9a1d2d5b0ed56bee6e3baf2cb6923b70f6074960cff4ea1cdb8e9e74",
+        "packetAdapterSha256": "46f0609921cb2bcaef66968294b47f7fc11e851ab7df72e5dd473cb54ba82fec",
+        "graphDecoderSha256": "babc7c5f60d69d2e66f280d8c1d29a9fd913b3435ab704e4023124910679761e",
+        "executorSha256": "7d55a9d269418801bbc9dd5a46be3cd18ad0d50624b4c898b244caf5ee6df30a",
+        "contextSerializationSha256": "bff95122f779997b644601927ef840a94655ef9a829e5e80f480e822bb65f15b",
+        "bindingsSha256": "07b8094f4c1ababffff579dfd0d249b597afcafcfb26c47bc776887ce03e0798",
+        "backendSha256": "02dfea67bde34755c1510be1a6656c8d64bbdca9e84479b32422226b9b8469b8"
+      },
+      "authority": "psys2.node-reader-host/1: exact runtime tree and explicit trusted deployment identity"
+    },
+    "implementationTrust": "external host attestation; not proven by artifact hashes",
+    "calibration": null,
+    "executionEligible": false,
+    "assemblySha256": "47c5aa5eb3013f9123f367a9defd99e7279b3b17fb9a8e8534dad1b70972b1b3",
+    "backendIdentity": {
+      "format": "psys2.node-reader-backend/1",
+      "runtimeTreeSha256": "4dcc880aa97ba3d7d4423054a4d2ff87812f3f05daaf5fde37e755adeb039dc2",
+      "node": "v22.23.2",
+      "platform": "linux",
+      "arch": "arm64",
+      "ortModule": "onnxruntime-node/dist/index.js",
+      "transformersModule": "@huggingface/transformers/dist/transformers.node.mjs",
+      "options": {
+        "executionProviders": [
+          "cpu"
+        ],
+        "intraOpNumThreads": 1,
+        "interOpNumThreads": 1
+      }
+    },
+    "contextProfile": "psys2.native-reader-context/1",
+    "tokenizerConfigSha256": "a025160ef0431f1a392f6f050c1310f4c5d9fb6f275932dbccba73c4d214bf10",
+    "tokenizerConstructorPolicy": "explicit-bert-special-roles/1",
+    "tokenizerConstructorConfigSha256": "c0dae1855b3de10c3936490e6cae0e11aa85dc93739894f2d20e2ef6da3b1836"
+  },
+  "pythonModelIdentity": {
+    "sha256": "177cecee44c811822c65852fac1148a2faa3f9073a44b1677120a9068effb59d",
+    "tokenizerSha256": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+    "codecSha256": "e5e8a1d997e8cbd89e116eeed2471e6ca5403406a75130dab9f326ac809c8151",
+    "decoderVersion": 2
+  },
+  "excludedFields": [
+    "per-packet model identity only; identities retained separately"
+  ],
+  "semanticAccuracy": null,
+  "calibration": null,
+  "executionEligible": false,
+  "nodeSource": {
+    "path": "../.session-control/review23-v2-node-probe.json",
+    "sha256": "ee9fece87592930f077dfdecd0f774b362290a0c7f65dcf161f0b375971af795"
+  },
+  "pythonSource": {
+    "path": "../.session-control/review23-v2-node-probes.python-reference.json",
+    "sha256": "1e4e10b49e448db7675ba4bd923f6b84b713f9363224be24d7762af22de9320f"
+  },
+  "selection": {
+    "format": "psys2.predeclared-source-probes/1",
+    "sourceSha256": "4911bcb18188940abc7a13719dc1d379e85393fb5b6a716086cae2766b46b71e",
+    "version": "haiku-v2",
+    "perArea": 2,
+    "areas": [
+      "calendar",
+      "diagram",
+      "document",
+      "drawing"
+    ],
+    "selectionPolicy": "first perArea records of each area in source order, filtered only by source_path version; never by annotations or model outputs",
+    "selection": [
+      {
+        "id": "data/haiku-v2/calendar/v2b01a.jsonl:calendar-v2b01-0004",
+        "area": "calendar",
+        "sourcePath": "data/haiku-v2/calendar/v2b01a.jsonl",
+        "sourceLine": 4,
+        "sourceSha256": "789315fa06459a478fb13727efa0daccded2a55e7ea7edc6088f3b25977d7cb4",
+        "calibrationLine": 1611
+      },
+      {
+        "id": "data/haiku-v2/calendar/v2b01a.jsonl:calendar-v2b01-0013",
+        "area": "calendar",
+        "sourcePath": "data/haiku-v2/calendar/v2b01a.jsonl",
+        "sourceLine": 13,
+        "sourceSha256": "789315fa06459a478fb13727efa0daccded2a55e7ea7edc6088f3b25977d7cb4",
+        "calibrationLine": 1612
+      },
+      {
+        "id": "data/haiku-v2/diagram/v2b01a.jsonl:diagram-v2b01-0006",
+        "area": "diagram",
+        "sourcePath": "data/haiku-v2/diagram/v2b01a.jsonl",
+        "sourceLine": 6,
+        "sourceSha256": "9ed77737b71f211c80342fb4ddfec7c5da52097af1c8aa43f6c3d85f7f2a92d3",
+        "calibrationLine": 1995
+      },
+      {
+        "id": "data/haiku-v2/diagram/v2b01a.jsonl:diagram-v2b01-0015",
+        "area": "diagram",
+        "sourcePath": "data/haiku-v2/diagram/v2b01a.jsonl",
+        "sourceLine": 15,
+        "sourceSha256": "9ed77737b71f211c80342fb4ddfec7c5da52097af1c8aa43f6c3d85f7f2a92d3",
+        "calibrationLine": 1996
+      },
+      {
+        "id": "data/haiku-v2/document/v2b01a.jsonl:document-v2b01-0025",
+        "area": "document",
+        "sourcePath": "data/haiku-v2/document/v2b01a.jsonl",
+        "sourceLine": 25,
+        "sourceSha256": "b67772fca0537a2d9e836b0cc7c5dd93660d9cf812a363fd5043bb9b3da4d80e",
+        "calibrationLine": 2548
+      },
+      {
+        "id": "data/haiku-v2/document/v2b01a.jsonl:document-v2b01-0036",
+        "area": "document",
+        "sourcePath": "data/haiku-v2/document/v2b01a.jsonl",
+        "sourceLine": 36,
+        "sourceSha256": "b67772fca0537a2d9e836b0cc7c5dd93660d9cf812a363fd5043bb9b3da4d80e",
+        "calibrationLine": 2549
+      },
+      {
+        "id": "data/haiku-v2/drawing/v2b01a.jsonl:drawing-v2b01-0001",
+        "area": "drawing",
+        "sourcePath": "data/haiku-v2/drawing/v2b01a.jsonl",
+        "sourceLine": 1,
+        "sourceSha256": "d620618aecce8c7ac2a14fe3812b8eec0fb3c5b2fcf73346b15472c9c06ede57",
+        "calibrationLine": 2945
+      },
+      {
+        "id": "data/haiku-v2/drawing/v2b01a.jsonl:drawing-v2b01-0003",
+        "area": "drawing",
+        "sourcePath": "data/haiku-v2/drawing/v2b01a.jsonl",
+        "sourceLine": 3,
+        "sourceSha256": "d620618aecce8c7ac2a14fe3812b8eec0fb3c5b2fcf73346b15472c9c06ede57",
+        "calibrationLine": 2946
+      }
+    ],
+    "inputSha256": "2174b63a7a46e656b2af969c487da99c26b5a30fa86dc42ce6cc79954a573935",
+    "labelsProvidedToModel": false,
+    "sourcePath": "../.session-control/structural-gold-review23-full/calibration.jsonl"
+  },
+  "summary": {
+    "nodeCuts": 8,
+    "pythonCuts": 8,
+    "nodeRawComplete": 1,
+    "pythonRawComplete": 0,
+    "nodeCanonicalCandidates": 0
+  },
+  "boundary": "Predeclared eight v2 source-context probes only. Three of eight semantic RAW pipelines match exactly after excluding only per-packet model identity. Raw completeness and canonical proposal availability are not correctness. Actual v2 serialization/token/feed parity and backend numerical isolation remain unmeasured; do not attribute differences solely to backend or infer a global accuracy rate. No admission/effects."
+}

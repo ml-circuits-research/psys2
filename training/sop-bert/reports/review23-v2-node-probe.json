@@ -411,7 +411,12 @@
     "sha256": "ee9fece87592930f077dfdecd0f774b362290a0c7f65dcf161f0b375971af795",
     "bytes": 915148
   },
-  "pythonComparison": "pending separately supplied same-input q8 reference",
+  "pythonComparison": {
+    "path": "review23-v2-node-python-comparison.json",
+    "sha256": "0d5d2046ca6cbbf2dfee2e4fa0f7275e8ce831e3da52d6cb3fd26531e58a80a5",
+    "semanticRawEqual": 3,
+    "cases": 8
+  },
   "semanticAccuracy": null,
   "calibration": null,
   "executionEligible": false,
