@@ -5439,3 +5439,10 @@ What changes now (owner decision on honesty stays in force: do NOT chase numbers
    c. calibrate the gate on calibration rows;
    d. rerun the 301-row matrix and owner replay; report the class × area table and the stage counts (cutter / raw complete / bound / executed).
 4. If disk is the reason for the byte bookkeeping, say so in one line and say what to delete; the owner decides.
+
+### Review 28 addendum — 2026-11-17 08:07 Rome (owner request)
+
+Clean up disk as you go. Owner decision: do not fill the disk with intermediate material.
+- Delete intermediate files your own runs made once they are superseded: old checkpoints except the selected epoch 7 and the latest run's best, FP32/ONNX intermediates after the q8 bundle is verified, duplicate snapshots, temporary exports, cached packets, test logs, `.session-control` receipts not referenced by a test.
+- Keep: training data (haiku-v1, haiku-v2, functional matrix), the deployed bundle, the selected checkpoint, reports that are committed.
+- One line in worker-log per cleanup: what was deleted and how much space it freed. If something is unclear (not made by your runs, or might be needed), list it and ask the owner instead of deleting.
