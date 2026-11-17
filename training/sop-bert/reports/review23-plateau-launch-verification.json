@@ -1,0 +1,23 @@
+{
+  "format": "sop.review23-launch-config-verification/1",
+  "actualConfigSha256": "b7b03ad5c06ebaeec6ff2014e2ac01d26a935e58de62bdbb7589eaf02f28efdb",
+  "actualRunId": "10c13e0e5b3f43178e3b22664a9ddfdc",
+  "stableCanonicalSha256ExcludingRunId": "4a27d8bb6bf685d0d86eb6adb9aac9694c60a2718673c18591f8661c86d8f554",
+  "preflightStableFieldsEqual": true,
+  "launchSha256": "c31ec5445f1f10641aca0d600fbb4d57d9796cc8c58a63070f628490891a247c",
+  "processSha256": "c53a6bb1376acce78d9f22fe0e9115e2e7e92350ceb663b97f4cd9c3b5e9ce20",
+  "candidateDataManifestSha256": "4b9ddfa1ee8033d23005b336f542d26f0c9d0066b138887acb95eb58ec9c3b2d",
+  "sourceHashes": {
+    "train-key-reader.py": "f9e5794fd939ce5a202be2c4cdfdacc7e8e48e68ded4d50d97453108bcc6a69c",
+    "prepare-key-reader.py": "5cab868172f89f29f51d35894aebfbae0c71011cc97bd3ad4b3b1c29a96fa477",
+    "target-type-weight-migration.py": "9b7a41049680bf044b02618f976e2ae9231ff7b3359730bc5b00d87445adee37"
+  },
+  "state": "active optimizer progress observed; no completed epoch yet",
+  "trainingComplete": false,
+  "executable": false,
+  "observedOptimizerProgress": {
+    "epoch": 1,
+    "steps": 200,
+    "lastLoss": 0.008521056734025478
+  }
+}
