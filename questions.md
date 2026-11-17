@@ -1182,3 +1182,19 @@ Document `section.content` remains unresolved despite available `w.document.sent
 ### Frozen structural v1: missing requirements despite typed validity
 
 Actual source-only development prediction for matrix:document-v2b02-0068 (“make sure the intro is under 100 words”) produced an ask/answer request about an existing section with no constraints. The typed graph validates but loses the numeric requirement. Separately, five of 97 matrix no-request proposals omit annotated requests; 92 match annotated empty arrays. Two owner no-request proposals cannot be scored because request annotations remain pending. The app correctly refuses all effects under its closed gate, but this is not semantic correctness. Proposed evaluation requirement: report missed request/condition cardinality and whole-request semantic recall separately from schema validity and effect safety; fit any future admission policy on complete-graph correctness, never raw coverage or averaged head accuracy. No sentence-specific fix or extra schema rule can establish source faithfulness here.
+
+## Q36 (task BIO-DECODER, 2026-11-17)
+Question: Should a future admission policy evaluate the legal Viterbi decoder
+using calibrated complete-request risk, keeping refusal rather than forcing
+cuts where exact-request risk is unknown?
+Context: One identical-emissions CUDA BF16 pass over all3308 CAL messages
+reproduces the original strict baseline exactly. Legal Viterbi raises span
+F1 from81.73% to82.06%, adds72 true spans but73 false-positive spans, and
+reduces unresolved92->2. Among90 newly resolved messages,30 have exact request
+boundaries and60 still have incorrect boundaries. Empty exact remains74/81.
+An F1-only switch would hide this additional false-positive exposure.
+Proposal: preserve separately versioned strict/Viterbi results and require
+downstream calibrated exact-request risk before admission; no activation or
+confidence follows from BIO legality or summed logits.
+Blocking: no. The app gate and frozen strict codec remain unchanged; the
+comparison is offline evidence only.
