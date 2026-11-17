@@ -1,3 +1,4 @@
+import {quantizeGeometryArguments} from './ui/geometry-values.mjs';
 import {createObjectCodePanel} from './ui/world-code.mjs';
 import {createWorldsExplorer} from './ui/worlds-explorer.mjs';
 import {createInstanceStore} from './ui/instance-store.mjs';
@@ -26,7 +27,7 @@ import { createSwitchTranslator, createBrowserBackend, browserTranslatorKind, br
 import { renderTrace } from './ui/trace.mjs';
 import { findDispatcherModel, versionLabel } from './ui/dispatcher-host.mjs';
 import { findNormalizerModel } from './ui/normalizer-host.mjs';
-import { createEngineClient } from './ui/engine-client.mjs';
+import { createEngineClient,createLoadTimings } from './ui/engine-client.mjs';
 import { normalizeNxStrategy } from './lib/formalizer/nx-strategy.mjs';
 import { DEFAULT_SETTINGS, SETTINGS_KEY, loadSettings, applyReading } from './ui/settings.mjs';
 import { guard, TurnAborted, withDeadline, LOAD_WAIT_CAP_MS } from './lib/formalizer/guard.mjs';
@@ -136,13 +137,33 @@ export async function mountPsys2(element, options = {}) {
    * The tab's UI, made on first use: the tab opens, a message makes its world act, or an effect of the tab arrives. Making it loads the tab's world (the engine adds it) and its vendor assets
    * (map shapes, the editor, the chart library): none of them is fetched at boot except the open tab's.
    */
+  const tabLoads=new Map();let tabLoadTicker=null;
+  function paintTabLoad(){
+    const record=tabLoads.get(view);tabLoadRow.hidden=!record;if(!record)return;
+    const measured=record.timeline.snapshot();tabLoadRow.dataset.state=measured.status;
+    tabLoadStage.textContent=record.label+' · '+(measured.status==='loading'?(measured.stage??'Loading') : measured.status==='error'?'Could not load':'Ready');
+    tabLoadElapsed.textContent=(measured.elapsedMs/1000).toFixed(2)+' s';
+    tabLoadDetails.textContent=[...measured.stages.map(row=>row.stage+': '+row.ms.toFixed(1)+' ms'),...(record.worker??[]).map(row=>'  Worker · '+row.stage+': '+row.ms.toFixed(1)+' ms'),...(measured.error?[measured.error]:[])].join('\n');
+  }
+  function beginTabLoad(tab){
+    const record={id:tab.id,label:tab.label,worker:[],timeline:createLoadTimings({onChange:()=>{if(view===tab.id)paintTabLoad();}})};tabLoads.set(tab.id,record);record.timeline.stage('Opening tab');
+    if(!tabLoadTicker)tabLoadTicker=setInterval(()=>{paintTabLoad();if(![...tabLoads.values()].some(row=>row.timeline.snapshot().status==='loading')){clearInterval(tabLoadTicker);tabLoadTicker=null;}},150);
+    paintTabLoad();return record;
+  }
+  const tabPaint=()=>new Promise(resolve=>{const timer=setTimeout(resolve,100);requestAnimationFrame(()=>{clearTimeout(timer);resolve();});});
+  async function finishTabLoad(record,stage='Present tab'){record.timeline.stage(stage);await tabPaint();record.timeline.finish();}
   const worldViews=new Map(),worldActivityListeners=new Set(),worldActivity=[];
-  let worldsExplorer=null,worldsRefreshTimer=null;
+  let worldsExplorer=null,worldsRefreshTimer=null,worldsLoadInFlight=null;
   const scheduleWorldsRefresh=()=>{clearTimeout(worldsRefreshTimer);worldsRefreshTimer=setTimeout(()=>{if(view==='worlds')void worldsExplorer?.refresh();},350);};
-  const emitWorldActivity=event=>{worldActivity.push(event);if(worldActivity.length>300)worldActivity.shift();for(const fn of worldActivityListeners)fn(event);if(['end','error'].includes(event.phase)&&event.nodeIds?.some(id=>/^(interpreter:|world:|component:)/.test(id))&&view==='worlds')scheduleWorldsRefresh();};
+  const emitWorldActivity=event=>{worldActivity.push(event);if(worldActivity.length>300)worldActivity.shift();for(const fn of worldActivityListeners)fn(event);if(event.operation!=='worldsInspection'&&['end','error'].includes(event.phase)&&event.nodeIds?.some(id=>/^(interpreter:|world:|component:)/.test(id))&&view==='worlds')scheduleWorldsRefresh();};
   function makeWorldsTab(t){
-    const explorer=createWorldsExplorer({load:async()=>{
-      const data=await engineClient.call('worldsInspection');
+    const explorer=createWorldsExplorer({load:()=>{
+      if(worldsLoadInFlight)return worldsLoadInFlight;
+      const timing=tabLoads.get(t.id)?.timeline.snapshot().status==='loading'?tabLoads.get(t.id):beginTabLoad(t);
+      worldsLoadInFlight=(async()=>{
+      timing.timeline.stage('Read runtime worlds');await tabPaint();
+      const data=await engineClient.call('worldsInspection',{tab:t.id});timing.worker=data.timings??[];
+      timing.timeline.stage('Read browser records');
       const storage=await instanceStore.inspect(),pairs=await trainingPairs.all();
       const structures=[
         {id:'browser:instance-store',label:'Explicit snapshot buffer',kind:'storage',implementation:'javascript',description:'Session-only buffer populated when work is explicitly exported. Editor work is not saved or restored automatically. Legacy browser archives are left untouched and inactive.',details:{...storage,source:'ui/instance-store.mjs'}},
@@ -151,13 +172,14 @@ export async function mountPsys2(element, options = {}) {
         {id:'browser:worlds-view',label:'Worlds inspector',kind:'adapter',implementation:'javascript',description:'Read-only runtime inspection and activity visualization. This graph is an inspection of the current implementation; it is not yet an authoritative SOP project registry.',details:{source:'ui/worlds-explorer.mjs; dialog/worlds-inspection.mjs',activeView:view,activeEditor:lastShellTab}}
       ];
       return {...data,areas:tabDefs.filter(t=>t.world).map(t=>({...data.areas?.find(area=>area.world===t.world),view:t.id,world:t.world,label:t.label})),centralNodeId:'project:application',nodes:[...data.nodes,...structures],edges:[...data.edges,{from:'runtime:activity-bus',to:'browser:worlds-view',label:'streams observed activity'},...data.nodes.filter(n=>n.id.startsWith('instance:')).flatMap(n=>[{from:n.id,to:'browser:instance-store',label:'explicit export buffer'},{from:'browser:intent-records',to:n.id,label:'records changes to'}])]};
-    },subscribe:fn=>{worldActivityListeners.add(fn);for(const event of worldActivity)fn(event);return()=>worldActivityListeners.delete(fn);},copy:text=>ALLOW['clipboard.copy']({text})});
-    worldsExplorer=explorer;tabBtns[t.id].panel.append(explorer.element);panelUI[t.id]={ui:{show:()=>void explorer.refresh(),update:()=>{},destroy:explorer.destroy}};cleanups.push(()=>{clearTimeout(worldsRefreshTimer);explorer.destroy();});return panelUI[t.id].ui;
+      })().then(async result=>{const latest=tabLoads.get(t.id)??timing;latest.worker=timing.worker;latest.timeline.stage('Draw architecture graph');if(latest!==timing)timing.timeline.finish();await tabPaint();void finishTabLoad(latest,'Draw architecture graph');return result;},error=>{timing.timeline.finish(error);tabLoads.get(t.id)?.timeline.finish(error);throw error;}).finally(()=>{worldsLoadInFlight=null;});return worldsLoadInFlight;
+    },subscribe:fn=>{worldActivityListeners.add(fn);return()=>worldActivityListeners.delete(fn);},copy:text=>ALLOW['clipboard.copy']({text})});
+    worldsExplorer=explorer;tabBtns[t.id].panel.append(explorer.element);panelUI[t.id]={ui:{show:()=>explorer.refresh(),update:()=>{},destroy:explorer.destroy}};cleanups.push(()=>{clearTimeout(worldsRefreshTimer);explorer.destroy();});return panelUI[t.id].ui;
   }
   function attachWorldViews(t,panel){
     const shell=h('div',{class:'p2-world-views'}),holder=h('div',{class:'p2-tabbody p2-active-world',role:'tabpanel',id:`p2-${t.id}-active`});
     let pending=null,pendingEpoch=-1,epoch=0,pane=null,paneObserver=null,discovery=null;
-    const load=()=>{if(!pending||pendingEpoch!==epoch){const request=engineClient.call('instanceInspection',{world:t.world}).finally(()=>{if(pending===request)pending=null;});pending=request;pendingEpoch=epoch;}return pending;};
+    const load=()=>{if(!pending||pendingEpoch!==epoch){const request=engineClient.call('instanceInspection',{world:t.world}).catch(error=>{if(pending===request)pending=null;throw error;});pending=request;pendingEpoch=epoch;}return pending;};
     const copy=text=>ALLOW['clipboard.copy']({text});
     const object=createObjectCodePanel({load,copy});
     const selection=()=>{try{return JSON.parse(pane?.dataset.selectedNativeIds??'[]');}catch{return [];}};
@@ -169,23 +191,27 @@ export async function mountPsys2(element, options = {}) {
   }
   function makeTab(t) {
     if (!tabKnown.has(t.id)) return Promise.resolve(null);
-    if(t.architecture)return Promise.resolve(panelUI[t.id]?.ui??makeWorldsTab(t));
+    if(t.architecture){if(!panelUI[t.id])beginTabLoad(t);return Promise.resolve(panelUI[t.id]?.ui??makeWorldsTab(t));}
     if(t.settingsPage){
+      const timing=beginTabLoad(t);timing.timeline.stage('Render settings');
       if(!panelUI[t.id]){settingsEl.classList.add('p2-settings-inline');settingsEl.removeAttribute('aria-modal');settingsEl.setAttribute('role','region');setClose.hidden=true;tabBtns[t.id].panel.append(settingsEl);panelUI[t.id]={ui:{show(){settingsEl.hidden=false;renderSettings();void tl.init().then(()=>renderSettings(),()=>{});},hide(){settingsEl.hidden=true;},update(){}}};}
-      panelUI[t.id].ui.show();return Promise.resolve(panelUI[t.id].ui);
+      panelUI[t.id].ui.show();void finishTabLoad(timing);return Promise.resolve(panelUI[t.id].ui);
     }
     if (!tabMade.has(t.id)) tabMade.set(t.id, (async () => {
+      const timing=beginTabLoad(t);
       effectsPending++; updateBusy();   // the tab's UI is part of the turn that opened it: the host is busy (and a test or a voice turn waits) until it is there
       try {
+      timing.timeline.stage('Load editor module');await tabPaint();
       if (t.file && !t.make) { const m = (await import(new URL(`ui/tabs/${t.file}`, base).href)).default; Object.assign(t, m); }   // the tab's module loads now (with its world modules); vendor assets load when it makes its UI
-      if (!options.renderAllTabs && engineClient) { try { const r = await engineClient.call('ensure', { worlds: [t.world], why: 'tab' }); for (const id of r?.added ?? []) loadedWorlds.add(id); } catch (e) { console.warn('could not load the world of the tab', t.world, e); } }
+      if (!options.renderAllTabs && engineClient) { try { timing.timeline.stage('Ensure instance world');const r = await engineClient.call('ensure', { worlds: [t.world], why: 'tab',tab:t.id });timing.worker=r?.timings??[]; for (const id of r?.added ?? []) loadedWorlds.add(id); } catch (e) { console.warn('could not load the world of the tab', t.world, e); } }
       if (destroyed) return null;
+      timing.timeline.stage('Create editor');await tabPaint();
       const {holder}=attachWorldViews(t,tabBtns[t.id].panel);
       panelUI[t.id] = { ui: t.make(holder, hostApi) };
-      panelUI[t.id].ui.update?.(states[t.world]);
+      timing.timeline.stage('Render instance state');panelUI[t.id].ui.update?.(states[t.world]);
       if (view === t.id) panelUI[t.id].ui.show?.();
-      return panelUI[t.id].ui;
-      } finally { effectsPending = Math.max(0, effectsPending - 1); updateBusy(); }
+      await finishTabLoad(timing);return panelUI[t.id].ui;
+      }catch(error){timing.timeline.finish(error);tabMade.delete(t.id);throw error;} finally { effectsPending = Math.max(0, effectsPending - 1); updateBusy(); }
     })());
     const p = tabMade.get(t.id);
     if (!panelUI[t.id]) { makingTabs.add(p); p.finally(() => makingTabs.delete(p)).catch(() => {}); }
@@ -305,11 +331,15 @@ export async function mountPsys2(element, options = {}) {
     h('footer', { class: 'p2-foot' }, h('a', { href: SOURCE_URL, target: '_blank', rel: 'noopener', 'data-source-link': 'footer' }, 'Source code (AGPL-3.0)')));
   const tabsEl = h('div', { class: 'p2-tabs', role: 'tablist', 'aria-label': 'Tools' });
   const panelsEl = h('div', { class: 'p2-panels' });
+  const tabLoadStage=h('span',{'aria-live':'polite'}),tabLoadElapsed=h('span',{'aria-hidden':'true'}),tabLoadDetails=h('pre',{style:'margin:6px 0;white-space:pre-wrap;font:12px monospace;max-height:160px;overflow:auto'});
+  const tabLoadRow=h('details',{class:'p2-tab-load-timings',hidden:true,style:'flex:none;padding:3px 10px;border-bottom:1px solid var(--line);font-size:12px;background:var(--surface)'},h('summary',{style:'cursor:pointer;display:flex;gap:8px;align-items:center'},tabLoadStage,tabLoadElapsed,h('span',{style:'margin-left:auto;color:var(--muted)'},'Load timings')),tabLoadDetails);
+  cleanups.push(()=>clearInterval(tabLoadTicker));
+
   root.append(chat);
   // DBG: in developer mode a thin header row under the tab strip carries the Debug button of the tab that is open (one button per tab: it follows the selected tab)
   const dbgBtn = h('button', { class: 'p2-btn-text p2-dbg-open', type: 'button', id: 'p2-dbg-open', 'aria-haspopup': 'dialog' }, h('span', { class: 'p2-dbg-ico', 'aria-hidden': 'true' }, '🐞'), ' Debug');
   const dbgRow = h('div', { class: 'p2-dbgrow', hidden: true }, dbgBtn);
-  const paneEl = tabDefs.length ? h('section', { class: 'p2-pane', 'aria-label': 'Tools' }, tabsEl, dbgRow, panelsEl) : null;
+  const paneEl = tabDefs.length ? h('section', { class: 'p2-pane', 'aria-label': 'Tools' }, tabsEl,tabLoadRow, dbgRow, panelsEl) : null;
   if (paneEl) {root.append(paneEl);cleanups.push(mountPaneSplitter(root,chat,{persist:options.persist!==false}));} else root.classList.add('p2-chat-only');
   const modalHost = h('div', { class: 'p2 p2-modal-host' }, settingsEl);
   // USER-ACTIONS: taps are recorded by one delegated listener (no per-tab code): the name, the area, what kind of thing it was; tabs, the mic and Send have their own events
@@ -439,6 +469,7 @@ export async function mountPsys2(element, options = {}) {
     if (!tabBtns[id]) return;
     if (id !== view) events.add('tab', id, { via, tabAfter: id });   // USER-ACTIONS: how the tab was opened (tap | key | message | card | example | command)
     view = id;
+    const warm=panelUI[id]&&beginTabLoad(tabDefs.find(tab=>tab.id===id));if(warm)warm.timeline.stage(id==='worlds'?'Inspect runtime':'Render current state');
     dieBtn.disabled=!tabDefs.find(t=>t.id===id)?.world;
     try { if (options.persist !== false && via !== 'start') localStorage.setItem('psys2.webchat.tab', id); } catch { /* storage unavailable */ }
     for (const [k, { btn, panel }] of Object.entries(tabBtns)) {
@@ -452,7 +483,8 @@ export async function mountPsys2(element, options = {}) {
     syncPageUI();
     refreshSuggestions();
     const def = tabDefs.find((t) => t.id === id);
-    if (def && !panelUI[id]) makeTab(def);else if(def)worldViews.get(def.world)?.refresh(false);
+    if (def && !panelUI[id])void makeTab(def).catch(()=>{});else if(def){worldViews.get(def.world)?.refresh(false);if(warm&&id!=='worlds')void finishTabLoad(warm);}
+    paintTabLoad();
   }
 
   // ---------- chat ----------
@@ -682,7 +714,7 @@ export async function mountPsys2(element, options = {}) {
     tool: async (operation,args={},options={}) => {
       if(isBusy())return {ok:false,message:'Please wait for the current action.'};
       const focusBeforeTool=document.activeElement;effectsPending++;updateBusy();
-      try{const r=await session.tool(operation,args,options);applyState(r.state);if(r.intentRecord){await trainingPairs.record(r.intentRecord);const row=addMessage('user',r.intentRecord.text);appendIntent(row.bubble,r.intentRecord.wires,'SOP Lang intent',r.intentRecord.intent?.expandedWires);addMessage('bot',r.message+' · '+(r.intentRecord.verification?.status??'unverified'));}if(r.ok&&r.changed)events.add('control',operation);return r;}
+      try{const r=await session.tool(operation,quantizeGeometryArguments(args),options);applyState(r.state);if(r.intentRecord){await trainingPairs.record(r.intentRecord);const row=addMessage('user',r.intentRecord.text);appendIntent(row.bubble,r.intentRecord.wires,'SOP Lang intent',r.intentRecord.intent?.expandedWires);addMessage('bot',r.message+' · '+(r.intentRecord.verification?.status??'unverified'));}if(r.ok&&r.changed)events.add('control',operation);return r;}
       finally{effectsPending=Math.max(0,effectsPending-1);updateBusy();if(focusBeforeTool?.isConnected&&document.activeElement===document.body)focusBeforeTool.focus({preventScroll:true});}
     },
     send: (text) => send(String(text), 'form'),   // a tab's form or control (logged as mode 'form'); ignored (with a hint) while a turn runs
@@ -943,8 +975,12 @@ export async function mountPsys2(element, options = {}) {
     const notUnderstood = mode === 'voice' && (reply.statuses ?? []).length > 0 && !(reply.statuses ?? []).includes('supported') && (reply.segments ?? []).some((sg) => sg.unparsed);
     if (!modelsStarted && ((reply.statuses ?? []).length === 0 || !(reply.statuses ?? []).includes('supported') || (reply.segments ?? []).some((sg) => sg.unparsed))) startModels();   // LAZY-LOAD-3: the rules did not read it cleanly: the reading model is wanted now
     const botMsg = addMessage('bot', answer);
-    const requestWires=reply.trace?.reading?.wires??reply.trace?.readerRouting?.admission?.alternatives?.[0]?.wires;
-    if(typeof requestWires==='string'&&requestWires.trim())appendIntent(botMsg.bubble,requestWires,'SOP Lang reading');
+    const readerRouting=reply.trace?.readerRouting,readingCandidates=[reply.trace?.reading,...(readerRouting?.proposalCandidates??[]),...(readerRouting?.admission?.alternatives??[])],shownReadings=new Set();
+    for(const candidate of readingCandidates){const wires=candidate?.wires;if(typeof wires!=='string'||!wires.trim()||shownReadings.has(wires))continue;shownReadings.add(wires);appendIntent(botMsg.bubble,wires,reply.statuses?.includes('supported')?'SOP Lang reading':'Reader proposal · not executed');}
+    if(readerRouting){
+      if(!shownReadings.size)botMsg.bubble.append(h('p',{class:'p2-reader-proposal-status'},'No SOP request produced'));
+      const diagnostic=JSON.stringify(readerRouting,null,2);botMsg.bubble.append(h('details',{class:'p2-reader-diagnostics'},h('summary',{},'Reader diagnostics'),copyButton('Copy diagnostics',()=>diagnostic),h('pre',{class:'p2-code'},diagnostic)));
+    }
     if (notUnderstood) {   // MOBILE-VOICE: repeated not-understood voice replies within 20 s are collapsed into one (the first gets a count)
       const nowT = performance.now();
       if (lastNU && nowT - lastNU.at < 20000 && lastNU.el.isConnected) { lastNU.n++; lastNU.at = nowT; lastNU.badge.textContent = ` ×${lastNU.n}`; botMsg.msg.hidden = true; botMsg.msg.classList.add('is-collapsed'); }
@@ -1974,6 +2010,7 @@ export async function mountPsys2(element, options = {}) {
   // the engine worker's events: model status, ORT counters, stage
   const ortMirror = { restarts: 0, stats: {}, paused: null, speed: 1, limits: null, lanes: {}, resume() { this.paused = null; engineClient?.call('ort-resume').catch(() => {}); }, restart: (lane, why) => engineClient.call('ort-restart', { lane, why }) };   // the real ORT client lives in the engine worker; this mirror is refreshed by its events
   function onEngineEvent(name, data) {
+    if(name==='tab-load-progress'){const record=tabLoads.get(data.tab);if(record?.timeline.snapshot().status==='loading')record.timeline.stage(data.stage);return;}
     if(name==='world-activity'){emitWorldActivity(data);return;}
     if (name === 'sop-reader-status') {
       if (data.state === 'loading') progress.start('model', 'Loading SOP-BERT');
@@ -2137,7 +2174,7 @@ export async function mountPsys2(element, options = {}) {
     h('button',{class:'p2-btn-text',type:'button',title:'Download the current worlds; editor work is not saved automatically',onclick:async()=>{try{await saveFile('psys2-work.json',JSON.stringify(await workFiles.snapshot(),null,2));}catch(error){failInstances(error);}}},'Save work'),
     h('button',{class:'p2-btn-text',type:'button',title:'Open a work file from this application version; no automatic conversion',onclick:()=>openInput.click()},'Open work'),exportWorld,openInput);
   const handle = {
-    engine, session, settings, trainingPairs, instanceStore, flushInstances, workFiles, send, stop: stopTurn, engineClient, longTasks, applyState, showTab: (id, via = 'card') => userTab(id, via), get busy() { return !!turn; }, get debug() { return dbg; }, worldActivity:{list:()=>worldActivity.slice(),subscribe:fn=>{worldActivityListeners.add(fn);return()=>worldActivityListeners.delete(fn);}}, isBusy, get veiled() { return veiled; },
+    engine, session, settings, trainingPairs, instanceStore, flushInstances, workFiles, send, stop: stopTurn, engineClient, longTasks, applyState, showTab: (id, via = 'card') => userTab(id, via), get busy() { return !!turn; }, get debug() { return dbg; }, tabLoading:{list:()=>[...tabLoads.values()].map(record=>({id:record.id,...record.timeline.snapshot(),worker:record.worker})),current:()=>tabLoads.get(view)?.timeline.snapshot()??null},worldActivity:{list:()=>worldActivity.slice(),subscribe:fn=>{worldActivityListeners.add(fn);return()=>worldActivityListeners.delete(fn);}}, isBusy, get veiled() { return veiled; },
     /** The queue of waiting messages (MIC2) and the turn state flags, in one place for other features (BUSY veil): `turnState()` says what is running and what waits. */
     queue: { list: () => queue.map((q) => ({ id: q.id, text: q.text, mode: q.mode })), drop: dropQueued, clear: clearQueue, get length() { return queue.length; } },
     turnState: () => ({ running: !!turn, queued: queue.length, speaking: !!mic.speaking, mic: micBtn.dataset.mic }),

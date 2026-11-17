@@ -24,7 +24,7 @@ export async function createKeyReaderPipeline({cutter,reader,getContext,cutterMo
   try{
    if(typeof text!=='string'||text.length>maxText*2)throw Error('invalid-source-text');const chars=Array.from(text);tick(chars.length);if(chars.length>maxText)throw Error('source-size');
    if(typeof cutter?.cut!=='function'||typeof reader?.read!=='function')throw Error('model-unavailable');
-   const context=copy(await getContext());closed(context,['area','context']);if(typeof context.area!=='string'||!context.area||!Object.hasOwn(context,'context'))throw Error('invalid-host-context');
+   const context=copy(await getContext(text));closed(context,['area','context']);if(typeof context.area!=='string'||!context.area||!Object.hasOwn(context,'context'))throw Error('invalid-host-context');
    const cut=copy(await cutter.cut(text));closed(cut,['source','spans','coverage','unresolved','model']);source(cut.source,text);if(!same(modelIdentity(cut.model),identities.cutter))throw Error('cutter-provenance-mismatch');status(cut,['cutter']);
    if(!Array.isArray(cut.spans)||cut.spans.length>maxRequests)throw Error('request-count-overflow');let previous=0;
    for(const span of cut.spans){tick();if(!Array.isArray(span)||span.length!==2||!span.every(Number.isSafeInteger)||span[0]<previous||span[0]<0||span[0]>=span[1]||span[1]>chars.length)throw Error('invalid-cut-span');previous=span[1];}

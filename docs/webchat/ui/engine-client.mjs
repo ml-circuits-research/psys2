@@ -14,6 +14,14 @@ const ABORT_GRACE_MS = 300;       // a turn that has not answered this long afte
 const MAX_BOOT_FAILURES = 3;      // consecutive failed starts, then the engine stays down (no endless restart loop)
 const MAX_RESTARTS_PER_TURN = 1;  // a turn is never re-sent by the client; the next message starts a worker if the last one died
 
+/** Wall-clock UI load stages. Measurements describe completed work, never simulated progress. */
+export function createLoadTimings({now=()=>performance.now(),onChange=()=>{}}={}){
+ const started=now(),stages=[];let stage=null,at=started,ended=null,status='loading',error=null;
+ const snapshot=()=>({status,stage,elapsedMs:(ended??now())-started,stages:stages.map(row=>({...row})),error});
+ const notify=()=>onChange(snapshot());
+ return {snapshot,stage(label){if(status!=='loading'||label===stage)return;const end=now();if(stage)stages.push({stage,ms:end-at});stage=label;at=end;notify();},finish(failure=null){if(status!=='loading')return snapshot();ended=now();if(stage)stages.push({stage,ms:ended-at});status=failure?'error':'ready';error=failure?String(failure.message??failure):null;notify();return snapshot();}};
+}
+
 export const badKeyOf = (text, tab) => `${String(text ?? '').toLowerCase().replace(/\s+/g, ' ').trim()}|${tab ?? ''}`;
 
 export function createEngineClient({ base, versions = {}, getSettings, getLanguage = () => undefined, getTab = () => null, onEvent = () => {}, browserCall = null, spawn = null, testHooks = false, limits = { watchdogMs: 8000 }, log = () => {} }) {

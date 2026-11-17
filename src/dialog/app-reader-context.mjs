@@ -18,10 +18,16 @@ export async function createAreaHost(area,{loader,knowledge,...options}={}){
 export function createAppReaderContext({getState,getPrevious=()=>null,getInstanceId=()=>globalThis.crypto.randomUUID(),onObservation=()=>{}}={}){
  if(typeof getState!=='function'||typeof getPrevious!=='function'||typeof onObservation!=='function')throw Error('invalid-app-reader-context');
  const hosts=new WeakMap();
- return async()=>{
+ return async(text='')=>{
   const state=getState(),tab=state?.['ui.shell']?.activeTab,area=NATIVE_AREAS[tab],native=area&&state[area.world];
   if(!area||!native||typeof native!=='object')throw Error('active-native-context-unavailable');
   let host=hosts.get(native);if(!host){host=await area.create({state:native,instanceId:getInstanceId(area.world)});hosts.set(native,host);}
-  const observation=host.observe(),result=observedReaderContext(area.area,observation,getPrevious());onObservation({area:area.area,observation});return result;
+  const observation=host.observe(),ids=new Set(observation.objects.map(object=>String(object.id))),focus=[];
+  const collect=value=>{if(typeof value==='string'&&ids.has(value))focus.push(value);else if(Array.isArray(value))value.forEach(collect);else if(value&&typeof value==='object'){
+   if(typeof value.id==='string'){const fields=Object.entries(value).filter(([key])=>key!=='id');if(fields.length)for(const object of observation.objects){const owner=object.id===value.id||object.in===value.id||object.parent===value.id;if(owner&&fields.every(([key,wanted])=>object.inputs.some(input=>input.key===key&&input.values.length===1&&(()=>{try{return JSON.parse(input.values[0])===wanted;}catch{return false;}})())))focus.push(String(object.id));}}
+   Object.values(value).forEach(collect);
+  }};
+  for(const path of area.historySelection??[]){let value=native;for(const key of path)value=value?.[key];collect(value);}
+  let contextSelection;const result=observedReaderContext(area.area,observation,getPrevious(),{compact:true,text,focus,onSummary:summary=>contextSelection=summary});onObservation({area:area.area,world:area.world,observation,contextSelection});return result;
  };
 }

@@ -1,5 +1,8 @@
 import{inspectCachedExecutionSource}from'./execution-world-inspection.mjs';
 import{instanceIdFor}from'./instance-identity.mjs';
+import{prepareNativeControlHost}from'./native-control-preparation.mjs';
+import{invokeObservedNativeTool}from'./native-tool-activity.mjs';
+import{describeNativeControl,verifyNativeControlEffect}from'./native-control-intent.mjs';
 import {nativeKindCandidates} from './native-binding-candidates.mjs';
 // Application composition of declared semantic identities and native capabilities; no text parsing.
 import {World,str} from '../vendor/sopworld/sopworld.mjs';
@@ -33,7 +36,7 @@ export async function executeDeclaredRequest(session,candidate,text,{bindings,vi
  if(target.selector.length)return null;
  if(!['make','change','place','remove'].includes(act)||act==='make'&&target.mode!=='new'||act!=='make'&&target.mode!=='existing')return null;
  const mappings=nativeKindCandidates(bindings).filter(r=>r.area===area.area&&r.canonical===target.kind&&r.nativeFamilyBinding);
- if(!mappings.length)return null;
+ if(!mappings.length)return act==='make'?reply('I understood the requested action and object, but could not find their declared tool binding. Nothing changed.',false,{reason:'native-binding-gap',reading:candidate,binding:{act,kind:target.kind,alternatives:[]}}):null;
  const nativeState=session.isession.state[area.world];if(!nativeState)return null;
  const host=await createAreaHost(area,{state:nativeState,instanceId:instanceIdFor(session,area.world),loader:session.engine?.loader,knowledge:session.engine?.knowledge}),before=host.observe(),operations=host.bindings();
  const familyOps=operations.filter(op=>mappings.some(m=>m.nativeFamilyBinding.operation===op.id));
@@ -54,14 +57,16 @@ export async function executeDeclaredRequest(session,candidate,text,{bindings,vi
   if(objects.length>1)notes.push('I used the most recent matching '+selected.kind+'.');
   operationsForAct=operationsForAct.filter(op=>op.on===selected.sourceType);
  }
- const candidates=[];
+ const candidates=[],bindingFailures=[];
  for(const operation of operationsForAct) {
   const explicitDefaults=mappings.find(m=>m.nativeFamilyBinding.operation===operation.id)?.nativeFamilyBinding.arguments??{};
   const args=structuredClone(explicitDefaults),applied=[],skipped=[],assumptions=[];
-  if(operation.params.kind) {if(kinds.length!==1)continue;args.kind=kinds[0];}
+  if(operation.params.kind) {if(kinds.length!==1){bindingFailures.push({operation:operation.id,reason:'native-kind-enum',requested:mappings.map(mapping=>mapping.lemma),accepted:operation.params.kind.enum??null});continue;}args.kind=kinds[0];}
+  const knowledgeInputs=operation.knowledgeInputs??[],lexicalKinds=[...new Set(mappings.map(mapping=>mapping.lemma))];
+  for(const input of knowledgeInputs)if(!Object.hasOwn(args,input.argument)&&lexicalKinds.length===1)args[input.argument]=lexicalKinds[0];
   if(selected){if(operation.params.ids)args.ids=[selected.id];else if(operation.params.id)args.id=selected.id;}
   if(act==='make'&&operation.params.id?.required)args.id=globalThis.crypto.randomUUID();
-  if(target.name&&operation.params.name)args.name=target.name;
+  if(target.name&&operation.params.name&&!knowledgeInputs.some(input=>input.argument==='name'))args.name=target.name;
   const orderedResults=[...projection.results].sort((a,b)=>{const av=a.wire.attrs['source.start']?.[0],bv=b.wire.attrs['source.start']?.[0];return av!==undefined&&bv!==undefined?Number(str(av))-Number(str(bv)):0;});
   for(const condition of orderedResults) {
    if(condition.operator!=='eq'||condition.polarity!=='positive'){skipped.push(condition);continue;}
@@ -92,21 +97,25 @@ export async function executeDeclaredRequest(session,candidate,text,{bindings,vi
   for(const rule of operation.defaultsFrom??[])if(rule.method==='ordinal-labels'&&operation.params[rule.parameter]?.type==='array'&&operation.params[rule.lengthOf]?.type==='array'&&(!args[rule.parameter]||args[rule.parameter].length===0)&&Array.isArray(args[rule.lengthOf])&&args[rule.lengthOf].length){args[rule.parameter]=args[rule.lengthOf].map((_,i)=>String(i+1));assumptions.push('I numbered the categories because no labels were supplied.');}
   const checked=validateNativeArguments(operation,args);
   if(checked.ok&&(act==='make'||act==='remove'||applied.length))candidates.push({operation,args:checked.args,applied,skipped,assumptions});
+  else bindingFailures.push({operation:operation.id,reason:checked.reason??'no-applicable-result',missing:Object.entries(operation.params).filter(([name,parameter])=>parameter.required&&!Object.hasOwn(args,name)&&!Object.hasOwn(parameter,'default')).map(([name])=>name)});
  }
  candidates.sort((a,b)=>b.applied.length-a.applied.length);
- const chosen=candidates[0];if(!chosen)return null;
+ const chosen=candidates[0];if(!chosen)return reply(`I understood that you want to ${act} a ${mappings[0].lemma}, but could not bind its required tool arguments. Nothing changed.`,false,{reason:'native-binding-gap',reading:candidate,binding:{act,kind:target.kind,alternatives:bindingFailures}});
  // A create instruction must not silently overwrite a populated singleton editor.
  if(chosen.operation.id==='document.write'&&(nativeState.title||nativeState.blocks?.length))return reply('The document already has content. I left it unchanged.',false,{reason:'overwrite-needs-stricter-admission'});
  if(chosen.operation.id==='calendar.meeting.add'&&(chosen.skipped.length||externalUnapplied.length))return reply('I understood a meeting, but could not apply its scheduling details. Nothing changed.',false,{reason:'unapplied-scheduling-details'});
- const receipt=host.invoke({invocation:globalThis.crypto.randomUUID(),expectedVersion:before.version,operation:chosen.operation.id,args:chosen.args});
+ const invocation=globalThis.crypto.randomUUID();let prepared;
+ try{prepared=await prepareNativeControlHost(session,{view,operation:chosen.operation.id,args:chosen.args,host,invocation});}catch(error){return reply(`I understood the request for ${mappings[0].lemma}, but could not load the knowledge required by its tool. Nothing changed.`,false,{reason:'native-knowledge-unavailable',reading:candidate,binding:{operation:chosen.operation.id,knowledgeInputs:chosen.operation.knowledgeInputs??[]},error:String(error?.message??error)});}
+ const observedBefore=prepared.observe(),intent=describeNativeControl({operation:chosen.operation,args:chosen.args,before:observedBefore});
+ const receipt=await invokeObservedNativeTool(session,{area,host:prepared,invocation,expectedVersion:observedBefore.version,operation:chosen.operation.id,args:chosen.args});
  if(receipt.status==='refused')return reply('I could not apply that action. Nothing changed.',false,{reason:receipt.reason,receipt});
- const after=host.observe(),created=after.objects.filter(o=>!before.objects.some(b=>b.id===o.id)),object=created[0]??selected;
+ const after=prepared.observe(),verification=verifyNativeControlEffect({intent,before:observedBefore,after,receipt}),created=after.objects.filter(o=>!before.objects.some(b=>b.id===o.id)),object=created[0]??selected;
  session.newEngineFocus={...session.newEngineFocus,[view]:object?.id??null};
  notes.push(...chosen.assumptions);unapplied.push(...externalUnapplied,...chosen.skipped.map(c=>`${c.concept} ${c.value??''}`));
  const kind=object?.kind??kinds[0]??mappings[0].lemma;
  const said=act==='make'?`Created a ${kind}.`:act==='remove'?`Removed the ${kind}.`:`Updated the ${kind}.`;
  if(unapplied.length)notes.push('I could not apply '+unapplied.join(', ')+'.');
  const message=[said,...notes].join(' ');
- return {...reply(message,true,{assessment:receipt.status,receipt,reading:candidate,uncertainty:notes,alternatives:candidates.map(c=>c.operation.id),partial:unapplied.length>0}),
+ return {...reply(message,true,{assessment:receipt.status,receipt,reading:candidate,controlIntent:intent.wires,effectVerification:verification,binding:{operation:chosen.operation.id,alternatives:bindingFailures},uncertainty:notes,alternatives:candidates.map(c=>c.operation.id),partial:unapplied.length>0}),
   state:{[area.world]:structuredClone(nativeState)},effects:receipt.status==='changed'?[{operation:chosen.operation.id}]:[]};
 }

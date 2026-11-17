@@ -18,6 +18,7 @@ export async function routeNewEngine(session,text,options={}){
   try{provenance=typeof provider.provenance==='function'?provider.provenance():null;proposal=await provider.propose(text);}
   catch{proposal=unavailable('model-proposal-failed');}
  }
+ const providerCandidates=Array.isArray(proposal?.candidates)?structuredClone(proposal.candidates):[];
  const context={area:options.view??session.isession.state['ui.shell']?.activeTab};
  let contextProjection=null,bindings=null,registry=null;
  try{bindings=provider?.bindings?.();registry=provider?.registry?.();contextProjection=await projectContextAction(proposal,session,{bindings,registry,view:context.area});if(contextProjection)proposal=contextProjection.proposal;else{const creation=await projectCreateAction(proposal,session,{bindings,registry,view:context.area});if(creation)proposal=creation;}}catch{}
@@ -50,5 +51,5 @@ export async function routeNewEngine(session,text,options={}){
  result??={text:message,parts:[{text:message,translate:false}],statuses:['unsupported'],answers:[],segments:[],state:{},effects:[],newEngine:true,trace:{legacy:false,engine:'new',reason:options.language&&options.language!=='en'?'language':'reading'}};
  return {...result,trace:{...result.trace,readerRouting:{primary:'sop-bert',selected:eligible?'sop-bert':null,reason,
   admission:{mode:decision.mode??null,uncertain:decision.uncertain??false,alternatives:decision.alternatives??[],scoreDefinition:decision.scoreDefinition,score:decision.score,proposalEligible:decision.eligible,assessment:decision.assessment},
-  interpretation:proposal?.interpretation??null,unresolved:proposal?.failures??[],rawReading:proposal?.raw?.requests??null,model:{provenance,coverage:proposal?.coverage??null,candidates:Array.isArray(proposal?.candidates)?proposal.candidates.length:0,eligible:!!eligible}}}};
+  interpretation:proposal?.interpretation??null,unresolved:proposal?.failures??[],proposalCandidates:providerCandidates,rawReading:proposal?.raw?.requests??null,model:{provenance,coverage:proposal?.coverage??null,candidates:Array.isArray(proposal?.candidates)?proposal.candidates.length:0,eligible:!!eligible}}}};
 }

@@ -1,4 +1,4 @@
-import {nativeKindCandidates} from './native-binding-candidates.mjs';
+import {nativeCreationCandidates} from './native-binding-candidates.mjs';
 // Compose a reversible creation from model-declared roles and actual native constructor declarations.
 import {serializeRequestGraph,editCost} from '../vendor/sopworld/sopworld.mjs';
 import {NATIVE_AREAS} from './app-reader-context.mjs';
@@ -11,7 +11,7 @@ export async function projectCreateAction(proposal,session,{bindings,registry,vi
  if(typeof r.trigger!=='string'||!evidence(['trigger'],r.trigger))return null;
  const native=session.isession.state[area.world];if(!native)return null;
  const host=await area.create({state:native,instanceId:'creation-'+globalThis.crypto.randomUUID()}),operations=host.bindings();
- const choices=nativeKindCandidates(bindings).filter(k=>k.area===area.area&&k.nativeFamilyBinding).map(k=>({mapping:k,operation:operations.find(o=>o.act==='make'&&o.id===k.nativeFamilyBinding.operation&&!o.requires?.length)})).filter(c=>c.operation&&(!c.operation.params.kind||c.operation.params.kind.enum?.includes(c.mapping.lemma)));
+ const choices=nativeCreationCandidates(bindings,operations,area.area);
  let lexical=r.target.kind,kindCondition=-1;
  if(lexical&&!evidence(['target','kind_span'],r.target.kind_span??lexical))return null;
  if(!lexical)for(const [i,c]of r.constraints.entries())if(kindConcepts.has(registry[area.area+'.'+c.key]?.concept)&&c.value===c.value_span&&evidence(['constraints',String(i),'value_span'],c.value)){lexical=c.value;kindCondition=i;break;}

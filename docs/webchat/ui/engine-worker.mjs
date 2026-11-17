@@ -26,6 +26,13 @@ const post = (m, t) => postMessage(m, t ?? []);
 const evt = (name, data) => post({ type: 'evt', name, data });
 const activityLog=[];let activitySequence=0;
 function worldActivity(nodeIds,phase,label,extra={}){const event={id:++activitySequence,nodeIds,phase,label,time:Date.now(),...extra};activityLog.push(event);if(activityLog.length>200)activityLog.shift();evt('world-activity',event);}
+// Only instrumented RPC boundaries are timed; these events do not infer inner reasoning.
+function loadProgress(message,operation){
+ const timings=[];let current=null,started=0;
+ const correlationId='rpc:'+message.id;
+ const close=error=>{if(!current)return;const ms=performance.now()-started;timings.push({stage:current.stage,ms});worldActivity(current.nodeIds,error?'error':'end',current.stage,{operation,correlationId,stage:current.stage,durationMs:ms,status:error?'failed':'completed',...(error?{error:String(error?.message??error)}:{})});current=null;};
+ return {stage(stage,nodeIds=['runtime:registry']){close();current={stage,nodeIds};started=performance.now();evt('tab-load-progress',{tab:message.tab??(operation==='worldsInspection'?'worlds':null),requestId:message.id,operation,correlationId,stage});worldActivity(nodeIds,'start',stage,{operation,correlationId,stage,status:'running'});},finish(error=null){close(error);return timings;}};
+}
 const knowledgeReadFiles=new Map();
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -168,7 +175,7 @@ async function init(m) {
     const src = createCachedSource({ source: createKnowledgeSource(settings.knowledgeUrl || KNOWLEDGE_URLS), caches: globalThis.caches, onCacheEvent: (e) => evt('knowledge-cache', e) });
     // the bundled subset (colours, number words, the drawings of the built-in kinds: generated from the catalog) answers for a catalog that cannot be reached; the catalog replaces it when it can
     const layered = createLayeredSource({ text: (p) => Promise.race([src.text(p).catch(() => null), new Promise((res) => setTimeout(() => res(null), knowledgeTimeoutMs(p) + 2000))]) });
-    knowledgeFacts = createFacts({source:{...layered,async text(path){worldActivity(['knowledge:catalog'],'start','Read '+path);try{const text=await layered.text(path);if(typeof text==='string')knowledgeReadFiles.set(path,text);worldActivity(['knowledge:catalog','knowledge-file:'+path],text==null?'unavailable':'end','Read '+path);return text;}catch(error){worldActivity(['knowledge:catalog'],'error','Read '+path,{error:String(error?.message??error)});throw error;}}}});
+    knowledgeFacts = createFacts({source:{...layered,async text(path){const started=performance.now(),activity={operation:'knowledge.read',stage:'knowledge',path};worldActivity(['knowledge:catalog'],'start','Read '+path,activity);try{const text=await layered.text(path);if(typeof text==='string')knowledgeReadFiles.set(path,text);worldActivity(['knowledge:catalog','knowledge-file:'+path],text==null?'unavailable':'end','Read '+path,{...activity,durationMs:performance.now()-started});return text;}catch(error){worldActivity(['knowledge:catalog'],'error','Read '+path,{...activity,durationMs:performance.now()-started,error:String(error?.message??error)});throw error;}}}});
     engine.setKnowledge(knowledgeFacts);
     engine.onNotice = (text) => evt('notice', text);   // "Looking up how a pineapple looks..." while a shard loads
   } catch (e) { console.warn('knowledge catalog not attached', e); }
@@ -189,9 +196,14 @@ async function installSopReader(imp){
     const response=await fetch(vurl('models/sop-bert/deployment.json'));if(!response.ok)throw Error('SOP-BERT deployment HTTP '+response.status);
     const deployment=await response.json();if(deployment.format!=='psys2.browser-reader-deployment/1')throw Error('unsupported-reader-deployment');
     const [{createBrowserReaderHost},{createAppReaderContext}]=await Promise.all([imp('lib/dialog/browser-reader-host.mjs'),imp('lib/dialog/app-reader-context.mjs')]);
-    const getContext=createAppReaderContext({getState:()=>session.isession.state,getPrevious:()=>readerPrevious,getInstanceId:world=>{session.nativeInstanceIds??={};return session.nativeInstanceIds[world]??=crypto.randomUUID();},onObservation:value=>{readerObservation=value;}});
-    const host=await createBrowserReaderHost({manifestURL:abs(deployment.manifestPath),manifestSha256:deployment.manifestSha256,tokenizerArtifact:deployment.tokenizerArtifact,bindingsArtifact:deployment.bindingsArtifact,tokenizerConfigArtifact:deployment.tokenizerConfigArtifact,runtimeIdentity:deployment.runtimeIdentity,getContext,resolveURL:rel=>abs(rel),recordDiagnostics:async diagnostic=>{readerDiagnostics.push(diagnostic);if(readerDiagnostics.length>64)readerDiagnostics.shift();}});
-    engine.requestReader={...host.provider,async propose(text){worldActivity(['component:reader'],'start','Read request');try{const result=await host.provider.propose(text);worldActivity(['component:reader'],'end','Reader proposal');return result;}catch(error){worldActivity(['component:reader'],'error','Reader failed',{error:String(error?.message??error)});throw error;}}};readerStatus={state:'ready',verified:host.verified,cache:host.browserHost.cache};
+    const getContext=createAppReaderContext({getState:()=>session.isession.state,getPrevious:()=>readerPrevious,getInstanceId:world=>{session.nativeInstanceIds??={};return session.nativeInstanceIds[world]??=crypto.randomUUID();},onObservation:value=>{readerObservation=value;if(value.contextSelection)worldActivity(['component:reader',...(value.world?['native:'+value.world]:[])],'stage','Select reader context',{operation:'reader.context.select',world:value.world,contextSelection:value.contextSelection});}});
+    const host=await createBrowserReaderHost({manifestURL:abs(deployment.manifestPath),manifestSha256:deployment.manifestSha256,tokenizerArtifact:deployment.tokenizerArtifact,bindingsArtifact:deployment.bindingsArtifact,tokenizerConfigArtifact:deployment.tokenizerConfigArtifact,runtimeIdentity:deployment.runtimeIdentity,getContext,resolveURL:rel=>abs(rel),recordDiagnostics:async diagnostic=>{readerDiagnostics.push(diagnostic);if(readerDiagnostics.length>64)readerDiagnostics.shift();const selection=diagnostic.result?.auxiliary?.contextSelection;if(selection)worldActivity(['component:reader'],'stage','Fit reader context to model budget',{operation:'reader.context.fit',contextSelection:selection});}});
+    engine.requestReader={...host.provider,async propose(text){
+      const correlationId='reader:'+crypto.randomUUID(),started=performance.now();
+      worldActivity(['component:reader'],'start','Read request',{operation:'reader.propose',correlationId,text});
+      try{const result=await host.provider.propose(text);worldActivity(['component:reader'],'end','Reader proposal',{operation:'reader.propose',correlationId,durationMs:performance.now()-started,coverage:result.coverage??null,failures:result.failures??[],proposals:(result.candidates??[]).map(candidate=>({request:candidate.request,wires:candidate.wires}))});return result;}
+      catch(error){worldActivity(['component:reader'],'error','Reader failed',{operation:'reader.propose',correlationId,durationMs:performance.now()-started,error:String(error?.message??error)});throw error;}
+    }};readerStatus={state:'ready',verified:host.verified,cache:host.browserHost.cache};
   }catch(error){
     const reason=String(error?.message??error);readerStatus={state:'unavailable',reason};
     engine.requestReader={propose:async()=>({candidates:[],coverage:{complete:false,graphProposal:false,executable:false},failures:[{reason:'model-load-failed',detail:reason}]})};
@@ -230,15 +242,20 @@ function sendOrt() {
 
 // ---------- LAZY LOADING (specs/06 "Lazy loading") ----------
 const worldLabel = (ids) => { const names = ids.map((id) => worldLoader.info(id)?.label).filter(Boolean); const pick = names.slice(-1)[0] ?? 'next'; return `Loading the ${pick} world${ids.length > 1 && names.length > 1 ? 's' : ''}…`; };
-const activeWorld=()=>{try{return mods.projectDomainForTab(projectWorld,session.state()['ui.shell']?.activeTab)?.world??null;}catch{return null;}};
+const activeWorld=()=>{
+ const started=performance.now();let tab=null;
+ try{tab=session.state()['ui.shell']?.activeTab??null;const world=mods.projectDomainForTab(projectWorld,tab)?.world??null;worldActivity(['project:application',...(world?['world:'+world]:[])],'stage','Resolve active capability domain',{operation:'project.domain.resolve',stage:'project.domain.resolve',tab,world,durationMs:performance.now()-started,status:world?'resolved':'unresolved'});return world;}
+ catch(error){worldActivity(['project:application'],'error','Resolve active capability domain',{operation:'project.domain.resolve',stage:'project.domain.resolve',tab,world:null,durationMs:performance.now()-started,status:'failed',error:String(error?.message??error)});return null;}
+};
 const loadedLog = [];   // what was loaded on demand: { ids, why, ms, bytes } (diagnostics and the on-demand report)
 /**
  * Adds `ids` (and what they import) to the running engine: fetches their files, replaces the world set (`engine.reload`), and gives the session its state and memory back, as a restart does.
  * Nothing happens when they are all loaded. A failed fetch changes nothing: the engine goes on with the worlds it has (a lazy fetch that fails never changes a reading).
  */
 let lockP = Promise.resolve();   // one load at a time (a page request and a turn can ask together)
-const ensureWorlds = (ids, why) => { const p = lockP.then(() => ensureRun(ids, why), () => ensureRun(ids, why)); lockP = p.catch(() => {}); return p; };
-async function ensureRun(ids, why) {
+const ensureWorlds = (ids, why,progress=()=>{}) => { const p = lockP.then(() => ensureRun(ids, why,progress), () => ensureRun(ids, why,progress)); lockP = p.catch(() => {}); return p; };
+async function ensureRun(ids, why,progress=()=>{}) {
+  progress('Read world dependencies');
   const want = worldLoader.closure([...ids].filter((id) => allowed(id) && worldLoader.info(id)));
   const missing = [...want].filter((id) => !loadedIds.has(id));
   if (!missing.length) {canonicalizeSessionStates();return [];}
@@ -246,11 +263,14 @@ async function ensureRun(ids, why) {
   evt('world-load', { id: stepId, op: 'start', label, why, ids: missing });
   worldActivity(missing.map(id=>'world:'+id),'start',label,{why});
   try {
+    progress('Fetch world bundles');
     try { await worldLoader.bundles(want); } catch (e) { evt('world-load', { id: stepId, op: 'fail', label, message: String(e?.message ?? e) }); return []; }
+    progress('Compile world schemas and methods');
     const next = [...loadedIds, ...missing];
     reloading++;
     try { await engine.reload(loaders.createBundleLoader(worldLoader.bundleOf(next, absModule))); } finally { reloading--; }
     // the session is read HERE, after the awaits and with none between this and the new session: a state the page set while the worlds were loading (a tab click, a setting) is in it, and is not lost
+    progress('Restore live world state');
     const st = coreStateOf(), meta = metaOf();
     const old = session, portable = [...snaps].map(([k, sn]) => { try { return [k, old.portableSnapshot(sn)]; } catch { return null; } }).filter(Boolean);   // the undo snapshots as plain data: they survive the reload
     for (const id of missing) loadedIds.add(id);
@@ -307,7 +327,7 @@ const handlers = {
       worldActivity(['component:reasoner'],'start','Session request');
       reply = await read();
       worldActivity(['component:reasoner'],'end','Session request completed');readerPrevious=m.text;
-      reply.trace={...reply.trace,readerHost:{state:readerStatus.state,reason:readerStatus.reason??null,diagnosticCount:readerDiagnostics.length,area:readerObservation?.area??null}};
+      reply.trace={...reply.trace,readerHost:{state:readerStatus.state,reason:readerStatus.reason??null,diagnosticCount:readerDiagnostics.length,area:readerObservation?.area??null,contextSelection:readerObservation?.contextSelection??null,modelContexts:readerDiagnostics.filter(diagnostic=>diagnostic.result?.auxiliary?.contextSelection).map(diagnostic=>diagnostic.result.auxiliary.contextSelection)}};
       annotateWires(reply);
       noteWorlds(reply);
       return { reply, before: loadedBefore(before, had), state: stateOf(), meta: metaOf(), usage: (translator.usage ?? []).map((u) => ({ ...u })), detection: (translator.detectUsage ?? []).map((u) => ({ ...u })),
@@ -336,20 +356,27 @@ const handlers = {
     const restored=await restoreNativeInstances(session,m.records);
     return {...restored,state:stateOf(),meta:metaOf()};
   },
-  async worldsInspection() {
+  async worldsInspection(m) {
+    const progress=loadProgress(m,'worldsInspection');try{progress.stage('Wait for active action');
     while(turnRunning())await sleep(20);
-    canonicalizeSessionStates();
+    progress.stage('Load inspection modules');canonicalizeSessionStates();
     const [{NATIVE_AREAS,createAreaHost},{observeNativeInstanceWorlds},{inspectWorldsRuntime}]=await Promise.all([import(vurl('lib/dialog/app-reader-context.mjs')),import(vurl('lib/dialog/instance-persistence.mjs')),import(vurl('lib/dialog/worlds-inspection.mjs'))]);
     const available=Object.entries(NATIVE_AREAS).filter(([,area])=>loadedIds.has(area.world)&&session.isession.state[area.world]);
+    progress.stage('Observe live instance facts');
     const instances=await observeNativeInstanceWorlds(session,{worlds:available.map(([,area])=>area.world)}),hosts=[];
+    progress.stage('Read native adapter capabilities');
     for(const [view,area]of available){const host=await createAreaHost(area,{state:session.isession.state[area.world],instanceId:session.nativeInstanceIds[area.world],loader:engine.loader,knowledge:engine.knowledge});hosts.push({view,world:area.world,operations:host.bindings(),observation:host.observe(),capabilities:host.capabilities?.()??null});}
     const {serialize,version,build,SCHEMA_TYPES,STAGES,TURN_STAGES}=await import(vurl('lib/vendor/sopworld/sopworld.mjs'));
     const instanceCaches=Object.entries(session.instanceWorlds??{}).map(([world,cache])=>({world,wireCount:cache.wires?.size??0,wires:serialize([...(cache.wires?.values?.()??[])])}));
+    progress.stage('Describe runtime packages');
     const baseGraph=inspectWorldsRuntime({index:worldLoader.index,bundle:worldLoader.bundleOf([...loadedIds],absModule),loaded:[...loadedIds],instances,hosts,knowledgeFiles:[...knowledgeReadFiles].map(([path,text])=>({path,text})),reader:readerStatus,nativeStates:session.isession.state,instanceCaches,sessionMeta:metaOf(),libraryInfo:{version,build,schemaTypes:[...SCHEMA_TYPES],stages:STAGES,turnStages:TURN_STAGES}});
     const {inspectExecutionWorlds}=await import(vurl('lib/dialog/execution-world-inspection.mjs'));
+    progress.stage('Read execution knowledge and episodes');
     const executionGraph=await inspectExecutionWorlds(session);
+    progress.stage('Build project world links');
     projectAreas=projectAreas.map(area=>({...area,schemaWorld:worldLoader.info(area.world)?.schemaWorld??area.schemaWorld}));projectWorld=mods.createProjectWorld({areas:projectAreas,instances});const projectGraph=mods.inspectProjectWorld(projectWorld);
-    return {...baseGraph,centralNodeId:'project:application',areas:projectAreas,nodes:[...baseGraph.nodes,...executionGraph.nodes,...projectGraph.nodes],edges:[...baseGraph.edges,...executionGraph.edges,...projectGraph.edges,...['new-engine','declared-execution'].map(name=>({from:'component:reasoner',to:'execution:module:'+name,label:'dispatches to'}))],activity:activityLog.slice()};
+    return {...baseGraph,centralNodeId:'project:application',areas:projectAreas,nodes:[...baseGraph.nodes,...executionGraph.nodes,...projectGraph.nodes],edges:[...baseGraph.edges,...executionGraph.edges,...projectGraph.edges,...['new-engine','declared-execution'].map(name=>({from:'component:reasoner',to:'execution:module:'+name,label:'dispatches to'}))],activity:activityLog.slice(),timings:progress.finish()};
+    }catch(error){progress.finish(error);throw error;}
   },
   async instanceInspection(m) {
     while(turnRunning())await sleep(20);
@@ -444,7 +471,7 @@ const handlers = {
   },
   async warm() { return null; },
   /** The page needs a world now (its tab opens, the user names it): loads it and answers which worlds are loaded. */
-  async ensure(m) { while (turnRunning()) await sleep(20); const added = await ensureWorlds(m.worlds ?? [], m.why ?? 'tab'); return { added, loaded: [...loadedIds], state: stateOf(), log: loadedLog.slice(-20) }; },
+  async ensure(m) {const progress=loadProgress(m,'ensure');try{progress.stage('Wait for active action');while(turnRunning())await sleep(20);progress.stage('Wait for world loader');const added=await ensureWorlds(m.worlds??[],m.why??'tab',stage=>progress.stage(stage));progress.stage('Project editor state');const state=stateOf();return {added,loaded:[...loadedIds],state,log:loadedLog.slice(-20),timings:progress.finish()};}catch(error){progress.finish(error);throw error;}},
   async loaded() { return { loaded: [...loadedIds], log: loadedLog.slice(), loader: worldLoader.stats }; },
   /** Page start-up step and its retries: reads the catalog's index (not the vocabulary: that is read by buckets, when a message needs it); { ok } is false while the catalog cannot be reached (the page asks again; `refresh` skips the backoff). */
   async catalog(m) {

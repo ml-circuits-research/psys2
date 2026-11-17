@@ -22,6 +22,27 @@ export function keyReaderContextJSON(value,depth=0){
  const compare=(a,b)=>{const x=Array.from(a),y=Array.from(b);for(let i=0;i<Math.min(x.length,y.length);i++){const d=x[i].codePointAt(0)-y[i].codePointAt(0);if(d)return d;}return x.length-y.length;};
  return '{'+Object.keys(value).sort(compare).map(k=>keyReaderContextJSON(k,depth+1)+': '+keyReaderContextJSON(value[k],depth+1)).join(', ')+'}';
 }
+/** Fit context to the actual artifact budget; never shorten the utterance. */
+export async function fitKeyReaderContext(tokenizer,text,area,context,maxLength){
+ const copy=value=>copyHostData(value,{maxBytes:4000000});
+ const measure=async value=>{const json=keyReaderContextJSON({area,context:value}),full=await tokenizer([text],{text_pair:[json],padding:false,truncation:false});return {context:value,json,full,tokens:tokenRow(full.attention_mask).reduce((sum,value)=>sum+value,0)};};
+ const original=await measure(context),summary={profile:'utterance-first-context/1',originalTokens:original.tokens,maxLength,originalExisting:Array.isArray(context?.existing)?context.existing.length:0,includedExisting:Array.isArray(context?.existing)?context.existing.length:0,omittedNames:[],omittedPrevious:false};
+ if(original.tokens<=maxLength)return {...original,summary:{...summary,fittedTokens:original.tokens}};
+ if(!object(context)||!Array.isArray(context.existing))return {...original,summary:{...summary,fittedTokens:original.tokens}};
+ const base={...copy(context),existing:[],...(Object.hasOwn(context,'previous')?{previous:null}:{})},empty=await measure(base);
+ if(empty.tokens>maxLength)return {...empty,summary:{...summary,includedExisting:0,omittedPrevious:context.previous!==null&&context.previous!==undefined,fittedTokens:empty.tokens}};
+ const rows=[];
+ for(const [index,item]of context.existing.entries()){
+  let row=copy(item);
+  // Keep the entity's declared kind when a long display label alone exhausts context.
+  if(typeof row.name==='string'&&row.name.length>maxLength){const single=await measure({...base,existing:[row]});if(single.tokens>maxLength){delete row.name;summary.omittedNames.push(index);}}
+  rows.push(row);
+ }
+ let low=0,high=rows.length,best=empty;
+ while(low<=high){const count=Math.floor((low+high)/2),candidate=await measure({...base,existing:rows.slice(0,count)});if(candidate.tokens<=maxLength){best=candidate;low=count+1;}else high=count-1;}
+ if(context.previous!==null&&context.previous!==undefined){const previous=await measure({...best.context,previous:context.previous});if(previous.tokens<=maxLength)best=previous;else summary.omittedPrevious=true;}
+ return {...best,summary:{...summary,includedExisting:best.context.existing.length,fittedTokens:best.tokens}};
+}
 function choice(values){let max=-Infinity,index=-1,tied=false;for(let i=0;i<values.length;i++){const v=values[i];if(!Number.isFinite(v))throw Error('nonfinite-logit');if(v>max){max=v;index=i;tied=false;}else if(v===max)tied=true;}return tied||index<0?null:index;}
 function setPath(row,path,value){const parts=path.split('.');let at=row;for(const part of parts.slice(0,-1)){if(!Object.hasOwn(at,part))at[part]={};if(!object(at[part]))throw Error('conflicting-raw-route');at=at[part];}at[parts.at(-1)]=value;}
 function support(config){return config.keys.map(key=>({key,presence:config.registry[key].role==='derived'?'untrained':'learned-uncalibrated',value:config.registry[key].role==='derived'?'untrained':config.registry[key].role==='metadata'&&!Object.hasOwn(config.banks,key)?'unsupported':Object.hasOwn(config.banks,key)?'declared-class':'source-copy-normalization-unresolved'}));}
@@ -57,8 +78,8 @@ export async function createKeyReaderInference({manifest,tokenizer,encoder,heads
   if(Object.keys(map).length!==keys.length||keys.some(k=>!Object.hasOwn(map,k)||!safePath(map[k])))throw Error('incomplete-raw-route-map');
   const paths=Object.values(map);if(new Set(paths).size!==paths.length||paths.some(p=>paths.some(q=>p!==q&&p.startsWith(q+'.'))))throw Error('conflicting-raw-route-map');
  }
- const decoderVersion=3,literalProofContract='sop.key-literal-proof/1';
- const composite=await digest(JSON.stringify({decoderVersion,literalProofContract,config:m.configSha256,checkpoint:m.checkpointSha256,encoder:m.encoderSha256,heads:m.headsSha256,tokenizer:m.tokenizerSha256,preparer:m.preparerSha256,trainer:m.trainerSha256,codec:m.codecSha256,dtype:m.dtype,weightRepresentation:m.weightRepresentation,rawRoutes:m.rawRoutes}));
+ const decoderVersion=4,literalProofContract='sop.key-literal-proof/1',contextPolicy='utterance-first-context/1';
+ const composite=await digest(JSON.stringify({decoderVersion,literalProofContract,contextPolicy,config:m.configSha256,checkpoint:m.checkpointSha256,encoder:m.encoderSha256,heads:m.headsSha256,tokenizer:m.tokenizerSha256,preparer:m.preparerSha256,trainer:m.trainerSha256,codec:m.codecSha256,dtype:m.dtype,weightRepresentation:m.weightRepresentation,rawRoutes:m.rawRoutes}));
  const model={sha256:composite,tokenizerSha256:m.tokenizerSha256,codecSha256:m.codecSha256,decoderVersion};
  const adapter=await createKeyReaderPacketAdapter({configJSON,configSha256:m.configSha256,model});
  const banks=[],bankMap=new Map();let width=0;
@@ -73,8 +94,8 @@ export async function createKeyReaderInference({manifest,tokenizer,encoder,heads
   const issue=(reason,key=null)=>raw.unresolved.push({reason,...(key?{key}:{})});
   try{
    if(!scalarString(text)||!text||Array.from(text).length>maxText||typeof area!=='string'||!area)throw Error('invalid-source-input');
-   const chars=Array.from(text),contextJSON=keyReaderContextJSON(copyHostData({area,context},{maxBytes:maxContextBytes})),pair={text_pair:[contextJSON]};
-   const full=await tokenizer([text],{...pair,padding:false,truncation:false}),encoded=await tokenizer([text],{...pair,padding:'max_length',truncation:true,max_length:config.maxLength});
+   const chars=Array.from(text),fitted=await fitKeyReaderContext(tokenizer,text,area,copyHostData(context,{maxBytes:maxContextBytes}),config.maxLength),contextJSON=fitted.json,pair={text_pair:[contextJSON]};auxiliary.contextSelection=fitted.summary;
+   const full=fitted.full,encoded=await tokenizer([text],{...pair,padding:'max_length',truncation:true,max_length:config.maxLength});
    const ids=tokenRow(encoded.input_ids),mask=tokenRow(encoded.attention_mask),fullIds=tokenRow(full.input_ids),fullMask=tokenRow(full.attention_mask),length=ids.length;
    if(length!==config.maxLength||mask.length!==length||fullMask.length!==fullIds.length||[...mask,...fullMask].some(n=>n!==0&&n!==1))throw Error('invalid-tokenizer-shape');
    raw.coverage.truncated=fullMask.reduce((a,b)=>a+b,0)>mask.reduce((a,b)=>a+b,0);if(raw.coverage.truncated)throw Error('source-or-context-truncated');

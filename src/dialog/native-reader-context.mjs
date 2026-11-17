@@ -10,7 +10,7 @@ const labels={
 };
 /** Caller supplies actual native observation, actual selected area and sent history.
  * Expected request annotations are not part of this API. */
-export function observedReaderContext(area,observation,previous=null){
+export function observedReaderContext(area,observation,previous=null,options={}){
  if(typeof area!=='string'||!area||!(previous===null||typeof previous==='string'))throw Error('invalid-reader-context-input');
  const o=copyHostData(observation,{maxBytes:1000000});
  if(!o||o.complete!==true||typeof o.scope!=='string'||typeof o.instanceId!=='string'||typeof o.version!=='string'||!Array.isArray(o.objects)||o.objects.length>1000)throw Error('incomplete-native-context');
@@ -23,5 +23,21 @@ export function observedReaderContext(area,observation,previous=null){
   if(name!==null&&typeof name!=='string')throw Error('invalid-native-display-name');
   existing.push({kind:object.kind,...(name!==null?{name}:{})});
  }
- return {area,context:{existing,previous}};
+ if(!options.compact)return {area,context:{existing,previous}};
+ const compact=hierarchicalReaderContext(o,existing,{text:options.text,focus:options.focus??[]});options.onSummary?.(compact.summary);return {area,context:{existing:compact.existing,previous}};
+}
+
+/** A ranked model view of actual observations; the full observation remains authoritative. */
+export function hierarchicalReaderContext(observation,existing,{text='',focus=[]}={}){
+ const objects=observation.objects,ids=new Set(objects.map(object=>String(object.id))),parents=new Map(),focused=new Set(focus.map(String));
+ const own=(child,parent)=>{if(ids.has(String(child))&&ids.has(String(parent))&&String(child)!==String(parent))parents.set(String(child),String(parent));};
+ for(const object of objects){for(const key of ['in','parent'])if(object[key]!==undefined)own(object.id,object[key]);for(const child of [...(object.members??[]),...(object.relations?.members??[])])own(child,object.id);}
+ const contains=(value)=>{if(typeof text!=='string'||typeof value!=='string'||!value)return false;const source=Array.from(text.toLowerCase()),label=Array.from(value.toLowerCase()),word=char=>char!==undefined&&/[\p{L}\p{N}_]/u.test(char);for(let at=0;at+label.length<=source.length;at++)if(label.every((char,index)=>source[at+index]===char)&&!word(source[at-1])&&!word(source[at+label.length]))return true;return false;};
+ const rows=objects.map((object,index)=>{
+  let row=existing[index];if(!row.name){const label=(object.inputs??[]).find(input=>['label','name'].includes(input.key)&&input.values?.length===1);const value=label?str(label.values[0]):object.role;if(typeof value==='string'&&value)row={...row,name:value};}
+  const mentioned=contains(row.name)||contains(object.role)||contains(row.kind),selected=focused.has(String(object.id))||(object.inputs??[]).some(input=>input.key==='selected'&&input.values?.[0]==='true'),root=!parents.has(String(object.id));
+  return {object,index,row,mentioned,selected,root};
+ }).filter(row=>row.root||row.mentioned||row.selected);
+ rows.sort((a,b)=>Number(b.mentioned)-Number(a.mentioned)||Number(b.selected)-Number(a.selected)||Number(b.root)-Number(a.root)||b.index-a.index);
+ return {existing:rows.map(value=>value.row),summary:{profile:'hierarchical-native-context/1',observed:objects.length,included:rows.length,omittedDescendants:objects.length-rows.length,rankedIds:rows.map(value=>value.object.id),policy:'Explicit labels and selection, then roots and recency; full observation retained.'}};
 }

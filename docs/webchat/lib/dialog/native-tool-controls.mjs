@@ -1,10 +1,10 @@
-import{instanceIdFor}from'./instance-identity.mjs?v=37c0536b83';
+import{prepareNativeControlHost}from'./native-control-preparation.mjs?v=c5981d312b';
+import{invokeObservedNativeTool}from'./native-tool-activity.mjs?v=644ec5af08';
 // Typed UI gestures use the same declared native tools and undo history as model requests.
-import {NATIVE_AREAS,createAreaHost} from './app-reader-context.mjs?v=b8fb242112';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=a83ed42db4';
 import {describeNativeControl,verifyNativeControlEffect} from './native-control-intent.mjs?v=15a2913b39';
 import {readNativeIntent} from './native-intent-reader.mjs?v=98f8dbde1e';
-import {copyHostData} from '../../worlds/native-tool-host.mjs?v=463e762442';
-function activity(session,area,operation,phase,extra={}){try{session.engine?.onWorldActivity?.({nodeIds:['interpreter:'+area.world,'instance:'+area.world,'native:'+area.world],phase,label:operation,world:area.world,operation,...extra});}catch{/* Inspection must never change execution. */}}
+
 // Focus navigation is declared by each host; it does not invalidate content undo.
 const areaForWorld=world=>Object.values(NATIVE_AREAS).find(area=>area.world===world);
 function journalContent(world,state){
@@ -37,18 +37,15 @@ export async function invokeNativeControl(session,{view,operation,args={}}={},de
  let state=session.isession.state[area.world];
  if(!state)throw Error('native-state-unavailable');
  if(area.canonicalizeState)state=session.isession.state[area.world]=area.canonicalizeState(state);
- const before=structuredClone(state);let host=await createAreaHost(area,{state,instanceId:instanceIdFor(session,area.world),loader:session.engine?.loader,knowledge:session.engine?.knowledge});
- const needs=host.bindings().find(op=>op.id===operation)?.knowledgeInputs??[];
- for(const input of needs){if(typeof session.engine?.knowledge?.[input.load]!=='function')throw Error('knowledge-service-unavailable');await session.engine.knowledge[input.load](args[input.argument]);}
- if(needs.length)host=await createAreaHost(area,{state,instanceId:instanceIdFor(session,area.world),loader:session.engine?.loader,knowledge:session.engine?.knowledge});
+ const invocation=globalThis.crypto.randomUUID();
+ const before=structuredClone(state),host=await prepareNativeControlHost(session,{view,operation,args,invocation});
  const observation=host.observe();
  const declaration=host.bindings().find(op=>op.id===operation);if(!declaration)throw Error('undeclared-native-control');
  if(['undo','redo'].includes(declaration.act))return invokeNativeControl(session,{view,operation:declaration.act,args:{}},depth+1);
  const intent=describeNativeControl({operation:declaration,args,before:observation});
  const interpreted=readNativeIntent(intent.wires,{operation:declaration});
  if(interpreted.operation!==operation||JSON.stringify(interpreted.args)!==JSON.stringify(intent.expected.args))throw Error('native-intent-roundtrip');
- activity(session,area,operation,'start');
- let receipt;try{receipt=await host.invoke({invocation:globalThis.crypto.randomUUID(),expectedVersion:observation.version,operation:interpreted.operation,args:copyHostData(interpreted.args)});activity(session,area,operation,'end',{status:receipt.status});}catch(error){activity(session,area,operation,'error',{error:String(error?.message??error)});throw error;}
+ const receipt=await invokeObservedNativeTool(session,{area,host,invocation,expectedVersion:observation.version,operation:interpreted.operation,args:interpreted.args});
  const changed=JSON.stringify(before)!==JSON.stringify(state),ok=['changed','unchanged','supported'].includes(receipt.status);
  if(!ok&&changed){session.isession.state[area.world]=before;throw Error('native-refusal-mutated-state');}
  if(changed&&!['ask','pick'].includes(declaration.act)){

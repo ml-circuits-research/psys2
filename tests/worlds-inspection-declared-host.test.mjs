@@ -2,8 +2,9 @@ import test from'node:test';import assert from'node:assert/strict';
 import{inspectWorldsRuntime}from'../src/dialog/worlds-inspection.mjs';
 test('architecture inspector exposes exact held files, actual state structures and labeled declarations without claiming reasoning',()=>{
  const state={objects:[{id:'a',x:5}],history:[{objects:[]}],future:[],selected:'a'},schema='@t core.type name=novel.item',archive='@a novel.item x=5';
- const result=inspectWorldsRuntime({index:{worlds:{novel:{imports:['shared'],reads:[],compose:[]},shared:{imports:[]}}},bundle:{worlds:{novel:{files:{'legend.sop':schema,'world.sop':'@w core.world'}}}},loaded:['novel'],nativeStates:{novel:state},instances:[{world:'novel',instanceId:'actual',revision:2,wires:archive}],instanceCaches:[{world:'novel',wireCount:1,wires:archive}],hosts:[{world:'novel',view:'editor',operations:[{id:'novel.add'}],observation:{objects:state.objects}}],knowledgeFiles:[{path:'shards/a.sop',text:'@k k.item n=2'}],reader:{state:'ready'},sessionMeta:{memory:{newEngineUndo:[{operation:'actual'}]}}});
+ const result=inspectWorldsRuntime({index:{worlds:{novel:{imports:['shared'],reads:[],compose:[]},shared:{imports:[]}}},bundle:{worlds:{novel:{files:{'legend.sop':schema,'world.sop':'@w core.world'}}}},loaded:['novel'],nativeStates:{novel:state},instances:[{world:'novel',instanceId:'actual',revision:2,wires:archive}],instanceCaches:[{world:'novel',wireCount:1,wires:archive}],hosts:[{world:'novel',view:'editor',operations:[{id:'novel.add'}],observation:{objects:state.objects}}],knowledgeFiles:[{path:'shards/a.sop',text:'@k k.item n=2'}],reader:{state:'ready',cache:{hits:7,networkBytes:0}},sessionMeta:{memory:{newEngineUndo:[{operation:'actual'}]}}});
  const byId=new Map(result.nodes.map(n=>[n.id,n]));
+ assert.ok(!result.nodes.some(n=>n.id.startsWith('cache:')));assert.equal(byId.get('component:reader').details.cache.hits,7);assert.match(byId.get('component:reader').help.purpose,/candidate request graphs/);assert.equal(byId.get('instance:novel').role,'World instance');
  assert.equal(byId.get('schema:novel:legend.sop').wires,schema);assert.equal(byId.get('instance:novel').wires,archive);assert.equal(byId.get('instance:novel').details.cachedWorld.wires,archive);
  assert.equal(byId.get('native:novel').details,state);assert.deepEqual(byId.get('structure:novel:history').details.value,state.history);
  assert.equal(byId.get('world:shared').details.loaded,false);assert.equal(byId.get('world:shared').wires,'');
@@ -18,7 +19,7 @@ import{initialDrawingState}from'../worlds/art.draw/declared-host.mjs';
 test('native execution emits actual host invocation boundaries and observer exceptions cannot alter effects',async()=>{
  const events=[],session={isession:{state:{'art.draw':initialDrawingState()}},engine:{onWorldActivity:event=>events.push(event)}};
  const result=await invokeNativeControl(session,{view:'draw',operation:'drawing.ids.show',args:{mode:'always'}});
- assert.equal(result.ok,true);assert.deepEqual(events.map(e=>e.phase),['start','end']);assert.equal(events[1].status,'changed');assert.equal(events[0].operation,'drawing.ids.show');assert.ok(events[0].nodeIds.includes('interpreter:art.draw'));
+ assert.equal(result.ok,true);assert.deepEqual(events.map(e=>e.phase),['start','end']);assert.equal(events[0].invocation,events[1].invocation);assert.equal(events[0].args.mode,'always');assert.equal(events[0].args.duration,4000);assert.ok(events[1].durationMs>=0);assert.equal(events[1].result.status,'changed');assert.equal(events[1].status,'changed');assert.equal(events[0].operation,'drawing.ids.show');assert.ok(events[0].nodeIds.includes('interpreter:art.draw'));
  session.engine.onWorldActivity=()=>{throw Error('broken observer');};
  assert.equal((await invokeNativeControl(session,{view:'draw',operation:'drawing.ids.show',args:{mode:'off'}})).ok,true);assert.equal(session.isession.state['art.draw'].idDisplay.mode,'off');
 });
