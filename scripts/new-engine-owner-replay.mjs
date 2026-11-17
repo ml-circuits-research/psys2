@@ -6,11 +6,13 @@ import { routeNewEngine as runNewEngine } from '../src/dialog/reader-routing.mjs
 import { initialState } from '../worlds/art.draw/board.mjs';
 import {createDrawingHost} from '../worlds/art.draw/declared-host.mjs';
 import {loadActualReplayReader} from './lib/actual-reader-provider.mjs';
+import {summarizeReaderStages,rankLeafReasons} from './lib/reader-stage-counts.mjs';
 const args=process.argv.slice(2),specIndex=args.indexOf('--reader-spec'),outIndex=args.indexOf('--output-prefix'),browserMode=args.includes('--browser-route');
 if(browserMode&&specIndex>=0)throw Error('one-reader-runtime-only');
 if((specIndex>=0||browserMode)&&outIndex<0)throw Error('actual-reader-requires-separate-output-prefix');
 const actual=specIndex<0?null:await loadActualReplayReader(JSON.parse(readFileSync(args[specIndex+1],'utf8'))),output=outIndex<0?'training/results/new-engine-owner-english':args[outIndex+1],histories=new Map(),hosts=new Map();
 const browser=browserMode?await (await import('./lib/browser-reader-route.mjs')).openBrowserReaderRoute():null;
+const config=actual?JSON.parse(JSON.parse(readFileSync(JSON.parse(readFileSync(args[specIndex+1])).artifactRoot+'/manifest.json')).configJSON):null;
 const pin = '2ba0259603ed5155b57324fca7c27fc249ba2a0a';
 const path = 'compat/psys2/reader/development/rows.jsonl';
 const raw = execFileSync('git', ['-C', '../soplang-words-lib', 'show', `${pin}:${path}`], { encoding: 'utf8', maxBuffer: 4_000_000 });
@@ -32,12 +34,13 @@ for (const row of input) {
   const refused = reply.statuses.every(status => status === 'unsupported');
   // Without an independently reviewed state-intent check, success is never promoted to right.
   const verdict = refused && unchanged && reply.effects.length === 0 && reply.text.trim() ? 'honest' : 'needs-review';
-  rows.push({ readerMeasurement:browser?{browser:true,readerHost:measured.reply?.trace?.readerHost??null}:measured?.measurement, readerRouting: reply.trace.readerRouting, classes: Array.isArray(row.classes) && row.classes.length ? row.classes : ['unclassified'], classificationStatus: Array.isArray(row.classes) && row.classes.length ? 'source-declared' : 'pending-reviewed-intent-tags', id: row.id, text: row.text, session: key, tab, area: row.area, retired: retired.has(tab), verdict,
+  rows.push({ ...(actual?{stages:summarizeReaderStages(measured?.measurement,config)}:{}),readerMeasurement:browser?{browser:true,readerHost:measured.reply?.trace?.readerHost??null}:measured?.measurement, readerRouting: reply.trace.readerRouting, classes: Array.isArray(row.classes) && row.classes.length ? row.classes : ['unclassified'], classificationStatus: Array.isArray(row.classes) && row.classes.length ? 'source-declared' : 'pending-reviewed-intent-tags', id: row.id, text: row.text, session: key, tab, area: row.area, retired: retired.has(tab), verdict,
     reason: reply.trace.reason ?? null, reply: reply.text, unchanged, legacy: reply.trace.legacy,
     source: { ...row.source, originalText: undefined }, contextualSetupReplayed: false });
 }
 const summary = Object.fromEntries(['right', 'partly', 'honest', 'wrong', 'needs-review'].map(verdict => [verdict, rows.filter(row => row.verdict === verdict).length]));
-const result = { reader:browser?.info??actual?.verified, source: { libraryCommit: pin, path, sha256: createHash('sha256').update(raw).digest('hex') },
+const stageSummary=actual?{cutterComplete:rows.filter(r=>r.stages?.cutter.complete).length,rawComplete:rows.filter(r=>r.stages?.raw.complete).length,bound:rows.filter(r=>r.stages?.pipeline.nonemptyGraph).length,executed:rows.filter(r=>r.readerRouting?.selected==='sop-bert').length,reasons:rankLeafReasons(rows)}:null;
+const result = { stageSummary,reader:browser?.info??actual?.verified, source: { libraryCommit: pin, path, sha256: createHash('sha256').update(raw).digest('hex') },
   scope: '205 reviewed English development rows; sessions replay in recorded order from empty native Drawing state. Historical external UI actions and hand-gloss setup commands are not reconstructed. This measures truthful refusal and observed effects, not semantic success against provisional labels.',
   classCounts: Object.fromEntries([...new Set(rows.flatMap(row => row.classes))].sort().map(name => [name, rows.filter(row => row.classes.includes(name)).length])),
   summary, retired: rows.filter(row => row.retired).length, rows };

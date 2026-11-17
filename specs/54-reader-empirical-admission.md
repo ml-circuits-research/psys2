@@ -24,7 +24,7 @@ The host supplies `session.engine.requestReaderAdmission = {world, reference:{ow
 | backendSha256 | Actual runtime/backend/quantization profile |
 | contextSerializationSha256 | Actual context input schema/serialization/offset protocol |
 
-These hashes must be loader-verified host declarations. That actual artifact loader is not installed yet, so no runtime identity or production report is currently admitted. This adapter does not prove file authenticity from a caller-provided string or infer backend parity. If the provider already declares a binding hash it must match the runtime identity. Model, runtime, binding, context, backend or execution behavior changes require new identity and measurement.
+These hashes must be loader-verified host declarations. The verified artifact loader and browser route are installed; an approved real calibration report is still required by this version of the routing policy. This adapter does not prove file authenticity from a caller-provided string or infer backend parity. If the provider already declares a binding hash it must match the runtime identity. Model, runtime, binding, context, backend or execution behavior changes require new identity and measurement.
 
 `readerCalibrationScope(area)` produces a canonical string containing protocol `psys2.reader-area/1` and the current runtime area. The area is read through the same host options/live tab used by execution. No expected annotation or guessed functional-class tag is used to choose scope. Narrower class admission needs a separately defined runtime-derived classifier and new protocol.
 
@@ -35,3 +35,11 @@ C1 calls the library's `retainSelectiveCalibration` with this identity/scope, an
 Runtime calls only `assessSelectiveCalibration` against the retained owner/revision and actual score/eligibility. Missing evidence, insufficient support, changed identities/scope, failed risk evaluation or forged retained summary refuse without effects. The trace retains score definition, eligibility and the library's measured admission result. Native execution can still refuse a statistically admitted graph for unsupported semantics, stale/ambiguous targets or unverified effects. The model's graph confidence stays null; cohort precision is never copied into it.
 
 Tests use explicitly synthetic C1 labels to exercise the admission mechanism and an actual native observation/effect, not to claim real-model correctness or ship a calibration report. Real frozen predictions, independent semantic/effect labels and deployment backend parity remain necessary before any production model can be admitted.
+
+## Actual CAL measurement
+
+`scripts/calibrate-reader.mjs READER_SPEC CAL_CORPUS OUTPUT_PREFIX [COMPARISON_LIBRARY]` measures full calibration messages using the installed model/bindings, the actual Node backend, native context seeding and the same proposal score. Teacher annotations enter only after inference returns. Messages excluded by native setup remain in the denominator. Fit/evaluation assignment is fixed from source text/context before labels; repeated source identities are refused by the retained calibration API.
+
+The comparator is the published library's strict graph comparison, loaded by C1 independently of the application's vendored runtime. Both agreement and difference are diagnostic: neither supplies an independent intent/effect correctness label. An eligible proposal with unknown correctness stays eligible and blocks approval; it cannot be hidden among abstentions. Empty eligible cohorts have no approved threshold. The explicit baseline policy requires two accepted fit and two accepted evaluation sources with zero observed error; it does not express a confidence guarantee. This command never installs admission, and its Node backend identity cannot authorize browser admission.
+
+The functional and owner replay commands now collect stages from their own inference diagnostics. A separate identical inference pass is unnecessary for cutter/raw/bound/executed counts. Owner rows without reviewed functional-class annotations remain unclassified rather than receiving keyword-derived intent labels.
