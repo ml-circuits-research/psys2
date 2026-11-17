@@ -4827,3 +4827,23 @@ parity and emoji scalar ranges. Synthetic callbacks are explicitly fixture
 artifacts and remain incomplete. No actual ONNX weights/session, model files,
 GPU, source training/data mutation or provider activation. Knowledge/PSys
 confirmed exact bundle fields and frozen codec/config identities.
+
+## 2026-11-17 — Verified neural provider byte assembly
+
+Added only NEWverified-reader-provider.mjs+tests/spec. Locally verifies exact
+manifest/config strings,3graph bytes, external tokenizer JSON and bindings hash
+before constructing tokenizer/sessions. Builds actual injected sessions and
+published cutter/key/offset/pipeline computation; no fake graph/model fallback.
+External host implementation attestation is explicit, never derived merely
+from caller hashes. No router/admission/report/score installation.
+
+Root review fixes included: per-descriptor+remaining-total copy bounds before
+allocation, and release the just-created invalid session with prior sessions.
+Captured backend functions cannot change during attestation; diagnostic copies
+cannot mutate delivered results. Artifact byte bounds are not peak runtime RAM.
+
+Checks:8synthetic byte/session Node fixtures pass, exercising all3graph stages
+and refusals/cleanup/provenance. Trained-role branch is protocol testing only,
+not actual model evidence. No trained files/weights, network, GPU or data/source
+training mutation. Node actual-backend harness remains PSys ownership and will
+perform real CPU smoke after integration; empirical admission remains separate.
