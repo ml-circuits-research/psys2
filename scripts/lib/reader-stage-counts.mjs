@@ -17,7 +17,9 @@ export function summarizeReaderStages(measurement,config){
   const required={operator:0,phase:0,polarity:0,character:0};
   if(constraints)for(const c of constraints){keys[c.key??'<missing>']=(keys[c.key??'<missing>']??0)+1;for(const key of Object.keys(required))if(c[key]!==undefined)required[key]++;}
   for(const issue of raw?.unresolved??[])add('key-reader',issue,['requests',String(index)]);
-  for(const issue of r?.diagnostics??[])add('packet-adapter',issue,['requests',String(index)]);
+  const adapted=r?.diagnostics;if(adapted!==undefined&&(!adapted||Array.isArray(adapted)||typeof adapted!=='object'))throw Error('invalid-packet-adapter-diagnostics');
+  if(adapted?.issues!==undefined&&!Array.isArray(adapted.issues))throw Error('invalid-packet-adapter-issues');
+  for(const issue of adapted?.issues??[])add('packet-adapter',issue,['requests',String(index)]);
   requests.push({index,heads,constraints:constraints?.length??null,constraintKeys:keys,requiredMetadataPresent:constraints?required:null,rawComplete:raw?.coverage?.complete??null,truncated:raw?.coverage?.truncated??null});
  }
  const p=measurement?.proposal;
