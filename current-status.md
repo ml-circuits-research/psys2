@@ -4,7 +4,7 @@ Updated: 2026-11-17, 21:32 UTC. Owner requested a committed handover and standby
 
 ## Public demo
 
-The committed UI build is `d840ad120f`: https://ml-circuits-research.github.io/psys2/webchat/?ui=d840ad120f . GitHub Pages can take a short time to update after push. The deployed SOP-BERT remains the original epoch-7 model. Its replacement has **not** been declared better, exported or deployed.
+Implementation commit: `af6b83c1` (pushed to `origin/main`; working tree clean at handover). The committed UI build is `d840ad120f`: https://ml-circuits-research.github.io/psys2/webchat/?ui=d840ad120f . GitHub Pages can take a short time to update after push; the immediate public check still returned `c342d5df70`, so public activation is not yet verified. The deployed SOP-BERT remains the original epoch-7 model. Its replacement has **not** been declared better, exported or deployed.
 
 ## Completed work
 
@@ -32,6 +32,8 @@ New generic native-interface binding preparation describes 25 families / 144 lit
 - Key reader: `.session-control/overnight-ui-key-run/`; log `.session-control/overnight-ui-key-training.log`. Full prepared union, compatible epoch-7 heads/encoder, max 25 epochs, minimum 5, patience 4, best checkpoint only. First retry reached 500 optimizer steps. It was temporarily suspended while the cutter finished to avoid severe GPU context contention; a detached one-shot watcher resumes that exact process automatically, retaining optimizer state.
 - Cutter: `.session-control/overnight-ui-cutter-run/`; log `.session-control/overnight-ui-cutter-training.log`. Full old/new corpus, 34,655 training / 3,818 calibration messages, minimum 8/max 12 epochs. Intermediate epoch-2 calibration span F1 was 0.999885; this is **not** the final fixed-source comparison or browser result.
 - Initial key-reader attempt failed before any optimizer step during CUDA context allocation. Compact int8 CPU labels and CUDA initialization before label preparation resolved the retry's allocation failure; the initial failure log is retained.
+
+Detached workers: `.session-control/overnight-cutter-resume-key.py` resumes the exact suspended key process when the cutter exits, including failure; `.session-control/overnight-cutter-evaluate-after.py` evaluates the successfully completed cutter on the same 5,218 cases and writes `.session-control/overnight-ui-cutter-after/comparison.json`. These scripts do not wake the agent or promote a model.
 
 No training result is presented as a successful replacement until old/new evaluation, q8 export and actual browser checks have run. A completed unattended training run alone does not publish its model.
 
