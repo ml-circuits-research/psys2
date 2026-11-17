@@ -3,7 +3,7 @@
 import { readdirSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 const fixed = [
-  'selected-reader-source.test.mjs',
+  'selected-reader-source.test.mjs', 'declaration-alignments.test.mjs',
   'candidate-execution-measurement.test.mjs', 'reader-stage-counts.test.mjs',
   'verified-reader-provider.test.mjs', 'actual-reader-replay.test.mjs', 'browser-reader-host.test.mjs', 'browser-reader-route.test.mjs', 'app-reader-context.test.mjs', 'reader-probe-selection.test.mjs', 'new-engine.test.mjs', 'reader-routing.test.mjs', 'functional-context-seeding.test.mjs', 'declared-dispatch.test.mjs', 'native-selection.test.mjs', 'observation-query.test.mjs', 'property-selection.test.mjs', 'drawing-property-host.test.mjs',
   'calendar-host.test.mjs', 'calendar-observation.test.mjs', 'face-preparation.test.mjs',
