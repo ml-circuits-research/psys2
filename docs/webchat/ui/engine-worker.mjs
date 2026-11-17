@@ -129,7 +129,15 @@ async function init(m) {
   const bundle = worldLoader.bundleOf(startIds, absModule);
   const bundleBytes = startIds.reduce((s, id) => s + (worldLoader.info(id)?.bytes ?? 0), 0);
   // Host transport only: no legacy translator, dispatcher, normalizer or warm-up reader.
-  const translator = { usage: [], detectUsage: [], resetUsage() {} };
+  const browserCall = (op, payload) => new Promise((resolve, reject) => {
+    const id = ++btSeq;
+    const timer = setTimeout(() => { btPending.delete(id); reject(new Error('browser translation timeout')); }, 10000);
+    btPending.set(id, { resolve: value => { clearTimeout(timer); resolve(value); }, reject: error => { clearTimeout(timer); reject(error); } });
+    post({ type: 'bt', id, op, ...payload });
+  });
+  const translator = { usage: [], detectUsage: [], resetUsage() {},
+    machineTranslate: (text, { from, to }) => browserCall('translate', { text, from, to }),
+    detectInput: text => browserCall('detect', { text }) };
   evt('boot-step', { id: 'worlds', op: 'end', bytes: bundleBytes, count: startIds.length });
   evt('boot-step', { id: 'reasoner', op: 'start' });
   engine = await dialog.createEngine({ loader: loadersMod.createBundleLoader(bundle), translator, options: { reasoner: 'matrix', applicationAreas: worldLoader.index.retiredAreas ?? [] } });   // the product reasoner (spec 15): the page never selects ops, the test oracle

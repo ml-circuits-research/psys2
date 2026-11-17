@@ -62,3 +62,20 @@ test('undo, focus and the last applied intent survive the session recreation use
  const snap=second.snapshot();second.newEngineUndo=[];second.newEngineFocus={};second.newEngineLastAction={};second.restore(snap);assert.deepEqual(second.newEngineUndo,first.newEngineUndo);assert.deepEqual(second.newEngineLastAction,first.newEngineLastAction);
  second.newEngineUndo[0].before.native.value=99;assert.equal(first.newEngineUndo[0].before.native.value,1);
 });
+
+import {DialogSession} from '../src/dialog/index.mjs';
+test('interface translation reaches only the English reader; unavailable input translation never invokes it',async()=>{
+ let reads=0,seen=null;
+ const session={language:'fr',isession:{state:{}},engine:{translator:{machineTranslate:async()=>{throw Error('not available');}},requestReader:{propose:async input=>{reads++;seen=input;return {candidates:[],failures:[]};}}}};
+ let r=await DialogSession.prototype._send.call(session,'source text');
+ assert.equal(reads,0);assert.equal(r.trace.reason,'translation-unavailable');assert.deepEqual(r.effects,[]);
+ const translations=[];
+ session.engine.translator.machineTranslate=async(input,pair)=>{translations.push(pair);return pair.to==='en'?'English source text':'Translated effect reply';};
+ r=await DialogSession.prototype._send.call(session,'source text');
+ assert.equal(reads,1);assert.equal(seen,'English source text');assert.equal(r.trace.translation.original,'source text');assert.equal(r.text,'Translated effect reply');assert.deepEqual(translations,[{from:'fr',to:'en'},{from:'en',to:'fr'}]);
+ session.engine.translator.detectInput=async()=>[{detectedLanguage:'en',confidence:0.99}];
+ translations.length=0;r=await DialogSession.prototype._send.call(session,'English typed input');
+ assert.equal(seen,'English typed input');assert.equal(translations.length,1);assert.equal(translations[0].from,'en');
+ session.engine.translator.machineTranslate=async()=>{throw Error('output failed');};
+ r=await DialogSession.prototype._send.call(session,'English typed input');assert.equal(reads,3);assert.equal(r.trace.replyTranslation,'unavailable');assert.match(r.text,/Nothing changed/);
+});

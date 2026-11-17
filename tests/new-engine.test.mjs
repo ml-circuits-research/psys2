@@ -171,13 +171,13 @@ test('malformed input, retired auxiliary APIs and turn errors never enter an old
   await assert.rejects(session.send('anything'), /simulated worker turn failure/);
   assert.equal(oldCalls, 0);
 });
-test('saved non-English session settings are refused without invoking old translation', async () => {
+test('saved non-English sessions report unavailable machine translation without invoking old translation', async () => {
   const engine = await fixtureEngine(), session = engine.createSession({ language: 'ro' });
   Object.assign(session.isession.state, setup().isession.state);
   engine.translator = { translate() { throw new Error('retired translation called'); } };
   const before = structuredClone(session.isession.state);
   const result = await session.send(sentence);
-  assert.equal(result.trace.reason, 'language'); assert.equal(result.trace.legacy, false);
+  assert.equal(result.trace.reason, 'translation-unavailable'); assert.equal(result.trace.legacy, false);
   assert.deepEqual(session.isession.state, before);
 });
 

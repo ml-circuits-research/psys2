@@ -22,12 +22,12 @@ export const CREDITS = [
 /** The one-line description used in the header, the page title and the greeting (DOC). */
 export const TAGLINE = 'neurosymbolic · runs in your browser';
 export const PAGE_TITLE = 'PSys2: a neurosymbolic assistant that runs in your browser, with no server and no large language model';
-export const GREETING = 'Hi, I am PSys2. The SOP-BERT request reader is not ready yet. Typed commands leave your work unchanged; you can still use the area controls.';
+export const GREETING = 'Hi, I am PSys2. Choose an area and tell me what you want to do. I will say what I changed and where I made an assumption.';
 
 /** Current application behavior, separate from historical experiments. */
 export const ABOUT_SECTIONS = [
   ['What PSys2 is', 'PSys2 is a browser application with native drawing, diagram, document and calendar tools. Typed requests must pass through SOP-BERT and validated request graphs before changing a world.'],
-  ['Reader readiness', 'SOP-BERT is the only application reader. A complete graph-producing model has not yet been deployed. There is no grammar fallback: unavailable, incomplete or unapproved proposals receive an explicit no-effect answer.'],
+  ['Reader readiness', 'SOP-BERT reads requests in English. Other languages use on-device translation at the interface. Reversible actions use the most plausible usable reading and disclose uncertainty. Reader loading and failures appear in the status panel.'],
   ['How effects are checked', 'A complete proposal must resolve its targets and declared values, pass the native tool checks, and retain observations of the result. A native receipt alone is not proof that the requested outcome was achieved.'],
 ];
 export const ACCURACY = [

@@ -1634,7 +1634,34 @@ export class DialogSession {
 
   /** Sole public turn route. Retired options cannot select another reader. */
   async _send(text, opts = {}) {
-    return (await import('./reader-routing.mjs')).routeNewEngine(this, text, { ...opts, language: opts.language ?? (this.language === 'auto' ? 'en' : this.language) });
+    const language = opts.language ?? (this.language === 'auto' ? 'en' : this.language);
+    const translator = this.engine.translator;
+    let english = text, sourceLanguage = language, translation = null;
+    if (language !== 'en') {
+      // UI language is a reply preference; a browser-detected input language may differ.
+      try { const top = (await translator?.detectInput?.(text))?.[0]; if (top?.confidence >= 0.8) sourceLanguage = top.detectedLanguage.split('-')[0]; } catch { /* use the selected language */ }
+      if (sourceLanguage !== 'en') {
+        try {
+          english = await translator?.machineTranslate?.(text, { from: sourceLanguage, to: 'en' });
+          if (typeof english !== 'string' || !english.trim()) throw new Error('translation unavailable');
+          translation = { from: sourceLanguage, to: 'en', original: text, english };
+        } catch {
+          const said = 'The translation service is not ready for this language. Nothing changed. You can select English and send an English request, or retry when translation is ready.';
+          return { text: said, parts: [{ text: said, translate: false }], statuses: ['unsupported'], answers: [], segments: [], effects: [], state: {}, trace: { legacy: false, engine: 'new', reason: 'translation-unavailable', sourceLanguage } };
+        }
+      }
+    }
+    const reply = await (await import('./reader-routing.mjs')).routeNewEngine(this, english, { ...opts, language: 'en' });
+    reply.trace = { ...reply.trace, english, ...(translation ? { translation } : {}) };
+    if (language !== 'en') {
+      try {
+        const said = await translator?.machineTranslate?.(reply.text, { from: 'en', to: language });
+        if (typeof said !== 'string' || !said.trim()) throw new Error('translation unavailable');
+        reply.trace.replyEnglish = reply.text;
+        reply.text = said; reply.parts = [{ text: said, translate: false }];
+      } catch { reply.trace.replyTranslation = 'unavailable'; } // Keep the actual effect reply; never retry execution.
+    }
+    return reply;
   }
 
   /**

@@ -1,3 +1,4 @@
+import { createTranslationLayer } from './ui/translation-ui.mjs';
 // SPDX-License-Identifier: AGPL-3.0-only
 // PSys2 browser demo (spec 06 "Webchat", spec 07 §4). Runs C2 entirely in the browser: no server, no large language model.
 //
@@ -211,7 +212,7 @@ export async function mountPsys2(element, options = {}) {
   const dictBar = h('div', { class: 'p2-dictbar', role: 'status', hidden: true }, h('i', { class: 'p2-rec', 'aria-hidden': 'true' }), dictText, dictStop);
   const langSel = h('select', { class: 'p2-select', 'aria-label': 'Language' }, h('option', { value: 'en' }, 'English'));   // the other languages are filled in by renderLangSelect from the translation layer
   // MT-SERIOUS: the translation layer (browser Translator, else the on-device model downloaded lazily when a language is selected); the selector lists what it supports
-  const tl = { listed: () => [{ code: 'en', name: 'English' }], init: async () => {}, prepare: async () => ({ supported: false }), needsModel: () => false, describe: () => ({ state: 'unavailable', size: 0 }), whenReady: async () => ({ supported: false }), host: null, mtProxy: null, registry: null, quality: null }; // retired model layer: no loads
+  const tl = createTranslationLayer({ base, h, note, progress, onChange: () => { renderLangSelect(); if (!settingsEl.hidden) renderSettings(); } });
   globalThis.__psys2Tl = tl;   // diagnostics and the phone tests
   function renderLangSelect() {
     const cur = language.get(), list = tl.listed();
@@ -1885,7 +1886,11 @@ export async function mountPsys2(element, options = {}) {
   // the engine worker's events: model status, ORT counters, stage
   const ortMirror = { restarts: 0, stats: {}, paused: null, speed: 1, limits: null, lanes: {}, resume() { this.paused = null; engineClient?.call('ort-resume').catch(() => {}); }, restart: (lane, why) => engineClient.call('ort-restart', { lane, why }) };   // the real ORT client lives in the engine worker; this mirror is refreshed by its events
   function onEngineEvent(name, data) {
-    if (name === 'dispatcher-status') {
+    if (name === 'sop-reader-status') {
+      if (data.state === 'loading') progress.start('model', 'Loading SOP-BERT');
+      else if (data.state === 'ready') progress.end('model', { label: 'SOP-BERT is ready' });
+      else if (data.state === 'unavailable') progress.fail('model', 'SOP-BERT could not start', 'Area controls remain available. Reload to retry.');
+    } else if (name === 'dispatcher-status') {
       // PROGRESS: the reading model is a step of the one panel; the chat works meanwhile (the rules read)
       if (data.state === 'loading') { progress.start('model', 'Loading the reading model'); progress.note('Still loading the reading model: until it is ready the world of each message is chosen by the rules and their reasons alone (routing B); when it is ready the model adds its hint (routing C). Answers may be simpler for a moment.'); }
       else if (data.state === 'ready') { progress.end('model', { bytes: modelBytes || null, label: 'Reading model loaded' }); progress.note(''); }
@@ -1987,7 +1992,8 @@ export async function mountPsys2(element, options = {}) {
   applyEngineSettings();
   setStatus();
 
-  progress.end('translator', { ms: 0, label: 'English request path' });
+  progress.end('translator', { ms: 0, label: 'Translation interface ready' });
+  tl.init({ probe: language.get() !== 'en' }).then(() => { renderLangSelect(); if (language.get() !== 'en') tl.prepare(language.get()).catch(() => {}); }).catch(() => {});
   renderLangSelect();
 
   // optional capabilities, checked once
