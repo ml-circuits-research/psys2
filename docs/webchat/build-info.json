@@ -1,5 +1,5 @@
 {
-  "version": "f365cbb8f6",
+  "version": "e1d018f6d3",
   "worlds": [
     "acts",
     "art.draw",
@@ -45,7 +45,7 @@
     "lib/astra/session.mjs": "ae641720f754a9dc",
     "lib/astra/where.mjs": "df7e71a782e57a0d",
     "lib/dialog/application-areas.mjs": "1787d43260ddea8d",
-    "lib/dialog/bert-source-offsets.mjs": "f1540507917fa1a2",
+    "lib/dialog/bert-source-offsets.mjs": "74ff867965dc9f41",
     "lib/dialog/bio-viterbi.mjs": "47cfa0acefe8d629",
     "lib/dialog/budget-limits.mjs": "361b73ef578f74d5",
     "lib/dialog/budget.mjs": "a7b9cf83512b05c1",
@@ -104,6 +104,7 @@
     "lib/dialog/typed-reader.mjs": "4e4818d9077928f5",
     "lib/dialog/value-check.mjs": "81e73c3636215729",
     "lib/dialog/variants.mjs": "073a28036443a136",
+    "lib/dialog/verified-reader-provider.mjs": "ae98e7d9c49710bc",
     "lib/dialog/verify-run.mjs": "7909e08aa84b86e7",
     "lib/dialog/word-reader.mjs": "d2b7285d0cf16ce7",
     "lib/dialog/world-aware.mjs": "a99d5bf6aced3c61",
@@ -660,8 +661,8 @@
     "worlds/words/zo.json": "98c807997b12214c",
     "worlds/words.bloom.json": "1aee5298e6fe2c42"
   },
-  "builtAt": "2026-11-17T02:49:03.461Z",
-  "commit": "dbb8ef5b-dirty",
+  "builtAt": "2026-11-17T03:16:20.045Z",
+  "commit": "650a655f-dirty",
   "catalog": "c9d5d0a9308bce06ceb805a358677318887c8ebc",
   "assets": {
     "app.mjs": "acad83ead9",
@@ -677,7 +678,7 @@
     "lib/astra/session.mjs": "e029c21c92",
     "lib/astra/where.mjs": "09b4059350",
     "lib/dialog/application-areas.mjs": "5930d8fe63",
-    "lib/dialog/bert-source-offsets.mjs": "b2a19ec515",
+    "lib/dialog/bert-source-offsets.mjs": "9b7b99f458",
     "lib/dialog/bio-viterbi.mjs": "c1429c6de9",
     "lib/dialog/budget-limits.mjs": "fb1adadf05",
     "lib/dialog/budget.mjs": "00bce6e369",
@@ -736,6 +737,7 @@
     "lib/dialog/typed-reader.mjs": "66eabe4250",
     "lib/dialog/value-check.mjs": "be80eadbd6",
     "lib/dialog/variants.mjs": "4206965d92",
+    "lib/dialog/verified-reader-provider.mjs": "469cf5f9cb",
     "lib/dialog/verify-run.mjs": "4fcd239e2d",
     "lib/dialog/word-reader.mjs": "77bcda1ab1",
     "lib/dialog/world-aware.mjs": "412d6f576f",

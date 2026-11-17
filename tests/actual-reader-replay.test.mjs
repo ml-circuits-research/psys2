@@ -49,5 +49,14 @@ test('measurement host supplies observed context, captures proposal and removes/
   assert.deepEqual(seen,{text:'A source message',area:'drawing',context:{existing:[],previous:'Actual history'}});
   assert.equal(admissionDuring,undefined);assert.equal(session.engine.requestReaderAdmission,admission);assert.equal(session.engine.requestReader,undefined);
   assert.equal(result.measurement.semanticCorrectness,null);assert.equal(result.measurement.observation.instanceId,'actual-context-fixture');assert.equal(result.measurement.proposal.failures[0].reason,'fixture-no-model');
+  await assert.rejects(reader.probe('source',{area:'drawing',context:{},requests:[]}),/invalid-source-context/);
+  const probe=await reader.probe('source',{area:'drawing',context:{existing:[],previous:null}});assert.equal(probe.semanticCorrectness,null);assert.equal(probe.executionEligible,false);
  }finally{await rm(dir,{recursive:true,force:true});}
+});
+test('explicit BERT role adapter accepts declared roles and rejects vocabulary/processor/config conflicts',async()=>{
+ const {bertRuntimeConfiguration}=await import('../scripts/lib/actual-reader-provider.mjs');
+ const names=['[PAD]','[UNK]','[CLS]','[SEP]','[MASK]'],profile={added_tokens:names.map((content,id)=>({content,id,special:true})),model:{unk_token:'[UNK]',vocab:Object.fromEntries(names.map((n,i)=>[n,i]))},post_processor:{special_tokens:Object.fromEntries(['[CLS]','[SEP]'].map(content=>[content,{ids:[names.indexOf(content)],tokens:[content]}]))}};
+ assert.equal(bertRuntimeConfiguration(profile,{}).pad_token,'[PAD]');
+ assert.throws(()=>bertRuntimeConfiguration(profile,{pad_token:'different'}),/conflicting/);
+ for(const mutation of [p=>p.added_tokens.push(p.added_tokens[0]),p=>p.model.vocab['[PAD]']=99,p=>p.model.unk_token='other',p=>p.post_processor.special_tokens['[CLS]'].ids=[99]]){const p=structuredClone(profile);mutation(p);assert.throws(()=>bertRuntimeConfiguration(p,{}));}
 });

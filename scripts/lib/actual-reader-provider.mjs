@@ -4,6 +4,7 @@ import {resolve,relative,isAbsolute} from 'node:path';
 import {pathToFileURL} from 'node:url';
 import {createHash} from 'node:crypto';
 import {routeNewEngine} from '../../src/dialog/reader-routing.mjs';
+import {copyHostData} from '../../worlds/native-tool-host.mjs';
 import {observedReaderContext,REPLAY_CONTEXT_PROFILE} from './reader-context-profile.mjs';
 const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
 const hash=value=>typeof value==='string'&&/^[a-f0-9]{64}$/.test(value);
@@ -27,6 +28,18 @@ export async function runtimeTreeIdentity(directory){
  }
  await walk(root);return {root,sha256:sha(JSON.stringify(rows)),files:rows.length,bytes};
 }
+export function bertRuntimeConfiguration(profile,config){
+ const roles={pad_token:'[PAD]',unk_token:'[UNK]',cls_token:'[CLS]',sep_token:'[SEP]',mask_token:'[MASK]'};
+ const ids=new Set();
+ for(const [key,value]of Object.entries(roles)){
+  if(config[key]!==undefined&&config[key]!==value)throw Error('conflicting-bert-special-role');
+  const matches=profile.added_tokens?.filter(t=>t.content===value&&t.special===true);
+  if(matches?.length!==1||ids.has(matches[0].id)||profile.model?.vocab?.[value]!==matches[0].id)throw Error('missing-declared-bert-special-role');ids.add(matches[0].id);
+  if(key==='unk_token'&&profile.model.unk_token!==value)throw Error('conflicting-bert-unknown-role');
+  if(key==='cls_token'||key==='sep_token'){const declared=profile.post_processor?.special_tokens?.[value];if(JSON.stringify(declared?.ids)!==JSON.stringify([matches[0].id])||JSON.stringify(declared?.tokens)!==JSON.stringify([value]))throw Error('conflicting-bert-processor-role');}
+ }
+ return {...config,...roles};
+}
 /** Explicit spec paths are local evaluation inputs, never fields from a model or annotation. */
 export async function loadActualReplayReader(spec,{factory}={}){
  if(!spec||spec.format!=='psys2.actual-reader-replay/1'||!hash(spec.manifestSha256)||!hash(spec.runtimeTreeSha256)||!spec.runtimeIdentity)throw Error('invalid-replay-reader-spec');
@@ -42,15 +55,22 @@ export async function loadActualReplayReader(spec,{factory}={}){
  const tokenizerConfigBytes=await artifact(spec.tokenizerConfig.path);
  if(!hash(spec.tokenizerConfig.sha256)||sha(tokenizerConfigBytes)!==spec.tokenizerConfig.sha256)throw Error('tokenizer-config-hash');
  const tokenizerConfig=JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(tokenizerConfigBytes));
- if(tokenizerConfig.tokenizer_class!=='DistilBertTokenizer'&&tokenizerConfig.tokenizer_class!=='BertTokenizer')throw Error('unsupported-tokenizer-class');
- const createTokenizer=async({tokenizerJSON})=>new transformers.BertTokenizer(JSON.parse(tokenizerJSON),tokenizerConfig);
+ if(tokenizerConfig.tokenizer_class!==undefined&&tokenizerConfig.tokenizer_class!=='DistilBertTokenizer'&&tokenizerConfig.tokenizer_class!=='BertTokenizer')throw Error('unsupported-tokenizer-class');
+ let constructorConfig=null;
+ const createTokenizer=async({tokenizerJSON})=>{constructorConfig=bertRuntimeConfiguration(JSON.parse(tokenizerJSON),tokenizerConfig);return new transformers.BertTokenizer(JSON.parse(tokenizerJSON),constructorConfig);};
  let current=null,observation=null,busy=false;const diagnostics=[];let diagnosticBytes=0;
  const create=factory??(await import('../../src/dialog/verified-reader-provider.mjs')).createVerifiedReaderProvider;
  const assembled=await create({manifestJSON:manifestBytes.toString('utf8'),manifestSha256:spec.manifestSha256,tokenizerArtifact:spec.tokenizerArtifact,bindingsArtifact:spec.bindingsArtifact,readArtifact:artifact,backend,createTokenizer,
   getContext:()=>{if(!current)throw Error('native-context-unavailable');return current;},recordDiagnostics:async entry=>{diagnosticBytes+=Buffer.byteLength(JSON.stringify(entry));if(diagnosticBytes>16000000)throw Error('reader-diagnostic-budget');diagnostics.push(entry);},runtimeIdentity:spec.runtimeIdentity,
   verifyHostRuntime:async({runtimeIdentity})=>({verified:true,identity:runtimeIdentity,authority:'psys2.node-reader-host/1: exact runtime tree and explicit trusted deployment identity'})});
  // Identity completeness beyond measured runtime bytes is a reviewed deployment obligation.
- return {verified:{...assembled.verified,backendIdentity,contextProfile:REPLAY_CONTEXT_PROFILE,tokenizerConfigSha256:spec.tokenizerConfig.sha256},async run(session,text,{area,host,previous=null}){
+ return {verified:{...assembled.verified,backendIdentity,contextProfile:REPLAY_CONTEXT_PROFILE,tokenizerConfigSha256:spec.tokenizerConfig.sha256,tokenizerConstructorPolicy:'explicit-bert-special-roles/1',tokenizerConstructorConfigSha256:constructorConfig?sha(JSON.stringify(constructorConfig)):null},async probe(text,sourceContext){
+  if(busy)throw Error('concurrent-replay-reader');
+  if(!sourceContext||Object.keys(sourceContext).sort().join(',')!=='area,context')throw Error('invalid-source-context');
+  busy=true;diagnostics.length=0;diagnosticBytes=0;
+  try{current=copyHostData(sourceContext,{maxBytes:65536});const proposal=await assembled.provider.propose(text);return {proposal,diagnostics:[...diagnostics],sourceContext:current,semanticCorrectness:null,executionEligible:false};}
+  finally{current=null;busy=false;}
+ },async run(session,text,{area,host,previous=null}){
   if(busy)throw Error('concurrent-replay-reader');busy=true;diagnostics.length=0;diagnosticBytes=0;
   const engine=session.engine??{},old=engine.requestReader,oldAdmission=engine.requestReaderAdmission;session.engine=engine;let proposal=null,error=null;
   delete engine.requestReaderAdmission;

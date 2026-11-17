@@ -1,0 +1,377 @@
+{
+  "format": "psys2.actual-node-python-q8-parity/1",
+  "nodeReportSha256": "c643321cd3b20a1c8cd5075697d1f241c5c3293fa32f67023232bc06a5dea8b8",
+  "pythonReportSha256": "79089bd24876d55bb47811420e2a0a9f2c4b967ffe339962ee0ed334aaf16b11",
+  "nodeVerified": {
+    "format": "psys2.verified-reader-provider/1",
+    "manifestSha256": "aa4a549bda7727a24dcef74a0d0a801d5bba277f93498324aa071986e8200c6c",
+    "artifactRole": "trained-unverified",
+    "weightRepresentation": "q8-dynamic",
+    "dtype": "fp32",
+    "files": {
+      "cutter": {
+        "path": "cutter.q8.onnx",
+        "sha256": "f21fb2dc82c52ab85c9436d53be83e0e69e0e9cb746f6ecd8b607b964d476a77",
+        "bytes": 66756266
+      },
+      "encoder": {
+        "path": "encoder.q8.onnx",
+        "sha256": "040c8bc3f0a0c3db619f4fb2a08587eb4fd8fbb1809a7e27977c7ac08897c8b5",
+        "bytes": 67160769
+      },
+      "heads": {
+        "path": "heads.q8.onnx",
+        "sha256": "2c741fe0190066a476ce6c42c3dcfd2637a6c25aa716cd3904530eacb1b21edb",
+        "bytes": 623715
+      },
+      "tokenizer": {
+        "path": "tokenizer.json",
+        "sha256": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+        "bytes": 466062
+      },
+      "bindings": {
+        "path": "bindings.json",
+        "sha256": "07b8094f4c1ababffff579dfd0d249b597afcafcfb26c47bc776887ce03e0798",
+        "bytes": 3737397
+      }
+    },
+    "configSha256": "b7b03ad5c06ebaeec6ff2014e2ac01d26a935e58de62bdbb7589eaf02f28efdb",
+    "cutterConfigSha256": "64f3e284f6c901329956351e1077a479102683ffd043b6dabda755a739863ad9",
+    "tokenizerSha256": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+    "bindingsSha256": "07b8094f4c1ababffff579dfd0d249b597afcafcfb26c47bc776887ce03e0798",
+    "totalAuthenticatedBytes": 138945065,
+    "models": {
+      "cutter": {
+        "format": "sop.request-cutter-computation/1",
+        "artifactRole": "trained-unverified",
+        "model": {
+          "sha256": "5c2c545cea87b2618c4209c338bd3e30d1671a0da32139819fe5a6110d61ac6b",
+          "tokenizerSha256": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+          "codecSha256": "64fd854a5711acd8f675c7669e2426b12676b200fa3b1a9da6f67ad60e7f8213",
+          "decoderVersion": 1
+        },
+        "configSha256": "64f3e284f6c901329956351e1077a479102683ffd043b6dabda755a739863ad9",
+        "checkpointSha256": "85d1d2ee1e03ee22c355077cf6248fba30cb14c2195151deb36f68cffbe758e0",
+        "graphSha256": "f21fb2dc82c52ab85c9436d53be83e0e69e0e9cb746f6ecd8b607b964d476a77",
+        "tokenizerSha256": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+        "trainerSha256": "d9422af7ad75e9053f5dfc86c36b0a49ac8f6b52099aa49ac02d95925db1a445",
+        "codecSha256": "64fd854a5711acd8f675c7669e2426b12676b200fa3b1a9da6f67ad60e7f8213",
+        "dtype": "fp32",
+        "weightRepresentation": "q8-dynamic",
+        "calibration": null,
+        "executionEligible": false
+      },
+      "reader": {
+        "format": "sop.key-reader-runtime/1",
+        "artifactRole": "trained-unverified",
+        "model": {
+          "sha256": "db66d42b1daf1e0b19e31751f9c140c124124f587983923cdd9fc16eeebefa2c",
+          "tokenizerSha256": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+          "codecSha256": "e5e8a1d997e8cbd89e116eeed2471e6ca5403406a75130dab9f326ac809c8151",
+          "decoderVersion": 2
+        },
+        "configSha256": "b7b03ad5c06ebaeec6ff2014e2ac01d26a935e58de62bdbb7589eaf02f28efdb",
+        "encoderSha256": "040c8bc3f0a0c3db619f4fb2a08587eb4fd8fbb1809a7e27977c7ac08897c8b5",
+        "headsSha256": "2c741fe0190066a476ce6c42c3dcfd2637a6c25aa716cd3904530eacb1b21edb",
+        "checkpointSha256": "177cecee44c811822c65852fac1148a2faa3f9073a44b1677120a9068effb59d",
+        "weightRepresentation": "q8-dynamic",
+        "calibration": null,
+        "executionEligible": false
+      }
+    },
+    "pipeline": {
+      "modelSha256": "ff26e88415f28d8a85b2f33db011e458b504a6752236b83b54de0bfda98ef5cb",
+      "decoderVersion": 1,
+      "models": {
+        "cutter": {
+          "sha256": "5c2c545cea87b2618c4209c338bd3e30d1671a0da32139819fe5a6110d61ac6b",
+          "tokenizerSha256": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+          "codecSha256": "64fd854a5711acd8f675c7669e2426b12676b200fa3b1a9da6f67ad60e7f8213",
+          "decoderVersion": 1
+        },
+        "reader": {
+          "sha256": "db66d42b1daf1e0b19e31751f9c140c124124f587983923cdd9fc16eeebefa2c",
+          "tokenizerSha256": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+          "codecSha256": "e5e8a1d997e8cbd89e116eeed2471e6ca5403406a75130dab9f326ac809c8151",
+          "decoderVersion": 2
+        }
+      },
+      "bindingsSha256": "07b8094f4c1ababffff579dfd0d249b597afcafcfb26c47bc776887ce03e0798",
+      "architecture": "source-cutter/request-key-heads",
+      "calibration": null
+    },
+    "offsetAuthority": {
+      "protocol": "bert-component-trace/1",
+      "tokenizerSha256": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+      "verification": "per-input ID/mask/offset parity"
+    },
+    "hostRuntimeAttestation": {
+      "verified": true,
+      "identity": {
+        "appBuildSha256": "3bf762c218730d62c6709bf15244b05e1c671a413e59126f2bbd36f6fb6d3bbb",
+        "readerSha256": "fa218f77fe7d38cea70f0ed2d32e58f1044ee038bc4b841341d66cf12d219328",
+        "pipelineSha256": "4aa4e2bb9a1d2d5b0ed56bee6e3baf2cb6923b70f6074960cff4ea1cdb8e9e74",
+        "packetAdapterSha256": "46f0609921cb2bcaef66968294b47f7fc11e851ab7df72e5dd473cb54ba82fec",
+        "graphDecoderSha256": "babc7c5f60d69d2e66f280d8c1d29a9fd913b3435ab704e4023124910679761e",
+        "executorSha256": "7d55a9d269418801bbc9dd5a46be3cd18ad0d50624b4c898b244caf5ee6df30a",
+        "contextSerializationSha256": "bff95122f779997b644601927ef840a94655ef9a829e5e80f480e822bb65f15b",
+        "bindingsSha256": "07b8094f4c1ababffff579dfd0d249b597afcafcfb26c47bc776887ce03e0798",
+        "backendSha256": "02dfea67bde34755c1510be1a6656c8d64bbdca9e84479b32422226b9b8469b8"
+      },
+      "authority": "psys2.node-reader-host/1: exact runtime tree and explicit trusted deployment identity"
+    },
+    "implementationTrust": "external host attestation; not proven by artifact hashes",
+    "calibration": null,
+    "executionEligible": false,
+    "assemblySha256": "47c5aa5eb3013f9123f367a9defd99e7279b3b17fb9a8e8534dad1b70972b1b3",
+    "backendIdentity": {
+      "format": "psys2.node-reader-backend/1",
+      "runtimeTreeSha256": "4dcc880aa97ba3d7d4423054a4d2ff87812f3f05daaf5fde37e755adeb039dc2",
+      "node": "v22.23.2",
+      "platform": "linux",
+      "arch": "arm64",
+      "ortModule": "onnxruntime-node/dist/index.js",
+      "transformersModule": "@huggingface/transformers/dist/transformers.node.mjs",
+      "options": {
+        "executionProviders": [
+          "cpu"
+        ],
+        "intraOpNumThreads": 1,
+        "interOpNumThreads": 1
+      }
+    },
+    "contextProfile": "psys2.native-reader-context/1",
+    "tokenizerConfigSha256": "a025160ef0431f1a392f6f050c1310f4c5d9fb6f275932dbccba73c4d214bf10",
+    "tokenizerConstructorPolicy": "explicit-bert-special-roles/1",
+    "tokenizerConstructorConfigSha256": "c0dae1855b3de10c3936490e6cae0e11aa85dc93739894f2d20e2ef6da3b1836"
+  },
+  "pythonModelIdentity": {
+    "sha256": "177cecee44c811822c65852fac1148a2faa3f9073a44b1677120a9068effb59d",
+    "tokenizerSha256": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+    "codecSha256": "e5e8a1d997e8cbd89e116eeed2471e6ca5403406a75130dab9f326ac809c8151",
+    "decoderVersion": 2
+  },
+  "excludedFields": [
+    "per-packet model identity only; identities retained separately"
+  ],
+  "rows": [
+    {
+      "id": "data/haiku-v1/calendar/b01a.jsonl:calendar-b01-0018",
+      "equal": true,
+      "allDifferencePaths": [],
+      "cuts": 1,
+      "rawComplete": 0,
+      "canonicalCandidates": 0
+    },
+    {
+      "id": "data/haiku-v1/calendar/b01a.jsonl:calendar-b01-0022",
+      "equal": false,
+      "allDifferencePaths": [
+        "$.readings:length",
+        "$.readings[0].sourceRange[1]",
+        "$.readings[0].packet.source.text",
+        "$.readings[0].packet.request.turn:missing",
+        "$.readings[0].packet.request.target.determiner:missing",
+        "$.readings[0].packet.request.target.fill",
+        "$.readings[0].packet.request.act",
+        "$.readings[0].packet.request.constraints:length",
+        "$.readings[0].packet.request.span",
+        "$.readings[0].packet.unresolved:length",
+        "$.readings[0].packet.unresolved[0].reason",
+        "$.readings[0].packet.ranges:length",
+        "$.cutter.spans:length",
+        "$.cutter.spans[0][1]"
+      ],
+      "cuts": 2,
+      "rawComplete": 0,
+      "canonicalCandidates": 0
+    },
+    {
+      "id": "data/haiku-v1/diagram/b01a.jsonl:diagram-b01-0016",
+      "equal": true,
+      "allDifferencePaths": [],
+      "cuts": 1,
+      "rawComplete": 0,
+      "canonicalCandidates": 0
+    },
+    {
+      "id": "data/haiku-v1/diagram/b01a.jsonl:diagram-b01-0038",
+      "equal": true,
+      "allDifferencePaths": [],
+      "cuts": 1,
+      "rawComplete": 0,
+      "canonicalCandidates": 0
+    },
+    {
+      "id": "data/haiku-v1/document/b01a.jsonl:document-b01-0012",
+      "equal": true,
+      "allDifferencePaths": [],
+      "cuts": 1,
+      "rawComplete": 0,
+      "canonicalCandidates": 0
+    },
+    {
+      "id": "data/haiku-v1/document/b01a.jsonl:document-b01-0035",
+      "equal": false,
+      "allDifferencePaths": [
+        "$.readings[0].packet.request.constraints:length",
+        "$.readings[0].packet.unresolved:length",
+        "$.readings[0].packet.unresolved[0].reason",
+        "$.readings[0].packet.unresolved[0].key",
+        "$.readings[0].packet.unresolved[1].reason",
+        "$.readings[0].packet.unresolved[2].reason",
+        "$.readings[0].packet.unresolved[2].key",
+        "$.readings[0].packet.ranges:length",
+        "$.readings[0].packet.ranges[3].range[0]",
+        "$.readings[0].packet.ranges[3].range[1]",
+        "$.readings[0].packet.ranges[3].path:length",
+        "$.readings[0].packet.ranges[3].path[0]"
+      ],
+      "cuts": 1,
+      "rawComplete": 0,
+      "canonicalCandidates": 0
+    },
+    {
+      "id": "data/haiku-v1/drawing/b01a.jsonl:drawing-b01-0046",
+      "equal": true,
+      "allDifferencePaths": [],
+      "cuts": 1,
+      "rawComplete": 0,
+      "canonicalCandidates": 0
+    },
+    {
+      "id": "data/haiku-v1/drawing/b01a.jsonl:drawing-b01-0053",
+      "equal": true,
+      "allDifferencePaths": [],
+      "cuts": 1,
+      "rawComplete": 1,
+      "canonicalCandidates": 0
+    }
+  ],
+  "equal": 6,
+  "cases": 8,
+  "semanticAccuracy": null,
+  "calibration": null,
+  "executionEligible": false,
+  "nodeSourceInventory": {
+    "appBuildSha256": [
+      {
+        "path": "docs/webchat/build-info.json",
+        "sha256": "d5bac005dea70106fa6ffdf9fa2f8cf89ff67e59e1f6c5b57cca300ea912db66"
+      }
+    ],
+    "readerSha256": [
+      {
+        "path": "src/dialog/cutter-inference.mjs",
+        "sha256": "06e1fcd1ce03123af1b0f9bf1ae4c183cd7d25aa83b9d7c158c2a1390a5c5db1"
+      },
+      {
+        "path": "src/dialog/key-reader-inference.mjs",
+        "sha256": "68df1865a113288f2c7e81ec3629e3b3ef6d5bd6280d6de36d689eec3655a779"
+      },
+      {
+        "path": "src/dialog/bert-source-offsets.mjs",
+        "sha256": "74ff867965dc9f41ea4bd9d3c6b82900421807485fd718527be377d59af5978b"
+      }
+    ],
+    "pipelineSha256": [
+      {
+        "path": "src/dialog/key-reader-pipeline.mjs",
+        "sha256": "6328e433f5bf0355841453d09ad3f48ed939950328f642da81b2798a3b27b766"
+      },
+      {
+        "path": "src/dialog/verified-reader-provider.mjs",
+        "sha256": "62cb355182dd8b9111baf143bc1eefde5e7126a5197a529c2b104ad028532557"
+      },
+      {
+        "path": "scripts/lib/actual-reader-provider.mjs",
+        "sha256": "ef8bef9b1cdc5362df40e639ff6be110797f273c27ecaa8bbd49cecae2d5d325"
+      }
+    ],
+    "packetAdapterSha256": [
+      {
+        "path": "src/dialog/key-reader-packet.mjs",
+        "sha256": "db68f96f29330a1a2d4908729b38f8ab609851320c3d2a97dd956684bce19265"
+      }
+    ],
+    "graphDecoderSha256": [
+      {
+        "path": "src/dialog/raw-structural-bridge.mjs",
+        "sha256": "d0cf3447531ad7039cecae0d7c4af72f1b89774e1230739843a8271d5aec0bd2"
+      },
+      {
+        "path": "src/dialog/model-graph-decoder.mjs",
+        "sha256": "444e8bf035ba8ef81b81e824467b4b2dfd9eb7e9976e3524809b1000d97d62c0"
+      },
+      {
+        "path": "src/vendor/sopworld/sopworld.mjs",
+        "sha256": "fb54e3d0856a296f2a33a2bc0baa42f0442866a8e50f69827d4dae3ddb812f95"
+      }
+    ],
+    "executorSha256": [
+      {
+        "path": "src/dialog/new-engine.mjs",
+        "sha256": "c1fe33163e8228e37f27530ba17a15fda4dd8474b31d451a73c6711244367a28"
+      },
+      {
+        "path": "src/dialog/reader-routing.mjs",
+        "sha256": "7cc41dbfe3ff8acf119153f75df32a3a2ba542529ed29ce67057c12ae6f934d0"
+      },
+      {
+        "path": "src/dialog/reader-admission.mjs",
+        "sha256": "d24676c119ec676defd7504ba3bc3cd5510ca0e38762e574167527cf3604b323"
+      }
+    ],
+    "contextSerializationSha256": [
+      {
+        "path": "scripts/lib/reader-context-profile.mjs",
+        "sha256": "c740fca4519934b6a05b426deb6b5826f9f0d568813616d5d33df3e066fda2ac"
+      },
+      {
+        "path": "src/dialog/key-reader-inference.mjs",
+        "sha256": "68df1865a113288f2c7e81ec3629e3b3ef6d5bd6280d6de36d689eec3655a779"
+      }
+    ]
+  },
+  "runtimeTree": {
+    "root": "/home/salboaie/work/sopworlds/.session-control/diagram-vss-demo/training/laptop/node_modules",
+    "sha256": "4dcc880aa97ba3d7d4423054a4d2ff87812f3f05daaf5fde37e755adeb039dc2",
+    "files": 2467,
+    "bytes": 406419324
+  },
+  "source": {
+    "path": "/home/salboaie/work/sopworlds/.session-control/structural-gold-review23-full/calibration.jsonl",
+    "sha256": "4911bcb18188940abc7a13719dc1d379e85393fb5b6a716086cae2766b46b71e",
+    "selection": "first two source records per area; text/actual context only, no request labels"
+  },
+  "fullNodePackets": {
+    "path": "/home/salboaie/work/sopworlds/.session-control/actual-node-eight-probe.json",
+    "sha256": "c643321cd3b20a1c8cd5075697d1f241c5c3293fa32f67023232bc06a5dea8b8",
+    "bytes": 1050249
+  },
+  "pythonReference": {
+    "path": "/home/salboaie/work/sopworlds/.session-control/review23-node-reference-packets.json",
+    "sha256": "79089bd24876d55bb47811420e2a0a9f2c4b967ffe339962ee0ed334aaf16b11"
+  },
+  "sourceOnlyInputs": {
+    "path": "/home/salboaie/work/sopworlds/.session-control/review23-node-reference-inputs.jsonl",
+    "sha256": "b2a5e19ac4f5070e485ec54e533a40ac0d60a9b7ea1c93e64dbb70e136c69a6b"
+  },
+  "executedScripts": {
+    "actual-node-eight-probe.mjs": "c987a90a2602bc5b87d49911ab37acc869c30365f96c96ad3040edb3b0f231de",
+    "compare-node-eight.py": "79af8310a4f30945d1e1b6d1baf8a1d8fdd3740ba7e110556a907e5bec2a0709"
+  },
+  "failedProbe": {
+    "reason": "Original small tokenizer_config omits special-role fields required by Transformers.js; all8 refused before model computation",
+    "path": "/home/salboaie/work/sopworlds/.session-control/actual-node-eight-probe-missing-pad.json",
+    "sha256": "d30f36f8c582ffd26779d4cd3976cc62a7c55238465e158b8b0aaa7e7df22763"
+  },
+  "tokenizerCertification": {
+    "singlePairCases": 26,
+    "tests": 2,
+    "passed": 2,
+    "actualProfile": "pinned original tokenizer bytes; explicit-bert-special-roles/1; component trace version2",
+    "logSha256": "1b74d5534448c04c82087e8cf1282b78aeab654c68763ed15bb98340b82ba194"
+  },
+  "boundary": "Actual frozen q8 Node CPU source-only inference, not semantic accuracy or calibrated admission. Six of eight semantic RAW pipelines match Python q8 after removing only provider-specific model identity; both identities retained. Nine cuts, one complete raw packet, zero canonical candidates. Actual8 input serialization/token feed comparison and backend numeric isolation remain pending; do not attribute the two differences solely to backend yet."
+}

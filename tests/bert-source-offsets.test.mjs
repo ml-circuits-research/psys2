@@ -1,4 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync,existsSync} from 'node:fs';import {createHash} from 'node:crypto';import {pathToFileURL} from 'node:url';import {resolve} from 'node:path';import {execFileSync} from 'node:child_process';
+import {bertRuntimeConfiguration} from '../scripts/lib/actual-reader-provider.mjs';
 import {createBertSourceOffsetAuthority} from '../src/dialog/bert-source-offsets.mjs';
 const sha=s=>createHash('sha256').update(s).digest('hex');
 test('offset authority rejects unauthenticated tokenizer bytes and unsupported profiles',async()=>{
@@ -9,7 +10,9 @@ test('offset authority rejects unauthenticated tokenizer bytes and unsupported p
 const runtimePath=process.env.SOP_TRANSFORMERS_RUNTIME,modelDir=process.env.SOP_STRUCTURAL_MODEL_DIR;
 test('actual BERT component trace matches fast-tokenizer scalar offsets and refuses unsupported input',{skip:!runtimePath||!modelDir},async()=>{
  const runtime=await import(pathToFileURL(resolve(runtimePath)).href);runtime.env.allowRemoteModels=false;
- const tokenizer=await runtime.AutoTokenizer.from_pretrained(resolve(modelDir),{local_files_only:true}),json=readFileSync(resolve(modelDir,'tokenizer.json'),'utf8');
+ const json=readFileSync(resolve(modelDir,'tokenizer.json'),'utf8'),profile=JSON.parse(json),config=JSON.parse(readFileSync(resolve(modelDir,'tokenizer_config.json'),'utf8'));
+ const tokenizer=new runtime.BertTokenizer(profile,bertRuntimeConfiguration(profile,config));
+ for(const changed of [{...profile,model:{...profile.model,type:'BPE'}},{...profile,model:{...profile.model,type:undefined,ambiguous:true}}]){const bad=JSON.stringify(changed);await assert.rejects(createBertSourceOffsetAuthority({tokenizer,tokenizerJSON:bad,tokenizerSha256:sha(bad)}),/unsupported-profile/);}
  const options={tokenizer,tokenizerJSON:json,tokenizerSha256:sha(json)},authority=await createBertSourceOffsetAuthority(options);
  const inputs=['','Set BLUE widget.','Café naïve résumé','Cafe\u0301 repeated cafe\u0301','🟦 😀 widget','one, two; three!','same same same','a'.repeat(101),'你好 世界','İstanbul','A\u0000B','x\t y\n z','unbelievably colourful'];
  const contextJson='{"area":"drawing","context":{"name":"same"}}';
