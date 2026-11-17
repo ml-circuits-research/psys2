@@ -360,7 +360,7 @@ export async function buildWebchat({ root = REPO, outDir = path.join(root, 'docs
   const tabFiles = [];
   for (const file of (await exists(tabsSrc)) ? (await readdir(tabsSrc)).filter((f) => f.endsWith('.mjs')).sort() : []) {
     const plugin = (await import(pathToFileURL(path.join(tabsSrc, file)).href)).default;
-    if (selected.has(plugin?.world)) tabFiles.push(file);
+    if (plugin?.id && plugin.standalone !== false && selected.has(plugin?.world)) tabFiles.push(file);
   }
   await mkdir(path.join(outDir, 'ui/tabs'), { recursive: true });
   await writeFile(path.join(outDir, 'ui/tabs/index.json'), JSON.stringify(tabFiles) + '\n');

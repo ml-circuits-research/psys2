@@ -2,6 +2,8 @@
 // diagram.sketch core: the engine of diagram-vss-demo bound to a state (worlds/diagram.sketch/engine/, loaded lazily), the short ids of its shapes and arrows, the state and
 // its write-back. Shared by the tool primitives (tool.mjs, what the request door calls) and the old word operations (engine.mjs). No words, no request, no replies. Browser-safe.
 
+import {initialChartState} from '../data.charts/declared-host.mjs?v=f9e3064f7b';
+
 export const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 
 export const TAB = 'diagram';
@@ -21,6 +23,7 @@ export function initialState() {
   return {
     shapes: [], edges: [], rules: [], seq: {}, edgeSeq: 0, ruleSeq: 0, order: 0, frame: { x: 0, y: 0 }, frames: [], groups: [],
     last: [], selected: null, pending: null, undo: [], redo: [], rev: 0,
+    chartTools: {...initialChartState(),idPrefix:'chart:'}, compositionHistory:[], compositionFuture:[],
   };
 }
 export function ensure(ctx) {

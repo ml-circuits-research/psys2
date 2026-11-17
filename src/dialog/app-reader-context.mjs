@@ -4,8 +4,14 @@ import {createDrawingHost} from '../../worlds/art.draw/declared-host.mjs';
 import {createDiagramHost} from '../../worlds/diagram.sketch/declared-host.mjs';
 import {createDocumentHost} from '../../worlds/docs.editor/declared-host.mjs';
 import {createCalendarHost} from '../../worlds/time.calendar/declared-host.mjs';
-import {createChartHost} from '../../worlds/data.charts/declared-host.mjs';
-export const NATIVE_AREAS={draw:{area:'drawing',world:'art.draw',create:createDrawingHost},diagram:{area:'diagram',world:'diagram.sketch',create:createDiagramHost},editor:{area:'document',world:'docs.editor',create:createDocumentHost},calendar:{area:'calendar',world:'time.calendar',create:createCalendarHost},charts:{area:'diagram',world:'data.charts',create:createChartHost}};
+export const NATIVE_AREAS={draw:{area:'drawing',world:'art.draw',create:createDrawingHost},diagram:{area:'diagram',world:'diagram.sketch',create:createDiagramHost},editor:{area:'document',world:'docs.editor',create:createDocumentHost},calendar:{area:'calendar',world:'time.calendar',create:createCalendarHost,policyFile:'scheduling-policy.sop'}};
+/** Application composition: the same declared policy guards controls and spoken requests. */
+export async function createAreaHost(area,{loader,...options}={}){
+ if(!area)throw Error('unknown-native-area');
+ const policySource=area.policyFile?await loader?.readFile?.(area.world,area.policyFile):undefined;
+ if(area.policyFile&&!policySource)throw Error('native-policy-unavailable');
+ return area.create({...options,...(policySource?{policySource}:{})});
+}
 export function createAppReaderContext({getState,getPrevious=()=>null,onObservation=()=>{}}={}){
  if(typeof getState!=='function'||typeof getPrevious!=='function'||typeof onObservation!=='function')throw Error('invalid-app-reader-context');
  const hosts=new WeakMap();

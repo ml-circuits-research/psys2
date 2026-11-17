@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-import {createCalendar} from './calendar-tool.mjs?v=7be76f9245';
+import {createCalendar} from './calendar-tool.mjs?v=7878bd2af4';
 import {World} from '../../lib/vendor/sopworld/sopworld.mjs?v=ca48804f00';
 /** SOP policy supplied by loader; this projection assigns no timezone/default values. */
 export function createCalendarPolicy({source,budget=10000}={}){
@@ -9,7 +9,7 @@ export function createCalendarPolicy({source,budget=10000}={}){
   try{createCalendar({instanceId:'policy',...state});}catch{return {ok:false,code:'invalid-native-calendar-input'};}
   const world=new World();world.load(source);let n=0;const facts=[];
   for(const meeting of state.meetings){
-   const resources=[...meeting.participants.map(id=>['person',id]),...(meeting.room===null?[]:[['room',meeting.room]])];
+   const resources=[...meeting.participants.map(id=>['person',id]),...(meeting.room===null?[]:[['room',meeting.room]]),...(meeting.calendar?[['calendar',meeting.calendar]]:[])];
    for(const resource of resources){if(++n>budget)return {ok:false,code:'calendar-policy-budget'};facts.push(`@calendar.fact.${n} calendar.policy.interval event=${JSON.stringify(meeting.id)} resource=${JSON.stringify(JSON.stringify(resource))} start=${meeting.start} end=${meeting.start+meeting.duration}`);}
   }
   const result=world.tell(facts.join("\n"));return result.ok?{ok:true}:{ok:false,code:'calendar-policy-denied',details:JSON.parse(JSON.stringify(result))};

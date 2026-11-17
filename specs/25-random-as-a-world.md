@@ -1,6 +1,6 @@
 # 25. Random as a world (host side of `std.sample`)
 
-Status: implemented with sopworld 0.59 (vendored 0.62) (`sample`, `diversity`). Code: `src/dialog/sampler.mjs`, the worker op `sample` in `docs/webchat/ui/engine-worker.mjs`, the host in `docs/webchat/app.mjs`. Tests: `tests/sampler.test.mjs`. Measurement: `scripts/measure-dice.mjs` (rows in `training/eval/dice-samples.jsonl`).
+Historical implementation: implemented with sopworld 0.59 (vendored 0.62) (`sample`, `diversity`). Code: `src/dialog/sampler.mjs`, the worker op `sample` in `docs/webchat/ui/engine-worker.mjs`, the host in `docs/webchat/app.mjs`. Tests: `tests/sampler.test.mjs`. Measurement: `scripts/measure-dice.mjs` (rows in `training/eval/dice-samples.jsonl`).
 
 ## Rule
 No hard-coded examples and no generator of our own. The dice, the example chips and the action buttons all come from the library's `sample`. Deleted by this spec: `docs/webchat/surprise-pool.json` (214 hand-validated texts, a 25-minute build), `src/dialog/surprise.mjs` (pool build and picker), `tests/surprise.test.mjs`, the welcome examples (`EXAMPLES` in app.mjs), the empty-state lists of the Talk, Charts, Editor and Documents tabs and the "Try: ..." hints of the Map and the editor view, and the generator of `scripts/coverage-grid.mjs` (forms x verbs x kinds, with its placeholders).
@@ -63,3 +63,11 @@ The example bar shows the open page's own chips: the acts that fit its selected 
 
 ## Sensitive things are never offered unasked (reviewer 2026-11-15 03:35 (a), knowledge Q76)
 The catalog marks lemmas `k.kinds.sensitivity name=<lemma> sensitive=weapon|drug|alcohol|tobacco` (shard k.kinds/shards/sensitive). `src/knowledge/sensitive.mjs` loads that one shard in the background when a sampler is made (never awaited by a turn), and `engineSampler` drops a thing found there from every list a world gives the sampler (`sampleKnowledge`: the dice's vocabulary, the chips' next things) and from every sampled item (`sample`, `actions`, `dice`), unless the user named it in the last turn (its English or the words as typed, singular or plural). Before the shard arrives, or at a catalog commit without the type (the current pin ab3b2ab), nothing is known sensitive: the filter starts working when the pin moves to a commit that has it. Test: tests/sensitive-chips.test.mjs (a fixture catalog; fails with the filter off).
+
+## New-reader application integration (2026-11-17)
+
+The new worker uses `native-request-sampler.mjs` to adapt declared native operations, exported semantic bindings and actual observations to the existing sampler schema. `std.sample` chooses frames and the existing English language world realises them; no example list or sentence parser is added. Candidate properties use finite declared enums, bounded numeric ranges or the same knowledge value source used by native execution. Existing objects come from the current observation.
+
+At most eight proposed sentences go through the normal SOP-BERT route on independent state copies. Only an observed changing effect with the sampled act is offered; creation must create the sampled kind, and a change must affect the sampled existing id. Probing never commits changes or journals. If the live state changes during generation, suggestions are discarded. Sampling and actual turns serialize model use; unsupported areas and missing reader/bindings report no suggestion. The dice sends the chosen sentence through the normal user-turn route, retaining correction and undo. This does not bypass the reader or certify broad semantic accuracy.
+
+Current generation covers creation and changes with declared finite values, with novelty retained between rolls. It does not generate arbitrary free text, complex relations or scheduling values without finite declared generation contracts. Non-English UI proposals use the existing machine-translation boundary.

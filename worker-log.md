@@ -25,3 +25,7 @@ Owner explicitly requested diagnosis before strategy and one run instead of repe
 Command: node scripts/diagnose-training-pipeline.mjs ../.session-control/active-reader-node-spec.json ../.session-control/structural-gold-review23-full/train.jsonl ../.session-control/target-type-review23-data-v3-full/train.jsonl.gz ../.session-control/training-pipeline-random100-seed1 1
 Book-aligned report and all 100 rows: training/results/training-pipeline-random100-seed1.md; 83 incomplete setups, 83 reader-issue rows, 70 property-binding rows (overlapping); calendar fixture empty-participant bug distinguished from neural errors.
 Validation: npm test — 356 tests, 353 pass, 0 fail, 3 skips. No product fixes; existing sampler/browser work preserved. Next discriminating run: original-context reader comparison plus gold-description bridge on these fixed ids.
+
+2026-11-17 done: first UI delivery replaces Charts tab with Calendar; chart tools/SVG/multiple series are composed inside Diagram. Calendar UI supports personal calendars, rooms, timed events, occupancy, policy conflicts and undo; work survives reload.
+Checks: npm test (active gate), native chart composition tests, node scripts/smoke-demo-areas.mjs; actual Chromium created resources/events/chart, refused overlap, edited/undid and restored all data after reload.
+Native bindings regenerated and packaged with unchanged epoch7 weights; direct numerical chart proposal executes [3,5,8]. This is not a reader-accuracy claim. Dataset repair/retraining and richer gesture/intent capture remain active separately.

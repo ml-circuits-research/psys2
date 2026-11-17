@@ -12,7 +12,7 @@ import { en } from '../../lib/lang/en.mjs?v=edece7402d';
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 
-export function initialState() { return { today: null, month: null, season: null, clock: null, date: null }; }
+export function initialState() { return { calendars:[],people:[],rooms:[],meetings:[] }; }
 
 // ---------------------------------------------------------------- k.time
 const UNIT_OF = { 'k.time.weekday': 'day', 'k.time.month': 'month', 'k.time.season': 'season' };

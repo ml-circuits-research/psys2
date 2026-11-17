@@ -519,6 +519,9 @@ export async function mountPsys2(element, options = {}) {
   function note(text) { const m = addMessage('bot', text, { className: 'is-note' }); return m; }
 
   // ---------- state -> UI ----------
+  const DEMO_STATE_KEY='psys2.demo.worlds.v1';
+  const DEMO_WORLDS=['art.draw','diagram.sketch','docs.editor','time.calendar'];
+  let demoRestored=false;
   function applyState(snapshot) {
     if (!snapshot || typeof snapshot !== 'object') return;
     const changed = [];
@@ -527,6 +530,7 @@ export async function mountPsys2(element, options = {}) {
     if (changed.includes('ui.avatar')) avatarUI?.update(states['ui.avatar']);
     if (changed.includes(SHELL)) applyShell(states[SHELL]);
     if (changed.includes('docs.editor')) syncDictation();
+    if(demoRestored&&options.persist!==false&&changed.some(id=>DEMO_WORLDS.includes(id)))try{localStorage.setItem(DEMO_STATE_KEY,JSON.stringify(Object.fromEntries(DEMO_WORLDS.filter(id=>states[id]).map(id=>[id,states[id]]))));}catch{}
     options.onState?.(states, changed);
   }
   function applyShell(sh) {
@@ -605,6 +609,12 @@ export async function mountPsys2(element, options = {}) {
   const hostApi = {
     /** RANDOM (spec 25): texts the sampler gives for the tab (mode 'few' | 'actions' | 'one'); a tab shows them in its empty state instead of a list of its own. */
     sample: (mode, extra) => sampleItems(mode, extra).then((items) => items.map((i) => i.text)),
+    tool: async (operation,args={}) => {
+      if(isBusy())return {ok:false,message:'Please wait for the current action.'};
+      effectsPending++;updateBusy();
+      try{const r=await session.tool(operation,args);applyState(r.state);if(r.ok&&r.changed)events.add('control',operation);return r;}
+      finally{effectsPending=Math.max(0,effectsPending-1);updateBusy();}
+    },
     send: (text) => send(String(text), 'form'),   // a tab's form or control (logged as mode 'form'); ignored (with a hint) while a turn runs
     /** A card or control that moves the person to another tab (a transferred card): logged as a tab opened by a card. */
     openTab: (id) => { userTab(id, 'card'); },
@@ -1186,9 +1196,11 @@ export async function mountPsys2(element, options = {}) {
   const sampleItems = (mode, extra) => sample(mode, extra).then((r) => r?.items ?? []);
   async function rollDice(tab = view) {
     if (turn) { flashHint(BUSY_HINT); return; }
-    const r = await sample('one', { tab });
+    dieBtn.disabled = true;
+    let r;
+    try { r = await sample('one', { tab, language: language.get() }); } finally { dieBtn.disabled = false; }
     const ex = r?.items?.[0];
-    if (!ex) { flashHint(r?.available === false ? 'The random command needs the sampler library.' : 'No random command is available for this tab yet.'); return; }
+    if (!ex) { flashHint(r?.reason === 'busy' ? 'Finish the current request before trying an example.' : 'I could not find a changing example for the current state and reader.'); return; }
     // a command of another world is shown on that world's tab: a short one ("Add a table.") means something else on the drawing tab, which would read it itself
     if (ex.tab && ex.tab !== 'robot' && tabBtns[ex.tab] && view !== ex.tab) userTab(ex.tab, 'example');
     send(ex.text, 'chip', { example: true });
@@ -1956,6 +1968,8 @@ export async function mountPsys2(element, options = {}) {
     if (info.problems?.length) console.warn('PSys2 world problems:', info.problems);
     if (!settingsEl.hidden) renderSettings();
     session = engineClient.session; mark('session');
+    if(options.persist!==false)try{const saved=JSON.parse(localStorage.getItem(DEMO_STATE_KEY)??'null');if(saved&&typeof saved==='object'&&!Array.isArray(saved)){const worlds=Object.keys(saved).filter(id=>DEMO_WORLDS.includes(id));if(worlds.length){await engineClient.call('ensure',{worlds,why:'saved work'});const r=await engineClient.call('setStates',{state:Object.fromEntries(worlds.map(id=>[id,saved[id]]))});engineClient.session.acceptState(r);}}}catch(e){console.warn('Saved work could not be restored',e);}
+    demoRestored=true;
     session.setWorldState?.(SHELL, { language: language.get(), ...(savedTab ? { activeTab: savedTab } : {}) });   // the shell world's language state starts as the selector (LANG-FIXED)
   } catch (e) {
     console.error(e);
@@ -2019,7 +2033,7 @@ export async function mountPsys2(element, options = {}) {
     sampleItems('few', { tab: 'talk', count: 4, language: language.get() }).then((items) => { for (const it of items) chips.append(h('button', { class: 'p2-example', type: 'button', onclick: () => { if (it.tab && tabBtns[it.tab] && view !== it.tab) userTab(it.tab, 'example'); send(it.text, 'chip', { example: true }); input.focus(); } }, it.text)); }).catch(() => {});
   }
   const handle = {
-    engine, session, settings, send, stop: stopTurn, engineClient, longTasks, applyState, showTab: (id, via = 'card') => showTab(id, via), get busy() { return !!turn; }, get debug() { return dbg; }, isBusy, get veiled() { return veiled; },
+    engine, session, settings, send, stop: stopTurn, engineClient, longTasks, applyState, showTab: (id, via = 'card') => userTab(id, via), get busy() { return !!turn; }, get debug() { return dbg; }, isBusy, get veiled() { return veiled; },
     /** The queue of waiting messages (MIC2) and the turn state flags, in one place for other features (BUSY veil): `turnState()` says what is running and what waits. */
     queue: { list: () => queue.map((q) => ({ id: q.id, text: q.text, mode: q.mode })), drop: dropQueued, clear: clearQueue, get length() { return queue.length; } },
     turnState: () => ({ running: !!turn, queued: queue.length, speaking: !!mic.speaking, mic: micBtn.dataset.mic }),

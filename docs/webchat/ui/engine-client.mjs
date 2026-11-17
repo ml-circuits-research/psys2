@@ -223,6 +223,11 @@ export function createEngineClient({ base, versions = {}, getSettings, getLangua
       if (res.reply.budgetExceeded) rememberBad({ key, text, tab, kind: 'send' }, 'budget', { site: res.reply.budgetExceeded.site, stage: res.reply.budgetExceeded.stage });   // a reply that says "too complex" is never recomputed
       return res.reply;
     },
+    acceptState(result) {applyStateInfo(result);},
+    async tool(operation,args={}) {
+      const r=await guarded('nativeTool','nativeTool',{view:getTab(),operation,args},{hardMs:15000,text:operation,key:null,tab:getTab()});
+      applyStateInfo(r);return r;
+    },
     async dryRead(text, opts = {}) {
       const tab = getTab(), key = badKeyOf(text, tab);
       if (bad.has(key)) { stats.refused++; return { complete: false, segments: 0, reason: 'known-slow' }; }

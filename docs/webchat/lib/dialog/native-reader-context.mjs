@@ -6,6 +6,7 @@ const labels={
  'art.draw.object':'drawing.object.name','diagram.sketch.node':'diagram.node.label',
  'docs.editor.document':'document.title','docs.editor.block':'document.block.name','docs.editor.section':'document.block.name',
  'time.calendar.meeting':'calendar.meeting.title','time.calendar.room':'calendar.room.label','time.calendar.person':'calendar.person.label',
+ 'time.calendar.calendar':'calendar.calendar.label','data.charts.chart':'chart.title',
 };
 /** Caller supplies actual native observation, actual selected area and sent history.
  * Expected request annotations are not part of this API. */

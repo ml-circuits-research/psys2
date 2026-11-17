@@ -1,9 +1,9 @@
 // Model-first proposal routing. Calibration authority belongs to host configuration,
 // never to a model output, evaluation annotation or grammar proposal.
 import {executeRequestCandidate} from './new-engine.mjs?v=21fadf9db4';
-import {executeDeclaredRequest} from './declared-execution.mjs?v=45e9b6bf93';
-import {projectContextAction} from './project-context-action.mjs?v=eb08312d69';
-import {projectCreateAction} from './project-create-action.mjs?v=bc6915e201';
+import {executeDeclaredRequest} from './declared-execution.mjs?v=8c21544c99';
+import {projectContextAction} from './project-context-action.mjs?v=e7e967bfcf';
+import {projectCreateAction} from './project-create-action.mjs?v=1e3c2776c0';
 import {parse,str} from '../vendor/sopworld/sopworld.mjs?v=ca48804f00';
 import {assessReaderProposal} from './reader-admission.mjs?v=1f4bce9083';
 const unavailable=reason=>({candidates:[],coverage:{complete:false,executable:false,graphProposal:false},failures:[{reason}]});

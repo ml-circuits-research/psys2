@@ -1,11 +1,9 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Pure comparison of local host snapshots. No language, schedule policy or SOP binding.
-import { calendarObservationIssue } from './calendar-tool.mjs?v=7be76f9245';
+import { calendarObservationIssue } from './calendar-tool.mjs?v=7878bd2af4';
 const copy = (x) => structuredClone(x);
 const source = (o) => ({ instanceId: o?.instanceId ?? null, version: o?.version ?? null, complete: o?.complete ?? null });
-const normalized = (fact) => fact.kind === 'meeting'
-  ? { id: fact.id, kind: fact.kind, title: fact.title, start: fact.start, duration: fact.duration, participants: [...fact.participants].sort(), room: fact.room }
-  : { id: fact.id, kind: fact.kind, label: fact.label };
+const normalized = (fact) => Object.fromEntries(Object.keys(fact).sort().map(key=>[key,key==='participants'?[...fact[key]].sort():fact[key]]));
 const equal = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 
 export function compareCalendarObservations(before, after) {

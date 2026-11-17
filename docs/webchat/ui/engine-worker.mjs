@@ -40,7 +40,7 @@ let dispatcherEnc = null, normalizerHost = null, dispatcherInfo = null;
 let worldLoader = null, loaders = null, rulesMod = null, wordMod = null, tabWorlds = {}, universe = null;   // LAZY LOADING: the world index, the library modules the loader needs, tab id -> world id, the worlds this page may use (tests)
 const loadedIds = new Set();
 const DEFAULT_DICE_WORLD = 'art.draw';
-let sampler = null;   // the sampler of the session (sopworld std.sample; novelty is kept in it)
+let sampler = null, samplerRun = null;   // the sampler of the session (sopworld std.sample; novelty is kept in it)
 const recentWorlds = [];   // worlds the last replies came from, newest first
 const noteWorlds = (reply) => { for (const x of (reply?.segments ?? [])) { const id = x.match?.worldId ?? x.world; if (id) { const i = recentWorlds.indexOf(id); if (i >= 0) recentWorlds.splice(i, 1); recentWorlds.unshift(id); } } recentWorlds.length = Math.min(recentWorlds.length, 6); };
 const allowed = (id) => !universe || id === 'core' || universe.has(id);
@@ -104,7 +104,7 @@ async function init(m) {
   loaders = loadersMod;
   tabWorlds = m.tabWorlds ?? {}; universe = m.onlyWorlds ? new Set(m.onlyWorlds) : null;
   try { const b = await imp('lib/dialog/budget.mjs'); budgetMod.createBudget = b.createBudget ?? null; } catch { budgetMod.createBudget = null; }   // agent B's step budget, when this build has it
-  mods = { tl, dialog, rc, guard: g.guard, TurnAborted: g.TurnAborted, soplang, lang };
+  mods = { tl, dialog, rc, guard: g.guard, TurnAborted: g.TurnAborted, soplang, lang, ...(await imp('lib/dialog/demo-state-migration.mjs')) };
   // the guard reports its stage to the page at once (postMessage from synchronous code is delivered while the loop runs): a killed turn says where it was
   { let last = ''; const report = (stage) => { if (stage && stage !== last) { last = stage; evt('stage', stage); } };   // a few dozen changes per turn
     const gc = g.guard.check.bind(g.guard), gs = g.guard.setStage.bind(g.guard), ga = g.guard.abortable.bind(g.guard);
@@ -162,6 +162,7 @@ async function init(m) {
   session = engine.createSession({ language: lang.normalize(settings.language) });   // LANG-FIXED: always an explicit 'en' | 'ro', never 'auto'
   applySettings(null);
   if (m.restoreState) restoreStates(m.restoreState, m.restoreMeta);
+  mods.migrateDemoState?.(session.isession.state);
   await installSopReader(imp);
   return { retiredAreas: worldLoader.index.retiredAreas ?? [], worlds: engine.worlds().map((w) => w.id), known: worldLoader.ids(), worldTabs: Object.fromEntries(worldLoader.ids().map((id) => [id, worldLoader.info(id).tab?.id ?? null]).filter(([, v]) => v)), problems: engine.problems?.() ?? [], state: stateOf(), hasDispatcher: !!dispatcherEnc, hasNormalizer: !!normalizerHost, budget: !!budgetMod.createBudget, reader: readerStatus };
 }
@@ -184,7 +185,8 @@ async function installSopReader(imp){
 
 function restoreStates(state, meta) {
   if (state && typeof state === 'object') {
-    session.isession.state = { ...session.isession.state, ...structuredClone(state) };   // over the fresh session's initial states: a world loaded since the record was made has none in it (lazy loading)
+    session.isession.state = { ...session.isession.state, ...structuredClone(state) };
+    mods.migrateDemoState?.(session.isession.state);   // over the fresh session's initial states: a world loaded since the record was made has none in it (lazy loading)
     if (meta) {
       readerPrevious=typeof meta.readerPrevious==='string'?meta.readerPrevious:null;
       session._msg = meta.msg ?? session._msg; session._sessionLang = meta.lang ?? session._sessionLang; session._weakRo = meta.weakRo ?? 0;
@@ -246,6 +248,7 @@ const allLoaded = () => worldLoader.ids().filter(allowed).every((id) => loadedId
 const handlers = {
   async init(m) { return init(m); },
   async send(m) {
+    if (samplerRun) await samplerRun;
     const ctl = new AbortController();
     active.set(m.id, ctl);
     if (warming) await warming;
@@ -280,6 +283,18 @@ const handlers = {
         budget: budget ? { ticks: budget.ticks, bySite: { ...budget.bySite } } : null, ort: true };
     } finally { active.delete(m.id); lastTurnEnd = performance.now(); faultNow = null; sendOrt(); }
   },
+  async nativeTool(m) {
+    if(turnRunning()||samplerRun)throw Error('An action is already running.');
+    const ctl=new AbortController();active.set(m.id,ctl);
+    try{const {NATIVE_AREAS}=await import(vurl('lib/dialog/app-reader-context.mjs'));
+      const view=session.isession.state['ui.shell']?.activeTab,area=NATIVE_AREAS[view];
+      if(!area||m.view!==view)throw Error('The active tab changed. Please try again.');
+      await ensureWorlds([area.world],'area control');
+      const {invokeNativeControl}=await import(vurl('lib/dialog/native-tool-controls.mjs'));
+      const result=await invokeNativeControl(session,{view,operation:m.operation,args:m.args});
+      return {...result,state:stateOf(),meta:metaOf()};
+    }finally{active.delete(m.id);}
+  },
   async dry() { return { complete: false, segments: 0, reason: 'unsupported', understood: [], missing: ['declared dry reading'] }; },
   async hint() { return null; },
   async observe() { return { follow: [], state: stateOf(), unsupported: 'No declared observation reaction is bound.' }; },
@@ -293,7 +308,27 @@ const handlers = {
   async settings(m) { applySettings(m.settings, { prepare: m.prepare }); return null; },
   async option(m) { session[m.key] = m.value; if (m.key === 'formalizer') session.setOption?.('formalizer', m.value); return null; },
   async prepare() { return {available:readerStatus.state==='ready',reader:readerStatus}; },
-  async sample() { return { items: [], available: false, reason: 'no-declared-request-sampler' }; },
+  async sample(m) {
+    if (samplerRun || turnRunning() || warming) return { items: [], available: true, reason: 'busy' };
+    const run = (async () => {
+      const [{NATIVE_AREAS},{createNativeRequestSampler}] = await Promise.all([import(vurl('lib/dialog/app-reader-context.mjs')),import(vurl('lib/dialog/native-request-sampler.mjs'))]);
+      const view = m.tab ?? session.isession.state['ui.shell']?.activeTab, area = NATIVE_AREAS[view];
+      if (!area || view !== session.isession.state['ui.shell']?.activeTab || readerStatus.state !== 'ready') return { items: [], available: false, reason: 'active-reader-area-unavailable' };
+      await ensureWorlds([area.world], 'request sampler');
+      const bindings = engine.requestReader.bindings?.();
+      if (!bindings) return { items: [], available: false, reason: 'reader-bindings-unavailable' };
+      sampler ??= createNativeRequestSampler();
+      const host = await area.create({ state: structuredClone(session.isession.state[area.world]), instanceId: 'sampler-'+crypto.randomUUID() });
+      const result = await sampler.sample({ session, area: area.area, view, world: area.world, host, createHost: area.create, bindings, mode: m.mode ?? 'one', count: Math.min(4,Math.max(1,Number(m.count)||1)) });
+      const language = m.language ?? settings.language ?? 'en';
+      if (language !== 'en') for (const item of result.items) {
+        try { const translated = await engine.translator.machineTranslate(item.text,{from:'en',to:language}); if (typeof translated === 'string' && translated.trim()) item.text = translated; } catch { /* English remains usable input. */ }
+      }
+      return result;
+    })();
+    samplerRun = run;
+    try { return await run; } finally { if (samplerRun === run) samplerRun = null; }
+  },
   async warm() { return null; },
   /** The page needs a world now (its tab opens, the user names it): loads it and answers which worlds are loaded. */
   async ensure(m) { while (turnRunning()) await sleep(20); const added = await ensureWorlds(m.worlds ?? [], m.why ?? 'tab'); return { added, loaded: [...loadedIds], state: stateOf(), log: loadedLog.slice(-20) }; },

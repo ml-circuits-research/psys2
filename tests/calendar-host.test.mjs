@@ -24,7 +24,7 @@ test('calendar observations preserve overlapping bookings; policy belongs to the
 
 test('invalid input and resource references are atomic refusals', () => {
   const tool = createCalendar(initial()), before = tool.observe();
-  for (const fields of [{ duration: 0 }, { duration: -1 }, { start: NaN }, { start: '0' }, { start: 8.64e15 }, { participants: ['missing'] }, { participants: ['p1', 'p1'] }, { participants: [] }, { room: 'missing' }, { unrecognised: true }]) {
+  for (const fields of [{ duration: 0 }, { duration: -1 }, { start: NaN }, { start: '0' }, { start: 8.64e15 }, { participants: ['missing'] }, { participants: ['p1', 'p1'] }, { participants: [], room: null }, { room: 'missing' }, { unrecognised: true }]) {
     assert.equal(call(tool, 'meeting.add', { ...meeting('m', 0), ...fields }).ok, false);
     assert.deepEqual(tool.observe(), before);
   }

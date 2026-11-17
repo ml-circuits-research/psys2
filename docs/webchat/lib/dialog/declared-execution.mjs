@@ -3,8 +3,8 @@ import {nativeKindCandidates} from './native-binding-candidates.mjs?v=965157001c
 import {World,str} from '../vendor/sopworld/sopworld.mjs?v=ca48804f00';
 import SOURCE from './new-engine-source.mjs?v=e31b4adb7f';
 import {flatRequestProjection} from './request-projection.mjs?v=091aaf724b';
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=bfb7a4d854';
-import {observedReaderContext} from './native-reader-context.mjs?v=2946a2d8ee';
+import {NATIVE_AREAS,createAreaHost} from './app-reader-context.mjs?v=5ff36b453a';
+import {observedReaderContext} from './native-reader-context.mjs?v=c51a7d6eb4';
 import {validateNativeArguments} from '../../worlds/native-tool-host.mjs?v=463e762442';
 import {resolvePropertyValue} from './property-selection.mjs?v=e569f0bfcb';
 import {DRAWING_PROPERTY_BINDINGS} from '../../worlds/art.draw/property-host.mjs?v=70c302d3e0';
@@ -12,6 +12,11 @@ let knowledge;
 const source=()=>knowledge??=World.fromJSON(SOURCE.snapshot);
 // Explicit application value and creation defaults. These are assumptions, not knowledge facts.
 const valueSources={colour:{valueType:'k.colours.colour',nameKey:'name',valueKey:'rgb'}};
+/** Finite lexical values from the same declared knowledge source used by execution. */
+export function declaredPropertyValues(concept) {
+ const config=valueSources[concept];
+ return config?source().ofType(config.valueType).map(w=>str(w.attrs[config.nameKey]?.[0])).filter(v=>typeof v==='string'):[];
+}
 const creationDefaults={
  'document.write':()=>({blocks:[]}),
  'calendar.meeting.add':()=>({start:Date.now(),duration:30*60*1000,participants:[],room:null}),
@@ -26,7 +31,7 @@ export async function executeDeclaredRequest(session,candidate,text,{bindings,vi
  const mappings=nativeKindCandidates(bindings).filter(r=>r.area===area.area&&r.canonical===target.kind&&r.nativeFamilyBinding);
  if(!mappings.length)return null;
  const nativeState=session.isession.state[area.world];if(!nativeState)return null;
- const host=await area.create({state:nativeState,instanceId:'execution-'+globalThis.crypto.randomUUID()}),before=host.observe(),operations=host.bindings();
+ const host=await createAreaHost(area,{state:nativeState,instanceId:'execution-'+globalThis.crypto.randomUUID(),loader:session.engine?.loader}),before=host.observe(),operations=host.bindings();
  const familyOps=operations.filter(op=>mappings.some(m=>m.nativeFamilyBinding.operation===op.id));
  const kinds=[...new Set(mappings.map(m=>m.lemma).filter(name=>familyOps.some(op=>op.params.kind?.enum?.includes(name))))];
  const sourceTypes=new Set(familyOps.map(op=>op.on)),notes=[],unapplied=[];
@@ -47,17 +52,26 @@ export async function executeDeclaredRequest(session,candidate,text,{bindings,vi
  }
  const candidates=[];
  for(const operation of operationsForAct) {
-  const args={},applied=[],skipped=[],assumptions=[];
+  const explicitDefaults=mappings.find(m=>m.nativeFamilyBinding.operation===operation.id)?.nativeFamilyBinding.arguments??{};
+  const args=structuredClone(explicitDefaults),applied=[],skipped=[],assumptions=[];
   if(operation.params.kind) {if(kinds.length!==1)continue;args.kind=kinds[0];}
   if(selected){if(operation.params.ids)args.ids=[selected.id];else if(operation.params.id)args.id=selected.id;}
   if(act==='make'&&operation.params.id?.required)args.id=globalThis.crypto.randomUUID();
   if(target.name&&operation.params.name)args.name=target.name;
-  for(const condition of projection.results) {
+  const orderedResults=[...projection.results].sort((a,b)=>{const av=a.wire.attrs['source.start']?.[0],bv=b.wire.attrs['source.start']?.[0];return av!==undefined&&bv!==undefined?Number(str(av))-Number(str(bv)):0;});
+  for(const condition of orderedResults) {
    if(condition.operator!=='eq'||condition.polarity!=='positive'){skipped.push(condition);continue;}
    const mapping=bindings.properties.find(p=>p.area===area.area&&p.canonical===condition.concept&&p.hostBinding&&p.hostBinding.sourceType===operation.on&&Object.hasOwn(operation.params,p.hostBinding.parameter))??DRAWING_PROPERTY_BINDINGS.filter(b=>b.concept===condition.concept&&b.sourceType===operation.on&&Object.hasOwn(operation.params,b.key)).map(b=>({hostBinding:{parameter:b.key,sourceType:b.sourceType}}))[0];
    if(!mapping){skipped.push(condition);continue;}
    const parameter=mapping.hostBinding.parameter,descriptor=operation.params[parameter];let value=condition.value;
-   if(valueSources[condition.concept]) {
+   if(descriptor.type==='array'&&mapping.hostBinding.codec){
+    const codec=mapping.hostBinding.codec;let items;
+    try{const parsed=JSON.parse(value);items=Array.isArray(parsed)?parsed:[parsed];}catch{items=String(value).split(',').map(v=>v.trim());}
+    if(codec==='number-list'){if(items.some(v=>typeof v!=='number'&&(typeof v!=='string'||!v.trim()||!Number.isFinite(Number(v))))){skipped.push(condition);continue;}items=items.map(Number);}
+    else if(codec==='string-list'){if(items.some(v=>typeof v!=='string'||!v)){skipped.push(condition);continue;}}
+    else {skipped.push(condition);continue;}
+    value=[...(args[parameter]??[]),...items];
+   }else if(valueSources[condition.concept]) {
     const found=resolvePropertyValue(source(),{normalize:v=>/^#[a-f0-9]{6}$/i.test(v)?v.toLowerCase():null},valueSources[condition.concept],value);
     if(!found.ok){skipped.push(condition);continue;}value=found.values[0];
    } else if(['number','integer'].includes(descriptor.type)&&value!==null&&value.trim()!==''&&Number.isFinite(Number(value)))value=Number(value);
@@ -71,6 +85,7 @@ export async function executeDeclaredRequest(session,candidate,text,{bindings,vi
    const defaults=creationDefaults[operation.id]?.()??{};
    for(const [key,value]of Object.entries(defaults))if(!Object.hasOwn(args,key)){args[key]=value;if(key==='start')assumptions.push('I scheduled it starting now.');if(key==='duration')assumptions.push('I used a 30-minute duration.');}
   }
+  for(const rule of operation.defaultsFrom??[])if(rule.method==='ordinal-labels'&&operation.params[rule.parameter]?.type==='array'&&operation.params[rule.lengthOf]?.type==='array'&&(!args[rule.parameter]||args[rule.parameter].length===0)&&Array.isArray(args[rule.lengthOf])&&args[rule.lengthOf].length){args[rule.parameter]=args[rule.lengthOf].map((_,i)=>String(i+1));assumptions.push('I numbered the categories because no labels were supplied.');}
   const checked=validateNativeArguments(operation,args);
   if(checked.ok&&(act==='make'||act==='remove'||applied.length))candidates.push({operation,args:checked.args,applied,skipped,assumptions});
  }

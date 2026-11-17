@@ -1,11 +1,17 @@
 // Actual application state only. No request annotations or invented semantic types.
-import {observedReaderContext} from './native-reader-context.mjs?v=2946a2d8ee';
+import {observedReaderContext} from './native-reader-context.mjs?v=c51a7d6eb4';
 import {createDrawingHost} from '../../worlds/art.draw/declared-host.mjs?v=18f0432d80';
-import {createDiagramHost} from '../../worlds/diagram.sketch/declared-host.mjs?v=8ca86f7be1';
+import {createDiagramHost} from '../../worlds/diagram.sketch/declared-host.mjs?v=1a1d433c5e';
 import {createDocumentHost} from '../../worlds/docs.editor/declared-host.mjs?v=0ab7205f05';
-import {createCalendarHost} from '../../worlds/time.calendar/declared-host.mjs?v=82d3f9e703';
-import {createChartHost} from '../../worlds/data.charts/declared-host.mjs?v=4828979363';
-export const NATIVE_AREAS={draw:{area:'drawing',world:'art.draw',create:createDrawingHost},diagram:{area:'diagram',world:'diagram.sketch',create:createDiagramHost},editor:{area:'document',world:'docs.editor',create:createDocumentHost},calendar:{area:'calendar',world:'time.calendar',create:createCalendarHost},charts:{area:'diagram',world:'data.charts',create:createChartHost}};
+import {createCalendarHost} from '../../worlds/time.calendar/declared-host.mjs?v=ad4802d70b';
+export const NATIVE_AREAS={draw:{area:'drawing',world:'art.draw',create:createDrawingHost},diagram:{area:'diagram',world:'diagram.sketch',create:createDiagramHost},editor:{area:'document',world:'docs.editor',create:createDocumentHost},calendar:{area:'calendar',world:'time.calendar',create:createCalendarHost,policyFile:'scheduling-policy.sop'}};
+/** Application composition: the same declared policy guards controls and spoken requests. */
+export async function createAreaHost(area,{loader,...options}={}){
+ if(!area)throw Error('unknown-native-area');
+ const policySource=area.policyFile?await loader?.readFile?.(area.world,area.policyFile):undefined;
+ if(area.policyFile&&!policySource)throw Error('native-policy-unavailable');
+ return area.create({...options,...(policySource?{policySource}:{})});
+}
 export function createAppReaderContext({getState,getPrevious=()=>null,onObservation=()=>{}}={}){
  if(typeof getState!=='function'||typeof getPrevious!=='function'||typeof onObservation!=='function')throw Error('invalid-app-reader-context');
  const hosts=new WeakMap();

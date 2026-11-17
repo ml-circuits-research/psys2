@@ -1,3 +1,4 @@
+// Retired standalone renderer; numeric charts are now SVG instruments in Diagram.
 // Charts tab (world data.charts, spec 07 sections 6-7): draws the active chart of the world state with Chart.js
 // (vendored in ../../vendor/charts/), updates it in place so every change animates, shows the numbers in a small table,
 // keeps a strip of thumbnails for several charts and turns every click into a typed command through host.send, so mouse and
@@ -207,6 +208,7 @@ function make(holder, host) {
 
 export default {
   id: 'charts',
+  standalone: false,
   label: 'Charts',
   world: 'data.charts',
   order: 70,

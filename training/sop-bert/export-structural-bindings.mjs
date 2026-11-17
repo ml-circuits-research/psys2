@@ -1,3 +1,4 @@
+import {CHART_KIND_PARAMETERS,CHART_PROPERTY_ALIGNMENTS} from '../../worlds/data.charts/declared-host.mjs';
 import {validateSemanticCatalogue,planCatalogueEnrichment} from './semantic-alignment-catalogue.mjs';
 // C1 authorial declaration alignment. Never reads messages, evaluation or owner rows.
 import {readFile,writeFile,link,chmod,lstat,statfs} from 'node:fs/promises';import {resolve,dirname,join} from 'node:path';import {pathToFileURL,fileURLToPath} from 'node:url';import {createHash} from 'node:crypto';import {execFileSync} from 'node:child_process';
@@ -53,16 +54,18 @@ export function buildStructuralBindings({world,str,inventory,snapshotSHA,hostTab
   if(!inventory[mapping.area]?.[mapping.type]||get(mapping.canonical)?.type!=='core.type'||get(mapping.canonical)?.attrs.of?.length!==1||str(get(mapping.canonical).attrs.of[0])!==mapping.canonical||mapping.sourceWire!==mapping.canonical){unresolved.push({family:'families',area:mapping.area,type:mapping.type,reason:'missing-or-incompatible-family-declaration'});continue;}
   families.push({area:mapping.area,type:mapping.type,canonical:mapping.canonical,...metadata(mapping.sourceWire),alignment:{kind:'explicit-raw-family-identity',authority:mapping.authority},...(mapping.evidence?{catalogueEvidence:mapping.evidence}:{})});
  }
+ const chartAlignments=inventory.diagram?.chart?CHART_PROPERTY_ALIGNMENTS:[];
+ propertyAlignments=[...propertyAlignments.filter(m=>!chartAlignments.some(c=>c.area===m.area&&c.key===m.key)),...chartAlignments];
  for(const mapping of propertyAlignments){
   const raw=descriptor(mapping.area,mapping.key),table=hostTables[mapping.host],op=table?.operations?.find(op=>op.id===mapping.operation),declaration=get(mapping.sourceWire);
   if(!raw||!declaration){unresolved.push({family:'properties',area:mapping.area,key:mapping.key,sourceWire:mapping.sourceWire,reason:!raw?'missing-inventory-descriptor':'missing-semantic-declaration'});continue;}
   const native=op&&Object.hasOwn(op.params??{},mapping.parameter);
   const record={area:mapping.area,key:mapping.key,canonical:mapping.canonical,valueKind:mapping.valueKind,...metadata(mapping.sourceWire),rawDescriptor:raw,...(mapping.evidence?{catalogueEvidence:mapping.evidence,valueContract:mapping.valueContract}:{}),alignment:{kind:native?'explicit-C1-declaration-native-chain':'explicit-C1-semantic-declaration',authority:'Owner-authorized inventory/owning-declaration alignment; native capability is separate, no descriptor-prefix inference.',valueBoundary:'Raw annotation token only. Native values, units, date/time composition, regions and defaults require separate declared resolution.'}};
-  if(native)record.hostBinding={id:op.id,sourceType:op.on,key:mapping.parameter,operation:op.id,parameter:mapping.parameter,exportName:table.exportName,sourcePath:table.sourcePath,sourceSha256:table.sourceSha256};
+  if(native)record.hostBinding={id:op.id,sourceType:op.on,key:mapping.parameter,operation:op.id,parameter:mapping.parameter,exportName:table.exportName,sourcePath:table.sourcePath,sourceSha256:table.sourceSha256,...(mapping.codec?{codec:mapping.codec}:{})};
   else {record.nativeCapability={status:'unsupported',reason:'missing-native-operation-parameter'};unresolved.push({family:'nativeCapabilities',area:mapping.area,key:mapping.key,reason:'missing-native-operation-parameter'});}
   properties.push(record);
  }
- for(const record of kinds){const route=NATIVE_KIND_FAMILIES[record.area+'.'+record.type];if(!route)continue;const table=hostTables[route[0]],operation=table?.operations?.find(op=>op.id===route[1]);if(!operation)continue;record.nativeFamilyBinding={operation:operation.id,sourceType:operation.on,exportName:table.exportName,sourcePath:table.sourcePath,sourceSha256:table.sourceSha256,boundary:'Family eligibility only; canonical-to-native kind/value conversion is not asserted.'};}
+ for(const record of kinds){const chartParameters=record.area==='diagram'?CHART_KIND_PARAMETERS[record.canonical]:null;const route=chartParameters?['diagram','chart.make']:NATIVE_KIND_FAMILIES[record.area+'.'+record.type];if(!route)continue;const table=hostTables[route[0]],operation=table?.operations?.find(op=>op.id===route[1]);if(!operation)continue;record.nativeFamilyBinding={operation:operation.id,sourceType:operation.on,exportName:table.exportName,sourcePath:table.sourcePath,sourceSha256:table.sourceSha256,...(chartParameters?{arguments:chartParameters}:{}),boundary:chartParameters?'Owning chart declaration maps semantic form to a native type; explicit data only.':'Family eligibility only; canonical-to-native kind/value conversion is not asserted.'};}
  // The projector's lookup is exact and single-valued. Keep ambiguity unresolved,
  // never select a provider from corpus frequency or a preferred acceptance row.
  const groups=new Map();for(const record of kinds){const key=JSON.stringify([record.area,record.type,record.lemma]);if(!groups.has(key))groups.set(key,[]);groups.get(key).push(record);}

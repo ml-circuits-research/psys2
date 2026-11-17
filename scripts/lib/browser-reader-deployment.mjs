@@ -5,7 +5,7 @@ export async function refreshBrowserReaderDeployment(outDir){
  const file=path.join(outDir,'models/sop-bert/deployment.json');if(!await stat(file).then(()=>true,()=>false))return null;
  const deployment=JSON.parse(await readFile(file,'utf8'));if(deployment.format!=='psys2.browser-reader-deployment/1')throw Error('unsupported-reader-deployment');
  const groups={
-  appBuildSha256:['ui/engine-worker.mjs','lib/dialog/index.mjs'],
+  appBuildSha256:['ui/engine-worker.mjs','lib/dialog/index.mjs','lib/dialog/native-request-sampler.mjs','lib/dialog/sampler.mjs'],
   readerSha256:['lib/dialog/cutter-inference.mjs','lib/dialog/key-reader-inference.mjs','lib/dialog/bert-source-offsets.mjs','lib/dialog/model-selection-score.mjs'],
   pipelineSha256:['lib/dialog/key-reader-pipeline.mjs','lib/dialog/verified-reader-provider.mjs','lib/dialog/browser-reader-host.mjs','lib/dialog/project-journal-action.mjs','lib/dialog/project-context-action.mjs','lib/dialog/project-create-action.mjs'],
   packetAdapterSha256:['lib/dialog/key-reader-packet.mjs'],

@@ -6,6 +6,7 @@
 // The engine (470 KB) is loaded lazily: when this tab is first shown, or when the first state with shapes arrives (PERF).
 // Pan (drag), zoom (buttons, ctrl + wheel, pinch, + - 0 keys), fit, SVG and PNG export (effect diagram.download).
 const ENGINE_ASSET = 'worlds/diagram.sketch/engine/logic.mjs';
+const CHART_ASSET = 'worlds/data.charts/vector-svg.mjs';
 const ARROWS_ASSET = 'worlds/diagram.sketch/arrows.mjs';   // arrow geometry (DIAG3): sides, entry angles, spread, detours
 const NS = 'http://www.w3.org/2000/svg';
 const HINTS = ['draw a rectangle called Api', 'draw a red circle called Db', 'connect Api to Db', 'make Db huge', 'arrange them in a row', 'draw a flowchart with Start, Check and Done', 'how many connections are there?', 'undo'];
@@ -40,6 +41,17 @@ const CSS = `
 .dg-btn.hint { box-shadow: inset 0 0 0 2px #e8a317; }
 .dg-zoom { display: inline-flex; align-items: center; gap: 4px; }
 .dg-pct { min-width: 44px; text-align: center; font: 600 12px system-ui, sans-serif; color: var(--dg-faint); }
+.dg-chart { cursor: pointer; }
+.dg-chart-tools { border: 1px solid var(--dg-line); border-radius: 10px; padding: 10px 12px; background: var(--dg-card); }
+.dg-chart-tools summary { cursor: pointer; font-weight: 650; }
+.dg-chart-form { display: flex; flex-wrap: wrap; align-items: end; gap: 10px; margin-top: 10px; }
+.dg-chart-form[hidden] { display: none; }
+.dg-chart-form label { display: grid; gap: 4px; font-size: 12px; color: var(--dg-faint); }
+.dg-chart-form input, .dg-chart-form select, .dg-chart-form textarea { box-sizing: border-box; border: 1px solid var(--dg-line); border-radius: 6px; padding: 7px; background: var(--dg-bg); color: var(--dg-ink); font: 13px system-ui; max-width: 100%; }
+.dg-chart-form textarea { width: 260px; min-height: 72px; resize: vertical; }
+.dg-chart-form .dg-position { width: 80px; }
+.dg-chart-data { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; }
+.dg-chart-data td, .dg-chart-data th { padding: 4px 8px; border-bottom: 1px solid var(--dg-line); text-align: left; }
 .dg-spacer { flex: 1 1 auto; }
 .dg-caption { margin: 0; min-height: 20px; font-size: 14px; opacity: .85; }
 .dg-hint { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; padding: 8%; pointer-events: none; color: var(--dg-faint); font-family: system-ui, sans-serif; }
@@ -70,6 +82,7 @@ function paletteCss(K, scope = ':root') {
 }
 
 function make(holder, host) {
+  let api;
   holder.style.maxWidth = '1000px';
   holder.classList.add('dg-root');
   const html = (tag, cls, inner) => { const e = document.createElement(tag); if (cls) e.className = cls; if (inner != null) e.innerHTML = inner; return e; };
@@ -89,9 +102,10 @@ function make(holder, host) {
   const namesBtn = btn('Names', 'Hide the names above the shapes', () => { showNames = !showNames; namesBtn.setAttribute('aria-pressed', String(showNames)); redraw(); });
   namesBtn.setAttribute('aria-pressed', 'true');
   const idsBtn = btn('Ids', 'Hide the short ids of the shapes and arrows (c1, r1, a1)', () => { showIds = !showIds; idsBtn.setAttribute('aria-pressed', String(showIds)); try { localStorage.setItem('p2-diagram-ids', showIds ? '1' : '0'); } catch { /* storage may be off */ } redraw(); });
-  tools.append(zoomBox, namesBtn, idsBtn, html('span', 'dg-spacer'), btn('Undo', 'Undo the last change', () => host.send('undo')), btn('Redo', 'Do the last undone change again', () => host.send('redo')), btn('Save SVG', 'Save the diagram as an SVG file', () => host.send('save the diagram as an SVG')), btn('Save PNG', 'Save the diagram as a PNG file', () => host.send('save the diagram as a PNG')));
+  const nodeKind=document.createElement('select');nodeKind.setAttribute('aria-label','Node shape');for(const kind of ['rectangle','circle','ellipse','square','diamond','triangle','hexagon','star']){const option=document.createElement('option');option.value=kind;option.textContent=kind;nodeKind.append(option);}
+  tools.append(nodeKind,btn('Add node','Add a vector node',()=>toolCall('diagram.node.make',{kind:nodeKind.value})),zoomBox, namesBtn, idsBtn, html('span', 'dg-spacer'), btn('Undo', 'Undo the last change', () => host.send('undo')), btn('Redo', 'Do the last undone change again', () => host.send('redo')), btn('Save SVG', 'Save the diagram as an SVG file', () => api.download({format:'svg'})), btn('Save PNG', 'Save the diagram as a PNG file', () => api.download({format:'png'})));
 
-  let K = null, AR = null, loading = null, state = EMPTY, destroyed = false, hintIndex = 0, showNames = true, showIds = true, tucked = new Set(), loadError = null, stagePanel = null;
+  let K = null, AR = null, VC = null, loading = null, state = EMPTY, destroyed = false, hintIndex = 0, showNames = true, showIds = true, tucked = new Set(), loadError = null, stagePanel = null;
   const zv = { k: 1, dx: 0, dy: 0 };
   let vbBase = { x: 0, y: 0, w: 800, h: 500 }, vbNow = vbBase, fitKey = '';
   try { showIds = localStorage.getItem('p2-diagram-ids') !== '0'; } catch { /* default on */ }
@@ -100,7 +114,7 @@ function make(holder, host) {
 
   /** Loads the engine once (lazy: PERF). */
   function load() {
-    loading ??= Promise.all([import(host.asset(ENGINE_ASSET)), import(host.asset(ARROWS_ASSET))]).then(([m, a]) => { K = m.default; AR = a; ensureCss(K); if (!destroyed) redraw(); }).catch((e) => { loadError = e; console.warn('diagram tab: engine failed to load', e); caption.textContent = 'The diagram engine could not be loaded. The commands still work.'; });
+    loading ??= Promise.all([import(host.asset(ENGINE_ASSET)), import(host.asset(ARROWS_ASSET)), import(host.asset(CHART_ASSET))]).then(([m, a, c]) => { K = m.default; AR = a; VC=c;for(const name of Object.keys(c.PALETTES)){const o=html('option','',name);o.value=name;palette.append(o);}palette.value=active()?.options?.palette??'default'; ensureCss(K); if (!destroyed) redraw(); }).catch((e) => { loadError = e; console.warn('diagram tab: engine failed to load', e); caption.textContent = 'The diagram engine could not be loaded. The commands still work.'; });
     return loading;
   }
   ensureCss(null);
@@ -110,7 +124,7 @@ function make(holder, host) {
   }
 
   function showHint() {
-    const empty = !(state.shapes?.length);
+    const empty = !(state.shapes?.length || state.chartTools?.charts?.length);
     hint.hidden = !empty;
     if (empty) hint.innerHTML = `<b>What shall we draw?</b><span>Say or type: <q>${HINTS[hintIndex % HINTS.length]}</q></span>`;
   }
@@ -257,8 +271,62 @@ function make(holder, host) {
     const selE = new Set(S.selected?.edges ?? []), selS = new Set(S.selected?.shapes ?? []);
     for (const e of S.edges) { const r = routes.get(e.id); if (r) drawArrow(eg, e, r, selE.has(e.id)); }
     for (const s of S.shapes) drawShape(s.layer === 'background' || s.layer === 'zone' ? pg : sg, s, selS);
+    if(VC)for(const [index,chart]of (S.chartTools?.charts??[]).entries()){
+      const group=el('g',{},target.layer);group.innerHTML=VC.chartSVG(chart,{index,selected:chart.id===S.chartTools.active});
+      const b=VC.chartBounds(chart,index),[bx,by,bw,bh]=base;
+      base=[Math.min(bx,b.x-20),Math.min(by,b.y-20),Math.max(bx+bw,b.x+b.width+20)-Math.min(bx,b.x-20),Math.max(by+bh,b.y+b.height+20)-Math.min(by,b.y-20)];
+    }
     return base;
   }
+
+  // Explicit typed UI commands share the instance and undo journal with spoken requests.
+  const toolCall=async(operation,args={})=>{try{if(typeof host.tool!=='function')throw Error('The editing tools are not available.');const reply=await host.tool(operation,args);if(reply?.text)caption.textContent=reply.text;return reply;}catch(e){caption.textContent=String(e.message??e);return null;}};
+  const chartPanel=html('details','dg-chart-tools'),summary=html('summary','','Chart tools');chartPanel.append(summary);
+  const form=html('div','dg-chart-form');chartPanel.append(form);holder.append(chartPanel);
+  const input=(label,type,value)=>{const l=html('label','',label),e=html('input');e.type=type;e.value=value;e.setAttribute('aria-label',label);l.append(e);form.append(l);return e;};
+  const select=(label,values)=>{const l=html('label','',label),e=html('select');e.setAttribute('aria-label',label);for(const value of values){const o=html('option','',value);o.value=value;e.append(o);}l.append(e);form.append(l);return e;};
+  const titleInput=input('Chart title','text',''),typeInput=select('Chart type',['bar','line','pie','doughnut','radar','polarArea','scatter']);
+  const dataLabel=html('label','','Values — one label, number per line'),dataInput=html('textarea');dataInput.setAttribute('aria-label','Chart data');dataInput.placeholder='Apples, 5\nPears, 3';dataLabel.append(dataInput);form.append(dataLabel);
+  const parseData=()=>{const labels=[],values=[];for(const line of dataInput.value.split('\n').filter(x=>x.trim())){const at=line.lastIndexOf(',');if(at<1||!line.slice(at+1).trim()||!Number.isFinite(Number(line.slice(at+1))))throw Error('Use one label, number per line.');labels.push(line.slice(0,at).trim());values.push(Number(line.slice(at+1)));}if(!labels.length)throw Error('Enter at least one value.');return {labels,values};};
+  const seriesPanel=html('div','dg-chart-form'),seriesRows=[];chartPanel.append(seriesPanel);
+  const addSeriesRow=(dataset={label:'Series '+(seriesRows.length+1),data:[],color:null})=>{
+    const row=html('div','dg-chart-form'),name=html('input'),numbers=html('input'),colour=html('input'),automatic=html('input');
+    const index=seriesRows.length;name.value=dataset.label;name.setAttribute('aria-label','Series '+(index+1)+' name');name.placeholder='Series name';
+    numbers.value=dataset.data.join(', ');numbers.placeholder=index===0?'Values from the table above':'One value per category';numbers.disabled=index===0;numbers.setAttribute('aria-label','Series '+(index+1)+' values');
+    colour.type='color';colour.value=dataset.color??'#356ac3';colour.setAttribute('aria-label','Series '+(index+1)+' colour');automatic.type='checkbox';automatic.checked=dataset.color==null;
+    const automaticLabel=html('label','','Palette colour');automaticLabel.append(automatic);const entry={row,name,numbers,colour,automatic};seriesRows.push(entry);
+    row.append(name,numbers,colour,automaticLabel,btn('Remove series','Remove this draft series',()=>{if(seriesRows.length===1){caption.textContent='A chart needs at least one series.';return;}const removed=seriesRows.indexOf(entry);seriesRows.splice(removed,1);row.remove();if(removed===0){const replacement=seriesRows[0].numbers.value.split(',').map(v=>v.trim());const labels=dataInput.value.split('\n').filter(v=>v.trim()).map(v=>v.slice(0,v.lastIndexOf(',')).trim());dataInput.value=labels.map((label,i)=>label+', '+(replacement[i]??'')).join('\n');seriesRows[0].numbers.disabled=true;}}));seriesPanel.append(row);
+  };
+  addSeriesRow({label:'Value',data:[],color:null});
+  form.append(btn('Add series','Add another data series to the editor',()=>addSeriesRow()));
+  const readData=()=>{const first=parseData();return {labels:first.labels,datasets:seriesRows.map((r,i)=>{const values=i===0?first.values:r.numbers.value.split(',').map(v=>{if(!v.trim()||!Number.isFinite(Number(v)))throw Error('Each series needs one numeric value per category.');return Number(v);});if(values.length!==first.labels.length)throw Error('Each series needs one value per category.');return {label:r.name.value.trim()||'Series '+(i+1),data:values,color:r.automatic.checked?null:r.colour.value};})};};
+  const create=btn('Add chart','Add a chart to this diagram',async()=>{try{await toolCall('chart.make',{type:typeInput.value,title:titleInput.value.trim()||'Chart',...readData(),source:[]});}catch(e){caption.textContent=e.message;}});form.append(create);
+  const chosen=select('Selected chart',[]),active=()=>state.chartTools?.charts?.find(c=>c.id===chosen.value);
+  chosen.addEventListener('change',()=>toolCall('chart.select',{id:chosen.value}));
+  const update=btn('Update chart','Update selected chart data and title',async()=>{const chart=active();if(!chart)return;try{const data=readData(),title=titleInput.value.trim()||'Chart',type=typeInput.value;const first=await toolCall('chart.datasets.change',{id:chart.id,...data});if(first?.statuses?.includes('unsupported'))return;await toolCall('chart.change',{id:chart.id,title,type});}catch(e){caption.textContent=e.message;}});form.append(update);
+  const left=input('Chart X','number',60),top=input('Chart Y','number',60);left.className=top.className='dg-position';
+  const place=btn('Move','Move selected chart',()=>{const chart=active();if(chart)toolCall('chart.place',{id:chart.id,x:Number(left.value),y:Number(top.value)});});
+  const remove=btn('Delete chart','Delete selected chart',()=>{const chart=active();if(chart)toolCall('chart.remove',{ids:[chart.id]});});form.append(place,remove);
+  const stacked=input('Stacked series','checkbox',''),horizontal=input('Horizontal bars','checkbox',''),legend=input('Show legend','checkbox',''),values=input('Show values','checkbox','');legend.checked=true;
+  for(const [element,key]of [[stacked,'stacked'],[horizontal,'horizontal'],[legend,'showLegend'],[values,'showValues']])element.addEventListener('change',()=>{const chart=active();if(chart)toolCall('chart.change',{id:chart.id,[key]:element.checked});});
+  const order=select('Value order',['none','asc','desc','alpha']);order.addEventListener('change',()=>{const chart=active();if(chart)toolCall('chart.change',{id:chart.id,sort:order.value});});
+  const palette=select('Chart palette',['default']);palette.addEventListener('change',()=>{const chart=active();if(chart)toolCall('chart.change',{id:chart.id,palette:palette.value});});
+  const table=html('table','dg-chart-data');chartPanel.append(table);let displayed=null;
+  function syncChartTools(){
+    const charts=state.chartTools?.charts??[],id=state.chartTools?.active;
+    chosen.textContent='';for(const chart of charts){const o=html('option');o.textContent=chart.title||chart.id;o.value=chart.id;chosen.append(o);}chosen.value=id??'';
+    const chart=charts.find(c=>c.id===id);update.disabled=place.disabled=remove.disabled=!chart;
+    stacked.disabled=horizontal.disabled=legend.disabled=values.disabled=order.disabled=palette.disabled=!chart;
+    if(!chart){table.textContent='';displayed=null;return;}
+    const mark=JSON.stringify(chart);if(mark===displayed)return;displayed=mark;
+    seriesPanel.textContent='';seriesRows.length=0;for(const dataset of chart.datasets)addSeriesRow(dataset);
+    titleInput.value=chart.title;typeInput.value=chart.type;dataInput.value=chart.labels.map((l,i)=>`${l}, ${chart.datasets[0].data[i]}`).join('\n');
+    left.value=chart.placement?.x??60;top.value=chart.placement?.y??60;stacked.checked=chart.options?.stacked===true;palette.value=chart.options?.palette??'default';horizontal.checked=chart.options?.horizontal===true;legend.checked=chart.options?.showLegend!==false;values.checked=chart.options?.showValues===true;order.value=chart.options?.sort??'none';
+    table.textContent='';const head=html('tr');head.append(html('th','','Label'));for(const dataset of chart.datasets){const cell=html('th');cell.textContent=dataset.label;head.append(cell);}table.append(head);for(const [i,label]of chart.labels.entries()){const row=html('tr');const cell=html('td');cell.textContent=label;row.append(cell);for(const dataset of chart.datasets)row.append(html('td','',String(dataset.data[i])));table.append(row);}
+  }
+  let suppressObjectClick=false;
+  svg.addEventListener('click',ev=>{if(suppressObjectClick){suppressObjectClick=false;return;}const shape=ev.target.closest?.('.shp[data-name]');if(shape){toolCall('diagram.node.select',{ids:[shape.getAttribute('data-name')]});return;}const chart=ev.target.closest?.('[data-chart-id]');if(chart)toolCall('chart.select',{id:chart.getAttribute('data-chart-id')});});
+  svg.addEventListener('keydown',ev=>{if(!['Enter',' '].includes(ev.key))return;const chart=ev.target.closest?.('[data-chart-id]');if(chart){ev.preventDefault();toolCall('chart.select',{id:chart.getAttribute('data-chart-id')});}});
 
   // ---- view: pan, zoom, fit -------------------------------------------------------------------------------------------------
   const zoomed = () => zv.k !== 1 || zv.dx !== 0 || zv.dy !== 0;
@@ -287,8 +355,10 @@ function make(holder, host) {
     ptrs.set(ev.pointerId, { x: ev.clientX, y: ev.clientY });
     if (ptrs.size === 2) { const [a, b] = [...ptrs.values()]; pinch = { d0: Math.hypot(a.x - b.x, a.y - b.y) || 1, k0: zv.k }; pan = null; return; }
     if (ev.button !== 0 && ev.pointerType === 'mouse') return;
-    const m = svg.getScreenCTM();
-    pan = { id: ev.pointerId, x0: ev.clientX, y0: ev.clientY, dx0: zv.dx, dy0: zv.dy, upp: m?.a ? 1 / m.a : 1, moved: false };
+    const m = svg.getScreenCTM(),chartElement=ev.target.closest?.('[data-chart-id]'),shapeElement=ev.target.closest?.('.shp[data-name]');
+    const object=chartElement?state.chartTools?.charts?.find(c=>c.id===chartElement.getAttribute('data-chart-id')):shapeElement?state.shapes.find(s=>s.name===shapeElement.getAttribute('data-name')):null;
+    const position=chartElement&&object?VC.chartBounds(object):object;
+    pan = { id: ev.pointerId, x0: ev.clientX, y0: ev.clientY, dx0: zv.dx, dy0: zv.dy, upp: m?.a ? 1 / m.a : 1, moved: false,object:object?{id:chartElement?object.id:object.name,kind:chartElement?'chart':'node',x:position.x,y:position.y,element:chartElement??shapeElement}:null };
   });
   svg.addEventListener('pointermove', (ev) => {
     if (!ptrs.has(ev.pointerId)) return;
@@ -298,10 +368,17 @@ function make(holder, host) {
     const mx = ev.clientX - pan.x0, my = ev.clientY - pan.y0;
     if (!pan.moved && Math.hypot(mx, my) < 4) return;
     if (!pan.moved) { pan.moved = true; try { svg.setPointerCapture(ev.pointerId); } catch { /* gone */ } svg.classList.add('panning'); }
+    if(pan.object){pan.object.element.setAttribute('transform',`translate(${pan.object.x+mx*pan.upp} ${pan.object.y+my*pan.upp})`);return;}
     zv.dx = pan.dx0 - mx * pan.upp; zv.dy = pan.dy0 - my * pan.upp; applyZoom();
   });
-  const endPan = (ev) => { ptrs.delete(ev.pointerId); if (ptrs.size < 2) pinch = null; if (pan?.id === ev.pointerId) { pan = null; svg.classList.remove('panning'); } };
+  const endPan = (ev) => { ptrs.delete(ev.pointerId); if (ptrs.size < 2) pinch = null; if (pan?.id === ev.pointerId) {
+    const drag=pan;pan=null;svg.classList.remove('panning');
+    if(drag.object&&drag.moved){suppressObjectClick=true;const o=drag.object;if(ev.type==='pointercancel'){suppressObjectClick=false;redraw();return;}const x=o.x+(ev.clientX-drag.x0)*drag.upp,y=o.y+(ev.clientY-drag.y0)*drag.upp;toolCall(o.kind==='chart'?'chart.place':'diagram.node.place',o.kind==='chart'?{id:o.id,x,y}:{ids:[o.id],x,y});}
+  } };
   svg.addEventListener('pointerup', endPan); svg.addEventListener('pointercancel', endPan);
+  const editBox=html('form','dg-chart-form');editBox.hidden=true;const editLabel=html('input'),saveLabel=btn('Save label','Save node label',()=>{}),cancelLabel=btn('Cancel','Cancel label edit',()=>{editBox.hidden=true;});saveLabel.type='submit';editLabel.setAttribute('aria-label','Node label');editBox.append(editLabel,saveLabel,cancelLabel);holder.append(editBox);let editingNode=null;
+  svg.addEventListener('dblclick',ev=>{const node=ev.target.closest?.('.shp[data-name]');if(!node)return;const shape=state.shapes.find(s=>s.name===node.getAttribute('data-name'));if(!shape)return;editingNode=shape.name;editLabel.value=shape.label??'';editBox.hidden=false;editLabel.focus();editLabel.select();});
+  editBox.addEventListener('submit',async ev=>{ev.preventDefault();if(editingNode){await toolCall('diagram.node.change',{ids:[editingNode],label:editLabel.value});editBox.hidden=true;editingNode=null;}});
   svg.addEventListener('wheel', (ev) => { if (!ev.ctrlKey && !ev.metaKey) return; ev.preventDefault(); zoomBy(Math.exp(-ev.deltaY * 0.0025), svgPt(ev)); }, { passive: false });
   svg.addEventListener('keydown', (ev) => {
     const step = 0.1, d = { ArrowLeft: [-step, 0], ArrowRight: [step, 0], ArrowUp: [0, -step], ArrowDown: [0, step] }[ev.key];
@@ -309,8 +386,8 @@ function make(holder, host) {
   });
 
   function describe(S) {
-    const n = S.shapes.length, m = S.edges.length;
-    return n ? `${n} shape${n === 1 ? '' : 's'}, ${m} connection${m === 1 ? '' : 's'}${(S.groups || []).length ? `, ${S.groups.length} group${S.groups.length === 1 ? '' : 's'}` : ''}` : 'An empty canvas. Say what to draw!';
+    const n = S.shapes.length, m = S.edges.length,c=S.chartTools?.charts?.length??0;
+    return n||c ? `${c?c+' chart'+(c===1?'':'s')+', ':''}${n} shape${n === 1 ? '' : 's'}, ${m} connection${m === 1 ? '' : 's'}${(S.groups || []).length ? `, ${S.groups.length} group${S.groups.length === 1 ? '' : 's'}` : ''}` : 'An empty canvas. Say what to draw!';
   }
   function redraw() {
     showHint();
@@ -349,18 +426,19 @@ function make(holder, host) {
     setTimeout(() => URL.revokeObjectURL(url), 5000);
   };
 
-  return {
+  return api = {
     update(next) {
       state = { ...EMPTY, ...(next && typeof next === 'object' ? next : {}) };
       state.shapes ??= []; state.edges ??= []; state.groups ??= [];
-      if (state.shapes.length && !K) load();
+      if ((state.shapes.length || state.chartTools?.charts?.length) && !K) load();
+      syncChartTools();
       redraw();
     },
     hide() { ptrs.clear(); pan = null; pinch = null; },
     /** Download the diagram as SVG or PNG; returns { ok, detail }. */
     async download({ format = 'svg', filename = 'my-diagram' } = {}) {
       await load();
-      if (!K || !state.shapes.length) return { ok: false, detail: 'the diagram is empty' };
+      if (!K || !(state.shapes.length || state.chartTools?.charts?.length)) return { ok: false, detail: 'the diagram is empty' };
       const base = String(filename).replace(/[^\w.\- ]+/g, '_').slice(0, 60) || 'my-diagram';
       const { svg: text, w, h } = toSVG();
       if (format !== 'png') { save(new Blob([text], { type: 'image/svg+xml' }), `${base}.svg`); return { ok: true, detail: `${base}.svg` }; }

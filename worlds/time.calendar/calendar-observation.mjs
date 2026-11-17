@@ -3,9 +3,7 @@
 import { calendarObservationIssue } from './calendar-tool.mjs';
 const copy = (x) => structuredClone(x);
 const source = (o) => ({ instanceId: o?.instanceId ?? null, version: o?.version ?? null, complete: o?.complete ?? null });
-const normalized = (fact) => fact.kind === 'meeting'
-  ? { id: fact.id, kind: fact.kind, title: fact.title, start: fact.start, duration: fact.duration, participants: [...fact.participants].sort(), room: fact.room }
-  : { id: fact.id, kind: fact.kind, label: fact.label };
+const normalized = (fact) => Object.fromEntries(Object.keys(fact).sort().map(key=>[key,key==='participants'?[...fact[key]].sort():fact[key]]));
 const equal = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 
 export function compareCalendarObservations(before, after) {

@@ -1,0 +1,113 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {World,str} from '../src/vendor/sopworld/sopworld.mjs';
+import {createNativeToolHost,nativeToken} from '../worlds/native-tool-host.mjs';
+import {createCalendarHost,initialCalendarState} from '../worlds/time.calendar/declared-host.mjs';
+import {createDrawingHost,initialDrawingState} from '../worlds/art.draw/declared-host.mjs';
+import {createDiagramHost,initialDiagramState} from '../worlds/diagram.sketch/declared-host.mjs';
+import {createDocumentHost,initialDocumentState} from '../worlds/docs.editor/declared-host.mjs';
+import {describeNativeControl,verifyNativeControlEffect,NATIVE_CONTROL_INTENT_SCHEMA} from '../src/dialog/native-control-intent.mjs';
+
+const invoke=(host,operation,args)=>host.invoke({invocation:crypto.randomUUID(),expectedVersion:host.observe().version,operation,args});
+function capture(host,id,args,options={}){
+ const before=host.observe(),operation=host.bindings().find(op=>op.id===id),intent=describeNativeControl({operation,args,before,...options}),receipt=invoke(host,id,args),after=host.observe();
+ return {before,after,intent,receipt,verification:verifyNativeControlEffect({intent,before,after,receipt})};
+}
+test('Calendar typed intent preserves every argument, Unicode provenance and exact reference evidence as SOP',()=>{
+ const state=initialCalendarState(),host=createCalendarHost({state,instanceId:'intent.calendar'});
+ invoke(host,'calendar.calendar.add',{id:'work',label:'Work'});
+ const args={id:'event',title:'Plan 🐟\nSecond line',start:1000,duration:100,participants:[],room:null,calendar:'work',notes:'Use "quotes"'};
+ const frozen=JSON.stringify(args),r=capture(host,'calendar.meeting.add',args);
+ assert.match(r.intent.text,/^Create a meeting/);
+ assert.equal(r.intent.schema,'app.control.intent');assert.match(r.intent.semantics,/not an executable/);
+ assert.deepEqual(r.intent.expected.providedArgs,args);assert.equal(JSON.stringify(args),frozen);
+ assert.equal(r.verification.status,'verified');
+ const world=new World();assert.equal(world.load(NATIVE_CONTROL_INTENT_SCHEMA).ok,true);assert.equal(world.tell(r.intent.wires).ok,true);
+ const values=world.ofType('app.control.value');
+ assert.ok(values.some(v=>str(v.attrs['observed.id']?.[0])==='work'));
+ assert.ok(values.some(v=>str(v.attrs.kind?.[0])==='array'));
+ assert.ok(values.some(v=>str(v.attrs.kind?.[0])==='null'));
+ for(const range of r.intent.sourceRanges)assert.equal(Array.from(r.intent.text).slice(range.start,range.end).join(''),range.rendered);
+ assert.doesNotMatch(r.intent.text,/with id/);
+});
+
+test('same generic intent/verification applies to Drawing, Diagram and Documents exact observed fields',async()=>{
+ const drawing=createDrawingHost({state:initialDrawingState(),instanceId:'intent.draw'});
+ const made=capture(drawing,'drawing.object.make',{kind:'triangle',name:'Peak',x:123,y:200,color:'#112233'});
+ assert.equal(made.verification.status,'verified');
+ const diagram=await createDiagramHost({state:initialDiagramState(),instanceId:'intent.diagram'});
+ const node=invoke(diagram,'diagram.node.make',{kind:'rectangle'}).changed[0];
+ const renamed=capture(diagram,'diagram.node.change',{ids:[node],label:'Start'});
+ assert.equal(renamed.verification.status,'verified');
+ const docs=createDocumentHost({state:initialDocumentState(),instanceId:'intent.docs'});
+ const written=invoke(docs,'document.write',{title:'Notes',blocks:[]}).changed[0];
+ const block=capture(docs,'document.block.make',{parent:written,kind:'paragraph',text:'Exact literal text',name:'Intro'});
+ assert.equal(block.verification.status,'verified');
+});
+
+test('a fifth world retains nested typed values without domain mappings and never claims unobserved parameters verified',()=>{
+ const state={rows:[]},host=createNativeToolHost({state,instanceId:'fifth',scope:'synthetic',operations:[{id:'storage.make',act:'make',on:'invented.crate',params:{id:{type:'string',required:true},label:{type:'string',required:true},payload:{type:'object',required:true}}}],handlers:{'storage.make':(ctx,a)=>{ctx.state.rows.push(a);return {status:'supported',changed:[a.id]};}},view:s=>s.rows.map(r=>({id:r.id,kind:'crate',sourceType:'invented.crate',inputs:[{binding:'invented.label',key:'label',values:[nativeToken(r.label)]}]}))});
+ const payload={items:['first',false,null,{n:2.5}],empty:[]},r=capture(host,'storage.make',{id:'crate1',label:'A crate',payload});
+ assert.deepEqual(r.intent.expected.args.payload,payload);
+ const world=new World();world.load(NATIVE_CONTROL_INTENT_SCHEMA);assert.equal(world.tell(r.intent.wires).ok,true);
+ assert.equal(r.verification.status,'unverified');
+ assert.ok(r.verification.checks.some(c=>c.parameter==='payload'&&c.status==='unknown'));
+ assert.doesNotMatch(r.intent.text,/storage\.make/);
+});
+
+test('explicit binding aliases and set semantics are separate from retained exact array order',()=>{
+ const operation={id:'toy.change',act:'change',on:'toy.item',params:{id:{type:'string',required:true},names:{type:'array',required:true}}};
+ const object={id:'one',kind:'item',source:'identity',sourceType:'toy.item',version:'0',inputs:[{key:'members',binding:'toy.members',values:['"A"','"B"']}]},before={instanceId:'toy',scope:'all',version:'0',complete:true,objects:[object]},after={...before,version:'1',objects:[{...object,version:'1'}]};
+ const intent=describeNativeControl({operation,args:{id:'one',names:['B','A']},before,parameterBindings:[{parameter:'names',binding:'toy.members',mode:'set'}]});
+ assert.deepEqual(intent.expected.args.names,['B','A']);
+ assert.equal(verifyNativeControlEffect({intent,before,after,receipt:{status:'changed',operation:operation.id}}).status,'verified');
+ const noMapping=describeNativeControl({operation,args:{id:'one',names:['B','A']},before});
+ assert.equal(verifyNativeControlEffect({intent:noMapping,before,after,receipt:{status:'changed'}}).status,'unverified');
+});
+
+test('refusals, stale evidence and incorrect observed values retain their real status',()=>{
+ const state=initialCalendarState(),host=createCalendarHost({state,instanceId:'refusal'});
+ const invalid=capture(host,'calendar.meeting.add',{id:'m',title:'M',start:0,duration:100,participants:[],room:null});
+ assert.equal(invalid.verification.status,'refused');
+ const created=capture(host,'calendar.calendar.add',{id:'personal',label:'Personal',colour:'#112233'});
+ const tampered=structuredClone(created.after);tampered.objects[0].inputs.find(i=>i.key==='colour').values=['"#ffffff"'];
+ assert.equal(verifyNativeControlEffect({...created,after:tampered}).status,'mismatch');
+ assert.equal(verifyNativeControlEffect({...created,after:{...created.after,instanceId:'other'}}).status,'unverified');
+ assert.equal(verifyNativeControlEffect({...created,receipt:{...created.receipt,operation:'different'}}).status,'mismatch');
+ assert.equal(verifyNativeControlEffect({...created,receipt:{...created.receipt,beforeVersion:'stale'}}).status,'unverified');
+});
+
+test('all selected identities are checked, and modification of an unselected peer is a mismatch',()=>{
+ const state=initialDrawingState(),host=createDrawingHost({state,instanceId:'scope'});
+ const first=invoke(host,'drawing.object.make',{kind:'triangle'}).changed[0],second=invoke(host,'drawing.object.make',{kind:'triangle'}).changed[0];
+ const changed=capture(host,'drawing.object.change',{ids:[first],color:'#123456'});
+ assert.equal(changed.verification.status,'verified');
+ const tampered=structuredClone(changed.after);tampered.objects.find(o=>o.id===second).inputs.find(i=>i.key==='color').values=['"#ffffff"'];
+ assert.equal(verifyNativeControlEffect({...changed,after:tampered}).status,'mismatch');
+ const removed=capture(host,'drawing.object.remove',{ids:[first,second]});
+ assert.equal(removed.verification.status,'verified');
+});
+
+test('defaults are explicitly separated from original UI arguments, and null clears verify against absent slots',()=>{
+ const state=initialCalendarState(),host=createCalendarHost({state,instanceId:'clear'});
+ invoke(host,'calendar.room.add',{id:'room',label:'Room',capacity:4,location:'Floor 2'});
+ const cleared=capture(host,'calendar.room.change',{id:'room',capacity:null,location:null});
+ assert.equal(cleared.verification.status,'verified');
+ const operation={id:'toy.default',act:'make',on:'toy.item',params:{label:{type:'string',default:'Untitled'}}};
+ const intent=describeNativeControl({operation,args:{},before:host.observe()});
+ assert.deepEqual(intent.expected.providedArgs,{});assert.deepEqual(intent.expected.args,{label:'Untitled'});assert.equal(intent.expected.defaults.length,1);
+});
+
+test('human commands omit generated ids, preserve literal names and use declared time/reference wording',()=>{
+ const before={instanceId:'ui',version:'0',complete:true,objects:[{id:'room-uuid',kind:'room',sourceType:'toy.room',source:'room-source',version:'0',inputs:[{key:'label',binding:'toy.room.name',values:['"Oak"']}]}]};
+ const operation={id:'toy.make',act:'make',on:'toy.event',params:{id:{type:'string',required:true},label:{type:'string',required:true},room:{type:'string'},start:{type:'integer'},duration:{type:'integer'}},intent:{subject:'event',parameters:{room:{label:'in room',reference:true},start:{label:'starting at',format:'unix-ms'},duration:{label:'lasting',format:'duration-ms'}}}};
+ const intent=describeNativeControl({operation,args:{id:'new-uuid',label:'room-uuid',room:'room-uuid',start:0,duration:1800000},before});
+ assert.doesNotMatch(intent.text,/new-uuid/);
+ assert.match(intent.text,/named "room-uuid"/,'a literal label is not replaced just because it equals an observed id');
+ assert.match(intent.text,/in room "Oak"/);
+ assert.match(intent.text,/1970-01-01T00:00:00.000Z/);
+ assert.match(intent.text,/lasting 30 minutes/);
+ assert.equal(intent.expected.args.id,'new-uuid');
+ assert.equal(intent.sourceRanges.some(r=>r.parameter==='id'),false);
+ for(const range of intent.sourceRanges)assert.equal(Array.from(intent.text).slice(range.start,range.end).join(''),range.rendered);
+});

@@ -24,33 +24,43 @@ const canonical = (value, depth = 0) => {
 };
 const invalid = (code, detail = {}) => ({ code, ...detail });
 const resourceKeys = ['id', 'label'];
-const meetingKeys = ['id', 'title', 'start', 'duration', 'participants', 'room'];
-const operations = new Set(['person.add', 'person.change', 'person.remove', 'room.add', 'room.change', 'room.remove',
+const calendarKeys = [...resourceKeys, 'colour'];
+const roomKeys = [...resourceKeys, 'capacity', 'location'];
+const meetingKeys = ['id', 'title', 'start', 'duration', 'participants', 'room', 'calendar', 'notes'];
+const groups = {calendar:'calendars', person:'people', room:'rooms', meeting:'meetings'};
+const operations = new Set(['calendar.add', 'calendar.change', 'calendar.remove', 'person.add', 'person.change', 'person.remove', 'room.add', 'room.change', 'room.remove',
   'meeting.add', 'meeting.change', 'meeting.move', 'meeting.remove', 'undo']);
 
 function checkState(state) {
-  for (const kind of ['people', 'rooms']) {
+  for (const kind of ['calendars', 'people', 'rooms']) {
     const seen = new Set();
     for (const resource of state[kind]) {
-      if (!keys(resource, resourceKeys) || !id(resource.id) || typeof resource.label !== 'string') return invalid('invalid_resource', { kind });
+      const allowed=kind==='calendars'?calendarKeys:kind==='rooms'?roomKeys:resourceKeys;
+      if (!keys(resource, allowed) || !id(resource.id) || typeof resource.label !== 'string'
+        || Object.hasOwn(resource,'colour') && (typeof resource.colour!=='string'||!/^#[0-9a-f]{6}$/i.test(resource.colour))
+        || Object.hasOwn(resource,'capacity') && (!Number.isSafeInteger(resource.capacity)||resource.capacity<1)
+        || Object.hasOwn(resource,'location') && typeof resource.location!=='string') return invalid('invalid_resource', { kind });
       if (seen.has(resource.id)) return invalid('duplicate_id', { id: resource.id });
       seen.add(resource.id);
     }
   }
   // IDs have one namespace, so every observation reference has one interpretation.
-  const all = [...state.people, ...state.rooms, ...state.meetings].map((record) => record.id);
+  const all = [...state.calendars, ...state.people, ...state.rooms, ...state.meetings].map((record) => record.id);
   if (new Set(all).size !== all.length) return invalid('duplicate_id');
-  const people = new Set(state.people.map((p) => p.id)), rooms = new Set(state.rooms.map((r) => r.id));
+  const people = new Set(state.people.map((p) => p.id)), rooms = new Set(state.rooms.map((r) => r.id)), calendars=new Set(state.calendars.map(c=>c.id));
   for (const meeting of state.meetings) {
     if (!keys(meeting, meetingKeys) || !id(meeting.id) || typeof meeting.title !== 'string'
       || !Number.isSafeInteger(meeting.start) || !Number.isSafeInteger(meeting.duration) || meeting.duration <= 0
       || !Number.isSafeInteger(meeting.start + meeting.duration)
       || Math.abs(meeting.start) > 8.64e15 || Math.abs(meeting.start + meeting.duration) > 8.64e15
-      || !Array.isArray(meeting.participants) || meeting.participants.length === 0
+      || !Array.isArray(meeting.participants)
       || new Set(meeting.participants).size !== meeting.participants.length
-      || !(meeting.room === null || id(meeting.room))) return invalid('invalid_meeting', { id: meeting.id });
+      || !(meeting.room === null || id(meeting.room))
+      || meeting.calendar!==undefined && meeting.calendar!==null && !id(meeting.calendar)
+      || meeting.notes!==undefined && typeof meeting.notes!=='string'
+      || meeting.participants.length===0 && meeting.room===null && !meeting.calendar) return invalid('invalid_meeting', { id: meeting.id });
     const missing = meeting.participants.filter((person) => !people.has(person));
-    if (missing.length || (meeting.room !== null && !rooms.has(meeting.room))) return invalid('missing_resource', { id: meeting.id });
+    if (missing.length || (meeting.room !== null && !rooms.has(meeting.room)) || meeting.calendar && !calendars.has(meeting.calendar)) return invalid('missing_resource', { id: meeting.id });
   }
   return null;
 }
@@ -63,7 +73,7 @@ export function calendarObservationIssue(observation) {
     || typeof observation.complete !== 'boolean' || observation.timeUnit !== 'millisecond' || observation.timeOrigin !== 'unix'
     || !Array.isArray(observation.facts)) return invalid('invalid_observation');
   if (!observation.complete) return invalid('incomplete_observation');
-  const state = { people: [], rooms: [], meetings: [] }, groups = { person: 'people', room: 'rooms', meeting: 'meetings' };
+  const state = { calendars: [], people: [], rooms: [], meetings: [] };
   for (const fact of observation.facts) {
     if (!plain(fact) || !Object.hasOwn(groups, fact.kind)) return invalid('invalid_fact');
     const { kind, ...record } = fact;
@@ -73,14 +83,14 @@ export function calendarObservationIssue(observation) {
 }
 
 /** A local, in-memory calendar. The caller supplies stable identity and fully resolved values. */
-export function createCalendar({ instanceId, people = [], rooms = [], meetings = [] } = {}) {
-  if (!id(instanceId) || ![people, rooms, meetings].every(Array.isArray)) throw new TypeError('Invalid calendar snapshot');
-  let state = copy({ people, rooms, meetings }), version = 0;
+export function createCalendar({ instanceId, calendars = [], people = [], rooms = [], meetings = [] } = {}) {
+  if (!id(instanceId) || ![calendars, people, rooms, meetings].every(Array.isArray)) throw new TypeError('Invalid calendar snapshot');
+  let state = copy({ calendars, people, rooms, meetings }), version = 0;
   const issue = checkState(state);
   if (issue) throw new TypeError(`Invalid calendar snapshot: ${issue.code}`);
   const receipts = new Map(), history = [];
   const observe = () => ({ instanceId, version, complete: true, timeUnit: 'millisecond', timeOrigin: 'unix',
-    facts: copy([...state.people.map((p) => ({ kind: 'person', ...p })),
+    facts: copy([...state.calendars.map(c=>({kind:'calendar',...c})), ...state.people.map((p) => ({ kind: 'person', ...p })),
       ...state.rooms.map((r) => ({ kind: 'room', ...r })), ...state.meetings.map((m) => ({ kind: 'meeting', ...m }))]) });
   const fail = (code, detail = {}) => ({ ok: false, status: 'refused', instanceId, version, issue: invalid(code, detail) });
 
@@ -103,8 +113,8 @@ export function createCalendar({ instanceId, people = [], rooms = [], meetings =
       undone = last.operationId;
     } else {
       const [kind, action] = operation.split('.');
-      const list = candidate[kind === 'person' ? 'people' : kind === 'room' ? 'rooms' : 'meetings'];
-      const allowed = action === 'remove' ? ['id'] : action === 'move' ? ['id', 'start'] : kind === 'meeting' ? meetingKeys : resourceKeys;
+      const list = candidate[groups[kind]];
+      const allowed = action === 'remove' ? ['id'] : action === 'move' ? ['id', 'start'] : kind === 'meeting' ? meetingKeys : kind==='calendar'?calendarKeys:kind==='room'?roomKeys:resourceKeys;
       if (!keys(args, allowed) || !id(args.id)) return fail('invalid_arguments');
       const index = list.findIndex((record) => record.id === args.id);
       if (action === 'add') {
@@ -116,6 +126,7 @@ export function createCalendar({ instanceId, people = [], rooms = [], meetings =
         else {
           if (action === 'move' && !Object.hasOwn(args, 'start')) return fail('invalid_arguments');
           list[index] = { ...list[index], ...copy(args) };
+          if(kind==='room'&&action==='change')for(const key of ['capacity','location'])if(args[key]===null)delete list[index][key];
         }
       }
     }

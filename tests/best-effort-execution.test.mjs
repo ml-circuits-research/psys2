@@ -4,12 +4,13 @@ import {initialDrawingState} from '../worlds/art.draw/declared-host.mjs';
 import {initialDiagramState} from '../worlds/diagram.sketch/declared-host.mjs';
 import {initialDocumentState} from '../worlds/docs.editor/declared-host.mjs';
 import {selectedProbability,binaryDecisionProbability,combineModelScores} from '../src/dialog/model-selection-score.mjs';
+const calendarPolicy=await (await import('node:fs/promises')).readFile(new URL('../worlds/time.calendar/scheduling-policy.sop',import.meta.url),'utf8');
 const text='fixture source';
 const graph=(act='make')=>({request:'r',wires:`@s std.request.source text="${text}"\n@r std.request act=${act} mood=do source=$s`+(act==='undo'?'':'\n@t std.request.target request=$r mode=new kind=fixture.entity name="A name"')});
 const provenance={modelSha256:'a'.repeat(64),decoderVersion:1};
 const cases=[['draw','drawing','art.draw',initialDrawingState,'house','drawing.object.make'],['diagram','diagram','diagram.sketch',initialDiagramState,'rectangle','diagram.node.make'],['editor','document','docs.editor',initialDocumentState,'document','document.write'],['calendar','calendar','time.calendar',()=>({people:[],rooms:[],meetings:[]}),'person','calendar.person.add']];
 for(const [tab,area,key,initial,kind,operation] of cases)test('declared creation acts with disclosed uncertainty and undo in '+area,async()=>{
- const state={[key]:initial(),'ui.shell':{activeTab:tab}},before=structuredClone(state),session={isession:{state},engine:{}};let candidate=graph();
+ const state={[key]:initial(),'ui.shell':{activeTab:tab}},before=structuredClone(state),session={isession:{state},engine:{loader:{readFile:async()=>calendarPolicy}}};let candidate=graph();
  session.engine.requestReader={provenance:()=>provenance,bindings:()=>({kinds:[{area,canonical:'fixture.entity',lemma:kind,nativeFamilyBinding:{operation}}],properties:[]}),
   propose:async()=>({coverage:{complete:true,graphProposal:true},candidates:[candidate],failures:[],selectionScore:{definition:'psys2.model-minimum/1',value:0.63}})};
  const made=await routeNewEngine(session,text);assert.equal(made.statuses[0],'supported',JSON.stringify(made.trace));assert.notDeepEqual(session.isession.state[key],before[key]);assert.match(made.text,/Created/);assert.equal(made.trace.readerRouting.admission.mode,'uncalibrated-best-effort');assert.equal(made.trace.readerRouting.admission.uncertain,true);
@@ -36,7 +37,7 @@ import {createDrawingHost} from '../worlds/art.draw/declared-host.mjs';
 test('context value correction and other-target correction use actual objects and restore the mistaken target',async()=>{
  const board=initialDrawingState(),host=createDrawingHost({state:board,instanceId:'context-native-fixture'});
  for(const kind of ['house','fish'])host.invoke({invocation:kind,expectedVersion:host.observe().version,operation:'drawing.object.make',args:{kind,color:'#ff0000'}});
- const state={'art.draw':board,'ui.shell':{activeTab:'draw'}},session={isession:{state},engine:{}};
+ const state={'art.draw':board,'ui.shell':{activeTab:'draw'}},session={isession:{state},engine:{loader:{readFile:async()=>calendarPolicy}}};
  const bindings={kinds:['house','fish'].map(kind=>({area:'drawing',type:'drawn',lemma:kind,canonical:'fixture.'+kind,nativeFamilyBinding:{operation:'drawing.object.make',sourceType:'art.draw.object'}})),properties:[]};
  let input='fixture blue',other=false;
  session.engine.requestReader={provenance:()=>provenance,bindings:()=>bindings,registry:()=>({'drawing.drawn.colour':{concept:'colour'}}),propose:async()=>({coverage:{complete:false},candidates:[],failures:[{reason:'context-reference-not-bound'}],selectionScore:{definition:'psys2.model-minimum/1',value:0.67},
@@ -78,4 +79,19 @@ test('interface translation reaches only the English reader; unavailable input t
  assert.equal(seen,'English typed input');assert.equal(translations.length,1);assert.equal(translations[0].from,'en');
  session.engine.translator.machineTranslate=async()=>{throw Error('output failed');};
  r=await DialogSession.prototype._send.call(session,'English typed input');assert.equal(reads,3);assert.equal(r.trace.replyTranslation,'unavailable');assert.match(r.text,/Nothing changed/);
+});
+
+import {samplingSchema,createNativeRequestSampler} from '../src/dialog/native-request-sampler.mjs';
+
+test('request sampling reads capability declarations and actual objects in an additional area',()=>{
+ const shape=samplingSchema({area:'fixture',operations:[{id:'fixture.make',act:'make',on:'fixture.entity',params:{kind:{enum:['widget']}}},{id:'fixture.change',act:'change',on:'fixture.entity',params:{height:{type:'number',min:1,max:8}}}],observation:{objects:[{id:'current',kind:'widget',inputs:[]}]},bindings:{kinds:[{area:'fixture',lemma:'widget',nativeFamilyBinding:{operation:'fixture.make'}}],properties:[{area:'fixture',canonical:'height',hostBinding:{operation:'fixture.change',parameter:'height'}}]}});
+ assert.deepEqual(shape.schema.kinds.widget.acts,['make','change']);assert.deepEqual(shape.things.map(t=>t.id),['current']);assert.equal(shape.schema.attrs.height.max,8);
+});
+test('dice probes use the normal reader on an isolated state and reject a non-changing reader',async()=>{
+ const bindings={kinds:[{area:'drawing',lemma:'circle',canonical:'fixture.circle',nativeFamilyBinding:{operation:'drawing.object.make'}}],properties:[]};
+ const session={isession:{state:{'art.draw':initialDrawingState(),'ui.shell':{activeTab:'draw'}}},engine:{requestReader:{bindings:()=>bindings,provenance:()=>provenance,propose:async input=>({coverage:{complete:true,graphProposal:true},failures:[],selectionScore:{definition:'psys2.model-minimum/1',value:0.7},candidates:[{request:'r',wires:`@s std.request.source text=${JSON.stringify(input)}\n@r std.request act=make mood=do source=$s\n@t std.request.target request=$r mode=new kind=fixture.circle`}]})}}};
+ const before=structuredClone(session.isession.state),host=await createDrawingHost({state:structuredClone(session.isession.state['art.draw']),instanceId:'dice-test'});
+ const options={session,area:'drawing',view:'draw',world:'art.draw',host,createHost:createDrawingHost,bindings};
+ const r=await createNativeRequestSampler().sample(options);assert.equal(r.items.length,1);assert.equal(r.items[0].verifiedEffect,true);assert.deepEqual(session.isession.state,before);assert.equal(session.newEngineUndo,undefined);
+ session.engine.requestReader.propose=async()=>({candidates:[],failures:[]});const refused=await createNativeRequestSampler().sample(options);assert.equal(refused.items.length,0);assert.deepEqual(session.isession.state,before);
 });
