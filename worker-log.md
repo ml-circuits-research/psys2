@@ -4734,3 +4734,25 @@ Added frozen-corpus per-request preparation and an initial independent per-key B
 Integrated the exact scoped2948be99 source snapshot ascecacf44, without editing the independently owned training worktree. The preparer/trainer preserves per-mention metadata and explicit ambiguity across the134-key inventory; four pure Python fixtures now run in the active gate. This is preparation/source publication only: full per-key calibration, checkpoint selection and immutable final verification are still pending in that lane. No full-run success, provider activation or model confidence is claimed.
 
 Final active npm:227 total,225 passed,zero failed,two optional artifact skips; diff check passed. No runtime/browser changes or replay behavior changes; prior actual development safety replay remains applicable. Knowledge continues hardening its isolated source separately, with later changes requiring a new reviewed integration.
+## 2026-11-17 — Same-emissions strict versus legal Viterbi comparison
+
+Added isolated bounded comparison tools/spec; source-only single CAL emission
+pass uses the frozen85d1... checkpoint and published helper47cfa0... .
+Knowledge confirmed an idle GPU window; CUDA BF16/batch16/max_length192 matches
+training evaluation. GPU released immediately after the4.34second pass.
+All3308 original strict packets and full aggregate metrics reproduce exactly.
+
+Strict spanF1=81.7258%; Viterbi82.0559%. TP+72, FP+73, FN-72.
+Nonempty exact2534->2564/3227; empty74/81 unchanged. Unresolved92->2
+(global path ties). Of90 newly resolved messages,30 exact and60 incorrect.
+All-O negative baseline retained: positive0/3227, empty81/81, spanF1zero.
+No activation/calibration decision follows from F1 or summed logits.
+Q36 records the reviewer proposal for downstream calibrated exact-request risk.
+
+Checks: comparison fixtures4/4 (actual published helper included), original
+trainer fixtures14/14. All helper/model/data/tool hashes verified before/after;
+independent source/prediction status audit green. Exact command, full small
+metrics/provenance and tradeoffs in specs/cutter-decoder-comparison-v1-evidence.json.
+Large immutable emissions and decoder labels remain outside Git at
+.session-control/request-cutter-decoder-comparison-v1. Original trainer,
+checkpoint and strict evidence remain untouched.

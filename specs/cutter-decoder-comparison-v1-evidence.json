@@ -1,0 +1,467 @@
+{
+  "batchSize": 16,
+  "boundary": "Offline same-emissions structural decoding comparison, not graph confidence or app activation.",
+  "changes": {
+    "changedTokenRows": 92,
+    "changedTokens": 136
+  },
+  "command": "/home/salboaie/work/sopworlds/psys2/.venv/bin/python /home/salboaie/work/sopworlds/.session-control/request-cutter/training/sop-bert/compare-request-cutter.py --model /home/salboaie/work/sopworlds/.session-control/calendar-training/training/sop-bert/runs/owner-20261116/request-cutter-full-v1 --trainer /home/salboaie/work/sopworlds/.session-control/calendar-training/training/sop-bert/runs/owner-20261116/request-cutter-full-v1/trainer.py --input /home/salboaie/work/sopworlds/.session-control/request-cutter-comparison-source.jsonl --calibration /home/salboaie/work/sopworlds/.session-control/calendar-training/training/sop-bert/runs/owner-20261116/structural-gold-v3/calibration.jsonl --helper /home/salboaie/work/sopworlds/psys2/src/dialog/bio-viterbi.mjs --out /home/salboaie/work/sopworlds/.session-control/request-cutter-decoder-comparison-v1 --checkpoint-sha256 85d1d2ee1e03ee22c355077cf6248fba30cb14c2195151deb36f68cffbe758e0 --config-sha256 64f3e284f6c901329956351e1077a479102683ffd043b6dabda755a739863ad9 --verification-sha256 cd2b02a026f5096fd24a2bf4e197b5478ba765f1a7898b00e0b61fef6e1a73dc --trainer-sha256 d9422af7ad75e9053f5dfc86c36b0a49ac8f6b52099aa49ac02d95925db1a445 --helper-sha256 47cfa0acefe8d629dd7252c04a72cad0faf864b785e8d25671eb9a4f7e926e01 --device cuda --batch 16",
+  "complete": true,
+  "confidenceCalibrated": false,
+  "decoderLabelsSha256": "6c307b5326fb63775efaf4223185f21ec866cbc623ff34a35bfb54cf8aa97cc4",
+  "device": "cuda",
+  "elapsedSeconds": 4.336033821105957,
+  "emissionsSha256": "e0d4a23ba9ee549d089890c6be95583910bb6780449d11efe6dd163b3c5b352b",
+  "executionEligible": false,
+  "format": "sop.request-cutter-decoder-comparison/1",
+  "frozenTrainingBF16Baseline": {
+    "counts": {
+      "empty:exact": 74,
+      "empty:rows": 81,
+      "fn": 663,
+      "fp": 722,
+      "maskedSupervisionRows": 0,
+      "positive:exact": 2534,
+      "positive:rows": 3227,
+      "predictionUnresolvedRows": 92,
+      "rows": 3308,
+      "spanScorableRows": 3308,
+      "tp": 3097,
+      "utteranceExact": 2608
+    },
+    "diagnostics": {
+      "illegal-I-after-O": 87,
+      "unknown-BIO-label": 5
+    },
+    "empty": {
+      "exact": 74,
+      "rows": 81,
+      "utteranceExact": 0.9135802469135802
+    },
+    "positive": {
+      "exact": 2534,
+      "rows": 3227,
+      "utteranceExact": 0.7852494577006508
+    },
+    "span": {
+      "f1": 0.8172582134846286,
+      "fn": 663,
+      "fp": 722,
+      "precision": 0.8109452736318408,
+      "recall": 0.8236702127659574,
+      "tp": 3097
+    },
+    "tokenBIMacroF1": 0.94117120777319,
+    "tokenClasses": {
+      "B": {
+        "f1": 0.9197972182503574,
+        "fn": 222,
+        "fp": 395,
+        "precision": 0.8995677599796593,
+        "recall": 0.9409574468085107,
+        "support": 3760,
+        "tp": 3538
+      },
+      "I": {
+        "f1": 0.9625451972960226,
+        "fn": 1019,
+        "fp": 887,
+        "precision": 0.9650484671762944,
+        "recall": 0.9600548804390435,
+        "support": 25510,
+        "tp": 24491
+      },
+      "O": {
+        "f1": 0.8078188889997008,
+        "fn": 987,
+        "fp": 940,
+        "precision": 0.811623246492986,
+        "recall": 0.8040500297796307,
+        "support": 5037,
+        "tp": 4050
+      }
+    },
+    "tokenConfusion": [
+      [
+        4050,
+        209,
+        776,
+        2
+      ],
+      [
+        110,
+        3538,
+        111,
+        1
+      ],
+      [
+        830,
+        186,
+        24491,
+        3
+      ]
+    ],
+    "tokenPositive": {
+      "f1": 0.9670382192786303,
+      "fn": 944,
+      "fp": 987,
+      "precision": 0.9663289325555214,
+      "recall": 0.9677485480013666,
+      "support": 29270,
+      "tp": 28326
+    },
+    "utteranceExactLowerBound": 0.788391777509069
+  },
+  "hashes": {
+    "calibration": "cbf8a5a1bdc027c73d4bcdced97ea7c5dce83a0628cc6d525167490279038377",
+    "checkpoint": "85d1d2ee1e03ee22c355077cf6248fba30cb14c2195151deb36f68cffbe758e0",
+    "comparison": "2bf7f2c1e692b5d06ecf19758149ed991e1e3a24f96728ac48325a4abd818762",
+    "config": "64f3e284f6c901329956351e1077a479102683ffd043b6dabda755a739863ad9",
+    "encoder:config.json": "69c94b0222d5d1f4b0ad027ca7416cdafb98378cbbb8305d0bf47c9365c60c83",
+    "encoder:model.safetensors": "5e3f1108e3cb34ee048634875d8482665b65ac713291a7e32396fb18f6ff0063",
+    "encoder:tokenizer.json": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+    "encoder:tokenizer_config.json": "a025160ef0431f1a392f6f050c1310f4c5d9fb6f275932dbccba73c4d214bf10",
+    "encoder:vocab.txt": "07eced375cec144d27c900241f3e339478dec958f92fddbc551f295c992038a3",
+    "helper": "47cfa0acefe8d629dd7252c04a72cad0faf864b785e8d25671eb9a4f7e926e01",
+    "input": "f7bdf15cd37f62f527b4517224ad32ba79cde0df0ce1a1b490a409627e37eda7",
+    "nodeWrapper": "0c5ebb06336d54c08aabe668c3f33b7899aee30435a55d46687308f48f7c4c99",
+    "trainer": "d9422af7ad75e9053f5dfc86c36b0a49ac8f6b52099aa49ac02d95925db1a445",
+    "verification": "cd2b02a026f5096fd24a2bf4e197b5478ba765f1a7898b00e0b61fef6e1a73dc"
+  },
+  "independentAudit": {
+    "originalStrictPacketIdenticalRows": 3308,
+    "statusTransitions": {
+      "exact->exact": 2608,
+      "incorrect->incorrect": 608,
+      "unresolved->exact": 30,
+      "unresolved->incorrect": 60,
+      "unresolved->unresolved": 2
+    }
+  },
+  "logPath": ".session-control/request-cutter-decoder-comparison-v1.log",
+  "maxLength": 192,
+  "metrics": {
+    "allO": {
+      "counts": {
+        "empty:exact": 81,
+        "empty:rows": 81,
+        "fn": 3760,
+        "fp": 0,
+        "maskedSupervisionRows": 0,
+        "positive:exact": 0,
+        "positive:rows": 3227,
+        "predictionUnresolvedRows": 0,
+        "rows": 3308,
+        "spanScorableRows": 3308,
+        "tp": 0,
+        "utteranceExact": 81
+      },
+      "diagnostics": {},
+      "empty": {
+        "exact": 81,
+        "rows": 81,
+        "utteranceExact": 1.0
+      },
+      "positive": {
+        "exact": 0,
+        "rows": 3227,
+        "utteranceExact": 0.0
+      },
+      "span": {
+        "f1": 0.0,
+        "fn": 3760,
+        "fp": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "tp": 0
+      },
+      "tokenBIMacroF1": 0.0,
+      "tokenClasses": {
+        "B": {
+          "f1": 0.0,
+          "fn": 3760,
+          "fp": 0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "support": 3760,
+          "tp": 0
+        },
+        "I": {
+          "f1": 0.0,
+          "fn": 25510,
+          "fp": 0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "support": 25510,
+          "tp": 0
+        },
+        "O": {
+          "f1": 0.2560492069947133,
+          "fn": 0,
+          "fp": 29270,
+          "precision": 0.14682134841286035,
+          "recall": 1.0,
+          "support": 5037,
+          "tp": 5037
+        }
+      },
+      "tokenConfusion": [
+        [
+          5037,
+          0,
+          0,
+          0
+        ],
+        [
+          3760,
+          0,
+          0,
+          0
+        ],
+        [
+          25510,
+          0,
+          0,
+          0
+        ]
+      ],
+      "tokenPositive": {
+        "f1": 0.0,
+        "fn": 29270,
+        "fp": 0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "support": 29270,
+        "tp": 0
+      },
+      "utteranceExactLowerBound": 0.02448609431680774
+    },
+    "greedy": {
+      "counts": {
+        "empty:exact": 74,
+        "empty:rows": 81,
+        "fn": 663,
+        "fp": 722,
+        "maskedSupervisionRows": 0,
+        "positive:exact": 2534,
+        "positive:rows": 3227,
+        "predictionUnresolvedRows": 92,
+        "rows": 3308,
+        "spanScorableRows": 3308,
+        "tp": 3097,
+        "utteranceExact": 2608
+      },
+      "diagnostics": {
+        "illegal-I-after-O": 87,
+        "unknown-BIO-label": 5
+      },
+      "empty": {
+        "exact": 74,
+        "rows": 81,
+        "utteranceExact": 0.9135802469135802
+      },
+      "positive": {
+        "exact": 2534,
+        "rows": 3227,
+        "utteranceExact": 0.7852494577006508
+      },
+      "span": {
+        "f1": 0.8172582134846286,
+        "fn": 663,
+        "fp": 722,
+        "precision": 0.8109452736318408,
+        "recall": 0.8236702127659574,
+        "tp": 3097
+      },
+      "tokenBIMacroF1": 0.94117120777319,
+      "tokenClasses": {
+        "B": {
+          "f1": 0.9197972182503574,
+          "fn": 222,
+          "fp": 395,
+          "precision": 0.8995677599796593,
+          "recall": 0.9409574468085107,
+          "support": 3760,
+          "tp": 3538
+        },
+        "I": {
+          "f1": 0.9625451972960226,
+          "fn": 1019,
+          "fp": 887,
+          "precision": 0.9650484671762944,
+          "recall": 0.9600548804390435,
+          "support": 25510,
+          "tp": 24491
+        },
+        "O": {
+          "f1": 0.8078188889997008,
+          "fn": 987,
+          "fp": 940,
+          "precision": 0.811623246492986,
+          "recall": 0.8040500297796307,
+          "support": 5037,
+          "tp": 4050
+        }
+      },
+      "tokenConfusion": [
+        [
+          4050,
+          209,
+          776,
+          2
+        ],
+        [
+          110,
+          3538,
+          111,
+          1
+        ],
+        [
+          830,
+          186,
+          24491,
+          3
+        ]
+      ],
+      "tokenPositive": {
+        "f1": 0.9670382192786303,
+        "fn": 944,
+        "fp": 987,
+        "precision": 0.9663289325555214,
+        "recall": 0.9677485480013666,
+        "support": 29270,
+        "tp": 28326
+      },
+      "utteranceExactLowerBound": 0.788391777509069
+    },
+    "viterbi": {
+      "counts": {
+        "empty:exact": 74,
+        "empty:rows": 81,
+        "fn": 591,
+        "fp": 795,
+        "maskedSupervisionRows": 0,
+        "positive:exact": 2564,
+        "positive:rows": 3227,
+        "predictionUnresolvedRows": 2,
+        "rows": 3308,
+        "spanScorableRows": 3308,
+        "tp": 3169,
+        "utteranceExact": 2638
+      },
+      "diagnostics": {
+        "unknown-BIO-label": 2
+      },
+      "empty": {
+        "exact": 74,
+        "rows": 81,
+        "utteranceExact": 0.9135802469135802
+      },
+      "positive": {
+        "exact": 2564,
+        "rows": 3227,
+        "utteranceExact": 0.7945460179733499
+      },
+      "span": {
+        "f1": 0.8205592957017089,
+        "fn": 591,
+        "fp": 795,
+        "precision": 0.7994450050454087,
+        "recall": 0.8428191489361702,
+        "tp": 3169
+      },
+      "tokenBIMacroF1": 0.941171962620571,
+      "tokenClasses": {
+        "B": {
+          "f1": 0.9199896426721905,
+          "fn": 207,
+          "fp": 411,
+          "precision": 0.8963168516649849,
+          "recall": 0.9449468085106383,
+          "support": 3760,
+          "tp": 3553
+        },
+        "I": {
+          "f1": 0.9623542825689516,
+          "fn": 1033,
+          "fp": 882,
+          "precision": 0.9652194487164321,
+          "recall": 0.9595060760486084,
+          "support": 25510,
+          "tp": 24477
+        },
+        "O": {
+          "f1": 0.8084893382720993,
+          "fn": 999,
+          "fp": 914,
+          "precision": 0.8154281098546042,
+          "recall": 0.8016676593210245,
+          "support": 5037,
+          "tp": 4038
+        }
+      },
+      "tokenConfusion": [
+        [
+          4038,
+          213,
+          783,
+          3
+        ],
+        [
+          106,
+          3553,
+          99,
+          2
+        ],
+        [
+          808,
+          198,
+          24477,
+          27
+        ]
+      ],
+      "tokenPositive": {
+        "f1": 0.9668578059935832,
+        "fn": 943,
+        "fp": 999,
+        "precision": 0.965934665484553,
+        "recall": 0.967782712675094,
+        "support": 29270,
+        "tp": 28327
+      },
+      "utteranceExactLowerBound": 0.7974607013301088
+    }
+  },
+  "padding": "max_length",
+  "precision": "cuda-bfloat16",
+  "reportSha256": "da5e8b2ad96e66157ad057dbcea0ebc9b8eacc45c18f1899c49e21cac795500d",
+  "rows": 3308,
+  "runPath": ".session-control/request-cutter-decoder-comparison-v1",
+  "sameEmissionPass": true,
+  "sourceOnly": true,
+  "strictDecoder": "sop.request-cutter-codec/1",
+  "tradeoff": {
+    "activationDecision": "none; downstream calibrated complete-request risk required",
+    "additionalExactPositiveUtterances": 30,
+    "additionalFalsePositiveSpans": 73,
+    "additionalTrueSpans": 72,
+    "fewerFalseNegativeSpans": 72,
+    "newlyResolvedExactRows": 30,
+    "newlyResolvedIncorrectRows": 60
+  },
+  "utteranceTransitions": {
+    "empty:correct->correct": 74,
+    "empty:incorrect->incorrect": 7,
+    "positive:correct->correct": 2534,
+    "positive:incorrect->correct": 30,
+    "positive:incorrect->incorrect": 663
+  },
+  "versions": {
+    "torch": "2.14.1+cu130",
+    "transformers": "5.22.2"
+  },
+  "viterbiDecoder": "bio-viterbi/1",
+  "viterbiDiagnostics": {
+    "ambiguous-best-path": 2
+  }
+}

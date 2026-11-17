@@ -1198,3 +1198,18 @@ The sole application coordinator still admits the narrow positive property-equal
 ### Offline constrained BIO decoding comparison
 
 The Viterbi helper authored in e2a6adbb is an offline alternative decoder over the same frozen cutter emissions. The strict greedy codec and its reported illegal-transition failures remain the baseline. Comparing legal-path decoding can measure extraction differences, but it cannot create confidence calibration, semantic field accuracy or an active reader codec change. Reader-owned measurement is pending; any later deployment must identify the actual decoder/profile hash explicitly. No extra approval workflow or silent codec replacement is introduced.
+## Q36 (task BIO-DECODER, 2026-11-17)
+Question: Should a future admission policy evaluate the legal Viterbi decoder
+using calibrated complete-request risk, keeping refusal rather than forcing
+cuts where exact-request risk is unknown?
+Context: One identical-emissions CUDA BF16 pass over all3308 CAL messages
+reproduces the original strict baseline exactly. Legal Viterbi raises span
+F1 from81.73% to82.06%, adds72 true spans but73 false-positive spans, and
+reduces unresolved92->2. Among90 newly resolved messages,30 have exact request
+boundaries and60 still have incorrect boundaries. Empty exact remains74/81.
+An F1-only switch would hide this additional false-positive exposure.
+Proposal: preserve separately versioned strict/Viterbi results and require
+downstream calibrated exact-request risk before admission; no activation or
+confidence follows from BIO legality or summed logits.
+Blocking: no. The app gate and frozen strict codec remain unchanged; the
+comparison is offline evidence only.
