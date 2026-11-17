@@ -1,0 +1,3107 @@
+{
+  "format": "sop.key-reader-calibration/1",
+  "version": 1,
+  "runState": "five-epoch run active; first epoch frozen, epoch two updating",
+  "checkpoint": {
+    "path": "training/sop-bert/runs/owner-20261116/key-reader-full-v1/epoch1-frozen.pt",
+    "sha256": "a6c8233864428832cbfdc64c3be192fbc03edb85c4bf5d6817261fe0eff2234e"
+  },
+  "configSha256": "f23f5a14c7f1f5d3f0a5eb96f0768c1e2142c13127e8edaac853f6004f65b451",
+  "trainerSha256": "eb0a0ef595e1587da2be4ad4aea3a90ce1ba8829b89385be90ace4b13810d01f",
+  "dataManifestSha256": "e30a4eeb9eb24322cc49b299ebb4eb9df727086171ed3265a76ca3d18622668c",
+  "sourceManifestSha256": "865909c66c19d6181d1d340cccd68704129e104171a04626309bc0b1866dead4",
+  "sourceManifest": {
+    "annotationContract": {
+      "inventorySha256": "5e5c4404d392774b6e4754a31988fc2ba943d90289e9a083a6e23ba6cba21832",
+      "promptPath": "data/haiku-v2/INSTRUCTIONS-v2.md",
+      "promptSha256": "9b6632f011da5ccc1088aad1377fa63a0ac4a532cdf307006d2cfc2d609212e1"
+    },
+    "bindingsSha256": "68cea94caade750df6ca4e3b3a665ba5f1b794e6873bfc1eb627f14644a339db",
+    "boundary": "C1 teacher structure, not model inference or confidence. No missing semantic bindings, goals, group/binder edges or dependencies are guessed.",
+    "canonicalUnresolvedIsDistinctFromAbsence": true,
+    "counts": {
+      "calibration:completeNonemptyRows": 0,
+      "calibration:completeRows": 81,
+      "calibration:emptyRows": 81,
+      "calibration:requests": 3760,
+      "calibration:rows": 3308,
+      "excludedRows": 1648,
+      "train:completeNonemptyRows": 5,
+      "train:completeRows": 616,
+      "train:emptyRows": 611,
+      "train:requests": 33149,
+      "train:rows": 28959
+    },
+    "exclusion": {
+      "beforeProjection": true,
+      "foundIds": 1648,
+      "missingIds": [],
+      "requestedIds": 1648,
+      "sha256": "66b1ab7f205bedf08c15e3e83f98e3de217922d179e89ae8b99c29a938e29e77"
+    },
+    "executable": false,
+    "format": "sop.projected-structural-gold",
+    "outputs": {
+      "calibration": "cbf8a5a1bdc027c73d4bcdced97ea7c5dce83a0628cc6d525167490279038377",
+      "train": "8655d850e41445c5314551779d48e5dc7301f684e16ac6351f4f92cf9e211411"
+    },
+    "rawSupervisionField": "annotations",
+    "scriptSha256": "2e7644e68f16b63f086667ca80c8f623933b2dcad9cc4137e721298c112cf160",
+    "sourceAnnotationsRetained": true,
+    "sources": [
+      {
+        "path": "data/haiku-v1/calendar/b01a.jsonl",
+        "sha256": "72b3dd9e7b9affa64b0486de03791891022ce54c8216c8aaf5ad8d7bad3e03dd"
+      },
+      {
+        "path": "data/haiku-v1/calendar/b01b.jsonl",
+        "sha256": "9cf1156d7b502027cbbb582165cbb113920ceb85f650f120596132d47c232827"
+      },
+      {
+        "path": "data/haiku-v1/calendar/b02a.jsonl",
+        "sha256": "6bb44765eb471fbf6ff70921df24971bb24d400a8fee656b784942defe09e460"
+      },
+      {
+        "path": "data/haiku-v1/calendar/b02b.jsonl",
+        "sha256": "26f85dcf6b334f81ac648221f58127e6b8ec92abb387e7fc757c18db7b6bb53d"
+      },
+      {
+        "path": "data/haiku-v1/calendar/b03a.jsonl",
+        "sha256": "7bb51a3cb23372f5cae29ba9a09dd84cbeb892430b2d34d02448b762d1599f60"
+      },
+      {
+        "path": "data/haiku-v1/calendar/b03b.jsonl",
+        "sha256": "d78b7fe91fa835d82375e305bb54da31627bc7c8bc2777abfa45b16d0cbc5871"
+      },
+      {
+        "path": "data/haiku-v1/calendar/b04a.jsonl",
+        "sha256": "6f9d5bbe7c48ac46b7424ce8cfd6e5e7780fd26b6a44685d0dd0d6ebb817c06d"
+      },
+      {
+        "path": "data/haiku-v1/calendar/b04b.jsonl",
+        "sha256": "d141c6da5fe7505710e0b5f9cf8d906cbe816574d342fbd9fef813d3b1ba9dfc"
+      },
+      {
+        "path": "data/haiku-v1/calendar/b05a.jsonl",
+        "sha256": "9f3f9834e5220ed6eeae96c8ca9d0f4979c537157214d3c1aca07840903b2666"
+      },
+      {
+        "path": "data/haiku-v1/calendar/b05b.jsonl",
+        "sha256": "676a699c1f7efb7e954efb6cdcdf44d91abbbd89edc71165b3b362b673ef2d13"
+      },
+      {
+        "path": "data/haiku-v1/calendar/b06a.jsonl",
+        "sha256": "e3aca4b8b5b5cb4b5dc973461c91195da4df9021d8c52178ab6a8c2462a5726a"
+      },
+      {
+        "path": "data/haiku-v1/calendar/b06b.jsonl",
+        "sha256": "eb2b0d5d6546baa6a7f1749c912d006f0cf06268b6889136691c9b3dd65ab662"
+      },
+      {
+        "path": "data/haiku-v1/calendar/b07a.jsonl",
+        "sha256": "881dd3ecee5ded2b062297e20f2acf723993c1e7b7526529cbb6522d81751991"
+      },
+      {
+        "path": "data/haiku-v1/calendar/b07b.jsonl",
+        "sha256": "d470e592648d528b17b27f2620bbae7bc605cc962c25b936838aca411cab1b10"
+      },
+      {
+        "path": "data/haiku-v1/calendar/b08a.jsonl",
+        "sha256": "4ad67a40a7637640f7b78f9bfaac521371c2994e1b5aa8cdeb4598805a95c2ba"
+      },
+      {
+        "path": "data/haiku-v1/calendar/b08b.jsonl",
+        "sha256": "c7d6b59d8c279cc6f7335acfba4bde220ae8ba43c89f44af5ff5f02f2b1eec98"
+      },
+      {
+        "path": "data/haiku-v1/calendar/b09a.jsonl",
+        "sha256": "723574e5272f9b59bbef08aa902c11001abd9b1cefd4f98ea279c30068834b51"
+      },
+      {
+        "path": "data/haiku-v1/calendar/b09b.jsonl",
+        "sha256": "d9b439651a60107e8e01447d6d75161b7e832214b426cb01196319055640acfd"
+      },
+      {
+        "path": "data/haiku-v1/calendar/b10a.jsonl",
+        "sha256": "dcc303dfca16f6a90bc59d1546b125ef9bb0d9cc87f76c6b0103deb69b43360a"
+      },
+      {
+        "path": "data/haiku-v1/calendar/b10b.jsonl",
+        "sha256": "77c7e268683cf55e6744a76e208d0c37509d014be4b0dad22de48a017c2de1fc"
+      },
+      {
+        "path": "data/haiku-v1/calendar/b11a.jsonl",
+        "sha256": "4a22d885363fa59bf07febac4336ca620bec3b0995dbb520804c2ac4c3cef75a"
+      },
+      {
+        "path": "data/haiku-v1/calendar/b11b.jsonl",
+        "sha256": "47edfaef98df33df7a5e69a61db79658944627d5c22fe15f7de8e9b799309868"
+      },
+      {
+        "path": "data/haiku-v1/calendar/b12a.jsonl",
+        "sha256": "20e52de7c2c4c86c3f20e3cd3a4b15ca39d75c33ad3956f6ac856917fdfe101b"
+      },
+      {
+        "path": "data/haiku-v1/calendar/b12b.jsonl",
+        "sha256": "4861b6430780400b61fba233023865ed44841d24be2a75b54611244c20f7336a"
+      },
+      {
+        "path": "data/haiku-v1/calendar/b13a.jsonl",
+        "sha256": "023d45c5b71c1a3fab018e61ca5111b9c8a56cb87f27163bdcbe1534a034d5cd"
+      },
+      {
+        "path": "data/haiku-v1/calendar/b13b.jsonl",
+        "sha256": "5d787df9fc248ae6934fa3829ebe8c3e463dabc8cda5f377045aa3c42458e9b9"
+      },
+      {
+        "path": "data/haiku-v1/calendar/b14a.jsonl",
+        "sha256": "7557d91292abfd8a8bfbb5fa4049d9b916539c5325d4e3c4c319d2f48c388da1"
+      },
+      {
+        "path": "data/haiku-v1/calendar/b14b.jsonl",
+        "sha256": "607df2bbfc113b840a6e314ae9ced6a445f630f6eb805891b58211363b5544bf"
+      },
+      {
+        "path": "data/haiku-v1/calendar/b15a.jsonl",
+        "sha256": "2a4554cf5eb298f8c9d1ffb710aa24b80511110dade0b5c60d65057d9fa0e9ef"
+      },
+      {
+        "path": "data/haiku-v1/calendar/b15b.jsonl",
+        "sha256": "49a80f9e9391b37030fb40e168b5d66dce71e70fc8804e4f541094674ab4c205"
+      },
+      {
+        "path": "data/haiku-v1/calendar/b16a.jsonl",
+        "sha256": "7ec8bf90476317a32178219d44b50808ceb994fae193e167a4f50d2a5ae576b7"
+      },
+      {
+        "path": "data/haiku-v1/calendar/b16b.jsonl",
+        "sha256": "5cbc5e60934c94f8b8b10b019bc1752b2e468217992eb0120259c65beeda9017"
+      },
+      {
+        "path": "data/haiku-v1/diagram/b01a.jsonl",
+        "sha256": "175856382e4947e5711c4e053c40ae44aa05bfcb4864a55a1a53a7586289b21d"
+      },
+      {
+        "path": "data/haiku-v1/diagram/b01b.jsonl",
+        "sha256": "e717acfba88c205e22d774a66bb9ea744ba557b1bd1445ec6e37c80ad706e1ee"
+      },
+      {
+        "path": "data/haiku-v1/diagram/b02a.jsonl",
+        "sha256": "015c248f228dbe0f8c17454749272263116e6c9e2532c7800553b9b100242047"
+      },
+      {
+        "path": "data/haiku-v1/diagram/b02b.jsonl",
+        "sha256": "a1b7321f3d87945e71186ec9e8e4bcc4f9076baec26399085c311798a2f0fdaf"
+      },
+      {
+        "path": "data/haiku-v1/diagram/b03a.jsonl",
+        "sha256": "296610f6d3658b7cd6d5af3ed8111862fc9392ffef43502a1d7e45c30a932ab0"
+      },
+      {
+        "path": "data/haiku-v1/diagram/b03b.jsonl",
+        "sha256": "46da8f4a57e2c4dbea4a0ed04518a1c2e8229741b8ccdd8743f73abb58d4101b"
+      },
+      {
+        "path": "data/haiku-v1/diagram/b04a.jsonl",
+        "sha256": "b84566f2368a932a45fa599e3e74e25bc254fb0141a9790502e5800c0262751f"
+      },
+      {
+        "path": "data/haiku-v1/diagram/b04b.jsonl",
+        "sha256": "c311ea41a45cdee9c355899f6b1767023471ecc8e1c9ad576b735f31db3c418c"
+      },
+      {
+        "path": "data/haiku-v1/diagram/b05a.jsonl",
+        "sha256": "3424eb081ecdbd73396aa7a0fbcf2dfd42019689a300c5ccc7308b221d19790c"
+      },
+      {
+        "path": "data/haiku-v1/diagram/b05b.jsonl",
+        "sha256": "0a638d6eb272aa51e2026d7e3c077a07134a5f88114a473053983b7972dfd498"
+      },
+      {
+        "path": "data/haiku-v1/diagram/b06a.jsonl",
+        "sha256": "7de5d14309664258e590a9fbe60f6b210489e52ae47afbf84f049ce1f9b84f5f"
+      },
+      {
+        "path": "data/haiku-v1/diagram/b06b.jsonl",
+        "sha256": "c0b4be78ce2b6cd299dce9acee248b9a25a68f39615d3f810b023fb6eb24082f"
+      },
+      {
+        "path": "data/haiku-v1/diagram/b07a.jsonl",
+        "sha256": "a7d90e28b4a0c6fbc60c386eddf5cacd7fbc59cbb7af111d1acdaaed5b762e35"
+      },
+      {
+        "path": "data/haiku-v1/diagram/b07b.jsonl",
+        "sha256": "cf3a8eeddc016ebcc93226a40563f729e9b6b517770eba652256e7e3d79abc69"
+      },
+      {
+        "path": "data/haiku-v1/diagram/b08a.jsonl",
+        "sha256": "7a5cbfabd03bccfa9c267c832a33a3c04c036cb220cd4e6d51f0e720af95cab8"
+      },
+      {
+        "path": "data/haiku-v1/diagram/b08b.jsonl",
+        "sha256": "3602ca48c8253ade53bdfbe3fc22af3a127419aeb8bf8c725f8c85f14dba560c"
+      },
+      {
+        "path": "data/haiku-v1/diagram/b09a.jsonl",
+        "sha256": "1473f31eac851fbf0601bf48fd31b1b13e2d7c80776a15084da71e1cefb3625e"
+      },
+      {
+        "path": "data/haiku-v1/diagram/b09b.jsonl",
+        "sha256": "c3af9d5ec1f6aae5cd8216c732e42281daad55c9745514460d6b72cece04458c"
+      },
+      {
+        "path": "data/haiku-v1/diagram/b10a.jsonl",
+        "sha256": "9a1d5943fb57af2004a9c7163791a0e869979a17f95f0aeeb8d82655d1cb387f"
+      },
+      {
+        "path": "data/haiku-v1/diagram/b10b.jsonl",
+        "sha256": "3a5786100cd5f54b2fb6d51c23a6f555d655f70b2309195aea0b73fdbabd42fb"
+      },
+      {
+        "path": "data/haiku-v1/diagram/b11a.jsonl",
+        "sha256": "eaaefa557e9785ac4d0739ff3b730df7d75778cd35cc37df7559cce3204167ea"
+      },
+      {
+        "path": "data/haiku-v1/diagram/b11b.jsonl",
+        "sha256": "4ff578a835a4730e77c2f792836eff1dcb7c008f4b35f0a6f4f3105d5ed8e94d"
+      },
+      {
+        "path": "data/haiku-v1/diagram/b12a.jsonl",
+        "sha256": "0d47ce0031f526135ee9c96f1e7205b11fc3d1c36317eba84515f364453c7678"
+      },
+      {
+        "path": "data/haiku-v1/diagram/b12b.jsonl",
+        "sha256": "b9abf41a54d033ea7ff71b0441ac2aadcc5f00da0e8801afa06f9f1fa4c57106"
+      },
+      {
+        "path": "data/haiku-v1/diagram/b13a.jsonl",
+        "sha256": "549208bdf4d6ca63dd031429fac66da707b4320da8703297fe293d00d146c867"
+      },
+      {
+        "path": "data/haiku-v1/diagram/b13b.jsonl",
+        "sha256": "6888f6d779dbcb23cab7cc4bf68d5d4604b1e2299f3f01dedfb422e727ec348b"
+      },
+      {
+        "path": "data/haiku-v1/diagram/b14a.jsonl",
+        "sha256": "5f084ee6918b57f9d72d3b4ce045f7a8274149cc12bac95afafa3a34218e9688"
+      },
+      {
+        "path": "data/haiku-v1/diagram/b14b.jsonl",
+        "sha256": "da0a151506f476ceaa9ae5ce5635ba9a3d3cd8b3de530acc35d792b88391e1d5"
+      },
+      {
+        "path": "data/haiku-v1/diagram/b15a.jsonl",
+        "sha256": "3db985e50ee76a09738be4f9c73a705b98c2816ac920adb04efb194030b9af97"
+      },
+      {
+        "path": "data/haiku-v1/diagram/b15b.jsonl",
+        "sha256": "6322baffb57fd26b45d8549961c8ca9ebb1352d6085805f9f7fde3bb0d5a05a3"
+      },
+      {
+        "path": "data/haiku-v1/diagram/b16a.jsonl",
+        "sha256": "be51657b107abee2e7e40271e41ff52a1e76987469151ac4771047bf0379f188"
+      },
+      {
+        "path": "data/haiku-v1/diagram/b16b.jsonl",
+        "sha256": "ad95f54d991bf37e0e130f9267cfd42c7f8b4eb9173a8c4940648d0ecc574256"
+      },
+      {
+        "path": "data/haiku-v1/document/b01a.jsonl",
+        "sha256": "9a1100b7ee486f81c3ea6832a4041946151c923fcb43f6554ad4335e58c4eea7"
+      },
+      {
+        "path": "data/haiku-v1/document/b01b.jsonl",
+        "sha256": "1d66aa3f5266d83eaab70bad7e2bbc72ae3980af04561504078b254a5271ff76"
+      },
+      {
+        "path": "data/haiku-v1/document/b02a.jsonl",
+        "sha256": "bb6cd936b9c4e7c46b78e125aa1fba187a6e8ec3ffe67c6b4d97461f3a9604e8"
+      },
+      {
+        "path": "data/haiku-v1/document/b02b.jsonl",
+        "sha256": "6309677145838971016adcdd7ad88b6847ae8384899c89c36260385263319988"
+      },
+      {
+        "path": "data/haiku-v1/document/b03a.jsonl",
+        "sha256": "0838ab2e8583ad65faac643f8ab7de38583f89613ab3aa0c459bdfbd6877a853"
+      },
+      {
+        "path": "data/haiku-v1/document/b03b.jsonl",
+        "sha256": "bd66dbb4cf12590af99878a7c07c29c75ce94c5986f79a37212f92dc3ff76d69"
+      },
+      {
+        "path": "data/haiku-v1/document/b04a.jsonl",
+        "sha256": "99bc49fc7150aa335f65e5e0900a24a5e3a08affc504024fb9310bb529fe627a"
+      },
+      {
+        "path": "data/haiku-v1/document/b04b.jsonl",
+        "sha256": "ba9bd86c27d177a0f642fa57783c24bddce8c0a96087b37e146d6c7a5397f98a"
+      },
+      {
+        "path": "data/haiku-v1/document/b05a.jsonl",
+        "sha256": "8f5eaf546f816dfc0118b8a11be7b8b77d231603aa8b76ea193b70e430aaf9ec"
+      },
+      {
+        "path": "data/haiku-v1/document/b05b.jsonl",
+        "sha256": "590c6a2c33fff838da1039d11ed7d1166c595236a5d501c2d22179d123bf687a"
+      },
+      {
+        "path": "data/haiku-v1/document/b06a.jsonl",
+        "sha256": "d1bdb850412f206356005042266cfc60ae9c70bf4fd7cf1cc1760af45e1123e0"
+      },
+      {
+        "path": "data/haiku-v1/document/b06b.jsonl",
+        "sha256": "9542cf9e0695d63ef1ec5fe8f45ac9e87526253908c47bb2fd83a35ac9418ba9"
+      },
+      {
+        "path": "data/haiku-v1/document/b07a.jsonl",
+        "sha256": "e9f4d0fa3eb88f25f2569c221f82ac35163d27bfb8dbc8a4c88376022da8dab5"
+      },
+      {
+        "path": "data/haiku-v1/document/b07b.jsonl",
+        "sha256": "664a3c1556ed408393f452db22c4e29f7248be4afb27bf7bcbf859582a52ad2a"
+      },
+      {
+        "path": "data/haiku-v1/document/b08a.jsonl",
+        "sha256": "1df52f6ae2d3aeebbe44a580684cafcd3f8b6fe859954f5f10953ac511392893"
+      },
+      {
+        "path": "data/haiku-v1/document/b08b.jsonl",
+        "sha256": "d484a7f57d9d1002d2e3699f55922e98f138dcb7be000104d937e9357cc98d05"
+      },
+      {
+        "path": "data/haiku-v1/document/b09a.jsonl",
+        "sha256": "a2f6537cd6e41c45a3e13d47f7b02acd92e9079d3c7e5e8e1dd822e4e6a74c25"
+      },
+      {
+        "path": "data/haiku-v1/document/b09b.jsonl",
+        "sha256": "d8deee4ab4ef8a2e68eb175c54e914f6f3aead5b8eb3ebe36644b82c09b99fda"
+      },
+      {
+        "path": "data/haiku-v1/document/b10a.jsonl",
+        "sha256": "60bd034631817e749769f5b5099893dc271503b6bf5381baf42a37c636e58414"
+      },
+      {
+        "path": "data/haiku-v1/document/b10b.jsonl",
+        "sha256": "72cd1c2dee131d26555018845b5fa23367250c38e37d0b8168e843d520b72a36"
+      },
+      {
+        "path": "data/haiku-v1/document/b11a.jsonl",
+        "sha256": "30402e59d0f9c9a908792bea075e64cd587910db5ba28a758ab14e4ec574fb1b"
+      },
+      {
+        "path": "data/haiku-v1/document/b11b.jsonl",
+        "sha256": "39b1707ff81684aff30112f5fc7d5a5ff658cc6f512bb0ea6068f33cc5fad5bf"
+      },
+      {
+        "path": "data/haiku-v1/document/b12a.jsonl",
+        "sha256": "45e9fee56ffe93a8eabf010f691f90852c46375f5dc6a4d9d433cc00eb44ed82"
+      },
+      {
+        "path": "data/haiku-v1/document/b12b.jsonl",
+        "sha256": "46057958830bf009499037e651a6e42239a96acc6a429dc759e35d11b8783c61"
+      },
+      {
+        "path": "data/haiku-v1/document/b13a.jsonl",
+        "sha256": "6f1033f77df64c34f8ec910680258b6e53f41b4f5d037306b2eddc9814b23c41"
+      },
+      {
+        "path": "data/haiku-v1/document/b13b.jsonl",
+        "sha256": "ba3501697822a1be44dcbbf59b606b413e7ac245cc30e4f971683eaadfcfb351"
+      },
+      {
+        "path": "data/haiku-v1/document/b14a.jsonl",
+        "sha256": "22279e974ef607b19567890f7275de8849ac60264579d13f570b1cadd52331a4"
+      },
+      {
+        "path": "data/haiku-v1/document/b14b.jsonl",
+        "sha256": "2ad13dce5edcb66f668e6d368097751dda809a0a81d8d1c98b523881c73a0796"
+      },
+      {
+        "path": "data/haiku-v1/document/b15a.jsonl",
+        "sha256": "11869f76a93e545632fc3c16e2cc55066e43212b7984d7297f7f41af64e16253"
+      },
+      {
+        "path": "data/haiku-v1/document/b15b.jsonl",
+        "sha256": "090087d773515c1e59f9ef4d05f29d1f048353923c3638e40a4fd55424cf40e2"
+      },
+      {
+        "path": "data/haiku-v1/document/b16a.jsonl",
+        "sha256": "dabf03c65ddad921be2a6097d18cef6ff7676100c63e05f811b1b1e5b0e5f3bf"
+      },
+      {
+        "path": "data/haiku-v1/document/b16b.jsonl",
+        "sha256": "f51ccef224c4613a9931319049049c910f3c8d859c76f546f49babab94472e20"
+      },
+      {
+        "path": "data/haiku-v1/drawing/b01a.jsonl",
+        "sha256": "7c5f7e964fbca3e778bb3ad2821a1d4775c9e3f4f0b2126f71d806ad32177cb7"
+      },
+      {
+        "path": "data/haiku-v1/drawing/b01b.jsonl",
+        "sha256": "f1ed70834543238ae9c17d7aacbc063492a1e7c482f484d6aa3ee85d4858e126"
+      },
+      {
+        "path": "data/haiku-v1/drawing/b02a.jsonl",
+        "sha256": "2784e4939967f227bd0962a269795be791d9125c0016663976348f051472febc"
+      },
+      {
+        "path": "data/haiku-v1/drawing/b02b.jsonl",
+        "sha256": "b261e41bf4bbb78c04ef3e5b8ee3b5ff6846b622bfc28ccf3d8d0603317323e0"
+      },
+      {
+        "path": "data/haiku-v1/drawing/b03a.jsonl",
+        "sha256": "3d64e2c44a52d22f9202318a34efade738ae1cf5fabdcba02029d47915601d05"
+      },
+      {
+        "path": "data/haiku-v1/drawing/b03b.jsonl",
+        "sha256": "eff0518643a007c61c71b8852bfc63a45c78b0a26bba9d2eba501af4feb8f6c9"
+      },
+      {
+        "path": "data/haiku-v1/drawing/b04a.jsonl",
+        "sha256": "9d3d2116fb8cc41a2870082e832a265fed3c0e45bb76eb2ff5185fee6f99cdd9"
+      },
+      {
+        "path": "data/haiku-v1/drawing/b04b.jsonl",
+        "sha256": "22fa95d49ed7581cb3a37a3b92cc18d31fc17b12f30f9d659535bb8029bb3634"
+      },
+      {
+        "path": "data/haiku-v1/drawing/b05a.jsonl",
+        "sha256": "874e0750de6cb12d18bdff04c1b2ca89d22c5f7e6c09aa73a0901911742103a8"
+      },
+      {
+        "path": "data/haiku-v1/drawing/b05b.jsonl",
+        "sha256": "a353062fbd1b23f8831da1643ca562de67722601c59aacbfa6ead3d268d678e0"
+      },
+      {
+        "path": "data/haiku-v1/drawing/b06a.jsonl",
+        "sha256": "49cd1810c07aba047374ebd9127c30ec2cb0f71dc8abc89d69a160261d8e0ae8"
+      },
+      {
+        "path": "data/haiku-v1/drawing/b06b.jsonl",
+        "sha256": "85dff130d9ea5eca2a3cf20933b6e7aff02dd02c93386c3069c2630af4b7c446"
+      },
+      {
+        "path": "data/haiku-v1/drawing/b07a.jsonl",
+        "sha256": "655d78d2e47836ef8d8d9ed5dfc4e28b0f10ec003dbd6ec1bc1a49d8673c7721"
+      },
+      {
+        "path": "data/haiku-v1/drawing/b07b.jsonl",
+        "sha256": "1b3ac9cdfb070f0b67a7eb565557c6dc932321132baf2d745df1001a1cc86e48"
+      },
+      {
+        "path": "data/haiku-v1/drawing/b08a.jsonl",
+        "sha256": "9431f1aed86810febf2b5ae9c33b18346bb8fea85cc3f4e45436d20b30b094ac"
+      },
+      {
+        "path": "data/haiku-v1/drawing/b08b.jsonl",
+        "sha256": "8c9ac583cbc59ca916e10ca58c520e8ff93cd1aa28a8ea4196a844aa25b05d03"
+      },
+      {
+        "path": "data/haiku-v1/drawing/b09a.jsonl",
+        "sha256": "3fa6617cbe40957847097706736bdefd997c6e9faee3ef7b343cad7d1c97c53a"
+      },
+      {
+        "path": "data/haiku-v1/drawing/b09b.jsonl",
+        "sha256": "58105dd997c5783279822d45eee4c0fd2c0bd791880a7d58c1256f5f356eac0d"
+      },
+      {
+        "path": "data/haiku-v1/drawing/b10a.jsonl",
+        "sha256": "f6965fd409c2ab0cc4e1513b17df7da0d93fc1dcdfd6c0aae2aed2c59d665790"
+      },
+      {
+        "path": "data/haiku-v1/drawing/b10b.jsonl",
+        "sha256": "9165cf3da766f2315a89366b3af7e64180448f367120660fc60d0a633e2b477c"
+      },
+      {
+        "path": "data/haiku-v1/drawing/b11a.jsonl",
+        "sha256": "388b6aa470c8d2258d590f0c65823d9e90a8714a1e5c130211f8dd93cb789073"
+      },
+      {
+        "path": "data/haiku-v1/drawing/b11b.jsonl",
+        "sha256": "0dcb074c107432a164e7395ab139008a28042e4c256427c616e87be0dab87de3"
+      },
+      {
+        "path": "data/haiku-v1/drawing/b12a.jsonl",
+        "sha256": "8b1a0c5695b58fb7865f962c09409c10e4bfcf903539c5ec2ecdbd032664cc4e"
+      },
+      {
+        "path": "data/haiku-v1/drawing/b12b.jsonl",
+        "sha256": "e3647b028ce89af23ca06123f8c5b9255328fd83ec091162d99603f673f7de13"
+      },
+      {
+        "path": "data/haiku-v1/drawing/b13a.jsonl",
+        "sha256": "50f95790e5105dbe52942a091c4766e54169151470181efc733fc808b3545703"
+      },
+      {
+        "path": "data/haiku-v1/drawing/b13b.jsonl",
+        "sha256": "d7dd80e31c183bb528ab08e6f39422f29ccc0842c0f4c2822eb4090acf77bc05"
+      },
+      {
+        "path": "data/haiku-v1/drawing/b14a.jsonl",
+        "sha256": "d72fe3e940141f262704e673a5deae51b4618b3f977c0fc8cf43b819b68f4048"
+      },
+      {
+        "path": "data/haiku-v1/drawing/b14b.jsonl",
+        "sha256": "12c295497d5b304bf0e4e1f40ea765780ce81c38791d14a2a406d9e94e74ec9a"
+      },
+      {
+        "path": "data/haiku-v1/drawing/b15a.jsonl",
+        "sha256": "449b8bc3a2dfaf7f65c39eda3eb86102cbe7c7830421403f8caddfa7e5721d56"
+      },
+      {
+        "path": "data/haiku-v1/drawing/b15b.jsonl",
+        "sha256": "8ec3a39093b53d60021173976d1416c5df1bc69f398ec451d3760d29a69c1213"
+      },
+      {
+        "path": "data/haiku-v1/drawing/b16a.jsonl",
+        "sha256": "5c483f5f86c9554e66f446e734d8bdc13ff960bd0104b127621007c89942c8f0"
+      },
+      {
+        "path": "data/haiku-v1/drawing/b16b.jsonl",
+        "sha256": "80b09558db5d93bbfb6ecdfc85dc2b68d7906a0b34f54b4f62ec7195c947998d"
+      },
+      {
+        "path": "data/haiku-v2/calendar/v2b01a.jsonl",
+        "sha256": "789315fa06459a478fb13727efa0daccded2a55e7ea7edc6088f3b25977d7cb4"
+      },
+      {
+        "path": "data/haiku-v2/calendar/v2b01b.jsonl",
+        "sha256": "48fa6e046a34a830d39acda415ee1e0a1a03d3e5da5a49bfd13d41c03140fd6a"
+      },
+      {
+        "path": "data/haiku-v2/calendar/v2b02a.jsonl",
+        "sha256": "145c962c8c9544365f3bc336b4ba81a9ce9608fd9ed5cbac38c919846a50b04c"
+      },
+      {
+        "path": "data/haiku-v2/calendar/v2b02b.jsonl",
+        "sha256": "6fcda4247c804579aef8f62477a9abbaf1be34c5407cc7facd10e1c4dc435b33"
+      },
+      {
+        "path": "data/haiku-v2/calendar/v2b03a.jsonl",
+        "sha256": "eb0b28f8828bc7e07596fbc8997d95b89cf756e5f5f31b7d041301fd284aa98f"
+      },
+      {
+        "path": "data/haiku-v2/calendar/v2b03b.jsonl",
+        "sha256": "d207ea92e05e3fb01e2c66bb12b40f2ecc2ec8028798019d47e1e7998e8bf78b"
+      },
+      {
+        "path": "data/haiku-v2/calendar/v2b04a.jsonl",
+        "sha256": "7a89cf5d0bd507d920905a5e97e2c0444946470710a3c1c2583956163caa36a3"
+      },
+      {
+        "path": "data/haiku-v2/calendar/v2b04b.jsonl",
+        "sha256": "9a5bc006a3a510a583013f39a73f2833650d21402f7d3bae588c351b77cb131c"
+      },
+      {
+        "path": "data/haiku-v2/calendar/v2b05a.jsonl",
+        "sha256": "2e9cfb1ed8eb269e386296c67566f836f5058b13a1c1f1d0ca75e1c696650f6b"
+      },
+      {
+        "path": "data/haiku-v2/calendar/v2b05b.jsonl",
+        "sha256": "eb3a67293fc51c0a08c0e61820a0404c70538521cf3bcdcbcd4c514183978ae0"
+      },
+      {
+        "path": "data/haiku-v2/calendar/v2b06a.jsonl",
+        "sha256": "9a5892f00f24843aedc55e700ff2c54db093baeee423936ec3540e04fdd1efae"
+      },
+      {
+        "path": "data/haiku-v2/calendar/v2b06b.jsonl",
+        "sha256": "2198142c623ade8133b32bf4f8a6cf4f3beab165d483af30b054f71dba28df77"
+      },
+      {
+        "path": "data/haiku-v2/calendar/v2b07a.jsonl",
+        "sha256": "2c2f29fdd26a4b235efa9387b14f458447b8ace7fb389419b1fd52146e88f249"
+      },
+      {
+        "path": "data/haiku-v2/calendar/v2b07b.jsonl",
+        "sha256": "7341e426d73c9fe4b50cafa9d1c8c761486c459a7e038c90fc1ed5205812190d"
+      },
+      {
+        "path": "data/haiku-v2/calendar/v2b08a.jsonl",
+        "sha256": "83af2e406201650cb04cc403e022cf4df68accb11a41c2590264562e25bb6bb4"
+      },
+      {
+        "path": "data/haiku-v2/calendar/v2b08b.jsonl",
+        "sha256": "446a8dc7eeb2c7635c694ef60d51a761725f5713eeb3c5907b17109877bdc6af"
+      },
+      {
+        "path": "data/haiku-v2/calendar/v2b09a.jsonl",
+        "sha256": "19d252f96d882c4a92cb8345eb8db67ec06020944180ad76efe0c71324171f7d"
+      },
+      {
+        "path": "data/haiku-v2/calendar/v2b09b.jsonl",
+        "sha256": "a788b9c9d642cf6618685e56729569cfcdc25e96046520547fe0cfee92ff89d0"
+      },
+      {
+        "path": "data/haiku-v2/calendar/v2b10a.jsonl",
+        "sha256": "140db42b1a082d717938fb2128c30067161a65595b40afdb590eac4e874a50cf"
+      },
+      {
+        "path": "data/haiku-v2/calendar/v2b10b.jsonl",
+        "sha256": "9797f3d1b186fc31da1710422a468051165a5932806fbd269bd0ad92e39d07b0"
+      },
+      {
+        "path": "data/haiku-v2/calendar/v2b11a.jsonl",
+        "sha256": "fc82663b0c70bba0a0a6562ae373c88b9bd62ee634bffdd5469dd287717cfe88"
+      },
+      {
+        "path": "data/haiku-v2/calendar/v2b11b.jsonl",
+        "sha256": "fc063711f35d573cf9b4730452115d7dcf4e5c1f3469d424a5675f546da597c1"
+      },
+      {
+        "path": "data/haiku-v2/calendar/v2b12a.jsonl",
+        "sha256": "53dd62f4b04498ddb1e918979e815b776c1971282945c1ef26bf267b9dc52fa8"
+      },
+      {
+        "path": "data/haiku-v2/calendar/v2b12b.jsonl",
+        "sha256": "e7558403b44f27bca973cae0d3674754f9dc29edbeb2e2213720e579526f1f09"
+      },
+      {
+        "path": "data/haiku-v2/calendar/v2b13a.jsonl",
+        "sha256": "8745ebed2a5af0e41cf575c8d609180833daf7d3078b825756a1d541717acfdd"
+      },
+      {
+        "path": "data/haiku-v2/calendar/v2b13b.jsonl",
+        "sha256": "796ae50d4ab1d018989569675c43b1bda37d595e0c893349f41fbb69707fb864"
+      },
+      {
+        "path": "data/haiku-v2/calendar/v2b14a.jsonl",
+        "sha256": "8e0cc346682fc366c9af54bb6869329530d60e1b75cff9b5635162c682fb1b85"
+      },
+      {
+        "path": "data/haiku-v2/calendar/v2b14b.jsonl",
+        "sha256": "c0d88fddc15078a1ef32a84b91d183f5c9383d0a08dd5b19bab0671602ca5848"
+      },
+      {
+        "path": "data/haiku-v2/calendar/v2b15a.jsonl",
+        "sha256": "eb96aad034ddb4490ac46199b00f22c74c1e8067ca9d32fe3f66d19a2049ced7"
+      },
+      {
+        "path": "data/haiku-v2/calendar/v2b15b.jsonl",
+        "sha256": "c7662457ab714d6e092128d3638d802df8191d071783a74952452fa45d5297cd"
+      },
+      {
+        "path": "data/haiku-v2/calendar/v2b16a.jsonl",
+        "sha256": "a51992877eeef86df35e67ee9cc6261319ac3db4507ba650a0fc731cdabd30e9"
+      },
+      {
+        "path": "data/haiku-v2/calendar/v2b16b.jsonl",
+        "sha256": "28fc8b349207753c7386605632043865a5b1eb4f40d80243f0189711bfc96fda"
+      },
+      {
+        "path": "data/haiku-v2/calendar/v2b17a.jsonl",
+        "sha256": "68d3536f35b24f7ddd7f090bd6661c8b3e2d7b9a4090c9901ce17352b5476aa8"
+      },
+      {
+        "path": "data/haiku-v2/calendar/v2b17b.jsonl",
+        "sha256": "09043338e9e65eb2b9f38b121f860dd3f691eab4b248283284c9d99cb317f48d"
+      },
+      {
+        "path": "data/haiku-v2/calendar/v2b18a.jsonl",
+        "sha256": "020c8f0c0b8e961657117903a7ce32d5b476db43e43d8ee9bd48cca636645dfe"
+      },
+      {
+        "path": "data/haiku-v2/calendar/v2b18b.jsonl",
+        "sha256": "64cea780e7fcf5499e1d33afd8e28c35e7bc3338194305eba06fcd6b9736fcc9"
+      },
+      {
+        "path": "data/haiku-v2/calendar/v2b19a.jsonl",
+        "sha256": "07a43134557123e2cf214b9e0dcb3673e8c1d80643b507a94820ee185cfd8832"
+      },
+      {
+        "path": "data/haiku-v2/calendar/v2b19b.jsonl",
+        "sha256": "3178c8c71968ca7832e3ff7fcd2a4d874b856485e6fc20c89c4b6e2964f45974"
+      },
+      {
+        "path": "data/haiku-v2/diagram/v2b01a.jsonl",
+        "sha256": "9ed77737b71f211c80342fb4ddfec7c5da52097af1c8aa43f6c3d85f7f2a92d3"
+      },
+      {
+        "path": "data/haiku-v2/diagram/v2b01b.jsonl",
+        "sha256": "5dce72dda00de25e41f121c52fc3f4d365faee01465f16df7cc473851042c254"
+      },
+      {
+        "path": "data/haiku-v2/diagram/v2b02a.jsonl",
+        "sha256": "c258cac6b9e0b30b3342105fc8f4eb40201aebfa36289fcd210eb10752699e6c"
+      },
+      {
+        "path": "data/haiku-v2/diagram/v2b02b.jsonl",
+        "sha256": "f7ac14ca35e8480f56b6290d573d94b660998238d0f671c98d58d50461d924ba"
+      },
+      {
+        "path": "data/haiku-v2/diagram/v2b03a.jsonl",
+        "sha256": "d7e20e452e67e0c08cbd5f17273e6a39aacdc1559ba43aa8e5117978de425981"
+      },
+      {
+        "path": "data/haiku-v2/diagram/v2b03b.jsonl",
+        "sha256": "377bf5be22aef24e39e9ea3bcbca577533eeab11dfe8730d620dbbaca03ac9b8"
+      },
+      {
+        "path": "data/haiku-v2/diagram/v2b04a.jsonl",
+        "sha256": "396580aef2ef0b47aa788ec045a2e9fcecabca37b98d587979c8080e4dcb4340"
+      },
+      {
+        "path": "data/haiku-v2/diagram/v2b04b.jsonl",
+        "sha256": "ca04aaaf09973214e2e2e6da5d3793fda1594a043fc5e83d948389fdd5f4289f"
+      },
+      {
+        "path": "data/haiku-v2/diagram/v2b05a.jsonl",
+        "sha256": "4fcf81c1fe08a8c715d46273823073ba5dd1ac64eebcc435c05969adf9a516b4"
+      },
+      {
+        "path": "data/haiku-v2/diagram/v2b05b.jsonl",
+        "sha256": "f71616e1a0dfc77c7e2f46d6dc90935728032addd8f7f5a9e109ac0136a1410f"
+      },
+      {
+        "path": "data/haiku-v2/diagram/v2b06a.jsonl",
+        "sha256": "8d1bdf949b0e085618a00149d437318faf185e7b2ecff1d144f21c2455619f69"
+      },
+      {
+        "path": "data/haiku-v2/diagram/v2b06b.jsonl",
+        "sha256": "c0cc800beb6010cf64aab853e63732f4d0379e6f4db008d484a5378e073ce389"
+      },
+      {
+        "path": "data/haiku-v2/diagram/v2b07a.jsonl",
+        "sha256": "5053ec19b3f2cdcd557559a0e1955d974a3da1fa098456e89c3d569a4e96c5eb"
+      },
+      {
+        "path": "data/haiku-v2/diagram/v2b07b.jsonl",
+        "sha256": "4f90c8ec731d03492b6f69ddde4c3edbc37119a11f8043a91ce9c1618c7a91cd"
+      },
+      {
+        "path": "data/haiku-v2/diagram/v2b08a.jsonl",
+        "sha256": "ef119fb2379effa78c9ca7eda8e87f8f313c766fdc20bc5b17478932a772482b"
+      },
+      {
+        "path": "data/haiku-v2/diagram/v2b08b.jsonl",
+        "sha256": "7d5723a02a2a8f3a89cedf360fac7829c4ead2ead513b5bd007e5cfced17de50"
+      },
+      {
+        "path": "data/haiku-v2/diagram/v2b09a.jsonl",
+        "sha256": "60e19476a93626a88a37e18f64d59eab3e6f97762dbbb8ebc44f92f17cbcee0b"
+      },
+      {
+        "path": "data/haiku-v2/diagram/v2b09b.jsonl",
+        "sha256": "b9037cf2fb6a285556aa348e654c6ac9d0aee083097da5119e7e7a34f30e7342"
+      },
+      {
+        "path": "data/haiku-v2/diagram/v2b10a.jsonl",
+        "sha256": "318f62948f7d69ef8128a29a7ee4717e8a71a896d707a11981d08b36497a1af3"
+      },
+      {
+        "path": "data/haiku-v2/diagram/v2b10b.jsonl",
+        "sha256": "1186d88cb4e30931dff7a6da80e960de60bd8c1dac93801b3e312da80e5b634a"
+      },
+      {
+        "path": "data/haiku-v2/diagram/v2b11a.jsonl",
+        "sha256": "e201a7c0768bcdae44a3372f1288a5acc0898844f3a8436abda6285b334fb40e"
+      },
+      {
+        "path": "data/haiku-v2/diagram/v2b11b.jsonl",
+        "sha256": "d349a7aa460b758de5b0e03c8103d71ec5bff418274ffbb580e26a36433ce83d"
+      },
+      {
+        "path": "data/haiku-v2/diagram/v2b12a.jsonl",
+        "sha256": "773b3b72bfda05b8da26fbdbaff3c4b58785d441aeb0acc743c015006e6baa7d"
+      },
+      {
+        "path": "data/haiku-v2/diagram/v2b12b.jsonl",
+        "sha256": "2be90715dd7db8fe40990dfbaa72f52cb2f297ad491b9349f21df518874af86a"
+      },
+      {
+        "path": "data/haiku-v2/diagram/v2b13a.jsonl",
+        "sha256": "ffbd45a0b750129fd38bf04b021a2bd3b97341e0a440433cea6366fdddd04e14"
+      },
+      {
+        "path": "data/haiku-v2/diagram/v2b13b.jsonl",
+        "sha256": "850179b53ab71ea0b016814ea45ae28759fcaba9147614154bf50ee065162dc2"
+      },
+      {
+        "path": "data/haiku-v2/diagram/v2b14a.jsonl",
+        "sha256": "e72f2495e051b40cb170599d499912aa4fbf69129da8a8eb7b999a6dcec0e2a3"
+      },
+      {
+        "path": "data/haiku-v2/diagram/v2b14b.jsonl",
+        "sha256": "80b123e668590aa818edda9a8eb9c58e0c273fa7069ab64e0014d3d8d1c3585a"
+      },
+      {
+        "path": "data/haiku-v2/diagram/v2b15a.jsonl",
+        "sha256": "cadee1efb98c6aa8e9cbc2123a336d07b784a4cf2bee9a1a0e22f286fe09848f"
+      },
+      {
+        "path": "data/haiku-v2/diagram/v2b15b.jsonl",
+        "sha256": "2724ad7911ae9d8aaf4ce2b29fb806db998a8e28dfa03c99631f7f86f2996a90"
+      },
+      {
+        "path": "data/haiku-v2/diagram/v2b16a.jsonl",
+        "sha256": "d055fce9f9d0952520b6fbfd07724c2f8e7dbfdf94cb5215a1ca334552c8500f"
+      },
+      {
+        "path": "data/haiku-v2/diagram/v2b16b.jsonl",
+        "sha256": "e7e04cb2867820dae825c353a0e5e6e8ee8ea59acdbdf64773a5b2a79b77a3d5"
+      },
+      {
+        "path": "data/haiku-v2/diagram/v2b17a.jsonl",
+        "sha256": "4f5f5f3a5dca46af8913d634e98c1b60561385a794f2980a2eb21bf2325884db"
+      },
+      {
+        "path": "data/haiku-v2/diagram/v2b17b.jsonl",
+        "sha256": "1c872b942a5d32e22f8965ee9c3a253e75437e6529cfceca88178ee146ba2b47"
+      },
+      {
+        "path": "data/haiku-v2/diagram/v2b18a.jsonl",
+        "sha256": "5444303d7e44a342bc933cc564dbce12ec2d06f619e87556206dc6f1303aab0e"
+      },
+      {
+        "path": "data/haiku-v2/diagram/v2b18b.jsonl",
+        "sha256": "7fd564112461faac8972b9028d629a09b0f093f0d39e0ce7f0d01b432a93cbe8"
+      },
+      {
+        "path": "data/haiku-v2/diagram/v2b19a.jsonl",
+        "sha256": "ab40c010bb4af193d7164a24fdceeb6542fcad78f3d921d09bea42a422049a05"
+      },
+      {
+        "path": "data/haiku-v2/diagram/v2b19b.jsonl",
+        "sha256": "d69bf6f44ac794cc6f4359314fa4da956474bd2fbb72ea661c7b665a1db8b71b"
+      },
+      {
+        "path": "data/haiku-v2/diagram/v2b20a.jsonl",
+        "sha256": "6c8929ac65ebaa98415cbd06b861b1604332c55d12d5a2bb9a8323785602d5e7"
+      },
+      {
+        "path": "data/haiku-v2/diagram/v2b20b.jsonl",
+        "sha256": "0daec8b65215cb9468b3e091e6a5f8db0c76937fa2a8fa040705d1d46ce9662f"
+      },
+      {
+        "path": "data/haiku-v2/diagram/v2b21a.jsonl",
+        "sha256": "17623c2feb6bdb32874aee5412ebeda1be9b498fd946e07432501cc5232a5556"
+      },
+      {
+        "path": "data/haiku-v2/diagram/v2b21b.jsonl",
+        "sha256": "2eb45a5c8bdc4da37e5aab0478082eaedbc1055242cd470057f4f26ad12bb69f"
+      },
+      {
+        "path": "data/haiku-v2/diagram/v2b22a.jsonl",
+        "sha256": "0e8a67488adf7cc67e3d18e6e8bc4f4523f8b6a7667ac1a13f62a2db45bb19be"
+      },
+      {
+        "path": "data/haiku-v2/diagram/v2b22b.jsonl",
+        "sha256": "597969f1734979e685e6adeda70698fe6ae302c2be12d4825a0050796b25361b"
+      },
+      {
+        "path": "data/haiku-v2/diagram/v2b23a.jsonl",
+        "sha256": "29c12bdb74e34e2f97ca61bc2e0b32a5633a41a1159e86d001b3f17a72ad7ace"
+      },
+      {
+        "path": "data/haiku-v2/diagram/v2b23b.jsonl",
+        "sha256": "7a2ff883dc88aa285f47259d79445f2fe944377490e90137da0891ad4b89bddb"
+      },
+      {
+        "path": "data/haiku-v2/diagram/v2b24a.jsonl",
+        "sha256": "9cf4177ea8f74d19d21d8e613f2833d21edeefefbe620f84bb9a1248aaf3844b"
+      },
+      {
+        "path": "data/haiku-v2/diagram/v2b24b.jsonl",
+        "sha256": "72c8ed07367def5d4bb7396c59e258e9bb34951e1bcd29133e91a4ef61e428f1"
+      },
+      {
+        "path": "data/haiku-v2/diagram/v2b25a.jsonl",
+        "sha256": "90fa187fb5adf95eab072cf30ad6ac17b606acaa345687667a4b36f99c5ff49c"
+      },
+      {
+        "path": "data/haiku-v2/diagram/v2b25b.jsonl",
+        "sha256": "5a233d7b90cd703ebbac79f738d73605736c84b8c2743738402dc95dcd808478"
+      },
+      {
+        "path": "data/haiku-v2/diagram/v2b26a.jsonl",
+        "sha256": "549c88beba9b3ca322cdf33ae4c7b86f57dfc0decda69d387d6a55069c6eac65"
+      },
+      {
+        "path": "data/haiku-v2/diagram/v2b26b.jsonl",
+        "sha256": "ff0741c91f220f787cfc383843f23873bcadbdf4bde9079bfd3ab07829e191f5"
+      },
+      {
+        "path": "data/haiku-v2/document/v2b01a.jsonl",
+        "sha256": "b67772fca0537a2d9e836b0cc7c5dd93660d9cf812a363fd5043bb9b3da4d80e"
+      },
+      {
+        "path": "data/haiku-v2/document/v2b01b.jsonl",
+        "sha256": "a7fdd25ba2b3bea77b36af5a972203b25b6e997d063df3a16f746d0dec833291"
+      },
+      {
+        "path": "data/haiku-v2/document/v2b02a.jsonl",
+        "sha256": "a124279a362a9e39d23d8dc81398dda1ea2e86b30a23a633b9fcb49e648a3a59"
+      },
+      {
+        "path": "data/haiku-v2/document/v2b02b.jsonl",
+        "sha256": "9d3acf6353cada2229c598c5679fc9b757b37475f60fc950c876ff7359734f24"
+      },
+      {
+        "path": "data/haiku-v2/document/v2b03a.jsonl",
+        "sha256": "812d882bbf3b57b08ab6fe3ced0093290627aa269f69f40a6a622a4e09b5d5e4"
+      },
+      {
+        "path": "data/haiku-v2/document/v2b03b.jsonl",
+        "sha256": "d8dc849332c609ae3c95be6f3b5df94b7933bd262a38c3ef4cb10530473b89c1"
+      },
+      {
+        "path": "data/haiku-v2/document/v2b04a.jsonl",
+        "sha256": "dbea33ea946914747305602e88f3298a80ef06ae3035858e0cc480fcad1b224c"
+      },
+      {
+        "path": "data/haiku-v2/document/v2b04b.jsonl",
+        "sha256": "bc463a276498e12b015d2f6c821d0798f0350e08e06dc07806783bbc3af7291d"
+      },
+      {
+        "path": "data/haiku-v2/document/v2b05a.jsonl",
+        "sha256": "0b78f14c7e2293dbbe75968b8a8a892ef1d83ca3fbaf8c81eac83798a0282143"
+      },
+      {
+        "path": "data/haiku-v2/document/v2b05b.jsonl",
+        "sha256": "660376b5fbc59c7a751131fd04d5cff456ac1cc74731aeeaab4bec8b572dc968"
+      },
+      {
+        "path": "data/haiku-v2/document/v2b06a.jsonl",
+        "sha256": "964eed7ebf37dffa9c830ecf05dc6d9e04550659c42cf38ef8e8a87b7f19f049"
+      },
+      {
+        "path": "data/haiku-v2/document/v2b06b.jsonl",
+        "sha256": "95c19e3dae59a9251e48de154a3a32d3bd19157a598e6514e006e3175267adc3"
+      },
+      {
+        "path": "data/haiku-v2/document/v2b07a.jsonl",
+        "sha256": "bb7d696480ee07469a6f4465113a7fe41a057711dc38e1f66bf4e62c3e9fe333"
+      },
+      {
+        "path": "data/haiku-v2/document/v2b07b.jsonl",
+        "sha256": "10f66352968d7172793af397236a99a0ea1d3db8bf9f56501eb61b6acc795648"
+      },
+      {
+        "path": "data/haiku-v2/document/v2b08a.jsonl",
+        "sha256": "7aa3391c7fe2cc2def9d1f7ff8e965d0e815a8f89d851eaeaf80c763d1ccc7dc"
+      },
+      {
+        "path": "data/haiku-v2/document/v2b08b.jsonl",
+        "sha256": "912dfaed2cac8f5de3557e49db526ed3fc3858370647751edea18077e6829184"
+      },
+      {
+        "path": "data/haiku-v2/document/v2b09a.jsonl",
+        "sha256": "8db464c991cbc2764b48d138d200481691f0caddddfb8d69b61e8b96c6e08701"
+      },
+      {
+        "path": "data/haiku-v2/document/v2b09b.jsonl",
+        "sha256": "db4a94d89d6c75528969484baa1273a4f5654a08b6ce527bc7f7a143045d4a0b"
+      },
+      {
+        "path": "data/haiku-v2/document/v2b10a.jsonl",
+        "sha256": "1f29c644431c52fa6b6bddb0f5e7c7d9b9fb75c454407655967937fb812ce34b"
+      },
+      {
+        "path": "data/haiku-v2/document/v2b10b.jsonl",
+        "sha256": "b0f8ae802d2dd84ed3b003a626d31702576dc9c0c4c0c22724e8382e5f797d9b"
+      },
+      {
+        "path": "data/haiku-v2/document/v2b11a.jsonl",
+        "sha256": "32b361b6538bf850d5c36b894fed08d3b826553b9ce815baeaf3ed2dc5e7a2c2"
+      },
+      {
+        "path": "data/haiku-v2/document/v2b11b.jsonl",
+        "sha256": "96dc89bbde1ac71ad230a715ce77e3cf50986aa74d37c33aa14981b9974b4238"
+      },
+      {
+        "path": "data/haiku-v2/document/v2b12a.jsonl",
+        "sha256": "fefb648074a8a6d517b8c2fd9b8461e6f32fb589fe8a35e471d4fd6617486dea"
+      },
+      {
+        "path": "data/haiku-v2/document/v2b12b.jsonl",
+        "sha256": "68fd99e243c875a098c039e1bf9cb6b29432496ef26c0c348af9e7ee64faf9be"
+      },
+      {
+        "path": "data/haiku-v2/document/v2b13a.jsonl",
+        "sha256": "8ac929d98c17adad66e11528747f7de9f9a004baaae433179066e17aa7f3b711"
+      },
+      {
+        "path": "data/haiku-v2/document/v2b13b.jsonl",
+        "sha256": "2473069dcd188974a768828c26c60a394ff5cccb3d6949c0d0eca8d9521626bb"
+      },
+      {
+        "path": "data/haiku-v2/document/v2b14a.jsonl",
+        "sha256": "3e9db977ffe684e7c5bd27de8a53a4a034d195d773b20a1ddf40a7ab9b7ede50"
+      },
+      {
+        "path": "data/haiku-v2/document/v2b14b.jsonl",
+        "sha256": "edd0c2443a04b7620849ef4d2f993a218035270515b7ec6d7e6ad5fcf362f9d8"
+      },
+      {
+        "path": "data/haiku-v2/document/v2b15a.jsonl",
+        "sha256": "7b7d444c202940b7b788a57dd4d196f852c85adfa568636eb0fdfc66b32c9005"
+      },
+      {
+        "path": "data/haiku-v2/document/v2b15b.jsonl",
+        "sha256": "755769ccb06a99cc14211b29123a92b68d9743219457676b1aae309c6d10ede0"
+      },
+      {
+        "path": "data/haiku-v2/document/v2b16a.jsonl",
+        "sha256": "373f8029aa4d8b5ab1af86d563ae40390893e198dc25261be59fd415b7a6245e"
+      },
+      {
+        "path": "data/haiku-v2/document/v2b16b.jsonl",
+        "sha256": "0d84d9e03cb3c81beadede00aef40570349ea906e580aa32f8036fd6411a8ba0"
+      },
+      {
+        "path": "data/haiku-v2/document/v2b17a.jsonl",
+        "sha256": "1200037ab56a613c3073d9c7ce95fdc16f9595578183f2dcf2eec3c33a4eada7"
+      },
+      {
+        "path": "data/haiku-v2/document/v2b17b.jsonl",
+        "sha256": "c50a38f3e351e1c7c75eb9dbd1497532bd8c1294b4cddc4461751130a3c64e8c"
+      },
+      {
+        "path": "data/haiku-v2/document/v2b18a.jsonl",
+        "sha256": "df51f52a4658bad70f9444dea013bbbc1665fef269aff7330c1bd82cfa0c9e93"
+      },
+      {
+        "path": "data/haiku-v2/document/v2b18b.jsonl",
+        "sha256": "cada473f6ad0508002a0ba917b87417ee5fbde770f15c7eaf1337a791ee6a69b"
+      },
+      {
+        "path": "data/haiku-v2/document/v2b19a.jsonl",
+        "sha256": "d57100fbbe81fbdbb5dcbbd32161705cdf997a0336281e94db26289cca494d16"
+      },
+      {
+        "path": "data/haiku-v2/document/v2b19b.jsonl",
+        "sha256": "c5ca3be698e4efbc031f1f6b87099245b5270f347a83d2828676b0d80a75718f"
+      },
+      {
+        "path": "data/haiku-v2/drawing/v2b01a.jsonl",
+        "sha256": "d620618aecce8c7ac2a14fe3812b8eec0fb3c5b2fcf73346b15472c9c06ede57"
+      },
+      {
+        "path": "data/haiku-v2/drawing/v2b01b.jsonl",
+        "sha256": "7da0715017b62239e6e9aad04f383ebabb1c4011879d988cef558de3fea00d42"
+      },
+      {
+        "path": "data/haiku-v2/drawing/v2b02a.jsonl",
+        "sha256": "5983ca4c1709563fcf1ffe6dec148536efe014dc1cbf5869b623d9923db57ff2"
+      },
+      {
+        "path": "data/haiku-v2/drawing/v2b02b.jsonl",
+        "sha256": "220a3cbe2183858e46bdff8dcc9d026db1a197c7fe740fa799535af586fdf33a"
+      },
+      {
+        "path": "data/haiku-v2/drawing/v2b03a.jsonl",
+        "sha256": "ddf116d6a75bb82375b03b0766872bf6cfab1bb66c473ad7e98bacd8d79b42cc"
+      },
+      {
+        "path": "data/haiku-v2/drawing/v2b03b.jsonl",
+        "sha256": "10c80dac38dc1585d1e9bb7e2ed8d8cfd53f04bf712cab654931dbceafdbd9ea"
+      },
+      {
+        "path": "data/haiku-v2/drawing/v2b04a.jsonl",
+        "sha256": "7c91fbd17200fc4bff2c5065cf894f61e554ae1e9efc1fcf3737e19a2bc2157e"
+      },
+      {
+        "path": "data/haiku-v2/drawing/v2b04b.jsonl",
+        "sha256": "5439719edee39cbfb656102b4393481c7b9501bc1e00fee98bd2e2e9b475872e"
+      },
+      {
+        "path": "data/haiku-v2/drawing/v2b05a.jsonl",
+        "sha256": "f7b4860bc9455537701cc811fc6a4d38c97a32338a523351ca4cde97e2f9f059"
+      },
+      {
+        "path": "data/haiku-v2/drawing/v2b05b.jsonl",
+        "sha256": "039899862355796f1bd4d92d55bc8df445e6ab879da51c1f1815d32844f0fb6d"
+      },
+      {
+        "path": "data/haiku-v2/drawing/v2b06a.jsonl",
+        "sha256": "c89d81e03f579a9a00a99274f4951facb85b3fbcd95da167c08bacda839525f6"
+      },
+      {
+        "path": "data/haiku-v2/drawing/v2b06b.jsonl",
+        "sha256": "8ed063341e5984c3e3326ce3835c56a5749210ab61df1f73da897f1e05a97a0b"
+      },
+      {
+        "path": "data/haiku-v2/drawing/v2b07a.jsonl",
+        "sha256": "890d6b7f15066d849f74552c4b8ebce1f262c442a53ce38d213479870368bb91"
+      },
+      {
+        "path": "data/haiku-v2/drawing/v2b07b.jsonl",
+        "sha256": "96b169b88731005b836ecb580e1dac570da7447ac5ef0eb11ffc738359b80080"
+      },
+      {
+        "path": "data/haiku-v2/drawing/v2b08a.jsonl",
+        "sha256": "bf6bb69d7a5a85ebfa67a869c75121a7aa9c0e8af644c6760cbd625ebfce991c"
+      },
+      {
+        "path": "data/haiku-v2/drawing/v2b08b.jsonl",
+        "sha256": "715841a63452056c9195eefacd2225debca3af2ad1c42832015d3c631268e68e"
+      },
+      {
+        "path": "data/haiku-v2/drawing/v2b09a.jsonl",
+        "sha256": "d135af7783d13c128af3154d386c0b74b7564560a820cbc795769c412c668d4f"
+      },
+      {
+        "path": "data/haiku-v2/drawing/v2b09b.jsonl",
+        "sha256": "efd946b2e95e738abb95a857caedc54b9cd4c0622e67d94d1974aa2579d49879"
+      },
+      {
+        "path": "data/haiku-v2/drawing/v2b10a.jsonl",
+        "sha256": "eeb8ebdbb85521bfc29eb322dbbd10973ab50350bd2f6f0315842215d33f8fa0"
+      },
+      {
+        "path": "data/haiku-v2/drawing/v2b10b.jsonl",
+        "sha256": "c4634368eb18634be6e01512831dd366e24675e68bca67f7dc5ca8d4e68ab079"
+      },
+      {
+        "path": "data/haiku-v2/drawing/v2b11a.jsonl",
+        "sha256": "57ff0428f910b33c2b4314bbc04a6cdb076d029186a5a82c34a12f705f2c83f3"
+      },
+      {
+        "path": "data/haiku-v2/drawing/v2b11b.jsonl",
+        "sha256": "85327adae2eb660d4a080035384500de4f9368ab68f80a0c838f9748a5a6eb87"
+      },
+      {
+        "path": "data/haiku-v2/drawing/v2b12a.jsonl",
+        "sha256": "538ef0046eb6581186a948e052affd7c43b8e031077a24148c10fb2e17fe97e0"
+      },
+      {
+        "path": "data/haiku-v2/drawing/v2b12b.jsonl",
+        "sha256": "d06224e8b439e417788ec4c858bcd830d8f795941e69863bbc819d300dd68be6"
+      },
+      {
+        "path": "data/haiku-v2/drawing/v2b13a.jsonl",
+        "sha256": "6f574ad13c83ce5c2b30baa02ae89288d118e77155e9a2bba5cdaf77a766b0a3"
+      },
+      {
+        "path": "data/haiku-v2/drawing/v2b13b.jsonl",
+        "sha256": "998fd0c4146dc70bc1ff518e2b49e5d763eff447d61fe88233516b8928c394b9"
+      },
+      {
+        "path": "data/haiku-v2/drawing/v2b14a.jsonl",
+        "sha256": "39d988be7a923a3fe73fd9f8c1f8681727199eba3362de30a247af9807c9ab33"
+      },
+      {
+        "path": "data/haiku-v2/drawing/v2b14b.jsonl",
+        "sha256": "bf26d3a3ae673aed4597e4a4628a92635726e40ce0d8d78ada688f56aa057195"
+      },
+      {
+        "path": "data/haiku-v2/drawing/v2b15a.jsonl",
+        "sha256": "e2d79afaf87d8f8ec69b9aa32958f128dfc42cfc84812b2ef5e4ed90eb070dcc"
+      },
+      {
+        "path": "data/haiku-v2/drawing/v2b15b.jsonl",
+        "sha256": "7b4401984cfdbb37a3b60c9fcf1c92d0a320840d51d53b688c6ec53bbecba962"
+      },
+      {
+        "path": "data/haiku-v2/drawing/v2b16a.jsonl",
+        "sha256": "65525d47ea5d624e3ad4832325ce719abfa5d97f0fe93df54c83f26c76b9caf7"
+      },
+      {
+        "path": "data/haiku-v2/drawing/v2b16b.jsonl",
+        "sha256": "8f4ed3fc977de725cfc74beda41457ee308d17e79cdfbbcd8bc6a713c9acadb4"
+      },
+      {
+        "path": "data/haiku-v2/drawing/v2b17a.jsonl",
+        "sha256": "95d8ea4a34ed32ca35859edc6d51bb924bd198e1bf56b9a71ea35ffda06c9371"
+      },
+      {
+        "path": "data/haiku-v2/drawing/v2b17b.jsonl",
+        "sha256": "663ea6aa431ec9a2afb21840faedab983b9377e29b87f8d1876e06523c5ac29c"
+      },
+      {
+        "path": "data/haiku-v2/drawing/v2b18a.jsonl",
+        "sha256": "4778f7a73a88c864f8d053556630819bd548c8da40038800d35a1f10e0bb8604"
+      },
+      {
+        "path": "data/haiku-v2/drawing/v2b18b.jsonl",
+        "sha256": "53e3b51b51f1b25642c90b40b2671aa0667df5905edd6a075919870dd3288eff"
+      },
+      {
+        "path": "data/haiku-v2/drawing/v2b19a.jsonl",
+        "sha256": "27a326fbb1a6aab0d64570d3444633755e197e46a85b80c617dd7948b066a89a"
+      },
+      {
+        "path": "data/haiku-v2/drawing/v2b19b.jsonl",
+        "sha256": "a6d9842a1140481b0600b4950f9e687a5cf4c813dd1bda0c8fc314f4c9a03880"
+      },
+      {
+        "path": "data/haiku-v2/drawing/v2b20a.jsonl",
+        "sha256": "4c9486e8abb104b3279e4f9426e17d8e5da99e55a80ed23d5f579394687c2ade"
+      },
+      {
+        "path": "data/haiku-v2/drawing/v2b20b.jsonl",
+        "sha256": "af454732756796d47e8929a136c364e7d90fc2483c290397fc18da5bccf80bcc"
+      },
+      {
+        "path": "data/haiku-v2/drawing/v2b21a.jsonl",
+        "sha256": "209f503acd75b04bb6c4c94ae9d519b9e963b6102016eff1b44be51770e9058e"
+      },
+      {
+        "path": "data/haiku-v2/drawing/v2b21b.jsonl",
+        "sha256": "1b5e006c316fe0cd6c6111d097c1e0acc125633ccd2192ab53a2898c43bbd229"
+      },
+      {
+        "path": "data/haiku-v2/drawing/v2b22a.jsonl",
+        "sha256": "9b84e2b346512c11e284b2129f76f5e6106b55bdb9b5565294c19439295b3f46"
+      },
+      {
+        "path": "data/haiku-v2/drawing/v2b22b.jsonl",
+        "sha256": "c7838f7e34943be592d9ba6efa01c0cf1715ffc57e32e9810d94a74d6a2c8161"
+      },
+      {
+        "path": "data/haiku-v2/drawing/v2b23a.jsonl",
+        "sha256": "0750e77c3b44f81180fd5dfdfacaedc7eee805a31e30ff0683343c9606e2ddc4"
+      },
+      {
+        "path": "data/haiku-v2/drawing/v2b23b.jsonl",
+        "sha256": "c92950a1b7fdd4929db6380a6adc17330d04e20c74104e31934ee548a108335c"
+      },
+      {
+        "path": "data/haiku-v2/drawing/v2b24a.jsonl",
+        "sha256": "38d0c93f6f750e827ed144f2112a708e120fda33ce97cc0df2b932519954abc4"
+      },
+      {
+        "path": "data/haiku-v2/drawing/v2b24b.jsonl",
+        "sha256": "05aa4c5dc6d75299ccc7746391da7b8dad68c5cd1f85cfa48c465fd394db0c05"
+      },
+      {
+        "path": "data/haiku-v2/drawing/v2b25a.jsonl",
+        "sha256": "36d1ea4b5a30febf4b9ba9653f544a9a30b3247997fe74448f8d6fc3c5d66210"
+      },
+      {
+        "path": "data/haiku-v2/drawing/v2b25b.jsonl",
+        "sha256": "0dd2a2e41077eae9085aec74931cf2982e7f3cbcb102e2ac544fe3b8ac119d4f"
+      },
+      {
+        "path": "data/haiku-v2/drawing/v2b26a.jsonl",
+        "sha256": "9c38e73cb476a7afdc13c21d929344fe07e9a1e9eee9879ea4ae6d25173e9fe1"
+      },
+      {
+        "path": "data/haiku-v2/drawing/v2b26b.jsonl",
+        "sha256": "47385270e4193a897966fc930305745bcc9c52fc2e9bebf27698d7f35af4ff24"
+      }
+    ],
+    "unresolved": {
+      "ambiguous-or-missing-request-span": 9,
+      "context-reference-not-bound": 4338,
+      "description-reference-without-predicate": 1837,
+      "missing-or-ambiguous-field-anchor": 149,
+      "quantifier-binder-not-projected": 701,
+      "request-dependencies-not-annotated": 10113,
+      "requires-declared-anchor_fill-projection": 965,
+      "requires-declared-anchor_span-projection": 968,
+      "requires-declared-count-projection": 311,
+      "requires-declared-group-projection": 637,
+      "requires-declared-ordinal-projection": 623,
+      "requires-declared-query-projection": 2004,
+      "requires-declared-step-projection": 495,
+      "requires-declared-variety-projection": 270,
+      "requires-measure-projection": 186,
+      "requires-operator-reference-projection": 1669,
+      "selector-logical-closure-not-projected": 51,
+      "turn-contract-not-projected": 1202,
+      "unresolved-canonical-kind-binding": 18640,
+      "unresolved-canonical-property-binding": 24185,
+      "unresolved-unit-binding": 938,
+      "unresolved-value-representation": 23887,
+      "v1-flat-answers-not-canonical-graph": 17572
+    },
+    "version": 1
+  },
+  "counts": {
+    "train:samples": 33760,
+    "train:mentions": 40443,
+    "train:noRequest": 611,
+    "calibration:samples": 3841,
+    "calibration:mentions": 4553,
+    "calibration:noRequest": 81
+  },
+  "preparationDiagnostics": {
+    "explicit-v1-new-target-mode-alignment": 3490,
+    "missing-or-ambiguous-mention-span": 3778,
+    "v1-unowned-metadata-retained": 2550,
+    "same-key-overlap-or-identical-range": 6
+  },
+  "metrics": {
+    "evaluation": {
+      "perKey": {
+        "request.request.mood": {
+          "presenceTP": 3742,
+          "presentClassSupport": 3760,
+          "presentClassCorrect": 3482,
+          "mentionTP": 70,
+          "mentionFP": 1,
+          "mentionFN": 4,
+          "invalidBIO": 0,
+          "positiveTokens": 74,
+          "positiveTokenCorrect": 70,
+          "absentTokens": 1067,
+          "absentTokenCorrect": 1066,
+          "presenceFN": 18,
+          "presenceTN": 50,
+          "absentClassSupport": 81,
+          "absentClassCorrect": 70,
+          "presenceFP": 31
+        },
+        "request.request.act": {
+          "presenceTP": 3742,
+          "presentClassSupport": 3760,
+          "presentClassCorrect": 2779,
+          "mentionTP": 1720,
+          "mentionFP": 557,
+          "mentionFN": 445,
+          "invalidBIO": 57,
+          "positiveTokens": 3103,
+          "positiveTokenCorrect": 2638,
+          "absentTokens": 14312,
+          "absentTokenCorrect": 13779,
+          "presenceFN": 18,
+          "presenceTN": 56,
+          "absentClassSupport": 81,
+          "absentClassCorrect": 73,
+          "presenceFP": 25
+        },
+        "request.target.mode": {
+          "presenceTP": 2318,
+          "presentClassSupport": 2330,
+          "presentClassCorrect": 2174,
+          "mentionTP": 23,
+          "mentionFP": 0,
+          "mentionFN": 0,
+          "invalidBIO": 0,
+          "positiveTokens": 23,
+          "positiveTokenCorrect": 23,
+          "absentTokens": 759,
+          "absentTokenCorrect": 759,
+          "presenceTN": 60,
+          "absentClassSupport": 81,
+          "absentClassCorrect": 70,
+          "presenceFP": 21,
+          "presenceFN": 12
+        },
+        "request.target.fill": {
+          "presenceTP": 2560,
+          "presentClassSupport": 2801,
+          "presentClassCorrect": 1775,
+          "presenceFP": 126,
+          "mentionTP": 20,
+          "mentionFP": 10,
+          "mentionFN": 0,
+          "invalidBIO": 0,
+          "positiveTokens": 20,
+          "positiveTokenCorrect": 20,
+          "absentTokens": 7017,
+          "absentTokenCorrect": 7007,
+          "absentClassSupport": 710,
+          "absentClassCorrect": 621,
+          "presenceFN": 241,
+          "presenceTN": 584
+        },
+        "request.target.determiner": {
+          "presenceTN": 101,
+          "mentionTP": 0,
+          "mentionFP": 0,
+          "mentionFN": 0,
+          "invalidBIO": 0,
+          "positiveTokens": 0,
+          "positiveTokenCorrect": 0,
+          "absentTokens": 2004,
+          "absentTokenCorrect": 2004,
+          "absentClassSupport": 310,
+          "absentClassCorrect": 160,
+          "presenceFP": 209,
+          "presenceTP": 1686,
+          "presentClassSupport": 1771,
+          "presentClassCorrect": 1568,
+          "presenceFN": 85
+        },
+        "request.target.kind": {
+          "presenceTN": 1689,
+          "mentionTP": 827,
+          "mentionFP": 467,
+          "mentionFN": 190,
+          "invalidBIO": 62,
+          "positiveTokens": 1226,
+          "positiveTokenCorrect": 997,
+          "absentTokens": 25132,
+          "absentTokenCorrect": 24571,
+          "presenceFN": 323,
+          "presenceTP": 1103,
+          "presenceFP": 726
+        },
+        "request.target.name": {
+          "presenceTP": 1091,
+          "mentionTP": 862,
+          "mentionFP": 709,
+          "mentionFN": 377,
+          "invalidBIO": 198,
+          "positiveTokens": 3235,
+          "positiveTokenCorrect": 2636,
+          "absentTokens": 26450,
+          "absentTokenCorrect": 25035,
+          "presenceTN": 1926,
+          "presenceFP": 670,
+          "presenceFN": 154
+        },
+        "request.target.description": {
+          "presenceTN": 2169,
+          "mentionTP": 151,
+          "mentionFP": 310,
+          "mentionFN": 101,
+          "invalidBIO": 138,
+          "positiveTokens": 885,
+          "positiveTokenCorrect": 695,
+          "absentTokens": 19527,
+          "absentTokenCorrect": 18804,
+          "presenceFP": 108,
+          "presenceFN": 99,
+          "presenceTP": 153
+        },
+        "request.target.ordinal": {
+          "presenceTN": 3704,
+          "mentionTP": 86,
+          "mentionFP": 56,
+          "mentionFN": 1,
+          "invalidBIO": 0,
+          "positiveTokens": 90,
+          "positiveTokenCorrect": 89,
+          "absentTokens": 29603,
+          "absentTokenCorrect": 29547,
+          "absentClassSupport": 3743,
+          "absentClassCorrect": 3738,
+          "presenceFP": 39,
+          "presenceFN": 26,
+          "presentClassSupport": 98,
+          "presentClassCorrect": 10,
+          "presenceTP": 72
+        },
+        "request.target.count": {
+          "presenceTN": 3770,
+          "mentionTP": 43,
+          "mentionFP": 80,
+          "mentionFN": 2,
+          "invalidBIO": 0,
+          "positiveTokens": 46,
+          "positiveTokenCorrect": 43,
+          "absentTokens": 29544,
+          "absentTokenCorrect": 29465,
+          "presenceFN": 71
+        },
+        "request.constraint.concept": {},
+        "request.constraint.operator": {
+          "presenceTN": 281,
+          "presenceFP": 99,
+          "presenceTP": 1601,
+          "goldMentionabsentClassSupport": 3696,
+          "goldMentionabsentClassCorrect": 3655,
+          "goldMentionpresentClassSupport": 2418,
+          "goldMentionpresentClassCorrect": 2204,
+          "presenceFN": 100
+        },
+        "request.constraint.phase": {
+          "presenceTN": 277,
+          "presenceFP": 103,
+          "presenceTP": 1608,
+          "goldMentionabsentClassSupport": 3696,
+          "goldMentionabsentClassCorrect": 3682,
+          "goldMentionpresentClassSupport": 2418,
+          "goldMentionpresentClassCorrect": 2196,
+          "presenceFN": 93
+        },
+        "request.constraint.polarity": {
+          "presenceTN": 276,
+          "presenceFP": 104,
+          "presenceTP": 1607,
+          "goldMentionabsentClassSupport": 3696,
+          "goldMentionabsentClassCorrect": 3682,
+          "goldMentionpresentClassSupport": 2418,
+          "goldMentionpresentClassCorrect": 2327,
+          "presenceFN": 94
+        },
+        "request.constraint.character": {
+          "presenceTN": 275,
+          "presenceFP": 105,
+          "presenceTP": 1604,
+          "goldMentionabsentClassSupport": 3696,
+          "goldMentionabsentClassCorrect": 3685,
+          "goldMentionpresentClassSupport": 2418,
+          "goldMentionpresentClassCorrect": 2371,
+          "presenceFN": 97
+        },
+        "request.constraint.scope": {
+          "presenceTN": 1990,
+          "goldMentionabsentClassSupport": 6041,
+          "goldMentionabsentClassCorrect": 5996,
+          "presenceFP": 17,
+          "presenceTP": 40,
+          "goldMentionpresentClassSupport": 73,
+          "goldMentionpresentClassCorrect": 26,
+          "presenceFN": 34
+        },
+        "request.constraint.step": {
+          "presenceTN": 2033,
+          "goldMentionabsentClassSupport": 6089,
+          "goldMentionabsentClassCorrect": 6073,
+          "presenceFN": 48,
+          "goldMentionpresentClassSupport": 25,
+          "goldMentionpresentClassCorrect": 7
+        },
+        "request.constraint.measure": {
+          "presenceTN": 1977,
+          "presenceFN": 104
+        },
+        "request.constraint.unit": {
+          "presenceTN": 1988,
+          "presenceFN": 93
+        },
+        "request.constraint.variety": {
+          "presenceTN": 2478,
+          "goldMentionabsentClassSupport": 6096,
+          "goldMentionabsentClassCorrect": 6094,
+          "presenceFN": 27,
+          "goldMentionpresentClassSupport": 18,
+          "goldMentionpresentClassCorrect": 0
+        },
+        "request.logic.quantifier": {
+          "presenceTN": 3599,
+          "mentionTP": 132,
+          "mentionFP": 48,
+          "mentionFN": 2,
+          "invalidBIO": 0,
+          "positiveTokens": 134,
+          "positiveTokenCorrect": 132,
+          "absentTokens": 29073,
+          "absentTokenCorrect": 29025,
+          "absentClassSupport": 3645,
+          "absentClassCorrect": 3620,
+          "presenceFP": 46,
+          "presenceTP": 157,
+          "presentClassSupport": 167,
+          "presentClassCorrect": 48,
+          "unknownClassSupport": 29,
+          "unknownClassCorrect": 18,
+          "presenceFN": 39
+        },
+        "request.logic.group": {
+          "presenceTN": 2049,
+          "goldMentionabsentClassSupport": 6048,
+          "goldMentionabsentClassCorrect": 6046,
+          "presenceFN": 32,
+          "goldMentionpresentClassSupport": 66,
+          "goldMentionpresentClassCorrect": 6
+        },
+        "request.logic.negated": {},
+        "request.question.ask": {
+          "presenceTN": 3138,
+          "mentionTP": 220,
+          "mentionFP": 57,
+          "mentionFN": 0,
+          "invalidBIO": 0,
+          "positiveTokens": 220,
+          "positiveTokenCorrect": 220,
+          "absentTokens": 26404,
+          "absentTokenCorrect": 26347,
+          "absentClassSupport": 3238,
+          "absentClassCorrect": 3194,
+          "presenceTP": 588,
+          "presentClassSupport": 603,
+          "presentClassCorrect": 260,
+          "presenceFN": 15,
+          "presenceFP": 100
+        },
+        "request.question.asked_key": {
+          "presenceTN": 1836,
+          "mentionTP": 0,
+          "mentionFP": 0,
+          "mentionFN": 0,
+          "invalidBIO": 0,
+          "positiveTokens": 0,
+          "positiveTokenCorrect": 0,
+          "absentTokens": 14782,
+          "absentTokenCorrect": 14782,
+          "presenceFP": 22,
+          "presenceTP": 213,
+          "presenceFN": 10
+        },
+        "conversation.turn.fragment": {
+          "presenceTN": 3717,
+          "mentionTP": 9,
+          "mentionFP": 29,
+          "mentionFN": 1,
+          "invalidBIO": 0,
+          "positiveTokens": 10,
+          "positiveTokenCorrect": 9,
+          "absentTokens": 29286,
+          "absentTokenCorrect": 29257,
+          "absentClassSupport": 3730,
+          "absentClassCorrect": 3701,
+          "presenceTP": 17,
+          "presentClassSupport": 111,
+          "presentClassCorrect": 8,
+          "presenceFN": 94,
+          "presenceFP": 13
+        },
+        "conversation.turn.repeat_count": {
+          "presenceTN": 2069,
+          "mentionTP": 6,
+          "mentionFP": 0,
+          "mentionFN": 1,
+          "invalidBIO": 0,
+          "positiveTokens": 7,
+          "positiveTokenCorrect": 6,
+          "absentTokens": 16458,
+          "absentTokenCorrect": 16458,
+          "presenceFN": 12
+        },
+        "conversation.turn.objection": {
+          "presenceTN": 2021,
+          "mentionTP": 0,
+          "mentionFP": 0,
+          "mentionFN": 0,
+          "invalidBIO": 0,
+          "positiveTokens": 0,
+          "positiveTokenCorrect": 0,
+          "absentTokens": 16105,
+          "absentTokenCorrect": 16105,
+          "absentClassSupport": 2022,
+          "absentClassCorrect": 2022,
+          "presenceFP": 1,
+          "presenceFN": 59,
+          "presentClassSupport": 59,
+          "presentClassCorrect": 0
+        },
+        "conversation.turn.area": {
+          "presenceTN": 2057,
+          "mentionTP": 13,
+          "mentionFP": 2,
+          "mentionFN": 1,
+          "invalidBIO": 0,
+          "positiveTokens": 14,
+          "positiveTokenCorrect": 13,
+          "absentTokens": 16363,
+          "absentTokenCorrect": 16361,
+          "absentClassSupport": 2057,
+          "absentClassCorrect": 2057,
+          "presenceFN": 24,
+          "presentClassSupport": 24,
+          "presentClassCorrect": 0
+        },
+        "drawing.page.background": {
+          "presenceTN": 2060,
+          "mentionTP": 16,
+          "mentionFP": 45,
+          "mentionFN": 5,
+          "invalidBIO": 0,
+          "positiveTokens": 26,
+          "positiveTokenCorrect": 19,
+          "absentTokens": 16454,
+          "absentTokenCorrect": 16415,
+          "presenceFN": 21
+        },
+        "drawing.page.scene": {
+          "presenceTN": 2491,
+          "mentionTP": 19,
+          "mentionFP": 51,
+          "mentionFN": 0,
+          "invalidBIO": 0,
+          "positiveTokens": 19,
+          "positiveTokenCorrect": 19,
+          "absentTokens": 19170,
+          "absentTokenCorrect": 19119,
+          "presenceFN": 20
+        },
+        "drawing.page.parts_named": {
+          "presenceTN": 2491,
+          "mentionTP": 11,
+          "mentionFP": 32,
+          "mentionFN": 11,
+          "invalidBIO": 3,
+          "positiveTokens": 147,
+          "positiveTokenCorrect": 123,
+          "absentTokens": 19024,
+          "absentTokenCorrect": 19002,
+          "presenceFN": 20
+        },
+        "drawing.page.mood": {
+          "presenceTN": 2049,
+          "mentionTP": 29,
+          "mentionFP": 21,
+          "mentionFN": 3,
+          "invalidBIO": 3,
+          "positiveTokens": 50,
+          "positiveTokenCorrect": 50,
+          "absentTokens": 16430,
+          "absentTokenCorrect": 16402,
+          "presenceFN": 32,
+          "goldMentionpresentClassSupport": 32,
+          "goldMentionpresentClassCorrect": 6
+        },
+        "drawing.drawn.kind": {
+          "presenceTN": 2081,
+          "mentionTP": 0,
+          "mentionFP": 0,
+          "mentionFN": 0,
+          "invalidBIO": 0,
+          "positiveTokens": 0,
+          "positiveTokenCorrect": 0,
+          "absentTokens": 16480,
+          "absentTokenCorrect": 16480
+        },
+        "drawing.drawn.at": {
+          "presenceTN": 2459,
+          "mentionTP": 33,
+          "mentionFP": 21,
+          "mentionFN": 3,
+          "invalidBIO": 0,
+          "positiveTokens": 44,
+          "positiveTokenCorrect": 39,
+          "absentTokens": 19029,
+          "absentTokenCorrect": 19009,
+          "presenceFN": 52,
+          "goldMentionpresentClassSupport": 36,
+          "goldMentionpresentClassCorrect": 10
+        },
+        "drawing.drawn.relation": {
+          "presenceTN": 2350,
+          "mentionTP": 74,
+          "mentionFP": 34,
+          "mentionFN": 7,
+          "invalidBIO": 7,
+          "positiveTokens": 92,
+          "positiveTokenCorrect": 81,
+          "absentTokens": 18785,
+          "absentTokenCorrect": 18738,
+          "presenceFP": 43,
+          "presenceTP": 67,
+          "goldMentionpresentClassSupport": 81,
+          "goldMentionpresentClassCorrect": 20,
+          "presenceFN": 51
+        },
+        "drawing.drawn.anchor": {
+          "presenceTN": 2408,
+          "mentionTP": 85,
+          "mentionFP": 73,
+          "mentionFN": 10,
+          "invalidBIO": 13,
+          "positiveTokens": 223,
+          "positiveTokenCorrect": 204,
+          "absentTokens": 18974,
+          "absentTokenCorrect": 18828,
+          "presenceFN": 57,
+          "presenceTP": 39,
+          "presenceFP": 7
+        },
+        "drawing.drawn.direction": {
+          "presenceTN": 2471,
+          "mentionTP": 29,
+          "mentionFP": 21,
+          "mentionFN": 0,
+          "invalidBIO": 0,
+          "positiveTokens": 29,
+          "positiveTokenCorrect": 29,
+          "absentTokens": 19117,
+          "absentTokenCorrect": 19096,
+          "presenceFN": 40,
+          "goldMentionpresentClassSupport": 29,
+          "goldMentionpresentClassCorrect": 22
+        },
+        "drawing.drawn.distance": {
+          "presenceTN": 2501,
+          "mentionTP": 10,
+          "mentionFP": 6,
+          "mentionFN": 0,
+          "invalidBIO": 0,
+          "positiveTokens": 10,
+          "positiveTokenCorrect": 10,
+          "absentTokens": 19194,
+          "absentTokenCorrect": 19188,
+          "presenceFN": 10
+        },
+        "drawing.drawn.size": {
+          "presenceTN": 2464,
+          "mentionTP": 24,
+          "mentionFP": 94,
+          "mentionFN": 7,
+          "invalidBIO": 8,
+          "positiveTokens": 47,
+          "positiveTokenCorrect": 41,
+          "absentTokens": 19022,
+          "absentTokenCorrect": 18905,
+          "presenceFN": 47,
+          "goldMentionpresentClassSupport": 29,
+          "goldMentionpresentClassCorrect": 11
+        },
+        "drawing.drawn.colour": {
+          "presenceTN": 2420,
+          "mentionTP": 79,
+          "mentionFP": 44,
+          "mentionFN": 8,
+          "invalidBIO": 1,
+          "positiveTokens": 97,
+          "positiveTokenCorrect": 80,
+          "absentTokens": 18998,
+          "absentTokenCorrect": 18957,
+          "presenceFN": 91
+        },
+        "drawing.drawn.fill": {
+          "presenceTN": 2052,
+          "mentionTP": 29,
+          "mentionFP": 0,
+          "mentionFN": 1,
+          "invalidBIO": 0,
+          "positiveTokens": 33,
+          "positiveTokenCorrect": 32,
+          "absentTokens": 16447,
+          "absentTokenCorrect": 16447,
+          "presenceFN": 29,
+          "goldMentionpresentClassSupport": 29,
+          "goldMentionpresentClassCorrect": 19
+        },
+        "drawing.drawn.rotation": {
+          "presenceTN": 2480,
+          "mentionTP": 19,
+          "mentionFP": 2,
+          "mentionFN": 2,
+          "invalidBIO": 1,
+          "positiveTokens": 25,
+          "positiveTokenCorrect": 24,
+          "absentTokens": 19118,
+          "absentTokenCorrect": 19113,
+          "presenceFN": 31,
+          "goldMentionpresentClassSupport": 21,
+          "goldMentionpresentClassCorrect": 17
+        },
+        "drawing.drawn.flip": {
+          "presenceTN": 2052,
+          "mentionTP": 9,
+          "mentionFP": 0,
+          "mentionFN": 3,
+          "invalidBIO": 1,
+          "positiveTokens": 21,
+          "positiveTokenCorrect": 15,
+          "absentTokens": 16392,
+          "absentTokenCorrect": 16392,
+          "presenceFN": 29,
+          "goldMentionpresentClassSupport": 12,
+          "goldMentionpresentClassCorrect": 6
+        },
+        "drawing.drawn.layer": {
+          "presenceTN": 2479,
+          "mentionTP": 31,
+          "mentionFP": 4,
+          "mentionFN": 1,
+          "invalidBIO": 0,
+          "positiveTokens": 33,
+          "positiveTokenCorrect": 31,
+          "absentTokens": 19171,
+          "absentTokenCorrect": 19167,
+          "presenceFN": 32,
+          "goldMentionpresentClassSupport": 32,
+          "goldMentionpresentClassCorrect": 21
+        },
+        "drawing.drawn.count": {
+          "presenceTN": 2050,
+          "mentionTP": 30,
+          "mentionFP": 28,
+          "mentionFN": 1,
+          "invalidBIO": 0,
+          "positiveTokens": 32,
+          "positiveTokenCorrect": 30,
+          "absentTokens": 16448,
+          "absentTokenCorrect": 16421,
+          "presenceFN": 31
+        },
+        "drawing.drawn.name": {
+          "presenceTN": 2064,
+          "mentionTP": 15,
+          "mentionFP": 0,
+          "mentionFN": 2,
+          "invalidBIO": 0,
+          "positiveTokens": 21,
+          "positiveTokenCorrect": 19,
+          "absentTokens": 16459,
+          "absentTokenCorrect": 16459,
+          "presenceFN": 17
+        },
+        "drawing.part.part": {
+          "presenceTN": 2479,
+          "mentionTP": 20,
+          "mentionFP": 118,
+          "mentionFN": 2,
+          "invalidBIO": 0,
+          "positiveTokens": 25,
+          "positiveTokenCorrect": 22,
+          "absentTokens": 19112,
+          "absentTokenCorrect": 18994,
+          "presenceFN": 32
+        },
+        "drawing.part.colour": {
+          "presenceTN": 2071,
+          "mentionTP": 9,
+          "mentionFP": 48,
+          "mentionFN": 0,
+          "invalidBIO": 0,
+          "positiveTokens": 9,
+          "positiveTokenCorrect": 9,
+          "absentTokens": 16452,
+          "absentTokenCorrect": 16404,
+          "presenceFN": 10
+        },
+        "drawing.part.size": {
+          "presenceTN": 2052,
+          "mentionTP": 25,
+          "mentionFP": 38,
+          "mentionFN": 2,
+          "invalidBIO": 0,
+          "positiveTokens": 30,
+          "positiveTokenCorrect": 25,
+          "absentTokens": 16431,
+          "absentTokenCorrect": 16393,
+          "presenceFN": 29,
+          "goldMentionpresentClassSupport": 25,
+          "goldMentionpresentClassCorrect": 10
+        },
+        "drawing.part.count": {
+          "presenceTN": 2063,
+          "mentionTP": 17,
+          "mentionFP": 43,
+          "mentionFN": 0,
+          "invalidBIO": 0,
+          "positiveTokens": 17,
+          "positiveTokenCorrect": 17,
+          "absentTokens": 16459,
+          "absentTokenCorrect": 16416,
+          "presenceFN": 18
+        },
+        "drawing.part.variant": {
+          "presenceTN": 2476,
+          "mentionTP": 20,
+          "mentionFP": 30,
+          "mentionFN": 4,
+          "invalidBIO": 0,
+          "positiveTokens": 26,
+          "positiveTokenCorrect": 22,
+          "absentTokens": 19113,
+          "absentTokenCorrect": 19083,
+          "presenceFN": 35
+        },
+        "drawing.face.feature": {
+          "presenceTN": 2071,
+          "mentionTP": 11,
+          "mentionFP": 17,
+          "mentionFN": 0,
+          "invalidBIO": 0,
+          "positiveTokens": 11,
+          "positiveTokenCorrect": 11,
+          "absentTokens": 16461,
+          "absentTokenCorrect": 16444,
+          "presenceFN": 10
+        },
+        "drawing.face.hair_style": {
+          "presenceTN": 2043,
+          "mentionTP": 38,
+          "mentionFP": 0,
+          "mentionFN": 0,
+          "invalidBIO": 0,
+          "positiveTokens": 38,
+          "positiveTokenCorrect": 38,
+          "absentTokens": 16442,
+          "absentTokenCorrect": 16442,
+          "presenceFN": 38
+        },
+        "drawing.face.colour": {
+          "presenceTN": 2065,
+          "mentionTP": 17,
+          "mentionFP": 3,
+          "mentionFN": 0,
+          "invalidBIO": 0,
+          "positiveTokens": 17,
+          "positiveTokenCorrect": 17,
+          "absentTokens": 16463,
+          "absentTokenCorrect": 16460,
+          "presenceFN": 16
+        },
+        "drawing.face.expression": {
+          "presenceTN": 2022,
+          "mentionTP": 59,
+          "mentionFP": 11,
+          "mentionFN": 0,
+          "invalidBIO": 1,
+          "positiveTokens": 65,
+          "positiveTokenCorrect": 65,
+          "absentTokens": 16415,
+          "absentTokenCorrect": 16403,
+          "presenceFN": 59,
+          "goldMentionpresentClassSupport": 59,
+          "goldMentionpresentClassCorrect": 11
+        },
+        "drawing.face.preset": {
+          "presenceTN": 2052,
+          "mentionTP": 30,
+          "mentionFP": 3,
+          "mentionFN": 0,
+          "invalidBIO": 0,
+          "positiveTokens": 32,
+          "positiveTokenCorrect": 32,
+          "absentTokens": 16448,
+          "absentTokenCorrect": 16445,
+          "presenceFN": 29
+        },
+        "drawing.face.name": {
+          "presenceTN": 2042,
+          "mentionTP": 33,
+          "mentionFP": 5,
+          "mentionFN": 6,
+          "invalidBIO": 6,
+          "positiveTokens": 60,
+          "positiveTokenCorrect": 52,
+          "absentTokens": 16420,
+          "absentTokenCorrect": 16411,
+          "presenceFN": 39
+        },
+        "drawing.face.animation": {
+          "presenceTN": 2049,
+          "mentionTP": 23,
+          "mentionFP": 5,
+          "mentionFN": 3,
+          "invalidBIO": 1,
+          "positiveTokens": 40,
+          "positiveTokenCorrect": 33,
+          "absentTokens": 16421,
+          "absentTokenCorrect": 16418,
+          "presenceFN": 32,
+          "goldMentionpresentClassSupport": 26,
+          "goldMentionpresentClassCorrect": 13
+        },
+        "diagram.diagram.kind": {
+          "presenceTN": 2464,
+          "mentionTP": 16,
+          "mentionFP": 31,
+          "mentionFN": 7,
+          "invalidBIO": 27,
+          "positiveTokens": 45,
+          "positiveTokenCorrect": 36,
+          "absentTokens": 19079,
+          "absentTokenCorrect": 19002,
+          "presenceFN": 40,
+          "goldMentionpresentClassSupport": 23,
+          "goldMentionpresentClassCorrect": 9
+        },
+        "diagram.diagram.layout": {
+          "presenceTN": 2425,
+          "mentionTP": 59,
+          "mentionFP": 18,
+          "mentionFN": 5,
+          "invalidBIO": 1,
+          "positiveTokens": 82,
+          "positiveTokenCorrect": 82,
+          "absentTokens": 19089,
+          "absentTokenCorrect": 19066,
+          "presenceFN": 79,
+          "goldMentionpresentClassSupport": 64,
+          "goldMentionpresentClassCorrect": 38
+        },
+        "diagram.diagram.title": {
+          "presenceTN": 2052,
+          "mentionTP": 26,
+          "mentionFP": 2,
+          "mentionFN": 3,
+          "invalidBIO": 4,
+          "positiveTokens": 72,
+          "positiveTokenCorrect": 72,
+          "absentTokens": 16408,
+          "absentTokenCorrect": 16401,
+          "presenceFN": 29
+        },
+        "diagram.diagram.size": {
+          "presenceTN": 2060,
+          "mentionTP": 18,
+          "mentionFP": 22,
+          "mentionFN": 3,
+          "invalidBIO": 0,
+          "positiveTokens": 23,
+          "positiveTokenCorrect": 20,
+          "absentTokens": 16457,
+          "absentTokenCorrect": 16437,
+          "presenceFN": 21
+        },
+        "diagram.diagram.links": {
+          "presenceTN": 2065,
+          "mentionTP": 16,
+          "mentionFP": 24,
+          "mentionFN": 1,
+          "invalidBIO": 0,
+          "positiveTokens": 18,
+          "positiveTokenCorrect": 17,
+          "absentTokens": 16462,
+          "absentTokenCorrect": 16439,
+          "presenceFN": 16
+        },
+        "diagram.node.label": {
+          "presenceTN": 2451,
+          "mentionTP": 36,
+          "mentionFP": 34,
+          "mentionFN": 17,
+          "invalidBIO": 15,
+          "positiveTokens": 101,
+          "positiveTokenCorrect": 74,
+          "absentTokens": 19182,
+          "absentTokenCorrect": 19124,
+          "presenceFN": 53
+        },
+        "diagram.node.shape": {
+          "presenceTN": 2399,
+          "mentionTP": 88,
+          "mentionFP": 52,
+          "mentionFN": 5,
+          "invalidBIO": 14,
+          "positiveTokens": 154,
+          "positiveTokenCorrect": 153,
+          "absentTokens": 19033,
+          "absentTokenCorrect": 18956,
+          "presenceFN": 105,
+          "goldMentionpresentClassSupport": 93,
+          "goldMentionpresentClassCorrect": 34
+        },
+        "diagram.node.colour": {
+          "presenceTN": 2464,
+          "mentionTP": 41,
+          "mentionFP": 55,
+          "mentionFN": 2,
+          "invalidBIO": 2,
+          "positiveTokens": 46,
+          "positiveTokenCorrect": 43,
+          "absentTokens": 19218,
+          "absentTokenCorrect": 19158,
+          "presenceFN": 40
+        },
+        "diagram.node.size": {
+          "presenceTN": 2470,
+          "mentionTP": 15,
+          "mentionFP": 24,
+          "mentionFN": 3,
+          "invalidBIO": 5,
+          "positiveTokens": 24,
+          "positiveTokenCorrect": 21,
+          "absentTokens": 19177,
+          "absentTokenCorrect": 19146,
+          "presenceFN": 34,
+          "goldMentionpresentClassSupport": 13,
+          "goldMentionpresentClassCorrect": 3
+        },
+        "diagram.node.position": {
+          "presenceTN": 2457,
+          "mentionTP": 17,
+          "mentionFP": 4,
+          "mentionFN": 1,
+          "invalidBIO": 0,
+          "positiveTokens": 18,
+          "positiveTokenCorrect": 17,
+          "absentTokens": 19039,
+          "absentTokenCorrect": 19035,
+          "presenceFN": 47,
+          "goldMentionpresentClassSupport": 18,
+          "goldMentionpresentClassCorrect": 5
+        },
+        "diagram.node.anchor": {
+          "presenceTN": 2459,
+          "mentionTP": 41,
+          "mentionFP": 14,
+          "mentionFN": 4,
+          "invalidBIO": 5,
+          "positiveTokens": 96,
+          "positiveTokenCorrect": 92,
+          "absentTokens": 19192,
+          "absentTokenCorrect": 19166,
+          "presenceFN": 45
+        },
+        "diagram.node.at": {
+          "presenceTN": 2019,
+          "mentionTP": 51,
+          "mentionFP": 65,
+          "mentionFN": 12,
+          "invalidBIO": 6,
+          "positiveTokens": 88,
+          "positiveTokenCorrect": 87,
+          "absentTokens": 16392,
+          "absentTokenCorrect": 16311,
+          "presenceFN": 62,
+          "goldMentionpresentClassSupport": 63,
+          "goldMentionpresentClassCorrect": 9
+        },
+        "diagram.node.value": {
+          "presenceTN": 2496,
+          "mentionTP": 7,
+          "mentionFP": 17,
+          "mentionFN": 0,
+          "invalidBIO": 0,
+          "positiveTokens": 7,
+          "positiveTokenCorrect": 7,
+          "absentTokens": 19274,
+          "absentTokenCorrect": 19257,
+          "presenceFN": 8
+        },
+        "diagram.node.group": {
+          "presenceTN": 2058,
+          "mentionTP": 22,
+          "mentionFP": 22,
+          "mentionFN": 2,
+          "invalidBIO": 1,
+          "positiveTokens": 35,
+          "positiveTokenCorrect": 31,
+          "absentTokens": 16442,
+          "absentTokenCorrect": 16410,
+          "presenceFN": 23
+        },
+        "diagram.link.from": {
+          "presenceTN": 2439,
+          "mentionTP": 41,
+          "mentionFP": 75,
+          "mentionFN": 21,
+          "invalidBIO": 60,
+          "positiveTokens": 98,
+          "positiveTokenCorrect": 89,
+          "absentTokens": 19190,
+          "absentTokenCorrect": 18987,
+          "presenceTP": 16,
+          "presenceFN": 46,
+          "presenceFP": 3
+        },
+        "diagram.link.to": {
+          "presenceTN": 2444,
+          "mentionTP": 45,
+          "mentionFP": 84,
+          "mentionFN": 15,
+          "invalidBIO": 27,
+          "positiveTokens": 98,
+          "positiveTokenCorrect": 87,
+          "absentTokens": 19190,
+          "absentTokenCorrect": 19034,
+          "presenceTP": 12,
+          "presenceFN": 47,
+          "presenceFP": 1
+        },
+        "diagram.link.style": {
+          "presenceTN": 2423,
+          "mentionTP": 84,
+          "mentionFP": 1,
+          "mentionFN": 0,
+          "invalidBIO": 0,
+          "positiveTokens": 84,
+          "positiveTokenCorrect": 84,
+          "absentTokens": 19204,
+          "absentTokenCorrect": 19203,
+          "presenceFN": 81,
+          "goldMentionpresentClassSupport": 84,
+          "goldMentionpresentClassCorrect": 48
+        },
+        "diagram.link.arrow": {
+          "presenceTN": 2478,
+          "mentionTP": 8,
+          "mentionFP": 16,
+          "mentionFN": 12,
+          "invalidBIO": 11,
+          "positiveTokens": 39,
+          "positiveTokenCorrect": 30,
+          "absentTokens": 19185,
+          "absentTokenCorrect": 19141,
+          "presenceFN": 26,
+          "goldMentionpresentClassSupport": 20,
+          "goldMentionpresentClassCorrect": 9
+        },
+        "diagram.link.label": {
+          "presenceTN": 2067,
+          "mentionTP": 13,
+          "mentionFP": 11,
+          "mentionFN": 1,
+          "invalidBIO": 2,
+          "positiveTokens": 20,
+          "positiveTokenCorrect": 19,
+          "absentTokens": 16460,
+          "absentTokenCorrect": 16446,
+          "presenceFN": 14
+        },
+        "diagram.link.colour": {
+          "presenceTN": 2060,
+          "mentionTP": 22,
+          "mentionFP": 40,
+          "mentionFN": 0,
+          "invalidBIO": 1,
+          "positiveTokens": 23,
+          "positiveTokenCorrect": 23,
+          "absentTokens": 16457,
+          "absentTokenCorrect": 16416,
+          "presenceFN": 21
+        },
+        "diagram.group.label": {
+          "presenceTN": 2057,
+          "mentionTP": 19,
+          "mentionFP": 24,
+          "mentionFN": 6,
+          "invalidBIO": 5,
+          "positiveTokens": 36,
+          "positiveTokenCorrect": 29,
+          "absentTokens": 16444,
+          "absentTokenCorrect": 16412,
+          "presenceFN": 24
+        },
+        "diagram.group.members": {
+          "presenceTN": 2075,
+          "mentionTP": 9,
+          "mentionFP": 29,
+          "mentionFN": 2,
+          "invalidBIO": 17,
+          "positiveTokens": 16,
+          "positiveTokenCorrect": 13,
+          "absentTokens": 16464,
+          "absentTokenCorrect": 16397,
+          "presenceFN": 6
+        },
+        "diagram.group.colour": {
+          "presenceTN": 2054,
+          "mentionTP": 28,
+          "mentionFP": 41,
+          "mentionFN": 0,
+          "invalidBIO": 0,
+          "positiveTokens": 30,
+          "positiveTokenCorrect": 30,
+          "absentTokens": 16450,
+          "absentTokenCorrect": 16408,
+          "presenceFN": 27
+        },
+        "diagram.chart.series": {
+          "presenceTN": 2071,
+          "mentionTP": 5,
+          "mentionFP": 4,
+          "mentionFN": 6,
+          "invalidBIO": 1,
+          "positiveTokens": 29,
+          "positiveTokenCorrect": 20,
+          "absentTokens": 16451,
+          "absentTokenCorrect": 16450,
+          "presenceFN": 10
+        },
+        "diagram.chart.labels": {
+          "presenceTN": 2068,
+          "mentionTP": 7,
+          "mentionFP": 3,
+          "mentionFN": 13,
+          "invalidBIO": 5,
+          "positiveTokens": 67,
+          "positiveTokenCorrect": 55,
+          "absentTokens": 16401,
+          "absentTokenCorrect": 16395,
+          "presenceFN": 13
+        },
+        "diagram.chart.values": {
+          "presenceTN": 2496,
+          "mentionTP": 5,
+          "mentionFP": 32,
+          "mentionFN": 6,
+          "invalidBIO": 0,
+          "positiveTokens": 43,
+          "positiveTokenCorrect": 8,
+          "absentTokens": 19245,
+          "absentTokenCorrect": 19234,
+          "presenceFN": 8
+        },
+        "diagram.chart.axis": {
+          "presenceTN": 2064,
+          "mentionTP": 17,
+          "mentionFP": 9,
+          "mentionFN": 4,
+          "invalidBIO": 0,
+          "positiveTokens": 44,
+          "positiveTokenCorrect": 40,
+          "absentTokens": 16436,
+          "absentTokenCorrect": 16434,
+          "presenceFN": 17
+        },
+        "diagram.chart.legend": {
+          "presenceTN": 2485,
+          "mentionTP": 8,
+          "mentionFP": 20,
+          "mentionFN": 7,
+          "invalidBIO": 1,
+          "positiveTokens": 30,
+          "positiveTokenCorrect": 27,
+          "absentTokens": 19236,
+          "absentTokenCorrect": 19218,
+          "presenceFN": 19,
+          "goldMentionpresentClassSupport": 15,
+          "goldMentionpresentClassCorrect": 9
+        },
+        "diagram.chart.show_values": {
+          "presenceTN": 2493,
+          "mentionTP": 0,
+          "mentionFP": 0,
+          "mentionFN": 2,
+          "invalidBIO": 0,
+          "positiveTokens": 2,
+          "positiveTokenCorrect": 0,
+          "absentTokens": 19230,
+          "absentTokenCorrect": 19230,
+          "presenceFN": 11,
+          "goldMentionpresentClassSupport": 2,
+          "goldMentionpresentClassCorrect": 2
+        },
+        "diagram.chart.stacked": {
+          "presenceTN": 2483,
+          "mentionTP": 19,
+          "mentionFP": 6,
+          "mentionFN": 2,
+          "invalidBIO": 1,
+          "positiveTokens": 37,
+          "positiveTokenCorrect": 33,
+          "absentTokens": 19251,
+          "absentTokenCorrect": 19245,
+          "presenceFN": 21,
+          "goldMentionpresentClassSupport": 21,
+          "goldMentionpresentClassCorrect": 13
+        },
+        "diagram.chart.horizontal": {
+          "presenceTN": 2481,
+          "mentionTP": 9,
+          "mentionFP": 11,
+          "mentionFN": 2,
+          "invalidBIO": 0,
+          "positiveTokens": 13,
+          "positiveTokenCorrect": 11,
+          "absentTokens": 19218,
+          "absentTokenCorrect": 19211,
+          "presenceFN": 23,
+          "goldMentionunknownClassSupport": 1,
+          "goldMentionunknownClassCorrect": 0,
+          "goldMentionpresentClassSupport": 10,
+          "goldMentionpresentClassCorrect": 7
+        },
+        "diagram.chart.sort": {
+          "presenceTN": 2466,
+          "mentionTP": 11,
+          "mentionFP": 24,
+          "mentionFN": 14,
+          "invalidBIO": 20,
+          "positiveTokens": 124,
+          "positiveTokenCorrect": 115,
+          "absentTokens": 19037,
+          "absentTokenCorrect": 18951,
+          "presenceFN": 38,
+          "goldMentionpresentClassSupport": 25,
+          "goldMentionpresentClassCorrect": 12
+        },
+        "diagram.chart.palette": {
+          "presenceTN": 2065,
+          "mentionTP": 6,
+          "mentionFP": 48,
+          "mentionFN": 11,
+          "invalidBIO": 1,
+          "positiveTokens": 33,
+          "positiveTokenCorrect": 25,
+          "absentTokens": 16447,
+          "absentTokenCorrect": 16403,
+          "presenceFN": 16
+        },
+        "diagram.chart.source": {
+          "presenceTN": 2454,
+          "mentionTP": 33,
+          "mentionFP": 68,
+          "mentionFN": 17,
+          "invalidBIO": 6,
+          "positiveTokens": 85,
+          "positiveTokenCorrect": 70,
+          "absentTokens": 19203,
+          "absentTokenCorrect": 19108,
+          "presenceFN": 50,
+          "goldMentionunknownClassSupport": 11,
+          "goldMentionunknownClassCorrect": 11,
+          "goldMentionpresentClassSupport": 39,
+          "goldMentionpresentClassCorrect": 0
+        },
+        "document.text.genre": {
+          "presenceTN": 2384,
+          "mentionTP": 76,
+          "mentionFP": 59,
+          "mentionFN": 10,
+          "invalidBIO": 0,
+          "positiveTokens": 90,
+          "positiveTokenCorrect": 76,
+          "absentTokens": 19927,
+          "absentTokenCorrect": 19868,
+          "presenceFN": 45,
+          "goldMentionpresentClassSupport": 86,
+          "goldMentionpresentClassCorrect": 23,
+          "presenceFP": 42,
+          "presenceTP": 69
+        },
+        "document.text.about": {
+          "presenceTN": 2365,
+          "mentionTP": 74,
+          "mentionFP": 133,
+          "mentionFN": 60,
+          "invalidBIO": 34,
+          "positiveTokens": 518,
+          "positiveTokenCorrect": 433,
+          "absentTokens": 19801,
+          "absentTokenCorrect": 19477,
+          "presenceTP": 98,
+          "presenceFP": 41,
+          "presenceFN": 36
+        },
+        "document.text.title": {
+          "presenceTN": 2523,
+          "mentionTP": 10,
+          "mentionFP": 9,
+          "mentionFN": 7,
+          "invalidBIO": 3,
+          "positiveTokens": 58,
+          "positiveTokenCorrect": 39,
+          "absentTokens": 20261,
+          "absentTokenCorrect": 20249,
+          "presenceFN": 17
+        },
+        "document.text.tone": {
+          "presenceTN": 2374,
+          "mentionTP": 90,
+          "mentionFP": 31,
+          "mentionFN": 5,
+          "invalidBIO": 2,
+          "positiveTokens": 111,
+          "positiveTokenCorrect": 99,
+          "absentTokens": 19951,
+          "absentTokenCorrect": 19916,
+          "presenceFN": 98,
+          "goldMentionpresentClassSupport": 95,
+          "goldMentionpresentClassCorrect": 25,
+          "presenceTP": 29,
+          "presenceFP": 39
+        },
+        "document.text.length": {
+          "presenceTN": 2485,
+          "mentionTP": 34,
+          "mentionFP": 44,
+          "mentionFN": 6,
+          "invalidBIO": 9,
+          "positiveTokens": 48,
+          "positiveTokenCorrect": 45,
+          "absentTokens": 20167,
+          "absentTokenCorrect": 20103,
+          "presenceFN": 50,
+          "goldMentionpresentClassSupport": 40,
+          "goldMentionpresentClassCorrect": 23,
+          "presenceTP": 3,
+          "presenceFP": 2
+        },
+        "document.text.words": {
+          "presenceTN": 2518,
+          "mentionTP": 22,
+          "mentionFP": 20,
+          "mentionFN": 1,
+          "invalidBIO": 0,
+          "positiveTokens": 25,
+          "positiveTokenCorrect": 22,
+          "absentTokens": 20294,
+          "absentTokenCorrect": 20275,
+          "presenceFN": 22
+        },
+        "document.text.recipient": {
+          "presenceTN": 2428,
+          "mentionTP": 59,
+          "mentionFP": 51,
+          "mentionFN": 10,
+          "invalidBIO": 8,
+          "positiveTokens": 168,
+          "positiveTokenCorrect": 153,
+          "absentTokens": 20151,
+          "absentTokenCorrect": 20050,
+          "presenceFN": 26,
+          "presenceTP": 43,
+          "presenceFP": 43
+        },
+        "document.text.chapters": {
+          "presenceTN": 2068,
+          "mentionTP": 13,
+          "mentionFP": 4,
+          "mentionFN": 0,
+          "invalidBIO": 0,
+          "positiveTokens": 13,
+          "positiveTokenCorrect": 13,
+          "absentTokens": 16467,
+          "absentTokenCorrect": 16463,
+          "presenceFN": 13
+        },
+        "document.section.role": {
+          "presenceTN": 2368,
+          "mentionTP": 65,
+          "mentionFP": 177,
+          "mentionFN": 63,
+          "invalidBIO": 51,
+          "positiveTokens": 236,
+          "positiveTokenCorrect": 142,
+          "absentTokens": 19926,
+          "absentTokenCorrect": 19631,
+          "presenceFN": 129,
+          "goldMentionunknownClassSupport": 49,
+          "goldMentionunknownClassCorrect": 49,
+          "goldMentionpresentClassSupport": 79,
+          "goldMentionpresentClassCorrect": 4,
+          "presenceTP": 19,
+          "presenceFP": 24
+        },
+        "document.section.order": {
+          "presenceTN": 2469,
+          "mentionTP": 58,
+          "mentionFP": 16,
+          "mentionFN": 2,
+          "invalidBIO": 3,
+          "positiveTokens": 66,
+          "positiveTokenCorrect": 62,
+          "absentTokens": 20167,
+          "absentTokenCorrect": 20148,
+          "presenceFN": 71,
+          "goldMentionpresentClassSupport": 60,
+          "goldMentionpresentClassCorrect": 38
+        },
+        "document.section.order_anchor": {
+          "presenceTN": 2526,
+          "mentionTP": 12,
+          "mentionFP": 19,
+          "mentionFN": 2,
+          "invalidBIO": 5,
+          "positiveTokens": 37,
+          "positiveTokenCorrect": 35,
+          "absentTokens": 20282,
+          "absentTokenCorrect": 20236,
+          "presenceFN": 14
+        },
+        "document.section.length": {
+          "presenceTN": 2067,
+          "mentionTP": 8,
+          "mentionFP": 43,
+          "mentionFN": 3,
+          "invalidBIO": 3,
+          "positiveTokens": 20,
+          "positiveTokenCorrect": 16,
+          "absentTokens": 16440,
+          "absentTokenCorrect": 16381,
+          "presenceFN": 14,
+          "goldMentionpresentClassSupport": 8,
+          "goldMentionpresentClassCorrect": 4
+        },
+        "document.section.words": {
+          "presenceTN": 2068,
+          "mentionTP": 13,
+          "mentionFP": 25,
+          "mentionFN": 0,
+          "invalidBIO": 0,
+          "positiveTokens": 13,
+          "positiveTokenCorrect": 13,
+          "absentTokens": 16467,
+          "absentTokenCorrect": 16442,
+          "presenceFN": 13
+        },
+        "document.section.content": {
+          "presenceTN": 2515,
+          "mentionTP": 11,
+          "mentionFP": 42,
+          "mentionFN": 14,
+          "invalidBIO": 34,
+          "positiveTokens": 76,
+          "positiveTokenCorrect": 52,
+          "absentTokens": 20243,
+          "absentTokenCorrect": 20090,
+          "presenceFN": 25
+        },
+        "document.section.level": {
+          "presenceTN": 2045,
+          "mentionTP": 35,
+          "mentionFP": 6,
+          "mentionFN": 1,
+          "invalidBIO": 0,
+          "positiveTokens": 37,
+          "positiveTokenCorrect": 35,
+          "absentTokens": 16443,
+          "absentTokenCorrect": 16438,
+          "presenceFN": 36,
+          "goldMentionpresentClassSupport": 36,
+          "goldMentionpresentClassCorrect": 21
+        },
+        "document.section.count": {
+          "presenceTN": 2525,
+          "mentionTP": 7,
+          "mentionFP": 28,
+          "mentionFN": 2,
+          "invalidBIO": 0,
+          "positiveTokens": 13,
+          "positiveTokenCorrect": 7,
+          "absentTokens": 20252,
+          "absentTokenCorrect": 20225,
+          "presenceFN": 15
+        },
+        "document.inline.format": {
+          "presenceTN": 2478,
+          "mentionTP": 59,
+          "mentionFP": 17,
+          "mentionFN": 2,
+          "invalidBIO": 0,
+          "positiveTokens": 88,
+          "positiveTokenCorrect": 83,
+          "absentTokens": 20203,
+          "absentTokenCorrect": 20186,
+          "presenceFN": 62,
+          "goldMentionpresentClassSupport": 58,
+          "goldMentionpresentClassCorrect": 35,
+          "goldMentionunknownClassSupport": 3,
+          "goldMentionunknownClassCorrect": 0
+        },
+        "document.inline.list_kind": {
+          "presenceTN": 2044,
+          "mentionTP": 40,
+          "mentionFP": 7,
+          "mentionFN": 8,
+          "invalidBIO": 3,
+          "positiveTokens": 74,
+          "positiveTokenCorrect": 71,
+          "absentTokens": 16478,
+          "absentTokenCorrect": 16466,
+          "presenceFN": 52,
+          "goldMentionpresentClassSupport": 48,
+          "goldMentionpresentClassCorrect": 34
+        },
+        "document.inline.align": {
+          "presenceTN": 2055,
+          "mentionTP": 24,
+          "mentionFP": 8,
+          "mentionFN": 1,
+          "invalidBIO": 0,
+          "positiveTokens": 26,
+          "positiveTokenCorrect": 25,
+          "absentTokens": 16447,
+          "absentTokenCorrect": 16441,
+          "presenceFN": 26,
+          "goldMentionpresentClassSupport": 25,
+          "goldMentionpresentClassCorrect": 11
+        },
+        "document.inline.task": {
+          "presenceTN": 2069,
+          "mentionTP": 15,
+          "mentionFP": 4,
+          "mentionFN": 2,
+          "invalidBIO": 5,
+          "positiveTokens": 52,
+          "positiveTokenCorrect": 47,
+          "absentTokens": 16428,
+          "absentTokenCorrect": 16414,
+          "presenceFN": 12
+        },
+        "document.inline.checked": {
+          "presenceTN": 2056,
+          "mentionTP": 17,
+          "mentionFP": 3,
+          "mentionFN": 4,
+          "invalidBIO": 0,
+          "positiveTokens": 38,
+          "positiveTokenCorrect": 31,
+          "absentTokens": 16414,
+          "absentTokenCorrect": 16413,
+          "presenceFN": 25,
+          "goldMentionpresentClassSupport": 21,
+          "goldMentionpresentClassCorrect": 10
+        },
+        "document.inline.table_size": {
+          "presenceTN": 2060,
+          "mentionTP": 15,
+          "mentionFP": 4,
+          "mentionFN": 5,
+          "invalidBIO": 3,
+          "positiveTokens": 100,
+          "positiveTokenCorrect": 87,
+          "absentTokens": 16368,
+          "absentTokenCorrect": 16364,
+          "presenceFN": 21
+        },
+        "document.inline.link_target": {
+          "presenceTN": 2066,
+          "mentionTP": 13,
+          "mentionFP": 0,
+          "mentionFN": 2,
+          "invalidBIO": 2,
+          "positiveTokens": 180,
+          "positiveTokenCorrect": 180,
+          "absentTokens": 16300,
+          "absentTokenCorrect": 16297,
+          "presenceFN": 15
+        },
+        "calendar.meeting.title": {
+          "presenceTN": 2470,
+          "mentionTP": 23,
+          "mentionFP": 85,
+          "mentionFN": 40,
+          "invalidBIO": 14,
+          "positiveTokens": 149,
+          "positiveTokenCorrect": 61,
+          "absentTokens": 20263,
+          "absentTokenCorrect": 20140,
+          "presenceFN": 59
+        },
+        "calendar.meeting.day": {
+          "presenceTN": 2117,
+          "mentionTP": 262,
+          "mentionFP": 72,
+          "mentionFN": 26,
+          "invalidBIO": 7,
+          "positiveTokens": 430,
+          "positiveTokenCorrect": 403,
+          "absentTokens": 19944,
+          "absentTokenCorrect": 19870,
+          "presenceFN": 104,
+          "presenceFP": 132,
+          "presenceTP": 176
+        },
+        "calendar.meeting.time": {
+          "presenceTN": 2337,
+          "mentionTP": 124,
+          "mentionFP": 148,
+          "mentionFN": 48,
+          "invalidBIO": 29,
+          "positiveTokens": 333,
+          "positiveTokenCorrect": 294,
+          "absentTokens": 20036,
+          "absentTokenCorrect": 19726,
+          "presenceFN": 129,
+          "presenceTP": 44,
+          "presenceFP": 19
+        },
+        "calendar.meeting.length": {
+          "presenceTN": 2407,
+          "mentionTP": 88,
+          "mentionFP": 57,
+          "mentionFN": 33,
+          "invalidBIO": 16,
+          "positiveTokens": 162,
+          "positiveTokenCorrect": 152,
+          "absentTokens": 20203,
+          "absentTokenCorrect": 20115,
+          "presenceFN": 120,
+          "goldMentionunknownClassSupport": 104,
+          "goldMentionunknownClassCorrect": 104,
+          "goldMentionpresentClassSupport": 17,
+          "goldMentionpresentClassCorrect": 0,
+          "presenceFP": 2
+        },
+        "calendar.meeting.end": {
+          "presenceTN": 2059,
+          "mentionTP": 11,
+          "mentionFP": 27,
+          "mentionFN": 12,
+          "invalidBIO": 20,
+          "positiveTokens": 64,
+          "positiveTokenCorrect": 54,
+          "absentTokens": 16416,
+          "absentTokenCorrect": 16324,
+          "presenceFN": 22
+        },
+        "calendar.meeting.room": {
+          "presenceTN": 2447,
+          "mentionTP": 70,
+          "mentionFP": 61,
+          "mentionFN": 13,
+          "invalidBIO": 23,
+          "positiveTokens": 181,
+          "positiveTokenCorrect": 164,
+          "absentTokens": 20231,
+          "absentTokenCorrect": 20113,
+          "presenceFN": 82
+        },
+        "calendar.meeting.people": {
+          "presenceTN": 2429,
+          "mentionTP": 96,
+          "mentionFP": 78,
+          "mentionFN": 12,
+          "invalidBIO": 26,
+          "positiveTokens": 167,
+          "positiveTokenCorrect": 150,
+          "absentTokens": 20245,
+          "absentTokenCorrect": 20096,
+          "presenceFN": 91,
+          "presenceFP": 6,
+          "presenceTP": 3
+        },
+        "calendar.meeting.recurrence": {
+          "presenceTN": 2486,
+          "mentionTP": 32,
+          "mentionFP": 5,
+          "mentionFN": 5,
+          "invalidBIO": 7,
+          "positiveTokens": 60,
+          "positiveTokenCorrect": 59,
+          "absentTokens": 20273,
+          "absentTokenCorrect": 20257,
+          "presenceFN": 43,
+          "goldMentionpresentClassSupport": 37,
+          "goldMentionpresentClassCorrect": 12
+        },
+        "calendar.meeting.shift": {
+          "presenceTN": 2498,
+          "mentionTP": 21,
+          "mentionFP": 7,
+          "mentionFN": 4,
+          "invalidBIO": 9,
+          "positiveTokens": 29,
+          "positiveTokenCorrect": 24,
+          "absentTokens": 20334,
+          "absentTokenCorrect": 20313,
+          "presenceFN": 31,
+          "goldMentionpresentClassSupport": 25,
+          "goldMentionpresentClassCorrect": 19
+        },
+        "calendar.meeting.relation": {
+          "presenceTN": 2044,
+          "mentionTP": 35,
+          "mentionFP": 10,
+          "mentionFN": 3,
+          "invalidBIO": 4,
+          "positiveTokens": 56,
+          "positiveTokenCorrect": 51,
+          "absentTokens": 16424,
+          "absentTokenCorrect": 16403,
+          "presenceFN": 37,
+          "goldMentionpresentClassSupport": 38,
+          "goldMentionpresentClassCorrect": 13
+        },
+        "calendar.meeting.relation_anchor": {
+          "presenceTN": 2072,
+          "mentionTP": 8,
+          "mentionFP": 33,
+          "mentionFN": 2,
+          "invalidBIO": 1,
+          "positiveTokens": 19,
+          "positiveTokenCorrect": 17,
+          "absentTokens": 16461,
+          "absentTokenCorrect": 16371,
+          "presenceFN": 9
+        },
+        "calendar.meeting.free": {
+          "presenceTN": 2495,
+          "mentionTP": 20,
+          "mentionFP": 5,
+          "mentionFN": 8,
+          "invalidBIO": 7,
+          "positiveTokens": 86,
+          "positiveTokenCorrect": 78,
+          "absentTokens": 20246,
+          "absentTokenCorrect": 20229,
+          "presenceFN": 34,
+          "goldMentionpresentClassSupport": 28,
+          "goldMentionpresentClassCorrect": 15
+        },
+        "calendar.meeting.agenda": {
+          "presenceTN": 2070,
+          "mentionTP": 3,
+          "mentionFP": 2,
+          "mentionFN": 8,
+          "invalidBIO": 7,
+          "positiveTokens": 48,
+          "positiveTokenCorrect": 45,
+          "absentTokens": 16432,
+          "absentTokenCorrect": 16408,
+          "presenceFN": 11
+        },
+        "calendar.room.name": {
+          "presenceTN": 2062,
+          "mentionTP": 21,
+          "mentionFP": 25,
+          "mentionFN": 1,
+          "invalidBIO": 0,
+          "positiveTokens": 32,
+          "positiveTokenCorrect": 31,
+          "absentTokens": 16448,
+          "absentTokenCorrect": 16402,
+          "presenceFN": 19
+        },
+        "calendar.room.seats": {
+          "presenceTN": 2070,
+          "mentionTP": 10,
+          "mentionFP": 2,
+          "mentionFN": 1,
+          "invalidBIO": 0,
+          "positiveTokens": 11,
+          "positiveTokenCorrect": 10,
+          "absentTokens": 16469,
+          "absentTokenCorrect": 16467,
+          "presenceFN": 11
+        },
+        "calendar.room.quality": {
+          "presenceTN": 2489,
+          "mentionTP": 35,
+          "mentionFP": 24,
+          "mentionFN": 1,
+          "invalidBIO": 0,
+          "positiveTokens": 40,
+          "positiveTokenCorrect": 35,
+          "absentTokens": 20338,
+          "absentTokenCorrect": 20314,
+          "presenceFN": 40,
+          "goldMentionpresentClassSupport": 36,
+          "goldMentionpresentClassCorrect": 25
+        },
+        "calendar.person.name": {
+          "presenceTN": 2068,
+          "mentionTP": 13,
+          "mentionFP": 40,
+          "mentionFN": 2,
+          "invalidBIO": 5,
+          "positiveTokens": 34,
+          "positiveTokenCorrect": 33,
+          "absentTokens": 16446,
+          "absentTokenCorrect": 16389,
+          "presenceFN": 13
+        },
+        "calendar.person.role": {
+          "presenceTN": 2061,
+          "mentionTP": 16,
+          "mentionFP": 21,
+          "mentionFN": 6,
+          "invalidBIO": 4,
+          "positiveTokens": 32,
+          "positiveTokenCorrect": 26,
+          "absentTokens": 16448,
+          "absentTokenCorrect": 16423,
+          "presenceFN": 20
+        }
+      },
+      "decodedMentionF1": 0.6718443135154437,
+      "conditionalBioAndGlobalExact": 430,
+      "conditionalBioAndGlobalSupport": 3841,
+      "positiveBioAndGlobalExact": 361,
+      "positiveBioAndGlobalSupport": 3603,
+      "scope": "Gold request-cut conditional; mention metadata metrics explicitly gold-mention conditioned; not canonical/full-pipeline graph exact."
+    },
+    "epoch": 1,
+    "steps": 4220,
+    "trainLossSum": 344.16076289396733,
+    "conditionalBioCorrect": 2209776,
+    "conditionalBioSupport": 2220598,
+    "positiveTokenCorrect": 13795,
+    "positiveTokenSupport": 16186,
+    "truncatedTrain": 1,
+    "truncatedCalibration": 0,
+    "executable": false
+  },
+  "metricBoundaries": {
+    "decodedMentionF1": "key plus exact source-token interval, conditional gold request cut; includes global/domain BIO streams",
+    "conditionalBioAndGlobalExact": "only BIO streams and global schema-bank classes, excludes unsupported/masked fields and per-mention metadata; not full raw request/graph exact",
+    "goldMentionClasses": "metadata/domain classes evaluated at gold mention spans, not end-to-end predicted metadata",
+    "tokenMetrics": "token counts include many absent/O labels; positive/absent support separately in perKey",
+    "emptyRequests": "one retained negative record per no-request message",
+    "modelProvenance": "clean auxiliary encoder initialization; no slot model weights",
+    "graphConfidence": "absent; no execution admission or activation"
+  },
+  "unsupported": [
+    "independent target.type absent from inventory",
+    "metadata measure/unit candidate normalization",
+    "direct derived concept/negated output",
+    "source-nonidentity normalization without declared provenance"
+  ],
+  "executable": false
+}
