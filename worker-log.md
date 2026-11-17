@@ -4682,3 +4682,24 @@ metrics/provenance and tradeoffs in specs/cutter-decoder-comparison-v1-evidence.
 Large immutable emissions and decoder labels remain outside Git at
 .session-control/request-cutter-decoder-comparison-v1. Original trainer,
 checkpoint and strict evidence remain untouched.
+
+## 2026-11-17 — Isolated target.type key-reader candidate
+
+Copied exact fb37a609 baseline preparer/trainer into this isolated branch only.
+Added candidate-versioned class-only request.target.type from authoritative
+inventory domain family declarations,15current values (unique union) with
+per-area membership. Config135keys/122BIO/63classbanks; no literal BIO guessing.
+Nonempty v1/missing-v2 type unknown stays masked, no-request stays ABSENT,
+invalid/cross-area v2 types UNKNOWN; original raw annotations remain intact.
+Open kind identity remains separate. No live/main/calendar-training edits.
+
+Pure semantic migration plan maps key embeddings/presence/BIO rows by key names
+and classes ModuleDict names plus typed bank entries by identity. Never copies
+shifted indices positionally; new rows retain initialization, optimizer dropped.
+Explicit candidate preparation/model/raw-codec/run formats prevent baseline use.
+
+Checks:13/13 pure/CPU fixtures pass with existing .venv Python, including all15
+families, shared-family deduplication, actual CPU label encoding and reordered
+key/BIO/class banks. No model/checkpoint reads, full corpus run, GPU or saved
+binaries. specs/key-reader-target-type-candidate.md records baseline/inventory
+hashes and the review-before-next-run boundary.
