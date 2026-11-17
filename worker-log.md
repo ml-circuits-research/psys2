@@ -4866,3 +4866,13 @@ calls/GPU. Calendar-b01-0022 cutsets differ despite identical cutter feeds;
 handed identical arrays to PSys for backend numeric investigation. No tokenizer
 fix, semantic accuracy, calibration or admission claim. Full evidence outside
 Git; small SHA summary committed. Pure checks3/3 pass; actual bounded run exit0.
+
+## 2026-11-17 — Browser reader host and small tokenizer bundle
+
+New browser host reuses verified provider, exact legacy role adapter and existing
+ORTWeb1.31.1 WASM (one thread/no proxy). Added111KB Transformers3.8.1 constructor
+bundle, no model/runtime duplicates or dependencies installed. Apache/MIT notices
+and source input hashes included. Network tokenizer loading/tensor operations
+explicitly refuse. Four targeted tests pass including actual full/minimal runtime
+arrays+tensors parity. No model calls/GPU/artifact copies/gate or engine edits;
+PSys owns app/worker integration and full gate.

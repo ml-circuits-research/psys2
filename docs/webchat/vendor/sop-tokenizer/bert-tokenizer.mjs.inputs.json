@@ -1,0 +1,72 @@
+{
+  "format": "psys2.browser-tokenizer-build/1",
+  "transformersVersion": "3.8.1",
+  "bundlerVersion": "0.28.2",
+  "inputs": [
+    {
+      "path": "@huggingface/transformers/src/utils/generic.js",
+      "sha256": "3e2bf14553f9c098e1f42dd995b29a59ff29240573be837fc4af88ebca6b9d80"
+    },
+    {
+      "path": "@huggingface/transformers/src/utils/core.js",
+      "sha256": "bb1cb278ea79da1d62952a139c28a1c488fb443b74f44e5343b999af28e7e287"
+    },
+    {
+      "path": "local:hub"
+    },
+    {
+      "path": "@huggingface/transformers/src/utils/maths.js",
+      "sha256": "5542c6ceef214cff9879c30c47f99f4138774f1c4bb9f83445320e19342777e5"
+    },
+    {
+      "path": "onnxruntime-common/dist/esm/tensor-conversion-impl.js",
+      "sha256": "930fab2a1e294b31be89ee9650e51a8d25cf9925dc40a3084a0d2ecf9d8dfbb3"
+    },
+    {
+      "path": "onnxruntime-common/dist/esm/tensor-factory-impl.js",
+      "sha256": "cf5606fe23461e01bff59c2d72ac47d74e652548718f1e5fab07a22b441379b4"
+    },
+    {
+      "path": "onnxruntime-common/dist/esm/tensor-impl-type-mapping.js",
+      "sha256": "20bd5ddb858954cf071bace6c7a6628c8e311433798ec172f4c778bebd81d407"
+    },
+    {
+      "path": "onnxruntime-common/dist/esm/tensor-utils-impl.js",
+      "sha256": "87d3e07c153616138c2f57846545eea9c47957c714d50c0264696bdc293e6732"
+    },
+    {
+      "path": "onnxruntime-common/dist/esm/tensor-impl.js",
+      "sha256": "6a749be63055f9d21069566b1515412484a3a03448ca20427c8f8d29328a2843"
+    },
+    {
+      "path": "onnxruntime-common/dist/esm/tensor.js",
+      "sha256": "721d24a538de5333057bfc423bc00c3453a1c483f4495c857d0a6f9b8f2d330e"
+    },
+    {
+      "path": "local:backend"
+    },
+    {
+      "path": "local:ops"
+    },
+    {
+      "path": "@huggingface/transformers/src/utils/tensor.js",
+      "sha256": "ce7e523e41ff883170afc99688591c21c4b4e9b9f94d285020d29e3422f98ddb"
+    },
+    {
+      "path": "@huggingface/transformers/src/utils/data-structures.js",
+      "sha256": "f5ede2f29df807030cabffb9ac8244d17e354a9da3bf2c99f98cfc493b27803d"
+    },
+    {
+      "path": "@huggingface/jinja/dist/index.js",
+      "sha256": "c8871915dfa68f976c11540c33fc9341c0810ebe29adb7027b8d51f2a8044936"
+    },
+    {
+      "path": "@huggingface/transformers/src/models/whisper/common_whisper.js",
+      "sha256": "c1458c2de1ad983c17bf951aaf8ba0a7d6a7c3f0fda8a185aa92a53ac412fffa"
+    },
+    {
+      "path": "@huggingface/transformers/src/tokenizers.js",
+      "sha256": "b8852dd6fcc740c9063273d4c21a8a52f5951517ad6e65939c85a75447a5394d"
+    }
+  ]
+}
