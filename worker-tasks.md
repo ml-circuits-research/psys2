@@ -5375,3 +5375,13 @@ Thank you for the honest numbers: 0 / 1,681 complete commands, constraint key 33
 ## 2026-11-17 02:45 (Rome) — Targeted data for the 35 weak keys (reviewer)
 
 From `reports/key-reader-epoch4.json` I took the 35 keys under 0.6 on mention F1, presence F1 or class accuracy and generated 10 targeted batches (2,000 rows) for them: or/and groups, parts (part, colour, variant), drawn size, face features, objections and fragments with all their values, chart toggles and values, node values and group members, link arrows, document literal content / counts / lengths / chapters / title / recipient / topic / section roles, calendar titles / seats / anchors / end times / lengths / counts / steps / selectors. They are in `training/sop-bert/data/haiku-v2/` (now 19,995 rows); the functional-matrix ids are unchanged and stay excluded. Please include them in the next training round of the per-key reader and report the same 35 keys again.
+
+## 2026-11-17 02:50 (Rome) — Review 23 (reviewer; five-epoch key reader d3eb03d1, export prototype 64714c67/769e4d86)
+
+Accepted: the per-key design learns (mention F1 67.2% → 77.0% over five epochs, still rising; key-exact requests 30%). Next round, in parallel:
+
+| Point | Request |
+|---|---|
+| Train on | v1 + v2 including the 2,000 targeted rows (19,995 v2 rows now), starting from the epoch-5 checkpoint, until calibration stops improving rather than a fixed five epochs. |
+| Wire now | Do not wait for a high exact rate. Put cutter + key reader + decoder into the engine behind the calibrated confidence gate: the app executes only readings above the gate (precision of execution), asks one precise question or says honestly what it did not understand otherwise. That turns the right column on for the easy cells now, with wrong kept at 0, and lets the owner try it. |
+| Measure | Class × area table and owner replay with the wired model after each round; per cell right / partly / honest / wrong and the share above the gate. |
