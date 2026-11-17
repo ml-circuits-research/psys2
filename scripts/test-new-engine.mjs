@@ -3,6 +3,7 @@
 import { readdirSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 const fixed = [
+  'selected-reader-source.test.mjs',
   'candidate-execution-measurement.test.mjs', 'reader-stage-counts.test.mjs',
   'verified-reader-provider.test.mjs', 'actual-reader-replay.test.mjs', 'browser-reader-host.test.mjs', 'browser-reader-route.test.mjs', 'app-reader-context.test.mjs', 'reader-probe-selection.test.mjs', 'new-engine.test.mjs', 'reader-routing.test.mjs', 'functional-context-seeding.test.mjs', 'declared-dispatch.test.mjs', 'native-selection.test.mjs', 'observation-query.test.mjs', 'property-selection.test.mjs', 'drawing-property-host.test.mjs',
   'calendar-host.test.mjs', 'calendar-observation.test.mjs', 'face-preparation.test.mjs',
@@ -12,6 +13,7 @@ const fixed = [
 const lanes = readdirSync(new URL('../tests/', import.meta.url)).filter(name => name.endsWith('-declared-host.test.mjs'));
 const files = [...new Set([...fixed, ...lanes])].sort().map(name => `tests/${name}`);
 files.push('training/sop-bert/tests/compile-teacher-expectations.test.mjs');
+files.push('training/sop-bert/tests/package-reader-browser.test.mjs');
 console.log(`Active new-engine gate: ${files.length} files; retired dialogue/REAL suites are not acceptance gates.`);
 const result = spawnSync(process.execPath, ['--test', ...files], { cwd: new URL('../', import.meta.url), stdio: 'inherit' });
 process.exitCode = result.status ?? 1;

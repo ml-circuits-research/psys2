@@ -1,0 +1,2805 @@
+{
+  "format": "sop.semantic-alignment-catalogue/1",
+  "knowledgePin": "539dd413ae52d978422d0060a5c8a87f0347c517",
+  "inventory": {
+    "path": "training/sop-bert/heads/inventory.json",
+    "sha256": "5e5c4404d392774b6e4754a31988fc2ba943d90289e9a083a6e23ba6cba21832"
+  },
+  "prompt": {
+    "path": "training/sop-bert/data/haiku-v2/INSTRUCTIONS-v2.md",
+    "sha256": "9b6632f011da5ccc1088aad1377fa63a0ac4a532cdf307006d2cfc2d609212e1"
+  },
+  "authority": "Owner-authorized C1 authorial alignment; complete inventory status, independent from native capability and evaluation rows.",
+  "families": [
+    {
+      "area": "drawing",
+      "type": "page",
+      "rawMeaning": "the drawing as a whole",
+      "status": "aligned",
+      "canonical": "w.picture.picture",
+      "sourceWire": "w.picture.picture",
+      "authority": "Raw drawing-as-a-whole aligns the depicted picture container, not physical-page lexical meaning.",
+      "evidence": {
+        "knowledgePin": "539dd413ae52d978422d0060a5c8a87f0347c517",
+        "path": "docs/worlds/w.picture/schema.sop",
+        "sha256": "65ca81b3a69606462a73944bcc48b1e74f67ddb31573ec3fb3974a08b7311859",
+        "sourceWire": "w.picture.picture",
+        "sourceWorld": "w.picture",
+        "moduleVersion": "1",
+        "declaration": "@w.picture.picture core.type of=w.picture.picture extends=std.schema.thing closed=true core.source=\"hand-core 1\""
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "drawn",
+      "rawMeaning": "a drawn thing (book 7.1 t.drawn)",
+      "status": "unresolved",
+      "reason": "No declared live superclass covers arbitrary drawn things; picture is the whole container."
+    },
+    {
+      "area": "drawing",
+      "type": "part",
+      "rawMeaning": "a part of a drawn thing (petal, roof, window, wheel)",
+      "status": "unresolved",
+      "reason": "Generic object parts are not uniformly face-owned parts or depicted picture objects."
+    },
+    {
+      "area": "drawing",
+      "type": "face",
+      "rawMeaning": "an avatar / face (a kind of drawn thing; old ui.avatar)",
+      "status": "aligned",
+      "canonical": "w.face.face",
+      "sourceWire": "w.face.face",
+      "authority": "Raw avatar/face aligns the declared face instance, not its individual parts.",
+      "evidence": {
+        "knowledgePin": "539dd413ae52d978422d0060a5c8a87f0347c517",
+        "path": "docs/worlds/w.face/schema.sop",
+        "sha256": "48d07e2a7c1140a824604bf7af71f58e0298b3355114b2dda8e50fda8f5bed2f",
+        "sourceWire": "w.face.face",
+        "sourceWorld": "w.face",
+        "moduleVersion": "1",
+        "declaration": "@w.face.face core.type of=w.face.face extends=std.schema.thing closed=true core.source=\"hand-core 1\""
+      }
+    },
+    {
+      "area": "diagram",
+      "type": "diagram",
+      "rawMeaning": "a diagram as a whole",
+      "status": "unresolved",
+      "reason": "Inventory explicitly includes charts; chart.chart and diagram.diagram are separate direct thing subclasses."
+    },
+    {
+      "area": "diagram",
+      "type": "node",
+      "rawMeaning": "a node / box / bar / slice (book 7.2 t.node)",
+      "status": "unresolved",
+      "reason": "Raw nodes include bars/slices; graph node and chart point are distinct declared classes."
+    },
+    {
+      "area": "diagram",
+      "type": "link",
+      "rawMeaning": "an arrow between nodes (book 7.2 t.link)",
+      "status": "aligned",
+      "canonical": "w.diagram.edge",
+      "sourceWire": "w.diagram.edge",
+      "authority": "Raw arrow between nodes aligns declared edge from/to nodes.",
+      "evidence": {
+        "knowledgePin": "539dd413ae52d978422d0060a5c8a87f0347c517",
+        "path": "docs/worlds/w.diagram/schema.sop",
+        "sha256": "83b216f493b2a5589cbfac021dac6737fc5fe4b1640bea2a3f57587e2eca28fb",
+        "sourceWire": "w.diagram.edge",
+        "sourceWorld": "w.diagram",
+        "moduleVersion": "1",
+        "declaration": "@w.diagram.edge core.type of=w.diagram.edge extends=std.schema.thing closed=true core.source=\"hand-core 1\""
+      }
+    },
+    {
+      "area": "diagram",
+      "type": "group",
+      "rawMeaning": "a group / cluster / lane of nodes",
+      "status": "aligned",
+      "canonical": "w.diagram.group",
+      "sourceWire": "w.diagram.group",
+      "authority": "Raw group/cluster/lane of nodes aligns declared node grouping.",
+      "evidence": {
+        "knowledgePin": "539dd413ae52d978422d0060a5c8a87f0347c517",
+        "path": "docs/worlds/w.diagram/schema.sop",
+        "sha256": "83b216f493b2a5589cbfac021dac6737fc5fe4b1640bea2a3f57587e2eca28fb",
+        "sourceWire": "w.diagram.group",
+        "sourceWorld": "w.diagram",
+        "moduleVersion": "1",
+        "declaration": "@w.diagram.group core.type of=w.diagram.group extends=std.schema.thing closed=true core.source=\"hand-core 1\""
+      }
+    },
+    {
+      "area": "diagram",
+      "type": "chart",
+      "rawMeaning": "chart data and display (old data.charts)",
+      "status": "aligned",
+      "canonical": "w.chart.chart",
+      "sourceWire": "w.chart.chart",
+      "authority": "Raw chart data/display aligns chart as a whole, not a series or point.",
+      "evidence": {
+        "knowledgePin": "539dd413ae52d978422d0060a5c8a87f0347c517",
+        "path": "docs/worlds/w.chart/schema.sop",
+        "sha256": "047fb1fb5256e56247dbd37e959792d37ff5a8b5828d7f6bf33d8c0d0b67e66c",
+        "sourceWire": "w.chart.chart",
+        "sourceWorld": "w.chart",
+        "moduleVersion": "1",
+        "declaration": "@w.chart.chart core.type of=w.chart.chart extends=std.schema.thing closed=true core.source=\"hand-core 1\""
+      }
+    },
+    {
+      "area": "document",
+      "type": "text",
+      "rawMeaning": "a document as a whole (book 7.3 t.text)",
+      "status": "aligned",
+      "canonical": "w.document.document",
+      "sourceWire": "w.document.document",
+      "authority": "Raw document-as-a-whole aligns mutable document, not immutable text source/revision.",
+      "evidence": {
+        "knowledgePin": "539dd413ae52d978422d0060a5c8a87f0347c517",
+        "path": "docs/worlds/w.document/schema.sop",
+        "sha256": "4b8e3bfab57dd0757be6a0da0d4b050a94d2245cd4660202461fbef2c4b368f6",
+        "sourceWire": "w.document.document",
+        "sourceWorld": "w.document",
+        "moduleVersion": "2",
+        "declaration": "@w.document.document core.type of=w.document.document extends=std.schema.thing closed=true core.source=\"hand-core 1\""
+      }
+    },
+    {
+      "area": "document",
+      "type": "section",
+      "rawMeaning": "a part of a document (book 7.3 t.section)",
+      "status": "unresolved",
+      "reason": "Raw part includes chapter/section/paragraph/slide/sentence, with no declared common part superclass."
+    },
+    {
+      "area": "document",
+      "type": "inline",
+      "rawMeaning": "formatting, lists, tasks, tables (old docs.editor)",
+      "status": "unresolved",
+      "reason": "Formatting/list/task/table inventory exceeds source-anchored text span and has distinct owners."
+    },
+    {
+      "area": "calendar",
+      "type": "meeting",
+      "rawMeaning": "a meeting (book 7.4 t.meeting)",
+      "status": "aligned",
+      "canonical": "w.calendar.event",
+      "sourceWire": "w.calendar.event",
+      "authority": "Raw meeting is the event family; source word.event explicitly names meeting.",
+      "evidence": {
+        "knowledgePin": "539dd413ae52d978422d0060a5c8a87f0347c517",
+        "path": "docs/worlds/w.calendar/schema.sop",
+        "sha256": "f104791cf830c5bc12063357211c78273062ab1c90d433eb990661dab05bcbba",
+        "sourceWire": "w.calendar.event",
+        "sourceWorld": "w.calendar",
+        "moduleVersion": "2",
+        "declaration": "@w.calendar.event core.type of=w.calendar.event extends=std.schema.thing closed=true core.source=\"hand-core 1\""
+      }
+    },
+    {
+      "area": "calendar",
+      "type": "room",
+      "rawMeaning": "a room (book 7.4 t.room)",
+      "status": "aligned",
+      "canonical": "w.room.room",
+      "sourceWire": "w.room.room",
+      "authority": "Raw room aligns room identity; booking availability is not implied.",
+      "evidence": {
+        "knowledgePin": "539dd413ae52d978422d0060a5c8a87f0347c517",
+        "path": "docs/worlds/w.room/schema.sop",
+        "sha256": "9ec49a23f8d778ff487b74380e62bb8c2beb65d78e58c2b741a3cb79337a38c7",
+        "sourceWire": "w.room.room",
+        "sourceWorld": "w.room",
+        "moduleVersion": "1",
+        "declaration": "@w.room.room core.type of=w.room.room extends=std.schema.thing closed=true core.source=\"hand-core 1\""
+      }
+    },
+    {
+      "area": "calendar",
+      "type": "person",
+      "rawMeaning": "a participant (w.person)",
+      "status": "aligned",
+      "canonical": "w.person.person",
+      "sourceWire": "w.person.person",
+      "authority": "Raw participant aligns person identity; participation requires a separate relation.",
+      "evidence": {
+        "knowledgePin": "539dd413ae52d978422d0060a5c8a87f0347c517",
+        "path": "docs/worlds/w.person/schema.sop",
+        "sha256": "c3c2b90a455f919d10bc7e43d62541c31c1e7d303436a704b05bf3c76b94ac0b",
+        "sourceWire": "w.person.person",
+        "sourceWorld": "w.person",
+        "moduleVersion": "1",
+        "declaration": "@w.person.person core.type of=w.person.person extends=std.schema.thing closed=true core.source=\"hand-core 1\""
+      }
+    }
+  ],
+  "properties": [
+    {
+      "area": "drawing",
+      "type": "page",
+      "key": "page.background",
+      "descriptor": {
+        "head": "class",
+        "concept": "colour",
+        "src": "paintSky / background colour"
+      },
+      "status": "aligned",
+      "alignment": {
+        "area": "drawing",
+        "key": "page.background",
+        "sourceWire": "w.picture.picture.background",
+        "canonical": "w.picture.picture.background",
+        "valueKind": "string"
+      },
+      "evidence": {
+        "knowledgePin": "539dd413ae52d978422d0060a5c8a87f0347c517",
+        "path": "docs/worlds/w.picture/schema.sop",
+        "sha256": "65ca81b3a69606462a73944bcc48b1e74f67ddb31573ec3fb3974a08b7311859",
+        "sourceWire": "w.picture.picture.background",
+        "sourceWorld": "w.picture",
+        "moduleVersion": "1",
+        "declaration": "@w.picture.picture.background core.slot of=w.picture.picture key=background kind=atom kind=string type=k.colours.colour by=name core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy-or-explicit-source-backed-normalization",
+        "semanticBoundary": "Retains declared property identity and literal evidence only; no native conversion, qualitative threshold, reference binding or effect is asserted."
+      },
+      "nativeCapability": {
+        "status": "unsupported",
+        "reason": "No reviewed native capability join in this catalogue."
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "page",
+      "key": "page.scene",
+      "descriptor": {
+        "head": "candidate",
+        "concept": "kind",
+        "src": "whole scene asked: landscape, farm, beach (k.expect parts)"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "page",
+      "key": "page.parts_named",
+      "descriptor": {
+        "head": "span",
+        "concept": "parts_list",
+        "many": true,
+        "src": "parts the user names for a whole (book 6.7)"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "page",
+      "key": "page.mood",
+      "descriptor": {
+        "head": "class",
+        "concept": "mood_region",
+        "values": [
+          "happy",
+          "calm",
+          "gloomy",
+          "festive",
+          "spooky",
+          "natural"
+        ],
+        "src": "old art.draw state mood"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "drawn",
+      "key": "drawn.kind",
+      "descriptor": {
+        "head": "candidate",
+        "concept": "kind",
+        "src": "s.drawn.kind (knowledge kind tree with images)"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "drawn",
+      "key": "drawn.at",
+      "descriptor": {
+        "head": "class",
+        "concept": "region",
+        "values": [
+          "corner",
+          "top",
+          "bottom",
+          "left",
+          "right",
+          "center",
+          "top_left",
+          "top_right",
+          "bottom_left",
+          "bottom_right",
+          "middle",
+          "background",
+          "foreground"
+        ],
+        "src": "s.drawn.at means=place space=page (regions)"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "drawn",
+      "key": "drawn.relation",
+      "descriptor": {
+        "head": "class",
+        "concept": "spatial_relation",
+        "values": [
+          "in",
+          "on",
+          "under",
+          "above",
+          "below",
+          "next_to",
+          "left_of",
+          "right_of",
+          "between",
+          "behind",
+          "in_front_of",
+          "near",
+          "around",
+          "inside",
+          "outside",
+          "along"
+        ],
+        "src": "s.drawn.in/on + moveThings relation"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "drawn",
+      "key": "drawn.anchor",
+      "descriptor": {
+        "head": "fill+span",
+        "concept": "reference",
+        "src": "the other thing of the relation"
+      },
+      "status": "unresolved",
+      "reason": "Missing declared reference-role/identity projection; a label is not an object reference.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing declared reference-role/identity projection; a label is not an object reference."
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "drawn",
+      "key": "drawn.direction",
+      "descriptor": {
+        "head": "class",
+        "concept": "direction",
+        "values": [
+          "up",
+          "down",
+          "left",
+          "right",
+          "closer",
+          "apart",
+          "forward",
+          "backward"
+        ],
+        "src": "a move step"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "drawn",
+      "key": "drawn.distance",
+      "descriptor": {
+        "head": "number",
+        "concept": "measure",
+        "src": "move by N"
+      },
+      "status": "unresolved",
+      "reason": "Missing owning semantic/value contract for numeric, qualitative or relative change; no implicit units or thresholds.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing owning semantic/value contract for numeric, qualitative or relative change; no implicit units or thresholds."
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "drawn",
+      "key": "drawn.size",
+      "descriptor": {
+        "head": "class+step",
+        "concept": "size",
+        "values": [
+          "tiny",
+          "small",
+          "default",
+          "big",
+          "huge"
+        ],
+        "src": "s.drawn.size space=size"
+      },
+      "status": "aligned",
+      "alignment": {
+        "area": "drawing",
+        "key": "drawn.size",
+        "sourceWire": "k.attributes.attribute.size",
+        "canonical": "size",
+        "valueKind": "string",
+        "host": "drawing",
+        "operation": "drawing.object.change",
+        "parameter": "size"
+      },
+      "evidence": {
+        "knowledgePin": "539dd413ae52d978422d0060a5c8a87f0347c517",
+        "path": "docs/worlds/k.attributes/shards/attributes.sop",
+        "sha256": "997c44ffaa9bb05d24bd98e349430780b872c9f4ed9a91ec9e929a316b6197a5",
+        "sourceWire": "k.attributes.attribute.size",
+        "sourceWorld": "k.attributes",
+        "moduleVersion": "6",
+        "declaration": "@k.attributes.attribute.size k.attributes.attribute name=size holds=size aspect=spatial about=\"how big a thing is next to other things\" default_type=k.scenes.thing default_key=size core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy-or-explicit-source-backed-normalization",
+        "semanticBoundary": "Retains declared property identity and literal evidence only; no native conversion, qualitative threshold, reference binding or effect is asserted."
+      },
+      "nativeCapability": {
+        "status": "candidate-join",
+        "host": "drawing",
+        "operation": "drawing.object.change",
+        "parameter": "size",
+        "boundary": "Revalidated against actual host declarations on export; old file hashes are not reused."
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "drawn",
+      "key": "drawn.colour",
+      "descriptor": {
+        "head": "candidate+step",
+        "concept": "colour",
+        "src": "s.drawn.colour space=colour (k.colours; step darker/lighter)"
+      },
+      "status": "aligned",
+      "alignment": {
+        "area": "drawing",
+        "key": "drawn.colour",
+        "sourceWire": "k.attributes.attribute.colour",
+        "canonical": "colour",
+        "valueKind": "string",
+        "host": "drawing",
+        "operation": "drawing.object.change",
+        "parameter": "color"
+      },
+      "evidence": {
+        "knowledgePin": "539dd413ae52d978422d0060a5c8a87f0347c517",
+        "path": "docs/worlds/k.attributes/shards/attributes.sop",
+        "sha256": "997c44ffaa9bb05d24bd98e349430780b872c9f4ed9a91ec9e929a316b6197a5",
+        "sourceWire": "k.attributes.attribute.colour",
+        "sourceWorld": "k.attributes",
+        "moduleVersion": "6",
+        "declaration": "@k.attributes.attribute.colour k.attributes.attribute name=colour holds=colour aspect=visual about=\"the colour a thing usually has\" default_type=k.objects.part default_key=colour core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy-or-explicit-source-backed-normalization",
+        "semanticBoundary": "Retains declared property identity and literal evidence only; no native conversion, qualitative threshold, reference binding or effect is asserted."
+      },
+      "nativeCapability": {
+        "status": "candidate-join",
+        "host": "drawing",
+        "operation": "drawing.object.change",
+        "parameter": "color",
+        "boundary": "Revalidated against actual host declarations on export; old file hashes are not reused."
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "drawn",
+      "key": "drawn.fill",
+      "descriptor": {
+        "head": "class",
+        "concept": "fill",
+        "values": [
+          "solid",
+          "none",
+          "striped",
+          "dotted",
+          "gradient"
+        ],
+        "src": "old typed fill"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "drawn",
+      "key": "drawn.rotation",
+      "descriptor": {
+        "head": "class",
+        "concept": "rotation",
+        "values": [
+          "rotate_left",
+          "rotate_right",
+          "upside_down",
+          "tilt"
+        ],
+        "src": "old object rotation"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "drawn",
+      "key": "drawn.flip",
+      "descriptor": {
+        "head": "class",
+        "concept": "flip",
+        "values": [
+          "horizontal",
+          "vertical"
+        ],
+        "src": "old object flip"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "drawn",
+      "key": "drawn.layer",
+      "descriptor": {
+        "head": "class",
+        "concept": "layer",
+        "values": [
+          "front",
+          "back",
+          "forward",
+          "backward"
+        ],
+        "src": "old z order"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "drawn",
+      "key": "drawn.count",
+      "descriptor": {
+        "head": "number",
+        "concept": "count",
+        "src": "addThings n"
+      },
+      "status": "unresolved",
+      "reason": "Missing owning semantic/value contract for numeric, qualitative or relative change; no implicit units or thresholds.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing owning semantic/value contract for numeric, qualitative or relative change; no implicit units or thresholds."
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "drawn",
+      "key": "drawn.name",
+      "descriptor": {
+        "head": "span",
+        "concept": "name",
+        "src": "label given by the user"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "part",
+      "key": "part.part",
+      "descriptor": {
+        "head": "candidate",
+        "concept": "part_kind",
+        "src": "k.expect.part / putPart part"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "part",
+      "key": "part.colour",
+      "descriptor": {
+        "head": "candidate+step",
+        "concept": "colour",
+        "src": "part colour"
+      },
+      "status": "unresolved",
+      "reason": "Missing owning semantic/value contract for numeric, qualitative or relative change; no implicit units or thresholds.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing owning semantic/value contract for numeric, qualitative or relative change; no implicit units or thresholds."
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "part",
+      "key": "part.size",
+      "descriptor": {
+        "head": "class+step",
+        "concept": "size",
+        "values": [
+          "tiny",
+          "small",
+          "default",
+          "big",
+          "huge"
+        ],
+        "src": "part size"
+      },
+      "status": "unresolved",
+      "reason": "Missing owning semantic/value contract for numeric, qualitative or relative change; no implicit units or thresholds.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing owning semantic/value contract for numeric, qualitative or relative change; no implicit units or thresholds."
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "part",
+      "key": "part.count",
+      "descriptor": {
+        "head": "number",
+        "concept": "count",
+        "src": "three windows"
+      },
+      "status": "unresolved",
+      "reason": "Missing owning semantic/value contract for numeric, qualitative or relative change; no implicit units or thresholds.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing owning semantic/value contract for numeric, qualitative or relative change; no implicit units or thresholds."
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "part",
+      "key": "part.variant",
+      "descriptor": {
+        "head": "candidate",
+        "concept": "variant",
+        "src": "putPart variant (curly, round, open)"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "face",
+      "key": "face.feature",
+      "descriptor": {
+        "head": "candidate",
+        "concept": "part_kind",
+        "src": "hair, eyes, mouth, nose, ears, beard, glasses, hat, skin"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "face",
+      "key": "face.hair_style",
+      "descriptor": {
+        "head": "candidate",
+        "concept": "variant",
+        "src": "curly, straight, short, long, bun, bald"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "face",
+      "key": "face.colour",
+      "descriptor": {
+        "head": "candidate+step",
+        "concept": "colour",
+        "src": "hair/eye/skin colour"
+      },
+      "status": "unresolved",
+      "reason": "Missing owning semantic/value contract for numeric, qualitative or relative change; no implicit units or thresholds.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing owning semantic/value contract for numeric, qualitative or relative change; no implicit units or thresholds."
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "face",
+      "key": "face.expression",
+      "descriptor": {
+        "head": "class+step",
+        "concept": "expression",
+        "values": [
+          "happy",
+          "sad",
+          "angry",
+          "surprised",
+          "neutral",
+          "sleepy",
+          "laughing",
+          "winking",
+          "thinking",
+          "scared"
+        ],
+        "src": "wearPreset expression"
+      },
+      "status": "unresolved",
+      "reason": "Missing owning semantic/value contract for numeric, qualitative or relative change; no implicit units or thresholds.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing owning semantic/value contract for numeric, qualitative or relative change; no implicit units or thresholds."
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "face",
+      "key": "face.preset",
+      "descriptor": {
+        "head": "candidate",
+        "concept": "style",
+        "src": "wearPreset preset"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "face",
+      "key": "face.name",
+      "descriptor": {
+        "head": "span",
+        "concept": "name",
+        "src": "avatar setName"
+      },
+      "status": "aligned",
+      "alignment": {
+        "area": "drawing",
+        "key": "face.name",
+        "sourceWire": "w.face.face.name",
+        "canonical": "w.face.face.name",
+        "valueKind": "string"
+      },
+      "evidence": {
+        "knowledgePin": "539dd413ae52d978422d0060a5c8a87f0347c517",
+        "path": "docs/worlds/w.face/schema.sop",
+        "sha256": "48d07e2a7c1140a824604bf7af71f58e0298b3355114b2dda8e50fda8f5bed2f",
+        "sourceWire": "w.face.face.name",
+        "sourceWorld": "w.face",
+        "moduleVersion": "1",
+        "declaration": "@w.face.face.name core.slot of=w.face.face key=name kind=atom kind=string core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy-or-explicit-source-backed-normalization",
+        "semanticBoundary": "Retains declared property identity and literal evidence only; no native conversion, qualitative threshold, reference binding or effect is asserted."
+      },
+      "nativeCapability": {
+        "status": "unsupported",
+        "reason": "No reviewed native capability join in this catalogue."
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "face",
+      "key": "face.animation",
+      "descriptor": {
+        "head": "class",
+        "concept": "animation",
+        "values": [
+          "wave",
+          "nod",
+          "blink",
+          "smile",
+          "dance",
+          "none"
+        ],
+        "src": "avatar.animate"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "diagram",
+      "type": "diagram",
+      "key": "diagram.kind",
+      "descriptor": {
+        "head": "candidate",
+        "concept": "diagram_kind",
+        "values": [
+          "flowchart",
+          "tree",
+          "org_chart",
+          "mind_map",
+          "network",
+          "sequence",
+          "timeline",
+          "venn",
+          "state_machine",
+          "bar_chart",
+          "line_chart",
+          "pie_chart",
+          "doughnut_chart",
+          "scatter_chart",
+          "radar_chart",
+          "area_chart",
+          "table"
+        ],
+        "src": "startDiagram kind; charts are a kind of diagram"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "diagram",
+      "type": "diagram",
+      "key": "diagram.layout",
+      "descriptor": {
+        "head": "class",
+        "concept": "layout",
+        "values": [
+          "tidy",
+          "left_to_right",
+          "top_to_bottom",
+          "radial",
+          "grid",
+          "row",
+          "column",
+          "circle",
+          "layers",
+          "compact",
+          "spread",
+          "fewer_crossings",
+          "align"
+        ],
+        "src": "arrangeShapes / startDiagram layout"
+      },
+      "status": "unresolved",
+      "reason": "Raw diagram includes charts; graph-diagram-only layout lacks a proven target-kind applicability contract.",
+      "candidateEvidence": {
+        "knowledgePin": "539dd413ae52d978422d0060a5c8a87f0347c517",
+        "path": "docs/worlds/w.diagram/schema.sop",
+        "sha256": "83b216f493b2a5589cbfac021dac6737fc5fe4b1640bea2a3f57587e2eca28fb",
+        "sourceWire": "w.diagram.diagram.layout",
+        "sourceWorld": "w.diagram",
+        "moduleVersion": "1",
+        "declaration": "@w.diagram.diagram.layout core.slot of=w.diagram.diagram key=layout enum=top_down enum=left_right enum=radial enum=circular enum=grid enum=overlapping enum=free core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Raw diagram includes charts; graph-diagram-only layout lacks a proven target-kind applicability contract."
+      }
+    },
+    {
+      "area": "diagram",
+      "type": "diagram",
+      "key": "diagram.title",
+      "descriptor": {
+        "head": "span",
+        "concept": "name",
+        "src": "diagram title"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "diagram",
+      "type": "diagram",
+      "key": "diagram.size",
+      "descriptor": {
+        "head": "number",
+        "concept": "count",
+        "src": "six steps"
+      },
+      "status": "unresolved",
+      "reason": "Missing owning semantic/value contract for numeric, qualitative or relative change; no implicit units or thresholds.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing owning semantic/value contract for numeric, qualitative or relative change; no implicit units or thresholds."
+      }
+    },
+    {
+      "area": "diagram",
+      "type": "diagram",
+      "key": "diagram.links",
+      "descriptor": {
+        "head": "number",
+        "concept": "count",
+        "src": "startDiagram links"
+      },
+      "status": "unresolved",
+      "reason": "Missing owning semantic/value contract for numeric, qualitative or relative change; no implicit units or thresholds.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing owning semantic/value contract for numeric, qualitative or relative change; no implicit units or thresholds."
+      }
+    },
+    {
+      "area": "diagram",
+      "type": "node",
+      "key": "node.label",
+      "descriptor": {
+        "head": "span",
+        "concept": "name",
+        "src": "s.node.label"
+      },
+      "status": "unresolved",
+      "reason": "Raw node includes chart bars/slices; graph-node-owned label lacks a proven target-kind applicability contract.",
+      "candidateEvidence": {
+        "knowledgePin": "539dd413ae52d978422d0060a5c8a87f0347c517",
+        "path": "docs/worlds/w.diagram/schema.sop",
+        "sha256": "83b216f493b2a5589cbfac021dac6737fc5fe4b1640bea2a3f57587e2eca28fb",
+        "sourceWire": "w.diagram.node.label",
+        "sourceWorld": "w.diagram",
+        "moduleVersion": "1",
+        "declaration": "@w.diagram.node.label core.slot of=w.diagram.node key=label required=true kind=atom kind=string core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Raw node includes chart bars/slices; graph-node-owned label lacks a proven target-kind applicability contract."
+      }
+    },
+    {
+      "area": "diagram",
+      "type": "node",
+      "key": "node.shape",
+      "descriptor": {
+        "head": "class+step",
+        "concept": "shape",
+        "values": [
+          "box",
+          "rounded_box",
+          "circle",
+          "ellipse",
+          "diamond",
+          "hexagon",
+          "triangle",
+          "star",
+          "cylinder",
+          "parallelogram",
+          "cloud",
+          "note",
+          "square",
+          "rectangle"
+        ],
+        "src": "s.node.shape space=shape (step rounder)"
+      },
+      "status": "unresolved",
+      "reason": "Raw node includes chart bars/slices; graph-node-only shape enum is not a whole-family semantic contract.",
+      "candidateEvidence": {
+        "knowledgePin": "539dd413ae52d978422d0060a5c8a87f0347c517",
+        "path": "docs/worlds/w.diagram/schema.sop",
+        "sha256": "83b216f493b2a5589cbfac021dac6737fc5fe4b1640bea2a3f57587e2eca28fb",
+        "sourceWire": "w.diagram.node.shape",
+        "sourceWorld": "w.diagram",
+        "moduleVersion": "1",
+        "declaration": "@w.diagram.node.shape core.slot of=w.diagram.node key=shape enum=oval enum=rectangle enum=rounded_rectangle enum=diamond enum=parallelogram enum=document enum=double_rectangle enum=circle enum=ellipse enum=dot enum=chevron core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Raw node includes chart bars/slices; graph-node-only shape enum is not a whole-family semantic contract."
+      }
+    },
+    {
+      "area": "diagram",
+      "type": "node",
+      "key": "node.colour",
+      "descriptor": {
+        "head": "candidate+step",
+        "concept": "colour",
+        "src": "s.node.colour"
+      },
+      "status": "aligned",
+      "alignment": {
+        "area": "diagram",
+        "key": "node.colour",
+        "sourceWire": "k.attributes.attribute.colour",
+        "canonical": "colour",
+        "valueKind": "string",
+        "host": "diagram",
+        "operation": "diagram.node.change",
+        "parameter": "colour"
+      },
+      "evidence": {
+        "knowledgePin": "539dd413ae52d978422d0060a5c8a87f0347c517",
+        "path": "docs/worlds/k.attributes/shards/attributes.sop",
+        "sha256": "997c44ffaa9bb05d24bd98e349430780b872c9f4ed9a91ec9e929a316b6197a5",
+        "sourceWire": "k.attributes.attribute.colour",
+        "sourceWorld": "k.attributes",
+        "moduleVersion": "6",
+        "declaration": "@k.attributes.attribute.colour k.attributes.attribute name=colour holds=colour aspect=visual about=\"the colour a thing usually has\" default_type=k.objects.part default_key=colour core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy-or-explicit-source-backed-normalization",
+        "semanticBoundary": "Retains declared property identity and literal evidence only; no native conversion, qualitative threshold, reference binding or effect is asserted."
+      },
+      "nativeCapability": {
+        "status": "candidate-join",
+        "host": "diagram",
+        "operation": "diagram.node.change",
+        "parameter": "colour",
+        "boundary": "Revalidated against actual host declarations on export; old file hashes are not reused."
+      }
+    },
+    {
+      "area": "diagram",
+      "type": "node",
+      "key": "node.size",
+      "descriptor": {
+        "head": "class+step",
+        "concept": "size",
+        "values": [
+          "tiny",
+          "small",
+          "default",
+          "big",
+          "huge"
+        ],
+        "src": "setShapes size"
+      },
+      "status": "aligned",
+      "alignment": {
+        "area": "diagram",
+        "key": "node.size",
+        "sourceWire": "k.attributes.attribute.size",
+        "canonical": "size",
+        "valueKind": "string",
+        "host": "diagram",
+        "operation": "diagram.node.change",
+        "parameter": "size"
+      },
+      "evidence": {
+        "knowledgePin": "539dd413ae52d978422d0060a5c8a87f0347c517",
+        "path": "docs/worlds/k.attributes/shards/attributes.sop",
+        "sha256": "997c44ffaa9bb05d24bd98e349430780b872c9f4ed9a91ec9e929a316b6197a5",
+        "sourceWire": "k.attributes.attribute.size",
+        "sourceWorld": "k.attributes",
+        "moduleVersion": "6",
+        "declaration": "@k.attributes.attribute.size k.attributes.attribute name=size holds=size aspect=spatial about=\"how big a thing is next to other things\" default_type=k.scenes.thing default_key=size core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy-or-explicit-source-backed-normalization",
+        "semanticBoundary": "Retains declared property identity and literal evidence only; no native conversion, qualitative threshold, reference binding or effect is asserted."
+      },
+      "nativeCapability": {
+        "status": "candidate-join",
+        "host": "diagram",
+        "operation": "diagram.node.change",
+        "parameter": "size",
+        "boundary": "Revalidated against actual host declarations on export; old file hashes are not reused."
+      }
+    },
+    {
+      "area": "diagram",
+      "type": "node",
+      "key": "node.position",
+      "descriptor": {
+        "head": "class",
+        "concept": "spatial_relation",
+        "values": [
+          "in",
+          "on",
+          "under",
+          "above",
+          "below",
+          "next_to",
+          "left_of",
+          "right_of",
+          "between",
+          "behind",
+          "in_front_of",
+          "near",
+          "around",
+          "inside",
+          "outside",
+          "along"
+        ],
+        "src": "moveShapes place/anchor"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "diagram",
+      "type": "node",
+      "key": "node.anchor",
+      "descriptor": {
+        "head": "fill+span",
+        "concept": "reference",
+        "src": "the anchor node"
+      },
+      "status": "unresolved",
+      "reason": "Missing declared reference-role/identity projection; a label is not an object reference.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing declared reference-role/identity projection; a label is not an object reference."
+      }
+    },
+    {
+      "area": "diagram",
+      "type": "node",
+      "key": "node.at",
+      "descriptor": {
+        "head": "class",
+        "concept": "region",
+        "values": [
+          "corner",
+          "top",
+          "bottom",
+          "left",
+          "right",
+          "center",
+          "top_left",
+          "top_right",
+          "bottom_left",
+          "bottom_right",
+          "middle",
+          "background",
+          "foreground"
+        ],
+        "src": "s.node.at"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "diagram",
+      "type": "node",
+      "key": "node.value",
+      "descriptor": {
+        "head": "number+step",
+        "concept": "quantity",
+        "src": "s.node.value (bars, points, slices)"
+      },
+      "status": "unresolved",
+      "reason": "Missing owning semantic/value contract for numeric, qualitative or relative change; no implicit units or thresholds.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing owning semantic/value contract for numeric, qualitative or relative change; no implicit units or thresholds."
+      }
+    },
+    {
+      "area": "diagram",
+      "type": "node",
+      "key": "node.group",
+      "descriptor": {
+        "head": "fill+span",
+        "concept": "reference",
+        "src": "member of a group"
+      },
+      "status": "unresolved",
+      "reason": "Group name requires identity resolution and many-valued membership semantics.",
+      "candidateEvidence": {
+        "knowledgePin": "539dd413ae52d978422d0060a5c8a87f0347c517",
+        "path": "docs/worlds/w.diagram/schema.sop",
+        "sha256": "83b216f493b2a5589cbfac021dac6737fc5fe4b1640bea2a3f57587e2eca28fb",
+        "sourceWire": "w.diagram.node.group",
+        "sourceWorld": "w.diagram",
+        "moduleVersion": "1",
+        "declaration": "@w.diagram.node.group core.slot of=w.diagram.node key=group many=true type=w.diagram.group core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Group name requires identity resolution and many-valued membership semantics."
+      }
+    },
+    {
+      "area": "diagram",
+      "type": "link",
+      "key": "link.from",
+      "descriptor": {
+        "head": "fill+span",
+        "concept": "reference",
+        "src": "s.link.from role=source"
+      },
+      "status": "unresolved",
+      "reason": "Endpoint name requires target identity and relation ownership, not a string-to-reference coercion.",
+      "candidateEvidence": {
+        "knowledgePin": "539dd413ae52d978422d0060a5c8a87f0347c517",
+        "path": "docs/worlds/w.diagram/schema.sop",
+        "sha256": "83b216f493b2a5589cbfac021dac6737fc5fe4b1640bea2a3f57587e2eca28fb",
+        "sourceWire": "w.diagram.edge.from",
+        "sourceWorld": "w.diagram",
+        "moduleVersion": "1",
+        "declaration": "@w.diagram.edge.from core.slot of=w.diagram.edge key=from required=true type=w.diagram.node core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Endpoint name requires target identity and relation ownership, not a string-to-reference coercion."
+      }
+    },
+    {
+      "area": "diagram",
+      "type": "link",
+      "key": "link.to",
+      "descriptor": {
+        "head": "fill+span",
+        "concept": "reference",
+        "src": "s.link.to role=goal"
+      },
+      "status": "unresolved",
+      "reason": "Endpoint name requires target identity and relation ownership, not a string-to-reference coercion.",
+      "candidateEvidence": {
+        "knowledgePin": "539dd413ae52d978422d0060a5c8a87f0347c517",
+        "path": "docs/worlds/w.diagram/schema.sop",
+        "sha256": "83b216f493b2a5589cbfac021dac6737fc5fe4b1640bea2a3f57587e2eca28fb",
+        "sourceWire": "w.diagram.edge.to",
+        "sourceWorld": "w.diagram",
+        "moduleVersion": "1",
+        "declaration": "@w.diagram.edge.to core.slot of=w.diagram.edge key=to required=true type=w.diagram.node core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Endpoint name requires target identity and relation ownership, not a string-to-reference coercion."
+      }
+    },
+    {
+      "area": "diagram",
+      "type": "link",
+      "key": "link.style",
+      "descriptor": {
+        "head": "class",
+        "concept": "line_style",
+        "values": [
+          "solid",
+          "dashed",
+          "dotted",
+          "thick",
+          "thin",
+          "curved",
+          "straight"
+        ],
+        "src": "link style"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "diagram",
+      "type": "link",
+      "key": "link.arrow",
+      "descriptor": {
+        "head": "class",
+        "concept": "arrow",
+        "values": [
+          "none",
+          "forward",
+          "backward",
+          "both"
+        ],
+        "src": "link arrow"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "diagram",
+      "type": "link",
+      "key": "link.label",
+      "descriptor": {
+        "head": "span",
+        "concept": "name",
+        "src": "label on the arrow"
+      },
+      "status": "aligned",
+      "alignment": {
+        "area": "diagram",
+        "key": "link.label",
+        "sourceWire": "w.diagram.edge.label",
+        "canonical": "w.diagram.edge.label",
+        "valueKind": "string"
+      },
+      "evidence": {
+        "knowledgePin": "539dd413ae52d978422d0060a5c8a87f0347c517",
+        "path": "docs/worlds/w.diagram/schema.sop",
+        "sha256": "83b216f493b2a5589cbfac021dac6737fc5fe4b1640bea2a3f57587e2eca28fb",
+        "sourceWire": "w.diagram.edge.label",
+        "sourceWorld": "w.diagram",
+        "moduleVersion": "1",
+        "declaration": "@w.diagram.edge.label core.slot of=w.diagram.edge key=label kind=atom kind=string core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy-or-explicit-source-backed-normalization",
+        "semanticBoundary": "Retains declared property identity and literal evidence only; no native conversion, qualitative threshold, reference binding or effect is asserted."
+      },
+      "nativeCapability": {
+        "status": "unsupported",
+        "reason": "No reviewed native capability join in this catalogue."
+      }
+    },
+    {
+      "area": "diagram",
+      "type": "link",
+      "key": "link.colour",
+      "descriptor": {
+        "head": "candidate",
+        "concept": "colour",
+        "src": "link colour"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "diagram",
+      "type": "group",
+      "key": "group.label",
+      "descriptor": {
+        "head": "span",
+        "concept": "name",
+        "src": "group name"
+      },
+      "status": "aligned",
+      "alignment": {
+        "area": "diagram",
+        "key": "group.label",
+        "sourceWire": "w.diagram.group.label",
+        "canonical": "w.diagram.group.label",
+        "valueKind": "string"
+      },
+      "evidence": {
+        "knowledgePin": "539dd413ae52d978422d0060a5c8a87f0347c517",
+        "path": "docs/worlds/w.diagram/schema.sop",
+        "sha256": "83b216f493b2a5589cbfac021dac6737fc5fe4b1640bea2a3f57587e2eca28fb",
+        "sourceWire": "w.diagram.group.label",
+        "sourceWorld": "w.diagram",
+        "moduleVersion": "1",
+        "declaration": "@w.diagram.group.label core.slot of=w.diagram.group key=label required=true kind=atom kind=string core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy-or-explicit-source-backed-normalization",
+        "semanticBoundary": "Retains declared property identity and literal evidence only; no native conversion, qualitative threshold, reference binding or effect is asserted."
+      },
+      "nativeCapability": {
+        "status": "unsupported",
+        "reason": "No reviewed native capability join in this catalogue."
+      }
+    },
+    {
+      "area": "diagram",
+      "type": "group",
+      "key": "group.members",
+      "descriptor": {
+        "head": "fill+span",
+        "concept": "reference",
+        "many": true,
+        "src": "diagram.sketch.group"
+      },
+      "status": "unresolved",
+      "reason": "Missing declared reference-role/identity projection; a label is not an object reference.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing declared reference-role/identity projection; a label is not an object reference."
+      }
+    },
+    {
+      "area": "diagram",
+      "type": "group",
+      "key": "group.colour",
+      "descriptor": {
+        "head": "candidate",
+        "concept": "colour",
+        "src": "group colour"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "diagram",
+      "type": "chart",
+      "key": "chart.series",
+      "descriptor": {
+        "head": "span",
+        "concept": "name",
+        "many": true,
+        "src": "series names"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "diagram",
+      "type": "chart",
+      "key": "chart.labels",
+      "descriptor": {
+        "head": "span",
+        "concept": "name",
+        "many": true,
+        "src": "bar/slice/point labels"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "diagram",
+      "type": "chart",
+      "key": "chart.values",
+      "descriptor": {
+        "head": "span",
+        "concept": "quantity",
+        "many": true,
+        "src": "chart.setValues"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "diagram",
+      "type": "chart",
+      "key": "chart.axis",
+      "descriptor": {
+        "head": "span",
+        "concept": "name",
+        "src": "axis title / range"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "diagram",
+      "type": "chart",
+      "key": "chart.legend",
+      "descriptor": {
+        "head": "class",
+        "concept": "toggle",
+        "values": [
+          "show",
+          "hide"
+        ],
+        "src": "chart options legend"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "diagram",
+      "type": "chart",
+      "key": "chart.show_values",
+      "descriptor": {
+        "head": "class",
+        "concept": "toggle",
+        "values": [
+          "show",
+          "hide"
+        ],
+        "src": "showValues"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "diagram",
+      "type": "chart",
+      "key": "chart.stacked",
+      "descriptor": {
+        "head": "class",
+        "concept": "toggle",
+        "values": [
+          "on",
+          "off"
+        ],
+        "src": "stacked"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "diagram",
+      "type": "chart",
+      "key": "chart.horizontal",
+      "descriptor": {
+        "head": "class",
+        "concept": "toggle",
+        "values": [
+          "on",
+          "off"
+        ],
+        "src": "horizontal"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "diagram",
+      "type": "chart",
+      "key": "chart.sort",
+      "descriptor": {
+        "head": "class",
+        "concept": "sort",
+        "values": [
+          "desc",
+          "asc",
+          "alpha",
+          "given"
+        ],
+        "src": "sort"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "diagram",
+      "type": "chart",
+      "key": "chart.palette",
+      "descriptor": {
+        "head": "candidate",
+        "concept": "colour",
+        "src": "palette"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "diagram",
+      "type": "chart",
+      "key": "chart.source",
+      "descriptor": {
+        "head": "class+span",
+        "concept": "data_source",
+        "values": [
+          "calendar",
+          "document",
+          "list",
+          "prices",
+          "holdings",
+          "typed"
+        ],
+        "src": "chart.fromList/fromHoldings/...; book: meetings per person from the calendar"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "document",
+      "type": "text",
+      "key": "text.genre",
+      "descriptor": {
+        "head": "candidate",
+        "concept": "kind",
+        "values": [
+          "letter",
+          "email",
+          "report",
+          "story",
+          "note",
+          "memo",
+          "essay",
+          "summary",
+          "article",
+          "invitation",
+          "announcement",
+          "speech",
+          "cover_letter",
+          "complaint",
+          "review",
+          "recipe",
+          "list",
+          "minutes",
+          "proposal",
+          "poem",
+          "press_release",
+          "newsletter",
+          "itinerary",
+          "lab_report",
+          "cv"
+        ],
+        "src": "s.text.genre (k.genres)"
+      },
+      "status": "aligned",
+      "alignment": {
+        "area": "document",
+        "key": "text.genre",
+        "sourceWire": "w.document.document.genre",
+        "canonical": "w.document.document.genre",
+        "valueKind": "string",
+        "host": "document",
+        "operation": "document.write",
+        "parameter": "genre"
+      },
+      "evidence": {
+        "knowledgePin": "539dd413ae52d978422d0060a5c8a87f0347c517",
+        "path": "docs/worlds/w.document/schema.sop",
+        "sha256": "4b8e3bfab57dd0757be6a0da0d4b050a94d2245cd4660202461fbef2c4b368f6",
+        "sourceWire": "w.document.document.genre",
+        "sourceWorld": "w.document",
+        "moduleVersion": "2",
+        "declaration": "@w.document.document.genre core.slot of=w.document.document key=genre kind=atom kind=string type=k.genres.genre by=name core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy-or-explicit-source-backed-normalization",
+        "semanticBoundary": "Retains declared property identity and literal evidence only; no native conversion, qualitative threshold, reference binding or effect is asserted."
+      },
+      "nativeCapability": {
+        "status": "candidate-join",
+        "host": "document",
+        "operation": "document.write",
+        "parameter": "genre",
+        "boundary": "Revalidated against actual host declarations on export; old file hashes are not reused."
+      }
+    },
+    {
+      "area": "document",
+      "type": "text",
+      "key": "text.about",
+      "descriptor": {
+        "head": "span",
+        "concept": "topic",
+        "src": "s.text.about"
+      },
+      "status": "aligned",
+      "alignment": {
+        "area": "document",
+        "key": "text.about",
+        "sourceWire": "w.document.document.topic",
+        "canonical": "w.document.document.topic",
+        "valueKind": "string",
+        "host": "document",
+        "operation": "document.write",
+        "parameter": "topic"
+      },
+      "evidence": {
+        "knowledgePin": "539dd413ae52d978422d0060a5c8a87f0347c517",
+        "path": "docs/worlds/w.document/schema.sop",
+        "sha256": "4b8e3bfab57dd0757be6a0da0d4b050a94d2245cd4660202461fbef2c4b368f6",
+        "sourceWire": "w.document.document.topic",
+        "sourceWorld": "w.document",
+        "moduleVersion": "2",
+        "declaration": "@w.document.document.topic core.slot of=w.document.document key=topic kind=atom kind=string core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy-or-explicit-source-backed-normalization",
+        "semanticBoundary": "Retains declared property identity and literal evidence only; no native conversion, qualitative threshold, reference binding or effect is asserted."
+      },
+      "nativeCapability": {
+        "status": "candidate-join",
+        "host": "document",
+        "operation": "document.write",
+        "parameter": "topic",
+        "boundary": "Revalidated against actual host declarations on export; old file hashes are not reused."
+      }
+    },
+    {
+      "area": "document",
+      "type": "text",
+      "key": "text.title",
+      "descriptor": {
+        "head": "span",
+        "concept": "name",
+        "src": "s.text.title"
+      },
+      "status": "aligned",
+      "alignment": {
+        "area": "document",
+        "key": "text.title",
+        "sourceWire": "w.document.document.title",
+        "canonical": "w.document.document.title",
+        "valueKind": "string",
+        "host": "document",
+        "operation": "document.write",
+        "parameter": "title"
+      },
+      "evidence": {
+        "knowledgePin": "539dd413ae52d978422d0060a5c8a87f0347c517",
+        "path": "docs/worlds/w.document/schema.sop",
+        "sha256": "4b8e3bfab57dd0757be6a0da0d4b050a94d2245cd4660202461fbef2c4b368f6",
+        "sourceWire": "w.document.document.title",
+        "sourceWorld": "w.document",
+        "moduleVersion": "2",
+        "declaration": "@w.document.document.title core.slot of=w.document.document key=title required=true kind=atom kind=string core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy-or-explicit-source-backed-normalization",
+        "semanticBoundary": "Retains declared property identity and literal evidence only; no native conversion, qualitative threshold, reference binding or effect is asserted."
+      },
+      "nativeCapability": {
+        "status": "candidate-join",
+        "host": "document",
+        "operation": "document.write",
+        "parameter": "title",
+        "boundary": "Revalidated against actual host declarations on export; old file hashes are not reused."
+      }
+    },
+    {
+      "area": "document",
+      "type": "text",
+      "key": "text.tone",
+      "descriptor": {
+        "head": "class+step",
+        "concept": "tone",
+        "values": [
+          "formal",
+          "informal",
+          "friendly",
+          "warm",
+          "cold",
+          "polite",
+          "firm",
+          "neutral",
+          "enthusiastic",
+          "apologetic",
+          "humorous",
+          "serious",
+          "persuasive",
+          "simple"
+        ],
+        "src": "s.text.tone space=tone"
+      },
+      "status": "unresolved",
+      "reason": "Missing owning semantic/value contract for numeric, qualitative or relative change; no implicit units or thresholds.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing owning semantic/value contract for numeric, qualitative or relative change; no implicit units or thresholds."
+      }
+    },
+    {
+      "area": "document",
+      "type": "text",
+      "key": "text.length",
+      "descriptor": {
+        "head": "class+step",
+        "concept": "length",
+        "values": [
+          "very_short",
+          "short",
+          "medium",
+          "long",
+          "very_long"
+        ],
+        "src": "writeText words (region)"
+      },
+      "status": "unresolved",
+      "reason": "Missing owning semantic/value contract for numeric, qualitative or relative change; no implicit units or thresholds.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing owning semantic/value contract for numeric, qualitative or relative change; no implicit units or thresholds."
+      }
+    },
+    {
+      "area": "document",
+      "type": "text",
+      "key": "text.words",
+      "descriptor": {
+        "head": "number",
+        "concept": "measure",
+        "src": "writeText words"
+      },
+      "status": "aligned",
+      "alignment": {
+        "area": "document",
+        "key": "text.words",
+        "sourceWire": "w.document.document.words",
+        "canonical": "w.document.document.words",
+        "valueKind": "literal",
+        "host": "document",
+        "operation": "document.compose",
+        "parameter": "words"
+      },
+      "evidence": {
+        "knowledgePin": "539dd413ae52d978422d0060a5c8a87f0347c517",
+        "path": "docs/worlds/w.document/schema.sop",
+        "sha256": "4b8e3bfab57dd0757be6a0da0d4b050a94d2245cd4660202461fbef2c4b368f6",
+        "sourceWire": "w.document.document.words",
+        "sourceWorld": "w.document",
+        "moduleVersion": "2",
+        "declaration": "@w.document.document.words core.slot of=w.document.document key=words kind=integer min=0 step=1 core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "literal",
+        "source": "exact-copy-or-explicit-source-backed-normalization",
+        "semanticBoundary": "Retains declared property identity and literal evidence only; no native conversion, qualitative threshold, reference binding or effect is asserted."
+      },
+      "nativeCapability": {
+        "status": "candidate-join",
+        "host": "document",
+        "operation": "document.compose",
+        "parameter": "words",
+        "boundary": "Revalidated against actual host declarations on export; old file hashes are not reused."
+      }
+    },
+    {
+      "area": "document",
+      "type": "text",
+      "key": "text.recipient",
+      "descriptor": {
+        "head": "span",
+        "concept": "person",
+        "src": "who it is for"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "document",
+      "type": "text",
+      "key": "text.chapters",
+      "descriptor": {
+        "head": "number",
+        "concept": "count",
+        "src": "writeText chapters / keepChapters"
+      },
+      "status": "unresolved",
+      "reason": "Missing owning semantic/value contract for numeric, qualitative or relative change; no implicit units or thresholds.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing owning semantic/value contract for numeric, qualitative or relative change; no implicit units or thresholds."
+      }
+    },
+    {
+      "area": "document",
+      "type": "section",
+      "key": "section.role",
+      "descriptor": {
+        "head": "candidate",
+        "concept": "part_kind",
+        "values": [
+          "greeting",
+          "introduction",
+          "body",
+          "conclusion",
+          "signature",
+          "chapter",
+          "paragraph",
+          "heading",
+          "list",
+          "table",
+          "apology",
+          "explanation",
+          "summary",
+          "closing",
+          "subject",
+          "abstract",
+          "methods",
+          "results",
+          "references",
+          "item"
+        ],
+        "src": "s.sec.role"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "document",
+      "type": "section",
+      "key": "section.order",
+      "descriptor": {
+        "head": "class",
+        "concept": "order_relation",
+        "values": [
+          "before",
+          "after",
+          "first",
+          "last",
+          "top",
+          "bottom",
+          "swap"
+        ],
+        "src": "s.sec.order"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "document",
+      "type": "section",
+      "key": "section.order_anchor",
+      "descriptor": {
+        "head": "fill+span",
+        "concept": "reference",
+        "src": "the other section"
+      },
+      "status": "unresolved",
+      "reason": "Missing declared reference-role/identity projection; a label is not an object reference.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing declared reference-role/identity projection; a label is not an object reference."
+      }
+    },
+    {
+      "area": "document",
+      "type": "section",
+      "key": "section.length",
+      "descriptor": {
+        "head": "class+step",
+        "concept": "length",
+        "values": [
+          "very_short",
+          "short",
+          "medium",
+          "long",
+          "very_long"
+        ],
+        "src": "s.sec.length"
+      },
+      "status": "unresolved",
+      "reason": "Missing owning semantic/value contract for numeric, qualitative or relative change; no implicit units or thresholds.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing owning semantic/value contract for numeric, qualitative or relative change; no implicit units or thresholds."
+      }
+    },
+    {
+      "area": "document",
+      "type": "section",
+      "key": "section.words",
+      "descriptor": {
+        "head": "number",
+        "concept": "measure",
+        "src": "s.sec.length unit=word"
+      },
+      "status": "unresolved",
+      "reason": "Missing owning semantic/value contract for numeric, qualitative or relative change; no implicit units or thresholds.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing owning semantic/value contract for numeric, qualitative or relative change; no implicit units or thresholds."
+      }
+    },
+    {
+      "area": "document",
+      "type": "section",
+      "key": "section.content",
+      "descriptor": {
+        "head": "span",
+        "concept": "literal_text",
+        "src": "text the user dictates to insert/replace (doc.addParagraph, doc.dictate)"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "document",
+      "type": "section",
+      "key": "section.level",
+      "descriptor": {
+        "head": "class",
+        "concept": "heading_level",
+        "values": [
+          "1",
+          "2",
+          "3"
+        ],
+        "src": "old heading level"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "document",
+      "type": "section",
+      "key": "section.count",
+      "descriptor": {
+        "head": "number",
+        "concept": "count",
+        "src": "three paragraphs"
+      },
+      "status": "unresolved",
+      "reason": "Missing owning semantic/value contract for numeric, qualitative or relative change; no implicit units or thresholds.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing owning semantic/value contract for numeric, qualitative or relative change; no implicit units or thresholds."
+      }
+    },
+    {
+      "area": "document",
+      "type": "inline",
+      "key": "inline.format",
+      "descriptor": {
+        "head": "class",
+        "concept": "format",
+        "values": [
+          "bold",
+          "italic",
+          "underline",
+          "highlight",
+          "strike",
+          "link",
+          "code"
+        ],
+        "src": "old style/highlight/link"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "document",
+      "type": "inline",
+      "key": "inline.list_kind",
+      "descriptor": {
+        "head": "class",
+        "concept": "list_kind",
+        "values": [
+          "bullets",
+          "numbered",
+          "checklist"
+        ],
+        "src": "doc.addList"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "document",
+      "type": "inline",
+      "key": "inline.align",
+      "descriptor": {
+        "head": "class",
+        "concept": "align",
+        "values": [
+          "left",
+          "center",
+          "right",
+          "justify"
+        ],
+        "src": "old align"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "document",
+      "type": "inline",
+      "key": "inline.task",
+      "descriptor": {
+        "head": "span",
+        "concept": "literal_text",
+        "src": "doc.checkTask / listTasks item"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "document",
+      "type": "inline",
+      "key": "inline.checked",
+      "descriptor": {
+        "head": "class",
+        "concept": "toggle",
+        "values": [
+          "on",
+          "off"
+        ],
+        "src": "old checked"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "document",
+      "type": "inline",
+      "key": "inline.table_size",
+      "descriptor": {
+        "head": "span",
+        "concept": "measure",
+        "src": "doc.fillTable rows x cols"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "document",
+      "type": "inline",
+      "key": "inline.link_target",
+      "descriptor": {
+        "head": "span",
+        "concept": "literal_text",
+        "src": "old link"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "calendar",
+      "type": "meeting",
+      "key": "meeting.title",
+      "descriptor": {
+        "head": "span",
+        "concept": "name",
+        "src": "s.meet.title"
+      },
+      "status": "aligned",
+      "alignment": {
+        "area": "calendar",
+        "key": "meeting.title",
+        "sourceWire": "w.calendar.event.title",
+        "canonical": "w.calendar.event.title",
+        "valueKind": "string",
+        "host": "calendar",
+        "operation": "calendar.meeting.change",
+        "parameter": "title"
+      },
+      "evidence": {
+        "knowledgePin": "539dd413ae52d978422d0060a5c8a87f0347c517",
+        "path": "docs/worlds/w.calendar/schema.sop",
+        "sha256": "f104791cf830c5bc12063357211c78273062ab1c90d433eb990661dab05bcbba",
+        "sourceWire": "w.calendar.event.title",
+        "sourceWorld": "w.calendar",
+        "moduleVersion": "2",
+        "declaration": "@w.calendar.event.title core.slot of=w.calendar.event key=title required=true kind=atom kind=string core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy-or-explicit-source-backed-normalization",
+        "semanticBoundary": "Retains declared property identity and literal evidence only; no native conversion, qualitative threshold, reference binding or effect is asserted."
+      },
+      "nativeCapability": {
+        "status": "candidate-join",
+        "host": "calendar",
+        "operation": "calendar.meeting.change",
+        "parameter": "title",
+        "boundary": "Revalidated against actual host declarations on export; old file hashes are not reused."
+      }
+    },
+    {
+      "area": "calendar",
+      "type": "meeting",
+      "key": "meeting.day",
+      "descriptor": {
+        "head": "candidate+span",
+        "concept": "day",
+        "src": "s.meet.start part=start (day): today, tomorrow, weekday, date, next week"
+      },
+      "status": "unresolved",
+      "reason": "Relative/calendar day requires declared date and timezone/context resolution; string is not time.date.",
+      "candidateEvidence": {
+        "knowledgePin": "539dd413ae52d978422d0060a5c8a87f0347c517",
+        "path": "docs/worlds/w.calendar/schema.sop",
+        "sha256": "f104791cf830c5bc12063357211c78273062ab1c90d433eb990661dab05bcbba",
+        "sourceWire": "w.calendar.event.date",
+        "sourceWorld": "w.calendar",
+        "moduleVersion": "2",
+        "declaration": "@w.calendar.event.date core.slot of=w.calendar.event key=date required=true kind=time.date core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Relative/calendar day requires declared date and timezone/context resolution; string is not time.date."
+      }
+    },
+    {
+      "area": "calendar",
+      "type": "meeting",
+      "key": "meeting.time",
+      "descriptor": {
+        "head": "candidate+span+step",
+        "concept": "time",
+        "src": "s.meet.start (clock or region morning/afternoon; step earlier/later)"
+      },
+      "status": "unresolved",
+      "reason": "Clock/region/relative time requires typed frame/context resolution; string is not time.clock.",
+      "candidateEvidence": {
+        "knowledgePin": "539dd413ae52d978422d0060a5c8a87f0347c517",
+        "path": "docs/worlds/w.calendar/schema.sop",
+        "sha256": "f104791cf830c5bc12063357211c78273062ab1c90d433eb990661dab05bcbba",
+        "sourceWire": "w.calendar.event.start",
+        "sourceWorld": "w.calendar",
+        "moduleVersion": "2",
+        "declaration": "@w.calendar.event.start core.slot of=w.calendar.event key=start kind=time.clock core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Clock/region/relative time requires typed frame/context resolution; string is not time.clock."
+      }
+    },
+    {
+      "area": "calendar",
+      "type": "meeting",
+      "key": "meeting.length",
+      "descriptor": {
+        "head": "number+class+step",
+        "concept": "duration",
+        "values": [
+          "short",
+          "long"
+        ],
+        "src": "s.meet.length part=duration"
+      },
+      "status": "unresolved",
+      "reason": "Duration requires numeric magnitude/unit or declared qualitative/relative interpretation.",
+      "candidateEvidence": {
+        "knowledgePin": "539dd413ae52d978422d0060a5c8a87f0347c517",
+        "path": "docs/worlds/k.attributes/shards/aspects.sop",
+        "sha256": "6449301f8c96ce11f4671f3f9037033984ce3562253db8310d67afb47c7259eb",
+        "sourceWire": "k.attributes.family.duration",
+        "sourceWorld": "k.attributes",
+        "moduleVersion": "6",
+        "declaration": "@k.attributes.family.duration k.attributes.family name=duration about=\"a length of time\" world=k.time type=k.time.duration by=name core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Duration requires numeric magnitude/unit or declared qualitative/relative interpretation."
+      }
+    },
+    {
+      "area": "calendar",
+      "type": "meeting",
+      "key": "meeting.end",
+      "descriptor": {
+        "head": "span",
+        "concept": "time",
+        "src": "until 5"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "calendar",
+      "type": "meeting",
+      "key": "meeting.room",
+      "descriptor": {
+        "head": "fill+span",
+        "concept": "reference",
+        "src": "s.meet.room relation=in"
+      },
+      "status": "unresolved",
+      "reason": "Missing declared reference-role/identity projection; a label is not an object reference.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing declared reference-role/identity projection; a label is not an object reference."
+      }
+    },
+    {
+      "area": "calendar",
+      "type": "meeting",
+      "key": "meeting.people",
+      "descriptor": {
+        "head": "fill+span",
+        "concept": "person",
+        "many": true,
+        "src": "s.meet.people role=participant many=true"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "calendar",
+      "type": "meeting",
+      "key": "meeting.recurrence",
+      "descriptor": {
+        "head": "class",
+        "concept": "recurrence",
+        "values": [
+          "daily",
+          "weekly",
+          "every_weekday",
+          "biweekly",
+          "monthly",
+          "yearly"
+        ],
+        "src": "repetition"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "calendar",
+      "type": "meeting",
+      "key": "meeting.shift",
+      "descriptor": {
+        "head": "number+class",
+        "concept": "delta",
+        "values": [
+          "earlier",
+          "later"
+        ],
+        "src": "move by an amount"
+      },
+      "status": "unresolved",
+      "reason": "Missing owning semantic/value contract for numeric, qualitative or relative change; no implicit units or thresholds.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing owning semantic/value contract for numeric, qualitative or relative change; no implicit units or thresholds."
+      }
+    },
+    {
+      "area": "calendar",
+      "type": "meeting",
+      "key": "meeting.relation",
+      "descriptor": {
+        "head": "class",
+        "concept": "time_relation",
+        "values": [
+          "before",
+          "after",
+          "same_time",
+          "during",
+          "between",
+          "not_overlapping"
+        ],
+        "src": "relative to another meeting"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "calendar",
+      "type": "meeting",
+      "key": "meeting.relation_anchor",
+      "descriptor": {
+        "head": "fill+span",
+        "concept": "reference",
+        "src": "the other meeting"
+      },
+      "status": "unresolved",
+      "reason": "Missing declared reference-role/identity projection; a label is not an object reference.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing declared reference-role/identity projection; a label is not an object reference."
+      }
+    },
+    {
+      "area": "calendar",
+      "type": "meeting",
+      "key": "meeting.free",
+      "descriptor": {
+        "head": "class",
+        "concept": "free_search",
+        "values": [
+          "nearest_free",
+          "first_free",
+          "common_free"
+        ],
+        "src": "book 6.8 / 7.4: nearest free time"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "calendar",
+      "type": "meeting",
+      "key": "meeting.agenda",
+      "descriptor": {
+        "head": "span",
+        "concept": "literal_text",
+        "src": "notes / agenda"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "calendar",
+      "type": "room",
+      "key": "room.name",
+      "descriptor": {
+        "head": "span",
+        "concept": "name",
+        "src": "room name"
+      },
+      "status": "aligned",
+      "alignment": {
+        "area": "calendar",
+        "key": "room.name",
+        "sourceWire": "w.room.room.name",
+        "canonical": "w.room.room.name",
+        "valueKind": "string"
+      },
+      "evidence": {
+        "knowledgePin": "539dd413ae52d978422d0060a5c8a87f0347c517",
+        "path": "docs/worlds/w.room/schema.sop",
+        "sha256": "9ec49a23f8d778ff487b74380e62bb8c2beb65d78e58c2b741a3cb79337a38c7",
+        "sourceWire": "w.room.room.name",
+        "sourceWorld": "w.room",
+        "moduleVersion": "1",
+        "declaration": "@w.room.room.name core.slot of=w.room.room key=name required=true kind=atom kind=string core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy-or-explicit-source-backed-normalization",
+        "semanticBoundary": "Retains declared property identity and literal evidence only; no native conversion, qualitative threshold, reference binding or effect is asserted."
+      },
+      "nativeCapability": {
+        "status": "unsupported",
+        "reason": "No reviewed native capability join in this catalogue."
+      }
+    },
+    {
+      "area": "calendar",
+      "type": "room",
+      "key": "room.seats",
+      "descriptor": {
+        "head": "number",
+        "concept": "quantity",
+        "src": "s.room.seats counts=w.person"
+      },
+      "status": "unresolved",
+      "reason": "Exact integer/nonnegative source conversion and counted-person dimension need a typed value contract.",
+      "candidateEvidence": {
+        "knowledgePin": "539dd413ae52d978422d0060a5c8a87f0347c517",
+        "path": "docs/worlds/w.room/schema.sop",
+        "sha256": "9ec49a23f8d778ff487b74380e62bb8c2beb65d78e58c2b741a3cb79337a38c7",
+        "sourceWire": "w.room.room.seats",
+        "sourceWorld": "w.room",
+        "moduleVersion": "1",
+        "declaration": "@w.room.room.seats core.slot of=w.room.room key=seats kind=integer min=0 step=1 core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Exact integer/nonnegative source conversion and counted-person dimension need a typed value contract."
+      }
+    },
+    {
+      "area": "calendar",
+      "type": "room",
+      "key": "room.quality",
+      "descriptor": {
+        "head": "class",
+        "concept": "room_quality",
+        "values": [
+          "big",
+          "small",
+          "quiet",
+          "free",
+          "any"
+        ],
+        "src": "'big room' judged against the rooms"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    },
+    {
+      "area": "calendar",
+      "type": "person",
+      "key": "person.name",
+      "descriptor": {
+        "head": "span",
+        "concept": "person",
+        "src": "person name"
+      },
+      "status": "aligned",
+      "alignment": {
+        "area": "calendar",
+        "key": "person.name",
+        "sourceWire": "w.person.person.name",
+        "canonical": "w.person.person.name",
+        "valueKind": "string",
+        "host": "calendar",
+        "operation": "calendar.person.change",
+        "parameter": "label"
+      },
+      "evidence": {
+        "knowledgePin": "539dd413ae52d978422d0060a5c8a87f0347c517",
+        "path": "docs/worlds/w.person/schema.sop",
+        "sha256": "c3c2b90a455f919d10bc7e43d62541c31c1e7d303436a704b05bf3c76b94ac0b",
+        "sourceWire": "w.person.person.name",
+        "sourceWorld": "w.person",
+        "moduleVersion": "1",
+        "declaration": "@w.person.person.name core.slot of=w.person.person key=name kind=atom kind=string core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy-or-explicit-source-backed-normalization",
+        "semanticBoundary": "Retains declared property identity and literal evidence only; no native conversion, qualitative threshold, reference binding or effect is asserted."
+      },
+      "nativeCapability": {
+        "status": "candidate-join",
+        "host": "calendar",
+        "operation": "calendar.person.change",
+        "parameter": "label",
+        "boundary": "Revalidated against actual host declarations on export; old file hashes are not reused."
+      }
+    },
+    {
+      "area": "calendar",
+      "type": "person",
+      "key": "person.role",
+      "descriptor": {
+        "head": "candidate",
+        "concept": "role",
+        "src": "the hiring lead, my manager"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment.",
+      "valueContract": {
+        "status": "unresolved",
+        "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "path": "docs/worlds/w.picture/schema.sop",
+      "sha256": "65ca81b3a69606462a73944bcc48b1e74f67ddb31573ec3fb3974a08b7311859"
+    },
+    {
+      "path": "docs/worlds/k.attributes/schema.sop",
+      "sha256": "9a8bacaab0afd710f90ba8958a88e10927848f3509b4a83515b58a64e6a983c4"
+    },
+    {
+      "path": "docs/worlds/k.attributes/shards/attributes.sop",
+      "sha256": "997c44ffaa9bb05d24bd98e349430780b872c9f4ed9a91ec9e929a316b6197a5"
+    },
+    {
+      "path": "docs/worlds/w.face/schema.sop",
+      "sha256": "48d07e2a7c1140a824604bf7af71f58e0298b3355114b2dda8e50fda8f5bed2f"
+    },
+    {
+      "path": "docs/worlds/w.diagram/schema.sop",
+      "sha256": "83b216f493b2a5589cbfac021dac6737fc5fe4b1640bea2a3f57587e2eca28fb"
+    },
+    {
+      "path": "docs/worlds/w.chart/schema.sop",
+      "sha256": "047fb1fb5256e56247dbd37e959792d37ff5a8b5828d7f6bf33d8c0d0b67e66c"
+    },
+    {
+      "path": "docs/worlds/w.document/schema.sop",
+      "sha256": "4b8e3bfab57dd0757be6a0da0d4b050a94d2245cd4660202461fbef2c4b368f6"
+    },
+    {
+      "path": "docs/worlds/w.calendar/schema.sop",
+      "sha256": "f104791cf830c5bc12063357211c78273062ab1c90d433eb990661dab05bcbba"
+    },
+    {
+      "path": "docs/worlds/k.attributes/shards/aspects.sop",
+      "sha256": "6449301f8c96ce11f4671f3f9037033984ce3562253db8310d67afb47c7259eb"
+    },
+    {
+      "path": "docs/worlds/w.room/schema.sop",
+      "sha256": "9ec49a23f8d778ff487b74380e62bb8c2beb65d78e58c2b741a3cb79337a38c7"
+    },
+    {
+      "path": "docs/worlds/w.person/schema.sop",
+      "sha256": "c3c2b90a455f919d10bc7e43d62541c31c1e7d303436a704b05bf3c76b94ac0b"
+    }
+  ],
+  "coverage": {
+    "families": 15,
+    "alignedFamilies": 9,
+    "properties": 105,
+    "alignedProperties": 15
+  }
+}
