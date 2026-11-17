@@ -207,7 +207,7 @@ def apply_weight_migration(old_config,new_config,plan,old_state,fresh_state,
     """Return an independent CPU state, or {ok:false,state:None} atomically.
 
     max_elements charges validation reads, cloning, copies and dtype roundtrips;
-    it is a total work/allocation bound, not just a count of model parameters.
+    it is an element-work bound, not a peak-memory byte allowance.
     """
     stats={'elements':0,'copiedElements':0,'tensors':0,'rows':0}
     def tick(kind,count=1):
