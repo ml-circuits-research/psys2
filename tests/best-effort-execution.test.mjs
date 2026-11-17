@@ -1,5 +1,6 @@
 import {test} from 'node:test';import assert from 'node:assert/strict';
 import {routeNewEngine} from '../src/dialog/reader-routing.mjs';
+import {NATIVE_AREAS} from '../src/dialog/app-reader-context.mjs';
 import {initialDrawingState} from '../worlds/art.draw/declared-host.mjs';
 import {initialDiagramState} from '../worlds/diagram.sketch/declared-host.mjs';
 import {initialDocumentState} from '../worlds/docs.editor/declared-host.mjs';
@@ -15,7 +16,7 @@ for(const [tab,area,key,initial,kind,operation] of cases)test('declared creation
   propose:async()=>({coverage:{complete:true,graphProposal:true},candidates:[candidate],failures:[],selectionScore:{definition:'psys2.model-minimum/1',value:0.63}})};
  const made=await routeNewEngine(session,text);assert.equal(made.statuses[0],'supported',JSON.stringify(made.trace));assert.notDeepEqual(session.isession.state[key],before[key]);assert.match(made.text,/Created/);assert.equal(made.trace.readerRouting.admission.mode,'uncalibrated-best-effort');assert.equal(made.trace.readerRouting.admission.uncertain,true);
  // Undo in one area preserves an unrelated area's newer state.
- session.isession.state.unrelated={newer:true};candidate=graph('undo');const undo=await routeNewEngine(session,text);assert.equal(undo.statuses[0],'supported');assert.deepEqual(session.isession.state[key],before[key]);assert.deepEqual(session.isession.state.unrelated,{newer:true});assert.match(undo.text,/Undid/);
+ session.isession.state.unrelated={newer:true};candidate=graph('undo');const undo=await routeNewEngine(session,text);assert.equal(undo.statuses[0],'supported');assert.deepEqual(session.isession.state[key],NATIVE_AREAS[tab].canonicalizeState?.(before[key])??before[key]);assert.deepEqual(session.isession.state.unrelated,{newer:true});assert.match(undo.text,/Undid/);
 });
 test('destructive requests retain stricter admission instead of borrowing reversible best effort',async()=>{
  const session={isession:{state:{'art.draw':initialDrawingState(),'ui.shell':{activeTab:'draw'}}},engine:{requestReader:{provenance:()=>provenance,propose:async()=>({coverage:{complete:true,graphProposal:true},candidates:[{request:'r',wires:`@s std.request.source text="${text}"\n@r std.request act=remove mood=do source=$s\n@t std.request.target request=$r mode=existing kind=fixture.entity`}],failures:[],selectionScore:{definition:'psys2.model-minimum/1',value:0.99}})}}};

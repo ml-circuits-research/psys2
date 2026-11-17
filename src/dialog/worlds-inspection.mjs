@@ -1,34 +1,57 @@
 // Read-only architecture projection of the runtime registry. No inferred execution links.
+import {parse,serialize,str} from '../vendor/sopworld/sopworld.mjs';
+
+export function inspectSchemaSource(source){
+ if(typeof source!=='string')return {status:'source not loaded',legends:[],modules:[],types:[],slots:[],tools:[],parameters:[],language:[],documentation:[],languageStatus:'Source has not been read; no language binding is asserted.'};
+ try{
+  const nodes=parse(source),entry=node=>({id:node.id,predicate:node.type,attributes:structuredClone(node.attrs),wire:serialize([node]),...(node.attrs.doc?{documentation:node.attrs.doc.map(str).join(' ')}:{})}),select=types=>nodes.filter(node=>types.includes(node.type)).map(entry);
+  const language=select(['core.word','core.phrase','core.shape']);
+  return {status:'parsed declarations',legends:select(['core.legend']),modules:select(['core.module','core.use']),types:select(['core.type']),slots:select(['core.slot','core.key']),tools:select(['app.native.operation']),parameters:select(['app.native.parameter']),language,documentation:nodes.filter(node=>node.attrs.doc).map(entry),languageStatus:language.length?'Word, phrase or shape declarations are present. Their presence does not prove that the active reader uses them.':'No core.word, core.phrase or core.shape declarations occur in this source. Native tool declarations alone do not establish a text-to-intent binding.'};
+ }catch(error){return {status:'source parse failed',error:String(error?.message??error),legends:[],modules:[],types:[],slots:[],tools:[],parameters:[],language:[],documentation:[],languageStatus:'Source could not be parsed; no language binding is asserted.'};}
+}
 export function inspectWorldsRuntime({index={},bundle={worlds:{}},loaded=[],instances=[],hosts=[],knowledgeFiles=[],reader={},nativeStates={},instanceCaches=[],sessionMeta=null,libraryInfo=null}={}){
+ const authoritative=new Set(instances.filter(record=>record.authoritative).map(record=>record.world));
+ const schemaWorlds=new Map();
  const nodes=[],edges=[],loadedSet=new Set(loaded),hostByWorld=new Map(hosts.map(h=>[h.world,h]));
  const link=(from,to,label)=>edges.push({from,to,label});
- nodes.push({id:'runtime:registry',label:'Application registry',kind:'runtime',implementation:'JavaScript',description:'Actual routing index and loaded bundle registry. This is not a SOP central project world.',details:{index,loaded}});
+ nodes.push({id:'runtime:registry',label:'World bundle loader',kind:'runtime',implementation:'JavaScript',description:'Actual bundle/module loading index. Editor domain resolution is handled by the separate operational SOP project World.',details:{index,loaded}});
  for(const [id,info]of Object.entries(index.worlds??{})){
   const held=bundle.worlds?.[id],files=held?.files??{},host=hostByWorld.get(id);
-  nodes.push({id:'world:'+id,label:id,kind:'world',implementation:'SOP Lang',description:info.summary||info.title||'',details:{...info,loaded:loadedSet.has(id),files:Object.keys(files)},wires:Object.entries(files).map(([path,text])=>'# '+path+'\n'+text).join('\n\n')});
+  nodes.push({id:'world:'+id,label:id,kind:'world',implementation:'SOP Lang',status:loadedSet.has(id)?'loaded':'available, not loaded',description:info.summary||info.title||'Application SOP world package. Schema declarations, methods and initial facts may coexist in this package; inspect its actual files.',details:{...info,loaded:loadedSet.has(id),files:Object.keys(files),architectureRole:'Application SOP world package; not asserted to be a pure world pattern'},wires:Object.entries(files).map(([path,text])=>'# '+path+'\n'+text).join('\n\n')});
   link('runtime:registry','world:'+id,loadedSet.has(id)?'loaded world':'available world');
   for(const target of info.imports??[])link('world:'+id,'world:'+target,'imports');
   for(const target of info.reads??[])link('world:'+id,'world:'+target,'declares reads');
   for(const target of info.compose??[])link('world:'+id,'world:'+target,'declares composition');
-  for(const [path,text]of Object.entries(files))if(/(?:schema|legend).*\.sop$/.test(path)){
-   const key='schema:'+id+':'+path;
-   nodes.push({id:key,label:id+' / '+path,kind:'schema',implementation:'SOP Lang',description:'Exact schema/legend file held by the world loader.',wires:text,details:{world:id,path,loaded:loadedSet.has(id)}});link('world:'+id,key,'contains declaration file');
+  const declared=new Map((info.schemaFiles??[]).map(entry=>typeof entry==='string'?[entry,{file:entry}]:[entry.file,entry]).filter(([file])=>typeof file==='string'));
+  const paths=[...new Set([...Object.keys(files).filter(path=>/(?:schema|legend).*\.sop$/.test(path)),...declared.keys()])];
+  const schemaWorld=typeof info.schemaWorld==='string'?info.schemaWorld:null,schemaWorldId=schemaWorld?'schema-world:'+schemaWorld:null;
+  if(schemaWorldId){
+   schemaWorlds.set(id,schemaWorldId);const present=[...declared.keys()].filter(path=>typeof files[path]==='string'),wires=present.map(path=>'# '+path+'\n'+files[path]).join('\n\n');
+   nodes.push({id:schemaWorldId,label:schemaWorld,kind:'schema',implementation:'SOP Lang declared sources',status:present.length===declared.size&&declared.size?'declared sources loaded':present.length?'declared sources partly loaded':'declared sources not loaded',description:'Schema-world identity explicitly declared by application metadata. Its exact source files are linked below. This view does not assert an additional independently executed World.',...(present.length?{wires}:{}),schemaView:inspectSchemaSource(present.length?wires:undefined),details:{world:id,schemaWorld,declaredFiles:[...declared.values()],loadedFiles:present,completeStateSchema:[...declared.values()].some(file=>file.completeStateSchema===true),completenessEvidence:'completeStateSchema comes from the source-file declaration; a native-tool-interface alone is not a complete state schema.'}});
+   link('world:'+id,schemaWorldId,'declares schema world');
+  }
+  for(const path of paths){
+   const text=files[path],descriptor=declared.get(path)??{},key='schema:'+id+':'+path,loaded=typeof text==='string';
+   nodes.push({id:key,label:id+' / '+path,kind:'schema',implementation:'SOP Lang',status:loaded?'source loaded':'source declared, not loaded',description:descriptor.role==='native-tool-interface'?'Declared native tool interface: operations, targets and parameters. This source does not claim a complete semantic state schema.':'Exact schema, legend or policy source declared by this application package.',...(loaded?{wires:text}:{}),schemaView:inspectSchemaSource(text),details:{world:id,path,...descriptor,...(schemaWorld?{schemaWorld}:{}),loaded}});
+   link('world:'+id,key,declared.has(path)?'declares schema file':'contains declaration file');if(schemaWorldId&&declared.has(path))link(schemaWorldId,key,'declares source file');
   }
   if(host){
-   nodes.push({id:'interpreter:'+id,label:host.view+' interpreter',kind:'interpreter',implementation:'JavaScript',description:'Native declared host: bindings and observation from the actual host. Semantic behavior is still implemented in JavaScript here.',tools:host.operations,details:{world:id,capabilities:host.capabilities,observation:host.observation,source:'worlds/'+id+'/declared-host.mjs'}});
+   nodes.push({id:'interpreter:'+id,label:host.view+' native tool host',kind:'adapter',implementation:'JavaScript',description:'Combined native interpreter/adapter implementation: declared tool bindings, state observation and effect handlers. It currently contains JavaScript semantic behavior as well as mechanical tool execution.',tools:host.operations,details:{world:id,capabilities:host.capabilities,observation:host.observation,source:'worlds/'+id+'/declared-host.mjs'}});
    link('interpreter:'+id,'world:'+id,'native adapter for');
   }
  }
  for(const [world,state]of Object.entries(nativeStates)){
   const nativeId='native:'+world;
-  nodes.push({id:nativeId,label:world+' native state',kind:'runtime',implementation:'JavaScript',description:'Actual operational editor state. Every top-level structure is exposed below, including undo/redo when present.',details:state});link('runtime:registry',nativeId,'session state');
+  nodes.push({id:nativeId,label:world+' native state',kind:'runtime',implementation:'JavaScript',description:authoritative.has(world)?'SOP carrier owned by the capability-domain adapter. The authoritative domain facts are in the linked SOP World; decoded native rows are temporary.':'Actual operational JavaScript editor state. Its additional semantic fields are not yet fully represented by the observed SOP World.',details:state});link('runtime:registry',nativeId,'session state');
   for(const [key,value]of Object.entries(state??{})){const id='structure:'+world+':'+key;nodes.push({id,label:world+' / '+key,kind:'structure',implementation:'JavaScript',description:'Exact native state property, not an independent SOP world.',details:{key,value}});link(nativeId,id,'owns property');}
  }
- for(const cache of instanceCaches){nodes.push({id:'cache:'+cache.world,label:cache.world+' SOP cache',kind:'runtime',implementation:'SOP Lang in JavaScript World',description:'Actual session.instanceWorlds cache. This is loaded from the persistence snapshot; it is not yet the editor operational authority.',wires:cache.wires,details:{world:cache.world,wireCount:cache.wireCount}});link('cache:'+cache.world,'instance:'+cache.world,'loaded from snapshot');}
+
  for(const record of instances){
-  nodes.push({id:'instance:'+record.world,label:record.world+' instance',kind:'instance',implementation:'SOP snapshot + native JavaScript state',description:'Exact current SOP serialization. Stored browser records are inspected separately. Native editor state remains the operational authority; this archive includes undo and renderer data.',wires:record.wires,details:{instanceId:record.instanceId,revision:record.revision,world:record.world}});
-  link('instance:'+record.world,'world:'+record.world,'instance of');
-  link('native:'+record.world,'instance:'+record.world,'serialized snapshot from');
+  nodes.push({id:'instance:'+record.world,label:record.world+' world instance',kind:'instance',implementation:record.authoritative?'Authoritative SOP Lang World':'SOP Lang World observed from native adapter',description:record.authoritative?'Actual operational domain state. Tools decode temporary native data from these exact SOP facts and commit only validated SOP results; there is no parallel native row store.':'Actual semantic World held in session.instanceWorlds: domain facts and explicit references, excluding native history, renderer projection and archive descriptors. The native adapter still owns additional semantic state; this observation is not yet the operational authority.',wires:record.wires,details:{instanceId:record.instanceId,revision:record.revision,world:record.world,storage:'session.instanceWorlds',cachedWorld:instanceCaches.find(cache=>cache.world===record.world)??null}});
+  link('instance:'+record.world,'world:'+record.world,'associated application world');
+  if(schemaWorlds.has(record.world))link('instance:'+record.world,schemaWorlds.get(record.world),'declared schema world');
+  if(record.authoritative)link('instance:'+record.world,'native:'+record.world,'stored as SOP carrier');else link('native:'+record.world,'instance:'+record.world,'observed facts from');
+  if(record.schema){const id='governing-schema:'+record.world;nodes.push({id,label:record.world+' governing schema',kind:'schema',implementation:'SOP Lang',description:'Actual schema loaded to validate the operational World.',wires:record.schema,schemaView:inspectSchemaSource(record.schema),details:{world:record.world,role:'governing-state-schema'}});link('instance:'+record.world,id,'validated by');}
 
   if(hostByWorld.has(record.world))link('interpreter:'+record.world,'instance:'+record.world,'observes / changes');
  }
@@ -42,19 +65,21 @@ export function inspectWorldsRuntime({index={},bundle={worlds:{}},loaded=[],inst
  const catalogIds=new Set(catalogWorlds.map(world=>world.id));
  for(const world of catalogWorlds){
   const id='knowledge-world:'+world.id,paths=[world.schema,...(world.shards??[]).map(shard=>shard.path)].filter(Boolean),loadedFiles=paths.filter(path=>knowledgeByPath.has(path));
-  nodes.push({id,label:world.id,kind:'knowledge',implementation:'SOP Lang',description:'Actual catalog world declaration. Files are loaded by reference, not copied into instances.',details:{...world,loadedFiles}});link('knowledge:catalog',id,'catalog world');
+  nodes.push({id,label:world.id,kind:'knowledge',implementation:'SOP Lang',status:loadedFiles.length?'partly loaded':'declared, not loaded',description:'A world published in the shared catalog. The catalog contains world patterns and knowledge bases; this entry does not explicitly declare which book role it has. Sources are linked, not copied into instances.',details:{...world,loadedFiles,architectureRole:'Published world; specific pattern/knowledge role not declared in catalog metadata'}});link('knowledge:catalog',id,'catalog world');
   for(const target of world.depends??[])if(catalogIds.has(target))link(id,'knowledge-world:'+target,'declares dependency');
   for(const path of loadedFiles)link(id,'knowledge-file:'+path,path===world.schema?'loaded schema':'loaded shard');
-  if(world.schema&&!knowledgeByPath.has(world.schema)){const schemaId='knowledge-file:'+world.schema;nodes.push({id:schemaId,label:world.schema,kind:'schema',implementation:'SOP Lang',description:'Schema declared by the catalog; its text has not been read by this worker.',details:{path:world.schema,loaded:false}});link(id,schemaId,'declares schema');}
+  if(world.schema&&!knowledgeByPath.has(world.schema)){const schemaId='knowledge-file:'+world.schema;nodes.push({id:schemaId,label:world.schema,kind:'schema',implementation:'SOP Lang',description:'Schema declared by the catalog; its text has not been read by this worker.',schemaView:inspectSchemaSource(undefined),details:{path:world.schema,loaded:false}});link(id,schemaId,'declares schema');}
  }
- for(const file of knowledgeFiles){const id='knowledge-file:'+file.path;nodes.push({id,label:file.path,kind:catalogWorlds.some(world=>world.schema===file.path)?'schema':'knowledge',implementation:/\.sop$/.test(file.path)?'SOP Lang':'Catalog data',description:'Exact file text returned by the active knowledge source.',wires:file.text,details:{path:file.path,loaded:true}});link('knowledge:catalog',id,'loaded file');} 
+ for(const file of knowledgeFiles){const id='knowledge-file:'+file.path;nodes.push({id,label:file.path,kind:catalogWorlds.some(world=>world.schema===file.path)?'schema':'knowledge',implementation:/\.sop$/.test(file.path)?'SOP Lang':'Catalog data',description:'Exact file text returned by the active knowledge source.',wires:file.text,...(catalogWorlds.some(world=>world.schema===file.path)?{schemaView:inspectSchemaSource(file.text)}:{}),details:{path:file.path,loaded:true}});link('knowledge:catalog',id,'loaded file');}
  if(libraryInfo){nodes.push({id:'component:library',label:'SOPWorlds library',kind:'component',implementation:'JavaScript + built-in SOP schemas',description:'Actual imported library version, schema type identities and exported pipeline declarations. These are implementation mechanisms, not independent instance worlds.',details:libraryInfo});link('component:reasoner','component:library','imports mechanisms');link('component:formalizer','component:library','imports schema / binding mechanisms');}
  nodes.push({id:'component:reader',label:'SOP-BERT reader',kind:'component',implementation:'Trained model + JavaScript',description:'Actual browser reader provider. This node does not imply that model internals are SOP reasoning.',details:reader});
  if(reader.cache){nodes.push({id:'cache:reader-artifacts',label:'SOP-BERT artifact cache',kind:'storage',implementation:'Browser CacheStorage',description:'Verified model, tokenizer and binding bytes keyed by SHA-256. Contains downloadable artifacts only, separate from edited work. Runtime sessions are recreated on page load.',details:reader.cache});link('component:reader','cache:reader-artifacts','loads verified artifact bytes');}
+ nodes.push({id:'component:control-interpreter',label:'SOP control interpreter',kind:'interpreter',implementation:'JavaScript + declared tool schemas',description:'Parses compact or expanded SOP control wires and validates exact tool parameters before native UI invocation. This interpreter is separate from the text reader.',details:{source:'src/dialog/native-intent-reader.mjs',caller:'src/dialog/native-tool-controls.mjs'}});
+ for(const host of hosts)link('component:control-interpreter','interpreter:'+host.world,'passes declared UI operations to');
  nodes.push({id:'component:formalizer',label:'Request formalizer',kind:'component',implementation:'JavaScript + SOP declarations',description:'Request proposal and binding pipeline. Stage events report actual runtime guard stages, not invented world activations.'});
  nodes.push({id:'component:reasoner',label:'Session / executor',kind:'component',implementation:'JavaScript + SOP mechanisms',description:'Actual session.send execution boundary. Native UI controls invoke their declared host directly.'});
  nodes.push({id:'runtime:activity-bus',label:'Runtime activity bus',kind:'component',implementation:'JavaScript worker event channel',description:'Actual world-activity events on the engine worker channel. Emits observed loading, reader, session and native invocation boundaries; it does not infer internal reasoning.',details:{workerEvent:'world-activity',retainedWorkerEvents:200,browserReplayWindow:300}});
- for(const node of nodes.filter(node=>node.kind==='interpreter'||['component:reader','component:reasoner','knowledge:catalog'].includes(node.id)))link(node.id,'runtime:activity-bus','publishes observed activity');
+ for(const node of nodes.filter(node=>['interpreter','adapter'].includes(node.kind)||['component:reader','component:reasoner','knowledge:catalog'].includes(node.id)))link(node.id,'runtime:activity-bus','publishes observed activity');
  link('component:reasoner','component:reader','requestReader provider');
  return {nodes,edges,limitations:['This graph projects actual loader metadata, native bindings and snapshots; the graph is not yet an authoritative SOP project world.','A loaded/imported world is not proof it participated in a particular decision. Only observed runtime events animate nodes.']};
 }

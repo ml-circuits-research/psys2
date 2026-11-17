@@ -93,7 +93,7 @@ test('songs: ten public-domain songs, each with a source, listed in the tab plug
   const songs = wires.filter((w) => w.type === 'media.music.song');
   assert.equal(songs.length, 10);
   assert.equal(kb.match(/core\.source="fixture:media\.music\/songs/g).length, 10);
-  const plugin = readFileSync(new URL('../docs/webchat/ui/tabs/music.mjs', import.meta.url), 'utf8');
+  const plugin = readFileSync(new URL('../legacy/webchat/ui/tabs/music.mjs', import.meta.url), 'utf8');
   for (const m of kb.matchAll(/^\s+title="([^"]+)"/gm)) {
     const title = m[1].replace(/ to You$/, '').replace(/ Had a Farm$/, '').replace(/ Is Falling Down$/, '');
     assert.ok(plugin.includes(title.replace(/'/g, "'")) || plugin.includes(title.replace(/'/g, '"')), `${m[1]} missing in the tab plugin`);
@@ -101,9 +101,9 @@ test('songs: ten public-domain songs, each with a source, listed in the tab plug
 });
 
 test('vendor: bundles carry header and licence', () => {
-  for (const f of ['tone', 'abcjs']) assert.match(readFileSync(new URL(`../docs/webchat/vendor/music/${f}.mjs`, import.meta.url), 'utf8').slice(0, 600), /MIT/);
+  for (const f of ['tone', 'abcjs']) assert.match(readFileSync(new URL(`../legacy/webchat/vendor/music/${f}.mjs`, import.meta.url), 'utf8').slice(0, 600), /MIT/);
   assert.match(readFileSync(new URL('../worlds/media.music/vendor/tonal.mjs', import.meta.url), 'utf8').slice(0, 600), /MIT/);
-  assert.match(readFileSync(new URL('../docs/webchat/vendor/music/LICENSES.md', import.meta.url), 'utf8'), /MIT/);
+  assert.match(readFileSync(new URL('../legacy/webchat/vendor/music/LICENSES.md', import.meta.url), 'utf8'), /MIT/);
 });
 
 test('datagen: deterministic, valid SOP, negatives, many groups', () => {

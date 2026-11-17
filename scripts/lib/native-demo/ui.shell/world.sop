@@ -1,0 +1,1 @@
+@world.ui.shell core.world namespace=ui.shell version=1.0.0 legend=$legend.ui.shell imports=world.core language=en status=fixture passive=true title="Application shell" doc="Current editor selection and interface preferences. Native initialization contains no historical demo or game navigation."

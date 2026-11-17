@@ -1,0 +1,14 @@
+@world.time.calendar core.world
+    namespace=time.calendar
+    version=1.0.0
+    legend=$legend.time.calendar
+    imports=world.core
+    language=en
+    status=fixture
+    title="Calendar"
+    summary="edit calendar"
+    tab=calendar
+    tabTitle="Calendar"
+    tabOrder=30
+    tabKind=tool
+    doc="Native editor application contract. Tools are declared by the actual native host; native-interface.sop describes that interface. It does not claim a complete semantic state schema."

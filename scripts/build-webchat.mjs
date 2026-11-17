@@ -24,7 +24,7 @@ import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import path from 'node:path';
-import { createDemoLoader } from './lib/demo-composition.mjs';
+import { createDemoLoader,readDemoComposition } from './lib/demo-composition.mjs';
 import {refreshBrowserReaderDeployment} from './lib/browser-reader-deployment.mjs';
 import { slotDeclarations } from '../src/worlds/describe.mjs';
 
@@ -98,7 +98,7 @@ export async function copyDispatcherModel({ root = REPO, outDir, exportDir = DEF
 }
 
 const EARLY_BEGIN = '<!-- early-load:begin (written by scripts/build-webchat.mjs) -->', EARLY_END = '<!-- early-load:end -->';
-const IMPORT_RE = /(?:import|export)\s[^'"`;]*?from\s*['"](\.{1,2}\/[^'"]+)['"]|(?:^|[;\n])\s*import\s*['"](\.{1,2}\/[^'"]+)['"]/g;
+const IMPORT_RE = /(?:import|export)\s*[^'"`;]*?from\s*['"](\.{1,2}\/[^'"]+)['"]|(?:^|[;\n])\s*import\s*['"](\.{1,2}\/[^'"]+)['"]/g;
 /** Static import graph (relative specifiers only) reachable from `roots`, as paths relative to outDir. */
 async function importGraph(outDir, roots) {
   const seen = new Set(); const stack = [...roots];
@@ -169,12 +169,13 @@ export async function versionGraph(outDir) {
 
 /** Every module of the page (app, ui, lib, world ops; not vendor/) with a short content hash, plus worlds/index.json: { 'lib/dialog/index.mjs': '1a2b3c4d5e', ... }. */
 async function moduleVersions(outDir, graph = {}) {
+  const excluded=(await readDemoComposition()).excludeAssets??[];
   const out = {};
   const add = async (rel) => { out[rel] = sha(await readFile(path.join(outDir, rel))).slice(0, 10); };
   if (await exists(path.join(outDir, 'app.mjs'))) await add('app.mjs');
   for (const sub of ['ui', 'lib', 'worlds']) {
     if (!(await exists(path.join(outDir, sub)))) continue;
-    for (const f of await walk(path.join(outDir, sub))) if (f.endsWith('.mjs')) await add(`${sub}/${f}`);
+    for (const f of await walk(path.join(outDir, sub))) if (f.endsWith('.mjs')&&!excluded.some(prefix=>prefix.endsWith('/')?`${sub}/${f}`.startsWith(prefix):`${sub}/${f}`===prefix)) await add(`${sub}/${f}`);
   }
   Object.assign(out, graph);   // lib and worlds: the graph version (the same string their own imports carry), so the page and the workers load one instance
   if (await exists(path.join(outDir, 'worlds/index.json'))) await add('worlds/index.json');
@@ -189,9 +190,10 @@ const NOT_ASSETS = [/^index\.html$/, /^build-info\.json$/, /^sw\.js$/, /(^|\/)RE
  * for a module of lib/ and worlds/, the content hash of the module text for ui/ and app.mjs, otherwise the content hash of the file (10 hex digits).
  */
 export async function assetHashes(outDir, ver = {}) {
+  const composition=await readDemoComposition(),excluded=composition.excludeAssets??[];
   const out = {};
   for (const rel of await walk(outDir)) {
-    if (NOT_ASSETS.some((re) => re.test(rel))) continue;
+    if (NOT_ASSETS.some((re) => re.test(rel))||excluded.some(prefix=>prefix.endsWith('/')?rel.startsWith(prefix):rel===prefix)) continue;
     out[rel] = ver[rel] ?? sha(await readFile(path.join(outDir, rel))).slice(0, 10);
   }
   return out;
@@ -270,15 +272,16 @@ export const VENDOR_OF = { 'geo.map': ['map'], 'docs.editor': ['editor'], 'data.
  * `worlds/words/index.json`); the runtime uses the one `words.design` says. Built from the engine's own view of the worlds (src/worlds/word-index.mjs, scripts/lib/world-index-build.mjs).
  */
 async function writeWorldIndex({ root, outDir, loader, bundle, ids, log }) {
-  const [{ createEngine }, { buildWorldIndex, ALWAYS }] = await Promise.all([import('../src/dialog/index.mjs'), import('./lib/world-index-build.mjs')]);
+  const [{ createEngine }, { buildWorldIndex }] = await Promise.all([import('../src/dialog/index.mjs'), import('./lib/world-index-build.mjs')]);
   const engine = await createEngine({ loader });
+  const ALWAYS=loader.always??[];
   const ix = buildWorldIndex(engine.set, { mode: 'vocab' });
   const worlds = {};
   for (const id of ids) {
     const w = engine.set.get(id);
     const bytes = JSON.stringify(bundle.worlds[id]).length;
     const hash = sha(await readFile(path.join(outDir, 'worlds', id, 'bundle.json'))).slice(0, 10);   // the same string assetHashes gives the file: the worker fetches it as `bundle.json?v=<hash>`
-    worlds[id] = { bundle: `worlds/${id}/bundle.json`, hash, label: LABELS[id] ?? id.split('.').at(-1), bytes, imports: w?.imports ?? [], deps: engine.set.available(id), reads: w?.reads ?? [], compose: w?.compose ?? [], tab: w?.tab ? { id: w.tab.id, title: w.tab.title, aliases: w.tab.aliases } : null, title: w?.title ?? id, summary: w?.summaryPhrase ?? null, vendor: (VENDOR_OF[id] ?? []).map((d) => `vendor/${d}/`) };
+    worlds[id] = { ...loader.composition?.profiles?.[id], bundle: `worlds/${id}/bundle.json`, hash, label: LABELS[id] ?? id.split('.').at(-1), bytes, imports: w?.imports ?? [], deps: engine.set.available(id), reads: w?.reads ?? [], compose: w?.compose ?? [], tab: w?.tab ? { id: w.tab.id, title: w.tab.title, aliases: w.tab.aliases } : null, title: w?.title ?? id, summary: w?.summaryPhrase ?? null, vendor: (VENDOR_OF[id] ?? []).map((d) => `vendor/${d}/`) };
   }
   // the actions of the worlds that are not always loaded -> their world: a turn that asked for one nobody loaded (talk asks `draw.add`) loads the world and is read again
   const actions = {};
@@ -299,6 +302,7 @@ export async function buildWebchat({ root = REPO, outDir = path.join(root, 'docs
   const loader = await createDemoLoader({ root: worldsRoot });
   const selected = new Set(await loader.listWorlds());
   await mkdir(outDir, { recursive: true });
+  for(const relative of loader.composition.excludeAssets??[])await rm(path.join(outDir,relative),{recursive:true,force:true});
   for (const p of ['lib', 'worlds', 'build-info.json']) await rm(path.join(outDir, p), { recursive: true, force: true });
 
   // 1. library
@@ -310,50 +314,37 @@ export async function buildWebchat({ root = REPO, outDir = path.join(root, 'docs
     await cp(path.join(src, f), path.join(outDir, 'lib', f));
   }
 
-  // 2. worlds
-  const bundle = { worlds: {} };
-  const ids = [];
-  for (const e of (await readdir(worldsRoot, { withFileTypes: true })).sort((a, b) => a.name.localeCompare(b.name))) {
-    if (e.isFile() && e.name.endsWith('.mjs')) {
-      // Shared native host modules live beside the world directories.
-      await mkdir(path.join(outDir, 'worlds'), { recursive: true });
-      const text = (await readFile(path.join(worldsRoot, e.name), 'utf8')).replace(/((?:\.\.\/)+)src\//g, '$1lib/');
-      await writeFile(path.join(outDir, 'worlds', e.name), text);
-      continue;
+  // 2. The native application composition owns its SOP contracts. Historical
+  // grammar fixtures remain in source, never in this application's world loader.
+  const bundle={worlds:{}},ids=[...selected];
+  for(const id of ids){
+    const profile=loader.composition.profiles[id],entry={files:{}};
+    for(const file of loader.filesFor(id)){const text=await loader.readFile(id,file);if(text!==null)entry.files[file]=text;}
+    if(profile.nativeInitializer){
+      const descriptor=profile.nativeInitializer,relative=path.posix.relative('worlds/'+id,descriptor.module);
+      const text=descriptor.module.startsWith('worlds/')?'// Native initial state only; no legacy grammar executor.\nexport{'+descriptor.export+' as initialState}from'+JSON.stringify(relative.startsWith('.')?relative:'./'+relative)+';\n':await readFile(path.join(root,descriptor.module),'utf8');
+      await mkdir(path.join(outDir,'worlds',id),{recursive:true});await writeFile(path.join(outDir,'worlds',id,'ops.mjs'),text);entry.opsUrl='worlds/'+id+'/ops.mjs';
     }
-    if (!e.isDirectory() || !selected.has(e.name)) continue;
-    const id = e.name;
-    const dir = path.join(worldsRoot, id);
-    const entry = { files: {} };
-    for (const f of await walk(dir)) {
-      if (f === 'coverage.md') {   // not in index.json; the debug view (developer mode) fetches it on demand
-        await mkdir(path.join(outDir, 'worlds', id), { recursive: true });
-        await cp(path.join(dir, f), path.join(outDir, 'worlds', id, f));
-        continue;
-      }
-      if (f === 'describe.sop') {   // only the `slot=` declarations (spec 16 section 8) go to the browser, not the wording
-        const decl = slotDeclarations(await readFile(path.join(dir, f), 'utf8'));
-        if (decl) entry.files[f] = decl;
-        continue;
-      }
-      if (BROWSER_SKIP.has(f)) continue;
-      if (WORLD_TEXT.test(f)) entry.files[f] = await loader.readFile(id, f);
-      else if (f.endsWith('.mjs')) {
-        await mkdir(path.dirname(path.join(outDir, 'worlds', id, f)), { recursive: true });
-        // a world module reaches the knowledge tier with `../../src/knowledge/x.mjs`; in the built tree the same modules are in `lib/` (same layout, one level up from `worlds/`)
-        const text = (await readFile(path.join(dir, f), 'utf8')).replace(/((?:\.\.\/)+)src\//g, '$1lib/');
-        await writeFile(path.join(outDir, 'worlds', id, f), text);
-      }
-    }
-    if (await exists(path.join(dir, 'ops.mjs'))) entry.opsUrl = `worlds/${id}/ops.mjs`;
-    if (await exists(path.join(dir, 'fns.mjs'))) entry.fnsUrl = `worlds/${id}/fns.mjs`;   // the actions and reply words of a matrix world (spec 15), loaded only with the matrix reasoner
-    bundle.worlds[id] = entry;
-    ids.push(id);
-    await mkdir(path.join(outDir, 'worlds', id), { recursive: true });
-    await writeFile(path.join(outDir, 'worlds', id, 'bundle.json'), JSON.stringify(entry) + '\n');   // the world's files, loaded when the world is needed (LAZY LOADING)
+    bundle.worlds[id]=entry;await mkdir(path.join(outDir,'worlds',id),{recursive:true});await writeFile(path.join(outDir,'worlds',id,'bundle.json'),JSON.stringify(entry)+'\n');
   }
-  await mkdir(path.join(outDir, 'worlds'), { recursive: true });
-  await writeWorldIndex({ root, outDir, loader, bundle, ids, log });
+  // Mechanical module reachability retains shared native primitives (including
+  // Charts inside Diagram), without registering their historical fixture worlds.
+  const moduleRoots=[];
+  for(const dir of LIB_DIRS)if(await exists(path.join(src,dir)))for(const file of await walk(path.join(src,dir)))if(file.endsWith('.mjs'))moduleRoots.push('src/'+dir+'/'+file);
+  for(const profile of Object.values(loader.composition.profiles)){if(profile.nativeInitializer)moduleRoots.push(profile.nativeInitializer.module);if(profile.nativeHost)moduleRoots.push(profile.nativeHost.module);moduleRoots.push(...(profile.runtimeModules??[]));}
+  const tabsDirectory=path.join(root,'docs/webchat/ui/tabs');
+  for(const file of await walk(tabsDirectory))if(file.endsWith('.mjs')&&!(loader.composition.excludeAssets??[]).some(prefix=>('ui/tabs/'+file).startsWith(prefix)))moduleRoots.push('docs/webchat/ui/tabs/'+file);
+  const visited=new Set(),pending=[...moduleRoots];
+  while(pending.length){
+    const relative=pending.pop();if(visited.has(relative))continue;visited.add(relative);const file=path.join(root,relative);if(!await exists(file))throw Error('Missing native module dependency '+relative);
+    const text=await readFile(file,'utf8');for(const dependency of relative.startsWith('src/vendor/')?[]:specifiersOf(text))pending.push(path.posix.normalize(path.posix.join(path.posix.dirname(relative),dependency)));
+    if(relative.startsWith('worlds/')){
+      // ops.mjs at an active world's root is the explicit native initializer.
+      if(ids.some(id=>relative==='worlds/'+id+'/ops.mjs'))continue;
+      const target=path.join(outDir,relative);await mkdir(path.dirname(target),{recursive:true});await writeFile(target,text.replace(/((?:\.\.\/)+)src\//g,'$1lib/'));
+    }
+  }
+  await writeWorldIndex({root,outDir,loader,bundle,ids,log});
 
   // 3. tab plugins: docs/webchat/ui/tabs/*.mjs -> ui/tabs/index.json (loaded by app.mjs, spec 07 §6)
   const tabsSrc = path.join(root, 'docs/webchat/ui/tabs');

@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine, runWorldTests } from '../src/dialog/index.mjs';
 import { haversine, fitZoom } from '../worlds/geo.map/map.mjs';
-import { topoFeatures, greatCircle, fmtKm } from '../docs/webchat/ui/tabs/map/geo.mjs';
+import { topoFeatures, greatCircle, fmtKm } from '../legacy/webchat/ui/tabs/map/geo.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 import { createFacts } from '../src/knowledge/facts.mjs';
@@ -53,7 +53,7 @@ test('fitZoom: larger boxes give smaller zoom', () => {
 });
 
 test('map tab helpers: topoFeatures decodes the vendored atlas, greatCircle ends at its ends', () => {
-  const topo = JSON.parse(fs.readFileSync(path.join(root, 'docs/webchat/vendor/map/countries-50m.json'), 'utf8'));
+  const topo = JSON.parse(fs.readFileSync(path.join(root, 'legacy/webchat/vendor/map/countries-50m.json'), 'utf8'));
   const feats = topoFeatures(topo, 'countries');
   assert.ok(feats.length > 200);
   const pts = greatCircle({ lat: 10, lon: 20 }, { lat: 50, lon: 60 });
@@ -64,10 +64,10 @@ test('map tab helpers: topoFeatures decodes the vendored atlas, greatCircle ends
 
 test('retired map fixture: not registered in demo; vendored files keep headers and licences', () => {
   assert.equal(JSON.parse(fs.readFileSync(path.join(root, 'docs/webchat/ui/tabs/index.json'), 'utf8')).includes('map.mjs'), false);
-  const lf = fs.readFileSync(path.join(root, 'docs/webchat/vendor/map/leaflet.mjs'), 'utf8');
+  const lf = fs.readFileSync(path.join(root, 'legacy/webchat/vendor/map/leaflet.mjs'), 'utf8');
   assert.match(lf.slice(0, 600), /Leaflet/);
   assert.match(lf.slice(0, 600), /BSD/);
-  assert.ok(fs.existsSync(path.join(root, 'docs/webchat/vendor/map/LICENSES.md')));
+  assert.ok(fs.existsSync(path.join(root, 'legacy/webchat/vendor/map/LICENSES.md')));
 });
 
 test('geo.map: a locate observation fills the state with a marker', async () => {

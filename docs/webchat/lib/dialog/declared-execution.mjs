@@ -1,15 +1,18 @@
-import{instanceIdFor}from'./instance-identity.mjs';
+import{inspectCachedExecutionSource}from'./execution-world-inspection.mjs?v=dacb925ff3';
+import{instanceIdFor}from'./instance-identity.mjs?v=37c0536b83';
 import {nativeKindCandidates} from './native-binding-candidates.mjs?v=965157001c';
 // Application composition of declared semantic identities and native capabilities; no text parsing.
-import {World,str} from '../vendor/sopworld/sopworld.mjs?v=5c806a534f';
+import {World,str} from '../vendor/sopworld/sopworld.mjs?v=20fdd56a67';
 import SOURCE from './new-engine-source.mjs?v=e31b4adb7f';
-import {flatRequestProjection} from './request-projection.mjs?v=1ff8cffb73';
-import {NATIVE_AREAS,createAreaHost} from './app-reader-context.mjs?v=9c205a1358';
-import {observedReaderContext} from './native-reader-context.mjs?v=4fa819674d';
+import {flatRequestProjection} from './request-projection.mjs?v=f03efb554d';
+import {NATIVE_AREAS,createAreaHost} from './app-reader-context.mjs?v=b8fb242112';
+import {observedReaderContext} from './native-reader-context.mjs?v=386b8a518b';
 import {validateNativeArguments} from '../../worlds/native-tool-host.mjs?v=463e762442';
-import {resolvePropertyValue} from './property-selection.mjs?v=98dd5767d1';
+import {resolvePropertyValue} from './property-selection.mjs?v=6edcdae5e2';
 import {DRAWING_PROPERTY_BINDINGS} from '../../worlds/art.draw/property-host.mjs?v=ad4de9eb20';
 let knowledge;
+/** Read-only cache inspection; does not create the lazy knowledge World. */
+export const inspectDeclaredExecutionSourceWorld=options=>inspectCachedExecutionSource(knowledge,options);
 const source=()=>knowledge??=World.fromJSON(SOURCE.snapshot);
 // Explicit application value and creation defaults. These are assumptions, not knowledge facts.
 const valueSources={colour:{valueType:'k.colours.colour',nameKey:'name',valueKey:'rgb'}};

@@ -1,3 +1,4 @@
+import{inspectCachedExecutionSource}from'./execution-world-inspection.mjs';
 import{instanceIdFor}from'./instance-identity.mjs';
 import {nativeKindCandidates} from './native-binding-candidates.mjs';
 // Application composition of declared semantic identities and native capabilities; no text parsing.
@@ -10,6 +11,8 @@ import {validateNativeArguments} from '../../worlds/native-tool-host.mjs';
 import {resolvePropertyValue} from './property-selection.mjs';
 import {DRAWING_PROPERTY_BINDINGS} from '../../worlds/art.draw/property-host.mjs';
 let knowledge;
+/** Read-only cache inspection; does not create the lazy knowledge World. */
+export const inspectDeclaredExecutionSourceWorld=options=>inspectCachedExecutionSource(knowledge,options);
 const source=()=>knowledge??=World.fromJSON(SOURCE.snapshot);
 // Explicit application value and creation defaults. These are assumptions, not knowledge facts.
 const valueSources={colour:{valueType:'k.colours.colour',nameKey:'name',valueKey:'rgb'}};

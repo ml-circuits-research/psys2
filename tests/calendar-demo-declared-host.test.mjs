@@ -1,3 +1,4 @@
+import {toNativeCalendarState} from '../worlds/time.calendar/canonical-state.mjs';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
@@ -16,15 +17,15 @@ test('personal calendars and room bookings persist as visible declared objects w
  assert.equal(invoke(host,'calendar.room.add',{id:'oak',label:'Oak room',capacity:8,location:'Floor 2'}).status,'changed');
  assert.equal(invoke(host,'calendar.meeting.add',event('focus',{calendar:'work',notes:'Read the draft'})).status,'changed');
  assert.equal(invoke(host,'calendar.meeting.add',event('hold',{room:'oak'})).status,'changed');
- assert.equal(state.people.length,0);
+ assert.equal(toNativeCalendarState(state).people.length,0);
  const restored=createCalendarHost({state:structuredClone(state),instanceId:'restored',policySource});
  const work=restored.observe().objects.find(o=>o.id==='work');
  assert.equal(work.sourceType,'time.calendar.calendar');
  assert.deepEqual(work.inputs.find(i=>i.key==='colour').values,['"#2376bc"']);
  const hold=restored.observe().objects.find(o=>o.id==='hold');
  assert.deepEqual(hold.inputs.find(i=>i.key==='participants').values,[]);
- assert.equal(state.meetings.find(m=>m.id==='focus').calendar,'work');
- assert.equal(calendarObservationIssue(createCalendar({instanceId:'native',...state}).observe()),null);
+ assert.equal(toNativeCalendarState(state).meetings.find(m=>m.id==='focus').calendar,'work');
+ assert.equal(calendarObservationIssue(createCalendar({instanceId:'native',...toNativeCalendarState(state)}).observe()),null);
 });
 
 test('SOP policy denies room and personal-calendar overlaps but permits adjacency and separate resources',()=>{
@@ -42,7 +43,7 @@ test('SOP policy denies room and personal-calendar overlaps but permits adjacenc
   assert.equal(invoke(host,'calendar.meeting.add',event('separate',{[resource]:'b',start:1000})).status,'changed');
   const move=invoke(host,'calendar.meeting.move',{id:'adjacent',start:1099});
   assert.equal(move.reason,'calendar-policy-denied');
-  assert.equal(state.meetings.find(m=>m.id==='adjacent').start,1100);
+  assert.equal(toNativeCalendarState(state).meetings.find(m=>m.id==='adjacent').start,1100);
  }
 });
 
@@ -52,7 +53,7 @@ test('resource deletion refuses while referenced, and metadata edits remain obse
  invoke(host,'calendar.room.add',{id:'room',label:'Room',capacity:4});
  invoke(host,'calendar.meeting.add',event('meeting',{calendar:'personal',room:'room'}));
  for(const kind of ['calendar','room'])assert.equal(invoke(host,`calendar.${kind}.remove`,{id:kind==='room'?'room':'personal'}).reason,'missing_resource');
- const native=createCalendar({instanceId:'native',...state}),before=native.observe();
+ const native=createCalendar({instanceId:'native',...toNativeCalendarState(state)}),before=native.observe();
  const changed=native.call({operationId:'recolour',expectedVersion:0,operation:'calendar.change',args:{id:'personal',colour:'#445566'}});
  assert.equal(changed.ok,true);
  assert.deepEqual(compareCalendarObservations(before,native.observe()).changes.map(c=>[c.id,c.fields]),[['personal',['colour']]]);
@@ -92,10 +93,10 @@ test('room editing clears optional metadata explicitly while omitted fields rema
  const state=initialCalendarState(),host=createCalendarHost({state,instanceId:'demo',policySource});
  invoke(host,'calendar.room.add',{id:'room',label:'Room',capacity:6,location:'Floor 3'});
  assert.equal(invoke(host,'calendar.room.change',{id:'room',label:'Updated room'}).status,'changed');
- assert.equal(state.rooms[0].capacity,6);
- assert.equal(state.rooms[0].location,'Floor 3');
+ assert.equal(toNativeCalendarState(state).rooms[0].capacity,6);
+ assert.equal(toNativeCalendarState(state).rooms[0].location,'Floor 3');
  assert.equal(invoke(host,'calendar.room.change',{id:'room',capacity:null,location:null}).status,'changed');
- assert.deepEqual(state.rooms[0],{id:'room',label:'Updated room'});
+ assert.deepEqual(toNativeCalendarState(state).rooms[0],{id:'room',label:'Updated room'});
  assert.equal(host.observe().objects[0].inputs.some(i=>i.key==='capacity'||i.key==='location'),false);
  assert.equal(invoke(host,'calendar.room.add',{id:'bad',label:'Bad',capacity:null}).status,'refused');
 });

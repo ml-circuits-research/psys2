@@ -17,11 +17,15 @@ test('webchat build produces a bundle the browser loader can run', async () => {
     assert.ok(!info.tabs.includes('map.mjs') && !info.tabs.includes('music.mjs'));
     await assert.rejects(stat(path.join(out, 'worlds/geo.map/bundle.json')), { code: 'ENOENT' });
     await assert.rejects(stat(path.join(out, 'worlds/media.music/ops.mjs')), { code: 'ENOENT' });
-    assert.ok(info.worlds.includes('core') && info.worlds.includes('kids.common'));
+    assert.deepEqual([...info.worlds].sort(),['art.draw','core','diagram.sketch','docs.editor','time.calendar','ui.avatar','ui.shell']);
     assert.ok(info.files['lib/dialog/index.mjs'] && info.files['lib/loaders/bundle-loader.mjs']);
     const again = await buildWebchat({ outDir: out });
     assert.deepEqual(again.files, info.files, 'idempotent');
-    assert.ok(await stat(path.join(out, 'worlds/kids.common/ops.mjs')));
+    await assert.rejects(stat(path.join(out,'worlds/kids.common/ops.mjs')),{code:'ENOENT'});
+    assert.ok(await stat(path.join(out,'worlds/art.draw/ops.mjs')));
+    for(const file of ['facedraw.mjs','facelogic.mjs','motion.mjs','default-motion.mjs'])assert.ok(await stat(path.join(out,'worlds/ui.avatar',file)),'Avatar visual resource '+file);
+    for(const file of ['ui/tabs/map.mjs','ui/tabs/music.mjs','vendor/map','vendor/music'])await assert.rejects(stat(path.join(out,file)),{code:'ENOENT'});
+    for(const file of Object.keys(info.assets))assert.doesNotMatch(file,/^worlds\/(?:kids\.|calc\.|geo\.|media\.|games\.|talk\/|plan\.)/);
 
     // load the COPIED library, as the browser does
     const url = (p) => pathToFileURL(path.join(out, p)).href;
@@ -53,7 +57,8 @@ test('webchat build produces a bundle the browser loader can run', async () => {
       if (w.opsUrl) w.opsUrl = url(path.posix.join('worlds', w.opsUrl.split('/')[1], 'ops.mjs'));
       if (w.fnsUrl) w.fnsUrl = url(path.posix.join('worlds', w.fnsUrl.split('/')[1], 'fns.mjs'));   // matrix is the default reasoner: the functions of the matrix worlds load
     }
-    for (const id of ['ui.shell', 'ui.help', 'meta.worlds']) assert.doesNotMatch(bundle.worlds[id].files['kb.sop'], /\b(?:geo\.map|media\.music)\b/);
+    assert.deepEqual(new Set(index.always),new Set(Object.keys(index.worlds)),'all seven tiny contracts initialize before the architecture is inspected');
+    for(const [id,world]of Object.entries(bundle.worlds)){assert.ok(!world.files['patterns.sop']);assert.ok(!world.files['lexicon.sop']);assert.ok(!world.files['kb.sop']);assert.doesNotMatch(world.files['world.sop'],/imports=world\.kids\./);}
     assert.equal(Object.values(index.actions).some((id) => ['geo.map', 'media.music'].includes(id)), false);
     assert.equal(index.words.ids.some((id) => ['geo.map', 'media.music'].includes(id)), false);
     const engine = await createEngine({ loader: createBundleLoader(bundle), options: { applicationAreas: index.retiredAreas } });

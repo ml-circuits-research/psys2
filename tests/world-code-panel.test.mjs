@@ -46,7 +46,7 @@ async function run(){
  assert(object.element.querySelector('dl').textContent.includes('live-instance')&&object.element.querySelector('dl').textContent.includes('Revision8'),'object inspector shows actual world revision');
  assert(article.querySelector('pre').textContent===snapshot('8').objects[0].wires,'object SOP and relation wires remain exact');
  assert(article.querySelector('details').open,'actual object wires are initially visible');
- assert(article.querySelectorAll('details').length===4,'attributes, relations and metadata remain expandable');
+ assert(article.querySelectorAll('details').length===1,'object facts are shown once as exact SOP, without derived JSON dumps');assert(article.querySelector('summary').textContent.includes('related SOP references'),'domain fact and reference scope is explicit');
  article.querySelector('button').click();await tick();assert(objectCopies[0]===snapshot('8').objects[0].wires,'object copy receives only exact related wires');
  const absent=object.refresh(['not-there']);objectLoads[2].resolve(snapshot('9'));await absent;assert(object.element.textContent.includes('absent from this instance snapshot'),'missing selection stays missing');assert(!object.element.querySelector('article pre'),'missing id never borrows another object');
  const pending=object.refresh(['o2']);await object.refresh([]);objectLoads[3].resolve(snapshot('10'));await pending;

@@ -4,6 +4,7 @@ import { readdirSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 const fixed = [
   'diagram-editors-native.test.mjs',
+  'demo-composition.test.mjs',
   'avatar-resize-browser.test.mjs',
   'world-code-panel.test.mjs',
   'worlds-explorer.test.mjs',

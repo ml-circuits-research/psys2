@@ -1,0 +1,18 @@
+@native.instance.module core.use world=std.instance
+@native.interface core.module name=app.native.interface version=1.0.0
+@native.kind core.type of=app.native.kind closed=true
+@native.kind.name core.slot of=app.native.kind key=name kind=string present=true
+@native.operation core.type of=app.native.operation closed=true
+@native.operation.id core.slot of=app.native.operation key=id kind=string present=true
+@native.operation.act core.slot of=app.native.operation key=act kind=string
+@native.operation.on core.slot of=app.native.operation key=on kind=string
+@native.operation.definition core.slot of=app.native.operation key=definition type=std.instance.record present=true
+@native.parameter core.type of=app.native.parameter closed=true
+@native.parameter.op core.slot of=app.native.parameter key=operation type=app.native.operation present=true
+@native.parameter.name core.slot of=app.native.parameter key=name kind=string present=true
+@native.parameter.type core.slot of=app.native.parameter key=type kind=string present=true
+@native.parameter.required core.slot of=app.native.parameter key=required kind=boolean
+@native.parameter.nullable core.slot of=app.native.parameter key=nullable kind=boolean
+@native.parameter.min core.slot of=app.native.parameter key=min kind=number
+@native.parameter.max core.slot of=app.native.parameter key=max kind=number
+@native.parameter.definition core.slot of=app.native.parameter key=definition type=std.instance.record present=true

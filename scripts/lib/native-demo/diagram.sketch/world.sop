@@ -1,0 +1,14 @@
+@world.diagram.sketch core.world
+    namespace=diagram.sketch
+    version=1.0.0
+    legend=$legend.diagram.sketch
+    imports=world.core
+    language=en
+    status=fixture
+    title="Diagram"
+    summary="edit diagram"
+    tab=diagram
+    tabTitle="Diagram"
+    tabOrder=20
+    tabKind=tool
+    doc="Native editor application contract. Tools are declared by the actual native host; native-interface.sop describes that interface. It does not claim a complete semantic state schema."

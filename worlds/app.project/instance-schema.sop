@@ -1,0 +1,13 @@
+@project.module core.module name=app.project version=1 exports=app.project exports=app.project.domain exports=app.project.instance
+@project.type core.type of=app.project closed=true
+@project.domain core.slot of=app.project key=domain kind=ref to=app.project.domain many=true
+@domain.type core.type of=app.project.domain closed=true
+@domain.world core.slot of=app.project.domain key=world kind=string present=true
+@domain.tab core.slot of=app.project.domain key=tab kind=string present=true
+@domain.label core.slot of=app.project.domain key=label kind=string present=true
+@domain.schema core.slot of=app.project.domain key=schema kind=string
+@domain.instance core.slot of=app.project.domain key=instance kind=ref to=app.project.instance
+@instance.type core.type of=app.project.instance closed=true
+@instance.id core.slot of=app.project.instance key=id kind=string present=true
+@instance.world core.slot of=app.project.instance key=world kind=string present=true
+@instance.revision core.slot of=app.project.instance key=revision kind=integer min=0

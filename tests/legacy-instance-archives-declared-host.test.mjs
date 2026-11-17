@@ -5,10 +5,15 @@ import {readFile} from 'node:fs/promises';
 import {isDeepStrictEqual} from 'node:util';
 import {restoreNativeInstances,snapshotNativeInstances} from '../src/dialog/instance-persistence.mjs';
 import {readInstanceState} from '../src/vendor/sopworld/sopworld.mjs';
+import {toNativeCalendarState,createCalendarHost} from '../worlds/time.calendar/declared-host.mjs';
+import {nativeObservationObjects} from '../src/dialog/instance-facts.mjs';
 
 const fixture=JSON.parse(await readFile(new URL('./fixtures/instance-3ce-saved-worlds.json',import.meta.url),'utf8'));
 const records=await Promise.all(fixture.records.map(async({world,instanceId,revision,wires,wiresFile})=>({world,instanceId,revision,wires:wires??await readFile(new URL('./fixtures/'+wiresFile,import.meta.url),'utf8')})));
 const archives=new Map(records.map(record=>[record.world,readInstanceState(record.wires)]));
+const semantic=objects=>objects.map(object=>{const copy=structuredClone(object);if(copy.metadata){delete copy.metadata.inputs;if(!Object.keys(copy.metadata).length)delete copy.metadata;}return copy;});
+const projection=(world,state)=>world==='time.calendar'?toNativeCalendarState(state):state;
+const exported=(record)=>record.world==='time.calendar'?{projection:toNativeCalendarState({sop:record.wires}),objects:nativeObservationObjects(createCalendarHost({state:{sop:record.wires},instanceId:record.instanceId}).observe())}:readInstanceState(record.wires);
 const session=()=>({isession:{state:{}},engine:{loader:{readFile:(world,file)=>readFile(new URL(`../worlds/${world}/${file}`,import.meta.url),'utf8')}}});
 function difference(actual,expected,at='$'){
  if(isDeepStrictEqual(actual,expected))return null;
@@ -38,20 +43,20 @@ test('the historical fixture contains populated, unmodified published instances 
 for(const record of records)test(`published ${record.world} SOP archive restores every fact, full projection and stable IDs`,async()=>{
  const target=session(),archive=archives.get(record.world),original=JSON.stringify(record);
  await restoreNativeInstances(target,[record]);
- exact(target.isession.state[record.world],archive.projection,'every renderer field and native history remains exact');
+ exact(projection(record.world,target.isession.state[record.world]),archive.projection,'every renderer field and native history remains exact');if(record.world==='time.calendar')assert.deepEqual(Object.keys(target.isession.state[record.world]),['sop']);
  assert.equal(target.nativeInstanceIds[record.world],record.instanceId);
  assert.equal(target.nativeInstanceRevisions[record.world],record.revision);
- const [roundtrip]=await snapshotNativeInstances(target,{worlds:[record.world]}),next=readInstanceState(roundtrip.wires);
- exact(next.projection,archive.projection,'projection after re-export');exact(next.objects,archive.objects,'all semantic facts, values, relations and bindings after re-export');
- assert.equal(roundtrip.instanceId,record.instanceId);assert.equal(roundtrip.revision,record.revision);assert.equal(next.schemaVersion,archive.schemaVersion);
+ const [roundtrip]=await snapshotNativeInstances(target,{worlds:[record.world]}),next=exported(roundtrip);
+ exact(next.projection,archive.projection,'projection after re-export');exact(next.objects,semantic(archive.objects),'all semantic facts, values and relations after re-export; binding declarations are no longer copied');
+ assert.equal(roundtrip.instanceId,record.instanceId);assert.equal(roundtrip.revision,record.revision);if(record.world!=='time.calendar')assert.equal(next.schemaVersion,archive.schemaVersion);else assert.doesNotMatch(roundtrip.wires,/std\.instance\./);
  assert.equal(JSON.stringify(record),original,'the original archive is never rewritten or stripped');
 });
 
-test('all five published archives restore together without projection migration or partial adoption',async()=>{
+test('all five published archives restore together without losing native data or partially adopting state',async()=>{
  const target=session(),result=await restoreNativeInstances(target,records);
  assert.deepEqual(result.worlds,records.map(record=>record.world));
- for(const record of records)exact(target.isession.state[record.world],archives.get(record.world).projection,record.world+' full projection');
+ for(const record of records)exact(projection(record.world,target.isession.state[record.world]),archives.get(record.world).projection,record.world+' full projection');
  for(const record of await snapshotNativeInstances(target,{worlds:records.map(record=>record.world)})){
-  const next=readInstanceState(record.wires),original=archives.get(record.world);exact(next.objects,original.objects,record.world+' all object facts');exact(next.projection,original.projection,record.world+' complete projection');assert.equal(record.instanceId,original.instanceId);assert.equal(record.revision,original.revision);
+  const next=exported(record),original=archives.get(record.world);exact(next.objects,semantic(original.objects),record.world+' all object facts');exact(next.projection,original.projection,record.world+' complete projection');assert.equal(record.instanceId,original.instanceId);assert.equal(record.revision,original.revision);
  }
 });

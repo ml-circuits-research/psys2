@@ -22,7 +22,7 @@ export function createEngineClient({ base, versions = {}, getSettings, getLangua
   const cache = { state: {}, meta: null };
   let lastBefore = null, lastEnd = null;   // see session.loadedBefore / session.turnWorlds
   let worker = null, gen = 0, seq = 0, undoSeq = 0, stage = null, bootFailures = 0, down = null;
-  let readyP = null, bootInfo = null, booting = false, lastBoot = null;
+  let readyP = null, bootInfo = null, booting = false, lastBoot = null, latestReaderStatus = null;
   const pending = new Map();        // id -> { resolve, reject, op, text, key, kind }
   const ortWorkers = new Set();
   let lastUsage = { usage: [], detection: [] };
@@ -71,6 +71,7 @@ export function createEngineClient({ base, versions = {}, getSettings, getLangua
       if (m.ok) p.resolve(m.value); else p.reject(Object.assign(new Error(m.error?.message ?? 'engine error'), m.error ?? {}));
     } else if (m.type === 'evt') {
       if (m.name === 'stage') { stage = m.data; return; }
+      if (m.name === 'sop-reader-status') { latestReaderStatus=m.data;if(bootInfo)bootInfo.reader=m.data; }
       try { onEvent(m.name, m.data); } catch (e) { log('event-handler', String(e?.message ?? e)); }
     } else if (m.type === 'spawn-ort') bridgeOrt(m);
     else if (m.type === 'bt') {   // the worker asks for the page's on-device translator / language detector (windows only); it waits at most its own deadline for the answer
@@ -89,7 +90,7 @@ export function createEngineClient({ base, versions = {}, getSettings, getLangua
   /** Starts a worker (the first one, or the replacement of a killed one) and resolves when it has loaded the worlds. */
   function start(restore = null) {
     if (down) return Promise.reject(down);
-    booting = true; stage = null;
+    booting = true; stage = null; latestReaderStatus = null;
     const g = gen;
     const w = spawn ? spawn() : new Worker(workerUrl(), { type: 'module' });
     worker = w; stats.starts++;
@@ -111,7 +112,7 @@ export function createEngineClient({ base, versions = {}, getSettings, getLangua
       try { onEvent('engine-down', { reason: 'start-timeout', message: down.message, startMs }); } catch { /* ignore */ }
       killWorker('start-timeout');   // rejects the init request: booting is cleared below
     }, startMs);
-    return promise.then((info) => { clearTimeout(startTimer); booting = false; bootFailures = 0; bootInfo = info; cache.state = info.state ?? cache.state; return info; },
+    return promise.then((info) => { clearTimeout(startTimer); booting = false; bootFailures = 0; bootInfo = info;if(latestReaderStatus)bootInfo.reader=latestReaderStatus; cache.state = info.state ?? cache.state; return info; },
       (e) => { clearTimeout(startTimer); booting = false; bootFailures++; if (!down && bootFailures >= MAX_BOOT_FAILURES) down = Object.assign(new Error(`the engine could not start (${e?.message ?? e})`), { name: 'EngineDown' }); throw down ?? e; });
   }
   /** The worker crashed or died by itself: whatever ran is remembered as bad; the next request finds a new worker. */

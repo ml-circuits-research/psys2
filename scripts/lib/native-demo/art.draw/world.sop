@@ -1,0 +1,14 @@
+@world.art.draw core.world
+    namespace=art.draw
+    version=1.0.0
+    legend=$legend.art.draw
+    imports=world.core
+    language=en
+    status=fixture
+    title="Drawing"
+    summary="edit drawing"
+    tab=draw
+    tabTitle="Drawing"
+    tabOrder=10
+    tabKind=tool
+    doc="Native editor application contract. Tools are declared by the actual native host; native-interface.sop describes that interface. It does not claim a complete semantic state schema."

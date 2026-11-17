@@ -1,3 +1,4 @@
+import {toNativeCalendarState} from '../worlds/time.calendar/canonical-state.mjs';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {createCalendarHost} from '../worlds/time.calendar/declared-host.mjs';
@@ -40,7 +41,7 @@ test('declared SOP overlap policy rejects shared people or room and admits adjac
  for(const [participants,room]of [[['p'],null],[['q'],'r']]){
   const state={people:[{id:'p',label:'P'},{id:'q',label:'Q'}],rooms:[{id:'r',label:'Room'}],meetings:[event('a',0,['p'],'r')]};
   const host=createCalendarHost({state,instanceId:'calendar',validate:policy.validate});
-  const denied=invoke(host,'calendar.meeting.add',event('b',50,participants,room));assert.equal(denied.reason,'calendar-policy-denied');assert.equal(state.meetings.length,1);
+  const denied=invoke(host,'calendar.meeting.add',event('b',50,participants,room));assert.equal(denied.reason,'calendar-policy-denied');assert.equal(toNativeCalendarState(state).meetings.length,1);
   assert.equal(invoke(host,'calendar.meeting.add',event('b',100,participants,room),'adjacent').status,'changed');
  }
  assert.equal(policy.validate({people:[{id:'p',label:'P'},{id:'q',label:'Q'}],rooms:[],meetings:[event('a',0),event('b',0,['q'])]}).ok,true);

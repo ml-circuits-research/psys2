@@ -1,9 +1,9 @@
-import{K}from'./core.mjs';
-import{CHART_LAYOUTS,GROUP_LAYOUTS,layoutNumericGroup}from'./chart-layout.mjs';
+import{K}from'./core.mjs?v=10f28871b3';
+import{CHART_LAYOUTS,GROUP_LAYOUTS,layoutNumericGroup}from'./chart-layout.mjs?v=a2ed8b2db1';
 // Stable groups over actual diagram nodes; coordinates come from declared native layout tools.
-import{nativeToken}from'../native-tool-host.mjs';
-import{addShapes,arrangeShapes}from'./tool.mjs';
-import{chartNativeHandlers,CHART_TOOL_BINDINGS}from'../data.charts/declared-host.mjs';
+import{nativeToken}from'../native-tool-host.mjs?v=463e762442';
+import{addShapes,arrangeShapes}from'./tool.mjs?v=84c1f3a065';
+import{chartNativeHandlers,CHART_TOOL_BINDINGS}from'../data.charts/declared-host.mjs?v=c9a9fc2097';
 export const GROUP_CHART_PROJECTION=Object.freeze({id:'diagram.group.numeric-chart',source:'diagram.sketch.group',members:'members',label:'label',memberLabel:'label',memberValue:'value',missingSource:'detach-snapshot',directDataEdit:'detach-snapshot',preserve:['type','placement','options','dataset.color']});
 const id={type:'string',required:true},layouts=GROUP_LAYOUTS;
 export const GROUP_TOOL_BINDINGS=[

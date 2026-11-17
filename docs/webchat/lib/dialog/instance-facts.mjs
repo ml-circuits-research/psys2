@@ -21,16 +21,13 @@ export function nativeObservationObjects(observation){
  const ids=new Set();
  for(const row of o.objects){if(!text(row.id)||!text(row.sourceType)||!text(row.kind)||!text(row.source)||row.version!==o.version||!Array.isArray(row.inputs)||ids.has(row.id))fail('invalid-native-object');ids.add(row.id);}
  return o.objects.map(row=>{
-  const attributes={kind:[row.kind]},relations={},bindings={};
+  const attributes={kind:[row.kind]},relations={},inputKeys=new Set();
   for(const input of row.inputs){
    if(!record(input)||!text(input.key)||!text(input.binding)||!Array.isArray(input.values)||input.source!==row.source||input.sourceType!==row.sourceType||input.version!==o.version)fail('unsupported-native-input');
-   if(Object.hasOwn(bindings,input.key))fail('duplicate-native-input');
-   const meta={};for(const key of Object.keys(input).sort())if(!['key','values','source','sourceType','version'].includes(key))meta[key]=input[key];
-   bindings[input.key]=[meta];
+   if(inputKeys.has(input.key))fail('duplicate-native-input');inputKeys.add(input.key);
    const values=input.values.map(literal);
-   // The protocol kind is authoritative; a matching input still retains its binding.
-   if(input.key==='kind')bindings[input.key][0].values=values;
-   else attributes[input.key]=values;
+   // The protocol kind is authoritative. Binding declarations are not object state.
+   if(input.key!=='kind')attributes[input.key]=values;
   }
   for(const key of Object.keys(row).sort())if(!['id','sourceType','kind','inputs','source','version','relations','in','parent','members'].includes(key)){
    const values=[row[key]];
@@ -47,14 +44,14 @@ export function nativeObservationObjects(observation){
    if(!text(key)||!Array.isArray(refs[key])||refs[key].some(id=>!text(id)||!ids.has(id)))fail('dangling-native-relation');
    relations[key]=refs[key];delete attributes[key];
   }
-  return {id:row.id,type:row.sourceType,attributes:ordered(attributes),relations:ordered(relations),...(Object.keys(bindings).length?{metadata:{inputs:ordered(bindings)}}:{})};
+  return {id:row.id,type:row.sourceType,attributes:ordered(attributes),relations:ordered(relations)};
  }).sort((a,b)=>a.id<b.id?-1:a.id>b.id?1:0);
 }
 /** Recompute semantic facts, allowing only transient observation identities to vary. */
 export function compareInstanceObjects(expectedObjects,observation){
  try{
   if(!Array.isArray(expectedObjects))return {ok:false,reason:'invalid-expected-objects'};
-  const expected=copyHostData(expectedObjects).sort((a,b)=>String(a.id)<String(b.id)?-1:String(a.id)>String(b.id)?1:0);
+  const expected=copyHostData(expectedObjects).map(object=>{if(record(object.metadata)){delete object.metadata.inputs;if(Object.keys(object.metadata).length===0)delete object.metadata;}return object;}).sort((a,b)=>String(a.id)<String(b.id)?-1:String(a.id)>String(b.id)?1:0);
   return same(expected,nativeObservationObjects(observation))?{ok:true}:{ok:false,reason:'instance-facts-mismatch'};
  }catch(error){return {ok:false,reason:error.message};}
 }

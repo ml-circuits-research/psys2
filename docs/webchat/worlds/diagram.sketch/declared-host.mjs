@@ -1,9 +1,9 @@
-import{projectNumericGroups}from'./chart-layout.mjs';
+import{projectNumericGroups}from'./chart-layout.mjs?v=a2ed8b2db1';
 // SPDX-License-Identifier: AGPL-3.0-only
 import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs?v=463e762442';
 import {initialState,loadEngine,systemFor,writeBack,PREFIX,K} from './core.mjs?v=10f28871b3';
 import * as tool from './tool.mjs?v=84c1f3a065';
-import{GROUP_TOOL_BINDINGS,groupNativeObjects,groupNativeHandlers,projectGroupCharts}from'./group-tools.mjs';
+import{GROUP_TOOL_BINDINGS,groupNativeObjects,groupNativeHandlers,projectGroupCharts}from'./group-tools.mjs?v=7a033b2281';
 import {CHART_TOOL_BINDINGS,initialChartState,chartNativeObjects,chartNativeHandlers} from '../data.charts/declared-host.mjs?v=c9a9fc2097';
 export const DIAGRAM_COMPONENTS=[{world:'data.charts',stateKey:'chartTools',operations:CHART_TOOL_BINDINGS.filter(op=>!['chart.undo','chart.redo'].includes(op.id))}];
 const array={type:'array',required:true},id={type:'string',required:true};

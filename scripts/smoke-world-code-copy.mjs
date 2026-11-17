@@ -19,8 +19,10 @@ try{
   await b.evaluate(`window.psys2.showTab('worlds');true`);
   await wait(`document.querySelector('[data-world-node="instance:${world}"]')&&!document.querySelector('.p2-worlds-status[role="alert"]')`);
   await b.evaluate(`document.querySelector('[data-world-node="instance:${world}"]').dispatchEvent(new MouseEvent('click',{bubbles:true}));true`);
+  await b.evaluate(`document.querySelector('[data-detail-tab="sop"]').click();true`);
   const data=await b.evaluate(`(async()=>{const record=await window.psys2.engineClient.call('instanceInspection',{world:${JSON.stringify(world)}});return {actual:record.wires,shown:document.querySelector('.p2-worlds-wires').textContent,width:document.documentElement.scrollWidth,instance:record.instanceId,revision:record.revision};})()`);assert.equal(data.shown,data.actual);assert.ok(data.width<=1440);
-  await b.evaluate(`[...document.querySelectorAll('.p2-worlds-inspector button')].find(b=>b.textContent==='Copy SOP Lang').click();true`);await wait(`window.__copied===${JSON.stringify(data.actual)}`);
+  await b.evaluate(`[...document.querySelectorAll('.p2-worlds-dialog button')].find(b=>b.textContent==='Copy SOP Lang').click();true`);await wait(`window.__copied===${JSON.stringify(data.actual)}`);
+  await b.evaluate(`document.querySelector('[aria-label="Back to architecture map"]').click();true`);
   checks.push({area,archiveExact:true,copyExact:true,instance:data.instance,revision:data.revision});
  }
  assert.deepEqual(b.logs.console.filter(x=>x.type==='exception'),[]);console.log(JSON.stringify({complete:true,checks}));

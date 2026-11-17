@@ -1,12 +1,12 @@
 // Model-first proposal routing. Calibration authority belongs to host configuration,
 // never to a model output, evaluation annotation or grammar proposal.
-import {executeRequestCandidate} from './new-engine.mjs?v=0392b3fc24';
-import {invokeNativeControl} from './native-tool-controls.mjs?v=a3010a40d8';
-import {executeDeclaredRequest} from './declared-execution.mjs?v=e00e0428e5';
-import {projectContextAction} from './project-context-action.mjs?v=29310d61e2';
-import {projectCreateAction} from './project-create-action.mjs?v=d0b60745f2';
-import {parse,str} from '../vendor/sopworld/sopworld.mjs?v=5c806a534f';
-import {assessReaderProposal} from './reader-admission.mjs?v=9430f86cf3';
+import {executeRequestCandidate} from './new-engine.mjs?v=dacb925ff3';
+import {invokeNativeControl} from './native-tool-controls.mjs?v=e2fc730bd7';
+import {executeDeclaredRequest} from './declared-execution.mjs?v=dacb925ff3';
+import {projectContextAction} from './project-context-action.mjs?v=aff449db16';
+import {projectCreateAction} from './project-create-action.mjs?v=38fbf86096';
+import {parse,str} from '../vendor/sopworld/sopworld.mjs?v=20fdd56a67';
+import {assessReaderProposal} from './reader-admission.mjs?v=2ae4a44c2e';
 const unavailable=reason=>({candidates:[],coverage:{complete:false,executable:false,graphProposal:false},failures:[{reason}]});
 /** The model only sees utterance text. No expected annotations or grammar graphs. */
 export async function routeNewEngine(session,text,options={}){

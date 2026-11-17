@@ -1,23 +1,2 @@
-// GENERATED from schema.sop by scripts/build-schema-world.mjs (spec 21). Never edited by hand.
-import { createExecutor, deserializeSchema } from '../acts/acts.mjs?v=ec2ba6b44e';
-import { hooks } from './hooks.mjs?v=44f2616525';
-export * from './own.mjs?v=597eecdeb0';
-const SCHEMA = {"id":"dg","noun":"diagram","acts":["make","remove","change","place","connect","group","pick","ask","copy","undo","redo","own"],"limits":{"items":200,"history":30},"kinds":{"shape":{"name":"shape","plural":"shapes","numbered":false,"named":true,"max":null,"in":null,"capacity":null,"acts":[],"any":false,"words":["circle","circles","square","squares","rectangle","rectangles","triangle","triangles","diamond","diamonds","ellipse","ellipses","oval","hexagon","hexagons","star","stars","box","boxes","node","nodes","dot"]},"arrow":{"name":"arrow","plural":"arrows","numbered":false,"named":false,"max":null,"in":null,"capacity":null,"acts":[],"any":false,"words":["line","lines","connection","connections","link","links","edge"],"diceNot":["make"]},"text":{"name":"text","plural":"texts","numbered":false,"named":false,"max":null,"in":null,"capacity":null,"acts":[],"any":false,"words":["label","labels","caption","note"],"diceNot":["make"],"know":[{"list":"diagrams","verb":"*"}]}},"attrs":{"colour":{"name":"colour","of":["shape","arrow","text"],"type":"colour","values":[],"min":null,"max":null,"more":[],"less":[],"stepMore":[],"stepLess":[],"reset":[],"words":["color","fill"],"step":1},"size":{"name":"size","of":["shape"],"type":"enum","values":["tiny","small","medium","large","huge"],"min":null,"max":null,"def":"medium","more":["bigger","larger"],"less":["smaller","tinier"],"stepMore":[],"stepLess":[],"reset":[],"words":[],"step":1}},"doc":"The diagram editor as a schema (pilot P1 of spec 21): shapes, arrows and labels with colour, size and text. The engine of diagram-vss-demo (engine/, ops.mjs) stays as it is: it executes and lays out; the schema only says what is said.","tabOnly":false,"flags":{"dir":true,"bare":true,"layout":true,"rel":true,"thingask":true,"reader":true,"tabUndo":true,"claim":true,"signal":true},"reads":["link","ends"],"lexicons":["diagram.edge","diagram.edge.from","diagram.direction"],"boost":14,"sample":"circle","hooks":"hooks.mjs","own":["create:diagram.create","diagramUndo:diagram.undo","diagramRedo:diagram.redo"]};
-const X = createExecutor(deserializeSchema(SCHEMA), hooks);
-export const make = (ctx, args = {}) => X.operation(ctx, 'make', args);
-export const remove = (ctx, args = {}) => X.operation(ctx, 'remove', args);
-export const change = (ctx, args = {}) => X.operation(ctx, 'change', args);
-export const connect = (ctx, args = {}) => X.operation(ctx, 'connect', args);
-export const group = (ctx, args = {}) => X.operation(ctx, 'group', args);
-export const pick = (ctx, args = {}) => X.operation(ctx, 'pick', args);
-export const copy = (ctx, args = {}) => X.operation(ctx, 'copy', args);
-export const ask = (ctx, args = {}) => X.operation(ctx, 'ask', args);
-export const undo = (ctx, args = {}) => X.operation(ctx, 'undo', args);
-export const redo = (ctx, args = {}) => X.operation(ctx, 'redo', args);
-export const place = (ctx, args = {}) => X.operation(ctx, 'place', args);
-export const own = (ctx, args = {}) => X.operation(ctx, 'own', args);
-export const interceptInput = (ctx, text) => X.interceptInput(ctx, text);
-export const outOfScope = (ctx, a = {}) => X.outOfScope(ctx, a.text);
-export const accepts = (info) => X.accepts(info);
-export const referents = (ctx) => X.referents(ctx);
-export const executor = X;
+// Native initial state only; no legacy grammar executor.
+export{initialDiagramState as initialState}from"./declared-host.mjs?v=863247d13b";

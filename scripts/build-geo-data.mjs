@@ -10,14 +10,14 @@
 //   countries  world-countries 5.1.0 (mledoze/countries)   ODbL 1.0   names, capitals, region, borders, area, currencies, languages
 //   population country-json 2.3.0 (country-by-population)  MIT        about 2018 estimates, one number per country
 //   cities     all-the-cities 3.1.0 (GeoNames gazetteer)    CC BY 4.0  capitals, cities of 500,000+ people, Romanian/Moldovan 30,000+
-//   outlines   world-atlas 2.0.2 countries-50m (Natural Earth) public domain; written to docs/webchat/vendor/map/
+//   outlines   world-atlas 2.0.2 countries-50m (Natural Earth) public domain; written to legacy/webchat/vendor/map/
 //
 // Output (deterministic):
 //   worlds/geo.map/kb.sop         one wire per country, city and region (compact keys)
 //   worlds/geo.map/lexicon.sop    lex.geo.map.places (every name the language layer can recognise, lemma form) + lexicon.extra.sop verbatim
 //   worlds/geo.map/data/README.md data sources, licences, counts, how to rebuild
-//   docs/webchat/vendor/map/countries-50m.json   TopoJSON, each country carries `cc` (ISO alpha-2)
-//   docs/webchat/vendor/map/places.json          compact country and city lists for the offline base map (labels, dots)
+//   legacy/webchat/vendor/map/countries-50m.json   TopoJSON, each country carries `cc` (ISO alpha-2)
+//   legacy/webchat/vendor/map/places.json          compact country and city lists for the offline base map (labels, dots)
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
@@ -26,7 +26,7 @@ import { singularLemma } from '../src/formalizer/rules/lemma.mjs';
 
 const REPO = fileURLToPath(new URL('..', import.meta.url));
 const WORLD = path.join(REPO, 'worlds/geo.map');
-const VENDOR = path.join(REPO, 'docs/webchat/vendor/map');
+const VENDOR = path.join(REPO, 'legacy/webchat/vendor/map');
 
 export const SRC_COUNTRIES = 'world-countries 5.1.0 (ODbL 1.0, https://github.com/mledoze/countries)';
 export const SRC_POP = 'country-json 2.3.0 (MIT, about 2018 estimates)';
@@ -300,7 +300,7 @@ All files here and the knowledge base (\`kb.sop\`) and place lexicon (\`lexicon.
 | Countries: names, capitals, region, borders, area, currencies, languages, landlocked | world-countries ${versions['world-countries']} (mledoze/countries) | ODbL 1.0 (attribution and share-alike for the database) | \`geo.map.country\` wires |
 | Country population | country-json ${versions['country-json']} (country-by-population, about 2018 estimates) | MIT | \`pop\` of countries (Timor-Leste added by hand: World Bank 2018) |
 | Cities | all-the-cities ${versions['all-the-cities']} (GeoNames gazetteer, https://www.geonames.org) | CC BY 4.0 (attribution required) | \`geo.map.city\` wires: ${nCap} capitals, every city of 500,000+ people, Romanian and Moldovan cities of 30,000+ (${cityList.length} in all) |
-| Country outlines (offline base map) | world-atlas ${versions['world-atlas']} countries-50m (Natural Earth) | public domain | \`docs/webchat/vendor/map/countries-50m.json\`, bounding boxes of countries (\`bb\`) |
+| Country outlines (offline base map) | world-atlas ${versions['world-atlas']} countries-50m (Natural Earth) | public domain | \`legacy/webchat/vendor/map/countries-50m.json\`, bounding boxes of countries (\`bb\`) |
 | Groups (EU, NATO, Nordic ...) | hand-written, as of 2024 | none | \`geo.map.region\` wires of kind \`group\` |
 
 Every KB wire carries its source and licence in \`core.source\`. Population figures are rough and dated; city populations are GeoNames city-proper values (a few large cities are much smaller than their metro areas).

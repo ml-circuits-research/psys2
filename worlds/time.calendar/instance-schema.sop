@@ -1,0 +1,30 @@
+# Canonical calendar state. Containers are ordered references, not serialized native rows.
+@calendar.schema.state core.type of=time.calendar.state closed=true
+@calendar.schema.entry core.type of=time.calendar.entry closed=true
+@calendar.schema.calendar core.type of=time.calendar.calendar extends=time.calendar.entry closed=true
+@calendar.schema.person core.type of=time.calendar.person extends=time.calendar.entry closed=true
+@calendar.schema.room core.type of=time.calendar.room extends=time.calendar.entry closed=true
+@calendar.schema.meeting core.type of=time.calendar.meeting extends=time.calendar.entry closed=true
+@calendar.schema.id core.slot of=time.calendar.entry key=id kind=string present=true id=true
+@calendar.schema.calendars core.slot of=time.calendar.state key=calendars type=time.calendar.calendar many=true
+@calendar.schema.people core.slot of=time.calendar.state key=people type=time.calendar.person many=true
+@calendar.schema.rooms core.slot of=time.calendar.state key=rooms type=time.calendar.room many=true
+@calendar.schema.meetings core.slot of=time.calendar.state key=meetings type=time.calendar.meeting many=true
+@calendar.schema.has.calendars core.slot of=time.calendar.state key=has.calendars kind=boolean
+@calendar.schema.has.people core.slot of=time.calendar.state key=has.people kind=boolean
+@calendar.schema.has.rooms core.slot of=time.calendar.state key=has.rooms kind=boolean
+@calendar.schema.has.meetings core.slot of=time.calendar.state key=has.meetings kind=boolean
+@calendar.schema.selected core.slot of=time.calendar.state key=selectedEvent kind=atom type=time.calendar.meeting
+@calendar.schema.calendar.label core.slot of=time.calendar.calendar key=label kind=string present=true
+@calendar.schema.calendar.colour core.slot of=time.calendar.calendar key=colour kind=string
+@calendar.schema.person.label core.slot of=time.calendar.person key=label kind=string present=true
+@calendar.schema.room.label core.slot of=time.calendar.room key=label kind=string present=true
+@calendar.schema.room.capacity core.slot of=time.calendar.room key=capacity kind=integer min=1
+@calendar.schema.room.location core.slot of=time.calendar.room key=location kind=string
+@calendar.schema.meeting.title core.slot of=time.calendar.meeting key=title kind=string present=true
+@calendar.schema.meeting.start core.slot of=time.calendar.meeting key=start kind=integer min=-8640000000000000 max=8640000000000000 present=true
+@calendar.schema.meeting.duration core.slot of=time.calendar.meeting key=duration kind=integer min=1 present=true
+@calendar.schema.meeting.participants core.slot of=time.calendar.meeting key=participants type=time.calendar.person many=true
+@calendar.schema.meeting.room core.slot of=time.calendar.meeting key=room kind=atom type=time.calendar.room present=true
+@calendar.schema.meeting.calendar core.slot of=time.calendar.meeting key=calendar kind=atom type=time.calendar.calendar
+@calendar.schema.meeting.notes core.slot of=time.calendar.meeting key=notes kind=string

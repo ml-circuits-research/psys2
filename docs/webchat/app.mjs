@@ -4,7 +4,7 @@ import {createInstanceStore} from './ui/instance-store.mjs';
 import {workFile,readWorkFile} from './ui/work-files.mjs';
 import {mountPaneSplitter} from './ui/pane-splitter.mjs';
 import {createIntentRecords} from './ui/intent-records.mjs';
-import { createTranslationLayer } from './ui/translation-ui.mjs';
+import { createTranslationLayer, QUALITY_GATE } from './ui/translation-ui.mjs';
 // SPDX-License-Identifier: AGPL-3.0-only
 // PSys2 browser demo (spec 06 "Webchat", spec 07 §4). Runs C2 entirely in the browser: no server, no large language model.
 //
@@ -44,8 +44,8 @@ import { snapshotState, describeChanges, turnBaseline, turnAfter } from './ui/st
 
 const HERE = new URL('.', import.meta.url);
 
-/** The order of the pages (owner, 2026-11-15; tab cuts ADR-010 and ADR-012): Drawing and Diagram first, the rest as listed; Documents is the editor (the phone menu lists Chat, then these). The avatar is not a tab: it is the icon in the input bar; Talk is not a page: its summary is a panel of the chat. */
-export const TAB_ORDER = ['draw', 'diagram', 'calendar', 'editor', 'worlds', 'avatar'];
+/** Editor tabs come first; Settings and the final Worlds inspector form a separate utility section. */
+export const TAB_ORDER = ['draw', 'diagram', 'calendar', 'editor', 'avatar', 'settings', 'worlds'];
 export const TABS = [
   { id: 'editor', label: 'Documents', world: 'docs.editor', make: createEditor },
 ];
@@ -76,6 +76,12 @@ export const TOO_LONG = 'That took too long, I stopped it.';
 export const SOURCE_URL = 'https://github.com/ml-circuits-research/psys2';
 export const BUSY_HINT = 'Wait for the answer or press Stop.';
 const ICON = {
+  draw:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 3 6 6-10 10-7 1 1-7 10-10Zm0 3-8 8-.5 3.5L10 17l8-8-3-3Z"/></svg>',
+  diagram:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 2h8v6h-3v3h7v5h3v6h-8v-6h3v-3H6v3h3v6H1v-6h3v-5h7V8H8V2Zm2 2v2h4V4h-4ZM3 18v2h4v-2H3Zm14 0v2h4v-2h-4Z"/></svg>',
+  calendar:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2h2v3h8V2h2v3h4v17H2V5h4V2Zm-2 9v9h16v-9H4Zm0-4v2h16V7H4Zm3 6h3v2H7v-2Zm7 0h3v2h-3v-2ZM7 17h3v2H7v-2Z"/></svg>',
+  editor:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 2h10l6 6v14H4V2Zm2 2v16h12V9h-5V4H6Zm9 1v2h2l-2-2ZM8 11h8v2H8v-2Zm0 4h8v2H8v-2Z"/></svg>',
+  avatar:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 1 1 0 14 7 7 0 0 1 0-14Zm0 2a5 5 0 1 0 0 10 5 5 0 0 0 0-10ZM3 23v-2c0-3 4-5 9-5s9 2 9 5v2h-2v-2c0-1-3-3-7-3s-7 2-7 3v2H3Z"/></svg>',
+  worlds:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 1h4v4h-4V1ZM1 10h4v4H1v-4Zm18 0h4v4h-4v-4ZM10 19h4v4h-4v-4Zm1-12h2v3h3v3h-3v3h-2v-3H8v-3h3V7ZM5 5l2-1 3 4-2 1-3-4Zm12-1 2 1-3 4-2-1 3-4ZM5 19l3-4 2 1-3 4-2-1Zm12 1-3-4 2-1 3 4-2 1Z"/></svg>',
   mic: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.92V22h2v-3.08A7 7 0 0 0 19 12h-2Z"/></svg>',
   speaker: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Zm12.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4Z"/></svg>',
   gear: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.4 13a7.5 7.5 0 0 0 0-2l2-1.6-2-3.4-2.4 1a7.6 7.6 0 0 0-1.7-1L15 3.4h-4l-.4 2.6a7.6 7.6 0 0 0-1.7 1l-2.4-1-2 3.4 2 1.6a7.5 7.5 0 0 0 0 2l-2 1.6 2 3.4 2.4-1a7.6 7.6 0 0 0 1.7 1l.4 2.6h4l.4-2.6a7.6 7.6 0 0 0 1.7-1l2.4 1 2-3.4-2-1.6ZM13 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7Z"/></svg>',
@@ -114,7 +120,7 @@ export async function mountPsys2(element, options = {}) {
   language.onChange(({ lang, previous, reason }) => { try { events.add('language', lang, { from: previous, reason }); } catch { /* logging never breaks the app */ } });
   const save = () => { if (options.persist !== false) try { localStorage.setItem(SETTINGS_KEY, JSON.stringify({ ...settings, handsFree: false })); } catch { /* storage unavailable */ } };
   const plugins = await loadTabPlugins(base);
-  const builtin = [...TABS,{id:'worlds',label:'Worlds',architecture:true}].map((t, i) => ({ order: (i + 1) * 10, ...t }));
+  const builtin = [...TABS,{id:'settings',label:'Settings',settingsPage:true},{id:'worlds',label:'Worlds',architecture:true}].map((t, i) => ({ order: (i + 1) * 10, ...t }));
   const byOrder = [...builtin.filter((t) => !plugins.some((p) => p.id === t.id)), ...plugins].sort((a, b) => (a.order ?? 100) - (b.order ?? 100));
   // the owner's order (2026-11-14); a tab not listed goes to the end in its current order
   const rank = (t) => { const i = TAB_ORDER.indexOf(t.id); return i < 0 ? TAB_ORDER.length : i; };
@@ -142,9 +148,9 @@ export async function mountPsys2(element, options = {}) {
         {id:'browser:instance-store',label:'Explicit snapshot buffer',kind:'storage',implementation:'javascript',description:'Session-only buffer populated when work is explicitly exported. Editor work is not saved or restored automatically. Legacy browser archives are left untouched and inactive.',details:{...storage,source:'ui/instance-store.mjs'}},
         {id:'browser:intent-records',label:'UI training pairs',kind:'runtime',implementation:'javascript',description:'Session-only training pairs: human text, SOP intent, native before/after state and verification. Download explicitly to keep them.',details:{source:'ui/intent-records.mjs',persistent:false,records:pairs}},
         {id:'browser:chat-history',label:'Chat and event history',kind:'runtime',implementation:'javascript',description:'Browser message history and UI action log. Clearing message history does not clear editor worlds or undo.',details:{source:'app.mjs; ui/phrase-log.mjs; ui/action-log.mjs',phrases:phrases.all?.()??null,events:events.all?.()??null}},
-        {id:'browser:worlds-view',label:'Worlds inspector',kind:'adapter',implementation:'javascript',description:'Read-only runtime inspection and activity visualization. This graph is an inspection of the current implementation; it is not yet an authoritative SOP project registry.',details:{source:'ui/worlds-explorer.mjs; dialog/worlds-inspection.mjs'}}
+        {id:'browser:worlds-view',label:'Worlds inspector',kind:'adapter',implementation:'javascript',description:'Read-only runtime inspection and activity visualization. This graph is an inspection of the current implementation; it is not yet an authoritative SOP project registry.',details:{source:'ui/worlds-explorer.mjs; dialog/worlds-inspection.mjs',activeView:view,activeEditor:lastShellTab}}
       ];
-      return {...data,nodes:[...data.nodes,...structures],edges:[...data.edges,{from:'runtime:activity-bus',to:'browser:worlds-view',label:'streams observed activity'},...data.nodes.filter(n=>n.id.startsWith('instance:')).flatMap(n=>[{from:n.id,to:'browser:instance-store',label:'explicit export buffer'},{from:'browser:intent-records',to:n.id,label:'records changes to'}])]};
+      return {...data,areas:tabDefs.filter(t=>t.world).map(t=>({...data.areas?.find(area=>area.world===t.world),view:t.id,world:t.world,label:t.label})),centralNodeId:'project:application',nodes:[...data.nodes,...structures],edges:[...data.edges,{from:'runtime:activity-bus',to:'browser:worlds-view',label:'streams observed activity'},...data.nodes.filter(n=>n.id.startsWith('instance:')).flatMap(n=>[{from:n.id,to:'browser:instance-store',label:'explicit export buffer'},{from:'browser:intent-records',to:n.id,label:'records changes to'}])]};
     },subscribe:fn=>{worldActivityListeners.add(fn);for(const event of worldActivity)fn(event);return()=>worldActivityListeners.delete(fn);},copy:text=>ALLOW['clipboard.copy']({text})});
     worldsExplorer=explorer;tabBtns[t.id].panel.append(explorer.element);panelUI[t.id]={ui:{show:()=>void explorer.refresh(),update:()=>{},destroy:explorer.destroy}};cleanups.push(()=>{clearTimeout(worldsRefreshTimer);explorer.destroy();});return panelUI[t.id].ui;
   }
@@ -164,6 +170,10 @@ export async function mountPsys2(element, options = {}) {
   function makeTab(t) {
     if (!tabKnown.has(t.id)) return Promise.resolve(null);
     if(t.architecture)return Promise.resolve(panelUI[t.id]?.ui??makeWorldsTab(t));
+    if(t.settingsPage){
+      if(!panelUI[t.id]){settingsEl.classList.add('p2-settings-inline');settingsEl.removeAttribute('aria-modal');settingsEl.setAttribute('role','region');setClose.hidden=true;tabBtns[t.id].panel.append(settingsEl);panelUI[t.id]={ui:{show(){settingsEl.hidden=false;renderSettings();void tl.init().then(()=>renderSettings(),()=>{});},hide(){settingsEl.hidden=true;},update(){}}};}
+      panelUI[t.id].ui.show();return Promise.resolve(panelUI[t.id].ui);
+    }
     if (!tabMade.has(t.id)) tabMade.set(t.id, (async () => {
       effectsPending++; updateBusy();   // the tab's UI is part of the turn that opened it: the host is busy (and a test or a voice turn waits) until it is there
       try {
@@ -317,9 +327,9 @@ export async function mountPsys2(element, options = {}) {
   on(root, 'click', logTap, true); on(modalHost, 'click', logTap, true); on(modalHost, 'change', logSetting, true);
 
   const tabBtns = {};
-  const VIEW_TABS = new Set(['diagram', 'worlds']);   // pan / zoom / scroll stay usable while the host is busy
+  const VIEW_TABS = new Set(['diagram', 'worlds', 'settings']);   // pan / zoom / scroll stay usable while the host is busy
   for (const t of tabDefs) {
-    const btn = h('button', { class: 'p2-tab', role: 'tab', type: 'button', id: `p2-tab-${t.id}`, 'aria-controls': `p2-panel-${t.id}`, onclick: () => userTab(t.id) }, t.label);
+    const btn = h('button', { class: t.settingsPage?'p2-tab p2-tab-architecture':t.architecture?'p2-tab p2-tab-worlds':'p2-tab', role: 'tab', type: 'button', id: `p2-tab-${t.id}`, 'aria-controls': `p2-panel-${t.id}`, onclick: () => userTab(t.id) }, icon(t.id==='settings'?'gear':t.id),h('span',{class:'p2-tab-label'},t.label));
     const panel = h('div', { class: 'p2-panel', role: 'tabpanel', id: `p2-panel-${t.id}`, 'aria-labelledby': `p2-tab-${t.id}`, tabindex: '0' });
     tabBtns[t.id] = { btn, panel };
     tabsEl.append(btn); panelsEl.append(panel);
@@ -332,7 +342,7 @@ export async function mountPsys2(element, options = {}) {
   /** The user opened a tab (click or arrow keys): the dialog engine must know it too (routing tier T, tab-bound questions), RP5b. */
   function userTab(id, via = 'tap') {
     showTab(id, via);
-    if (tabBtns[id] && lastShellTab !== id) { lastShellTab = id; session?.setWorldState?.(SHELL, { activeTab: id }); }
+    if (tabBtns[id] && tabDefs.find(t=>t.id===id)?.world && lastShellTab !== id) { lastShellTab = id; session?.setWorldState?.(SHELL, { activeTab: id }); }
   }
   // ---------- pages (phone) ----------
   const pageName = (id) => (id === 'chat' ? 'Chat' : tabDefs.find((t) => t.id === id)?.label ?? id);
@@ -360,7 +370,7 @@ export async function mountPsys2(element, options = {}) {
     if (id !== 'chat' && !tabBtns[id]) return;
     if (!phone) { if (id !== 'chat') userTab(id, via); return; }
     const was = page; page = id; closeMenu(); hideToast();
-    if (id === 'chat') panelUI[view]?.ui?.hide?.(); else { showTab(id, via); if (lastShellTab !== id) { lastShellTab = id; session?.setWorldState?.(SHELL, { activeTab: id }); } }
+    if (id === 'chat') panelUI[view]?.ui?.hide?.(); else { showTab(id, via); if (tabDefs.find(t=>t.id===id)?.world && lastShellTab !== id) { lastShellTab = id; session?.setWorldState?.(SHELL, { activeTab: id }); } }
     syncPageUI(); refreshSuggestions();
     if (push && was !== id) pushPage(id);
   }
@@ -429,6 +439,7 @@ export async function mountPsys2(element, options = {}) {
     if (!tabBtns[id]) return;
     if (id !== view) events.add('tab', id, { via, tabAfter: id });   // USER-ACTIONS: how the tab was opened (tap | key | message | card | example | command)
     view = id;
+    dieBtn.disabled=!tabDefs.find(t=>t.id===id)?.world;
     try { if (options.persist !== false && via !== 'start') localStorage.setItem('psys2.webchat.tab', id); } catch { /* storage unavailable */ }
     for (const [k, { btn, panel }] of Object.entries(tabBtns)) {
       const active = k === id, ui = panelUI[k]?.ui;
@@ -592,8 +603,8 @@ export async function mountPsys2(element, options = {}) {
   }
   function applyShell(sh) {
     if (!sh) return;
-    if (!shellSeen) { shellSeen = true; lastShell = { ...sh }; if (sh.activeTab && tabBtns[sh.activeTab]) { lastShellTab = sh.activeTab; showTab(sh.activeTab, 'start'); } return; }   // the world's first tab 'robot' is no tab: the host's own first tab (Talk) is shown and told to the world after the start // startup snapshot: do not override saved host settings
-    if (sh.activeTab && sh.activeTab !== lastShellTab) { lastShellTab = sh.activeTab; showTab(sh.activeTab, turn ? 'message' : 'command'); }
+    if (!shellSeen) { shellSeen = true; lastShell = { ...sh }; if (sh.activeTab && tabBtns[sh.activeTab]) { lastShellTab = sh.activeTab; if(tabDefs.find(t=>t.id===view)?.world)showTab(sh.activeTab, 'start'); } return; }   // the world's first tab 'robot' is no tab: the host's own first tab (Talk) is shown and told to the world after the start // startup snapshot: do not override saved host settings
+    if (sh.activeTab && sh.activeTab !== lastShellTab) { lastShellTab = sh.activeTab; if(tabDefs.find(t=>t.id===view)?.world)showTab(sh.activeTab, turn ? 'message' : 'command'); }
     if (sh.speaker !== undefined && sh.speaker !== lastShell.speaker) setSpeaker(!!sh.speaker, false);
     if (sh.handsFree !== undefined && sh.handsFree !== lastShell.handsFree) setHandsFree(!!sh.handsFree, false);
     if (sh.listening === false && lastShell.listening !== false) speech?.stopListening();
@@ -746,7 +757,7 @@ export async function mountPsys2(element, options = {}) {
   // PROGRESS: a turn that passes 400 ms shows what is being done in the input (the stages the engine already times). Typing ahead is kept (a message sent meanwhile waits in the queue);
   // while a state-changing action runs (carrying out, showing the result) the input is marked busy and Stop is the way out.
   const STAGE_WORDS = { seed: 'getting ready', knowledge: 'looking up knowledge', spell: 'checking spelling', correct: 'checking spelling', rules: 'reading', formalize: 'reading', 'nx.read': 'reading', discourse: 'reading', voice: 'reading', normalizer: 'rewording your message', 'init.compilePattern': 'preparing the rules',
-    interpreter: 'carrying it out', lookup: 'looking up knowledge', effects: 'showing the result', restarting: 'restarting the engine', download: 'downloading a model' };
+    interpreter: 'carrying it out', lookup: 'looking up knowledge', effects: 'showing the result', restarting: 'restarting the engine', 'reader-loading': 'loading SOP-BERT', download: 'downloading a model' };
   const STATE_STAGES = new Set(['interpreter', 'effects']);
   const INPUT_PLACEHOLDER = input.placeholder;
   let stageOverride = null;
@@ -1424,6 +1435,7 @@ export async function mountPsys2(element, options = {}) {
     hintEl = h('div', { class: 'p2-lang-hint', role: 'note' }, `${line} `, h('button', { class: 'p2-btn-text', type: 'button', 'data-lang-hint': suggested, onclick: () => setLanguage(suggested, 'hint') }, button));
     userMsg.msg.append(hintEl);
   }
+  gearBtn.hidden=!!tabBtns.settings;
   on(gearBtn, 'click', () => openSettings());
 
   if (options.pushToTalk !== false && speechSupport.recognition) {
@@ -1484,6 +1496,7 @@ export async function mountPsys2(element, options = {}) {
   });
   /** Opens the modal (on `tab`, else the last tab). One history entry is pushed so that the phone's Back button closes it. */
   function openSettings(tab, { push = true } = {}) {
+    if(tabBtns.settings){if(tab&&isSettingsTab(tab))settingsTab=resolveTab(tab);userTab('settings');setSettingsTab(settingsTab);return;}
     tl.init().then(() => renderSettings(), () => {});   // the language list and the model sizes (loaded on first use, not at start-up)
     if (tab && isSettingsTab(tab)) settingsTab = resolveTab(tab);
     const wasOpen = !settingsEl.hidden;
@@ -1496,6 +1509,7 @@ export async function mountPsys2(element, options = {}) {
     setSettingsTab(settingsTab, !wasOpen);
   }
   function closeSettings({ fromPop = false } = {}) {
+    if(settingsEl.classList.contains('p2-settings-inline')){if(view==='settings')userTab(tabDefs.find(t=>t.world)?.id??'worlds');return;}
     if (settingsEl.hidden) return;
     settingsEl.hidden = true; gearBtn.setAttribute('aria-expanded', 'false');
     chat.inert = false; if (paneEl) paneEl.inert = false;
@@ -1505,7 +1519,7 @@ export async function mountPsys2(element, options = {}) {
   on(setClose, 'click', () => closeSettings());
   on(settingsEl, 'keydown', (e) => {
     if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); closeSettings(); return; }
-    if (e.key !== 'Tab') return;
+    if (settingsEl.classList.contains('p2-settings-inline')||e.key !== 'Tab') return;
     const f = [...settingsEl.querySelectorAll('button, input, select, a[href], textarea, [tabindex]:not([tabindex="-1"])')].filter((n) => !n.disabled && n.tabIndex >= 0 && n.getClientRects().length);
     if (!f.length) return;
     const first = f[0], last = f.at(-1);
@@ -2013,7 +2027,7 @@ export async function mountPsys2(element, options = {}) {
     encoderChecked = true;
     // Facades of the models that live in the engine worker (the page only needs their labels, status and a way to start loading them)
     browserBackend = createBrowserBackend({ mt: tl.mtProxy });
-    engineClient = createEngineClient({ base, versions: globalThis.__psys2Mod ?? {}, getLanguage: () => language.get(), browserCall: (op, m) => (op === 'translate' ? browserBackend.translate(m.text, m.from, m.to, m.only ?? null) : browserBackend.detect(m.text)), getSettings: engineSettings, getTab: () => view, onEvent: onEngineEvent, testHooks: testHooksOn, limits: LIMITS, log: (...a) => { if (testHooksOn) console.debug('ENGINE', ...a); } });
+    engineClient = createEngineClient({ base, versions: globalThis.__psys2Mod ?? {}, getLanguage: () => language.get(), browserCall: (op, m) => (op === 'translate' ? browserBackend.translate(m.text, m.from, m.to, m.only ?? null) : browserBackend.detect(m.text)), getSettings: engineSettings, getTab: () => tabDefs.find(t=>t.id===view)?.world?view:(lastShellTab??tabDefs.find(t=>t.world)?.id), onEvent: onEngineEvent, testHooks: testHooksOn, limits: LIMITS, log: (...a) => { if (testHooksOn) console.debug('ENGINE', ...a); } });
     // The browser Translation API lives on the window, not in a worker: the page answers the worker's requests for it (deadline, then the rules).
     translator = { get usage() { return engineClient.usage; }, get detectUsage() { return engineClient.detection; }, resetUsage() { engineClient.resetUsage(); },
       translatorState: (f, t) => browserBackend.state(f, t), prepareTranslator: (f, t) => browserBackend.prepare(f, t), rules: null };
@@ -2031,7 +2045,7 @@ export async function mountPsys2(element, options = {}) {
     if (info.problems?.length) console.warn('PSys2 world problems:', info.problems);
     if (!settingsEl.hidden) renderSettings();
     session = engineClient.session; mark('session');
-    session.setWorldState?.(SHELL, { language: language.get(), ...(savedTab ? { activeTab: savedTab } : {}) });   // the shell world's language state starts as the selector (LANG-FIXED)
+    session.setWorldState?.(SHELL, { language: language.get(), ...(savedTab&&tabDefs.find(t=>t.id===savedTab)?.world ? { activeTab: savedTab } : {}) });   // the shell world's language state starts as the selector (LANG-FIXED)
   } catch (e) {
     console.error(e);
     progress.fail('worlds', `PSys2 could not start: ${e?.message ?? e}`, '');
@@ -2045,7 +2059,7 @@ export async function mountPsys2(element, options = {}) {
   const known = new Set(engine.worlds().map((w) => w.id));
   for (const t of tabDefs) {
     const { panel } = tabBtns[t.id];
-    if (t.architecture || known.has(t.world) || options.renderAllTabs) { // renderAllTabs: development aid to test the renderers without the worlds
+    if (t.architecture || t.settingsPage || known.has(t.world) || options.renderAllTabs) { // renderAllTabs: development aid to test the renderers without the worlds
       tabKnown.add(t.id);   // its UI (and its vendor assets) are made when the tab opens or its world is used (makeTab), never at boot
     } else {
       panel.append(h('div', { class: 'p2-placeholder' }, h('h3', {}, `${t.label} is not in this build`),
@@ -2061,7 +2075,7 @@ export async function mountPsys2(element, options = {}) {
   try { applyState(session.state?.()); } catch (e) { console.warn('session.state() failed', e); }
   for (const t of tabDefs) if (panelUI[t.id] && !states[t.world]) panelUI[t.id].ui.update(undefined);
   if (avatarUI && !states['ui.avatar']) avatarUI.update(undefined);
-  if (!lastShellTab) { showTab(view, 'start'); lastShellTab = view; session?.setWorldState?.(SHELL, { activeTab: view }); }   // the engine knows the tab the person sees
+  if (!lastShellTab) { showTab(view, 'start'); lastShellTab = tabDefs.find(t=>t.id===view)?.world?view:(session.state(SHELL)?.activeTab??tabDefs.find(t=>t.world)?.id); session?.setWorldState?.(SHELL, { activeTab: lastShellTab }); }   // the engine knows the tab the person sees
   tabsLive = true;
   applyEngineSettings();
   setStatus();

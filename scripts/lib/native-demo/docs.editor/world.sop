@@ -1,0 +1,14 @@
+@world.docs.editor core.world
+    namespace=docs.editor
+    version=1.0.0
+    legend=$legend.docs.editor
+    imports=world.core
+    language=en
+    status=fixture
+    title="Documents"
+    summary="edit documents"
+    tab=editor
+    tabTitle="Documents"
+    tabOrder=40
+    tabKind=tool
+    doc="Native editor application contract. Tools are declared by the actual native host; native-interface.sop describes that interface. It does not claim a complete semantic state schema."

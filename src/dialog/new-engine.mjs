@@ -1,3 +1,4 @@
+import{inspectCachedExecutionSource}from'./execution-world-inspection.mjs';
 // Validated graph execution; no natural-language reader or grammar application path.
 import { World, inspectRequest, assessPropertyChange, quote, str, parse } from '../vendor/sopworld/sopworld.mjs';
 import SOURCE from './new-engine-source.mjs';
@@ -6,6 +7,8 @@ import { NEW_ENGINE_AREAS } from './new-engine-areas.mjs';
 import { flatRequestProjection } from './request-projection.mjs';
 const hosts = new WeakMap();
 let knowledge;
+/** Read-only cache inspection; does not create the lazy knowledge World. */
+export const inspectNewEngineSourceWorld=options=>inspectCachedExecutionSource(knowledge,options);
 const sourceWorld = () => knowledge ??= World.fromJSON(SOURCE.snapshot);
 const first = (wire, key) => wire?.attrs[key]?.[0];
 const line = (id, type, attrs) => `@${id} ${type} ` + Object.entries(attrs).flatMap(([key, values]) => values.map(value => `${key}=${value}`)).join(' ');

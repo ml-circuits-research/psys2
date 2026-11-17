@@ -2,7 +2,7 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {invokeNativeControl} from '../src/dialog/native-tool-controls.mjs';
-import {initialCalendarState} from '../worlds/time.calendar/declared-host.mjs';
+import {initialCalendarState,toNativeCalendarState} from '../worlds/time.calendar/declared-host.mjs';
 import {initialDocumentState} from '../worlds/docs.editor/declared-host.mjs';
 import {DEFAULT_FACE} from '../worlds/ui.avatar/default-face.mjs';
 import {variantFor} from '../worlds/ui.avatar/facedraw.mjs';
@@ -12,7 +12,7 @@ const run=(s,view,operation,args={})=>invokeNativeControl(s,{view,operation,args
 test('Calendar clear deletes exact events, retains its resource, and actual shared undo restores events',async()=>{
  const s=session('time.calendar',initialCalendarState());
  await run(s,'calendar','calendar.event.add',{id:'first',title:'First',start:1000,duration:100});await run(s,'calendar','calendar.event.add',{id:'second',title:'Second',start:2000,duration:100});
- const before=structuredClone(s.isession.state['time.calendar']),r=await run(s,'calendar','calendar.events.remove',{ids:['first','second']});assert.equal(r.ok,true);assert.equal(s.isession.state['time.calendar'].meetings.length,0);assert.deepEqual(s.isession.state['time.calendar'].calendars,before.calendars);
+ const before=structuredClone(s.isession.state['time.calendar']),r=await run(s,'calendar','calendar.events.remove',{ids:['first','second']});assert.equal(r.ok,true);assert.equal(toNativeCalendarState(s.isession.state['time.calendar']).meetings.length,0);assert.deepEqual(toNativeCalendarState(s.isession.state['time.calendar']).calendars,toNativeCalendarState(before).calendars);assert.deepEqual(Object.keys(s.isession.state['time.calendar']),['sop']);
  assert.equal((await run(s,'calendar','undo')).ok,true);assert.deepEqual(s.isession.state['time.calendar'],before);
  await run(s,'calendar','calendar.events.remove',{ids:['first','second']});assert.equal((await run(s,'calendar','calendar.events.remove',{ids:[]})).changed,false);
 });

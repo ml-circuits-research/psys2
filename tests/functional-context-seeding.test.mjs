@@ -2,7 +2,7 @@ import {test} from 'node:test';import assert from 'node:assert/strict';
 import {seedFunctionalContext} from '../scripts/functional-context-seeding.mjs';
 import {createDiagramHost,initialDiagramState} from '../worlds/diagram.sketch/declared-host.mjs';
 import {createDocumentHost,initialDocumentState} from '../worlds/docs.editor/declared-host.mjs';
-import {createCalendarHost} from '../worlds/time.calendar/declared-host.mjs';
+import {createCalendarHost,toNativeCalendarState} from '../worlds/time.calendar/declared-host.mjs';
 import {createNativeToolHost} from '../worlds/native-tool-host.mjs';
 const name={from:'name'},field=key=>({from:'field',key});
 const diagramMapping={id:'invented.diagram-circle-alias',kind:'round-node',nativeKind:'circle',operation:'diagram.node.make',arguments:{kind:{from:'kind'}},setters:[{operation:'diagram.node.change',arguments:{ids:{from:'createdIds'},label:name}}]};
@@ -28,7 +28,7 @@ test('Document is seeded only with supplied native content and declared title ma
 test('Calendar uses actual explicit attributes, preserves resources and respects policy failure',async()=>{
  const state={people:[],rooms:[],meetings:[]},host=createCalendarHost({state,instanceId:'seed.calendar.policy',validate:s=>s.meetings.length?{ok:false,code:'invented-policy-deny'}:{ok:true}});
  const person={kind:'person',operation:'calendar.person.add',arguments:{id:name,label:name}},context={existing:[{name:'Person',kind:'person'},{name:'Meeting',kind:'meeting',start:1000,duration:100,participants:['Person'],room:null}]};
- const result=await seedFunctionalContext({context,host,kindMappings:[person,meetingMapping]});assert.equal(result.ok,false);assert.equal(result.counters.seeded,1);assert.equal(result.counters.failed,1);assert.equal(result.counters.calls,2);assert.equal(result.partial,true);assert.equal(result.failures[0].nativeReason,'invented-policy-deny');assert.equal(state.people.length,1);assert.equal(state.meetings.length,0);
+ const result=await seedFunctionalContext({context,host,kindMappings:[person,meetingMapping]});assert.equal(result.ok,false);assert.equal(result.counters.seeded,1);assert.equal(result.counters.failed,1);assert.equal(result.counters.calls,2);assert.equal(result.partial,true);assert.equal(result.failures[0].nativeReason,'invented-policy-deny');assert.equal(toNativeCalendarState(state).people.length,1);assert.equal(toNativeCalendarState(state).meetings.length,0);assert.deepEqual(Object.keys(state),['sop']);
 });
 test('unmapped attributes, unpreserved names and arbitrary literals fail before mutation',async()=>{
  const state=initialDiagramState(),host=await createDiagramHost({state,instanceId:'seed.preflight'});

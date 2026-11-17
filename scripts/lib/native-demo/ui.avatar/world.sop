@@ -1,0 +1,14 @@
+@world.ui.avatar core.world
+    namespace=ui.avatar
+    version=1.0.0
+    legend=$legend.ui.avatar
+    imports=world.core
+    language=en
+    status=fixture
+    title="Avatar"
+    summary="edit avatar"
+    tab=avatar
+    tabTitle="Avatar"
+    tabOrder=50
+    tabKind=tool
+    doc="Native editor application contract. Tools are declared by the actual native host; native-interface.sop describes that interface. It does not claim a complete semantic state schema."

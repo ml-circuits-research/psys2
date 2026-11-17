@@ -1,30 +1,12 @@
 {
   "worlds": [
-    "acts",
-    "art.draw",
-    "calc.arith",
-    "calc.story",
-    "common.sense",
     "core",
-    "data.charts",
+    "ui.shell",
+    "art.draw",
     "diagram.sketch",
-    "docs.editor",
-    "kids.arith",
-    "kids.common",
-    "kids.shop",
-    "kids.tasks",
-    "lang.common",
-    "meta.worlds",
-    "plan.list",
-    "session.conversation",
-    "session.dialogue",
-    "session.things",
-    "space",
-    "talk",
     "time.calendar",
-    "ui.avatar",
-    "ui.help",
-    "ui.shell"
+    "docs.editor",
+    "ui.avatar"
   ],
   "retiredAreas": [
     {
@@ -39,5 +21,172 @@
       "label": "Music",
       "status": "retired"
     }
+  ],
+  "profile": "native-editors/1",
+  "always": [
+    "core",
+    "ui.shell",
+    "art.draw",
+    "diagram.sketch",
+    "time.calendar",
+    "docs.editor",
+    "ui.avatar"
+  ],
+  "profiles": {
+    "core": {
+      "sourceFiles": [
+        "world.sop",
+        "legend.sop",
+        "mapping.sop"
+      ]
+    },
+    "ui.shell": {
+      "profileFiles": [
+        "world.sop",
+        "legend.sop"
+      ],
+      "nativeInitializer": {
+        "module": "scripts/lib/native-demo/ui.shell/initial-state.mjs",
+        "export": "initialState"
+      }
+    },
+    "art.draw": {
+      "profileFiles": [
+        "world.sop",
+        "legend.sop"
+      ],
+      "schemaWorld": "pattern.art.draw",
+      "schemaFiles": [
+        {
+          "file": "native-interface.sop",
+          "role": "native-tool-interface",
+          "completeStateSchema": false
+        }
+      ],
+      "nativeInitializer": {
+        "module": "worlds/art.draw/declared-host.mjs",
+        "export": "initialDrawingState"
+      },
+      "nativeHost": {
+        "module": "worlds/art.draw/declared-host.mjs",
+        "factory": "createDrawingHost"
+      }
+    },
+    "diagram.sketch": {
+      "profileFiles": [
+        "world.sop",
+        "legend.sop"
+      ],
+      "schemaWorld": "pattern.diagram.sketch",
+      "schemaFiles": [
+        {
+          "file": "native-interface.sop",
+          "role": "native-tool-interface",
+          "completeStateSchema": false
+        }
+      ],
+      "nativeInitializer": {
+        "module": "worlds/diagram.sketch/declared-host.mjs",
+        "export": "initialDiagramState"
+      },
+      "nativeHost": {
+        "module": "worlds/diagram.sketch/declared-host.mjs",
+        "factory": "createDiagramHost"
+      }
+    },
+    "time.calendar": {
+      "profileFiles": [
+        "world.sop",
+        "legend.sop"
+      ],
+      "schemaWorld": "pattern.time.calendar",
+      "schemaFiles": [
+        {
+          "file": "native-interface.sop",
+          "role": "native-tool-interface",
+          "completeStateSchema": false
+        },
+        {
+          "file": "instance-schema.sop",
+          "role": "canonical-state-schema",
+          "completeStateSchema": true
+        },
+        {
+          "file": "scheduling-policy.sop",
+          "role": "interval-policy",
+          "completeStateSchema": false
+        }
+      ],
+      "nativeInitializer": {
+        "module": "worlds/time.calendar/declared-host.mjs",
+        "export": "initialCalendarState"
+      },
+      "nativeHost": {
+        "module": "worlds/time.calendar/declared-host.mjs",
+        "factory": "createCalendarHost"
+      },
+      "sourceFiles": [
+        "instance-schema.sop",
+        "scheduling-policy.sop"
+      ]
+    },
+    "docs.editor": {
+      "profileFiles": [
+        "world.sop",
+        "legend.sop"
+      ],
+      "schemaWorld": "pattern.docs.editor",
+      "schemaFiles": [
+        {
+          "file": "native-interface.sop",
+          "role": "native-tool-interface",
+          "completeStateSchema": false
+        }
+      ],
+      "nativeInitializer": {
+        "module": "worlds/docs.editor/declared-host.mjs",
+        "export": "initialDocumentState"
+      },
+      "nativeHost": {
+        "module": "worlds/docs.editor/declared-host.mjs",
+        "factory": "createDocumentHost"
+      }
+    },
+    "ui.avatar": {
+      "profileFiles": [
+        "world.sop",
+        "legend.sop"
+      ],
+      "schemaWorld": "pattern.ui.avatar",
+      "schemaFiles": [
+        {
+          "file": "native-interface.sop",
+          "role": "native-tool-interface",
+          "completeStateSchema": false
+        }
+      ],
+      "nativeInitializer": {
+        "module": "worlds/ui.avatar/declared-host.mjs",
+        "export": "initialAvatarState"
+      },
+      "nativeHost": {
+        "module": "worlds/ui.avatar/declared-host.mjs",
+        "factory": "createAvatarHost"
+      },
+      "runtimeModules": [
+        "worlds/ui.avatar/facedraw.mjs",
+        "worlds/ui.avatar/facelogic.mjs",
+        "worlds/ui.avatar/motion.mjs",
+        "worlds/ui.avatar/default-motion.mjs"
+      ]
+    }
+  },
+  "excludeAssets": [
+    "ui/tabs/map.mjs",
+    "ui/tabs/map/",
+    "ui/tabs/music.mjs",
+    "ui/tabs/music/",
+    "vendor/map/",
+    "vendor/music/"
   ]
 }

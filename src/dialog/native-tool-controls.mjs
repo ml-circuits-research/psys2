@@ -6,8 +6,9 @@ import {readNativeIntent} from './native-intent-reader.mjs';
 import {copyHostData} from '../../worlds/native-tool-host.mjs';
 function activity(session,area,operation,phase,extra={}){try{session.engine?.onWorldActivity?.({nodeIds:['interpreter:'+area.world,'instance:'+area.world,'native:'+area.world],phase,label:operation,world:area.world,operation,...extra});}catch{/* Inspection must never change execution. */}}
 // Focus navigation is declared by each host; it does not invalidate content undo.
+const areaForWorld=world=>Object.values(NATIVE_AREAS).find(area=>area.world===world);
 function journalContent(world,state){
- const copy=structuredClone(state),area=Object.values(NATIVE_AREAS).find(area=>area.world===world),paths=[...(area?.historySelection??[]),...(area?.historyView??[])];
+ const area=areaForWorld(world),copy=structuredClone(area?.projectState?area.projectState(state):state),paths=[...(area?.historySelection??[]),...(area?.historyView??[])];
  for(const path of paths){let node=copy;for(const key of path.slice(0,-1))node=node?.[key];if(node&&typeof node==='object')delete node[path.at(-1)];}
  return JSON.stringify(copy);
 }
@@ -22,12 +23,20 @@ export async function invokeNativeControl(session,{view,operation,args={}}={},de
   if(!Object.keys(baseline).every(k=>journalContent(k,session.isession.state[k])===journalContent(k,baseline[k])))return {ok:false,changed:false,message:'The objects changed after that action. Nothing changed.'};
   const intent=describeNativeControl({operation:{id:'ui.history.'+verb.toLowerCase(),act:verb.toLowerCase(),on:'app.history',intent:{subject:'last action',determiner:'the'},params:{}},args:{},before:null});
   const actualBefore=Object.fromEntries(Object.keys(baseline).map(world=>[world,structuredClone(session.isession.state[world])])),restored=structuredClone(next);
-  for(const [world,state]of Object.entries(restored))for(const path of Object.values(NATIVE_AREAS).find(area=>area.world===world)?.historyView??[]){let from=session.isession.state[world],to=state;for(const key of path.slice(0,-1)){from=from?.[key];if(!to[key]||typeof to[key]!=='object')to[key]={};to=to[key];}const key=path.at(-1);if(from&&Object.hasOwn(from,key))to[key]=structuredClone(from[key]);else delete to[key];}
+  for(const [world,state]of Object.entries(restored)){
+   const owner=areaForWorld(world),paths=owner?.historyView??[];
+   if(!paths.length){if(owner?.canonicalizeState)restored[world]=owner.canonicalizeState(state);continue;}
+   const fromState=owner.projectState?owner.projectState(session.isession.state[world]):session.isession.state[world];
+   const target=structuredClone(owner.projectState?owner.projectState(state):state);
+   for(const path of paths){let from=fromState,to=target;for(const key of path.slice(0,-1)){from=from?.[key];if(!to[key]||typeof to[key]!=='object')to[key]={};to=to[key];}const key=path.at(-1);if(from&&Object.hasOwn(from,key))to[key]=structuredClone(from[key]);else delete to[key];}
+   restored[world]=owner.canonicalizeState?owner.canonicalizeState(target):target;
+  }
   Object.assign(session.isession.state,restored);session[key]=history.filter((_,i)=>i!==index);const other=redo?'newEngineUndo':'newEngineRedo';session[other]=[...(session[other]??[]).slice(-31),entry];
   return {ok:true,changed:true,message:redo?'Redid the last action.':'Undid the last action.',intentRecord:{format:'psys2.ui-training-pair/1',id:globalThis.crypto.randomUUID(),at:new Date().toISOString(),view,world:area.world,text:intent.text,wires:intent.wires,intent,tool:{operation:'ui.history.'+verb.toLowerCase(),args:{}},verification:{status:'verified',reason:'journal-content-restored-with-current-view-preferences'},before:actualBefore,after:restored}};
  }
- const state=session.isession.state[area.world];
+ let state=session.isession.state[area.world];
  if(!state)throw Error('native-state-unavailable');
+ if(area.canonicalizeState)state=session.isession.state[area.world]=area.canonicalizeState(state);
  const before=structuredClone(state);let host=await createAreaHost(area,{state,instanceId:instanceIdFor(session,area.world),loader:session.engine?.loader,knowledge:session.engine?.knowledge});
  const needs=host.bindings().find(op=>op.id===operation)?.knowledgeInputs??[];
  for(const input of needs){if(typeof session.engine?.knowledge?.[input.load]!=='function')throw Error('knowledge-service-unavailable');await session.engine.knowledge[input.load](args[input.argument]);}

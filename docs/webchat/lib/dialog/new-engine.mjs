@@ -1,11 +1,14 @@
+import{inspectCachedExecutionSource}from'./execution-world-inspection.mjs?v=dacb925ff3';
 // Validated graph execution; no natural-language reader or grammar application path.
-import { World, inspectRequest, assessPropertyChange, quote, str, parse } from '../vendor/sopworld/sopworld.mjs?v=5c806a534f';
+import { World, inspectRequest, assessPropertyChange, quote, str, parse } from '../vendor/sopworld/sopworld.mjs?v=20fdd56a67';
 import SOURCE from './new-engine-source.mjs?v=e31b4adb7f';
-import { resolvePropertyValue, selectPropertyObject } from './property-selection.mjs?v=98dd5767d1';
+import { resolvePropertyValue, selectPropertyObject } from './property-selection.mjs?v=6edcdae5e2';
 import { NEW_ENGINE_AREAS } from './new-engine-areas.mjs?v=ef31165c84';
-import { flatRequestProjection } from './request-projection.mjs?v=1ff8cffb73';
+import { flatRequestProjection } from './request-projection.mjs?v=f03efb554d';
 const hosts = new WeakMap();
 let knowledge;
+/** Read-only cache inspection; does not create the lazy knowledge World. */
+export const inspectNewEngineSourceWorld=options=>inspectCachedExecutionSource(knowledge,options);
 const sourceWorld = () => knowledge ??= World.fromJSON(SOURCE.snapshot);
 const first = (wire, key) => wire?.attrs[key]?.[0];
 const line = (id, type, attrs) => `@${id} ${type} ` + Object.entries(attrs).flatMap(([key, values]) => values.map(value => `${key}=${value}`)).join(' ');

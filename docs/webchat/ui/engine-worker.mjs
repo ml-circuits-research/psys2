@@ -40,6 +40,7 @@ const turnRunning = () => [...active.values()].some((c) => !c.dry);
 const turnIdle = async () => { while (turnRunning() || warming) await sleep(20); };   // a warm-up turn holds a step budget too
 let reloading = 0;   // a world load in progress: the warm-up turns wait for it (they would read a half-swapped engine and charge their budget)
 let dispatcherEnc = null, normalizerHost = null, dispatcherInfo = null;
+let projectWorld=null,projectAreas=[];
 let worldLoader = null, loaders = null, rulesMod = null, wordMod = null, tabWorlds = {}, universe = null;   // LAZY LOADING: the world index, the library modules the loader needs, tab id -> world id, the worlds this page may use (tests)
 const loadedIds = new Set();
 const DEFAULT_DICE_WORLD = 'art.draw';
@@ -51,7 +52,7 @@ const absModule = (path, id, kind) => new URL(path, ROOT).href + (ver[`worlds/${
 const snaps = new Map();             // undo id -> engine snapshot (a ring: the last SNAP_KEEP)
 const SNAP_KEEP = 24;
 let lastTurnEnd = 0;
-let readerPrevious=null,readerStatus={state:'unavailable'},readerObservation=null,readerDiagnostics=[];
+let readerPrevious=null,readerStatus={state:'unavailable'},readerObservation=null,readerDiagnostics=[],readerReady=null;
 const budgetMod = { createBudget: null };
 let btSeq = 0;
 const btPending = new Map();         // id -> { resolve, reject } of a call to the page's browser translator / detector
@@ -75,7 +76,14 @@ function annotateWires(root) {
   walk(root, 0);
   return root;
 }
-const stateOf = () => session.state();
+const areaForWorld=world=>Object.values(mods?.NATIVE_AREAS??{}).find(area=>area.world===world);
+function canonicalStates(state){
+ return Object.fromEntries(Object.entries(state??{}).map(([world,value])=>{const area=areaForWorld(world);return [world,value&&area?.canonicalizeState?area.canonicalizeState(value):value];}));
+}
+function canonicalizeSessionStates(){Object.assign(session.isession.state,canonicalStates(session.isession.state));}
+const coreStateOf=()=>{canonicalizeSessionStates();return session.state();};
+// Projection is a transport boundary. The session and all undo snapshots keep canonical carriers.
+const stateOf=()=>Object.fromEntries(Object.entries(coreStateOf()).map(([world,value])=>{const area=areaForWorld(world);return [world,value&&area?.projectState?area.projectState(value):value];}));
 /** Of the before-turn state, the worlds the turn loaded (not in `had`): the page has the others in its own snapshot, so its what-happened diff needs nothing more. */
 const loadedBefore = (before, had) => Object.fromEntries(Object.entries(before ?? {}).filter(([id]) => !had.has(id)));   // `had`: the worlds whose state the page holds (it sends their ids)
 const metaOf = () => ({ msg: session._msg, lang: session._sessionLang, weakRo: session._weakRo, language: session.language, memory: memoryOf(), readerPrevious });
@@ -101,13 +109,15 @@ async function init(m) {
   settings = { ...(m.settings ?? {}) };
   const imp = (rel) => import(vurl(rel));
   globalThis.__psys2LazyRoEn = true; // prevent eager loading of retired language tables
-  const [dialog, loadersMod, soplang, rc, g, tl, lang, wlMod] = await Promise.all([
+  const [dialog, loadersMod, soplang, rc, g, tl, lang, wlMod, areaMod] = await Promise.all([
     imp('lib/dialog/index.mjs'), imp('lib/loaders/bundle-loader.mjs'), imp('lib/soplang/index.mjs'),
-    imp('lib/dialog/runtime-config.mjs'), imp('lib/formalizer/guard.mjs'), imp('lib/dialog/time-limits.mjs'), imp('ui/language.mjs'), imp('ui/world-loader.mjs')]);
+    imp('lib/dialog/runtime-config.mjs'), imp('lib/formalizer/guard.mjs'), imp('lib/dialog/time-limits.mjs'), imp('ui/language.mjs'), imp('ui/world-loader.mjs'), imp('lib/dialog/app-reader-context.mjs')]);
   loaders = loadersMod;
   tabWorlds = m.tabWorlds ?? {}; universe = m.onlyWorlds ? new Set(m.onlyWorlds) : null;
   try { const b = await imp('lib/dialog/budget.mjs'); budgetMod.createBudget = b.createBudget ?? null; } catch { budgetMod.createBudget = null; }   // agent B's step budget, when this build has it
-  mods = { tl, dialog, rc, guard: g.guard, TurnAborted: g.TurnAborted, soplang, lang, ...(await imp('lib/dialog/demo-state-migration.mjs')) };
+  mods = { tl, dialog, rc, guard: g.guard, TurnAborted: g.TurnAborted, soplang, lang, ...areaMod };
+  Object.assign(mods,await imp('lib/dialog/project-world.mjs'));
+  projectAreas=(m.tabBindings??Object.entries(tabWorlds).map(([view,world])=>({view,world,label:view}))).map(area=>({...area,schemaWorld:worldLoader?.info(area.world)?.schemaWorld??null}));projectWorld=mods.createProjectWorld({areas:projectAreas});
   // the guard reports its stage to the page at once (postMessage from synchronous code is delivered while the loop runs): a killed turn says where it was
   { let last = ''; const report = (stage) => { if (stage && stage !== last) { last = stage; evt('stage', stage); worldActivity(['component:reasoner'],'stage',stage); } };   // a few dozen changes per turn
     const gc = g.guard.check.bind(g.guard), gs = g.guard.setStage.bind(g.guard), ga = g.guard.abortable.bind(g.guard);
@@ -167,13 +177,14 @@ async function init(m) {
   session = engine.createSession({ language: lang.normalize(settings.language) });   // LANG-FIXED: always an explicit 'en' | 'ro', never 'auto'
   applySettings(null);
   if (m.restoreState) restoreStates(m.restoreState, m.restoreMeta);
-  mods.migrateDemoState?.(session.isession.state);
-  await installSopReader(imp);
+  canonicalizeSessionStates();
+  // Editor hosts and inspection do not depend on neural session construction.
+  readerReady=installSopReader(imp);
   return { retiredAreas: worldLoader.index.retiredAreas ?? [], worlds: engine.worlds().map((w) => w.id), known: worldLoader.ids(), worldTabs: Object.fromEntries(worldLoader.ids().map((id) => [id, worldLoader.info(id).tab?.id ?? null]).filter(([, v]) => v)), problems: engine.problems?.() ?? [], state: stateOf(), hasDispatcher: !!dispatcherEnc, hasNormalizer: !!normalizerHost, budget: !!budgetMod.createBudget, reader: readerStatus };
 }
 
 async function installSopReader(imp){
-  readerStatus={state:'loading'};evt('sop-reader-status',readerStatus);
+  readerStatus={state:'loading'};evt('sop-reader-status',readerStatus);worldActivity(['component:reader'],'start','Initialize SOP-BERT');
   try{
     const response=await fetch(vurl('models/sop-bert/deployment.json'));if(!response.ok)throw Error('SOP-BERT deployment HTTP '+response.status);
     const deployment=await response.json();if(deployment.format!=='psys2.browser-reader-deployment/1')throw Error('unsupported-reader-deployment');
@@ -185,13 +196,23 @@ async function installSopReader(imp){
     const reason=String(error?.message??error);readerStatus={state:'unavailable',reason};
     engine.requestReader={propose:async()=>({candidates:[],coverage:{complete:false,graphProposal:false,executable:false},failures:[{reason:'model-load-failed',detail:reason}]})};
   }
-  evt('sop-reader-status',readerStatus);
+  evt('sop-reader-status',readerStatus);worldActivity(['component:reader'],readerStatus.state==='ready'?'end':'error','Initialize SOP-BERT',{state:readerStatus.state,...(readerStatus.reason?{reason:readerStatus.reason}:{})});
+}
+
+async function waitForSopReader(signal=null){
+ if(readerStatus.state!=='loading'||!readerReady)return;
+ evt('stage','reader-loading');evt('turn-wait',{op:'start',source:'sop-reader'});
+ let abort;
+ try{
+  if(signal?.aborted)throw new mods.TurnAborted(signal.reason?.name==='TimeoutError'?'timeout':'stopped','reader-loading');
+  const cancelled=signal?new Promise((_,reject)=>{abort=()=>reject(new mods.TurnAborted(signal.reason?.name==='TimeoutError'?'timeout':'stopped','reader-loading'));signal.addEventListener('abort',abort,{once:true});}):null;
+  await (cancelled?Promise.race([readerReady,cancelled]):readerReady);
+ }finally{if(abort)signal.removeEventListener('abort',abort);evt('turn-wait',{op:'end',source:'sop-reader'});}
 }
 
 function restoreStates(state, meta) {
   if (state && typeof state === 'object') {
-    session.isession.state = { ...session.isession.state, ...structuredClone(state) };
-    mods.migrateDemoState?.(session.isession.state);   // over the fresh session's initial states: a world loaded since the record was made has none in it (lazy loading)
+    session.isession.state = canonicalStates({ ...session.isession.state, ...structuredClone(state) });
     if (meta) {
       readerPrevious=typeof meta.readerPrevious==='string'?meta.readerPrevious:null;
       session._msg = meta.msg ?? session._msg; session._sessionLang = meta.lang ?? session._sessionLang; session._weakRo = meta.weakRo ?? 0;
@@ -209,7 +230,7 @@ function sendOrt() {
 
 // ---------- LAZY LOADING (specs/06 "Lazy loading") ----------
 const worldLabel = (ids) => { const names = ids.map((id) => worldLoader.info(id)?.label).filter(Boolean); const pick = names.slice(-1)[0] ?? 'next'; return `Loading the ${pick} world${ids.length > 1 && names.length > 1 ? 's' : ''}…`; };
-const activeWorld = () => { try { const tab = session.state()['ui.shell']?.activeTab; return tab ? (tabWorlds[tab] ?? worldLoader.ids().find((id) => worldLoader.info(id).tab?.id === tab) ?? null) : null; } catch { return null; } };
+const activeWorld=()=>{try{return mods.projectDomainForTab(projectWorld,session.state()['ui.shell']?.activeTab)?.world??null;}catch{return null;}};
 const loadedLog = [];   // what was loaded on demand: { ids, why, ms, bytes } (diagnostics and the on-demand report)
 /**
  * Adds `ids` (and what they import) to the running engine: fetches their files, replaces the world set (`engine.reload`), and gives the session its state and memory back, as a restart does.
@@ -220,7 +241,7 @@ const ensureWorlds = (ids, why) => { const p = lockP.then(() => ensureRun(ids, w
 async function ensureRun(ids, why) {
   const want = worldLoader.closure([...ids].filter((id) => allowed(id) && worldLoader.info(id)));
   const missing = [...want].filter((id) => !loadedIds.has(id));
-  if (!missing.length) return [];
+  if (!missing.length) {canonicalizeSessionStates();return [];}
   const label = worldLabel(missing), stepId = `world:${missing.join(',')}`, t0 = performance.now();
   evt('world-load', { id: stepId, op: 'start', label, why, ids: missing });
   worldActivity(missing.map(id=>'world:'+id),'start',label,{why});
@@ -230,7 +251,7 @@ async function ensureRun(ids, why) {
     reloading++;
     try { await engine.reload(loaders.createBundleLoader(worldLoader.bundleOf(next, absModule))); } finally { reloading--; }
     // the session is read HERE, after the awaits and with none between this and the new session: a state the page set while the worlds were loading (a tab click, a setting) is in it, and is not lost
-    const st = stateOf(), meta = metaOf();
+    const st = coreStateOf(), meta = metaOf();
     const old = session, portable = [...snaps].map(([k, sn]) => { try { return [k, old.portableSnapshot(sn)]; } catch { return null; } }).filter(Boolean);   // the undo snapshots as plain data: they survive the reload
     for (const id of missing) loadedIds.add(id);
     session = engine.createSession({ language: mods.lang.normalize(settings.language) });
@@ -274,6 +295,7 @@ const handlers = {
     budget = newBudget();
     mods.guard.setStage?.('start');
     try {
+      await waitForSopReader(ctl.signal);
       const translator = engine.translator; translator.resetUsage?.();
       let reply;
       const read = async () => {
@@ -316,13 +338,18 @@ const handlers = {
   },
   async worldsInspection() {
     while(turnRunning())await sleep(20);
-    const [{NATIVE_AREAS,createAreaHost},{snapshotNativeInstances},{inspectWorldsRuntime}]=await Promise.all([import(vurl('lib/dialog/app-reader-context.mjs')),import(vurl('lib/dialog/instance-persistence.mjs')),import(vurl('lib/dialog/worlds-inspection.mjs'))]);
+    canonicalizeSessionStates();
+    const [{NATIVE_AREAS,createAreaHost},{observeNativeInstanceWorlds},{inspectWorldsRuntime}]=await Promise.all([import(vurl('lib/dialog/app-reader-context.mjs')),import(vurl('lib/dialog/instance-persistence.mjs')),import(vurl('lib/dialog/worlds-inspection.mjs'))]);
     const available=Object.entries(NATIVE_AREAS).filter(([,area])=>loadedIds.has(area.world)&&session.isession.state[area.world]);
-    const instances=await snapshotNativeInstances(session,{worlds:available.map(([,area])=>area.world)}),hosts=[];
+    const instances=await observeNativeInstanceWorlds(session,{worlds:available.map(([,area])=>area.world)}),hosts=[];
     for(const [view,area]of available){const host=await createAreaHost(area,{state:session.isession.state[area.world],instanceId:session.nativeInstanceIds[area.world],loader:engine.loader,knowledge:engine.knowledge});hosts.push({view,world:area.world,operations:host.bindings(),observation:host.observe(),capabilities:host.capabilities?.()??null});}
     const {serialize,version,build,SCHEMA_TYPES,STAGES,TURN_STAGES}=await import(vurl('lib/vendor/sopworld/sopworld.mjs'));
     const instanceCaches=Object.entries(session.instanceWorlds??{}).map(([world,cache])=>({world,wireCount:cache.wires?.size??0,wires:serialize([...(cache.wires?.values?.()??[])])}));
-    return {...inspectWorldsRuntime({index:worldLoader.index,bundle:worldLoader.bundleOf([...loadedIds],absModule),loaded:[...loadedIds],instances,hosts,knowledgeFiles:[...knowledgeReadFiles].map(([path,text])=>({path,text})),reader:readerStatus,nativeStates:session.isession.state,instanceCaches,sessionMeta:metaOf(),libraryInfo:{version,build,schemaTypes:[...SCHEMA_TYPES],stages:STAGES,turnStages:TURN_STAGES}}),activity:activityLog.slice()};
+    const baseGraph=inspectWorldsRuntime({index:worldLoader.index,bundle:worldLoader.bundleOf([...loadedIds],absModule),loaded:[...loadedIds],instances,hosts,knowledgeFiles:[...knowledgeReadFiles].map(([path,text])=>({path,text})),reader:readerStatus,nativeStates:session.isession.state,instanceCaches,sessionMeta:metaOf(),libraryInfo:{version,build,schemaTypes:[...SCHEMA_TYPES],stages:STAGES,turnStages:TURN_STAGES}});
+    const {inspectExecutionWorlds}=await import(vurl('lib/dialog/execution-world-inspection.mjs'));
+    const executionGraph=await inspectExecutionWorlds(session);
+    projectAreas=projectAreas.map(area=>({...area,schemaWorld:worldLoader.info(area.world)?.schemaWorld??area.schemaWorld}));projectWorld=mods.createProjectWorld({areas:projectAreas,instances});const projectGraph=mods.inspectProjectWorld(projectWorld);
+    return {...baseGraph,centralNodeId:'project:application',areas:projectAreas,nodes:[...baseGraph.nodes,...executionGraph.nodes,...projectGraph.nodes],edges:[...baseGraph.edges,...executionGraph.edges,...projectGraph.edges,...['new-engine','declared-execution'].map(name=>({from:'component:reasoner',to:'execution:module:'+name,label:'dispatches to'}))],activity:activityLog.slice()};
   },
   async instanceInspection(m) {
     while(turnRunning())await sleep(20);
@@ -330,12 +357,12 @@ const handlers = {
     const area=Object.values(NATIVE_AREAS).find(area=>area.world===m.world);
     if(!area)throw Error('Unknown inspected instance world.');
     await ensureWorlds([m.world],'inspecting SOP world');
-    const {snapshotNativeInstances}=await import(vurl('lib/dialog/instance-persistence.mjs'));
-    const record=(await snapshotNativeInstances(session,{worlds:[m.world]}))[0];
+    const {observeNativeInstanceWorlds}=await import(vurl('lib/dialog/instance-persistence.mjs'));
+    const record=(await observeNativeInstanceWorlds(session,{worlds:[m.world]}))[0];
     if(!record)throw Error('Instance state unavailable.');
-    const host=await createAreaHost(area,{state:session.isession.state[m.world],instanceId:record.instanceId,loader:engine.loader,knowledge:engine.knowledge});
     const {inspectInstanceRecord}=await import(vurl('lib/dialog/instance-inspection.mjs'));
-    return inspectInstanceRecord(record,{observation:host.observe()});
+    const data=inspectInstanceRecord({...record,wires:record.carrier},{observation:record.observation,...(record.authoritative?{semanticWires:record.wires}:{})});
+    return {...data,wires:record.wires,archiveWires:record.carrier};
   },
   async instanceFacts(m) {
     while(turnRunning())await sleep(20);
@@ -375,7 +402,16 @@ const handlers = {
   async dry() { return { complete: false, segments: 0, reason: 'unsupported', understood: [], missing: ['declared dry reading'] }; },
   async hint() { return null; },
   async observe() { return { follow: [], state: stateOf(), unsupported: 'No declared observation reaction is bound.' }; },
-  async setWorldState(m) { session.setWorldState(m.worldId, m.patch); return null; },
+  async setWorldState(m) {
+    const area=areaForWorld(m.worldId);canonicalizeSessionStates();
+    if(area?.canonicalizeState){
+      const current=session.isession.state[m.worldId]??{},patch=structuredClone(m.patch??{});
+      const canonicalPatch=Object.keys(patch).every(key=>Object.hasOwn(current,key));
+      const base=canonicalPatch?current:area.projectState?area.projectState(current):current;
+      session.setWorldState(m.worldId,area.canonicalizeState({...base,...patch}));
+    }else session.setWorldState(m.worldId,m.patch);
+    return null;
+  },
   async setStates(m) { restoreStates(m.state, m.meta); return { state: stateOf() }; },
   async restore(m) {
     const snap = m.undoId != null ? snaps.get(m.undoId) : null;
@@ -384,7 +420,7 @@ const handlers = {
   },
   async settings(m) { applySettings(m.settings, { prepare: m.prepare }); return null; },
   async option(m) { session[m.key] = m.value; if (m.key === 'formalizer') session.setOption?.('formalizer', m.value); return null; },
-  async prepare() { return {available:readerStatus.state==='ready',reader:readerStatus}; },
+  async prepare() { await waitForSopReader();return {available:readerStatus.state==='ready',reader:readerStatus}; },
   async sample(m) {
     if (samplerRun || turnRunning() || warming) return { items: [], available: true, reason: 'busy' };
     const run = (async () => {
