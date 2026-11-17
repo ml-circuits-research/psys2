@@ -4728,3 +4728,9 @@ Final combined npm:226 total,224 passed,zero failed,two optional artifact skips.
 ### 2026-11-17 — inventory-key learner runnable preparation
 
 Added frozen-corpus per-request preparation and an initial independent per-key BIO/per-mention metadata trainer, replacing the abandoned slot-v2 plan. Preserves repeated same-key conditions and raw annotations; overlapping same-key supervision is retained/masked. Typed schema banks distinguish absent, unknown, explicit null and literal sentinel strings. No observed open literal vocabulary. Four fixtures pass; Python compile passes. Actual CUDA no-save smoke: 8 train/8 calibration records, four finite updates; token973/1201 and positive10/30 are shape-smoke counts only. No full run, complete graph accuracy, runtime activation or graph confidence claimed. Full-run calibration/provenance hardening remains in progress.
+
+### Inventory-key learner preparation integrated
+
+Integrated the exact scoped2948be99 source snapshot ascecacf44, without editing the independently owned training worktree. The preparer/trainer preserves per-mention metadata and explicit ambiguity across the134-key inventory; four pure Python fixtures now run in the active gate. This is preparation/source publication only: full per-key calibration, checkpoint selection and immutable final verification are still pending in that lane. No full-run success, provider activation or model confidence is claimed.
+
+Final active npm:227 total,225 passed,zero failed,two optional artifact skips; diff check passed. No runtime/browser changes or replay behavior changes; prior actual development safety replay remains applicable. Knowledge continues hardening its isolated source separately, with later changes requiring a new reviewed integration.
