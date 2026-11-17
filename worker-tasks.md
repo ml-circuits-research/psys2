@@ -5389,3 +5389,13 @@ Accepted: the per-key design learns (mention F1 67.2% → 77.0% over five epochs
 ## 2026-11-17 04:35 (Rome) — Review 24 (reviewer; q8 reader through the Node backend, parity, replay host 7652cc0c..04a3b117)
 
 Accepted: the q8 reader runs through the actual Node backend with same-input parity to Python. Proportion, though: the last hour went into parity and provenance evidence, and the app route still does not call SOP-BERT. The next landing should be the route itself — browser worker loads the published q8 cutter + key graphs, decoder, admission gate, engine — published to Pages, with the functional matrix and the owner replay run through it. Provenance hashes are enough as recorded; no further parity variants are needed before that.
+
+## 2026-11-17 05:35 (Rome) — Review 25 (reviewer; real-browser matrix and owner replay 8fdf5440; C1 executor evidence 727f6457)
+
+Accepted as honest measurement: the real browser route runs, 0 wrong. The finding that matters: **301 neural invocations produced 0 non-empty complete graph proposals** on the matrix, 2 on the owner turns. The gate is not the bottleneck yet; the reader → decoder chain almost never produces a complete request.
+
+| Point | Request |
+|---|---|
+| Stage counts | For the 301 eligible matrix rows (Node route is fine for this), count per stage: cutter spans found, request heads present (mood, act, target type/mode), constraint keys fired, decoder accepted / refused with reason. Publish the refusal reasons ranked. |
+| Fix the top reason | If the decoder needs fields the key reader does not predict (request-level structure, target type/mode/fill, operator/phase/polarity per key), train those heads in the same model now — they are annotated in every v2 row. If it is canonical binding of values, bind from the inventory value lists and knowledge, not by enum. |
+| Then | Calibrate the gate on calibration rows (not the matrix), rerun matrix and owner replay, report class × area. |
