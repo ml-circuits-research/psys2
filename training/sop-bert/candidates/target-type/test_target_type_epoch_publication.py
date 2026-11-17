@@ -19,7 +19,8 @@ class PublicationTests(unittest.TestCase):
     def config(self):
         return {'format':'sop.key-reader/2-target-type-candidate',
                 'rawCodecFormat':'sop.key-reader-raw-codec/2-target-type-candidate',
-                'trainingSourceFormat':'sop.key-reader-source/4-target-type-plateau-candidate',
+                'trainingSourceFormat':'sop.key-reader-source/5-presence-bio-consistency-candidate',
+                'trainingObjective':copy.deepcopy(train.TRAINING_OBJECTIVE),
                 'trainingPolicy':train.training_policy(),'warmstart':{'kind':'synthetic-fixture'}}
 
     def first(self,directory,data=b'first-epoch-fixture'):
@@ -113,6 +114,7 @@ class PublicationTests(unittest.TestCase):
             root=Path(temp);publication,proof,receipt=self.first(root)
             self.assertTrue(proof['epochComplete']);self.assertFalse(proof['runComplete'])
             self.assertEqual((proof['completedEpoch'],proof['checkpointEpoch']),(1,1))
+            self.assertEqual(proof['trainingObjective'],train.TRAINING_OBJECTIVE)
             self.assertFalse(proof['executionEligible']);self.assertFalse(proof['confidenceCalibrated'])
             canonical=json.dumps(metric(),sort_keys=True,ensure_ascii=False,separators=(',',':')).encode()
             self.assertEqual(proof['checkpointMetricsSha256'],hashlib.sha256(canonical).hexdigest())
