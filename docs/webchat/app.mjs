@@ -1,6 +1,7 @@
 import {createObjectCodePanel} from './ui/world-code.mjs';
 import {createWorldsExplorer} from './ui/worlds-explorer.mjs';
 import {createInstanceStore} from './ui/instance-store.mjs';
+import {workFile,readWorkFile} from './ui/work-files.mjs';
 import {mountPaneSplitter} from './ui/pane-splitter.mjs';
 import {createIntentRecords} from './ui/intent-records.mjs';
 import { createTranslationLayer } from './ui/translation-ui.mjs';
@@ -119,7 +120,7 @@ export async function mountPsys2(element, options = {}) {
   const rank = (t) => { const i = TAB_ORDER.indexOf(t.id); return i < 0 ? TAB_ORDER.length : i; };
   const allTabs = byOrder.map((t, i) => ({ t, i })).sort((a, b) => rank(a.t) - rank(b.t) || a.i - b.i).map((x) => x.t);
   const tabDefs = allTabs.filter((t) => !options.tabs || options.tabs.includes(t.id));
-  const trainingPairs=createIntentRecords({persistent:options.persist!==false});
+  const trainingPairs=createIntentRecords({persistent:false});
   const states = {};           // world id -> latest state snapshot
   const panelUI = {};          // tab id -> { ui, present }
   let tabsLive = false;   // set once the boot state was shown: after that, a turn that changes a tab's world makes the tab (the changed worlds only; a world that merely loaded does not)
@@ -138,12 +139,12 @@ export async function mountPsys2(element, options = {}) {
       const data=await engineClient.call('worldsInspection');
       const storage=await instanceStore.inspect(),pairs=await trainingPairs.all();
       const structures=[
-        {id:'browser:instance-store',label:'Instance persistence',kind:'storage',implementation:'javascript',description:'Browser storage adapter. Stores complete SOP instance archive records; it is not a reasoning world.',details:{...storage,source:'ui/instance-store.mjs'}},
-        {id:'browser:intent-records',label:'UI training pairs',kind:'runtime',implementation:'javascript',description:'Records human text, emitted SOP intent, native before/after state and verification for actual UI actions.',details:{source:'ui/intent-records.mjs',persistent:options.persist!==false,records:pairs}},
+        {id:'browser:instance-store',label:'Explicit snapshot buffer',kind:'storage',implementation:'javascript',description:'Session-only buffer populated when work is explicitly exported. Editor work is not saved or restored automatically. Legacy browser archives are left untouched and inactive.',details:{...storage,source:'ui/instance-store.mjs'}},
+        {id:'browser:intent-records',label:'UI training pairs',kind:'runtime',implementation:'javascript',description:'Session-only training pairs: human text, SOP intent, native before/after state and verification. Download explicitly to keep them.',details:{source:'ui/intent-records.mjs',persistent:false,records:pairs}},
         {id:'browser:chat-history',label:'Chat and event history',kind:'runtime',implementation:'javascript',description:'Browser message history and UI action log. Clearing message history does not clear editor worlds or undo.',details:{source:'app.mjs; ui/phrase-log.mjs; ui/action-log.mjs',phrases:phrases.all?.()??null,events:events.all?.()??null}},
         {id:'browser:worlds-view',label:'Worlds inspector',kind:'adapter',implementation:'javascript',description:'Read-only runtime inspection and activity visualization. This graph is an inspection of the current implementation; it is not yet an authoritative SOP project registry.',details:{source:'ui/worlds-explorer.mjs; dialog/worlds-inspection.mjs'}}
       ];
-      return {...data,nodes:[...data.nodes,...structures],edges:[...data.edges,{from:'runtime:activity-bus',to:'browser:worlds-view',label:'streams observed activity'},...data.nodes.filter(n=>n.id.startsWith('instance:')).flatMap(n=>[{from:n.id,to:'browser:instance-store',label:'saved by'},{from:'browser:intent-records',to:n.id,label:'records changes to'}])]};
+      return {...data,nodes:[...data.nodes,...structures],edges:[...data.edges,{from:'runtime:activity-bus',to:'browser:worlds-view',label:'streams observed activity'},...data.nodes.filter(n=>n.id.startsWith('instance:')).flatMap(n=>[{from:n.id,to:'browser:instance-store',label:'explicit export buffer'},{from:'browser:intent-records',to:n.id,label:'records changes to'}])]};
     },subscribe:fn=>{worldActivityListeners.add(fn);for(const event of worldActivity)fn(event);return()=>worldActivityListeners.delete(fn);},copy:text=>ALLOW['clipboard.copy']({text})});
     worldsExplorer=explorer;tabBtns[t.id].panel.append(explorer.element);panelUI[t.id]={ui:{show:()=>void explorer.refresh(),update:()=>{},destroy:explorer.destroy}};cleanups.push(()=>{clearTimeout(worldsRefreshTimer);explorer.destroy();});return panelUI[t.id].ui;
   }
@@ -570,31 +571,13 @@ export async function mountPsys2(element, options = {}) {
   function note(text) { const m = addMessage('bot', text, { className: 'is-note' }); return m; }
 
   // ---------- state -> UI ----------
-  const DEMO_STATE_KEY='psys2.demo.worlds.v1';
   const DEMO_WORLDS=['art.draw','diagram.sketch','docs.editor','time.calendar','ui.avatar'];
-  const instanceStore=createInstanceStore({persistent:options.persist!==false});
-  let demoRestored=false,instancesDirty=false,instancesSaving=null,instanceFailure=null;
-  function failInstances(error){
-    if(!instanceFailure)note('Saved work could not be loaded or saved. Existing saved work is preserved; further saving is paused.');
-    instanceFailure=error;console.warn('SOP instance persistence failed',error);
+  const instanceStore=createInstanceStore({persistent:false});
+  async function flushInstances(){
+    const {records}=await engineClient.call('snapshotInstances',{worlds:DEMO_WORLDS.filter(id=>Object.hasOwn(states,id))});
+    await instanceStore.saveMany(records);return records;
   }
-  function queueInstances() {
-    if(!demoRestored||instanceFailure)return;
-    instancesDirty=true;
-    if(!instancesSaving){
-      instancesSaving=Promise.resolve().then(async()=>{
-        while(instancesDirty&&!instanceFailure){
-          instancesDirty=false;
-          const {records}=await engineClient.call('snapshotInstances',{worlds:DEMO_WORLDS.filter(id=>loadedWorlds.has(id))});
-          await instanceStore.saveMany(records);
-        }
-      }).catch(failInstances).finally(()=>{instancesSaving=null;});
-    }
-  }
-  async function flushInstances() {
-    while(instancesSaving)await instancesSaving;
-    if(instanceFailure)throw instanceFailure;
-  }
+  const failInstances=error=>{note('Could not save or open work: '+String(error?.message??error));console.warn('Explicit work file operation failed',error);};
   const renderFailures=new Set();
   function applyState(snapshot) {
     if (!snapshot || typeof snapshot !== 'object') return;
@@ -604,7 +587,6 @@ export async function mountPsys2(element, options = {}) {
     if (changed.includes('ui.avatar')) avatarUI?.update(states['ui.avatar']);
     if (changed.includes(SHELL)) applyShell(states[SHELL]);
     if (changed.includes('docs.editor')) syncDictation();
-    if(changed.some(id=>DEMO_WORLDS.includes(id)))queueInstances();
     for(const id of changed)worldViews.get(id)?.refresh();
     options.onState?.(states, changed);
   }
@@ -689,7 +671,7 @@ export async function mountPsys2(element, options = {}) {
     tool: async (operation,args={},options={}) => {
       if(isBusy())return {ok:false,message:'Please wait for the current action.'};
       const focusBeforeTool=document.activeElement;effectsPending++;updateBusy();
-      try{const r=await session.tool(operation,args,options);applyState(r.state);if(r.intentRecord){await trainingPairs.record(r.intentRecord);const row=addMessage('user',r.intentRecord.text);appendIntent(row.bubble,r.intentRecord.wires,'SOP Lang intent',r.intentRecord.intent?.expandedWires);addMessage('bot',r.message+' · '+(r.intentRecord.verification?.status??'unverified'));}if(r.ok&&r.changed)events.add('control',operation);await flushInstances();return r;}
+      try{const r=await session.tool(operation,args,options);applyState(r.state);if(r.intentRecord){await trainingPairs.record(r.intentRecord);const row=addMessage('user',r.intentRecord.text);appendIntent(row.bubble,r.intentRecord.wires,'SOP Lang intent',r.intentRecord.intent?.expandedWires);addMessage('bot',r.message+' · '+(r.intentRecord.verification?.status??'unverified'));}if(r.ok&&r.changed)events.add('control',operation);return r;}
       finally{effectsPending=Math.max(0,effectsPending-1);updateBusy();if(focusBeforeTool?.isConnected&&document.activeElement===document.body)focusBeforeTool.focus({preventScroll:true});}
     },
     send: (text) => send(String(text), 'form'),   // a tab's form or control (logged as mode 'form'); ignored (with a hint) while a turn runs
@@ -1016,7 +998,6 @@ export async function mountPsys2(element, options = {}) {
     const rec = { text, ...reply.perf, formalizer: settings.formalizer };
     (globalThis.__psys2Perf ??= []).push(rec);
     showPerfOverlay(rec);
-    await flushInstances();
     options.onReply?.(reply);
     return reply;
   }
@@ -2050,32 +2031,6 @@ export async function mountPsys2(element, options = {}) {
     if (info.problems?.length) console.warn('PSys2 world problems:', info.problems);
     if (!settingsEl.hidden) renderSettings();
     session = engineClient.session; mark('session');
-    try {
-      const records=await instanceStore.all();
-      if(records.length){
-        await engineClient.call('ensure',{worlds:records.map(row=>row.world),why:'saved SOP work'});
-        const restored=await engineClient.call('restoreInstances',{records});
-        session.acceptState(restored);applyState(restored.state);
-      }else if(options.persist!==false){
-        const saved=JSON.parse(localStorage.getItem(DEMO_STATE_KEY)??'null');
-        if(saved&&typeof saved==='object'&&!Array.isArray(saved)){
-          const worlds=Object.keys(saved).filter(id=>DEMO_WORLDS.includes(id));
-          if(worlds.length){
-            await engineClient.call('ensure',{worlds,why:'migrating saved work'});
-            const migrated=await engineClient.call('setStates',{state:Object.fromEntries(worlds.map(id=>[id,saved[id]]))});
-            session.acceptState(migrated);applyState(migrated.state);
-            const snapshot=await engineClient.call('snapshotInstances',{worlds});
-            await instanceStore.saveMany(snapshot.records);
-            const readback=await instanceStore.all();
-            if(snapshot.records.some(row=>!readback.some(saved=>saved.world===row.world&&saved.instanceId===row.instanceId&&saved.revision===row.revision&&saved.wires===row.wires)))throw Error('instance-migration-readback-mismatch');
-            const restored=await engineClient.call('restoreInstances',{records:readback});
-            session.acceptState(restored);applyState(restored.state);
-            localStorage.removeItem(DEMO_STATE_KEY);
-          }
-        }
-      }
-    }catch(error){failInstances(error);}
-    demoRestored=true;
     session.setWorldState?.(SHELL, { language: language.get(), ...(savedTab ? { activeTab: savedTab } : {}) });   // the shell world's language state starts as the selector (LANG-FIXED)
   } catch (e) {
     console.error(e);
@@ -2143,22 +2098,39 @@ export async function mountPsys2(element, options = {}) {
     try{
       const world=tabDefs.find(tab=>tab.id===view)?.world;
       if(!world){note('Open a world to export its SOP.');return;}
-      queueInstances();await flushInstances();
+      await flushInstances();
       const wires=await instanceStore.exportWorld(world);
       if(!wires){note('This world has no saved SOP instance.');return;}
       await saveFile(`${world}.sop`,wires);
     }catch(error){failInstances(error);}
   }},'Export world SOP');
-  root.querySelector('.p2-tools')?.append(exportWorld);
+  const workMenu=h('details',{class:'p2-work-menu'},h('summary',{title:'Explicit save/open; editor work starts fresh on reload'},'Work'));
+  const workActions=h('div',{class:'p2-work-actions'},h('p',{},'Work is session-only. Save a file to keep it.'));workMenu.append(workActions);root.querySelector('.p2-tools')?.append(workMenu);
+  const applicationVersion=()=>globalThis.__psys2Build?.version;
+  const workFiles={
+    async snapshot(){return workFile(applicationVersion(),await flushInstances());},
+    async open(text){
+      if(isBusy())throw Error('Wait for the current action before opening work.');
+      const records=readWorkFile(text,applicationVersion());
+      await engineClient.call('ensure',{worlds:records.map(row=>row.world),why:'explicit work file'});
+      const restored=await engineClient.call('restoreInstances',{records});session.acceptState(restored);applyState(restored.state);
+      note(`Loaded ${records.length} saved worlds.`);return records.length;
+    }
+  };
+  const openInput=h('input',{type:'file',accept:'.json,application/json',hidden:true,'aria-label':'Open work file'});
+  on(openInput,'change',async()=>{const file=openInput.files?.[0];if(!file)return;try{await workFiles.open(await file.text());}catch(error){failInstances(error);}finally{openInput.value='';}});
+  workActions.append(
+    h('button',{class:'p2-btn-text',type:'button',title:'Download the current worlds; editor work is not saved automatically',onclick:async()=>{try{await saveFile('psys2-work.json',JSON.stringify(await workFiles.snapshot(),null,2));}catch(error){failInstances(error);}}},'Save work'),
+    h('button',{class:'p2-btn-text',type:'button',title:'Open a work file from this application version; no automatic conversion',onclick:()=>openInput.click()},'Open work'),exportWorld,openInput);
   const handle = {
-    engine, session, settings, trainingPairs, instanceStore, flushInstances, send, stop: stopTurn, engineClient, longTasks, applyState, showTab: (id, via = 'card') => userTab(id, via), get busy() { return !!turn; }, get debug() { return dbg; }, worldActivity:{list:()=>worldActivity.slice(),subscribe:fn=>{worldActivityListeners.add(fn);return()=>worldActivityListeners.delete(fn);}}, isBusy, get veiled() { return veiled; },
+    engine, session, settings, trainingPairs, instanceStore, flushInstances, workFiles, send, stop: stopTurn, engineClient, longTasks, applyState, showTab: (id, via = 'card') => userTab(id, via), get busy() { return !!turn; }, get debug() { return dbg; }, worldActivity:{list:()=>worldActivity.slice(),subscribe:fn=>{worldActivityListeners.add(fn);return()=>worldActivityListeners.delete(fn);}}, isBusy, get veiled() { return veiled; },
     /** The queue of waiting messages (MIC2) and the turn state flags, in one place for other features (BUSY veil): `turnState()` says what is running and what waits. */
     queue: { list: () => queue.map((q) => ({ id: q.id, text: q.text, mode: q.mode })), drop: dropQueued, clear: clearQueue, get length() { return queue.length; } },
     turnState: () => ({ running: !!turn, queued: queue.length, speaking: !!mic.speaking, mic: micBtn.dataset.mic }),
     get micLog() { return micLog; }, micClick,
     /** USER-ACTIONS hook for other features: `actions.record(kind, target, extra)`; `actions.recall(text)` is called by the arrow-key message history (INPUT-HISTORY). */
     actions: { record: (kind, target, extra) => events.add(kind, target, extra), recall: (text) => events.add('recall', text), events: () => events.all() }, progress,
-    destroy() { destroyed = true; void flushInstances().catch(()=>{}).finally(async()=>{engineClient?.destroy();await instanceStore.close();}).catch(()=>{}); cleanups.forEach((f) => f()); modalHost.remove(); dbg?.destroy?.(); avatarUI?.destroy?.(); speech.destroy(); element.replaceChildren(); element.classList.remove('p2-box'); },
+    destroy() { destroyed = true;engineClient?.destroy();void instanceStore.close(); cleanups.forEach((f) => f()); modalHost.remove(); dbg?.destroy?.(); avatarUI?.destroy?.(); speech.destroy(); element.replaceChildren(); element.classList.remove('p2-box'); },
   };
   // FREEZE: the listening state is never restored; the microphone starts only with a click
   if (settings.devMode === true) { syncDebugButton(); loadDebug(); }   // DBG: developer mode is remembered

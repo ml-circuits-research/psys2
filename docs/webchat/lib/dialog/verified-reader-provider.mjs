@@ -81,7 +81,7 @@ export async function createVerifiedReaderProvider({
  if(['tokenizer','bindings'].some(kind=>descriptors[kind].bytes!==undefined&&descriptors[kind].bytes>maxJSONBytes))throw Error('json-byte-budget');
  let remainingBytes=maxTotalBytes-manifestBytes.byteLength;
  const files=Object.fromEntries(await Promise.all(Object.entries(descriptors).map(async([kind,d])=>{
-  const supplied=await readArtifact(d.path);
+  const supplied=await readArtifact(d.path,{sha256:d.sha256,...(d.bytes===undefined?{}:{bytes:d.bytes})});
   if(!(supplied instanceof Uint8Array)&&!(supplied instanceof ArrayBuffer))throw Error('artifact-bytes-required');
   const size=supplied.byteLength,limit=Math.min(d.bytes??maxJSONBytes,remainingBytes);
   if(size>limit||!size)throw Error('artifact-byte-budget:'+kind);

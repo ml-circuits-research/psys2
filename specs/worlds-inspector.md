@@ -9,3 +9,9 @@ The worker publishes `world-activity` events on the existing engine event channe
 Instance snapshots use the library compact typed serializer while restoring legacy archives. Ordinary semantic scalar properties remain inline on object facts. The generic lossless native projection uses direct typed literals inside container nodes rather than separate scalar nodes; object keys and member values correspond in order. Container references preserve nesting. This reduces transport serialization, without claiming to have removed the native state adapter or migrated its decisions into SOP worlds.
 
 Validation includes real Chromium graph selection, exact archive display/copy, native history inspection, live native events, desktop layout and the existing full new-engine gate. Model retraining remains deferred until owner UI review.
+
+## Explicit work files and model cache
+
+Editor work starts fresh on navigation. There is no automatic native state restore, autosave, legacy JSON migration or startup archive conversion. The UI offers explicit Save work/Open work files and current-world SOP export. Work files declare the exact application build; another build is refused before any state adoption without conversion. Old browser databases remain untouched and inactive. UI training pairs remain session-local until downloaded. Settings and message logs retain their existing independent purpose and do not restore editor worlds.
+
+SOP-BERT artifact bytes use their own SHA-256 keyed CacheStorage. Every cache read checks size/digest; corrupt entries are evicted and fetched again. Unavailable CacheStorage falls through to the authenticated fetch path. Only successful full reader assembly prunes this cache to current artifact hashes. This cache survives unrelated UI builds when weights are unchanged. Worlds exposes cache statistics separately from editor state and explicit snapshot buffers. ONNX sessions and WASM initialization still occur after navigation.

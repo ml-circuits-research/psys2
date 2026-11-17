@@ -200,3 +200,8 @@ test('persisted five-file manifests require exact independently trusted external
  extra.input.manifestJSON=JSON.stringify(m);extra.input.manifestSha256=hash(extra.input.manifestJSON);
  await assert.rejects(createVerifiedReaderProvider(extra.input),/bundle-profile/);
 });
+test('artifact reader receives authenticated content descriptors for cache identity independently of deployment path',async()=>{
+ const f=fixture(),reads=[];f.input.readArtifact=async(path,descriptor)=>{reads.push({path,...descriptor});return f.artifacts[path];};
+ const built=await createVerifiedReaderProvider(f.input);
+ assert.equal(reads.length,5);for(const read of reads){assert.equal(read.sha256,hash(f.artifacts[read.path]));assert.equal(read.bytes,f.artifacts[read.path].byteLength);assert.ok(Object.values(built.verified.files).some(file=>file.path===read.path&&file.sha256===read.sha256));}
+});
