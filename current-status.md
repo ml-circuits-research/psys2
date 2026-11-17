@@ -4,7 +4,7 @@ Updated: 2026-11-17, 23:12 UTC (2026-11-18 local time). Final verified handover 
 
 ## Public demo
 
-Latest build: **`78a45da5bc`**, https://ml-circuits-research.github.io/psys2/webchat/?ui=78a45da5bc . This handover is committed and pushed with the implementation; public activation is checked separately because GitHub Pages updates asynchronously. The preceding `e54e1f807b` build was confirmed live.
+Latest build: **`78a45da5bc`**, https://ml-circuits-research.github.io/psys2/webchat/?ui=78a45da5bc . Implementation commit **`49ece0cd`** is pushed. GitHub Pages deployment completed successfully and the public `build-info.json` was verified to return **`78a45da5bc`**.
 
 The deployed SOP-BERT weights remain the original epoch-7 model. No new-model deployment or completed retraining is claimed.
 
@@ -15,7 +15,7 @@ The deployed SOP-BERT weights remain the original epoch-7 model. No new-model de
 - Union includes all **36,999 older authored messages** plus the new corpus: **46,098 training samples / 4,451 calibration samples, 257 keys**. UI training weight is five; related paraphrases share split cohorts. No source exclusions.
 - Worlds: vertical explanatory legend, breadcrumb navigation, separate Activity log page, larger adjustable fonts, visibility/focus-gated animation, and per-response Replay of exact recorded events. Replay does not execute commands again.
 - Optional dynamic input padding, compact CPU training labels and compatible-head warm-starting reduce unnecessary inference/training work. Legacy model configurations retain their previous padding behavior.
-- Recovered **1,408,461,474 bytes** from superseded checkpoints/export/cache. About 21 GB remains free. Current deployed weights, selected epoch-7 checkpoint, training data and unowned stale worktrees were preserved.
+- Recovered **1,408,461,474 bytes** from superseded checkpoints/export/cache. About 20 GB remains free. Current deployed weights, selected epoch-7 checkpoint, training data and unowned stale worktrees were preserved.
 
 ## Actual measurements
 
