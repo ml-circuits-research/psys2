@@ -4752,3 +4752,16 @@ Checks:7new tiny CPU IO/warmstart/selection fixtures pass; prior13candidate and
 10migration fixtures checked. No full corpus preparation, model construction,
 GPU, optimizer run or saved binaries. Exact source/profile review and separate
 disk/memory reserve remain necessary before any real data/model operation.
+
+## 2026-11-17 — Evaluate the exact compacted checkpoint candidate
+
+Fixed only the new candidate: selection evaluates a detached FP32 clone loaded
+from the exact CPU BF16 compact snapshot that is subsequently saved if selected.
+Live model parameters/gradients/mode and optimizer remain unchanged. Config/run
+record explicit compaction/evaluation precision. Unsupported floating dtypes or
+nonfinite compacted values refuse. No intermediate disk/model artifact.
+
+Checks:3new tiny CPU compaction fixtures pass (near-boundary class flip,
+selection/reload parity, unchanged live/optimizer state and refusal cases).
+Prior13candidate+10migration+7IO/warmstart fixtures also pass:33total.
+No pretrained model/corpus/checkpoint/GPU run or saved model binaries.

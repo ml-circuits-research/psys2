@@ -1,7 +1,7 @@
 """Inventory-key BIO reader with shared per-mention metadata; no slot assignment.
 Gold request cuts are conditional supervision, never an inference argument.
 """
-import argparse,collections,gzip,hashlib,importlib.util,json,random,time
+import argparse,collections,copy,gzip,hashlib,importlib.util,json,random,time
 from pathlib import Path
 
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
@@ -17,6 +17,11 @@ def token_interval(offsets,span):
     ids=[i for i,(a,b)in enumerate(offsets)if b>a and a>=span[0]and b<=span[1]]
     return (ids[0],ids[-1]+1)if ids and offsets[ids[0]][0]==span[0]and offsets[ids[-1]][1]==span[1]else None
 
+CHECKPOINT_EVALUATION={'format':'sop.key-reader-checkpoint-evaluation/1',
+    'trainingParameterDtype':'float32','checkpointFloatingStorage':'bfloat16',
+    'evaluationRoundtrip':'float32->bfloat16->float32','forwardAutocast':'disabled',
+    'device':'training-device','state':'detached-eval-clone','optimizer':'unchanged'}
+
 SELECTION_CRITERION={'format':'sop.key-reader-selection/1','order':['positiveSupervisedBioGlobalExactRate','targetTypePresentClassAccuracy','decodedMentionF1'],'scope':'gold-cut supervised BIO+global subset, not complete graph'}
 
 def selection_rank(report):
@@ -29,7 +34,7 @@ def configuration(manifest):
     if manifest.get('format')!='sop.per-key-supervision/3-target-type-migration-candidate':raise ValueError('candidate-supervision-required')
     registry=manifest['registry'];keys=list(registry)
     if registry.get('request.target.type',{}).get('bio') is not False:raise ValueError('target-type-must-be-class-only')
-    return {'format':'sop.key-reader/2-target-type-candidate','rawCodecFormat':'sop.key-reader-raw-codec/2-target-type-candidate','candidate':True,'executionEligible':False,'tensorArchitectureVersion':2,'trainingSourceFormat':'sop.key-reader-source/3-target-type-migration-candidate','selectionCriterion':SELECTION_CRITERION,'baselineTrainerSha256':'eb0a0ef595e1587da2be4ad4aea3a90ce1ba8829b89385be90ace4b13810d01f','inventorySha256':manifest['inventorySha256'],'exclusionSha256':manifest['exclusionSha256'],'targetFamilies':manifest['targetFamilies'],'keys':keys,'registry':registry,'banks':{k:bank(v)for k,v in registry.items()if v.get('values')},'bioKeys':[k for k,v in registry.items()if v['role']in ['domain','global'] and v.get('bio',True)],'metadataKeys':[k for k,v in registry.items()if v['role']=='metadata'and v.get('values')],'maxLength':192,'boundary':'Conditional gold-cut training; predicted BIO mentions at runtime; unrepresented normalizations/candidates unresolved. No observed literal vocabulary.'}
+    return {'format':'sop.key-reader/2-target-type-candidate','rawCodecFormat':'sop.key-reader-raw-codec/2-target-type-candidate','candidate':True,'executionEligible':False,'tensorArchitectureVersion':2,'trainingSourceFormat':'sop.key-reader-source/3-target-type-migration-candidate','selectionCriterion':SELECTION_CRITERION,'checkpointEvaluation':CHECKPOINT_EVALUATION,'baselineTrainerSha256':'eb0a0ef595e1587da2be4ad4aea3a90ce1ba8829b89385be90ace4b13810d01f','inventorySha256':manifest['inventorySha256'],'exclusionSha256':manifest['exclusionSha256'],'targetFamilies':manifest['targetFamilies'],'keys':keys,'registry':registry,'banks':{k:bank(v)for k,v in registry.items()if v.get('values')},'bioKeys':[k for k,v in registry.items()if v['role']in ['domain','global'] and v.get('bio',True)],'metadataKeys':[k for k,v in registry.items()if v['role']=='metadata'and v.get('values')],'maxLength':192,'boundary':'Conditional gold-cut training; predicted BIO mentions at runtime; unrepresented normalizations/candidates unresolved. No observed literal vocabulary.'}
 
 def encode(row,tokenizer,config):
     import torch
@@ -136,6 +141,31 @@ def evaluate(model,rows,config,device,batch):
                 exact+=bool(rowexact);total+=1;positive_exact+=bool(rowexact and haspositive);positive_total+=haspositive
     tp=sum(v['mentionTP']for v in report.values());fp=sum(v['mentionFP']for v in report.values());fn=sum(v['mentionFN']for v in report.values())
     return {'targetTypePresentClass':{'support':sum(v['support']for v in type_classes.values()),'correct':sum(v['correct']for v in type_classes.values())},'targetTypePerClass':{key:{**value,'accuracy':value['correct']/value['support']if value['support']else None}for key,value in type_classes.items()},'perKey':{k:dict(v)for k,v in report.items()},'decodedMentionF1':2*tp/max(1,2*tp+fp+fn),'conditionalBioAndGlobalExact':exact,'conditionalBioAndGlobalSupport':total,'positiveBioAndGlobalExact':positive_exact,'positiveBioAndGlobalSupport':positive_total,'scope':'Gold request-cut conditional; mention metadata metrics explicitly gold-mention conditioned; not canonical/full-pipeline graph exact.'}
+
+def evaluate_compacted_checkpoint(model,evaluator,*args,**kwargs):
+    """Evaluate exact save/load values without touching training/optimizer state.
+
+    Returns the very same CPU compact state that the caller must serialize if
+    selected. No model/checkpoint files are produced here.
+    """
+    import torch
+    compact={}
+    for key,value in model.state_dict().items():
+        if value.is_floating_point() and value.dtype!=torch.float32:
+            raise ValueError('unsupported-training-parameter-dtype')
+        saved=value.detach().cpu().to(torch.bfloat16)if value.is_floating_point()else value.detach().cpu()
+        compact[key]=saved.clone()
+        if not bool(torch.isfinite(compact[key]).all()):
+            raise ValueError('nonfinite-compacted-state')
+    detached=copy.deepcopy(model)
+    detached.load_state_dict(compact,strict=True) # BF16 -> original FP32, as reload
+    detached.requires_grad_(False)
+    detached.eval()
+    # The live training loop's autocast context must not affect evaluation.
+    device=next(detached.parameters()).device.type
+    with torch.no_grad(),torch.autocast(device_type=device,enabled=False):
+        report=evaluator(detached,*args,**kwargs)
+    return report,compact
 
 def weight_migration_plan(old,new):
     """Semantic row plan only; no checkpoints/tensors are read or written.
@@ -344,7 +374,7 @@ def main():
             if not torch.isfinite(loss):raise ValueError('nonfinite-training-loss')
             loss.backward();torch.nn.utils.clip_grad_norm_(model.parameters(),1);optimizer.step();steps+=1;total+=loss.item()
             if steps%100==0:print(json.dumps({'epoch':epoch+1,'steps':steps,'lastLoss':loss.item()}),flush=True)
-        evaluation=evaluate(model,datasets['calibration'],config,device,args.batch)
+        evaluation,checkpoint_state=evaluate_compacted_checkpoint(model,evaluate,datasets['calibration'],config,device,args.batch)
         metric={'evaluation':evaluation,'epoch':epoch+1,'steps':steps,'trainLossSum':total,
                 'truncatedTrain':sum(r['truncated']for r in datasets['train']),
                 'truncatedCalibration':sum(r['truncated']for r in datasets['calibration']),'executable':False}
@@ -353,12 +383,12 @@ def main():
         rank=selection_rank(evaluation)
         if best is None or rank>best:
             best=rank;best_evaluation=evaluation
-            required=sum(v.numel()*2 for v in model.state_dict().values())*2+128*1024**2
+            required=sum(v.numel()*v.element_size()for v in checkpoint_state.values())*2+128*1024**2
             if shutil.disk_usage(args.out).free<=required:raise ValueError('insufficient-atomic-checkpoint-reserve')
             temp=args.out/'checkpoint.tmp'
-            torch.save({'model':{k:v.detach().cpu().to(torch.bfloat16)if v.is_floating_point()else v.cpu()
-                                for k,v in model.state_dict().items()},'config':config,'epoch':epoch+1},temp)
+            torch.save({'model':checkpoint_state,'config':config,'epoch':epoch+1},temp)
             os.replace(temp,args.out/'checkpoint.pt')
+        del checkpoint_state
     if sha(Path(__file__))!=trainer_sha or sha(data_manifest_path)!=data_sha:
         raise ValueError('training-source-mutated')
     for split,item in manifest['dataFiles'].items():
@@ -374,7 +404,7 @@ def main():
             'dataManifestSha256':data_sha,'preparerSha256':manifest['scriptSha256'],
             'encodedDataSha256':manifest['outputs'],'epochsCompleted':args.epochs,'steps':steps,
             'checkpointSha256':sha(args.out/'checkpoint.pt'),'bestDecodedMentionF1':best_evaluation['decodedMentionF1'],
-            'selectionCriterion':SELECTION_CRITERION,'bestSelectionRank':list(best),'warmstart':warm,
+            'selectionCriterion':SELECTION_CRITERION,'checkpointEvaluation':CHECKPOINT_EVALUATION,'bestSelectionRank':list(best),'warmstart':warm,
             'scope':'complete retained corpus; conditional gold-cut, not full pipeline or calibrated confidence'}
     (args.out/'run.json').write_text(json.dumps(record,indent=2)+'\n',encoding='utf-8')
 

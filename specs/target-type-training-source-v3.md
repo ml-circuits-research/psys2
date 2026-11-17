@@ -106,3 +106,30 @@ GPU work or saved model binaries are generated. This source preparation does
 not authorize a training run, activation, confidence calibration or full graph
 success claim. Gold-cut conditional evaluation remains distinct from future
 predicted-cutter end-to-end evaluation.
+
+## Selection over exact checkpoint-compacted values
+
+A live FP32 epoch can produce different class decisions from its BF16-stored
+checkpoint. Selection therefore evaluates a detached in-memory model clone.
+Its state is first captured as CPU BF16 floating tensors (nonfloating tensors
+copied unchanged), then loaded back into the clone's original FP32 dtype.
+Autocast is disabled for this evaluation. The returned compact CPU snapshot is
+the exact dictionary serialized when selected; save does not recompute it from
+live parameters. No intermediate checkpoint/model file is written.
+
+Config and completed run both declare checkpointEvaluation:
+format:sop.key-reader-checkpoint-evaluation/1,
+trainingParameterDtype:float32,checkpointFloatingStorage:bfloat16,
+evaluationRoundtrip:float32->bfloat16->float32,forwardAutocast:disabled,
+device:training-device,state:detached-eval-clone,optimizer:unchanged.
+Other floating parameter dtypes and nonfinite compacted values refuse rather
+than mislabel precision. The live model, gradients, training mode and optimizer
+are untouched. This requires extra transient model/snapshot memory, separate
+from the existing disk reserve; no additional files or model artifacts.
+
+Three new tiny CPU fixtures show a near-boundary class flipping after BF16
+compaction, prove selection uses the changed class, and prove snapshot reload
+reproduces evaluated results exactly. They also check input gradients/mode and
+optimizer state survive, and nonfinite/unsupported precision refuses.
+Total targeted fixtures:33. No actual pretrained model, corpus, GPU, checkpoint
+or saved weights were used; this is source-only readiness evidence.
