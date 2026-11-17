@@ -1,0 +1,1043 @@
+{
+  "bioBySourceContextSpecialPadding": {
+    "cutter:fp32-vs-q8:contextActive": {
+      "argmaxChanges": 0,
+      "calls": 8,
+      "labelSupport": 0,
+      "maxAbs": 0.0,
+      "values": 0
+    },
+    "cutter:fp32-vs-q8:padding": {
+      "argmaxChanges": 190,
+      "calls": 8,
+      "labelSupport": 1469,
+      "maxAbs": 6.372014999389648,
+      "values": 4407
+    },
+    "cutter:fp32-vs-q8:sourceActive": {
+      "argmaxChanges": 2,
+      "calls": 8,
+      "labelSupport": 51,
+      "maxAbs": 1.4011914730072021,
+      "values": 153
+    },
+    "cutter:fp32-vs-q8:special": {
+      "argmaxChanges": 0,
+      "calls": 8,
+      "labelSupport": 16,
+      "maxAbs": 0.746174693107605,
+      "values": 48
+    },
+    "cutter:torch-vs-fp32:contextActive": {
+      "argmaxChanges": 0,
+      "calls": 8,
+      "labelSupport": 0,
+      "maxAbs": 0.0,
+      "values": 0
+    },
+    "cutter:torch-vs-fp32:padding": {
+      "argmaxChanges": 0,
+      "calls": 8,
+      "labelSupport": 1469,
+      "maxAbs": 0.00011491775512695312,
+      "values": 4407
+    },
+    "cutter:torch-vs-fp32:sourceActive": {
+      "argmaxChanges": 0,
+      "calls": 8,
+      "labelSupport": 51,
+      "maxAbs": 1.0013580322265625e-05,
+      "values": 153
+    },
+    "cutter:torch-vs-fp32:special": {
+      "argmaxChanges": 0,
+      "calls": 8,
+      "labelSupport": 16,
+      "maxAbs": 5.27501106262207e-06,
+      "values": 48
+    },
+    "cutter:torch-vs-q8:contextActive": {
+      "argmaxChanges": 0,
+      "calls": 8,
+      "labelSupport": 0,
+      "maxAbs": 0.0,
+      "values": 0
+    },
+    "cutter:torch-vs-q8:padding": {
+      "argmaxChanges": 190,
+      "calls": 8,
+      "labelSupport": 1469,
+      "maxAbs": 6.372014999389648,
+      "values": 4407
+    },
+    "cutter:torch-vs-q8:sourceActive": {
+      "argmaxChanges": 2,
+      "calls": 8,
+      "labelSupport": 51,
+      "maxAbs": 1.4011867046356201,
+      "values": 153
+    },
+    "cutter:torch-vs-q8:special": {
+      "argmaxChanges": 0,
+      "calls": 8,
+      "labelSupport": 16,
+      "maxAbs": 0.746177077293396,
+      "values": 48
+    },
+    "key:fp32-vs-q8:contextActive": {
+      "argmaxChanges": 58,
+      "calls": 10,
+      "labelSupport": 96136,
+      "maxAbs": 1.8716049194335938,
+      "values": 288408
+    },
+    "key:fp32-vs-q8:padding": {
+      "argmaxChanges": 122,
+      "calls": 10,
+      "labelSupport": 127490,
+      "maxAbs": 3.830570936203003,
+      "values": 382470
+    },
+    "key:fp32-vs-q8:sourceActive": {
+      "argmaxChanges": 0,
+      "calls": 10,
+      "labelSupport": 6954,
+      "maxAbs": 2.084239959716797,
+      "values": 20862
+    },
+    "key:fp32-vs-q8:special": {
+      "argmaxChanges": 0,
+      "calls": 10,
+      "labelSupport": 3660,
+      "maxAbs": 1.0123920440673828,
+      "values": 10980
+    },
+    "key:torch-vs-fp32:contextActive": {
+      "argmaxChanges": 0,
+      "calls": 10,
+      "labelSupport": 96136,
+      "maxAbs": 3.0517578125e-05,
+      "values": 288408
+    },
+    "key:torch-vs-fp32:padding": {
+      "argmaxChanges": 0,
+      "calls": 10,
+      "labelSupport": 127490,
+      "maxAbs": 4.7206878662109375e-05,
+      "values": 382470
+    },
+    "key:torch-vs-fp32:sourceActive": {
+      "argmaxChanges": 0,
+      "calls": 10,
+      "labelSupport": 6954,
+      "maxAbs": 1.9073486328125e-05,
+      "values": 20862
+    },
+    "key:torch-vs-fp32:special": {
+      "argmaxChanges": 0,
+      "calls": 10,
+      "labelSupport": 3660,
+      "maxAbs": 1.9073486328125e-05,
+      "values": 10980
+    },
+    "key:torch-vs-q8:contextActive": {
+      "argmaxChanges": 58,
+      "calls": 10,
+      "labelSupport": 96136,
+      "maxAbs": 1.871617317199707,
+      "values": 288408
+    },
+    "key:torch-vs-q8:padding": {
+      "argmaxChanges": 122,
+      "calls": 10,
+      "labelSupport": 127490,
+      "maxAbs": 3.8305745124816895,
+      "values": 382470
+    },
+    "key:torch-vs-q8:sourceActive": {
+      "argmaxChanges": 0,
+      "calls": 10,
+      "labelSupport": 6954,
+      "maxAbs": 2.0842361450195312,
+      "values": 20862
+    },
+    "key:torch-vs-q8:special": {
+      "argmaxChanges": 0,
+      "calls": 10,
+      "labelSupport": 3660,
+      "maxAbs": 1.0124073028564453,
+      "values": 10980
+    }
+  },
+  "caseCount": 8,
+  "cases": [
+    {
+      "allIndependentRawDifferencePaths": {
+        "fp32-vs-q8": [
+          [
+            "readings",
+            "0",
+            "packet",
+            "coverage",
+            "complete"
+          ],
+          [
+            "readings",
+            "0",
+            "packet",
+            "unresolved"
+          ]
+        ],
+        "torch-vs-fp32": [],
+        "torch-vs-q8": [
+          [
+            "readings",
+            "0",
+            "packet",
+            "coverage",
+            "complete"
+          ],
+          [
+            "readings",
+            "0",
+            "packet",
+            "unresolved"
+          ]
+        ]
+      },
+      "area": "calendar",
+      "cuts": {
+        "fp32": 1,
+        "q8": 1,
+        "torch": 1
+      },
+      "cutterIssues": {
+        "fp32": [],
+        "q8": [],
+        "torch": []
+      },
+      "empty": {
+        "fp32": false,
+        "q8": false,
+        "torch": false
+      },
+      "id": "data/haiku-v1/calendar/b01a.jsonl:calendar-b01-0018",
+      "rawEqual": {
+        "fp32-vs-q8": false,
+        "torch-vs-fp32": true,
+        "torch-vs-q8": false
+      },
+      "sourceTextSha256": "7ca626a2423e4e3adb082e67ed850db40ce49a2af37625c66defae87c4792af5",
+      "truncation": {
+        "fp32": false,
+        "q8": false,
+        "torch": false
+      }
+    },
+    {
+      "allIndependentRawDifferencePaths": {
+        "fp32-vs-q8": [
+          [
+            "cutter",
+            "spans"
+          ],
+          [
+            "readings"
+          ]
+        ],
+        "torch-vs-fp32": [],
+        "torch-vs-q8": [
+          [
+            "cutter",
+            "spans"
+          ],
+          [
+            "readings"
+          ]
+        ]
+      },
+      "area": "calendar",
+      "cuts": {
+        "fp32": 2,
+        "q8": 1,
+        "torch": 2
+      },
+      "cutterIssues": {
+        "fp32": [],
+        "q8": [],
+        "torch": []
+      },
+      "empty": {
+        "fp32": false,
+        "q8": false,
+        "torch": false
+      },
+      "id": "data/haiku-v1/calendar/b01a.jsonl:calendar-b01-0022",
+      "rawEqual": {
+        "fp32-vs-q8": false,
+        "torch-vs-fp32": true,
+        "torch-vs-q8": false
+      },
+      "sourceTextSha256": "0a15013a5857f740061ca00af2b87b75c7c73faeeac3499b4afbc05afb0f183b",
+      "truncation": {
+        "fp32": false,
+        "q8": false,
+        "torch": false
+      }
+    },
+    {
+      "allIndependentRawDifferencePaths": {
+        "fp32-vs-q8": [],
+        "torch-vs-fp32": [],
+        "torch-vs-q8": []
+      },
+      "area": "diagram",
+      "cuts": {
+        "fp32": 1,
+        "q8": 1,
+        "torch": 1
+      },
+      "cutterIssues": {
+        "fp32": [],
+        "q8": [],
+        "torch": []
+      },
+      "empty": {
+        "fp32": false,
+        "q8": false,
+        "torch": false
+      },
+      "id": "data/haiku-v1/diagram/b01a.jsonl:diagram-b01-0016",
+      "rawEqual": {
+        "fp32-vs-q8": true,
+        "torch-vs-fp32": true,
+        "torch-vs-q8": true
+      },
+      "sourceTextSha256": "b883ee762a3dd3c40f11c4f8ae1b149be53e36c889cab7ab10cbd5950930c38b",
+      "truncation": {
+        "fp32": false,
+        "q8": false,
+        "torch": false
+      }
+    },
+    {
+      "allIndependentRawDifferencePaths": {
+        "fp32-vs-q8": [],
+        "torch-vs-fp32": [],
+        "torch-vs-q8": []
+      },
+      "area": "diagram",
+      "cuts": {
+        "fp32": 1,
+        "q8": 1,
+        "torch": 1
+      },
+      "cutterIssues": {
+        "fp32": [],
+        "q8": [],
+        "torch": []
+      },
+      "empty": {
+        "fp32": false,
+        "q8": false,
+        "torch": false
+      },
+      "id": "data/haiku-v1/diagram/b01a.jsonl:diagram-b01-0038",
+      "rawEqual": {
+        "fp32-vs-q8": true,
+        "torch-vs-fp32": true,
+        "torch-vs-q8": true
+      },
+      "sourceTextSha256": "cb0a668db5e8537bf6e3beb897a435d6888fcc5403eb249fd0dabcd67407f456",
+      "truncation": {
+        "fp32": false,
+        "q8": false,
+        "torch": false
+      }
+    },
+    {
+      "allIndependentRawDifferencePaths": {
+        "fp32-vs-q8": [],
+        "torch-vs-fp32": [],
+        "torch-vs-q8": []
+      },
+      "area": "document",
+      "cuts": {
+        "fp32": 1,
+        "q8": 1,
+        "torch": 1
+      },
+      "cutterIssues": {
+        "fp32": [],
+        "q8": [],
+        "torch": []
+      },
+      "empty": {
+        "fp32": false,
+        "q8": false,
+        "torch": false
+      },
+      "id": "data/haiku-v1/document/b01a.jsonl:document-b01-0012",
+      "rawEqual": {
+        "fp32-vs-q8": true,
+        "torch-vs-fp32": true,
+        "torch-vs-q8": true
+      },
+      "sourceTextSha256": "45475fa270f5b29ce0b0f77a85145702bd672130d2f9c07f5a2edfa6e958055e",
+      "truncation": {
+        "fp32": false,
+        "q8": false,
+        "torch": false
+      }
+    },
+    {
+      "allIndependentRawDifferencePaths": {
+        "fp32-vs-q8": [],
+        "torch-vs-fp32": [],
+        "torch-vs-q8": []
+      },
+      "area": "document",
+      "cuts": {
+        "fp32": 1,
+        "q8": 1,
+        "torch": 1
+      },
+      "cutterIssues": {
+        "fp32": [],
+        "q8": [],
+        "torch": []
+      },
+      "empty": {
+        "fp32": false,
+        "q8": false,
+        "torch": false
+      },
+      "id": "data/haiku-v1/document/b01a.jsonl:document-b01-0035",
+      "rawEqual": {
+        "fp32-vs-q8": true,
+        "torch-vs-fp32": true,
+        "torch-vs-q8": true
+      },
+      "sourceTextSha256": "9d021fb590fb17e3cf7a8fc59e7b0f0dbb5c3aea5194b5d78b86af9c78c14257",
+      "truncation": {
+        "fp32": false,
+        "q8": false,
+        "torch": false
+      }
+    },
+    {
+      "allIndependentRawDifferencePaths": {
+        "fp32-vs-q8": [
+          [
+            "readings",
+            "0",
+            "packet",
+            "request",
+            "constraints",
+            "0",
+            "scope"
+          ],
+          [
+            "readings",
+            "0",
+            "packet",
+            "request",
+            "target",
+            "type"
+          ],
+          [
+            "readings",
+            "0",
+            "packet",
+            "unresolved"
+          ]
+        ],
+        "torch-vs-fp32": [],
+        "torch-vs-q8": [
+          [
+            "readings",
+            "0",
+            "packet",
+            "request",
+            "constraints",
+            "0",
+            "scope"
+          ],
+          [
+            "readings",
+            "0",
+            "packet",
+            "request",
+            "target",
+            "type"
+          ],
+          [
+            "readings",
+            "0",
+            "packet",
+            "unresolved"
+          ]
+        ]
+      },
+      "area": "drawing",
+      "cuts": {
+        "fp32": 1,
+        "q8": 1,
+        "torch": 1
+      },
+      "cutterIssues": {
+        "fp32": [],
+        "q8": [],
+        "torch": []
+      },
+      "empty": {
+        "fp32": false,
+        "q8": false,
+        "torch": false
+      },
+      "id": "data/haiku-v1/drawing/b01a.jsonl:drawing-b01-0046",
+      "rawEqual": {
+        "fp32-vs-q8": false,
+        "torch-vs-fp32": true,
+        "torch-vs-q8": false
+      },
+      "sourceTextSha256": "63ed74c6b97cc95a88a485b7b0676c3560c559b7cad0bc231b1b4f82b3050f4d",
+      "truncation": {
+        "fp32": false,
+        "q8": false,
+        "torch": false
+      }
+    },
+    {
+      "allIndependentRawDifferencePaths": {
+        "fp32-vs-q8": [],
+        "torch-vs-fp32": [],
+        "torch-vs-q8": []
+      },
+      "area": "drawing",
+      "cuts": {
+        "fp32": 1,
+        "q8": 1,
+        "torch": 1
+      },
+      "cutterIssues": {
+        "fp32": [],
+        "q8": [],
+        "torch": []
+      },
+      "empty": {
+        "fp32": false,
+        "q8": false,
+        "torch": false
+      },
+      "id": "data/haiku-v1/drawing/b01a.jsonl:drawing-b01-0053",
+      "rawEqual": {
+        "fp32-vs-q8": true,
+        "torch-vs-fp32": true,
+        "torch-vs-q8": true
+      },
+      "sourceTextSha256": "c4b800d845e5cd2ae4f42e3161508ebd1c226fdb06ed38986bb5c5efd138e1fb",
+      "truncation": {
+        "fp32": false,
+        "q8": false,
+        "torch": false
+      }
+    }
+  ],
+  "command": "CUDA_VISIBLE_DEVICES='' OMP_NUM_THREADS=2 MKL_NUM_THREADS=2 .venv/bin/python .session-control/diagnose-review23-reader-ram.py",
+  "executionEligible": false,
+  "format": "sop.reader-fp32-export-q8-diagnostic/1",
+  "gpu": false,
+  "graphConfidence": null,
+  "harnessFormattingNote": "Executednumericalprobecompleted; escapedtrailingnewline inreportwriter correctedafterward. Publishedreproductionharness fixesonlythisreportformatting; originalexecutedharnessSHA retainedin scriptSha256. No numerical/model change.",
+  "hiddenNumericalOnly": {
+    "fp32-vs-q8": {
+      "calls": 10,
+      "maxAbs": 2.309473991394043,
+      "values": 1474560
+    },
+    "torch-vs-fp32": {
+      "calls": 10,
+      "maxAbs": 3.287196159362793e-05,
+      "values": 1474560
+    },
+    "torch-vs-q8": {
+      "calls": 10,
+      "maxAbs": 2.309476137161255,
+      "values": 1474560
+    }
+  },
+  "keyCheckpointSha256": "177cecee44c811822c65852fac1148a2faa3f9073a44b1677120a9068effb59d",
+  "keyProofSha256": "a7c89a58a1d77a29a8cd275c5d6b9bdb521b7baaf75ee54e51896748f2405bf9",
+  "level": "actual8CALtexts/context/tokenizer/predictedcuts+queries, no goldinputs; notfullCAL/accuracy/admission/canonicalgraphparity",
+  "loaderProvenance": {
+    "checkpointFloatingStorage": "bfloat16",
+    "device": "cpu",
+    "encoderFiles": {
+      "config.json": "69c94b0222d5d1f4b0ad027ca7416cdafb98378cbbb8305d0bf47c9365c60c83",
+      "model.safetensors": "5e3f1108e3cb34ee048634875d8482665b65ac713291a7e32396fb18f6ff0063",
+      "tokenizer.json": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+      "tokenizer_config.json": "a025160ef0431f1a392f6f050c1310f4c5d9fb6f275932dbccba73c4d214bf10",
+      "vocab.txt": "07eced375cec144d27c900241f3e339478dec958f92fddbc551f295c992038a3"
+    },
+    "executionEligible": false,
+    "format": "sop.key-reader-cpu-load/1",
+    "forwardAutocast": "disabled",
+    "graphConfidence": null,
+    "hashes": {
+      "artifact": "a7c89a58a1d77a29a8cd275c5d6b9bdb521b7baaf75ee54e51896748f2405bf9",
+      "checkpoint": "177cecee44c811822c65852fac1148a2faa3f9073a44b1677120a9068effb59d",
+      "config": "b7b03ad5c06ebaeec6ff2014e2ac01d26a935e58de62bdbb7589eaf02f28efdb",
+      "dataManifest": "4b9ddfa1ee8033d23005b336f542d26f0c9d0066b138887acb95eb58ec9c3b2d",
+      "preparer": "5cab868172f89f29f51d35894aebfbae0c71011cc97bd3ad4b3b1c29a96fa477",
+      "trainer": "f9e5794fd939ce5a202be2c4cdfdacc7e8e48e68ded4d50d97453108bcc6a69c"
+    },
+    "historicalContractSha256": "e4f5bea5e35ed7712d7eee0a435c3b8993784c4949e5ee5c8d17f208ebda8db7",
+    "loadedFloatingDtype": "float32",
+    "loaderSha256": "10638c9fbb87a1af38eddc2642568ec9bceb8a6911ef15e14efb973a1457c2a1",
+    "validatorSha256": "2a09586cfd768bd9447262ea2afd6a6f938fcc15b6e506da429ecc749394b912"
+  },
+  "metricBoundaries": {
+    "BIO": "Source-active,context,special,padding separated; no goldcorrectness labels",
+    "RAW": "independentcuttercuts/queries perbackend; no canonicalgraph/admission/accuracyclaim",
+    "headClasses": "same-reference-query role-applicable head decisions; not necessarilyemittedfields; independentRAWcomparisonretained",
+    "hidden": "numericalmax only, no semanticargmax",
+    "presence": "individualhead sign changes only"
+  },
+  "models": {
+    "cutter": {
+      "fp32Bytes": 265574045,
+      "fp32Sha256": "97d9499c2041c52332331472370c06094ad5922ab1d27a31537b701775c4abcc",
+      "q8Bytes": 66756266,
+      "q8Sha256": "f21fb2dc82c52ab85c9436d53be83e0e69e0e9cb746f6ecd8b607b964d476a77"
+    },
+    "encoder": {
+      "fp32Bytes": 267118432,
+      "fp32Sha256": "ad8ad9de00a1ee122fafb02926398bce36069e11635dd7e27d1940d8ff27417e",
+      "q8Bytes": 67160769,
+      "q8Sha256": "040c8bc3f0a0c3db619f4fb2a08587eb4fd8fbb1809a7e27977c7ac08897c8b5"
+    },
+    "heads": {
+      "fp32Bytes": 2210366,
+      "fp32Sha256": "c55798e3a49b87a893a6aa1d83ce40b36e478bfbe5cfaadce6f851584177f970",
+      "q8Bytes": 623715,
+      "q8Sha256": "2c741fe0190066a476ce6c42c3dcfd2637a6c25aa716cd3904530eacb1b21edb"
+    }
+  },
+  "newGraphFilesWritten": false,
+  "peakRssBytes": 4287066112,
+  "presenceIndividualSignDecisions": {
+    "fp32-vs-q8": {
+      "calls": 10,
+      "headDecisions": 1350,
+      "maxAbs": 1.3693580627441406,
+      "signChanges": 9
+    },
+    "torch-vs-fp32": {
+      "calls": 10,
+      "headDecisions": 1350,
+      "maxAbs": 1.430511474609375e-05,
+      "signChanges": 0
+    },
+    "torch-vs-q8": {
+      "calls": 10,
+      "headDecisions": 1350,
+      "maxAbs": 1.3693585395812988,
+      "signChanges": 9
+    }
+  },
+  "q8ArtifactManifestSha256": "aa4a549bda7727a24dcef74a0d0a801d5bba277f93498324aa071986e8200c6c",
+  "rawEqualCounts": {
+    "fp32-vs-q8": 5,
+    "torch-vs-fp32": 8,
+    "torch-vs-q8": 5
+  },
+  "reproductionHarnessSha256": "f7b521241ac19f5bfbbcd2e6ecd69fd3a67d7a15e8e1c98148870c0707243eb2",
+  "sameReferenceQueryApplicableHeadDecisions": {
+    "fp32-vs-q8:calendar.meeting.shift": {
+      "argmaxChanges": 0,
+      "maxAbs": 0.27618926763534546,
+      "queries": 2
+    },
+    "fp32-vs-q8:conversation.turn.area": {
+      "argmaxChanges": 0,
+      "maxAbs": 0.6687850952148438,
+      "queries": 10
+    },
+    "fp32-vs-q8:conversation.turn.fragment": {
+      "argmaxChanges": 1,
+      "maxAbs": 0.7646366357803345,
+      "queries": 10
+    },
+    "fp32-vs-q8:conversation.turn.objection": {
+      "argmaxChanges": 0,
+      "maxAbs": 0.6255583763122559,
+      "queries": 10
+    },
+    "fp32-vs-q8:document.inline.list_kind": {
+      "argmaxChanges": 0,
+      "maxAbs": 0.21426105499267578,
+      "queries": 1
+    },
+    "fp32-vs-q8:document.section.role": {
+      "argmaxChanges": 0,
+      "maxAbs": 0.4526407718658447,
+      "queries": 1
+    },
+    "fp32-vs-q8:document.text.genre": {
+      "argmaxChanges": 0,
+      "maxAbs": 0.4632294178009033,
+      "queries": 1
+    },
+    "fp32-vs-q8:drawing.drawn.layer": {
+      "argmaxChanges": 0,
+      "maxAbs": 0.20242619514465332,
+      "queries": 1
+    },
+    "fp32-vs-q8:request.constraint.character": {
+      "argmaxChanges": 0,
+      "maxAbs": 0.5013151168823242,
+      "queries": 13
+    },
+    "fp32-vs-q8:request.constraint.operator": {
+      "argmaxChanges": 0,
+      "maxAbs": 0.5965533256530762,
+      "queries": 13
+    },
+    "fp32-vs-q8:request.constraint.phase": {
+      "argmaxChanges": 0,
+      "maxAbs": 0.5877270698547363,
+      "queries": 13
+    },
+    "fp32-vs-q8:request.constraint.polarity": {
+      "argmaxChanges": 0,
+      "maxAbs": 0.48050642013549805,
+      "queries": 13
+    },
+    "fp32-vs-q8:request.constraint.scope": {
+      "argmaxChanges": 1,
+      "maxAbs": 0.5900087356567383,
+      "queries": 13
+    },
+    "fp32-vs-q8:request.constraint.step": {
+      "argmaxChanges": 0,
+      "maxAbs": 0.4326324462890625,
+      "queries": 13
+    },
+    "fp32-vs-q8:request.constraint.variety": {
+      "argmaxChanges": 0,
+      "maxAbs": 0.4508955478668213,
+      "queries": 13
+    },
+    "fp32-vs-q8:request.logic.group": {
+      "argmaxChanges": 0,
+      "maxAbs": 0.3580169677734375,
+      "queries": 13
+    },
+    "fp32-vs-q8:request.logic.quantifier": {
+      "argmaxChanges": 0,
+      "maxAbs": 0.5593857765197754,
+      "queries": 10
+    },
+    "fp32-vs-q8:request.question.ask": {
+      "argmaxChanges": 0,
+      "maxAbs": 1.0360225439071655,
+      "queries": 10
+    },
+    "fp32-vs-q8:request.request.act": {
+      "argmaxChanges": 0,
+      "maxAbs": 1.1352183818817139,
+      "queries": 10
+    },
+    "fp32-vs-q8:request.request.mood": {
+      "argmaxChanges": 0,
+      "maxAbs": 0.8670532703399658,
+      "queries": 10
+    },
+    "fp32-vs-q8:request.target.determiner": {
+      "argmaxChanges": 0,
+      "maxAbs": 0.6928215026855469,
+      "queries": 10
+    },
+    "fp32-vs-q8:request.target.fill": {
+      "argmaxChanges": 1,
+      "maxAbs": 1.0260529518127441,
+      "queries": 10
+    },
+    "fp32-vs-q8:request.target.mode": {
+      "argmaxChanges": 0,
+      "maxAbs": 0.9239881038665771,
+      "queries": 10
+    },
+    "fp32-vs-q8:request.target.ordinal": {
+      "argmaxChanges": 0,
+      "maxAbs": 1.0130305290222168,
+      "queries": 10
+    },
+    "fp32-vs-q8:request.target.type": {
+      "argmaxChanges": 1,
+      "maxAbs": 0.753340482711792,
+      "queries": 10
+    },
+    "torch-vs-fp32:calendar.meeting.shift": {
+      "argmaxChanges": 0,
+      "maxAbs": 4.291534423828125e-06,
+      "queries": 2
+    },
+    "torch-vs-fp32:conversation.turn.area": {
+      "argmaxChanges": 0,
+      "maxAbs": 1.239776611328125e-05,
+      "queries": 10
+    },
+    "torch-vs-fp32:conversation.turn.fragment": {
+      "argmaxChanges": 0,
+      "maxAbs": 1.33514404296875e-05,
+      "queries": 10
+    },
+    "torch-vs-fp32:conversation.turn.objection": {
+      "argmaxChanges": 0,
+      "maxAbs": 1.621246337890625e-05,
+      "queries": 10
+    },
+    "torch-vs-fp32:document.inline.list_kind": {
+      "argmaxChanges": 0,
+      "maxAbs": 3.814697265625e-06,
+      "queries": 1
+    },
+    "torch-vs-fp32:document.section.role": {
+      "argmaxChanges": 0,
+      "maxAbs": 3.5762786865234375e-06,
+      "queries": 1
+    },
+    "torch-vs-fp32:document.text.genre": {
+      "argmaxChanges": 0,
+      "maxAbs": 8.58306884765625e-06,
+      "queries": 1
+    },
+    "torch-vs-fp32:drawing.drawn.layer": {
+      "argmaxChanges": 0,
+      "maxAbs": 1.0013580322265625e-05,
+      "queries": 1
+    },
+    "torch-vs-fp32:request.constraint.character": {
+      "argmaxChanges": 0,
+      "maxAbs": 7.62939453125e-06,
+      "queries": 13
+    },
+    "torch-vs-fp32:request.constraint.operator": {
+      "argmaxChanges": 0,
+      "maxAbs": 1.049041748046875e-05,
+      "queries": 13
+    },
+    "torch-vs-fp32:request.constraint.phase": {
+      "argmaxChanges": 0,
+      "maxAbs": 1.049041748046875e-05,
+      "queries": 13
+    },
+    "torch-vs-fp32:request.constraint.polarity": {
+      "argmaxChanges": 0,
+      "maxAbs": 1.430511474609375e-05,
+      "queries": 13
+    },
+    "torch-vs-fp32:request.constraint.scope": {
+      "argmaxChanges": 0,
+      "maxAbs": 7.62939453125e-06,
+      "queries": 13
+    },
+    "torch-vs-fp32:request.constraint.step": {
+      "argmaxChanges": 0,
+      "maxAbs": 1.430511474609375e-05,
+      "queries": 13
+    },
+    "torch-vs-fp32:request.constraint.variety": {
+      "argmaxChanges": 0,
+      "maxAbs": 8.106231689453125e-06,
+      "queries": 13
+    },
+    "torch-vs-fp32:request.logic.group": {
+      "argmaxChanges": 0,
+      "maxAbs": 7.62939453125e-06,
+      "queries": 13
+    },
+    "torch-vs-fp32:request.logic.quantifier": {
+      "argmaxChanges": 0,
+      "maxAbs": 6.198883056640625e-06,
+      "queries": 10
+    },
+    "torch-vs-fp32:request.question.ask": {
+      "argmaxChanges": 0,
+      "maxAbs": 1.1444091796875e-05,
+      "queries": 10
+    },
+    "torch-vs-fp32:request.request.act": {
+      "argmaxChanges": 0,
+      "maxAbs": 1.239776611328125e-05,
+      "queries": 10
+    },
+    "torch-vs-fp32:request.request.mood": {
+      "argmaxChanges": 0,
+      "maxAbs": 1.430511474609375e-05,
+      "queries": 10
+    },
+    "torch-vs-fp32:request.target.determiner": {
+      "argmaxChanges": 0,
+      "maxAbs": 1.1444091796875e-05,
+      "queries": 10
+    },
+    "torch-vs-fp32:request.target.fill": {
+      "argmaxChanges": 0,
+      "maxAbs": 7.62939453125e-06,
+      "queries": 10
+    },
+    "torch-vs-fp32:request.target.mode": {
+      "argmaxChanges": 0,
+      "maxAbs": 1.430511474609375e-05,
+      "queries": 10
+    },
+    "torch-vs-fp32:request.target.ordinal": {
+      "argmaxChanges": 0,
+      "maxAbs": 1.33514404296875e-05,
+      "queries": 10
+    },
+    "torch-vs-fp32:request.target.type": {
+      "argmaxChanges": 0,
+      "maxAbs": 5.7220458984375e-06,
+      "queries": 10
+    },
+    "torch-vs-q8:calendar.meeting.shift": {
+      "argmaxChanges": 0,
+      "maxAbs": 0.2761877775192261,
+      "queries": 2
+    },
+    "torch-vs-q8:conversation.turn.area": {
+      "argmaxChanges": 0,
+      "maxAbs": 0.6687870025634766,
+      "queries": 10
+    },
+    "torch-vs-q8:conversation.turn.fragment": {
+      "argmaxChanges": 1,
+      "maxAbs": 0.7646342515945435,
+      "queries": 10
+    },
+    "torch-vs-q8:conversation.turn.objection": {
+      "argmaxChanges": 0,
+      "maxAbs": 0.6255583763122559,
+      "queries": 10
+    },
+    "torch-vs-q8:document.inline.list_kind": {
+      "argmaxChanges": 0,
+      "maxAbs": 0.2142629623413086,
+      "queries": 1
+    },
+    "torch-vs-q8:document.section.role": {
+      "argmaxChanges": 0,
+      "maxAbs": 0.4526371955871582,
+      "queries": 1
+    },
+    "torch-vs-q8:document.text.genre": {
+      "argmaxChanges": 0,
+      "maxAbs": 0.4632298946380615,
+      "queries": 1
+    },
+    "torch-vs-q8:drawing.drawn.layer": {
+      "argmaxChanges": 0,
+      "maxAbs": 0.2024240493774414,
+      "queries": 1
+    },
+    "torch-vs-q8:request.constraint.character": {
+      "argmaxChanges": 0,
+      "maxAbs": 0.501319408416748,
+      "queries": 13
+    },
+    "torch-vs-q8:request.constraint.operator": {
+      "argmaxChanges": 0,
+      "maxAbs": 0.5965542793273926,
+      "queries": 13
+    },
+    "torch-vs-q8:request.constraint.phase": {
+      "argmaxChanges": 0,
+      "maxAbs": 0.5877313613891602,
+      "queries": 13
+    },
+    "torch-vs-q8:request.constraint.polarity": {
+      "argmaxChanges": 0,
+      "maxAbs": 0.48050928115844727,
+      "queries": 13
+    },
+    "torch-vs-q8:request.constraint.scope": {
+      "argmaxChanges": 1,
+      "maxAbs": 0.5900125503540039,
+      "queries": 13
+    },
+    "torch-vs-q8:request.constraint.step": {
+      "argmaxChanges": 0,
+      "maxAbs": 0.43263816833496094,
+      "queries": 13
+    },
+    "torch-vs-q8:request.constraint.variety": {
+      "argmaxChanges": 0,
+      "maxAbs": 0.4508965015411377,
+      "queries": 13
+    },
+    "torch-vs-q8:request.logic.group": {
+      "argmaxChanges": 0,
+      "maxAbs": 0.3580169677734375,
+      "queries": 13
+    },
+    "torch-vs-q8:request.logic.quantifier": {
+      "argmaxChanges": 0,
+      "maxAbs": 0.5593881607055664,
+      "queries": 10
+    },
+    "torch-vs-q8:request.question.ask": {
+      "argmaxChanges": 0,
+      "maxAbs": 1.0360233783721924,
+      "queries": 10
+    },
+    "torch-vs-q8:request.request.act": {
+      "argmaxChanges": 0,
+      "maxAbs": 1.1352126598358154,
+      "queries": 10
+    },
+    "torch-vs-q8:request.request.mood": {
+      "argmaxChanges": 0,
+      "maxAbs": 0.8670570850372314,
+      "queries": 10
+    },
+    "torch-vs-q8:request.target.determiner": {
+      "argmaxChanges": 0,
+      "maxAbs": 0.6928176879882812,
+      "queries": 10
+    },
+    "torch-vs-q8:request.target.fill": {
+      "argmaxChanges": 1,
+      "maxAbs": 1.0260567665100098,
+      "queries": 10
+    },
+    "torch-vs-q8:request.target.mode": {
+      "argmaxChanges": 0,
+      "maxAbs": 0.9239906072616577,
+      "queries": 10
+    },
+    "torch-vs-q8:request.target.ordinal": {
+      "argmaxChanges": 0,
+      "maxAbs": 1.013029932975769,
+      "queries": 10
+    },
+    "torch-vs-q8:request.target.type": {
+      "argmaxChanges": 1,
+      "maxAbs": 0.7533413171768188,
+      "queries": 10
+    }
+  },
+  "scriptSha256": "f7b521241ac19f5bfbbcd2e6ecd69fd3a67d7a15e8e1c98148870c0707243eb2",
+  "seconds": 11.898794651031494,
+  "sources": {
+    "/home/salboaie/work/sopworlds/.session-control/calendar-training/training/sop-bert/export-key-reader.py": "8295a8e40a5c73e4bc3bccc204ba60bf69244ec7b676b2f68f62813c390d1670",
+    "/home/salboaie/work/sopworlds/.session-control/calendar-training/training/sop-bert/export-reader-onnx.py": "fa2d3740ba087c3125a6e53dba237350934074c7fb9ff0a30e75504a678d7ab1",
+    "/home/salboaie/work/sopworlds/.session-control/request-cutter/training/sop-bert/train-request-cutter.py": "d9422af7ad75e9053f5dfc86c36b0a49ac8f6b52099aa49ac02d95925db1a445",
+    "/home/salboaie/work/sopworlds/psys2/training/sop-bert/candidates/target-type/load-artifact.py": "10638c9fbb87a1af38eddc2642568ec9bceb8a6911ef15e14efb973a1457c2a1",
+    "/home/salboaie/work/sopworlds/psys2/training/sop-bert/candidates/target-type/predict-key-reader.py": "845f29364890415d8de2d85345ce06e7dc6fbe28529ec8a763cf6af14b116212",
+    "/home/salboaie/work/sopworlds/psys2/training/sop-bert/candidates/target-type/prepare-key-reader.py": "5cab868172f89f29f51d35894aebfbae0c71011cc97bd3ad4b3b1c29a96fa477"
+  }
+}
