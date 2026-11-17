@@ -5420,3 +5420,22 @@ Accepted: rejected-field witnesses, family/semantic binding split, selected-chec
 One counter: the catalogue aligns 9 of 15 families and 15 of 105 properties; 90 stay "unknown". That is the same gap the stage report showed (canonical binding 0/27). Close it from the knowledge worlds, not by hand per property: every property and value list already declared in sop-knowledge-worlds (latest 539dd413: depiction, text, room) should produce its alignment record; a property that is truly undeclared becomes a knowledge-worlds task, not a reader rule. Typed dates/clock/duration go through the existing value types.
 
 Order after that: run 5 (presence/span jointly) or epoch 7 as is if run 5 is not ready, export and deploy to the app, calibrate the gate on calibration rows, rerun the 301-row matrix and owner replay, report the class × area table.
+
+## Review 28 — 2026-11-17 08:05 Rome (reviewer, after talking with the owner)
+
+The owner sees a large subscription spend with little visible progress, and asked whether the work is going in circles. My reading of the last 20 hours (144 commits):
+
+- Real progress happened: reader in the browser worker, real-browser matrix, stage measurement, plateau training.
+- But about 55 of the 144 commits are about receipts, hashes, pins, byte caps, immutable copies, witnesses, "source-only" candidates and metadata verification. worker-log.md is 214,000 words, with 579 lines about bytes, SHA or reserves. That is the circle: each step verifies and documents the previous one instead of running the next one.
+- Nothing has run end to end since 05:08. The epoch-1 bundle is still in the app; run 5 is source only; the catalogue has 15 of 105 properties.
+
+What changes now (owner decision on honesty stays in force: do NOT chase numbers by special-casing rows, sentences or the matrix; a lower honest number is better than a higher fake one):
+
+1. Stop the paperwork layer. No new receipts, SHA chains, byte reserves, "bounded witness" files or metadata-only verification steps unless a test needs them. Git history is the provenance. Keep worker-log entries to at most 5 lines; move the current worker-log.md to an archive file and do not read it back each round. This also cuts the token cost.
+2. Each landing must run something real: training, export, deploy, or a measurement on the 301 rows / owner replay. Preparation goes into the same commit as the run it prepares.
+3. Next landings, in this order:
+   a. derive all 105 property alignments mechanically from the sop-knowledge-worlds declarations (one exporter, no hand-written records); undeclared ones listed as knowledge-worlds tasks;
+   b. deploy epoch 7 to the app (run 5 later, when trained);
+   c. calibrate the gate on calibration rows;
+   d. rerun the 301-row matrix and owner replay; report the class × area table and the stage counts (cutter / raw complete / bound / executed).
+4. If disk is the reason for the byte bookkeeping, say so in one line and say what to delete; the owner decides.
