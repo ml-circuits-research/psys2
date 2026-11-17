@@ -371,6 +371,7 @@ export async function mountPsys2(element, options = {}) {
   });
   /** The user opened a tab (click or arrow keys): the dialog engine must know it too (routing tier T, tab-bound questions), RP5b. */
   function userTab(id, via = 'tap') {
+    if (phone) { setPage(id, { via }); return; }
     showTab(id, via);
     if (tabBtns[id] && tabDefs.find(t=>t.id===id)?.world && lastShellTab !== id) { lastShellTab = id; session?.setWorldState?.(SHELL, { activeTab: id }); }
   }
@@ -505,7 +506,7 @@ export async function mountPsys2(element, options = {}) {
     // Keep each response's actual request records even when the live bus ring advances.
     const recorded=structuredClone(activity);
     message.meta.querySelector('.p2-response-replay')?.remove();
-    const replay=h('button',{type:'button',class:'p2-response-replay',title:recorded.length?'Replay the recorded world activity for this response. No command is executed again.':'No world activity was recorded for this response.',disabled:!recorded.length,'data-event-count':recorded.length,onclick:async()=>{showTab('worlds','response-replay');await makeTab(tabDefs.find(t=>t.id==='worlds')); worldsExplorer?.setVisible?.(true);worldsExplorer?.replayEvents(recorded);}},'Replay');
+    const replay=h('button',{type:'button',class:'p2-response-replay',title:recorded.length?'Replay the recorded world activity for this response. No command is executed again.':'No world activity was recorded for this response.',disabled:!recorded.length,'data-event-count':recorded.length,onclick:async()=>{userTab('worlds','response-replay');await makeTab(tabDefs.find(t=>t.id==='worlds')); worldsExplorer?.setVisible?.(true);worldsExplorer?.replayEvents(recorded);}},'Replay');
     message.meta.append(replay);return replay;
   }
   function addMessage(who, text, { children, className } = {}) {

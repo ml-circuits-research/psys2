@@ -1,21 +1,22 @@
 // Model-first proposal routing. Calibration authority belongs to host configuration,
 // never to a model output, evaluation annotation or grammar proposal.
-import {executeRequestCandidate} from './new-engine.mjs?v=ced328a27e';
+import {requestCompositionPolicy}from './request-composition-policy.mjs?v=f691e6cdc6';
+import {executeRequestCandidate} from './new-engine.mjs?v=7369ac48a4';
 import {invokeNativeControl} from './native-tool-controls.mjs?v=4ffbf11c80';
-import {executeDeclaredRequest} from './declared-execution.mjs?v=ced328a27e';
-import {projectContextAction} from './project-context-action.mjs?v=ba72ef72a8';
-import {projectCreateAction} from './project-create-action.mjs?v=7a8d517b41';
+import {executeDeclaredRequest} from './declared-execution.mjs?v=7369ac48a4';
+import {projectContextAction} from './project-context-action.mjs?v=767236c471';
+import {projectCreateAction} from './project-create-action.mjs?v=17662c0aac';
 import {parse,str} from '../vendor/sopworld/sopworld.mjs?v=20fdd56a67';
 import {assessReaderProposal} from './reader-admission.mjs?v=2ae4a44c2e';
 const unavailable=reason=>({candidates:[],coverage:{complete:false,executable:false,graphProposal:false},failures:[{reason}]});
 /** The model only sees utterance text. No expected annotations or grammar graphs. */
-export async function routeNewEngine(session,text,options={}){
+async function routeReaderProposal(session,text,options={},suppliedProposal){
  const provider=session.engine?.requestReader;
  let proposal,provenance=null;
  if(typeof text!=='string'||!text.trim()||text.length>65536||(options.language&&options.language!=='en'))proposal=unavailable('invalid-reader-input');
  else if(!provider||typeof provider.propose!=='function')proposal=unavailable('model-provider-unavailable');
  else{
-  try{provenance=typeof provider.provenance==='function'?provider.provenance():null;proposal=await provider.propose(text);}
+  try{provenance=typeof provider.provenance==='function'?provider.provenance():null;proposal=suppliedProposal??await provider.propose(text);}
   catch{proposal=unavailable('model-proposal-failed');}
  }
  const providerCandidates=Array.isArray(proposal?.candidates)?structuredClone(proposal.candidates):[];
@@ -52,4 +53,23 @@ export async function routeNewEngine(session,text,options={}){
  return {...result,trace:{...result.trace,readerRouting:{primary:'sop-bert',selected:eligible?'sop-bert':null,reason,
   admission:{mode:decision.mode??null,uncertain:decision.uncertain??false,alternatives:decision.alternatives??[],scoreDefinition:decision.scoreDefinition,score:decision.score,proposalEligible:decision.eligible,assessment:decision.assessment},
   interpretation:proposal?.interpretation??null,unresolved:proposal?.failures??[],proposalCandidates:providerCandidates,rawReading:proposal?.raw?.requests??null,model:{provenance,coverage:proposal?.coverage??null,candidates:Array.isArray(proposal?.candidates)?proposal.candidates.length:0,eligible:!!eligible}}}};
+}
+
+/** Apply the declared source-order schedule to actual model cuts, never source words. */
+export async function routeNewEngine(session,text,options={}){
+ const provider=session.engine?.requestReader;
+ if(typeof text!=='string'||!text.trim()||text.length>65536||options.language&&options.language!=='en')return routeReaderProposal(session,text,options);
+ const policy=requestCompositionPolicy();
+ if(!policy.enabled||typeof provider?.proposeRequests!=='function')return routeReaderProposal(session,text,options);
+ const before=structuredClone(session.isession.state),undoBefore=session.newEngineUndo??[],steps=[];
+ for await(const proposal of provider.proposeRequests(text)){
+  const result=await routeReaderProposal(session,text,options,proposal);
+  if(!proposal.composition)return result;
+  steps.push({source:proposal.composition,reply:result});
+ }
+ if(!steps.length)return routeReaderProposal(session,text,options);
+ const area=options.view??session.isession.state['ui.shell']?.activeTab,changed=Object.keys(session.isession.state).filter(key=>JSON.stringify(before[key])!==JSON.stringify(session.isession.state[key]));
+ if(changed.length)session.newEngineUndo=[...undoBefore.slice(-31),{area,before:Object.fromEntries(changed.map(key=>[key,before[key]])),after:Object.fromEntries(changed.map(key=>[key,structuredClone(session.isession.state[key])])),reading:steps.at(-1).reply.trace?.reading,readings:steps.map(step=>step.reply.trace?.reading).filter(Boolean),alternatives:steps.flatMap(step=>step.reply.trace?.readerRouting?.admission?.alternatives??[])}];
+ const supported=steps.filter(step=>step.reply.statuses?.includes('supported')),textReply=steps.map(step=>step.reply.text).join(' '),last=steps.at(-1).reply;
+ return {...last,text:textReply,parts:[{text:textReply,translate:false}],statuses:steps.flatMap(step=>step.reply.statuses??[]),effects:steps.flatMap(step=>step.reply.effects??[]),trace:{...last.trace,readerRouting:{...last.trace?.readerRouting,rawReading:steps.flatMap(step=>step.reply.trace?.readerRouting?.rawReading??[]),unresolved:steps.flatMap(step=>step.reply.trace?.readerRouting?.unresolved??[]),proposalCandidates:steps.flatMap(step=>[step.reply.trace?.reading,...(step.reply.trace?.readerRouting?.proposalCandidates??[])]).filter(Boolean)},partial:supported.length!==steps.length||steps.some(step=>step.reply.trace?.partial),composition:{policy,sourceCuts:steps[0].source.sourceCuts,steps:steps.map(step=>({source:step.source,statuses:step.reply.statuses,trace:step.reply.trace,text:step.reply.text})),supported:supported.length,total:steps.length,undoGroup:changed.length?1:0}}};
 }

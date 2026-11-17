@@ -1,10 +1,10 @@
 # Current status
 
-Updated: 2026-11-17, 21:32 UTC. Owner requested a committed handover and standby. Training may continue unattended; no new weights have been promoted.
+Updated: 2026-11-17, 22:58 UTC. Owner returned with compound-command and mobile failures; active work resumed. No new weights have been promoted.
 
 ## Public demo
 
-Implementation commit: `af6b83c1` (pushed to `origin/main`; working tree clean at handover). The committed UI build is `d840ad120f`: https://ml-circuits-research.github.io/psys2/webchat/?ui=d840ad120f . GitHub Pages can take a short time to update after push; the immediate public check still returned `c342d5df70`, so public activation is not yet verified. The deployed SOP-BERT remains the original epoch-7 model. Its replacement has **not** been declared better, exported or deployed.
+Implementation commit: `af6b83c1` (pushed to `origin/main`; working tree clean at handover). The latest committed UI build is `e54e1f807b`: https://ml-circuits-research.github.io/psys2/webchat/?ui=e54e1f807b . GitHub Pages can take a short time to update after push; the immediate public check still returned `c342d5df70`, so public activation is not yet verified. The deployed SOP-BERT remains the original epoch-7 model. Its replacement has **not** been declared better, exported or deployed.
 
 ## Completed work
 
@@ -23,22 +23,30 @@ The deployed cutter on the fixed 5,218-source comparison achieved **3,728 exact 
 
 ## Checks and integration limits
 
-Full integrated gate: **556 tests, 553 passed, zero failures, three skipped**; system map and browser assets rebuilt. Actual Chromium checks passed for the explanatory legend, 15px base font and zoom, breadcrumbs preserving map position, full-page Activity log, usable chat, and visibility/focus pause/resume; zero console exceptions. Replay was independently verified not to execute commands again.
+Latest integrated gate: **568 tests, 565 passed, zero failures, three skipped**; system map and browser assets rebuilt. Actual Chromium checks passed for the explanatory legend, 15px base font and zoom, breadcrumbs preserving map position, full-page Activity log, usable chat, and visibility/focus pause/resume; zero console exceptions. Replay was independently verified not to execute commands again.
 
 New generic native-interface binding preparation describes 25 families / 144 literal properties in five SOP schemas. Actual gold-request integration changed Avatar base to man and Drawing label to Cabin, with effect verification. This tests the binding/executor mechanism, **not neural recognition**. The overlay is not activated in the deployed model; structured argument codecs and new-model provider-area activation still need integration with the candidate bundle.
 
-## Training in progress at handover
+## Actual training results and corrected diagnosis
 
-- Key reader: `.session-control/overnight-ui-key-run/`; log `.session-control/overnight-ui-key-training.log`. Full prepared union, compatible epoch-7 heads/encoder, max 25 epochs, minimum 5, patience 4, best checkpoint only. First retry reached 500 optimizer steps. It was temporarily suspended while the cutter finished to avoid severe GPU context contention; a detached one-shot watcher resumes that exact process automatically, retaining optimizer state.
-- Cutter: `.session-control/overnight-ui-cutter-run/`; log `.session-control/overnight-ui-cutter-training.log`. Full old/new corpus, 34,655 training / 3,818 calibration messages, minimum 8/max 12 epochs. Intermediate epoch-2 calibration span F1 was 0.999885; this is **not** the final fixed-source comparison or browser result.
-- Initial key-reader attempt failed before any optimizer step during CUDA context allocation. Compact int8 CPU labels and CUDA initialization before label preparation resolved the retry's allocation failure; the initial failure log is retained.
+Cutter completed eight epochs, selecting epoch two. Same fixed 5,218 source cases: **5,212 exact (99.885%)**, up from 3,728 (71.44%). However, it regresses the owner noun enumeration: the deployed cutter reads two cuts for `draw a tree and a house`, while the candidate reads one. It is not promoted on aggregate score alone.
 
-Detached workers: `.session-control/overnight-cutter-resume-key.py` resumes the exact suspended key process when the cutter exits, including failure; `.session-control/overnight-cutter-evaluate-after.py` evaluates the successfully completed cutter on the same 5,218 cases and writes `.session-control/overnight-ui-cutter-after/comparison.json`. These scripts do not wake the agent or promote a model.
+Key reader selected epoch three, SHA `3192ac283d00977146543dedf94d72234dcb3020dfc77a8862acd105f8086d04`. Actual CPU comparison on identical 1,480 gold cuts: **1,037 exact intents (70.07%)**, **1,412 exact global fields (95.41%)**, **1,229 exact source spans (83.04%)**, **791 complete reader meanings (53.45%)**. Old intent was 28/1,480. Shared-key intent is 212/250; new-key intent is 825/1,230. These are conditional reader diagnostics, not native/browser execution accuracy.
 
-No training result is presented as a successful replacement until old/new evaluation, q8 export and actual browser checks have run. A completed unattended training run alone does not publish its model.
+Training was stopped before completion when supervision/representation defects were confirmed: V2 preparation bypassed existing lexical-inner span extraction, teaching `coloured red` instead of `red`; 88 rows have values outside available classifier banks; unit/measure metadata lacks output heads. The selected checkpoint and both real evaluation passes are retained. Further epochs cannot fix those contracts. No completed-run or deployment success is fabricated.
+
+The new key reader BIO already finds **both** `tree` and `house` spans. Its singleton target.kind conversion refuses multiple mentions; a repeated-target/role contract is needed. A generic source-cut scheduling policy fixes the deployed two-cut runtime failure without splitting English text or inventing a verb, but cannot repair the new one-cut representation. `draw a tree near a house` is a counterexample to blindly creating every noun.
+
+Reports: `.session-control/overnight-ui-cutter-after/comparison.json` and `.session-control/overnight-reader-candidate-eval/`. No model promotion or restart occurs until the unresolved contracts are addressed.
+
+## Current implementation batch
+
+Actual Chromium on the built site with deployed reader: both `draw a tree and a house` and the repeated-verb version create both real objects; one Undo restores the pre-command scene; the first retains an extra unapplied tree constraint honestly. Validated requests use refreshed context and one undo group. Operational SOP Worlds now declare scheduling, omitted-argument defaults and knowledge-property joins. Mobile Worlds legend releases space on close; explicit phone navigation opens the visible page. Missing Diagram renderer modules were found in deployment, independently of touch behavior, and added to the runtime closure.
+
+The architecture plan is `specs/plans/worlds-native-reduction.md`. The live graph inventory contains 75 native state properties, nine runtime records, five adapters and seven components; they are not hidden or relabelled as migrated. Avatar typed-state codec preparation roundtrips actual operations, but its authoritative host integration is still pending. Drawing/Diagram touch workflows remain active work. Updated library skills were pushed in `fba0f38` with source/bundle gates each 964 tests, zero failures.
 
 ## Remaining after standby
 
-Read the completed run logs; compare both selected models on the same frozen cohorts; export and measure q8 in the real browser; promote only a measured improvement. Review UI feedback before expanding further.
+Finish and verify touch editing and the Avatar state-authority migration; correct lexical-span preparation; preserve unresolved multi-target, unit/measure and reference-normalization contracts explicitly. Publish completed batches, update this handover, then return to standby as requested.
 
 Known limits: Avatar man reading can still fail with the deployed model; recognized requests can retain extra unapplied constraints; omitted positions may overlap at native center defaults. Calendar owns canonical SOP state; Drawing, Diagram, Documents and Avatar still expose native JS authority alongside observed SOP facts. Complete world-based reasoning and universal UI-language execution are not claimed.

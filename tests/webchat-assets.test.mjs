@@ -117,3 +117,18 @@ test('service worker: hash-keyed cache, concurrent requests share one fetch, not
   const assets = await readFile(path.join(WEB, 'ui/assets.mjs'), 'utf8');
   assert.equal(/const GENERATION = (\d+)/.exec(sw)[1], /CACHE_GENERATION = (\d+)/.exec(assets)[1], 'sw.js and ui/assets.mjs bump the generation together');
 });
+
+test('lazy editor module asset constants resolve in the published site and content manifest', async()=>{
+  const base=path.join(WEB,'ui'),manifest=JSON.parse(await readFile(path.join(WEB,'build-info.json'),'utf8'));
+  let checked=0;
+  for(const file of await readdir(base,{recursive:true})){
+    if(!file.endsWith('.mjs'))continue;
+    const source=await readFile(path.join(base,file),'utf8');
+    for(const match of source.matchAll(/\bconst\s+[A-Z_]*ASSET\s*=\s*['"]([^'"]+\.mjs)['"]/g)){
+      const asset=match[1];assert(!asset.startsWith('/')&&!asset.includes('..'),asset);
+      assert.ok((await readFile(path.join(WEB,asset))).length,`${file} requires ${asset}`);
+      assert.ok(manifest.files[asset],`content manifest omits ${asset}`);checked++;
+    }
+  }
+  assert.ok(checked>0,'actual lazy module declarations were checked');
+});

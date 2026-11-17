@@ -1,9 +1,10 @@
-import{inspectCachedExecutionSource}from'./execution-world-inspection.mjs?v=ced328a27e';
+import{executionValueSource,executionDefaults}from'./execution-policy.mjs?v=f97054802d';
+import{inspectCachedExecutionSource}from'./execution-world-inspection.mjs?v=7369ac48a4';
 import{instanceIdFor}from'./instance-identity.mjs?v=37c0536b83';
 import{prepareNativeControlHost}from'./native-control-preparation.mjs?v=c5981d312b';
 import{invokeObservedNativeTool}from'./native-tool-activity.mjs?v=644ec5af08';
 import{describeNativeControl,verifyNativeControlEffect}from'./native-control-intent.mjs?v=15a2913b39';
-import {nativeKindCandidates} from './native-binding-candidates.mjs?v=2e7e2fecaa';
+import {nativeKindCandidates} from './native-binding-candidates.mjs?v=de223646d6';
 // Application composition of declared semantic identities and native capabilities; no text parsing.
 import {World,str} from '../vendor/sopworld/sopworld.mjs?v=20fdd56a67';
 import SOURCE from './new-engine-source.mjs?v=e31b4adb7f';
@@ -17,17 +18,12 @@ let knowledge;
 /** Read-only cache inspection; does not create the lazy knowledge World. */
 export const inspectDeclaredExecutionSourceWorld=options=>inspectCachedExecutionSource(knowledge,options);
 const source=()=>knowledge??=World.fromJSON(SOURCE.snapshot);
-// Explicit application value and creation defaults. These are assumptions, not knowledge facts.
-const valueSources={colour:{valueType:'k.colours.colour',nameKey:'name',valueKey:'rgb'}};
+// Value joins and omitted-argument assumptions come from the operational SOP policy.
 /** Finite lexical values from the same declared knowledge source used by execution. */
 export function declaredPropertyValues(concept) {
- const config=valueSources[concept];
+ const config=executionValueSource(concept);
  return config?source().ofType(config.valueType).map(w=>str(w.attrs[config.nameKey]?.[0])).filter(v=>typeof v==='string'):[];
 }
-const creationDefaults={
- 'document.write':()=>({blocks:[]}),
- 'calendar.meeting.add':()=>({start:Date.now(),duration:30*60*1000,participants:[],room:null}),
-};
 const reply=(text,supported,trace={})=>({text,parts:[{text,translate:false}],statuses:[supported?'supported':'unsupported'],answers:[],segments:[],state:{},effects:[],newEngine:true,trace:{legacy:false,engine:'new',...trace}});
 export async function executeDeclaredRequest(session,candidate,text,{bindings,view,unapplied:externalUnapplied=[]}={}) {
  const area=NATIVE_AREAS[view],readerArea=bindings?.readerAreaByView?.[view]??area?.area,projection=flatRequestProjection(candidate);
@@ -80,8 +76,8 @@ export async function executeDeclaredRequest(session,candidate,text,{bindings,vi
     else if(codec==='string-list'){if(items.some(v=>typeof v!=='string'||!v)){skipped.push(condition);continue;}}
     else {skipped.push(condition);continue;}
     value=[...(args[parameter]??[]),...items];
-   }else if(valueSources[condition.concept]) {
-    const found=resolvePropertyValue(source(),{normalize:v=>/^#[a-f0-9]{6}$/i.test(v)?v.toLowerCase():null},valueSources[condition.concept],value);
+   }else if(executionValueSource(condition.concept)) {
+    const found=resolvePropertyValue(source(),{normalize:v=>/^#[a-f0-9]{6}$/i.test(v)?v.toLowerCase():null},executionValueSource(condition.concept),value);
     if(!found.ok){skipped.push(condition);continue;}value=found.values[0];
    } else if(['number','integer'].includes(descriptor.type)&&value!==null&&value.trim()!==''&&Number.isFinite(Number(value)))value=Number(value);
    else if(descriptor.type==='boolean'&&['true','false'].includes(value))value=value==='true';
@@ -91,8 +87,8 @@ export async function executeDeclaredRequest(session,candidate,text,{bindings,vi
   if(act==='make') {
    if(operation.params.title?.required&&!Object.hasOwn(args,'title')){args.title=target.name??mappings[0].lemma;assumptions.push('I used '+JSON.stringify(args.title)+' as the title.');}
    if(operation.params.label?.required&&!Object.hasOwn(args,'label')){args.label=target.name??mappings[0].lemma;assumptions.push('I used '+JSON.stringify(args.label)+' as the name.');}
-   const defaults=creationDefaults[operation.id]?.()??{};
-   for(const [key,value]of Object.entries(defaults))if(!Object.hasOwn(args,key)){args[key]=value;if(key==='start')assumptions.push('I scheduled it starting now.');if(key==='duration')assumptions.push('I used a 30-minute duration.');}
+   const defaults=executionDefaults(operation.id,args);
+   Object.assign(args,defaults.values);assumptions.push(...defaults.notices);
   }
   for(const rule of operation.defaultsFrom??[])if(rule.method==='ordinal-labels'&&operation.params[rule.parameter]?.type==='array'&&operation.params[rule.lengthOf]?.type==='array'&&(!args[rule.parameter]||args[rule.parameter].length===0)&&Array.isArray(args[rule.lengthOf])&&args[rule.lengthOf].length){args[rule.parameter]=args[rule.lengthOf].map((_,i)=>String(i+1));assumptions.push('I numbered the categories because no labels were supplied.');}
   const checked=validateNativeArguments(operation,args);

@@ -117,8 +117,8 @@ export async function createVerifiedReaderProvider({
   }
   return session.run(converted);
  };
- let decisionScores=[];
- const diagnostics=component=>async result=>{decisionScores.push(result.auxiliary?.minimumProbability);return recordDiagnostics(copyHostData({component,result}));};
+ let decisionScores=[];const componentScores={};
+ const diagnostics=component=>async result=>{decisionScores.push(result.auxiliary?.minimumProbability);componentScores[component]=result.auxiliary?.minimumProbability;return recordDiagnostics(copyHostData({component,result}));};
  // Constructors verify their profiles without calling these deferred sessions.
  const cutter=await createCutterInference({manifest:m,tokenizer,model:call('cutter'),offsetAuthority:authority,recordDiagnostics:diagnostics('cutter')});
  const reader=await createKeyReaderInference({manifest:m,tokenizer,encoder:call('encoder'),heads:call('heads'),
@@ -147,6 +147,7 @@ export async function createVerifiedReaderProvider({
   calibration:null,executionEligible:false
  };
  verified.assemblySha256=await digest(utf8(JSON.stringify(stable(verified))));
- const scoredProvider={...provider,registry:()=>copyHostData(JSON.parse(m.configJSON).registry),bindings:()=>copyHostData(JSON.parse(bindingsJSON)),async propose(text){decisionScores=[];const proposal=await provider.propose(text);return {...projectJournalAction(proposal),selectionScore:combineModelScores(decisionScores)};}};
+ const scoreProposal=proposal=>({...projectJournalAction(proposal),selectionScore:combineModelScores(decisionScores)});
+ const scoredProvider={...provider,registry:()=>copyHostData(JSON.parse(m.configJSON).registry),bindings:()=>copyHostData(JSON.parse(bindingsJSON)),async propose(text){decisionScores=[];const proposal=await provider.propose(text);return scoreProposal(proposal);},async *proposeRequests(text){const sequence=provider.proposeRequests(text);delete componentScores.cutter;while(true){decisionScores=[];delete componentScores['key-reader'];const step=await sequence.next();if(step.done)return;const proposal=scoreProposal(step.value);proposal.selectionScore=combineModelScores([componentScores.cutter,componentScores['key-reader']]);yield proposal;}}};
  return {provider:scoredProvider,verified:copyHostData(verified),provenance:()=>copyHostData(verified)};
 }

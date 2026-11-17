@@ -2,6 +2,9 @@
 import{serialize,str,version,build}from'../vendor/sopworld/sopworld.mjs?v=20fdd56a67';
 import SOURCE from'./new-engine-source.mjs?v=e31b4adb7f';
 import{CATALOG_PIN}from'../knowledge/catalog-pin.mjs?v=dc47595de0';
+import{inspectExecutionPolicyWorld}from'./execution-policy.mjs?v=f97054802d';
+import{inspectSchemaSource}from'./worlds-inspection.mjs?v=a7f4fe77fe';
+import{inspectRequestCompositionPolicy}from'./request-composition-policy.mjs?v=f691e6cdc6';
 const clone=value=>structuredClone(value);
 const loggedWires=snapshot=>(snapshot?.log??[]).flatMap(entry=>entry.wires??[]);
 const importsOf=snapshot=>[...new Set(loggedWires(snapshot).filter(wire=>wire.type==='core.use').flatMap(wire=>(wire.attrs.world??[]).map(str)))];
@@ -13,9 +16,15 @@ export function inspectCachedExecutionSource(world,{moduleNames=[]}={}){
 function snapshotText(snapshot){return (snapshot?.log??[]).map((entry,index)=>'# Log entry '+index+' / '+entry.op+'\n'+serialize(entry.wires??[])).join('\n\n');}
 /** Projects actual cache accessors and retained journal JSON; performs no reading or reasoning. */
 export async function inspectExecutionWorlds(session){
- const [{inspectNewEngineSourceWorld},{inspectDeclaredExecutionSourceWorld}]=await Promise.all([import('./new-engine.mjs?v=ced328a27e'),import('./declared-execution.mjs?v=ced328a27e')]);
+ const [{inspectNewEngineSourceWorld},{inspectDeclaredExecutionSourceWorld}]=await Promise.all([import('./new-engine.mjs?v=7369ac48a4'),import('./declared-execution.mjs?v=7369ac48a4')]);
  const journal=session?.newEngineJournal??[],moduleNames=[...new Set(journal.flatMap(record=>importsOf(record.evidence)))],sources=[['new-engine','src/dialog/new-engine.mjs',inspectNewEngineSourceWorld({moduleNames})],['declared-execution','src/dialog/declared-execution.mjs',inspectDeclaredExecutionSourceWorld({moduleNames})]],nodes=[],edges=[];
  const link=(from,to,label)=>edges.push({from,to,label});
+ const policy=inspectExecutionPolicyWorld();
+ nodes.push({id:'execution:policy',label:'Execution policy',kind:'knowledge',implementation:'Operational SOP Lang World + declared host clock',description:'Actual policy queried by execution for omitted arguments and knowledge-property joins. The source is available before initialization; loaded status records the real lazy World. This moves these decisions out of native operation maps, but does not migrate editor state or all native tool semantics.',wires:policy.wires,schemaView:inspectSchemaSource(policy.wires),details:{source:policy.source,loaded:policy.loaded,functions:policy.functions},help:{purpose:'Declare defaults and knowledge value joins used by concrete request execution.',inputs:['Operation and explicit arguments','Referenced knowledge properties','Clock primitive for a missing current time'],outputs:['Only omitted argument defaults','Assumption notices','Typed knowledge-property lookup descriptors'],limits:['These are explicit defaults, not proof of broader reasoning. Editor native implementations remain visible.']}});
+ link('execution:module:declared-execution','execution:policy','queries defaults and value joins');
+ const composition=inspectRequestCompositionPolicy(),compositionWires=composition.world?serialize([...composition.world.matrix.values(),...composition.world.wires.values()]):composition.source;
+ nodes.push({id:'execution:composition-policy',label:'Request composition',kind:'knowledge',implementation:'Operational SOP Lang World',description:'Actual source-order scheduling and undo policy for independently validated request cuts. This declaration does not infer target membership or causal dependencies from repeated nouns.',wires:compositionWires,schemaView:inspectSchemaSource(compositionWires),details:{loaded:composition.loaded,source:'worlds/app.project/request-composition-policy.sop'}});
+ link('execution:composition-policy','execution:module:declared-execution','governs independent request scheduling');
  nodes.push({id:'execution:source-snapshot',label:'Execution knowledge',kind:'knowledge',implementation:'SOP Lang snapshot bundled in JavaScript',description:'Exact available initialization snapshot imported by both execution modules. Inspection does not initialize either lazy World cache. Its pinned knowledge differs from the active catalog when indicated below.',wires:snapshotText(SOURCE.snapshot),details:{loaded:false,status:'available initialization snapshot',knowledgePin:SOURCE.knowledgePin,libraryPin:SOURCE.libraryPin,activeKnowledgePin:CATALOG_PIN.commit,knowledgePinMatchesActive:SOURCE.knowledgePin===CATALOG_PIN.commit,activeLibraryVersion:version,activeLibraryBuild:build,sources:clone(SOURCE.sources),snapshot:clone(SOURCE.snapshot)}});
  const libraryModules=new Map();
  for(const [key,module,cache]of sources){

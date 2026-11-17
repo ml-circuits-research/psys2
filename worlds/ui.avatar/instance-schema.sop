@@ -1,0 +1,65 @@
+# Canonical Avatar state: composition-owned parts, direct scalar attributes and ordered references.
+@avatar.schema.root core.type of=ui.avatar.state.root closed=true
+@avatar.schema.composition core.type of=ui.avatar.state.composition closed=true
+@avatar.schema.part core.type of=ui.avatar.state.part closed=true
+@avatar.schema.overrides core.type of=ui.avatar.state.overrides closed=true
+@avatar.schema.options core.type of=ui.avatar.state.options closed=true
+@avatar.schema.referent core.type of=ui.avatar.state.referent closed=true
+@avatar.schema.idDisplay core.type of=ui.avatar.state.idDisplay closed=true
+@avatar.schema.colour core.type of=ui.avatar.state.colour closed=true
+@avatar.schema.root.face core.slot of=ui.avatar.state.root key=face type=ui.avatar.state.composition
+@avatar.schema.root.name core.slot of=ui.avatar.state.root key=name kind=string
+@avatar.schema.root.selectedSlot core.slot of=ui.avatar.state.root key=selectedSlot kind=string kind=atom
+@avatar.schema.root.idDisplay core.slot of=ui.avatar.state.root key=idDisplay type=ui.avatar.state.idDisplay
+@avatar.schema.composition.expression core.slot of=ui.avatar.state.composition key=expression kind=string
+@avatar.schema.composition.base core.slot of=ui.avatar.state.composition key=base kind=string
+@avatar.schema.composition.name core.slot of=ui.avatar.state.composition key=name kind=string
+@avatar.schema.composition.label core.slot of=ui.avatar.state.composition key=label kind=string
+@avatar.schema.composition.savedKey core.slot of=ui.avatar.state.composition key=savedKey kind=string
+@avatar.schema.composition.v core.slot of=ui.avatar.state.composition key=v kind=number
+@avatar.schema.composition.n core.slot of=ui.avatar.state.composition key=n kind=number
+@avatar.schema.composition.stepGroup core.slot of=ui.avatar.state.composition key=stepGroup kind=string kind=atom
+@avatar.schema.composition.explicit core.slot of=ui.avatar.state.composition key=explicit type=ui.avatar.state.overrides
+@avatar.schema.composition.options core.slot of=ui.avatar.state.composition key=options kind=atom type=ui.avatar.state.options
+@avatar.schema.composition.slots core.slot of=ui.avatar.state.composition key=slots type=ui.avatar.state.part many=true
+@avatar.schema.composition.has.slots core.slot of=ui.avatar.state.composition key=has.slots kind=boolean
+@avatar.schema.composition.paint core.slot of=ui.avatar.state.composition key=paint type=ui.avatar.state.part many=true
+@avatar.schema.composition.has.paint core.slot of=ui.avatar.state.composition key=has.paint kind=boolean
+@avatar.schema.composition.grade core.slot of=ui.avatar.state.composition key=grade type=ui.avatar.state.part many=true
+@avatar.schema.composition.has.grade core.slot of=ui.avatar.state.composition key=has.grade kind=boolean
+@avatar.schema.composition.expressionParts core.slot of=ui.avatar.state.composition key=expressionParts type=ui.avatar.state.part many=true
+@avatar.schema.composition.has.expressionParts core.slot of=ui.avatar.state.composition key=has.expressionParts kind=boolean
+@avatar.schema.composition.adj core.slot of=ui.avatar.state.composition key=adj type=ui.avatar.state.part many=true
+@avatar.schema.composition.has.adj core.slot of=ui.avatar.state.composition key=has.adj kind=boolean
+@avatar.schema.composition.colours core.slot of=ui.avatar.state.composition key=colours type=ui.avatar.state.colour many=true
+@avatar.schema.composition.has.colours core.slot of=ui.avatar.state.composition key=has.colours kind=boolean
+@avatar.schema.composition.saved core.slot of=ui.avatar.state.composition key=saved type=ui.avatar.state.composition many=true
+@avatar.schema.composition.has.saved core.slot of=ui.avatar.state.composition key=has.saved kind=boolean
+@avatar.schema.composition.history core.slot of=ui.avatar.state.composition key=history type=ui.avatar.state.composition many=true
+@avatar.schema.composition.has.history core.slot of=ui.avatar.state.composition key=has.history kind=boolean
+@avatar.schema.composition.future core.slot of=ui.avatar.state.composition key=future type=ui.avatar.state.composition many=true
+@avatar.schema.composition.has.future core.slot of=ui.avatar.state.composition key=has.future kind=boolean
+@avatar.schema.composition.refs core.slot of=ui.avatar.state.composition key=refs type=ui.avatar.state.referent many=true
+@avatar.schema.composition.has.refs core.slot of=ui.avatar.state.composition key=has.refs kind=boolean
+@avatar.schema.part.id core.slot of=ui.avatar.state.part key=id kind=string
+@avatar.schema.part.variant core.slot of=ui.avatar.state.part key=variant kind=string
+@avatar.schema.part.paint core.slot of=ui.avatar.state.part key=paint kind=string
+@avatar.schema.part.grade core.slot of=ui.avatar.state.part key=grade kind=string
+@avatar.schema.part.expressionVariant core.slot of=ui.avatar.state.part key=expressionVariant kind=string
+@avatar.schema.part.has.geometry core.slot of=ui.avatar.state.part key=has.geometry kind=boolean
+@avatar.schema.part.geometry.s core.slot of=ui.avatar.state.part key=geometry.s kind=number
+@avatar.schema.part.geometry.dx core.slot of=ui.avatar.state.part key=geometry.dx kind=number
+@avatar.schema.part.geometry.dy core.slot of=ui.avatar.state.part key=geometry.dy kind=number
+@avatar.schema.overrides.slots core.slot of=ui.avatar.state.overrides key=slots kind=string many=true
+@avatar.schema.overrides.has.slots core.slot of=ui.avatar.state.overrides key=has.slots kind=boolean
+@avatar.schema.overrides.roles core.slot of=ui.avatar.state.overrides key=roles kind=string many=true
+@avatar.schema.overrides.has.roles core.slot of=ui.avatar.state.overrides key=has.roles kind=boolean
+@avatar.schema.overrides.paint core.slot of=ui.avatar.state.overrides key=paint kind=string many=true
+@avatar.schema.overrides.has.paint core.slot of=ui.avatar.state.overrides key=has.paint kind=boolean
+@avatar.schema.options.slot core.slot of=ui.avatar.state.options key=slot kind=string
+@avatar.schema.options.variants core.slot of=ui.avatar.state.options key=variants kind=string many=true
+@avatar.schema.referent.thing core.slot of=ui.avatar.state.referent key=thing kind=string
+@avatar.schema.idDisplay.mode core.slot of=ui.avatar.state.idDisplay key=mode kind=string
+@avatar.schema.idDisplay.expiresAt core.slot of=ui.avatar.state.idDisplay key=expiresAt kind=number
+@avatar.schema.colour.role core.slot of=ui.avatar.state.colour key=role kind=string
+@avatar.schema.colour.colour core.slot of=ui.avatar.state.colour key=colour kind=string

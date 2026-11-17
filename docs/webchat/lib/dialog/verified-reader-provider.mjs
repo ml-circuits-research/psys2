@@ -5,7 +5,7 @@ import {copyHostData} from '../../worlds/native-tool-host.mjs?v=463e762442';
 import {createCutterInference} from './cutter-inference.mjs?v=e3ef21b269';
 import {createKeyReaderInference} from './key-reader-inference.mjs?v=37b7c1826e';
 import {createBertSourceOffsetAuthority} from './bert-source-offsets.mjs?v=9b7b99f458';
-import {createKeyReaderPipeline} from './key-reader-pipeline.mjs?v=d37f01736e';
+import {createKeyReaderPipeline} from './key-reader-pipeline.mjs?v=e9ec4ab522';
 
 const hash=x=>typeof x==='string'&&/^[a-f0-9]{64}$/.test(x);
 const object=x=>x!==null&&typeof x==='object'&&!Array.isArray(x);
@@ -117,8 +117,8 @@ export async function createVerifiedReaderProvider({
   }
   return session.run(converted);
  };
- let decisionScores=[];
- const diagnostics=component=>async result=>{decisionScores.push(result.auxiliary?.minimumProbability);return recordDiagnostics(copyHostData({component,result}));};
+ let decisionScores=[];const componentScores={};
+ const diagnostics=component=>async result=>{decisionScores.push(result.auxiliary?.minimumProbability);componentScores[component]=result.auxiliary?.minimumProbability;return recordDiagnostics(copyHostData({component,result}));};
  // Constructors verify their profiles without calling these deferred sessions.
  const cutter=await createCutterInference({manifest:m,tokenizer,model:call('cutter'),offsetAuthority:authority,recordDiagnostics:diagnostics('cutter')});
  const reader=await createKeyReaderInference({manifest:m,tokenizer,encoder:call('encoder'),heads:call('heads'),
@@ -147,6 +147,7 @@ export async function createVerifiedReaderProvider({
   calibration:null,executionEligible:false
  };
  verified.assemblySha256=await digest(utf8(JSON.stringify(stable(verified))));
- const scoredProvider={...provider,registry:()=>copyHostData(JSON.parse(m.configJSON).registry),bindings:()=>copyHostData(JSON.parse(bindingsJSON)),async propose(text){decisionScores=[];const proposal=await provider.propose(text);return {...projectJournalAction(proposal),selectionScore:combineModelScores(decisionScores)};}};
+ const scoreProposal=proposal=>({...projectJournalAction(proposal),selectionScore:combineModelScores(decisionScores)});
+ const scoredProvider={...provider,registry:()=>copyHostData(JSON.parse(m.configJSON).registry),bindings:()=>copyHostData(JSON.parse(bindingsJSON)),async propose(text){decisionScores=[];const proposal=await provider.propose(text);return scoreProposal(proposal);},async *proposeRequests(text){const sequence=provider.proposeRequests(text);delete componentScores.cutter;while(true){decisionScores=[];delete componentScores['key-reader'];const step=await sequence.next();if(step.done)return;const proposal=scoreProposal(step.value);proposal.selectionScore=combineModelScores([componentScores.cutter,componentScores['key-reader']]);yield proposal;}}};
  return {provider:scoredProvider,verified:copyHostData(verified),provenance:()=>copyHostData(verified)};
 }

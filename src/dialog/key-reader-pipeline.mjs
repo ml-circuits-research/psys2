@@ -13,8 +13,8 @@ export async function createKeyReaderPipeline({cutter,reader,getContext,cutterMo
  const bindings=copyHostData(JSON.parse(bindingsJSON),{maxBytes});
  const pipelineSha256=await digest(JSON.stringify({format:'psys2.key-reader-pipeline/1',...identities,bindingsSha256}));
  const provenance={modelSha256:pipelineSha256,decoderVersion:1,models:identities,bindingsSha256,architecture:'source-cutter/request-key-heads',calibration:null};
- return {provenance:()=>copyHostData(provenance),async propose(text){
-  const failures=[],requests=[],ranges=[];let raw=null,steps=0;
+ async function propose(text,knownCut=null){
+  const failures=[],requests=[],ranges=[];let raw=null,sourceCut=null,steps=0;
   const tick=(n=1)=>{steps+=n;if(steps>budget)throw Error('pipeline-budget');};
   const fail=(reason,path=[])=>failures.push({reason,path});
   const copy=x=>copyHostData(x,{maxBytes});
@@ -25,9 +25,10 @@ export async function createKeyReaderPipeline({cutter,reader,getContext,cutterMo
    if(typeof text!=='string'||text.length>maxText*2)throw Error('invalid-source-text');const chars=Array.from(text);tick(chars.length);if(chars.length>maxText)throw Error('source-size');
    if(typeof cutter?.cut!=='function'||typeof reader?.read!=='function')throw Error('model-unavailable');
    const context=copy(await getContext(text));closed(context,['area','context']);if(typeof context.area!=='string'||!context.area||!Object.hasOwn(context,'context'))throw Error('invalid-host-context');
-   const cut=copy(await cutter.cut(text));closed(cut,['source','spans','coverage','unresolved','model']);source(cut.source,text);if(!same(modelIdentity(cut.model),identities.cutter))throw Error('cutter-provenance-mismatch');status(cut,['cutter']);
+   const cut=copy(knownCut??await cutter.cut(text));closed(cut,['source','spans','coverage','unresolved','model']);source(cut.source,text);if(!same(modelIdentity(cut.model),identities.cutter))throw Error('cutter-provenance-mismatch');status(cut,['cutter']);
    if(!Array.isArray(cut.spans)||cut.spans.length>maxRequests)throw Error('request-count-overflow');let previous=0;
    for(const span of cut.spans){tick();if(!Array.isArray(span)||span.length!==2||!span.every(Number.isSafeInteger)||span[0]<previous||span[0]<0||span[0]>=span[1]||span[1]>chars.length)throw Error('invalid-cut-span');previous=span[1];}
+   sourceCut=copy(cut);
    // Validate the entire cut before any request-local provider call.
    if(failures.length)throw Error('incomplete-request-cut');
    for(let index=0;index<cut.spans.length;index++){
@@ -49,7 +50,15 @@ export async function createKeyReaderPipeline({cutter,reader,getContext,cutterMo
    raw={format:RAW_STRUCTURAL_FORMAT,source:{text,unit:'unicode-scalar'},area:context.area,model:{kind:'structural-graph',sha256:pipelineSha256,decoderVersion:1},requestCount:cut.spans.length,requests,ranges,coverage:{complete:failures.length===0,truncated:false},unresolved:copy(failures)};
    const bridge=bridgeRawStructure(raw,{bindings,bindingSha256:bindingsSha256,budget,decoderBudget,maxBytes});
    failures.push(...bridge.diagnostics.map(issue=>({reason:issue.reason,path:issue.path})));const decoded=bridge.decoded;failures.push(...(decoded?.issues??[]));
-   return {candidates:failures.length?[]:(decoded?.candidates??[]),coverage:{complete:failures.length===0&&decoded?.coverage?.complete===true,graphProposal:decoded?.coverage?.graphProposal===true,executable:false},failures,raw,provenance:copy(provenance),graphConfidence:null,steps};
-  }catch(error){fail(String(error?.message??'pipeline-failed'));return {candidates:[],coverage:{complete:false,graphProposal:false,executable:false},failures,raw,provenance:copy(provenance),graphConfidence:null,steps};}
+   return {candidates:failures.length?[]:(decoded?.candidates??[]),coverage:{complete:failures.length===0&&decoded?.coverage?.complete===true,graphProposal:decoded?.coverage?.graphProposal===true,executable:false},failures,raw,provenance:copy(provenance),graphConfidence:null,sourceCut,steps};
+  }catch(error){fail(String(error?.message??'pipeline-failed'));return {candidates:[],coverage:{complete:false,graphProposal:false,executable:false},failures,raw,provenance:copy(provenance),graphConfidence:null,sourceCut,steps};}
+ }
+ return {provenance:()=>copyHostData(provenance),propose:text=>propose(text),async *proposeRequests(text){
+  const initial=await propose(text),cut=initial.sourceCut;
+  if(!cut||cut.coverage.complete!==true||cut.coverage.truncated||cut.unresolved.length||cut.spans.length<2){yield initial;return;}
+  for(const [index,range]of cut.spans.entries()){
+   const proposal=await propose(text,{...cut,spans:[range]});
+   yield {...proposal,composition:{index,total:cut.spans.length,range:[...range],sourceCuts:cut.spans.map(span=>[...span]),policy:'source-order-independent-cuts',explicitDependencies:[]}};
+  }
  }};
 }

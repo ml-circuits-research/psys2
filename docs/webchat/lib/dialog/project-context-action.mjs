@@ -1,4 +1,4 @@
-import {nativeKindCandidates} from './native-binding-candidates.mjs?v=2e7e2fecaa';
+import {nativeKindCandidates} from './native-binding-candidates.mjs?v=de223646d6';
 // Bind model-declared context references to actual native objects; never inspect source words.
 import {serializeRequestGraph} from '../vendor/sopworld/sopworld.mjs?v=20fdd56a67';
 import {NATIVE_AREAS} from './app-reader-context.mjs?v=a83ed42db4';

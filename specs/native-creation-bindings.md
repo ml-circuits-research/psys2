@@ -9,3 +9,9 @@ Coordinates, dimensions and placement are omitted when absent from the request; 
 Dispatch verifies observable effects against its concrete control intent. Its trace retains that intent, verification status and rejected constructor alternatives. Missing family bindings, incompatible native enumerations and missing required arguments are reported as native binding gaps, separately from reader failures. Missing knowledge services report knowledge preparation failure and leave the scene unchanged.
 
 The reader-routing diagnostic retains the original provider candidate array before contextual or creation projection. It never synthesizes a SOP proposal from incomplete decoded fields for display.
+
+## Operational execution policy
+
+`worlds/app.project/execution-policy.sop` owns omitted-argument defaults and knowledge-value lookup descriptors. `src/dialog/execution-policy.mjs` queries those actual facts; the execution adapter has no operation-to-default or concept-to-source map. Explicit arguments override defaults, including explicit null/empty values. Duplicate parameter defaults or competing sources are errors. The declared `clock.now` host primitive supplies the current timestamp only when the policy requests it for a missing argument. Default notices are facts, so the trace/reply reports the actual assumptions.
+
+Worlds shows the exact source/matrix/facts and the actual loaded state without initializing a lazy policy solely for inspection. Moving these decisions into SOP does not claim that native editor state, geometry, tool handlers or the remainder of request execution are already governed by declarative reasoning.

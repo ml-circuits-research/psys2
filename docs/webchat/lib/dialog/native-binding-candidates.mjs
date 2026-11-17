@@ -7,6 +7,6 @@ export function nativeKindCandidates(bindings) {
 export function nativeCreationCandidates(bindings,operations,area){
  return nativeKindCandidates(bindings).filter(mapping=>mapping.area===area&&mapping.nativeFamilyBinding).flatMap(mapping=>{
   const declared=operations.find(operation=>operation.id===mapping.nativeFamilyBinding.operation);if(!declared)return [];
-  return operations.filter(operation=>operation.act==='make'&&!operation.requires?.length&&operation.on===declared.on&&(operation.id===declared.id||operation.knowledgeInputs?.length)).filter(operation=>!operation.params.kind||operation.params.kind.enum?.includes(mapping.lemma)).map(operation=>({mapping,operation}));
+  return operations.filter(operation=>operation.act==='make'&&!operation.requires?.length&&operation.on===declared.on&&(operation.id===declared.id||!mapping.familyIdentity&&operation.knowledgeInputs?.length)).filter(operation=>!operation.params.kind||operation.params.kind.enum?.includes(mapping.lemma)).map(operation=>({mapping,operation}));
  });
 }

@@ -1,4 +1,4 @@
-import {nativeCreationCandidates} from './native-binding-candidates.mjs?v=2e7e2fecaa';
+import {nativeCreationCandidates} from './native-binding-candidates.mjs?v=de223646d6';
 // Compose a reversible creation from model-declared roles and actual native constructor declarations.
 import {serializeRequestGraph,editCost} from '../vendor/sopworld/sopworld.mjs?v=20fdd56a67';
 import {NATIVE_AREAS} from './app-reader-context.mjs?v=a83ed42db4';

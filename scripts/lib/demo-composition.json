@@ -92,7 +92,11 @@
       "nativeHost": {
         "module": "worlds/diagram.sketch/declared-host.mjs",
         "factory": "createDiagramHost"
-      }
+      },
+      "runtimeModules": [
+        "worlds/diagram.sketch/arrows.mjs",
+        "worlds/data.charts/vector-svg.mjs"
+      ]
     },
     "time.calendar": {
       "profileFiles": [
@@ -187,6 +191,7 @@
     "ui/tabs/music.mjs",
     "ui/tabs/music/",
     "vendor/map/",
-    "vendor/music/"
+    "vendor/music/",
+    "ui/tabs/charts.mjs"
   ]
 }
