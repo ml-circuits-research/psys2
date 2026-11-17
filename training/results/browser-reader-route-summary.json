@@ -1,0 +1,169 @@
+{
+  "format": "psys2.browser-route-measurement/1",
+  "applicationCommit": "58e9c2f2",
+  "runtime": "ONNX Runtime Web1.31.1 WASM, one thread, proxy false",
+  "artifactManifestSha256": "aa4a549bda7727a24dcef74a0d0a801d5bba277f93498324aa071986e8200c6c",
+  "scope": "Actual normal browser route; no retained calibration report, no execution admission, no semantic accuracy claim. Matrix setup exclusions and unavailable owner contexts remain denominators.",
+  "stageAccounting": "Empty readings are identified from complete/graphProposal=false plus cutter-only diagnostic in this fixed pipeline. Full raw packets/bridge stages were not retained by this worker trace; no inferred nonempty RAW completion totals.",
+  "summaries": {
+    "browser-reader-functional": {
+      "summary": {
+        "right": 0,
+        "partly": 0,
+        "honest": 301,
+        "wrong": 0,
+        "needs-review": 0
+      },
+      "totalRows": 1648,
+      "areas": {
+        "calendar": {
+          "rows": 397,
+          "invoked": 14,
+          "neuralRows": 14,
+          "componentDiagnostics": 31,
+          "emptyReadings": 0,
+          "nonemptyGraphProposals": 0,
+          "proposalEligible": 0,
+          "admitted": 0,
+          "reasons": {
+            "setup-excluded": 383,
+            "incomplete-provider-coverage": 14
+          }
+        },
+        "diagram": {
+          "rows": 438,
+          "invoked": 72,
+          "neuralRows": 72,
+          "componentDiagnostics": 145,
+          "emptyReadings": 7,
+          "nonemptyGraphProposals": 0,
+          "proposalEligible": 0,
+          "admitted": 0,
+          "reasons": {
+            "setup-excluded": 366,
+            "incomplete-provider-coverage": 60,
+            "incomplete-model-proposal": 7,
+            "unresolved-canonical-kind-binding": 5
+          }
+        },
+        "document": {
+          "rows": 398,
+          "invoked": 141,
+          "neuralRows": 141,
+          "componentDiagnostics": 300,
+          "emptyReadings": 10,
+          "nonemptyGraphProposals": 0,
+          "proposalEligible": 0,
+          "admitted": 0,
+          "reasons": {
+            "setup-excluded": 257,
+            "incomplete-provider-coverage": 118,
+            "request-dependencies-not-annotated": 1,
+            "unresolved-canonical-property-binding": 1,
+            "unresolved-canonical-kind-binding": 11,
+            "incomplete-model-proposal": 10
+          }
+        },
+        "drawing": {
+          "rows": 415,
+          "invoked": 74,
+          "neuralRows": 74,
+          "componentDiagnostics": 159,
+          "emptyReadings": 4,
+          "nonemptyGraphProposals": 0,
+          "proposalEligible": 0,
+          "admitted": 0,
+          "reasons": {
+            "setup-excluded": 341,
+            "incomplete-provider-coverage": 60,
+            "unresolved-canonical-property-binding": 3,
+            "description-reference-without-predicate": 1,
+            "incomplete-model-proposal": 4,
+            "unprojected-population-reference": 1,
+            "unresolved-canonical-kind-binding": 3,
+            "request-dependencies-not-annotated": 2
+          }
+        }
+      },
+      "source": {
+        "path": "training/eval/functional-matrix/dev-rows.jsonl",
+        "sha256": "a4e73efe913f1f9946dd6c85851b542f038038a2dbb5a06a10e821838d88b6f4"
+      },
+      "reportSha256": "9ea42951eed88e64d4ec2cb65f77bfdeeea5ffa4cadda316ec89abeeb2bc9e2c"
+    },
+    "browser-reader-owner-english": {
+      "summary": {
+        "right": 0,
+        "partly": 0,
+        "honest": 205,
+        "wrong": 0,
+        "needs-review": 0
+      },
+      "totalRows": 205,
+      "areas": {
+        "diagram": {
+          "rows": 7,
+          "invoked": 7,
+          "neuralRows": 7,
+          "componentDiagnostics": 12,
+          "emptyReadings": 1,
+          "nonemptyGraphProposals": 0,
+          "proposalEligible": 0,
+          "admitted": 0,
+          "reasons": {
+            "incomplete-provider-coverage": 6,
+            "incomplete-model-proposal": 1
+          }
+        },
+        "document": {
+          "rows": 1,
+          "invoked": 1,
+          "neuralRows": 1,
+          "componentDiagnostics": 2,
+          "emptyReadings": 0,
+          "nonemptyGraphProposals": 0,
+          "proposalEligible": 0,
+          "admitted": 0,
+          "reasons": {
+            "incomplete-provider-coverage": 1
+          }
+        },
+        "drawing": {
+          "rows": 124,
+          "invoked": 124,
+          "neuralRows": 124,
+          "componentDiagnostics": 250,
+          "emptyReadings": 0,
+          "nonemptyGraphProposals": 2,
+          "proposalEligible": 2,
+          "admitted": 0,
+          "reasons": {
+            "incomplete-provider-coverage": 104,
+            "model-calibration-gate-closed": 2,
+            "unresolved-canonical-kind-binding": 13,
+            "unresolved-canonical-property-binding": 5
+          }
+        },
+        "unavailable": {
+          "rows": 73,
+          "invoked": 73,
+          "neuralRows": 0,
+          "componentDiagnostics": 0,
+          "emptyReadings": 0,
+          "nonemptyGraphProposals": 0,
+          "proposalEligible": 0,
+          "admitted": 0,
+          "reasons": {
+            "active-native-context-unavailable": 73
+          }
+        }
+      },
+      "source": {
+        "libraryCommit": "2ba0259603ed5155b57324fca7c27fc249ba2a0a",
+        "path": "compat/psys2/reader/development/rows.jsonl",
+        "sha256": "a1836c8a8f178e15e6019bc19996285defb3ebbc9f1d68ea640aa698fbe615f5"
+      },
+      "reportSha256": "c3fc2c3536c8b811f528cb54c859d85aba40f7f54136b0d158404f699cfccbb4"
+    }
+  }
+}

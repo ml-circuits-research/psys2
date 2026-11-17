@@ -1,0 +1,59 @@
+{
+  "deployment": {
+    "format": "sop.pages-deployment-check/2",
+    "commit": "58e9c2f2",
+    "baseURL": "https://ml-circuits-research.github.io/psys2/webchat/",
+    "checks": [
+      {
+        "path": "build-info.json",
+        "status": 200,
+        "bytes": 68552,
+        "commitBytes": 68552,
+        "matchesPublishedCommit": true,
+        "sha256": "20d282b54ff0c42b9839ba1f2767177124d459d412af22ee8288a2f187d2c02e"
+      },
+      {
+        "path": "ui/engine-worker.mjs",
+        "status": 200,
+        "bytes": 28073,
+        "commitBytes": 28073,
+        "matchesPublishedCommit": true,
+        "sha256": "f9184d4057682c995700dce52c80cc08f5f2306ccab61d8234898dc1b97ba378"
+      },
+      {
+        "path": "models/sop-bert/aa4a549bda7727a24dcef74a0d0a801d5bba277f93498324aa071986e8200c6c/manifest.json",
+        "status": 200,
+        "bytes": 200856,
+        "commitBytes": 200856,
+        "matchesPublishedCommit": true,
+        "sha256": "aa4a549bda7727a24dcef74a0d0a801d5bba277f93498324aa071986e8200c6c"
+      }
+    ]
+  },
+  "modelHeads": {
+    "format": "sop.pages-model-head-check/1",
+    "commit": "58e9c2f2",
+    "checks": [
+      {
+        "path": "cutter.q8.onnx",
+        "status": 200,
+        "contentLength": "66756266",
+        "expectedBytes": 66756266
+      },
+      {
+        "path": "encoder.q8.onnx",
+        "status": 200,
+        "contentLength": "67160769",
+        "expectedBytes": 67160769
+      },
+      {
+        "path": "heads.q8.onnx",
+        "status": 200,
+        "contentLength": "623715",
+        "expectedBytes": 623715
+      }
+    ],
+    "fullModelsRedownloaded": false
+  },
+  "scope": "Public bytes and availability, not browser semantic accuracy; the preceding CDN-old/503 check was superseded."
+}

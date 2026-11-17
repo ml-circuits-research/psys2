@@ -1,0 +1,36 @@
+{
+  "format": "psys2.browser-replay-baseline-correction/1",
+  "applicationCommit": "58e9c2f2",
+  "initialOwner": {
+    "rows": 205,
+    "honest": 204,
+    "needsReview": 1,
+    "row": "owner-en-2026-11-15:008"
+  },
+  "diagnosis": {
+    "actualChangedKeys": [
+      "docs.editor"
+    ],
+    "effects": [],
+    "cause": "First active Document host lazy-load was included in external observe delta; worker captured initial state before command."
+  },
+  "correction": "Merge same-send session.loadedBefore into absent baseline worlds only, preserving existing observed values; neither new nor old native effects are ignored.",
+  "failedIntermediate": "A transport-only attempt called loadedBefore on the client instead of client.session; it failed before final measurement and was corrected. Original log retained.",
+  "evidence": [
+    {
+      "path": "../.session-control/review24-browser-owner-first.json",
+      "sha256": "acaa7c13262b789084973f4dcc2aaf6de960ecd667b0c0e337631c2f707c4c44",
+      "bytes": 583859
+    },
+    {
+      "path": "../.session-control/review24-document-baseline-diagnostic.json",
+      "sha256": "419387187f5e33666cfedcf8905abad8a962ee1b717d24fb5f98f2d202ae984d",
+      "bytes": 5566
+    },
+    {
+      "path": "../.session-control/review24-browser-owner-corrected.log",
+      "sha256": "3530f34da41a15f2f8db3686f90f49c47932f1eb6f35d09555b98e58df1645c9",
+      "bytes": 786
+    }
+  ]
+}
