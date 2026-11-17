@@ -4847,3 +4847,10 @@ and refusals/cleanup/provenance. Trained-role branch is protocol testing only,
 not actual model evidence. No trained files/weights, network, GPU or data/source
 training mutation. Node actual-backend harness remains PSys ownership and will
 perform real CPU smoke after integration; empirical admission remains separate.
+
+Actual preflight follow-up: factory now admits exact3graph or exact5
+graph+tokenizer+bindings manifest forms. In5form, external descriptors must
+match trusted path/SHA/bytes exactly; no silent extra entries. Regression
+covers valid5, both mismatches and unrelated extras. Fixed test candidate
+fixture path for main integration.9/9 source fixtures pass; no artifact/model
+or persisted manifest changes. PSys owns actual8probe after cherry-pick.

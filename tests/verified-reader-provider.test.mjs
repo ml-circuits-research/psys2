@@ -8,7 +8,7 @@ import {createVerifiedReaderProvider} from '../src/dialog/verified-reader-provid
 const hash=value=>createHash('sha256').update(value).digest('hex');
 const bytes=value=>new TextEncoder().encode(value);
 const clone=value=>structuredClone(value);
-const base=fileURLToPath(new URL('../training/sop-bert/',import.meta.url));
+const base=fileURLToPath(new URL('../training/sop-bert/candidates/target-type/',import.meta.url));
 const candidate=JSON.parse(execFileSync('python3',['-c',[
  'import importlib.util,json,sys',
  'from pathlib import Path',
@@ -183,4 +183,20 @@ test('implementation callbacks changing during host attestation are refused befo
  const f=fixture({mutateBackend:true});
  await assert.rejects(createVerifiedReaderProvider(f.input),/host-runtime-mutated/);
  assert.equal(f.events.some(e=>e==='tokenizer'||e.startsWith('session:')),false);
+});
+
+test('persisted five-file manifests require exact independently trusted external descriptors',async()=>{
+ const valid=fixture();
+ const withFiles=clone(valid.manifest);withFiles.files.tokenizer=clone(valid.input.tokenizerArtifact);withFiles.files.bindings=clone(valid.input.bindingsArtifact);
+ valid.input.manifestJSON=JSON.stringify(withFiles);valid.input.manifestSha256=hash(valid.input.manifestJSON);
+ const built=await createVerifiedReaderProvider(valid.input);assert.equal(built.verified.files.tokenizer.sha256,valid.input.tokenizerArtifact.sha256);
+ for(const kind of ['tokenizer','bindings']){
+  const f=fixture(),m=clone(f.manifest);m.files.tokenizer=clone(f.input.tokenizerArtifact);m.files.bindings=clone(f.input.bindingsArtifact);
+  m.files[kind].bytes++;f.input.manifestJSON=JSON.stringify(m);f.input.manifestSha256=hash(f.input.manifestJSON);
+  await assert.rejects(createVerifiedReaderProvider(f.input),/manifest-external-artifact-mismatch/);
+  assert.equal(f.events.length,0);
+ }
+ const extra=fixture(),m=clone(extra.manifest);m.files.extra=clone(extra.input.tokenizerArtifact);
+ extra.input.manifestJSON=JSON.stringify(m);extra.input.manifestSha256=hash(extra.input.manifestJSON);
+ await assert.rejects(createVerifiedReaderProvider(extra.input),/bundle-profile/);
 });

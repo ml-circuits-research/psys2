@@ -55,7 +55,7 @@ export async function createVerifiedReaderProvider({
  const manifestBytes=utf8(manifestJSON);
  if(manifestBytes.byteLength>maxJSONBytes||await digest(manifestBytes)!==manifestSha256)throw Error('manifest-hash-mismatch');
  const m=copyHostData(JSON.parse(manifestJSON),{maxBytes:maxJSONBytes});
- if(m.format!=='sop.key-reader-runtime/1'||!['fixture','trained-unverified'].includes(m.artifactRole)||m.executionEligible!==false||m.graphConfidence!==null||m.dtype!=='fp32'||!['fp32','q8-dynamic'].includes(m.weightRepresentation)||!object(m.files)||!same(Object.keys(m.files).sort(),['cutter','encoder','heads'])||!['cutterSha256','encoderSha256','headsSha256','configSha256','cutterConfigSha256','tokenizerSha256'].every(k=>hash(m[k])))throw Error('invalid-reader-bundle-profile');
+ if(m.format!=='sop.key-reader-runtime/1'||!['fixture','trained-unverified'].includes(m.artifactRole)||m.executionEligible!==false||m.graphConfidence!==null||m.dtype!=='fp32'||!['fp32','q8-dynamic'].includes(m.weightRepresentation)||!object(m.files)||!([['cutter','encoder','heads'],['bindings','cutter','encoder','heads','tokenizer']].some(names=>same(Object.keys(m.files).sort(),names)))||!['cutterSha256','encoderSha256','headsSha256','configSha256','cutterConfigSha256','tokenizerSha256'].every(k=>hash(m[k])))throw Error('invalid-reader-bundle-profile');
  for(const [field,expected]of [['configJSON',m.configSha256],['cutterConfigJSON',m.cutterConfigSha256]]){
   if(!scalar(m[field])||utf8(m[field]).byteLength>maxJSONBytes||await digest(utf8(m[field]))!==expected)throw Error('embedded-config-hash-mismatch');
   copyHostData(JSON.parse(m[field]),{maxBytes:maxJSONBytes});
@@ -67,6 +67,12 @@ export async function createVerifiedReaderProvider({
   tokenizer:descriptor(tokenizerArtifact,m.tokenizerSha256),
   bindings:descriptor(bindingsArtifact)
  };
+ if(Object.keys(m.files).length===5){
+  for(const kind of ['tokenizer','bindings']){
+   const persisted=descriptor(m.files[kind],descriptors[kind].sha256,true);
+   if(!same(persisted,descriptors[kind]))throw Error('manifest-external-artifact-mismatch:'+kind);
+  }
+ }
  const paths=Object.values(descriptors).map(d=>d.path);
  if(new Set(paths).size!==paths.length)throw Error('duplicate-artifact-path');
  if(manifestBytes.byteLength+Object.values(descriptors).reduce((n,d)=>n+(d.bytes??maxJSONBytes),0)>maxTotalBytes)throw Error('declared-artifact-byte-budget');
