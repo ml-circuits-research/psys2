@@ -20,6 +20,7 @@ export const NATIVE_CONTROL_INTENT_SCHEMA=`
 @app.control.argument.value core.slot of=app.control.argument key=value type=app.control.value required=true
 @app.control.argument.start core.slot of=app.control.argument key=source.start kind=integer min=0
 @app.control.argument.end core.slot of=app.control.argument key=source.end kind=integer min=0
+@app.control.argument.origin core.slot of=app.control.argument key=source.origin kind=string
 @app.control.value core.type
 @app.control.value.kind core.slot of=app.control.value key=kind kind=string required=true
 @app.control.value.string core.slot of=app.control.value key=string kind=string
@@ -38,10 +39,13 @@ export const NATIVE_CONTROL_INTENT_SCHEMA=`
 @app.control.target.version core.slot of=app.control.target key=version kind=string
 `;
 const own=(o,k)=>Object.hasOwn(o,k),quote=value=>JSON.stringify(value);
-const canonical=value=>Array.isArray(value)?value.map(canonical):value&&typeof value==='object'?Object.fromEntries(Object.keys(value).sort().map(k=>[k,canonical(value[k])])):value;
+function canonical(value,depth=0){
+ if(depth>32)throw Error('native-intent-comparison-depth');
+ return Array.isArray(value)?value.map(v=>canonical(v,depth+1)):value&&typeof value==='object'?Object.fromEntries(Object.keys(value).sort().map(k=>[k,canonical(value[k],depth+1)])):value;
+}
 const equal=(a,b)=>JSON.stringify(canonical(a))===JSON.stringify(canonical(b));
 const readable=value=>typeof value==='string'?quote(value):JSON.stringify(value);
-const words=value=>String(value).replace(/[._-]+/g,' ');
+const words=value=>String(value).replace(/([a-z0-9])([A-Z])/g,'$1 $2').replace(/[._-]+/g,' ').toLowerCase();
 const verbs={make:'Create',change:'Update',place:'Move',remove:'Delete',pick:'Select',ask:'Show',undo:'Undo',redo:'Redo'};
 const validObservation=o=>!!o&&o.complete===true&&typeof o.instanceId==='string'&&typeof o.version==='string'&&Array.isArray(o.objects);
 const selectedIds=(op,args)=>op.act==='make'?[]:typeof args.id==='string'?[args.id]:Array.isArray(args.ids)&&args.ids.every(x=>typeof x==='string')?[...args.ids]:[];
@@ -58,16 +62,22 @@ export function describeNativeControl({operation,args={},before,parameterBinding
   return {mode:'existing',id,on:op.on,...(found?{source:found.source,version:found.version}:{})};
  });
  if(op.act==='make')targets.push({mode:'new',on:op.on,...(typeof values.id==='string'?{id:values.id}:{})});
- const type=words(op.on.split('.').at(-1)),targetText=ids.length?ids.map(id=>{
+ const displayName=id=>{
   const object=objects.find(o=>o.id===id),label=object?.inputs?.find(i=>['label','name','title'].includes(i.key)&&i.values?.length===1),decoded=label?observationValue(label.values[0]):null;
-  return decoded?.ok?`${readable(decoded.value)} (${id})`:readable(id);
- }).join(', '):`a ${type}`;
+  return decoded?.ok?decoded.value:null;
+ };
+ const type=op.intent?.subject??words(op.on.split('.').at(-1)),targetText=ids.length?ids.map(id=>readable(displayName(id)??id)).join(', '):`a ${type}`;
  let text=`${verbs[op.act]??'Apply'} ${targetText}`,ranges=[];
- const fields=Object.entries(values).filter(([key])=>!ids.length||!['id','ids'].includes(key));
- if(fields.length)text+=' with ';
+ const fields=Object.entries(values).filter(([key])=>!['id','ids'].includes(key)&&op.intent?.parameters?.[key]?.hidden!==true);
+ const modifiers={name:'named',label:'named',title:'titled',colour:'coloured',color:'coloured',kind:'of kind',type:'of type'};
  for(const [index,[parameter,value]]of fields.entries()){
-  if(index)text+=index===fields.length-1?' and ':', ';
-  text+=words(parameter)+' ';const start=Array.from(text).length;text+=readable(value);ranges.push({parameter,start,end:Array.from(text).length});
+  text+=index?', ':' ';
+  const metadata=op.intent?.parameters?.[parameter],modifier=metadata?.label??modifiers[parameter]??'with '+words(parameter);
+  text+=modifier+' ';let rendered=readable(value),origin='text';
+  if(metadata?.reference===true&&typeof value==='string'&&displayName(value)!==null){rendered=readable(displayName(value));origin='observed-identity-label';}
+  else if(metadata?.format==='unix-ms'&&Number.isSafeInteger(value)){rendered=quote(new Date(value).toISOString());origin='declared-time-format';}
+  else if(metadata?.format==='duration-ms'&&typeof value==='number'){rendered=`${value/60000} minutes`;origin='declared-duration-format';}
+  const start=Array.from(text).length;text+=rendered;ranges.push({parameter,start,end:Array.from(text).length,rendered,origin});
  }
  text+='.';
  const lines=[`@control.source app.control.source text=${quote(text)}`],valueRows=[];let sequence=0;
@@ -86,7 +96,7 @@ export function describeNativeControl({operation,args={},before,parameterBinding
  };
  const argumentsRows=Object.entries(values).map(([parameter,value],index)=>{
   const range=ranges.find(r=>r.parameter===parameter),id=`control.argument.${index}`,valueId=encode(value);
-  lines.push(`@${id} app.control.argument parameter=${quote(parameter)} value=$${valueId}${range?` source.start=${range.start} source.end=${range.end}`:''}`);return id;
+  lines.push(`@${id} app.control.argument parameter=${quote(parameter)} value=$${valueId}${range?` source.start=${range.start} source.end=${range.end} source.origin=${quote(range.origin)}`:''}`);return id;
  });
  const targetRows=targets.map((target,index)=>{const id=`control.target.${index}`;lines.push(`@${id} app.control.target ${Object.entries(target).map(([k,v])=>`${k}=${quote(v)}`).join(' ')}`);return id;});
  lines.push(...valueRows,`@control.intent app.control.intent operation=${quote(op.id)} act=${quote(op.act)} mood="do" on=${quote(op.on)} source=$control.source${validObservation(observation)?` instance=${quote(observation.instanceId)} version=${quote(observation.version)}`:''}${argumentsRows.map(id=>` argument=$${id}`).join('')}${targetRows.map(id=>` target=$${id}`).join('')}`);

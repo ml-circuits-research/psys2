@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Resolved host preparation, not a new-path binding. Owns a copied state for one lifetime.
-import { newFace, toolView, NONE } from './face.mjs?v=29240b25c0';
+import { newFace, toolView, NONE } from './face.mjs?v=34547faa83';
 import { DEFAULT_FACE } from './default-face.mjs?v=9a9dc8d5bf';
 const copy = (x) => structuredClone(x);
 const record = (x) => x !== null && typeof x === 'object' && !Array.isArray(x)

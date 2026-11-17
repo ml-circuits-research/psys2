@@ -95,6 +95,8 @@ export function resize(data, f, slotName, next) {
  */
 const GRADE = { tiny: 0.6, small: 0.8, default: 1, big: 1.25, huge: 1.5 };   // the tool's own size grades as scales of a part
 const DIRECTION = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] };
+export const PART_SIZE_GRADES=Object.keys(GRADE);
+export const PART_MOVE_DIRECTIONS=Object.keys(DIRECTION);
 const MOVE_STEP = 4;
 export const faceData = (ctx) => ctx?.knowledge?.peekFaces?.() ?? DEFAULT_FACE;
 const ok = (changed = []) => ({ status: 'supported', value: '', changed });

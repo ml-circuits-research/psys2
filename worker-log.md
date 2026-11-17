@@ -29,3 +29,6 @@ Validation: npm test — 356 tests, 353 pass, 0 fail, 3 skips. No product fixes;
 2026-11-17 done: first UI delivery replaces Charts tab with Calendar; chart tools/SVG/multiple series are composed inside Diagram. Calendar UI supports personal calendars, rooms, timed events, occupancy, policy conflicts and undo; work survives reload.
 Checks: npm test (active gate), native chart composition tests, node scripts/smoke-demo-areas.mjs; actual Chromium created resources/events/chart, refused overlap, edited/undid and restored all data after reload.
 Native bindings regenerated and packaged with unchanged epoch7 weights; direct numerical chart proposal executes [3,5,8]. This is not a reader-accuracy claim. Dataset repair/retraining and richer gesture/intent capture remain active separately.
+
+2026-11-17 done: synchronized generated asset manifest after removing one superseded task-created bundle, plus completed avatar native declarations for the next UI batch. Final first-interface gate: 382 tests, 379 passed, 0 failed, 3 optional skips; real browser controls smoke passed.
+Commands: node scripts/build-system-map.mjs --write; npm run build:webchat; npm test; node scripts/smoke-demo-areas.mjs. Initial publication 34db393c; generated-manifest correction follows immediately.
