@@ -23,6 +23,8 @@ export function bridgeRawStructure(prediction,{bindings,bindingSha256,budget=200
   shape(raw.source,['text','unit'],['source']);shape(raw.coverage,['complete','truncated'],['coverage']);
   if(raw.format!==RAW_STRUCTURAL_FORMAT||raw.source?.unit!=='unicode-scalar'||typeof raw.source.text!=='string'||typeof raw.area!=='string')fail('invalid-raw-envelope');
   if(table.format!=='sop.structural-bindings/1'||!hash(bindingSha256))fail('invalid-binding-snapshot');
+  if(table.families!==undefined&&(!Array.isArray(table.families)||table.families.length>256))fail('invalid-family-binding-table');
+  for(const row of table.families??[]){tick();if(!row||!['area','type','canonical','sourceWire','sourceWorld','moduleVersion'].every(k=>typeof row[k]==='string'&&row[k])||!hash(row.sourceSnapshotSHA)||row.alignment?.kind!=='explicit-raw-family-identity')fail('invalid-family-binding-record');}
   if(!Array.isArray(raw.requests)||raw.requests.length>32||raw.requestCount!==raw.requests.length||!Number.isSafeInteger(raw.requestCount))issue('unresolved-or-overflow-request-count',['requestCount']);
   if(!Array.isArray(raw.requests)||raw.requests.length>32)fail('request-budget');
   if(raw.coverage?.complete!==true||raw.coverage?.truncated!==false)issue('incomplete-model-coverage',['coverage']);
@@ -56,7 +58,10 @@ export function bridgeRawStructure(prediction,{bindings,bindingSha256,budget=200
    const target=original.target??{};shape(target,keys.target,[...basePath,'target']);const t={id:tid};label.targets.push(t);
    if(['new','existing','bound'].includes(target.mode))t.mode=target.mode;else unresolved('missing-target-mode',['targets',tid,'mode']);
    const kind=lookup('kinds',{area:raw.area,type:target.type,lemma:target.kind});
-   if(kind){t.kind=kind.canonical;anchor(['targets',tid,'kind'],target.kind_span||target.kind,kind.sourceWire,false,['target',target.kind_span?'kind_span':'kind']);}else if(target.mode!=='bound')unresolved('unresolved-canonical-kind-binding',['targets',tid,'kind']);
+   const family=target.mode!=='bound'&&!has(target,'kind')&&!has(target,'kind_span')&&typeof target.type==='string'?lookup('families',{area:raw.area,type:target.type}):null;
+   if(kind){t.kind=kind.canonical;anchor(['targets',tid,'kind'],target.kind_span||target.kind,kind.sourceWire,false,['target',target.kind_span?'kind_span':'kind']);}
+   else if(family){t.kind=family.canonical;anchor(['targets',tid,'kind'],null,family.sourceWire,true);}
+   else if(target.mode!=='bound')unresolved('unresolved-canonical-kind-binding',['targets',tid,'kind']);
    if(has(target,'name_span')){t.name={kind:'string',value:target.name_span};anchor(['targets',tid,'name'],target.name_span,null,false,['target','name_span']);}
    if(has(target,'determiner'))t.determiner=target.determiner;
    if(['context','previous_reply','journal_step'].includes(target.fill))unresolved('context-reference-not-bound',['targets',tid]);

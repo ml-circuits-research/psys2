@@ -57,3 +57,9 @@ Check source export behavior with
 `node --test tests/structural-bindings.test.mjs`. Missing native capabilities,
 component ownership edges, semantic references and lexical value normalization
 remain separate obligations, even when a declaration or binding is available.
+
+## Independent semantic and native projection
+
+The exporter accepts optional explicit `familyAlignments` (cap256), requiring an inventory family, existing `core.type` identity, matching owning source wire and nonempty authorial authority. It exports source/module/snapshot evidence; no lexical alias implies a raw family identity. The default CLI does not infer or enable these alignments.
+
+Property alignment (cap4096) requires the exact inventory descriptor and owning semantic declaration. Missing native operation/parameter now retains the semantic property with `nativeCapability.status='unsupported'` and a separate `nativeCapabilities` diagnostic. No hostBinding is invented. Missing semantic declarations still omit the property and report unknown; all unmapped inventory properties remain listed. Native presence is a declared parameter join, not proof of complete operation semantics, value conversion or effect assessment. Existing typed values, unit/frame/source proofs and canonical ambiguity guards remain mandatory. This change adds no property alignments or normalizers by itself.
