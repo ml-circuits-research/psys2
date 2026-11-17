@@ -5385,3 +5385,7 @@ Accepted: the per-key design learns (mention F1 67.2% → 77.0% over five epochs
 | Train on | v1 + v2 including the 2,000 targeted rows (19,995 v2 rows now), starting from the epoch-5 checkpoint, until calibration stops improving rather than a fixed five epochs. |
 | Wire now | Do not wait for a high exact rate. Put cutter + key reader + decoder into the engine behind the calibrated confidence gate: the app executes only readings above the gate (precision of execution), asks one precise question or says honestly what it did not understand otherwise. That turns the right column on for the easy cells now, with wrong kept at 0, and lets the owner try it. |
 | Measure | Class × area table and owner replay with the wired model after each round; per cell right / partly / honest / wrong and the share above the gate. |
+
+## 2026-11-17 04:35 (Rome) — Review 24 (reviewer; q8 reader through the Node backend, parity, replay host 7652cc0c..04a3b117)
+
+Accepted: the q8 reader runs through the actual Node backend with same-input parity to Python. Proportion, though: the last hour went into parity and provenance evidence, and the app route still does not call SOP-BERT. The next landing should be the route itself — browser worker loads the published q8 cutter + key graphs, decoder, admission gate, engine — published to Pages, with the functional matrix and the owner replay run through it. Provenance hashes are enough as recorded; no further parity variants are needed before that.
