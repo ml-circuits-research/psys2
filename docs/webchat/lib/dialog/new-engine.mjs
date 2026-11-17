@@ -1,9 +1,9 @@
 // Validated graph execution; no natural-language reader or grammar application path.
-import { World, inspectRequest, assessPropertyChange, quote, str, parse } from '../vendor/sopworld/sopworld.mjs?v=d58613c0ad';
+import { World, inspectRequest, assessPropertyChange, quote, str, parse } from '../vendor/sopworld/sopworld.mjs?v=ca48804f00';
 import SOURCE from './new-engine-source.mjs?v=e31b4adb7f';
-import { resolvePropertyValue, selectPropertyObject } from './property-selection.mjs?v=4ba30f3009';
+import { resolvePropertyValue, selectPropertyObject } from './property-selection.mjs?v=e569f0bfcb';
 import { NEW_ENGINE_AREAS } from './new-engine-areas.mjs?v=510334f8b4';
-import { flatRequestProjection } from './request-projection.mjs?v=76ee53f763';
+import { flatRequestProjection } from './request-projection.mjs?v=091aaf724b';
 const hosts = new WeakMap();
 let knowledge;
 const sourceWorld = () => knowledge ??= World.fromJSON(SOURCE.snapshot);

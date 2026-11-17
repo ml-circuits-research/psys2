@@ -1,5 +1,5 @@
 // Application bindings resolve names; library guards evaluate exact native equality.
-import { projectTemplates, quote, str } from '../vendor/sopworld/sopworld.mjs?v=d58613c0ad';
+import { projectTemplates, quote, str } from '../vendor/sopworld/sopworld.mjs?v=ca48804f00';
 
 export function resolvePropertyValue(source, area, binding, semanticValue) {
   const facts = [];

@@ -22,6 +22,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -64,6 +70,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -106,6 +118,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -148,6 +166,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -190,6 +214,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -232,6 +262,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -274,6 +310,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -316,6 +358,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -358,6 +406,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -400,6 +454,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -442,6 +502,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -484,6 +550,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -526,6 +598,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -568,6 +646,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -610,6 +694,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -652,6 +742,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -694,6 +790,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -736,6 +838,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -778,6 +886,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -820,6 +934,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -862,6 +982,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -904,6 +1030,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -946,6 +1078,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -988,6 +1126,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -1030,6 +1174,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -1072,6 +1222,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -1114,6 +1270,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -1156,6 +1318,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -1198,6 +1366,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -1240,6 +1414,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -1282,6 +1462,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -1324,6 +1510,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -1366,6 +1558,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -1408,6 +1606,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -1450,6 +1654,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -1492,6 +1702,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -1534,6 +1750,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -1576,6 +1798,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -1618,6 +1846,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -1660,6 +1894,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -1702,6 +1942,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -1744,6 +1990,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -1786,6 +2038,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -1828,6 +2086,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -1870,6 +2134,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -1911,6 +2181,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -1952,6 +2228,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -1993,6 +2275,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -2034,6 +2322,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -2075,6 +2369,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -2116,6 +2416,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -2157,6 +2463,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -2198,6 +2510,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -2239,6 +2557,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -2280,6 +2604,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -2321,6 +2651,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -2362,6 +2698,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -2403,6 +2745,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -2444,6 +2792,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -2485,6 +2839,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -2526,6 +2886,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -2567,6 +2933,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -2608,6 +2980,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -2649,6 +3027,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -2690,6 +3074,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -2731,6 +3121,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -2772,6 +3168,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -2813,6 +3215,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -2854,6 +3262,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -2895,6 +3309,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -2936,6 +3356,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -2977,6 +3403,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -3018,6 +3450,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -3059,6 +3497,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -3100,6 +3544,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -3141,6 +3591,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -3182,6 +3638,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -3223,6 +3685,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -3264,6 +3732,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -3305,6 +3779,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -3346,6 +3826,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -3387,6 +3873,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -3428,6 +3920,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -3469,6 +3967,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -3510,6 +4014,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -3551,6 +4061,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -3592,6 +4108,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -3633,6 +4155,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -3674,6 +4202,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -3715,6 +4249,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -3756,6 +4296,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -3797,6 +4343,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -3838,6 +4390,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -3879,6 +4437,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -3920,6 +4484,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -3961,6 +4531,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -4002,6 +4578,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -4043,6 +4625,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -4084,6 +4672,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -4125,6 +4719,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -4166,6 +4766,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -4207,6 +4813,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -4248,6 +4860,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -4289,6 +4907,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -4330,6 +4954,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -4371,6 +5001,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -4412,6 +5048,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -4453,6 +5095,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -4494,6 +5142,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -4535,6 +5189,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -4576,6 +5236,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -4617,6 +5283,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -4658,6 +5330,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -4699,6 +5377,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -4740,6 +5424,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -4781,6 +5471,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -4822,6 +5518,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -4863,6 +5565,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -4904,6 +5612,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -4945,6 +5659,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -4986,6 +5706,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -5027,6 +5753,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -5068,6 +5800,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -5109,6 +5847,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -5150,6 +5894,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -5191,6 +5941,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -5232,6 +5988,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -5273,6 +6035,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -5314,6 +6082,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -5355,6 +6129,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -5396,6 +6176,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -5437,6 +6223,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -5478,6 +6270,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -5519,6 +6317,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -5560,6 +6364,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -5601,6 +6411,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -5642,6 +6458,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -5683,6 +6505,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -5724,6 +6552,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -5765,6 +6599,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -5806,6 +6646,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -5847,6 +6693,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -5888,6 +6740,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -5929,6 +6787,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -5970,6 +6834,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -6011,6 +6881,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -6052,6 +6928,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -6093,6 +6975,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -6134,6 +7022,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -6175,6 +7069,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -6216,6 +7116,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -6257,6 +7163,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -6298,6 +7210,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -6339,6 +7257,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -6380,6 +7304,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -6421,6 +7351,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -6462,6 +7398,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -6503,6 +7445,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -6544,6 +7492,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -6585,6 +7539,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -6626,6 +7586,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -6667,6 +7633,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -6708,6 +7680,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -6749,6 +7727,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -6790,6 +7774,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -6831,6 +7821,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -6872,6 +7868,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -6913,6 +7915,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -6954,6 +7962,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -6995,6 +8009,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -7036,6 +8056,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -7077,6 +8103,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -7118,6 +8150,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -7159,6 +8197,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -7200,6 +8244,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -7241,6 +8291,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -7282,6 +8338,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -7323,6 +8385,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -7364,6 +8432,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -7405,6 +8479,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -7446,6 +8526,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -7487,6 +8573,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -7528,6 +8620,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -7569,6 +8667,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -7610,6 +8714,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -7651,6 +8761,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -7692,6 +8808,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -7733,6 +8855,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -7774,6 +8902,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -7815,6 +8949,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -7856,6 +8996,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -7897,6 +9043,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -7938,6 +9090,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -7979,6 +9137,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -8020,6 +9184,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -8061,6 +9231,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -8102,6 +9278,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -8143,6 +9325,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -8184,6 +9372,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -8225,6 +9419,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -8266,6 +9466,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -8307,6 +9513,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -8348,6 +9560,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -8389,6 +9607,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {
@@ -8430,6 +9654,12 @@
         "primary": "sop-bert",
         "selected": null,
         "reason": "model-provider-unavailable",
+        "admission": {
+          "scoreDefinition": "psys2.complete-unique/1",
+          "score": 0,
+          "proposalEligible": false,
+          "assessment": null
+        },
         "model": {
           "provenance": null,
           "coverage": {

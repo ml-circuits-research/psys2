@@ -3,8 +3,9 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { runGrammarEngine as runNewEngine } from '../scripts/lib/grammar-reader.mjs';
 import { initialState } from '../worlds/art.draw/board.mjs';
-import { World, str } from '../src/vendor/sopworld/sopworld.mjs';
+import { World, str, retainSelectiveCalibration } from '../src/vendor/sopworld/sopworld.mjs';
 import { fixtureEngine } from './helpers.mjs';
+import {readerCalibrationIdentity,readerCalibrationScope,READER_RUNTIME_IDENTITY_FIELDS} from '../src/dialog/reader-admission.mjs';
 import sourceSnapshot from '../src/dialog/new-engine-source.mjs';
 const sentence = 'Change the colour of the circle to purple.';
 const setup = (objects = [{ id: 17, kind: 'circle', color: 'red' }]) => {
@@ -79,8 +80,11 @@ test('the sole route ignores retired options and preserves undo and journal pers
   Object.assign(session.isession.state, setup().isession.state);
   // Controlled graph-provider fixture, not a trained-model performance claim.
   const wires = `@source std.request.source text=${JSON.stringify(sentence)}\n@r std.request act=change mood=do source=$source root=$condition\n@target std.request.target request=$r mode=existing kind=circle\n@condition std.request.constraint request=$r target=$target concept=colour operator=eq value=purple character=requirement polarity=positive`;
-  engine.requestReader = { provenance: () => ({modelSha256:'a'.repeat(64),decoderVersion:1}), propose: async () => ({candidates:[{request:'r',wires}],coverage:{complete:true,executable:true,graphProposal:true}}) };
-  engine.requestReaderGate = {status:'approved',modelSha256:'a'.repeat(64),decoderVersion:1,reportSha256:'b'.repeat(64),wrong:0,better:true,compared:1,accepts:()=>true};
+  engine.requestReader = { provenance: () => ({modelSha256:'a'.repeat(64),decoderVersion:1}), propose: async () => ({candidates:[{request:'r',wires}],coverage:{complete:true,executable:false,graphProposal:true},failures:[]}) };
+  const runtimeIdentity=Object.fromEntries(READER_RUNTIME_IDENTITY_FIELDS.map(key=>[key,'b'.repeat(64)])),calibrationWorld=new World(),reference={owner:'fixture.sole-route',revision:'1'};
+  const row=id=>({id,source:id,score:1,eligible:true,correct:true});
+  assert.equal(retainSelectiveCalibration(calibrationWorld,{...reference,identity:readerCalibrationIdentity(engine.requestReader.provenance(),runtimeIdentity),scope:readerCalibrationScope('draw'),policy:{minFitAccepted:2,minEvaluationAccepted:2,maxErrorRate:0},fitRows:[row('fit1'),row('fit2')],evaluationRows:[row('eval1'),row('eval2')]}).ok,true);
+  engine.requestReaderAdmission={world:calibrationWorld,reference,runtimeIdentity};
   let legacyCalls = 0;
   session._sendRead = async () => { legacyCalls++; return { text: 'legacy', trace: {}, statuses: [] }; };
   const before = session.snapshot();
