@@ -11,6 +11,7 @@ const fixed = [
 ];
 const lanes = readdirSync(new URL('../tests/', import.meta.url)).filter(name => name.endsWith('-declared-host.test.mjs'));
 const files = [...new Set([...fixed, ...lanes])].sort().map(name => `tests/${name}`);
+files.push('training/sop-bert/tests/compile-teacher-expectations.test.mjs');
 console.log(`Active new-engine gate: ${files.length} files; retired dialogue/REAL suites are not acceptance gates.`);
 const result = spawnSync(process.execPath, ['--test', ...files], { cwd: new URL('../', import.meta.url), stdio: 'inherit' });
 process.exitCode = result.status ?? 1;
