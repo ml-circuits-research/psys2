@@ -1,5 +1,5 @@
 {
-  "version": "1def9b544a",
+  "version": "db7deacbcb",
   "worlds": [
     "acts",
     "art.draw",
@@ -45,7 +45,7 @@
     "lib/astra/session.mjs": "ae641720f754a9dc",
     "lib/astra/where.mjs": "df7e71a782e57a0d",
     "lib/dialog/application-areas.mjs": "1787d43260ddea8d",
-    "lib/dialog/bert-source-offsets.mjs": "b7c9237579d7cce9",
+    "lib/dialog/bert-source-offsets.mjs": "f1540507917fa1a2",
     "lib/dialog/budget-limits.mjs": "361b73ef578f74d5",
     "lib/dialog/budget.mjs": "a7b9cf83512b05c1",
     "lib/dialog/compose-plan.mjs": "f242e1d38a459d0d",
@@ -654,8 +654,8 @@
     "worlds/words/zo.json": "98c807997b12214c",
     "worlds/words.bloom.json": "1aee5298e6fe2c42"
   },
-  "builtAt": "2026-11-16T23:54:53.069Z",
-  "commit": "077f9227-dirty",
+  "builtAt": "2026-11-17T00:04:58.250Z",
+  "commit": "ddfec462-dirty",
   "catalog": "c9d5d0a9308bce06ceb805a358677318887c8ebc",
   "assets": {
     "app.mjs": "acad83ead9",
@@ -671,7 +671,7 @@
     "lib/astra/session.mjs": "e029c21c92",
     "lib/astra/where.mjs": "09b4059350",
     "lib/dialog/application-areas.mjs": "5930d8fe63",
-    "lib/dialog/bert-source-offsets.mjs": "1fcb73408e",
+    "lib/dialog/bert-source-offsets.mjs": "b2a19ec515",
     "lib/dialog/budget-limits.mjs": "fb1adadf05",
     "lib/dialog/budget.mjs": "00bce6e369",
     "lib/dialog/compose-plan.mjs": "b890bea99a",

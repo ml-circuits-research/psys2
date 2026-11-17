@@ -17,10 +17,10 @@ export async function createBertSourceOffsetAuthority({tokenizer,tokenizerJSON,t
   if(tokenizer.normalizer?.constructor?.name!=='BertNormalizer'||tokenizer.pre_tokenizer?.constructor?.name!=='BertPreTokenizer'||tokenizer.model?.constructor?.name!=='WordPieceTokenizer'||tokenizer.post_processor?.constructor?.name!=='TemplateProcessing'||!same(tokenizer.normalizer?.config,normalizer)||!same(tokenizer.model?.config,model)||!same(tokenizer.post_processor?.config,post)||tokenizer.padding_side!=='right'||typeof tokenizer.normalizer?.normalize!=='function'||typeof tokenizer.pre_tokenizer?.pre_tokenize_text!=='function'||typeof tokenizer.model?.encode!=='function'||!same(tokenizer.added_tokens?.map(t=>({id:t.id,content:t.content,single_word:t.single_word,lstrip:t.lstrip,rstrip:t.rstrip,normalized:t.normalized,special:t.special})),profile.added_tokens))reject('component-profile-mismatch');
  };
  assertComponents();
- const provenance={id:'bert-component-trace',version:1,profileSha256:await digest(JSON.stringify({normalizer,pre_tokenizer:profile.pre_tokenizer,model:{type:model.type,continuing_subword_prefix:model.continuing_subword_prefix,max_input_chars_per_word:model.max_input_chars_per_word},post_processor:post,policy:'untruncated-right-padding;no-added-token-input;no-supplementary-cjk'})),tokenizerSha256};
+ const provenance={id:'bert-component-trace',version:1,profileSha256:await digest(JSON.stringify({normalizer,pre_tokenizer:profile.pre_tokenizer,model:{type:model.type,continuing_subword_prefix:model.continuing_subword_prefix,max_input_chars_per_word:model.max_input_chars_per_word},post_processor:post,policy:'single-or-pair;untruncated-right-padding;no-added-token-input;no-supplementary-cjk'})),tokenizerSha256};
  return async function authority({text,contextJson,tokenIds,attentionMask,fullTokenIds,fullAttentionMask,maxLength}={}){
   assertComponents();let work=0;const tick=n=>{work+=n;if(work>budget)reject('budget');};
-  if(typeof text!=='string'||typeof contextJson!=='string'||!Number.isSafeInteger(maxLength)||maxLength<1||maxLength>512)reject('invalid-input');
+  if(typeof text!=='string'||(contextJson!==undefined&&typeof contextJson!=='string')||!Number.isSafeInteger(maxLength)||maxLength<1||maxLength>512)reject('invalid-input');
   const trace=(original,sequence)=>{
    const input=Array.from(original);tick(input.length);if(input.length>maxScalars)reject('source-size');
    // JS and Rust BERT CJK handling differ for supplementary characters.
@@ -42,11 +42,11 @@ export async function createBertSourceOffsetAuthority({tokenizer,tokenizerJSON,t
    }
    for(let scan=0;scan<normalized.length;scan++){if(cursor>=normalized.length||!/\s/u.test(normalized[cursor]))break;cursor++;tick(1);}if(cursor!==normalized.length)reject('unconsumed-normalization');return output;
   };
-  const sequences={A:trace(text,0),B:trace(contextJson,1)},composed=[];
-  for(const item of post.pair){tick(1);if(item.Sequence)composed.push(...sequences[item.Sequence.id]);else{const special=post.special_tokens[item.SpecialToken.id];if(!special||special.ids.length!==1||special.tokens.length!==1||model.vocab[special.tokens[0]]!==special.ids[0])reject('invalid-special');composed.push({id:special.ids[0],sequence:null,offset:null,special:1});}}
+  const paired=contextJson!==undefined,sequences={A:trace(text,0),...(paired?{B:trace(contextJson,1)}:{})},composed=[];
+  for(const item of paired?post.pair:post.single){tick(1);if(item.Sequence)composed.push(...sequences[item.Sequence.id]);else{const special=post.special_tokens[item.SpecialToken.id];if(!special||special.ids.length!==1||special.tokens.length!==1||model.vocab[special.tokens[0]]!==special.ids[0])reject('invalid-special');composed.push({id:special.ids[0],sequence:null,offset:null,special:1});}}
   const ids=composed.map(t=>t.id),ones=ids.map(()=>1);if(ids.length>maxLength)reject('truncation-unsupported');
   // Independently invoke the actual complete tokenizer, including interception and processor.
-  const actual=await tokenizer([text],{text_pair:[contextJson],padding:false,truncation:false,return_tensor:false});
+  const actual=await tokenizer([text],{...(paired?{text_pair:[contextJson]}:{}),padding:false,truncation:false,return_tensor:false});
   if(!same(actual.input_ids?.[0],ids)||!same(actual.attention_mask?.[0],ones)||!same(fullTokenIds,ids)||!same(fullAttentionMask,ones))reject('full-token-parity');
   if(!Array.isArray(tokenIds)||tokenIds.length!==maxLength||!Array.isArray(attentionMask)||attentionMask.length!==maxLength)reject('padding-shape');
   for(let i=composed.length;i<maxLength;i++){tick(1);composed.push({id:model.vocab['[PAD]'],sequence:null,offset:null,special:1});}
