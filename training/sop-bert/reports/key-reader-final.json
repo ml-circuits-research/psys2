@@ -3631,5 +3631,11 @@
     "direct derived concept/negated output",
     "nonidentity source normalization absent explicit declaration"
   ],
-  "executable": false
+  "executable": false,
+  "precisionBoundary": {
+    "decodedPerKeyCalibration": "evaluate() used live FP32 parameter state without autocast",
+    "aggregateTokenCalibration": "objective() token pass used live FP32 parameters under CUDA BF16 autocast",
+    "savedCheckpoint": "floating state compacted to BF16 after calibration",
+    "implication": "Hash/config verification proves saved artifact identity, not calibration parity of rounded saved weights. Frozen checkpoint/backend parity is pending separate actual measurement; no inherited saved-artifact accuracy or graph confidence."
+  }
 }
