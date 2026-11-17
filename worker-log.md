@@ -4885,3 +4885,11 @@ provider, restores declared host state and measures actual before/after snapshot
 Fresh bounded profile/cache stays under workspace and is removed on close.
 Two pure tests pass; actual smoke awaiting PSys built deployment/assets. No
 model/engine/deployment edits; PSys owns integration and full app gate.
+
+Actual Chromium first smoke fetched all3graph files200, then offset authority
+correctly refused minified tokenizer component class names before WASM/session
+creation. Kept failure evidence outsideGit; rebuilt vendor with keepNames=true
+and added actual authority construction regression (no verifier weakening).
+Six targeted fixtures now pass including actual full/minimal/authority check.
+Harness also routes crash diagnostics/config/cache under its own fresh profile.
+Actual rerun follows PSys rebuild; original no-effect failure remains recorded.
