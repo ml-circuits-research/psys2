@@ -5446,3 +5446,16 @@ Clean up disk as you go. Owner decision: do not fill the disk with intermediate 
 - Delete intermediate files your own runs made once they are superseded: old checkpoints except the selected epoch 7 and the latest run's best, FP32/ONNX intermediates after the q8 bundle is verified, duplicate snapshots, temporary exports, cached packets, test logs, `.session-control` receipts not referenced by a test.
 - Keep: training data (haiku-v1, haiku-v2, functional matrix), the deployed bundle, the selected checkpoint, reports that are committed.
 - One line in worker-log per cleanup: what was deleted and how much space it freed. If something is unclear (not made by your runs, or might be needed), list it and ask the owner instead of deleting.
+
+## Review 29 — 2026-11-17 08:45 Rome (owner decision on the confidence gate)
+
+Owner, verbatim in substance: for our worlds the gate can be looser; small mistakes now and then are acceptable (LLMs make them too); that is better than often saying "I don't know how".
+
+Current state I found: `reader-admission.mjs` requires `maxErrorRate:0` and zero wrong in both fit and evaluation cohorts, and the score `psys2.complete-unique/1` is 0 or 1, so there is no ranking to choose a threshold on. With that policy the gate can almost never open.
+
+What changes:
+1. Policy: `maxErrorRate` 0.05 on accepted rows (at most about 1 in 20 executed commands wrong), set in one declared place, not hard-coded. Destructive commands (delete, overwrite, clear) keep a stricter rate (0.01). Everything executed stays undoable.
+2. Score: use the model's own confidence (for example the minimum over the cutter, key-presence and binding probabilities of the request), not 0/1, so the calibration can actually pick a threshold. Keep the existing safety: validation, resolution, assessment, native executor refusal.
+3. "Wrong" for the gate means the effect differs from the intended one. A clarifying question is not wrong. A refusal counts as not covered, not as wrong.
+4. Report both numbers per class × area: coverage (how often it acts) and error rate among acted rows. The owner's English sessions are still judged turn by turn (right / partly / honest / wrong); a rare wrong is now tolerated, a pattern of wrong in one class is not.
+5. Same honesty rule as review 28: calibrate on CAL rows only, no tuning on the 301 matrix rows or the owner's sessions.
