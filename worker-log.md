@@ -4703,3 +4703,20 @@ families, shared-family deduplication, actual CPU label encoding and reordered
 key/BIO/class banks. No model/checkpoint reads, full corpus run, GPU or saved
 binaries. specs/key-reader-target-type-candidate.md records baseline/inventory
 hashes and the review-before-next-run boundary.
+
+## 2026-11-17 — Pure CPU semantic migration applier
+
+Added NEW target-type-weight-migration.py and focused synthetic fixtures/spec.
+Reviewed candidate preparer/trainer bytes remain unchanged. The helper consumes
+the explicit semantic plan, independently validates key/BIO/typed-bank mappings,
+exact encoder provenance, all expected tensor names/shapes and finite CPU values.
+It returns independent cloned state, preserves fresh new rows, refuses lossy
+dtype conversion and discards optimizer state. No source/fresh mutation or
+partial result on refusal; finite tensor/row/element budgets cover actual work.
+
+Checks:9/9 tiny synthetic CPU fixtures pass with CUDA_VISIBLE_DEVICES='',
+including unchanged logits after key/BIO/class permutations, typed values,
+new-row survival, no output storage aliases, exact encoder chain, malformed
+plans/configs, missing/mismatched/nonfinite/non-CPU tensors and budget refusal.
+Existing candidate13/13 fixtures pass. No file/checkpoint weights read, no GPU
+or model construction, actual migration/training or saved model binaries.

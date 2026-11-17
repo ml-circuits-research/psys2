@@ -56,9 +56,11 @@ class rows are joined by the complete typed state/value entry, never ordinals.
 For example numeric1, string"1", literal"<ABSENT>" and reserved absent are
 distinct entries. Newly introduced keys/classes keep fresh initialization.
 Optimizer state is discarded; unspecified tensors are never copied by position.
-This candidate provides the reviewable plan only, not an unsafe partial applier.
-The existing CLI warmstart still loads encoder weights only, so it does not
-pretend to apply this semantic migration.
+The separately reviewed target-type-weight-migration.py helper now applies the
+plan to in-memory CPU state dictionaries under exact provenance/shape/budget
+checks (see target-type-weight-migration.md). The existing CLI warmstart still
+loads encoder weights only; it never silently invokes this applier. No actual
+checkpoint migration is authorized or performed by this candidate preparation.
 
 ## Checks and limits
 
