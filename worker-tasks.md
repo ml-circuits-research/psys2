@@ -5410,3 +5410,13 @@ Accepted: 10 epochs, plateau at epoch 7; 28 of the 35 weak keys now above 0.6. T
 | Raw complete | 48 of 292 | presence fires but the span is missing or mismatched in 196 rows (393 occurrences): decode a present key without a span as "present, value from class head" where the key has a class head, and train presence and span jointly so they agree; report the top keys. |
 | Canonical binding | 0 of 27 non-empty | kind (21 rows), property/value (16) and description/context: bind lemmas to declared identities by lookup in the knowledge worlds (kinds tree, colours, shapes, units, people/rooms of the live instance) and the inventory value lists; a lemma that matches nothing becomes one precise question, not a refusal of the whole request. Context/description go to instance resolution (library 72ec8f1 / 6cce066) instead of blocking the graph. |
 | Deploy | — | the deployed bundle is still the epoch-1 checkpoint; deploy epoch 7 with the fixes, calibrate the gate on calibration rows, rerun matrix and owner replay. |
+
+## Review 27 — 2026-11-17 06:30 Rome (reviewer)
+
+Reviewed 39daa71f, b22a0e45, 48c0b68c, 1df35b60, 26c0323d. Active gate in my env: passes (ONNX export test excluded, env torch). No domain or sentence names in new src.
+
+Accepted: rejected-field witnesses, family/semantic binding split, selected-checkpoint export path (epoch 7), presence/BIO consistency candidate, semantic alignment catalogue with exact KB evidence and no lexical fallback.
+
+One counter: the catalogue aligns 9 of 15 families and 15 of 105 properties; 90 stay "unknown". That is the same gap the stage report showed (canonical binding 0/27). Close it from the knowledge worlds, not by hand per property: every property and value list already declared in sop-knowledge-worlds (latest 539dd413: depiction, text, room) should produce its alignment record; a property that is truly undeclared becomes a knowledge-worlds task, not a reader rule. Typed dates/clock/duration go through the existing value types.
+
+Order after that: run 5 (presence/span jointly) or epoch 7 as is if run 5 is not ready, export and deploy to the app, calibrate the gate on calibration rows, rerun the 301-row matrix and owner replay, report the class × area table.
