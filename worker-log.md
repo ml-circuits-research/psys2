@@ -4665,3 +4665,11 @@ saved, no inference activation/confidence claimed. OutsideGit evidence:
 .session-control/request-cutter-smoke-v1/{final-verification.json,preparation.json}.
 The small smoke model produces invalid BIO transitions, correctly reported
 unresolved. Full GPU training follows this immutable source commit.
+
+### BIO cutter source integration and active training status
+
+Integrated 63ba6b19 unchanged as 5f935e9a and added its 14 pure Python fixtures to the active npm gate through a Node runner. Exact trainer SHA remains d9422af7ad75e9053f5dfc86c36b0a49ac8f6b52099aa49ac02d95925db1a445; codec SHA64fd854a5711acd8f675c7669e2426b12676b200fa3b1a9da6f67ad60e7f8213. The independent cutter lane has started the actual five-epoch CUDA run, batch16, on all28,959 training/3,308 calibration rows. Last observed progress at integration: epoch1 step1580, finite loss0.2907; this is ongoing training, not a final result or deployment proof.
+
+Exact launch command is retained at `.session-control/request-cutter-full-v1.command`, progress at `.session-control/request-cutter-full-v1.log`, model run at `.session-control/calendar-training/training/sop-bert/runs/owner-20261116/request-cutter-full-v1`. The command invokes the isolated frozen trainer's `train` subcommand with structural-gold-v3, exclusion-source.json, pinned DistilBERT encoder, clean auxiliary initializer SHA68ca1038..., `--epochs 5 --batch-size 16 --device cuda`. Integration copies source bytes into main only; the running source checkout, configuration, corpus and checkpoints were not edited.
+
+Final active gate:211 total,209 passed,zero failed,two optional artifact skips. Existing 1,853-row no-effect development replay is unchanged because no runtime/provider code changed. No checkpoint was activated and no confidence claim was made.
