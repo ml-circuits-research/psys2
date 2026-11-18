@@ -20,13 +20,13 @@
   },
   "admission": null,
   "runtimeIdentity": {
-    "appBuildSha256": "f1ed8e3e6131bce0a66b97d02fe8e6358fae0ce44ceff824b1a28661f5c79715",
-    "readerSha256": "4a2c323d6f90d5d01a88bb8b61efcbf8ecafb9b686137d8324a53eae8051f1a9",
-    "pipelineSha256": "2930e6617869568aad9850950b061e5fe69d14d9cd9cb588911d77a251b89489",
-    "packetAdapterSha256": "8bfaf8ace890cffd628c619732be15277578569bbd2db1ffe2181184cbbffe9c",
-    "graphDecoderSha256": "99fefe8692f318a43047f2330d008ca76210eb8b2c0bc2e9d31946fd203bc26e",
-    "executorSha256": "93505ae03e8f9ec36b4bd9cdbfc1192ee91517b4f91aac3627888f12b977eb6e",
-    "contextSerializationSha256": "54ea1a0f4c80a60ab59b2be966a9797f2a57670100187a262d09609808a567e6",
+    "appBuildSha256": "aeb38fa916f17d6313fac11ab19b62c51511c7132f5b5e75eb0d80844984af87",
+    "readerSha256": "fcdec0fab7cca33dac66380de60b535bc69b3e725543ae7eab7cb878921202ef",
+    "pipelineSha256": "1e0beeb9926f35dc1a66c4e1c104aa4aa8dd7e0198a184b8d4a14c4768e30ef3",
+    "packetAdapterSha256": "4b2993e61e931d48c440e0ff656e2a2ae8db04138734f4e5537bb915bca9d0a1",
+    "graphDecoderSha256": "fd53f6abe75302296eccadac65c71aaee4054473d51a8ccf16bcff296dd4a5d8",
+    "executorSha256": "1b59fdaa8fd536e72b5f9211325a228f71e6b4ff17d5cb4a52495110a7a910c1",
+    "contextSerializationSha256": "a254015a89ffacfd5e42808b82de5daa238b5e376abfe1daa4ee23760242c5b7",
     "backendSha256": "b22eaac167cf46782e78f47aaa0f472b0b4f95893079068e8294112759d239fa",
     "bindingsSha256": "589a96e458038e9987f3c0c47c2245e7a4ea73d1ab91d9fe05d7e5d1452ba14b"
   },
@@ -40,25 +40,25 @@
         },
         {
           "path": "lib/dialog/index.mjs",
-          "sha256": "f4e047656ad720bc09bc73069732bf2730c00f6456aa41ce8df4403648299451"
+          "sha256": "3d490c472b8fdab465dcf56ff64dc6a4b65aa9232a842c026f83391eeb71b03d"
         },
         {
           "path": "lib/dialog/native-request-sampler.mjs",
-          "sha256": "d5dc64f6ec2f17a79bd4da5ac8ae2a5f26fae179ea12bfa19d4decb61406628e"
+          "sha256": "798265a917172888e5f99389327b0ac778b88adea8d3a7daa48bd85f4bdaa1d8"
         },
         {
           "path": "lib/dialog/sampler.mjs",
-          "sha256": "57e9f8a415e5f9ab4735d46e0cb2326f5be60b6cef01540563185b42622bef62"
+          "sha256": "4585e5297b4df0b6aeb275413bca4b79e9ca2b170538e05365dbd16f91f4fe87"
         }
       ],
       "readerSha256": [
         {
           "path": "lib/dialog/cutter-inference.mjs",
-          "sha256": "fc3da71c43e6636d942f4f0973558ab53ed0a82963bda6fb45509408d5db5775"
+          "sha256": "eee538bb567ba1d34ac0b6fd4accba7e7370fb32836e8ef21e9f49d74a3169ae"
         },
         {
           "path": "lib/dialog/key-reader-inference.mjs",
-          "sha256": "7d86a7e75a0741649099c34ed252a84cb1f34730f187ab2e9676c154a2dd0b52"
+          "sha256": "729673762b4fb8ae419dcdaa4621b656746fe3c5d4a5d5e78b922a13247334b2"
         },
         {
           "path": "lib/dialog/bert-source-offsets.mjs",
@@ -72,15 +72,15 @@
       "pipelineSha256": [
         {
           "path": "lib/dialog/reader-source.mjs",
-          "sha256": "b5d9a5bbe46889ade428ed3675d8f40ea274e59d33bb5bda7f6b65b787cb334a"
+          "sha256": "dfbe21288b18c695b349d8f4219babf5cf6692c04d5f90c635edb454fcac25fb"
         },
         {
           "path": "lib/dialog/key-reader-pipeline.mjs",
-          "sha256": "f3bbb5d67e8edbe757fe36ba864ef0dddd0b5030d9029442906fdd7f5e014018"
+          "sha256": "271cb62190bbc68dfb72068e6a5dd4f425277fba5a3cbcf9d14d6ff6bbc3bc9f"
         },
         {
           "path": "lib/dialog/reader-head-alternative.mjs",
-          "sha256": "fb244a7ea20377f6ffc2eaa8fa55cc4c66f324ebe7d19f42fcb26225e7051401"
+          "sha256": "5f0590fe97901f7e65c6a4930120da064eab67355d5bb0638fe5fb0ee9cda9fc"
         },
         {
           "path": "worlds/app.project/reader-head-policy-source.mjs",
@@ -92,19 +92,19 @@
         },
         {
           "path": "lib/dialog/verified-reader-provider.mjs",
-          "sha256": "6ef91e19641591060124c03194eae4c3da022d1400e66e4252bd1e14580114d5"
+          "sha256": "c3bd9fe2cc4233b2a2349b36fd610b30c8fd07764b922d278a91e9dcae0bfd58"
         },
         {
           "path": "lib/dialog/browser-reader-host.mjs",
-          "sha256": "5da35c4661d6c4977ca91696c5a2eb18a66910e055e75b333433f9298e29bc3a"
+          "sha256": "98f16e7edfc9a883394a4506e736c42ddd9751a77e2d496e44e8c93257f4a641"
         },
         {
           "path": "lib/dialog/project-journal-action.mjs",
-          "sha256": "f36d37f05135567c7740b7d77b498f88a73c4e82ae7da140bff800d3e6ba524f"
+          "sha256": "5f97108d119bc9f324c2d31ef9588a63d2931d1827e45271854c86214849beb8"
         },
         {
           "path": "lib/dialog/history-policy.mjs",
-          "sha256": "014daf0f242697c55f7ccc4a5ca2008cbbc2c4cc6732110010b98a391cdb9143"
+          "sha256": "d360d269f39b426915f7ed4840becef3427dbe1c2a5cd3008d10c35900a03165"
         },
         {
           "path": "worlds/app.project/history-policy-source.mjs",
@@ -116,11 +116,11 @@
         },
         {
           "path": "lib/dialog/project-context-action.mjs",
-          "sha256": "0ef7f568ee68db5dcc444a96a6a6516fd6fba141260498889b7ecfec7eaa0b0b"
+          "sha256": "b35d207cc19afefdb4c46077472f22181c75f1dfb17c57189f576385f44565d7"
         },
         {
           "path": "lib/dialog/grounded-projection.mjs",
-          "sha256": "e331bafe441df6ef8ae86463465ab3833b0ac6890b63f22c941f75b1519d4ee6"
+          "sha256": "1023969caa4987e378bd56073a13812caaa38d432d52a69b24fe322011f5e383"
         },
         {
           "path": "worlds/app.project/grounded-projection-source.mjs",
@@ -132,11 +132,11 @@
         },
         {
           "path": "lib/dialog/reference-policy.mjs",
-          "sha256": "79ec8253a412a5d265e9575b09dee518da22fc32d617f07e0c1a9cb36d348515"
+          "sha256": "5444f188ec3fe19123af6df7afd01fb68dfc3c14eb329ffe862ce16bbd3ce5d2"
         },
         {
           "path": "lib/dialog/observed-choice.mjs",
-          "sha256": "bd729388236d1d525a7c1d737d5cd318056e8209adb1d043a8b19e9f788cefdc"
+          "sha256": "bf772bcda2b09e798abe4e9d37a31351ee982f3b5a0b7183bea4870978fc13a3"
         },
         {
           "path": "worlds/app.project/reference-schema-source.mjs",
@@ -148,11 +148,11 @@
         },
         {
           "path": "lib/dialog/project-create-action.mjs",
-          "sha256": "460aa01811691a533f2b12a396502da6c360a1df582d5b9db2280d9e4c8093e8"
+          "sha256": "269479c17bbf371de54172ac53d21beb99c77eaaa665209b368e687d61c56595"
         },
         {
           "path": "lib/dialog/project-query-action.mjs",
-          "sha256": "1049acc79eeb06bac0541004ebf8081266e59f1afa5f5e21792520c5b4c96d2f"
+          "sha256": "ad60703a6dbdb2deb97f8bee9338e78ff0bd981ff895a1a34371e9f48d4157f4"
         },
         {
           "path": "worlds/app.project/query-reading-schema-source.mjs",
@@ -174,43 +174,43 @@
       "packetAdapterSha256": [
         {
           "path": "lib/dialog/key-reader-packet.mjs",
-          "sha256": "84153054a8719e80c4db0d546768adc6de014daca889e82c4c78be14a918bc32"
+          "sha256": "ad8157a97c56b09d0e1c126e5c492b3b73aab0f750583cef77e5e374641c09c7"
         }
       ],
       "graphDecoderSha256": [
         {
           "path": "lib/dialog/raw-structural-bridge.mjs",
-          "sha256": "2e5ee5df293e46010f544db654920b04867ab7ae8ec440fa08d2df068d5813be"
+          "sha256": "0674068dd21831f6355cb1a7dd7c9a0734a0d06ed1c843a4e942859697402113"
         },
         {
           "path": "lib/dialog/model-graph-decoder.mjs",
-          "sha256": "2e3327909f023529a3e87064ac9c7b9eacf5abae6fba190a15b01a3a263f4826"
+          "sha256": "33a9bfca73d3d0c77cbc9fff0ee1de336adc43320b748233a2ddf8b3330e15c5"
         },
         {
           "path": "lib/vendor/sopworld/sopworld.mjs",
-          "sha256": "4285a82801977a96c6d83693ebfee72a632f25ed9bd3e8c9c5f101f131ded668"
+          "sha256": "fd52af8819bf3088f2770a7ccc9491e3721933b9e61cad2b092bf11707e9c866"
         }
       ],
       "executorSha256": [
         {
           "path": "lib/dialog/new-engine.mjs",
-          "sha256": "b97d7c91214f0dd08441dbce0a31bf1f9aee40e6fd66da561cb77ef031428eb1"
+          "sha256": "417813930002f37d424bc2980a3b9c2f508313ed2f90a0f39cbb72a76498467f"
         },
         {
           "path": "lib/dialog/reader-routing.mjs",
-          "sha256": "8adb05a8a79d88151c97e8a7b4102102bcb02dae18668e6f899d7eee8fd6bf7b"
+          "sha256": "7473962cf8a3fc82e11fdcc32fbb31527df3e339770e565f553603e9a082274c"
         },
         {
           "path": "lib/dialog/project-removal-action.mjs",
-          "sha256": "192e532bc56ddd8c1331e3e676c249faca18056b572bb8634f9c4788e4ee1159"
+          "sha256": "f856534e722fa2f4cc3ca2ab73304d335289e9c4b3debbc58b279ed359049431"
         },
         {
           "path": "lib/lang/en.facts.generated.mjs",
-          "sha256": "1e32110d6afb73723d449391846b7f603a8e9388615c7a99c3e2b3ffe533e343"
+          "sha256": "15613c178b5b97456b9121c90896bdace5a48ab8a447b49538bb587d2dc22a50"
         },
         {
           "path": "lib/dialog/request-composition-policy.mjs",
-          "sha256": "5438fbf552b4e65fd62a6bfed16aaee3aa6d329ba344a7f76d224b9d6cac0e61"
+          "sha256": "5db25c18cddcac2ab35a8908980eb1a634b938f64353efcf08682fd003e4f825"
         },
         {
           "path": "worlds/app.project/request-composition-policy-source.mjs",
@@ -222,23 +222,23 @@
         },
         {
           "path": "lib/dialog/authored-request-tool.mjs",
-          "sha256": "8c8b823ae64e853df21b8903d8f3b3ddcf9c71934ea1f76040e579184dde7cf1"
+          "sha256": "7246ae8f7241aad6a9bb726e7466bfd843684d8cfd1dc232a541fb5e005812cd"
         },
         {
           "path": "lib/dialog/reader-admission.mjs",
-          "sha256": "d656f98e424bfd1e7826908eb2a40bfdc434b46fa84193bcd7c8b0ef56cf4025"
+          "sha256": "2a62c1bf855f1db07b7ffeeb2c6f4e806890fad9e120e6543ae2bb5c12a84188"
         },
         {
           "path": "lib/dialog/reader-policy.mjs",
-          "sha256": "31d066984e38d4be041c58fa769816599febf92438eab2be3e664cfa046e59cd"
+          "sha256": "08d389fa61badbaa832fc5a4dd2f612d633029415ad6fc894b58e31aa01bff38"
         },
         {
           "path": "lib/dialog/declared-execution.mjs",
-          "sha256": "575f092bf2d5a41de071483ada1d081da5d00ab84d3e29b2402f515680e7498d"
+          "sha256": "b586275f248a5a948a6f449aa2083c079c420390a802bb0e584133b4828d6af8"
         },
         {
           "path": "lib/dialog/native-binding-candidates.mjs",
-          "sha256": "683c02f97b97103e3a6c79e747434b5c1a3e23b5bd5484bab89f4860e753c258"
+          "sha256": "9d87b16bc98f6221f475fe831f2ba469cc8a9e5edd2532e19cc621ab44e53e5e"
         },
         {
           "path": "worlds/app.project/constructor-policy-source.mjs",
@@ -250,19 +250,19 @@
         },
         {
           "path": "lib/dialog/capability-plan-adapter.mjs",
-          "sha256": "96c8b41d7f9ca4487a0b9ca84b2ebf7d2566b378d991b19b8c750e7ea5dbef65"
+          "sha256": "443a4b233fa3f02f416019c8235b679a66f05f1d8b456d458410b17ab29802b2"
         },
         {
           "path": "lib/dialog/scene-placement-defaults.mjs",
-          "sha256": "e736afff1b4d328b9214a952372fbb179f9029f25a0de95c5fdd0b62abe25dd8"
+          "sha256": "2eff2ae0cc33bf2b1526a5e8bae1293d9fff80446fed71272cc88a1596d10192"
         },
         {
           "path": "worlds/app.project/scene-default-policy-source.mjs",
-          "sha256": "5747723deb2294ccff3baf8f55397d4d855e263f53eec7dfbd4fac3b50a55aac"
+          "sha256": "168049b74465cd4e5102079da2d65bbfa922f5e4207a4307ac9fc6a18f54ce09"
         },
         {
           "path": "worlds/app.project/scene-default-schema-source.mjs",
-          "sha256": "8abf926bb812a73603bb8c5b16c8af26d76db9960f0a0f0b30b7671cd14a8b70"
+          "sha256": "60210cdb73f20e88bdb233e9e6e1f5437cc17e7189733542e402a579d3548da8"
         },
         {
           "path": "worlds/app.project/scene-default-projection-source.mjs",
@@ -270,15 +270,15 @@
         },
         {
           "path": "lib/dialog/native-query-execution.mjs",
-          "sha256": "c9d18b584b82d80f398e04e5662413a1741b76f8d1a49a569d0c1da1b09a2784"
+          "sha256": "de0dc9957dba358e877473b8bc5f3084b4a3f9282d14dddd6e59eef669fbb842"
         },
         {
           "path": "lib/dialog/execution-policy.mjs",
-          "sha256": "467bc7612dbf1dc8d00d48911b21bdf77a12eeaa4b2be9ade3082b97c67c741b"
+          "sha256": "d1cadccbb4653a0147ed9a0fc48422661842065bad2600e114723ee284250e7d"
         },
         {
           "path": "worlds/native-tool-interface.mjs",
-          "sha256": "b7c8034700740e9eb51e7792b9f4ca33ee7b12c8c04237c1abdc2613ed810614"
+          "sha256": "73902954b5bae71c44de441368768beeecb605c1eb05b112b5e67e8125747b4d"
         },
         {
           "path": "worlds/app.project/capability-policy.mjs",
@@ -302,7 +302,7 @@
         },
         {
           "path": "lib/dialog/request-routing-policy.mjs",
-          "sha256": "5cddf7b3072e17faa5ee0e2e50dde75beab6a2062c8ffd5ea46d404b8c358fdd"
+          "sha256": "f246154ab5b2b8ecf2d669913ce5a0e1661cb1f8249b1c63eb576d63c8622ede"
         },
         {
           "path": "worlds/app.project/request-routing-schema-source.mjs",
@@ -314,27 +314,27 @@
         },
         {
           "path": "lib/dialog/spatial-placement-execution.mjs",
-          "sha256": "531ea9abec5f9116e619fffb4ef9a366b37ace2d3c163103a6b6e5fbd6487175"
+          "sha256": "a6567194959735a47157fc79587e54fd3f20d2b62702fabf9354f4b5e4ba1f32"
         },
         {
           "path": "lib/dialog/new-engine-source.mjs",
-          "sha256": "89be73135d44805f2c63a77e0447413bd91b8c75aafeb6757e087cbbbbcc9e23"
+          "sha256": "513093aa4673c318e030f1483b1f43b7e8c3331c68d56c3b33c43b1fdd76b28c"
         },
         {
           "path": "lib/dialog/native-tool-activity.mjs",
-          "sha256": "e5f93f35d8656dc05c5f1630a069fe3f0d49bced1f465b04071daac158680445"
+          "sha256": "8e68996de3a1dfe1677f40be39acb863a108eefd06e61fcf6271ce5bdc582a62"
         },
         {
           "path": "lib/dialog/history-tool.mjs",
-          "sha256": "e1290d7a04d3f6e4eb2afb578c532c4a7e1cf9e5d2e242f82ba6f94b908d1086"
+          "sha256": "929c244ad7ca60dc4aa63af19a2a33b8ccbf730f2ded7ea3992303a7eaeda5a8"
         },
         {
           "path": "lib/dialog/history-journal.mjs",
-          "sha256": "0b6fd251096bb598a7a95eb6143341d8567d8f3ee1689b510affd0945149ee0e"
+          "sha256": "2e835e9122acbd344b1590b33ac51f9d8a9df34f92a2f2900157cac5ac1808e0"
         },
         {
           "path": "lib/dialog/history-execution.mjs",
-          "sha256": "4578f7f3b4b647455bc23e541f1297aaf49325092c6d3f75cf8c727520bfa000"
+          "sha256": "43d40a6b368d36b350ce644e2ac6950d07a4bc57cc90e0455e2e5be3ac61c295"
         },
         {
           "path": "worlds/app.project/history-policy-source.mjs",
@@ -346,19 +346,19 @@
         },
         {
           "path": "lib/dialog/native-intent-reader.mjs",
-          "sha256": "51a8973eae698e2907440fa1a2de530772705b20c7e49685bb5a0f8301a57d6c"
+          "sha256": "e6415f2f5246470689fc8651fa6be9314be820fcdb795c3688a03f171e12bb40"
         },
         {
           "path": "lib/dialog/native-binding-candidates.mjs",
-          "sha256": "683c02f97b97103e3a6c79e747434b5c1a3e23b5bd5484bab89f4860e753c258"
+          "sha256": "9d87b16bc98f6221f475fe831f2ba469cc8a9e5edd2532e19cc621ab44e53e5e"
         },
         {
           "path": "lib/dialog/native-tool-controls.mjs",
-          "sha256": "ef59e6ffb06d881b40f3ad4c7f502545edaf98d3cf8edfcb893c6c66d10e30fc"
+          "sha256": "01bdf41315de4effc6cc7de36273e4d8d17a9e0cd69ec9ad23d4dad8482f3da0"
         },
         {
           "path": "worlds/native-tool-host.mjs",
-          "sha256": "5d76d3fb88fae5071fc4347adc813ae64bf30fccb9b11b69c1096a684adbea12"
+          "sha256": "b562563ee63a6655f2e09756f1f561ff59f283b4bed3af39f3067e91a0e2e078"
         },
         {
           "path": "worlds/native-tool-arguments.mjs",
@@ -374,7 +374,7 @@
         },
         {
           "path": "worlds/native-spatial-interface.mjs",
-          "sha256": "0012f9b92b4e8def1b9c81144ee8bc7ce014bcb7e57f68c3e46621190a9517bb"
+          "sha256": "e65a9d950d01ed6ca3f55ec94287b87b8e58ee1c32ac892dc4281a265bfde009"
         },
         {
           "path": "worlds/app.project/reader-admission-policy-source.mjs",
@@ -386,27 +386,27 @@
         },
         {
           "path": "worlds/app.project/spatial-profile.mjs",
-          "sha256": "dc79dbad8dcac717b5b8b2f0a80ee2863b4dadcaef6474cddced7864bffaf3fe"
+          "sha256": "7904bd5c1867664e56cdb053c42810675c57f158ce6951a0a64beb686710b8d9"
         },
         {
           "path": "worlds/art.draw/declared-host.mjs",
-          "sha256": "d053bef2d7153ab42202511de8650160eb5b801df262dc31761c1b7582d1cf60"
+          "sha256": "60762ea1640c933a003f1eedfccdb31ea0b0ea605743164101f07770f4509066"
         },
         {
           "path": "worlds/diagram.sketch/declared-host.mjs",
-          "sha256": "ae196d4bf09a396d0cad21e73e5576b2526f00e6ffe9faacbe8efa59f18ec91e"
+          "sha256": "e91f414777ac832f5bbf8f7c14d0a059e0a858df9aeb0de5fbee5d38fcb3e3c1"
         },
         {
           "path": "worlds/ui.avatar/declared-host.mjs",
-          "sha256": "7186939548f184bbbc37e0b4bb73f31a8d5e6d62fb1c7726e0a56bb81a392607"
+          "sha256": "4526debf88ed70e8b25bf1a370bd348445167b62d30fdbe10fde28ba1660b2c9"
         },
         {
           "path": "worlds/docs.editor/declared-host.mjs",
-          "sha256": "821053fdee0d225492559e132763ec9e421ff1ad4e643668c314c8eac9d65ccb"
+          "sha256": "fce4fa43fb19171ed86f0a84006ef444ceebedc37ce081ffdb726ebef5f5d14c"
         },
         {
           "path": "worlds/art.draw/canonical-state.mjs",
-          "sha256": "ba6527ed8946c5f2f50b80be19061e978dc4fb45ad645264f5c7fcdd8faef369"
+          "sha256": "13b7ce36bd234e28f44953b44e1295eb5baf1c1dcb287a49111268ccc582624c"
         },
         {
           "path": "worlds/art.draw/state-schema-source.mjs",
@@ -414,7 +414,7 @@
         },
         {
           "path": "worlds/diagram.sketch/canonical-state.mjs",
-          "sha256": "3d3161297a23584061dfb69d5d6516a75cd2018c5f87c7cdea79c04b392b5cc0"
+          "sha256": "5e54cb58168b7781c88d29625d79cc99836ddb21ebbb4430773be1677c87cca6"
         },
         {
           "path": "worlds/diagram.sketch/state-schema-source.mjs",
@@ -426,7 +426,7 @@
         },
         {
           "path": "worlds/docs.editor/canonical-state.mjs",
-          "sha256": "2b5d88ccdb92b5b77fddce80585df390947df4d4ba92bf8819342841e976538d"
+          "sha256": "a896ed13ea6e9a9022872f27a15c1b57c75f1c7cc048ab7190a735636827a4fb"
         },
         {
           "path": "worlds/docs.editor/state-schema-source.mjs",
@@ -434,7 +434,7 @@
         },
         {
           "path": "worlds/tool-instance-state.mjs",
-          "sha256": "462e583d9312e9479e328373f207b23cac3a00895d44efa0260af2b3d286d31e"
+          "sha256": "d5f26fbd15372f0525b8300e92efc5d7bc1f50fe42b225e5deb08829c0aa8caa"
         },
         {
           "path": "lib/vendor/sopworld/instance-fact-codec.mjs",
@@ -444,19 +444,19 @@
       "contextSerializationSha256": [
         {
           "path": "lib/dialog/native-reader-context.mjs",
-          "sha256": "e6ccc5ae11ccb8ffabf96f6550b4d4768e608d6b9d97ea58b3180242e1daf96b"
+          "sha256": "50b84504156d89fd50bc0513babeeacfb5da77a4068232e0486c0e80fe0033c7"
         },
         {
           "path": "lib/dialog/reader-context-policy.mjs",
-          "sha256": "e35ad94999b847575bee055ac63ec600ed6160724cb29717b8b69a9049b21dd0"
+          "sha256": "38ec56d8ec7c69f9d97e806d30e13658becf436dce058f2ab9f65e13bd982f4c"
         },
         {
           "path": "lib/dialog/app-reader-context.mjs",
-          "sha256": "095b159667d98cf6e47d517ef92b28710c72aa141f0472530c2bf66f9707d2a3"
+          "sha256": "ccca199f96398c0cc953b686d02e2e02d8524ce6873114724455591f6d11a03b"
         },
         {
           "path": "lib/dialog/key-reader-inference.mjs",
-          "sha256": "7d86a7e75a0741649099c34ed252a84cb1f34730f187ab2e9676c154a2dd0b52"
+          "sha256": "729673762b4fb8ae419dcdaa4621b656746fe3c5d4a5d5e78b922a13247334b2"
         },
         {
           "path": "worlds/app.project/reader-context-policy-source.mjs",

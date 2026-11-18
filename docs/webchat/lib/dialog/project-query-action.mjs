@@ -1,11 +1,11 @@
-import {World,editCost,quote,serialize} from '../vendor/sopworld/sopworld.mjs?v=3a48344175';
-import {createAreaHost,NATIVE_AREAS} from './app-reader-context.mjs?v=3b73627e71';
-import {nativeCreationCandidates} from './native-binding-candidates.mjs?v=f6d6f43960';
-import {compileObservedChoice} from './observed-choice.mjs?v=7c29d210ff';
+import {World,editCost,quote,serialize} from '../vendor/sopworld/sopworld.mjs?v=8186c36d14';
+import {createAreaHost,NATIVE_AREAS} from './app-reader-context.mjs?v=6618e2cba6';
+import {nativeCreationCandidates} from './native-binding-candidates.mjs?v=823de2d713';
+import {compileObservedChoice} from './observed-choice.mjs?v=516055ab97';
 import POLICY from '../../worlds/app.project/query-reading-policy-source.mjs?v=76826c506c';
 import SCHEMA from '../../worlds/app.project/query-reading-schema-source.mjs?v=b57441ceb8';
 import {budget} from './budget.mjs?v=00bce6e369';
-import {writeReaderSource} from './reader-source.mjs?v=a4e0cf4f2a';
+import {writeReaderSource} from './reader-source.mjs?v=f615c37c90';
 
 const kind='app.query.read';
 const atom=value=>typeof value==='string'&&/^[A-Za-z_][A-Za-z0-9_.-]*$/.test(value)?value:undefined;

@@ -1,6 +1,6 @@
 import { readSceneDefaults } from './scene-placement-defaults.mjs';
 import { executeSpatialPlacement } from './spatial-placement-execution.mjs';
-import { compareNativeReadings } from './capability-plan-adapter.mjs';
+import { compareNativeReadings, compileNativeCapability } from './capability-plan-adapter.mjs';
 import { NATIVE_AREAS,createAreaHost } from './app-reader-context.mjs';
 import { instanceIdFor } from './instance-identity.mjs';
 import { describeRouteComparison,resolveRequestRoute } from './request-routing-policy.mjs';
@@ -54,8 +54,10 @@ export async function compareDeclaredReadings(session,candidates,{view,bindings,
   if(indices.length&&state&&bindings){
     const host=await createAreaHost(area,{state:structuredClone(state),instanceId:instanceIdFor(session,area.world),loader:session.engine?.loader,knowledge:session.engine?.knowledge});
     const alternatives=indices.map(index=>candidates[index]),observation=host.observe();
-    const sceneDefaults=await readSceneDefaults({host,bindings,area,view,knowledge:session.engine?.knowledge,candidates:alternatives});
-    result=compare(alternatives,{area,view,bindings,host,observation,focus:session.newEngineFocus?.[view],unapplied,readKnowledge:source,sceneDefaults});
+    const context={area,view,bindings,host,observation,focus:session.newEngineFocus?.[view],unapplied,readKnowledge:source};
+    const sceneDefaults=await readSceneDefaults({host,knowledge:session.engine?.knowledge,candidates:alternatives,
+      preflight:candidate=>compileNativeCapability(candidate,context)});
+    result=compare(alternatives,{...context,sceneDefaults});
   }
   if(!limited)return result??null;
   const index=result?.index===undefined?undefined:indices[result.index];

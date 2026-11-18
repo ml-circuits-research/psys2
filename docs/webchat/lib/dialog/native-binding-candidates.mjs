@@ -1,4 +1,4 @@
-import { World, quote, serialize } from '../vendor/sopworld/sopworld.mjs?v=3a48344175';
+import { World, quote, serialize } from '../vendor/sopworld/sopworld.mjs?v=8186c36d14';
 import CONSTRUCTORS from '../../worlds/app.project/constructor-policy-source.mjs?v=91bc3b4d74';
 import SCHEMA from '../../worlds/app.project/constructor-schema-source.mjs?v=97be28057e';
 import { budget } from './budget.mjs?v=00bce6e369';

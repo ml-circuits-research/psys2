@@ -1,4 +1,4 @@
-import {parse,quote,str} from '../vendor/sopworld/sopworld.mjs?v=3a48344175';
+import {parse,quote,str} from '../vendor/sopworld/sopworld.mjs?v=8186c36d14';
 
 const maxUnits=65536;
 const sourceType='std.request.source';

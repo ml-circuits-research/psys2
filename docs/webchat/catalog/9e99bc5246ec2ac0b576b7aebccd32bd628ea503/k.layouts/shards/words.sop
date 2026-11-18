@@ -20,6 +20,7 @@
 @k.layouts.word.key.layout.ordered core.word text=ordered means=k.layouts.layout.ordered core.source="hand-core 1"
 @k.layouts.word.key.layout.usual_for core.word text="usual for" means=k.layouts.layout.usual_for core.source="hand-core 1"
 @k.layouts.word.key.slot.name core.word text=name means=k.layouts.slot.name core.source="hand-core 1"
+@k.layouts.word.key.slot.role core.word text=role means=k.layouts.slot.role core.source="hand-core 1"
 @k.layouts.word.key.slot.count core.word text=count means=k.layouts.slot.count core.source="hand-core 1"
 @k.layouts.word.key.slot.pair core.word text=pair means=k.layouts.slot.pair core.source="hand-core 1"
 @k.layouts.word.key.slot.optional core.word text=optional means=k.layouts.slot.optional core.source="hand-core 1"

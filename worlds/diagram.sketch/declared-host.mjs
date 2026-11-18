@@ -124,15 +124,24 @@ export async function createDiagramHost({state=initialState(),instanceId,...limi
  }])):handlers;
  function measure(operation,args){
   if(operation!=='diagram.node.make'||!Object.hasOwn(PREFIX,args.kind))return null;
-  const rules=(canonical?toNativeDiagramState(state):state).rules;
-  const key=JSON.stringify([rules,args]);
-  if(nodeExtents.has(key))return {...nodeExtents.get(key)};
-  const scratch=initialState();scratch.rules=structuredClone(rules);
+  const native=canonical?toNativeDiagramState(state):state;
+  const single=(args.n??1)===1;
+  const key=single?JSON.stringify([native.rules,args]):null;
+  if(key&&nodeExtents.has(key))return {...nodeExtents.get(key)};
+  const {compositionHistory,compositionFuture,undo,redo,...live}=native;
+  const scratch=single?initialState():structuredClone(live);
+  if(single)scratch.rules=structuredClone(native.rules);
   const applied=tool.addShapes({state:scratch},{...args,step:'measure'});
-  if(applied?.status!=='supported'||scratch.shapes.length!==1)return null;
-  const {w,h}=K.dims(scratch.shapes[0]),measurement={width:w,height:h};
-  if(nodeExtents.size>=128)nodeExtents.clear();
-  nodeExtents.set(key,measurement);return {...measurement};
+  if(applied?.status!=='supported')return null;
+  const ids=new Set(applied.changed),made=scratch.shapes.filter(node=>ids.has(node.name));
+  if(made.length!==(args.n??1))return null;
+  const cx=made.reduce((sum,node)=>sum+node.x,0)/made.length,cy=made.reduce((sum,node)=>sum+node.y,0)/made.length;
+  const footprint=unionSpatialBoxes('measured','diagram.canvas',made.map(node=>centeredSpatialBox(node.name,'diagram.canvas',{...node,...K.dims(node)})));
+  if(!footprint)return null;
+  const {min_x,min_y,max_x,max_y}=footprint;
+  const measurement={width:max_x-min_x,height:max_y-min_y,minX:min_x-cx,minY:min_y-cy,maxX:max_x-cx,maxY:max_y-cy};
+  if(key){if(nodeExtents.size>=128)nodeExtents.clear();nodeExtents.set(key,measurement);}
+  return {...measurement};
  }
  return createNativeToolHost({state,instanceId,scope:'diagram.nodes-links-and-charts',toolInterface,handlers:effectiveHandlers,
   view:carrier=>view(canonical?toNativeDiagramState(carrier):carrier,canonical),

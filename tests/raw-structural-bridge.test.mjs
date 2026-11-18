@@ -57,3 +57,23 @@ test('family declarations never override present unknown, ambiguous or orphan le
 test('family conflicts, malformed provenance and table budgets fail closed; legacy table behavior unchanged',()=>{const p=raw({...sample(),target:{type:'item',mode:'existing'}});assert.ok(bridge(p).diagnostics.some(x=>x.reason==='unresolved-canonical-kind-binding'));const table=familyTable();table.families.push({...table.families[0],canonical:'fixture.other'});assert.equal(bridgeRawStructure(p,{bindings:table,bindingSha256}).decoded.candidates.length,0);const invalid=familyTable();invalid.families[0].sourceSnapshotSHA='bad';assert.ok(bridgeRawStructure(p,{bindings:invalid,bindingSha256}).diagnostics.some(x=>x.reason==='invalid-family-binding-record'));const big=familyTable();big.families=Array(257).fill(big.families[0]);assert.ok(bridgeRawStructure(p,{bindings:big,bindingSha256}).diagnostics.some(x=>x.reason==='invalid-family-binding-table'));assert.deepEqual(bridgeRawStructure(raw(sample()),{bindings:familyTable(),bindingSha256}).packet,bridge(raw(sample())).packet);});
 test('abstract family identity does not create a binding for bound context targets',()=>{const r=bridgeRawStructure(raw({...sample(),target:{type:'item',mode:'bound'}}),{bindings:familyTable(),bindingSha256});assert.equal(r.decoded?.candidates.length??0,0);assert.ok(!r.packet?.hypotheses?.[0]?.requests?.[0]?.targets?.[0]?.kind);});
 test('catalogue does not authorize graph-node slots merely because a broad-family lexical kind resolved',()=>{const p=raw({...sample(),constraints:[{...condition('cerulean'),key:'node.label'}]}),table=structuredClone(bindings);table.properties=table.properties.filter(x=>x.key!=='node.label');const r=bridgeRawStructure(p,{bindings:table,bindingSha256});assert.ok(r.packet.hypotheses[0].requests[0].targets[0].kind);assert.equal(r.decoded.candidates.length,0);assert.ok(r.diagnostics.some(x=>x.reason==='unresolved-canonical-property-binding'));});
+
+test('a grounded new-target cardinal span retains count while ordinal or conflicting evidence stays unresolved',()=>{
+ const candidate=(count_span,count)=>raw({
+  span:'make '+count_span+' widget',trigger:'make',act:'make',mood:'do',
+  target:{type:'item',mode:'new',kind:'widget',kind_span:'widget',count_span,...(count===undefined?{}:{count})},
+  constraints:[],
+ });
+ for(const text of ['three','3']){
+  const r=bridge(candidate(text,3));
+  assert.deepEqual(r.diagnostics,[]);
+  const wires=r.decoded.candidates[0].wires;
+  assert.match(wires,/concept=count.*value=3/);
+  assert.match(wires,/source\.start=5/);
+ }
+ for(const input of [candidate('third',3),candidate('three',2),candidate('0',0)]){
+  const r=bridge(input);
+  assert.equal(r.decoded.candidates.length,0);
+  assert.ok(r.diagnostics.some(d=>d.reason==='requires-declared-count-projection'));
+ }
+});

@@ -16,7 +16,7 @@
  *   numberWordOf(n, kind)   12 -> "twelve", 3 -> "third" (ordinal)
  */
 import { parseLine } from './catalog.mjs?v=339ac7a09d';
-import { BUNDLED_VALUES } from './bundled-values.mjs?v=ba9a1006cd';
+import { BUNDLED_VALUES } from './bundled-values.mjs?v=7e7511a6f1';
 
 const lc = (s) => String(s ?? '').toLowerCase().replace(/[_-]+/g, ' ').replace(/\s+/g, ' ').trim();   // glue-lint: tool-data (colour name)
 const state = { colours: new Map(), numbers: new Map(), comparatives: [], from: 'none', loading: null };

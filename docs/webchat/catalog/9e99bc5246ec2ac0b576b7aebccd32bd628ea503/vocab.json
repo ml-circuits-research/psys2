@@ -120658,6 +120658,7 @@
   "k.kinds/shards/relations-expect",
   "k.kinds/shards/relations-layouts",
   "k.kinds/shards/relations-procedures",
+  "k.layouts/schema.sop",
   "k.people/schema.sop",
   "k.procedures/schema.sop",
   "k.procedures/shards/from-knowledge",

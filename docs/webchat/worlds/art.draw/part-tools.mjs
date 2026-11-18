@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Geometry primitives for actual instance constituents. No words, parser or kind-specific branch.
-import {partsOf,piecesOf,groupOf,registerShape,thingBuild,COMPOSITE,thingOfKey,kindKey,kindName,KINDS,objectMatrix,multiplyMatrix,inverseMatrix,geometryPoint,bbox} from './scene.mjs?v=8a4786bf92';
-import {makeObject,remember} from './board.mjs?v=783a0f38ca';
+import {partsOf,piecesOf,groupOf,registerShape,thingBuild,COMPOSITE,thingOfKey,kindKey,kindName,KINDS,objectMatrix,multiplyMatrix,inverseMatrix,geometryPoint,bbox} from './scene.mjs?v=62dad6e481';
+import {makeObject,remember} from './board.mjs?v=2201f24977';
 const budget={tick:(site,n=1)=>globalThis[Symbol.for('psys2.budget')]?.tick(site,n)};
 const fail=code=>({status:'missing',code}),done=(changed,data)=>({status:'supported',changed,...(data?{data}:{})}),object=(s,id)=>findDrawingObject(s,id);
 const boxOf=p=>{if(p.pts){const xs=p.pts.map(q=>q[0]),ys=p.pts.map(q=>q[1]);return {x0:Math.min(...xs),x1:Math.max(...xs),y0:Math.min(...ys),y1:Math.max(...ys)};}return {x0:p.x-p.w/2,x1:p.x+p.w/2,y0:p.y-p.h/2,y1:p.y+p.h/2};};

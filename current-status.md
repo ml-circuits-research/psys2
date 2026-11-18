@@ -1,6 +1,18 @@
 # Current status
 
-## 2026-11-18 — Declarative knowledge projection and browser tool input
+## 2026-11-18 — Counted Diagram creation
+
+Webchat build `9e44cd7951` integrates SOPWorlds 0.224.0 and catalog `9e99bc52`. In Chromium, “Add three circles” created three distinct circles while preserving an existing rectangle. The three visible centres matched the compiled group placement. “Add three circles and add two squares” produced five new visible nodes. One Undo removed the five and preserved the original rectangle. The full application gate passed 646 tests with three skipped.
+
+## Earlier checkpoint — Placement evidence and the frozen reader
+
+[Open Webchat](https://ml-circuits-research.github.io/psys2/webchat/). Build `07959a7e9e` (PSys2 `94371dff`) exposes the actual knowledge records referenced by its placement proof in Worlds. The public catalog returned 130 records for the secondary field `place=water`, including the boat, and preserved the connection to the lake’s water anchor. The ordinary Drawing route previously verified boat placement after moving the lake. Diagram creation and Undo preserved other objects. The integrated application gate passed 644 tests with three skipped.
+
+The unchanged SOP-BERT reader can answer a count and an existence question about red houses in sequence. After removing the only red house while a blue house remains, the existence result is false. With only a blue tree remaining, the count is zero but the next existence question can lose the noun. This sequence and a cold-start timeout under delayed catalog loading are open. Reader accuracy over a random sample was not measured in this phase.
+
+The library release `0.224.0` (`361ecdf`) supports defaults conditional on a candidate’s typed arguments. Its source, bundle and copy-on-write gates passed 1015, 1015 and 1013 tests respectively. This public application build still uses 0.223. The [remaining compiler work](https://github.com/ml-circuits-research/soplang-words-lib/blob/main/refactoring/request-to-executable-circuits.md) includes multi-tool data dependencies, relative placement, scoped preferences and generalizing the remaining application-owned reasoning.
+
+## Earlier checkpoint — Declarative knowledge projection and browser tool input
 
 Webchat build `beaab25626` uses SOPWorlds 0.222.0. The Drawing placement profile states which catalog records to read and which rule results to return. The library performs this lookup from SOP bindings. A Chromium run moved the lake, drew the boat at its new position and undid only the boat. A Diagram host test changed the authored region and observed new node coordinates on two pages. The ordinary Diagram catalog still needs equivalent domain coverage. Browser tool input is now a SOP string.
 

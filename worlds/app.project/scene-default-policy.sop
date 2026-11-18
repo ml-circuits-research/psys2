@@ -8,10 +8,15 @@
 @scene.position.x std.capability.property scope=?scope concept=x on=?on parameter=?xKey order=500
 @scene.position.y std.capability.property scope=?scope concept=y on=?on parameter=?yKey order=501
 @scene.position.bind core.rule when=$scene.position.port when=$scene.position.tool if=$scene.position.identity then=$scene.position.x then=$scene.position.y
+@scene.multiplicity.port app.sceneDefault.port scope=?scope operation=?operation countKey=?countKey
+@scene.multiplicity.tool std.capability.operation scope=?scope on=?on act=make
+@scene.multiplicity.identity core.check fn=eq args=?operation args=$scene.multiplicity.tool
+@scene.multiplicity.property std.capability.property scope=?scope concept=count on=?on parameter=?countKey order=502
+@scene.multiplicity.bind core.rule when=$scene.multiplicity.port when=$scene.multiplicity.tool if=$scene.multiplicity.identity then=$scene.multiplicity.property
 
 # A normalized slot is framed by the actual editor bounds. A support region is
 # framed by an actual visible object with a relevant catalog anchor.
-@scene.subject app.sceneDefault.subject scope=?scope canonical=?kind name=?native operation=?operation xKey=?xKey yKey=?yKey width=?width height=?height
+@scene.subject app.sceneDefault.subject scope=?scope canonical=?kind name=?native operation=?operation xKey=?xKey yKey=?yKey minX=?extentLeft minY=?extentTop maxX=?extentRight maxY=?extentBottom
 @scene.frame app.sceneDefault.frame scope=?scope min_x=?left min_y=?top max_x=?right max_y=?bottom
 @scene.catalog.slot k.composition2d.slot subject=?label layout=?layout place=?place x=?u y=?v w=?w h=?h
 @scene.live.support app.sceneDefault.requiresSupport place=?place
@@ -49,18 +54,16 @@
 @scene.y.offset core.calc fn=mul args=?physicalH args=?fractionV out=?offsetY
 @scene.x core.calc fn=add args=?left args=?offsetX out=?x
 @scene.y core.calc fn=add args=?top args=?offsetY out=?y
-@scene.rx core.calc fn=div args=?width args=2 out=?radiusX
-@scene.ry core.calc fn=div args=?height args=2 out=?radiusY
-@scene.left core.calc fn=sub args=?x args=?radiusX out=?minX
-@scene.top core.calc fn=sub args=?y args=?radiusY out=?minY
-@scene.right core.calc fn=add args=?x args=?radiusX out=?maxX
-@scene.bottom core.calc fn=add args=?y args=?radiusY out=?maxY
+@scene.left core.calc fn=add args=?x args=?extentLeft out=?minX
+@scene.top core.calc fn=add args=?y args=?extentTop out=?minY
+@scene.right core.calc fn=add args=?x args=?extentRight out=?maxX
+@scene.bottom core.calc fn=add args=?y args=?extentBottom out=?maxY
 @scene.inside.left core.check fn=gte args=?minX args=?frameLeft
 @scene.inside.top core.check fn=gte args=?minY args=?frameTop
 @scene.inside.right core.check fn=lte args=?maxX args=?frameRight
 @scene.inside.bottom core.check fn=lte args=?maxY args=?frameBottom
-@scene.option app.sceneDefault.option scope=?scope kind=?kind operation=?operation anchor=?anchor rank=?rank order=?order sample=?sample x=?x y=?y xKey=?xKey yKey=?yKey min_x=?minX min_y=?minY max_x=?maxX max_y=?maxY
-@scene.project core.rule when=$scene.subject when=$scene.site when=$scene.viewport when=$scene.fraction with=$scene.w with=$scene.h with=$scene.u.half with=$scene.v.half with=$scene.u.core with=$scene.v.core with=$scene.u.frac with=$scene.v.frac with=$scene.x.offset with=$scene.y.offset with=$scene.x with=$scene.y with=$scene.rx with=$scene.ry with=$scene.left with=$scene.top with=$scene.right with=$scene.bottom if=$scene.inside.left if=$scene.inside.top if=$scene.inside.right if=$scene.inside.bottom then=$scene.option
+@scene.option app.sceneDefault.option subject=$scene.subject scope=?scope kind=?kind operation=?operation anchor=?anchor rank=?rank order=?order sample=?sample x=?x y=?y xKey=?xKey yKey=?yKey min_x=?minX min_y=?minY max_x=?maxX max_y=?maxY
+@scene.project core.rule when=$scene.subject when=$scene.site when=$scene.viewport when=$scene.fraction with=$scene.w with=$scene.h with=$scene.u.half with=$scene.v.half with=$scene.u.core with=$scene.v.core with=$scene.u.frac with=$scene.v.frac with=$scene.x.offset with=$scene.y.offset with=$scene.x with=$scene.y with=$scene.left with=$scene.top with=$scene.right with=$scene.bottom if=$scene.inside.left if=$scene.inside.top if=$scene.inside.right if=$scene.inside.bottom then=$scene.option
 
 # Weight crowding by the actual overlapping area. An observed support is expected to overlap.
 @scene.trial app.sceneDefault.option scope=?scope anchor=?anchor min_x=?a0 min_y=?b0 max_x=?a1 max_y=?b1
@@ -86,8 +89,8 @@
 
 # Minimize observed crowding first, then prefer a supported site, central
 # sample and the latest comparable observation.
-@scene.choice app.sceneDefault.option scope=?scope kind=?kind operation=?operation rank=?rank order=?order sample=?sample
-@scene.alternative app.sceneDefault.option scope=?scope kind=?kind operation=?operation rank=?nextRank order=?nextOrder sample=?nextSample
+@scene.choice app.sceneDefault.option subject=?subject scope=?scope kind=?kind operation=?operation rank=?rank order=?order sample=?sample
+@scene.alternative app.sceneDefault.option subject=?subject scope=?scope kind=?kind operation=?operation rank=?nextRank order=?nextOrder sample=?nextSample
 @scene.candidate app.sceneDefault.candidate option=$scene.choice crowding=?crowding
 @scene.known.alternative app.sceneDefault.candidate option=$scene.alternative crowding=?nextCrowding
 @scene.less.crowding core.check fn=lt args=?nextCrowding args=?crowding
@@ -106,11 +109,18 @@
 @scene.prefer.recent core.rule when=$scene.choice when=$scene.candidate when=$scene.alternative when=$scene.known.alternative if=$scene.same.crowding if=$scene.equal.rank if=$scene.equal.sample if=$scene.more.recent then=$scene.displaced
 @scene.stable.tie core.rule when=$scene.choice when=$scene.candidate when=$scene.alternative when=$scene.known.alternative if=$scene.same.crowding if=$scene.equal.rank if=$scene.equal.sample if=$scene.equal.order if=$scene.earlier.record then=$scene.displaced
 
-@scene.winner app.sceneDefault.option scope=?scope kind=?kind operation=?operation xKey=?xKey yKey=?yKey x=?x y=?y
+@scene.winner app.sceneDefault.option subject=?subject scope=?scope kind=?kind operation=?operation xKey=?xKey yKey=?yKey x=?x y=?y
 @scene.winner.feasible app.sceneDefault.candidate option=$scene.winner
 @scene.winner.displaced app.sceneDefault.displaced option=$scene.winner
 @scene.tool std.capability.operation scope=?scope name=?operationName act=make eligible=true
 @scene.tool.identity core.check fn=eq args=?operation args=$scene.tool
 @scene.seed.x std.capability.seed scope=?scope kind=?kind operation=?operationName parameter=?xKey source=value value=?x phase=missing order=250
 @scene.seed.y std.capability.seed scope=?scope kind=?kind operation=?operationName parameter=?yKey source=value value=?y phase=missing order=251 notice="I used the scene layout for the placement."
-@scene.seed core.rule when=$scene.winner when=$scene.winner.feasible when=$scene.tool not=$scene.winner.displaced if=$scene.tool.identity then=$scene.seed.x then=$scene.seed.y
+@scene.guardless.subject app.sceneDefault.subject guarded=false
+@scene.guardless.identity core.check fn=eq args=?subject args=$scene.guardless.subject
+@scene.guarded.subject app.sceneDefault.subject guarded=true guard=?guard
+@scene.guarded.identity core.check fn=eq args=?subject args=$scene.guarded.subject
+@scene.seed.guarded.x std.capability.seed scope=?scope kind=?kind operation=?operationName parameter=?xKey source=value value=?x whenArgument=?guard phase=missing order=250
+@scene.seed.guarded.y std.capability.seed scope=?scope kind=?kind operation=?operationName parameter=?yKey source=value value=?y whenArgument=?guard phase=missing order=251 notice="I used the scene layout for the placement."
+@scene.seed core.rule when=$scene.winner when=$scene.winner.feasible when=$scene.tool when=$scene.guardless.subject not=$scene.winner.displaced if=$scene.tool.identity if=$scene.guardless.identity then=$scene.seed.x then=$scene.seed.y
+@scene.seed.guarded core.rule when=$scene.winner when=$scene.winner.feasible when=$scene.tool when=$scene.guarded.subject not=$scene.winner.displaced if=$scene.tool.identity if=$scene.guarded.identity then=$scene.seed.guarded.x then=$scene.seed.guarded.y

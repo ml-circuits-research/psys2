@@ -1,5 +1,5 @@
 {
- "version": "c467a0e6fc05",
+ "version": "762f5f565d12",
  "sopworld": "94cffa2",
  "worlds": [
   {
@@ -40982,8 +40982,8 @@
     {
      "id": "k.layouts/shards/words",
      "path": "k.layouts/shards/words.sop",
-     "wires": 45,
-     "bytes": 5538,
+     "wires": 46,
+     "bytes": 5640,
      "keys": [],
      "sources": [
       "hand-core-1"

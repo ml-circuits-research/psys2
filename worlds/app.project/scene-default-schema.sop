@@ -28,8 +28,12 @@
 @scene.defaults.subject.operation core.slot of=app.sceneDefault.subject key=operation kind=ref to=std.capability.operation present=true
 @scene.defaults.subject.xKey core.slot of=app.sceneDefault.subject key=xKey kind=string present=true
 @scene.defaults.subject.yKey core.slot of=app.sceneDefault.subject key=yKey kind=string present=true
-@scene.defaults.subject.width core.slot of=app.sceneDefault.subject key=width kind=number min=0 present=true
-@scene.defaults.subject.height core.slot of=app.sceneDefault.subject key=height kind=number min=0 present=true
+@scene.defaults.subject.guarded core.slot of=app.sceneDefault.subject key=guarded kind=boolean present=true
+@scene.defaults.subject.guard core.slot of=app.sceneDefault.subject key=guard kind=ref to=std.capability.arg
+@scene.defaults.subject.minX core.slot of=app.sceneDefault.subject key=minX kind=number present=true
+@scene.defaults.subject.minY core.slot of=app.sceneDefault.subject key=minY kind=number present=true
+@scene.defaults.subject.maxX core.slot of=app.sceneDefault.subject key=maxX kind=number present=true
+@scene.defaults.subject.maxY core.slot of=app.sceneDefault.subject key=maxY kind=number present=true
 @scene.defaults.site.type core.type of=app.sceneDefault.site closed=true
 @scene.defaults.site.scope core.slot of=app.sceneDefault.site key=scope kind=ref to=std.capability.scope present=true
 @scene.defaults.site.kind core.slot of=app.sceneDefault.site key=kind kind=atom present=true
@@ -46,6 +50,7 @@
 @scene.defaults.site.max_x core.slot of=app.sceneDefault.site key=max_x kind=number present=true
 @scene.defaults.site.max_y core.slot of=app.sceneDefault.site key=max_y kind=number present=true
 @scene.defaults.option.type core.type of=app.sceneDefault.option closed=true
+@scene.defaults.option.subject core.slot of=app.sceneDefault.option key=subject kind=ref to=app.sceneDefault.subject present=true
 @scene.defaults.option.scope core.slot of=app.sceneDefault.option key=scope kind=ref to=std.capability.scope present=true
 @scene.defaults.option.kind core.slot of=app.sceneDefault.option key=kind kind=atom present=true
 @scene.defaults.option.operation core.slot of=app.sceneDefault.option key=operation kind=ref to=std.capability.operation present=true
@@ -75,6 +80,7 @@
 @scene.defaults.port.scope core.slot of=app.sceneDefault.port key=scope kind=ref to=std.capability.scope present=true
 @scene.defaults.port.operation core.slot of=app.sceneDefault.port key=operation kind=ref to=std.capability.operation present=true
 @scene.defaults.port.x core.slot of=app.sceneDefault.port key=xKey kind=string present=true
+@scene.defaults.port.count core.slot of=app.sceneDefault.port key=countKey kind=string
 @scene.defaults.port.y core.slot of=app.sceneDefault.port key=yKey kind=string present=true
 @scene.defaults.sample.type core.type of=app.sceneDefault.sample closed=true
 @scene.defaults.sample.u core.slot of=app.sceneDefault.sample key=u kind=number min=0 max=1 present=true

@@ -1,12 +1,13 @@
-import {World,editCost,parse,quote,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=3a48344175';
+import {World,editCost,parse,quote,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=8186c36d14';
 import POLICY from '../../worlds/app.project/creation-policy-source.mjs?v=874b0f8e6d';
 import SCHEMA from '../../worlds/app.project/creation-schema-source.mjs?v=9d9c428cd6';
-import {executionPolicyWorld} from './execution-policy.mjs?v=0b0a918c63';
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=3b73627e71';
-import {nativeCreationCandidates} from './native-binding-candidates.mjs?v=f6d6f43960';
+import {executionPolicyWorld} from './execution-policy.mjs?v=9b4ddaac32';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=6618e2cba6';
+import {nativeCreationCandidates} from './native-binding-candidates.mjs?v=823de2d713';
 import {budget} from './budget.mjs?v=00bce6e369';
-import {observeGroundedProjection,projectGroundedRequest} from './grounded-projection.mjs?v=6b5fddabd8';
-import {compileObservedChoice} from './observed-choice.mjs?v=7c29d210ff';
+import {observeGroundedProjection,projectGroundedRequest} from './grounded-projection.mjs?v=ce4c391dd1';
+import {positiveCardinalProof} from './key-reader-value-proof.mjs?v=d14c6ccdaf';
+import {compileObservedChoice} from './observed-choice.mjs?v=516055ab97';
 
 const field=(fact,key)=>str(fact.attrs[key]?.[0]);
 let loaded;
@@ -142,7 +143,10 @@ export async function projectCreateAction(proposal,session,{bindings,registry,vi
  const host=await area.create({state:native,instanceId:'creation-'+globalThis.crypto.randomUUID()});
  const choices=nativeCreationCandidates(bindings,host.bindings(),readerArea);
  const config=creationPolicy(policy),target={...r.target,kind:r.target.kind?(r.target.kind_span??r.target.kind):undefined};
- const conditions=roleEvidence(r,registry,readerArea,evidence);
+ const cardinal=positiveCardinalProof(target.count_span);
+ const countRange=cardinal&&(target.count===undefined||target.count===cardinal.value)?evidence(['target','count_span'],target.count_span):null;
+ const conditions=roleEvidence(r,registry,readerArea,evidence).filter(({concept,range})=>
+  !(countRange&&concept==='count'&&range?.[0]===countRange[0]&&range?.[1]===countRange[1]));
  const kindRange=target.kind?evidence(['target','kind_span'],target.kind):null;
  if(target.kind&&!kindRange||target.name&&!evidence(['target','name_span'],target.name))return null;
  const lexicalView=resolveRoles(config.world,target,kindRange,conditions,[]);
@@ -158,6 +162,7 @@ export async function projectCreateAction(proposal,session,{bindings,registry,vi
  const settled=shared&&assignment(shared,conditions);
  if(!settled)return null;
  const {name,values,unapplied}=settled;
+ const groundedValues=countRange?[...values,{concept:'count',token:String(cardinal.value),range:countRange,witness:'request.target.count'}]:values;
 
  const noteFor=choice=>choice.distance>0?`I took ${JSON.stringify(lexical)} as ${choice.mapping.lemma}.`:!lexical?`I used ${choice.mapping.lemma} as the kind.`:'';
  const candidates=equivalent.flatMap(choice=>{
@@ -166,12 +171,12 @@ export async function projectCreateAction(proposal,session,{bindings,registry,vi
    if(!alternative||JSON.stringify(assignment(alternative,conditions))!==JSON.stringify(settled))return [];
   }
   const graph=projectGroundedRequest({profile:'creation',act:r.act,mood:r.mood,kind:choice.mapping.canonical,
-   text:raw.source.text,name,values,witness:choice.mapping.sourceWire??choice.operation.id});
+   text:raw.source.text,name,values:groundedValues,witness:choice.mapping.sourceWire??choice.operation.id});
   if(graph)observeGroundedProjection(session,graph.projection);
   return graph?[{...graph,creationNote:noteFor(choice)}]:[];
  });
  if(!candidates.length)return null;
- if(target.count!==undefined&&target.count!==1||target.count_span)unapplied.push('the requested object count');
+ if(!countRange&&(target.count!==undefined&&target.count!==1||target.count_span))unapplied.push('the requested object count');
  const note=candidates[0].creationNote;
  return {...proposal,candidates,coverage:{complete:true,graphProposal:true,executable:false},failures:[],
   interpretation:{profile:'declared-creation/1',note,projections:candidates.map(candidate=>candidate.projection),unapplied,...(name?{requestedName:name}:{}),alternatives:options.map(choice=>({

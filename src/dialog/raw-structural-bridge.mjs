@@ -1,5 +1,6 @@
 // Predicted raw structure -> declared canonical structure. No reader or gold input.
 import {copyHostData} from '../../worlds/native-tool-host.mjs';
+import {positiveCardinalProof} from './key-reader-value-proof.mjs';
 import {decodeModelGraphs} from './model-graph-decoder.mjs';
 export const RAW_STRUCTURAL_FORMAT='psys2.raw-structural-predictions/1';
 const has=(o,k)=>Object.hasOwn(o,k),hash=v=>typeof v==='string'&&/^[a-f0-9]{64}$/.test(v);
@@ -67,9 +68,18 @@ export function bridgeRawStructure(prediction,{bindings,bindingSha256,budget=200
    if(['context','previous_reply','journal_step'].includes(target.fill))unresolved('context-reference-not-bound',['targets',tid]);
    else if(target.fill==='all'&&target.mode!=='bound')unresolved('unprojected-population-reference',['targets',tid]);
    else if(target.fill!==undefined&&!['written','description','all'].includes(target.fill))unresolved('unknown-target-fill',['targets',tid]);
-   if(has(target,'count_span')&&!has(target,'count'))unresolved('unowned-count-span',['targets',tid,'count_span']);
-   for(const field of ['count','ordinal'])if(has(target,field))unresolved(`requires-declared-${field}-projection`,['targets',tid,field]);
    const phase={selector:[],result:[]},conditions=original.constraints??[];if(!Array.isArray(conditions)||conditions.length>256)fail('constraint-budget',basePath);
+   const cardinal=original.act==='make'&&t.mode==='new'?positiveCardinalProof(target.count_span):null;
+   const countRange=cardinal&&(target.count===undefined||target.count===cardinal.value)&&span
+    ?locate(original.span,target.count_span,span[0],[...rawPath,'target','count_span'],span):null;
+   if(countRange){
+    const id=`count${index}`,path=['constraints',id],c={id,target:tid,phase:'result',concept:'count',operator:'eq',character:'requirement',polarity:'positive',
+     value:{kind:'literal',value:String(cardinal.value)},source:countRange};
+    label.constraints.push(c);phase.result.push([id,c]);
+    for(const key of ['concept','value'])evidence.push({path:[...path,key],ranges:[countRange],origin:'text'});
+   }else if(has(target,'count')||has(target,'count_span'))
+    unresolved(has(target,'count')?'requires-declared-count-projection':'unowned-count-span',['targets',tid,'count']);
+   if(has(target,'ordinal'))unresolved('requires-declared-ordinal-projection',['targets',tid,'ordinal']);
    for(const [ci,condition]of conditions.entries()){
     tick();shape(condition,keys.constraint,[...basePath,'constraints',ci]);const cid=`c${index}_${ci}`,c={id:cid,target:tid},path=['constraints',cid];label.constraints.push(c);
     for(const field of ['phase','operator','character','polarity'])if(has(condition,field))c[field]=condition[field];else unresolved('missing-annotated-field',[...path,field]);

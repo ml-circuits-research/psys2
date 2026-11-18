@@ -4,11 +4,12 @@ import {test} from 'node:test';
 import {createKnowledgeSource} from '../src/loaders/knowledge-source.mjs';
 import {createFacts} from '../src/knowledge/facts.mjs';
 import {CATALOG_PIN} from '../src/knowledge/catalog-pin.mjs';
-import {executeDeclaredRequest} from '../src/dialog/declared-execution.mjs';
+import {compareDeclaredReadings,executeDeclaredRequest} from '../src/dialog/declared-execution.mjs';
 import {toNativeDrawingState} from '../worlds/art.draw/canonical-state.mjs';
-import {initialDiagramState} from "../worlds/diagram.sketch/declared-host.mjs";
+import {createDiagramHost,initialDiagramState} from "../worlds/diagram.sketch/declared-host.mjs";
 import {toNativeDiagramState} from "../worlds/diagram.sketch/canonical-state.mjs";
 import {initialDrawingState} from '../worlds/art.draw/declared-host.mjs';
+import {parse} from '../src/vendor/sopworld/sopworld.mjs';
 import {performGesture} from './fixtures/editor-gesture.mjs';
 
 const root = new URL('../docs/webchat/', import.meta.url);
@@ -132,4 +133,47 @@ test('shipped Diagram role layout responds to actual page occupancy and independ
   const drawing=setup(), drawn=await draw(drawing,'circle');
   assert.equal(observe(drawing)[0].kind,'circle');
   assert.doesNotMatch(drawn.trace.compiledSop,/scene\.seed/);
+});
+
+test('plural Diagram preflight measures each admissible count and commits one native batch', async () => {
+  const view='diagram', world='diagram.sketch', activity=[];
+  const session={
+    isession:{state:{[world]:initialDiagramState(),'ui.shell':{activeTab:view}}},
+    engine:{knowledge:createFacts({source:createKnowledgeSource(catalog)}),onWorldActivity:event=>activity.push(event)},
+  };
+  const gesture=(operation,args={})=>performGesture(session,{view,operation,args});
+  assert.equal((await gesture('diagram.node.make',{kind:'rectangle',x:285,y:250})).ok,true);
+  const observation=()=>toNativeDiagramState(session.isession.state[world]).shapes.map(({name,shape,x,y})=>({name,shape,x,y}));
+  const starting=observation();
+  const text='Add 3 circles';
+  const candidate=count=>({request:'r',wires:[
+    '@s std.request.source text='+JSON.stringify(text),
+    '@r std.request act=make mood=do source=$s',
+    '@t std.request.target request=$r mode=new kind=k.shapes.shape.circle',
+    ...(count?['@c std.request.constraint request=$r target=$t concept=count operator=eq character=requirement polarity=positive value='+count]:[]),
+  ].join('\n')});
+  const compared=await compareDeclaredReadings(session,[candidate(3),candidate()],{view,bindings});
+  assert.equal(compared.index,0,compared.sop);
+  assert.equal(compared.plan.args.n,3);
+  assert.equal(compared.plan.scenePlaced,true);
+  assert.equal(compared.plan.args.x,600);
+  const singleton=await compareDeclaredReadings(session,[candidate(),candidate(3)],{view,bindings});
+  assert.equal(singleton.plan.args.n,1);
+  assert.equal(singleton.plan.args.x,400);
+  assert.deepEqual(observation(),starting);
+  const reply=await executeDeclaredRequest(session,candidate(3),text,{view,bindings});
+  assert.equal(reply.statuses[0],'supported',reply.text);
+  assert.match(reply.text,/Created 3 objects of kind circle/);
+  assert.match(reply.trace.controlIntent,/name="n" value=3/);
+  assert.deepEqual(observation().slice(0,1),starting);
+  assert.deepEqual(observation().slice(1).map(measure),[[482,250],[600,250],[718,250]]);
+
+  const proof=parse(activity.find(event=>event.sceneEvidence).sceneEvidence);
+  const chosen=proof.find(row=>row.type==='app.sceneDefault.option');
+  const observed=(await createDiagramHost({instanceId:'plural-observation',state:structuredClone(session.isession.state[world])})).observeSpatial();
+  const names=new Set(observation().slice(1).map(shape=>shape.name));
+  const boxes=observed.boxes.filter(box=>names.has(box.entity));
+  const actual=[Math.min(...boxes.map(box=>box.min_x)),Math.min(...boxes.map(box=>box.min_y)),
+    Math.max(...boxes.map(box=>box.max_x)),Math.max(...boxes.map(box=>box.max_y))];
+  assert.deepEqual(['min_x','min_y','max_x','max_y'].map(key=>Number(chosen.attrs[key][0])),actual);
 });

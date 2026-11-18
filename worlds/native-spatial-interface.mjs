@@ -67,7 +67,8 @@ function nativeCapabilityWires(host,operations,mappings,frame) {
    const extent=measurements.get(material);
    if(!extent||!(extent.width>0)||!(extent.height>0))continue;
    const kind='native.spatial.kind.'+rows.length;
-   rows.push(row(kind,'std.placement.kind',{binding:'$'+tool,concept:mapping.canonical,native:mapping.lemma,...extent}));
+   const {width,height,originX,originY}=extent;
+   rows.push(row(kind,'std.placement.kind',{binding:'$'+tool,concept:mapping.canonical,native:mapping.lemma,width,height,originX,originY}));
    for(const [key,value] of Object.entries(args))if(operation.act==='make'&&key!==kindKey)rows.push(row('native.spatial.argument.'+rows.length,'std.placement.argument',{binding:'$'+kind,key,value:scalar(value)}));
   }
  }

@@ -1,6 +1,6 @@
 // Observe the actual mechanical tool boundary without changing execution or journal policy.
-import{readNativeIntent}from'./native-intent-reader.mjs?v=0695766175';
-import{copyHostData,toolInvocationContext}from'../../worlds/native-tool-host.mjs?v=66339be62d';
+import{readNativeIntent}from'./native-intent-reader.mjs?v=ec637e1934';
+import{copyHostData,toolInvocationContext}from'../../worlds/native-tool-host.mjs?v=ad44986a97';
 function emit(session,area,operation,phase,extra){
  try{session.engine?.onWorldActivity?.({nodeIds:['interpreter:'+area.world,'instance:'+area.world,...(area.stateWorld?[]:['native:'+area.world])],phase,label:operation,world:area.world,operation,...extra});}catch{/* Observation cannot change an operation. */}
 }

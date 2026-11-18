@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-import { parse, quote, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=3a48344175';
+import { parse, quote, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=8186c36d14';
 import { decodeCapabilityCall } from '../vendor/sopworld/capability-call.mjs?v=ed3b773c65';
 import POLICY from '../../worlds/app.project/capability-policy.mjs?v=9f3103a196';
-import { executionPolicyWorld } from './execution-policy.mjs?v=0b0a918c63';
-import { projectionModule } from './composition-knowledge.mjs?v=155f810d74';
-import { sceneDefaultModule, writeSceneDefaults } from './scene-placement-defaults.mjs?v=ed75f9e5bd';
-import { nativeKindCandidates } from './native-binding-candidates.mjs?v=f6d6f43960';
-import { observedReaderContext } from './native-reader-context.mjs?v=ab17c14d8a';
+import { executionPolicyWorld } from './execution-policy.mjs?v=9b4ddaac32';
+import { projectionModule } from './composition-knowledge.mjs?v=0b19c226f3';
+import { sceneDefaultModule, writeSceneDefaults } from './scene-placement-defaults.mjs?v=51d89e03be';
+import { nativeKindCandidates } from './native-binding-candidates.mjs?v=823de2d713';
+import { observedReaderContext } from './native-reader-context.mjs?v=ecc94da360';
 import { budget } from './budget.mjs?v=00bce6e369';
 
 const NS = 'std.capability.';

@@ -51,10 +51,13 @@ export async function executeNativeCapability(session, candidate, { bindings, vi
   const host = await createAreaHost(area, { state: nativeState, instanceId: instanceIdFor(session, area.world),
     loader: session.engine?.loader, knowledge: session.engine?.knowledge });
   const before = host.observe();
-  const sceneDefaults = compiledPlan ? null : await readSceneDefaults({host,bindings,area,view,
-    knowledge:session.engine?.knowledge,candidates:[candidate]});
-  const plan = compiledPlan ?? compileNativeCapability(candidate, { area, view, bindings, host, observation: before,
-    focus: focus ?? session.newEngineFocus?.[view], targetUnique, unapplied, readKnowledge, sceneDefaults });
+  const context = {area,view,bindings,host,observation:before,
+    focus:focus ?? session.newEngineFocus?.[view],targetUnique,unapplied,readKnowledge};
+  let preliminary;
+  const sceneDefaults = compiledPlan ? null : await readSceneDefaults({host,knowledge:session.engine?.knowledge,candidates:[candidate],
+    preflight:current=>preliminary ??= compileNativeCapability(current,context)});
+  const plan = compiledPlan ?? (sceneDefaults ? compileNativeCapability(candidate,{...context,sceneDefaults})
+    : preliminary ?? compileNativeCapability(candidate,context));
   if (plan.status === 'not-applicable') return null;
   if (plan.status !== 'compiled') return refusal(plan, candidate);
 
@@ -100,7 +103,8 @@ export async function executeNativeCapability(session, candidate, { bindings, vi
     });
   }
   const old = new Set(before.objects.map((object) => object.id));
-  const object = after.objects.find((value) => !old.has(value.id)) ?? before.objects.find((value) => String(value.id) === plan.id);
+  const added = after.objects.filter(value => !old.has(value.id));
+  const object = added[0] ?? before.objects.find((value) => String(value.id) === plan.id);
   const previousFocus = session.newEngineFocus?.[view];
   const nextFocus = plan.act === 'remove' ? after.objects.find((item) => item.id === previousFocus)?.id : object?.id;
   session.newEngineFocus = { ...session.newEngineFocus, [view]: nextFocus ?? null };
@@ -110,7 +114,9 @@ export async function executeNativeCapability(session, candidate, { bindings, vi
     ? 'More than one matched. I used ' + kind + ' ' + plan.id + '. You can undo this.'
     : 'I used the most recent matching ' + plan.kind + '.');
   if (plan.skipped.length) notes.push('I could not apply ' + plan.skipped.join(', ') + '.');
-  const said = plan.act === 'make' ? `Created a ${kind}.` : plan.act === 'remove' ? `Removed the ${kind}.` : `Updated the ${kind}.`;
+  const addedOfKind = operation.spatial?.countKey && added.filter(value => value.sourceType === operation.on && value.kind === kind).length;
+  const created = addedOfKind>1 ? `Created ${addedOfKind} objects of kind ${kind}.` : `Created a ${kind}.`;
+  const said = plan.act === 'make' ? created : plan.act === 'remove' ? `Removed the ${kind}.` : `Updated the ${kind}.`;
   const measured = retainPropertyEffect(session, { candidate, text, view, plan, before: observed, after, receipt, verification, message: notes.join(' ') });
   const message = measured?.text ?? [said, ...notes].join(' ');
   return {

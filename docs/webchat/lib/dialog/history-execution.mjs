@@ -1,8 +1,8 @@
-import {readAuthoredRequest} from './authored-request-tool.mjs?v=b28428ba91';
-import {parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=3a48344175';
-import {historyPolicy} from './history-policy.mjs?v=70f9fa874e';
-import {observeHistory,createHistoryTool} from './history-tool.mjs?v=970ca1f227';
-import {invokeObservedNativeTool} from './native-tool-activity.mjs?v=b78711d18a';
+import {readAuthoredRequest} from './authored-request-tool.mjs?v=669290a7ca';
+import {parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=8186c36d14';
+import {historyPolicy} from './history-policy.mjs?v=c1593409c5';
+import {observeHistory,createHistoryTool} from './history-tool.mjs?v=b1cf8430b1';
+import {invokeObservedNativeTool} from './native-tool-activity.mjs?v=18bb56df0d';
 
 const area={world:'app.history',stateWorld:true};
 const first=(wire,key)=>wire?.attrs[key]?.[0];

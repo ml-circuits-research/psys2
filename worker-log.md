@@ -210,3 +210,6 @@ Actual SVG transforms, native circuit, catalog source and Undo checked in Chromi
 
 2026-11-18 — The Worlds trace follows the selected projection's actual record references and module declaration. It no longer infers provenance from names of particular knowledge families. Tests cover Drawing's lake evidence, Diagram's node-role evidence, and exclusion of unrelated records.
 Webchat 07959a7e9e: integrated gate passed 644, skipped 3. Published 5bd8aa6ecb additionally replayed actual Diagram SVG moves and Undo; a separate cold run reached the worker timeout.
+
+2026-11-18 — Webchat 9e44cd7951 binds cardinal spans to Diagram creation and measures each candidate’s actual batch through its declared tool. Pins SOPWorlds 0.224.0 and knowledge 9e99bc52.
+Chromium verified three circles, then a three-circle/two-square compound, exact SVG bounds and Undo preserving an earlier rectangle. Application gate passed 646, skipped 3, failed 0.

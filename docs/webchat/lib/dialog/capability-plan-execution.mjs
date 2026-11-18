@@ -1,12 +1,12 @@
-import { readSceneDefaults } from './scene-placement-defaults.mjs?v=ed75f9e5bd';
+import { readSceneDefaults } from './scene-placement-defaults.mjs?v=51d89e03be';
 // SPDX-License-Identifier: AGPL-3.0-only
-import { compileNativeCapability } from './capability-plan-adapter.mjs?v=a27fe51893';
-import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=3b73627e71';
+import { compileNativeCapability } from './capability-plan-adapter.mjs?v=b5ec148e95';
+import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=6618e2cba6';
 import { instanceIdFor } from './instance-identity.mjs?v=024ef1ca83';
-import { prepareNativeControlHost } from './native-control-preparation.mjs?v=65fb56afe6';
-import { invokeObservedNativeTool } from './native-tool-activity.mjs?v=b78711d18a';
-import { retainPropertyEffect } from './property-effect-evidence.mjs?v=fedf5e9e69';
-import { describeNativeControl, verifyNativeControlEffect } from './native-control-intent.mjs?v=cb692a2c50';
+import { prepareNativeControlHost } from './native-control-preparation.mjs?v=1c47621458';
+import { invokeObservedNativeTool } from './native-tool-activity.mjs?v=18bb56df0d';
+import { retainPropertyEffect } from './property-effect-evidence.mjs?v=6a13f16085';
+import { describeNativeControl, verifyNativeControlEffect } from './native-control-intent.mjs?v=d7f5f6af36';
 
 function reply(text, supported, trace = {}) {
   return { text, parts: [{ text, translate: false }], statuses: [supported ? 'supported' : 'unsupported'],
@@ -51,10 +51,13 @@ export async function executeNativeCapability(session, candidate, { bindings, vi
   const host = await createAreaHost(area, { state: nativeState, instanceId: instanceIdFor(session, area.world),
     loader: session.engine?.loader, knowledge: session.engine?.knowledge });
   const before = host.observe();
-  const sceneDefaults = compiledPlan ? null : await readSceneDefaults({host,bindings,area,view,
-    knowledge:session.engine?.knowledge,candidates:[candidate]});
-  const plan = compiledPlan ?? compileNativeCapability(candidate, { area, view, bindings, host, observation: before,
-    focus: focus ?? session.newEngineFocus?.[view], targetUnique, unapplied, readKnowledge, sceneDefaults });
+  const context = {area,view,bindings,host,observation:before,
+    focus:focus ?? session.newEngineFocus?.[view],targetUnique,unapplied,readKnowledge};
+  let preliminary;
+  const sceneDefaults = compiledPlan ? null : await readSceneDefaults({host,knowledge:session.engine?.knowledge,candidates:[candidate],
+    preflight:current=>preliminary ??= compileNativeCapability(current,context)});
+  const plan = compiledPlan ?? (sceneDefaults ? compileNativeCapability(candidate,{...context,sceneDefaults})
+    : preliminary ?? compileNativeCapability(candidate,context));
   if (plan.status === 'not-applicable') return null;
   if (plan.status !== 'compiled') return refusal(plan, candidate);
 
@@ -100,7 +103,8 @@ export async function executeNativeCapability(session, candidate, { bindings, vi
     });
   }
   const old = new Set(before.objects.map((object) => object.id));
-  const object = after.objects.find((value) => !old.has(value.id)) ?? before.objects.find((value) => String(value.id) === plan.id);
+  const added = after.objects.filter(value => !old.has(value.id));
+  const object = added[0] ?? before.objects.find((value) => String(value.id) === plan.id);
   const previousFocus = session.newEngineFocus?.[view];
   const nextFocus = plan.act === 'remove' ? after.objects.find((item) => item.id === previousFocus)?.id : object?.id;
   session.newEngineFocus = { ...session.newEngineFocus, [view]: nextFocus ?? null };
@@ -110,7 +114,9 @@ export async function executeNativeCapability(session, candidate, { bindings, vi
     ? 'More than one matched. I used ' + kind + ' ' + plan.id + '. You can undo this.'
     : 'I used the most recent matching ' + plan.kind + '.');
   if (plan.skipped.length) notes.push('I could not apply ' + plan.skipped.join(', ') + '.');
-  const said = plan.act === 'make' ? `Created a ${kind}.` : plan.act === 'remove' ? `Removed the ${kind}.` : `Updated the ${kind}.`;
+  const addedOfKind = operation.spatial?.countKey && added.filter(value => value.sourceType === operation.on && value.kind === kind).length;
+  const created = addedOfKind>1 ? `Created ${addedOfKind} objects of kind ${kind}.` : `Created a ${kind}.`;
+  const said = plan.act === 'make' ? created : plan.act === 'remove' ? `Removed the ${kind}.` : `Updated the ${kind}.`;
   const measured = retainPropertyEffect(session, { candidate, text, view, plan, before: observed, after, receipt, verification, message: notes.join(' ') });
   const message = measured?.text ?? [said, ...notes].join(' ');
   return {
