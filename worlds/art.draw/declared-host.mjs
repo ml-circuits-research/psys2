@@ -1,32 +1,18 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { readNativeToolInterface } from '../native-tool-interface.mjs';
+import NATIVE_INTERFACE from './native-interface-source.mjs';
 import {budget} from '../../src/dialog/budget.mjs';
 import {canonicalDrawingState,toNativeDrawingState} from './canonical-state.mjs';
 import {spatialBox} from '../native-spatial-observation.mjs';
 import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs';
 import {initialState,makeObject,remember,undoStep,redoStep,newPage} from './board.mjs';
-import {DRAWING_PART_TOOL_BINDINGS,drawingPartHandlers,drawingPartsOf,makeKnowledgeDrawing,restoreMembers,drawingObjectsOf,findDrawingObject,replaceDrawingObject,independentDrawingIds,colourDrawingObject} from './part-tools.mjs';
+import {drawingPartHandlers,drawingPartsOf,makeKnowledgeDrawing,restoreMembers,drawingObjectsOf,findDrawingObject,replaceDrawingObject,independentDrawingIds,colourDrawingObject} from './part-tools.mjs';
 import {KINDS,W,H,bbox,objectMatrix} from './scene.mjs';
 export {initialState as initialDrawingState};
 export const initialCanonicalDrawingState=()=>canonicalDrawingState(initialState());
-const kinds=Object.keys(KINDS),array={type:'array',required:true};
-const properties={name:{type:'string'},label:{type:'string'},width:{type:'number',min:.001},height:{type:'number',min:.001},x:{type:'number'},y:{type:'number'},size:{type:'number',min:0.001},color:{type:'string',nullable:true}};
-export const DRAWING_TOOL_BINDINGS=[
- {id:'drawing.object.make',sample:[{args:{kind:{enum:true},label:{unique:{prefix:'Shape'}},x:{number:{min:80,max:650}},y:{number:{min:80,max:450}},size:{number:{min:40,max:100}}}}],act:'make',on:'art.draw.object',params:{kind:{type:'string',required:true,enum:kinds},...properties},spatial:{frame:'drawing.canvas',kindKey:'kind',xKey:'x',yKey:'y'}},
- {id:'drawing.catalog.make',act:'make',on:'art.draw.object',knowledgeInputs:[{argument:'name',load:'thing'}],params:{name:{type:'string',required:true},x:{type:'number'},y:{type:'number'},size:{type:'number',min:.001}}},
- {id:'drawing.object.change',effectScope:{ancestors:{via:['in','parent'],keys:['x','y','size','width','height']}},sample:[{args:{ids:{ref:{on:'art.draw.object',many:true}},label:{unique:{prefix:'Shape'}}}}],act:'change',on:'art.draw.object',params:{ids:array,...properties}},
- {id:'drawing.object.select',act:'pick',on:'art.draw.object',params:{id:{type:'string',required:true,nullable:true}}},
- {id:'drawing.objects.select',act:'pick',on:'art.draw.object',params:{ids:array}},
- {id:'drawing.object.place',effectScope:{ancestors:{via:['in','parent'],keys:['x','y','size','width','height']}},act:'place',on:'art.draw.object',params:{ids:array,x:{type:'number',required:true},y:{type:'number',required:true}},coordinates:{dimension:'length',unit:'canvas.pixel',frame:'drawing.canvas'},spatial:{frame:'drawing.canvas',xKey:'x',yKey:'y',idsKey:'ids'}},
- {id:'drawing.objects.transform',act:'change',on:'art.draw.object',effectScope:{projection:'composite'},params:{ids:array,x:{type:'number',required:true},y:{type:'number',required:true},width:{type:'number',required:true,min:.001},height:{type:'number',required:true,min:.001}},coordinates:{dimension:'length',unit:'canvas.pixel',frame:'drawing.canvas'}},
- {id:'drawing.page.clear',act:'remove',on:'art.draw.page',intent:{subject:'contents of the drawing',determiner:'the'},params:{}},
- {id:'drawing.object.remove',act:'remove',on:'art.draw.object',params:{ids:array}},
- {id:'drawing.ids.show',intent:{subject:'ObjectIDs',determiner:'the',parameters:{duration:{format:'duration-ms',label:'for'}}},act:'ask',on:'art.draw.page',params:{mode:{type:'string',required:true,enum:['temporary','always','off']},duration:{type:'integer',default:4000,min:1,max:60000}}},
- {id:'drawing.observe',act:'ask',on:'art.draw.object',params:{}},
- {id:'drawing.undo',act:'undo',on:'art.draw.object',params:{}},
- {id:'drawing.redo',act:'redo',on:'art.draw.object',params:{}},
- ...DRAWING_PART_TOOL_BINDINGS,
-];
-const keys=Object.keys(properties),fail=code=>({status:'missing',code}),done=changed=>({status:'supported',changed});
+const toolInterface = readNativeToolInterface(NATIVE_INTERFACE).realize({ 'drawing.kinds': Object.keys(KINDS) });
+export const DRAWING_TOOL_BINDINGS = toolInterface.bindings;
+const keys=Object.keys(DRAWING_TOOL_BINDINGS.find(op=>op.id==='drawing.object.change').params).filter(key=>key!=='ids'),fail=code=>({status:'missing',code}),done=changed=>({status:'supported',changed});
 const validPatch=a=>!Object.hasOwn(a,'color')||a.color===null||/^#[a-fA-F0-9]{6}$/.test(a.color);
 const select=(s,ids)=>Array.isArray(ids)&&ids.length>0&&new Set(ids).size===ids.length&&ids.every(id=>typeof id==='string'&&!!findDrawingObject(s,id))&&independentDrawingIds(s,ids);
 const view=s=>{
@@ -112,7 +98,7 @@ export function createDrawingHost({state=initialState(),instanceId,knowledge=nul
   return result;
  }])):nativeHandlers;
  const project=handler=>governed?carrier=>handler(toNativeDrawingState(carrier)):handler;
- const host=createNativeToolHost({state,instanceId,scope:'drawing.object-lifecycle',operations:DRAWING_TOOL_BINDINGS,handlers,view:project(view),spatial:project(spatial),...limits});
+ const host=createNativeToolHost({state,instanceId,scope:'drawing.object-lifecycle',toolInterface,handlers,view:project(view),spatial:project(spatial),...limits});
  return {...host,measureSpatial(operation,args){
   if(operation!=='drawing.object.make'||!Object.hasOwn(KINDS,args.kind)||!validPatch(args))return null;
   const {w,h}=bbox(buildDrawingObject({nextId:1},args));return {width:w,height:h};

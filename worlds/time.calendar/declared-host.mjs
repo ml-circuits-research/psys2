@@ -1,29 +1,14 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { readNativeToolInterface } from '../native-tool-interface.mjs';
+import NATIVE_INTERFACE from './native-interface-source.mjs';
 import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs';
 import {createCalendar} from './calendar-tool.mjs';
 import {createCalendarPolicy} from './scheduling.mjs';
 import {canonicalCalendarState,toNativeCalendarState,adoptCanonicalCalendarState} from './canonical-state.mjs';
 export {canonicalCalendarState,toNativeCalendarState} from './canonical-state.mjs';
-const required=type=>({type,required:true});
-const identity=required('string');
-const fields={id:identity,title:required('string'),start:required('integer'),duration:{...required('integer'),min:1},participants:required('array'),room:{...required('string'),nullable:true},calendar:{type:'string',nullable:true},notes:{type:'string'}};
-const resourceFields={calendar:{id:identity,label:required('string'),colour:{type:'string'}},person:{id:identity,label:required('string')},room:{id:identity,label:required('string'),capacity:{type:'integer',min:1},location:{type:'string'}}};
-const time={dimension:'time',unit:'millisecond',frame:'unix'};
-export const CALENDAR_TOOL_BINDINGS=[
- ...Object.entries(resourceFields).flatMap(([kind,params])=>[
-  {id:`calendar.${kind}.add`,act:'make',on:`time.calendar.${kind}`,params},
-  {id:`calendar.${kind}.change`,act:'change',on:`time.calendar.${kind}`,params:Object.fromEntries(Object.entries(params).map(([k,v])=>[k,k==='id'?v:{...v,required:false,...(kind==='room'&&['capacity','location'].includes(k)?{nullable:true}:{})}]))},
-  {id:`calendar.${kind}.remove`,act:'remove',on:`time.calendar.${kind}`,params:{id:identity}},
- ]),
- {id:'calendar.meeting.add',act:'make',on:'time.calendar.meeting',params:fields},
- {id:'calendar.event.select',act:'pick',on:'time.calendar.meeting',effectScope:{selection:{key:'selected'}},params:{id:{...identity,nullable:true}}},
- {id:'calendar.event.add',act:'make',on:'time.calendar.meeting',sample:[{args:{id:{unique:{prefix:'event',separator:'-'}},title:{unique:{prefix:'Event'}},start:{now:{round:86400000,offset:43200000}},duration:{value:3600000}}}],params:{id:identity,title:fields.title,start:fields.start,duration:fields.duration,notes:fields.notes}},
- {id:'calendar.meeting.change',sample:[{args:{id:{ref:{on:'time.calendar.meeting'}},title:{unique:{prefix:'Event'}}}}],act:'change',on:'time.calendar.meeting',params:Object.fromEntries(Object.entries(fields).map(([k,v])=>[k,k==='id'?v:{...v,required:false}]))},
- {id:'calendar.meeting.move',act:'place',on:'time.calendar.meeting',params:{id:identity,start:required('integer')},coordinates:time},
- {id:'calendar.events.remove',act:'remove',on:'time.calendar.meeting',params:{ids:{type:'array',required:true}}},
- {id:'calendar.meeting.remove',act:'remove',on:'time.calendar.meeting',params:{id:identity}},
- {id:'calendar.observe',act:'ask',on:'time.calendar',params:{}},
-].map(op=>({...op,intent:{subject:op.on.endsWith('.calendar')?'personal calendar':op.on.endsWith('.meeting')?'event':op.on.split('.').at(-1),parameters:{calendar:{reference:true,label:'in calendar'},room:{reference:true,label:'in room'},start:{format:'unix-ms',label:'starting at'},duration:{format:'duration-ms',label:'lasting'},participants:{reference:true,label:'with participants',hiddenIfEmpty:true},notes:{label:'with notes',hiddenIfEmpty:true}}}}));
+const toolInterface = readNativeToolInterface(NATIVE_INTERFACE).realize();
+export const CALENDAR_TOOL_BINDINGS = toolInterface.bindings;
+const time = CALENDAR_TOOL_BINDINGS.find(operation=>operation.id==='calendar.meeting.move').coordinates;
 const groups={calendar:'calendars',person:'people',room:'rooms',meeting:'meetings'};
 export const initialCalendarState=()=>canonicalCalendarState({calendars:[],people:[],rooms:[],meetings:[],selectedEvent:null});
 const nativeView=state=>Object.entries(groups).flatMap(([kind,key])=>(state[key]??[]).map(row=>({id:row.id,kind,sourceType:`time.calendar.${kind}`,...(kind==='meeting'?{relations:{participants:[...(row.participants??[])],...(row.room?{room:[row.room]}:{}),...(row.calendar?{calendar:[row.calendar]}:{})}}:{}),inputs:Object.entries({...row,...(kind==='meeting'&&Object.hasOwn(state,'selectedEvent')?{selected:state.selectedEvent===row.id}:{})}).filter(([k])=>k!=='id').map(([key,value])=>({binding:`calendar.${kind}.${key}`,key,values:value===null?[]:(Array.isArray(value)?[...value].sort():[value]).map(nativeToken),...(key==='start'?time:key==='duration'?{dimension:'time',unit:'millisecond',frame:'duration'}:{})}))})));
@@ -57,5 +42,5 @@ export function createCalendarHost({state=initialCalendarState(),instanceId,vali
   return result;
  }]));
  const view=carrier=>nativeView(toNativeCalendarState(carrier));
- return createNativeToolHost({state,instanceId,scope:'calendar.lifecycle-store',operations:CALENDAR_TOOL_BINDINGS,handlers,view,validate:check?carrier=>check(toNativeCalendarState(carrier)):null,...limits});
+ return createNativeToolHost({state,instanceId,scope:'calendar.lifecycle-store',toolInterface,handlers,view,validate:check?carrier=>check(toNativeCalendarState(carrier)):null,...limits});
 }

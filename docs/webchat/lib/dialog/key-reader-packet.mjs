@@ -1,6 +1,6 @@
 // Explicit offline/runtime packet boundary; no model loading or execution admission.
 import {validateKeyReaderLayout} from './key-reader-layout.mjs?v=13da6b9284';
-import {copyHostData} from '../../worlds/native-tool-host.mjs?v=cf38a0ae11';
+import {copyHostData} from '../../worlds/native-tool-host.mjs?v=ecc9d8b538';
 const hash=value=>typeof value==='string'&&/^[a-f0-9]{64}$/.test(value);
 const digest=async text=>Array.from(new Uint8Array(await globalThis.crypto.subtle.digest('SHA-256',new TextEncoder().encode(text))),b=>b.toString(16).padStart(2,'0')).join('');
 const object=value=>value!==null&&typeof value==='object'&&!Array.isArray(value);

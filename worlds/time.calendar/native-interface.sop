@@ -1,0 +1,645 @@
+# Native tool interface owned by time.calendar.
+@native.time.calendar.scope std.capability.scope instance="time.calendar" version="1"
+@native.time.calendar.op.calendar.calendar.add std.capability.operation scope=$native.time.calendar.scope name="calendar.calendar.add" act=make on="time.calendar.calendar" order=0 eligible=true
+@native.time.calendar.op.calendar.calendar.add.param.id std.capability.parameter operation=$native.time.calendar.op.calendar.calendar.add name="id" kind=string required=true
+@native.time.calendar.op.calendar.calendar.add.param.label std.capability.parameter operation=$native.time.calendar.op.calendar.calendar.add name="label" kind=string required=true
+@native.time.calendar.op.calendar.calendar.add.param.colour std.capability.parameter operation=$native.time.calendar.op.calendar.calendar.add name="colour" kind=string
+@native.time.calendar.value.5 std.capability.arg name="subject" value="personal calendar"
+@native.time.calendar.value.6 std.capability.arg name="reference" value=true
+@native.time.calendar.value.7 std.capability.arg name="label" value="in calendar"
+@native.time.calendar.value.8 std.capability.record entry=$native.time.calendar.value.6 entry=$native.time.calendar.value.7
+@native.time.calendar.value.9 std.capability.arg name="calendar" value=$native.time.calendar.value.8
+@native.time.calendar.value.10 std.capability.arg name="reference" value=true
+@native.time.calendar.value.11 std.capability.arg name="label" value="in room"
+@native.time.calendar.value.12 std.capability.record entry=$native.time.calendar.value.10 entry=$native.time.calendar.value.11
+@native.time.calendar.value.13 std.capability.arg name="room" value=$native.time.calendar.value.12
+@native.time.calendar.value.14 std.capability.arg name="format" value="unix-ms"
+@native.time.calendar.value.15 std.capability.arg name="label" value="starting at"
+@native.time.calendar.value.16 std.capability.record entry=$native.time.calendar.value.14 entry=$native.time.calendar.value.15
+@native.time.calendar.value.17 std.capability.arg name="start" value=$native.time.calendar.value.16
+@native.time.calendar.value.18 std.capability.arg name="format" value="duration-ms"
+@native.time.calendar.value.19 std.capability.arg name="label" value="lasting"
+@native.time.calendar.value.20 std.capability.record entry=$native.time.calendar.value.18 entry=$native.time.calendar.value.19
+@native.time.calendar.value.21 std.capability.arg name="duration" value=$native.time.calendar.value.20
+@native.time.calendar.value.22 std.capability.arg name="reference" value=true
+@native.time.calendar.value.23 std.capability.arg name="label" value="with participants"
+@native.time.calendar.value.24 std.capability.arg name="hiddenIfEmpty" value=true
+@native.time.calendar.value.25 std.capability.record entry=$native.time.calendar.value.22 entry=$native.time.calendar.value.23 entry=$native.time.calendar.value.24
+@native.time.calendar.value.26 std.capability.arg name="participants" value=$native.time.calendar.value.25
+@native.time.calendar.value.27 std.capability.arg name="label" value="with notes"
+@native.time.calendar.value.28 std.capability.arg name="hiddenIfEmpty" value=true
+@native.time.calendar.value.29 std.capability.record entry=$native.time.calendar.value.27 entry=$native.time.calendar.value.28
+@native.time.calendar.value.30 std.capability.arg name="notes" value=$native.time.calendar.value.29
+@native.time.calendar.value.31 std.capability.record entry=$native.time.calendar.value.9 entry=$native.time.calendar.value.13 entry=$native.time.calendar.value.17 entry=$native.time.calendar.value.21 entry=$native.time.calendar.value.26 entry=$native.time.calendar.value.30
+@native.time.calendar.value.32 std.capability.arg name="parameters" value=$native.time.calendar.value.31
+@native.time.calendar.value.33 std.capability.record entry=$native.time.calendar.value.5 entry=$native.time.calendar.value.32
+@native.time.calendar.value.34 std.capability.arg name="intent" value=$native.time.calendar.value.33
+@native.time.calendar.op.calendar.calendar.add.metadata app.native.metadata operation=$native.time.calendar.op.calendar.calendar.add field=$native.time.calendar.value.34
+@native.time.calendar.op.calendar.calendar.change std.capability.operation scope=$native.time.calendar.scope name="calendar.calendar.change" act=change on="time.calendar.calendar" order=1 eligible=true
+@native.time.calendar.op.calendar.calendar.change.param.id std.capability.parameter operation=$native.time.calendar.op.calendar.calendar.change name="id" kind=string required=true
+@native.time.calendar.op.calendar.calendar.change.param.label std.capability.parameter operation=$native.time.calendar.op.calendar.calendar.change name="label" kind=string required=false
+@native.time.calendar.op.calendar.calendar.change.param.colour std.capability.parameter operation=$native.time.calendar.op.calendar.calendar.change name="colour" kind=string required=false
+@native.time.calendar.value.40 std.capability.arg name="subject" value="personal calendar"
+@native.time.calendar.value.41 std.capability.arg name="reference" value=true
+@native.time.calendar.value.42 std.capability.arg name="label" value="in calendar"
+@native.time.calendar.value.43 std.capability.record entry=$native.time.calendar.value.41 entry=$native.time.calendar.value.42
+@native.time.calendar.value.44 std.capability.arg name="calendar" value=$native.time.calendar.value.43
+@native.time.calendar.value.45 std.capability.arg name="reference" value=true
+@native.time.calendar.value.46 std.capability.arg name="label" value="in room"
+@native.time.calendar.value.47 std.capability.record entry=$native.time.calendar.value.45 entry=$native.time.calendar.value.46
+@native.time.calendar.value.48 std.capability.arg name="room" value=$native.time.calendar.value.47
+@native.time.calendar.value.49 std.capability.arg name="format" value="unix-ms"
+@native.time.calendar.value.50 std.capability.arg name="label" value="starting at"
+@native.time.calendar.value.51 std.capability.record entry=$native.time.calendar.value.49 entry=$native.time.calendar.value.50
+@native.time.calendar.value.52 std.capability.arg name="start" value=$native.time.calendar.value.51
+@native.time.calendar.value.53 std.capability.arg name="format" value="duration-ms"
+@native.time.calendar.value.54 std.capability.arg name="label" value="lasting"
+@native.time.calendar.value.55 std.capability.record entry=$native.time.calendar.value.53 entry=$native.time.calendar.value.54
+@native.time.calendar.value.56 std.capability.arg name="duration" value=$native.time.calendar.value.55
+@native.time.calendar.value.57 std.capability.arg name="reference" value=true
+@native.time.calendar.value.58 std.capability.arg name="label" value="with participants"
+@native.time.calendar.value.59 std.capability.arg name="hiddenIfEmpty" value=true
+@native.time.calendar.value.60 std.capability.record entry=$native.time.calendar.value.57 entry=$native.time.calendar.value.58 entry=$native.time.calendar.value.59
+@native.time.calendar.value.61 std.capability.arg name="participants" value=$native.time.calendar.value.60
+@native.time.calendar.value.62 std.capability.arg name="label" value="with notes"
+@native.time.calendar.value.63 std.capability.arg name="hiddenIfEmpty" value=true
+@native.time.calendar.value.64 std.capability.record entry=$native.time.calendar.value.62 entry=$native.time.calendar.value.63
+@native.time.calendar.value.65 std.capability.arg name="notes" value=$native.time.calendar.value.64
+@native.time.calendar.value.66 std.capability.record entry=$native.time.calendar.value.44 entry=$native.time.calendar.value.48 entry=$native.time.calendar.value.52 entry=$native.time.calendar.value.56 entry=$native.time.calendar.value.61 entry=$native.time.calendar.value.65
+@native.time.calendar.value.67 std.capability.arg name="parameters" value=$native.time.calendar.value.66
+@native.time.calendar.value.68 std.capability.record entry=$native.time.calendar.value.40 entry=$native.time.calendar.value.67
+@native.time.calendar.value.69 std.capability.arg name="intent" value=$native.time.calendar.value.68
+@native.time.calendar.op.calendar.calendar.change.metadata app.native.metadata operation=$native.time.calendar.op.calendar.calendar.change field=$native.time.calendar.value.69
+@native.time.calendar.op.calendar.calendar.remove std.capability.operation scope=$native.time.calendar.scope name="calendar.calendar.remove" act=remove on="time.calendar.calendar" order=2 eligible=true
+@native.time.calendar.op.calendar.calendar.remove.param.id std.capability.parameter operation=$native.time.calendar.op.calendar.calendar.remove name="id" kind=string required=true
+@native.time.calendar.value.73 std.capability.arg name="subject" value="personal calendar"
+@native.time.calendar.value.74 std.capability.arg name="reference" value=true
+@native.time.calendar.value.75 std.capability.arg name="label" value="in calendar"
+@native.time.calendar.value.76 std.capability.record entry=$native.time.calendar.value.74 entry=$native.time.calendar.value.75
+@native.time.calendar.value.77 std.capability.arg name="calendar" value=$native.time.calendar.value.76
+@native.time.calendar.value.78 std.capability.arg name="reference" value=true
+@native.time.calendar.value.79 std.capability.arg name="label" value="in room"
+@native.time.calendar.value.80 std.capability.record entry=$native.time.calendar.value.78 entry=$native.time.calendar.value.79
+@native.time.calendar.value.81 std.capability.arg name="room" value=$native.time.calendar.value.80
+@native.time.calendar.value.82 std.capability.arg name="format" value="unix-ms"
+@native.time.calendar.value.83 std.capability.arg name="label" value="starting at"
+@native.time.calendar.value.84 std.capability.record entry=$native.time.calendar.value.82 entry=$native.time.calendar.value.83
+@native.time.calendar.value.85 std.capability.arg name="start" value=$native.time.calendar.value.84
+@native.time.calendar.value.86 std.capability.arg name="format" value="duration-ms"
+@native.time.calendar.value.87 std.capability.arg name="label" value="lasting"
+@native.time.calendar.value.88 std.capability.record entry=$native.time.calendar.value.86 entry=$native.time.calendar.value.87
+@native.time.calendar.value.89 std.capability.arg name="duration" value=$native.time.calendar.value.88
+@native.time.calendar.value.90 std.capability.arg name="reference" value=true
+@native.time.calendar.value.91 std.capability.arg name="label" value="with participants"
+@native.time.calendar.value.92 std.capability.arg name="hiddenIfEmpty" value=true
+@native.time.calendar.value.93 std.capability.record entry=$native.time.calendar.value.90 entry=$native.time.calendar.value.91 entry=$native.time.calendar.value.92
+@native.time.calendar.value.94 std.capability.arg name="participants" value=$native.time.calendar.value.93
+@native.time.calendar.value.95 std.capability.arg name="label" value="with notes"
+@native.time.calendar.value.96 std.capability.arg name="hiddenIfEmpty" value=true
+@native.time.calendar.value.97 std.capability.record entry=$native.time.calendar.value.95 entry=$native.time.calendar.value.96
+@native.time.calendar.value.98 std.capability.arg name="notes" value=$native.time.calendar.value.97
+@native.time.calendar.value.99 std.capability.record entry=$native.time.calendar.value.77 entry=$native.time.calendar.value.81 entry=$native.time.calendar.value.85 entry=$native.time.calendar.value.89 entry=$native.time.calendar.value.94 entry=$native.time.calendar.value.98
+@native.time.calendar.value.100 std.capability.arg name="parameters" value=$native.time.calendar.value.99
+@native.time.calendar.value.101 std.capability.record entry=$native.time.calendar.value.73 entry=$native.time.calendar.value.100
+@native.time.calendar.value.102 std.capability.arg name="intent" value=$native.time.calendar.value.101
+@native.time.calendar.op.calendar.calendar.remove.metadata app.native.metadata operation=$native.time.calendar.op.calendar.calendar.remove field=$native.time.calendar.value.102
+@native.time.calendar.op.calendar.person.add std.capability.operation scope=$native.time.calendar.scope name="calendar.person.add" act=make on="time.calendar.person" order=3 eligible=true
+@native.time.calendar.op.calendar.person.add.param.id std.capability.parameter operation=$native.time.calendar.op.calendar.person.add name="id" kind=string required=true
+@native.time.calendar.op.calendar.person.add.param.label std.capability.parameter operation=$native.time.calendar.op.calendar.person.add name="label" kind=string required=true
+@native.time.calendar.value.107 std.capability.arg name="subject" value="person"
+@native.time.calendar.value.108 std.capability.arg name="reference" value=true
+@native.time.calendar.value.109 std.capability.arg name="label" value="in calendar"
+@native.time.calendar.value.110 std.capability.record entry=$native.time.calendar.value.108 entry=$native.time.calendar.value.109
+@native.time.calendar.value.111 std.capability.arg name="calendar" value=$native.time.calendar.value.110
+@native.time.calendar.value.112 std.capability.arg name="reference" value=true
+@native.time.calendar.value.113 std.capability.arg name="label" value="in room"
+@native.time.calendar.value.114 std.capability.record entry=$native.time.calendar.value.112 entry=$native.time.calendar.value.113
+@native.time.calendar.value.115 std.capability.arg name="room" value=$native.time.calendar.value.114
+@native.time.calendar.value.116 std.capability.arg name="format" value="unix-ms"
+@native.time.calendar.value.117 std.capability.arg name="label" value="starting at"
+@native.time.calendar.value.118 std.capability.record entry=$native.time.calendar.value.116 entry=$native.time.calendar.value.117
+@native.time.calendar.value.119 std.capability.arg name="start" value=$native.time.calendar.value.118
+@native.time.calendar.value.120 std.capability.arg name="format" value="duration-ms"
+@native.time.calendar.value.121 std.capability.arg name="label" value="lasting"
+@native.time.calendar.value.122 std.capability.record entry=$native.time.calendar.value.120 entry=$native.time.calendar.value.121
+@native.time.calendar.value.123 std.capability.arg name="duration" value=$native.time.calendar.value.122
+@native.time.calendar.value.124 std.capability.arg name="reference" value=true
+@native.time.calendar.value.125 std.capability.arg name="label" value="with participants"
+@native.time.calendar.value.126 std.capability.arg name="hiddenIfEmpty" value=true
+@native.time.calendar.value.127 std.capability.record entry=$native.time.calendar.value.124 entry=$native.time.calendar.value.125 entry=$native.time.calendar.value.126
+@native.time.calendar.value.128 std.capability.arg name="participants" value=$native.time.calendar.value.127
+@native.time.calendar.value.129 std.capability.arg name="label" value="with notes"
+@native.time.calendar.value.130 std.capability.arg name="hiddenIfEmpty" value=true
+@native.time.calendar.value.131 std.capability.record entry=$native.time.calendar.value.129 entry=$native.time.calendar.value.130
+@native.time.calendar.value.132 std.capability.arg name="notes" value=$native.time.calendar.value.131
+@native.time.calendar.value.133 std.capability.record entry=$native.time.calendar.value.111 entry=$native.time.calendar.value.115 entry=$native.time.calendar.value.119 entry=$native.time.calendar.value.123 entry=$native.time.calendar.value.128 entry=$native.time.calendar.value.132
+@native.time.calendar.value.134 std.capability.arg name="parameters" value=$native.time.calendar.value.133
+@native.time.calendar.value.135 std.capability.record entry=$native.time.calendar.value.107 entry=$native.time.calendar.value.134
+@native.time.calendar.value.136 std.capability.arg name="intent" value=$native.time.calendar.value.135
+@native.time.calendar.op.calendar.person.add.metadata app.native.metadata operation=$native.time.calendar.op.calendar.person.add field=$native.time.calendar.value.136
+@native.time.calendar.op.calendar.person.change std.capability.operation scope=$native.time.calendar.scope name="calendar.person.change" act=change on="time.calendar.person" order=4 eligible=true
+@native.time.calendar.op.calendar.person.change.param.id std.capability.parameter operation=$native.time.calendar.op.calendar.person.change name="id" kind=string required=true
+@native.time.calendar.op.calendar.person.change.param.label std.capability.parameter operation=$native.time.calendar.op.calendar.person.change name="label" kind=string required=false
+@native.time.calendar.value.141 std.capability.arg name="subject" value="person"
+@native.time.calendar.value.142 std.capability.arg name="reference" value=true
+@native.time.calendar.value.143 std.capability.arg name="label" value="in calendar"
+@native.time.calendar.value.144 std.capability.record entry=$native.time.calendar.value.142 entry=$native.time.calendar.value.143
+@native.time.calendar.value.145 std.capability.arg name="calendar" value=$native.time.calendar.value.144
+@native.time.calendar.value.146 std.capability.arg name="reference" value=true
+@native.time.calendar.value.147 std.capability.arg name="label" value="in room"
+@native.time.calendar.value.148 std.capability.record entry=$native.time.calendar.value.146 entry=$native.time.calendar.value.147
+@native.time.calendar.value.149 std.capability.arg name="room" value=$native.time.calendar.value.148
+@native.time.calendar.value.150 std.capability.arg name="format" value="unix-ms"
+@native.time.calendar.value.151 std.capability.arg name="label" value="starting at"
+@native.time.calendar.value.152 std.capability.record entry=$native.time.calendar.value.150 entry=$native.time.calendar.value.151
+@native.time.calendar.value.153 std.capability.arg name="start" value=$native.time.calendar.value.152
+@native.time.calendar.value.154 std.capability.arg name="format" value="duration-ms"
+@native.time.calendar.value.155 std.capability.arg name="label" value="lasting"
+@native.time.calendar.value.156 std.capability.record entry=$native.time.calendar.value.154 entry=$native.time.calendar.value.155
+@native.time.calendar.value.157 std.capability.arg name="duration" value=$native.time.calendar.value.156
+@native.time.calendar.value.158 std.capability.arg name="reference" value=true
+@native.time.calendar.value.159 std.capability.arg name="label" value="with participants"
+@native.time.calendar.value.160 std.capability.arg name="hiddenIfEmpty" value=true
+@native.time.calendar.value.161 std.capability.record entry=$native.time.calendar.value.158 entry=$native.time.calendar.value.159 entry=$native.time.calendar.value.160
+@native.time.calendar.value.162 std.capability.arg name="participants" value=$native.time.calendar.value.161
+@native.time.calendar.value.163 std.capability.arg name="label" value="with notes"
+@native.time.calendar.value.164 std.capability.arg name="hiddenIfEmpty" value=true
+@native.time.calendar.value.165 std.capability.record entry=$native.time.calendar.value.163 entry=$native.time.calendar.value.164
+@native.time.calendar.value.166 std.capability.arg name="notes" value=$native.time.calendar.value.165
+@native.time.calendar.value.167 std.capability.record entry=$native.time.calendar.value.145 entry=$native.time.calendar.value.149 entry=$native.time.calendar.value.153 entry=$native.time.calendar.value.157 entry=$native.time.calendar.value.162 entry=$native.time.calendar.value.166
+@native.time.calendar.value.168 std.capability.arg name="parameters" value=$native.time.calendar.value.167
+@native.time.calendar.value.169 std.capability.record entry=$native.time.calendar.value.141 entry=$native.time.calendar.value.168
+@native.time.calendar.value.170 std.capability.arg name="intent" value=$native.time.calendar.value.169
+@native.time.calendar.op.calendar.person.change.metadata app.native.metadata operation=$native.time.calendar.op.calendar.person.change field=$native.time.calendar.value.170
+@native.time.calendar.op.calendar.person.remove std.capability.operation scope=$native.time.calendar.scope name="calendar.person.remove" act=remove on="time.calendar.person" order=5 eligible=true
+@native.time.calendar.op.calendar.person.remove.param.id std.capability.parameter operation=$native.time.calendar.op.calendar.person.remove name="id" kind=string required=true
+@native.time.calendar.value.174 std.capability.arg name="subject" value="person"
+@native.time.calendar.value.175 std.capability.arg name="reference" value=true
+@native.time.calendar.value.176 std.capability.arg name="label" value="in calendar"
+@native.time.calendar.value.177 std.capability.record entry=$native.time.calendar.value.175 entry=$native.time.calendar.value.176
+@native.time.calendar.value.178 std.capability.arg name="calendar" value=$native.time.calendar.value.177
+@native.time.calendar.value.179 std.capability.arg name="reference" value=true
+@native.time.calendar.value.180 std.capability.arg name="label" value="in room"
+@native.time.calendar.value.181 std.capability.record entry=$native.time.calendar.value.179 entry=$native.time.calendar.value.180
+@native.time.calendar.value.182 std.capability.arg name="room" value=$native.time.calendar.value.181
+@native.time.calendar.value.183 std.capability.arg name="format" value="unix-ms"
+@native.time.calendar.value.184 std.capability.arg name="label" value="starting at"
+@native.time.calendar.value.185 std.capability.record entry=$native.time.calendar.value.183 entry=$native.time.calendar.value.184
+@native.time.calendar.value.186 std.capability.arg name="start" value=$native.time.calendar.value.185
+@native.time.calendar.value.187 std.capability.arg name="format" value="duration-ms"
+@native.time.calendar.value.188 std.capability.arg name="label" value="lasting"
+@native.time.calendar.value.189 std.capability.record entry=$native.time.calendar.value.187 entry=$native.time.calendar.value.188
+@native.time.calendar.value.190 std.capability.arg name="duration" value=$native.time.calendar.value.189
+@native.time.calendar.value.191 std.capability.arg name="reference" value=true
+@native.time.calendar.value.192 std.capability.arg name="label" value="with participants"
+@native.time.calendar.value.193 std.capability.arg name="hiddenIfEmpty" value=true
+@native.time.calendar.value.194 std.capability.record entry=$native.time.calendar.value.191 entry=$native.time.calendar.value.192 entry=$native.time.calendar.value.193
+@native.time.calendar.value.195 std.capability.arg name="participants" value=$native.time.calendar.value.194
+@native.time.calendar.value.196 std.capability.arg name="label" value="with notes"
+@native.time.calendar.value.197 std.capability.arg name="hiddenIfEmpty" value=true
+@native.time.calendar.value.198 std.capability.record entry=$native.time.calendar.value.196 entry=$native.time.calendar.value.197
+@native.time.calendar.value.199 std.capability.arg name="notes" value=$native.time.calendar.value.198
+@native.time.calendar.value.200 std.capability.record entry=$native.time.calendar.value.178 entry=$native.time.calendar.value.182 entry=$native.time.calendar.value.186 entry=$native.time.calendar.value.190 entry=$native.time.calendar.value.195 entry=$native.time.calendar.value.199
+@native.time.calendar.value.201 std.capability.arg name="parameters" value=$native.time.calendar.value.200
+@native.time.calendar.value.202 std.capability.record entry=$native.time.calendar.value.174 entry=$native.time.calendar.value.201
+@native.time.calendar.value.203 std.capability.arg name="intent" value=$native.time.calendar.value.202
+@native.time.calendar.op.calendar.person.remove.metadata app.native.metadata operation=$native.time.calendar.op.calendar.person.remove field=$native.time.calendar.value.203
+@native.time.calendar.op.calendar.room.add std.capability.operation scope=$native.time.calendar.scope name="calendar.room.add" act=make on="time.calendar.room" order=6 eligible=true
+@native.time.calendar.op.calendar.room.add.param.id std.capability.parameter operation=$native.time.calendar.op.calendar.room.add name="id" kind=string required=true
+@native.time.calendar.op.calendar.room.add.param.label std.capability.parameter operation=$native.time.calendar.op.calendar.room.add name="label" kind=string required=true
+@native.time.calendar.op.calendar.room.add.param.capacity std.capability.parameter operation=$native.time.calendar.op.calendar.room.add name="capacity" kind=integer min=1
+@native.time.calendar.op.calendar.room.add.param.location std.capability.parameter operation=$native.time.calendar.op.calendar.room.add name="location" kind=string
+@native.time.calendar.value.210 std.capability.arg name="subject" value="room"
+@native.time.calendar.value.211 std.capability.arg name="reference" value=true
+@native.time.calendar.value.212 std.capability.arg name="label" value="in calendar"
+@native.time.calendar.value.213 std.capability.record entry=$native.time.calendar.value.211 entry=$native.time.calendar.value.212
+@native.time.calendar.value.214 std.capability.arg name="calendar" value=$native.time.calendar.value.213
+@native.time.calendar.value.215 std.capability.arg name="reference" value=true
+@native.time.calendar.value.216 std.capability.arg name="label" value="in room"
+@native.time.calendar.value.217 std.capability.record entry=$native.time.calendar.value.215 entry=$native.time.calendar.value.216
+@native.time.calendar.value.218 std.capability.arg name="room" value=$native.time.calendar.value.217
+@native.time.calendar.value.219 std.capability.arg name="format" value="unix-ms"
+@native.time.calendar.value.220 std.capability.arg name="label" value="starting at"
+@native.time.calendar.value.221 std.capability.record entry=$native.time.calendar.value.219 entry=$native.time.calendar.value.220
+@native.time.calendar.value.222 std.capability.arg name="start" value=$native.time.calendar.value.221
+@native.time.calendar.value.223 std.capability.arg name="format" value="duration-ms"
+@native.time.calendar.value.224 std.capability.arg name="label" value="lasting"
+@native.time.calendar.value.225 std.capability.record entry=$native.time.calendar.value.223 entry=$native.time.calendar.value.224
+@native.time.calendar.value.226 std.capability.arg name="duration" value=$native.time.calendar.value.225
+@native.time.calendar.value.227 std.capability.arg name="reference" value=true
+@native.time.calendar.value.228 std.capability.arg name="label" value="with participants"
+@native.time.calendar.value.229 std.capability.arg name="hiddenIfEmpty" value=true
+@native.time.calendar.value.230 std.capability.record entry=$native.time.calendar.value.227 entry=$native.time.calendar.value.228 entry=$native.time.calendar.value.229
+@native.time.calendar.value.231 std.capability.arg name="participants" value=$native.time.calendar.value.230
+@native.time.calendar.value.232 std.capability.arg name="label" value="with notes"
+@native.time.calendar.value.233 std.capability.arg name="hiddenIfEmpty" value=true
+@native.time.calendar.value.234 std.capability.record entry=$native.time.calendar.value.232 entry=$native.time.calendar.value.233
+@native.time.calendar.value.235 std.capability.arg name="notes" value=$native.time.calendar.value.234
+@native.time.calendar.value.236 std.capability.record entry=$native.time.calendar.value.214 entry=$native.time.calendar.value.218 entry=$native.time.calendar.value.222 entry=$native.time.calendar.value.226 entry=$native.time.calendar.value.231 entry=$native.time.calendar.value.235
+@native.time.calendar.value.237 std.capability.arg name="parameters" value=$native.time.calendar.value.236
+@native.time.calendar.value.238 std.capability.record entry=$native.time.calendar.value.210 entry=$native.time.calendar.value.237
+@native.time.calendar.value.239 std.capability.arg name="intent" value=$native.time.calendar.value.238
+@native.time.calendar.op.calendar.room.add.metadata app.native.metadata operation=$native.time.calendar.op.calendar.room.add field=$native.time.calendar.value.239
+@native.time.calendar.op.calendar.room.change std.capability.operation scope=$native.time.calendar.scope name="calendar.room.change" act=change on="time.calendar.room" order=7 eligible=true
+@native.time.calendar.op.calendar.room.change.param.id std.capability.parameter operation=$native.time.calendar.op.calendar.room.change name="id" kind=string required=true
+@native.time.calendar.op.calendar.room.change.param.label std.capability.parameter operation=$native.time.calendar.op.calendar.room.change name="label" kind=string required=false
+@native.time.calendar.op.calendar.room.change.param.capacity std.capability.parameter operation=$native.time.calendar.op.calendar.room.change name="capacity" kind=integer required=false nullable=true min=1
+@native.time.calendar.op.calendar.room.change.param.location std.capability.parameter operation=$native.time.calendar.op.calendar.room.change name="location" kind=string required=false nullable=true
+@native.time.calendar.value.246 std.capability.arg name="subject" value="room"
+@native.time.calendar.value.247 std.capability.arg name="reference" value=true
+@native.time.calendar.value.248 std.capability.arg name="label" value="in calendar"
+@native.time.calendar.value.249 std.capability.record entry=$native.time.calendar.value.247 entry=$native.time.calendar.value.248
+@native.time.calendar.value.250 std.capability.arg name="calendar" value=$native.time.calendar.value.249
+@native.time.calendar.value.251 std.capability.arg name="reference" value=true
+@native.time.calendar.value.252 std.capability.arg name="label" value="in room"
+@native.time.calendar.value.253 std.capability.record entry=$native.time.calendar.value.251 entry=$native.time.calendar.value.252
+@native.time.calendar.value.254 std.capability.arg name="room" value=$native.time.calendar.value.253
+@native.time.calendar.value.255 std.capability.arg name="format" value="unix-ms"
+@native.time.calendar.value.256 std.capability.arg name="label" value="starting at"
+@native.time.calendar.value.257 std.capability.record entry=$native.time.calendar.value.255 entry=$native.time.calendar.value.256
+@native.time.calendar.value.258 std.capability.arg name="start" value=$native.time.calendar.value.257
+@native.time.calendar.value.259 std.capability.arg name="format" value="duration-ms"
+@native.time.calendar.value.260 std.capability.arg name="label" value="lasting"
+@native.time.calendar.value.261 std.capability.record entry=$native.time.calendar.value.259 entry=$native.time.calendar.value.260
+@native.time.calendar.value.262 std.capability.arg name="duration" value=$native.time.calendar.value.261
+@native.time.calendar.value.263 std.capability.arg name="reference" value=true
+@native.time.calendar.value.264 std.capability.arg name="label" value="with participants"
+@native.time.calendar.value.265 std.capability.arg name="hiddenIfEmpty" value=true
+@native.time.calendar.value.266 std.capability.record entry=$native.time.calendar.value.263 entry=$native.time.calendar.value.264 entry=$native.time.calendar.value.265
+@native.time.calendar.value.267 std.capability.arg name="participants" value=$native.time.calendar.value.266
+@native.time.calendar.value.268 std.capability.arg name="label" value="with notes"
+@native.time.calendar.value.269 std.capability.arg name="hiddenIfEmpty" value=true
+@native.time.calendar.value.270 std.capability.record entry=$native.time.calendar.value.268 entry=$native.time.calendar.value.269
+@native.time.calendar.value.271 std.capability.arg name="notes" value=$native.time.calendar.value.270
+@native.time.calendar.value.272 std.capability.record entry=$native.time.calendar.value.250 entry=$native.time.calendar.value.254 entry=$native.time.calendar.value.258 entry=$native.time.calendar.value.262 entry=$native.time.calendar.value.267 entry=$native.time.calendar.value.271
+@native.time.calendar.value.273 std.capability.arg name="parameters" value=$native.time.calendar.value.272
+@native.time.calendar.value.274 std.capability.record entry=$native.time.calendar.value.246 entry=$native.time.calendar.value.273
+@native.time.calendar.value.275 std.capability.arg name="intent" value=$native.time.calendar.value.274
+@native.time.calendar.op.calendar.room.change.metadata app.native.metadata operation=$native.time.calendar.op.calendar.room.change field=$native.time.calendar.value.275
+@native.time.calendar.op.calendar.room.remove std.capability.operation scope=$native.time.calendar.scope name="calendar.room.remove" act=remove on="time.calendar.room" order=8 eligible=true
+@native.time.calendar.op.calendar.room.remove.param.id std.capability.parameter operation=$native.time.calendar.op.calendar.room.remove name="id" kind=string required=true
+@native.time.calendar.value.279 std.capability.arg name="subject" value="room"
+@native.time.calendar.value.280 std.capability.arg name="reference" value=true
+@native.time.calendar.value.281 std.capability.arg name="label" value="in calendar"
+@native.time.calendar.value.282 std.capability.record entry=$native.time.calendar.value.280 entry=$native.time.calendar.value.281
+@native.time.calendar.value.283 std.capability.arg name="calendar" value=$native.time.calendar.value.282
+@native.time.calendar.value.284 std.capability.arg name="reference" value=true
+@native.time.calendar.value.285 std.capability.arg name="label" value="in room"
+@native.time.calendar.value.286 std.capability.record entry=$native.time.calendar.value.284 entry=$native.time.calendar.value.285
+@native.time.calendar.value.287 std.capability.arg name="room" value=$native.time.calendar.value.286
+@native.time.calendar.value.288 std.capability.arg name="format" value="unix-ms"
+@native.time.calendar.value.289 std.capability.arg name="label" value="starting at"
+@native.time.calendar.value.290 std.capability.record entry=$native.time.calendar.value.288 entry=$native.time.calendar.value.289
+@native.time.calendar.value.291 std.capability.arg name="start" value=$native.time.calendar.value.290
+@native.time.calendar.value.292 std.capability.arg name="format" value="duration-ms"
+@native.time.calendar.value.293 std.capability.arg name="label" value="lasting"
+@native.time.calendar.value.294 std.capability.record entry=$native.time.calendar.value.292 entry=$native.time.calendar.value.293
+@native.time.calendar.value.295 std.capability.arg name="duration" value=$native.time.calendar.value.294
+@native.time.calendar.value.296 std.capability.arg name="reference" value=true
+@native.time.calendar.value.297 std.capability.arg name="label" value="with participants"
+@native.time.calendar.value.298 std.capability.arg name="hiddenIfEmpty" value=true
+@native.time.calendar.value.299 std.capability.record entry=$native.time.calendar.value.296 entry=$native.time.calendar.value.297 entry=$native.time.calendar.value.298
+@native.time.calendar.value.300 std.capability.arg name="participants" value=$native.time.calendar.value.299
+@native.time.calendar.value.301 std.capability.arg name="label" value="with notes"
+@native.time.calendar.value.302 std.capability.arg name="hiddenIfEmpty" value=true
+@native.time.calendar.value.303 std.capability.record entry=$native.time.calendar.value.301 entry=$native.time.calendar.value.302
+@native.time.calendar.value.304 std.capability.arg name="notes" value=$native.time.calendar.value.303
+@native.time.calendar.value.305 std.capability.record entry=$native.time.calendar.value.283 entry=$native.time.calendar.value.287 entry=$native.time.calendar.value.291 entry=$native.time.calendar.value.295 entry=$native.time.calendar.value.300 entry=$native.time.calendar.value.304
+@native.time.calendar.value.306 std.capability.arg name="parameters" value=$native.time.calendar.value.305
+@native.time.calendar.value.307 std.capability.record entry=$native.time.calendar.value.279 entry=$native.time.calendar.value.306
+@native.time.calendar.value.308 std.capability.arg name="intent" value=$native.time.calendar.value.307
+@native.time.calendar.op.calendar.room.remove.metadata app.native.metadata operation=$native.time.calendar.op.calendar.room.remove field=$native.time.calendar.value.308
+@native.time.calendar.op.calendar.meeting.add std.capability.operation scope=$native.time.calendar.scope name="calendar.meeting.add" act=make on="time.calendar.meeting" order=9 eligible=true
+@native.time.calendar.op.calendar.meeting.add.param.id std.capability.parameter operation=$native.time.calendar.op.calendar.meeting.add name="id" kind=string required=true
+@native.time.calendar.op.calendar.meeting.add.param.title std.capability.parameter operation=$native.time.calendar.op.calendar.meeting.add name="title" kind=string required=true
+@native.time.calendar.op.calendar.meeting.add.param.start std.capability.parameter operation=$native.time.calendar.op.calendar.meeting.add name="start" kind=integer required=true
+@native.time.calendar.op.calendar.meeting.add.param.duration std.capability.parameter operation=$native.time.calendar.op.calendar.meeting.add name="duration" kind=integer required=true min=1
+@native.time.calendar.op.calendar.meeting.add.param.participants std.capability.parameter operation=$native.time.calendar.op.calendar.meeting.add name="participants" kind=array required=true
+@native.time.calendar.op.calendar.meeting.add.param.room std.capability.parameter operation=$native.time.calendar.op.calendar.meeting.add name="room" kind=string required=true nullable=true
+@native.time.calendar.op.calendar.meeting.add.param.calendar std.capability.parameter operation=$native.time.calendar.op.calendar.meeting.add name="calendar" kind=string nullable=true
+@native.time.calendar.op.calendar.meeting.add.param.notes std.capability.parameter operation=$native.time.calendar.op.calendar.meeting.add name="notes" kind=string
+@native.time.calendar.value.319 std.capability.arg name="subject" value="event"
+@native.time.calendar.value.320 std.capability.arg name="reference" value=true
+@native.time.calendar.value.321 std.capability.arg name="label" value="in calendar"
+@native.time.calendar.value.322 std.capability.record entry=$native.time.calendar.value.320 entry=$native.time.calendar.value.321
+@native.time.calendar.value.323 std.capability.arg name="calendar" value=$native.time.calendar.value.322
+@native.time.calendar.value.324 std.capability.arg name="reference" value=true
+@native.time.calendar.value.325 std.capability.arg name="label" value="in room"
+@native.time.calendar.value.326 std.capability.record entry=$native.time.calendar.value.324 entry=$native.time.calendar.value.325
+@native.time.calendar.value.327 std.capability.arg name="room" value=$native.time.calendar.value.326
+@native.time.calendar.value.328 std.capability.arg name="format" value="unix-ms"
+@native.time.calendar.value.329 std.capability.arg name="label" value="starting at"
+@native.time.calendar.value.330 std.capability.record entry=$native.time.calendar.value.328 entry=$native.time.calendar.value.329
+@native.time.calendar.value.331 std.capability.arg name="start" value=$native.time.calendar.value.330
+@native.time.calendar.value.332 std.capability.arg name="format" value="duration-ms"
+@native.time.calendar.value.333 std.capability.arg name="label" value="lasting"
+@native.time.calendar.value.334 std.capability.record entry=$native.time.calendar.value.332 entry=$native.time.calendar.value.333
+@native.time.calendar.value.335 std.capability.arg name="duration" value=$native.time.calendar.value.334
+@native.time.calendar.value.336 std.capability.arg name="reference" value=true
+@native.time.calendar.value.337 std.capability.arg name="label" value="with participants"
+@native.time.calendar.value.338 std.capability.arg name="hiddenIfEmpty" value=true
+@native.time.calendar.value.339 std.capability.record entry=$native.time.calendar.value.336 entry=$native.time.calendar.value.337 entry=$native.time.calendar.value.338
+@native.time.calendar.value.340 std.capability.arg name="participants" value=$native.time.calendar.value.339
+@native.time.calendar.value.341 std.capability.arg name="label" value="with notes"
+@native.time.calendar.value.342 std.capability.arg name="hiddenIfEmpty" value=true
+@native.time.calendar.value.343 std.capability.record entry=$native.time.calendar.value.341 entry=$native.time.calendar.value.342
+@native.time.calendar.value.344 std.capability.arg name="notes" value=$native.time.calendar.value.343
+@native.time.calendar.value.345 std.capability.record entry=$native.time.calendar.value.323 entry=$native.time.calendar.value.327 entry=$native.time.calendar.value.331 entry=$native.time.calendar.value.335 entry=$native.time.calendar.value.340 entry=$native.time.calendar.value.344
+@native.time.calendar.value.346 std.capability.arg name="parameters" value=$native.time.calendar.value.345
+@native.time.calendar.value.347 std.capability.record entry=$native.time.calendar.value.319 entry=$native.time.calendar.value.346
+@native.time.calendar.value.348 std.capability.arg name="intent" value=$native.time.calendar.value.347
+@native.time.calendar.op.calendar.meeting.add.metadata app.native.metadata operation=$native.time.calendar.op.calendar.meeting.add field=$native.time.calendar.value.348
+@native.time.calendar.op.calendar.event.select std.capability.operation scope=$native.time.calendar.scope name="calendar.event.select" act=pick on="time.calendar.meeting" order=10 eligible=true
+@native.time.calendar.op.calendar.event.select.param.id std.capability.parameter operation=$native.time.calendar.op.calendar.event.select name="id" kind=string required=true nullable=true
+@native.time.calendar.value.352 std.capability.arg name="key" value="selected"
+@native.time.calendar.value.353 std.capability.record entry=$native.time.calendar.value.352
+@native.time.calendar.value.354 std.capability.arg name="selection" value=$native.time.calendar.value.353
+@native.time.calendar.value.355 std.capability.record entry=$native.time.calendar.value.354
+@native.time.calendar.value.356 std.capability.arg name="effectScope" value=$native.time.calendar.value.355
+@native.time.calendar.value.357 std.capability.arg name="subject" value="event"
+@native.time.calendar.value.358 std.capability.arg name="reference" value=true
+@native.time.calendar.value.359 std.capability.arg name="label" value="in calendar"
+@native.time.calendar.value.360 std.capability.record entry=$native.time.calendar.value.358 entry=$native.time.calendar.value.359
+@native.time.calendar.value.361 std.capability.arg name="calendar" value=$native.time.calendar.value.360
+@native.time.calendar.value.362 std.capability.arg name="reference" value=true
+@native.time.calendar.value.363 std.capability.arg name="label" value="in room"
+@native.time.calendar.value.364 std.capability.record entry=$native.time.calendar.value.362 entry=$native.time.calendar.value.363
+@native.time.calendar.value.365 std.capability.arg name="room" value=$native.time.calendar.value.364
+@native.time.calendar.value.366 std.capability.arg name="format" value="unix-ms"
+@native.time.calendar.value.367 std.capability.arg name="label" value="starting at"
+@native.time.calendar.value.368 std.capability.record entry=$native.time.calendar.value.366 entry=$native.time.calendar.value.367
+@native.time.calendar.value.369 std.capability.arg name="start" value=$native.time.calendar.value.368
+@native.time.calendar.value.370 std.capability.arg name="format" value="duration-ms"
+@native.time.calendar.value.371 std.capability.arg name="label" value="lasting"
+@native.time.calendar.value.372 std.capability.record entry=$native.time.calendar.value.370 entry=$native.time.calendar.value.371
+@native.time.calendar.value.373 std.capability.arg name="duration" value=$native.time.calendar.value.372
+@native.time.calendar.value.374 std.capability.arg name="reference" value=true
+@native.time.calendar.value.375 std.capability.arg name="label" value="with participants"
+@native.time.calendar.value.376 std.capability.arg name="hiddenIfEmpty" value=true
+@native.time.calendar.value.377 std.capability.record entry=$native.time.calendar.value.374 entry=$native.time.calendar.value.375 entry=$native.time.calendar.value.376
+@native.time.calendar.value.378 std.capability.arg name="participants" value=$native.time.calendar.value.377
+@native.time.calendar.value.379 std.capability.arg name="label" value="with notes"
+@native.time.calendar.value.380 std.capability.arg name="hiddenIfEmpty" value=true
+@native.time.calendar.value.381 std.capability.record entry=$native.time.calendar.value.379 entry=$native.time.calendar.value.380
+@native.time.calendar.value.382 std.capability.arg name="notes" value=$native.time.calendar.value.381
+@native.time.calendar.value.383 std.capability.record entry=$native.time.calendar.value.361 entry=$native.time.calendar.value.365 entry=$native.time.calendar.value.369 entry=$native.time.calendar.value.373 entry=$native.time.calendar.value.378 entry=$native.time.calendar.value.382
+@native.time.calendar.value.384 std.capability.arg name="parameters" value=$native.time.calendar.value.383
+@native.time.calendar.value.385 std.capability.record entry=$native.time.calendar.value.357 entry=$native.time.calendar.value.384
+@native.time.calendar.value.386 std.capability.arg name="intent" value=$native.time.calendar.value.385
+@native.time.calendar.op.calendar.event.select.metadata app.native.metadata operation=$native.time.calendar.op.calendar.event.select field=$native.time.calendar.value.356 field=$native.time.calendar.value.386
+@native.time.calendar.op.calendar.event.add std.capability.operation scope=$native.time.calendar.scope name="calendar.event.add" act=make on="time.calendar.meeting" order=11 eligible=true
+@native.time.calendar.op.calendar.event.add.param.id std.capability.parameter operation=$native.time.calendar.op.calendar.event.add name="id" kind=string required=true
+@native.time.calendar.op.calendar.event.add.param.title std.capability.parameter operation=$native.time.calendar.op.calendar.event.add name="title" kind=string required=true
+@native.time.calendar.op.calendar.event.add.param.start std.capability.parameter operation=$native.time.calendar.op.calendar.event.add name="start" kind=integer required=true
+@native.time.calendar.op.calendar.event.add.param.duration std.capability.parameter operation=$native.time.calendar.op.calendar.event.add name="duration" kind=integer required=true min=1
+@native.time.calendar.op.calendar.event.add.param.notes std.capability.parameter operation=$native.time.calendar.op.calendar.event.add name="notes" kind=string
+@native.time.calendar.value.394 std.capability.arg name="prefix" value="event"
+@native.time.calendar.value.395 std.capability.arg name="separator" value="-"
+@native.time.calendar.value.396 std.capability.record entry=$native.time.calendar.value.394 entry=$native.time.calendar.value.395
+@native.time.calendar.value.397 std.capability.arg name="unique" value=$native.time.calendar.value.396
+@native.time.calendar.value.398 std.capability.record entry=$native.time.calendar.value.397
+@native.time.calendar.value.399 std.capability.arg name="id" value=$native.time.calendar.value.398
+@native.time.calendar.value.400 std.capability.arg name="prefix" value="Event"
+@native.time.calendar.value.401 std.capability.record entry=$native.time.calendar.value.400
+@native.time.calendar.value.402 std.capability.arg name="unique" value=$native.time.calendar.value.401
+@native.time.calendar.value.403 std.capability.record entry=$native.time.calendar.value.402
+@native.time.calendar.value.404 std.capability.arg name="title" value=$native.time.calendar.value.403
+@native.time.calendar.value.405 std.capability.arg name="round" value=86400000
+@native.time.calendar.value.406 std.capability.arg name="offset" value=43200000
+@native.time.calendar.value.407 std.capability.record entry=$native.time.calendar.value.405 entry=$native.time.calendar.value.406
+@native.time.calendar.value.408 std.capability.arg name="now" value=$native.time.calendar.value.407
+@native.time.calendar.value.409 std.capability.record entry=$native.time.calendar.value.408
+@native.time.calendar.value.410 std.capability.arg name="start" value=$native.time.calendar.value.409
+@native.time.calendar.value.411 std.capability.arg name="value" value=3600000
+@native.time.calendar.value.412 std.capability.record entry=$native.time.calendar.value.411
+@native.time.calendar.value.413 std.capability.arg name="duration" value=$native.time.calendar.value.412
+@native.time.calendar.value.414 std.capability.record entry=$native.time.calendar.value.399 entry=$native.time.calendar.value.404 entry=$native.time.calendar.value.410 entry=$native.time.calendar.value.413
+@native.time.calendar.value.415 std.capability.arg name="args" value=$native.time.calendar.value.414
+@native.time.calendar.value.416 std.capability.record entry=$native.time.calendar.value.415
+@native.time.calendar.value.417 std.capability.item index=0 value=$native.time.calendar.value.416
+@native.time.calendar.value.418 std.capability.list member=$native.time.calendar.value.417
+@native.time.calendar.value.419 std.capability.arg name="sample" value=$native.time.calendar.value.418
+@native.time.calendar.value.420 std.capability.arg name="subject" value="event"
+@native.time.calendar.value.421 std.capability.arg name="reference" value=true
+@native.time.calendar.value.422 std.capability.arg name="label" value="in calendar"
+@native.time.calendar.value.423 std.capability.record entry=$native.time.calendar.value.421 entry=$native.time.calendar.value.422
+@native.time.calendar.value.424 std.capability.arg name="calendar" value=$native.time.calendar.value.423
+@native.time.calendar.value.425 std.capability.arg name="reference" value=true
+@native.time.calendar.value.426 std.capability.arg name="label" value="in room"
+@native.time.calendar.value.427 std.capability.record entry=$native.time.calendar.value.425 entry=$native.time.calendar.value.426
+@native.time.calendar.value.428 std.capability.arg name="room" value=$native.time.calendar.value.427
+@native.time.calendar.value.429 std.capability.arg name="format" value="unix-ms"
+@native.time.calendar.value.430 std.capability.arg name="label" value="starting at"
+@native.time.calendar.value.431 std.capability.record entry=$native.time.calendar.value.429 entry=$native.time.calendar.value.430
+@native.time.calendar.value.432 std.capability.arg name="start" value=$native.time.calendar.value.431
+@native.time.calendar.value.433 std.capability.arg name="format" value="duration-ms"
+@native.time.calendar.value.434 std.capability.arg name="label" value="lasting"
+@native.time.calendar.value.435 std.capability.record entry=$native.time.calendar.value.433 entry=$native.time.calendar.value.434
+@native.time.calendar.value.436 std.capability.arg name="duration" value=$native.time.calendar.value.435
+@native.time.calendar.value.437 std.capability.arg name="reference" value=true
+@native.time.calendar.value.438 std.capability.arg name="label" value="with participants"
+@native.time.calendar.value.439 std.capability.arg name="hiddenIfEmpty" value=true
+@native.time.calendar.value.440 std.capability.record entry=$native.time.calendar.value.437 entry=$native.time.calendar.value.438 entry=$native.time.calendar.value.439
+@native.time.calendar.value.441 std.capability.arg name="participants" value=$native.time.calendar.value.440
+@native.time.calendar.value.442 std.capability.arg name="label" value="with notes"
+@native.time.calendar.value.443 std.capability.arg name="hiddenIfEmpty" value=true
+@native.time.calendar.value.444 std.capability.record entry=$native.time.calendar.value.442 entry=$native.time.calendar.value.443
+@native.time.calendar.value.445 std.capability.arg name="notes" value=$native.time.calendar.value.444
+@native.time.calendar.value.446 std.capability.record entry=$native.time.calendar.value.424 entry=$native.time.calendar.value.428 entry=$native.time.calendar.value.432 entry=$native.time.calendar.value.436 entry=$native.time.calendar.value.441 entry=$native.time.calendar.value.445
+@native.time.calendar.value.447 std.capability.arg name="parameters" value=$native.time.calendar.value.446
+@native.time.calendar.value.448 std.capability.record entry=$native.time.calendar.value.420 entry=$native.time.calendar.value.447
+@native.time.calendar.value.449 std.capability.arg name="intent" value=$native.time.calendar.value.448
+@native.time.calendar.op.calendar.event.add.metadata app.native.metadata operation=$native.time.calendar.op.calendar.event.add field=$native.time.calendar.value.419 field=$native.time.calendar.value.449
+@native.time.calendar.op.calendar.meeting.change std.capability.operation scope=$native.time.calendar.scope name="calendar.meeting.change" act=change on="time.calendar.meeting" order=12 eligible=true
+@native.time.calendar.op.calendar.meeting.change.param.id std.capability.parameter operation=$native.time.calendar.op.calendar.meeting.change name="id" kind=string required=true
+@native.time.calendar.op.calendar.meeting.change.param.title std.capability.parameter operation=$native.time.calendar.op.calendar.meeting.change name="title" kind=string required=false
+@native.time.calendar.op.calendar.meeting.change.param.start std.capability.parameter operation=$native.time.calendar.op.calendar.meeting.change name="start" kind=integer required=false
+@native.time.calendar.op.calendar.meeting.change.param.duration std.capability.parameter operation=$native.time.calendar.op.calendar.meeting.change name="duration" kind=integer required=false min=1
+@native.time.calendar.op.calendar.meeting.change.param.participants std.capability.parameter operation=$native.time.calendar.op.calendar.meeting.change name="participants" kind=array required=false
+@native.time.calendar.op.calendar.meeting.change.param.room std.capability.parameter operation=$native.time.calendar.op.calendar.meeting.change name="room" kind=string required=false nullable=true
+@native.time.calendar.op.calendar.meeting.change.param.calendar std.capability.parameter operation=$native.time.calendar.op.calendar.meeting.change name="calendar" kind=string required=false nullable=true
+@native.time.calendar.op.calendar.meeting.change.param.notes std.capability.parameter operation=$native.time.calendar.op.calendar.meeting.change name="notes" kind=string required=false
+@native.time.calendar.value.460 std.capability.arg name="on" value="time.calendar.meeting"
+@native.time.calendar.value.461 std.capability.record entry=$native.time.calendar.value.460
+@native.time.calendar.value.462 std.capability.arg name="ref" value=$native.time.calendar.value.461
+@native.time.calendar.value.463 std.capability.record entry=$native.time.calendar.value.462
+@native.time.calendar.value.464 std.capability.arg name="id" value=$native.time.calendar.value.463
+@native.time.calendar.value.465 std.capability.arg name="prefix" value="Event"
+@native.time.calendar.value.466 std.capability.record entry=$native.time.calendar.value.465
+@native.time.calendar.value.467 std.capability.arg name="unique" value=$native.time.calendar.value.466
+@native.time.calendar.value.468 std.capability.record entry=$native.time.calendar.value.467
+@native.time.calendar.value.469 std.capability.arg name="title" value=$native.time.calendar.value.468
+@native.time.calendar.value.470 std.capability.record entry=$native.time.calendar.value.464 entry=$native.time.calendar.value.469
+@native.time.calendar.value.471 std.capability.arg name="args" value=$native.time.calendar.value.470
+@native.time.calendar.value.472 std.capability.record entry=$native.time.calendar.value.471
+@native.time.calendar.value.473 std.capability.item index=0 value=$native.time.calendar.value.472
+@native.time.calendar.value.474 std.capability.list member=$native.time.calendar.value.473
+@native.time.calendar.value.475 std.capability.arg name="sample" value=$native.time.calendar.value.474
+@native.time.calendar.value.476 std.capability.arg name="subject" value="event"
+@native.time.calendar.value.477 std.capability.arg name="reference" value=true
+@native.time.calendar.value.478 std.capability.arg name="label" value="in calendar"
+@native.time.calendar.value.479 std.capability.record entry=$native.time.calendar.value.477 entry=$native.time.calendar.value.478
+@native.time.calendar.value.480 std.capability.arg name="calendar" value=$native.time.calendar.value.479
+@native.time.calendar.value.481 std.capability.arg name="reference" value=true
+@native.time.calendar.value.482 std.capability.arg name="label" value="in room"
+@native.time.calendar.value.483 std.capability.record entry=$native.time.calendar.value.481 entry=$native.time.calendar.value.482
+@native.time.calendar.value.484 std.capability.arg name="room" value=$native.time.calendar.value.483
+@native.time.calendar.value.485 std.capability.arg name="format" value="unix-ms"
+@native.time.calendar.value.486 std.capability.arg name="label" value="starting at"
+@native.time.calendar.value.487 std.capability.record entry=$native.time.calendar.value.485 entry=$native.time.calendar.value.486
+@native.time.calendar.value.488 std.capability.arg name="start" value=$native.time.calendar.value.487
+@native.time.calendar.value.489 std.capability.arg name="format" value="duration-ms"
+@native.time.calendar.value.490 std.capability.arg name="label" value="lasting"
+@native.time.calendar.value.491 std.capability.record entry=$native.time.calendar.value.489 entry=$native.time.calendar.value.490
+@native.time.calendar.value.492 std.capability.arg name="duration" value=$native.time.calendar.value.491
+@native.time.calendar.value.493 std.capability.arg name="reference" value=true
+@native.time.calendar.value.494 std.capability.arg name="label" value="with participants"
+@native.time.calendar.value.495 std.capability.arg name="hiddenIfEmpty" value=true
+@native.time.calendar.value.496 std.capability.record entry=$native.time.calendar.value.493 entry=$native.time.calendar.value.494 entry=$native.time.calendar.value.495
+@native.time.calendar.value.497 std.capability.arg name="participants" value=$native.time.calendar.value.496
+@native.time.calendar.value.498 std.capability.arg name="label" value="with notes"
+@native.time.calendar.value.499 std.capability.arg name="hiddenIfEmpty" value=true
+@native.time.calendar.value.500 std.capability.record entry=$native.time.calendar.value.498 entry=$native.time.calendar.value.499
+@native.time.calendar.value.501 std.capability.arg name="notes" value=$native.time.calendar.value.500
+@native.time.calendar.value.502 std.capability.record entry=$native.time.calendar.value.480 entry=$native.time.calendar.value.484 entry=$native.time.calendar.value.488 entry=$native.time.calendar.value.492 entry=$native.time.calendar.value.497 entry=$native.time.calendar.value.501
+@native.time.calendar.value.503 std.capability.arg name="parameters" value=$native.time.calendar.value.502
+@native.time.calendar.value.504 std.capability.record entry=$native.time.calendar.value.476 entry=$native.time.calendar.value.503
+@native.time.calendar.value.505 std.capability.arg name="intent" value=$native.time.calendar.value.504
+@native.time.calendar.op.calendar.meeting.change.metadata app.native.metadata operation=$native.time.calendar.op.calendar.meeting.change field=$native.time.calendar.value.475 field=$native.time.calendar.value.505
+@native.time.calendar.op.calendar.meeting.move std.capability.operation scope=$native.time.calendar.scope name="calendar.meeting.move" act=place on="time.calendar.meeting" order=13 eligible=true
+@native.time.calendar.op.calendar.meeting.move.param.id std.capability.parameter operation=$native.time.calendar.op.calendar.meeting.move name="id" kind=string required=true
+@native.time.calendar.op.calendar.meeting.move.param.start std.capability.parameter operation=$native.time.calendar.op.calendar.meeting.move name="start" kind=integer required=true
+@native.time.calendar.value.510 std.capability.arg name="dimension" value="time"
+@native.time.calendar.value.511 std.capability.arg name="unit" value="millisecond"
+@native.time.calendar.value.512 std.capability.arg name="frame" value="unix"
+@native.time.calendar.value.513 std.capability.record entry=$native.time.calendar.value.510 entry=$native.time.calendar.value.511 entry=$native.time.calendar.value.512
+@native.time.calendar.value.514 std.capability.arg name="coordinates" value=$native.time.calendar.value.513
+@native.time.calendar.value.515 std.capability.arg name="subject" value="event"
+@native.time.calendar.value.516 std.capability.arg name="reference" value=true
+@native.time.calendar.value.517 std.capability.arg name="label" value="in calendar"
+@native.time.calendar.value.518 std.capability.record entry=$native.time.calendar.value.516 entry=$native.time.calendar.value.517
+@native.time.calendar.value.519 std.capability.arg name="calendar" value=$native.time.calendar.value.518
+@native.time.calendar.value.520 std.capability.arg name="reference" value=true
+@native.time.calendar.value.521 std.capability.arg name="label" value="in room"
+@native.time.calendar.value.522 std.capability.record entry=$native.time.calendar.value.520 entry=$native.time.calendar.value.521
+@native.time.calendar.value.523 std.capability.arg name="room" value=$native.time.calendar.value.522
+@native.time.calendar.value.524 std.capability.arg name="format" value="unix-ms"
+@native.time.calendar.value.525 std.capability.arg name="label" value="starting at"
+@native.time.calendar.value.526 std.capability.record entry=$native.time.calendar.value.524 entry=$native.time.calendar.value.525
+@native.time.calendar.value.527 std.capability.arg name="start" value=$native.time.calendar.value.526
+@native.time.calendar.value.528 std.capability.arg name="format" value="duration-ms"
+@native.time.calendar.value.529 std.capability.arg name="label" value="lasting"
+@native.time.calendar.value.530 std.capability.record entry=$native.time.calendar.value.528 entry=$native.time.calendar.value.529
+@native.time.calendar.value.531 std.capability.arg name="duration" value=$native.time.calendar.value.530
+@native.time.calendar.value.532 std.capability.arg name="reference" value=true
+@native.time.calendar.value.533 std.capability.arg name="label" value="with participants"
+@native.time.calendar.value.534 std.capability.arg name="hiddenIfEmpty" value=true
+@native.time.calendar.value.535 std.capability.record entry=$native.time.calendar.value.532 entry=$native.time.calendar.value.533 entry=$native.time.calendar.value.534
+@native.time.calendar.value.536 std.capability.arg name="participants" value=$native.time.calendar.value.535
+@native.time.calendar.value.537 std.capability.arg name="label" value="with notes"
+@native.time.calendar.value.538 std.capability.arg name="hiddenIfEmpty" value=true
+@native.time.calendar.value.539 std.capability.record entry=$native.time.calendar.value.537 entry=$native.time.calendar.value.538
+@native.time.calendar.value.540 std.capability.arg name="notes" value=$native.time.calendar.value.539
+@native.time.calendar.value.541 std.capability.record entry=$native.time.calendar.value.519 entry=$native.time.calendar.value.523 entry=$native.time.calendar.value.527 entry=$native.time.calendar.value.531 entry=$native.time.calendar.value.536 entry=$native.time.calendar.value.540
+@native.time.calendar.value.542 std.capability.arg name="parameters" value=$native.time.calendar.value.541
+@native.time.calendar.value.543 std.capability.record entry=$native.time.calendar.value.515 entry=$native.time.calendar.value.542
+@native.time.calendar.value.544 std.capability.arg name="intent" value=$native.time.calendar.value.543
+@native.time.calendar.op.calendar.meeting.move.metadata app.native.metadata operation=$native.time.calendar.op.calendar.meeting.move field=$native.time.calendar.value.514 field=$native.time.calendar.value.544
+@native.time.calendar.op.calendar.events.remove std.capability.operation scope=$native.time.calendar.scope name="calendar.events.remove" act=remove on="time.calendar.meeting" order=14 eligible=true
+@native.time.calendar.op.calendar.events.remove.param.ids std.capability.parameter operation=$native.time.calendar.op.calendar.events.remove name="ids" kind=array required=true
+@native.time.calendar.value.548 std.capability.arg name="subject" value="event"
+@native.time.calendar.value.549 std.capability.arg name="reference" value=true
+@native.time.calendar.value.550 std.capability.arg name="label" value="in calendar"
+@native.time.calendar.value.551 std.capability.record entry=$native.time.calendar.value.549 entry=$native.time.calendar.value.550
+@native.time.calendar.value.552 std.capability.arg name="calendar" value=$native.time.calendar.value.551
+@native.time.calendar.value.553 std.capability.arg name="reference" value=true
+@native.time.calendar.value.554 std.capability.arg name="label" value="in room"
+@native.time.calendar.value.555 std.capability.record entry=$native.time.calendar.value.553 entry=$native.time.calendar.value.554
+@native.time.calendar.value.556 std.capability.arg name="room" value=$native.time.calendar.value.555
+@native.time.calendar.value.557 std.capability.arg name="format" value="unix-ms"
+@native.time.calendar.value.558 std.capability.arg name="label" value="starting at"
+@native.time.calendar.value.559 std.capability.record entry=$native.time.calendar.value.557 entry=$native.time.calendar.value.558
+@native.time.calendar.value.560 std.capability.arg name="start" value=$native.time.calendar.value.559
+@native.time.calendar.value.561 std.capability.arg name="format" value="duration-ms"
+@native.time.calendar.value.562 std.capability.arg name="label" value="lasting"
+@native.time.calendar.value.563 std.capability.record entry=$native.time.calendar.value.561 entry=$native.time.calendar.value.562
+@native.time.calendar.value.564 std.capability.arg name="duration" value=$native.time.calendar.value.563
+@native.time.calendar.value.565 std.capability.arg name="reference" value=true
+@native.time.calendar.value.566 std.capability.arg name="label" value="with participants"
+@native.time.calendar.value.567 std.capability.arg name="hiddenIfEmpty" value=true
+@native.time.calendar.value.568 std.capability.record entry=$native.time.calendar.value.565 entry=$native.time.calendar.value.566 entry=$native.time.calendar.value.567
+@native.time.calendar.value.569 std.capability.arg name="participants" value=$native.time.calendar.value.568
+@native.time.calendar.value.570 std.capability.arg name="label" value="with notes"
+@native.time.calendar.value.571 std.capability.arg name="hiddenIfEmpty" value=true
+@native.time.calendar.value.572 std.capability.record entry=$native.time.calendar.value.570 entry=$native.time.calendar.value.571
+@native.time.calendar.value.573 std.capability.arg name="notes" value=$native.time.calendar.value.572
+@native.time.calendar.value.574 std.capability.record entry=$native.time.calendar.value.552 entry=$native.time.calendar.value.556 entry=$native.time.calendar.value.560 entry=$native.time.calendar.value.564 entry=$native.time.calendar.value.569 entry=$native.time.calendar.value.573
+@native.time.calendar.value.575 std.capability.arg name="parameters" value=$native.time.calendar.value.574
+@native.time.calendar.value.576 std.capability.record entry=$native.time.calendar.value.548 entry=$native.time.calendar.value.575
+@native.time.calendar.value.577 std.capability.arg name="intent" value=$native.time.calendar.value.576
+@native.time.calendar.op.calendar.events.remove.metadata app.native.metadata operation=$native.time.calendar.op.calendar.events.remove field=$native.time.calendar.value.577
+@native.time.calendar.op.calendar.meeting.remove std.capability.operation scope=$native.time.calendar.scope name="calendar.meeting.remove" act=remove on="time.calendar.meeting" order=15 eligible=true
+@native.time.calendar.op.calendar.meeting.remove.param.id std.capability.parameter operation=$native.time.calendar.op.calendar.meeting.remove name="id" kind=string required=true
+@native.time.calendar.value.581 std.capability.arg name="subject" value="event"
+@native.time.calendar.value.582 std.capability.arg name="reference" value=true
+@native.time.calendar.value.583 std.capability.arg name="label" value="in calendar"
+@native.time.calendar.value.584 std.capability.record entry=$native.time.calendar.value.582 entry=$native.time.calendar.value.583
+@native.time.calendar.value.585 std.capability.arg name="calendar" value=$native.time.calendar.value.584
+@native.time.calendar.value.586 std.capability.arg name="reference" value=true
+@native.time.calendar.value.587 std.capability.arg name="label" value="in room"
+@native.time.calendar.value.588 std.capability.record entry=$native.time.calendar.value.586 entry=$native.time.calendar.value.587
+@native.time.calendar.value.589 std.capability.arg name="room" value=$native.time.calendar.value.588
+@native.time.calendar.value.590 std.capability.arg name="format" value="unix-ms"
+@native.time.calendar.value.591 std.capability.arg name="label" value="starting at"
+@native.time.calendar.value.592 std.capability.record entry=$native.time.calendar.value.590 entry=$native.time.calendar.value.591
+@native.time.calendar.value.593 std.capability.arg name="start" value=$native.time.calendar.value.592
+@native.time.calendar.value.594 std.capability.arg name="format" value="duration-ms"
+@native.time.calendar.value.595 std.capability.arg name="label" value="lasting"
+@native.time.calendar.value.596 std.capability.record entry=$native.time.calendar.value.594 entry=$native.time.calendar.value.595
+@native.time.calendar.value.597 std.capability.arg name="duration" value=$native.time.calendar.value.596
+@native.time.calendar.value.598 std.capability.arg name="reference" value=true
+@native.time.calendar.value.599 std.capability.arg name="label" value="with participants"
+@native.time.calendar.value.600 std.capability.arg name="hiddenIfEmpty" value=true
+@native.time.calendar.value.601 std.capability.record entry=$native.time.calendar.value.598 entry=$native.time.calendar.value.599 entry=$native.time.calendar.value.600
+@native.time.calendar.value.602 std.capability.arg name="participants" value=$native.time.calendar.value.601
+@native.time.calendar.value.603 std.capability.arg name="label" value="with notes"
+@native.time.calendar.value.604 std.capability.arg name="hiddenIfEmpty" value=true
+@native.time.calendar.value.605 std.capability.record entry=$native.time.calendar.value.603 entry=$native.time.calendar.value.604
+@native.time.calendar.value.606 std.capability.arg name="notes" value=$native.time.calendar.value.605
+@native.time.calendar.value.607 std.capability.record entry=$native.time.calendar.value.585 entry=$native.time.calendar.value.589 entry=$native.time.calendar.value.593 entry=$native.time.calendar.value.597 entry=$native.time.calendar.value.602 entry=$native.time.calendar.value.606
+@native.time.calendar.value.608 std.capability.arg name="parameters" value=$native.time.calendar.value.607
+@native.time.calendar.value.609 std.capability.record entry=$native.time.calendar.value.581 entry=$native.time.calendar.value.608
+@native.time.calendar.value.610 std.capability.arg name="intent" value=$native.time.calendar.value.609
+@native.time.calendar.op.calendar.meeting.remove.metadata app.native.metadata operation=$native.time.calendar.op.calendar.meeting.remove field=$native.time.calendar.value.610
+@native.time.calendar.op.calendar.observe std.capability.operation scope=$native.time.calendar.scope name="calendar.observe" act=ask on="time.calendar" order=16 eligible=true
+@native.time.calendar.value.613 std.capability.arg name="subject" value="personal calendar"
+@native.time.calendar.value.614 std.capability.arg name="reference" value=true
+@native.time.calendar.value.615 std.capability.arg name="label" value="in calendar"
+@native.time.calendar.value.616 std.capability.record entry=$native.time.calendar.value.614 entry=$native.time.calendar.value.615
+@native.time.calendar.value.617 std.capability.arg name="calendar" value=$native.time.calendar.value.616
+@native.time.calendar.value.618 std.capability.arg name="reference" value=true
+@native.time.calendar.value.619 std.capability.arg name="label" value="in room"
+@native.time.calendar.value.620 std.capability.record entry=$native.time.calendar.value.618 entry=$native.time.calendar.value.619
+@native.time.calendar.value.621 std.capability.arg name="room" value=$native.time.calendar.value.620
+@native.time.calendar.value.622 std.capability.arg name="format" value="unix-ms"
+@native.time.calendar.value.623 std.capability.arg name="label" value="starting at"
+@native.time.calendar.value.624 std.capability.record entry=$native.time.calendar.value.622 entry=$native.time.calendar.value.623
+@native.time.calendar.value.625 std.capability.arg name="start" value=$native.time.calendar.value.624
+@native.time.calendar.value.626 std.capability.arg name="format" value="duration-ms"
+@native.time.calendar.value.627 std.capability.arg name="label" value="lasting"
+@native.time.calendar.value.628 std.capability.record entry=$native.time.calendar.value.626 entry=$native.time.calendar.value.627
+@native.time.calendar.value.629 std.capability.arg name="duration" value=$native.time.calendar.value.628
+@native.time.calendar.value.630 std.capability.arg name="reference" value=true
+@native.time.calendar.value.631 std.capability.arg name="label" value="with participants"
+@native.time.calendar.value.632 std.capability.arg name="hiddenIfEmpty" value=true
+@native.time.calendar.value.633 std.capability.record entry=$native.time.calendar.value.630 entry=$native.time.calendar.value.631 entry=$native.time.calendar.value.632
+@native.time.calendar.value.634 std.capability.arg name="participants" value=$native.time.calendar.value.633
+@native.time.calendar.value.635 std.capability.arg name="label" value="with notes"
+@native.time.calendar.value.636 std.capability.arg name="hiddenIfEmpty" value=true
+@native.time.calendar.value.637 std.capability.record entry=$native.time.calendar.value.635 entry=$native.time.calendar.value.636
+@native.time.calendar.value.638 std.capability.arg name="notes" value=$native.time.calendar.value.637
+@native.time.calendar.value.639 std.capability.record entry=$native.time.calendar.value.617 entry=$native.time.calendar.value.621 entry=$native.time.calendar.value.625 entry=$native.time.calendar.value.629 entry=$native.time.calendar.value.634 entry=$native.time.calendar.value.638
+@native.time.calendar.value.640 std.capability.arg name="parameters" value=$native.time.calendar.value.639
+@native.time.calendar.value.641 std.capability.record entry=$native.time.calendar.value.613 entry=$native.time.calendar.value.640
+@native.time.calendar.value.642 std.capability.arg name="intent" value=$native.time.calendar.value.641
+@native.time.calendar.op.calendar.observe.metadata app.native.metadata operation=$native.time.calendar.op.calendar.observe field=$native.time.calendar.value.642

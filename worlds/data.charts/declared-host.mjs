@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { readNativeToolInterface } from '../native-tool-interface.mjs';
+import NATIVE_INTERFACE from './native-interface-source.mjs';
 // Explicit numeric data only: no text parser, inferred values, or legacy dispatch.
 import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs';
-import {PALETTES} from './palettes.mjs';
-const text={type:'string',required:true},array={type:'array',required:true},seriesIndex={type:'integer',min:0,default:0};
 export const CHART_KIND_PARAMETERS={
  'w.chart.chart':{type:'bar'},'k.charts.kind.bar_chart':{type:'bar'},'k.charts.kind.line_chart':{type:'line'},
  'k.charts.kind.pie_chart':{type:'pie'},'k.charts.kind.scatter_plot':{type:'scatter'},
@@ -12,23 +12,10 @@ export const CHART_PROPERTY_ALIGNMENTS=[
  {key:'chart.values',sourceWire:'w.chart.point.value',canonical:'w.chart.point.value',operation:'chart.make',parameter:'values',codec:'number-list'},
  {key:'chart.series',sourceWire:'w.chart.series.name',canonical:'w.chart.series.name',operation:'chart.make',parameter:'series'},
 ].map(row=>({...row,area:'diagram',host:'diagram',valueKind:'string'}));
-export const CHART_TYPES=['bar','line','pie','doughnut','radar','polarArea','scatter'];
-export const CHART_TOOL_BINDINGS=[
- {id:'chart.make',sample:[{args:{type:{enum:true},title:{unique:{prefix:'Chart'}},labels:{value:['A','B','C']},values:{value:[3,7,5]}}}],act:'make',on:'data.charts.chart',defaultsFrom:[{parameter:'labels',lengthOf:'values',method:'ordinal-labels'}],params:{type:{type:'string',required:true,enum:CHART_TYPES},title:text,labels:{...array,default:[]},values:{...array,default:[]},series:{type:'string',default:'Value'},datasets:{type:'array'},source:{...array,default:[]}}},
- {id:'chart.change',act:'change',on:'data.charts.chart',params:{id:text,title:{type:'string'},type:{type:'string',enum:CHART_TYPES},horizontal:{type:'boolean'},stacked:{type:'boolean'},showLegend:{type:'boolean'},showValues:{type:'boolean'},sort:{type:'string',enum:['asc','desc','alpha','none']},colour:{type:'string'},palette:{type:'string',enum:['default',...Object.keys(PALETTES)]}}},
- {id:'chart.data.change',act:'change',on:'data.charts.chart',params:{id:text,labels:array,values:array,series:seriesIndex}},
- {id:'chart.datasets.change',act:'change',on:'data.charts.chart',params:{id:text,labels:array,datasets:array}},
- {id:'chart.series.add',act:'make',on:'data.charts.series',params:{chart:text,label:text,values:array,colour:{type:'string'}}},
- {id:'chart.series.change',act:'change',on:'data.charts.series',params:{chart:text,index:{type:'integer',required:true,min:0},label:{type:'string'},values:{type:'array'},colour:{type:'string'}}},
- {id:'chart.series.remove',act:'remove',on:'data.charts.series',params:{chart:text,index:{type:'integer',required:true,min:0}}},
- {id:'chart.point.change',act:'change',on:'data.charts.point',params:{chart:text,index:{type:'integer',required:true,min:0},series:seriesIndex,value:{type:'number',required:true}},measurement:{dimension:'number',unit:'unitless',frame:'chart.data'}},
- {id:'chart.select',act:'pick',on:'data.charts.chart',params:{id:text}},
- {id:'chart.place',act:'place',on:'data.charts.chart',params:{id:text,x:{type:'number',required:true},y:{type:'number',required:true},width:{type:'number',min:240,max:1600},height:{type:'number',min:180,max:1200}},coordinates:{dimension:'length',unit:'canvas.pixel',frame:'diagram.canvas'}},
- {id:'chart.remove',act:'remove',on:'data.charts.chart',params:{ids:array}},
- {id:'chart.observe',act:'ask',on:'data.charts.chart',params:{}},
- {id:'chart.undo',act:'undo',on:'data.charts.chart',params:{}},
- {id:'chart.redo',act:'redo',on:'data.charts.chart',params:{}},
-];
+export const chartToolInterface = readNativeToolInterface(NATIVE_INTERFACE);
+const toolInterface = chartToolInterface.realize();
+export const CHART_TOOL_BINDINGS = toolInterface.bindings;
+export const CHART_TYPES = CHART_TOOL_BINDINGS.find(op=>op.id==='chart.make').params.type.enum;
 export const initialChartState=()=>({charts:[],active:null,nextId:1,inputMode:null,history:[],future:[]});
 const done=changed=>({status:'supported',changed}),fail=code=>({status:'missing',code});
 const snapshot=s=>structuredClone({charts:s.charts,active:s.active,nextId:s.nextId,inputMode:s.inputMode});
@@ -75,4 +62,4 @@ export function chartNativeHandlers(){return {
  'chart.undo':ctx=>{const s=ctx.state;if(!s.history?.length)return fail('nothing-to-undo');s.future??=[];s.future.push(snapshot(s));Object.assign(s,s.history.pop());return done([]);},
  'chart.redo':ctx=>{const s=ctx.state;if(!s.future?.length)return fail('nothing-to-redo');s.history??=[];s.history.push(snapshot(s));Object.assign(s,s.future.pop());return done([]);},
 };}
-export function createChartHost({state=initialChartState(),instanceId,...limits}={}){return createNativeToolHost({state,instanceId,scope:'charts-and-points',operations:CHART_TOOL_BINDINGS,handlers:chartNativeHandlers(),view:chartNativeObjects,...limits});}
+export function createChartHost({state=initialChartState(),instanceId,...limits}={}){return createNativeToolHost({state,instanceId,scope:'charts-and-points',toolInterface,handlers:chartNativeHandlers(),view:chartNativeObjects,...limits});}

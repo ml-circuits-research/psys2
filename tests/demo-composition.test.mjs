@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import { selectWorlds, validateDependencies, createDemoLoader } from '../scripts/lib/demo-composition.mjs';
 import { loadWorlds } from '../src/worlds/index.mjs';
 
@@ -36,18 +37,35 @@ test('demo loader and its generated metadata omit retired capabilities', async (
   assert.ok(set.get('art.draw') && set.get('diagram.sketch') && set.get('docs.editor'));
 });
 
-test('native interface schemas preserve every actual host binding without claiming complete native state schemas',async()=>{
- const {World,str}=await import('../src/vendor/sopworld/sopworld.mjs'),loader=await createDemoLoader();
- const definition=(world,token)=>{if(!token.startsWith('$'))return JSON.parse(token);const node=world.get(token.slice(1));if(node.type==='std.instance.sequence')return (node.attrs.item??[]).map(value=>definition(world,value));assert.equal(node.type,'std.instance.record');return Object.fromEntries(Object.entries(node.attrs).map(([key,values])=>[key.slice(6),definition(world,values[0])]));};
- for(const [id,profile]of Object.entries(loader.composition.profiles)){
+test('demo exposes authored native interfaces and the actual host uses those capability records',async()=>{
+ const {World,parse,str}=await import('../src/vendor/sopworld/sopworld.mjs'),loader=await createDemoLoader();
+ for(const [id,profile] of Object.entries(loader.composition.profiles)){
   if(!profile.nativeHost)continue;
-  const module=await import('../'+profile.nativeHost.module),initial=(await loader.loadOps(id)).initialState(),host=await module[profile.nativeHost.factory]({state:initial,instanceId:'composition-interface-test'}),world=new World();
-  assert.equal(world.load(await loader.readFile(id,'native-interface.sop')).ok,true,id);
-  const operations=world.ofType('app.native.operation');assert.deepEqual(operations.map(wire=>definition(world,wire.attrs.definition[0])),host.bindings(),id);
-  for(const operation of operations){assert.ok(operation.attrs.definition[0].startsWith('$'));assert.equal(world.get(operation.attrs.definition[0].slice(1)).type,'std.instance.record');}
-  for(const parameter of world.ofType('app.native.parameter'))assert.equal(world.get(parameter.attrs.operation[0].slice(1)).type,'app.native.operation');
-  assert.equal(world.ofType('std.instance.snapshot').length,0);assert.equal(world.ofType('std.instance.object').length,0);
+  const source=await readFile(new URL('../worlds/'+id+'/native-interface.sop',import.meta.url),'utf8');
+  assert.equal(await loader.readFile(id,'native-interface.sop'),source);
+  const native=parse(source).filter(wire=>wire.type==='std.capability.operation');
+  const module=await import('../'+profile.nativeHost.module);
+  const initial=(await loader.loadOps(id)).initialState();
+  const host=await module[profile.nativeHost.factory]({state:initial,instanceId:'composition-interface-test'});
+  const world=new World();
+  world.use('std.capability');
+  const facts=host.capabilityFacts('$scope');
+  world.load('@scope std.capability.scope instance="fixture" version="1"');
+  assert.ok(world.tell(facts,{factsOnly:true}).ok,id);
+  const bindings=host.bindings(),operations=world.ofType('std.capability.operation');
+  assert.deepEqual(operations.map(wire=>str(wire.attrs.name[0])),bindings.map(op=>op.id),id);
+  assert.deepEqual(operations.slice(0,native.length).map(wire=>wire.id),native.map(wire=>wire.id),id);
+  for(const parameter of world.ofType('std.capability.parameter')){
+   const operation=world.get(parameter.attrs.operation[0].slice(1));
+   const binding=bindings.find(op=>op.id===str(operation.attrs.name[0]));
+   const name=str(parameter.attrs.name[0]);
+   assert.equal(parameter.attrs.kind[0],binding.params[name].type);
+  }
+  assert.equal(world.ofType('std.instance.snapshot').length,0);
   assert.equal(profile.schemaFiles.find(file=>file.role==='native-tool-interface').completeStateSchema,false);
  }
- const calendar=loader.composition.profiles['time.calendar'];assert.ok(calendar.schemaFiles.some(file=>file.role==='canonical-state-schema'&&file.completeStateSchema));assert.match(await loader.readFile('time.calendar','instance-schema.sop'),/time.calendar.state/);
+ assert.equal(await loader.readFile('diagram.sketch','chart-interface.sop'),await readFile(new URL('../worlds/data.charts/native-interface.sop',import.meta.url),'utf8'));
+ const calendar=loader.composition.profiles['time.calendar'];
+ assert.ok(calendar.schemaFiles.some(file=>file.role==='canonical-state-schema'&&file.completeStateSchema));
+ assert.match(await loader.readFile('time.calendar','instance-schema.sop'),/time.calendar.state/);
 });

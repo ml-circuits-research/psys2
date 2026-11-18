@@ -1,10 +1,10 @@
 // Read-only inspection of execution worlds already owned by the application.
-import{serialize,str,version,build}from'../vendor/sopworld/sopworld.mjs?v=b88e6c95e3';
-import SOURCE from'./new-engine-source.mjs?v=3af7eedb03';
+import{serialize,str,version,build}from'../vendor/sopworld/sopworld.mjs?v=f5d53a8da9';
+import SOURCE from'./new-engine-source.mjs?v=7b47872052';
 import{CATALOG_PIN}from'../knowledge/catalog-pin.mjs?v=d1ff29de82';
-import{inspectExecutionPolicyWorld}from'./execution-policy.mjs?v=5900e84cec';
-import{inspectSchemaSource}from'./worlds-inspection.mjs?v=8f7e50c011';
-import{inspectRequestCompositionPolicy}from'./request-composition-policy.mjs?v=978770a321';
+import{inspectExecutionPolicyWorld}from'./execution-policy.mjs?v=fc08ac9b87';
+import{inspectSchemaSource}from'./worlds-inspection.mjs?v=365e9ab288';
+import{inspectRequestCompositionPolicy}from'./request-composition-policy.mjs?v=31a123865e';
 const clone=value=>structuredClone(value);
 const loggedWires=snapshot=>(snapshot?.log??[]).flatMap(entry=>entry.wires??[]);
 const importsOf=snapshot=>[...new Set(loggedWires(snapshot).filter(wire=>wire.type==='core.use').flatMap(wire=>(wire.attrs.world??[]).map(str)))];
@@ -17,7 +17,7 @@ function snapshotText(snapshot){return (snapshot?.log??[]).map((entry,index)=>'#
 /** Projects actual cache accessors and retained journal JSON; performs no reading or reasoning. */
 export async function inspectExecutionWorlds(session){
  const [{inspectNewEngineSourceWorld},{inspectDeclaredExecutionSourceWorld},{inspectSpatialPlacementWorld}]=await Promise.all([
-  import('./new-engine.mjs?v=27786193d4'),import('./declared-execution.mjs?v=27786193d4'),import('./spatial-placement-execution.mjs?v=0e8f9da3a1'),
+  import('./new-engine.mjs?v=1eba59df72'),import('./declared-execution.mjs?v=1eba59df72'),import('./spatial-placement-execution.mjs?v=fe77bea63d'),
  ]);
  const journal=session?.newEngineJournal??[],moduleNames=[...new Set(journal.flatMap(record=>importsOf(record.evidence)))],sources=[['new-engine','src/dialog/new-engine.mjs',inspectNewEngineSourceWorld({moduleNames})],['declared-execution','src/dialog/declared-execution.mjs',inspectDeclaredExecutionSourceWorld({moduleNames})]],nodes=[],edges=[];
  const link=(from,to,label)=>edges.push({from,to,label});

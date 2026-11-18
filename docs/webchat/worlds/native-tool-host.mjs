@@ -55,12 +55,12 @@ export function validateNativeArguments(operation,input,{maxBytes=4000000}={}) {
  }catch{return fail('invalid-native-declaration-or-data');}
 }
 
-export function createNativeToolHost({state,instanceId,scope,operations,handlers,view,spatial=null,identityRegistry=new Map(),validate=null,maxObjects=10000,maxBytes=4000000}={}) {
+export function createNativeToolHost({state,instanceId,scope,operations,toolInterface,handlers,view,spatial=null,identityRegistry=new Map(),validate=null,maxObjects=10000,maxBytes=4000000}={}) {
  if(spatial!==null&&typeof spatial!=='function')throw new TypeError('invalid-spatial-observer');
  if(validate!==null&&typeof validate!=='function')throw new TypeError('invalid-policy-validator');
  if(!Number.isSafeInteger(maxObjects)||maxObjects<1||!Number.isSafeInteger(maxBytes)||maxBytes<1)throw new TypeError('invalid-host-budget');
  if(!text(instanceId)||!text(scope)||!state||Object.getPrototypeOf(state)!==Object.prototype)throw new TypeError('host-identity-required');
- const copy=value=>copyHostData(value,{maxBytes});const declared=copy(operations),byId=new Map();
+ const copy=value=>copyHostData(value,{maxBytes});const declared=copy(toolInterface?.bindings??operations),byId=new Map();
  if(!Array.isArray(declared)||!handlers||typeof handlers!=='object'||typeof view!=='function')throw new TypeError('invalid-tool-declaration');
  for(const op of declared){checkOperation(op);if(!text(op.id)||byId.has(op.id)||!handlers[op.id]||typeof handlers[op.id]!=='function')throw new TypeError('invalid-tool-declaration');byId.set(op.id,op);}
  if(!identityRegistry.has(scope))identityRegistry.set(scope,{sequence:0,live:new Map()});
@@ -108,5 +108,7 @@ export function createNativeToolHost({state,instanceId,scope,operations,handlers
    relations:(geometry.relations??[]).map(relation=>({...tag,...relation})),
   };
  };
- snapshot();return Object.freeze({observe:()=>copy(snapshot()),invoke,bindings:()=>copy(declared),...(spatial?{observeSpatial,spatialRevision:()=>readSpatialRevision(snapshot())}:{})});
+ snapshot();return Object.freeze({observe:()=>copy(snapshot()),invoke,bindings:()=>copy(declared),
+  ...(toolInterface?{capabilityFacts:scope=>copy(toolInterface.capabilityFacts(scope))}:{}),
+  ...(spatial?{observeSpatial,spatialRevision:()=>readSpatialRevision(snapshot())}:{})});
 }

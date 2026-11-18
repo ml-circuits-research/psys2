@@ -1,6 +1,6 @@
 // Exact interpreter for declared UI intent wires; it never guesses words or operations.
-import{parse,str}from'../vendor/sopworld/sopworld.mjs?v=b88e6c95e3';
-import{copyHostData,validateNativeArguments}from'../../worlds/native-tool-host.mjs?v=cf38a0ae11';
+import{parse,str}from'../vendor/sopworld/sopworld.mjs?v=f5d53a8da9';
+import{copyHostData,validateNativeArguments}from'../../worlds/native-tool-host.mjs?v=ecc9d8b538';
 const identifier=/^[A-Za-z_][A-Za-z0-9_-]*(?:\.[A-Za-z0-9_][A-Za-z0-9_-]*)*$/;
 const forbidden=new Set(['__proto__','constructor','prototype']);
 const numberToken=v=>Object.is(v,-0)?'-0':String(v);

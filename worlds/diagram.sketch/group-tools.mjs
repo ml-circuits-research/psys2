@@ -1,24 +1,11 @@
 import{K}from'./core.mjs';
-import{CHART_LAYOUTS,GROUP_LAYOUTS,layoutNumericGroup}from'./chart-layout.mjs';
+import{CHART_LAYOUTS,layoutNumericGroup}from'./chart-layout.mjs';
 // Stable groups over actual diagram nodes; coordinates come from declared native layout tools.
 import{nativeToken}from'../native-tool-host.mjs';
 import{addShapes,arrangeShapes}from'./tool.mjs';
 import{chartNativeHandlers,CHART_TOOL_BINDINGS}from'../data.charts/declared-host.mjs';
-export const GROUP_CHART_PROJECTION=Object.freeze({id:'diagram.group.numeric-chart',source:'diagram.sketch.group',members:'members',label:'label',memberLabel:'label',memberValue:'value',missingSource:'detach-snapshot',directDataEdit:'detach-snapshot',preserve:['type','placement','options','dataset.color']});
-const id={type:'string',required:true},layouts=GROUP_LAYOUTS;
-export const GROUP_TOOL_BINDINGS=[
- {id:'diagram.group.make',act:'make',on:'diagram.sketch.group',params:{name:id,label:{type:'string'},ids:{type:'array',required:true}}},
- {id:'diagram.group.select',act:'ask',on:'diagram.sketch.group',params:{id}},
- {id:'diagram.group.change',act:'change',on:'diagram.sketch.group',params:{id,label:{type:'string'},colour:{type:'string'},size:{type:'string',enum:['tiny','small','medium','large','huge']}}},
- {id:'diagram.group.layout',act:'place',on:'diagram.sketch.group',params:{id,layout:{type:'string',required:true,enum:layouts}}},
- {id:'diagram.group.resize',act:'change',on:'diagram.sketch.group',params:{id,scale:{type:'number',required:true,min:.05,max:20}}},
- {id:'diagram.group.place',act:'place',on:'diagram.sketch.group',params:{id,x:{type:'number',required:true},y:{type:'number',required:true}},coordinates:{dimension:'length',unit:'canvas.pixel',frame:'diagram.canvas'}},
- {id:'diagram.group.remove',act:'remove',on:'diagram.sketch.group',params:{id}},
- {id:'diagram.group.ungroup',act:'remove',on:'diagram.sketch.group',params:{id}},
- {id:'diagram.group.chart.make',sample:[{args:{label:{unique:{prefix:'Values'}},labels:{value:['A','B','C']},values:{value:[3,7,5]},layout:{enum:true}}}],act:'make',on:'diagram.sketch.group',result:{identityParameter:null},params:{label:{type:'string',required:true},labels:{type:'array',required:true},values:{type:'array',required:true},layout:{type:'string',required:true,enum:CHART_LAYOUTS}}},
- {id:'diagram.group.chart.adopt',act:'make',on:'diagram.sketch.group',result:{identityParameter:null},params:{id}},
- {id:'diagram.group.chart',derivedProjection:GROUP_CHART_PROJECTION,act:'make',on:'data.charts.chart',result:{identityParameter:null},intent:{parameters:{id:{role:'source',reference:true,label:'from group'}}},params:{id,type:CHART_TOOL_BINDINGS.find(o=>o.id==='chart.make').params.type,title:{type:'string'}}},
-];
+import { DIAGRAM_TOOL_BINDINGS } from './tool-interface.mjs';
+export const GROUP_CHART_PROJECTION = Object.freeze(DIAGRAM_TOOL_BINDINGS.find(operation=>operation.id==='diagram.group.chart').derivedProjection);
 const group=(s,id)=>s.groups.find(g=>g.name===id),members=(s,g)=>g.members.map(id=>s.shapes.find(n=>n.name===id)).filter(Boolean),center=nodes=>({x:nodes.reduce((n,o)=>n+o.x/nodes.length,0),y:nodes.reduce((n,o)=>n+o.y/nodes.length,0)});
 const fail=code=>({status:'missing',code}),done=changed=>({status:'supported',changed});
 export const groupNativeObjects=s=>(s.groups??[]).map(g=>({id:g.name,kind:'group',sourceType:'diagram.sketch.group',members:[...g.members],...(g.links?.length||g.chartId?{relations:{...(g.links?.length?{links:[...g.links]}:{}),...(g.chartId?{chart:[g.chartId]}:{})}}:{}),inputs:Object.entries({label:g.label??g.name,members:g.members,layout:g.layout??null,...(g.layoutOrigin?{layoutOriginX:g.layoutOrigin.x,layoutOriginY:g.layoutOrigin.y}:{}),...(members(s,g).length?center(members(s,g)):{}),chart:g.chartId??null}).map(([key,value])=>({binding:'diagram.group.'+key,key,values:value===null?[]:(Array.isArray(value)?value:[value]).map(nativeToken)}))}));

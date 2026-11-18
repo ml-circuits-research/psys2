@@ -1,0 +1,113 @@
+# Native tool interface owned by data.charts.
+@native.data.charts.scope std.capability.scope instance="data.charts" version="1"
+@native.data.charts.op.chart.make std.capability.operation scope=$native.data.charts.scope name="chart.make" act=make on="data.charts.chart" order=0 eligible=true
+@native.data.charts.op.chart.make.param.type std.capability.parameter operation=$native.data.charts.op.chart.make name="type" kind=string required=true enum="bar" enum="line" enum="pie" enum="doughnut" enum="radar" enum="polarArea" enum="scatter" enumClosed=true
+@native.data.charts.op.chart.make.param.title std.capability.parameter operation=$native.data.charts.op.chart.make name="title" kind=string required=true
+@native.data.charts.value.4 std.capability.list
+@native.data.charts.op.chart.make.param.labels std.capability.parameter operation=$native.data.charts.op.chart.make name="labels" kind=array required=true default=$native.data.charts.value.4
+@native.data.charts.value.6 std.capability.list
+@native.data.charts.op.chart.make.param.values std.capability.parameter operation=$native.data.charts.op.chart.make name="values" kind=array required=true default=$native.data.charts.value.6
+@native.data.charts.op.chart.make.param.series std.capability.parameter operation=$native.data.charts.op.chart.make name="series" kind=string default="Value"
+@native.data.charts.op.chart.make.param.datasets std.capability.parameter operation=$native.data.charts.op.chart.make name="datasets" kind=array
+@native.data.charts.value.10 std.capability.list
+@native.data.charts.op.chart.make.param.source std.capability.parameter operation=$native.data.charts.op.chart.make name="source" kind=array required=true default=$native.data.charts.value.10
+@native.data.charts.value.12 std.capability.arg name="enum" value=true
+@native.data.charts.value.13 std.capability.record entry=$native.data.charts.value.12
+@native.data.charts.value.14 std.capability.arg name="type" value=$native.data.charts.value.13
+@native.data.charts.value.15 std.capability.arg name="prefix" value="Chart"
+@native.data.charts.value.16 std.capability.record entry=$native.data.charts.value.15
+@native.data.charts.value.17 std.capability.arg name="unique" value=$native.data.charts.value.16
+@native.data.charts.value.18 std.capability.record entry=$native.data.charts.value.17
+@native.data.charts.value.19 std.capability.arg name="title" value=$native.data.charts.value.18
+@native.data.charts.value.20 std.capability.item index=0 value="A"
+@native.data.charts.value.21 std.capability.item index=1 value="B"
+@native.data.charts.value.22 std.capability.item index=2 value="C"
+@native.data.charts.value.23 std.capability.list member=$native.data.charts.value.20 member=$native.data.charts.value.21 member=$native.data.charts.value.22
+@native.data.charts.value.24 std.capability.arg name="value" value=$native.data.charts.value.23
+@native.data.charts.value.25 std.capability.record entry=$native.data.charts.value.24
+@native.data.charts.value.26 std.capability.arg name="labels" value=$native.data.charts.value.25
+@native.data.charts.value.27 std.capability.item index=0 value=3
+@native.data.charts.value.28 std.capability.item index=1 value=7
+@native.data.charts.value.29 std.capability.item index=2 value=5
+@native.data.charts.value.30 std.capability.list member=$native.data.charts.value.27 member=$native.data.charts.value.28 member=$native.data.charts.value.29
+@native.data.charts.value.31 std.capability.arg name="value" value=$native.data.charts.value.30
+@native.data.charts.value.32 std.capability.record entry=$native.data.charts.value.31
+@native.data.charts.value.33 std.capability.arg name="values" value=$native.data.charts.value.32
+@native.data.charts.value.34 std.capability.record entry=$native.data.charts.value.14 entry=$native.data.charts.value.19 entry=$native.data.charts.value.26 entry=$native.data.charts.value.33
+@native.data.charts.value.35 std.capability.arg name="args" value=$native.data.charts.value.34
+@native.data.charts.value.36 std.capability.record entry=$native.data.charts.value.35
+@native.data.charts.value.37 std.capability.item index=0 value=$native.data.charts.value.36
+@native.data.charts.value.38 std.capability.list member=$native.data.charts.value.37
+@native.data.charts.value.39 std.capability.arg name="sample" value=$native.data.charts.value.38
+@native.data.charts.value.40 std.capability.arg name="parameter" value="labels"
+@native.data.charts.value.41 std.capability.arg name="lengthOf" value="values"
+@native.data.charts.value.42 std.capability.arg name="method" value="ordinal-labels"
+@native.data.charts.value.43 std.capability.record entry=$native.data.charts.value.40 entry=$native.data.charts.value.41 entry=$native.data.charts.value.42
+@native.data.charts.value.44 std.capability.item index=0 value=$native.data.charts.value.43
+@native.data.charts.value.45 std.capability.list member=$native.data.charts.value.44
+@native.data.charts.value.46 std.capability.arg name="defaultsFrom" value=$native.data.charts.value.45
+@native.data.charts.op.chart.make.metadata app.native.metadata operation=$native.data.charts.op.chart.make field=$native.data.charts.value.39 field=$native.data.charts.value.46
+@native.data.charts.op.chart.change std.capability.operation scope=$native.data.charts.scope name="chart.change" act=change on="data.charts.chart" order=1 eligible=true
+@native.data.charts.op.chart.change.param.id std.capability.parameter operation=$native.data.charts.op.chart.change name="id" kind=string required=true
+@native.data.charts.op.chart.change.param.title std.capability.parameter operation=$native.data.charts.op.chart.change name="title" kind=string
+@native.data.charts.op.chart.change.param.type std.capability.parameter operation=$native.data.charts.op.chart.change name="type" kind=string enum="bar" enum="line" enum="pie" enum="doughnut" enum="radar" enum="polarArea" enum="scatter" enumClosed=true
+@native.data.charts.op.chart.change.param.horizontal std.capability.parameter operation=$native.data.charts.op.chart.change name="horizontal" kind=boolean
+@native.data.charts.op.chart.change.param.stacked std.capability.parameter operation=$native.data.charts.op.chart.change name="stacked" kind=boolean
+@native.data.charts.op.chart.change.param.showLegend std.capability.parameter operation=$native.data.charts.op.chart.change name="showLegend" kind=boolean
+@native.data.charts.op.chart.change.param.showValues std.capability.parameter operation=$native.data.charts.op.chart.change name="showValues" kind=boolean
+@native.data.charts.op.chart.change.param.sort std.capability.parameter operation=$native.data.charts.op.chart.change name="sort" kind=string enum="asc" enum="desc" enum="alpha" enum="none" enumClosed=true
+@native.data.charts.op.chart.change.param.colour std.capability.parameter operation=$native.data.charts.op.chart.change name="colour" kind=string
+@native.data.charts.op.chart.change.param.palette std.capability.parameter operation=$native.data.charts.op.chart.change name="palette" kind=string enum="default" enum="classic" enum="rainbow" enum="pastel" enum="ocean" enum="forest" enum="sunset" enum="warm" enum="cool" enum="neon" enum="earth" enumClosed=true
+@native.data.charts.op.chart.data.change std.capability.operation scope=$native.data.charts.scope name="chart.data.change" act=change on="data.charts.chart" order=2 eligible=true
+@native.data.charts.op.chart.data.change.param.id std.capability.parameter operation=$native.data.charts.op.chart.data.change name="id" kind=string required=true
+@native.data.charts.op.chart.data.change.param.labels std.capability.parameter operation=$native.data.charts.op.chart.data.change name="labels" kind=array required=true
+@native.data.charts.op.chart.data.change.param.values std.capability.parameter operation=$native.data.charts.op.chart.data.change name="values" kind=array required=true
+@native.data.charts.op.chart.data.change.param.series std.capability.parameter operation=$native.data.charts.op.chart.data.change name="series" kind=integer min=0 default=0
+@native.data.charts.op.chart.datasets.change std.capability.operation scope=$native.data.charts.scope name="chart.datasets.change" act=change on="data.charts.chart" order=3 eligible=true
+@native.data.charts.op.chart.datasets.change.param.id std.capability.parameter operation=$native.data.charts.op.chart.datasets.change name="id" kind=string required=true
+@native.data.charts.op.chart.datasets.change.param.labels std.capability.parameter operation=$native.data.charts.op.chart.datasets.change name="labels" kind=array required=true
+@native.data.charts.op.chart.datasets.change.param.datasets std.capability.parameter operation=$native.data.charts.op.chart.datasets.change name="datasets" kind=array required=true
+@native.data.charts.op.chart.series.add std.capability.operation scope=$native.data.charts.scope name="chart.series.add" act=make on="data.charts.series" order=4 eligible=true
+@native.data.charts.op.chart.series.add.param.chart std.capability.parameter operation=$native.data.charts.op.chart.series.add name="chart" kind=string required=true
+@native.data.charts.op.chart.series.add.param.label std.capability.parameter operation=$native.data.charts.op.chart.series.add name="label" kind=string required=true
+@native.data.charts.op.chart.series.add.param.values std.capability.parameter operation=$native.data.charts.op.chart.series.add name="values" kind=array required=true
+@native.data.charts.op.chart.series.add.param.colour std.capability.parameter operation=$native.data.charts.op.chart.series.add name="colour" kind=string
+@native.data.charts.op.chart.series.change std.capability.operation scope=$native.data.charts.scope name="chart.series.change" act=change on="data.charts.series" order=5 eligible=true
+@native.data.charts.op.chart.series.change.param.chart std.capability.parameter operation=$native.data.charts.op.chart.series.change name="chart" kind=string required=true
+@native.data.charts.op.chart.series.change.param.index std.capability.parameter operation=$native.data.charts.op.chart.series.change name="index" kind=integer required=true min=0
+@native.data.charts.op.chart.series.change.param.label std.capability.parameter operation=$native.data.charts.op.chart.series.change name="label" kind=string
+@native.data.charts.op.chart.series.change.param.values std.capability.parameter operation=$native.data.charts.op.chart.series.change name="values" kind=array
+@native.data.charts.op.chart.series.change.param.colour std.capability.parameter operation=$native.data.charts.op.chart.series.change name="colour" kind=string
+@native.data.charts.op.chart.series.remove std.capability.operation scope=$native.data.charts.scope name="chart.series.remove" act=remove on="data.charts.series" order=6 eligible=true
+@native.data.charts.op.chart.series.remove.param.chart std.capability.parameter operation=$native.data.charts.op.chart.series.remove name="chart" kind=string required=true
+@native.data.charts.op.chart.series.remove.param.index std.capability.parameter operation=$native.data.charts.op.chart.series.remove name="index" kind=integer required=true min=0
+@native.data.charts.op.chart.point.change std.capability.operation scope=$native.data.charts.scope name="chart.point.change" act=change on="data.charts.point" order=7 eligible=true
+@native.data.charts.op.chart.point.change.param.chart std.capability.parameter operation=$native.data.charts.op.chart.point.change name="chart" kind=string required=true
+@native.data.charts.op.chart.point.change.param.index std.capability.parameter operation=$native.data.charts.op.chart.point.change name="index" kind=integer required=true min=0
+@native.data.charts.op.chart.point.change.param.series std.capability.parameter operation=$native.data.charts.op.chart.point.change name="series" kind=integer min=0 default=0
+@native.data.charts.op.chart.point.change.param.value std.capability.parameter operation=$native.data.charts.op.chart.point.change name="value" kind=number required=true
+@native.data.charts.value.87 std.capability.arg name="dimension" value="number"
+@native.data.charts.value.88 std.capability.arg name="unit" value="unitless"
+@native.data.charts.value.89 std.capability.arg name="frame" value="chart.data"
+@native.data.charts.value.90 std.capability.record entry=$native.data.charts.value.87 entry=$native.data.charts.value.88 entry=$native.data.charts.value.89
+@native.data.charts.value.91 std.capability.arg name="measurement" value=$native.data.charts.value.90
+@native.data.charts.op.chart.point.change.metadata app.native.metadata operation=$native.data.charts.op.chart.point.change field=$native.data.charts.value.91
+@native.data.charts.op.chart.select std.capability.operation scope=$native.data.charts.scope name="chart.select" act=pick on="data.charts.chart" order=8 eligible=true
+@native.data.charts.op.chart.select.param.id std.capability.parameter operation=$native.data.charts.op.chart.select name="id" kind=string required=true
+@native.data.charts.op.chart.place std.capability.operation scope=$native.data.charts.scope name="chart.place" act=place on="data.charts.chart" order=9 eligible=true
+@native.data.charts.op.chart.place.param.id std.capability.parameter operation=$native.data.charts.op.chart.place name="id" kind=string required=true
+@native.data.charts.op.chart.place.param.x std.capability.parameter operation=$native.data.charts.op.chart.place name="x" kind=number required=true
+@native.data.charts.op.chart.place.param.y std.capability.parameter operation=$native.data.charts.op.chart.place name="y" kind=number required=true
+@native.data.charts.op.chart.place.param.width std.capability.parameter operation=$native.data.charts.op.chart.place name="width" kind=number min=240 max=1600
+@native.data.charts.op.chart.place.param.height std.capability.parameter operation=$native.data.charts.op.chart.place name="height" kind=number min=180 max=1200
+@native.data.charts.value.101 std.capability.arg name="dimension" value="length"
+@native.data.charts.value.102 std.capability.arg name="unit" value="canvas.pixel"
+@native.data.charts.value.103 std.capability.arg name="frame" value="diagram.canvas"
+@native.data.charts.value.104 std.capability.record entry=$native.data.charts.value.101 entry=$native.data.charts.value.102 entry=$native.data.charts.value.103
+@native.data.charts.value.105 std.capability.arg name="coordinates" value=$native.data.charts.value.104
+@native.data.charts.op.chart.place.metadata app.native.metadata operation=$native.data.charts.op.chart.place field=$native.data.charts.value.105
+@native.data.charts.op.chart.remove std.capability.operation scope=$native.data.charts.scope name="chart.remove" act=remove on="data.charts.chart" order=10 eligible=true
+@native.data.charts.op.chart.remove.param.ids std.capability.parameter operation=$native.data.charts.op.chart.remove name="ids" kind=array required=true
+@native.data.charts.op.chart.observe std.capability.operation scope=$native.data.charts.scope name="chart.observe" act=ask on="data.charts.chart" order=11 eligible=true
+@native.data.charts.op.chart.undo std.capability.operation scope=$native.data.charts.scope name="chart.undo" act=undo on="data.charts.chart" order=12 eligible=true
+@native.data.charts.op.chart.redo std.capability.operation scope=$native.data.charts.scope name="chart.redo" act=redo on="data.charts.chart" order=13 eligible=true

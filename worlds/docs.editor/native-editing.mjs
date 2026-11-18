@@ -1,28 +1,7 @@
 // Literal document editing tools. Uses the real block/mark model, never a language reader.
 import {commit,sync,addBlock} from './document.mjs';
-import {MARK_TYPES,ALIGNS,getText,addMark,cutMark,spliceText,containers} from './model.mjs';
+import {getText,addMark,cutMark,spliceText,containers} from './model.mjs';
 export const documentTextId=(id,at='0')=>JSON.stringify([id,at]);
-const text={type:'string',required:true},array={type:'array',required:true},integer={type:'integer',required:true,min:0};
-const blockFields={id:text,text:{type:'string'},name:{type:'string'},kind:{type:'string',enum:['paragraph','heading','quote']},level:{type:'integer',min:3,max:6},align:{type:'string',enum:ALIGNS}};
-const selection={id:text,at:{type:'string',default:'0'},from:integer,to:integer};
-const mark={...selection,mark:{type:'string',required:true,enum:MARK_TYPES},enabled:{type:'boolean',required:true},attrs:{type:'object'}};
-export const DOCUMENT_EDITING_BINDINGS=[
- {id:'document.title.change',act:'change',on:'docs.editor.document',params:{id:text,title:text}},
- {id:'document.block.select',act:'pick',on:'docs.editor.block',params:selection},
- {id:'document.section.select',act:'pick',on:'docs.editor.section',params:selection},
- {id:'document.section.change',act:'change',on:'docs.editor.section',params:{...blockFields,kind:{type:'string',enum:['heading']},level:{type:'integer',min:1,max:2}}},
- {id:'document.block.mark',act:'change',on:'docs.editor.block',params:mark},
- {id:'document.section.mark',act:'change',on:'docs.editor.section',params:mark},
- {id:'document.block.align',act:'change',on:'docs.editor.block',params:{id:text,align:{type:'string',required:true,enum:ALIGNS}}},
- {id:'document.section.align',act:'change',on:'docs.editor.section',params:{id:text,align:{type:'string',required:true,enum:ALIGNS}}},
- {id:'document.block.reorder',act:'place',on:'docs.editor.block',params:{ids:array}},
- {id:'document.list.make',act:'make',on:'docs.editor.block',params:{parent:text,name:{type:'string'},items:array,style:{type:'string',required:true,enum:['bullet','numbered','task']}}},
- {id:'document.list.change',act:'change',on:'docs.editor.block',params:{id:text,items:{type:'array'},style:{type:'string',enum:['bullet','numbered','task']},checked:{type:'array'}}},
- {id:'document.table.make',act:'make',on:'docs.editor.block',params:{parent:text,name:{type:'string'},rows:array,header:{type:'boolean',default:true}}},
- {id:'document.table.change',act:'change',on:'docs.editor.block',params:{id:text,rows:{type:'array'},header:{type:'boolean'}}},
- {id:'document.container.change',act:'change',on:'docs.editor.text',params:{id:text,text:text}},
-];
-export const DOCUMENT_BLOCK_CHANGE_PARAMETERS=blockFields;
 const fail=code=>({status:'missing',code}),done=changed=>({status:'supported',changed});
 const strings=items=>Array.isArray(items)&&items.length>0&&items.length<=500&&items.every(t=>typeof t==='string');
 const table=rows=>Array.isArray(rows)&&rows.length>0&&rows.length<=100&&Array.isArray(rows[0])&&rows[0].length>0&&rows[0].length<=20&&rows.every(row=>Array.isArray(row)&&row.length===rows[0].length&&row.every(v=>typeof v==='string'));

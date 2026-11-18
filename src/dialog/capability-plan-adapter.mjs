@@ -12,7 +12,6 @@ const take = (wire, key) => str(wire?.attrs[key]?.[0]);
 const token = (value) => Object.is(value, -0) ? '-0' : JSON.stringify(value);
 const ref = (wire) => '$' + wire;
 const values = (wire, key) => (wire?.attrs[key] || []).map(str);
-const own = (object, key) => Object.hasOwn(object, key);
 
 function factWriter() {
   const wires = [];
@@ -43,23 +42,13 @@ function interfaceFacts({ area, view, bindings, host, observation, focus, unappl
     instance: quote(observation.instanceId), version: quote(observation.version), focus: focus === undefined ? undefined : quote(String(focus)),
     newId: quote(globalThis.crypto.randomUUID()), clock: String(Date.now()), unapplied: unapplied.map(quote),
   }, 'capability.scope');
-  const operations = new Map(), sourceTypes = new Set();
+  const declarations = host.capabilityFacts(scope);
+  wires.push(...declarations);
+  const admitted = declarations.filter((wire) => wire.type === NS + 'operation');
+  const operations = new Map(admitted.map((wire) => [take(wire, 'name'), ref(wire.id)]));
+  const sourceTypes = new Set(admitted.map((wire) => take(wire, 'on')));
   const seed = (operation, fields) => write(NS + 'seed', { operation: quote(operation), ...fields });
-  for (const [order, operation] of host.bindings().entries()) {
-    const id = write(NS + 'operation', {
-      scope, name: quote(operation.id), act: operation.act, on: quote(operation.on), order: String(order),
-      eligible: String(!operation.requires?.length),
-    });
-    operations.set(operation.id, id);
-    sourceTypes.add(operation.on);
-    for (const [name, param] of Object.entries(operation.params)) {
-      write(NS + 'parameter', {
-        operation: id, name: quote(name), kind: param.type, required: param.required === true ? 'true' : undefined,
-        nullable: param.nullable === true ? 'true' : undefined, min: token(param.min), max: token(param.max),
-        enum: param.enum?.map((item) => value(item)), enumClosed: param.enum ? 'true' : undefined,
-        default: own(param, 'default') ? value(param.default) : undefined,
-      });
-    }
+  for (const operation of host.bindings()) {
     for (const input of operation.knowledgeInputs || []) {
       seed(operation.id, { parameter: quote(input.argument), source: 'label', phase: 'initial', order: '20' });
     }

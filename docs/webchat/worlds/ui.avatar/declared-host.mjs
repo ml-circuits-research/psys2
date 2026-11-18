@@ -1,12 +1,14 @@
+import { readNativeToolInterface } from '../native-tool-interface.mjs?v=63e0f2fedd';
+import NATIVE_INTERFACE from './native-interface-source.mjs?v=e227fb4b70';
 // The avatar's native face tools, with choices derived from the supplied knowledge.
 import {centeredSpatialBox,unionSpatialBoxes} from '../native-spatial-observation.mjs?v=ced85b9a29';
-import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs?v=cf38a0ae11';
+import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs?v=ecc9d8b538';
 import {compositionBase,compositionOverrides,expressionParts} from './composition.mjs?v=b3e12b14a5';
-import {toNativeAvatarState,adoptCanonicalAvatarState} from './canonical-state.mjs?v=174776b972';
+import {toNativeAvatarState,adoptCanonicalAvatarState} from './canonical-state.mjs?v=0fe6c48089';
 import {DEFAULT_FACE} from './default-face.mjs?v=f1afd579e8';
 import {variantFor} from './facedraw.mjs?v=708c1180b9';
 import {newFace,mark,wearPreset,putPart,takeOff,setParts,moveParts,toolView,roleOf,neighbours,centre,SCALE_MIN,SCALE_MAX,NONE,PART_SIZE_GRADES,PART_MOVE_DIRECTIONS,undoStep,redoStep} from './face.mjs?v=b71e0c38d9';
-const text={type:'string',required:true},ids={type:'array',required:true},faceId={type:'string',default:'face',enum:['face']};
+const nativeInterface = readNativeToolInterface(NATIVE_INTERFACE);
 const available=(slot,variant)=>slot?.variants.some(v=>v.name===variant&&v.parts?.length>0);
 export const initialAvatarState=(data=DEFAULT_FACE)=>({face:newFace(data),selectedSlot:null});
 /** A role colour is shared by its visible parts; callers must name that whole scope. */
@@ -31,27 +33,22 @@ export function createAvatarHost({state=null,instanceId,knowledge=null,data=null
  state??=initialAvatarState(catalog);
  if(toNativeAvatarState(state).face?.v!==2)throw Error('avatar-initialization-required');
  adoptCanonicalAvatarState(state,state);
- const operations=[
-  {id:'avatar.face.compose',act:'change',on:'ui.avatar.face',intent:{subject:'composition',parameters:{characterKind:{label:'of character kind'},base:{label:'using composition base'}}},params:{id:faceId,characterKind:{type:'string',enum:capabilities.characterKinds},base:{type:'string',enum:capabilities.presets}}},
-  {id:'avatar.face.preset',act:'change',on:'ui.avatar.face',intent:{subject:'face',parameters:{preset:{label:'using preset'}}},params:{id:faceId,preset:{...text,enum:capabilities.presets}}},
-  {id:'avatar.face.expression',sample:[{args:{expression:{enum:true}}}],act:'change',on:'ui.avatar.face',intent:{subject:'face',parameters:{expression:{label:'with expression'}}},params:{id:faceId,expression:{...text,enum:['',...capabilities.expressions]}}},
-  {id:'avatar.face.name',act:'change',on:'ui.avatar.face',params:{id:faceId,name:text}},
-  {id:'avatar.face.select',act:'pick',on:'ui.avatar.face',params:{id:faceId}},
-  {id:'avatar.ids.show',act:'ask',on:'ui.avatar.face',intent:{subject:'object IDs',determiner:'the'},params:{mode:{type:'string',required:true,enum:['temporary','always','off']},duration:{type:'integer',default:4000,min:1,max:60000}}},
-  {id:'avatar.part.select',act:'pick',on:'ui.avatar.part',effectScope:{selection:{key:'selected'}},params:{id:{...text,nullable:true,enum:[null,...capabilities.slots.filter(slot=>slot.variants.length).map(slot=>slot.id)]}}},
-  {id:'avatar.face.resize',act:'change',on:'ui.avatar.face',params:{id:faceId,scale:{type:'number',required:true,min:SCALE_MIN,max:SCALE_MAX}}},
-  {id:'avatar.part.resize',act:'change',on:'ui.avatar.part',effectScope:{related:resizeRelated.map(row=>({...row,when:{...row.when,provided:'scale'}}))},params:{ids,scale:{type:'number',required:true,min:SCALE_MIN,max:SCALE_MAX}}},
-  {id:'avatar.part.add',act:'make',on:'ui.avatar.part',params:{id:{...text,enum:capabilities.slots.filter(s=>s.variants.length).map(s=>s.id)},variant:{...text,enum:variants}}},
-  {id:'avatar.part.change',act:'change',on:'ui.avatar.part',effectScope:{related:resizeRelated},params:{ids,variant:{type:'string',enum:variants},colour:{type:'string',enum:[...new Set(capabilities.slots.flatMap(s=>s.colours))]},size:{type:'string',enum:capabilities.sizes}}},
-  {id:'avatar.part.feature',act:'change',on:'ui.avatar.part',intent:{parameters:{property:{label:'with feature'},value:{label:'set to'}}},params:{id:text,property:{...text,enum:[...new Set(capabilities.slots.flatMap(s=>Object.keys(s.features)))]},value:{...text,enum:[...new Set(capabilities.slots.flatMap(s=>Object.values(s.features).flat()))]}}},
-  {id:'avatar.part.move',sample:[{args:{ids:{ref:{on:'ui.avatar.part',many:true}},place:{enum:true}}}],act:'place',on:'ui.avatar.part',params:{ids,place:{...text,enum:capabilities.directions}}},
-  {id:'avatar.part.remove',act:'remove',on:'ui.avatar.part',params:{ids}},
-  {id:'avatar.parts.remove',act:'remove',on:'ui.avatar.part',params:{ids}},
-  {id:'avatar.clear',act:'remove',on:'ui.avatar.part',params:{ids}},
-  {id:'avatar.observe',act:'ask',on:'ui.avatar.face',params:{}},
-  {id:'avatar.undo',act:'undo',on:'ui.avatar.face',params:{}},
-  {id:'avatar.redo',act:'redo',on:'ui.avatar.face',params:{}},
- ];
+ const toolInterface = nativeInterface.realize({
+  'avatar.characterKinds': capabilities.characterKinds,
+  'avatar.presets': capabilities.presets,
+  'avatar.expressions': capabilities.expressions,
+  'avatar.visibleSlots': capabilities.slots.filter(slot=>slot.variants.length).map(slot=>slot.id),
+  'avatar.minScale': SCALE_MIN,
+  'avatar.maxScale': SCALE_MAX,
+  'avatar.variants': variants,
+  'avatar.colours': [...new Set(capabilities.slots.flatMap(slot=>slot.colours))],
+  'avatar.features': [...new Set(capabilities.slots.flatMap(slot=>Object.keys(slot.features)))],
+  'avatar.featureValues': [...new Set(capabilities.slots.flatMap(slot=>Object.values(slot.features).flat()))],
+  'avatar.sizes': capabilities.sizes,
+  'avatar.directions': capabilities.directions,
+  'avatar.resizeRelated': resizeRelated.map(row=>({...row,when:{...row.when,provided:'scale'}})),
+  'avatar.sizeRelated': resizeRelated,
+ });
  const nativeView=s=>toolView({state:s,knowledge:{peekFaces:()=>catalog}}).map(row=>({id:row.id,kind:row.kind,sourceType:row.id==='face'?'ui.avatar.face':'ui.avatar.part',inputs:Object.entries({...row,...(row.id==='face'?{name:s.name??'Avatar',...(Object.hasOwn(s,'idDisplay')?s.idDisplay:{}),...(s.face.adj?.face?{scale:s.face.adj.face.s??1}:{}),...(Object.hasOwn(s,'selectedSlot')?{selectedSlot:s.selectedSlot??null}:{}),base:s.face.base,characterKind:catalog.presets[s.face.base]?.kind??null}:{...(Object.hasOwn(s,'selectedSlot')?{selected:s.selectedSlot===row.id}:{}),name:capabilities.slots.find(slot=>slot.id===row.id)?.label??row.id,dx:s.face.adj?.[row.id]?.dx??0,dy:s.face.adj?.[row.id]?.dy??0,scale:s.face.adj?.[row.id]?.s??1,tintRole:roleOf(catalog,row.id)})}).filter(([key])=>!['id','kind'].includes(key)).map(([key,value])=>({binding:`avatar.${row.id==='face'?'face':'part'}.${key}`,key,values:value===null||value===undefined?[]:[nativeToken(value)]}))}));
  const context=ctx=>({...ctx,knowledge:{peekFaces:()=>catalog}}),validIds=(ctx,a)=>a.ids.length>0&&new Set(a.ids).size===a.ids.length&&a.ids.every(id=>typeof id==='string'&&(ctx.state.face.expressionParts?.[id]??ctx.state.face.slots[id])&&(ctx.state.face.expressionParts?.[id]??ctx.state.face.slots[id])!==NONE);
  const noteExplicit=(f,args)=>{f.explicit??=compositionOverrides(catalog,f);if(args.variant!==undefined)f.explicit.slots=[...new Set([...f.explicit.slots,...args.ids])];if(args.colour!==undefined)for(const id of args.ids){const role=roleOf(catalog,id);if(role&&catalog.colours[role]?.[args.colour])f.explicit.roles=[...new Set([...f.explicit.roles,role])];else f.explicit.paint=[...new Set([...f.explicit.paint,id])];}};
@@ -125,5 +122,5 @@ export function createAvatarHost({state=null,instanceId,knowledge=null,data=null
   }
   return {frame,scope,container:'face',boxes,relations,occupants:[],unknown};
  };
- return {...createNativeToolHost({state,instanceId,scope:'avatar.face-and-parts',operations,handlers,view,spatial,...limits}),capabilities:()=>structuredClone(capabilities)};
+ return {...createNativeToolHost({state,instanceId,scope:'avatar.face-and-parts',toolInterface,handlers,view,spatial,...limits}),capabilities:()=>structuredClone(capabilities)};
 }

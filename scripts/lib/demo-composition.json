@@ -89,6 +89,13 @@
           "file": "native-interface.sop",
           "role": "native-tool-interface",
           "completeStateSchema": false
+        },
+        {
+          "file": "chart-interface.sop",
+          "owner": "data.charts",
+          "source": "native-interface.sop",
+          "role": "native-tool-interface",
+          "completeStateSchema": false
         }
       ],
       "nativeInitializer": {

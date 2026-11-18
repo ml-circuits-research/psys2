@@ -1,5 +1,5 @@
 // Read-only architecture projection of the runtime registry. No inferred execution links.
-import {parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=b88e6c95e3';
+import {parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=f5d53a8da9';
 import {describeWorldsNodes} from './worlds-node-metadata.mjs?v=11b6d9d2f3';
 import {CATALOG_WORLD_PURPOSES} from './catalog-world-purpose.mjs?v=2eb2f3f744';
 
@@ -8,7 +8,7 @@ export function inspectSchemaSource(source){
  try{
   const nodes=parse(source),entry=node=>({id:node.id,predicate:node.type,attributes:structuredClone(node.attrs),wire:serialize([node]),...(node.attrs.doc?{documentation:node.attrs.doc.map(str).join(' ')}:{})}),select=types=>nodes.filter(node=>types.includes(node.type)).map(entry);
   const language=select(['core.word','core.phrase','core.shape']);
-  return {status:'parsed declarations',legends:select(['core.legend']),modules:select(['core.module','core.use']),types:select(['core.type']),slots:select(['core.slot','core.key']),tools:select(['app.native.operation']),parameters:select(['app.native.parameter']),language,documentation:nodes.filter(node=>node.attrs.doc).map(entry),languageStatus:language.length?'Word, phrase or shape declarations are present. Their presence does not prove that the active reader uses them.':'No core.word, core.phrase or core.shape declarations occur in this source. Native tool declarations alone do not establish a text-to-intent binding.'};
+  return {status:'parsed declarations',legends:select(['core.legend']),modules:select(['core.module','core.use']),types:select(['core.type']),slots:select(['core.slot','core.key']),tools:select(['app.native.operation','std.capability.operation']),parameters:select(['app.native.parameter','std.capability.parameter']),language,documentation:nodes.filter(node=>node.attrs.doc).map(entry),languageStatus:language.length?'Word, phrase or shape declarations are present. Their presence does not prove that the active reader uses them.':'No core.word, core.phrase or core.shape declarations occur in this source. Native tool declarations alone do not establish a text-to-intent binding.'};
  }catch(error){return {status:'source parse failed',error:String(error?.message??error),legends:[],modules:[],types:[],slots:[],tools:[],parameters:[],language:[],documentation:[],languageStatus:'Source could not be parsed; no language binding is asserted.'};}
 }
 export function inspectWorldsRuntime({index={},bundle={worlds:{}},loaded=[],instances=[],hosts=[],nativePackages=[],knowledgeFiles=[],reader={},nativeStates={},instanceCaches=[],sessionMeta=null,libraryInfo=null}={}){

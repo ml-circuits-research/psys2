@@ -120,3 +120,8 @@ Worlds Chromium `node .git/worlds-browser-count.mjs` with and without `VERIFY_WO
 
 2026-11-18 Drawing and Documents now store their current content as authoritative typed SOP facts. The editor adapters derive closed schemas from typed field inventories and stage native render/tool views. Work files retain auxiliary history in separate typed runtime records.
 Checks: npm test 612 tests, 609 pass, 3 skip, webchat build 5aa3495574. Chromium edited and saved a Documents paragraph and a positioned Drawing house, reopened both work files, edited again, and used Undo in both editors. Worlds showed both authoritative SOP states. Legacy Documents CLI remains 8/212 without its former reader.
+
+2026-11-18 delivered native interface authority in SOP for Drawing, Diagram, Documents, Calendar and Avatar plus Diagram's Chart dependency. The native validator, capability compiler and Worlds source inspector consume the same owned interface. Older `operations.sop` files remain the legacy core.operation surface.
+`node ../.session-control/check-capability-abi-final.mjs` compared actual before/after native bindings and retained every operation descriptor (21/40/27/17/19, standalone Chart 14), including metadata and dynamic options. The shared-input test verifies the same declared limit in the compiler and the real host.
+Checks: LIB 0.212.0/a3ea363, `node scripts/build-native-interfaces.mjs --check`, execution source and system map rebuilt, `npm run build:webchat` d8d03df4c3, `npm test` 614 tests / 611 pass / 3 skip, `git diff --check`.
+`node ../.session-control/native-abi-main-chromium-smoke.mjs` verified authored SOP recolor #ff0000 → #0000ff in the authoritative Drawing World, exact dispatched call and authored interface in Worlds, and Undo restoring #ff0000.

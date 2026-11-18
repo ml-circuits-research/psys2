@@ -1,35 +1,14 @@
-import{projectNumericGroups}from'./chart-layout.mjs';
 // SPDX-License-Identifier: AGPL-3.0-only
+import { diagramToolInterface, DIAGRAM_COMPONENTS } from './tool-interface.mjs';
+export { DIAGRAM_TOOL_BINDINGS, DIAGRAM_COMPONENTS } from './tool-interface.mjs';
+import{projectNumericGroups}from'./chart-layout.mjs';
 import {centeredSpatialBox,spatialBox,unionSpatialBoxes} from '../native-spatial-observation.mjs';
 import {routeEdges} from './arrows.mjs';
 import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs';
 import {initialState,loadEngine,systemFor,writeBack,PREFIX,K} from './core.mjs';
 import * as tool from './tool.mjs';
-import{GROUP_TOOL_BINDINGS,groupNativeObjects,groupNativeHandlers,projectGroupCharts}from'./group-tools.mjs';
-import {CHART_TOOL_BINDINGS,initialChartState,chartNativeObjects,chartNativeHandlers} from '../data.charts/declared-host.mjs';
-export const DIAGRAM_COMPONENTS=[{world:'data.charts',stateKey:'chartTools',operations:CHART_TOOL_BINDINGS.filter(op=>!['chart.undo','chart.redo'].includes(op.id))}];
-const array={type:'array',required:true},id={type:'string',required:true};
-export const DIAGRAM_TOOL_BINDINGS=[
- {id:'diagram.node.make',sample:[{args:{kind:{enum:true},n:{value:1},colour:{enum:true},size:{enum:true}}}],act:'make',on:'diagram.sketch.node',params:{kind:{type:'string',required:true,enum:Object.keys(PREFIX)},label:{type:'string'},n:{type:'integer',default:1,min:1,max:12},colour:{type:'string'},size:{type:'string',enum:['tiny','small','medium','large','huge']},layout:{type:'string',enum:['tree','grid','row','column','circle','radial','layers']},x:{type:'number'},y:{type:'number'}},spatial:{frame:'diagram.canvas',kindKey:'kind',xKey:'x',yKey:'y'}},
- {id:'diagram.node.change',sample:[{args:{ids:{ref:{on:'diagram.sketch.node',many:true}},label:{unique:{prefix:'Node'}}}}],act:'change',on:'diagram.sketch.node',params:{ids:array,colour:{type:'string'},size:{type:'string',enum:['tiny','small','medium','large','huge']},label:{type:'string'},value:{type:'number'}}},
- {id:'diagram.node.select',act:'pick',on:'diagram.sketch.node',params:{ids:array,edges:{type:'array'}}},
- {id:'diagram.node.remove',act:'remove',on:'diagram.sketch.node',params:{ids:array}},
- {id:'diagram.node.place',act:'place',on:'diagram.sketch.node',params:{ids:array,x:{type:'number',required:true},y:{type:'number',required:true}},coordinates:{dimension:'length',unit:'canvas.pixel',frame:'diagram.canvas'},spatial:{frame:'diagram.canvas',xKey:'x',yKey:'y',idsKey:'ids'}},
- {id:'diagram.node.resize',act:'change',on:'diagram.sketch.node',params:{ids:array,width:{type:'number',required:true,min:8,max:4096},height:{type:'number',required:true,min:8,max:4096}},coordinates:{dimension:'length',unit:'canvas.pixel',frame:'diagram.canvas'}},
- {id:'diagram.node.layout',act:'change',on:'diagram.sketch.node',params:{ids:array,layout:{type:'string',required:true,enum:['tree','grid','row','column','circle','radial','layers']}}},
- {id:'diagram.link.make',act:'make',on:'diagram.sketch.link',params:{from:id,to:id}},
- {id:'diagram.link.select',act:'pick',on:'diagram.sketch.link',params:{ids:array,nodes:{type:'array'}}},
- {id:'diagram.link.change',act:'change',on:'diagram.sketch.link',params:{ids:array,from:{type:'string'},to:{type:'string'},label:{type:'string'},colour:{type:'string'},style:{type:'string',enum:['solid','dashed','dotted']},arrow:{type:'string',enum:['forward','both','none']},width:{type:'number',min:.5,max:12}}},
- {id:'diagram.link.remove',act:'remove',on:'diagram.sketch.link',params:{ids:array}},
- {id:'diagram.selection.remove',act:'remove',on:'diagram.sketch',effectScope:{projection:'composite'},params:{nodes:array,links:array}},
- {id:'diagram.page.clear',act:'remove',on:'diagram.sketch',intent:{subject:'contents of the diagram',determiner:'the'},effectScope:{projection:'composite'},params:{}},
- {id:'diagram.ids.show',act:'ask',on:'diagram.sketch.page',intent:{subject:'object IDs',determiner:'the',parameters:{duration:{format:'duration-ms',label:'for'}}},params:{mode:{type:'string',required:true,enum:['temporary','always','off']},duration:{type:'integer',default:4000,min:1,max:60000}}},
- {id:'diagram.observe',act:'ask',on:'diagram.sketch',params:{}},
- {id:'diagram.undo',act:'undo',on:'diagram.sketch',params:{}},
- {id:'diagram.redo',act:'redo',on:'diagram.sketch',params:{}},
- ...GROUP_TOOL_BINDINGS,
- ...DIAGRAM_COMPONENTS.flatMap(component=>component.operations.map(({sample,...operation})=>operation)),
-];
+import{groupNativeObjects,groupNativeHandlers,projectGroupCharts}from'./group-tools.mjs';
+import {initialChartState,chartNativeObjects,chartNativeHandlers} from '../data.charts/declared-host.mjs';
 export const initialDiagramState=initialState;
 const fail=code=>({status:'missing',code});
 const ids=(s,list,kind='shapes')=>Array.isArray(list)&&list.length>0&&new Set(list).size===list.length&&list.every(id=>typeof id==='string'&&s[kind].some(item=>(kind==='shapes'?item.name:item.id)===id));
@@ -95,7 +74,7 @@ const restoreComposition=(state,snapshot)=>{const copy=structuredClone(snapshot)
 export async function createDiagramHost({state=initialState(),instanceId,...limits}={}){
  await loadEngine();migrateChartTools(state);
  const colours=Object.keys(systemFor(state).engine.plugin('shapes').legend.color.values);
- const operations=DIAGRAM_TOOL_BINDINGS.map(op=>({...op,params:Object.fromEntries(Object.entries(op.params).map(([key,value])=>[key,op.id.startsWith('diagram.')&&key==='colour'?{...value,enum:colours}:value]))}));
+ const toolInterface = diagramToolInterface.realize({ 'diagram.colours': colours });
  const run=(ctx,args)=>{try{const r=systemFor(ctx.state).engine.run([{id:'native',type:'command',args}]);writeBack(ctx.state);return r.ok?{status:'supported',changed:args.target||[]}:fail('native-refusal');}catch{return fail('native-refusal');}};
  const handlers={
   'diagram.node.make':(ctx,a,step)=>{const result=tool.addShapes(ctx,{...a,step});if(result.status==='supported'){const made=ctx.state.shapes.filter(n=>result.changed.includes(n.name));if(a.label!==undefined||a.kind==='text')for(const node of made)node.label=a.label??'Text';if(a.x!==undefined||a.y!==undefined){const cx=made.reduce((v,n)=>v+n.x,0)/made.length,cy=made.reduce((v,n)=>v+n.y,0)/made.length;for(const n of made){n.x+=(a.x??cx)-cx;n.y+=(a.y??cy)-cy;}}ctx.state.rev++;ctx.state.selected={shapes:result.changed,edges:[]};ctx.state.chartTools.active=null;}return result;},
@@ -117,11 +96,11 @@ export async function createDiagramHost({state=initialState(),instanceId,...limi
  };
  Object.assign(handlers,groupNativeHandlers({run}));
  const chartHandlers=chartNativeHandlers();
- for(const operation of CHART_TOOL_BINDINGS.filter(op=>!['chart.undo','chart.redo'].includes(op.id)))handlers[operation.id]=(ctx,args,step)=>{const result=chartHandlers[operation.id]({...ctx,state:ctx.state.chartTools},args,step);if(result?.status==='supported'&&['chart.select','chart.make','chart.place'].includes(operation.id))ctx.state.selected={shapes:[],edges:[]};return result;};
+ for(const operation of DIAGRAM_COMPONENTS.flatMap(component=>component.operations))handlers[operation.id]=(ctx,args,step)=>{const result=chartHandlers[operation.id]({...ctx,state:ctx.state.chartTools},args,step);if(result?.status==='supported'&&['chart.select','chart.make','chart.place'].includes(operation.id))ctx.state.selected={shapes:[],edges:[]};return result;};
  handlers['diagram.undo']=ctx=>{const s=ctx.state;if(!s.compositionHistory?.length)return fail('nothing-to-undo');s.compositionFuture??=[];s.compositionFuture.push(compositionSnapshot(s));restoreComposition(s,s.compositionHistory.pop());return {status:'supported',changed:[]};};
  handlers['diagram.redo']=ctx=>{const s=ctx.state;if(!s.compositionFuture?.length)return fail('nothing-to-redo');s.compositionHistory??=[];s.compositionHistory.push(compositionSnapshot(s));restoreComposition(s,s.compositionFuture.pop());return {status:'supported',changed:[]};};
- for(const operation of operations){if(['ask','undo','redo','pick'].includes(operation.act))continue;const handler=handlers[operation.id];handlers[operation.id]=(ctx,args,step)=>{const before=compositionSnapshot(ctx.state),result=handler(ctx,args,step);if(result?.status==='supported'){const derived=[...projectGroupCharts(ctx.state,{operation:operation.id,args}),...projectNumericGroups(ctx.state,{operation:operation.id,args})];if(derived.length)result.changed=[...new Set([...(result.changed??[]),...derived])];}if(result?.status==='supported'&&JSON.stringify(before)!==JSON.stringify(compositionSnapshot(ctx.state))){ctx.state.compositionHistory??=[];ctx.state.compositionHistory.push(before);if(ctx.state.compositionHistory.length>30)ctx.state.compositionHistory.shift();ctx.state.compositionFuture=[];}return result;};}
- const host=createNativeToolHost({state,instanceId,scope:'diagram.nodes-links-and-charts',operations,handlers,view,spatial,...limits});
+ for(const operation of toolInterface.bindings){if(['ask','undo','redo','pick'].includes(operation.act))continue;const handler=handlers[operation.id];handlers[operation.id]=(ctx,args,step)=>{const before=compositionSnapshot(ctx.state),result=handler(ctx,args,step);if(result?.status==='supported'){const derived=[...projectGroupCharts(ctx.state,{operation:operation.id,args}),...projectNumericGroups(ctx.state,{operation:operation.id,args})];if(derived.length)result.changed=[...new Set([...(result.changed??[]),...derived])];}if(result?.status==='supported'&&JSON.stringify(before)!==JSON.stringify(compositionSnapshot(ctx.state))){ctx.state.compositionHistory??=[];ctx.state.compositionHistory.push(before);if(ctx.state.compositionHistory.length>30)ctx.state.compositionHistory.shift();ctx.state.compositionFuture=[];}return result;};}
+ const host=createNativeToolHost({state,instanceId,scope:'diagram.nodes-links-and-charts',toolInterface,handlers,view,spatial,...limits});
  return {...host,measureSpatial(operation,args){
   if(operation!=='diagram.node.make'||!Object.hasOwn(PREFIX,args.kind))return null;
   const key=JSON.stringify([state.rules,args]);

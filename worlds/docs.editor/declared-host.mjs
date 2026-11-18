@@ -1,26 +1,13 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import { readNativeToolInterface } from '../native-tool-interface.mjs';
+import NATIVE_INTERFACE from './native-interface-source.mjs';
 import {createNativeToolHost,copyHostData,nativeToken} from '../native-tool-host.mjs';
 import {createDoc,writeText,commit,sync,undoStep,redoStep,addBlock} from './document.mjs';
-import {DOCUMENT_EDITING_BINDINGS,DOCUMENT_BLOCK_CHANGE_PARAMETERS,documentEditingHandlers,changeDocumentBlock,documentTextId} from './native-editing.mjs';
+import {documentEditingHandlers,changeDocumentBlock,documentTextId} from './native-editing.mjs';
 import {canonicalDocumentState,documentStateWorld,toNativeDocumentState,DOCUMENT_STATE_SCHEMA} from './canonical-state.mjs';
 import {blockText,containers} from './model.mjs';
-const text={type:'string',required:true},array={type:'array',required:true};
-export const DOCUMENT_TOOL_BINDINGS=[
- ...DOCUMENT_EDITING_BINDINGS,
- {id:'document.write',sample:[{when:{missing:'docs.editor.document'},args:{title:{unique:{prefix:'Notes'}},blocks:{value:[]}}}],act:'make',on:'docs.editor.document',params:{title:text,blocks:array,genre:{type:'string'},topic:{type:'string'}}},
- {id:'document.compose',act:'make',on:'docs.editor.document',requires:['knowledge-composer'],params:{genre:text,topic:text,words:{type:'integer',min:1,max:100000},chapters:{type:'integer',min:1,max:100}}},
- {id:'document.rewrite',act:'change',on:'docs.editor.document',requires:['knowledge-rewriter'],params:{property:{type:'string',required:true,enum:['tone','length']},value:{type:'string',required:true}}},
- {id:'document.block.make',sample:[{args:{parent:{ref:{on:'docs.editor.document'}},kind:{enum:true},text:{value:'A new idea for this document.'},name:{unique:{prefix:'Note'}}}}],act:'make',on:'docs.editor.block',params:{parent:text,kind:{type:'string',required:true,enum:['paragraph','heading','quote']},text:{type:'string',default:''},level:{type:'integer',min:3,max:6},name:{type:'string'}}},
- {id:'document.section.make',act:'make',on:'docs.editor.section',params:{parent:text,after:{type:'string'},text:{type:'string',default:''},level:{type:'integer',default:2,min:1,max:2},name:{type:'string'}}},
- {id:'document.block.change',sample:[{args:{id:{ref:{on:'docs.editor.block'}},name:{unique:{prefix:'Note'}}}}],act:'change',on:'docs.editor.block',params:DOCUMENT_BLOCK_CHANGE_PARAMETERS},
- {id:'document.block.remove',act:'remove',on:'docs.editor.block',params:{ids:array}},
- {id:'document.section.remove',descendantPolicy:'until-next-heading-at-same-or-shallower-level',act:'remove',on:'docs.editor.section',params:{ids:array}},
- {id:'document.section.reorder',act:'place',on:'docs.editor.section',params:{ids:array}},
- {id:'document.remove',act:'remove',on:'docs.editor.document',params:{}},
- {id:'document.observe',act:'ask',on:'docs.editor.document',params:{}},
- {id:'document.undo',act:'undo',on:'docs.editor.document',params:{}},
- {id:'document.redo',act:'redo',on:'docs.editor.document',params:{}},
-];
+const toolInterface = readNativeToolInterface(NATIVE_INTERFACE).realize();
+export const DOCUMENT_TOOL_BINDINGS = toolInterface.bindings;
 export function initialDocumentState(){const s={title:'',titleMarks:[],titleAlign:'left',titleSize:0,blocks:[],cursor:-1,selection:null,focus:null,inputMode:null,history:[],future:[],nextId:1,dictBlock:null,kind:null,about:null,textId:null};sync(s);return s;}
 export const initialCanonicalDocumentState=()=>canonicalDocumentState(initialDocumentState());
 export const DOCUMENT_STATE_INTERFACE=Object.freeze({canonicalizeState:canonicalDocumentState,projectState:toNativeDocumentState,
@@ -69,6 +56,6 @@ export function createDocumentHost({state=initialDocumentState(),instanceId,comp
   if(result?.status==='supported')Object.assign(ctx.state,canonicalDocumentState(native));
   return result;
  }])):handlers;
- return createNativeToolHost({state,instanceId,scope:'document-and-blocks',operations:DOCUMENT_TOOL_BINDINGS,handlers:effectiveHandlers,
+ return createNativeToolHost({state,instanceId,scope:'document-and-blocks',toolInterface,handlers:effectiveHandlers,
   view:canonical?carrier=>view(toNativeDocumentState(carrier)):view,...limits});
 }

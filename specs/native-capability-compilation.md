@@ -23,3 +23,19 @@ native SOP dispatch. Its concrete receipt and independently observed state deter
 The spatial request hook runs through the spatial compiler. Query and graph structures outside
 this capability contract retain their existing handling. The change does not alter the learned
 reader, its confidence policy or native editor undo history.
+
+## Authority for a native interface
+
+Each editor owns `worlds/<editor>/native-interface.sop`. It declares the same
+`std.capability.operation` and `std.capability.parameter` records used by the
+compiler. Typed children retain structured values, argument metadata, effect scope,
+coordinates, defaults and samples. A mechanical decoder builds the native argument
+interface and attaches the scoped facts to live compilation. Avatar catalog choices
+and Diagram color values enter as named runtime inputs. The composition clause in
+Diagram includes Chart operations from the Chart interface, with a shared history.
+
+`native-interface-source.mjs` transports the authored bytes into the Node and browser
+modules. Generate or verify it with `node scripts/build-native-interfaces.mjs` or
+`node scripts/build-native-interfaces.mjs --check`. The demo loader exposes the
+authored sources directly in Worlds. Each existing `operations.sop` is the separate
+legacy `core.operation` surface of the older world loader.

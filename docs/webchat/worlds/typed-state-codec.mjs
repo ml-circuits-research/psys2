@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Serialize declared domain records as closed SOP types. Only scalar properties
 // and explicitly typed child records can become facts.
-import { World, parse, quote, serialize } from '../lib/vendor/sopworld/sopworld.mjs?v=b88e6c95e3';
+import { World, parse, quote, serialize } from '../lib/vendor/sopworld/sopworld.mjs?v=f5d53a8da9';
 import { budget } from '../lib/dialog/budget.mjs?v=00bce6e369';
-import { copyHostData } from './native-tool-host.mjs?v=cf38a0ae11';
+import { copyHostData } from './native-tool-host.mjs?v=ecc9d8b538';
 
 const scalarKinds = new Set(['string','number','integer','boolean','atom']);
 const token = value => typeof value === 'string' ? quote(value) : Object.is(value,-0) ? '-0' : String(value);

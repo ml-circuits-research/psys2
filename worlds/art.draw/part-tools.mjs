@@ -3,17 +3,6 @@
 import {partsOf,piecesOf,groupOf,registerShape,thingBuild,COMPOSITE,thingOfKey,kindKey,kindName,KINDS,objectMatrix,multiplyMatrix,inverseMatrix,geometryPoint,bbox} from './scene.mjs';
 import {makeObject,remember} from './board.mjs';
 const budget={tick:(site,n=1)=>globalThis[Symbol.for('psys2.budget')]?.tick(site,n)};
-const text={type:'string',required:true},index={type:'integer',required:true,min:0},number={type:'number',required:true};
-export const DRAWING_PART_TOOL_BINDINGS=[
- {id:'drawing.object.parts',act:'ask',on:'art.draw.object',params:{id:text}},
- {id:'drawing.part.select',act:'ask',on:'art.draw.part',params:{id:text,index}},
- {id:'drawing.part.change',act:'change',on:'art.draw.part',params:{id:text,index,color:{type:'string'},width:{type:'number',min:.01},height:{type:'number',min:.01}}},
- {id:'drawing.part.place',act:'place',on:'art.draw.part',params:{id:text,index,x:number,y:number},coordinates:{dimension:'length',unit:'canvas.pixel',frame:'drawing.canvas'}},
- {id:'drawing.part.remove',act:'remove',on:'art.draw.part',params:{id:text,index}},
- {id:'drawing.part.extract',act:'ungroup',on:'art.draw.part',effectScope:{projection:'composite'},intent:{parameters:{id:{role:'source',reference:true,label:'from object'}}},params:{id:text,index}},
- {id:'drawing.object.group',act:'group',on:'art.draw.object',effectScope:{projection:'composite'},intent:{parameters:{ids:{role:'source',reference:true,label:'from members'}}},params:{ids:{type:'array',required:true},name:{type:'string',default:'Group'},label:{type:'string'}}},
- {id:'drawing.object.ungroup',act:'ungroup',on:'art.draw.object',effectScope:{projection:'composite'},intent:{parameters:{id:{role:'source',reference:true,label:'from object'}}},params:{id:text}},
-];
 const fail=code=>({status:'missing',code}),done=(changed,data)=>({status:'supported',changed,...(data?{data}:{})}),object=(s,id)=>findDrawingObject(s,id);
 const boxOf=p=>{if(p.pts){const xs=p.pts.map(q=>q[0]),ys=p.pts.map(q=>q[1]);return {x0:Math.min(...xs),x1:Math.max(...xs),y0:Math.min(...ys),y1:Math.max(...ys)};}return {x0:p.x-p.w/2,x1:p.x+p.w/2,y0:p.y-p.h/2,y1:p.y+p.h/2};};
 const transform=(o,x,y)=>{const p=geometryPoint(objectMatrix(o),x*o.size,y*o.size);return [o.x+p[0],o.y+p[1]];};

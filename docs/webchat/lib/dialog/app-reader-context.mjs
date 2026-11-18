@@ -1,13 +1,13 @@
 // Actual application state only. No request annotations or invented semantic types.
-import {observedReaderContext} from './native-reader-context.mjs?v=6cf1d2e296';
-import {createCanonicalDrawingHost} from '../../worlds/art.draw/declared-host.mjs?v=a9e420b741';
-import {DRAWING_STATE_INTERFACE} from '../../worlds/art.draw/canonical-state.mjs?v=590239fc7c';
-import {createDiagramHost} from '../../worlds/diagram.sketch/declared-host.mjs?v=b338f5c5d4';
-import {createDocumentHost,DOCUMENT_STATE_INTERFACE} from '../../worlds/docs.editor/declared-host.mjs?v=2dc3451241';
-import {createAvatarHost} from '../../worlds/ui.avatar/declared-host.mjs?v=81f6e24632';
-import {canonicalAvatarState,toNativeAvatarState,avatarStateWorld,AVATAR_STATE_SCHEMA} from '../../worlds/ui.avatar/canonical-state.mjs?v=174776b972';
-import {createCalendarHost,canonicalCalendarState,toNativeCalendarState} from '../../worlds/time.calendar/declared-host.mjs?v=6d55ee9264';
-import {calendarStateWorld,CALENDAR_STATE_SCHEMA} from '../../worlds/time.calendar/canonical-state.mjs?v=1676a28d12';
+import {observedReaderContext} from './native-reader-context.mjs?v=0b0220ad07';
+import {createCanonicalDrawingHost} from '../../worlds/art.draw/declared-host.mjs?v=9a5cbc733a';
+import {DRAWING_STATE_INTERFACE} from '../../worlds/art.draw/canonical-state.mjs?v=368d518f98';
+import {createDiagramHost} from '../../worlds/diagram.sketch/declared-host.mjs?v=e5b1edb8ee';
+import {createDocumentHost,DOCUMENT_STATE_INTERFACE} from '../../worlds/docs.editor/declared-host.mjs?v=8e6863b870';
+import {createAvatarHost} from '../../worlds/ui.avatar/declared-host.mjs?v=de1d9c428e';
+import {canonicalAvatarState,toNativeAvatarState,avatarStateWorld,AVATAR_STATE_SCHEMA} from '../../worlds/ui.avatar/canonical-state.mjs?v=0fe6c48089';
+import {createCalendarHost,canonicalCalendarState,toNativeCalendarState} from '../../worlds/time.calendar/declared-host.mjs?v=ee359fcd83';
+import {calendarStateWorld,CALENDAR_STATE_SCHEMA} from '../../worlds/time.calendar/canonical-state.mjs?v=a4e222288c';
 export const NATIVE_AREAS={
  avatar:{area:'drawing',world:'ui.avatar',create:createAvatarHost,canonicalizeState:canonicalAvatarState,projectState:toNativeAvatarState,
   stateWorld:avatarStateWorld,stateSchema:AVATAR_STATE_SCHEMA,stateInterfaceTypeKey:'nativeType',loadKnowledge:'faces',
