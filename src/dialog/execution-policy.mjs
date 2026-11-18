@@ -21,9 +21,9 @@ export function inspectExecutionPolicyWorld(){
 function admitExecutionPolicy(wires){
  const context=new World({library:{[schemaModule]:SCHEMA}});
  const schema=wires.filter(wire=>wire.type==='core.use');
- if(!context.tell(schema).ok)throw Error('invalid-execution-policy-schema');
+ if(!context.tell(serialize(schema)).ok)throw Error('invalid-execution-policy-schema');
  const policy=context.fork(),rows=wires.filter(wire=>wire.type!=='core.use');
- if(!policy.tell(rows,{factsOnly:true}).ok)throw Error('invalid-execution-policy');
+ if(!policy.tell(serialize(rows),{factsOnly:true}).ok)throw Error('invalid-execution-policy');
  const seen=new Set();
  for(const row of policy.ofType('std.capability.seed')){
   const key=JSON.stringify([row.attrs.operation[0],row.attrs.parameter[0]]);

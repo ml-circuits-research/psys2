@@ -1,6 +1,6 @@
-import {invokeToolCommand} from './native-control-intent.mjs?v=3865c9f05f';
+import {invokeToolCommand} from './native-control-intent.mjs?v=38f2efeed0';
 // A dice gesture samples declared UI fields. It is not a language-reader prediction.
-import {copyHostData,validateNativeArguments} from '../../worlds/native-tool-host.mjs?v=2a5ea0af55';
+import {copyHostData,validateNativeArguments} from '../../worlds/native-tool-host.mjs?v=cb157b31d6';
 const pick=(items,random)=>items.length?items[Math.min(items.length-1,Math.floor(Math.max(0,Math.min(.999999999,Number(random())||0))*items.length))]:undefined;
 const projection=observation=>JSON.stringify(observation.objects.map(({source,version,...row})=>({...row,inputs:(row.inputs??[]).map(({source,version,...input})=>input)})));
 function argument(strategy,param,observation,random,serial){

@@ -1,5 +1,5 @@
 // Operational C1 scheduling policy. Ordering independent cuts is not a causal claim.
-import {World,parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=7950b62b94';
+import {World,parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=b7d50d9480';
 import SOURCE from '../../worlds/app.project/request-composition-policy-source.mjs?v=e190149088';
 import SCHEMA from '../../worlds/app.project/request-composition-policy-schema-source.mjs?v=1b5c95ad54';
 export const REQUEST_COMPOSITION_POLICY_SOURCE=SOURCE;
@@ -11,9 +11,9 @@ let world;
 export function requestCompositionPolicy(){
  if(!world){
   const context=new World({library:{[schemaModule]:SCHEMA}});
-  if(!context.tell(imports).ok)throw Error('invalid-request-composition-policy-schema');
+  if(!context.tell(serialize(imports)).ok)throw Error('invalid-request-composition-policy-schema');
   const policy=context.fork();
-  if(!policy.tell(facts,{factsOnly:true}).ok)throw Error('invalid-request-composition-policy');
+  if(!policy.tell(serialize(facts),{factsOnly:true}).ok)throw Error('invalid-request-composition-policy');
   world=policy;
  }
  const declaration=world.get('composition.default'),value=key=>str(declaration?.attrs[key]?.[0]);

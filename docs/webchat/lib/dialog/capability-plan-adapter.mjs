@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-import { parse, quote, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=7950b62b94';
+import { parse, quote, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=b7d50d9480';
 import { decodeCapabilityCall } from '../vendor/sopworld/capability-call.mjs?v=ed3b773c65';
 import POLICY from '../../worlds/app.project/capability-policy.mjs?v=9f3103a196';
-import { executionPolicyWorld } from './execution-policy.mjs?v=52e745ed26';
-import { nativeKindCandidates } from './native-binding-candidates.mjs?v=de223646d6';
-import { observedReaderContext } from './native-reader-context.mjs?v=0849a36a70';
+import { executionPolicyWorld } from './execution-policy.mjs?v=9ad12c3289';
+import { nativeKindCandidates } from './native-binding-candidates.mjs?v=5d5aa4bc25';
+import { observedReaderContext } from './native-reader-context.mjs?v=1f97f6d3a1';
 import { budget } from './budget.mjs?v=00bce6e369';
 
 const NS = 'std.capability.';
@@ -137,7 +137,7 @@ function compilerWorld(context, nodes) {
   const concepts = new Set(nodes.filter(wire => wire.type === 'std.request.constraint').map(wire => take(wire, 'concept')));
   const {wires,scope}=interfaceFacts(context, concepts);
   const world=declarations.fork();
-  if (!world.tell(wires,{factsOnly:true}).ok) throw Error('invalid-capability-interface');
+  if (!world.tell(serialize(wires),{factsOnly:true}).ok) throw Error('invalid-capability-interface');
   return {world,scope};
 }
 function contextWire(id,request,scope) {

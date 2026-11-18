@@ -165,3 +165,6 @@ Checks: npm test passed 615 with three skips. Chromium verified authored Undo, U
 
 2026-11-18: The deployed reader accepts a single SOP source wire. Tool declarations supply capability seeds. Lookup and normalization use authored SOP with original evidence.
 Checks: npm test passed 617, three skips. Chromium verified exact Unicode ingress, tree and house with Undo, ordinal chart labels [1,2,3] and catalog apple with three parts, as well as authored and natural Undo/Redo on the integrated build.
+
+2026-11-18: SOPWorlds 0.217 projects rule calls through the same tool input boundary. Grounded creation and reference circuits and native constructor joins now follow authored SOP with separately inspectable schemas. Removed the unused JavaScript property selector and its browser asset.
+Checks: npm test passed 618 with three skips. Chromium exercised seven creation/Undo pairs, contextual retargeting, natural and manual history, and the actual property compiler and tool after removal of the old selector.

@@ -27,3 +27,29 @@ test('compatible catalog constructors are selected for an unfamiliar declared fa
  const bindings={kinds:[{area:'novel',lemma:'unlisted',canonical:'example.unlisted',nativeFamilyBinding:{operation:'create.basic'}}]},operations=[{id:'create.basic',act:'make',on:'example.item',params:{kind:{type:'string',enum:['basic']}}},{id:'create.catalog',act:'make',on:'example.item',knowledgeInputs:[{argument:'entry',load:'resolve'}],params:{entry:{type:'string',required:true}}},{id:'other.catalog',act:'make',on:'unrelated.item',knowledgeInputs:[{argument:'entry',load:'resolve'}],params:{entry:{type:'string'}}}];
  assert.deepEqual(nativeCreationCandidates(bindings,operations,'novel').map(candidate=>candidate.operation.id),['create.catalog']);
 });
+
+test('constructor policy retains same-family alternatives and treats absence as evidence only where declared', () => {
+ const operation=(id,overrides={})=>({id,act:'make',on:'fixture.item',params:{},...overrides});
+ const load=[{argument:'entry',load:'fixture'}];
+ const operations=[
+  operation('new.mapped',{knowledgeInputs:load,params:{kind:{enum:['sprout']}}}),
+  operation('new.catalog',{knowledgeInputs:load}),
+  operation('new.second',{knowledgeInputs:load}),
+  operation('new.blocked',{knowledgeInputs:load,requires:['prior-observation']}),
+  operation('new.open-kind',{knowledgeInputs:load,params:{kind:{type:'string'}}}),
+  operation('new.edit',{act:'change',knowledgeInputs:load}),
+ ];
+ const nativeFamilyBinding={operation:'new.mapped'};
+ const leaf={area:'novel',lemma:'sprout',canonical:'fixture.sprout',nativeFamilyBinding};
+ const family={area:'novel',type:'sprout',canonical:'fixture.family',nativeFamilyBinding};
+ const missing={...leaf,nativeFamilyBinding:{operation:'new.missing'}};
+ const names = bindings => nativeCreationCandidates(bindings,operations,'novel').map(({mapping,operation})=>[mapping.canonical,operation.id]);
+ assert.deepEqual(names({kinds:[leaf,missing],families:[family]}),[
+  ['fixture.sprout','new.mapped'],['fixture.sprout','new.catalog'],['fixture.sprout','new.second'],
+  ['fixture.family','new.mapped'],
+ ]);
+ assert.deepEqual(names({kinds:[{...leaf,area:'other'}]}),[]);
+ assert.deepEqual(names({kinds:[{...leaf,lemma:'unknown'}]}),[
+  ['fixture.sprout','new.catalog'],['fixture.sprout','new.second'],
+ ]);
+});

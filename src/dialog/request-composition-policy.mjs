@@ -11,9 +11,9 @@ let world;
 export function requestCompositionPolicy(){
  if(!world){
   const context=new World({library:{[schemaModule]:SCHEMA}});
-  if(!context.tell(imports).ok)throw Error('invalid-request-composition-policy-schema');
+  if(!context.tell(serialize(imports)).ok)throw Error('invalid-request-composition-policy-schema');
   const policy=context.fork();
-  if(!policy.tell(facts,{factsOnly:true}).ok)throw Error('invalid-request-composition-policy');
+  if(!policy.tell(serialize(facts),{factsOnly:true}).ok)throw Error('invalid-request-composition-policy');
   world=policy;
  }
  const declaration=world.get('composition.default'),value=key=>str(declaration?.attrs[key]?.[0]);

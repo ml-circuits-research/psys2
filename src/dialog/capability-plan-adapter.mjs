@@ -137,7 +137,7 @@ function compilerWorld(context, nodes) {
   const concepts = new Set(nodes.filter(wire => wire.type === 'std.request.constraint').map(wire => take(wire, 'concept')));
   const {wires,scope}=interfaceFacts(context, concepts);
   const world=declarations.fork();
-  if (!world.tell(wires,{factsOnly:true}).ok) throw Error('invalid-capability-interface');
+  if (!world.tell(serialize(wires),{factsOnly:true}).ok) throw Error('invalid-capability-interface');
   return {world,scope};
 }
 function contextWire(id,request,scope) {

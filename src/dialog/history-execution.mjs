@@ -11,16 +11,17 @@ async function execute(session,candidate,view){
  const act=first(request,'act');
  if(!authored.ofType('std.compile.rule').some(wire=>first(wire,'act')===act))return null;
  const world=authored.fork(),heads=observeHistory(session,view);
- if(!world.tell(heads,{factsOnly:true}).ok)throw Error('invalid-history-observation');
- const compiledSop=world.compileRequest(candidate.wires),rows=parse(compiledSop),result=rows.find(wire=>wire.type==='std.compile.result');
- const callRef=result?.attrs.call,call=callRef?.length===1&&rows.find(wire=>'$'+wire.id===callRef[0]);
- if(first(result,'status')!=='compiled'||!call){
+ if(!world.tell(serialize(heads),{factsOnly:true}).ok)throw Error('invalid-history-observation');
+ const compiledSop=world.compileRequest(candidate.wires);
+ const [result]=parse(compiledSop);
+ if(first(result,'status')!=='compiled'){
   const reason=first(result,'reason');
   const empty=reason==='no-complete-derivation'&&!heads.some(wire=>first(wire,'direction')===act);
   return {ok:false,changed:false,compiledSop,reason:empty?'empty-history':reason,
    message:empty?'There is no earlier action to '+act+'.':'I could not apply that history request. Nothing changed.'};
  }
- const sop=serialize([call]),host=createHistoryTool(session,view),{args}=host.readCall(sop);
+ const sop=world.compileToolInput(compiledSop);
+ const host=createHistoryTool(session,view),{args}=host.readCall(sop);
  try{session.engine?.onWorldActivity?.({nodeIds:['component:library','execution:history-policy'],phase:'stage',operation:'std.compile',
   label:'Compile journal command',wires:compiledSop});}catch{/* Observation cannot change execution. */}
  const receipt=await invokeObservedNativeTool(session,{area,host,expectedVersion:args.entry,sop});

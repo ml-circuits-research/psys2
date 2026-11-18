@@ -15,7 +15,7 @@ export function compileReaderAdmission(evidenceSop, source = SOURCE) {
   const [evidence, ...other] = parse(evidenceSop);
   if (other.length || evidence?.type !== 'app.reader.evidence') throw Error('invalid-reader-admission-evidence');
   const trial = policyWorld(source).fork();
-  if (!trial.tell([evidence], { factsOnly: true }).ok) throw Error('invalid-reader-admission-evidence');
+  if (!trial.tell(evidenceSop, { factsOnly: true }).ok) throw Error('invalid-reader-admission-evidence');
   const decisions = trial.ofType('app.reader.decision');
   if (decisions.length !== 1) throw Error('invalid-reader-admission-decision');
   return serialize(decisions);

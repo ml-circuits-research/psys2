@@ -1,0 +1,28 @@
+@constructor.module core.module name=app.constructor version=1 exports=app.constructor.scope exports=app.constructor.mapping exports=app.constructor.operation exports=app.constructor.parameter exports=app.constructor.candidate
+
+@constructor.policy.type core.type of=app.constructor.policy closed=true
+@constructor.policy.act core.slot of=app.constructor.policy key=act kind=string present=true
+@constructor.policy.discriminator core.slot of=app.constructor.policy key=discriminator kind=string present=true
+@constructor.scope.type core.type of=app.constructor.scope closed=true
+@constructor.scope.area core.slot of=app.constructor.scope key=area kind=string present=true
+@constructor.mapping.type core.type of=app.constructor.mapping closed=true
+@constructor.mapping.area core.slot of=app.constructor.mapping key=area kind=string
+@constructor.mapping.lemma core.slot of=app.constructor.mapping key=lemma kind=string
+@constructor.mapping.operation core.slot of=app.constructor.mapping key=operation kind=string present=true
+@constructor.mapping.family core.slot of=app.constructor.mapping key=family kind=boolean present=true
+@constructor.operation.type core.type of=app.constructor.operation closed=true
+@constructor.operation.name core.slot of=app.constructor.operation key=name kind=string present=true
+@constructor.operation.act core.slot of=app.constructor.operation key=act kind=string present=true
+@constructor.operation.on core.slot of=app.constructor.operation key=on kind=string present=true
+@constructor.operation.requirements core.slot of=app.constructor.operation key=requirements kind=integer min=0 present=true
+@constructor.operation.knowledge core.slot of=app.constructor.operation key=knowledge kind=integer min=0 present=true
+@constructor.parameter.type core.type of=app.constructor.parameter closed=true
+@constructor.parameter.operation core.slot of=app.constructor.parameter key=operation kind=ref to=app.constructor.operation present=true
+@constructor.parameter.name core.slot of=app.constructor.parameter key=name kind=string present=true
+@constructor.parameter.enum core.slot of=app.constructor.parameter key=enum kind=any many=true
+@constructor.compatible.type core.type of=app.constructor.compatible closed=true
+@constructor.compatible.mapping core.slot of=app.constructor.compatible key=mapping kind=ref to=app.constructor.mapping present=true
+@constructor.compatible.operation core.slot of=app.constructor.compatible key=operation kind=ref to=app.constructor.operation present=true
+@constructor.candidate.type core.type of=app.constructor.candidate closed=true
+@constructor.candidate.mapping core.slot of=app.constructor.candidate key=mapping kind=ref to=app.constructor.mapping present=true
+@constructor.candidate.operation core.slot of=app.constructor.candidate key=operation kind=ref to=app.constructor.operation present=true

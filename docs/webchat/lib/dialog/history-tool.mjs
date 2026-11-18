@@ -1,8 +1,8 @@
 // The concrete session journal owns restoration. The compiler supplies one observed head.
-import {parse, quote, serialize, str} from '../vendor/sopworld/sopworld.mjs?v=7950b62b94';
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=22bf86d30c';
-import {readToolInvocation} from '../../worlds/native-tool-host.mjs?v=2a5ea0af55';
-import {discardPlacementLinks,withdrawPlacementCorrection} from '../../worlds/app.project/spatial-profile.mjs?v=aeda8d7562';
+import {parse, quote, serialize, str} from '../vendor/sopworld/sopworld.mjs?v=b7d50d9480';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=be2be0e135';
+import {readToolInvocation} from '../../worlds/native-tool-host.mjs?v=cb157b31d6';
+import {discardPlacementLinks,withdrawPlacementCorrection} from '../../worlds/app.project/spatial-profile.mjs?v=9c5b466409';
 
 const areaForWorld=world=>Object.values(NATIVE_AREAS).find(area=>area.world===world);
 const stacks={undo:['newEngineUndo','newEngineRedo'],redo:['newEngineRedo','newEngineUndo']};

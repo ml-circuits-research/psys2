@@ -32,6 +32,8 @@ For non-destructive actions, multiple matching objects prefer the current focus 
 
 Functional and owner replay commands extract stage counts from the same inference calls. Actual actions without reviewed intended-effect labels remain `needs-review`, rather than automatically becoming right or wrong. The owner feedback is the next semantic judgment. Historical measurements made before Review29 are explicitly dated in `training/results/epoch7-reader-measurement.md` and do not validate this policy.
 
+Constructor eligibility uses `worlds/app.project/constructor-policy.sop` to join canonical bindings with observed native interfaces. It retains the direct constructor and any compatible knowledge-backed constructors for the same source type. Family-level bindings retain their own constructor. Precondition and kind-enum restrictions are applied before candidate ranking.
+
 Creation completion also consumes model-declared constructor-kind roles (such as a shape value) and exact owning identities. Conflicting target-class heads can yield to an anchored lexical identity within the active area; near lexical guesses use the published library edit cost over declared native-compatible identities and disclose the guess. No source phrase is matched. Unsupported condition metadata remains unapplied, not reinterpreted as an absolute value. Calendar creation does not silently discard unresolved scheduling details.
 
 The parameter-free journal-act profile consumes a learned act/mood and source evidence, retaining discarded object-head diagnostics as uncertainty. Undo, focus and prior applied intent are included in session memory and snapshots so lazy world loading does not lose them.

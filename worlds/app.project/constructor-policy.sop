@@ -1,0 +1,32 @@
+# Eligibility of native constructors for a reader's mapped identity.
+@constructor.schema core.use world=app.constructor prefix=false
+
+@constructor.defaults app.constructor.policy act="make" discriminator="kind"
+
+@constructor.query app.constructor.scope area=?area
+@constructor.qualifies app.constructor.policy act=?act
+@constructor.direct app.constructor.mapping area=?area operation=?name
+@constructor.named app.constructor.operation name=?name act=?act requirements=0
+@constructor.direct.match app.constructor.compatible mapping=$constructor.direct operation=$constructor.named
+@constructor.join.direct core.rule when=$constructor.query when=$constructor.qualifies when=$constructor.direct when=$constructor.named then=$constructor.direct.match
+
+@constructor.identity app.constructor.mapping area=?area operation=?name family=false
+@constructor.mapped app.constructor.operation name=?name on=?on
+@constructor.provider app.constructor.operation on=?on act=?act requirements=0 knowledge=?knowledge
+@constructor.needs.knowledge core.check fn=gt args=?knowledge args=0
+@constructor.knowledge.match app.constructor.compatible mapping=$constructor.identity operation=$constructor.provider
+@constructor.join.knowledge core.rule when=$constructor.query when=$constructor.qualifies when=$constructor.identity when=$constructor.mapped when=$constructor.provider if=$constructor.needs.knowledge then=$constructor.knowledge.match
+
+@constructor.discriminator app.constructor.policy discriminator=?parameter
+@constructor.pair app.constructor.compatible mapping=?mapping operation=?operation
+@constructor.enum.parameter app.constructor.parameter operation=?operation name=?parameter
+@constructor.allowed app.constructor.candidate mapping=?mapping operation=?operation
+@constructor.accept.unrestricted core.rule when=$constructor.discriminator when=$constructor.pair not=$constructor.enum.parameter then=$constructor.allowed
+
+# The enum test keeps literal identity. An enum parameter without members gives
+# no evidence that it admits this lemma.
+@constructor.enum.mapping app.constructor.mapping lemma=?lemma
+@constructor.enum.pair app.constructor.compatible mapping=$constructor.enum.mapping operation=?operation
+@constructor.enum.matches app.constructor.parameter operation=?operation name=?parameter enum=?lemma
+@constructor.enum.allowed app.constructor.candidate mapping=$constructor.enum.mapping operation=?operation
+@constructor.accept.member core.rule when=$constructor.discriminator when=$constructor.enum.mapping when=$constructor.enum.pair when=$constructor.enum.matches then=$constructor.enum.allowed

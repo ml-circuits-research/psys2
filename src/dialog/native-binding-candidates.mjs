@@ -1,12 +1,58 @@
+import { World, quote, serialize } from '../vendor/sopworld/sopworld.mjs';
+import CONSTRUCTORS from '../../worlds/app.project/constructor-policy-source.mjs';
+import SCHEMA from '../../worlds/app.project/constructor-schema-source.mjs';
+import { budget } from './budget.mjs';
+
 // Preserve declared alternatives for reversible best-effort interpretation; the strict bridge can still abstain.
 export function nativeKindCandidates(bindings) {
  return [...(bindings.kinds??[]),...(bindings.families??[]).filter(f=>f.nativeFamilyBinding).map(f=>({...f,lemma:f.type,familyIdentity:true})),...(bindings.unresolved??[]).filter(r=>r.family==='kinds'&&r.reason==='ambiguous-canonical-kind'&&r.rawDescriptor).flatMap(r=>(r.candidates??[]).filter(c=>c.nativeFamilyBinding).map(c=>({...c,area:r.rawDescriptor.area,type:r.rawDescriptor.type,lemma:r.rawDescriptor.kind})))];
 }
 
-/** Canonical identity joins a declared native family and its compatible constructors. */
-export function nativeCreationCandidates(bindings,operations,area){
- return nativeKindCandidates(bindings).filter(mapping=>mapping.area===area&&mapping.nativeFamilyBinding).flatMap(mapping=>{
-  const declared=operations.find(operation=>operation.id===mapping.nativeFamilyBinding.operation);if(!declared)return [];
-  return operations.filter(operation=>operation.act==='make'&&!operation.requires?.length&&operation.on===declared.on&&(operation.id===declared.id||!mapping.familyIdentity&&operation.knowledgeInputs?.length)).filter(operation=>!operation.params.kind||operation.params.kind.enum?.includes(mapping.lemma)).map(operation=>({mapping,operation}));
- });
+let loaded;
+function constructorWorld() {
+ if (!loaded) {
+  const world = new World({ library: { 'app.constructor': SCHEMA } });
+  if (!world.tell(CONSTRUCTORS).ok) throw Error('invalid-native-constructor-policy');
+  loaded = world;
+ }
+ return loaded.fork();
+}
+export function inspectConstructorPolicy() {
+ return { policy: CONSTRUCTORS, schema: SCHEMA, loaded: !!loaded };
+}
+
+const scalar = value => value === undefined ? [] : [quote(value)];
+const wire = (id, type, attrs) => ({ id, type: 'app.constructor.' + type, attrs, pattern: false });
+const indexOfReference = (row, key) => Number(row.attrs[key][0].split('.').at(-1));
+
+/** Project actual tool metadata and retain all constructor pairs derived by SOP. */
+export function nativeCreationCandidates(bindings, operations, area) {
+ const mappings = nativeKindCandidates(bindings);
+ const world = constructorWorld(), facts = [wire('constructor.query.input', 'scope', { area: scalar(area) })];
+ for (const [index, mapping] of mappings.entries()) {
+  budget.tick('constructor.mapping');
+  const operation = mapping.nativeFamilyBinding?.operation;
+  if (operation === undefined) continue;
+  facts.push(wire('constructor.mapping.' + index, 'mapping', {
+   area: scalar(mapping.area), lemma: scalar(mapping.lemma), operation: scalar(operation), family: [String(Boolean(mapping.familyIdentity))],
+  }));
+ }
+ for (const [index, operation] of operations.entries()) {
+  budget.tick('constructor.operation');
+  const id = 'constructor.operation.' + index;
+  facts.push(wire(id, 'operation', {
+   name: scalar(operation.id), act: scalar(operation.act), on: scalar(operation.on),
+   requirements: [String(operation.requires?.length ?? 0)], knowledge: [String(operation.knowledgeInputs?.length ?? 0)],
+  }));
+  for (const [name, parameter] of Object.entries(operation.params)) {
+   budget.tick('constructor.parameter');
+   facts.push(wire('constructor.parameter.' + facts.length, 'parameter', {
+    operation: ['$' + id], name: scalar(name), enum: (parameter.enum ?? []).map(value => JSON.stringify(value)),
+   }));
+  }
+ }
+ if (!world.tell(serialize(facts), { factsOnly: true }).ok) throw Error('invalid-native-constructor-evidence');
+ const pairs = world.ofType('app.constructor.candidate').map(row => [indexOfReference(row, 'mapping'), indexOfReference(row, 'operation')]);
+ return pairs.sort(([am, ao], [bm, bo]) => am - bm || ao - bo)
+  .map(([mapping, operation]) => ({ mapping: mappings[mapping], operation: operations[operation] }));
 }

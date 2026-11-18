@@ -6,6 +6,8 @@ import { emit, done } from './lib/generated.mjs';
 const folder = new URL('../worlds/app.project/', import.meta.url);
 for (const [source, module] of [
   ['capability-policy.sop', 'capability-policy.mjs'],
+  ['constructor-policy.sop', 'constructor-policy-source.mjs'],
+  ['constructor-schema.sop', 'constructor-schema-source.mjs'],
   ['execution-policy.sop', 'execution-policy-source.mjs'],
   ['execution-policy-schema.sop', 'execution-policy-schema-source.mjs'],
 ]) {

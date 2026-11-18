@@ -1,0 +1,46 @@
+@ground.types core.use world=app.grounded prefix=false
+
+@ground.context app.grounded.profile profile=context mode=existing request=context.request target=context.target source=context.source result=context.result.
+@ground.creation app.grounded.profile profile=creation mode=new request=creation.request target=creation.target source=creation.source result=creation.result.
+
+
+
+
+
+
+@p.profile app.grounded.profile profile=?profile mode=?mode request=?requestId target=?targetId source=?sourceId result=?prefix
+@p.input app.grounded.input profile=?profile act=?act mood=?mood kind=?kind text=?text
+@o.source std.request.source text=?text
+@o.request std.request act=?act mood=?mood source=$o.source
+@o.target std.request.target request=$o.request mode=?mode kind=?kind
+@o.graph app.grounded.graph input=$p.input request=$o.request target=$o.target source=$o.source prefix=?prefix
+@o.request.alias app.grounded.alias id=?requestId wire=$o.request output=std.request
+@o.target.alias app.grounded.alias id=?targetId wire=$o.target output=std.request.target
+@o.source.alias app.grounded.alias id=?sourceId wire=$o.source output=std.request.source
+@ground.graph core.rule when=$p.profile when=$p.input then=$o.source then=$o.request then=$o.target then=$o.graph then=$o.request.alias then=$o.target.alias then=$o.source.alias
+
+@p.graph app.grounded.graph input=?input request=?request target=?target source=?source prefix=?prefix
+@p.name app.grounded.input name=?name
+@p.target std.request.target request=?request
+@same.input core.check fn=eq args=$p.name args=?input
+@same.target core.check fn=eq args=$p.target args=?target
+@o.name std.request.target core.on=$p.target name=?name
+@ground.name core.rule when=$p.graph when=$p.name when=$p.target if=$same.input if=$same.target then=$o.name
+
+@p.value app.grounded.value input=?input index=?index concept=?concept value=?value
+@o.key core.calc fn=concat args=?prefix args=?index out=?wireId
+@o.constraint app.grounded.constraint request=?request target=?target concept=?concept value=?value operator=eq character=requirement polarity=positive projection.index=?index
+@o.constraint.alias app.grounded.alias id=?wireId wire=$o.constraint output=std.request.constraint
+@ground.constraints core.rule when=$p.graph when=$p.value with=$o.key then=$o.constraint then=$o.constraint.alias
+
+@p.singleton app.grounded.input count=1
+@p.request std.request
+@p.result app.grounded.constraint request=?request projection.index=?index
+@same.singleton core.check fn=eq args=$p.singleton args=?input
+@same.request core.check fn=eq args=$p.request args=?request
+@o.root std.request core.on=$p.request root=$p.result
+@ground.root core.rule when=$p.graph when=$p.singleton when=$p.request when=$p.result if=$same.singleton if=$same.request then=$o.root
+
+@p.ranged app.grounded.value input=?input index=?index start=?begin end=?end
+@o.range app.grounded.constraint core.on=$p.result source=?source source.start=?begin source.end=?end
+@ground.range core.rule when=$p.graph when=$p.ranged when=$p.result then=$o.range

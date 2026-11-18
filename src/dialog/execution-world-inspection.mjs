@@ -6,6 +6,8 @@ import{inspectHistoryPolicy}from'./history-policy.mjs';
 import{inspectExecutionPolicyWorld}from'./execution-policy.mjs';
 import{inspectCapabilityPolicy}from'./capability-plan-adapter.mjs';
 import{inspectCreationPolicy}from'./project-create-action.mjs';
+import{inspectConstructorPolicy}from'./native-binding-candidates.mjs';
+import{inspectGroundedProjection}from'./grounded-projection.mjs';
 import{inspectReferencePolicy}from'./reference-policy.mjs';
 import{inspectSchemaSource}from'./worlds-inspection.mjs';
 import{inspectRequestCompositionPolicy}from'./request-composition-policy.mjs';
@@ -42,6 +44,17 @@ export async function inspectExecutionWorlds(session){
  link('execution:module:declared-execution','execution:history-policy','compiles history requests');
  link('execution:history-policy','interpreter:app.history','supplies a guarded SOP call');
  link('interpreter:app.history','instance:app.history','restores and verifies an entry');
+ const grounded=inspectGroundedProjection();
+ nodes.push({id:'execution:grounded-projection',label:'Grounded request projection',kind:'knowledge',implementation:'Operational SOP Lang World',
+  description:'Derives typed request wires from chosen contextual and creation evidence, retaining rule support and source spans.',
+  wires:grounded.policy,details:{source:'worlds/app.project/grounded-projection.sop',loaded:grounded.loaded}});
+ nodes.push({id:'execution:grounded-projection-schema',label:'app.grounded',kind:'schema',implementation:'SOP Lang schema module',
+  description:'Defines grounded evidence, graph aliases and their standard request types.',
+  wires:grounded.schema,schemaView:inspectSchemaSource(grounded.schema),details:{source:'worlds/app.project/grounded-projection-schema.sop',loaded:grounded.loaded}});
+ link('execution:grounded-projection','execution:grounded-projection-schema','imports schema');
+ link('execution:reference-policy','execution:grounded-projection','supplies a grounded reference');
+ link('execution:creation-policy','execution:grounded-projection','supplies a grounded constructor');
+ link('execution:grounded-projection','execution:module:declared-execution','emits an owned request graph');
  const reference=inspectReferencePolicy();
  nodes.push({id:'execution:reference-policy',label:'Context references',kind:'knowledge',implementation:'Operational SOP Lang World',
   description:'Matches contextual references to observed objects. Its criteria prefer the focused object for a current reference and exclude it when retargeting the previous change.',
@@ -59,6 +72,16 @@ export async function inspectExecutionWorlds(session){
   description:'Declares grounded source roles and the lexical distance limit used when reading a creation request.',
   wires:creation.schema,schemaView:inspectSchemaSource(creation.schema),details:{source:'worlds/app.project/creation-schema.sop',loaded:creation.loaded}});
  link('execution:creation-policy','execution:creation-schema','imports schema');
+ const constructors=inspectConstructorPolicy();
+ nodes.push({id:'execution:constructor-policy',label:'Native constructor eligibility',kind:'knowledge',implementation:'Operational SOP Lang World',
+  description:'Joins reader bindings with the current tool interface and retains every eligible constructor pair.',
+  wires:constructors.policy,details:{source:'worlds/app.project/constructor-policy.sop',loaded:constructors.loaded}});
+ nodes.push({id:'execution:constructor-schema',label:'app.constructor',kind:'schema',implementation:'SOP Lang schema module',
+  description:'Defines mapped identities, tool capabilities and the derived pairs passed to creation ranking.',
+  wires:constructors.schema,schemaView:inspectSchemaSource(constructors.schema),
+  details:{module:'app.constructor',source:'worlds/app.project/constructor-schema.sop',loaded:constructors.loaded}});
+ link('execution:constructor-policy','execution:constructor-schema','imports schema');
+ link('execution:creation-policy','execution:constructor-policy','ranks eligible constructor pairs');
  link('execution:creation-policy','execution:module:declared-execution','supplies grounded creation readings');
  const policy=inspectExecutionPolicyWorld();
  nodes.push({id:'execution:policy',label:'Execution policy',kind:'knowledge',implementation:'Operational SOP Lang World',

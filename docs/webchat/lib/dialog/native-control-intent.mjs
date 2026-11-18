@@ -1,7 +1,7 @@
 // Typed UI intent capture. No language parser, model inference or optimistic effect claims.
 import {budget} from './budget.mjs?v=00bce6e369';
-import {copyHostData,validateNativeArguments,toolInvocationContext} from '../../worlds/native-tool-host.mjs?v=2a5ea0af55';
-import {compactNativeIntent} from './native-intent-reader.mjs?v=347d66630a';
+import {copyHostData,validateNativeArguments,toolInvocationContext} from '../../worlds/native-tool-host.mjs?v=cb157b31d6';
+import {compactNativeIntent} from './native-intent-reader.mjs?v=0a8d6b5c05';
 
 export const NATIVE_CONTROL_INTENT_FORMAT='psys2.native-control-intent/1';
 export const NATIVE_CONTROL_INTENT_SCHEMA=`

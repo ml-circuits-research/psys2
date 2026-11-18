@@ -1,10 +1,11 @@
-import {World,editCost,parse,serializeRequestGraph,str} from '../vendor/sopworld/sopworld.mjs';
+import {World,editCost,parse,quote,str} from '../vendor/sopworld/sopworld.mjs';
 import POLICY from '../../worlds/app.project/creation-policy-source.mjs';
 import SCHEMA from '../../worlds/app.project/creation-schema-source.mjs';
 import {executionPolicyWorld} from './execution-policy.mjs';
 import {NATIVE_AREAS} from './app-reader-context.mjs';
 import {nativeCreationCandidates} from './native-binding-candidates.mjs';
 import {budget} from './budget.mjs';
+import {observeGroundedProjection,projectGroundedRequest} from './grounded-projection.mjs';
 import {compileObservedChoice} from './observed-choice.mjs';
 
 const field=(fact,key)=>str(fact.attrs[key]?.[0]);
@@ -75,17 +76,6 @@ function rankConstructors(choices,lexical,readType,family){
  }
  return {options,equivalent,trace};
 }
-const literal=value=>({kind:'literal',value}),ref=value=>({kind:'ref',value}),string=value=>({kind:'string',value});
-function creationGraph(canonical,raw,name,values){
- const target={request:[ref('creation.request')],mode:[literal('new')],kind:[literal(canonical)],...(name?{name:[string(name)]}:{})};
- const nodes=[{id:'creation.source',type:'std.request.source',attrs:{text:[string(raw.source.text)]}},
-  {id:'creation.request',type:'std.request',attrs:{act:[literal('make')],mood:[literal('do')],source:[ref('creation.source')],...(values.length===1?{root:[ref('creation.result.0')]}:{})}},
-  {id:'creation.target',type:'std.request.target',attrs:target}];
- for(const [i,c]of values.entries())nodes.push({id:'creation.result.'+i,type:'std.request.constraint',attrs:{request:[ref('creation.request')],target:[ref('creation.target')],concept:[literal(c.concept)],operator:[literal('eq')],polarity:[literal('positive')],character:[literal('requirement')],value:[string(c.value)]}});
- const graph=serializeRequestGraph({request:'creation.request',nodes});
- return graph.ok?{request:'creation.request',wires:graph.wires}:null;
-}
-
 export async function projectCreateAction(proposal,session,{bindings,registry,view}={}){
  const raw=proposal?.raw,r=raw?.requests?.[0],area=NATIVE_AREAS[view];
  if(!area||!bindings||!registry||proposal.coverage?.complete||raw?.requestCount!==1||raw.coverage?.truncated||r?.act!=='make'||r.mood!=='do'||r.target?.mode!=='new'||typeof raw.source?.text!=='string'||!Array.isArray(r.constraints)||r.constraints.some(c=>c.polarity==='negative'))return null;
@@ -127,18 +117,20 @@ export async function projectCreateAction(proposal,session,{bindings,registry,vi
   if(role==='name'&&acceptsName&&(!name||name===entry.value)){name=entry.value;continue;}
   const canonical=bindings.properties.find(p=>p.area===readerArea&&p.key===entry.key)?.canonical;
   const own=executionPolicyWorld().ofType('app.execution.observedProperty').find(p=>field(p,'sourceType')===chosen.operation.on&&field(p,'concept')===concept);
-  if(canonical||own)values.push({concept:canonical??concept,value:entry.value});
+  if(canonical||own)values.push({concept:canonical??concept,token:quote(entry.value),range,witness:entry.key});
   else unapplied.push((concept??entry.key)+' '+entry.value);
  }
  const noteFor=choice=>choice.distance>0?`I took ${JSON.stringify(lexical)} as ${choice.mapping.lemma}.`:!lexical?`I used ${choice.mapping.lemma} as the kind.`:'';
  const candidates=equivalent.flatMap(choice=>{
-  const graph=creationGraph(choice.mapping.canonical,raw,name,values);
+  const graph=projectGroundedRequest({profile:'creation',act:r.act,mood:r.mood,kind:choice.mapping.canonical,
+   text:raw.source.text,name,values,witness:choice.mapping.sourceWire??choice.operation.id});
+  if(graph)observeGroundedProjection(session,graph.projection);
   return graph?[{...graph,creationNote:noteFor(choice)}]:[];
  });
  if(!candidates.length)return null;
  const note=candidates[0].creationNote;
  return {...proposal,candidates,coverage:{complete:true,graphProposal:true,executable:false},failures:[],
-  interpretation:{profile:'declared-creation/1',note,unapplied,...(name&&acceptsName?{requestedName:name}:{}),alternatives:options.map(choice=>({
+  interpretation:{profile:'declared-creation/1',note,projections:candidates.map(candidate=>candidate.projection),unapplied,...(name&&acceptsName?{requestedName:name}:{}),alternatives:options.map(choice=>({
    canonical:choice.mapping.canonical,lemma:choice.mapping.lemma,cost:choice.distance,why:choice.why,
   })),decision:{input:trace.input,sop:trace.sop},unresolved:proposal.failures}};
 }

@@ -11,6 +11,7 @@ test('webchat build produces a bundle the browser loader can run', async () => {
   try {
     const info = await buildWebchat({ outDir: out });
     await assert.rejects(stat(path.join(out, 'lib/dialog/reader-compat')), error => error.code === 'ENOENT');
+    await assert.rejects(stat(path.join(out, 'lib/dialog/property-selection.mjs')), { code: 'ENOENT' });
     const readerRoute = await readFile(path.join(out, 'lib/dialog/reader-routing.mjs'), 'utf8');
     assert.doesNotMatch(readerRoute, /grammar-reader|readGrammarRequests|compileGrammarOverlay|runGrammarEngine/);
     assert.ok(!info.worlds.includes('geo.map') && !info.worlds.includes('media.music'));

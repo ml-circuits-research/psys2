@@ -1,0 +1,37 @@
+@ground.module core.module name=app.grounded imports=std.request exports=app.grounded.profile exports=app.grounded.input exports=app.grounded.value exports=app.grounded.graph exports=app.grounded.alias exports=app.grounded.constraint
+@ground.profile core.type of=app.grounded.profile closed=true
+@ground.profile.key core.slot of=app.grounded.profile key=profile kind=atom present=true
+@ground.profile.mode core.slot of=app.grounded.profile key=mode kind=atom present=true
+@ground.profile.request core.slot of=app.grounded.profile key=request kind=atom present=true
+@ground.profile.target core.slot of=app.grounded.profile key=target kind=atom present=true
+@ground.profile.source core.slot of=app.grounded.profile key=source kind=atom present=true
+@ground.profile.result core.slot of=app.grounded.profile key=result kind=atom present=true
+@ground.input.type core.type of=app.grounded.input closed=true
+@ground.input.profile core.slot of=app.grounded.input key=profile kind=atom present=true
+@ground.input.act core.slot of=app.grounded.input key=act kind=atom present=true
+@ground.input.mood core.slot of=app.grounded.input key=mood kind=atom present=true
+@ground.input.kind core.slot of=app.grounded.input key=kind kind=atom present=true
+@ground.input.text core.slot of=app.grounded.input key=text kind=string present=true
+@ground.input.name core.slot of=app.grounded.input key=name kind=string
+@ground.input.count core.slot of=app.grounded.input key=count kind=integer min=0 present=true
+@ground.input.witness core.slot of=app.grounded.input key=witness kind=string
+@ground.value.type core.type of=app.grounded.value closed=true
+@ground.value.input core.slot of=app.grounded.value key=input type=app.grounded.input present=true
+@ground.value.index core.slot of=app.grounded.value key=index kind=integer min=0 present=true
+@ground.value.concept core.slot of=app.grounded.value key=concept kind=atom present=true
+@ground.value.literal core.slot of=app.grounded.value key=value kind=any present=true
+@ground.value.start core.slot of=app.grounded.value key=start kind=integer min=0
+@ground.value.end core.slot of=app.grounded.value key=end kind=integer min=1
+@ground.value.witness core.slot of=app.grounded.value key=witness kind=string
+@ground.graph.type core.type of=app.grounded.graph closed=true
+@ground.graph.input core.slot of=app.grounded.graph key=input type=app.grounded.input present=true
+@ground.graph.request core.slot of=app.grounded.graph key=request type=std.request present=true
+@ground.graph.target core.slot of=app.grounded.graph key=target type=std.request.target present=true
+@ground.graph.source core.slot of=app.grounded.graph key=source type=std.request.source present=true
+@ground.graph.prefix core.slot of=app.grounded.graph key=prefix kind=atom present=true
+@ground.alias.type core.type of=app.grounded.alias closed=true
+@ground.alias.id core.slot of=app.grounded.alias key=id kind=atom present=true
+@ground.alias.wire core.slot of=app.grounded.alias key=wire kind=ref present=true
+@ground.alias.output core.slot of=app.grounded.alias key=output kind=atom present=true
+@ground.constraint.type core.type of=app.grounded.constraint extends=std.request.constraint closed=true
+@ground.constraint.index core.slot of=app.grounded.constraint key=projection.index kind=integer min=0 present=true

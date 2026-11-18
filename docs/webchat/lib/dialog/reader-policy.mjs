@@ -1,5 +1,5 @@
 // Send runtime evidence through the authored SOP decision rules.
-import { World, parse, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=7950b62b94';
+import { World, parse, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=b7d50d9480';
 import SOURCE from '../../worlds/app.project/reader-admission-policy-source.mjs?v=f39ec7261d';
 
 let loaded;
@@ -15,7 +15,7 @@ export function compileReaderAdmission(evidenceSop, source = SOURCE) {
   const [evidence, ...other] = parse(evidenceSop);
   if (other.length || evidence?.type !== 'app.reader.evidence') throw Error('invalid-reader-admission-evidence');
   const trial = policyWorld(source).fork();
-  if (!trial.tell([evidence], { factsOnly: true }).ok) throw Error('invalid-reader-admission-evidence');
+  if (!trial.tell(evidenceSop, { factsOnly: true }).ok) throw Error('invalid-reader-admission-evidence');
   const decisions = trial.ofType('app.reader.decision');
   if (decisions.length !== 1) throw Error('invalid-reader-admission-decision');
   return serialize(decisions);

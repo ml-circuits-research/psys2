@@ -1,3 +1,4 @@
+import{readFile}from'node:fs/promises';
 import test from'node:test';import assert from'node:assert/strict';
 import{inspectExecutionWorlds}from'../src/dialog/execution-world-inspection.mjs';
 import{executeRequestCandidate}from'../src/dialog/new-engine.mjs';
@@ -16,6 +17,16 @@ test('inspection shows exact available pinned snapshot without initializing the 
  assert.ok(snapshot.wires.includes(serialize([SOURCE.snapshot.log[0].wires[0]])));assert.equal(lookup(graph,'execution:module:declared-execution').details.sourceWorld.loaded,false);
  snapshot.details.sources[0].path='changed only in inspector output';assert.notEqual(SOURCE.sources[0].path,'changed only in inspector output');
  assert.ok(!graph.nodes.some(node=>node.id.startsWith('execution:cache:')));
+ const constructors=lookup(graph,'execution:constructor-policy');
+ assert.equal(constructors.details.source,'worlds/app.project/constructor-policy.sop');
+ assert.equal(constructors.wires,await readFile(new URL('../'+constructors.details.source,import.meta.url),'utf8'));
+ assert.equal(constructors.details.loaded,false);
+ const constructorSchema=lookup(graph,'execution:constructor-schema');
+ assert.equal(constructorSchema.details.source,'worlds/app.project/constructor-schema.sop');
+ assert.equal(constructorSchema.wires,await readFile(new URL('../'+constructorSchema.details.source,import.meta.url),'utf8'));
+ assert.ok(parse(constructorSchema.wires).every(wire=>SCHEMA_TYPES.has(wire.type)));
+ assert.ok(graph.edges.some(edge=>edge.from===constructors.id&&edge.to===constructorSchema.id));
+ assert.ok(graph.edges.some(edge=>edge.from==='execution:creation-policy'&&edge.to===constructors.id));
  for(const owner of ['execution:policy','execution:composition-policy']){
   const facts=lookup(graph,owner),schema=lookup(graph,owner+':schema');
   assert.equal(parse(facts.wires).some(wire=>SCHEMA_TYPES.has(wire.type)),false,'policy source contains owned facts only');

@@ -1,48 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { resolvePropertyValue, selectPropertyObject } from '../src/dialog/property-selection.mjs';
+import { compileNativeCapability } from '../src/dialog/capability-plan-adapter.mjs';
+import SOURCE from '../src/dialog/new-engine-source.mjs';
+import { World } from '../src/vendor/sopworld/sopworld.mjs';
 import { executeRequestCandidate } from '../src/dialog/new-engine.mjs';
 import { runGrammarEngine as runNewEngine } from '../scripts/lib/grammar-reader.mjs';
 import { canonicalDrawingState, toNativeDrawingState } from '../worlds/art.draw/canonical-state.mjs';
+import { createCanonicalDrawingHost } from '../worlds/art.draw/declared-host.mjs';
 import { initialState, makeObject } from '../worlds/art.draw/board.mjs';
-const binding = { id: 'toy.surface', key: 'finish', concept: 'texture', sourceType: 'toy.object', valueType: 'toy.texture', nameKey: 'label', valueKey: 'native' };
-const normalize = value => typeof value === 'string' && value.startsWith('native:') ? value : null;
-const resolved = { ok: true, values: ['native:rough'], facts: [{ id: 'rough-fact', type: 'toy.texture', native: 'native:rough' }] };
-const object = (id, value, kind = 'vessel') => ({ id, kind, inputs: [{ binding: binding.id, source: `source:${id}`, sourceType: binding.sourceType, key: binding.key, version: '7', values: value === null ? [] : [JSON.stringify(value)] }] });
-const observation = objects => ({ complete: true, instanceId: 'test-lifetime', version: '7', scope: 'test-objects', objects });
-const select = (observed, options) => selectPropertyObject(observed, { kind: 'vessel', selector: 'selected', binding, resolved }, { normalize, ...options });
-test('declared value lookup merges exact equivalents and preserves conflicting alternatives', () => {
-  const facts = [{ id: 'a', type: 'toy.texture', attrs: { label: ['"rough"'], native: ['"native:rough"'] } }, { id: 'b', type: 'toy.texture', attrs: { label: ['"rough"'], native: ['"native:rough"'] } }];
-  const source = { ofType(type) { assert.equal(type, 'toy.texture'); return facts; } };
-  const value = resolvePropertyValue(source, { normalize }, binding, 'rough');
-  assert.equal(value.ok, true); assert.equal(value.facts.length, 2);
-  facts[1].attrs.native = ['"native:smooth"'];
-  assert.equal(resolvePropertyValue(source, { normalize }, binding, 'rough').ok, false);
-  assert.equal(resolvePropertyValue(source, { normalize }, binding, 'missing').ok, false);
-});
-test('library equality guard distinguishes mismatch, unknown and ambiguity with complete witnesses', () => {
-  const before = observation([object(1, 'native:rough'), object(2, 'native:smooth'), object(3, 'native:rough', 'crate')]);
-  const result = select(before);
-  assert.equal(result.ok, true); assert.equal(result.object.id, 1);
-  assert.deepEqual(result.considered.map(item => item.status), ['match', 'mismatch']);
-  assert.deepEqual(result.evaluation.failures, [{ index: 1, reason: 'guard-rejected' }]);
-  result.considered[0].inputs[0].values[0] = 'changed';
-  assert.equal(before.objects[0].inputs[0].values[0], '"native:rough"');
-  assert.equal(select(observation([object(1, 'native:rough'), object(2, null)])).reason, 'unknown');
-  assert.equal(select(observation([object(1, 'native:rough'), object(2, 'native:rough')])).reason, 'ambiguous');
-  assert.equal(select(observation([object(1, 'native:smooth')])).reason, 'missing');
-  assert.equal(select({ ...before, complete: false }).reason, 'incomplete-observation');
-  assert.equal(select(before, { budget: 1 }).ok, false);
-  assert.equal(select(observation([object(1, 'rough')])).reason, 'unknown', 'unresolved stored names are not native observations');
-});
-test('missing duplicate or wrong-version native observations cannot prove selector equality', () => {
-  for (const edit of [input => { input.version = '6'; }, input => { input.key = 'another'; }, input => { input.sourceType = 'other'; }]) {
-    const before = observation([object(1, 'native:rough')]); edit(before.objects[0].inputs[0]);
-    assert.equal(select(before).reason, 'unknown');
-  }
-  const before = observation([object(1, 'native:rough')]); before.objects[0].inputs.push(structuredClone(before.objects[0].inputs[0]));
-  assert.equal(select(before).reason, 'unknown');
-});
 const graph = (selected = 'red', desired = 'blue', kind = 'circle') => ({ request: 'r', wires: `@source std.request.source text="structural fixture"
 @r std.request act=change mood=do source=$source root=$desired
 @target std.request.target request=$r mode=existing kind=${kind} selector=$selected
@@ -82,13 +47,30 @@ test('unknown, ambiguous, unsupported or overlapping selectors never mutate stat
   assert.equal((await runNewEngine(fresh, 'make the green square purple')).trace.assessment, 'changed');
   assert.equal(toNativeDrawingState(fresh.isession.state['art.draw']).objects[0].color, '#800080');
 });
-test('selector binding never reads a different result-property slot', () => {
-  const before = observation([object(1, 'native:rough'), object(2, 'native:smooth')]);
-  for (const item of before.objects) item.inputs.push({ ...item.inputs[0], binding: 'toy.tint', key: 'color', values: ['"native:rough"'] });
-  const result = select(before);
-  assert.equal(result.object.id, 1);
-  assert.deepEqual(result.considered.map(item => item.inputs.map(input => input.key)), [['finish'], ['finish']]);
-  assert.deepEqual(result.considered.map(item => item.status), ['match', 'mismatch']);
+test('live capability selection disregards stale and unrelated native fields', () => {
+  const s = session([{ id: 1, kind: 'circle', color: '#ff0000' }, { id: 2, kind: 'circle', color: '#0000ff' }]);
+  const state = s.isession.state['art.draw'], host = createCanonicalDrawingHost({ state, instanceId: 'observation-version' });
+  const bindings = { kinds: [{ area: 'drawing', canonical: 'circle', lemma: 'circle',
+    nativeFamilyBinding: { operation: 'drawing.object.make' } }] };
+  const source = World.fromJSON(SOURCE.snapshot, { library: SOURCE.schemaModules });
+  const compile = observation => compileNativeCapability(graph(), { observation, host, readKnowledge: () => source,
+    bindings, view: 'draw', area: { area: 'drawing' }, unapplied: [] });
+  const field = (snapshot, id) => snapshot.objects.find(object => object.id === id).inputs.find(input => input.binding === 'drawing.object.color');
+  const withUnrelatedField = host.observe();
+  const second = withUnrelatedField.objects.find(object => object.id === '2');
+  second.inputs.push({ ...field(withUnrelatedField, '2'), binding: 'another.property', values: ['"#ff0000"'] });
+  const plan = compile(withUnrelatedField);
+  assert.equal(plan.status, 'compiled');
+  assert.equal(plan.id, '1');
+  assert.deepEqual(plan.selection.map(row => row.status), ['match', 'mismatch']);
+  for (const [key, invalid] of [['version', 'stale'], ['source', 'another-object'], ['sourceType', 'another.kind']]) {
+    const snapshot = host.observe();
+    field(snapshot, '2')[key] = invalid;
+    const refused = compile(snapshot);
+    assert.equal(refused.status, 'unavailable');
+    assert.deepEqual(refused.selection.map(row => row.status), ['match', 'unknown']);
+  }
+  assert.deepEqual(toNativeDrawingState(state).objects.map(object => object.color), ['#ff0000', '#0000ff']);
 });
 test('detached graph cannot hide extra requests, executable declarations or mismatched original text', async () => {
   for (const [candidate, text] of [

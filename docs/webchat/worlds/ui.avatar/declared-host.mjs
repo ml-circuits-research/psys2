@@ -1,10 +1,10 @@
-import { readNativeToolInterface } from '../native-tool-interface.mjs?v=c2d3097e87';
+import { readNativeToolInterface } from '../native-tool-interface.mjs?v=0ffe6c4fde';
 import NATIVE_INTERFACE from './native-interface-source.mjs?v=e227fb4b70';
 // The avatar's native face tools, with choices derived from the supplied knowledge.
 import {centeredSpatialBox,unionSpatialBoxes} from '../native-spatial-observation.mjs?v=ced85b9a29';
-import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs?v=2a5ea0af55';
+import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs?v=cb157b31d6';
 import {compositionBase,compositionOverrides,expressionParts} from './composition.mjs?v=b3e12b14a5';
-import {toNativeAvatarState,adoptCanonicalAvatarState} from './canonical-state.mjs?v=e6663d4dad';
+import {toNativeAvatarState,adoptCanonicalAvatarState} from './canonical-state.mjs?v=38911f3bf1';
 import {DEFAULT_FACE} from './default-face.mjs?v=f1afd579e8';
 import {variantFor} from './facedraw.mjs?v=708c1180b9';
 import {newFace,mark,wearPreset,putPart,takeOff,setParts,moveParts,toolView,roleOf,neighbours,centre,SCALE_MIN,SCALE_MAX,NONE,PART_SIZE_GRADES,PART_MOVE_DIRECTIONS,undoStep,redoStep} from './face.mjs?v=b71e0c38d9';

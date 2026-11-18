@@ -1,7 +1,7 @@
-import {parse,quote,serialize} from '../vendor/sopworld/sopworld.mjs?v=7950b62b94';
-import {historyPolicy} from './history-policy.mjs?v=f8948bd1c0';
-import {observeHistory,createHistoryTool} from './history-tool.mjs?v=005c52e415';
-import {invokeObservedNativeTool} from './native-tool-activity.mjs?v=0689e5b140';
+import {parse,quote,serialize} from '../vendor/sopworld/sopworld.mjs?v=b7d50d9480';
+import {historyPolicy} from './history-policy.mjs?v=86df5db75d';
+import {observeHistory,createHistoryTool} from './history-tool.mjs?v=64314a74e7';
+import {invokeObservedNativeTool} from './native-tool-activity.mjs?v=23bd5b418a';
 
 const area={world:'app.history',stateWorld:true};
 const first=(wire,key)=>wire?.attrs[key]?.[0];
@@ -11,16 +11,17 @@ async function execute(session,candidate,view){
  const act=first(request,'act');
  if(!authored.ofType('std.compile.rule').some(wire=>first(wire,'act')===act))return null;
  const world=authored.fork(),heads=observeHistory(session,view);
- if(!world.tell(heads,{factsOnly:true}).ok)throw Error('invalid-history-observation');
- const compiledSop=world.compileRequest(candidate.wires),rows=parse(compiledSop),result=rows.find(wire=>wire.type==='std.compile.result');
- const callRef=result?.attrs.call,call=callRef?.length===1&&rows.find(wire=>'$'+wire.id===callRef[0]);
- if(first(result,'status')!=='compiled'||!call){
+ if(!world.tell(serialize(heads),{factsOnly:true}).ok)throw Error('invalid-history-observation');
+ const compiledSop=world.compileRequest(candidate.wires);
+ const [result]=parse(compiledSop);
+ if(first(result,'status')!=='compiled'){
   const reason=first(result,'reason');
   const empty=reason==='no-complete-derivation'&&!heads.some(wire=>first(wire,'direction')===act);
   return {ok:false,changed:false,compiledSop,reason:empty?'empty-history':reason,
    message:empty?'There is no earlier action to '+act+'.':'I could not apply that history request. Nothing changed.'};
  }
- const sop=serialize([call]),host=createHistoryTool(session,view),{args}=host.readCall(sop);
+ const sop=world.compileToolInput(compiledSop);
+ const host=createHistoryTool(session,view),{args}=host.readCall(sop);
  try{session.engine?.onWorldActivity?.({nodeIds:['component:library','execution:history-policy'],phase:'stage',operation:'std.compile',
   label:'Compile journal command',wires:compiledSop});}catch{/* Observation cannot change execution. */}
  const receipt=await invokeObservedNativeTool(session,{area,host,expectedVersion:args.entry,sop});
