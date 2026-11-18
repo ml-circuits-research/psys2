@@ -1,5 +1,5 @@
 {
-  "version": "a362406fc1",
+  "version": "6b5964853d",
   "worlds": [
     "core",
     "ui.shell",
@@ -317,11 +317,11 @@
     "worlds/words/ed.json": "6b969840b04e8c56",
     "worlds/words.bloom.json": "0710f3899a6043f6"
   },
-  "builtAt": "2026-11-18T17:09:16.608Z",
-  "commit": "3e5b3100-dirty",
+  "builtAt": "2026-11-18T17:12:49.193Z",
+  "commit": "4a9045bf-dirty",
   "catalog": "844ebfd7ca972ebe31a916a21569d606eb01d600",
   "assets": {
-    "app.mjs": "10c844d558",
+    "app.mjs": "a4632d027f",
     "coverage-grid.json": "dc56813858",
     "favicon.svg": "89f8b9f010",
     "lib/astra/focus.mjs": "37cd902837",
@@ -715,7 +715,7 @@
     "ui/work-files.mjs": "1c02e5e60c",
     "ui/world-code.mjs": "8be09959f2",
     "ui/world-loader.mjs": "ae492183e0",
-    "ui/worlds-explorer.mjs": "fd22a1c9c2",
+    "ui/worlds-explorer.mjs": "47ba36b096",
     "vendor/bergamot/bergamot-translator-worker.js": "cf3192f885",
     "vendor/bergamot/bergamot-translator-worker.wasm": "95a2b58dd6",
     "vendor/bergamot/LICENSES.md": "98bef6fc01",

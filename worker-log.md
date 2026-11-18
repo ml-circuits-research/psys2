@@ -114,3 +114,6 @@ Worlds Chromium `node .git/worlds-browser-count.mjs` with and without `VERIFY_WO
 
 - Restoring Worlds on startup now mounts its panel even when the worker restores a different active editor. The Chromium regression reloads the actual page and verifies the selected Worlds graph without another click.
 - `node scripts/build-webchat.mjs`, `npm test`, `git diff --check`.
+
+- Response Replay identifies its command, opens the map and highlights declared relationships whose endpoints share an actual event. Offscreen activity stays in the log. The preceding refresh fix was verified on Pages in Chromium with 154 graph nodes after reload.
+- `node scripts/build-webchat.mjs`, `npm test` (606 tests, 603 passed, three skipped), `git diff --check`.
