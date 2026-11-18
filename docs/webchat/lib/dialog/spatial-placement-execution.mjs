@@ -1,13 +1,13 @@
 // Assemble trusted native observations and dispatch the compiler's SOP call.
-import {World,parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=e931f8b20e';
-import SOURCE from './new-engine-source.mjs?v=f1bd2490cf';
-import {readPlacementProfile,rememberPlacement} from '../../worlds/app.project/spatial-profile.mjs?v=39f7c0e60c';
-import {placementInterfaceSop} from '../../worlds/native-spatial-interface.mjs?v=ac00360c26';
-import {NATIVE_AREAS,createAreaHost} from './app-reader-context.mjs?v=abf36e3d52';
+import {World,parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=9d6ddce277';
+import SOURCE from './new-engine-source.mjs?v=36ca8dc7f2';
+import {readPlacementProfile,rememberPlacement} from '../../worlds/app.project/spatial-profile.mjs?v=e92cc5593b';
+import {placementInterfaceSop} from '../../worlds/native-spatial-interface.mjs?v=643deec9a2';
+import {NATIVE_AREAS,createAreaHost} from './app-reader-context.mjs?v=c84a75634d';
 import {identityRegistryFor,instanceIdFor} from './instance-identity.mjs?v=024ef1ca83';
-import {nativeKindCandidates} from './native-binding-candidates.mjs?v=f430418571';
-import {invokeObservedNativeTool} from './native-tool-activity.mjs?v=10e4ff71ec';
-import {describeNativeControl,verifyNativeControlEffect} from './native-control-intent.mjs?v=2a5bfacfd9';
+import {nativeKindCandidates} from './native-binding-candidates.mjs?v=aa6673454c';
+import {invokeObservedNativeTool} from './native-tool-activity.mjs?v=cb32498a31';
+import {describeNativeControl,verifyNativeControlEffect} from './native-control-intent.mjs?v=a3764ece95';
 
 const read = (row,key) => row?.attrs[key]?.length===1 ? str(row.attrs[key][0]) : undefined;
 const ref = (row,key) => {

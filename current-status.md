@@ -1,5 +1,11 @@
 # Current status
 
+## 2026-11-18 — Declarative knowledge projection and browser tool input
+
+Webchat build `beaab25626` uses SOPWorlds 0.222.0. The Drawing placement profile states which catalog records to read and which rule results to return. The library performs this lookup from SOP bindings. A Chromium run moved the lake, drew the boat at its new position and undid only the boat. A Diagram host test changed the authored region and observed new node coordinates on two pages. The ordinary Diagram catalog still needs equivalent domain coverage. Browser tool input is now a SOP string.
+
+The integrated gate passed 638 tests with 3 skipped. The frozen reader can still omit the noun on an existence question after a count question. In that case the grounded target remains unresolved. No model retraining was performed. Remaining compiler tasks are in the library’s refactoring plan.
+
 ## 2026-11-18 — Scene knowledge in ordinary Drawing requests
 
 On a 1000 × 700 frame, Chromium placed a sun at (500, 175). After Undo, “Draw a lake” followed by “Draw a boat” placed both at (500, 525). The boat instruction used the observed lake and its declared water anchor. Undo removed the boat and preserved the lake. Explicit coordinate precedence and occupied placements also passed targeted host tests. The reader weights are unchanged.

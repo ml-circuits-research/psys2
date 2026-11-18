@@ -1,4 +1,4 @@
-import {World} from '../vendor/sopworld/sopworld.mjs?v=e931f8b20e';
+import {World} from '../vendor/sopworld/sopworld.mjs?v=9d6ddce277';
 import POLICY from '../../worlds/app.project/history-policy-source.mjs?v=4a3ac642e0';
 
 import SCHEMA from '../../worlds/app.project/history-schema-source.mjs?v=ab0c2e3e60';

@@ -1,9 +1,9 @@
-import {World,editCost,quote,serialize} from '../vendor/sopworld/sopworld.mjs?v=e931f8b20e';
-import {createAreaHost,NATIVE_AREAS} from './app-reader-context.mjs?v=abf36e3d52';
-import {nativeCreationCandidates} from './native-binding-candidates.mjs?v=f430418571';
-import {compileObservedChoice} from './observed-choice.mjs?v=e1375fd46d';
-import POLICY from '../../worlds/app.project/query-reading-policy-source.mjs?v=65a1df533b';
-import SCHEMA from '../../worlds/app.project/query-reading-schema-source.mjs?v=4e7f8576d5';
+import {World,editCost,quote,serialize} from '../vendor/sopworld/sopworld.mjs?v=9d6ddce277';
+import {createAreaHost,NATIVE_AREAS} from './app-reader-context.mjs?v=c84a75634d';
+import {nativeCreationCandidates} from './native-binding-candidates.mjs?v=aa6673454c';
+import {compileObservedChoice} from './observed-choice.mjs?v=c2e93b7522';
+import POLICY from '../../worlds/app.project/query-reading-policy-source.mjs?v=1697719f48';
+import SCHEMA from '../../worlds/app.project/query-reading-schema-source.mjs?v=f301119a4b';
 import {budget} from './budget.mjs?v=00bce6e369';
 
 const kind='app.query.read';
@@ -71,9 +71,9 @@ export async function projectQueryAction(proposal,session,{view,bindings}={}){
  if(condition){
   const propertyConcept=atom(property(condition.key));
   if(!propertyConcept||condition.value!==condition.value_span||!anchored(['constraints','0','value_span'],condition.value)||
-     Object.keys(condition).some(key=>!['key','value','value_span','phase','operator','character','polarity'].includes(key)))return null;
+     Object.keys(condition).some(key=>!['key','value','value_span','phase','operator','character','polarity','scope'].includes(key)))return null;
   facts.push(row('observed.condition',kind+'.condition',{concept:propertyConcept,value:quote(condition.value),phase:atom(condition.phase),
-   operator:atom(condition.operator),polarity:atom(condition.polarity),character:atom(condition.character)}));
+   operator:atom(condition.operator),polarity:atom(condition.polarity),character:atom(condition.character),scope:atom(condition.scope??'unmarked')}));
  }
  const world=queryPolicy().fork(),evidence=serialize(facts);
  if(!world.tell(evidence,{factsOnly:true}).ok)return null;

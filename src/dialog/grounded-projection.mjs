@@ -23,18 +23,21 @@ export function inspectGroundedProjection() {
   return { policy: POLICY, schema: SCHEMA, loaded: !!base };
 }
 
-export function resolveGroundedMention({text,area,family,lexemes}){
+export function resolveGroundedMention({text,area,family,lexemes,evidence}){
   const world=groundingWorld().fork();
   const input=serialize([
-    record('ground.mention','mention',{text:quote(text),area:quote(area),family:quote(family)}),
-    ...lexemes.map(({text,area,family,canonical,witness},index)=>record('ground.lexeme.'+index,'lexeme',{
-      text:quote(text),area:quote(area),family:quote(family),canonical:quote(canonical),witness:quote(witness),
+    record('ground.mention','mention',{text:quote(text),area:quote(area),family:quote(family),
+      ...Object.fromEntries(Object.entries(evidence).map(([key,value])=>[key,value===undefined?undefined:String(value)])),
+    }),
+    ...lexemes.map(({text,area,family,canonical,witness,form},index)=>record('ground.lexeme.'+index,'lexeme',{
+      text:quote(text),area:quote(area),family:quote(family),canonical:quote(canonical),witness:quote(witness),form,
     })),
   ]);
   if(!world.tell(input,{factsOnly:true}).ok)return [];
   return world.ofType('app.grounded.meaning').map(row=>{
     const lexeme=world.get(first(row,'lexeme').slice(1));
-    return {canonical:str(first(lexeme,'canonical')),witness:str(first(lexeme,'witness'))};
+    return {canonical:str(first(lexeme,'canonical')),witness:str(first(lexeme,'witness')),
+      proof:serialize([world.get('ground.mention'),lexeme,row]),support:{wire:row.id,rule:row.meta.via,from:[...row.meta.from]}};
   });
 }
 

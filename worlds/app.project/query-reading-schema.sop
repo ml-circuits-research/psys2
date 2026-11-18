@@ -1,4 +1,4 @@
-@query.schema core.module name=app.query.read exports=app.query.read.head exports=app.query.read.question exports=app.query.read.condition exports=app.query.read.operation exports=app.query.read.selector exports=app.query.read.phase
+@query.schema core.module name=app.query.read exports=app.query.read.head exports=app.query.read.question exports=app.query.read.condition exports=app.query.read.operation exports=app.query.read.selector exports=app.query.read.phase exports=app.query.read.scope
 @query.head core.type of=app.query.read.head closed=true
 @query.head.kind core.slot of=app.query.read.head key=head kind=atom present=true
 @query.head.operation core.slot of=app.query.read.head key=operation kind=atom present=true
@@ -25,3 +25,7 @@
 @query.selector.value core.slot of=app.query.read.selector key=value kind=string present=true
 @query.question.targetCue core.slot of=app.query.read.question key=targetCue kind=boolean present=true
 @query.head.targetCue core.slot of=app.query.read.head key=targetCue kind=boolean
+
+@query.condition.scope core.slot of=app.query.read.condition key=scope kind=atom present=true
+@query.scope.type core.type of=app.query.read.scope closed=true
+@query.scope.name core.slot of=app.query.read.scope key=name kind=atom present=true

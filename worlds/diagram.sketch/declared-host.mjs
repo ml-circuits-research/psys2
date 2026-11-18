@@ -34,7 +34,9 @@ const view=(s,canonical)=>[
 const nodeExtents=new Map();
 const spatial = state => {
  const frame = 'diagram.canvas', scope = frame;
- const boxes = [], points = [], relations = [], occupants = [], unknown = [];
+ const {x,y} = state.frame ?? {x:0,y:0};
+ const page = spatialBox(frame,scope,[x,y,x+K.CANVAS.W,y+K.CANVAS.H]);
+ const boxes = page ? [page] : [], points = [], relations = [], occupants = [], unknown = [];
  const nodes = new Map(state.shapes.map(node => [node.name,centeredSpatialBox(node.name,scope,{...node,...K.dims(node)})]));
  const memberIds = new Set(state.groups.flatMap(group => group.members));
  const add = (id, box, occupant) => {
@@ -62,7 +64,7 @@ const spatial = state => {
   points.push({entity:endpoint,scope,x,y},{entity:border,scope,x,y});
   relations.push({subject:endpoint,object:border,kind:'endpoint_of',scope,evidence:'coincident'});
  }
- return {frame,scope,container:frame,boxes,points,relations,occupants,unknown};
+ return {frame,scope,container:frame,viewport:frame,boxes,points,relations,occupants,unknown};
 };
 
 /** One-time migration of chart data into the diagram instance; legacy ids are namespaced. */

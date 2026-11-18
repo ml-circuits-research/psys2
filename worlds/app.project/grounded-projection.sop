@@ -45,7 +45,16 @@
 @o.range app.grounded.constraint core.on=$p.result source=?source source.start=?begin source.end=?end
 @ground.range core.rule when=$p.graph when=$p.ranged when=$p.result then=$o.range
 
-@p.mention app.grounded.mention area=?area family=?family text=?text
-@p.lexeme app.grounded.lexeme area=?area family=?family text=?text canonical=?meaning
+# A name-only observation supports an exact definite lexeme when there is no provider gap.
+@p.name.only app.grounded.mention area=?area family=?family text=?text descriptionMarked=false diagnostics=0
+@p.definite.lexeme app.grounded.lexeme area=?area family=?family text=?text form=definite
+@o.definite.meaning app.grounded.meaning lexeme=$p.definite.lexeme
+@ground.mention.definite core.rule when=$p.name.only when=$p.definite.lexeme then=$o.definite.meaning
+
+# Corroborated spans can account for a single specific presence diagnostic.
+@p.kind.gap app.grounded.mention area=?area family=?family text=?text descriptionMarked=true start=?start end=?end descriptionStart=?start descriptionEnd=?end diagnostics=2 incomplete=1 reason=presence-span-inconsistent head=target.kind present=true ranges=0
+@p.description.gap app.grounded.mention area=?area family=?family text=?text descriptionMarked=true start=?start end=?end descriptionStart=?start descriptionEnd=?end diagnostics=2 incomplete=1 reason=presence-span-inconsistent head=target.description_span present=false ranges=1 headStart=?start headEnd=?end
+@p.lexeme app.grounded.lexeme area=?area family=?family text=?text
 @o.meaning app.grounded.meaning lexeme=$p.lexeme
-@ground.mention core.rule when=$p.mention when=$p.lexeme then=$o.meaning
+@ground.mention.kind.gap core.rule when=$p.kind.gap when=$p.lexeme then=$o.meaning
+@ground.mention.description.gap core.rule when=$p.description.gap when=$p.lexeme then=$o.meaning

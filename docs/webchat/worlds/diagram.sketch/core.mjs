@@ -2,7 +2,7 @@
 // diagram.sketch core: the engine of diagram-vss-demo bound to a state (worlds/diagram.sketch/engine/, loaded lazily), the short ids of its shapes and arrows, the state and
 // its write-back. Shared by the tool primitives (tool.mjs, what the request door calls) and the old word operations (engine.mjs). No words, no request, no replies. Browser-safe.
 
-import {initialChartState} from '../data.charts/declared-host.mjs?v=5f08545bc4';
+import {initialChartState} from '../data.charts/declared-host.mjs?v=40ec8c1078';
 
 export const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 

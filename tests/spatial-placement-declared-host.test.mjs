@@ -151,7 +151,9 @@ test('Diagram projects group membership and moving rendered link endpoints with 
  assert.notEqual(next.x,source.x);
  assert.notEqual(next.revision,source.revision);
  assert.equal(after.observation.instanceId,'diagram.observed');
- assert.equal((await createDiagramHost({instanceId:'diagram.other'})).observeSpatial().boxes.length,0);
+ const other=(await createDiagramHost({instanceId:'diagram.other'})).observeSpatial();
+ assert.deepEqual(other.occupants,[]);
+ assert.deepEqual(other.boxes.map(box=>box.entity),[other.viewport]);
 });
 
 test('Avatar observes a visible attachment following a resized anchor without treating it as a peer',()=>{

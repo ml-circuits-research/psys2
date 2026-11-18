@@ -193,3 +193,6 @@ The isolated Webchat build f5481215af loaded the new composition schema and word
 
 2026-11-18 — Public browser session.tool takes a SOP instruction or history query. Editor widgets format their gesture before invoking that entry. A regression rejects JS command objects before worker dispatch and verifies exact SOP transmission.
 636 tests passed, 3 skipped. Chromium executed a direct SOP call before reader readiness and verified menu → chat → menu retained all three objects in Drawing and Diagram.
+
+2026-11-18 — Webchat beaab25626 uses published LIB 0.222.0 (6bef652) and KB a0e85384. The authored scene profile declares indexed reads and result families. Drawing and Diagram supply their own geometry. Worlds links the profile to its declared module.
+638 passed, 3 skipped. Chromium checked a boat at the moved lake, exact support evidence and Undo. Real Diagram host tests checked an authored region on two pages. The offline comparator now replays its frozen declarations with their inherited schema dependency.

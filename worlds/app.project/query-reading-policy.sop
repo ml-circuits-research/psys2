@@ -25,9 +25,12 @@
 @phase.filter app.query.read.phase name=selector
 @phase.result app.query.read.phase name=result
 @question.phase app.query.read.phase name=?phase
-@condition app.query.read.condition phase=?phase operator=eq character=requirement polarity=positive concept=?concept value=?value
+@scope.unmarked app.query.read.scope name=unmarked
+@scope.each app.query.read.scope name=each
+@question.scope app.query.read.scope name=?scope
+@condition app.query.read.condition scope=?scope phase=?phase operator=eq character=requirement polarity=positive concept=?concept value=?value
 @out.selector app.query.read.selector concept=?concept value=?value
-@query.scope core.rule when=$condition when=$question.phase then=$out.selector
+@query.scope core.rule when=$condition when=$question.phase when=$question.scope then=$out.selector
 
 @query.lexical std.decide.criterion of=app.query.kind n=1 name=distance measure=distance dir=min
 @query.reader.type std.decide.criterion of=app.query.kind n=2 name=reader.type measure=otherType dir=min

@@ -1,15 +1,15 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-import { diagramToolInterface, DIAGRAM_COMPONENTS } from './tool-interface.mjs?v=783b0bb52a';
-export { DIAGRAM_TOOL_BINDINGS, DIAGRAM_COMPONENTS } from './tool-interface.mjs?v=783b0bb52a';
-import{projectNumericGroups}from'./chart-layout.mjs?v=3bab230559';
+import { diagramToolInterface, DIAGRAM_COMPONENTS } from './tool-interface.mjs?v=07942af352';
+export { DIAGRAM_TOOL_BINDINGS, DIAGRAM_COMPONENTS } from './tool-interface.mjs?v=07942af352';
+import{projectNumericGroups}from'./chart-layout.mjs?v=0c15a4ee91';
 import {centeredSpatialBox,spatialBox,unionSpatialBoxes} from '../native-spatial-observation.mjs?v=ced85b9a29';
 import {routeEdges,edgeAppearance} from './arrows.mjs?v=e2ec6e110c';
-import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs?v=62cdd97cd1';
-import {canonicalDiagramState,toNativeDiagramState,diagramStateWorld,DIAGRAM_STATE_SCHEMA} from './canonical-state.mjs?v=574b20fa67';
-import {initialState,loadEngine,systemFor,writeBack,PREFIX,K} from './core.mjs?v=f4e9339264';
-import * as tool from './tool.mjs?v=f48f000500';
-import{groupNativeObjects,groupNativeHandlers,projectGroupCharts}from'./group-tools.mjs?v=500eaea5ac';
-import {initialChartState,chartNativeObjects,chartNativeHandlers} from '../data.charts/declared-host.mjs?v=5f08545bc4';
+import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs?v=c0eac86cc6';
+import {canonicalDiagramState,toNativeDiagramState,diagramStateWorld,DIAGRAM_STATE_SCHEMA} from './canonical-state.mjs?v=7fe404906d';
+import {initialState,loadEngine,systemFor,writeBack,PREFIX,K} from './core.mjs?v=ccb2aa61d1';
+import * as tool from './tool.mjs?v=01788c1967';
+import{groupNativeObjects,groupNativeHandlers,projectGroupCharts}from'./group-tools.mjs?v=3ebcb7a289';
+import {initialChartState,chartNativeObjects,chartNativeHandlers} from '../data.charts/declared-host.mjs?v=40ec8c1078';
 export const initialDiagramState=initialState;
 export const initialCanonicalDiagramState=()=>canonicalDiagramState(initialState());
 export const DIAGRAM_STATE_INTERFACE=Object.freeze({canonicalizeState:canonicalDiagramState,projectState:toNativeDiagramState,
@@ -34,7 +34,9 @@ const view=(s,canonical)=>[
 const nodeExtents=new Map();
 const spatial = state => {
  const frame = 'diagram.canvas', scope = frame;
- const boxes = [], points = [], relations = [], occupants = [], unknown = [];
+ const {x,y} = state.frame ?? {x:0,y:0};
+ const page = spatialBox(frame,scope,[x,y,x+K.CANVAS.W,y+K.CANVAS.H]);
+ const boxes = page ? [page] : [], points = [], relations = [], occupants = [], unknown = [];
  const nodes = new Map(state.shapes.map(node => [node.name,centeredSpatialBox(node.name,scope,{...node,...K.dims(node)})]));
  const memberIds = new Set(state.groups.flatMap(group => group.members));
  const add = (id, box, occupant) => {
@@ -62,7 +64,7 @@ const spatial = state => {
   points.push({entity:endpoint,scope,x,y},{entity:border,scope,x,y});
   relations.push({subject:endpoint,object:border,kind:'endpoint_of',scope,evidence:'coincident'});
  }
- return {frame,scope,container:frame,boxes,points,relations,occupants,unknown};
+ return {frame,scope,container:frame,viewport:frame,boxes,points,relations,occupants,unknown};
 };
 
 /** One-time migration of chart data into the diagram instance; legacy ids are namespaced. */

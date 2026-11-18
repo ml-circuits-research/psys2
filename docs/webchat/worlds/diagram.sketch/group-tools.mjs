@@ -1,10 +1,10 @@
-import{K}from'./core.mjs?v=f4e9339264';
-import{CHART_LAYOUTS,layoutNumericGroup}from'./chart-layout.mjs?v=3bab230559';
+import{K}from'./core.mjs?v=ccb2aa61d1';
+import{CHART_LAYOUTS,layoutNumericGroup}from'./chart-layout.mjs?v=0c15a4ee91';
 // Stable groups over actual diagram nodes; coordinates come from declared native layout tools.
-import{nativeToken}from'../native-tool-host.mjs?v=62cdd97cd1';
-import{addShapes,arrangeShapes}from'./tool.mjs?v=f48f000500';
-import{chartNativeHandlers,CHART_TOOL_BINDINGS}from'../data.charts/declared-host.mjs?v=5f08545bc4';
-import { DIAGRAM_TOOL_BINDINGS } from './tool-interface.mjs?v=783b0bb52a';
+import{nativeToken}from'../native-tool-host.mjs?v=c0eac86cc6';
+import{addShapes,arrangeShapes}from'./tool.mjs?v=01788c1967';
+import{chartNativeHandlers,CHART_TOOL_BINDINGS}from'../data.charts/declared-host.mjs?v=40ec8c1078';
+import { DIAGRAM_TOOL_BINDINGS } from './tool-interface.mjs?v=07942af352';
 export const GROUP_CHART_PROJECTION = Object.freeze(DIAGRAM_TOOL_BINDINGS.find(operation=>operation.id==='diagram.group.chart').derivedProjection);
 const group=(s,id)=>s.groups.find(g=>g.name===id),members=(s,g)=>g.members.map(id=>s.shapes.find(n=>n.name===id)).filter(Boolean),center=nodes=>({x:nodes.reduce((n,o)=>n+o.x/nodes.length,0),y:nodes.reduce((n,o)=>n+o.y/nodes.length,0)});
 const fail=code=>({status:'missing',code}),done=changed=>({status:'supported',changed});

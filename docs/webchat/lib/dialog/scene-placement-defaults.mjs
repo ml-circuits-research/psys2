@@ -1,7 +1,7 @@
 // The compiler receives exact catalog regions and current renderer evidence.
-import { parse, quote } from '../vendor/sopworld/sopworld.mjs?v=e931f8b20e';
-import { nativeKindCandidates } from './native-binding-candidates.mjs?v=f430418571';
-import { readCompositionRegions } from './composition-knowledge.mjs?v=35d9529932';
+import { parse, quote } from '../vendor/sopworld/sopworld.mjs?v=9d6ddce277';
+import { nativeKindCandidates } from './native-binding-candidates.mjs?v=aa6673454c';
+import { readCompositionRegions, projectionLoaded, sceneProjectionSource } from './composition-knowledge.mjs?v=9f1db6c12f';
 import POLICY from '../../worlds/app.project/scene-default-policy-source.mjs?v=06eaeac5e8';
 import SCHEMA from '../../worlds/app.project/scene-default-schema-source.mjs?v=0a4d397328';
 
@@ -10,8 +10,8 @@ const coordinateKeys = ['min_x', 'min_y', 'max_x', 'max_y'];
 const first = (row, key) => row.attrs[key]?.[0];
 const isBox = box => box && coordinateKeys.every(key => Number.isFinite(box[key]));
 const style = parse(POLICY).find(row => row.type === family + 'style');
-export const sceneDefaultModule = { name: 'app.sceneDefault', schema: SCHEMA, policy: POLICY };
-export const sceneDefaultInspection = () => sceneDefaultModule;
+export const sceneDefaultModule = { name: 'app.sceneDefault', schema: SCHEMA, policy: POLICY, projection: sceneProjectionSource };
+export const sceneDefaultInspection = () => ({...sceneDefaultModule, projectionLoaded:projectionLoaded()});
 
 export async function readSceneDefaults({ host, bindings, area, view, knowledge, candidates }) {
   if (!host.observeSpatial || !host.measureSpatial || !(knowledge?.base ?? knowledge)?.wireSource) return null;
@@ -25,7 +25,7 @@ export async function readSceneDefaults({ host, bindings, area, view, knowledge,
   const spatial = host.observeSpatial();
   if (!spatial.observation.complete || spatial.unknown.some(entity => spatial.occupants.includes(entity))) return null;
   const available = new Set(spatial.occupants), boxes = new Map(spatial.boxes.filter(isBox).map(box => [box.entity,box]));
-  const bounds = boxes.get(spatial.bounds);
+  const bounds = boxes.get(spatial.viewport ?? spatial.bounds);
   if (!bounds) return null;
   const peers = spatial.observation.objects.flatMap((object, order) => available.has(object.id) && boxes.has(object.id)
     ? [{ ...boxes.get(object.id), name: object.kind, source: object.source, order }] : []);
@@ -40,7 +40,7 @@ export async function readSceneDefaults({ host, bindings, area, view, knowledge,
   }
   if (!regions) return null;
   const regionRows = parse(regions);
-  if (!regionRows.some(row => ['k.composition2d.slot','k.composition2d.anchor'].includes(row.type))) return null;
+  if (!regionRows.length || regionRows[0].type === 'std.compile.result') return null;
   return { regions: regionRows, bounds, peers, mappings, spatial };
 }
 

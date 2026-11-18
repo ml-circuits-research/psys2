@@ -46,6 +46,26 @@ for(const context of cases)test('exact grounded removal and Undo use actual nati
  const refused=await routeNewEngine(session,current.text);
  assert.deepEqual(refused.statuses,['unsupported']);
  assert.deepEqual((await observe()).map(row=>row.id),before.map(row=>row.id));
+
+ current=mention(context,kinds[0]);
+ const raw=current.proposal.raw;
+ delete raw.requests[0].target.description_span;
+ raw.ranges=raw.ranges.filter(row=>row.path.at(-1)!=='description_span');
+ raw.unresolved=[];
+ raw.coverage.complete=true;
+ current.proposal.failures=[{reason:'unresolved-canonical-kind-binding'}];
+ raw.unresolved=[{reason:'unproved-provider-target'}];
+ assert.deepEqual((await routeNewEngine(session,current.text)).statuses,['unsupported']);
+ assert.deepEqual((await observe()).map(row=>row.id),before.map(row=>row.id));
+ raw.unresolved=[];
+ const onlyName=await routeNewEngine(session,current.text);
+ assert.deepEqual(onlyName.statuses,['supported']);
+ assert.match(onlyName.text,/I read "the /);
+ assert.ok(events.some(event=>event.support?.some(row=>row.rule==='ground.mention.definite')));
+ assert.equal(onlyName.trace.effectVerification.status,'verified');
+ assert.deepEqual((await observe()).map(row=>row.id),[before[1].id]);
+ assert.deepEqual((await routeNewEngine(session,'@s std.request.source text="Undo" @r std.request act=undo mood=do source=$s')).statuses,['supported']);
+
  assert.equal((await performGesture(session,{view,operation:make,args:{kind:kinds[0]}})).ok,true);
  const three=await observe();
  current=mention(context,kinds[0]);

@@ -76,7 +76,7 @@ export async function executeNativeCapability(session, candidate, { bindings, vi
       { reason: 'stale-compiled-capability', reading: candidate, compiledSop: plan.sop });
   }
   try {
-    session.engine?.onWorldActivity?.({ nodeIds: ['execution:capability-policy','execution:policy',...(plan.scenePlaced?['execution:scene-default-policy','knowledge-world:k.composition2d']:[])], phase: 'stage', label: 'Compiled declared capabilities',
+    session.engine?.onWorldActivity?.({ nodeIds: ['execution:capability-policy','execution:policy',...(plan.scenePlaced?['execution:scene-default-policy','execution:scene-default-projection','knowledge-world:k.composition2d']:[])], phase: 'stage', label: 'Compiled declared capabilities',
       operation: 'policy.execution.compile', tool: operation.id, facts: plan.support, wires: plan.sop,
       ...(plan.sceneEvidence?{sceneEvidence:plan.sceneEvidence}:{}) });
   } catch {

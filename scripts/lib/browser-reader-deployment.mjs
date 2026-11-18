@@ -15,7 +15,7 @@ export async function refreshBrowserReaderDeployment(outDir){
    'lib/dialog/reader-admission.mjs','lib/dialog/reader-policy.mjs','lib/dialog/declared-execution.mjs',
    'lib/dialog/native-binding-candidates.mjs','worlds/app.project/constructor-policy-source.mjs','worlds/app.project/constructor-schema-source.mjs',
    'lib/dialog/capability-plan-adapter.mjs','lib/dialog/scene-placement-defaults.mjs',
-   'worlds/app.project/scene-default-policy-source.mjs','worlds/app.project/scene-default-schema-source.mjs','lib/dialog/native-query-execution.mjs','lib/dialog/execution-policy.mjs','worlds/native-tool-interface.mjs',
+   'worlds/app.project/scene-default-policy-source.mjs','worlds/app.project/scene-default-schema-source.mjs','worlds/app.project/scene-default-projection-source.mjs','lib/dialog/native-query-execution.mjs','lib/dialog/execution-policy.mjs','worlds/native-tool-interface.mjs',
    'worlds/app.project/capability-policy.mjs','worlds/app.project/execution-policy-source.mjs',
    'worlds/app.project/execution-policy-schema-source.mjs','worlds/art.draw/native-interface-source.mjs',
    'worlds/data.charts/native-interface-source.mjs',

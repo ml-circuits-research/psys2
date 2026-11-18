@@ -48,3 +48,17 @@
 @ground.lexeme.area core.slot of=app.grounded.lexeme key=area kind=string present=true
 @ground.lexeme.family core.slot of=app.grounded.lexeme key=family kind=string present=true
 @ground.lexeme.text core.slot of=app.grounded.lexeme key=text kind=string present=true
+@ground.mention.start core.slot of=app.grounded.mention key=start kind=integer
+@ground.mention.end core.slot of=app.grounded.mention key=end kind=integer
+@ground.mention.descriptionMarked core.slot of=app.grounded.mention key=descriptionMarked kind=boolean
+@ground.mention.descriptionStart core.slot of=app.grounded.mention key=descriptionStart kind=integer
+@ground.mention.descriptionEnd core.slot of=app.grounded.mention key=descriptionEnd kind=integer
+@ground.mention.diagnostics core.slot of=app.grounded.mention key=diagnostics kind=integer
+@ground.mention.incomplete core.slot of=app.grounded.mention key=incomplete kind=integer
+@ground.mention.reason core.slot of=app.grounded.mention key=reason kind=atom
+@ground.mention.head core.slot of=app.grounded.mention key=head kind=atom
+@ground.mention.present core.slot of=app.grounded.mention key=present kind=boolean
+@ground.mention.ranges core.slot of=app.grounded.mention key=ranges kind=integer
+@ground.mention.headStart core.slot of=app.grounded.mention key=headStart kind=integer
+@ground.mention.headEnd core.slot of=app.grounded.mention key=headEnd kind=integer
+@ground.lexeme.form core.slot of=app.grounded.lexeme key=form kind=atom present=true

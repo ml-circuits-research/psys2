@@ -8,6 +8,7 @@
 # script: none (hand-written)
 # needs: sopworld with std.schema and std.acts (tools/sopworld/VERSION, 0.30.0 or later)
 
+@w.face.schema core.use world=std.schema core.source="hand-core 1"
 @w.face core.module name=w.face version=1 exports=face exports=part exports=hair_back exports=shoulders exports=clothes exports=neck exports=ears exports=head exports=cheeks exports=beard exports=mouth exports=moustache exports=nose exports=eyes exports=eyebrows exports=glasses exports=hair_front exports=earrings exports=hat exports=accessories core.source="hand-core 1"
 @w.face.world std.schema.world name=w.face doc="a drawn face: parts with their variant, colour, size and place, and an expression" core.source="hand-core 1"
 

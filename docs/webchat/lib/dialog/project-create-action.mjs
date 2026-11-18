@@ -1,12 +1,12 @@
-import {World,editCost,parse,quote,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=e931f8b20e';
+import {World,editCost,parse,quote,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=9d6ddce277';
 import POLICY from '../../worlds/app.project/creation-policy-source.mjs?v=874b0f8e6d';
 import SCHEMA from '../../worlds/app.project/creation-schema-source.mjs?v=9d9c428cd6';
-import {executionPolicyWorld} from './execution-policy.mjs?v=4cd537de54';
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=abf36e3d52';
-import {nativeCreationCandidates} from './native-binding-candidates.mjs?v=f430418571';
+import {executionPolicyWorld} from './execution-policy.mjs?v=42251ca865';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=c84a75634d';
+import {nativeCreationCandidates} from './native-binding-candidates.mjs?v=aa6673454c';
 import {budget} from './budget.mjs?v=00bce6e369';
-import {observeGroundedProjection,projectGroundedRequest} from './grounded-projection.mjs?v=01fe10c4a8';
-import {compileObservedChoice} from './observed-choice.mjs?v=e1375fd46d';
+import {observeGroundedProjection,projectGroundedRequest} from './grounded-projection.mjs?v=2a1c2fd26d';
+import {compileObservedChoice} from './observed-choice.mjs?v=c2e93b7522';
 
 const field=(fact,key)=>str(fact.attrs[key]?.[0]);
 let loaded;

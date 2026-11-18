@@ -1,5 +1,5 @@
 // Read-only presentation of the exact instance archive and its owned object facts.
-import{parse,serialize,str,readInstanceState}from'../vendor/sopworld/sopworld.mjs?v=e931f8b20e';
+import{parse,serialize,str,readInstanceState}from'../vendor/sopworld/sopworld.mjs?v=9d6ddce277';
 import{createBudget}from'./budget.mjs?v=00bce6e369';
 export function inspectInstanceRecord(record,{observation=null,semanticWires=null,identityKey='id',interfaceTypeKey=null,observationOnlyTypes=[]}={}){
  const archive=readInstanceState(record.wires),nodes=parse(record.wires),byId=new Map(nodes.map(n=>[n.id,n])),order=new Map(nodes.map((n,i)=>[n.id,i])),byNative=new Map(archive.objects.map(o=>[o.id,o]));

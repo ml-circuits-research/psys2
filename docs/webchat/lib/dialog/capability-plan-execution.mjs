@@ -1,12 +1,12 @@
-import { readSceneDefaults } from './scene-placement-defaults.mjs?v=83718f3e1d';
+import { readSceneDefaults } from './scene-placement-defaults.mjs?v=bdbf97975e';
 // SPDX-License-Identifier: AGPL-3.0-only
-import { compileNativeCapability } from './capability-plan-adapter.mjs?v=b2fbe51d51';
-import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=abf36e3d52';
+import { compileNativeCapability } from './capability-plan-adapter.mjs?v=0a0618a0cf';
+import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=c84a75634d';
 import { instanceIdFor } from './instance-identity.mjs?v=024ef1ca83';
-import { prepareNativeControlHost } from './native-control-preparation.mjs?v=96eb7da134';
-import { invokeObservedNativeTool } from './native-tool-activity.mjs?v=10e4ff71ec';
-import { retainPropertyEffect } from './property-effect-evidence.mjs?v=5cd3cb855c';
-import { describeNativeControl, verifyNativeControlEffect } from './native-control-intent.mjs?v=2a5bfacfd9';
+import { prepareNativeControlHost } from './native-control-preparation.mjs?v=9b467a4462';
+import { invokeObservedNativeTool } from './native-tool-activity.mjs?v=cb32498a31';
+import { retainPropertyEffect } from './property-effect-evidence.mjs?v=5ade3886fa';
+import { describeNativeControl, verifyNativeControlEffect } from './native-control-intent.mjs?v=a3764ece95';
 
 function reply(text, supported, trace = {}) {
   return { text, parts: [{ text, translate: false }], statuses: [supported ? 'supported' : 'unsupported'],
@@ -76,7 +76,7 @@ export async function executeNativeCapability(session, candidate, { bindings, vi
       { reason: 'stale-compiled-capability', reading: candidate, compiledSop: plan.sop });
   }
   try {
-    session.engine?.onWorldActivity?.({ nodeIds: ['execution:capability-policy','execution:policy',...(plan.scenePlaced?['execution:scene-default-policy','knowledge-world:k.composition2d']:[])], phase: 'stage', label: 'Compiled declared capabilities',
+    session.engine?.onWorldActivity?.({ nodeIds: ['execution:capability-policy','execution:policy',...(plan.scenePlaced?['execution:scene-default-policy','execution:scene-default-projection','knowledge-world:k.composition2d']:[])], phase: 'stage', label: 'Compiled declared capabilities',
       operation: 'policy.execution.compile', tool: operation.id, facts: plan.support, wires: plan.sop,
       ...(plan.sceneEvidence?{sceneEvidence:plan.sceneEvidence}:{}) });
   } catch {

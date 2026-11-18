@@ -1,2 +1,2 @@
 // Native initial state only; no legacy grammar executor.
-export{initialCanonicalDrawingState as initialState}from"./declared-host.mjs?v=b6cfb56641";
+export{initialCanonicalDrawingState as initialState}from"./declared-host.mjs?v=be040dc21a";

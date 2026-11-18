@@ -11,6 +11,7 @@ for (const [source, module] of [
   ['reader-admission-policy.sop', 'reader-admission-policy-source.mjs'],
   ['scene-default-schema.sop', 'scene-default-schema-source.mjs'],
   ['scene-default-policy.sop', 'scene-default-policy-source.mjs'],
+  ['scene-default-projection.sop', 'scene-default-projection-source.mjs'],
   ['capability-policy.sop', 'capability-policy.mjs'],
   ['constructor-policy.sop', 'constructor-policy-source.mjs'],
   ['constructor-schema.sop', 'constructor-schema-source.mjs'],

@@ -7,12 +7,19 @@ import {executeRequestCandidate} from '../../src/dialog/new-engine.mjs';
 let grammar;
 const reply=(text,supported,trace={})=>({text,parts:[{text,translate:false}],statuses:[supported?'supported':'unsupported'],answers:[],segments:[],state:{},effects:[],newEngine:true,trace:{legacy:false,engine:'new',...trace}});
 const refusal=(reason,trace={})=>reply('The declared grammar could not resolve this request. Nothing changed.',false,{reason,...trace});
+// The frozen comparator contains flattened module declarations. Its face rule
+// reads the inherited kind slot from std.schema, a dependency of its matrix.
+function restoreComparator(snapshot) {
+  const prelude = new World();
+  prelude.load('@comparator.schema core.use world=std.schema');
+  return World.fromJSON({...snapshot, log:[...prelude.toJSON().log, ...snapshot.log]});
+}
 function reader() {
   if (!grammar) {
-    const world = World.fromJSON(SOURCE.snapshot);
+    const world = restoreComparator(SOURCE.snapshot);
     const compiled = compileGrammarOverlay(world, { types: SOURCE.types });
     if (!compiled.ok) throw new Error('Declared reader could not compile');
-    const phraseWorld = World.fromJSON(SOURCE.phraseSnapshot), frameWorld = World.fromJSON(SOURCE.frameSnapshot);
+    const phraseWorld = restoreComparator(SOURCE.phraseSnapshot), frameWorld = restoreComparator(SOURCE.frameSnapshot);
     const mappings = englishRequestMappings(api, frameWorld);
     if (!mappings.ok) throw new Error('Declared request mappings could not compile');
     const general = createGeneralEnglishReader(api);

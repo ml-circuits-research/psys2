@@ -7,10 +7,10 @@
 //   adj: { <slot>: { s: scale, dx, dy } }, expression, base (the preset it started from), name, saved: { <key>: { name, slots, colours, paint, adj } }, options (what "which hats are there"
 //   shows), refs (the things of the face: the referents of this world), history / future (undo, redo), n (a counter) }.
 // Browser-safe: imports the shared space module, the English of the catalog (src/lang/en.mjs: the words a request skips, the negations) and the comparatives of k.values.
-import * as space from '../space/space.mjs?v=5ea46f2d62';
-import { en } from '../../lib/lang/en.mjs?v=5db4f4eafd';
-import { comparativeWords } from '../../lib/knowledge/values.mjs?v=9ed0c6384c';
-import { NONE, DEFAULT_PRESET, slotOf, newFace, faceOf, snap, mark, apply, put, neighbours, centre, SCALE_MIN, SCALE_MAX } from './face.mjs?v=6829060f19';   // the face's state and its algorithms are the tool's (face.mjs)
+import * as space from '../space/space.mjs?v=ccdb3c34af';
+import { en } from '../../lib/lang/en.mjs?v=69ca49b029';
+import { comparativeWords } from '../../lib/knowledge/values.mjs?v=7e7de4e32a';
+import { NONE, DEFAULT_PRESET, slotOf, newFace, faceOf, snap, mark, apply, put, neighbours, centre, SCALE_MIN, SCALE_MAX } from './face.mjs?v=a06ad86d7f';   // the face's state and its algorithms are the tool's (face.mjs)
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 export { NONE, DEFAULT_PRESET, newFace, faceOf, neighbours };

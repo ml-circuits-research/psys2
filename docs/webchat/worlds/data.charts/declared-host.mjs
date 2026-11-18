@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-import { readNativeToolInterface } from '../native-tool-interface.mjs?v=2aed95f709';
+import { readNativeToolInterface } from '../native-tool-interface.mjs?v=45d7698f44';
 import NATIVE_INTERFACE from './native-interface-source.mjs?v=6c0dc1d746';
 // Explicit numeric data only: no text parser, inferred values, or legacy dispatch.
-import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs?v=62cdd97cd1';
+import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs?v=c0eac86cc6';
 export const CHART_KIND_PARAMETERS={
  'w.chart.chart':{type:'bar'},'k.charts.kind.bar_chart':{type:'bar'},'k.charts.kind.line_chart':{type:'line'},
  'k.charts.kind.pie_chart':{type:'pie'},'k.charts.kind.scatter_plot':{type:'scatter'},

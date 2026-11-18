@@ -71,9 +71,9 @@ export async function projectQueryAction(proposal,session,{view,bindings}={}){
  if(condition){
   const propertyConcept=atom(property(condition.key));
   if(!propertyConcept||condition.value!==condition.value_span||!anchored(['constraints','0','value_span'],condition.value)||
-     Object.keys(condition).some(key=>!['key','value','value_span','phase','operator','character','polarity'].includes(key)))return null;
+     Object.keys(condition).some(key=>!['key','value','value_span','phase','operator','character','polarity','scope'].includes(key)))return null;
   facts.push(row('observed.condition',kind+'.condition',{concept:propertyConcept,value:quote(condition.value),phase:atom(condition.phase),
-   operator:atom(condition.operator),polarity:atom(condition.polarity),character:atom(condition.character)}));
+   operator:atom(condition.operator),polarity:atom(condition.polarity),character:atom(condition.character),scope:atom(condition.scope??'unmarked')}));
  }
  const world=queryPolicy().fork(),evidence=serialize(facts);
  if(!world.tell(evidence,{factsOnly:true}).ok)return null;

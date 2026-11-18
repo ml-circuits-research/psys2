@@ -36,7 +36,7 @@ export async function openLangRo({ facts = null, unimorph = false, gloss: glossF
   // the large dictionary (3,466 lemmas derived from UniMorph, CC BY-SA 3.0, no senses) is a module of its own, loaded only when asked for; for a letter the hand file comes first, then the derived rows
   const extra = unimorph ? (await import('./ro.unimorph.generated.mjs?v=fd204dbae6')).LANG_RO_UNIMORPH : {};
   const text = (letter) => [facts.dictionary[letter], local.dictionary[letter], extra[letter]].filter(Boolean).join('\n');
-  const lib = await import('../vendor/sopworld/sopworld.mjs?v=e931f8b20e');
+  const lib = await import('../vendor/sopworld/sopworld.mjs?v=9d6ddce277');
   const world = new lib.World();
   world.load(facts.wires);
   if (local.wires.trim()) world.load(local.wires);

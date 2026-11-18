@@ -1,13 +1,13 @@
-import { recordHistory } from './history-journal.mjs?v=f8c90b3b55';
-import{prepareNativeControlHost}from'./native-control-preparation.mjs?v=96eb7da134';
-import {isAuthoredRequest} from './authored-request-tool.mjs?v=8d2451af0f';
-import{runHistoryControlQuery}from'./history-execution.mjs?v=1c66831477';
-import{invokeObservedNativeTool}from'./native-tool-activity.mjs?v=10e4ff71ec';
+import { recordHistory } from './history-journal.mjs?v=8961973e33';
+import{prepareNativeControlHost}from'./native-control-preparation.mjs?v=9b467a4462';
+import {isAuthoredRequest} from './authored-request-tool.mjs?v=157bf02ab3';
+import{runHistoryControlQuery}from'./history-execution.mjs?v=7dd1d9a7da';
+import{invokeObservedNativeTool}from'./native-tool-activity.mjs?v=cb32498a31';
 // Typed UI gestures use the same declared native tools and undo history as model requests.
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=abf36e3d52';
-import {describeNativeControl,verifyNativeControlEffect} from './native-control-intent.mjs?v=2a5bfacfd9';
-import {readNativeIntent} from './native-intent-reader.mjs?v=e0d8c6f40a';
-import {observePlacementCorrection,prunePlacementLinks} from '../../worlds/app.project/spatial-profile.mjs?v=39f7c0e60c';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=c84a75634d';
+import {describeNativeControl,verifyNativeControlEffect} from './native-control-intent.mjs?v=a3764ece95';
+import {readNativeIntent} from './native-intent-reader.mjs?v=13524d9fe4';
+import {observePlacementCorrection,prunePlacementLinks} from '../../worlds/app.project/spatial-profile.mjs?v=e92cc5593b';
 
 export async function invokeNativeControl(session,{view,sop}={}){
  if(typeof sop!=='string')throw Error('invalid-control-intent');

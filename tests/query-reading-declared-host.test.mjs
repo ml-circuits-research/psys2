@@ -43,3 +43,15 @@ test('A property projection requires its own exact span and a member question ne
  members.raw.requests[0].trigger='Which';members.raw.ranges[0].range=[0,5];
  assert.equal(await projectQueryAction(members,session,options),null);
 });
+
+test('A grounded filter may be distributed per member only when its scope is declared',async()=>{
+ const predicate={...condition,phase:'selector',scope:'each'};
+ const proposal=proposalFor('Are there any red houses',{trigger:'Are there',question:{ask:'exists'},target,constraints:[predicate]},
+  [[['trigger'],[0,9]],[['target','kind_span'],[18,24]],[['constraints','0','value_span'],[14,17]]]);
+ const result=await projectQueryAction(proposal,session,options);
+ assert.match(result.candidates[0].wires,/operation=exists/);
+ assert.match(result.candidates[0].wires,/value="red"/);
+ assert.match(result.interpretation.evidence,/scope=each/);
+ predicate.scope='group';
+ assert.equal(await projectQueryAction(proposal,session,options),null);
+});
