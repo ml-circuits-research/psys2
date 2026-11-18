@@ -1,7 +1,7 @@
 // Read-only presentation of the exact instance archive and its owned object facts.
 import{parse,serialize,str,readInstanceState}from'../vendor/sopworld/sopworld.mjs';
 import{createBudget}from'./budget.mjs';
-export function inspectInstanceRecord(record,{observation=null,semanticWires=null,identityKey='id',interfaceTypeKey=null}={}){
+export function inspectInstanceRecord(record,{observation=null,semanticWires=null,identityKey='id',interfaceTypeKey=null,observationOnlyTypes=[]}={}){
  const archive=readInstanceState(record.wires),nodes=parse(record.wires),byId=new Map(nodes.map(n=>[n.id,n])),order=new Map(nodes.map((n,i)=>[n.id,i])),byNative=new Map(archive.objects.map(o=>[o.id,o]));
  const descriptors=nodes.filter(n=>n.type==='std.instance.object'),facts=new Set(descriptors.map(n=>str(n.attrs.fact[0]).slice(1)));
  const observed=new Map((observation?.objects??[]).map(o=>[o.id,o]));
@@ -21,7 +21,10 @@ export function inspectInstanceRecord(record,{observation=null,semanticWires=nul
   const semanticNodes=parse(semanticWires),semanticById=new Map(semanticNodes.map(node=>[node.id,node])),boundFacts=semanticNodes.filter(node=>node.attrs[identityKey]?.length===1&&(!interfaceTypeKey||node.attrs[interfaceTypeKey]?.length===1)),identity=new Map(boundFacts.map(node=>[str(node.attrs[identityKey][0]),node]));
   if(identity.size!==boundFacts.length)throw Error('canonical-object-identity-ambiguous');
   const facts=new Set([...identity.values()].map(node=>node.id));
-  for(const object of objects){const fact=identity.get(object.id);if(!fact||(interfaceTypeKey?str(fact.attrs[interfaceTypeKey]?.[0]):fact.type)!==object.type)throw Error('canonical-object-identity-mismatch');const ids=new Set(),pending=[fact.id];
+  for(const object of objects){const fact=identity.get(object.id);
+   if(!fact&&observationOnlyTypes.includes(object.type)){object.factSource='tool observation';continue;}
+   object.factSource='instance';
+   if(!fact||(interfaceTypeKey?str(fact.attrs[interfaceTypeKey]?.[0]):fact.type)!==object.type)throw Error('canonical-object-identity-mismatch');const ids=new Set(),pending=[fact.id];
    while(pending.length){budget.tick('instance-inspection.canonical-references');const id=pending.pop();if(ids.has(id))continue;const node=semanticById.get(id);if(!node)throw Error('canonical-dangling-reference');ids.add(id);for(const values of Object.values(node.attrs))for(const value of values)if(value[0]==='$'&&(!facts.has(value.slice(1))||value.slice(1)===fact.id))pending.push(value.slice(1));}
    object.factId=fact.id;object.wires=serialize(semanticNodes.filter(node=>ids.has(node.id)));
   }

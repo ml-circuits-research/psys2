@@ -9,3 +9,15 @@ test('canonical inspection follows explicit interface identity and never substit
 test('canonical inspection refuses missing, conflicting or duplicate interface facts',()=>{
  for(const semanticWires of ['@current fixture.state id="piece" x=5','@current fixture.state id="piece" nativeType="fixture.other" x=5','@a fixture.state id="piece" nativeType="fixture.visible"\n@b fixture.state id="piece" nativeType="fixture.visible"'])assert.throws(()=>inspectInstanceRecord(record,{semanticWires,interfaceTypeKey:'nativeType'}),/canonical-object-identity/);
 });
+
+test('a declared tool observation retains its observed facts until the instance owns a fact with the same identity',()=>{
+ const options={interfaceTypeKey:'nativeType',observationOnlyTypes:['fixture.visible'],semanticWires:'@scene fixture.scene'};
+ const projected=inspectInstanceRecord(record,options);
+ assert.equal(projected.objects[0].factSource,'tool observation');
+ assert.match(projected.objects[0].wires,/fixture.visible/);
+ assert.equal(projected.wires,options.semanticWires);
+ const owned=inspectInstanceRecord(record,{...options,semanticWires:'@edited fixture.part id="piece" nativeType="fixture.visible" x=9'});
+ assert.equal(owned.objects[0].factSource,'instance');
+ assert.match(owned.objects[0].wires,/x=9/);
+ assert.throws(()=>inspectInstanceRecord(record,{...options,semanticWires:'@wrong fixture.part id="piece" nativeType="other"'}),/identity-mismatch/);
+});

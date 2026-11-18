@@ -432,7 +432,7 @@ const handlers = {
     const record=(await observeNativeInstanceWorlds(session,{worlds:[m.world],prepareKnowledge:false}))[0];
     if(!record)throw Error('Instance state unavailable.');
     const {inspectInstanceRecord}=await import(vurl('lib/dialog/instance-inspection.mjs'));
-    const data=inspectInstanceRecord({...record,wires:record.carrier},{observation:record.observation,...(record.authoritative?{semanticWires:record.wires,interfaceTypeKey:area.stateInterfaceTypeKey??null}:{})});
+    const data=inspectInstanceRecord({...record,wires:record.carrier},{observation:record.observation,...(record.authoritative?{semanticWires:record.wires,interfaceTypeKey:area.stateInterfaceTypeKey??null,observationOnlyTypes:area.observationOnlyTypes??[]}:{})});
     return {...data,wires:record.wires,archiveWires:record.carrier};
   },
   async instanceFacts(m) {

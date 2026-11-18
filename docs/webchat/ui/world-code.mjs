@@ -119,7 +119,7 @@ export function createObjectCodePanel({load,copy}={}){
     if(matches.length!==1){article.append(h('h4',{text:id}),h('p',{text:matches.length?'Object identity occurs more than once in this snapshot.':'Object is absent from this instance snapshot.'}));content.append(article);continue;}
     const object=matches[0];if(typeof object.wires!=='string')throw Error(`Object ${id} has no SOP wires in the inspection.`);
     const actions=h('div',{class:'p2-object-code-actions'},state.copyButton('Copy SOP',object.wires,token));
-    article.append(h('header',{},h('h4',{text:id}),actions),identity([['Object ID',object.id],['Type',object.type],['Fact ID',object.factId],['Observation source',object.observation?.source],['Observation version',object.observation?.version]]),details('Object facts and related SOP references',object.wires,{open:true,code:true}));
+    article.append(h('header',{},h('h4',{text:id}),actions),identity([['Object ID',object.id],['Type',object.type],['Fact ID',object.factId],['Fact source',object.factSource],['Observation source',object.observation?.source],['Observation version',object.observation?.version]]),details('Object facts and related SOP references',object.wires,{open:true,code:true}));
     content.append(article);
    }
    state.message(`${requested.length} selected ${requested.length===1?'object':'objects'}.`);

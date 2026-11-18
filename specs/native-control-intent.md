@@ -38,3 +38,5 @@ For a new object, the tool interface measures the concrete construction's footpr
 ### Authored request input
 
 A chat message starting with a standard request declaration may contain one owned request circuit, on one line or several. Enter submits it and Shift+Enter inserts a line. The input uses the standard request schema and the normal execution and undo paths. An authored turn records its supplied request and actual execution evidence. Language inference is unnecessary. Given a house in the Drawing instance, the request can identify a new fish, the existing house and the positive relation `near`; the compiler reads the current house bounds when the turn runs. The regression `tests/authored-request-declared-host.test.mjs` supplies the complete pasteable circuit and executes it twice with no reader attached.
+
+The inspector can show an observed component produced by a tool alongside authoritative instance objects. A tool declares the observation-only types it can produce. An owned fact with the same identity takes precedence and must match the interface type. The object panel identifies the source of the inspected fact.

@@ -108,3 +108,6 @@ Legacy CLI test-world all still exercises the retired text-reader fixtures witho
 Checks: `node scripts/build-new-engine-source.mjs`, `node scripts/build-system-map.mjs --write`, `npm run build:webchat` (de268c1941), `npm test` (605 tests, 602 pass, 3 skip), `git diff --check`. The retired `node --test tests/reasoner.test.mjs` checks an obsolete library pin and removed language routes (6 pass, 25 fail).
 Built Chromium `node ../.session-control/capability-chromium-smoke.mjs` ran the authored Drawing change, observed #ff0000 → #0000ff, verified the exact tool SOP in Worlds and restored #ff0000 with Undo. Source tests also exercised Diagram placement/removal, Document overwrite refusal and Calendar coverage/defaults.
 Worlds Chromium `node .git/worlds-browser-count.mjs` with and without `VERIFY_WORLDS=1` measured 241 → 162 nodes and 326 → 250 links, retaining real activity and inspector sources. Main World, library, reader and loader share the top row with their actual roles.
+
+- Shared object inspection distinguishes declared derived observations from authoritative instance facts. A matching identity with the wrong type still fails validation.
+- `node scripts/build-webchat.mjs`, `npm test` (606 tests, 603 pass, three skipped), `git diff --check`.
