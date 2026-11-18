@@ -228,3 +228,5 @@ Chromium verified the changing house/tree population and the real query graph in
 
 2026-11-18 — Webchat 6d32d74ccd gives queued chat and direct actions priority after the running background suggestion probe. The same six-turn Chromium sequence cut removal from 6.42 to 1.25 seconds and the next existence question from 7.74 to 2.37 seconds, preserving the board and expected answers.
 Integrated build verified the full count/delete/existence sequence and recorded SOP derivation. 650 passed, 3 skipped; deadlines remain unchanged.
+
+2026-11-18 — Public 6d32d74ccd: actual chat “Draw a man” selected the grounded man concept, dispatched drawing.catalog.make and created one composite in an empty instance. Current-status distinguishes this from the isolated lexical query failure. Gate: 650 passed, 3 skipped.
