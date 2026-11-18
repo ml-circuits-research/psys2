@@ -3,7 +3,8 @@ import assert from 'node:assert/strict';
 import { resolvePropertyValue, selectPropertyObject } from '../src/dialog/property-selection.mjs';
 import { executeRequestCandidate } from '../src/dialog/new-engine.mjs';
 import { runGrammarEngine as runNewEngine } from '../scripts/lib/grammar-reader.mjs';
-import { initialState } from '../worlds/art.draw/board.mjs';
+import { canonicalDrawingState, toNativeDrawingState } from '../worlds/art.draw/canonical-state.mjs';
+import { initialState, makeObject } from '../worlds/art.draw/board.mjs';
 const binding = { id: 'toy.surface', key: 'finish', concept: 'texture', sourceType: 'toy.object', valueType: 'toy.texture', nameKey: 'label', valueKey: 'native' };
 const normalize = value => typeof value === 'string' && value.startsWith('native:') ? value : null;
 const resolved = { ok: true, values: ['native:rough'], facts: [{ id: 'rough-fact', type: 'toy.texture', native: 'native:rough' }] };
@@ -47,19 +48,19 @@ const graph = (selected = 'red', desired = 'blue', kind = 'circle') => ({ reques
 @target std.request.target request=$r mode=existing kind=${kind} selector=$selected
 @selected std.request.constraint request=$r target=$target concept=colour operator=eq value="${selected}" character=assumption polarity=positive
 @desired std.request.constraint request=$r target=$target concept=colour operator=eq value="${desired}" character=requirement polarity=positive` });
-const session = objects => { const state = initialState(); state.objects = objects; return { isession: { state: { 'ui.shell': { activeTab: 'draw' }, 'art.draw': state } }, newEngineJournal: [] }; };
-test('validated detached selector graph selects pre-state independently of desired effect and retains evidence', () => {
+const session = objects => { const state = initialState(); state.objects = objects.map((item) => ({ ...makeObject(state, item.kind), ...item, id: String(item.id) })); return { isession: { state: { 'ui.shell': { activeTab: 'draw' }, 'art.draw': canonicalDrawingState(state) } }, newEngineJournal: [] }; };
+test('validated detached selector graph selects pre-state independently of desired effect and retains evidence', async () => {
   const s = session([{ id: 1, kind: 'circle', color: '#ff0000' }, { id: 2, kind: 'circle', color: '#0000ff' }]);
-  const result = executeRequestCandidate(s, graph(), 'structural fixture', { invocation: 'selected-turn' });
+  const result = await executeRequestCandidate(s, graph(), 'structural fixture', { invocation: 'selected-turn' });
   assert.equal(result.trace.assessment, 'changed', JSON.stringify(result));
-  assert.deepEqual(s.isession.state['art.draw'].objects.map(object => object.color), ['#0000ff', '#0000ff']);
-  assert.equal(s.isession.state['art.draw'].history.length, 1);
+  assert.deepEqual(toNativeDrawingState(s.isession.state['art.draw']).objects.map(object => object.color), ['#0000ff', '#0000ff']);
+  assert.equal(toNativeDrawingState(s.isession.state['art.draw']).history.length, 1);
   assert.deepEqual(result.trace.journal.selection.considered.map(item => item.status), ['match', 'mismatch']);
-  assert.ok(result.trace.journal.selection.mapping.facts.some(fact => fact.id === 'k.colours.css.red'));
-  assert.equal(executeRequestCandidate(s, graph(), 'structural fixture', { invocation: 'selected-turn' }).trace.replayed, true);
-  assert.equal(executeRequestCandidate(s, graph('red', 'purple'), 'structural fixture', { invocation: 'selected-turn' }).trace.reason, 'identity');
+  assert.ok(result.trace.journal.selection.considered[0].support.some(id => id.includes('k.colours.css.red')));
+  assert.equal((await executeRequestCandidate(s, graph(), 'structural fixture', { invocation: 'selected-turn' })).trace.replayed, true);
+  assert.equal((await executeRequestCandidate(s, graph('red', 'purple'), 'structural fixture', { invocation: 'selected-turn' })).trace.reason, 'identity');
 });
-test('unknown, ambiguous, unsupported or overlapping selectors never mutate state', () => {
+test('unknown, ambiguous, unsupported or overlapping selectors never mutate state', async () => {
   for (const [objects, candidate] of [
     [[{ id: 1, kind: 'circle', color: '#ff0000' }, { id: 2, kind: 'circle' }], graph()],
     [[{ id: 1, kind: 'circle', color: '#ff0000' }, { id: 2, kind: 'circle', color: '#ff0000' }], graph()],
@@ -69,17 +70,17 @@ test('unknown, ambiguous, unsupported or overlapping selectors never mutate stat
     [[{ id: 1, kind: 'circle', color: '#ff0000' }], { ...graph(), wires: graph().wires.replace('concept=colour', 'concept=texture') }],
   ]) {
     const s = session(objects), before = structuredClone(s.isession.state);
-    const result = executeRequestCandidate(s, candidate, 'structural fixture');
+    const result = await executeRequestCandidate(s, candidate, 'structural fixture');
     assert.deepEqual(result.statuses, ['unsupported']); assert.deepEqual(s.isession.state, before);
   }
   const s = session([{ id: 'other', kind: 'square', color: '#008000' }, { id: 'irrelevant', kind: 'circle' }]);
-  assert.equal(executeRequestCandidate(s, graph('green', 'purple', 'square'), 'structural fixture').trace.assessment, 'changed');
+  assert.equal((await executeRequestCandidate(s, graph('green', 'purple', 'square'), 'structural fixture')).trace.assessment, 'changed');
   const after = structuredClone(s.isession.state);
-  assert.equal(runNewEngine(s, 'make the green square purple').trace.reason, 'target', 'general reader resolves the selector but the previous effect removed its matching value');
+  assert.equal((await runNewEngine(s, 'make the green square purple')).trace.reason, 'target', 'general reader resolves the selector but the previous effect removed its matching value');
   assert.deepEqual(s.isession.state, after);
   const fresh = session([{ id: 'new-square', kind: 'square', color: '#008000' }]);
-  assert.equal(runNewEngine(fresh, 'make the green square purple').trace.assessment, 'changed');
-  assert.equal(fresh.isession.state['art.draw'].objects[0].color, '#800080');
+  assert.equal((await runNewEngine(fresh, 'make the green square purple')).trace.assessment, 'changed');
+  assert.equal(toNativeDrawingState(fresh.isession.state['art.draw']).objects[0].color, '#800080');
 });
 test('selector binding never reads a different result-property slot', () => {
   const before = observation([object(1, 'native:rough'), object(2, 'native:smooth')]);
@@ -89,7 +90,7 @@ test('selector binding never reads a different result-property slot', () => {
   assert.deepEqual(result.considered.map(item => item.inputs.map(input => input.key)), [['finish'], ['finish']]);
   assert.deepEqual(result.considered.map(item => item.status), ['match', 'mismatch']);
 });
-test('detached graph cannot hide extra requests, executable declarations or mismatched original text', () => {
+test('detached graph cannot hide extra requests, executable declarations or mismatched original text', async () => {
   for (const [candidate, text] of [
     [graph(), 'different source text'],
     [{ ...graph(), wires: graph().wires + '\n@extra std.request act=change mood=do source=$source' }, 'structural fixture'],
@@ -97,23 +98,23 @@ test('detached graph cannot hide extra requests, executable declarations or mism
     [{ ...graph(), wires: graph().wires + '\n@source std.request.source text="redefined"' }, 'structural fixture'],
   ]) {
     const s = session([{ id: 1, kind: 'circle', color: '#ff0000' }]), before = structuredClone(s.isession.state);
-    assert.equal(executeRequestCandidate(s, candidate, text).trace.reason, 'structure');
+    assert.equal((await executeRequestCandidate(s, candidate, text)).trace.reason, 'structure');
     assert.deepEqual(s.isession.state, before);
   }
 });
-test('detached request identities cannot overwrite journal evidence or loaded modules', () => {
+test('detached request identities cannot overwrite journal evidence or loaded modules', async () => {
   for (const id of ['step', 'trace.request', 'before.input', 'expected.input', 'semantic.input', 'after.input', 'before.observation', 'after.observation', 'claim', 'reply', 'request.module', 'trace.module', 'reply.module']) {
     const candidate = graph(); candidate.wires = candidate.wires.replaceAll('@r std.request ', '@' + id + ' std.request ').replaceAll('request=$r', 'request=$' + id); candidate.request = id;
     const s = session([{ id: 1, kind: 'circle', color: '#ff0000' }]), before = structuredClone(s.isession.state);
-    assert.equal(executeRequestCandidate(s, candidate, 'structural fixture').trace.reason, 'structure', id);
+    assert.equal((await executeRequestCandidate(s, candidate, 'structural fixture')).trace.reason, 'structure', id);
     assert.deepEqual(s.isession.state, before, id); assert.equal(s.newEngineJournal.length, 0);
   }
 });
-test('selector equality with an already satisfied result observes unchanged without an undo effect', () => {
+test('selector equality with an already satisfied result observes unchanged without an undo effect', async () => {
   const s = session([{ id: 9, kind: 'circle', color: '#ff0000' }, { id: 10, kind: 'circle', color: '#0000ff' }]);
-  const result = executeRequestCandidate(s, graph('red', 'red'), 'structural fixture');
+  const result = await executeRequestCandidate(s, graph('red', 'red'), 'structural fixture');
   assert.equal(result.trace.assessment, 'unchanged');
-  assert.equal(s.isession.state['art.draw'].history.length, 0);
-  assert.equal(result.trace.journal.selection.object.id, 9);
+  assert.equal(toNativeDrawingState(s.isession.state['art.draw']).history.length, 0);
+  assert.equal(result.trace.journal.selection.object.id, '9');
   assert.deepEqual(result.trace.journal.selection.considered.map(item => item.status), ['match', 'mismatch']);
 });

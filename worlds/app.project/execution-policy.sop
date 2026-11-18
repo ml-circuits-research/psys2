@@ -6,3 +6,4 @@
 @calendar.participants app.execution.default operation="calendar.meeting.add" parameter="participants" value=$empty
 @calendar.room app.execution.default operation="calendar.meeting.add" parameter="room" value=null
 @colour app.execution.values concept="colour" valueType="k.colours.colour" nameKey="name" valueKey="rgb"
+@drawing.colour app.execution.observedProperty concept=colour sourceType="art.draw.object" parameter="color" binding="drawing.object.color" format=rgb

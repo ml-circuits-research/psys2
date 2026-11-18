@@ -148,3 +148,7 @@ Verified the executable call equals the library output, Drawing effects, replay,
 
 2026-11-18 Drawing and Diagram renderer measurements now consume the same SOP constructor form as a concrete command. Spatial replies expose the exact call observed at dispatch, preserving compiler-assigned wire identity.
 Checks: spatial placement tests 7/7, full npm gate 617 passed and 3 skipped. Real Chromium placed the fish at (467,300) near the house, matched the chat call byte-for-byte with the recorded invocation and restored the scene with Undo.
+
+## 2026-11-18 — Property selection uses the declared compiler
+- Reader and authored property changes now use versioned capability selection and send the selected SOP call directly to the native interpreter. The detached comparator and measurement use the same compiler and tool. Worlds retains observed property claims and candidate evidence.
+- `npm test` passed 617 tests with three optional skips and zero failures. Chromium replay on the normal page selected the older red house, changed it to purple, left the blue house unchanged, and restored both on Undo. Verified the exact dispatch SOP, canonical facts and retained claim.

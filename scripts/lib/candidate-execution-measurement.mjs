@@ -3,7 +3,7 @@ import {executeRequestCandidate} from '../../src/dialog/new-engine.mjs';
 import {copyHostData} from '../../worlds/native-tool-host.mjs';
 export const MEASUREMENT_FORMAT='psys2.candidate-execution-measurement/1';
 /** No semantic correctness label is inferred from schema validity or a native receipt. */
-export function measureCandidateExecution({state,candidate,text,view,identity,expectation=null,maxBytes=4000000,maxNodes=100000}={}){
+export async function measureCandidateExecution({state,candidate,text,view,identity,expectation=null,maxBytes=4000000,maxNodes=100000}={}){
  const unknown={status:'unknown',correct:null,reason:'intent-and-effect-checker-unavailable'};
  let before,reading,declared,expected;
  try{
@@ -14,7 +14,7 @@ export function measureCandidateExecution({state,candidate,text,view,identity,ex
  }catch(error){return {format:MEASUREMENT_FORMAT,status:'invalid',executed:false,error:String(error.message),intent:unknown};}
  const session={isession:{state:copyHostData(before,{maxBytes,maxNodes})},newEngineJournal:[]};
  let reply=null,error=null,after=null,journal=null,originalUnchanged=false,captureError=null;
- try{reply=executeRequestCandidate(session,reading,text,{view,language:'en',invocation:globalThis.crypto.randomUUID()});}
+ try{reply=await executeRequestCandidate(session,reading,text,{view,language:'en',invocation:globalThis.crypto.randomUUID()});}
  catch(failure){error={name:String(failure?.name??'Error'),message:String(failure?.message??failure)};}
  // Capture state even when the actual executor throws; do not replace it with its reply projection.
  try{after=copyHostData(session.isession.state,{maxBytes,maxNodes});journal=structuredClone(session.newEngineJournal);reply=structuredClone(reply);}

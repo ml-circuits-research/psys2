@@ -4,6 +4,7 @@ import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs';
 import { instanceIdFor } from './instance-identity.mjs';
 import { prepareNativeControlHost } from './native-control-preparation.mjs';
 import { invokeObservedNativeTool } from './native-tool-activity.mjs';
+import { retainPropertyEffect } from './property-effect-evidence.mjs';
 import { describeNativeControl, verifyNativeControlEffect } from './native-control-intent.mjs';
 
 function reply(text, supported, trace = {}) {
@@ -13,6 +14,7 @@ function reply(text, supported, trace = {}) {
 
 function refusal(plan, candidate) {
   const messages = {
+    value: 'I could not resolve one exact declared value. Nothing changed.',
     target: 'I could not find an object to apply that action to. Nothing changed.',
     'native-binding-gap': 'I understood the requested action and object, but could not bind their required tool arguments. Nothing changed.',
   };
@@ -23,7 +25,7 @@ function refusal(plan, candidate) {
 }
 
 /** Compose authoritative observations, run the compiled native call and report the actual effect. */
-export async function executeNativeCapability(session, candidate, { bindings, view, unapplied = [], compiledPlan, readKnowledge } = {}) {
+export async function executeNativeCapability(session, candidate, { bindings, view, text, targetUnique, invocation = globalThis.crypto.randomUUID(), unapplied = [], compiledPlan, readKnowledge } = {}) {
   const area = NATIVE_AREAS[view];
   const nativeState = area && session.isession.state[area.world];
   if (!nativeState || !bindings) return null;
@@ -31,11 +33,10 @@ export async function executeNativeCapability(session, candidate, { bindings, vi
     loader: session.engine?.loader, knowledge: session.engine?.knowledge });
   const before = host.observe();
   const plan = compiledPlan ?? compileNativeCapability(candidate, { area, view, bindings, host, observation: before,
-    focus: session.newEngineFocus?.[view], unapplied, readKnowledge });
+    focus: session.newEngineFocus?.[view], targetUnique, unapplied, readKnowledge });
   if (plan.status === 'not-applicable') return null;
   if (plan.status !== 'compiled') return refusal(plan, candidate);
 
-  const invocation = globalThis.crypto.randomUUID();
   let prepared;
   try {
     prepared = await prepareNativeControlHost(session, { view, operation: plan.operation, args: plan.args, host, invocation });
@@ -60,12 +61,19 @@ export async function executeNativeCapability(session, candidate, { bindings, vi
     // Inspection does not affect dispatch.
   }
   const intent = describeNativeControl({ operation, args: plan.args, before: observed });
+  const original = plan.selector ? structuredClone(nativeState) : undefined;
   const receipt = await invokeObservedNativeTool(session, { area, host: prepared, invocation,
     expectedVersion: observed.version, sop: plan.toolInput });
   if (receipt.status === 'refused') return reply('I could not apply that action. Nothing changed.', false,
     { reason: receipt.reason, receipt, compiledSop: plan.sop });
 
   const after = prepared.observe(), verification = verifyNativeControlEffect({ intent, before: observed, after, receipt });
+  if (original && verification.status !== 'verified') {
+    session.isession.state[area.world] = original;
+    return reply('I could not confirm the requested change. I restored the previous state.', false, {
+      reason: 'unverified-selector-effect', compiledSop: plan.sop, receipt, effectVerification: verification,
+    });
+  }
   const old = new Set(before.objects.map((object) => object.id));
   const object = after.objects.find((value) => !old.has(value.id)) ?? before.objects.find((value) => String(value.id) === plan.id);
   session.newEngineFocus = { ...session.newEngineFocus, [view]: object?.id ?? null };
@@ -74,9 +82,10 @@ export async function executeNativeCapability(session, candidate, { bindings, vi
   if (plan.targets.length > 1) notes.unshift('I used the most recent matching ' + plan.kind + '.');
   if (plan.skipped.length) notes.push('I could not apply ' + plan.skipped.join(', ') + '.');
   const said = plan.act === 'make' ? `Created a ${kind}.` : plan.act === 'remove' ? `Removed the ${kind}.` : `Updated the ${kind}.`;
-  const message = [said, ...notes].join(' ');
+  const measured = retainPropertyEffect(session, { candidate, text, view, plan, before: observed, after, receipt, verification, message: notes.join(' ') });
+  const message = measured?.text ?? [said, ...notes].join(' ');
   return {
-    ...reply(message, true, { assessment: receipt.status, receipt, reading: candidate, compiledSop: plan.sop,
+    ...reply(message, true, { assessment: measured?.assessment ?? receipt.status, journal: measured?.journal, receipt, reading: candidate, compiledSop: plan.sop,
       controlIntent: plan.toolInput, effectVerification: verification, binding: { operation: plan.operation, alternatives: plan.alternatives.filter((choice) => choice.reason) },
       uncertainty: notes, alternatives: plan.alternatives.filter((choice) => !choice.reason).map((choice) => choice.operation), partial: plan.skipped.length > 0 }),
     state: { [area.world]: structuredClone(session.isession.state[area.world]) },

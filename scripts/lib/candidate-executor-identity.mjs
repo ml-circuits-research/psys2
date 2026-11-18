@@ -18,6 +18,6 @@ export async function observeExecutorSource(){
   sha256:createHash('sha256').update(JSON.stringify(files)).digest('hex'),scope:'Observed static local import closure; no dynamic loader, in-memory module byte attestation or browser equivalence claim'};
 }
 export async function measureCandidateExecutionNode(input){
- const before=await observeExecutorSource(),result=measureCandidateExecution(input),after=await observeExecutorSource();
+ const before=await observeExecutorSource(),result=await measureCandidateExecution(input),after=await observeExecutorSource();
  return {...result,observedExecutor:{before,after,unchanged:before.sha256===after.sha256},status:before.sha256===after.sha256?result.status:'invalid'};
 }

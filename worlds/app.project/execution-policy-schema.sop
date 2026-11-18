@@ -1,4 +1,4 @@
-@policy.module core.module name=app.execution version=1 exports=app.execution.default exports=app.execution.values exports=app.execution.list
+@policy.module core.module name=app.execution version=1 exports=app.execution.default exports=app.execution.values exports=app.execution.list exports=app.execution.observedProperty
 @default.type core.type of=app.execution.default closed=true
 @default.operation core.slot of=app.execution.default key=operation kind=string present=true
 @default.parameter core.slot of=app.execution.default key=parameter kind=string present=true
@@ -13,3 +13,9 @@
 @values.name core.slot of=app.execution.values key=nameKey kind=string present=true
 @values.value core.slot of=app.execution.values key=valueKey kind=string present=true
 @clock.function core.function name=clock.now out.kind=number pure=false doc="Host clock; milliseconds since the Unix epoch. A default is sampled only when its parameter is absent."
+@observed.type core.type of=app.execution.observedProperty closed=true
+@observed.concept core.slot of=app.execution.observedProperty key=concept kind=atom present=true
+@observed.on core.slot of=app.execution.observedProperty key=sourceType kind=string present=true
+@observed.parameter core.slot of=app.execution.observedProperty key=parameter kind=string present=true
+@observed.binding core.slot of=app.execution.observedProperty key=binding kind=string present=true
+@observed.format core.slot of=app.execution.observedProperty key=format kind=atom

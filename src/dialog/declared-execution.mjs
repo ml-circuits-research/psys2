@@ -15,9 +15,9 @@ export function declaredPropertyValues(concept) {
   return config ? source().ofType(config.valueType).map((wire) => str(wire.attrs[config.nameKey]?.[0]))
     .filter((value) => typeof value === 'string') : [];
 }
-export async function executeDeclaredRequest(session, candidate, _text, { bindings, view, unapplied = [],compiledPlan } = {}) {
+export async function executeDeclaredRequest(session, candidate, text, { bindings, view, targetUnique, invocation, unapplied = [],compiledPlan } = {}) {
   if (requestsSpatialPlacement(candidate)) return executeSpatialPlacement(session, candidate, { bindings, view });
-  return executeNativeCapability(session, candidate, { bindings, view, unapplied, readKnowledge: source,compiledPlan });
+  return executeNativeCapability(session, candidate, { bindings, view, text, targetUnique, invocation, unapplied, readKnowledge: source,compiledPlan });
 }
 
 export async function compareDeclaredReadings(session,candidates,{view,bindings}){

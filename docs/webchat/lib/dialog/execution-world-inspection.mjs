@@ -1,10 +1,10 @@
 // Read-only inspection of execution worlds already owned by the application.
-import{serialize,str,version,build}from'../vendor/sopworld/sopworld.mjs?v=d762ac1a79';
-import SOURCE from'./new-engine-source.mjs?v=10c56a9044';
+import{serialize,str,version,build}from'../vendor/sopworld/sopworld.mjs?v=327fb3cf41';
+import SOURCE from'./new-engine-source.mjs?v=3690001255';
 import{CATALOG_PIN}from'../knowledge/catalog-pin.mjs?v=d1ff29de82';
-import{inspectExecutionPolicyWorld}from'./execution-policy.mjs?v=fa9237583c';
-import{inspectSchemaSource}from'./worlds-inspection.mjs?v=3888f9e9e4';
-import{inspectRequestCompositionPolicy}from'./request-composition-policy.mjs?v=dae34fa500';
+import{inspectExecutionPolicyWorld}from'./execution-policy.mjs?v=df376f0b69';
+import{inspectSchemaSource}from'./worlds-inspection.mjs?v=17631e793c';
+import{inspectRequestCompositionPolicy}from'./request-composition-policy.mjs?v=572967d7a2';
 const clone=value=>structuredClone(value);
 const loggedWires=snapshot=>(snapshot?.log??[]).flatMap(entry=>entry.wires??[]);
 const importsOf=snapshot=>[...new Set(loggedWires(snapshot).filter(wire=>wire.type==='core.use').flatMap(wire=>(wire.attrs.world??[]).map(str)))];
@@ -16,10 +16,10 @@ export function inspectCachedExecutionSource(world,{moduleNames=[]}={}){
 function snapshotText(snapshot){return (snapshot?.log??[]).map((entry,index)=>'# Log entry '+index+' / '+entry.op+'\n'+serialize(entry.wires??[])).join('\n\n');}
 /** Projects actual cache accessors and retained journal JSON; performs no reading or reasoning. */
 export async function inspectExecutionWorlds(session){
- const [{inspectNewEngineSourceWorld},{inspectDeclaredExecutionSourceWorld},{inspectSpatialPlacementWorld}]=await Promise.all([
-  import('./new-engine.mjs?v=8c83d0d020'),import('./declared-execution.mjs?v=8c83d0d020'),import('./spatial-placement-execution.mjs?v=27478a3d6b'),
+ const [{inspectDeclaredExecutionSourceWorld},{inspectSpatialPlacementWorld}]=await Promise.all([
+  import('./declared-execution.mjs?v=d4985ee166'),import('./spatial-placement-execution.mjs?v=9cd6d80e0e'),
  ]);
- const journal=session?.newEngineJournal??[],moduleNames=[...new Set(journal.flatMap(record=>importsOf(record.evidence)))],sources=[['new-engine','src/dialog/new-engine.mjs',inspectNewEngineSourceWorld({moduleNames})],['declared-execution','src/dialog/declared-execution.mjs',inspectDeclaredExecutionSourceWorld({moduleNames})]],nodes=[],edges=[];
+ const journal=session?.newEngineJournal??[],moduleNames=[...new Set(journal.flatMap(record=>importsOf(record.evidence)))],sources=[['declared-execution','src/dialog/declared-execution.mjs',inspectDeclaredExecutionSourceWorld({moduleNames})]],nodes=[],edges=[];
  const link=(from,to,label)=>edges.push({from,to,label});
  const policy=inspectExecutionPolicyWorld();
  nodes.push({id:'execution:policy',label:'Execution policy',kind:'knowledge',implementation:'Operational SOP Lang World + declared host clock',description:'Actual policy queried by execution for omitted arguments and knowledge-property joins. The source is available before initialization; loaded status records the real lazy World. This moves these decisions out of native operation maps, but does not migrate editor state or all native tool semantics.',wires:policy.facts,details:{source:policy.source,loaded:policy.loaded,functions:policy.functions,dependencies:policy.dependencies},help:{purpose:'Declare defaults and knowledge value joins used by concrete request execution.',inputs:['Operation and explicit arguments','Referenced knowledge properties','Clock primitive for a missing current time'],outputs:['Only omitted argument defaults','Assumption notices','Typed knowledge-property lookup descriptors'],limits:['These are explicit defaults, not proof of broader reasoning. Editor native implementations remain visible.']}});
@@ -42,7 +42,7 @@ export async function inspectExecutionWorlds(session){
   const id=owner+':schema';nodes.push({id,label:schema.module,kind:'schema',implementation:'SOP Lang schema module',description:'Structural declarations imported by the linked policy. These definitions are not policy facts or editor state.',wires:schema.wires,schemaView:inspectSchemaSource(schema.wires),details:{source:schema.source,module:schema.module,loaded:schema.loaded}});link(owner,id,'imports schema');
  }
 
- nodes.push({id:'execution:source-snapshot',label:'Execution knowledge',kind:'knowledge',implementation:'SOP Lang snapshot bundled in JavaScript',description:'Declared value-lookup composition used by both execution modules. Its knowledge facts and schema-module dependencies have separate source ownership. Inspection does not initialize either lazy World cache.',wires:snapshotText(SOURCE.snapshot),details:{loaded:false,status:'available initialization snapshot',knowledgePin:SOURCE.knowledgePin,libraryPin:SOURCE.libraryPin,activeKnowledgePin:CATALOG_PIN.commit,knowledgePinMatchesActive:SOURCE.knowledgePin===CATALOG_PIN.commit,activeLibraryVersion:version,activeLibraryBuild:build,sources:clone(SOURCE.sources),snapshot:clone(SOURCE.snapshot)}});
+ nodes.push({id:'execution:source-snapshot',label:'Execution knowledge',kind:'knowledge',implementation:'SOP Lang snapshot bundled in JavaScript',description:'Declared value-lookup composition used by declared execution. Its knowledge facts and schema-module dependencies have separate source ownership. Inspection does not initialize the lazy World cache.',wires:snapshotText(SOURCE.snapshot),details:{loaded:false,status:'available initialization snapshot',knowledgePin:SOURCE.knowledgePin,libraryPin:SOURCE.libraryPin,activeKnowledgePin:CATALOG_PIN.commit,knowledgePinMatchesActive:SOURCE.knowledgePin===CATALOG_PIN.commit,activeLibraryVersion:version,activeLibraryBuild:build,sources:clone(SOURCE.sources),snapshot:clone(SOURCE.snapshot)}});
  for(const [name,text]of Object.entries(SOURCE.schemaModules)){
   const id='execution:source-schema:'+name;nodes.push({id,label:name,kind:'schema',implementation:'SOP Lang schema module',description:'Exact separately held schema module required to replay the execution knowledge context.',wires:text,schemaView:inspectSchemaSource(text),details:{module:name,knowledgePin:SOURCE.knowledgePin,source:SOURCE.sources.find(source=>source.owner===name&&source.role==='schema')?.path}});link('execution:source-snapshot',id,'imports schema');
  }

@@ -1,6 +1,6 @@
 // Mechanical, lossless calendar facts <-> native tool data boundary. SOP wires own state.
-import {World,parse,serialize,quote} from '../../lib/vendor/sopworld/sopworld.mjs?v=d762ac1a79';
-import {copyHostData} from '../native-tool-host.mjs?v=2bfbd36d18';
+import {World,parse,serialize,quote} from '../../lib/vendor/sopworld/sopworld.mjs?v=327fb3cf41';
+import {copyHostData} from '../native-tool-host.mjs?v=7abe128286';
 import {createCalendar} from './calendar-tool.mjs?v=7878bd2af4';
 import schemaSource from './schema-source.mjs?v=c68128ab76';
 export {schemaSource as CALENDAR_STATE_SCHEMA};

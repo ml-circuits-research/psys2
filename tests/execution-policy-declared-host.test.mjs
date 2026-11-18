@@ -37,5 +37,6 @@ test('execution policy imports its reusable structure before admitting owned fac
  const fork=context.fork();
  assert.equal(fork.tell(facts,{factsOnly:true}).ok,true);
  assert.equal(context.wires.size,0);
- assert.equal(fork.wires.size,7);
+ assert.equal(fork.wires.size,facts.length);
+ assert.equal(fork.ofType('app.execution.observedProperty').length,1);
 });

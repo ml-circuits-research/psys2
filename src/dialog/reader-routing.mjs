@@ -2,7 +2,6 @@ import {isAuthoredRequest,readAuthoredRequest} from './authored-request-tool.mjs
 // Model-first proposal routing. Calibration authority belongs to host configuration,
 // never to a model output, evaluation annotation or grammar proposal.
 import {requestCompositionPolicy}from './request-composition-policy.mjs';
-import {executeRequestCandidate} from './new-engine.mjs';
 import {invokeNativeControl} from './native-tool-controls.mjs';
 import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs';
 import {projectContextAction} from './project-context-action.mjs';
@@ -10,6 +9,11 @@ import {projectCreateAction} from './project-create-action.mjs';
 import {parse,str} from '../vendor/sopworld/sopworld.mjs';
 import {assessReaderProposal} from './reader-admission.mjs';
 const unavailable=reason=>({candidates:[],coverage:{complete:false,executable:false,graphProposal:false},failures:[{reason}]});
+const noDeclaredAction = () => {
+ const text='I could not identify an action to apply. Nothing changed.';
+ return {text,parts:[{text,translate:false}],statuses:['unsupported'],answers:[],segments:[],state:{},effects:[],
+  trace:{legacy:false,engine:'new',reason:'no-declared-action'}};
+};
 async function dispatchRequest(session,candidate,text,options,bindings,contextProjection,interpretation,alternatives=[],compiledPlan) {
  let result;
   const act=str(parse(candidate.wires).find(w=>w.id===candidate.request)?.attrs.act?.[0]),area=options.view??session.isession.state['ui.shell']?.activeTab;
@@ -19,7 +23,7 @@ async function dispatchRequest(session,candidate,text,options,bindings,contextPr
   }else{
    const before=structuredClone(session.isession.state);
    if(contextProjection){if(contextProjection.rewind)Object.assign(session.isession.state,structuredClone(contextProjection.rewind));session.newEngineFocus={...session.newEngineFocus,[area]:contextProjection.focus};}
-   result=await executeDeclaredRequest(session,candidate,text,{bindings,view:area,compiledPlan,unapplied:interpretation?.unapplied??[]})??executeRequestCandidate(session,candidate,text,options);
+   result=await executeDeclaredRequest(session,candidate,text,{bindings,view:area,compiledPlan,unapplied:interpretation?.unapplied??[]})??noDeclaredAction();
    if(!result.statuses?.includes('supported')&&contextProjection?.rewind)session.isession.state=before;
    if(result.statuses?.includes('supported')){session.newEngineLastAction={...session.newEngineLastAction,[area]:candidate};if(contextProjection){result.text+=' '+interpretation.note;result.parts=[{text:result.text,translate:false}];result.trace={...result.trace,interpretation};}}
    const changed=Object.keys(session.isession.state).filter(key=>JSON.stringify(before[key])!==JSON.stringify(session.isession.state[key]));

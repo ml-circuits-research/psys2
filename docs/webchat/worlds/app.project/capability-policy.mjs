@@ -2,7 +2,7 @@
 // Application policy in SOP Lang. The receiver supplies the real tool and observation facts.
 export default `
 @mode.make std.capability.mode act=make target=new
-@mode.change std.capability.mode act=change target=existing requireResult=true
+@mode.change std.capability.mode act=change target=existing requireResult=true selector=true selectorUnique=true
 @mode.place std.capability.mode act=place target=existing requireResult=true
 @mode.remove std.capability.mode act=remove target=existing
 

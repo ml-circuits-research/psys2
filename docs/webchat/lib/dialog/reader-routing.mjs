@@ -1,15 +1,19 @@
-import {isAuthoredRequest,readAuthoredRequest} from './authored-request-tool.mjs?v=d28394af6a';
+import {isAuthoredRequest,readAuthoredRequest} from './authored-request-tool.mjs?v=267ab1e08b';
 // Model-first proposal routing. Calibration authority belongs to host configuration,
 // never to a model output, evaluation annotation or grammar proposal.
-import {requestCompositionPolicy}from './request-composition-policy.mjs?v=dae34fa500';
-import {executeRequestCandidate} from './new-engine.mjs?v=8c83d0d020';
-import {invokeNativeControl} from './native-tool-controls.mjs?v=ab469e9f84';
-import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=8c83d0d020';
-import {projectContextAction} from './project-context-action.mjs?v=73b379933f';
-import {projectCreateAction} from './project-create-action.mjs?v=f06890ad84';
-import {parse,str} from '../vendor/sopworld/sopworld.mjs?v=d762ac1a79';
-import {assessReaderProposal} from './reader-admission.mjs?v=a5669f7579';
+import {requestCompositionPolicy}from './request-composition-policy.mjs?v=572967d7a2';
+import {invokeNativeControl} from './native-tool-controls.mjs?v=f3c05964e9';
+import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=d4985ee166';
+import {projectContextAction} from './project-context-action.mjs?v=bb6ec330b3';
+import {projectCreateAction} from './project-create-action.mjs?v=6bd50987a1';
+import {parse,str} from '../vendor/sopworld/sopworld.mjs?v=327fb3cf41';
+import {assessReaderProposal} from './reader-admission.mjs?v=06324c04fb';
 const unavailable=reason=>({candidates:[],coverage:{complete:false,executable:false,graphProposal:false},failures:[{reason}]});
+const noDeclaredAction = () => {
+ const text='I could not identify an action to apply. Nothing changed.';
+ return {text,parts:[{text,translate:false}],statuses:['unsupported'],answers:[],segments:[],state:{},effects:[],
+  trace:{legacy:false,engine:'new',reason:'no-declared-action'}};
+};
 async function dispatchRequest(session,candidate,text,options,bindings,contextProjection,interpretation,alternatives=[],compiledPlan) {
  let result;
   const act=str(parse(candidate.wires).find(w=>w.id===candidate.request)?.attrs.act?.[0]),area=options.view??session.isession.state['ui.shell']?.activeTab;
@@ -19,7 +23,7 @@ async function dispatchRequest(session,candidate,text,options,bindings,contextPr
   }else{
    const before=structuredClone(session.isession.state);
    if(contextProjection){if(contextProjection.rewind)Object.assign(session.isession.state,structuredClone(contextProjection.rewind));session.newEngineFocus={...session.newEngineFocus,[area]:contextProjection.focus};}
-   result=await executeDeclaredRequest(session,candidate,text,{bindings,view:area,compiledPlan,unapplied:interpretation?.unapplied??[]})??executeRequestCandidate(session,candidate,text,options);
+   result=await executeDeclaredRequest(session,candidate,text,{bindings,view:area,compiledPlan,unapplied:interpretation?.unapplied??[]})??noDeclaredAction();
    if(!result.statuses?.includes('supported')&&contextProjection?.rewind)session.isession.state=before;
    if(result.statuses?.includes('supported')){session.newEngineLastAction={...session.newEngineLastAction,[area]:candidate};if(contextProjection){result.text+=' '+interpretation.note;result.parts=[{text:result.text,translate:false}];result.trace={...result.trace,interpretation};}}
    const changed=Object.keys(session.isession.state).filter(key=>JSON.stringify(before[key])!==JSON.stringify(session.isession.state[key]));

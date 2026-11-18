@@ -1,11 +1,10 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-import { World, parse, quote, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=d762ac1a79';
+import { World, parse, quote, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=327fb3cf41';
 import { decodeCapabilityCall } from '../vendor/sopworld/capability-call.mjs?v=ed3b773c65';
-import POLICY from '../../worlds/app.project/capability-policy.mjs?v=ca7d222029';
-import { DRAWING_PROPERTY_BINDINGS } from '../../worlds/art.draw/property-host.mjs?v=45ec70afe7';
-import { executionPolicyWorld } from './execution-policy.mjs?v=fa9237583c';
+import POLICY from '../../worlds/app.project/capability-policy.mjs?v=ca75c945c2';
+import { executionPolicyWorld } from './execution-policy.mjs?v=df376f0b69';
 import { nativeKindCandidates } from './native-binding-candidates.mjs?v=de223646d6';
-import { observedReaderContext } from './native-reader-context.mjs?v=e7b6cce6d7';
+import { observedReaderContext } from './native-reader-context.mjs?v=46d3fc5c6a';
 import { budget } from './budget.mjs?v=00bce6e369';
 
 const NS = 'std.capability.';
@@ -37,11 +36,11 @@ function factWriter() {
   return { write, value, wires };
 }
 
-function interfaceFacts({ area, view, bindings, host, observation, focus, unapplied, readKnowledge }, concepts) {
+function interfaceFacts({ area, view, bindings, host, observation, focus, targetUnique, unapplied, readKnowledge }, concepts) {
   const { write, value, wires } = factWriter();
   const scope = write(NS + 'scope', {
     instance: quote(observation.instanceId), version: quote(observation.version), focus: focus === undefined ? undefined : quote(String(focus)),
-    newId: quote(globalThis.crypto.randomUUID()), clock: String(Date.now()), unapplied: unapplied.map(quote),
+    newId: quote(globalThis.crypto.randomUUID()), targetUnique: targetUnique ? "true" : undefined, clock: String(Date.now()), unapplied: unapplied.map(quote),
   }, 'capability.scope');
   const declarations = host.capabilityFacts(scope);
   wires.push(...declarations);
@@ -70,17 +69,23 @@ function interfaceFacts({ area, view, bindings, host, observation, focus, unappl
 
   const executionPolicy = executionPolicyWorld();
   const valueMappings = new Map(executionPolicy.ofType('app.execution.values').map((row) => [take(row, 'concept'), row]));
-  const addProperty = (concept, { sourceType, parameter, id, codec }, order) => {
+  const selectors = new Map();
+  const addProperty = (concept, { sourceType, parameter, id, codec, format }, order) => {
+    if (id && format) selectors.set(id, format);
     const codecs = { 'number-list': 'number.list', 'string-list': 'string.list' };
     write(NS + 'property', { scope, concept, on: quote(sourceType), parameter: quote(parameter),
       binding: id ? quote(id) : undefined, codec: codecs[codec] || (valueMappings.has(concept) ? 'lookup' : undefined), order: String(order) });
   };
   let propertyOrder = 0;
+  for (const row of executionPolicy.ofType('app.execution.observedProperty')) {
+    const sourceType = take(row, 'sourceType');
+    if (sourceTypes.has(sourceType)) addProperty(take(row, 'concept'), {
+      sourceType, parameter: take(row, 'parameter'), id: take(row, 'binding'), format: take(row, 'format'),
+    }, propertyOrder++);
+  }
+
   for (const row of bindings.properties || []) {
     if (row.area === readerArea && sourceTypes.has(row.hostBinding?.sourceType)) addProperty(row.canonical, row.hostBinding, propertyOrder++);
-  }
-  for (const row of DRAWING_PROPERTY_BINDINGS) {
-    if (sourceTypes.has(row.sourceType)) addProperty(row.concept, { sourceType: row.sourceType, parameter: row.key, id: row.id }, propertyOrder++);
   }
 
   for (const [concept, mapping] of valueMappings) {
@@ -89,7 +94,7 @@ function interfaceFacts({ area, view, bindings, host, observation, focus, unappl
       for (const label of values(row, take(mapping, 'nameKey'))) {
         for (const datum of values(row, take(mapping, 'valueKey'))) {
           // Retain literal values from the source world. The receiving tool validates its own declared parameter.
-          write(NS + 'value', { concept, label: quote(label), value: value(datum.toLowerCase()) });
+          write(NS + 'value', { concept, label: quote(label), value: value(datum.toLowerCase()) }, 'capability.knowledge.' + row.id + '.' + wires.length);
         }
       }
     }
@@ -115,7 +120,12 @@ function interfaceFacts({ area, view, bindings, host, observation, focus, unappl
       order: String(order),
     });
     for (const field of object.inputs) {
-      write(NS + 'field', { object: id, binding: quote(field.binding), key: quote(field.key), value: field.values });
+      if (field.source !== object.source || field.sourceType !== object.sourceType ||
+          field.version !== observation.version || object.version !== observation.version) continue;
+      const literals = selectors.get(field.binding) === 'rgb'
+        ? field.values.filter((literal) => /^#[0-9a-f]{6}$/i.test(str(literal))).map((literal) => quote(str(literal).toLowerCase()))
+        : field.values;
+      write(NS + 'field', { object: id, binding: quote(field.binding), key: quote(field.key), value: literals });
     }
   }
   return { wires, scope };
@@ -137,6 +147,11 @@ function readPlan(world,sop) {
     act: take(result, 'act'), kind: take(result, 'kind'), id: take(result, 'id'), source: take(result, 'source'),
     instance: take(result, 'instance'), version: take(result, 'version'), targets: values(result, 'target'),
     skipped: values(result, 'skipped'), notes: values(result, 'note'), support: values(result, 'support'),
+    selector: take(result, 'selector'),
+    selection: (result?.attrs.selection || []).map(find).map((row) => ({
+      id: take(row, 'id'), status: take(row, 'status'), support: values(row, 'support'),
+    })),
+    covered: values(result, 'covered'),
     operation: call?.operation, args: call?.args ?? {}, toolInput, alternatives,
   };
 }
@@ -170,12 +185,13 @@ export function compileNativeCapability(candidate, context) {
 export function compareNativeReadings(candidates, context) {
   const graphs=candidates.map(candidate=>parse(candidate.wires));
   const {world,scope}=compilerWorld(context,graphs.flat());
-  const packet=[],requests=new Map(),options=[];
+  const packet=[],requests=new Map(),originals=[],options=[];
   for(const [index,nodes] of graphs.entries()){
     budget.tick('interpretation.source');
     const prefix='proposal.'+index+'.', ids=new Map(nodes.map((w,i)=>[w.id,prefix+i]));
     const request=ids.get(candidates[index].request);
     requests.set(request,index);
+    originals.push(new Map([...ids].map(([original, renamed]) => [renamed, original])));
     const members=nodes.map(w=>({...w,id:ids.get(w.id),attrs:Object.fromEntries(Object.entries(w.attrs).map(([key,tokens])=>
       [key,tokens.map(v=>v[0]==='$'&&ids.has(v.slice(1))?ref(ids.get(v.slice(1))):v)]))}));
     members.push(contextWire(prefix+'context',request,scope));
@@ -190,5 +206,8 @@ export function compareNativeReadings(candidates, context) {
   if(index===undefined)return {sop};
   const planRoot=records.find(w=>ref(w.id)===summary.attrs.plan?.[0]);
   const plan=readPlan(world,serialize([planRoot,...records.filter(w=>w.id.startsWith('interpret.plan.')&&w!==planRoot)]));
+  const origin = originals[index];
+  plan.covered = plan.covered.map(id => origin.get(id) ?? id);
+  if (plan.selector) plan.selector = origin.get(plan.selector) ?? plan.selector;
   return {sop,index,plan};
 }

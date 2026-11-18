@@ -5,7 +5,6 @@ import path from 'node:path';
 import {createHash} from 'node:crypto';
 import {World,str} from '../src/vendor/sopworld/sopworld.mjs';
 import {executionPolicyWorld} from '../src/dialog/execution-policy.mjs';
-import {NEW_ENGINE_AREAS} from '../src/dialog/new-engine-areas.mjs';
 import {catalogFolder,emit,done} from './lib/generated.mjs';
 
 const {dir,commit}=await catalogFolder(),catalog=JSON.parse(readFileSync(path.join(dir,'index.json'),'utf8'));
@@ -14,7 +13,6 @@ const read=file=>readFileSync(path.join(dir,file),'utf8');
 const library=Object.fromEntries(entries.map(entry=>[entry.id,read(entry.schema)]));
 const valueTypes=[...new Set([
  ...executionPolicyWorld().ofType('app.execution.values').map(row=>str(row.attrs.valueType[0])),
- ...Object.values(NEW_ENGINE_AREAS).flatMap(area=>area.bindings.map(binding=>binding.valueType)),
 ])].sort();
 const world=new World({library}),sources=[],seen=new Set(),owners=[];
 const record=(file,owner,role)=>{

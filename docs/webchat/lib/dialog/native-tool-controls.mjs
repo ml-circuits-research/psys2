@@ -1,10 +1,10 @@
-import{prepareNativeControlHost}from'./native-control-preparation.mjs?v=03aa831073';
-import{invokeObservedNativeTool}from'./native-tool-activity.mjs?v=6630b37425';
+import{prepareNativeControlHost}from'./native-control-preparation.mjs?v=fb0f182080';
+import{invokeObservedNativeTool}from'./native-tool-activity.mjs?v=776e7fac31';
 // Typed UI gestures use the same declared native tools and undo history as model requests.
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=6723c0bcb3';
-import {describeNativeControl,verifyNativeControlEffect} from './native-control-intent.mjs?v=72f6f4ee95';
-import {readNativeIntent} from './native-intent-reader.mjs?v=a28d9ff468';
-import {discardPlacementLinks,observePlacementCorrection,prunePlacementLinks,withdrawPlacementCorrection} from '../../worlds/app.project/spatial-profile.mjs?v=a878e9dc23';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=b953840f3e';
+import {describeNativeControl,verifyNativeControlEffect} from './native-control-intent.mjs?v=5222ebb9b1';
+import {readNativeIntent} from './native-intent-reader.mjs?v=61cedbbf02';
+import {discardPlacementLinks,observePlacementCorrection,prunePlacementLinks,withdrawPlacementCorrection} from '../../worlds/app.project/spatial-profile.mjs?v=81fd98abfa';
 
 // Focus navigation is declared by each host; it does not invalidate content undo.
 const areaForWorld=world=>Object.values(NATIVE_AREAS).find(area=>area.world===world);
