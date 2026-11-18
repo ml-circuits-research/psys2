@@ -45,6 +45,8 @@
 @query.coverage.isolated core.slot of=app.query.read.coverage key=isolated kind=boolean present=true
 @query.reconsider.type core.type of=app.query.read.reconsider closed=true
 @query.reconsider.reason core.slot of=app.query.read.reconsider key=reason kind=atom present=true
+@query.reconsider.profile core.slot of=app.query.read.reconsider key=profile kind=atom present=true
+@query.reconsider.rank core.slot of=app.query.read.reconsider key=rank kind=integer min=1 present=true
 @query.recovery.reading core.type of=app.query.read.recoveryReading closed=true
 @query.recovery.role core.slot of=app.query.read.recoveryReading key=role kind=atom present=true
 @query.recovery.source core.slot of=app.query.read.recoveryReading key=source kind=string present=true
@@ -53,7 +55,7 @@
 @query.recovery.head core.slot of=app.query.read.recoveryReading key=head kind=atom present=true
 @query.recovery.askedKey core.slot of=app.query.read.recoveryReading key=askedKey kind=string present=true
 @query.recovery.quantifier core.slot of=app.query.read.recoveryReading key=quantifier kind=string present=true
-@query.recovery.family core.slot of=app.query.read.recoveryReading key=family kind=string present=true
+@query.recovery.family core.slot of=app.query.read.recoveryReading key=family kind=string
 @query.recovery.triggerStart core.slot of=app.query.read.recoveryReading key=triggerStart kind=integer min=0 present=true
 @query.recovery.triggerEnd core.slot of=app.query.read.recoveryReading key=triggerEnd kind=integer min=0 present=true
 @query.recovery.referenceMarked core.slot of=app.query.read.recoveryReading key=referenceMarked kind=boolean present=true

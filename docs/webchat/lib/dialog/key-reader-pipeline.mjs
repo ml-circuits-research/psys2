@@ -16,7 +16,7 @@ export async function createKeyReaderPipeline({cutter,reader,getContext,cutterMo
  const provenance={modelSha256:pipelineSha256,decoderVersion:1,models:identities,bindingsSha256,architecture:'source-cutter/request-key-heads',calibration:null};
  let independentInput=null;
  async function propose(sourceSop,knownCut=null,cutOnly=false,recordedContext=null){
-  independentInput=null;
+  if(!recordedContext)independentInput=null;
   const failures=[],requests=[],ranges=[];let raw=null,sourceCut=null,steps=0;
   const tick=(n=1)=>{steps+=n;if(steps>budget)throw Error('pipeline-budget');};
   const fail=(reason,path=[])=>failures.push({reason,path});
@@ -58,17 +58,24 @@ export async function createKeyReaderPipeline({cutter,reader,getContext,cutterMo
     if(!suppliedSpan)ranges.push({path:['requests',String(index),'span'],range:[start,end]});
    }
    raw={format:RAW_STRUCTURAL_FORMAT,source:{text,unit:'unicode-scalar'},area:context.area,model:{kind:'structural-graph',sha256:pipelineSha256,decoderVersion:1},requestCount:cut.spans.length,requests,ranges,coverage:{complete:failures.length===0,truncated:false},unresolved:copy(failures)};
-   if(!recordedContext&&cut.spans.length===1&&context.context?.previous!=null)independentInput={sourceSop,cut,context};
+   if(!recordedContext&&cut.spans.length===1&&context.context?.previous!=null)independentInput={sourceSop,cut,context,profiles:new Set()};
    const bridge=bridgeRawStructure(raw,{bindings,bindingSha256:bindingsSha256,budget,decoderBudget,maxBytes});
    failures.push(...bridge.diagnostics.map(issue=>({reason:issue.reason,path:issue.path})));const decoded=bridge.decoded;failures.push(...(decoded?.issues??[]));
    return {candidates:failures.length?[]:(decoded?.candidates??[]),coverage:{complete:failures.length===0&&decoded?.coverage?.complete===true,graphProposal:decoded?.coverage?.graphProposal===true,executable:false},failures,raw,provenance:copy(provenance),graphConfidence:null,sourceCut,steps,...(observation?{sourceObservation:copy(observation)}:{})};
   }catch(error){fail(String(error?.message??'pipeline-failed'));return {candidates:[],coverage:{complete:false,graphProposal:false,executable:false},failures,raw,provenance:copy(provenance),graphConfidence:null,sourceCut,steps};}
  }
- return {provenance:()=>copyHostData(provenance),propose:sourceSop=>propose(sourceSop),async proposeIndependent(sourceSop){
-  const input=independentInput;independentInput=null;
-  if(input?.sourceSop!==sourceSop)return null;
-  return propose(sourceSop,input.cut,false,{...input.context,context:{...input.context.context,previous:null}});
- },async *proposeRequests(sourceSop){
+ async function repeat(sourceSop,profile){
+  const input=independentInput;
+  if(input?.sourceSop!==sourceSop){independentInput=null;return null;}
+  if(input.profiles.has(profile))return null;
+  input.profiles.add(profile);
+  const context={...input.context.context,previous:null};
+  if(profile==='literal')context.existing=[];
+  return propose(sourceSop,input.cut,false,{...input.context,context});
+ }
+ return {provenance:()=>copyHostData(provenance),propose:sourceSop=>propose(sourceSop),
+  proposeIndependent:sourceSop=>repeat(sourceSop,'independent'),
+  proposeLiteral:sourceSop=>repeat(sourceSop,'literal'),async *proposeRequests(sourceSop){
   const initial=await propose(sourceSop,null,true),cut=initial.sourceCut;
   if(!cut||cut.coverage.complete!==true||cut.coverage.truncated||cut.unresolved.length||cut.spans.length<2){yield cut?await propose(sourceSop,cut):initial;return;}
   for(const [index,range]of cut.spans.entries()){

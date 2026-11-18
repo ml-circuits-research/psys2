@@ -1,6 +1,10 @@
 # Current status
 
-## 2026-11-18 — Counted Diagram creation
+## 2026-11-18 — Query after deleting the last member of a kind
+
+Webchat build `0fd10c70f1` verified the full sequence in one Chromium session. With a blue tree and one red house, the count was 1 and existence was true. After deleting that house, the count was 0 and existence was false. The next query found the surviving blue tree. Read-only queries preserved all objects. For the missing noun, SOP rules admitted an alternate span from the current utterance and queried the live instance. The previous answer contributed no facts. The application gate passed 648 tests with three skipped. The reader weights are unchanged.
+
+## Earlier checkpoint — Counted Diagram creation
 
 Webchat build `9e44cd7951` integrates SOPWorlds 0.224.0 and catalog `9e99bc52`. In Chromium, “Add three circles” created three distinct circles while preserving an existing rectangle. The three visible centres matched the compiled group placement. “Add three circles and add two squares” produced five new visible nodes. One Undo removed the five and preserved the original rectangle. The full application gate passed 646 tests with three skipped.
 

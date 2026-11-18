@@ -73,8 +73,10 @@ export async function projectQueryAction(proposal,session,{view,bindings}={}){
   const proof={input:coverageSop,sop:serialize(limitations),rules:limitations.map(observation=>observation.meta.via)};
   try{session.engine?.onWorldActivity?.({nodeIds:['component:reader','component:library'],phase:'stage',
    operation:'app.query.read',label:'Record incomplete question evidence',wires:proof.input+'\n'+proof.sop});}catch{/* Observations are optional. */}
+  const strategies=coverageWorld.ofType(kind+'.reconsider').sort((a,b)=>Number(a.attrs.rank[0])-Number(b.attrs.rank[0]))
+   .map(observation=>observation.attrs.profile[0]);
   return {...proposal,interpretation:{profile:'declared-query/1',limitation:limitations.map(observation=>observation.attrs.reason[0]),
-   proof,reconsider:coverageWorld.ofType(kind+'.reconsider').length>0,unresolved:proposal.failures??[]}};
+   proof,reconsider:strategies.length>0,strategies,unresolved:proposal.failures??[]}};
  }
  const anchored=anchors(raw);
  const noun=target?.kind;
@@ -155,31 +157,46 @@ function readingObservation(proposal){
  };
 }
 
+const readFor={literal:'proposeLiteral',independent:'proposeIndependent'};
+
+function addWitnessedTarget(primary,alternate){
+ const request=primary.raw.requests[0],target=alternate.raw.requests[0].target;
+ const key=['requests','0','target','kind_span'];
+ const range=anchors(alternate.raw)(['target','kind_span'],target.kind_span);
+ return {...primary,selectionScore:alternate.selectionScore,raw:{...primary.raw,
+  requests:[{...request,target:{...request.target,kind:target.kind,kind_span:target.kind_span}}],
+  ranges:[...primary.raw.ranges,{path:key,range}]}};
+}
+
 export async function recoverQueryProjection(projected,session,{view,bindings,provider}={}){
- if(!projected?.interpretation?.reconsider||typeof provider?.proposeIndependent!=='function')return projected;
+ if(!projected?.interpretation?.reconsider)return projected;
  const area=NATIVE_AREAS[view],state=session.isession.state[area.world];
- let alternate;
- try{alternate=await provider.proposeIndependent(writeReaderSource(projected.raw.source.text));}catch{return projected;}
- if(session.isession.state[area.world]!==state)return projected;
- if(!alternate)return projected;
- const readings=[projected.raw,alternate.raw];
- const retry={readings,failures:[projected.failures,alternate.failures]};
- const retain=()=>({...projected,interpretation:{...projected.interpretation,retry}});
- if(!alternate.raw?.requests?.[0])return retain();
- const independent=await projectQueryAction(alternate,session,{view,bindings});
- if(session.isession.state[area.world]!==state||!independent?.candidates?.length||independent.interpretation?.limitation)return retain();
- const world=queryPolicy().fork();
- const input=serialize([
-  row('query.primary',kind+'.recoveryReading',{role:'primary',...readingObservation(projected)}),
-  row('query.independent',kind+'.recoveryReading',{role:'independent',...readingObservation(alternate)}),
- ]);
- if(!world.tell(input,{factsOnly:true}).ok)return retain();
- const results=world.ofType(kind+'.recovery');
- if(results.length!==1)return retain();
- const recovery={...retry,input,sop:serialize(results),rule:results[0].meta.via};
- try{session.engine?.onWorldActivity?.({nodeIds:['component:reader','component:library'],phase:'stage',
-  operation:'app.query.read',label:'Verify an independent reading of the current question',
-  wires:recovery.input+'\n'+recovery.sop});}catch{/* Observations are optional. */}
- return {...independent,interpretation:{...independent.interpretation,retry:recovery,
-  unresolved:[...projected.failures,...alternate.failures]}};
+ const readings=[projected.raw],failures=[projected.failures];
+ const retain=()=>readings.length===1?projected:{...projected,interpretation:{...projected.interpretation,retry:{readings,failures}}};
+ for(const profile of projected.interpretation.strategies){
+  let alternate;
+  try{alternate=await provider?.[readFor[profile]]?.(writeReaderSource(projected.raw.source.text));}catch{continue;}
+  if(session.isession.state[area.world]!==state)return retain();
+  if(!alternate)continue;
+  readings.push(alternate.raw);failures.push(alternate.failures);
+  if(!alternate.raw?.requests?.[0]||alternate.raw.requestCount!==1)continue;
+  const world=queryPolicy().fork();
+  const input=serialize([
+   row('query.primary',kind+'.recoveryReading',{role:'primary',...readingObservation(projected)}),
+   row('query.independent',kind+'.recoveryReading',{role:profile,...readingObservation(alternate)}),
+  ]);
+  if(!world.tell(input,{factsOnly:true}).ok)continue;
+  const results=world.ofType(kind+'.recovery'),pairs=world.ofType(kind+'.readingPair');
+  if(results.length!==1||pairs.length!==1)continue;
+  const candidate=profile==='literal'?addWitnessedTarget(projected,alternate):alternate;
+  const independent=await projectQueryAction(candidate,session,{view,bindings});
+  if(session.isession.state[area.world]!==state)return retain();
+  if(!independent?.candidates?.length||independent.interpretation?.limitation)continue;
+  const recovery={readings,failures,input,sop:serialize([...pairs,...results]),rule:results[0].meta.via,pairRule:pairs[0].meta.via,profile};
+  try{session.engine?.onWorldActivity?.({nodeIds:['component:reader','component:library'],phase:'stage',
+   operation:'app.query.read',label:'Verify an independent reading of the current question',
+   wires:recovery.input+'\n'+recovery.sop});}catch{/* Observations are optional. */}
+  return {...independent,interpretation:{...independent.interpretation,retry:recovery,unresolved:failures.flat()}};
+ }
+ return retain();
 }

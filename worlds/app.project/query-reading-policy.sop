@@ -47,8 +47,11 @@
 # An independent reading omits the previous utterance only for an isolated literal query.
 @p.literal app.query.read.coverage referenceMarked=false isolated=true
 @p.query.gap app.query.read.limitation reason=?reason
-@o.reconsider app.query.read.reconsider reason=?reason
+@o.reconsider app.query.read.reconsider reason=?reason profile=independent rank=2
 @query.reconsider core.rule when=$p.literal when=$p.query.gap then=$o.reconsider
+@p.literal.target.gap app.query.read.limitation reason=target-span-missing
+@o.reconsider.literal app.query.read.reconsider reason=target-span-missing profile=literal rank=1
+@query.reconsider.literal core.rule when=$p.literal when=$p.literal.target.gap then=$o.reconsider.literal
 
 # Join both readings of one literal utterance at the same native observation.
 @p.primary app.query.read.recoveryReading role=primary referenceMarked=false source=?source scope=?scopeKey instance=?instance revision=?revision act=?act mood=?mood head=?head askedKey=?askedKey family=?family quantifier=?quantifier triggerStart=?cueStart triggerEnd=?cueEnd
@@ -56,16 +59,25 @@
 @o.reading.pair app.query.read.readingPair primary=$p.primary independent=$p.independent
 @query.match.readings core.rule when=$p.primary when=$p.independent then=$o.reading.pair
 
+# A source-only alternate supplies a literal span. The primary reading still owns
+# the current editor's family if that classifier was absent in the alternate.
+@p.same.family.literal app.query.read.recoveryReading role=literal referenceMarked=false source=?source scope=?scopeKey instance=?instance revision=?revision act=?act mood=?mood head=?head askedKey=?askedKey family=?family quantifier=?quantifier triggerStart=?cueStart triggerEnd=?cueEnd
+@p.unclassified.literal app.query.read.recoveryReading role=literal referenceMarked=false source=?source scope=?scopeKey instance=?instance revision=?revision act=?act mood=?mood head=?head askedKey=?askedKey core.absent=family quantifier=?quantifier triggerStart=?cueStart triggerEnd=?cueEnd
+@o.same.family.literal app.query.read.readingPair primary=$p.primary independent=$p.same.family.literal
+@o.unclassified.literal app.query.read.readingPair primary=$p.primary independent=$p.unclassified.literal
+@query.match.literal core.rule when=$p.primary when=$p.same.family.literal then=$o.same.family.literal
+@query.match.literal.family core.rule when=$p.primary when=$p.unclassified.literal then=$o.unclassified.literal
+
 # Retain the exact witnessed filter when only the target is missing.
 @p.primary.target.gap app.query.read.recoveryReading role=primary filterCount=1 filterGaps=0 core.absent=targetText filterKey=?property filterValue=?value filterStart=?valueStart filterEnd=?valueEnd filterOperator=?operator filterCharacter=?character filterPolarity=?polarity filterPhase=?phase filterScope=?scope
-@p.independent.target app.query.read.recoveryReading role=independent targetText=?target targetStart=?targetStart targetEnd=?targetEnd filterCount=1 filterKey=?property filterValue=?value filterStart=?valueStart filterEnd=?valueEnd filterOperator=?operator filterCharacter=?character filterPolarity=?polarity
+@p.independent.target app.query.read.recoveryReading role=?candidate filterGaps=0 targetText=?target targetStart=?targetStart targetEnd=?targetEnd filterCount=1 filterKey=?property filterValue=?value filterStart=?valueStart filterEnd=?valueEnd filterOperator=?operator filterCharacter=?character filterPolarity=?polarity
 @p.target.pair app.query.read.readingPair primary=$p.primary.target.gap independent=$p.independent.target
 @o.recovered.target app.query.read.recovery selected=$p.independent.target
 @query.recover.target core.rule when=$p.primary.target.gap when=$p.independent.target when=$p.target.pair when=$question.phase when=$question.scope then=$o.recovered.target
 
 # A target-only reading cannot introduce a filter the primary model did not observe.
 @p.primary.bare.target.gap app.query.read.recoveryReading role=primary filterGaps=0 filterCount=0 core.absent=targetText
-@p.independent.bare.target app.query.read.recoveryReading role=independent targetText=?target targetStart=?targetStart targetEnd=?targetEnd filterCount=0
+@p.independent.bare.target app.query.read.recoveryReading role=?candidate filterGaps=0 targetText=?target targetStart=?targetStart targetEnd=?targetEnd filterCount=0
 @p.bare.target.pair app.query.read.readingPair primary=$p.primary.bare.target.gap independent=$p.independent.bare.target
 @o.recovered.bare.target app.query.read.recovery selected=$p.independent.bare.target
 @query.recover.bare.target core.rule when=$p.primary.bare.target.gap when=$p.independent.bare.target when=$p.bare.target.pair then=$o.recovered.bare.target

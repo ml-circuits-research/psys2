@@ -9,7 +9,7 @@ import {isAuthoredRequest,readAuthoredRequest} from './authored-request-tool.mjs
 // never to a model output, evaluation annotation or grammar proposal.
 import {requestCompositionPolicy,scheduleFollowingCut}from './request-composition-policy.mjs?v=73ae480f31';
 import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=9182a6cadd';
-import {projectQueryAction,recoverQueryProjection} from './project-query-action.mjs?v=46ad2e952e';
+import {projectQueryAction,recoverQueryProjection} from './project-query-action.mjs?v=3316b7df95';
 import {projectContextAction} from './project-context-action.mjs?v=3ef0fa920f';
 import {projectCreateAction} from './project-create-action.mjs?v=d390db15a0';
 import {assessReaderProposal} from './reader-admission.mjs?v=583f4541a9';

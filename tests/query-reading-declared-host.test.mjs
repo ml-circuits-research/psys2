@@ -113,3 +113,45 @@ test('a second read can supply its own target span while retaining current exact
  primary.raw.requests[0].target.fill='context';
  assert.equal((await projectQueryAction(primary,session,options)).interpretation.reconsider,false);
 });
+
+test('a literal alternate supplies only the witnessed noun where all objects of that kind are absent',async()=>{
+ const primary=makeExistence({noun:false});
+ primary.raw.unresolved=[modelGap({path:'target.kind'})];
+ primary.raw.requests[0].target.quantifier='any';
+ const result=await projectQueryAction(primary,session,options);
+ const alternate=makeExistence();
+ alternate.raw.requests[0].target={kind:'houses',kind_span:'houses',quantifier:'any'};
+ const attempts=[];
+ const live={...options,provider:{
+  proposeLiteral:async()=>{attempts.push('literal');return alternate;},
+  proposeIndependent:async()=>{attempts.push('independent');return null;},
+ }};
+ const response=await recoverQueryProjection(result,session,live);
+ assert.deepEqual(attempts,['literal']);
+ assert.match(response.candidates[0].wires,/kind=fixture.house/);
+ assert.match(response.candidates[0].wires,/value="red"/);
+ assert.equal(response.raw.requests[0].target.type,'drawn');
+ assert.equal(response.interpretation.retry.profile,'literal');
+ assert.equal(response.interpretation.retry.pairRule,'query.match.literal.family');
+ assert.equal(response.interpretation.retry.readings[0].requests[0].target.kind,undefined);
+ assert.equal(response.interpretation.retry.readings[1].requests[0].target.type,undefined);
+ const expectIncomplete=async()=>{
+  const refused=await recoverQueryProjection(result,session,live);
+  assert.deepEqual(refused.interpretation.limitation,['target-span-missing']);
+  assert.equal(refused.candidates,undefined);
+ };
+ alternate.raw.requests[0].target.type='node';
+ await expectIncomplete();
+ delete alternate.raw.requests[0].target.type;
+ alternate.raw.requests[0].target.quantifier='none';
+ await expectIncomplete();
+ alternate.raw.requests[0].target.quantifier='any';
+ alternate.sourceObservation={...observation,scope:'different'};
+ await expectIncomplete();
+ alternate.sourceObservation=observation;
+ alternate.raw.ranges.find(row=>row.path.at(-1)==='kind_span').range=[17,24];
+ await expectIncomplete();
+ alternate.raw.ranges.find(row=>row.path.at(-1)==='kind_span').range=[18,24];
+ alternate.raw.requests[0].target.kind=alternate.raw.requests[0].target.kind_span='trees';
+ await expectIncomplete();
+});

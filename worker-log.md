@@ -213,3 +213,6 @@ Webchat 07959a7e9e: integrated gate passed 644, skipped 3. Published 5bd8aa6ecb 
 
 2026-11-18 — Webchat 9e44cd7951 binds cardinal spans to Diagram creation and measures each candidate’s actual batch through its declared tool. Pins SOPWorlds 0.224.0 and knowledge 9e99bc52.
 Chromium verified three circles, then a three-circle/two-square compound, exact SVG bounds and Undo preserving an earlier rectangle. Application gate passed 646, skipped 3, failed 0.
+
+2026-11-18 — Webchat 0fd10c70f1 admits current-source noun evidence under declared scope, filter and quantifier checks and evaluates the live population. After deleting the only house, Chromium answered zero, false, then true for the surviving blue tree. Each query preserved state.
+Application gate passed 648 with three skips. No reader weights changed.

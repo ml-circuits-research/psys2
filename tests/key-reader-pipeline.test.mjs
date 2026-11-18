@@ -73,3 +73,19 @@ test('an independent read consumes one exact source and its already observed con
  assert.equal(await pipeline.proposeIndependent(writeReaderSource('set widget ✦')),null);
  assert.equal(await pipeline.proposeIndependent(source),null);
 });
+
+test('a literal read removes only model examples and history, retaining the authenticated current observation',async()=>{
+ const source=writeReaderSource('set widget 🟦');
+ const observation={scope:'drawing',instance:'board-1',revision:'9'};
+ const existing=[{kind:'tree'}];
+ const {pipeline,calls}=await setup({getContext:()=>({area:'toy',observation,context:{existing,previous:'earlier'}})});
+ await pipeline.propose(source);
+ const literal=await pipeline.proposeLiteral(source);
+ assert.deepEqual(literal.sourceObservation,observation);
+ assert.deepEqual(calls.at(-1),['read','set widget 🟦',{area:'toy',context:{existing:[],previous:null}}]);
+ assert.equal(await pipeline.proposeLiteral(source),null);
+ const independent=await pipeline.proposeIndependent(source);
+ assert.deepEqual(independent.sourceObservation,observation);
+ assert.deepEqual(calls.at(-1),['read','set widget 🟦',{area:'toy',context:{existing,previous:null}}]);
+ assert.equal(calls.filter(call=>call[0]==='cut').length,1);
+});
