@@ -128,3 +128,21 @@ test('Document overwrite and Calendar coverage policies read declared SOP guards
   assert.equal(created.duration, 300000);
   assert.ok(created.start >= started && created.start <= Date.now());
 });
+
+test('two reader-proposed meanings for one turn compile against the observed diagram before any effect',async()=>{
+ const state=initialDiagramState(),host=await createDiagramHost({state,instanceId:'seed'});
+ await invoke(host,'diagram.node.make',{kind:'rectangle',x:55,y:70});
+ const {value}=session('diagram.sketch',state);
+ const binds=binding('diagram','example.rectangle','rectangle','diagram.node.make','diagram.sketch.node',{x:'x',y:'y'});
+ const option=kind=>graph({act:'place',mode:'existing',kind,conditions:{x:100,y:120}});
+ const phrase='Author supplied a complete request graph';
+ value.engine.requestReader={bindings:()=>binds,provenance:()=>({modelSha256:'f'.repeat(64)}),propose:async()=>({
+  candidates:[option('example.absent'),option('example.rectangle')],coverage:{complete:true,graphProposal:true},failures:[],
+  selectionScore:{definition:'psys2.model-minimum/1',value:0.8},
+ })};
+ const r=await routeNewEngine(value,phrase,{view:'diagram'});
+ assert.deepEqual(r.statuses,['supported'],JSON.stringify(r.trace));
+ assert.match(r.trace.readingComparison,/std.interpret.reading/);
+ assert.deepEqual(value.isession.state['diagram.sketch'].shapes.map(n=>[n.x,n.y]),[[100,120]]);
+ assert.equal(value.newEngineUndo.length,1);
+});

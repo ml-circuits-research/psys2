@@ -1,16 +1,16 @@
-import {isAuthoredRequest,readAuthoredRequest} from './authored-request-tool.mjs?v=ceca8f42e1';
+import {isAuthoredRequest,readAuthoredRequest} from './authored-request-tool.mjs?v=1ae7ce653b';
 // Model-first proposal routing. Calibration authority belongs to host configuration,
 // never to a model output, evaluation annotation or grammar proposal.
-import {requestCompositionPolicy}from './request-composition-policy.mjs?v=31a123865e';
-import {executeRequestCandidate} from './new-engine.mjs?v=47c57a583e';
-import {invokeNativeControl} from './native-tool-controls.mjs?v=3f106192ea';
-import {executeDeclaredRequest} from './declared-execution.mjs?v=47c57a583e';
-import {projectContextAction} from './project-context-action.mjs?v=5bdb1b46e9';
-import {projectCreateAction} from './project-create-action.mjs?v=ef8b2bd150';
-import {parse,str} from '../vendor/sopworld/sopworld.mjs?v=f5d53a8da9';
-import {assessReaderProposal} from './reader-admission.mjs?v=9bdd3aa5fb';
+import {requestCompositionPolicy}from './request-composition-policy.mjs?v=c34044f14b';
+import {executeRequestCandidate} from './new-engine.mjs?v=9d8de22224';
+import {invokeNativeControl} from './native-tool-controls.mjs?v=b8f5faf50c';
+import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=9d8de22224';
+import {projectContextAction} from './project-context-action.mjs?v=c05860140e';
+import {projectCreateAction} from './project-create-action.mjs?v=5b4bd50fbb';
+import {parse,str} from '../vendor/sopworld/sopworld.mjs?v=14e619cf45';
+import {assessReaderProposal} from './reader-admission.mjs?v=3909247993';
 const unavailable=reason=>({candidates:[],coverage:{complete:false,executable:false,graphProposal:false},failures:[{reason}]});
-async function dispatchRequest(session,candidate,text,options,bindings,contextProjection,interpretation,alternatives=[]) {
+async function dispatchRequest(session,candidate,text,options,bindings,contextProjection,interpretation,alternatives=[],compiledPlan) {
  let result;
   const act=str(parse(candidate.wires).find(w=>w.id===candidate.request)?.attrs.act?.[0]),area=options.view??session.isession.state['ui.shell']?.activeTab;
   if(act==='undo'||act==='redo'){
@@ -19,7 +19,7 @@ async function dispatchRequest(session,candidate,text,options,bindings,contextPr
   }else{
    const before=structuredClone(session.isession.state);
    if(contextProjection){if(contextProjection.rewind)Object.assign(session.isession.state,structuredClone(contextProjection.rewind));session.newEngineFocus={...session.newEngineFocus,[area]:contextProjection.focus};}
-   result=await executeDeclaredRequest(session,candidate,text,{bindings,view:area,unapplied:interpretation?.unapplied??[]})??executeRequestCandidate(session,candidate,text,options);
+   result=await executeDeclaredRequest(session,candidate,text,{bindings,view:area,compiledPlan,unapplied:interpretation?.unapplied??[]})??executeRequestCandidate(session,candidate,text,options);
    if(!result.statuses?.includes('supported')&&contextProjection?.rewind)session.isession.state=before;
    if(result.statuses?.includes('supported')){session.newEngineLastAction={...session.newEngineLastAction,[area]:candidate};if(contextProjection){result.text+=' '+interpretation.note;result.parts=[{text:result.text,translate:false}];result.trace={...result.trace,interpretation};}}
    const changed=Object.keys(session.isession.state).filter(key=>JSON.stringify(before[key])!==JSON.stringify(session.isession.state[key]));
@@ -43,13 +43,25 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
  let contextProjection=null,bindings=null,registry=null;
  try{bindings=provider?.bindings?.();registry=provider?.registry?.();contextProjection=await projectContextAction(proposal,session,{bindings,registry,view:context.area});if(contextProjection)proposal=contextProjection.proposal;else{const creation=await projectCreateAction(proposal,session,{bindings,registry,view:context.area});if(creation)proposal=creation;}}catch{}
  const decision=assessReaderProposal({proposal,text,provenance,admission:session.engine?.requestReaderAdmission,area:context.area});
- const candidate=decision.candidate,eligible=decision.admitted,reason=decision.reason;
+ let candidate=decision.candidate,comparison=null;
+ const eligible=decision.admitted,reason=decision.reason;
+ if(eligible && decision.mode==='uncalibrated-best-effort' && !contextProjection && providerCandidates.length>1 && providerCandidates.length<=16){
+  const admitted=providerCandidates.filter(option=>assessReaderProposal({proposal:{...proposal,candidates:[option]},text,provenance,area:context.area}).admitted);
+  if(admitted.length>1){
+   comparison=await compareDeclaredReadings(session,admitted,{view:context.area,bindings});
+   if(comparison){
+    session.engine?.onWorldActivity?.({nodeIds:['component:library'],phase:'stage',operation:'std.interpret',label:'Compare proposed readings',
+     text,wires:comparison.sop,proposals:admitted.length});
+    if(comparison.index!==undefined)candidate=admitted[comparison.index];
+   }
+  }
+ }
  // No grammar fallback exists in the application. Unavailable or unapproved
  // structural models yield an explicit no-effect answer.
  const message='I could not identify an action to apply. Nothing changed.';
  let result;
  if(eligible){
-  result=await dispatchRequest(session,candidate,text,options,bindings,contextProjection,proposal.interpretation,decision.alternatives);
+  result=await dispatchRequest(session,candidate,text,options,bindings,contextProjection,proposal.interpretation,decision.alternatives,comparison?.plan);
   if(result?.statuses?.includes('supported')&&proposal.interpretation?.profile==='declared-creation/1'&&proposal.interpretation.note){result.text+=' '+proposal.interpretation.note;result.parts=[{text:result.text,translate:false}];result.trace={...result.trace,interpretation:proposal.interpretation};}
   if(result&&decision.uncertain&&result.statuses?.includes('supported')){
    const note=result.trace?.uncertainty?.length||result.trace?.interpretation?'':'I used the most likely reading; you can correct it or undo.';
@@ -57,7 +69,7 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
   }
  }
  result??={text:message,parts:[{text:message,translate:false}],statuses:['unsupported'],answers:[],segments:[],state:{},effects:[],newEngine:true,trace:{legacy:false,engine:'new',reason:options.language&&options.language!=='en'?'language':'reading'}};
- return {...result,trace:{...result.trace,readerRouting:{primary:'sop-bert',selected:eligible?'sop-bert':null,reason,
+ return {...result,trace:{...result.trace,...(comparison?{readingComparison:comparison.sop}:{}),readerRouting:{primary:'sop-bert',selected:eligible?'sop-bert':null,reason,
   admission:{mode:decision.mode??null,uncertain:decision.uncertain??false,alternatives:decision.alternatives??[],scoreDefinition:decision.scoreDefinition,score:decision.score,proposalEligible:decision.eligible,assessment:decision.assessment},
   interpretation:proposal?.interpretation??null,unresolved:proposal?.failures??[],proposalCandidates:providerCandidates,rawReading:proposal?.raw?.requests??null,model:{provenance,coverage:proposal?.coverage??null,candidates:Array.isArray(proposal?.candidates)?proposal.candidates.length:0,eligible:!!eligible}}}};
 }

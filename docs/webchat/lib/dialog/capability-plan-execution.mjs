@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-import { compileNativeCapability } from './capability-plan-adapter.mjs?v=51f8aa5243';
-import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=6e3d5a17a2';
+import { compileNativeCapability } from './capability-plan-adapter.mjs?v=da2a8c539c';
+import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=d608422334';
 import { instanceIdFor } from './instance-identity.mjs?v=024ef1ca83';
-import { prepareNativeControlHost } from './native-control-preparation.mjs?v=3a30e8d193';
-import { invokeObservedNativeTool } from './native-tool-activity.mjs?v=095b1f3f58';
-import { describeNativeControl, verifyNativeControlEffect } from './native-control-intent.mjs?v=36418fd336';
+import { prepareNativeControlHost } from './native-control-preparation.mjs?v=fd2bb6add2';
+import { invokeObservedNativeTool } from './native-tool-activity.mjs?v=23f96568ed';
+import { describeNativeControl, verifyNativeControlEffect } from './native-control-intent.mjs?v=c7cf5d55bb';
 
 function reply(text, supported, trace = {}) {
   return { text, parts: [{ text, translate: false }], statuses: [supported ? 'supported' : 'unsupported'],
@@ -23,14 +23,14 @@ function refusal(plan, candidate) {
 }
 
 /** Compose authoritative observations, run the compiled native call and report the actual effect. */
-export async function executeNativeCapability(session, candidate, { bindings, view, unapplied = [], readKnowledge } = {}) {
+export async function executeNativeCapability(session, candidate, { bindings, view, unapplied = [], compiledPlan, readKnowledge } = {}) {
   const area = NATIVE_AREAS[view];
   const nativeState = area && session.isession.state[area.world];
   if (!nativeState || !bindings) return null;
   const host = await createAreaHost(area, { state: nativeState, instanceId: instanceIdFor(session, area.world),
     loader: session.engine?.loader, knowledge: session.engine?.knowledge });
   const before = host.observe();
-  const plan = compileNativeCapability(candidate, { area, view, bindings, host, observation: before,
+  const plan = compiledPlan ?? compileNativeCapability(candidate, { area, view, bindings, host, observation: before,
     focus: session.newEngineFocus?.[view], unapplied, readKnowledge });
   if (plan.status === 'not-applicable') return null;
   if (plan.status !== 'compiled') return refusal(plan, candidate);

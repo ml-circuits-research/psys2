@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-import { diagramToolInterface, DIAGRAM_COMPONENTS } from './tool-interface.mjs?v=54732e8c2f';
-export { DIAGRAM_TOOL_BINDINGS, DIAGRAM_COMPONENTS } from './tool-interface.mjs?v=54732e8c2f';
-import{projectNumericGroups}from'./chart-layout.mjs?v=ebc29faa69';
+import { diagramToolInterface, DIAGRAM_COMPONENTS } from './tool-interface.mjs?v=522940fd25';
+export { DIAGRAM_TOOL_BINDINGS, DIAGRAM_COMPONENTS } from './tool-interface.mjs?v=522940fd25';
+import{projectNumericGroups}from'./chart-layout.mjs?v=132bf9f3f9';
 import {centeredSpatialBox,spatialBox,unionSpatialBoxes} from '../native-spatial-observation.mjs?v=ced85b9a29';
 import {routeEdges} from './arrows.mjs?v=3346b422bb';
 import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs?v=ecc9d8b538';
-import {initialState,loadEngine,systemFor,writeBack,PREFIX,K} from './core.mjs?v=2a3d956734';
-import * as tool from './tool.mjs?v=b024462978';
-import{groupNativeObjects,groupNativeHandlers,projectGroupCharts}from'./group-tools.mjs?v=6a2f618075';
-import {initialChartState,chartNativeObjects,chartNativeHandlers} from '../data.charts/declared-host.mjs?v=4e0f63bd12';
+import {initialState,loadEngine,systemFor,writeBack,PREFIX,K} from './core.mjs?v=1139adacc0';
+import * as tool from './tool.mjs?v=99a770da11';
+import{groupNativeObjects,groupNativeHandlers,projectGroupCharts}from'./group-tools.mjs?v=3f4c137162';
+import {initialChartState,chartNativeObjects,chartNativeHandlers} from '../data.charts/declared-host.mjs?v=922c82f339';
 export const initialDiagramState=initialState;
 const fail=code=>({status:'missing',code});
 const ids=(s,list,kind='shapes')=>Array.isArray(list)&&list.length>0&&new Set(list).size===list.length&&list.every(id=>typeof id==='string'&&s[kind].some(item=>(kind==='shapes'?item.name:item.id)===id));

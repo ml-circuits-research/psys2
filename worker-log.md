@@ -129,3 +129,6 @@ Checks: LIB 0.212.0/a3ea363, `node scripts/build-native-interfaces.mjs --check`,
 2026-11-18 delivered authored SOP state schema ownership in Drawing and Documents. The private LIB transport is pinned separately at df62fdee; closed slots, identity keys, owned references, named joins and native roles come from the actual schemas.
 Checks: node scripts/build-editor-state-schema-sources.mjs --check; npm run build:webchat (7 worlds, 312 files); npm test (614 tests, 611 pass, 3 skip, 0 fail).
 Existing editor-authority smoke replay against this build in Chromium confirmed real Drawing move/save/reopen/undo at (420, 300), exact Documents title/paragraph save/reopen/undo, and both runtime journals separate from semantic archive facts.
+
+2026-11-18 integrated SOPWorlds 0.213.0/1271181 for comparing bounded reader alternatives against the same live editor snapshot before dispatch. The Diagram regression verifies the selected circuit executes once and Undo restores the prior state.
+Checks: `npm run build:webchat` 0cf5b567da and `npm test` 615 total / 612 pass / 3 skip. Compared both vendored files byte-for-byte with the library bundle and the separately pinned instance codec. Local Chromium authored Drawing recolor and Undo verified the operational SOP facts and exact native call.

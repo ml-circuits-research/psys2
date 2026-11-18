@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-import { World, parse, quote, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=f5d53a8da9';
+import { World, parse, quote, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=14e619cf45';
 import POLICY from '../../worlds/app.project/capability-policy.mjs?v=ca7d222029';
 import { DRAWING_PROPERTY_BINDINGS } from '../../worlds/art.draw/property-host.mjs?v=45ec70afe7';
-import { executionPolicyWorld } from './execution-policy.mjs?v=fc08ac9b87';
+import { executionPolicyWorld } from './execution-policy.mjs?v=719611440c';
 import { nativeKindCandidates } from './native-binding-candidates.mjs?v=de223646d6';
-import { observedReaderContext } from './native-reader-context.mjs?v=0b0220ad07';
+import { observedReaderContext } from './native-reader-context.mjs?v=cf6eef4278';
 import { budget } from './budget.mjs?v=00bce6e369';
 
 const NS = 'std.capability.';
@@ -160,23 +160,51 @@ function readPlan(sop) {
 let declarations;
 
 /** Compose live interface facts and compile the original SOP graph. */
-export function compileNativeCapability(candidate, context) {
+function compilerWorld(context, nodes) {
   if (!declarations) {
     const world = new World();
-    if (!world.use('std.capability').ok) throw Error('capability-contract-unavailable');
+    if (!world.use('std.capability').ok || !world.use('std.interpret').ok) throw Error('capability-contract-unavailable');
     world.load(POLICY);
     declarations = world;
   }
-  const nodes = parse(candidate.wires);
-  const concepts = new Set(nodes.filter((wire) => wire.type === 'std.request.constraint').map((wire) => take(wire, 'concept')));
-  const { wires, scope } = interfaceFacts(context, concepts);
-  const world = declarations.fork();
-  const admitted = world.tell(wires, { factsOnly: true });
-  if (!admitted.ok) throw Error('invalid-capability-interface');
-  const request = nodes.find((wire) => wire.type === 'std.request' && wire.id === candidate.request);
-  if (!request) return readPlan('@compile.result std.compile.result status=not-applicable reason=request-root');
-  const sop = candidate.wires + '\n' + serialize([
-    { id: 'capability.context', type: NS + 'context', attrs: { request: [ref(request.id)], scope: [scope] }, pattern: false },
-  ]);
-  return readPlan(world.compileRequest(sop));
+  const concepts = new Set(nodes.filter(wire => wire.type === 'std.request.constraint').map(wire => take(wire, 'concept')));
+  const {wires,scope}=interfaceFacts(context, concepts);
+  const world=declarations.fork();
+  if (!world.tell(wires,{factsOnly:true}).ok) throw Error('invalid-capability-interface');
+  return {world,scope};
+}
+function contextWire(id,request,scope) {
+  return {id,type:NS+'context',attrs:{request:[ref(request)],scope:[scope]}};
+}
+export function compileNativeCapability(candidate, context) {
+  const nodes=parse(candidate.wires), {world,scope}=compilerWorld(context,nodes);
+  if(!nodes.some(w=>w.type==='std.request'&&w.id===candidate.request))return readPlan('@compile.result std.compile.result status=not-applicable reason=request-root');
+  return readPlan(world.compileRequest(serialize([...nodes,contextWire('capability.context',candidate.request,scope)])));
+}
+
+/** Keep each proposal's private identifiers distinct while preserving its actual request wires. */
+export function compareNativeReadings(candidates, context) {
+  const graphs=candidates.map(candidate=>parse(candidate.wires));
+  const {world,scope}=compilerWorld(context,graphs.flat());
+  const packet=[],requests=new Map(),options=[];
+  for(const [index,nodes] of graphs.entries()){
+    budget.tick('interpretation.source');
+    const prefix='proposal.'+index+'.', ids=new Map(nodes.map((w,i)=>[w.id,prefix+i]));
+    const request=ids.get(candidates[index].request);
+    requests.set(request,index);
+    const members=nodes.map(w=>({...w,id:ids.get(w.id),attrs:Object.fromEntries(Object.entries(w.attrs).map(([key,tokens])=>
+      [key,tokens.map(v=>v[0]==='$'&&ids.has(v.slice(1))?ref(ids.get(v.slice(1))):v)]))}));
+    members.push(contextWire(prefix+'context',request,scope));
+    const id=prefix+'option';
+    packet.push(...members,{id,type:'std.interpret.proposal',attrs:{request:[ref(request)],member:members.map(w=>ref(w.id))}});
+    options.push(ref(id));
+  }
+  packet.push({id:'interpret.input',type:'std.interpret.input',attrs:{proposal:options}});
+  const sop=world.compileRequest(serialize(packet)),records=parse(sop),summary=records[0];
+  const selected=records.find(w=>ref(w.id)===summary.attrs.choice?.[0]);
+  const index=selected?requests.get(take(selected,'request')):undefined;
+  if(index===undefined)return {sop};
+  const planRoot=records.find(w=>ref(w.id)===summary.attrs.plan?.[0]);
+  const plan=readPlan(serialize([planRoot,...records.filter(w=>w.id.startsWith('interpret.plan.')&&w!==planRoot)]));
+  return {sop,index,plan};
 }

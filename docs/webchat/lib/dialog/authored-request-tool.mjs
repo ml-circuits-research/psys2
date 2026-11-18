@@ -1,5 +1,5 @@
 // An authored circuit bypasses language inference and uses the same graph validator as a reader.
-import {parse,readValue,serializeRequestGraph} from '../vendor/sopworld/sopworld.mjs?v=f5d53a8da9';
+import {parse,readValue,serializeRequestGraph} from '../vendor/sopworld/sopworld.mjs?v=14e619cf45';
 
 export function isAuthoredRequest(text) {
   return typeof text==='string' && /^\s*@\S+\s+std\.request(?:\s|\.)/.test(text);
