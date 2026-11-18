@@ -1,3 +1,4 @@
+import { readSceneDefaults } from './scene-placement-defaults.mjs';
 // SPDX-License-Identifier: AGPL-3.0-only
 import { compileNativeCapability } from './capability-plan-adapter.mjs';
 import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs';
@@ -50,8 +51,10 @@ export async function executeNativeCapability(session, candidate, { bindings, vi
   const host = await createAreaHost(area, { state: nativeState, instanceId: instanceIdFor(session, area.world),
     loader: session.engine?.loader, knowledge: session.engine?.knowledge });
   const before = host.observe();
+  const sceneDefaults = compiledPlan ? null : await readSceneDefaults({host,bindings,area,view,
+    knowledge:session.engine?.knowledge,candidates:[candidate]});
   const plan = compiledPlan ?? compileNativeCapability(candidate, { area, view, bindings, host, observation: before,
-    focus: focus ?? session.newEngineFocus?.[view], targetUnique, unapplied, readKnowledge });
+    focus: focus ?? session.newEngineFocus?.[view], targetUnique, unapplied, readKnowledge, sceneDefaults });
   if (plan.status === 'not-applicable') return null;
   if (plan.status !== 'compiled') return refusal(plan, candidate);
 
@@ -73,7 +76,7 @@ export async function executeNativeCapability(session, candidate, { bindings, vi
       { reason: 'stale-compiled-capability', reading: candidate, compiledSop: plan.sop });
   }
   try {
-    session.engine?.onWorldActivity?.({ nodeIds: ['execution:capability-policy','execution:policy'], phase: 'stage', label: 'Compiled declared capabilities',
+    session.engine?.onWorldActivity?.({ nodeIds: ['execution:capability-policy','execution:policy',...(plan.scenePlaced?['execution:scene-default-policy']:[])], phase: 'stage', label: 'Compiled declared capabilities',
       operation: 'policy.execution.compile', tool: operation.id, facts: plan.support, wires: plan.sop });
   } catch {
     // Inspection does not affect dispatch.

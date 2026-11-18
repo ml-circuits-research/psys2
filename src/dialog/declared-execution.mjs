@@ -1,3 +1,4 @@
+import { readSceneDefaults } from './scene-placement-defaults.mjs';
 import { executeSpatialPlacement } from './spatial-placement-execution.mjs';
 import { compareNativeReadings } from './capability-plan-adapter.mjs';
 import { NATIVE_AREAS,createAreaHost } from './app-reader-context.mjs';
@@ -52,7 +53,9 @@ export async function compareDeclaredReadings(session,candidates,{view,bindings,
   let result;
   if(indices.length&&state&&bindings){
     const host=await createAreaHost(area,{state:structuredClone(state),instanceId:instanceIdFor(session,area.world),loader:session.engine?.loader,knowledge:session.engine?.knowledge});
-    result=compare(indices.map(index=>candidates[index]),{area,view,bindings,host,observation:host.observe(),focus:session.newEngineFocus?.[view],unapplied,readKnowledge:source});
+    const alternatives=indices.map(index=>candidates[index]),observation=host.observe();
+    const sceneDefaults=await readSceneDefaults({host,bindings,area,view,knowledge:session.engine?.knowledge,candidates:alternatives});
+    result=compare(alternatives,{area,view,bindings,host,observation,focus:session.newEngineFocus?.[view],unapplied,readKnowledge:source,sceneDefaults});
   }
   if(!limited)return result??null;
   const index=result?.index===undefined?undefined:indices[result.index];

@@ -6,6 +6,7 @@ import{inspectRequestRoutingPolicy}from'./request-routing-policy.mjs';
 import{inspectHistoryPolicy}from'./history-policy.mjs';
 import{inspectHistoryJournal}from'./history-journal.mjs';
 import{inspectExecutionPolicyWorld}from'./execution-policy.mjs';
+import{sceneDefaultInspection}from'./scene-placement-defaults.mjs';
 import{inspectCapabilityPolicy}from'./capability-plan-adapter.mjs';
 import{inspectCreationPolicy}from'./project-create-action.mjs';
 import{inspectConstructorPolicy}from'./native-binding-candidates.mjs';
@@ -118,6 +119,16 @@ export async function inspectExecutionWorlds(session){
  link('execution:module:declared-execution','execution:capability-policy','compiles native requests with');
  link('execution:capability-policy','execution:policy','uses authored seeds and lookup declarations');
  link('execution:capability-policy','execution:source-snapshot','reads original catalog values');
+ const sceneDefaults=sceneDefaultInspection();
+ nodes.push({id:'execution:scene-default-policy',label:'Scene placement defaults',kind:'knowledge',implementation:'Operational SOP Lang World',
+  description:'Projects catalog regions through observed editor geometry and chooses optional coordinates for ordinary creation.',
+  wires:sceneDefaults.policy,details:{source:'worlds/app.project/scene-default-policy.sop',loaded:capability.loaded}});
+ nodes.push({id:'execution:scene-default-schema',label:'app.sceneDefault',kind:'schema',implementation:'SOP Lang schema module',
+  description:'Defines renderer ports, observed bounds and optional placement alternatives.',
+  wires:sceneDefaults.schema,schemaView:inspectSchemaSource(sceneDefaults.schema),
+  details:{source:'worlds/app.project/scene-default-schema.sop',loaded:capability.loaded}});
+ link('execution:scene-default-policy','execution:scene-default-schema','imports schema');
+ link('execution:capability-policy','execution:scene-default-policy','uses scoped missing-coordinate seeds');
  const placement=inspectSpatialPlacementWorld();
  if(placement){
   const ids={policy:'execution:placement-policy',geometry:'execution:placement-geometry',schema:'execution:placement-geometry-schema'};
