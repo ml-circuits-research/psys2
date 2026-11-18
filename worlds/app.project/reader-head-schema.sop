@@ -1,0 +1,13 @@
+@head.module core.module name=app.reader.head exports=app.reader.head.evidence exports=app.reader.head.alternative
+@head.evidence core.type of=app.reader.head.evidence closed=true
+@head.evidence.key core.slot of=app.reader.head.evidence key=key kind=string present=true
+@head.evidence.area core.slot of=app.reader.head.evidence key=area kind=string present=true
+@head.evidence.concept core.slot of=app.reader.head.evidence key=concept kind=string present=true
+@head.evidence.source core.slot of=app.reader.head.evidence key=declaration kind=string present=true
+@head.evidence.world core.slot of=app.reader.head.evidence key=world kind=string present=true
+@head.evidence.snapshot core.slot of=app.reader.head.evidence key=snapshot kind=string present=true
+@head.evidence.kind core.slot of=app.reader.head.evidence key=role kind=atom enum=reported enum=grounded present=true
+@head.evidence.unique core.slot of=app.reader.head.evidence key=unique kind=integer min=0 present=true
+@head.alternative core.type of=app.reader.head.alternative closed=true
+@head.alternative.reported core.slot of=app.reader.head.alternative key=reported type=app.reader.head.evidence present=true
+@head.alternative.grounded core.slot of=app.reader.head.alternative key=grounded type=app.reader.head.evidence present=true

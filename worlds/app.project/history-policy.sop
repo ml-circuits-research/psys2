@@ -13,3 +13,25 @@
 
 @history.reader.undo app.history.reader act=undo fill=journal_step
 @history.reader.redo app.history.reader act=redo fill=journal_step
+
+# The durable journal stores one ordered position per native payload reference.
+@history.stack.undo app.history.stack direction=undo opposite=redo capacity=32 primary=true
+@history.stack.redo app.history.stack direction=redo opposite=undo capacity=32 primary=false
+@history.entry app.history.entry direction=?direction view=?view position=?position
+@history.later app.history.entry direction=?direction view=?view position=?later
+@history.newer core.check fn=gt args=?later args=?position
+@history.displace app.history.displaced entry=$history.entry
+@history.displacement core.rule when=$history.entry when=$history.later if=$history.newer then=$history.displace
+@history.top app.history.stackHead entry=$history.entry direction=?direction view=?view
+@history.top.rule core.rule when=$history.entry not=$history.displace then=$history.top
+
+@history.move.entry app.history.entry payload=?payload direction=?direction
+@history.move.head app.history.stackHead entry=$history.move.entry direction=?direction
+@history.move.route app.history.stack direction=?direction opposite=?opposite
+@history.move.result app.history.entry core.on=$history.move.entry direction=?opposite position=?position revision=?revision
+@history.move core.action name=move-history-head param=payload param=position param=revision when=$history.move.entry when=$history.move.head when=$history.move.route set=$history.move.result
+
+@history.position.a app.history.entry position=?position
+@history.position.b app.history.entry position=?position
+@history.position.distinct core.check fn=neq args=$history.position.a args=$history.position.b
+@history.position.unique core.deny when=$history.position.a when=$history.position.b if=$history.position.distinct why="A journal position has one entry."

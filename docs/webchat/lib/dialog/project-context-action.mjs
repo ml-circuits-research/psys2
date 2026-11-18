@@ -1,7 +1,8 @@
+import { historyHeads } from './history-journal.mjs?v=30f4a14542';
 import {nativeKindCandidates} from './native-binding-candidates.mjs?v=5d5aa4bc25';
 // Bind model-declared context references to actual native objects; never inspect source words.
 import {quote,str} from '../vendor/sopworld/sopworld.mjs?v=b7d50d9480';
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=be2be0e135';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=f4c8d09581';
 import {executionPolicyWorld} from './execution-policy.mjs?v=9ad12c3289';
 import {readReferenceTurn,resolveObservedReference} from './reference-policy.mjs?v=689aa905ba';
 import {observeGroundedProjection,projectGroundedRequest} from './grounded-projection.mjs?v=a4ff89b313';
@@ -19,9 +20,10 @@ export async function projectContextAction(proposal,session,{bindings,registry,v
  try{session.engine?.onWorldActivity?.({nodeIds:['component:library','execution:reference-policy','instance:'+area.world],
   phase:'stage',label:'Rank contextual references',operation:'std.choice',sop:choice.sop,input:choice.input,
   candidates:options.map(({object,canonical})=>({id:object.id,canonical}))});}catch{/* Trace subscribers cannot change interpretation. */}
- const previous=session.newEngineLastAction?.[view],history=session.newEngineUndo??[],last=history.findLast(e=>e.area===view);
+ const previous=session.newEngineLastAction?.[view];
  let inherited=null,rewind=null;
  if(other){
+  const last=historyHeads(session,view).find(row=>row.direction==='undo')?.entry;
   if(!previous||!last||!Object.keys(last.after).every(key=>JSON.stringify(session.isession.state[key])===JSON.stringify(last.after[key])))return null;
   const prior=flatRequestProjection(previous);if(!prior.ok||prior.request.act!==r.act||prior.targets.length!==1||!prior.results.length)return null;
   inherited=prior.results;rewind=last.before;

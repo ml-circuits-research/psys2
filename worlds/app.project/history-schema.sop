@@ -1,4 +1,4 @@
-@history.module core.module name=app.history exports=app.history.head exports=app.history.restore exports=app.history.terminal exports=app.history.result exports=app.history.reader
+@history.module core.module name=app.history exports=app.history.advance exports=app.history.head exports=app.history.restore exports=app.history.terminal exports=app.history.result exports=app.history.reader exports=app.history.journal exports=app.history.entry exports=app.history.stack exports=app.history.stackHead exports=app.history.displaced
 @history.compile core.use world=std.compile
 @history.head.type core.type of=app.history.head closed=true
 @history.head.direction core.slot of=app.history.head key=direction kind=atom enum=undo enum=redo present=true
@@ -21,3 +21,27 @@
 @history.reader.type core.type of=app.history.reader closed=true
 @history.reader.act core.slot of=app.history.reader key=act kind=atom present=true
 @history.reader.fill core.slot of=app.history.reader key=fill kind=atom present=true
+@history.journal.type core.type of=app.history.journal closed=true
+@history.journal.identity core.slot of=app.history.journal key=identity kind=string present=true
+@history.entry.type core.type of=app.history.entry closed=true
+@history.entry.payload core.slot of=app.history.entry key=payload kind=string id=true present=true
+@history.entry.direction core.slot of=app.history.entry key=direction kind=atom enum=undo enum=redo present=true
+@history.entry.view core.slot of=app.history.entry key=view kind=string present=true
+@history.entry.order core.slot of=app.history.entry key=position kind=integer min=1 present=true
+@history.entry.revision core.slot of=app.history.entry key=revision kind=string present=true
+@history.entry.world core.slot of=app.history.entry key=world kind=string many=true present=true
+@history.stack.type core.type of=app.history.stack closed=true
+@history.stack.direction core.slot of=app.history.stack key=direction kind=atom enum=undo enum=redo id=true present=true
+@history.stack.opposite core.slot of=app.history.stack key=opposite kind=atom enum=undo enum=redo present=true
+@history.stack.capacity core.slot of=app.history.stack key=capacity kind=integer min=1 present=true
+@history.stack.primary core.slot of=app.history.stack key=primary kind=boolean present=true
+@history.stackHead.type core.type of=app.history.stackHead closed=true
+@history.stackHead.entry core.slot of=app.history.stackHead key=entry kind=ref to=app.history.entry present=true
+@history.stackHead.direction core.slot of=app.history.stackHead key=direction kind=atom present=true
+@history.stackHead.view core.slot of=app.history.stackHead key=view kind=string present=true
+@history.displaced.type core.type of=app.history.displaced closed=true
+@history.displaced.entry core.slot of=app.history.displaced key=entry kind=ref to=app.history.entry present=true
+@history.advance.type core.type of=app.history.advance extends=std.compile.call closed=true
+@history.advance.payload core.slot of=app.history.advance key=arg.payload kind=string present=true
+@history.advance.position core.slot of=app.history.advance key=arg.position kind=integer min=1 present=true
+@history.advance.revision core.slot of=app.history.advance key=arg.revision kind=string present=true

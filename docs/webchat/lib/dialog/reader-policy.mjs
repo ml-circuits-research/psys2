@@ -1,12 +1,14 @@
 // Send runtime evidence through the authored SOP decision rules.
 import { World, parse, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=b7d50d9480';
-import SOURCE from '../../worlds/app.project/reader-admission-policy-source.mjs?v=f39ec7261d';
+import SOURCE from '../../worlds/app.project/reader-admission-policy-source.mjs?v=b0a246ce58';
+
+import SCHEMA from '../../worlds/app.project/reader-admission-schema-source.mjs?v=7430bbc150';
 
 let loaded;
 function policyWorld(source) {
   if (source === SOURCE && loaded) return loaded;
-  const context = new World({ library: { 'app.reader': source } });
-  if (!context.use('app.reader', { prefix: false }).ok) throw Error('invalid-reader-admission-policy');
+  const context = new World({ library: { 'app.reader': SCHEMA } });
+  if (!context.tell(source).ok) throw Error('invalid-reader-admission-policy');
   if (source === SOURCE) loaded = context;
   return context;
 }
@@ -28,5 +30,5 @@ export function readerCalibrationErrorLimit() {
 }
 
 export function inspectReaderAdmissionPolicy() {
-  return { source: 'worlds/app.project/reader-admission-policy.sop', wires: SOURCE, loaded: !!loaded };
+  return { source: 'worlds/app.project/reader-admission-policy.sop', wires: SOURCE, schema: SCHEMA, loaded: !!loaded };
 }

@@ -1,4 +1,5 @@
-import {isAuthoredRequest} from './authored-request-tool.mjs?v=f0f4db610b';
+import { captureHistory, initializeHistory, restoreHistory } from './history-journal.mjs?v=30f4a14542';
+import {isAuthoredRequest} from './authored-request-tool.mjs?v=e0f7f15750';
 // SPDX-License-Identifier: AGPL-3.0-only
 /**
  * C2 dialog pipeline (spec 06). Browser-safe.
@@ -473,8 +474,7 @@ export class DialogSession {
     this.astra = createSessionAstra(this);
     this.sources = new Map();
     this.newEngineJournal = [];
-    this.newEngineUndo = [];
-    this.newEngineRedo = [];
+    initializeHistory(this);
     this.newEngineFocus = {};
     this.newEngineLastAction = {};
     this._msg = 0;
@@ -1527,15 +1527,14 @@ export class DialogSession {
     try { astra = this.astra ? astraSnapshot(this.astra) : null; } catch { astra = null; }
     let rs = null;
     try { rs = this.isession.rs?.timelineJSON() ?? null; } catch { rs = null; }   // the library instances and the undo timeline (spec 15); absent on the ops reasoner
-    return { v: 1, newEngineUndo: structuredClone(this.newEngineUndo), newEngineRedo: structuredClone(this.newEngineRedo??[]), newEngineFocus: structuredClone(this.newEngineFocus), newEngineLastAction: structuredClone(this.newEngineLastAction), ...(this.newEngineJournal.length ? { newEngineJournal: structuredClone(this.newEngineJournal) } : {}), discourse: this.discourse.toJSON(), dialogue: this.dialogue.toJSON(), astra, recent: [...(this._recentWorlds ?? [])], ...(rs ? { rs } : {}) };
+    return { v: 1, history: captureHistory(this), newEngineFocus: structuredClone(this.newEngineFocus), newEngineLastAction: structuredClone(this.newEngineLastAction), ...(this.newEngineJournal.length ? { newEngineJournal: structuredClone(this.newEngineJournal) } : {}), discourse: this.discourse.toJSON(), dialogue: this.dialogue.toJSON(), astra, recent: [...(this._recentWorlds ?? [])], ...(rs ? { rs } : {}) };
   }
 
   /** Puts a `memoryJSON()` record back (a bad record changes nothing it cannot read). Runs no effect. */
   restoreMemory(mem) {
     if (!mem || typeof mem !== 'object' || mem.v !== 1) return false;
+    if (!restoreHistory(this,mem.history,mem)) return false;
     if (Array.isArray(mem.newEngineJournal)) this.newEngineJournal = structuredClone(mem.newEngineJournal.slice(-128));
-    this.newEngineRedo = Array.isArray(mem.newEngineRedo) ? structuredClone(mem.newEngineRedo.slice(-32)) : [];
-    this.newEngineUndo = Array.isArray(mem.newEngineUndo) ? structuredClone(mem.newEngineUndo.slice(-32)) : [];
     this.newEngineFocus = structuredClone(mem.newEngineFocus ?? {});
     this.newEngineLastAction = structuredClone(mem.newEngineLastAction ?? {});
     this.discourse.load(mem.discourse);
@@ -1562,7 +1561,7 @@ export class DialogSession {
       isession: this.isession.clone(), msg: this._msg, recent: [...(this._recentWorlds ?? [])], lang: [this._sessionLang, this._weakRo],
       discourse: { ...dis, frames: [...dis.frames], actions: [...dis.actions], topics: [...dis.topics], lastByWorld: { ...dis.lastByWorld } },
       newEngineJournal: structuredClone(this.newEngineJournal),
-      newEngineUndo: structuredClone(this.newEngineUndo), newEngineRedo: structuredClone(this.newEngineRedo??[]), newEngineFocus: structuredClone(this.newEngineFocus), newEngineLastAction: structuredClone(this.newEngineLastAction),
+      history: captureHistory(this), newEngineFocus: structuredClone(this.newEngineFocus), newEngineLastAction: structuredClone(this.newEngineLastAction),
       sources: new Set(this.sources.keys()), astra: this.astra?.capture(), dialogue: this.dialogue.toJSON(),
     };
   }
@@ -1596,10 +1595,9 @@ export class DialogSession {
   /** Puts the session back to a snapshot taken by `snapshot()`. */
   restore(snap) {
     if (!snap) return;
+    if (!restoreHistory(this,snap.history,snap)) throw Error('invalid-session-history-snapshot');
     this.isession = snap.isession; this._msg = snap.msg; this._recentWorlds = snap.recent; [this._sessionLang, this._weakRo] = snap.lang;
     this.newEngineJournal = structuredClone(snap.newEngineJournal ?? []);
-    this.newEngineUndo = structuredClone(snap.newEngineUndo ?? []);
-    this.newEngineRedo = structuredClone(snap.newEngineRedo ?? []);
     this.newEngineFocus = structuredClone(snap.newEngineFocus ?? {});
     this.newEngineLastAction = structuredClone(snap.newEngineLastAction ?? {});
     Object.assign(this.discourse, snap.discourse);
@@ -1655,7 +1653,7 @@ export class DialogSession {
         }
       }
     }
-    const reply = await (await import('./reader-routing.mjs?v=5960a63639')).routeNewEngine(this, english, { ...opts, language: 'en' });
+    const reply = await (await import('./reader-routing.mjs?v=63856dac6e')).routeNewEngine(this, english, { ...opts, language: 'en' });
     reply.trace = { ...reply.trace, english, ...(translation ? { translation } : {}) };
     if (language !== 'en') {
       try {

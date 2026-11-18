@@ -61,3 +61,63 @@ test('an authored history request dispatches exactly its compiled call and rejec
  assert.equal(incomplete.trace.reason,'incomplete-coverage');
  assert.deepEqual(state['art.draw'],before);
 });
+
+
+test('mixed history retains ordered SOP identities across memory reload and snapshot while dispatch leases remain local', async () => {
+ const {createEngine}=await import('../src/dialog/index.mjs');
+ const {createFsLoader}=await import('../src/loaders/fs-loader.mjs');
+ const {initialDiagramState}=await import('../worlds/diagram.sketch/declared-host.mjs');
+ const {toNativeDiagramState}=await import('../worlds/diagram.sketch/canonical-state.mjs');
+ const {parse,str}=await import('../src/vendor/sopworld/sopworld.mjs');
+ const {inspectExecutionWorlds}=await import('../src/dialog/execution-world-inspection.mjs');
+ const engine=await createEngine({loader:createFsLoader()});
+ const source=engine.createSession({language:'en'});
+ source.setWorldState('art.draw',initialDrawingState());
+ source.setWorldState('diagram.sketch',initialDiagramState());
+ await run(source,'draw','drawing.object.make',{kind:'circle'});
+ await run(source,'diagram','diagram.node.make',{kind:'rectangle'});
+ await run(source,'draw','drawing.object.make',{kind:'square'});
+
+ const authored='@source std.request.source text="Undo the current drawing"\n@request std.request act=undo mood=do source=$source';
+ const initialMemory=source.memoryJSON(), archive=initialMemory.history;
+ const entries=parse(archive.sop).filter(row=>row.type==='app.history.entry');
+ assert.deepEqual(entries.map(row=>[str(row.attrs.view[0]),Number(row.attrs.position[0])]),[['draw',1],['diagram',2],['draw',3]]);
+ assert.equal(Object.keys(archive.payloads).length,3);
+ assert.equal(Object.hasOwn(initialMemory,'newEngineUndo'),false);
+ const snap=source.snapshot();
+ const firstUndo=await routeNewEngine(source,authored,{view:'draw'});
+ assert.equal(firstUndo.statuses[0],'supported');
+ source.restore(snap);
+ assert.equal(source.memoryJSON().history.sop,archive.sop);
+ const staleContext=toolInvocationContext('stale-history',firstUndo.trace.receipt.beforeVersion);
+ assert.equal(createHistoryTool(source,'draw').invoke(firstUndo.trace.controlIntent,staleContext).reason,'stale-history-head');
+
+ const portable=source.portableSnapshot(source.snapshot());
+ const reload=engine.createSession({language:'en'});
+ const cloned=reload.adoptSnapshot(JSON.parse(JSON.stringify(portable)));
+ reload.restore(cloned);
+ assert.deepEqual(reload.memoryJSON().history,source.memoryJSON().history);
+ assert.equal(createHistoryTool(reload,'draw').invoke(firstUndo.trace.controlIntent,staleContext).reason,'stale-history-head');
+ const graph=await inspectExecutionWorlds(reload);
+ const visible=graph.nodes.find(node=>node.id==='instance:app.history');
+ assert.equal(visible.details.authority,'operational');
+ assert.deepEqual(parse(visible.wires).filter(row=>row.type==='app.history.entry'),entries);
+ assert.equal(parse(visible.wires).filter(row=>row.type==='app.history.stackHead').length,2);
+
+ assert.equal((await run(reload,'draw','ui.history.undo')).ok,true);
+ const moved=parse(reload.memoryJSON().history.sop).find(row=>row.id===entries.at(-1).id);
+ assert.equal(moved.attrs.direction[0],'redo');
+ assert.equal(str(moved.attrs.payload[0]),str(entries.at(-1).attrs.payload[0]));
+ assert.equal(toNativeDrawingState(reload.isession.state['art.draw']).objects.length,1);
+ assert.equal(toNativeDrawingState(source.isession.state['art.draw']).objects.length,2);
+ assert.equal(toNativeDiagramState(reload.isession.state['diagram.sketch']).shapes.length,1);
+ assert.equal((await run(reload,'diagram','ui.history.undo')).ok,true);
+ assert.equal((await run(reload,'draw','ui.history.redo')).ok,true);
+ assert.equal(toNativeDrawingState(reload.isession.state['art.draw']).objects.length,2);
+ assert.equal(toNativeDiagramState(reload.isession.state['diagram.sketch']).shapes.length,0);
+ const retained=reload.memoryJSON();
+ const bad=structuredClone(retained);
+ bad.history.sop=bad.history.sop.replace('view="draw"','view="calendar"');
+ assert.equal(reload.restoreMemory(bad),false);
+ assert.deepEqual(reload.memoryJSON().history,retained.history);
+});

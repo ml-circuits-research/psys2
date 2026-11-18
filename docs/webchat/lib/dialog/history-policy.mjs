@@ -1,7 +1,7 @@
 import {World} from '../vendor/sopworld/sopworld.mjs?v=b7d50d9480';
-import POLICY from '../../worlds/app.project/history-policy-source.mjs?v=b9a7fb7d99';
+import POLICY from '../../worlds/app.project/history-policy-source.mjs?v=4a3ac642e0';
 
-import SCHEMA from '../../worlds/app.project/history-schema-source.mjs?v=d580532276';
+import SCHEMA from '../../worlds/app.project/history-schema-source.mjs?v=ab0c2e3e60';
 
 let policy;
 export function historyPolicy(){

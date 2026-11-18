@@ -1,12 +1,14 @@
+import { captureHistory, recordHistory, restoreHistory } from './history-journal.mjs?v=30f4a14542';
+import {projectReaderHeadAlternative} from './reader-head-alternative.mjs?v=c0c4068d81';
 import {writeReaderSource} from './reader-source.mjs?v=43cafe61fb';
-import {isAuthoredRequest,readAuthoredRequest} from './authored-request-tool.mjs?v=f0f4db610b';
+import {isAuthoredRequest,readAuthoredRequest} from './authored-request-tool.mjs?v=e0f7f15750';
 // Model-first proposal routing. Calibration authority belongs to host configuration,
 // never to a model output, evaluation annotation or grammar proposal.
 import {requestCompositionPolicy}from './request-composition-policy.mjs?v=6783cc1b81';
-import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=a708f3d059';
-import {projectContextAction} from './project-context-action.mjs?v=8b79a2e00f';
-import {projectCreateAction} from './project-create-action.mjs?v=7d3372bdfc';
-import {assessReaderProposal} from './reader-admission.mjs?v=c3cbe94fbd';
+import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=90df3024fa';
+import {projectContextAction} from './project-context-action.mjs?v=fba9421f24';
+import {projectCreateAction} from './project-create-action.mjs?v=55c1645319';
+import {assessReaderProposal} from './reader-admission.mjs?v=68dc6469f1';
 const unavailable=reason=>({candidates:[],coverage:{complete:false,executable:false,graphProposal:false},failures:[{reason}]});
 const noDeclaredAction = () => {
  const text='I could not identify an action to apply. Nothing changed.';
@@ -28,7 +30,8 @@ async function dispatchRequest(session,candidate,text,options,bindings,contextPr
  if(result.trace?.history)return result;
  if(result.statuses?.includes('supported')){session.newEngineLastAction={...session.newEngineLastAction,[area]:candidate};if(contextProjection){result.text+=' '+interpretation.note;result.parts=[{text:result.text,translate:false}];result.trace={...result.trace,interpretation};}}
  const changed=Object.keys(session.isession.state).filter(key=>JSON.stringify(before[key])!==JSON.stringify(session.isession.state[key]));
- if(changed.length){session.newEngineRedo=(session.newEngineRedo??[]).filter(r=>r.area!==area);session.newEngineUndo=[...(session.newEngineUndo??[]).slice(-31),{area,before:Object.fromEntries(changed.map(key=>[key,before[key]])),after:Object.fromEntries(changed.map(key=>[key,structuredClone(session.isession.state[key])])),reading:candidate,alternatives}];}
+ if(changed.length)recordHistory(session,{area,before:Object.fromEntries(changed.map(key=>[key,before[key]])),
+  after:Object.fromEntries(changed.map(key=>[key,structuredClone(session.isession.state[key])])),reading:candidate,alternatives});
  return result;
 }
 
@@ -42,10 +45,28 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
   try{provenance=typeof provider.provenance==='function'?provider.provenance():null;proposal=suppliedProposal??await provider.propose(writeReaderSource(text));}
   catch{proposal=unavailable('model-proposal-failed');}
  }
+ const providerCoverage=proposal?.coverage;
  const providerCandidates=Array.isArray(proposal?.candidates)?structuredClone(proposal.candidates):[];
  const context={area:options.view??session.isession.state['ui.shell']?.activeTab};
  let contextProjection=null,bindings=null,registry=null;
  try{bindings=provider?.bindings?.();registry=provider?.registry?.();contextProjection=await projectContextAction(proposal,session,{bindings,registry,view:context.area});if(contextProjection)proposal=contextProjection.proposal;else{const creation=await projectCreateAction(proposal,session,{bindings,registry,view:context.area});if(creation)proposal=creation;}}catch{}
+ let provenAlternative=null;
+ if(!proposal.coverage?.complete&&bindings&&provenance?.bindingsSha256){
+  try{
+   const {candidate,proof}=projectReaderHeadAlternative(proposal.raw,{bindings,bindingSha256:provenance.bindingsSha256,
+    cutStart:proposal.sourceCut?.spans?.[0]?.[0]})??{};
+   const comparison=candidate&&await compareDeclaredReadings(session,[candidate],{view:context.area,bindings});
+   if(comparison?.plan?.status==='compiled'&&comparison.plan.skipped.length===0&&comparison.plan.id&&comparison.plan.source){
+    const unresolved=proposal.failures;
+    provenAlternative=comparison;
+    proposal={...proposal,candidates:[candidate],coverage:{complete:true,graphProposal:true,executable:false},failures:[],
+     interpretation:{profile:'grounded-head-alternative/1',note:'I used the property reading that matched this editor. The reader also suggested the same property in another editor.',
+      proof,unresolved}};
+    session.engine?.onWorldActivity?.({nodeIds:['component:library','execution:reader-head-policy'],phase:'stage',
+     operation:'app.reader.head',label:'Prove a grounded property reading',wires:proof.input+'\n'+proof.sop+'\n'+comparison.sop});
+   }
+  }catch{/* An unproved alternative leaves the original diagnostics in force. */}
+ }
  const decision=assessReaderProposal({proposal,text,provenance,admission:session.engine?.requestReaderAdmission,area:context.area});
  if(decision.decisionSop){
   try{session.engine?.onWorldActivity?.({nodeIds:['component:request-admission','knowledge:reader-admission-policy','component:library'],phase:'stage',operation:'app.reader.admission',label:'Evaluate reader admission policy',wires:decision.decisionSop});}catch{/* Observation cannot change admission. */}
@@ -53,7 +74,7 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
  const choice=proposal?.interpretation?.decision;
  if(choice)try{session.engine?.onWorldActivity?.({nodeIds:['component:library','execution:creation-policy'],phase:'stage',operation:'std.choice',label:'Compare grounded creation readings',
   text,wires:choice.input+'\n'+choice.sop});}catch{/* Trace subscribers cannot change interpretation. */}
- let candidate=decision.candidate,comparison=null;
+ let candidate=decision.candidate,comparison=provenAlternative;
  const eligible=decision.admitted,reason=decision.reason;
  const interpretations=proposal?.interpretation?.profile==='declared-creation/1'?proposal.candidates:providerCandidates;
  if(eligible && decision.mode==='uncalibrated-best-effort' && !contextProjection && interpretations.length>1 && interpretations.length<=16){
@@ -80,6 +101,11 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
    if(note)notes.push(note);
    if(notes.length){result.text+=' '+notes.join(' ');result.parts=[{text:result.text,translate:false}];result.trace={...result.trace,interpretation:proposal.interpretation};}
   }
+  if(result?.statuses?.includes('supported')&&provenAlternative){
+   result.text+=' '+proposal.interpretation.note;
+   result.parts=[{text:result.text,translate:false}];
+   result.trace={...result.trace,interpretation:proposal.interpretation};
+  }
   if(result&&decision.uncertain&&result.statuses?.includes('supported')){
    const note=result.trace?.uncertainty?.length||result.trace?.interpretation?'':'I used the most likely reading; you can correct it or undo.';
    if(note){result.text+=' '+note;result.parts=[{text:result.text,translate:false}];}
@@ -87,8 +113,8 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
  }
  result??={text:message,parts:[{text:message,translate:false}],statuses:['unsupported'],answers:[],segments:[],state:{},effects:[],newEngine:true,trace:{legacy:false,engine:'new',reason:options.language&&options.language!=='en'?'language':'reading'}};
  return {...result,trace:{...result.trace,...(eligible?{reading:candidate}:{}),...(comparison?{readingComparison:comparison.sop}:{}),readerRouting:{primary:'sop-bert',selected:eligible?'sop-bert':null,reason,
-  admission:{mode:decision.mode??null,uncertain:decision.uncertain??false,alternatives:decision.alternatives??[],scoreDefinition:decision.scoreDefinition,score:decision.score,proposalEligible:decision.eligible,assessment:decision.assessment,decisionSop:decision.decisionSop??null},
-  interpretation:proposal?.interpretation??null,unresolved:proposal?.failures??[],proposalCandidates:providerCandidates,rawReading:proposal?.raw?.requests??null,model:{provenance,coverage:proposal?.coverage??null,candidates:Array.isArray(proposal?.candidates)?proposal.candidates.length:0,eligible:!!eligible}}}};
+  admission:{mode:decision.mode??null,uncertain:!!provenAlternative||(decision.uncertain??false),alternatives:decision.alternatives??[],scoreDefinition:decision.scoreDefinition,score:decision.score,proposalEligible:decision.eligible,assessment:decision.assessment,decisionSop:decision.decisionSop??null},
+  interpretation:proposal?.interpretation??null,unresolved:provenAlternative?proposal.interpretation.unresolved:(proposal?.failures??[]),proposalCandidates:providerCandidates,rawReading:proposal?.raw?.requests??null,model:{provenance,coverage:(provenAlternative?providerCoverage:proposal?.coverage)??null,candidates:provenAlternative?providerCandidates.length:(proposal?.candidates?.length??0),eligible:!!eligible}}}};
 }
 
 /** Apply the declared source-order schedule to actual model cuts, never source words. */
@@ -105,7 +131,7 @@ export async function routeNewEngine(session,text,options={}){
  const policy=requestCompositionPolicy();
  try{session.engine?.onWorldActivity?.({nodeIds:['execution:composition-policy'],phase:'stage',label:'Read request scheduling policy',operation:'policy.request-composition',policy:structuredClone(policy)});}catch{/* Observation cannot change request scheduling. */}
  if(!policy.enabled||typeof provider?.proposeRequests!=='function')return routeReaderProposal(session,text,options);
- const before=structuredClone(session.isession.state),undoBefore=session.newEngineUndo??[],steps=[];
+ const before=structuredClone(session.isession.state),journalBefore=captureHistory(session,false),steps=[];
  let sourceSop;
  try{sourceSop=writeReaderSource(text);}catch{return routeReaderProposal(session,text,options);}
  for await(const proposal of provider.proposeRequests(sourceSop)){
@@ -116,7 +142,13 @@ export async function routeNewEngine(session,text,options={}){
  if(!steps.length)return routeReaderProposal(session,text,options);
  const area=options.view??session.isession.state['ui.shell']?.activeTab,changed=Object.keys(session.isession.state).filter(key=>JSON.stringify(before[key])!==JSON.stringify(session.isession.state[key]));
  const grouped=changed.length>0&&!steps.some(step=>step.reply.trace?.history&&step.reply.statuses.includes('supported'));
- if(grouped)session.newEngineUndo=[...undoBefore.slice(-31),{area,before:Object.fromEntries(changed.map(key=>[key,before[key]])),after:Object.fromEntries(changed.map(key=>[key,structuredClone(session.isession.state[key])])),reading:steps.at(-1).reply.trace?.reading,readings:steps.map(step=>step.reply.trace?.reading).filter(Boolean),alternatives:steps.flatMap(step=>step.reply.trace?.readerRouting?.admission?.alternatives??[])}];
+ if(grouped){
+  if(!restoreHistory(session,journalBefore,{},false))throw Error('invalid-group-history-checkpoint');
+  recordHistory(session,{area,before:Object.fromEntries(changed.map(key=>[key,before[key]])),
+   after:Object.fromEntries(changed.map(key=>[key,structuredClone(session.isession.state[key])])),reading:steps.at(-1).reply.trace?.reading,
+   readings:steps.map(step=>step.reply.trace?.reading).filter(Boolean),
+   alternatives:steps.flatMap(step=>step.reply.trace?.readerRouting?.admission?.alternatives??[])});
+ }
  const supported=steps.filter(step=>step.reply.statuses?.includes('supported'));
  const mixed=supported.length>0&&supported.length<steps.length;
  const scalars=Array.from(text);

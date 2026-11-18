@@ -1,0 +1,15 @@
+@route.module core.module name=app.request.route imports=std.request exports=app.request.route.selection exports=app.request.route.spatial exports=app.request.route.comparison exports=app.request.route.alternative
+@route.selection core.type of=app.request.route.selection closed=true
+@route.selection.request core.slot of=app.request.route.selection key=request type=std.request present=true
+@route.selection.method core.slot of=app.request.route.selection key=method kind=atom present=true
+@route.selection.reason core.slot of=app.request.route.selection key=reason kind=atom
+@route.spatial.type core.type of=app.request.route.spatial closed=true
+@route.spatial.request core.slot of=app.request.route.spatial key=request type=std.request present=true
+@route.comparison.type core.type of=app.request.route.comparison closed=true
+@route.comparison.reason core.slot of=app.request.route.comparison key=reason kind=atom present=true
+@route.comparison.selected core.slot of=app.request.route.comparison key=selected kind=integer min=0
+@route.comparison.alternative core.slot of=app.request.route.comparison key=alternative type=app.request.route.alternative many=true present=true
+@route.alternative.type core.type of=app.request.route.alternative closed=true
+@route.alternative.index core.slot of=app.request.route.alternative key=index kind=integer min=0 present=true
+@route.alternative.method core.slot of=app.request.route.alternative key=method kind=atom
+@route.alternative.assessed core.slot of=app.request.route.alternative key=assessed kind=boolean present=true

@@ -1,6 +1,6 @@
 // Read-only architecture projection of the runtime registry. No inferred execution links.
 import {parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=b7d50d9480';
-import {inspectReaderAdmissionPolicy} from './reader-policy.mjs?v=7385cb24d5';
+import {inspectReaderAdmissionPolicy} from './reader-policy.mjs?v=efcc019585';
 import {describeWorldsNodes} from './worlds-node-metadata.mjs?v=11b6d9d2f3';
 import {CATALOG_WORLD_PURPOSES} from './catalog-world-purpose.mjs?v=2eb2f3f744';
 
@@ -86,6 +86,11 @@ export function inspectWorldsRuntime({index={},bundle={worlds:{}},loaded=[],inst
  nodes.push({id:'knowledge:reader-admission-policy',label:'Reader admission policy',kind:'knowledge',implementation:'Operational SOP Lang World',
   status:admissionPolicy.loaded?'loaded':'available, not loaded',description:'Declares action classes, calibration limits and when reversible best effort is allowed.',wires:admissionPolicy.wires,
   details:{source:admissionPolicy.source,loaded:admissionPolicy.loaded}});
+ nodes.push({id:'schema:reader-admission',label:'Reader admission schema',kind:'schema',implementation:'SOP Lang schema World',
+  description:'Defines the measured reader evidence, action classes and decisions used to admit a proposed request.',
+  wires:admissionPolicy.schema,schemaView:inspectSchemaSource(admissionPolicy.schema),
+  details:{source:'worlds/app.project/reader-admission-schema.sop',loaded:admissionPolicy.loaded}});
+ link('knowledge:reader-admission-policy','schema:reader-admission','imports its evidence and decision types');
  link('component:request-admission','knowledge:reader-admission-policy','asks for an admission decision');
  if(libraryInfo)link('knowledge:reader-admission-policy','component:library','runs declared rules in');
  link('component:reader','component:request-admission','supplies candidate graphs');

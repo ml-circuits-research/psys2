@@ -3,7 +3,7 @@ import {World,parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=b7d50
 import SOURCE from './new-engine-source.mjs?v=97321241ce';
 import {readPlacementProfile,rememberPlacement} from '../../worlds/app.project/spatial-profile.mjs?v=9c5b466409';
 import {placementInterfaceSop} from '../../worlds/native-spatial-interface.mjs?v=975e4fa8db';
-import {NATIVE_AREAS,createAreaHost} from './app-reader-context.mjs?v=be2be0e135';
+import {NATIVE_AREAS,createAreaHost} from './app-reader-context.mjs?v=f4c8d09581';
 import {identityRegistryFor,instanceIdFor} from './instance-identity.mjs?v=024ef1ca83';
 import {nativeKindCandidates} from './native-binding-candidates.mjs?v=5d5aa4bc25';
 import {invokeObservedNativeTool} from './native-tool-activity.mjs?v=23bd5b418a';
@@ -29,13 +29,6 @@ function baseWorld() {
  world.load(SOURCE.spatial.policy);
  placementWorld=world;
  return world;
-}
-
-/** Routing recognises an owned relation graph. Relation meaning and all choices belong to the compiler. */
-export function requestsSpatialPlacement(candidate) {
- if(typeof candidate?.wires!=='string'||candidate.wires.length>65536)return false;
- try{return parse(candidate.wires).some(wire=>wire.type==='std.request.constraint'&&read(wire,'operator')==='relation');}
- catch{return false;}
 }
 
 const activity=(session,area,details)=>{

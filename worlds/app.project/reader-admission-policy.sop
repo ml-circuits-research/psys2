@@ -1,33 +1,4 @@
-# Review29. The browser uses the same decision as the C1 measurement tools.
-@reader.policy.module core.module name=app.reader version=1 exports=app.reader.profile exports=app.reader.act exports=app.reader.evidence exports=app.reader.decision
-
-@reader.profile.type core.type of=app.reader.profile closed=true
-@reader.profile.class core.slot of=app.reader.profile key=class kind=atom id=true present=true
-@reader.profile.default core.slot of=app.reader.profile key=default kind=boolean present=true
-@reader.profile.error core.slot of=app.reader.profile key=max.error.rate kind=number min=0 max=1 present=true
-@reader.profile.bootstrap core.slot of=app.reader.profile key=reversible.best.effort kind=boolean present=true
-@reader.act.type core.type of=app.reader.act closed=true
-@reader.act.name core.slot of=app.reader.act key=act kind=atom id=true present=true
-@reader.act.class core.slot of=app.reader.act key=class kind=atom present=true
-@reader.evidence.type core.type of=app.reader.evidence closed=true
-@reader.evidence.act core.slot of=app.reader.evidence key=act kind=atom present=true
-@reader.evidence.configured core.slot of=app.reader.evidence key=calibration.configured kind=boolean present=true
-@reader.evidence.admitted core.slot of=app.reader.evidence key=calibration.admitted kind=boolean present=true
-@reader.evidence.error core.slot of=app.reader.evidence key=calibration.error.limit kind=number min=0 max=1
-@reader.evidence.score core.slot of=app.reader.evidence key=score.available kind=boolean present=true
-@reader.evidence.model core.slot of=app.reader.evidence key=model.identity.present kind=boolean present=true
-@reader.evidence.uncertain core.slot of=app.reader.evidence key=uncertain kind=boolean present=true
-@reader.class.type core.type of=app.reader.classification closed=true
-@reader.class.name core.slot of=app.reader.classification key=class kind=atom present=true
-@reader.approval.type core.type of=app.reader.approval closed=true
-@reader.approval.mode core.slot of=app.reader.approval key=mode kind=atom present=true
-@reader.approval.reason core.slot of=app.reader.approval key=reason kind=atom present=true
-@reader.approval.uncertain core.slot of=app.reader.approval key=uncertain kind=boolean present=true
-@reader.decision.type core.type of=app.reader.decision closed=true
-@reader.decision.admitted core.slot of=app.reader.decision key=admitted kind=boolean present=true
-@reader.decision.mode core.slot of=app.reader.decision key=mode kind=atom present=true
-@reader.decision.reason core.slot of=app.reader.decision key=reason kind=atom present=true
-@reader.decision.uncertain core.slot of=app.reader.decision key=uncertain kind=boolean present=true
+@admission.types core.use world=app.reader prefix=false
 
 @reader.ordinary app.reader.profile class=ordinary default=true max.error.rate=0.05 reversible.best.effort=true
 @reader.destructive app.reader.profile class=destructive default=false max.error.rate=0.01 reversible.best.effort=false

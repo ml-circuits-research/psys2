@@ -1,0 +1,6 @@
+@head.schema core.use world=app.reader.head prefix=false
+@head.report app.reader.head.evidence role=reported area=?foreign concept=?concept declaration=?declaration world=?world snapshot=?snapshot unique=0
+@head.local app.reader.head.evidence role=grounded area=?current concept=?concept declaration=?declaration world=?world snapshot=?snapshot
+@head.foreign core.check fn=neq args=?foreign args=?current
+@head.out app.reader.head.alternative reported=$head.report grounded=$head.local
+@head.equivalence core.rule when=$head.report when=$head.local if=$head.foreign then=$head.out

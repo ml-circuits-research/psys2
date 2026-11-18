@@ -93,7 +93,7 @@ export async function createKeyReaderInference({manifest,tokenizer,encoder,heads
   const raw={source:{text:typeof text==='string'?text:'',unit:'unicode-scalar'},request:{span:typeof text==='string'?text:'',target:{},constraints:[]},ranges:[],coverage:{complete:false,truncated:false,support:support(config)},unresolved:[],model};
   const auxiliary={queryCount:0,selectedLogits:[],minimumProbability:null,valueProofs:[]};
   const probability=value=>{auxiliary.minimumProbability=Math.min(auxiliary.minimumProbability??1,value);};let offsetProvenance=null;
-  const issue=(reason,key=null)=>raw.unresolved.push({reason,...(key?{key}:{})});
+  const issue=(reason,key=null,head)=>raw.unresolved.push({reason,...(key?{key}:{}),...(head?{head}:{})});
   try{
    if(!scalarString(text)||!text||Array.from(text).length>maxText||typeof area!=='string'||!area)throw Error('invalid-source-input');
    const chars=Array.from(text),fitted=await fitKeyReaderContext(tokenizer,text,area,copyHostData(context,{maxBytes:maxContextBytes}),config.maxLength),contextJSON=fitted.json,pair={text_pair:[contextJSON]};auxiliary.contextSelection=fitted.summary;
@@ -123,7 +123,13 @@ export async function createKeyReaderInference({manifest,tokenizer,encoder,heads
      }
      if(path==='act'){if(spans.length===1){const range=spans[0].range;raw.request.trigger=chars.slice(...range).join('');raw.ranges.push({path:['trigger'],range:[...range]});}else issue('missing-or-ambiguous-act-anchor',key);}
     }else if(spec.role==='domain'){
-     if(present!==null&&present!==Boolean(spans.length))issue('presence-span-inconsistent',key);if(spec.area!==area){if(present||spans.length)issue('cross-area-key-unresolved',key);continue;}
+     if(spec.area!==area){
+      const head={area:spec.area,property:spec.type+'.'+spec.key,present,ranges:spans.map(span=>[...span.range])};
+      if(present!==null&&present!==Boolean(spans.length))issue('presence-span-inconsistent',key,head);
+      if(present||spans.length)issue('cross-area-key-unresolved',key,head);
+      continue;
+     }
+     if(present!==null&&present!==Boolean(spans.length))issue('presence-span-inconsistent',key);
      for(const span of spans){tick();const query=queryMap.get(key+':'+span.tokens.join(':')),value=chars.slice(...span.range).join(''),condition={key:spec.type+'.'+spec.key,value_span:value},index=String(raw.request.constraints.length);
       if(bankMap.has(key)){
        const layout=bankMap.get(key),values=logits.slice(query*width+layout.start,query*width+layout.end),proof=canonicalLiteralProof(config.banks[key],value,values,tick);

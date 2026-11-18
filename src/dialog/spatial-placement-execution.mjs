@@ -31,13 +31,6 @@ function baseWorld() {
  return world;
 }
 
-/** Routing recognises an owned relation graph. Relation meaning and all choices belong to the compiler. */
-export function requestsSpatialPlacement(candidate) {
- if(typeof candidate?.wires!=='string'||candidate.wires.length>65536)return false;
- try{return parse(candidate.wires).some(wire=>wire.type==='std.request.constraint'&&read(wire,'operator')==='relation');}
- catch{return false;}
-}
-
 const activity=(session,area,details)=>{
  try{session.engine?.onWorldActivity?.({nodeIds:['interpreter:'+area.world,'instance:'+area.world,'knowledge-world:k.spatial2d','execution:placement-geometry','execution:placement-policy',...(area.stateWorld?[]:['native:'+area.world])],world:area.world,operation:'std.placement',...details});}
  catch{/* Inspection does not affect execution. */}

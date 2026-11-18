@@ -168,3 +168,6 @@ Checks: npm test passed 617, three skips. Chromium verified exact Unicode ingres
 
 2026-11-18: SOPWorlds 0.217 projects rule calls through the same tool input boundary. Grounded creation and reference circuits and native constructor joins now follow authored SOP with separately inspectable schemas. Removed the unused JavaScript property selector and its browser asset.
 Checks: npm test passed 618 with three skips. Chromium exercised seven creation/Undo pairs, contextual retargeting, natural and manual history, and the actual property compiler and tool after removal of the old selector.
+
+2026-11-18: Resolve competing reader heads through declared provenance and source coverage, route queries using authored interpreter applicability, and hold journal entries and stack heads in an operational SOP instance. Split the admission schema and policy.
+Checks: npm test passed 624 tests, three skips. Chromium used the frozen reader to recolour only the red house, verified the exact tool call and Undo, and restarted the worker with the same three journal entry IDs and two editor heads.

@@ -1,9 +1,9 @@
-import {projectJournalAction} from './project-journal-action.mjs?v=4b8680a5f0';
+import {projectJournalAction} from './project-journal-action.mjs?v=493bf2da6d';
 import {combineModelScores} from './model-selection-score.mjs?v=ac3ac10191';
 // Verify artifact bytes, then assemble actual injected neural sessions. No admission.
 import {copyHostData} from '../../worlds/native-tool-host.mjs?v=cb157b31d6';
 import {createCutterInference} from './cutter-inference.mjs?v=19eb7a3625';
-import {createKeyReaderInference} from './key-reader-inference.mjs?v=46a845240a';
+import {createKeyReaderInference} from './key-reader-inference.mjs?v=7b51e4b444';
 import {createBertSourceOffsetAuthority} from './bert-source-offsets.mjs?v=9b7b99f458';
 import {createKeyReaderPipeline} from './key-reader-pipeline.mjs?v=f6bc5d892b';
 

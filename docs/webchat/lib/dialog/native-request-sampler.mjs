@@ -1,9 +1,10 @@
+import { captureHistory, restoreHistory } from './history-journal.mjs?v=30f4a14542';
 // Native capability/state adapter for the existing std.sample and language-world realiser.
 import * as lib from '../vendor/sopworld/sopworld.mjs?v=b7d50d9480';
 import {createSampler} from './sampler.mjs?v=5e276e0acd';
 import {nativeKindCandidates} from './native-binding-candidates.mjs?v=5d5aa4bc25';
-import {declaredPropertyValues} from './declared-execution.mjs?v=a708f3d059';
-import {routeNewEngine} from './reader-routing.mjs?v=5960a63639';
+import {declaredPropertyValues} from './declared-execution.mjs?v=90df3024fa';
+import {routeNewEngine} from './reader-routing.mjs?v=63856dac6e';
 const word = x => typeof x==='string' && /^[a-z]+$/.test(x);
 
 export function samplingSchema({area,operations,observation,bindings}) {
@@ -43,7 +44,9 @@ export function createNativeRequestSampler() {
   for(const proposal of proposals) {
    if(probes++>=maxProbes||items.length>=count)break;
    const fork={engine:session.engine,isession:{state:structuredClone(session.isession.state)},
-    newEngineUndo:structuredClone(session.newEngineUndo??[]),newEngineFocus:structuredClone(session.newEngineFocus??{}),newEngineLastAction:structuredClone(session.newEngineLastAction??{})};
+    newEngineFocus:structuredClone(session.newEngineFocus??{}),newEngineLastAction:structuredClone(session.newEngineLastAction??{})};
+   if(session.historyJournal)restoreHistory(fork,captureHistory(session));
+   else if(session.newEngineUndo?.length||session.newEngineRedo?.length)restoreHistory(fork,undefined,session);
    let result;
    try {result=await routeNewEngine(fork,proposal.text,{language:'en',view});}catch{continue;}
    // Effects must match the sampled act and the requested kind/observed target.

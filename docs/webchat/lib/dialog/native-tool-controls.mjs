@@ -1,8 +1,9 @@
-import{prepareNativeControlHost}from'./native-control-preparation.mjs?v=3b89a35a22';
-import{runHistoryControl}from'./history-execution.mjs?v=eac8e50b84';
+import { recordHistory } from './history-journal.mjs?v=30f4a14542';
+import{prepareNativeControlHost}from'./native-control-preparation.mjs?v=6c7c1901fe';
+import{runHistoryControl}from'./history-execution.mjs?v=d5c9d08711';
 import{invokeObservedNativeTool}from'./native-tool-activity.mjs?v=23bd5b418a';
 // Typed UI gestures use the same declared native tools and undo history as model requests.
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=be2be0e135';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=f4c8d09581';
 import {describeNativeControl,verifyNativeControlEffect} from './native-control-intent.mjs?v=38f2efeed0';
 import {readNativeIntent} from './native-intent-reader.mjs?v=0a8d6b5c05';
 import {observePlacementCorrection,prunePlacementLinks} from '../../worlds/app.project/spatial-profile.mjs?v=9c5b466409';
@@ -33,9 +34,7 @@ export async function invokeNativeControl(session,{view,operation,args={}}={},de
  if(!ok&&changed){session.isession.state[area.world]=before;throw Error('native-refusal-mutated-state');}
  let historyEntry;
  if(changed&&!['ask','pick'].includes(declaration.act)){
-  session.newEngineRedo=(session.newEngineRedo??[]).filter(r=>r.area!==view);
   historyEntry={area:view,before:{[area.world]:before},after:{[area.world]:structuredClone(state)},operation};
-  session.newEngineUndo=[...(session.newEngineUndo??[]).slice(-31),historyEntry];
   const object=host.observe().objects.find(o=>!observation.objects.some(b=>b.id===o.id));
   if(object)session.newEngineFocus={...session.newEngineFocus,[view]:object.id};
  }
@@ -48,6 +47,7 @@ export async function invokeNativeControl(session,{view,operation,args={}}={},de
   }
   prunePlacementLinks(session,spatialAfter);
  }
+ if(historyEntry)recordHistory(session,historyEntry);
  const intentRecord={format:'psys2.ui-training-pair/1',id:globalThis.crypto.randomUUID(),at:new Date().toISOString(),view,world:area.world,text:intent.text,wires:intent.wires,intent,tool:interpreted,before:observation,after,verification,outcome:receipt.status};
  return {ok,changed,receipt,intentRecord,message:ok?(changed?'Saved.':'Already up to date.'):(receipt.reason==='calendar-policy-denied'||JSON.stringify(receipt).includes('calendar-policy-denied')?'This time overlaps another booking for that calendar, participant or room.':(JSON.stringify(receipt).includes('missing_resource')?'Remove or reassign this resource’s events first.':`Could not save: ${receipt.reason??receipt.code??'the tool refused this change'}.`))};
 }

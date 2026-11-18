@@ -61,3 +61,18 @@ the same noun appears elsewhere. Kind-role evidence coextensive with a bound
 target noun is consumed once. Independently anchored requirements retain their
 own constraints or appear in the execution's unapplied details. Undo records
 the single committed circuit.
+
+The interpreter routing policy admits the actual request graph into an isolated
+World. A request selects history when the history compiler declares its act.
+A relation constraint selects spatial compilation when it belongs to the
+request and identifies a distinct subject and anchor. An ordinary request
+selects the declared capability compiler. A failed placement keeps its
+original diagnostic and does not reach another interpreter. Worlds records the
+fired rule, its evidence and the selected interpreter separately from the
+compiler's result.
+
+Reader alternatives with a shared comparison implementation compile against
+the same live snapshot. When an interpretation uses a different interpreter,
+the comparison retains that interpretation and records the missing common
+comparison explicitly. A compatible capability alternative can still supply
+a compiled plan. Comparing proposals never invokes an editor tool.

@@ -8,6 +8,9 @@ test('architecture inspector exposes exact held files, actual state structures a
  assert.ok(!result.nodes.some(n=>n.id.startsWith('cache:')));assert.equal(byId.get('component:reader').details.cache.hits,7);assert.match(byId.get('component:reader').help.purpose,/candidate request graphs/);assert.equal(byId.get('instance:novel').role,'Observed World instance');
  const readerPolicy=byId.get('knowledge:reader-admission-policy');
  assert.equal(readerPolicy.details.source,'worlds/app.project/reader-admission-policy.sop');
+ assert.doesNotMatch(readerPolicy.wires,/ core\.(type|slot) /);
+ assert.match(byId.get('schema:reader-admission').wires,/@reader\.evidence\.type core\.type/);
+ assert.ok(result.edges.some(e=>e.from===readerPolicy.id&&e.to==='schema:reader-admission'));
  assert.match(readerPolicy.wires,/@reader.permit.calibrated core.rule/);
  assert.ok(result.edges.some(e=>e.from==='component:request-admission'&&e.to===readerPolicy.id));
  assert.ok(!byId.has('component:formalizer'));assert.equal(byId.get('component:request-admission').details.entryPoint,'assessReaderProposal');

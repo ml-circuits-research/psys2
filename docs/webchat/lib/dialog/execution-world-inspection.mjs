@@ -2,14 +2,17 @@
 import{serialize,str,version,build}from'../vendor/sopworld/sopworld.mjs?v=b7d50d9480';
 import SOURCE from'./new-engine-source.mjs?v=97321241ce';
 import{CATALOG_PIN}from'../knowledge/catalog-pin.mjs?v=d1ff29de82';
-import{inspectHistoryPolicy}from'./history-policy.mjs?v=86df5db75d';
+import{inspectRequestRoutingPolicy}from'./request-routing-policy.mjs?v=fa7c52f7e7';
+import{inspectHistoryPolicy}from'./history-policy.mjs?v=4fdf583b0a';
+import{inspectHistoryJournal}from'./history-journal.mjs?v=30f4a14542';
 import{inspectExecutionPolicyWorld}from'./execution-policy.mjs?v=9ad12c3289';
 import{inspectCapabilityPolicy}from'./capability-plan-adapter.mjs?v=dad67b1272';
-import{inspectCreationPolicy}from'./project-create-action.mjs?v=7d3372bdfc';
+import{inspectCreationPolicy}from'./project-create-action.mjs?v=55c1645319';
 import{inspectConstructorPolicy}from'./native-binding-candidates.mjs?v=5d5aa4bc25';
 import{inspectGroundedProjection}from'./grounded-projection.mjs?v=a4ff89b313';
+import{inspectReaderHeadPolicy}from'./reader-head-alternative.mjs?v=c0c4068d81';
 import{inspectReferencePolicy}from'./reference-policy.mjs?v=689aa905ba';
-import{inspectSchemaSource}from'./worlds-inspection.mjs?v=9e2e68c262';
+import{inspectSchemaSource}from'./worlds-inspection.mjs?v=8ed88f47ce';
 import{inspectRequestCompositionPolicy}from'./request-composition-policy.mjs?v=6783cc1b81';
 const clone=value=>structuredClone(value);
 const loggedWires=snapshot=>(snapshot?.log??[]).flatMap(entry=>entry.wires??[]);
@@ -23,10 +26,20 @@ function snapshotText(snapshot){return (snapshot?.log??[]).map((entry,index)=>'#
 /** Projects actual cache accessors and retained journal JSON; performs no reading or reasoning. */
 export async function inspectExecutionWorlds(session){
  const [{inspectDeclaredExecutionSourceWorld},{inspectSpatialPlacementWorld}]=await Promise.all([
-  import('./declared-execution.mjs?v=a708f3d059'),import('./spatial-placement-execution.mjs?v=b58a33c6b8'),
+  import('./declared-execution.mjs?v=90df3024fa'),import('./spatial-placement-execution.mjs?v=d8cdb90319'),
  ]);
  const journal=session?.newEngineJournal??[],moduleNames=[...new Set(journal.flatMap(record=>importsOf(record.evidence)))],sources=[['declared-execution','src/dialog/declared-execution.mjs',inspectDeclaredExecutionSourceWorld({moduleNames})]],nodes=[],edges=[];
  const link=(from,to,label)=>edges.push({from,to,label});
+ const routing=inspectRequestRoutingPolicy();
+ nodes.push({id:'execution:routing-policy',label:'Request interpreter routing',kind:'knowledge',implementation:'Operational SOP Lang World',
+  description:'Selects one interpreter from admitted request facts and the history compiler’s declared methods.',
+  wires:routing.policy,details:{source:'worlds/app.project/request-routing-policy.sop',loaded:routing.loaded}});
+ nodes.push({id:'execution:routing-schema',label:'app.request.route',kind:'schema',implementation:'SOP Lang schema module',
+  description:'Defines a placement witness and the interpreter selected for an admitted request.',
+  wires:routing.schema,details:{source:'worlds/app.project/request-routing-schema.sop',loaded:routing.loaded}});
+ link('execution:module:declared-execution','execution:routing-policy','selects an interpreter using');
+ link('execution:routing-policy','execution:routing-schema','imports schema');
+ link('execution:routing-policy','execution:history-policy','reads declared history methods');
  const history=inspectHistoryPolicy();
  nodes.push({id:'execution:history-policy',label:'History circuit policy',kind:'knowledge',implementation:'Operational SOP Lang World',
   description:'Compiles an admitted history request with the latest observed entry in the active editor.',
@@ -38,12 +51,14 @@ export async function inspectExecutionWorlds(session){
  nodes.push({id:'interpreter:app.history',label:'History interpreter',kind:'interpreter',implementation:'JavaScript journal primitive',
   description:'Checks the compiled head and current content, then restores and verifies the saved editor state.',
   details:{module:'src/dialog/history-tool.mjs'}});
- nodes.push({id:'instance:app.history',label:'Session Undo and Redo',kind:'runtime',implementation:'Live session journal',
-  description:'Authoritative groups of previous and restored editor changes.',
-  details:{undo:session?.newEngineUndo?.length??0,redo:session?.newEngineRedo?.length??0}});
+ const journalInstance=inspectHistoryJournal(session);
+ if(journalInstance)nodes.push({id:'instance:app.history',label:'Session Undo and Redo',kind:'instance',implementation:'Authoritative SOP Lang World',
+  description:'Live journal identities, ordered entries and derived heads. Entry payload references link to editor snapshots owned by the journal interpreter.',
+  wires:journalInstance.wires,details:{identity:journalInstance.identity,authority:'operational',undo:journalInstance.undo,redo:journalInstance.redo,
+   payloadStore:'src/dialog/history-journal.mjs'}});
  link('execution:module:declared-execution','execution:history-policy','compiles history requests');
  link('execution:history-policy','interpreter:app.history','supplies a guarded SOP call');
- link('interpreter:app.history','instance:app.history','restores and verifies an entry');
+ if(journalInstance)link('interpreter:app.history','instance:app.history','restores and verifies an entry');
  const grounded=inspectGroundedProjection();
  nodes.push({id:'execution:grounded-projection',label:'Grounded request projection',kind:'knowledge',implementation:'Operational SOP Lang World',
   description:'Derives typed request wires from chosen contextual and creation evidence, retaining rule support and source spans.',
@@ -55,6 +70,15 @@ export async function inspectExecutionWorlds(session){
  link('execution:reference-policy','execution:grounded-projection','supplies a grounded reference');
  link('execution:creation-policy','execution:grounded-projection','supplies a grounded constructor');
  link('execution:grounded-projection','execution:module:declared-execution','emits an owned request graph');
+ const headPolicy=inspectReaderHeadPolicy();
+ nodes.push({id:'execution:reader-head-policy',label:'Competing property heads',kind:'knowledge',implementation:'Operational SOP Lang World',
+  description:'Checks whether an unresolved head has a source-grounded equivalent for the active editor.',
+  wires:headPolicy.source,details:{source:'worlds/app.project/reader-head-policy.sop',loaded:headPolicy.loaded}});
+ nodes.push({id:'execution:reader-head-schema',label:'app.reader.head',kind:'schema',implementation:'SOP Lang schema module',
+  description:'Declares source-grounded property evidence and equivalent competing heads.',
+  wires:headPolicy.schema,schemaView:inspectSchemaSource(headPolicy.schema),details:{source:'worlds/app.project/reader-head-schema.sop',loaded:headPolicy.loaded}});
+ link('execution:reader-head-policy','execution:reader-head-schema','imports schema');
+ link('execution:reader-head-policy','execution:module:declared-execution','requires a complete live capability plan');
  const reference=inspectReferencePolicy();
  nodes.push({id:'execution:reference-policy',label:'Context references',kind:'knowledge',implementation:'Operational SOP Lang World',
   description:'Matches contextual references to observed objects. Its criteria prefer the focused object for a current reference and exclude it when retargeting the previous change.',

@@ -12,9 +12,6 @@ export function readAuthoredRequest(text) {
     const roots=wires.filter(w=>w.type==='std.request');
     if (roots.length!==1||wires.length>256) return {reason:'request-root'};
     if (wires.some(w=>w.pattern)) return {reason:'request-pattern'};
-    const act=roots[0].attrs.act?.[0];
-    if (['undo','redo'].includes(act) && (roots[0].attrs.mood?.[0]!=='do' ||
-      wires.some(w=>!['std.request','std.request.source'].includes(w.type)))) return {reason:'history-scope'};
     const nodes=wires.map(({id,type,attrs})=>({id,type,attrs:Object.fromEntries(
       Object.entries(attrs).map(([key,values])=>[key,values.map(token=>{
         const {kind,v}=readValue(token);

@@ -1,5 +1,11 @@
 # Current status
 
+## 2026-11-18 — Property readings, request routing and journal state
+
+The frozen reader recognizes both colour roles in “Make the red house purple.” A competing head reported the same catalog property in Diagram with no additional source span. The authored reader-head policy proves their shared declaration and provenance, and the live compiler verifies a complete interpretation before dispatch. The original incomplete proposal remains in the trace. Chromium verified the older red house changed, the newer blue house stayed blue, and Undo restored the colours.
+
+Request routing now uses an authored policy before choosing a concrete interpreter. Worlds exposes the route and its supporting rule. Undo and Redo membership, ordering and head identity are authoritative SOP journal facts; editor payloads live in the journal tool. A browser worker restart preserved the identities and heads of three entries across Drawing and Diagram. The reader admission schema and its decision policy now appear separately in Worlds.
+
 ## 2026-11-18 — Grounded request circuits and eligible tools
 
 Creation and contextual edits now derive request, source, target and result wires from grounded evidence using authored rules. Other rules join actual tool metadata to eligible constructors, including catalog tools. Worlds shows both knowledge policies and their schemas. SOPWorlds 0.217 projects the ordered calls of a completed rule circuit into tool input and validates their declared call schema. The history interpreter consumes this projection. Reader-head interpretation, correction coordination and some observation adapters remain application code.

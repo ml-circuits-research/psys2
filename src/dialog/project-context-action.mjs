@@ -1,3 +1,4 @@
+import { historyHeads } from './history-journal.mjs';
 import {nativeKindCandidates} from './native-binding-candidates.mjs';
 // Bind model-declared context references to actual native objects; never inspect source words.
 import {quote,str} from '../vendor/sopworld/sopworld.mjs';
@@ -19,9 +20,10 @@ export async function projectContextAction(proposal,session,{bindings,registry,v
  try{session.engine?.onWorldActivity?.({nodeIds:['component:library','execution:reference-policy','instance:'+area.world],
   phase:'stage',label:'Rank contextual references',operation:'std.choice',sop:choice.sop,input:choice.input,
   candidates:options.map(({object,canonical})=>({id:object.id,canonical}))});}catch{/* Trace subscribers cannot change interpretation. */}
- const previous=session.newEngineLastAction?.[view],history=session.newEngineUndo??[],last=history.findLast(e=>e.area===view);
+ const previous=session.newEngineLastAction?.[view];
  let inherited=null,rewind=null;
  if(other){
+  const last=historyHeads(session,view).find(row=>row.direction==='undo')?.entry;
   if(!previous||!last||!Object.keys(last.after).every(key=>JSON.stringify(session.isession.state[key])===JSON.stringify(last.after[key])))return null;
   const prior=flatRequestProjection(previous);if(!prior.ok||prior.request.act!==r.act||prior.targets.length!==1||!prior.results.length)return null;
   inherited=prior.results;rewind=last.before;
