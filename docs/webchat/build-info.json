@@ -1,5 +1,5 @@
 {
-  "version": "67ef748374",
+  "version": "582454509e",
   "worlds": [
     "core",
     "ui.shell",
@@ -376,11 +376,11 @@
     "worlds/words/ed.json": "6b969840b04e8c56",
     "worlds/words.bloom.json": "0710f3899a6043f6"
   },
-  "builtAt": "2026-11-18T20:03:55.068Z",
-  "commit": "1b8d1536-dirty",
+  "builtAt": "2026-11-18T20:04:47.151Z",
+  "commit": "58066bec-dirty",
   "catalog": "9e99bc5246ec2ac0b576b7aebccd32bd628ea503",
   "assets": {
-    "app.mjs": "dc32d93489",
+    "app.mjs": "8b566c1830",
     "coverage-grid.json": "dc56813858",
     "favicon.svg": "89f8b9f010",
     "lib/astra/focus.mjs": "98c1ffbfce",
@@ -734,7 +734,7 @@
     "models/sop-bert/b1e2e97ff6ad418435215fceb9d7dc16f653a7fd20758b59beb7b789f6619da3/tokenizer_config.json": "a025160ef0",
     "models/sop-bert/b1e2e97ff6ad418435215fceb9d7dc16f653a7fd20758b59beb7b789f6619da3/tokenizer.json": "ce64fce797",
     "models/sop-bert/b1e2e97ff6ad418435215fceb9d7dc16f653a7fd20758b59beb7b789f6619da3/vocab.txt": "07eced375c",
-    "models/sop-bert/deployment.json": "974b25e499",
+    "models/sop-bert/deployment.json": "1c234363b8",
     "models-mt/ro/fromEn/lex.50.50.enro.s2t.bin.gz": "a64099f219",
     "models-mt/ro/fromEn/model.enro.intgemm.alphas.bin.gz": "3596ee3bc1",
     "models-mt/ro/fromEn/vocab.enro.spm.gz": "61a75f040f",
@@ -749,8 +749,8 @@
     "ui/debug.mjs": "496e398ab3",
     "ui/dispatcher-host.mjs": "b7c79577fd",
     "ui/editor.mjs": "4e4dbd381f",
-    "ui/engine-client.mjs": "7105330d66",
-    "ui/engine-worker.mjs": "8e24202c98",
+    "ui/engine-client.mjs": "3d3ec85cc1",
+    "ui/engine-worker.mjs": "a86638fb12",
     "ui/failures.mjs": "c3bee734c9",
     "ui/feedback.mjs": "ddd1432c05",
     "ui/geometry-values.mjs": "e7f7481586",

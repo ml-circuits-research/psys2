@@ -50,7 +50,7 @@ Microphone (single shot), push-to-talk (hold the space bar when no input has foc
     worlds: ['core', 'kids.common', 'kids.animals'], // optional allow-list (include what the worlds import)
     language: 'en', onboarding: false, persist: false,
   });
-  psys2.send('hello');                         // also: psys2.session, psys2.engine, psys2.applyState(), psys2.destroy()
+  psys2.send('hello');                         // also: psys2.session, psys2.engine, await psys2.refreshState(), psys2.destroy()
 </script>
 ```
 Options: `baseUrl` (where `lib/` and `worlds/` live), `worlds`, `tabs`, `language`, `title`, `onboarding`, `persist` (settings in localStorage), `pushToTalk`, `onReply(reply)`, `onState(states, changedIds)`. Styles are scoped under `.p2`; the layout adapts to the width of the element (container query), not the window.

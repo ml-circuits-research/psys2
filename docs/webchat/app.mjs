@@ -105,7 +105,7 @@ const mark = (name) => { try { performance.mark(`psys2:${name}`); } catch { /* n
  * Mounts the chat (and the tool tabs) into `element`.
  * options: { baseUrl, worlds: [ids] | undefined, tabs: [tab ids] | undefined ([] = chat only), language, title,
  *            onboarding = true, persist = true, pushToTalk = true, onReply(reply), onState(states) }
- * Returns { engine, session, send(text), applyState(snapshot), settings, destroy() }.
+ * Returns { engine, session, send(text), refreshState(), settings, destroy() }.
  */
 export async function mountPsys2(element, options = {}) {
   const tEntry = performance.now();   // PROGRESS: everything before this was the page code (HTML, scripts, modules)
@@ -1314,7 +1314,8 @@ export async function mountPsys2(element, options = {}) {
   };
   /** Sends one message; while a turn runs (or others wait) it joins the visible queue and runs in order. */
   const send = (text, mode = 'typed', voice = {}) => {
-    const t = String(text ?? '').trim();
+    if (typeof text !== 'string') return Promise.reject(new TypeError('Browser messages require text.'));
+    const t = text.trim();
     if (!t || !session) return Promise.resolve(null);
     if (mode === 'voice' && (turn || effectsPending > 0)) {   // MOBILE-VOICE: no voice queue; the microphone is paused while a request runs, so this is a late final: the text waits in the box
       if (!input.value.trim()) { input.value = t; syncSendButton(); }
@@ -1901,7 +1902,6 @@ export async function mountPsys2(element, options = {}) {
         const result = await engineClient.call('placementProfile', { sop });
         status.textContent = result.message || '';
         if (!result.ok) return;
-        if (action !== 'inspect') session.acceptState(result);
         input.value = result.clearance ?? '';
         input.placeholder = String(result.defaultClearance);
         available = true;
@@ -2281,7 +2281,7 @@ export async function mountPsys2(element, options = {}) {
       if(isBusy())throw Error('Wait for the current action before opening work.');
       const records=readWorkFile(text,applicationVersion());
       await engineClient.call('ensure',{worlds:records.map(row=>row.world),why:'explicit work file'});
-      const restored=await engineClient.call('restoreInstances',{records});session.acceptState(restored);applyState(restored.state);
+      const restored=await engineClient.call('restoreInstances',{records});applyState(restored.state);
       note(`Loaded ${records.length} saved worlds.`);return records.length;
     }
   };
@@ -2290,8 +2290,12 @@ export async function mountPsys2(element, options = {}) {
   workActions.append(
     h('button',{class:'p2-btn-text',type:'button',title:'Download the current worlds; editor work is not saved automatically',onclick:async()=>{try{await saveFile('psys2-work.json',JSON.stringify(await workFiles.snapshot(),null,2));}catch(error){failInstances(error);}}},'Save work'),
     h('button',{class:'p2-btn-text',type:'button',title:'Open a work file from this application version; no automatic conversion',onclick:()=>openInput.click()},'Open work'),exportWorld,openInput);
+  async function refreshState() {
+    const {state}=await engineClient.call('observe');
+    applyState(state);
+  }
   const handle = {
-    engine, session, settings, trainingPairs, instanceStore, flushInstances, workFiles, send, stop: stopTurn, engineClient, longTasks, applyState, showTab: (id, via = 'card') => userTab(id, via), get busy() { return !!turn; }, get debug() { return dbg; }, tabLoading:{list:()=>[...tabLoads.values()].map(record=>({id:record.id,...record.timeline.snapshot(),worker:record.worker})),current:()=>tabLoads.get(view)?.timeline.snapshot()??null},worldActivity:{list:()=>worldActivity.slice(),subscribe:fn=>{worldActivityListeners.add(fn);return()=>worldActivityListeners.delete(fn);}}, isBusy, get veiled() { return veiled; },
+    engine, session, settings, trainingPairs, instanceStore, flushInstances, workFiles, send, stop: stopTurn, engineClient, longTasks, refreshState, showTab: (id, via = 'card') => userTab(id, via), get busy() { return !!turn; }, get debug() { return dbg; }, tabLoading:{list:()=>[...tabLoads.values()].map(record=>({id:record.id,...record.timeline.snapshot(),worker:record.worker})),current:()=>tabLoads.get(view)?.timeline.snapshot()??null},worldActivity:{list:()=>worldActivity.slice(),subscribe:fn=>{worldActivityListeners.add(fn);return()=>worldActivityListeners.delete(fn);}}, isBusy, get veiled() { return veiled; },
     /** The queue of waiting messages (MIC2) and the turn state flags, in one place for other features (BUSY veil): `turnState()` says what is running and what waits. */
     queue: { list: () => queue.map((q) => ({ id: q.id, text: q.text, mode: q.mode })), drop: dropQueued, clear: clearQueue, get length() { return queue.length; } },
     turnState: () => ({ running: !!turn, queued: queue.length, speaking: !!mic.speaking, mic: micBtn.dataset.mic }),

@@ -222,3 +222,6 @@ Application gate passed 649 with 3 skips. The separate historical worker restart
 
 2026-11-18 — Query rules now produce the source, target, query and optional selector links of the standard request. Worlds exposes the actual policy, both schema dependencies and the deriving rules.
 Chromium verified the changing house/tree population and the real query graph in recorded activity. Webchat 67ef748374: 649 tests passed, 3 skipped.
+
+2026-11-18 — Webchat 582454509e keeps cached state and its recovery metadata private; callers obtain detached observations, reload work from SOP, and refresh from the committed worker projection. Objects passed as messages are refused before transcript changes.
+650 tests passed and 3 skipped, including browser coverage for restore, restart and Undo. A separate UI timeout on an authored removal with zero worker kills remains under investigation.

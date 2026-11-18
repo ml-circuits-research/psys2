@@ -98,7 +98,7 @@ export function createEngineClient({ base, versions = {}, getSettings, getLangua
   function rawCall(op, payload = {}, extra = {}) {
     const id = ++seq;
     const { skipPost, ...rest } = extra;
-    return { id, promise: new Promise((resolve, reject) => { pending.set(id, { resolve, reject, op, id, ...rest }); try { if (!skipPost) post({ op, id, ...payload }); } catch (e) { pending.delete(id); reject(e); } }) };
+    return { id, promise: new Promise((resolve, reject) => { pending.set(id, { resolve, reject, op, id, ...rest }); try { if (!skipPost) post({ ...payload, op, id }); } catch (e) { pending.delete(id); reject(e); } }) };
   }
 
   /** Starts a worker (the first one, or the replacement of a killed one) and resolves when it has loaded the worlds. */
@@ -126,7 +126,7 @@ export function createEngineClient({ base, versions = {}, getSettings, getLangua
       try { onEvent('engine-down', { reason: 'start-timeout', message: down.message, startMs }); } catch { /* ignore */ }
       killWorker('start-timeout');   // rejects the init request: booting is cleared below
     }, startMs);
-    return promise.then((info) => { clearTimeout(startTimer); booting = false; bootFailures = 0; bootInfo = info;if(latestReaderStatus)bootInfo.reader=latestReaderStatus; cache.state = info.state ?? cache.state; return info; },
+    return promise.then((info) => { clearTimeout(startTimer); booting = false; bootFailures = 0; bootInfo = info;if(latestReaderStatus)bootInfo.reader=latestReaderStatus; applyStateInfo(info); return info; },
       (e) => { clearTimeout(startTimer); booting = false; bootFailures++; if (!down && bootFailures >= MAX_BOOT_FAILURES) down = Object.assign(new Error(`the engine could not start (${e?.message ?? e})`), { name: 'EngineDown' }); throw down ?? e; });
   }
   /** The worker crashed or died by itself: whatever ran is remembered as bad; the next request finds a new worker. */
@@ -179,6 +179,7 @@ export function createEngineClient({ base, versions = {}, getSettings, getLangua
   }
 
   async function boot(init) {
+    if (lastBoot) throw new Error('The browser engine has already started.');
     lastBoot = { ...init };
     readyP = start(null);
     return readyP;
@@ -227,11 +228,15 @@ export function createEngineClient({ base, versions = {}, getSettings, getLangua
     text: rec.reason === 'budget' ? TOO_COMPLEX_TEXT : KNOWN_SLOW_TEXT, lang: 'en', statuses: [], segments: [], effects: [], wires: [], state: {}, operations: [],
     perf: { total: 0, stages: {} }, knownBad: { reason: rec.reason, stage: rec.stage, site: rec.site ?? null, since: new Date(rec.at).toISOString() },
   });
-  function applyStateInfo(r) { if (r?.state) cache.state = r.state; if (r?.meta) cache.meta = r.meta; }
+  function applyStateInfo(r) {
+    if (r?.state) cache.state = structuredClone(r.state);
+    if (r?.meta) cache.meta = structuredClone(r.meta);
+  }
 
   const session = {
     /** One turn. Resolves with the reply; rejects TurnAborted (stopped / timeout) or an error. Known-bad inputs are answered without running them. */
     async send(text, opts = {}) {
+      if (typeof text !== 'string') throw new TypeError('Browser messages require text.');
       const tab = getTab(), key = badKeyOf(text, tab);
       const known = bad.get(key);
       if (known) { stats.refused++; return knownReply(known); }
@@ -249,7 +254,6 @@ export function createEngineClient({ base, versions = {}, getSettings, getLangua
       res.reply.trace={...res.reply.trace,worldActivity:res.worldActivity??[],activityRequestId:res.activityRequestId??null};
       return res.reply;
     },
-    acceptState(result) {applyStateInfo(result);},
     async tools({view=getTab()}={}) {
       return guarded('nativeTools','nativeTools',{view},{hardMs:30000,text:'Tools',key:null,tab:view});
     },
@@ -280,7 +284,6 @@ export function createEngineClient({ base, versions = {}, getSettings, getLangua
     async observe(obs) {
       try {
         const r = await guarded('observe', 'observe', { obs }, { hardMs: limits.watchdogMs ?? 8000, text: `observe ${obs?.effect ?? ''}`, key: null });
-        if (r?.state) cache.state = r.state;
         return r?.follow ?? null;
       } catch (e) { if (e?.name === 'TurnAborted' || e?.name === 'EngineRestarted') return null; throw e; }
     },
@@ -288,7 +291,7 @@ export function createEngineClient({ base, versions = {}, getSettings, getLangua
       if (typeof sop !== 'string') throw new TypeError('Browser state input requires SOP Lang.');
       if (booting || !worker) await settled();
       const changes = await rawCall('stateInput', { sop }).promise;
-      for (const [world, patch] of Object.entries(changes)) {
+      for (const [world, patch] of Object.entries(structuredClone(changes))) {
         cache.state = { ...cache.state, [world]: { ...(cache.state[world] ?? {}), ...patch } };
       }
       return changes;
@@ -298,7 +301,7 @@ export function createEngineClient({ base, versions = {}, getSettings, getLangua
     /** The worlds that existed when the last turn ended: a world a later load added (the background load of a language) is not the turn's doing. */
     turnWorlds() { return lastEnd; },
     /** The committed state (a plain object; read only). Always the state after the last finished operation, so it is also what a new worker starts from. */
-    state(worldId) { return worldId ? (cache.state[worldId] ?? null) : cache.state; },
+    state(worldId) { return structuredClone(worldId ? (cache.state[worldId] ?? null) : cache.state); },
     snapshot() {
       const undo = Object.freeze({ id: ++undoSeq });
       snapshots.set(undo, { state: cache.state, meta: cache.meta });
@@ -349,10 +352,14 @@ export function createEngineClient({ base, versions = {}, getSettings, getLangua
     resetUsage() { lastUsage = { usage: [], detection: [] }; },
     badInputs: () => [...bad.entries()].map(([k, v]) => ({ key: k, ...v })),
     isBad: (text, tab = getTab()) => bad.has(badKeyOf(text, tab)),
-    call: (op, payload) => ready().then(() => rawCall(op, payload).promise),
+    async call(op, payload) {
+      if (op === 'init' || op === 'restore') throw new Error('This worker operation is internal.');
+      await ready();
+      const result = await rawCall(op, payload).promise;
+      if (op === 'restoreInstances' || op === 'placementProfile') applyStateInfo(result);
+      return result;
+    },
     warm: (payload) => ready().then(() => rawCall('warm', payload).promise),
-    /** Test and diagnostics: the current worker (null while a new one starts). */
-    get worker() { return worker; },
     kill: (why = 'requested') => { killWorker(why); respawn(); },
     destroy() { killWorker('destroyed'); down = Object.assign(new Error('destroyed'), { name: 'EngineDown' }); },
     MAX_RESTARTS_PER_TURN,

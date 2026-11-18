@@ -319,9 +319,15 @@ const allLoaded = () => worldLoader.ids().filter(allowed).every((id) => loadedId
 
 
 // ---------- requests ----------
+let initReceived = false;
 const handlers = {
-  async init(m) { return init(m); },
+  async init(m) {
+    if (initReceived) throw Error('The browser engine has already started.');
+    initReceived = true;
+    return init(m);
+  },
   async send(m) {
+    if (typeof m.text !== 'string') throw new TypeError('Browser messages require text.');
     if (samplerRun) await samplerRun;
     const ctl = new AbortController();
     executionRequestId=m.id;

@@ -13,7 +13,7 @@ try{
  await b.evaluate(`document.querySelector('#p2-st-about').click();true`);await wait(`document.querySelector('#p2-st-about').getAttribute('aria-selected')==='true'`);
  await b.screenshot('../.session-control/settings-tab-preview.png');
  await b.evaluate(`document.querySelector('#p2-tab-worlds').click();true`);await wait(`document.querySelector('[data-world-node="interpreter:art.draw"]')`);
- const result=await b.evaluate(`(async()=>{const r=await window.psys2.session.tool('@show drawing.ids.show mode="always"',{view:'draw'});window.psys2.applyState(r.state);return {ok:r.ok,view:document.querySelector('#p2-tab-worlds').getAttribute('aria-selected'),activeEditor:window.psys2.session.state('ui.shell').activeTab};})()`);
+ const result=await b.evaluate(`(async()=>{const r=await window.psys2.session.tool('@show drawing.ids.show mode="always"',{view:'draw'});await window.psys2.refreshState();return {ok:r.ok,view:document.querySelector('#p2-tab-worlds').getAttribute('aria-selected'),activeEditor:window.psys2.session.state('ui.shell').activeTab};})()`);
  assert.equal(result.ok,true);assert.equal(result.view,'true');assert.equal(result.activeEditor,'draw');
  assert.equal(await b.evaluate(`document.querySelector('[data-world-node="interpreter:art.draw"]').classList.contains('active')`),false);
  assert.equal(await b.evaluate(`document.documentElement.scrollWidth<=innerWidth`),true);assert.deepEqual(b.logs.console.filter(e=>e.type==='exception'),[]);

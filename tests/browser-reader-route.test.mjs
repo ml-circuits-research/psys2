@@ -37,6 +37,10 @@ test('built browser worker uses declared shell SOP and keeps committed state thr
       await client.call('ensure',{worlds:['art.draw']});
       await session.stateInput('@popup app.browser.state.observe.popup-open\\n@hands app.browser.state.observe.hands-free value=true\\n@mic app.browser.state.observe.listening value=true');
       const refusals=[];
+      const beforeMessages=document.querySelectorAll('.p2-msg').length;
+      try { await window.psys2.send({text:'message without a source string'}); }
+      catch(error) { refusals.push(error.message); }
+      const unchangedTranscript=document.querySelectorAll('.p2-msg').length===beforeMessages;
       for(const [op, payload] of [
         ['setWorldState',{worldId:'art.draw',patch:{objects:[]}}],
         ['setStates',{state:{'ui.shell':{activeTab:'chart'}}}],
@@ -46,7 +50,8 @@ test('built browser worker uses declared shell SOP and keeps committed state thr
       ]) try { await client.call(op,payload); } catch(error){ refusals.push(error.message); }
       try { await session.stateInput('@bad app.browser.state.observe.tab value=unavailable'); }
       catch(error) { refusals.push(error.message); }
-      const rawRestore = await client.call('restore',{state:{'ui.shell':{activeTab:'chart'}}});
+      try { await client.call('restore',{state:{'ui.shell':{activeTab:'chart'}}}); }
+      catch(error) { refusals.push(error.message); }
       const graph = await client.call('worldsInspection');
       const inputNodes = graph.nodes.filter(node=>['browser:state-input-tool','execution:browser-state-bindings','execution:browser-state-schema'].includes(node.id));
       const inputEdges = graph.edges.filter(edge=>edge.from==='browser:state-input-tool');
@@ -67,15 +72,16 @@ test('built browser worker uses declared shell SOP and keeps committed state thr
       await wait(()=>client.stats.starts>priorStarts);
       await client.ready();
       const recovered=(await current())['ui.shell'];
-      return {refusals, rawRestore, inputNodes, inputEdges, state:state['ui.shell'], restored:restored['ui.shell'], shape:archive?.wires, recovered, made:made.receipt.changed.length, hasSetter:'setWorldState' in session};
+      return {refusals, unchangedTranscript, inputNodes, inputEdges, state:state['ui.shell'], restored:restored['ui.shell'], shape:archive?.wires, recovered, made:made.receipt.changed.length, hasSetter:'setWorldState' in session || 'acceptState' in session || 'applyState' in window.psys2};
     })()`);
     assert.equal(outcome.hasSetter, false);
-    assert.equal(outcome.refusals.length, 6);
+    assert.equal(outcome.refusals.length, 8);
+    assert.equal(outcome.unchangedTranscript, true);
+    assert.ok(outcome.refusals.some(message=>message.includes('internal')));
     assert.equal(outcome.inputNodes.length, 3);
     assert.match(outcome.inputNodes.find(node => node.id === 'execution:browser-state-schema').wires, /kind=boolean/);
     assert.match(outcome.inputNodes.find(node => node.id === 'execution:browser-state-bindings').wires, /registry=enabled-tab/);
     assert.equal(outcome.inputEdges.length, 2);
-    assert.deepEqual(outcome.rawRestore, { restored: false });
     assert.equal(outcome.state.activeTab, 'draw');
     assert.equal(outcome.state.activePopup, 'avatar');
     assert.equal(outcome.restored.activeTab, 'draw');
@@ -89,9 +95,9 @@ test('built browser worker uses declared shell SOP and keeps committed state thr
     const settingsPerson = {things:[],views:{},learned:[],n:0,person:{me:{name:'Ada'},lines:[]}};
     await browser.seed({state:{'session.things':settingsPerson}});
     const forgotten = await browser.evaluate(`(async()=>{
-      const {engineClient, applyState, session}=window.psys2;
+      const {engineClient, refreshState, session}=window.psys2;
       const current=async()=>(await engineClient.call('observe')).state;
-      applyState(await current());
+      await refreshState();
       document.querySelector('[aria-label="Settings"]').click();
       document.querySelector('#p2-st-privacy').click();
       const section=document.querySelector('[data-section="person"]');

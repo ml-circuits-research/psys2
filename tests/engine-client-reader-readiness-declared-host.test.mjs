@@ -37,3 +37,30 @@ test('the public tool entry accepts an exact SOP instruction and rejects argumen
    client.destroy();
  }
 });
+
+test('public state and worker replies are detached from the committed browser snapshot', async () => {
+ const worker=fakeWorker(), initialize=worker.postMessage.bind(worker);
+ const state={'art.draw':{objects:[{id:'o1',name:'Original'}]}};
+ const requests=[];
+ worker.postMessage=function(message){
+  requests.push(message);
+  if(message.op!=='restoreInstances')return initialize(message);
+  queueMicrotask(()=>this.onmessage({data:{type:'res',id:message.id,ok:true,value:{state,meta:{readerPrevious:'Committed utterance'}}}}));
+ };
+ const client=createEngineClient({base:'https://example.test/app/',getSettings:()=>({}),spawn:()=>worker});
+ try{
+  await client.boot({});
+  assert.equal(client.session.acceptState,undefined);
+  assert.equal(client.worker,undefined);
+  const reply=await client.call('restoreInstances',{records:[]});
+  reply.state['art.draw'].objects[0].name='Renderer copy';
+  const view=client.session.state('art.draw');
+  view.objects.push({id:'local'});
+  assert.deepEqual(client.session.state('art.draw').objects,[{id:'o1',name:'Original'}]);
+  await assert.rejects(client.boot({}),/already started/);
+  await assert.rejects(client.call('init'),/internal/);
+  await assert.rejects(client.call('restore'),/internal/);
+  await assert.rejects(client.session.send({text:'Expected a string'}),/require text/);
+  assert.deepEqual(requests.map(({op})=>op),['init','restoreInstances']);
+ }finally{client.destroy();}
+});
