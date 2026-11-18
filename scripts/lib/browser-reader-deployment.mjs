@@ -19,6 +19,7 @@ export async function refreshBrowserReaderDeployment(outDir){
    'worlds/app.project/spatial-profile.mjs','worlds/art.draw/declared-host.mjs','worlds/diagram.sketch/declared-host.mjs',
    'worlds/ui.avatar/declared-host.mjs','worlds/docs.editor/declared-host.mjs',
    'worlds/art.draw/canonical-state.mjs','worlds/art.draw/state-schema-source.mjs',
+   'worlds/diagram.sketch/canonical-state.mjs','worlds/diagram.sketch/state-schema-source.mjs','worlds/diagram.sketch/arrows.mjs',
    'worlds/docs.editor/canonical-state.mjs','worlds/docs.editor/state-schema-source.mjs',
    'worlds/tool-instance-state.mjs','lib/vendor/sopworld/instance-fact-codec.mjs',
   ],

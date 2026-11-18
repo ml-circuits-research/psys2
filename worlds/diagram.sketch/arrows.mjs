@@ -7,6 +7,13 @@
 //   - parallel and opposite arrows between the same two shapes are spread SPREAD px apart;
 //   - a segment keeps at least CLEAR px from every other shape (a detour bend is tried; a crowded diagram may leave a smaller gap);
 //   - the label sits off the line (halo drawn by the tab), the id tag on the middle of the line.
+// One effective style for the displayed connection, the tool view and the SOP carrier.
+export function edgeAppearance(edge){
+ const merged={...edge,...edge.properties};
+ return {style:merged.style??'solid',arrow:merged.arrow??'forward',label:merged.label??null,
+  color:merged.color??null,width:merged.width??2};
+}
+
 export const CORNER = 8, MIN_ENTRY = 30, SPREAD = 14, CLEAR = 8, STUB = 14, APART = 10, FAN = 20;
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)

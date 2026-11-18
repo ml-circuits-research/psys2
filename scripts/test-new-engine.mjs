@@ -3,7 +3,7 @@
 import { readdirSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 const fixed = [
-  'diagram-editors-native.test.mjs',
+  'diagram-editors-native.test.mjs', 'diagram-authority-declared-host.test.mjs',
   'demo-composition.test.mjs',
   'avatar-resize-browser.test.mjs',
   'mobile-editors-touch-browser.test.mjs',

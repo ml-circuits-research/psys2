@@ -1,3 +1,4 @@
+import {toNativeDiagramState} from '../worlds/diagram.sketch/canonical-state.mjs';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {createDiagramHost,initialDiagramState,migrateChartTools} from '../worlds/diagram.sketch/declared-host.mjs';
@@ -35,7 +36,7 @@ test('shared declared request executor passes anchored chart label/value lists t
  const properties=[['w.chart.point.category','labels','string-list'],['w.chart.point.value','values','number-list']].map(([canonical,parameter,codec])=>({area:'diagram',canonical,hostBinding:{id:'chart.make',sourceType:'data.charts.chart',parameter,codec}}));
  const candidate={request:'r',wires:'@s std.request.source text="make a bar chart"\n@r std.request act=make mood=do source=$s\n@t std.request.target request=$r mode=new kind=k.charts.kind.bar_chart\n@c1 std.request.constraint request=$r target=$t concept=w.chart.point.category operator=eq polarity=positive character=requirement value="Apples, Pears"\n@c2 std.request.constraint request=$r target=$t concept=w.chart.point.value operator=eq polarity=positive character=requirement value="5, 3"'};
  const reply=await executeDeclaredRequest(session,candidate,'make a bar chart',{bindings:{kinds:[binding],properties},view:'diagram'});
- assert.ok(reply.statuses.includes('supported'));assert.equal(state.chartTools.charts[0].type,'bar');assert.deepEqual(state.chartTools.charts[0].datasets[0].data,[5,3]);assert.deepEqual(state.chartTools.charts[0].labels,['Apples','Pears']);
+ assert.ok(reply.statuses.includes('supported'));assert.equal(toNativeDiagramState(state).chartTools.charts[0].type,'bar');assert.deepEqual(toNativeDiagramState(state).chartTools.charts[0].datasets[0].data,[5,3]);assert.deepEqual(toNativeDiagramState(state).chartTools.charts[0].labels,['Apples','Pears']);
 });
 test('multiple numeric constraints append in source order and missing category labels become disclosed ordinals',async()=>{
  const state=initialDiagramState(),session={isession:{state:{'diagram.sketch':state}}};
@@ -43,7 +44,7 @@ test('multiple numeric constraints append in source order and missing category l
  const constraints=[['c',8,32],['a',3,26],['b',5,29]].map(([id,value,start])=>`@${id} std.request.constraint request=$r target=$t concept=w.chart.point.value operator=eq polarity=positive character=requirement value="${value}" source=$s source.start=${start} source.end=${start+1}`).join('\n');
  const candidate={request:'r',wires:'@s std.request.source text="draw a bar chart with values 3, 5, 8"\n@r std.request act=make mood=do source=$s\n@t std.request.target request=$r mode=new kind=k.charts.kind.bar_chart\n'+constraints};
  const reply=await executeDeclaredRequest(session,candidate,'draw a bar chart with values 3, 5, 8',{bindings,view:'diagram'});
- assert.deepEqual(state.chartTools.charts[0].datasets[0].data,[3,5,8]);assert.deepEqual(state.chartTools.charts[0].labels,['1','2','3']);assert.match(reply.text,/numbered the categories/);
+ assert.deepEqual(toNativeDiagramState(state).chartTools.charts[0].datasets[0].data,[3,5,8]);assert.deepEqual(toNativeDiagramState(state).chartTools.charts[0].labels,['1','2','3']);assert.match(reply.text,/numbered the categories/);
 });
 test('multi-series chart mutations and stacked rendering preserve numeric values across all forms',async()=>{
  const state=initialDiagramState(),h=await createDiagramHost({state,instanceId:'multi'});

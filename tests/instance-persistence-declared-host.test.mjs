@@ -1,3 +1,5 @@
+import {CATALOG_PIN} from '../src/knowledge/catalog-pin.mjs';
+import {diagramStateWorld,toNativeDiagramState} from '../worlds/diagram.sketch/canonical-state.mjs';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
@@ -6,7 +8,7 @@ import {readInstanceState,serializeInstanceState,str,parse,serialize,SCHEMA_TYPE
 import {NATIVE_AREAS,createAreaHost} from '../src/dialog/app-reader-context.mjs';
 import {nativeObservationObjects} from '../src/dialog/instance-facts.mjs';
 import {initialDrawingState} from '../worlds/art.draw/declared-host.mjs';
-import {initialDiagramState} from '../worlds/diagram.sketch/declared-host.mjs';
+import {createDiagramHost,initialDiagramState} from '../worlds/diagram.sketch/declared-host.mjs';
 import {initialCalendarState,toNativeCalendarState} from '../worlds/time.calendar/declared-host.mjs';
 import {calendarStateWorld} from '../worlds/time.calendar/canonical-state.mjs';
 import {initialCanonicalDocumentState} from '../worlds/docs.editor/declared-host.mjs';
@@ -32,7 +34,9 @@ test('five actual native hosts restore exact projections, stable identities and 
  assert.equal(records.length,5);await restoreNativeInstances(target,records);
  assert.deepEqual(target.isession.state,s.isession.state);assert.deepEqual(target.nativeInstanceIds,s.nativeInstanceIds);
  for(const record of records){const area=Object.values(NATIVE_AREAS).find(a=>a.world===record.world);if(area.stateWorld){assert.equal(record.wires,s.isession.state[record.world].sop);assert.deepEqual(area.projectState(target.isession.state[record.world]),area.projectState(s.isession.state[record.world]));assert.doesNotMatch(record.wires,/std\.instance\./);}else{const archive=readInstanceState(record.wires);assert.deepEqual(archive.projection,s.isession.state[record.world]);assert.equal(archive.instanceId,s.nativeInstanceIds[record.world]);assert.equal(archive.revision,0);}assert.equal(record.instanceId,s.nativeInstanceIds[record.world]);assert.equal(record.revision,0);assert.ok(target.instanceWorlds[record.world]);}
- const diagram=readInstanceState(records.find(r=>r.world==='diagram.sketch').wires).objects.find(o=>o.attributes.kind[0]==='link');assert.ok(diagram.relations.from.length);assert.ok(diagram.relations.to.length);
+ const diagram=diagramStateWorld(target.isession.state['diagram.sketch']),edge=diagram.ofType('diagram.sketch.state.edge')[0];
+ const nodes=diagram.ofType('diagram.sketch.state.node').map(node=>str(node.attrs.id[0]));
+ assert.ok(nodes.includes(str(edge.attrs.from[0]))&&nodes.includes(str(edge.attrs.to[0])));
  const calendar=calendarStateWorld({sop:records.find(r=>r.world==='time.calendar').wires}),meeting=calendar.ofType('time.calendar.meeting').find(o=>str(o.attrs.id[0])==='event'),identity=reference=>str(calendar.get(reference.slice(1)).attrs.id[0]);assert.deepEqual(meeting.attrs.participants.map(identity),['person']);assert.deepEqual(meeting.attrs.room.map(identity),['room']);assert.deepEqual(meeting.attrs.calendar.map(identity),['calendar']);
  const repeated=await snapshotNativeInstances(target);for(const record of repeated){const original=records.find(r=>r.world===record.world);if(Object.values(NATIVE_AREAS).find(a=>a.world===record.world).stateWorld)assert.deepEqual(record,original);else assert.deepEqual(readInstanceState(record.wires),readInstanceState(original.wires));}
  invoke(hosts.draw,'drawing.object.make',{kind:'circle',name:'Moon',x:25,y:30,color:'#223344'});
@@ -40,7 +44,12 @@ test('five actual native hosts restore exact projections, stable identities and 
  const area=NATIVE_AREAS.draw;const restoredHost=await createAreaHost(area,{state:target.isession.state[area.world],instanceId:target.nativeInstanceIds[area.world]});assert.deepEqual(nativeObservationObjects(restoredHost.observe()),drawingFacts);
 });
 for(const corruption of ['malformed','semantic mismatch','projection mismatch','dangling relation','knowledge pin conflict'])test(`${corruption} refuses the whole archive batch before adoption`,async()=>{
- const {s}=await populated(),records=await snapshotNativeInstances(s),bad=records.find(record=>record.world==='diagram.sketch'),archive=readInstanceState(bad.wires);
+ const {s}=await populated(),records=await snapshotNativeInstances(s),bad=records.find(record=>record.world==='diagram.sketch');
+ const projection=toNativeDiagramState(s.isession.state[bad.world]),host=await createDiagramHost({state:projection,instanceId:bad.instanceId});
+ const archive={world:bad.world,instanceId:bad.instanceId,revision:bad.revision,schemaVersion:'psys2.native-instance/1',
+  objects:nativeObservationObjects(host.observe()),projection,
+  metadata:{projection:'native-host-data/1',knowledge:{repository:CATALOG_PIN.repo,version:CATALOG_PIN.commit}},
+ };
  const target=session();target.isession.state={sentinel:{keep:true}};target.nativeInstanceIds={sentinel:'original'};target.nativeInstanceRevisions={sentinel:12};target.nativeInstanceSnapshots={sentinel:'original'};target.instanceWorlds={sentinel:{keep:true}};
  const prior={state:structuredClone(target.isession.state),ids:structuredClone(target.nativeInstanceIds),revisions:structuredClone(target.nativeInstanceRevisions),snapshots:structuredClone(target.nativeInstanceSnapshots),world:target.instanceWorlds.sentinel};
  let wires;
@@ -51,7 +60,7 @@ for(const corruption of ['malformed','semantic mismatch','projection mismatch','
   // Start with a valid serialized archive, then corrupt its local reference token.
   archive.objects[0].relations.probe=[archive.objects[0].id];const valid=serializeInstanceState(archive);wires=valid.replace(/(\bprobe\s*=\s*)[^;\n]+/,'$1$missing.local.object');assert.notEqual(wires,valid,'test must corrupt an actual relation token');
  }else{archive.metadata.knowledge.version='incompatible-pin';wires=serializeInstanceState(archive);}
- const batch=[...records.filter(record=>record!==bad),{...bad,wires}];await assert.rejects(restoreNativeInstances(target,batch));
+ const batch=[...records.filter(record=>record!==bad),{world:bad.world,instanceId:bad.instanceId,revision:bad.revision,wires}];await assert.rejects(restoreNativeInstances(target,batch));
  assert.deepEqual(target.isession.state,prior.state);assert.deepEqual(target.nativeInstanceIds,prior.ids);assert.deepEqual(target.nativeInstanceRevisions,prior.revisions);assert.deepEqual(target.nativeInstanceSnapshots,prior.snapshots);assert.equal(target.instanceWorlds.sentinel,prior.world);assert.deepEqual(Object.keys(target.instanceWorlds),['sentinel']);
 });
 test('invalid canonical Calendar references refuse a mixed batch before any adoption',async()=>{

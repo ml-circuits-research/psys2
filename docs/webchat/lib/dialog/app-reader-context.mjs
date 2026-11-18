@@ -3,7 +3,7 @@ import {observedReaderContext} from './native-reader-context.mjs?v=cf6eef4278';
 import {isAuthoredRequest} from './authored-request-tool.mjs?v=1ae7ce653b';
 import {createCanonicalDrawingHost} from '../../worlds/art.draw/declared-host.mjs?v=11cf0284ea';
 import {DRAWING_STATE_INTERFACE} from '../../worlds/art.draw/canonical-state.mjs?v=8b4caf1d94';
-import {createDiagramHost} from '../../worlds/diagram.sketch/declared-host.mjs?v=7d744acc90';
+import {createCanonicalDiagramHost,DIAGRAM_STATE_INTERFACE} from '../../worlds/diagram.sketch/declared-host.mjs?v=25696b79eb';
 import {createDocumentHost,DOCUMENT_STATE_INTERFACE} from '../../worlds/docs.editor/declared-host.mjs?v=16691c01e8';
 import {createAvatarHost} from '../../worlds/ui.avatar/declared-host.mjs?v=8e5d889bbd';
 import {canonicalAvatarState,toNativeAvatarState,avatarStateWorld,AVATAR_STATE_SCHEMA} from '../../worlds/ui.avatar/canonical-state.mjs?v=45ac954b00';
@@ -15,7 +15,7 @@ export const NATIVE_AREAS={
   historySelection:[['selectedSlot']],historyView:[['idDisplay']]},
  draw:{area:'drawing',world:'art.draw',create:createCanonicalDrawingHost,...DRAWING_STATE_INTERFACE,
   historySelection:[['selected'],['selectedIds'],['selectedPart']],historyView:[['idDisplay']]},
- diagram:{area:'diagram',world:'diagram.sketch',create:createDiagramHost,historySelection:[['selected'],['chartTools','active']],historyView:[['idDisplay']]},
+ diagram:{area:'diagram',world:'diagram.sketch',create:createCanonicalDiagramHost,...DIAGRAM_STATE_INTERFACE,historySelection:[['selected'],['chartTools','active']],historyView:[['idDisplay']]},
  editor:{area:'document',world:'docs.editor',create:createDocumentHost,...DOCUMENT_STATE_INTERFACE,historySelection:[['selection']]},
  calendar:{area:'calendar',world:'time.calendar',create:createCalendarHost,canonicalizeState:canonicalCalendarState,projectState:toNativeCalendarState,
   stateWorld:calendarStateWorld,stateSchema:CALENDAR_STATE_SCHEMA,policyFile:'scheduling-policy.sop',historySelection:[['selectedEvent']]},

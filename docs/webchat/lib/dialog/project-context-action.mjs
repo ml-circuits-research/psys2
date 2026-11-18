@@ -1,7 +1,7 @@
 import {nativeKindCandidates} from './native-binding-candidates.mjs?v=de223646d6';
 // Bind model-declared context references to actual native objects; never inspect source words.
 import {serializeRequestGraph} from '../vendor/sopworld/sopworld.mjs?v=14e619cf45';
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=6c7fc1be6d';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=aab30ccd46';
 import {DRAWING_PROPERTY_BINDINGS} from '../../worlds/art.draw/property-host.mjs?v=45ec70afe7';
 import {flatRequestProjection} from './request-projection.mjs?v=e246760812';
 export async function projectContextAction(proposal,session,{bindings,registry,view}={}) {

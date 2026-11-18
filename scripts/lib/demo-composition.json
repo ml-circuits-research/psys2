@@ -84,7 +84,13 @@
         "legend.sop"
       ],
       "schemaWorld": "pattern.diagram.sketch",
+      "sourceFiles": ["instance-schema.sop"],
       "schemaFiles": [
+        {
+          "file": "instance-schema.sop",
+          "role": "canonical-instance-schema",
+          "completeStateSchema": true
+        },
         {
           "file": "native-interface.sop",
           "role": "native-tool-interface",
@@ -100,11 +106,11 @@
       ],
       "nativeInitializer": {
         "module": "worlds/diagram.sketch/declared-host.mjs",
-        "export": "initialDiagramState"
+        "export": "initialCanonicalDiagramState"
       },
       "nativeHost": {
         "module": "worlds/diagram.sketch/declared-host.mjs",
-        "factory": "createDiagramHost"
+        "factory": "createCanonicalDiagramHost"
       },
       "runtimeModules": [
         "worlds/diagram.sketch/arrows.mjs",

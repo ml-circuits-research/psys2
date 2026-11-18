@@ -1,3 +1,4 @@
+import {CATALOG_PIN} from '../src/knowledge/catalog-pin.mjs';
 import {readInstanceState,serializeInstanceState} from '../src/vendor/sopworld/sopworld.mjs';
 import {K} from '../worlds/diagram.sketch/core.mjs';
 import {test} from 'node:test';import assert from 'node:assert/strict';
@@ -61,8 +62,16 @@ test('native text and shape creation accept authored labels at actual pointer co
 
 test('archive validation compares actual renderer geometry rather than its optional authored-field cache',async()=>{
  const {state,host}=await fixture();invoke(host,'diagram.group.chart.make',{label:'Sectors',labels:['A','B'],values:[2,3],layout:'pie'});
- const session={isession:{state:{'diagram.sketch':state}},engine:{loader:{readFile:(world,file)=>readFile(new URL(`../worlds/${world}/${file}`,import.meta.url),'utf8')}}},records=await snapshotNativeInstances(session);
- for(const property of ['w','startAngle']){const archive=readInstanceState(records[0].wires);archive.projection.shapes[0][property]+=1;const target={isession:{state:{}},engine:session.engine};await assert.rejects(restoreNativeInstances(target,[{...records[0],wires:serializeInstanceState(archive)}]),/instance-projection-mismatch/);}
+ const world='diagram.sketch',instanceId=host.observe().instanceId,revision=0;
+ const wires=serializeInstanceState({world,instanceId,revision,schemaVersion:'psys2.native-instance/1',
+  objects:nativeObservationObjects(host.observe()),projection:state,
+  metadata:{projection:'native-host-data/1',knowledge:{repository:CATALOG_PIN.repo,version:CATALOG_PIN.commit}},
+ });
+ for(const property of ['w','startAngle']){
+  const archive=readInstanceState(wires);archive.projection.shapes[0][property]+=1;
+  const target={isession:{state:{}},engine:{}};
+  await assert.rejects(restoreNativeInstances(target,[{world,instanceId,revision,wires:serializeInstanceState(archive)}]),/instance-projection-mismatch/);
+ }
 });
 
 test('Object ID view actions are declared, observed conditionally and independent of content undo',async()=>{

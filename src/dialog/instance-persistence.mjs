@@ -63,9 +63,12 @@ export async function restoreNativeInstances(session,records){
   if(!area||record.world!==archive.world||record.instanceId!==archive.instanceId||record.revision!==archive.revision||worlds.has(archive.world)||ids.has(archive.instanceId))throw Error('instance-descriptor-conflict');
   if(archive.schemaVersion!==NATIVE_INSTANCE_SCHEMA||archive.metadata?.projection!=='native-host-data/1'||!Number.isSafeInteger(archive.revision)||archive.revision<0)throw Error('instance-schema-migration-required');
   if(archive.metadata?.knowledge?.version!==CATALOG_PIN.commit)throw Error('instance-knowledge-migration-required');
-  const projection=copyHostData(archive.projection),state=area.canonicalizeState?area.canonicalizeState(projection):projection;
-  const host=await create(session,area,state,archive.instanceId),checked=compareInstanceObjects(archive.objects,host.observe());
-  if(!checked.ok)throw Error('instance-projection-mismatch:'+checked.reason);
+  const projection=copyHostData(archive.projection);
+  const original=area.legacyHost?await create(session,{...area,create:area.legacyHost},projection,archive.instanceId):null;
+  const verify=host=>{const checked=compareInstanceObjects(archive.objects,host.observe());if(!checked.ok)throw Error('instance-projection-mismatch:'+checked.reason);};
+  if(original)verify(original);
+  const state=area.canonicalizeState?area.canonicalizeState(projection):projection,host=await create(session,area,state,archive.instanceId);
+  if(!original)verify(host);
   staged.push({archive,state,objects:nativeObservationObjects(host.observe()),world:area.stateWorld?area.stateWorld(state):instanceStateWorld(record.wires)});worlds.add(archive.world);ids.add(archive.instanceId);
  }
  session.nativeInstanceIds??={};session.nativeInstanceRevisions??={};session.nativeInstanceSnapshots??={};session.instanceWorlds??={};

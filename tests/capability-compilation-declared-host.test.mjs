@@ -1,3 +1,4 @@
+import {toNativeDiagramState} from '../worlds/diagram.sketch/canonical-state.mjs';
 import {toNativeDrawingState} from '../worlds/art.draw/canonical-state.mjs';
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
@@ -76,10 +77,10 @@ test('Diagram compiled place and remove reach real tool mutations', async () => 
     graph({ act, mode: 'existing', kind: 'canonical.rectangle', conditions }), '', { view: 'diagram', bindings });
   const moved = await run('place', { x: 260, y: 270 });
   assert.equal(moved.statuses[0], 'supported', JSON.stringify(moved.trace));
-  assert.deepEqual([state.shapes[0].x, state.shapes[0].y], [260, 270]);
+  assert.deepEqual(toNativeDiagramState(state).shapes.map(({x,y})=>[x,y])[0], [260, 270]);
   assert.match(moved.trace.compiledSop, /operation="diagram.node.place"/);
   assert.equal((await run('remove')).statuses[0], 'supported');
-  assert.equal(state.shapes.length, 0);
+  assert.equal(toNativeDiagramState(state).shapes.length, 0);
 });
 
 test('Document overwrite and Calendar coverage policies read declared SOP guards', async () => {
@@ -143,6 +144,6 @@ test('two reader-proposed meanings for one turn compile against the observed dia
  const r=await routeNewEngine(value,phrase,{view:'diagram'});
  assert.deepEqual(r.statuses,['supported'],JSON.stringify(r.trace));
  assert.match(r.trace.readingComparison,/std.interpret.reading/);
- assert.deepEqual(value.isession.state['diagram.sketch'].shapes.map(n=>[n.x,n.y]),[[100,120]]);
+ assert.deepEqual(toNativeDiagramState(value.isession.state['diagram.sketch']).shapes.map(n=>[n.x,n.y]),[[100,120]]);
  assert.equal(value.newEngineUndo.length,1);
 });

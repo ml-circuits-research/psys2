@@ -1,0 +1,179 @@
+# Canonical Diagram content. Editor history is stored separately.
+@diagram.sketch.state.module core.module name=diagram.sketch.state
+
+@diagram.sketch.state.board.definition core.type of=diagram.sketch.state.board closed=true
+@diagram.sketch.state.board.node core.slot of=diagram.sketch.state.board key=node type=diagram.sketch.state.node many=true
+@diagram.sketch.state.board.has.node core.slot of=diagram.sketch.state.board key=has.node kind=boolean required=true
+@diagram.sketch.state.board.link core.slot of=diagram.sketch.state.board key=link type=diagram.sketch.state.edge many=true
+@diagram.sketch.state.board.has.link core.slot of=diagram.sketch.state.board key=has.link kind=boolean required=true
+@diagram.sketch.state.board.group core.slot of=diagram.sketch.state.board key=group type=diagram.sketch.state.group many=true
+@diagram.sketch.state.board.has.group core.slot of=diagram.sketch.state.board key=has.group kind=boolean required=true
+@diagram.sketch.state.board.chart core.slot of=diagram.sketch.state.board key=chart type=diagram.sketch.state.chart many=true
+@diagram.sketch.state.board.has.chart core.slot of=diagram.sketch.state.board key=has.chart kind=boolean required=true
+@diagram.sketch.state.board.rule core.slot of=diagram.sketch.state.board key=rule type=diagram.sketch.state.rule many=true
+@diagram.sketch.state.board.has.rule core.slot of=diagram.sketch.state.board key=has.rule kind=boolean required=true
+@diagram.sketch.state.board.whole core.slot of=diagram.sketch.state.board key=whole type=diagram.sketch.state.whole many=true
+@diagram.sketch.state.board.has.whole core.slot of=diagram.sketch.state.board key=has.whole kind=boolean
+@diagram.sketch.state.board.frame core.slot of=diagram.sketch.state.board key=frame type=diagram.sketch.state.frame required=true
+@diagram.sketch.state.board.frames core.slot of=diagram.sketch.state.board key=frames type=diagram.sketch.state.frame many=true
+@diagram.sketch.state.board.has.frames core.slot of=diagram.sketch.state.board key=has.frames kind=boolean required=true
+
+@diagram.sketch.state.node.definition core.type of=diagram.sketch.state.node closed=true
+@diagram.sketch.state.node.id core.slot of=diagram.sketch.state.node key=id kind=string id=true required=true
+@diagram.sketch.state.node.nativeType core.slot of=diagram.sketch.state.node key=nativeType kind=atom required=true
+@diagram.sketch.state.node.shortId core.slot of=diagram.sketch.state.node key=shortId kind=string
+@diagram.sketch.state.node.shape core.slot of=diagram.sketch.state.node key=shape kind=atom required=true
+@diagram.sketch.state.node.x core.slot of=diagram.sketch.state.node key=x kind=number required=true
+@diagram.sketch.state.node.y core.slot of=diagram.sketch.state.node key=y kind=number required=true
+@diagram.sketch.state.node.size core.slot of=diagram.sketch.state.node key=size kind=number required=true
+@diagram.sketch.state.node.color core.slot of=diagram.sketch.state.node key=color kind=string kind=atom
+@diagram.sketch.state.node.outline core.slot of=diagram.sketch.state.node key=outline kind=string kind=atom
+@diagram.sketch.state.node.label core.slot of=diagram.sketch.state.node key=label kind=string kind=atom
+@diagram.sketch.state.node.value core.slot of=diagram.sketch.state.node key=value kind=number
+@diagram.sketch.state.node.w core.slot of=diagram.sketch.state.node key=w kind=number
+@diagram.sketch.state.node.h core.slot of=diagram.sketch.state.node key=h kind=number
+@diagram.sketch.state.node.font core.slot of=diagram.sketch.state.node key=font kind=number
+@diagram.sketch.state.node.order core.slot of=diagram.sketch.state.node key=order kind=integer
+@diagram.sketch.state.node.fill core.slot of=diagram.sketch.state.node key=fill kind=string kind=atom
+@diagram.sketch.state.node.layer core.slot of=diagram.sketch.state.node key=layer kind=string kind=atom
+@diagram.sketch.state.node.quiet core.slot of=diagram.sketch.state.node key=quiet kind=boolean
+@diagram.sketch.state.node.template core.slot of=diagram.sketch.state.node key=template kind=string
+@diagram.sketch.state.node.startAngle core.slot of=diagram.sketch.state.node key=startAngle kind=number
+@diagram.sketch.state.node.endAngle core.slot of=diagram.sketch.state.node key=endAngle kind=number
+@diagram.sketch.state.node.innerRadius core.slot of=diagram.sketch.state.node key=innerRadius kind=number
+@diagram.sketch.state.node.geometry core.slot of=diagram.sketch.state.node key=geometry type=diagram.sketch.state.geometry
+
+@diagram.sketch.state.geometry.definition core.type of=diagram.sketch.state.geometry closed=true
+@diagram.sketch.state.geometry.width core.slot of=diagram.sketch.state.geometry key=width kind=number
+@diagram.sketch.state.geometry.height core.slot of=diagram.sketch.state.geometry key=height kind=number
+@diagram.sketch.state.geometry.startAngle core.slot of=diagram.sketch.state.geometry key=startAngle kind=number
+@diagram.sketch.state.geometry.endAngle core.slot of=diagram.sketch.state.geometry key=endAngle kind=number
+@diagram.sketch.state.geometry.innerRadius core.slot of=diagram.sketch.state.geometry key=innerRadius kind=number
+
+@diagram.sketch.state.edge.definition core.type of=diagram.sketch.state.edge closed=true
+@diagram.sketch.state.edge.id core.slot of=diagram.sketch.state.edge key=id kind=string id=true required=true
+@diagram.sketch.state.edge.nativeType core.slot of=diagram.sketch.state.edge key=nativeType kind=atom required=true
+@diagram.sketch.state.edge.from core.slot of=diagram.sketch.state.edge key=from type=diagram.sketch.state.node by=id kind=string strict=true required=true
+@diagram.sketch.state.edge.to core.slot of=diagram.sketch.state.edge key=to type=diagram.sketch.state.node by=id kind=string strict=true required=true
+@diagram.sketch.state.edge.style core.slot of=diagram.sketch.state.edge key=style kind=atom required=true
+@diagram.sketch.state.edge.arrow core.slot of=diagram.sketch.state.edge key=arrow kind=atom required=true
+@diagram.sketch.state.edge.label core.slot of=diagram.sketch.state.edge key=label kind=string kind=atom
+@diagram.sketch.state.edge.color core.slot of=diagram.sketch.state.edge key=color kind=string kind=atom
+@diagram.sketch.state.edge.width core.slot of=diagram.sketch.state.edge key=width kind=number required=true
+
+@diagram.sketch.state.group.definition core.type of=diagram.sketch.state.group closed=true
+@diagram.sketch.state.group.id core.slot of=diagram.sketch.state.group key=id kind=string id=true required=true
+@diagram.sketch.state.group.nativeType core.slot of=diagram.sketch.state.group key=nativeType kind=atom required=true
+@diagram.sketch.state.group.label core.slot of=diagram.sketch.state.group key=label kind=string
+@diagram.sketch.state.group.layout core.slot of=diagram.sketch.state.group key=layout kind=string
+@diagram.sketch.state.group.member core.slot of=diagram.sketch.state.group key=member type=diagram.sketch.state.node by=id kind=string strict=true many=true
+@diagram.sketch.state.group.has.member core.slot of=diagram.sketch.state.group key=has.member kind=boolean required=true
+@diagram.sketch.state.group.link core.slot of=diagram.sketch.state.group key=link type=diagram.sketch.state.edge by=id kind=string strict=true many=true
+@diagram.sketch.state.group.has.link core.slot of=diagram.sketch.state.group key=has.link kind=boolean
+@diagram.sketch.state.group.chart core.slot of=diagram.sketch.state.group key=chart type=diagram.sketch.state.chart by=id kind=string strict=true
+@diagram.sketch.state.group.layoutOrigin core.slot of=diagram.sketch.state.group key=layoutOrigin type=diagram.sketch.state.position
+
+@diagram.sketch.state.position.definition core.type of=diagram.sketch.state.position closed=true
+@diagram.sketch.state.position.x core.slot of=diagram.sketch.state.position key=x kind=number required=true
+@diagram.sketch.state.position.y core.slot of=diagram.sketch.state.position key=y kind=number required=true
+
+@diagram.sketch.state.frame.definition core.type of=diagram.sketch.state.frame closed=true
+@diagram.sketch.state.frame.x core.slot of=diagram.sketch.state.frame key=x kind=number required=true
+@diagram.sketch.state.frame.y core.slot of=diagram.sketch.state.frame key=y kind=number required=true
+@diagram.sketch.state.frame.title core.slot of=diagram.sketch.state.frame key=title kind=string
+
+@diagram.sketch.state.rule.definition core.type of=diagram.sketch.state.rule closed=true
+@diagram.sketch.state.rule.id core.slot of=diagram.sketch.state.rule key=id kind=string id=true required=true
+@diagram.sketch.state.rule.shape core.slot of=diagram.sketch.state.rule key=shape kind=string kind=atom
+@diagram.sketch.state.rule.color core.slot of=diagram.sketch.state.rule key=color kind=string kind=atom
+@diagram.sketch.state.rule.size core.slot of=diagram.sketch.state.rule key=size kind=string kind=atom
+@diagram.sketch.state.rule.outline core.slot of=diagram.sketch.state.rule key=outline kind=string kind=atom
+
+@diagram.sketch.state.whole.definition core.type of=diagram.sketch.state.whole closed=true
+@diagram.sketch.state.whole.id core.slot of=diagram.sketch.state.whole key=id kind=string id=true required=true
+@diagram.sketch.state.whole.kind core.slot of=diagram.sketch.state.whole key=kind kind=string required=true
+@diagram.sketch.state.whole.layout core.slot of=diagram.sketch.state.whole key=layout kind=string kind=atom
+@diagram.sketch.state.whole.links core.slot of=diagram.sketch.state.whole key=links kind=number
+@diagram.sketch.state.whole.member core.slot of=diagram.sketch.state.whole key=member type=diagram.sketch.state.node by=id kind=string strict=true many=true
+@diagram.sketch.state.whole.has.member core.slot of=diagram.sketch.state.whole key=has.member kind=boolean required=true
+
+@diagram.sketch.state.chart.definition core.type of=diagram.sketch.state.chart closed=true
+@diagram.sketch.state.chart.id core.slot of=diagram.sketch.state.chart key=id kind=string id=true required=true
+@diagram.sketch.state.chart.nativeType core.slot of=diagram.sketch.state.chart key=nativeType kind=atom required=true
+@diagram.sketch.state.chart.type core.slot of=diagram.sketch.state.chart key=type kind=atom required=true
+@diagram.sketch.state.chart.title core.slot of=diagram.sketch.state.chart key=title kind=string required=true
+@diagram.sketch.state.chart.category core.slot of=diagram.sketch.state.chart key=category type=diagram.sketch.state.category many=true
+@diagram.sketch.state.chart.has.category core.slot of=diagram.sketch.state.chart key=has.category kind=boolean required=true
+@diagram.sketch.state.chart.series core.slot of=diagram.sketch.state.chart key=series type=diagram.sketch.state.series many=true
+@diagram.sketch.state.chart.has.series core.slot of=diagram.sketch.state.chart key=has.series kind=boolean required=true
+@diagram.sketch.state.chart.options core.slot of=diagram.sketch.state.chart key=options type=diagram.sketch.state.chartOptions
+@diagram.sketch.state.chart.source core.slot of=diagram.sketch.state.chart key=source type=diagram.sketch.state.source many=true
+@diagram.sketch.state.chart.has.source core.slot of=diagram.sketch.state.chart key=has.source kind=boolean
+@diagram.sketch.state.chart.placement core.slot of=diagram.sketch.state.chart key=placement type=diagram.sketch.state.rectangle
+@diagram.sketch.state.chart.group core.slot of=diagram.sketch.state.chart key=group type=diagram.sketch.state.group by=id kind=string strict=true
+@diagram.sketch.state.chart.projection core.slot of=diagram.sketch.state.chart key=projection type=diagram.sketch.state.projection
+@diagram.sketch.state.chart.proper core.slot of=diagram.sketch.state.chart key=proper kind=boolean
+@diagram.sketch.state.chart.recipe core.slot of=diagram.sketch.state.chart key=recipe type=diagram.sketch.state.recipe kind=atom
+
+@diagram.sketch.state.category.definition core.type of=diagram.sketch.state.category closed=true
+@diagram.sketch.state.category.id core.slot of=diagram.sketch.state.category key=id kind=string id=true required=true
+@diagram.sketch.state.category.label core.slot of=diagram.sketch.state.category key=label kind=string required=true
+@diagram.sketch.state.category.index core.slot of=diagram.sketch.state.category key=index kind=integer
+
+@diagram.sketch.state.series.definition core.type of=diagram.sketch.state.series closed=true
+@diagram.sketch.state.series.id core.slot of=diagram.sketch.state.series key=id kind=string id=true required=true
+@diagram.sketch.state.series.nativeType core.slot of=diagram.sketch.state.series key=nativeType kind=atom
+@diagram.sketch.state.series.label core.slot of=diagram.sketch.state.series key=label kind=string required=true
+@diagram.sketch.state.series.color core.slot of=diagram.sketch.state.series key=color kind=string kind=atom
+@diagram.sketch.state.series.point core.slot of=diagram.sketch.state.series key=point type=diagram.sketch.state.point many=true
+@diagram.sketch.state.series.has.point core.slot of=diagram.sketch.state.series key=has.point kind=boolean required=true
+
+@diagram.sketch.state.point.definition core.type of=diagram.sketch.state.point closed=true
+@diagram.sketch.state.point.id core.slot of=diagram.sketch.state.point key=id kind=string id=true required=true
+@diagram.sketch.state.point.nativeType core.slot of=diagram.sketch.state.point key=nativeType kind=atom required=true
+@diagram.sketch.state.point.category core.slot of=diagram.sketch.state.point key=category type=diagram.sketch.state.category by=id kind=string strict=true required=true
+@diagram.sketch.state.point.value core.slot of=diagram.sketch.state.point key=value kind=number required=true
+
+@diagram.sketch.state.chartOptions.definition core.type of=diagram.sketch.state.chartOptions closed=true
+@diagram.sketch.state.chartOptions.stacked core.slot of=diagram.sketch.state.chartOptions key=stacked kind=boolean
+@diagram.sketch.state.chartOptions.horizontal core.slot of=diagram.sketch.state.chartOptions key=horizontal kind=boolean
+@diagram.sketch.state.chartOptions.showLegend core.slot of=diagram.sketch.state.chartOptions key=showLegend kind=boolean kind=atom
+@diagram.sketch.state.chartOptions.showValues core.slot of=diagram.sketch.state.chartOptions key=showValues kind=boolean
+@diagram.sketch.state.chartOptions.sort core.slot of=diagram.sketch.state.chartOptions key=sort kind=string kind=atom
+@diagram.sketch.state.chartOptions.palette core.slot of=diagram.sketch.state.chartOptions key=palette kind=string kind=atom
+@diagram.sketch.state.chartOptions.pointColor core.slot of=diagram.sketch.state.chartOptions key=pointColor type=diagram.sketch.state.pointColor many=true
+@diagram.sketch.state.chartOptions.has.pointColor core.slot of=diagram.sketch.state.chartOptions key=has.pointColor kind=boolean
+
+@diagram.sketch.state.pointColor.definition core.type of=diagram.sketch.state.pointColor closed=true
+@diagram.sketch.state.pointColor.label core.slot of=diagram.sketch.state.pointColor key=label kind=string required=true
+@diagram.sketch.state.pointColor.color core.slot of=diagram.sketch.state.pointColor key=color kind=string required=true
+
+@diagram.sketch.state.source.definition core.type of=diagram.sketch.state.source closed=true
+@diagram.sketch.state.source.id core.slot of=diagram.sketch.state.source key=id kind=string required=true
+
+@diagram.sketch.state.rectangle.definition core.type of=diagram.sketch.state.rectangle closed=true
+@diagram.sketch.state.rectangle.x core.slot of=diagram.sketch.state.rectangle key=x kind=number required=true
+@diagram.sketch.state.rectangle.y core.slot of=diagram.sketch.state.rectangle key=y kind=number required=true
+@diagram.sketch.state.rectangle.width core.slot of=diagram.sketch.state.rectangle key=width kind=number required=true
+@diagram.sketch.state.rectangle.height core.slot of=diagram.sketch.state.rectangle key=height kind=number required=true
+
+@diagram.sketch.state.projection.definition core.type of=diagram.sketch.state.projection closed=true
+@diagram.sketch.state.projection.contract core.slot of=diagram.sketch.state.projection key=contract kind=string required=true
+@diagram.sketch.state.projection.status core.slot of=diagram.sketch.state.projection key=status kind=atom required=true
+@diagram.sketch.state.projection.titleMode core.slot of=diagram.sketch.state.projection key=titleMode kind=atom
+@diagram.sketch.state.projection.reason core.slot of=diagram.sketch.state.projection key=reason kind=string
+@diagram.sketch.state.projection.linkedGroup core.slot of=diagram.sketch.state.projection key=linkedGroup type=diagram.sketch.state.group by=id kind=string strict=true
+@diagram.sketch.state.projection.linkedMember core.slot of=diagram.sketch.state.projection key=linkedMember type=diagram.sketch.state.node by=id kind=string strict=true many=true
+@diagram.sketch.state.projection.has.linkedMember core.slot of=diagram.sketch.state.projection key=has.linkedMember kind=boolean
+@diagram.sketch.state.projection.priorGroup core.slot of=diagram.sketch.state.projection key=priorGroup kind=string
+@diagram.sketch.state.projection.priorMember core.slot of=diagram.sketch.state.projection key=priorMember type=diagram.sketch.state.source many=true
+@diagram.sketch.state.projection.has.priorMember core.slot of=diagram.sketch.state.projection key=has.priorMember kind=boolean
+
+@diagram.sketch.state.recipe.definition core.type of=diagram.sketch.state.recipe closed=true
+@diagram.sketch.state.recipe.kind core.slot of=diagram.sketch.state.recipe key=kind kind=string required=true
+@diagram.sketch.state.recipe.argument core.slot of=diagram.sketch.state.recipe key=argument type=diagram.sketch.state.argument many=true
+@diagram.sketch.state.recipe.has.argument core.slot of=diagram.sketch.state.recipe key=has.argument kind=boolean required=true
+
+@diagram.sketch.state.argument.definition core.type of=diagram.sketch.state.argument closed=true
+@diagram.sketch.state.argument.key core.slot of=diagram.sketch.state.argument key=key kind=string required=true
+@diagram.sketch.state.argument.value core.slot of=diagram.sketch.state.argument key=value kind=string kind=number kind=boolean kind=atom

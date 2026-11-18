@@ -139,3 +139,6 @@ Chromium verified the exact authored recolor query, compiler output and dispatch
 2026-11-18 delivered: serialized authored SOP is excluded from the natural-language previous-utterance input. Native scene observations and the authored execution journal are retained.
 Chromium A/B after authored recolor and Undo: cutter emitted the same two cuts. Previously only tree executed; now both tree and house execute with two admitted queries, two compiled circuits and two native calls. The one-cut circle/square coverage gap remains.
 Checks: node --test tests/app-reader-context.test.mjs (3 passed); npm run build:webchat (7 worlds, 312 files); npm test (613 pass, 3 skip, 0 fail); repeat Chromium replay with rendered circuits.
+
+2026-11-18 made Diagram's authored SOP schema authoritative for nodes, groups, links and charts. The schema validates named joins, and older archives validate their original observations before conversion. Current Work files preserve editor history separately.
+Checks: editor schema source check, Webchat build c7d76f4fb1, and npm test (615 pass, 3 skip, 0 fail). Chromium dragged a real node, reopened the saved SVG link with the same dotted style, arrowheads and label, placed a circle via authored chat, and undid the placement.

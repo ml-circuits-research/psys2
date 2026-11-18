@@ -49,7 +49,8 @@ for(const record of records)test(`published ${record.world} archive remains loss
  assert.notEqual(archive.metadata.knowledge.version,CATALOG_PIN.commit);
  // Verify the historical facts against a fresh adapter without presenting the old archive as a current work file.
  const state=structuredClone(archive.projection),area=Object.values(NATIVE_AREAS).find(area=>area.world===record.world);
- const host=await createAreaHost(area,{state,instanceId:record.instanceId,loader:target.engine.loader});
+ const options={state,instanceId:record.instanceId,loader:target.engine.loader};
+ const host=await (area.legacyHost?area.legacyHost(options):createAreaHost(area,options));
  exact(projection(record.world,state),archive.projection,'all historical renderer fields and native history remain representable');
  exact(nativeObservationObjects(host.observe()),semantic(archive.objects),'all historical semantic values and references remain exact');
  await assert.rejects(restoreNativeInstances(target,[record]),/instance-knowledge-migration-required/);

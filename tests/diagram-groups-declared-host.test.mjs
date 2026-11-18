@@ -1,3 +1,4 @@
+import {toNativeDiagramState} from '../worlds/diagram.sketch/canonical-state.mjs';
 import {nativeObservationObjects,compareInstanceObjects} from '../src/dialog/instance-facts.mjs';
 import test from'node:test';import assert from'node:assert/strict';
 import{createDiagramHost,initialDiagramState}from'../worlds/diagram.sketch/declared-host.mjs';
@@ -33,7 +34,8 @@ import {invokeNativeControl} from '../src/dialog/native-tool-controls.mjs';
 test('diagram size observation uses the engine canonical grade and keeps pixel size separate',async()=>{
  const state=initialDiagramState(),session={isession:{state:{'diagram.sketch':state}}};const run=(operation,args)=>invokeNativeControl(session,{view:'diagram',operation,args});
  const made=await run('diagram.node.make',{kind:'circle',size:'small',colour:'cyan'});assert.equal(made.ok,true);assert.notEqual(made.intentRecord.verification.status,'mismatch');assert.ok(made.intentRecord.verification.checks.some(c=>c.parameter==='size'&&c.status==='met'));
- const changed=await run('diagram.node.change',{ids:[state.shapes[0].name],size:'large',colour:'blue'});assert.equal(changed.intentRecord.verification.status,'verified');const node=changed.intentRecord.after.objects.find(o=>o.sourceType==='diagram.sketch.node');assert.equal(node.inputs.find(i=>i.key==='size').values[0],JSON.stringify('large'));assert.equal(node.inputs.find(i=>i.key==='sizePixels').values[0],JSON.stringify(state.shapes[0].size));
+ const shape=()=>toNativeDiagramState(session.isession.state['diagram.sketch']).shapes[0];
+ const changed=await run('diagram.node.change',{ids:[shape().name],size:'large',colour:'blue'});assert.equal(changed.intentRecord.verification.status,'verified');const node=changed.intentRecord.after.objects.find(o=>o.sourceType==='diagram.sketch.node');assert.equal(node.inputs.find(i=>i.key==='size').values[0],JSON.stringify('large'));assert.equal(node.inputs.find(i=>i.key==='sizePixels').values[0],JSON.stringify(shape().size));
 });
 
 test('linked group charts derive source edits atomically, preserve presentation, undo, and detach snapshots',async()=>{

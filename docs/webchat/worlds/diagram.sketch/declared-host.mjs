@@ -3,21 +3,33 @@ import { diagramToolInterface, DIAGRAM_COMPONENTS } from './tool-interface.mjs?v
 export { DIAGRAM_TOOL_BINDINGS, DIAGRAM_COMPONENTS } from './tool-interface.mjs?v=522940fd25';
 import{projectNumericGroups}from'./chart-layout.mjs?v=132bf9f3f9';
 import {centeredSpatialBox,spatialBox,unionSpatialBoxes} from '../native-spatial-observation.mjs?v=ced85b9a29';
-import {routeEdges} from './arrows.mjs?v=3346b422bb';
+import {routeEdges,edgeAppearance} from './arrows.mjs?v=e2ec6e110c';
 import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs?v=ecc9d8b538';
+import {canonicalDiagramState,toNativeDiagramState,diagramStateWorld,DIAGRAM_STATE_SCHEMA} from './canonical-state.mjs?v=00aba1b7d4';
 import {initialState,loadEngine,systemFor,writeBack,PREFIX,K} from './core.mjs?v=1139adacc0';
 import * as tool from './tool.mjs?v=99a770da11';
 import{groupNativeObjects,groupNativeHandlers,projectGroupCharts}from'./group-tools.mjs?v=3f4c137162';
 import {initialChartState,chartNativeObjects,chartNativeHandlers} from '../data.charts/declared-host.mjs?v=922c82f339';
 export const initialDiagramState=initialState;
+export const initialCanonicalDiagramState=()=>canonicalDiagramState(initialState());
+export const DIAGRAM_STATE_INTERFACE=Object.freeze({canonicalizeState:canonicalDiagramState,projectState:toNativeDiagramState,
+ stateWorld:diagramStateWorld,stateSchema:DIAGRAM_STATE_SCHEMA,stateInterfaceTypeKey:'nativeType',separateRuntime:true,
+ observationOnlyTypes:['diagram.sketch.page'],legacyHost:createDiagramHost});
 const fail=code=>({status:'missing',code});
 const ids=(s,list,kind='shapes')=>Array.isArray(list)&&list.length>0&&new Set(list).size===list.length&&list.every(id=>typeof id==='string'&&s[kind].some(item=>(kind==='shapes'?item.name:item.id)===id));
-const view=s=>[
+const edgeInputs=(edge,canonical)=>{
+ const appearance=canonical?edgeAppearance(edge):edge.properties??{};
+ return Object.entries({from:edge.from,to:edge.to,...appearance}).map(([field,value])=>{
+  const key=field==='color'?'colour':field;
+  return {binding:'diagram.link.'+key,key,values:canonical&&value==null?[]:[nativeToken(value)]};
+ });
+};
+const view=(s,canonical)=>[
  ...(Object.hasOwn(s,'idDisplay')?[{id:'diagram.page',kind:'page',sourceType:'diagram.sketch.page',inputs:Object.entries(s.idDisplay).map(([key,value])=>({binding:'diagram.ids.'+key,key,values:[nativeToken(value)]}))}]:[]),
  ...s.shapes.map(n=>({id:n.name,kind:n.shape,sourceType:'diagram.sketch.node',inputs:Object.entries({colour:n.color,size:K.sizeName(n.size),sizePixels:n.size,label:n.label,value:n.value,x:n.x,y:n.y,...Object.fromEntries(['width','height','startAngle','endAngle','innerRadius'].filter(key=>Object.hasOwn(n.geometry??{},key)).map(key=>[key,key==='width'?K.dims(n).w:key==='height'?K.dims(n).h:n[key]]))}).map(([key,value])=>({binding:`diagram.node.${key}`,key,values:value===null||value===undefined?[]:[nativeToken(value)],...(['x','y','sizePixels','width','height'].includes(key)?{dimension:'length',unit:'canvas.pixel',frame:'diagram.canvas'}:{})}))})),
  ...groupNativeObjects(s),
  ...chartNativeObjects(s.chartTools??initialChartState()).map(row=>{const chart=s.chartTools.charts.find(c=>c.id===row.id);return chart?.projection?{...row,inputs:[...row.inputs,{binding:'chart.projection.status',key:'projectionStatus',values:[nativeToken(chart.projection.status)]},{binding:'chart.projection.sourceGroup',key:'sourceGroup',values:[nativeToken(chart.projection.sourceGroup)]},...(chart.projection.reason?[{binding:'chart.projection.reason',key:'projectionReason',values:[nativeToken(chart.projection.reason)]}]:[])]}:row;}),
- ...s.edges.map(e=>({id:e.id,kind:'link',sourceType:'diagram.sketch.link',from:e.from,to:e.to,relations:{from:[e.from],to:[e.to]},predicate:'connected',inputs:[...['from','to'].map(key=>({binding:`diagram.link.${key}`,key,values:[nativeToken(e[key])]})),...Object.entries(e.properties??{}).map(([key,value])=>({binding:`diagram.link.${key==='color'?'colour':key}`,key:key==='color'?'colour':key,values:[nativeToken(value)]}))]})),
+ ...s.edges.map(e=>({id:e.id,kind:'link',sourceType:'diagram.sketch.link',from:e.from,to:e.to,relations:{from:[e.from],to:[e.to]},predicate:'connected',inputs:edgeInputs(e,canonical)})),
 ];
 const nodeExtents=new Map();
 const spatial = state => {
@@ -72,8 +84,11 @@ const compositionSnapshot=state=>{
 };
 const restoreComposition=(state,snapshot)=>{const copy=structuredClone(snapshot);delete copy.idDisplay;for(const key of Object.keys(state))if(!['compositionHistory','compositionFuture','idDisplay'].includes(key))delete state[key];Object.assign(state,copy);};
 export async function createDiagramHost({state=initialState(),instanceId,...limits}={}){
- await loadEngine();migrateChartTools(state);
- const colours=Object.keys(systemFor(state).engine.plugin('shapes').legend.color.values);
+ await loadEngine();
+ const canonical=Object.hasOwn(state,'sop');
+ const projected=canonical?toNativeDiagramState(state):state;
+ migrateChartTools(projected);
+ const colours=Object.keys(systemFor(projected).engine.plugin('shapes').legend.color.values);
  const toolInterface = diagramToolInterface.realize({ 'diagram.colours': colours });
  const run=(ctx,args)=>{try{const r=systemFor(ctx.state).engine.run([{id:'native',type:'command',args}]);writeBack(ctx.state);return r.ok?{status:'supported',changed:args.target||[]}:fail('native-refusal');}catch{return fail('native-refusal');}};
  const handlers={
@@ -91,7 +106,7 @@ export async function createDiagramHost({state=initialState(),instanceId,...limi
   'diagram.selection.remove':(ctx,a,step)=>{if(a.nodes.length&&!ids(ctx.state,a.nodes)||a.links.length&&!ids(ctx.state,a.links,'edges'))return fail('missing-target');const changed=[...a.nodes,...a.links];if(a.nodes.length){const result=tool.removeShapes(ctx,{ids:a.nodes,step});if(result.status!=='supported')return result;}const remaining=a.links.filter(id=>ctx.state.edges.some(edge=>edge.id===id));if(remaining.length){const result=tool.removeLinks(ctx,{ids:remaining,step});if(result.status!=='supported')return result;}ctx.state.selected={shapes:[],edges:[]};return {status:'supported',changed};},
   'diagram.page.clear':ctx=>{const s=ctx.state,empty=initialState(),changed=[...s.shapes.map(n=>n.name),...s.edges.map(e=>e.id),...s.groups.map(g=>g.name),...s.chartTools.charts.map(c=>c.id)];for(const key of Object.keys(s))if(!['compositionHistory','compositionFuture','idDisplay'].includes(key))delete s[key];delete empty.compositionHistory;delete empty.compositionFuture;Object.assign(s,empty);return {status:'supported',changed};},
   'diagram.ids.show':(ctx,a)=>{const next={mode:a.mode,...(a.mode==='temporary'?{expiresAt:Date.now()+a.duration}:{})};if(JSON.stringify(ctx.state.idDisplay)===JSON.stringify(next))return {status:'supported',changed:[]};ctx.state.idDisplay=next;return {status:'supported',changed:['diagram.page']};},
-  'diagram.observe':ctx=>({status:'supported',data:view(ctx.state)}),
+  'diagram.observe':ctx=>({status:'supported',data:view(ctx.state,canonical)}),
   'diagram.undo':tool.undoStep,'diagram.redo':tool.redoStep,
  };
  Object.assign(handlers,groupNativeHandlers({run}));
@@ -100,16 +115,35 @@ export async function createDiagramHost({state=initialState(),instanceId,...limi
  handlers['diagram.undo']=ctx=>{const s=ctx.state;if(!s.compositionHistory?.length)return fail('nothing-to-undo');s.compositionFuture??=[];s.compositionFuture.push(compositionSnapshot(s));restoreComposition(s,s.compositionHistory.pop());return {status:'supported',changed:[]};};
  handlers['diagram.redo']=ctx=>{const s=ctx.state;if(!s.compositionFuture?.length)return fail('nothing-to-redo');s.compositionHistory??=[];s.compositionHistory.push(compositionSnapshot(s));restoreComposition(s,s.compositionFuture.pop());return {status:'supported',changed:[]};};
  for(const operation of toolInterface.bindings){if(['ask','undo','redo','pick'].includes(operation.act))continue;const handler=handlers[operation.id];handlers[operation.id]=(ctx,args,step)=>{const before=compositionSnapshot(ctx.state),result=handler(ctx,args,step);if(result?.status==='supported'){const derived=[...projectGroupCharts(ctx.state,{operation:operation.id,args}),...projectNumericGroups(ctx.state,{operation:operation.id,args})];if(derived.length)result.changed=[...new Set([...(result.changed??[]),...derived])];}if(result?.status==='supported'&&JSON.stringify(before)!==JSON.stringify(compositionSnapshot(ctx.state))){ctx.state.compositionHistory??=[];ctx.state.compositionHistory.push(before);if(ctx.state.compositionHistory.length>30)ctx.state.compositionHistory.shift();ctx.state.compositionFuture=[];}return result;};}
- const host=createNativeToolHost({state,instanceId,scope:'diagram.nodes-links-and-charts',toolInterface,handlers,view,spatial,...limits});
+ const effectiveHandlers=canonical?Object.fromEntries(Object.entries(handlers).map(([id,handler])=>[id,(ctx,args,invocation)=>{
+  const native=toNativeDiagramState(ctx.state),result=handler({...ctx,state:native},args,invocation);
+  if(result?.status==='supported')Object.assign(ctx.state,canonicalDiagramState(native));
+  return result;
+ }])):handlers;
+ const host=createNativeToolHost({state,instanceId,scope:'diagram.nodes-links-and-charts',toolInterface,handlers:effectiveHandlers,
+  view:carrier=>view(canonical?toNativeDiagramState(carrier):carrier,canonical),
+  spatial:canonical?carrier=>spatial(toNativeDiagramState(carrier)):spatial,...limits});
  return {...host,measureSpatial(operation,args){
   if(operation!=='diagram.node.make'||!Object.hasOwn(PREFIX,args.kind))return null;
-  const key=JSON.stringify([state.rules,args]);
+  const rules=(canonical?toNativeDiagramState(state):state).rules;
+  const key=JSON.stringify([rules,args]);
   if(nodeExtents.has(key))return {...nodeExtents.get(key)};
-  const scratch=initialState();scratch.rules=structuredClone(state.rules);
+  const scratch=initialState();scratch.rules=structuredClone(rules);
   const applied=tool.addShapes({state:scratch},{...args,step:'measure'});
   if(applied?.status!=='supported'||scratch.shapes.length!==1)return null;
   const {w,h}=K.dims(scratch.shapes[0]),measurement={width:w,height:h};
   if(nodeExtents.size>=128)nodeExtents.clear();
   nodeExtents.set(key,measurement);return {...measurement};
  }};
+}
+
+export async function createCanonicalDiagramHost({state=initialCanonicalDiagramState(),...options}={}){
+ if(!Object.hasOwn(state,'sop')){
+  const draft=structuredClone(state);
+  migrateChartTools(draft);
+  const carrier=canonicalDiagramState(draft);
+  for(const key of Object.keys(state))delete state[key];
+  Object.assign(state,carrier);
+ }
+ return createDiagramHost({state,...options});
 }

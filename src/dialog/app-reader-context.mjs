@@ -3,7 +3,7 @@ import {observedReaderContext} from './native-reader-context.mjs';
 import {isAuthoredRequest} from './authored-request-tool.mjs';
 import {createCanonicalDrawingHost} from '../../worlds/art.draw/declared-host.mjs';
 import {DRAWING_STATE_INTERFACE} from '../../worlds/art.draw/canonical-state.mjs';
-import {createDiagramHost} from '../../worlds/diagram.sketch/declared-host.mjs';
+import {createCanonicalDiagramHost,DIAGRAM_STATE_INTERFACE} from '../../worlds/diagram.sketch/declared-host.mjs';
 import {createDocumentHost,DOCUMENT_STATE_INTERFACE} from '../../worlds/docs.editor/declared-host.mjs';
 import {createAvatarHost} from '../../worlds/ui.avatar/declared-host.mjs';
 import {canonicalAvatarState,toNativeAvatarState,avatarStateWorld,AVATAR_STATE_SCHEMA} from '../../worlds/ui.avatar/canonical-state.mjs';
@@ -15,7 +15,7 @@ export const NATIVE_AREAS={
   historySelection:[['selectedSlot']],historyView:[['idDisplay']]},
  draw:{area:'drawing',world:'art.draw',create:createCanonicalDrawingHost,...DRAWING_STATE_INTERFACE,
   historySelection:[['selected'],['selectedIds'],['selectedPart']],historyView:[['idDisplay']]},
- diagram:{area:'diagram',world:'diagram.sketch',create:createDiagramHost,historySelection:[['selected'],['chartTools','active']],historyView:[['idDisplay']]},
+ diagram:{area:'diagram',world:'diagram.sketch',create:createCanonicalDiagramHost,...DIAGRAM_STATE_INTERFACE,historySelection:[['selected'],['chartTools','active']],historyView:[['idDisplay']]},
  editor:{area:'document',world:'docs.editor',create:createDocumentHost,...DOCUMENT_STATE_INTERFACE,historySelection:[['selection']]},
  calendar:{area:'calendar',world:'time.calendar',create:createCalendarHost,canonicalizeState:canonicalCalendarState,projectState:toNativeCalendarState,
   stateWorld:calendarStateWorld,stateSchema:CALENDAR_STATE_SCHEMA,policyFile:'scheduling-policy.sop',historySelection:[['selectedEvent']]},

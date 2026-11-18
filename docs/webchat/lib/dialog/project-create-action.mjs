@@ -1,7 +1,7 @@
 import {nativeCreationCandidates} from './native-binding-candidates.mjs?v=de223646d6';
 // Compose a reversible creation from model-declared roles and actual native constructor declarations.
 import {serializeRequestGraph,editCost} from '../vendor/sopworld/sopworld.mjs?v=14e619cf45';
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=6c7fc1be6d';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=aab30ccd46';
 import {DRAWING_PROPERTY_BINDINGS} from '../../worlds/art.draw/property-host.mjs?v=45ec70afe7';
 const kindConcepts=new Set(['kind','shape']);
 export async function projectCreateAction(proposal,session,{bindings,registry,view}={}) {

@@ -1,3 +1,4 @@
+import {toNativeDiagramState} from '../worlds/diagram.sketch/canonical-state.mjs';
 import { test } from 'node:test';
 import {toNativeDrawingState} from '../worlds/art.draw/canonical-state.mjs';
 import assert from 'node:assert/strict';
@@ -30,7 +31,7 @@ test('the shared native control route executes recorded SOP in all editor areas'
   };
   const cases = [
     ['draw', 'drawing.object.make', { kind: 'circle', x: 120, y: 130 }, () => toNativeDrawingState(state['art.draw']).objects[0]?.x, 120],
-    ['diagram', 'diagram.node.make', { kind: 'rectangle', x: 230, y: 240 }, () => state['diagram.sketch'].shapes[0]?.y, 240],
+    ['diagram', 'diagram.node.make', { kind: 'rectangle', x: 230, y: 240 }, () => toNativeDiagramState(state['diagram.sketch']).shapes[0]?.y, 240],
     ['editor', 'document.write', { title: 'Report', blocks: [{ kind: 'paragraph', text: 'Measured' }] },
       () => toNativeDocumentState(state['docs.editor']).blocks[0]?.text, 'Measured'],
     ['calendar', 'calendar.event.add', { id: 'visit', title: 'Visit', start: 2000, duration: 100 },
