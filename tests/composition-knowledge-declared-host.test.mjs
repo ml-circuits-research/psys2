@@ -10,7 +10,7 @@ test('placement knowledge retains actual catalog facts and requires a visible su
  const base=new URL('../docs/webchat/catalog/'+CATALOG_PIN.commit+'/',import.meta.url);
  const reads=[];
  const catalog=createFacts({source:{text:path=>{reads.push(path);return readFile(new URL(path,base),'utf8');}}});
- const regions=async anchors=>parse(await readCompositionRegions(catalog,{subjects:['boat','sun'],anchors,layout:'landscape'}));
+ const regions=async anchors=>parse(await readCompositionRegions(catalog,{subjects:['boat','sun'],anchors,layout:'landscape'},'scene.projection'));
  const dry=await regions([]);
  assert.ok(dry.some(row=>row.type==='k.composition2d.slot'&&row.attrs.subject[0]==='sun'&&row.attrs.place[0]==='sky'));
  assert.ok(!dry.some(row=>row.type==='k.composition2d.anchor'));

@@ -8,7 +8,7 @@
 // lexicon is its closed list. Browser-safe: no node imports.
 import { lemmaCandidates } from './facts.mjs?v=a7d292c001';
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
-import { colourName, isCoreColour } from './values.mjs?v=e5168916d2';
+import { colourName, isCoreColour } from './values.mjs?v=92e909b8d2';
 
 let attached = null;
 /** The host attaches the catalog of the session (`engine.setKnowledge`); `null` detaches it. */

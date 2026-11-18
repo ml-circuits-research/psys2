@@ -16,10 +16,10 @@
  * is learned and nothing is weighted: a reading is dropped for a named reason, and every decision is recorded on the segment (`wa`, `veto`, `pick`).
  */
 import { budget } from './budget.mjs?v=00bce6e369';
-import { en } from '../lang/en.mjs?v=c2e13a25d5';
-import { editDistance } from '../formalizer/rules/normalize.mjs?v=00ffd2e5f0';
-import { foreignFragment } from './continuation.mjs?v=d418b63ff2';
-import { liveFromContext } from './meta-worlds.mjs?v=72e6df807c';
+import { en } from '../lang/en.mjs?v=84434dacf2';
+import { editDistance } from '../formalizer/rules/normalize.mjs?v=e8fab95560';
+import { foreignFragment } from './continuation.mjs?v=82e4e6b616';
+import { liveFromContext } from './meta-worlds.mjs?v=0bbeec250b';
 
 export const WORLD_AWARE_MODES = Object.freeze(['off', 'veto', 'choose', 'observe', 'veto-strict', 'choose-strict']);
 /** The default mode (user decision 2026-11-12): an unset option is `veto`; an explicit `off` turns the layer off. */

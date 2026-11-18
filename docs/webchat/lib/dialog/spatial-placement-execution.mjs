@@ -1,9 +1,9 @@
 // Assemble trusted native observations and dispatch the compiler's SOP call.
 import {World,parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=3a48344175';
-import SOURCE from './new-engine-source.mjs?v=c9a0091f89';
-import {readPlacementProfile,rememberPlacement} from '../../worlds/app.project/spatial-profile.mjs?v=9da38f72b7';
+import SOURCE from './new-engine-source.mjs?v=5d39de193e';
+import {readPlacementProfile,rememberPlacement} from '../../worlds/app.project/spatial-profile.mjs?v=a97957388d';
 import {placementInterfaceSop} from '../../worlds/native-spatial-interface.mjs?v=c8748f1d05';
-import {NATIVE_AREAS,createAreaHost} from './app-reader-context.mjs?v=cd0bb261b1';
+import {NATIVE_AREAS,createAreaHost} from './app-reader-context.mjs?v=a11d1a3e95';
 import {identityRegistryFor,instanceIdFor} from './instance-identity.mjs?v=024ef1ca83';
 import {nativeKindCandidates} from './native-binding-candidates.mjs?v=f6d6f43960';
 import {invokeObservedNativeTool} from './native-tool-activity.mjs?v=b78711d18a';

@@ -2,10 +2,13 @@
 # license: CC0-1.0
 # script: none (hand-written)
 
-@k.composition2d core.module name=k.composition2d version=1 imports=k.scenes imports=k.layouts exports=subject exports=slot exports=anchor core.source="hand-core 1"
+@k.composition2d core.module name=k.composition2d version=2 imports=k.scenes imports=k.layouts exports=subject exports=role exports=slot exports=anchor core.source="hand-core 1"
 
 @k.composition2d.subject core.type of=k.composition2d.subject shared=true closed=true core.source="hand-core 1"
 @k.composition2d.subject.name core.slot of=k.composition2d.subject key=name id=true kind=atom kind=string core.source="hand-core 1"
+
+@k.composition2d.role core.type of=k.composition2d.role shared=true closed=true core.source="hand-core 1"
+@k.composition2d.role.name core.slot of=k.composition2d.role key=name id=true kind=atom kind=string core.source="hand-core 1"
 
 @k.composition2d.slot core.type of=k.composition2d.slot shared=true closed=true core.source="hand-core 1"
 @k.composition2d.slot.subject core.slot of=k.composition2d.slot key=subject id=true kind=atom kind=string core.source="hand-core 1"
@@ -49,3 +52,10 @@
 @k.composition2d.held_anchor k.composition2d.anchor subject=?subject of=?owner kind=?place x=?x y=?y w=?w h=?h basis=holds region=$k.composition2d.anchor_holds evidence=$k.composition2d.anchor_holds
 @k.composition2d.match_layer_subject core.rule when=$k.composition2d.requested when=$k.composition2d.layer_holds then=$k.composition2d.held_layer core.source="hand-core 1"
 @k.composition2d.match_anchor_subject core.rule when=$k.composition2d.requested when=$k.composition2d.anchor_holds then=$k.composition2d.held_anchor core.source="hand-core 1"
+
+
+# A known structural role can occupy an accepting slot independently of the subject's shape or name.
+@k.composition2d.requested_role k.composition2d.role name=?role
+@k.composition2d.role_region k.layouts.slot layout=?layout name=?place role=?role x=?x y=?y w=?w h=?h
+@k.composition2d.role_slot k.composition2d.slot subject=?subject layout=?layout place=?place x=?x y=?y w=?w h=?h basis=role region=$k.composition2d.role_region evidence=$k.composition2d.role_region
+@k.composition2d.match_role core.rule when=$k.composition2d.requested when=$k.composition2d.requested_role when=$k.composition2d.role_region then=$k.composition2d.role_slot core.source="hand-core 1"

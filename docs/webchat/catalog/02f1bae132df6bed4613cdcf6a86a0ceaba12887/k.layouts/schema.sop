@@ -21,13 +21,14 @@
 
 # A place of an arrangement. `count` is `one` thing or `many`; `pair=true` says that the place is there twice, once
 # on each side of the middle line (the eyes of a face); `optional=true` that it may stay empty; `holds` names what
-# usually goes there (many); `arranged` names the arrangement of the things inside the place, where they have one
+# usually goes there (many); `role` names explicitly assigned structural roles it accepts; `arranged` names the arrangement of the things inside the place, where they have one
 # (each row of a grid is a `row`); `x`, `y`, `w`, `h` are the usual box of the place in the frame of the whole
 # arrangement, 0 to 100, x to the right and y down, where the arrangement has usual places (the sky of a landscape
 # is its upper half). The box of a pair is that of its left one. The boxes may overlap.
 @k.layouts.slot core.type of=k.layouts.slot shared=true closed=true core.source="hand-core 1"
 @k.layouts.slot.layout core.slot of=k.layouts.slot key=layout id=true required=true kind=atom kind=string type=k.layouts.layout by=name core.source="hand-core 1"
 @k.layouts.slot.name core.slot of=k.layouts.slot key=name id=true required=true kind=atom core.source="hand-core 1"
+@k.layouts.slot.role core.slot of=k.layouts.slot key=role kind=atom kind=string many=true core.source="hand-core 1"
 @k.layouts.slot.count core.slot of=k.layouts.slot key=count required=true enum=one enum=many core.source="hand-core 1"
 @k.layouts.slot.pair core.slot of=k.layouts.slot key=pair kind=boolean core.source="hand-core 1"
 @k.layouts.slot.optional core.slot of=k.layouts.slot key=optional kind=boolean core.source="hand-core 1"

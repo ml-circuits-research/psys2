@@ -1,11 +1,11 @@
-import { readSceneDefaults } from './scene-placement-defaults.mjs?v=6ac473709c';
+import { readSceneDefaults } from './scene-placement-defaults.mjs?v=b4fcb37ca3';
 // SPDX-License-Identifier: AGPL-3.0-only
-import { compileNativeCapability } from './capability-plan-adapter.mjs?v=f2d8882450';
-import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=cd0bb261b1';
+import { compileNativeCapability } from './capability-plan-adapter.mjs?v=395c5a9950';
+import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=a11d1a3e95';
 import { instanceIdFor } from './instance-identity.mjs?v=024ef1ca83';
-import { prepareNativeControlHost } from './native-control-preparation.mjs?v=293c688d66';
+import { prepareNativeControlHost } from './native-control-preparation.mjs?v=fe320cf69e';
 import { invokeObservedNativeTool } from './native-tool-activity.mjs?v=b78711d18a';
-import { retainPropertyEffect } from './property-effect-evidence.mjs?v=1fe747f662';
+import { retainPropertyEffect } from './property-effect-evidence.mjs?v=fedf5e9e69';
 import { describeNativeControl, verifyNativeControlEffect } from './native-control-intent.mjs?v=cb692a2c50';
 
 function reply(text, supported, trace = {}) {

@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-import { diagramToolInterface, DIAGRAM_COMPONENTS } from './tool-interface.mjs?v=7372b3aa5e';
-export { DIAGRAM_TOOL_BINDINGS, DIAGRAM_COMPONENTS } from './tool-interface.mjs?v=7372b3aa5e';
+import { diagramToolInterface, DIAGRAM_COMPONENTS } from './tool-interface.mjs?v=f287b7935d';
+export { DIAGRAM_TOOL_BINDINGS, DIAGRAM_COMPONENTS } from './tool-interface.mjs?v=f287b7935d';
 import{projectNumericGroups}from'./chart-layout.mjs?v=bc0a0e3ac5';
 import {centeredSpatialBox,spatialBox,unionSpatialBoxes} from '../native-spatial-observation.mjs?v=ced85b9a29';
 import {routeEdges,edgeAppearance} from './arrows.mjs?v=e2ec6e110c';
@@ -8,7 +8,7 @@ import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs?v=66339b
 import {canonicalDiagramState,toNativeDiagramState,diagramStateWorld,DIAGRAM_STATE_SCHEMA} from './canonical-state.mjs?v=5e49c7545e';
 import {initialState,loadEngine,systemFor,writeBack,PREFIX,K} from './core.mjs?v=2f762c6877';
 import * as tool from './tool.mjs?v=94e898cd74';
-import{groupNativeObjects,groupNativeHandlers,projectGroupCharts}from'./group-tools.mjs?v=33deaf5527';
+import{groupNativeObjects,groupNativeHandlers,projectGroupCharts}from'./group-tools.mjs?v=939fefb19c';
 import {initialChartState,chartNativeObjects,chartNativeHandlers} from '../data.charts/declared-host.mjs?v=8672c45c1a';
 export const initialDiagramState=initialState;
 export const initialCanonicalDiagramState=()=>canonicalDiagramState(initialState());

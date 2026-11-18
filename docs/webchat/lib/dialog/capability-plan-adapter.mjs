@@ -2,8 +2,8 @@
 import { parse, quote, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=3a48344175';
 import { decodeCapabilityCall } from '../vendor/sopworld/capability-call.mjs?v=ed3b773c65';
 import POLICY from '../../worlds/app.project/capability-policy.mjs?v=9f3103a196';
-import { executionPolicyWorld } from './execution-policy.mjs?v=8e287af4f7';
-import { sceneDefaultModule, writeSceneDefaults } from './scene-placement-defaults.mjs?v=6ac473709c';
+import { executionPolicyWorld } from './execution-policy.mjs?v=0b0a918c63';
+import { sceneDefaultModule, writeSceneDefaults } from './scene-placement-defaults.mjs?v=b4fcb37ca3';
 import { nativeKindCandidates } from './native-binding-candidates.mjs?v=f6d6f43960';
 import { observedReaderContext } from './native-reader-context.mjs?v=ab17c14d8a';
 import { budget } from './budget.mjs?v=00bce6e369';

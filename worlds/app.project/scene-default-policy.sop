@@ -1,5 +1,4 @@
 @scene.schema core.use world=app.sceneDefault prefix=false
-@scene.style app.sceneDefault.style layout=landscape
 @scene.water.support app.sceneDefault.requiresSupport place=water
 
 # Explicit coordinate constraints bind through the same renderer ports.
@@ -14,10 +13,11 @@
 # framed by an actual visible object with a relevant catalog anchor.
 @scene.subject app.sceneDefault.subject scope=?scope canonical=?kind name=?native operation=?operation xKey=?xKey yKey=?yKey width=?width height=?height
 @scene.frame app.sceneDefault.frame scope=?scope min_x=?left min_y=?top max_x=?right max_y=?bottom
-@scene.placement.style app.sceneDefault.style layout=?layout
 @scene.catalog.slot k.composition2d.slot subject=?label layout=?layout place=?place x=?u y=?v w=?w h=?h
 @scene.live.support app.sceneDefault.requiresSupport place=?place
+@scene.allowed.slot app.sceneDefault.region operation=?operation value=$scene.catalog.slot
 @scene.catalog.anchor k.composition2d.anchor subject=?label of=?owner x=?u y=?v w=?w h=?h
+@scene.allowed.anchor app.sceneDefault.region operation=?operation value=$scene.catalog.anchor
 @scene.label core.calc fn=matches args=?label args="^[\\s\\S]*$" out=?nativeLabel
 @scene.owner core.calc fn=matches args=?owner args="^[\\s\\S]*$" out=?nativeOwner
 @scene.matches core.check fn=eq args=?native args=?nativeLabel
@@ -25,8 +25,8 @@
 @scene.owner.observed app.sceneDefault.peer scope=?scope entity=?anchor name=?ownerName order=?order min_x=?left min_y=?top max_x=?right max_y=?bottom
 @scene.frame.site app.sceneDefault.site scope=?scope kind=?kind operation=?operation anchor="" rank=1 order=0 x=?u y=?v w=?w h=?h min_x=?left min_y=?top max_x=?right max_y=?bottom
 @scene.anchor.site app.sceneDefault.site scope=?scope kind=?kind operation=?operation anchor=?anchor rank=0 order=?order x=?u y=?v w=?w h=?h min_x=?left min_y=?top max_x=?right max_y=?bottom
-@scene.frame.preference core.rule when=$scene.subject when=$scene.placement.style when=$scene.frame when=$scene.catalog.slot not=$scene.live.support with=$scene.label if=$scene.matches then=$scene.frame.site
-@scene.anchor.preference core.rule when=$scene.subject when=$scene.owner.observed when=$scene.catalog.anchor with=$scene.label with=$scene.owner if=$scene.matches if=$scene.owner.matches then=$scene.anchor.site
+@scene.frame.preference core.rule when=$scene.subject when=$scene.frame when=$scene.catalog.slot when=$scene.allowed.slot not=$scene.live.support with=$scene.label if=$scene.matches then=$scene.frame.site
+@scene.anchor.preference core.rule when=$scene.subject when=$scene.owner.observed when=$scene.catalog.anchor when=$scene.allowed.anchor with=$scene.label with=$scene.owner if=$scene.matches if=$scene.owner.matches then=$scene.anchor.site
 
 # Sample the admitted catalog box using the same fractions in every scene.
 @scene.point.center app.sceneDefault.sample u=0.5 v=0.5 rank=0

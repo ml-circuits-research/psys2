@@ -1,5 +1,5 @@
 import {World,editCost,quote,serialize} from '../vendor/sopworld/sopworld.mjs?v=3a48344175';
-import {createAreaHost,NATIVE_AREAS} from './app-reader-context.mjs?v=cd0bb261b1';
+import {createAreaHost,NATIVE_AREAS} from './app-reader-context.mjs?v=a11d1a3e95';
 import {nativeCreationCandidates} from './native-binding-candidates.mjs?v=f6d6f43960';
 import {compileObservedChoice} from './observed-choice.mjs?v=7c29d210ff';
 import POLICY from '../../worlds/app.project/query-reading-policy-source.mjs?v=1697719f48';

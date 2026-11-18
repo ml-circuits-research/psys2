@@ -8,3 +8,8 @@
 @scene.projection.slots std.knowledge.select param=layout type=k.composition2d.slot key=layout
 @scene.projection.support std.knowledge.select param=anchors type=k.composition2d.anchor key=of
 @scene.projection std.knowledge.profile module=k.composition2d input=$scene.projection.subject read=$scene.projection.things read=$scene.projection.layouts read=$scene.projection.anchors select=$scene.projection.slots select=$scene.projection.support
+
+
+# Structural placement uses the operation's declared role and layout without a shape-to-role lookup.
+@scene.projection.role std.knowledge.input param=role type=k.composition2d.role key=name
+@scene.projection.roles std.knowledge.profile module=k.composition2d input=$scene.projection.subject input=$scene.projection.role read=$scene.projection.layouts select=$scene.projection.slots

@@ -198,3 +198,6 @@ The isolated Webchat build f5481215af loaded the new composition schema and word
 638 passed, 3 skipped. Chromium checked a boat at the moved lake, exact support evidence and Undo. Real Diagram host tests checked an authored region on two pages. The offline comparator now replays its frozen declarations with their inherited schema dependency.
 
 2026-11-18 — Webchat a344c72883 pins SOPWorlds 0.223.0 and KB c97b0063. Full native/reader gate passed 639, skipped 3. Chromium compiled a secondary-slot lookup over the real world and recovered all 130 water entries, including boat, with the lake-water evidence. A missing shard now produces an unavailable read.
+
+2026-11-18 — Webchat 43de207bc3 uses the Diagram tool's declared node role and the shipped scatter-slot knowledge at 02f1bae1. Three natural additions used (400,250), (200,250), then (400,250) after moving the first circle to (600,250).
+Actual SVG transforms, native circuit, catalog source and Undo checked in Chromium. Full gate: 639 passed, 3 skipped. Drawing circle retains its independent context.

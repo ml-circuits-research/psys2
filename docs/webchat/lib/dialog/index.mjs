@@ -13,55 +13,55 @@ import {isAuthoredRequest} from './authored-request-tool.mjs?v=b28428ba91';
  */
 import { retiredArea, unavailableAreaReply } from './application-areas.mjs?v=5930d8fe63';
 import { composeReply, sayOf } from './composed-reply.mjs?v=7e2c232418';
-import { reviewForeign } from './foreign-reading.mjs?v=821a44dfe1';
-import { installTextGen } from './textgen.mjs?v=8f2f343c69';
-import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=231518daa6';
-import { loadWorlds, tabOfWorld } from '../worlds/index.mjs?v=6b7cb00bac';
-import { validateWorldSet } from '../worlds/validate.mjs?v=94527915cb';
-import { defaultRouter, namedWorlds, namingTables, setWorldChooser } from '../formalizer/routing.mjs?v=231518daa6';
-import { isNumberWord, ordinalWordValue } from '../formalizer/rules/numbers.mjs?v=37cba1a69e';
-import { createInterpreter } from '../interpreter/index.mjs?v=7eb1a02248';
-import { createReasoner } from '../reasoner/index.mjs?v=8ab6d7308e';
-import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=1759f04291';
-import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=8964dcf130';
+import { reviewForeign } from './foreign-reading.mjs?v=1c1891d26d';
+import { installTextGen } from './textgen.mjs?v=0e0bfbfb58';
+import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=aaf2ea3359';
+import { loadWorlds, tabOfWorld } from '../worlds/index.mjs?v=24a5ae0a59';
+import { validateWorldSet } from '../worlds/validate.mjs?v=d7ba8fb758';
+import { defaultRouter, namedWorlds, namingTables, setWorldChooser } from '../formalizer/routing.mjs?v=aaf2ea3359';
+import { isNumberWord, ordinalWordValue } from '../formalizer/rules/numbers.mjs?v=c3562183b4';
+import { createInterpreter } from '../interpreter/index.mjs?v=456ac52a9d';
+import { createReasoner } from '../reasoner/index.mjs?v=231b46a9d2';
+import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=87ddc54ee7';
+import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=cbb48c866a';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=c57881f705';
-import { splitSentences } from '../formalizer/rules/normalize.mjs?v=00ffd2e5f0';
-import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=f9984da0f8';
-import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=f2f76b07f2';
+import { splitSentences } from '../formalizer/rules/normalize.mjs?v=e8fab95560';
+import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=c0a138d2cf';
+import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=a05f01760f';
 import { gatherCandidates, chooseCandidate, englishTest, nearAny } from '../translate/candidates.mjs?v=a7f7eb0703';
 import { machineReads } from '../translate/reading-policy.mjs?v=96bd6cc0e4';   // reviewer 02:30 (Q50): the machine translator does not read the request in a language with a rules translator (data, reversible)
 import { worldThingNames, sessionNames } from '../translate/keep-list.mjs?v=c0baa0b9d0';
 import { langRoNow } from '../translate/frames-ro.mjs?v=6291058d65';
 import { repairInContext } from '../translate/source-repair.mjs?v=db5b883c67';
-import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=231518daa6';
-import { lexIndex } from '../worlds/lexicon.mjs?v=8c18a6acda';
+import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=aaf2ea3359';
+import { lexIndex } from '../worlds/lexicon.mjs?v=a266b05a78';
 import { perf } from '../formalizer/perf.mjs?v=b81e032a17';
 import { guard, TurnAborted } from '../formalizer/guard.mjs?v=82a55329d9';
 import { createBudget, installBudget, releaseBudget, isBudgetExceeded, budget } from './budget.mjs?v=00bce6e369';
-import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs?v=a438091a85';
-import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=644b717a3f';
-import { checkValues } from './value-check.mjs?v=7462760c21';
-import { attachValues } from '../knowledge/values.mjs?v=e5168916d2';
-import { attachOpenWords, ready as openWordsReady } from '../knowledge/open-words.mjs?v=2ca7ec82f8';
-import { attachArrangement } from '../knowledge/arrangement.mjs?v=6d1fc4abfd';
-import { Discourse } from './discourse.mjs?v=e6d30b57bf';
-import { Dialogue } from './dialogue.mjs?v=2666d35f33';
+import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs?v=0bba58366c';
+import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=573034bfab';
+import { checkValues } from './value-check.mjs?v=a0aca8f57e';
+import { attachValues } from '../knowledge/values.mjs?v=92e909b8d2';
+import { attachOpenWords, ready as openWordsReady } from '../knowledge/open-words.mjs?v=853884fdc5';
+import { attachArrangement } from '../knowledge/arrangement.mjs?v=af61b9f2e8';
+import { Discourse } from './discourse.mjs?v=e3e6213975';
+import { Dialogue } from './dialogue.mjs?v=71d27d29f6';
 import { turnSteps, withDoor } from './steps.mjs?v=1bf5f81c99';
-import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=ce03650498';
-import { knowledgeAnswer, knowledgeFallback, preloadThings, prefetchNext, knowledgeOf, within } from './knowledge-lookup.mjs?v=0dce2e8261';
-import { personTurn } from './person.mjs?v=33f6a81380';
-import { proposeByTypes } from './typed-reader.mjs?v=bc9094ca77';
-import { withVariants, anyVoiceOn } from './variants.mjs?v=db6c2ebc17';
-import { isIncomplete, completeMode } from '../formalizer/completeness.mjs?v=231518daa6';
-import { createTypedWorlds } from '../formalizer/typed-world.mjs?v=231518daa6';
-import { repairFromScene } from './scene-referents.mjs?v=00fa400472';
-import { loadMetaWorlds } from './meta-worlds.mjs?v=72e6df807c';
-import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=ddb9a2a72b';
-import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=f48e2df50f';
+import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=63a6d89540';
+import { knowledgeAnswer, knowledgeFallback, preloadThings, prefetchNext, knowledgeOf, within } from './knowledge-lookup.mjs?v=0ec4fa5976';
+import { personTurn } from './person.mjs?v=ef5682e3c5';
+import { proposeByTypes } from './typed-reader.mjs?v=b64cba34eb';
+import { withVariants, anyVoiceOn } from './variants.mjs?v=d1c158e71f';
+import { isIncomplete, completeMode } from '../formalizer/completeness.mjs?v=aaf2ea3359';
+import { createTypedWorlds } from '../formalizer/typed-world.mjs?v=aaf2ea3359';
+import { repairFromScene } from './scene-referents.mjs?v=fdc3d3e807';
+import { loadMetaWorlds } from './meta-worlds.mjs?v=0bbeec250b';
+import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=2c97da090d';
+import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=3df72e4483';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
 import { panel } from '../astra/where.mjs?v=09b4059350';
 import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=3e29fd91c2';
-import { correctMessage, splitAnswerList } from '../formalizer/rules/expand.mjs?v=0c4f2d928d';
+import { correctMessage, splitAnswerList } from '../formalizer/rules/expand.mjs?v=2c50afd86a';
 
 export { runWorldTests } from './test-runner.mjs?v=635e001b3e';
 
@@ -401,10 +401,10 @@ import { LIMITS } from './time-limits.mjs?v=3dc818f0e6';
 import { languageCommand } from '../translate/language-command.mjs?v=af45c6bf2e';
 import { withSubject, polishReply } from '../translate/register.mjs?v=45588e0a13';
 import { BARE_DONE, NOTHING_CHANGED, contentChanged } from './honest-done.mjs?v=80e9d07ff4';
-import { intentStep, weakReading, cutWorld } from './intent.mjs?v=6603b62908';
+import { intentStep, weakReading, cutWorld } from './intent.mjs?v=1854681c0d';
 import { knownEnglishWord } from '../translate/en-ro.mjs?v=cbd133aecd';
 import { proposeReading, negationWords } from './proposer.mjs?v=b3c21ed7d7';
-import { requestLanguage, liveWorld, readTurn, replyOf, stateWorld, worldWholes, typeParents, definiteKind, saysAnything, actOperation, worldWholeOperation, clausesOf, boundTools, goalOf, plainRequest, declarationsOf, isQuestion, madeIn, withSubkindsNegated, unitOfWhole, doorWholes, strongConstraint, madeAgainstSaid } from './request.mjs?v=6ab9594d88';
+import { requestLanguage, liveWorld, readTurn, replyOf, stateWorld, worldWholes, typeParents, definiteKind, saysAnything, actOperation, worldWholeOperation, clausesOf, boundTools, goalOf, plainRequest, declarationsOf, isQuestion, madeIn, withSubkindsNegated, unitOfWhole, doorWholes, strongConstraint, madeAgainstSaid } from './request.mjs?v=9350f878d1';
 /** A settled dry-run answer is reused for the same text and session state for this long (ms). */
 export const DRY_CACHE_MS = 5000;
 const stripDetail = (r) => { if (!r || !('detail' in r)) return r; const { detail: _d, ...rest } = r; return rest; };
@@ -1653,7 +1653,7 @@ export class DialogSession {
         }
       }
     }
-    const reply = await (await import('./reader-routing.mjs?v=5a37700320')).routeNewEngine(this, english, { ...opts, language: 'en' });
+    const reply = await (await import('./reader-routing.mjs?v=0305b1e454')).routeNewEngine(this, english, { ...opts, language: 'en' });
     reply.trace = { ...reply.trace, english, ...(translation ? { translation } : {}) };
     if (language !== 'en') {
       try {

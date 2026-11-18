@@ -1,4 +1,4 @@
-# k.kinds/shards/relations-layouts: the keys of the types of k.layouts read as relations: 44 relations, each with the kind of its subject and the class, types and senses of its object (from the joins declared on the slots, by rule from the schemas, and by value from the shards, as found says).
+# k.kinds/shards/relations-layouts: the keys of the types of k.layouts read as relations: 45 relations, each with the kind of its subject and the class, types and senses of its object (from the joins declared on the slots, by rule from the schemas, and by value from the shards, as found says).
 # sources: hand-core 1 (computed in this repository from the schemas and shards of the knowledge worlds: tools/relations-core.mjs)
 # license: CC0-1.0
 # script: tools/relations-core.mjs
@@ -38,6 +38,7 @@
 @k.kinds.relation.k.layouts.relation.among k.kinds.relation type=k.layouts.relation key=among subject=relation object=value found=schema core.source="hand-core 1"
 @k.kinds.relation.k.layouts.slot.layout k.kinds.relation type=k.layouts.slot key=layout subject=slot object=group object_type=k.layouts.layout found=declared object_by=name core.source="hand-core 1"
 @k.kinds.relation.k.layouts.slot.name k.kinds.relation type=k.layouts.slot key=name subject=slot object=word object_type=k.words.sense found=value core.source="hand-core 1"
+@k.kinds.relation.k.layouts.slot.role k.kinds.relation type=k.layouts.slot key=role subject=slot object=word found=value core.source="hand-core 1"
 @k.kinds.relation.k.layouts.slot.count k.kinds.relation type=k.layouts.slot key=count subject=slot object=value object_type=k.expect.amount found=value core.source="hand-core 1"
 @k.kinds.relation.k.layouts.slot.pair k.kinds.relation type=k.layouts.slot key=pair subject=slot object=boolean found=schema core.source="hand-core 1"
 @k.kinds.relation.k.layouts.slot.optional k.kinds.relation type=k.layouts.slot key=optional subject=slot object=boolean found=schema core.source="hand-core 1"

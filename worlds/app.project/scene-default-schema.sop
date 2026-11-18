@@ -1,6 +1,10 @@
-@scene.defaults.module core.module name=app.sceneDefault imports=std.capability exports=app.sceneDefault.style exports=app.sceneDefault.frame exports=app.sceneDefault.peer exports=app.sceneDefault.subject exports=app.sceneDefault.site exports=app.sceneDefault.option exports=app.sceneDefault.overlap exports=app.sceneDefault.candidate exports=app.sceneDefault.displaced exports=app.sceneDefault.port exports=app.sceneDefault.requiresSupport exports=app.sceneDefault.sample
-@scene.defaults.style.type core.type of=app.sceneDefault.style closed=true
-@scene.defaults.style.layout core.slot of=app.sceneDefault.style key=layout kind=atom present=true
+@scene.defaults.module core.module name=app.sceneDefault imports=std.capability exports=app.sceneDefault.region exports=app.sceneDefault.frame exports=app.sceneDefault.peer exports=app.sceneDefault.subject exports=app.sceneDefault.site exports=app.sceneDefault.option exports=app.sceneDefault.overlap exports=app.sceneDefault.candidate exports=app.sceneDefault.displaced exports=app.sceneDefault.port exports=app.sceneDefault.requiresSupport exports=app.sceneDefault.sample
+@scene.defaults.region.type core.type of=app.sceneDefault.region closed=true
+@scene.defaults.region.operation core.slot of=app.sceneDefault.region key=operation kind=ref to=std.capability.operation present=true
+@scene.defaults.region.profile core.slot of=app.sceneDefault.region key=profile kind=string present=true
+@scene.defaults.region.layout core.slot of=app.sceneDefault.region key=layout kind=string present=true
+@scene.defaults.region.role core.slot of=app.sceneDefault.region key=role kind=string
+@scene.defaults.region.value core.slot of=app.sceneDefault.region key=value kind=ref present=true
 @scene.defaults.frame.type core.type of=app.sceneDefault.frame closed=true
 @scene.defaults.frame.scope core.slot of=app.sceneDefault.frame key=scope kind=ref to=std.capability.scope present=true
 @scene.defaults.frame.min_x core.slot of=app.sceneDefault.frame key=min_x kind=number present=true

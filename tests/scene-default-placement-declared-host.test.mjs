@@ -94,32 +94,38 @@ test('an occupied sky slot tries another sampled point and a full region keeps i
   assert.deepEqual(measure(observe(full).at(-1)),[250,175]);
 });
 
-test('the same projection places a real Diagram node from the authored region in its active page', async () => {
-  const base = createFacts({source:createKnowledgeSource(catalog)});
+test('shipped Diagram role layout responds to actual page occupancy and independent node moves', async () => {
   const candidate={request:'r',wires:[
     '@s std.request.source text="Add a circle."',
     '@r std.request act=make mood=do source=$s',
     '@t std.request.target request=$r mode=new kind=k.shapes.shape.circle',
   ].join('\n')};
-  for (const [slotX, page, expected] of [[20,{x:0,y:0},[240,175]],[60,{x:800,y:500},[1360,675]]]) {
-    const fixture = '@fixture.layout.slot k.layouts.slot layout=landscape name=diagram_workspace count=one holds=circle x='+slotX+' y=25 w=20 h=20';
-    const projectedCatalog = {...base, async wireSource(type, filters) {
-      const source = await base.wireSource(type,filters);
-      return [source, ...(type === 'k.layouts.slot' && filters.keys.includes('landscape') ? [fixture] : [])].join('\n');
-    }};
-    const state = initialDiagramState();
-    state.frame = page;
-    const session = {
-      isession:{state:{'diagram.sketch':state,'ui.shell':{activeTab:'diagram'}}},
-      engine:{knowledge:projectedCatalog},
-    };
+  const state = initialDiagramState();
+  state.frame = {x:800,y:500};
+  const activity = [];
+  const session = {
+    isession:{state:{'diagram.sketch':state,'ui.shell':{activeTab:'diagram'}}},
+    engine:{knowledge:createFacts({source:createKnowledgeSource(catalog)}),onWorldActivity:event=>activity.push(event)},
+  };
+  const shapes=()=>toNativeDiagramState(session.isession.state['diagram.sketch']).shapes;
+  async function addCircle(expected) {
     const result=await executeDeclaredRequest(session,candidate,'Add a circle.',{view:'diagram',bindings});
     assert.equal(result.statuses[0],'supported',JSON.stringify(result.trace));
     assert.match(result.trace.controlIntent,/operation="diagram.node.make"/);
     assert.match(result.trace.compiledSop,/scene\.seed/);
-    assert.ok(result.trace.controlIntent.includes('name="x" value='+expected[0]+'\n'));
-    const native=toNativeDiagramState(session.isession.state['diagram.sketch']);
-    assert.equal(native.shapes.length,1);
-    assert.deepEqual(measure(native.shapes[0]),expected);
+    assert.deepEqual(measure(shapes().at(-1)),expected);
   }
+  await addCircle([1200,750]);
+  assert.match(activity.find(event=>event.sceneEvidence)?.sceneEvidence,/k\.layouts\.slot\.scatter\.item/);
+  assert.match(activity.find(event=>event.sceneEvidence)?.sceneEvidence,/basis=role/);
+  await addCircle([1000,750]);
+  const moved=await performGesture(session,{view:'diagram',operation:'diagram.node.place',
+    args:{ids:[shapes()[0].name],x:1400,y:750}});
+  assert.equal(moved.ok,true);
+  await addCircle([1200,750]);
+  assert.deepEqual(shapes().map(measure),[[1400,750],[1000,750],[1200,750]]);
+
+  const drawing=setup(), drawn=await draw(drawing,'circle');
+  assert.equal(observe(drawing)[0].kind,'circle');
+  assert.doesNotMatch(drawn.trace.compiledSop,/scene\.seed/);
 });

@@ -1,14 +1,20 @@
 // The scene adapter passes observed parameter values to the authored projection profile.
-import { World, quote } from '../vendor/sopworld/sopworld.mjs';
+import { World, parse, quote } from '../vendor/sopworld/sopworld.mjs';
 import PROJECTION from '../../worlds/app.project/scene-default-projection-source.mjs';
 
 export const sceneProjectionSource = PROJECTION;
+const declarations = new Map(parse(PROJECTION).map(wire => [wire.id, wire]));
+const profiles = new Map([...declarations.values()].filter(wire => wire.type === 'std.knowledge.profile').map(wire => [
+ wire.id, new Set(['input','read','select'].flatMap(key => wire.attrs[key] ?? [])
+  .map(ref => declarations.get(ref.slice(1)).attrs.param[0])),
+]));
 let context;
 export const projectionLoaded = () => Boolean(context);
 
-export async function readCompositionRegions(knowledge, parameters) {
+export async function readCompositionRegions(knowledge, parameters, profile) {
  const catalog = knowledge?.base ?? knowledge;
- if (!catalog?.wireSource || !parameters.subjects.length) return '';
+ const ports = profiles.get(profile);
+ if (!catalog?.wireSource || !ports) return '';
  if (!context) {
   const world = new World();
   const admitted = world.tell(PROJECTION);
@@ -17,6 +23,7 @@ export async function readCompositionRegions(knowledge, parameters) {
  }
  const facts = [], references = [];
  for (const [param, values] of Object.entries(parameters)) {
+  if (!ports.has(param) || values == null) continue;
   const tokens = Array.isArray(values) ? values : [values];
   if (!tokens.length) continue;
   const id = 'scene.projection.binding.' + facts.length;
@@ -25,7 +32,7 @@ export async function readCompositionRegions(knowledge, parameters) {
    [...new Set(tokens)].map(value => 'value=' + quote(value)).join(' '));
  }
  return await context.compileRequest([
-  '@scene.projection.request std.knowledge.request profile=$scene.projection ' + references.join(' '),
+  '@scene.projection.request std.knowledge.request profile=$' + profile + ' ' + references.join(' '),
   ...facts,
  ].join('\n'), {catalog});
 }

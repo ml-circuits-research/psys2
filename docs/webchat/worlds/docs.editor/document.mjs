@@ -3,7 +3,7 @@
 // a new document from blocks, and the TOOL PRIMITIVES the request door runs through request.sop's std.tool wires, with the document's view as facts. No request, no words of a
 // person, no reply sentences, no defaults: values come in as the tool takes them (the library planned and translated them) and a call answers with a status, the ids it changed,
 // or a refusal code / a reply fact's name. The editor's word operations (editor.mjs) build on this module; this module never imports them. Browser-safe.
-import { titleBlock, getText, normalizeMarks, toDoc, stats as computeStats } from './model.mjs?v=58e174e556';
+import { titleBlock, getText, normalizeMarks, toDoc, stats as computeStats } from './model.mjs?v=c13fd667e1';
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 const MAX_HISTORY = 50;

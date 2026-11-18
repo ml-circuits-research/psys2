@@ -34,8 +34,8 @@
 @k.layouts.relation.ring.item.evenly_spaced.item k.layouts.relation layout=ring a=item rel=evenly_spaced b=item among=neighbours core.source="hand-core 1"
 
 # scatter
-@k.layouts.layout.scatter k.layouts.layout name=scatter kind=repeating about="Things spread over an area with no order, not touching." usual_for="stars in the sky" usual_for="flowers in a meadow" usual_for="sheep in a field" usual_for="toys on the floor" usual_for="fish in the sea" usual_for="raisins in a cake" core.source="hand-core 1"
-@k.layouts.slot.scatter.item k.layouts.slot layout=scatter name=item count=many holds=thing core.source="hand-core 1"
+@k.layouts.layout.scatter k.layouts.layout name=scatter kind=repeating about="Things spread over an area with no order, not touching." usual_for="stars in the sky" usual_for="flowers in a meadow" usual_for="sheep in a field" usual_for="toys on the floor" usual_for="fish in the sea" usual_for="raisins in a cake" usual_for="independent nodes of an unordered graph" core.source="hand-core 1"
+@k.layouts.slot.scatter.item k.layouts.slot layout=scatter name=item count=many holds=thing role=node x=0 y=0 w=100 h=100 core.source="hand-core 1"
 @k.layouts.relation.scatter.item.apart.item k.layouts.relation layout=scatter a=item rel=apart b=item among=all core.source="hand-core 1"
 
 # corners

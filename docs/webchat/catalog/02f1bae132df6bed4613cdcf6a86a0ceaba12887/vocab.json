@@ -77083,6 +77083,9 @@
   "k.attributes/shards/narration",
   "k.kinds/shards/relations-composition2d"
  ],
+ "k.composition2d.role": [
+  "k.attributes/shards/narration"
+ ],
  "k.composition2d.slot": [
   "k.attributes/shards/narration",
   "k.kinds/shards/relations-composition2d"
@@ -120653,6 +120656,7 @@
   "k.kinds/shards/relations-actions",
   "k.kinds/shards/relations-diagrams",
   "k.kinds/shards/relations-expect",
+  "k.kinds/shards/relations-layouts",
   "k.kinds/shards/relations-procedures",
   "k.people/schema.sop",
   "k.procedures/schema.sop",

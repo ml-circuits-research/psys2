@@ -1,5 +1,5 @@
-import {isScopedRemoval} from './capability-plan-execution.mjs?v=52fa572876';
-import {projectRemovalAction} from './project-removal-action.mjs?v=93d4376ddd';
+import {isScopedRemoval} from './capability-plan-execution.mjs?v=6b59905e1b';
+import {projectRemovalAction} from './project-removal-action.mjs?v=bae249b8d7';
 import { captureHistory, recordHistory, restoreHistory } from './history-journal.mjs?v=73602fda44';
 import {projectReaderHeadAlternative} from './reader-head-alternative.mjs?v=e9b7e3104b';
 import {parse} from '../vendor/sopworld/sopworld.mjs?v=3a48344175';
@@ -8,10 +8,10 @@ import {isAuthoredRequest,readAuthoredRequest} from './authored-request-tool.mjs
 // Model-first proposal routing. Calibration authority belongs to host configuration,
 // never to a model output, evaluation annotation or grammar proposal.
 import {requestCompositionPolicy,scheduleFollowingCut}from './request-composition-policy.mjs?v=f4e72706e2';
-import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=3246b67a5c';
-import {projectQueryAction} from './project-query-action.mjs?v=1be57f7816';
-import {projectContextAction} from './project-context-action.mjs?v=a12ccecbd1';
-import {projectCreateAction} from './project-create-action.mjs?v=02dca32a4f';
+import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=0660339de1';
+import {projectQueryAction} from './project-query-action.mjs?v=b2207dd2d6';
+import {projectContextAction} from './project-context-action.mjs?v=3bc9b8f1b6';
+import {projectCreateAction} from './project-create-action.mjs?v=a42de58833';
 import {assessReaderProposal} from './reader-admission.mjs?v=c825751cc8';
 const unavailable=reason=>({candidates:[],coverage:{complete:false,executable:false,graphProposal:false},failures:[{reason}]});
 const noDeclaredAction = () => {

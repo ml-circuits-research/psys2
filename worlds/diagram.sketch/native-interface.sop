@@ -33,7 +33,10 @@
 @native.diagram.sketch.value.31 std.capability.arg name="kindKey" value="kind"
 @native.diagram.sketch.value.32 std.capability.arg name="xKey" value="x"
 @native.diagram.sketch.value.33 std.capability.arg name="yKey" value="y"
-@native.diagram.sketch.value.34 std.capability.record entry=$native.diagram.sketch.value.30 entry=$native.diagram.sketch.value.31 entry=$native.diagram.sketch.value.32 entry=$native.diagram.sketch.value.33
+@native.diagram.sketch.scene.profile std.capability.arg name="projection" value="scene.projection.roles"
+@native.diagram.sketch.scene.layout std.capability.arg name="layout" value="scatter"
+@native.diagram.sketch.scene.role std.capability.arg name="role" value="node"
+@native.diagram.sketch.value.34 std.capability.record entry=$native.diagram.sketch.value.30 entry=$native.diagram.sketch.value.31 entry=$native.diagram.sketch.value.32 entry=$native.diagram.sketch.value.33 entry=$native.diagram.sketch.scene.profile entry=$native.diagram.sketch.scene.layout entry=$native.diagram.sketch.scene.role
 @native.diagram.sketch.value.35 std.capability.arg name="spatial" value=$native.diagram.sketch.value.34
 @native.diagram.sketch.op.diagram.node.make.metadata app.native.metadata operation=$native.diagram.sketch.op.diagram.node.make field=$native.diagram.sketch.value.29 field=$native.diagram.sketch.value.35
 @native.diagram.sketch.op.diagram.node.change std.capability.operation scope=$native.diagram.sketch.scope name="diagram.node.change" act=change on="diagram.sketch.node" order=1 eligible=true

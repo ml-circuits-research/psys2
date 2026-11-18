@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 import { World, parse, quote, str } from '../../lib/vendor/sopworld/sopworld.mjs?v=3a48344175';
-import SOURCE from '../../lib/dialog/new-engine-source.mjs?v=c9a0091f89';
+import SOURCE from '../../lib/dialog/new-engine-source.mjs?v=5d39de193e';
 import { nativeIdentitySnapshot, restoreNativeIdentitySnapshot } from '../../lib/dialog/instance-identity.mjs?v=024ef1ca83';
 import { spatialWire } from '../native-spatial-interface.mjs?v=c8748f1d05';
 

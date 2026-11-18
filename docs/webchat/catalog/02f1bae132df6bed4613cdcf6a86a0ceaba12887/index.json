@@ -1,5 +1,5 @@
 {
- "version": "5cfcd728cfd8",
+ "version": "c467a0e6fc05",
  "sopworld": "94cffa2",
  "worlds": [
   {
@@ -4702,8 +4702,8 @@
     {
      "id": "k.attributes/shards/narration",
      "path": "k.attributes/shards/narration.sop",
-     "wires": 1337,
-     "bytes": 259609,
+     "wires": 1339,
+     "bytes": 260022,
      "keys": [
       "a",
       "about",
@@ -4963,6 +4963,7 @@
       "k.commonsense.placed",
       "k.commonsense.thing",
       "k.composition2d.anchor",
+      "k.composition2d.role",
       "k.composition2d.slot",
       "k.composition2d.subject",
       "k.diagrams.fill",
@@ -13767,11 +13768,12 @@
   },
   {
    "id": "k.composition2d",
-   "version": "1",
+   "version": "2",
    "schema": "k.composition2d/schema.sop",
    "vocabulary": "k.composition2d/shards/words.sop",
    "exports": [
     "k.composition2d.anchor",
+    "k.composition2d.role",
     "k.composition2d.slot",
     "k.composition2d.subject"
    ],
@@ -34708,8 +34710,8 @@
     {
      "id": "k.kinds/shards/relations-layouts",
      "path": "k.kinds/shards/relations-layouts.sop",
-     "wires": 44,
-     "bytes": 8134,
+     "wires": 45,
+     "bytes": 8281,
      "keys": [
       "a",
       "about",
@@ -34741,6 +34743,7 @@
       "part",
       "points",
       "rel",
+      "role",
       "shape",
       "side",
       "tolerance",
@@ -40781,7 +40784,7 @@
      "id": "k.layouts/shards/layouts",
      "path": "k.layouts/shards/layouts.sop",
      "wires": 186,
-     "bytes": 33198,
+     "bytes": 33280,
      "keys": [
       "above",
       "aligned_column",

@@ -1,15 +1,14 @@
 // The compiler receives exact catalog regions and current renderer evidence.
 import { parse, quote } from '../vendor/sopworld/sopworld.mjs?v=3a48344175';
 import { nativeKindCandidates } from './native-binding-candidates.mjs?v=f6d6f43960';
-import { readCompositionRegions, projectionLoaded, sceneProjectionSource } from './composition-knowledge.mjs?v=6b420e733f';
-import POLICY from '../../worlds/app.project/scene-default-policy-source.mjs?v=06eaeac5e8';
-import SCHEMA from '../../worlds/app.project/scene-default-schema-source.mjs?v=0a4d397328';
+import { readCompositionRegions, projectionLoaded, sceneProjectionSource } from './composition-knowledge.mjs?v=49ebe443d8';
+import POLICY from '../../worlds/app.project/scene-default-policy-source.mjs?v=6b3584bb39';
+import SCHEMA from '../../worlds/app.project/scene-default-schema-source.mjs?v=f108c770c4';
 
 const family = 'app.sceneDefault.';
 const coordinateKeys = ['min_x', 'min_y', 'max_x', 'max_y'];
 const first = (row, key) => row.attrs[key]?.[0];
 const isBox = box => box && coordinateKeys.every(key => Number.isFinite(box[key]));
-const style = parse(POLICY).find(row => row.type === family + 'style');
 export const sceneDefaultModule = { name: 'app.sceneDefault', schema: SCHEMA, policy: POLICY, projection: sceneProjectionSource };
 export const sceneDefaultInspection = () => ({...sceneDefaultModule, projectionLoaded:projectionLoaded()});
 
@@ -29,19 +28,29 @@ export async function readSceneDefaults({ host, bindings, area, view, knowledge,
   if (!bounds) return null;
   const peers = spatial.observation.objects.flatMap((object, order) => available.has(object.id) && boxes.has(object.id)
     ? [{ ...boxes.get(object.id), name: object.kind, source: object.source, order }] : []);
-  let regions;
-  try { regions = await readCompositionRegions(knowledge, {
-    subjects: [...new Set(mappings.map(row => row.lemma))],
-    anchors: [...new Set(peers.map(row => row.name))],
-    layout: first(style,'layout'),
-  }); } catch (error) {
-    if (error?.name === 'BudgetExceeded' || error?.name === 'TurnAborted') throw error;
-    return null;
+  const operations = new Map(host.bindings().map(operation => [operation.id,operation]));
+  const groups = new Map();
+  for (const mapping of mappings) {
+    const port = operations.get(mapping.nativeFamilyBinding.operation)?.spatial;
+    if (!port?.projection || !port.layout) continue;
+    const key = JSON.stringify([port.projection,port.layout,port.role]);
+    if (!groups.has(key)) groups.set(key,{port,mappings:[]});
+    groups.get(key).mappings.push(mapping);
   }
-  if (!regions) return null;
-  const regionRows = parse(regions);
-  if (!regionRows.length || regionRows[0].type === 'std.compile.result') return null;
-  return { regions: regionRows, bounds, peers, mappings, spatial };
+  const anchors = peers.map(row => row.name);
+  const projections = (await Promise.all([...groups.values()].map(async ({port,mappings}) => {
+    try {
+      const source = await readCompositionRegions(knowledge, {
+        subjects: mappings.map(row => row.lemma), anchors, layout:port.layout, role:port.role,
+      },port.projection);
+      const rows = parse(source);
+      return rows.length && rows[0].type !== 'std.compile.result' ? {rows,mappings,port} : null;
+    } catch (error) {
+      if (error?.name === 'BudgetExceeded' || error?.name === 'TurnAborted') throw error;
+      return null;
+    }
+  }))).filter(Boolean);
+  return projections.length ? {projections,bounds,peers} : null;
 }
 
 export function writeSceneDefaults(scene, host, scope, operations, write, wires) {
@@ -58,9 +67,24 @@ export function writeSceneDefaults(scene, host, scope, operations, write, wires)
   write(family + 'frame', { scope, ...coordinates(scene.bounds) });
   for (const peer of scene.peers) write(family + 'peer', { scope, entity: quote(String(peer.entity)), name: quote(peer.name),
     source: quote(peer.source), order: String(peer.order), ...coordinates(peer) });
-  wires.push(...scene.regions);
+  const rows = new Map();
+  const admitted = new Set();
+  for (const projection of scene.projections) {
+    const projectedOperations = new Set(projection.mappings.map(mapping => operations.get(mapping.nativeFamilyBinding.operation)).filter(Boolean));
+    for (const row of projection.rows) {
+      rows.set(row.id,row);
+      for (const operation of projectedOperations) {
+        const key = JSON.stringify([operation,row.id]);
+        if (admitted.has(key)) continue;
+        admitted.add(key);
+        const {projection:profile,layout,role} = projection.port;
+        write(family + 'region', {operation,value:'$'+row.id,profile:quote(profile),layout:quote(layout),...(role ? {role:quote(role)} : {})});
+      }
+    }
+  }
+  wires.push(...rows.values());
 
-  for (const mapping of scene.mappings) {
+  for (const mapping of scene.projections.flatMap(group => group.mappings)) {
     const binding = mapping.nativeFamilyBinding, operation = declared.get(binding.operation), place = operation?.spatial;
     if (!place?.kindKey || !operations.has(binding.operation)) continue;
     const data = { ...binding.arguments,[place.kindKey]: mapping.lemma };

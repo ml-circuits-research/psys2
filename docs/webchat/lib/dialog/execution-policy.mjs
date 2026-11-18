@@ -2,7 +2,7 @@
 import{World,parse,str,serialize}from'../vendor/sopworld/sopworld.mjs?v=3a48344175';
 import SOURCE from'../../worlds/app.project/execution-policy-source.mjs?v=0d0c73b4e6';
 import SCHEMA from'../../worlds/app.project/execution-policy-schema-source.mjs?v=5aa31bfdbd';
-import SCENE_SCHEMA from'../../worlds/app.project/scene-default-schema-source.mjs?v=0a4d397328';
+import SCENE_SCHEMA from'../../worlds/app.project/scene-default-schema-source.mjs?v=f108c770c4';
 const schemaModule='app.execution';
 const declarations=parse(SOURCE);
 const imports=declarations.filter(wire=>wire.type==='core.use');

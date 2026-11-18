@@ -1,11 +1,11 @@
 // Actual application state only. No request annotations or invented semantic types.
 import {observedReaderContext} from './native-reader-context.mjs?v=ab17c14d8a';
 import {isAuthoredRequest} from './authored-request-tool.mjs?v=b28428ba91';
-import {createCanonicalDrawingHost} from '../../worlds/art.draw/declared-host.mjs?v=f772ed3cbf';
-import {DRAWING_STATE_INTERFACE} from '../../worlds/art.draw/canonical-state.mjs?v=936b96103f';
-import {createCanonicalDiagramHost,DIAGRAM_STATE_INTERFACE} from '../../worlds/diagram.sketch/declared-host.mjs?v=59b7ce52e9';
-import {createDocumentHost,DOCUMENT_STATE_INTERFACE} from '../../worlds/docs.editor/declared-host.mjs?v=cb4b1218f2';
-import {createAvatarHost} from '../../worlds/ui.avatar/declared-host.mjs?v=b68f18e760';
+import {createCanonicalDrawingHost} from '../../worlds/art.draw/declared-host.mjs?v=575782b11f';
+import {DRAWING_STATE_INTERFACE} from '../../worlds/art.draw/canonical-state.mjs?v=d273552577';
+import {createCanonicalDiagramHost,DIAGRAM_STATE_INTERFACE} from '../../worlds/diagram.sketch/declared-host.mjs?v=d54747f4e9';
+import {createDocumentHost,DOCUMENT_STATE_INTERFACE} from '../../worlds/docs.editor/declared-host.mjs?v=58e1d9dccc';
+import {createAvatarHost} from '../../worlds/ui.avatar/declared-host.mjs?v=41f40f7a93';
 import {canonicalAvatarState,toNativeAvatarState,avatarStateWorld,AVATAR_STATE_SCHEMA} from '../../worlds/ui.avatar/canonical-state.mjs?v=e957aeef37';
 import {createCalendarHost,canonicalCalendarState,toNativeCalendarState} from '../../worlds/time.calendar/declared-host.mjs?v=1bc6064210';
 import {calendarStateWorld,CALENDAR_STATE_SCHEMA} from '../../worlds/time.calendar/canonical-state.mjs?v=aabdc90930';
