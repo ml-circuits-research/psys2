@@ -2168,7 +2168,9 @@ export async function mountPsys2(element, options = {}) {
   try { applyState(session.state?.()); } catch (e) { console.warn('session.state() failed', e); }
   for (const t of tabDefs) if (panelUI[t.id] && !states[t.world]) panelUI[t.id].ui.update(undefined);
   if (avatarUI && !states['ui.avatar']) avatarUI.update(undefined);
-  if (!lastShellTab) { showTab(view, 'start'); lastShellTab = tabDefs.find(t=>t.id===view)?.world?view:(session.state(SHELL)?.activeTab??tabDefs.find(t=>t.world)?.id); session?.setWorldState?.(SHELL, { activeTab: lastShellTab }); }   // the engine knows the tab the person sees
+  // The shell restores its active editor independently of the visible architecture tab.
+  if (tabKnown.has(view) && !panelUI[view]) showTab(view, 'start');
+  if (!lastShellTab) { lastShellTab = tabDefs.find(t=>t.id===view)?.world?view:(session.state(SHELL)?.activeTab??tabDefs.find(t=>t.world)?.id); session?.setWorldState?.(SHELL, { activeTab: lastShellTab }); }   // the engine knows the tab the person sees
   tabsLive = true;
   applyEngineSettings();
   setStatus();

@@ -111,3 +111,6 @@ Worlds Chromium `node .git/worlds-browser-count.mjs` with and without `VERIFY_WO
 
 - Shared object inspection distinguishes declared derived observations from authoritative instance facts. A matching identity with the wrong type still fails validation.
 - `node scripts/build-webchat.mjs`, `npm test` (606 tests, 603 pass, three skipped), `git diff --check`.
+
+- Restoring Worlds on startup now mounts its panel even when the worker restores a different active editor. The Chromium regression reloads the actual page and verifies the selected Worlds graph without another click.
+- `node scripts/build-webchat.mjs`, `npm test`, `git diff --check`.

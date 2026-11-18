@@ -1,5 +1,5 @@
 {
-  "version": "4d979bcbfd",
+  "version": "a362406fc1",
   "worlds": [
     "core",
     "ui.shell",
@@ -317,11 +317,11 @@
     "worlds/words/ed.json": "6b969840b04e8c56",
     "worlds/words.bloom.json": "0710f3899a6043f6"
   },
-  "builtAt": "2026-11-18T17:02:52.357Z",
-  "commit": "75e16462-dirty",
+  "builtAt": "2026-11-18T17:09:16.608Z",
+  "commit": "3e5b3100-dirty",
   "catalog": "844ebfd7ca972ebe31a916a21569d606eb01d600",
   "assets": {
-    "app.mjs": "6a26e77805",
+    "app.mjs": "10c844d558",
     "coverage-grid.json": "dc56813858",
     "favicon.svg": "89f8b9f010",
     "lib/astra/focus.mjs": "37cd902837",

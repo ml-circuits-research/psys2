@@ -11,6 +11,14 @@ test('built Worlds RPC and explicit SOP inspection preserve state across catalog
  try{
   await b.viewport(390,844);await wait(`document.querySelector('.p2').classList.contains('is-phone')`);await b.evaluate(`document.querySelector('.p2-burger').click();document.querySelector('.p2-menu-item[data-page=worlds]').click();true`);
   await wait(`document.querySelectorAll('[data-world-node]').length>0`);
+  await b.evaluate(`sessionStorage.setItem('worlds-reload-check',String(performance.timeOrigin));setTimeout(()=>location.reload(),0);true`);
+  for(let i=0;i<400;i++){
+    try{if(await b.evaluate(`!!window.psys2?.engineClient && performance.timeOrigin!==Number(sessionStorage.getItem('worlds-reload-check'))`))break;}catch{/* Browser context is replaced during navigation. */}
+    await pause(50);
+  }
+  assert.equal(await b.evaluate(`performance.timeOrigin!==Number(sessionStorage.getItem('worlds-reload-check'))`),true);
+  await wait(`document.querySelector('#p2-tab-worlds')?.getAttribute('aria-selected')==='true' && document.querySelectorAll('[data-world-node]').length>0`);
+
   if(await b.evaluate(`document.querySelector('.p2').classList.contains('p2-on-chat')`))await b.evaluate(`document.querySelector('.p2-burger').click();document.querySelector('.p2-menu-item[data-page=worlds]').click();true`);
   await wait(`document.querySelector('.p2-worlds').getBoundingClientRect().width>0`);
   const nodes=await b.evaluate(`(async()=>{const graph=await window.psys2.engineClient.call('worldsInspection');return graph.nodes.map(node=>({id:node.id,representation:node.representation,usage:node.usage,why:node.why}));})()`);
