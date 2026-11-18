@@ -498,10 +498,31 @@ export async function mountPsys2(element, options = {}) {
     }},label);
   }
   function appendIntent(bubble,wires,label,expandedWires=null) {
-    const detail=h('details',{class:'p2-intent'},h('summary',{'aria-label':label,title:label},h('span',{'aria-hidden':'true'},'⟨/⟩'),' SOP'));
+    const detail=h('details',{class:'p2-intent'},h('summary',{'aria-label':label,title:label},h('span',{'aria-hidden':'true'},'⟨/⟩'),' '+label));
     detail.append(copyButton('Copy SOP Lang',()=>wires),h('pre',{class:'p2-code'},wires));
     if(expandedWires&&expandedWires!==wires){const trace=h('details',{class:'p2-execution-details'},h('summary',{},'Execution details'));trace.append(copyButton('Copy execution details',()=>expandedWires),h('pre',{class:'p2-code'},expandedWires));detail.append(trace);}
     bubble.append(detail);return detail;
+  }
+  function appendTurnCircuits(question, answer, trace) {
+    if (!trace) return;
+    const steps = trace.composition?.steps?.map(step => step.trace) ?? [trace];
+    for (const [index, step] of steps.entries()) {
+      if (!step) continue;
+      const suffix = steps.length > 1 ? ' · ' + (index + 1) : '';
+      const query = step.reading?.wires ?? step.journal?.reading?.wires;
+      if (query) {
+        appendIntent(question, query, 'SOP query' + suffix);
+      } else {
+        const proposals = new Set((step.readerRouting?.proposalCandidates ?? []).map(item => item.wires).filter(Boolean));
+        for (const wires of proposals) appendIntent(question, wires, 'Proposed query' + suffix);
+        if (!proposals.size) question.append(h('p', {class:'p2-reader-proposal-status'}, 'No SOP query recorded' + suffix));
+      }
+
+      const compiled = step.compiledSop ?? step.placement;
+      if (compiled) appendIntent(answer, compiled, (step.controlIntent ? 'Compiled circuit' : 'Compiler output') + suffix);
+      if (step.controlIntent) appendIntent(answer, step.controlIntent, 'Tool call' + suffix);
+      if (!compiled && !step.controlIntent) answer.append(h('p', {class:'p2-reader-proposal-status'}, 'No compiled circuit recorded' + suffix));
+    }
   }
   function attachResponseReplay(message,activity=[],command="") {
     // Keep each response's actual request records even when the live bus ring advances.
@@ -724,7 +745,22 @@ export async function mountPsys2(element, options = {}) {
     tool: async (operation,args={},options={}) => {
       if(isBusy())return {ok:false,message:'Please wait for the current action.'};
       const focusBeforeTool=document.activeElement;effectsPending++;updateBusy();
-      try{const r=await session.tool(operation,quantizeGeometryArguments(args),options);applyState(r.state);if(r.intentRecord){await trainingPairs.record(r.intentRecord);const row=addMessage('user',r.intentRecord.text);appendIntent(row.bubble,r.intentRecord.wires,'SOP Lang intent',r.intentRecord.intent?.expandedWires);attachResponseReplay(addMessage('bot',r.message+' · '+(r.intentRecord.verification?.status??'unverified')),r.worldActivity,r.intentRecord.text);}if(r.ok&&r.changed)events.add('control',operation);return r;}
+      try {
+        const r=await session.tool(operation,quantizeGeometryArguments(args),options);
+        applyState(r.state);
+        if (r.intentRecord) {
+          await trainingPairs.record(r.intentRecord);
+          const row = addMessage('user', r.intentRecord.text);
+          appendIntent(row.bubble, r.intentRecord.wires, 'Tool instruction', r.intentRecord.intent?.expandedWires);
+          const response = addMessage('bot', r.message+' · '+(r.intentRecord.verification?.status??'unverified'));
+          for (const event of r.worldActivity ?? []) {
+            if (event.phase === 'start' && event.operation === operation && event.sop) appendIntent(response.bubble, event.sop, 'Tool call');
+          }
+          attachResponseReplay(response, r.worldActivity, r.intentRecord.text);
+        }
+        if (r.ok && r.changed) events.add('control',operation);
+        return r;
+      }
       finally{effectsPending=Math.max(0,effectsPending-1);updateBusy();if(focusBeforeTool?.isConnected&&document.activeElement===document.body)focusBeforeTool.focus({preventScroll:true});}
     },
     send: (text) => send(String(text), 'form'),   // a tab's form or control (logged as mode 'form'); ignored (with a hint) while a turn runs
@@ -829,7 +865,7 @@ export async function mountPsys2(element, options = {}) {
     if (user?.msg && !user.msg.dataset.said) {   // INPUT-HISTORY on touch: a tap on a sent message copies it into the box for editing
       user.msg.dataset.said = text;
       let at = 0;
-      const tap = () => { if (performance.now() - at < 500) return; at = performance.now(); if (inputHistory.recallText(text)) events.add('recall', text); };
+      const tap = (event) => { if (event.target.closest('details, button')) return; if (performance.now() - at < 500) return; at = performance.now(); if (inputHistory.recallText(text)) events.add('recall', text); };
       user.bubble.addEventListener('click', tap); user.bubble.addEventListener('touchend', tap);
     }
     const correction = user && 'correction' in user ? user.correction : inputHistory.push(text);   // INPUT-HISTORY: an edited recalled message sent right after a failed turn is a correction of it (M1)
@@ -986,12 +1022,7 @@ export async function mountPsys2(element, options = {}) {
     if (!modelsStarted && ((reply.statuses ?? []).length === 0 || !(reply.statuses ?? []).includes('supported') || (reply.segments ?? []).some((sg) => sg.unparsed))) startModels();   // LAZY-LOAD-3: the rules did not read it cleanly: the reading model is wanted now
     const botMsg = addMessage('bot', answer);
     attachResponseReplay(botMsg,reply.trace?.worldActivity,text);
-    const readerRouting=reply.trace?.readerRouting,readingCandidates=[reply.trace?.reading,...(readerRouting?.proposalCandidates??[]),...(readerRouting?.admission?.alternatives??[])],shownReadings=new Set();
-    for(const candidate of readingCandidates){const wires=candidate?.wires;if(typeof wires!=='string'||!wires.trim()||shownReadings.has(wires))continue;shownReadings.add(wires);appendIntent(botMsg.bubble,wires,reply.statuses?.includes('supported')?'SOP Lang reading':'Reader proposal · not executed');}
-    if(readerRouting){
-      if(!shownReadings.size)botMsg.bubble.append(h('p',{class:'p2-reader-proposal-status'},'No SOP request produced'));
-      const diagnostic=JSON.stringify(readerRouting,null,2);botMsg.bubble.append(h('details',{class:'p2-reader-diagnostics'},h('summary',{},'Reader diagnostics'),copyButton('Copy diagnostics',()=>diagnostic),h('pre',{class:'p2-code'},diagnostic)));
-    }
+    appendTurnCircuits(user.bubble, botMsg.bubble, reply.trace);
     if (notUnderstood) {   // MOBILE-VOICE: repeated not-understood voice replies within 20 s are collapsed into one (the first gets a count)
       const nowT = performance.now();
       if (lastNU && nowT - lastNU.at < 20000 && lastNU.el.isConnected) { lastNU.n++; lastNU.at = nowT; lastNU.badge.textContent = ` ×${lastNU.n}`; botMsg.msg.hidden = true; botMsg.msg.classList.add('is-collapsed'); }

@@ -3,7 +3,7 @@ import * as lib from '../vendor/sopworld/sopworld.mjs?v=14e619cf45';
 import {createSampler} from './sampler.mjs?v=d76fb6f9ed';
 import {nativeKindCandidates} from './native-binding-candidates.mjs?v=de223646d6';
 import {declaredPropertyValues} from './declared-execution.mjs?v=9d8de22224';
-import {routeNewEngine} from './reader-routing.mjs?v=e943c4d947';
+import {routeNewEngine} from './reader-routing.mjs?v=86413e0f27';
 const word = x => typeof x==='string' && /^[a-z]+$/.test(x);
 
 export function samplingSchema({area,operations,observation,bindings}) {

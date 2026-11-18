@@ -132,3 +132,6 @@ Existing editor-authority smoke replay against this build in Chromium confirmed 
 
 2026-11-18 integrated SOPWorlds 0.213.0/1271181 for comparing bounded reader alternatives against the same live editor snapshot before dispatch. The Diagram regression verifies the selected circuit executes once and Undo restores the prior state.
 Checks: `npm run build:webchat` 0cf5b567da and `npm test` 615 total / 612 pass / 3 skip. Compared both vendored files byte-for-byte with the library bundle and the separately pinned instance codec. Local Chromium authored Drawing recolor and Undo verified the operational SOP facts and exact native call.
+
+2026-11-18 moved the recorded SOP query to the question and the compiler output and tool call to the answer, with per-step labels, copy controls and collapsed disclosures.
+Chromium verified the exact authored recolor query, compiler output and dispatched call, and a natural two-part request with a successful tree step and no query for the house step. Webchat rebuilt; npm test passed 612, skipped 3.
