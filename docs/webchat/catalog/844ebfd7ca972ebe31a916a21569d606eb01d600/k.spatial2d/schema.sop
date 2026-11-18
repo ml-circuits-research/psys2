@@ -1,0 +1,295 @@
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@k.spatial2d core.module name=k.spatial2d version=1 exports=box exports=point exports=relation exports=policy exports=direction exports=measurement exports=profile exports=preference exports=correction exports=learned_preference exports=effective_policy core.source="hand-core 1"
+
+@k.spatial2d.box core.type of=k.spatial2d.box shared=true closed=true core.source="hand-core 1"
+@k.spatial2d.box.entity core.slot of=k.spatial2d.box key=entity required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.box.evidence core.slot of=k.spatial2d.box key=evidence required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.box.frame core.slot of=k.spatial2d.box key=frame required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.box.instance core.slot of=k.spatial2d.box key=instance required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.box.revision core.slot of=k.spatial2d.box key=revision required=true kind=atom kind=string kind=integer core.source="hand-core 1"
+@k.spatial2d.box.scope core.slot of=k.spatial2d.box key=scope required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.box.min_x core.slot of=k.spatial2d.box key=min_x required=true kind=number core.source="hand-core 1"
+@k.spatial2d.box.min_y core.slot of=k.spatial2d.box key=min_y required=true kind=number core.source="hand-core 1"
+@k.spatial2d.box.max_x core.slot of=k.spatial2d.box key=max_x required=true kind=number core.source="hand-core 1"
+@k.spatial2d.box.max_y core.slot of=k.spatial2d.box key=max_y required=true kind=number core.source="hand-core 1"
+
+@k.spatial2d.point core.type of=k.spatial2d.point shared=true closed=true core.source="hand-core 1"
+@k.spatial2d.point.entity core.slot of=k.spatial2d.point key=entity required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.point.frame core.slot of=k.spatial2d.point key=frame required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.point.instance core.slot of=k.spatial2d.point key=instance required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.point.revision core.slot of=k.spatial2d.point key=revision required=true kind=atom kind=string kind=integer core.source="hand-core 1"
+@k.spatial2d.point.scope core.slot of=k.spatial2d.point key=scope required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.point.x core.slot of=k.spatial2d.point key=x required=true kind=number core.source="hand-core 1"
+@k.spatial2d.point.y core.slot of=k.spatial2d.point key=y required=true kind=number core.source="hand-core 1"
+
+@k.spatial2d.relation core.type of=k.spatial2d.relation shared=true closed=true core.source="hand-core 1"
+@k.spatial2d.relation.subject core.slot of=k.spatial2d.relation key=subject required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.relation.object core.slot of=k.spatial2d.relation key=object required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.relation.kind core.slot of=k.spatial2d.relation key=kind required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.relation.frame core.slot of=k.spatial2d.relation key=frame required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.relation.instance core.slot of=k.spatial2d.relation key=instance required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.relation.revision core.slot of=k.spatial2d.relation key=revision required=true kind=atom kind=string kind=integer core.source="hand-core 1"
+@k.spatial2d.relation.scope core.slot of=k.spatial2d.relation key=scope required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.relation.evidence core.slot of=k.spatial2d.relation key=evidence kind=atom kind=string core.source="hand-core 1"
+
+@k.spatial2d.pair_geometry core.type of=k.spatial2d.pair_geometry shared=true closed=true core.source="hand-core 1"
+@k.spatial2d.pair_geometry.subject core.slot of=k.spatial2d.pair_geometry key=subject required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.pair_geometry.object core.slot of=k.spatial2d.pair_geometry key=object required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.pair_geometry.kind core.slot of=k.spatial2d.pair_geometry key=kind required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.pair_geometry.frame core.slot of=k.spatial2d.pair_geometry key=frame required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.pair_geometry.instance core.slot of=k.spatial2d.pair_geometry key=instance required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.pair_geometry.revision core.slot of=k.spatial2d.pair_geometry key=revision required=true kind=atom kind=string kind=integer core.source="hand-core 1"
+@k.spatial2d.pair_geometry.scope core.slot of=k.spatial2d.pair_geometry key=scope required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.pair_geometry.separation core.slot of=k.spatial2d.pair_geometry key=separation required=true kind=number core.source="hand-core 1"
+@k.spatial2d.pair_geometry.overlap core.slot of=k.spatial2d.pair_geometry key=overlap required=true kind=number core.source="hand-core 1"
+
+@k.spatial2d.policy core.type of=k.spatial2d.policy shared=true closed=true core.source="hand-core 1"
+@k.spatial2d.policy.relation core.slot of=k.spatial2d.policy key=relation required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.policy.metric core.slot of=k.spatial2d.policy key=metric required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.policy.clearance core.slot of=k.spatial2d.policy key=clearance required=true kind=number min=0 core.source="hand-core 1"
+@k.spatial2d.policy.weight core.slot of=k.spatial2d.policy key=weight required=true kind=number min=0 core.source="hand-core 1"
+@k.spatial2d.policy.hard core.slot of=k.spatial2d.policy key=hard required=true kind=boolean core.source="hand-core 1"
+
+@k.spatial2d.policy.profiled core.slot of=k.spatial2d.policy key=profiled kind=boolean core.source="hand-core 1"
+@k.spatial2d.policy.geometry core.slot of=k.spatial2d.policy key=geometry kind=atom core.source="hand-core 1"
+
+@k.spatial2d.direction core.type of=k.spatial2d.direction shared=true closed=true core.source="hand-core 1"
+@k.spatial2d.direction.relation core.slot of=k.spatial2d.direction key=relation required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.direction.name core.slot of=k.spatial2d.direction key=name required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.direction.anchor_x core.slot of=k.spatial2d.direction key=anchor_x required=true kind=number core.source="hand-core 1"
+@k.spatial2d.direction.anchor_y core.slot of=k.spatial2d.direction key=anchor_y required=true kind=number core.source="hand-core 1"
+@k.spatial2d.direction.subject_x core.slot of=k.spatial2d.direction key=subject_x required=true kind=number core.source="hand-core 1"
+@k.spatial2d.direction.subject_y core.slot of=k.spatial2d.direction key=subject_y required=true kind=number core.source="hand-core 1"
+@k.spatial2d.direction.gap_x core.slot of=k.spatial2d.direction key=gap_x required=true kind=number core.source="hand-core 1"
+@k.spatial2d.direction.gap_y core.slot of=k.spatial2d.direction key=gap_y required=true kind=number core.source="hand-core 1"
+@k.spatial2d.direction.rank core.slot of=k.spatial2d.direction key=rank required=true kind=integer min=0 core.source="hand-core 1"
+
+@k.spatial2d.measurement core.type of=k.spatial2d.measurement shared=true closed=true core.source="hand-core 1"
+@k.spatial2d.measurement.subject core.slot of=k.spatial2d.measurement key=subject required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.measurement.object core.slot of=k.spatial2d.measurement key=object required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.measurement.kind core.slot of=k.spatial2d.measurement key=kind required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.measurement.frame core.slot of=k.spatial2d.measurement key=frame required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.measurement.instance core.slot of=k.spatial2d.measurement key=instance required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.measurement.revision core.slot of=k.spatial2d.measurement key=revision required=true kind=atom kind=string kind=integer core.source="hand-core 1"
+@k.spatial2d.measurement.scope core.slot of=k.spatial2d.measurement key=scope required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.measurement.metric core.slot of=k.spatial2d.measurement key=metric required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.measurement.value core.slot of=k.spatial2d.measurement key=value required=true kind=number min=0 core.source="hand-core 1"
+@k.spatial2d.measurement.weight core.slot of=k.spatial2d.measurement key=weight required=true kind=number min=0 core.source="hand-core 1"
+@k.spatial2d.measurement.hard core.slot of=k.spatial2d.measurement key=hard required=true kind=boolean core.source="hand-core 1"
+
+@k.spatial2d.profile core.type of=k.spatial2d.profile shared=true closed=true core.source="hand-core 1"
+@k.spatial2d.profile.name core.slot of=k.spatial2d.profile key=name required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.profile.frame core.slot of=k.spatial2d.profile key=frame required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.profile.instance core.slot of=k.spatial2d.profile key=instance required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.profile.revision core.slot of=k.spatial2d.profile key=revision required=true kind=atom kind=string kind=integer core.source="hand-core 1"
+@k.spatial2d.profile.scope core.slot of=k.spatial2d.profile key=scope required=true kind=atom kind=string core.source="hand-core 1"
+
+@k.spatial2d.profile.comparison core.slot of=k.spatial2d.profile key=comparison kind=atom kind=string core.source="hand-core 1"
+
+@k.spatial2d.preference core.type of=k.spatial2d.preference shared=true closed=true core.source="hand-core 1"
+@k.spatial2d.preference.profile core.slot of=k.spatial2d.preference key=profile required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.preference.scope core.slot of=k.spatial2d.preference key=scope required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.preference.frame core.slot of=k.spatial2d.preference key=frame required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.preference.relation core.slot of=k.spatial2d.preference key=relation required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.preference.metric core.slot of=k.spatial2d.preference key=metric required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.preference.evidence core.slot of=k.spatial2d.preference key=evidence required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.preference.clearance core.slot of=k.spatial2d.preference key=clearance required=true kind=number min=0 core.source="hand-core 1"
+@k.spatial2d.preference.weight core.slot of=k.spatial2d.preference key=weight required=true kind=number min=0 core.source="hand-core 1"
+
+@k.spatial2d.correction core.type of=k.spatial2d.correction shared=true closed=true core.source="hand-core 1"
+@k.spatial2d.correction.profile core.slot of=k.spatial2d.correction key=profile required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.correction.scope core.slot of=k.spatial2d.correction key=scope required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.correction.frame core.slot of=k.spatial2d.correction key=frame required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.correction.relation core.slot of=k.spatial2d.correction key=relation required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.correction.metric core.slot of=k.spatial2d.correction key=metric required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.correction.comparison core.slot of=k.spatial2d.correction key=comparison required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.correction.event core.slot of=k.spatial2d.correction key=event required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.correction.before core.slot of=k.spatial2d.correction key=before required=true kind=number min=0 core.source="hand-core 1"
+@k.spatial2d.correction.clearance core.slot of=k.spatial2d.correction key=clearance required=true kind=number min=0 core.source="hand-core 1"
+
+@k.spatial2d.learned_preference core.type of=k.spatial2d.learned_preference shared=true closed=true core.source="hand-core 1"
+@k.spatial2d.learned_preference.profile core.slot of=k.spatial2d.learned_preference key=profile required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.learned_preference.scope core.slot of=k.spatial2d.learned_preference key=scope required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.learned_preference.frame core.slot of=k.spatial2d.learned_preference key=frame required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.learned_preference.relation core.slot of=k.spatial2d.learned_preference key=relation required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.learned_preference.metric core.slot of=k.spatial2d.learned_preference key=metric required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.learned_preference.comparison core.slot of=k.spatial2d.learned_preference key=comparison required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.learned_preference.first_event core.slot of=k.spatial2d.learned_preference key=first_event required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.learned_preference.second_event core.slot of=k.spatial2d.learned_preference key=second_event required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.learned_preference.clearance core.slot of=k.spatial2d.learned_preference key=clearance required=true kind=number min=0 core.source="hand-core 1"
+
+@k.spatial2d.learning_conflict core.type of=k.spatial2d.learning_conflict shared=true closed=true core.source="hand-core 1"
+@k.spatial2d.learning_conflict.profile core.slot of=k.spatial2d.learning_conflict key=profile required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.learning_conflict.scope core.slot of=k.spatial2d.learning_conflict key=scope required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.learning_conflict.frame core.slot of=k.spatial2d.learning_conflict key=frame required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.learning_conflict.relation core.slot of=k.spatial2d.learning_conflict key=relation required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.learning_conflict.metric core.slot of=k.spatial2d.learning_conflict key=metric required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.learning_conflict.comparison core.slot of=k.spatial2d.learning_conflict key=comparison required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.learning_conflict.clearance core.slot of=k.spatial2d.learning_conflict key=clearance required=true kind=number min=0 core.source="hand-core 1"
+
+@k.spatial2d.effective_policy core.type of=k.spatial2d.effective_policy shared=true closed=true core.source="hand-core 1"
+@k.spatial2d.effective_policy.subject core.slot of=k.spatial2d.effective_policy key=subject required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.effective_policy.object core.slot of=k.spatial2d.effective_policy key=object required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.effective_policy.kind core.slot of=k.spatial2d.effective_policy key=kind required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.effective_policy.frame core.slot of=k.spatial2d.effective_policy key=frame required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.effective_policy.instance core.slot of=k.spatial2d.effective_policy key=instance required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.effective_policy.revision core.slot of=k.spatial2d.effective_policy key=revision required=true kind=atom kind=string kind=integer core.source="hand-core 1"
+@k.spatial2d.effective_policy.scope core.slot of=k.spatial2d.effective_policy key=scope required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.effective_policy.metric core.slot of=k.spatial2d.effective_policy key=metric required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.effective_policy.weight core.slot of=k.spatial2d.effective_policy key=weight required=true kind=number min=0 core.source="hand-core 1"
+@k.spatial2d.effective_policy.hard core.slot of=k.spatial2d.effective_policy key=hard required=true kind=boolean core.source="hand-core 1"
+@k.spatial2d.effective_policy.clearance core.slot of=k.spatial2d.effective_policy key=clearance required=true kind=number min=0 core.source="hand-core 1"
+
+@k.spatial2d.preferred_policy core.type of=k.spatial2d.preferred_policy shared=true closed=true core.source="hand-core 1"
+@k.spatial2d.preferred_policy.subject core.slot of=k.spatial2d.preferred_policy key=subject required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.preferred_policy.object core.slot of=k.spatial2d.preferred_policy key=object required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.preferred_policy.kind core.slot of=k.spatial2d.preferred_policy key=kind required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.preferred_policy.frame core.slot of=k.spatial2d.preferred_policy key=frame required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.preferred_policy.instance core.slot of=k.spatial2d.preferred_policy key=instance required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.preferred_policy.revision core.slot of=k.spatial2d.preferred_policy key=revision required=true kind=atom kind=string kind=integer core.source="hand-core 1"
+@k.spatial2d.preferred_policy.scope core.slot of=k.spatial2d.preferred_policy key=scope required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.preferred_policy.metric core.slot of=k.spatial2d.preferred_policy key=metric required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.preferred_policy.weight core.slot of=k.spatial2d.preferred_policy key=weight required=true kind=number min=0 core.source="hand-core 1"
+@k.spatial2d.preferred_policy.hard core.slot of=k.spatial2d.preferred_policy key=hard required=true kind=boolean core.source="hand-core 1"
+@k.spatial2d.preferred_policy.clearance core.slot of=k.spatial2d.preferred_policy key=clearance required=true kind=number min=0 core.source="hand-core 1"
+@k.spatial2d.preferred_policy.profile core.slot of=k.spatial2d.preferred_policy key=profile required=true kind=atom kind=string core.source="hand-core 1"
+@k.spatial2d.preferred_policy.evidence core.slot of=k.spatial2d.preferred_policy key=evidence required=true kind=atom kind=string core.source="hand-core 1"
+
+@k.spatial2d.valid_x.shape k.spatial2d.box min_x=?low max_x=?high
+@k.spatial2d.valid_x.inverted core.check fn=gt args=?low args=?high
+@k.spatial2d.valid_x core.deny when=$k.spatial2d.valid_x.shape if=$k.spatial2d.valid_x.inverted why="Inverted box bounds on x" core.source="hand-core 1"
+
+@k.spatial2d.valid_y.shape k.spatial2d.box min_y=?low max_y=?high
+@k.spatial2d.valid_y.inverted core.check fn=gt args=?low args=?high
+@k.spatial2d.valid_y core.deny when=$k.spatial2d.valid_y.shape if=$k.spatial2d.valid_y.inverted why="Inverted box bounds on y" core.source="hand-core 1"
+
+@k.spatial2d.measure_box_pair.relation k.spatial2d.relation subject=?subject object=?object kind=?kind frame=?frame instance=?instance revision=?revision scope=?scope
+@k.spatial2d.measure_box_pair.policy k.spatial2d.policy relation=?kind geometry=box_pair
+@k.spatial2d.measure_box_pair.subject k.spatial2d.box entity=?subject frame=?frame instance=?instance revision=?revision scope=?scope min_x=?ax0 max_x=?ax1 min_y=?ay0 max_y=?ay1
+@k.spatial2d.measure_box_pair.object k.spatial2d.box entity=?object frame=?frame instance=?instance revision=?revision scope=?scope min_x=?bx0 max_x=?bx1 min_y=?by0 max_y=?by1
+@k.spatial2d.measure_box_pair.gap_left core.calc out=?gap_left fn=sub args=?bx0 args=?ax1
+@k.spatial2d.measure_box_pair.gap_right core.calc out=?gap_right fn=sub args=?ax0 args=?bx1
+@k.spatial2d.measure_box_pair.gap_top core.calc out=?gap_top fn=sub args=?by0 args=?ay1
+@k.spatial2d.measure_box_pair.gap_bottom core.calc out=?gap_bottom fn=sub args=?ay0 args=?by1
+@k.spatial2d.measure_box_pair.gap_x core.calc out=?gap_x fn=max args=?gap_left args=?gap_right
+@k.spatial2d.measure_box_pair.gap_y core.calc out=?gap_y fn=max args=?gap_top args=?gap_bottom
+@k.spatial2d.measure_box_pair.separation core.calc out=?separation fn=max args=?gap_x args=?gap_y
+@k.spatial2d.measure_box_pair.inner_right core.calc out=?inner_right fn=min args=?ax1 args=?bx1
+@k.spatial2d.measure_box_pair.inner_left core.calc out=?inner_left fn=max args=?ax0 args=?bx0
+@k.spatial2d.measure_box_pair.inner_bottom core.calc out=?inner_bottom fn=min args=?ay1 args=?by1
+@k.spatial2d.measure_box_pair.inner_top core.calc out=?inner_top fn=max args=?ay0 args=?by0
+@k.spatial2d.measure_box_pair.inner_width core.calc out=?inner_width fn=sub args=?inner_right args=?inner_left
+@k.spatial2d.measure_box_pair.inner_height core.calc out=?inner_height fn=sub args=?inner_bottom args=?inner_top
+@k.spatial2d.measure_box_pair.overlap_x core.calc out=?overlap_x fn=max args=0 args=?inner_width
+@k.spatial2d.measure_box_pair.overlap_y core.calc out=?overlap_y fn=max args=0 args=?inner_height
+@k.spatial2d.measure_box_pair.area core.calc out=?area fn=mul args=?overlap_x args=?overlap_y
+@k.spatial2d.measure_box_pair.distinct core.check fn=neq args=?subject args=?object
+@k.spatial2d.measure_box_pair.result k.spatial2d.pair_geometry subject=?subject object=?object kind=?kind frame=?frame instance=?instance revision=?revision scope=?scope separation=?separation overlap=?area
+@k.spatial2d.measure_box_pair core.rule when=$k.spatial2d.measure_box_pair.relation when=$k.spatial2d.measure_box_pair.policy when=$k.spatial2d.measure_box_pair.subject when=$k.spatial2d.measure_box_pair.object with=$k.spatial2d.measure_box_pair.gap_left with=$k.spatial2d.measure_box_pair.gap_right with=$k.spatial2d.measure_box_pair.gap_top with=$k.spatial2d.measure_box_pair.gap_bottom with=$k.spatial2d.measure_box_pair.gap_x with=$k.spatial2d.measure_box_pair.gap_y with=$k.spatial2d.measure_box_pair.separation with=$k.spatial2d.measure_box_pair.inner_right with=$k.spatial2d.measure_box_pair.inner_left with=$k.spatial2d.measure_box_pair.inner_bottom with=$k.spatial2d.measure_box_pair.inner_top with=$k.spatial2d.measure_box_pair.inner_width with=$k.spatial2d.measure_box_pair.inner_height with=$k.spatial2d.measure_box_pair.overlap_x with=$k.spatial2d.measure_box_pair.overlap_y with=$k.spatial2d.measure_box_pair.area if=$k.spatial2d.measure_box_pair.distinct then=$k.spatial2d.measure_box_pair.result core.source="hand-core 1"
+
+# Preferences change only policies explicitly declared profile-sensitive.
+@k.spatial2d.preferred.relation k.spatial2d.relation subject=?subject object=?object kind=?kind frame=?frame instance=?instance revision=?revision scope=?scope
+@k.spatial2d.preferred.profile k.spatial2d.profile name=?profile frame=?frame instance=?instance revision=?revision scope=?scope
+@k.spatial2d.preferred.policy k.spatial2d.policy relation=?kind metric=?metric profiled=true hard=false
+@k.spatial2d.preferred.preference k.spatial2d.preference profile=?profile scope=?scope frame=?frame relation=?kind metric=?metric clearance=?clearance weight=?weight evidence=?evidence
+@k.spatial2d.preferred.result k.spatial2d.preferred_policy subject=?subject object=?object kind=?kind frame=?frame instance=?instance revision=?revision scope=?scope metric=?metric clearance=?clearance weight=?weight hard=false profile=?profile evidence=?evidence
+@k.spatial2d.preferred core.rule when=$k.spatial2d.preferred.relation when=$k.spatial2d.preferred.profile when=$k.spatial2d.preferred.policy when=$k.spatial2d.preferred.preference then=$k.spatial2d.preferred.result core.source="hand-core 1"
+
+# Two independently observed comparable corrections must agree on the exact resulting clearance.
+# Distinct transaction IDs and a nonzero observed adjustment on each correction are required.
+@k.spatial2d.learn.first k.spatial2d.correction profile=?profile scope=?scope frame=?frame relation=?kind metric=?metric comparison=?comparison clearance=?clearance event=?first before=?first_before
+@k.spatial2d.learn.second k.spatial2d.correction profile=?profile scope=?scope frame=?frame relation=?kind metric=?metric comparison=?comparison clearance=?clearance event=?second before=?second_before
+@k.spatial2d.learn.distinct core.check fn=neq args=?first args=?second
+@k.spatial2d.learn.ordered core.check fn=before args=$k.spatial2d.learn.first args=$k.spatial2d.learn.second
+@k.spatial2d.learn.changed_first core.check fn=neq args=?first_before args=?clearance
+@k.spatial2d.learn.changed_second core.check fn=neq args=?second_before args=?clearance
+@k.spatial2d.learn.result k.spatial2d.learned_preference profile=?profile scope=?scope frame=?frame relation=?kind metric=?metric comparison=?comparison clearance=?clearance first_event=?first second_event=?second
+@k.spatial2d.learn core.rule when=$k.spatial2d.learn.first when=$k.spatial2d.learn.second if=$k.spatial2d.learn.distinct if=$k.spatial2d.learn.ordered if=$k.spatial2d.learn.changed_first if=$k.spatial2d.learn.changed_second then=$k.spatial2d.learn.result core.source="hand-core 1"
+
+# Conflicting learned targets leave the default in effect. An explicit setting takes precedence.
+@k.spatial2d.learned.relation k.spatial2d.relation subject=?subject object=?object kind=?kind frame=?frame instance=?instance revision=?revision scope=?scope
+@k.spatial2d.learned.profile k.spatial2d.profile name=?profile frame=?frame instance=?instance revision=?revision scope=?scope comparison=?comparison
+@k.spatial2d.learned.policy k.spatial2d.policy relation=?kind metric=?metric profiled=true hard=false weight=?weight
+@k.spatial2d.learned.preference k.spatial2d.learned_preference profile=?profile scope=?scope frame=?frame relation=?kind metric=?metric comparison=?comparison clearance=?clearance
+@k.spatial2d.learned.disagreement k.spatial2d.learned_preference profile=?profile scope=?scope frame=?frame relation=?kind metric=?metric comparison=?comparison clearance=?other
+@k.spatial2d.learned.different core.check fn=neq args=?clearance args=?other
+@k.spatial2d.learned.conflict k.spatial2d.learning_conflict profile=?profile scope=?scope frame=?frame relation=?kind metric=?metric comparison=?comparison clearance=?clearance
+@k.spatial2d.learned.ambiguous core.rule when=$k.spatial2d.learned.preference when=$k.spatial2d.learned.disagreement if=$k.spatial2d.learned.different then=$k.spatial2d.learned.conflict core.source="hand-core 1"
+
+@k.spatial2d.learned.chosen k.spatial2d.preferred_policy subject=?subject object=?object kind=?kind frame=?frame instance=?instance revision=?revision scope=?scope metric=?metric clearance=?clearance weight=?weight hard=false profile=?profile evidence=learned
+@k.spatial2d.learned.explicit k.spatial2d.preference profile=?profile scope=?scope frame=?frame relation=?kind metric=?metric
+@k.spatial2d.learned.apply core.rule when=$k.spatial2d.learned.relation when=$k.spatial2d.learned.profile when=$k.spatial2d.learned.policy when=$k.spatial2d.learned.preference not=$k.spatial2d.learned.explicit not=$k.spatial2d.learned.conflict then=$k.spatial2d.learned.chosen core.source="hand-core 1"
+
+@k.spatial2d.policy_conflict.first k.spatial2d.preferred_policy subject=?subject object=?object kind=?kind frame=?frame instance=?instance revision=?revision scope=?scope metric=?metric clearance=?first_gap weight=?first_weight
+@k.spatial2d.policy_conflict.other_gap k.spatial2d.preferred_policy subject=?subject object=?object kind=?kind frame=?frame instance=?instance revision=?revision scope=?scope metric=?metric clearance=?other_gap
+@k.spatial2d.policy_conflict.other_weight k.spatial2d.preferred_policy subject=?subject object=?object kind=?kind frame=?frame instance=?instance revision=?revision scope=?scope metric=?metric weight=?other_weight
+@k.spatial2d.policy_conflict.gap core.check fn=neq args=?first_gap args=?other_gap
+@k.spatial2d.policy_conflict.weight core.check fn=neq args=?first_weight args=?other_weight
+@k.spatial2d.policy_conflict.clearance core.deny when=$k.spatial2d.policy_conflict.first when=$k.spatial2d.policy_conflict.other_gap if=$k.spatial2d.policy_conflict.gap why="Conflicting active spatial clearance preferences" core.source="hand-core 1"
+@k.spatial2d.policy_conflict.importance core.deny when=$k.spatial2d.policy_conflict.first when=$k.spatial2d.policy_conflict.other_weight if=$k.spatial2d.policy_conflict.weight why="Conflicting active spatial preference weights" core.source="hand-core 1"
+
+@k.spatial2d.preferred_effective.selected k.spatial2d.preferred_policy subject=?subject object=?object kind=?kind frame=?frame instance=?instance revision=?revision scope=?scope metric=?metric clearance=?clearance weight=?weight hard=?hard
+@k.spatial2d.preferred_effective.result k.spatial2d.effective_policy subject=?subject object=?object kind=?kind frame=?frame instance=?instance revision=?revision scope=?scope metric=?metric clearance=?clearance weight=?weight hard=?hard
+@k.spatial2d.preferred_effective core.rule when=$k.spatial2d.preferred_effective.selected then=$k.spatial2d.preferred_effective.result core.source="hand-core 1"
+
+@k.spatial2d.default_effective.relation k.spatial2d.relation subject=?subject object=?object kind=?kind frame=?frame instance=?instance revision=?revision scope=?scope
+@k.spatial2d.default_effective.policy k.spatial2d.policy relation=?kind metric=?metric clearance=?clearance weight=?weight hard=?hard
+@k.spatial2d.default_effective.override k.spatial2d.preferred_policy subject=?subject object=?object kind=?kind frame=?frame instance=?instance revision=?revision scope=?scope metric=?metric
+@k.spatial2d.default_effective.result k.spatial2d.effective_policy subject=?subject object=?object kind=?kind frame=?frame instance=?instance revision=?revision scope=?scope metric=?metric clearance=?clearance weight=?weight hard=?hard
+@k.spatial2d.default_effective core.rule when=$k.spatial2d.default_effective.relation when=$k.spatial2d.default_effective.policy not=$k.spatial2d.default_effective.override then=$k.spatial2d.default_effective.result core.source="hand-core 1"
+
+@k.spatial2d.clearance_cost.pair k.spatial2d.pair_geometry subject=?subject object=?object kind=?kind frame=?frame instance=?instance revision=?revision scope=?scope separation=?distance
+@k.spatial2d.clearance_cost.policy k.spatial2d.effective_policy subject=?subject object=?object kind=?kind frame=?frame instance=?instance revision=?revision scope=?scope weight=?weight hard=?hard metric=clearance_deficit clearance=?clearance
+@k.spatial2d.clearance_cost.shortfall core.calc out=?shortfall fn=sub args=?clearance args=?distance
+@k.spatial2d.clearance_cost.deficit core.calc out=?deficit fn=max args=0 args=?shortfall
+@k.spatial2d.clearance_cost.result k.spatial2d.measurement subject=?subject object=?object kind=?kind frame=?frame instance=?instance revision=?revision scope=?scope weight=?weight hard=?hard metric=clearance_deficit value=?deficit
+@k.spatial2d.clearance_cost core.rule when=$k.spatial2d.clearance_cost.pair when=$k.spatial2d.clearance_cost.policy with=$k.spatial2d.clearance_cost.shortfall with=$k.spatial2d.clearance_cost.deficit then=$k.spatial2d.clearance_cost.result core.source="hand-core 1"
+
+@k.spatial2d.overlap_cost.pair k.spatial2d.pair_geometry subject=?subject object=?object kind=?kind frame=?frame instance=?instance revision=?revision scope=?scope overlap=?area
+@k.spatial2d.overlap_cost.policy k.spatial2d.effective_policy subject=?subject object=?object kind=?kind frame=?frame instance=?instance revision=?revision scope=?scope weight=?weight hard=?hard metric=overlap_area
+@k.spatial2d.overlap_cost.result k.spatial2d.measurement subject=?subject object=?object kind=?kind frame=?frame instance=?instance revision=?revision scope=?scope weight=?weight hard=?hard metric=overlap_area value=?area
+@k.spatial2d.overlap_cost core.rule when=$k.spatial2d.overlap_cost.pair when=$k.spatial2d.overlap_cost.policy then=$k.spatial2d.overlap_cost.result core.source="hand-core 1"
+
+@k.spatial2d.near_cost.pair k.spatial2d.pair_geometry subject=?subject object=?object kind=?kind frame=?frame instance=?instance revision=?revision scope=?scope separation=?distance
+@k.spatial2d.near_cost.policy k.spatial2d.effective_policy subject=?subject object=?object kind=?kind frame=?frame instance=?instance revision=?revision scope=?scope weight=?weight hard=?hard metric=near_distance clearance=?clearance
+@k.spatial2d.near_cost.shortfall core.calc out=?shortfall fn=sub args=?clearance args=?distance
+@k.spatial2d.near_cost.excess core.calc out=?excess fn=sub args=?distance args=?clearance
+@k.spatial2d.near_cost.error core.calc out=?error fn=max args=?shortfall args=?excess
+@k.spatial2d.near_cost.result k.spatial2d.measurement subject=?subject object=?object kind=?kind frame=?frame instance=?instance revision=?revision scope=?scope weight=?weight hard=?hard metric=near_distance value=?error
+@k.spatial2d.near_cost core.rule when=$k.spatial2d.near_cost.pair when=$k.spatial2d.near_cost.policy with=$k.spatial2d.near_cost.shortfall with=$k.spatial2d.near_cost.excess with=$k.spatial2d.near_cost.error then=$k.spatial2d.near_cost.result core.source="hand-core 1"
+
+@k.spatial2d.containment.relation k.spatial2d.relation subject=?subject object=?object kind=?kind frame=?frame instance=?instance revision=?revision scope=?scope evidence=containment
+@k.spatial2d.containment.subject k.spatial2d.box entity=?subject frame=?frame instance=?instance revision=?revision scope=?scope min_x=?ax0 max_x=?ax1 min_y=?ay0 max_y=?ay1
+@k.spatial2d.containment.object k.spatial2d.box entity=?object frame=?frame instance=?instance revision=?revision min_x=?bx0 max_x=?bx1 min_y=?by0 max_y=?by1 evidence=rectangle
+@k.spatial2d.containment.policy k.spatial2d.effective_policy subject=?subject object=?object kind=?kind frame=?frame instance=?instance revision=?revision scope=?scope weight=?weight hard=?hard metric=containment
+@k.spatial2d.containment.over_left core.calc out=?over_left fn=sub args=?bx0 args=?ax0
+@k.spatial2d.containment.over_right core.calc out=?over_right fn=sub args=?ax1 args=?bx1
+@k.spatial2d.containment.over_top core.calc out=?over_top fn=sub args=?by0 args=?ay0
+@k.spatial2d.containment.over_bottom core.calc out=?over_bottom fn=sub args=?ay1 args=?by1
+@k.spatial2d.containment.over_x core.calc out=?over_x fn=max args=?over_left args=?over_right
+@k.spatial2d.containment.over_y core.calc out=?over_y fn=max args=?over_top args=?over_bottom
+@k.spatial2d.containment.over_any core.calc out=?over_any fn=max args=?over_x args=?over_y
+@k.spatial2d.containment.overflow core.calc out=?overflow fn=max args=0 args=?over_any
+@k.spatial2d.containment.result k.spatial2d.measurement subject=?subject object=?object kind=?kind frame=?frame instance=?instance revision=?revision scope=?scope weight=?weight hard=?hard metric=containment value=?overflow
+@k.spatial2d.containment core.rule when=$k.spatial2d.containment.relation when=$k.spatial2d.containment.subject when=$k.spatial2d.containment.object when=$k.spatial2d.containment.policy with=$k.spatial2d.containment.over_left with=$k.spatial2d.containment.over_right with=$k.spatial2d.containment.over_top with=$k.spatial2d.containment.over_bottom with=$k.spatial2d.containment.over_x with=$k.spatial2d.containment.over_y with=$k.spatial2d.containment.over_any with=$k.spatial2d.containment.overflow then=$k.spatial2d.containment.result core.source="hand-core 1"
+
+@k.spatial2d.contact.relation k.spatial2d.relation subject=?subject object=?object kind=?kind frame=?frame instance=?instance revision=?revision scope=?scope evidence=coincident
+@k.spatial2d.contact.subject k.spatial2d.point entity=?subject frame=?frame instance=?instance revision=?revision scope=?scope x=?sx y=?sy
+@k.spatial2d.contact.object k.spatial2d.point entity=?object frame=?frame instance=?instance revision=?revision x=?ox y=?oy
+@k.spatial2d.contact.policy k.spatial2d.effective_policy subject=?subject object=?object kind=?kind frame=?frame instance=?instance revision=?revision scope=?scope weight=?weight hard=?hard metric=coincident
+@k.spatial2d.contact.offset_x core.calc out=?offset_x fn=sub args=?sx args=?ox
+@k.spatial2d.contact.reverse_x core.calc out=?reverse_x fn=sub args=?ox args=?sx
+@k.spatial2d.contact.offset_y core.calc out=?offset_y fn=sub args=?sy args=?oy
+@k.spatial2d.contact.reverse_y core.calc out=?reverse_y fn=sub args=?oy args=?sy
+@k.spatial2d.contact.abs_x core.calc out=?abs_x fn=max args=?offset_x args=?reverse_x
+@k.spatial2d.contact.abs_y core.calc out=?abs_y fn=max args=?offset_y args=?reverse_y
+@k.spatial2d.contact.offset core.calc out=?offset fn=max args=?abs_x args=?abs_y
+@k.spatial2d.contact.result k.spatial2d.measurement subject=?subject object=?object kind=?kind frame=?frame instance=?instance revision=?revision scope=?scope weight=?weight hard=?hard metric=coincident value=?offset
+@k.spatial2d.contact core.rule when=$k.spatial2d.contact.relation when=$k.spatial2d.contact.subject when=$k.spatial2d.contact.object when=$k.spatial2d.contact.policy with=$k.spatial2d.contact.offset_x with=$k.spatial2d.contact.reverse_x with=$k.spatial2d.contact.offset_y with=$k.spatial2d.contact.reverse_y with=$k.spatial2d.contact.abs_x with=$k.spatial2d.contact.abs_y with=$k.spatial2d.contact.offset then=$k.spatial2d.contact.result core.source="hand-core 1"
+
+@k.spatial2d.hard_geometry.failure k.spatial2d.measurement hard=true value=?value
+@k.spatial2d.hard_geometry.positive core.check fn=gt args=?value args=0
+@k.spatial2d.hard_geometry core.deny when=$k.spatial2d.hard_geometry.failure if=$k.spatial2d.hard_geometry.positive why="Hard spatial requirement violated" core.source="hand-core 1"

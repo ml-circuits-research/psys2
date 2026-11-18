@@ -1,5 +1,5 @@
 // Interpret declared execution defaults and knowledge-property joins. No domain names or text parsing.
-import{World,parse,str,serialize}from'../vendor/sopworld/sopworld.mjs?v=820bedd01b';
+import{World,parse,str,serialize}from'../vendor/sopworld/sopworld.mjs?v=df8c26a4de';
 import SOURCE from'../../worlds/app.project/execution-policy-source.mjs?v=83dffdfb88';
 import SCHEMA from'../../worlds/app.project/execution-policy-schema-source.mjs?v=1876a81f20';
 const schemaModule='app.execution';

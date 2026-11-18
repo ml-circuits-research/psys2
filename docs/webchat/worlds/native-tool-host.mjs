@@ -55,21 +55,24 @@ export function validateNativeArguments(operation,input,{maxBytes=4000000}={}) {
  }catch{return fail('invalid-native-declaration-or-data');}
 }
 
-export function createNativeToolHost({state,instanceId,scope,operations,handlers,view,validate=null,maxObjects=10000,maxBytes=4000000}={}) {
+export function createNativeToolHost({state,instanceId,scope,operations,handlers,view,spatial=null,identityRegistry=new Map(),validate=null,maxObjects=10000,maxBytes=4000000}={}) {
+ if(spatial!==null&&typeof spatial!=='function')throw new TypeError('invalid-spatial-observer');
  if(validate!==null&&typeof validate!=='function')throw new TypeError('invalid-policy-validator');
  if(!Number.isSafeInteger(maxObjects)||maxObjects<1||!Number.isSafeInteger(maxBytes)||maxBytes<1)throw new TypeError('invalid-host-budget');
  if(!text(instanceId)||!text(scope)||!state||Object.getPrototypeOf(state)!==Object.prototype)throw new TypeError('host-identity-required');
  const copy=value=>copyHostData(value,{maxBytes});const declared=copy(operations),byId=new Map();
  if(!Array.isArray(declared)||!handlers||typeof handlers!=='object'||typeof view!=='function')throw new TypeError('invalid-tool-declaration');
  for(const op of declared){checkOperation(op);if(!text(op.id)||byId.has(op.id)||!handlers[op.id]||typeof handlers[op.id]!=='function')throw new TypeError('invalid-tool-declaration');byId.set(op.id,op);}
- let fingerprint,revision=0,sequence=0;const live=new Map(),receipts=new Map();
+ if(!identityRegistry.has(scope))identityRegistry.set(scope,{sequence:0,live:new Map()});
+ const identity=identityRegistry.get(scope),{live}=identity;
+ let fingerprint,revision=0;const receipts=new Map();
  const snapshot=()=>{
   const data=copy(state),mark=JSON.stringify(data);if(mark.length>maxBytes)throw new RangeError('host-data-budget');
   const records=copy(view(data));if(!Array.isArray(records)||records.length>maxObjects)throw new TypeError('host-population-budget');
   const ids=new Set();for(const row of records){if(!text(row.id)||!text(row.kind)||!text(row.sourceType)||ids.has(row.id)||(row.inputs!==undefined&&!Array.isArray(row.inputs)))throw new TypeError('invalid-host-identity');ids.add(row.id);}
   if(fingerprint!==undefined&&fingerprint!==mark)revision++;fingerprint=mark;
   for(const id of live.keys())if(!ids.has(id))live.delete(id);
-  const version=String(revision),objects=records.map(row=>{if(!live.has(row.id))live.set(row.id,++sequence);const source=JSON.stringify([instanceId,scope,row.id,live.get(row.id)]);return {...row,source,version,inputs:(row.inputs||[]).map(input=>({...input,source,sourceType:row.sourceType,version}))};});
+  const version=String(revision),objects=records.map(row=>{if(!live.has(row.id))live.set(row.id,++identity.sequence);const source=JSON.stringify([instanceId,scope,row.id,live.get(row.id)]);return {...row,source,version,inputs:(row.inputs||[]).map(input=>({...input,source,sourceType:row.sourceType,version}))};});
   return {instanceId,version,scope,complete:true,objects};
  };
  const invoke=packet=>{
@@ -93,5 +96,17 @@ export function createNativeToolHost({state,instanceId,scope,operations,handlers
   const after=snapshot(),receipt={status:changed?'changed':'unchanged',verification:'unverified',invocation:call.invocation,operation:call.operation,instanceId,beforeVersion:before.version,afterVersion:after.version,before,after,validation,changed:copy(result.changed||[]),effects:copy(effects),data:copy(result.data??null)};
   receipts.set(call.invocation,{payload,receipt});return copy(receipt);
  };
- snapshot();return Object.freeze({observe:()=>copy(snapshot()),invoke,bindings:()=>copy(declared)});
+ const geometryLease=spatial?globalThis.crypto.randomUUID():null;
+ const readSpatialRevision=observation=>geometryLease+':'+observation.version;
+ const observeSpatial=()=>{
+  const observation=snapshot();
+  const geometry=copy(spatial(copy(state),observation.objects));
+  const tag={frame:geometry.frame,instance:observation.instanceId,revision:readSpatialRevision(observation)};
+  return {observation,...geometry,revision:tag.revision,
+   boxes:geometry.boxes.map(box=>({...tag,...box})),
+   points:(geometry.points??[]).map(point=>({...tag,...point})),
+   relations:(geometry.relations??[]).map(relation=>({...tag,...relation})),
+  };
+ };
+ snapshot();return Object.freeze({observe:()=>copy(snapshot()),invoke,bindings:()=>copy(declared),...(spatial?{observeSpatial,spatialRevision:()=>readSpatialRevision(snapshot())}:{})});
 }

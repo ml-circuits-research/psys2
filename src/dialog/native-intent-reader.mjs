@@ -36,13 +36,20 @@ function primitiveValue(token){
  if(!/^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?(?:[eE][+-]?[0-9]+)?$/.test(token))throw Error('invalid-control-primitive');
  const value=Number(token);if(!Number.isFinite(value))throw Error('nonfinite-control-number');return value;
 }
-export function readNativeIntent(wires,{operation}={}){
+export function readNativeIntent(wires,{operation,operations}={}){
  if(typeof wires!=='string'||wires.length>4000000)throw Error('invalid-control-intent');
  const nodes=parse(wires);if(nodes.length>10000)throw Error('control-intent-budget');
  if(nodes.some(n=>n.pattern||Object.keys(n.attrs).some(k=>forbidden.has(k))))throw Error('invalid-control-wire');
+ function matchingOperation(id){
+  if(operation)return declaration(operation);
+  if(!operations)return null;
+  const matches=operations.filter(candidate=>candidate.id===id);
+  if(matches.length!==1)throw Error('undeclared-native-control');
+  return declaration(matches[0]);
+ }
  if(nodes.length===1){
-  if(!operation)throw Error('control-declaration-required');
-  const op=declaration(operation),node=nodes[0],args={};let count=0;
+  const node=nodes[0],op=matchingOperation(node.type),args={};let count=0;
+  if(!op)throw Error('control-declaration-required');
   if(node.type!==op.id)throw Error('control-operation-mismatch');
   for(const [key,tokens]of Object.entries(node.attrs)){
    if(!Object.hasOwn(op.params,key))throw Error('unknown-control-parameter:'+key);
@@ -71,7 +78,7 @@ export function readNativeIntent(wires,{operation}={}){
  if(value(root,'mood')!=='do')throw Error('invalid-control-mood');
  const source=ref(value(root,'source'));if(source.type!=='app.control.source')throw Error('invalid-control-source');
  const result={operation:value(root,'operation'),act:value(root,'act'),sourceType:value(root,'on'),args,text:value(source,'text')};
- const op=operation?declaration(operation):null;
+ const op=matchingOperation(result.operation);
  if(!expandedRequired(args,op?.params))throw Error('compact-control-intent-required');
  if(op){if(result.operation!==op.id||result.act!==op.act||result.sourceType!==op.on)throw Error('control-operation-mismatch');result.args=admitted(op,args);}
  return result;

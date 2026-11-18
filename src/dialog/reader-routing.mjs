@@ -1,3 +1,4 @@
+import {isAuthoredRequest,readAuthoredRequest} from './authored-request-tool.mjs';
 // Model-first proposal routing. Calibration authority belongs to host configuration,
 // never to a model output, evaluation annotation or grammar proposal.
 import {requestCompositionPolicy}from './request-composition-policy.mjs';
@@ -9,6 +10,24 @@ import {projectCreateAction} from './project-create-action.mjs';
 import {parse,str} from '../vendor/sopworld/sopworld.mjs';
 import {assessReaderProposal} from './reader-admission.mjs';
 const unavailable=reason=>({candidates:[],coverage:{complete:false,executable:false,graphProposal:false},failures:[{reason}]});
+async function dispatchRequest(session,candidate,text,options,bindings,contextProjection,interpretation,alternatives=[]) {
+ let result;
+  const act=str(parse(candidate.wires).find(w=>w.id===candidate.request)?.attrs.act?.[0]),area=options.view??session.isession.state['ui.shell']?.activeTab;
+  if(act==='undo'||act==='redo'){
+   const history=await invokeNativeControl(session,{view:area,operation:act});
+   result={text:history.message,parts:[{text:history.message,translate:false}],statuses:[history.ok?'supported':'unsupported'],answers:[],segments:[],state:history.ok?structuredClone(session.isession.state):{},effects:history.ok?[{operation:act}]:[],trace:{legacy:false,engine:'new',assessment:history.ok?act:'history-refused'}};
+  }else{
+   const before=structuredClone(session.isession.state);
+   if(contextProjection){if(contextProjection.rewind)Object.assign(session.isession.state,structuredClone(contextProjection.rewind));session.newEngineFocus={...session.newEngineFocus,[area]:contextProjection.focus};}
+   result=await executeDeclaredRequest(session,candidate,text,{bindings,view:area,unapplied:interpretation?.unapplied??[]})??executeRequestCandidate(session,candidate,text,options);
+   if(!result.statuses?.includes('supported')&&contextProjection?.rewind)session.isession.state=before;
+   if(result.statuses?.includes('supported')){session.newEngineLastAction={...session.newEngineLastAction,[area]:candidate};if(contextProjection){result.text+=' '+interpretation.note;result.parts=[{text:result.text,translate:false}];result.trace={...result.trace,interpretation};}}
+   const changed=Object.keys(session.isession.state).filter(key=>JSON.stringify(before[key])!==JSON.stringify(session.isession.state[key]));
+   if(changed.length){session.newEngineRedo=(session.newEngineRedo??[]).filter(r=>r.area!==area);session.newEngineUndo=[...(session.newEngineUndo??[]).slice(-31),{area,before:Object.fromEntries(changed.map(key=>[key,before[key]])),after:Object.fromEntries(changed.map(key=>[key,structuredClone(session.isession.state[key])])),reading:candidate,alternatives}];}
+  }
+ return result;
+}
+
 /** The model only sees utterance text. No expected annotations or grammar graphs. */
 async function routeReaderProposal(session,text,options={},suppliedProposal){
  const provider=session.engine?.requestReader;
@@ -30,19 +49,7 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
  const message='I could not identify an action to apply. Nothing changed.';
  let result;
  if(eligible){
-  const act=str(parse(candidate.wires).find(w=>w.id===candidate.request)?.attrs.act?.[0]),area=context.area;
-  if(act==='undo'||act==='redo'){
-   const history=await invokeNativeControl(session,{view:area,operation:act});
-   result={text:history.message,parts:[{text:history.message,translate:false}],statuses:[history.ok?'supported':'unsupported'],answers:[],segments:[],state:history.ok?structuredClone(session.isession.state):{},effects:history.ok?[{operation:act}]:[],trace:{legacy:false,engine:'new',assessment:history.ok?act:'history-refused'}};
-  }else{
-   const before=structuredClone(session.isession.state);
-   if(contextProjection){if(contextProjection.rewind)Object.assign(session.isession.state,structuredClone(contextProjection.rewind));session.newEngineFocus={...session.newEngineFocus,[area]:contextProjection.focus};}
-   result=await executeDeclaredRequest(session,candidate,text,{bindings,view:area,unapplied:proposal.interpretation?.unapplied??[]})??executeRequestCandidate(session,candidate,text,options);
-   if(!result.statuses?.includes('supported')&&contextProjection?.rewind)session.isession.state=before;
-   if(result.statuses?.includes('supported')){session.newEngineLastAction={...session.newEngineLastAction,[area]:candidate};if(contextProjection){result.text+=' '+proposal.interpretation.note;result.parts=[{text:result.text,translate:false}];result.trace={...result.trace,interpretation:proposal.interpretation};}}
-   const changed=Object.keys(session.isession.state).filter(key=>JSON.stringify(before[key])!==JSON.stringify(session.isession.state[key]));
-   if(changed.length)session.newEngineUndo=[...(session.newEngineUndo??[]).slice(-31),{area,before:Object.fromEntries(changed.map(key=>[key,before[key]])),after:Object.fromEntries(changed.map(key=>[key,structuredClone(session.isession.state[key])])),reading:candidate,alternatives:decision.alternatives}];
-  }
+  result=await dispatchRequest(session,candidate,text,options,bindings,contextProjection,proposal.interpretation,decision.alternatives);
   if(result?.statuses?.includes('supported')&&proposal.interpretation?.profile==='declared-creation/1'&&proposal.interpretation.note){result.text+=' '+proposal.interpretation.note;result.parts=[{text:result.text,translate:false}];result.trace={...result.trace,interpretation:proposal.interpretation};}
   if(result&&decision.uncertain&&result.statuses?.includes('supported')){
    const note=result.trace?.uncertainty?.length||result.trace?.interpretation?'':'I used the most likely reading; you can correct it or undo.';
@@ -57,6 +64,13 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
 
 /** Apply the declared source-order schedule to actual model cuts, never source words. */
 export async function routeNewEngine(session,text,options={}){
+ if(isAuthoredRequest(text)){
+  const input=readAuthoredRequest(text);
+  if(!input.candidate){const message='The SOP request could not be read ('+input.reason+').';return {text:message,parts:[{text:message,translate:false}],statuses:['unsupported'],answers:[],segments:[],state:{},effects:[],trace:{authored:true,reason:input.reason}};}
+  const bindings=session.engine?.nativeBindings??session.engine?.requestReader?.bindings?.();
+  const result=await dispatchRequest(session,input.candidate,text,options,bindings);
+  return {...result,trace:{...result.trace,authored:true,reading:input.candidate}};
+ }
  const provider=session.engine?.requestReader;
  if(typeof text!=='string'||!text.trim()||text.length>65536||options.language&&options.language!=='en')return routeReaderProposal(session,text,options);
  const policy=requestCompositionPolicy();

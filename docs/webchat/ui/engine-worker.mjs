@@ -95,7 +95,7 @@ const coreStateOf=()=>{canonicalizeSessionStates();return session.state();};
 const stateOf=()=>Object.fromEntries(Object.entries(coreStateOf()).map(([world,value])=>{const area=areaForWorld(world);return [world,value&&area?.projectState?area.projectState(value):value];}));
 /** Of the before-turn state, the worlds the turn loaded (not in `had`): the page has the others in its own snapshot, so its what-happened diff needs nothing more. */
 const loadedBefore = (before, had) => Object.fromEntries(Object.entries(before ?? {}).filter(([id]) => !had.has(id)));   // `had`: the worlds whose state the page holds (it sends their ids)
-const metaOf = () => ({ msg: session._msg, lang: session._sessionLang, weakRo: session._weakRo, language: session.language, memory: memoryOf(), readerPrevious });
+const metaOf = () => ({ msg: session._msg, lang: session._sessionLang, weakRo: session._weakRo, language: session.language, memory: memoryOf(), readerPrevious, placementProfile: mods.placementProfileSnapshot(session) });
 /** The discourse / ASTRA memory as JSON, so that a restarted worker gets it back (a failure here must never fail a turn). */
 function memoryOf() { try { return session.memoryJSON(); } catch { return null; } }
 
@@ -126,6 +126,8 @@ async function init(m) {
   try { const b = await imp('lib/dialog/budget.mjs'); budgetMod.createBudget = b.createBudget ?? null; } catch { budgetMod.createBudget = null; }   // agent B's step budget, when this build has it
   mods = { tl, dialog, rc, guard: g.guard, TurnAborted: g.TurnAborted, soplang, lang, ...areaMod };
   Object.assign(mods,await imp('lib/dialog/project-world.mjs'));
+  Object.assign(mods,await imp('worlds/app.project/spatial-profile.mjs'));
+  Object.assign(mods,await imp('lib/dialog/instance-identity.mjs'));
   projectAreas=(m.tabBindings??Object.entries(tabWorlds).map(([view,world])=>({view,world,label:view}))).map(area=>({...area,schemaWorld:worldLoader?.info(area.world)?.schemaWorld??null}));projectWorld=mods.createProjectWorld({areas:projectAreas});
   // the guard reports its stage to the page at once (postMessage from synchronous code is delivered while the loop runs): a killed turn says where it was
   { let last = ''; const report = (stage) => { if (stage && stage !== last) { last = stage; evt('stage', stage); worldActivity(['component:reasoner'],'stage',stage); } };   // a few dozen changes per turn
@@ -189,6 +191,7 @@ async function init(m) {
   if (m.restoreState) restoreStates(m.restoreState, m.restoreMeta);
   canonicalizeSessionStates();
   // Editor hosts and inspection do not depend on neural session construction.
+  mods.isAuthoredRequest=(await imp('lib/dialog/authored-request-tool.mjs')).isAuthoredRequest;
   readerReady=installSopReader(imp);
   return { retiredAreas: worldLoader.index.retiredAreas ?? [], worlds: engine.worlds().map((w) => w.id), known: worldLoader.ids(), worldTabs: Object.fromEntries(worldLoader.ids().map((id) => [id, worldLoader.info(id).tab?.id ?? null]).filter(([, v]) => v)), problems: engine.problems?.() ?? [], state: stateOf(), hasDispatcher: !!dispatcherEnc, hasNormalizer: !!normalizerHost, budget: !!budgetMod.createBudget, reader: readerStatus };
 }
@@ -199,7 +202,7 @@ async function installSopReader(imp){
     const response=await fetch(vurl('models/sop-bert/deployment.json'));if(!response.ok)throw Error('SOP-BERT deployment HTTP '+response.status);
     const deployment=await response.json();if(deployment.format!=='psys2.browser-reader-deployment/1')throw Error('unsupported-reader-deployment');
     const [{createBrowserReaderHost},{createAppReaderContext}]=await Promise.all([imp('lib/dialog/browser-reader-host.mjs'),imp('lib/dialog/app-reader-context.mjs')]);
-    const getContext=createAppReaderContext({getState:()=>session.isession.state,getPrevious:()=>readerPrevious,getInstanceId:world=>{session.nativeInstanceIds??={};return session.nativeInstanceIds[world]??=crypto.randomUUID();},onObservation:value=>{readerObservation=value;if(value.contextSelection)worldActivity(['component:reader',...(value.world?['native:'+value.world]:[])],'stage','Select reader context',{operation:'reader.context.select',world:value.world,contextSelection:value.contextSelection});}});
+    const getContext=createAppReaderContext({getState:()=>session.isession.state,getPrevious:()=>readerPrevious,getInstanceId:world=>mods.instanceIdFor(session,world),getIdentityRegistry:world=>mods.identityRegistryFor(session,world),onObservation:value=>{readerObservation=value;if(value.contextSelection)worldActivity(['component:reader',...(value.world?['native:'+value.world]:[])],'stage','Select reader context',{operation:'reader.context.select',world:value.world,contextSelection:value.contextSelection});}});
     const host=await createBrowserReaderHost({manifestURL:abs(deployment.manifestPath),manifestSha256:deployment.manifestSha256,tokenizerArtifact:deployment.tokenizerArtifact,bindingsArtifact:deployment.bindingsArtifact,tokenizerConfigArtifact:deployment.tokenizerConfigArtifact,runtimeIdentity:deployment.runtimeIdentity,getContext,resolveURL:rel=>abs(rel),recordDiagnostics:async diagnostic=>{readerDiagnostics.push(diagnostic);if(readerDiagnostics.length>64)readerDiagnostics.shift();const selection=diagnostic.result?.auxiliary?.contextSelection;if(selection)worldActivity(['component:reader'],'stage','Fit reader context to model budget',{operation:'reader.context.fit',contextSelection:selection});}});
     engine.requestReader={...host.provider,async *proposeRequests(text){
       const correlationId='reader:'+crypto.randomUUID(),started=performance.now();let index=0;
@@ -242,6 +245,7 @@ function restoreStates(state, meta) {
       readerPrevious=typeof meta.readerPrevious==='string'?meta.readerPrevious:null;
       session._msg = meta.msg ?? session._msg; session._sessionLang = meta.lang ?? session._sessionLang; session._weakRo = meta.weakRo ?? 0;
       if (meta.memory) { try { session.restoreMemory(meta.memory); } catch (e) { console.warn('memory not restored', e); } }
+      mods.restorePlacementProfile(session,meta.placementProfile);
     }
   }
 }
@@ -329,7 +333,17 @@ const handlers = {
     budget = newBudget();
     mods.guard.setStage?.('start');
     try {
-      await waitForSopReader(ctl.signal);
+      if (mods.isAuthoredRequest(m.text)) {
+        if (!engine.nativeBindings && !engine.requestReader?.bindings) {
+          const response=await fetch(vurl('models/sop-bert/deployment.json'),{signal:ctl.signal});
+          if (!response.ok) throw Error('Native bindings deployment HTTP '+response.status);
+          const deployment=await response.json();
+          const artifact=deployment.bindingsArtifact;
+          const {fetchBrowserReaderBytes}=await import(vurl('lib/dialog/browser-reader-host.mjs'));
+          const bytes=await fetchBrowserReaderBytes(abs(deployment.artifactBase+artifact.path),{...artifact,maxBytes:artifact.bytes});
+          engine.nativeBindings=JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(bytes));
+        }
+      } else await waitForSopReader(ctl.signal);
       const translator = engine.translator; translator.resetUsage?.();
       let reply;
       const read = async () => {
@@ -456,6 +470,24 @@ const handlers = {
       const result=await invokeNativeControl(session,{view,operation:m.operation,args:m.args});
       return {...result,state:stateOf(),meta:metaOf()};
     }finally{active.delete(m.id);}
+  },
+  async placementProfile(m) {
+    if(samplerRun)await samplerRun.catch(()=>undefined);
+    await turnIdle();
+    const ctl=new AbortController();active.set(m.id,ctl);
+    try {
+      const view=session.isession.state['ui.shell']?.activeTab,area=mods.NATIVE_AREAS[view];
+      const unavailable={ok:false,message:'Open an editor with placement controls first.'};
+      if(!area)return unavailable;
+      await ensureWorlds([area.world],'placement setting');
+      if(session.isession.state['ui.shell']?.activeTab!==view)return unavailable;
+      const state=session.isession.state[area.world];
+      if(!state)return unavailable;
+      const host=await mods.createAreaHost(area,{state,instanceId:mods.instanceIdFor(session,area.world),identityRegistry:mods.identityRegistryFor(session,area.world),loader:engine.loader,knowledge:engine.knowledge});
+      if(session.isession.state['ui.shell']?.activeTab!==view || !host?.observeSpatial || !host.bindings().some(operation=>operation.spatial))return unavailable;
+      const result=mods.placementProfileSop(session,host.observeSpatial(),m.sop);
+      return result.ok?{...result,state:stateOf(),meta:metaOf()}:result;
+    } finally {active.delete(m.id);}
   },
   async dry() { return { complete: false, segments: 0, reason: 'unsupported', understood: [], missing: ['declared dry reading'] }; },
   async hint() { return null; },

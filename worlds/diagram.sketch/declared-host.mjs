@@ -1,5 +1,7 @@
 import{projectNumericGroups}from'./chart-layout.mjs';
 // SPDX-License-Identifier: AGPL-3.0-only
+import {centeredSpatialBox,spatialBox,unionSpatialBoxes} from '../native-spatial-observation.mjs';
+import {routeEdges} from './arrows.mjs';
 import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs';
 import {initialState,loadEngine,systemFor,writeBack,PREFIX,K} from './core.mjs';
 import * as tool from './tool.mjs';
@@ -8,11 +10,11 @@ import {CHART_TOOL_BINDINGS,initialChartState,chartNativeObjects,chartNativeHand
 export const DIAGRAM_COMPONENTS=[{world:'data.charts',stateKey:'chartTools',operations:CHART_TOOL_BINDINGS.filter(op=>!['chart.undo','chart.redo'].includes(op.id))}];
 const array={type:'array',required:true},id={type:'string',required:true};
 export const DIAGRAM_TOOL_BINDINGS=[
- {id:'diagram.node.make',sample:[{args:{kind:{enum:true},n:{value:1},colour:{enum:true},size:{enum:true}}}],act:'make',on:'diagram.sketch.node',params:{kind:{type:'string',required:true,enum:Object.keys(PREFIX)},label:{type:'string'},n:{type:'integer',default:1,min:1,max:12},colour:{type:'string'},size:{type:'string',enum:['tiny','small','medium','large','huge']},layout:{type:'string',enum:['tree','grid','row','column','circle','radial','layers']},x:{type:'number'},y:{type:'number'}}},
+ {id:'diagram.node.make',sample:[{args:{kind:{enum:true},n:{value:1},colour:{enum:true},size:{enum:true}}}],act:'make',on:'diagram.sketch.node',params:{kind:{type:'string',required:true,enum:Object.keys(PREFIX)},label:{type:'string'},n:{type:'integer',default:1,min:1,max:12},colour:{type:'string'},size:{type:'string',enum:['tiny','small','medium','large','huge']},layout:{type:'string',enum:['tree','grid','row','column','circle','radial','layers']},x:{type:'number'},y:{type:'number'}},spatial:{frame:'diagram.canvas',kindKey:'kind',xKey:'x',yKey:'y'}},
  {id:'diagram.node.change',sample:[{args:{ids:{ref:{on:'diagram.sketch.node',many:true}},label:{unique:{prefix:'Node'}}}}],act:'change',on:'diagram.sketch.node',params:{ids:array,colour:{type:'string'},size:{type:'string',enum:['tiny','small','medium','large','huge']},label:{type:'string'},value:{type:'number'}}},
  {id:'diagram.node.select',act:'pick',on:'diagram.sketch.node',params:{ids:array,edges:{type:'array'}}},
  {id:'diagram.node.remove',act:'remove',on:'diagram.sketch.node',params:{ids:array}},
- {id:'diagram.node.place',act:'place',on:'diagram.sketch.node',params:{ids:array,x:{type:'number',required:true},y:{type:'number',required:true}},coordinates:{dimension:'length',unit:'canvas.pixel',frame:'diagram.canvas'}},
+ {id:'diagram.node.place',act:'place',on:'diagram.sketch.node',params:{ids:array,x:{type:'number',required:true},y:{type:'number',required:true}},coordinates:{dimension:'length',unit:'canvas.pixel',frame:'diagram.canvas'},spatial:{frame:'diagram.canvas',xKey:'x',yKey:'y',idsKey:'ids'}},
  {id:'diagram.node.resize',act:'change',on:'diagram.sketch.node',params:{ids:array,width:{type:'number',required:true,min:8,max:4096},height:{type:'number',required:true,min:8,max:4096}},coordinates:{dimension:'length',unit:'canvas.pixel',frame:'diagram.canvas'}},
  {id:'diagram.node.layout',act:'change',on:'diagram.sketch.node',params:{ids:array,layout:{type:'string',required:true,enum:['tree','grid','row','column','circle','radial','layers']}}},
  {id:'diagram.link.make',act:'make',on:'diagram.sketch.link',params:{from:id,to:id}},
@@ -38,6 +40,40 @@ const view=s=>[
  ...chartNativeObjects(s.chartTools??initialChartState()).map(row=>{const chart=s.chartTools.charts.find(c=>c.id===row.id);return chart?.projection?{...row,inputs:[...row.inputs,{binding:'chart.projection.status',key:'projectionStatus',values:[nativeToken(chart.projection.status)]},{binding:'chart.projection.sourceGroup',key:'sourceGroup',values:[nativeToken(chart.projection.sourceGroup)]},...(chart.projection.reason?[{binding:'chart.projection.reason',key:'projectionReason',values:[nativeToken(chart.projection.reason)]}]:[])]}:row;}),
  ...s.edges.map(e=>({id:e.id,kind:'link',sourceType:'diagram.sketch.link',from:e.from,to:e.to,relations:{from:[e.from],to:[e.to]},predicate:'connected',inputs:[...['from','to'].map(key=>({binding:`diagram.link.${key}`,key,values:[nativeToken(e[key])]})),...Object.entries(e.properties??{}).map(([key,value])=>({binding:`diagram.link.${key==='color'?'colour':key}`,key:key==='color'?'colour':key,values:[nativeToken(value)]}))]})),
 ];
+const nodeExtents=new Map();
+const spatial = state => {
+ const frame = 'diagram.canvas', scope = frame;
+ const boxes = [], points = [], relations = [], occupants = [], unknown = [];
+ const nodes = new Map(state.shapes.map(node => [node.name,centeredSpatialBox(node.name,scope,{...node,...K.dims(node)})]));
+ const memberIds = new Set(state.groups.flatMap(group => group.members));
+ const add = (id, box, occupant) => {
+  if (box) boxes.push(box); else unknown.push(id);
+  if (occupant) occupants.push(id);
+ };
+ for (const [id,box] of nodes) add(id,box,!memberIds.has(id));
+ for (const group of state.groups) {
+  add(group.name,unionSpatialBoxes(group.name,scope,group.members.map(id=>nodes.get(id))),true);
+  for (const member of group.members) relations.push({subject:member,object:group.name,kind:'member_of',scope});
+ }
+ for (const chart of state.chartTools?.charts??[]) {
+  const p = chart.placement;
+  add(chart.id,p&&spatialBox(chart.id,scope,[p.x,p.y,p.x+p.width,p.y+p.height]),true);
+ }
+ // Use the same border intersections the diagram renders. Hidden routes retain
+ // their logical endpoint ownership without an invented point.
+ const routes = state.shapes.length+state.edges.length<=512?routeEdges(state.shapes,state.edges,K.dims):null;
+ for (const edge of state.edges) for (const [role,index] of [['from',0],['to',-1]]) {
+  const rendered = routes?.get(edge.id)?.pts.at(index);
+  const endpoint = JSON.stringify([edge.id,role]), border = JSON.stringify([edge[role],edge.id,role]);
+  relations.push({subject:edge.id,object:edge[role],kind:'endpoint_of',scope});
+  if (!rendered?.every(Number.isFinite)) { unknown.push(endpoint); continue; }
+  const [x,y] = rendered;
+  points.push({entity:endpoint,scope,x,y},{entity:border,scope,x,y});
+  relations.push({subject:endpoint,object:border,kind:'endpoint_of',scope,evidence:'coincident'});
+ }
+ return {frame,scope,container:frame,boxes,points,relations,occupants,unknown};
+};
+
 /** One-time migration of chart data into the diagram instance; legacy ids are namespaced. */
 export function migrateChartTools(state,legacy=null){
  if(!state.chartTools)state.chartTools={...initialChartState(),idPrefix:'chart:'};
@@ -85,5 +121,16 @@ export async function createDiagramHost({state=initialState(),instanceId,...limi
  handlers['diagram.undo']=ctx=>{const s=ctx.state;if(!s.compositionHistory?.length)return fail('nothing-to-undo');s.compositionFuture??=[];s.compositionFuture.push(compositionSnapshot(s));restoreComposition(s,s.compositionHistory.pop());return {status:'supported',changed:[]};};
  handlers['diagram.redo']=ctx=>{const s=ctx.state;if(!s.compositionFuture?.length)return fail('nothing-to-redo');s.compositionHistory??=[];s.compositionHistory.push(compositionSnapshot(s));restoreComposition(s,s.compositionFuture.pop());return {status:'supported',changed:[]};};
  for(const operation of operations){if(['ask','undo','redo','pick'].includes(operation.act))continue;const handler=handlers[operation.id];handlers[operation.id]=(ctx,args,step)=>{const before=compositionSnapshot(ctx.state),result=handler(ctx,args,step);if(result?.status==='supported'){const derived=[...projectGroupCharts(ctx.state,{operation:operation.id,args}),...projectNumericGroups(ctx.state,{operation:operation.id,args})];if(derived.length)result.changed=[...new Set([...(result.changed??[]),...derived])];}if(result?.status==='supported'&&JSON.stringify(before)!==JSON.stringify(compositionSnapshot(ctx.state))){ctx.state.compositionHistory??=[];ctx.state.compositionHistory.push(before);if(ctx.state.compositionHistory.length>30)ctx.state.compositionHistory.shift();ctx.state.compositionFuture=[];}return result;};}
- return createNativeToolHost({state,instanceId,scope:'diagram.nodes-links-and-charts',operations,handlers,view,...limits});
+ const host=createNativeToolHost({state,instanceId,scope:'diagram.nodes-links-and-charts',operations,handlers,view,spatial,...limits});
+ return {...host,measureSpatial(operation,args){
+  if(operation!=='diagram.node.make'||!Object.hasOwn(PREFIX,args.kind))return null;
+  const key=JSON.stringify([state.rules,args]);
+  if(nodeExtents.has(key))return {...nodeExtents.get(key)};
+  const scratch=initialState();scratch.rules=structuredClone(state.rules);
+  const applied=tool.addShapes({state:scratch},{...args,step:'measure'});
+  if(applied?.status!=='supported'||scratch.shapes.length!==1)return null;
+  const {w,h}=K.dims(scratch.shapes[0]),measurement={width:w,height:h};
+  if(nodeExtents.size>=128)nodeExtents.clear();
+  nodeExtents.set(key,measurement);return {...measurement};
+ }};
 }

@@ -1,3 +1,4 @@
+import {isAuthoredRequest} from './authored-request-tool.mjs';
 // SPDX-License-Identifier: AGPL-3.0-only
 /**
  * C2 dialog pipeline (spec 06). Browser-safe.
@@ -1640,7 +1641,7 @@ export class DialogSession {
     const language = opts.language ?? (this.language === 'auto' ? 'en' : this.language);
     const translator = this.engine.translator;
     let english = text, sourceLanguage = language, translation = null;
-    if (language !== 'en') {
+    if (language !== 'en' && !isAuthoredRequest(text)) {
       // UI language is a reply preference; a browser-detected input language may differ.
       try { const top = (await translator?.detectInput?.(text))?.[0]; if (top?.confidence >= 0.8) sourceLanguage = top.detectedLanguage.split('-')[0]; } catch { /* use the selected language */ }
       if (sourceLanguage !== 'en') {

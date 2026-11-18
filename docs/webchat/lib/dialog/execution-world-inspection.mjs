@@ -1,10 +1,10 @@
 // Read-only inspection of execution worlds already owned by the application.
-import{serialize,str,version,build}from'../vendor/sopworld/sopworld.mjs?v=820bedd01b';
-import SOURCE from'./new-engine-source.mjs?v=fb3421bd1d';
-import{CATALOG_PIN}from'../knowledge/catalog-pin.mjs?v=d62c892245';
-import{inspectExecutionPolicyWorld}from'./execution-policy.mjs?v=55a3c62ad7';
-import{inspectSchemaSource}from'./worlds-inspection.mjs?v=3d6df707f3';
-import{inspectRequestCompositionPolicy}from'./request-composition-policy.mjs?v=a6d084e5a1';
+import{serialize,str,version,build}from'../vendor/sopworld/sopworld.mjs?v=df8c26a4de';
+import SOURCE from'./new-engine-source.mjs?v=94658c42d6';
+import{CATALOG_PIN}from'../knowledge/catalog-pin.mjs?v=d1ff29de82';
+import{inspectExecutionPolicyWorld}from'./execution-policy.mjs?v=df2bd66b62';
+import{inspectSchemaSource}from'./worlds-inspection.mjs?v=94ead0703f';
+import{inspectRequestCompositionPolicy}from'./request-composition-policy.mjs?v=24e6325486';
 const clone=value=>structuredClone(value);
 const loggedWires=snapshot=>(snapshot?.log??[]).flatMap(entry=>entry.wires??[]);
 const importsOf=snapshot=>[...new Set(loggedWires(snapshot).filter(wire=>wire.type==='core.use').flatMap(wire=>(wire.attrs.world??[]).map(str)))];
@@ -16,12 +16,25 @@ export function inspectCachedExecutionSource(world,{moduleNames=[]}={}){
 function snapshotText(snapshot){return (snapshot?.log??[]).map((entry,index)=>'# Log entry '+index+' / '+entry.op+'\n'+serialize(entry.wires??[])).join('\n\n');}
 /** Projects actual cache accessors and retained journal JSON; performs no reading or reasoning. */
 export async function inspectExecutionWorlds(session){
- const [{inspectNewEngineSourceWorld},{inspectDeclaredExecutionSourceWorld}]=await Promise.all([import('./new-engine.mjs?v=26488779ab'),import('./declared-execution.mjs?v=26488779ab')]);
+ const [{inspectNewEngineSourceWorld},{inspectDeclaredExecutionSourceWorld},{inspectSpatialPlacementWorld}]=await Promise.all([
+  import('./new-engine.mjs?v=c1b4a1fb44'),import('./declared-execution.mjs?v=c1b4a1fb44'),import('./spatial-placement-execution.mjs?v=ee2e9a4822'),
+ ]);
  const journal=session?.newEngineJournal??[],moduleNames=[...new Set(journal.flatMap(record=>importsOf(record.evidence)))],sources=[['new-engine','src/dialog/new-engine.mjs',inspectNewEngineSourceWorld({moduleNames})],['declared-execution','src/dialog/declared-execution.mjs',inspectDeclaredExecutionSourceWorld({moduleNames})]],nodes=[],edges=[];
  const link=(from,to,label)=>edges.push({from,to,label});
  const policy=inspectExecutionPolicyWorld();
  nodes.push({id:'execution:policy',label:'Execution policy',kind:'knowledge',implementation:'Operational SOP Lang World + declared host clock',description:'Actual policy queried by execution for omitted arguments and knowledge-property joins. The source is available before initialization; loaded status records the real lazy World. This moves these decisions out of native operation maps, but does not migrate editor state or all native tool semantics.',wires:policy.facts,details:{source:policy.source,loaded:policy.loaded,functions:policy.functions,dependencies:policy.dependencies},help:{purpose:'Declare defaults and knowledge value joins used by concrete request execution.',inputs:['Operation and explicit arguments','Referenced knowledge properties','Clock primitive for a missing current time'],outputs:['Only omitted argument defaults','Assumption notices','Typed knowledge-property lookup descriptors'],limits:['These are explicit defaults, not proof of broader reasoning. Editor native implementations remain visible.']}});
  link('execution:module:declared-execution','execution:policy','queries defaults and value joins');
+ const placement=inspectSpatialPlacementWorld();
+ if(placement){
+  const ids={policy:'execution:placement-policy',geometry:'execution:placement-geometry',schema:'execution:placement-geometry-schema'};
+  const details={loaded:placement.loaded,knowledgePin:placement.knowledgePin,libraryPin:placement.libraryPin};
+  nodes.push({id:ids.policy,label:'Placement objective',kind:'knowledge',implementation:'Operational SOP Lang World',description:'The method and declared costs read when compiling placement from live geometry.',wires:placement.policy,details:{...details,source:'worlds/app.project/spatial-placement.sop'}});
+  nodes.push({id:ids.geometry,label:'Spatial policies',kind:'knowledge',implementation:'Catalog SOP Lang facts',description:'The compiled route reads these pinned geometric applicability and scoring policies.',wires:placement.knowledge,details});
+  nodes.push({id:ids.schema,label:'k.spatial2d',kind:'schema',implementation:'Catalog SOP Lang schema and rules',description:'Shared relation, geometry and measurement declarations used by both editor routes.',wires:placement.schema,schemaView:inspectSchemaSource(placement.schema),details});
+  link('execution:module:declared-execution',ids.policy,'compiles relation placement');
+  link(ids.policy,ids.geometry,'uses spatial policies');
+  link(ids.geometry,ids.schema,'imports schema and rules');
+ }
  const composition=inspectRequestCompositionPolicy(),compositionWires=composition.facts;
  nodes.push({id:'execution:composition-policy',label:'Request composition',kind:'knowledge',implementation:'Operational SOP Lang World',description:'Actual source-order scheduling and undo policy for independently validated request cuts. This declaration does not infer target membership or causal dependencies from repeated nouns.',wires:compositionWires,details:{loaded:composition.loaded,source:'worlds/app.project/request-composition-policy.sop',dependencies:composition.dependencies}});
  link('execution:composition-policy','execution:module:declared-execution','governs independent request scheduling');

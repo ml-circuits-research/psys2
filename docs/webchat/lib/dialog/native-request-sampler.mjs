@@ -1,9 +1,9 @@
 // Native capability/state adapter for the existing std.sample and language-world realiser.
-import * as lib from '../vendor/sopworld/sopworld.mjs?v=820bedd01b';
-import {createSampler} from './sampler.mjs?v=95a4b5bd4a';
+import * as lib from '../vendor/sopworld/sopworld.mjs?v=df8c26a4de';
+import {createSampler} from './sampler.mjs?v=cf85e3964b';
 import {nativeKindCandidates} from './native-binding-candidates.mjs?v=de223646d6';
-import {declaredPropertyValues} from './declared-execution.mjs?v=26488779ab';
-import {routeNewEngine} from './reader-routing.mjs?v=7a427042a2';
+import {declaredPropertyValues} from './declared-execution.mjs?v=c1b4a1fb44';
+import {routeNewEngine} from './reader-routing.mjs?v=e6ba554722';
 const word = x => typeof x==='string' && /^[a-z]+$/.test(x);
 
 export function samplingSchema({area,operations,observation,bindings}) {

@@ -1,0 +1,13 @@
+# The editor applies the catalog's shared geometric policies.
+# Rank AABB overlap before clearance shortfall and declared direction order.
+@layout.method std.placement.method directionType=k.spatial2d.direction boxType=k.spatial2d.box relationType=k.spatial2d.relation policyType=k.spatial2d.policy effectiveType=k.spatial2d.effective_policy measurementType=k.spatial2d.measurement peerRelation=independent_peer containRelation=member_of containEvidence=containment gapMetric=near_distance objective=$layout.objective
+@layout.objective std.objective direction=minimise order=lexicographic term=$layout.overlap.term term=$layout.clearance.term term=$layout.order.term
+@layout.overlap std.objective.evaluator normalisation=canvas.pixel.area version=1
+@layout.clearance std.objective.evaluator normalisation=canvas.pixel.length version=1
+@layout.order std.objective.evaluator normalisation=declared.direction.rank version=1
+@layout.overlap.term std.objective.term evaluator=layout.overlap normalisation=declared.by.evaluator weight=1 priority=0
+@layout.clearance.term std.objective.term evaluator=layout.clearance normalisation=declared.by.evaluator weight=1 priority=1
+@layout.order.term std.objective.term evaluator=layout.order normalisation=declared.by.evaluator weight=1 priority=2
+@layout.overlap.cost std.placement.cost evaluator=$layout.overlap metric=overlap_area
+@layout.clearance.cost std.placement.cost evaluator=$layout.clearance metric=clearance_deficit
+@layout.order.cost std.placement.cost evaluator=$layout.order metric=rank

@@ -268,7 +268,7 @@ export async function mountPsys2(element, options = {}) {
   element.replaceChildren(root);
   const log = h('div', { class: 'p2-log', role: 'log', 'aria-live': 'polite', 'aria-relevant': 'additions', 'aria-label': 'Conversation', tabindex: '0' });
   const statusEl = h('p', { class: 'p2-status', 'aria-live': 'off' }, 'Loading…');
-  const input = h('input', { class: 'p2-text', type: 'text', id: `p2-in-${Math.random().toString(36).slice(2, 7)}`, autocomplete: 'off', enterkeyhint: 'send', placeholder: 'Type a message…', 'aria-label': 'Message' });
+  const input = h('textarea', { class: 'p2-text', rows: 1, id: `p2-in-${Math.random().toString(36).slice(2, 7)}`, autocomplete: 'off', enterkeyhint: 'send', placeholder: 'Type a message…', 'aria-label': 'Message' });
   const inputHistory = createInputHistory(input);   // arrow up / down recall; the keydown listener is added below with the other input listeners
   input.addEventListener('keydown', inputHistory.onKeydown);
   // Every icon button carries a tooltip (title) with the same text as its aria-label, saying what it does and what state it is in (UI1).
@@ -1302,6 +1302,12 @@ export async function mountPsys2(element, options = {}) {
     if (turn && !turn.ctl.signal.aborted) { turn.reason = 'stopped'; turn.ctl.abort(new DOMException('stopped by the user', 'AbortError')); }
     speech?.stopSpeaking?.(); effectsPending = 0; endSpeakCap(); updateBusy();
   };
+  on(input, 'keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey && !e.isComposing && !e.defaultPrevented) {
+      e.preventDefault();
+      form.requestSubmit();
+    }
+  });
   on(form, 'submit', (e) => {
     e.preventDefault();
     const t = input.value; input.value = ''; send(t);
@@ -1818,12 +1824,51 @@ export async function mountPsys2(element, options = {}) {
   }
   function readingBody() {
     return [
+      placementSpacingControl(),
       optCheck('helperModel', settings.helperModel !== false, (v) => { settings.helperModel = v; applyReading(settings); applyEngineSettings(); if (v) startModels(); save(); renderSettings(); }, { status: readingStatus() }),
       ...optionsOf('reading').filter((o) => o.id !== 'helperModel').map((o) => {
         if (o.id === 'normalizer') return optCheck('normalizer', settings.normalizer === true, (v) => { settings.normalizer = v; if (v) normalizerHost?.prepare().catch(() => {}); save(); renderSettings(); }, { disabledWhy: normalizerHost ? '' : 'no model in this build', status: normalizerText() });
         return optCheck(o.id, o.id === 'spellcheck' ? settings.spellcheck : settings[o.key] !== false && !!settings[o.key], (v) => { settings[o.key] = v; applyEngineSettings(); save(); });
       }),
     ];
+  }
+  function placementSpacingControl() {
+    const id = 'p2-placement-spacing';
+    const label = tabDefs.find(tab => tab.id === lastShellTab)?.label;
+    const input = h('input', { id, type: 'number', min: '0', step: 'any', required: true, disabled: true });
+    const status = h('small', { role: 'status' });
+    const apply = h('button', { class: 'p2-btn-text', type: 'button', disabled: true, onclick: () => change('set') }, 'Save spacing');
+    const undo = h('button', { class: 'p2-btn-text', type: 'button', disabled: true, onclick: () => change('undo') }, 'Undo spacing setting');
+    let available = false, canUndo = false;
+    async function change(action) {
+      if (!engineClient) return;
+      if (action === 'set' && (!input.checkValidity() || !Number.isFinite(input.valueAsNumber))) {
+        input.reportValidity();
+        return;
+      }
+      input.disabled = apply.disabled = undo.disabled = true;
+      try {
+        const clearance = action === 'set' ? ' clearance=' + input.valueAsNumber : '';
+        const sop = '@spacing app.spatial-profile.' + action + ' relation=near metric=near_distance' + clearance;
+        const result = await engineClient.call('placementProfile', { sop });
+        status.textContent = result.message || '';
+        if (!result.ok) return;
+        if (action !== 'inspect') session.acceptState(result);
+        input.value = result.clearance ?? '';
+        input.placeholder = String(result.defaultClearance);
+        available = true;
+        canUndo = result.canUndo;
+      } catch (error) {
+        status.textContent = error?.message || 'Placement spacing is unavailable.';
+      } finally {
+        input.disabled = apply.disabled = !available;
+        undo.disabled = !canUndo;
+      }
+    }
+    if (engineClient) void change('inspect');
+    return h('div', { class: 'p2-opt' },
+      h('label', { for: id }, label ? 'Placement spacing · ' + label : 'Placement spacing'),
+      input, apply, undo, status);
   }
   function languageOptions() {
     const list = tl.listed(), cur = language.get();

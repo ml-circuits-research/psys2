@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Explicit numeric data only: no text parser, inferred values, or legacy dispatch.
-import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs?v=463e762442';
+import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs?v=cf38a0ae11';
 import {PALETTES} from './palettes.mjs?v=624dcc19cf';
 const text={type:'string',required:true},array={type:'array',required:true},seriesIndex={type:'integer',min:0,default:0};
 export const CHART_KIND_PARAMETERS={

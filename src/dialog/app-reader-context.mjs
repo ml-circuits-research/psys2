@@ -16,13 +16,13 @@ export async function createAreaHost(area,{loader,knowledge,prepareKnowledge=tru
  if(area.policyFile&&!policySource)throw Error('native-policy-unavailable');
  return area.create({...options,knowledge,...(policySource?{policySource}:{})});
 }
-export function createAppReaderContext({getState,getPrevious=()=>null,getInstanceId=()=>globalThis.crypto.randomUUID(),onObservation=()=>{}}={}){
+export function createAppReaderContext({getState,getPrevious=()=>null,getInstanceId=()=>globalThis.crypto.randomUUID(),getIdentityRegistry,onObservation=()=>{}}={}){
  if(typeof getState!=='function'||typeof getPrevious!=='function'||typeof onObservation!=='function')throw Error('invalid-app-reader-context');
  const hosts=new WeakMap();
  return async(text='')=>{
   const state=getState(),tab=state?.['ui.shell']?.activeTab,area=NATIVE_AREAS[tab],native=area&&state[area.world];
   if(!area||!native||typeof native!=='object')throw Error('active-native-context-unavailable');
-  let host=hosts.get(native);if(!host){host=await area.create({state:native,instanceId:getInstanceId(area.world)});hosts.set(native,host);}
+  let host=hosts.get(native);if(!host){host=await area.create({state:native,instanceId:getInstanceId(area.world),identityRegistry:getIdentityRegistry?.(area.world)});hosts.set(native,host);}
   const observation=host.observe(),ids=new Set(observation.objects.map(object=>String(object.id))),focus=[];
   const collect=value=>{if(typeof value==='string'&&ids.has(value))focus.push(value);else if(Array.isArray(value))value.forEach(collect);else if(value&&typeof value==='object'){
    if(typeof value.id==='string'){const fields=Object.entries(value).filter(([key])=>key!=='id');if(fields.length)for(const object of observation.objects){const owner=object.id===value.id||object.in===value.id||object.parent===value.id;if(owner&&fields.every(([key,wanted])=>object.inputs.some(input=>input.key===key&&input.values.length===1&&(()=>{try{return JSON.parse(input.values[0])===wanted;}catch{return false;}})())))focus.push(String(object.id));}}

@@ -1,9 +1,11 @@
 // The avatar's native face tools, with choices derived from the supplied knowledge.
-import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs?v=463e762442';
+import {centeredSpatialBox,unionSpatialBoxes} from '../native-spatial-observation.mjs?v=ced85b9a29';
+import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs?v=cf38a0ae11';
 import {compositionBase,compositionOverrides,expressionParts} from './composition.mjs?v=b3e12b14a5';
-import {toNativeAvatarState,adoptCanonicalAvatarState} from './canonical-state.mjs?v=8b998421fc';
-import {DEFAULT_FACE} from './default-face.mjs?v=e04d7c743a';
-import {newFace,mark,wearPreset,putPart,takeOff,setParts,moveParts,toolView,roleOf,neighbours,centre,SCALE_MIN,SCALE_MAX,NONE,PART_SIZE_GRADES,PART_MOVE_DIRECTIONS,undoStep,redoStep} from './face.mjs?v=a6ef7e7eba';
+import {toNativeAvatarState,adoptCanonicalAvatarState} from './canonical-state.mjs?v=a41479ae8d';
+import {DEFAULT_FACE} from './default-face.mjs?v=f1afd579e8';
+import {variantFor} from './facedraw.mjs?v=708c1180b9';
+import {newFace,mark,wearPreset,putPart,takeOff,setParts,moveParts,toolView,roleOf,neighbours,centre,SCALE_MIN,SCALE_MAX,NONE,PART_SIZE_GRADES,PART_MOVE_DIRECTIONS,undoStep,redoStep} from './face.mjs?v=b71e0c38d9';
 const text={type:'string',required:true},ids={type:'array',required:true},faceId={type:'string',default:'face',enum:['face']};
 const available=(slot,variant)=>slot?.variants.some(v=>v.name===variant&&v.parts?.length>0);
 export const initialAvatarState=(data=DEFAULT_FACE)=>({face:newFace(data),selectedSlot:null});
@@ -105,5 +107,23 @@ export function createAvatarHost({state=null,instanceId,knowledge=null,data=null
   return result;
  }]));
  const view=carrier=>nativeView(toNativeAvatarState(carrier));
- return {...createNativeToolHost({state,instanceId,scope:'avatar.face-and-parts',operations,handlers,view,...limits}),capabilities:()=>structuredClone(capabilities)};
+ const spatial=(carrier,records)=>{
+  const frame='avatar.face-plane',scope=frame,face=toNativeAvatarState(carrier).face;
+  const visible=new Set(records.map(row=>row.id)),slots=catalog.slots.filter(slot=>visible.has(slot.name));
+  const scale=face.adj?.face?.s??1, cx=catalog.frame.w/2,cy=catalog.frame.h/2;
+  const boxes=[],relations=[],unknown=[];
+  for(const slot of slots){
+   const b=centre(slot,face),x=cx+(b.x-cx)*scale,y=cy+(b.y-cy)*scale;
+   const extent={y,w:b.w*scale,h:b.h*scale},sides=[];
+   if(variantFor(catalog,face,slot.name,'left'))sides.push(centeredSpatialBox(slot.name,scope,{...extent,x}));
+   if(slot.mirror&&variantFor(catalog,face,slot.name,'right'))sides.push(centeredSpatialBox(slot.name,scope,{...extent,x:catalog.frame.w-x}));
+   const box=unionSpatialBoxes(slot.name,scope,sides);
+   if(box)boxes.push(box);else unknown.push(slot.name);
+   const {inside,riders}=neighbours(catalog,slot);
+   for(const part of inside)if(visible.has(part.name))relations.push({subject:part.name,object:slot.name,kind:'member_of',scope});
+   for(const part of riders)if(visible.has(part.name))relations.push({subject:part.name,object:slot.name,kind:'anchored_to',scope});
+  }
+  return {frame,scope,container:'face',boxes,relations,occupants:[],unknown};
+ };
+ return {...createNativeToolHost({state,instanceId,scope:'avatar.face-and-parts',operations,handlers,view,spatial,...limits}),capabilities:()=>structuredClone(capabilities)};
 }

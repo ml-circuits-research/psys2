@@ -1,7 +1,7 @@
 // Authored purpose comments, grounded in each WORLD.md and schema.sop at this pin.
 // Descriptions explain the available definitions; actual use needs runtime evidence.
 export const CATALOG_WORLD_PURPOSE_CONTEXT = Object.freeze({
- catalogCommit: '59875277e34943877ef3f7d28d759589373153bb',
+ catalogCommit: '844ebfd7ca972ebe31a916a21569d606eb01d600',
  definitionStatus: 'Definitions published in the pinned knowledge catalog.',
  runtimeUseStatus: 'Runtime use is not established by this metadata; a loaded definition alone does not show participation in a reasoning step.',
  sourcePath: '<world-id>/WORLD.md',
@@ -37,6 +37,7 @@ export const CATALOG_WORLD_PURPOSES = Object.freeze({
  'k.shapes': 'Describes flat shapes, lines and solids by their sides, corners, roundness and kind relationships. These properties support recognizing shapes, comparing them and relating everyday objects to geometry.',
  'k.space': 'Describes celestial bodies and astronomical kinds through orbit relations, order, physical properties and drawable counterparts. This supports questions and comparisons about the solar system and other named objects in space.',
  'k.story': 'Defines story elements, character goals, obstacles and constraints linking events. Its links to people, animals, scenes and actions supply structured choices for composing a coherent story.',
+ 'k.spatial2d': 'Measures bounds, gaps, containment and attachment in versioned two-dimensional frames. Its policies define which relations constrain a placement and which distances can adapt to scoped preferences.',
  'k.time': 'Defines calendar and clock cycles, their members, ordering and duration relations. This provides the temporal structure needed to interpret months, weekdays, seasons, parts of a day and recurring order.',
  'k.units': 'Defines quantities, units, symbols and conversion factors or offsets relative to a base unit. These definitions let a consumer compare or convert compatible measurements without confusing their units.',
  'k.values': 'Relates everyday words to ordered scales, degrees, sizes, amounts, directions, regions and numbers. This gives a reader reusable value meanings and comparison steps for requests such as smaller, brighter or farther.',

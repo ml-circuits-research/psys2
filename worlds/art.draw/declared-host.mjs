@@ -1,4 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
+import {budget} from '../../src/dialog/budget.mjs';
+import {spatialBox} from '../native-spatial-observation.mjs';
 import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs';
 import {initialState,makeObject,remember,undoStep,redoStep,newPage} from './board.mjs';
 import {DRAWING_PART_TOOL_BINDINGS,drawingPartHandlers,drawingPartsOf,makeKnowledgeDrawing,restoreMembers,drawingObjectsOf,findDrawingObject,replaceDrawingObject,independentDrawingIds,colourDrawingObject} from './part-tools.mjs';
@@ -7,12 +9,12 @@ export {initialState as initialDrawingState};
 const kinds=Object.keys(KINDS),array={type:'array',required:true};
 const properties={name:{type:'string'},label:{type:'string'},width:{type:'number',min:.001},height:{type:'number',min:.001},x:{type:'number'},y:{type:'number'},size:{type:'number',min:0.001},color:{type:'string',nullable:true}};
 export const DRAWING_TOOL_BINDINGS=[
- {id:'drawing.object.make',sample:[{args:{kind:{enum:true},label:{unique:{prefix:'Shape'}},x:{number:{min:80,max:650}},y:{number:{min:80,max:450}},size:{number:{min:40,max:100}}}}],act:'make',on:'art.draw.object',params:{kind:{type:'string',required:true,enum:kinds},...properties}},
+ {id:'drawing.object.make',sample:[{args:{kind:{enum:true},label:{unique:{prefix:'Shape'}},x:{number:{min:80,max:650}},y:{number:{min:80,max:450}},size:{number:{min:40,max:100}}}}],act:'make',on:'art.draw.object',params:{kind:{type:'string',required:true,enum:kinds},...properties},spatial:{frame:'drawing.canvas',kindKey:'kind',xKey:'x',yKey:'y'}},
  {id:'drawing.catalog.make',act:'make',on:'art.draw.object',knowledgeInputs:[{argument:'name',load:'thing'}],params:{name:{type:'string',required:true},x:{type:'number'},y:{type:'number'},size:{type:'number',min:.001}}},
  {id:'drawing.object.change',effectScope:{ancestors:{via:['in','parent'],keys:['x','y','size','width','height']}},sample:[{args:{ids:{ref:{on:'art.draw.object',many:true}},label:{unique:{prefix:'Shape'}}}}],act:'change',on:'art.draw.object',params:{ids:array,...properties}},
  {id:'drawing.object.select',act:'pick',on:'art.draw.object',params:{id:{type:'string',required:true,nullable:true}}},
  {id:'drawing.objects.select',act:'pick',on:'art.draw.object',params:{ids:array}},
- {id:'drawing.object.place',effectScope:{ancestors:{via:['in','parent'],keys:['x','y','size','width','height']}},act:'place',on:'art.draw.object',params:{ids:array,x:{type:'number',required:true},y:{type:'number',required:true}},coordinates:{dimension:'length',unit:'canvas.pixel',frame:'drawing.canvas'}},
+ {id:'drawing.object.place',effectScope:{ancestors:{via:['in','parent'],keys:['x','y','size','width','height']}},act:'place',on:'art.draw.object',params:{ids:array,x:{type:'number',required:true},y:{type:'number',required:true}},coordinates:{dimension:'length',unit:'canvas.pixel',frame:'drawing.canvas'},spatial:{frame:'drawing.canvas',xKey:'x',yKey:'y',idsKey:'ids'}},
  {id:'drawing.objects.transform',act:'change',on:'art.draw.object',effectScope:{projection:'composite'},params:{ids:array,x:{type:'number',required:true},y:{type:'number',required:true},width:{type:'number',required:true,min:.001},height:{type:'number',required:true,min:.001}},coordinates:{dimension:'length',unit:'canvas.pixel',frame:'drawing.canvas'}},
  {id:'drawing.page.clear',act:'remove',on:'art.draw.page',intent:{subject:'contents of the drawing',determiner:'the'},params:{}},
  {id:'drawing.object.remove',act:'remove',on:'art.draw.object',params:{ids:array}},
@@ -34,13 +36,39 @@ const view=s=>{
  const page=Object.hasOwn(s,'idDisplay')?[{id:'drawing.page',kind:'page',sourceType:'art.draw.page',inputs:Object.entries(s.idDisplay).map(([key,value])=>({binding:'drawing.ids.'+key,key,values:[nativeToken(value)]}))}]:[];
  return [...roots,...members,...children,...page];
 };
+const spatial = state => {
+ const frame = 'drawing.canvas', scope = frame, boxes = [spatialBox(frame, scope, [0, 0, W, H], 'rectangle')];
+ const relations = [], occupants = [], unknown = [];
+ const walk = (object, parent, depth=0) => {
+  budget.tick('drawing.native.spatial');
+  if(depth>32)throw new RangeError('drawing-group-depth');
+  const b = bbox(object);
+  const box = spatialBox(object.id, scope, [b.x0, b.y0, b.x1, b.y1]);
+  if (!parent) occupants.push(object.id);
+  if (box) boxes.push(box); else unknown.push(object.id);
+  if (parent) relations.push({subject:object.id,object:parent,kind:'member_of',scope});
+  if (object.shape?.nativeMembers) for (const member of restoreMembers(object)) walk(member,object.id,depth+1);
+  for (const part of drawingPartsOf(object)) {
+   const b = part.bounds, bounds = spatialBox(part.id,scope,[b.x0,b.y0,b.x1,b.y1]);
+   if (bounds) boxes.push(bounds); else unknown.push(part.id);
+   relations.push({subject:part.id,object:object.id,kind:'member_of',scope});
+  }
+ };
+ for (const object of state.objects) walk(object,null);
+ return {frame,scope,container:frame,bounds:frame,boxes,relations,occupants,unknown};
+};
+const buildDrawingObject=(state,args)=>{
+ const object=makeObject(state,args.kind);
+ for(const key of keys)if(Object.hasOwn(args,key))object[key]=args[key];
+ if(args.width!==undefined||args.height!==undefined)object.geometryMatrix=objectMatrix(object);
+ return object;
+};
 export function createDrawingHost({state=initialState(),instanceId,knowledge=null,...limits}={}){
  const handlers={
   'drawing.object.make':(ctx,a)=>{
    if(!validPatch(a))return fail('invalid-native-color');
    if(ctx.state.objects.some(o=>o.id===`o${ctx.state.nextId}`)||!Number.isSafeInteger(ctx.state.nextId+1))return fail('native-id-collision');
-   remember(ctx.state,null);const object=makeObject(ctx.state,a.kind);
-   for(const key of keys)if(Object.hasOwn(a,key))object[key]=a[key];if(a.width!==undefined||a.height!==undefined)object.geometryMatrix=objectMatrix(object);
+   remember(ctx.state,null);const object=buildDrawingObject(ctx.state,a);
    ctx.state.objects.push(object);ctx.state.last=[object.id];ctx.state.selected=object.id;ctx.state.selectedIds=[object.id];ctx.state.selectedPart=null;return done([object.id]);
   },
   'drawing.catalog.make':(ctx,a)=>makeKnowledgeDrawing(ctx.state,a.name,knowledge?.peek?.(a.name),a),
@@ -74,7 +102,11 @@ export function createDrawingHost({state=initialState(),instanceId,knowledge=nul
   'drawing.undo':undoStep,'drawing.redo':redoStep,
   ...drawingPartHandlers,
  };
- return createNativeToolHost({state,instanceId,scope:'drawing.object-lifecycle',operations:DRAWING_TOOL_BINDINGS,handlers,view,...limits});
+ const host=createNativeToolHost({state,instanceId,scope:'drawing.object-lifecycle',operations:DRAWING_TOOL_BINDINGS,handlers,view,spatial,...limits});
+ return {...host,measureSpatial(operation,args){
+  if(operation!=='drawing.object.make'||!Object.hasOwn(KINDS,args.kind)||!validPatch(args))return null;
+  const {w,h}=bbox(buildDrawingObject({nextId:1},args));return {width:w,height:h};
+ }};
 }
 // Actual board construction defaults, not semantic-kind or request mappings.
 export const DRAWING_NATIVE_DEFAULTS={x:W/2,y:H/2,size:'renderer-kind.size',color:null};

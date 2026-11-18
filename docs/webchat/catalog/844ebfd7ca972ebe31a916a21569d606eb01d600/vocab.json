@@ -5828,11 +5828,30 @@
   "k.words/shards/an",
   "k.words/shards/frequency-a"
  ],
+ "anchor x": [
+  "k.spatial2d/schema.sop"
+ ],
+ "anchor y": [
+  "k.spatial2d/schema.sop"
+ ],
  "anchor_arms": [
   "k.objects/shards/food-2"
  ],
  "anchor_post": [
   "k.objects/shards/food-2"
+ ],
+ "anchor_x": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-spatial2d",
+  "k.units/shards/measures"
+ ],
+ "anchor_y": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-spatial2d",
+  "k.units/shards/measures"
+ ],
+ "anchored part": [
+  "k.spatial2d/schema.sop"
  ],
  "anchors": [
   "k.layouts/schema.sop"
@@ -9278,6 +9297,9 @@
   "k.layouts/schema.sop",
   "k.words/shards/at",
   "k.words/shards/frequency-a"
+ ],
+ "attached endpoint": [
+  "k.spatial2d/schema.sop"
  ],
  "attaches": [
   "k.layouts/schema.sop"
@@ -14786,7 +14808,11 @@
   "k.food/shards/vegetables"
  ],
  "before": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-spatial2d",
+  "k.spatial2d/schema.sop",
   "k.time/schema.sop",
+  "k.units/shards/measures",
   "k.words/shards/be",
   "k.words/shards/frequency-b",
   "w.lang.en/shards/closed-classes",
@@ -18971,6 +18997,9 @@
   "k.words/shards/bo",
   "k.words/shards/frequency-b"
  ],
+ "bounding box": [
+  "k.spatial2d/schema.sop"
+ ],
  "bounds": [
   "k.words/shards/bo",
   "k.words/shards/frequency-b"
@@ -19246,6 +19275,7 @@
   "k.parts/shards/m",
   "k.scenes/shards/things-b",
   "k.shapes/shards/shapes",
+  "k.units/shards/measures",
   "k.words/shards/bo",
   "k.words/shards/frequency-b",
   "w.diagram/schema.sop",
@@ -29989,6 +30019,10 @@
   "k.actions/shards/actions-make-change"
  ],
  "clearance": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-spatial2d",
+  "k.spatial2d/schema.sop",
+  "k.units/shards/measures",
   "k.words/shards/cl",
   "k.words/shards/frequency-c"
  ],
@@ -32178,6 +32212,9 @@
   "k.words/shards/frequency-c"
  ],
  "comparison": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-spatial2d",
+  "k.spatial2d/schema.sop",
   "k.words/shards/co-1",
   "k.words/shards/frequency-c"
  ],
@@ -33198,6 +33235,9 @@
   "k.words/shards/co-2",
   "k.words/shards/frequency-c"
  ],
+ "contained member": [
+  "k.spatial2d/schema.sop"
+ ],
  "container": [
   "k.attributes/shards/attributes",
   "k.attributes/shards/ranges",
@@ -34097,6 +34137,7 @@
   "k.words/shards/frequency-c"
  ],
  "correction": [
+  "k.units/shards/measures",
   "k.words/shards/co-2",
   "k.words/shards/frequency-c",
   "w.dialogue/schema.sop"
@@ -47133,6 +47174,12 @@
   "k.words/shards/frequency-e",
   "w.dialogue/schema.sop"
  ],
+ "effective spatial policy": [
+  "k.spatial2d/schema.sop"
+ ],
+ "effective_policy": [
+  "k.units/shards/measures"
+ ],
  "effects": [
   "k.procedures/schema.sop",
   "k.words/shards/ef",
@@ -48832,6 +48879,9 @@
   "k.words/shards/frequency-e"
  ],
  "entity": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-spatial2d",
+  "k.spatial2d/schema.sop",
   "k.words/shards/en",
   "k.words/shards/frequency-e"
  ],
@@ -49770,7 +49820,9 @@
   "k.diagrams/shards/diagrams",
   "k.expect/shards/diagrams",
   "k.kinds/shards/relations-motion",
+  "k.kinds/shards/relations-spatial2d",
   "k.motion/schema.sop",
+  "k.spatial2d/schema.sop",
   "k.words/shards/ev",
   "k.words/shards/frequency-e",
   "w.calendar/schema.sop",
@@ -49877,6 +49929,9 @@
   "k.words/shards/frequency-e"
  ],
  "evidence": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-spatial2d",
+  "k.spatial2d/schema.sop",
   "k.words/shards/ev",
   "k.words/shards/frequency-e",
   "w.document/schema.sop",
@@ -54323,6 +54378,9 @@
  "first day": [
   "w.calendar/schema.sop"
  ],
+ "first event": [
+  "k.spatial2d/schema.sop"
+ ],
  "first gear": [
   "k.kinds/shards/part_of-wordnet-2"
  ],
@@ -54351,6 +54409,10 @@
  ],
  "first_book": [
   "k.objects/shards/home"
+ ],
+ "first_event": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-spatial2d"
  ],
  "first_knob": [
   "k.objects/shards/home"
@@ -56695,6 +56757,7 @@
   "k.kinds/shards/part_of",
   "k.kinds/shards/part_of-wordnet-2",
   "k.kinds/shards/part_of-wordnet-3",
+  "k.kinds/shards/relations-spatial2d",
   "k.kinds/shards/relations-units",
   "k.kinds/shards/use",
   "k.kinds/shards/wordnet-1",
@@ -56711,6 +56774,7 @@
   "k.objects/shards/vehicles",
   "k.parts/shards/f",
   "k.scenes/shards/things-f",
+  "k.spatial2d/schema.sop",
   "k.units/schema.sop",
   "k.units/shards/measures",
   "k.words/shards/fr",
@@ -59958,6 +60022,12 @@
   "k.words/shards/frequency-g",
   "k.words/shards/ga"
  ],
+ "gap x": [
+  "k.spatial2d/schema.sop"
+ ],
+ "gap y": [
+  "k.spatial2d/schema.sop"
+ ],
  "gap_1": [
   "k.faces/shards/plain-mouth"
  ],
@@ -59966,6 +60036,16 @@
  ],
  "gap_3": [
   "k.faces/shards/plain-mouth"
+ ],
+ "gap_x": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-spatial2d",
+  "k.units/shards/measures"
+ ],
+ "gap_y": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-spatial2d",
+  "k.units/shards/measures"
  ],
  "gape": [
   "k.actions/shards/actions-body-social-nature"
@@ -60963,6 +61043,9 @@
   "k.words/shards/ge"
  ],
  "geometry": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-spatial2d",
+  "k.spatial2d/schema.sop",
   "k.words/shards/frequency-g",
   "k.words/shards/ge"
  ],
@@ -66573,6 +66656,9 @@
   "k.scenes/shards/scenes-town"
  ],
  "hard": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-spatial2d",
+  "k.spatial2d/schema.sop",
   "k.words/shards/frequency-h",
   "k.words/shards/ha"
  ],
@@ -72693,6 +72779,9 @@
   "k.words/shards/frequency-i",
   "k.words/shards/in"
  ],
+ "independent peer": [
+  "k.spatial2d/schema.sop"
+ ],
  "independent state of papua new guinea": [
   "k.geo/shards/oceania"
  ],
@@ -73361,6 +73450,9 @@
   "k.words/shards/in"
  ],
  "instance": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-spatial2d",
+  "k.spatial2d/schema.sop",
   "k.words/shards/frequency-i",
   "k.words/shards/in"
  ],
@@ -77620,6 +77712,65 @@
   "k.attributes/shards/narration",
   "k.kinds/shards/relations-space"
  ],
+ "k.spatial2d": [
+  "k.units/shards/measures"
+ ],
+ "k.spatial2d.box": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-spatial2d"
+ ],
+ "k.spatial2d.correction": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-spatial2d"
+ ],
+ "k.spatial2d.direction": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-spatial2d"
+ ],
+ "k.spatial2d.effective_policy": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-spatial2d"
+ ],
+ "k.spatial2d.learned_preference": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-spatial2d"
+ ],
+ "k.spatial2d.learning_conflict": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-spatial2d"
+ ],
+ "k.spatial2d.measurement": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-spatial2d"
+ ],
+ "k.spatial2d.pair_geometry": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-spatial2d"
+ ],
+ "k.spatial2d.point": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-spatial2d"
+ ],
+ "k.spatial2d.policy": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-spatial2d"
+ ],
+ "k.spatial2d.preference": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-spatial2d"
+ ],
+ "k.spatial2d.preferred_policy": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-spatial2d"
+ ],
+ "k.spatial2d.profile": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-spatial2d"
+ ],
+ "k.spatial2d.relation": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-spatial2d"
+ ],
  "k.story": [
   "k.kinds/shards/structures",
   "k.units/shards/measures"
@@ -79638,6 +79789,7 @@
   "k.kinds/shards/relations-scenes",
   "k.kinds/shards/relations-shapes",
   "k.kinds/shards/relations-space",
+  "k.kinds/shards/relations-spatial2d",
   "k.kinds/shards/relations-wearables",
   "k.layouts/schema.sop",
   "k.motion/schema.sop",
@@ -79650,6 +79802,7 @@
   "k.scenes/schema.sop",
   "k.shapes/schema.sop",
   "k.space/schema.sop",
+  "k.spatial2d/schema.sop",
   "k.units/schema.sop",
   "k.units/shards/measures",
   "k.wearables/schema.sop",
@@ -83033,6 +83186,12 @@
   "k.words/shards/frequency-l",
   "k.words/shards/le"
  ],
+ "learned placement preference": [
+  "k.spatial2d/schema.sop"
+ ],
+ "learned_preference": [
+  "k.units/shards/measures"
+ ],
  "learner": [
   "k.words/shards/frequency-l",
   "k.words/shards/le"
@@ -83040,6 +83199,9 @@
  "learning": [
   "k.words/shards/frequency-l",
   "k.words/shards/le"
+ ],
+ "learning_conflict": [
+  "k.units/shards/measures"
  ],
  "lease": [
   "k.words/shards/frequency-l",
@@ -90840,12 +91002,28 @@
  "max factor": [
   "k.expect/schema.sop"
  ],
+ "max x": [
+  "k.spatial2d/schema.sop"
+ ],
+ "max y": [
+  "k.spatial2d/schema.sop"
+ ],
  "max_factor": [
   "k.attributes/shards/narration",
   "k.kinds/shards/relations-expect",
   "k.units/shards/measures"
  ],
  "max_words": [
+  "k.units/shards/measures"
+ ],
+ "max_x": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-spatial2d",
+  "k.units/shards/measures"
+ ],
+ "max_y": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-spatial2d",
   "k.units/shards/measures"
  ],
  "maxim": [
@@ -91127,6 +91305,7 @@
   "k.units/schema.sop"
  ],
  "measurement": [
+  "k.units/shards/measures",
   "k.words/shards/frequency-m",
   "k.words/shards/me"
  ],
@@ -92124,6 +92303,11 @@
  ],
  "metres per second": [
   "k.units/shards/core"
+ ],
+ "metric": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-spatial2d",
+  "k.spatial2d/schema.sop"
  ],
  "metro": [
   "k.attributes/shards/drawn-noto",
@@ -93143,12 +93327,28 @@
  "min factor": [
   "k.expect/schema.sop"
  ],
+ "min x": [
+  "k.spatial2d/schema.sop"
+ ],
+ "min y": [
+  "k.spatial2d/schema.sop"
+ ],
  "min_factor": [
   "k.attributes/shards/narration",
   "k.kinds/shards/relations-expect",
   "k.units/shards/measures"
  ],
  "min_length": [
+  "k.units/shards/measures"
+ ],
+ "min_x": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-spatial2d",
+  "k.units/shards/measures"
+ ],
+ "min_y": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-spatial2d",
   "k.units/shards/measures"
  ],
  "mina": [
@@ -97430,6 +97630,7 @@
   "k.kinds/shards/relations-motion",
   "k.kinds/shards/relations-objects",
   "k.kinds/shards/relations-procedures",
+  "k.kinds/shards/relations-spatial2d",
   "k.kinds/shards/relations-time",
   "k.kinds/shards/relations-units",
   "k.kinds/shards/relations-values",
@@ -97440,6 +97641,7 @@
   "k.procedures/shards/compose",
   "k.procedures/shards/from-knowledge",
   "k.procedures/shards/tasks",
+  "k.spatial2d/schema.sop",
   "k.time/schema.sop",
   "k.units/schema.sop",
   "k.values/schema.sop",
@@ -98066,6 +98268,9 @@
  ],
  "near opposite": [
   "k.words/schema.sop"
+ ],
+ "near placement": [
+  "k.spatial2d/schema.sop"
  ],
  "near_mountain": [
   "k.objects/shards/scenery"
@@ -100888,9 +101093,11 @@
   "k.diagrams/shards/diagrams",
   "k.kinds/schema.sop",
   "k.kinds/shards/relations-actions",
+  "k.kinds/shards/relations-spatial2d",
   "k.kinds/shards/wordnet-1",
   "k.kinds/shards/wordnet-2",
   "k.objects/schema.sop",
+  "k.spatial2d/schema.sop",
   "k.words/shards/frequency-o",
   "k.words/shards/ob",
   "w.list/schema.sop",
@@ -100971,6 +101178,9 @@
   "k.actions/shards/actions-mind-talk",
   "k.words/shards/frequency-o",
   "k.words/shards/ob"
+ ],
+ "observed point": [
+  "k.spatial2d/schema.sop"
  ],
  "observer": [
   "k.words/shards/frequency-o",
@@ -103442,6 +103652,15 @@
   "k.words/shards/frequency-o",
   "k.words/shards/ov"
  ],
+ "overlap": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-spatial2d",
+  "k.spatial2d/schema.sop",
+  "k.units/shards/measures"
+ ],
+ "overlap area": [
+  "k.spatial2d/schema.sop"
+ ],
  "overlapping": [
   "k.words/shards/frequency-o",
   "k.words/shards/ov",
@@ -104142,6 +104361,9 @@
   "k.words/shards/frequency-p",
   "k.words/shards/pa",
   "w.lang.en/shards/number-words"
+ ],
+ "pair_geometry": [
+  "k.units/shards/measures"
  ],
  "paisley": [
   "k.attributes/shards/same-p",
@@ -109430,6 +109652,18 @@
   "k.words/shards/frequency-p",
   "k.words/shards/pl"
  ],
+ "placement correction": [
+  "k.spatial2d/schema.sop"
+ ],
+ "placement direction": [
+  "k.spatial2d/schema.sop"
+ ],
+ "placement preference": [
+  "k.spatial2d/schema.sop"
+ ],
+ "placement profile": [
+  "k.spatial2d/schema.sop"
+ ],
  "placental": [
   "k.kinds/shards/wordnet-1",
   "k.kinds/shards/wordnet-2"
@@ -110641,6 +110875,7 @@
   "k.people/shards/roles-jobs"
  ],
  "policy": [
+  "k.units/shards/measures",
   "k.words/shards/frequency-p",
   "k.words/shards/po"
  ],
@@ -112051,11 +112286,15 @@
   "k.words/shards/pr"
  ],
  "preference": [
+  "k.units/shards/measures",
   "k.words/shards/frequency-p",
   "k.words/shards/pr"
  ],
  "preferences": [
   "w.person/schema.sop"
+ ],
+ "preferred_policy": [
+  "k.units/shards/measures"
  ],
  "pregnancy": [
   "k.words/shards/frequency-p",
@@ -112753,9 +112992,18 @@
   "k.words/shards/pr"
  ],
  "profile": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-spatial2d",
+  "k.spatial2d/schema.sop",
+  "k.units/shards/measures",
   "k.words/shards/frequency-p",
   "k.words/shards/pr",
   "w.person/schema.sop"
+ ],
+ "profiled": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-spatial2d",
+  "k.spatial2d/schema.sop"
  ],
  "profit": [
   "k.words/shards/frequency-p",
@@ -115334,8 +115582,10 @@
   "k.charts/schema.sop",
   "k.kinds/shards/relations-charts",
   "k.kinds/shards/relations-procedures",
+  "k.kinds/shards/relations-spatial2d",
   "k.kinds/shards/relations-values",
   "k.procedures/schema.sop",
+  "k.spatial2d/schema.sop",
   "k.units/shards/measures",
   "k.values/schema.sop",
   "k.words/shards/frequency-r",
@@ -116856,10 +117106,13 @@
  ],
  "relation": [
   "k.attributes/shards/narration",
+  "k.kinds/shards/relations-spatial2d",
   "k.kinds/shards/relations-story",
   "k.layouts/schema.sop",
   "k.people/shards/kinds",
+  "k.spatial2d/schema.sop",
   "k.story/schema.sop",
+  "k.units/shards/measures",
   "k.words/shards/frequency-r",
   "k.words/shards/re",
   "w.person/schema.sop",
@@ -118162,6 +118415,10 @@
   "w.request/schema.sop"
  ],
  "revision": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-spatial2d",
+  "k.spatial2d/schema.sop",
+  "k.units/shards/measures",
   "w.dialogue/schema.sop",
   "w.request/schema.sop",
   "w.text/schema.sop"
@@ -125250,7 +125507,9 @@
   "k.attributes/shards/narration",
   "k.interest/schema.sop",
   "k.kinds/shards/relations-interest",
+  "k.kinds/shards/relations-spatial2d",
   "k.objects/shards/things-2",
+  "k.spatial2d/schema.sop",
   "k.words/shards/frequency-s",
   "k.words/shards/sc"
  ],
@@ -126084,6 +126343,9 @@
  "second balcony": [
   "k.kinds/shards/part_of-wordnet-3"
  ],
+ "second event": [
+  "k.spatial2d/schema.sop"
+ ],
  "second gear": [
   "k.kinds/shards/part_of-wordnet-3"
  ],
@@ -126092,6 +126354,10 @@
  ],
  "second_book": [
   "k.objects/shards/home"
+ ],
+ "second_event": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-spatial2d"
  ],
  "second_knob": [
   "k.objects/shards/home"
@@ -126725,6 +126991,10 @@
   "k.actions/shards/families"
  ],
  "separation": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-spatial2d",
+  "k.spatial2d/schema.sop",
+  "k.units/shards/measures",
   "k.words/shards/frequency-s",
   "k.words/shards/se"
  ],
@@ -132899,6 +133169,15 @@
  "spatial": [
   "k.attributes/shards/aspects"
  ],
+ "spatial measurement": [
+  "k.spatial2d/schema.sop"
+ ],
+ "spatial policy": [
+  "k.spatial2d/schema.sop"
+ ],
+ "spatial relation": [
+  "k.spatial2d/schema.sop"
+ ],
  "spatter": [
   "k.words/shards/sp"
  ],
@@ -136660,6 +136939,8 @@
  "subject": [
   "k.attributes/shards/narration",
   "k.kinds/schema.sop",
+  "k.kinds/shards/relations-spatial2d",
+  "k.spatial2d/schema.sop",
   "k.words/shards/frequency-s",
   "k.words/shards/su",
   "w.diagram/schema.sop",
@@ -136668,8 +136949,24 @@
  "subject sense": [
   "k.kinds/schema.sop"
  ],
+ "subject x": [
+  "k.spatial2d/schema.sop"
+ ],
+ "subject y": [
+  "k.spatial2d/schema.sop"
+ ],
  "subject_sense": [
   "k.attributes/shards/narration"
+ ],
+ "subject_x": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-spatial2d",
+  "k.units/shards/measures"
+ ],
+ "subject_y": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-spatial2d",
+  "k.units/shards/measures"
  ],
  "sublime": [
   "k.words/shards/frequency-s",
@@ -150771,12 +151068,14 @@
   "k.kinds/shards/relations-kinds",
   "k.kinds/shards/relations-motion",
   "k.kinds/shards/relations-procedures",
+  "k.kinds/shards/relations-spatial2d",
   "k.kinds/shards/structures",
   "k.motion/schema.sop",
   "k.procedures/schema.sop",
   "k.procedures/shards/compose",
   "k.procedures/shards/from-knowledge",
   "k.procedures/shards/tasks",
+  "k.spatial2d/schema.sop",
   "k.units/shards/measures",
   "k.words/shards/frequency-v",
   "k.words/shards/va",
@@ -154830,6 +155129,8 @@
   "k.attributes/shards/typical",
   "k.body/schema.sop",
   "k.kinds/shards/relations-attributes",
+  "k.kinds/shards/relations-spatial2d",
+  "k.spatial2d/schema.sop",
   "k.units/shards/measures",
   "k.values/shards/scales",
   "k.words/shards/frequency-w",
@@ -157806,10 +158107,12 @@
   "k.kinds/shards/relations-faces",
   "k.kinds/shards/relations-layouts",
   "k.kinds/shards/relations-objects",
+  "k.kinds/shards/relations-spatial2d",
   "k.kinds/shards/relations-values",
   "k.kinds/shards/relations-wearables",
   "k.layouts/schema.sop",
   "k.objects/schema.sop",
+  "k.spatial2d/schema.sop",
   "k.units/shards/measures",
   "k.values/schema.sop",
   "k.wearables/schema.sop",
@@ -157950,10 +158253,12 @@
   "k.kinds/shards/relations-faces",
   "k.kinds/shards/relations-layouts",
   "k.kinds/shards/relations-objects",
+  "k.kinds/shards/relations-spatial2d",
   "k.kinds/shards/relations-values",
   "k.kinds/shards/relations-wearables",
   "k.layouts/schema.sop",
   "k.objects/schema.sop",
+  "k.spatial2d/schema.sop",
   "k.units/shards/measures",
   "k.values/schema.sop",
   "k.wearables/schema.sop",

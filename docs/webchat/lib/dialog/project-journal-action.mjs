@@ -1,5 +1,5 @@
 // A declared journal-step act has no object/property arguments. This consumes model structure, never source words.
-import {serializeRequestGraph} from '../vendor/sopworld/sopworld.mjs?v=820bedd01b';
+import {serializeRequestGraph} from '../vendor/sopworld/sopworld.mjs?v=df8c26a4de';
 const profiles=Object.freeze({undo:{fill:'journal_step',step:'latest'}});
 export function projectJournalAction(proposal) {
  const raw=proposal?.raw,request=raw?.requests?.[0],profile=profiles[request?.act];

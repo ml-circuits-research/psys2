@@ -10,8 +10,19 @@ export async function refreshBrowserReaderDeployment(outDir){
   pipelineSha256:['lib/dialog/key-reader-pipeline.mjs','lib/dialog/verified-reader-provider.mjs','lib/dialog/browser-reader-host.mjs','lib/dialog/project-journal-action.mjs','lib/dialog/project-context-action.mjs','lib/dialog/project-create-action.mjs'],
   packetAdapterSha256:['lib/dialog/key-reader-packet.mjs'],
   graphDecoderSha256:['lib/dialog/raw-structural-bridge.mjs','lib/dialog/model-graph-decoder.mjs','lib/vendor/sopworld/sopworld.mjs'],
-  executorSha256:['lib/dialog/new-engine.mjs','lib/dialog/reader-routing.mjs','lib/dialog/reader-admission.mjs','lib/dialog/reader-policy.mjs','lib/dialog/declared-execution.mjs','lib/dialog/native-binding-candidates.mjs'],
-  contextSerializationSha256:['lib/dialog/native-reader-context.mjs','lib/dialog/app-reader-context.mjs','lib/dialog/key-reader-inference.mjs'],
+  executorSha256:[
+   'lib/dialog/new-engine.mjs','lib/dialog/reader-routing.mjs','lib/dialog/authored-request-tool.mjs',
+   'lib/dialog/reader-admission.mjs','lib/dialog/reader-policy.mjs','lib/dialog/declared-execution.mjs',
+   'lib/dialog/spatial-placement-execution.mjs','lib/dialog/new-engine-source.mjs','lib/dialog/native-tool-activity.mjs',
+   'lib/dialog/native-intent-reader.mjs','lib/dialog/native-binding-candidates.mjs','lib/dialog/native-tool-controls.mjs',
+   'worlds/native-tool-host.mjs','worlds/native-spatial-observation.mjs','worlds/native-spatial-interface.mjs',
+   'worlds/app.project/spatial-profile.mjs','worlds/art.draw/declared-host.mjs','worlds/diagram.sketch/declared-host.mjs',
+   'worlds/ui.avatar/declared-host.mjs',
+  ],
+  contextSerializationSha256:[
+   'lib/dialog/native-reader-context.mjs','lib/dialog/app-reader-context.mjs','lib/dialog/key-reader-inference.mjs',
+   'lib/dialog/instance-identity.mjs',
+  ],
   backendSha256:['vendor/onnxruntime/ort.wasm.bundle.min.mjs','vendor/onnxruntime/ort-wasm-simd-threaded.mjs','vendor/onnxruntime/ort-wasm-simd-threaded.wasm','vendor/sop-tokenizer/bert-tokenizer.mjs']
  };
  const sourceInventory={};

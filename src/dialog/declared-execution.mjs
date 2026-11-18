@@ -1,6 +1,7 @@
+import{executeSpatialPlacement,requestsSpatialPlacement}from'./spatial-placement-execution.mjs';
 import{executionValueSource,executionDefaults}from'./execution-policy.mjs';
 import{inspectCachedExecutionSource}from'./execution-world-inspection.mjs';
-import{instanceIdFor}from'./instance-identity.mjs';
+import{instanceIdFor,identityRegistryFor}from'./instance-identity.mjs';
 import{prepareNativeControlHost}from'./native-control-preparation.mjs';
 import{invokeObservedNativeTool}from'./native-tool-activity.mjs';
 import{describeNativeControl,verifyNativeControlEffect}from'./native-control-intent.mjs';
@@ -26,6 +27,7 @@ export function declaredPropertyValues(concept) {
 }
 const reply=(text,supported,trace={})=>({text,parts:[{text,translate:false}],statuses:[supported?'supported':'unsupported'],answers:[],segments:[],state:{},effects:[],newEngine:true,trace:{legacy:false,engine:'new',...trace}});
 export async function executeDeclaredRequest(session,candidate,text,{bindings,view,unapplied:externalUnapplied=[]}={}) {
+ if(requestsSpatialPlacement(candidate))return executeSpatialPlacement(session,candidate,{bindings,view});
  const area=NATIVE_AREAS[view],readerArea=bindings?.readerAreaByView?.[view]??area?.area,projection=flatRequestProjection(candidate);
  if(!area||!bindings||!projection.ok||projection.targets.length!==1||projection.request.mood!=='do')return null;
  const act=projection.request.act,target=projection.targets[0];
@@ -34,7 +36,7 @@ export async function executeDeclaredRequest(session,candidate,text,{bindings,vi
  const mappings=nativeKindCandidates(bindings).filter(r=>r.area===readerArea&&r.canonical===target.kind&&r.nativeFamilyBinding);
  if(!mappings.length)return act==='make'?reply('I understood the requested action and object, but could not find their declared tool binding. Nothing changed.',false,{reason:'native-binding-gap',reading:candidate,binding:{act,kind:target.kind,alternatives:[]}}):null;
  const nativeState=session.isession.state[area.world];if(!nativeState)return null;
- const host=await createAreaHost(area,{state:nativeState,instanceId:instanceIdFor(session,area.world),loader:session.engine?.loader,knowledge:session.engine?.knowledge}),before=host.observe(),operations=host.bindings();
+ const host=await createAreaHost(area,{state:nativeState,instanceId:instanceIdFor(session,area.world),identityRegistry:identityRegistryFor(session,area.world),loader:session.engine?.loader,knowledge:session.engine?.knowledge}),before=host.observe(),operations=host.bindings();
  const familyOps=operations.filter(op=>mappings.some(m=>m.nativeFamilyBinding.operation===op.id));
  const kinds=[...new Set(mappings.map(m=>m.lemma).filter(name=>familyOps.some(op=>op.params.kind?.enum?.includes(name))))];
  const sourceTypes=new Set(familyOps.map(op=>op.on)),notes=[],unapplied=[];
@@ -104,7 +106,7 @@ export async function executeDeclaredRequest(session,candidate,text,{bindings,vi
  const invocation=globalThis.crypto.randomUUID();let prepared;
  try{prepared=await prepareNativeControlHost(session,{view,operation:chosen.operation.id,args:chosen.args,host,invocation});}catch(error){return reply(`I understood the request for ${mappings[0].lemma}, but could not load the knowledge required by its tool. Nothing changed.`,false,{reason:'native-knowledge-unavailable',reading:candidate,binding:{operation:chosen.operation.id,knowledgeInputs:chosen.operation.knowledgeInputs??[]},error:String(error?.message??error)});}
  const observedBefore=prepared.observe(),intent=describeNativeControl({operation:chosen.operation,args:chosen.args,before:observedBefore});
- const receipt=await invokeObservedNativeTool(session,{area,host:prepared,invocation,expectedVersion:observedBefore.version,operation:chosen.operation.id,args:chosen.args});
+ const receipt=await invokeObservedNativeTool(session,{area,host:prepared,invocation,expectedVersion:observedBefore.version,sop:intent.wires});
  if(receipt.status==='refused')return reply('I could not apply that action. Nothing changed.',false,{reason:receipt.reason,receipt});
  const after=prepared.observe(),verification=verifyNativeControlEffect({intent,before:observedBefore,after,receipt}),created=after.objects.filter(o=>!before.objects.some(b=>b.id===o.id)),object=created[0]??selected;
  session.newEngineFocus={...session.newEngineFocus,[view]:object?.id??null};

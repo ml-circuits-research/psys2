@@ -36,8 +36,14 @@ for(const name of [...world.used].sort()){
  const entry=byId.get(name);if(!entry)continue;
  schemaModules[name]=read(entry.schema);record(entry.schema,name,'schema');
 }
+const spatialEntry=byId.get('k.spatial2d');
+const spatial=spatialEntry&&{
+ schema:record(spatialEntry.schema,spatialEntry.id,'schema'),
+ facts:(spatialEntry.shards??[]).map(shard=>record(shard.path??shard.id+'.sop',spatialEntry.id,'knowledge')).filter(Boolean).join('\n'),
+ policy:readFileSync(new URL('../worlds/app.project/spatial-placement.sop',import.meta.url),'utf8'),
+};
 const provenance=JSON.parse(readFileSync(new URL('../src/vendor/sopworld/provenance.json',import.meta.url),'utf8'));
-const data={knowledgePin:commit,libraryPin:provenance.commit,sources,schemaModules,valueTypes,worlds:owners,snapshot:world.toJSON()};
+const data={knowledgePin:commit,libraryPin:provenance.commit,sources,schemaModules,valueTypes,worlds:owners,spatial,snapshot:world.toJSON()};
 // Prove that persisted context imports replay using only the separately held schema modules.
 const restored=World.fromJSON(data.snapshot,{library:schemaModules});
 for(const type of valueTypes)if(!restored.ofType(type).length)throw Error('empty-execution-value-type:'+type);

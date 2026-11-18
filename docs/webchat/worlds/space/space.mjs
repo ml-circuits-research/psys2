@@ -14,7 +14,7 @@
 //   parseQuestion / answer    what is next to X, which is in the middle, is A above B, how far apart
 //   interpret(text, ctx)      the whole sentence at once (hosts without their own reading of the verb and the thing)
 
-import { arrangement } from '../../lib/knowledge/arrangement.mjs?v=b2550f6587';   // what rests on what, the parts of a face (k.scenes, k.layouts)
+import { arrangement } from '../../lib/knowledge/arrangement.mjs?v=c36b8f1c8a';   // what rests on what, the parts of a face (k.scenes, k.layouts)
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 const toks = (t) => String(t ?? '').toLowerCase().replace(/[^a-z0-9\s]+/g, ' ').split(/\s+/).filter(Boolean);
 const has = (a, w) => a.includes(w);
