@@ -1,4 +1,5 @@
 import {test} from 'node:test';
+import {toNativeDrawingState} from '../worlds/art.draw/canonical-state.mjs';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {parse,str} from '../src/vendor/sopworld/sopworld.mjs';
@@ -100,8 +101,8 @@ test('Drawing uses a less crowded orientation and refuses a compiled call after 
  const stale=await run();
  assert.equal(stale.statuses[0],'unsupported');
  assert.equal(stale.trace.reason,'stale-observation');
- assert.deepEqual(board.objects.map(object=>object.id),[anchor,blocker]);
- assert.equal(board.objects[0].x,350);
+ assert.deepEqual(toNativeDrawingState(board).objects.map(object=>object.id),[anchor,blocker]);
+ assert.equal(toNativeDrawingState(board).objects[0].x,350);
 });
 
 test('Drawing checks hard frame containment before ranking alternatives',async()=>{
@@ -126,8 +127,8 @@ test('Drawing compiles a spatial move of an existing object and retains its appe
  assert.equal(call.type,'drawing.object.place');
  assert.equal(selected(choice,'anchor'),anchor);
  assert.deepEqual(call.attrs.ids.map(str),[fish]);
- assert.equal(board.objects.find(o=>o.id===fish).color,'#112233');
- assert.equal(board.objects.find(o=>o.id===fish).size,130);
+ assert.equal(toNativeDrawingState(board).objects.find(o=>o.id===fish).color,'#112233');
+ assert.equal(toNativeDrawingState(board).objects.find(o=>o.id===fish).size,130);
  assert.equal((await control('undo',{})).ok,true);
  assert.deepEqual(session.isession.state['art.draw'],prior);
 });

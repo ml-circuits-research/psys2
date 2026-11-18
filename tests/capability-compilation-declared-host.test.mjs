@@ -1,3 +1,4 @@
+import {toNativeDrawingState} from '../worlds/art.draw/canonical-state.mjs';
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { readFile } from 'node:fs/promises';
@@ -53,17 +54,17 @@ test('Drawing compiled change uses actual recency, named matches and valid focus
   const latest = await run('By recency');
   assert.equal(latest.statuses[0], 'supported');
   assert.equal(latest.trace.authored, true);
-  assert.deepEqual(state.objects.map((object) => object.label), ['First', 'By recency']);
+  assert.deepEqual(toNativeDrawingState(state).objects.map((object) => object.label), ['First', 'By recency']);
   assert.match(latest.trace.compiledSop, /std\.capability\.result status=compiled.*act=change/);
   assert.match(latest.trace.compiledSop, /std\.capability\.call operation="drawing.object.change"/);
   assert.equal(latest.trace.controlIntent, activity.find((event) => event.operation === 'drawing.object.change' && event.phase === 'start').sop);
   assert.equal((await run('By name', 'First')).statuses[0], 'supported');
-  assert.deepEqual(state.objects.map((object) => object.label), ['By name', 'By recency']);
+  assert.deepEqual(toNativeDrawingState(state).objects.map((object) => object.label), ['By name', 'By recency']);
   assert.equal((await run('By focus')).statuses[0], 'supported');
-  assert.deepEqual(state.objects.map((object) => object.label), ['By focus', 'By recency']);
+  assert.deepEqual(toNativeDrawingState(state).objects.map((object) => object.label), ['By focus', 'By recency']);
   const undo = '@r std.request act=undo mood=do source=$s\n@s std.request.source text="Undo the last action"';
   assert.equal((await routeNewEngine(value, undo, { view: 'draw' })).statuses[0], 'supported');
-  assert.deepEqual(value.isession.state['art.draw'].objects.map((object) => object.label), ['By name', 'By recency']);
+  assert.deepEqual(toNativeDrawingState(value.isession.state['art.draw']).objects.map((object) => object.label), ['By name', 'By recency']);
 });
 
 test('Diagram compiled place and remove reach real tool mutations', async () => {

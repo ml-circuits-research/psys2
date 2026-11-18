@@ -2,6 +2,7 @@
 import {createNativeToolHost,copyHostData,nativeToken} from '../native-tool-host.mjs';
 import {createDoc,writeText,commit,sync,undoStep,redoStep,addBlock} from './document.mjs';
 import {DOCUMENT_EDITING_BINDINGS,DOCUMENT_BLOCK_CHANGE_PARAMETERS,documentEditingHandlers,changeDocumentBlock,documentTextId} from './native-editing.mjs';
+import {canonicalDocumentState,documentStateWorld,toNativeDocumentState,DOCUMENT_STATE_SCHEMA} from './canonical-state.mjs';
 import {blockText,containers} from './model.mjs';
 const text={type:'string',required:true},array={type:'array',required:true};
 export const DOCUMENT_TOOL_BINDINGS=[
@@ -21,13 +22,16 @@ export const DOCUMENT_TOOL_BINDINGS=[
  {id:'document.redo',act:'redo',on:'docs.editor.document',params:{}},
 ];
 export function initialDocumentState(){const s={title:'',titleMarks:[],titleAlign:'left',titleSize:0,blocks:[],cursor:-1,selection:null,focus:null,inputMode:null,history:[],future:[],nextId:1,dictBlock:null,kind:null,about:null,textId:null};sync(s);return s;}
+export const initialCanonicalDocumentState=()=>canonicalDocumentState(initialDocumentState());
+export const DOCUMENT_STATE_INTERFACE=Object.freeze({canonicalizeState:canonicalDocumentState,projectState:toNativeDocumentState,
+ stateWorld:documentStateWorld,stateSchema:DOCUMENT_STATE_SCHEMA,stateInterfaceTypeKey:'nativeType',separateRuntime:true});
 const fail=code=>({status:'missing',code}),done=changed=>({status:'supported',changed});
 const sections=s=>{const heads=s.blocks.map((b,i)=>({b,i})).filter(({b})=>b.kind==='heading'&&(b.level??2)<=2);return heads.map(({b,i},n)=>({id:b.id,start:i,end:heads[n+1]?.i??s.blocks.length}));};
 const validBlocks=blocks=>Array.isArray(blocks)&&blocks.length<=10000&&blocks.every(b=>b&&typeof b==='object'&&!Array.isArray(b)&&['paragraph','heading','quote'].includes(b.kind)&&typeof b.text==='string'&&(!Object.hasOwn(b,'level')||Number.isSafeInteger(b.level)&&b.level>=1&&b.level<=6)&&(!Object.hasOwn(b,'from')||Array.isArray(b.from)&&b.from.every(x=>typeof x==='string'))&&Object.keys(b).every(k=>['kind','text','level','from'].includes(k)));
 const view=s=>{
  if(!Array.isArray(s.blocks)||!Array.isArray(s.history)||!Array.isArray(s.future))throw new TypeError('invalid-document');
  const groups=new Map(sections(s).map(g=>[g.id,g])),rows=[];
- if(s.textId||s.blocks.length)rows.push({id:s.textId||'document',kind:'document',sourceType:'docs.editor.document',inputs:Object.entries({title:s.title,genre:s.kind,topic:s.about,length:s.stats.words}).map(([key,value])=>({binding:`document.${key}`,key,values:value===null||value===undefined?[]:[nativeToken(value)],...(key==='length'?{dimension:'count',unit:'word',frame:'document.text'}:{})}))});
+ if(s.textId||s.title||s.blocks.length)rows.push({id:s.textId||'document',kind:'document',sourceType:'docs.editor.document',inputs:Object.entries({title:s.title,genre:s.kind,topic:s.about,length:s.stats.words}).map(([key,value])=>({binding:`document.${key}`,key,values:value===null||value===undefined?[]:[nativeToken(value)],...(key==='length'?{dimension:'count',unit:'word',frame:'document.text'}:{})}))});
  for(const [index,b]of s.blocks.entries())rows.push({id:b.id,kind:groups.has(b.id)?'section':b.kind,sourceType:groups.has(b.id)?'docs.editor.section':'docs.editor.block',parent:s.textId,inputs:Object.entries({text:blockText(b),name:b.name??'',parent:s.textId,kind:b.kind,level:b.level??null,align:b.align??'left',index,items:b.items??null,rows:b.rows??null,style:b.style??null,checked:b.checked??null,header:b.header??null,marks:b.marks??[],selected:s.focus===b.id,...(s.selection?.type==='range'&&s.selection.block===b.id?{selectionFrom:s.selection.from,selectionTo:s.selection.to,selectionAt:s.selection.at}:{})}).map(([key,value])=>({binding:'document.block.'+key,key,values:value===null?[]:Array.isArray(value)?value.map(v=>v&&typeof v==='object'?JSON.stringify(v):nativeToken(v)):[nativeToken(value)]})),...(groups.has(b.id)?{members:s.blocks.slice(groups.get(b.id).start,groups.get(b.id).end).map(x=>x.id)}:{})});
  for(const b of s.blocks)for(const container of containers(b))rows.push({id:documentTextId(b.id,container.at),kind:'text',sourceType:'docs.editor.text',parent:b.id,inputs:[{binding:'document.text.text',key:'text',values:[nativeToken(container.text)]},{binding:'document.text.name',key:'name',values:[nativeToken((b.name??b.kind)+' '+container.at)]},{binding:'document.text.parent',key:'parent',values:[nativeToken(b.id)]},{binding:'document.text.at',key:'at',values:[nativeToken(container.at)]}]});
  return rows;
@@ -59,5 +63,12 @@ export function createDocumentHost({state=initialDocumentState(),instanceId,comp
   'document.observe':ctx=>({status:'supported',data:view(ctx.state)}),
   'document.undo':undoStep,'document.redo':redoStep,
  };
- return createNativeToolHost({state,instanceId,scope:'document-and-blocks',operations:DOCUMENT_TOOL_BINDINGS,handlers,view,...limits});
+ const canonical=Object.hasOwn(state,'sop');
+ const effectiveHandlers=canonical?Object.fromEntries(Object.entries(handlers).map(([id,handler])=>[id,(ctx,args,invocation)=>{
+  const native=toNativeDocumentState(ctx.state),result=handler({...ctx,state:native},args,invocation);
+  if(result?.status==='supported')Object.assign(ctx.state,canonicalDocumentState(native));
+  return result;
+ }])):handlers;
+ return createNativeToolHost({state,instanceId,scope:'document-and-blocks',operations:DOCUMENT_TOOL_BINDINGS,handlers:effectiveHandlers,
+  view:canonical?carrier=>view(toNativeDocumentState(carrier)):view,...limits});
 }

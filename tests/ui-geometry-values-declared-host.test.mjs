@@ -1,3 +1,4 @@
+import {toNativeDrawingState} from '../worlds/art.draw/canonical-state.mjs';
 import{test}from'node:test';import assert from'node:assert/strict';
 import{quantizeGeometryArguments}from'../docs/webchat/ui/geometry-values.mjs';
 import{invokeNativeControl}from'../src/dialog/native-tool-controls.mjs';
@@ -10,7 +11,7 @@ test('UI dispatch rounds real geometry and leaves unrelated numeric values exact
 test('actual Drawing command text, SOP arguments and stored position share UI precision',async()=>{
  const state=initialDrawingState(),host=createDrawingHost({state,instanceId:'ui-precision'});host.invoke({invocation:'make',expectedVersion:host.observe().version,operation:'drawing.object.make',args:{kind:'rectangle'}});
  const session={isession:{state:{'art.draw':state}},engine:{}},args=quantizeGeometryArguments({ids:[state.objects[0].id],x:226.7711375210331,y:288.9317562519493});
- const result=await invokeNativeControl(session,{view:'draw',operation:'drawing.object.place',args});assert.equal(result.ok,true);assert.equal(state.objects[0].x,args.x);assert.equal(state.objects[0].y,args.y);assert.match(result.intentRecord.wires,/x=226\.77 y=288\.93/);assert.match(result.intentRecord.text,/226\.77/);assert.match(result.intentRecord.text,/288\.93/);assert.equal(result.intentRecord.verification.status,'verified');
+ const result=await invokeNativeControl(session,{view:'draw',operation:'drawing.object.place',args});assert.equal(result.ok,true);assert.equal(toNativeDrawingState(session.isession.state['art.draw']).objects[0].x,args.x);assert.equal(toNativeDrawingState(session.isession.state['art.draw']).objects[0].y,args.y);assert.match(result.intentRecord.wires,/x=226\.77 y=288\.93/);assert.match(result.intentRecord.text,/226\.77/);assert.match(result.intentRecord.text,/288\.93/);assert.equal(result.intentRecord.verification.status,'verified');
 });
 
 test('geometry copying has a finite depth and value budget, including cycles',()=>{const cyclic={};cyclic.geometry=cyclic;assert.throws(()=>quantizeGeometryArguments(cyclic),/budget/);let deep={x:1.1234};for(let n=0;n<34;n++)deep={geometry:deep};assert.throws(()=>quantizeGeometryArguments(deep),/budget/);assert.throws(()=>quantizeGeometryArguments({data:Array(100001).fill(1)}),/budget/);});

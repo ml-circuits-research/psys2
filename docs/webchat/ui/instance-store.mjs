@@ -1,10 +1,13 @@
 // Browser carrier for canonical SOP archives. No native world state is serialized here.
 const DATABASE='psys2-instance-worlds',TABLE='instances',FALLBACK_KEY='psys2.instance-worlds.sop.v1';
 function checked(record){
- if(!record||Object.getPrototypeOf(record)!==Object.prototype||Reflect.ownKeys(record).length!==4||!['world','instanceId','wires','revision'].every(key=>Object.hasOwn(record,key)))throw new TypeError('invalid-instance-record');
- const {world,instanceId,wires,revision}=record;
+ const fields=['world','instanceId','wires','revision'];
+ if(!record||Object.getPrototypeOf(record)!==Object.prototype||!fields.every(key=>Object.hasOwn(record,key))||
+  Reflect.ownKeys(record).some(key=>key!=='runtime'&&!fields.includes(key)))throw new TypeError('invalid-instance-record');
+ const {world,instanceId,wires,revision,runtime}=record;
+ if(Object.hasOwn(record,'runtime')&&typeof runtime!=='string')throw new TypeError('invalid-instance-runtime');
  if(typeof world!=='string'||!world||typeof instanceId!=='string'||!instanceId||typeof wires!=='string'||!(typeof revision==='string'&&revision.length||Number.isSafeInteger(revision)&&revision>=0))throw new TypeError('invalid-instance-record');
- return {world,instanceId,wires,revision};
+ return {world,instanceId,wires,revision,...(runtime===undefined?{}:{runtime})};
 }
 function batch(records){if(!Array.isArray(records))throw new TypeError('instance-records-required');const rows=records.map(checked);if(new Set(rows.map(row=>row.world)).size!==rows.length)throw new TypeError('duplicate-instance-world');return rows;}
 const sorted=records=>records.map(checked).sort((a,b)=>a.world.localeCompare(b.world));

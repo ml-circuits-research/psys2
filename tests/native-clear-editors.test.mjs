@@ -4,7 +4,8 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {invokeNativeControl} from '../src/dialog/native-tool-controls.mjs';
 import {initialCalendarState,toNativeCalendarState} from '../worlds/time.calendar/declared-host.mjs';
-import {initialDocumentState} from '../worlds/docs.editor/declared-host.mjs';
+import {initialCanonicalDocumentState} from '../worlds/docs.editor/declared-host.mjs';
+import {toNativeDocumentState} from '../worlds/docs.editor/canonical-state.mjs';
 import {DEFAULT_FACE} from '../worlds/ui.avatar/default-face.mjs';
 import {variantFor} from '../worlds/ui.avatar/facedraw.mjs';
 import {initialAvatarState,createAvatarHost} from '../worlds/ui.avatar/declared-host.mjs';
@@ -18,11 +19,11 @@ test('Calendar clear deletes exact events, retains its resource, and actual shar
  await run(s,'calendar','calendar.events.remove',{ids:['first','second']});assert.equal((await run(s,'calendar','calendar.events.remove',{ids:[]})).changed,false);
 });
 test('Documents clear retains document identity/title and is undoable; section deletion includes nested subchapters',async()=>{
- const s=session('docs.editor',initialDocumentState());await run(s,'editor','document.write',{title:'Keep title',blocks:[{kind:'heading',level:1,text:'Chapter'},{kind:'paragraph',text:'Body'},{kind:'heading',level:2,text:'Subchapter'},{kind:'paragraph',text:'Sub body'},{kind:'heading',level:1,text:'Next'}]});
- const before=structuredClone(s.isession.state['docs.editor']),id=before.textId,blocks=before.blocks.map(b=>b.id);
- assert.equal((await run(s,'editor','document.block.remove',{ids:blocks})).ok,true);assert.equal(s.isession.state['docs.editor'].blocks.length,0);assert.equal(s.isession.state['docs.editor'].textId,id);assert.equal(s.isession.state['docs.editor'].title,'Keep title');
+ const s=session('docs.editor',initialCanonicalDocumentState()),project=()=>toNativeDocumentState(s.isession.state['docs.editor']);await run(s,'editor','document.write',{title:'Keep title',blocks:[{kind:'heading',level:1,text:'Chapter'},{kind:'paragraph',text:'Body'},{kind:'heading',level:2,text:'Subchapter'},{kind:'paragraph',text:'Sub body'},{kind:'heading',level:1,text:'Next'}]});
+ const before=structuredClone(s.isession.state['docs.editor']),id=project().textId,blocks=project().blocks.map(b=>b.id);
+ assert.equal((await run(s,'editor','document.block.remove',{ids:blocks})).ok,true);assert.equal(project().blocks.length,0);assert.equal(project().textId,id);assert.equal(project().title,'Keep title');
  assert.equal((await run(s,'editor','document.block.remove',{ids:[]})).changed,false);assert.equal((await run(s,'editor','document.undo')).ok,true);assert.deepEqual(s.isession.state['docs.editor'],before);
- assert.equal((await run(s,'editor','document.section.remove',{ids:[blocks[0]]})).ok,true);assert.deepEqual(s.isession.state['docs.editor'].blocks.map(b=>b.text),['Next']);
+ assert.equal((await run(s,'editor','document.section.remove',{ids:[blocks[0]]})).ok,true);assert.deepEqual(project().blocks.map(b=>b.text),['Next']);
  assert.equal((await run(s,'editor','undo')).ok,true);assert.deepEqual(s.isession.state['docs.editor'],before);
 });
 test('Avatar concrete deletion permits required parts, clear is empty/undoable and exact base recomposes',async()=>{

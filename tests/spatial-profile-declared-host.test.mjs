@@ -1,4 +1,5 @@
 import { test } from 'node:test';
+import {toNativeDrawingState} from '../worlds/art.draw/canonical-state.mjs';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { parse } from '../src/vendor/sopworld/sopworld.mjs';
@@ -88,7 +89,7 @@ test('two independently verified placement corrections change the next compiled 
   const anchor = (await control('drawing.object.make',{kind:'house',x:390,y:350})).receipt.changed[0];
   const fish = await run();
   const move = async distance => {
-    const object = session.isession.state[world].objects.find(row=>row.id===fish);
+    const object = toNativeDrawingState(session.isession.state[world]).objects.find(row=>row.id===fish);
     return control('drawing.object.place',{ids:[fish],x:object.x+distance,y:object.y});
   };
   assert.equal(gap(spatial(),fish,anchor),12);

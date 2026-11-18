@@ -17,7 +17,8 @@ export async function refreshBrowserReaderDeployment(outDir){
    'lib/dialog/native-intent-reader.mjs','lib/dialog/native-binding-candidates.mjs','lib/dialog/native-tool-controls.mjs',
    'worlds/native-tool-host.mjs','worlds/native-spatial-observation.mjs','worlds/native-spatial-interface.mjs',
    'worlds/app.project/spatial-profile.mjs','worlds/art.draw/declared-host.mjs','worlds/diagram.sketch/declared-host.mjs',
-   'worlds/ui.avatar/declared-host.mjs',
+   'worlds/ui.avatar/declared-host.mjs','worlds/docs.editor/declared-host.mjs',
+   'worlds/art.draw/canonical-state.mjs','worlds/docs.editor/canonical-state.mjs','worlds/typed-state-codec.mjs',
   ],
   contextSerializationSha256:[
    'lib/dialog/native-reader-context.mjs','lib/dialog/app-reader-context.mjs','lib/dialog/key-reader-inference.mjs',

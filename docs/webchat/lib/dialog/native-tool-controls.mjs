@@ -1,7 +1,7 @@
-import{prepareNativeControlHost}from'./native-control-preparation.mjs?v=469e0ec668';
+import{prepareNativeControlHost}from'./native-control-preparation.mjs?v=994d2fd890';
 import{invokeObservedNativeTool}from'./native-tool-activity.mjs?v=4b79238f3b';
 // Typed UI gestures use the same declared native tools and undo history as model requests.
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=ea048c4992';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=f954ad84ea';
 import {describeNativeControl,verifyNativeControlEffect} from './native-control-intent.mjs?v=a76c747854';
 import {readNativeIntent} from './native-intent-reader.mjs?v=e9834110af';
 import {discardPlacementLinks,observePlacementCorrection,prunePlacementLinks,withdrawPlacementCorrection} from '../../worlds/app.project/spatial-profile.mjs?v=a31aa29884';

@@ -1,11 +1,13 @@
 import { test } from 'node:test';
+import {toNativeDrawingState} from '../worlds/art.draw/canonical-state.mjs';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { invokeNativeControl } from '../src/dialog/native-tool-controls.mjs';
 import { invokeObservedNativeTool } from '../src/dialog/native-tool-activity.mjs';
 import { createDrawingHost, initialDrawingState } from '../worlds/art.draw/declared-host.mjs';
 import { initialDiagramState } from '../worlds/diagram.sketch/declared-host.mjs';
-import { initialDocumentState } from '../worlds/docs.editor/declared-host.mjs';
+import { initialCanonicalDocumentState } from '../worlds/docs.editor/declared-host.mjs';
+import { toNativeDocumentState } from '../worlds/docs.editor/canonical-state.mjs';
 import { initialCalendarState, toNativeCalendarState } from '../worlds/time.calendar/declared-host.mjs';
 import { initialAvatarState } from '../worlds/ui.avatar/declared-host.mjs';
 import { toNativeAvatarState } from '../worlds/ui.avatar/canonical-state.mjs';
@@ -14,7 +16,7 @@ test('the shared native control route executes recorded SOP in all editor areas'
   const state = {
     'art.draw': initialDrawingState(),
     'diagram.sketch': initialDiagramState(),
-    'docs.editor': initialDocumentState(),
+    'docs.editor': initialCanonicalDocumentState(),
     'time.calendar': initialCalendarState(),
     'ui.avatar': initialAvatarState(),
   };
@@ -27,10 +29,10 @@ test('the shared native control route executes recorded SOP in all editor areas'
     },
   };
   const cases = [
-    ['draw', 'drawing.object.make', { kind: 'circle', x: 120, y: 130 }, () => state['art.draw'].objects[0]?.x, 120],
+    ['draw', 'drawing.object.make', { kind: 'circle', x: 120, y: 130 }, () => toNativeDrawingState(state['art.draw']).objects[0]?.x, 120],
     ['diagram', 'diagram.node.make', { kind: 'rectangle', x: 230, y: 240 }, () => state['diagram.sketch'].shapes[0]?.y, 240],
     ['editor', 'document.write', { title: 'Report', blocks: [{ kind: 'paragraph', text: 'Measured' }] },
-      () => state['docs.editor'].blocks[0]?.text, 'Measured'],
+      () => toNativeDocumentState(state['docs.editor']).blocks[0]?.text, 'Measured'],
     ['calendar', 'calendar.event.add', { id: 'visit', title: 'Visit', start: 2000, duration: 100 },
       () => toNativeCalendarState(state['time.calendar']).meetings[0]?.title, 'Visit'],
     ['avatar', 'avatar.face.expression', { expression: 'happy' },

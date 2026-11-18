@@ -1,11 +1,13 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 import {budget} from '../../lib/dialog/budget.mjs?v=00bce6e369';
+import {canonicalDrawingState,toNativeDrawingState} from './canonical-state.mjs?v=590239fc7c';
 import {spatialBox} from '../native-spatial-observation.mjs?v=ced85b9a29';
 import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs?v=cf38a0ae11';
 import {initialState,makeObject,remember,undoStep,redoStep,newPage} from './board.mjs?v=bedcd7dae6';
 import {DRAWING_PART_TOOL_BINDINGS,drawingPartHandlers,drawingPartsOf,makeKnowledgeDrawing,restoreMembers,drawingObjectsOf,findDrawingObject,replaceDrawingObject,independentDrawingIds,colourDrawingObject} from './part-tools.mjs?v=a522e6d103';
 import {KINDS,W,H,bbox,objectMatrix} from './scene.mjs?v=a4ab5fac44';
 export {initialState as initialDrawingState};
+export const initialCanonicalDrawingState=()=>canonicalDrawingState(initialState());
 const kinds=Object.keys(KINDS),array={type:'array',required:true};
 const properties={name:{type:'string'},label:{type:'string'},width:{type:'number',min:.001},height:{type:'number',min:.001},x:{type:'number'},y:{type:'number'},size:{type:'number',min:0.001},color:{type:'string',nullable:true}};
 export const DRAWING_TOOL_BINDINGS=[
@@ -64,7 +66,7 @@ const buildDrawingObject=(state,args)=>{
  return object;
 };
 export function createDrawingHost({state=initialState(),instanceId,knowledge=null,...limits}={}){
- const handlers={
+ const nativeHandlers={
   'drawing.object.make':(ctx,a)=>{
    if(!validPatch(a))return fail('invalid-native-color');
    if(ctx.state.objects.some(o=>o.id===`o${ctx.state.nextId}`)||!Number.isSafeInteger(ctx.state.nextId+1))return fail('native-id-collision');
@@ -102,11 +104,28 @@ export function createDrawingHost({state=initialState(),instanceId,knowledge=nul
   'drawing.undo':undoStep,'drawing.redo':redoStep,
   ...drawingPartHandlers,
  };
- const host=createNativeToolHost({state,instanceId,scope:'drawing.object-lifecycle',operations:DRAWING_TOOL_BINDINGS,handlers,view,spatial,...limits});
+ const governed=Object.hasOwn(state,'sop');
+ const handlers=governed?Object.fromEntries(Object.entries(nativeHandlers).map(([name,handler])=>[name,(ctx,args)=>{
+  const native=toNativeDrawingState(ctx.state),before=JSON.stringify(native);
+  const result=handler({...ctx,state:native},args);
+  if(result?.status==='supported'&&JSON.stringify(native)!==before)Object.assign(ctx.state,canonicalDrawingState(native));
+  return result;
+ }])):nativeHandlers;
+ const project=handler=>governed?carrier=>handler(toNativeDrawingState(carrier)):handler;
+ const host=createNativeToolHost({state,instanceId,scope:'drawing.object-lifecycle',operations:DRAWING_TOOL_BINDINGS,handlers,view:project(view),spatial:project(spatial),...limits});
  return {...host,measureSpatial(operation,args){
   if(operation!=='drawing.object.make'||!Object.hasOwn(KINDS,args.kind)||!validPatch(args))return null;
   const {w,h}=bbox(buildDrawingObject({nextId:1},args));return {width:w,height:h};
  }};
+}
+// Application entry point. Existing explicit native fixtures may still use createDrawingHost.
+export function createCanonicalDrawingHost({state=initialCanonicalDrawingState(),...options}={}){
+ if(!Object.hasOwn(state,'sop')){
+  const carrier=canonicalDrawingState(state);
+  for(const key of Object.keys(state))delete state[key];
+  Object.assign(state,carrier);
+ }
+ return createDrawingHost({state,...options});
 }
 // Actual board construction defaults, not semantic-kind or request mappings.
 export const DRAWING_NATIVE_DEFAULTS={x:W/2,y:H/2,size:'renderer-kind.size',color:null};

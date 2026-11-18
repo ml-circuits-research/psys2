@@ -1,3 +1,4 @@
+import {toNativeDrawingState} from '../worlds/art.draw/canonical-state.mjs';
 // Actual archives emitted by the published 3ce runtime, with their original facts/history.
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
@@ -16,7 +17,7 @@ const fixture=JSON.parse(await readFile(new URL('./fixtures/instance-3ce-saved-w
 const records=await Promise.all(fixture.records.map(async({world,instanceId,revision,wires,wiresFile})=>({world,instanceId,revision,wires:wires??await readFile(new URL('./fixtures/'+wiresFile,import.meta.url),'utf8')})));
 const archives=new Map(records.map(record=>[record.world,readInstanceState(record.wires)]));
 const semantic=objects=>objects.map(object=>{const copy=structuredClone(object);if(copy.metadata){delete copy.metadata.inputs;if(!Object.keys(copy.metadata).length)delete copy.metadata;}return copy;});
-const projection=(world,state)=>world==='time.calendar'?toNativeCalendarState(state):world==='ui.avatar'?toNativeAvatarState(state):state;
+const projection=(world,state)=>world==='art.draw'?toNativeDrawingState(state):world==='time.calendar'?toNativeCalendarState(state):world==='ui.avatar'?toNativeAvatarState(state):state;
 const session=()=>({isession:{state:{}},engine:{loader:{readFile:(world,file)=>readFile(new URL(`../worlds/${world}/${file}`,import.meta.url),'utf8')}}});
 function difference(actual,expected,at='$'){
  if(isDeepStrictEqual(actual,expected))return null;

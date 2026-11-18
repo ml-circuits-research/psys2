@@ -1,13 +1,23 @@
 // Versioned SOP instances; native projections are admitted only after their declared view agrees.
 import{serializeInstanceState,readInstanceState,instanceStateWorld,serialize}from'../vendor/sopworld/sopworld.mjs?v=b88e6c95e3';
-import{NATIVE_AREAS,createAreaHost}from'./app-reader-context.mjs?v=ea048c4992';
+import{NATIVE_AREAS,createAreaHost}from'./app-reader-context.mjs?v=f954ad84ea';
 import{nativeObservationObjects,compareInstanceObjects}from'./instance-facts.mjs?v=917c5c120e';
 import{instanceIdFor}from'./instance-identity.mjs?v=024ef1ca83';
 import{copyHostData}from'../../worlds/native-tool-host.mjs?v=cf38a0ae11';
 import{CATALOG_PIN}from'../knowledge/catalog-pin.mjs?v=d1ff29de82';
 export const NATIVE_INSTANCE_SCHEMA='psys2.native-instance/1';
+const RUNTIME_SCHEMA='psys2.native-runtime/1';
 const byWorld=new Map(Object.values(NATIVE_AREAS).map(a=>[a.world,a]));
 const create=(session,area,state,instanceId,prepareKnowledge=true)=>createAreaHost(area,{state,instanceId,prepareKnowledge,loader:session.engine?.loader,knowledge:session.engine?.knowledge});
+function runtimeFromArchive(record,area){
+ if(!Object.hasOwn(record,'runtime'))return {};
+ if(!area.separateRuntime||typeof record.runtime!=='string')throw Error('unexpected-instance-runtime');
+ const data=readInstanceState(record.runtime);
+ if(data.schemaVersion!==RUNTIME_SCHEMA||data.world!==record.world||data.instanceId!==record.instanceId||data.revision!==record.revision||
+  data.objects.length||!data.projection||typeof data.projection!=='object'||Array.isArray(data.projection))throw Error('instance-runtime-mismatch');
+ return {runtime:data.projection};
+}
+
 /** Observe a compact semantic World without serializing native render caches or undo history.
  * Optional native interface metadata reuses this same host and observation for inspection. */
 export async function observeNativeInstanceWorlds(session,{worlds=[...byWorld.keys()],includeHostInterface=false,prepareKnowledge=true}={}){
@@ -32,7 +42,9 @@ export async function snapshotNativeInstances(session,{worlds=[...byWorld.keys()
   const revision=session.nativeInstanceRevisions[world]??0;
   const wires=area.stateWorld?serialize([...area.stateWorld(state).wires.values()]):serializeInstanceState({instanceId,world,schemaVersion:NATIVE_INSTANCE_SCHEMA,revision,objects,projection,metadata:{knowledge:{repository:CATALOG_PIN.repo,version:CATALOG_PIN.commit},projection:'native-host-data/1'}});
   session.nativeInstanceSnapshots[world]=canonical;session.instanceWorlds[world]=area.stateWorld?area.stateWorld(state):instanceStateWorld(wires);
-  records.push({world,instanceId,revision,wires});
+  const runtimeData=area.separateRuntime?(Object.hasOwn(state,'runtime')?state.runtime:area.canonicalizeState(state).runtime):undefined;
+  const runtime=runtimeData===undefined?undefined:serializeInstanceState({instanceId,world,schemaVersion:RUNTIME_SCHEMA,revision,objects:[],projection:runtimeData});
+  records.push({world,instanceId,revision,wires,...(runtime===undefined?{}:{runtime})});
  }
  return records;
 }
@@ -43,14 +55,16 @@ export async function restoreNativeInstances(session,records){
   const canonicalArea=byWorld.get(record.world);
   if(canonicalArea?.stateWorld&&!record.wires.includes(' std.instance.snapshot ')){
    if(typeof record.instanceId!=='string'||!record.instanceId||!Number.isSafeInteger(record.revision)||record.revision<0||worlds.has(record.world)||ids.has(record.instanceId))throw Error('instance-descriptor-conflict');
-   const state=canonicalArea.canonicalizeState({sop:record.wires}),world=canonicalArea.stateWorld(state),host=await create(session,canonicalArea,state,record.instanceId),objects=nativeObservationObjects(host.observe());
+   const state=canonicalArea.canonicalizeState({sop:record.wires,...runtimeFromArchive(record,canonicalArea)}),world=canonicalArea.stateWorld(state),host=await create(session,canonicalArea,state,record.instanceId),objects=nativeObservationObjects(host.observe());
    staged.push({archive:{world:record.world,instanceId:record.instanceId,revision:record.revision},state,objects,world});worlds.add(record.world);ids.add(record.instanceId);continue;
   }
+  if(Object.hasOwn(record,'runtime'))throw Error('unexpected-instance-runtime');
   const archive=readInstanceState(record.wires),area=byWorld.get(archive.world);
   if(!area||record.world!==archive.world||record.instanceId!==archive.instanceId||record.revision!==archive.revision||worlds.has(archive.world)||ids.has(archive.instanceId))throw Error('instance-descriptor-conflict');
   if(archive.schemaVersion!==NATIVE_INSTANCE_SCHEMA||archive.metadata?.projection!=='native-host-data/1'||!Number.isSafeInteger(archive.revision)||archive.revision<0)throw Error('instance-schema-migration-required');
   if(archive.metadata?.knowledge?.version!==CATALOG_PIN.commit)throw Error('instance-knowledge-migration-required');
-  const state=copyHostData(archive.projection),host=await create(session,area,state,archive.instanceId),checked=compareInstanceObjects(archive.objects,host.observe());
+  const projection=copyHostData(archive.projection),state=area.canonicalizeState?area.canonicalizeState(projection):projection;
+  const host=await create(session,area,state,archive.instanceId),checked=compareInstanceObjects(archive.objects,host.observe());
   if(!checked.ok)throw Error('instance-projection-mismatch:'+checked.reason);
   staged.push({archive,state,objects:nativeObservationObjects(host.observe()),world:area.stateWorld?area.stateWorld(state):instanceStateWorld(record.wires)});worlds.add(archive.world);ids.add(archive.instanceId);
  }

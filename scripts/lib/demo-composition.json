@@ -61,16 +61,22 @@
           "file": "native-interface.sop",
           "role": "native-tool-interface",
           "completeStateSchema": false
+        },
+        {
+          "file": "instance-schema.sop",
+          "role": "canonical-state-schema",
+          "completeStateSchema": true
         }
       ],
       "nativeInitializer": {
         "module": "worlds/art.draw/declared-host.mjs",
-        "export": "initialDrawingState"
+        "export": "initialCanonicalDrawingState"
       },
       "nativeHost": {
         "module": "worlds/art.draw/declared-host.mjs",
-        "factory": "createDrawingHost"
-      }
+        "factory": "createCanonicalDrawingHost"
+      },
+      "sourceFiles": ["instance-schema.sop"]
     },
     "diagram.sketch": {
       "profileFiles": [
@@ -140,7 +146,13 @@
         "legend.sop"
       ],
       "schemaWorld": "pattern.docs.editor",
+      "sourceFiles": ["state-schema.sop"],
       "schemaFiles": [
+        {
+          "file": "state-schema.sop",
+          "role": "canonical-instance-schema",
+          "completeStateSchema": true
+        },
         {
           "file": "native-interface.sop",
           "role": "native-tool-interface",
@@ -149,7 +161,7 @@
       ],
       "nativeInitializer": {
         "module": "worlds/docs.editor/declared-host.mjs",
-        "export": "initialDocumentState"
+        "export": "initialCanonicalDocumentState"
       },
       "nativeHost": {
         "module": "worlds/docs.editor/declared-host.mjs",

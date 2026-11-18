@@ -1,3 +1,4 @@
+import {toNativeDrawingState} from '../worlds/art.draw/canonical-state.mjs';
 import {test} from 'node:test';import assert from 'node:assert/strict';
 import {createDrawingHost,initialDrawingState} from '../worlds/art.draw/declared-host.mjs';
 const call=(h,operation,args,invocation=crypto.randomUUID())=>h.invoke({invocation,expectedVersion:h.observe().version,operation,args});
@@ -43,14 +44,15 @@ import {invokeNativeControl} from '../src/dialog/native-tool-controls.mjs';
 test('compound UI capture retains source references and leaves unsupported projections unverified',async()=>{
  const state=initialDrawingState(),session={isession:{state:{'art.draw':state}}};
  const run=(operation,args)=>invokeNativeControl(session,{view:'draw',operation,args});
- await run('drawing.object.make',{kind:'house',name:'Home'});const root=state.objects[0].id;
- const roof=drawingPartsOf(state.objects[0]).find(p=>p.role==='roof');
+ const current=()=>toNativeDrawingState(session.isession.state['art.draw']);
+ await run('drawing.object.make',{kind:'house',name:'Home'});const root=current().objects[0].id;
+ const roof=drawingPartsOf(current().objects[0]).find(p=>p.role==='roof');
  const extracted=await run('drawing.part.extract',{id:root,index:roof.index});
- assert.equal(extracted.ok,true);assert.equal(extracted.intentRecord.verification.status,'unverified');assert.equal(state.objects.length,2);assert.equal(state.objects.find(o=>o.id!==root).origin.role,'roof');
- const ids=state.objects.map(o=>o.id),grouped=await run('drawing.object.group',{ids,name:'Editable home'});
- assert.equal(grouped.ok,true);assert.equal(grouped.intentRecord.verification.status,'unverified');assert.equal(state.objects.length,1);assert.equal(state.objects[0].shape.members.length,2);
- const ungrouped=await run('drawing.object.ungroup',{id:state.objects[0].id});
- assert.equal(ungrouped.ok,true);assert.equal(ungrouped.intentRecord.verification.status,'unverified');assert.deepEqual(state.objects.map(o=>o.id),ids);assert.ok(state.objects.every(o=>partsOf(o).length));
+ assert.equal(extracted.ok,true);assert.equal(extracted.intentRecord.verification.status,'unverified');assert.equal(current().objects.length,2);assert.equal(current().objects.find(o=>o.id!==root).origin.role,'roof');
+ const ids=current().objects.map(o=>o.id),grouped=await run('drawing.object.group',{ids,name:'Editable home'});
+ assert.equal(grouped.ok,true);assert.equal(grouped.intentRecord.verification.status,'unverified');assert.equal(current().objects.length,1);assert.equal(current().objects[0].shape.members.length,2);
+ const ungrouped=await run('drawing.object.ungroup',{id:current().objects[0].id});
+ assert.equal(ungrouped.ok,true);assert.equal(ungrouped.intentRecord.verification.status,'unverified');assert.deepEqual(current().objects.map(o=>o.id),ids);assert.ok(current().objects.every(o=>partsOf(o).length));
  for(const record of [extracted,grouped,ungrouped].map(r=>r.intentRecord))assert.ok(record.text.includes('from '));
 });
 test('knowledge drawings use worker-loaded actual constituents, keep meaning and reject UI-supplied geometry',()=>{

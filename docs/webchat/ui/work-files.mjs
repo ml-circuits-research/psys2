@@ -1,7 +1,7 @@
 // Explicit portable work files. No startup restore, migration, or browser persistence.
 export const WORK_FILE_FORMAT='psys2.work-file/1';
 function recordsOf(records){
- if(!Array.isArray(records)||records.some(r=>!r||typeof r.world!=='string'||typeof r.instanceId!=='string'||typeof r.wires!=='string'||!(Number.isSafeInteger(r.revision)&&r.revision>=0)))throw Error('Invalid saved world records.');
+ if(!Array.isArray(records)||records.some(r=>!r||typeof r.world!=='string'||typeof r.instanceId!=='string'||typeof r.wires!=='string'||Object.hasOwn(r,'runtime')&&typeof r.runtime!=='string'||!(Number.isSafeInteger(r.revision)&&r.revision>=0)))throw Error('Invalid saved world records.');
  if(new Set(records.map(r=>r.world)).size!==records.length)throw Error('Duplicate saved world.');
  return structuredClone(records);
 }

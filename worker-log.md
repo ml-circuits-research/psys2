@@ -117,3 +117,6 @@ Worlds Chromium `node .git/worlds-browser-count.mjs` with and without `VERIFY_WO
 
 - Response Replay identifies its command, opens the map and highlights declared relationships whose endpoints share an actual event. Offscreen activity stays in the log. The preceding refresh fix was verified on Pages in Chromium with 154 graph nodes after reload.
 - `node scripts/build-webchat.mjs`, `npm test` (606 tests, 603 passed, three skipped), `git diff --check`.
+
+2026-11-18 Drawing and Documents now store their current content as authoritative typed SOP facts. The editor adapters derive closed schemas from typed field inventories and stage native render/tool views. Work files retain auxiliary history in separate typed runtime records.
+Checks: npm test 612 tests, 609 pass, 3 skip, webchat build 5aa3495574. Chromium edited and saved a Documents paragraph and a positioned Drawing house, reopened both work files, edited again, and used Undo in both editors. Worlds showed both authoritative SOP states. Legacy Documents CLI remains 8/212 without its former reader.

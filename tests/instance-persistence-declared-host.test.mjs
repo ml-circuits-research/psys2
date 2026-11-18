@@ -9,13 +9,13 @@ import {initialDrawingState} from '../worlds/art.draw/declared-host.mjs';
 import {initialDiagramState} from '../worlds/diagram.sketch/declared-host.mjs';
 import {initialCalendarState,toNativeCalendarState} from '../worlds/time.calendar/declared-host.mjs';
 import {calendarStateWorld} from '../worlds/time.calendar/canonical-state.mjs';
-import {initialDocumentState} from '../worlds/docs.editor/declared-host.mjs';
+import {initialCanonicalDocumentState} from '../worlds/docs.editor/declared-host.mjs';
 import {initialAvatarState} from '../worlds/ui.avatar/declared-host.mjs';
 const session=()=>({isession:{state:{}},engine:{loader:{readFile:(world,file)=>readFile(new URL(`../worlds/${world}/${file}`,import.meta.url),'utf8')}}});
 let sequence=0;
 function invoke(host,operation,args){const receipt=host.invoke({invocation:'archive.'+(++sequence),expectedVersion:host.observe().version,operation,args});assert.equal(receipt.status,'changed',JSON.stringify(receipt));return receipt;}
 async function populated(){
- const s=session();Object.assign(s.isession.state,{'art.draw':initialDrawingState(),'diagram.sketch':initialDiagramState(),'time.calendar':initialCalendarState(),'docs.editor':initialDocumentState(),'ui.avatar':initialAvatarState()});
+ const s=session();Object.assign(s.isession.state,{'art.draw':initialDrawingState(),'diagram.sketch':initialDiagramState(),'time.calendar':initialCalendarState(),'docs.editor':initialCanonicalDocumentState(),'ui.avatar':initialAvatarState()});
  s.nativeInstanceIds=Object.fromEntries(Object.values(NATIVE_AREAS).map(a=>[a.world,'stable.'+a.world]));
  const hosts={};for(const [key,area] of Object.entries(NATIVE_AREAS))hosts[key]=await createAreaHost(area,{state:s.isession.state[area.world],instanceId:s.nativeInstanceIds[area.world],loader:s.engine.loader});
  invoke(hosts.draw,'drawing.object.make',{kind:'triangle',name:'Peak',x:123,y:200,color:'#112233'});
@@ -28,24 +28,25 @@ async function populated(){
 }
 test('five actual native hosts restore exact projections, stable identities and explicit relations from SOP',async()=>{
  const {s,hosts}=await populated(),records=await snapshotNativeInstances(s),target=session();
+ const drawingFacts=nativeObservationObjects(hosts.draw.observe());
  assert.equal(records.length,5);await restoreNativeInstances(target,records);
  assert.deepEqual(target.isession.state,s.isession.state);assert.deepEqual(target.nativeInstanceIds,s.nativeInstanceIds);
- for(const record of records){const area=Object.values(NATIVE_AREAS).find(a=>a.world===record.world);if(area.stateWorld){assert.equal(record.wires,s.isession.state[record.world].sop);assert.deepEqual(area.projectState({sop:record.wires}),area.projectState(s.isession.state[record.world]));assert.doesNotMatch(record.wires,/std\.instance\./);}else{const archive=readInstanceState(record.wires);assert.deepEqual(archive.projection,s.isession.state[record.world]);assert.equal(archive.instanceId,s.nativeInstanceIds[record.world]);assert.equal(archive.revision,0);}assert.equal(record.instanceId,s.nativeInstanceIds[record.world]);assert.equal(record.revision,0);assert.ok(target.instanceWorlds[record.world]);}
+ for(const record of records){const area=Object.values(NATIVE_AREAS).find(a=>a.world===record.world);if(area.stateWorld){assert.equal(record.wires,s.isession.state[record.world].sop);assert.deepEqual(area.projectState(target.isession.state[record.world]),area.projectState(s.isession.state[record.world]));assert.doesNotMatch(record.wires,/std\.instance\./);}else{const archive=readInstanceState(record.wires);assert.deepEqual(archive.projection,s.isession.state[record.world]);assert.equal(archive.instanceId,s.nativeInstanceIds[record.world]);assert.equal(archive.revision,0);}assert.equal(record.instanceId,s.nativeInstanceIds[record.world]);assert.equal(record.revision,0);assert.ok(target.instanceWorlds[record.world]);}
  const diagram=readInstanceState(records.find(r=>r.world==='diagram.sketch').wires).objects.find(o=>o.attributes.kind[0]==='link');assert.ok(diagram.relations.from.length);assert.ok(diagram.relations.to.length);
  const calendar=calendarStateWorld({sop:records.find(r=>r.world==='time.calendar').wires}),meeting=calendar.ofType('time.calendar.meeting').find(o=>str(o.attrs.id[0])==='event'),identity=reference=>str(calendar.get(reference.slice(1)).attrs.id[0]);assert.deepEqual(meeting.attrs.participants.map(identity),['person']);assert.deepEqual(meeting.attrs.room.map(identity),['room']);assert.deepEqual(meeting.attrs.calendar.map(identity),['calendar']);
  const repeated=await snapshotNativeInstances(target);for(const record of repeated){const original=records.find(r=>r.world===record.world);if(Object.values(NATIVE_AREAS).find(a=>a.world===record.world).stateWorld)assert.deepEqual(record,original);else assert.deepEqual(readInstanceState(record.wires),readInstanceState(original.wires));}
  invoke(hosts.draw,'drawing.object.make',{kind:'circle',name:'Moon',x:25,y:30,color:'#223344'});
  const edited=await snapshotNativeInstances(s);assert.equal(edited.find(r=>r.world==='art.draw').revision,1);assert.equal(edited.find(r=>r.world==='art.draw').instanceId,'stable.art.draw');for(const r of edited.filter(r=>r.world!=='art.draw'))assert.equal(r.revision,0);
- const area=NATIVE_AREAS.draw;const restoredHost=await createAreaHost(area,{state:target.isession.state[area.world],instanceId:target.nativeInstanceIds[area.world]});assert.deepEqual(nativeObservationObjects(restoredHost.observe()),readInstanceState(records.find(r=>r.world===area.world).wires).objects);
+ const area=NATIVE_AREAS.draw;const restoredHost=await createAreaHost(area,{state:target.isession.state[area.world],instanceId:target.nativeInstanceIds[area.world]});assert.deepEqual(nativeObservationObjects(restoredHost.observe()),drawingFacts);
 });
 for(const corruption of ['malformed','semantic mismatch','projection mismatch','dangling relation','knowledge pin conflict'])test(`${corruption} refuses the whole archive batch before adoption`,async()=>{
- const {s}=await populated(),records=await snapshotNativeInstances(s),bad=records.find(record=>record.world==='art.draw'),archive=readInstanceState(bad.wires);
+ const {s}=await populated(),records=await snapshotNativeInstances(s),bad=records.find(record=>record.world==='diagram.sketch'),archive=readInstanceState(bad.wires);
  const target=session();target.isession.state={sentinel:{keep:true}};target.nativeInstanceIds={sentinel:'original'};target.nativeInstanceRevisions={sentinel:12};target.nativeInstanceSnapshots={sentinel:'original'};target.instanceWorlds={sentinel:{keep:true}};
  const prior={state:structuredClone(target.isession.state),ids:structuredClone(target.nativeInstanceIds),revisions:structuredClone(target.nativeInstanceRevisions),snapshots:structuredClone(target.nativeInstanceSnapshots),world:target.instanceWorlds.sentinel};
  let wires;
  if(corruption==='malformed')wires='this is not a SOP archive';
  else if(corruption==='semantic mismatch'){archive.objects[0].attributes.kind=['changed semantics'];wires=serializeInstanceState(archive);}
- else if(corruption==='projection mismatch'){archive.projection.objects[0].x+=1;wires=serializeInstanceState(archive);}
+ else if(corruption==='projection mismatch'){archive.projection.shapes[0].x+=1;wires=serializeInstanceState(archive);}
  else if(corruption==='dangling relation'){
   // Start with a valid serialized archive, then corrupt its local reference token.
   archive.objects[0].relations.probe=[archive.objects[0].id];const valid=serializeInstanceState(archive);wires=valid.replace(/(\bprobe\s*=\s*)[^;\n]+/,'$1$missing.local.object');assert.notEqual(wires,valid,'test must corrupt an actual relation token');
