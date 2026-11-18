@@ -1,13 +1,13 @@
 // Assemble trusted native observations and dispatch the compiler's SOP call.
-import {World,parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=ac74fb4d82';
-import SOURCE from './new-engine-source.mjs?v=a563693f0b';
-import {readPlacementProfile,rememberPlacement} from '../../worlds/app.project/spatial-profile.mjs?v=b07bd210a7';
-import {placementInterfaceSop} from '../../worlds/native-spatial-interface.mjs?v=671cfb2430';
-import {NATIVE_AREAS,createAreaHost} from './app-reader-context.mjs?v=7e10ec6a65';
+import {World,parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=5c616c8f7e';
+import SOURCE from './new-engine-source.mjs?v=e91977e5d1';
+import {readPlacementProfile,rememberPlacement} from '../../worlds/app.project/spatial-profile.mjs?v=c984481ef7';
+import {placementInterfaceSop} from '../../worlds/native-spatial-interface.mjs?v=6b219d6145';
+import {NATIVE_AREAS,createAreaHost} from './app-reader-context.mjs?v=de06cfe134';
 import {identityRegistryFor,instanceIdFor} from './instance-identity.mjs?v=024ef1ca83';
-import {nativeKindCandidates} from './native-binding-candidates.mjs?v=5941d8843a';
-import {invokeObservedNativeTool} from './native-tool-activity.mjs?v=08bb000923';
-import {describeNativeControl,verifyNativeControlEffect} from './native-control-intent.mjs?v=51c8828fba';
+import {nativeKindCandidates} from './native-binding-candidates.mjs?v=ea53f301f4';
+import {invokeObservedNativeTool} from './native-tool-activity.mjs?v=5b01ff8b9b';
+import {describeNativeControl,verifyNativeControlEffect} from './native-control-intent.mjs?v=2212b96658';
 
 const read = (row,key) => row?.attrs[key]?.length===1 ? str(row.attrs[key][0]) : undefined;
 const ref = (row,key) => {
@@ -73,7 +73,7 @@ export async function executeSpatialPlacement(session,candidate,{bindings,view}=
  try{result=await invokeSpatialPlacementSop(session,{area,host,sop});}
  catch(error){return fail('invalid-compiled-placement',{placement:sop,error:String(error?.message??error)});}
  const {receipt,operation,args,before}=result;
- if(receipt.status==='refused')return fail(receipt.reason,{receipt,placement:sop});
+ if(receipt.status==='refused')return fail(receipt.reason,{receipt,placement:sop,controlIntent:result.sop});
  const observed=host.observeSpatial(),after=observed.observation;
  const intent=describeNativeControl({operation,args,before}),verification=verifyNativeControlEffect({intent,before,after,receipt});
  const targets=operation.act==='make'?after.objects.filter(object=>object.sourceType===operation.on&&!before.objects.some(prior=>prior.id===object.id)):

@@ -3,7 +3,7 @@ import {toNativeAvatarState,canonicalAvatarState} from '../worlds/ui.avatar/cano
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {invokeNativeControl} from '../src/dialog/native-tool-controls.mjs';
+import {performGesture} from './fixtures/editor-gesture.mjs';
 import {initialCalendarState,toNativeCalendarState} from '../worlds/time.calendar/declared-host.mjs';
 import {initialCanonicalDocumentState} from '../worlds/docs.editor/declared-host.mjs';
 import {toNativeDocumentState} from '../worlds/docs.editor/canonical-state.mjs';
@@ -11,7 +11,7 @@ import {DEFAULT_FACE} from '../worlds/ui.avatar/default-face.mjs';
 import {variantFor} from '../worlds/ui.avatar/facedraw.mjs';
 import {initialAvatarState,createAvatarHost} from '../worlds/ui.avatar/declared-host.mjs';
 const session=(world,state)=>({isession:{state:{[world]:state}},engine:{loader:{readFile:(world,file)=>readFile(new URL('../worlds/'+world+'/'+file,import.meta.url),'utf8')}}});
-const run=(s,view,operation,args={})=>invokeNativeControl(s,{view,operation,args});
+const run=(s,view,operation,args={})=>performGesture(s,{view,operation,args});
 test('Calendar clear deletes exact events, retains its resource, and actual shared undo restores events',async()=>{
  const s=session('time.calendar',initialCalendarState());
  await run(s,'calendar','calendar.event.add',{id:'first',title:'First',start:1000,duration:100});await run(s,'calendar','calendar.event.add',{id:'second',title:'Second',start:2000,duration:100});

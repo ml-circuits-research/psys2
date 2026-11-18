@@ -1,19 +1,19 @@
 // Read-only inspection of execution worlds already owned by the application.
-import{serialize,str,version,build}from'../vendor/sopworld/sopworld.mjs?v=ac74fb4d82';
-import SOURCE from'./new-engine-source.mjs?v=a563693f0b';
+import{serialize,str,version,build}from'../vendor/sopworld/sopworld.mjs?v=5c616c8f7e';
+import SOURCE from'./new-engine-source.mjs?v=e91977e5d1';
 import{CATALOG_PIN}from'../knowledge/catalog-pin.mjs?v=d1ff29de82';
-import{inspectRequestRoutingPolicy}from'./request-routing-policy.mjs?v=fc4f849155';
-import{inspectHistoryPolicy}from'./history-policy.mjs?v=5ddf217de5';
-import{inspectHistoryJournal}from'./history-journal.mjs?v=8707a8440f';
-import{inspectExecutionPolicyWorld}from'./execution-policy.mjs?v=3652fc9f1f';
-import{inspectCapabilityPolicy}from'./capability-plan-adapter.mjs?v=240539707f';
-import{inspectCreationPolicy}from'./project-create-action.mjs?v=0ad8fe8f47';
-import{inspectConstructorPolicy}from'./native-binding-candidates.mjs?v=5941d8843a';
-import{inspectGroundedProjection}from'./grounded-projection.mjs?v=9cff47c5cf';
-import{inspectReaderHeadPolicy}from'./reader-head-alternative.mjs?v=862e800256';
-import{inspectReferencePolicy}from'./reference-policy.mjs?v=5989b174b9';
-import{inspectSchemaSource}from'./worlds-inspection.mjs?v=cd2d93f58e';
-import{inspectRequestCompositionPolicy}from'./request-composition-policy.mjs?v=cfd3a47ffa';
+import{inspectRequestRoutingPolicy}from'./request-routing-policy.mjs?v=06318084ab';
+import{inspectHistoryPolicy}from'./history-policy.mjs?v=d3efd02478';
+import{inspectHistoryJournal}from'./history-journal.mjs?v=e1571189f1';
+import{inspectExecutionPolicyWorld}from'./execution-policy.mjs?v=3849fdc94e';
+import{inspectCapabilityPolicy}from'./capability-plan-adapter.mjs?v=c016c5ed42';
+import{inspectCreationPolicy}from'./project-create-action.mjs?v=ba00426b67';
+import{inspectConstructorPolicy}from'./native-binding-candidates.mjs?v=ea53f301f4';
+import{inspectGroundedProjection}from'./grounded-projection.mjs?v=aec3da20b2';
+import{inspectReaderHeadPolicy}from'./reader-head-alternative.mjs?v=d543cc0d7c';
+import{inspectReferencePolicy}from'./reference-policy.mjs?v=c8acffcea6';
+import{inspectSchemaSource}from'./worlds-inspection.mjs?v=5088000e6b';
+import{inspectRequestCompositionPolicy}from'./request-composition-policy.mjs?v=ad402a31c4';
 const clone=value=>structuredClone(value);
 const loggedWires=snapshot=>(snapshot?.log??[]).flatMap(entry=>entry.wires??[]);
 const importsOf=snapshot=>[...new Set(loggedWires(snapshot).filter(wire=>wire.type==='core.use').flatMap(wire=>(wire.attrs.world??[]).map(str)))];
@@ -26,7 +26,7 @@ function snapshotText(snapshot){return (snapshot?.log??[]).map((entry,index)=>'#
 /** Projects actual cache accessors and retained journal JSON; performs no reading or reasoning. */
 export async function inspectExecutionWorlds(session){
  const [{inspectDeclaredExecutionSourceWorld},{inspectSpatialPlacementWorld}]=await Promise.all([
-  import('./declared-execution.mjs?v=e66d9dfc5e'),import('./spatial-placement-execution.mjs?v=c6c1d35174'),
+  import('./declared-execution.mjs?v=365671c72f'),import('./spatial-placement-execution.mjs?v=ff665bb661'),
  ]);
  const journal=session?.newEngineJournal??[],moduleNames=[...new Set(journal.flatMap(record=>importsOf(record.evidence)))],sources=[['declared-execution','src/dialog/declared-execution.mjs',inspectDeclaredExecutionSourceWorld({moduleNames})]],nodes=[],edges=[];
  const link=(from,to,label)=>edges.push({from,to,label});
@@ -130,7 +130,7 @@ export async function inspectExecutionWorlds(session){
   link(ids.geometry,ids.schema,'imports schema and rules');
  }
  const composition=inspectRequestCompositionPolicy(),compositionWires=composition.facts;
- nodes.push({id:'execution:composition-policy',label:'Request composition',kind:'knowledge',implementation:'Operational SOP Lang World',description:'Actual source-order scheduling and undo policy for independently validated request cuts. This declaration does not infer target membership or causal dependencies from repeated nouns.',wires:compositionWires,details:{loaded:composition.loaded,source:'worlds/app.project/request-composition-policy.sop',dependencies:composition.dependencies}});
+ nodes.push({id:'execution:composition-policy',label:'Request composition',kind:'knowledge',implementation:'Operational SOP Lang World',description:'Schedules independent request cuts in source order and chooses what follows an unresolved result.',wires:compositionWires,details:{loaded:composition.loaded,source:'worlds/app.project/request-composition-policy.sop',dependencies:composition.dependencies}});
  link('execution:composition-policy','execution:module:declared-execution','governs independent request scheduling');
  for(const [owner,schema]of [['execution:policy',policy.schema],['execution:composition-policy',composition.schema]]){
   const id=owner+':schema';nodes.push({id,label:schema.module,kind:'schema',implementation:'SOP Lang schema module',description:'Structural declarations imported by the linked policy. These definitions are not policy facts or editor state.',wires:schema.wires,schemaView:inspectSchemaSource(schema.wires),details:{source:schema.source,module:schema.module,loaded:schema.loaded}});link(owner,id,'imports schema');

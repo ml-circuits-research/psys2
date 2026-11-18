@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {parse,str} from '../src/vendor/sopworld/sopworld.mjs';
 import {routeNewEngine} from '../src/dialog/reader-routing.mjs';
-import {invokeNativeControl} from '../src/dialog/native-tool-controls.mjs';
+import {performGesture} from './fixtures/editor-gesture.mjs';
 import {createDrawingHost,initialDrawingState} from '../worlds/art.draw/declared-host.mjs';
 import {createDiagramHost,initialDiagramState} from '../worlds/diagram.sketch/declared-host.mjs';
 import {createAvatarHost} from '../worlds/ui.avatar/declared-host.mjs';
@@ -39,7 +39,7 @@ function sessionFor(view,world,state,read) {
    propose:async()=>({coverage:{complete:true,graphProposal:true},candidates:[read],failures:[],selectionScore:{definition:'psys2.model-minimum/1',value:.85}}),
   },
  }};
- return {session,activities,control:(operation,args)=>invokeNativeControl(session,{view,operation,args}),run:()=>routeNewEngine(session,text,{view})};
+ return {session,activities,control:(operation,args)=>performGesture(session,{view,operation,args}),run:()=>routeNewEngine(session,text,{view})};
 }
 
 for(const editor of [

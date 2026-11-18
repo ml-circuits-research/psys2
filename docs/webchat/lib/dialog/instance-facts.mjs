@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Lossless native facts adapter: references require explicit protocol declarations.
 import {createBudget} from './budget.mjs?v=00bce6e369';
-import {copyHostData} from '../../worlds/native-tool-host.mjs?v=3f7fc9e775';
+import {copyHostData} from '../../worlds/native-tool-host.mjs?v=fbb597c3c4';
 const text=v=>typeof v==='string'&&v.length>0;
 const record=v=>v!==null&&typeof v==='object'&&!Array.isArray(v);
 function ordered(value,budget=createBudget({perTurn:100000,perSite:100000}),depth=0){

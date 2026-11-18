@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {routeNewEngine} from '../src/dialog/reader-routing.mjs';
 import {initialDrawingState} from '../worlds/art.draw/declared-host.mjs';
-import {invokeNativeControl} from '../src/dialog/native-tool-controls.mjs';
+import {performGesture} from './fixtures/editor-gesture.mjs';
 
 const webchat=new URL('../docs/webchat/',import.meta.url);
 const deployment=JSON.parse(readFileSync(new URL('models/sop-bert/deployment.json',webchat)));
@@ -18,7 +18,7 @@ const request=[
 ];
 test('a pasted request executes and undoes through Drawing without a reader',async()=>{
   const session={isession:{state:{'ui.shell':{activeTab:'draw'},'art.draw':initialDrawingState()}},engine:{nativeBindings:bindings}};
-  const seed=await invokeNativeControl(session,{view:'draw',operation:'drawing.object.make',args:{kind:'house',x:350,y:300}});
+  const seed=await performGesture(session,{view:'draw',operation:'drawing.object.make',args:{kind:'house',x:350,y:300}});
   assert.ok(seed.ok);
   const before=structuredClone(session.isession.state['art.draw']);
   for (const separator of ['\n',' ']) {

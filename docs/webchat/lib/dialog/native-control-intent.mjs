@@ -1,7 +1,18 @@
 // Typed UI intent capture. No language parser, model inference or optimistic effect claims.
 import {budget} from './budget.mjs?v=00bce6e369';
-import {copyHostData,validateNativeArguments,toolInvocationContext} from '../../worlds/native-tool-host.mjs?v=3f7fc9e775';
-import {compactNativeIntent} from './native-intent-reader.mjs?v=1127922c45';
+import {copyHostData,validateNativeArguments,toolInvocationContext} from '../../worlds/native-tool-host.mjs?v=fbb597c3c4';
+import {compactNativeIntent} from './native-intent-reader.mjs?v=756fec4d88';
+
+import {historyControlQuery} from './history-control-query.mjs?v=227273ef37';
+
+// The page calls this with its gesture and the active editor's declared interface.
+export async function editorGestureSop(operation,args,loadDeclarations){
+ const history=historyControlQuery(operation);
+ if(history)return history;
+ const declaration=(await loadDeclarations()).find(entry=>entry.id===operation);
+ if(!declaration)throw Error('undeclared-native-control');
+ return historyControlQuery(declaration.act)??describeNativeControl({operation:declaration,args}).wires;
+}
 
 export const NATIVE_CONTROL_INTENT_FORMAT='psys2.native-control-intent/1';
 export const NATIVE_CONTROL_INTENT_SCHEMA=`

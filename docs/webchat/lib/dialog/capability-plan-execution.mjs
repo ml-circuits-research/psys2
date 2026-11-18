@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-import { compileNativeCapability } from './capability-plan-adapter.mjs?v=240539707f';
-import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=7e10ec6a65';
+import { compileNativeCapability } from './capability-plan-adapter.mjs?v=c016c5ed42';
+import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=de06cfe134';
 import { instanceIdFor } from './instance-identity.mjs?v=024ef1ca83';
-import { prepareNativeControlHost } from './native-control-preparation.mjs?v=732c68050c';
-import { invokeObservedNativeTool } from './native-tool-activity.mjs?v=08bb000923';
-import { retainPropertyEffect } from './property-effect-evidence.mjs?v=a763f9f75c';
-import { describeNativeControl, verifyNativeControlEffect } from './native-control-intent.mjs?v=51c8828fba';
+import { prepareNativeControlHost } from './native-control-preparation.mjs?v=525350b2d8';
+import { invokeObservedNativeTool } from './native-tool-activity.mjs?v=5b01ff8b9b';
+import { retainPropertyEffect } from './property-effect-evidence.mjs?v=595c97230f';
+import { describeNativeControl, verifyNativeControlEffect } from './native-control-intent.mjs?v=2212b96658';
 
 function reply(text, supported, trace = {}) {
   return { text, parts: [{ text, translate: false }], statuses: [supported ? 'supported' : 'unsupported'],
@@ -65,13 +65,13 @@ export async function executeNativeCapability(session, candidate, { bindings, vi
   const receipt = await invokeObservedNativeTool(session, { area, host: prepared, invocation,
     expectedVersion: observed.version, sop: plan.toolInput });
   if (receipt.status === 'refused') return reply('I could not apply that action. Nothing changed.', false,
-    { reason: receipt.reason, receipt, compiledSop: plan.sop });
+    { reason: receipt.reason, receipt, compiledSop: plan.sop, controlIntent: plan.toolInput });
 
   const after = prepared.observe(), verification = verifyNativeControlEffect({ intent, before: observed, after, receipt });
   if (original && verification.status !== 'verified') {
     session.isession.state[area.world] = original;
     return reply('I could not confirm the requested change. I restored the previous state.', false, {
-      reason: 'unverified-selector-effect', compiledSop: plan.sop, receipt, effectVerification: verification,
+      reason: 'unverified-selector-effect', compiledSop: plan.sop, controlIntent: plan.toolInput, receipt, effectVerification: verification,
     });
   }
   const old = new Set(before.objects.map((object) => object.id));

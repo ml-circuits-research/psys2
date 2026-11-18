@@ -1,13 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {invokeNativeControl} from '../src/dialog/native-tool-controls.mjs';
+import {performGesture} from './fixtures/editor-gesture.mjs';
 import {initialCalendarState,toNativeCalendarState} from '../worlds/time.calendar/declared-host.mjs';
 import {migrateDemoState} from '../src/dialog/demo-state-migration.mjs';
 const policy=await readFile(new URL('../worlds/time.calendar/scheduling-policy.sop',import.meta.url),'utf8');
 const makeSession=()=>({engine:{loader:{readFile:async()=>policy}},isession:{state:{'ui.shell':{activeTab:'calendar'},'time.calendar':initialCalendarState()}}});
 test('UI controls share native calendar policy, observation and journal undo',async()=>{
- const s=makeSession(),run=(operation,args)=>invokeNativeControl(s,{view:'calendar',operation,args});
+ const s=makeSession(),run=(operation,args)=>performGesture(s,{view:'calendar',operation,args});
  assert.equal((await run('calendar.calendar.add',{id:'personal',label:'Personal',colour:'#7788aa'})).ok,true);
  assert.equal((await run('calendar.room.add',{id:'room',label:'Workshop',capacity:8})).ok,true);
  const event={id:'event',title:'Working session',start:100000,duration:3600000,participants:[],room:'room',calendar:'personal'};

@@ -247,15 +247,8 @@ export function createEngineClient({ base, versions = {}, getSettings, getLangua
     },
     async tool(operation,args={},options={}) {
       const view=options.view??getTab();
-      const {historyControlQuery}=await import(moduleUrl('lib/dialog/history-control-query.mjs'));
-      let sop=historyControlQuery(operation);
-      if(!sop){
-        const declarations=toolDeclarations.get(view)??(await session.tools({view})).operations;
-        const declaration=declarations.find(entry=>entry.id===operation);
-        if(!declaration)throw Error('undeclared-native-control');
-        const {describeNativeControl}=await import(moduleUrl('lib/dialog/native-control-intent.mjs'));
-        sop=historyControlQuery(declaration.act)??describeNativeControl({operation:declaration,args}).wires;
-      }
+      const {editorGestureSop}=await import(moduleUrl('lib/dialog/native-control-intent.mjs'));
+      const sop=await editorGestureSop(operation,args,async()=>toolDeclarations.get(view)??(await session.tools({view})).operations);
       const r=await guarded('nativeTool','nativeTool',{view,sop},{hardMs:15000,text:operation,key:null,tab:view});
       applyStateInfo(r);return r;
     },

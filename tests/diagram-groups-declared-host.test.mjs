@@ -31,9 +31,9 @@ test('new diagram nodes use explicit canvas coordinates and native selection cle
  invoke('diagram.group.ungroup',{id:'Pair'});assert.deepEqual(state.selected.shapes,ids);assert.equal(state.selected.group,undefined);assert.equal(state.shapes.length,2);invoke('diagram.node.select',{ids:[]});assert.deepEqual(state.selected.shapes,[]);
 });
 
-import {invokeNativeControl} from '../src/dialog/native-tool-controls.mjs';
+import {performGesture} from './fixtures/editor-gesture.mjs';
 test('diagram size observation uses the engine canonical grade and keeps pixel size separate',async()=>{
- const state=initialDiagramState(),session={isession:{state:{'diagram.sketch':state}}};const run=(operation,args)=>invokeNativeControl(session,{view:'diagram',operation,args});
+ const state=initialDiagramState(),session={isession:{state:{'diagram.sketch':state}}};const run=(operation,args)=>performGesture(session,{view:'diagram',operation,args});
  const made=await run('diagram.node.make',{kind:'circle',size:'small',colour:'cyan'});assert.equal(made.ok,true);assert.notEqual(made.intentRecord.verification.status,'mismatch');assert.ok(made.intentRecord.verification.checks.some(c=>c.parameter==='size'&&c.status==='met'));
  const shape=()=>toNativeDiagramState(session.isession.state['diagram.sketch']).shapes[0];
  const changed=await run('diagram.node.change',{ids:[shape().name],size:'large',colour:'blue'});assert.equal(changed.intentRecord.verification.status,'verified');const node=changed.intentRecord.after.objects.find(o=>o.sourceType==='diagram.sketch.node');assert.equal(node.inputs.find(i=>i.key==='size').values[0],JSON.stringify('large'));assert.equal(node.inputs.find(i=>i.key==='sizePixels').values[0],JSON.stringify(shape().size));

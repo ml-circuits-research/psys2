@@ -6,7 +6,7 @@ import {parse,str,readInstanceState,serializeInstanceState} from '../src/vendor/
 import {initialCanonicalDocumentState,initialDocumentState,createDocumentHost} from '../worlds/docs.editor/declared-host.mjs';
 import {documentStateWorld,toNativeDocumentState,DOCUMENT_STATE_SCHEMA} from '../worlds/docs.editor/canonical-state.mjs';
 import {documentTextId} from '../worlds/docs.editor/native-editing.mjs';
-import {invokeNativeControl} from '../src/dialog/native-tool-controls.mjs';
+import {performGesture} from './fixtures/editor-gesture.mjs';
 import {snapshotNativeInstances,restoreNativeInstances,observeNativeInstanceWorlds} from '../src/dialog/instance-persistence.mjs';
 import {nativeObservationObjects} from '../src/dialog/instance-facts.mjs';
 import {CATALOG_PIN} from '../src/knowledge/catalog-pin.mjs';
@@ -16,7 +16,7 @@ import {createInstanceStore} from '../docs/webchat/ui/instance-store.mjs';
 const world='docs.editor';
 const session=state=>({engine:{},isession:{state:state?{[world]:state}:{}}});
 const native=(s)=>toNativeDocumentState(s.isession.state[world]);
-const control=(s,operation,args={})=>invokeNativeControl(s,{view:'editor',operation,args});
+const control=(s,operation,args={})=>performGesture(s,{view:'editor',operation,args});
 const checked=async(s,operation,args)=>{
  const outcome=await control(s,operation,args);
  assert.equal(outcome.ok,true,JSON.stringify(outcome.receipt??outcome));

@@ -1,10 +1,10 @@
 import test from 'node:test';import assert from 'node:assert/strict';
-import{invokeNativeControl}from'../src/dialog/native-tool-controls.mjs';
+import{performGesture}from'./fixtures/editor-gesture.mjs';
 import{canonicalDrawingState,toNativeDrawingState}from'../worlds/art.draw/canonical-state.mjs';
 import{initialDrawingState}from'../worlds/art.draw/declared-host.mjs';
 import{NATIVE_AREAS}from'../src/dialog/app-reader-context.mjs';
 import{createNativeToolHost,nativeToken,toolInvocationContext}from'../worlds/native-tool-host.mjs';
-const run=(s,view,operation,args={})=>invokeNativeControl(s,{view,operation,args});
+const run=(s,view,operation,args={})=>performGesture(s,{view,operation,args});
 import{createHistoryTool}from'../src/dialog/history-tool.mjs';
 import{executeHistoryRequest}from'../src/dialog/history-execution.mjs';
 import{routeNewEngine}from'../src/dialog/reader-routing.mjs';

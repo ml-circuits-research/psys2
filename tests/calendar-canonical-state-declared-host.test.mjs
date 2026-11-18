@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {canonicalCalendarState,toNativeCalendarState,calendarStateWorld,CALENDAR_STATE_SCHEMA} from '../worlds/time.calendar/canonical-state.mjs';
 import {createCalendarHost,initialCalendarState} from '../worlds/time.calendar/declared-host.mjs';
-import {invokeNativeControl} from '../src/dialog/native-tool-controls.mjs';
+import {performGesture} from './fixtures/editor-gesture.mjs';
 const policySource=readFileSync(new URL('../worlds/time.calendar/scheduling-policy.sop',import.meta.url),'utf8');
 const invoke=(h,operation,args={})=>invokeToolCommand(h,{invocation:crypto.randomUUID(),expectedVersion:h.observe().version,operation,args});
 const fixture=()=>({calendars:[{id:'c',label:'Personal',colour:'#123456'}],people:[{id:'b',label:'B'},{id:'a',label:'A'}],rooms:[{id:'r',label:'Room',capacity:3,location:'Floor 2'}],meetings:[{id:'later',title:'Later',start:1000,duration:50,participants:['a','b'],room:'r',calendar:'c',notes:'Exact notes'},{id:'early',title:'Early',start:0,duration:50,participants:[],room:null,calendar:'c'}],selectedEvent:'later'});
@@ -50,9 +50,9 @@ test('the Calendar host reads canonical SOP before calls and retains no native r
 test('SOP-only carriers survive native session undo, redo and cloned restore boundaries',async()=>{
  const session={isession:{state:{'time.calendar':initialCalendarState()}},engine:{loader:{readFile:(_world,file)=>readFileSync(new URL('../worlds/time.calendar/'+file,import.meta.url),'utf8')}}};
  const before=structuredClone(session.isession.state['time.calendar']);
- assert.equal((await invokeNativeControl(session,{view:'calendar',operation:'calendar.event.add',args:{id:'e',title:'Event',start:0,duration:100}})).ok,true);
+ assert.equal((await performGesture(session,{view:'calendar',operation:'calendar.event.add',args:{id:'e',title:'Event',start:0,duration:100}})).ok,true);
  const after=structuredClone(session.isession.state['time.calendar']);assert.deepEqual(Object.keys(after),['sop']);
- assert.equal((await invokeNativeControl(session,{view:'calendar',operation:'undo'})).ok,true);assert.deepEqual(session.isession.state['time.calendar'],before);
- assert.equal((await invokeNativeControl(session,{view:'calendar',operation:'redo'})).ok,true);assert.deepEqual(session.isession.state['time.calendar'],after);
+ assert.equal((await performGesture(session,{view:'calendar',operation:'undo'})).ok,true);assert.deepEqual(session.isession.state['time.calendar'],before);
+ assert.equal((await performGesture(session,{view:'calendar',operation:'redo'})).ok,true);assert.deepEqual(session.isession.state['time.calendar'],after);
  session.isession.state['time.calendar']=structuredClone(before);assert.equal(toNativeCalendarState(session.isession.state['time.calendar']).meetings.length,0);
 });

@@ -6,7 +6,7 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { readFile } from 'node:fs/promises';
 import { executeDeclaredRequest } from '../src/dialog/declared-execution.mjs';
-import { invokeNativeControl } from '../src/dialog/native-tool-controls.mjs';
+import { performGesture } from './fixtures/editor-gesture.mjs';
 import { routeNewEngine } from '../src/dialog/reader-routing.mjs';
 import { createDrawingHost, initialDrawingState } from '../worlds/art.draw/declared-host.mjs';
 import { createDiagramHost, initialDiagramState } from '../worlds/diagram.sketch/declared-host.mjs';
@@ -104,7 +104,7 @@ test('Document overwrite and Calendar coverage policies read declared SOP guards
   assert.equal(editorActivity.filter((event) => event.operation === 'document.write' && event.phase === 'start').length, 1);
 
   const { value: calendar, activity: calendarActivity } = session('time.calendar', initialCalendarState());
-  assert.equal((await invokeNativeControl(calendar, { view: 'calendar', operation: 'calendar.calendar.add',
+  assert.equal((await performGesture(calendar, { view: 'calendar', operation: 'calendar.calendar.add',
     args: { id: 'office', label: 'Office' } })).ok, true);
   const calendarBindings = binding('calendar', 'canonical.meeting', 'meeting', 'calendar.meeting.add', 'time.calendar.meeting',
     { start: 'start', title: 'title', calendar: 'calendar', duration: 'duration' });

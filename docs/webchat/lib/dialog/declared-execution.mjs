@@ -1,14 +1,15 @@
-import { executeSpatialPlacement } from './spatial-placement-execution.mjs?v=c6c1d35174';
-import { compareNativeReadings } from './capability-plan-adapter.mjs?v=240539707f';
-import { NATIVE_AREAS,createAreaHost } from './app-reader-context.mjs?v=7e10ec6a65';
+import { executeSpatialPlacement } from './spatial-placement-execution.mjs?v=ff665bb661';
+import { compareNativeReadings } from './capability-plan-adapter.mjs?v=c016c5ed42';
+import { NATIVE_AREAS,createAreaHost } from './app-reader-context.mjs?v=de06cfe134';
 import { instanceIdFor } from './instance-identity.mjs?v=024ef1ca83';
-import { describeRouteComparison,resolveRequestRoute } from './request-routing-policy.mjs?v=fc4f849155';
-import { executeHistoryRequest } from './history-execution.mjs?v=a2169732f3';
-import { executeNativeCapability } from './capability-plan-execution.mjs?v=c96fd2cfec';
-import { executionValueSource } from './execution-policy.mjs?v=3652fc9f1f';
-import { inspectCachedExecutionSource } from './execution-world-inspection.mjs?v=e66d9dfc5e';
-import { World, str } from '../vendor/sopworld/sopworld.mjs?v=ac74fb4d82';
-import SOURCE from './new-engine-source.mjs?v=a563693f0b';
+import { describeRouteComparison,resolveRequestRoute } from './request-routing-policy.mjs?v=06318084ab';
+import { executeHistoryRequest } from './history-execution.mjs?v=5e14a5d847';
+import { executeNativeQuery } from './native-query-execution.mjs?v=b4f968e05a';
+import { executeNativeCapability } from './capability-plan-execution.mjs?v=2f34464d2e';
+import { executionValueSource } from './execution-policy.mjs?v=3849fdc94e';
+import { inspectCachedExecutionSource } from './execution-world-inspection.mjs?v=365671c72f';
+import { World, str } from '../vendor/sopworld/sopworld.mjs?v=5c616c8f7e';
+import SOURCE from './new-engine-source.mjs?v=e91977e5d1';
 let knowledge;
 const source = () => knowledge ??= World.fromJSON(SOURCE.snapshot, { library: SOURCE.schemaModules });
 export const inspectDeclaredExecutionSourceWorld = (options) => inspectCachedExecutionSource(knowledge, options);
@@ -20,6 +21,7 @@ export function declaredPropertyValues(concept) {
 const unavailable=(text,reason)=>({text,parts:[{text,translate:false}],statuses:['unsupported'],answers:[],segments:[],state:{},effects:[],
   trace:{legacy:false,engine:'new',reason}});
 const interpreters=new Map([
+  ['query',{run:({session,candidate,options})=>executeNativeQuery(session,candidate.wires,{...options,readKnowledge:source})}],
   ['history',{run:({session,candidate,options})=>executeHistoryRequest(session,candidate,options.view)}],
   ['spatial',{run:({session,candidate,options})=>executeSpatialPlacement(session,candidate,options)}],
   ['capability',{run:({session,candidate,options})=>executeNativeCapability(session,candidate,{...options,readKnowledge:source}),compare:compareNativeReadings}],

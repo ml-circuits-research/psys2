@@ -7,7 +7,3 @@ const queries = new Map(['undo', 'redo'].map(direction => [
 export function historyControlQuery(operation) {
  return queries.get(operation.replace(/^ui\.history\./, ''));
 }
-
-export function isHistoryControlQuery(sop) {
- return [...queries.values()].includes(sop);
-}

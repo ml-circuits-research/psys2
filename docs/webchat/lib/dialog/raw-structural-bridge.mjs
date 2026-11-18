@@ -1,6 +1,6 @@
 // Predicted raw structure -> declared canonical structure. No reader or gold input.
-import {copyHostData} from '../../worlds/native-tool-host.mjs?v=3f7fc9e775';
-import {decodeModelGraphs} from './model-graph-decoder.mjs?v=ae67164088';
+import {copyHostData} from '../../worlds/native-tool-host.mjs?v=fbb597c3c4';
+import {decodeModelGraphs} from './model-graph-decoder.mjs?v=511292bff9';
 export const RAW_STRUCTURAL_FORMAT='psys2.raw-structural-predictions/1';
 const has=(o,k)=>Object.hasOwn(o,k),hash=v=>typeof v==='string'&&/^[a-f0-9]{64}$/.test(v);
 const keys={request:['span','trigger','mood','act','target','constraints','question','turn'],target:['type','mode','fill','determiner','kind','kind_span','name_span','description_span','ordinal','count','count_span','quantifier'],constraint:['key','value','value_span','operator','phase','polarity','character','step','measure','measure_span','unit','anchor_span','anchor_fill','variety','scope','group']};

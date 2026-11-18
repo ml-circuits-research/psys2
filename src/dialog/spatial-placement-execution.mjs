@@ -73,7 +73,7 @@ export async function executeSpatialPlacement(session,candidate,{bindings,view}=
  try{result=await invokeSpatialPlacementSop(session,{area,host,sop});}
  catch(error){return fail('invalid-compiled-placement',{placement:sop,error:String(error?.message??error)});}
  const {receipt,operation,args,before}=result;
- if(receipt.status==='refused')return fail(receipt.reason,{receipt,placement:sop});
+ if(receipt.status==='refused')return fail(receipt.reason,{receipt,placement:sop,controlIntent:result.sop});
  const observed=host.observeSpatial(),after=observed.observation;
  const intent=describeNativeControl({operation,args,before}),verification=verifyNativeControlEffect({intent,before,after,receipt});
  const targets=operation.act==='make'?after.objects.filter(object=>object.sourceType===operation.on&&!before.objects.some(prior=>prior.id===object.id)):

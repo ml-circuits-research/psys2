@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
 import {parse,str} from '../src/vendor/sopworld/sopworld.mjs';
-import {invokeNativeControl} from '../src/dialog/native-tool-controls.mjs';
+import {performGesture} from './fixtures/editor-gesture.mjs';
 import {routeNewEngine} from '../src/dialog/reader-routing.mjs';
 import {initialDrawingState} from '../worlds/art.draw/declared-host.mjs';
 
@@ -20,7 +20,7 @@ test('authored query answers from two real coloured Drawing objects without writ
   onWorldActivity:event=>events.push(event)},
   isession:{state:{[drawing]:initialDrawingState()}},newEngineLastAction:{draw:{label:'previous'}}};
  for(const [name,color]of [['Crimson cottage','#ff0000'],['Blue bungalow','#0000ff']]){
-  const result=await invokeNativeControl(session,{view,operation:'drawing.object.make',args:{kind:'house',name,color}});
+  const result=await performGesture(session,{view,operation:'drawing.object.make',args:{kind:'house',name,color}});
   assert.equal(result.ok,true);
  }
  const state=structuredClone(session.isession.state),undo=structuredClone(session.newEngineUndo),previous=structuredClone(session.newEngineLastAction);

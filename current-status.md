@@ -1,5 +1,9 @@
 # Current status
 
+## 2026-11-18 — Scene rendering, manual animation and executable circuits
+
+Drawing and Diagram received canonical SOP state in the chat reply where the canvas and SVG expected their render projection. The worker retained the objects. The renderer now uses the committed projected values for the changed worlds. Animate on a response opens Worlds and replays only its recorded activity. Chat now shows the exact dispatched circuit alongside the answer and keeps compiler evidence in Worlds. SOPWorlds 0.219 supports read-only counts, members, values and existence over evidenced object populations.
+
 ## 2026-11-18 — Editor gestures travel as SOP
 
 The editor page now submits the actual SOP instruction across the worker boundary. Each editor resolves its live declaration and records the instruction it executed. Chromium traced a Drawing edit from a visible control through the worker, tool and chat. Undo submits its query first, then the history compiler binds the live journal entry. Creation rules now assign names and constructor properties from grounded evidence and preserve unapplied requirements.

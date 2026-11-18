@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { parse } from '../src/vendor/sopworld/sopworld.mjs';
 import { routeNewEngine } from '../src/dialog/reader-routing.mjs';
-import { invokeNativeControl } from '../src/dialog/native-tool-controls.mjs';
+import { performGesture } from './fixtures/editor-gesture.mjs';
 import { identityRegistryFor, instanceIdFor } from '../src/dialog/instance-identity.mjs';
 import { createNativeToolHost } from '../worlds/native-tool-host.mjs';
 import { createDrawingHost, initialDrawingState } from '../worlds/art.draw/declared-host.mjs';
@@ -33,7 +33,7 @@ function setup() {
     bindings:()=>bindings, provenance:()=>({modelSha256:'a'.repeat(64),decoderVersion:1}),
     propose:async()=>({coverage:{complete:true,graphProposal:true},candidates:[candidate],failures:[],selectionScore:{definition:'psys2.model-minimum/1',value:.85}}),
   } } };
-  const control = (operation,args) => invokeNativeControl(session,{view,operation,args});
+  const control = (operation,args) => performGesture(session,{view,operation,args});
   const spatial = () => createDrawingHost({state:session.isession.state[world],instanceId:instanceIdFor(session,world)}).observeSpatial();
   async function run(act = 'make') {
     candidate = request(act);

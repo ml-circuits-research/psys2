@@ -3,6 +3,17 @@ import {budget} from './budget.mjs';
 import {copyHostData,validateNativeArguments,toolInvocationContext} from '../../worlds/native-tool-host.mjs';
 import {compactNativeIntent} from './native-intent-reader.mjs';
 
+import {historyControlQuery} from './history-control-query.mjs';
+
+// The page calls this with its gesture and the active editor's declared interface.
+export async function editorGestureSop(operation,args,loadDeclarations){
+ const history=historyControlQuery(operation);
+ if(history)return history;
+ const declaration=(await loadDeclarations()).find(entry=>entry.id===operation);
+ if(!declaration)throw Error('undeclared-native-control');
+ return historyControlQuery(declaration.act)??describeNativeControl({operation:declaration,args}).wires;
+}
+
 export const NATIVE_CONTROL_INTENT_FORMAT='psys2.native-control-intent/1';
 export const NATIVE_CONTROL_INTENT_SCHEMA=`
 @app.control.invocation core.type of=app.control.invocation closed=true

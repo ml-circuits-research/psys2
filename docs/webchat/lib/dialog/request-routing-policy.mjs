@@ -1,7 +1,7 @@
-import {World,parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=ac74fb4d82';
+import {World,parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=5c616c8f7e';
 import SCHEMA from '../../worlds/app.project/request-routing-schema-source.mjs?v=1d66248bf7';
-import POLICY from '../../worlds/app.project/request-routing-policy-source.mjs?v=52f1f73db2';
-import {historyPolicy} from './history-policy.mjs?v=5ddf217de5';
+import POLICY from '../../worlds/app.project/request-routing-policy-source.mjs?v=89ae1f392c';
+import {historyPolicy} from './history-policy.mjs?v=d3efd02478';
 
 const schema='app.request.route';
 const selectedType=schema+'.selection';

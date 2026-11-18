@@ -518,17 +518,16 @@ export async function mountPsys2(element, options = {}) {
         if (!proposals.size) question.append(h('p', {class:'p2-reader-proposal-status'}, 'No SOP query recorded' + suffix));
       }
 
-      const compiled = step.compiledSop ?? step.placement;
-      if (compiled) appendIntent(answer, compiled, (step.controlIntent ? 'Compiled circuit' : 'Compiler output') + suffix);
-      if (step.controlIntent) appendIntent(answer, step.controlIntent, 'Tool call' + suffix);
-      if (!compiled && !step.controlIntent) answer.append(h('p', {class:'p2-reader-proposal-status'}, 'No compiled circuit recorded' + suffix));
+      if (step.controlIntent) appendIntent(answer, step.controlIntent, 'Executable circuit' + suffix);
+      else if (step.readOnly && step.compiledSop) appendIntent(answer, step.compiledSop, 'Query result' + suffix);
+      else answer.append(h('p', {class:'p2-reader-proposal-status'}, 'No executable circuit was sent' + suffix));
     }
   }
   function attachResponseReplay(message,activity=[],command="") {
     // Keep each response's actual request records even when the live bus ring advances.
     const recorded=structuredClone(activity);
     message.meta.querySelector('.p2-response-replay')?.remove();
-    const replay=h('button',{type:'button',class:'p2-response-replay',title:recorded.length?'Replay the recorded world activity for this response. No command is executed again.':'No world activity was recorded for this response.',disabled:!recorded.length,'data-event-count':recorded.length,onclick:async()=>{userTab('worlds','response-replay');await makeTab(tabDefs.find(t=>t.id==='worlds')); worldsExplorer?.setVisible?.(true);worldsExplorer?.replayEvents(recorded,command);}},'Replay');
+    const replay=h('button',{type:'button',class:'p2-response-replay',title:recorded.length?'Animate this response step by step on the Worlds map.':'No world activity was recorded for this response.',disabled:!recorded.length,'data-event-count':recorded.length,onclick:async()=>{userTab('worlds','response-replay');await makeTab(tabDefs.find(t=>t.id==='worlds')); worldsExplorer?.setVisible?.(true);worldsExplorer?.replayEvents(recorded,command);}},'Animate');
     message.meta.append(replay);return replay;
   }
   function addMessage(who, text, { children, className } = {}) {
@@ -653,10 +652,10 @@ export async function mountPsys2(element, options = {}) {
   }
   const failInstances=error=>{note('Could not save or open work: '+String(error?.message??error));console.warn('Explicit work file operation failed',error);};
   const renderFailures=new Set();
-  function applyState(snapshot) {
+  function applyState(snapshot, projection = snapshot) {
     if (!snapshot || typeof snapshot !== 'object') return;
     const changed = [];
-    for (const [id, st] of Object.entries(snapshot)) { states[id] = st; changed.push(id); }
+    for (const [id, st] of Object.entries(snapshot)) { states[id] = Object.hasOwn(projection, id) ? projection[id] : st; changed.push(id); }
     for (const t of tabDefs) if (changed.includes(t.world)) { try{if (panelUI[t.id]) panelUI[t.id].ui.update(states[t.world]); else if (tabKnown.has(t.id) && tabsLive) makeTab(t);renderFailures.delete(t.id);}catch(error){console.warn('Editor refresh failed',t.id,error);if(!renderFailures.has(t.id))note(`${t.label} could not refresh. World data is preserved.`);renderFailures.add(t.id);} }
     if (changed.includes('ui.avatar')) avatarUI?.update(states['ui.avatar']);
     if (changed.includes(SHELL)) applyShell(states[SHELL]);
@@ -753,9 +752,8 @@ export async function mountPsys2(element, options = {}) {
           const row = addMessage('user', r.intentRecord.text);
           appendIntent(row.bubble, r.intentRecord.inputSop??r.intentRecord.wires, r.intentRecord.inputSop?'Query circuit':'Tool instruction', r.intentRecord.intent?.expandedWires);
           const response = addMessage('bot', r.message+' · '+(r.intentRecord.verification?.status??'unverified'));
-          if (r.compiledSop) appendIntent(response.bubble, r.compiledSop, 'Compiled circuit');
           for (const event of r.worldActivity ?? []) {
-            if (event.phase === 'start' && event.operation === r.intentRecord.tool?.operation && event.sop) appendIntent(response.bubble, event.sop, 'Tool call');
+            if (event.phase === 'start' && event.operation === r.intentRecord.tool?.operation && event.sop) appendIntent(response.bubble, event.sop, 'Executable circuit');
           }
           attachResponseReplay(response, r.worldActivity, r.intentRecord.text);
         }
@@ -1038,7 +1036,8 @@ export async function mountPsys2(element, options = {}) {
     if (mode === 'typed' && language.get() === sentLang && !reply.knownBad) hintLanguage(text, user);   // not after a switch command
     if (reply.lang && reply.lang !== 'en') user.meta.prepend(h('span', { class: 'p2-lang' }, `${reply.lang.toUpperCase()} → EN`));
 
-    if (!notUnderstood) applyState(reply.state);   // noise never switches the tab
+    // The reply names the affected worlds. The worker cache holds their editor projections.
+    if (!notUnderstood) applyState(reply.state, session.state?.() ?? reply.state);
     // MOTION: the reply starts (its text and how it went) and the face moves by the motion rules; a tab may add its own mood (Talk: a big number is surprising)
     clearTimeout(tn.thinkT);
     const tabMood = tabDefs.find((x) => x.id === view)?.mood?.(reply, answer);

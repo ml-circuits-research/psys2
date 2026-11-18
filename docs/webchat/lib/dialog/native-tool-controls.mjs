@@ -1,43 +1,35 @@
-import { recordHistory } from './history-journal.mjs?v=8707a8440f';
-import{prepareNativeControlHost}from'./native-control-preparation.mjs?v=732c68050c';
-import {isHistoryControlQuery} from './history-control-query.mjs?v=2c0d5814c5';
-import{runHistoryControl,runHistoryControlQuery}from'./history-execution.mjs?v=a2169732f3';
-import{invokeObservedNativeTool}from'./native-tool-activity.mjs?v=08bb000923';
+import { recordHistory } from './history-journal.mjs?v=e1571189f1';
+import{prepareNativeControlHost}from'./native-control-preparation.mjs?v=525350b2d8';
+import {isAuthoredRequest} from './authored-request-tool.mjs?v=fb101f1944';
+import{runHistoryControlQuery}from'./history-execution.mjs?v=5e14a5d847';
+import{invokeObservedNativeTool}from'./native-tool-activity.mjs?v=5b01ff8b9b';
 // Typed UI gestures use the same declared native tools and undo history as model requests.
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=7e10ec6a65';
-import {describeNativeControl,verifyNativeControlEffect} from './native-control-intent.mjs?v=51c8828fba';
-import {readNativeIntent} from './native-intent-reader.mjs?v=1127922c45';
-import {observePlacementCorrection,prunePlacementLinks} from '../../worlds/app.project/spatial-profile.mjs?v=b07bd210a7';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=de06cfe134';
+import {describeNativeControl,verifyNativeControlEffect} from './native-control-intent.mjs?v=2212b96658';
+import {readNativeIntent} from './native-intent-reader.mjs?v=756fec4d88';
+import {observePlacementCorrection,prunePlacementLinks} from '../../worlds/app.project/spatial-profile.mjs?v=c984481ef7';
 
-export async function invokeNativeControl(session,{view,operation,args={},sop}={},depth=0){
- if(depth>1)throw Error('native-history-alias-depth');
+export async function invokeNativeControl(session,{view,sop}={}){
+ if(typeof sop!=='string')throw Error('invalid-control-intent');
  const area=NATIVE_AREAS[view];
  if(!area)throw Error('unknown-native-control');
- if(isHistoryControlQuery(sop))return runHistoryControlQuery(session,view,sop);
- if(sop===undefined && typeof operation!=='string')throw Error('unknown-native-control');
- const direction=operation?.replace(/^ui\.history\./,'');
- if(['undo','redo'].includes(direction))return runHistoryControl(session,view,direction);
+ if(isAuthoredRequest(sop))return runHistoryControlQuery(session,view,sop);
  let state=session.isession.state[area.world];
  if(!state)throw Error('native-state-unavailable');
  if(area.canonicalizeState)state=session.isession.state[area.world]=area.canonicalizeState(state);
  const invocation=globalThis.crypto.randomUUID();
- let declaredHost;
- if(sop!==undefined){
-  declaredHost=await prepareNativeControlHost(session,{view,invocation});
-  ({operation,args}=readNativeIntent(sop,{operations:declaredHost.bindings()}));
- }
+ const declaredHost=await prepareNativeControlHost(session,{view,invocation});
+ const interpreted=readNativeIntent(sop,{operations:declaredHost.bindings()});
+ const {operation,args}=interpreted;
  const before=structuredClone(state),host=await prepareNativeControlHost(session,{view,operation,args,invocation,host:declaredHost});
  const observation=host.observe();
  const declaration=host.bindings().find(op=>op.id===operation);if(!declaration)throw Error('undeclared-native-control');
- if(['undo','redo'].includes(declaration.act))return invokeNativeControl(session,{view,operation:declaration.act,args:{}},depth+1);
  const targets=declaration.spatial?.idsKey&&args[declaration.spatial.idsKey];
  const movedId=declaration.act==='place'&&Array.isArray(targets)&&targets.length===1?targets[0]:null;
  const observeSpatial=()=>{try{return host.observeSpatial?.();}catch{return null;}};
  const spatialBefore=movedId?observeSpatial():null;
  const intent=describeNativeControl({operation:declaration,args,before:observation});
- if(sop!==undefined)intent.wires=sop;
- const interpreted=readNativeIntent(intent.wires,{operation:declaration});
- if(interpreted.operation!==operation||JSON.stringify(interpreted.args)!==JSON.stringify(intent.expected.args))throw Error('native-intent-roundtrip');
+ intent.wires=sop;
  const receipt=await invokeObservedNativeTool(session,{area,host,invocation,expectedVersion:observation.version,sop:intent.wires});
  const changed=JSON.stringify(before)!==JSON.stringify(state),ok=['changed','unchanged','supported'].includes(receipt.status);
  if(!ok&&changed){session.isession.state[area.world]=before;throw Error('native-refusal-mutated-state');}

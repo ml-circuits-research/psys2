@@ -3,7 +3,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { serialize, serializeInstanceState } from '../src/vendor/sopworld/sopworld.mjs';
-import { invokeNativeControl } from '../src/dialog/native-tool-controls.mjs';
+import { performGesture } from './fixtures/editor-gesture.mjs';
 import { observeNativeInstanceWorlds, restoreNativeInstances, snapshotNativeInstances, NATIVE_INSTANCE_SCHEMA } from '../src/dialog/instance-persistence.mjs';
 import { nativeObservationObjects } from '../src/dialog/instance-facts.mjs';
 import { CATALOG_PIN } from '../src/knowledge/catalog-pin.mjs';
@@ -12,7 +12,7 @@ import { canonicalDrawingState, DRAWING_STATE_SCHEMA, drawingStateWorld, toNativ
 
 const domain='art.draw';
 const drawing = session => session.isession.state[domain];
-const control = (session,operation,args={}) => invokeNativeControl(session,{view:'draw',operation,args});
+const control = (session,operation,args={}) => performGesture(session,{view:'draw',operation,args});
 
 test('Drawing authority commits editable grouped vectors and movement as typed SOP facts across undo and save/load',async()=>{
  const session={isession:{state:{[domain]:initialDrawingState()}}};

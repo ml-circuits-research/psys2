@@ -58,3 +58,5 @@ The page encodes each editor gesture against its declared tool interface. The wo
 ## Continuation between request cuts
 
 The source reader yields independently validated cuts sequentially so each reading can observe earlier effects. After a supported or unresolved cut, the request composition world derives whether to advance or stop. The default advances after an unresolved cut. An authored stop policy leaves later cuts unread and unapplied. Its reply identifies those spans and preserves the verified changes in the turn’s Undo group.
+
+Chat attaches the high-level SOP query to its input and the exact dispatched executable circuit to its answer. A compound request labels each step. Read-only queries show their answer circuit. Compiler selection evidence, alternatives and explanations belong to the recorded activity in Worlds. Editors render the committed projection for each changed world after a chat turn.

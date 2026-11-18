@@ -1,7 +1,7 @@
 // Source-only two-model proposals. No parser fallback or execution admission.
-import {readReaderSource} from './reader-source.mjs?v=82bbda74bc';
-import {copyHostData} from '../../worlds/native-tool-host.mjs?v=3f7fc9e775';
-import {bridgeRawStructure,RAW_STRUCTURAL_FORMAT} from './raw-structural-bridge.mjs?v=25de587ed1';
+import {readReaderSource} from './reader-source.mjs?v=b1cb106384';
+import {copyHostData} from '../../worlds/native-tool-host.mjs?v=fbb597c3c4';
+import {bridgeRawStructure,RAW_STRUCTURAL_FORMAT} from './raw-structural-bridge.mjs?v=fab16c5156';
 const hash=x=>typeof x==='string'&&/^[a-f0-9]{64}$/.test(x);
 const digest=async x=>Array.from(new Uint8Array(await globalThis.crypto.subtle.digest('SHA-256',new TextEncoder().encode(x))),b=>b.toString(16).padStart(2,'0')).join('');
 const same=(a,b)=>JSON.stringify(a)===JSON.stringify(b);

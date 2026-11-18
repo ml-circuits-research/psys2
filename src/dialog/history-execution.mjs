@@ -1,5 +1,5 @@
-import {historyControlQuery} from './history-control-query.mjs';
-import {parse,serialize} from '../vendor/sopworld/sopworld.mjs';
+import {readAuthoredRequest} from './authored-request-tool.mjs';
+import {parse,serialize,str} from '../vendor/sopworld/sopworld.mjs';
 import {historyPolicy} from './history-policy.mjs';
 import {observeHistory,createHistoryTool} from './history-tool.mjs';
 import {invokeObservedNativeTool} from './native-tool-activity.mjs';
@@ -35,15 +35,16 @@ async function execute(session,candidate,view){
    tool:{operation:receipt.operation,args},verification,before:receipt.before,after:receipt.after,outcome:receipt.status}};
 }
 
-export async function runHistoryControl(session,view,direction){
- return runHistoryControlQuery(session,view,historyControlQuery(direction));
-}
-
 export async function runHistoryControlQuery(session,view,wires){
- const result=await execute(session,{request:'history.control',wires},view);
- if(result?.intentRecord){
+ const {candidate,reason}=readAuthoredRequest(wires);
+ if(!candidate)throw Error(reason);
+ const result=await execute(session,candidate,view);
+ if(!result)throw Error('undeclared-history-request');
+ if(result.intentRecord){
+  const nodes=parse(candidate.wires),request=nodes.find(node=>node.id===candidate.request);
+  const source=nodes.find(node=>'$'+node.id===first(request,'source'));
   result.intentRecord.inputSop=wires;
-  result.intentRecord.text=JSON.parse(first(parse(wires)[0],'text'));
+  result.intentRecord.text=str(first(source,'text'))??result.message;
  }
  return result;
 }

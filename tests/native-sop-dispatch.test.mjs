@@ -23,6 +23,7 @@ test('the shared native control route executes recorded SOP in all editor areas'
     'time.calendar': initialCalendarState(),
     'ui.avatar': initialAvatarState(),
   };
+  await assert.rejects(invokeNativeControl({isession:{state}}, {view:'draw',operation:'drawing.object.make',args:{kind:'house'}}), /invalid-control-intent/);
   const activity = [];
   const session = {
     isession: { state },
@@ -53,6 +54,11 @@ test('the shared native control route executes recorded SOP in all editor areas'
     assert.equal(event.sop, result.intentRecord.wires, view);
     assert.deepEqual(event.args, result.intentRecord.tool.args, view);
   }
+  const undo='@gesture std.request source=$words mood=do act=undo\n@words std.request.source text="Undo my drawing edit."';
+  const restored=await invokeNativeControl(session,{view:'draw',sop:undo});
+  assert.equal(restored.intentRecord.inputSop,undo);
+  assert.equal(restored.intentRecord.text,'Undo my drawing edit.');
+  assert.equal(toNativeDrawingState(state['art.draw']).objects.length,0);
   assert.match(activity.find((event) => event.operation === 'document.write' && event.phase === 'start').sop, /app\.control\.intent/);
 });
 

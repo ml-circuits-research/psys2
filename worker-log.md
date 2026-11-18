@@ -180,3 +180,6 @@ Reader context now selects and orders observed parts and names using authored SO
 Checks: 625 passed, three skipped. Chromium compared exact worker input with tool activity and chat, exercised compound creation and Undo. All five areas accepted SOP input, including nested document blocks.
 2026-11-18 connected authored inspector projections to actual editor observations through SOPWorld 0.219. Drawing proof counted one named red house among two observed houses, returned its name and exact colour, and counted zero green houses. Read answers preserve the editor, previous action and journal.
 Checks: Webchat build 682e70818e, npm test (625 pass, 3 skip). Real Chromium chat showed answer evidence and no tool call.
+
+2026-11-18: Fixed blank Drawing and Diagram after chat. Worlds animates only a selected response on Animate. Chat shows its exact executable circuit. Editor inputs accept SOP only. Compound continuation follows authored policy.
+Checks: 627 passed, three skipped. Chromium verified the original house plus new tree stayed visible, two Diagram SVG nodes persisted, menu edits retained all objects, and entering Worlds stayed idle until Animate. Read-only queries returned actual values without writes.

@@ -41,10 +41,10 @@ test('extract, group, move and ungroup retain actual constituents and undo rathe
 });
 
 import {THINGS} from '../worlds/art.draw/things.catalog.mjs';
-import {invokeNativeControl} from '../src/dialog/native-tool-controls.mjs';
+import {performGesture} from './fixtures/editor-gesture.mjs';
 test('compound UI capture retains source references and leaves unsupported projections unverified',async()=>{
  const state=initialDrawingState(),session={isession:{state:{'art.draw':state}}};
- const run=(operation,args)=>invokeNativeControl(session,{view:'draw',operation,args});
+ const run=(operation,args)=>performGesture(session,{view:'draw',operation,args});
  const current=()=>toNativeDrawingState(session.isession.state['art.draw']);
  await run('drawing.object.make',{kind:'house',name:'Home'});const root=current().objects[0].id;
  const roof=drawingPartsOf(current().objects[0]).find(p=>p.role==='roof');

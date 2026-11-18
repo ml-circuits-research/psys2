@@ -65,13 +65,13 @@ export async function executeNativeCapability(session, candidate, { bindings, vi
   const receipt = await invokeObservedNativeTool(session, { area, host: prepared, invocation,
     expectedVersion: observed.version, sop: plan.toolInput });
   if (receipt.status === 'refused') return reply('I could not apply that action. Nothing changed.', false,
-    { reason: receipt.reason, receipt, compiledSop: plan.sop });
+    { reason: receipt.reason, receipt, compiledSop: plan.sop, controlIntent: plan.toolInput });
 
   const after = prepared.observe(), verification = verifyNativeControlEffect({ intent, before: observed, after, receipt });
   if (original && verification.status !== 'verified') {
     session.isession.state[area.world] = original;
     return reply('I could not confirm the requested change. I restored the previous state.', false, {
-      reason: 'unverified-selector-effect', compiledSop: plan.sop, receipt, effectVerification: verification,
+      reason: 'unverified-selector-effect', compiledSop: plan.sop, controlIntent: plan.toolInput, receipt, effectVerification: verification,
     });
   }
   const old = new Set(before.objects.map((object) => object.id));

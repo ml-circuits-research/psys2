@@ -2,7 +2,7 @@ import {invokeToolCommand} from '../src/dialog/native-control-intent.mjs';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {parse,serializeInstanceState,str} from '../src/vendor/sopworld/sopworld.mjs';
-import {invokeNativeControl} from '../src/dialog/native-tool-controls.mjs';
+import {performGesture} from './fixtures/editor-gesture.mjs';
 import {routeNewEngine} from '../src/dialog/reader-routing.mjs';
 import {observeNativeInstanceWorlds,restoreNativeInstances,snapshotNativeInstances} from '../src/dialog/instance-persistence.mjs';
 import {nativeObservationObjects} from '../src/dialog/instance-facts.mjs';
@@ -15,7 +15,7 @@ import {workFile,readWorkFile} from '../docs/webchat/ui/work-files.mjs';
 const world='diagram.sketch',view='diagram';
 const session=state=>({engine:{},isession:{state:state?{[world]:state}:{}}});
 const native=s=>toNativeDiagramState(s.isession.state[world]);
-const control=(s,operation,args={})=>invokeNativeControl(s,{view,operation,args});
+const control=(s,operation,args={})=>performGesture(s,{view,operation,args});
 const committed=async(s,operation,args)=>{
  const result=await control(s,operation,args);
  assert.equal(result.receipt?.status,'changed',JSON.stringify(result.receipt??result));

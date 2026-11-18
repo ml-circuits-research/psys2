@@ -1,14 +1,14 @@
-import { captureHistory, recordHistory, restoreHistory } from './history-journal.mjs?v=8707a8440f';
-import {projectReaderHeadAlternative} from './reader-head-alternative.mjs?v=862e800256';
-import {writeReaderSource} from './reader-source.mjs?v=82bbda74bc';
-import {isAuthoredRequest,readAuthoredRequest} from './authored-request-tool.mjs?v=1d242a1d6b';
+import { captureHistory, recordHistory, restoreHistory } from './history-journal.mjs?v=e1571189f1';
+import {projectReaderHeadAlternative} from './reader-head-alternative.mjs?v=d543cc0d7c';
+import {writeReaderSource} from './reader-source.mjs?v=b1cb106384';
+import {isAuthoredRequest,readAuthoredRequest} from './authored-request-tool.mjs?v=fb101f1944';
 // Model-first proposal routing. Calibration authority belongs to host configuration,
 // never to a model output, evaluation annotation or grammar proposal.
-import {requestCompositionPolicy}from './request-composition-policy.mjs?v=cfd3a47ffa';
-import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=e66d9dfc5e';
-import {projectContextAction} from './project-context-action.mjs?v=ca74132f87';
-import {projectCreateAction} from './project-create-action.mjs?v=0ad8fe8f47';
-import {assessReaderProposal} from './reader-admission.mjs?v=1c8a7a51a7';
+import {requestCompositionPolicy,scheduleFollowingCut}from './request-composition-policy.mjs?v=ad402a31c4';
+import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=365671c72f';
+import {projectContextAction} from './project-context-action.mjs?v=58fade2709';
+import {projectCreateAction} from './project-create-action.mjs?v=ba00426b67';
+import {assessReaderProposal} from './reader-admission.mjs?v=c79b3efc71';
 const unavailable=reason=>({candidates:[],coverage:{complete:false,executable:false,graphProposal:false},failures:[{reason}]});
 const noDeclaredAction = () => {
  const text='I could not identify an action to apply. Nothing changed.';
@@ -27,7 +27,7 @@ async function dispatchRequest(session,candidate,text,options,bindings,contextPr
  }finally{
   if(originals&&!result?.statuses?.includes('supported'))Object.assign(session.isession.state,originals);
  }
- if(result.trace?.history)return result;
+ if(result.trace?.history||result.trace?.readOnly)return result;
  if(result.statuses?.includes('supported')){session.newEngineLastAction={...session.newEngineLastAction,[area]:candidate};if(contextProjection){result.text+=' '+interpretation.note;result.parts=[{text:result.text,translate:false}];result.trace={...result.trace,interpretation};}}
  const changed=Object.keys(session.isession.state).filter(key=>JSON.stringify(before[key])!==JSON.stringify(session.isession.state[key]));
  if(changed.length)recordHistory(session,{area,before:Object.fromEntries(changed.map(key=>[key,before[key]])),
@@ -128,16 +128,26 @@ export async function routeNewEngine(session,text,options={}){
  }
  const provider=session.engine?.requestReader;
  if(typeof text!=='string'||!text.trim()||text.length>65536||options.language&&options.language!=='en')return routeReaderProposal(session,text,options);
- const policy=requestCompositionPolicy();
+ const policySource=session.engine?.requestCompositionPolicySource;
+ const policy=requestCompositionPolicy(policySource);
  try{session.engine?.onWorldActivity?.({nodeIds:['execution:composition-policy'],phase:'stage',label:'Read request scheduling policy',operation:'policy.request-composition',policy:structuredClone(policy)});}catch{/* Observation cannot change request scheduling. */}
  if(!policy.enabled||typeof provider?.proposeRequests!=='function')return routeReaderProposal(session,text,options);
  const before=structuredClone(session.isession.state),journalBefore=captureHistory(session,false),steps=[];
+ let deferred=[];
  let sourceSop;
  try{sourceSop=writeReaderSource(text);}catch{return routeReaderProposal(session,text,options);}
  for await(const proposal of provider.proposeRequests(sourceSop)){
   const result=await routeReaderProposal(session,text,options,proposal);
   if(!proposal.composition)return result;
-  steps.push({source:proposal.composition,reply:result});
+  const source=proposal.composition;
+  const following=Array.isArray(source.sourceCuts)&&Number.isSafeInteger(source.index)?source.sourceCuts.slice(source.index+1):[];
+  const next=following.length?scheduleFollowingCut(result,following.length,policySource):null;
+  steps.push({source,reply:result,next:next?.sop});
+  if(next){
+   try{session.engine?.onWorldActivity?.({nodeIds:['component:library','execution:composition-policy'],phase:'stage',
+    label:'Schedule remaining request cuts',operation:'app.request.composition.decision',wires:next.sop});}catch{/* Observation cannot change scheduling. */}
+   if(next.action==='stop'){deferred=following;break;}
+  }
  }
  if(!steps.length)return routeReaderProposal(session,text,options);
  const area=options.view??session.isession.state['ui.shell']?.activeTab,changed=Object.keys(session.isession.state).filter(key=>JSON.stringify(before[key])!==JSON.stringify(session.isession.state[key]));
@@ -157,7 +167,7 @@ export async function routeNewEngine(session,text,options={}){
   const excerpt=JSON.stringify(scalars.slice(...source.range).join(''));
   if(reply.trace?.reason==='reading'||reply.trace?.reason==='no-declared-action')return 'I could not apply '+excerpt+'.';
   return 'For '+excerpt+': '+reply.text;
- }).join(' ');
+ }).join(' ')+(deferred.length?' I stopped before '+deferred.map(range=>JSON.stringify(scalars.slice(...range).join(''))).join(', ')+'.':'');
  const last=steps.at(-1).reply;
- return {...last,state:changed.length?structuredClone(session.isession.state):last.state,text:textReply,parts:[{text:textReply,translate:false}],statuses:steps.flatMap(step=>step.reply.statuses??[]),effects:steps.flatMap(step=>step.reply.effects??[]),trace:{...last.trace,readerRouting:{...last.trace?.readerRouting,rawReading:steps.flatMap(step=>step.reply.trace?.readerRouting?.rawReading??[]),unresolved:steps.flatMap(step=>step.reply.trace?.readerRouting?.unresolved??[]),proposalCandidates:steps.flatMap(step=>[step.reply.trace?.reading,...(step.reply.trace?.readerRouting?.proposalCandidates??[])]).filter(Boolean)},partial:supported.length!==steps.length||steps.some(step=>step.reply.trace?.partial),composition:{policy,sourceCuts:steps[0].source.sourceCuts,steps:steps.map(step=>({source:step.source,statuses:step.reply.statuses,trace:step.reply.trace,text:step.reply.text})),supported:supported.length,total:steps.length,undoGroup:grouped?1:0}}};
+ return {...last,state:changed.length?structuredClone(session.isession.state):last.state,text:textReply,parts:[{text:textReply,translate:false}],statuses:steps.flatMap(step=>step.reply.statuses??[]),effects:steps.flatMap(step=>step.reply.effects??[]),trace:{...last.trace,readerRouting:{...last.trace?.readerRouting,rawReading:steps.flatMap(step=>step.reply.trace?.readerRouting?.rawReading??[]),unresolved:steps.flatMap(step=>step.reply.trace?.readerRouting?.unresolved??[]),proposalCandidates:steps.flatMap(step=>[step.reply.trace?.reading,...(step.reply.trace?.readerRouting?.proposalCandidates??[])]).filter(Boolean)},partial:deferred.length>0||supported.length!==steps.length||steps.some(step=>step.reply.trace?.partial),composition:{policy,sourceCuts:steps[0].source.sourceCuts,steps:steps.map(step=>({source:step.source,statuses:step.reply.statuses,trace:step.reply.trace,text:step.reply.text,...(step.next?{schedule:step.next}:{})})),supported:supported.length,total:steps.length+deferred.length,deferred,undoGroup:grouped?1:0}}};
 }
