@@ -468,7 +468,7 @@ const handlers = {
       if(!area||(session.isession.state['ui.shell']?.activeTab!==view))throw Error('The active tab changed. Please try again.');
       await ensureWorlds([area.world],'area control');
       const {invokeNativeControl}=await import(vurl('lib/dialog/native-tool-controls.mjs'));
-      const result=await invokeNativeControl(session,{view,operation:m.operation,args:m.args});
+      const result=await invokeNativeControl(session,{view,sop:m.sop});
       return {...result,state:stateOf(),meta:metaOf()};
     }finally{active.delete(m.id);}
   },

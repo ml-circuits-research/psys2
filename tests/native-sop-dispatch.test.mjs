@@ -3,6 +3,8 @@ import { test } from 'node:test';
 import {toNativeDrawingState} from '../worlds/art.draw/canonical-state.mjs';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
+import {describeNativeControl} from '../src/dialog/native-control-intent.mjs';
+import {prepareNativeControlHost} from '../src/dialog/native-control-preparation.mjs';
 import { invokeNativeControl } from '../src/dialog/native-tool-controls.mjs';
 import { invokeObservedNativeTool } from '../src/dialog/native-tool-activity.mjs';
 import { createDrawingHost, initialDrawingState } from '../worlds/art.draw/declared-host.mjs';
@@ -40,7 +42,11 @@ test('the shared native control route executes recorded SOP in all editor areas'
       () => toNativeAvatarState(state['ui.avatar']).face.expression, 'happy'],
   ];
   for (const [view, operation, args, observe, expected] of cases) {
-    const result = await invokeNativeControl(session, { view, operation, args });
+    const host = await prepareNativeControlHost(session, {view});
+    const declaration = host.bindings().find(entry => entry.id === operation);
+    const input = describeNativeControl({operation: declaration, args}).wires;
+    const result = await invokeNativeControl(session, {view, sop: input});
+    assert.equal(result.intentRecord.wires, input);
     assert.equal(result.receipt.status, 'changed', view);
     assert.equal(observe(), expected, view);
     const event = activity.find((row) => row.operation === operation && row.phase === 'start');

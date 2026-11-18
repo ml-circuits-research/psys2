@@ -751,10 +751,11 @@ export async function mountPsys2(element, options = {}) {
         if (r.intentRecord) {
           await trainingPairs.record(r.intentRecord);
           const row = addMessage('user', r.intentRecord.text);
-          appendIntent(row.bubble, r.intentRecord.wires, 'Tool instruction', r.intentRecord.intent?.expandedWires);
+          appendIntent(row.bubble, r.intentRecord.inputSop??r.intentRecord.wires, r.intentRecord.inputSop?'Query circuit':'Tool instruction', r.intentRecord.intent?.expandedWires);
           const response = addMessage('bot', r.message+' · '+(r.intentRecord.verification?.status??'unverified'));
+          if (r.compiledSop) appendIntent(response.bubble, r.compiledSop, 'Compiled circuit');
           for (const event of r.worldActivity ?? []) {
-            if (event.phase === 'start' && event.operation === operation && event.sop) appendIntent(response.bubble, event.sop, 'Tool call');
+            if (event.phase === 'start' && event.operation === r.intentRecord.tool?.operation && event.sop) appendIntent(response.bubble, event.sop, 'Tool call');
           }
           attachResponseReplay(response, r.worldActivity, r.intentRecord.text);
         }

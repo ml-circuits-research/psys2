@@ -53,3 +53,5 @@ Worlds attaches the compiler result to the history policy and shows the exact ca
 ## Grounded creation requirements
 
 Creation resolution supplies exact Unicode source spans, declared property mappings and the selected constructor’s parameters to the creation policy. The policy identifies lexical kind evidence and classifies grounded requirements as consumed, bound to a name, bound to a property, or unapplied. A coextensive role is consumed only when its support matches the chosen kind span. A naming parameter used to load catalog knowledge is distinct from a parameter that stores a name. Remaining grounded requirements are disclosed in the response.
+
+The page encodes each editor gesture against its declared tool interface. The worker receives the view and SOP text, resolves the live declaration and forwards the exact instruction to the tool. The training pair and the chat expose that same instruction. A history gesture supplies a request whose compilation binds the current journal head.

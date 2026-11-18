@@ -1,6 +1,7 @@
-import {parse,quote,serialize} from '../vendor/sopworld/sopworld.mjs?v=ac74fb4d82';
+import {historyControlQuery} from './history-control-query.mjs?v=2c0d5814c5';
+import {parse,serialize} from '../vendor/sopworld/sopworld.mjs?v=ac74fb4d82';
 import {historyPolicy} from './history-policy.mjs?v=5ddf217de5';
-import {observeHistory,createHistoryTool} from './history-tool.mjs?v=c81f87999d';
+import {observeHistory,createHistoryTool} from './history-tool.mjs?v=b419d00903';
 import {invokeObservedNativeTool} from './native-tool-activity.mjs?v=08bb000923';
 
 const area={world:'app.history',stateWorld:true};
@@ -35,9 +36,16 @@ async function execute(session,candidate,view){
 }
 
 export async function runHistoryControl(session,view,direction){
- const text=direction==='redo'?'Redo the last action.':'Undo the last action.';
- return execute(session,{request:'history.control',wires:'@history.source std.request.source text='+quote(text)
-  +'\n@history.control std.request act='+direction+' mood=do source=$history.source'},view);
+ return runHistoryControlQuery(session,view,historyControlQuery(direction));
+}
+
+export async function runHistoryControlQuery(session,view,wires){
+ const result=await execute(session,{request:'history.control',wires},view);
+ if(result?.intentRecord){
+  result.intentRecord.inputSop=wires;
+  result.intentRecord.text=JSON.parse(first(parse(wires)[0],'text'));
+ }
+ return result;
 }
 
 export async function executeHistoryRequest(session,candidate,view){

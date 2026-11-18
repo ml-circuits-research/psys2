@@ -1,5 +1,5 @@
 // Actual application state only. No request annotations or invented semantic types.
-import {observedReaderContext} from './native-reader-context.mjs?v=e556586c4a';
+import {observedReaderContext} from './native-reader-context.mjs?v=352d78aa43';
 import {isAuthoredRequest} from './authored-request-tool.mjs?v=1d242a1d6b';
 import {createCanonicalDrawingHost} from '../../worlds/art.draw/declared-host.mjs?v=4d810ffbf9';
 import {DRAWING_STATE_INTERFACE} from '../../worlds/art.draw/canonical-state.mjs?v=ad946674a2';

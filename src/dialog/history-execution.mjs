@@ -1,4 +1,5 @@
-import {parse,quote,serialize} from '../vendor/sopworld/sopworld.mjs';
+import {historyControlQuery} from './history-control-query.mjs';
+import {parse,serialize} from '../vendor/sopworld/sopworld.mjs';
 import {historyPolicy} from './history-policy.mjs';
 import {observeHistory,createHistoryTool} from './history-tool.mjs';
 import {invokeObservedNativeTool} from './native-tool-activity.mjs';
@@ -35,9 +36,16 @@ async function execute(session,candidate,view){
 }
 
 export async function runHistoryControl(session,view,direction){
- const text=direction==='redo'?'Redo the last action.':'Undo the last action.';
- return execute(session,{request:'history.control',wires:'@history.source std.request.source text='+quote(text)
-  +'\n@history.control std.request act='+direction+' mood=do source=$history.source'},view);
+ return runHistoryControlQuery(session,view,historyControlQuery(direction));
+}
+
+export async function runHistoryControlQuery(session,view,wires){
+ const result=await execute(session,{request:'history.control',wires},view);
+ if(result?.intentRecord){
+  result.intentRecord.inputSop=wires;
+  result.intentRecord.text=JSON.parse(first(parse(wires)[0],'text'));
+ }
+ return result;
 }
 
 export async function executeHistoryRequest(session,candidate,view){

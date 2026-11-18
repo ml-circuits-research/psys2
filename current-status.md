@@ -1,5 +1,9 @@
 # Current status
 
+## 2026-11-18 — Editor gestures travel as SOP
+
+The editor page now submits the actual SOP instruction across the worker boundary. Each editor resolves its live declaration and records the instruction it executed. Chromium traced a Drawing edit from a visible control through the worker, tool and chat. Undo submits its query first, then the history compiler binds the live journal entry. Creation rules now assign names and constructor properties from grounded evidence and preserve unapplied requirements.
+
 ## 2026-11-18 — Property readings, request routing and journal state
 
 The frozen reader recognizes both colour roles in “Make the red house purple.” A competing head reported the same catalog property in Diagram with no additional source span. The authored reader-head policy proves their shared declaration and provenance, and the live compiler verifies a complete interpretation before dispatch. The original incomplete proposal remains in the trace. Chromium verified the older red house changed, the newer blue house stayed blue, and Undo restored the colours.

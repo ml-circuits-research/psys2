@@ -5,9 +5,9 @@ import {isAuthoredRequest,readAuthoredRequest} from './authored-request-tool.mjs
 // Model-first proposal routing. Calibration authority belongs to host configuration,
 // never to a model output, evaluation annotation or grammar proposal.
 import {requestCompositionPolicy}from './request-composition-policy.mjs?v=cfd3a47ffa';
-import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=245e822ede';
-import {projectContextAction} from './project-context-action.mjs?v=4bf2a33de9';
-import {projectCreateAction} from './project-create-action.mjs?v=e3c5aa0908';
+import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=e66d9dfc5e';
+import {projectContextAction} from './project-context-action.mjs?v=ca74132f87';
+import {projectCreateAction} from './project-create-action.mjs?v=0ad8fe8f47';
 import {assessReaderProposal} from './reader-admission.mjs?v=1c8a7a51a7';
 const unavailable=reason=>({candidates:[],coverage:{complete:false,executable:false,graphProposal:false},failures:[{reason}]});
 const noDeclaredAction = () => {

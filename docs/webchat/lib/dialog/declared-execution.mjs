@@ -1,12 +1,12 @@
-import { executeSpatialPlacement } from './spatial-placement-execution.mjs?v=20e8c57a7a';
-import { compareNativeReadings } from './capability-plan-adapter.mjs?v=ad600d2750';
-import { NATIVE_AREAS,createAreaHost } from './app-reader-context.mjs?v=21796a4665';
+import { executeSpatialPlacement } from './spatial-placement-execution.mjs?v=c6c1d35174';
+import { compareNativeReadings } from './capability-plan-adapter.mjs?v=240539707f';
+import { NATIVE_AREAS,createAreaHost } from './app-reader-context.mjs?v=7e10ec6a65';
 import { instanceIdFor } from './instance-identity.mjs?v=024ef1ca83';
 import { describeRouteComparison,resolveRequestRoute } from './request-routing-policy.mjs?v=fc4f849155';
-import { executeHistoryRequest } from './history-execution.mjs?v=364800068e';
-import { executeNativeCapability } from './capability-plan-execution.mjs?v=a4d7212e6e';
+import { executeHistoryRequest } from './history-execution.mjs?v=a2169732f3';
+import { executeNativeCapability } from './capability-plan-execution.mjs?v=c96fd2cfec';
 import { executionValueSource } from './execution-policy.mjs?v=3652fc9f1f';
-import { inspectCachedExecutionSource } from './execution-world-inspection.mjs?v=245e822ede';
+import { inspectCachedExecutionSource } from './execution-world-inspection.mjs?v=e66d9dfc5e';
 import { World, str } from '../vendor/sopworld/sopworld.mjs?v=ac74fb4d82';
 import SOURCE from './new-engine-source.mjs?v=a563693f0b';
 let knowledge;

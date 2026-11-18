@@ -174,3 +174,7 @@ Checks: npm test passed 624 tests, three skips. Chromium used the frozen reader 
 
 2026-11-18: Authored requests and reader candidates now submit their actual SOP string to the common graph validator in SOPWorlds 0.218. Removed the duplicate JS conversion in authored requests and the synthetic one-entry batch in reader admission.
 Checks: npm test passed 624 with three skips. Chromium verified the trained two-colour selector, the compiled call, Undo, spatial placement and refusal with no effect.
+
+2026-11-18: The page sends editor instructions as SOP through the worker. History gestures send a query compiled against the live journal. Creation argument roles and unapplied requirements come from authored rules.
+Reader context now selects and orders observed parts and names using authored SOP.
+Checks: 625 passed, three skipped. Chromium compared exact worker input with tool activity and chat, exercised compound creation and Undo. All five areas accepted SOP input, including nested document blocks.

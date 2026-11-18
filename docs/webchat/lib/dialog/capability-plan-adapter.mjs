@@ -4,7 +4,7 @@ import { decodeCapabilityCall } from '../vendor/sopworld/capability-call.mjs?v=e
 import POLICY from '../../worlds/app.project/capability-policy.mjs?v=9f3103a196';
 import { executionPolicyWorld } from './execution-policy.mjs?v=3652fc9f1f';
 import { nativeKindCandidates } from './native-binding-candidates.mjs?v=5941d8843a';
-import { observedReaderContext } from './native-reader-context.mjs?v=e556586c4a';
+import { observedReaderContext } from './native-reader-context.mjs?v=352d78aa43';
 import { budget } from './budget.mjs?v=00bce6e369';
 
 const NS = 'std.capability.';

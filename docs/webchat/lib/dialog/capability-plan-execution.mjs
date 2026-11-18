@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-import { compileNativeCapability } from './capability-plan-adapter.mjs?v=ad600d2750';
-import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=21796a4665';
+import { compileNativeCapability } from './capability-plan-adapter.mjs?v=240539707f';
+import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=7e10ec6a65';
 import { instanceIdFor } from './instance-identity.mjs?v=024ef1ca83';
-import { prepareNativeControlHost } from './native-control-preparation.mjs?v=d1360ee4da';
+import { prepareNativeControlHost } from './native-control-preparation.mjs?v=732c68050c';
 import { invokeObservedNativeTool } from './native-tool-activity.mjs?v=08bb000923';
 import { retainPropertyEffect } from './property-effect-evidence.mjs?v=a763f9f75c';
 import { describeNativeControl, verifyNativeControlEffect } from './native-control-intent.mjs?v=51c8828fba';

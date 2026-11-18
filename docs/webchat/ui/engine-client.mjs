@@ -38,8 +38,13 @@ export function createEngineClient({ base, versions = {}, getSettings, getLangua
   let restorePending = null, restoreTimer = 0;   // a restore asked while the worker was still busy with an abandoned request
   const options = {};               // local mirror of session options (nx, formalizer)
 
-  const workerUrl = () => new URL('ui/engine-worker.mjs', base).href + (versions['ui/engine-worker.mjs'] ? `?v=${versions['ui/engine-worker.mjs']}` : '');
-  const ortUrl = () => new URL('ui/ort-worker.mjs', base).href + (versions['ui/ort-worker.mjs'] ? `?v=${versions['ui/ort-worker.mjs']}` : '');
+  function moduleUrl(path) {
+    const url = new URL(path, base);
+    if (versions[path]) url.searchParams.set('v', versions[path]);
+    return url.href;
+  }
+  const workerUrl = () => moduleUrl('ui/engine-worker.mjs');
+  const ortUrl = () => moduleUrl('ui/ort-worker.mjs');
 
   function killWorker(why) {
     const w = worker; worker = null; gen++;
@@ -213,6 +218,7 @@ export function createEngineClient({ base, versions = {}, getSettings, getLangua
   });
   function applyStateInfo(r) { if (r?.state) cache.state = r.state; if (r?.meta) cache.meta = r.meta; }
 
+  const toolDeclarations = new Map();
   const session = {
     /** One turn. Resolves with the reply; rejects TurnAborted (stopped / timeout) or an error. Known-bad inputs are answered without running them. */
     async send(text, opts = {}) {
@@ -234,9 +240,23 @@ export function createEngineClient({ base, versions = {}, getSettings, getLangua
       return res.reply;
     },
     acceptState(result) {applyStateInfo(result);},
-    async tools({view=getTab()}={}) {return guarded('nativeTools','nativeTools',{view},{hardMs:30000,text:'Tools',key:null,tab:view});},
+    async tools({view=getTab()}={}) {
+      const result=await guarded('nativeTools','nativeTools',{view},{hardMs:30000,text:'Tools',key:null,tab:view});
+      toolDeclarations.set(view,result.operations);
+      return result;
+    },
     async tool(operation,args={},options={}) {
-      const r=await guarded('nativeTool','nativeTool',{view:options.view??getTab(),operation,args},{hardMs:15000,text:operation,key:null,tab:getTab()});
+      const view=options.view??getTab();
+      const {historyControlQuery}=await import(moduleUrl('lib/dialog/history-control-query.mjs'));
+      let sop=historyControlQuery(operation);
+      if(!sop){
+        const declarations=toolDeclarations.get(view)??(await session.tools({view})).operations;
+        const declaration=declarations.find(entry=>entry.id===operation);
+        if(!declaration)throw Error('undeclared-native-control');
+        const {describeNativeControl}=await import(moduleUrl('lib/dialog/native-control-intent.mjs'));
+        sop=historyControlQuery(declaration.act)??describeNativeControl({operation:declaration,args}).wires;
+      }
+      const r=await guarded('nativeTool','nativeTool',{view,sop},{hardMs:15000,text:operation,key:null,tab:view});
       applyStateInfo(r);return r;
     },
     async dryRead(text, opts = {}) {

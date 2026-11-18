@@ -6,13 +6,13 @@ import{inspectRequestRoutingPolicy}from'./request-routing-policy.mjs?v=fc4f84915
 import{inspectHistoryPolicy}from'./history-policy.mjs?v=5ddf217de5';
 import{inspectHistoryJournal}from'./history-journal.mjs?v=8707a8440f';
 import{inspectExecutionPolicyWorld}from'./execution-policy.mjs?v=3652fc9f1f';
-import{inspectCapabilityPolicy}from'./capability-plan-adapter.mjs?v=ad600d2750';
-import{inspectCreationPolicy}from'./project-create-action.mjs?v=e3c5aa0908';
+import{inspectCapabilityPolicy}from'./capability-plan-adapter.mjs?v=240539707f';
+import{inspectCreationPolicy}from'./project-create-action.mjs?v=0ad8fe8f47';
 import{inspectConstructorPolicy}from'./native-binding-candidates.mjs?v=5941d8843a';
 import{inspectGroundedProjection}from'./grounded-projection.mjs?v=9cff47c5cf';
 import{inspectReaderHeadPolicy}from'./reader-head-alternative.mjs?v=862e800256';
 import{inspectReferencePolicy}from'./reference-policy.mjs?v=5989b174b9';
-import{inspectSchemaSource}from'./worlds-inspection.mjs?v=ca325be289';
+import{inspectSchemaSource}from'./worlds-inspection.mjs?v=cd2d93f58e';
 import{inspectRequestCompositionPolicy}from'./request-composition-policy.mjs?v=cfd3a47ffa';
 const clone=value=>structuredClone(value);
 const loggedWires=snapshot=>(snapshot?.log??[]).flatMap(entry=>entry.wires??[]);
@@ -26,7 +26,7 @@ function snapshotText(snapshot){return (snapshot?.log??[]).map((entry,index)=>'#
 /** Projects actual cache accessors and retained journal JSON; performs no reading or reasoning. */
 export async function inspectExecutionWorlds(session){
  const [{inspectDeclaredExecutionSourceWorld},{inspectSpatialPlacementWorld}]=await Promise.all([
-  import('./declared-execution.mjs?v=245e822ede'),import('./spatial-placement-execution.mjs?v=20e8c57a7a'),
+  import('./declared-execution.mjs?v=e66d9dfc5e'),import('./spatial-placement-execution.mjs?v=c6c1d35174'),
  ]);
  const journal=session?.newEngineJournal??[],moduleNames=[...new Set(journal.flatMap(record=>importsOf(record.evidence)))],sources=[['declared-execution','src/dialog/declared-execution.mjs',inspectDeclaredExecutionSourceWorld({moduleNames})]],nodes=[],edges=[];
  const link=(from,to,label)=>edges.push({from,to,label});
@@ -90,10 +90,10 @@ export async function inspectExecutionWorlds(session){
  link('execution:reference-policy','execution:module:declared-execution','supplies a grounded reference');
  const creation=inspectCreationPolicy();
  nodes.push({id:'execution:creation-policy',label:'Creation readings',kind:'knowledge',implementation:'Operational SOP Lang World',
-  description:'Compares grounded names with the constructors that the current tool exposes. Its criteria order lexical distance, reader type and family.',
+  description:'Ranks constructors by grounded lexical evidence, reader type and family. It also classifies anchored inputs by authored source roles and the selected tool parameters.',
   wires:creation.policy,details:{source:'worlds/app.project/creation-policy.sop',loaded:creation.loaded}});
  nodes.push({id:'execution:creation-schema',label:'app.creation',kind:'schema',implementation:'SOP Lang schema module',
-  description:'Declares grounded source roles and the lexical distance limit used when reading a creation request.',
+  description:'Declares grounded source evidence, capability inputs, lexical limits and dispositions of creation requirements.',
   wires:creation.schema,schemaView:inspectSchemaSource(creation.schema),details:{source:'worlds/app.project/creation-schema.sop',loaded:creation.loaded}});
  link('execution:creation-policy','execution:creation-schema','imports schema');
  const constructors=inspectConstructorPolicy();
