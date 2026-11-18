@@ -90,3 +90,6 @@ Audit: k.interest scoring is not connected to demo (oldcompiledschema/zerointere
 Checks: build4d6b6239e8; npm test580tests577pass0fail3skip, including realbuilt390/1600Worlds RPC/source tests; exactk.interest+k.animalsfiles/pagination, unchangedstate/worlds/sends, noexceptions/404. current-status.md records actualscope and remainingintegration. No model/training changes.
 
 2026-11-18 publication confirmed: GitHub Pages run44257170447 succeeded forfc7d0523; public build-info returns4d6b6239e8. No model or training changes.
+
+2026-11-18 owner-requested documentation delivery: current-status.md and the native reduction plan now point to the revised normative book and request-to-executable-circuits plan (library59295ca). Public boundary is world/interface/context supply plus SOP request compilation; internal reasoning stays encapsulated. No demo runtime/model changes; pending UI labels remain stashed.
+Checks: `npm test` —580tests577pass0fail3skip; `git diff --check` clean. Library book schema audit and source/bundle checks are recorded in the sibling library worker-log.

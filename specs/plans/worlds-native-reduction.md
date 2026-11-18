@@ -2,6 +2,12 @@
 
 Owner priority, 2026-11-17. This is an implementation plan, not a completed migration claim.
 
+## Governing compiler contract
+
+The owner clarified the public boundary: supply existing worlds, tool interfaces and context, then compile SOP request/query circuits into concrete executable call circuits. Internal resolution, completion, ranking and planning are encapsulated in SOPWorlds LIB. Tools consume their own concrete typed calls; they do not interpret a plan or a human request. UI actions use the same concrete interfaces directly.
+
+The normative explanation is [the book](../../../soplang-words-lib/books/sop-worlds-teorie.md); the current cross-repository implementation sequence and request-family acceptance matrix are in [request-to-executable-circuits.md](../../../soplang-words-lib/refactoring/request-to-executable-circuits.md). These links describe a coordinated sibling workspace. That plan governs the semantic migration below; existing native functionality is replaced after actual call/effect/undo parity. Runtime refactoring remains deferred while the owner reviews the theory and plan.
+
 ## Evidence and first end-to-end run
 
 The live graph has 333 worker nodes: 75 are individual JavaScript state properties, nine runtime records, five adapters and seven components. The 75 properties are not 75 independent algorithms, but their state authority is genuinely native and must not be hidden by relabelling. Four application-added nodes make 337 rendered nodes. The compact actual inventory is at workspace `.session-control/worlds-native-inventory.json`.

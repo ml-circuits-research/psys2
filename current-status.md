@@ -1,5 +1,16 @@
 # Current status
 
+## 2026-11-18 — book and compiler migration plan
+
+The owner requested theory and a concrete plan before runtime refactoring. The revised [SOP Worlds book](../soplang-words-lib/books/sop-worlds-teorie.md) defines a minimal public boundary: provide existing worlds, tool interfaces and context, then compile SOP request/query circuits. LIB encapsulates binding, completion, hypothesis ranking, constraint solving and planning. A plan is a concrete circuit of typed tool calls; tools consume their own instructions.
+
+Chapter9 now explains request classes and resolution algorithms instead of public JavaScript APIs. The whole-book review removes release/implementation diary entries and corrects unsupported examples. `node tools/audit-book-examples.mjs --published --strict` admits all46 SOP examples against real schemas; structural admission is not execution evidence. Library source and bundle gates each passed964tests:962pass,0fail,1skip,1todo; documentation rebuilt.
+
+The [migration plan](../soplang-words-lib/refactoring/request-to-executable-circuits.md) records actual gaps, responsibilities to remove from application JS, typed tool contracts and nine request-family acceptance groups across all five editors. PSys2 `npm test` also passed580tests:577pass,0fail,3skip. The existing [native reduction plan](specs/plans/worlds-native-reduction.md) points to that contract. No runtime or training changes were made for this documentation delivery; the deployed UI/model remain as reported below. Pending label changes remain stashed.
+
+---
+
+
 Updated: 2026-11-18. Worlds truthfulness and readability review completed.
 
 ## Public demo
