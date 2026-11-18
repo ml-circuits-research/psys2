@@ -4,6 +4,7 @@ import { NATIVE_AREAS,createAreaHost } from './app-reader-context.mjs';
 import { instanceIdFor } from './instance-identity.mjs';
 import { describeRouteComparison,resolveRequestRoute } from './request-routing-policy.mjs';
 import { executeHistoryRequest } from './history-execution.mjs';
+import { executeNativeQuery } from './native-query-execution.mjs';
 import { executeNativeCapability } from './capability-plan-execution.mjs';
 import { executionValueSource } from './execution-policy.mjs';
 import { inspectCachedExecutionSource } from './execution-world-inspection.mjs';
@@ -20,6 +21,7 @@ export function declaredPropertyValues(concept) {
 const unavailable=(text,reason)=>({text,parts:[{text,translate:false}],statuses:['unsupported'],answers:[],segments:[],state:{},effects:[],
   trace:{legacy:false,engine:'new',reason}});
 const interpreters=new Map([
+  ['query',{run:({session,candidate,options})=>executeNativeQuery(session,candidate.wires,{...options,readKnowledge:source})}],
   ['history',{run:({session,candidate,options})=>executeHistoryRequest(session,candidate,options.view)}],
   ['spatial',{run:({session,candidate,options})=>executeSpatialPlacement(session,candidate,options)}],
   ['capability',{run:({session,candidate,options})=>executeNativeCapability(session,candidate,{...options,readKnowledge:source}),compare:compareNativeReadings}],

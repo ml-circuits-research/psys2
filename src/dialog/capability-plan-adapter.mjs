@@ -39,7 +39,8 @@ function factWriter() {
 function interfaceFacts({ area, view, bindings, host, observation, focus, targetUnique, unapplied, readKnowledge }, concepts) {
   const { write, value, wires } = factWriter();
   const scope = write(NS + 'scope', {
-    instance: quote(observation.instanceId), version: quote(observation.version), focus: focus === undefined ? undefined : quote(String(focus)),
+    instance: quote(observation.instanceId), version: quote(observation.version), population: typeof observation.scope==='string' ? quote(observation.scope) : undefined,
+    populationComplete: String(observation.complete===true), focus: focus === undefined ? undefined : quote(String(focus)),
     newId: quote(globalThis.crypto.randomUUID()), targetUnique: targetUnique ? "true" : undefined, clock: String(Date.now()), unapplied: unapplied.map(quote),
   }, 'capability.scope');
   const declarations = host.capabilityFacts(scope);
@@ -147,6 +148,13 @@ export function compileNativeCapability(candidate, context) {
   const nodes=parse(candidate.wires), {world,scope}=compilerWorld(context,nodes);
   if(!nodes.some(w=>w.type==='std.request'&&w.id===candidate.request))return readPlan(world,'@compile.result std.compile.result status=not-applicable reason=request-root');
   return readPlan(world,world.compileRequest(serialize([...nodes,contextWire('capability.context',candidate.request,scope)])));
+}
+
+export function compileNativeQuery(sop,context){
+  const nodes=parse(sop),root=nodes.find(wire=>wire.type==='std.request');
+  if(!root?.attrs.query?.length)return '@compile.result std.compile.result status=unavailable reason=query-root';
+  const {world,scope}=compilerWorld(context,nodes);
+  return world.compileRequest(serialize([...nodes,contextWire('capability.context',root.id,scope)]));
 }
 
 /** Keep each proposal's private identifiers distinct while preserving its actual request wires. */

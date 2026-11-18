@@ -5,6 +5,9 @@
 @history.method std.compile.rule act=?act
 @history.result app.request.route.selection request=$request method=history
 @route.history core.rule when=$request when=$history.method then=$history.result
+@query std.request.query request=$request
+@query.result app.request.route.selection request=$request method=query
+@route.query core.rule when=$request when=$query not=$history.method then=$query.result
 
 @relation std.request.constraint request=$request operator=relation target=?subject goal=?anchor
 @intent.relation std.request.constraint request=$request operator=relation
@@ -12,10 +15,10 @@
 @spatial.distinct core.check fn=neq args=?subject args=?anchor
 @route.bind-placement core.rule when=$request when=$relation if=$spatial.distinct then=$spatial.witness
 @spatial.result app.request.route.selection request=$request method=spatial
-@route.spatial core.rule when=$request when=$spatial.witness not=$history.method then=$spatial.result
+@route.spatial core.rule when=$request when=$spatial.witness not=$history.method not=$query then=$spatial.result
 
 @blocked.result app.request.route.selection request=$request method=reject reason=request-targets
-@route.blocked core.rule when=$request when=$intent.relation not=$history.method not=$spatial.witness then=$blocked.result
+@route.blocked core.rule when=$request when=$intent.relation not=$history.method not=$query not=$spatial.witness then=$blocked.result
 
 @capability.result app.request.route.selection request=$request method=capability
-@route.capability core.rule when=$request not=$history.method not=$intent.relation then=$capability.result
+@route.capability core.rule when=$request not=$history.method not=$query not=$intent.relation then=$capability.result

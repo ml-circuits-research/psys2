@@ -76,3 +76,12 @@ the same live snapshot. When an interpretation uses a different interpreter,
 the comparison retains that interpretation and records the missing common
 comparison explicitly. A compatible capability alternative can still supply
 a compiled plan. Comparing proposals never invokes an editor tool.
+
+An authored inspector request may own count, existence, members and values
+projections. The query interpreter reads one detached observation of the
+active native editor. It gives the library the same declared identity and
+property evidence used for selectors. The library returns the answer and
+observed scope in SOP with no tool call. Chat displays the answer and leaves
+the board, previous action and Undo journal untouched. A complete empty
+population yields zero or false. Incomplete observations can establish
+witnessed existence and otherwise report the unsupported projection.

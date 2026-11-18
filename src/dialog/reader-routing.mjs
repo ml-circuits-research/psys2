@@ -27,7 +27,7 @@ async function dispatchRequest(session,candidate,text,options,bindings,contextPr
  }finally{
   if(originals&&!result?.statuses?.includes('supported'))Object.assign(session.isession.state,originals);
  }
- if(result.trace?.history)return result;
+ if(result.trace?.history||result.trace?.readOnly)return result;
  if(result.statuses?.includes('supported')){session.newEngineLastAction={...session.newEngineLastAction,[area]:candidate};if(contextProjection){result.text+=' '+interpretation.note;result.parts=[{text:result.text,translate:false}];result.trace={...result.trace,interpretation};}}
  const changed=Object.keys(session.isession.state).filter(key=>JSON.stringify(before[key])!==JSON.stringify(session.isession.state[key]));
  if(changed.length)recordHistory(session,{area,before:Object.fromEntries(changed.map(key=>[key,before[key]])),

@@ -178,3 +178,5 @@ Checks: npm test passed 624 with three skips. Chromium verified the trained two-
 2026-11-18: The page sends editor instructions as SOP through the worker. History gestures send a query compiled against the live journal. Creation argument roles and unapplied requirements come from authored rules.
 Reader context now selects and orders observed parts and names using authored SOP.
 Checks: 625 passed, three skipped. Chromium compared exact worker input with tool activity and chat, exercised compound creation and Undo. All five areas accepted SOP input, including nested document blocks.
+2026-11-18 connected authored inspector projections to actual editor observations through SOPWorld 0.219. Drawing proof counted one named red house among two observed houses, returned its name and exact colour, and counted zero green houses. Read answers preserve the editor, previous action and journal.
+Checks: Webchat build 682e70818e, npm test (625 pass, 3 skip). Real Chromium chat showed answer evidence and no tool call.
