@@ -1,5 +1,6 @@
 // Read-only architecture projection of the runtime registry. No inferred execution links.
 import {parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=327fb3cf41';
+import {inspectReaderAdmissionPolicy} from './reader-policy.mjs?v=fc4ed21011';
 import {describeWorldsNodes} from './worlds-node-metadata.mjs?v=11b6d9d2f3';
 import {CATALOG_WORLD_PURPOSES} from './catalog-world-purpose.mjs?v=2eb2f3f744';
 
@@ -80,7 +81,13 @@ export function inspectWorldsRuntime({index={},bundle={worlds:{}},loaded=[],inst
 
  nodes.push({id:'component:control-interpreter',label:'SOP tool command reader',kind:'interpreter',implementation:'JavaScript + declared tool schemas',description:'Parses compact or expanded SOP control wires and validates exact tool parameters before native UI invocation. This interpreter is separate from the text reader.',details:{source:'src/dialog/native-intent-reader.mjs',caller:'src/dialog/native-tool-controls.mjs'}});
  for(const host of hosts)if(Object.hasOwn(index.worlds??{},host.world))link('component:control-interpreter','interpreter:'+host.world,'validates concrete tool commands for');
- nodes.push({id:'component:request-admission',label:'Request admission',kind:'component',implementation:'JavaScript',description:'The reader router checks proposed graphs and ranks their admissibility against the configured calibration policy.',details:{source:'src/dialog/reader-admission.mjs',entryPoint:'assessReaderProposal'}});
+ nodes.push({id:'component:request-admission',label:'Request admission',kind:'component',implementation:'JavaScript',description:'Checks technical proposal validity and submits measured evidence to the reader admission World.',details:{source:'src/dialog/reader-admission.mjs',entryPoint:'assessReaderProposal'}});
+ const admissionPolicy=inspectReaderAdmissionPolicy();
+ nodes.push({id:'knowledge:reader-admission-policy',label:'Reader admission policy',kind:'knowledge',implementation:'Operational SOP Lang World',
+  status:admissionPolicy.loaded?'loaded':'available, not loaded',description:'Declares action classes, calibration limits and when reversible best effort is allowed.',wires:admissionPolicy.wires,
+  details:{source:admissionPolicy.source,loaded:admissionPolicy.loaded}});
+ link('component:request-admission','knowledge:reader-admission-policy','asks for an admission decision');
+ if(libraryInfo)link('knowledge:reader-admission-policy','component:library','runs declared rules in');
  link('component:reader','component:request-admission','supplies candidate graphs');
  link('component:reasoner','component:request-admission','checks proposal admission through');
  link('component:reasoner','component:control-interpreter','routes exact tool commands and undo through');
@@ -91,7 +98,7 @@ export function inspectWorldsRuntime({index={},bundle={worlds:{}},loaded=[],inst
  const componentHelp={
   'runtime:registry':{purpose:'Load the application packages declared by the deployment and provide their exact SOP source files.',inputs:['Versioned world index','Requested domain'],outputs:['Loaded world package and native module dependencies'],limits:['Loading a package does not mean it took part in a reasoning step.']},
   'component:reader':{purpose:'Turn the input text into candidate request graphs using SOP-BERT and its declared binding metadata.',inputs:['User text','Available world and selection context'],outputs:['Candidate intents, targets and constraints','Model confidence and missing-field diagnostics'],limits:['Recognition is separate from tool execution. A correctly named concept may still lack an executable drawing or tool binding.'],execution:'Model artifacts may be cached. Cache hit and initialization timings remain in this component’s implementation details.'},
-  'component:request-admission':{purpose:'Assess candidate graphs and apply the configured model-confidence policy.',inputs:['Reader candidates and provenance','Configured admission policy'],outputs:['Admissible interpretations and alternatives','Named gaps and rejected interpretations'],limits:['Native tool binding and execution follow in separate components.']},
+  'component:request-admission':{purpose:'Validate reader proposals and verify retained calibration evidence.',inputs:['Reader candidates and provenance','Configured admission policy'],outputs:['Admissible interpretations and alternatives','Named gaps and rejected interpretations'],limits:['Native tool binding and execution follow in separate components.']},
   'component:control-interpreter':{purpose:'Read concrete SOP control commands produced by UI gestures or supplied directly.',inputs:['Compact or expanded SOP command','Declared native tool interface'],outputs:['Validated operation name and typed arguments'],limits:['Concrete controls bypass vague-language interpretation; they still use the same native tool handlers.']},
   'component:reasoner':{purpose:'Coordinate a user turn, dispatch requests to execution mechanisms and retain conversational state.',inputs:['User request','Current editor Worlds','Session memory'],outputs:['Concrete effects or a named unresolved step','Response and undo state'],limits:['Only instrumented boundaries animate in this graph. The animation does not reveal every internal deduction.']},
   'runtime:activity-bus':{purpose:'Carry actual loading, reader and tool-execution events from the worker to the UI.',inputs:['Instrumented runtime boundary events'],outputs:['Visible node activation and event timeline'],limits:['It observes execution; it does not make decisions or infer unrecorded reasoning.']},

@@ -152,3 +152,7 @@ Checks: spatial placement tests 7/7, full npm gate 617 passed and 3 skipped. Rea
 ## 2026-11-18 — Property selection uses the declared compiler
 - Reader and authored property changes now use versioned capability selection and send the selected SOP call directly to the native interpreter. The detached comparator and measurement use the same compiler and tool. Worlds retains observed property claims and candidate evidence.
 - `npm test` passed 617 tests with three optional skips and zero failures. Chromium replay on the normal page selected the older red house, changed it to purple, left the blue house unchanged, and restored both on Undo. Verified the exact dispatch SOP, canonical facts and retained claim.
+
+## 2026-11-18 — Reader admission runs in an authored SOP World
+- C1 and C2 share the declared calibration ceiling. C2 verifies the retained evidence and derives its decision from the authored action classes, limits and reversible fallback rules. Worlds cites the source and shows the decision that ran.
+- `npm run build:webchat` produced d8cd485c6b. `npm test`: 619 passed, three skipped, zero failures. Chromium ran the actual SOP-BERT reader, created a tree and exposed the same admission wire in the reply trace and Worlds activity.

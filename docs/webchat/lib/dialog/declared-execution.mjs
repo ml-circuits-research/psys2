@@ -4,7 +4,7 @@ import { NATIVE_AREAS,createAreaHost } from './app-reader-context.mjs?v=b953840f
 import { instanceIdFor } from './instance-identity.mjs?v=024ef1ca83';
 import { executeNativeCapability } from './capability-plan-execution.mjs?v=23b2bf19f0';
 import { executionValueSource } from './execution-policy.mjs?v=df376f0b69';
-import { inspectCachedExecutionSource } from './execution-world-inspection.mjs?v=d4985ee166';
+import { inspectCachedExecutionSource } from './execution-world-inspection.mjs?v=0454b8cfa8';
 import { World, str } from '../vendor/sopworld/sopworld.mjs?v=327fb3cf41';
 import SOURCE from './new-engine-source.mjs?v=3690001255';
 let knowledge;

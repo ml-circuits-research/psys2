@@ -3,7 +3,7 @@ import{serialize,str,version,build}from'../vendor/sopworld/sopworld.mjs?v=327fb3
 import SOURCE from'./new-engine-source.mjs?v=3690001255';
 import{CATALOG_PIN}from'../knowledge/catalog-pin.mjs?v=d1ff29de82';
 import{inspectExecutionPolicyWorld}from'./execution-policy.mjs?v=df376f0b69';
-import{inspectSchemaSource}from'./worlds-inspection.mjs?v=17631e793c';
+import{inspectSchemaSource}from'./worlds-inspection.mjs?v=e37e9cfc1b';
 import{inspectRequestCompositionPolicy}from'./request-composition-policy.mjs?v=572967d7a2';
 const clone=value=>structuredClone(value);
 const loggedWires=snapshot=>(snapshot?.log??[]).flatMap(entry=>entry.wires??[]);
@@ -17,7 +17,7 @@ function snapshotText(snapshot){return (snapshot?.log??[]).map((entry,index)=>'#
 /** Projects actual cache accessors and retained journal JSON; performs no reading or reasoning. */
 export async function inspectExecutionWorlds(session){
  const [{inspectDeclaredExecutionSourceWorld},{inspectSpatialPlacementWorld}]=await Promise.all([
-  import('./declared-execution.mjs?v=d4985ee166'),import('./spatial-placement-execution.mjs?v=9cd6d80e0e'),
+  import('./declared-execution.mjs?v=0454b8cfa8'),import('./spatial-placement-execution.mjs?v=9cd6d80e0e'),
  ]);
  const journal=session?.newEngineJournal??[],moduleNames=[...new Set(journal.flatMap(record=>importsOf(record.evidence)))],sources=[['declared-execution','src/dialog/declared-execution.mjs',inspectDeclaredExecutionSourceWorld({moduleNames})]],nodes=[],edges=[];
  const link=(from,to,label)=>edges.push({from,to,label});
