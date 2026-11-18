@@ -1,6 +1,6 @@
 // Complete native observations plus explicit kind/property declarations.
 // Equality itself is evaluated by the public library projection guard.
-import {projectTemplates} from '../vendor/sopworld/sopworld.mjs?v=df8c26a4de';
+import {projectTemplates} from '../vendor/sopworld/sopworld.mjs?v=b88e6c95e3';
 import {copyHostData} from '../../worlds/native-tool-host.mjs?v=cf38a0ae11';
 const nonempty=value=>typeof value==='string'&&value.length>0;
 export function selectNativeObjects(observation,selection,{mode='one',budget=100000}={}){

@@ -1,5 +1,5 @@
 // Operational C1 scheduling policy. Ordering independent cuts is not a causal claim.
-import {World,parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=df8c26a4de';
+import {World,parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=b88e6c95e3';
 import SOURCE from '../../worlds/app.project/request-composition-policy-source.mjs?v=e190149088';
 import SCHEMA from '../../worlds/app.project/request-composition-policy-schema-source.mjs?v=1b5c95ad54';
 export const REQUEST_COMPOSITION_POLICY_SOURCE=SOURCE;

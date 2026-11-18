@@ -2,7 +2,7 @@
 import{readNativeIntent}from'./native-intent-reader.mjs';
 import{copyHostData}from'../../worlds/native-tool-host.mjs';
 function emit(session,area,operation,phase,extra){
- try{session.engine?.onWorldActivity?.({nodeIds:['interpreter:'+area.world,'instance:'+area.world,'native:'+area.world],phase,label:operation,world:area.world,operation,...extra});}catch{/* Observation cannot change an operation. */}
+ try{session.engine?.onWorldActivity?.({nodeIds:['interpreter:'+area.world,'instance:'+area.world,...(area.stateWorld?[]:['native:'+area.world])],phase,label:operation,world:area.world,operation,...extra});}catch{/* Observation cannot change an operation. */}
 }
 export async function invokeObservedNativeTool(session,{area,host,invocation=globalThis.crypto.randomUUID(),expectedVersion,sop,includeCall=false}){
  const bindings=host.bindings(),{operation,args}=readNativeIntent(sop,{operations:bindings});

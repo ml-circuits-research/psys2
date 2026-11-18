@@ -1,5 +1,5 @@
-// Interpret declared execution defaults and knowledge-property joins. No domain names or text parsing.
-import{World,parse,str,serialize}from'../vendor/sopworld/sopworld.mjs?v=df8c26a4de';
+// Admit owned default and value-lookup policy facts for the request compiler.
+import{World,parse,str,serialize}from'../vendor/sopworld/sopworld.mjs?v=b88e6c95e3';
 import SOURCE from'../../worlds/app.project/execution-policy-source.mjs?v=83dffdfb88';
 import SCHEMA from'../../worlds/app.project/execution-policy-schema-source.mjs?v=1876a81f20';
 const schemaModule='app.execution';
@@ -18,33 +18,44 @@ export function inspectExecutionPolicyWorld(){
   dependencies:imports.map(wire=>str(wire.attrs.world[0])),
  };
 }
-export function executionPolicyWorld(){
- if(!operational){
-  const context=new World({fns:{'clock.now':Date.now},library:{[schemaModule]:SCHEMA}});
-  if(!context.tell(imports).ok)throw Error('invalid-execution-policy-schema');
-  const policy=context.fork();
-  if(!policy.tell(facts,{factsOnly:true}).ok)throw Error('invalid-execution-policy');
-  operational=policy;
+function admitExecutionPolicy(wires){
+ const context=new World({fns:{'clock.now':Date.now},library:{[schemaModule]:SCHEMA}});
+ const schema=wires.filter(wire=>wire.type==='core.use');
+ if(!context.tell(schema).ok)throw Error('invalid-execution-policy-schema');
+ const policy=context.fork(),rows=wires.filter(wire=>wire.type!=='core.use');
+ if(!policy.tell(rows,{factsOnly:true}).ok)throw Error('invalid-execution-policy');
+ const literal=token=>{
+  const value=JSON.parse(token);
+  if(value!==null&&!['string','boolean'].includes(typeof value)&&!Number.isFinite(value))throw Error('invalid-policy-literal');
+ };
+ const seen=new Map();
+ for(const row of policy.ofType('app.execution.default')){
+  const operation=str(row.attrs.operation[0]),parameter=str(row.attrs.parameter[0]);
+  if(!seen.has(operation))seen.set(operation,new Set());
+  const parameters=seen.get(operation);
+  if(parameters.has(parameter))throw Error('duplicate-policy-default');
+  parameters.add(parameter);
+  const source=row.attrs.source?.[0],values=row.attrs.value;
+  if((source!==undefined)===(values!==undefined))throw Error('invalid-policy-default-source');
+  if(source!==undefined){
+   if(str(source)!=='clock.now'||!policy.functions().some(fn=>fn.name==='clock.now'&&fn.out.kind==='number'&&!fn.pure))throw Error('undeclared-policy-function');
+  }else{
+   if(values.length!==1)throw Error('invalid-policy-default-value');
+   const [token]=values;
+   if(token.startsWith('$')){
+    const list=policy.get(token.slice(1));
+    if(list?.type!=='app.execution.list')throw Error('invalid-policy-list');
+    (list.attrs.item??[]).forEach(literal);
+   }else literal(token);
+  }
  }
- return operational;
+ return policy;
 }
-const scalar=raw=>{if(typeof raw!=='string'||raw.startsWith('$')||raw.startsWith('?'))throw Error('invalid-policy-literal');const value=JSON.parse(raw);if(value!==null&&!['string','number','boolean'].includes(typeof value))throw Error('invalid-policy-literal');return value;};
+export function executionPolicyWorld(source=SOURCE){
+ return source===SOURCE?(operational??=admitExecutionPolicy(declarations)):admitExecutionPolicy(parse(source));
+}
 export function executionValueSource(concept,world=executionPolicyWorld()){
  const rows=world.ofType('app.execution.values').filter(row=>str(row.attrs.concept?.[0])===concept);
  if(rows.length>1)throw Error('ambiguous-policy-value-source');if(!rows.length)return null;
  return Object.fromEntries(['valueType','nameKey','valueKey'].map(key=>[key,str(rows[0].attrs[key][0])]));
-}
-export function executionDefaults(operation,args,{world=executionPolicyWorld(),now=Date.now}={}){
- const values={},notices=[],evidence=[],seen=new Set();
- for(const row of world.ofType('app.execution.default').filter(row=>str(row.attrs.operation?.[0])===operation)){
-  const parameter=str(row.attrs.parameter?.[0]);if(seen.has(parameter))throw Error('duplicate-policy-default');seen.add(parameter);
-  if(Object.hasOwn(args,parameter))continue;
-  const source=row.attrs.source?.[0],tokens=row.attrs.value;
-  if((source!==undefined)===(tokens!==undefined))throw Error('invalid-policy-default-source');
-  let value;
-  if(source!==undefined){if(str(source)!=='clock.now'||!world.functions().some(fn=>fn.name==='clock.now'&&fn.out.kind==='number'&&!fn.pure))throw Error('undeclared-policy-function');value=now();if(!Number.isFinite(value))throw Error('invalid-clock-value');}
-  else{if(tokens.length!==1)throw Error('invalid-policy-default-value');const token=tokens[0];if(token[0]==='$'){const list=world.wires.get(token.slice(1));if(list?.type!=='app.execution.list')throw Error('invalid-policy-list');value=(list.attrs.item??[]).map(scalar);}else value=scalar(token);}
-  Object.defineProperty(values,parameter,{value,enumerable:true});if(row.attrs.notice)notices.push(str(row.attrs.notice[0]));evidence.push(row.id);
- }
- return {values,notices,evidence};
 }

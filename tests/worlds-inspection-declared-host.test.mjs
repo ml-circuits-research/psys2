@@ -4,14 +4,15 @@ test('architecture inspector exposes exact held files, actual state structures a
  const state={objects:[{id:'a',x:5}],history:[{objects:[]}],future:[],selected:'a'},schema='@t core.type name=novel.item',archive='@a novel.item x=5';
  const result=inspectWorldsRuntime({index:{worlds:{novel:{imports:['shared'],reads:[],compose:[]},shared:{imports:[]}}},bundle:{worlds:{novel:{files:{'legend.sop':schema,'world.sop':'@w core.world'}}}},loaded:['novel'],nativeStates:{novel:state},instances:[{world:'novel',instanceId:'actual',revision:2,wires:archive}],instanceCaches:[{world:'novel',wireCount:1,wires:archive}],hosts:[{world:'novel',view:'editor',operations:[{id:'novel.add'}],observation:{objects:state.objects}}],knowledgeFiles:[{path:'shards/a.sop',text:'@k k.item n=2'}],reader:{state:'ready',cache:{hits:7,networkBytes:0}},sessionMeta:{memory:{newEngineUndo:[{operation:'actual'}]}}});
  const byId=new Map(result.nodes.map(n=>[n.id,n]));
- assert.ok(!result.nodes.some(n=>n.id.startsWith('cache:')));assert.equal(byId.get('component:reader').details.cache.hits,7);assert.match(byId.get('component:reader').help.purpose,/candidate request graphs/);assert.equal(byId.get('instance:novel').role,'World instance');
+ assert.ok(!result.nodes.some(n=>n.id.startsWith('cache:')));assert.equal(byId.get('component:reader').details.cache.hits,7);assert.match(byId.get('component:reader').help.purpose,/candidate request graphs/);assert.equal(byId.get('instance:novel').role,'Observed World instance');
+ assert.ok(!byId.has('component:formalizer'));assert.equal(byId.get('component:request-admission').details.entryPoint,'assessReaderProposal');
  assert.equal(byId.get('schema:novel:legend.sop').wires,schema);assert.equal(byId.get('instance:novel').wires,archive);assert.equal(byId.get('instance:novel').details.cachedWorld.wires,archive);
- assert.equal(byId.get('native:novel').details,state);assert.deepEqual(byId.get('structure:novel:history').details.value,state.history);
+ assert.equal(byId.get('native:novel').details,state);assert.ok(!byId.has('structure:novel:history'));assert.deepEqual(byId.get('native:novel').details.history,state.history);
  assert.equal(byId.get('world:shared').details.loaded,false);assert.equal(byId.get('world:shared').wires,undefined);assert.equal(byId.get('world:shared').sopAvailable,false);
  assert.equal(byId.get('interpreter:novel').implementation,'JavaScript');assert.equal(byId.get('knowledge-file:shards/a.sop').wires,'@k k.item n=2');
  assert.ok(result.edges.some(e=>e.from==='world:novel'&&e.to==='world:shared'&&e.label==='imports'));
  assert.ok(!result.edges.some(e=>e.label==='reasoned with'));assert.ok(result.limitations.length);
- assert.deepEqual(byId.get('session-memory:newEngineUndo').details.value,[{operation:'actual'}]);
+ assert.ok(!byId.has('session-memory:newEngineUndo'));assert.deepEqual(byId.get('runtime:session-memory').details.memory.newEngineUndo,[{operation:'actual'}]);
  const ids=new Set(result.nodes.map(n=>n.id));for(const edge of result.edges){assert.ok(ids.has(edge.from),edge.from);assert.ok(ids.has(edge.to),edge.to);}
 });
 import{invokeNativeControl}from'../src/dialog/native-tool-controls.mjs';
@@ -36,6 +37,7 @@ test('declared schema worlds expose native interfaces, state completeness and ex
  assert.equal(toolInterface.schemaView.tools[0].attributes.id[0],'"novel.move"');assert.match(toolInterface.schemaView.tools[0].wire,/app.native.operation/);
  assert.equal(pattern.details.schemaWorld,'pattern.novel');assert.equal(pattern.details.completeStateSchema,true);assert.equal(pattern.status,'declared sources partly loaded');assert.ok(pattern.wires.includes(native)&&pattern.wires.includes(stateSchema));
  assert.equal(byId.get('schema:novel:unread.sop').wires,undefined);assert.equal(byId.get('schema:novel:unread.sop').schemaView.status,'source not loaded');
+ assert.equal(byId.get('instance:novel').role,'Operational World instance');assert.equal(byId.get('instance:novel').details.nativeCarrier.sop,'@o novel.item x=5');assert.ok(!byId.has('native:novel'));
  assert.equal(byId.get('governing-schema:novel').wires,stateSchema);assert.equal(byId.get('governing-schema:novel').schemaView.slots.length,1);
  assert.ok(graph.edges.some(edge=>edge.from==='world:novel'&&edge.to===pattern.id&&edge.label==='declares schema world'));
  assert.ok(graph.edges.some(edge=>edge.from==='instance:novel'&&edge.to===pattern.id&&edge.label==='declared schema world'));

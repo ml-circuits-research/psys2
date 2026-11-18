@@ -17,7 +17,8 @@ test('built Worlds RPC and explicit SOP inspection preserve state across catalog
   const initialIds=await b.evaluate(`([...document.querySelectorAll('[data-world-node]')].map(node=>node.getAttribute('data-world-node'))) `),inspectedSourceIds=new Set();
   assert(nodes.some(node=>node.representation==='model'));assert(nodes.some(node=>node.representation==='javascript'));assert(nodes.some(node=>node.representation==='sop'));
   const colors=await b.evaluate(`([...document.querySelectorAll('[data-world-node]')].map(node=>({representation:node.getAttribute('data-representation'),stroke:node.querySelector('circle').getAttribute('stroke')})))`);
-  for(const node of colors)assert.equal(node.stroke,node.representation==='sop'?'#65d7b4':node.representation==='model'?'#72a8ff':'#efa66e');
+  const palette={sop:'#65d7b4',model:'#72a8ff',javascript:'#efa66e',catalog:'#b2a7d9'};
+  for(const node of colors)assert.equal(node.stroke,palette[node.representation]);
   const before=await b.evaluate(`(async()=>({state:JSON.stringify((await window.psys2.engineClient.call('observe')).state),loaded:(await window.psys2.engineClient.call('loaded')).loaded,sends:window.psys2.engineClient.stats.sends}))()`);
   for(const world of ['k.interest','k.animals']){
    const node=nodes.find(node=>node.id==='knowledge-world:'+world);assert(node,'Actual catalog world '+world);

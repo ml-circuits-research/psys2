@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs?v=cf38a0ae11';
 import {createCalendar} from './calendar-tool.mjs?v=7878bd2af4';
-import {createCalendarPolicy} from './scheduling.mjs?v=4a3211bc0d';
-import {canonicalCalendarState,toNativeCalendarState,adoptCanonicalCalendarState} from './canonical-state.mjs?v=5fb1edb341';
-export {canonicalCalendarState,toNativeCalendarState} from './canonical-state.mjs?v=5fb1edb341';
+import {createCalendarPolicy} from './scheduling.mjs?v=d80cd7ebce';
+import {canonicalCalendarState,toNativeCalendarState,adoptCanonicalCalendarState} from './canonical-state.mjs?v=1676a28d12';
+export {canonicalCalendarState,toNativeCalendarState} from './canonical-state.mjs?v=1676a28d12';
 const required=type=>({type,required:true});
 const identity=required('string');
 const fields={id:identity,title:required('string'),start:required('integer'),duration:{...required('integer'),min:1},participants:required('array'),room:{...required('string'),nullable:true},calendar:{type:'string',nullable:true},notes:{type:'string'}};

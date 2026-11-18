@@ -1,13 +1,13 @@
 // Assemble trusted native observations and dispatch the compiler's SOP call.
-import {World,parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=df8c26a4de';
-import SOURCE from './new-engine-source.mjs?v=94658c42d6';
-import {readPlacementProfile,rememberPlacement} from '../../worlds/app.project/spatial-profile.mjs?v=e36cb3717e';
-import {placementInterfaceSop} from '../../worlds/native-spatial-interface.mjs?v=ef6d6c14f1';
-import {NATIVE_AREAS,createAreaHost} from './app-reader-context.mjs?v=5b3e61223b';
+import {World,parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=b88e6c95e3';
+import SOURCE from './new-engine-source.mjs?v=3af7eedb03';
+import {readPlacementProfile,rememberPlacement} from '../../worlds/app.project/spatial-profile.mjs?v=a31aa29884';
+import {placementInterfaceSop} from '../../worlds/native-spatial-interface.mjs?v=a5d9cee3e8';
+import {NATIVE_AREAS,createAreaHost} from './app-reader-context.mjs?v=ea048c4992';
 import {identityRegistryFor,instanceIdFor} from './instance-identity.mjs?v=024ef1ca83';
 import {nativeKindCandidates} from './native-binding-candidates.mjs?v=de223646d6';
-import {invokeObservedNativeTool} from './native-tool-activity.mjs?v=a58fc3b0c5';
-import {describeNativeControl,verifyNativeControlEffect} from './native-control-intent.mjs?v=518d471334';
+import {invokeObservedNativeTool} from './native-tool-activity.mjs?v=4b79238f3b';
+import {describeNativeControl,verifyNativeControlEffect} from './native-control-intent.mjs?v=a76c747854';
 
 const read = (row,key) => row?.attrs[key]?.length===1 ? str(row.attrs[key][0]) : undefined;
 const ref = (row,key) => {
@@ -39,7 +39,7 @@ export function requestsSpatialPlacement(candidate) {
 }
 
 const activity=(session,area,details)=>{
- try{session.engine?.onWorldActivity?.({nodeIds:['interpreter:'+area.world,'instance:'+area.world,'knowledge-world:k.spatial2d','execution:placement-geometry','execution:placement-policy','native:'+area.world],world:area.world,operation:'std.placement',...details});}
+ try{session.engine?.onWorldActivity?.({nodeIds:['interpreter:'+area.world,'instance:'+area.world,'knowledge-world:k.spatial2d','execution:placement-geometry','execution:placement-policy',...(area.stateWorld?[]:['native:'+area.world])],world:area.world,operation:'std.placement',...details});}
  catch{/* Inspection does not affect execution. */}
 };
 const reply=(text,supported,trace={},state={},effects=[])=>({text,parts:[{text,translate:false}],statuses:[supported?'supported':'unsupported'],answers:[],segments:[],state,effects,newEngine:true,trace:{legacy:false,engine:'new',...trace}});
