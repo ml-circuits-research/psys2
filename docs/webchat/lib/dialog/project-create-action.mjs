@@ -2,7 +2,7 @@ import {World,editCost,parse,quote,serialize,str} from '../vendor/sopworld/sopwo
 import POLICY from '../../worlds/app.project/creation-policy-source.mjs?v=874b0f8e6d';
 import SCHEMA from '../../worlds/app.project/creation-schema-source.mjs?v=9d9c428cd6';
 import {executionPolicyWorld} from './execution-policy.mjs?v=0b0a918c63';
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=a11d1a3e95';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=3b73627e71';
 import {nativeCreationCandidates} from './native-binding-candidates.mjs?v=f6d6f43960';
 import {budget} from './budget.mjs?v=00bce6e369';
 import {observeGroundedProjection,projectGroundedRequest} from './grounded-projection.mjs?v=6b5fddabd8';

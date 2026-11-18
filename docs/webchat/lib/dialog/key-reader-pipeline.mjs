@@ -14,7 +14,9 @@ export async function createKeyReaderPipeline({cutter,reader,getContext,cutterMo
  const bindings=copyHostData(JSON.parse(bindingsJSON),{maxBytes});
  const pipelineSha256=await digest(JSON.stringify({format:'psys2.key-reader-pipeline/1',...identities,bindingsSha256}));
  const provenance={modelSha256:pipelineSha256,decoderVersion:1,models:identities,bindingsSha256,architecture:'source-cutter/request-key-heads',calibration:null};
- async function propose(sourceSop,knownCut=null,cutOnly=false){
+ let independentInput=null;
+ async function propose(sourceSop,knownCut=null,cutOnly=false,recordedContext=null){
+  independentInput=null;
   const failures=[],requests=[],ranges=[];let raw=null,sourceCut=null,steps=0;
   const tick=(n=1)=>{steps+=n;if(steps>budget)throw Error('pipeline-budget');};
   const fail=(reason,path=[])=>failures.push({reason,path});
@@ -33,10 +35,15 @@ export async function createKeyReaderPipeline({cutter,reader,getContext,cutterMo
    // Validate the entire cut before any request-local provider call.
    if(failures.length)throw Error('incomplete-request-cut');
    if(cutOnly)return {sourceCut,candidates:[],coverage:{complete:true,graphProposal:false,executable:false},failures,provenance:copy(provenance),graphConfidence:null,steps};
-   const context=copy(await getContext(text));closed(context,['area','context']);if(typeof context.area!=='string'||!context.area||!Object.hasOwn(context,'context'))throw Error('invalid-host-context');
+   const context=copy(recordedContext??await getContext(text));closed(context,['area','context','observation']);if(typeof context.area!=='string'||!context.area||!Object.hasOwn(context,'context'))throw Error('invalid-host-context');
+   const observation=context.observation;
+   if(observation!==undefined){
+    closed(observation,['scope','instance','revision']);
+    if(!['scope','instance','revision'].every(key=>typeof observation[key]==='string'&&observation[key]))throw Error('invalid-context-observation');
+   }
    for(let index=0;index<cut.spans.length;index++){
     const [start,end]=cut.spans[index],localChars=chars.slice(start,end),substring=localChars.join('');tick(end-start);
-    const result=copy(await reader.read(substring,copy(context)));closed(result,['source','request','ranges','coverage','unresolved','model']);source(result.source,substring);if(!same(modelIdentity(result.model),identities.reader))throw Error('reader-provenance-mismatch');status(result,['requests',index]);
+    const result=copy(await reader.read(substring,copy({area:context.area,context:context.context})));closed(result,['source','request','ranges','coverage','unresolved','model']);source(result.source,substring);if(!same(modelIdentity(result.model),identities.reader))throw Error('reader-provenance-mismatch');status(result,['requests',index]);
     if(!result.request||typeof result.request!=='object'||Array.isArray(result.request)||!Array.isArray(result.ranges))throw Error('invalid-request-output');
     const request=copy(result.request);if(Object.hasOwn(request,'span')&&request.span!==substring)throw Error('request-span-mismatch');request.span=substring;requests.push(request);
     const seen=new Set();let suppliedSpan=false;
@@ -51,12 +58,17 @@ export async function createKeyReaderPipeline({cutter,reader,getContext,cutterMo
     if(!suppliedSpan)ranges.push({path:['requests',String(index),'span'],range:[start,end]});
    }
    raw={format:RAW_STRUCTURAL_FORMAT,source:{text,unit:'unicode-scalar'},area:context.area,model:{kind:'structural-graph',sha256:pipelineSha256,decoderVersion:1},requestCount:cut.spans.length,requests,ranges,coverage:{complete:failures.length===0,truncated:false},unresolved:copy(failures)};
+   if(!recordedContext&&cut.spans.length===1&&context.context?.previous!=null)independentInput={sourceSop,cut,context};
    const bridge=bridgeRawStructure(raw,{bindings,bindingSha256:bindingsSha256,budget,decoderBudget,maxBytes});
    failures.push(...bridge.diagnostics.map(issue=>({reason:issue.reason,path:issue.path})));const decoded=bridge.decoded;failures.push(...(decoded?.issues??[]));
-   return {candidates:failures.length?[]:(decoded?.candidates??[]),coverage:{complete:failures.length===0&&decoded?.coverage?.complete===true,graphProposal:decoded?.coverage?.graphProposal===true,executable:false},failures,raw,provenance:copy(provenance),graphConfidence:null,sourceCut,steps};
+   return {candidates:failures.length?[]:(decoded?.candidates??[]),coverage:{complete:failures.length===0&&decoded?.coverage?.complete===true,graphProposal:decoded?.coverage?.graphProposal===true,executable:false},failures,raw,provenance:copy(provenance),graphConfidence:null,sourceCut,steps,...(observation?{sourceObservation:copy(observation)}:{})};
   }catch(error){fail(String(error?.message??'pipeline-failed'));return {candidates:[],coverage:{complete:false,graphProposal:false,executable:false},failures,raw,provenance:copy(provenance),graphConfidence:null,sourceCut,steps};}
  }
- return {provenance:()=>copyHostData(provenance),propose:sourceSop=>propose(sourceSop),async *proposeRequests(sourceSop){
+ return {provenance:()=>copyHostData(provenance),propose:sourceSop=>propose(sourceSop),async proposeIndependent(sourceSop){
+  const input=independentInput;independentInput=null;
+  if(input?.sourceSop!==sourceSop)return null;
+  return propose(sourceSop,input.cut,false,{...input.context,context:{...input.context.context,previous:null}});
+ },async *proposeRequests(sourceSop){
   const initial=await propose(sourceSop,null,true),cut=initial.sourceCut;
   if(!cut||cut.coverage.complete!==true||cut.coverage.truncated||cut.unresolved.length||cut.spans.length<2){yield cut?await propose(sourceSop,cut):initial;return;}
   for(const [index,range]of cut.spans.entries()){

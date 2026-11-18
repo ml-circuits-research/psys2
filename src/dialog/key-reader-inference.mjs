@@ -129,7 +129,7 @@ export async function createKeyReaderInference({manifest,tokenizer,encoder,heads
       if(present||spans.length)issue('cross-area-key-unresolved',key,head);
       continue;
      }
-     if(present!==null&&present!==Boolean(spans.length))issue('presence-span-inconsistent',key);
+     if(present!==null&&present!==Boolean(spans.length))issue('presence-span-inconsistent',key,{area:spec.area,property:spec.type+'.'+spec.key,present,ranges:spans.map(span=>[...span.range])});
      for(const span of spans){tick();const query=queryMap.get(key+':'+span.tokens.join(':')),value=chars.slice(...span.range).join(''),condition={key:spec.type+'.'+spec.key,value_span:value},index=String(raw.request.constraints.length);
       if(bankMap.has(key)){
        const layout=bankMap.get(key),values=logits.slice(query*width+layout.start,query*width+layout.end),proof=canonicalLiteralProof(config.banks[key],value,values,tick);

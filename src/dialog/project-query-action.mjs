@@ -5,6 +5,7 @@ import {compileObservedChoice} from './observed-choice.mjs';
 import POLICY from '../../worlds/app.project/query-reading-policy-source.mjs';
 import SCHEMA from '../../worlds/app.project/query-reading-schema-source.mjs';
 import {budget} from './budget.mjs';
+import {writeReaderSource} from './reader-source.mjs';
 
 const kind='app.query.read';
 const atom=value=>typeof value==='string'&&/^[A-Za-z_][A-Za-z0-9_.-]*$/.test(value)?value:undefined;
@@ -53,6 +54,28 @@ export async function projectQueryAction(proposal,session,{view,bindings}={}){
  if(!area||!bindings||proposal.coverage?.complete||raw?.requestCount!==1||raw.coverage?.truncated||
   !atom(request?.question?.ask)||typeof raw.source?.text!=='string'||!Array.isArray(request.constraints)||request.constraints.length>1||
   target?.name||target?.name_span||target?.description_span)return null;
+ const grounded=anchors(raw);
+ const observedTarget=grounded(['target','kind_span'],target?.kind_span);
+ const observations=(raw.unresolved??[]).flatMap(({reason,detail},index)=>{
+  const head=detail?.head;
+  if(reason!=='provider-unresolved'||!head||!Array.isArray(head.ranges)||typeof head.present!=='boolean')return [];
+  const subject=head.property??head.path;
+  if(typeof subject!=='string')return [];
+  return [row('observed.gap.'+index,kind+'.headObservation',{subject:quote(subject),role:head.property?'filter':'global',
+   reason:atom(detail.reason),present:String(head.present),ranges:String(head.ranges.length)})];
+ });
+ const coverage=[row('observed.coverage',kind+'.coverage',{targetAnchored:String(!!observedTarget),
+  referenceMarked:String(!!request.turn||target?.fill==='context'),isolated:String(!proposal.composition)}),...observations];
+ const coverageWorld=queryPolicy().fork(),coverageSop=serialize(coverage);
+ if(!coverageWorld.tell(coverageSop,{factsOnly:true}).ok)return null;
+ const limitations=coverageWorld.ofType(kind+'.limitation');
+ if(limitations.length){
+  const proof={input:coverageSop,sop:serialize(limitations),rules:limitations.map(observation=>observation.meta.via)};
+  try{session.engine?.onWorldActivity?.({nodeIds:['component:reader','component:library'],phase:'stage',
+   operation:'app.query.read',label:'Record incomplete question evidence',wires:proof.input+'\n'+proof.sop});}catch{/* Observations are optional. */}
+  return {...proposal,interpretation:{profile:'declared-query/1',limitation:limitations.map(observation=>observation.attrs.reason[0]),
+   proof,reconsider:coverageWorld.ofType(kind+'.reconsider').length>0,unresolved:proposal.failures??[]}};
+ }
  const anchored=anchors(raw);
  const noun=target?.kind;
  const trigger=anchored(['trigger'],request.trigger),kindRange=anchored(['target','kind_span'],target?.kind_span);
@@ -102,4 +125,61 @@ export async function projectQueryAction(proposal,session,{view,bindings}={}){
  return {...proposal,candidates:[result],coverage:{complete:true,graphProposal:true,executable:false},failures:[],
   interpretation:{profile:'declared-query/1',note:selected.distance?'I interpreted '+JSON.stringify(noun)+' as '+selected.lemma+'.':'',
    selected,alternatives,decision:{input:decision.input,sop:decision.sop},evidence,projection,unresolved:proposal.failures??[]}};
+}
+
+
+function readingObservation(proposal){
+ const {raw,sourceObservation}=proposal,request=raw.requests[0],target=request.target??{},anchored=anchors(raw);
+ const targetRange=anchored(['target','kind_span'],target.kind_span);
+ const filter=request.constraints[0];
+ const filterRange=filter&&anchored(['constraints','0','value_span'],filter.value_span);
+ const trigger=anchored(['trigger'],request.trigger);
+ const positives=(raw.unresolved??[]).filter(({reason,detail})=>reason==='provider-unresolved'&&
+  detail?.reason==='presence-span-inconsistent'&&detail.head?.present===true&&
+  detail.head.ranges?.length===0&&typeof detail.head.property==='string');
+ const literal=value=>typeof value==='string'?quote(value):undefined;
+ const index=value=>Number.isSafeInteger(value)?String(value):undefined;
+ return {
+  source:literal(raw.source.text),act:atom(request.act),mood:atom(request.mood),head:atom(request.question?.ask),
+  askedKey:literal(request.question?.asked_key??''),family:literal(target.type),quantifier:literal(target.quantifier??''),
+  triggerStart:index(trigger?.[0]),triggerEnd:index(trigger?.[1]),
+  referenceMarked:String(!!request.turn||target.fill==='context'),
+  scope:literal(sourceObservation?.scope),instance:literal(sourceObservation?.instance),revision:literal(sourceObservation?.revision),
+  targetText:targetRange&&target.kind===target.kind_span?literal(target.kind):undefined,
+  targetStart:index(targetRange?.[0]),targetEnd:index(targetRange?.[1]),
+  filterKey:literal(filter?.key),filterValue:filterRange&&filter.value===filter.value_span?literal(filter.value):undefined,
+  filterStart:index(filterRange?.[0]),filterEnd:index(filterRange?.[1]),
+  filterOperator:atom(filter?.operator),filterCharacter:atom(filter?.character),filterPolarity:atom(filter?.polarity),
+  filterCount:String(request.constraints.length),filterPhase:atom(filter?.phase),filterScope:filter?atom(filter.scope??'unmarked'):undefined,
+  filterGaps:String(positives.length),filterGap:positives.length===1?literal(positives[0].detail.head.property):undefined,
+ };
+}
+
+export async function recoverQueryProjection(projected,session,{view,bindings,provider}={}){
+ if(!projected?.interpretation?.reconsider||typeof provider?.proposeIndependent!=='function')return projected;
+ const area=NATIVE_AREAS[view],state=session.isession.state[area.world];
+ let alternate;
+ try{alternate=await provider.proposeIndependent(writeReaderSource(projected.raw.source.text));}catch{return projected;}
+ if(session.isession.state[area.world]!==state)return projected;
+ if(!alternate)return projected;
+ const readings=[projected.raw,alternate.raw];
+ const retry={readings,failures:[projected.failures,alternate.failures]};
+ const retain=()=>({...projected,interpretation:{...projected.interpretation,retry}});
+ if(!alternate.raw?.requests?.[0])return retain();
+ const independent=await projectQueryAction(alternate,session,{view,bindings});
+ if(session.isession.state[area.world]!==state||!independent?.candidates?.length||independent.interpretation?.limitation)return retain();
+ const world=queryPolicy().fork();
+ const input=serialize([
+  row('query.primary',kind+'.recoveryReading',{role:'primary',...readingObservation(projected)}),
+  row('query.independent',kind+'.recoveryReading',{role:'independent',...readingObservation(alternate)}),
+ ]);
+ if(!world.tell(input,{factsOnly:true}).ok)return retain();
+ const results=world.ofType(kind+'.recovery');
+ if(results.length!==1)return retain();
+ const recovery={...retry,input,sop:serialize(results),rule:results[0].meta.via};
+ try{session.engine?.onWorldActivity?.({nodeIds:['component:reader','component:library'],phase:'stage',
+  operation:'app.query.read',label:'Verify an independent reading of the current question',
+  wires:recovery.input+'\n'+recovery.sop});}catch{/* Observations are optional. */}
+ return {...independent,interpretation:{...independent.interpretation,retry:recovery,
+  unresolved:[...projected.failures,...alternate.failures]}};
 }

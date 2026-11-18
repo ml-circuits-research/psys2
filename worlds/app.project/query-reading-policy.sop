@@ -34,3 +34,45 @@
 
 @query.lexical std.decide.criterion of=app.query.kind n=1 name=distance measure=distance dir=min
 @query.reader.type std.decide.criterion of=app.query.kind n=2 name=reader.type measure=otherType dir=min
+
+# A positive model head with no source span cannot supply a query target or filter.
+@p.filter.missing app.query.read.headObservation role=filter reason=presence-span-inconsistent present=true ranges=0
+@p.target.missing app.query.read.headObservation role=global subject="target.kind" reason=presence-span-inconsistent present=true ranges=0
+@p.no.target app.query.read.coverage targetAnchored=false
+@o.filter.missing app.query.read.limitation reason=filter-span-missing
+@o.target.missing app.query.read.limitation reason=target-span-missing
+@query.limit.filter core.rule when=$p.filter.missing then=$o.filter.missing
+@query.limit.target core.rule when=$p.target.missing when=$p.no.target then=$o.target.missing
+
+# An independent reading omits the previous utterance only for an isolated literal query.
+@p.literal app.query.read.coverage referenceMarked=false isolated=true
+@p.query.gap app.query.read.limitation reason=?reason
+@o.reconsider app.query.read.reconsider reason=?reason
+@query.reconsider core.rule when=$p.literal when=$p.query.gap then=$o.reconsider
+
+# Join both readings of one literal utterance at the same native observation.
+@p.primary app.query.read.recoveryReading role=primary referenceMarked=false source=?source scope=?scopeKey instance=?instance revision=?revision act=?act mood=?mood head=?head askedKey=?askedKey family=?family quantifier=?quantifier triggerStart=?cueStart triggerEnd=?cueEnd
+@p.independent app.query.read.recoveryReading role=independent referenceMarked=false source=?source scope=?scopeKey instance=?instance revision=?revision act=?act mood=?mood head=?head askedKey=?askedKey family=?family quantifier=?quantifier triggerStart=?cueStart triggerEnd=?cueEnd
+@o.reading.pair app.query.read.readingPair primary=$p.primary independent=$p.independent
+@query.match.readings core.rule when=$p.primary when=$p.independent then=$o.reading.pair
+
+# Retain the exact witnessed filter when only the target is missing.
+@p.primary.target.gap app.query.read.recoveryReading role=primary filterCount=1 filterGaps=0 core.absent=targetText filterKey=?property filterValue=?value filterStart=?valueStart filterEnd=?valueEnd filterOperator=?operator filterCharacter=?character filterPolarity=?polarity filterPhase=?phase filterScope=?scope
+@p.independent.target app.query.read.recoveryReading role=independent targetText=?target targetStart=?targetStart targetEnd=?targetEnd filterCount=1 filterKey=?property filterValue=?value filterStart=?valueStart filterEnd=?valueEnd filterOperator=?operator filterCharacter=?character filterPolarity=?polarity
+@p.target.pair app.query.read.readingPair primary=$p.primary.target.gap independent=$p.independent.target
+@o.recovered.target app.query.read.recovery selected=$p.independent.target
+@query.recover.target core.rule when=$p.primary.target.gap when=$p.independent.target when=$p.target.pair when=$question.phase when=$question.scope then=$o.recovered.target
+
+# A target-only reading cannot introduce a filter the primary model did not observe.
+@p.primary.bare.target.gap app.query.read.recoveryReading role=primary filterGaps=0 filterCount=0 core.absent=targetText
+@p.independent.bare.target app.query.read.recoveryReading role=independent targetText=?target targetStart=?targetStart targetEnd=?targetEnd filterCount=0
+@p.bare.target.pair app.query.read.readingPair primary=$p.primary.bare.target.gap independent=$p.independent.bare.target
+@o.recovered.bare.target app.query.read.recovery selected=$p.independent.bare.target
+@query.recover.bare.target core.rule when=$p.primary.bare.target.gap when=$p.independent.bare.target when=$p.bare.target.pair then=$o.recovered.bare.target
+
+# Recover a filter only from a span for the same model head, preserving the target span.
+@p.primary.filter.gap app.query.read.recoveryReading role=primary targetText=?target targetStart=?targetStart targetEnd=?targetEnd filterGaps=1 filterGap=?property filterCount=0
+@p.independent.filter app.query.read.recoveryReading role=independent targetText=?target targetStart=?targetStart targetEnd=?targetEnd filterCount=1 filterKey=?property filterValue=?value filterStart=?valueStart filterEnd=?valueEnd
+@p.filter.pair app.query.read.readingPair primary=$p.primary.filter.gap independent=$p.independent.filter
+@o.recovered.filter app.query.read.recovery selected=$p.independent.filter
+@query.recover.filter core.rule when=$p.primary.filter.gap when=$p.independent.filter when=$p.filter.pair then=$o.recovered.filter

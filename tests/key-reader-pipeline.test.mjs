@@ -53,3 +53,23 @@ test('the reader only admits one concrete SOP source and preserves its scalar se
  }
  assert.equal(calls.length,1,'invalid inputs must never reach cutter or tokenizer');
 });
+
+test('an independent read consumes one exact source and its already observed context', async()=>{
+ let snapshots=0;
+ const observation={scope:'drawing',instance:'board-1',revision:'9'};
+ const {pipeline,calls}=await setup({getContext:()=>({area:'toy',observation,context:{native:++snapshots,previous:'earlier turn'}})});
+ const source=writeReaderSource('set widget 🟦');
+ const primary=await pipeline.propose(source), alternate=await pipeline.proposeIndependent(source);
+ assert.deepEqual(primary.sourceObservation,observation);
+ assert.deepEqual(alternate.sourceObservation,observation);
+ assert.deepEqual(primary.sourceCut,alternate.sourceCut);
+ assert.deepEqual(calls,[
+  ['cut','set widget 🟦'],
+  ['read','set widget 🟦',{area:'toy',context:{native:1,previous:'earlier turn'}}],
+  ['read','set widget 🟦',{area:'toy',context:{native:1,previous:null}}],
+ ]);
+ assert.equal(await pipeline.proposeIndependent(source),null);
+ await pipeline.propose(source);
+ assert.equal(await pipeline.proposeIndependent(writeReaderSource('set widget ✦')),null);
+ assert.equal(await pipeline.proposeIndependent(source),null);
+});

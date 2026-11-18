@@ -9,7 +9,7 @@ import {isAuthoredRequest,readAuthoredRequest} from './authored-request-tool.mjs
 // never to a model output, evaluation annotation or grammar proposal.
 import {requestCompositionPolicy,scheduleFollowingCut}from './request-composition-policy.mjs';
 import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs';
-import {projectQueryAction} from './project-query-action.mjs';
+import {projectQueryAction,recoverQueryProjection} from './project-query-action.mjs';
 import {projectContextAction} from './project-context-action.mjs';
 import {projectCreateAction} from './project-create-action.mjs';
 import {assessReaderProposal} from './reader-admission.mjs';
@@ -53,7 +53,20 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
  const providerCandidates=Array.isArray(proposal?.candidates)?structuredClone(proposal.candidates):[];
  const context={area:options.view??session.isession.state['ui.shell']?.activeTab};
  let contextProjection=null,bindings=null,registry=null;
- try{bindings=provider?.bindings?.();registry=provider?.registry?.();contextProjection=await projectContextAction(proposal,session,{bindings,registry,view:context.area});if(contextProjection)proposal=contextProjection.proposal;else{const projected=await projectQueryAction(proposal,session,{bindings,view:context.area})??await projectCreateAction(proposal,session,{bindings,registry,view:context.area});if(projected)proposal=projected;}}catch{}
+ try{
+  bindings=provider?.bindings?.();
+  registry=provider?.registry?.();
+  const projectionOptions={bindings,registry,view:context.area};
+  contextProjection=await projectContextAction(proposal,session,projectionOptions);
+  if(contextProjection)proposal=contextProjection.proposal;
+  else{
+   const query=await projectQueryAction(proposal,session,projectionOptions);
+   if(query){
+    proposal=query;
+    proposal=await recoverQueryProjection(query,session,{...projectionOptions,provider});
+   }else proposal=await projectCreateAction(proposal,session,projectionOptions)??proposal;
+  }
+ }catch{/* A failed projection preserves the available model observations. */}
  let provenAlternative=null;
  if(!proposal.coverage?.complete&&bindings&&provenance?.bindingsSha256){
   try{
@@ -88,7 +101,7 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
    }
   }catch{/* A request with unproved removal remains subject to normal admission. */}
  }
- const preservedProviderTrace=!!provenAlternative||proposal.interpretation?.profile==='grounded-removal/1';
+ const preservedProviderTrace=!!provenAlternative||proposal.interpretation?.profile==='grounded-removal/1'||!!proposal.interpretation?.retry;
  const decision=assessReaderProposal({proposal,text,provenance,admission:session.engine?.requestReaderAdmission,area:context.area,scopedRemoval:!!removalComparison});
  if(decision.decisionSop){
   try{session.engine?.onWorldActivity?.({nodeIds:['component:request-admission','knowledge:reader-admission-policy','component:library'],phase:'stage',operation:'app.reader.admission',label:'Evaluate reader admission policy',wires:decision.decisionSop});}catch{/* Observation cannot change admission. */}
@@ -112,7 +125,10 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
  }
  // No grammar fallback exists in the application. Unavailable or unapproved
  // structural models yield an explicit no-effect answer.
- const message='I could not identify an action to apply. Nothing changed.';
+ const limitations=proposal?.interpretation?.limitation??[];
+ const message=limitations.includes('filter-span-missing')?'I could not ground a filter in the question. I have no complete answer.':
+  limitations.includes('target-span-missing')?'I could not ground the kind of object the question refers to. I have no complete answer.':
+  'I could not identify an action to apply. Nothing changed.';
  let result;
  if(eligible){
   result=await dispatchRequest(session,candidate,text,options,bindings,contextProjection,proposal.interpretation,decision.alternatives,comparison?.plan);

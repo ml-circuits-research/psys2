@@ -1,5 +1,5 @@
-import {isScopedRemoval} from './capability-plan-execution.mjs?v=6b59905e1b';
-import {projectRemovalAction} from './project-removal-action.mjs?v=bae249b8d7';
+import {isScopedRemoval} from './capability-plan-execution.mjs?v=bb71201d6f';
+import {projectRemovalAction} from './project-removal-action.mjs?v=65725d959b';
 import { captureHistory, recordHistory, restoreHistory } from './history-journal.mjs?v=73602fda44';
 import {projectReaderHeadAlternative} from './reader-head-alternative.mjs?v=e9b7e3104b';
 import {parse} from '../vendor/sopworld/sopworld.mjs?v=3a48344175';
@@ -8,10 +8,10 @@ import {isAuthoredRequest,readAuthoredRequest} from './authored-request-tool.mjs
 // Model-first proposal routing. Calibration authority belongs to host configuration,
 // never to a model output, evaluation annotation or grammar proposal.
 import {requestCompositionPolicy,scheduleFollowingCut}from './request-composition-policy.mjs?v=f4e72706e2';
-import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=0660339de1';
-import {projectQueryAction} from './project-query-action.mjs?v=b2207dd2d6';
-import {projectContextAction} from './project-context-action.mjs?v=3bc9b8f1b6';
-import {projectCreateAction} from './project-create-action.mjs?v=a42de58833';
+import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=b42c41a2b6';
+import {projectQueryAction,recoverQueryProjection} from './project-query-action.mjs?v=66e64a10cd';
+import {projectContextAction} from './project-context-action.mjs?v=7bf88d0365';
+import {projectCreateAction} from './project-create-action.mjs?v=96ab209173';
 import {assessReaderProposal} from './reader-admission.mjs?v=c825751cc8';
 const unavailable=reason=>({candidates:[],coverage:{complete:false,executable:false,graphProposal:false},failures:[{reason}]});
 const noDeclaredAction = () => {
@@ -53,7 +53,20 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
  const providerCandidates=Array.isArray(proposal?.candidates)?structuredClone(proposal.candidates):[];
  const context={area:options.view??session.isession.state['ui.shell']?.activeTab};
  let contextProjection=null,bindings=null,registry=null;
- try{bindings=provider?.bindings?.();registry=provider?.registry?.();contextProjection=await projectContextAction(proposal,session,{bindings,registry,view:context.area});if(contextProjection)proposal=contextProjection.proposal;else{const projected=await projectQueryAction(proposal,session,{bindings,view:context.area})??await projectCreateAction(proposal,session,{bindings,registry,view:context.area});if(projected)proposal=projected;}}catch{}
+ try{
+  bindings=provider?.bindings?.();
+  registry=provider?.registry?.();
+  const projectionOptions={bindings,registry,view:context.area};
+  contextProjection=await projectContextAction(proposal,session,projectionOptions);
+  if(contextProjection)proposal=contextProjection.proposal;
+  else{
+   const query=await projectQueryAction(proposal,session,projectionOptions);
+   if(query){
+    proposal=query;
+    proposal=await recoverQueryProjection(query,session,{...projectionOptions,provider});
+   }else proposal=await projectCreateAction(proposal,session,projectionOptions)??proposal;
+  }
+ }catch{/* A failed projection preserves the available model observations. */}
  let provenAlternative=null;
  if(!proposal.coverage?.complete&&bindings&&provenance?.bindingsSha256){
   try{
@@ -88,7 +101,7 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
    }
   }catch{/* A request with unproved removal remains subject to normal admission. */}
  }
- const preservedProviderTrace=!!provenAlternative||proposal.interpretation?.profile==='grounded-removal/1';
+ const preservedProviderTrace=!!provenAlternative||proposal.interpretation?.profile==='grounded-removal/1'||!!proposal.interpretation?.retry;
  const decision=assessReaderProposal({proposal,text,provenance,admission:session.engine?.requestReaderAdmission,area:context.area,scopedRemoval:!!removalComparison});
  if(decision.decisionSop){
   try{session.engine?.onWorldActivity?.({nodeIds:['component:request-admission','knowledge:reader-admission-policy','component:library'],phase:'stage',operation:'app.reader.admission',label:'Evaluate reader admission policy',wires:decision.decisionSop});}catch{/* Observation cannot change admission. */}
@@ -112,7 +125,10 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
  }
  // No grammar fallback exists in the application. Unavailable or unapproved
  // structural models yield an explicit no-effect answer.
- const message='I could not identify an action to apply. Nothing changed.';
+ const limitations=proposal?.interpretation?.limitation??[];
+ const message=limitations.includes('filter-span-missing')?'I could not ground a filter in the question. I have no complete answer.':
+  limitations.includes('target-span-missing')?'I could not ground the kind of object the question refers to. I have no complete answer.':
+  'I could not identify an action to apply. Nothing changed.';
  let result;
  if(eligible){
   result=await dispatchRequest(session,candidate,text,options,bindings,contextProjection,proposal.interpretation,decision.alternatives,comparison?.plan);

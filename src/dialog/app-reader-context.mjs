@@ -28,7 +28,7 @@ export async function createAreaHost(area,{loader,knowledge,prepareKnowledge=tru
  if(area.policyFile&&!policySource)throw Error('native-policy-unavailable');
  return area.create({...options,knowledge,...(policySource?{policySource}:{})});
 }
-export function createAppReaderContext({getState,getPrevious=()=>null,getInstanceId=()=>globalThis.crypto.randomUUID(),getIdentityRegistry,onObservation=()=>{}}={}){
+export function createAppReaderContext({getState,getPrevious=()=>null,getInstanceId=()=>globalThis.crypto.randomUUID(),getIdentityRegistry,includeObservationIdentity=false,onObservation=()=>{}}={}){
  if(typeof getState!=='function'||typeof getPrevious!=='function'||typeof onObservation!=='function')throw Error('invalid-app-reader-context');
  const hosts=new WeakMap();
  return async(text='')=>{
@@ -44,6 +44,7 @@ export function createAppReaderContext({getState,getPrevious=()=>null,getInstanc
   for(const path of area.historySelection??[]){let value=nativeView;for(const key of path)value=value?.[key];collect(value);}
   // An authored graph has its own source and reaches execution without the text reader.
   const prior=getPrevious(),previous=isAuthoredRequest(prior)?null:prior;
-  let contextSelection;const result=observedReaderContext(area.area,observation,previous,{compact:true,text,focus,onSummary:summary=>contextSelection=summary});onObservation({area:area.area,world:area.world,observation,contextSelection});return result;
+  let contextSelection;const result=observedReaderContext(area.area,observation,previous,{compact:true,text,focus,onSummary:summary=>contextSelection=summary});onObservation({area:area.area,world:area.world,observation,contextSelection});
+  return includeObservationIdentity?{...result,observation:{scope:observation.scope,instance:observation.instanceId,revision:observation.version}}:result;
  };
 }

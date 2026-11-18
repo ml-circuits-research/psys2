@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
 import {parse} from '../src/vendor/sopworld/sopworld.mjs';
-import {projectQueryAction} from '../src/dialog/project-query-action.mjs';
+import {projectQueryAction,recoverQueryProjection} from '../src/dialog/project-query-action.mjs';
 import {initialDrawingState} from '../worlds/art.draw/declared-host.mjs';
 
 const bindings={kinds:[{area:'drawing',type:'drawn',lemma:'house',canonical:'fixture.house',nativeFamilyBinding:{operation:'drawing.object.make'}}],
@@ -54,4 +54,62 @@ test('A grounded filter may be distributed per member only when its scope is dec
  assert.match(result.interpretation.evidence,/scope=each/);
  predicate.scope='group';
  assert.equal(await projectQueryAction(proposal,session,options),null);
+});
+
+const modelGap=(head)=>({reason:'provider-unresolved',path:['requests',0],
+ detail:{reason:'presence-span-inconsistent',head:{present:true,ranges:[],...head}}});
+const question='Are there any red houses';
+const observation={scope:'drawing',instance:'board-1',revision:'9'};
+const makeExistence=({noun=true,filter=true}={})=>{
+ const proposal=proposalFor(question,{trigger:'Are there',question:{ask:'exists'},
+  target:noun?target:{type:'drawn',mode:'bound'},constraints:filter?[condition]:[]},
+  [[['trigger'],[0,9]],...(noun?[[['target','kind_span'],[18,24]]]:[]),
+   ...(filter?[[['constraints','0','value_span'],[14,17]]]:[])]);
+ proposal.sourceObservation=observation;
+ return proposal;
+};
+
+test('unanchored filter does not become a complete count or existence query',async()=>{
+ const primary=makeExistence({filter:false});
+ primary.raw.unresolved=[modelGap({area:'drawing',property:'drawn.colour'})];
+ const result=await projectQueryAction(primary,session,options);
+ assert.deepEqual(result.interpretation.limitation,['filter-span-missing']);
+ assert.equal(result.candidates,undefined);
+ assert.match(result.interpretation.proof.sop,/filter-span-missing/);
+ const matching=makeExistence();
+ const recovered=await recoverQueryProjection(result,session,{...options,provider:{proposeIndependent:async()=>matching}});
+ assert.equal(recovered.interpretation.retry.rule,'query.recover.filter');
+ assert.match(recovered.candidates[0].wires,/value="red"/);
+ const wrongFilter=makeExistence();
+ wrongFilter.raw.requests[0].constraints=[{...condition,key:'drawn.unrelated'}];
+ assert.deepEqual((await recoverQueryProjection(result,session,{...options,provider:{proposeIndependent:async()=>wrongFilter}}))
+  .interpretation.limitation,['filter-span-missing']);
+});
+
+test('a second read can supply its own target span while retaining current exact filter and observation',async()=>{
+ const primary=makeExistence({noun:false});
+ primary.raw.unresolved=[modelGap({path:'target.kind'})];
+ const result=await projectQueryAction(primary,session,options);
+ const alternate=makeExistence();
+ const live={...options,provider:{proposeIndependent:async()=>alternate}};
+ const recovered=await recoverQueryProjection(result,session,live);
+ assert.equal(recovered.interpretation.retry.rule,'query.recover.target');
+ assert.deepEqual(recovered.interpretation.retry.readings,[primary.raw,alternate.raw]);
+ assert.match(recovered.candidates[0].wires,/operation=exists/);
+ assert.match(recovered.interpretation.retry.input,/scope="drawing" instance="board-1" revision="9"/);
+ assert.match(recovered.interpretation.retry.input,/targetText="houses" targetStart=18 targetEnd=24/);
+ alternate.sourceObservation={...observation,revision:'10'};
+ assert.deepEqual((await recoverQueryProjection(result,session,live)).interpretation.limitation,['target-span-missing']);
+ alternate.sourceObservation=observation;
+ alternate.raw.requests[0].target={...target,quantifier:'none'};
+ assert.deepEqual((await recoverQueryProjection(result,session,live)).interpretation.limitation,['target-span-missing']);
+ alternate.raw.requests[0].target=target;
+ primary.raw.requests[0].constraints=[{...condition,scope:'group'}];
+ assert.deepEqual((await recoverQueryProjection(result,session,live)).interpretation.limitation,['target-span-missing']);
+ primary.raw.requests[0].constraints=[condition];
+ alternate.raw.requests[0].constraints=[];
+ alternate.raw.ranges=alternate.raw.ranges.filter(r=>r.path[2]!=='constraints');
+ assert.deepEqual((await recoverQueryProjection(result,session,live)).interpretation.limitation,['target-span-missing']);
+ primary.raw.requests[0].target.fill='context';
+ assert.equal((await projectQueryAction(primary,session,options)).interpretation.reconsider,false);
 });

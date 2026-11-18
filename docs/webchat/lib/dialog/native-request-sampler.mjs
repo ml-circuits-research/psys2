@@ -3,8 +3,8 @@ import { captureHistory, restoreHistory } from './history-journal.mjs?v=73602fda
 import * as lib from '../vendor/sopworld/sopworld.mjs?v=3a48344175';
 import {createSampler} from './sampler.mjs?v=7860124cef';
 import {nativeKindCandidates} from './native-binding-candidates.mjs?v=f6d6f43960';
-import {declaredPropertyValues} from './declared-execution.mjs?v=0660339de1';
-import {routeNewEngine} from './reader-routing.mjs?v=0305b1e454';
+import {declaredPropertyValues} from './declared-execution.mjs?v=b42c41a2b6';
+import {routeNewEngine} from './reader-routing.mjs?v=c8b1c9d9b4';
 const word = x => typeof x==='string' && /^[a-z]+$/.test(x);
 
 export function samplingSchema({area,operations,observation,bindings}) {

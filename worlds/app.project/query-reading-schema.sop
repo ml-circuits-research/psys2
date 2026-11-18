@@ -1,4 +1,4 @@
-@query.schema core.module name=app.query.read exports=app.query.read.head exports=app.query.read.question exports=app.query.read.condition exports=app.query.read.operation exports=app.query.read.selector exports=app.query.read.phase exports=app.query.read.scope
+@query.schema core.module name=app.query.read exports=app.query.read.head exports=app.query.read.question exports=app.query.read.condition exports=app.query.read.operation exports=app.query.read.selector exports=app.query.read.phase exports=app.query.read.scope exports=app.query.read.coverage exports=app.query.read.headObservation exports=app.query.read.limitation exports=app.query.read.reconsider exports=app.query.read.recoveryReading exports=app.query.read.recovery exports=app.query.read.readingPair
 @query.head core.type of=app.query.read.head closed=true
 @query.head.kind core.slot of=app.query.read.head key=head kind=atom present=true
 @query.head.operation core.slot of=app.query.read.head key=operation kind=atom present=true
@@ -29,3 +29,54 @@
 @query.condition.scope core.slot of=app.query.read.condition key=scope kind=atom present=true
 @query.scope.type core.type of=app.query.read.scope closed=true
 @query.scope.name core.slot of=app.query.read.scope key=name kind=atom present=true
+
+@query.coverage.type core.type of=app.query.read.coverage closed=true
+@query.coverage.target core.slot of=app.query.read.coverage key=targetAnchored kind=boolean present=true
+@query.headObservation.type core.type of=app.query.read.headObservation closed=true
+@query.headObservation.subject core.slot of=app.query.read.headObservation key=subject kind=string present=true
+@query.headObservation.role core.slot of=app.query.read.headObservation key=role kind=atom present=true
+@query.headObservation.reason core.slot of=app.query.read.headObservation key=reason kind=atom
+@query.headObservation.present core.slot of=app.query.read.headObservation key=present kind=boolean present=true
+@query.headObservation.ranges core.slot of=app.query.read.headObservation key=ranges kind=integer min=0 present=true
+@query.limitation.type core.type of=app.query.read.limitation closed=true
+@query.limitation.reason core.slot of=app.query.read.limitation key=reason kind=atom present=true
+
+@query.coverage.reference core.slot of=app.query.read.coverage key=referenceMarked kind=boolean present=true
+@query.coverage.isolated core.slot of=app.query.read.coverage key=isolated kind=boolean present=true
+@query.reconsider.type core.type of=app.query.read.reconsider closed=true
+@query.reconsider.reason core.slot of=app.query.read.reconsider key=reason kind=atom present=true
+@query.recovery.reading core.type of=app.query.read.recoveryReading closed=true
+@query.recovery.role core.slot of=app.query.read.recoveryReading key=role kind=atom present=true
+@query.recovery.source core.slot of=app.query.read.recoveryReading key=source kind=string present=true
+@query.recovery.act core.slot of=app.query.read.recoveryReading key=act kind=atom present=true
+@query.recovery.mood core.slot of=app.query.read.recoveryReading key=mood kind=atom present=true
+@query.recovery.head core.slot of=app.query.read.recoveryReading key=head kind=atom present=true
+@query.recovery.askedKey core.slot of=app.query.read.recoveryReading key=askedKey kind=string present=true
+@query.recovery.quantifier core.slot of=app.query.read.recoveryReading key=quantifier kind=string present=true
+@query.recovery.family core.slot of=app.query.read.recoveryReading key=family kind=string present=true
+@query.recovery.triggerStart core.slot of=app.query.read.recoveryReading key=triggerStart kind=integer min=0 present=true
+@query.recovery.triggerEnd core.slot of=app.query.read.recoveryReading key=triggerEnd kind=integer min=0 present=true
+@query.recovery.referenceMarked core.slot of=app.query.read.recoveryReading key=referenceMarked kind=boolean present=true
+@query.recovery.scope core.slot of=app.query.read.recoveryReading key=scope kind=string present=true
+@query.recovery.instance core.slot of=app.query.read.recoveryReading key=instance kind=string present=true
+@query.recovery.revision core.slot of=app.query.read.recoveryReading key=revision kind=string present=true
+@query.recovery.targetText core.slot of=app.query.read.recoveryReading key=targetText kind=string
+@query.recovery.targetStart core.slot of=app.query.read.recoveryReading key=targetStart kind=integer min=0
+@query.recovery.targetEnd core.slot of=app.query.read.recoveryReading key=targetEnd kind=integer min=0
+@query.recovery.filterKey core.slot of=app.query.read.recoveryReading key=filterKey kind=string
+@query.recovery.filterValue core.slot of=app.query.read.recoveryReading key=filterValue kind=string
+@query.recovery.filterStart core.slot of=app.query.read.recoveryReading key=filterStart kind=integer min=0
+@query.recovery.filterEnd core.slot of=app.query.read.recoveryReading key=filterEnd kind=integer min=0
+@query.recovery.filterOperator core.slot of=app.query.read.recoveryReading key=filterOperator kind=atom
+@query.recovery.filterCharacter core.slot of=app.query.read.recoveryReading key=filterCharacter kind=atom
+@query.recovery.filterPolarity core.slot of=app.query.read.recoveryReading key=filterPolarity kind=atom
+@query.recovery.filterCount core.slot of=app.query.read.recoveryReading key=filterCount kind=integer min=0 present=true
+@query.recovery.filterPhase core.slot of=app.query.read.recoveryReading key=filterPhase kind=atom
+@query.recovery.filterScope core.slot of=app.query.read.recoveryReading key=filterScope kind=atom
+@query.recovery.filterGaps core.slot of=app.query.read.recoveryReading key=filterGaps kind=integer min=0 present=true
+@query.recovery.filterGap core.slot of=app.query.read.recoveryReading key=filterGap kind=string
+@query.pair.type core.type of=app.query.read.readingPair closed=true
+@query.pair.primary core.slot of=app.query.read.readingPair key=primary type=app.query.read.recoveryReading present=true
+@query.pair.independent core.slot of=app.query.read.readingPair key=independent type=app.query.read.recoveryReading present=true
+@query.recovery.type core.type of=app.query.read.recovery closed=true
+@query.recovery.selected core.slot of=app.query.read.recovery key=selected type=app.query.read.recoveryReading present=true

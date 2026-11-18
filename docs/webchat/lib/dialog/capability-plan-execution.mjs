@@ -1,9 +1,9 @@
 import { readSceneDefaults } from './scene-placement-defaults.mjs?v=b4fcb37ca3';
 // SPDX-License-Identifier: AGPL-3.0-only
 import { compileNativeCapability } from './capability-plan-adapter.mjs?v=395c5a9950';
-import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=a11d1a3e95';
+import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=3b73627e71';
 import { instanceIdFor } from './instance-identity.mjs?v=024ef1ca83';
-import { prepareNativeControlHost } from './native-control-preparation.mjs?v=fe320cf69e';
+import { prepareNativeControlHost } from './native-control-preparation.mjs?v=65fb56afe6';
 import { invokeObservedNativeTool } from './native-tool-activity.mjs?v=b78711d18a';
 import { retainPropertyEffect } from './property-effect-evidence.mjs?v=fedf5e9e69';
 import { describeNativeControl, verifyNativeControlEffect } from './native-control-intent.mjs?v=cb692a2c50';

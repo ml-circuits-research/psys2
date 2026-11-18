@@ -201,3 +201,6 @@ The isolated Webchat build f5481215af loaded the new composition schema and word
 
 2026-11-18 — Webchat 43de207bc3 uses the Diagram tool's declared node role and the shipped scatter-slot knowledge at 02f1bae1. Three natural additions used (400,250), (200,250), then (400,250) after moving the first circle to (600,250).
 Actual SVG transforms, native circuit, catalog source and Undo checked in Chromium. Full gate: 639 passed, 3 skipped. Drawing circle retains its independent context.
+
+2026-11-18 — Webchat 70eb2eb98c compares the contextual and independent frozen-reader hypotheses for the same utterance and revision under declared SOP rules. A retained colour-head gap now prevents reporting a complete unfiltered count.
+642 passed, 3 skipped. Chromium app.send verified count → existence on the two-object board, and refusal to report an ungrounded filtered count on the three-object control. Neither question changed the Drawing state.

@@ -148,6 +148,11 @@ export async function createVerifiedReaderProvider({
  };
  verified.assemblySha256=await digest(utf8(JSON.stringify(stable(verified))));
  const scoreProposal=proposal=>({...projectJournalAction(proposal),selectionScore:combineModelScores(decisionScores)});
- const scoredProvider={...provider,registry:()=>copyHostData(JSON.parse(m.configJSON).registry),bindings:()=>copyHostData(JSON.parse(bindingsJSON)),async propose(sourceSop){decisionScores=[];const proposal=await provider.propose(sourceSop);return scoreProposal(proposal);},async *proposeRequests(sourceSop){const sequence=provider.proposeRequests(sourceSop);delete componentScores.cutter;while(true){decisionScores=[];delete componentScores['key-reader'];const step=await sequence.next();if(step.done)return;const proposal=scoreProposal(step.value);proposal.selectionScore=combineModelScores([componentScores.cutter,componentScores['key-reader']]);yield proposal;}}};
+ const scoredProvider={...provider,registry:()=>copyHostData(JSON.parse(m.configJSON).registry),bindings:()=>copyHostData(JSON.parse(bindingsJSON)),async propose(sourceSop){decisionScores=[];const proposal=await provider.propose(sourceSop);return scoreProposal(proposal);},async proposeIndependent(sourceSop){
+  decisionScores=[];delete componentScores['key-reader'];
+  const proposal=await provider.proposeIndependent(sourceSop);
+  return proposal?{...projectJournalAction(proposal),
+   selectionScore:combineModelScores([componentScores.cutter,componentScores['key-reader']])}:null;
+ },async *proposeRequests(sourceSop){const sequence=provider.proposeRequests(sourceSop);delete componentScores.cutter;while(true){decisionScores=[];delete componentScores['key-reader'];const step=await sequence.next();if(step.done)return;const proposal=scoreProposal(step.value);proposal.selectionScore=combineModelScores([componentScores.cutter,componentScores['key-reader']]);yield proposal;}}};
  return {provider:scoredProvider,verified:copyHostData(verified),provenance:()=>copyHostData(verified)};
 }

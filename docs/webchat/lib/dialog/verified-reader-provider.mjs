@@ -3,9 +3,9 @@ import {combineModelScores} from './model-selection-score.mjs?v=ac3ac10191';
 // Verify artifact bytes, then assemble actual injected neural sessions. No admission.
 import {copyHostData} from '../../worlds/native-tool-host.mjs?v=66339be62d';
 import {createCutterInference} from './cutter-inference.mjs?v=b520e0006b';
-import {createKeyReaderInference} from './key-reader-inference.mjs?v=8d398a8f61';
+import {createKeyReaderInference} from './key-reader-inference.mjs?v=0a046fe08e';
 import {createBertSourceOffsetAuthority} from './bert-source-offsets.mjs?v=9b7b99f458';
-import {createKeyReaderPipeline} from './key-reader-pipeline.mjs?v=1758ed9445';
+import {createKeyReaderPipeline} from './key-reader-pipeline.mjs?v=b346b21350';
 
 const hash=x=>typeof x==='string'&&/^[a-f0-9]{64}$/.test(x);
 const object=x=>x!==null&&typeof x==='object'&&!Array.isArray(x);
@@ -148,6 +148,11 @@ export async function createVerifiedReaderProvider({
  };
  verified.assemblySha256=await digest(utf8(JSON.stringify(stable(verified))));
  const scoreProposal=proposal=>({...projectJournalAction(proposal),selectionScore:combineModelScores(decisionScores)});
- const scoredProvider={...provider,registry:()=>copyHostData(JSON.parse(m.configJSON).registry),bindings:()=>copyHostData(JSON.parse(bindingsJSON)),async propose(sourceSop){decisionScores=[];const proposal=await provider.propose(sourceSop);return scoreProposal(proposal);},async *proposeRequests(sourceSop){const sequence=provider.proposeRequests(sourceSop);delete componentScores.cutter;while(true){decisionScores=[];delete componentScores['key-reader'];const step=await sequence.next();if(step.done)return;const proposal=scoreProposal(step.value);proposal.selectionScore=combineModelScores([componentScores.cutter,componentScores['key-reader']]);yield proposal;}}};
+ const scoredProvider={...provider,registry:()=>copyHostData(JSON.parse(m.configJSON).registry),bindings:()=>copyHostData(JSON.parse(bindingsJSON)),async propose(sourceSop){decisionScores=[];const proposal=await provider.propose(sourceSop);return scoreProposal(proposal);},async proposeIndependent(sourceSop){
+  decisionScores=[];delete componentScores['key-reader'];
+  const proposal=await provider.proposeIndependent(sourceSop);
+  return proposal?{...projectJournalAction(proposal),
+   selectionScore:combineModelScores([componentScores.cutter,componentScores['key-reader']])}:null;
+ },async *proposeRequests(sourceSop){const sequence=provider.proposeRequests(sourceSop);delete componentScores.cutter;while(true){decisionScores=[];delete componentScores['key-reader'];const step=await sequence.next();if(step.done)return;const proposal=scoreProposal(step.value);proposal.selectionScore=combineModelScores([componentScores.cutter,componentScores['key-reader']]);yield proposal;}}};
  return {provider:scoredProvider,verified:copyHostData(verified),provenance:()=>copyHostData(verified)};
 }
