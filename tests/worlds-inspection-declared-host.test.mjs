@@ -7,7 +7,7 @@ test('architecture inspector exposes exact held files, actual state structures a
  assert.ok(!result.nodes.some(n=>n.id.startsWith('cache:')));assert.equal(byId.get('component:reader').details.cache.hits,7);assert.match(byId.get('component:reader').help.purpose,/candidate request graphs/);assert.equal(byId.get('instance:novel').role,'World instance');
  assert.equal(byId.get('schema:novel:legend.sop').wires,schema);assert.equal(byId.get('instance:novel').wires,archive);assert.equal(byId.get('instance:novel').details.cachedWorld.wires,archive);
  assert.equal(byId.get('native:novel').details,state);assert.deepEqual(byId.get('structure:novel:history').details.value,state.history);
- assert.equal(byId.get('world:shared').details.loaded,false);assert.equal(byId.get('world:shared').wires,'');
+ assert.equal(byId.get('world:shared').details.loaded,false);assert.equal(byId.get('world:shared').wires,undefined);assert.equal(byId.get('world:shared').sopAvailable,false);
  assert.equal(byId.get('interpreter:novel').implementation,'JavaScript');assert.equal(byId.get('knowledge-file:shards/a.sop').wires,'@k k.item n=2');
  assert.ok(result.edges.some(e=>e.from==='world:novel'&&e.to==='world:shared'&&e.label==='imports'));
  assert.ok(!result.edges.some(e=>e.label==='reasoned with'));assert.ok(result.limitations.length);

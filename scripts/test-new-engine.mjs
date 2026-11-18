@@ -9,6 +9,8 @@ const fixed = [
   'mobile-editors-touch-browser.test.mjs',
   'world-code-panel.test.mjs',
   'worlds-explorer.test.mjs',
+  'knowledge-source-inspection.test.mjs',
+  'worlds-source-browser.test.mjs',
   'work-files.test.mjs',
   'calendar-avatar-selection.test.mjs',
   'avatar-composition.test.mjs', 'calendar-single-editor.test.mjs', 'native-clear-editors.test.mjs', 'native-control-sampler.test.mjs', 'instance-store.test.mjs',

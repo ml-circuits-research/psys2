@@ -3,7 +3,7 @@ import{serialize,str,version,build}from'../vendor/sopworld/sopworld.mjs?v=20fdd5
 import SOURCE from'./new-engine-source.mjs?v=e31b4adb7f';
 import{CATALOG_PIN}from'../knowledge/catalog-pin.mjs?v=dc47595de0';
 import{inspectExecutionPolicyWorld}from'./execution-policy.mjs?v=f97054802d';
-import{inspectSchemaSource}from'./worlds-inspection.mjs?v=a7f4fe77fe';
+import{inspectSchemaSource}from'./worlds-inspection.mjs?v=00ec7e3869';
 import{inspectRequestCompositionPolicy}from'./request-composition-policy.mjs?v=2d9a83c780';
 const clone=value=>structuredClone(value);
 const loggedWires=snapshot=>(snapshot?.log??[]).flatMap(entry=>entry.wires??[]);
@@ -16,7 +16,7 @@ export function inspectCachedExecutionSource(world,{moduleNames=[]}={}){
 function snapshotText(snapshot){return (snapshot?.log??[]).map((entry,index)=>'# Log entry '+index+' / '+entry.op+'\n'+serialize(entry.wires??[])).join('\n\n');}
 /** Projects actual cache accessors and retained journal JSON; performs no reading or reasoning. */
 export async function inspectExecutionWorlds(session){
- const [{inspectNewEngineSourceWorld},{inspectDeclaredExecutionSourceWorld}]=await Promise.all([import('./new-engine.mjs?v=f68f283f2c'),import('./declared-execution.mjs?v=f68f283f2c')]);
+ const [{inspectNewEngineSourceWorld},{inspectDeclaredExecutionSourceWorld}]=await Promise.all([import('./new-engine.mjs?v=f44d7a5021'),import('./declared-execution.mjs?v=f44d7a5021')]);
  const journal=session?.newEngineJournal??[],moduleNames=[...new Set(journal.flatMap(record=>importsOf(record.evidence)))],sources=[['new-engine','src/dialog/new-engine.mjs',inspectNewEngineSourceWorld({moduleNames})],['declared-execution','src/dialog/declared-execution.mjs',inspectDeclaredExecutionSourceWorld({moduleNames})]],nodes=[],edges=[];
  const link=(from,to,label)=>edges.push({from,to,label});
  const policy=inspectExecutionPolicyWorld();

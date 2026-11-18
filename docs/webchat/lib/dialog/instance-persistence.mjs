@@ -1,20 +1,20 @@
 // Versioned SOP instances; native projections are admitted only after their declared view agrees.
 import{serializeInstanceState,readInstanceState,instanceStateWorld,serialize}from'../vendor/sopworld/sopworld.mjs?v=20fdd56a67';
-import{NATIVE_AREAS,createAreaHost}from'./app-reader-context.mjs?v=b5d2aa913a';
+import{NATIVE_AREAS,createAreaHost}from'./app-reader-context.mjs?v=8473a7502b';
 import{nativeObservationObjects,compareInstanceObjects}from'./instance-facts.mjs?v=44097f62ae';
 import{instanceIdFor}from'./instance-identity.mjs?v=37c0536b83';
 import{copyHostData}from'../../worlds/native-tool-host.mjs?v=463e762442';
 import{CATALOG_PIN}from'../knowledge/catalog-pin.mjs?v=dc47595de0';
 export const NATIVE_INSTANCE_SCHEMA='psys2.native-instance/1';
 const byWorld=new Map(Object.values(NATIVE_AREAS).map(a=>[a.world,a]));
-const create=(session,area,state,instanceId)=>createAreaHost(area,{state,instanceId,loader:session.engine?.loader,knowledge:session.engine?.knowledge});
+const create=(session,area,state,instanceId,prepareKnowledge=true)=>createAreaHost(area,{state,instanceId,prepareKnowledge,loader:session.engine?.loader,knowledge:session.engine?.knowledge});
 /** Observe a compact semantic World without serializing native render caches or undo history.
  * Optional native interface metadata reuses this same host and observation for inspection. */
-export async function observeNativeInstanceWorlds(session,{worlds=[...byWorld.keys()],includeHostInterface=false}={}){
+export async function observeNativeInstanceWorlds(session,{worlds=[...byWorld.keys()],includeHostInterface=false,prepareKnowledge=true}={}){
  session.nativeInstanceRevisions??={};session.nativeInstanceSnapshots??={};session.instanceWorlds??={};const records=[];
  for(const world of [...new Set(worlds)]){
   const area=byWorld.get(world),state=session.isession.state[world];if(!area||!state)continue;
-  const instanceId=instanceIdFor(session,world),host=await create(session,area,state,instanceId),observation=host.observe(),objects=nativeObservationObjects(observation),canonical=JSON.stringify({objects,projection:state}),prior=session.nativeInstanceSnapshots[world];
+  const instanceId=instanceIdFor(session,world),host=await create(session,area,state,instanceId,prepareKnowledge),observation=host.observe(),objects=nativeObservationObjects(observation),canonical=JSON.stringify({objects,projection:state}),prior=session.nativeInstanceSnapshots[world];
   if(prior!==undefined&&prior!==canonical)session.nativeInstanceRevisions[world]=(session.nativeInstanceRevisions[world]??0)+1;
   const revision=session.nativeInstanceRevisions[world]??0,carrier=serializeInstanceState({instanceId,world,schemaVersion:NATIVE_INSTANCE_SCHEMA,revision,objects,projection:null});
   const semantic=area.stateWorld?area.stateWorld(state):instanceStateWorld(carrier);session.instanceWorlds[world]=semantic;session.nativeInstanceSnapshots[world]=canonical;

@@ -34,7 +34,8 @@ function loadProgress(message,operation){
  const close=error=>{if(!current)return;const ms=performance.now()-started;timings.push({stage:current.stage,ms});worldActivity(current.nodeIds,error?'error':'end',current.stage,{operation,requestId:message.id,correlationId,stage:current.stage,durationMs:ms,status:error?'failed':'completed',...(error?{error:String(error?.message??error)}:{})});current=null;};
  return {stage(stage,nodeIds=['runtime:registry']){close();current={stage,nodeIds};started=performance.now();evt('tab-load-progress',{tab:message.tab??(operation==='worldsInspection'?'worlds':null),requestId:message.id,operation,correlationId,stage});worldActivity(nodeIds,'start',stage,{operation,requestId:message.id,correlationId,stage,status:'running'});},finish(error=null){close(error);return timings;}};
 }
-const knowledgeReadFiles=new Map();
+const knowledgeReadFiles=new Map(),knowledgeReadPurposes=new Map();
+let knowledgeInspectionSource=null;
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 let engine = null, session = null, settings = {}, mods = null, testHooks = false, faultNow = null;
@@ -176,7 +177,8 @@ async function init(m) {
     const src = createCachedSource({ source: createKnowledgeSource(settings.knowledgeUrl || KNOWLEDGE_URLS), caches: globalThis.caches, onCacheEvent: (e) => evt('knowledge-cache', e) });
     // the bundled subset (colours, number words, the drawings of the built-in kinds: generated from the catalog) answers for a catalog that cannot be reached; the catalog replaces it when it can
     const layered = createLayeredSource({ text: (p) => Promise.race([src.text(p).catch(() => null), new Promise((res) => setTimeout(() => res(null), knowledgeTimeoutMs(p) + 2000))]) });
-    knowledgeFacts = createFacts({source:{...layered,async text(path){const started=performance.now(),activity={operation:'knowledge.read',stage:'knowledge',path};worldActivity(['knowledge:catalog'],'start','Read '+path,activity);try{const text=await layered.text(path);if(typeof text==='string')knowledgeReadFiles.set(path,text);worldActivity(['knowledge:catalog','knowledge-file:'+path],text==null?'unavailable':'end','Read '+path,{...activity,durationMs:performance.now()-started});return text;}catch(error){worldActivity(['knowledge:catalog'],'error','Read '+path,{...activity,durationMs:performance.now()-started,error:String(error?.message??error)});throw error;}}}});
+    knowledgeInspectionSource={...layered,async text(path,{purpose='runtime',requestId}={}){const started=performance.now(),activity={operation:purpose==='inspection'?'knowledge.inspect.read':'knowledge.read',stage:'knowledge',path,purpose,...(requestId===undefined?{}:{requestId})};worldActivity(['knowledge:catalog'],'start','Read '+path,activity);try{const text=await layered.text(path);if(typeof text==='string'){knowledgeReadFiles.set(path,text);if(!knowledgeReadPurposes.has(path))knowledgeReadPurposes.set(path,new Set());knowledgeReadPurposes.get(path).add(purpose);}worldActivity(['knowledge:catalog','knowledge-file:'+path],text==null?'unavailable':'end','Read '+path,{...activity,durationMs:performance.now()-started});return text;}catch(error){worldActivity(['knowledge:catalog'],'error','Read '+path,{...activity,durationMs:performance.now()-started,error:String(error?.message??error)});throw error;}}};
+    knowledgeFacts=createFacts({source:knowledgeInspectionSource});
     engine.setKnowledge(knowledgeFacts);
     engine.onNotice = (text) => evt('notice', text);   // "Looking up how a pineapple looks..." while a shard loads
   } catch (e) { console.warn('knowledge catalog not attached', e); }
@@ -368,26 +370,42 @@ const handlers = {
     const restored=await restoreNativeInstances(session,m.records);
     return {...restored,state:stateOf(),meta:metaOf()};
   },
+  async worldSources(m){
+    while(turnRunning())await sleep(20);
+    if(!knowledgeInspectionSource)throw Error('knowledge-source-unavailable');
+    const readText=async path=>{
+      if(!knowledgeReadFiles.has(path))return knowledgeInspectionSource.text(path,{purpose:'inspection',requestId:m.id});
+      if(!knowledgeReadPurposes.has(path))knowledgeReadPurposes.set(path,new Set());knowledgeReadPurposes.get(path).add('inspection');
+      worldActivity(['knowledge:catalog','knowledge-file:'+path],'end','Inspect cached source '+path,{operation:'knowledge.inspect.read',purpose:'inspection',requestId:m.id,path,cached:true});
+      return knowledgeReadFiles.get(path);
+    };
+    const indexText=await readText('index.json');if(typeof indexText!=='string')throw Error('knowledge-index-unavailable');
+    const {inspectCatalogSources}=await import(vurl('ui/knowledge-source-inspection.mjs'));
+    return inspectCatalogSources({nodeId:m.nodeId,offset:m.offset??0,index:JSON.parse(indexText),readText});
+  },
   async worldsInspection(m) {
     const progress=loadProgress(m,'worldsInspection');try{progress.stage('Wait for active action');
     while(turnRunning())await sleep(20);
+    progress.stage('Read catalog index for inspection');
+    if(!knowledgeReadFiles.has('index.json'))await knowledgeInspectionSource?.text('index.json',{purpose:'inspection',requestId:m.id});
     progress.stage('Load inspection modules');canonicalizeSessionStates();
     const [{NATIVE_AREAS},{observeNativeInstanceWorlds},{inspectWorldsRuntime}]=await Promise.all([import(vurl('lib/dialog/app-reader-context.mjs')),import(vurl('lib/dialog/instance-persistence.mjs')),import(vurl('lib/dialog/worlds-inspection.mjs'))]);
     const available=Object.entries(NATIVE_AREAS).filter(([,area])=>loadedIds.has(area.world)&&session.isession.state[area.world]);
     progress.stage('Observe live instance facts');
-    const instances=await observeNativeInstanceWorlds(session,{worlds:available.map(([,area])=>area.world),includeHostInterface:true});
+    const instances=await observeNativeInstanceWorlds(session,{worlds:available.map(([,area])=>area.world),includeHostInterface:true,prepareKnowledge:false});
     progress.stage('Describe observed adapter interfaces');
     const viewByWorld=new Map(available.map(([view,area])=>[area.world,view])),hosts=instances.map(record=>({view:viewByWorld.get(record.world),world:record.world,observation:record.observation,...record.nativeInterface}));
     const {serialize,version,build,SCHEMA_TYPES,STAGES,TURN_STAGES}=await import(vurl('lib/vendor/sopworld/sopworld.mjs'));
     const instanceCaches=Object.entries(session.instanceWorlds??{}).map(([world,cache])=>({world,wireCount:cache.wires?.size??0,wires:serialize([...(cache.wires?.values?.()??[])])}));
     progress.stage('Describe runtime packages');
-    const baseGraph=inspectWorldsRuntime({index:worldLoader.index,bundle:worldLoader.bundleOf([...loadedIds],absModule),loaded:[...loadedIds],instances,hosts,knowledgeFiles:[...knowledgeReadFiles].map(([path,text])=>({path,text})),reader:readerStatus,nativeStates:session.isession.state,instanceCaches,sessionMeta:metaOf(),libraryInfo:{version,build,schemaTypes:[...SCHEMA_TYPES],stages:STAGES,turnStages:TURN_STAGES}});
+    const baseGraph=inspectWorldsRuntime({nativePackages:Object.entries(worldLoader.composition?.profiles??{}).filter(([,profile])=>profile.nativeHost||profile.nativeInitializer).map(([id])=>id),index:worldLoader.index,bundle:worldLoader.bundleOf([...loadedIds],absModule),loaded:[...loadedIds],instances,hosts,knowledgeFiles:[...knowledgeReadFiles].map(([path,text])=>({path,text,purposes:[...(knowledgeReadPurposes.get(path)??[])]})),reader:readerStatus,nativeStates:session.isession.state,instanceCaches,sessionMeta:metaOf(),libraryInfo:{version,build,schemaTypes:[...SCHEMA_TYPES],stages:STAGES,turnStages:TURN_STAGES}});
+    const {describeWorldsNodes}=await import(vurl('lib/dialog/worlds-node-metadata.mjs'));
     const {inspectExecutionWorlds}=await import(vurl('lib/dialog/execution-world-inspection.mjs'));
     progress.stage('Read execution knowledge and episodes');
     const executionGraph=await inspectExecutionWorlds(session);
     progress.stage('Build project world links');
     projectAreas=projectAreas.map(area=>({...area,schemaWorld:worldLoader.info(area.world)?.schemaWorld??area.schemaWorld}));projectWorld=mods.createProjectWorld({areas:projectAreas,instances});const projectGraph=mods.inspectProjectWorld(projectWorld);
-    return {...baseGraph,centralNodeId:'project:application',areas:projectAreas,nodes:[...baseGraph.nodes,...executionGraph.nodes,...projectGraph.nodes],edges:[...baseGraph.edges,...executionGraph.edges,...projectGraph.edges,...['new-engine','declared-execution'].map(name=>({from:'component:reasoner',to:'execution:module:'+name,label:'dispatches to'}))],activity:activityLog.slice(),timings:progress.finish()};
+    return {...baseGraph,centralNodeId:'project:application',areas:projectAreas,nodes:describeWorldsNodes([...baseGraph.nodes,...executionGraph.nodes,...projectGraph.nodes]),edges:[...baseGraph.edges,...executionGraph.edges,...projectGraph.edges,...['new-engine','declared-execution'].map(name=>({from:'component:reasoner',to:'execution:module:'+name,label:'dispatches to'}))],activity:activityLog.slice(),timings:progress.finish()};
     }catch(error){progress.finish(error);throw error;}
   },
   async instanceInspection(m) {
@@ -397,7 +415,7 @@ const handlers = {
     if(!area)throw Error('Unknown inspected instance world.');
     await ensureWorlds([m.world],'inspecting SOP world');
     const {observeNativeInstanceWorlds}=await import(vurl('lib/dialog/instance-persistence.mjs'));
-    const record=(await observeNativeInstanceWorlds(session,{worlds:[m.world]}))[0];
+    const record=(await observeNativeInstanceWorlds(session,{worlds:[m.world],prepareKnowledge:false}))[0];
     if(!record)throw Error('Instance state unavailable.');
     const {inspectInstanceRecord}=await import(vurl('lib/dialog/instance-inspection.mjs'));
     const data=inspectInstanceRecord({...record,wires:record.carrier},{observation:record.observation,...(record.authoritative?{semanticWires:record.wires,interfaceTypeKey:area.stateInterfaceTypeKey??null}:{})});

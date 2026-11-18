@@ -1,12 +1,21 @@
 # Current status
 
-Updated: 2026-11-17, 23:12 UTC (2026-11-18 local time). Final verified handover before standby.
+Updated: 2026-11-18. Worlds truthfulness and readability review completed.
 
 ## Public demo
 
-Latest build: **`78a45da5bc`**, https://ml-circuits-research.github.io/psys2/webchat/?ui=78a45da5bc . Implementation commit **`49ece0cd`** is pushed. GitHub Pages deployment completed successfully and the public `build-info.json` was verified to return **`78a45da5bc`**.
+Latest build: **`4d6b6239e8`**, https://ml-circuits-research.github.io/psys2/webchat/?ui=4d6b6239e8 . Publication is verified after the implementation push; the earlier public build was `78a45da5bc`. Model weights are unchanged.
 
-The deployed SOP-BERT weights remain the original epoch-7 model. No new-model deployment or completed retraining is claimed.
+## Latest Worlds review
+
+- Breadcrumbs, relationships and property navigation are borderless links. Why opens first and uses short authored purpose comments. All 40 published catalog definitions have concrete explanations grounded in their source documentation.
+- Orange means JavaScript/native implementation or catalog metadata; green means SOP declarations/facts; blue means SOP-BERT. Role icons no longer imply implementation. Native/model/JSON nodes have no fabricated SOP tab; empty Tools, Properties and Schema tabs are omitted.
+- Opening a declared SOP source fetches its real catalog files. Flat file links select **one exact complete file at a time**; all fetched files remain accessible and larger worlds use bounded pagination. No file is summarized, truncated or combined with other files.
+- Catalog-only, inspection-only and source-read are distinct. Reading bytes is not evidence that reasoning used them. `k.interest` is a genuine published definition but **its scoring mechanism is not connected to this demo**: the older executor snapshot contains its schema, zero scoring facts, and the active native path has no interest-scoring call. This missing integration is now stated, not presented as a working capability.
+- Opening Worlds no longer prepares native knowledge services just to construct the map. Explicit source inspection reads raw declared files without compiling a knowledge World, running rules, calling tools, changing editor state or sending a model request.
+- Checks: **580 tests, 577 passed, zero failures, three skipped**, including the actual built-app Worlds RPC/source test. Real 390px/1600px visible panes, three-colour palette, Why/link navigation, exact `k.interest` and paginated `k.animals` source text, retained graph identities and unchanged native state/loaded-world set/send count all pass. No console exceptions or missing files.
+
+These changes correct the inspector. They do not implement unused knowledge mechanisms or claim that every catalog definition participates in reasoning. Drawing, Diagram and Documents still have native state authority; Avatar and Calendar retain their verified SOP authority.
 
 ## Completed work
 

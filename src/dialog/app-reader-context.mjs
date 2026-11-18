@@ -9,9 +9,9 @@ import {createCalendarHost,canonicalCalendarState,toNativeCalendarState} from '.
 import {calendarStateWorld,CALENDAR_STATE_SCHEMA} from '../../worlds/time.calendar/canonical-state.mjs';
 export const NATIVE_AREAS={avatar:{area:'drawing',world:'ui.avatar',create:createAvatarHost,canonicalizeState:canonicalAvatarState,projectState:toNativeAvatarState,stateWorld:avatarStateWorld,stateSchema:AVATAR_STATE_SCHEMA,stateInterfaceTypeKey:'nativeType',loadKnowledge:'faces',historySelection:[['selectedSlot']],historyView:[['idDisplay']]},draw:{area:'drawing',world:'art.draw',create:createDrawingHost,historySelection:[['selected'],['selectedIds'],['selectedPart']],historyView:[['idDisplay']]},diagram:{area:'diagram',world:'diagram.sketch',create:createDiagramHost,historySelection:[['selected'],['chartTools','active']],historyView:[['idDisplay']]},editor:{area:'document',world:'docs.editor',create:createDocumentHost,historySelection:[['selection']]},calendar:{area:'calendar',world:'time.calendar',create:createCalendarHost,canonicalizeState:canonicalCalendarState,projectState:toNativeCalendarState,stateWorld:calendarStateWorld,stateSchema:CALENDAR_STATE_SCHEMA,policyFile:'scheduling-policy.sop',historySelection:[['selectedEvent']]}};
 /** Application composition: the same declared policy guards controls and spoken requests. */
-export async function createAreaHost(area,{loader,knowledge,...options}={}){
+export async function createAreaHost(area,{loader,knowledge,prepareKnowledge=true,...options}={}){
  if(!area)throw Error('unknown-native-area');
- if(area.loadKnowledge)await knowledge?.[area.loadKnowledge]?.();
+ if(prepareKnowledge&&area.loadKnowledge)await knowledge?.[area.loadKnowledge]?.();
  const policySource=area.policyFile?await loader?.readFile?.(area.world,area.policyFile):undefined;
  if(area.policyFile&&!policySource)throw Error('native-policy-unavailable');
  return area.create({...options,knowledge,...(policySource?{policySource}:{})});
