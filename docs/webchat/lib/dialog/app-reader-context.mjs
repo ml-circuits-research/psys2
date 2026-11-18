@@ -1,14 +1,14 @@
 // Actual application state only. No request annotations or invented semantic types.
-import {observedReaderContext} from './native-reader-context.mjs?v=46d3fc5c6a';
-import {isAuthoredRequest} from './authored-request-tool.mjs?v=267ab1e08b';
-import {createCanonicalDrawingHost} from '../../worlds/art.draw/declared-host.mjs?v=0499ae06d1';
-import {DRAWING_STATE_INTERFACE} from '../../worlds/art.draw/canonical-state.mjs?v=c4a59587b6';
-import {createCanonicalDiagramHost,DIAGRAM_STATE_INTERFACE} from '../../worlds/diagram.sketch/declared-host.mjs?v=b36e2bd67d';
-import {createDocumentHost,DOCUMENT_STATE_INTERFACE} from '../../worlds/docs.editor/declared-host.mjs?v=91c62fd58f';
-import {createAvatarHost} from '../../worlds/ui.avatar/declared-host.mjs?v=cdaf03a858';
-import {canonicalAvatarState,toNativeAvatarState,avatarStateWorld,AVATAR_STATE_SCHEMA} from '../../worlds/ui.avatar/canonical-state.mjs?v=5dd498c84a';
-import {createCalendarHost,canonicalCalendarState,toNativeCalendarState} from '../../worlds/time.calendar/declared-host.mjs?v=662f48ac0f';
-import {calendarStateWorld,CALENDAR_STATE_SCHEMA} from '../../worlds/time.calendar/canonical-state.mjs?v=701989fb25';
+import {observedReaderContext} from './native-reader-context.mjs?v=357ec324f6';
+import {isAuthoredRequest} from './authored-request-tool.mjs?v=4eb61f6a88';
+import {createCanonicalDrawingHost} from '../../worlds/art.draw/declared-host.mjs?v=86daec3860';
+import {DRAWING_STATE_INTERFACE} from '../../worlds/art.draw/canonical-state.mjs?v=67cf169ac3';
+import {createCanonicalDiagramHost,DIAGRAM_STATE_INTERFACE} from '../../worlds/diagram.sketch/declared-host.mjs?v=fbda26f01e';
+import {createDocumentHost,DOCUMENT_STATE_INTERFACE} from '../../worlds/docs.editor/declared-host.mjs?v=cecca8344b';
+import {createAvatarHost} from '../../worlds/ui.avatar/declared-host.mjs?v=3152b4926c';
+import {canonicalAvatarState,toNativeAvatarState,avatarStateWorld,AVATAR_STATE_SCHEMA} from '../../worlds/ui.avatar/canonical-state.mjs?v=db06ce32bf';
+import {createCalendarHost,canonicalCalendarState,toNativeCalendarState} from '../../worlds/time.calendar/declared-host.mjs?v=64ba4169ed';
+import {calendarStateWorld,CALENDAR_STATE_SCHEMA} from '../../worlds/time.calendar/canonical-state.mjs?v=f9022644c0';
 export const NATIVE_AREAS={
  avatar:{area:'drawing',world:'ui.avatar',create:createAvatarHost,canonicalizeState:canonicalAvatarState,projectState:toNativeAvatarState,
   stateWorld:avatarStateWorld,stateSchema:AVATAR_STATE_SCHEMA,stateInterfaceTypeKey:'nativeType',loadKnowledge:'faces',

@@ -1,13 +1,13 @@
-import {isAuthoredRequest,readAuthoredRequest} from './authored-request-tool.mjs?v=267ab1e08b';
+import {isAuthoredRequest,readAuthoredRequest} from './authored-request-tool.mjs?v=4eb61f6a88';
 // Model-first proposal routing. Calibration authority belongs to host configuration,
 // never to a model output, evaluation annotation or grammar proposal.
-import {requestCompositionPolicy}from './request-composition-policy.mjs?v=572967d7a2';
-import {invokeNativeControl} from './native-tool-controls.mjs?v=f3c05964e9';
-import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=0454b8cfa8';
-import {projectContextAction} from './project-context-action.mjs?v=bb6ec330b3';
-import {projectCreateAction} from './project-create-action.mjs?v=6bd50987a1';
-import {parse,str} from '../vendor/sopworld/sopworld.mjs?v=327fb3cf41';
-import {assessReaderProposal} from './reader-admission.mjs?v=2d1a2a7506';
+import {requestCompositionPolicy}from './request-composition-policy.mjs?v=aad24b5d80';
+import {invokeNativeControl} from './native-tool-controls.mjs?v=2b00275ad3';
+import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=7c959edcf4';
+import {projectContextAction} from './project-context-action.mjs?v=c83632ceb9';
+import {projectCreateAction} from './project-create-action.mjs?v=cb5fd5ea73';
+import {parse,str} from '../vendor/sopworld/sopworld.mjs?v=7950b62b94';
+import {assessReaderProposal} from './reader-admission.mjs?v=5c5a484840';
 const unavailable=reason=>({candidates:[],coverage:{complete:false,executable:false,graphProposal:false},failures:[{reason}]});
 const noDeclaredAction = () => {
  const text='I could not identify an action to apply. Nothing changed.';
@@ -22,9 +22,14 @@ async function dispatchRequest(session,candidate,text,options,bindings,contextPr
    result={text:history.message,parts:[{text:history.message,translate:false}],statuses:[history.ok?'supported':'unsupported'],answers:[],segments:[],state:history.ok?structuredClone(session.isession.state):{},effects:history.ok?[{operation:act}]:[],trace:{legacy:false,engine:'new',assessment:history.ok?act:'history-refused'}};
   }else{
    const before=structuredClone(session.isession.state);
-   if(contextProjection){if(contextProjection.rewind)Object.assign(session.isession.state,structuredClone(contextProjection.rewind));session.newEngineFocus={...session.newEngineFocus,[area]:contextProjection.focus};}
-   result=await executeDeclaredRequest(session,candidate,text,{bindings,view:area,compiledPlan,unapplied:interpretation?.unapplied??[]})??noDeclaredAction();
-   if(!result.statuses?.includes('supported')&&contextProjection?.rewind)session.isession.state=before;
+   const rewind=contextProjection?.rewind;
+   const originals=rewind&&Object.fromEntries(Object.keys(rewind).map(key=>[key,session.isession.state[key]]));
+   if(rewind)Object.assign(session.isession.state,structuredClone(rewind));
+   try{
+    result=await executeDeclaredRequest(session,candidate,text,{bindings,view:area,compiledPlan,focus:contextProjection?.focus,unapplied:interpretation?.unapplied??[]})??noDeclaredAction();
+   }finally{
+    if(originals&&!result?.statuses?.includes('supported'))Object.assign(session.isession.state,originals);
+   }
    if(result.statuses?.includes('supported')){session.newEngineLastAction={...session.newEngineLastAction,[area]:candidate};if(contextProjection){result.text+=' '+interpretation.note;result.parts=[{text:result.text,translate:false}];result.trace={...result.trace,interpretation};}}
    const changed=Object.keys(session.isession.state).filter(key=>JSON.stringify(before[key])!==JSON.stringify(session.isession.state[key]));
    if(changed.length){session.newEngineRedo=(session.newEngineRedo??[]).filter(r=>r.area!==area);session.newEngineUndo=[...(session.newEngineUndo??[]).slice(-31),{area,before:Object.fromEntries(changed.map(key=>[key,before[key]])),after:Object.fromEntries(changed.map(key=>[key,structuredClone(session.isession.state[key])])),reading:candidate,alternatives}];}
@@ -50,12 +55,16 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
  if(decision.decisionSop){
   try{session.engine?.onWorldActivity?.({nodeIds:['component:request-admission','knowledge:reader-admission-policy','component:library'],phase:'stage',operation:'app.reader.admission',label:'Evaluate reader admission policy',wires:decision.decisionSop});}catch{/* Observation cannot change admission. */}
  }
+ const choice=proposal?.interpretation?.decision;
+ if(choice)try{session.engine?.onWorldActivity?.({nodeIds:['component:library','execution:creation-policy'],phase:'stage',operation:'std.choice',label:'Compare grounded creation readings',
+  text,wires:choice.input+'\n'+choice.sop});}catch{/* Trace subscribers cannot change interpretation. */}
  let candidate=decision.candidate,comparison=null;
  const eligible=decision.admitted,reason=decision.reason;
- if(eligible && decision.mode==='uncalibrated-best-effort' && !contextProjection && providerCandidates.length>1 && providerCandidates.length<=16){
-  const admitted=providerCandidates.filter(option=>assessReaderProposal({proposal:{...proposal,candidates:[option]},text,provenance,area:context.area}).admitted);
+ const interpretations=proposal?.interpretation?.profile==='declared-creation/1'?proposal.candidates:providerCandidates;
+ if(eligible && decision.mode==='uncalibrated-best-effort' && !contextProjection && interpretations.length>1 && interpretations.length<=16){
+  const admitted=interpretations.filter(option=>assessReaderProposal({proposal:{...proposal,candidates:[option]},text,provenance,area:context.area}).admitted);
   if(admitted.length>1){
-   comparison=await compareDeclaredReadings(session,admitted,{view:context.area,bindings});
+   comparison=await compareDeclaredReadings(session,admitted,{view:context.area,bindings,unapplied:proposal.interpretation?.unapplied});
    if(comparison){
     session.engine?.onWorldActivity?.({nodeIds:['component:library'],phase:'stage',operation:'std.interpret',label:'Compare proposed readings',
      text,wires:comparison.sop,proposals:admitted.length});
@@ -69,7 +78,13 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
  let result;
  if(eligible){
   result=await dispatchRequest(session,candidate,text,options,bindings,contextProjection,proposal.interpretation,decision.alternatives,comparison?.plan);
-  if(result?.statuses?.includes('supported')&&proposal.interpretation?.profile==='declared-creation/1'&&proposal.interpretation.note){result.text+=' '+proposal.interpretation.note;result.parts=[{text:result.text,translate:false}];result.trace={...result.trace,interpretation:proposal.interpretation};}
+  if(result?.statuses?.includes('supported')&&proposal.interpretation?.profile==='declared-creation/1'){
+   const {requestedName}=proposal.interpretation,notes=[];
+   const note=candidate.creationNote??proposal.interpretation.note;
+   if(requestedName&&result.trace.effectVerification?.checks?.some(check=>check.parameter==='name'&&check.status==='met'&&check.actual===requestedName))notes.push('I named it '+JSON.stringify(requestedName)+'.');
+   if(note)notes.push(note);
+   if(notes.length){result.text+=' '+notes.join(' ');result.parts=[{text:result.text,translate:false}];result.trace={...result.trace,interpretation:proposal.interpretation};}
+  }
   if(result&&decision.uncertain&&result.statuses?.includes('supported')){
    const note=result.trace?.uncertainty?.length||result.trace?.interpretation?'':'I used the most likely reading; you can correct it or undo.';
    if(note){result.text+=' '+note;result.parts=[{text:result.text,translate:false}];}

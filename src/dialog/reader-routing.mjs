@@ -22,9 +22,14 @@ async function dispatchRequest(session,candidate,text,options,bindings,contextPr
    result={text:history.message,parts:[{text:history.message,translate:false}],statuses:[history.ok?'supported':'unsupported'],answers:[],segments:[],state:history.ok?structuredClone(session.isession.state):{},effects:history.ok?[{operation:act}]:[],trace:{legacy:false,engine:'new',assessment:history.ok?act:'history-refused'}};
   }else{
    const before=structuredClone(session.isession.state);
-   if(contextProjection){if(contextProjection.rewind)Object.assign(session.isession.state,structuredClone(contextProjection.rewind));session.newEngineFocus={...session.newEngineFocus,[area]:contextProjection.focus};}
-   result=await executeDeclaredRequest(session,candidate,text,{bindings,view:area,compiledPlan,unapplied:interpretation?.unapplied??[]})??noDeclaredAction();
-   if(!result.statuses?.includes('supported')&&contextProjection?.rewind)session.isession.state=before;
+   const rewind=contextProjection?.rewind;
+   const originals=rewind&&Object.fromEntries(Object.keys(rewind).map(key=>[key,session.isession.state[key]]));
+   if(rewind)Object.assign(session.isession.state,structuredClone(rewind));
+   try{
+    result=await executeDeclaredRequest(session,candidate,text,{bindings,view:area,compiledPlan,focus:contextProjection?.focus,unapplied:interpretation?.unapplied??[]})??noDeclaredAction();
+   }finally{
+    if(originals&&!result?.statuses?.includes('supported'))Object.assign(session.isession.state,originals);
+   }
    if(result.statuses?.includes('supported')){session.newEngineLastAction={...session.newEngineLastAction,[area]:candidate};if(contextProjection){result.text+=' '+interpretation.note;result.parts=[{text:result.text,translate:false}];result.trace={...result.trace,interpretation};}}
    const changed=Object.keys(session.isession.state).filter(key=>JSON.stringify(before[key])!==JSON.stringify(session.isession.state[key]));
    if(changed.length){session.newEngineRedo=(session.newEngineRedo??[]).filter(r=>r.area!==area);session.newEngineUndo=[...(session.newEngineUndo??[]).slice(-31),{area,before:Object.fromEntries(changed.map(key=>[key,before[key]])),after:Object.fromEntries(changed.map(key=>[key,structuredClone(session.isession.state[key])])),reading:candidate,alternatives}];}
@@ -50,12 +55,16 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
  if(decision.decisionSop){
   try{session.engine?.onWorldActivity?.({nodeIds:['component:request-admission','knowledge:reader-admission-policy','component:library'],phase:'stage',operation:'app.reader.admission',label:'Evaluate reader admission policy',wires:decision.decisionSop});}catch{/* Observation cannot change admission. */}
  }
+ const choice=proposal?.interpretation?.decision;
+ if(choice)try{session.engine?.onWorldActivity?.({nodeIds:['component:library','execution:creation-policy'],phase:'stage',operation:'std.choice',label:'Compare grounded creation readings',
+  text,wires:choice.input+'\n'+choice.sop});}catch{/* Trace subscribers cannot change interpretation. */}
  let candidate=decision.candidate,comparison=null;
  const eligible=decision.admitted,reason=decision.reason;
- if(eligible && decision.mode==='uncalibrated-best-effort' && !contextProjection && providerCandidates.length>1 && providerCandidates.length<=16){
-  const admitted=providerCandidates.filter(option=>assessReaderProposal({proposal:{...proposal,candidates:[option]},text,provenance,area:context.area}).admitted);
+ const interpretations=proposal?.interpretation?.profile==='declared-creation/1'?proposal.candidates:providerCandidates;
+ if(eligible && decision.mode==='uncalibrated-best-effort' && !contextProjection && interpretations.length>1 && interpretations.length<=16){
+  const admitted=interpretations.filter(option=>assessReaderProposal({proposal:{...proposal,candidates:[option]},text,provenance,area:context.area}).admitted);
   if(admitted.length>1){
-   comparison=await compareDeclaredReadings(session,admitted,{view:context.area,bindings});
+   comparison=await compareDeclaredReadings(session,admitted,{view:context.area,bindings,unapplied:proposal.interpretation?.unapplied});
    if(comparison){
     session.engine?.onWorldActivity?.({nodeIds:['component:library'],phase:'stage',operation:'std.interpret',label:'Compare proposed readings',
      text,wires:comparison.sop,proposals:admitted.length});
@@ -69,7 +78,13 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
  let result;
  if(eligible){
   result=await dispatchRequest(session,candidate,text,options,bindings,contextProjection,proposal.interpretation,decision.alternatives,comparison?.plan);
-  if(result?.statuses?.includes('supported')&&proposal.interpretation?.profile==='declared-creation/1'&&proposal.interpretation.note){result.text+=' '+proposal.interpretation.note;result.parts=[{text:result.text,translate:false}];result.trace={...result.trace,interpretation:proposal.interpretation};}
+  if(result?.statuses?.includes('supported')&&proposal.interpretation?.profile==='declared-creation/1'){
+   const {requestedName}=proposal.interpretation,notes=[];
+   const note=candidate.creationNote??proposal.interpretation.note;
+   if(requestedName&&result.trace.effectVerification?.checks?.some(check=>check.parameter==='name'&&check.status==='met'&&check.actual===requestedName))notes.push('I named it '+JSON.stringify(requestedName)+'.');
+   if(note)notes.push(note);
+   if(notes.length){result.text+=' '+notes.join(' ');result.parts=[{text:result.text,translate:false}];result.trace={...result.trace,interpretation:proposal.interpretation};}
+  }
   if(result&&decision.uncertain&&result.statuses?.includes('supported')){
    const note=result.trace?.uncertainty?.length||result.trace?.interpretation?'':'I used the most likely reading; you can correct it or undo.';
    if(note){result.text+=' '+note;result.parts=[{text:result.text,translate:false}];}

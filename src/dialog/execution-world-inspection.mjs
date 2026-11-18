@@ -3,6 +3,8 @@ import{serialize,str,version,build}from'../vendor/sopworld/sopworld.mjs';
 import SOURCE from'./new-engine-source.mjs';
 import{CATALOG_PIN}from'../knowledge/catalog-pin.mjs';
 import{inspectExecutionPolicyWorld}from'./execution-policy.mjs';
+import{inspectCreationPolicy}from'./project-create-action.mjs';
+import{inspectReferencePolicy}from'./reference-policy.mjs';
 import{inspectSchemaSource}from'./worlds-inspection.mjs';
 import{inspectRequestCompositionPolicy}from'./request-composition-policy.mjs';
 const clone=value=>structuredClone(value);
@@ -21,6 +23,24 @@ export async function inspectExecutionWorlds(session){
  ]);
  const journal=session?.newEngineJournal??[],moduleNames=[...new Set(journal.flatMap(record=>importsOf(record.evidence)))],sources=[['declared-execution','src/dialog/declared-execution.mjs',inspectDeclaredExecutionSourceWorld({moduleNames})]],nodes=[],edges=[];
  const link=(from,to,label)=>edges.push({from,to,label});
+ const reference=inspectReferencePolicy();
+ nodes.push({id:'execution:reference-policy',label:'Context references',kind:'knowledge',implementation:'Operational SOP Lang World',
+  description:'Matches contextual references to observed objects. Its criteria prefer the focused object for a current reference and exclude it when retargeting the previous change.',
+  wires:reference.policy,details:{source:'worlds/app.project/reference-policy.sop',loaded:reference.loaded}});
+ nodes.push({id:'execution:reference-schema',label:'app.reference',kind:'schema',implementation:'SOP Lang schema module',
+  description:'Defines reader evidence, live objects, canonical bindings and the result of resolving a contextual reference.',
+  wires:reference.schema,schemaView:inspectSchemaSource(reference.schema),details:{source:'worlds/app.project/reference-schema.sop',loaded:reference.loaded}});
+ link('execution:reference-policy','execution:reference-schema','imports schema');
+ link('execution:reference-policy','execution:module:declared-execution','supplies a grounded reference');
+ const creation=inspectCreationPolicy();
+ nodes.push({id:'execution:creation-policy',label:'Creation readings',kind:'knowledge',implementation:'Operational SOP Lang World',
+  description:'Compares grounded names with the constructors that the current tool exposes. Its criteria order lexical distance, reader type and family.',
+  wires:creation.policy,details:{source:'worlds/app.project/creation-policy.sop',loaded:creation.loaded}});
+ nodes.push({id:'execution:creation-schema',label:'app.creation',kind:'schema',implementation:'SOP Lang schema module',
+  description:'Declares grounded source roles and the lexical distance limit used when reading a creation request.',
+  wires:creation.schema,schemaView:inspectSchemaSource(creation.schema),details:{source:'worlds/app.project/creation-schema.sop',loaded:creation.loaded}});
+ link('execution:creation-policy','execution:creation-schema','imports schema');
+ link('execution:creation-policy','execution:module:declared-execution','supplies grounded creation readings');
  const policy=inspectExecutionPolicyWorld();
  nodes.push({id:'execution:policy',label:'Execution policy',kind:'knowledge',implementation:'Operational SOP Lang World + declared host clock',description:'Actual policy queried by execution for omitted arguments and knowledge-property joins. The source is available before initialization; loaded status records the real lazy World. This moves these decisions out of native operation maps, but does not migrate editor state or all native tool semantics.',wires:policy.facts,details:{source:policy.source,loaded:policy.loaded,functions:policy.functions,dependencies:policy.dependencies},help:{purpose:'Declare defaults and knowledge value joins used by concrete request execution.',inputs:['Operation and explicit arguments','Referenced knowledge properties','Clock primitive for a missing current time'],outputs:['Only omitted argument defaults','Assumption notices','Typed knowledge-property lookup descriptors'],limits:['These are explicit defaults, not proof of broader reasoning. Editor native implementations remain visible.']}});
  link('execution:module:declared-execution','execution:policy','queries defaults and value joins');
@@ -55,7 +75,7 @@ export async function inspectExecutionWorlds(session){
  nodes.push({id:'execution:journal',label:'Retained execution journal',kind:'runtime',implementation:'JavaScript collection of SOP World snapshots',description:'Actual session.newEngineJournal entries. Each evidence snapshot below is a retained SOP World, not a fabricated reasoning replay.',details:{count:journal.length,records:clone(journal)}});
  for(const [index,record]of journal.entries()){
   const id='execution:episode:'+index+':'+String(record.invocation),snapshot=record.evidence,imports=importsOf(snapshot);
-  nodes.push({id,label:'Evidence '+String(record.invocation),kind:'episode',implementation:'Retained SOP Lang World snapshot',description:'Exact evidence.toJSON retained by the executed operation. The wire text lists its real restoration log entries; JSON retains the full snapshot.',wires:snapshotText(snapshot),details:{...clone(record),imports,loaded:false,status:'retained serialized World'}});link('execution:journal',id,'retains evidence World');link(id,'execution:module:new-engine','retained by');
+  nodes.push({id,label:'Evidence '+String(record.invocation),kind:'episode',implementation:'Retained SOP Lang World snapshot',description:'Exact evidence.toJSON retained by the executed operation. The wire text lists its real restoration log entries; JSON retains the full snapshot.',wires:snapshotText(snapshot),details:{...clone(record),imports,loaded:false,status:'retained serialized World'}});link('execution:journal',id,'retains evidence World');link(id,'execution:module:declared-execution','retained by');
   for(const name of imports)link(id,'library:'+name,'imports');
  }
  for(const name of moduleNames){const text=libraryModules.get(name);nodes.push({id:'library:'+name,label:name,kind:'schema',implementation:'SOP Lang standard module',description:text?'Exact standard module source available through the actual loaded execution World library.':'Referenced by retained evidence; its source is not held by an initialized execution cache.',...(text?{wires:text}:{}),details:{module:name,available:text!==undefined,libraryVersion:version,libraryBuild:build}});}

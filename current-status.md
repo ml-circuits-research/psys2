@@ -1,10 +1,18 @@
 # Current status
 
+## 2026-11-18 — grounded choices and direct property execution
+
+SOPWorlds 0.216 compiles ranked-choice queries. The creation and reference policies supply criteria for comparing grounded alternatives. Their schemas, rules and actual decisions can be inspected in Worlds. Direct property changes and selectors compile through the same native tool declarations; the former standalone Drawing property host was removed. Admission classes and calibration thresholds are authored SOP policy.
+
+In Chromium, “make it blue” changed the focused fish. “No, the other one” restored the fish and changed the house. Undo restored both prior colors. The cutter treated “no” as a separate clause and generated an extra failure sentence. Seven creation trials, including named shapes and a typo, changed the expected objects and could be undone. The previous live reader test of “Make the red house purple” still lacked an admitted query although the authored selector executed successfully.
+
+Remaining semantic JavaScript includes constructing request graphs from incomplete reader evidence, scheduling and coordinating corrections and history, and portions of the live-to-SOP capability adapter. The migration remains open.
+
 ## 2026-11-18 — executable SOP at the tool boundary
 
 The five editor tool hosts accept SOP commands with a separate SOP invocation identity and observed revision. Compiled capability calls carry their typed arguments straight from the compiler into the interpreter. Manual editor gestures retain their compact tool wires. The chat and Worlds show the exact dispatched command. A stale revision is refused; a retry with the same invocation and command returns the prior receipt.
 
-Drawing, Diagram, Documents, Calendar and Avatar now own their editor state as SOP facts. The reader’s creation and context projections and the legacy property path still contain semantic JavaScript. The general compiler migration is ongoing.
+Drawing, Diagram, Documents, Calendar and Avatar now own their editor state as SOP facts. See the latest entry above for the subsequent migration of the property path.
 
 ## 2026-11-18 — chat circuits and reader context
 

@@ -156,3 +156,6 @@ Checks: spatial placement tests 7/7, full npm gate 617 passed and 3 skipped. Rea
 ## 2026-11-18 — Reader admission runs in an authored SOP World
 - C1 and C2 share the declared calibration ceiling. C2 verifies the retained evidence and derives its decision from the authored action classes, limits and reversible fallback rules. Worlds cites the source and shows the decision that ran.
 - `npm run build:webchat` produced d8cd485c6b. `npm test`: 619 passed, three skipped, zero failures. Chromium ran the actual SOP-BERT reader, created a tree and exposed the same admission wire in the reply trace and Worlds activity.
+
+2026-11-18 integrated SOPWorlds 0.216/aeb470f, grounded creation and contextual-reference choices, their actual schemas/rules and activity in Worlds. Removed the standalone Drawing property host from source and browser.
+Checks: npm test 614 passed, 3 skipped, zero failed. Chromium verified seven creation/Undo pairs including named shapes; “make it blue” and “no, the other one” applied and reversed the expected colors, with the previous target excluded by the recorded choice.

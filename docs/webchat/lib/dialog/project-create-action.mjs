@@ -1,51 +1,144 @@
+import {World,editCost,parse,serializeRequestGraph,str} from '../vendor/sopworld/sopworld.mjs?v=7950b62b94';
+import POLICY from '../../worlds/app.project/creation-policy-source.mjs?v=a166e47fda';
+import SCHEMA from '../../worlds/app.project/creation-schema-source.mjs?v=6f8e06c701';
+import {executionPolicyWorld} from './execution-policy.mjs?v=245d0e44ab';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=34af7a8466';
 import {nativeCreationCandidates} from './native-binding-candidates.mjs?v=de223646d6';
-// Compose a reversible creation from model-declared roles and actual native constructor declarations.
-import {serializeRequestGraph,editCost} from '../vendor/sopworld/sopworld.mjs?v=327fb3cf41';
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=b953840f3e';
-import {DRAWING_PROPERTY_BINDINGS} from '../../worlds/art.draw/property-host.mjs?v=45ec70afe7';
-const kindConcepts=new Set(['kind','shape']);
-export async function projectCreateAction(proposal,session,{bindings,registry,view}={}) {
- const raw=proposal?.raw,r=raw?.requests?.[0],area=NATIVE_AREAS[view];
- if(!area||!bindings||!registry||proposal.coverage?.complete||raw?.requestCount!==1||raw.coverage?.truncated||r?.act!=='make'||r.mood!=='do'||r.target?.mode!=='new'||!Array.isArray(r.constraints)||r.constraints.some(c=>c.polarity==='negative'))return null;
- const chars=Array.from(raw.source.text),evidence=(path,value)=>(raw.ranges??[]).some(a=>JSON.stringify(a.path)===JSON.stringify(['requests','0',...path])&&chars.slice(...a.range).join('')===value);
- if(typeof r.trigger!=='string'||!evidence(['trigger'],r.trigger))return null;
- const native=session.isession.state[area.world];if(!native)return null;
- const host=await area.create({state:native,instanceId:'creation-'+globalThis.crypto.randomUUID()}),operations=host.bindings();
- const choices=nativeCreationCandidates(bindings,operations,area.area);
- let lexical=r.target.kind,kindCondition=-1;
- if(lexical&&!evidence(['target','kind_span'],r.target.kind_span??lexical))return null;
- if(!lexical)for(const [i,c]of r.constraints.entries())if(kindConcepts.has(registry[area.area+'.'+c.key]?.concept)&&c.value===c.value_span&&evidence(['constraints',String(i),'value_span'],c.value)){lexical=c.value;kindCondition=i;break;}
- let ranked;
- if(lexical){
-  if(typeof lexical!=='string'||lexical.length>64)return null;
-  // Reuse the library's bounded lexical edit ranking, with no copied vocabulary.
-  ranked=choices.filter(c=>c.mapping.lemma.length<=64).map(c=>({...c,cost:editCost(lexical.toLowerCase(),c.mapping.lemma.toLowerCase(),2)})).filter(c=>Number.isFinite(c.cost)).sort((a,b)=>a.cost-b.cost||Number(b.mapping.type===r.target.type)-Number(a.mapping.type===r.target.type));
- }else {
-  ranked=choices.filter(c=>c.mapping.type===r.target.type).map(c=>({...c,cost:0}));
-  const family=bindings.families?.find(f=>f.area===area.area&&f.type===r.target.type);
-  ranked.sort((a,b)=>Number(b.mapping.canonical===family?.canonical)-Number(a.mapping.canonical===family?.canonical));
+import {budget} from './budget.mjs?v=00bce6e369';
+import {compileObservedChoice} from './observed-choice.mjs?v=ff2dabe509';
+
+const field=(fact,key)=>str(fact.attrs[key]?.[0]);
+let loaded;
+export const inspectCreationPolicy=()=>({policy:POLICY,schema:SCHEMA,loaded:!!loaded});
+function creationPolicy(){
+ if(loaded)return loaded;
+ const world=new World({library:{'app.creation':SCHEMA}});
+ if(!world.tell(POLICY).ok)throw Error('invalid-creation-policy');
+ const rows=world.ofType('app.creation.role'),[grounding]=world.ofType('app.creation.grounding');
+ const roles=new Map(rows.map(row=>[field(row,'concept'),field(row,'role')]));
+ const editCeiling=Number(field(grounding,'editCeiling'));
+ const nameParameter=field(rows.find(row=>field(row,'role')==='name'),'parameter');
+ loaded={world,roles,editCeiling,nameParameter};
+ return loaded;
+}
+const valueKeys=new Set(['key','value','value_span','phase','operator','polarity','character']);
+const retainedLimit=5;
+const choiceBatchLimit=200;
+
+function sourceEvidence(raw){
+ const chars=Array.from(raw.source.text),ranges=raw.ranges??[];
+ return (path,value)=>{
+  if(typeof value!=='string'||!value)return null;
+  const key=JSON.stringify(['requests','0',...path]);
+  const matches=ranges.filter(row=>JSON.stringify(row.path)===key);
+  if(matches.length!==1)return null;
+  const range=matches[0].range;
+  if(!Array.isArray(range)||range.length!==2||!range.every(Number.isInteger)||range[0]<0||range[1]>chars.length||range[1]<=range[0])return null;
+  return chars.slice(...range).join('')===value?range:null;
+ };
+}
+const coextensive=(a,b)=>a&&b&&a[0]===b[0]&&a[1]===b[1];
+
+function rankConstructors(choices,lexical,readType,family){
+ const {world,editCeiling}=creationPolicy();
+ if(lexical&&lexical.length>64)return {options:[]};
+ const candidates=[];
+ for(const choice of choices){
+  budget.tick('creation.rank');
+  const mapping=choice.mapping;
+  if(lexical?mapping.lemma.length>64:mapping.type!==readType)continue;
+  const distance=lexical?editCost(lexical.toLowerCase(),mapping.lemma.toLowerCase(),editCeiling):0;
+  if(Number.isFinite(distance))candidates.push({...choice,distance,otherType:mapping.type!==readType,otherFamily:!lexical&&mapping.canonical!==family});
  }
- const chosen=ranked[0];if(!chosen)return null;
- const canonical=chosen.mapping.canonical,values=[],unapplied=[];
- if(r.target.count!==undefined&&r.target.count!==1||r.target.count_span)unapplied.push('the requested object count');
- for(const [i,c]of r.constraints.entries()) {
-  if(i===kindCondition)continue;
-  const spec=registry[area.area+'.'+c.key];
-  if(Object.keys(c).some(k=>!['key','value','value_span','phase','operator','polarity','character'].includes(k))){unapplied.push((spec?.concept??c.key)+' '+c.value);continue;}
-  if(c.operator!=='eq'||c.phase!=='result'||c.polarity!=='positive'||c.character!=='requirement'||typeof c.value!=='string'||c.value!==c.value_span||!evidence(['constraints',String(i),'value_span'],c.value))return null;
-  let concept=bindings.properties.find(p=>p.area===area.area&&p.key===c.key)?.canonical;
-  if(!concept)concept=DRAWING_PROPERTY_BINDINGS.find(p=>p.sourceType===chosen.operation.on&&p.concept===spec?.concept)?.concept;
-  if(concept)values.push({concept,value:c.value});else unapplied.push((spec?.concept??c.key)+' '+c.value);
+ let options=[],equivalent=[],trace;
+ for(let offset=0;offset<candidates.length;offset+=choiceBatchLimit-retainedLimit){
+  budget.tick('creation.rank.batch');
+  const batch=[...options,...candidates.slice(offset,offset+choiceBatchLimit-retainedLimit)];
+  trace=compileObservedChoice(world,'app.creation',batch.map(({distance,otherType,otherFamily})=>({
+   distance,otherType:Number(otherType),otherFamily:Number(otherFamily),
+  })));
+  if(trace.selected===undefined)return {options:[]};
+  const used=new Set(),ties=new Set([trace.selected,...trace.ties]);
+  const assessments=new Map(parse(trace.sop).filter(row=>row.type==='std.choice.assessment')
+   .map(row=>[row.attrs.option[0],field(row,'why')]));
+  options=[];
+  equivalent=[];
+  for(const index of [trace.selected,...trace.alternatives]){
+   const choice=batch[index],canonical=choice.mapping.canonical;
+   if(used.has(canonical))continue;
+   used.add(canonical);
+   choice.why=assessments.get('$observed.option.'+index);
+   options.push(choice);
+   if(ties.has(index))equivalent.push(choice);
+   if(options.length===retainedLimit)break;
+  }
  }
- const literal=value=>({kind:'literal',value}),ref=value=>({kind:'ref',value}),string=value=>({kind:'string',value});
- const target={request:[ref('creation.request')],mode:[literal('new')],kind:[literal(canonical)]};
- if(r.target.name){if(!evidence(['target','name_span'],r.target.name_span??r.target.name))return null;target.name=[string(r.target.name)];}
+ return {options,equivalent,trace};
+}
+const literal=value=>({kind:'literal',value}),ref=value=>({kind:'ref',value}),string=value=>({kind:'string',value});
+function creationGraph(canonical,raw,name,values){
+ const target={request:[ref('creation.request')],mode:[literal('new')],kind:[literal(canonical)],...(name?{name:[string(name)]}:{})};
  const nodes=[{id:'creation.source',type:'std.request.source',attrs:{text:[string(raw.source.text)]}},
   {id:'creation.request',type:'std.request',attrs:{act:[literal('make')],mood:[literal('do')],source:[ref('creation.source')],...(values.length===1?{root:[ref('creation.result.0')]}:{})}},
   {id:'creation.target',type:'std.request.target',attrs:target}];
  for(const [i,c]of values.entries())nodes.push({id:'creation.result.'+i,type:'std.request.constraint',attrs:{request:[ref('creation.request')],target:[ref('creation.target')],concept:[literal(c.concept)],operator:[literal('eq')],polarity:[literal('positive')],character:[literal('requirement')],value:[string(c.value)]}});
- const graph=serializeRequestGraph({request:'creation.request',nodes});if(!graph.ok)return null;
- const note=chosen.cost>0?`I took ${JSON.stringify(lexical)} as ${chosen.mapping.lemma}.`:!lexical?`I used ${chosen.mapping.lemma} as the kind.`:'';
- return {...proposal,candidates:[{request:'creation.request',wires:graph.wires}],coverage:{complete:true,graphProposal:true,executable:false},failures:[],
-  interpretation:{profile:'declared-creation/1',note,unapplied,alternatives:ranked.slice(0,5).map(c=>({canonical:c.mapping.canonical,lemma:c.mapping.lemma,cost:c.cost})),unresolved:proposal.failures}};
+ const graph=serializeRequestGraph({request:'creation.request',nodes});
+ return graph.ok?{request:'creation.request',wires:graph.wires}:null;
+}
+
+export async function projectCreateAction(proposal,session,{bindings,registry,view}={}){
+ const raw=proposal?.raw,r=raw?.requests?.[0],area=NATIVE_AREAS[view];
+ if(!area||!bindings||!registry||proposal.coverage?.complete||raw?.requestCount!==1||raw.coverage?.truncated||r?.act!=='make'||r.mood!=='do'||r.target?.mode!=='new'||typeof raw.source?.text!=='string'||!Array.isArray(r.constraints)||r.constraints.some(c=>c.polarity==='negative'))return null;
+ const evidence=sourceEvidence(raw);
+ if(!evidence(['trigger'],r.trigger))return null;
+ const native=session.isession.state[area.world];
+ if(!native)return null;
+ const readerArea=bindings.readerAreaByView?.[view]??area.area;
+ const host=await area.create({state:native,instanceId:'creation-'+globalThis.crypto.randomUUID()});
+ const choices=nativeCreationCandidates(bindings,host.bindings(),readerArea);
+ const {roles,nameParameter}=creationPolicy();
+ const recognized=r.constraints.map((entry,index)=>{
+  const concept=registry[readerArea+'.'+entry.key]?.concept;
+  const range=entry.value===entry.value_span?evidence(['constraints',String(index),'value_span'],entry.value):null;
+  return {entry,concept,range,role:roles.get(concept)};
+ });
+ let lexical=r.target.kind,kindRange=null;
+ if(lexical){
+  kindRange=evidence(['target','kind_span'],r.target.kind_span??lexical);
+  if(!kindRange)return null;
+ }else{
+  const kind=recognized.find(row=>row.role==='kind'&&row.range);
+  lexical=kind?.entry.value;
+  kindRange=kind?.range;
+ }
+ let name=r.target.name;
+ if(name&&!evidence(['target','name_span'],r.target.name_span??name))return null;
+ const family=bindings.families?.find(f=>f.area===readerArea&&f.type===r.target.type)?.canonical;
+ const {options,equivalent,trace}=rankConstructors(choices,lexical,r.target.type,family);
+ const chosen=options[0];
+ if(!chosen)return null;
+ const values=[],unapplied=[];
+ const acceptsName=!!chosen.operation.params[nameParameter]&&!chosen.operation.knowledgeInputs?.some(input=>input.argument===nameParameter);
+ if(r.target.count!==undefined&&r.target.count!==1||r.target.count_span)unapplied.push('the requested object count');
+ for(const {entry,concept,range,role} of recognized){
+  if(Object.keys(entry).some(k=>!valueKeys.has(k))){unapplied.push((concept??entry.key)+' '+entry.value);continue;}
+  if(entry.operator!=='eq'||entry.phase!=='result'||entry.polarity!=='positive'||entry.character!=='requirement'||!range)return null;
+  if((role==='kind'||role==='coextensive')&&coextensive(kindRange,range))continue;
+  if(role==='name'&&acceptsName&&(!name||name===entry.value)){name=entry.value;continue;}
+  const canonical=bindings.properties.find(p=>p.area===readerArea&&p.key===entry.key)?.canonical;
+  const own=executionPolicyWorld().ofType('app.execution.observedProperty').find(p=>field(p,'sourceType')===chosen.operation.on&&field(p,'concept')===concept);
+  if(canonical||own)values.push({concept:canonical??concept,value:entry.value});
+  else unapplied.push((concept??entry.key)+' '+entry.value);
+ }
+ const noteFor=choice=>choice.distance>0?`I took ${JSON.stringify(lexical)} as ${choice.mapping.lemma}.`:!lexical?`I used ${choice.mapping.lemma} as the kind.`:'';
+ const candidates=equivalent.flatMap(choice=>{
+  const graph=creationGraph(choice.mapping.canonical,raw,name,values);
+  return graph?[{...graph,creationNote:noteFor(choice)}]:[];
+ });
+ if(!candidates.length)return null;
+ const note=candidates[0].creationNote;
+ return {...proposal,candidates,coverage:{complete:true,graphProposal:true,executable:false},failures:[],
+  interpretation:{profile:'declared-creation/1',note,unapplied,...(name&&acceptsName?{requestedName:name}:{}),alternatives:options.map(choice=>({
+   canonical:choice.mapping.canonical,lemma:choice.mapping.lemma,cost:choice.distance,why:choice.why,
+  })),decision:{input:trace.input,sop:trace.sop},unresolved:proposal.failures}};
 }

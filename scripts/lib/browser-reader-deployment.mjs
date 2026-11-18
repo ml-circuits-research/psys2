@@ -7,7 +7,7 @@ export async function refreshBrowserReaderDeployment(outDir){
  const groups={
   appBuildSha256:['ui/engine-worker.mjs','lib/dialog/index.mjs','lib/dialog/native-request-sampler.mjs','lib/dialog/sampler.mjs'],
   readerSha256:['lib/dialog/cutter-inference.mjs','lib/dialog/key-reader-inference.mjs','lib/dialog/bert-source-offsets.mjs','lib/dialog/model-selection-score.mjs'],
-  pipelineSha256:['lib/dialog/key-reader-pipeline.mjs','lib/dialog/verified-reader-provider.mjs','lib/dialog/browser-reader-host.mjs','lib/dialog/project-journal-action.mjs','lib/dialog/project-context-action.mjs','lib/dialog/project-create-action.mjs'],
+  pipelineSha256:['lib/dialog/key-reader-pipeline.mjs','lib/dialog/verified-reader-provider.mjs','lib/dialog/browser-reader-host.mjs','lib/dialog/project-journal-action.mjs','lib/dialog/project-context-action.mjs','lib/dialog/reference-policy.mjs','lib/dialog/observed-choice.mjs','worlds/app.project/reference-schema-source.mjs','worlds/app.project/reference-policy-source.mjs','lib/dialog/project-create-action.mjs','worlds/app.project/creation-policy-source.mjs','worlds/app.project/creation-schema-source.mjs'],
   packetAdapterSha256:['lib/dialog/key-reader-packet.mjs'],
   graphDecoderSha256:['lib/dialog/raw-structural-bridge.mjs','lib/dialog/model-graph-decoder.mjs','lib/vendor/sopworld/sopworld.mjs'],
   executorSha256:[

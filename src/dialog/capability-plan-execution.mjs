@@ -25,7 +25,7 @@ function refusal(plan, candidate) {
 }
 
 /** Compose authoritative observations, run the compiled native call and report the actual effect. */
-export async function executeNativeCapability(session, candidate, { bindings, view, text, targetUnique, invocation = globalThis.crypto.randomUUID(), unapplied = [], compiledPlan, readKnowledge } = {}) {
+export async function executeNativeCapability(session, candidate, { bindings, view, focus, text, targetUnique, invocation = globalThis.crypto.randomUUID(), unapplied = [], compiledPlan, readKnowledge } = {}) {
   const area = NATIVE_AREAS[view];
   const nativeState = area && session.isession.state[area.world];
   if (!nativeState || !bindings) return null;
@@ -33,7 +33,7 @@ export async function executeNativeCapability(session, candidate, { bindings, vi
     loader: session.engine?.loader, knowledge: session.engine?.knowledge });
   const before = host.observe();
   const plan = compiledPlan ?? compileNativeCapability(candidate, { area, view, bindings, host, observation: before,
-    focus: session.newEngineFocus?.[view], targetUnique, unapplied, readKnowledge });
+    focus: focus ?? session.newEngineFocus?.[view], targetUnique, unapplied, readKnowledge });
   if (plan.status === 'not-applicable') return null;
   if (plan.status !== 'compiled') return refusal(plan, candidate);
 

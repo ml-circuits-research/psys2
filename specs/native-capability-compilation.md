@@ -45,3 +45,19 @@ The natural-language reader receives the previous natural-language turn when it 
 The tool receives two SOP texts. The first is the concrete command. A compiled capability sends its selected `std.capability.call` and the argument wires reachable from that call. A manual control can send its compact operation wire or its declared structured argument circuit. The second text carries the invocation identity and observed revision. For example, `@invoke app.control.invocation id="move-9" version="3"` binds one attempt to that revision. Retries reuse the identity. The interpreter checks its operation declaration, decodes typed arguments and stages its native change. A caller can inspect the exact input on the response and in the Worlds activity record.
 
 For spatial compilation the renderer measures a proposed constructor without committing it. Drawing and Diagram receive the constructor as SOP and return its native bounds. After dispatch, the response's tool call uses the exact command recorded by the interpreter, including its original wire ID.
+
+The reference policy matches a contextual reading and live object bindings in a temporary world. A current reference uses the declared focus and recency criteria. Retargeting a previous change makes the prior focus ineligible and inherits that change only while its recorded state still matches. The Worlds activity record includes measured candidates and the choice circuit. The reference schema and the knowledge rules are separately inspectable.
+
+Incomplete creation readings with a grounded trigger join the predicted target to
+declared native constructors. The application measures bounded lexical distance,
+reader-type mismatch and family-default mismatch. The authored creation policy
+orders those measurements using the generic SOP choice compiler. Its input and
+assessments are retained, and equally ranked canonical readings are compared
+against the same live tool capabilities before one action can run.
+
+A result span with a declared name role can supply a new target's name when the
+chosen operation accepts names. The exact source range is required even when
+the same noun appears elsewhere. Kind-role evidence coextensive with a bound
+target noun is consumed once. Independently anchored requirements retain their
+own constraints or appear in the execution's unapplied details. Undo records
+the single committed circuit.

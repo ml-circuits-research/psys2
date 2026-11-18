@@ -50,11 +50,46 @@ test('context value correction and other-target correction use actual objects an
 });
 
 import {projectCreateAction} from '../src/dialog/project-create-action.mjs';
+import creationPolicy from '../worlds/app.project/creation-policy-source.mjs';
 test('creation projection resolves conflicting type heads by anchored declared identity and guesses a declared typo',async()=>{
  const session={isession:{state:{'art.draw':canonicalDrawingState(initialDrawingState())}}},bindings={kinds:[{area:'drawing',type:'drawn',canonical:'fixture.house',lemma:'house',nativeFamilyBinding:{operation:'drawing.object.make'}}],properties:[]};
  const message='fixture hosue',p={coverage:{complete:false},candidates:[],failures:[{reason:'unresolved-canonical-kind-binding'}],raw:{source:{text:message,unit:'unicode-scalar'},requestCount:1,coverage:{truncated:false},requests:[{act:'make',mood:'do',trigger:'fixture',target:{mode:'new',type:'a-conflicting-class',kind:'hosue',kind_span:'hosue'},constraints:[]}],ranges:[{path:['requests','0','trigger'],range:[0,7]},{path:['requests','0','target','kind_span'],range:[8,13]}]}};
  const original=structuredClone(session.isession.state),result=await projectCreateAction(p,session,{bindings,registry:{},view:'draw'});assert.equal(result.coverage.complete,true);assert.match(result.candidates[0].wires,/fixture.house/);assert.match(result.interpretation.note,/hosue/);assert.deepEqual(session.isession.state,original);assert.equal(p.coverage.complete,false);
  const unsupported=structuredClone(p);unsupported.raw.requests[0].constraints=[{polarity:'negative'}];assert.equal(await projectCreateAction(unsupported,session,{bindings,registry:{},view:'draw'}),null);
+});
+
+test('creation hypotheses preserve exact identities, consume coextensive evidence and apply an independently anchored name',async()=>{
+ const authored=await (await import('node:fs/promises')).readFile(new URL('../worlds/app.project/creation-policy.sop',import.meta.url),'utf8');assert.equal(creationPolicy,authored);
+ const source='Draw a square named Oval',query={mode:'new',type:'drawn',kind:'square',kind_span:'square'};
+ const makeup=(key,value)=>({key,value,value_span:value,operator:'eq',phase:'result',polarity:'positive',character:'requirement'});
+ const proposal={coverage:{complete:false},candidates:[],failures:[{reason:'unresolved-canonical-kind-binding'}],selectionScore:{definition:'psys2.model-minimum/1',value:0.7},
+  raw:{source:{text:source,unit:'unicode-scalar'},requestCount:1,coverage:{truncated:false},
+   requests:[{act:'make',mood:'do',trigger:'Draw',target:query,constraints:[makeup('shape','square'),makeup('name','Oval')]}],
+   ranges:[{path:['requests','0','trigger'],range:[0,4]},{path:['requests','0','target','kind_span'],range:[7,13]},
+    {path:['requests','0','constraints','0','value_span'],range:[7,13]},{path:['requests','0','constraints','1','value_span'],range:[20,24]}]}};
+ const kinds=[{canonical:'fixture.square',lemma:'square'},{canonical:'fixture.square',lemma:'square'},{canonical:'fixture.outline.square',lemma:'square'}];
+ const bindings={kinds:kinds.map(k=>({...k,area:'drawing',type:'drawn',nativeFamilyBinding:{operation:'drawing.object.make',sourceType:'art.draw.object'}})),properties:[]};
+ const registry={'drawing.shape':{concept:'shape'},'drawing.name':{concept:'name'}};
+ const board=canonicalDrawingState(initialDrawingState()),before=structuredClone(board);
+ const session={isession:{state:{'art.draw':board,'ui.shell':{activeTab:'draw'}}},engine:{requestReader:{
+  provenance:()=>provenance,bindings:()=>bindings,registry:()=>registry,propose:async()=>proposal,
+ }}};
+ const completed=await projectCreateAction(proposal,session,{view:'draw',bindings,registry});
+ assert.deepEqual(completed.interpretation.alternatives.map(row=>row.canonical),['fixture.square','fixture.outline.square']);
+ assert.equal(completed.candidates.length,2);
+ assert.deepEqual(completed.interpretation.unapplied,[]);
+ const made=await routeNewEngine(session,source,{view:'draw'});
+ assert.equal(made.statuses[0],'supported',JSON.stringify(made.trace));
+ assert.equal(made.trace.readerRouting.admission.alternatives.length,2);
+ assert.match(made.trace.readingComparison,/std.interpret.reading/);
+ assert.match(made.text,/I named it "Oval"/);
+ assert.deepEqual(toNativeDrawingState(session.isession.state['art.draw']).objects.map(({kind,name})=>({kind,name})),[{kind:'square',name:'Oval'}]);
+ assert.equal(session.newEngineUndo.length,1);
+ const undone=await routeNewEngine(session,`@r std.request act=undo mood=do source=$s @s std.request.source text="Undo"`,{view:'draw'});
+ assert.equal(undone.statuses[0],'supported');
+ assert.deepEqual(session.isession.state['art.draw'],before);
+ const forged=structuredClone(proposal);forged.raw.ranges.at(-1).range=[7,13];
+ assert.equal(await projectCreateAction(forged,session,{view:'draw',bindings,registry}),null);
 });
 
 import {fixtureEngine} from './helpers.mjs';

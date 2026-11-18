@@ -1,0 +1,26 @@
+@ref.module core.module name=app.reference exports=app.reference.reading exports=app.reference.resolution exports=app.reference.object exports=app.reference.mapping exports=app.reference.match
+@ref.reading core.type of=app.reference.reading closed=true
+@ref.reading.turn core.slot of=app.reference.reading key=turn kind=string present=true
+@ref.reading.act core.slot of=app.reference.reading key=act kind=string present=true
+@ref.reading.mood core.slot of=app.reference.reading key=mood kind=string present=true
+@ref.reading.fill core.slot of=app.reference.reading key=fill kind=string
+@ref.reading.mode core.slot of=app.reference.reading key=mode kind=string
+@ref.reading.quantifier core.slot of=app.reference.reading key=quantifier kind=string
+@ref.reading.fragment core.slot of=app.reference.reading key=fragment kind=string
+@ref.resolution core.type of=app.reference.resolution closed=true
+@ref.resolution.turn core.slot of=app.reference.resolution key=turn kind=string present=true
+@ref.resolution.policy core.slot of=app.reference.resolution key=policy kind=atom present=true
+@ref.resolution.values core.slot of=app.reference.resolution key=values kind=atom present=true
+@ref.object core.type of=app.reference.object closed=true
+@ref.object.id core.slot of=app.reference.object key=id kind=string present=true
+@ref.object.kind core.slot of=app.reference.object key=kind kind=string present=true
+@ref.object.sourceType core.slot of=app.reference.object key=sourceType kind=string present=true
+@ref.mapping core.type of=app.reference.mapping closed=true
+@ref.mapping.sourceType core.slot of=app.reference.mapping key=sourceType kind=string present=true
+@ref.mapping.lemma core.slot of=app.reference.mapping key=lemma kind=string present=true
+@ref.mapping.canonical core.slot of=app.reference.mapping key=canonical kind=string present=true
+@ref.mapping.family core.slot of=app.reference.mapping key=family kind=boolean present=true
+@ref.match core.type of=app.reference.match closed=true
+@ref.match.id core.slot of=app.reference.match key=id kind=string present=true
+@ref.match.canonical core.slot of=app.reference.match key=canonical kind=string present=true
+@ref.match.exact core.slot of=app.reference.match key=exact kind=boolean present=true

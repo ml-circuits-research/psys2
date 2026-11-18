@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-import { compileNativeCapability } from './capability-plan-adapter.mjs?v=9686961b1b';
-import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=b953840f3e';
+import { compileNativeCapability } from './capability-plan-adapter.mjs?v=a7e2d40deb';
+import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=34af7a8466';
 import { instanceIdFor } from './instance-identity.mjs?v=024ef1ca83';
-import { prepareNativeControlHost } from './native-control-preparation.mjs?v=fb0f182080';
-import { invokeObservedNativeTool } from './native-tool-activity.mjs?v=776e7fac31';
-import { retainPropertyEffect } from './property-effect-evidence.mjs?v=cdb9d296ed';
-import { describeNativeControl, verifyNativeControlEffect } from './native-control-intent.mjs?v=5222ebb9b1';
+import { prepareNativeControlHost } from './native-control-preparation.mjs?v=386abe354b';
+import { invokeObservedNativeTool } from './native-tool-activity.mjs?v=c802deacbe';
+import { retainPropertyEffect } from './property-effect-evidence.mjs?v=94e5215451';
+import { describeNativeControl, verifyNativeControlEffect } from './native-control-intent.mjs?v=f12f8ff87e';
 
 function reply(text, supported, trace = {}) {
   return { text, parts: [{ text, translate: false }], statuses: [supported ? 'supported' : 'unsupported'],
@@ -25,7 +25,7 @@ function refusal(plan, candidate) {
 }
 
 /** Compose authoritative observations, run the compiled native call and report the actual effect. */
-export async function executeNativeCapability(session, candidate, { bindings, view, text, targetUnique, invocation = globalThis.crypto.randomUUID(), unapplied = [], compiledPlan, readKnowledge } = {}) {
+export async function executeNativeCapability(session, candidate, { bindings, view, focus, text, targetUnique, invocation = globalThis.crypto.randomUUID(), unapplied = [], compiledPlan, readKnowledge } = {}) {
   const area = NATIVE_AREAS[view];
   const nativeState = area && session.isession.state[area.world];
   if (!nativeState || !bindings) return null;
@@ -33,7 +33,7 @@ export async function executeNativeCapability(session, candidate, { bindings, vi
     loader: session.engine?.loader, knowledge: session.engine?.knowledge });
   const before = host.observe();
   const plan = compiledPlan ?? compileNativeCapability(candidate, { area, view, bindings, host, observation: before,
-    focus: session.newEngineFocus?.[view], targetUnique, unapplied, readKnowledge });
+    focus: focus ?? session.newEngineFocus?.[view], targetUnique, unapplied, readKnowledge });
   if (plan.status === 'not-applicable') return null;
   if (plan.status !== 'compiled') return refusal(plan, candidate);
 

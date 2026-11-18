@@ -1,7 +1,7 @@
 // Read-only lifecycle admission. Native policies and effects are deferred.
-import {World,parse,str,prepareRequestBatch,resolveRequestTargets,projectTemplates} from '../vendor/sopworld/sopworld.mjs?v=327fb3cf41';
-import {copyHostData,validateNativeArguments,nativeToken} from '../../worlds/native-tool-host.mjs?v=7abe128286';
-import {selectNativeObjects} from './native-selection.mjs?v=12aae830ed';
+import {World,parse,str,prepareRequestBatch,resolveRequestTargets,projectTemplates} from '../vendor/sopworld/sopworld.mjs?v=7950b62b94';
+import {copyHostData,validateNativeArguments,nativeToken} from '../../worlds/native-tool-host.mjs?v=2fcf94c42e';
+import {selectNativeObjects} from './native-selection.mjs?v=0fdd4bcf04';
 const ref=x=>typeof x==='string'&&x.startsWith('$')?x.slice(1):null;
 const one=(w,k)=>w.attrs[k]?.length===1?str(w.attrs[k][0]):null;
 const proof=x=>x&&['sourceWorld','sourceWire','moduleVersion'].every(k=>typeof x[k]==='string'&&x[k])&&/^[a-f0-9]{64}$/.test(x.sourceSnapshotSHA??'');
