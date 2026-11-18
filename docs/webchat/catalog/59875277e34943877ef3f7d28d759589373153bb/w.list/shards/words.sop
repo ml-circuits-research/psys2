@@ -1,0 +1,24 @@
+# w.list/shards/words: the owned English vocabulary, separate from the schema.
+# sources: hand-core 1 (hand-written declarations and deterministic key vocabulary)
+# license: CC0-1.0
+# script: none (hand-written; generated key block maintained by tools/key-words.mjs)
+
+@w.list.word.world core.word text=list text=lists text="shopping list" text="to-do list" text="todo list" text="grocery list" text=checklist text="packing list" text=basket text="shopping basket" means=w.list of=std.schema.world.name core.source="hand-core 1"
+@w.list.word.list core.word text=list text=lists text=checklist text=basket means=w.list.list core.source="hand-core 1"
+@w.list.word.item core.word text=item text=items text=entry text=entries text=thing text=things text=stuff means=w.list.item core.source="hand-core 1"
+@w.list.word.name core.word text=name text=called text=title means=w.list.list.name core.source="hand-core 1"
+@w.list.word.about core.word text=about text=for means=w.list.list.about core.source="hand-core 1"
+@w.list.word.sort core.word text=sort text=kind text=type text=shopping text=to-do text=todo means=w.list.list.sort core.source="hand-core 1"
+@w.list.word.budget core.word text=budget text=limit text="spend at most" means=w.list.list.budget core.source="hand-core 1"
+@w.list.word.currency core.word text=currency text=money text=in means=w.list.list.currency core.source="hand-core 1"
+@w.list.word.item.list core.word text=on text=in text=belongs means=w.list.item.list core.source="hand-core 1"
+@w.list.word.text core.word text=text text=says means=w.list.item.text core.source="hand-core 1"
+@w.list.word.food core.word text=food text=eat text=drink means=w.list.item.food core.source="hand-core 1"
+@w.list.word.object core.word text=object text=thing means=w.list.item.object core.source="hand-core 1"
+@w.list.word.n core.word text=place text=position text=number text=order means=w.list.item.n core.source="hand-core 1"
+@w.list.word.quantity core.word text=quantity text="how many" text="how much" means=w.list.item.quantity core.source="hand-core 1"
+@w.list.word.unit core.word text=unit text=units means=w.list.item.unit core.source="hand-core 1"
+@w.list.word.price core.word text=price text=cost text=costs text="how much" text=priced means=w.list.item.price core.source="hand-core 1"
+@w.list.word.item.currency core.word text=currency text=in means=w.list.item.currency core.source="hand-core 1"
+@w.list.word.status core.word text=status text=done text=open text=ticked text=checked text=finished text=bought text=left means=w.list.item.status core.source="hand-core 1"
+@w.list.word.note core.word text=note text=notes text=comment means=w.list.item.note core.source="hand-core 1"

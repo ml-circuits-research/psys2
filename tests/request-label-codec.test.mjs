@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { requestGraphFromSop as graph, encodeRequestGraph as encode, decodeRequestLabels as decode, requestLabelsToSop as toSop, LabelCodecError, LABEL_LIMITS } from '../training/sop-bert/request-label-codec.mjs';
-import { World, inspectRequest } from '../src/vendor/sopworld/sopworld.mjs';
+import { World, inspectRequest, version } from '../src/vendor/sopworld/sopworld.mjs';
 const base = '@s std.request.source text="select 😀 item and change it"\n@r std.request act=declared.custom mood=do source=$s';
 const target = '@t std.request.target request=$r mode=existing kind=declared.item name=""';
 const leaf = (id, targetId, value, extra = '') => `@${id} std.request.constraint request=$r target=$${targetId} concept=declared.property operator=eq value=${value} polarity=positive character=requirement ${extra}`;
@@ -19,7 +19,7 @@ const rejects = (fn, code) => assert.throws(fn, (e) => e instanceof LabelCodecEr
 
 test('training validator shares the exact application library pin', () => {
   const root = new URL('../src/vendor/sopworld/', import.meta.url), manifest = JSON.parse(readFileSync(new URL('provenance.json', root)));
-  assert.equal(manifest.release, '0.208.0');
+  assert.equal(manifest.release, version);
   assert.equal(createHash('sha256').update(readFileSync(new URL('sopworld.mjs', root))).digest('hex'), manifest.sha256);
 });
 

@@ -3,7 +3,7 @@
 // releases them, `available` is false, every call returns null and the UI hides what needs them: there is NO local generator and NO fallback text here.
 // Browser-safe: no `node:*` imports; the library module is passed in.
 
-import { knowledgeWorld, languageWorld, randomTopics, topicIndex } from './compose-world.mjs?v=e747037185';
+import { knowledgeWorld, languageWorld, randomTopics, topicIndex } from './compose-world.mjs?v=eb74459924';
 import { englishOf } from '../lang/en-generate.mjs?v=84a99c355e';
 import { relatedTopics, readLongTopic, isLongTopic, knownName, wordCount, nameIndex, PRIMARY } from './compose-plan.mjs?v=b890bea99a';
 

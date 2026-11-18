@@ -1,5 +1,17 @@
 # Current status
 
+## 2026-11-18 — schema, knowledge and instance ownership
+
+Delivered application build **87d3be7b8b** with library **0.209.0 / 602df0d** and knowledge catalog **59875277**. Calendar and Avatar import reusable schemas into separate contexts, then admit only instance facts through the library guard and their existing domain ownership closure. Direct instance readers reject copied schemas, rules, imports and unrelated knowledge facts. Current five-editor export/restore/query/temporary-reasoning checks preserve all data; schema definitions and temporary deductions do not enter instance storage. Drawing, Diagram and Documents still have authoritative native state with explicit SOP observations.
+
+Execution defaults and request-composition policy facts now have separate imported schema sources. The Worlds inspector shows those owners independently. Vocabulary comes through explicit catalog dependencies rather than concatenation into schema text. Offline person/diagram profiles preserve their prior vocabulary as separate knowledge sources. The operative execution source now contains only declared value-lookup families and references separately held schema modules; its RGB name/value bindings retain exact parity. It is an evaluation context, not copied editor state.
+
+`node scripts/build-lang-en.mjs` regenerated the pinned bundles and declared execution source; `node scripts/build-webchat.mjs` checked them and built the site catalog with **1,318 files**. `npm test`: **589 tests, 586 passed, zero failed, three skipped**. The actual pinned-knowledge probe also created an editable vector apple and resized Avatar eyes after loading its alias data. Existing source/browser gates passed in the integrated suite.
+
+Historical archive bytes and their old knowledge pin remain unchanged and losslessly readable. The current application rejects their incompatible pin atomically, as required by the no-implicit-migration policy. They are not silently relabelled as current files. No model weights or training changed. This delivery enforces ownership boundaries; it does not complete the general request compiler. The broader book revision is being handled separately.
+
+---
+
 ## 2026-11-18 — book and compiler migration plan
 
 The owner requested theory and a concrete plan before runtime refactoring. The revised [SOP Worlds book](../soplang-words-lib/books/sop-worlds-teorie.md) defines a minimal public boundary: provide existing worlds, tool interfaces and context, then compile SOP request/query circuits. LIB encapsulates binding, completion, hypothesis ranking, constraint solving and planning. A plan is a concrete circuit of typed tool calls; tools consume their own instructions.

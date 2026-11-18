@@ -1,0 +1,5 @@
+@composition.module core.module name=app.request.composition version=1 exports=app.request.composition.policy
+@composition.type core.type of=app.request.composition.policy
+@composition.order core.slot of=app.request.composition.policy key=independent.order kind=atom enum=source
+@composition.dependencies core.slot of=app.request.composition.policy key=explicit.dependencies kind=atom enum=preserve
+@composition.undo core.slot of=app.request.composition.policy key=undo kind=atom enum=turn

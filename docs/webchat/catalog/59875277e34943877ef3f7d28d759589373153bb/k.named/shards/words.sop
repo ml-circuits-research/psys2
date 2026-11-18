@@ -1,0 +1,9 @@
+# k.named/shards/words: the owned English vocabulary, separate from the schema.
+# sources: hand-core 1 (hand-written declarations and deterministic key vocabulary)
+# license: CC0-1.0
+# script: none (hand-written; generated key block maintained by tools/key-words.mjs)
+
+@k.named.word.named core.word text="labelled by a model" text="named by a model" means=k.named.labelled.named core.source="hand-core 1"
+
+# Words for the keys, by rule: the name of each key, and everyday words for some (tools/key-words.mjs).
+@k.named.word.key.labelled.named core.word text=named means=k.named.labelled.named core.source="hand-core 1"

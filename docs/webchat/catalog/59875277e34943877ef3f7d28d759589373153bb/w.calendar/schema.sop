@@ -1,0 +1,76 @@
+# w.calendar: a reusable world: a calendar, the days of a month in a grid with the events on them (a family
+# calendar, a school year, the appointments of a week). Declared in the library's std.schema format; the acts of
+# std.acts drive it; three denies keep an event's ends in order; it has no function of its own. Its events follow the
+# iCalendar standard (RFC 5545: an event has a start date, a start and an end time or none for an all-day event, and
+# a recurrence rule of a frequency, an interval, weekdays, a count or an end date); the weeks start on Monday by
+# ISO 8601 unless the calendar says Sunday. Version 1 (Q92-w4); version 2 adds the calendar's time zone.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+# needs: sopworld with std.schema and std.acts (tools/sopworld/VERSION, 0.30.0 or later)
+
+@w.calendar core.module name=w.calendar version=2 exports=calendar exports=event exports=view core.source="hand-core 1"
+@w.calendar.world std.schema.world name=w.calendar doc="calendars: events on the days of a month" core.source="hand-core 1"
+
+# A calendar. `name`; `week_starts` is the first day of each row of the grid (Monday by ISO 8601; Sunday in the
+# United States and some other countries), a weekday of k.time (the seven names stay listed until strict joins);
+# `zone` the time zone its clock times are in, a zone of k.time.zone by its IANA name (Europe/Bucharest; version 2,
+# Q92-w4 item 3). A calendar without one keeps the times as they are said.
+@w.calendar.calendar core.type of=w.calendar.calendar extends=std.schema.thing closed=true core.source="hand-core 1"
+@w.calendar.calendar.name core.slot of=w.calendar.calendar key=name required=true kind=atom kind=string core.source="hand-core 1"
+@w.calendar.calendar.week_starts core.slot of=w.calendar.calendar key=week_starts enum=Monday enum=Sunday default=Monday kind=atom type=k.time.weekday by=name core.source="hand-core 1"
+@w.calendar.calendar.zone core.slot of=w.calendar.calendar key=zone kind=atom kind=string type=k.time.zone by=name core.source="hand-core 1"
+
+# An event (RFC 5545 VEVENT). `title` is what happens; `calendar` refers to its calendar; `date` is its day (an ISO
+# 8601 date, 2026-11-20; DTSTART); `start` and `end` are clock times that day (14:30; an event without `start` lasts
+# the whole day); `last_date` is the last day of an event of several days (a holiday); `place` where; `sort` what sort
+# of event (birthday, lesson, appointment, holiday); `about` one sentence more.
+# It repeats (RRULE) when it has `repeat`: daily, weekly, monthly or yearly (FREQ); `every` how many of those between
+# two (INTERVAL: every 2 weeks); `on` the weekdays of a weekly event (BYDAY: on Monday and Thursday); it stops after
+# `times` times (COUNT) or on `repeat_until` (UNTIL), or never.
+@w.calendar.event core.type of=w.calendar.event extends=std.schema.thing closed=true core.source="hand-core 1"
+@w.calendar.event.title core.slot of=w.calendar.event key=title required=true kind=atom kind=string core.source="hand-core 1"
+@w.calendar.event.calendar core.slot of=w.calendar.event key=calendar type=w.calendar.calendar core.source="hand-core 1"
+@w.calendar.event.date core.slot of=w.calendar.event key=date required=true kind=time.date core.source="hand-core 1"
+@w.calendar.event.start core.slot of=w.calendar.event key=start kind=time.clock core.source="hand-core 1"
+@w.calendar.event.end core.slot of=w.calendar.event key=end kind=time.clock core.source="hand-core 1"
+@w.calendar.event.last_date core.slot of=w.calendar.event key=last_date kind=time.date core.source="hand-core 1"
+@w.calendar.event.place core.slot of=w.calendar.event key=place kind=atom kind=string core.source="hand-core 1"
+@w.calendar.event.sort core.slot of=w.calendar.event key=sort kind=atom kind=string core.source="hand-core 1"
+@w.calendar.event.about core.slot of=w.calendar.event key=about kind=string core.source="hand-core 1"
+@w.calendar.event.repeat core.slot of=w.calendar.event key=repeat enum=daily enum=weekly enum=monthly enum=yearly core.source="hand-core 1"
+@w.calendar.event.every core.slot of=w.calendar.event key=every kind=integer min=1 max=100 default=1 core.source="hand-core 1"
+@w.calendar.event.on core.slot of=w.calendar.event key=on many=true enum=Monday enum=Tuesday enum=Wednesday enum=Thursday enum=Friday enum=Saturday enum=Sunday kind=atom type=k.time.weekday by=name core.source="hand-core 1"
+@w.calendar.event.times core.slot of=w.calendar.event key=times kind=integer min=1 max=1000 core.source="hand-core 1"
+@w.calendar.event.repeat_until core.slot of=w.calendar.event key=repeat_until kind=time.date core.source="hand-core 1"
+
+# The view: the month the grid shows (a month of k.time and a year), shown by month, week or day.
+@w.calendar.view core.type of=w.calendar.view extends=std.schema.thing closed=true core.source="hand-core 1"
+@w.calendar.view.month core.slot of=w.calendar.view key=month enum=January enum=February enum=March enum=April enum=May enum=June enum=July enum=August enum=September enum=October enum=November enum=December kind=atom type=k.time.month by=name core.source="hand-core 1"
+@w.calendar.view.year core.slot of=w.calendar.view key=year kind=integer min=1 max=9999 core.source="hand-core 1"
+@w.calendar.view.mode core.slot of=w.calendar.view key=mode enum=month enum=week enum=day default=month core.source="hand-core 1"
+
+# An event does not end before it starts: its `end` is not before its `start`, its `last_date` not before its `date`,
+# and it does not stop repeating before it begins (`repeat_until` not before `date`).
+@w.calendar.order.times w.calendar.event start=?start end=?end
+@w.calendar.order.times_earlier core.check fn=lt args=?end args=?start
+@w.calendar.order.ends core.deny when=$w.calendar.order.times if=$w.calendar.order.times_earlier why="An event does not end before it starts: ?end is before ?start." core.source="hand-core 1"
+@w.calendar.order.days w.calendar.event date=?date last_date=?last
+@w.calendar.order.days_earlier core.check fn=lt args=?last args=?date
+@w.calendar.order.last_day core.deny when=$w.calendar.order.days if=$w.calendar.order.days_earlier why="An event does not end before it starts: its last day ?last is before ?date." core.source="hand-core 1"
+@w.calendar.order.repeats w.calendar.event date=?date repeat_until=?until
+@w.calendar.order.repeats_earlier core.check fn=lt args=?until args=?date
+@w.calendar.order.repeat_end core.deny when=$w.calendar.order.repeats if=$w.calendar.order.repeats_earlier why="An event does not stop repeating before it begins: ?until is before ?date." core.source="hand-core 1"
+
+# The kinds, the acts and the view. The grid shows each event with the keys of its aspect (the temporal aspect of
+# k.attributes). At most 20 calendars, 2,000 events and one view.
+@w.calendar.kind.calendar std.schema.kind of=w.calendar.calendar world=w.calendar acts=make acts=remove acts=change acts=pick acts=ask acts=copy core.source="hand-core 1"
+@w.calendar.kind.event std.schema.kind of=w.calendar.event world=w.calendar acts=make acts=remove acts=change acts=pick acts=ask acts=copy acts=group acts=show aspects=w.calendar.on_day core.source="hand-core 1"
+@w.calendar.kind.view std.schema.kind of=w.calendar.view world=w.calendar acts=make acts=change acts=ask core.source="hand-core 1"
+@w.calendar.aspect.on_day std.schema.aspect name=w.calendar.on_day keys=title keys=date keys=start keys=end keys=last_date keys=repeat doc="an event on the days of the grid" core.source="hand-core 1"
+@w.calendar.view.calendar std.schema.view name=w.calendar shows=w.calendar.on_day state=w.calendar.view core.source="hand-core 1"
+@w.calendar.limit.calendar std.schema.limit of=w.calendar.calendar max=20 core.source="hand-core 1"
+@w.calendar.limit.event std.schema.limit of=w.calendar.event max=2000 core.source="hand-core 1"
+@w.calendar.limit.view std.schema.limit of=w.calendar.view max=1 core.source="hand-core 1"
+
+# Words: for the world (how a host finds it by name), its kinds and its keys.

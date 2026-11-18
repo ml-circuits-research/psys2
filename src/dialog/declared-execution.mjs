@@ -17,7 +17,7 @@ import {DRAWING_PROPERTY_BINDINGS} from '../../worlds/art.draw/property-host.mjs
 let knowledge;
 /** Read-only cache inspection; does not create the lazy knowledge World. */
 export const inspectDeclaredExecutionSourceWorld=options=>inspectCachedExecutionSource(knowledge,options);
-const source=()=>knowledge??=World.fromJSON(SOURCE.snapshot);
+const source=()=>knowledge??=World.fromJSON(SOURCE.snapshot,{library:SOURCE.schemaModules});
 // Value joins and omitted-argument assumptions come from the operational SOP policy.
 /** Finite lexical values from the same declared knowledge source used by execution. */
 export function declaredPropertyValues(concept) {

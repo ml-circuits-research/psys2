@@ -1,13 +1,13 @@
 // Model-first proposal routing. Calibration authority belongs to host configuration,
 // never to a model output, evaluation annotation or grammar proposal.
-import {requestCompositionPolicy}from './request-composition-policy.mjs?v=2d9a83c780';
-import {executeRequestCandidate} from './new-engine.mjs?v=f44d7a5021';
-import {invokeNativeControl} from './native-tool-controls.mjs?v=274c02bae8';
-import {executeDeclaredRequest} from './declared-execution.mjs?v=f44d7a5021';
-import {projectContextAction} from './project-context-action.mjs?v=456a1a3374';
-import {projectCreateAction} from './project-create-action.mjs?v=cf85da86a6';
-import {parse,str} from '../vendor/sopworld/sopworld.mjs?v=20fdd56a67';
-import {assessReaderProposal} from './reader-admission.mjs?v=2ae4a44c2e';
+import {requestCompositionPolicy}from './request-composition-policy.mjs?v=a6d084e5a1';
+import {executeRequestCandidate} from './new-engine.mjs?v=26488779ab';
+import {invokeNativeControl} from './native-tool-controls.mjs?v=2fd312a33b';
+import {executeDeclaredRequest} from './declared-execution.mjs?v=26488779ab';
+import {projectContextAction} from './project-context-action.mjs?v=7cf94760ab';
+import {projectCreateAction} from './project-create-action.mjs?v=c2f03a76ea';
+import {parse,str} from '../vendor/sopworld/sopworld.mjs?v=820bedd01b';
+import {assessReaderProposal} from './reader-admission.mjs?v=a900ae9fb4';
 const unavailable=reason=>({candidates:[],coverage:{complete:false,executable:false,graphProposal:false},failures:[{reason}]});
 /** The model only sees utterance text. No expected annotations or grammar graphs. */
 async function routeReaderProposal(session,text,options={},suppliedProposal){

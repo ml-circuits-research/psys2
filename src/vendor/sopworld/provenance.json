@@ -1,9 +1,9 @@
 {
   "repository": "https://github.com/ml-circuits-research/soplang-words-lib",
-  "commit": "f262f4261f255001be143970bd6438e115dd5d98",
-  "release": "0.208.0",
+  "commit": "602df0d8f2e61c666911424e1fac0029b9ef5734",
+  "release": "0.209.0",
   "sourcePath": "docs/sopworld.mjs",
-  "sha256": "063a40892204da862d7ac5126d91a5ddfd20484be5de0f8ddf3461b058a146ad",
-  "bytes": 1580081,
-  "build": "15a468aa9811"
+  "sha256": "95b8bb6affaf041c8be8d67a26b63a82941e0a791c7e0b9e89169abf627e705e",
+  "bytes": 1580869,
+  "build": "8dc67fc55e4d"
 }

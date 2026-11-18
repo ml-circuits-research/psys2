@@ -2,7 +2,7 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {snapshotNativeInstances,restoreNativeInstances,observeNativeInstanceWorlds} from '../src/dialog/instance-persistence.mjs';
-import {readInstanceState,serializeInstanceState,str} from '../src/vendor/sopworld/sopworld.mjs';
+import {readInstanceState,serializeInstanceState,str,parse,serialize,SCHEMA_TYPES} from '../src/vendor/sopworld/sopworld.mjs';
 import {NATIVE_AREAS,createAreaHost} from '../src/dialog/app-reader-context.mjs';
 import {nativeObservationObjects} from '../src/dialog/instance-facts.mjs';
 import {initialDrawingState} from '../worlds/art.draw/declared-host.mjs';
@@ -71,4 +71,45 @@ test('inspection shares one host observation with its interface without adding n
   assert.ok(!record.wires.includes('nativeInterface'));assert.ok(record.nativeInterface.operations.length>0);
  }
  assert.deepEqual(s.isession.state,before);
+});
+
+test('five editor exports retain instance ownership across restore and temporary reasoning',async()=>{
+ const {s}=await populated(),records=await snapshotNativeInstances(s),target=session();
+ for(const record of records)assert.equal(parse(record.wires).some(node=>SCHEMA_TYPES.has(node.type)),false,record.world+' must not own schema declarations');
+ await restoreNativeInstances(target,records);
+ for(const record of records){
+  const context=target.instanceWorlds[record.world],first=[...context.wires.values()][0];
+  assert.ok(first,record.world+' has queryable concrete facts');
+  assert.ok(context.ask('@subject '+first.type).length>0);
+  assert.equal(context.load('@separation.subject '+first.type+'\n@separation.result separation.probe source=$separation.subject\n@separation.rule core.rule when=$separation.subject then=$separation.result').ok,true);
+  assert.ok(context.ofType('separation.probe').length>0,'temporary reasoning evaluates the restored facts');
+ }
+ const after=await snapshotNativeInstances(target);
+ for(const record of records){
+  const current=after.find(row=>row.world===record.world);
+  assert.equal(current.wires,record.wires,'reasoning context must not copy rules or deductions into '+record.world+' storage');
+  assert.doesNotMatch(current.wires,/separation\./);
+ }
+});
+
+test('canonical instance readers reject schema and rule ownership before evaluating carrier input',async()=>{
+ const {s}=await populated();
+ const injections=[
+  '@injected.schema core.type of=unexpected.schema closed=true',
+  '@injected.slot core.slot of=time.calendar.meeting key=injected kind=string',
+  '@injected.pattern time.calendar.meeting\n@injected.result unexpected.result\n@injected.rule core.rule when=$injected.pattern then=$injected.result',
+  '@injected.import core.use world=std.request',
+  '@copied.word core.word text="some alias" means=sample.concept',
+  '@copied.knowledge unrelated.knowledge value="A copied knowledge fact"',
+ ];
+ for(const area of Object.values(NATIVE_AREAS).filter(area=>area.stateWorld)){
+  const carrier=s.isession.state[area.world],prior=carrier.sop,existing=area.stateWorld(carrier);
+  const copiedDefinition=serialize([[...existing.matrix.values()].find(node=>node.type==='core.type')]);
+  for(const injection of [...injections,copiedDefinition])assert.throws(()=>area.stateWorld({sop:prior+'\n'+injection}),undefined,area.world+' must reject instance-owned schema');
+  assert.equal(carrier.sop,prior);
+  const context=area.stateWorld(carrier);
+  assert.equal(context.matrix.has('injected.schema'),false);
+  assert.equal(context.matrix.has('injected.import'),false);
+  assert.equal(context.ofType('unexpected.result').length,0);
+ }
 });

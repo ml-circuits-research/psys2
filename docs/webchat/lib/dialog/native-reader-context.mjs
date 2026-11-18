@@ -1,5 +1,5 @@
 // Evaluation host declarations: native display labels, never inferred semantic types.
-import {str} from '../vendor/sopworld/sopworld.mjs?v=20fdd56a67';
+import {str} from '../vendor/sopworld/sopworld.mjs?v=820bedd01b';
 import {copyHostData} from '../../worlds/native-tool-host.mjs?v=463e762442';
 export const REPLAY_CONTEXT_PROFILE='psys2.native-reader-context/1';
 const labels={

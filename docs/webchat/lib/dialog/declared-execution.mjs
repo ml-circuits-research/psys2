@@ -1,23 +1,23 @@
-import{executionValueSource,executionDefaults}from'./execution-policy.mjs?v=f97054802d';
-import{inspectCachedExecutionSource}from'./execution-world-inspection.mjs?v=f44d7a5021';
+import{executionValueSource,executionDefaults}from'./execution-policy.mjs?v=55a3c62ad7';
+import{inspectCachedExecutionSource}from'./execution-world-inspection.mjs?v=26488779ab';
 import{instanceIdFor}from'./instance-identity.mjs?v=37c0536b83';
-import{prepareNativeControlHost}from'./native-control-preparation.mjs?v=39e2aa546d';
+import{prepareNativeControlHost}from'./native-control-preparation.mjs?v=06c7aa71f4';
 import{invokeObservedNativeTool}from'./native-tool-activity.mjs?v=644ec5af08';
-import{describeNativeControl,verifyNativeControlEffect}from'./native-control-intent.mjs?v=15a2913b39';
+import{describeNativeControl,verifyNativeControlEffect}from'./native-control-intent.mjs?v=4f21ff541e';
 import {nativeKindCandidates} from './native-binding-candidates.mjs?v=de223646d6';
 // Application composition of declared semantic identities and native capabilities; no text parsing.
-import {World,str} from '../vendor/sopworld/sopworld.mjs?v=20fdd56a67';
-import SOURCE from './new-engine-source.mjs?v=e31b4adb7f';
-import {flatRequestProjection} from './request-projection.mjs?v=f03efb554d';
-import {NATIVE_AREAS,createAreaHost} from './app-reader-context.mjs?v=8473a7502b';
-import {observedReaderContext} from './native-reader-context.mjs?v=e70ef5c1f2';
+import {World,str} from '../vendor/sopworld/sopworld.mjs?v=820bedd01b';
+import SOURCE from './new-engine-source.mjs?v=fb3421bd1d';
+import {flatRequestProjection} from './request-projection.mjs?v=ddeed4e94b';
+import {NATIVE_AREAS,createAreaHost} from './app-reader-context.mjs?v=b18048ebf9';
+import {observedReaderContext} from './native-reader-context.mjs?v=03c7083ae0';
 import {validateNativeArguments} from '../../worlds/native-tool-host.mjs?v=463e762442';
-import {resolvePropertyValue} from './property-selection.mjs?v=6edcdae5e2';
-import {DRAWING_PROPERTY_BINDINGS} from '../../worlds/art.draw/property-host.mjs?v=ad4de9eb20';
+import {resolvePropertyValue} from './property-selection.mjs?v=d7f455ebb3';
+import {DRAWING_PROPERTY_BINDINGS} from '../../worlds/art.draw/property-host.mjs?v=9c6f1fa045';
 let knowledge;
 /** Read-only cache inspection; does not create the lazy knowledge World. */
 export const inspectDeclaredExecutionSourceWorld=options=>inspectCachedExecutionSource(knowledge,options);
-const source=()=>knowledge??=World.fromJSON(SOURCE.snapshot);
+const source=()=>knowledge??=World.fromJSON(SOURCE.snapshot,{library:SOURCE.schemaModules});
 // Value joins and omitted-argument assumptions come from the operational SOP policy.
 /** Finite lexical values from the same declared knowledge source used by execution. */
 export function declaredPropertyValues(concept) {

@@ -1,0 +1,15 @@
+@policy.module core.module name=app.execution version=1 exports=app.execution.default exports=app.execution.values exports=app.execution.list
+@default.type core.type of=app.execution.default closed=true
+@default.operation core.slot of=app.execution.default key=operation kind=string present=true
+@default.parameter core.slot of=app.execution.default key=parameter kind=string present=true
+@default.value core.slot of=app.execution.default key=value kind=any
+@default.source core.slot of=app.execution.default key=source kind=string enum=clock.now
+@default.notice core.slot of=app.execution.default key=notice kind=string
+@list.type core.type of=app.execution.list closed=true
+@list.item core.slot of=app.execution.list key=item kind=any many=true
+@values.type core.type of=app.execution.values closed=true
+@values.concept core.slot of=app.execution.values key=concept kind=string present=true
+@values.type.slot core.slot of=app.execution.values key=valueType kind=string present=true
+@values.name core.slot of=app.execution.values key=nameKey kind=string present=true
+@values.value core.slot of=app.execution.values key=valueKey kind=string present=true
+@clock.function core.function name=clock.now out.kind=number pure=false doc="Host clock; milliseconds since the Unix epoch. A default is sampled only when its parameter is absent."

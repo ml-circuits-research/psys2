@@ -1,0 +1,22 @@
+# w.chart/shards/words: the owned English vocabulary, separate from the schema.
+# sources: hand-core 1 (hand-written declarations and deterministic key vocabulary)
+# license: CC0-1.0
+# script: none (hand-written; generated key block maintained by tools/key-words.mjs)
+
+@w.chart.word.world core.word text=chart text=charts text=graph text=graphs text="bar chart" text="pie chart" text="line chart" text="line graph" text="bar graph" text=plot means=w.chart of=std.schema.world.name core.source="hand-core 1"
+@w.chart.word.chart core.word text=chart text=charts text=graph text=graphs text=plot means=w.chart.chart core.source="hand-core 1"
+@w.chart.word.series core.word text=series text=line text=lines text=dataset text="data set" means=w.chart.series core.source="hand-core 1"
+@w.chart.word.point core.word text=point text=points text=value text=values text=bar text=bars text=slice text=slices text="data point" means=w.chart.point core.source="hand-core 1"
+@w.chart.word.title core.word text=title text=called text=name means=w.chart.chart.title core.source="hand-core 1"
+@w.chart.word.form core.word text=kind text=type text=form means=w.chart.chart.form core.source="hand-core 1"
+@w.chart.word.x_label core.word text="x axis" text="horizontal axis" means=w.chart.chart.x_label core.source="hand-core 1"
+@w.chart.word.y_label core.word text="y axis" text="vertical axis" means=w.chart.chart.y_label core.source="hand-core 1"
+@w.chart.word.unit core.word text=unit text=units means=w.chart.chart.unit core.source="hand-core 1"
+@w.chart.word.series.name core.word text=name text=called means=w.chart.series.name core.source="hand-core 1"
+@w.chart.word.series.chart core.word text=on text=in text=belongs means=w.chart.series.chart core.source="hand-core 1"
+@w.chart.word.series.n core.word text=place text=position text=order means=w.chart.series.n core.source="hand-core 1"
+@w.chart.word.colour core.word text=colour text=color means=w.chart.series.colour core.source="hand-core 1"
+@w.chart.word.category core.word text=category text=label text=month text=year text=group means=w.chart.point.category core.source="hand-core 1"
+@w.chart.word.value core.word text=value text=number text=amount text="how much" means=w.chart.point.value core.source="hand-core 1"
+@w.chart.word.n core.word text=place text=position text=order means=w.chart.point.n core.source="hand-core 1"
+@w.chart.word.point.series core.word text=on text=in text=belongs means=w.chart.point.series core.source="hand-core 1"

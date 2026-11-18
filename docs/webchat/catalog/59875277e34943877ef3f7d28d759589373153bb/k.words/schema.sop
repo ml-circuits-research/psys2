@@ -1,0 +1,50 @@
+# k.words: English words: the noun and verb senses of frequent words, and the adjective and adverb senses of the
+# 3,000 most frequent, each with a short gloss, its synonyms, its opposite, what it is a kind of (directly, and for
+# the common words the whole chain of kinds), what it is an instance of and what it is a part of. Irregular forms are core.word facts in the shards.
+# sources: wordnet 3.1 (Princeton WordNet 3.1); wordfreq 3.1.1 (the frequency of words, in shards of their own under CC BY-SA 4.0); the schema itself is hand-core 1
+# license: CC0-1.0
+# script: none (hand-written); the shards are written by tools/import/wordnet.mjs
+
+@k.words core.module name=k.words version=4 exports=sense exports=frequency core.source="hand-core 1"
+
+# One sense of a word. `n` is the sense number in WordNet (1 is the most frequent sense of the word for that part of
+# speech). The values of synonym, is_a, instance_of and part_of are words (several words are a string).
+# Version 2 (Q36): `word` too may be several words, a string ("manta ray", "light year"), as WordNet has them.
+# Version 4 (block "02:15"): every sense carries its `supersense`.
+# Round 9: `opposite` is WordNet's antonym of the word in this sense (hot: cold); `near_opposite`, for an adjective
+# without one of its own, is the opposite of the adjective it is filed as similar to (huge is similar to large:
+# small); `kind_of` is the chain of kinds upward from the sense, nearest first, through the first kind at each step
+# (dog: canine, carnivore, placental, mammal, vertebrate, chordate, animal, organism, "living thing" …), given for
+# the senses of the 3,000 most frequent words so that "is a dog an animal" is one lookup.
+@k.words.sense core.type of=k.words.sense shared=true closed=true core.source="hand-core 1"
+@k.words.sense.word core.slot of=k.words.sense key=word id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.words.sense.pos core.slot of=k.words.sense key=pos id=true required=true enum=noun enum=verb enum=adjective enum=adverb core.source="hand-core 1"
+@k.words.sense.n core.slot of=k.words.sense key=n id=true required=true kind=integer min=1 core.source="hand-core 1"
+# `supersense`: the WordNet lexicographer file of the sense (noun.animal, noun.artifact, verb.motion, adj.all, ...; the 45
+# names of WordNet 3.1's lexnames), a coarse semantic class for type signatures (reviewer block "02:15").
+@k.words.sense.supersense core.slot of=k.words.sense key=supersense enum=adj.all enum=adj.pert enum=adv.all enum=noun.Tops enum=noun.act enum=noun.animal enum=noun.artifact enum=noun.attribute enum=noun.body enum=noun.cognition enum=noun.communication enum=noun.event enum=noun.feeling enum=noun.food enum=noun.group enum=noun.location enum=noun.motive enum=noun.object enum=noun.person enum=noun.phenomenon enum=noun.plant enum=noun.possession enum=noun.process enum=noun.quantity enum=noun.relation enum=noun.shape enum=noun.state enum=noun.substance enum=noun.time enum=verb.body enum=verb.change enum=verb.cognition enum=verb.communication enum=verb.competition enum=verb.consumption enum=verb.contact enum=verb.creation enum=verb.emotion enum=verb.motion enum=verb.perception enum=verb.possession enum=verb.social enum=verb.stative enum=verb.weather enum=adj.ppl core.source="hand-core 1"
+@k.words.sense.gloss core.slot of=k.words.sense key=gloss kind=string core.source="hand-core 1"
+@k.words.sense.synonym core.slot of=k.words.sense key=synonym many=true kind=atom kind=string core.source="hand-core 1"
+@k.words.sense.is_a core.slot of=k.words.sense key=is_a many=true kind=atom kind=string core.source="hand-core 1"
+@k.words.sense.instance_of core.slot of=k.words.sense key=instance_of many=true kind=atom kind=string core.source="hand-core 1"
+@k.words.sense.part_of core.slot of=k.words.sense key=part_of many=true kind=atom kind=string core.source="hand-core 1"
+@k.words.sense.opposite core.slot of=k.words.sense key=opposite many=true kind=atom kind=string core.source="hand-core 1"
+@k.words.sense.near_opposite core.slot of=k.words.sense key=near_opposite many=true kind=atom kind=string core.source="hand-core 1"
+@k.words.sense.kind_of core.slot of=k.words.sense key=kind_of many=true kind=atom kind=string core.source="hand-core 1"
+# Version 3 (block "15:15" item 2, the register of words for lexical choice by genre): `usage` is WordNet's usage
+# domain of the sense, where it has one: informal (WordNet's colloquialism), slang, archaic, formal, euphemism,
+# disparaging. A sense without it is neutral as far as WordNet says.
+@k.words.sense.usage core.slot of=k.words.sense key=usage many=true enum=informal enum=slang enum=archaic enum=formal enum=euphemism enum=disparaging core.source="hand-core 1"
+
+# How frequent a word is (version 3): `word` in lower case (a capitalised word of k.words.sense is found by its
+# lower case, as its core.word spelling says); `zipf` its Zipf value in wordfreq's merged English list (log10 of its
+# frequency per billion words: 7 the commonest function words, 3 a word met about once in a million); `band` computed
+# from it: 1 very common (Zipf >= 6), 2 common (>= 5), 3 familiar (>= 4), 4 uncommon (>= 3), 5 rare (below 3, still
+# among wordfreq's first 50,000). A word with no fact is rarer than that, or not in the list. The facts are in shards
+# of their own under wordfreq's data terms (CC BY-SA 4.0).
+@k.words.frequency core.type of=k.words.frequency shared=true closed=true core.source="hand-core 1"
+@k.words.frequency.word core.slot of=k.words.frequency key=word id=true required=true kind=atom core.source="hand-core 1"
+@k.words.frequency.zipf core.slot of=k.words.frequency key=zipf required=true kind=number min=0 max=9 core.source="hand-core 1"
+@k.words.frequency.band core.slot of=k.words.frequency key=band required=true kind=integer min=1 max=5 core.source="hand-core 1"
+
+# Words for the type and keys of this world.

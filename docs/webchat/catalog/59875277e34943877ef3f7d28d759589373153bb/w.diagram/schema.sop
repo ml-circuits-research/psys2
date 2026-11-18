@@ -1,0 +1,68 @@
+# w.diagram: a reusable world: diagrams of nodes, edges and groups (a flowchart of a recipe, the life cycle of a frog
+# as a cycle, a tree of kinds of animals, a Venn diagram of what cats and dogs share, a mind map of a topic). Declared
+# as data in the library's std.schema format; the acts of std.acts drive it; it has no rule and no function of its
+# own. What each kind of diagram is (its structure, layout, shapes and the knowledge that fills it) is k.diagrams'.
+# sources: hand-core 1 (hand-written in this repository; block "04:40")
+# license: CC0-1.0
+# script: none (hand-written)
+# needs: sopworld with std.schema and std.acts (tools/sopworld/VERSION)
+
+@w.diagram core.module name=w.diagram version=1 exports=diagram exports=node exports=edge exports=group core.source="hand-core 1"
+@w.diagram.world std.schema.world name=w.diagram doc="diagrams of nodes joined by edges, in groups, laid out by the diagram's kind" core.source="hand-core 1"
+
+# A diagram. `title` what it shows; `form` its kind (the names of k.diagrams.kind form=: flowchart, tree, cycle, timeline,
+# mind_map, venn, org_chart, network, pipeline, table; not `kind`, which the act `make` reads as the kind of thing to
+# make); `layout` how its nodes are laid out (top_down, left_right, radial, circular, grid, overlapping, free); `topic`
+# what the diagram is about (a name of the catalog: frog, water cycle).
+@w.diagram.diagram core.type of=w.diagram.diagram extends=std.schema.thing closed=true core.source="hand-core 1"
+@w.diagram.diagram.title core.slot of=w.diagram.diagram key=title kind=atom kind=string core.source="hand-core 1"
+@w.diagram.diagram.form core.slot of=w.diagram.diagram key=form enum=flowchart enum=tree enum=cycle enum=timeline enum=mind_map enum=venn enum=org_chart enum=network enum=pipeline enum=table default=flowchart core.source="hand-core 1"
+@w.diagram.diagram.layout core.slot of=w.diagram.diagram key=layout enum=top_down enum=left_right enum=radial enum=circular enum=grid enum=overlapping enum=free core.source="hand-core 1"
+@w.diagram.diagram.topic core.slot of=w.diagram.diagram key=topic kind=atom kind=string core.source="hand-core 1"
+
+# A node: `label` its text, `diagram` its diagram, `role` what it is in the diagram (a flowchart's start, end, process,
+# decision, data, document, subprocess, connector; a tree's root and item; a cycle's stage; a timeline's event; a mind
+# map's centre and branch; a Venn diagram's item; an org chart's post; a network's node; a table's row, column, cell);
+# `shape` how it is drawn (k.diagrams.shape gives the usual one for each kind and role); `parent` the node it hangs
+# from (a tree, an org chart, a mind map); `group` the groups it is in (a Venn diagram's sets: one or several); `n` its
+# place in order (a step, a stage, an event), from 1; `x`, `y` where the layout put it; `colour`.
+@w.diagram.node core.type of=w.diagram.node extends=std.schema.thing closed=true core.source="hand-core 1"
+@w.diagram.node.label core.slot of=w.diagram.node key=label required=true kind=atom kind=string core.source="hand-core 1"
+@w.diagram.node.diagram core.slot of=w.diagram.node key=diagram type=w.diagram.diagram core.source="hand-core 1"
+@w.diagram.node.role core.slot of=w.diagram.node key=role enum=start enum=end enum=process enum=decision enum=data enum=document enum=subprocess enum=connector enum=root enum=item enum=stage enum=event enum=centre enum=branch enum=post enum=node enum=row enum=column enum=cell core.source="hand-core 1"
+@w.diagram.node.shape core.slot of=w.diagram.node key=shape enum=oval enum=rectangle enum=rounded_rectangle enum=diamond enum=parallelogram enum=document enum=double_rectangle enum=circle enum=ellipse enum=dot enum=chevron core.source="hand-core 1"
+@w.diagram.node.parent core.slot of=w.diagram.node key=parent type=w.diagram.node core.source="hand-core 1"
+@w.diagram.node.group core.slot of=w.diagram.node key=group many=true type=w.diagram.group core.source="hand-core 1"
+@w.diagram.node.n core.slot of=w.diagram.node key=n kind=integer min=1 step=1 core.source="hand-core 1"
+@w.diagram.node.x core.slot of=w.diagram.node key=x kind=number core.source="hand-core 1"
+@w.diagram.node.y core.slot of=w.diagram.node key=y kind=number core.source="hand-core 1"
+@w.diagram.node.colour core.slot of=w.diagram.node key=colour kind=atom kind=string core.source="hand-core 1"
+
+# An edge from one node to another: `label` what the link says (yes, no, then, eats), `direction` forward (an arrow from
+# `from` to `to`; the default), both, or none (a line: a tree's branch, a network's link); `diagram` its diagram.
+@w.diagram.edge core.type of=w.diagram.edge extends=std.schema.thing closed=true core.source="hand-core 1"
+@w.diagram.edge.from core.slot of=w.diagram.edge key=from required=true type=w.diagram.node core.source="hand-core 1"
+@w.diagram.edge.to core.slot of=w.diagram.edge key=to required=true type=w.diagram.node core.source="hand-core 1"
+@w.diagram.edge.label core.slot of=w.diagram.edge key=label kind=atom kind=string core.source="hand-core 1"
+@w.diagram.edge.direction core.slot of=w.diagram.edge key=direction enum=forward enum=both enum=none default=forward core.source="hand-core 1"
+@w.diagram.edge.diagram core.slot of=w.diagram.edge key=diagram type=w.diagram.diagram core.source="hand-core 1"
+
+# A group of nodes drawn as one shape around them (a set of a Venn diagram, a lane, a cluster): `label`, `diagram`,
+# `shape` (circle, ellipse, rectangle, rounded_rectangle), `parent` the group it lies in (nested groups).
+@w.diagram.group core.type of=w.diagram.group extends=std.schema.thing closed=true core.source="hand-core 1"
+@w.diagram.group.label core.slot of=w.diagram.group key=label required=true kind=atom kind=string core.source="hand-core 1"
+@w.diagram.group.diagram core.slot of=w.diagram.group key=diagram type=w.diagram.diagram core.source="hand-core 1"
+@w.diagram.group.shape core.slot of=w.diagram.group key=shape enum=circle enum=ellipse enum=rectangle enum=rounded_rectangle default=circle core.source="hand-core 1"
+@w.diagram.group.parent core.slot of=w.diagram.group key=parent type=w.diagram.group core.source="hand-core 1"
+
+# The kinds and the acts that apply to them. At most 20 diagrams, 500 nodes, 1,000 edges and 100 groups.
+@w.diagram.kind.diagram std.schema.kind of=w.diagram.diagram world=w.diagram acts=make acts=remove acts=change acts=pick acts=ask acts=copy core.source="hand-core 1"
+@w.diagram.kind.node std.schema.kind of=w.diagram.node world=w.diagram acts=make acts=remove acts=change acts=place acts=connect acts=group acts=pick acts=ask acts=copy core.source="hand-core 1"
+@w.diagram.kind.edge std.schema.kind of=w.diagram.edge world=w.diagram acts=make acts=remove acts=change acts=pick acts=ask core.source="hand-core 1"
+@w.diagram.kind.group std.schema.kind of=w.diagram.group world=w.diagram acts=make acts=remove acts=change acts=pick acts=ask acts=copy core.source="hand-core 1"
+@w.diagram.limit.diagram std.schema.limit of=w.diagram.diagram max=20 core.source="hand-core 1"
+@w.diagram.limit.node std.schema.limit of=w.diagram.node max=500 core.source="hand-core 1"
+@w.diagram.limit.edge std.schema.limit of=w.diagram.edge max=1000 core.source="hand-core 1"
+@w.diagram.limit.group std.schema.limit of=w.diagram.group max=100 core.source="hand-core 1"
+
+# Words: for the world (how a host finds it by name), its kinds and its keys.

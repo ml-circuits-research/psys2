@@ -1,0 +1,54 @@
+# w.text: retained text sources and explicitly anchored formatting spans
+# sources: hand-core 1 (own project declarations; sources/hand-core/SOURCE.md)
+# license: CC0-1.0
+# script: none (hand-written)
+# needs: pinned sopworld std.schema/std.acts; no new runtime capability
+
+@w.text core.module name=w.text version=1 imports=w.document exports=source exports=span core.source="hand-core 1"
+@w.text.world std.schema.world name=w.text doc="retained text sources and explicitly anchored formatting spans" core.source="hand-core 1"
+
+@w.text.source core.type of=w.text.source extends=std.schema.thing closed=true core.source="hand-core 1"
+@w.text.source.source_id core.slot of=w.text.source key=source_id required=true kind=atom kind=string core.source="hand-core 1"
+@w.text.source.revision core.slot of=w.text.source key=revision required=true kind=atom kind=string core.source="hand-core 1"
+@w.text.source.text core.slot of=w.text.source key=text required=true kind=string core.source="hand-core 1"
+@w.text.source.document core.slot of=w.text.source key=document type=w.document.document core.source="hand-core 1"
+@w.text.kind.source std.schema.kind of=w.text.source world=w.text acts=make acts=ask acts=copy core.source="hand-core 1"
+
+@w.text.span core.type of=w.text.span extends=std.schema.thing closed=true core.source="hand-core 1"
+@w.text.span.source core.slot of=w.text.span key=source required=true type=w.text.source core.source="hand-core 1"
+@w.text.span.unit core.slot of=w.text.span key=unit required=true enum=unicode_scalar core.source="hand-core 1"
+@w.text.span.start core.slot of=w.text.span key=start required=true kind=integer min=0 step=1 core.source="hand-core 1"
+@w.text.span.end core.slot of=w.text.span key=end required=true kind=integer min=0 step=1 core.source="hand-core 1"
+@w.text.span.bold core.slot of=w.text.span key=bold kind=boolean core.source="hand-core 1"
+@w.text.span.italic core.slot of=w.text.span key=italic kind=boolean core.source="hand-core 1"
+@w.text.span.underline core.slot of=w.text.span key=underline kind=boolean core.source="hand-core 1"
+@w.text.span.strike core.slot of=w.text.span key=strike kind=boolean core.source="hand-core 1"
+@w.text.span.highlight core.slot of=w.text.span key=highlight kind=boolean core.source="hand-core 1"
+@w.text.span.code core.slot of=w.text.span key=code kind=boolean core.source="hand-core 1"
+@w.text.span.highlight_colour core.slot of=w.text.span key=highlight_colour kind=atom kind=string type=k.colours.colour by=name core.source="hand-core 1"
+@w.text.span.link_target core.slot of=w.text.span key=link_target kind=string core.source="hand-core 1"
+@w.text.kind.span std.schema.kind of=w.text.span world=w.text acts=make acts=remove acts=change acts=ask acts=copy core.source="hand-core 1"
+
+
+# Half-open nonempty scalar range. The host must verify source identity and upper bound.
+@w.text.span.order w.text.span start=?start end=?end
+@w.text.span.not_before core.check fn=gte args=?start args=?end
+@w.text.span.valid_order core.deny when=$w.text.span.order if=$w.text.span.not_before why="A formatting span must end after it starts." core.source="hand-core 1"
+@w.text.required.source.source_id.fact w.text.source core.absent=source_id
+@w.text.required.source.source_id core.deny when=$w.text.required.source.source_id.fact why="A retained text source requires an explicit source_id." core.source="hand-core 1"
+@w.text.required.source.revision.fact w.text.source core.absent=revision
+@w.text.required.source.revision core.deny when=$w.text.required.source.revision.fact why="A retained text source requires an explicit revision." core.source="hand-core 1"
+@w.text.required.source.text.fact w.text.source core.absent=text
+@w.text.required.source.text core.deny when=$w.text.required.source.text.fact why="A retained text source requires an explicit text." core.source="hand-core 1"
+@w.text.required.span.source.fact w.text.span core.absent=source
+@w.text.required.span.source core.deny when=$w.text.required.span.source.fact why="A retained text span requires an explicit source." core.source="hand-core 1"
+@w.text.required.span.unit.fact w.text.span core.absent=unit
+@w.text.required.span.unit core.deny when=$w.text.required.span.unit.fact why="A retained text span requires an explicit unit." core.source="hand-core 1"
+@w.text.required.span.start.fact w.text.span core.absent=start
+@w.text.required.span.start core.deny when=$w.text.required.span.start.fact why="A retained text span requires an explicit start." core.source="hand-core 1"
+@w.text.required.span.end.fact w.text.span core.absent=end
+@w.text.required.span.end core.deny when=$w.text.required.span.end.fact why="A retained text span requires an explicit end." core.source="hand-core 1"
+@w.text.empty.source_id.fact w.text.source source_id=""
+@w.text.empty.source_id core.deny when=$w.text.empty.source_id.fact why="A retained source requires a nonempty source_id." core.source="hand-core 1"
+@w.text.empty.revision.fact w.text.source revision=""
+@w.text.empty.revision core.deny when=$w.text.empty.revision.fact why="A retained source requires a nonempty revision." core.source="hand-core 1"

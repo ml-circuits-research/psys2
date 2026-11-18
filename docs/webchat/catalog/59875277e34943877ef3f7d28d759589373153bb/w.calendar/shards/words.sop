@@ -1,0 +1,29 @@
+# w.calendar/shards/words: the owned English vocabulary, separate from the schema.
+# sources: hand-core 1 (hand-written declarations and deterministic key vocabulary)
+# license: CC0-1.0
+# script: none (hand-written; generated key block maintained by tools/key-words.mjs)
+
+@w.calendar.word.world core.word text=calendar text=calendars text=diary text=planner text=agenda text="wall calendar" means=w.calendar of=std.schema.world.name core.source="hand-core 1"
+@w.calendar.word.calendar core.word text=calendar text=calendars means=w.calendar.calendar core.source="hand-core 1"
+@w.calendar.word.event core.word text=event text=events text=appointment text=appointments text=meeting text=meetings means=w.calendar.event core.source="hand-core 1"
+@w.calendar.word.view core.word text=month text=view means=w.calendar.view core.source="hand-core 1"
+@w.calendar.word.name core.word text=name text=called means=w.calendar.calendar.name core.source="hand-core 1"
+@w.calendar.word.zone core.word text="time zone" text=zone text=timezone means=w.calendar.calendar.zone core.source="hand-core 1"
+@w.calendar.word.week_starts core.word text="week starts" text="first day" means=w.calendar.calendar.week_starts core.source="hand-core 1"
+@w.calendar.word.title core.word text=title text=called text=what means=w.calendar.event.title core.source="hand-core 1"
+@w.calendar.word.event.calendar core.word text=on text=in means=w.calendar.event.calendar core.source="hand-core 1"
+@w.calendar.word.date core.word text=date text=day text=when means=w.calendar.event.date core.source="hand-core 1"
+@w.calendar.word.start core.word text=start text=starts text=from text=at means=w.calendar.event.start core.source="hand-core 1"
+@w.calendar.word.end core.word text=end text=ends text=till text=until means=w.calendar.event.end core.source="hand-core 1"
+@w.calendar.word.last_date core.word text="last day" text="ends on" means=w.calendar.event.last_date core.source="hand-core 1"
+@w.calendar.word.place core.word text=place text=where text=at means=w.calendar.event.place core.source="hand-core 1"
+@w.calendar.word.sort core.word text=kind text=sort text=type means=w.calendar.event.sort core.source="hand-core 1"
+@w.calendar.word.about core.word text=about text=more means=w.calendar.event.about core.source="hand-core 1"
+@w.calendar.word.repeat core.word text=repeat text=repeats text=every text=recurring means=w.calendar.event.repeat core.source="hand-core 1"
+@w.calendar.word.every core.word text=every text=interval means=w.calendar.event.every core.source="hand-core 1"
+@w.calendar.word.on core.word text=on text=days means=w.calendar.event.on core.source="hand-core 1"
+@w.calendar.word.times core.word text=times text=count means=w.calendar.event.times core.source="hand-core 1"
+@w.calendar.word.repeat_until core.word text="repeat until" text="stops on" means=w.calendar.event.repeat_until core.source="hand-core 1"
+@w.calendar.word.month core.word text=month means=w.calendar.view.month core.source="hand-core 1"
+@w.calendar.word.year core.word text=year means=w.calendar.view.year core.source="hand-core 1"
+@w.calendar.word.mode core.word text=mode text=shown text=by means=w.calendar.view.mode core.source="hand-core 1"

@@ -4,8 +4,8 @@
  * into the original text. Original casing is kept in `raw`.
  */
 import { budget } from '../../dialog/budget.mjs?v=00bce6e369';
-import { en } from '../../lang/en.mjs?v=1c3d1d175f';
-import { isNumberWord, parseNumberRun, ordinalWordValue, digitWordValue } from './numbers.mjs?v=6c42bec0ab';
+import { en } from '../../lang/en.mjs?v=373500f14a';
+import { isNumberWord, parseNumberRun, ordinalWordValue, digitWordValue } from './numbers.mjs?v=ff699f4f54';
 
 export const QUESTION_WORDS = en.questionWords('question-start');   // facts of handover/lang.en (clauses shard)
 

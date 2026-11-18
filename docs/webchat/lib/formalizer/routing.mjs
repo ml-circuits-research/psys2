@@ -37,8 +37,8 @@
  * Inside a tier the order is always: priority, literals, fewer wildcard tokens, router score, pattern order.
  */
 
-import { en } from '../lang/en.mjs?v=1c3d1d175f';
-import { completeOn } from './completeness.mjs?v=c9c59a1f4a';
+import { en } from '../lang/en.mjs?v=373500f14a';
+import { completeOn } from './completeness.mjs?v=33fec7e5d0';
 
 /**
  * The library's decision for several worlds that read one sentence (sopworld 0.104 `arbitrate` decides with std.decide kind `world`: coverage, then the open tab, then priority). The host

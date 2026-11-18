@@ -1,0 +1,26 @@
+# k.animals/shards/words: the owned English vocabulary, separate from the schema.
+# sources: hand-core 1 (hand-written declarations and deterministic key vocabulary)
+# license: CC0-1.0
+# script: none (hand-written; generated key block maintained by tools/key-words.mjs)
+
+@k.animals.word.animal core.word text=animal text=animals means=k.animals.animal core.source="hand-core 1"
+@k.animals.word.class core.word text=class text=kind means=k.animals.animal.class core.source="hand-core 1"
+@k.animals.word.legs core.word text=legs text=leg means=k.animals.animal.legs core.source="hand-core 1"
+@k.animals.word.covering core.word text=covering text=covered means=k.animals.animal.covering core.source="hand-core 1"
+@k.animals.word.sound core.word text=sound text=sounds text=noise text=noises text=says text=say means=k.animals.animal.sound core.source="hand-core 1"
+@k.animals.word.habitat core.word text=habitat text=lives text=live means=k.animals.animal.habitat core.source="hand-core 1"
+@k.animals.word.diet core.word text=diet means=k.animals.animal.diet core.source="hand-core 1"
+@k.animals.word.eats core.word text=eats text=eat text=food means=k.animals.animal.eats core.source="hand-core 1"
+@k.animals.word.baby core.word text=baby text=young means=k.animals.animal.baby core.source="hand-core 1"
+@k.animals.word.baby.kit core.word text=bunny text=bunnies means=kit of=k.animals.animal.baby core.source="hand-core 1"
+@k.animals.word.cannot core.word text=cannot text="can not" means=k.animals.animal.cannot core.source="hand-core 1"
+@k.animals.word.group core.word text=group text=herd text=flock text=pack means=k.animals.animal.group core.source="hand-core 1"
+
+# Words for the keys, by rule: the name of each key, and everyday words for some (tools/key-words.mjs).
+@k.animals.word.key.animal.baby core.word text=called means=k.animals.animal.baby core.source="hand-core 1"
+@k.animals.word.key.animal.can core.word text=can text=able text=do means=k.animals.animal.can core.source="hand-core 1"
+@k.animals.word.key.animal.cannot core.word text=unable means=k.animals.animal.cannot core.source="hand-core 1"
+@k.animals.word.key.animal.drawing core.word text=drawing means=k.animals.animal.drawing core.source="hand-core 1"
+@k.animals.word.key.animal.thing core.word text=thing means=k.animals.animal.thing core.source="hand-core 1"
+@k.animals.word.key.class.legs core.word text=legs means=k.animals.class.legs core.source="hand-core 1"
+@k.animals.word.key.class.covering core.word text=covering means=k.animals.class.covering core.source="hand-core 1"

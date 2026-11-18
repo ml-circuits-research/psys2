@@ -1,0 +1,91 @@
+# w.request: a reusable world: the meaning of one request a person makes of an application (owner's GO, reviewer
+# block 2026-11-15 14:00, item 1). A request has an act (a k.actions act: make, change, remove, place ...), a target
+# (a kind of the open world, a thing present in it, or the last result) and constraints, each a fact: a kind wanted or
+# not wanted, a count (a number, a range or a named amount of k.expect), a size or extent on the scale of k.expect, an
+# attribute with its value, a place, a manner, parts it is to have (with), a topic (about), a length. Every content
+# word of the message ends in a constraint (its `words`) or in an `unread` fact: nothing is silently dropped. A reader
+# fills one live instance per turn; w.dialogue keeps the requests of a session and revises them; the open tab's world
+# receives the request as a goal and its planner fills what was not said from k.expect.
+# Declared as data in the library's std.schema format; the acts of std.acts drive it; it has no rule and no function.
+# sources: hand-core 1 (hand-written in this repository; own)
+# license: CC0-1.0
+# script: none (hand-written)
+# needs: sopworld with std.schema and std.acts (tools/sopworld/VERSION)
+
+@w.request core.module name=w.request version=1 exports=request exports=constraint exports=unread core.source="hand-core 1"
+@w.request.world std.schema.world name=w.request doc="the meaning of one request: an act, a target and constraints" core.source="hand-core 1"
+
+# A request. `act` the k.actions act (make, change, remove, place, group, connect, ...); `mode` the frame's mode where
+# it has one (more, apart). `target` what it acts on: a kind name (circle, pond, story), a thing of the live world by
+# its id, or the last result; `refers` says which (kind, thing, last). `goes_to` the world it goes to (the open tab's
+# world: w.diagram, a drawing, w.document ...). `text` the message as read (English; a message in another language is
+# translated at the boundary, `said` keeps the original). `n` the turn it was said at, from 1. `revises` the earlier
+# request this one revises (a reaction or "my expectation was ..."): the revision carries the whole new constraint set.
+# `status`: open (not done yet), done, partly (some constraint not honoured), refused, replaced (revised by a later one).
+@w.request.request core.type of=w.request.request extends=std.schema.thing closed=true core.source="hand-core 1"
+@w.request.request.act core.slot of=w.request.request key=act required=true kind=atom kind=string type=k.actions.act by=name core.source="hand-core 1"
+@w.request.request.mode core.slot of=w.request.request key=mode kind=atom core.source="hand-core 1"
+@w.request.request.target core.slot of=w.request.request key=target kind=atom kind=string core.source="hand-core 1"
+@w.request.request.refers core.slot of=w.request.request key=refers enum=kind enum=thing enum=last enum=world default=kind core.source="hand-core 1"
+@w.request.request.goes_to core.slot of=w.request.request key=goes_to kind=atom kind=string core.source="hand-core 1"
+@w.request.request.text core.slot of=w.request.request key=text kind=string core.source="hand-core 1"
+@w.request.request.said core.slot of=w.request.request key=said kind=string core.source="hand-core 1"
+@w.request.request.n core.slot of=w.request.request key=n kind=integer min=1 step=1 core.source="hand-core 1"
+@w.request.request.revises core.slot of=w.request.request key=revises type=w.request.request core.source="hand-core 1"
+@w.request.request.status core.slot of=w.request.request key=status enum=open enum=done enum=partly enum=refused enum=replaced default=open core.source="hand-core 1"
+
+# A constraint of a request: one thing the person said (or the planner assumed) about the result. `on` says what it
+# constrains:
+#   kind      a kind of thing in the result (`value` the kind: circle, duck, house)
+#   count     how many (`number`, or `min`/`max`, or `amount` a k.expect amount: few, several, many), of `of` when given
+#   size      the size of each thing (`value` a k.expect scale step: tiny, small, default, big, huge)
+#   extent    how much of the canvas or page the result takes (`value` a scale step; `place` narrows it: in a corner)
+#   attribute an attribute of the things (`attribute` a k.attributes name: colour; `value` its value: red)
+#   place     where (`relation` in, on, at, next_to ...; `value` the place: corner, left, top, centre, or a thing)
+#   manner    how (`value`: nice, better, tidy, random, logical, simple, colourful, symmetric)
+#   layout    the arrangement (`value` a k.layouts layout or a k.diagrams layout: grid, radial, top_down, circle)
+#   with      parts it is to have (`value` the part kind: arrow, water plant, duck; `count` facts may name it in `of`)
+#   about     a topic (`value` the topic in words: the water cycle, a dragon)
+#   length    how long a text is (`number` or `min`/`max` or `amount`, in `unit`: word, sentence, paragraph, chapter, page)
+# `want`: yes (wanted, the default), no (not wanted: "not a circle", "without arrows", "instead of circles"), not_all
+# ("not all circles": the kind may appear, but not as every thing: the result has more than one kind). `of` the kind
+# the constraint is about where it is not the target ("red circles": attribute colour red of circle). `words` the words
+# of the message it was read from (every content word is in one constraint or in an unread fact). `origin`: said (by
+# the person), default (filled by the planner from k.expect: an assumption the reply names), reaction (added by a
+# reaction of w.dialogue to the last result). `honoured`: what the world did with it (yes, no, partly), set after the
+# plan; `why` says why not, in words, for the reply.
+@w.request.constraint core.type of=w.request.constraint extends=std.schema.thing closed=true core.source="hand-core 1"
+@w.request.constraint.request core.slot of=w.request.constraint key=request required=true type=w.request.request core.source="hand-core 1"
+@w.request.constraint.on core.slot of=w.request.constraint key=on required=true enum=kind enum=count enum=size enum=extent enum=attribute enum=place enum=manner enum=layout enum=with enum=about enum=length core.source="hand-core 1"
+@w.request.constraint.want core.slot of=w.request.constraint key=want enum=yes enum=no enum=not_all default=yes core.source="hand-core 1"
+@w.request.constraint.value core.slot of=w.request.constraint key=value kind=atom kind=string core.source="hand-core 1"
+@w.request.constraint.of core.slot of=w.request.constraint key=of kind=atom kind=string core.source="hand-core 1"
+@w.request.constraint.attribute core.slot of=w.request.constraint key=attribute kind=atom kind=string core.source="hand-core 1"
+@w.request.constraint.relation core.slot of=w.request.constraint key=relation kind=atom kind=string core.source="hand-core 1"
+@w.request.constraint.number core.slot of=w.request.constraint key=number kind=number min=0 core.source="hand-core 1"
+@w.request.constraint.min core.slot of=w.request.constraint key=min kind=number min=0 core.source="hand-core 1"
+@w.request.constraint.max core.slot of=w.request.constraint key=max kind=number min=0 core.source="hand-core 1"
+@w.request.constraint.amount core.slot of=w.request.constraint key=amount kind=atom kind=string core.source="hand-core 1"
+@w.request.constraint.unit core.slot of=w.request.constraint key=unit kind=atom kind=string core.source="hand-core 1"
+@w.request.constraint.words core.slot of=w.request.constraint key=words kind=string core.source="hand-core 1"
+@w.request.constraint.origin core.slot of=w.request.constraint key=origin enum=said enum=default enum=reaction default=said core.source="hand-core 1"
+@w.request.constraint.honoured core.slot of=w.request.constraint key=honoured enum=yes enum=no enum=partly core.source="hand-core 1"
+@w.request.constraint.why core.slot of=w.request.constraint key=why kind=string core.source="hand-core 1"
+
+# A content word of the message that no constraint took (P5: the reply names it). `text` the word or words, `n` its
+# place in the message (from 1), `note` what the reader guessed, if anything.
+@w.request.unread core.type of=w.request.unread extends=std.schema.thing closed=true core.source="hand-core 1"
+@w.request.unread.request core.slot of=w.request.unread key=request required=true type=w.request.request core.source="hand-core 1"
+@w.request.unread.text core.slot of=w.request.unread key=text required=true kind=atom kind=string core.source="hand-core 1"
+@w.request.unread.n core.slot of=w.request.unread key=n kind=integer min=1 step=1 core.source="hand-core 1"
+@w.request.unread.note core.slot of=w.request.unread key=note kind=string core.source="hand-core 1"
+
+# The kinds and the acts that apply to them. A session holds at most 500 requests.
+@w.request.kind.request std.schema.kind of=w.request.request world=w.request acts=make acts=remove acts=change acts=ask acts=copy core.source="hand-core 1"
+@w.request.kind.constraint std.schema.kind of=w.request.constraint world=w.request acts=make acts=remove acts=change acts=ask core.source="hand-core 1"
+@w.request.kind.unread std.schema.kind of=w.request.unread world=w.request acts=make acts=remove acts=ask core.source="hand-core 1"
+@w.request.limit.request std.schema.limit of=w.request.request max=500 core.source="hand-core 1"
+@w.request.limit.constraint std.schema.limit of=w.request.constraint max=5000 core.source="hand-core 1"
+@w.request.limit.unread std.schema.limit of=w.request.unread max=2000 core.source="hand-core 1"
+
+# Words: for the world, its kinds and its keys.

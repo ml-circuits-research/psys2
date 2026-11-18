@@ -1,7 +1,7 @@
 // Authored purpose comments, grounded in each WORLD.md and schema.sop at this pin.
 // Descriptions explain the available definitions; actual use needs runtime evidence.
 export const CATALOG_WORLD_PURPOSE_CONTEXT = Object.freeze({
- catalogCommit: 'd506e222691d41cd6dc68d8e4e147f5705b0bb71',
+ catalogCommit: '59875277e34943877ef3f7d28d759589373153bb',
  definitionStatus: 'Definitions published in the pinned knowledge catalog.',
  runtimeUseStatus: 'Runtime use is not established by this metadata; a loaded definition alone does not show participation in a reasoning step.',
  sourcePath: '<world-id>/WORLD.md',

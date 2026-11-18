@@ -1,0 +1,15 @@
+# w.picture/shards/words: the owned English vocabulary, separate from the schema.
+# sources: hand-core 1 (hand-written declarations and deterministic key vocabulary)
+# license: CC0-1.0
+# script: none (hand-written; generated key block maintained by tools/key-words.mjs)
+
+@w.picture.word.world core.word text="picture" means=w.picture of=std.schema.world.name core.source="hand-core 1"
+@w.picture.word.0 core.word text="picture" means=w.picture.picture core.source="hand-core 1"
+@w.picture.word.1 core.word text="canvas" means=w.picture.picture core.source="hand-core 1"
+@w.picture.word.2 core.word text="background" means=w.picture.picture.background core.source="hand-core 1"
+@w.picture.word.3 core.word text="scene" means=w.picture.picture.scene core.source="hand-core 1"
+@w.picture.word.4 core.word text="depicted part" means=w.picture.part core.source="hand-core 1"
+@w.picture.word.5 core.word text="depicted object" means=w.picture.part.object core.source="hand-core 1"
+@w.picture.word.6 core.word text="label" means=w.picture.part.label core.source="hand-core 1"
+@w.picture.word.name core.word text=name means=w.picture.picture.name core.source="hand-core 1"
+@w.picture.word.part.picture core.word text=picture means=w.picture.part.picture core.source="hand-core 1"

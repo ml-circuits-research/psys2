@@ -1,12 +1,12 @@
 // Actual application state only. No request annotations or invented semantic types.
-import {observedReaderContext} from './native-reader-context.mjs?v=e70ef5c1f2';
-import {createDrawingHost} from '../../worlds/art.draw/declared-host.mjs?v=79b6983664';
+import {observedReaderContext} from './native-reader-context.mjs?v=03c7083ae0';
+import {createDrawingHost} from '../../worlds/art.draw/declared-host.mjs?v=6f22c21a78';
 import {createDiagramHost} from '../../worlds/diagram.sketch/declared-host.mjs?v=863247d13b';
-import {createDocumentHost} from '../../worlds/docs.editor/declared-host.mjs?v=1b73d3a9a2';
-import {createAvatarHost} from '../../worlds/ui.avatar/declared-host.mjs?v=9d56ee46d4';
-import {canonicalAvatarState,toNativeAvatarState,avatarStateWorld,AVATAR_STATE_SCHEMA} from '../../worlds/ui.avatar/canonical-state.mjs?v=701f0639ef';
-import {createCalendarHost,canonicalCalendarState,toNativeCalendarState} from '../../worlds/time.calendar/declared-host.mjs?v=d531e21dc3';
-import {calendarStateWorld,CALENDAR_STATE_SCHEMA} from '../../worlds/time.calendar/canonical-state.mjs?v=829333ea89';
+import {createDocumentHost} from '../../worlds/docs.editor/declared-host.mjs?v=a45dd6cafe';
+import {createAvatarHost} from '../../worlds/ui.avatar/declared-host.mjs?v=58b021c63a';
+import {canonicalAvatarState,toNativeAvatarState,avatarStateWorld,AVATAR_STATE_SCHEMA} from '../../worlds/ui.avatar/canonical-state.mjs?v=8b998421fc';
+import {createCalendarHost,canonicalCalendarState,toNativeCalendarState} from '../../worlds/time.calendar/declared-host.mjs?v=3ff6e9af15';
+import {calendarStateWorld,CALENDAR_STATE_SCHEMA} from '../../worlds/time.calendar/canonical-state.mjs?v=82dff42a48';
 export const NATIVE_AREAS={avatar:{area:'drawing',world:'ui.avatar',create:createAvatarHost,canonicalizeState:canonicalAvatarState,projectState:toNativeAvatarState,stateWorld:avatarStateWorld,stateSchema:AVATAR_STATE_SCHEMA,stateInterfaceTypeKey:'nativeType',loadKnowledge:'faces',historySelection:[['selectedSlot']],historyView:[['idDisplay']]},draw:{area:'drawing',world:'art.draw',create:createDrawingHost,historySelection:[['selected'],['selectedIds'],['selectedPart']],historyView:[['idDisplay']]},diagram:{area:'diagram',world:'diagram.sketch',create:createDiagramHost,historySelection:[['selected'],['chartTools','active']],historyView:[['idDisplay']]},editor:{area:'document',world:'docs.editor',create:createDocumentHost,historySelection:[['selection']]},calendar:{area:'calendar',world:'time.calendar',create:createCalendarHost,canonicalizeState:canonicalCalendarState,projectState:toNativeCalendarState,stateWorld:calendarStateWorld,stateSchema:CALENDAR_STATE_SCHEMA,policyFile:'scheduling-policy.sop',historySelection:[['selectedEvent']]}};
 /** Application composition: the same declared policy guards controls and spoken requests. */
 export async function createAreaHost(area,{loader,knowledge,prepareKnowledge=true,...options}={}){

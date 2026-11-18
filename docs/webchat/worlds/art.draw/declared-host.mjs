@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs?v=463e762442';
-import {initialState,makeObject,remember,undoStep,redoStep,newPage} from './board.mjs?v=184d8dc039';
-import {DRAWING_PART_TOOL_BINDINGS,drawingPartHandlers,drawingPartsOf,makeKnowledgeDrawing,restoreMembers,drawingObjectsOf,findDrawingObject,replaceDrawingObject,independentDrawingIds,colourDrawingObject} from './part-tools.mjs?v=0c74ead2e5';
-import {KINDS,W,H,bbox,objectMatrix} from './scene.mjs?v=dd93a23dcd';
+import {initialState,makeObject,remember,undoStep,redoStep,newPage} from './board.mjs?v=ec3f721e87';
+import {DRAWING_PART_TOOL_BINDINGS,drawingPartHandlers,drawingPartsOf,makeKnowledgeDrawing,restoreMembers,drawingObjectsOf,findDrawingObject,replaceDrawingObject,independentDrawingIds,colourDrawingObject} from './part-tools.mjs?v=9bd000a5d9';
+import {KINDS,W,H,bbox,objectMatrix} from './scene.mjs?v=2f9fac19e3';
 export {initialState as initialDrawingState};
 const kinds=Object.keys(KINDS),array={type:'array',required:true};
 const properties={name:{type:'string'},label:{type:'string'},width:{type:'number',min:.001},height:{type:'number',min:.001},x:{type:'number'},y:{type:'number'},size:{type:'number',min:0.001},color:{type:'string',nullable:true}};

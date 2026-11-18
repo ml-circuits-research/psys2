@@ -1,7 +1,7 @@
 // Read-only architecture projection of the runtime registry. No inferred execution links.
-import {parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=20fdd56a67';
+import {parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=820bedd01b';
 import {describeWorldsNodes} from './worlds-node-metadata.mjs?v=552b6b3939';
-import {CATALOG_WORLD_PURPOSES} from './catalog-world-purpose.mjs?v=5a0d802ef1';
+import {CATALOG_WORLD_PURPOSES} from './catalog-world-purpose.mjs?v=4fbd6202a5';
 
 export function inspectSchemaSource(source){
  if(typeof source!=='string')return {status:'source not loaded',legends:[],modules:[],types:[],slots:[],tools:[],parameters:[],language:[],documentation:[],languageStatus:'Source has not been read; no language binding is asserted.'};
@@ -64,12 +64,13 @@ export function inspectWorldsRuntime({index={},bundle={worlds:{}},loaded=[],inst
  nodes.push({id:'knowledge:catalog',label:'Knowledge',kind:'knowledge',implementation:'SOP Lang + JavaScript loader',description:'Shared catalog loaded by reference. The children show files actually read in this worker; no knowledge is copied into an instance by this inspector.',details:{filesRead:knowledgeFiles.length}});
  const knowledgeByPath=new Map(knowledgeFiles.map(file=>[file.path,file])),catalogText=knowledgeByPath.get('index.json')?.text;let catalogWorlds=[];
  try{const catalog=JSON.parse(catalogText??'null');if(Array.isArray(catalog?.worlds))catalogWorlds=catalog.worlds;}catch{/* The exact invalid source remains visible as a file. */}
- const catalogIds=new Set(catalogWorlds.map(world=>world.id)),sourceOwners=new Map(catalogWorlds.flatMap(world=>[world.schema,...(world.shards??[]).map(shard=>shard.path)].filter(Boolean).map(path=>[path,world.id])));
+ const sourcePaths=world=>[...new Set([world.schema,world.vocabulary,...(world.shards??[]).map(shard=>shard.path)].filter(Boolean))];
+ const catalogIds=new Set(catalogWorlds.map(world=>world.id)),sourceOwners=new Map(catalogWorlds.flatMap(world=>sourcePaths(world).map(path=>[path,world.id])));
  for(const world of catalogWorlds){
-  const id='knowledge-world:'+world.id,paths=[world.schema,...(world.shards??[]).map(shard=>shard.path)].filter(Boolean),loadedFiles=paths.filter(path=>knowledgeByPath.has(path));
+  const id='knowledge-world:'+world.id,paths=sourcePaths(world),loadedFiles=paths.filter(path=>knowledgeByPath.has(path));
   nodes.push({id,label:world.id,kind:'knowledge',implementation:'SOP Lang',status:loadedFiles.length===paths.length&&paths.length?'All declared sources read':loadedFiles.length?'Some sources read':'Source files available; not read',why:CATALOG_WORLD_PURPOSES[world.id],sourceFiles:paths.filter(path=>path.endsWith('.sop')).map(path=>({path,role:path===world.schema?'schema':'knowledge',loaded:knowledgeByPath.has(path)})),usage:loadedFiles.some(path=>knowledgeByPath.get(path)?.purposes?.includes('runtime'))?'runtime-read':loadedFiles.length?'inspection-only':'available',description:'A world published in the shared catalog. The catalog contains world patterns and knowledge bases; this entry does not explicitly declare which book role it has. Sources are linked, not copied into instances.',details:{...world,loadedFiles,architectureRole:'Published world; specific pattern/knowledge role not declared in catalog metadata'}});link('knowledge:catalog',id,'catalog world');
   for(const target of world.depends??[])if(catalogIds.has(target))link(id,'knowledge-world:'+target,'declares dependency');
-  for(const path of loadedFiles)link(id,'knowledge-file:'+path,path===world.schema?'loaded schema':'loaded shard');
+  for(const path of loadedFiles)link(id,'knowledge-file:'+path,path===world.schema?'loaded schema':path===world.vocabulary?'loaded vocabulary':'loaded shard');
   if(world.schema&&!knowledgeByPath.has(world.schema)){const schemaId='knowledge-file:'+world.schema;nodes.push({id:schemaId,label:world.schema,kind:'schema',implementation:'SOP Lang',description:'Schema declared by the catalog; its text has not been read by this worker.',why:CATALOG_WORLD_PURPOSES[world.id],sourceFiles:[{path:world.schema,role:'schema',loaded:false}],usage:'available',schemaView:inspectSchemaSource(undefined),details:{path:world.schema,loaded:false}});link(id,schemaId,'declares schema');}
  }
  for(const file of knowledgeFiles){const id='knowledge-file:'+file.path;nodes.push({id,label:file.path,kind:catalogWorlds.some(world=>world.schema===file.path)?'schema':'knowledge',implementation:/\.sop$/.test(file.path)?'SOP Lang':'Catalog data',description:'Exact file text returned by the active knowledge source.',why:CATALOG_WORLD_PURPOSES[sourceOwners.get(file.path)],sourceFiles:[{path:file.path,role:'source',loaded:true}],usage:file.purposes?.includes('runtime')?'runtime-read':'inspection-only',wires:file.text,...(catalogWorlds.some(world=>world.schema===file.path)?{schemaView:inspectSchemaSource(file.text)}:{}),details:{path:file.path,loaded:true}});link('knowledge:catalog',id,'loaded file');}

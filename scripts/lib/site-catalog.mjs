@@ -18,6 +18,7 @@ export async function siteCatalogFiles(dir) {
   const out = new Set(['index.json', 'vocab.json', 'LICENSES.md', 'README.md']);   // the catalog's licences travel with its data (attribution)
   for (const w of [...(index.worlds ?? []), ...(Array.isArray(index.schemas) ? index.schemas : [])]) {   // knowledge worlds and the world schemas (w.face, w.chart, ...)
     if (w.schema) out.add(w.schema);
+    if (w.vocabulary) out.add(w.vocabulary);
     for (const s of w.shards ?? []) if (s.path) out.add(s.path);
   }
   if (existsSync(path.join(dir, 'vocab'))) for (const f of await readdir(path.join(dir, 'vocab'))) if (f.endsWith('.json')) out.add(`vocab/${f}`);

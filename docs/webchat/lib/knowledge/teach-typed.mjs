@@ -15,7 +15,7 @@
  *   verb    "X V Y (and Z)"           V is a word of a slot (eats, says -> sound); "a baby X is called Y" (baby); "X is covered in Y" (covering)
  * Returns { form, subject, object, lines: [wire without id], say } or null. Browser-safe: no `node:*`.
  */
-import { numberValue } from './values.mjs?v=8601038efd';
+import { numberValue } from './values.mjs?v=b1fd95966f';
 
 const lc = (s) => String(s ?? '').toLowerCase().trim();
 const sing = (w) => (/ies$/.test(w) ? `${w.slice(0, -3)}y` : /(?:ses|xes|ches|shes|oes)$/.test(w) ? w.slice(0, -2) : /s$/.test(w) && !/ss$/.test(w) ? w.slice(0, -1) : w);

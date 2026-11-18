@@ -25,9 +25,9 @@ test('new groups keep real child identities and SOP member references through af
  const session={isession:{state:{'art.draw':state}},nativeInstanceIds:{'art.draw':'members'}},records=await snapshotNativeInstances(session,{worlds:['art.draw']}),restored={isession:{state:{}}};await restoreNativeInstances(restored,records);assert.deepEqual(restored.isession.state['art.draw'],state);assert.deepEqual(readInstanceState(records[0].wires).objects,nativeObservationObjects(h.observe()));
  call(h,'drawing.object.ungroup',{id:group.id});assert.deepEqual(state.objects.map(o=>o.id),ids);const home=state.objects.find(o=>o.id===ids[0]);assert.equal(home.label,'Home');assert.equal(drawingPartsOf(home).find(p=>p.role==='roof').color,'#ff0000');assert.ok(partsOf(home).length>3);
 });
-test('legacy archive from actual 3ce76683 Drawing host restores its exact old projection',async()=>{
+test('historical Drawing projection remains exact while its old knowledge pin is not adopted',async()=>{
  const wires=await readFile(new URL('./fixtures/drawing-native-3ce76683.sop',import.meta.url),'utf8'),archive=readInstanceState(wires),target={isession:{state:{}}};
- await restoreNativeInstances(target,[{world:archive.world,instanceId:archive.instanceId,revision:archive.revision,wires}]);const h=createDrawingHost({state:target.isession.state['art.draw'],instanceId:archive.instanceId});assert.deepEqual(compareInstanceObjects(archive.objects,h.observe()),{ok:true});
+ await assert.rejects(restoreNativeInstances(target,[{world:archive.world,instanceId:archive.instanceId,revision:archive.revision,wires}]),/instance-knowledge-migration-required/);assert.deepEqual(target.isession.state,{});const h=createDrawingHost({state:structuredClone(archive.projection),instanceId:archive.instanceId});assert.deepEqual(compareInstanceObjects(archive.objects,h.observe()),{ok:true});
  for(const o of h.observe().objects.filter(o=>o.sourceType==='art.draw.object'))for(const key of ['label','width','height'])assert.equal(o.inputs.some(i=>i.key===key),false);
 });
 test('Label changes keep ObjectID immutable and render actual text on the canvas',()=>{

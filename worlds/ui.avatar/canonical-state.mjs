@@ -3,6 +3,9 @@ import {World,parse,serialize,quote} from '../../src/vendor/sopworld/sopworld.mj
 import {copyHostData} from '../native-tool-host.mjs';
 import schemaSource from './state-schema-source.mjs';
 export {schemaSource as AVATAR_STATE_SCHEMA};
+// The reusable schema is owned by this module; carriers contain only instance facts.
+const schemaWorld=new World({library:{'ui.avatar':schemaSource}});
+schemaWorld.load('@avatar.state.schema core.use world=ui.avatar');
 const own=(o,k)=>Object.hasOwn(o,k),plain=o=>o!==null&&typeof o==='object'&&!Array.isArray(o);
 const need=(ok,why)=>{if(!ok)throw new TypeError('avatar-canonical:'+why);};
 const workBudget=()=>{let steps=0;return {tick(){need(++steps<=100000,'work-budget');}};};
@@ -75,15 +78,18 @@ function encode(input){
  if(own(s,'idDisplay')){const p=add('avatar.idDisplay','idDisplay');for(const [k,v]of Object.entries(s.idDisplay))put(p,k,v);root.attrs.idDisplay=['$'+p.id];}
  return serialize(nodes);
 }
-export function avatarStateWorld(carrier){
+function avatarStateContext(carrier){
  need(plain(carrier)&&Object.keys(carrier).length===1&&typeof carrier.sop==='string'&&carrier.sop.length<=4000000,'carrier');
- const w=new World();need(w.load(schemaSource).ok,'schema');need(w.load(carrier.sop).ok,'facts');return w;
+ const w=schemaWorld.fork();need(w.tell(carrier.sop,{factsOnly:true}).ok,'facts');return w;
 }
+export function avatarStateWorld(carrier){return decodeAvatarState(carrier).world;}
 /** Exact temporary native data, including empty collections and journal ordering. */
 export function toNativeAvatarState(input){
- const budget=workBudget();
  if(!input||!own(input,'sop'))return nativeData(input);
- avatarStateWorld(input);const nodes=parse(input.sop),byId=new Map(nodes.map(n=>[n.id,n]));
+ return decodeAvatarState(input).state;
+}
+function decodeAvatarState(input){
+ const budget=workBudget(),world=avatarStateContext(input),nodes=parse(input.sop),byId=new Map(nodes.map(n=>[n.id,n]));
  need(nodes.every(n=>!n.pattern&&!n.legacy)&&nodes.length===byId.size,'duplicate-or-pattern');
  const used=new Set(),compositionPath=new Set();
  const get=(id,kind)=>{const n=byId.get(id);need(n?.type==='ui.avatar.state.'+kind,'reference-type');used.add(id);return n;};
@@ -116,7 +122,7 @@ export function toNativeAvatarState(input){
  need(nodes.every(n=>used.has(n.id)),'unowned-fact');nativeData(state);
  // Canonical domain structure must account for every supplied attribute and relationship.
  const normalized=ns=>ns.map(n=>({id:n.id,type:n.type,attrs:Object.fromEntries(Object.entries(n.attrs).filter(([,v])=>v.length).sort(([a],[b])=>a.localeCompare(b)))})).sort((a,b)=>a.id.localeCompare(b.id));
- need(JSON.stringify(normalized(parse(encode(state))))===JSON.stringify(normalized(nodes)),'noncanonical-domain-structure');return state;
+ need(JSON.stringify(normalized(parse(encode(state))))===JSON.stringify(normalized(nodes)),'noncanonical-domain-structure');return {state,world};
 }
 export function canonicalAvatarState(input){if(input&&own(input,'sop')){toNativeAvatarState(input);return {sop:input.sop};}const carrier={sop:encode(input)};avatarStateWorld(carrier);return carrier;}
 export function adoptCanonicalAvatarState(target,input){const next=canonicalAvatarState(input);for(const k of Object.keys(target))delete target[k];target.sop=next.sop;return target;}

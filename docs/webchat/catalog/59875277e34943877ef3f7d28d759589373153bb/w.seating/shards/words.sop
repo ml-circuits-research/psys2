@@ -1,0 +1,24 @@
+# w.seating/shards/words: the owned English vocabulary, separate from the schema.
+# sources: hand-core 1 (hand-written declarations and deterministic key vocabulary)
+# license: CC0-1.0
+# script: none (hand-written; generated key block maintained by tools/key-words.mjs)
+
+@w.seating.word.world core.word text="seating plan" text="seating chart" text=seating text="table plan" text="who sits where" means=w.seating of=std.schema.world.name core.source="hand-core 1"
+@w.seating.word.table core.word text=table text=tables means=w.seating.table core.source="hand-core 1"
+@w.seating.word.seat core.word text=seat text=seats text=chair text=chairs text=place text=places means=w.seating.seat core.source="hand-core 1"
+@w.seating.word.guest core.word text=guest text=guests text=person text=people means=w.seating.guest core.source="hand-core 1"
+@w.seating.word.name core.word text=name text=called means=w.seating.table.name core.source="hand-core 1"
+@w.seating.word.shape core.word text=shape text=round text=square text=long means=w.seating.table.shape core.source="hand-core 1"
+@w.seating.word.seats core.word text="how many seats" text=size means=w.seating.table.seats core.source="hand-core 1"
+@w.seating.word.table.x core.word text=where text=stands text=across means=w.seating.table.x core.source="hand-core 1"
+@w.seating.word.table.y core.word text=where text=stands text=along means=w.seating.table.y core.source="hand-core 1"
+@w.seating.word.seat.table core.word text=at text=table means=w.seating.seat.table core.source="hand-core 1"
+@w.seating.word.seat.n core.word text=number text=position means=w.seating.seat.n core.source="hand-core 1"
+@w.seating.word.guest.name core.word text=name text=called means=w.seating.guest.name core.source="hand-core 1"
+@w.seating.word.guest.seat core.word text=sits text=sit text=sitting text=seated text=where means=w.seating.guest.seat core.source="hand-core 1"
+@w.seating.word.guest.party core.word text=party text=family text=with text=side means=w.seating.guest.party core.source="hand-core 1"
+@w.seating.word.guest.needs core.word text=needs text=need text=diet text=allergy means=w.seating.guest.needs core.source="hand-core 1"
+@w.seating.word.guest.table core.word text=at text=table means=w.seating.guest.table core.source="hand-core 1"
+@w.seating.word.colour core.word text=colour text=color text=coloured means=w.seating.table.colour core.source="hand-core 1"
+@w.seating.word.guest.colour core.word text=colour text=color means=w.seating.guest.colour core.source="hand-core 1"
+@w.seating.word.guest.note core.word text=note text=notes means=w.seating.guest.note core.source="hand-core 1"

@@ -1,62 +1,46 @@
-// Reproducible declared-reader snapshot; no compiled grammar or instance data.
-import { execFileSync } from 'node:child_process';
-import { writeFileSync, mkdirSync } from 'node:fs';
-import { createHash } from 'node:crypto';
-import { World } from '../src/vendor/sopworld/sopworld.mjs';
-const knowledge = new URL('../../sop-knowledge-worlds/', import.meta.url).pathname;
-const pin = '7fbcf774e21c168e1c1b5f9dbd4e95b51a186825';
-const git = (...args) => execFileSync('git', ['-C', knowledge, ...args], { encoding: 'utf8', maxBuffer: 80_000_000 });
-const libraryPin = '2f99032d9988074829f1f7f46ebc87ea0685ac76';
-const compatDirectory = new URL('./lib/reader-compat/', import.meta.url);
-mkdirSync(compatDirectory, { recursive: true });
-for (const name of ['general.mjs','frames.mjs','overlay.mjs','request-profile.mjs']) {
- const contents = execFileSync('git', ['-C', new URL('../../soplang-words-lib/', import.meta.url).pathname, 'show', `${libraryPin}:compat/psys2/reader/${name}`]);
- writeFileSync(new URL(name, compatDirectory), contents);
-}
-const profilePath = 'compat/psys2/reader/request-profile.mjs';
-const profileText = execFileSync('git', ['-C', new URL('../../soplang-words-lib/', import.meta.url).pathname, 'show', `${libraryPin}:${profilePath}`], { encoding: 'utf8' });
-const profileUrl = `data:text/javascript,${encodeURIComponent(profileText)}`;
-const overlay = execFileSync('git', ['-C', new URL('../../soplang-words-lib/', import.meta.url).pathname, 'show', `${libraryPin}:compat/psys2/reader/overlay.mjs`], { encoding: 'utf8' });
-const { ENGLISH_OVERLAY_TYPES: types, ENGLISH_READER_FACTS: families, ENGLISH_REQUEST_OPTIONS: options } = await import(`data:text/javascript,${encodeURIComponent(overlay.replace("'./request-profile.mjs'", JSON.stringify(profileUrl)))}`);
-const files = git('ls-tree', '-r', '--name-only', pin, 'docs/worlds').trim().split('\n').sort();
-const world = new World();
-const sources = [];
-const load = (file, filter) => {
-  const text = git('show', `${pin}:${file}`);
-  const selected = filter ? text.split('\n').filter(line => filter.some(type => line.includes(` ${type} `))).join('\n') : text;
-  if (!selected) return;
-  sources.push({ path: file, sha256: createHash('sha256').update(text).digest('hex') });
-  return selected;
+// Build only the declared value-lookup context used by native execution.
+// Schema modules, vocabulary and knowledge keep their source ownership; no editor state is bundled.
+import {readFileSync} from 'node:fs';
+import path from 'node:path';
+import {createHash} from 'node:crypto';
+import {World,str} from '../src/vendor/sopworld/sopworld.mjs';
+import {executionPolicyWorld} from '../src/dialog/execution-policy.mjs';
+import {NEW_ENGINE_AREAS} from '../src/dialog/new-engine-areas.mjs';
+import {catalogFolder,emit,done} from './lib/generated.mjs';
+
+const {dir,commit}=await catalogFolder(),catalog=JSON.parse(readFileSync(path.join(dir,'index.json'),'utf8'));
+const entries=[...catalog.worlds,...(catalog.schemas??[])],byId=new Map(entries.map(entry=>[entry.id,entry]));
+const read=file=>readFileSync(path.join(dir,file),'utf8');
+const library=Object.fromEntries(entries.map(entry=>[entry.id,read(entry.schema)]));
+const valueTypes=[...new Set([
+ ...executionPolicyWorld().ofType('app.execution.values').map(row=>str(row.attrs.valueType[0])),
+ ...Object.values(NEW_ENGINE_AREAS).flatMap(area=>area.bindings.map(binding=>binding.valueType)),
+])].sort();
+const world=new World({library}),sources=[],seen=new Set(),owners=[];
+const record=(file,owner,role)=>{
+ if(seen.has(file))return;seen.add(file);const text=read(file);
+ sources.push({path:'docs/worlds/'+file,owner,role,sha256:createHash('sha256').update(text).digest('hex')});
+ return text;
 };
-const schemas = files.filter(path => /^docs\/worlds\/[kw]\.[^/]+\/schema\.sop$/.test(path)).map(file => load(file)).join('\n');
-if (!world.tell(schemas).ok) throw new Error('Knowledge schemas rejected');
-for (const [name, selectedTypes] of Object.entries(families)) {
-  const text = files.filter(file => file.startsWith(`docs/worlds/${name}/`) && file.endsWith('.sop') && !file.endsWith('/schema.sop')).map(file => load(file, selectedTypes)).filter(Boolean).join('\n');
-  const result = world.tell(text);
-  if (!result.ok) throw new Error(`${name}: ${JSON.stringify(result.violations)}`);
+for(const [index,type]of valueTypes.entries()){
+ const candidates=catalog.worlds.filter(entry=>entry.exports?.includes(type));
+ if(candidates.length!==1)throw Error('execution-value-owner:'+type);
+ const owner=candidates[0];if(owners.includes(owner.id))continue;owners.push(owner.id);
+ world.load(`@execution.schema.${index} core.use world=${owner.id}`);
+ for(const shard of owner.shards??[]){const file=shard.path??shard.id+'.sop';const text=record(file,owner.id,file===owner.vocabulary?'vocabulary':'knowledge');if(text)world.load(text);}
+ // A vocabulary is an explicit dependency even when the catalog exposes it outside the shard list.
+ if(owner.vocabulary){const text=record(owner.vocabulary,owner.id,'vocabulary');if(text)world.load(text);}
 }
-const compatibilitySources = [{ path: 'compat/psys2/reader/overlay.mjs', sha256: createHash('sha256').update(overlay).digest('hex') }, { path: profilePath, sha256: createHash('sha256').update(profileText).digest('hex') }];
-const { ENGLISH_PHRASE_FACTS, ENGLISH_REQUEST_MAPPING_FACTS } = await import('./lib/reader-compat/general.mjs');
-const { ENGLISH_FRAME_FACTS } = await import('./lib/reader-compat/frames.mjs');
-const buildWorld = families => {
- const output = new World();
- if (!output.tell(schemas).ok) throw new Error('Partition schemas rejected');
- for (const [name, selectedTypes] of Object.entries(families)) {
-  if (!selectedTypes.length) continue;
-  const text = files.filter(file => file.startsWith(`docs/worlds/${name}/`) && file.endsWith('.sop') && !file.endsWith('/schema.sop')).map(file => load(file, selectedTypes)).filter(Boolean).join('\n');
-  if (!output.tell(text).ok) throw new Error(`Partition facts rejected: ${name}`);
- }
- return output.toJSON();
-};
-const phraseSnapshot = buildWorld(ENGLISH_PHRASE_FACTS);
-const frameSnapshot = buildWorld({...ENGLISH_FRAME_FACTS,...ENGLISH_REQUEST_MAPPING_FACTS,'w.lang.en':[...ENGLISH_FRAME_FACTS['w.lang.en'],'w.lang.en.prep'],'k.attributes':['k.attributes.attribute']});
-for (const name of ['general.mjs','frames.mjs']) {
- const path = 'compat/psys2/reader/'+name;
- const text = execFileSync('git', ['-C', new URL('../../soplang-words-lib/', import.meta.url).pathname, 'show', `${libraryPin}:${path}`], {encoding:'utf8'});
- compatibilitySources.push({path,sha256:createHash('sha256').update(text).digest('hex')});
+const schemaModules={};
+for(const name of [...world.used].sort()){
+ const entry=byId.get(name);if(!entry)continue;
+ schemaModules[name]=read(entry.schema);record(entry.schema,name,'schema');
 }
-const data = { phraseSnapshot, frameSnapshot, knowledgePin: pin, libraryPin, compatibilitySources, sources, types, options, snapshot: world.toJSON() };
-writeFileSync(new URL('./lib/grammar-source.mjs', import.meta.url), '// Offline comparator data, generated from published declarations.\nexport default ' + JSON.stringify(data) + ';\n');
-const knowledgeSnapshot = buildWorld(Object.fromEntries(Object.entries(families).filter(([name]) => name !== 'w.reader.en')));
-writeFileSync(new URL('../src/dialog/new-engine-source.mjs', import.meta.url), '// Generated knowledge-only source. No application grammar profile.\nexport default ' + JSON.stringify({knowledgePin:pin,libraryPin,sources,snapshot:knowledgeSnapshot}) + ';\n');
-console.log(`Reader snapshot: ${sources.length} sources, knowledge ${pin}, library ${libraryPin}`);
+const provenance=JSON.parse(readFileSync(new URL('../src/vendor/sopworld/provenance.json',import.meta.url),'utf8'));
+const data={knowledgePin:commit,libraryPin:provenance.commit,sources,schemaModules,valueTypes,worlds:owners,snapshot:world.toJSON()};
+// Prove that persisted context imports replay using only the separately held schema modules.
+const restored=World.fromJSON(data.snapshot,{library:schemaModules});
+for(const type of valueTypes)if(!restored.ofType(type).length)throw Error('empty-execution-value-type:'+type);
+emit(new URL('../src/dialog/new-engine-source.mjs',import.meta.url).pathname,'// Generated execution knowledge context. Schema modules are separate dependencies, never instance facts.\nexport default '+JSON.stringify(data)+';\n');
+console.log(`Execution knowledge: ${valueTypes.length} declared value families, ${sources.length} owned sources, catalog ${commit??'explicit folder'}`);
+done('build-new-engine-source');

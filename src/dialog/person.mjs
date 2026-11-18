@@ -51,6 +51,7 @@ function reader(lib) {
   if (base?.lib === lib) return base;
   const world = new lib.World();
   world.load(BUNDLED_PERSON.schema);
+  world.load(BUNDLED_PERSON.vocabulary);
   world.load(BUNDLED_PERSON.frames);
   // ADAPTER (asked of the library, questions.md [LIB]): readFrames reads a determiner, a numeral and the list particle of a language world by `form=`; w.lang.en writes `text=` and has no
   // list particle. The closed words the frames need are given in the library's shape, from the same catalog words (the articles and number words of the session's readers).
@@ -78,6 +79,7 @@ function worldOf(lib, person) {
   const r = reader(lib);
   const w = new lib.World();
   w.load(BUNDLED_PERSON.schema);
+  w.load(BUNDLED_PERSON.vocabulary);
   w.load([meLine(person.me), ...person.lines].join('\n'));   // the user's own thing first: every relative and taste refers to it
   return { w, frames: r.world };
 }

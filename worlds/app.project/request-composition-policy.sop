@@ -1,6 +1,2 @@
-@composition.world core.world namespace=app.request.composition version=1.0.0 status=fixture imports=world.core
-@composition.type core.type of=app.request.composition.policy
-@composition.order core.slot of=app.request.composition.policy key=independent.order kind=atom enum=source
-@composition.dependencies core.slot of=app.request.composition.policy key=explicit.dependencies kind=atom enum=preserve
-@composition.undo core.slot of=app.request.composition.policy key=undo kind=atom enum=turn
+@policy.schema core.use world=app.request.composition prefix=false
 @composition.default app.request.composition.policy independent.order=source explicit.dependencies=preserve undo=turn

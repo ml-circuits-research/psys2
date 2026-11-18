@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 import {createNativeToolHost,copyHostData,nativeToken} from '../native-tool-host.mjs?v=463e762442';
-import {createDoc,writeText,commit,sync,undoStep,redoStep,addBlock} from './document.mjs?v=e04d587f05';
-import {DOCUMENT_EDITING_BINDINGS,DOCUMENT_BLOCK_CHANGE_PARAMETERS,documentEditingHandlers,changeDocumentBlock,documentTextId} from './native-editing.mjs?v=a66cb5143e';
-import {blockText,containers} from './model.mjs?v=2f19aea106';
+import {createDoc,writeText,commit,sync,undoStep,redoStep,addBlock} from './document.mjs?v=5d13a91fc9';
+import {DOCUMENT_EDITING_BINDINGS,DOCUMENT_BLOCK_CHANGE_PARAMETERS,documentEditingHandlers,changeDocumentBlock,documentTextId} from './native-editing.mjs?v=3c672ac63c';
+import {blockText,containers} from './model.mjs?v=f7854291fb';
 const text={type:'string',required:true},array={type:'array',required:true};
 export const DOCUMENT_TOOL_BINDINGS=[
  ...DOCUMENT_EDITING_BINDINGS,

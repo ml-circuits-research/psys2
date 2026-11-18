@@ -1,0 +1,24 @@
+# w.text/shards/words: the owned English vocabulary, separate from the schema.
+# sources: hand-core 1 (hand-written declarations and deterministic key vocabulary)
+# license: CC0-1.0
+# script: none (hand-written; generated key block maintained by tools/key-words.mjs)
+
+@w.text.word.world core.word text="text source" means=w.text of=std.schema.world.name core.source="hand-core 1"
+@w.text.word.0 core.word text="text source" means=w.text.source core.source="hand-core 1"
+@w.text.word.1 core.word text="formatting span" means=w.text.span core.source="hand-core 1"
+@w.text.word.2 core.word text="source identifier" means=w.text.source.source_id core.source="hand-core 1"
+@w.text.word.3 core.word text="revision" means=w.text.source.revision core.source="hand-core 1"
+@w.text.word.4 core.word text="text" means=w.text.source.text core.source="hand-core 1"
+@w.text.word.5 core.word text="span source" means=w.text.span.source core.source="hand-core 1"
+@w.text.word.6 core.word text="coordinate unit" means=w.text.span.unit core.source="hand-core 1"
+@w.text.word.7 core.word text="span start" means=w.text.span.start core.source="hand-core 1"
+@w.text.word.8 core.word text="span end" means=w.text.span.end core.source="hand-core 1"
+@w.text.word.9 core.word text="bold" means=w.text.span.bold core.source="hand-core 1"
+@w.text.word.10 core.word text="italic" means=w.text.span.italic core.source="hand-core 1"
+@w.text.word.11 core.word text="underline" means=w.text.span.underline core.source="hand-core 1"
+@w.text.word.12 core.word text="strike" means=w.text.span.strike core.source="hand-core 1"
+@w.text.word.13 core.word text="highlight" means=w.text.span.highlight core.source="hand-core 1"
+@w.text.word.14 core.word text="code" means=w.text.span.code core.source="hand-core 1"
+@w.text.word.15 core.word text="highlight colour" means=w.text.span.highlight_colour core.source="hand-core 1"
+@w.text.word.16 core.word text="link target" means=w.text.span.link_target core.source="hand-core 1"
+@w.text.word.document core.word text=document means=w.text.source.document core.source="hand-core 1"

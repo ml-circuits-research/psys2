@@ -1,0 +1,34 @@
+# k.objects/shards/words: the owned English vocabulary, separate from the schema.
+# sources: hand-core 1 (hand-written declarations and deterministic key vocabulary)
+# license: CC0-1.0
+# script: none (hand-written; generated key block maintained by tools/key-words.mjs)
+
+@k.objects.word.object core.word text=object text=objects text=drawing text=picture means=k.objects.object core.source="hand-core 1"
+@k.objects.word.part core.word text=part text=parts means=k.objects.part core.source="hand-core 1"
+@k.objects.word.colour core.word text=colour text=color means=k.objects.part.colour core.source="hand-core 1"
+@k.objects.word.shape core.word text=shape means=k.objects.part.shape core.source="hand-core 1"
+@k.objects.word.stand_in core.word text="stand-in" text="stand-ins" means=k.objects.stand_in core.source="hand-core 1"
+@k.objects.word.keyword core.word text=keyword text=keywords means=k.objects.keyword core.source="hand-core 1"
+
+# Words for the keys, by rule: the name of each key, and everyday words for some (tools/key-words.mjs).
+@k.objects.word.key.object core.word text=draw text=sketch text=show text="shaped like" text="looks like" means=k.objects.object core.source="hand-core 1"
+@k.objects.word.key.part.name core.word text=name means=k.objects.part.name core.source="hand-core 1"
+@k.objects.word.key.part.kind core.word text=kind means=k.objects.part.kind core.source="hand-core 1"
+@k.objects.word.key.part.above core.word text=above means=k.objects.part.above core.source="hand-core 1"
+@k.objects.word.key.part.below core.word text=below means=k.objects.part.below core.source="hand-core 1"
+@k.objects.word.key.part.inside core.word text=inside means=k.objects.part.inside core.source="hand-core 1"
+@k.objects.word.key.part.left_of core.word text="left of" means=k.objects.part.left_of core.source="hand-core 1"
+@k.objects.word.key.part.right_of core.word text="right of" means=k.objects.part.right_of core.source="hand-core 1"
+@k.objects.word.key.part.on core.word text=on means=k.objects.part.on core.source="hand-core 1"
+@k.objects.word.key.part.centered core.word text=centered means=k.objects.part.centered core.source="hand-core 1"
+@k.objects.word.key.skeleton.n core.word text=n means=k.objects.skeleton.n core.source="hand-core 1"
+@k.objects.word.key.skeleton.x core.word text=x means=k.objects.skeleton.x core.source="hand-core 1"
+@k.objects.word.key.skeleton.y core.word text=y means=k.objects.skeleton.y core.source="hand-core 1"
+@k.objects.word.key.skeleton.w core.word text=w means=k.objects.skeleton.w core.source="hand-core 1"
+@k.objects.word.key.skeleton.h core.word text=h means=k.objects.skeleton.h core.source="hand-core 1"
+@k.objects.word.key.skeleton.part core.word text=part means=k.objects.skeleton.part core.source="hand-core 1"
+@k.objects.word.key.skeleton.drawings core.word text=drawings means=k.objects.skeleton.drawings core.source="hand-core 1"
+@k.objects.word.key.skeleton.spread core.word text=spread means=k.objects.skeleton.spread core.source="hand-core 1"
+@k.objects.word.key.stand_in.drawing core.word text=drawing means=k.objects.stand_in.drawing core.source="hand-core 1"
+@k.objects.word.key.keyword.of core.word text=of means=k.objects.keyword.of core.source="hand-core 1"
+@k.objects.word.key.keyword.text core.word text=text means=k.objects.keyword.text core.source="hand-core 1"

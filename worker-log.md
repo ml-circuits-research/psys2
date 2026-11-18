@@ -93,3 +93,7 @@ Checks: build4d6b6239e8; npm test580tests577pass0fail3skip, including realbuilt3
 
 2026-11-18 owner-requested documentation delivery: current-status.md and the native reduction plan now point to the revised normative book and request-to-executable-circuits plan (library59295ca). Public boundary is world/interface/context supply plus SOP request compilation; internal reasoning stays encapsulated. No demo runtime/model changes; pending UI labels remain stashed.
 Checks: `npm test` —580tests577pass0fail3skip; `git diff --check` clean. Library book schema audit and source/bundle checks are recorded in the sibling library worker-log.
+
+2026-11-18 delivered schema/knowledge/instance ownership: library0.209.0/602df0d factsOnly admission plus canonical owned closure; separate policy schemas/facts, explicit vocabulary sources, catalog59875277, and execution-only declared value context with external schema modules. Native Drawing/Diagram/Documents authority remains explicit; model weights unchanged.
+Checks: `node scripts/build-lang-en.mjs`; `node scripts/build-webchat.mjs` —build87d3be7b8b, pinned catalog1318files; `npm test` —589tests586pass0fail3skip. `node --test tests/knowledge-schema-ownership-declared-host.test.mjs` —5/5 including actual pinned drawing/avatar effects. `git diff --check` clean.
+Historical archive fixtures retain original bytes/pins and lossless decoding; current restore rejects incompatible old pins before adoption, while current five-host restore and temporary-rule isolation pass. No hidden archive migration or universal compiler claim.

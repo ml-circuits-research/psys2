@@ -9,7 +9,7 @@
  */
 export const CATALOG_PIN = Object.freeze({
   repo: 'https://github.com/ml-circuits-research/sop-knowledge-worlds',
-  commit: 'd506e222691d41cd6dc68d8e4e147f5705b0bb71',   // Sparse constituent feature goals for avatar expressions; previous c9d5d0a.
+  commit: '59875277e34943877ef3f7d28d759589373153bb',   // Schema definitions and owned vocabulary shards are separate sources.
   path: 'docs/worlds',
 });
 

@@ -1,0 +1,6 @@
+# w.lang.ro/shards/words: the owned English vocabulary, separate from the schema.
+# sources: hand-core 1 (hand-written declarations and deterministic key vocabulary)
+# license: CC0-1.0
+# script: none (hand-written; generated key block maintained by tools/key-words.mjs)
+
+@w.lang.ro.word.world core.word text="romanian grammar" text="romanian language" text=romanian means=w.lang.ro.class core.source="hand-core 1"

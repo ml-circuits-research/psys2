@@ -262,7 +262,8 @@ export function createFacts({ source, name = 'catalog' }) {
 
 
   /**
-   * The schemas of the catalog's worlds, read generically (no code per world): `slotWords` (a word -> the slots it means, from the `core.word` wires: "legs" means k.animals.animal.legs),
+   * Structural schemas and their explicitly linked vocabulary, read generically:
+   * `slotWords` comes from the separate owned vocabulary shard, never from schema text;
    * `slots` (type id -> { key -> { kind, enum, many } }) and `types` (type id -> { complete }). Built once; `peekSchema()` reads it synchronously (`ctx.knowledge.peekSchema()`).
    */
   let schemaData = null, schemaLoading = null;
@@ -274,16 +275,24 @@ export function createFacts({ source, name = 'catalog' }) {
         if (!w.schema) continue;
         let text = null;
         try { text = await source.text(w.schema); } catch { /* no schema, no slots */ }
-        // a world's English words stored beside it (catalog 34bab7c6, owner's decision 2026-11-15 08:10): the `core.word` wires of its words shard belong to its schema
-        const wordsShard = (w.shards ?? []).find((sh) => /\/shards\/words$/.test(sh.id));
-        if (wordsShard) { try { text = `${text ?? ''}\n${(await source.text(wordsShard.path ?? `${wordsShard.id}.sop`)) ?? ''}`; } catch { /* the schema's own words */ } }
         for (const line of (text ?? '').split('\n')) {
           if (line.charCodeAt(0) !== 64) continue;
           const r = parseFact(line);
           if (!r) continue;
           if (r.type === 'core.type') types.set(one(r, 'of'), { complete: one(r, 'complete') === 'true', world: w.id });
           else if (r.type === 'core.slot') { const t = one(r, 'of'); if (!slots.has(t)) slots.set(t, {}); slots.get(t)[one(r, 'key')] = { kind: r.f.kind ?? [], enum: r.f.enum ?? [], many: one(r, 'many') === 'true', id: one(r, 'id') === 'true' }; }
-          else if (r.type === 'core.word') for (const word of r.f.text ?? []) for (const m of r.f.means ?? []) { const k = word.toLowerCase(); if (!slotWords.has(k)) slotWords.set(k, new Set()); slotWords.get(k).add(m); }
+        }
+        // This is a knowledge dependency declared by the catalog, not schema ownership.
+        if (typeof w.vocabulary === 'string') {
+          const owner = (w.shards ?? []).find(sh => (sh.path ?? pathOf(sh.id)) === w.vocabulary);
+          const words = await loadShard(owner?.id ?? w.vocabulary);
+          for (const line of words) {
+            if (line.charCodeAt(0) !== 64) continue;
+            const r = parseFact(line);
+            if (r?.type === 'core.word') for (const word of r.f.text ?? []) for (const m of r.f.means ?? []) {
+              const key = word.toLowerCase(); if (!slotWords.has(key)) slotWords.set(key, new Set()); slotWords.get(key).add(m);
+            }
+          }
         }
       }
       schemaData = { slotWords, slots, types };

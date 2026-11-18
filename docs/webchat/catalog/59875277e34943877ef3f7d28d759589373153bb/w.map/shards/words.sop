@@ -1,0 +1,20 @@
+# w.map/shards/words: the owned English vocabulary, separate from the schema.
+# sources: hand-core 1 (hand-written declarations and deterministic key vocabulary)
+# license: CC0-1.0
+# script: none (hand-written; generated key block maintained by tools/key-words.mjs)
+
+@w.map.word.world core.word text=map text=maps text="world map" text=atlas means=w.map of=std.schema.world.name core.source="hand-core 1"
+@w.map.word.place core.word text=place text=places text=country text=countries text=city text=cities means=w.map.place core.source="hand-core 1"
+@w.map.word.pin core.word text=pin text=pins text=marker text=markers text=flag text=flags means=w.map.pin core.source="hand-core 1"
+@w.map.word.view core.word text=map text=view means=w.map.view core.source="hand-core 1"
+@w.map.word.place.name core.word text=name text=called means=w.map.place.name core.source="hand-core 1"
+@w.map.word.place.sort core.word text=country text=city text=kind means=w.map.place.sort core.source="hand-core 1"
+@w.map.word.place.highlight core.word text=highlight text=highlighted text=mark text=marked text=colour means=w.map.place.highlight core.source="hand-core 1"
+@w.map.word.place.colour core.word text=colour text=color means=w.map.place.colour core.source="hand-core 1"
+@w.map.word.pin.on core.word text=on text=at text=where means=w.map.pin.on core.source="hand-core 1"
+@w.map.word.pin.sort core.word text=country text=city text=kind means=w.map.pin.sort core.source="hand-core 1"
+@w.map.word.pin.label core.word text=label text=says text=note means=w.map.pin.label core.source="hand-core 1"
+@w.map.word.pin.colour core.word text=colour text=color means=w.map.pin.colour core.source="hand-core 1"
+@w.map.word.view.zoom core.word text=zoom text="zoom in" text="zoom out" text=closer text=farther means=w.map.view.zoom core.source="hand-core 1"
+@w.map.word.view.layer core.word text=layer text=borders text=rivers means=w.map.view.layer core.source="hand-core 1"
+@w.map.word.view.centre core.word text=centre text=center text=middle means=w.map.view.centre core.source="hand-core 1"

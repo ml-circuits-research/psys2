@@ -129,7 +129,7 @@ test('evicted journal entries cannot turn native receipt replay into fresh evide
 });
 
 test('every declared colour name retains exact-value execution or honest unresolved-value refusal', () => {
-  const source = World.fromJSON(sourceSnapshot.snapshot), names = new Map();
+  const source = World.fromJSON(sourceSnapshot.snapshot,{library:sourceSnapshot.schemaModules}), names = new Map();
   for (const fact of source.ofType('k.colours.colour')) {
     const name = str(fact.attrs.name?.[0]);
     if (!name) continue;

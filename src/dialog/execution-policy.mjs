@@ -1,10 +1,31 @@
 // Interpret declared execution defaults and knowledge-property joins. No domain names or text parsing.
-import{World,str,serialize}from'../vendor/sopworld/sopworld.mjs';
+import{World,parse,str,serialize}from'../vendor/sopworld/sopworld.mjs';
 import SOURCE from'../../worlds/app.project/execution-policy-source.mjs';
+import SCHEMA from'../../worlds/app.project/execution-policy-schema-source.mjs';
+const schemaModule='app.execution';
+const declarations=parse(SOURCE);
+const imports=declarations.filter(wire=>wire.type==='core.use');
+const facts=declarations.filter(wire=>wire.type!=='core.use');
 let operational;
-export function inspectExecutionPolicyWorld(){return {loaded:!!operational,wires:operational?serialize([...operational.matrix.values(),...operational.wires.values()]):SOURCE,functions:operational?.functions()??[],source:'worlds/app.project/execution-policy.sop'};}
+export function inspectExecutionPolicyWorld(){
+ return {
+  loaded:!!operational,
+  wires:operational?serialize([...operational.matrix.values(),...operational.wires.values()]):SOURCE,
+  functions:operational?.functions()??[],
+  source:'worlds/app.project/execution-policy.sop',
+  facts:serialize(facts),
+  schema:{module:schemaModule,source:'worlds/app.project/execution-policy-schema.sop',wires:SCHEMA,loaded:!!operational},
+  dependencies:imports.map(wire=>str(wire.attrs.world[0])),
+ };
+}
 export function executionPolicyWorld(){
- if(!operational){operational=new World({fns:{'clock.now':Date.now}});if(!operational.load(SOURCE).ok)throw Error('invalid-execution-policy');}
+ if(!operational){
+  const context=new World({fns:{'clock.now':Date.now},library:{[schemaModule]:SCHEMA}});
+  if(!context.tell(imports).ok)throw Error('invalid-execution-policy-schema');
+  const policy=context.fork();
+  if(!policy.tell(facts,{factsOnly:true}).ok)throw Error('invalid-execution-policy');
+  operational=policy;
+ }
  return operational;
 }
 const scalar=raw=>{if(typeof raw!=='string'||raw.startsWith('$')||raw.startsWith('?'))throw Error('invalid-policy-literal');const value=JSON.parse(raw);if(value!==null&&!['string','number','boolean'].includes(typeof value))throw Error('invalid-policy-literal');return value;};

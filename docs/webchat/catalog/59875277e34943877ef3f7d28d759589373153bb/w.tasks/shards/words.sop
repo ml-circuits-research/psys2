@@ -1,0 +1,15 @@
+# w.tasks/shards/words: the owned English vocabulary, separate from the schema.
+# sources: hand-core 1 (hand-written declarations and deterministic key vocabulary)
+# license: CC0-1.0
+# script: none (hand-written; generated key block maintained by tools/key-words.mjs)
+
+@w.tasks.word.world core.word text=tasks text="task list" text=chores text=reminders text="things to do" text=to-dos text=todos means=w.tasks of=std.schema.world.name core.source="hand-core 1"
+@w.tasks.word.task core.word text=task text=tasks text=chore text=chores text=job text=jobs text=to-do text=todo text=reminder text=reminders means=w.tasks.task core.source="hand-core 1"
+@w.tasks.word.text core.word text=text text=what text=says means=w.tasks.task.text core.source="hand-core 1"
+@w.tasks.word.status core.word text=status text=done text=open text=finished text=completed text=left text=still means=w.tasks.task.status core.source="hand-core 1"
+@w.tasks.word.list core.word text=on text=list means=w.tasks.task.list core.source="hand-core 1"
+@w.tasks.word.n core.word text=place text=position text=order text=first text=next means=w.tasks.task.n core.source="hand-core 1"
+@w.tasks.word.due core.word text=due text=by text=deadline text=until text=when means=w.tasks.task.due core.source="hand-core 1"
+@w.tasks.word.reminder core.word text=reminder text=remind text=alarm text=alert means=w.tasks.task.reminder core.source="hand-core 1"
+@w.tasks.word.owner core.word text=owner text=who text=assigned text=for means=w.tasks.task.owner core.source="hand-core 1"
+@w.tasks.word.note core.word text=note text=notes text=comment means=w.tasks.task.note core.source="hand-core 1"

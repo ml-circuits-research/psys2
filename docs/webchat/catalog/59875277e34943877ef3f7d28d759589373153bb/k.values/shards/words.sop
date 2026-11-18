@@ -1,0 +1,33 @@
+# k.values/shards/words: the owned English vocabulary, separate from the schema.
+# sources: hand-core 1 (hand-written declarations and deterministic key vocabulary)
+# license: CC0-1.0
+# script: none (hand-written; generated key block maintained by tools/key-words.mjs)
+
+@k.values.word.direction core.word text=direction text=directions means=k.values.direction core.source="hand-core 1"
+@k.values.word.position core.word text=position text=positions means=k.values.position core.source="hand-core 1"
+@k.values.word.scale core.word text=scale text=scales means=k.values.scale core.source="hand-core 1"
+@k.values.word.fill core.word text=fill text=filled text=pattern means=k.values.fill core.source="hand-core 1"
+
+# Words for the keys, by rule: the name of each key, and everyday words for some (tools/key-words.mjs).
+@k.values.word.key.coloured.colour core.word text=colour means=k.values.coloured.colour core.source="hand-core 1"
+@k.values.word.key.scale.about core.word text=about means=k.values.scale.about core.source="hand-core 1"
+@k.values.word.key.scale.steps core.word text=steps means=k.values.scale.steps core.source="hand-core 1"
+@k.values.word.key.step.name core.word text=name means=k.values.step.name core.source="hand-core 1"
+@k.values.word.key.step.rank core.word text=rank means=k.values.step.rank core.source="hand-core 1"
+@k.values.word.key.comparative.scale core.word text=scale means=k.values.comparative.scale core.source="hand-core 1"
+@k.values.word.key.comparative.way core.word text=way means=k.values.comparative.way core.source="hand-core 1"
+@k.values.word.key.comparative.degree core.word text=degree means=k.values.comparative.degree core.source="hand-core 1"
+@k.values.word.key.direction.axis core.word text=axis means=k.values.direction.axis core.source="hand-core 1"
+@k.values.word.key.direction.x core.word text=x means=k.values.direction.x core.source="hand-core 1"
+@k.values.word.key.direction.y core.word text=y means=k.values.direction.y core.source="hand-core 1"
+@k.values.word.key.direction.opposite core.word text=opposite means=k.values.direction.opposite core.source="hand-core 1"
+@k.values.word.key.position.column core.word text=column means=k.values.position.column core.source="hand-core 1"
+@k.values.word.key.position.row core.word text=row means=k.values.position.row core.source="hand-core 1"
+@k.values.word.key.position.depth core.word text=depth means=k.values.position.depth core.source="hand-core 1"
+@k.values.word.key.set_word.picks core.word text=picks means=k.values.set_word.picks core.source="hand-core 1"
+@k.values.word.key.set_word.manner core.word text=manner means=k.values.set_word.manner core.source="hand-core 1"
+@k.values.word.key.set_word.about core.word text=about means=k.values.set_word.about core.source="hand-core 1"
+@k.values.word.key.fill.about core.word text=about means=k.values.fill.about core.source="hand-core 1"
+@k.values.word.key.shade.lightness core.word text=lightness means=k.values.shade.lightness core.source="hand-core 1"
+@k.values.word.key.shade.saturation core.word text=saturation means=k.values.shade.saturation core.source="hand-core 1"
+@k.values.word.key.reply.opposite core.word text=opposite means=k.values.reply.opposite core.source="hand-core 1"

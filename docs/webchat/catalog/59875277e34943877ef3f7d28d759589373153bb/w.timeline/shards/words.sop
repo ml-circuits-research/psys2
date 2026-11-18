@@ -1,0 +1,19 @@
+# w.timeline/shards/words: the owned English vocabulary, separate from the schema.
+# sources: hand-core 1 (hand-written declarations and deterministic key vocabulary)
+# license: CC0-1.0
+# script: none (hand-written; generated key block maintained by tools/key-words.mjs)
+
+@w.timeline.word.world core.word text=timeline text=timelines text="time line" text=chronology text=history text=schedule means=w.timeline of=std.schema.world.name core.source="hand-core 1"
+@w.timeline.word.timeline core.word text=timeline text=timelines means=w.timeline.timeline core.source="hand-core 1"
+@w.timeline.word.event core.word text=event text=events text=milestone text=milestones text=happened means=w.timeline.event core.source="hand-core 1"
+@w.timeline.word.name core.word text=name text=called means=w.timeline.timeline.name core.source="hand-core 1"
+@w.timeline.word.unit core.word text=unit text=counted text=in means=w.timeline.timeline.unit core.source="hand-core 1"
+@w.timeline.word.from core.word text=from text=starts text=start text=begins means=w.timeline.timeline.from core.source="hand-core 1"
+@w.timeline.word.to core.word text=to text=ends text=end means=w.timeline.timeline.to core.source="hand-core 1"
+@w.timeline.word.title core.word text=title text=called text=what means=w.timeline.event.title core.source="hand-core 1"
+@w.timeline.word.event.timeline core.word text=on text=in text=belongs means=w.timeline.event.timeline core.source="hand-core 1"
+@w.timeline.word.at core.word text=when text=at text=date text=year text=time means=w.timeline.event.at core.source="hand-core 1"
+@w.timeline.word.until core.word text=until text=till text=ended text=lasted means=w.timeline.event.until core.source="hand-core 1"
+@w.timeline.word.sort core.word text=kind text=sort text=type means=w.timeline.event.sort core.source="hand-core 1"
+@w.timeline.word.about core.word text=about text=more means=w.timeline.event.about core.source="hand-core 1"
+@w.timeline.word.certain core.word text=certain text=sure text=exact means=w.timeline.event.certain core.source="hand-core 1"

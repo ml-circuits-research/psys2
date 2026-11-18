@@ -1,0 +1,33 @@
+# w.diagram/shards/words: the owned English vocabulary, separate from the schema.
+# sources: hand-core 1 (hand-written declarations and deterministic key vocabulary)
+# license: CC0-1.0
+# script: none (hand-written; generated key block maintained by tools/key-words.mjs)
+
+@w.diagram.word.world core.word text=diagram text=diagrams text=flowchart text="flow chart" text="cycle diagram" text="tree diagram" text="mind map" text="venn diagram" text="org chart" text="organisation chart" text="organization chart" text="network diagram" text="process diagram" text="concept map" means=w.diagram of=std.schema.world.name core.source="hand-core 1"
+@w.diagram.word.diagram core.word text=diagram text=diagrams text=flowchart text=scheme means=w.diagram.diagram core.source="hand-core 1"
+@w.diagram.word.node core.word text=node text=nodes text=box text=boxes text=step text=steps text=stage text=stages text=bubble text=bubbles means=w.diagram.node core.source="hand-core 1"
+@w.diagram.word.edge core.word text=edge text=edges text=arrow text=arrows text=link text=links text=line text=lines text=connector means=w.diagram.edge core.source="hand-core 1"
+@w.diagram.word.group core.word text=group text=groups text=set text=sets text=cluster text=lane means=w.diagram.group core.source="hand-core 1"
+@w.diagram.word.title core.word text=title text=called text=name means=w.diagram.diagram.title core.source="hand-core 1"
+@w.diagram.word.form core.word text=kind text=type text=form means=w.diagram.diagram.form core.source="hand-core 1"
+@w.diagram.word.layout core.word text=layout text=arrangement text=arranged text=direction means=w.diagram.diagram.layout core.source="hand-core 1"
+@w.diagram.word.topic core.word text=topic text=about text=subject means=w.diagram.diagram.topic core.source="hand-core 1"
+@w.diagram.word.label core.word text=label text=text text=says text=called means=w.diagram.node.label core.source="hand-core 1"
+@w.diagram.word.node.diagram core.word text=on text=in text=belongs means=w.diagram.node.diagram core.source="hand-core 1"
+@w.diagram.word.role core.word text=role text=start text=end text=decision text=process means=w.diagram.node.role core.source="hand-core 1"
+@w.diagram.word.shape core.word text=shape text=oval text=diamond text=rectangle text=circle means=w.diagram.node.shape core.source="hand-core 1"
+@w.diagram.word.parent core.word text=parent text=under text=below means=w.diagram.node.parent core.source="hand-core 1"
+@w.diagram.word.node.group core.word text=in text=inside text=member means=w.diagram.node.group core.source="hand-core 1"
+@w.diagram.word.n core.word text=place text=position text=order text=number means=w.diagram.node.n core.source="hand-core 1"
+@w.diagram.word.x core.word text=x text=horizontal means=w.diagram.node.x core.source="hand-core 1"
+@w.diagram.word.y core.word text=y text=vertical means=w.diagram.node.y core.source="hand-core 1"
+@w.diagram.word.colour core.word text=colour text=color means=w.diagram.node.colour core.source="hand-core 1"
+@w.diagram.word.from core.word text=from text=start means=w.diagram.edge.from core.source="hand-core 1"
+@w.diagram.word.to core.word text=to text=end means=w.diagram.edge.to core.source="hand-core 1"
+@w.diagram.word.edge.label core.word text=label text=says means=w.diagram.edge.label core.source="hand-core 1"
+@w.diagram.word.direction core.word text=direction text=arrow text=both text=undirected means=w.diagram.edge.direction core.source="hand-core 1"
+@w.diagram.word.edge.diagram core.word text=on text=in means=w.diagram.edge.diagram core.source="hand-core 1"
+@w.diagram.word.group.label core.word text=label text=called text=name means=w.diagram.group.label core.source="hand-core 1"
+@w.diagram.word.group.diagram core.word text=on text=in means=w.diagram.group.diagram core.source="hand-core 1"
+@w.diagram.word.group.shape core.word text=shape text=circle text=ellipse means=w.diagram.group.shape core.source="hand-core 1"
+@w.diagram.word.group.parent core.word text=inside text=within means=w.diagram.group.parent core.source="hand-core 1"

@@ -1,15 +1,15 @@
-import{inspectCachedExecutionSource}from'./execution-world-inspection.mjs?v=f44d7a5021';
+import{inspectCachedExecutionSource}from'./execution-world-inspection.mjs?v=26488779ab';
 // Validated graph execution; no natural-language reader or grammar application path.
-import { World, inspectRequest, assessPropertyChange, quote, str, parse } from '../vendor/sopworld/sopworld.mjs?v=20fdd56a67';
-import SOURCE from './new-engine-source.mjs?v=e31b4adb7f';
-import { resolvePropertyValue, selectPropertyObject } from './property-selection.mjs?v=6edcdae5e2';
-import { NEW_ENGINE_AREAS } from './new-engine-areas.mjs?v=ef31165c84';
-import { flatRequestProjection } from './request-projection.mjs?v=f03efb554d';
+import { World, inspectRequest, assessPropertyChange, quote, str, parse } from '../vendor/sopworld/sopworld.mjs?v=820bedd01b';
+import SOURCE from './new-engine-source.mjs?v=fb3421bd1d';
+import { resolvePropertyValue, selectPropertyObject } from './property-selection.mjs?v=d7f455ebb3';
+import { NEW_ENGINE_AREAS } from './new-engine-areas.mjs?v=9cb25cd264';
+import { flatRequestProjection } from './request-projection.mjs?v=ddeed4e94b';
 const hosts = new WeakMap();
 let knowledge;
 /** Read-only cache inspection; does not create the lazy knowledge World. */
 export const inspectNewEngineSourceWorld=options=>inspectCachedExecutionSource(knowledge,options);
-const sourceWorld = () => knowledge ??= World.fromJSON(SOURCE.snapshot);
+const sourceWorld = () => knowledge ??= World.fromJSON(SOURCE.snapshot,{library:SOURCE.schemaModules});
 const first = (wire, key) => wire?.attrs[key]?.[0];
 const line = (id, type, attrs) => `@${id} ${type} ` + Object.entries(attrs).flatMap(([key, values]) => values.map(value => `${key}=${value}`)).join(' ');
 const input = (id, value) => line(id, 'std.trace.input', { source: [quote(value.source)], version: [quote(value.version)], 'source.type': [value.sourceType], key: [value.key], values: [quote(JSON.stringify(value.values))] });

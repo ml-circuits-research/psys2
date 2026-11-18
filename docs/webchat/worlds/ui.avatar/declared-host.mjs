@@ -1,9 +1,9 @@
 // The avatar's native face tools, with choices derived from the supplied knowledge.
 import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs?v=463e762442';
 import {compositionBase,compositionOverrides,expressionParts} from './composition.mjs?v=b3e12b14a5';
-import {toNativeAvatarState,adoptCanonicalAvatarState} from './canonical-state.mjs?v=701f0639ef';
-import {DEFAULT_FACE} from './default-face.mjs?v=ff75a38298';
-import {newFace,mark,wearPreset,putPart,takeOff,setParts,moveParts,toolView,roleOf,neighbours,centre,SCALE_MIN,SCALE_MAX,NONE,PART_SIZE_GRADES,PART_MOVE_DIRECTIONS,undoStep,redoStep} from './face.mjs?v=37a4e888d7';
+import {toNativeAvatarState,adoptCanonicalAvatarState} from './canonical-state.mjs?v=8b998421fc';
+import {DEFAULT_FACE} from './default-face.mjs?v=e04d7c743a';
+import {newFace,mark,wearPreset,putPart,takeOff,setParts,moveParts,toolView,roleOf,neighbours,centre,SCALE_MIN,SCALE_MAX,NONE,PART_SIZE_GRADES,PART_MOVE_DIRECTIONS,undoStep,redoStep} from './face.mjs?v=a6ef7e7eba';
 const text={type:'string',required:true},ids={type:'array',required:true},faceId={type:'string',default:'face',enum:['face']};
 const available=(slot,variant)=>slot?.variants.some(v=>v.name===variant&&v.parts?.length>0);
 export const initialAvatarState=(data=DEFAULT_FACE)=>({face:newFace(data),selectedSlot:null});

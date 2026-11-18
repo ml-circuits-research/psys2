@@ -1,9 +1,9 @@
 import {nativeKindCandidates} from './native-binding-candidates.mjs?v=de223646d6';
 // Bind model-declared context references to actual native objects; never inspect source words.
-import {serializeRequestGraph} from '../vendor/sopworld/sopworld.mjs?v=20fdd56a67';
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=8473a7502b';
-import {DRAWING_PROPERTY_BINDINGS} from '../../worlds/art.draw/property-host.mjs?v=ad4de9eb20';
-import {flatRequestProjection} from './request-projection.mjs?v=f03efb554d';
+import {serializeRequestGraph} from '../vendor/sopworld/sopworld.mjs?v=820bedd01b';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=b18048ebf9';
+import {DRAWING_PROPERTY_BINDINGS} from '../../worlds/art.draw/property-host.mjs?v=9c6f1fa045';
+import {flatRequestProjection} from './request-projection.mjs?v=ddeed4e94b';
 export async function projectContextAction(proposal,session,{bindings,registry,view}={}) {
  const raw=proposal?.raw,r=raw?.requests?.[0],area=NATIVE_AREAS[view],readerArea=bindings?.readerAreaByView?.[view]??area?.area;
  if(!area||!bindings||!registry||proposal.coverage?.complete||raw?.requestCount!==1||raw.coverage?.truncated||r?.mood!=='do'||r.act!=='change'||r.target?.kind||r.target?.name)return null;

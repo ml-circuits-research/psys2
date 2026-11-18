@@ -1,9 +1,12 @@
 // Mechanical, lossless calendar facts <-> native tool data boundary. SOP wires own state.
-import {World,parse,serialize,quote} from '../../lib/vendor/sopworld/sopworld.mjs?v=20fdd56a67';
+import {World,parse,serialize,quote} from '../../lib/vendor/sopworld/sopworld.mjs?v=820bedd01b';
 import {copyHostData} from '../native-tool-host.mjs?v=463e762442';
 import {createCalendar} from './calendar-tool.mjs?v=7878bd2af4';
 import schemaSource from './schema-source.mjs?v=c68128ab76';
 export {schemaSource as CALENDAR_STATE_SCHEMA};
+// The reusable schema is owned by this module; carriers contain only instance facts.
+const schemaWorld=new World({library:{'time.calendar':schemaSource}});
+schemaWorld.load('@calendar.state.schema core.use world=time.calendar');
 const groups={calendars:'calendar',people:'person',rooms:'room',meetings:'meeting'};
 const fields={calendar:['id','label','colour'],person:['id','label'],room:['id','label','capacity','location'],meeting:['id','title','start','duration','participants','room','calendar','notes']};
 const require=(value,why)=>{if(!value)throw new TypeError('calendar-canonical:'+why);};
@@ -32,14 +35,18 @@ function encode(input){
  nodes.push(root);return serialize(nodes);
 }
 /** Load actual typed facts under the canonical schema; rules and queries see native resources directly. */
-export function calendarStateWorld(state){
+function calendarStateContext(state){
  require(state&&typeof state==='object'&&!Array.isArray(state)&&Object.keys(state).length===1&&typeof state.sop==='string','carrier');
- const world=new World();require(world.load(schemaSource).ok,'schema');require(world.load(state.sop).ok,'invalid-facts');return world;
+ const world=schemaWorld.fork();require(world.tell(state.sop,{factsOnly:true}).ok,'invalid-facts');return world;
 }
+export function calendarStateWorld(state){return decodeCalendarState(state).world;}
 /** Exact derived native rows; absent keys, nulls and ordered lists are retained. */
 export function toNativeCalendarState(input){
  if(!input||!Object.hasOwn(input,'sop'))return nativeData(input);
- const world=calendarStateWorld(input),nodes=parse(input.sop),byId=new Map(nodes.map(node=>[node.id,node])),root=byId.get('calendar.state'),used=new Set(['calendar.state']);
+ return decodeCalendarState(input).state;
+}
+function decodeCalendarState(input){
+ const world=calendarStateContext(input),nodes=parse(input.sop),byId=new Map(nodes.map(node=>[node.id,node])),root=byId.get('calendar.state'),used=new Set(['calendar.state']);
  require(nodes.every(node=>!node.pattern&&!node.legacy)&&byId.size===nodes.length&&root?.type==='time.calendar.state','root');
  const one=(node,key)=>{const values=node.attrs[key];require(Array.isArray(values)&&values.length===1,'single-'+key);return values[0];};
  const literal=raw=>{require(typeof raw==='string'&&raw[0]!=='$'&&raw[0]!=='?','literal');let value;try{value=JSON.parse(raw);}catch{throw new TypeError('calendar-canonical:literal');}require(value===null||['string','number','boolean'].includes(typeof value),'literal-type');return value;};
@@ -57,7 +64,7 @@ export function toNativeCalendarState(input){
   });}else require(refs.length===0,'absent-group');
  }
  if(Object.hasOwn(root.attrs,'selectedEvent')){const raw=one(root,'selectedEvent');state.selectedEvent=raw==='null'?null:idOf(raw,'meeting');}
- require(nodes.every(node=>used.has(node.id)),'unowned-fact');return nativeData(state);
+ require(nodes.every(node=>used.has(node.id)),'unowned-fact');return {state:nativeData(state),world};
 }
 /** Explicit import/bootstrap boundary; no native rows remain in the returned carrier. */
 export function canonicalCalendarState(input){

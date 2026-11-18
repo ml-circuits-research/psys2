@@ -1,0 +1,26 @@
+# w.lang.en/shards/words: the owned English vocabulary, separate from the schema.
+# sources: hand-core 1 (hand-written declarations and deterministic key vocabulary)
+# license: CC0-1.0
+# script: none (hand-written; generated key block maintained by tools/key-words.mjs)
+
+@w.lang.en.word.number core.word text=number text=numbers text="number word" means=w.lang.en.number core.source="hand-core 1"
+@w.lang.en.word.number.value core.word text=value means=w.lang.en.number.value core.source="hand-core 1"
+@w.lang.en.word.feeling_reply core.word text=reply text=say text=answer text="what to say" means=w.lang.en.feeling_reply core.source="hand-core 1"
+@w.lang.en.word.phrasing core.word text=phrasing text="attribute phrasing" means=w.lang.en.phrasing core.source="hand-core 1"
+@w.lang.en.word.alternation core.word text=alternation text=alternations text=variant text=paraphrase means=w.lang.en.alternation core.source="hand-core 1"
+@w.lang.en.word.world core.word text=grammar text="english grammar" text="grammar rules" text="parts of speech" means=w.lang.en.construction core.source="hand-core 1"
+@w.lang.en.word.det core.word text=determiner text=determiners text=article text=articles text=quantifier text=quantifiers means=w.lang.en.det core.source="psys2 78f45863"
+@w.lang.en.word.pron core.word text=pronoun text=pronouns means=w.lang.en.pron core.source="psys2 78f45863"
+@w.lang.en.word.prep core.word text=preposition text=prepositions means=w.lang.en.prep core.source="psys2 78f45863"
+@w.lang.en.word.prep.time core.word text=preposition text=prepositions means=w.lang.en.prep.time core.source="hand-core 1"
+@w.lang.en.word.irregular core.word text=plural text=plurals text=irregular means=w.lang.en.irregular core.source="hand-core 1"
+@w.lang.en.word.contraction core.word text=contraction text=contractions means=w.lang.en.contraction core.source="hand-core 1"
+@w.lang.en.word.wh core.word text="question word" text="question words" means=w.lang.en.wh core.source="hand-core 1"
+@w.lang.en.word.cue core.word text=cue text=cues text="request cue" text="reaction cue" means=w.lang.en.cue core.source="hand-core 1"
+@w.lang.en.word.closed core.word text="word class" text="closed class" text="function word" text="function words" means=w.lang.en.closed core.source="hand-core 1"
+@w.lang.en.word.class core.word text="paradigm class" text="inflection class" text=inflection text=conjugation means=w.lang.en.class core.source="hand-core 1"
+@w.lang.en.word.arrangement core.word text=arrangement text=arrangements text=arranged text="laid out" means=w.lang.en.arrangement core.source="hand-core 1"
+@w.lang.en.word.aux core.word text=auxiliary text="auxiliary verb" means=w.lang.en.aux core.source="hand-core 1"
+@w.lang.en.word.frame core.word text="argument frame" text=frame text=frames means=w.lang.en.frame core.source="hand-core 1"
+@w.lang.en.word.rule core.word text="grammar rule" text=production means=w.lang.en.rule core.source="hand-core 1"
+@w.lang.en.word.construction core.word text=construction text=constructions means=w.lang.en.construction core.source="hand-core 1"

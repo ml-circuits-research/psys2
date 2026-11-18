@@ -9,7 +9,7 @@ const hosts = new WeakMap();
 let knowledge;
 /** Read-only cache inspection; does not create the lazy knowledge World. */
 export const inspectNewEngineSourceWorld=options=>inspectCachedExecutionSource(knowledge,options);
-const sourceWorld = () => knowledge ??= World.fromJSON(SOURCE.snapshot);
+const sourceWorld = () => knowledge ??= World.fromJSON(SOURCE.snapshot,{library:SOURCE.schemaModules});
 const first = (wire, key) => wire?.attrs[key]?.[0];
 const line = (id, type, attrs) => `@${id} ${type} ` + Object.entries(attrs).flatMap(([key, values]) => values.map(value => `${key}=${value}`)).join(' ');
 const input = (id, value) => line(id, 'std.trace.input', { source: [quote(value.source)], version: [quote(value.version)], 'source.type': [value.sourceType], key: [value.key], values: [quote(JSON.stringify(value.values))] });

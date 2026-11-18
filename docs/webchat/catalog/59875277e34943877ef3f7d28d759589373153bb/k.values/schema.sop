@@ -1,0 +1,90 @@
+# k.values: the words for values (colour names are in k.colours). Ordered scales (size, amount, degree and
+# more) with their steps and comparatives, directions and positions in a picture, set words (all,
+# each, random, same, different); number words are in w.lang.en (w.lang.en.number). For reading the value a person names in a request.
+# sources: hand-core 1 (the schema and the hand-written shards); psys2-worlds 6b63b2ba (shard psys2)
+# license: CC0-1.0
+# script: none (hand-written); the shards are written by tools/values-core.mjs
+
+@k.values core.module name=k.values version=2 imports=k.named exports=scale exports=step exports=comparative exports=direction exports=position exports=set_word exports=shade exports=reply exports=fill exports=coloured core.source="hand-core 1"
+
+# Colour names live in k.colours (KR2, reviewer 14:45): k.colours.colour (name, rgb, family, basic=true on the 11 basic
+# terms); k.values.colour is gone.
+
+# The basic colours, declared once (Q34 item 4): a type of the worlds whose things have a usual colour by name
+# extends `k.values.coloured` and takes its slot `colour` (k.food.food, k.space.body). A slot that must differ (required
+# in k.drawing.part, `any` more in k.attributes.thing, another key: `drawn_colour`, `family`) says the
+# list again, and a test keeps every such list equal to this one.
+@k.values.coloured core.type of=k.values.coloured shared=true core.source="hand-core 1"
+@k.values.coloured.colour core.slot of=k.values.coloured key=colour many=true enum=black enum=white enum=grey enum=red enum=orange enum=yellow enum=green enum=blue enum=purple enum=pink enum=brown kind=atom type=k.colours.basic by=name core.source="hand-core 1"
+
+# An ordered scale (size, length, amount, degree) and its steps. `steps` is how many steps it has. A step has a
+# `rank`, 1 for the least. Step names repeat across scales (medium; light is a weight and a brightness).
+@k.values.scale core.type of=k.values.scale shared=true closed=true core.source="hand-core 1"
+@k.values.scale.name core.slot of=k.values.scale key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.values.scale.about core.slot of=k.values.scale key=about required=true kind=string core.source="hand-core 1"
+@k.values.scale.steps core.slot of=k.values.scale key=steps required=true kind=integer min=2 core.source="hand-core 1"
+@k.values.step core.type of=k.values.step shared=true closed=true core.source="hand-core 1"
+@k.values.step.scale core.slot of=k.values.step key=scale id=true required=true kind=atom kind=string type=k.values.scale by=name core.source="hand-core 1"
+@k.values.step.name core.slot of=k.values.step key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.values.step.rank core.slot of=k.values.step key=rank required=true kind=integer min=1 core.source="hand-core 1"
+
+# A comparative or superlative: a word that moves along a scale. `way=up` is towards the most (bigger on the scale
+# size), `way=down` towards the least. A word can belong to two scales (shorter: length and height).
+@k.values.comparative core.type of=k.values.comparative shared=true closed=true core.source="hand-core 1"
+@k.values.comparative.text core.slot of=k.values.comparative key=text id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.values.comparative.scale core.slot of=k.values.comparative key=scale id=true required=true kind=atom kind=string type=k.values.scale by=name core.source="hand-core 1"
+@k.values.comparative.way core.slot of=k.values.comparative key=way required=true enum=up enum=down core.source="hand-core 1"
+@k.values.comparative.degree core.slot of=k.values.comparative key=degree required=true enum=comparative enum=superlative core.source="hand-core 1"
+
+# A shape name. `solid=true`: a shape with depth (cube, sphere); otherwise flat. What a shape has (sides, corners)
+# and which things have it are not here.
+
+# A direction of movement. `axis` groups directions that are answers to the same question; `opposite` names the
+# contrary one. `x` and `y` are the step in a picture, x to the right and y downwards as in k.objects (up: x=0
+# y=-1); the compass directions are those of a map with north at the top. Depth, turn and spread have no step.
+@k.values.direction core.type of=k.values.direction shared=true closed=true core.source="hand-core 1"
+@k.values.direction.name core.slot of=k.values.direction key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.values.direction.axis core.slot of=k.values.direction key=axis required=true enum=horizontal enum=vertical enum=depth enum=turn enum=spread enum=compass core.source="hand-core 1"
+@k.values.direction.x core.slot of=k.values.direction key=x kind=integer min=-1 max=1 core.source="hand-core 1"
+@k.values.direction.y core.slot of=k.values.direction key=y kind=integer min=-1 max=1 core.source="hand-core 1"
+@k.values.direction.opposite core.slot of=k.values.direction key=opposite required=true kind=atom kind=string type=k.values.direction by=name core.source="hand-core 1"
+
+# A position in a picture: its `column` (left, centre, right), its `row` (top, middle, bottom) and its `depth`
+# (front, back), each where the name says it ("top left": both; "top": the row only).
+@k.values.position core.type of=k.values.position shared=true closed=true core.source="hand-core 1"
+@k.values.position.name core.slot of=k.values.position key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.values.position.column core.slot of=k.values.position key=column enum=left enum=centre enum=right core.source="hand-core 1"
+@k.values.position.row core.slot of=k.values.position key=row enum=top enum=middle enum=bottom core.source="hand-core 1"
+@k.values.position.depth core.slot of=k.values.position key=depth enum=front enum=back core.source="hand-core 1"
+
+# A set word: a word that says which of several things are meant, or how values are given to them. `picks`: how
+# many of the things meant (all, one, two, some, most, half, none, or the rest: those not named). `manner`: how
+# (one by one; by chance; the same for all; different for each; alternating; by the place in an order).
+@k.values.set_word core.type of=k.values.set_word shared=true closed=true core.source="hand-core 1"
+@k.values.set_word.name core.slot of=k.values.set_word key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.values.set_word.picks core.slot of=k.values.set_word key=picks enum=all enum=one enum=two enum=some enum=most enum=half enum=none enum=rest core.source="hand-core 1"
+@k.values.set_word.manner core.slot of=k.values.set_word key=manner enum="one by one" enum=random enum=same enum=different enum=alternating enum="in order" core.source="hand-core 1"
+@k.values.set_word.about core.slot of=k.values.set_word key=about required=true kind=string core.source="hand-core 1"
+
+
+# Words for the types of this world.
+
+# A fill: how a shape is filled in a picture (solid, outline, striped). A value of the role `value` of the act
+# change in k.actions ("make it outline", "fill it in").
+@k.values.fill core.type of=k.values.fill shared=true closed=true core.source="hand-core 1"
+@k.values.fill.name core.slot of=k.values.fill key=name id=true required=true kind=atom core.source="hand-core 1"
+@k.values.fill.about core.slot of=k.values.fill key=about required=true kind=string core.source="hand-core 1"
+
+# A shade word: a word said before a colour name that changes the colour ("light blue", "deep red"). `lightness`
+# says how much lighter (above 0) or darker (below 0) the colour becomes, `saturation` how much more (above 0) or
+# less (below 0) colour it has, each as a part of the full range (0.2 is a fifth).
+@k.values.shade core.type of=k.values.shade shared=true closed=true core.source="hand-core 1"
+@k.values.shade.name core.slot of=k.values.shade key=name id=true required=true kind=atom core.source="hand-core 1"
+@k.values.shade.lightness core.slot of=k.values.shade key=lightness required=true kind=number min=-1 max=1 core.source="hand-core 1"
+@k.values.shade.saturation core.slot of=k.values.shade key=saturation required=true kind=number min=-1 max=1 core.source="hand-core 1"
+
+# The two replies to a question that asks whether something is so: yes and no. The many ways of saying each
+# (yeah, sure, of course; nope, no way) are core.word facts of the shard.
+@k.values.reply core.type of=k.values.reply shared=true closed=true core.source="hand-core 1"
+@k.values.reply.name core.slot of=k.values.reply key=name id=true required=true enum=yes enum=no core.source="hand-core 1"
+@k.values.reply.opposite core.slot of=k.values.reply key=opposite enum=yes enum=no core.source="hand-core 1"

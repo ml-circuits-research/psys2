@@ -101,7 +101,9 @@ const worlds = new WeakMap();
 export function bundledDiagramWorld(lib) {
   if (worlds.has(lib)) return worlds.get(lib);
   const w = new lib.World();
-  for (const text of Object.values(BUNDLED_DIAGRAMS.files)) w.tell(text);
+  for (const text of Object.values(BUNDLED_DIAGRAMS.schemas)) w.load(text);
+  for (const text of Object.values(BUNDLED_DIAGRAMS.vocabularies)) w.load(text);
+  for (const text of Object.values(BUNDLED_DIAGRAMS.files)) w.load(text);
   w.tell(BUNDLED_GEO.text);
   worlds.set(lib, w);
   return w;

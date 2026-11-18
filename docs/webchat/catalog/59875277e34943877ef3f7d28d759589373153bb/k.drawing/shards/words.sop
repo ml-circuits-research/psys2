@@ -1,0 +1,21 @@
+# k.drawing/shards/words: the owned English vocabulary, separate from the schema.
+# sources: hand-core 1 (hand-written declarations and deterministic key vocabulary)
+# license: CC0-1.0
+# script: none (hand-written; generated key block maintained by tools/key-words.mjs)
+
+@k.drawing.word.part core.word text=part text=parts text=shape means=k.drawing.part core.source="hand-core 1"
+@k.drawing.word.point core.word text=point text=points text=corner means=k.drawing.point core.source="hand-core 1"
+
+# Words for the keys, by rule: the name of each key, and everyday words for some (tools/key-words.mjs).
+@k.drawing.word.key.part.shape core.word text=shape means=k.drawing.part.shape core.source="hand-core 1"
+@k.drawing.word.key.part.x core.word text=x means=k.drawing.part.x core.source="hand-core 1"
+@k.drawing.word.key.part.y core.word text=y means=k.drawing.part.y core.source="hand-core 1"
+@k.drawing.word.key.part.w core.word text=w means=k.drawing.part.w core.source="hand-core 1"
+@k.drawing.word.key.part.h core.word text=h means=k.drawing.part.h core.source="hand-core 1"
+@k.drawing.word.key.part.z core.word text=z means=k.drawing.part.z core.source="hand-core 1"
+@k.drawing.word.key.part.colour core.word text=colour means=k.drawing.part.colour core.source="hand-core 1"
+@k.drawing.word.key.part.rgb core.word text=rgb means=k.drawing.part.rgb core.source="hand-core 1"
+@k.drawing.word.key.part.pointing core.word text=pointing means=k.drawing.part.pointing core.source="hand-core 1"
+@k.drawing.word.key.part.opens core.word text=opens means=k.drawing.part.opens core.source="hand-core 1"
+@k.drawing.word.key.point.x core.word text=x means=k.drawing.point.x core.source="hand-core 1"
+@k.drawing.word.key.point.y core.word text=y means=k.drawing.point.y core.source="hand-core 1"

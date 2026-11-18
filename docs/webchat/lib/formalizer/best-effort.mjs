@@ -10,11 +10,11 @@
  *   const cands = looseCandidates(set, 'square eyes robot pls', { worlds: ['ui.avatar'], tabWorld: 'ui.avatar' });
  *   // [{ world: 'ui.avatar', patternId, text: 'make your eyes square', score, coverage, used, ignored: ['robot'] }, ...]
  */
-import { lexIndex } from '../worlds/lexicon.mjs?v=590cd85fa9';
-import { isNumberWord } from './rules/numbers.mjs?v=6c42bec0ab';
-import { FUNCTION_WORDS, ABBREVIATIONS, worldVocabulary } from './spell.mjs?v=c9c59a1f4a';
+import { lexIndex } from '../worlds/lexicon.mjs?v=0e61c2f7d7';
+import { isNumberWord } from './rules/numbers.mjs?v=ff699f4f54';
+import { FUNCTION_WORDS, ABBREVIATIONS, worldVocabulary } from './spell.mjs?v=33fec7e5d0';
 import { budget } from '../dialog/budget.mjs?v=00bce6e369';
-import { en } from '../lang/en.mjs?v=1c3d1d175f';
+import { en } from '../lang/en.mjs?v=373500f14a';
 
 const WORD_RE = /[\p{L}\p{N}][\p{L}\p{N}'’-]*/gu;
 const SLOT_RE = /\{[A-Za-z_0-9]+:([A-Za-z_.0-9]+)\}/g;
