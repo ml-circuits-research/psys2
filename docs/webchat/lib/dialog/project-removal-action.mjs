@@ -3,7 +3,7 @@ import {parse,str} from '../vendor/sopworld/sopworld.mjs?v=8186c36d14';
 import {LANG_EN_FACTS} from '../lang/en.facts.generated.mjs?v=1fba1d111b';
 import {NATIVE_AREAS} from './app-reader-context.mjs?v=6618e2cba6';
 import {nativeKindCandidates} from './native-binding-candidates.mjs?v=823de2d713';
-import {projectGroundedRequest,observeGroundedProjection,resolveGroundedMention} from './grounded-projection.mjs?v=ce4c391dd1';
+import {projectGroundedRequest,observeGroundedProjection,resolveGroundedMention} from './grounded-projection.mjs?v=5e31a84273';
 
 const read=(wire,key)=>str(wire.attrs[key]?.[0]);
 const articles=parse(LANG_EN_FACTS.determiners)

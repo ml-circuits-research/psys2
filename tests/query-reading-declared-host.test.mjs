@@ -22,6 +22,13 @@ test('Grounded question heads choose projections and preserve the actual selecto
  assert.equal(wires.find(row=>row.type==='std.request.query').attrs.operation[0],'count');
  assert.equal(wires.find(row=>row.type==='std.request.target').attrs.kind[0],'fixture.house');
  assert.equal(wires.find(row=>row.type==='std.request.constraint').attrs.value[0],'"red"');
+ const candidate=result.candidates[0],byId=new Map(wires.map(wire=>['$'+wire.id,wire]));
+ const root=byId.get('$'+candidate.request),answer=byId.get(root.attrs.query[0]);
+ const subject=byId.get(answer.attrs.target[0]),filter=byId.get(subject.attrs.selector[0]);
+ assert.equal(answer.attrs.request[0],'$'+root.id);
+ assert.equal(filter.attrs.target[0],'$'+subject.id);
+ assert.equal(byId.get(root.attrs.source[0]).attrs.text[0],'"How many red houses"');
+ assert.deepEqual(new Set(candidate.projection.support.map(wire=>wire.rule)),new Set(['query.graph','query.graph.selector']));
  assert.match(result.interpretation.decision.sop,/std.choice.result/);
  assert.deepEqual(result.interpretation.unresolved,proposal.failures);
  proposal.raw.ranges[2].range=[1,4];

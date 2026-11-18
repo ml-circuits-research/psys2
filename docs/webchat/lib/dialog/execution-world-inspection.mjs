@@ -8,9 +8,10 @@ import{inspectHistoryJournal}from'./history-journal.mjs?v=c7afd454fd';
 import{inspectExecutionPolicyWorld}from'./execution-policy.mjs?v=9b4ddaac32';
 import{sceneDefaultInspection}from'./scene-placement-defaults.mjs?v=51d89e03be';
 import{inspectCapabilityPolicy}from'./capability-plan-adapter.mjs?v=b5ec148e95';
-import{inspectCreationPolicy}from'./project-create-action.mjs?v=d390db15a0';
+import{inspectQueryPolicy}from'./project-query-action.mjs?v=a0d1d72358';
+import{inspectCreationPolicy}from'./project-create-action.mjs?v=11bbfb4324';
 import{inspectConstructorPolicy}from'./native-binding-candidates.mjs?v=823de2d713';
-import{inspectGroundedProjection}from'./grounded-projection.mjs?v=ce4c391dd1';
+import{inspectGroundedProjection}from'./grounded-projection.mjs?v=5e31a84273';
 import{inspectReaderHeadPolicy}from'./reader-head-alternative.mjs?v=637b6dff44';
 import{inspectReferencePolicy}from'./reference-policy.mjs?v=89acac947f';
 import{inspectSchemaSource}from'./worlds-inspection.mjs?v=41f965d344';
@@ -27,7 +28,7 @@ function snapshotText(snapshot){return (snapshot?.log??[]).map((entry,index)=>'#
 /** Projects actual cache accessors and retained journal JSON; performs no reading or reasoning. */
 export async function inspectExecutionWorlds(session){
  const [{inspectDeclaredExecutionSourceWorld},{inspectSpatialPlacementWorld}]=await Promise.all([
-  import('./declared-execution.mjs?v=9182a6cadd'),import('./spatial-placement-execution.mjs?v=82e3f9a7d9'),
+  import('./declared-execution.mjs?v=997eb34461'),import('./spatial-placement-execution.mjs?v=82e3f9a7d9'),
  ]);
  const journal=session?.newEngineJournal??[],moduleNames=[...new Set(journal.flatMap(record=>importsOf(record.evidence)))],sources=[['declared-execution','src/dialog/declared-execution.mjs',inspectDeclaredExecutionSourceWorld({moduleNames})]],nodes=[],edges=[];
  const link=(from,to,label)=>edges.push({from,to,label});
@@ -60,13 +61,23 @@ export async function inspectExecutionWorlds(session){
  link('execution:module:declared-execution','execution:history-policy','compiles history requests');
  link('execution:history-policy','interpreter:app.history','supplies a guarded SOP call');
  if(journalInstance)link('interpreter:app.history','instance:app.history','restores and verifies an entry');
+ const query=inspectQueryPolicy();
+ nodes.push({id:'execution:query-policy',label:'Question readings',kind:'knowledge',implementation:'Operational SOP Lang World',
+  description:'Connects the question, its observed noun and any grounded filter to the request that reads the current instance. The same world declares when another reading may supply missing evidence.',
+  wires:query.policy,details:{source:'worlds/app.project/query-reading-policy.sop',loaded:query.loaded}});
+ nodes.push({id:'execution:query-schema',label:'app.query.read',kind:'schema',implementation:'SOP Lang schema module',
+  description:'Declares the evidence for a question, its selected operation and the records that justify recovering a missing span.',
+  wires:query.schema,schemaView:inspectSchemaSource(query.schema),details:{source:'worlds/app.project/query-reading-schema.sop',loaded:query.loaded}});
+ link('execution:query-policy','execution:query-schema','imports schema');
+ link('execution:query-schema','execution:grounded-projection-schema','imports request wire aliases');
+ link('execution:query-policy','execution:module:declared-execution','emits an owned question graph');
  const grounded=inspectGroundedProjection();
  nodes.push({id:'execution:grounded-projection',label:'Grounded request projection',kind:'knowledge',implementation:'Operational SOP Lang World',
   description:'Derives typed request wires from chosen contextual and creation evidence, retaining rule support and source spans.',
   wires:grounded.policy,details:{source:'worlds/app.project/grounded-projection.sop',loaded:grounded.loaded}});
  nodes.push({id:'execution:grounded-projection-schema',label:'app.grounded',kind:'schema',implementation:'SOP Lang schema module',
   description:'Defines grounded evidence, graph aliases and their standard request types.',
-  wires:grounded.schema,schemaView:inspectSchemaSource(grounded.schema),details:{source:'worlds/app.project/grounded-projection-schema.sop',loaded:grounded.loaded}});
+  wires:grounded.schema,schemaView:inspectSchemaSource(grounded.schema),details:{source:'worlds/app.project/grounded-projection-schema.sop',loaded:grounded.loaded||query.loaded}});
  link('execution:grounded-projection','execution:grounded-projection-schema','imports schema');
  link('execution:reference-policy','execution:grounded-projection','supplies a grounded reference');
  link('execution:creation-policy','execution:grounded-projection','supplies a grounded constructor');

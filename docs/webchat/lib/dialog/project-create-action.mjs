@@ -5,7 +5,7 @@ import {executionPolicyWorld} from './execution-policy.mjs?v=9b4ddaac32';
 import {NATIVE_AREAS} from './app-reader-context.mjs?v=6618e2cba6';
 import {nativeCreationCandidates} from './native-binding-candidates.mjs?v=823de2d713';
 import {budget} from './budget.mjs?v=00bce6e369';
-import {observeGroundedProjection,projectGroundedRequest} from './grounded-projection.mjs?v=ce4c391dd1';
+import {observeGroundedProjection,projectGroundedRequest} from './grounded-projection.mjs?v=5e31a84273';
 import {positiveCardinalProof} from './key-reader-value-proof.mjs?v=d14c6ccdaf';
 import {compileObservedChoice} from './observed-choice.mjs?v=516055ab97';
 

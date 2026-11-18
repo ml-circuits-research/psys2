@@ -219,3 +219,6 @@ Application gate passed 648 with three skips. No reader weights changed.
 
 2026-11-18 — Webchat c73080f75d shares the in-flight catalog index read and accounts only transport wait separately from computation. With an 11.5 s injected delay Chromium created one circle in 11.67 s, one index GET, zero watchdog kills. The compute limit remains 8 s.
 Application gate passed 649 with 3 skips. The separate historical worker restart remains unconfirmed. Current handoff is in current-status.md.
+
+2026-11-18 — Query rules now produce the source, target, query and optional selector links of the standard request. Worlds exposes the actual policy, both schema dependencies and the deriving rules.
+Chromium verified the changing house/tree population and the real query graph in recorded activity. Webchat 67ef748374: 649 tests passed, 3 skipped.

@@ -1,4 +1,4 @@
-@query.schema core.module name=app.query.read exports=app.query.read.head exports=app.query.read.question exports=app.query.read.condition exports=app.query.read.operation exports=app.query.read.selector exports=app.query.read.phase exports=app.query.read.scope exports=app.query.read.coverage exports=app.query.read.headObservation exports=app.query.read.limitation exports=app.query.read.reconsider exports=app.query.read.recoveryReading exports=app.query.read.recovery exports=app.query.read.readingPair
+@query.schema core.module name=app.query.read imports=app.grounded exports=app.query.read.ground exports=app.query.read.head exports=app.query.read.question exports=app.query.read.condition exports=app.query.read.operation exports=app.query.read.selector exports=app.query.read.phase exports=app.query.read.scope exports=app.query.read.coverage exports=app.query.read.headObservation exports=app.query.read.limitation exports=app.query.read.reconsider exports=app.query.read.recoveryReading exports=app.query.read.recovery exports=app.query.read.readingPair
 @query.head core.type of=app.query.read.head closed=true
 @query.head.kind core.slot of=app.query.read.head key=head kind=atom present=true
 @query.head.operation core.slot of=app.query.read.head key=operation kind=atom present=true
@@ -82,3 +82,7 @@
 @query.pair.independent core.slot of=app.query.read.readingPair key=independent type=app.query.read.recoveryReading present=true
 @query.recovery.type core.type of=app.query.read.recovery closed=true
 @query.recovery.selected core.slot of=app.query.read.recovery key=selected type=app.query.read.recoveryReading present=true
+
+@query.ground core.type of=app.query.read.ground closed=true
+@query.ground.text core.slot of=app.query.read.ground key=text kind=string present=true
+@query.ground.kind core.slot of=app.query.read.ground key=kind kind=atom present=true

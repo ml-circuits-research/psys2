@@ -5,7 +5,7 @@ import {quote,str} from '../vendor/sopworld/sopworld.mjs?v=8186c36d14';
 import {NATIVE_AREAS} from './app-reader-context.mjs?v=6618e2cba6';
 import {executionPolicyWorld} from './execution-policy.mjs?v=9b4ddaac32';
 import {readReferenceTurn,resolveObservedReference} from './reference-policy.mjs?v=89acac947f';
-import {observeGroundedProjection,projectGroundedRequest} from './grounded-projection.mjs?v=ce4c391dd1';
+import {observeGroundedProjection,projectGroundedRequest} from './grounded-projection.mjs?v=5e31a84273';
 import {flatRequestProjection} from './request-projection.mjs?v=48d5ac928b';
 export async function projectContextAction(proposal,session,{bindings,registry,view}={}) {
  const raw=proposal?.raw,r=raw?.requests?.[0],area=NATIVE_AREAS[view],readerArea=bindings?.readerAreaByView?.[view]??area?.area;

@@ -8,7 +8,7 @@ import { executeHistoryRequest } from './history-execution.mjs?v=3489211ffb';
 import { executeNativeQuery } from './native-query-execution.mjs?v=e812ee2ce6';
 import { executeNativeCapability } from './capability-plan-execution.mjs?v=b83d8b3839';
 import { executionValueSource } from './execution-policy.mjs?v=9b4ddaac32';
-import { inspectCachedExecutionSource } from './execution-world-inspection.mjs?v=9182a6cadd';
+import { inspectCachedExecutionSource } from './execution-world-inspection.mjs?v=997eb34461';
 import { World, str } from '../vendor/sopworld/sopworld.mjs?v=8186c36d14';
 import SOURCE from './new-engine-source.mjs?v=c12e1d00c7';
 let knowledge;

@@ -3,6 +3,8 @@ import {createAreaHost,NATIVE_AREAS} from './app-reader-context.mjs';
 import {nativeCreationCandidates} from './native-binding-candidates.mjs';
 import {compileObservedChoice} from './observed-choice.mjs';
 import POLICY from '../../worlds/app.project/query-reading-policy-source.mjs';
+import {detachGroundedRequest} from './grounded-projection.mjs';
+import GROUNDED_SCHEMA from '../../worlds/app.project/grounded-projection-schema-source.mjs';
 import SCHEMA from '../../worlds/app.project/query-reading-schema-source.mjs';
 import {budget} from './budget.mjs';
 import {writeReaderSource} from './reader-source.mjs';
@@ -13,9 +15,11 @@ const row=(id,type,fields)=>({id,type,attrs:Object.fromEntries(Object.entries(fi
  .filter(([,value])=>value!==undefined).map(([key,value])=>[key,[value]]))});
 let base;
 
+export const inspectQueryPolicy=()=>({schema:SCHEMA,policy:POLICY,loaded:!!base});
+
 function queryPolicy(){
  if(!base){
-  const world=new World({library:{[kind]:SCHEMA}});
+  const world=new World({library:{[kind]:SCHEMA,'app.grounded':GROUNDED_SCHEMA}});
   world.load(POLICY);
   base=world;
  }
@@ -32,20 +36,6 @@ function anchors(raw){
   return ranges.length===1&&Array.isArray(range)&&range.length===2&&range.every(Number.isSafeInteger)&&
    range[0]>=0&&range[1]<=source.length&&range[0]<range[1]&&source.slice(...range).join('')===value?range:null;
  };
-}
-
-function graph(text,request,canonical,operation,selector){
- const target={request:'$query',mode:'existing',kind:canonical};
- const nodes=[row('query.source','std.request.source',{text:quote(text)}),
-  row('query','std.request',{act:request.act,mood:request.mood,source:'$query.source',query:'$query.answer'}),
-  row('query.answer','std.request.query',{request:'$query',target:'$query.target',operation:operation.attrs.name[0],concept:operation.attrs.concept?.[0]})];
- if(selector){
-  target.selector='$query.selector';
-  nodes.push(row('query.selector','std.request.constraint',{request:'$query',target:'$query.target',concept:selector.attrs.concept[0],
-   value:selector.attrs.value[0],operator:'eq',character:'requirement',polarity:'positive'}));
- }
- nodes.push(row('query.target','std.request.target',target));
- return {request:'query',wires:serialize(nodes)};
 }
 
 export async function projectQueryAction(proposal,session,{view,bindings}={}){
@@ -71,7 +61,7 @@ export async function projectQueryAction(proposal,session,{view,bindings}={}){
  const limitations=coverageWorld.ofType(kind+'.limitation');
  if(limitations.length){
   const proof={input:coverageSop,sop:serialize(limitations),rules:limitations.map(observation=>observation.meta.via)};
-  try{session.engine?.onWorldActivity?.({nodeIds:['component:reader','component:library'],phase:'stage',
+  try{session.engine?.onWorldActivity?.({nodeIds:['component:reader','component:library','execution:query-policy'],phase:'stage',
    operation:'app.query.read',label:'Record incomplete question evidence',wires:proof.input+'\n'+proof.sop});}catch{/* Observations are optional. */}
   const strategies=coverageWorld.ofType(kind+'.reconsider').sort((a,b)=>Number(a.attrs.rank[0])-Number(b.attrs.rank[0]))
    .map(observation=>observation.attrs.profile[0]);
@@ -119,10 +109,13 @@ export async function projectQueryAction(proposal,session,{view,bindings}={}){
  const decision=compileObservedChoice(world,'app.query.kind',candidates.map(({distance,otherType})=>({distance,otherType})));
  if(decision.selected===undefined)return null;
  const selected=candidates[decision.selected],alternatives=decision.alternatives.map(index=>candidates[index]);
- const result=graph(raw.source.text,request,selected.canonical,operations[0],selectors[0]);
+ const grounding=serialize([row('observed.ground',kind+'.ground',{text:quote(raw.source.text),kind:selected.canonical})]);
+ if(!world.tell(grounding,{factsOnly:true}).ok)return null;
+ const result=detachGroundedRequest(world,evidence+'\n'+grounding,4+selectors.length);
+ if(!result)return null;
  const projection=serialize([...operations,...selectors]);
- try{session.engine?.onWorldActivity?.({nodeIds:['component:reader','component:library'],phase:'stage',operation:'app.query.read',
-  label:'Ground the model’s question projection',wires:evidence+'\n'+projection+'\n'+decision.input+'\n'+decision.sop,selected,alternatives});}
+ try{session.engine?.onWorldActivity?.({nodeIds:['component:reader','component:library','execution:query-policy'],phase:'stage',operation:'app.query.read',
+  label:'Ground the model’s question projection',wires:[evidence,projection,decision.input,decision.sop,grounding,result.wires].join('\n'),support:result.projection.support,selected,alternatives});}
  catch{/* Inspection cannot change the reading. */}
  return {...proposal,candidates:[result],coverage:{complete:true,graphProposal:true,executable:false},failures:[],
   interpretation:{profile:'declared-query/1',note:selected.distance?'I interpreted '+JSON.stringify(noun)+' as '+selected.lemma+'.':'',
@@ -193,7 +186,7 @@ export async function recoverQueryProjection(projected,session,{view,bindings,pr
   if(session.isession.state[area.world]!==state)return retain();
   if(!independent?.candidates?.length||independent.interpretation?.limitation)continue;
   const recovery={readings,failures,input,sop:serialize([...pairs,...results]),rule:results[0].meta.via,pairRule:pairs[0].meta.via,profile};
-  try{session.engine?.onWorldActivity?.({nodeIds:['component:reader','component:library'],phase:'stage',
+  try{session.engine?.onWorldActivity?.({nodeIds:['component:reader','component:library','execution:query-policy'],phase:'stage',
    operation:'app.query.read',label:'Verify an independent reading of the current question',
    wires:recovery.input+'\n'+recovery.sop});}catch{/* Observations are optional. */}
   return {...independent,interpretation:{...independent.interpretation,retry:recovery,unresolved:failures.flat()}};

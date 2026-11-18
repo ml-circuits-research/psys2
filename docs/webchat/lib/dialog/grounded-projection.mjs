@@ -57,9 +57,13 @@ export function projectGroundedRequest({ profile, act, mood, kind, text, name, v
     })),
   ]);
   if (!world.tell(input, { factsOnly: true }).ok) return null;
+  return detachGroundedRequest(world, input, values.length + 3);
+}
+
+export function detachGroundedRequest(world, input, expectedSize) {
   const aliases = world.ofType('app.grounded.alias');
   const names = new Map(aliases.map((row) => [first(row, 'wire'), str(first(row, 'id'))]));
-  if (aliases.length !== values.length + 3 || names.size !== aliases.length || new Set(names.values()).size !== names.size) return null;
+  if (aliases.length !== expectedSize || names.size !== aliases.length || new Set(names.values()).size !== names.size) return null;
   const nodes = aliases.map((row) => {
     const source = world.get(first(row, 'wire').slice(1)), type = first(row, 'output'), keys = world.schema(type).keys;
     const attrs = Object.fromEntries(Object.entries(source.attrs).filter(([key]) => Object.hasOwn(keys, key))

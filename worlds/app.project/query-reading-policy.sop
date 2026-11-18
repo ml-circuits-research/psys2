@@ -88,3 +88,34 @@
 @p.filter.pair app.query.read.readingPair primary=$p.primary.filter.gap independent=$p.independent.filter
 @o.recovered.filter app.query.read.recovery selected=$p.independent.filter
 @query.recover.filter core.rule when=$p.primary.filter.gap when=$p.independent.filter when=$p.filter.pair then=$o.recovered.filter
+
+# The chosen referent and the admitted question produce one standard request graph.
+@p.ground app.query.read.ground text=?text kind=?kind
+@p.question.act app.query.read.question act=?act mood=?mood
+@p.answer.operation app.query.read.operation name=?operation
+@o.source std.request.source text=?text
+@o.request std.request act=?act mood=?mood source=$o.source
+@o.target std.request.target request=$o.request kind=?kind mode=existing
+@o.answer std.request.query request=$o.request target=$o.target operation=?operation
+@o.alias.source app.grounded.alias id=query.source wire=$o.source output=std.request.source
+@o.alias.request app.grounded.alias id=query wire=$o.request output=std.request
+@o.alias.target app.grounded.alias id=query.target wire=$o.target output=std.request.target
+@o.alias.answer app.grounded.alias id=query.answer wire=$o.answer output=std.request.query
+@query.graph core.rule when=$p.ground when=$p.question.act when=$p.answer.operation then=$o.source then=$o.request then=$o.target then=$o.answer then=$o.alias.source then=$o.alias.request then=$o.alias.target then=$o.alias.answer
+
+@p.request std.request
+@p.target std.request.target request=$p.request
+@p.answer std.request.query request=$p.request target=$p.target
+@o.answer.link std.request core.on=$p.request query=$p.answer
+@query.graph.answer core.rule when=$p.request when=$p.target when=$p.answer then=$o.answer.link
+
+@p.property.operation app.query.read.operation name=?operation concept=?property
+@p.property.answer std.request.query operation=?operation
+@o.answer.property std.request.query core.on=$p.property.answer concept=?property
+@query.graph.property core.rule when=$p.property.operation when=$p.property.answer then=$o.answer.property
+
+@p.selector app.query.read.selector concept=?property value=?value
+@o.filter std.request.constraint request=$p.request target=$p.target concept=?property value=?value operator=eq character=requirement polarity=positive
+@o.alias.filter app.grounded.alias id=query.selector wire=$o.filter output=std.request.constraint
+@o.target.filter std.request.target core.on=$p.target selector=$o.filter
+@query.graph.selector core.rule when=$p.request when=$p.target when=$p.selector then=$o.filter then=$o.alias.filter then=$o.target.filter

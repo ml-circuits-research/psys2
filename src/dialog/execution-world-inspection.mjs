@@ -8,6 +8,7 @@ import{inspectHistoryJournal}from'./history-journal.mjs';
 import{inspectExecutionPolicyWorld}from'./execution-policy.mjs';
 import{sceneDefaultInspection}from'./scene-placement-defaults.mjs';
 import{inspectCapabilityPolicy}from'./capability-plan-adapter.mjs';
+import{inspectQueryPolicy}from'./project-query-action.mjs';
 import{inspectCreationPolicy}from'./project-create-action.mjs';
 import{inspectConstructorPolicy}from'./native-binding-candidates.mjs';
 import{inspectGroundedProjection}from'./grounded-projection.mjs';
@@ -60,13 +61,23 @@ export async function inspectExecutionWorlds(session){
  link('execution:module:declared-execution','execution:history-policy','compiles history requests');
  link('execution:history-policy','interpreter:app.history','supplies a guarded SOP call');
  if(journalInstance)link('interpreter:app.history','instance:app.history','restores and verifies an entry');
+ const query=inspectQueryPolicy();
+ nodes.push({id:'execution:query-policy',label:'Question readings',kind:'knowledge',implementation:'Operational SOP Lang World',
+  description:'Connects the question, its observed noun and any grounded filter to the request that reads the current instance. The same world declares when another reading may supply missing evidence.',
+  wires:query.policy,details:{source:'worlds/app.project/query-reading-policy.sop',loaded:query.loaded}});
+ nodes.push({id:'execution:query-schema',label:'app.query.read',kind:'schema',implementation:'SOP Lang schema module',
+  description:'Declares the evidence for a question, its selected operation and the records that justify recovering a missing span.',
+  wires:query.schema,schemaView:inspectSchemaSource(query.schema),details:{source:'worlds/app.project/query-reading-schema.sop',loaded:query.loaded}});
+ link('execution:query-policy','execution:query-schema','imports schema');
+ link('execution:query-schema','execution:grounded-projection-schema','imports request wire aliases');
+ link('execution:query-policy','execution:module:declared-execution','emits an owned question graph');
  const grounded=inspectGroundedProjection();
  nodes.push({id:'execution:grounded-projection',label:'Grounded request projection',kind:'knowledge',implementation:'Operational SOP Lang World',
   description:'Derives typed request wires from chosen contextual and creation evidence, retaining rule support and source spans.',
   wires:grounded.policy,details:{source:'worlds/app.project/grounded-projection.sop',loaded:grounded.loaded}});
  nodes.push({id:'execution:grounded-projection-schema',label:'app.grounded',kind:'schema',implementation:'SOP Lang schema module',
   description:'Defines grounded evidence, graph aliases and their standard request types.',
-  wires:grounded.schema,schemaView:inspectSchemaSource(grounded.schema),details:{source:'worlds/app.project/grounded-projection-schema.sop',loaded:grounded.loaded}});
+  wires:grounded.schema,schemaView:inspectSchemaSource(grounded.schema),details:{source:'worlds/app.project/grounded-projection-schema.sop',loaded:grounded.loaded||query.loaded}});
  link('execution:grounded-projection','execution:grounded-projection-schema','imports schema');
  link('execution:reference-policy','execution:grounded-projection','supplies a grounded reference');
  link('execution:creation-policy','execution:grounded-projection','supplies a grounded constructor');
