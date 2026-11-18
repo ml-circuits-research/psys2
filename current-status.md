@@ -4,7 +4,7 @@ Updated: 2026-11-18. Worlds truthfulness and readability review completed.
 
 ## Public demo
 
-Latest build: **`4d6b6239e8`**, https://ml-circuits-research.github.io/psys2/webchat/?ui=4d6b6239e8 . Publication is verified after the implementation push; the earlier public build was `78a45da5bc`. Model weights are unchanged.
+Latest build: **`4d6b6239e8`**, https://ml-circuits-research.github.io/psys2/webchat/?ui=4d6b6239e8 . Implementation commit `fc7d0523` is pushed; GitHub Pages deployment completed successfully and the public build-info was verified to return `4d6b6239e8`. Model weights are unchanged.
 
 ## Latest Worlds review
 

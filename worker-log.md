@@ -88,3 +88,5 @@ Checks: build78a45da5bc; npm test571tests568pass0fail3skip incl real Chromium to
 2026-11-18 delivered: Worlds borderless links, compact authoredWhy for40/40catalogdefinitions+native records, orangeJS/greenSOP/blueBERT, no fabricatedSOP/emptytool/schema tabs. Declared source RPC loads exact bounded files; flat filepicker showsonefullsource while retainingallfiles/pagination.
 Audit: k.interest scoring is not connected to demo (oldcompiledschema/zerointerestfacts/noactivecall). Catalogonly/inspectiononly/sourceread never claimreasoning; read-onlyinspection skips knowledgepreparation. Allactualnodes retained; no fakeactivation or inference added.
 Checks: build4d6b6239e8; npm test580tests577pass0fail3skip, including realbuilt390/1600Worlds RPC/source tests; exactk.interest+k.animalsfiles/pagination, unchangedstate/worlds/sends, noexceptions/404. current-status.md records actualscope and remainingintegration. No model/training changes.
+
+2026-11-18 publication confirmed: GitHub Pages run44257170447 succeeded forfc7d0523; public build-info returns4d6b6239e8. No model or training changes.
