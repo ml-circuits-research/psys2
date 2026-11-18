@@ -6,7 +6,7 @@ import { Astra } from './registry.mjs?v=0f78b9c641';
 import { runCommand, parseCommand } from './where.mjs?v=09b4059350';
 import { Agenda, frameFromPending, frameFromModal } from './frames.mjs?v=7f08beebfe';
 import { USER_SCOPE } from './registry.mjs?v=0f78b9c641';
-import { tabOfWorld } from '../worlds/index.mjs?v=7d2de6fd8e';   // the avatar is not a tab (tab cut, ADR-010): only the Documents tab is built in
+import { tabOfWorld } from '../worlds/index.mjs?v=6b7cb00bac';   // the avatar is not a tab (tab cut, ADR-010): only the Documents tab is built in
 
 /** The Astra of a dialog session: the binding reads `dialog.isession.state` lazily (the session object is replaced by an undo restore). */
 export function createSessionAstra(dialog, { chatKey = 'chat' } = {}) {

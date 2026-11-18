@@ -3,8 +3,8 @@
 // knowledge has that structure; the library's `composeDiagram` / `sampleDiagram` (sopworld 0.112) draw a kind x a topic and lay it out with `arrange`. This file does what a host owes the
 // library: builds the World it reads (the bundled subset of the catalog, `bundled-diagrams.mjs`, with the live catalog laid over it when reachable), reads a request into a kind and a topic
 // (the kinds' words come from the knowledge, not from a list here), tries the candidate topics, and says what was composed in plain words. No template, no sample labels. Browser-safe: no `node:*`.
-import { BUNDLED_DIAGRAMS } from './bundled-diagrams.mjs?v=aa51fec027';
-import { BUNDLED_GEO } from './bundled-geo.mjs?v=9c4c21b7dd';
+import { BUNDLED_DIAGRAMS } from './bundled-diagrams.mjs?v=1f38d9e72b';
+import { BUNDLED_GEO } from './bundled-geo.mjs?v=475efa8b11';
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 const words = (s) => String(s ?? '').toLowerCase().match(/[\p{L}\p{N}']+/gu) ?? [];
@@ -14,7 +14,7 @@ const esc = (s) => String(s).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 let libraryPromise = null;
 /** The library module, loaded once (lazily: the vendored file is 900 kB). */
-export const diagramLibrary = () => (libraryPromise ??= import('../vendor/sopworld/sopworld.mjs?v=9d6ddce277'));
+export const diagramLibrary = () => (libraryPromise ??= import('../vendor/sopworld/sopworld.mjs?v=3a48344175'));
 
 /** The kinds the bundled catalog has: [{ name, form, words }], read from its text (a request can be read before the library is loaded); `words` are the other names a request uses ("hierarchy" for a tree: `core.word of=k.diagrams.kind.name`). */
 export function kindNames() {

@@ -7,7 +7,7 @@
  * Never ignores a negation: dropping "not" would turn the request into its opposite.
  */
 
-import { QUESTION_WORDS } from './rules/normalize.mjs?v=94117d6ea2';
+import { QUESTION_WORDS } from './rules/normalize.mjs?v=00ffd2e5f0';
 import { guard } from './guard.mjs?v=82a55329d9';
 
 /** True when `text` has a question cue (a question mark or a question word anywhere). */

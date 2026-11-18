@@ -16,7 +16,7 @@
 import { serialize, parse as parseOurs, ref as refValue, atom as atomValue, str as strValue } from '../soplang/index.mjs?v=c57881f705';
 import { budget as turnBudget } from '../dialog/budget.mjs?v=00bce6e369';
 import { nsWorld, nsContext, strip } from './ns.mjs?v=655a807958';
-import { entityName } from '../interpreter/render.mjs?v=6876e73e3a';
+import { entityName } from '../interpreter/render.mjs?v=dad0d90e56';
 
 /** Types the dialogue produces that the library must never be told (they are asked, not stated). */
 const NOT_FACTS = new Set(['core.question', 'core.request', 'core.answer', 'core.observation']);
@@ -59,7 +59,7 @@ function libWire(lib, w) {
 export async function createReasoner(set, { lib = null } = {}) {
   const worlds = set.list().filter((w) => w.reasoner === 'matrix' && w.raw.matrix != null);
   if (!worlds.length) return null;
-  lib ??= await import('../vendor/sopworld/sopworld.mjs?v=9d6ddce277');
+  lib ??= await import('../vendor/sopworld/sopworld.mjs?v=3a48344175');
   const legends = set.legends;
   const lexicon = (id) => { const l = set.list().flatMap((w) => w.lexicons).find((x) => x.id === id); return l ? [...l.words] : []; };
   /** What the host gives an action function besides the library's own context (`ctx.host`, spec 15): the lexicons, and `view(ctx)`, an ops-shaped read-only context (find, val, vals, lexicon) over the library, so the tables of a world's ops.mjs can be shared. */

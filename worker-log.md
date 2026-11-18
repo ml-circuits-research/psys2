@@ -196,3 +196,5 @@ The isolated Webchat build f5481215af loaded the new composition schema and word
 
 2026-11-18 — Webchat beaab25626 uses published LIB 0.222.0 (6bef652) and KB a0e85384. The authored scene profile declares indexed reads and result families. Drawing and Diagram supply their own geometry. Worlds links the profile to its declared module.
 638 passed, 3 skipped. Chromium checked a boat at the moved lake, exact support evidence and Undo. Real Diagram host tests checked an authored region on two pages. The offline comparator now replays its frozen declarations with their inherited schema dependency.
+
+2026-11-18 — Webchat a344c72883 pins SOPWorlds 0.223.0 and KB c97b0063. Full native/reader gate passed 639, skipped 3. Chromium compiled a secondary-slot lookup over the real world and recovered all 130 water entries, including boat, with the lake-water evidence. A missing shard now produces an unavailable read.

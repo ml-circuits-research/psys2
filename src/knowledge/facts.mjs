@@ -119,6 +119,7 @@ export function createFacts({ source, name = 'catalog' }) {
   })();
 
   const wireMemo = new Map();   // (type|key) -> the wires of a lookup with no shard filter, until the catalog reloads
+  const incompleteShards = new Set();
   const wireIx = new Map();   // shard id -> { byType: Map(type -> wires), byValue: Map(lowercased value -> wires) }, built once per load
   const wireIndex = async (id) => {
     if (!wireIx.has(id)) {
@@ -145,7 +146,8 @@ export function createFacts({ source, name = 'catalog' }) {
       try { txt = await source.text(pathOf(id)); } catch { /* an unreachable shard is no knowledge */ }
       stats.shardMs += clock() - t; stats.shardBytes += txt?.length ?? 0; stats.shardsLoaded.push(id);
       const degraded = !txt || !!source.fellBack?.(pathOf(id));   // a layered source (the bundled subset under the catalog) answered for an unreachable catalog
-      if (degraded) down = true;
+      if (degraded) { down = true; incompleteShards.add(id); }
+      else incompleteShards.delete(id);
       if (degraded) retryLater(() => { shards.delete(id); parsed.delete(id); wireIx.delete(id); wireMemo.clear(); things.clear(); });
       return txt ? txt.split('\n') : [];
     })());
@@ -198,20 +200,26 @@ export function createFacts({ source, name = 'catalog' }) {
     return out;
   }
 
-  /** Return original SOP declarations containing indexed terms. The consumer owns interpretation. */
-  async function wireSource(type, { key, keys = key == null ? [] : [key] } = {}) {
+  /** A field can prune shards only when its index covers every recorded value.
+   * Older catalogs and secondary fields use a bounded scan of the owning world. */
+  async function wireSource(type, { field, key, keys = key == null ? [] : [key], maxBytes = 2_000_000 } = {}) {
     const terms = new Set(keys.map(term => String(term).toLowerCase()));
     if (!terms.size) return '';
     const owner = await world(type);
-    if (!owner) return '';
-    const shards = owner.shards.filter(shard => shard.keys?.some(term => terms.has(term)));
-    const sources = await Promise.all(shards.map(async shard => {
+    if (!owner) throw Error('No catalog world exports ' + type);
+    const covered = owner.indexedFields?.[type]?.includes(field);
+    const selected = covered ? owner.shards.filter(shard => shard.keys?.some(term => terms.has(term))) : owner.shards;
+    if (selected.reduce((bytes, shard) => bytes + (shard.bytes ?? 0), 0) > maxBytes) return null;
+    const sources = await Promise.all(selected.map(async shard => {
       const index = await wireIndex(shard.id);
+      if (incompleteShards.has(shard.id)) throw Error('Incomplete catalog shard: ' + shard.id);
       const lines = new Set();
       for (const term of terms) {
         for (const row of index.byValue.get(term) ?? []) {
           budget.tick('facts.source');
-          if (row.type === type) lines.add(row.line);
+          if (row.type === type && (!field || row.f[field]?.some(value => String(value).toLowerCase() === term))) {
+            lines.add(row.line);
+          }
         }
       }
       return [...lines].join('\n');

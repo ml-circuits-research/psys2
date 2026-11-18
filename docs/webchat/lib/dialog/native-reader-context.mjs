@@ -1,7 +1,7 @@
 // Actual native observations and an authored projection provide reader context.
-import {str} from '../vendor/sopworld/sopworld.mjs?v=9d6ddce277';
-import {copyHostData} from '../../worlds/native-tool-host.mjs?v=c0eac86cc6';
-import {contextClass,readerContextPolicy} from './reader-context-policy.mjs?v=a7d8379c64';
+import {str} from '../vendor/sopworld/sopworld.mjs?v=3a48344175';
+import {copyHostData} from '../../worlds/native-tool-host.mjs?v=66339be62d';
+import {contextClass,readerContextPolicy} from './reader-context-policy.mjs?v=7c5b3dc36d';
 export const REPLAY_CONTEXT_PROFILE='psys2.native-reader-context/1';
 
 /** Caller supplies actual native observation, actual selected area and sent history. */

@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-import { readNativeToolInterface } from '../native-tool-interface.mjs?v=45d7698f44';
+import { readNativeToolInterface } from '../native-tool-interface.mjs?v=70dc2d3ab9';
 import NATIVE_INTERFACE from './native-interface-source.mjs?v=0111c52683';
-import {createNativeToolHost,copyHostData,nativeToken} from '../native-tool-host.mjs?v=c0eac86cc6';
-import {createDoc,writeText,commit,sync,undoStep,redoStep,addBlock} from './document.mjs?v=a7898597e0';
-import {documentEditingHandlers,changeDocumentBlock,documentTextId} from './native-editing.mjs?v=af29e0d24d';
-import {canonicalDocumentState,documentStateWorld,toNativeDocumentState,DOCUMENT_STATE_SCHEMA} from './canonical-state.mjs?v=0534607cbd';
-import {blockText,containers} from './model.mjs?v=88ccf4c000';
+import {createNativeToolHost,copyHostData,nativeToken} from '../native-tool-host.mjs?v=66339be62d';
+import {createDoc,writeText,commit,sync,undoStep,redoStep,addBlock} from './document.mjs?v=00ac7cec53';
+import {documentEditingHandlers,changeDocumentBlock,documentTextId} from './native-editing.mjs?v=474c41ed4e';
+import {canonicalDocumentState,documentStateWorld,toNativeDocumentState,DOCUMENT_STATE_SCHEMA} from './canonical-state.mjs?v=868c934098';
+import {blockText,containers} from './model.mjs?v=58e174e556';
 const toolInterface = readNativeToolInterface(NATIVE_INTERFACE).realize();
 export const DOCUMENT_TOOL_BINDINGS = toolInterface.bindings;
 export function initialDocumentState(){const s={title:'',titleMarks:[],titleAlign:'left',titleSize:0,blocks:[],cursor:-1,selection:null,focus:null,inputMode:null,history:[],future:[],nextId:1,dictBlock:null,kind:null,about:null,textId:null};sync(s);return s;}

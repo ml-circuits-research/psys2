@@ -20,6 +20,38 @@
    "depends": [
     "k.named"
    ],
+   "indexedFields": {
+    "k.actions.act": [
+     "name"
+    ],
+    "k.actions.action": [
+     "name"
+    ],
+    "k.actions.family": [
+     "name"
+    ],
+    "k.actions.marking": [
+     "act",
+     "marker",
+     "verb"
+    ],
+    "k.actions.member": [
+     "act",
+     "family"
+    ],
+    "k.actions.role": [
+     "act",
+     "name"
+    ],
+    "k.actions.similar": [
+     "action",
+     "name"
+    ],
+    "k.actions.verb": [
+     "act",
+     "text"
+    ]
+   },
    "shards": [
     {
      "id": "k.actions/shards/actions-body-social-nature",
@@ -1476,6 +1508,14 @@
    "depends": [
     "k.named"
    ],
+   "indexedFields": {
+    "k.animals.animal": [
+     "name"
+    ],
+    "k.animals.class": [
+     "name"
+    ]
+   },
    "shards": [
     {
      "id": "k.animals/shards/birds",
@@ -2044,6 +2084,65 @@
    "depends": [
     "k.named"
    ],
+   "indexedFields": {
+    "k.attributes.aspect": [
+     "name"
+    ],
+    "k.attributes.attribute": [
+     "name"
+    ],
+    "k.attributes.drawn": [
+     "name"
+    ],
+    "k.attributes.family": [
+     "name"
+    ],
+    "k.attributes.found": [
+     "attribute",
+     "key",
+     "type"
+    ],
+    "k.attributes.kind": [
+     "name"
+    ],
+    "k.attributes.narration": [
+     "key",
+     "type"
+    ],
+    "k.attributes.number": [
+     "name",
+     "sense"
+    ],
+    "k.attributes.range": [
+     "basis",
+     "key",
+     "kind",
+     "type"
+    ],
+    "k.attributes.same": [
+     "name",
+     "sense"
+    ],
+    "k.attributes.shows": [
+     "family",
+     "key",
+     "type"
+    ],
+    "k.attributes.switch": [
+     "name"
+    ],
+    "k.attributes.thing": [
+     "name"
+    ],
+    "k.attributes.typical": [
+     "attribute",
+     "of"
+    ],
+    "k.attributes.usage": [
+     "name",
+     "sense"
+    ]
+   },
    "shards": [
     {
      "id": "k.attributes/shards/aspects",
@@ -12561,6 +12660,14 @@
    "depends": [
     "k.named"
    ],
+   "indexedFields": {
+    "k.body.part": [
+     "name"
+    ],
+    "k.body.sense": [
+     "name"
+    ]
+   },
    "shards": [
     {
      "id": "k.body/shards/core",
@@ -12705,6 +12812,24 @@
     "k.charts.source"
    ],
    "depends": [],
+   "indexedFields": {
+    "k.charts.encoding": [
+     "name"
+    ],
+    "k.charts.kind": [
+     "name"
+    ],
+    "k.charts.relationship": [
+     "name"
+    ],
+    "k.charts.rule": [
+     "kind",
+     "relationship"
+    ],
+    "k.charts.source": [
+     "name"
+    ]
+   },
    "shards": [
     {
      "id": "k.charts/shards/charts",
@@ -12791,6 +12916,18 @@
    "depends": [
     "k.named"
    ],
+   "indexedFields": {
+    "k.colours.basic": [
+     "name"
+    ],
+    "k.colours.colour": [
+     "name"
+    ],
+    "k.colours.mix": [
+     "a",
+     "b"
+    ]
+   },
    "shards": [
     {
      "id": "k.colours/shards/colours-common",
@@ -13122,6 +13259,14 @@
     "k.food",
     "k.kinds"
    ],
+   "indexedFields": {
+    "k.commonsense.lives": [
+     "in"
+    ],
+    "k.commonsense.thing": [
+     "name"
+    ]
+   },
    "shards": [
     {
      "id": "k.commonsense/shards/core",
@@ -13634,6 +13779,7 @@
     "k.layouts",
     "k.scenes"
    ],
+   "indexedFields": {},
    "shards": [
     {
      "id": "k.composition2d/shards/words",
@@ -13669,6 +13815,23 @@
     "k.diagrams.topic"
    ],
    "depends": [],
+   "indexedFields": {
+    "k.diagrams.fill": [
+     "key",
+     "kind",
+     "type"
+    ],
+    "k.diagrams.kind": [
+     "name"
+    ],
+    "k.diagrams.shape": [
+     "kind",
+     "role"
+    ],
+    "k.diagrams.source": [
+     "name"
+    ]
+   },
    "shards": [
     {
      "id": "k.diagrams/shards/diagrams",
@@ -13905,6 +14068,7 @@
     "k.drawing.point"
    ],
    "depends": [],
+   "indexedFields": {},
    "shards": [
     {
      "id": "k.drawing/shards/words",
@@ -13939,6 +14103,21 @@
     "k.expect.scale"
    ],
    "depends": [],
+   "indexedFields": {
+    "k.expect.amount": [
+     "name"
+    ],
+    "k.expect.make": [
+     "thing"
+    ],
+    "k.expect.part": [
+     "of",
+     "part"
+    ],
+    "k.expect.scale": [
+     "step"
+    ]
+   },
    "shards": [
     {
      "id": "k.expect/shards/diagrams",
@@ -14773,6 +14952,33 @@
     "k.drawing",
     "k.named"
    ],
+   "indexedFields": {
+    "k.faces.canon": [
+     "style"
+    ],
+    "k.faces.colour": [
+     "name",
+     "of"
+    ],
+    "k.faces.expression": [
+     "name"
+    ],
+    "k.faces.part": [
+     "of",
+     "slot"
+    ],
+    "k.faces.preset": [
+     "name"
+    ],
+    "k.faces.slot": [
+     "name",
+     "style"
+    ],
+    "k.faces.variant": [
+     "name",
+     "slot"
+    ]
+   },
    "shards": [
     {
      "id": "k.faces/shards/big-smile-accessories",
@@ -16796,6 +17002,11 @@
     "k.feelings.feeling"
    ],
    "depends": [],
+   "indexedFields": {
+    "k.feelings.feeling": [
+     "name"
+    ]
+   },
    "shards": [
     {
      "id": "k.feelings/shards/feelings",
@@ -16873,6 +17084,11 @@
     "k.named",
     "k.values"
    ],
+   "indexedFields": {
+    "k.food.food": [
+     "name"
+    ]
+   },
    "shards": [
     {
      "id": "k.food/shards/animal-foods",
@@ -17216,6 +17432,29 @@
     "k.genres.step"
    ],
    "depends": [],
+   "indexedFields": {
+    "k.genres.genre": [
+     "name"
+    ],
+    "k.genres.move": [
+     "name"
+    ],
+    "k.genres.part": [
+     "genre",
+     "name"
+    ],
+    "k.genres.register": [
+     "name"
+    ],
+    "k.genres.source": [
+     "name"
+    ],
+    "k.genres.step": [
+     "genre",
+     "move",
+     "part"
+    ]
+   },
    "shards": [
     {
      "id": "k.genres/shards/email",
@@ -17648,6 +17887,48 @@
    "depends": [
     "k.named"
    ],
+   "indexedFields": {
+    "k.geo.city": [
+     "country",
+     "name"
+    ],
+    "k.geo.continent": [
+     "name"
+    ],
+    "k.geo.country": [
+     "name"
+    ],
+    "k.geo.desert": [
+     "name"
+    ],
+    "k.geo.group": [
+     "name"
+    ],
+    "k.geo.island": [
+     "name"
+    ],
+    "k.geo.lake": [
+     "name"
+    ],
+    "k.geo.mountain": [
+     "continent",
+     "name"
+    ],
+    "k.geo.range": [
+     "continent",
+     "name"
+    ],
+    "k.geo.region": [
+     "name"
+    ],
+    "k.geo.river": [
+     "continent",
+     "name"
+    ],
+    "k.geo.sea": [
+     "name"
+    ]
+   },
    "shards": [
     {
      "id": "k.geo/shards/africa-borders",
@@ -24631,6 +24912,20 @@
     "k.interest.source"
    ],
    "depends": [],
+   "indexedFields": {
+    "k.interest.appraisal": [
+     "name"
+    ],
+    "k.interest.feature": [
+     "name"
+    ],
+    "k.interest.measure": [
+     "name"
+    ],
+    "k.interest.source": [
+     "name"
+    ]
+   },
    "shards": [
     {
      "id": "k.interest/shards/features",
@@ -24762,6 +25057,44 @@
     "k.kinds.structure"
    ],
    "depends": [],
+   "indexedFields": {
+    "k.kinds.argument": [
+     "name"
+    ],
+    "k.kinds.cast": [
+     "filler",
+     "role",
+     "structure",
+     "world"
+    ],
+    "k.kinds.constraint": [
+     "name",
+     "structure"
+    ],
+    "k.kinds.form": [
+     "structure",
+     "world"
+    ],
+    "k.kinds.parent": [
+     "is_a",
+     "name",
+     "sense"
+    ],
+    "k.kinds.relation": [
+     "key",
+     "type"
+    ],
+    "k.kinds.role": [
+     "name",
+     "structure"
+    ],
+    "k.kinds.sensitivity": [
+     "name"
+    ],
+    "k.kinds.structure": [
+     "name"
+    ]
+   },
    "shards": [
     {
      "id": "k.kinds/shards/arguments",
@@ -39914,6 +40247,36 @@
    "depends": [
     "k.named"
    ],
+   "indexedFields": {
+    "k.layouts.anchor": [
+     "name",
+     "of"
+    ],
+    "k.layouts.joins": [
+     "a",
+     "b",
+     "rel"
+    ],
+    "k.layouts.layout": [
+     "name"
+    ],
+    "k.layouts.outline": [
+     "name"
+    ],
+    "k.layouts.outline_point": [
+     "outline"
+    ],
+    "k.layouts.relation": [
+     "a",
+     "b",
+     "layout",
+     "rel"
+    ],
+    "k.layouts.slot": [
+     "layout",
+     "name"
+    ]
+   },
    "shards": [
     {
      "id": "k.layouts/shards/anchors-points",
@@ -40658,6 +41021,43 @@
     "k.motion.when"
    ],
    "depends": [],
+   "indexedFields": {
+    "k.motion.event": [
+     "name"
+    ],
+    "k.motion.field": [
+     "event",
+     "name"
+    ],
+    "k.motion.layer": [
+     "name"
+    ],
+    "k.motion.letters": [
+     "name",
+     "splitter"
+    ],
+    "k.motion.rule": [
+     "name"
+    ],
+    "k.motion.set": [
+     "key",
+     "rule"
+    ],
+    "k.motion.splitter": [
+     "name"
+    ],
+    "k.motion.step": [
+     "rule"
+    ],
+    "k.motion.viseme": [
+     "class",
+     "style"
+    ],
+    "k.motion.when": [
+     "key",
+     "rule"
+    ]
+   },
    "shards": [
     {
      "id": "k.motion/shards/mouth",
@@ -40768,6 +41168,23 @@
     "k.music.scale"
    ],
    "depends": [],
+   "indexedFields": {
+    "k.music.chord": [
+     "name"
+    ],
+    "k.music.interval": [
+     "name"
+    ],
+    "k.music.key": [
+     "name"
+    ],
+    "k.music.note": [
+     "name"
+    ],
+    "k.music.scale": [
+     "name"
+    ]
+   },
    "shards": [
     {
      "id": "k.music/shards/chords",
@@ -41218,6 +41635,7 @@
     "k.named.labelled"
    ],
    "depends": [],
+   "indexedFields": {},
    "shards": [
     {
      "id": "k.named/shards/words",
@@ -41258,6 +41676,17 @@
     "k.drawing",
     "k.named"
    ],
+   "indexedFields": {
+    "k.objects.object": [
+     "name"
+    ],
+    "k.objects.part": [
+     "of"
+    ],
+    "k.objects.stand_in": [
+     "name"
+    ]
+   },
    "shards": [
     {
      "id": "k.objects/shards/animals-2",
@@ -52872,6 +53301,22 @@
     "k.parts.whole"
    ],
    "depends": [],
+   "indexedFields": {
+    "k.parts.called": [
+     "of",
+     "part"
+    ],
+    "k.parts.inherited": [
+     "from",
+     "name"
+    ],
+    "k.parts.usual": [
+     "name"
+    ],
+    "k.parts.whole": [
+     "name"
+    ]
+   },
    "shards": [
     {
      "id": "k.parts/shards/a",
@@ -54580,6 +55025,17 @@
    "depends": [
     "k.kinds"
    ],
+   "indexedFields": {
+    "k.people.given_name": [
+     "name"
+    ],
+    "k.people.kind": [
+     "name"
+    ],
+    "k.people.role": [
+     "name"
+    ]
+   },
    "shards": [
     {
      "id": "k.people/shards/derived",
@@ -58187,6 +58643,41 @@
     "k.procedures.step"
    ],
    "depends": [],
+   "indexedFields": {
+    "k.procedures.arg": [
+     "attribute",
+     "method",
+     "role"
+    ],
+    "k.procedures.binding": [
+     "method",
+     "name"
+    ],
+    "k.procedures.condition": [
+     "method"
+    ],
+    "k.procedures.goal": [
+     "method",
+     "role"
+    ],
+    "k.procedures.howto": [
+     "name"
+    ],
+    "k.procedures.howto_step": [
+     "howto"
+    ],
+    "k.procedures.match": [
+     "binding",
+     "key",
+     "method"
+    ],
+    "k.procedures.method": [
+     "name"
+    ],
+    "k.procedures.step": [
+     "method"
+    ]
+   },
    "shards": [
     {
      "id": "k.procedures/shards/compose",
@@ -58482,6 +58973,18 @@
    "depends": [
     "k.named"
    ],
+   "indexedFields": {
+    "k.scenes.has": [
+     "scene",
+     "thing"
+    ],
+    "k.scenes.scene": [
+     "name"
+    ],
+    "k.scenes.thing": [
+     "name"
+    ]
+   },
    "shards": [
     {
      "id": "k.scenes/shards/psys2",
@@ -62127,6 +62630,11 @@
    "depends": [
     "k.kinds"
    ],
+   "indexedFields": {
+    "k.shapes.shape": [
+     "name"
+    ]
+   },
    "shards": [
     {
      "id": "k.shapes/shards/derived",
@@ -62259,6 +62767,14 @@
     "k.named",
     "k.values"
    ],
+   "indexedFields": {
+    "k.space.body": [
+     "name"
+    ],
+    "k.space.kind": [
+     "name"
+    ]
+   },
    "shards": [
     {
      "id": "k.space/shards/kinds",
@@ -62378,6 +62894,7 @@
     "k.spatial2d.relation"
    ],
    "depends": [],
+   "indexedFields": {},
    "shards": [
     {
      "id": "k.spatial2d/shards/policies",
@@ -62425,6 +62942,24 @@
     "k.story.source"
    ],
    "depends": [],
+   "indexedFields": {
+    "k.story.constraint": [
+     "name"
+    ],
+    "k.story.element": [
+     "name"
+    ],
+    "k.story.goal": [
+     "name"
+    ],
+    "k.story.obstacle": [
+     "blocks",
+     "thing"
+    ],
+    "k.story.source": [
+     "name"
+    ]
+   },
    "shards": [
     {
      "id": "k.story/shards/goals-obstacles",
@@ -62564,6 +63099,57 @@
     "k.time.zone"
    ],
    "depends": [],
+   "indexedFields": {
+    "k.time.before": [
+     "cycle",
+     "earlier",
+     "later"
+    ],
+    "k.time.clock_phrase": [
+     "name"
+    ],
+    "k.time.cycle": [
+     "name"
+    ],
+    "k.time.duration": [
+     "name",
+     "unit"
+    ],
+    "k.time.during": [
+     "hemisphere",
+     "span",
+     "time"
+    ],
+    "k.time.hour": [
+     "name"
+    ],
+    "k.time.month": [
+     "name"
+    ],
+    "k.time.part_of_day": [
+     "name"
+    ],
+    "k.time.season": [
+     "name"
+    ],
+    "k.time.season_in": [
+     "hemisphere",
+     "season"
+    ],
+    "k.time.span": [
+     "name"
+    ],
+    "k.time.stage": [
+     "cycle",
+     "name"
+    ],
+    "k.time.weekday": [
+     "name"
+    ],
+    "k.time.zone": [
+     "name"
+    ]
+   },
    "shards": [
     {
      "id": "k.time/shards/calendar",
@@ -63273,6 +63859,22 @@
     "k.units.unit"
    ],
    "depends": [],
+   "indexedFields": {
+    "k.units.currency": [
+     "code"
+    ],
+    "k.units.measure": [
+     "key",
+     "type",
+     "world"
+    ],
+    "k.units.quantity": [
+     "name"
+    ],
+    "k.units.unit": [
+     "name"
+    ]
+   },
    "shards": [
     {
      "id": "k.units/shards/core",
@@ -63909,6 +64511,37 @@
    "depends": [
     "k.named"
    ],
+   "indexedFields": {
+    "k.values.comparative": [
+     "scale",
+     "text"
+    ],
+    "k.values.direction": [
+     "name"
+    ],
+    "k.values.fill": [
+     "name"
+    ],
+    "k.values.position": [
+     "name"
+    ],
+    "k.values.reply": [
+     "name"
+    ],
+    "k.values.scale": [
+     "name"
+    ],
+    "k.values.set_word": [
+     "name"
+    ],
+    "k.values.shade": [
+     "name"
+    ],
+    "k.values.step": [
+     "name",
+     "scale"
+    ]
+   },
    "shards": [
     {
      "id": "k.values/shards/directions",
@@ -64209,6 +64842,14 @@
    "depends": [
     "k.named"
    ],
+   "indexedFields": {
+    "k.wearables.place": [
+     "name"
+    ],
+    "k.wearables.wearable": [
+     "name"
+    ]
+   },
    "shards": [
     {
      "id": "k.wearables/shards/places",
@@ -64387,6 +65028,15 @@
     "k.words.sense"
    ],
    "depends": [],
+   "indexedFields": {
+    "k.words.frequency": [
+     "word"
+    ],
+    "k.words.sense": [
+     "pos",
+     "word"
+    ]
+   },
    "shards": [
     {
      "id": "k.words/shards/a",
@@ -92711,6 +93361,95 @@
     "w.lang.en.word"
    ],
    "depends": [],
+   "indexedFields": {
+    "w.lang.en.alternation_case": [
+     "text"
+    ],
+    "w.lang.en.anaphor": [
+     "text"
+    ],
+    "w.lang.en.arrangement": [
+     "text"
+    ],
+    "w.lang.en.aux": [
+     "text"
+    ],
+    "w.lang.en.calc": [
+     "text"
+    ],
+    "w.lang.en.choice": [
+     "text"
+    ],
+    "w.lang.en.contraction": [
+     "text"
+    ],
+    "w.lang.en.contraction.ending": [
+     "ending"
+    ],
+    "w.lang.en.copula": [
+     "text"
+    ],
+    "w.lang.en.correction": [
+     "text"
+    ],
+    "w.lang.en.det": [
+     "text"
+    ],
+    "w.lang.en.ellipsis.lead": [
+     "text"
+    ],
+    "w.lang.en.ellipsis.repeat": [
+     "text"
+    ],
+    "w.lang.en.ellipsis.starter": [
+     "text"
+    ],
+    "w.lang.en.ellipsis.trail": [
+     "text"
+    ],
+    "w.lang.en.fn": [
+     "text"
+    ],
+    "w.lang.en.frame_lead": [
+     "text"
+    ],
+    "w.lang.en.irregular": [
+     "singular"
+    ],
+    "w.lang.en.joiner.keep": [
+     "text"
+    ],
+    "w.lang.en.number": [
+     "text"
+    ],
+    "w.lang.en.numeral": [
+     "text"
+    ],
+    "w.lang.en.ordinal": [
+     "text"
+    ],
+    "w.lang.en.other": [
+     "text"
+    ],
+    "w.lang.en.prep": [
+     "text"
+    ],
+    "w.lang.en.prep.time": [
+     "text"
+    ],
+    "w.lang.en.pron": [
+     "text"
+    ],
+    "w.lang.en.relpron": [
+     "text"
+    ],
+    "w.lang.en.wh": [
+     "text"
+    ],
+    "w.lang.en.word": [
+     "text"
+    ]
+   },
    "shards": [
     {
      "id": "w.lang.en/shards/alternations",
@@ -94803,6 +95542,7 @@
     "w.lang.ro.vowel"
    ],
    "depends": [],
+   "indexedFields": {},
    "shards": [
     {
      "id": "w.lang.ro/shards/closed",
@@ -95347,6 +96087,7 @@
     "w.reader.en.step"
    ],
    "depends": [],
+   "indexedFields": {},
    "shards": [
     {
      "id": "w.reader.en/shards/property-change",
@@ -95380,6 +96121,7 @@
    "depends": [
     "w.reader.en"
    ],
+   "indexedFields": {},
    "shards": [
     {
      "id": "w.reader.en.frames/shards/licences",
@@ -95419,6 +96161,7 @@
    "depends": [
     "w.reader.en.frames"
    ],
+   "indexedFields": {},
    "shards": [
     {
      "id": "w.reader.en.phrases/shards/phrases",
@@ -95452,6 +96195,7 @@
     "w.reader.en.requests.relation"
    ],
    "depends": [],
+   "indexedFields": {},
    "shards": [
     {
      "id": "w.reader.en.requests/shards/requests",

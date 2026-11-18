@@ -1,5 +1,5 @@
 // The scene adapter passes observed parameter values to the authored projection profile.
-import { World, quote } from '../vendor/sopworld/sopworld.mjs?v=9d6ddce277';
+import { World, quote } from '../vendor/sopworld/sopworld.mjs?v=3a48344175';
 import PROJECTION from '../../worlds/app.project/scene-default-projection-source.mjs?v=5db840f091';
 
 export const sceneProjectionSource = PROJECTION;

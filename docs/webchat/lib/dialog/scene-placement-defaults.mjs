@@ -1,7 +1,7 @@
 // The compiler receives exact catalog regions and current renderer evidence.
-import { parse, quote } from '../vendor/sopworld/sopworld.mjs?v=9d6ddce277';
-import { nativeKindCandidates } from './native-binding-candidates.mjs?v=aa6673454c';
-import { readCompositionRegions, projectionLoaded, sceneProjectionSource } from './composition-knowledge.mjs?v=9f1db6c12f';
+import { parse, quote } from '../vendor/sopworld/sopworld.mjs?v=3a48344175';
+import { nativeKindCandidates } from './native-binding-candidates.mjs?v=f6d6f43960';
+import { readCompositionRegions, projectionLoaded, sceneProjectionSource } from './composition-knowledge.mjs?v=6b420e733f';
 import POLICY from '../../worlds/app.project/scene-default-policy-source.mjs?v=06eaeac5e8';
 import SCHEMA from '../../worlds/app.project/scene-default-schema-source.mjs?v=0a4d397328';
 
