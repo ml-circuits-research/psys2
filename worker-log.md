@@ -190,3 +190,6 @@ Checks: Webchat 92cea1baf5 and npm test (628 pass, 3 skip). Seven property formu
 The isolated Webchat build f5481215af loaded the new composition schema and word shard from its own origin in Chromium. The frozen reader still created a house. The catalog source check passed and npm test passed 629 with 3 skips.
 
 2026-11-18 — Integrated scoped requests and composition knowledge in Webchat build 769b440387. Chromium verified sun placement, lake → boat and Undo. The integrated application gate passed 635 with three skips.
+
+2026-11-18 — Public browser session.tool takes a SOP instruction or history query. Editor widgets format their gesture before invoking that entry. A regression rejects JS command objects before worker dispatch and verifies exact SOP transmission.
+636 tests passed, 3 skipped. Chromium executed a direct SOP call before reader readiness and verified menu → chat → menu retained all three objects in Drawing and Diagram.

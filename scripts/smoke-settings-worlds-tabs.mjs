@@ -13,9 +13,9 @@ try{
  await b.evaluate(`document.querySelector('#p2-st-about').click();true`);await wait(`document.querySelector('#p2-st-about').getAttribute('aria-selected')==='true'`);
  await b.screenshot('../.session-control/settings-tab-preview.png');
  await b.evaluate(`document.querySelector('#p2-tab-worlds').click();true`);await wait(`document.querySelector('[data-world-node="interpreter:art.draw"]')`);
- const result=await b.evaluate(`(async()=>{const r=await window.psys2.session.tool('drawing.ids.show',{mode:'always'},{view:'draw'});window.psys2.applyState(r.state);return {ok:r.ok,view:document.querySelector('#p2-tab-worlds').getAttribute('aria-selected'),activeEditor:window.psys2.session.state('ui.shell').activeTab};})()`);
+ const result=await b.evaluate(`(async()=>{const r=await window.psys2.session.tool('@show drawing.ids.show mode="always"',{view:'draw'});window.psys2.applyState(r.state);return {ok:r.ok,view:document.querySelector('#p2-tab-worlds').getAttribute('aria-selected'),activeEditor:window.psys2.session.state('ui.shell').activeTab};})()`);
  assert.equal(result.ok,true);assert.equal(result.view,'true');assert.equal(result.activeEditor,'draw');
- await wait(`document.querySelector('[data-world-node="interpreter:art.draw"]').classList.contains('active')`);
+ assert.equal(await b.evaluate(`document.querySelector('[data-world-node="interpreter:art.draw"]').classList.contains('active')`),false);
  assert.equal(await b.evaluate(`document.documentElement.scrollWidth<=innerWidth`),true);assert.deepEqual(b.logs.console.filter(e=>e.type==='exception'),[]);
- console.log(JSON.stringify({complete:true,tabs:tabs.map(t=>t.label),icons:true,separator:true,settingsInline:true,utilityTabsKeepEditorContext:true,nativeActivationVisibleWhileWorldsOpen:true}));
+ console.log(JSON.stringify({complete:true,tabs:tabs.map(t=>t.label),icons:true,separator:true,settingsInline:true,utilityTabsKeepEditorContext:true,activityAwaitsManualPlayback:true}));
 }finally{await b.close();}

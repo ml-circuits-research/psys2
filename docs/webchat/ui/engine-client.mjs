@@ -218,7 +218,6 @@ export function createEngineClient({ base, versions = {}, getSettings, getLangua
   });
   function applyStateInfo(r) { if (r?.state) cache.state = r.state; if (r?.meta) cache.meta = r.meta; }
 
-  const toolDeclarations = new Map();
   const session = {
     /** One turn. Resolves with the reply; rejects TurnAborted (stopped / timeout) or an error. Known-bad inputs are answered without running them. */
     async send(text, opts = {}) {
@@ -241,15 +240,11 @@ export function createEngineClient({ base, versions = {}, getSettings, getLangua
     },
     acceptState(result) {applyStateInfo(result);},
     async tools({view=getTab()}={}) {
-      const result=await guarded('nativeTools','nativeTools',{view},{hardMs:30000,text:'Tools',key:null,tab:view});
-      toolDeclarations.set(view,result.operations);
-      return result;
+      return guarded('nativeTools','nativeTools',{view},{hardMs:30000,text:'Tools',key:null,tab:view});
     },
-    async tool(operation,args={},options={}) {
-      const view=options.view??getTab();
-      const {editorGestureSop}=await import(moduleUrl('lib/dialog/native-control-intent.mjs'));
-      const sop=await editorGestureSop(operation,args,async()=>toolDeclarations.get(view)??(await session.tools({view})).operations);
-      const r=await guarded('nativeTool','nativeTool',{view,sop},{hardMs:15000,text:operation,key:null,tab:view});
+    async tool(sop,{view=getTab()}={}) {
+      if (typeof sop !== 'string' || !sop.trimStart().startsWith('@')) throw new TypeError('Expected a SOP Lang tool instruction or history query.');
+      const r=await guarded('nativeTool','nativeTool',{view,sop},{hardMs:15000,text:sop,key:null,tab:view});
       applyStateInfo(r);return r;
     },
     async dryRead(text, opts = {}) {

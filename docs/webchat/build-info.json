@@ -1,5 +1,5 @@
 {
-  "version": "769b440387",
+  "version": "234104f7c5",
   "worlds": [
     "core",
     "ui.shell",
@@ -372,11 +372,11 @@
     "worlds/words/ed.json": "6b969840b04e8c56",
     "worlds/words.bloom.json": "0710f3899a6043f6"
   },
-  "builtAt": "2026-11-18T19:05:59.679Z",
-  "commit": "680db20e-dirty",
+  "builtAt": "2026-11-18T19:15:06.654Z",
+  "commit": "b3190f72-dirty",
   "catalog": "402803b964f56ece09a359a0a9a5041b1b370968",
   "assets": {
-    "app.mjs": "e25c05c2cd",
+    "app.mjs": "03fb061561",
     "coverage-grid.json": "dc56813858",
     "favicon.svg": "89f8b9f010",
     "lib/astra/focus.mjs": "10d045664f",
@@ -744,7 +744,7 @@
     "ui/debug.mjs": "496e398ab3",
     "ui/dispatcher-host.mjs": "b7c79577fd",
     "ui/editor.mjs": "4e4dbd381f",
-    "ui/engine-client.mjs": "07c76cb835",
+    "ui/engine-client.mjs": "8304270885",
     "ui/engine-worker.mjs": "d505e409b1",
     "ui/failures.mjs": "c3bee734c9",
     "ui/feedback.mjs": "ddd1432c05",

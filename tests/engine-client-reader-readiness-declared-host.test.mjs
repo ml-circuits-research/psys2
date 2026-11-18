@@ -15,3 +15,25 @@ test('completed replies retain only their exact worker request activity, indepen
  const client=createEngineClient({base:'https://example.test/app/',getSettings:()=>({}),spawn:()=>worker});
  try{await client.boot({});const reply=await client.session.send('actual request');assert.deepEqual(reply.trace.worldActivity,first);assert.equal(reply.trace.activityRequestId,2);assert.equal(reply.trace.reading.wires,'actual request');worker.emit('world-activity',{id:42,requestId:999,phase:'end'});assert.deepEqual(reply.trace.worldActivity,first);assert.equal(client.stats.sends,1);}finally{client.destroy();}
 });
+
+test('the public tool entry accepts an exact SOP instruction and rejects argument objects before dispatch', async () => {
+ const worker = fakeWorker();
+ const initialize = worker.postMessage.bind(worker);
+ const calls = [];
+ worker.postMessage = function (message) {
+   if (message.op !== 'nativeTool') return initialize(message);
+   calls.push(message);
+   queueMicrotask(() => this.onmessage({data:{type:'res', id:message.id, ok:true, value:{ok:true}}}));
+ };
+ const client = createEngineClient({base:'https://example.test/app/',getSettings:()=>({}),spawn:()=>worker});
+ try {
+   await client.boot({});
+   await assert.rejects(client.session.tool('drawing.object.make',{kind:'circle'}), /SOP Lang/);
+   await assert.rejects(client.session.tool({operation:'drawing.object.make'}), /SOP Lang/);
+   const sop = '@create drawing.object.make kind="circle" x=135 y=220';
+   assert.equal((await client.session.tool(sop,{view:'draw'})).ok,true);
+   assert.deepEqual(calls.map(({op,view,sop})=>({op,view,sop})),[{op:'nativeTool',view:'draw',sop}]);
+ } finally {
+   client.destroy();
+ }
+});

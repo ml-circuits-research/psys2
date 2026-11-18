@@ -736,16 +736,28 @@ export async function mountPsys2(element, options = {}) {
     },
   };
   /** What tab plugins may use: send a command through the language layer, speak, read/patch world state, load assets. */
+  const activeEditor = () => tabDefs.find(t=>t.id===view)?.world?view:(lastShellTab??tabDefs.find(t=>t.world)?.id);
+  const editorDeclarations = new Map();
+  async function editorTools(options={}) {
+    const selected = options.view ?? activeEditor();
+    const result = await session.tools({view:selected});
+    editorDeclarations.set(selected,result.operations);
+    return result;
+  }
   const hostApi = {
     persistent: options.persist !== false,
     /** RANDOM (spec 25): texts the sampler gives for the tab (mode 'few' | 'actions' | 'one'); a tab shows them in its empty state instead of a list of its own. */
     sample: (mode, extra) => sampleItems(mode, extra).then((items) => items.map((i) => i.text)),
-    tools: (options={}) => session.tools(options),
+    tools: editorTools,
     tool: async (operation,args={},options={}) => {
       if(isBusy())return {ok:false,message:'Please wait for the current action.'};
       const focusBeforeTool=document.activeElement;effectsPending++;updateBusy();
       try {
-        const r=await session.tool(operation,quantizeGeometryArguments(args),options);
+        const selected = options.view ?? activeEditor();
+        const {editorGestureSop} = await import('./lib/dialog/native-control-intent.mjs');
+        const sop = await editorGestureSop(operation,quantizeGeometryArguments(args),async () =>
+          editorDeclarations.get(selected) ?? (await editorTools({view:selected})).operations);
+        const r=await session.tool(sop,{view:selected});
         applyState(r.state);
         if (r.intentRecord) {
           await trainingPairs.record(r.intentRecord);
@@ -2151,7 +2163,7 @@ export async function mountPsys2(element, options = {}) {
     encoderChecked = true;
     // Facades of the models that live in the engine worker (the page only needs their labels, status and a way to start loading them)
     browserBackend = createBrowserBackend({ mt: tl.mtProxy });
-    engineClient = createEngineClient({ base, versions: globalThis.__psys2Mod ?? {}, getLanguage: () => language.get(), browserCall: (op, m) => (op === 'translate' ? browserBackend.translate(m.text, m.from, m.to, m.only ?? null) : browserBackend.detect(m.text)), getSettings: engineSettings, getTab: () => tabDefs.find(t=>t.id===view)?.world?view:(lastShellTab??tabDefs.find(t=>t.world)?.id), onEvent: onEngineEvent, testHooks: testHooksOn, limits: LIMITS, log: (...a) => { if (testHooksOn) console.debug('ENGINE', ...a); } });
+    engineClient = createEngineClient({ base, versions: globalThis.__psys2Mod ?? {}, getLanguage: () => language.get(), browserCall: (op, m) => (op === 'translate' ? browserBackend.translate(m.text, m.from, m.to, m.only ?? null) : browserBackend.detect(m.text)), getSettings: engineSettings, getTab: activeEditor, onEvent: onEngineEvent, testHooks: testHooksOn, limits: LIMITS, log: (...a) => { if (testHooksOn) console.debug('ENGINE', ...a); } });
     // The browser Translation API lives on the window, not in a worker: the page answers the worker's requests for it (deadline, then the rules).
     translator = { get usage() { return engineClient.usage; }, get detectUsage() { return engineClient.detection; }, resetUsage() { engineClient.resetUsage(); },
       translatorState: (f, t) => browserBackend.state(f, t), prepareTranslator: (f, t) => browserBackend.prepare(f, t), rules: null };
