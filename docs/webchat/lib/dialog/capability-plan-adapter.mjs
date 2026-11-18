@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-import { parse, quote, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=b7d50d9480';
+import { parse, quote, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=ac74fb4d82';
 import { decodeCapabilityCall } from '../vendor/sopworld/capability-call.mjs?v=ed3b773c65';
 import POLICY from '../../worlds/app.project/capability-policy.mjs?v=9f3103a196';
-import { executionPolicyWorld } from './execution-policy.mjs?v=9ad12c3289';
-import { nativeKindCandidates } from './native-binding-candidates.mjs?v=5d5aa4bc25';
-import { observedReaderContext } from './native-reader-context.mjs?v=1f97f6d3a1';
+import { executionPolicyWorld } from './execution-policy.mjs?v=3652fc9f1f';
+import { nativeKindCandidates } from './native-binding-candidates.mjs?v=5941d8843a';
+import { observedReaderContext } from './native-reader-context.mjs?v=e556586c4a';
 import { budget } from './budget.mjs?v=00bce6e369';
 
 const NS = 'std.capability.';

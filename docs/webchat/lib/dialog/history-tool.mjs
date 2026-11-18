@@ -1,9 +1,9 @@
 // The concrete session journal owns restoration. The compiler supplies one observed head.
-import {parse, quote, serialize, str} from '../vendor/sopworld/sopworld.mjs?v=b7d50d9480';
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=f4c8d09581';
-import {historyHeads,stageHistoryMove} from './history-journal.mjs?v=30f4a14542';
-import {readToolInvocation} from '../../worlds/native-tool-host.mjs?v=cb157b31d6';
-import {discardPlacementLinks,withdrawPlacementCorrection} from '../../worlds/app.project/spatial-profile.mjs?v=9c5b466409';
+import {parse, quote, serialize, str} from '../vendor/sopworld/sopworld.mjs?v=ac74fb4d82';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=21796a4665';
+import {historyHeads,stageHistoryMove} from './history-journal.mjs?v=8707a8440f';
+import {readToolInvocation} from '../../worlds/native-tool-host.mjs?v=3f7fc9e775';
+import {discardPlacementLinks,withdrawPlacementCorrection} from '../../worlds/app.project/spatial-profile.mjs?v=b07bd210a7';
 
 const areaForWorld=world=>Object.values(NATIVE_AREAS).find(area=>area.world===world);
 const directions=['undo','redo'];

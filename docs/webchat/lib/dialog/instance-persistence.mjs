@@ -1,9 +1,9 @@
 // Versioned SOP instances; native projections are admitted only after their declared view agrees.
-import{serializeInstanceState,readInstanceState,instanceStateWorld,serialize}from'../vendor/sopworld/sopworld.mjs?v=b7d50d9480';
-import{NATIVE_AREAS,createAreaHost}from'./app-reader-context.mjs?v=f4c8d09581';
-import{nativeObservationObjects,compareInstanceObjects}from'./instance-facts.mjs?v=f200506365';
+import{serializeInstanceState,readInstanceState,instanceStateWorld,serialize}from'../vendor/sopworld/sopworld.mjs?v=ac74fb4d82';
+import{NATIVE_AREAS,createAreaHost}from'./app-reader-context.mjs?v=21796a4665';
+import{nativeObservationObjects,compareInstanceObjects}from'./instance-facts.mjs?v=2eebc35a82';
 import{instanceIdFor}from'./instance-identity.mjs?v=024ef1ca83';
-import{copyHostData}from'../../worlds/native-tool-host.mjs?v=cb157b31d6';
+import{copyHostData}from'../../worlds/native-tool-host.mjs?v=3f7fc9e775';
 import{CATALOG_PIN}from'../knowledge/catalog-pin.mjs?v=d1ff29de82';
 export const NATIVE_INSTANCE_SCHEMA='psys2.native-instance/1';
 const RUNTIME_SCHEMA='psys2.native-runtime/1';

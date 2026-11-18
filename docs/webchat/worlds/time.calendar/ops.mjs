@@ -1,2 +1,2 @@
 // Native initial state only; no legacy grammar executor.
-export{initialCalendarState as initialState}from"./declared-host.mjs?v=e55d0bbeae";
+export{initialCalendarState as initialState}from"./declared-host.mjs?v=0e7cf79057";

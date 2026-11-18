@@ -171,3 +171,6 @@ Checks: npm test passed 618 with three skips. Chromium exercised seven creation/
 
 2026-11-18: Resolve competing reader heads through declared provenance and source coverage, route queries using authored interpreter applicability, and hold journal entries and stack heads in an operational SOP instance. Split the admission schema and policy.
 Checks: npm test passed 624 tests, three skips. Chromium used the frozen reader to recolour only the red house, verified the exact tool call and Undo, and restarted the worker with the same three journal entry IDs and two editor heads.
+
+2026-11-18: Authored requests and reader candidates now submit their actual SOP string to the common graph validator in SOPWorlds 0.218. Removed the duplicate JS conversion in authored requests and the synthetic one-entry batch in reader admission.
+Checks: npm test passed 624 with three skips. Chromium verified the trained two-colour selector, the compiled call, Undo, spatial placement and refusal with no effect.

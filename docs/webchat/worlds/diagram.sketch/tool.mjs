@@ -8,7 +8,7 @@
 //   a, b    the ends of an arrow (shape ids)                          ids     the ids acted on    place   a region of the canvas, or a direction (up, down)
 //   anchor  the id of a shape to go next to                           step    the session step (the host's): the calls of one step are one entry of the engine's undo
 // A refusal is { status: 'missing', code }; a call that did it is { status: 'supported', changed }.
-import { K, loadEngine, ensure, systemFor, writeBack, open, budget } from './core.mjs?v=f7536ec522';
+import { K, loadEngine, ensure, systemFor, writeBack, open, budget } from './core.mjs?v=60f25ba3d5';
 
 const done = (changed = []) => ({ status: 'supported', value: '', changed });
 const refuse = (code) => ({ status: 'missing', value: '', code });

@@ -1,14 +1,14 @@
-import { captureHistory, recordHistory, restoreHistory } from './history-journal.mjs?v=30f4a14542';
-import {projectReaderHeadAlternative} from './reader-head-alternative.mjs?v=c0c4068d81';
-import {writeReaderSource} from './reader-source.mjs?v=43cafe61fb';
-import {isAuthoredRequest,readAuthoredRequest} from './authored-request-tool.mjs?v=e0f7f15750';
+import { captureHistory, recordHistory, restoreHistory } from './history-journal.mjs?v=8707a8440f';
+import {projectReaderHeadAlternative} from './reader-head-alternative.mjs?v=862e800256';
+import {writeReaderSource} from './reader-source.mjs?v=82bbda74bc';
+import {isAuthoredRequest,readAuthoredRequest} from './authored-request-tool.mjs?v=1d242a1d6b';
 // Model-first proposal routing. Calibration authority belongs to host configuration,
 // never to a model output, evaluation annotation or grammar proposal.
-import {requestCompositionPolicy}from './request-composition-policy.mjs?v=6783cc1b81';
-import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=90df3024fa';
-import {projectContextAction} from './project-context-action.mjs?v=fba9421f24';
-import {projectCreateAction} from './project-create-action.mjs?v=55c1645319';
-import {assessReaderProposal} from './reader-admission.mjs?v=68dc6469f1';
+import {requestCompositionPolicy}from './request-composition-policy.mjs?v=cfd3a47ffa';
+import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=245e822ede';
+import {projectContextAction} from './project-context-action.mjs?v=4bf2a33de9';
+import {projectCreateAction} from './project-create-action.mjs?v=e3c5aa0908';
+import {assessReaderProposal} from './reader-admission.mjs?v=1c8a7a51a7';
 const unavailable=reason=>({candidates:[],coverage:{complete:false,executable:false,graphProposal:false},failures:[{reason}]});
 const noDeclaredAction = () => {
  const text='I could not identify an action to apply. Nothing changed.';

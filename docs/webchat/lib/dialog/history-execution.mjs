@@ -1,7 +1,7 @@
-import {parse,quote,serialize} from '../vendor/sopworld/sopworld.mjs?v=b7d50d9480';
-import {historyPolicy} from './history-policy.mjs?v=4fdf583b0a';
-import {observeHistory,createHistoryTool} from './history-tool.mjs?v=03886afb1c';
-import {invokeObservedNativeTool} from './native-tool-activity.mjs?v=23bd5b418a';
+import {parse,quote,serialize} from '../vendor/sopworld/sopworld.mjs?v=ac74fb4d82';
+import {historyPolicy} from './history-policy.mjs?v=5ddf217de5';
+import {observeHistory,createHistoryTool} from './history-tool.mjs?v=c81f87999d';
+import {invokeObservedNativeTool} from './native-tool-activity.mjs?v=08bb000923';
 
 const area={world:'app.history',stateWorld:true};
 const first=(wire,key)=>wire?.attrs[key]?.[0];

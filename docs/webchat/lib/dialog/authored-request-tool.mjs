@@ -1,5 +1,5 @@
 // An authored circuit bypasses language inference and uses the same graph validator as a reader.
-import {parse,readValue,serializeRequestGraph} from '../vendor/sopworld/sopworld.mjs?v=b7d50d9480';
+import {parse,serializeRequestGraph} from '../vendor/sopworld/sopworld.mjs?v=ac74fb4d82';
 
 export function isAuthoredRequest(text) {
   return typeof text==='string' && /^\s*@\S+\s+std\.request(?:\s|\.)/.test(text);
@@ -12,13 +12,7 @@ export function readAuthoredRequest(text) {
     const roots=wires.filter(w=>w.type==='std.request');
     if (roots.length!==1||wires.length>256) return {reason:'request-root'};
     if (wires.some(w=>w.pattern)) return {reason:'request-pattern'};
-    const nodes=wires.map(({id,type,attrs})=>({id,type,attrs:Object.fromEntries(
-      Object.entries(attrs).map(([key,values])=>[key,values.map(token=>{
-        const {kind,v}=readValue(token);
-        return {kind:kind==='atom'?'literal':kind,value:v};
-      })])
-    )}));
-    const graph=serializeRequestGraph({request:roots[0].id,nodes});
-    return graph.ok?{candidate:{request:roots[0].id,wires:graph.wires}}:{reason:graph.issues[0]?.reason??'invalid-request'};
+    const graph=serializeRequestGraph(text);
+    return graph.ok?{candidate:{request:graph.request,wires:graph.wires}}:{reason:graph.issues[0]?.reason??'invalid-request'};
   } catch {return {reason:'invalid-request'};}
 }

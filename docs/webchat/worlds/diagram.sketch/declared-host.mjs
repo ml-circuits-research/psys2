@@ -1,15 +1,15 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-import { diagramToolInterface, DIAGRAM_COMPONENTS } from './tool-interface.mjs?v=da3cd036d3';
-export { DIAGRAM_TOOL_BINDINGS, DIAGRAM_COMPONENTS } from './tool-interface.mjs?v=da3cd036d3';
-import{projectNumericGroups}from'./chart-layout.mjs?v=5cbe446b2b';
+import { diagramToolInterface, DIAGRAM_COMPONENTS } from './tool-interface.mjs?v=3982771b27';
+export { DIAGRAM_TOOL_BINDINGS, DIAGRAM_COMPONENTS } from './tool-interface.mjs?v=3982771b27';
+import{projectNumericGroups}from'./chart-layout.mjs?v=c529b27dff';
 import {centeredSpatialBox,spatialBox,unionSpatialBoxes} from '../native-spatial-observation.mjs?v=ced85b9a29';
 import {routeEdges,edgeAppearance} from './arrows.mjs?v=e2ec6e110c';
-import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs?v=cb157b31d6';
-import {canonicalDiagramState,toNativeDiagramState,diagramStateWorld,DIAGRAM_STATE_SCHEMA} from './canonical-state.mjs?v=908b0fc195';
-import {initialState,loadEngine,systemFor,writeBack,PREFIX,K} from './core.mjs?v=f7536ec522';
-import * as tool from './tool.mjs?v=76d79f31e3';
-import{groupNativeObjects,groupNativeHandlers,projectGroupCharts}from'./group-tools.mjs?v=5d12c171dc';
-import {initialChartState,chartNativeObjects,chartNativeHandlers} from '../data.charts/declared-host.mjs?v=a78d61c14e';
+import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs?v=3f7fc9e775';
+import {canonicalDiagramState,toNativeDiagramState,diagramStateWorld,DIAGRAM_STATE_SCHEMA} from './canonical-state.mjs?v=4827f64f29';
+import {initialState,loadEngine,systemFor,writeBack,PREFIX,K} from './core.mjs?v=60f25ba3d5';
+import * as tool from './tool.mjs?v=11dacab457';
+import{groupNativeObjects,groupNativeHandlers,projectGroupCharts}from'./group-tools.mjs?v=5755e0880f';
+import {initialChartState,chartNativeObjects,chartNativeHandlers} from '../data.charts/declared-host.mjs?v=296c6c8541';
 export const initialDiagramState=initialState;
 export const initialCanonicalDiagramState=()=>canonicalDiagramState(initialState());
 export const DIAGRAM_STATE_INTERFACE=Object.freeze({canonicalizeState:canonicalDiagramState,projectState:toNativeDiagramState,

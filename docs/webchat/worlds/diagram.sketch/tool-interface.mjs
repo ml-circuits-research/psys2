@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-import { readNativeToolInterface } from '../native-tool-interface.mjs?v=0ffe6c4fde';
-import { chartToolInterface } from '../data.charts/declared-host.mjs?v=a78d61c14e';
+import { readNativeToolInterface } from '../native-tool-interface.mjs?v=141110d424';
+import { chartToolInterface } from '../data.charts/declared-host.mjs?v=296c6c8541';
 import SOURCE from './native-interface-source.mjs?v=2066362255';
 
 export const diagramToolInterface = readNativeToolInterface(SOURCE, { imports: { 'data.charts': chartToolInterface } });

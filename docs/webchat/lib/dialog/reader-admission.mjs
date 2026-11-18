@@ -1,9 +1,9 @@
 // One versioned eligibility/score protocol shared by C1 measurement and C2 routing.
 // The score selects the entire complete/unique cohort; it is not confidence.
-import {prepareRequestBatch,parse,str,assessSelectiveCalibration} from '../vendor/sopworld/sopworld.mjs?v=b7d50d9480';
-import {copyHostData} from '../../worlds/native-tool-host.mjs?v=cb157b31d6';
+import {serializeRequestGraph,parse,str,assessSelectiveCalibration} from '../vendor/sopworld/sopworld.mjs?v=ac74fb4d82';
+import {copyHostData} from '../../worlds/native-tool-host.mjs?v=3f7fc9e775';
 import {MODEL_SELECTION_SCORE} from './model-selection-score.mjs?v=ac3ac10191';
-import {compileReaderAdmission} from './reader-policy.mjs?v=efcc019585';
+import {compileReaderAdmission} from './reader-policy.mjs?v=18ded1c9f7';
 export const READER_SCORE_DEFINITION=MODEL_SELECTION_SCORE;
 export const READER_RUNTIME_IDENTITY_FIELDS=Object.freeze(['appBuildSha256','readerSha256','pipelineSha256','packetAdapterSha256','graphDecoderSha256','bindingsSha256','executorSha256','backendSha256','contextSerializationSha256']);
 const hash=x=>typeof x==='string'&&/^[a-f0-9]{64}$/.test(x);
@@ -16,8 +16,8 @@ export function scoreReaderProposal(proposal,text){
   if(!Array.isArray(p.failures)||p.failures.length||p.coverage.truncated===true||(p.unresolved!==undefined&&(!Array.isArray(p.unresolved)||p.unresolved.length)))return refused('model-proposal-diagnostics');
   const candidate=p.candidates[0];
   if(typeof text!=='string'||typeof candidate?.wires!=='string'||candidate.wires.length>65536)return refused('invalid-model-graph');
-  const checked=prepareRequestBatch({entries:[{id:'proposal',request:candidate.request,wires:candidate.wires,after:[]}]});
-  if(!checked.ok)return refused('invalid-model-graph');
+  const checked=serializeRequestGraph(candidate.wires);
+  if(!checked.ok||checked.request!==candidate.request)return refused('invalid-model-graph');
   const wires=parse(candidate.wires),sources=wires.filter(w=>w.type==='std.request.source');
   if(sources.length!==1||sources[0].attrs.text?.length!==1||str(sources[0].attrs.text[0])!==text)return refused('model-source-mismatch');
   const score=p.selectionScore?.definition===READER_SCORE_DEFINITION&&Number.isFinite(p.selectionScore.value)&&p.selectionScore.value>=0&&p.selectionScore.value<=1?p.selectionScore.value:null;

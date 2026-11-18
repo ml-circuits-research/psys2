@@ -1,6 +1,6 @@
 // Read-only architecture projection of the runtime registry. No inferred execution links.
-import {parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=b7d50d9480';
-import {inspectReaderAdmissionPolicy} from './reader-policy.mjs?v=efcc019585';
+import {parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=ac74fb4d82';
+import {inspectReaderAdmissionPolicy} from './reader-policy.mjs?v=18ded1c9f7';
 import {describeWorldsNodes} from './worlds-node-metadata.mjs?v=11b6d9d2f3';
 import {CATALOG_WORLD_PURPOSES} from './catalog-world-purpose.mjs?v=2eb2f3f744';
 
