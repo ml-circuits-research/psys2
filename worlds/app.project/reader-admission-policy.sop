@@ -1,0 +1,61 @@
+# Review29. The browser uses the same decision as the C1 measurement tools.
+@reader.policy.module core.module name=app.reader version=1 exports=app.reader.profile exports=app.reader.act exports=app.reader.evidence exports=app.reader.decision
+
+@reader.profile.type core.type of=app.reader.profile closed=true
+@reader.profile.class core.slot of=app.reader.profile key=class kind=atom id=true present=true
+@reader.profile.default core.slot of=app.reader.profile key=default kind=boolean present=true
+@reader.profile.error core.slot of=app.reader.profile key=max.error.rate kind=number min=0 max=1 present=true
+@reader.profile.bootstrap core.slot of=app.reader.profile key=reversible.best.effort kind=boolean present=true
+@reader.act.type core.type of=app.reader.act closed=true
+@reader.act.name core.slot of=app.reader.act key=act kind=atom id=true present=true
+@reader.act.class core.slot of=app.reader.act key=class kind=atom present=true
+@reader.evidence.type core.type of=app.reader.evidence closed=true
+@reader.evidence.act core.slot of=app.reader.evidence key=act kind=atom present=true
+@reader.evidence.configured core.slot of=app.reader.evidence key=calibration.configured kind=boolean present=true
+@reader.evidence.admitted core.slot of=app.reader.evidence key=calibration.admitted kind=boolean present=true
+@reader.evidence.error core.slot of=app.reader.evidence key=calibration.error.limit kind=number min=0 max=1
+@reader.evidence.score core.slot of=app.reader.evidence key=score.available kind=boolean present=true
+@reader.evidence.model core.slot of=app.reader.evidence key=model.identity.present kind=boolean present=true
+@reader.evidence.uncertain core.slot of=app.reader.evidence key=uncertain kind=boolean present=true
+@reader.class.type core.type of=app.reader.classification closed=true
+@reader.class.name core.slot of=app.reader.classification key=class kind=atom present=true
+@reader.approval.type core.type of=app.reader.approval closed=true
+@reader.approval.mode core.slot of=app.reader.approval key=mode kind=atom present=true
+@reader.approval.reason core.slot of=app.reader.approval key=reason kind=atom present=true
+@reader.approval.uncertain core.slot of=app.reader.approval key=uncertain kind=boolean present=true
+@reader.decision.type core.type of=app.reader.decision closed=true
+@reader.decision.admitted core.slot of=app.reader.decision key=admitted kind=boolean present=true
+@reader.decision.mode core.slot of=app.reader.decision key=mode kind=atom present=true
+@reader.decision.reason core.slot of=app.reader.decision key=reason kind=atom present=true
+@reader.decision.uncertain core.slot of=app.reader.decision key=uncertain kind=boolean present=true
+
+@reader.ordinary app.reader.profile class=ordinary default=true max.error.rate=0.05 reversible.best.effort=true
+@reader.destructive app.reader.profile class=destructive default=false max.error.rate=0.01 reversible.best.effort=false
+@reader.remove app.reader.act act=remove class=destructive
+@reader.delete app.reader.act act=delete class=destructive
+@reader.overwrite app.reader.act act=overwrite class=destructive
+@reader.clear app.reader.act act=clear class=destructive
+
+@reader.input app.reader.evidence act=?act
+@reader.explicit app.reader.act act=?act class=?class
+@reader.override app.reader.act act=?act
+@reader.default app.reader.profile class=?class default=true
+@reader.class app.reader.classification class=?class
+@reader.classify core.rule when=$reader.input when=$reader.explicit then=$reader.class
+@reader.classify.default core.rule when=$reader.input when=$reader.default not=$reader.override then=$reader.class
+
+@reader.limit app.reader.profile class=?class max.error.rate=?limit
+@reader.bootstrap app.reader.profile class=?class reversible.best.effort=true
+@reader.calibration app.reader.evidence calibration.configured=true calibration.admitted=true calibration.error.limit=?error uncertain=?uncertain
+@reader.within core.check fn=lte args=?error args=?limit
+@reader.calibrated app.reader.approval mode=calibrated reason=approved-model-proposal uncertain=?uncertain
+@reader.permit.calibrated core.rule when=$reader.class when=$reader.limit when=$reader.calibration if=$reader.within then=$reader.calibrated
+@reader.unconfigured app.reader.evidence calibration.configured=false score.available=true model.identity.present=true
+@reader.best.effort app.reader.approval mode=uncalibrated-best-effort reason=best-effort-model-proposal uncertain=true
+@reader.permit.best.effort core.rule when=$reader.class when=$reader.bootstrap when=$reader.unconfigured then=$reader.best.effort
+
+@reader.approved app.reader.approval mode=?mode reason=?reason uncertain=?uncertain
+@reader.applied app.reader.decision admitted=true mode=?mode reason=?reason uncertain=?uncertain
+@reader.closed app.reader.decision admitted=false mode=closed reason=model-calibration-gate-closed uncertain=false
+@reader.decide.admitted core.rule when=$reader.approved then=$reader.applied
+@reader.decide.closed core.rule when=$reader.input not=$reader.approved then=$reader.closed

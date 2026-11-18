@@ -3,7 +3,7 @@
 import {prepareRequestBatch,parse,str,assessSelectiveCalibration} from '../vendor/sopworld/sopworld.mjs';
 import {copyHostData} from '../../worlds/native-tool-host.mjs';
 import {MODEL_SELECTION_SCORE} from './model-selection-score.mjs';
-import {READER_POLICY,destructiveRequest} from './reader-policy.mjs';
+import {compileReaderAdmission} from './reader-policy.mjs';
 export const READER_SCORE_DEFINITION=MODEL_SELECTION_SCORE;
 export const READER_RUNTIME_IDENTITY_FIELDS=Object.freeze(['appBuildSha256','readerSha256','pipelineSha256','packetAdapterSha256','graphDecoderSha256','bindingsSha256','executorSha256','backendSha256','contextSerializationSha256']);
 const hash=x=>typeof x==='string'&&/^[a-f0-9]{64}$/.test(x);
@@ -18,10 +18,10 @@ export function scoreReaderProposal(proposal,text){
   if(typeof text!=='string'||typeof candidate?.wires!=='string'||candidate.wires.length>65536)return refused('invalid-model-graph');
   const checked=prepareRequestBatch({entries:[{id:'proposal',request:candidate.request,wires:candidate.wires,after:[]}]});
   if(!checked.ok)return refused('invalid-model-graph');
-  const sources=parse(candidate.wires).filter(w=>w.type==='std.request.source');
+  const wires=parse(candidate.wires),sources=wires.filter(w=>w.type==='std.request.source');
   if(sources.length!==1||sources[0].attrs.text?.length!==1||str(sources[0].attrs.text[0])!==text)return refused('model-source-mismatch');
   const score=p.selectionScore?.definition===READER_SCORE_DEFINITION&&Number.isFinite(p.selectionScore.value)&&p.selectionScore.value>=0&&p.selectionScore.value<=1?p.selectionScore.value:null;
-  return {eligible:true,score:score??0,scoreAvailable:score!==null,candidate,alternatives:p.candidates,uncertain:p.candidates.length>1,destructive:destructiveRequest(candidate,parse,str),reason:'complete-unique-proposal',scoreDefinition:READER_SCORE_DEFINITION};
+  return {eligible:true,score:score??0,scoreAvailable:score!==null,candidate,alternatives:p.candidates,uncertain:p.candidates.length>1,act:wires.find(w=>w.type==='std.request').attrs.act[0],reason:'complete-unique-proposal',scoreDefinition:READER_SCORE_DEFINITION};
  }catch{return refused('invalid-model-proposal');}
 }
 /** runtimeIdentity is loader-verified host configuration, never model authority.
@@ -36,18 +36,27 @@ export function readerCalibrationScope(area){if(typeof area!=='string'||!area)th
 export function assessReaderProposal({proposal,text,provenance,admission,area}){
  const scored=scoreReaderProposal(proposal,text);
  if(!scored.eligible)return {...scored,admitted:false,assessment:null};
- const limit=scored.destructive?READER_POLICY.destructiveMaxErrorRate:READER_POLICY.maxErrorRate;
  let assessment=null;
  try{
   if(!admission||typeof area!=='string'||!area||typeof admission.reference?.owner!=='string'||typeof admission.reference?.revision!=='string')throw Error('missing-calibration');
   const identity=readerCalibrationIdentity(provenance,admission.runtimeIdentity);
   assessment=assessSelectiveCalibration(admission.world,admission.reference,{identity,scope:readerCalibrationScope(area),score:scored.score,eligible:scored.eligible});
-  const admitted=assessment.admitted===true&&assessment.policy?.maxErrorRate<=limit;
-  if(admitted)return {...scored,admitted:true,assessment,uncertain:scored.uncertain,mode:'calibrated',reason:'approved-model-proposal'};
  }catch(error){assessment={admitted:false,reason:String(error?.message??'invalid-calibration')};}
- // The owner explicitly accepts reversible best-effort actions before a cohort is calibrated.
- // This is not an empirical error-rate claim. Destructive actions retain their stricter admission.
- const bestEffort=READER_POLICY.uncalibratedAction==='reversible-best-effort'&&!admission&&!scored.destructive&&scored.scoreAvailable&&hash(provenance?.modelSha256);
- return {...scored,admitted:bestEffort,assessment,uncertain:bestEffort,mode:bestEffort?'uncalibrated-best-effort':'closed',
-  reason:bestEffort?'best-effort-model-proposal':'model-calibration-gate-closed'};
+ const evidence=[
+  '@proposal app.reader.evidence act='+scored.act,
+  'calibration.configured='+Boolean(admission),
+  'calibration.admitted='+(assessment?.admitted===true),
+  'score.available='+scored.scoreAvailable,
+  'model.identity.present='+hash(provenance?.modelSha256),
+  'uncertain='+scored.uncertain,
+ ];
+ if(Number.isFinite(assessment?.policy?.maxErrorRate))evidence.push('calibration.error.limit='+assessment.policy.maxErrorRate);
+ try{
+  const decisionSop=compileReaderAdmission(evidence.join(' '));
+  const [{attrs}]=parse(decisionSop);
+  return {...scored,assessment,decisionSop,admitted:attrs.admitted[0]==='true',uncertain:attrs.uncertain[0]==='true',
+   mode:str(attrs.mode[0]),reason:str(attrs.reason[0])};
+ }catch{
+  return {...scored,assessment,admitted:false,uncertain:false,mode:'closed',reason:'model-admission-policy-unavailable'};
+ }
 }

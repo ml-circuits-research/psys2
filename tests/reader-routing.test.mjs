@@ -1,7 +1,10 @@
 import test from 'node:test';import assert from 'node:assert/strict';
 import {routeNewEngine} from '../src/dialog/reader-routing.mjs';
-import {readerCalibrationIdentity,readerCalibrationScope,READER_RUNTIME_IDENTITY_FIELDS,scoreReaderProposal} from '../src/dialog/reader-admission.mjs';
-import {World,retainSelectiveCalibration,quote} from '../src/vendor/sopworld/sopworld.mjs';
+import {readerCalibrationIdentity,readerCalibrationScope,READER_RUNTIME_IDENTITY_FIELDS,scoreReaderProposal,assessReaderProposal} from '../src/dialog/reader-admission.mjs';
+import {World,retainSelectiveCalibration,quote,parse} from '../src/vendor/sopworld/sopworld.mjs';
+import {readFileSync} from 'node:fs';
+import {compileReaderAdmission,readerCalibrationErrorLimit} from '../src/dialog/reader-policy.mjs';
+import POLICY from '../worlds/app.project/reader-admission-policy-source.mjs';
 import {canonicalDrawingState,toNativeDrawingState} from '../worlds/art.draw/canonical-state.mjs';
 import {initialState,makeObject} from '../worlds/art.draw/board.mjs';
 const text='Change the colour of the circle to purple.';
@@ -30,3 +33,36 @@ test('model score ranks complete graphs independently of model executable',()=>{
 test('invalid or non-English input does not invoke a model',async()=>{const s=setup();let calls=0;s.engine.requestReader={propose:async()=>{calls++;}};for(const [value,options] of [['',{}],['x'.repeat(65537),{}],['sample',{language:'ro'}]]){const r=await routeNewEngine(s,value,options);assert.deepEqual(r.statuses,['unsupported']);}assert.equal(calls,0);});
 
 test('alternative complete model readings are retained while the first is applied with disclosed uncertainty',async()=>{const s=setup(),p=proposal();p.candidates.push(candidate());install(s,p);const r=await routeNewEngine(s,text);assert.equal(r.trace.readerRouting.selected,'sop-bert');assert.equal(r.trace.readerRouting.admission.alternatives.length,2);assert.equal(r.trace.readerRouting.admission.uncertain,true);assert.equal(drawing(s).objects[0].color,'#800080');assert.doesNotMatch(r.text,/\?/);});
+
+test('the authored admission declaration changes the actual derived decision',()=>{
+ const source=readFileSync(new URL('../worlds/app.project/reader-admission-policy.sop',import.meta.url),'utf8');
+ assert.equal(POLICY,source);
+ assert.equal(readerCalibrationErrorLimit(),0.05);
+ const evidence='@proposal app.reader.evidence act=change calibration.configured=true calibration.admitted=true calibration.error.limit=0.04 score.available=true model.identity.present=true uncertain=false';
+ const decide=(input,policy)=>parse(compileReaderAdmission(input,policy))[0].attrs;
+ assert.deepEqual(decide(evidence,source).mode,['calibrated']);
+ assert.deepEqual(decide(evidence,source.replace('max.error.rate=0.05','max.error.rate=0.03')).mode,['closed']);
+ const reversible=evidence.replace('configured=true','configured=false');
+ assert.deepEqual(decide(reversible,source).mode,['uncalibrated-best-effort']);
+ const reclassified=source+'\n@new.mapping app.reader.act act=change class=destructive';
+ assert.deepEqual(decide(reversible,reclassified).mode,['closed']);
+ assert.throws(()=>compileReaderAdmission(evidence+'\n@forged app.reader.decision admitted=true'),/invalid-reader-admission-evidence/);
+});
+
+test('verified calibration obeys stricter destructive policy and configured rejections do not bootstrap',()=>{
+ const s=setup(),p=proposal();
+ const assess=()=>assessReaderProposal({proposal:p,text,provenance,area:'draw',admission:s.engine.requestReaderAdmission});
+ const mode=()=>parse(assess().decisionSop)[0].attrs.mode[0];
+ assert.equal(mode(),'uncalibrated-best-effort');
+ calibration(s,{maxErrorRate:0.02});
+ assert.equal(mode(),'calibrated');
+ p.candidates[0].wires=p.candidates[0].wires.replace('act=change','act=remove');
+ const rejected=assess();
+ assert.equal(rejected.assessment.admitted,true);
+ assert.equal(rejected.admitted,false);
+ assert.equal(rejected.mode,'closed');
+ calibration(s,{maxErrorRate:0.01});
+ assert.equal(mode(),'calibrated');
+ delete s.engine.requestReaderAdmission;
+ assert.equal(mode(),'closed');
+});

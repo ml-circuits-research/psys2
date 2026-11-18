@@ -4,9 +4,11 @@ Owner decision Review29 supersedes the earlier zero-error, refusal-first policy.
 
 ## One declared policy
 
-`reader-policy.mjs` declares accepted-row empirical error limits: 0.05 for ordinary commands and 0.01 for destructive acts (remove/delete/overwrite/clear). Retained calibration still uses source-disjoint CAL fit/evaluation rows, exact runtime/area identities, validation, resolution and native execution checks. Refusals are not coverage. Error among acted rows requires an independent intended-effect judgment; neither graph validity nor a native receipt supplies it.
+`worlds/app.project/reader-admission-policy.sop` owns action classification and accepted-row empirical error limits: 0.05 for ordinary commands and 0.01 for destructive acts (remove/delete/overwrite/clear). Retained calibration still uses source-disjoint CAL fit/evaluation rows, exact runtime/area identities, validation, resolution and native execution checks. Refusals are not coverage. Error among acted rows requires an independent intended-effect judgment; neither graph validity nor a native receipt supplies it.
 
-The owner also authorizes reversible best effort while no calibrated cohort is available. That mode is explicitly `uncalibrated-best-effort`, carries no measured error-rate claim, requires a valid source-anchored complete graph and actual neural score, and excludes destructive acts. A supplied but rejected calibration is not overridden. This bootstrap mode is reported separately from calibrated admission. It exists to let the owner try the demo and correct it rather than wait for a complete annotation program.
+The owner also authorizes reversible best effort while no calibrated cohort is configured. That mode is explicitly `uncalibrated-best-effort`, carries no measured error-rate claim, requires a valid source-anchored complete graph and actual neural score, and excludes destructive acts. The SOP rules derive a closed decision for a supplied but rejected calibration. This bootstrap mode is reported separately from calibrated admission. It exists to let the owner try the demo and correct it rather than wait for a complete annotation program.
+
+The reader validates the proposed graph and independently verifies any retained report. It supplies these observations as `app.reader.evidence` to the SOP rules in a library World fork. The derived `app.reader.decision` controls dispatch and is retained in the trace. C1 takes its ordinary error-rate ceiling from the same authored policy. Worlds shows the governing SOP file and its link to the evidence adapter.
 
 ## Score and alternatives
 

@@ -6,6 +6,10 @@ test('architecture inspector exposes exact held files, actual state structures a
  const result=inspectWorldsRuntime({index:{worlds:{novel:{imports:['shared'],reads:[],compose:[]},shared:{imports:[]}}},bundle:{worlds:{novel:{files:{'legend.sop':schema,'world.sop':'@w core.world'}}}},loaded:['novel'],nativeStates:{novel:state},instances:[{world:'novel',instanceId:'actual',revision:2,wires:archive}],instanceCaches:[{world:'novel',wireCount:1,wires:archive}],hosts:[{world:'novel',view:'editor',operations:[{id:'novel.add'}],observation:{objects:state.objects}}],knowledgeFiles:[{path:'shards/a.sop',text:'@k k.item n=2'}],reader:{state:'ready',cache:{hits:7,networkBytes:0}},sessionMeta:{memory:{newEngineUndo:[{operation:'actual'}]}}});
  const byId=new Map(result.nodes.map(n=>[n.id,n]));
  assert.ok(!result.nodes.some(n=>n.id.startsWith('cache:')));assert.equal(byId.get('component:reader').details.cache.hits,7);assert.match(byId.get('component:reader').help.purpose,/candidate request graphs/);assert.equal(byId.get('instance:novel').role,'Observed World instance');
+ const readerPolicy=byId.get('knowledge:reader-admission-policy');
+ assert.equal(readerPolicy.details.source,'worlds/app.project/reader-admission-policy.sop');
+ assert.match(readerPolicy.wires,/@reader.permit.calibrated core.rule/);
+ assert.ok(result.edges.some(e=>e.from==='component:request-admission'&&e.to===readerPolicy.id));
  assert.ok(!byId.has('component:formalizer'));assert.equal(byId.get('component:request-admission').details.entryPoint,'assessReaderProposal');
  assert.equal(byId.get('schema:novel:legend.sop').wires,schema);assert.equal(byId.get('instance:novel').wires,archive);assert.equal(byId.get('instance:novel').details.cachedWorld.wires,archive);
  assert.equal(byId.get('native:novel').details,state);assert.ok(!byId.has('structure:novel:history'));assert.deepEqual(byId.get('native:novel').details.history,state.history);

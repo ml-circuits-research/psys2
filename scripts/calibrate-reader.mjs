@@ -16,7 +16,7 @@ import {compileTeacherRow} from '../training/sop-bert/compile-teacher-expectatio
 import {calibrationObservation,retainCalibrationCohorts} from './lib/reader-calibration-measurement.mjs';
 import {summarizeReaderStages,rankLeafReasons} from './lib/reader-stage-counts.mjs';
 import {readerCalibrationIdentity} from '../src/dialog/reader-admission.mjs';
-import {READER_POLICY} from '../src/dialog/reader-policy.mjs';
+import {readerCalibrationErrorLimit} from '../src/dialog/reader-policy.mjs';
 const [specPath,corpusPath,output,comparisonLibrary='../soplang-words-lib/docs/sopworld.mjs']=process.argv.slice(2);
 const {compareRequestGraphs}=await import(pathToFileURL(resolve(comparisonLibrary)));
 if(typeof compareRequestGraphs!=='function') throw Error('published-graph-comparator-required');
@@ -55,7 +55,7 @@ try {for(const row of input) {
   if(rows.length%100===0) console.log(JSON.stringify({completed:rows.length,total:input.length,invoked:rows.filter(r=>r.readerInvoked).length,seconds:Math.round((Date.now()-started)/1000)}));
 }} finally {closeSync(fd);}
 if(sha(readFileSync(corpusPath))!==sha(corpus)) throw Error('calibration-input-mutated');
-const policy={minFitAccepted:2,minEvaluationAccepted:2,maxErrorRate:READER_POLICY.maxErrorRate};
+const policy={minFitAccepted:2,minEvaluationAccepted:2,maxErrorRate:readerCalibrationErrorLimit()};
 const identity=provenance?readerCalibrationIdentity(provenance,spec.runtimeIdentity):null;
 const reports=identity?retainCalibrationCohorts(rows,{identity,policy}):{};
 const counts={messages:rows.length,readerInvoked:rows.filter(r=>r.readerInvoked).length,setupExcluded:rows.filter(r=>!r.setupComplete).length,
