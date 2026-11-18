@@ -60,7 +60,10 @@ function nativeCapabilityWires(host,operations,mappings,frame) {
    const material=JSON.stringify([constructor.id,args]),key=JSON.stringify([operation.id,mapping.canonical,mapping.lemma,material]);
    if(seen.has(key))continue;
    seen.add(key);
-   if(!measurements.has(material))measurements.set(material,host.measureSpatial(constructor.id,args));
+   if(!measurements.has(material)){
+    const command=row('measure',constructor.id,Object.fromEntries(Object.entries(args).map(([key,value])=>[key,scalar(value)])));
+    measurements.set(material,host.measureSpatial(command));
+   }
    const extent=measurements.get(material);
    if(!extent||!(extent.width>0)||!(extent.height>0))continue;
    const kind='native.spatial.kind.'+rows.length;

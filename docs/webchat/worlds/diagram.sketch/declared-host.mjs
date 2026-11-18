@@ -1,15 +1,15 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-import { diagramToolInterface, DIAGRAM_COMPONENTS } from './tool-interface.mjs?v=ec78b00b15';
-export { DIAGRAM_TOOL_BINDINGS, DIAGRAM_COMPONENTS } from './tool-interface.mjs?v=ec78b00b15';
-import{projectNumericGroups}from'./chart-layout.mjs?v=4462ab84d8';
+import { diagramToolInterface, DIAGRAM_COMPONENTS } from './tool-interface.mjs?v=f5321a2098';
+export { DIAGRAM_TOOL_BINDINGS, DIAGRAM_COMPONENTS } from './tool-interface.mjs?v=f5321a2098';
+import{projectNumericGroups}from'./chart-layout.mjs?v=c2811e2bf2';
 import {centeredSpatialBox,spatialBox,unionSpatialBoxes} from '../native-spatial-observation.mjs?v=ced85b9a29';
 import {routeEdges,edgeAppearance} from './arrows.mjs?v=e2ec6e110c';
-import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs?v=ca9bb682f6';
-import {canonicalDiagramState,toNativeDiagramState,diagramStateWorld,DIAGRAM_STATE_SCHEMA} from './canonical-state.mjs?v=2f56892d11';
-import {initialState,loadEngine,systemFor,writeBack,PREFIX,K} from './core.mjs?v=6ea3e34a0e';
-import * as tool from './tool.mjs?v=95e51a94b0';
-import{groupNativeObjects,groupNativeHandlers,projectGroupCharts}from'./group-tools.mjs?v=cc8e1b7a47';
-import {initialChartState,chartNativeObjects,chartNativeHandlers} from '../data.charts/declared-host.mjs?v=16cc5644d1';
+import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs?v=2bfbd36d18';
+import {canonicalDiagramState,toNativeDiagramState,diagramStateWorld,DIAGRAM_STATE_SCHEMA} from './canonical-state.mjs?v=0d7597950e';
+import {initialState,loadEngine,systemFor,writeBack,PREFIX,K} from './core.mjs?v=0908b31ffb';
+import * as tool from './tool.mjs?v=6124b99e17';
+import{groupNativeObjects,groupNativeHandlers,projectGroupCharts}from'./group-tools.mjs?v=4707a75745';
+import {initialChartState,chartNativeObjects,chartNativeHandlers} from '../data.charts/declared-host.mjs?v=f4bbe7030e';
 export const initialDiagramState=initialState;
 export const initialCanonicalDiagramState=()=>canonicalDiagramState(initialState());
 export const DIAGRAM_STATE_INTERFACE=Object.freeze({canonicalizeState:canonicalDiagramState,projectState:toNativeDiagramState,
@@ -120,10 +120,7 @@ export async function createDiagramHost({state=initialState(),instanceId,...limi
   if(result?.status==='supported')Object.assign(ctx.state,canonicalDiagramState(native));
   return result;
  }])):handlers;
- const host=createNativeToolHost({state,instanceId,scope:'diagram.nodes-links-and-charts',toolInterface,handlers:effectiveHandlers,
-  view:carrier=>view(canonical?toNativeDiagramState(carrier):carrier,canonical),
-  spatial:canonical?carrier=>spatial(toNativeDiagramState(carrier)):spatial,...limits});
- return {...host,measureSpatial(operation,args){
+ function measure(operation,args){
   if(operation!=='diagram.node.make'||!Object.hasOwn(PREFIX,args.kind))return null;
   const rules=(canonical?toNativeDiagramState(state):state).rules;
   const key=JSON.stringify([rules,args]);
@@ -134,7 +131,10 @@ export async function createDiagramHost({state=initialState(),instanceId,...limi
   const {w,h}=K.dims(scratch.shapes[0]),measurement={width:w,height:h};
   if(nodeExtents.size>=128)nodeExtents.clear();
   nodeExtents.set(key,measurement);return {...measurement};
- }};
+ }
+ return createNativeToolHost({state,instanceId,scope:'diagram.nodes-links-and-charts',toolInterface,handlers:effectiveHandlers,
+  view:carrier=>view(canonical?toNativeDiagramState(carrier):carrier,canonical),
+  spatial:canonical?carrier=>spatial(toNativeDiagramState(carrier)):spatial,measure,...limits});
 }
 
 export async function createCanonicalDiagramHost({state=initialCanonicalDiagramState(),...options}={}){

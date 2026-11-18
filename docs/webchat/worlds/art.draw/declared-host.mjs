@@ -2,9 +2,9 @@
 import { readNativeToolInterface } from '../native-tool-interface.mjs?v=973f8a5868';
 import NATIVE_INTERFACE from './native-interface-source.mjs?v=e86f8f8bfd';
 import {budget} from '../../lib/dialog/budget.mjs?v=00bce6e369';
-import {canonicalDrawingState,toNativeDrawingState} from './canonical-state.mjs?v=b6c6a2b613';
+import {canonicalDrawingState,toNativeDrawingState} from './canonical-state.mjs?v=9e74f9e129';
 import {spatialBox} from '../native-spatial-observation.mjs?v=ced85b9a29';
-import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs?v=ca9bb682f6';
+import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs?v=2bfbd36d18';
 import {initialState,makeObject,remember,undoStep,redoStep,newPage} from './board.mjs?v=bedcd7dae6';
 import {drawingPartHandlers,drawingPartsOf,makeKnowledgeDrawing,restoreMembers,drawingObjectsOf,findDrawingObject,replaceDrawingObject,independentDrawingIds,colourDrawingObject} from './part-tools.mjs?v=dd2b980965';
 import {KINDS,W,H,bbox,objectMatrix} from './scene.mjs?v=a4ab5fac44';
@@ -98,11 +98,11 @@ export function createDrawingHost({state=initialState(),instanceId,knowledge=nul
   return result;
  }])):nativeHandlers;
  const project=handler=>governed?carrier=>handler(toNativeDrawingState(carrier)):handler;
- const host=createNativeToolHost({state,instanceId,scope:'drawing.object-lifecycle',toolInterface,handlers,view:project(view),spatial:project(spatial),...limits});
- return {...host,measureSpatial(operation,args){
+ function measure(operation,args){
   if(operation!=='drawing.object.make'||!Object.hasOwn(KINDS,args.kind)||!validPatch(args))return null;
   const {w,h}=bbox(buildDrawingObject({nextId:1},args));return {width:w,height:h};
- }};
+ }
+ return createNativeToolHost({state,instanceId,scope:'drawing.object-lifecycle',toolInterface,handlers,view:project(view),spatial:project(spatial),measure,...limits});
 }
 // Application entry point. Existing explicit native fixtures may still use createDrawingHost.
 export function createCanonicalDrawingHost({state=initialCanonicalDrawingState(),...options}={}){

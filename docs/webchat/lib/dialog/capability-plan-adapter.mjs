@@ -5,7 +5,7 @@ import POLICY from '../../worlds/app.project/capability-policy.mjs?v=ca7d222029'
 import { DRAWING_PROPERTY_BINDINGS } from '../../worlds/art.draw/property-host.mjs?v=45ec70afe7';
 import { executionPolicyWorld } from './execution-policy.mjs?v=fa9237583c';
 import { nativeKindCandidates } from './native-binding-candidates.mjs?v=de223646d6';
-import { observedReaderContext } from './native-reader-context.mjs?v=d7d22ad083';
+import { observedReaderContext } from './native-reader-context.mjs?v=e7b6cce6d7';
 import { budget } from './budget.mjs?v=00bce6e369';
 
 const NS = 'std.capability.';

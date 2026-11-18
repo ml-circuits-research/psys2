@@ -145,3 +145,6 @@ Checks: editor schema source check, Webchat build c7d76f4fb1, and npm test (615 
 
 2026-11-18 replaced the JS invocation packet at the native editor hosts with SOP command and revision/identity wires. Compiled capability calls pass through with their original typed arguments; all callers migrated. LIB 0.214.0/945b0d73.
 Verified the executable call equals the library output, Drawing effects, replay, stale revision refusal, malformed input rollback, manual tool instructions, and two natural-language clauses in Chromium. Full gate 617 passed, 3 skipped, zero failed.
+
+2026-11-18 Drawing and Diagram renderer measurements now consume the same SOP constructor form as a concrete command. Spatial replies expose the exact call observed at dispatch, preserving compiler-assigned wire identity.
+Checks: spatial placement tests 7/7, full npm gate 617 passed and 3 skipped. Real Chromium placed the fish at (467,300) near the house, matched the chat call byte-for-byte with the recorded invocation and restored the scene with Undo.

@@ -2,13 +2,13 @@ import {isAuthoredRequest,readAuthoredRequest} from './authored-request-tool.mjs
 // Model-first proposal routing. Calibration authority belongs to host configuration,
 // never to a model output, evaluation annotation or grammar proposal.
 import {requestCompositionPolicy}from './request-composition-policy.mjs?v=dae34fa500';
-import {executeRequestCandidate} from './new-engine.mjs?v=cabff52624';
-import {invokeNativeControl} from './native-tool-controls.mjs?v=de26c79207';
-import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=cabff52624';
-import {projectContextAction} from './project-context-action.mjs?v=2a79f4b861';
-import {projectCreateAction} from './project-create-action.mjs?v=97c7c818aa';
+import {executeRequestCandidate} from './new-engine.mjs?v=8c83d0d020';
+import {invokeNativeControl} from './native-tool-controls.mjs?v=ab469e9f84';
+import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=8c83d0d020';
+import {projectContextAction} from './project-context-action.mjs?v=73b379933f';
+import {projectCreateAction} from './project-create-action.mjs?v=f06890ad84';
 import {parse,str} from '../vendor/sopworld/sopworld.mjs?v=d762ac1a79';
-import {assessReaderProposal} from './reader-admission.mjs?v=b17141593d';
+import {assessReaderProposal} from './reader-admission.mjs?v=a5669f7579';
 const unavailable=reason=>({candidates:[],coverage:{complete:false,executable:false,graphProposal:false},failures:[{reason}]});
 async function dispatchRequest(session,candidate,text,options,bindings,contextProjection,interpretation,alternatives=[],compiledPlan) {
  let result;

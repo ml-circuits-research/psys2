@@ -98,11 +98,11 @@ export function createDrawingHost({state=initialState(),instanceId,knowledge=nul
   return result;
  }])):nativeHandlers;
  const project=handler=>governed?carrier=>handler(toNativeDrawingState(carrier)):handler;
- const host=createNativeToolHost({state,instanceId,scope:'drawing.object-lifecycle',toolInterface,handlers,view:project(view),spatial:project(spatial),...limits});
- return {...host,measureSpatial(operation,args){
+ function measure(operation,args){
   if(operation!=='drawing.object.make'||!Object.hasOwn(KINDS,args.kind)||!validPatch(args))return null;
   const {w,h}=bbox(buildDrawingObject({nextId:1},args));return {width:w,height:h};
- }};
+ }
+ return createNativeToolHost({state,instanceId,scope:'drawing.object-lifecycle',toolInterface,handlers,view:project(view),spatial:project(spatial),measure,...limits});
 }
 // Application entry point. Existing explicit native fixtures may still use createDrawingHost.
 export function createCanonicalDrawingHost({state=initialCanonicalDrawingState(),...options}={}){

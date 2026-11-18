@@ -13,6 +13,6 @@ export async function invokeObservedNativeTool(session,{area,host,invocation=glo
  try{
   const receipt=await host.invoke(sop,toolInvocationContext(invocation,expectedVersion));
   const result=Object.fromEntries(['status','reason','verification','instanceId','beforeVersion','afterVersion','changed','effects','validation'].filter(key=>receipt[key]!==undefined).map(key=>[key,copyHostData(receipt[key])]));
-  emit(session,area,operation,'end',{invocation,durationMs:performance.now()-started,status:receipt.status,result});return includeCall?{before,operation:declaration,args,receipt}:receipt;
+  emit(session,area,operation,'end',{invocation,durationMs:performance.now()-started,status:receipt.status,result});return includeCall?{before,operation:declaration,args,receipt,sop}:receipt;
  }catch(error){emit(session,area,operation,'error',{invocation,durationMs:performance.now()-started,error:String(error?.message??error)});throw error;}
 }

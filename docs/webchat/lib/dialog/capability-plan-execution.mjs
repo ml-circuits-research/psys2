@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-import { compileNativeCapability } from './capability-plan-adapter.mjs?v=92901bed0e';
-import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=5b662d9ad0';
+import { compileNativeCapability } from './capability-plan-adapter.mjs?v=b27ab95ba9';
+import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=6723c0bcb3';
 import { instanceIdFor } from './instance-identity.mjs?v=024ef1ca83';
-import { prepareNativeControlHost } from './native-control-preparation.mjs?v=127c654ac5';
-import { invokeObservedNativeTool } from './native-tool-activity.mjs?v=f35f865bba';
-import { describeNativeControl, verifyNativeControlEffect } from './native-control-intent.mjs?v=9015e8a68b';
+import { prepareNativeControlHost } from './native-control-preparation.mjs?v=03aa831073';
+import { invokeObservedNativeTool } from './native-tool-activity.mjs?v=6630b37425';
+import { describeNativeControl, verifyNativeControlEffect } from './native-control-intent.mjs?v=72f6f4ee95';
 
 function reply(text, supported, trace = {}) {
   return { text, parts: [{ text, translate: false }], statuses: [supported ? 'supported' : 'unsupported'],

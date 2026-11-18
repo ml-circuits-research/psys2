@@ -62,7 +62,7 @@ for(const editor of [
  const observed=await host({state:session.isession.state[world],instanceId:'independent.first'});
  assert.equal(observedBox(observed,newId).min_x-observedBox(observed,anchorId).max_x,12);
  assert.ok(activities.some(event=>event.operation==='std.placement'&&event.nodeIds.includes('execution:placement-policy')&&event.sop===first.trace.placement));
- assert.ok(activities.some(event=>event.operation===make&&event.phase==='start'&&event.sop?.includes(make)));
+ assert.equal(activities.findLast(event=>event.operation===make&&event.phase==='start').sop,first.trace.controlIntent);
  assert.equal((await control('undo',{})).ok,true);
  assert.deepEqual(session.isession.state[world],anchorBefore);
 

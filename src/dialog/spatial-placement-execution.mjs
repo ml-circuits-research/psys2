@@ -92,7 +92,7 @@ export async function executeSpatialPlacement(session,candidate,{bindings,view}=
   Number.isFinite(wanted)&&Math.abs(wanted-bounds[key])<=1e-9*Math.max(1,Math.abs(wanted)));
  activity(session,area,{phase:'end',label:'Observe placement effect',status:geometryVerified?'verified':'mismatch',
   sop,receipt:{operation:receipt.operation,beforeVersion:receipt.beforeVersion,afterVersion:receipt.afterVersion},bounds,geometryVerified,verification});
- const trace={assessment:receipt.status,receipt,reading:candidate,placement:sop,effectVerification:verification,observedBounds:bounds,geometryVerified,controlIntent:intent.wires};
+ const trace={assessment:receipt.status,receipt,reading:candidate,placement:sop,effectVerification:verification,observedBounds:bounds,geometryVerified,controlIntent:result.sop};
  const changed=receipt.status==='changed',worldState={[area.world]:structuredClone(state)},effects=changed?[{operation:operation.id}]:[];
  const observedLocation=bounds?' at ('+((bounds.min_x+bounds.max_x)/2)+', '+((bounds.min_y+bounds.max_y)/2)+')':'';
  const effect=target?(operation.act==='make'?'Created ':'Moved ')+target.kind+' '+target.id+observedLocation+'. ':'';

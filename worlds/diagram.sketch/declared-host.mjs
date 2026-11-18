@@ -120,10 +120,7 @@ export async function createDiagramHost({state=initialState(),instanceId,...limi
   if(result?.status==='supported')Object.assign(ctx.state,canonicalDiagramState(native));
   return result;
  }])):handlers;
- const host=createNativeToolHost({state,instanceId,scope:'diagram.nodes-links-and-charts',toolInterface,handlers:effectiveHandlers,
-  view:carrier=>view(canonical?toNativeDiagramState(carrier):carrier,canonical),
-  spatial:canonical?carrier=>spatial(toNativeDiagramState(carrier)):spatial,...limits});
- return {...host,measureSpatial(operation,args){
+ function measure(operation,args){
   if(operation!=='diagram.node.make'||!Object.hasOwn(PREFIX,args.kind))return null;
   const rules=(canonical?toNativeDiagramState(state):state).rules;
   const key=JSON.stringify([rules,args]);
@@ -134,7 +131,10 @@ export async function createDiagramHost({state=initialState(),instanceId,...limi
   const {w,h}=K.dims(scratch.shapes[0]),measurement={width:w,height:h};
   if(nodeExtents.size>=128)nodeExtents.clear();
   nodeExtents.set(key,measurement);return {...measurement};
- }};
+ }
+ return createNativeToolHost({state,instanceId,scope:'diagram.nodes-links-and-charts',toolInterface,handlers:effectiveHandlers,
+  view:carrier=>view(canonical?toNativeDiagramState(carrier):carrier,canonical),
+  spatial:canonical?carrier=>spatial(toNativeDiagramState(carrier)):spatial,measure,...limits});
 }
 
 export async function createCanonicalDiagramHost({state=initialCanonicalDiagramState(),...options}={}){

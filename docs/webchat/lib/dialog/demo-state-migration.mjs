@@ -1,5 +1,5 @@
 // One-time migration from the former independent chart tab into the diagram instance.
-import {migrateChartTools,initialDiagramState} from '../../worlds/diagram.sketch/declared-host.mjs?v=77f421ab37';
+import {migrateChartTools,initialDiagramState} from '../../worlds/diagram.sketch/declared-host.mjs?v=45e73b93b6';
 export function migrateDemoState(state){
  if(!state||typeof state!=='object')return state;
  const legacy=state['data.charts'];
