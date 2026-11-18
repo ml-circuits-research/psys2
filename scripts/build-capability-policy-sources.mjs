@@ -19,6 +19,8 @@ for (const [source, module] of [
   ['execution-policy-schema.sop', 'execution-policy-schema-source.mjs'],
   ['history-policy.sop', 'history-policy-source.mjs'],
   ['history-schema.sop', 'history-schema-source.mjs'],
+  ['browser-state-schema.sop', 'browser-state-schema-source.mjs'],
+  ['browser-state-bindings.sop', 'browser-state-bindings-source.mjs'],
   ['request-routing-schema.sop', 'request-routing-schema-source.mjs'],
   ['request-routing-policy.sop', 'request-routing-policy-source.mjs'],
   ['query-reading-schema.sop', 'query-reading-schema-source.mjs'],

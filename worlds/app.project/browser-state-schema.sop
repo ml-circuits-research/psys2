@@ -1,0 +1,18 @@
+@app.browser.state core.module name=app.browser.state exports=app.browser.state.forget-person exports=app.browser.state.observe.hands-free exports=app.browser.state.observe.language exports=app.browser.state.observe.listening exports=app.browser.state.observe.popup-close exports=app.browser.state.observe.popup-open exports=app.browser.state.observe.tab exports=app.browser.state.binding
+@binding.type core.type of=app.browser.state.binding closed=true
+@binding.type-key core.slot of=app.browser.state.binding key=input kind=atom present=true
+@binding.world core.slot of=app.browser.state.binding key=world kind=atom present=true
+@binding.field core.slot of=app.browser.state.binding key=field kind=atom present=true
+@binding.fixed core.slot of=app.browser.state.binding key=fixed kind=atom enum=avatar enum=null
+@tab.type core.type of=app.browser.state.observe.tab closed=true
+@tab.value core.slot of=app.browser.state.observe.tab key=value kind=atom present=true
+@popup.open.type core.type of=app.browser.state.observe.popup-open closed=true
+@popup.close.type core.type of=app.browser.state.observe.popup-close closed=true
+@language.type core.type of=app.browser.state.observe.language closed=true
+@language.value core.slot of=app.browser.state.observe.language key=value kind=atom present=true
+@listening.type core.type of=app.browser.state.observe.listening closed=true
+@listening.value core.slot of=app.browser.state.observe.listening key=value kind=boolean present=true
+@handsfree.type core.type of=app.browser.state.observe.hands-free closed=true
+@handsfree.value core.slot of=app.browser.state.observe.hands-free key=value kind=boolean present=true
+@forget.type core.type of=app.browser.state.forget-person closed=true
+@binding.registry core.slot of=app.browser.state.binding key=registry kind=atom enum=enabled-tab

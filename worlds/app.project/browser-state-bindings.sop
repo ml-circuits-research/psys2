@@ -1,0 +1,8 @@
+@state.input.schema core.use world=app.browser.state prefix=false
+@tab.binding app.browser.state.binding input=app.browser.state.observe.tab world=ui.shell field=activeTab registry=enabled-tab
+@popup.open.binding app.browser.state.binding input=app.browser.state.observe.popup-open world=ui.shell field=activePopup fixed=avatar
+@popup.close.binding app.browser.state.binding input=app.browser.state.observe.popup-close world=ui.shell field=activePopup fixed=null
+@language.binding app.browser.state.binding input=app.browser.state.observe.language world=ui.shell field=language
+@listening.binding app.browser.state.binding input=app.browser.state.observe.listening world=ui.shell field=listening
+@handsfree.binding app.browser.state.binding input=app.browser.state.observe.hands-free world=ui.shell field=handsFree
+@forget.binding app.browser.state.binding input=app.browser.state.forget-person world=session.things field=person fixed=null

@@ -35,6 +35,7 @@ export function createEngineClient({ base, versions = {}, getSettings, getLangua
   const ortWorkers = new Set();
   let lastUsage = { usage: [], detection: [] };
   const zombies = new Set();        // ids of requests the host abandoned (Stop, watchdog) that the worker has not settled yet: a new request waits for them
+  const snapshots = new WeakMap();
   let restorePending = null, restoreTimer = 0;   // a restore asked while the worker was still busy with an abandoned request
   const options = {};               // local mirror of session options (nx, formalizer)
 
@@ -149,6 +150,16 @@ export function createEngineClient({ base, versions = {}, getSettings, getLangua
     readyP.catch(() => {});
     return readyP;
   }
+  async function restoreById(undoId, saved) {
+    const target = worker;
+    const result = await rawCall('restore', { undoId }).promise;
+    if (!result?.restored && worker === target) {
+      cache.state = saved.state;
+      cache.meta = saved.meta;
+      killWorker('restore');
+      await respawn(saved.state, saved.meta);
+    }
+  }
   const ready = async () => { if (!readyP) throw new Error('engine not started'); await readyP; };
   /** True while a request would have to wait: a replacement worker is starting, an abandoned request is still being ended, or no worker runs. */
   const restarting = () => !down && (booting || zombies.size > 0 || !!restorePending || !worker);
@@ -207,7 +218,7 @@ export function createEngineClient({ base, versions = {}, getSettings, getLangua
       clearTimeout(graceTimer); clearTimeout(hardTimer); signal?.removeEventListener?.('abort', onAbort); zombies.delete(id);
       if (restorePending && !killed && worker && ![...pending.values()].some((q) => q.kind === 'send' || q.kind === 'dry')) {   // it stopped by itself: now it goes back to the snapshot
         const r = restorePending; restorePending = null; clearTimeout(restoreTimer);
-        rawCall('restore', { undoId: r.undoId, state: r.state, meta: r.meta }).promise.catch(() => {});
+        restoreById(r.id, r.saved).catch(() => {});
       } else if (killed) { restorePending = null; clearTimeout(restoreTimer); }
     }
   }
@@ -229,7 +240,7 @@ export function createEngineClient({ base, versions = {}, getSettings, getLangua
       rest.language ??= getLanguage();   // LANG-FIXED: a turn is read in the selected language (ui/language.mjs) unless the caller says which one (the app always passes the selected one)
       stats.sends++;
       const fault = testHooks ? globalThis.__psys2Fault?.[text] ?? null : null;
-      const res = await guarded('send', 'send', { text, opts: { ...rest, hardMs, softMs }, undoId: undo?.id ?? null, settings: getSettings(), fault, known: Object.keys(cache.state ?? {}) }, { signal, hardMs: hardMs ? hardMs + 600 + 30000 : null, text, key, tab });
+      const res = await guarded('send', 'send', { text, opts: { ...rest, hardMs, softMs }, undoId: snapshots.has(undo) ? undo.id : null, settings: getSettings(), fault, known: Object.keys(cache.state ?? {}) }, { signal, hardMs: hardMs ? hardMs + 600 + 30000 : null, text, key, tab });
       applyStateInfo(res);
       lastBefore = res.before ?? null; lastEnd = res.state ? Object.keys(res.state) : null;
       lastUsage = { usage: res.usage ?? [], detection: res.detection ?? [] };
@@ -273,11 +284,14 @@ export function createEngineClient({ base, versions = {}, getSettings, getLangua
         return r?.follow ?? null;
       } catch (e) { if (e?.name === 'TurnAborted' || e?.name === 'EngineRestarted') return null; throw e; }
     },
-    setWorldState(worldId, patch = {}) {
-      cache.state = { ...cache.state, [worldId]: { ...(cache.state[worldId] ?? {}), ...structuredClone(patch) } };
-      const send = () => post({ op: 'setWorldState', id: ++seq, worldId, patch });
-      if (booting) readyP.then(send, () => {}); else if (worker) send();
-      return cache.state[worldId];
+    async stateInput(sop) {
+      if (typeof sop !== 'string') throw new TypeError('Browser state input requires SOP Lang.');
+      if (booting || !worker) await settled();
+      const changes = await rawCall('stateInput', { sop }).promise;
+      for (const [world, patch] of Object.entries(changes)) {
+        cache.state = { ...cache.state, [world]: { ...(cache.state[world] ?? {}), ...patch } };
+      }
+      return changes;
     },
     /** The before-turn state of the worlds the last turn loaded (lazy loading): the page's what-happened diff takes them as they were when the turn started, not as absent. */
     loadedBefore() { return lastBefore; },
@@ -285,18 +299,24 @@ export function createEngineClient({ base, versions = {}, getSettings, getLangua
     turnWorlds() { return lastEnd; },
     /** The committed state (a plain object; read only). Always the state after the last finished operation, so it is also what a new worker starts from. */
     state(worldId) { return worldId ? (cache.state[worldId] ?? null) : cache.state; },
-    snapshot() { return { id: ++undoSeq, state: cache.state, meta: cache.meta }; },
+    snapshot() {
+      const undo = Object.freeze({ id: ++undoSeq });
+      snapshots.set(undo, { state: cache.state, meta: cache.meta });
+      return undo;
+    },
     restore(undo) {
-      if (!undo) return;
-      cache.state = undo.state ?? cache.state; cache.meta = undo.meta ?? cache.meta;
+      const saved = snapshots.get(undo);
+      if (!saved) return;
+      cache.state = saved.state;
+      cache.meta = saved.meta;
       const busy = [...pending.values()].filter((p) => p.kind === 'send' || p.kind === 'dry');
       if (busy.length) {   // the host gave the request up (Stop, watchdog) but the worker has not answered: it gets the abort grace to stop by itself, then it is replaced (from the restored state)
-        restorePending = { undoId: undo.id, state: undo.state, meta: undo.meta };
+        restorePending = { id: undo.id, saved };
         clearTimeout(restoreTimer);
         restoreTimer = setTimeout(() => { if (restorePending) { for (const p of busy) if (pending.has(p.id)) rememberBad(p, 'timeout'); restorePending = null; killWorker('restore'); respawn(); } }, ABORT_GRACE_MS + 500);
         return;
       }
-      const go = () => rawCall('restore', { undoId: undo.id, state: undo.state, meta: undo.meta }).promise.then((r) => { if (r?.state && !pending.size) { /* the page state is already the restored one */ } }, () => {});
+      const go = () => restoreById(undo.id, saved).catch(() => {});
       if (booting) readyP.then(go, () => {}); else if (worker) go();
     },
     memory() { return null; },

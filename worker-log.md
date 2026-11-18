@@ -204,3 +204,6 @@ Actual SVG transforms, native circuit, catalog source and Undo checked in Chromi
 
 2026-11-18 — Webchat 70eb2eb98c compares the contextual and independent frozen-reader hypotheses for the same utterance and revision under declared SOP rules. A retained colour-head gap now prevents reporting a complete unfiltered count.
 642 passed, 3 skipped. Chromium app.send verified count → existence on the two-object board, and refusal to report an ungrounded filtered count on the three-object control. Neither question changed the Drawing state.
+
+2026-11-18 — Build 5bd8aa6ecb accepts declared SOP observations and the Settings forget-person tool in place of arbitrary browser state patches. Worlds displays the schema, binding facts and adapter. Recovery uses retained snapshots; work-file edits still use explicit imports.
+644 passed, 3 skipped. Dedicated browser route suite passed 5/5, including privacy action, malformed packet refusal, work-file restore and worker restart.

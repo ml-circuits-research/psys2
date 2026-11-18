@@ -374,7 +374,7 @@ export async function mountPsys2(element, options = {}) {
   function userTab(id, via = 'tap') {
     if (phone) { setPage(id, { via }); return; }
     showTab(id, via);
-    if (tabBtns[id] && tabDefs.find(t=>t.id===id)?.world && lastShellTab !== id) { lastShellTab = id; session?.setWorldState?.(SHELL, { activeTab: id }); }
+    if (tabBtns[id] && tabDefs.find(t=>t.id===id)?.world && lastShellTab !== id) { lastShellTab = id; reportBrowserState('@tab app.browser.state.observe.tab value=' + id); }
   }
   // ---------- pages (phone) ----------
   const pageName = (id) => (id === 'chat' ? 'Chat' : tabDefs.find((t) => t.id === id)?.label ?? id);
@@ -402,7 +402,7 @@ export async function mountPsys2(element, options = {}) {
     if (id !== 'chat' && !tabBtns[id]) return;
     if (!phone) { if (id !== 'chat') userTab(id, via); return; }
     const was = page; page = id; closeMenu(); hideToast();
-    if (id === 'chat') panelUI[view]?.ui?.hide?.(); else { showTab(id, via); if (tabDefs.find(t=>t.id===id)?.world && lastShellTab !== id) { lastShellTab = id; session?.setWorldState?.(SHELL, { activeTab: id }); } }
+    if (id === 'chat') panelUI[view]?.ui?.hide?.(); else { showTab(id, via); if (tabDefs.find(t=>t.id===id)?.world && lastShellTab !== id) { lastShellTab = id; reportBrowserState('@tab app.browser.state.observe.tab value=' + id); } }
     syncPageUI(); refreshSuggestions();
     if (push && was !== id) pushPage(id);
   }
@@ -459,7 +459,7 @@ export async function mountPsys2(element, options = {}) {
 
     if (!avatarUI) return;
     avatarOpen = !!on;
-    session?.setWorldState?.(SHELL,{activePopup:avatarOpen?'avatar':null});
+    reportBrowserState('@popup app.browser.state.observe.popup-' + (avatarOpen ? 'open' : 'close'));
     avPop.hidden = !avatarOpen; avBtn.setAttribute('aria-expanded', String(avatarOpen)); root.classList.toggle('p2-avpop-open', avatarOpen);
     if (avatarOpen) placeAvatarPopup();
     avatarUI.setVisible(avatarOpen);
@@ -663,6 +663,12 @@ export async function mountPsys2(element, options = {}) {
     for(const id of changed)worldViews.get(id)?.refresh();
     options.onState?.(states, changed);
   }
+  function reportBrowserState(sop) {
+    return session?.stateInput(sop).catch(error => {
+      console.warn('Browser state observation failed', error);
+      return null;
+    });
+  }
   function applyShell(sh) {
     if (!sh) return;
     if (!shellSeen) { shellSeen = true; lastShell = { ...sh }; if (sh.activeTab && tabBtns[sh.activeTab]) { lastShellTab = sh.activeTab; if(tabDefs.find(t=>t.id===view)?.world)showTab(sh.activeTab, 'start'); } return; }   // the world's first tab 'robot' is no tab: the host's own first tab (Talk) is shown and told to the world after the start // startup snapshot: do not override saved host settings
@@ -781,7 +787,6 @@ export async function mountPsys2(element, options = {}) {
     progress: { start: (...a) => progress.start(...a), step: (...a) => progress.step(...a), end: (...a) => progress.end(...a), fail: (...a) => progress.fail(...a) },
     speak: (text) => { if (speech && speechSupport.synthesis) speech.speak(String(text), { lang: speechLangTag() }); },
     state: (worldId) => states[worldId],
-    setWorldState: (worldId, patch) => session?.setWorldState?.(worldId, patch),
     textGen: () => textGenReady,   // { summarizer, composer }: each has `available`
     asset: (path) => assetUrl(base, path),   // the file's URL with its content hash (ui/assets.mjs): cached forever under it
     /** The parts of a catalog thing as the engine drew it ({ name, parts } or null); undefined without an engine worker (the tab then reads the catalog itself). */
@@ -1413,7 +1418,7 @@ export async function mountPsys2(element, options = {}) {
     settings.handsFree = on;
     if (fromUser) events.add('mic', on ? 'on' : 'off', { via: 'settings' });
     speech?.setHandsFree(on); save(); setStatus(); renderSettings();
-    if (fromUser) session?.setWorldState?.(SHELL, { handsFree: on });
+    if (fromUser) reportBrowserState('@hands app.browser.state.observe.hands-free value=' + on);
   }
   function disable(btn, why) { btn.disabled = true; label(btn, `${btn.getAttribute('aria-label')} (unavailable: ${why})`); }
   const mobileUA = (() => { try { return navigator.userAgentData?.mobile === true || /Android|iPhone|iPad|Mobi/i.test(navigator.userAgent ?? ''); } catch { return false; } })();
@@ -1458,7 +1463,7 @@ export async function mountPsys2(element, options = {}) {
   const logMic = (via, r) => { micLog.push({ t: new Date().toISOString().slice(11, 23), via, action: r.action, before: r.before, after: r.after }); if (micLog.length > 100) micLog.shift(); };
   function micClick(via = 'click') {
     const r = speech.toggle({ single: settings.keepListening === false });
-    if (r.after.on !== settings.handsFree) { settings.handsFree = r.after.on; save(); session?.setWorldState?.(SHELL, { handsFree: r.after.on, listening: r.after.on }); renderSettings(); }
+    if (r.after.on !== settings.handsFree) { settings.handsFree = r.after.on; save(); reportBrowserState('@hands app.browser.state.observe.hands-free value=' + r.after.on + '\n@listen app.browser.state.observe.listening value=' + r.after.on); renderSettings(); }
     logMic(via, r); events.add('mic', r.after.on ? 'on' : 'off', { via }); setStatus();
     return r;
   }
@@ -1509,7 +1514,7 @@ export async function mountPsys2(element, options = {}) {
   language.onChange(({ lang, reason }) => {
     settings.language = lang; langSel.value = lang;
     speech?.refreshLang(); save(); renderSettings();
-    session?.setWorldState?.(SHELL, { language: lang });   // the shell world's state follows the selector, so that "speak Romanian" is a change and not a no-op
+    reportBrowserState('@language app.browser.state.observe.language value=' + lang);   // the shell world's state follows the selector, so that "speak Romanian" is a change and not a no-op
     renderLangSelect(); voiceNotice(lang);   // MT-SERIOUS: the model of the language downloads now (lazily: only when it is selected)
     hintEl?.remove(); hintEl = null;
     refreshSuggestions();   // the example bar is in the selected language
@@ -1966,7 +1971,13 @@ export async function mountPsys2(element, options = {}) {
   function personSection() {
     const v = personView(states['session.things']);
     const rows = [['Name', v.name], ['Age', v.age], ['Job', v.occupation], ['Languages', v.language.join(', ')], ['Family', v.relatives.map((r) => `${r.count} × ${r.relation}`).join(', ')], ['Likes', v.likes.map((x) => x.thing).join(', ')], ['Does not like', v.dislikes.map((x) => x.thing).join(', ')]].filter(([, x]) => x != null && x !== '');
-    const forget = h('button', { class: 'p2-btn-text', type: 'button', disabled: rows.length ? null : true, onclick: () => { session?.setWorldState?.('session.things', { person: null }); states['session.things'] = { ...(states['session.things'] ?? {}), person: null }; toast('Forgotten'); renderSettings(); } }, 'Forget what you know about me');
+    const forget = h('button', { class: 'p2-btn-text', type: 'button', disabled: rows.length ? null : true, onclick: async () => {
+      const changes = await reportBrowserState('@forget app.browser.state.forget-person');
+      if (!changes) return;
+      states['session.things'] = session.state('session.things');
+      toast('Forgotten');
+      renderSettings();
+    } }, 'Forget what you know about me');
     return h('div', { class: 'p2-plog', 'data-section': 'person' }, h('strong', {}, 'What I know about you'),
       h('p', { class: 'p2-opt-note' }, 'What you told me about yourself in this conversation ("my name is Ana", "I have two kids", "I like cats"). It stays on this device, only for this conversation, and is never sent.'),
       rows.length ? h('dl', { class: 'p2-person' }, ...rows.flatMap(([k, x]) => [h('dt', {}, k), h('dd', {}, String(x))])) : h('p', {}, 'Nothing yet.'),
@@ -2181,7 +2192,8 @@ export async function mountPsys2(element, options = {}) {
     if (info.problems?.length) console.warn('PSys2 world problems:', info.problems);
     if (!settingsEl.hidden) renderSettings();
     session = engineClient.session; mark('session');
-    session.setWorldState?.(SHELL, { language: language.get(), ...(savedTab&&tabDefs.find(t=>t.id===savedTab)?.world ? { activeTab: savedTab } : {}) });   // the shell world's language state starts as the selector (LANG-FIXED)
+    await session.stateInput('@language app.browser.state.observe.language value=' + language.get() +
+      (savedTab && info.stateInputTabs.includes(savedTab) ? '\n@tab app.browser.state.observe.tab value=' + savedTab : ''));   // the shell world's language state starts as the selector (LANG-FIXED)
   } catch (e) {
     console.error(e);
     progress.fail('worlds', `PSys2 could not start: ${e?.message ?? e}`, '');
@@ -2213,7 +2225,11 @@ export async function mountPsys2(element, options = {}) {
   if (avatarUI && !states['ui.avatar']) avatarUI.update(undefined);
   // The shell restores its active editor independently of the visible architecture tab.
   if (tabKnown.has(view) && !panelUI[view]) showTab(view, 'start');
-  if (!lastShellTab) { lastShellTab = tabDefs.find(t=>t.id===view)?.world?view:(session.state(SHELL)?.activeTab??tabDefs.find(t=>t.world)?.id); session?.setWorldState?.(SHELL, { activeTab: lastShellTab }); }   // the engine knows the tab the person sees
+  if (!lastShellTab) {
+    const saved = session.state(SHELL)?.activeTab, enabled = engineClient.info.stateInputTabs;
+    lastShellTab = [view, saved].find(id => enabled.includes(id)) ?? enabled[0];
+    if (lastShellTab) await reportBrowserState('@tab app.browser.state.observe.tab value=' + lastShellTab);
+  }
   tabsLive = true;
   applyEngineSettings();
   setStatus();

@@ -4,7 +4,7 @@
 // (the only way to stop synchronous JavaScript) and starting a new one from the last committed state.
 //
 // Protocol (structured clone only), see ui/engine-client.mjs:
-//   page -> worker: { op, id, ... }   init | send | dry | observe | setWorldState | setStates | restore | settings | abort | prepare | candidates | warm | ort-resume
+//   page -> worker: { op, id, ... }   init | send | dry | observe | stateInput | restore | settings | abort | prepare | candidates | warm | ort-resume
 //   worker -> page: { type: 'res', id, ok, value | error }   answers of the requests above
 //                   { type: 'evt', name, data }              ready | stage | dispatcher-status | normalizer-status | model-source | progress | ort | ort-paused | rules-compiled
 //                   { type: 'spawn-ort', id, lane, port }    the page owns the ORT workers; this worker talks to them through a MessageChannel it asks for
@@ -39,6 +39,7 @@ let knowledgeInspectionSource=null;
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 let engine = null, session = null, settings = {}, mods = null, testHooks = false, faultNow = null;
+let browserStateInput = null, initialized = false;
 const active = new Map();            // request id -> AbortController of a send or dry read that runs
 const turnRunning = () => [...active.values()].some((c) => !c.dry);
 /**
@@ -113,6 +114,8 @@ function applySettings(s, extra) {
 const KNOWLEDGE_FETCH_MS = 8000;   // the catalog URL is the pinned one (lib/knowledge/catalog-pin.mjs, P4), read in init
 // ---------- boot ----------
 async function init(m) {
+  if (initialized) throw Error('Engine already initialized.');
+  initialized = true;
   Object.assign(ver, m.versions ?? {});
   testHooks = m.testHooks === true;
   settings = { ...(m.settings ?? {}) };
@@ -143,6 +146,11 @@ async function init(m) {
   const fetchJson = async (rel, hash) => { const r = await fetch(abs(rel) + (hash ? `?v=${hash}` : ''), { cache: 'default' }); if (!r.ok) throw new Error(`${rel}: HTTP ${r.status}`); return r.json(); };
   worldLoader = wlMod.createWorldLoader({ indexHash: ver['worlds/index.json'], fetchJson, bag: () => new Set() });
   await worldLoader.init();
+  const browserState = await imp('lib/dialog/browser-state-input.mjs');
+  mods.inspectBrowserStateInput = browserState.inspectBrowserStateInput;
+  const enabledTabs = new Set(Object.entries(tabWorlds)
+    .filter(([, world]) => allowed(world) && worldLoader.info(world)).map(([tab]) => tab));
+  browserStateInput = browserState.createBrowserStateInput({ registries: { 'enabled-tab': enabledTabs } });
   // `?psys2lazy=0` (tests, a comparison with the full set) and a saved language other than English: every world is loaded at start (a Romanian message is read through English candidates that a
   // partial world set can mistake for understood: a session that starts in Romanian must read like the full set, from its first message)
   // BOOT COST (owner export 2026-11-14 22:43: "Starting the reasoner" took 6.3 s on a phone in a Romanian session): a saved language other than English no longer builds the engine on every world at
@@ -193,7 +201,7 @@ async function init(m) {
   // Editor hosts and inspection do not depend on neural session construction.
   mods.isAuthoredRequest=(await imp('lib/dialog/authored-request-tool.mjs')).isAuthoredRequest;
   readerReady=installSopReader(imp);
-  return { retiredAreas: worldLoader.index.retiredAreas ?? [], worlds: engine.worlds().map((w) => w.id), known: worldLoader.ids(), worldTabs: Object.fromEntries(worldLoader.ids().map((id) => [id, worldLoader.info(id).tab?.id ?? null]).filter(([, v]) => v)), problems: engine.problems?.() ?? [], state: stateOf(), hasDispatcher: !!dispatcherEnc, hasNormalizer: !!normalizerHost, budget: !!budgetMod.createBudget, reader: readerStatus };
+  return { stateInputTabs: [...enabledTabs], retiredAreas: worldLoader.index.retiredAreas ?? [], worlds: engine.worlds().map((w) => w.id), known: worldLoader.ids(), worldTabs: Object.fromEntries(worldLoader.ids().map((id) => [id, worldLoader.info(id).tab?.id ?? null]).filter(([, v]) => v)), problems: engine.problems?.() ?? [], state: stateOf(), hasDispatcher: !!dispatcherEnc, hasNormalizer: !!normalizerHost, budget: !!budgetMod.createBudget, reader: readerStatus };
 }
 
 async function installSopReader(imp){
@@ -418,13 +426,14 @@ const handlers = {
     const {inspectExecutionWorlds}=await import(vurl('lib/dialog/execution-world-inspection.mjs'));
     progress.stage('Read execution knowledge and episodes');
     const executionGraph=await inspectExecutionWorlds(session);
+    const browserGraph = mods.inspectBrowserStateInput(Boolean(browserStateInput));
     progress.stage('Build project world links');
     projectAreas=projectAreas.map(area=>({...area,schemaWorld:worldLoader.info(area.world)?.schemaWorld??area.schemaWorld}));projectWorld=mods.createProjectWorld({areas:projectAreas,instances});const projectGraph=mods.inspectProjectWorld(projectWorld);
     const availableNodes=new Set(baseGraph.nodes.map(node=>node.id));
     const catalogDependencies=executionGraph.nodes.flatMap(node=>(node.details?.catalogModules??[])
       .map(module=>'knowledge-world:'+module).filter(id=>availableNodes.has(id))
       .map(to=>({from:node.id,to,label:'queries declared catalog module'})));
-    return {...baseGraph,centralNodeId:'project:application',areas:projectAreas,nodes:describeWorldsNodes([...baseGraph.nodes,...executionGraph.nodes,...projectGraph.nodes]),edges:[...baseGraph.edges,...executionGraph.edges,...projectGraph.edges,...catalogDependencies,...['new-engine','declared-execution'].map(name=>({from:'component:reasoner',to:'execution:module:'+name,label:'dispatches to'}))],activity:activityLog.slice(),timings:progress.finish()};
+    return {...baseGraph,centralNodeId:'project:application',areas:projectAreas,nodes:describeWorldsNodes([...baseGraph.nodes,...executionGraph.nodes,...browserGraph.nodes,...projectGraph.nodes]),edges:[...baseGraph.edges,...executionGraph.edges,...browserGraph.edges,...projectGraph.edges,...catalogDependencies,...['new-engine','declared-execution'].map(name=>({from:'component:reasoner',to:'execution:module:'+name,label:'dispatches to'}))],activity:activityLog.slice(),timings:progress.finish()};
     }catch(error){progress.finish(error);throw error;}
   },
   async instanceInspection(m) {
@@ -497,24 +506,20 @@ const handlers = {
   async dry() { return { complete: false, segments: 0, reason: 'unsupported', understood: [], missing: ['declared dry reading'] }; },
   async hint() { return null; },
   async observe() { return { follow: [], state: stateOf(), unsupported: 'No declared observation reaction is bound.' }; },
-  async setWorldState(m) {
-    const area=areaForWorld(m.worldId);canonicalizeSessionStates();
-    if(area?.canonicalizeState){
-      const current=session.isession.state[m.worldId]??{},patch=structuredClone(m.patch??{});
-      const canonicalPatch=Object.keys(patch).every(key=>Object.hasOwn(current,key));
-      const base=canonicalPatch?current:area.projectState?area.projectState(current):current;
-      session.setWorldState(m.worldId,area.canonicalizeState({...base,...patch}));
-    }else session.setWorldState(m.worldId,m.patch);
-    return null;
-  },
-  async setStates(m) { restoreStates(m.state, m.meta); return { state: stateOf() }; },
+  async stateInput(m) { return browserStateInput(session, m.sop); },
   async restore(m) {
     const snap = m.undoId != null ? snaps.get(m.undoId) : null;
-    if (snap) session.restore(snap); else if (m.state) restoreStates(m.state, m.meta);
-    return { state: stateOf(), meta: metaOf() };
+    if (!snap) return { restored: false };
+    session.restore(snap);
+    return { restored: true, state: stateOf(), meta: metaOf() };
   },
   async settings(m) { applySettings(m.settings, { prepare: m.prepare }); return null; },
-  async option(m) { session[m.key] = m.value; if (m.key === 'formalizer') session.setOption?.('formalizer', m.value); return null; },
+  async option(m) {
+    if (m.key === 'nx') session.nx = m.value;
+    else if (m.key === 'formalizer') { session.formalizer = m.value; session.setOption?.('formalizer', m.value); }
+    else throw Error('Unknown engine option.');
+    return null;
+  },
   async prepare() { await waitForSopReader();return {available:readerStatus.state==='ready',reader:readerStatus}; },
   async sample(m) {
     if (samplerRun || turnRunning() || warming) return { items: [], available: true, reason: 'busy' };
@@ -558,7 +563,7 @@ onmessage = async (ev) => {
   const m = ev.data;
   if (m.type === 'bt-res') { const p = btPending.get(m.id); btPending.delete(m.id); if (p) { if (m.ok) p.resolve(m.value); else p.reject(new Error(m.error ?? 'browser API error')); } return; }
   if (m.op === 'abort') { for (const [id, ctl] of active) if (m.id == null || id === m.id) ctl.abort(new DOMException(m.reason === 'timeout' ? 'turn time limit' : 'stopped', m.reason === 'timeout' ? 'TimeoutError' : 'AbortError')); return; }
-  const h = handlers[m.op];
+  const h = Object.hasOwn(handlers, m.op) ? handlers[m.op] : null;
   if (!h) { post({ type: 'res', id: m.id, ok: false, error: { name: 'Error', message: `unknown op ${m.op}` } }); return; }
   const recordsActivity=['send','nativeTool'].includes(m.op);
   if(recordsActivity)requestActivities.set(m.id,[]);
