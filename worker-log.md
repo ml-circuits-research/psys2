@@ -225,3 +225,6 @@ Chromium verified the changing house/tree population and the real query graph in
 
 2026-11-18 — Webchat 582454509e keeps cached state and its recovery metadata private; callers obtain detached observations, reload work from SOP, and refresh from the committed worker projection. Objects passed as messages are refused before transcript changes.
 650 tests passed and 3 skipped, including browser coverage for restore, restart and Undo. A separate UI timeout on an authored removal with zero worker kills remains under investigation.
+
+2026-11-18 — Webchat 6d32d74ccd gives queued chat and direct actions priority after the running background suggestion probe. The same six-turn Chromium sequence cut removal from 6.42 to 1.25 seconds and the next existence question from 7.74 to 2.37 seconds, preserving the board and expected answers.
+Integrated build verified the full count/delete/existence sequence and recorded SOP derivation. 650 passed, 3 skipped; deadlines remain unchanged.

@@ -55,6 +55,13 @@ let worldLoader = null, loaders = null, rulesMod = null, wordMod = null, tabWorl
 const loadedIds = new Set();
 const DEFAULT_DICE_WORLD = 'art.draw';
 let sampler = null, samplerRun = null;   // the sampler of the session (sopworld std.sample; novelty is kept in it)
+let foregroundWaiting = 0;
+async function finishSuggestionProbe() {
+  if (!samplerRun) return;
+  foregroundWaiting++;
+  try { await samplerRun.catch(() => undefined); }
+  finally { foregroundWaiting--; }
+}
 const recentWorlds = [];   // worlds the last replies came from, newest first
 const noteWorlds = (reply) => { for (const x of (reply?.segments ?? [])) { const id = x.match?.worldId ?? x.world; if (id) { const i = recentWorlds.indexOf(id); if (i >= 0) recentWorlds.splice(i, 1); recentWorlds.unshift(id); } } recentWorlds.length = Math.min(recentWorlds.length, 6); };
 const allowed = (id) => !universe || id === 'core' || universe.has(id);
@@ -328,7 +335,10 @@ const handlers = {
   },
   async send(m) {
     if (typeof m.text !== 'string') throw new TypeError('Browser messages require text.');
-    if (samplerRun) await samplerRun;
+    if (samplerRun) {
+      evt('stage','suggestion-probe');
+      await finishSuggestionProbe();
+    }
     const ctl = new AbortController();
     executionRequestId=m.id;
     active.set(m.id, ctl);
@@ -462,7 +472,7 @@ const handlers = {
     return records[0]??null;
   },
   async sampleControl(m) {
-    if(samplerRun)await samplerRun.catch(()=>undefined);
+    await finishSuggestionProbe();
     if(turnRunning())return {candidate:null,reason:'busy'};
     const ctl=new AbortController();active.set(m.id,ctl);
     try {
@@ -477,8 +487,8 @@ const handlers = {
     }finally{active.delete(m.id);}
   },
   async nativeTool(m) {
-    // Background example generation must finish before a user edit, never discard it.
-    if(samplerRun)await samplerRun.catch(()=>undefined);
+    // Let the current verified probe finish before an editor operation.
+    await finishSuggestionProbe();
     if(turnRunning())throw Error('An action is already running.');
     executionRequestId=m.id;
     const ctl=new AbortController();active.set(m.id,ctl);
@@ -492,7 +502,7 @@ const handlers = {
     }finally{active.delete(m.id);}
   },
   async placementProfile(m) {
-    if(samplerRun)await samplerRun.catch(()=>undefined);
+    await finishSuggestionProbe();
     await turnIdle();
     const ctl=new AbortController();active.set(m.id,ctl);
     try {
@@ -528,7 +538,7 @@ const handlers = {
   },
   async prepare() { await waitForSopReader();return {available:readerStatus.state==='ready',reader:readerStatus}; },
   async sample(m) {
-    if (samplerRun || turnRunning() || warming) return { items: [], available: true, reason: 'busy' };
+    if (samplerRun || foregroundWaiting || turnRunning() || warming) return { items: [], available: true, reason: 'busy' };
     const run = (async () => {
       const [{NATIVE_AREAS},{createNativeRequestSampler}] = await Promise.all([import(vurl('lib/dialog/app-reader-context.mjs')),import(vurl('lib/dialog/native-request-sampler.mjs'))]);
       const view = m.tab ?? session.isession.state['ui.shell']?.activeTab, area = NATIVE_AREAS[view];
@@ -538,7 +548,7 @@ const handlers = {
       if (!bindings) return { items: [], available: false, reason: 'reader-bindings-unavailable' };
       sampler ??= createNativeRequestSampler();
       const host = await area.create({ state: structuredClone(session.isession.state[area.world]), instanceId: 'sampler-'+crypto.randomUUID() });
-      const result = await sampler.sample({ session, area: area.area, view, world: area.world, host, createHost: area.create, bindings, mode: m.mode ?? 'one', count: Math.min(4,Math.max(1,Number(m.count)||1)) });
+      const result = await sampler.sample({ session, area: area.area, view, world: area.world, host, createHost: area.create, bindings, shouldYield: () => foregroundWaiting > 0, mode: m.mode ?? 'one', count: Math.min(4,Math.max(1,Number(m.count)||1)) });
       const language = m.language ?? settings.language ?? 'en';
       if (language !== 'en') for (const item of result.items) {
         try { const translated = await engine.translator.machineTranslate(item.text,{from:'en',to:language}); if (typeof translated === 'string' && translated.trim()) item.text = translated; } catch { /* English remains usable input. */ }

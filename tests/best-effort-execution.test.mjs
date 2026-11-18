@@ -142,5 +142,12 @@ test('dice probes use the normal reader on an isolated state and reject a non-ch
  const before=structuredClone(session.isession.state),host=await createDrawingHost({state:structuredClone(session.isession.state['art.draw']),instanceId:'dice-test'});
  const options={session,area:'drawing',view:'draw',world:'art.draw',host,createHost:createDrawingHost,bindings};
  const r=await createNativeRequestSampler().sample(options);assert.equal(r.items.length,1);assert.equal(r.items[0].verifiedEffect,true);assert.deepEqual(session.isession.state,before);assert.equal(session.newEngineUndo,undefined);
+ let yieldNow=false;
+ const propose=session.engine.requestReader.propose;
+ session.engine.requestReader.propose=async source=>{const result=await propose(source);yieldNow=true;return result;};
+ const interrupted=await createNativeRequestSampler().sample({...options,count:4,shouldYield:()=>yieldNow});
+ assert.equal(interrupted.probes,1);
+ assert.equal(interrupted.items.length,1);
+ assert.deepEqual(session.isession.state,before);
  session.engine.requestReader.propose=async()=>({candidates:[],failures:[]});const refused=await createNativeRequestSampler().sample(options);assert.equal(refused.items.length,0);assert.deepEqual(session.isession.state,before);
 });

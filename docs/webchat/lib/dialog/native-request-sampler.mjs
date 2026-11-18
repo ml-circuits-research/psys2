@@ -36,13 +36,14 @@ export function samplingSchema({area,operations,observation,bindings}) {
 export function createNativeRequestSampler() {
  let current=null;
  const sampler=createSampler(lib,{worldOf:()=>current?{schema:current.schema}:null,thingsOf:()=>current?.things??[],historyOf:()=>0});
- return {async sample({session,area,view,world,host,createHost,bindings,mode='one',count=1,maxProbes=8}) {
+ return {async sample({session,area,view,world,host,createHost,bindings,mode='one',count=1,maxProbes=8,shouldYield=()=>false}) {
   const baseline=JSON.stringify(session.isession.state),observation=host.observe();
   current=samplingSchema({area,operations:host.bindings(),observation,bindings});
   const proposals=sampler.sample(mode,{worldId:area,count:Math.min(maxProbes,Math.max(count,8))});
   const items=[];let probes=0;
   for(const proposal of proposals) {
-   if(probes++>=maxProbes||items.length>=count)break;
+   if(shouldYield()||probes>=maxProbes||items.length>=count)break;
+   probes++;
    const fork={engine:session.engine,isession:{state:structuredClone(session.isession.state)},
     newEngineFocus:structuredClone(session.newEngineFocus??{}),newEngineLastAction:structuredClone(session.newEngineLastAction??{})};
    if(session.historyJournal)restoreHistory(fork,captureHistory(session));
