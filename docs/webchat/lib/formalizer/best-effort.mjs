@@ -10,9 +10,9 @@
  *   const cands = looseCandidates(set, 'square eyes robot pls', { worlds: ['ui.avatar'], tabWorld: 'ui.avatar' });
  *   // [{ world: 'ui.avatar', patternId, text: 'make your eyes square', score, coverage, used, ignored: ['robot'] }, ...]
  */
-import { lexIndex } from '../worlds/lexicon.mjs?v=85e739e718';
+import { lexIndex } from '../worlds/lexicon.mjs?v=1a30235da4';
 import { isNumberWord } from './rules/numbers.mjs?v=1da7403197';
-import { FUNCTION_WORDS, ABBREVIATIONS, worldVocabulary } from './spell.mjs?v=2a05a698e0';
+import { FUNCTION_WORDS, ABBREVIATIONS, worldVocabulary } from './spell.mjs?v=80f75734e6';
 import { budget } from '../dialog/budget.mjs?v=00bce6e369';
 import { en } from '../lang/en.mjs?v=4f8918344e';
 

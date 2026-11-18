@@ -64,7 +64,33 @@ class GenMap extends Map {
   clear() { this.gen++; super.clear(); }
 }
 
-export function createFacts({ source, name = 'catalog' }) {
+export function createFacts({ source, name = 'catalog', startReadWait = () => null }) {
+  const transport = new Map();
+  function startRead(path) {
+    let read = transport.get(path);
+    if (!read) {
+      const pending = Promise.resolve().then(() => source.text(path));
+      read = { pending, waiters: [] };
+      transport.set(path, read);
+      const done = () => {
+        transport.delete(path);
+        for (const end of read.waiters) end();
+      };
+      pending.then(done, done);
+    }
+    return read.pending;
+  }
+  function consumeRead(path, result, account = true) {
+    const read = transport.get(path);
+    // A turn can join a read started by background preload. Close its wait
+    // before any parser or index traversal resumes.
+    if (account && read) {
+      const end = startReadWait();
+      if (end) read.waiters.push(end);
+    }
+    return result;
+  }
+  const readText = path => consumeRead(path, startRead(path));
   let vocab = null, vocabLoading = null;
   const shards = new Map();   // shard id -> Promise<facts[]>
   const stats = { vocabMs: 0, vocabBytes: 0, shardMs: 0, shardBytes: 0, shardsLoaded: [], lookups: 0, hits: 0, walkCuts: 0, maxWalk: 0 };
@@ -74,14 +100,17 @@ export function createFacts({ source, name = 'catalog' }) {
   let down = false;           // the last read of the vocabulary or of a shard found the catalog unreachable (offline, too slow); cleared by the next good read
   const things = new GenMap();   // lemma -> thing | null  (settled lookups, readable synchronously through `peek`); its generation moves with every change (OVERLAY-MEMO)
 
-  const loadVocab = () => vocabLoading ??= (async () => {
-    const t = clock();
-    let failed = false;
-    try { const txt = await source.text('vocab.json'); stats.vocabBytes = txt?.length ?? 0; failed = !txt || !!source.fellBack?.('vocab.json'); vocab = txt ? JSON.parse(txt) : {}; } catch { failed = true; vocab = {}; }
-    down = failed;
-    if (failed) retryLater(() => { vocabLoading = null; vocab = null; things.clear(); });
-    stats.vocabMs = clock() - t;
-  })();
+  const loadVocab = () => {
+    vocabLoading ??= (async () => {
+      const t = clock();
+      let failed = false;
+      try { const txt = await startRead('vocab.json'); stats.vocabBytes = txt?.length ?? 0; failed = !txt || !!source.fellBack?.('vocab.json'); vocab = txt ? JSON.parse(txt) : {}; } catch { failed = true; vocab = {}; }
+      down = failed;
+      if (failed) retryLater(() => { vocabLoading = null; vocab = null; things.clear(); });
+      stats.vocabMs = clock() - t;
+    })();
+    return consumeRead('vocab.json', vocabLoading);
+  };
 
   // LAZY LOADING (specs/06 "Lazy loading", "the catalog by the same index"): a catalog that publishes `vocab/index.json` (buckets of the vocabulary cut by the first two letters of a lemma,
   // `vocab/<bucket>.json`, scripts/build-catalog-vocab.mjs) is read bucket by bucket, only the ones the words of a message fall in; without it the whole `vocab.json` is read, as before.
@@ -89,9 +118,12 @@ export function createFacts({ source, name = 'catalog' }) {
   const buckets = new Map();
   const foldKey = (w) => String(w).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]/g, '');
   const bucketKey = (w) => (foldKey(w).slice(0, 2) || '_').padEnd(2, '_');
-  const loadVocabIndex = () => vocabIndexLoading ??= (async () => {
-    try { const txt = await source.text('vocab/index.json'); vocabIndex = txt && !source.fellBack?.('vocab/index.json') ? (JSON.parse(txt).buckets ? JSON.parse(txt) : null) : null; } catch { vocabIndex = null; }
-  })();
+  const loadVocabIndex = () => {
+    vocabIndexLoading ??= (async () => {
+      try { const txt = await startRead('vocab/index.json'); vocabIndex = txt && !source.fellBack?.('vocab/index.json') ? (JSON.parse(txt).buckets ? JSON.parse(txt) : null) : null; } catch { vocabIndex = null; }
+    })();
+    return consumeRead('vocab/index.json', vocabIndexLoading);
+  };
   /** Loads what the vocabulary needs for these words (their lemma candidates): the buckets of their first letters, or the whole file when the catalog has no buckets. */
   const loadVocabFor = async (words) => {
     await loadVocabIndex();
@@ -103,20 +135,23 @@ export function createFacts({ source, name = 'catalog' }) {
       if (!buckets.has(b)) buckets.set(b, (async () => {
         const t0 = clock();
         let txt = null;
-        try { txt = await source.text(`vocab/${b}.json`); } catch { txt = null; }
+        try { txt = await startRead(`vocab/${b}.json`); } catch { txt = null; }
         stats.vocabBytes += txt?.length ?? 0; stats.vocabMs += clock() - t0; stats.vocabBuckets = (stats.vocabBuckets ?? 0) + 1;
         if (!txt || source.fellBack?.(`vocab/${b}.json`)) { down = true; buckets.delete(b); retryLater(() => {}); return; }
         try { Object.assign(vocab, JSON.parse(txt)); } catch { buckets.delete(b); }
       })());
-      return buckets.get(b);
+      return consumeRead(`vocab/${b}.json`, buckets.get(b));
     }));
   };
 
-  const loadIndex = () => indexLoading ??= (async () => {
-    let failed = false;
-    try { const txt = await source.text('index.json'); failed = !txt || !!source.fellBack?.('index.json'); index = txt ? JSON.parse(txt) : { worlds: [] }; } catch { failed = true; index = { worlds: [] }; }
-    if (failed) { down = true; retryLater(() => { indexLoading = null; index = null; }); }
-  })();
+  const loadIndex = (account = true) => {
+    indexLoading ??= (async () => {
+      let failed = false;
+      try { const txt = await startRead('index.json'); failed = !txt || !!source.fellBack?.('index.json'); index = txt ? JSON.parse(txt) : { worlds: [] }; } catch { failed = true; index = { worlds: [] }; }
+      if (failed) { down = true; retryLater(() => { indexLoading = null; index = null; }); }
+    })();
+    return consumeRead('index.json', indexLoading, account);
+  };
 
   const wireMemo = new Map();   // (type|key) -> the wires of a lookup with no shard filter, until the catalog reloads
   const incompleteShards = new Set();
@@ -143,7 +178,7 @@ export function createFacts({ source, name = 'catalog' }) {
     if (!shards.has(id)) shards.set(id, (async () => {
       const t = clock();
       let txt = null;
-      try { txt = await source.text(pathOf(id)); } catch { /* an unreachable shard is no knowledge */ }
+      try { txt = await startRead(pathOf(id)); } catch { /* an unreachable shard is no knowledge */ }
       stats.shardMs += clock() - t; stats.shardBytes += txt?.length ?? 0; stats.shardsLoaded.push(id);
       const degraded = !txt || !!source.fellBack?.(pathOf(id));   // a layered source (the bundled subset under the catalog) answered for an unreachable catalog
       if (degraded) { down = true; incompleteShards.add(id); }
@@ -151,7 +186,7 @@ export function createFacts({ source, name = 'catalog' }) {
       if (degraded) retryLater(() => { shards.delete(id); parsed.delete(id); wireIx.delete(id); wireMemo.clear(); things.clear(); });
       return txt ? txt.split('\n') : [];
     })());
-    return shards.get(id);
+    return consumeRead(pathOf(id), shards.get(id));
   };
 
   /**
@@ -170,8 +205,8 @@ export function createFacts({ source, name = 'catalog' }) {
   }
 
   /** A world of the catalog index by id (`k.faces`) or by one of its exported types (`k.faces.slot`): `{ id, exports, shards: [{ id, keys, sources, ... }] }`, else null. No code per world. */
-  async function world(idOrType) {
-    await loadIndex();
+  async function world(idOrType, { accountRead = true } = {}) {
+    await loadIndex(accountRead);
     return index.worlds.find((w) => w.id === idOrType) ?? index.worlds.find((w) => w.exports?.includes(idOrType)) ?? null;
   }
 
@@ -304,7 +339,7 @@ export function createFacts({ source, name = 'catalog' }) {
       for (const w of index.worlds) {
         if (!w.schema) continue;
         let text = null;
-        try { text = await source.text(w.schema); } catch { /* no schema, no slots */ }
+        try { text = await readText(w.schema); } catch { /* no schema, no slots */ }
         for (const line of (text ?? '').split('\n')) {
           if (line.charCodeAt(0) !== 64) continue;
           const r = parseFact(line);
@@ -389,7 +424,7 @@ export function createFacts({ source, name = 'catalog' }) {
     peekWiresBy: (type, key) => wireMemo.get(`${type}|${String(key).toLowerCase()}|`),
     name, find, thing, stats, loadVocab, loadVocabFor, world, wires, wireSource, schema, series,
     /** The text of a catalog file (a shard, a schema) through the same source, for hosts that read worlds whole (the planner: src/plan/host.mjs). */
-    readText: (path) => source.text(path),
+    readText,
     /**
      * Loads a typed need (`std.schema.needs of= type= from=?`, sopworld 0.39) so that an operation reads it synchronously: the wires of the type (`peekWires`), in the world `from` when it is named; the
      * types the host builds a model from are the models: `k.faces.*` the faces (`peekFaces`), `core.slot` and `core.word` of no world the schemas of the knowledge worlds and the ordered series (`peekSchema`, `peekSeries`).

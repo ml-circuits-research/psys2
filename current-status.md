@@ -1,6 +1,16 @@
 # Current status
 
-## 2026-11-18 — Query after deleting the last member of a kind
+## 2026-11-18 — Session handoff
+
+[Open the demo](https://ml-circuits-research.github.io/psys2/webchat/). **Webchat build `c73080f75d`** integrates the counted Diagram commands, the query after deleting the last house, and a cold-start repair. The app pins SOPWorlds `0.224.0` (`361ecdf`) and knowledge catalog `9e99bc52`. The final application gate passed 649 tests, with three skipped. The catalog gate passed 3,249 with 18 skipped. Reader weights stayed fixed.
+
+- **Diagram.** “Add three circles and add two squares” produced five visible nodes. Their placement used the measured batches and current scene. One Undo restored the earlier rectangle.
+- **Drawing.** With a blue tree and one red house, the same count and existence questions gave 1/true before the deletion and 0/false afterwards. The next question found the blue tree. Queries preserved the board.
+- **Worlds.** The placement trace follows the declared projection and referenced facts. A published browser run verified that the graph stayed idle on opening Worlds and that Animate displayed the command and lit a connecting edge.
+- **Cold start.** With the pinned catalog index delayed deliberately by 11.5 seconds, the ordinary “Add a circle” turn finished in 11.67 seconds, created one circle, and made one physical index download. The compute budget remained eight seconds. The previous build timed out on this controlled case. A separate historical worker restart has no confirmed reproduction.
+- **Still open.** Scoped learning of preferences, dependent cross-editor requests (Calendar → chart → document), relative placement and migration of remaining application-owned reasoning are tracked in the [compiler plan](https://github.com/ml-circuits-research/soplang-words-lib/blob/main/refactoring/request-to-executable-circuits.md). There is no new aggregate reader accuracy measurement from these focused runs.
+
+## Earlier checkpoint — Query after deleting the last member of a kind
 
 Webchat build `0fd10c70f1` verified the full sequence in one Chromium session. With a blue tree and one red house, the count was 1 and existence was true. After deleting that house, the count was 0 and existence was false. The next query found the surviving blue tree. Read-only queries preserved all objects. For the missing noun, SOP rules admitted an alternate span from the current utterance and queried the live instance. The previous answer contributed no facts. The application gate passed 648 tests with three skipped. The reader weights are unchanged.
 

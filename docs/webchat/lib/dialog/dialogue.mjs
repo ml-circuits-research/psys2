@@ -29,7 +29,7 @@ import { en } from '../lang/en.mjs?v=4f8918344e';
 import { GRAMMAR } from './continuation.mjs?v=7ec0059718';
 import { touched } from './followup.mjs?v=88af56c068';
 import { relativeTurn } from './relative.mjs?v=00bcc39bab';
-import { isKnownWord, spellVocabulary } from '../formalizer/spell.mjs?v=2a05a698e0';
+import { isKnownWord, spellVocabulary } from '../formalizer/spell.mjs?v=80f75734e6';
 import { classify, describeReferent, plain } from './meta.mjs?v=aa6dfcad14';
 import { compareTimes, loadTime } from '../knowledge/time.mjs?v=6cf0bbbdb1';
 

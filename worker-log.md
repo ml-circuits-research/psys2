@@ -216,3 +216,6 @@ Chromium verified three circles, then a three-circle/two-square compound, exact 
 
 2026-11-18 — Webchat 0fd10c70f1 admits current-source noun evidence under declared scope, filter and quantifier checks and evaluates the live population. After deleting the only house, Chromium answered zero, false, then true for the surviving blue tree. Each query preserved state.
 Application gate passed 648 with three skips. No reader weights changed.
+
+2026-11-18 — Webchat c73080f75d shares the in-flight catalog index read and accounts only transport wait separately from computation. With an 11.5 s injected delay Chromium created one circle in 11.67 s, one index GET, zero watchdog kills. The compute limit remains 8 s.
+Application gate passed 649 with 3 skips. The separate historical worker restart remains unconfirmed. Current handoff is in current-status.md.

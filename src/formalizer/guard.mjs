@@ -72,17 +72,22 @@ export const guard = {
    * total taken out so far, so the page's watchdog does the same. Outside a turn it just runs `work`.
    */
   async untimed(work) {
+    const end = guard.beginWait();
+    try { return await work(); } finally { end?.(); }
+  },
+  /** Start accounting for a pending transport before its consumers resume. */
+  beginWait() {
     const c = cur;
-    if (!c) return work();
+    if (!c) return null;
     const w = c.wait ??= { depth: 0, since: 0, used: 0 };
     if (w.depth++ === 0) { w.since = c.clock(); try { waitListener?.('start', w.used); } catch { /* host events never break a turn */ } }
-    try { return await work(); } finally {
+    return () => {
       if (--w.depth === 0) {
         const add = Math.max(0, Math.min(c.clock() - w.since, LOAD_WAIT_CAP_MS - w.used));
         w.used += add; c.hardAt += add; c.softAt += add;
-        try { waitListener?.('end', w.used); } catch { /* ignore */ }
+        if (cur === c) { try { waitListener?.('end', w.used); } catch { /* ignore */ } }
       }
-    }
+    };
   },
   /** The host's listener for `untimed` (the engine worker forwards it to the page). */
   setWaitListener(fn) { waitListener = typeof fn === 'function' ? fn : null; },

@@ -188,7 +188,7 @@ async function init(m) {
     // the bundled subset (colours, number words, the drawings of the built-in kinds: generated from the catalog) answers for a catalog that cannot be reached; the catalog replaces it when it can
     const layered = createLayeredSource({ text: (p) => Promise.race([src.text(p).catch(() => null), new Promise((res) => setTimeout(() => res(null), knowledgeTimeoutMs(p) + 2000))]) });
     knowledgeInspectionSource={...layered,async text(path,{purpose='runtime',requestId}={}){const started=performance.now(),activity={operation:purpose==='inspection'?'knowledge.inspect.read':'knowledge.read',stage:'knowledge',path,purpose,...(requestId===undefined?{}:{requestId})};worldActivity(['knowledge:catalog'],'start','Read '+path,activity);try{const text=await layered.text(path);if(typeof text==='string'){knowledgeReadFiles.set(path,text);if(!knowledgeReadPurposes.has(path))knowledgeReadPurposes.set(path,new Set());knowledgeReadPurposes.get(path).add(purpose);}worldActivity(['knowledge:catalog','knowledge-file:'+path],text==null?'unavailable':'end','Read '+path,{...activity,durationMs:performance.now()-started});return text;}catch(error){worldActivity(['knowledge:catalog'],'error','Read '+path,{...activity,durationMs:performance.now()-started,error:String(error?.message??error)});throw error;}}};
-    knowledgeFacts=createFacts({source:knowledgeInspectionSource});
+    knowledgeFacts=createFacts({source:knowledgeInspectionSource,startReadWait:()=>g.guard.beginWait()});
     engine.setKnowledge(knowledgeFacts);
     engine.onNotice = (text) => evt('notice', text);   // "Looking up how a pineapple looks..." while a shard loads
   } catch (e) { console.warn('knowledge catalog not attached', e); }
@@ -550,7 +550,7 @@ const handlers = {
   async catalog(m) {
     if (!knowledgeFacts) return { ok: false, bytes: null };
     if (m.refresh) knowledgeFacts.refresh();
-    await knowledgeFacts.world?.('k.objects');   // LAZY LOADING: the catalog's index (version-cached), not its 1.3 MB vocabulary: a message reads the buckets of its words
+    await knowledgeFacts.world?.('k.objects', { accountRead: false });   // LAZY LOADING: the catalog's index (version-cached), not its 1.3 MB vocabulary: a message reads the buckets of its words
     return { ok: !knowledgeFacts.unreachable(), bytes: knowledgeFacts.stats?.vocabBytes ?? null };
   },
   /** The parts of a catalog thing as the engine drew it (the drawing tab draws with these: the page never reads a second copy of the catalog that could miss a shard the reply counted). */

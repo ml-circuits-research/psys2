@@ -5,25 +5,25 @@
  * formalize(text, { worlds, session, source }) -> { segments, wires }
  * `worlds` is a WorldSet; `session` is a FormSession or any object with a `.form` FormSession.
  */
-import { guard } from '../guard.mjs?v=82a55329d9';
-import { perf } from '../perf.mjs?v=b81e032a17';
-import { lexIndex } from '../../worlds/lexicon.mjs?v=85e739e718';
+import { guard } from '../guard.mjs?v=551ea15752';
+import { perf } from '../perf.mjs?v=b90d818bed';
+import { lexIndex } from '../../worlds/lexicon.mjs?v=1a30235da4';
 import { analyze, tokenize, QUESTION_WORDS, correctTokens, isOldFiller, editDistance } from './normalize.mjs?v=0b489b29ff';
 import { compilePattern, matchTokens, wordBag, prefilterPasses, prefilterNeeds, BUILTIN_CLASSES, PatternError } from './matcher.mjs?v=cb9c749c29';
 import { buildWires, substituteEmit, dummySlots, SEGMENT_SLOT } from './emit.mjs?v=8e51d17dc1';
 import { routeScores } from './router.mjs?v=1627316289';
-import { createRouter, wildTokens, contextFromFocus, normalizeContext, defaultRouter, isGameControl, gameControlAction, namingTables } from '../routing.mjs?v=2a05a698e0';
+import { createRouter, wildTokens, contextFromFocus, normalizeContext, defaultRouter, isGameControl, gameControlAction, namingTables } from '../routing.mjs?v=80f75734e6';
 import { FormSession, STOP_WORDS, isPronoun } from './session.mjs?v=218ec74a62';
 import { selfCorrect, repetition, joinText, MARKER_RE, SEP_RE } from './expand.mjs?v=80b12c5556';
 import { en } from '../../lang/en.mjs?v=4f8918344e';   // English: shared argument, verb ellipsis, one-anaphora (facts of handover/lang.en)
 import { parse } from '../../soplang/index.mjs?v=c57881f705';
 import { budget } from '../../dialog/budget.mjs?v=00bce6e369';
 import { readingVariants, dropStyleIn } from './variants.mjs?v=234be3bba9';
-import { annotateUnread } from '../completeness.mjs?v=2a05a698e0';
-import { isCatchAll } from '../typed-world.mjs?v=2a05a698e0';
+import { annotateUnread } from '../completeness.mjs?v=80f75734e6';
+import { isCatchAll } from '../typed-world.mjs?v=80f75734e6';
 
 export { FormSession } from './session.mjs?v=218ec74a62';
-export { createRouter, createPriorityRouter, emptyContext } from '../routing.mjs?v=2a05a698e0';
+export { createRouter, createPriorityRouter, emptyContext } from '../routing.mjs?v=80f75734e6';
 export { analyze, splitSentences, tokenize, editDistance, correctTokens, SHORT_TYPOS } from './normalize.mjs?v=0b489b29ff';
 export { compilePattern, matchTokens } from './matcher.mjs?v=cb9c749c29';
 export { singularLemma, pluralize } from './lemma.mjs?v=617cf7dc2f';

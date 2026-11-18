@@ -22,12 +22,12 @@
  * Worlds the model is not trained on (user.profile) are read by the rules only: no pattern of such a world is a candidate, and in `neural` a
  * message that an untrained world's rules read is left to the rules path.
  */
-import { lexIndex } from '../worlds/lexicon.mjs?v=85e739e718';
-import { compilePattern, formalize } from './rules/index.mjs?v=2a05a698e0';
-import { candidateSegmentations } from './dispatcher-runtime.mjs?v=2deeb9a0c4';
+import { lexIndex } from '../worlds/lexicon.mjs?v=1a30235da4';
+import { compilePattern, formalize } from './rules/index.mjs?v=80f75734e6';
+import { candidateSegmentations } from './dispatcher-runtime.mjs?v=d10ceceff4';
 import { atom } from '../soplang/index.mjs?v=c57881f705';
-import { perf } from './perf.mjs?v=b81e032a17';
-import { guard, TurnAborted } from './guard.mjs?v=82a55329d9';
+import { perf } from './perf.mjs?v=b90d818bed';
+import { guard, TurnAborted } from './guard.mjs?v=551ea15752';
 
 import { NX_STRATEGIES, DEFAULT_NX_STRATEGY, normalizeNxStrategy } from './nx-strategy.mjs?v=079cade33c';
 export { NX_STRATEGIES, DEFAULT_NX_STRATEGY, normalizeNxStrategy };
