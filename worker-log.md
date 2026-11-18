@@ -125,3 +125,7 @@ Checks: npm test 612 tests, 609 pass, 3 skip, webchat build 5aa3495574. Chromium
 `node ../.session-control/check-capability-abi-final.mjs` compared actual before/after native bindings and retained every operation descriptor (21/40/27/17/19, standalone Chart 14), including metadata and dynamic options. The shared-input test verifies the same declared limit in the compiler and the real host.
 Checks: LIB 0.212.0/a3ea363, `node scripts/build-native-interfaces.mjs --check`, execution source and system map rebuilt, `npm run build:webchat` d8d03df4c3, `npm test` 614 tests / 611 pass / 3 skip, `git diff --check`.
 `node ../.session-control/native-abi-main-chromium-smoke.mjs` verified authored SOP recolor #ff0000 → #0000ff in the authoritative Drawing World, exact dispatched call and authored interface in Worlds, and Undo restoring #ff0000.
+
+2026-11-18 delivered authored SOP state schema ownership in Drawing and Documents. The private LIB transport is pinned separately at df62fdee; closed slots, identity keys, owned references, named joins and native roles come from the actual schemas.
+Checks: node scripts/build-editor-state-schema-sources.mjs --check; npm run build:webchat (7 worlds, 312 files); npm test (614 tests, 611 pass, 3 skip, 0 fail).
+Existing editor-authority smoke replay against this build in Chromium confirmed real Drawing move/save/reopen/undo at (420, 300), exact Documents title/paragraph save/reopen/undo, and both runtime journals separate from semantic archive facts.

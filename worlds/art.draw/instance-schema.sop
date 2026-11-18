@@ -1,4 +1,4 @@
-# Canonical Drawing facts. Generated from the closed Drawing type inventory.
+# Canonical Drawing board and vector ownership.
 @art.draw.state core.module name=art.draw.state
 @art.draw.state.board core.type of=art.draw.state.board closed=true
 @art.draw.state.canvas core.type of=art.draw.state.canvas closed=true
@@ -18,7 +18,7 @@
 @art.draw.state.scene core.type of=art.draw.state.scene closed=true
 @art.draw.state.board.canvas core.slot of=art.draw.state.board key=canvas type=art.draw.state.canvas
 @art.draw.state.board.objects core.slot of=art.draw.state.board key=objects type=art.draw.state.object many=true
-@art.draw.state.board.has.objects core.slot of=art.draw.state.board key=has.objects kind=boolean
+@art.draw.state.board.has.objects core.slot of=art.draw.state.board key=has.objects kind=boolean required=true
 @art.draw.state.board.background core.slot of=art.draw.state.board key=background kind=string kind=atom
 @art.draw.state.board.sky core.slot of=art.draw.state.board key=sky kind=string kind=atom
 @art.draw.state.board.ground core.slot of=art.draw.state.board key=ground kind=string kind=atom
@@ -40,8 +40,8 @@
 @art.draw.state.pose.y core.slot of=art.draw.state.pose key=y kind=number
 @art.draw.state.pose.size core.slot of=art.draw.state.pose key=size kind=number
 @art.draw.state.pose.color core.slot of=art.draw.state.pose key=color kind=string kind=atom
-@art.draw.state.object.id core.slot of=art.draw.state.object key=id kind=string required=true
-@art.draw.state.object.nativeType core.slot of=art.draw.state.object key=nativeType kind=string required=true
+@art.draw.state.object.id core.slot of=art.draw.state.object key=id kind=string required=true id=true
+@art.draw.state.object.nativeType core.slot of=art.draw.state.object key=nativeType kind=string required=true enum="art.draw.object"
 @art.draw.state.object.kind core.slot of=art.draw.state.object key=kind kind=string
 @art.draw.state.object.thing core.slot of=art.draw.state.object key=thing kind=string
 @art.draw.state.object.semanticKind core.slot of=art.draw.state.object key=semanticKind kind=string
@@ -87,7 +87,7 @@
 @art.draw.state.shape.parts core.slot of=art.draw.state.shape key=parts type=art.draw.state.vector many=true
 @art.draw.state.shape.has.parts core.slot of=art.draw.state.shape key=has.parts kind=boolean
 @art.draw.state.vector.id core.slot of=art.draw.state.vector key=id kind=string
-@art.draw.state.vector.nativeType core.slot of=art.draw.state.vector key=nativeType kind=string
+@art.draw.state.vector.nativeType core.slot of=art.draw.state.vector key=nativeType kind=string enum="art.draw.part"
 @art.draw.state.vector.n core.slot of=art.draw.state.vector key=n kind=string
 @art.draw.state.vector.s core.slot of=art.draw.state.vector key=s kind=string
 @art.draw.state.vector.c core.slot of=art.draw.state.vector key=c kind=string kind=atom
@@ -134,8 +134,8 @@
 @art.draw.state.relations.facts core.slot of=art.draw.state.relations key=facts type=art.draw.state.relation many=true
 @art.draw.state.relations.has.facts core.slot of=art.draw.state.relations key=has.facts kind=boolean
 @art.draw.state.relation.rel core.slot of=art.draw.state.relation key=rel kind=string
-@art.draw.state.relation.a core.slot of=art.draw.state.relation key=a kind=string
-@art.draw.state.relation.b core.slot of=art.draw.state.relation key=b kind=string kind=atom
+@art.draw.state.relation.a core.slot of=art.draw.state.relation key=a kind=string type=art.draw.state.object by=id
+@art.draw.state.relation.b core.slot of=art.draw.state.relation key=b kind=string kind=atom type=art.draw.state.object by=id
 @art.draw.state.relation.source core.slot of=art.draw.state.relation key=source kind=string
 @art.draw.state.relation.tier core.slot of=art.draw.state.relation key=tier kind=string
 @art.draw.state.relation.seq core.slot of=art.draw.state.relation key=seq kind=integer
@@ -145,7 +145,7 @@
 @art.draw.state.scene.id core.slot of=art.draw.state.scene key=id kind=string
 @art.draw.state.scene.kind core.slot of=art.draw.state.scene key=kind kind=string
 @art.draw.state.scene.region core.slot of=art.draw.state.scene key=region kind=string kind=atom
-@art.draw.state.scene.members core.slot of=art.draw.state.scene key=members kind=string many=true
+@art.draw.state.scene.members core.slot of=art.draw.state.scene key=members kind=string many=true type=art.draw.state.object by=id
 @art.draw.state.scene.has.members core.slot of=art.draw.state.scene key=has.members kind=boolean
 @art.draw.state.scene.fresh core.slot of=art.draw.state.scene key=fresh kind=boolean
 @art.draw.state.scene.gone core.slot of=art.draw.state.scene key=gone kind=boolean

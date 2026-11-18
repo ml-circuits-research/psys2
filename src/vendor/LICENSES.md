@@ -6,6 +6,7 @@
 - Pinned commit: `a3ea363619b48b95a45b9746406be48ff644591c` (published release 0.212.0, build `c54948eab8e0`). See `sopworld/provenance.json` for the exact source and hash.
 - Vendored file: `src/vendor/sopworld/sopworld.mjs`, the library's built single file `docs/sopworld.mjs` (1645408 bytes, sha256 `0d8423d8cb4c68020ec6614b329aa28f1c6c99b2d5516cf750381ebde0dc892e`), copied byte for byte. Record defects in the library repository.
 - `src/vendor/sopworld/tools/scan-loops.mjs`: the library's own loop scanner (`tools/scan-loops.mjs`), copied byte for byte; `tests/reasoner.test.mjs` runs it on the vendored file.
+- `src/vendor/sopworld/instance-fact-codec.mjs`: the private `src/internal/instance-fact-codec.mjs` from library commit `df62fdeeab443a593cff9079e5bd444c5d834e99`, copied byte for byte (sha256 `77c335b6d1fb8056c2240d9c9c1d491629c9b3075191a2728a0d013d6dac96e5`). The editor passes parser services from the existing bundled runtime.
 - Licence: MIT (below). Compatible with AGPL-3.0-only.
 - The shipped application reads the vendored module offline for request compilation and execution.
 - `src/vendor/sopworld/tools/build-bundle.mjs` and `src/vendor/sopworld/src/knowledge.mjs`: the library's `tools/build-bundle.mjs` and `src/knowledge.mjs`, byte for byte (the second is the one module the first imports, so the offline bundle generator runs unmodified: `node src/vendor/sopworld/tools/build-bundle.mjs <catalog dir> <out.json> <word|shard|world> ...`).

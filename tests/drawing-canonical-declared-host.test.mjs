@@ -74,7 +74,7 @@ test('Drawing loads verified legacy native archives into typed authority without
 
 test('Drawing state schema matches the published file and canonical wire identities survive order changes',()=>{
  const schema=readFileSync(new URL('../worlds/art.draw/instance-schema.sop',import.meta.url),'utf8');
- assert.equal(schema.split('\n').slice(1).join('\n').trim(),DRAWING_STATE_SCHEMA);
+ assert.equal(schema,DRAWING_STATE_SCHEMA);
  const native=initialDrawingState(),host=createDrawingHost({state:native,instanceId:'drawing.ids'});
  for(let i=0;i<2;i++){
   const result=host.invoke({invocation:'make.'+i,operation:'drawing.object.make',args:{kind:'square'},expectedVersion:host.observe().version});
@@ -89,5 +89,5 @@ test('Drawing state schema matches the published file and canonical wire identit
  world.revise(obj.id,{x:425});
  const external={...carrier,sop:serialize([...world.wires.values()])};
  assert.equal(toNativeDrawingState(external).objects.find(object=>object.id==='o1').x,425);
- assert.throws(()=>canonicalDrawingState({...native,untypedOpaqueState:{objects:[]}}),/unknown-key/);
+ assert.throws(()=>canonicalDrawingState({...native,untypedOpaqueState:{objects:[]}}),/record-key/);
 });

@@ -2,7 +2,7 @@
 import { readNativeToolInterface } from '../native-tool-interface.mjs?v=63e0f2fedd';
 import NATIVE_INTERFACE from './native-interface-source.mjs?v=e86f8f8bfd';
 import {budget} from '../../lib/dialog/budget.mjs?v=00bce6e369';
-import {canonicalDrawingState,toNativeDrawingState} from './canonical-state.mjs?v=368d518f98';
+import {canonicalDrawingState,toNativeDrawingState} from './canonical-state.mjs?v=cb25fd72dc';
 import {spatialBox} from '../native-spatial-observation.mjs?v=ced85b9a29';
 import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs?v=ecc9d8b538';
 import {initialState,makeObject,remember,undoStep,redoStep,newPage} from './board.mjs?v=bedcd7dae6';

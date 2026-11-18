@@ -1,50 +1,13 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Drawing authority consists of owned board, object and vector SOP facts.
-import { typedStateCodec } from '../typed-state-codec.mjs?v=22973f8553';
+import { toolInstanceStateCodec } from '../tool-instance-state.mjs?v=35f86205aa';
+import authoredSchema from './state-schema-source.mjs?v=9b442dbc4b';
 import { copyHostData } from '../native-tool-host.mjs?v=ecc9d8b538';
 import { initialState } from './board.mjs?v=bedcd7dae6';
 
-const ref = type => ({type});
-const list = type => ({type,many:true});
-const texts = {kind:'string',many:true};
-const text = {kind:'string',nullable:true};
-const maybe = type => ({type,nullable:true});
-const numericFields = keys => Object.fromEntries(keys.split(' ').map(key=>[key,'number']));
-const inventory = {
- board:{
-  canvas:ref('canvas'),objects:{...list('object'),required:true},background:text,sky:text,
-  ground:text,groundColor:text,mood:text,sunStash:list('object'),sunPose:maybe('pose'),
-  nextId:{kind:'integer',required:true},seq:'integer',seed:'integer',rels:ref('relations'),
-  scenes:list('scene'),sceneSeq:'integer',
- },
- canvas:numericFields('w h'),
- pose:{...numericFields('x y size'),color:text},
- object:{
-  id:{kind:'string',required:true},nativeType:{kind:'string',required:true},
-  kind:'string',thing:'string',semanticKind:'string',name:'string',label:text,tag:text,who:text,mood:text,zone:text,
-  ...numericFields('x y size width height rotation z'),color:text,fill:text,flip:'boolean',
-  groupColorOverride:'boolean',geometryMatrix:ref('linearTransform'),shape:ref('shape'),parts:list('paint'),
-  extra:list('amount'),hide:texts,origin:ref('origin'),
- },
- origin:{kind:'string',object:'string',role:'string',requested:'string',realization:'string',representation:'string'},
- shape:{...numericFields('aspect size'),sourceKind:'string',nativeMembers:'boolean',members:list('object'),ref:ref('pose'),parts:list('vector')},
- vector:{
-  id:'string',nativeType:'string',n:'string',s:'string',c:text,alt:text,f:text,
-  ...numericFields('x y w h a0 a1 r t sh m mg full'),memberId:'string',memberPart:'integer',
-  memberOrigin:maybe('memberOrigin'),matrix:ref('affineTransform'),pts:list('point'),
- },
- memberOrigin:{memberId:'string',memberPart:'integer',memberOrigin:maybe('memberOrigin')},
- point:numericFields('x y'),
- linearTransform:numericFields('a b c d'),
- affineTransform:numericFields('a b c d e f'),
- paint:{role:'string',color:text},
- amount:{role:'string',count:'number'},
- relations:{seq:'integer',facts:list('relation')},
- relation:{rel:'string',a:'string',b:text,source:'string',tier:'string',seq:'integer',axis:'string',anchorA:text,anchorB:text},
- scene:{id:'string',kind:'string',region:text,members:texts,fresh:'boolean',gone:'boolean'},
-};
-const board=typedStateCodec('art.draw.state','board',inventory,{identities:{object:'id'}});
-export const DRAWING_STATE_SCHEMA=board.schema;
+export const DRAWING_STATE_SCHEMA=authoredSchema;
+const board=toolInstanceStateCodec(authoredSchema,'art.draw.state.board');
+
 const uiFields = new Set(['selected','selectedIds','selectedPart','idDisplay','last','history','future',
  'prev','stepGroup','lastMove','lastMoveInfo','pendingJoin','advised','drawnAsSaid','guessSaid']);
 const initialRuntime = () => ({selected:null,last:[],history:[],future:[]});

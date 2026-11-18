@@ -1,4 +1,4 @@
-# Generated from the declared Documents content records in canonical-state.mjs.
+# Canonical Documents content and block/text ownership.
 @docs.editor.content core.module name=docs.editor.content
 @docs.editor.content.document core.type of=docs.editor.content.document closed=true
 @docs.editor.content.block core.type of=docs.editor.content.block closed=true
@@ -7,7 +7,7 @@
 @docs.editor.content.mark core.type of=docs.editor.content.mark closed=true
 @docs.editor.content.source core.type of=docs.editor.content.source closed=true
 @docs.editor.content.document.id core.slot of=docs.editor.content.document key=id kind=string
-@docs.editor.content.document.nativeType core.slot of=docs.editor.content.document key=nativeType kind=atom
+@docs.editor.content.document.nativeType core.slot of=docs.editor.content.document key=nativeType kind=atom enum=docs.editor.document
 @docs.editor.content.document.textId core.slot of=docs.editor.content.document key=textId kind=string
 @docs.editor.content.document.title core.slot of=docs.editor.content.document key=title kind=string required=true
 @docs.editor.content.document.titleAlign core.slot of=docs.editor.content.document key=titleAlign kind=atom required=true
@@ -17,9 +17,9 @@
 @docs.editor.content.document.titleMark core.slot of=docs.editor.content.document key=titleMark type=docs.editor.content.mark many=true
 @docs.editor.content.document.has.titleMark core.slot of=docs.editor.content.document key=has.titleMark kind=boolean
 @docs.editor.content.document.block core.slot of=docs.editor.content.document key=block type=docs.editor.content.block many=true
-@docs.editor.content.document.has.block core.slot of=docs.editor.content.document key=has.block kind=boolean
-@docs.editor.content.block.id core.slot of=docs.editor.content.block key=id kind=string required=true
-@docs.editor.content.block.nativeType core.slot of=docs.editor.content.block key=nativeType kind=atom required=true
+@docs.editor.content.document.has.block core.slot of=docs.editor.content.document key=has.block kind=boolean required=true
+@docs.editor.content.block.id core.slot of=docs.editor.content.block key=id kind=string required=true id=true
+@docs.editor.content.block.nativeType core.slot of=docs.editor.content.block key=nativeType kind=atom required=true enum=docs.editor.block enum=docs.editor.section
 @docs.editor.content.block.kind core.slot of=docs.editor.content.block key=kind kind=atom required=true
 @docs.editor.content.block.level core.slot of=docs.editor.content.block key=level kind=integer
 @docs.editor.content.block.align core.slot of=docs.editor.content.block key=align kind=atom
@@ -36,9 +36,9 @@
 @docs.editor.content.block.row core.slot of=docs.editor.content.block key=row type=docs.editor.content.row many=true
 @docs.editor.content.block.has.row core.slot of=docs.editor.content.block key=has.row kind=boolean
 @docs.editor.content.row.cell core.slot of=docs.editor.content.row key=cell type=docs.editor.content.text many=true
-@docs.editor.content.row.has.cell core.slot of=docs.editor.content.row key=has.cell kind=boolean
-@docs.editor.content.text.id core.slot of=docs.editor.content.text key=id kind=string required=true
-@docs.editor.content.text.nativeType core.slot of=docs.editor.content.text key=nativeType kind=atom required=true
+@docs.editor.content.row.has.cell core.slot of=docs.editor.content.row key=has.cell kind=boolean required=true
+@docs.editor.content.text.id core.slot of=docs.editor.content.text key=id kind=string required=true id=true
+@docs.editor.content.text.nativeType core.slot of=docs.editor.content.text key=nativeType kind=atom required=true enum=docs.editor.text
 @docs.editor.content.text.text core.slot of=docs.editor.content.text key=text kind=string required=true
 @docs.editor.content.text.at core.slot of=docs.editor.content.text key=at kind=string required=true
 @docs.editor.content.text.checked core.slot of=docs.editor.content.text key=checked kind=boolean
@@ -50,4 +50,4 @@
 @docs.editor.content.mark.hasAttributes core.slot of=docs.editor.content.mark key=hasAttributes kind=boolean
 @docs.editor.content.mark.href core.slot of=docs.editor.content.mark key=href kind=string
 @docs.editor.content.mark.color core.slot of=docs.editor.content.mark key=color kind=string
-@docs.editor.content.source.id core.slot of=docs.editor.content.source key=id kind=string required=true
+@docs.editor.content.source.id core.slot of=docs.editor.content.source key=id kind=string required=true type=docs.editor.content.block by=id

@@ -1,7 +1,7 @@
-import { executeSpatialPlacement, requestsSpatialPlacement } from './spatial-placement-execution.mjs?v=fe77bea63d';
-import { executeNativeCapability } from './capability-plan-execution.mjs?v=7abed4e252';
+import { executeSpatialPlacement, requestsSpatialPlacement } from './spatial-placement-execution.mjs?v=6323944f41';
+import { executeNativeCapability } from './capability-plan-execution.mjs?v=40d04d6af6';
 import { executionValueSource } from './execution-policy.mjs?v=fc08ac9b87';
-import { inspectCachedExecutionSource } from './execution-world-inspection.mjs?v=1eba59df72';
+import { inspectCachedExecutionSource } from './execution-world-inspection.mjs?v=47c57a583e';
 import { World, str } from '../vendor/sopworld/sopworld.mjs?v=f5d53a8da9';
 import SOURCE from './new-engine-source.mjs?v=7b47872052';
 let knowledge;

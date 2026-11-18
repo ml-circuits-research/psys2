@@ -1,32 +1,14 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // The current document is SOP. Editing primitives and the renderer use detached views.
 import { copyHostData } from '../native-tool-host.mjs?v=ecc9d8b538';
-import { typedStateCodec } from '../typed-state-codec.mjs?v=22973f8553';
+import { toolInstanceStateCodec } from '../tool-instance-state.mjs?v=35f86205aa';
+import authoredSchema from './state-schema-source.mjs?v=cb9f3ad4f3';
 import { containers, ALIGNS, MARK_TYPES } from './model.mjs?v=d82adc50e5';
 import { sync } from './document.mjs?v=aa0453e621';
 import { documentTextId } from './native-editing.mjs?v=77e696d766';
 
-const string={kind:'string',required:true}, integer={kind:'integer',required:true};
-const ordered=type=>({type,many:true});
-const mark={
- kind:{kind:'atom',required:true},start:integer,end:integer,hasAttributes:'boolean',href:'string',color:'string',
-};
-const identity={id:string,nativeType:{kind:'atom',required:true}};
-const codec=typedStateCodec('docs.editor.content','document',{
- document:{
-  id:'string',nativeType:'atom',textId:'string',title:string,titleAlign:{kind:'atom',required:true},titleSize:integer,
-  genre:'string',topic:'string',titleMark:ordered('mark'),block:{...ordered('block'),required:true},
- },
- block:{
-  ...identity,kind:{kind:'atom',required:true},level:'integer',align:'atom',name:'string',part:'string',asTitle:'boolean',
-  style:'atom',header:'boolean',source:ordered('source'),text:{type:'text'},item:ordered('text'),row:ordered('row'),
- },
- row:{cell:{...ordered('text'),required:true}},
- text:{...identity,text:string,at:string,checked:'boolean',mark:ordered('mark')},
- mark,
- source:{id:string},
-},{identities:{block:'id',text:'id'}});
-export const DOCUMENT_STATE_SCHEMA=codec.schema;
+export const DOCUMENT_STATE_SCHEMA=authoredSchema;
+const codec=toolInstanceStateCodec(authoredSchema,'docs.editor.content.document');
 
 const own=(object,key)=>Object.hasOwn(object,key);
 const plain=value=>!!value&&typeof value==='object'&&!Array.isArray(value);
@@ -113,7 +95,7 @@ function decodeBlock(input) {
  return block;
 }
 function contentOf(state) {
- const id=state.textId??(state.title||state.blocks.length?'document':null);
+ const id=state.textId??(state.blocks.length?'document':null);
  return {
   ...(id?{id,nativeType:'docs.editor.document'}:{}),...(state.textId?{textId:state.textId}:{}),
   title:state.title,titleAlign:state.titleAlign,titleSize:state.titleSize,
@@ -126,7 +108,7 @@ function readContent(content) {
  const {title,titleAlign,titleSize,genre,topic,textId}=content;
  const state={title,titleAlign,titleSize,kind:genre??null,about:topic??null,textId:textId??null,
   titleMarks:decodeMarks(content.titleMark,'0',title),blocks:content.block.map(decodeBlock)};
- const id=state.textId??(state.title||state.blocks.length?'document':undefined);
+ const id=state.textId??(state.blocks.length?'document':undefined);
  need(content.id===id&&content.nativeType===(id?'docs.editor.document':undefined),'document-identity');
  need(ALIGNS.includes(titleAlign)&&new Set(state.blocks.map(block=>block.id)).size===state.blocks.length,'document-content');
  return state;
