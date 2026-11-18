@@ -130,7 +130,7 @@ export async function inspectExecutionWorlds(session){
   link(ids.geometry,ids.schema,'imports schema and rules');
  }
  const composition=inspectRequestCompositionPolicy(),compositionWires=composition.facts;
- nodes.push({id:'execution:composition-policy',label:'Request composition',kind:'knowledge',implementation:'Operational SOP Lang World',description:'Actual source-order scheduling and undo policy for independently validated request cuts. This declaration does not infer target membership or causal dependencies from repeated nouns.',wires:compositionWires,details:{loaded:composition.loaded,source:'worlds/app.project/request-composition-policy.sop',dependencies:composition.dependencies}});
+ nodes.push({id:'execution:composition-policy',label:'Request composition',kind:'knowledge',implementation:'Operational SOP Lang World',description:'Schedules independent request cuts in source order and chooses what follows an unresolved result.',wires:compositionWires,details:{loaded:composition.loaded,source:'worlds/app.project/request-composition-policy.sop',dependencies:composition.dependencies}});
  link('execution:composition-policy','execution:module:declared-execution','governs independent request scheduling');
  for(const [owner,schema]of [['execution:policy',policy.schema],['execution:composition-policy',composition.schema]]){
   const id=owner+':schema';nodes.push({id,label:schema.module,kind:'schema',implementation:'SOP Lang schema module',description:'Structural declarations imported by the linked policy. These definitions are not policy facts or editor state.',wires:schema.wires,schemaView:inspectSchemaSource(schema.wires),details:{source:schema.source,module:schema.module,loaded:schema.loaded}});link(owner,id,'imports schema');

@@ -26,6 +26,43 @@ test('request composition retains independent schema and policy sources',async()
  assert.deepEqual(dependencies,['app.request.composition']);
  const [importEntry,factEntry]=world.toJSON().log;
  assert.deepEqual(importEntry.wires.map(wire=>wire.type),['core.use']);
- assert.deepEqual(factEntry.wires.map(wire=>wire.type),['app.request.composition.policy']);
+ assert.equal(factEntry.wires[0].type,'app.request.composition.policy');
+ assert.equal(factEntry.wires.filter(wire=>wire.type==='core.rule').length,2);
  assert.deepEqual(parse(facts),factEntry.wires);
+});
+
+
+test('authored continuation controls whether an unresolved clause blocks later effects and preserves undo',async()=>{
+ const text='make a circle; make an unavailable object; make a house',sourceCuts=[[0,13],[15,41],[43,55]];
+ const authored=inspectRequestCompositionPolicy().source;
+ for(const action of ['advance','stop']){
+  const policySource=authored.replace('after.unresolved=advance','after.unresolved='+action);
+  const state=initialDrawingState(),events=[],seen=[],session={isession:{state:{'ui.shell':{activeTab:'draw'},'art.draw':state}},
+   engine:{requestCompositionPolicySource:policySource,onWorldActivity:event=>events.push(event),requestReader:{
+    bindings:()=>bindings,registry:()=>({}),provenance:()=>({modelSha256:'a'.repeat(64)}),
+    propose(){throw Error('compound fixture must use observed cuts');},
+    async *proposeRequests(sourceSop){
+     assert.equal(readReaderSource(sourceSop),text);
+     for(const [index,kind] of ['circle','unbound','house'].entries()){
+      seen.push(index);
+      const next=proposal(kind,0);
+      next.candidates[0].wires=next.candidates[0].wires.replace(JSON.stringify(full),JSON.stringify(text));
+      next.composition={index,range:sourceCuts[index],sourceCuts,explicitDependencies:[]};
+      yield next;
+     }
+    },
+   }}};
+  const result=await routeNewEngine(session,text,{view:'draw'});
+  const advanced=action==='advance';
+  assert.deepEqual(seen,advanced?[0,1,2]:[0,1]);
+  assert.deepEqual(toNativeDrawingState(session.isession.state['art.draw']).objects.map(object=>object.kind),advanced?['circle','house']:['circle'],JSON.stringify(result.trace));
+  assert.equal(result.trace.composition.total,3);
+  assert.deepEqual(result.trace.composition.deferred,advanced?[]:[sourceCuts[2]]);
+  assert.equal(result.trace.composition.undoGroup,1);
+  assert.ok(events.some(event=>event.operation==='app.request.composition.decision'&&event.wires.includes('previous=unresolved')&&event.wires.includes('action='+action)));
+  if(!advanced)assert.match(result.text,/stopped before "make a house"/);
+  const undo=await routeNewEngine(session,'@s std.request.source text="Undo" @r std.request act=undo mood=do source=$s',{view:'draw'});
+  assert.deepEqual(undo.statuses,['supported']);
+  assert.deepEqual(toNativeDrawingState(session.isession.state['art.draw']).objects,[]);
+ }
 });

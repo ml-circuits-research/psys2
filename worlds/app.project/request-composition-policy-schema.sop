@@ -1,5 +1,13 @@
-@composition.module core.module name=app.request.composition version=1 exports=app.request.composition.policy
-@composition.type core.type of=app.request.composition.policy
-@composition.order core.slot of=app.request.composition.policy key=independent.order kind=atom enum=source
-@composition.dependencies core.slot of=app.request.composition.policy key=explicit.dependencies kind=atom enum=preserve
-@composition.undo core.slot of=app.request.composition.policy key=undo kind=atom enum=turn
+@composition.module core.module name=app.request.composition version=1 exports=app.request.composition.policy exports=app.request.composition.progress exports=app.request.composition.decision
+@composition.type core.type of=app.request.composition.policy closed=true
+@composition.order core.slot of=app.request.composition.policy key=independent.order kind=atom enum=source present=true
+@composition.dependencies core.slot of=app.request.composition.policy key=explicit.dependencies kind=atom enum=preserve present=true
+@composition.undo core.slot of=app.request.composition.policy key=undo kind=atom enum=turn present=true
+@composition.after core.slot of=app.request.composition.policy key=after.unresolved kind=atom enum=advance enum=stop present=true
+
+@progress.type core.type of=app.request.composition.progress closed=true
+@progress.previous core.slot of=app.request.composition.progress key=previous kind=atom enum=complete enum=unresolved present=true
+@progress.remaining core.slot of=app.request.composition.progress key=remaining kind=integer min=1 max=32 present=true
+@decision.type core.type of=app.request.composition.decision closed=true
+@decision.progress core.slot of=app.request.composition.decision key=progress type=app.request.composition.progress present=true
+@decision.action core.slot of=app.request.composition.decision key=action kind=atom enum=advance enum=stop present=true

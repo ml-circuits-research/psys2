@@ -29,7 +29,7 @@ test('inspection shows exact available pinned snapshot without initializing the 
  assert.ok(graph.edges.some(edge=>edge.from==='execution:creation-policy'&&edge.to===constructors.id));
  for(const owner of ['execution:policy','execution:composition-policy']){
   const facts=lookup(graph,owner),schema=lookup(graph,owner+':schema');
-  assert.equal(parse(facts.wires).some(wire=>SCHEMA_TYPES.has(wire.type)),false,'policy source contains owned facts only');
+  assert.equal(parse(facts.wires).some(wire=>SCHEMA_TYPES.has(wire.type)&&wire.type!=='core.rule'),false,'policy rules and facts have separate schema definitions');
   assert.ok(parse(schema.wires).some(wire=>wire.type==='core.type'));
   assert.ok(graph.edges.some(edge=>edge.from===owner&&edge.to===schema.id&&edge.label==='imports schema'));
  }
