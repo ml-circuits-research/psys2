@@ -10,6 +10,8 @@ The owner also authorizes reversible best effort while no calibrated cohort is c
 
 The reader validates the proposed graph and independently verifies any retained report. It supplies these observations as `app.reader.evidence` to the SOP rules in a library World fork. The derived `app.reader.decision` controls dispatch and is retained in the trace. C1 takes its ordinary error-rate ceiling from the same authored policy. Worlds shows the governing SOP file and its link to the evidence adapter.
 
+The live reader context uses authored observation roles, hierarchy paths and focus evidence in `worlds/app.project/reader-context-policy.sop`. SOP rules retain roots, exact mentions and focused items. The library ranks the finite evidence classes once, then the reader projects observed records in the declared tie order. Offline replay uses the same display bindings and keeps the full source-order inventory.
+
 ## Score and alternatives
 
 `psys2.model-minimum/1` uses the minimum selected softmax probability from actual cutter token decisions and request-class decisions, and the selected sigmoid probability of learned key-presence decisions. Untrained derived presence keys do not enter it. Every component is read from real inference outputs. No canonical-binding probability is fabricated: the declared binding/graph validation remains a structural eligibility condition. The scalar ranks interpretations and supports future threshold fitting; it is not a calibrated individual probability of success. Missing scores do not receive a synthetic confidence of one.

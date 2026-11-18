@@ -13,6 +13,10 @@ test('architecture inspector exposes exact held files, actual state structures a
  assert.ok(result.edges.some(e=>e.from===readerPolicy.id&&e.to==='schema:reader-admission'));
  assert.match(readerPolicy.wires,/@reader.permit.calibrated core.rule/);
  assert.ok(result.edges.some(e=>e.from==='component:request-admission'&&e.to===readerPolicy.id));
+ const context=byId.get('knowledge:reader-context'),contextSchema=byId.get('schema:reader-context');
+ assert.match(context.wires,/@context.rank.mention std.decide.criterion/);
+ assert.match(contextSchema.wires,/core.type of=app.readerContext.display/);
+ assert.ok(result.edges.some(e=>e.from===context.id&&e.to===contextSchema.id));
  assert.ok(!byId.has('component:formalizer'));assert.equal(byId.get('component:request-admission').details.entryPoint,'assessReaderProposal');
  assert.equal(byId.get('schema:novel:legend.sop').wires,schema);assert.equal(byId.get('instance:novel').wires,archive);assert.equal(byId.get('instance:novel').details.cachedWorld.wires,archive);
  assert.equal(byId.get('native:novel').details,state);assert.ok(!byId.has('structure:novel:history'));assert.deepEqual(byId.get('native:novel').details.history,state.history);

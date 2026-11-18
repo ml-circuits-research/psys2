@@ -5,6 +5,8 @@ import { emit, done } from './lib/generated.mjs';
 
 const folder = new URL('../worlds/app.project/', import.meta.url);
 for (const [source, module] of [
+  ['reader-context-schema.sop', 'reader-context-schema-source.mjs'],
+  ['reader-context-policy.sop', 'reader-context-policy-source.mjs'],
   ['reader-admission-schema.sop', 'reader-admission-schema-source.mjs'],
   ['reader-admission-policy.sop', 'reader-admission-policy-source.mjs'],
   ['capability-policy.sop', 'capability-policy.mjs'],

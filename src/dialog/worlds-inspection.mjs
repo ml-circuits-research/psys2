@@ -1,6 +1,7 @@
 // Read-only architecture projection of the runtime registry. No inferred execution links.
 import {parse,serialize,str} from '../vendor/sopworld/sopworld.mjs';
 import {inspectReaderAdmissionPolicy} from './reader-policy.mjs';
+import {inspectReaderContextPolicy} from './reader-context-policy.mjs';
 import {describeWorldsNodes} from './worlds-node-metadata.mjs';
 import {CATALOG_WORLD_PURPOSES} from './catalog-world-purpose.mjs';
 
@@ -78,6 +79,16 @@ export function inspectWorldsRuntime({index={},bundle={worlds:{}},loaded=[],inst
  for(const file of knowledgeFiles){const id='knowledge-file:'+file.path;nodes.push({id,label:file.path,kind:catalogWorlds.some(world=>world.schema===file.path)?'schema':'knowledge',implementation:/\.sop$/.test(file.path)?'SOP Lang':'Catalog data',description:'Exact file text returned by the active knowledge source.',why:CATALOG_WORLD_PURPOSES[sourceOwners.get(file.path)],sourceFiles:[{path:file.path,role:'source',loaded:true}],usage:file.purposes?.includes('runtime')?'runtime-read':'inspection-only',wires:file.text,...(catalogWorlds.some(world=>world.schema===file.path)?{schemaView:inspectSchemaSource(file.text)}:{}),details:{path:file.path,loaded:true}});link('knowledge:catalog',id,'loaded file');}
  if(libraryInfo){nodes.push({id:'component:library',label:'SOPWorlds library',kind:'component',implementation:'JavaScript + built-in SOP schemas',description:'Actual imported library version, schema type identities and exported pipeline declarations. These are implementation mechanisms, not independent instance worlds.',details:libraryInfo});link('component:reasoner','component:library','imports mechanisms');}
  nodes.push({id:'component:reader',label:'SOP-BERT',kind:'component',implementation:'Trained model + JavaScript',description:'Actual browser reader provider. This node does not imply that model internals are SOP reasoning.',details:reader});
+ const context=inspectReaderContextPolicy();
+ nodes.push({id:'knowledge:reader-context',label:'Reader context policy',kind:'knowledge',implementation:'Operational SOP Lang World',
+  description:'Defines the display bindings, exact mention evidence, hierarchy and focus used to select reader context.',
+  wires:context.policy,details:{source:'worlds/app.project/reader-context-policy.sop',loaded:context.loaded}});
+ nodes.push({id:'schema:reader-context',label:'app.readerContext',kind:'schema',implementation:'SOP Lang schema module',
+  description:'Defines the native observation roles and evidence classes used by context projection.',
+  wires:context.schema,schemaView:inspectSchemaSource(context.schema),
+  details:{source:'worlds/app.project/reader-context-schema.sop',loaded:context.loaded}});
+ link('component:reader','knowledge:reader-context','uses declared context projection');
+ link('knowledge:reader-context','schema:reader-context','imports schema');
 
  nodes.push({id:'component:control-interpreter',label:'SOP tool command reader',kind:'interpreter',implementation:'JavaScript + declared tool schemas',description:'Parses compact or expanded SOP control wires and validates exact tool parameters before native UI invocation. This interpreter is separate from the text reader.',details:{source:'src/dialog/native-intent-reader.mjs',caller:'src/dialog/native-tool-controls.mjs'}});
  for(const host of hosts)if(Object.hasOwn(index.worlds??{},host.world))link('component:control-interpreter','interpreter:'+host.world,'validates concrete tool commands for');

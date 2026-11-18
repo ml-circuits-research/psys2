@@ -31,7 +31,8 @@ export async function refreshBrowserReaderDeployment(outDir){
    'worlds/tool-instance-state.mjs','lib/vendor/sopworld/instance-fact-codec.mjs',
   ],
   contextSerializationSha256:[
-   'lib/dialog/native-reader-context.mjs','lib/dialog/app-reader-context.mjs','lib/dialog/key-reader-inference.mjs',
+   'lib/dialog/native-reader-context.mjs','lib/dialog/reader-context-policy.mjs','lib/dialog/app-reader-context.mjs','lib/dialog/key-reader-inference.mjs',
+   'worlds/app.project/reader-context-policy-source.mjs','worlds/app.project/reader-context-schema-source.mjs',
    'lib/dialog/instance-identity.mjs',
   ],
   backendSha256:['vendor/onnxruntime/ort.wasm.bundle.min.mjs','vendor/onnxruntime/ort-wasm-simd-threaded.mjs','vendor/onnxruntime/ort-wasm-simd-threaded.wasm','vendor/sop-tokenizer/bert-tokenizer.mjs']

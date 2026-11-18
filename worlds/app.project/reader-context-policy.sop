@@ -1,0 +1,44 @@
+@context.schema core.use world=app.readerContext prefix=false
+@context.choice core.use world=std.choice
+@context.criteria core.use world=std.decide
+
+# These are the exact native observation bindings read by both runtime and replay.
+@context.display.drawing app.readerContext.display on="art.draw.object" binding="drawing.object.name"
+@context.display.diagram app.readerContext.display on="diagram.sketch.node" binding="diagram.node.label"
+@context.display.document app.readerContext.display on="docs.editor.document" binding="document.title"
+@context.display.block app.readerContext.display on="docs.editor.block" binding="document.block.name"
+@context.display.section app.readerContext.display on="docs.editor.section" binding="document.block.name"
+@context.display.meeting app.readerContext.display on="time.calendar.meeting" binding="calendar.meeting.title"
+@context.display.room app.readerContext.display on="time.calendar.room" binding="calendar.room.label"
+@context.display.person app.readerContext.display on="time.calendar.person" binding="calendar.person.label"
+@context.display.calendar app.readerContext.display on="time.calendar.calendar" binding="calendar.calendar.label"
+@context.display.chart app.readerContext.display on="data.charts.chart" binding="chart.title"
+@context.compact.label app.readerContext.fallback input="label" input="name" object="role"
+@context.parent.in app.readerContext.relation path="in" endpoint=parent
+@context.parent.direct app.readerContext.relation path="parent" endpoint=parent
+@context.children.members app.readerContext.relation path="members" endpoint=child
+@context.children.related app.readerContext.relation path="relations" path="members" endpoint=child
+@context.selected app.readerContext.focus input="selected" value=true
+
+# Compile the finite evidence classes once. A root, mention or focus is enough.
+@context.zero app.readerContext.flag value=0
+@context.one app.readerContext.flag value=1
+@context.mention app.readerContext.flag value=?mentioned
+@context.focused app.readerContext.flag value=?focused
+@context.parented app.readerContext.flag value=?parented
+@context.all app.readerContext.cohort mentioned=?mentioned focused=?focused parented=?parented
+@context.cohorts core.rule when=$context.mention when=$context.focused when=$context.parented then=$context.all
+@context.roots app.readerContext.cohort mentioned=?mentioned focused=?focused parented=0
+@context.mentions app.readerContext.cohort mentioned=1 focused=?focused parented=?parented
+@context.focuses app.readerContext.cohort mentioned=?mentioned focused=1 parented=?parented
+@context.allowed.root app.readerContext.eligible mentioned=?mentioned focused=?focused parented=0
+@context.allowed.mention app.readerContext.eligible mentioned=1 focused=?focused parented=?parented
+@context.allowed.focus app.readerContext.eligible mentioned=?mentioned focused=1 parented=?parented
+@context.retain.roots core.rule when=$context.roots then=$context.allowed.root
+@context.retain.mentions core.rule when=$context.mentions then=$context.allowed.mention
+@context.retain.focuses core.rule when=$context.focuses then=$context.allowed.focus
+
+@context.rank.mention std.decide.criterion of=app.readerContext n=1 name=mention measure=mentioned dir=max
+@context.rank.focus std.decide.criterion of=app.readerContext n=2 name=focus measure=focused dir=max
+@context.rank.root std.decide.criterion of=app.readerContext n=3 name=root measure=parented dir=min
+@context.tie.order app.readerContext.profile ties=reverse mention.row="name" mention.row="kind" mention.object="role"

@@ -21,3 +21,22 @@ test('actual context token fitting removes optional context rather than shorteni
 test('an overlong utterance remains whole and over budget for the existing explicit refusal path',async()=>{
  const seen=[],text='word '.repeat(200),fitted=await fitKeyReaderContext(fakeTokenizer(seen),text,'unfamiliar',{existing:[],previous:null},96);assert.ok(fitted.full.input_ids.data.length>96);assert.ok(seen.every(value=>value===text));
 });
+
+test('declared context roles rank exact mentions, then focus, roots and recent source order',()=>{
+ const shape=(id,details={})=>({id,source:id+'@1',version:'1',sourceType:'novel.item',kind:'piece',inputs:[],...details});
+ const observation={complete:true,instanceId:'scope',scope:'all',version:'1',objects:[
+  shape('earliest',{members:['hidden','focused']}),
+  shape('hidden',{role:'roof'}),
+  shape('focused',{inputs:[{key:'selected',values:['true']}]}),
+  shape('newest',{parent:'unobserved'}),
+  shape('self',{parent:'self',relations:{members:['mentioned']}}),
+  shape('mentioned',{role:'arch'}),
+ ]};
+ const read=text=>{
+  let ids;
+  observedReaderContext('novel',observation,null,{compact:true,text,onSummary:value=>{ids=value.rankedIds;}});
+  return ids;
+ };
+ assert.deepEqual(read('Move the arch by the roofing'),['mentioned','focused','self','newest','earliest']);
+ assert.deepEqual(read('Move the roof'),['hidden','focused','self','newest','earliest']);
+});
