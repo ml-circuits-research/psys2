@@ -49,3 +49,7 @@ The active editor contributes observed journal heads to the history policy in `w
 The journal tool consumes the selected SOP call, checks its invocation revision and current content, and restores the saved editor state with the current view preferences. It verifies the restored content before moving the entry to the other journal stack. A reverse move assigns a fresh head identity, so an earlier call cannot run against an entry that left and reentered the stack. History does not record another undo group for the restoration. Independent edits in a composed turn share one group when the turn makes no journal moves.
 
 Worlds attaches the compiler result to the history policy and shows the exact call and typed outcome at the journal interpreter. A stale call or conflicting editor content yields a refusal before mutation.
+
+## Grounded creation requirements
+
+Creation resolution supplies exact Unicode source spans, declared property mappings and the selected constructor’s parameters to the creation policy. The policy identifies lexical kind evidence and classifies grounded requirements as consumed, bound to a name, bound to a property, or unapplied. A coextensive role is consumed only when its support matches the chosen kind span. A naming parameter used to load catalog knowledge is distinct from a parameter that stores a name. Remaining grounded requirements are disclosed in the response.

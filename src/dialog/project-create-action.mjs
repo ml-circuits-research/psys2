@@ -1,4 +1,4 @@
-import {World,editCost,parse,quote,str} from '../vendor/sopworld/sopworld.mjs';
+import {World,editCost,parse,quote,serialize,str} from '../vendor/sopworld/sopworld.mjs';
 import POLICY from '../../worlds/app.project/creation-policy-source.mjs';
 import SCHEMA from '../../worlds/app.project/creation-schema-source.mjs';
 import {executionPolicyWorld} from './execution-policy.mjs';
@@ -11,16 +11,14 @@ import {compileObservedChoice} from './observed-choice.mjs';
 const field=(fact,key)=>str(fact.attrs[key]?.[0]);
 let loaded;
 export const inspectCreationPolicy=()=>({policy:POLICY,schema:SCHEMA,loaded:!!loaded});
-function creationPolicy(){
- if(loaded)return loaded;
+function creationPolicy(source){
+ if(source===POLICY&&loaded)return loaded;
  const world=new World({library:{'app.creation':SCHEMA}});
- if(!world.tell(POLICY).ok)throw Error('invalid-creation-policy');
- const rows=world.ofType('app.creation.role'),[grounding]=world.ofType('app.creation.grounding');
- const roles=new Map(rows.map(row=>[field(row,'concept'),field(row,'role')]));
- const editCeiling=Number(field(grounding,'editCeiling'));
- const nameParameter=field(rows.find(row=>field(row,'role')==='name'),'parameter');
- loaded={world,roles,editCeiling,nameParameter};
- return loaded;
+ if(!world.tell(source).ok)throw Error('invalid-creation-policy');
+ const [grounding]=world.ofType('app.creation.grounding');
+ const config={world,editCeiling:Number(field(grounding,'editCeiling'))};
+ if(source===POLICY)loaded=config;
+ return config;
 }
 const valueKeys=new Set(['key','value','value_span','phase','operator','polarity','character']);
 const retainedLimit=5;
@@ -38,10 +36,8 @@ function sourceEvidence(raw){
   return chars.slice(...range).join('')===value?range:null;
  };
 }
-const coextensive=(a,b)=>a&&b&&a[0]===b[0]&&a[1]===b[1];
 
-function rankConstructors(choices,lexical,readType,family){
- const {world,editCeiling}=creationPolicy();
+function rankConstructors({world,editCeiling},choices,lexical,readType,family){
  if(lexical&&lexical.length>64)return {options:[]};
  const candidates=[];
  for(const choice of choices){
@@ -76,9 +72,68 @@ function rankConstructors(choices,lexical,readType,family){
  }
  return {options,equivalent,trace};
 }
-export async function projectCreateAction(proposal,session,{bindings,registry,view}={}){
+const textToken=value=>typeof value==='string'?quote(value):undefined;
+const spanTokens=range=>range?{start:String(range[0]),end:String(range[1])}:{};
+const row=(id,type,fields)=>({id,type:'app.creation.'+type,attrs:Object.fromEntries(
+ Object.entries(fields).filter(([,value])=>value!==undefined).map(([key,value])=>[key,[value]]))});
+const conditionId=index=>'creation.entry.'+index;
+
+function roleEvidence(request,registry,readerArea,span){
+ return request.constraints.map((entry,index)=>{
+  const concept=registry[readerArea+'.'+entry.key]?.concept;
+  const range=entry.value===entry.value_span?span(['constraints',String(index),'value_span'],entry.value):null;
+  return {entry,concept,range};
+ });
+}
+function resolveRoles(base, target, kindRange, conditions, properties, operation){
+ const view=base.fork(),facts=[row('creation.input','input',{
+  kind:textToken(target.kind),name:textToken(target.name),...spanTokens(kindRange),on:textToken(operation?.on),
+ })];
+ for(const [index,{entry,concept,range}]of conditions.entries()){
+  facts.push(row(conditionId(index),'entry',{key:textToken(entry.key),concept,value:textToken(entry.value),
+   phase:textToken(entry.phase),operator:textToken(entry.operator),character:textToken(entry.character),polarity:textToken(entry.polarity),
+   normal:String(Object.keys(entry).every(key=>valueKeys.has(key))),...spanTokens(range),
+  }));
+ }
+ if(operation){
+  const knowledge=new Set((operation.knowledgeInputs??[]).map(input=>input.argument));
+  for(const name of Object.keys(operation.params))facts.push(row('creation.parameter.'+facts.length,'parameter',
+   {name:quote(name),knowledge:String(knowledge.has(name))}));
+  for(const property of properties)facts.push(row('creation.property.'+facts.length,'property',{
+   key:quote(property.key),canonical:quote(property.canonical),on:quote(property.sourceType),parameter:quote(property.parameter),
+  }));
+ }
+ if(!view.tell(serialize(facts),{factsOnly:true}).ok)return null;
+ return view;
+}
+function propertyEvidence(bindings,readerArea,conditions){
+ const observed=executionPolicyWorld().ofType('app.execution.observedProperty');
+ const direct=(bindings.properties??[]).filter(row=>row.area===readerArea&&row.hostBinding?.sourceType&&row.hostBinding.parameter)
+  .map(row=>({key:row.key,canonical:row.canonical,sourceType:row.hostBinding.sourceType,parameter:row.hostBinding.parameter}));
+ const owned=conditions.flatMap(({entry,concept})=>observed.filter(row=>field(row,'concept')===concept).map(row=>({
+  key:entry.key,canonical:concept,sourceType:field(row,'sourceType'),parameter:field(row,'parameter'),
+ })));
+ return [...direct,...owned];
+}
+function assignment(view,conditions){
+ const rows=view.ofType('app.creation.disposition'),dispositions=new Map(rows.map(fact=>[fact.attrs.entry[0],fact]));
+ if(dispositions.size!==rows.length||dispositions.size!==conditions.length)return null;
+ const values=[],unapplied=[],names=new Set(view.ofType('app.creation.targetName').map(fact=>field(fact,'value')));
+ for(const [index,{entry,concept,range}] of conditions.entries()){
+  const decision=dispositions.get('$'+conditionId(index));
+  if(!decision)return null;
+  const action=field(decision,'action');
+  if(action==='name')names.add(field(decision,'name'));
+  if(action==='value')values.push({concept:field(decision,'concept'),token:quote(entry.value),range,witness:entry.key});
+  if(action==='unapplied')unapplied.push((concept??entry.key)+' '+entry.value);
+ }
+ for(const gap of view.ofType('app.creation.nameGap'))unapplied.push('the name '+JSON.stringify(field(gap,'value')));
+ if(names.size>1)return null;
+ return {name:[...names][0],values,unapplied};
+}
+export async function projectCreateAction(proposal,session,{bindings,registry,view,policy=POLICY}={}){
  const raw=proposal?.raw,r=raw?.requests?.[0],area=NATIVE_AREAS[view];
- if(!area||!bindings||!registry||proposal.coverage?.complete||raw?.requestCount!==1||raw.coverage?.truncated||r?.act!=='make'||r.mood!=='do'||r.target?.mode!=='new'||typeof raw.source?.text!=='string'||!Array.isArray(r.constraints)||r.constraints.some(c=>c.polarity==='negative'))return null;
+ if(!area||!bindings||!registry||proposal.coverage?.complete||raw?.requestCount!==1||raw.coverage?.truncated||r?.act!=='make'||r.mood!=='do'||r.target?.mode!=='new'||typeof raw.source?.text!=='string'||!Array.isArray(r.constraints))return null;
  const evidence=sourceEvidence(raw);
  if(!evidence(['trigger'],r.trigger))return null;
  const native=session.isession.state[area.world];
@@ -86,51 +141,40 @@ export async function projectCreateAction(proposal,session,{bindings,registry,vi
  const readerArea=bindings.readerAreaByView?.[view]??area.area;
  const host=await area.create({state:native,instanceId:'creation-'+globalThis.crypto.randomUUID()});
  const choices=nativeCreationCandidates(bindings,host.bindings(),readerArea);
- const {roles,nameParameter}=creationPolicy();
- const recognized=r.constraints.map((entry,index)=>{
-  const concept=registry[readerArea+'.'+entry.key]?.concept;
-  const range=entry.value===entry.value_span?evidence(['constraints',String(index),'value_span'],entry.value):null;
-  return {entry,concept,range,role:roles.get(concept)};
- });
- let lexical=r.target.kind,kindRange=null;
- if(lexical){
-  kindRange=evidence(['target','kind_span'],r.target.kind_span??lexical);
-  if(!kindRange)return null;
- }else{
-  const kind=recognized.find(row=>row.role==='kind'&&row.range);
-  lexical=kind?.entry.value;
-  kindRange=kind?.range;
- }
- let name=r.target.name;
- if(name&&!evidence(['target','name_span'],r.target.name_span??name))return null;
- const family=bindings.families?.find(f=>f.area===readerArea&&f.type===r.target.type)?.canonical;
- const {options,equivalent,trace}=rankConstructors(choices,lexical,r.target.type,family);
- const chosen=options[0];
- if(!chosen)return null;
- const values=[],unapplied=[];
- const acceptsName=!!chosen.operation.params[nameParameter]&&!chosen.operation.knowledgeInputs?.some(input=>input.argument===nameParameter);
- if(r.target.count!==undefined&&r.target.count!==1||r.target.count_span)unapplied.push('the requested object count');
- for(const {entry,concept,range,role} of recognized){
-  if(Object.keys(entry).some(k=>!valueKeys.has(k))){unapplied.push((concept??entry.key)+' '+entry.value);continue;}
-  if(entry.operator!=='eq'||entry.phase!=='result'||entry.polarity!=='positive'||entry.character!=='requirement'||!range)return null;
-  if((role==='kind'||role==='coextensive')&&coextensive(kindRange,range))continue;
-  if(role==='name'&&acceptsName&&(!name||name===entry.value)){name=entry.value;continue;}
-  const canonical=bindings.properties.find(p=>p.area===readerArea&&p.key===entry.key)?.canonical;
-  const own=executionPolicyWorld().ofType('app.execution.observedProperty').find(p=>field(p,'sourceType')===chosen.operation.on&&field(p,'concept')===concept);
-  if(canonical||own)values.push({concept:canonical??concept,token:quote(entry.value),range,witness:entry.key});
-  else unapplied.push((concept??entry.key)+' '+entry.value);
- }
+ const config=creationPolicy(policy),target={...r.target,kind:r.target.kind?(r.target.kind_span??r.target.kind):undefined};
+ const conditions=roleEvidence(r,registry,readerArea,evidence);
+ const kindRange=target.kind?evidence(['target','kind_span'],target.kind):null;
+ if(target.kind&&!kindRange||target.name&&!evidence(['target','name_span'],target.name))return null;
+ const lexicalView=resolveRoles(config.world,target,kindRange,conditions,[]);
+ if(!lexicalView||lexicalView.ofType('app.creation.checked').length!==conditions.length)return null;
+ const lexicalChoices=lexicalView.ofType('app.creation.lexical');
+ if(lexicalChoices.length>1)return null;
+ const lexical=lexicalChoices.length?field(lexicalChoices[0],'value'):undefined;
+ const family=bindings.families?.find(f=>f.area===readerArea&&f.type===target.type)?.canonical;
+ const {options,equivalent,trace}=rankConstructors(config,choices,lexical,target.type,family);
+ if(!options.length)return null;
+ const properties=propertyEvidence(bindings,readerArea,conditions);
+ const shared=resolveRoles(config.world,target,kindRange,conditions,properties,options[0].operation);
+ const settled=shared&&assignment(shared,conditions);
+ if(!settled)return null;
+ const {name,values,unapplied}=settled;
+
  const noteFor=choice=>choice.distance>0?`I took ${JSON.stringify(lexical)} as ${choice.mapping.lemma}.`:!lexical?`I used ${choice.mapping.lemma} as the kind.`:'';
  const candidates=equivalent.flatMap(choice=>{
+  if(choice!==options[0]){
+   const alternative=resolveRoles(config.world,target,kindRange,conditions,properties,choice.operation);
+   if(!alternative||JSON.stringify(assignment(alternative,conditions))!==JSON.stringify(settled))return [];
+  }
   const graph=projectGroundedRequest({profile:'creation',act:r.act,mood:r.mood,kind:choice.mapping.canonical,
    text:raw.source.text,name,values,witness:choice.mapping.sourceWire??choice.operation.id});
   if(graph)observeGroundedProjection(session,graph.projection);
   return graph?[{...graph,creationNote:noteFor(choice)}]:[];
  });
  if(!candidates.length)return null;
+ if(target.count!==undefined&&target.count!==1||target.count_span)unapplied.push('the requested object count');
  const note=candidates[0].creationNote;
  return {...proposal,candidates,coverage:{complete:true,graphProposal:true,executable:false},failures:[],
-  interpretation:{profile:'declared-creation/1',note,projections:candidates.map(candidate=>candidate.projection),unapplied,...(name&&acceptsName?{requestedName:name}:{}),alternatives:options.map(choice=>({
+  interpretation:{profile:'declared-creation/1',note,projections:candidates.map(candidate=>candidate.projection),unapplied,...(name?{requestedName:name}:{}),alternatives:options.map(choice=>({
    canonical:choice.mapping.canonical,lemma:choice.mapping.lemma,cost:choice.distance,why:choice.why,
   })),decision:{input:trace.input,sop:trace.sop},unresolved:proposal.failures}};
 }

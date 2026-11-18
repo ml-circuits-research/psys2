@@ -10,3 +10,59 @@
 @part app.creation.role concept=part_kind role=coextensive
 @name app.creation.role concept=name role=name parameter="name"
 @limits app.creation.grounding editCeiling=2
+
+@p.anchored app.creation.entry key=?key value=?value start=?start end=?end phase="result" operator="eq" polarity="positive" character="requirement"
+@p.applicable app.creation.entry key=?key concept=?concept value=?value start=?start end=?end phase="result" operator="eq" polarity="positive" character="requirement" normal=true
+@p.skipped.shape app.creation.entry value=?value start=?start end=?end polarity="positive" normal=false
+@o.checked app.creation.checked entry=$p.anchored
+@o.checked.shape app.creation.checked entry=$p.skipped.shape
+@entry.grounded core.rule when=$p.anchored then=$o.checked
+@entry.untreated.shape core.rule when=$p.skipped.shape then=$o.checked.shape
+
+@p.explicitKind app.creation.input kind=?value start=?start end=?end
+@p.anyKind app.creation.input kind=?stated
+@p.kind.role app.creation.role concept=?concept role=kind
+@o.lexical app.creation.lexical value=?value start=?start end=?end
+@lexical.explicit core.rule when=$p.explicitKind then=$o.lexical
+@lexical.role core.rule when=$p.applicable when=$p.kind.role not=$p.anyKind then=$o.lexical
+
+@p.sameSpan app.creation.lexical start=?start end=?end
+@p.coextensive.role app.creation.role concept=?concept role=coextensive
+@o.consume app.creation.consumed entry=$p.applicable
+@consume.kind core.rule when=$p.applicable when=$p.sameSpan when=$p.kind.role then=$o.consume
+@consume.coextensive core.rule when=$p.applicable when=$p.sameSpan when=$p.coextensive.role then=$o.consume
+
+@p.name.role app.creation.role concept=?concept role=name parameter=?parameter
+@p.textParameter app.creation.parameter name=?parameter knowledge=false
+@p.explicitName app.creation.input name=?explicit
+@p.sameName core.check fn=eq args=?value args=?explicit
+@p.consumed app.creation.consumed entry=$p.applicable
+@o.name app.creation.named entry=$p.applicable name=?value
+@apply.name core.rule when=$p.applicable when=$p.name.role when=$p.textParameter not=$p.explicitName not=$p.consumed then=$o.name
+@apply.sameName core.rule when=$p.applicable when=$p.name.role when=$p.textParameter when=$p.explicitName if=$p.sameName not=$p.consumed then=$o.name
+
+@p.sourceType app.creation.input on=?on
+@p.property app.creation.property key=?key canonical=?canonical on=?on parameter=?parameter
+@p.named app.creation.named entry=$p.applicable
+@o.value app.creation.result entry=$p.applicable concept=?canonical
+@apply.result core.rule when=$p.applicable when=$p.sourceType when=$p.property when=$p.textParameter not=$p.named not=$p.consumed then=$o.value
+
+@p.checked app.creation.checked entry=?entry
+@p.applied.kind app.creation.consumed entry=?entry
+@p.applied.name app.creation.named entry=?entry name=?name
+@p.applied.result app.creation.result entry=?entry concept=?canonical
+@o.disposition.kind app.creation.disposition entry=?entry action=consumed
+@o.disposition.name app.creation.disposition entry=?entry action=name name=?name
+@o.disposition.result app.creation.disposition entry=?entry action=value concept=?canonical
+@record.kind core.rule when=$p.applied.kind then=$o.disposition.kind
+@record.name core.rule when=$p.applied.name then=$o.disposition.name
+@record.result core.rule when=$p.applied.result then=$o.disposition.result
+@o.unapplied app.creation.disposition entry=?entry action=unapplied
+@disclose.remaining core.rule when=$p.checked not=$p.applied.kind not=$p.applied.name not=$p.applied.result then=$o.unapplied
+
+@p.nameParameter app.creation.role role=name parameter=?parameter
+@o.explicitName app.creation.targetName value=?explicit
+@p.admittedName app.creation.targetName value=?explicit
+@o.nameGap app.creation.nameGap value=?explicit
+@apply.explicitName core.rule when=$p.explicitName when=$p.nameParameter when=$p.textParameter then=$o.explicitName
+@disclose.explicitName core.rule when=$p.explicitName not=$p.admittedName then=$o.nameGap

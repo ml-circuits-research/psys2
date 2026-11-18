@@ -52,6 +52,7 @@ test('context value correction and other-target correction use actual objects an
 
 import {projectCreateAction} from '../src/dialog/project-create-action.mjs';
 import creationPolicy from '../worlds/app.project/creation-policy-source.mjs';
+import {executeDeclaredRequest} from '../src/dialog/declared-execution.mjs';
 test('creation projection resolves conflicting type heads by anchored declared identity and guesses a declared typo',async()=>{
  const session={isession:{state:{'art.draw':canonicalDrawingState(initialDrawingState())}}},bindings={kinds:[{area:'drawing',type:'drawn',canonical:'fixture.house',lemma:'house',nativeFamilyBinding:{operation:'drawing.object.make'}}],properties:[]};
  const message='fixture hosue',p={coverage:{complete:false},candidates:[],failures:[{reason:'unresolved-canonical-kind-binding'}],raw:{source:{text:message,unit:'unicode-scalar'},requestCount:1,coverage:{truncated:false},requests:[{act:'make',mood:'do',trigger:'fixture',target:{mode:'new',type:'a-conflicting-class',kind:'hosue',kind_span:'hosue'},constraints:[]}],ranges:[{path:['requests','0','trigger'],range:[0,7]},{path:['requests','0','target','kind_span'],range:[8,13]}]}};
@@ -91,6 +92,15 @@ test('creation hypotheses preserve exact identities, consume coextensive evidenc
  assert.deepEqual(session.isession.state['art.draw'],before);
  const forged=structuredClone(proposal);forged.raw.ranges.at(-1).range=[7,13];
  assert.equal(await projectCreateAction(forged,session,{view:'draw',bindings,registry}),null);
+ const otherPolicy=creationPolicy.replace('role=name parameter="name"', 'role=name parameter="unavailable-name"');
+ const alternative=await projectCreateAction(proposal,session,{view:'draw',bindings,registry,policy:otherPolicy});
+ assert.deepEqual(alternative.interpretation.unapplied,['name Oval']);
+ assert.doesNotMatch(alternative.candidates[0].wires,/\bname=/);
+ const applied=await executeDeclaredRequest(session,alternative.candidates[0],source,{view:'draw',bindings,unapplied:alternative.interpretation.unapplied});
+ assert.equal(applied.statuses[0],'supported');
+ assert.match(applied.text,/could not apply name Oval/);
+ assert.equal(toNativeDrawingState(session.isession.state['art.draw']).objects[0].name,undefined);
+
 });
 
 import {fixtureEngine} from './helpers.mjs';

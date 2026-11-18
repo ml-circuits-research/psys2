@@ -90,10 +90,10 @@ export async function inspectExecutionWorlds(session){
  link('execution:reference-policy','execution:module:declared-execution','supplies a grounded reference');
  const creation=inspectCreationPolicy();
  nodes.push({id:'execution:creation-policy',label:'Creation readings',kind:'knowledge',implementation:'Operational SOP Lang World',
-  description:'Compares grounded names with the constructors that the current tool exposes. Its criteria order lexical distance, reader type and family.',
+  description:'Ranks constructors by grounded lexical evidence, reader type and family. It also classifies anchored inputs by authored source roles and the selected tool parameters.',
   wires:creation.policy,details:{source:'worlds/app.project/creation-policy.sop',loaded:creation.loaded}});
  nodes.push({id:'execution:creation-schema',label:'app.creation',kind:'schema',implementation:'SOP Lang schema module',
-  description:'Declares grounded source roles and the lexical distance limit used when reading a creation request.',
+  description:'Declares grounded source evidence, capability inputs, lexical limits and dispositions of creation requirements.',
   wires:creation.schema,schemaView:inspectSchemaSource(creation.schema),details:{source:'worlds/app.project/creation-schema.sop',loaded:creation.loaded}});
  link('execution:creation-policy','execution:creation-schema','imports schema');
  const constructors=inspectConstructorPolicy();
