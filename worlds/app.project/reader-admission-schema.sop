@@ -15,6 +15,7 @@
 @reader.evidence.error core.slot of=app.reader.evidence key=calibration.error.limit kind=number min=0 max=1
 @reader.evidence.score core.slot of=app.reader.evidence key=score.available kind=boolean present=true
 @reader.evidence.model core.slot of=app.reader.evidence key=model.identity.present kind=boolean present=true
+@reader.evidence.scoped core.slot of=app.reader.evidence key=scoped.removal kind=boolean
 @reader.evidence.uncertain core.slot of=app.reader.evidence key=uncertain kind=boolean present=true
 @reader.class.type core.type of=app.reader.classification closed=true
 @reader.class.name core.slot of=app.reader.classification key=class kind=atom present=true

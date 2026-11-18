@@ -24,6 +24,24 @@ function refusal(plan, candidate) {
   });
 }
 
+// A command with an exact bound object and recoverable session state can use reversible best effort.
+export function isScopedRemoval(plan){
+ if(plan?.status!=='compiled'||plan.act!=='remove'||!plan.id||!plan.source||!plan.instance||typeof plan.version!=='string'||plan.skipped.length||Object.keys(plan.args).length!==1)return false;
+ const {id,ids}=plan.args;
+ return id===plan.id&&ids===undefined||id===undefined&&Array.isArray(ids)&&ids.length===1&&ids[0]===plan.id;
+}
+
+function verifyRemovalPeers(plan, before, after, evidence) {
+  const removed = before.objects.find((object) => object.id === plan.id && object.source === plan.source);
+  if (!removed || evidence.status !== 'verified') return evidence;
+  const peers = before.objects.filter((object) => object.sourceType === removed.sourceType &&
+    object.id !== removed.id && (object.in ?? object.parent) === (removed.in ?? removed.parent));
+  const survivors = new Set(after.objects.map((object) => object.source));
+  const lost = peers.filter((object) => !survivors.has(object.source));
+  if (!lost.length) return evidence;
+  return { ...evidence, status:'mismatch', reason:'unrelated-peer-removed', changedPeers:lost.map((object) => object.id) };
+}
+
 /** Compose authoritative observations, run the compiled native call and report the actual effect. */
 export async function executeNativeCapability(session, candidate, { bindings, view, focus, text, targetUnique, invocation = globalThis.crypto.randomUUID(), unapplied = [], compiledPlan, readKnowledge } = {}) {
   const area = NATIVE_AREAS[view];
@@ -61,25 +79,32 @@ export async function executeNativeCapability(session, candidate, { bindings, vi
     // Inspection does not affect dispatch.
   }
   const intent = describeNativeControl({ operation, args: plan.args, before: observed });
-  const original = plan.selector ? structuredClone(nativeState) : undefined;
+  const scopedRemoval = isScopedRemoval(plan);
+  const original = plan.selector || scopedRemoval ? structuredClone(nativeState) : undefined;
   const receipt = await invokeObservedNativeTool(session, { area, host: prepared, invocation,
     expectedVersion: observed.version, sop: plan.toolInput });
   if (receipt.status === 'refused') return reply('I could not apply that action. Nothing changed.', false,
     { reason: receipt.reason, receipt, compiledSop: plan.sop, controlIntent: plan.toolInput });
 
-  const after = prepared.observe(), verification = verifyNativeControlEffect({ intent, before: observed, after, receipt });
+  const after = prepared.observe();
+  const effect = verifyNativeControlEffect({ intent, before: observed, after, receipt });
+  const verification = scopedRemoval ? verifyRemovalPeers(plan, observed, after, effect) : effect;
   if (original && verification.status !== 'verified') {
     session.isession.state[area.world] = original;
     return reply('I could not confirm the requested change. I restored the previous state.', false, {
-      reason: 'unverified-selector-effect', compiledSop: plan.sop, controlIntent: plan.toolInput, receipt, effectVerification: verification,
+      reason: scopedRemoval ? 'unverified-removal-effect' : 'unverified-selector-effect', compiledSop: plan.sop, controlIntent: plan.toolInput, receipt, effectVerification: verification,
     });
   }
   const old = new Set(before.objects.map((object) => object.id));
   const object = after.objects.find((value) => !old.has(value.id)) ?? before.objects.find((value) => String(value.id) === plan.id);
-  session.newEngineFocus = { ...session.newEngineFocus, [view]: object?.id ?? null };
+  const previousFocus = session.newEngineFocus?.[view];
+  const nextFocus = plan.act === 'remove' ? after.objects.find((item) => item.id === previousFocus)?.id : object?.id;
+  session.newEngineFocus = { ...session.newEngineFocus, [view]: nextFocus ?? null };
   const kind = object?.kind ?? plan.kind;
   const notes = [...plan.notes];
-  if (plan.targets.length > 1) notes.unshift('I used the most recent matching ' + plan.kind + '.');
+  if (plan.targets.length > 1) notes.unshift(plan.act === 'remove'
+    ? 'More than one matched. I used ' + kind + ' ' + plan.id + '. You can undo this.'
+    : 'I used the most recent matching ' + plan.kind + '.');
   if (plan.skipped.length) notes.push('I could not apply ' + plan.skipped.join(', ') + '.');
   const said = plan.act === 'make' ? `Created a ${kind}.` : plan.act === 'remove' ? `Removed the ${kind}.` : `Updated the ${kind}.`;
   const measured = retainPropertyEffect(session, { candidate, text, view, plan, before: observed, after, receipt, verification, message: notes.join(' ') });

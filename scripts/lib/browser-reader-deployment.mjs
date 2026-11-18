@@ -11,7 +11,7 @@ export async function refreshBrowserReaderDeployment(outDir){
   packetAdapterSha256:['lib/dialog/key-reader-packet.mjs'],
   graphDecoderSha256:['lib/dialog/raw-structural-bridge.mjs','lib/dialog/model-graph-decoder.mjs','lib/vendor/sopworld/sopworld.mjs'],
   executorSha256:[
-   'lib/dialog/new-engine.mjs','lib/dialog/reader-routing.mjs','lib/dialog/request-composition-policy.mjs','worlds/app.project/request-composition-policy-source.mjs','worlds/app.project/request-composition-policy-schema-source.mjs','lib/dialog/authored-request-tool.mjs',
+   'lib/dialog/new-engine.mjs','lib/dialog/reader-routing.mjs','lib/dialog/project-removal-action.mjs','lib/lang/en.facts.generated.mjs','lib/dialog/request-composition-policy.mjs','worlds/app.project/request-composition-policy-source.mjs','worlds/app.project/request-composition-policy-schema-source.mjs','lib/dialog/authored-request-tool.mjs',
    'lib/dialog/reader-admission.mjs','lib/dialog/reader-policy.mjs','lib/dialog/declared-execution.mjs',
    'lib/dialog/native-binding-candidates.mjs','worlds/app.project/constructor-policy-source.mjs','worlds/app.project/constructor-schema-source.mjs',
    'lib/dialog/capability-plan-adapter.mjs','lib/dialog/native-query-execution.mjs','lib/dialog/execution-policy.mjs','worlds/native-tool-interface.mjs',

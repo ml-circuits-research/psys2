@@ -60,3 +60,8 @@ The page encodes each editor gesture against its declared tool interface. The wo
 The source reader yields independently validated cuts sequentially so each reading can observe earlier effects. After a supported or unresolved cut, the request composition world derives whether to advance or stop. The default advances after an unresolved cut. An authored stop policy leaves later cuts unread and unapplied. Its reply identifies those spans and preserves the verified changes in the turn’s Undo group.
 
 Chat attaches the high-level SOP query to its input and the exact dispatched executable circuit to its answer. A compound request labels each step. Read-only queries show their answer circuit. Compiler selection evidence, alternatives and explanations belong to the recorded activity in Worlds. Editors render the committed projection for each changed world after a chat turn.
+## Scoped removal
+
+A definite existing-object mention can match an exact declared kind in the current editor. When the reader's kind head has no span, the projection requires the name and description spans to coincide and match the whole phrase. The imported language world supplies available articles. The original reader failures remain in the reply trace.
+
+An uncalibrated removal can proceed when the compiler selects a current observed identity and binds that identity as the only target of a concrete remove call. The interpreter observes the result and checks that the selected object disappeared and its peers remain. Ambiguous matches retain the chosen identity and alternates. Undo restores the removed object. Bulk clears and other actions still use their separate admission policy.

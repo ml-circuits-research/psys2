@@ -44,3 +44,8 @@
 @p.ranged app.grounded.value input=?input index=?index start=?begin end=?end
 @o.range app.grounded.constraint core.on=$p.result source=?source source.start=?begin source.end=?end
 @ground.range core.rule when=$p.graph when=$p.ranged when=$p.result then=$o.range
+
+@p.mention app.grounded.mention area=?area family=?family text=?text
+@p.lexeme app.grounded.lexeme area=?area family=?family text=?text canonical=?meaning
+@o.meaning app.grounded.meaning lexeme=$p.lexeme
+@ground.mention core.rule when=$p.mention when=$p.lexeme then=$o.meaning

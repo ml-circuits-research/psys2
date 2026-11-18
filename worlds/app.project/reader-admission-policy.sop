@@ -25,6 +25,9 @@
 @reader.best.effort app.reader.approval mode=uncalibrated-best-effort reason=best-effort-model-proposal uncertain=true
 @reader.permit.best.effort core.rule when=$reader.class when=$reader.bootstrap when=$reader.unconfigured then=$reader.best.effort
 
+@reader.scopedRemoval app.reader.evidence act=remove scoped.removal=true
+@reader.permit.scopedRemoval core.rule when=$reader.scopedRemoval when=$reader.unconfigured then=$reader.best.effort
+
 @reader.approved app.reader.approval mode=?mode reason=?reason uncertain=?uncertain
 @reader.applied app.reader.decision admitted=true mode=?mode reason=?reason uncertain=?uncertain
 @reader.closed app.reader.decision admitted=false mode=closed reason=model-calibration-gate-closed uncertain=false

@@ -23,6 +23,21 @@ export function inspectGroundedProjection() {
   return { policy: POLICY, schema: SCHEMA, loaded: !!base };
 }
 
+export function resolveGroundedMention({text,area,family,lexemes}){
+  const world=groundingWorld().fork();
+  const input=serialize([
+    record('ground.mention','mention',{text:quote(text),area:quote(area),family:quote(family)}),
+    ...lexemes.map(({text,area,family,canonical,witness},index)=>record('ground.lexeme.'+index,'lexeme',{
+      text:quote(text),area:quote(area),family:quote(family),canonical:quote(canonical),witness:quote(witness),
+    })),
+  ]);
+  if(!world.tell(input,{factsOnly:true}).ok)return [];
+  return world.ofType('app.grounded.meaning').map(row=>{
+    const lexeme=world.get(first(row,'lexeme').slice(1));
+    return {canonical:str(first(lexeme,'canonical')),witness:str(first(lexeme,'witness'))};
+  });
+}
+
 export function projectGroundedRequest({ profile, act, mood, kind, text, name, values, witness }) {
   if (typeof text !== 'string' || text.length > 65536 || values.length > 256) return null;
   const atom = /^[A-Za-z0-9_][A-Za-z0-9_.:-]*$/;

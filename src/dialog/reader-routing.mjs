@@ -1,5 +1,8 @@
+import {isScopedRemoval} from './capability-plan-execution.mjs';
+import {projectRemovalAction} from './project-removal-action.mjs';
 import { captureHistory, recordHistory, restoreHistory } from './history-journal.mjs';
 import {projectReaderHeadAlternative} from './reader-head-alternative.mjs';
+import {parse} from '../vendor/sopworld/sopworld.mjs';
 import {writeReaderSource} from './reader-source.mjs';
 import {isAuthoredRequest,readAuthoredRequest} from './authored-request-tool.mjs';
 // Model-first proposal routing. Calibration authority belongs to host configuration,
@@ -68,17 +71,35 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
    }
   }catch{/* An unproved alternative leaves the original diagnostics in force. */}
  }
- const decision=assessReaderProposal({proposal,text,provenance,admission:session.engine?.requestReaderAdmission,area:context.area});
+ let removalComparison=null;
+ if(bindings){
+  try{
+   const projection=projectRemovalAction(proposal,session,{bindings,view:context.area});
+   const pending=projection?.candidates??proposal.candidates;
+   if(pending?.length&&pending.length<=16&&pending.every(candidate=>parse(candidate.wires).some(wire=>wire.type==='std.request'&&wire.id===candidate.request&&wire.attrs.act?.[0]==='remove'))){
+    const compared=await compareDeclaredReadings(session,pending,{view:context.area,bindings});
+    if(isScopedRemoval(compared?.plan)){
+     removalComparison=compared;
+     if(projection)proposal={...proposal,candidates:[pending[compared.index]],coverage:{complete:true,graphProposal:true,executable:false},failures:[],
+      interpretation:{profile:'grounded-removal/1',mention:projection.mention,range:projection.range,unresolved:proposal.failures,
+       alternatives:pending}};
+     else if(compared.index!==0)proposal={...proposal,candidates:[pending[compared.index],...pending.filter((_,index)=>index!==compared.index)]};
+    }
+   }
+  }catch{/* A request with unproved removal remains subject to normal admission. */}
+ }
+ const preservedProviderTrace=!!provenAlternative||proposal.interpretation?.profile==='grounded-removal/1';
+ const decision=assessReaderProposal({proposal,text,provenance,admission:session.engine?.requestReaderAdmission,area:context.area,scopedRemoval:!!removalComparison});
  if(decision.decisionSop){
   try{session.engine?.onWorldActivity?.({nodeIds:['component:request-admission','knowledge:reader-admission-policy','component:library'],phase:'stage',operation:'app.reader.admission',label:'Evaluate reader admission policy',wires:decision.decisionSop});}catch{/* Observation cannot change admission. */}
  }
  const choice=proposal?.interpretation?.decision;
  if(choice&&proposal.interpretation.profile==='declared-creation/1')try{session.engine?.onWorldActivity?.({nodeIds:['component:library','execution:creation-policy'],phase:'stage',operation:'std.choice',label:'Compare grounded creation readings',
   text,wires:choice.input+'\n'+choice.sop});}catch{/* Trace subscribers cannot change interpretation. */}
- let candidate=decision.candidate,comparison=provenAlternative;
+ let candidate=decision.candidate,comparison=removalComparison??provenAlternative;
  const eligible=decision.admitted,reason=decision.reason;
  const interpretations=proposal?.interpretation?.profile==='declared-creation/1'?proposal.candidates:providerCandidates;
- if(eligible && decision.mode==='uncalibrated-best-effort' && !contextProjection && interpretations.length>1 && interpretations.length<=16){
+ if(eligible && decision.mode==='uncalibrated-best-effort' && !contextProjection && !removalComparison && interpretations.length>1 && interpretations.length<=16){
   const admitted=interpretations.filter(option=>assessReaderProposal({proposal:{...proposal,candidates:[option]},text,provenance,area:context.area}).admitted);
   if(admitted.length>1){
    comparison=await compareDeclaredReadings(session,admitted,{view:context.area,bindings,unapplied:proposal.interpretation?.unapplied});
@@ -110,6 +131,11 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
   if(result?.statuses?.includes('supported')&&proposal.interpretation?.profile==='declared-query/1'&&proposal.interpretation.note){
    result.text+=' '+proposal.interpretation.note;result.parts=[{text:result.text,translate:false}];result.trace={...result.trace,interpretation:proposal.interpretation};
   }
+  if(result?.statuses?.includes('supported')&&proposal.interpretation?.profile==='grounded-removal/1'){
+   result.text+=' I read '+JSON.stringify(proposal.interpretation.mention)+' as that object. You can undo this.';
+   result.parts=[{text:result.text,translate:false}];
+   result.trace={...result.trace,interpretation:proposal.interpretation};
+  }
   if(result&&decision.uncertain&&result.statuses?.includes('supported')){
    const note=result.trace?.uncertainty?.length||result.trace?.interpretation?'':'I used the most likely reading; you can correct it or undo.';
    if(note){result.text+=' '+note;result.parts=[{text:result.text,translate:false}];}
@@ -118,7 +144,7 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
  result??={text:message,parts:[{text:message,translate:false}],statuses:['unsupported'],answers:[],segments:[],state:{},effects:[],newEngine:true,trace:{legacy:false,engine:'new',reason:options.language&&options.language!=='en'?'language':'reading'}};
  return {...result,trace:{...result.trace,...(eligible?{reading:candidate}:{}),...(comparison?{readingComparison:comparison.sop}:{}),readerRouting:{primary:'sop-bert',selected:eligible?'sop-bert':null,reason,
   admission:{mode:decision.mode??null,uncertain:!!provenAlternative||(decision.uncertain??false),alternatives:decision.alternatives??[],scoreDefinition:decision.scoreDefinition,score:decision.score,proposalEligible:decision.eligible,assessment:decision.assessment,decisionSop:decision.decisionSop??null},
-  interpretation:proposal?.interpretation??null,unresolved:provenAlternative?proposal.interpretation.unresolved:(proposal?.failures??[]),proposalCandidates:providerCandidates,rawReading:proposal?.raw?.requests??null,model:{provenance,coverage:(provenAlternative?providerCoverage:proposal?.coverage)??null,candidates:provenAlternative?providerCandidates.length:(proposal?.candidates?.length??0),eligible:!!eligible}}}};
+  interpretation:proposal?.interpretation??null,unresolved:preservedProviderTrace?proposal.interpretation.unresolved:(proposal?.failures??[]),proposalCandidates:providerCandidates,rawReading:proposal?.raw?.requests??null,model:{provenance,coverage:(preservedProviderTrace?providerCoverage:proposal?.coverage)??null,candidates:preservedProviderTrace?providerCandidates.length:(proposal?.candidates?.length??0),eligible:!!eligible}}}};
 }
 
 /** Apply the declared source-order schedule to actual model cuts, never source words. */

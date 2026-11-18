@@ -33,7 +33,7 @@ export function readerCalibrationIdentity(provenance,runtimeIdentity){
  return {provider:p,runtime:r,scoreDefinition:READER_SCORE_DEFINITION};
 }
 export function readerCalibrationScope(area){if(typeof area!=='string'||!area)throw Error('invalid-runtime-area');return JSON.stringify({protocol:'psys2.reader-area/1',area});}
-export function assessReaderProposal({proposal,text,provenance,admission,area}){
+export function assessReaderProposal({proposal,text,provenance,admission,area,scopedRemoval=false}){
  const scored=scoreReaderProposal(proposal,text);
  if(!scored.eligible)return {...scored,admitted:false,assessment:null};
  let assessment=null;
@@ -49,6 +49,7 @@ export function assessReaderProposal({proposal,text,provenance,admission,area}){
   'score.available='+scored.scoreAvailable,
   'model.identity.present='+hash(provenance?.modelSha256),
   'uncertain='+scored.uncertain,
+  'scoped.removal='+Boolean(scopedRemoval),
  ];
  if(Number.isFinite(assessment?.policy?.maxErrorRate))evidence.push('calibration.error.limit='+assessment.policy.maxErrorRate);
  try{
