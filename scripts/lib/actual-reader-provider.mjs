@@ -1,3 +1,4 @@
+import {writeReaderSource} from '../../src/dialog/reader-source.mjs';
 // Evaluation-only Node host. No model confidence or admission report is installed.
 import {readFile,realpath,readdir} from 'node:fs/promises';
 import {resolve,relative,isAbsolute} from 'node:path';
@@ -58,13 +59,13 @@ export async function loadActualReplayReader(spec,{factory}={}){
   if(busy)throw Error('concurrent-replay-reader');
   if(!sourceContext||Object.keys(sourceContext).sort().join(',')!=='area,context')throw Error('invalid-source-context');
   busy=true;diagnostics.length=0;diagnosticBytes=0;
-  try{current=copyHostData(sourceContext,{maxBytes:65536});const proposal=await assembled.provider.propose(text);return {proposal,diagnostics:[...diagnostics],sourceContext:current,semanticCorrectness:null,executionEligible:false};}
+  try{current=copyHostData(sourceContext,{maxBytes:65536});const proposal=await assembled.provider.propose(writeReaderSource(text));return {proposal,diagnostics:[...diagnostics],sourceContext:current,semanticCorrectness:null,executionEligible:false};}
   finally{current=null;busy=false;}
  },async run(session,text,{area,host,previous=null}){
   if(busy)throw Error('concurrent-replay-reader');busy=true;diagnostics.length=0;diagnosticBytes=0;
   const engine=session.engine??{},old=engine.requestReader,oldAdmission=engine.requestReaderAdmission;session.engine=engine;let proposal=null,error=null;
   delete engine.requestReaderAdmission;
-  engine.requestReader={...assembled.provider,async propose(source){proposal=await assembled.provider.propose(source);return proposal;}};
+  engine.requestReader={...assembled.provider,async propose(sourceSop){proposal=await assembled.provider.propose(sourceSop);return proposal;}};
   try{try{observation=host?.observe()??null;current=observedReaderContext(area,observation,previous);}catch(e){error=String(e.message);current=null;}
    const reply=await routeNewEngine(session,text,{language:'en'});
    const routing=reply.trace?.readerRouting,operational=routing?.admission?.proposalEligible?{...proposal,candidates:routing.admission.alternatives,coverage:routing.model.coverage,failures:[],interpretation:routing.interpretation??proposal.interpretation}:proposal;

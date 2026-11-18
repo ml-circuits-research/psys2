@@ -35,9 +35,7 @@ export function retainPropertyEffect(session, { candidate, text, view, plan, bef
   const request = key('request'), step = key('step'), expectation = key('expected');
   const world = new World();
   world.load(['std.request', 'std.trace', 'std.reply'].map((name) => '@' + key(name) + ' core.use world=' + name).join('\n'));
-  const support = plan.support
-    .filter((id) => id.startsWith('capability.knowledge.'))
-    .map((id) => id.slice('capability.knowledge.'.length, id.lastIndexOf('.')));
+  const support = plan.knowledgeSupport ?? [];
   world.load([candidate.wires, serialize([
     fact(request, 'std.trace.request', { message: quote(text) }),
     traceInput(key('before'), previous), traceInput(key('after'), observed),

@@ -1,4 +1,4 @@
-import { readNativeToolInterface } from '../native-tool-interface.mjs?v=4a6a40a39b';
+import { readNativeToolInterface } from '../native-tool-interface.mjs?v=c2d3097e87';
 import NATIVE_INTERFACE from './native-interface-source.mjs?v=e227fb4b70';
 // The avatar's native face tools, with choices derived from the supplied knowledge.
 import {centeredSpatialBox,unionSpatialBoxes} from '../native-spatial-observation.mjs?v=ced85b9a29';

@@ -201,23 +201,24 @@ async function installSopReader(imp){
   try{
     const response=await fetch(vurl('models/sop-bert/deployment.json'));if(!response.ok)throw Error('SOP-BERT deployment HTTP '+response.status);
     const deployment=await response.json();if(deployment.format!=='psys2.browser-reader-deployment/1')throw Error('unsupported-reader-deployment');
-    const [{createBrowserReaderHost},{createAppReaderContext}]=await Promise.all([imp('lib/dialog/browser-reader-host.mjs'),imp('lib/dialog/app-reader-context.mjs')]);
+    const [{createBrowserReaderHost},{createAppReaderContext},{readReaderSource}]=await Promise.all([imp('lib/dialog/browser-reader-host.mjs'),imp('lib/dialog/app-reader-context.mjs'),imp('lib/dialog/reader-source.mjs')]);
     const getContext=createAppReaderContext({getState:()=>session.isession.state,getPrevious:()=>readerPrevious,getInstanceId:world=>mods.instanceIdFor(session,world),getIdentityRegistry:world=>mods.identityRegistryFor(session,world),onObservation:value=>{readerObservation=value;if(value.contextSelection)worldActivity(['component:reader',...(value.world?['interpreter:'+value.world]:[])],'stage','Select reader context',{operation:'reader.context.select',world:value.world,contextSelection:value.contextSelection});}});
     const host=await createBrowserReaderHost({manifestURL:abs(deployment.manifestPath),manifestSha256:deployment.manifestSha256,tokenizerArtifact:deployment.tokenizerArtifact,bindingsArtifact:deployment.bindingsArtifact,tokenizerConfigArtifact:deployment.tokenizerConfigArtifact,runtimeIdentity:deployment.runtimeIdentity,getContext,resolveURL:rel=>abs(rel),recordDiagnostics:async diagnostic=>{readerDiagnostics.push(diagnostic);if(readerDiagnostics.length>64)readerDiagnostics.shift();const selection=diagnostic.result?.auxiliary?.contextSelection;if(selection)worldActivity(['component:reader'],'stage','Fit reader context to model budget',{operation:'reader.context.fit',contextSelection:selection});}});
-    engine.requestReader={...host.provider,async *proposeRequests(text){
+    const inputEvidence=sourceSop=>{try{return {text:readReaderSource(sourceSop),wires:sourceSop};}catch{return {};}};
+    engine.requestReader={...host.provider,async *proposeRequests(sourceSop){
       const correlationId='reader:'+crypto.randomUUID(),started=performance.now();let index=0;
-      worldActivity(['component:reader'],'start','Read coordinated requests',{operation:'reader.proposeRequests',correlationId,text});
+      worldActivity(['component:reader'],'start','Read coordinated requests',{operation:'reader.proposeRequests',correlationId,...inputEvidence(sourceSop)});
       try{
-        for await(const result of host.provider.proposeRequests(text)){
+        for await(const result of host.provider.proposeRequests(sourceSop)){
           worldActivity(['component:reader'],'stage','Reader request proposal',{operation:'reader.proposeRequests',correlationId,index:index++,sourceRange:result.composition?.range??null,coverage:result.coverage??null,failures:result.failures??[],proposals:(result.candidates??[]).map(candidate=>({request:candidate.request,wires:candidate.wires}))});
           yield result;
         }
         worldActivity(['component:reader'],'end','Coordinated reading complete',{operation:'reader.proposeRequests',correlationId,requests:index,durationMs:performance.now()-started,timingScope:'iterator lifetime includes execution between request proposals'});
       }catch(error){worldActivity(['component:reader'],'error','Reader failed',{operation:'reader.proposeRequests',correlationId,durationMs:performance.now()-started,error:String(error?.message??error)});throw error;}
-    },async propose(text){
+    },async propose(sourceSop){
       const correlationId='reader:'+crypto.randomUUID(),started=performance.now();
-      worldActivity(['component:reader'],'start','Read request',{operation:'reader.propose',correlationId,text});
-      try{const result=await host.provider.propose(text);worldActivity(['component:reader'],'end','Reader proposal',{operation:'reader.propose',correlationId,durationMs:performance.now()-started,coverage:result.coverage??null,failures:result.failures??[],proposals:(result.candidates??[]).map(candidate=>({request:candidate.request,wires:candidate.wires}))});return result;}
+      worldActivity(['component:reader'],'start','Read request',{operation:'reader.propose',correlationId,...inputEvidence(sourceSop)});
+      try{const result=await host.provider.propose(sourceSop);worldActivity(['component:reader'],'end','Reader proposal',{operation:'reader.propose',correlationId,durationMs:performance.now()-started,coverage:result.coverage??null,failures:result.failures??[],proposals:(result.candidates??[]).map(candidate=>({request:candidate.request,wires:candidate.wires}))});return result;}
       catch(error){worldActivity(['component:reader'],'error','Reader failed',{operation:'reader.propose',correlationId,durationMs:performance.now()-started,error:String(error?.message??error)});throw error;}
     }};readerStatus={state:'ready',verified:host.verified,cache:host.browserHost.cache};
   }catch(error){

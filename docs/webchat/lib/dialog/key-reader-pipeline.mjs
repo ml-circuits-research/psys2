@@ -1,4 +1,5 @@
 // Source-only two-model proposals. No parser fallback or execution admission.
+import {readReaderSource} from './reader-source.mjs?v=e823bf03dc';
 import {copyHostData} from '../../worlds/native-tool-host.mjs?v=2a5ea0af55';
 import {bridgeRawStructure,RAW_STRUCTURAL_FORMAT} from './raw-structural-bridge.mjs?v=bfeb4f2e54';
 const hash=x=>typeof x==='string'&&/^[a-f0-9]{64}$/.test(x);
@@ -13,7 +14,7 @@ export async function createKeyReaderPipeline({cutter,reader,getContext,cutterMo
  const bindings=copyHostData(JSON.parse(bindingsJSON),{maxBytes});
  const pipelineSha256=await digest(JSON.stringify({format:'psys2.key-reader-pipeline/1',...identities,bindingsSha256}));
  const provenance={modelSha256:pipelineSha256,decoderVersion:1,models:identities,bindingsSha256,architecture:'source-cutter/request-key-heads',calibration:null};
- async function propose(text,knownCut=null,cutOnly=false){
+ async function propose(sourceSop,knownCut=null,cutOnly=false){
   const failures=[],requests=[],ranges=[];let raw=null,sourceCut=null,steps=0;
   const tick=(n=1)=>{steps+=n;if(steps>budget)throw Error('pipeline-budget');};
   const fail=(reason,path=[])=>failures.push({reason,path});
@@ -22,7 +23,8 @@ export async function createKeyReaderPipeline({cutter,reader,getContext,cutterMo
   const source=(x,expected)=>{closed(x,['text','unit']);if(x.unit!=='unicode-scalar'||x.text!==expected)throw Error('source-snapshot-mismatch');};
   const status=(x,path)=>{closed(x.coverage,['complete','truncated']);if(x.coverage.complete!==true||x.coverage.truncated!==false)fail('incomplete-provider-coverage',path);if(!Array.isArray(x.unresolved))throw Error('missing-unresolved-status');for(const issue of x.unresolved){tick();failures.push({reason:'provider-unresolved',path,detail:copy(issue)});}};
   try{
-   if(typeof text!=='string'||text.length>maxText*2)throw Error('invalid-source-text');const chars=Array.from(text);tick(chars.length);if(chars.length>maxText)throw Error('source-size');
+   const text=readReaderSource(sourceSop);
+   if(text.length>maxText*2)throw Error('invalid-source-text');const chars=Array.from(text);tick(chars.length);if(chars.length>maxText)throw Error('source-size');
    if(typeof cutter?.cut!=='function'||typeof reader?.read!=='function')throw Error('model-unavailable');
    const cut=copy(knownCut??await cutter.cut(text));closed(cut,['source','spans','coverage','unresolved','model']);source(cut.source,text);if(!same(modelIdentity(cut.model),identities.cutter))throw Error('cutter-provenance-mismatch');status(cut,['cutter']);
    if(!Array.isArray(cut.spans)||cut.spans.length>maxRequests)throw Error('request-count-overflow');let previous=0;
@@ -54,11 +56,11 @@ export async function createKeyReaderPipeline({cutter,reader,getContext,cutterMo
    return {candidates:failures.length?[]:(decoded?.candidates??[]),coverage:{complete:failures.length===0&&decoded?.coverage?.complete===true,graphProposal:decoded?.coverage?.graphProposal===true,executable:false},failures,raw,provenance:copy(provenance),graphConfidence:null,sourceCut,steps};
   }catch(error){fail(String(error?.message??'pipeline-failed'));return {candidates:[],coverage:{complete:false,graphProposal:false,executable:false},failures,raw,provenance:copy(provenance),graphConfidence:null,sourceCut,steps};}
  }
- return {provenance:()=>copyHostData(provenance),propose:text=>propose(text),async *proposeRequests(text){
-  const initial=await propose(text,null,true),cut=initial.sourceCut;
-  if(!cut||cut.coverage.complete!==true||cut.coverage.truncated||cut.unresolved.length||cut.spans.length<2){yield cut?await propose(text,cut):initial;return;}
+ return {provenance:()=>copyHostData(provenance),propose:sourceSop=>propose(sourceSop),async *proposeRequests(sourceSop){
+  const initial=await propose(sourceSop,null,true),cut=initial.sourceCut;
+  if(!cut||cut.coverage.complete!==true||cut.coverage.truncated||cut.unresolved.length||cut.spans.length<2){yield cut?await propose(sourceSop,cut):initial;return;}
   for(const [index,range]of cut.spans.entries()){
-   const proposal=await propose(text,{...cut,spans:[range]});
+   const proposal=await propose(sourceSop,{...cut,spans:[range]});
    yield {...proposal,composition:{index,total:cut.spans.length,range:[...range],sourceCuts:cut.spans.map(span=>[...span]),policy:'source-order-independent-cuts',explicitDependencies:[]}};
   }
  }};

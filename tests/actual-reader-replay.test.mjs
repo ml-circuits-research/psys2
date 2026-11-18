@@ -1,3 +1,4 @@
+import {readReaderSource} from '../src/dialog/reader-source.mjs';
 import {invokeToolCommand} from '../src/dialog/native-control-intent.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -45,7 +46,7 @@ test('measurement host supplies observed context, captures proposal and removes/
   let seen,admissionDuring;
   const admission={untrusted:'must not execute'},session={engine:{requestReaderAdmission:admission},isession:{state:{'art.draw':initialDrawingState(),'ui.shell':{activeTab:'draw'}}},newEngineJournal:[]};
   const host=createDrawingHost({state:session.isession.state['art.draw'],instanceId:'actual-context-fixture'});
-  const reader=await loadActualReplayReader({format:'psys2.actual-reader-replay/1',artifactRoot:artifacts,manifestSha256:digest('{}'),runtimeRoot:runtime,runtimeTreeSha256:tree.sha256,ortModule:'ort.mjs',transformersModule:'tokenizer.mjs',runtimeIdentity:{backendSha256:digest(JSON.stringify(backendIdentity))},tokenizerConfig:{path:'tokenizer_config.json',sha256:digest(tc)}},{factory:async({getContext})=>({verified:{fixture:true},provider:{async propose(text){seen={text,...getContext()};admissionDuring=session.engine.requestReaderAdmission;return {coverage:{complete:false},candidates:[],failures:[{reason:'fixture-no-model'}]};}}})});
+  const reader=await loadActualReplayReader({format:'psys2.actual-reader-replay/1',artifactRoot:artifacts,manifestSha256:digest('{}'),runtimeRoot:runtime,runtimeTreeSha256:tree.sha256,ortModule:'ort.mjs',transformersModule:'tokenizer.mjs',runtimeIdentity:{backendSha256:digest(JSON.stringify(backendIdentity))},tokenizerConfig:{path:'tokenizer_config.json',sha256:digest(tc)}},{factory:async({getContext})=>({verified:{fixture:true},provider:{async propose(sourceSop){const text=readReaderSource(sourceSop);seen={text,...getContext()};admissionDuring=session.engine.requestReaderAdmission;return {coverage:{complete:false},candidates:[],failures:[{reason:'fixture-no-model'}]};}}})});
   const result=await reader.run(session,'A source message',{area:'drawing',host,previous:'Actual history'});
   assert.deepEqual(seen,{text:'A source message',area:'drawing',context:{existing:[],previous:'Actual history'}});
   assert.equal(admissionDuring,undefined);assert.equal(session.engine.requestReaderAdmission,admission);assert.equal(session.engine.requestReader,undefined);

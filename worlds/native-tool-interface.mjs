@@ -33,7 +33,7 @@ const forbidden = new Set(['__proto__', 'constructor', 'prototype']);
 const parameterFields = ['kind', 'required', 'nullable', 'min', 'max', 'enum', 'default'];
 const inheritedFields = new Set(['id', 'act', 'on', 'params']);
 const interfaceTypes = new Set([
-  ...['scope', 'operation', 'parameter', 'arg', 'record', 'list', 'item'].map(type => NS + type),
+  ...['scope', 'operation', 'parameter', 'seed', 'arg', 'record', 'list', 'item'].map(type => NS + type),
   ...['metadata', 'input', 'parameter', 'compose'].map(type => ABI + type),
 ]);
 let validators;
@@ -146,7 +146,7 @@ function quoteScalar(value) {
   throw Error('invalid-native-interface-scalar');
 }
 
-function valuesOf(parameters, byId) {
+function valuesOf(parameters, seeds, byId) {
   const values = new Map();
   const visit = (token, depth = 0) => {
     budget.tick('native.interface.references');
@@ -161,6 +161,7 @@ function valuesOf(parameters, byId) {
     for (const name of ['member', 'entry', 'value']) for (const value of row.attrs[name] || []) visit(value, depth + 1);
   };
   for (const row of parameters) for (const key of ['enum', 'default']) for (const token of row.attrs[key] || []) visit(token);
+  for (const row of seeds) visit(field(row, 'value'));
   return [...values.values()];
 }
 
@@ -178,6 +179,14 @@ export function readNativeToolInterface(source, { imports = {} } = {}) {
   const metadata = lookupBy(of(ABI + 'metadata'), 'operation');
   const overrides = lookupBy(of(ABI + 'parameter'), 'parameter');
   const uses = of(ABI + 'compose');
+  const operationNames = new Set(rows.map(row => first(row, 'name')));
+  const seeds = new Map();
+  for (const seed of of(NS + 'seed')) {
+    const operation = first(seed, 'operation');
+    if (!operationNames.has(operation)) throw Error('unknown-native-interface-seed-operation');
+    if (!seeds.has(operation)) seeds.set(operation, []);
+    seeds.get(operation).push(seed);
+  }
 
   return {
     realize(inputs = {}) {
@@ -192,7 +201,9 @@ export function readNativeToolInterface(source, { imports = {} } = {}) {
         }
         const supplements = metadata.get(operation.id) || [];
         if (supplements.length > 1) throw Error('duplicate-native-interface-metadata');
-        return { operation, parameters: facts, values: valuesOf(facts, byId),
+        const ownedSeeds = seeds.get(first(operation, 'name')) || [];
+        if (ownedSeeds.some(seed => !native.has(first(seed, 'parameter')))) throw Error('unknown-native-interface-seed-parameter');
+        return { operation, parameters: facts, seeds: ownedSeeds, values: valuesOf(facts, ownedSeeds, byId),
           binding: ownOperation(operation, Object.fromEntries(native), supplements[0], byId, inputs) };
       });
       const components = [];
@@ -218,7 +229,7 @@ export function readNativeToolInterface(source, { imports = {} } = {}) {
           const facts = new Map();
           for (const [order, entry] of declarations.entries()) {
             facts.set(entry.operation.id, { ...entry.operation, attrs: { ...entry.operation.attrs, scope: [scope], order: [String(order)] } });
-            for (const wire of [...entry.parameters, ...entry.values]) facts.set(wire.id, wire);
+            for (const wire of [...entry.parameters, ...entry.seeds, ...entry.values]) facts.set(wire.id, wire);
           }
           return [...facts.values()];
         },

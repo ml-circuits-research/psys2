@@ -1,9 +1,9 @@
 @policy.schema core.use world=app.execution prefix=false
-@empty app.execution.list
-@document.blocks app.execution.default operation="document.write" parameter="blocks" value=$empty
-@calendar.start app.execution.default operation="calendar.meeting.add" parameter="start" source=clock.now notice="I scheduled it starting now."
-@calendar.duration app.execution.default operation="calendar.meeting.add" parameter="duration" value=1800000 notice="I used a 30-minute duration."
-@calendar.participants app.execution.default operation="calendar.meeting.add" parameter="participants" value=$empty
-@calendar.room app.execution.default operation="calendar.meeting.add" parameter="room" value=null
-@colour app.execution.values concept="colour" valueType="k.colours.colour" nameKey="name" valueKey="rgb"
-@drawing.colour app.execution.observedProperty concept=colour sourceType="art.draw.object" parameter="color" binding="drawing.object.color" format=rgb
+@empty std.capability.list
+@document.blocks std.capability.seed operation="document.write" parameter="blocks" source=value value=$empty phase=missing order=120
+@calendar.start std.capability.seed operation="calendar.meeting.add" parameter="start" source=clock phase=missing order=121 notice="I scheduled it starting now."
+@calendar.duration std.capability.seed operation="calendar.meeting.add" parameter="duration" source=value value=1800000 phase=missing order=122 notice="I used a 30-minute duration."
+@calendar.participants std.capability.seed operation="calendar.meeting.add" parameter="participants" source=value value=$empty phase=missing order=123
+@calendar.room std.capability.seed operation="calendar.meeting.add" parameter="room" source=value value=null phase=missing order=124
+@colour app.execution.values concept=colour valueType="k.colours.colour" nameKey="name" valueKey="rgb" codec=lookup
+@drawing.colour app.execution.observedProperty concept=colour sourceType="art.draw.object" parameter="color" binding="drawing.object.color" format=rgb codec=lookup order=0

@@ -1,3 +1,4 @@
+import {readReaderSource} from '../src/dialog/reader-source.mjs';
 import {invokeToolCommand} from '../src/dialog/native-control-intent.mjs';
 import {canonicalDrawingState,toNativeDrawingState} from '../worlds/art.draw/canonical-state.mjs';
 import {test} from 'node:test';import assert from 'node:assert/strict';
@@ -105,7 +106,7 @@ test('undo, focus and the last applied intent survive the session recreation use
 import {DialogSession} from '../src/dialog/index.mjs';
 test('interface translation reaches only the English reader; unavailable input translation never invokes it',async()=>{
  let reads=0,seen=null;
- const session={language:'fr',isession:{state:{}},engine:{translator:{machineTranslate:async()=>{throw Error('not available');}},requestReader:{propose:async input=>{reads++;seen=input;return {candidates:[],failures:[]};}}}};
+ const session={language:'fr',isession:{state:{}},engine:{translator:{machineTranslate:async()=>{throw Error('not available');}},requestReader:{propose:async sourceSop=>{reads++;seen=readReaderSource(sourceSop);return {candidates:[],failures:[]};}}}};
  let r=await DialogSession.prototype._send.call(session,'source text');
  assert.equal(reads,0);assert.equal(r.trace.reason,'translation-unavailable');assert.deepEqual(r.effects,[]);
  const translations=[];
@@ -127,7 +128,7 @@ test('request sampling reads capability declarations and actual objects in an ad
 });
 test('dice probes use the normal reader on an isolated state and reject a non-changing reader',async()=>{
  const bindings={kinds:[{area:'drawing',lemma:'circle',canonical:'fixture.circle',nativeFamilyBinding:{operation:'drawing.object.make'}}],properties:[]};
- const session={isession:{state:{'art.draw':initialDrawingState(),'ui.shell':{activeTab:'draw'}}},engine:{requestReader:{bindings:()=>bindings,provenance:()=>provenance,propose:async input=>({coverage:{complete:true,graphProposal:true},failures:[],selectionScore:{definition:'psys2.model-minimum/1',value:0.7},candidates:[{request:'r',wires:`@s std.request.source text=${JSON.stringify(input)}\n@r std.request act=make mood=do source=$s\n@t std.request.target request=$r mode=new kind=fixture.circle`}]})}}};
+ const session={isession:{state:{'art.draw':initialDrawingState(),'ui.shell':{activeTab:'draw'}}},engine:{requestReader:{bindings:()=>bindings,provenance:()=>provenance,propose:async sourceSop=>({coverage:{complete:true,graphProposal:true},failures:[],selectionScore:{definition:'psys2.model-minimum/1',value:0.7},candidates:[{request:'r',wires:`@s std.request.source text=${JSON.stringify(readReaderSource(sourceSop))}\n@r std.request act=make mood=do source=$s\n@t std.request.target request=$r mode=new kind=fixture.circle`}]})}}};
  const before=structuredClone(session.isession.state),host=await createDrawingHost({state:structuredClone(session.isession.state['art.draw']),instanceId:'dice-test'});
  const options={session,area:'drawing',view:'draw',world:'art.draw',host,createHost:createDrawingHost,bindings};
  const r=await createNativeRequestSampler().sample(options);assert.equal(r.items.length,1);assert.equal(r.items[0].verifiedEffect,true);assert.deepEqual(session.isession.state,before);assert.equal(session.newEngineUndo,undefined);

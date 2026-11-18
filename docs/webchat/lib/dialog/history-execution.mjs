@@ -1,6 +1,6 @@
 import {parse,quote,serialize} from '../vendor/sopworld/sopworld.mjs?v=7950b62b94';
 import {historyPolicy} from './history-policy.mjs?v=f8948bd1c0';
-import {observeHistory,createHistoryTool} from './history-tool.mjs?v=c99cbb2705';
+import {observeHistory,createHistoryTool} from './history-tool.mjs?v=005c52e415';
 import {invokeObservedNativeTool} from './native-tool-activity.mjs?v=0689e5b140';
 
 const area={world:'app.history',stateWorld:true};

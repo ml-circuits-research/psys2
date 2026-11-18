@@ -4,6 +4,7 @@ import SOURCE from'./new-engine-source.mjs';
 import{CATALOG_PIN}from'../knowledge/catalog-pin.mjs';
 import{inspectHistoryPolicy}from'./history-policy.mjs';
 import{inspectExecutionPolicyWorld}from'./execution-policy.mjs';
+import{inspectCapabilityPolicy}from'./capability-plan-adapter.mjs';
 import{inspectCreationPolicy}from'./project-create-action.mjs';
 import{inspectReferencePolicy}from'./reference-policy.mjs';
 import{inspectSchemaSource}from'./worlds-inspection.mjs';
@@ -60,8 +61,16 @@ export async function inspectExecutionWorlds(session){
  link('execution:creation-policy','execution:creation-schema','imports schema');
  link('execution:creation-policy','execution:module:declared-execution','supplies grounded creation readings');
  const policy=inspectExecutionPolicyWorld();
- nodes.push({id:'execution:policy',label:'Execution policy',kind:'knowledge',implementation:'Operational SOP Lang World + declared host clock',description:'Actual policy queried by execution for omitted arguments and knowledge-property joins. The source is available before initialization; loaded status records the real lazy World. This moves these decisions out of native operation maps, but does not migrate editor state or all native tool semantics.',wires:policy.facts,details:{source:policy.source,loaded:policy.loaded,functions:policy.functions,dependencies:policy.dependencies},help:{purpose:'Declare defaults and knowledge value joins used by concrete request execution.',inputs:['Operation and explicit arguments','Referenced knowledge properties','Clock primitive for a missing current time'],outputs:['Only omitted argument defaults','Assumption notices','Typed knowledge-property lookup descriptors'],limits:['These are explicit defaults, not proof of broader reasoning. Editor native implementations remain visible.']}});
- link('execution:module:declared-execution','execution:policy','queries defaults and value joins');
+ nodes.push({id:'execution:policy',label:'Execution policy',kind:'knowledge',implementation:'Operational SOP Lang World',
+  description:'Declares omitted argument defaults, their notices and catalog lookup ownership.',
+  wires:policy.facts,details:{source:policy.source,loaded:policy.loaded,dependencies:policy.dependencies}});
+ const capability=inspectCapabilityPolicy();
+ nodes.push({id:'execution:capability-policy',label:'Capability compilation',kind:'knowledge',implementation:'Operational SOP Lang World',
+  description:'Applies request modes, seeds, guards and the declared normalization rules to live tool inputs.',
+  wires:capability.wires,details:{source:capability.source,loaded:capability.loaded}});
+ link('execution:module:declared-execution','execution:capability-policy','compiles native requests with');
+ link('execution:capability-policy','execution:policy','uses authored seeds and lookup declarations');
+ link('execution:capability-policy','execution:source-snapshot','reads original catalog values');
  const placement=inspectSpatialPlacementWorld();
  if(placement){
   const ids={policy:'execution:placement-policy',geometry:'execution:placement-geometry',schema:'execution:placement-geometry-schema'};

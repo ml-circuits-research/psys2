@@ -1,3 +1,4 @@
+import {writeReaderSource} from '../src/dialog/reader-source.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
@@ -128,7 +129,7 @@ test('verifies all bytes before constructing actual injected sessions; assembly 
  const firstConstruction=f.events.findIndex(x=>x==='tokenizer'||x.startsWith('session:'));
  assert.ok(f.events.slice(0,firstConstruction).filter(x=>x.startsWith('read:')).length===5);
  assert.equal(f.calls.length,0);assert.equal(f.events.includes('context'),false);
- const result=await built.provider.propose('x');
+ const result=await built.provider.propose(writeReaderSource('x'));
  assert.deepEqual(f.calls,['cutter','encoder','heads']);
  assert.equal(result.coverage.executable,false);assert.equal(result.graphConfidence,null);
  assert.equal(built.verified.calibration,null);assert.equal(built.verified.executionEligible,false);
@@ -172,7 +173,7 @@ test('wrong external tokenizer descriptor, unsafe paths and duplicate paths refu
 });
 test('fixture artifacts retain unavailable effects and diagnostic mutation cannot alter delivered computation',async()=>{
  const f=fixture({fixtureRole:true,diagnostics:event=>{event.result.packet??={};event.result.packet.coverage={complete:true};}});
- const built=await createVerifiedReaderProvider(f.input),result=await built.provider.propose('x');
+ const built=await createVerifiedReaderProvider(f.input),result=await built.provider.propose(writeReaderSource('x'));
  assert.deepEqual(f.calls,['cutter']);assert.equal(result.coverage.complete,false);
  assert.deepEqual(result.candidates,[]);assert.equal(result.coverage.executable,false);
  const original=built.provenance();built.verified.files.cutter.sha256='0'.repeat(64);

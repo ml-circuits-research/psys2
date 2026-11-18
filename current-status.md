@@ -1,5 +1,9 @@
 # Current status
 
+## 2026-11-18 — Reader input and declared tool defaults
+
+The verified reader consumes one `std.request.source` wire. Worlds records the exact input, including Unicode text. The chart and catalog interpreters declare their own argument seeds. The capability policy derives colour lookup and evidence from catalog and observed facts. Chromium exercised creation of two objects from one spoken-form request, Undo, chart labels and catalog construction.
+
 ## 2026-11-18 — History commands and compound replies
 
 Undo and Redo from editor controls, authored queries and the reader compile against the observed journal head into an exact SOP call. The history interpreter checks that head and compares current content with the expected revision before restoring it. Worlds shows the schema, compilation policy, JavaScript interpreter and session journal separately. The journal still stores native before/after snapshots.

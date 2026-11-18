@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-import { compileNativeCapability } from './capability-plan-adapter.mjs?v=5086d0ab6b';
-import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=9dfde53bd1';
+import { compileNativeCapability } from './capability-plan-adapter.mjs?v=2026344bab';
+import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=22bf86d30c';
 import { instanceIdFor } from './instance-identity.mjs?v=024ef1ca83';
-import { prepareNativeControlHost } from './native-control-preparation.mjs?v=9a9db03439';
+import { prepareNativeControlHost } from './native-control-preparation.mjs?v=0f2e0853bd';
 import { invokeObservedNativeTool } from './native-tool-activity.mjs?v=0689e5b140';
-import { retainPropertyEffect } from './property-effect-evidence.mjs?v=94e5215451';
+import { retainPropertyEffect } from './property-effect-evidence.mjs?v=6c6cd510c1';
 import { describeNativeControl, verifyNativeControlEffect } from './native-control-intent.mjs?v=3865c9f05f';
 
 function reply(text, supported, trace = {}) {
@@ -55,7 +55,7 @@ export async function executeNativeCapability(session, candidate, { bindings, vi
       { reason: 'stale-compiled-capability', reading: candidate, compiledSop: plan.sop });
   }
   try {
-    session.engine?.onWorldActivity?.({ nodeIds: ['execution:policy'], phase: 'stage', label: 'Compiled declared capabilities',
+    session.engine?.onWorldActivity?.({ nodeIds: ['execution:capability-policy','execution:policy'], phase: 'stage', label: 'Compiled declared capabilities',
       operation: 'policy.execution.compile', tool: operation.id, facts: plan.support, wires: plan.sop });
   } catch {
     // Inspection does not affect dispatch.

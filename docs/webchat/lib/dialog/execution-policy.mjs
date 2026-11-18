@@ -1,7 +1,7 @@
 // Admit owned default and value-lookup policy facts for the request compiler.
 import{World,parse,str,serialize}from'../vendor/sopworld/sopworld.mjs?v=7950b62b94';
-import SOURCE from'../../worlds/app.project/execution-policy-source.mjs?v=817b6f3a37';
-import SCHEMA from'../../worlds/app.project/execution-policy-schema-source.mjs?v=c6edcb1442';
+import SOURCE from'../../worlds/app.project/execution-policy-source.mjs?v=0d0c73b4e6';
+import SCHEMA from'../../worlds/app.project/execution-policy-schema-source.mjs?v=5aa31bfdbd';
 const schemaModule='app.execution';
 const declarations=parse(SOURCE);
 const imports=declarations.filter(wire=>wire.type==='core.use');
@@ -19,35 +19,17 @@ export function inspectExecutionPolicyWorld(){
  };
 }
 function admitExecutionPolicy(wires){
- const context=new World({fns:{'clock.now':Date.now},library:{[schemaModule]:SCHEMA}});
+ const context=new World({library:{[schemaModule]:SCHEMA}});
  const schema=wires.filter(wire=>wire.type==='core.use');
  if(!context.tell(schema).ok)throw Error('invalid-execution-policy-schema');
  const policy=context.fork(),rows=wires.filter(wire=>wire.type!=='core.use');
  if(!policy.tell(rows,{factsOnly:true}).ok)throw Error('invalid-execution-policy');
- const literal=token=>{
-  const value=JSON.parse(token);
-  if(value!==null&&!['string','boolean'].includes(typeof value)&&!Number.isFinite(value))throw Error('invalid-policy-literal');
- };
- const seen=new Map();
- for(const row of policy.ofType('app.execution.default')){
-  const operation=str(row.attrs.operation[0]),parameter=str(row.attrs.parameter[0]);
-  if(!seen.has(operation))seen.set(operation,new Set());
-  const parameters=seen.get(operation);
-  if(parameters.has(parameter))throw Error('duplicate-policy-default');
-  parameters.add(parameter);
-  const source=row.attrs.source?.[0],values=row.attrs.value;
-  if((source!==undefined)===(values!==undefined))throw Error('invalid-policy-default-source');
-  if(source!==undefined){
-   if(str(source)!=='clock.now'||!policy.functions().some(fn=>fn.name==='clock.now'&&fn.out.kind==='number'&&!fn.pure))throw Error('undeclared-policy-function');
-  }else{
-   if(values.length!==1)throw Error('invalid-policy-default-value');
-   const [token]=values;
-   if(token.startsWith('$')){
-    const list=policy.get(token.slice(1));
-    if(list?.type!=='app.execution.list')throw Error('invalid-policy-list');
-    (list.attrs.item??[]).forEach(literal);
-   }else literal(token);
-  }
+ const seen=new Set();
+ for(const row of policy.ofType('std.capability.seed')){
+  const key=JSON.stringify([row.attrs.operation[0],row.attrs.parameter[0]]);
+  if(seen.has(key))throw Error('duplicate-policy-default');
+  seen.add(key);
+  if((row.attrs.source[0]==='value')!==Object.hasOwn(row.attrs,'value'))throw Error('invalid-policy-default-source');
  }
  return policy;
 }

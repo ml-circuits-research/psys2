@@ -1,6 +1,7 @@
 // Source-only development proposal replay. No final holdout or execution gate.
 import {readFileSync,writeFileSync} from 'node:fs';import {execFileSync} from 'node:child_process';import {createHash} from 'node:crypto';
 import {bridgeRawStructure} from '../src/dialog/raw-structural-bridge.mjs';
+import {readReaderSource} from '../src/dialog/reader-source.mjs';
 import {routeNewEngine} from '../src/dialog/reader-routing.mjs';
 import {initialDrawingState,createDrawingHost} from '../worlds/art.draw/declared-host.mjs';
 import {initialDiagramState,createDiagramHost} from '../worlds/diagram.sketch/declared-host.mjs';
@@ -33,7 +34,7 @@ else{
    const host=area==='drawing'?createDrawingHost({state:state['art.draw'],instanceId}):area==='diagram'?await createDiagramHost({state:state['diagram.sketch'],instanceId}):area==='document'?createDocumentHost({state:state['docs.editor'],instanceId}):area==='calendar'?createCalendarHost({state:state['time.calendar'],instanceId}):null;
    const seeded=await seedFunctionalContext({context:fixture.context,host,kindMappings:FUNCTIONAL_NATIVE_BINDINGS[area]??[],invocationPrefix:instanceId});setup={ok:seeded.ok,semanticallyLimited:fixture.semanticallyLimited,counters:seeded.counters};
   }
-  const before=JSON.stringify(state),provider={provenance:()=>({modelSha256:model.prediction.model.sha256,decoderVersion:model.prediction.model.decoderVersion,source:'frozen structural inference'}),propose:async text=>{if(text!==row.input.text)throw Error('unexpected provider source');return proposal;}};
+  const before=JSON.stringify(state),provider={provenance:()=>({modelSha256:model.prediction.model.sha256,decoderVersion:model.prediction.model.decoderVersion,source:'frozen structural inference'}),propose:async sourceSop=>{if(readReaderSource(sourceSop)!==row.input.text)throw Error('unexpected provider source');return proposal;}};
   const reply=await routeNewEngine({isession:{state},engine:{requestReader:provider},newEngineJournal:[]},row.input.text,{language:'en'});
   const noEffects=before===JSON.stringify(state)&&reply.effects.length===0&&reply.statuses.every(s=>s==='unsupported')&&reply.trace.readerRouting.selected===null;
   const reasons=[...model.prediction.unresolved.map(i=>i.reason),...bridge.diagnostics.map(i=>i.reason),...(bridge.decoded?.issues??[]).map(i=>i.reason)];

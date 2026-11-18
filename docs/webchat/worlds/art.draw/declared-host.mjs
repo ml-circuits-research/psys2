@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-import { readNativeToolInterface } from '../native-tool-interface.mjs?v=4a6a40a39b';
-import NATIVE_INTERFACE from './native-interface-source.mjs?v=e86f8f8bfd';
+import { readNativeToolInterface } from '../native-tool-interface.mjs?v=c2d3097e87';
+import NATIVE_INTERFACE from './native-interface-source.mjs?v=d1134285cd';
 import {budget} from '../../lib/dialog/budget.mjs?v=00bce6e369';
 import {canonicalDrawingState,toNativeDrawingState} from './canonical-state.mjs?v=77966b5bef';
 import {spatialBox} from '../native-spatial-observation.mjs?v=ced85b9a29';

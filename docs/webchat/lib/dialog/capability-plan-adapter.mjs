@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-import { World, parse, quote, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=7950b62b94';
+import { parse, quote, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=7950b62b94';
 import { decodeCapabilityCall } from '../vendor/sopworld/capability-call.mjs?v=ed3b773c65';
-import POLICY from '../../worlds/app.project/capability-policy.mjs?v=ca75c945c2';
-import { executionPolicyWorld } from './execution-policy.mjs?v=245d0e44ab';
+import POLICY from '../../worlds/app.project/capability-policy.mjs?v=9f3103a196';
+import { executionPolicyWorld } from './execution-policy.mjs?v=52e745ed26';
 import { nativeKindCandidates } from './native-binding-candidates.mjs?v=de223646d6';
 import { observedReaderContext } from './native-reader-context.mjs?v=0849a36a70';
 import { budget } from './budget.mjs?v=00bce6e369';
@@ -47,17 +47,6 @@ function interfaceFacts({ area, view, bindings, host, observation, focus, target
   const admitted = declarations.filter((wire) => wire.type === NS + 'operation');
   const operations = new Map(admitted.map((wire) => [take(wire, 'name'), ref(wire.id)]));
   const sourceTypes = new Set(admitted.map((wire) => take(wire, 'on')));
-  const seed = (operation, fields) => write(NS + 'seed', { operation: quote(operation), ...fields });
-  for (const operation of host.bindings()) {
-    for (const input of operation.knowledgeInputs || []) {
-      seed(operation.id, { parameter: quote(input.argument), source: 'label', phase: 'initial', order: '20' });
-    }
-    for (const rule of operation.defaultsFrom || []) {
-      if (rule.method === 'ordinal-labels') seed(operation.id, { parameter: quote(rule.parameter), source: 'ordinal.list',
-        from: quote(rule.lengthOf), phase: 'missing', order: '200', notice: quote('I numbered the categories because no labels were supplied.') });
-    }
-  }
-
   const readerArea = bindings.readerAreaByView?.[view] ?? area.area;
   for (const row of nativeKindCandidates(bindings)) {
     const binding = row.nativeFamilyBinding;
@@ -69,48 +58,21 @@ function interfaceFacts({ area, view, bindings, host, observation, focus, target
 
   const executionPolicy = executionPolicyWorld();
   const valueMappings = new Map(executionPolicy.ofType('app.execution.values').map((row) => [take(row, 'concept'), row]));
-  const selectors = new Map();
-  const addProperty = (concept, { sourceType, parameter, id, codec, format }, order) => {
-    if (id && format) selectors.set(id, format);
-    const codecs = { 'number-list': 'number.list', 'string-list': 'string.list' };
-    write(NS + 'property', { scope, concept, on: quote(sourceType), parameter: quote(parameter),
-      binding: id ? quote(id) : undefined, codec: codecs[codec] || (valueMappings.has(concept) ? 'lookup' : undefined), order: String(order) });
-  };
-  let propertyOrder = 0;
-  for (const row of executionPolicy.ofType('app.execution.observedProperty')) {
-    const sourceType = take(row, 'sourceType');
-    if (sourceTypes.has(sourceType)) addProperty(take(row, 'concept'), {
-      sourceType, parameter: take(row, 'parameter'), id: take(row, 'binding'), format: take(row, 'format'),
-    }, propertyOrder++);
-  }
-
+  const observed = executionPolicy.ofType('app.execution.observedProperty');
+  const normalizedBindings = new Set(observed.filter((row) => row.attrs.format).map((row) => take(row, 'binding')));
+  const codecs = { 'number-list': 'number.list', 'string-list': 'string.list' };
+  let propertyOrder = Math.max(-1, ...observed.map((row) => Number(take(row, 'order')))) + 1;
   for (const row of bindings.properties || []) {
-    if (row.area === readerArea && sourceTypes.has(row.hostBinding?.sourceType)) addProperty(row.canonical, row.hostBinding, propertyOrder++);
+    const binding = row.hostBinding;
+    if (row.area !== readerArea || !sourceTypes.has(binding?.sourceType)) continue;
+    write(NS + 'property', { scope, concept: row.canonical, on: quote(binding.sourceType), parameter: quote(binding.parameter),
+      binding: binding.id ? quote(binding.id) : undefined,
+      codec: codecs[binding.codec] || take(valueMappings.get(row.canonical), 'codec'), order: String(propertyOrder++) });
   }
 
-  for (const [concept, mapping] of valueMappings) {
-    if (!concepts.has(concept)) continue;
-    for (const row of readKnowledge().ofType(take(mapping, 'valueType'))) {
-      for (const label of values(row, take(mapping, 'nameKey'))) {
-        for (const datum of values(row, take(mapping, 'valueKey'))) {
-          // Retain literal values from the source world. The receiving tool validates its own declared parameter.
-          write(NS + 'value', { concept, label: quote(label), value: value(datum.toLowerCase()) }, 'capability.knowledge.' + row.id + '.' + wires.length);
-        }
-      }
-    }
-  }
-
-  for (const [index, row] of executionPolicy.ofType('app.execution.default').entries()) {
-    const [literal] = row.attrs.value || [];
-    const list = literal?.startsWith('$') && executionPolicy.get(literal.slice(1));
-    const isClock = take(row, 'source') === 'clock.now';
-    if (!operations.has(take(row, 'operation'))) continue;
-    seed(take(row, 'operation'), {
-      parameter: quote(take(row, 'parameter')), source: isClock ? 'clock' : 'value',
-      value: list ? value((list.attrs.item || []).map(JSON.parse)) : literal,
-      phase: 'missing', order: String(120 + index), notice: row.attrs.notice?.[0],
-    });
-  }
+  const knowledgeTypes = new Set([...valueMappings].filter(([concept]) => concepts.has(concept))
+    .map(([, mapping]) => take(mapping, 'valueType')));
+  for (const type of knowledgeTypes) wires.push(...readKnowledge().ofType(type));
 
   const names = observedReaderContext(area.area, observation).context.existing;
   for (const [order, object] of observation.objects.entries()) {
@@ -122,10 +84,8 @@ function interfaceFacts({ area, view, bindings, host, observation, focus, target
     for (const field of object.inputs) {
       if (field.source !== object.source || field.sourceType !== object.sourceType ||
           field.version !== observation.version || object.version !== observation.version) continue;
-      const literals = selectors.get(field.binding) === 'rgb'
-        ? field.values.filter((literal) => /^#[0-9a-f]{6}$/i.test(str(literal))).map((literal) => quote(str(literal).toLowerCase()))
-        : field.values;
-      write(NS + 'field', { object: id, binding: quote(field.binding), key: quote(field.key), value: literals });
+      const type = normalizedBindings.has(field.binding) ? 'app.execution.observedField' : NS + 'field';
+      write(type, { object: id, binding: quote(field.binding), key: quote(field.key), value: field.values });
     }
   }
   return { wires, scope };
@@ -138,6 +98,11 @@ function readPlan(world,sop) {
   const toolInput = result?.attrs.call ? world.compileToolInput(sop) : undefined;
   const call = toolInput ? decodeCapabilityCall(parse(toolInput)) : null;
   if (call?.reason) throw Error(call.reason);
+  const support = (wire) => [...new Set(values(wire, 'support').flatMap(id =>
+    [id, ...(world.why(id)?.steps || []).map(step => step.id)]))];
+  const proof = support(result);
+  const knowledgeTypes = new Set(world.ofType('app.execution.values').map(row => take(row, 'valueType')));
+  const knowledgeSupport = proof.filter(id => knowledgeTypes.has(world.get(id)?.type));
   const alternatives = (result?.attrs.alternative || []).map((id) => {
     const alternative = find(id);
     return { operation: take(alternative, 'operation'), status: take(alternative, 'status'), reason: take(alternative, 'reason') };
@@ -146,10 +111,10 @@ function readPlan(world,sop) {
     sop, status: take(result, 'status'), reason: take(result, 'reason'), message: take(result, 'message'),
     act: take(result, 'act'), kind: take(result, 'kind'), id: take(result, 'id'), source: take(result, 'source'),
     instance: take(result, 'instance'), version: take(result, 'version'), targets: values(result, 'target'),
-    skipped: values(result, 'skipped'), notes: values(result, 'note'), support: values(result, 'support'),
+    skipped: values(result, 'skipped'), notes: values(result, 'note'), support: proof, knowledgeSupport,
     selector: take(result, 'selector'),
     selection: (result?.attrs.selection || []).map(find).map((row) => ({
-      id: take(row, 'id'), status: take(row, 'status'), support: values(row, 'support'),
+      id: take(row, 'id'), status: take(row, 'status'), support: support(row),
     })),
     covered: values(result, 'covered'),
     operation: call?.operation, args: call?.args ?? {}, toolInput, alternatives,
@@ -157,12 +122,15 @@ function readPlan(world,sop) {
 }
 
 let declarations;
+export function inspectCapabilityPolicy() {
+  return { loaded: !!declarations, source: 'worlds/app.project/capability-policy.sop', wires: POLICY };
+}
 
 /** Compose live interface facts and compile the original SOP graph. */
 function compilerWorld(context, nodes) {
   if (!declarations) {
-    const world = new World();
-    if (!world.use('std.capability').ok || !world.use('std.interpret').ok) throw Error('capability-contract-unavailable');
+    const world = executionPolicyWorld().fork();
+    if (!world.use('std.interpret').ok) throw Error('capability-contract-unavailable');
     world.load(POLICY);
     declarations = world;
   }

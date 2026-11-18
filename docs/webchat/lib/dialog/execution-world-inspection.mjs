@@ -3,8 +3,9 @@ import{serialize,str,version,build}from'../vendor/sopworld/sopworld.mjs?v=7950b6
 import SOURCE from'./new-engine-source.mjs?v=bbd94cc4be';
 import{CATALOG_PIN}from'../knowledge/catalog-pin.mjs?v=d1ff29de82';
 import{inspectHistoryPolicy}from'./history-policy.mjs?v=f8948bd1c0';
-import{inspectExecutionPolicyWorld}from'./execution-policy.mjs?v=245d0e44ab';
-import{inspectCreationPolicy}from'./project-create-action.mjs?v=779242de67';
+import{inspectExecutionPolicyWorld}from'./execution-policy.mjs?v=52e745ed26';
+import{inspectCapabilityPolicy}from'./capability-plan-adapter.mjs?v=2026344bab';
+import{inspectCreationPolicy}from'./project-create-action.mjs?v=c7033caa42';
 import{inspectReferencePolicy}from'./reference-policy.mjs?v=32943dbf90';
 import{inspectSchemaSource}from'./worlds-inspection.mjs?v=245c518f1f';
 import{inspectRequestCompositionPolicy}from'./request-composition-policy.mjs?v=aad24b5d80';
@@ -20,7 +21,7 @@ function snapshotText(snapshot){return (snapshot?.log??[]).map((entry,index)=>'#
 /** Projects actual cache accessors and retained journal JSON; performs no reading or reasoning. */
 export async function inspectExecutionWorlds(session){
  const [{inspectDeclaredExecutionSourceWorld},{inspectSpatialPlacementWorld}]=await Promise.all([
-  import('./declared-execution.mjs?v=3844c6ae33'),import('./spatial-placement-execution.mjs?v=bb5b5995f0'),
+  import('./declared-execution.mjs?v=f2296ae50f'),import('./spatial-placement-execution.mjs?v=80a8073bcf'),
  ]);
  const journal=session?.newEngineJournal??[],moduleNames=[...new Set(journal.flatMap(record=>importsOf(record.evidence)))],sources=[['declared-execution','src/dialog/declared-execution.mjs',inspectDeclaredExecutionSourceWorld({moduleNames})]],nodes=[],edges=[];
  const link=(from,to,label)=>edges.push({from,to,label});
@@ -60,8 +61,16 @@ export async function inspectExecutionWorlds(session){
  link('execution:creation-policy','execution:creation-schema','imports schema');
  link('execution:creation-policy','execution:module:declared-execution','supplies grounded creation readings');
  const policy=inspectExecutionPolicyWorld();
- nodes.push({id:'execution:policy',label:'Execution policy',kind:'knowledge',implementation:'Operational SOP Lang World + declared host clock',description:'Actual policy queried by execution for omitted arguments and knowledge-property joins. The source is available before initialization; loaded status records the real lazy World. This moves these decisions out of native operation maps, but does not migrate editor state or all native tool semantics.',wires:policy.facts,details:{source:policy.source,loaded:policy.loaded,functions:policy.functions,dependencies:policy.dependencies},help:{purpose:'Declare defaults and knowledge value joins used by concrete request execution.',inputs:['Operation and explicit arguments','Referenced knowledge properties','Clock primitive for a missing current time'],outputs:['Only omitted argument defaults','Assumption notices','Typed knowledge-property lookup descriptors'],limits:['These are explicit defaults, not proof of broader reasoning. Editor native implementations remain visible.']}});
- link('execution:module:declared-execution','execution:policy','queries defaults and value joins');
+ nodes.push({id:'execution:policy',label:'Execution policy',kind:'knowledge',implementation:'Operational SOP Lang World',
+  description:'Declares omitted argument defaults, their notices and catalog lookup ownership.',
+  wires:policy.facts,details:{source:policy.source,loaded:policy.loaded,dependencies:policy.dependencies}});
+ const capability=inspectCapabilityPolicy();
+ nodes.push({id:'execution:capability-policy',label:'Capability compilation',kind:'knowledge',implementation:'Operational SOP Lang World',
+  description:'Applies request modes, seeds, guards and the declared normalization rules to live tool inputs.',
+  wires:capability.wires,details:{source:capability.source,loaded:capability.loaded}});
+ link('execution:module:declared-execution','execution:capability-policy','compiles native requests with');
+ link('execution:capability-policy','execution:policy','uses authored seeds and lookup declarations');
+ link('execution:capability-policy','execution:source-snapshot','reads original catalog values');
  const placement=inspectSpatialPlacementWorld();
  if(placement){
   const ids={policy:'execution:placement-policy',geometry:'execution:placement-geometry',schema:'execution:placement-geometry-schema'};

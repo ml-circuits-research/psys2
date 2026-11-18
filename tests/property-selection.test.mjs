@@ -50,7 +50,7 @@ const graph = (selected = 'red', desired = 'blue', kind = 'circle') => ({ reques
 @desired std.request.constraint request=$r target=$target concept=colour operator=eq value="${desired}" character=requirement polarity=positive` });
 const session = objects => { const state = initialState(); state.objects = objects.map((item) => ({ ...makeObject(state, item.kind), ...item, id: String(item.id) })); return { isession: { state: { 'ui.shell': { activeTab: 'draw' }, 'art.draw': canonicalDrawingState(state) } }, newEngineJournal: [] }; };
 test('validated detached selector graph selects pre-state independently of desired effect and retains evidence', async () => {
-  const s = session([{ id: 1, kind: 'circle', color: '#ff0000' }, { id: 2, kind: 'circle', color: '#0000ff' }]);
+  const s = session([{ id: 1, kind: 'circle', color: '#FF0000' }, { id: 2, kind: 'circle', color: '#0000ff' }]);
   const result = await executeRequestCandidate(s, graph(), 'structural fixture', { invocation: 'selected-turn' });
   assert.equal(result.trace.assessment, 'changed', JSON.stringify(result));
   assert.deepEqual(toNativeDrawingState(s.isession.state['art.draw']).objects.map(object => object.color), ['#0000ff', '#0000ff']);

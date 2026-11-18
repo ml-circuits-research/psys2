@@ -53,6 +53,7 @@
 @native.art.draw.op.drawing.object.make.metadata app.native.metadata operation=$native.art.draw.op.drawing.object.make field=$native.art.draw.value.44 field=$native.art.draw.value.50
 @native.art.draw.op.drawing.catalog.make std.capability.operation scope=$native.art.draw.scope name="drawing.catalog.make" act=make on="art.draw.object" order=1 eligible=true
 @native.art.draw.op.drawing.catalog.make.param.name std.capability.parameter operation=$native.art.draw.op.drawing.catalog.make name="name" kind=string required=true
+@native.art.draw.seed.catalog-label std.capability.seed operation="drawing.catalog.make" parameter="name" source=label phase=initial order=20
 @native.art.draw.op.drawing.catalog.make.param.x std.capability.parameter operation=$native.art.draw.op.drawing.catalog.make name="x" kind=number
 @native.art.draw.op.drawing.catalog.make.param.y std.capability.parameter operation=$native.art.draw.op.drawing.catalog.make name="y" kind=number
 @native.art.draw.op.drawing.catalog.make.param.size std.capability.parameter operation=$native.art.draw.op.drawing.catalog.make name="size" kind=number min=0.001

@@ -31,3 +31,13 @@ Encoder outputs are hidden `[1,L,H]`, BIO `[1,122,L,3]` and presence `[1,135]`. 
 Context JSON reproduces Python's sorted keys and default separators for Unicode scalar strings, booleans, null, safe integers, arrays and objects. Noninteger numbers, negative zero and unpaired surrogates refuse because untyped JavaScript numbers cannot recover the original Python numeric spelling. Source/context truncation refuses before model execution. Invalid tensor shapes, nonfinite outputs, offset mismatch, excessive queries or local work exhaustion yield incomplete packets. The local work allowance covers tensor scanning and decoding, with separate copy, text, query and class-output caps; it is not a bound on neural execution, tokenizer internals, diagnostic storage or downstream bridge work.
 
 Real artifact export/load and decoded backend parity remain required. A synthetic fixture can exercise the neural call interface without establishing any real model accuracy. The empirical admission gate and complete intent/effect scorer remain separate required integrations.
+
+
+The deployed reader accepts a single concrete `std.request.source` wire as its
+tool input. For example, `@reader.source std.request.source text="Draw a tree"`
+carries the exact English utterance. Both one-proposal and streamed calls use
+this boundary. The reader validates the wire and decodes its quoted text before
+running the native tokenizer, cutter and model. It retains Unicode scalar ranges
+against the decoded utterance. Extra fields, multiple wires, patterns and raw
+utterance strings cannot reach model inference. Worlds activity records the
+input wire and its decoded utterance alongside the proposal evidence.

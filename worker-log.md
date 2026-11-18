@@ -162,3 +162,6 @@ Checks: npm test 614 passed, 3 skipped, zero failed. Chromium verified seven cre
 
 2026-11-18: Undo and Redo compile against observed journal heads. Controls and natural requests dispatch the exact SOP call to the history interpreter. Worlds separates schema, policy, interpreter and native journal. Mixed responses report failed source cuts and return final state.
 Checks: npm test passed 615 with three skips. Chromium verified authored Undo, UI Redo and both natural-language directions on two shapes, including the exact call and outcome.
+
+2026-11-18: The deployed reader accepts a single SOP source wire. Tool declarations supply capability seeds. Lookup and normalization use authored SOP with original evidence.
+Checks: npm test passed 617, three skips. Chromium verified exact Unicode ingress, tree and house with Undo, ordinal chart labels [1,2,3] and catalog apple with three parts, as well as authored and natural Undo/Redo on the integrated build.

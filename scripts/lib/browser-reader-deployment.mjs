@@ -7,12 +7,16 @@ export async function refreshBrowserReaderDeployment(outDir){
  const groups={
   appBuildSha256:['ui/engine-worker.mjs','lib/dialog/index.mjs','lib/dialog/native-request-sampler.mjs','lib/dialog/sampler.mjs'],
   readerSha256:['lib/dialog/cutter-inference.mjs','lib/dialog/key-reader-inference.mjs','lib/dialog/bert-source-offsets.mjs','lib/dialog/model-selection-score.mjs'],
-  pipelineSha256:['lib/dialog/key-reader-pipeline.mjs','lib/dialog/verified-reader-provider.mjs','lib/dialog/browser-reader-host.mjs','lib/dialog/project-journal-action.mjs','lib/dialog/history-policy.mjs','worlds/app.project/history-policy-source.mjs','worlds/app.project/history-schema-source.mjs','lib/dialog/project-context-action.mjs','lib/dialog/reference-policy.mjs','lib/dialog/observed-choice.mjs','worlds/app.project/reference-schema-source.mjs','worlds/app.project/reference-policy-source.mjs','lib/dialog/project-create-action.mjs','worlds/app.project/creation-policy-source.mjs','worlds/app.project/creation-schema-source.mjs'],
+  pipelineSha256:['lib/dialog/reader-source.mjs','lib/dialog/key-reader-pipeline.mjs','lib/dialog/verified-reader-provider.mjs','lib/dialog/browser-reader-host.mjs','lib/dialog/project-journal-action.mjs','lib/dialog/history-policy.mjs','worlds/app.project/history-policy-source.mjs','worlds/app.project/history-schema-source.mjs','lib/dialog/project-context-action.mjs','lib/dialog/reference-policy.mjs','lib/dialog/observed-choice.mjs','worlds/app.project/reference-schema-source.mjs','worlds/app.project/reference-policy-source.mjs','lib/dialog/project-create-action.mjs','worlds/app.project/creation-policy-source.mjs','worlds/app.project/creation-schema-source.mjs'],
   packetAdapterSha256:['lib/dialog/key-reader-packet.mjs'],
   graphDecoderSha256:['lib/dialog/raw-structural-bridge.mjs','lib/dialog/model-graph-decoder.mjs','lib/vendor/sopworld/sopworld.mjs'],
   executorSha256:[
    'lib/dialog/new-engine.mjs','lib/dialog/reader-routing.mjs','lib/dialog/authored-request-tool.mjs',
    'lib/dialog/reader-admission.mjs','lib/dialog/reader-policy.mjs','lib/dialog/declared-execution.mjs',
+   'lib/dialog/capability-plan-adapter.mjs','lib/dialog/execution-policy.mjs','worlds/native-tool-interface.mjs',
+   'worlds/app.project/capability-policy.mjs','worlds/app.project/execution-policy-source.mjs',
+   'worlds/app.project/execution-policy-schema-source.mjs','worlds/art.draw/native-interface-source.mjs',
+   'worlds/data.charts/native-interface-source.mjs',
    'lib/dialog/spatial-placement-execution.mjs','lib/dialog/new-engine-source.mjs','lib/dialog/native-tool-activity.mjs',
    'lib/dialog/history-tool.mjs','lib/dialog/history-execution.mjs','worlds/app.project/history-policy-source.mjs','worlds/app.project/history-schema-source.mjs',
    'lib/dialog/native-intent-reader.mjs','lib/dialog/native-binding-candidates.mjs','lib/dialog/native-tool-controls.mjs',

@@ -395,6 +395,7 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
   const models = m > 0 ? (process.argv[m + 1] && !process.argv[m + 1].startsWith('--') ? process.argv[m + 1] : true) : null;
   execFileSync(process.execPath, [path.join(REPO, 'scripts/build-native-interfaces.mjs'), '--check'], { stdio: 'inherit' });
   execFileSync(process.execPath, [path.join(REPO, 'scripts/build-reader-admission-policy.mjs'), '--check'], { stdio: 'inherit' });
+  execFileSync(process.execPath, [path.join(REPO, 'scripts/build-capability-policy-sources.mjs'), '--check'], { stdio: 'inherit' });
   // P4: the bundled English, every bundled subset (src/knowledge/bundled-*.mjs, the act verbs, the default face) and the generated schema worlds must be those of the pinned catalog;
   // build-lang-en --check checks them all and a stale one fails the build (--no-catalog-check skips it, offline)
   if (!process.argv.includes('--no-catalog-check')) {

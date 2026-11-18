@@ -39,14 +39,8 @@
 @native.data.charts.value.37 std.capability.item index=0 value=$native.data.charts.value.36
 @native.data.charts.value.38 std.capability.list member=$native.data.charts.value.37
 @native.data.charts.value.39 std.capability.arg name="sample" value=$native.data.charts.value.38
-@native.data.charts.value.40 std.capability.arg name="parameter" value="labels"
-@native.data.charts.value.41 std.capability.arg name="lengthOf" value="values"
-@native.data.charts.value.42 std.capability.arg name="method" value="ordinal-labels"
-@native.data.charts.value.43 std.capability.record entry=$native.data.charts.value.40 entry=$native.data.charts.value.41 entry=$native.data.charts.value.42
-@native.data.charts.value.44 std.capability.item index=0 value=$native.data.charts.value.43
-@native.data.charts.value.45 std.capability.list member=$native.data.charts.value.44
-@native.data.charts.value.46 std.capability.arg name="defaultsFrom" value=$native.data.charts.value.45
-@native.data.charts.op.chart.make.metadata app.native.metadata operation=$native.data.charts.op.chart.make field=$native.data.charts.value.39 field=$native.data.charts.value.46
+@native.data.charts.seed.ordinal-labels std.capability.seed operation="chart.make" parameter="labels" source=ordinal.list from="values" phase=missing order=200 notice="I numbered the categories because no labels were supplied."
+@native.data.charts.op.chart.make.metadata app.native.metadata operation=$native.data.charts.op.chart.make field=$native.data.charts.value.39
 @native.data.charts.op.chart.change std.capability.operation scope=$native.data.charts.scope name="chart.change" act=change on="data.charts.chart" order=1 eligible=true
 @native.data.charts.op.chart.change.param.id std.capability.parameter operation=$native.data.charts.op.chart.change name="id" kind=string required=true
 @native.data.charts.op.chart.change.param.title std.capability.parameter operation=$native.data.charts.op.chart.change name="title" kind=string

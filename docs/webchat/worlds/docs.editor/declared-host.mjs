@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-import { readNativeToolInterface } from '../native-tool-interface.mjs?v=4a6a40a39b';
+import { readNativeToolInterface } from '../native-tool-interface.mjs?v=c2d3097e87';
 import NATIVE_INTERFACE from './native-interface-source.mjs?v=0111c52683';
 import {createNativeToolHost,copyHostData,nativeToken} from '../native-tool-host.mjs?v=2a5ea0af55';
 import {createDoc,writeText,commit,sync,undoStep,redoStep,addBlock} from './document.mjs?v=aa0453e621';

@@ -4,11 +4,11 @@ import SOURCE from'../worlds/app.project/execution-policy-source.mjs';
 import SCHEMA from'../worlds/app.project/execution-policy-schema-source.mjs';
 import{executionPolicyWorld,executionValueSource,inspectExecutionPolicyWorld}from'../src/dialog/execution-policy.mjs';
 test('operational policy admits declared defaults without executing or choosing arguments',()=>{
- const policy=executionPolicyWorld(),rows=policy.ofType('app.execution.default');
- assert.equal(rows.find(wire=>wire.id==='calendar.start').attrs.source[0],'clock.now');
+ const policy=executionPolicyWorld(),rows=policy.ofType('std.capability.seed');
+ assert.equal(rows.find(wire=>wire.id==='calendar.start').attrs.source[0],'clock');
  assert.equal(rows.find(wire=>wire.id==='calendar.duration').attrs.value[0],'1800000');
  assert.equal(rows.find(wire=>wire.id==='document.blocks').attrs.value[0],'$empty');
- assert.equal(policy.functions()[0].registered,true);
+ assert.equal(policy.get('empty').type,'std.capability.list');
  const another=executionPolicyWorld(SOURCE.replaceAll('calendar.meeting.add','sample.task.make').replace('value=1800000','value=4500'));
  const duration=another.get('calendar.duration');
  assert.deepEqual(duration.attrs.operation,['"sample.task.make"']);
@@ -18,9 +18,9 @@ test('operational policy admits declared defaults without executing or choosing 
 });
 test('authored SOP policy is the exact shipped source and duplicate defaults cannot silently win',async()=>{
  assert.equal(await fs.readFile(new URL('../worlds/app.project/execution-policy.sop',import.meta.url),'utf8'),SOURCE);
- assert.throws(()=>executionPolicyWorld(SOURCE+'\n@duplicate app.execution.default operation="document.write" parameter="blocks" value=null'),/duplicate-policy-default/);
- assert.throws(()=>executionPolicyWorld(SOURCE+'\n@empty-source app.execution.default operation="fixture" parameter="missing"'),/invalid-policy-default-source/);
- assert.match(serialize([...executionPolicyWorld().wires.values()]),/parameter="duration" value=1800000/);
+ assert.throws(()=>executionPolicyWorld(SOURCE+'\n@duplicate std.capability.seed operation="document.write" parameter="blocks" source=value value=null phase=missing order=125'),/duplicate-policy-default/);
+ assert.throws(()=>executionPolicyWorld(SOURCE+'\n@empty-source std.capability.seed operation="fixture" parameter="missing" source=value phase=missing order=125'),/invalid-policy-default-source/);
+ assert.match(serialize([...executionPolicyWorld().wires.values()]),/parameter="duration".*value=1800000/);
 });
 test('execution policy imports its reusable structure before admitting owned facts',async()=>{
  const policy=executionPolicyWorld(),inspection=inspectExecutionPolicyWorld();

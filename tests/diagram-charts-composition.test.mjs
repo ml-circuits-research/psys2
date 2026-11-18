@@ -1,3 +1,6 @@
+import {compileNativeCapability} from '../src/dialog/capability-plan-adapter.mjs';
+import {readNativeToolInterface} from '../worlds/native-tool-interface.mjs';
+import CHART_SOURCE from '../worlds/data.charts/native-interface-source.mjs';
 import {invokeToolCommand} from '../src/dialog/native-control-intent.mjs';
 import {toNativeDiagramState} from '../worlds/diagram.sketch/canonical-state.mjs';
 import {test} from 'node:test';
@@ -7,6 +10,30 @@ import {chartSVG,chartRows} from '../worlds/data.charts/vector-svg.mjs';
 import {executeDeclaredRequest} from '../src/dialog/declared-execution.mjs';
 const call=(host,operation,args,id)=>invokeToolCommand(host,{invocation:id,expectedVersion:host.observe().version,operation,args});
 const data={type:'bar',title:'Counts',labels:['Apples','Pears'],values:[5,-3],series:'Value',source:['source.input']};
+test('Chart interface seeds reach the generic compiler and an authored notice changes the result', () => {
+ const bindings={kinds:[{area:'diagram',lemma:'bar chart',canonical:'k.charts.kind.bar_chart',
+  nativeFamilyBinding:{operation:'chart.make',arguments:{type:'bar'}}}],properties:[
+  {area:'diagram',canonical:'w.chart.point.value',hostBinding:{sourceType:'data.charts.chart',parameter:'values',codec:'number-list'}},
+ ]};
+ const candidate={request:'r',wires:`@s std.request.source text="draw a bar chart"
+@r std.request act=make mood=do source=$s
+@t std.request.target request=$r mode=new kind=k.charts.kind.bar_chart
+@v std.request.constraint request=$r target=$t concept=w.chart.point.value operator=eq polarity=positive character=requirement value="[3,5,8]"`};
+ const original='I numbered the categories because no labels were supplied.';
+ const edited='The tool assigns category numbers.';
+ const compile=source=>compileNativeCapability(candidate,{
+  area:{area:'diagram'},view:'diagram',bindings,host:readNativeToolInterface(source).realize(),
+  observation:{instanceId:'declared-fixture',version:'1',scope:'data.charts',complete:true,objects:[]},unapplied:[],
+ });
+ const current=compile(CHART_SOURCE), changed=compile(CHART_SOURCE.replace(original,edited));
+ assert.equal(current.status,'compiled');
+ assert.deepEqual(current.args.labels,['1','2','3']);
+ assert.deepEqual(current.args.values,[3,5,8]);
+ assert.ok(current.notes.includes(original));
+ assert.ok(changed.notes.includes(edited));
+ assert.ok(!changed.notes.includes(original));
+});
+
 test('one diagram instance contains shapes and vector charts with mixed undo/redo and chart selection',async()=>{
  const state=initialDiagramState(),host=await createDiagramHost({state,instanceId:'composition'});
  assert.equal(call(host,'diagram.node.make',{kind:'circle'},'node').status,'changed');

@@ -2,7 +2,7 @@
 
 `app.request.composition` is an operational SOP policy. It schedules independently validated source cuts in source order, preserves explicit dependencies, and retains one turn undo group. Source order is a scheduling policy, not an inferred causal relationship.
 
-The verified reader exposes `proposeRequests(text)`. It validates the actual cutter output once and refreshes the actual world context for each request-local proposal after the preceding result. Every request uses the existing single-request projection, admission and tool effect verification. Source offsets remain in the original full utterance; diagnostics, uncertainty and unexecuted proposals remain attached to each step. Mixed results remain partial and do not claim all requested effects.
+The verified reader exposes `proposeRequests(sourceSop)`. It reads the exact utterance from one validated `std.request.source` wire, validates the actual cutter output once and refreshes the actual world context for each request-local proposal after the preceding result. Every request uses the existing single-request projection, admission and tool effect verification. Source offsets remain in the original full utterance; diagnostics, uncertainty and unexecuted proposals remain attached to each step. Mixed results remain partial and do not claim all requested effects.
 
 The original single-proposal API and explicit graph dependency checks remain unchanged. This mechanism does not split text on conjunctions, rewrite elided verbs, manufacture missing model targets or repair a cutter that emits one span for a multi-target request. Repeated target membership and inherited-act reasoning require their own declared or learned structure.
 
