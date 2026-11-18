@@ -1,9 +1,9 @@
 // Read-only architecture projection of the runtime registry. No inferred execution links.
-import {parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=5c616c8f7e';
-import {inspectReaderAdmissionPolicy} from './reader-policy.mjs?v=86888a1b46';
-import {inspectReaderContextPolicy} from './reader-context-policy.mjs?v=49ed08ae9e';
+import {parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=e931f8b20e';
+import {inspectReaderAdmissionPolicy} from './reader-policy.mjs?v=67b5838366';
+import {inspectReaderContextPolicy} from './reader-context-policy.mjs?v=a07ba21cfd';
 import {describeWorldsNodes} from './worlds-node-metadata.mjs?v=11b6d9d2f3';
-import {CATALOG_WORLD_PURPOSES} from './catalog-world-purpose.mjs?v=2eb2f3f744';
+import {CATALOG_WORLD_PURPOSES} from './catalog-world-purpose.mjs?v=3b04268443';
 
 export function inspectSchemaSource(source){
  if(typeof source!=='string')return {status:'source not loaded',legends:[],modules:[],types:[],slots:[],tools:[],parameters:[],language:[],documentation:[],languageStatus:'Source has not been read; no language binding is asserted.'};

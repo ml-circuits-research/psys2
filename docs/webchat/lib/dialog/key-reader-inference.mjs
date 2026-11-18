@@ -1,9 +1,9 @@
 // Actual two-stage neural computation. Artifact loading and empirical admission are separate.
 import {validateKeyReaderLayout} from './key-reader-layout.mjs?v=13da6b9284';
-import {copyHostData} from '../../worlds/native-tool-host.mjs?v=fbb597c3c4';
+import {copyHostData} from '../../worlds/native-tool-host.mjs?v=62cdd97cd1';
 import {canonicalLiteralProof,positiveIntegerLiteralProof} from './key-reader-value-proof.mjs?v=dfe8bef1f0';
 import {selectedProbability,binaryDecisionProbability} from './model-selection-score.mjs?v=ac3ac10191';
-import {createKeyReaderPacketAdapter} from './key-reader-packet.mjs?v=042d7d8a0b';
+import {createKeyReaderPacketAdapter} from './key-reader-packet.mjs?v=fc586c190b';
 const hash=x=>typeof x==='string'&&/^[a-f0-9]{64}$/.test(x);
 const object=x=>x!==null&&typeof x==='object'&&!Array.isArray(x);
 const digest=async x=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(x))),b=>b.toString(16).padStart(2,'0')).join('');
@@ -118,7 +118,7 @@ export async function createKeyReaderInference({manifest,tokenizer,encoder,heads
      const path=m.rawRoutes.globals[key];
      if(bankMap.has(key)){const f=field(key,0);if(present!==null&&present!==f.exists)issue('presence-class-inconsistent',key);if(f.exists){setPath(raw.request,path,f.value);emitted.add(key);}}
      else{
-      if(present!==null&&present!==Boolean(spans.length))issue('presence-span-inconsistent',key);if(spans.length>1)issue('ambiguous-global-mention',key);
+      if(present!==null&&present!==Boolean(spans.length))issue('presence-span-inconsistent',key,{path,present,ranges:spans.map(span=>[...span.range])});if(spans.length>1)issue('ambiguous-global-mention',key);
       if(spans.length===1){const range=spans[0].range,value=chars.slice(...range).join('');setPath(raw.request,path,value);emitted.add(key);let anchor=path.endsWith('_span')?path:path+'_span';if(['target.count','turn.repeat_count'].includes(path)){const [a,b]=path.split('.');const proof=positiveIntegerLiteralProof(value);if(proof){raw.request[a][b]=proof.value;auxiliary.valueProofs.push({key,range:[...range],...proof});}else{delete raw.request[a][b];issue('unresolved-numeric-normalization',key);}}if(path==='question.asked_key'){issue('unsupported-question-key-copy',key);}else{setPath(raw.request,anchor,value);raw.ranges.push({path:anchor.split('.'),range:[...range]});}}
      }
      if(path==='act'){if(spans.length===1){const range=spans[0].range;raw.request.trigger=chars.slice(...range).join('');raw.ranges.push({path:['trigger'],range:[...range]});}else issue('missing-or-ambiguous-act-anchor',key);}

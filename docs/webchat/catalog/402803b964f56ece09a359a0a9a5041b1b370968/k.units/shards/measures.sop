@@ -1,4 +1,4 @@
-# k.units/shards/measures: in which unit the numbers of every knowledge world are given (w.reader.en, k.geo, k.animals, k.music, k.body, k.space, k.objects, k.faces, k.drawing, k.layouts, k.spatial2d, k.wearables, k.actions, k.words, k.attributes, k.commonsense, k.parts, k.people, k.scenes, k.expect, k.shapes, k.time, k.units, k.values, w.lang.en, k.motion, w.lang.ro, k.interest, k.genres, k.charts, k.diagrams, k.story, k.procedures): 337 slots, each with its unit, with what it counts, as a place in an order, as a position in a frame, or as a plain number.
+# k.units/shards/measures: in which unit the numbers of every knowledge world are given (w.reader.en, k.geo, k.animals, k.music, k.body, k.space, k.objects, k.faces, k.drawing, k.composition2d, k.layouts, k.spatial2d, k.wearables, k.actions, k.words, k.attributes, k.commonsense, k.parts, k.people, k.scenes, k.expect, k.shapes, k.time, k.units, k.values, w.lang.en, k.motion, w.lang.ro, k.interest, k.genres, k.charts, k.diagrams, k.story, k.procedures): 345 slots, each with its unit, with what it counts, as a place in an order, as a position in a frame, or as a plain number.
 # sources: hand-core 1 (hand-written in this repository: tools/measures-core.mjs)
 # license: CC0-1.0
 # script: tools/measures-core.mjs
@@ -118,6 +118,14 @@
 @k.units.measure.k.drawing.point.n k.units.measure world=k.drawing type=point key=n ordinal=true core.source="hand-core 1"
 @k.units.measure.k.drawing.point.x k.units.measure world=k.drawing type=point key=x frame=drawing core.source="hand-core 1"
 @k.units.measure.k.drawing.point.y k.units.measure world=k.drawing type=point key=y frame=drawing core.source="hand-core 1"
+@k.units.measure.k.composition2d.slot.x k.units.measure world=k.composition2d type=slot key=x frame=arrangement core.source="hand-core 1"
+@k.units.measure.k.composition2d.slot.y k.units.measure world=k.composition2d type=slot key=y frame=arrangement core.source="hand-core 1"
+@k.units.measure.k.composition2d.slot.w k.units.measure world=k.composition2d type=slot key=w frame=arrangement core.source="hand-core 1"
+@k.units.measure.k.composition2d.slot.h k.units.measure world=k.composition2d type=slot key=h frame=arrangement core.source="hand-core 1"
+@k.units.measure.k.composition2d.anchor.x k.units.measure world=k.composition2d type=anchor key=x frame=object core.source="hand-core 1"
+@k.units.measure.k.composition2d.anchor.y k.units.measure world=k.composition2d type=anchor key=y frame=object core.source="hand-core 1"
+@k.units.measure.k.composition2d.anchor.w k.units.measure world=k.composition2d type=anchor key=w frame=object core.source="hand-core 1"
+@k.units.measure.k.composition2d.anchor.h k.units.measure world=k.composition2d type=anchor key=h frame=object core.source="hand-core 1"
 @k.units.measure.k.layouts.slot.x k.units.measure world=k.layouts type=slot key=x frame=arrangement core.source="hand-core 1"
 @k.units.measure.k.layouts.slot.y k.units.measure world=k.layouts type=slot key=y frame=arrangement core.source="hand-core 1"
 @k.units.measure.k.layouts.slot.w k.units.measure world=k.layouts type=slot key=w frame=arrangement core.source="hand-core 1"

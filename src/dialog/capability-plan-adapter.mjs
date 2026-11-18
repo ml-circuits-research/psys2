@@ -105,6 +105,13 @@ function readPlan(world,sop) {
     [id, ...(world.why(id)?.steps || []).map(step => step.id)]))];
   const proof = support(result);
   const scenePlaced = proof.some(id => world.get(id)?.type === 'app.sceneDefault.option');
+  if(scenePlaced){
+    const original = proof.map(id => world.get(id)).filter(row => row?.type.startsWith('k.composition2d.'))
+      .flatMap(row => (row.attrs.evidence ?? []).map(reference => reference.slice(1)));
+    for (const id of new Set(original)) if (world.has(id) && !proof.includes(id)) proof.push(id);
+  }
+  const sceneEvidence = scenePlaced ? serialize(proof.map(id => world.get(id)).filter(row =>
+    ['app.sceneDefault.', 'k.composition2d.', 'k.scenes.', 'k.layouts.'].some(prefix => row?.type.startsWith(prefix)))) : undefined;
   const knowledgeTypes = new Set(world.ofType('app.execution.values').map(row => take(row, 'valueType')));
   const knowledgeSupport = proof.filter(id => knowledgeTypes.has(world.get(id)?.type));
   const alternatives = (result?.attrs.alternative || []).map((id) => {
@@ -115,7 +122,7 @@ function readPlan(world,sop) {
     sop, status: take(result, 'status'), reason: take(result, 'reason'), message: take(result, 'message'),
     act: take(result, 'act'), kind: take(result, 'kind'), id: take(result, 'id'), source: take(result, 'source'),
     instance: take(result, 'instance'), version: take(result, 'version'), targets: values(result, 'target'),
-    scenePlaced, skipped: values(result, 'skipped'), notes: values(result, 'note'), support: proof, knowledgeSupport,
+    scenePlaced, sceneEvidence, skipped: values(result, 'skipped'), notes: values(result, 'note'), support: proof, knowledgeSupport,
     selector: take(result, 'selector'),
     selection: (result?.attrs.selection || []).map(find).map((row) => ({
       id: take(row, 'id'), status: take(row, 'status'), support: support(row),

@@ -1,6 +1,6 @@
 // Avatar SOP authority. Native objects exist only at the primitive/view boundary.
-import {World,parse,serialize,quote} from '../../lib/vendor/sopworld/sopworld.mjs?v=5c616c8f7e';
-import {copyHostData} from '../native-tool-host.mjs?v=fbb597c3c4';
+import {World,parse,serialize,quote} from '../../lib/vendor/sopworld/sopworld.mjs?v=e931f8b20e';
+import {copyHostData} from '../native-tool-host.mjs?v=62cdd97cd1';
 import schemaSource from './state-schema-source.mjs?v=3242b6318f';
 export {schemaSource as AVATAR_STATE_SCHEMA};
 // The reusable schema is owned by this module; carriers contain only instance facts.

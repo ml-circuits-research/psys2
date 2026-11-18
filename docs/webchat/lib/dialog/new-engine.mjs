@@ -1,7 +1,7 @@
 // Detached development and measurement entry point for the actual declared executor.
-import { parse, str } from '../vendor/sopworld/sopworld.mjs?v=5c616c8f7e';
-import { executeDeclaredRequest } from './declared-execution.mjs?v=365671c72f';
-import { DRAWING_TOOL_BINDINGS } from '../../worlds/art.draw/declared-host.mjs?v=ac139dcdde';
+import { parse, str } from '../vendor/sopworld/sopworld.mjs?v=e931f8b20e';
+import { executeDeclaredRequest } from './declared-execution.mjs?v=0e020164aa';
+import { DRAWING_TOOL_BINDINGS } from '../../worlds/art.draw/declared-host.mjs?v=b6cfb56641';
 
 const graphTypes = new Set(['std.request', 'std.request.source', 'std.request.target', 'std.request.constraint']);
 const reserved = new Set(['request.module', 'trace.module', 'reply.module', 'trace.request', 'before.input', 'expected.input', 'semantic.input', 'step', 'after.input', 'before.observation', 'after.observation', 'claim', 'reply']);

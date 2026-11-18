@@ -16,12 +16,12 @@
  *     of the candidate has a counterpart in the source. A word the world knows may be dropped or added (that is the point of simplifying).
  * `{ ok, reason }`; with `vocab` absent only the first four checks run.
  */
-import { isNumberWord, parseNumberRun } from '../formalizer/rules/numbers.mjs?v=b28236a4f2';
-import { isColourWord } from '../knowledge/values.mjs?v=e8ec6a1bf4';
-import { editDistance } from '../formalizer/rules/normalize.mjs?v=fee99d564f';
-import { FUNCTION_WORDS, ABBREVIATIONS, spellBudget } from '../formalizer/spell.mjs?v=383b00774f';
+import { isNumberWord, parseNumberRun } from '../formalizer/rules/numbers.mjs?v=4bd4eb3b61';
+import { isColourWord } from '../knowledge/values.mjs?v=9ed0c6384c';
+import { editDistance } from '../formalizer/rules/normalize.mjs?v=fbf8f28ddd';
+import { FUNCTION_WORDS, ABBREVIATIONS, spellBudget } from '../formalizer/spell.mjs?v=ed1f42a0b1';
 import { budget } from './budget.mjs?v=00bce6e369';
-import { en } from '../lang/en.mjs?v=51d1ccc919';
+import { en } from '../lang/en.mjs?v=5db4f4eafd';
 
 export const COLORS = { has: (w) => isColourWord(w) };   // the colour names of the catalog (the one reader, k.values), single words
 const NEG = new Set("not no never without nothing none nobody nowhere neither nor cannot cant dont doesnt didnt isnt arent wasnt werent wont wouldnt shouldnt couldnt hasnt havent hadnt aint don't doesn't didn't isn't aren't wasn't weren't won't wouldn't shouldn't couldn't hasn't haven't hadn't can't ain't".split(/\s+/));

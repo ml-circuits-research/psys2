@@ -128,6 +128,7 @@ export function createFacts({ source, name = 'catalog' }) {
         if (line.charCodeAt(0) !== 64) continue;
         const r = parseFact(line);
         if (!r) continue;
+        r.line = line;
         (byType.get(r.type) ?? byType.set(r.type, []).get(r.type)).push(r);
         for (const v of new Set(Object.values(r.f).flatMap((vs) => vs.map((x) => String(x).toLowerCase())))) (byValue.get(v) ?? byValue.set(v, []).get(v)).push(r);
       }
@@ -190,11 +191,32 @@ export function createFacts({ source, name = 'catalog' }) {
       const ix = await wireIndex(sh.id);   // the shard is read and indexed once (by type, then by value): a turn's lookups cost the matches, not the lines
       for (const r of (k == null ? ix.byType.get(type) : ix.byValue.get(k)?.filter((x) => x.type === type)) ?? []) {
         budget.tick('facts.wires');
-        out.push({ ...r, shard: sh.id, source: r.f['core.source']?.[0] ?? null });
+        out.push({ id:r.id, type:r.type, f:r.f, shard: sh.id, source: r.f['core.source']?.[0] ?? null });
       }
     }
     if (memo && !down) wireMemo.set(memo, out);
     return out;
+  }
+
+  /** Return original SOP declarations containing indexed terms. The consumer owns interpretation. */
+  async function wireSource(type, { key, keys = key == null ? [] : [key] } = {}) {
+    const terms = new Set(keys.map(term => String(term).toLowerCase()));
+    if (!terms.size) return '';
+    const owner = await world(type);
+    if (!owner) return '';
+    const shards = owner.shards.filter(shard => shard.keys?.some(term => terms.has(term)));
+    const sources = await Promise.all(shards.map(async shard => {
+      const index = await wireIndex(shard.id);
+      const lines = new Set();
+      for (const term of terms) {
+        for (const row of index.byValue.get(term) ?? []) {
+          budget.tick('facts.source');
+          if (row.type === type) lines.add(row.line);
+        }
+      }
+      return [...lines].join('\n');
+    }));
+    return sources.filter(Boolean).join('\n');
   }
 
   /** `{ word, lemma, shards }` for the first lemma candidate the vocabulary knows, else null. No shard is loaded. */
@@ -357,7 +379,7 @@ export function createFacts({ source, name = 'catalog' }) {
     peekWires: (type, world = null) => listed.get(type) ?? wireMemo.get(`${type}|null|${world ?? ''}`),   // also the whole-type wires a world's `needs` entry `wires:<type>[@<world>]` settled (the map's countries and cities)
     /** The wires of a type that name one value (`wires(type, { key })` settled them), or undefined: a synchronous read (the scenes a kind is in, the things of a scene). */
     peekWiresBy: (type, key) => wireMemo.get(`${type}|${String(key).toLowerCase()}|`),
-    name, find, thing, stats, loadVocab, loadVocabFor, world, wires, schema, series,
+    name, find, thing, stats, loadVocab, loadVocabFor, world, wires, wireSource, schema, series,
     /** The text of a catalog file (a shard, a schema) through the same source, for hosts that read worlds whole (the planner: src/plan/host.mjs). */
     readText: (path) => source.text(path),
     /**

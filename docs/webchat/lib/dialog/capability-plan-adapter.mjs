@@ -1,10 +1,11 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-import { parse, quote, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=5c616c8f7e';
+import { parse, quote, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=e931f8b20e';
 import { decodeCapabilityCall } from '../vendor/sopworld/capability-call.mjs?v=ed3b773c65';
 import POLICY from '../../worlds/app.project/capability-policy.mjs?v=9f3103a196';
-import { executionPolicyWorld } from './execution-policy.mjs?v=3849fdc94e';
-import { nativeKindCandidates } from './native-binding-candidates.mjs?v=ea53f301f4';
-import { observedReaderContext } from './native-reader-context.mjs?v=58d7278fd6';
+import { executionPolicyWorld } from './execution-policy.mjs?v=4cd537de54';
+import { sceneDefaultModule, writeSceneDefaults } from './scene-placement-defaults.mjs?v=83718f3e1d';
+import { nativeKindCandidates } from './native-binding-candidates.mjs?v=f430418571';
+import { observedReaderContext } from './native-reader-context.mjs?v=876ed08e5a';
 import { budget } from './budget.mjs?v=00bce6e369';
 
 const NS = 'std.capability.';
@@ -36,7 +37,7 @@ function factWriter() {
   return { write, value, wires };
 }
 
-function interfaceFacts({ area, view, bindings, host, observation, focus, targetUnique, unapplied, readKnowledge }, concepts) {
+function interfaceFacts({ area, view, bindings, host, observation, focus, targetUnique, unapplied, readKnowledge, sceneDefaults }, concepts) {
   const { write, value, wires } = factWriter();
   const scope = write(NS + 'scope', {
     instance: quote(observation.instanceId), version: quote(observation.version), population: typeof observation.scope==='string' ? quote(observation.scope) : undefined,
@@ -48,6 +49,7 @@ function interfaceFacts({ area, view, bindings, host, observation, focus, target
   const admitted = declarations.filter((wire) => wire.type === NS + 'operation');
   const operations = new Map(admitted.map((wire) => [take(wire, 'name'), ref(wire.id)]));
   const sourceTypes = new Set(admitted.map((wire) => take(wire, 'on')));
+  writeSceneDefaults(sceneDefaults,host,scope,operations,write,wires);
   const readerArea = bindings.readerAreaByView?.[view] ?? area.area;
   for (const row of nativeKindCandidates(bindings)) {
     const binding = row.nativeFamilyBinding;
@@ -102,6 +104,14 @@ function readPlan(world,sop) {
   const support = (wire) => [...new Set(values(wire, 'support').flatMap(id =>
     [id, ...(world.why(id)?.steps || []).map(step => step.id)]))];
   const proof = support(result);
+  const scenePlaced = proof.some(id => world.get(id)?.type === 'app.sceneDefault.option');
+  if(scenePlaced){
+    const original = proof.map(id => world.get(id)).filter(row => row?.type.startsWith('k.composition2d.'))
+      .flatMap(row => (row.attrs.evidence ?? []).map(reference => reference.slice(1)));
+    for (const id of new Set(original)) if (world.has(id) && !proof.includes(id)) proof.push(id);
+  }
+  const sceneEvidence = scenePlaced ? serialize(proof.map(id => world.get(id)).filter(row =>
+    ['app.sceneDefault.', 'k.composition2d.', 'k.scenes.', 'k.layouts.'].some(prefix => row?.type.startsWith(prefix)))) : undefined;
   const knowledgeTypes = new Set(world.ofType('app.execution.values').map(row => take(row, 'valueType')));
   const knowledgeSupport = proof.filter(id => knowledgeTypes.has(world.get(id)?.type));
   const alternatives = (result?.attrs.alternative || []).map((id) => {
@@ -112,7 +122,7 @@ function readPlan(world,sop) {
     sop, status: take(result, 'status'), reason: take(result, 'reason'), message: take(result, 'message'),
     act: take(result, 'act'), kind: take(result, 'kind'), id: take(result, 'id'), source: take(result, 'source'),
     instance: take(result, 'instance'), version: take(result, 'version'), targets: values(result, 'target'),
-    skipped: values(result, 'skipped'), notes: values(result, 'note'), support: proof, knowledgeSupport,
+    scenePlaced, sceneEvidence, skipped: values(result, 'skipped'), notes: values(result, 'note'), support: proof, knowledgeSupport,
     selector: take(result, 'selector'),
     selection: (result?.attrs.selection || []).map(find).map((row) => ({
       id: take(row, 'id'), status: take(row, 'status'), support: support(row),
@@ -133,13 +143,19 @@ function compilerWorld(context, nodes) {
     const world = executionPolicyWorld().fork();
     if (!world.use('std.interpret').ok) throw Error('capability-contract-unavailable');
     world.load(POLICY);
+    world.load(sceneDefaultModule.policy);
     declarations = world;
   }
   const concepts = new Set(nodes.filter(wire => wire.type === 'std.request.constraint').map(wire => take(wire, 'concept')));
-  const {wires,scope}=interfaceFacts(context, concepts);
-  const world=declarations.fork();
-  if (!world.tell(serialize(wires),{factsOnly:true}).ok) throw Error('invalid-capability-interface');
-  return {world,scope};
+  const compose = sceneDefaults => {
+    const {wires,scope}=interfaceFacts({...context,sceneDefaults},concepts);
+    const world=declarations.fork();
+    return world.tell(serialize(wires),{factsOnly:true}).ok ? {world,scope} : null;
+  };
+  // Optional scene evidence may exceed the rule budget or be inconsistent.
+  const configured=compose(context.sceneDefaults) ?? (context.sceneDefaults && compose(null));
+  if(!configured)throw Error('invalid-capability-interface');
+  return configured;
 }
 function contextWire(id,request,scope) {
   return {id,type:NS+'context',attrs:{request:[ref(request)],scope:[scope]}};

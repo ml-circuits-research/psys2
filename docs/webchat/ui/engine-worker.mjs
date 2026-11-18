@@ -420,7 +420,9 @@ const handlers = {
     const executionGraph=await inspectExecutionWorlds(session);
     progress.stage('Build project world links');
     projectAreas=projectAreas.map(area=>({...area,schemaWorld:worldLoader.info(area.world)?.schemaWorld??area.schemaWorld}));projectWorld=mods.createProjectWorld({areas:projectAreas,instances});const projectGraph=mods.inspectProjectWorld(projectWorld);
-    return {...baseGraph,centralNodeId:'project:application',areas:projectAreas,nodes:describeWorldsNodes([...baseGraph.nodes,...executionGraph.nodes,...projectGraph.nodes]),edges:[...baseGraph.edges,...executionGraph.edges,...projectGraph.edges,...['new-engine','declared-execution'].map(name=>({from:'component:reasoner',to:'execution:module:'+name,label:'dispatches to'}))],activity:activityLog.slice(),timings:progress.finish()};
+    const sceneKnowledge=baseGraph.nodes.some(node=>node.id==='knowledge-world:k.composition2d')
+      ?[{from:'execution:scene-default-policy',to:'knowledge-world:k.composition2d',label:'uses catalog composition regions'}]:[];
+    return {...baseGraph,centralNodeId:'project:application',areas:projectAreas,nodes:describeWorldsNodes([...baseGraph.nodes,...executionGraph.nodes,...projectGraph.nodes]),edges:[...baseGraph.edges,...executionGraph.edges,...projectGraph.edges,...sceneKnowledge,...['new-engine','declared-execution'].map(name=>({from:'component:reasoner',to:'execution:module:'+name,label:'dispatches to'}))],activity:activityLog.slice(),timings:progress.finish()};
     }catch(error){progress.finish(error);throw error;}
   },
   async instanceInspection(m) {

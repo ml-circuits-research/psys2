@@ -1,15 +1,16 @@
-import { executeSpatialPlacement } from './spatial-placement-execution.mjs?v=ff665bb661';
-import { compareNativeReadings } from './capability-plan-adapter.mjs?v=c016c5ed42';
-import { NATIVE_AREAS,createAreaHost } from './app-reader-context.mjs?v=de06cfe134';
+import { readSceneDefaults } from './scene-placement-defaults.mjs?v=83718f3e1d';
+import { executeSpatialPlacement } from './spatial-placement-execution.mjs?v=a7e143f9d4';
+import { compareNativeReadings } from './capability-plan-adapter.mjs?v=b2fbe51d51';
+import { NATIVE_AREAS,createAreaHost } from './app-reader-context.mjs?v=abf36e3d52';
 import { instanceIdFor } from './instance-identity.mjs?v=024ef1ca83';
-import { describeRouteComparison,resolveRequestRoute } from './request-routing-policy.mjs?v=06318084ab';
-import { executeHistoryRequest } from './history-execution.mjs?v=5e14a5d847';
-import { executeNativeQuery } from './native-query-execution.mjs?v=b4f968e05a';
-import { executeNativeCapability } from './capability-plan-execution.mjs?v=2f34464d2e';
-import { executionValueSource } from './execution-policy.mjs?v=3849fdc94e';
-import { inspectCachedExecutionSource } from './execution-world-inspection.mjs?v=365671c72f';
-import { World, str } from '../vendor/sopworld/sopworld.mjs?v=5c616c8f7e';
-import SOURCE from './new-engine-source.mjs?v=e91977e5d1';
+import { describeRouteComparison,resolveRequestRoute } from './request-routing-policy.mjs?v=bc16ff9a89';
+import { executeHistoryRequest } from './history-execution.mjs?v=1c66831477';
+import { executeNativeQuery } from './native-query-execution.mjs?v=d6f59353e9';
+import { executeNativeCapability } from './capability-plan-execution.mjs?v=8f42926de0';
+import { executionValueSource } from './execution-policy.mjs?v=4cd537de54';
+import { inspectCachedExecutionSource } from './execution-world-inspection.mjs?v=0e020164aa';
+import { World, str } from '../vendor/sopworld/sopworld.mjs?v=e931f8b20e';
+import SOURCE from './new-engine-source.mjs?v=f1bd2490cf';
 let knowledge;
 const source = () => knowledge ??= World.fromJSON(SOURCE.snapshot, { library: SOURCE.schemaModules });
 export const inspectDeclaredExecutionSourceWorld = (options) => inspectCachedExecutionSource(knowledge, options);
@@ -52,7 +53,9 @@ export async function compareDeclaredReadings(session,candidates,{view,bindings,
   let result;
   if(indices.length&&state&&bindings){
     const host=await createAreaHost(area,{state:structuredClone(state),instanceId:instanceIdFor(session,area.world),loader:session.engine?.loader,knowledge:session.engine?.knowledge});
-    result=compare(indices.map(index=>candidates[index]),{area,view,bindings,host,observation:host.observe(),focus:session.newEngineFocus?.[view],unapplied,readKnowledge:source});
+    const alternatives=indices.map(index=>candidates[index]),observation=host.observe();
+    const sceneDefaults=await readSceneDefaults({host,bindings,area,view,knowledge:session.engine?.knowledge,candidates:alternatives});
+    result=compare(alternatives,{area,view,bindings,host,observation,focus:session.newEngineFocus?.[view],unapplied,readKnowledge:source,sceneDefaults});
   }
   if(!limited)return result??null;
   const index=result?.index===undefined?undefined:indices[result.index];

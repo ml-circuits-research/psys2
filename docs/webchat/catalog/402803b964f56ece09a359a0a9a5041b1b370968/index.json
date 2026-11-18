@@ -1,5 +1,5 @@
 {
- "version": "0ceffa61143b",
+ "version": "4df10a617b43",
  "sopworld": "94cffa2",
  "worlds": [
   {
@@ -4603,8 +4603,8 @@
     {
      "id": "k.attributes/shards/narration",
      "path": "k.attributes/shards/narration.sop",
-     "wires": 1316,
-     "bytes": 255212,
+     "wires": 1337,
+     "bytes": 259609,
      "keys": [
       "a",
       "about",
@@ -4863,6 +4863,9 @@
       "k.commonsense.lives",
       "k.commonsense.placed",
       "k.commonsense.thing",
+      "k.composition2d.anchor",
+      "k.composition2d.slot",
+      "k.composition2d.subject",
       "k.diagrams.fill",
       "k.diagrams.kind",
       "k.diagrams.shape",
@@ -13611,6 +13614,42 @@
     "rule-k.commonsense.habitat.place",
     "rule-k.commonsense.inability",
     "rule-k.kinds.up.direct"
+   ],
+   "licenses": [
+    "CC0-1.0"
+   ],
+   "warnings": []
+  },
+  {
+   "id": "k.composition2d",
+   "version": "1",
+   "schema": "k.composition2d/schema.sop",
+   "vocabulary": "k.composition2d/shards/words.sop",
+   "exports": [
+    "k.composition2d.anchor",
+    "k.composition2d.slot",
+    "k.composition2d.subject"
+   ],
+   "depends": [
+    "k.layouts",
+    "k.scenes"
+   ],
+   "shards": [
+    {
+     "id": "k.composition2d/shards/words",
+     "path": "k.composition2d/shards/words.sop",
+     "wires": 20,
+     "bytes": 2504,
+     "keys": [],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    }
+   ],
+   "sources": [
+    "hand-core-1"
    ],
    "licenses": [
     "CC0-1.0"
@@ -33876,6 +33915,33 @@
       "scene",
       "thing",
       "usually_count"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.kinds/shards/relations-composition2d",
+     "path": "k.kinds/shards/relations-composition2d.sop",
+     "wires": 20,
+     "bytes": 3752,
+     "keys": [
+      "basis",
+      "evidence",
+      "h",
+      "k.composition2d.anchor",
+      "k.composition2d.slot",
+      "kind",
+      "layout",
+      "of",
+      "place",
+      "region",
+      "subject",
+      "w",
+      "x",
+      "y"
      ],
      "sources": [
       "hand-core-1"
@@ -63502,8 +63568,8 @@
     {
      "id": "k.units/shards/measures",
      "path": "k.units/shards/measures.sop",
-     "wires": 337,
-     "bytes": 48447,
+     "wires": 345,
+     "bytes": 49564,
      "keys": [
       "after",
       "age_years_about",
@@ -63615,6 +63681,7 @@
       "k.body",
       "k.charts",
       "k.commonsense",
+      "k.composition2d",
       "k.diagrams",
       "k.drawing",
       "k.expect",

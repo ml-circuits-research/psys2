@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-import { readNativeToolInterface } from '../native-tool-interface.mjs?v=3aa63a31ba';
+import { readNativeToolInterface } from '../native-tool-interface.mjs?v=2aed95f709';
 import NATIVE_INTERFACE from './native-interface-source.mjs?v=3945d7d8fa';
-import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs?v=fbb597c3c4';
+import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs?v=62cdd97cd1';
 import {createCalendar} from './calendar-tool.mjs?v=7878bd2af4';
-import {createCalendarPolicy} from './scheduling.mjs?v=4a3a0dd43c';
-import {canonicalCalendarState,toNativeCalendarState,adoptCanonicalCalendarState} from './canonical-state.mjs?v=abec33abaf';
-export {canonicalCalendarState,toNativeCalendarState} from './canonical-state.mjs?v=abec33abaf';
+import {createCalendarPolicy} from './scheduling.mjs?v=a74c14cd58';
+import {canonicalCalendarState,toNativeCalendarState,adoptCanonicalCalendarState} from './canonical-state.mjs?v=b2bcb984b9';
+export {canonicalCalendarState,toNativeCalendarState} from './canonical-state.mjs?v=b2bcb984b9';
 const toolInterface = readNativeToolInterface(NATIVE_INTERFACE).realize();
 export const CALENDAR_TOOL_BINDINGS = toolInterface.bindings;
 const time = CALENDAR_TOOL_BINDINGS.find(operation=>operation.id==='calendar.meeting.move').coordinates;

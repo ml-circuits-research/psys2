@@ -1,7 +1,7 @@
 // Encode grounded evidence and detach the standard graph derived by the SOP rules.
-import { World, inspectRequest, quote, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=5c616c8f7e';
-import SCHEMA from '../../worlds/app.project/grounded-projection-schema-source.mjs?v=bab6710607';
-import POLICY from '../../worlds/app.project/grounded-projection-source.mjs?v=37b8fb59d7';
+import { World, inspectRequest, quote, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=e931f8b20e';
+import SCHEMA from '../../worlds/app.project/grounded-projection-schema-source.mjs?v=60ed35847e';
+import POLICY from '../../worlds/app.project/grounded-projection-source.mjs?v=09bd72a96a';
 
 let base;
 const first = (wire, key) => wire.attrs[key]?.[0];
@@ -21,6 +21,21 @@ function groundingWorld() {
 
 export function inspectGroundedProjection() {
   return { policy: POLICY, schema: SCHEMA, loaded: !!base };
+}
+
+export function resolveGroundedMention({text,area,family,lexemes}){
+  const world=groundingWorld().fork();
+  const input=serialize([
+    record('ground.mention','mention',{text:quote(text),area:quote(area),family:quote(family)}),
+    ...lexemes.map(({text,area,family,canonical,witness},index)=>record('ground.lexeme.'+index,'lexeme',{
+      text:quote(text),area:quote(area),family:quote(family),canonical:quote(canonical),witness:quote(witness),
+    })),
+  ]);
+  if(!world.tell(input,{factsOnly:true}).ok)return [];
+  return world.ofType('app.grounded.meaning').map(row=>{
+    const lexeme=world.get(first(row,'lexeme').slice(1));
+    return {canonical:str(first(lexeme,'canonical')),witness:str(first(lexeme,'witness'))};
+  });
 }
 
 export function projectGroundedRequest({ profile, act, mood, kind, text, name, values, witness }) {

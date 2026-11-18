@@ -1,14 +1,18 @@
-import { captureHistory, recordHistory, restoreHistory } from './history-journal.mjs?v=e1571189f1';
-import {projectReaderHeadAlternative} from './reader-head-alternative.mjs?v=d543cc0d7c';
-import {writeReaderSource} from './reader-source.mjs?v=b1cb106384';
-import {isAuthoredRequest,readAuthoredRequest} from './authored-request-tool.mjs?v=fb101f1944';
+import {isScopedRemoval} from './capability-plan-execution.mjs?v=8f42926de0';
+import {projectRemovalAction} from './project-removal-action.mjs?v=75cb9fe03e';
+import { captureHistory, recordHistory, restoreHistory } from './history-journal.mjs?v=f8c90b3b55';
+import {projectReaderHeadAlternative} from './reader-head-alternative.mjs?v=90d3990064';
+import {parse} from '../vendor/sopworld/sopworld.mjs?v=e931f8b20e';
+import {writeReaderSource} from './reader-source.mjs?v=0497d78933';
+import {isAuthoredRequest,readAuthoredRequest} from './authored-request-tool.mjs?v=8d2451af0f';
 // Model-first proposal routing. Calibration authority belongs to host configuration,
 // never to a model output, evaluation annotation or grammar proposal.
-import {requestCompositionPolicy,scheduleFollowingCut}from './request-composition-policy.mjs?v=ad402a31c4';
-import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=365671c72f';
-import {projectContextAction} from './project-context-action.mjs?v=58fade2709';
-import {projectCreateAction} from './project-create-action.mjs?v=ba00426b67';
-import {assessReaderProposal} from './reader-admission.mjs?v=c79b3efc71';
+import {requestCompositionPolicy,scheduleFollowingCut}from './request-composition-policy.mjs?v=e8603e6b15';
+import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=0e020164aa';
+import {projectQueryAction} from './project-query-action.mjs?v=70b4d8d9b3';
+import {projectContextAction} from './project-context-action.mjs?v=35145688d5';
+import {projectCreateAction} from './project-create-action.mjs?v=a5f442fa1e';
+import {assessReaderProposal} from './reader-admission.mjs?v=2e9469e509';
 const unavailable=reason=>({candidates:[],coverage:{complete:false,executable:false,graphProposal:false},failures:[{reason}]});
 const noDeclaredAction = () => {
  const text='I could not identify an action to apply. Nothing changed.';
@@ -49,7 +53,7 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
  const providerCandidates=Array.isArray(proposal?.candidates)?structuredClone(proposal.candidates):[];
  const context={area:options.view??session.isession.state['ui.shell']?.activeTab};
  let contextProjection=null,bindings=null,registry=null;
- try{bindings=provider?.bindings?.();registry=provider?.registry?.();contextProjection=await projectContextAction(proposal,session,{bindings,registry,view:context.area});if(contextProjection)proposal=contextProjection.proposal;else{const creation=await projectCreateAction(proposal,session,{bindings,registry,view:context.area});if(creation)proposal=creation;}}catch{}
+ try{bindings=provider?.bindings?.();registry=provider?.registry?.();contextProjection=await projectContextAction(proposal,session,{bindings,registry,view:context.area});if(contextProjection)proposal=contextProjection.proposal;else{const projected=await projectQueryAction(proposal,session,{bindings,view:context.area})??await projectCreateAction(proposal,session,{bindings,registry,view:context.area});if(projected)proposal=projected;}}catch{}
  let provenAlternative=null;
  if(!proposal.coverage?.complete&&bindings&&provenance?.bindingsSha256){
   try{
@@ -67,17 +71,35 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
    }
   }catch{/* An unproved alternative leaves the original diagnostics in force. */}
  }
- const decision=assessReaderProposal({proposal,text,provenance,admission:session.engine?.requestReaderAdmission,area:context.area});
+ let removalComparison=null;
+ if(bindings){
+  try{
+   const projection=projectRemovalAction(proposal,session,{bindings,view:context.area});
+   const pending=projection?.candidates??proposal.candidates;
+   if(pending?.length&&pending.length<=16&&pending.every(candidate=>parse(candidate.wires).some(wire=>wire.type==='std.request'&&wire.id===candidate.request&&wire.attrs.act?.[0]==='remove'))){
+    const compared=await compareDeclaredReadings(session,pending,{view:context.area,bindings});
+    if(isScopedRemoval(compared?.plan)){
+     removalComparison=compared;
+     if(projection)proposal={...proposal,candidates:[pending[compared.index]],coverage:{complete:true,graphProposal:true,executable:false},failures:[],
+      interpretation:{profile:'grounded-removal/1',mention:projection.mention,range:projection.range,unresolved:proposal.failures,
+       alternatives:pending}};
+     else if(compared.index!==0)proposal={...proposal,candidates:[pending[compared.index],...pending.filter((_,index)=>index!==compared.index)]};
+    }
+   }
+  }catch{/* A request with unproved removal remains subject to normal admission. */}
+ }
+ const preservedProviderTrace=!!provenAlternative||proposal.interpretation?.profile==='grounded-removal/1';
+ const decision=assessReaderProposal({proposal,text,provenance,admission:session.engine?.requestReaderAdmission,area:context.area,scopedRemoval:!!removalComparison});
  if(decision.decisionSop){
   try{session.engine?.onWorldActivity?.({nodeIds:['component:request-admission','knowledge:reader-admission-policy','component:library'],phase:'stage',operation:'app.reader.admission',label:'Evaluate reader admission policy',wires:decision.decisionSop});}catch{/* Observation cannot change admission. */}
  }
  const choice=proposal?.interpretation?.decision;
- if(choice)try{session.engine?.onWorldActivity?.({nodeIds:['component:library','execution:creation-policy'],phase:'stage',operation:'std.choice',label:'Compare grounded creation readings',
+ if(choice&&proposal.interpretation.profile==='declared-creation/1')try{session.engine?.onWorldActivity?.({nodeIds:['component:library','execution:creation-policy'],phase:'stage',operation:'std.choice',label:'Compare grounded creation readings',
   text,wires:choice.input+'\n'+choice.sop});}catch{/* Trace subscribers cannot change interpretation. */}
- let candidate=decision.candidate,comparison=provenAlternative;
+ let candidate=decision.candidate,comparison=removalComparison??provenAlternative;
  const eligible=decision.admitted,reason=decision.reason;
  const interpretations=proposal?.interpretation?.profile==='declared-creation/1'?proposal.candidates:providerCandidates;
- if(eligible && decision.mode==='uncalibrated-best-effort' && !contextProjection && interpretations.length>1 && interpretations.length<=16){
+ if(eligible && decision.mode==='uncalibrated-best-effort' && !contextProjection && !removalComparison && interpretations.length>1 && interpretations.length<=16){
   const admitted=interpretations.filter(option=>assessReaderProposal({proposal:{...proposal,candidates:[option]},text,provenance,area:context.area}).admitted);
   if(admitted.length>1){
    comparison=await compareDeclaredReadings(session,admitted,{view:context.area,bindings,unapplied:proposal.interpretation?.unapplied});
@@ -106,6 +128,14 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
    result.parts=[{text:result.text,translate:false}];
    result.trace={...result.trace,interpretation:proposal.interpretation};
   }
+  if(result?.statuses?.includes('supported')&&proposal.interpretation?.profile==='declared-query/1'&&proposal.interpretation.note){
+   result.text+=' '+proposal.interpretation.note;result.parts=[{text:result.text,translate:false}];result.trace={...result.trace,interpretation:proposal.interpretation};
+  }
+  if(result?.statuses?.includes('supported')&&proposal.interpretation?.profile==='grounded-removal/1'){
+   result.text+=' I read '+JSON.stringify(proposal.interpretation.mention)+' as that object. You can undo this.';
+   result.parts=[{text:result.text,translate:false}];
+   result.trace={...result.trace,interpretation:proposal.interpretation};
+  }
   if(result&&decision.uncertain&&result.statuses?.includes('supported')){
    const note=result.trace?.uncertainty?.length||result.trace?.interpretation?'':'I used the most likely reading; you can correct it or undo.';
    if(note){result.text+=' '+note;result.parts=[{text:result.text,translate:false}];}
@@ -114,7 +144,7 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
  result??={text:message,parts:[{text:message,translate:false}],statuses:['unsupported'],answers:[],segments:[],state:{},effects:[],newEngine:true,trace:{legacy:false,engine:'new',reason:options.language&&options.language!=='en'?'language':'reading'}};
  return {...result,trace:{...result.trace,...(eligible?{reading:candidate}:{}),...(comparison?{readingComparison:comparison.sop}:{}),readerRouting:{primary:'sop-bert',selected:eligible?'sop-bert':null,reason,
   admission:{mode:decision.mode??null,uncertain:!!provenAlternative||(decision.uncertain??false),alternatives:decision.alternatives??[],scoreDefinition:decision.scoreDefinition,score:decision.score,proposalEligible:decision.eligible,assessment:decision.assessment,decisionSop:decision.decisionSop??null},
-  interpretation:proposal?.interpretation??null,unresolved:provenAlternative?proposal.interpretation.unresolved:(proposal?.failures??[]),proposalCandidates:providerCandidates,rawReading:proposal?.raw?.requests??null,model:{provenance,coverage:(provenAlternative?providerCoverage:proposal?.coverage)??null,candidates:provenAlternative?providerCandidates.length:(proposal?.candidates?.length??0),eligible:!!eligible}}}};
+  interpretation:proposal?.interpretation??null,unresolved:preservedProviderTrace?proposal.interpretation.unresolved:(proposal?.failures??[]),proposalCandidates:providerCandidates,rawReading:proposal?.raw?.requests??null,model:{provenance,coverage:(preservedProviderTrace?providerCoverage:proposal?.coverage)??null,candidates:preservedProviderTrace?providerCandidates.length:(proposal?.candidates?.length??0),eligible:!!eligible}}}};
 }
 
 /** Apply the declared source-order schedule to actual model cuts, never source words. */

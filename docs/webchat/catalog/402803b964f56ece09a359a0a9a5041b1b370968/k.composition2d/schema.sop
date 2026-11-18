@@ -1,0 +1,51 @@
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@k.composition2d core.module name=k.composition2d version=1 imports=k.scenes imports=k.layouts exports=subject exports=slot exports=anchor core.source="hand-core 1"
+
+@k.composition2d.subject core.type of=k.composition2d.subject shared=true closed=true core.source="hand-core 1"
+@k.composition2d.subject.name core.slot of=k.composition2d.subject key=name id=true kind=atom kind=string core.source="hand-core 1"
+
+@k.composition2d.slot core.type of=k.composition2d.slot shared=true closed=true core.source="hand-core 1"
+@k.composition2d.slot.subject core.slot of=k.composition2d.slot key=subject id=true kind=atom kind=string core.source="hand-core 1"
+@k.composition2d.slot.layout core.slot of=k.composition2d.slot key=layout id=true kind=atom kind=string core.source="hand-core 1"
+@k.composition2d.slot.place core.slot of=k.composition2d.slot key=place id=true kind=atom kind=string core.source="hand-core 1"
+@k.composition2d.slot.region core.slot of=k.composition2d.slot key=region id=true kind=ref core.source="hand-core 1"
+@k.composition2d.slot.basis core.slot of=k.composition2d.slot key=basis id=true kind=atom core.source="hand-core 1"
+@k.composition2d.slot.x core.slot of=k.composition2d.slot key=x kind=number core.source="hand-core 1"
+@k.composition2d.slot.y core.slot of=k.composition2d.slot key=y kind=number core.source="hand-core 1"
+@k.composition2d.slot.w core.slot of=k.composition2d.slot key=w kind=number core.source="hand-core 1"
+@k.composition2d.slot.h core.slot of=k.composition2d.slot key=h kind=number core.source="hand-core 1"
+@k.composition2d.slot.evidence core.slot of=k.composition2d.slot key=evidence many=true kind=ref core.source="hand-core 1"
+
+@k.composition2d.anchor core.type of=k.composition2d.anchor shared=true closed=true core.source="hand-core 1"
+@k.composition2d.anchor.subject core.slot of=k.composition2d.anchor key=subject id=true kind=atom kind=string core.source="hand-core 1"
+@k.composition2d.anchor.of core.slot of=k.composition2d.anchor key=of id=true kind=atom kind=string core.source="hand-core 1"
+@k.composition2d.anchor.kind core.slot of=k.composition2d.anchor key=kind id=true kind=atom kind=string core.source="hand-core 1"
+@k.composition2d.anchor.region core.slot of=k.composition2d.anchor key=region id=true kind=ref core.source="hand-core 1"
+@k.composition2d.anchor.basis core.slot of=k.composition2d.anchor key=basis id=true kind=atom core.source="hand-core 1"
+@k.composition2d.anchor.x core.slot of=k.composition2d.anchor key=x kind=number core.source="hand-core 1"
+@k.composition2d.anchor.y core.slot of=k.composition2d.anchor key=y kind=number core.source="hand-core 1"
+@k.composition2d.anchor.w core.slot of=k.composition2d.anchor key=w kind=number core.source="hand-core 1"
+@k.composition2d.anchor.h core.slot of=k.composition2d.anchor key=h kind=number core.source="hand-core 1"
+@k.composition2d.anchor.evidence core.slot of=k.composition2d.anchor key=evidence many=true kind=ref core.source="hand-core 1"
+
+@k.composition2d.requested k.composition2d.subject name=?subject
+
+# A usual place can match any named composition layer or support region.
+@k.composition2d.typical k.scenes.thing name=?subject place=?place
+@k.composition2d.layer k.layouts.slot layout=?layout name=?place x=?x y=?y w=?w h=?h
+@k.composition2d.support k.layouts.anchor of=?owner kind=?place x=?x y=?y w=?w h=?h
+@k.composition2d.layer_match k.composition2d.slot subject=?subject layout=?layout place=?place x=?x y=?y w=?w h=?h basis=medium region=$k.composition2d.layer evidence=$k.composition2d.typical evidence=$k.composition2d.layer
+@k.composition2d.support_match k.composition2d.anchor subject=?subject of=?owner kind=?place x=?x y=?y w=?w h=?h basis=medium region=$k.composition2d.support evidence=$k.composition2d.typical evidence=$k.composition2d.support
+@k.composition2d.match_layer core.rule when=$k.composition2d.requested when=$k.composition2d.typical when=$k.composition2d.layer then=$k.composition2d.layer_match core.source="hand-core 1"
+@k.composition2d.match_medium core.rule when=$k.composition2d.requested when=$k.composition2d.typical when=$k.composition2d.support then=$k.composition2d.support_match core.source="hand-core 1"
+
+# A region can also declare directly which subjects it accommodates.
+@k.composition2d.layer_holds k.layouts.slot layout=?layout name=?place holds=?subject x=?x y=?y w=?w h=?h
+@k.composition2d.anchor_holds k.layouts.anchor of=?owner kind=?place holds=?subject x=?x y=?y w=?w h=?h
+@k.composition2d.held_layer k.composition2d.slot subject=?subject layout=?layout place=?place x=?x y=?y w=?w h=?h basis=holds region=$k.composition2d.layer_holds evidence=$k.composition2d.layer_holds
+@k.composition2d.held_anchor k.composition2d.anchor subject=?subject of=?owner kind=?place x=?x y=?y w=?w h=?h basis=holds region=$k.composition2d.anchor_holds evidence=$k.composition2d.anchor_holds
+@k.composition2d.match_layer_subject core.rule when=$k.composition2d.requested when=$k.composition2d.layer_holds then=$k.composition2d.held_layer core.source="hand-core 1"
+@k.composition2d.match_anchor_subject core.rule when=$k.composition2d.requested when=$k.composition2d.anchor_holds then=$k.composition2d.held_anchor core.source="hand-core 1"

@@ -13360,7 +13360,9 @@
  "basis": [
   "k.attributes/schema.sop",
   "k.attributes/shards/narration",
+  "k.composition2d/schema.sop",
   "k.kinds/shards/relations-attributes",
+  "k.kinds/shards/relations-composition2d",
   "k.kinds/shards/relations-procedures",
   "k.procedures/schema.sop",
   "k.words/shards/ba",
@@ -32384,6 +32386,9 @@
   "k.words/shards/frequency-c",
   "w.document/schema.sop"
  ],
+ "composition layer": [
+  "k.composition2d/schema.sop"
+ ],
  "compound": [
   "k.words/shards/co-1",
   "k.words/shards/frequency-c"
@@ -49930,6 +49935,8 @@
  ],
  "evidence": [
   "k.attributes/shards/narration",
+  "k.composition2d/schema.sop",
+  "k.kinds/shards/relations-composition2d",
   "k.kinds/shards/relations-spatial2d",
   "k.spatial2d/schema.sop",
   "k.words/shards/ev",
@@ -65390,8 +65397,10 @@
  ],
  "h": [
   "k.attributes/shards/narration",
+  "k.composition2d/schema.sop",
   "k.drawing/schema.sop",
   "k.faces/schema.sop",
+  "k.kinds/shards/relations-composition2d",
   "k.kinds/shards/relations-drawing",
   "k.kinds/shards/relations-faces",
   "k.kinds/shards/relations-layouts",
@@ -77067,6 +77076,20 @@
   "k.attributes/shards/narration",
   "k.kinds/shards/relations-commonsense"
  ],
+ "k.composition2d": [
+  "k.units/shards/measures"
+ ],
+ "k.composition2d.anchor": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-composition2d"
+ ],
+ "k.composition2d.slot": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-composition2d"
+ ],
+ "k.composition2d.subject": [
+  "k.attributes/shards/narration"
+ ],
  "k.diagrams": [
   "k.units/shards/measures"
  ],
@@ -79767,6 +79790,7 @@
   "k.body/schema.sop",
   "k.charts/schema.sop",
   "k.colours/schema.sop",
+  "k.composition2d/schema.sop",
   "k.diagrams/schema.sop",
   "k.faces/schema.sop",
   "k.food/schema.sop",
@@ -79777,6 +79801,7 @@
   "k.kinds/shards/relations-body",
   "k.kinds/shards/relations-charts",
   "k.kinds/shards/relations-colours",
+  "k.kinds/shards/relations-composition2d",
   "k.kinds/shards/relations-diagrams",
   "k.kinds/shards/relations-faces",
   "k.kinds/shards/relations-food",
@@ -82898,9 +82923,11 @@
  ],
  "layout": [
   "k.attributes/shards/narration",
+  "k.composition2d/schema.sop",
   "k.diagrams/schema.sop",
   "k.expect/schema.sop",
   "k.genres/schema.sop",
+  "k.kinds/shards/relations-composition2d",
   "k.kinds/shards/relations-diagrams",
   "k.kinds/shards/relations-expect",
   "k.kinds/shards/relations-genres",
@@ -101466,10 +101493,12 @@
  "of": [
   "k.actions/shards/verbs-change",
   "k.attributes/shards/narration",
+  "k.composition2d/schema.sop",
   "k.expect/schema.sop",
   "k.faces/schema.sop",
   "k.kinds/schema.sop",
   "k.kinds/shards/relations-attributes",
+  "k.kinds/shards/relations-composition2d",
   "k.kinds/shards/relations-expect",
   "k.kinds/shards/relations-faces",
   "k.kinds/shards/relations-motion",
@@ -109602,8 +109631,10 @@
   "k.attributes/shards/same-y",
   "k.attributes/shards/typical",
   "k.commonsense/schema.sop",
+  "k.composition2d/schema.sop",
   "k.kinds/shards/arguments",
   "k.kinds/shards/kind",
+  "k.kinds/shards/relations-composition2d",
   "k.kinds/shards/relations-scenes",
   "k.kinds/shards/wordnet-2",
   "k.layouts/schema.sop",
@@ -116903,8 +116934,10 @@
  "region": [
   "k.attributes/shards/aspects",
   "k.attributes/shards/narration",
+  "k.composition2d/schema.sop",
   "k.expect/schema.sop",
   "k.geo/schema.sop",
+  "k.kinds/shards/relations-composition2d",
   "k.kinds/shards/relations-geo",
   "k.kinds/shards/wordnet-1",
   "k.kinds/shards/wordnet-2",
@@ -136939,6 +136972,7 @@
  "subject": [
   "k.attributes/shards/narration",
   "k.kinds/schema.sop",
+  "k.kinds/shards/relations-composition2d",
   "k.kinds/shards/relations-spatial2d",
   "k.spatial2d/schema.sop",
   "k.words/shards/frequency-s",
@@ -137815,6 +137849,9 @@
   "k.kinds/shards/wordnet-2",
   "k.words/shards/frequency-s",
   "k.words/shards/su"
+ ],
+ "support region": [
+  "k.composition2d/schema.sop"
  ],
  "supporter": [
   "k.kinds/shards/wordnet-2",
@@ -153131,8 +153168,10 @@
  ],
  "w": [
   "k.attributes/shards/narration",
+  "k.composition2d/schema.sop",
   "k.drawing/schema.sop",
   "k.faces/schema.sop",
+  "k.kinds/shards/relations-composition2d",
   "k.kinds/shards/relations-drawing",
   "k.kinds/shards/relations-faces",
   "k.kinds/shards/relations-layouts",
@@ -158100,9 +158139,11 @@
   "k.attributes/shards/narration",
   "k.attributes/shards/typical",
   "k.charts/schema.sop",
+  "k.composition2d/schema.sop",
   "k.drawing/schema.sop",
   "k.faces/schema.sop",
   "k.kinds/shards/relations-charts",
+  "k.kinds/shards/relations-composition2d",
   "k.kinds/shards/relations-drawing",
   "k.kinds/shards/relations-faces",
   "k.kinds/shards/relations-layouts",
@@ -158246,9 +158287,11 @@
   "k.attributes/shards/narration",
   "k.attributes/shards/typical",
   "k.charts/schema.sop",
+  "k.composition2d/schema.sop",
   "k.drawing/schema.sop",
   "k.faces/schema.sop",
   "k.kinds/shards/relations-charts",
+  "k.kinds/shards/relations-composition2d",
   "k.kinds/shards/relations-drawing",
   "k.kinds/shards/relations-faces",
   "k.kinds/shards/relations-layouts",

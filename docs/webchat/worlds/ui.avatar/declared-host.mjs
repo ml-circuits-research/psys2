@@ -1,13 +1,13 @@
-import { readNativeToolInterface } from '../native-tool-interface.mjs?v=3aa63a31ba';
+import { readNativeToolInterface } from '../native-tool-interface.mjs?v=2aed95f709';
 import NATIVE_INTERFACE from './native-interface-source.mjs?v=e227fb4b70';
 // The avatar's native face tools, with choices derived from the supplied knowledge.
 import {centeredSpatialBox,unionSpatialBoxes} from '../native-spatial-observation.mjs?v=ced85b9a29';
-import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs?v=fbb597c3c4';
+import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs?v=62cdd97cd1';
 import {compositionBase,compositionOverrides,expressionParts} from './composition.mjs?v=b3e12b14a5';
-import {toNativeAvatarState,adoptCanonicalAvatarState} from './canonical-state.mjs?v=a9c215bfbb';
-import {DEFAULT_FACE} from './default-face.mjs?v=f1afd579e8';
+import {toNativeAvatarState,adoptCanonicalAvatarState} from './canonical-state.mjs?v=1d39a14a43';
+import {DEFAULT_FACE} from './default-face.mjs?v=ea50209f31';
 import {variantFor} from './facedraw.mjs?v=708c1180b9';
-import {newFace,mark,wearPreset,putPart,takeOff,setParts,moveParts,toolView,roleOf,neighbours,centre,SCALE_MIN,SCALE_MAX,NONE,PART_SIZE_GRADES,PART_MOVE_DIRECTIONS,undoStep,redoStep} from './face.mjs?v=b71e0c38d9';
+import {newFace,mark,wearPreset,putPart,takeOff,setParts,moveParts,toolView,roleOf,neighbours,centre,SCALE_MIN,SCALE_MAX,NONE,PART_SIZE_GRADES,PART_MOVE_DIRECTIONS,undoStep,redoStep} from './face.mjs?v=6829060f19';
 const nativeInterface = readNativeToolInterface(NATIVE_INTERFACE);
 const available=(slot,variant)=>slot?.variants.some(v=>v.name===variant&&v.parts?.length>0);
 export const initialAvatarState=(data=DEFAULT_FACE)=>({face:newFace(data),selectedSlot:null});

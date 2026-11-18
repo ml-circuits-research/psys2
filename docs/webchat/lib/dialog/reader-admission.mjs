@@ -1,9 +1,9 @@
 // One versioned eligibility/score protocol shared by C1 measurement and C2 routing.
 // The score selects the entire complete/unique cohort; it is not confidence.
-import {serializeRequestGraph,parse,str,assessSelectiveCalibration} from '../vendor/sopworld/sopworld.mjs?v=5c616c8f7e';
-import {copyHostData} from '../../worlds/native-tool-host.mjs?v=fbb597c3c4';
+import {serializeRequestGraph,parse,str,assessSelectiveCalibration} from '../vendor/sopworld/sopworld.mjs?v=e931f8b20e';
+import {copyHostData} from '../../worlds/native-tool-host.mjs?v=62cdd97cd1';
 import {MODEL_SELECTION_SCORE} from './model-selection-score.mjs?v=ac3ac10191';
-import {compileReaderAdmission} from './reader-policy.mjs?v=86888a1b46';
+import {compileReaderAdmission} from './reader-policy.mjs?v=67b5838366';
 export const READER_SCORE_DEFINITION=MODEL_SELECTION_SCORE;
 export const READER_RUNTIME_IDENTITY_FIELDS=Object.freeze(['appBuildSha256','readerSha256','pipelineSha256','packetAdapterSha256','graphDecoderSha256','bindingsSha256','executorSha256','backendSha256','contextSerializationSha256']);
 const hash=x=>typeof x==='string'&&/^[a-f0-9]{64}$/.test(x);
@@ -33,7 +33,7 @@ export function readerCalibrationIdentity(provenance,runtimeIdentity){
  return {provider:p,runtime:r,scoreDefinition:READER_SCORE_DEFINITION};
 }
 export function readerCalibrationScope(area){if(typeof area!=='string'||!area)throw Error('invalid-runtime-area');return JSON.stringify({protocol:'psys2.reader-area/1',area});}
-export function assessReaderProposal({proposal,text,provenance,admission,area}){
+export function assessReaderProposal({proposal,text,provenance,admission,area,scopedRemoval=false}){
  const scored=scoreReaderProposal(proposal,text);
  if(!scored.eligible)return {...scored,admitted:false,assessment:null};
  let assessment=null;
@@ -49,6 +49,7 @@ export function assessReaderProposal({proposal,text,provenance,admission,area}){
   'score.available='+scored.scoreAvailable,
   'model.identity.present='+hash(provenance?.modelSha256),
   'uncertain='+scored.uncertain,
+  'scoped.removal='+Boolean(scopedRemoval),
  ];
  if(Number.isFinite(assessment?.policy?.maxErrorRate))evidence.push('calibration.error.limit='+assessment.policy.maxErrorRate);
  try{

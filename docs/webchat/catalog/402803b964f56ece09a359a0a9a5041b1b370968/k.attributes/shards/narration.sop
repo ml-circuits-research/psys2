@@ -1,4 +1,4 @@
-# k.attributes/shards/narration: which keys of the catalog a composition may narrate (417 of 1316 slots of the k.* types), how salient each is and in which form it is said (block 00:05 item 1).
+# k.attributes/shards/narration: which keys of the catalog a composition may narrate (419 of 1337 slots of the k.* types), how salient each is and in which form it is said (block 00:05 item 1).
 # sources: hand-core 1 (computed by rules from the catalog's own facts: k.attributes.typical and found, k.attributes.shows, k.units.measure, k.faces slots, tests/*.questions.jsonl)
 # license: CC0-1.0
 # script: tools/narration-core.mjs
@@ -229,6 +229,27 @@
 @k.attributes.narration.k.commonsense.placed.in k.attributes.narration type=k.commonsense.placed key=in narrate=no salience=0 why="machinery: facts for rules" core.source="hand-core 1"
 @k.attributes.narration.k.commonsense.lives.in k.attributes.narration type=k.commonsense.lives key=in narrate=no salience=0 why="machinery: facts for rules" core.source="hand-core 1"
 @k.attributes.narration.k.commonsense.lives.at k.attributes.narration type=k.commonsense.lives key=at narrate=no salience=0 why="machinery: facts for rules" core.source="hand-core 1"
+@k.attributes.narration.k.composition2d.subject.name k.attributes.narration type=k.composition2d.subject key=name narrate=no salience=0 why="the name of the thing: the subject, not an attribute" core.source="hand-core 1"
+@k.attributes.narration.k.composition2d.slot.subject k.attributes.narration type=k.composition2d.slot key=subject narrate=no salience=0 why="part of the subject of a fact of several keys (red and yellow give orange)" core.source="hand-core 1"
+@k.attributes.narration.k.composition2d.slot.layout k.attributes.narration type=k.composition2d.slot key=layout narrate=no salience=0 why="part of the subject of a fact of several keys (red and yellow give orange)" core.source="hand-core 1"
+@k.attributes.narration.k.composition2d.slot.place k.attributes.narration type=k.composition2d.slot key=place narrate=no salience=0 why="part of the subject of a fact of several keys (red and yellow give orange)" core.source="hand-core 1"
+@k.attributes.narration.k.composition2d.slot.region k.attributes.narration type=k.composition2d.slot key=region narrate=no salience=0 why="part of the subject of a fact of several keys (red and yellow give orange)" core.source="hand-core 1"
+@k.attributes.narration.k.composition2d.slot.basis k.attributes.narration type=k.composition2d.slot key=basis narrate=no salience=0 why="part of the subject of a fact of several keys (red and yellow give orange)" core.source="hand-core 1"
+@k.attributes.narration.k.composition2d.slot.x k.attributes.narration type=k.composition2d.slot key=x narrate=no salience=0 why="a coordinate" core.source="hand-core 1"
+@k.attributes.narration.k.composition2d.slot.y k.attributes.narration type=k.composition2d.slot key=y narrate=no salience=0 why="a coordinate" core.source="hand-core 1"
+@k.attributes.narration.k.composition2d.slot.w k.attributes.narration type=k.composition2d.slot key=w narrate=no salience=0 why="a coordinate" core.source="hand-core 1"
+@k.attributes.narration.k.composition2d.slot.h k.attributes.narration type=k.composition2d.slot key=h narrate=no salience=0 why="a coordinate" core.source="hand-core 1"
+@k.attributes.narration.k.composition2d.slot.evidence k.attributes.narration type=k.composition2d.slot key=evidence narrate=yes salience=0 form=relation basis=measured core.source="hand-core 1"
+@k.attributes.narration.k.composition2d.anchor.subject k.attributes.narration type=k.composition2d.anchor key=subject narrate=no salience=0 why="part of the subject of a fact of several keys (red and yellow give orange)" core.source="hand-core 1"
+@k.attributes.narration.k.composition2d.anchor.of k.attributes.narration type=k.composition2d.anchor key=of narrate=no salience=0 why="part of the subject of a fact of several keys (red and yellow give orange)" core.source="hand-core 1"
+@k.attributes.narration.k.composition2d.anchor.kind k.attributes.narration type=k.composition2d.anchor key=kind narrate=no salience=0 why="part of the subject of a fact of several keys (red and yellow give orange)" core.source="hand-core 1"
+@k.attributes.narration.k.composition2d.anchor.region k.attributes.narration type=k.composition2d.anchor key=region narrate=no salience=0 why="part of the subject of a fact of several keys (red and yellow give orange)" core.source="hand-core 1"
+@k.attributes.narration.k.composition2d.anchor.basis k.attributes.narration type=k.composition2d.anchor key=basis narrate=no salience=0 why="part of the subject of a fact of several keys (red and yellow give orange)" core.source="hand-core 1"
+@k.attributes.narration.k.composition2d.anchor.x k.attributes.narration type=k.composition2d.anchor key=x narrate=no salience=0 why="a coordinate" core.source="hand-core 1"
+@k.attributes.narration.k.composition2d.anchor.y k.attributes.narration type=k.composition2d.anchor key=y narrate=no salience=0 why="a coordinate" core.source="hand-core 1"
+@k.attributes.narration.k.composition2d.anchor.w k.attributes.narration type=k.composition2d.anchor key=w narrate=no salience=0 why="a coordinate" core.source="hand-core 1"
+@k.attributes.narration.k.composition2d.anchor.h k.attributes.narration type=k.composition2d.anchor key=h narrate=no salience=0 why="a coordinate" core.source="hand-core 1"
+@k.attributes.narration.k.composition2d.anchor.evidence k.attributes.narration type=k.composition2d.anchor key=evidence narrate=yes salience=0 form=relation basis=measured core.source="hand-core 1"
 @k.attributes.narration.k.diagrams.source.name k.attributes.narration type=k.diagrams.source key=name narrate=no salience=0 why="the name of the thing: the subject, not an attribute" core.source="hand-core 1"
 @k.attributes.narration.k.diagrams.source.cite k.attributes.narration type=k.diagrams.source key=cite narrate=no salience=0 why="metadata: where a fact comes from or how sure it is" core.source="hand-core 1"
 @k.attributes.narration.k.diagrams.source.year k.attributes.narration type=k.diagrams.source key=year narrate=yes salience=0.3 form=measure basis=measured core.source="hand-core 1"

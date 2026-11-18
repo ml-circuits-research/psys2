@@ -1,0 +1,25 @@
+# k.kinds/shards/relations-composition2d: the keys of the types of k.composition2d read as relations: 20 relations, each with the kind of its subject and the class, types and senses of its object (from the joins declared on the slots, by rule from the schemas, and by value from the shards, as found says).
+# sources: hand-core 1 (computed in this repository from the schemas and shards of the knowledge worlds: tools/relations-core.mjs)
+# license: CC0-1.0
+# script: tools/relations-core.mjs
+
+@k.kinds.relation.k.composition2d.anchor.subject k.kinds.relation type=k.composition2d.anchor key=subject subject=anchor object=word found=value core.source="hand-core 1"
+@k.kinds.relation.k.composition2d.anchor.of k.kinds.relation type=k.composition2d.anchor key=of subject=anchor object=word found=value core.source="hand-core 1"
+@k.kinds.relation.k.composition2d.anchor.kind k.kinds.relation type=k.composition2d.anchor key=kind subject=anchor object=kind found=value core.source="hand-core 1"
+@k.kinds.relation.k.composition2d.anchor.region k.kinds.relation type=k.composition2d.anchor key=region subject=anchor object=word found=value core.source="hand-core 1"
+@k.kinds.relation.k.composition2d.anchor.basis k.kinds.relation type=k.composition2d.anchor key=basis subject=anchor object=word found=value core.source="hand-core 1"
+@k.kinds.relation.k.composition2d.anchor.x k.kinds.relation type=k.composition2d.anchor key=x subject=anchor object=number found=schema core.source="hand-core 1"
+@k.kinds.relation.k.composition2d.anchor.y k.kinds.relation type=k.composition2d.anchor key=y subject=anchor object=number found=schema core.source="hand-core 1"
+@k.kinds.relation.k.composition2d.anchor.w k.kinds.relation type=k.composition2d.anchor key=w subject=anchor object=number found=schema core.source="hand-core 1"
+@k.kinds.relation.k.composition2d.anchor.h k.kinds.relation type=k.composition2d.anchor key=h subject=anchor object=number found=schema core.source="hand-core 1"
+@k.kinds.relation.k.composition2d.anchor.evidence k.kinds.relation type=k.composition2d.anchor key=evidence subject=anchor object=word found=value core.source="hand-core 1"
+@k.kinds.relation.k.composition2d.slot.subject k.kinds.relation type=k.composition2d.slot key=subject subject=slot object=word found=value core.source="hand-core 1"
+@k.kinds.relation.k.composition2d.slot.layout k.kinds.relation type=k.composition2d.slot key=layout subject=slot object=word found=value core.source="hand-core 1"
+@k.kinds.relation.k.composition2d.slot.place k.kinds.relation type=k.composition2d.slot key=place subject=slot object=place found=value core.source="hand-core 1"
+@k.kinds.relation.k.composition2d.slot.region k.kinds.relation type=k.composition2d.slot key=region subject=slot object=word found=value core.source="hand-core 1"
+@k.kinds.relation.k.composition2d.slot.basis k.kinds.relation type=k.composition2d.slot key=basis subject=slot object=word found=value core.source="hand-core 1"
+@k.kinds.relation.k.composition2d.slot.x k.kinds.relation type=k.composition2d.slot key=x subject=slot object=number found=schema core.source="hand-core 1"
+@k.kinds.relation.k.composition2d.slot.y k.kinds.relation type=k.composition2d.slot key=y subject=slot object=number found=schema core.source="hand-core 1"
+@k.kinds.relation.k.composition2d.slot.w k.kinds.relation type=k.composition2d.slot key=w subject=slot object=number found=schema core.source="hand-core 1"
+@k.kinds.relation.k.composition2d.slot.h k.kinds.relation type=k.composition2d.slot key=h subject=slot object=number found=schema core.source="hand-core 1"
+@k.kinds.relation.k.composition2d.slot.evidence k.kinds.relation type=k.composition2d.slot key=evidence subject=slot object=word found=value core.source="hand-core 1"

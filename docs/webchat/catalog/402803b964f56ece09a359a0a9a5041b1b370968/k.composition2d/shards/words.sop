@@ -1,0 +1,26 @@
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@k.composition2d.word.slot core.word text="composition layer" means=k.composition2d.slot core.source="hand-core 1"
+@k.composition2d.word.anchor core.word text="support region" means=k.composition2d.anchor core.source="hand-core 1"
+
+# Words for the keys, by rule: the name of each key, and everyday words for some (tools/key-words.mjs).
+@k.composition2d.word.key.slot.layout core.word text=layout means=k.composition2d.slot.layout core.source="hand-core 1"
+@k.composition2d.word.key.slot.place core.word text=place means=k.composition2d.slot.place core.source="hand-core 1"
+@k.composition2d.word.key.slot.region core.word text=region means=k.composition2d.slot.region core.source="hand-core 1"
+@k.composition2d.word.key.slot.basis core.word text=basis means=k.composition2d.slot.basis core.source="hand-core 1"
+@k.composition2d.word.key.slot.x core.word text=x means=k.composition2d.slot.x core.source="hand-core 1"
+@k.composition2d.word.key.slot.y core.word text=y means=k.composition2d.slot.y core.source="hand-core 1"
+@k.composition2d.word.key.slot.w core.word text=w means=k.composition2d.slot.w core.source="hand-core 1"
+@k.composition2d.word.key.slot.h core.word text=h means=k.composition2d.slot.h core.source="hand-core 1"
+@k.composition2d.word.key.slot.evidence core.word text=evidence means=k.composition2d.slot.evidence core.source="hand-core 1"
+@k.composition2d.word.key.anchor.of core.word text=of means=k.composition2d.anchor.of core.source="hand-core 1"
+@k.composition2d.word.key.anchor.kind core.word text=kind means=k.composition2d.anchor.kind core.source="hand-core 1"
+@k.composition2d.word.key.anchor.region core.word text=region means=k.composition2d.anchor.region core.source="hand-core 1"
+@k.composition2d.word.key.anchor.basis core.word text=basis means=k.composition2d.anchor.basis core.source="hand-core 1"
+@k.composition2d.word.key.anchor.x core.word text=x means=k.composition2d.anchor.x core.source="hand-core 1"
+@k.composition2d.word.key.anchor.y core.word text=y means=k.composition2d.anchor.y core.source="hand-core 1"
+@k.composition2d.word.key.anchor.w core.word text=w means=k.composition2d.anchor.w core.source="hand-core 1"
+@k.composition2d.word.key.anchor.h core.word text=h means=k.composition2d.anchor.h core.source="hand-core 1"
+@k.composition2d.word.key.anchor.evidence core.word text=evidence means=k.composition2d.anchor.evidence core.source="hand-core 1"

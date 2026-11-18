@@ -54,12 +54,19 @@ test('water placement prefers a feasible observed support and never adds an unst
   assert.equal((await add('lake',260,460)).ok,true);
   assert.equal((await add('lake',720,440)).ok,true);
   assert.equal((await add('square',720,440)).ok,true);
+  const activity=[];
+  session.engine.onWorldActivity=event=>activity.push(event);
   const placement=await draw(session,'boat');
   const objects=observe(session);
   assert.deepEqual(objects.map(o=>o.kind),['lake','lake','square','boat']);
   assert.ok(Math.abs(objects.at(-1).x-260)<5,JSON.stringify(objects.at(-1)));
   assert.ok(Math.abs(objects.at(-1).y-460)<5,JSON.stringify(objects.at(-1)));
   assert.match(placement.trace.compiledSop,/scene\.seed/);
+  const selected=activity.filter(event=>event.nodeIds.includes('execution:scene-default-policy'));
+  assert.equal(selected.length,1);
+  assert.ok(selected[0].facts.includes('k.layouts.anchor.lake.water'));
+  assert.match(selected[0].sceneEvidence,/@k\.layouts\.anchor\.lake\.water k\.layouts\.anchor/);
+  assert.match(selected[0].sceneEvidence,/app\.sceneDefault\.candidate .*crowding=0/);
 
   const empty=setup(),without=await draw(empty,'boat');
   assert.deepEqual(observe(empty).map(o=>o.kind),['boat']);

@@ -1,2 +1,2 @@
 // Native initial state only; no legacy grammar executor.
-export{initialCanonicalDocumentState as initialState}from"./declared-host.mjs?v=da7eca3119";
+export{initialCanonicalDocumentState as initialState}from"./declared-host.mjs?v=de66adbeeb";

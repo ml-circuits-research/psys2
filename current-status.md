@@ -1,5 +1,9 @@
 # Current status
 
+## 2026-11-18 — Scene knowledge in ordinary Drawing requests
+
+On a 1000 × 700 frame, Chromium placed a sun at (500, 175). After Undo, “Draw a lake” followed by “Draw a boat” placed both at (500, 525). The boat instruction used the observed lake and its declared water anchor. Undo removed the boat and preserved the lake. Explicit coordinate precedence and occupied placements also passed targeted host tests. The reader weights are unchanged.
+
 ## 2026-11-18 — Scene rendering, manual animation and executable circuits
 
 Drawing and Diagram received canonical SOP state in the chat reply where the canvas and SVG expected their render projection. The worker retained the objects. The renderer now uses the committed projected values for the changed worlds. Animate on a response opens Worlds and replays only its recorded activity. Chat now shows the exact dispatched circuit alongside the answer and keeps compiler evidence in Worlds. SOPWorlds 0.219 supports read-only counts, members, values and existence over evidenced object populations.

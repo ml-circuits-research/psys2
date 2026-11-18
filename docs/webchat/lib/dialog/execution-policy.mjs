@@ -1,7 +1,8 @@
 // Admit owned default and value-lookup policy facts for the request compiler.
-import{World,parse,str,serialize}from'../vendor/sopworld/sopworld.mjs?v=5c616c8f7e';
+import{World,parse,str,serialize}from'../vendor/sopworld/sopworld.mjs?v=e931f8b20e';
 import SOURCE from'../../worlds/app.project/execution-policy-source.mjs?v=0d0c73b4e6';
 import SCHEMA from'../../worlds/app.project/execution-policy-schema-source.mjs?v=5aa31bfdbd';
+import SCENE_SCHEMA from'../../worlds/app.project/scene-default-schema-source.mjs?v=0a4d397328';
 const schemaModule='app.execution';
 const declarations=parse(SOURCE);
 const imports=declarations.filter(wire=>wire.type==='core.use');
@@ -19,7 +20,7 @@ export function inspectExecutionPolicyWorld(){
  };
 }
 function admitExecutionPolicy(wires){
- const context=new World({library:{[schemaModule]:SCHEMA}});
+ const context=new World({library:{[schemaModule]:SCHEMA,'app.sceneDefault':SCENE_SCHEMA}});
  const schema=wires.filter(wire=>wire.type==='core.use');
  if(!context.tell(serialize(schema)).ok)throw Error('invalid-execution-policy-schema');
  const policy=context.fork(),rows=wires.filter(wire=>wire.type!=='core.use');

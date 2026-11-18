@@ -22,8 +22,8 @@
  * Worlds the model is not trained on (user.profile) are read by the rules only: no pattern of such a world is a candidate, and in `neural` a
  * message that an untrained world's rules read is left to the rules path.
  */
-import { lexIndex } from '../worlds/lexicon.mjs?v=ff8349c1b4';
-import { compilePattern, formalize } from './rules/index.mjs?v=383b00774f';
+import { lexIndex } from '../worlds/lexicon.mjs?v=ac75ba58a6';
+import { compilePattern, formalize } from './rules/index.mjs?v=ed1f42a0b1';
 import { candidateSegmentations } from './dispatcher-runtime.mjs?v=2deeb9a0c4';
 import { atom } from '../soplang/index.mjs?v=c57881f705';
 import { perf } from './perf.mjs?v=b81e032a17';
