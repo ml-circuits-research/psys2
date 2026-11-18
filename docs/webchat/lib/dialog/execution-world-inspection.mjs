@@ -6,8 +6,8 @@ import{inspectRequestRoutingPolicy}from'./request-routing-policy.mjs?v=273995d41
 import{inspectHistoryPolicy}from'./history-policy.mjs?v=70f9fa874e';
 import{inspectHistoryJournal}from'./history-journal.mjs?v=73602fda44';
 import{inspectExecutionPolicyWorld}from'./execution-policy.mjs?v=0b0a918c63';
-import{sceneDefaultInspection}from'./scene-placement-defaults.mjs?v=b4fcb37ca3';
-import{inspectCapabilityPolicy}from'./capability-plan-adapter.mjs?v=395c5a9950';
+import{sceneDefaultInspection}from'./scene-placement-defaults.mjs?v=ed75f9e5bd';
+import{inspectCapabilityPolicy}from'./capability-plan-adapter.mjs?v=a27fe51893';
 import{inspectCreationPolicy}from'./project-create-action.mjs?v=96ab209173';
 import{inspectConstructorPolicy}from'./native-binding-candidates.mjs?v=f6d6f43960';
 import{inspectGroundedProjection}from'./grounded-projection.mjs?v=6b5fddabd8';
@@ -27,7 +27,7 @@ function snapshotText(snapshot){return (snapshot?.log??[]).map((entry,index)=>'#
 /** Projects actual cache accessors and retained journal JSON; performs no reading or reasoning. */
 export async function inspectExecutionWorlds(session){
  const [{inspectDeclaredExecutionSourceWorld},{inspectSpatialPlacementWorld}]=await Promise.all([
-  import('./declared-execution.mjs?v=b42c41a2b6'),import('./spatial-placement-execution.mjs?v=87b215dccc'),
+  import('./declared-execution.mjs?v=3af18c716b'),import('./spatial-placement-execution.mjs?v=87b215dccc'),
  ]);
  const journal=session?.newEngineJournal??[],moduleNames=[...new Set(journal.flatMap(record=>importsOf(record.evidence)))],sources=[['declared-execution','src/dialog/declared-execution.mjs',inspectDeclaredExecutionSourceWorld({moduleNames})]],nodes=[],edges=[];
  const link=(from,to,label)=>edges.push({from,to,label});
@@ -130,7 +130,7 @@ export async function inspectExecutionWorlds(session){
  nodes.push({id:'execution:scene-default-projection',label:'Scene catalog projection',kind:'knowledge',implementation:'SOP Lang compilation profile',
   description:'Binds the current subject names, visible support kinds and layout to indexed catalog reads and selected region evidence.',
   wires:sceneDefaults.projection,details:{source:'worlds/app.project/scene-default-projection.sop',loaded:sceneDefaults.projectionLoaded,
-   catalogModules:parse(sceneDefaults.projection).filter(wire=>wire.type==='std.knowledge.profile').flatMap(wire=>wire.attrs.module.map(str))}});
+   catalogModules:[...new Set(parse(sceneDefaults.projection).filter(wire=>wire.type==='std.knowledge.profile').flatMap(wire=>wire.attrs.module.map(str)))]}});
  link('execution:scene-default-policy','execution:scene-default-schema','imports schema');
  link('execution:scene-default-policy','execution:scene-default-projection','uses selected catalog regions');
  link('execution:capability-policy','execution:scene-default-policy','uses scoped missing-coordinate seeds');

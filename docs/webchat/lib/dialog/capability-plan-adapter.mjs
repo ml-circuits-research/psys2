@@ -3,7 +3,8 @@ import { parse, quote, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=
 import { decodeCapabilityCall } from '../vendor/sopworld/capability-call.mjs?v=ed3b773c65';
 import POLICY from '../../worlds/app.project/capability-policy.mjs?v=9f3103a196';
 import { executionPolicyWorld } from './execution-policy.mjs?v=0b0a918c63';
-import { sceneDefaultModule, writeSceneDefaults } from './scene-placement-defaults.mjs?v=b4fcb37ca3';
+import { projectionModule } from './composition-knowledge.mjs?v=155f810d74';
+import { sceneDefaultModule, writeSceneDefaults } from './scene-placement-defaults.mjs?v=ed75f9e5bd';
 import { nativeKindCandidates } from './native-binding-candidates.mjs?v=f6d6f43960';
 import { observedReaderContext } from './native-reader-context.mjs?v=ab17c14d8a';
 import { budget } from './budget.mjs?v=00bce6e369';
@@ -105,13 +106,29 @@ function readPlan(world,sop) {
     [id, ...(world.why(id)?.steps || []).map(step => step.id)]))];
   const proof = support(result);
   const scenePlaced = proof.some(id => world.get(id)?.type === 'app.sceneDefault.option');
-  if(scenePlaced){
-    const original = proof.map(id => world.get(id)).filter(row => row?.type.startsWith('k.composition2d.'))
-      .flatMap(row => (row.attrs.evidence ?? []).map(reference => reference.slice(1)));
-    for (const id of new Set(original)) if (world.has(id) && !proof.includes(id)) proof.push(id);
+  let sceneEvidence;
+  const catalogModules = new Set();
+  if (scenePlaced) {
+    const sceneFacts = proof.map(id => world.get(id)).filter(row => row?.type.startsWith(sceneDefaultModule.name + '.'));
+    const usedRegions = sceneFacts.filter(row => row.type === sceneDefaultModule.name + '.region');
+    const projectedIds = new Set(world.ofType(sceneDefaultModule.name + '.region').map(row => row.attrs.value[0].slice(1)));
+    const catalogIds = new Set();
+    for (const region of usedRegions) {
+      const module = projectionModule(take(region, 'profile'));
+      if (module) catalogModules.add(module);
+      catalogIds.add(region.attrs.value[0].slice(1));
+    }
+    // A projected record can refer to evidence returned by the same profile.
+    // Traverse those edges once, without guessing source families from their type names.
+    for (const id of catalogIds) {
+      budget.tick('capability.projected-evidence');
+      for (const token of Object.values(world.get(id)?.attrs ?? {}).flat()) {
+        if (token.startsWith('$') && projectedIds.has(token.slice(1))) catalogIds.add(token.slice(1));
+      }
+    }
+    for (const id of catalogIds) if (!proof.includes(id)) proof.push(id);
+    sceneEvidence = serialize([...sceneFacts, ...[...catalogIds].map(id => world.get(id)).filter(Boolean)]);
   }
-  const sceneEvidence = scenePlaced ? serialize(proof.map(id => world.get(id)).filter(row =>
-    ['app.sceneDefault.', 'k.composition2d.', 'k.scenes.', 'k.layouts.'].some(prefix => row?.type.startsWith(prefix)))) : undefined;
   const knowledgeTypes = new Set(world.ofType('app.execution.values').map(row => take(row, 'valueType')));
   const knowledgeSupport = proof.filter(id => knowledgeTypes.has(world.get(id)?.type));
   const alternatives = (result?.attrs.alternative || []).map((id) => {
@@ -122,7 +139,7 @@ function readPlan(world,sop) {
     sop, status: take(result, 'status'), reason: take(result, 'reason'), message: take(result, 'message'),
     act: take(result, 'act'), kind: take(result, 'kind'), id: take(result, 'id'), source: take(result, 'source'),
     instance: take(result, 'instance'), version: take(result, 'version'), targets: values(result, 'target'),
-    scenePlaced, sceneEvidence, skipped: values(result, 'skipped'), notes: values(result, 'note'), support: proof, knowledgeSupport,
+    scenePlaced, sceneEvidence, catalogModules:[...catalogModules], skipped: values(result, 'skipped'), notes: values(result, 'note'), support: proof, knowledgeSupport,
     selector: take(result, 'selector'),
     selection: (result?.attrs.selection || []).map(find).map((row) => ({
       id: take(row, 'id'), status: take(row, 'status'), support: support(row),

@@ -10,6 +10,7 @@ const profiles = new Map([...declarations.values()].filter(wire => wire.type ===
 ]));
 let context;
 export const projectionLoaded = () => Boolean(context);
+export const projectionModule = profile => declarations.get(profile)?.attrs.module?.[0];
 
 export async function readCompositionRegions(knowledge, parameters, profile) {
  const catalog = knowledge?.base ?? knowledge;

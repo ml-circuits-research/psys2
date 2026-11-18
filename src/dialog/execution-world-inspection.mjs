@@ -130,7 +130,7 @@ export async function inspectExecutionWorlds(session){
  nodes.push({id:'execution:scene-default-projection',label:'Scene catalog projection',kind:'knowledge',implementation:'SOP Lang compilation profile',
   description:'Binds the current subject names, visible support kinds and layout to indexed catalog reads and selected region evidence.',
   wires:sceneDefaults.projection,details:{source:'worlds/app.project/scene-default-projection.sop',loaded:sceneDefaults.projectionLoaded,
-   catalogModules:parse(sceneDefaults.projection).filter(wire=>wire.type==='std.knowledge.profile').flatMap(wire=>wire.attrs.module.map(str))}});
+   catalogModules:[...new Set(parse(sceneDefaults.projection).filter(wire=>wire.type==='std.knowledge.profile').flatMap(wire=>wire.attrs.module.map(str)))]}});
  link('execution:scene-default-policy','execution:scene-default-schema','imports schema');
  link('execution:scene-default-policy','execution:scene-default-projection','uses selected catalog regions');
  link('execution:capability-policy','execution:scene-default-policy','uses scoped missing-coordinate seeds');

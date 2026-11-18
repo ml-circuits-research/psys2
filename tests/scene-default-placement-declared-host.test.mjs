@@ -66,6 +66,7 @@ test('water placement prefers a feasible observed support and never adds an unst
   assert.match(placement.trace.compiledSop,/scene\.seed/);
   const selected=activity.filter(event=>event.nodeIds.includes('execution:scene-default-policy'));
   assert.equal(selected.length,1);
+  assert.deepEqual(selected[0].nodeIds.filter(id=>id.startsWith('knowledge-world:')),['knowledge-world:k.composition2d']);
   assert.ok(selected[0].facts.includes('k.layouts.anchor.lake.water'));
   assert.match(selected[0].sceneEvidence,/@k\.layouts\.anchor\.lake\.water k\.layouts\.anchor/);
   assert.match(selected[0].sceneEvidence,/app\.sceneDefault\.candidate .*crowding=0/);
@@ -117,7 +118,10 @@ test('shipped Diagram role layout responds to actual page occupancy and independ
   }
   await addCircle([1200,750]);
   assert.match(activity.find(event=>event.sceneEvidence)?.sceneEvidence,/k\.layouts\.slot\.scatter\.item/);
-  assert.match(activity.find(event=>event.sceneEvidence)?.sceneEvidence,/basis=role/);
+  const proof=activity.find(event=>event.sceneEvidence);
+  assert.match(proof.sceneEvidence,/basis=role/);
+  assert.match(proof.sceneEvidence,/profile="scene.projection.roles"/);
+  assert.doesNotMatch(proof.sceneEvidence,/k\.layouts\.anchor\.lake/);
   await addCircle([1000,750]);
   const moved=await performGesture(session,{view:'diagram',operation:'diagram.node.place',
     args:{ids:[shapes()[0].name],x:1400,y:750}});

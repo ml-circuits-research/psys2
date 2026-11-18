@@ -1,6 +1,6 @@
-import { readSceneDefaults } from './scene-placement-defaults.mjs?v=b4fcb37ca3';
+import { readSceneDefaults } from './scene-placement-defaults.mjs?v=ed75f9e5bd';
 // SPDX-License-Identifier: AGPL-3.0-only
-import { compileNativeCapability } from './capability-plan-adapter.mjs?v=395c5a9950';
+import { compileNativeCapability } from './capability-plan-adapter.mjs?v=a27fe51893';
 import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=3b73627e71';
 import { instanceIdFor } from './instance-identity.mjs?v=024ef1ca83';
 import { prepareNativeControlHost } from './native-control-preparation.mjs?v=65fb56afe6';
@@ -76,7 +76,7 @@ export async function executeNativeCapability(session, candidate, { bindings, vi
       { reason: 'stale-compiled-capability', reading: candidate, compiledSop: plan.sop });
   }
   try {
-    session.engine?.onWorldActivity?.({ nodeIds: ['execution:capability-policy','execution:policy',...(plan.scenePlaced?['execution:scene-default-policy','execution:scene-default-projection','knowledge-world:k.composition2d']:[])], phase: 'stage', label: 'Compiled declared capabilities',
+    session.engine?.onWorldActivity?.({ nodeIds: ['execution:capability-policy','execution:policy',...(plan.scenePlaced?['execution:scene-default-policy','execution:scene-default-projection',...plan.catalogModules.map(module=>'knowledge-world:'+module)]:[])], phase: 'stage', label: 'Compiled declared capabilities',
       operation: 'policy.execution.compile', tool: operation.id, facts: plan.support, wires: plan.sop,
       ...(plan.sceneEvidence?{sceneEvidence:plan.sceneEvidence}:{}) });
   } catch {

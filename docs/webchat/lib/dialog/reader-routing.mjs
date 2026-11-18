@@ -1,4 +1,4 @@
-import {isScopedRemoval} from './capability-plan-execution.mjs?v=bb71201d6f';
+import {isScopedRemoval} from './capability-plan-execution.mjs?v=9d3a74c873';
 import {projectRemovalAction} from './project-removal-action.mjs?v=65725d959b';
 import { captureHistory, recordHistory, restoreHistory } from './history-journal.mjs?v=73602fda44';
 import {projectReaderHeadAlternative} from './reader-head-alternative.mjs?v=e9b7e3104b';
@@ -8,7 +8,7 @@ import {isAuthoredRequest,readAuthoredRequest} from './authored-request-tool.mjs
 // Model-first proposal routing. Calibration authority belongs to host configuration,
 // never to a model output, evaluation annotation or grammar proposal.
 import {requestCompositionPolicy,scheduleFollowingCut}from './request-composition-policy.mjs?v=f4e72706e2';
-import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=b42c41a2b6';
+import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=3af18c716b';
 import {projectQueryAction,recoverQueryProjection} from './project-query-action.mjs?v=66e64a10cd';
 import {projectContextAction} from './project-context-action.mjs?v=7bf88d0365';
 import {projectCreateAction} from './project-create-action.mjs?v=96ab209173';

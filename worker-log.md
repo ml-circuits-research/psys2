@@ -207,3 +207,6 @@ Actual SVG transforms, native circuit, catalog source and Undo checked in Chromi
 
 2026-11-18 — Build 5bd8aa6ecb accepts declared SOP observations and the Settings forget-person tool in place of arbitrary browser state patches. Worlds displays the schema, binding facts and adapter. Recovery uses retained snapshots; work-file edits still use explicit imports.
 644 passed, 3 skipped. Dedicated browser route suite passed 5/5, including privacy action, malformed packet refusal, work-file restore and worker restart.
+
+2026-11-18 — The Worlds trace follows the selected projection's actual record references and module declaration. It no longer infers provenance from names of particular knowledge families. Tests cover Drawing's lake evidence, Diagram's node-role evidence, and exclusion of unrelated records.
+Webchat 07959a7e9e: integrated gate passed 644, skipped 3. Published 5bd8aa6ecb additionally replayed actual Diagram SVG moves and Undo; a separate cold run reached the worker timeout.
