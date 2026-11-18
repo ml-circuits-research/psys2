@@ -1,10 +1,11 @@
+import {invokeToolCommand} from '../src/dialog/native-control-intent.mjs';
 import {toNativeDiagramState} from '../worlds/diagram.sketch/canonical-state.mjs';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {createDiagramHost,initialDiagramState,migrateChartTools} from '../worlds/diagram.sketch/declared-host.mjs';
 import {chartSVG,chartRows} from '../worlds/data.charts/vector-svg.mjs';
 import {executeDeclaredRequest} from '../src/dialog/declared-execution.mjs';
-const call=(host,operation,args,id)=>host.invoke({invocation:id,expectedVersion:host.observe().version,operation,args});
+const call=(host,operation,args,id)=>invokeToolCommand(host,{invocation:id,expectedVersion:host.observe().version,operation,args});
 const data={type:'bar',title:'Counts',labels:['Apples','Pears'],values:[5,-3],series:'Value',source:['source.input']};
 test('one diagram instance contains shapes and vector charts with mixed undo/redo and chart selection',async()=>{
  const state=initialDiagramState(),host=await createDiagramHost({state,instanceId:'composition'});

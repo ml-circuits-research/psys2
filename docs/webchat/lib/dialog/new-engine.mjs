@@ -1,10 +1,10 @@
-import{inspectCachedExecutionSource}from'./execution-world-inspection.mjs?v=57594b9287';
+import{inspectCachedExecutionSource}from'./execution-world-inspection.mjs?v=cabff52624';
 // Validated graph execution; no natural-language reader or grammar application path.
-import { World, inspectRequest, assessPropertyChange, quote, str, parse } from '../vendor/sopworld/sopworld.mjs?v=14e619cf45';
-import SOURCE from './new-engine-source.mjs?v=840316d8d9';
-import { resolvePropertyValue, selectPropertyObject } from './property-selection.mjs?v=298bef572b';
+import { World, inspectRequest, assessPropertyChange, quote, str, parse } from '../vendor/sopworld/sopworld.mjs?v=d762ac1a79';
+import SOURCE from './new-engine-source.mjs?v=10c56a9044';
+import { resolvePropertyValue, selectPropertyObject } from './property-selection.mjs?v=4fbdd64e28';
 import { NEW_ENGINE_AREAS } from './new-engine-areas.mjs?v=d4af6e3003';
-import { flatRequestProjection } from './request-projection.mjs?v=e246760812';
+import { flatRequestProjection } from './request-projection.mjs?v=9d8ebe225b';
 const hosts = new WeakMap();
 let knowledge;
 /** Read-only cache inspection; does not create the lazy knowledge World. */

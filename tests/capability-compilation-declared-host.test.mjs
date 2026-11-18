@@ -1,3 +1,5 @@
+import { World } from '../src/vendor/sopworld/sopworld.mjs';
+import {invokeToolCommand} from '../src/dialog/native-control-intent.mjs';
 import {toNativeDiagramState} from '../worlds/diagram.sketch/canonical-state.mjs';
 import {toNativeDrawingState} from '../worlds/art.draw/canonical-state.mjs';
 import assert from 'node:assert/strict';
@@ -40,7 +42,7 @@ function session(world, instance) {
   return { value, activity };
 }
 async function invoke(host, operation, args) {
-  return host.invoke({ invocation: crypto.randomUUID(), expectedVersion: host.observe().version, operation, args });
+  return invokeToolCommand(host,{ invocation: crypto.randomUUID(), expectedVersion: host.observe().version, operation, args });
 }
 
 test('Drawing compiled change uses actual recency, named matches and valid focus', async () => {
@@ -58,6 +60,7 @@ test('Drawing compiled change uses actual recency, named matches and valid focus
   assert.deepEqual(toNativeDrawingState(state).objects.map((object) => object.label), ['First', 'By recency']);
   assert.match(latest.trace.compiledSop, /std\.capability\.result status=compiled.*act=change/);
   assert.match(latest.trace.compiledSop, /std\.capability\.call operation="drawing.object.change"/);
+  assert.equal(new World().compileToolInput(latest.trace.compiledSop), latest.trace.controlIntent);
   assert.equal(latest.trace.controlIntent, activity.find((event) => event.operation === 'drawing.object.change' && event.phase === 'start').sop);
   assert.equal((await run('By name', 'First')).statuses[0], 'supported');
   assert.deepEqual(toNativeDrawingState(state).objects.map((object) => object.label), ['By name', 'By recency']);

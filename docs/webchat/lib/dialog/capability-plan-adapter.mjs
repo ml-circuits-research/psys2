@@ -1,10 +1,11 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-import { World, parse, quote, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=14e619cf45';
+import { World, parse, quote, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=d762ac1a79';
+import { decodeCapabilityCall } from '../vendor/sopworld/capability-call.mjs?v=ed3b773c65';
 import POLICY from '../../worlds/app.project/capability-policy.mjs?v=ca7d222029';
 import { DRAWING_PROPERTY_BINDINGS } from '../../worlds/art.draw/property-host.mjs?v=45ec70afe7';
-import { executionPolicyWorld } from './execution-policy.mjs?v=719611440c';
+import { executionPolicyWorld } from './execution-policy.mjs?v=fa9237583c';
 import { nativeKindCandidates } from './native-binding-candidates.mjs?v=de223646d6';
-import { observedReaderContext } from './native-reader-context.mjs?v=cf6eef4278';
+import { observedReaderContext } from './native-reader-context.mjs?v=d7d22ad083';
 import { budget } from './budget.mjs?v=00bce6e369';
 
 const NS = 'std.capability.';
@@ -120,30 +121,13 @@ function interfaceFacts({ area, view, bindings, host, observation, focus, unappl
   return { wires, scope };
 }
 
-function readPlan(sop) {
+function readPlan(world,sop) {
   const rows = parse(sop), byId = new Map(rows.map((wire) => [wire.id, wire]));
   const result = rows.find((wire) => wire.type === NS + 'result') ?? rows.find((wire) => wire.type === 'std.compile.result');
   const find = (id) => byId.get(id?.slice(1));
-  let decoded = 0;
-  const decode = (literal, depth = 0) => {
-    budget.tick('capability.decode');
-    if (++decoded > 100000 || depth > 24) throw Error('capability-value-budget');
-    if (!literal.startsWith('$')) return JSON.parse(literal);
-    const wire = find(literal);
-    if (wire?.type === NS + 'list') {
-      return (wire.attrs.member || []).map(find).sort((a, b) => Number(take(a, 'index')) - Number(take(b, 'index')))
-        .map((item) => decode(item.attrs.value[0], depth + 1));
-    }
-    if (wire?.type === NS + 'record') {
-      return Object.fromEntries((wire.attrs.entry || []).map(find).map((entry) => [take(entry, 'name'), decode(entry.attrs.value[0], depth + 1)]));
-    }
-    throw Error('invalid-capability-call-value');
-  };
-  const call = find(result?.attrs.call?.[0]);
-  const args = Object.fromEntries((call?.attrs.argument || []).map((id) => {
-    const argument = find(id);
-    return [take(argument, 'name'), decode(argument.attrs.value[0])];
-  }));
+  const toolInput = result?.attrs.call ? world.compileToolInput(sop) : undefined;
+  const call = toolInput ? decodeCapabilityCall(parse(toolInput)) : null;
+  if (call?.reason) throw Error(call.reason);
   const alternatives = (result?.attrs.alternative || []).map((id) => {
     const alternative = find(id);
     return { operation: take(alternative, 'operation'), status: take(alternative, 'status'), reason: take(alternative, 'reason') };
@@ -153,7 +137,7 @@ function readPlan(sop) {
     act: take(result, 'act'), kind: take(result, 'kind'), id: take(result, 'id'), source: take(result, 'source'),
     instance: take(result, 'instance'), version: take(result, 'version'), targets: values(result, 'target'),
     skipped: values(result, 'skipped'), notes: values(result, 'note'), support: values(result, 'support'),
-    operation: take(call, 'operation'), args, alternatives,
+    operation: call?.operation, args: call?.args ?? {}, toolInput, alternatives,
   };
 }
 
@@ -178,8 +162,8 @@ function contextWire(id,request,scope) {
 }
 export function compileNativeCapability(candidate, context) {
   const nodes=parse(candidate.wires), {world,scope}=compilerWorld(context,nodes);
-  if(!nodes.some(w=>w.type==='std.request'&&w.id===candidate.request))return readPlan('@compile.result std.compile.result status=not-applicable reason=request-root');
-  return readPlan(world.compileRequest(serialize([...nodes,contextWire('capability.context',candidate.request,scope)])));
+  if(!nodes.some(w=>w.type==='std.request'&&w.id===candidate.request))return readPlan(world,'@compile.result std.compile.result status=not-applicable reason=request-root');
+  return readPlan(world,world.compileRequest(serialize([...nodes,contextWire('capability.context',candidate.request,scope)])));
 }
 
 /** Keep each proposal's private identifiers distinct while preserving its actual request wires. */
@@ -205,6 +189,6 @@ export function compareNativeReadings(candidates, context) {
   const index=selected?requests.get(take(selected,'request')):undefined;
   if(index===undefined)return {sop};
   const planRoot=records.find(w=>ref(w.id)===summary.attrs.plan?.[0]);
-  const plan=readPlan(serialize([planRoot,...records.filter(w=>w.id.startsWith('interpret.plan.')&&w!==planRoot)]));
+  const plan=readPlan(world,serialize([planRoot,...records.filter(w=>w.id.startsWith('interpret.plan.')&&w!==planRoot)]));
   return {sop,index,plan};
 }

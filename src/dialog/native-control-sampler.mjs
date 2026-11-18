@@ -1,3 +1,4 @@
+import {invokeToolCommand} from './native-control-intent.mjs';
 // A dice gesture samples declared UI fields. It is not a language-reader prediction.
 import {copyHostData,validateNativeArguments} from '../../worlds/native-tool-host.mjs';
 const pick=(items,random)=>items.length?items[Math.min(items.length-1,Math.floor(Math.max(0,Math.min(.999999999,Number(random())||0))*items.length))]:undefined;
@@ -21,7 +22,7 @@ export async function sampleNativeControl({host,createHost,state,random=Math.ran
   const candidate=pick(candidates,random),args={};let complete=true;
   for(const [key,strategy]of Object.entries(candidate.recipe.args)){const parameter=candidate.operation.params[key];if(!parameter){complete=false;break;}const result=argument(strategy,parameter,observation,random,Date.now().toString(36)+'-'+attempt);if(!result.ok){complete=false;break;}args[key]=result.value;}
   if(!complete||!validateNativeArguments(candidate.operation,args).ok)continue;
-  try{const clone=copyHostData(state),trial=await createHost({state:clone}),before=trial.observe(),operation=trial.bindings().find(o=>o.id===candidate.operation.id);if(!operation||!validateNativeArguments(operation,args).ok)continue;const receipt=await trial.invoke({invocation:'native-control-sample-'+attempt,expectedVersion:before.version,operation:operation.id,args});if(receipt.status==='changed'&&projection(before)!==projection(trial.observe()))return {operation:operation.id,args};}catch{/* A failed or unavailable native primitive is not a proposal. */}
+  try{const clone=copyHostData(state),trial=await createHost({state:clone}),before=trial.observe(),operation=trial.bindings().find(o=>o.id===candidate.operation.id);if(!operation||!validateNativeArguments(operation,args).ok)continue;const receipt=await invokeToolCommand(trial,{invocation:'native-control-sample-'+attempt,expectedVersion:before.version,operation:operation.id,args});if(receipt.status==='changed'&&projection(before)!==projection(trial.observe()))return {operation:operation.id,args};}catch{/* A failed or unavailable native primitive is not a proposal. */}
  }
  return null;
 }

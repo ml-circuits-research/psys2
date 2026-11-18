@@ -4,9 +4,9 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {createCalendarHost,initialCalendarState} from '../worlds/time.calendar/declared-host.mjs';
 import {createAvatarHost,initialAvatarState} from '../worlds/ui.avatar/declared-host.mjs';
-import {describeNativeControl} from '../src/dialog/native-control-intent.mjs';
+import {invokeToolCommand,describeNativeControl} from '../src/dialog/native-control-intent.mjs';
 import {nativeObservationObjects} from '../src/dialog/instance-facts.mjs';
-const invoke=(host,operation,args)=>host.invoke({invocation:crypto.randomUUID(),expectedVersion:host.observe().version,operation,args});
+const invoke=(host,operation,args)=>invokeToolCommand(host,{invocation:crypto.randomUUID(),expectedVersion:host.observe().version,operation,args});
 const input=(host,id,key)=>host.observe().objects.find(row=>row.id===id)?.inputs.find(row=>row.key===key)?.values;
 test('calendar event selection is native, observed and reversible without changing event data',()=>{
  const state=initialCalendarState(),host=createCalendarHost({state,instanceId:'selection-calendar'});

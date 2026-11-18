@@ -1,15 +1,16 @@
 // Exact interpreter for declared UI intent wires; it never guesses words or operations.
+import{decodeCapabilityCall}from'../vendor/sopworld/capability-call.mjs';
 import{parse,str}from'../vendor/sopworld/sopworld.mjs';
-import{copyHostData,validateNativeArguments}from'../../worlds/native-tool-host.mjs';
+import{copyHostData,validateNativeArguments}from'../../worlds/native-tool-arguments.mjs';
 const identifier=/^[A-Za-z_][A-Za-z0-9_-]*(?:\.[A-Za-z0-9_][A-Za-z0-9_-]*)*$/;
 const forbidden=new Set(['__proto__','constructor','prototype']);
 const numberToken=v=>Object.is(v,-0)?'-0':String(v);
 const primitive=v=>v===null||['string','number','boolean'].includes(typeof v);
 const token=v=>typeof v==='string'?JSON.stringify(v):typeof v==='number'?numberToken(v):String(v);
 const expandedRequired=(args,params={})=>Object.entries(args).some(([key,v])=>Array.isArray(v)?v.length===0||v.some(x=>!primitive(x)):v!==null&&typeof v==='object'||v===null&&params[key]?.type==='array');
-function declaration(operation){
+function declaration(operation,compact=false){
  const op=copyHostData(operation);
- if(!op||!['id','act','on'].every(k=>typeof op[k]==='string'&&identifier.test(op[k]))||!op.params||Object.keys(op.params).some(k=>!identifier.test(k)||forbidden.has(k))||validateNativeArguments(op,{}).reason==='invalid-native-declaration-or-data')throw Error('invalid-control-declaration');
+ if(!op||!(compact?['id']:['id','act','on']).every(k=>typeof op[k]==='string'&&identifier.test(op[k]))||!op.params||Object.keys(op.params).some(k=>!identifier.test(k)||forbidden.has(k))||validateNativeArguments(op,{}).reason==='invalid-native-declaration-or-data')throw Error('invalid-control-declaration');
  return op;
 }
 function admitted(op,args){
@@ -40,15 +41,24 @@ export function readNativeIntent(wires,{operation,operations}={}){
  if(typeof wires!=='string'||wires.length>4000000)throw Error('invalid-control-intent');
  const nodes=parse(wires);if(nodes.length>10000)throw Error('control-intent-budget');
  if(nodes.some(n=>n.pattern||Object.keys(n.attrs).some(k=>forbidden.has(k))))throw Error('invalid-control-wire');
- function matchingOperation(id){
-  if(operation)return declaration(operation);
+ function matchingOperation(id,compact=false){
+  if(operation)return declaration(operation,compact);
   if(!operations)return null;
   const matches=operations.filter(candidate=>candidate.id===id);
   if(matches.length!==1)throw Error('undeclared-native-control');
-  return declaration(matches[0]);
+  return declaration(matches[0],compact);
+ }
+ if(nodes.some(node=>node.type==='std.capability.call')){
+  // A tool accepts one concrete call and its owned values. Compiler reports have a separate owner.
+  const call=decodeCapabilityCall(nodes);
+  if(call.reason)throw Error(call.reason);
+  if(call.wires.length!==nodes.length)throw Error('unowned-call-wire');
+  const op=matchingOperation(call.operation,true);
+  if(!op||op.id!==call.operation)throw Error('undeclared-native-control');
+  return {operation:op.id,act:op.act,sourceType:op.on,args:admitted(op,call.args),text:null};
  }
  if(nodes.length===1){
-  const node=nodes[0],op=matchingOperation(node.type),args={};let count=0;
+  const node=nodes[0],op=matchingOperation(node.type,true),args={};let count=0;
   if(!op)throw Error('control-declaration-required');
   if(node.type!==op.id)throw Error('control-operation-mismatch');
   for(const [key,tokens]of Object.entries(node.attrs)){

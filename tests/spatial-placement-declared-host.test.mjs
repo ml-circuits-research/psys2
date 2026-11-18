@@ -1,3 +1,4 @@
+import {invokeToolCommand} from '../src/dialog/native-control-intent.mjs';
 import {test} from 'node:test';
 import {toNativeDrawingState} from '../worlds/art.draw/canonical-state.mjs';
 import assert from 'node:assert/strict';
@@ -29,7 +30,7 @@ const parseResult=reply=>{
  return {summary,call:get('call'),choice:get('choice'),options:wires.filter(wire=>wire.type==='std.placement.option'),measurements};
 };
 const observedBox=(host,id)=>host.observeSpatial().boxes.find(box=>box.entity===id);
-const makeCall=(host,operation,args)=>host.invoke({operation,args,invocation:crypto.randomUUID(),expectedVersion:host.observe().version});
+const makeCall=(host,operation,args)=>invokeToolCommand(host,{operation,args,invocation:crypto.randomUUID(),expectedVersion:host.observe().version});
 
 function sessionFor(view,world,state,read) {
  const activities=[],session={isession:{state:{[world]:state,'ui.shell':{activeTab:view}}},engine:{

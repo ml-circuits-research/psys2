@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-import { compileNativeCapability } from './capability-plan-adapter.mjs?v=da2a8c539c';
-import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=aab30ccd46';
+import { compileNativeCapability } from './capability-plan-adapter.mjs?v=92901bed0e';
+import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=5b662d9ad0';
 import { instanceIdFor } from './instance-identity.mjs?v=024ef1ca83';
-import { prepareNativeControlHost } from './native-control-preparation.mjs?v=835694f785';
-import { invokeObservedNativeTool } from './native-tool-activity.mjs?v=23f96568ed';
-import { describeNativeControl, verifyNativeControlEffect } from './native-control-intent.mjs?v=c7cf5d55bb';
+import { prepareNativeControlHost } from './native-control-preparation.mjs?v=127c654ac5';
+import { invokeObservedNativeTool } from './native-tool-activity.mjs?v=f35f865bba';
+import { describeNativeControl, verifyNativeControlEffect } from './native-control-intent.mjs?v=9015e8a68b';
 
 function reply(text, supported, trace = {}) {
   return { text, parts: [{ text, translate: false }], statuses: [supported ? 'supported' : 'unsupported'],
@@ -61,7 +61,7 @@ export async function executeNativeCapability(session, candidate, { bindings, vi
   }
   const intent = describeNativeControl({ operation, args: plan.args, before: observed });
   const receipt = await invokeObservedNativeTool(session, { area, host: prepared, invocation,
-    expectedVersion: observed.version, sop: intent.wires });
+    expectedVersion: observed.version, sop: plan.toolInput });
   if (receipt.status === 'refused') return reply('I could not apply that action. Nothing changed.', false,
     { reason: receipt.reason, receipt, compiledSop: plan.sop });
 
@@ -77,7 +77,7 @@ export async function executeNativeCapability(session, candidate, { bindings, vi
   const message = [said, ...notes].join(' ');
   return {
     ...reply(message, true, { assessment: receipt.status, receipt, reading: candidate, compiledSop: plan.sop,
-      controlIntent: intent.wires, effectVerification: verification, binding: { operation: plan.operation, alternatives: plan.alternatives.filter((choice) => choice.reason) },
+      controlIntent: plan.toolInput, effectVerification: verification, binding: { operation: plan.operation, alternatives: plan.alternatives.filter((choice) => choice.reason) },
       uncertainty: notes, alternatives: plan.alternatives.filter((choice) => !choice.reason).map((choice) => choice.operation), partial: plan.skipped.length > 0 }),
     state: { [area.world]: structuredClone(session.isession.state[area.world]) },
     effects: receipt.status === 'changed' ? [{ operation: plan.operation }] : [],

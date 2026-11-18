@@ -1,3 +1,4 @@
+import {invokeToolCommand} from '../src/dialog/native-control-intent.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
@@ -6,7 +7,7 @@ import {initialAvatarState,createAvatarHost} from '../worlds/ui.avatar/declared-
 import {snap} from '../worlds/ui.avatar/face.mjs';
 import {AVATAR_STATE_SCHEMA,canonicalAvatarState,toNativeAvatarState,avatarStateWorld,adoptCanonicalAvatarState} from '../worlds/ui.avatar/canonical-state.mjs';
 const roundtrip=native=>{const canonical=canonicalAvatarState(native);assert.deepEqual(Object.keys(canonical),['sop']);assert.deepEqual(toNativeAvatarState(canonical),native.sop?toNativeAvatarState(native):native);return canonical;};
-const invoke=(host,operation,args)=>host.invoke({invocation:crypto.randomUUID(),expectedVersion:host.observe().version,operation,args});
+const invoke=(host,operation,args)=>invokeToolCommand(host,{invocation:crypto.randomUUID(),expectedVersion:host.observe().version,operation,args});
 test('Avatar state schema source is exact and all current fields roundtrip without JSON carriers',()=>{
  assert.equal(AVATAR_STATE_SCHEMA,readFileSync('worlds/ui.avatar/instance-schema.sop','utf8'));
  const state=initialAvatarState(),face=state.face;state.name='Ada';state.selectedSlot='eyes';state.idDisplay={mode:'temporary',expiresAt:123456};

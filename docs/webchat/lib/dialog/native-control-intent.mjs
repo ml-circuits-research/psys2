@@ -1,10 +1,13 @@
 // Typed UI intent capture. No language parser, model inference or optimistic effect claims.
 import {budget} from './budget.mjs?v=00bce6e369';
-import {copyHostData,validateNativeArguments} from '../../worlds/native-tool-host.mjs?v=ecc9d8b538';
-import {compactNativeIntent} from './native-intent-reader.mjs?v=969c41538b';
+import {copyHostData,validateNativeArguments,toolInvocationContext} from '../../worlds/native-tool-host.mjs?v=ca9bb682f6';
+import {compactNativeIntent} from './native-intent-reader.mjs?v=a28d9ff468';
 
 export const NATIVE_CONTROL_INTENT_FORMAT='psys2.native-control-intent/1';
 export const NATIVE_CONTROL_INTENT_SCHEMA=`
+@app.control.invocation core.type of=app.control.invocation closed=true
+@app.control.invocation.id core.slot of=app.control.invocation key=id kind=string present=true
+@app.control.invocation.version core.slot of=app.control.invocation key=version kind=string present=true
 @app.control.source core.type
 @app.control.source.text core.slot of=app.control.source key=text kind=string required=true
 @app.control.intent core.type
@@ -184,4 +187,14 @@ export function verifyNativeControlEffect({intent,before,after,receipt}={}){
  if(checks.some(c=>c.status==='failed'))return finish('mismatch','observed-effect-differs-from-intent');
  if(checks.some(c=>c.status==='unknown'))return finish('unverified','some-intended-values-are-not-observable');
  return finish('verified','all-expressed-observable-effects-match');
+}
+
+/** Author a tool instruction for a programmatic control, then use the same SOP entry point as chat. */
+export function invokeToolCommand(host,{operation,args,invocation,expectedVersion}) {
+ const declaration = host.bindings().find(op => op.id === operation);
+ if (!declaration) return {status:'refused',reason:'undeclared-operation',verification:'unverified'};
+ const admitted = validateNativeArguments(declaration,args);
+ if (!admitted.ok) return {status:'refused',reason:admitted.reason,verification:'unverified'};
+ const wires = describeNativeControl({operation:declaration,args}).wires;
+ return host.invoke(wires,toolInvocationContext(invocation,expectedVersion));
 }

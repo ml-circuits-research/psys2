@@ -1,3 +1,4 @@
+import {invokeToolCommand} from '../src/dialog/native-control-intent.mjs';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {nativeObservationObjects,compareInstanceObjects} from '../src/dialog/instance-facts.mjs';
@@ -8,7 +9,7 @@ import {createCalendarHost,initialCalendarState} from '../worlds/time.calendar/d
 import {createDocumentHost,initialDocumentState} from '../worlds/docs.editor/declared-host.mjs';
 import {createAvatarHost,initialAvatarState} from '../worlds/ui.avatar/declared-host.mjs';
 let sequence=0;
-const invoke=(host,operation,args)=>{const r=host.invoke({invocation:'facts.'+(++sequence),expectedVersion:host.observe().version,operation,args});assert.equal(r.status,'changed',JSON.stringify(r));return r;};
+const invoke=(host,operation,args)=>{const r=invokeToolCommand(host,{invocation:'facts.'+(++sequence),expectedVersion:host.observe().version,operation,args});assert.equal(r.status,'changed',JSON.stringify(r));return r;};
 test('actual observations from five independent native hosts become exact instance facts',async()=>{
  const drawing=createDrawingHost({state:initialDrawingState(),instanceId:'facts.draw'});
  invoke(drawing,'drawing.object.make',{kind:'triangle',name:'Peak',x:123,y:200,color:'#112233'});

@@ -1,3 +1,4 @@
+import {invokeToolCommand} from '../src/dialog/native-control-intent.mjs';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
@@ -5,7 +6,7 @@ import {canonicalCalendarState,toNativeCalendarState,calendarStateWorld,CALENDAR
 import {createCalendarHost,initialCalendarState} from '../worlds/time.calendar/declared-host.mjs';
 import {invokeNativeControl} from '../src/dialog/native-tool-controls.mjs';
 const policySource=readFileSync(new URL('../worlds/time.calendar/scheduling-policy.sop',import.meta.url),'utf8');
-const invoke=(h,operation,args={})=>h.invoke({invocation:crypto.randomUUID(),expectedVersion:h.observe().version,operation,args});
+const invoke=(h,operation,args={})=>invokeToolCommand(h,{invocation:crypto.randomUUID(),expectedVersion:h.observe().version,operation,args});
 const fixture=()=>({calendars:[{id:'c',label:'Personal',colour:'#123456'}],people:[{id:'b',label:'B'},{id:'a',label:'A'}],rooms:[{id:'r',label:'Room',capacity:3,location:'Floor 2'}],meetings:[{id:'later',title:'Later',start:1000,duration:50,participants:['a','b'],room:'r',calendar:'c',notes:'Exact notes'},{id:'early',title:'Early',start:0,duration:50,participants:[],room:null,calendar:'c'}],selectedEvent:'later'});
 test('canonical Calendar stores actual typed facts and references with exact ordered reconstruction',()=>{
  assert.equal(CALENDAR_STATE_SCHEMA,readFileSync(new URL('../worlds/time.calendar/instance-schema.sop',import.meta.url),'utf8'));

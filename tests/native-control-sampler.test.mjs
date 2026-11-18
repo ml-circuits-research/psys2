@@ -1,3 +1,4 @@
+import {invokeToolCommand} from '../src/dialog/native-control-intent.mjs';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {sampleNativeControl} from '../src/dialog/native-control-sampler.mjs';
@@ -8,7 +9,7 @@ import {createDocumentHost,initialDocumentState} from '../worlds/docs.editor/dec
 import {createAvatarHost,initialAvatarState} from '../worlds/ui.avatar/declared-host.mjs';
 import {createNativeToolHost,nativeToken} from '../worlds/native-tool-host.mjs';
 const randomSource=()=>{let seed=713;return ()=>((seed=(seed*16807)%2147483647)-1)/2147483646;};
-const invoke=(host,p)=>host.invoke({invocation:crypto.randomUUID(),expectedVersion:host.observe().version,...p});
+const invoke=(host,p)=>invokeToolCommand(host,{invocation:crypto.randomUUID(),expectedVersion:host.observe().version,...p});
 for(const [name,initial,create] of [
  ['Drawing',initialDrawingState,createDrawingHost],['Diagram',initialDiagramState,createDiagramHost],['Calendar',initialCalendarState,createCalendarHost],['Documents',initialDocumentState,createDocumentHost],['Avatar',initialAvatarState,createAvatarHost],
 ])test(name+' dice samples real changing declared native actions on isolated clones',async()=>{

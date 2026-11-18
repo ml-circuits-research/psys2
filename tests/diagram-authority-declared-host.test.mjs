@@ -1,3 +1,4 @@
+import {invokeToolCommand} from '../src/dialog/native-control-intent.mjs';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {parse,serializeInstanceState,str} from '../src/vendor/sopworld/sopworld.mjs';
@@ -98,7 +99,7 @@ test('Diagram owns effective styles, named graph joins and actual chart series a
 test('Diagram admits old archives using the old observation contract and returns effective styles in SOP',async()=>{
  const instanceId='legacy.diagram',revision=4,projection=initialDiagramState();
  const host=await createDiagramHost({state:projection,instanceId});
- const place=(operation,args)=>host.invoke({operation,args,invocation:crypto.randomUUID(),expectedVersion:host.observe().version});
+ const place=(operation,args)=>invokeToolCommand(host,{operation,args,invocation:crypto.randomUUID(),expectedVersion:host.observe().version});
  const [a,b]=place('diagram.node.make',{kind:'rectangle',n:2}).changed;
  const [id]=place('diagram.link.make',{from:a,to:b}).changed;
  const objects=nativeObservationObjects(host.observe());

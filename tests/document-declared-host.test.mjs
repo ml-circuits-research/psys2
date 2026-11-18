@@ -1,6 +1,7 @@
+import {invokeToolCommand} from '../src/dialog/native-control-intent.mjs';
 import {test} from 'node:test';import assert from 'node:assert/strict';
 import {createDocumentHost,initialDocumentState} from '../worlds/docs.editor/declared-host.mjs';
-const call=(h,operation,args,invocation)=>h.invoke({operation,args,invocation,expectedVersion:h.observe().version});
+const call=(h,operation,args,invocation)=>invokeToolCommand(h,{operation,args,invocation,expectedVersion:h.observe().version});
 const blocks=[{kind:'heading',text:'First',level:2},{kind:'paragraph',text:'First body.'},{kind:'heading',text:'Second',level:2},{kind:'paragraph',text:'Second body.'}];
 test('Document writes supplied content, edits blocks, reorders/removes complete sections and restores history',()=>{
  const state=initialDocumentState(),h=createDocumentHost({state,instanceId:'document.one'});const made=call(h,'document.write',{title:'Test',blocks,genre:'report',topic:'fixture'},'write');assert.equal(made.status,'changed',JSON.stringify(made));assert.equal(made.verification,'unverified');assert.equal(state.history.length,1);assert.ok(state.doc);assert.equal(made.after.objects.length,9);
@@ -30,8 +31,8 @@ test('Document child creation requires parent and preserves siblings, real rende
  assert.equal(call(h,'document.block.make',{parent:'missing',kind:'paragraph'},'missing').reason,'missing-parent-document');assert.equal(JSON.stringify(state),empty);
  const parent=call(h,'document.write',{title:'Retained title',blocks:[{kind:'paragraph',text:'Retained sibling'}]},'parent').changed[0],original=state.blocks[0].id;
  const packet={invocation:'child',expectedVersion:h.observe().version,operation:'document.block.make',args:{parent,kind:'quote',text:'Explicit quote',name:'Named child'}};
- const made=h.invoke(packet),id=made.changed[0];assert.equal(made.status,'changed');assert.equal(state.title,'Retained title');assert.equal(state.blocks[0].id,original);assert.equal(state.blocks[1].text,'Explicit quote');assert.equal(state.doc.content.at(-1).type,'blockquote');assert.equal(h.invoke(packet).replayed,true);assert.equal(state.blocks.length,2);
- assert.equal(h.invoke({...packet,invocation:'stale'}).reason,'stale-observation');const observed=h.observe().objects.find(o=>o.id===id);assert.equal(observed.parent,parent);assert.equal(observed.inputs.find(i=>i.key==='name').values[0],'"Named child"');
+ const made=invokeToolCommand(h,packet),id=made.changed[0];assert.equal(made.status,'changed');assert.equal(state.title,'Retained title');assert.equal(state.blocks[0].id,original);assert.equal(state.blocks[1].text,'Explicit quote');assert.equal(state.doc.content.at(-1).type,'blockquote');assert.equal(invokeToolCommand(h,packet).replayed,true);assert.equal(state.blocks.length,2);
+ assert.equal(invokeToolCommand(h,{...packet,invocation:'stale'}).reason,'stale-observation');const observed=h.observe().objects.find(o=>o.id===id);assert.equal(observed.parent,parent);assert.equal(observed.inputs.find(i=>i.key==='name').values[0],'"Named child"');
  const section=call(h,'document.section.make',{parent,name:'Section metadata',text:'Section heading'},'section');assert.equal(section.status,'changed');const sectionId=section.changed[0];assert.equal(h.observe().objects.find(o=>o.id===sectionId).kind,'section');assert.equal(state.doc.content.at(-1).type,'heading');assert.equal(state.doc.content.at(-1).attrs.level,2);
  const sectionSource=h.observe().objects.find(o=>o.id===sectionId).source;call(h,'document.undo',{},'undo-child');assert.equal(state.blocks.length,2);call(h,'document.redo',{},'redo-child');assert.notEqual(h.observe().objects.find(o=>o.id===sectionId).source,sectionSource);
  const history=state.history.length;assert.equal(call(h,'document.block.change',{id,text:'Explicit quote'},'noop').status,'unchanged');assert.equal(state.history.length,history);

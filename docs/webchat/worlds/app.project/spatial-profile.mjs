@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-import { World, parse, quote, str } from '../../lib/vendor/sopworld/sopworld.mjs?v=14e619cf45';
-import SOURCE from '../../lib/dialog/new-engine-source.mjs?v=840316d8d9';
+import { World, parse, quote, str } from '../../lib/vendor/sopworld/sopworld.mjs?v=d762ac1a79';
+import SOURCE from '../../lib/dialog/new-engine-source.mjs?v=10c56a9044';
 import { nativeIdentitySnapshot, restoreNativeIdentitySnapshot } from '../../lib/dialog/instance-identity.mjs?v=024ef1ca83';
-import { spatialWire } from '../native-spatial-interface.mjs?v=c3140f6aeb';
+import { spatialWire } from '../native-spatial-interface.mjs?v=aee0bd862d';
 
 const namespace = 'k.spatial2d';
 const tool = 'app.spatial-profile';

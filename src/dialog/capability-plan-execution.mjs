@@ -61,7 +61,7 @@ export async function executeNativeCapability(session, candidate, { bindings, vi
   }
   const intent = describeNativeControl({ operation, args: plan.args, before: observed });
   const receipt = await invokeObservedNativeTool(session, { area, host: prepared, invocation,
-    expectedVersion: observed.version, sop: intent.wires });
+    expectedVersion: observed.version, sop: plan.toolInput });
   if (receipt.status === 'refused') return reply('I could not apply that action. Nothing changed.', false,
     { reason: receipt.reason, receipt, compiledSop: plan.sop });
 
@@ -77,7 +77,7 @@ export async function executeNativeCapability(session, candidate, { bindings, vi
   const message = [said, ...notes].join(' ');
   return {
     ...reply(message, true, { assessment: receipt.status, receipt, reading: candidate, compiledSop: plan.sop,
-      controlIntent: intent.wires, effectVerification: verification, binding: { operation: plan.operation, alternatives: plan.alternatives.filter((choice) => choice.reason) },
+      controlIntent: plan.toolInput, effectVerification: verification, binding: { operation: plan.operation, alternatives: plan.alternatives.filter((choice) => choice.reason) },
       uncertainty: notes, alternatives: plan.alternatives.filter((choice) => !choice.reason).map((choice) => choice.operation), partial: plan.skipped.length > 0 }),
     state: { [area.world]: structuredClone(session.isession.state[area.world]) },
     effects: receipt.status === 'changed' ? [{ operation: plan.operation }] : [],

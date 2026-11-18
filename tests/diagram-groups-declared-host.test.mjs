@@ -1,8 +1,9 @@
+import {invokeToolCommand} from '../src/dialog/native-control-intent.mjs';
 import {toNativeDiagramState} from '../worlds/diagram.sketch/canonical-state.mjs';
 import {nativeObservationObjects,compareInstanceObjects} from '../src/dialog/instance-facts.mjs';
 import test from'node:test';import assert from'node:assert/strict';
 import{createDiagramHost,initialDiagramState}from'../worlds/diagram.sketch/declared-host.mjs';
-const call=(h,operation,args)=>h.invoke({invocation:crypto.randomUUID(),expectedVersion:h.observe().version,operation,args});
+const call=(h,operation,args)=>invokeToolCommand(h,{invocation:crypto.randomUUID(),expectedVersion:h.observe().version,operation,args});
 test('named groups retain members through layout, properties and movement; explicit numeric values produce a linked chart',async()=>{
  const s=initialDiagramState(),h=await createDiagramHost({state:s,instanceId:'groups'});
  const first=call(h,'diagram.node.make',{kind:'rectangle',n:3});assert.equal(first.status,'changed');const ids=s.shapes.map(n=>n.name);
@@ -17,14 +18,14 @@ test('named groups retain members through layout, properties and movement; expli
 });
 test('group selection is declared, preserves members and rejects a missing group without mutation',async()=>{
  const state=initialDiagramState(),h=await createDiagramHost({state,instanceId:'group-selection'});
- const invoke=(operation,args)=>h.invoke({invocation:crypto.randomUUID(),expectedVersion:h.observe().version,operation,args});
+ const invoke=(operation,args)=>invokeToolCommand(h,{invocation:crypto.randomUUID(),expectedVersion:h.observe().version,operation,args});
  invoke('diagram.node.make',{kind:'circle',n:2});const ids=state.shapes.map(n=>n.name);invoke('diagram.group.make',{name:'Selected pair',ids});invoke('diagram.node.select',{ids:[]});const before=state.compositionHistory.length;
  const selected=invoke('diagram.group.select',{id:'Selected pair'});assert.equal(selected.status,'changed');assert.deepEqual(state.selected.shapes,ids);assert.equal(state.selected.group,'Selected pair');assert.equal(state.compositionHistory.length,before);assert.equal(state.chartTools.active,null);
  const snapshot=JSON.stringify(state);assert.equal(invoke('diagram.group.select',{id:'missing'}).status,'refused');assert.equal(JSON.stringify(state),snapshot);
 });
 
 test('new diagram nodes use explicit canvas coordinates and native selection clears and preserves groups',async()=>{
- const state=initialDiagramState(),h=await createDiagramHost({state,instanceId:'placement'});const invoke=(operation,args)=>h.invoke({invocation:crypto.randomUUID(),expectedVersion:h.observe().version,operation,args});
+ const state=initialDiagramState(),h=await createDiagramHost({state,instanceId:'placement'});const invoke=(operation,args)=>invokeToolCommand(h,{invocation:crypto.randomUUID(),expectedVersion:h.observe().version,operation,args});
  invoke('diagram.node.make',{kind:'rectangle',x:120,y:175});const first=state.shapes[0];assert.equal(first.x,120);assert.equal(first.y,175);assert.deepEqual(state.selected.shapes,[first.name]);
  invoke('diagram.node.make',{kind:'circle',x:350,y:260});assert.equal(state.shapes[1].x,350);assert.equal(state.shapes[0].x,120);const ids=state.shapes.map(n=>n.name);invoke('diagram.node.select',{ids});invoke('diagram.group.make',{name:'Pair',ids});assert.equal(state.selected.group,'Pair');
  invoke('diagram.group.ungroup',{id:'Pair'});assert.deepEqual(state.selected.shapes,ids);assert.equal(state.selected.group,undefined);assert.equal(state.shapes.length,2);invoke('diagram.node.select',{ids:[]});assert.deepEqual(state.selected.shapes,[]);

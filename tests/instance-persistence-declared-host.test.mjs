@@ -1,3 +1,4 @@
+import {invokeToolCommand} from '../src/dialog/native-control-intent.mjs';
 import {CATALOG_PIN} from '../src/knowledge/catalog-pin.mjs';
 import {diagramStateWorld,toNativeDiagramState} from '../worlds/diagram.sketch/canonical-state.mjs';
 import {test} from 'node:test';
@@ -15,7 +16,7 @@ import {initialCanonicalDocumentState} from '../worlds/docs.editor/declared-host
 import {initialAvatarState} from '../worlds/ui.avatar/declared-host.mjs';
 const session=()=>({isession:{state:{}},engine:{loader:{readFile:(world,file)=>readFile(new URL(`../worlds/${world}/${file}`,import.meta.url),'utf8')}}});
 let sequence=0;
-function invoke(host,operation,args){const receipt=host.invoke({invocation:'archive.'+(++sequence),expectedVersion:host.observe().version,operation,args});assert.equal(receipt.status,'changed',JSON.stringify(receipt));return receipt;}
+function invoke(host,operation,args){const receipt=invokeToolCommand(host,{invocation:'archive.'+(++sequence),expectedVersion:host.observe().version,operation,args});assert.equal(receipt.status,'changed',JSON.stringify(receipt));return receipt;}
 async function populated(){
  const s=session();Object.assign(s.isession.state,{'art.draw':initialDrawingState(),'diagram.sketch':initialDiagramState(),'time.calendar':initialCalendarState(),'docs.editor':initialCanonicalDocumentState(),'ui.avatar':initialAvatarState()});
  s.nativeInstanceIds=Object.fromEntries(Object.values(NATIVE_AREAS).map(a=>[a.world,'stable.'+a.world]));

@@ -1,3 +1,4 @@
+import {invokeToolCommand} from './native-control-intent.mjs';
 // Host orchestration only: semantic projections belong to area declarations.
 import { prepareRequestBatch, requestBatchFrontier, parse } from '../vendor/sopworld/sopworld.mjs';
 
@@ -35,7 +36,7 @@ export async function dispatchDeclaredBatch(batch, { resolve, invocation, budget
       }
       let receipt;
       try {
-        receipt = await resolution.host.invoke({ invocation: JSON.stringify([invocation, id]), expectedVersion: resolution.expectedVersion,
+        receipt = await invokeToolCommand(resolution.host,{ invocation: JSON.stringify([invocation, id]), expectedVersion: resolution.expectedVersion,
           operation: resolution.operation, args: resolution.args });
       } catch {
         outcomes.push({ id, status: 'unknown' });

@@ -1,7 +1,8 @@
+import {invokeToolCommand} from '../src/dialog/native-control-intent.mjs';
 import test from 'node:test';import assert from 'node:assert/strict';
 import {createDrawingHost,initialDrawingState,DRAWING_TOOL_BINDINGS} from '../worlds/art.draw/declared-host.mjs';
 import {partsOf,KINDS} from '../worlds/art.draw/scene.mjs';
-const call=(host,operation,args,invocation=Math.random().toString())=>host.invoke({invocation,expectedVersion:host.observe().version,operation,args});
+const call=(host,operation,args,invocation=Math.random().toString())=>invokeToolCommand(host,{invocation,expectedVersion:host.observe().version,operation,args});
 test('Drawing lifecycle creates actual renderable board objects across native kinds',()=>{
  const state=initialDrawingState(),host=createDrawingHost({state,instanceId:'drawing.native'});
  assert.deepEqual(DRAWING_TOOL_BINDINGS[0].params.kind.enum,Object.keys(KINDS));
@@ -11,9 +12,9 @@ test('Drawing lifecycle creates actual renderable board objects across native ki
 test('Drawing transactions preserve no-op, stale refusal, replay and real board undo',()=>{
  const state=initialDrawingState(),host=createDrawingHost({state,instanceId:'drawing.history'}),before=host.observe();
  const packet={invocation:'make',expectedVersion:before.version,operation:'drawing.object.make',args:{kind:'circle',color:'#123456'}};
- const made=host.invoke(packet),id=made.changed[0],source=host.observe().objects[0].source;
- assert.equal(host.invoke(packet).replayed,true);assert.equal(state.objects.length,1);
- assert.equal(host.invoke({...packet,invocation:'stale'}).reason,'stale-observation');
+ const made=invokeToolCommand(host,packet),id=made.changed[0],source=host.observe().objects[0].source;
+ assert.equal(invokeToolCommand(host,packet).replayed,true);assert.equal(state.objects.length,1);
+ assert.equal(invokeToolCommand(host,{...packet,invocation:'stale'}).reason,'stale-observation');
  const count=state.history.length;assert.equal(call(host,'drawing.object.change',{ids:[id],color:'#123456'}).status,'unchanged');assert.equal(state.history.length,count);
  assert.equal(call(host,'drawing.object.change',{ids:[id],color:'#654321',size:77}).status,'changed');
  assert.equal(call(host,'drawing.undo',{}).status,'changed');assert.equal(state.objects[0].color,'#123456');

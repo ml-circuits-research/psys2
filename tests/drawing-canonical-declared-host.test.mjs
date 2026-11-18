@@ -1,3 +1,4 @@
+import {invokeToolCommand} from '../src/dialog/native-control-intent.mjs';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
@@ -52,7 +53,7 @@ test('Drawing authority commits editable grouped vectors and movement as typed S
 test('Drawing loads verified legacy native archives into typed authority without losing scene data or history',async()=>{
  const native=initialDrawingState(),instanceId='drawing.legacy';
  const host=createDrawingHost({state:native,instanceId});
- const invoke=(operation,args)=>host.invoke({invocation:crypto.randomUUID(),operation,args,expectedVersion:host.observe().version});
+ const invoke=(operation,args)=>invokeToolCommand(host,{invocation:crypto.randomUUID(),operation,args,expectedVersion:host.observe().version});
  const [square]=invoke('drawing.object.make',{kind:'square',x:125,y:135}).changed;
  invoke('drawing.object.place',{ids:[square],x:300,y:200});
  native.scenes.push({id:'scene1',kind:'practice',region:null,members:[square],fresh:false});
@@ -64,7 +65,7 @@ test('Drawing loads verified legacy native archives into typed authority without
  assert.equal(typeof state.sop,'string');
  assert.deepEqual(toNativeDrawingState(state),native);
  const reopened=createCanonicalDrawingHost({state,instanceId});
- const nativeUndo=reopened.invoke({operation:'drawing.undo',args:{},invocation:'drawing.legacy.undo',expectedVersion:reopened.observe().version});
+ const nativeUndo=invokeToolCommand(reopened,{operation:'drawing.undo',args:{},invocation:'drawing.legacy.undo',expectedVersion:reopened.observe().version});
  assert.equal(nativeUndo.status,'changed');
  assert.equal(toNativeDrawingState(drawing(restored)).objects[0].x,125);
  const [after]=await snapshotNativeInstances(restored,{worlds:[domain]});
@@ -77,7 +78,7 @@ test('Drawing state schema matches the published file and canonical wire identit
  assert.equal(schema,DRAWING_STATE_SCHEMA);
  const native=initialDrawingState(),host=createDrawingHost({state:native,instanceId:'drawing.ids'});
  for(let i=0;i<2;i++){
-  const result=host.invoke({invocation:'make.'+i,operation:'drawing.object.make',args:{kind:'square'},expectedVersion:host.observe().version});
+  const result=invokeToolCommand(host,{invocation:'make.'+i,operation:'drawing.object.make',args:{kind:'square'},expectedVersion:host.observe().version});
   assert.equal(result.status,'changed');
  }
  const identities=state=>Object.fromEntries(drawingStateWorld(canonicalDrawingState(state)).ofType('art.draw.state.object').map(wire=>[wire.attrs.id[0],wire.id]));

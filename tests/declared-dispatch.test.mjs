@@ -1,9 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {parse} from '../src/vendor/sopworld/sopworld.mjs';
+import {parse,str} from '../src/vendor/sopworld/sopworld.mjs';
 import {dispatchDeclaredBatch} from '../src/dialog/declared-dispatch.mjs';
 const wires='@s std.request.source text="create a circle"\n@r std.request act=make mood=do source=$s\n@t std.request.target request=$r mode=new kind=circle';
 const entry=(id,after=[])=>({id,after,request:'r',wires});
+const nativeOperation={id:'make',act:'make',on:'fixture.item',params:{}};
+const host=invoke=>({bindings:()=>[nativeOperation],invoke});
 const witness=entry=>parse(entry.wires).flatMap(w=>Object.keys(w.attrs).map(k=>JSON.stringify([w.id,k])));
 test('all graphs validate before resolution and effects',async()=>{
  let calls=0;const r=await dispatchDeclaredBatch({entries:[entry('a'),{...entry('b'),wires:'@r std.request act=make'}]},{invocation:'i',resolve(){calls++;}});
@@ -11,15 +13,15 @@ test('all graphs validate before resolution and effects',async()=>{
 });
 test('unverified native effects block dependent entries but allow independent entries',async()=>{
  const called=[];
- const r=await dispatchDeclaredBatch({entries:[entry('a'),entry('b',['a']),entry('c')]},{invocation:'i',resolve(e){return {ok:true,declaration:'declared.make',consumed:witness(e),expectedVersion:'0',operation:'make',args:{},host:{invoke(p){called.push(p.invocation);return {status:'changed',verification:'unverified'};}}};}});
- assert.equal(r.ok,true);assert.deepEqual(r.outcomes.map(o=>[o.id,o.status]),[['a','unverified'],['c','unverified']]);assert.deepEqual(r.frontier.blocked,[{id:'b',dependencies:['a']}]);assert.equal(called.length,2);
+ const r=await dispatchDeclaredBatch({entries:[entry('a'),entry('b',['a']),entry('c')]},{invocation:'i',resolve(e){return {ok:true,declaration:'declared.make',consumed:witness(e),expectedVersion:'0',operation:'make',args:{},host:host((sop,context)=>{assert.equal(parse(sop)[0].type,'make');called.push(str(parse(context)[0].attrs.id[0]));return {status:'changed',verification:'unverified'};})};}});
+ assert.equal(r.ok,true);assert.deepEqual(r.outcomes.map(o=>[o.id,o.status]),[['a','unverified'],['c','unverified']]);assert.deepEqual(r.frontier.blocked,[{id:'b',dependencies:['a']}]);assert.deepEqual(called,[JSON.stringify(["i","a"]),JSON.stringify(["i","c"])]);
 });
 test('missing semantic field consumption refuses before native invocation',async()=>{
- let called=0;const r=await dispatchDeclaredBatch({entries:[entry('a')]},{invocation:'i',resolve(e){return {ok:true,declaration:'d',consumed:witness(e).slice(1),expectedVersion:'0',operation:'make',host:{invoke(){called++;}}};}});
+ let called=0;const r=await dispatchDeclaredBatch({entries:[entry('a')]},{invocation:'i',resolve(e){return {ok:true,declaration:'d',consumed:witness(e).slice(1),expectedVersion:'0',operation:'make',host:host(()=>{called++;})};}});
  assert.equal(called,0);assert.equal(r.records[0].reason,'incomplete-projection-witness');
 });
 test('historical native receipt cannot become a fresh confirmed outcome',async()=>{
- const r=await dispatchDeclaredBatch({entries:[entry('a')]},{invocation:'i',resolve(e){return {ok:true,declaration:'d',consumed:witness(e),expectedVersion:'0',operation:'make',args:{},host:{invoke(){return {status:'changed',replayed:true};}}};}});
+ const r=await dispatchDeclaredBatch({entries:[entry('a')]},{invocation:'i',resolve(e){return {ok:true,declaration:'d',consumed:witness(e),expectedVersion:'0',operation:'make',args:{},host:host(()=>({status:'changed',replayed:true}))};}});
  assert.equal(r.outcomes[0].status,'unverified');assert.equal(r.records[0].receipt.replayed,true);
 });
 

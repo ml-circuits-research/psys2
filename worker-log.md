@@ -142,3 +142,6 @@ Checks: node --test tests/app-reader-context.test.mjs (3 passed); npm run build:
 
 2026-11-18 made Diagram's authored SOP schema authoritative for nodes, groups, links and charts. The schema validates named joins, and older archives validate their original observations before conversion. Current Work files preserve editor history separately.
 Checks: editor schema source check, Webchat build c7d76f4fb1, and npm test (615 pass, 3 skip, 0 fail). Chromium dragged a real node, reopened the saved SVG link with the same dotted style, arrowheads and label, placed a circle via authored chat, and undid the placement.
+
+2026-11-18 replaced the JS invocation packet at the native editor hosts with SOP command and revision/identity wires. Compiled capability calls pass through with their original typed arguments; all callers migrated. LIB 0.214.0/945b0d73.
+Verified the executable call equals the library output, Drawing effects, replay, stale revision refusal, malformed input rollback, manual tool instructions, and two natural-language clauses in Chromium. Full gate 617 passed, 3 skipped, zero failed.

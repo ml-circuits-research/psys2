@@ -1,3 +1,4 @@
+import {invokeToolCommand} from '../src/dialog/native-control-intent.mjs';
 import {toNativeCalendarState} from '../worlds/time.calendar/canonical-state.mjs';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
@@ -7,7 +8,7 @@ import {createCalendar,calendarObservationIssue} from '../worlds/time.calendar/c
 import {compareCalendarObservations} from '../worlds/time.calendar/calendar-observation.mjs';
 
 const policySource=readFileSync(new URL('../worlds/time.calendar/scheduling-policy.sop',import.meta.url),'utf8');
-const invoke=(host,operation,args)=>host.invoke({invocation:globalThis.crypto.randomUUID(),expectedVersion:host.observe().version,operation,args});
+const invoke=(host,operation,args)=>invokeToolCommand(host,{invocation:globalThis.crypto.randomUUID(),expectedVersion:host.observe().version,operation,args});
 const event=(id,extra={})=>({id,title:id,start:1000,duration:100,participants:[],room:null,...extra});
 
 test('personal calendars and room bookings persist as visible declared objects without invented participants',()=>{

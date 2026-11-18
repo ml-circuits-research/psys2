@@ -1,3 +1,5 @@
+import {invokeToolCommand} from '../src/dialog/native-control-intent.mjs';
+import {toolInvocationContext} from '../worlds/native-tool-host.mjs';
 import {canonicalDrawingState, toNativeDrawingState} from '../worlds/art.draw/canonical-state.mjs';
 import{test}from'node:test';import assert from'node:assert/strict';import{readFile}from'node:fs/promises';
 import{createDrawingHost,initialDrawingState}from'../worlds/art.draw/declared-host.mjs';
@@ -7,7 +9,7 @@ import{nativeObservationObjects,compareInstanceObjects}from'../src/dialog/instan
 import{snapshotNativeInstances,restoreNativeInstances}from'../src/dialog/instance-persistence.mjs';
 import{readInstanceState}from'../src/vendor/sopworld/sopworld.mjs';
 import{createRenderer}from'../docs/webchat/ui/tabs/draw/render.mjs';import*as scene from'../worlds/art.draw/scene.mjs';
-const call=(h,operation,args)=>{const r=h.invoke({operation,args,invocation:crypto.randomUUID(),expectedVersion:h.observe().version});assert.notEqual(r.status,'refused',JSON.stringify(r));return r;};
+const call=(h,operation,args)=>{const r=invokeToolCommand(h,{operation,args,invocation:crypto.randomUUID(),expectedVersion:h.observe().version});assert.notEqual(r.status,'refused',JSON.stringify(r));return r;};
 const near=(actual,expected)=>assert.ok(Math.abs(actual-expected)<1e-8,`${actual} != ${expected}`);
 const union=objects=>{const bs=objects.map(bbox),x=Math.min(...bs.map(b=>b.x0)),y=Math.min(...bs.map(b=>b.y0));return{x,y,width:Math.max(...bs.map(b=>b.x1))-x,height:Math.max(...bs.map(b=>b.y1))-y};};
 test('native resize scales actual geometry, relative positions, rotated objects and one undo transaction',()=>{
@@ -15,7 +17,7 @@ test('native resize scales actual geometry, relative positions, rotated objects 
  const before=structuredClone(state.objects),b=union(before),ids=before.map(o=>o.id),history=state.history.length;call(h,'drawing.objects.transform',{ids,x:b.x+15,y:b.y-9,width:b.width*1.6,height:b.height*.65});
  assert.equal(state.history.length,history+1);const after=union(state.objects);near(after.x,b.x+15);near(after.y,b.y-9);near(after.width,b.width*1.6);near(after.height,b.height*.65);
  for(const old of before){const now=state.objects.find(o=>o.id===old.id),local=[.17*old.size,-.12*old.size],p=geometryPoint(objectMatrix(old),...local),q=geometryPoint(objectMatrix(now),...local);near(now.x+q[0],b.x+15+(old.x+p[0]-b.x)*1.6);near(now.y+q[1],b.y-9+(old.y+p[1]-b.y)*.65);}
- const malformed=JSON.stringify(state);assert.equal(h.invoke({operation:'drawing.objects.transform',args:{ids,x:0,y:0,width:0,height:30},invocation:'invalid',expectedVersion:h.observe().version}).status,'refused');assert.equal(JSON.stringify(state),malformed);
+ const malformed=JSON.stringify(state);assert.equal(h.invoke(`@command drawing.objects.transform ${ids.map(id=>`ids=${JSON.stringify(id)}`).join(' ')} x=0 y=0 width=0 height=30`,toolInvocationContext('invalid',h.observe().version)).status,'refused');assert.equal(JSON.stringify(state),malformed);
  call(h,'drawing.undo',{});assert.deepEqual(state.objects,before);
 });
 test('new groups keep real child identities and SOP member references through affine resize, constituent edits and ungroup',async()=>{
@@ -53,7 +55,7 @@ test('actual IDs address nested group members for selection, label, colour, geom
 
 test('native recursive geometry uses the shared computation budget and fails atomically when exhausted',()=>{
  const state=initialDrawingState(),h=createDrawingHost({state,instanceId:'geometry-budget'});call(h,'drawing.object.make',{kind:'circle'});const before=JSON.stringify(state),symbol=Symbol.for('psys2.budget'),previous=globalThis[symbol],sites=[];
- try{globalThis[symbol]={tick(site){sites.push(site);if(site==='drawing.native.replace')throw new Error('budget-exhausted');}};const result=h.invoke({operation:'drawing.object.change',args:{ids:['o1'],label:'Must roll back'},invocation:'exhausted',expectedVersion:h.observe().version});assert.equal(result.status,'refused');assert.equal(JSON.stringify(state),before);assert.ok(sites.includes('drawing.native.objects'));assert.ok(sites.includes('drawing.native.replace'));}finally{if(previous===undefined)delete globalThis[symbol];else globalThis[symbol]=previous;}
+ try{globalThis[symbol]={tick(site){sites.push(site);if(site==='drawing.native.replace')throw new Error('budget-exhausted');}};const result=invokeToolCommand(h,{operation:'drawing.object.change',args:{ids:['o1'],label:'Must roll back'},invocation:'exhausted',expectedVersion:h.observe().version});assert.equal(result.status,'refused');assert.equal(JSON.stringify(state),before);assert.ok(sites.includes('drawing.native.objects'));assert.ok(sites.includes('drawing.native.replace'));}finally{if(previous===undefined)delete globalThis[symbol];else globalThis[symbol]=previous;}
 });
 
 test('editing a coloured group member preserves the group colour and unrelated sibling appearance',()=>{const state=initialDrawingState(),h=createDrawingHost({state,instanceId:'group-colour'});for(const x of[100,300])call(h,'drawing.object.make',{kind:'square',x,y:200});call(h,'drawing.object.group',{ids:['o1','o2'],name:'Group'});const group=state.objects[0].id;call(h,'drawing.object.change',{ids:[group],color:'#ff0000'});call(h,'drawing.object.change',{ids:['o1'],label:'Label survives red group'});assert.equal(state.objects[0].color,'#ff0000');call(h,'drawing.object.change',{ids:['o1'],color:'#0000ff'});assert.equal(findDrawingObject(state,'o1').color,'#0000ff');assert.equal(findDrawingObject(state,'o2').color,'#ff0000');assert.equal(state.objects[0].color,'#ff0000');assert.ok(partsOf(state.objects[0]).some(p=>p.hex==='#0000ff'));call(h,'drawing.object.change',{ids:[group],color:'#00ff00'});assert.equal(findDrawingObject(state,'o1').color,'#00ff00');assert.equal(findDrawingObject(state,'o2').color,'#00ff00');assert.ok(partsOf(state.objects[0]).every(p=>p.hex==='#00ff00'));});

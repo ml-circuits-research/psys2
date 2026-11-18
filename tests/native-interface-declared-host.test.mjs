@@ -1,3 +1,4 @@
+import {invokeToolCommand} from '../src/dialog/native-control-intent.mjs';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { test } from 'node:test';
@@ -42,7 +43,7 @@ test('a typed SOP input changes both compiler admissibility and the real host gu
 `))[0];
     assert.equal(result.attrs.status[0], maximum === 4 ? 'compiled' : 'unavailable');
     assert.equal(host.bindings()[0].params.value.max, maximum);
-    const receipt = await host.invoke({ invocation: 'measure', expectedVersion: host.observe().version,
+    const receipt = await invokeToolCommand(host,{ invocation: 'measure', expectedVersion: host.observe().version,
       operation: 'region.measure', args: { value: 3 } });
     assert.equal(receipt.status, maximum === 4 ? 'changed' : 'refused');
     assert.equal(initial.observed, maximum === 4 ? 3 : undefined);

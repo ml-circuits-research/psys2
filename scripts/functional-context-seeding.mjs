@@ -1,3 +1,4 @@
+import {invokeToolCommand} from '../src/dialog/native-control-intent.mjs';
 // SPDX-License-Identifier: AGPL-3.0-only
 // Evaluation setup only. No reader annotations, sentence matching or domain defaults.
 import {copyHostData} from '../worlds/native-tool-host.mjs';
@@ -65,7 +66,7 @@ export async function seedFunctionalContext({context={},host,kindMappings=[],inv
   if(failures.length!==start){counters.failed++;continue;}
   const invoke=async(plan,sequence)=>{
    try{
-    counters.calls++;const before=observation,receipt=copyHostData(await host.invoke({invocation:`${invocationPrefix}:${index}:${sequence}`,expectedVersion:before.version,operation:plan.op.id,args:plan.args}));receipts.push(receipt);
+    counters.calls++;const before=observation,receipt=copyHostData(await invokeToolCommand(host,{invocation:`${invocationPrefix}:${index}:${sequence}`,expectedVersion:before.version,operation:plan.op.id,args:plan.args}));receipts.push(receipt);
     observation=copyHostData(await host.observe());
     if(!validObservation(observation)){fail(index,'incomplete-native-setup-observation');return false;}
     if(!['changed','unchanged'].includes(receipt.status)){fail(index,'native-setup-refused',{operation:plan.op.id,nativeReason:receipt.reason??receipt.code??'unknown'});return false;}

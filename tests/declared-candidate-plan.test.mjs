@@ -1,6 +1,7 @@
+import {invokeToolCommand} from '../src/dialog/native-control-intent.mjs';
 import test from 'node:test';import assert from 'node:assert/strict';
 import {planDeclaredCandidates} from '../src/dialog/declared-candidate-plan.mjs';
-import {validateNativeArguments,createNativeToolHost} from '../worlds/native-tool-host.mjs';
+import {validateNativeArguments,createNativeToolHost,toolInvocationContext} from '../worlds/native-tool-host.mjs';
 import {createDrawingHost,initialDrawingState} from '../worlds/art.draw/declared-host.mjs';
 import {createDiagramHost,initialDiagramState} from '../worlds/diagram.sketch/declared-host.mjs';
 import {createDocumentHost,initialDocumentState} from '../worlds/docs.editor/declared-host.mjs';
@@ -24,7 +25,7 @@ test('lifecycle make preparation covers four real native hosts without invoking 
  for(const [host,operation,kind,type,_scope,args,extra]of cases){const observation=host.observe(),capability=cap(host,operation,kind,type,observation.scope,args),before=JSON.stringify(observation),batch=graph('make',extra,Object.hasOwn(args,'title')?'name="Example"':'');let invoked=0;const guarded={bindings:()=>host.bindings(),observe:()=>host.observe(),invoke:()=>{invoked++;throw Error('forbidden');}};const r=plan(batch,guarded,capability);assert.equal(r.ok,true,JSON.stringify(r.unresolved));assert.equal(r.plans[0].expectedVersion,observation.version);assert.equal(r.plans[0].policy,'pending-native-validation');assert.equal(r.executable,false);assert.equal(invoked,0);assert.equal(JSON.stringify(host.observe()),before);}
 });
 test('remove resolves actual historical identity and named mismatches remain unresolved',()=>{
- const state=initialDrawingState(),host=createDrawingHost({state,instanceId:'d'});host.invoke({invocation:'setup',expectedVersion:host.observe().version,operation:'drawing.object.make',args:{kind:'circle',name:'First'}});
+ const state=initialDrawingState(),host=createDrawingHost({state,instanceId:'d'});invokeToolCommand(host,{invocation:'setup',expectedVersion:host.observe().version,operation:'drawing.object.make',args:{kind:'circle',name:'First'}});
  const c=cap(host,'drawing.object.remove','circle','art.draw.object',host.observe().scope,{ids:{from:'subjects',representation:'ids'}},'remove');c.nameBinding={...proof,binding:{id:'drawing.object.name',key:'name',sourceType:'art.draw.object'}};
  const r=plan(graph('remove','','name="First"'),host,c);assert.equal(r.ok,true,JSON.stringify(r.unresolved));assert.equal(r.plans[0].subjects.length,1);assert.deepEqual(r.plans[0].args.ids,[host.observe().objects[0].id]);assert.equal(plan(graph('remove','','name="Other"'),host,c).ok,false);
 });
@@ -36,7 +37,8 @@ test('missing explicit native requirements and unsupported semantics refuse the 
 });
 test('pure native admission reuses exact invoke validation and does not mutate arguments or state',()=>{
  const state={value:0},op={id:'set',act:'change',on:'fixture',params:{n:{type:'integer',required:true,min:1},flag:{type:'boolean',default:false}}},host=createNativeToolHost({state,instanceId:'n',scope:'all',operations:[op],handlers:{set:(ctx,args)=>{ctx.state.value=args.n;return {status:'supported'};}},view:()=>[]});
- for(const args of [{},{n:'1'},{n:0},{n:1,extra:1}]){const before=JSON.stringify(state),pure=validateNativeArguments(op,args),actual=host.invoke({invocation:JSON.stringify(args),expectedVersion:'0',operation:'set',args});assert.equal(pure.reason,actual.reason);assert.equal(JSON.stringify(state),before);}
+ for(const [args,fields] of [[{},''],[{n:'1'},' n="1"'],[{n:0},' n=0']]){const before=JSON.stringify(state),pure=validateNativeArguments(op,args),actual=host.invoke('@command set'+fields,toolInvocationContext(JSON.stringify(args),'0'));assert.equal(pure.reason,actual.reason);assert.equal(JSON.stringify(state),before);}
+ assert.equal(validateNativeArguments(op,{n:1,extra:1}).ok,false);assert.equal(host.invoke('@command set n=1 extra=1',toolInvocationContext('extra','0')).status,'refused');assert.deepEqual(state,{value:0});
  const args={n:2},r=validateNativeArguments(op,args);assert.deepEqual(args,{n:2});assert.deepEqual(r.args,{n:2,flag:false});assert.equal(r.defaults[0].parameter,'flag');assert.deepEqual(state,{value:0});
 });
 
@@ -47,11 +49,11 @@ test('remove plans preserve source incarnations across all four real areas',asyn
   [createDocumentHost({state:initialDocumentState(),instanceId:'doc2'}),'document.write',{title:'Document',blocks:[]},'document.remove','document','docs.editor.document',{}],
   [createCalendarHost({state:{people:[],rooms:[],meetings:[]},instanceId:'cal2'}),'calendar.person.add',{id:'p',label:'Person'},'calendar.person.remove','person','time.calendar.person',{id:{from:'subjects',representation:'id'}}]
  ];
- for(const [host,make,args,remove,kind,type,projection]of cases){const receipt=host.invoke({invocation:'setup',expectedVersion:host.observe().version,operation:make,args});assert.equal(receipt.status,'changed');const before=host.observe(),c=cap(host,remove,kind,type,before.scope,projection,'remove'),r=plan(graph('remove'),host,c);assert.equal(r.ok,true,JSON.stringify(r.unresolved));assert.equal(r.plans[0].subjects[0].subject.source,before.objects[0].source);assert.deepEqual(host.observe(),before);}
+ for(const [host,make,args,remove,kind,type,projection]of cases){const receipt=invokeToolCommand(host,{invocation:'setup',expectedVersion:host.observe().version,operation:make,args});assert.equal(receipt.status,'changed');const before=host.observe(),c=cap(host,remove,kind,type,before.scope,projection,'remove'),r=plan(graph('remove'),host,c);assert.equal(r.ok,true,JSON.stringify(r.unresolved));assert.equal(r.plans[0].subjects[0].subject.source,before.objects[0].source);assert.deepEqual(host.observe(),before);}
 });
 test('logical selectors use the shared resolver and require complete leaf-consumption evidence',async()=>{
  const {selectNativeObjects}=await import('../src/dialog/native-selection.mjs');
- const host=createDrawingHost({state:initialDrawingState(),instanceId:'selection'});for(const name of ['First','Second'])host.invoke({invocation:name,expectedVersion:host.observe().version,operation:'drawing.object.make',args:{kind:'circle',name,color:'#0000ff'}});
+ const host=createDrawingHost({state:initialDrawingState(),instanceId:'selection'});for(const name of ['First','Second'])invokeToolCommand(host,{invocation:name,expectedVersion:host.observe().version,operation:'drawing.object.make',args:{kind:'circle',name,color:'#0000ff'}});
  const c=cap(host,'drawing.object.remove','circle','art.draw.object',host.observe().scope,{ids:{from:'subjects',representation:'ids'}},'remove');
  const batch=graph('remove',`${result('a','color','"#0000ff"')}\n${result('b','name','"First"')}\n@both std.request.group request=$r operator=and member=$a member=$b`,'selector=$both');
  const evaluateSelector=({constraint,bindings},{observation})=>{const subject=bindings.t.subject,concept=constraint.attrs.concept[0],objects=observation.objects.filter(o=>o.source===subject.source),selected=selectNativeObjects({...observation,objects,complete:true},{scope:observation.scope,kind:{native:{kind:'circle',sourceType:'art.draw.object'},witness:proof},predicates:[{binding:{id:`drawing.object.${concept}`,key:concept,sourceType:'art.draw.object'},expected:{values:constraint.attrs.value,witness:proof}}]});const status=selected.considered[0]?.status;return {truth:status==='match'?'true':status==='mismatch'?'false':'unknown',evidence:[selected],consumed:Object.keys(constraint.attrs).map(k=>JSON.stringify([constraint.id,k]))};};
@@ -59,11 +61,11 @@ test('logical selectors use the shared resolver and require complete leaf-consum
  const partial={bindings:()=>host.bindings(),observe:()=>({...host.observe(),complete:false})};assert.equal(plan(batch,partial,c,{evaluateSelector}).ok,false);
 });
 test('Document child plans require explicit live parent references and reject stale witnesses',()=>{
- const host=createDocumentHost({state:initialDocumentState(),instanceId:'parent'});host.invoke({invocation:'setup',expectedVersion:host.observe().version,operation:'document.write',args:{title:'Parent',blocks:[]}});const o=host.observe(),parent=o.objects.find(x=>x.kind==='document');
+ const host=createDocumentHost({state:initialDocumentState(),instanceId:'parent'});invokeToolCommand(host,{invocation:'setup',expectedVersion:host.observe().version,operation:'document.write',args:{title:'Parent',blocks:[]}});const o=host.observe(),parent=o.objects.find(x=>x.kind==='document');
  const descriptor=value('fixture.parent',['"parent"'],parent.id);descriptor.reference={sourceType:'docs.editor.document',representation:'id'};descriptor.values[0].references=[{context:{instanceId:o.instanceId,scope:o.scope,version:o.version},subject:{id:parent.id,source:parent.source,sourceType:parent.sourceType,version:parent.version}}];
  const c=cap(host,'document.block.make','paragraph','docs.editor.block',o.scope,{kind:{from:'kind'},parent:descriptor});
  assert.equal(plan(graph(),host,c).unresolved[0].reason,'missing-argument');const batch=graph('make',result('c','fixture.parent','"parent"'));const r=plan(batch,host,c);assert.equal(r.ok,true,JSON.stringify(r.unresolved));assert.equal(r.plans[0].args.parent,parent.id);assert.equal(r.plans[0].mapping.defaults[0].parameter,'text');
- host.invoke({invocation:'replace',expectedVersion:host.observe().version,operation:'document.write',args:{title:'Other',blocks:[]}});assert.equal(plan(batch,host,c).unresolved[0].reason,'stale-native-reference');
+ invokeToolCommand(host,{invocation:'replace',expectedVersion:host.observe().version,operation:'document.write',args:{title:'Other',blocks:[]}});assert.equal(plan(batch,host,c).unresolved[0].reason,'stale-native-reference');
 });
 
 test('new-target selectors and unmapped predicates cannot be marked consumed',()=>{

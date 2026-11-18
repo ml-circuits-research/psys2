@@ -3,10 +3,10 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {createAvatarHost,initialAvatarState,avatarCapabilities} from '../worlds/ui.avatar/declared-host.mjs';
 import {DEFAULT_FACE} from '../worlds/ui.avatar/default-face.mjs';
-import {describeNativeControl,verifyNativeControlEffect} from '../src/dialog/native-control-intent.mjs';
+import {invokeToolCommand,describeNativeControl,verifyNativeControlEffect} from '../src/dialog/native-control-intent.mjs';
 import {readNativeIntent} from '../src/dialog/native-intent-reader.mjs';
 import {renderFace} from '../worlds/ui.avatar/facedraw.mjs';
-const invoke=(host,operation,args)=>host.invoke({invocation:crypto.randomUUID(),expectedVersion:host.observe().version,operation,args});
+const invoke=(host,operation,args)=>invokeToolCommand(host,{invocation:crypto.randomUUID(),expectedVersion:host.observe().version,operation,args});
 const customData=()=>{
  const data=structuredClone(DEFAULT_FACE);
  data.slots.push({name:'signal',optional:true,x:5,y:5,w:10,h:10,z:20,mirror:false,variants:[{name:'round signal',features:{},parts:[{name:'disc',shape:'circle',x:5,y:5,w:10,h:10,z:1,colour:['red'],rgb:'#ff0000',points:[]}]}]});

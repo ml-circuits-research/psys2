@@ -1,7 +1,7 @@
 import {test} from 'node:test';import assert from 'node:assert/strict';
-import {copyHostData,createNativeToolHost} from '../worlds/native-tool-host.mjs';
+import {copyHostData,createNativeToolHost,toolInvocationContext} from '../worlds/native-tool-host.mjs';
 const fixture=(handler,state={items:[]},view=s=>s.items.map(id=>({id,kind:'item',sourceType:'fixture.item',inputs:[]})))=>({state,host:createNativeToolHost({state,instanceId:'fixture',scope:'all-items',operations:[{id:'edit',params:{}}],handlers:{edit:handler},view})});
-const call=(h,id='edit')=>h.invoke({invocation:id,expectedVersion:h.observe().version,operation:'edit',args:{}});
+const call=(h,id='edit')=>h.invoke('@command edit',toolInvocationContext(id,h.observe().version));
 test('native transaction refuses unsafe JSON without invoking getters or losing hidden properties',()=>{
  let invoked=0;const accessor=Object.defineProperty({},'x',{enumerable:true,get(){invoked++;return 1;}});
  const hidden=Object.defineProperty({},'x',{value:1});const symbol={[Symbol('x')]:1};const cycle={};cycle.self=cycle;
@@ -18,7 +18,7 @@ test('native transaction stages effects, rolls back failed handlers and validate
 });
 test('native identity tracks removal/reappearance and complete snapshots ignore UI selection',()=>{
  const state={items:['a','b'],selected:'a'},f=fixture(ctx=>{ctx.state.items=[];return {status:'supported'};},state);const first=f.host.observe();assert.equal(first.complete,true);assert.equal(first.objects.length,2);call(f.host);state.items=['a'];const restored=f.host.observe();assert.notEqual(restored.objects[0].source,first.objects[0].source);assert.notEqual(restored.version,first.version);
- const version=restored.version;Object.defineProperty(state,'hidden',{value:true});assert.equal(f.host.invoke({operation:'edit',args:{},invocation:'unsafe',expectedVersion:version}).status,'refused');assert.deepEqual(state.items,['a']);
+ const version=restored.version;Object.defineProperty(state,'hidden',{value:true});assert.equal(f.host.invoke('@command edit',toolInvocationContext('unsafe',version)).status,'refused');assert.deepEqual(state.items,['a']);
 });
 test('native transaction refuses immutable state and invalid budgets before losing data',()=>{
  const state=Object.freeze({items:[]});const {host}=fixture(ctx=>{ctx.state.items.push('a');return {status:'supported'};},state);assert.equal(call(host).reason,'immutable-state');assert.deepEqual(state.items,[]);
@@ -26,10 +26,10 @@ test('native transaction refuses immutable state and invalid budgets before losi
 });
 test('nullable native parameters require an explicit declaration and preserve required absence',()=>{
  const make=nullable=>createNativeToolHost({state:{value:'old'},instanceId:'nullable',scope:'all',operations:[{id:'edit',params:{value:{type:'string',required:true,nullable}}}],handlers:{edit:(ctx,a)=>{ctx.state.value=a.value;return {status:'supported'};}},view:()=>[]});
- const packet=args=>({invocation:'edit',expectedVersion:'0',operation:'edit',args});
- assert.equal(make(true).invoke(packet({value:null})).status,'changed');
- assert.equal(make(false).invoke(packet({value:null})).reason,'invalid-argument-type');
- assert.equal(make(true).invoke(packet({})).reason,'missing-argument');
+ const message=toolInvocationContext('edit','0');
+ assert.equal(make(true).invoke('@command edit value=null',message).status,'changed');
+ assert.equal(make(false).invoke('@command edit value=null',message).reason,'invalid-argument-type');
+ assert.equal(make(true).invoke('@command edit',message).reason,'missing-argument');
 });
 test('declared precommit policy sees a detached candidate and denied or invalid policy cannot commit effects',()=>{
  for(const validate of [()=>({ok:false,code:'declared-deny',details:{rule:'fixture.rule'}}),()=>{throw Error('budget');},()=>({}),()=>Promise.resolve({ok:true})]){
@@ -52,6 +52,6 @@ test('malformed native declarations fail at construction, never become substring
   {type:'array',enum:[[]]},{type:'string',ignoredCheck:true},
  ])assert.throws(()=>make({id:'edit',params:{x:p}}),/parameter/);
  const host=make({id:'edit',params:{x:{type:'string',enum:['bad'],nullable:true,default:null}}});
- assert.equal(host.invoke({invocation:'one',expectedVersion:'0',operation:'edit',args:{x:'b'}}).reason,'invalid-argument-value');
- assert.equal(host.invoke({invocation:'two',expectedVersion:'0',operation:'edit',args:{}}).status,'unchanged');
+ assert.equal(host.invoke('@command edit x="b"',toolInvocationContext('one','0')).reason,'invalid-argument-value');
+ assert.equal(host.invoke('@command edit',toolInvocationContext('two','0')).status,'unchanged');
 });

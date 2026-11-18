@@ -1,5 +1,11 @@
 # Current status
 
+## 2026-11-18 — executable SOP at the tool boundary
+
+The five editor tool hosts accept SOP commands with a separate SOP invocation identity and observed revision. Compiled capability calls carry their typed arguments straight from the compiler into the interpreter. Manual editor gestures retain their compact tool wires. The chat and Worlds show the exact dispatched command. A stale revision is refused; a retry with the same invocation and command returns the prior receipt.
+
+Drawing, Diagram, Documents, Calendar and Avatar now own their editor state as SOP facts. The reader’s creation and context projections and the legacy property path still contain semantic JavaScript. The general compiler migration is ongoing.
+
 ## 2026-11-18 — chat circuits and reader context
 
 Browser build **84eed17ce4** shows each actual SOP query on its user message and its compiled circuit and tool call on the answer. Authored SOP graphs remain in the execution journal. The natural-language reader uses current editor observations without feeding serialized authoring syntax into its previous-utterance input.

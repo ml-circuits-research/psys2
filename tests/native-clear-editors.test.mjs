@@ -1,3 +1,4 @@
+import {invokeToolCommand} from '../src/dialog/native-control-intent.mjs';
 import {toNativeAvatarState,canonicalAvatarState} from '../worlds/ui.avatar/canonical-state.mjs';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
@@ -37,8 +38,8 @@ test('Avatar concrete deletion permits required parts, clear is empty/undoable a
 
 test('transient blink/talk overlays cannot introduce parts into a cleared avatar',()=>{
  const state=initialAvatarState(),h=createAvatarHost({state,instanceId:'no-ghosts'}),ids=h.observe().objects.filter(o=>o.sourceType==='ui.avatar.part').map(o=>o.id);
- h.invoke({invocation:'clear',expectedVersion:h.observe().version,operation:'avatar.clear',args:{ids}});
+ invokeToolCommand(h,{invocation:'clear',expectedVersion:h.observe().version,operation:'avatar.clear',args:{ids}});
  assert.equal(variantFor(DEFAULT_FACE,toNativeAvatarState(state).face,'eyes','left',{eyes:'closed'}),null);assert.equal(variantFor(DEFAULT_FACE,toNativeAvatarState(state).face,'mouth','left',{mouth:'talking'}),null);
- const expressive=h.invoke({invocation:'expression',expectedVersion:h.observe().version,operation:'avatar.face.expression',args:{expression:'happy'}});assert.equal(expressive.status,'changed');
+ const expressive=invokeToolCommand(h,{invocation:'expression',expectedVersion:h.observe().version,operation:'avatar.face.expression',args:{expression:'happy'}});assert.equal(expressive.status,'changed');
  assert.equal(variantFor(DEFAULT_FACE,toNativeAvatarState(state).face,'eyebrows').name,toNativeAvatarState(state).face.expressionParts.eyebrows);
 });

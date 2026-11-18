@@ -1,3 +1,4 @@
+import {invokeToolCommand} from '../src/dialog/native-control-intent.mjs';
 import {toNativeDrawingState} from '../worlds/art.draw/canonical-state.mjs';
 import {toNativeAvatarState} from '../worlds/ui.avatar/canonical-state.mjs';
 import test from'node:test';import assert from'node:assert/strict';import{readFile}from'node:fs/promises';import{createHash}from'node:crypto';
@@ -17,7 +18,7 @@ test('gold requests use actual native family/property declarations for avatar co
  const initial=bridgeRawStructure(faceRaw,{bindings,bindingSha256:sha});assert.equal(initial.decoded?.candidates.length??0,0);
  const projected=await projectContextAction({raw:faceRaw,coverage:{complete:false},failures:initial.diagnostics},session,{bindings,registry:{},view:'avatar'});assert.ok(projected);
  const faceReply=await executeDeclaredRequest(session,projected.proposal.candidates[0],faceRaw.source.text,{bindings,view:'avatar'});assert.equal(faceReply.statuses[0],'supported',JSON.stringify(faceReply));assert.equal(faceReply.trace.binding.operation,'avatar.face.compose');assert.equal(toNativeAvatarState(avatar).face.base,'man');assert.equal(faceReply.trace.effectVerification.status,'verified');
- const host=createDrawingHost({state:drawing,instanceId:'fixture'});await host.invoke({invocation:'fixture.make',expectedVersion:host.observe().version,operation:'drawing.object.make',args:{kind:'house'}});
+ const host=createDrawingHost({state:drawing,instanceId:'fixture'});await invokeToolCommand(host,{invocation:'fixture.make',expectedVersion:host.observe().version,operation:'drawing.object.make',args:{kind:'house'}});
  const drawingRaw=raw('drawing','drawn','label','Cabin'),bridge=bridgeRawStructure(drawingRaw,{bindings,bindingSha256:sha});assert.equal(bridge.decoded?.candidates.length,1,JSON.stringify(bridge.diagnostics));
  const result=await executeDeclaredRequest(session,bridge.decoded.candidates[0],drawingRaw.source.text,{bindings,view:'draw'});assert.equal(result.statuses[0],'supported',JSON.stringify(result));assert.equal(toNativeDrawingState(drawing).objects[0].label,'Cabin');assert.equal(result.trace.effectVerification.status,'verified');
  for(const reply of [faceReply,result])assert.equal(activity.find(event=>event.phase==='start'&&event.operation===reply.trace.binding.operation)?.sop,reply.trace.controlIntent);

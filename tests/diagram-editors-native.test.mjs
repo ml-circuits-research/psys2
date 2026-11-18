@@ -1,3 +1,4 @@
+import {invokeToolCommand} from '../src/dialog/native-control-intent.mjs';
 import {CATALOG_PIN} from '../src/knowledge/catalog-pin.mjs';
 import {readInstanceState,serializeInstanceState} from '../src/vendor/sopworld/sopworld.mjs';
 import {K} from '../worlds/diagram.sketch/core.mjs';
@@ -5,7 +6,7 @@ import {test} from 'node:test';import assert from 'node:assert/strict';
 import {createDiagramHost,initialDiagramState} from '../worlds/diagram.sketch/declared-host.mjs';
 import {nativeObservationObjects} from '../src/dialog/instance-facts.mjs';
 import {readFile} from 'node:fs/promises';import {snapshotNativeInstances,restoreNativeInstances} from '../src/dialog/instance-persistence.mjs';
-const invoke=(host,operation,args)=>host.invoke({invocation:crypto.randomUUID(),expectedVersion:host.observe().version,operation,args});
+const invoke=(host,operation,args)=>invokeToolCommand(host,{invocation:crypto.randomUUID(),expectedVersion:host.observe().version,operation,args});
 async function fixture(){const state=initialDiagramState(),host=await createDiagramHost({state,instanceId:'diagram-editors'});return {state,host};}
 test('native multi-node movement preserves offsets and exact resize has observable dimensions',async()=>{
  const {state,host}=await fixture();invoke(host,'diagram.node.make',{kind:'rectangle',n:2});const ids=state.shapes.map(node=>node.name),dx=state.shapes[1].x-state.shapes[0].x,dy=state.shapes[1].y-state.shapes[0].y;

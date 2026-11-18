@@ -1,12 +1,13 @@
 # Licences of vendored code in src/
 
-## sopworld 0.213.0 (one file, unmodified)
+## sopworld 0.214.0 (one file, unmodified)
 
 - Source: https://github.com/ml-circuits-research/soplang-words-lib (same owner as this repository)
-- Pinned commit: `1271181cb18ad39a7bf0c73fb4f48e54a8e63b8f` (published release 0.213.0, build `bbc3f7b80563`). See `sopworld/provenance.json` for the exact source and hash.
-- Vendored file: `src/vendor/sopworld/sopworld.mjs`, the library's built single file `docs/sopworld.mjs` (1651421 bytes, sha256 `69b515e1a88a1da159026131c57fa4b97d87c389235fce3664b0b82065cba82a`), copied byte for byte. Record defects in the library repository.
+- Pinned commit: `945b0d73e1bc94f8b0825b61babf8b8d17c4500a` (published release 0.214.0, build `257087a57654`). See `sopworld/provenance.json` for the exact source and hash.
+- Vendored file: `src/vendor/sopworld/sopworld.mjs`, the library's built single file `docs/sopworld.mjs` (1657258 bytes, sha256 `1d760f1798cf57d117e1439332ee7c113d0691943e243448b0409dade553e507`), copied byte for byte. Record defects in the library repository.
 - `src/vendor/sopworld/tools/scan-loops.mjs`: the library's own loop scanner (`tools/scan-loops.mjs`), copied byte for byte; `tests/reasoner.test.mjs` runs it on the vendored file.
 - `src/vendor/sopworld/instance-fact-codec.mjs`: the private `src/internal/instance-fact-codec.mjs` from library commit `df62fdeeab443a593cff9079e5bd444c5d834e99`, copied byte for byte (sha256 `77c335b6d1fb8056c2240d9c9c1d491629c9b3075191a2728a0d013d6dac96e5`). The editor passes parser services from the existing bundled runtime.
+- The tool adapter uses the private `src/internal/capability-call.mjs` from the same release as the bundle, copied byte for byte to `src/vendor/sopworld/capability-call.mjs`.
 - Licence: MIT (below). Compatible with AGPL-3.0-only.
 - The shipped application reads the vendored module offline for request compilation and execution.
 - `src/vendor/sopworld/tools/build-bundle.mjs` and `src/vendor/sopworld/src/knowledge.mjs`: the library's `tools/build-bundle.mjs` and `src/knowledge.mjs`, byte for byte (the second is the one module the first imports, so the offline bundle generator runs unmodified: `node src/vendor/sopworld/tools/build-bundle.mjs <catalog dir> <out.json> <word|shard|world> ...`).

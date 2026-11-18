@@ -1,3 +1,4 @@
+import {invokeToolCommand} from '../src/dialog/native-control-intent.mjs';
 import {toNativeAvatarState} from '../worlds/ui.avatar/canonical-state.mjs';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
@@ -8,7 +9,7 @@ import {DEFAULT_FACE} from '../worlds/ui.avatar/default-face.mjs';
 import {expressionParts} from '../worlds/ui.avatar/composition.mjs';
 import {variantFor} from '../worlds/ui.avatar/facedraw.mjs';
 const data=await createFacts({source:createKnowledgeSource(new URL('../../sop-knowledge-worlds/docs/worlds',import.meta.url).pathname)}).faces();
-const call=(h,operation,args)=>h.invoke({invocation:crypto.randomUUID(),operation,args,expectedVersion:h.observe().version});
+const call=(h,operation,args)=>invokeToolCommand(h,{invocation:crypto.randomUUID(),operation,args,expectedVersion:h.observe().version});
 const integrationTest=(name,fn)=>test(name,{skip:!data&&'the sibling knowledge catalog is not checked out'},fn);
 integrationTest('catalog adapter retains character kinds and sparse knowledge goals, with alternatives free',()=>{
  assert.equal(data.presets.robot.kind,'robot');assert.equal(data.presets.girl.kind,'human');

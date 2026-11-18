@@ -1,3 +1,4 @@
+import {invokeToolCommand} from '../src/dialog/native-control-intent.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createFacts} from '../src/knowledge/facts.mjs';
@@ -83,11 +84,11 @@ test('pinned vocabulary dependencies remain available to lookups, actual hosts a
  assert.ok(aliases.some(word=>word.f.text?.includes('android')&&word.f.means?.includes('robot')));
  const drawing=initialDrawingState(),drawHost=createDrawingHost({state:drawing,instanceId:'owned-source-drawing',knowledge});
  await knowledge.thing('apple');
- const added=drawHost.invoke({invocation:'owned-source-create',expectedVersion:drawHost.observe().version,operation:'drawing.catalog.make',args:{name:'apple',x:120,y:180,size:80}});
+ const added=invokeToolCommand(drawHost,{invocation:'owned-source-create',expectedVersion:drawHost.observe().version,operation:'drawing.catalog.make',args:{name:'apple',x:120,y:180,size:80}});
  assert.equal(added.status,'changed');assert.equal(drawing.objects[0].semanticKind,'apple');assert.ok(drawingPartsOf(drawing.objects[0]).length>1);
  const faces=await knowledge.faces();assert.ok(faces?.aliases.glasses?.includes('eyeglasses'));
  const avatar=initialAvatarState(faces),avatarHost=createAvatarHost({state:avatar,instanceId:'owned-source-avatar',knowledge});
- const resized=avatarHost.invoke({invocation:'owned-source-resize',expectedVersion:avatarHost.observe().version,operation:'avatar.part.resize',args:{ids:['eyes'],scale:1.1}});
+ const resized=invokeToolCommand(avatarHost,{invocation:'owned-source-resize',expectedVersion:avatarHost.observe().version,operation:'avatar.part.resize',args:{ids:['eyes'],scale:1.1}});
  assert.equal(resized.status,'changed');assert.equal(toNativeAvatarState(avatar).face.adj.eyes.s,1.1);
  const catalog=JSON.parse(await readFile(path.join(dir,'index.json'),'utf8')),served=new Set(await siteCatalogFiles(dir));
  for(const world of [...catalog.worlds,...catalog.schemas])if(world.vocabulary)assert.ok(served.has(world.vocabulary),world.vocabulary+' must travel with the site catalog');

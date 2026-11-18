@@ -1,9 +1,10 @@
+import {invokeToolCommand} from '../src/dialog/native-control-intent.mjs';
 import test from'node:test';import assert from'node:assert/strict';
 import{createAppReaderContext}from'../src/dialog/app-reader-context.mjs';
 import{observedReaderContext}from'../src/dialog/native-reader-context.mjs';
 import{fitKeyReaderContext}from'../src/dialog/key-reader-inference.mjs';
 import{createDrawingHost,initialDrawingState}from'../worlds/art.draw/declared-host.mjs';
-const board=()=>{const state=initialDrawingState(),host=createDrawingHost({state,instanceId:'context-hierarchy-test'});for(const kind of ['house','car','tree'])host.invoke({invocation:kind,expectedVersion:host.observe().version,operation:'drawing.object.make',args:{kind,name:kind}});return {state,host};};
+const board=()=>{const state=initialDrawingState(),host=createDrawingHost({state,instanceId:'context-hierarchy-test'});for(const kind of ['house','car','tree'])invokeToolCommand(host,{invocation:kind,expectedVersion:host.observe().version,operation:'drawing.object.make',args:{kind,name:kind}});return {state,host};};
 test('model context ranks actual roots and requested descendants while full observation and legacy identity indexing remain complete',async()=>{
  const {state,host}=board(),observation=host.observe(),before=structuredClone(observation);let retained;
  const read=createAppReaderContext({getState:()=>({'ui.shell':{activeTab:'draw'},'art.draw':state}),getInstanceId:()=>observation.instanceId,onObservation:value=>retained=value});

@@ -1,3 +1,4 @@
+import {invokeToolCommand} from '../src/dialog/native-control-intent.mjs';
 import {canonicalDrawingState,toNativeDrawingState} from '../worlds/art.draw/canonical-state.mjs';
 import {test} from 'node:test';import assert from 'node:assert/strict';
 import {routeNewEngine} from '../src/dialog/reader-routing.mjs';
@@ -38,7 +39,7 @@ test('journal-step act is projected from learned act/fill and exact source evide
 import {createDrawingHost} from '../worlds/art.draw/declared-host.mjs';
 test('context value correction and other-target correction use actual objects and restore the mistaken target',async()=>{
  const board=initialDrawingState(),host=createDrawingHost({state:board,instanceId:'context-native-fixture'});
- for(const kind of ['house','fish'])host.invoke({invocation:kind,expectedVersion:host.observe().version,operation:'drawing.object.make',args:{kind,color:'#ff0000'}});
+ for(const kind of ['house','fish'])invokeToolCommand(host,{invocation:kind,expectedVersion:host.observe().version,operation:'drawing.object.make',args:{kind,color:'#ff0000'}});
  const state={'art.draw':board,'ui.shell':{activeTab:'draw'}},session={isession:{state},engine:{loader:{readFile:async()=>calendarPolicy}}};
  const bindings={kinds:['house','fish'].map(kind=>({area:'drawing',type:'drawn',lemma:kind,canonical:'fixture.'+kind,nativeFamilyBinding:{operation:'drawing.object.make',sourceType:'art.draw.object'}})),properties:[]};
  let input='fixture blue',other=false;

@@ -1,3 +1,4 @@
+import {invokeToolCommand} from '../src/dialog/native-control-intent.mjs';
 import {toNativeDrawingState} from '../worlds/art.draw/canonical-state.mjs';
 import{test}from'node:test';import assert from'node:assert/strict';
 import{quantizeGeometryArguments}from'../docs/webchat/ui/geometry-values.mjs';
@@ -9,7 +10,7 @@ test('UI dispatch rounds real geometry and leaves unrelated numeric values exact
  assert.deepEqual(quantizeGeometryArguments({width:.001,x:.001,y:-.001}),{width:.01,x:0,y:0});
 });
 test('actual Drawing command text, SOP arguments and stored position share UI precision',async()=>{
- const state=initialDrawingState(),host=createDrawingHost({state,instanceId:'ui-precision'});host.invoke({invocation:'make',expectedVersion:host.observe().version,operation:'drawing.object.make',args:{kind:'rectangle'}});
+ const state=initialDrawingState(),host=createDrawingHost({state,instanceId:'ui-precision'});invokeToolCommand(host,{invocation:'make',expectedVersion:host.observe().version,operation:'drawing.object.make',args:{kind:'rectangle'}});
  const session={isession:{state:{'art.draw':state}},engine:{}},args=quantizeGeometryArguments({ids:[state.objects[0].id],x:226.7711375210331,y:288.9317562519493});
  const result=await invokeNativeControl(session,{view:'draw',operation:'drawing.object.place',args});assert.equal(result.ok,true);assert.equal(toNativeDrawingState(session.isession.state['art.draw']).objects[0].x,args.x);assert.equal(toNativeDrawingState(session.isession.state['art.draw']).objects[0].y,args.y);assert.match(result.intentRecord.wires,/x=226\.77 y=288\.93/);assert.match(result.intentRecord.text,/226\.77/);assert.match(result.intentRecord.text,/288\.93/);assert.equal(result.intentRecord.verification.status,'verified');
 });

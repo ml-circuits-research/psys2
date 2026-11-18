@@ -1,9 +1,10 @@
+import {invokeToolCommand} from '../src/dialog/native-control-intent.mjs';
 import {toNativeCalendarState} from '../worlds/time.calendar/canonical-state.mjs';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {createCalendarHost} from '../worlds/time.calendar/declared-host.mjs';
 const fixture=()=>({people:[{id:'p',label:'Person'}],rooms:[],meetings:[]});
-const invoke=(host,operation,args,id=operation)=>host.invoke({invocation:id,expectedVersion:host.observe().version,operation,args});
+const invoke=(host,operation,args,id=operation)=>invokeToolCommand(host,{invocation:id,expectedVersion:host.observe().version,operation,args});
 test('Calendar declarations mutate complete lifecycle store with dimensional observations and incarnated identities',()=>{
  const state=fixture(),host=createCalendarHost({state,instanceId:'calendar'});
  const args={id:'m',title:'Meeting',start:1000,duration:500,participants:['p'],room:null};

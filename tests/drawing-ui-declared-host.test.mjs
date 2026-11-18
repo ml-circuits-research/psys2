@@ -1,7 +1,8 @@
+import {invokeToolCommand} from '../src/dialog/native-control-intent.mjs';
 import {toNativeDrawingState} from '../worlds/art.draw/canonical-state.mjs';
 import {test} from 'node:test';import assert from 'node:assert/strict';
 import {createDrawingHost,initialDrawingState} from '../worlds/art.draw/declared-host.mjs';
-const call=(h,operation,args,invocation=crypto.randomUUID())=>h.invoke({invocation,expectedVersion:h.observe().version,operation,args});
+const call=(h,operation,args,invocation=crypto.randomUUID())=>invokeToolCommand(h,{invocation,expectedVersion:h.observe().version,operation,args});
 test('Drawing selection and explicit placement preserve identity, names, undo and stale guards',()=>{
  const state=initialDrawingState(),h=createDrawingHost({state,instanceId:'ui-editing'});
  call(h,'drawing.object.make',{kind:'circle',name:'Same'});const first=state.objects[0].id;call(h,'drawing.object.make',{kind:'square',name:'Same'});const second=state.objects[1].id;
@@ -11,7 +12,7 @@ test('Drawing selection and explicit placement preserve identity, names, undo an
  call(h,'drawing.undo',{});assert.equal(state.objects[0].name,'Same');call(h,'drawing.undo',{});assert.equal(state.objects[0].x,500);
  call(h,'drawing.object.select',{id:null});assert.equal(state.selected,null);
  const before=JSON.stringify(state);assert.equal(call(h,'drawing.object.select',{id:'absent'}).reason,'missing-target');assert.equal(call(h,'drawing.object.place',{ids:[first,'absent'],x:10,y:10}).status,'refused');assert.equal(JSON.stringify(state),before);
- const version=h.observe().version;state.objects[0].x=22;assert.equal(h.invoke({invocation:'stale',expectedVersion:version,operation:'drawing.object.place',args:{ids:[first],x:30,y:30}}).reason,'stale-observation');
+ const version=h.observe().version;state.objects[0].x=22;assert.equal(invokeToolCommand(h,{invocation:'stale',expectedVersion:version,operation:'drawing.object.place',args:{ids:[first],x:30,y:30}}).reason,'stale-observation');
 });
 test('Drawing clear is a real native operation and the entire page stays undoable',()=>{
  const state=initialDrawingState(),h=createDrawingHost({state,instanceId:'ui-clear'});call(h,'drawing.object.make',{kind:'tree'});const id=state.objects[0].id;state.sky='blue';

@@ -1,3 +1,4 @@
+import {invokeToolCommand} from '../src/dialog/native-control-intent.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {mkdtemp,writeFile,rm,mkdir,symlink} from 'node:fs/promises';
@@ -9,7 +10,7 @@ test('reader context is actual native observation with declared display labels a
  const host=createDrawingHost({state:initialDrawingState(),instanceId:'context-fixture'});
  const before=observedReaderContext('drawing',host.observe());assert.deepEqual(before.context.existing,[]);
  const kind=host.bindings()[0].params.kind.enum[0];
- const made=host.invoke({invocation:'make',expectedVersion:host.observe().version,operation:'drawing.object.make',args:{kind,name:'Named shape'}});
+ const made=invokeToolCommand(host,{invocation:'make',expectedVersion:host.observe().version,operation:'drawing.object.make',args:{kind,name:'Named shape'}});
  assert.notEqual(made.status,'refused');
  const context=observedReaderContext('drawing',host.observe(),'Actual previous message');
  assert.equal(context.context.existing[0].name,'Named shape');assert.equal(context.context.existing[0].kind,kind);

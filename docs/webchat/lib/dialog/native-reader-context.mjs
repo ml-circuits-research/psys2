@@ -1,6 +1,6 @@
 // Evaluation host declarations: native display labels, never inferred semantic types.
-import {str} from '../vendor/sopworld/sopworld.mjs?v=14e619cf45';
-import {copyHostData} from '../../worlds/native-tool-host.mjs?v=ecc9d8b538';
+import {str} from '../vendor/sopworld/sopworld.mjs?v=d762ac1a79';
+import {copyHostData} from '../../worlds/native-tool-host.mjs?v=ca9bb682f6';
 export const REPLAY_CONTEXT_PROFILE='psys2.native-reader-context/1';
 const labels={
  'art.draw.object':'drawing.object.name','diagram.sketch.node':'diagram.node.label',

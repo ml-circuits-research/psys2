@@ -1,8 +1,9 @@
+import {invokeToolCommand} from '../src/dialog/native-control-intent.mjs';
 import {toNativeCalendarState} from '../worlds/time.calendar/canonical-state.mjs';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {createCalendarHost,initialCalendarState} from '../worlds/time.calendar/declared-host.mjs';
-const invoke=(h,operation,args)=>h.invoke({invocation:crypto.randomUUID(),operation,args,expectedVersion:h.observe().version});
+const invoke=(h,operation,args)=>invokeToolCommand(h,{invocation:crypto.randomUUID(),operation,args,expectedVersion:h.observe().version});
 test('first event initializes one real calendar atomically and later edits preserve it',()=>{
  const state=initialCalendarState(),h=createCalendarHost({state,instanceId:'single'});
  assert.equal(invoke(h,'calendar.event.add',{id:'first',title:'First event',start:1000,duration:100}).status,'changed');

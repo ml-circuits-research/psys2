@@ -1,3 +1,4 @@
+import {invokeToolCommand} from '../src/dialog/native-control-intent.mjs';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
@@ -70,7 +71,7 @@ test('Documents edits canonical typed content and restores a portable work file 
  assert.deepEqual(restored.isession.state[world],before);
  assert.deepEqual(native(restored),rendered);
  const local=createDocumentHost({state:restored.isession.state[world],instanceId:'doc.aux-history'});
- const undo=local.invoke({expectedVersion:local.observe().version,operation:'document.undo',args:{},invocation:'saved.history.undo'});
+ const undo=invokeToolCommand(local,{expectedVersion:local.observe().version,operation:'document.undo',args:{},invocation:'saved.history.undo'});
  assert.equal(undo.status,'changed');
  assert.deepEqual(native(restored).blocks.map(block=>block.id),[chapter,paragraph,list,table]);
 });
@@ -98,7 +99,7 @@ test('bad content and mismatched detached runtime are rejected before replacing 
 
 test('a supported native projection archive is verified and adopts current canonical authority',async()=>{
  const raw=initialDocumentState(),instanceId='old.document',legacy=createDocumentHost({state:raw,instanceId});
- assert.equal(legacy.invoke({invocation:'write.legacy',expectedVersion:legacy.observe().version,operation:'document.write',args:{
+ assert.equal(invokeToolCommand(legacy,{invocation:'write.legacy',expectedVersion:legacy.observe().version,operation:'document.write',args:{
   title:'Existing work',blocks:[{kind:'paragraph',text:'Literal content and provenance',from:['old.source']}],
  }}).status,'changed');
  const archive=serializeInstanceState({world,instanceId,revision:0,schemaVersion:'psys2.native-instance/1',

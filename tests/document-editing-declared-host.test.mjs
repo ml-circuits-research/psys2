@@ -1,9 +1,9 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {createDocumentHost,initialDocumentState} from '../worlds/docs.editor/declared-host.mjs';
-import {describeNativeControl,verifyNativeControlEffect} from '../src/dialog/native-control-intent.mjs';
+import {invokeToolCommand,describeNativeControl,verifyNativeControlEffect} from '../src/dialog/native-control-intent.mjs';
 import {documentTextId} from '../worlds/docs.editor/native-editing.mjs';
-const call=(h,operation,args)=>h.invoke({invocation:crypto.randomUUID(),expectedVersion:h.observe().version,operation,args});
+const call=(h,operation,args)=>invokeToolCommand(h,{invocation:crypto.randomUUID(),expectedVersion:h.observe().version,operation,args});
 function setup(){const state=initialDocumentState(),host=createDocumentHost({state,instanceId:'editor'});call(host,'document.write',{title:'Notes',blocks:[{kind:'paragraph',text:'Hello world'}]});return {state,host,id:state.blocks[0].id};}
 test('literal native text, labels, title and alignment update the actual document model and preserve marks on unchanged text',()=>{
  const {state,host,id}=setup();

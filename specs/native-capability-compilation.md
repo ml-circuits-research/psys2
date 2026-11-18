@@ -41,3 +41,5 @@ authored sources directly in Worlds. Each existing `operations.sop` is the separ
 legacy `core.operation` surface of the older world loader.
 
 The natural-language reader receives the previous natural-language turn when it is available. An authored SOP request stays in the execution journal and contributes current native observations through its effects. Its serialized graph is excluded from the text reader's previous-utterance field.
+
+The tool receives two SOP texts. The first is the concrete command. A compiled capability sends its selected `std.capability.call` and the argument wires reachable from that call. A manual control can send its compact operation wire or its declared structured argument circuit. The second text carries the invocation identity and observed revision. For example, `@invoke app.control.invocation id="move-9" version="3"` binds one attempt to that revision. Retries reuse the identity. The interpreter checks its operation declaration, decodes typed arguments and stages its native change. A caller can inspect the exact input on the response and in the Worlds activity record.

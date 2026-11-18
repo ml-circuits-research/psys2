@@ -6,10 +6,10 @@ import {createCalendarHost,initialCalendarState} from '../worlds/time.calendar/d
 import {createDrawingHost,initialDrawingState} from '../worlds/art.draw/declared-host.mjs';
 import {createDiagramHost,initialDiagramState} from '../worlds/diagram.sketch/declared-host.mjs';
 import {createDocumentHost,initialDocumentState} from '../worlds/docs.editor/declared-host.mjs';
-import {describeNativeControl,verifyNativeControlEffect,NATIVE_CONTROL_INTENT_SCHEMA} from '../src/dialog/native-control-intent.mjs';
+import {invokeToolCommand,describeNativeControl,verifyNativeControlEffect,NATIVE_CONTROL_INTENT_SCHEMA} from '../src/dialog/native-control-intent.mjs';
 import {readNativeIntent,compactNativeIntent} from '../src/dialog/native-intent-reader.mjs';
 
-const invoke=(host,operation,args)=>host.invoke({invocation:crypto.randomUUID(),expectedVersion:host.observe().version,operation,args});
+const invoke=(host,operation,args)=>invokeToolCommand(host,{invocation:crypto.randomUUID(),expectedVersion:host.observe().version,operation,args});
 function capture(host,id,args,options={}){
  const before=host.observe(),operation=host.bindings().find(op=>op.id===id),intent=describeNativeControl({operation,args,before,...options}),receipt=invoke(host,id,args),after=host.observe();
  return {before,after,intent,receipt,verification:verifyNativeControlEffect({intent,before,after,receipt})};
