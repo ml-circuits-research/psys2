@@ -2,7 +2,7 @@
 import { readNativeToolInterface } from '../native-tool-interface.mjs?v=4a6a40a39b';
 import NATIVE_INTERFACE from './native-interface-source.mjs?v=a2eabb1528';
 // Explicit numeric data only: no text parser, inferred values, or legacy dispatch.
-import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs?v=2fcf94c42e';
+import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs?v=2a5ea0af55';
 export const CHART_KIND_PARAMETERS={
  'w.chart.chart':{type:'bar'},'k.charts.kind.bar_chart':{type:'bar'},'k.charts.kind.line_chart':{type:'line'},
  'k.charts.kind.pie_chart':{type:'pie'},'k.charts.kind.scatter_plot':{type:'scatter'},

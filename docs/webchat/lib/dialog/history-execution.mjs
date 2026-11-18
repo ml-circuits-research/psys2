@@ -1,0 +1,50 @@
+import {parse,quote,serialize} from '../vendor/sopworld/sopworld.mjs?v=7950b62b94';
+import {historyPolicy} from './history-policy.mjs?v=f8948bd1c0';
+import {observeHistory,createHistoryTool} from './history-tool.mjs?v=c99cbb2705';
+import {invokeObservedNativeTool} from './native-tool-activity.mjs?v=0689e5b140';
+
+const area={world:'app.history',stateWorld:true};
+const first=(wire,key)=>wire?.attrs[key]?.[0];
+
+async function execute(session,candidate,view){
+ const authored=historyPolicy(),request=parse(candidate.wires).find(wire=>wire.type==='std.request'&&wire.id===candidate.request);
+ const act=first(request,'act');
+ if(!authored.ofType('std.compile.rule').some(wire=>first(wire,'act')===act))return null;
+ const world=authored.fork(),heads=observeHistory(session,view);
+ if(!world.tell(heads,{factsOnly:true}).ok)throw Error('invalid-history-observation');
+ const compiledSop=world.compileRequest(candidate.wires),rows=parse(compiledSop),result=rows.find(wire=>wire.type==='std.compile.result');
+ const callRef=result?.attrs.call,call=callRef?.length===1&&rows.find(wire=>'$'+wire.id===callRef[0]);
+ if(first(result,'status')!=='compiled'||!call){
+  const reason=first(result,'reason');
+  const empty=reason==='no-complete-derivation'&&!heads.some(wire=>first(wire,'direction')===act);
+  return {ok:false,changed:false,compiledSop,reason:empty?'empty-history':reason,
+   message:empty?'There is no earlier action to '+act+'.':'I could not apply that history request. Nothing changed.'};
+ }
+ const sop=serialize([call]),host=createHistoryTool(session,view),{args}=host.readCall(sop);
+ try{session.engine?.onWorldActivity?.({nodeIds:['component:library','execution:history-policy'],phase:'stage',operation:'std.compile',
+  label:'Compile journal command',wires:compiledSop});}catch{/* Observation cannot change execution. */}
+ const receipt=await invokeObservedNativeTool(session,{area,host,expectedVersion:args.entry,sop});
+ const ok=receipt.status==='changed'&&receipt.verification==='verified';
+ const message=ok?(receipt.direction==='redo'?'Redid the last action.':'Undid the last action.'):
+  receipt.reason==='history-content-changed'?'The objects changed after that action. Nothing changed.':'The journal changed before the operation. Nothing changed.';
+ const verification={status:receipt.verification,reason:receipt.reason??'journal-content-restored-with-current-view-preferences'};
+ return {ok,changed:ok,message,reason:receipt.reason,receipt,compiledSop,sop,
+  intentRecord:{format:'psys2.ui-training-pair/1',id:receipt.invocation,view,world:area.world,text:message,wires:sop,
+   tool:{operation:receipt.operation,args},verification,before:receipt.before,after:receipt.after,outcome:receipt.status}};
+}
+
+export async function runHistoryControl(session,view,direction){
+ const text=direction==='redo'?'Redo the last action.':'Undo the last action.';
+ return execute(session,{request:'history.control',wires:'@history.source std.request.source text='+quote(text)
+  +'\n@history.control std.request act='+direction+' mood=do source=$history.source'},view);
+}
+
+export async function executeHistoryRequest(session,candidate,view){
+ const result=await execute(session,candidate,view);
+ if(!result)return null;
+ const {ok,message,receipt,compiledSop,sop,reason}=result;
+ return {text:message,parts:[{text:message,translate:false}],statuses:[ok?'supported':'unsupported'],answers:[],segments:[],
+  state:ok?structuredClone(session.isession.state):{},effects:ok?[{operation:receipt.direction}]:[],
+  trace:{legacy:false,engine:'new',history:true,assessment:ok?receipt.direction:'history-refused',compiledSop,controlIntent:sop,receipt,reason,
+   effectVerification:result.intentRecord?.verification}};
+}

@@ -2,9 +2,9 @@
 import { readNativeToolInterface } from '../native-tool-interface.mjs?v=4a6a40a39b';
 import NATIVE_INTERFACE from './native-interface-source.mjs?v=e86f8f8bfd';
 import {budget} from '../../lib/dialog/budget.mjs?v=00bce6e369';
-import {canonicalDrawingState,toNativeDrawingState} from './canonical-state.mjs?v=67cf169ac3';
+import {canonicalDrawingState,toNativeDrawingState} from './canonical-state.mjs?v=77966b5bef';
 import {spatialBox} from '../native-spatial-observation.mjs?v=ced85b9a29';
-import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs?v=2fcf94c42e';
+import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs?v=2a5ea0af55';
 import {initialState,makeObject,remember,undoStep,redoStep,newPage} from './board.mjs?v=bedcd7dae6';
 import {drawingPartHandlers,drawingPartsOf,makeKnowledgeDrawing,restoreMembers,drawingObjectsOf,findDrawingObject,replaceDrawingObject,independentDrawingIds,colourDrawingObject} from './part-tools.mjs?v=dd2b980965';
 import {KINDS,W,H,bbox,objectMatrix} from './scene.mjs?v=a4ab5fac44';

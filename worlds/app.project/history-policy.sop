@@ -1,0 +1,15 @@
+@history.schema core.use world=app.history prefix=false
+@history.compiler core.use world=std.compile
+@history.restore core.action name=restore-history param=direction param=view param=entry when=$history.head
+
+@history.undo std.compile.rule act=undo terminal=app.history.terminal call=app.history.restore action=restore-history
+@history.redo std.compile.rule act=redo terminal=app.history.terminal call=app.history.restore action=restore-history
+@history.request std.request act=?direction mood=do
+@history.head app.history.head direction=?direction entry=?entry view=?view
+@history.call app.history.restore action=restore-history order=1 arg.direction=?direction arg.entry=?entry arg.view=?view
+@history.terminal app.history.terminal request=$history.request call=$history.call
+@history.lower core.rule when=$history.request when=$history.head then=$history.call then=$history.terminal
+
+
+@history.reader.undo app.history.reader act=undo fill=journal_step
+@history.reader.redo app.history.reader act=redo fill=journal_step

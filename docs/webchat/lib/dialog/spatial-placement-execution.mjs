@@ -3,11 +3,11 @@ import {World,parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=7950b
 import SOURCE from './new-engine-source.mjs?v=bbd94cc4be';
 import {readPlacementProfile,rememberPlacement} from '../../worlds/app.project/spatial-profile.mjs?v=aeda8d7562';
 import {placementInterfaceSop} from '../../worlds/native-spatial-interface.mjs?v=34c0d733b8';
-import {NATIVE_AREAS,createAreaHost} from './app-reader-context.mjs?v=34af7a8466';
+import {NATIVE_AREAS,createAreaHost} from './app-reader-context.mjs?v=9dfde53bd1';
 import {identityRegistryFor,instanceIdFor} from './instance-identity.mjs?v=024ef1ca83';
 import {nativeKindCandidates} from './native-binding-candidates.mjs?v=de223646d6';
-import {invokeObservedNativeTool} from './native-tool-activity.mjs?v=c802deacbe';
-import {describeNativeControl,verifyNativeControlEffect} from './native-control-intent.mjs?v=f12f8ff87e';
+import {invokeObservedNativeTool} from './native-tool-activity.mjs?v=0689e5b140';
+import {describeNativeControl,verifyNativeControlEffect} from './native-control-intent.mjs?v=3865c9f05f';
 
 const read = (row,key) => row?.attrs[key]?.length===1 ? str(row.attrs[key][0]) : undefined;
 const ref = (row,key) => {

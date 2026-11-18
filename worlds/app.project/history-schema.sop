@@ -1,0 +1,23 @@
+@history.module core.module name=app.history exports=app.history.head exports=app.history.restore exports=app.history.terminal exports=app.history.result exports=app.history.reader
+@history.compile core.use world=std.compile
+@history.head.type core.type of=app.history.head closed=true
+@history.head.direction core.slot of=app.history.head key=direction kind=atom enum=undo enum=redo present=true
+@history.head.id core.slot of=app.history.head key=entry kind=string present=true
+@history.head.view core.slot of=app.history.head key=view kind=string present=true
+@history.terminal.type core.type of=app.history.terminal extends=std.compile.terminal closed=true
+@history.call.type core.type of=app.history.restore extends=std.compile.call closed=true
+@history.call.direction core.slot of=app.history.restore key=arg.direction kind=atom enum=undo enum=redo present=true
+@history.call.view core.slot of=app.history.restore key=arg.view kind=string present=true
+@history.call.entry core.slot of=app.history.restore key=arg.entry kind=string present=true
+@history.result.type core.type of=app.history.result closed=true
+@history.result.status core.slot of=app.history.result key=status kind=atom enum=changed enum=refused present=true
+@history.result.verification core.slot of=app.history.result key=verification kind=atom enum=verified enum=unverified present=true
+@history.result.direction core.slot of=app.history.result key=direction kind=atom enum=undo enum=redo
+@history.result.reason core.slot of=app.history.result key=reason kind=atom
+@history.result.invocation core.slot of=app.history.result key=invocation kind=string
+@history.result.before core.slot of=app.history.result key=before kind=string
+@history.result.after core.slot of=app.history.result key=after kind=string
+@history.result.world core.slot of=app.history.result key=world kind=string many=true
+@history.reader.type core.type of=app.history.reader closed=true
+@history.reader.act core.slot of=app.history.reader key=act kind=atom present=true
+@history.reader.fill core.slot of=app.history.reader key=fill kind=atom present=true

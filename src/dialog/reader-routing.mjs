@@ -2,11 +2,9 @@ import {isAuthoredRequest,readAuthoredRequest} from './authored-request-tool.mjs
 // Model-first proposal routing. Calibration authority belongs to host configuration,
 // never to a model output, evaluation annotation or grammar proposal.
 import {requestCompositionPolicy}from './request-composition-policy.mjs';
-import {invokeNativeControl} from './native-tool-controls.mjs';
 import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs';
 import {projectContextAction} from './project-context-action.mjs';
 import {projectCreateAction} from './project-create-action.mjs';
-import {parse,str} from '../vendor/sopworld/sopworld.mjs';
 import {assessReaderProposal} from './reader-admission.mjs';
 const unavailable=reason=>({candidates:[],coverage:{complete:false,executable:false,graphProposal:false},failures:[{reason}]});
 const noDeclaredAction = () => {
@@ -16,24 +14,20 @@ const noDeclaredAction = () => {
 };
 async function dispatchRequest(session,candidate,text,options,bindings,contextProjection,interpretation,alternatives=[],compiledPlan) {
  let result;
-  const act=str(parse(candidate.wires).find(w=>w.id===candidate.request)?.attrs.act?.[0]),area=options.view??session.isession.state['ui.shell']?.activeTab;
-  if(act==='undo'||act==='redo'){
-   const history=await invokeNativeControl(session,{view:area,operation:act});
-   result={text:history.message,parts:[{text:history.message,translate:false}],statuses:[history.ok?'supported':'unsupported'],answers:[],segments:[],state:history.ok?structuredClone(session.isession.state):{},effects:history.ok?[{operation:act}]:[],trace:{legacy:false,engine:'new',assessment:history.ok?act:'history-refused'}};
-  }else{
-   const before=structuredClone(session.isession.state);
-   const rewind=contextProjection?.rewind;
-   const originals=rewind&&Object.fromEntries(Object.keys(rewind).map(key=>[key,session.isession.state[key]]));
-   if(rewind)Object.assign(session.isession.state,structuredClone(rewind));
-   try{
-    result=await executeDeclaredRequest(session,candidate,text,{bindings,view:area,compiledPlan,focus:contextProjection?.focus,unapplied:interpretation?.unapplied??[]})??noDeclaredAction();
-   }finally{
-    if(originals&&!result?.statuses?.includes('supported'))Object.assign(session.isession.state,originals);
-   }
-   if(result.statuses?.includes('supported')){session.newEngineLastAction={...session.newEngineLastAction,[area]:candidate};if(contextProjection){result.text+=' '+interpretation.note;result.parts=[{text:result.text,translate:false}];result.trace={...result.trace,interpretation};}}
-   const changed=Object.keys(session.isession.state).filter(key=>JSON.stringify(before[key])!==JSON.stringify(session.isession.state[key]));
-   if(changed.length){session.newEngineRedo=(session.newEngineRedo??[]).filter(r=>r.area!==area);session.newEngineUndo=[...(session.newEngineUndo??[]).slice(-31),{area,before:Object.fromEntries(changed.map(key=>[key,before[key]])),after:Object.fromEntries(changed.map(key=>[key,structuredClone(session.isession.state[key])])),reading:candidate,alternatives}];}
-  }
+ const area=options.view??session.isession.state['ui.shell']?.activeTab;
+ const before=structuredClone(session.isession.state);
+ const rewind=contextProjection?.rewind;
+ const originals=rewind&&Object.fromEntries(Object.keys(rewind).map(key=>[key,session.isession.state[key]]));
+ if(rewind)Object.assign(session.isession.state,structuredClone(rewind));
+ try{
+  result=await executeDeclaredRequest(session,candidate,text,{bindings,view:area,compiledPlan,focus:contextProjection?.focus,unapplied:interpretation?.unapplied??[]})??noDeclaredAction();
+ }finally{
+  if(originals&&!result?.statuses?.includes('supported'))Object.assign(session.isession.state,originals);
+ }
+ if(result.trace?.history)return result;
+ if(result.statuses?.includes('supported')){session.newEngineLastAction={...session.newEngineLastAction,[area]:candidate};if(contextProjection){result.text+=' '+interpretation.note;result.parts=[{text:result.text,translate:false}];result.trace={...result.trace,interpretation};}}
+ const changed=Object.keys(session.isession.state).filter(key=>JSON.stringify(before[key])!==JSON.stringify(session.isession.state[key]));
+ if(changed.length){session.newEngineRedo=(session.newEngineRedo??[]).filter(r=>r.area!==area);session.newEngineUndo=[...(session.newEngineUndo??[]).slice(-31),{area,before:Object.fromEntries(changed.map(key=>[key,before[key]])),after:Object.fromEntries(changed.map(key=>[key,structuredClone(session.isession.state[key])])),reading:candidate,alternatives}];}
  return result;
 }
 
@@ -118,7 +112,17 @@ export async function routeNewEngine(session,text,options={}){
  }
  if(!steps.length)return routeReaderProposal(session,text,options);
  const area=options.view??session.isession.state['ui.shell']?.activeTab,changed=Object.keys(session.isession.state).filter(key=>JSON.stringify(before[key])!==JSON.stringify(session.isession.state[key]));
- if(changed.length)session.newEngineUndo=[...undoBefore.slice(-31),{area,before:Object.fromEntries(changed.map(key=>[key,before[key]])),after:Object.fromEntries(changed.map(key=>[key,structuredClone(session.isession.state[key])])),reading:steps.at(-1).reply.trace?.reading,readings:steps.map(step=>step.reply.trace?.reading).filter(Boolean),alternatives:steps.flatMap(step=>step.reply.trace?.readerRouting?.admission?.alternatives??[])}];
- const supported=steps.filter(step=>step.reply.statuses?.includes('supported')),textReply=steps.map(step=>step.reply.text).join(' '),last=steps.at(-1).reply;
- return {...last,text:textReply,parts:[{text:textReply,translate:false}],statuses:steps.flatMap(step=>step.reply.statuses??[]),effects:steps.flatMap(step=>step.reply.effects??[]),trace:{...last.trace,readerRouting:{...last.trace?.readerRouting,rawReading:steps.flatMap(step=>step.reply.trace?.readerRouting?.rawReading??[]),unresolved:steps.flatMap(step=>step.reply.trace?.readerRouting?.unresolved??[]),proposalCandidates:steps.flatMap(step=>[step.reply.trace?.reading,...(step.reply.trace?.readerRouting?.proposalCandidates??[])]).filter(Boolean)},partial:supported.length!==steps.length||steps.some(step=>step.reply.trace?.partial),composition:{policy,sourceCuts:steps[0].source.sourceCuts,steps:steps.map(step=>({source:step.source,statuses:step.reply.statuses,trace:step.reply.trace,text:step.reply.text})),supported:supported.length,total:steps.length,undoGroup:changed.length?1:0}}};
+ const grouped=changed.length>0&&!steps.some(step=>step.reply.trace?.history&&step.reply.statuses.includes('supported'));
+ if(grouped)session.newEngineUndo=[...undoBefore.slice(-31),{area,before:Object.fromEntries(changed.map(key=>[key,before[key]])),after:Object.fromEntries(changed.map(key=>[key,structuredClone(session.isession.state[key])])),reading:steps.at(-1).reply.trace?.reading,readings:steps.map(step=>step.reply.trace?.reading).filter(Boolean),alternatives:steps.flatMap(step=>step.reply.trace?.readerRouting?.admission?.alternatives??[])}];
+ const supported=steps.filter(step=>step.reply.statuses?.includes('supported'));
+ const mixed=supported.length>0&&supported.length<steps.length;
+ const scalars=Array.from(text);
+ const textReply=steps.map(({source,reply})=>{
+  if(!mixed||reply.statuses.includes('supported'))return reply.text;
+  const excerpt=JSON.stringify(scalars.slice(...source.range).join(''));
+  if(reply.trace?.reason==='reading'||reply.trace?.reason==='no-declared-action')return 'I could not apply '+excerpt+'.';
+  return 'For '+excerpt+': '+reply.text;
+ }).join(' ');
+ const last=steps.at(-1).reply;
+ return {...last,state:changed.length?structuredClone(session.isession.state):last.state,text:textReply,parts:[{text:textReply,translate:false}],statuses:steps.flatMap(step=>step.reply.statuses??[]),effects:steps.flatMap(step=>step.reply.effects??[]),trace:{...last.trace,readerRouting:{...last.trace?.readerRouting,rawReading:steps.flatMap(step=>step.reply.trace?.readerRouting?.rawReading??[]),unresolved:steps.flatMap(step=>step.reply.trace?.readerRouting?.unresolved??[]),proposalCandidates:steps.flatMap(step=>[step.reply.trace?.reading,...(step.reply.trace?.readerRouting?.proposalCandidates??[])]).filter(Boolean)},partial:supported.length!==steps.length||steps.some(step=>step.reply.trace?.partial),composition:{policy,sourceCuts:steps[0].source.sourceCuts,steps:steps.map(step=>({source:step.source,statuses:step.reply.statuses,trace:step.reply.trace,text:step.reply.text})),supported:supported.length,total:steps.length,undoGroup:grouped?1:0}}};
 }

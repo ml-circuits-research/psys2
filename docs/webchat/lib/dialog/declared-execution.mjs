@@ -1,10 +1,11 @@
-import { executeSpatialPlacement, requestsSpatialPlacement } from './spatial-placement-execution.mjs?v=b165d213a4';
-import { compareNativeReadings } from './capability-plan-adapter.mjs?v=a7e2d40deb';
-import { NATIVE_AREAS,createAreaHost } from './app-reader-context.mjs?v=34af7a8466';
+import { executeSpatialPlacement, requestsSpatialPlacement } from './spatial-placement-execution.mjs?v=bb5b5995f0';
+import { compareNativeReadings } from './capability-plan-adapter.mjs?v=5086d0ab6b';
+import { NATIVE_AREAS,createAreaHost } from './app-reader-context.mjs?v=9dfde53bd1';
 import { instanceIdFor } from './instance-identity.mjs?v=024ef1ca83';
-import { executeNativeCapability } from './capability-plan-execution.mjs?v=04443d5494';
+import { executeHistoryRequest } from './history-execution.mjs?v=879885f720';
+import { executeNativeCapability } from './capability-plan-execution.mjs?v=ff487f2776';
 import { executionValueSource } from './execution-policy.mjs?v=245d0e44ab';
-import { inspectCachedExecutionSource } from './execution-world-inspection.mjs?v=7c959edcf4';
+import { inspectCachedExecutionSource } from './execution-world-inspection.mjs?v=3844c6ae33';
 import { World, str } from '../vendor/sopworld/sopworld.mjs?v=7950b62b94';
 import SOURCE from './new-engine-source.mjs?v=bbd94cc4be';
 let knowledge;
@@ -16,6 +17,8 @@ export function declaredPropertyValues(concept) {
     .filter((value) => typeof value === 'string') : [];
 }
 export async function executeDeclaredRequest(session, candidate, text, { bindings, view, focus, targetUnique, invocation, unapplied = [],compiledPlan } = {}) {
+  const history = await executeHistoryRequest(session, candidate, view);
+  if (history) return history;
   if (requestsSpatialPlacement(candidate)) return executeSpatialPlacement(session, candidate, { bindings, view });
   return executeNativeCapability(session, candidate, { bindings, view, focus, text, targetUnique, invocation, unapplied, readKnowledge: source,compiledPlan });
 }

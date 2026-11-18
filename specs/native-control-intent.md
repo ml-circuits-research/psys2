@@ -40,3 +40,12 @@ For a new object, the tool interface measures the concrete construction's footpr
 A chat message starting with a standard request declaration may contain one owned request circuit, on one line or several. Enter submits it and Shift+Enter inserts a line. The input uses the standard request schema and the normal execution and undo paths. An authored turn records its supplied request and actual execution evidence. Language inference is unnecessary. Given a house in the Drawing instance, the request can identify a new fish, the existing house and the positive relation `near`; the compiler reads the current house bounds when the turn runs. The regression `tests/authored-request-declared-host.test.mjs` supplies the complete pasteable circuit and executes it twice with no reader attached.
 
 The inspector can show an observed component produced by a tool alongside authoritative instance objects. A tool declares the observation-only types it can produce. An owned fact with the same identity takes precedence and must match the interface type. The object panel identifies the source of the inspected fact.
+
+
+## Compiled Undo and Redo
+
+The active editor contributes observed journal heads to the history policy in `worlds/app.project/history-policy.sop`. An admitted reader graph or an authored targetless request can compile to an `app.history.restore` wire with an exact view, direction and head identity. Undo and Redo controls use the same compilation and interpreter.
+
+The journal tool consumes the selected SOP call, checks its invocation revision and current content, and restores the saved editor state with the current view preferences. It verifies the restored content before moving the entry to the other journal stack. A reverse move assigns a fresh head identity, so an earlier call cannot run against an entry that left and reentered the stack. History does not record another undo group for the restoration. Independent edits in a composed turn share one group when the turn makes no journal moves.
+
+Worlds attaches the compiler result to the history policy and shows the exact call and typed outcome at the journal interpreter. A stale call or conflicting editor content yields a refusal before mutation.

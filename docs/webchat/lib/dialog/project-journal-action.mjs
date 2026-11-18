@@ -1,8 +1,9 @@
 // A declared journal-step act has no object/property arguments. This consumes model structure, never source words.
 import {serializeRequestGraph} from '../vendor/sopworld/sopworld.mjs?v=7950b62b94';
-const profiles=Object.freeze({undo:{fill:'journal_step',step:'latest'}});
+import {historyPolicy} from './history-policy.mjs?v=f8948bd1c0';
 export function projectJournalAction(proposal) {
- const raw=proposal?.raw,request=raw?.requests?.[0],profile=profiles[request?.act];
+ const raw=proposal?.raw,request=raw?.requests?.[0];
+ const profile=request?.target?.fill && historyPolicy().ofType('app.history.reader').find(wire=>wire.attrs.act[0]===request.act&&wire.attrs.fill[0]===request.target.fill);
  if(!profile||proposal.coverage?.complete||raw.requestCount!==1||raw.coverage?.truncated||(request.mood!==undefined&&request.mood!=='do')||request.constraints?.length!==0)return proposal;
  if(request.turn?.repeat_count!==undefined&&request.turn.repeat_count!==1)return proposal;
  const anchors=raw.ranges?.filter(r=>JSON.stringify(r.path)===JSON.stringify(['requests','0','trigger']))??[];
@@ -15,5 +16,5 @@ export function projectJournalAction(proposal) {
  ]});
  if(!serialized.ok)return proposal;
  return {...proposal,candidates:[{request:'journal.request',wires:serialized.wires}],coverage:{complete:true,graphProposal:true,executable:false},failures:[],
-  interpretation:{profile:'journal-step/1',assumption:'the last action in the current area',unresolved:proposal.failures}};
+  interpretation:{profile:'journal-step/1',unresolved:proposal.failures}};
 }

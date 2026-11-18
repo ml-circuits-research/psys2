@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Current graph and chart data use the authored state schema. Native tools use detached records.
 import {toolInstanceStateCodec} from '../tool-instance-state.mjs?v=4530995ddc';
-import {copyHostData} from '../native-tool-host.mjs?v=2fcf94c42e';
-import {initialState} from './core.mjs?v=92c0bf796d';
-import {initialChartState} from '../data.charts/declared-host.mjs?v=0584c25888';
+import {copyHostData} from '../native-tool-host.mjs?v=2a5ea0af55';
+import {initialState} from './core.mjs?v=279811e42b';
+import {initialChartState} from '../data.charts/declared-host.mjs?v=4abd4fa0a8';
 import {edgeAppearance} from './arrows.mjs?v=e2ec6e110c';
 import schema from './state-schema-source.mjs?v=dfe86ffc09';
 

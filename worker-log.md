@@ -159,3 +159,6 @@ Checks: spatial placement tests 7/7, full npm gate 617 passed and 3 skipped. Rea
 
 2026-11-18 integrated SOPWorlds 0.216/aeb470f, grounded creation and contextual-reference choices, their actual schemas/rules and activity in Worlds. Removed the standalone Drawing property host from source and browser.
 Checks: npm test 614 passed, 3 skipped, zero failed. Chromium verified seven creation/Undo pairs including named shapes; “make it blue” and “no, the other one” applied and reversed the expected colors, with the previous target excluded by the recorded choice.
+
+2026-11-18: Undo and Redo compile against observed journal heads. Controls and natural requests dispatch the exact SOP call to the history interpreter. Worlds separates schema, policy, interpreter and native journal. Mixed responses report failed source cuts and return final state.
+Checks: npm test passed 615 with three skips. Chromium verified authored Undo, UI Redo and both natural-language directions on two shapes, including the exact call and outcome.

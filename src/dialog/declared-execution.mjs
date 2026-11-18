@@ -2,6 +2,7 @@ import { executeSpatialPlacement, requestsSpatialPlacement } from './spatial-pla
 import { compareNativeReadings } from './capability-plan-adapter.mjs';
 import { NATIVE_AREAS,createAreaHost } from './app-reader-context.mjs';
 import { instanceIdFor } from './instance-identity.mjs';
+import { executeHistoryRequest } from './history-execution.mjs';
 import { executeNativeCapability } from './capability-plan-execution.mjs';
 import { executionValueSource } from './execution-policy.mjs';
 import { inspectCachedExecutionSource } from './execution-world-inspection.mjs';
@@ -16,6 +17,8 @@ export function declaredPropertyValues(concept) {
     .filter((value) => typeof value === 'string') : [];
 }
 export async function executeDeclaredRequest(session, candidate, text, { bindings, view, focus, targetUnique, invocation, unapplied = [],compiledPlan } = {}) {
+  const history = await executeHistoryRequest(session, candidate, view);
+  if (history) return history;
   if (requestsSpatialPlacement(candidate)) return executeSpatialPlacement(session, candidate, { bindings, view });
   return executeNativeCapability(session, candidate, { bindings, view, focus, text, targetUnique, invocation, unapplied, readKnowledge: source,compiledPlan });
 }

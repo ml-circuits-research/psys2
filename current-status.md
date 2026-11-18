@@ -1,5 +1,11 @@
 # Current status
 
+## 2026-11-18 — History commands and compound replies
+
+Undo and Redo from editor controls, authored queries and the reader compile against the observed journal head into an exact SOP call. The history interpreter checks that head and compares current content with the expected revision before restoring it. Worlds shows the schema, compilation policy, JavaScript interpreter and session journal separately. The journal still stores native before/after snapshots.
+
+Mixed replies identify the exact source span they could not apply and return the final editor state even when the final cut fails. The reader still splits “no, the other one” into two parts.
+
 ## 2026-11-18 — grounded choices and direct property execution
 
 SOPWorlds 0.216 compiles ranked-choice queries. The creation and reference policies supply criteria for comparing grounded alternatives. Their schemas, rules and actual decisions can be inspected in Worlds. Direct property changes and selectors compile through the same native tool declarations; the former standalone Drawing property host was removed. Admission classes and calibration thresholds are authored SOP policy.

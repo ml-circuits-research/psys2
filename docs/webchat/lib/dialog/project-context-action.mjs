@@ -1,7 +1,7 @@
 import {nativeKindCandidates} from './native-binding-candidates.mjs?v=de223646d6';
 // Bind model-declared context references to actual native objects; never inspect source words.
 import {serializeRequestGraph,str} from '../vendor/sopworld/sopworld.mjs?v=7950b62b94';
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=34af7a8466';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=9dfde53bd1';
 import {executionPolicyWorld} from './execution-policy.mjs?v=245d0e44ab';
 import {readReferenceTurn,resolveObservedReference} from './reference-policy.mjs?v=32943dbf90';
 import {flatRequestProjection} from './request-projection.mjs?v=aad2e14a67';

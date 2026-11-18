@@ -9,7 +9,7 @@ export function toolInvocationContext(invocation, expectedVersion) {
  return '@invoke app.control.invocation id=' + JSON.stringify(invocation) + ' version=' + JSON.stringify(expectedVersion);
 }
 
-function readInvocation(context) {
+export function readToolInvocation(context) {
  if (typeof context !== 'string' || context.length > 65536) throw Error('invalid-tool-invocation');
  const nodes = parse(context);
  const node = nodes[0];
@@ -49,7 +49,7 @@ export function createNativeToolHost({state,instanceId,scope,operations,toolInte
   const refuse=reason=>({status:'refused',reason,verification:'unverified'});
   let call;
   try {
-   const [invocation,expectedVersion] = readInvocation(context);
+   const [invocation,expectedVersion] = readToolInvocation(context);
    const {operation,args} = readNativeIntent(sop,{operations:declared});
    call = {invocation,expectedVersion,operation,args};
   } catch (error) {

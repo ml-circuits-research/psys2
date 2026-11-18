@@ -2,6 +2,7 @@
 import{serialize,str,version,build}from'../vendor/sopworld/sopworld.mjs';
 import SOURCE from'./new-engine-source.mjs';
 import{CATALOG_PIN}from'../knowledge/catalog-pin.mjs';
+import{inspectHistoryPolicy}from'./history-policy.mjs';
 import{inspectExecutionPolicyWorld}from'./execution-policy.mjs';
 import{inspectCreationPolicy}from'./project-create-action.mjs';
 import{inspectReferencePolicy}from'./reference-policy.mjs';
@@ -23,6 +24,23 @@ export async function inspectExecutionWorlds(session){
  ]);
  const journal=session?.newEngineJournal??[],moduleNames=[...new Set(journal.flatMap(record=>importsOf(record.evidence)))],sources=[['declared-execution','src/dialog/declared-execution.mjs',inspectDeclaredExecutionSourceWorld({moduleNames})]],nodes=[],edges=[];
  const link=(from,to,label)=>edges.push({from,to,label});
+ const history=inspectHistoryPolicy();
+ nodes.push({id:'execution:history-policy',label:'History circuit policy',kind:'knowledge',implementation:'Operational SOP Lang World',
+  description:'Compiles an admitted history request with the latest observed entry in the active editor.',
+  wires:history.source,details:{source:'worlds/app.project/history-policy.sop',loaded:history.loaded}});
+ nodes.push({id:'execution:history-schema',label:'History schema',kind:'schema',implementation:'SOP Lang schema World',
+  description:'Defines journal heads, concrete restore instructions and the results the history interpreter reports.',
+  wires:history.schema,details:{source:'worlds/app.project/history-schema.sop',loaded:history.loaded}});
+ link('execution:history-policy','execution:history-schema','uses the journal contract');
+ nodes.push({id:'interpreter:app.history',label:'History interpreter',kind:'interpreter',implementation:'JavaScript journal primitive',
+  description:'Checks the compiled head and current content, then restores and verifies the saved editor state.',
+  details:{module:'src/dialog/history-tool.mjs'}});
+ nodes.push({id:'instance:app.history',label:'Session Undo and Redo',kind:'runtime',implementation:'Live session journal',
+  description:'Authoritative groups of previous and restored editor changes.',
+  details:{undo:session?.newEngineUndo?.length??0,redo:session?.newEngineRedo?.length??0}});
+ link('execution:module:declared-execution','execution:history-policy','compiles history requests');
+ link('execution:history-policy','interpreter:app.history','supplies a guarded SOP call');
+ link('interpreter:app.history','instance:app.history','restores and verifies an entry');
  const reference=inspectReferencePolicy();
  nodes.push({id:'execution:reference-policy',label:'Context references',kind:'knowledge',implementation:'Operational SOP Lang World',
   description:'Matches contextual references to observed objects. Its criteria prefer the focused object for a current reference and exclude it when retargeting the previous change.',

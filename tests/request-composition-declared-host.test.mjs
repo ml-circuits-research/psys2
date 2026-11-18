@@ -13,6 +13,8 @@ test('ordered declared requests use real state sequentially and retain one undo 
 test('one refused component retains the real successful effect and one partial undo record',async()=>{
  const state=initialDrawingState(),session={isession:{state:{'ui.shell':{activeTab:'draw'},'art.draw':state}},engine:{requestReader:{bindings:()=>bindings,registry:()=>({}),provenance:()=>({modelSha256:'a'.repeat(64)}),propose(){throw Error('fixture unexpectedly used');},async *proposeRequests(){yield proposal('circle',0);yield proposal('unbound',1);}}}};
  const result=await routeNewEngine(session,full,{language:'en',view:'draw'});assert.deepEqual(result.statuses,['supported','unsupported']);assert.equal(result.trace.partial,true);assert.equal(result.trace.composition.supported,1);assert.deepEqual(toNativeDrawingState(state).objects.map(o=>o.kind),['circle']);assert.equal(session.newEngineUndo.length,1);assert.equal(toNativeDrawingState(session.newEngineUndo[0].before['art.draw']).objects.length,0);assert.equal(toNativeDrawingState(session.newEngineUndo[0].after['art.draw']).objects.length,1);assert.ok(result.trace.composition.steps[1].trace.reason);
+ assert.ok(result.text.includes('"make a house"'),result.text);
+ assert.deepEqual(toNativeDrawingState(result.state['art.draw']).objects.map(o=>o.kind),['circle']);
 });
 test('request composition retains independent schema and policy sources',async()=>{
  assert.deepEqual(requestCompositionPolicy(),{enabled:true,order:'source',dependencies:'preserve',undo:'turn',world:'app.request.composition',declaration:'composition.default'});
