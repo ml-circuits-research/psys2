@@ -1,0 +1,33 @@
+@query.load core.use world=app.query.read prefix=false
+@query.choice core.use world=std.choice
+@query.order core.use world=std.decide
+
+@count app.query.read.head head=count operation=count property=false targetCue=false
+@exists app.query.read.head head=exists operation=exists property=false targetCue=false
+@which app.query.read.head head=which operation=members property=false targetCue=true
+@list app.query.read.head head=list operation=members property=false targetCue=true
+@what app.query.read.head head=what operation=values property=true
+@which.property app.query.read.head head=which operation=values property=true
+@list.property app.query.read.head head=list operation=values property=true
+@claimed app.query.read.question act=answer mood=ask head=?head
+@claimed.population app.query.read.question act=answer mood=ask head=?head targetCue=true core.absent=concept
+@claimed.property app.query.read.question act=answer mood=ask head=?head concept=?concept
+@simple app.query.read.head head=?head operation=?op property=false targetCue=false
+@population app.query.read.head head=?head operation=?op property=false targetCue=true
+@property app.query.read.head head=?head operation=?op property=true
+@out.basic app.query.read.operation name=?op
+@out.property app.query.read.operation name=?op concept=?concept
+@query.project core.rule when=$claimed when=$simple then=$out.basic
+@query.project.population core.rule when=$claimed.population when=$population then=$out.basic
+@query.project.property core.rule when=$claimed.property when=$property then=$out.property
+
+# A positive filter in an answered question scopes the requested observation.
+@phase.filter app.query.read.phase name=selector
+@phase.result app.query.read.phase name=result
+@question.phase app.query.read.phase name=?phase
+@condition app.query.read.condition phase=?phase operator=eq character=requirement polarity=positive concept=?concept value=?value
+@out.selector app.query.read.selector concept=?concept value=?value
+@query.scope core.rule when=$condition when=$question.phase then=$out.selector
+
+@query.lexical std.decide.criterion of=app.query.kind n=1 name=distance measure=distance dir=min
+@query.reader.type std.decide.criterion of=app.query.kind n=2 name=reader.type measure=otherType dir=min

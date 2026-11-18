@@ -85,3 +85,12 @@ observed scope in SOP with no tool call. Chat displays the answer and leaves
 the board, previous action and Undo journal untouched. A complete empty
 population yields zero or false. Incomplete observations can establish
 witnessed existence and otherwise report the unsupported projection.
+
+The frozen reader can supply a question projection and typed constraints without
+emitting a complete request graph. A separate SOP policy resolves those heads
+into read-only projections. Kind evidence must have an exact reader-supplied
+source span. If several declared observable kinds are plausible, the library
+compares their bounded lexical distances and retains the alternatives. The
+query policy requires a separately grounded property key for a property
+answer. An ambiguous membership cue or an absent key can leave a question
+unanswered even when its target is recognizable.

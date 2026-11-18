@@ -183,3 +183,5 @@ Checks: Webchat build 682e70818e, npm test (625 pass, 3 skip). Real Chromium cha
 
 2026-11-18: Fixed blank Drawing and Diagram after chat. Worlds animates only a selected response on Animate. Chat shows its exact executable circuit. Editor inputs accept SOP only. Compound continuation follows authored policy.
 Checks: 627 passed, three skipped. Chromium verified the original house plus new tree stayed visible, two Diagram SVG nodes persisted, menu edits retained all objects, and entering Worlds stayed idle until Animate. Read-only queries returned actual values without writes.
+2026-11-18 projected grounded frozen-reader question heads through a declared query policy. On the same live two-house board, Chromium answered natural count, existence and membership for red houses with 1, yes and Crimson cottage. All observations left the board untouched.
+Checks: Webchat 92cea1baf5 and npm test (628 pass, 3 skip). Seven property formulations lacked the independently anchored key. Other incomplete target spans remain unavailable. No model change.

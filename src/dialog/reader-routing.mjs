@@ -6,6 +6,7 @@ import {isAuthoredRequest,readAuthoredRequest} from './authored-request-tool.mjs
 // never to a model output, evaluation annotation or grammar proposal.
 import {requestCompositionPolicy,scheduleFollowingCut}from './request-composition-policy.mjs';
 import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs';
+import {projectQueryAction} from './project-query-action.mjs';
 import {projectContextAction} from './project-context-action.mjs';
 import {projectCreateAction} from './project-create-action.mjs';
 import {assessReaderProposal} from './reader-admission.mjs';
@@ -49,7 +50,7 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
  const providerCandidates=Array.isArray(proposal?.candidates)?structuredClone(proposal.candidates):[];
  const context={area:options.view??session.isession.state['ui.shell']?.activeTab};
  let contextProjection=null,bindings=null,registry=null;
- try{bindings=provider?.bindings?.();registry=provider?.registry?.();contextProjection=await projectContextAction(proposal,session,{bindings,registry,view:context.area});if(contextProjection)proposal=contextProjection.proposal;else{const creation=await projectCreateAction(proposal,session,{bindings,registry,view:context.area});if(creation)proposal=creation;}}catch{}
+ try{bindings=provider?.bindings?.();registry=provider?.registry?.();contextProjection=await projectContextAction(proposal,session,{bindings,registry,view:context.area});if(contextProjection)proposal=contextProjection.proposal;else{const projected=await projectQueryAction(proposal,session,{bindings,view:context.area})??await projectCreateAction(proposal,session,{bindings,registry,view:context.area});if(projected)proposal=projected;}}catch{}
  let provenAlternative=null;
  if(!proposal.coverage?.complete&&bindings&&provenance?.bindingsSha256){
   try{
@@ -72,7 +73,7 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
   try{session.engine?.onWorldActivity?.({nodeIds:['component:request-admission','knowledge:reader-admission-policy','component:library'],phase:'stage',operation:'app.reader.admission',label:'Evaluate reader admission policy',wires:decision.decisionSop});}catch{/* Observation cannot change admission. */}
  }
  const choice=proposal?.interpretation?.decision;
- if(choice)try{session.engine?.onWorldActivity?.({nodeIds:['component:library','execution:creation-policy'],phase:'stage',operation:'std.choice',label:'Compare grounded creation readings',
+ if(choice&&proposal.interpretation.profile==='declared-creation/1')try{session.engine?.onWorldActivity?.({nodeIds:['component:library','execution:creation-policy'],phase:'stage',operation:'std.choice',label:'Compare grounded creation readings',
   text,wires:choice.input+'\n'+choice.sop});}catch{/* Trace subscribers cannot change interpretation. */}
  let candidate=decision.candidate,comparison=provenAlternative;
  const eligible=decision.admitted,reason=decision.reason;
@@ -105,6 +106,9 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
    result.text+=' '+proposal.interpretation.note;
    result.parts=[{text:result.text,translate:false}];
    result.trace={...result.trace,interpretation:proposal.interpretation};
+  }
+  if(result?.statuses?.includes('supported')&&proposal.interpretation?.profile==='declared-query/1'&&proposal.interpretation.note){
+   result.text+=' '+proposal.interpretation.note;result.parts=[{text:result.text,translate:false}];result.trace={...result.trace,interpretation:proposal.interpretation};
   }
   if(result&&decision.uncertain&&result.statuses?.includes('supported')){
    const note=result.trace?.uncertainty?.length||result.trace?.interpretation?'':'I used the most likely reading; you can correct it or undo.';

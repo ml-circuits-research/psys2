@@ -18,6 +18,8 @@ for (const [source, module] of [
   ['history-schema.sop', 'history-schema-source.mjs'],
   ['request-routing-schema.sop', 'request-routing-schema-source.mjs'],
   ['request-routing-policy.sop', 'request-routing-policy-source.mjs'],
+  ['query-reading-schema.sop', 'query-reading-schema-source.mjs'],
+  ['query-reading-policy.sop', 'query-reading-policy-source.mjs'],
 ]) {
   const text = readFileSync(new URL(source, folder), 'utf8');
   emit(fileURLToPath(new URL(module, folder)), '// Generated from ' + source + '.\nexport default ' + JSON.stringify(text) + ';\n');

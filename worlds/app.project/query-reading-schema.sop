@@ -1,0 +1,27 @@
+@query.schema core.module name=app.query.read exports=app.query.read.head exports=app.query.read.question exports=app.query.read.condition exports=app.query.read.operation exports=app.query.read.selector exports=app.query.read.phase
+@query.head core.type of=app.query.read.head closed=true
+@query.head.kind core.slot of=app.query.read.head key=head kind=atom present=true
+@query.head.operation core.slot of=app.query.read.head key=operation kind=atom present=true
+@query.head.property core.slot of=app.query.read.head key=property kind=boolean present=true
+@query.question core.type of=app.query.read.question closed=true
+@query.question.act core.slot of=app.query.read.question key=act kind=atom present=true
+@query.question.mood core.slot of=app.query.read.question key=mood kind=atom present=true
+@query.question.head core.slot of=app.query.read.question key=head kind=atom present=true
+@query.question.concept core.slot of=app.query.read.question key=concept kind=atom
+@query.condition core.type of=app.query.read.condition closed=true
+@query.condition.phase core.slot of=app.query.read.condition key=phase kind=atom present=true
+@query.condition.operator core.slot of=app.query.read.condition key=operator kind=atom present=true
+@query.condition.character core.slot of=app.query.read.condition key=character kind=atom present=true
+@query.condition.polarity core.slot of=app.query.read.condition key=polarity kind=atom present=true
+@query.condition.concept core.slot of=app.query.read.condition key=concept kind=atom present=true
+@query.condition.value core.slot of=app.query.read.condition key=value kind=string present=true
+@query.phase core.type of=app.query.read.phase closed=true
+@query.phase.name core.slot of=app.query.read.phase key=name kind=atom present=true
+@query.operation core.type of=app.query.read.operation closed=true
+@query.operation.name core.slot of=app.query.read.operation key=name kind=atom present=true
+@query.operation.concept core.slot of=app.query.read.operation key=concept kind=atom
+@query.selector core.type of=app.query.read.selector closed=true
+@query.selector.concept core.slot of=app.query.read.selector key=concept kind=atom present=true
+@query.selector.value core.slot of=app.query.read.selector key=value kind=string present=true
+@query.question.targetCue core.slot of=app.query.read.question key=targetCue kind=boolean present=true
+@query.head.targetCue core.slot of=app.query.read.head key=targetCue kind=boolean
