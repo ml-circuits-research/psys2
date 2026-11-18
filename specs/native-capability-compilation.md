@@ -39,3 +39,5 @@ modules. Generate or verify it with `node scripts/build-native-interfaces.mjs` o
 `node scripts/build-native-interfaces.mjs --check`. The demo loader exposes the
 authored sources directly in Worlds. Each existing `operations.sop` is the separate
 legacy `core.operation` surface of the older world loader.
+
+The natural-language reader receives the previous natural-language turn when it is available. An authored SOP request stays in the execution journal and contributes current native observations through its effects. Its serialized graph is excluded from the text reader's previous-utterance field.

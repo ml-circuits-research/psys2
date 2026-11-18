@@ -1,5 +1,6 @@
 // Actual application state only. No request annotations or invented semantic types.
 import {observedReaderContext} from './native-reader-context.mjs';
+import {isAuthoredRequest} from './authored-request-tool.mjs';
 import {createCanonicalDrawingHost} from '../../worlds/art.draw/declared-host.mjs';
 import {DRAWING_STATE_INTERFACE} from '../../worlds/art.draw/canonical-state.mjs';
 import {createDiagramHost} from '../../worlds/diagram.sketch/declared-host.mjs';
@@ -41,6 +42,8 @@ export function createAppReaderContext({getState,getPrevious=()=>null,getInstanc
   }};
   const nativeView=area.projectState?area.projectState(native):native;
   for(const path of area.historySelection??[]){let value=nativeView;for(const key of path)value=value?.[key];collect(value);}
-  let contextSelection;const result=observedReaderContext(area.area,observation,getPrevious(),{compact:true,text,focus,onSummary:summary=>contextSelection=summary});onObservation({area:area.area,world:area.world,observation,contextSelection});return result;
+  // An authored graph has its own source and reaches execution without the text reader.
+  const prior=getPrevious(),previous=isAuthoredRequest(prior)?null:prior;
+  let contextSelection;const result=observedReaderContext(area.area,observation,previous,{compact:true,text,focus,onSummary:summary=>contextSelection=summary});onObservation({area:area.area,world:area.world,observation,contextSelection});return result;
  };
 }

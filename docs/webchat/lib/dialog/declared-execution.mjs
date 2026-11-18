@@ -1,10 +1,10 @@
-import { executeSpatialPlacement, requestsSpatialPlacement } from './spatial-placement-execution.mjs?v=c2748fbb63';
+import { executeSpatialPlacement, requestsSpatialPlacement } from './spatial-placement-execution.mjs?v=feb0063ce4';
 import { compareNativeReadings } from './capability-plan-adapter.mjs?v=da2a8c539c';
-import { NATIVE_AREAS,createAreaHost } from './app-reader-context.mjs?v=d608422334';
+import { NATIVE_AREAS,createAreaHost } from './app-reader-context.mjs?v=6c7fc1be6d';
 import { instanceIdFor } from './instance-identity.mjs?v=024ef1ca83';
-import { executeNativeCapability } from './capability-plan-execution.mjs?v=307948181a';
+import { executeNativeCapability } from './capability-plan-execution.mjs?v=8154df2460';
 import { executionValueSource } from './execution-policy.mjs?v=719611440c';
-import { inspectCachedExecutionSource } from './execution-world-inspection.mjs?v=9d8de22224';
+import { inspectCachedExecutionSource } from './execution-world-inspection.mjs?v=1ea894a309';
 import { World, str } from '../vendor/sopworld/sopworld.mjs?v=14e619cf45';
 import SOURCE from './new-engine-source.mjs?v=840316d8d9';
 let knowledge;

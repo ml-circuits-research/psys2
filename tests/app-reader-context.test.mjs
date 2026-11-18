@@ -14,3 +14,8 @@ test('application reader uses current native state and actual previous message a
 test('application reader rejects malformed observed state rather than substituting empty context',async()=>{
  const get=createAppReaderContext({getState:()=>({'ui.shell':{activeTab:'draw'},'art.draw':{objects:'invalid'}})});await assert.rejects(get());
 });
+test('authored SOP commands are excluded from natural-language context',async()=>{
+ const previous='@r std.request act=make mood=do source=$s @s std.request.source text="Create an object"';
+ const get=createAppReaderContext({getState:()=>({'ui.shell':{activeTab:'draw'},'art.draw':initialDrawingState()}),getPrevious:()=>previous});
+ assert.equal((await get('Create another object')).context.previous,null);
+});

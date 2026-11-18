@@ -1,5 +1,11 @@
 # Current status
 
+## 2026-11-18 — chat circuits and reader context
+
+Browser build **84eed17ce4** shows each actual SOP query on its user message and its compiled circuit and tool call on the answer. Authored SOP graphs remain in the execution journal. The natural-language reader uses current editor observations without feeding serialized authoring syntax into its previous-utterance input.
+
+A Chromium replay after an authored house recolor and Undo created both requested objects from “draw a tree and a house.” It displayed two admitted queries, two compiled circuits and two native calls. The reader and cutter weights are unchanged. The cutter still returned one span for “draw a circle and a square,” leaving the second target unresolved.
+
 ## 2026-11-18 — schema, knowledge and instance ownership
 
 Delivered application build **87d3be7b8b** with library **0.209.0 / 602df0d** and knowledge catalog **59875277**. GitHub Pages deployment [44327544495](https://github.com/ml-circuits-research/psys2/actions/runs/44327544495) succeeded; the [public demo](https://ml-circuits-research.github.io/psys2/webchat/?ui=87d3be7b8b) serves that exact build and catalog. Public schema and vocabulary source bytes were checked against the committed site copy. Calendar and Avatar import reusable schemas into separate contexts, then admit only instance facts through the library guard and their existing domain ownership closure. Direct instance readers reject copied schemas, rules, imports and unrelated knowledge facts. Current five-editor export/restore/query/temporary-reasoning checks preserve all data; schema definitions and temporary deductions do not enter instance storage. Drawing, Diagram and Documents still have authoritative native state with explicit SOP observations.

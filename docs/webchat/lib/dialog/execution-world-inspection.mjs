@@ -17,7 +17,7 @@ function snapshotText(snapshot){return (snapshot?.log??[]).map((entry,index)=>'#
 /** Projects actual cache accessors and retained journal JSON; performs no reading or reasoning. */
 export async function inspectExecutionWorlds(session){
  const [{inspectNewEngineSourceWorld},{inspectDeclaredExecutionSourceWorld},{inspectSpatialPlacementWorld}]=await Promise.all([
-  import('./new-engine.mjs?v=9d8de22224'),import('./declared-execution.mjs?v=9d8de22224'),import('./spatial-placement-execution.mjs?v=c2748fbb63'),
+  import('./new-engine.mjs?v=1ea894a309'),import('./declared-execution.mjs?v=1ea894a309'),import('./spatial-placement-execution.mjs?v=feb0063ce4'),
  ]);
  const journal=session?.newEngineJournal??[],moduleNames=[...new Set(journal.flatMap(record=>importsOf(record.evidence)))],sources=[['new-engine','src/dialog/new-engine.mjs',inspectNewEngineSourceWorld({moduleNames})],['declared-execution','src/dialog/declared-execution.mjs',inspectDeclaredExecutionSourceWorld({moduleNames})]],nodes=[],edges=[];
  const link=(from,to,label)=>edges.push({from,to,label});

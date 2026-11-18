@@ -1,4 +1,4 @@
-import{inspectCachedExecutionSource}from'./execution-world-inspection.mjs?v=9d8de22224';
+import{inspectCachedExecutionSource}from'./execution-world-inspection.mjs?v=1ea894a309';
 // Validated graph execution; no natural-language reader or grammar application path.
 import { World, inspectRequest, assessPropertyChange, quote, str, parse } from '../vendor/sopworld/sopworld.mjs?v=14e619cf45';
 import SOURCE from './new-engine-source.mjs?v=840316d8d9';

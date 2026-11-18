@@ -20,13 +20,13 @@
   },
   "admission": null,
   "runtimeIdentity": {
-    "appBuildSha256": "0474ff1d454a41bccb6881f5d5bb28f4e66f4ca53b24eaf1eb75c5d9dae4f5ef",
+    "appBuildSha256": "1a6ce78a1cc57c50789d551a6a4c6af05049061c2063c4c6035c792034393ca9",
     "readerSha256": "c88dd71c5ac3648576ee21f407cc550e72721726c6e1e7081370296b0a2f0e6a",
-    "pipelineSha256": "f83210cbd5253cf8cce72a377f5cd00742b942a9433a49eebd3f35fc414d4b87",
+    "pipelineSha256": "0da861cc31988d1991f170886aa866b947acf58c2ade9fe921804bf51aa2160a",
     "packetAdapterSha256": "09719d5734da131f5d7b737225c828a230feba490f99c05c3f71e89c4af9b67f",
     "graphDecoderSha256": "3b18ddc03cb8a70f8b6180b62deeaf0a4927d741cd026e70dfeefbcc3b0e2d2a",
-    "executorSha256": "3e16b461bce2a68109bce75fa40a3461fffa720c929a9300ae817531e375b0f4",
-    "contextSerializationSha256": "5c1f6f69561b0a33830142f8601698d8703acb2326accf16d6624d0c84f469b9",
+    "executorSha256": "753963b7c22fb9b7eebcf296d8569daee28f038fdd5d1dae062f2e5fcfb088f4",
+    "contextSerializationSha256": "dd458e5d5bd9b2b1a585f88d92948d998e991ee8d5143bb439ddb808b555eb72",
     "backendSha256": "b22eaac167cf46782e78f47aaa0f472b0b4f95893079068e8294112759d239fa",
     "bindingsSha256": "589a96e458038e9987f3c0c47c2245e7a4ea73d1ab91d9fe05d7e5d1452ba14b"
   },
@@ -40,11 +40,11 @@
         },
         {
           "path": "lib/dialog/index.mjs",
-          "sha256": "83289b069694373dace1f9b0cc5da441f70c72c9b8864c1796f71b0b98147e13"
+          "sha256": "a87dd2403bea097ea326511e59f5242a0d8a9e1cbf9364abd778c71a3808752a"
         },
         {
           "path": "lib/dialog/native-request-sampler.mjs",
-          "sha256": "57a1af1066bafb515e484d860c653a27c5bdd6942ddac2afc846b13095a41afa"
+          "sha256": "f4303309951f4865ec0abae7db4451cee2c164615cef9edac017983bcc16184c"
         },
         {
           "path": "lib/dialog/sampler.mjs",
@@ -88,11 +88,11 @@
         },
         {
           "path": "lib/dialog/project-context-action.mjs",
-          "sha256": "947263ae9fb2c5a5d52c947f109ec8ee8d655a8c34e8f74b4213d0bcd3f6a495"
+          "sha256": "bb57d3a4c07f0f9c8291c56ce3c2bc08dc5b9c0bb78d7d2aea815fed01e823dd"
         },
         {
           "path": "lib/dialog/project-create-action.mjs",
-          "sha256": "ed9a3d9a8a4ec58336d6bc5226bbb5e754b8e51b0cdb30fb70f2d5ea284a5ff4"
+          "sha256": "559eea40a4a9658338d3cbed13791b291bf82f7947d4218b6fa29f0d26f15c13"
         }
       ],
       "packetAdapterSha256": [
@@ -118,11 +118,11 @@
       "executorSha256": [
         {
           "path": "lib/dialog/new-engine.mjs",
-          "sha256": "88f6db43eccb69f14d82895777b6446e374866811d75155b4b02c01a9f736ea1"
+          "sha256": "518c9c53a6360ff339956723be9c2d118a008ef3759e87aa8cd5114f85c78d63"
         },
         {
           "path": "lib/dialog/reader-routing.mjs",
-          "sha256": "0c60330e5325e0e6e46f05582288468cb3b43f4f61fc2e947a8759196ab4b832"
+          "sha256": "1a88bf1f648a854402615d0b4cb777169e57576bc73583a247b6cdf05f079589"
         },
         {
           "path": "lib/dialog/authored-request-tool.mjs",
@@ -138,11 +138,11 @@
         },
         {
           "path": "lib/dialog/declared-execution.mjs",
-          "sha256": "fa88eab685803fa332188c128a2b090829266022a44e3e69f5dc4b0c9ca3c29d"
+          "sha256": "7dd5f99f70c3c8800d248ce351b00f108eeb8f2d203a5390947c1cee5f17db7b"
         },
         {
           "path": "lib/dialog/spatial-placement-execution.mjs",
-          "sha256": "ec5e87da9ef78561ebb29f9ab0a7798806ff8cf6df1c83f520c7de93715a4771"
+          "sha256": "ceb0ca87fa446e1913625f9c24829218a5918da8330daa02fe3505b4e2ea3dfc"
         },
         {
           "path": "lib/dialog/new-engine-source.mjs",
@@ -162,7 +162,7 @@
         },
         {
           "path": "lib/dialog/native-tool-controls.mjs",
-          "sha256": "163b725d313c6eae676b2facc7b1c769cb7f4e8e2d365519aed20a655b510c7d"
+          "sha256": "b07094232f16ed0eebaa5ddd3da28b8d250e5a2a0e90c7c42815534f5b3173bb"
         },
         {
           "path": "worlds/native-tool-host.mjs",
@@ -228,7 +228,7 @@
         },
         {
           "path": "lib/dialog/app-reader-context.mjs",
-          "sha256": "316e422fa9b4a447b5c07206c72a0a36d3158abebf01c050c5957025ba2cb894"
+          "sha256": "445542f269174b836b28dbc72298a97c16b289f4d93a9c3f888793e278355ee6"
         },
         {
           "path": "lib/dialog/key-reader-inference.mjs",
