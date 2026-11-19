@@ -5,7 +5,7 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync,readdirSync,existsSync} from 'node:fs';
 import {World} from '../src/vendor/sopworld/sopworld.mjs';
-import {renderPrimitives} from '../docs/webchat/ui/sop-primitives.mjs';
+import {renderPrimitives} from '../worlds/sop-primitives.mjs';
 
 const K=new URL('../../sop-knowledge-worlds/docs/worlds/',import.meta.url);
 const read=path=>readFileSync(new URL(path,K),'utf8');

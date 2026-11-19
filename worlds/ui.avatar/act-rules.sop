@@ -160,7 +160,7 @@
 @ps.slot.hat.call app.act.call act=make kind=w.face.hat variant=?v face=$ps.face order=2
 @preset.slot.hat core.rule when=$ps.pick when=$ps.face when=$ps.slot.hat.k then=$ps.slot.hat.call
 
-# View keys and history.
+# View keys. Undo and redo are the application's journal.
 @sel.req app.act.request operation="avatar.part.select" id=?id
 @sel.view app.act.view key=selected value=?id
 @select core.rule when=$sel.req then=$sel.view
@@ -173,21 +173,52 @@
 @fr.req app.act.request operation="avatar.face.resize" scale=?s
 @fr.view app.act.view key=scale value=?s
 @face.resize core.rule when=$fr.req then=$fr.view
-@undo.req app.act.request operation="avatar.undo"
-@undo.o app.act.history direction=back
-@undo core.rule when=$undo.req then=$undo.o
-@redo.req app.act.request operation="avatar.redo"
-@redo.o app.act.history direction=forward
-@redo core.rule when=$redo.req then=$redo.o
 @feat.req app.act.request operation="avatar.part.feature"
 @feat.o app.act.refuse reason=feature-lookup-not-declared
 @feature core.rule when=$feat.req then=$feat.o
 
 # What a reader observes: the face and each part, by its slot.
 @ob.face w.face.face name=?n
-@ob.face.o app.observe.object id=face kind=face sourceType=ui.avatar.face name=?n
-@observe.face core.rule when=$ob.face then=$ob.face.o
+@ob.face.preset w.face.face name=?n preset=?p style=?style
+@ob.face.kind k.faces.preset name=?p style=?style kind=?k
+@ob.face.any w.face.face preset=?anyPreset
+@ob.face.o app.observe.object id=face kind=face sourceType=ui.avatar.face binding=avatar.face name=?n
+@ob.face.preset.o app.observe.object id=face kind=face sourceType=ui.avatar.face binding=avatar.face name=?n base=?p characterKind=?k
+@observe.face core.rule when=$ob.face not=$ob.face.any then=$ob.face.o
+@observe.face.preset core.rule when=$ob.face.preset when=$ob.face.kind then=$ob.face.preset.o
 @ob.part w.face.part kind=?kind variant=?v
 @ob.slot w.face.slot part=?kind slot=?slot
-@ob.part.o app.observe.object id=?slot kind=?slot sourceType=ui.avatar.part variant=?v
-@observe.part core.rule when=$ob.part when=$ob.slot then=$ob.part.o
+@ob.sel app.area.view key=selected value=?slot
+@ob.part.o app.observe.object id=?slot kind=?slot sourceType=ui.avatar.part binding=avatar.part variant=?v selected=false
+@ob.part.sel.o app.observe.object id=?slot kind=?slot sourceType=ui.avatar.part binding=avatar.part variant=?v selected=true
+@observe.part core.rule when=$ob.part when=$ob.slot not=$ob.sel then=$ob.part.o
+@observe.part.selected core.rule when=$ob.part when=$ob.slot when=$ob.sel then=$ob.part.sel.o
+@ob.opt.face w.face.face style=?style
+@ob.opt.slot w.face.slot slot=?slot
+@ob.opt.v k.faces.variant slot=?slot style=?style name=?name
+@ob.opt.o app.observe.option id=?slot value=?name
+@observe.option core.rule when=$ob.opt.face when=$ob.opt.slot when=$ob.opt.v then=$ob.opt.o
+# Options a view offers for the face and its parts.
+@op.preset.face w.face.face style=?style
+@op.preset.k k.faces.preset style=?style name=?p
+@op.preset.o app.observe.option id=preset value=?p
+@option.preset core.rule when=$op.preset.face when=$op.preset.k then=$op.preset.o
+@op.expr.k k.faces.expression style=?style name=?e
+@op.expr.o app.observe.option id=expression value=?e
+@option.expression core.rule when=$op.preset.face when=$op.expr.k then=$op.expr.o
+@op.size.t ui.avatar.size grade=?g
+@op.size.o app.observe.option id=size value=?g
+@option.size core.rule when=$op.size.t then=$op.size.o
+@op.place.t ui.avatar.step place=?p
+@op.place.o app.observe.option id=place value=?p
+@option.place core.rule when=$op.place.t then=$op.place.o
+@op.colour.t ui.avatar.tint attr=?attr tint=?tint
+@op.colour.k k.faces.colour of=?tint name=?c
+@op.colour.o app.observe.option id=colour value=?c
+@option.colour core.rule when=$op.colour.t when=$op.colour.k then=$op.colour.o
+@op.object.s w.face.slot slot=?slot
+@op.object.o app.observe.option id=object value=?slot
+@option.object core.rule when=$op.object.s then=$op.object.o
+@ids.temporary app.observe.option id=idsMode value=temporary
+@ids.always app.observe.option id=idsMode value=always
+@ids.off app.observe.option id=idsMode value=off

@@ -13,7 +13,7 @@ export const dataOf = (ctx) => ctx.knowledge?.peekFaces?.() ?? DEFAULT_FACE;
 export const ensure = (ctx) => { ctx.state.name = typeof ctx.state.name === 'string' && ctx.state.name ? ctx.state.name : DEFAULT_NAME; return ctx.state; };
 
 /** The engine seeds the state of a tool world at the start of a session: the avatar has its name before anything is said. */
-export function initialState() { return { name: DEFAULT_NAME, face: newFace(DEFAULT_FACE) }; }
+export { emptyAvatarState as initialState } from './sop-avatar.mjs';
 
 export const setName = (ctx, { name } = {}) => {
   const n = String(name ?? '').trim().replace(/[.!?]+$/, '');

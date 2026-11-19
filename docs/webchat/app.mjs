@@ -204,7 +204,7 @@ export async function mountPsys2(element, options = {}) {
       try {
       timing.timeline.stage('Load editor module');await tabPaint();
       if (t.file && !t.make) { const m = (await import(new URL(`ui/tabs/${t.file}`, base).href)).default; Object.assign(t, m); }   // the tab's module loads now (with its world modules); vendor assets load when it makes its UI
-      if (!options.renderAllTabs && engineClient) { try { timing.timeline.stage('Ensure instance world');const r = await engineClient.call('ensure', { worlds: [t.world], why: 'tab',tab:t.id });timing.worker=r?.timings??[]; for (const id of r?.added ?? []) loadedWorlds.add(id); } catch (e) { console.warn('could not load the world of the tab', t.world, e); } }
+      if (!options.renderAllTabs && engineClient) { try { timing.timeline.stage('Ensure instance world');const r = await engineClient.call('ensure', { worlds: [t.world], why: 'tab',tab:t.id });timing.worker=r?.timings??[]; for (const id of r?.added ?? []) loadedWorlds.add(id); if (r?.state && Object.hasOwn(r.state, t.world)) states[t.world] = r.state[t.world]; } catch (e) { console.warn('could not load the world of the tab', t.world, e); } }
       if (destroyed) return null;
       timing.timeline.stage('Create editor');await tabPaint();
       const {holder}=attachWorldViews(t,tabBtns[t.id].panel);

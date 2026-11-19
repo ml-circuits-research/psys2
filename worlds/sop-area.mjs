@@ -7,11 +7,11 @@ import {catalogWorld} from './catalog-world.mjs';
 import {readNativeToolInterface} from './native-tool-interface.mjs';
 import {toolInvocationContext} from './native-tool-host.mjs';
 import {createSopWorldHost, initialSopWorldState, worldOf} from './sop-world-host.mjs';
-import {renderPrimitives} from '../docs/webchat/ui/sop-primitives.mjs';
+import {renderPrimitives} from './sop-primitives.mjs';
 
 const read = (fact, key) => { const raw = fact?.attrs[key]?.[0]; return raw === undefined ? undefined : raw.startsWith('"') ? str(raw) : raw; };
 const all = (fact, key) => (fact?.attrs[key] ?? []).map((raw) => raw.startsWith('"') ? str(raw) : raw);
-const cache = new Map();
+const cache = new Map(), resolved = new Map();
 
 function declaration(text) {
   const world = new World();
@@ -42,7 +42,7 @@ export async function areaBase({ world, loader, readCatalog }) {
     return { base, area, owned, kinds, instance };
   })();
   cache.set(world, promise);
-  try { return await promise; } catch (error) { cache.delete(world); throw error; }
+  try { const value = await promise; resolved.set(world, value); return value; } catch (error) { cache.delete(world); throw error; }
 }
 
 /** The interface's open choices, each read from the facts its declaration names. */
@@ -76,7 +76,38 @@ export async function initialSopAreaState(options) {
 
 /** What the tab shows: the area's declared primitive facts, drawn as they are. */
 export async function renderSopArea(options, state, opts) {
-  const declared = await areaBase(options), [draw] = declared.owned('app.area.draw');
-  const types = Object.fromEntries(['draw', 'fill', 'point', 'orient'].map((k) => [k, read(draw, k)]));
-  return renderPrimitives(worldOf(declared.base, state), types, { w: Number(read(declared.area, 'frame.w')), h: Number(read(declared.area, 'frame.h')) }, opts);
+  const declared = await areaBase(options), { types, select, frame } = drawTypes(declared);
+  return renderPrimitives(worldOf(declared.base, state), types, frame, { ...opts, select });
+}
+
+/** The area's base once loaded (synchronous readers: a state projection for the view). */
+export const peekAreaBase = (world) => resolved.get(world);
+
+function drawTypes(declared) {
+  const [draw] = declared.owned('app.area.draw');
+  return { types: Object.fromEntries(['draw', 'fill', 'point', 'orient'].map((k) => [k, read(draw, k)])), select: read(draw, 'select'),
+    frame: { w: Number(read(declared.area, 'frame.w')), h: Number(read(declared.area, 'frame.h')) } };
+}
+
+/**
+ * What a view shows of a state: the drawn SVG, the observed objects, the declared options per object and the
+ * view keys. Synchronous; before the base is loaded it says so.
+ */
+export function projectSopArea(world, state, opts = {}) {
+  const declared = resolved.get(world);
+  if (!declared || !state?.sop) return { sop: state?.sop ?? '', runtime: state?.runtime ?? { view: {} }, pending: true };
+  const live = worldOf(declared.base, state), { types, select, frame } = drawTypes(declared);
+  const objects = live.ofType('app.observe.object').map((fact) => Object.fromEntries(Object.keys(fact.attrs).map((k) => [k, read(fact, k)])));
+  const options = {};
+  for (const fact of live.ofType('app.observe.option')) (options[read(fact, 'id')] ??= []).push(read(fact, 'value'));
+  const view = state.runtime?.view ?? {}, selected = view.selected ?? null, present = objects.some((object) => object.id === selected);
+  const controls = declared.owned('app.area.control').sort((a, b) => Number(read(a, 'n')) - Number(read(b, 'n'))).map((control) => {
+    const key = read(control, 'options'), when = read(control, 'when');
+    return { label: read(control, 'label'), operation: read(control, 'operation'), param: read(control, 'param') ?? null,
+      options: key === undefined ? [] : key === 'selected' ? options[selected] ?? [] : options[key] ?? [],
+      target: read(control, 'target') ?? null, list: read(control, 'list') ?? null,
+      available: read(control, 'target') !== 'selected' || (selected !== null && selected !== 'face' && (when === undefined || (when === 'present') === present)) };
+  });
+  // The state itself travels with what is derived from it, so a projection canonicalizes back to its state.
+  return { sop: state.sop, runtime: state.runtime ?? { view: {} }, svg: renderPrimitives(live, types, frame, { ...opts, select }), objects, options, controls, selected };
 }

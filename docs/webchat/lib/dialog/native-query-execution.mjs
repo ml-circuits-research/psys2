@@ -1,6 +1,6 @@
 import { parse,str } from '../vendor/sopworld/sopworld.mjs?v=851c80bc87';
 import { compileNativeQuery } from './capability-plan-adapter.mjs?v=1172fcce3f';
-import { createAreaHost,NATIVE_AREAS } from './app-reader-context.mjs?v=dafd7cb7b2';
+import { createAreaHost,NATIVE_AREAS } from './app-reader-context.mjs?v=8db9667179';
 import { instanceIdFor } from './instance-identity.mjs?v=024ef1ca83';
 
 const value=(row,key)=>str(row?.attrs[key]?.[0]);

@@ -13,7 +13,7 @@ import {createDiagramHost,initialDiagramState} from '../worlds/diagram.sketch/de
 import {initialCalendarState,toNativeCalendarState} from '../worlds/time.calendar/declared-host.mjs';
 import {calendarStateWorld} from '../worlds/time.calendar/canonical-state.mjs';
 import {initialCanonicalDocumentState} from '../worlds/docs.editor/declared-host.mjs';
-import {initialAvatarState} from '../worlds/ui.avatar/declared-host.mjs';
+import {emptyAvatarState as initialAvatarState} from '../worlds/ui.avatar/sop-avatar.mjs';
 const session=()=>({isession:{state:{}},engine:{loader:{readFile:(world,file)=>readFile(new URL(`../worlds/${world}/${file}`,import.meta.url),'utf8')}}});
 let sequence=0;
 function invoke(host,operation,args){const receipt=invokeToolCommand(host,{invocation:'archive.'+(++sequence),expectedVersion:host.observe().version,operation,args});assert.equal(receipt.status,'changed',JSON.stringify(receipt));return receipt;}

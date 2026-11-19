@@ -65,7 +65,8 @@ export function renderPrimitives(world, types, frame = { w: 100, h: 100 }, opts 
     const shape = val(fact, 'shape'), line = (points.get(source) ?? []).sort((a, b) => a[0] - b[0]).map(([, x, y]) => [x, y]);
     const move = `translate(${f1(num(fact, 'tx'))} ${f1(num(fact, 'ty'))}) scale(${f1(num(fact, 'scale'))}) translate(${f1(-num(fact, 'cx'))} ${f1(-num(fact, 'cy'))})`;
     const flip = side === 'right' ? `matrix(-1 0 0 1 ${frame.w} 0) ` : '';
-    return `<g transform="${flip}${move}">${shapeSvg(box, shape, fill, line, orients.get(source) ?? {})}</g>`;
+    const tag = opts.select && fact.attrs[opts.select] ? ` data-select="${String(val(fact, opts.select)).replace(/[<>&"]/g, '')}"` : '';
+    return `<g transform="${flip}${move}"${tag}>${shapeSvg(box, shape, fill, line, orients.get(source) ?? {})}</g>`;
   });
   const size = opts.size ? ` width="${opts.size}" height="${f1((opts.size * frame.h) / frame.w)}"` : '';
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${frame.w} ${frame.h}"${size}>${out.join('')}</svg>`;

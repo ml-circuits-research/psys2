@@ -2,7 +2,7 @@ import { historyHeads } from './history-journal.mjs?v=f53cc4aa6f';
 import {nativeKindCandidates} from './native-binding-candidates.mjs?v=32473e62cc';
 // Bind model-declared context references to actual native objects; never inspect source words.
 import {quote,str} from '../vendor/sopworld/sopworld.mjs?v=851c80bc87';
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=dafd7cb7b2';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=8db9667179';
 import {executionPolicyWorld} from './execution-policy.mjs?v=90d00f1f0c';
 import {readReferenceTurn,resolveObservedReference} from './reference-policy.mjs?v=8eec9abd75';
 import {observeGroundedProjection,projectGroundedRequest} from './grounded-projection.mjs?v=d6cfa54db0';

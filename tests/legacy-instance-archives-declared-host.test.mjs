@@ -44,7 +44,15 @@ test('the historical fixture contains populated, unmodified published instances 
  assert.ok(calendar.meetings.some(event=>event.participants.length&&event.room&&event.calendar&&event.duration>0));assert.equal(Object.hasOwn(calendar,'selectedEvent'),false);
 });
 
-for(const record of records)test(`published ${record.world} archive remains lossless while its old knowledge pin is not silently adopted`,async()=>{
+// The Avatar now keeps a w.face SOP instance; an archive of the retired native face is refused, never adopted.
+test('a published archive of the retired native avatar face is refused and stays readable',async()=>{
+ const record=records.find(row=>row.world==='ui.avatar'),original=JSON.stringify(record),target=session();
+ await assert.rejects(restoreNativeInstances(target,[record]));
+ assert.deepEqual(target.isession.state,{});
+ exact(readInstanceState(record.wires),archives.get('ui.avatar'),'the original wire archive remains losslessly readable');
+ assert.equal(JSON.stringify(record),original);
+});
+for(const record of records.filter(row=>row.world!=='ui.avatar'))test(`published ${record.world} archive remains lossless while its old knowledge pin is not silently adopted`,async()=>{
  const archive=archives.get(record.world),original=JSON.stringify(record),target=session();
  assert.notEqual(archive.metadata.knowledge.version,CATALOG_PIN.commit);
  // Verify the historical facts against a fresh adapter without presenting the old archive as a current work file.

@@ -1,5 +1,4 @@
 import {invokeToolCommand} from '../src/dialog/native-control-intent.mjs';
-import {toNativeAvatarState,canonicalAvatarState} from '../worlds/ui.avatar/canonical-state.mjs';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
@@ -7,9 +6,7 @@ import {performGesture} from './fixtures/editor-gesture.mjs';
 import {initialCalendarState,toNativeCalendarState} from '../worlds/time.calendar/declared-host.mjs';
 import {initialCanonicalDocumentState} from '../worlds/docs.editor/declared-host.mjs';
 import {toNativeDocumentState} from '../worlds/docs.editor/canonical-state.mjs';
-import {DEFAULT_FACE} from '../worlds/ui.avatar/default-face.mjs';
-import {variantFor} from '../worlds/ui.avatar/facedraw.mjs';
-import {initialAvatarState,createAvatarHost} from '../worlds/ui.avatar/declared-host.mjs';
+import {emptyAvatarState,avatarAreaStateWorld} from '../worlds/ui.avatar/sop-avatar.mjs';
 const session=(world,state)=>({isession:{state:{[world]:state}},engine:{loader:{readFile:(world,file)=>readFile(new URL('../worlds/'+world+'/'+file,import.meta.url),'utf8')}}});
 const run=(s,view,operation,args={})=>performGesture(s,{view,operation,args});
 test('Calendar clear deletes exact events, retains its resource, and actual shared undo restores events',async()=>{
@@ -27,19 +24,15 @@ test('Documents clear retains document identity/title and is undoable; section d
  assert.equal((await run(s,'editor','document.section.remove',{ids:[blocks[0]]})).ok,true);assert.deepEqual(project().blocks.map(b=>b.text),['Next']);
  assert.equal((await run(s,'editor','undo')).ok,true);assert.deepEqual(s.isession.state['docs.editor'],before);
 });
-test('Avatar concrete deletion permits required parts, clear is empty/undoable and exact base recomposes',async()=>{
- const s=session('ui.avatar',canonicalAvatarState(initialAvatarState())),state=()=>s.isession.state['ui.avatar'];
- const before=structuredClone(state());assert.equal((await run(s,'avatar','avatar.parts.remove',{ids:['head']})).ok,true);assert.equal(toNativeAvatarState(state()).face.slots.head,'none');assert.equal((await run(s,'avatar','avatar.undo')).ok,true);assert.deepEqual(state(),before);
- const ids=createAvatarHost({state:state(),instanceId:'visible'}).observe().objects.filter(o=>o.sourceType==='ui.avatar.part').map(o=>o.id);
- assert.equal((await run(s,'avatar','avatar.clear',{ids})).ok,true);assert.ok(Object.values(toNativeAvatarState(state()).face.slots).every(value=>value==='none'));
- assert.equal((await run(s,'avatar','avatar.clear',{ids:[]})).changed,false);assert.equal((await run(s,'avatar','undo')).ok,true);assert.deepEqual(state(),before);
- await run(s,'avatar','avatar.clear',{ids});assert.equal((await run(s,'avatar','avatar.face.preset',{preset:toNativeAvatarState(state()).face.base})).ok,true);assert.ok(Object.values(toNativeAvatarState(state()).face.slots).some(value=>value!=='none'));
-});
-
-test('transient blink/talk overlays cannot introduce parts into a cleared avatar',()=>{
- const state=initialAvatarState(),h=createAvatarHost({state,instanceId:'no-ghosts'}),ids=h.observe().objects.filter(o=>o.sourceType==='ui.avatar.part').map(o=>o.id);
- invokeToolCommand(h,{invocation:'clear',expectedVersion:h.observe().version,operation:'avatar.clear',args:{ids}});
- assert.equal(variantFor(DEFAULT_FACE,toNativeAvatarState(state).face,'eyes','left',{eyes:'closed'}),null);assert.equal(variantFor(DEFAULT_FACE,toNativeAvatarState(state).face,'mouth','left',{mouth:'talking'}),null);
- const expressive=invokeToolCommand(h,{invocation:'expression',expectedVersion:h.observe().version,operation:'avatar.face.expression',args:{expression:'happy'}});assert.equal(expressive.status,'changed');
- assert.equal(variantFor(DEFAULT_FACE,toNativeAvatarState(state).face,'eyebrows').name,toNativeAvatarState(state).face.expressionParts.eyebrows);
+test('Avatar concrete deletion permits required parts, clear is empty/undoable and a preset recomposes',async()=>{
+ const s=session('ui.avatar',emptyAvatarState()),state=()=>s.isession.state['ui.avatar'];
+ const parts=()=>avatarAreaStateWorld(state()).wires.size-1;
+ assert.equal((await run(s,'avatar','avatar.face.select')).ok,true);
+ const before=state().sop;assert.ok(parts()>5);
+ assert.equal((await run(s,'avatar','avatar.parts.remove',{ids:['head']})).ok,true);assert.ok(!/ w\.face\.head /.test(state().sop));
+ {const u=await run(s,'avatar','avatar.undo');assert.equal(u.ok,true,JSON.stringify(u).slice(0,600));}assert.equal(state().sop,before);
+ const ids=[...avatarAreaStateWorld(state()).wires.values()].filter(w=>w.type!=='w.face.face').map(w=>w.type.slice('w.face.'.length));
+ assert.equal((await run(s,'avatar','avatar.clear',{ids})).ok,true);assert.equal(parts(),0);
+ assert.equal((await run(s,'avatar','avatar.clear',{ids:[]})).changed,false);assert.equal((await run(s,'avatar','undo')).ok,true);assert.equal(state().sop,before);
+ await run(s,'avatar','avatar.clear',{ids});assert.equal((await run(s,'avatar','avatar.face.preset',{preset:'robot'})).ok,true);assert.ok(parts()>3);
 });

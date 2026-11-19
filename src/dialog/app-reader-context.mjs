@@ -5,14 +5,12 @@ import {createCanonicalDrawingHost} from '../../worlds/art.draw/declared-host.mj
 import {DRAWING_STATE_INTERFACE} from '../../worlds/art.draw/canonical-state.mjs';
 import {createCanonicalDiagramHost,DIAGRAM_STATE_INTERFACE} from '../../worlds/diagram.sketch/declared-host.mjs';
 import {createDocumentHost,DOCUMENT_STATE_INTERFACE} from '../../worlds/docs.editor/declared-host.mjs';
-import {createAvatarHost} from '../../worlds/ui.avatar/declared-host.mjs';
-import {canonicalAvatarState,toNativeAvatarState,avatarStateWorld,AVATAR_STATE_SCHEMA} from '../../worlds/ui.avatar/canonical-state.mjs';
+import {createAvatarArea,canonicalAvatarArea,projectAvatarArea,avatarAreaStateWorld} from '../../worlds/ui.avatar/sop-avatar.mjs';
 import {createCalendarHost,canonicalCalendarState,toNativeCalendarState} from '../../worlds/time.calendar/declared-host.mjs';
 import {calendarStateWorld,CALENDAR_STATE_SCHEMA} from '../../worlds/time.calendar/canonical-state.mjs';
 export const NATIVE_AREAS={
- avatar:{area:'drawing',world:'ui.avatar',create:createAvatarHost,canonicalizeState:canonicalAvatarState,projectState:toNativeAvatarState,
-  stateWorld:avatarStateWorld,stateSchema:AVATAR_STATE_SCHEMA,stateInterfaceTypeKey:'nativeType',loadKnowledge:'faces',
-  historySelection:[['selectedSlot']],historyView:[['idDisplay']]},
+ avatar:{area:'drawing',world:'ui.avatar',create:createAvatarArea,prepare:createAvatarArea,canonicalizeState:canonicalAvatarArea,projectState:projectAvatarArea,
+  stateWorld:avatarAreaStateWorld,separateRuntime:true,historySelection:[['runtime','view','selected']],historyView:[['runtime','view','ids']]},
  draw:{area:'drawing',world:'art.draw',create:createCanonicalDrawingHost,...DRAWING_STATE_INTERFACE,
   historySelection:[['selected'],['selectedIds'],['selectedPart']],historyView:[['idDisplay']]},
  diagram:{area:'diagram',world:'diagram.sketch',create:createCanonicalDiagramHost,...DIAGRAM_STATE_INTERFACE,historySelection:[['selected'],['chartTools','active']],historyView:[['idDisplay']]},
@@ -26,7 +24,7 @@ export async function createAreaHost(area,{loader,knowledge,prepareKnowledge=tru
  if(prepareKnowledge&&area.loadKnowledge)await knowledge?.[area.loadKnowledge]?.();
  const policySource=area.policyFile?await loader?.readFile?.(area.world,area.policyFile):undefined;
  if(area.policyFile&&!policySource)throw Error('native-policy-unavailable');
- return area.create({...options,knowledge,...(policySource?{policySource}:{})});
+ return area.create({...options,knowledge,loader,...(policySource?{policySource}:{})});
 }
 export function createAppReaderContext({getState,getPrevious=()=>null,getInstanceId=()=>globalThis.crypto.randomUUID(),getIdentityRegistry,includeObservationIdentity=false,onObservation=()=>{}}={}){
  if(typeof getState!=='function'||typeof getPrevious!=='function'||typeof onObservation!=='function')throw Error('invalid-app-reader-context');

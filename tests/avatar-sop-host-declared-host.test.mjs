@@ -46,7 +46,7 @@ function session(){
  return {base,state,host,run,ids:()=>host.observe().objects.map(o=>o.id).sort(),shown:()=>Object.fromEntries(worldOf(base,state).ofType('ui.avatar.shown').map(s=>[s.attrs.slot[0],value(s.attrs.variant[0])]))};
 }
 
-test('a preset, part edits and history run as declared act rules over the w.face instance',{skip:available?false:'knowledge with w.face.slot unavailable'},()=>{
+test('a preset and part edits run as declared act rules over the w.face instance',{skip:available?false:'knowledge with w.face.slot unavailable'},()=>{
  const s=session();
  assert.equal(s.run('@c avatar.face.preset preset="child"').status,'changed');
  assert.ok(s.ids().includes('head')&&s.ids().includes('mouth'),JSON.stringify(s.ids()));
@@ -63,10 +63,8 @@ test('a preset, part edits and history run as declared act rules over the w.face
  assert.equal(s.shown().eyebrows,'arched');
  assert.equal(s.run('@c avatar.parts.remove ids="hat"').status,'changed');
  assert.equal(s.shown().hat,undefined);
- for(let i=0;i<4;i++)assert.equal(s.run('@c avatar.undo').status,'changed');
- assert.deepEqual({...s.shown()},{...child,hat:'cap'});
- assert.equal(s.run('@c avatar.redo').status,'changed');
- assert.equal(s.shown().mouth,'big smile');
+ // Undo and redo are the application's journal (tests/native-clear-editors.test.mjs).
+ assert.equal(s.shown().head,child.head);
 });
 
 test('a tinted part colour sets the face colour its tint names; size grades come from the SOP table',{skip:available?false:'knowledge with w.face.slot unavailable'},()=>{

@@ -12,8 +12,8 @@ import { initialDiagramState } from '../worlds/diagram.sketch/declared-host.mjs'
 import { initialCanonicalDocumentState } from '../worlds/docs.editor/declared-host.mjs';
 import { toNativeDocumentState } from '../worlds/docs.editor/canonical-state.mjs';
 import { initialCalendarState, toNativeCalendarState } from '../worlds/time.calendar/declared-host.mjs';
-import { initialAvatarState } from '../worlds/ui.avatar/declared-host.mjs';
-import { toNativeAvatarState } from '../worlds/ui.avatar/canonical-state.mjs';
+import { emptyAvatarState } from '../worlds/ui.avatar/sop-avatar.mjs';
+import { avatarAreaStateWorld } from '../worlds/ui.avatar/sop-avatar.mjs';
 
 test('the shared native control route executes recorded SOP in all editor areas', async () => {
   const state = {
@@ -21,7 +21,7 @@ test('the shared native control route executes recorded SOP in all editor areas'
     'diagram.sketch': initialDiagramState(),
     'docs.editor': initialCanonicalDocumentState(),
     'time.calendar': initialCalendarState(),
-    'ui.avatar': initialAvatarState(),
+    'ui.avatar': emptyAvatarState(),
   };
   await assert.rejects(invokeNativeControl({isession:{state}}, {view:'draw',operation:'drawing.object.make',args:{kind:'house'}}), /invalid-control-intent/);
   const activity = [];
@@ -40,7 +40,7 @@ test('the shared native control route executes recorded SOP in all editor areas'
     ['calendar', 'calendar.event.add', { id: 'visit', title: 'Visit', start: 2000, duration: 100 },
       () => toNativeCalendarState(state['time.calendar']).meetings[0]?.title, 'Visit'],
     ['avatar', 'avatar.face.expression', { expression: 'happy' },
-      () => toNativeAvatarState(state['ui.avatar']).face.expression, 'happy'],
+      () => avatarAreaStateWorld(state['ui.avatar']).ofType('w.face.face')[0]?.attrs.expression?.[0], 'happy'],
   ];
   for (const [view, operation, args, observe, expected] of cases) {
     const host = await prepareNativeControlHost(session, {view});
