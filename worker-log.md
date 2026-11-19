@@ -238,3 +238,6 @@ Chromium (rebuilt webchat): "Is there a hous?" → yes, noted "hous" as house; "
 
 2026-11-19 — Avatar as a SOP world (not yet wired into the tab): a w.face instance changed only by library std.acts; worlds/ui.avatar/render-projection.sop derives shown variants (expressions override mouth/eyebrows/eyes), slot transforms, mirrored slots, points, one fill per shape (tint > part colour > rgb > colour name, stratified) and orientation from k.faces. docs/webchat/ui/sop-primitives.mjs only draws those facts. Child/robot/girl render fully from the catalog; the old fallback-data path draws no robot.
 New test 2/2 (duplicate head refused, happy → "big smile", resize and undo); gate 653 pass/3 skip.
+
+2026-11-19 — Generic SOP world host (worlds/sop-world-host.mjs): a native command is told as app.act.request/app.act.item; the tab's rules derive ordered app.act.call (std.acts make/change/remove), view keys and history; the host runs them and keeps instance facts as state. worlds/ui.avatar/act-rules.sop compiles all avatar commands except part.feature (refused, not declared) — size grades, move steps and tint→face-colour routing are SOP tables. Not yet the live Avatar tab.
+New test 2/2 (preset, add, one hat per face, variant, move, expression, remove, 4× undo, redo, tinted colour, size grade); gate green.

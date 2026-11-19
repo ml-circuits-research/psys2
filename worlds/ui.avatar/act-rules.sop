@@ -1,0 +1,193 @@
+# ui.avatar act rules (authored). Each native avatar command compiles to ordered std.acts calls on the w.face
+# instance through these rules; worlds/sop-world-host.mjs only runs the derived calls. Value tables (size grades,
+# move steps, which face key a tinted part's colour sets) are facts here, not code.
+@avatar.tables.size core.type of=ui.avatar.size
+@avatar.tables.step core.type of=ui.avatar.step
+@avatar.tables.tint core.type of=ui.avatar.tint
+@size.tiny ui.avatar.size grade=tiny scale=0.6
+@size.small ui.avatar.size grade=small scale=0.8
+@size.default ui.avatar.size grade=default scale=1
+@size.big ui.avatar.size grade=big scale=1.2
+@size.huge ui.avatar.size grade=huge scale=1.5
+@step.up ui.avatar.step place=up dx=0 dy=-3
+@step.down ui.avatar.step place=down dx=0 dy=3
+@step.left ui.avatar.step place=left dx=-3 dy=0
+@step.right ui.avatar.step place=right dx=3 dy=0
+@tint.skin ui.avatar.tint tint=skin attr=skin
+@tint.hair ui.avatar.tint tint=hair attr=hair_colour
+@tint.eyes ui.avatar.tint tint=eyes attr=eye_colour
+@tint.clothes ui.avatar.tint tint=clothes attr=clothes
+
+# Add a part to the face.
+@add.req app.act.request operation="avatar.part.add" id=?slot variant=?v
+@add.slot w.face.slot slot=?slot part=?kind
+@add.face w.face.face
+@add.call app.act.call act=make kind=?kind variant=?v face=$add.face order=1
+@add core.rule when=$add.req when=$add.slot when=$add.face then=$add.call
+
+# Change the variant, colour or size grade of listed parts.
+@chg.item app.act.item param="ids" value=?slot
+@chg.slot w.face.slot slot=?slot part=?kind
+@chg.part w.face.part kind=?kind
+@chg.v.req app.act.request operation="avatar.part.change" variant=?v
+@chg.v.call app.act.call act=change thing=$chg.part attr=variant value=?v order=1
+@change.variant core.rule when=$chg.v.req when=$chg.item when=$chg.slot when=$chg.part then=$chg.v.call
+@chg.s.req app.act.request operation="avatar.part.change" size=?grade
+@chg.s.table ui.avatar.size grade=?grade scale=?scale
+@chg.s.call app.act.call act=change thing=$chg.part attr=size value=?scale order=1
+@change.size core.rule when=$chg.s.req when=$chg.s.table when=$chg.item when=$chg.slot when=$chg.part then=$chg.s.call
+# A colour on a tinted part sets the face colour its tint names; an untinted part takes its own colour.
+@chg.c.req app.act.request operation="avatar.part.change" colour=?c
+@chg.c.face w.face.face style=?style
+@chg.c.shown ui.avatar.shown part=$chg.part slot=?slot variant=?v
+@chg.c.kp k.faces.part slot=?slot of=?v tint=?tint
+@chg.c.table ui.avatar.tint tint=?tint attr=?attr
+@chg.c.tinted app.act.call act=change thing=$chg.c.face attr=?attr value=?c order=1
+@change.colour.tint core.rule when=$chg.c.req when=$chg.item when=$chg.slot when=$chg.part when=$chg.c.face when=$chg.c.shown when=$chg.c.kp when=$chg.c.table then=$chg.c.tinted
+@chg.c.anyTint k.faces.part slot=?slot of=?v tint=?anyTint
+@chg.c.own app.act.call act=change thing=$chg.part attr=colour value=?c order=1
+@change.colour.own core.rule when=$chg.c.req when=$chg.item when=$chg.slot when=$chg.part when=$chg.c.shown not=$chg.c.anyTint then=$chg.c.own
+
+# Resize listed parts; move them one step.
+@rsz.req app.act.request operation="avatar.part.resize" scale=?scale
+@rsz.call app.act.call act=change thing=$chg.part attr=size value=?scale order=1
+@resize core.rule when=$rsz.req when=$chg.item when=$chg.slot when=$chg.part then=$rsz.call
+@mv.req app.act.request operation="avatar.part.move" place=?place
+@mv.step ui.avatar.step place=?place dx=?dx dy=?dy
+@mv.part w.face.part kind=?kind x=?x y=?y
+@mv.nx core.calc out=?nx fn=add args=?x args=?dx
+@mv.ny core.calc out=?ny fn=add args=?y args=?dy
+@mv.cx app.act.call act=change thing=$mv.part attr=x value=?nx order=1
+@mv.cy app.act.call act=change thing=$mv.part attr=y value=?ny order=2
+@move.x core.rule when=$mv.req when=$mv.step when=$chg.item when=$chg.slot when=$mv.part with=$mv.nx then=$mv.cx
+@move.y core.rule when=$mv.req when=$mv.step when=$chg.item when=$chg.slot when=$mv.part with=$mv.ny then=$mv.cy
+
+# Remove listed parts (one, several, or all of them).
+@rm.req.one app.act.request operation="avatar.part.remove"
+@rm.req.many app.act.request operation="avatar.parts.remove"
+@rm.req.all app.act.request operation="avatar.clear"
+@rm.call app.act.call act=remove thing=$chg.part order=1
+@remove.one core.rule when=$rm.req.one when=$chg.item when=$chg.slot when=$chg.part then=$rm.call
+@remove.many core.rule when=$rm.req.many when=$chg.item when=$chg.slot when=$chg.part then=$rm.call
+@remove.all core.rule when=$rm.req.all when=$chg.item when=$chg.slot when=$chg.part then=$rm.call
+
+# Face keys: expression, name.
+@ex.req app.act.request operation="avatar.face.expression" expression=?e
+@ex.face w.face.face
+@ex.call app.act.call act=change thing=$ex.face attr=expression value=?e order=1
+@expression core.rule when=$ex.req when=$ex.face then=$ex.call
+@nm.req app.act.request operation="avatar.face.name" name=?n
+@nm.call app.act.call act=change thing=$ex.face attr=name value=?n order=1
+@name core.rule when=$nm.req when=$ex.face then=$nm.call
+
+# A preset (or a composition by base or by character kind) replaces every part with the preset's parts
+# and sets the face colours it names.
+@ps.req app.act.request operation="avatar.face.preset" preset=?p
+@ps.base.req app.act.request operation="avatar.face.compose" base=?p
+@ps.kind.req app.act.request operation="avatar.face.compose" characterKind=?k
+@ps.face w.face.face style=?style
+@ps.chosen.type core.type of=ui.avatar.chosen
+@ps.chosen ui.avatar.chosen preset=?p
+@choose.preset core.rule when=$ps.req then=$ps.chosen
+@choose.base core.rule when=$ps.base.req then=$ps.chosen
+@ps.bykind k.faces.preset kind=?k style=?style name=?p
+@choose.kind core.rule when=$ps.kind.req when=$ps.face when=$ps.bykind then=$ps.chosen
+@ps.pick ui.avatar.chosen preset=?p
+@ps.old w.face.part
+@ps.clear app.act.call act=remove thing=$ps.old order=1
+@preset.clear core.rule when=$ps.pick when=$ps.old then=$ps.clear
+@ps.k k.faces.preset name=?p style=?style
+@ps.call.face app.act.call act=change thing=$ps.face attr=preset value=?p order=3
+@preset.face core.rule when=$ps.pick when=$ps.face when=$ps.k then=$ps.call.face
+@ps.skin.k k.faces.preset name=?p style=?style skin=?c
+@ps.skin.call app.act.call act=change thing=$ps.face attr=skin value=?c order=3
+@preset.colour.skin core.rule when=$ps.pick when=$ps.face when=$ps.skin.k then=$ps.skin.call
+@ps.hair_colour.k k.faces.preset name=?p style=?style hair_colour=?c
+@ps.hair_colour.call app.act.call act=change thing=$ps.face attr=hair_colour value=?c order=3
+@preset.colour.hair_colour core.rule when=$ps.pick when=$ps.face when=$ps.hair_colour.k then=$ps.hair_colour.call
+@ps.eye_colour.k k.faces.preset name=?p style=?style eye_colour=?c
+@ps.eye_colour.call app.act.call act=change thing=$ps.face attr=eye_colour value=?c order=3
+@preset.colour.eye_colour core.rule when=$ps.pick when=$ps.face when=$ps.eye_colour.k then=$ps.eye_colour.call
+@ps.clothes.k k.faces.preset name=?p style=?style clothes=?c
+@ps.clothes.call app.act.call act=change thing=$ps.face attr=clothes value=?c order=3
+@preset.colour.clothes core.rule when=$ps.pick when=$ps.face when=$ps.clothes.k then=$ps.clothes.call
+@ps.slot.hair_back.k k.faces.preset name=?p style=?style hair_back=?v
+@ps.slot.hair_back.call app.act.call act=make kind=w.face.hair_back variant=?v face=$ps.face order=2
+@preset.slot.hair_back core.rule when=$ps.pick when=$ps.face when=$ps.slot.hair_back.k then=$ps.slot.hair_back.call
+@ps.slot.shoulders.k k.faces.preset name=?p style=?style shoulders=?v
+@ps.slot.shoulders.call app.act.call act=make kind=w.face.shoulders variant=?v face=$ps.face order=2
+@preset.slot.shoulders core.rule when=$ps.pick when=$ps.face when=$ps.slot.shoulders.k then=$ps.slot.shoulders.call
+@ps.slot.neck.k k.faces.preset name=?p style=?style neck=?v
+@ps.slot.neck.call app.act.call act=make kind=w.face.neck variant=?v face=$ps.face order=2
+@preset.slot.neck core.rule when=$ps.pick when=$ps.face when=$ps.slot.neck.k then=$ps.slot.neck.call
+@ps.slot.ears.k k.faces.preset name=?p style=?style ears=?v
+@ps.slot.ears.call app.act.call act=make kind=w.face.ears variant=?v face=$ps.face order=2
+@preset.slot.ears core.rule when=$ps.pick when=$ps.face when=$ps.slot.ears.k then=$ps.slot.ears.call
+@ps.slot.head.k k.faces.preset name=?p style=?style head=?v
+@ps.slot.head.call app.act.call act=make kind=w.face.head variant=?v face=$ps.face order=2
+@preset.slot.head core.rule when=$ps.pick when=$ps.face when=$ps.slot.head.k then=$ps.slot.head.call
+@ps.slot.cheeks.k k.faces.preset name=?p style=?style cheeks=?v
+@ps.slot.cheeks.call app.act.call act=make kind=w.face.cheeks variant=?v face=$ps.face order=2
+@preset.slot.cheeks core.rule when=$ps.pick when=$ps.face when=$ps.slot.cheeks.k then=$ps.slot.cheeks.call
+@ps.slot.beard.k k.faces.preset name=?p style=?style beard=?v
+@ps.slot.beard.call app.act.call act=make kind=w.face.beard variant=?v face=$ps.face order=2
+@preset.slot.beard core.rule when=$ps.pick when=$ps.face when=$ps.slot.beard.k then=$ps.slot.beard.call
+@ps.slot.mouth.k k.faces.preset name=?p style=?style mouth=?v
+@ps.slot.mouth.call app.act.call act=make kind=w.face.mouth variant=?v face=$ps.face order=2
+@preset.slot.mouth core.rule when=$ps.pick when=$ps.face when=$ps.slot.mouth.k then=$ps.slot.mouth.call
+@ps.slot.moustache.k k.faces.preset name=?p style=?style moustache=?v
+@ps.slot.moustache.call app.act.call act=make kind=w.face.moustache variant=?v face=$ps.face order=2
+@preset.slot.moustache core.rule when=$ps.pick when=$ps.face when=$ps.slot.moustache.k then=$ps.slot.moustache.call
+@ps.slot.nose.k k.faces.preset name=?p style=?style nose=?v
+@ps.slot.nose.call app.act.call act=make kind=w.face.nose variant=?v face=$ps.face order=2
+@preset.slot.nose core.rule when=$ps.pick when=$ps.face when=$ps.slot.nose.k then=$ps.slot.nose.call
+@ps.slot.eyes.k k.faces.preset name=?p style=?style eyes=?v
+@ps.slot.eyes.call app.act.call act=make kind=w.face.eyes variant=?v face=$ps.face order=2
+@preset.slot.eyes core.rule when=$ps.pick when=$ps.face when=$ps.slot.eyes.k then=$ps.slot.eyes.call
+@ps.slot.eyebrows.k k.faces.preset name=?p style=?style eyebrows=?v
+@ps.slot.eyebrows.call app.act.call act=make kind=w.face.eyebrows variant=?v face=$ps.face order=2
+@preset.slot.eyebrows core.rule when=$ps.pick when=$ps.face when=$ps.slot.eyebrows.k then=$ps.slot.eyebrows.call
+@ps.slot.glasses.k k.faces.preset name=?p style=?style glasses=?v
+@ps.slot.glasses.call app.act.call act=make kind=w.face.glasses variant=?v face=$ps.face order=2
+@preset.slot.glasses core.rule when=$ps.pick when=$ps.face when=$ps.slot.glasses.k then=$ps.slot.glasses.call
+@ps.slot.hair_front.k k.faces.preset name=?p style=?style hair_front=?v
+@ps.slot.hair_front.call app.act.call act=make kind=w.face.hair_front variant=?v face=$ps.face order=2
+@preset.slot.hair_front core.rule when=$ps.pick when=$ps.face when=$ps.slot.hair_front.k then=$ps.slot.hair_front.call
+@ps.slot.earrings.k k.faces.preset name=?p style=?style earrings=?v
+@ps.slot.earrings.call app.act.call act=make kind=w.face.earrings variant=?v face=$ps.face order=2
+@preset.slot.earrings core.rule when=$ps.pick when=$ps.face when=$ps.slot.earrings.k then=$ps.slot.earrings.call
+@ps.slot.hat.k k.faces.preset name=?p style=?style hat=?v
+@ps.slot.hat.call app.act.call act=make kind=w.face.hat variant=?v face=$ps.face order=2
+@preset.slot.hat core.rule when=$ps.pick when=$ps.face when=$ps.slot.hat.k then=$ps.slot.hat.call
+
+# View keys and history.
+@sel.req app.act.request operation="avatar.part.select" id=?id
+@sel.view app.act.view key=selected value=?id
+@select core.rule when=$sel.req then=$sel.view
+@fsel.req app.act.request operation="avatar.face.select"
+@fsel.view app.act.view key=selected value=face
+@select.face core.rule when=$fsel.req then=$fsel.view
+@ids.req app.act.request operation="avatar.ids.show" mode=?m
+@ids.view app.act.view key=ids value=?m
+@ids core.rule when=$ids.req then=$ids.view
+@fr.req app.act.request operation="avatar.face.resize" scale=?s
+@fr.view app.act.view key=scale value=?s
+@face.resize core.rule when=$fr.req then=$fr.view
+@undo.req app.act.request operation="avatar.undo"
+@undo.o app.act.history direction=back
+@undo core.rule when=$undo.req then=$undo.o
+@redo.req app.act.request operation="avatar.redo"
+@redo.o app.act.history direction=forward
+@redo core.rule when=$redo.req then=$redo.o
+@feat.req app.act.request operation="avatar.part.feature"
+@feat.o app.act.refuse reason=feature-lookup-not-declared
+@feature core.rule when=$feat.req then=$feat.o
+
+# What a reader observes: the face and each part, by its slot.
+@ob.face w.face.face name=?n
+@ob.face.o app.observe.object id=face kind=face sourceType=ui.avatar.face name=?n
+@observe.face core.rule when=$ob.face then=$ob.face.o
+@ob.part w.face.part kind=?kind variant=?v
+@ob.slot w.face.slot part=?kind slot=?slot
+@ob.part.o app.observe.object id=?slot kind=?slot sourceType=ui.avatar.part variant=?v
+@observe.part core.rule when=$ob.part when=$ob.slot then=$ob.part.o

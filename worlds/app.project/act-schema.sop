@@ -1,0 +1,11 @@
+# Generic tool-act records (worlds/sop-world-host.mjs). A native command arrives as app.act.request with its
+# scalar arguments and one app.act.item per list element; a tab's rules derive ordered app.act.call facts
+# (an act of the library's std.acts with its arguments), app.act.view keys, app.act.history and
+# app.act.refuse. app.observe.object is what a reader observes of the instance.
+@act.request core.type of=app.act.request
+@act.item core.type of=app.act.item
+@act.call core.type of=app.act.call
+@act.view core.type of=app.act.view
+@act.history core.type of=app.act.history
+@act.refuse core.type of=app.act.refuse
+@observe.object core.type of=app.observe.object
