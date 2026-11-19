@@ -1,13 +1,13 @@
-import {World,editCost,quote,serialize} from '../vendor/sopworld/sopworld.mjs?v=8186c36d14';
-import {createAreaHost,NATIVE_AREAS} from './app-reader-context.mjs?v=6618e2cba6';
-import {nativeCreationCandidates} from './native-binding-candidates.mjs?v=823de2d713';
-import {compileObservedChoice} from './observed-choice.mjs?v=516055ab97';
-import POLICY from '../../worlds/app.project/query-reading-policy-source.mjs?v=db9eef7137';
-import {detachGroundedRequest} from './grounded-projection.mjs?v=5e31a84273';
+import {World,quote,serialize} from '../vendor/sopworld/sopworld.mjs?v=851c80bc87';
+import {groundMention} from './lexical-grounding.mjs?v=3bbbe3cc27';
+import {createAreaHost,NATIVE_AREAS} from './app-reader-context.mjs?v=b85792edc1';
+import {nativeCreationCandidates} from './native-binding-candidates.mjs?v=32473e62cc';
+import POLICY from '../../worlds/app.project/query-reading-policy-source.mjs?v=2a90b91449';
+import {detachGroundedRequest} from './grounded-projection.mjs?v=d6cfa54db0';
 import GROUNDED_SCHEMA from '../../worlds/app.project/grounded-projection-schema-source.mjs?v=b6d275f29d';
 import SCHEMA from '../../worlds/app.project/query-reading-schema-source.mjs?v=2d9e000e63';
 import {budget} from './budget.mjs?v=00bce6e369';
-import {writeReaderSource} from './reader-source.mjs?v=f615c37c90';
+import {writeReaderSource} from './reader-source.mjs?v=b47454f543';
 
 const kind='app.query.read';
 const atom=value=>typeof value==='string'&&/^[A-Za-z_][A-Za-z0-9_.-]*$/.test(value)?value:undefined;
@@ -101,13 +101,13 @@ export async function projectQueryAction(proposal,session,{view,bindings}={}){
  for(const {mapping,operation}of nativeCreationCandidates(bindings,host.bindings(),readerArea)){
   budget.tick('query-reading.kinds');
   if(!operation.params.kind?.enum?.includes(mapping.lemma)||mapping.lemma.length>64)continue;
-  const distance=editCost(noun.toLowerCase(),mapping.lemma.toLowerCase(),2);
-  if(Number.isFinite(distance))choices.set(JSON.stringify([mapping.canonical,mapping.lemma]),{canonical:mapping.canonical,lemma:mapping.lemma,distance,otherType:Number(mapping.type!==target.type)});
+  choices.set(JSON.stringify([mapping.canonical,mapping.lemma]),{canonical:mapping.canonical,lemma:mapping.lemma,otherType:Number(mapping.type!==target.type)});
  }
  const candidates=[...choices.values()];
- if(!candidates.length||candidates.length>200)return null;
- const decision=compileObservedChoice(world,'app.query.kind',candidates.map(({distance,otherType})=>({distance,otherType})));
+ if(!candidates.length)return null;
+ const decision=await groundMention(world,'app.query.kind',noun,candidates.map(({lemma,otherType})=>({lemma,measures:{otherType}})),session.engine?.knowledge);
  if(decision.selected===undefined)return null;
+ for(const [index,{cost}] of decision.evidence)if(cost!==undefined)candidates[index].distance=cost;
  const selected=candidates[decision.selected],alternatives=decision.alternatives.map(index=>candidates[index]);
  const grounding=serialize([row('observed.ground',kind+'.ground',{text:quote(raw.source.text),kind:selected.canonical})]);
  if(!world.tell(grounding,{factsOnly:true}).ok)return null;
@@ -118,7 +118,7 @@ export async function projectQueryAction(proposal,session,{view,bindings}={}){
   label:'Ground the model’s question projection',wires:[evidence,projection,decision.input,decision.sop,grounding,result.wires].join('\n'),support:result.projection.support,selected,alternatives});}
  catch{/* Inspection cannot change the reading. */}
  return {...proposal,candidates:[result],coverage:{complete:true,graphProposal:true,executable:false},failures:[],
-  interpretation:{profile:'declared-query/1',note:selected.distance?'I interpreted '+JSON.stringify(noun)+' as '+selected.lemma+'.':'',
+  interpretation:{profile:'declared-query/1',note:selected.distance||decision.ties.length?'I interpreted '+JSON.stringify(noun)+' as '+selected.lemma+'.':'',
    selected,alternatives,decision:{input:decision.input,sop:decision.sop},evidence,projection,unresolved:proposal.failures??[]}};
 }
 

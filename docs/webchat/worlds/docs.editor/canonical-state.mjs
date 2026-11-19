@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // The current document is SOP. Editing primitives and the renderer use detached views.
-import { copyHostData } from '../native-tool-host.mjs?v=ad44986a97';
-import { toolInstanceStateCodec } from '../tool-instance-state.mjs?v=ff6416c767';
+import { copyHostData } from '../native-tool-host.mjs?v=de7f9df967';
+import { toolInstanceStateCodec } from '../tool-instance-state.mjs?v=bc7020b197';
 import authoredSchema from './state-schema-source.mjs?v=cb9f3ad4f3';
 import { containers, ALIGNS, MARK_TYPES } from './model.mjs?v=6a31113a10';
 import { sync } from './document.mjs?v=45e920897e';

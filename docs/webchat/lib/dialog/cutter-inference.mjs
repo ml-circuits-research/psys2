@@ -1,5 +1,5 @@
 // Source-only neural cutter computation. Loading, calibration and admission are separate.
-import {copyHostData} from '../../worlds/native-tool-host.mjs?v=ad44986a97';
+import {copyHostData} from '../../worlds/native-tool-host.mjs?v=de7f9df967';
 import {selectedProbability} from './model-selection-score.mjs?v=ac3ac10191';
 
 export const CUTTER_CODEC=Object.freeze({

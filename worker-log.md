@@ -232,3 +232,6 @@ Integrated build verified the full count/delete/existence sequence and recorded 
 2026-11-18 — Public 6d32d74ccd: actual chat “Draw a man” selected the grounded man concept, dispatched drawing.catalog.make and created one composite in an empty instance. Current-status distinguishes this from the isolated lexical query failure. Gate: 650 passed, 3 skipped.
 
 2026-11-19 — ui-human-v1: 188 executed seeds (one per editor × operation × key set) × 24 agent-authored paraphrases (equivalent/complex/simplified). `python3 assemble.py`: 4,284 accepted, 228 duplicates rejected, 3,483 linked to executed native calls; omitted/vague values recorded as completion requirements. Not yet trained.
+
+2026-11-19 — Query and creation adapters ground kind words through SOPWorlds 0.225.1 `std.ground` policies declared in query-reading/creation policy SOP; the fixed edit ceiling and per-adapter cost loops are gone. Knowledge kind_of/is_a edges come from catalog facts. Gate 651 pass/3 skip; new test: "man" → person with the relation, moon without, cat/car order-independent.
+Chromium (rebuilt webchat): "Is there a hous?" → yes, noted "hous" as house; "Draw a man" created the composite. Open: "Is there a man?" gets no action from the reader, and queries do not match catalog composites (man) by concept.

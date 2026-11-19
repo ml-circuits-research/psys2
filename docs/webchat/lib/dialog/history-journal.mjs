@@ -1,7 +1,7 @@
 // The SOP instance owns journal membership, identity and ordering. Native
 // editor payloads are held by its concrete journal tool under opaque references.
-import { parse, quote, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=8186c36d14';
-import { historyPolicy } from './history-policy.mjs?v=c1593409c5';
+import { parse, quote, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=851c80bc87';
+import { historyPolicy } from './history-policy.mjs?v=63b50dd0c1';
 import { budget } from './budget.mjs?v=00bce6e369';
 
 const prefix = 'app.history.';

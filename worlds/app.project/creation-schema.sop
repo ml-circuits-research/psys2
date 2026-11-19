@@ -1,10 +1,8 @@
-@creation.module core.module name=app.creation exports=app.creation.role exports=app.creation.grounding exports=app.creation.input exports=app.creation.entry exports=app.creation.parameter exports=app.creation.property exports=app.creation.lexical exports=app.creation.checked exports=app.creation.disposition exports=app.creation.consumed exports=app.creation.named exports=app.creation.result exports=app.creation.targetName exports=app.creation.nameGap
+@creation.module core.module name=app.creation exports=app.creation.role exports=app.creation.input exports=app.creation.entry exports=app.creation.parameter exports=app.creation.property exports=app.creation.lexical exports=app.creation.checked exports=app.creation.disposition exports=app.creation.consumed exports=app.creation.named exports=app.creation.result exports=app.creation.targetName exports=app.creation.nameGap
 @role.type core.type of=app.creation.role closed=true
 @role.concept core.slot of=app.creation.role key=concept kind=atom present=true
 @role.role core.slot of=app.creation.role key=role enum=kind enum=coextensive enum=name present=true
 @role.parameter core.slot of=app.creation.role key=parameter kind=string
-@grounding.type core.type of=app.creation.grounding closed=true
-@grounding.ceiling core.slot of=app.creation.grounding key=editCeiling kind=integer min=0 present=true
 
 @creation.input core.type of=app.creation.input closed=true
 @creation.input.kind core.slot of=app.creation.input key=kind kind=string

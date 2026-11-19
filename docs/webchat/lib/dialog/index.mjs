@@ -1,5 +1,5 @@
-import { captureHistory, initializeHistory, restoreHistory } from './history-journal.mjs?v=c7afd454fd';
-import {isAuthoredRequest} from './authored-request-tool.mjs?v=669290a7ca';
+import { captureHistory, initializeHistory, restoreHistory } from './history-journal.mjs?v=f53cc4aa6f';
+import {isAuthoredRequest} from './authored-request-tool.mjs?v=0ea11ee275';
 // SPDX-License-Identifier: AGPL-3.0-only
 /**
  * C2 dialog pipeline (spec 06). Browser-safe.
@@ -12,7 +12,7 @@ import {isAuthoredRequest} from './authored-request-tool.mjs?v=669290a7ca';
  * Without it all input is treated as English.
  */
 import { retiredArea, unavailableAreaReply } from './application-areas.mjs?v=5930d8fe63';
-import { composeReply, sayOf } from './composed-reply.mjs?v=73d7931943';
+import { composeReply, sayOf } from './composed-reply.mjs?v=1f97fad982';
 import { reviewForeign } from './foreign-reading.mjs?v=484f739c43';
 import { installTextGen } from './textgen.mjs?v=df07f0af2f';
 import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=80f75734e6';
@@ -21,7 +21,7 @@ import { validateWorldSet } from '../worlds/validate.mjs?v=b68f2d56d7';
 import { defaultRouter, namedWorlds, namingTables, setWorldChooser } from '../formalizer/routing.mjs?v=80f75734e6';
 import { isNumberWord, ordinalWordValue } from '../formalizer/rules/numbers.mjs?v=1da7403197';
 import { createInterpreter } from '../interpreter/index.mjs?v=c5bed55e3a';
-import { createReasoner } from '../reasoner/index.mjs?v=92988ef3d0';
+import { createReasoner } from '../reasoner/index.mjs?v=5fd6437174';
 import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=ff17a8b968';
 import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=6b15977558';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=c57881f705';
@@ -31,7 +31,7 @@ import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voi
 import { gatherCandidates, chooseCandidate, englishTest, nearAny } from '../translate/candidates.mjs?v=a7f7eb0703';
 import { machineReads } from '../translate/reading-policy.mjs?v=96bd6cc0e4';   // reviewer 02:30 (Q50): the machine translator does not read the request in a language with a rules translator (data, reversible)
 import { worldThingNames, sessionNames } from '../translate/keep-list.mjs?v=c0baa0b9d0';
-import { langRoNow } from '../translate/frames-ro.mjs?v=9436914156';
+import { langRoNow } from '../translate/frames-ro.mjs?v=696a73b73c';
 import { repairInContext } from '../translate/source-repair.mjs?v=db5b883c67';
 import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=80f75734e6';
 import { lexIndex } from '../worlds/lexicon.mjs?v=1a30235da4';
@@ -48,16 +48,16 @@ import { Discourse } from './discourse.mjs?v=6798a1e312';
 import { Dialogue } from './dialogue.mjs?v=d708799533';
 import { turnSteps, withDoor } from './steps.mjs?v=1bf5f81c99';
 import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=e080d83c71';
-import { knowledgeAnswer, knowledgeFallback, preloadThings, prefetchNext, knowledgeOf, within } from './knowledge-lookup.mjs?v=00333272c6';
-import { personTurn } from './person.mjs?v=f43067832e';
+import { knowledgeAnswer, knowledgeFallback, preloadThings, prefetchNext, knowledgeOf, within } from './knowledge-lookup.mjs?v=52e05b5a0b';
+import { personTurn } from './person.mjs?v=49f575bd18';
 import { proposeByTypes } from './typed-reader.mjs?v=473e7ecc54';
-import { withVariants, anyVoiceOn } from './variants.mjs?v=6b739e44c2';
+import { withVariants, anyVoiceOn } from './variants.mjs?v=6700b0f5c9';
 import { isIncomplete, completeMode } from '../formalizer/completeness.mjs?v=80f75734e6';
 import { createTypedWorlds } from '../formalizer/typed-world.mjs?v=80f75734e6';
 import { repairFromScene } from './scene-referents.mjs?v=618bf092c2';
-import { loadMetaWorlds } from './meta-worlds.mjs?v=0a652f1691';
-import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=b8241326e3';
-import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=ad9abc91fd';
+import { loadMetaWorlds } from './meta-worlds.mjs?v=255aada9f3';
+import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=ac45f98e02';
+import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=4ca3e29431';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
 import { panel } from '../astra/where.mjs?v=09b4059350';
 import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=3e29fd91c2';
@@ -1653,7 +1653,7 @@ export class DialogSession {
         }
       }
     }
-    const reply = await (await import('./reader-routing.mjs?v=d505af6676')).routeNewEngine(this, english, { ...opts, language: 'en' });
+    const reply = await (await import('./reader-routing.mjs?v=af888b00fa')).routeNewEngine(this, english, { ...opts, language: 'en' });
     reply.trace = { ...reply.trace, english, ...(translation ? { translation } : {}) };
     if (language !== 'en') {
       try {
@@ -2392,7 +2392,7 @@ export class DialogSession {
 
   async _sendCore(text, { language, formalizer, spell, partial, fastPath, bestEffort, mode, nx, worldAware, correction } = {}, override = null) {
     const { engine } = this;
-    if (engine.sopworld === undefined) engine.sopworld = await import('../vendor/sopworld/sopworld.mjs?v=8186c36d14').catch(() => null);   // the dialogue focus lives on its std.focus / std.fill
+    if (engine.sopworld === undefined) engine.sopworld = await import('../vendor/sopworld/sopworld.mjs?v=851c80bc87').catch(() => null);   // the dialogue focus lives on its std.focus / std.fill
     if (!globalThis[Symbol.for('psys2.textgen')]) installTextGen(engine.sopworld, null);   // std.summarize / std.compose for docs.editor (spec 26); unavailable until the library ships them
     this.dialogue._kind = null; this.dialogue.note = null; this.isession.dialogueFocus = (w) => this.dialogue.focusWords(w); this.isession.sessionFacts = () => this.dialogue.facts();
     this._voice = mode === 'voice';   // spoken input: stutter and send words are cleaned, garbled words repaired against the active tab's world (voice.mjs)
@@ -2800,7 +2800,7 @@ export async function createEngine({ loader, translator = null, options = {}, fo
   // `set`, `reasoner` and `interp` are replaced by `engine.reload(loader)` (LAZY LOADING: the worlds a message needs are added to a running engine); everything below reads them through these bindings.
   let set = await loadWorlds(loader, { reasoner: mode });
   let reasoner = mode === 'matrix' ? await createReasoner(set) : null;
-  try { setWorldChooser((await import('../vendor/sopworld/sopworld.mjs?v=8186c36d14')).choose); } catch { /* no library: the tiers decide alone */ }   // spec 20: arbitration by coverage, tab, priority (the library's std.decide kind world)
+  try { setWorldChooser((await import('../vendor/sopworld/sopworld.mjs?v=851c80bc87')).choose); } catch { /* no library: the tiers decide alone */ }   // spec 20: arbitration by coverage, tab, priority (the library's std.decide kind world)
   let interp = createInterpreter(set, { ...options, reasoner });
   attachOpenWords(options.knowledge ?? null);
   interp.knowledge = options.knowledge ?? null;   // the knowledge catalog (spec 17): operations read `ctx.knowledge.peek(name)`

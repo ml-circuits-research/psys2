@@ -1,6 +1,8 @@
 @creation.schema core.use world=app.creation prefix=false
 @choice.schema core.use world=std.choice
 @choice.criteria core.use world=std.decide
+@ground.use core.use world=std.ground
+@creation.ground std.ground.policy name=app.creation measure=distance maxSpelling=2 stepCost=0.5 maxSteps=2 follow=kind_of follow=is_a
 @creation.edit std.decide.criterion of=app.creation n=1 name=lexical.distance measure=distance dir=min
 @creation.type std.decide.criterion of=app.creation n=2 name=reader.type measure=otherType dir=min
 @creation.family std.decide.criterion of=app.creation n=3 name=family.default measure=otherFamily dir=min
@@ -9,7 +11,6 @@
 @shape app.creation.role concept=shape role=kind
 @part app.creation.role concept=part_kind role=coextensive
 @name app.creation.role concept=name role=name parameter="name"
-@limits app.creation.grounding editCeiling=2
 
 @p.anchored app.creation.entry key=?key value=?value start=?start end=?end phase="result" operator="eq" polarity="positive" character="requirement"
 @p.applicable app.creation.entry key=?key concept=?concept value=?value start=?start end=?end phase="result" operator="eq" polarity="positive" character="requirement" normal=true

@@ -1,6 +1,7 @@
 @query.load core.use world=app.query.read prefix=false
 @query.choice core.use world=std.choice
 @query.order core.use world=std.decide
+@query.ground.use core.use world=std.ground
 
 @count app.query.read.head head=count operation=count property=false targetCue=false
 @exists app.query.read.head head=exists operation=exists property=false targetCue=false
@@ -32,6 +33,8 @@
 @out.selector app.query.read.selector concept=?concept value=?value
 @query.scope core.rule when=$condition when=$question.phase when=$question.scope then=$out.selector
 
+# A mention grounds by exact identity, spelling repair up to 2, or declared kind relations at 0.5 per step.
+@query.ground std.ground.policy name=app.query.kind measure=distance maxSpelling=2 stepCost=0.5 maxSteps=2 follow=kind_of follow=is_a
 @query.lexical std.decide.criterion of=app.query.kind n=1 name=distance measure=distance dir=min
 @query.reader.type std.decide.criterion of=app.query.kind n=2 name=reader.type measure=otherType dir=min
 

@@ -14,7 +14,7 @@ const esc = (s) => String(s).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 let libraryPromise = null;
 /** The library module, loaded once (lazily: the vendored file is 900 kB). */
-export const diagramLibrary = () => (libraryPromise ??= import('../vendor/sopworld/sopworld.mjs?v=8186c36d14'));
+export const diagramLibrary = () => (libraryPromise ??= import('../vendor/sopworld/sopworld.mjs?v=851c80bc87'));
 
 /** The kinds the bundled catalog has: [{ name, form, words }], read from its text (a request can be read before the library is loaded); `words` are the other names a request uses ("hierarchy" for a tree: `core.word of=k.diagrams.kind.name`). */
 export function kindNames() {

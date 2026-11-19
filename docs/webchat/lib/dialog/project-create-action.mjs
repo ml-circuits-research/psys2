@@ -1,13 +1,14 @@
-import {World,editCost,parse,quote,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=8186c36d14';
-import POLICY from '../../worlds/app.project/creation-policy-source.mjs?v=874b0f8e6d';
-import SCHEMA from '../../worlds/app.project/creation-schema-source.mjs?v=9d9c428cd6';
-import {executionPolicyWorld} from './execution-policy.mjs?v=9b4ddaac32';
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=6618e2cba6';
-import {nativeCreationCandidates} from './native-binding-candidates.mjs?v=823de2d713';
+import {World,parse,quote,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=851c80bc87';
+import {groundMention} from './lexical-grounding.mjs?v=3bbbe3cc27';
+import POLICY from '../../worlds/app.project/creation-policy-source.mjs?v=990205b134';
+import SCHEMA from '../../worlds/app.project/creation-schema-source.mjs?v=b1dfaf43f6';
+import {executionPolicyWorld} from './execution-policy.mjs?v=90d00f1f0c';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=b85792edc1';
+import {nativeCreationCandidates} from './native-binding-candidates.mjs?v=32473e62cc';
 import {budget} from './budget.mjs?v=00bce6e369';
-import {observeGroundedProjection,projectGroundedRequest} from './grounded-projection.mjs?v=5e31a84273';
+import {observeGroundedProjection,projectGroundedRequest} from './grounded-projection.mjs?v=d6cfa54db0';
 import {positiveCardinalProof} from './key-reader-value-proof.mjs?v=d14c6ccdaf';
-import {compileObservedChoice} from './observed-choice.mjs?v=516055ab97';
+import {compileObservedChoice} from './observed-choice.mjs?v=1f7e712c74';
 
 const field=(fact,key)=>str(fact.attrs[key]?.[0]);
 let loaded;
@@ -16,8 +17,7 @@ function creationPolicy(source){
  if(source===POLICY&&loaded)return loaded;
  const world=new World({library:{'app.creation':SCHEMA}});
  if(!world.tell(source).ok)throw Error('invalid-creation-policy');
- const [grounding]=world.ofType('app.creation.grounding');
- const config={world,editCeiling:Number(field(grounding,'editCeiling'))};
+ const config={world};
  if(source===POLICY)loaded=config;
  return config;
 }
@@ -38,15 +38,36 @@ function sourceEvidence(raw){
  };
 }
 
-function rankConstructors({world,editCeiling},choices,lexical,readType,family){
- if(lexical&&lexical.length>64)return {options:[]};
+// A stated kind word is grounded by the declared std.ground policy: exact identity,
+// spelling repair and the kind relations it follows. Without a word, the reader's
+// family and type rank the constructors.
+async function groundConstructors({world},choices,lexical,readType,knowledge){
+ if(lexical.length>64)return {options:[]};
+ const candidates=choices.filter(choice=>{budget.tick('creation.rank');return choice.mapping.lemma.length<=64;});
+ if(!candidates.length)return {options:[]};
+ const decision=await groundMention(world,'app.creation',lexical,candidates.map(({mapping})=>({lemma:mapping.lemma,
+  measures:{otherType:Number(mapping.type!==readType),otherFamily:0}})),knowledge);
+ if(decision.selected===undefined)return {options:[]};
+ const ties=new Set([decision.selected,...decision.ties]),used=new Set(),options=[],equivalent=[];
+ for(const index of [decision.selected,...decision.alternatives]){
+  const choice=candidates[index],canonical=choice.mapping.canonical,evidence=decision.evidence.get(index);
+  if(used.has(canonical))continue;
+  used.add(canonical);
+  const ranked={...choice,distance:evidence.cost,why:evidence.route+(evidence.path.length?' '+evidence.path.join(' '):'')+' '+evidence.cost};
+  options.push(ranked);
+  if(ties.has(index))equivalent.push(ranked);
+  if(options.length===retainedLimit)break;
+ }
+ return {options,equivalent,trace:{input:decision.input,sop:decision.sop}};
+}
+
+function rankConstructors({world},choices,readType,family){
  const candidates=[];
  for(const choice of choices){
   budget.tick('creation.rank');
   const mapping=choice.mapping;
-  if(lexical?mapping.lemma.length>64:mapping.type!==readType)continue;
-  const distance=lexical?editCost(lexical.toLowerCase(),mapping.lemma.toLowerCase(),editCeiling):0;
-  if(Number.isFinite(distance))candidates.push({...choice,distance,otherType:mapping.type!==readType,otherFamily:!lexical&&mapping.canonical!==family});
+  if(mapping.type!==readType)continue;
+  candidates.push({...choice,distance:0,otherType:false,otherFamily:mapping.canonical!==family});
  }
  let options=[],equivalent=[],trace;
  for(let offset=0;offset<candidates.length;offset+=choiceBatchLimit-retainedLimit){
@@ -155,7 +176,8 @@ export async function projectCreateAction(proposal,session,{bindings,registry,vi
  if(lexicalChoices.length>1)return null;
  const lexical=lexicalChoices.length?field(lexicalChoices[0],'value'):undefined;
  const family=bindings.families?.find(f=>f.area===readerArea&&f.type===target.type)?.canonical;
- const {options,equivalent,trace}=rankConstructors(config,choices,lexical,target.type,family);
+ const {options,equivalent,trace}=lexical?await groundConstructors(config,choices,lexical,target.type,session.engine?.knowledge):
+  rankConstructors(config,choices,target.type,family);
  if(!options.length)return null;
  const properties=propertyEvidence(bindings,readerArea,conditions);
  const shared=resolveRoles(config.world,target,kindRange,conditions,properties,options[0].operation);

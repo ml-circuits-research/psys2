@@ -162,3 +162,17 @@ test('a literal alternate supplies only the witnessed noun where all objects of 
  alternate.raw.requests[0].target.kind=alternate.raw.requests[0].target.kind_span='trees';
  await expectIncomplete();
 });
+
+test('a question noun grounds through declared kind relations and keeps spelling ties order-independent',async()=>{
+ const kinds=lemmas=>lemmas.map(lemma=>({area:'drawing',type:'drawn',lemma,canonical:'fixture.'+lemma,nativeFamilyBinding:{operation:'drawing.object.make'}}));
+ const ask=noun=>proposalFor('Is there a '+noun,{trigger:'Is there',question:{ask:'exists'},target:{kind:noun,kind_span:noun,type:'drawn'}},
+  [[['trigger'],[0,8]],[['target','kind_span'],[11,11+noun.length]]]);
+ const kindOf=async(proposal,lemmas,knowledge)=>{
+  const result=await projectQueryAction(proposal,{...session,engine:{knowledge}},{view:'draw',bindings:{kinds:kinds(lemmas),properties:[]}});
+  return parse(result.candidates[0].wires).find(row=>row.type==='std.request.target').attrs.kind[0];
+ };
+ const relations={thing:async term=>term==='man'?{wires:[{type:'k.people.kind',f:{name:['man'],kind_of:['person']}}]}:null};
+ assert.equal(await kindOf(ask('man'),['person','moon','sun'],relations),'fixture.person');
+ assert.equal(await kindOf(ask('man'),['person','moon','sun'],undefined),'fixture.moon');
+ assert.equal(await kindOf(ask('cap'),['cat','car']),await kindOf(ask('cap'),['car','cat']));
+});
