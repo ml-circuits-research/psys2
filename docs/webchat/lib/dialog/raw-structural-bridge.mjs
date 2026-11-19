@@ -1,6 +1,6 @@
 // Predicted raw structure -> declared canonical structure. No reader or gold input.
 import {copyHostData} from '../../worlds/native-tool-host.mjs?v=de7f9df967';
-import {positiveCardinalProof} from './key-reader-value-proof.mjs?v=d14c6ccdaf';
+import {positiveCardinalProof} from './key-reader-value-proof.mjs?v=baab15c324';
 import {decodeModelGraphs} from './model-graph-decoder.mjs?v=d1ed008981';
 export const RAW_STRUCTURAL_FORMAT='psys2.raw-structural-predictions/1';
 const has=(o,k)=>Object.hasOwn(o,k),hash=v=>typeof v==='string'&&/^[a-f0-9]{64}$/.test(v);

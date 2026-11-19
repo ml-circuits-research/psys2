@@ -1,17 +1,17 @@
-import {isScopedRemoval} from './capability-plan-execution.mjs?v=34b55c2608';
-import {projectRemovalAction} from './project-removal-action.mjs?v=adf0b5631a';
+import {isScopedRemoval} from './capability-plan-execution.mjs?v=dc1ecb343a';
+import {projectRemovalAction} from './project-removal-action.mjs?v=c5e61b89dd';
 import { captureHistory, recordHistory, restoreHistory } from './history-journal.mjs?v=f53cc4aa6f';
-import {projectReaderHeadAlternative} from './reader-head-alternative.mjs?v=ec85c67c15';
+import {projectReaderHeadAlternative} from './reader-head-alternative.mjs?v=f0383df134';
 import {parse} from '../vendor/sopworld/sopworld.mjs?v=851c80bc87';
 import {writeReaderSource} from './reader-source.mjs?v=b47454f543';
 import {isAuthoredRequest,readAuthoredRequest} from './authored-request-tool.mjs?v=0ea11ee275';
 // Model-first proposal routing. Calibration authority belongs to host configuration,
 // never to a model output, evaluation annotation or grammar proposal.
 import {requestCompositionPolicy,scheduleFollowingCut}from './request-composition-policy.mjs?v=80a6a938ac';
-import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=aa2e0408a2';
-import {projectQueryAction,recoverQueryProjection} from './project-query-action.mjs?v=8824a039b5';
-import {projectContextAction} from './project-context-action.mjs?v=3976708c71';
-import {projectCreateAction} from './project-create-action.mjs?v=cf9f7b68a6';
+import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=f48bce405d';
+import {projectQueryAction,recoverQueryProjection} from './project-query-action.mjs?v=070c1d0a64';
+import {projectContextAction} from './project-context-action.mjs?v=513117545c';
+import {projectCreateAction} from './project-create-action.mjs?v=775d0fae33';
 import {assessReaderProposal} from './reader-admission.mjs?v=92e3deb0f2';
 const unavailable=reason=>({candidates:[],coverage:{complete:false,executable:false,graphProposal:false},failures:[{reason}]});
 const noDeclaredAction = () => {

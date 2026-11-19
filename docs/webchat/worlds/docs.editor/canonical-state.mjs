@@ -3,9 +3,9 @@
 import { copyHostData } from '../native-tool-host.mjs?v=de7f9df967';
 import { toolInstanceStateCodec } from '../tool-instance-state.mjs?v=bc7020b197';
 import authoredSchema from './state-schema-source.mjs?v=cb9f3ad4f3';
-import { containers, ALIGNS, MARK_TYPES } from './model.mjs?v=6a31113a10';
-import { sync } from './document.mjs?v=45e920897e';
-import { documentTextId } from './native-editing.mjs?v=23fc148497';
+import { containers, ALIGNS, MARK_TYPES } from './model.mjs?v=0b8f9bd134';
+import { sync } from './document.mjs?v=5ac82599ff';
+import { documentTextId } from './native-editing.mjs?v=7e34bea178';
 
 export const DOCUMENT_STATE_SCHEMA=authoredSchema;
 const codec=toolInstanceStateCodec(authoredSchema,'docs.editor.content.document');

@@ -1,11 +1,11 @@
 import { readSceneDefaults } from './scene-placement-defaults.mjs?v=f37f104722';
 // SPDX-License-Identifier: AGPL-3.0-only
 import { compileNativeCapability } from './capability-plan-adapter.mjs?v=1172fcce3f';
-import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=b85792edc1';
+import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=dafd7cb7b2';
 import { instanceIdFor } from './instance-identity.mjs?v=024ef1ca83';
-import { prepareNativeControlHost } from './native-control-preparation.mjs?v=922cdd5e0c';
+import { prepareNativeControlHost } from './native-control-preparation.mjs?v=5cbfc5da9d';
 import { invokeObservedNativeTool } from './native-tool-activity.mjs?v=264713ce58';
-import { retainPropertyEffect } from './property-effect-evidence.mjs?v=9e47e5bdc7';
+import { retainPropertyEffect } from './property-effect-evidence.mjs?v=508841e623';
 import { describeNativeControl, verifyNativeControlEffect } from './native-control-intent.mjs?v=cc74bd1d41';
 
 function reply(text, supported, trace = {}) {

@@ -38,3 +38,6 @@
 @w.face.word.part.size core.word text=size text=big text=small text=bigger text=smaller text=larger means=w.face.part.size core.source="hand-core 1"
 @w.face.word.part.x core.word text=left text=right text=sideways text=closer text=apart means=w.face.part.x core.source="hand-core 1"
 @w.face.word.part.y core.word text=up text=down text=higher text=lower text=raise means=w.face.part.y core.source="hand-core 1"
+@w.face.word.slot core.word text="face slot" text="slot of a part" means=w.face.slot core.source="hand-core 1"
+@w.face.word.slot.part core.word text="kind of part" means=w.face.slot.part core.source="hand-core 1"
+@w.face.word.slot.slot core.word text=slot text=place means=w.face.slot.slot core.source="hand-core 1"

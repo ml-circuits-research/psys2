@@ -3,7 +3,7 @@
 import { toolInstanceStateCodec } from '../tool-instance-state.mjs?v=bc7020b197';
 import authoredSchema from './state-schema-source.mjs?v=9b442dbc4b';
 import { copyHostData } from '../native-tool-host.mjs?v=de7f9df967';
-import { initialState } from './board.mjs?v=2201f24977';
+import { initialState } from './board.mjs?v=0ad3ec87aa';
 
 export const DRAWING_STATE_SCHEMA=authoredSchema;
 const board=toolInstanceStateCodec(authoredSchema,'art.draw.state.board');

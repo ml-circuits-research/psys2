@@ -8,7 +8,7 @@
  * Browser-safe: no `node:*`; synchronous reads (the space module must not wait), seeded from the bundled subset (bundled-arrangement.mjs, GENERATED from the catalog by
  * scripts/build-bundled-subset.mjs) and replaced by the catalog's own wires when `loadArrangement(facts)` finds them (the host calls it through `engine.setKnowledge`).
  */
-import { BUNDLED_ARRANGEMENT } from './bundled-arrangement.mjs?v=2144cb7f88';
+import { BUNDLED_ARRANGEMENT } from './bundled-arrangement.mjs?v=cb500395cc';
 import { deriveArrangement, withFaceAliases } from './arrangement-derive.mjs?v=37ee669aad';
 
 const state = { supports: [], around: [], face: [], from: 'none', loading: null };

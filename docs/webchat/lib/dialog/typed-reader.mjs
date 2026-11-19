@@ -14,7 +14,7 @@
  */
 import { buildWires, SEGMENT_SLOT } from '../formalizer/rules/emit.mjs?v=8e51d17dc1';
 import { budget } from './budget.mjs?v=00bce6e369';
-import { colourLexiconWords } from '../knowledge/values.mjs?v=eebd935e40';
+import { colourLexiconWords } from '../knowledge/values.mjs?v=632e65290c';
 
 const FREE = new Set(['rest', 'words', 'noun']);   // the classes of a role that takes any words
 const FUNCTION = new Set(['to', 'of', 'the', 'a', 'an', 'as', 'into', 'from', 'on', 'in', 'at', 'with', 'be']);

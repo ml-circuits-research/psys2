@@ -51994,7 +51994,8 @@
   "w.face/schema.sop"
  ],
  "face slot": [
-  "k.wearables/schema.sop"
+  "k.wearables/schema.sop",
+  "w.face/schema.sop"
  ],
  "face_slot": [
   "k.attributes/shards/narration",
@@ -79867,6 +79868,9 @@
  "kind of diagram": [
   "k.diagrams/schema.sop",
   "k.expect/schema.sop"
+ ],
+ "kind of part": [
+  "w.face/schema.sop"
  ],
  "kind of person": [
   "k.attributes/shards/aspects"
@@ -109651,6 +109655,7 @@
   "w.chart/schema.sop",
   "w.diagram/schema.sop",
   "w.document/schema.sop",
+  "w.face/schema.sop",
   "w.list/schema.sop",
   "w.map/schema.sop",
   "w.request/schema.sop",
@@ -131222,6 +131227,7 @@
   "k.units/shards/measures",
   "k.words/shards/frequency-s",
   "k.words/shards/sl",
+  "w.face/schema.sop",
   "k.objects/shards/noto-game-02"
  ],
  "slot machine": [
@@ -131232,6 +131238,9 @@
   "k.kinds/shards/head",
   "k.objects/shards/noto-game-02",
   "k.scenes/shards/things-s"
+ ],
+ "slot of a part": [
+  "w.face/schema.sop"
  ],
  "slot_1": [
   "k.faces/shards/plain-mouth",

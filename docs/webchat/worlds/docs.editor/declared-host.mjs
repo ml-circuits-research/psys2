@@ -2,10 +2,10 @@
 import { readNativeToolInterface } from '../native-tool-interface.mjs?v=14a5164517';
 import NATIVE_INTERFACE from './native-interface-source.mjs?v=0111c52683';
 import {createNativeToolHost,copyHostData,nativeToken} from '../native-tool-host.mjs?v=de7f9df967';
-import {createDoc,writeText,commit,sync,undoStep,redoStep,addBlock} from './document.mjs?v=45e920897e';
-import {documentEditingHandlers,changeDocumentBlock,documentTextId} from './native-editing.mjs?v=23fc148497';
-import {canonicalDocumentState,documentStateWorld,toNativeDocumentState,DOCUMENT_STATE_SCHEMA} from './canonical-state.mjs?v=e84f8b6937';
-import {blockText,containers} from './model.mjs?v=6a31113a10';
+import {createDoc,writeText,commit,sync,undoStep,redoStep,addBlock} from './document.mjs?v=5ac82599ff';
+import {documentEditingHandlers,changeDocumentBlock,documentTextId} from './native-editing.mjs?v=7e34bea178';
+import {canonicalDocumentState,documentStateWorld,toNativeDocumentState,DOCUMENT_STATE_SCHEMA} from './canonical-state.mjs?v=ef3a5bf214';
+import {blockText,containers} from './model.mjs?v=0b8f9bd134';
 const toolInterface = readNativeToolInterface(NATIVE_INTERFACE).realize();
 export const DOCUMENT_TOOL_BINDINGS = toolInterface.bindings;
 export function initialDocumentState(){const s={title:'',titleMarks:[],titleAlign:'left',titleSize:0,blocks:[],cursor:-1,selection:null,focus:null,inputMode:null,history:[],future:[],nextId:1,dictBlock:null,kind:null,about:null,textId:null};sync(s);return s;}

@@ -9,7 +9,7 @@
 # needs: sopworld with std.schema and std.acts (tools/sopworld/VERSION, 0.30.0 or later)
 
 @w.face.schema core.use world=std.schema core.source="hand-core 1"
-@w.face core.module name=w.face version=1 exports=face exports=part exports=hair_back exports=shoulders exports=clothes exports=neck exports=ears exports=head exports=cheeks exports=beard exports=mouth exports=moustache exports=nose exports=eyes exports=eyebrows exports=glasses exports=hair_front exports=earrings exports=hat exports=accessories core.source="hand-core 1"
+@w.face core.module name=w.face version=1 exports=face exports=part exports=hair_back exports=shoulders exports=clothes exports=neck exports=ears exports=head exports=cheeks exports=beard exports=mouth exports=moustache exports=nose exports=eyes exports=eyebrows exports=glasses exports=hair_front exports=earrings exports=hat exports=accessories exports=slot core.source="hand-core 1"
 @w.face.world std.schema.world name=w.face doc="a drawn face: parts with their variant, colour, size and place, and an expression" core.source="hand-core 1"
 
 # A face. `name` what it is called; `style` the style of k.faces its parts are drawn in (`k.faces.slot.style`:
@@ -112,5 +112,29 @@
 @w.face.limit.earrings std.schema.limit of=w.face.earrings max=10 core.source="hand-core 1"
 @w.face.limit.hat std.schema.limit of=w.face.hat max=10 core.source="hand-core 1"
 @w.face.limit.accessories std.schema.limit of=w.face.accessories max=10 core.source="hand-core 1"
+
+# Which k.faces slot each kind of part draws: an explicit join, so a rule that reads a part's variant
+# from k.faces matches the slot by a declared fact, not by the spelling of the type name.
+@w.face.slot.type core.type of=w.face.slot closed=true core.source="hand-core 1"
+@w.face.slot.part core.slot of=w.face.slot key=part kind=atom core.source="hand-core 1"
+@w.face.slot.slot core.slot of=w.face.slot key=slot kind=atom core.source="hand-core 1"
+@w.face.slot.hair_back w.face.slot part=w.face.hair_back slot=hair_back core.source="hand-core 1"
+@w.face.slot.shoulders w.face.slot part=w.face.shoulders slot=shoulders core.source="hand-core 1"
+@w.face.slot.clothes w.face.slot part=w.face.clothes slot=clothes core.source="hand-core 1"
+@w.face.slot.neck w.face.slot part=w.face.neck slot=neck core.source="hand-core 1"
+@w.face.slot.ears w.face.slot part=w.face.ears slot=ears core.source="hand-core 1"
+@w.face.slot.head w.face.slot part=w.face.head slot=head core.source="hand-core 1"
+@w.face.slot.cheeks w.face.slot part=w.face.cheeks slot=cheeks core.source="hand-core 1"
+@w.face.slot.beard w.face.slot part=w.face.beard slot=beard core.source="hand-core 1"
+@w.face.slot.mouth w.face.slot part=w.face.mouth slot=mouth core.source="hand-core 1"
+@w.face.slot.moustache w.face.slot part=w.face.moustache slot=moustache core.source="hand-core 1"
+@w.face.slot.nose w.face.slot part=w.face.nose slot=nose core.source="hand-core 1"
+@w.face.slot.eyes w.face.slot part=w.face.eyes slot=eyes core.source="hand-core 1"
+@w.face.slot.eyebrows w.face.slot part=w.face.eyebrows slot=eyebrows core.source="hand-core 1"
+@w.face.slot.glasses w.face.slot part=w.face.glasses slot=glasses core.source="hand-core 1"
+@w.face.slot.hair_front w.face.slot part=w.face.hair_front slot=hair_front core.source="hand-core 1"
+@w.face.slot.earrings w.face.slot part=w.face.earrings slot=earrings core.source="hand-core 1"
+@w.face.slot.hat w.face.slot part=w.face.hat slot=hat core.source="hand-core 1"
+@w.face.slot.accessories w.face.slot part=w.face.accessories slot=accessories core.source="hand-core 1"
 
 # Words: for the world (how a host finds it by name), its kinds and its keys.

@@ -5,9 +5,9 @@ import {centeredSpatialBox,unionSpatialBoxes} from '../native-spatial-observatio
 import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs?v=de7f9df967';
 import {compositionBase,compositionOverrides,expressionParts} from './composition.mjs?v=b3e12b14a5';
 import {toNativeAvatarState,adoptCanonicalAvatarState} from './canonical-state.mjs?v=b8dc908734';
-import {DEFAULT_FACE} from './default-face.mjs?v=acffba863d';
+import {DEFAULT_FACE} from './default-face.mjs?v=eb81378049';
 import {variantFor} from './facedraw.mjs?v=708c1180b9';
-import {newFace,mark,wearPreset,putPart,takeOff,setParts,moveParts,toolView,roleOf,neighbours,centre,SCALE_MIN,SCALE_MAX,NONE,PART_SIZE_GRADES,PART_MOVE_DIRECTIONS,undoStep,redoStep} from './face.mjs?v=23fa73e27c';
+import {newFace,mark,wearPreset,putPart,takeOff,setParts,moveParts,toolView,roleOf,neighbours,centre,SCALE_MIN,SCALE_MAX,NONE,PART_SIZE_GRADES,PART_MOVE_DIRECTIONS,undoStep,redoStep} from './face.mjs?v=bd75df934e';
 const nativeInterface = readNativeToolInterface(NATIVE_INTERFACE);
 const available=(slot,variant)=>slot?.variants.some(v=>v.name===variant&&v.parts?.length>0);
 export const initialAvatarState=(data=DEFAULT_FACE)=>({face:newFace(data),selectedSlot:null});

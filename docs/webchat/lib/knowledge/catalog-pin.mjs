@@ -9,7 +9,7 @@
  */
 export const CATALOG_PIN = Object.freeze({
   repo: 'https://github.com/ml-circuits-research/sop-knowledge-worlds',
-  commit: '9e99bc5246ec2ac0b576b7aebccd32bd628ea503',   // Schema definitions and owned vocabulary shards are separate sources.
+  commit: '288699c9c47ac615d02b3ab50bba56084e9b1623',   // Schema definitions and owned vocabulary shards are separate sources.
   path: 'docs/worlds',
 });
 

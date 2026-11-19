@@ -9,7 +9,7 @@
  * the user is `session.learned.own kind= name= owner=user`.
  */
 import { parseFact, lemmaCandidates } from './facts.mjs?v=2787597521';
-import { parseTeachTyped } from './teach-typed.mjs?v=dba4d62e87';
+import { parseTeachTyped } from './teach-typed.mjs?v=2727de51e5';
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 // TEMPORARY (until k.actions / k.commonsense carry the abilities of kinds): the verbs read as an ability when a bare plural says them ("ducks float"). Other forms need no list.
