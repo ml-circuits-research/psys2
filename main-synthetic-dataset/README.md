@@ -43,31 +43,42 @@ skill [`generate-reader-datasets`](https://github.com/ml-circuits-research/sopla
 | UI-enum combination seeds | 1,421 | every button value × parameter subsets |
 | catalog-kind seeds | 259 | drawing k.objects + avatar catalog presets, deterministic cap 120/op |
 
-## Final assembly (19 November 2026)
+## Final assembly (19 November 2026, rounds 1+2)
 
 | | examples |
 | --- | ---: |
-| **total accepted** | **6,721** |
-| human-equivalent | 732 |
-| human-complex | 465 |
-| human-simplified | 679 |
-| mechanical (combination coverage tier) | 4,845 |
-| by area | drawing 1,260 · avatar 3,646 · diagram 827 · document 722 · calendar 266 |
-| rejected as duplicates (vs `ui-human-v1`/`ui-natural-v1`/haiku + in-set) | 2,143 |
-| quarantined (double-occurrence surfaces, all mechanical) | 63 |
+| **total accepted** | **15,677** |
+| human-equivalent (round 1) | 732 |
+| human-complex (round 1) | 465 |
+| human-simplified (round 1, dropped/blurred optionals — completion signal) | 679 |
+| human-typo (deliberate slips; labels stay canonical, `typo_of` recorded) | 274 |
+| human-syn (out-of-vocabulary synonyms: cottage, dinghy, appointment…; labels canonical, `alias_of`) | 274 |
+| human-reorder (values-first, topicalization, dangling phrases) | 287 |
+| human-compound (two intents, one message — trains the cutter; per-segment spans) | 38 |
+| mechanical (verb/article/order frames + catalog synonym surfaces) | 8,890 |
+| mechanical-typo (deterministic slips on kind words, labels canonical) | 4,038 |
+| by area | drawing 3,388 · avatar 8,685 · diagram 1,768 · document 1,378 · calendar 458 |
+| rejected duplicates (old corpora + in-set) | 3,708 |
+| quarantined (double-occurrence surfaces; mechanical only) | 165 |
 
-98 distinct operations. The per-area imbalance is the honest shape of the UI surface
+99 distinct operations. The per-area imbalance is the honest shape of the UI surface
 (avatar carries the catalog presets); calendar is thin because its editor exposes 7
-current operations — all 14 of its combinations are covered, boosted to 16–20
-variants per seed. The diversity matrix (`matrix.md`) reports first-word dominance
-per area — the check the previous corpus failed; the human tiers hold every opener
-at ≤8 texts, most ≤2.
+current operations — all 14 of its combinations are covered, boosted hardest per
+seed. The diversity matrix (`matrix.md`) reports first-word dominance per area —
+the check the previous corpus failed; the human tiers hold every opener at ≤8
+texts, most ≤2.
+
+Robustness tiers (round 2): the reader now sees, with canonical labels,
+real typing slips (typos claimed per surface, `typo_of`), plausible synonyms the
+catalog does NOT declare (`cottage`, `dinghy`, `appointment`, `rhombus`… with
+`alias_unverified`), reword-order games, and two-intent compounds with independently
+spanned requests for the splitter.
 
 ## What is deliberately NOT here yet (next batches, honestly)
 
-- **Compound multi-request messages** for the cutter ("add two circles and then a
-  square below them") — the formatter emits one request per record; compounds need
-  the multi-request variant format (`seedIds: [...]`).
+- ~~Compound multi-request messages~~ **delivered in round 2**: 38 two-intent
+  compounds with per-segment spans (`tier: human-compound`), generated and
+  validated through the same assembler.
 - **Correction/ambiguity pairs** ("no, the other one") — needs `context.previous`
   plus an alternatives extension field; Review 29 behaviour.
 - **Execution verification**: unlike `ui-natural-v1`, these recipes were NOT

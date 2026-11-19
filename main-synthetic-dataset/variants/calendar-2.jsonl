@@ -1,0 +1,134 @@
+{"seedId": "syn-0856", "tier": "human-typo", "text": "add a metting Intro, title Main, start 3, duration 1, notes Mian", "surfaces": {"0": {"typo": "metting"}, "kind": {"typo": "metting"}, "5": {"typo": "Mian"}}}
+{"seedId": "syn-0856", "tier": "human-typo", "text": "please add a meting Intro with the title Main at 3 for 1, notes Mian too", "surfaces": {"0": {"typo": "meting"}, "kind": {"typo": "meting"}, "5": {"typo": "Mian"}}}
+{"seedId": "syn-0856", "tier": "human-typo", "text": "a meeing for Intro, if you can: Mian for the title, starting at 3 for 1, notes Main", "surfaces": {"0": {"typo": "meeing"}, "kind": {"typo": "meeing"}, "2": {"typo": "Mian"}}}
+{"seedId": "syn-0856", "tier": "human-syn", "text": "book an appointment for Intro, title Main, at 3 for 1, notes Primary", "surfaces": {"0": {"syn": "appointment"}, "kind": {"syn": "appointment"}, "5": {"syn": "Primary"}}}
+{"seedId": "syn-0856", "tier": "human-syn", "text": "how about an Intro gathering at 3, lasting 1, titled Main, with Primary in the notes?", "surfaces": {"0": {"syn": "gathering"}, "kind": {"syn": "gathering"}, "5": {"syn": "Primary"}}}
+{"seedId": "syn-0856", "tier": "human-syn", "text": "set up an Intro session with title Main, a 3 o'clock start, 1 long, and notes Primary", "surfaces": {"0": {"syn": "session"}, "kind": {"syn": "session"}, "5": {"syn": "Primary"}}}
+{"seedId": "syn-0856", "tier": "human-reorder", "text": "Intro is getting a new entry too: a meeting, titled Main, at 3 for 1, notes Primary", "surfaces": {"5": {"syn": "Primary"}}}
+{"seedId": "syn-0856", "tier": "human-reorder", "text": "Main for the title, Primary for the notes: that's the Intro meeting to add at 3 for 1", "surfaces": {"5": {"syn": "Primary"}}}
+{"seedId": "syn-0856", "tier": "human-reorder", "text": "There's one more for the Intro meeting: Main as the title, 3 start, 1 long, and Primary in the notes", "surfaces": {"5": {"syn": "Primary"}}}
+{"seedId": "syn-0855", "tier": "human-typo", "text": "add a metting Intro titled Main at 3 for 1", "surfaces": {"0": {"typo": "metting"}, "kind": {"typo": "metting"}}}
+{"seedId": "syn-0855", "tier": "human-typo", "text": "go ahead with a meting Intro: Main, 3, 1", "surfaces": {"0": {"typo": "meting"}, "kind": {"typo": "meting"}}}
+{"seedId": "syn-0855", "tier": "human-typo", "text": "a meeing Intro named Main, starting 3, lasting 1", "surfaces": {"0": {"typo": "meeing"}, "kind": {"typo": "meeing"}}}
+{"seedId": "syn-0855", "tier": "human-syn", "text": "book an Intro appointment called Main at 3 for 1", "surfaces": {"0": {"syn": "appointment"}, "kind": {"syn": "appointment"}}}
+{"seedId": "syn-0855", "tier": "human-syn", "text": "an Intro gathering at 3 for 1, titled Main", "surfaces": {"0": {"syn": "gathering"}, "kind": {"syn": "gathering"}}}
+{"seedId": "syn-0855", "tier": "human-syn", "text": "set up an Intro session: Main title, 3 start, 1 long", "surfaces": {"0": {"syn": "session"}, "kind": {"syn": "session"}}}
+{"seedId": "syn-0855", "tier": "human-reorder", "text": "Intro, Main, 3, 1 — add that meeting, would you?", "surfaces": {}}
+{"seedId": "syn-0855", "tier": "human-reorder", "text": "Could Main work as the name for a new Intro meeting at 3, running 1?", "surfaces": {}}
+{"seedId": "syn-0855", "tier": "human-reorder", "text": "One more thing: put a meeting down for Intro at 3, under the name Main, running 1", "surfaces": {}}
+{"seedId": "syn-0863", "tier": "human-typo", "text": "change the metting Intro to start at 2, run 3, with Intor as participants", "surfaces": {"0": {"typo": "metting"}, "kind": {"typo": "metting"}, "4": {"typo": "Intor"}}}
+{"seedId": "syn-0863", "tier": "human-typo", "text": "let the Intro meting open at 2, last 3, and carry Inrto as its participants", "surfaces": {"0": {"typo": "meting"}, "kind": {"typo": "meting"}, "4": {"typo": "Inrto"}}}
+{"seedId": "syn-0863", "tier": "human-typo", "text": "rework the Intro meeing: start 2, duration 3, participants Intoo", "surfaces": {"0": {"typo": "meeing"}, "kind": {"typo": "meeing"}, "4": {"typo": "Intoo"}}}
+{"seedId": "syn-0863", "tier": "human-syn", "text": "amend the Intro appointment to start at 2 and run 3, with Intor as participants", "surfaces": {"0": {"syn": "appointment"}, "kind": {"syn": "appointment"}, "4": {"typo": "Intor"}}}
+{"seedId": "syn-0863", "tier": "human-syn", "text": "give the Intro gathering a 2 start and a 3 run, with Inrto as participants", "surfaces": {"0": {"syn": "gathering"}, "kind": {"syn": "gathering"}, "4": {"typo": "Inrto"}}}
+{"seedId": "syn-0863", "tier": "human-syn", "text": "switch the Intro session to begin at 2 and stretch across 3, listing Intoo as participants", "surfaces": {"0": {"syn": "session"}, "kind": {"syn": "session"}, "4": {"typo": "Intoo"}}}
+{"seedId": "syn-0863", "tier": "human-reorder", "text": "2 and 3 are the new numbers for the Intro meeting, with Intor coming along as participants", "surfaces": {"4": {"typo": "Intor"}}}
+{"seedId": "syn-0863", "tier": "human-reorder", "text": "As for the Intro meeting, begin it at 2, run 3, and bring Intor as participants", "surfaces": {"4": {"typo": "Intor"}}}
+{"seedId": "syn-0863", "tier": "human-reorder", "text": "Before I forget: the Intro meeting moves to a 2 start and a 3 length, participants Intoo", "surfaces": {"4": {"typo": "Intoo"}}}
+{"seedId": "syn-0858", "tier": "human-typo", "text": "edit the metting Intro, rename it Second, trim the run to 2", "surfaces": {"0": {"typo": "metting"}, "kind": {"typo": "metting"}}}
+{"seedId": "syn-0858", "tier": "human-typo", "text": "have the Intro meting take Second as its new name and 2 as its length", "surfaces": {"0": {"typo": "meting"}, "kind": {"typo": "meting"}}}
+{"seedId": "syn-0858", "tier": "human-typo", "text": "rework the Intro meeing: Second for the title, duration down to 2", "surfaces": {"0": {"typo": "meeing"}, "kind": {"typo": "meeing"}}}
+{"seedId": "syn-0858", "tier": "human-syn", "text": "an amendment for the Intro appointment: title Second, length 2", "surfaces": {"0": {"syn": "appointment"}, "kind": {"syn": "appointment"}}}
+{"seedId": "syn-0858", "tier": "human-syn", "text": "get the Intro gathering to carry the name Second and a 2-hour run", "surfaces": {"0": {"syn": "gathering"}, "kind": {"syn": "gathering"}}}
+{"seedId": "syn-0858", "tier": "human-syn", "text": "edit the Intro session so the title reads Second and the length comes to 2", "surfaces": {"0": {"syn": "session"}, "kind": {"syn": "session"}}}
+{"seedId": "syn-0858", "tier": "human-reorder", "text": "Second is the title the Intro meeting should take, with the run trimmed to 2", "surfaces": {}}
+{"seedId": "syn-0858", "tier": "human-reorder", "text": "About the Intro meeting — could its title go to Second and its length come down to 2?", "surfaces": {}}
+{"seedId": "syn-0858", "tier": "human-reorder", "text": "On top of that, retitle the Intro meeting to Second and pull its length to 2", "surfaces": {}}
+{"seedId": "syn-0860", "tier": "human-typo", "text": "slide the metting Intro into room Main and retitle it Second", "surfaces": {"0": {"typo": "metting"}, "kind": {"typo": "metting"}}}
+{"seedId": "syn-0860", "tier": "human-typo", "text": "the Intro meting belongs in room Main now, under the name Second", "surfaces": {"0": {"typo": "meting"}, "kind": {"typo": "meting"}}}
+{"seedId": "syn-0860", "tier": "human-typo", "text": "rehouse the Intro meeing in Main with the label Second", "surfaces": {"0": {"typo": "meeing"}, "kind": {"typo": "meeing"}}}
+{"seedId": "syn-0860", "tier": "human-syn", "text": "in room Main, the Intro appointment lands with the title Second", "surfaces": {"0": {"syn": "appointment"}, "kind": {"syn": "appointment"}}}
+{"seedId": "syn-0860", "tier": "human-syn", "text": "shift the Intro gathering to room Main and rename it Second", "surfaces": {"0": {"syn": "gathering"}, "kind": {"syn": "gathering"}}}
+{"seedId": "syn-0860", "tier": "human-syn", "text": "room Main is where the Intro session goes, wearing the title Second", "surfaces": {"0": {"syn": "session"}, "kind": {"syn": "session"}}}
+{"seedId": "syn-0860", "tier": "human-reorder", "text": "Room Main is the new home for the Intro meeting, which also takes the name Second", "surfaces": {}}
+{"seedId": "syn-0860", "tier": "human-reorder", "text": "New home required: the Intro meeting moves to room Main with the title Second", "surfaces": {}}
+{"seedId": "syn-0860", "tier": "human-reorder", "text": "While you're at it: the Intro meeting can take room Main and answer to Second", "surfaces": {}}
+{"seedId": "syn-0861", "tier": "human-typo", "text": "put the metting Intro on the Main calendar with 3 as its new length", "surfaces": {"0": {"typo": "metting"}, "kind": {"typo": "metting"}}}
+{"seedId": "syn-0861", "tier": "human-typo", "text": "shift the Intro meting over to the Main calendar and give it a length of 3", "surfaces": {"0": {"typo": "meting"}, "kind": {"typo": "meting"}}}
+{"seedId": "syn-0861", "tier": "human-typo", "text": "re-file the Intro meeing under the Main calendar, duration 3", "surfaces": {"0": {"typo": "meeing"}, "kind": {"typo": "meeing"}}}
+{"seedId": "syn-0861", "tier": "human-syn", "text": "our Intro appointment belongs on the Main calendar now, running 3", "surfaces": {"0": {"syn": "appointment"}, "kind": {"syn": "appointment"}}}
+{"seedId": "syn-0861", "tier": "human-syn", "text": "switch the Intro gathering over to the Main calendar with 3 hours booked", "surfaces": {"0": {"syn": "gathering"}, "kind": {"syn": "gathering"}}}
+{"seedId": "syn-0861", "tier": "human-syn", "text": "drop the Intro session onto the Main calendar and give it a length of 3", "surfaces": {"0": {"syn": "session"}, "kind": {"syn": "session"}}}
+{"seedId": "syn-0861", "tier": "human-reorder", "text": "Its home is the Main calendar: the Intro meeting, with 3 as its length", "surfaces": {}}
+{"seedId": "syn-0861", "tier": "human-reorder", "text": "Speaking of the Intro meeting, could it live on the Main calendar at length 3?", "surfaces": {}}
+{"seedId": "syn-0861", "tier": "human-reorder", "text": "Before I forget: the Intro meeting slides onto the Main calendar for a 3-slot run", "surfaces": {}}
+{"seedId": "syn-0864", "tier": "human-typo", "text": "bump the metting Intro to a 2 start", "surfaces": {"0": {"typo": "metting"}, "kind": {"typo": "metting"}}}
+{"seedId": "syn-0864", "tier": "human-typo", "text": "slot the Intro meting at 2 instead", "surfaces": {"0": {"typo": "meting"}, "kind": {"typo": "meting"}}}
+{"seedId": "syn-0864", "tier": "human-typo", "text": "let's say the Intro meeing opens at 2: place it there", "surfaces": {"0": {"typo": "meeing"}, "kind": {"typo": "meeing"}}}
+{"seedId": "syn-0864", "tier": "human-syn", "text": "relocate the Intro appointment to a 2 start", "surfaces": {"0": {"syn": "appointment"}, "kind": {"syn": "appointment"}}}
+{"seedId": "syn-0864", "tier": "human-syn", "text": "retime the Intro gathering so it begins at 2", "surfaces": {"0": {"syn": "gathering"}, "kind": {"syn": "gathering"}}}
+{"seedId": "syn-0864", "tier": "human-syn", "text": "have the Intro session land at a start of 2", "surfaces": {"0": {"syn": "session"}, "kind": {"syn": "session"}}}
+{"seedId": "syn-0864", "tier": "human-reorder", "text": "2 is the start the Intro meeting should move to", "surfaces": {}}
+{"seedId": "syn-0864", "tier": "human-reorder", "text": "For the Intro meeting, how about moving its start to 2?", "surfaces": {}}
+{"seedId": "syn-0864", "tier": "human-reorder", "text": "Oh, and: nudge the Intro meeting over to 2", "surfaces": {}}
+{"seedId": "syn-0854", "tier": "human-typo", "text": "pick metting Intro", "surfaces": {"0": {"typo": "metting"}, "kind": {"typo": "metting"}}}
+{"seedId": "syn-0854", "tier": "human-typo", "text": "go with the Intro meting when you select", "surfaces": {"0": {"typo": "meting"}, "kind": {"typo": "meting"}}}
+{"seedId": "syn-0854", "tier": "human-typo", "text": "select the Intro meeing, that one", "surfaces": {"0": {"typo": "meeing"}, "kind": {"typo": "meeing"}}}
+{"seedId": "syn-0854", "tier": "human-syn", "text": "select the Intro appointment, please", "surfaces": {"0": {"syn": "appointment"}, "kind": {"syn": "appointment"}}}
+{"seedId": "syn-0854", "tier": "human-syn", "text": "I'll take the Intro gathering, select it", "surfaces": {"0": {"syn": "gathering"}, "kind": {"syn": "gathering"}}}
+{"seedId": "syn-0854", "tier": "human-syn", "text": "session: Intro, please", "surfaces": {"0": {"syn": "session"}, "kind": {"syn": "session"}}}
+{"seedId": "syn-0854", "tier": "human-reorder", "text": "That meeting, the Intro one, is what I want selected", "surfaces": {}}
+{"seedId": "syn-0854", "tier": "human-reorder", "text": "which one gets selected? the Intro meeting", "surfaces": {}}
+{"seedId": "syn-0854", "tier": "human-reorder", "text": "Also on the list: select the Intro meeting", "surfaces": {}}
+{"seedId": "syn-0865", "tier": "human-typo", "text": "delete the metting Intro", "surfaces": {"0": {"typo": "metting"}, "kind": {"typo": "metting"}}}
+{"seedId": "syn-0865", "tier": "human-typo", "text": "clear out the Intro meting", "surfaces": {"0": {"typo": "meting"}, "kind": {"typo": "meting"}}}
+{"seedId": "syn-0865", "tier": "human-typo", "text": "remove Intro meeing", "surfaces": {"0": {"typo": "meeing"}, "kind": {"typo": "meeing"}}}
+{"seedId": "syn-0865", "tier": "human-syn", "text": "scrap Intro appointment", "surfaces": {"0": {"syn": "appointment"}, "kind": {"syn": "appointment"}}}
+{"seedId": "syn-0865", "tier": "human-syn", "text": "take the Intro gathering off the calendar", "surfaces": {"0": {"syn": "gathering"}, "kind": {"syn": "gathering"}}}
+{"seedId": "syn-0865", "tier": "human-syn", "text": "purge Intro session", "surfaces": {"0": {"syn": "session"}, "kind": {"syn": "session"}}}
+{"seedId": "syn-0865", "tier": "human-reorder", "text": "my pick for deletion: the Intro meeting, and only that one", "surfaces": {}}
+{"seedId": "syn-0865", "tier": "human-reorder", "text": "Out they go: the Intro meeting, removed", "surfaces": {}}
+{"seedId": "syn-0865", "tier": "human-reorder", "text": "Oh, and: pull the Intro meeting out entirely", "surfaces": {}}
+{"seedId": "syn-0866", "tier": "human-typo", "text": "remove the metting Intro now", "surfaces": {"0": {"typo": "metting"}, "kind": {"typo": "metting"}}}
+{"seedId": "syn-0866", "tier": "human-typo", "text": "kill the Intro meting", "surfaces": {"0": {"typo": "meting"}, "kind": {"typo": "meting"}}}
+{"seedId": "syn-0866", "tier": "human-typo", "text": "count the Intro meeing as history and remove it", "surfaces": {"0": {"typo": "meeing"}, "kind": {"typo": "meeing"}}}
+{"seedId": "syn-0866", "tier": "human-syn", "text": "cancel the Intro appointment by removing it", "surfaces": {"0": {"syn": "appointment"}, "kind": {"syn": "appointment"}}}
+{"seedId": "syn-0866", "tier": "human-syn", "text": "ditch Intro gathering", "surfaces": {"0": {"syn": "gathering"}, "kind": {"syn": "gathering"}}}
+{"seedId": "syn-0866", "tier": "human-syn", "text": "retire Intro session", "surfaces": {"0": {"syn": "session"}, "kind": {"syn": "session"}}}
+{"seedId": "syn-0866", "tier": "human-reorder", "text": "Gone for good: the Intro meeting, thanks", "surfaces": {}}
+{"seedId": "syn-0866", "tier": "human-reorder", "text": "Bye to the Intro meeting — remove that one, nothing else", "surfaces": {}}
+{"seedId": "syn-0866", "tier": "human-reorder", "text": "There's one more thing: the Intro meeting goes too", "surfaces": {}}
+{"seedId": "syn-0867", "tier": "human-typo", "text": "check the calender", "surfaces": {"0": {"typo": "calender"}, "kind": {"typo": "calender"}}}
+{"seedId": "syn-0867", "tier": "human-typo", "text": "pull up the calandar for me", "surfaces": {"0": {"typo": "calandar"}, "kind": {"typo": "calandar"}}}
+{"seedId": "syn-0867", "tier": "human-typo", "text": "what does the calnedar say?", "surfaces": {"0": {"typo": "calnedar"}, "kind": {"typo": "calnedar"}}}
+{"seedId": "syn-0867", "tier": "human-syn", "text": "show me the agenda", "surfaces": {"0": {"syn": "agenda"}, "kind": {"syn": "agenda"}}}
+{"seedId": "syn-0867", "tier": "human-syn", "text": "open the planner, I want a look", "surfaces": {"0": {"syn": "planner"}, "kind": {"syn": "planner"}}}
+{"seedId": "syn-0867", "tier": "human-syn", "text": "just the diary, please", "surfaces": {"0": {"syn": "diary"}, "kind": {"syn": "diary"}}}
+{"seedId": "syn-0867", "tier": "human-reorder", "text": "The calendar — can you show me what it holds?", "surfaces": {}}
+{"seedId": "syn-0867", "tier": "human-reorder", "text": "What I need: a quick read of the calendar", "surfaces": {}}
+{"seedId": "syn-0867", "tier": "human-reorder", "text": "And one more thing: glance at the calendar for me", "surfaces": {}}
+{"seedId": "syn-0862", "tier": "human-typo", "text": "retune the metting Intro: Second title, Main in the notes", "surfaces": {"0": {"typo": "metting"}, "kind": {"typo": "metting"}}}
+{"seedId": "syn-0862", "tier": "human-typo", "text": "update the Intro meting so the title reads Second with notes Main", "surfaces": {"0": {"typo": "meting"}, "kind": {"typo": "meting"}}}
+{"seedId": "syn-0862", "tier": "human-typo", "text": "freshen up the Intro meeing — Second as the title, Main for the notes", "surfaces": {"0": {"typo": "meeing"}, "kind": {"typo": "meeing"}}}
+{"seedId": "syn-0862", "tier": "human-syn", "text": "tune up the Intro appointment: title Second, notes Main", "surfaces": {"0": {"syn": "appointment"}, "kind": {"syn": "appointment"}}}
+{"seedId": "syn-0862", "tier": "human-syn", "text": "tweak the Intro gathering so its name is Second and the notes read Main", "surfaces": {"0": {"syn": "gathering"}, "kind": {"syn": "gathering"}}}
+{"seedId": "syn-0862", "tier": "human-syn", "text": "give the Intro session a refresh: Second for the title, Main in the notes", "surfaces": {"0": {"syn": "session"}, "kind": {"syn": "session"}}}
+{"seedId": "syn-0862", "tier": "human-reorder", "text": "Second for the title and Main for the notes — that's the change the Intro meeting needs", "surfaces": {}}
+{"seedId": "syn-0862", "tier": "human-reorder", "text": "For the Intro meeting, shall we push the title to Second and the notes to Main?", "surfaces": {}}
+{"seedId": "syn-0862", "tier": "human-reorder", "text": "One last thing: the Intro meeting takes Second as its title with Main added to the notes", "surfaces": {}}
+{"seedId": "syn-0859", "tier": "human-typo", "text": "adjust the metting Intro so Main joins as a participant", "surfaces": {"0": {"typo": "metting"}, "kind": {"typo": "metting"}}}
+{"seedId": "syn-0859", "tier": "human-typo", "text": "fold Main into the Intro meting as participants", "surfaces": {"0": {"typo": "meting"}, "kind": {"typo": "meting"}}}
+{"seedId": "syn-0859", "tier": "human-typo", "text": "put Main on the participants list for the Intro meeing", "surfaces": {"0": {"typo": "meeing"}, "kind": {"typo": "meeing"}}}
+{"seedId": "syn-0859", "tier": "human-syn", "text": "tweak the Intro appointment to bring Main in as participants", "surfaces": {"0": {"syn": "appointment"}, "kind": {"syn": "appointment"}}}
+{"seedId": "syn-0859", "tier": "human-syn", "text": "on the Intro gathering, list Main among the participants", "surfaces": {"0": {"syn": "gathering"}, "kind": {"syn": "gathering"}}}
+{"seedId": "syn-0859", "tier": "human-syn", "text": "bring Main into the Intro session as participants", "surfaces": {"0": {"syn": "session"}, "kind": {"syn": "session"}}}
+{"seedId": "syn-0859", "tier": "human-reorder", "text": "Main is who the Intro meeting should carry as participants", "surfaces": {}}
+{"seedId": "syn-0859", "tier": "human-reorder", "text": "About the Intro meeting: could Main be listed as its participants?", "surfaces": {}}
+{"seedId": "syn-0859", "tier": "human-reorder", "text": "Also new: the Intro meeting lineup gains Main as participants", "surfaces": {}}
+{"seedId": "syn-0857", "tier": "human-typo", "text": "adjust metting Intro", "surfaces": {"0": {"typo": "metting"}, "kind": {"typo": "metting"}}}
+{"seedId": "syn-0857", "tier": "human-typo", "text": "fix up the Intro meting a little", "surfaces": {"0": {"typo": "meting"}, "kind": {"typo": "meting"}}}
+{"seedId": "syn-0857", "tier": "human-typo", "text": "that Intro meeing needs a touch-up — change it for me", "surfaces": {"0": {"typo": "meeing"}, "kind": {"typo": "meeing"}}}
+{"seedId": "syn-0857", "tier": "human-syn", "text": "amend Intro appointment", "surfaces": {"0": {"syn": "appointment"}, "kind": {"syn": "appointment"}}}
+{"seedId": "syn-0857", "tier": "human-syn", "text": "push some changes to the Intro gathering, please", "surfaces": {"0": {"syn": "gathering"}, "kind": {"syn": "gathering"}}}
+{"seedId": "syn-0857", "tier": "human-syn", "text": "revise Intro session", "surfaces": {"0": {"syn": "session"}, "kind": {"syn": "session"}}}
+{"seedId": "syn-0857", "tier": "human-reorder", "text": "regarding Intro: that meeting needs changing", "surfaces": {}}
+{"seedId": "syn-0857", "tier": "human-reorder", "text": "changes are due for the Intro meeting — go on then", "surfaces": {}}
+{"seedId": "syn-0857", "tier": "human-reorder", "text": "While you're in there: change the Intro meeting as well", "surfaces": {}}
+{"seedIds": ["syn-0855", "syn-0866"], "tier": "human-compound", "text": "schedule an Intro meeting named Main at 3 for 1, and then remove the Intro meeting from the plan", "segments": ["schedule an Intro meeting named Main at 3 for 1,", "and then remove the Intro meeting from the plan"], "surfacesPer": [{}, {}]}
+{"seedIds": ["syn-0854", "syn-0862"], "tier": "human-compound", "text": "grab the Intro meeting first, then change the Intro meeting so its title is Second with notes Main", "segments": ["grab the Intro meeting first,", "then change the Intro meeting so its title is Second with notes Main"], "surfacesPer": [{}, {}]}
+{"seedIds": ["syn-0864", "syn-0858"], "tier": "human-compound", "text": "move the Intro meeting to start at 2, then retitle the Intro meeting Second and trim its run to 2", "segments": ["move the Intro meeting to start at 2,", "then retitle the Intro meeting Second and trim its run to 2"], "surfacesPer": [{}, {}]}
+{"seedIds": ["syn-0867", "syn-0854"], "tier": "human-compound", "text": "show me the calendar, then select the Intro meeting", "segments": ["show me the calendar,", "then select the Intro meeting"], "surfacesPer": [{}, {}]}
+{"seedIds": ["syn-0860", "syn-0865"], "tier": "human-compound", "text": "relocate the Intro meeting into room Main titled Second, and afterwards remove the Intro meeting", "segments": ["relocate the Intro meeting into room Main titled Second,", "and afterwards remove the Intro meeting"], "surfacesPer": [{}, {}]}
+{"seedIds": ["syn-0863", "syn-0866"], "tier": "human-compound", "text": "change the Intro meeting to start at 2 and run 3 with participants Intor, then remove the Intro meeting", "segments": ["change the Intro meeting to start at 2 and run 3 with participants Intor,", "then remove the Intro meeting"], "surfacesPer": [{"4": {"typo": "Intor"}}, {}]}
+{"seedIds": ["syn-0861", "syn-0859"], "tier": "human-compound", "text": "scoot the Intro meeting onto the Main calendar with a length of 3, and add Main as participants to the Intro meeting", "segments": ["scoot the Intro meeting onto the Main calendar with a length of 3,", "and add Main as participants to the Intro meeting"], "surfacesPer": [{}, {}]}
+{"seedIds": ["syn-0856", "syn-0854"], "tier": "human-compound", "text": "line up an Intro meeting called Main at 3 for 1 with notes Primary, then select the Intro meeting", "segments": ["line up an Intro meeting called Main at 3 for 1 with notes Primary,", "then select the Intro meeting"], "surfacesPer": [{"5": {"syn": "Primary"}}, {}]}
