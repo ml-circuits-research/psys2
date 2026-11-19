@@ -1,0 +1,32 @@
+# The Avatar tab as a SOP area (read by worlds/sop-area.mjs). The instance is a w.face world drawn from k.faces;
+# the act rules compile every native command and the projection derives what is drawn and observed.
+@area.types core.type of=app.area
+@area.rules.type core.type of=app.area.rules
+@area.make.type core.type of=app.area.make
+@area.command.type core.type of=app.area.command
+@area.choice.type core.type of=app.area.choice
+@area.constant.type core.type of=app.area.constant
+@area.draw.type core.type of=app.area.draw
+
+@avatar.area app.area world=ui.avatar instance=w.face knowledge=k.faces scope="ui.avatar" frame.w=100 frame.h=100
+@avatar.rules.1 app.area.rules area=$avatar.area file="render-projection.sop" n=1
+@avatar.rules.2 app.area.rules area=$avatar.area file="act-rules.sop" n=2
+@avatar.make app.area.make area=$avatar.area kind=w.face.face name="Avatar" style=plain
+@avatar.start app.area.command area=$avatar.area sop="@start avatar.face.preset preset=\"girl\""
+@avatar.draw app.area.draw area=$avatar.area draw=ui.avatar.draw fill=ui.avatar.fill point=ui.avatar.point orient=ui.avatar.orient
+
+# The interface's open choices, read from the same world.
+@avatar.choice.kinds app.area.choice area=$avatar.area input="avatar.characterKinds" type=k.faces.preset key=kind style=plain
+@avatar.choice.presets app.area.choice area=$avatar.area input="avatar.presets" type=k.faces.preset key=name style=plain
+@avatar.choice.expressions app.area.choice area=$avatar.area input="avatar.expressions" type=k.faces.expression key=name style=plain
+@avatar.choice.slots app.area.choice area=$avatar.area input="avatar.visibleSlots" type=w.face.slot key=slot
+@avatar.choice.variants app.area.choice area=$avatar.area input="avatar.variants" type=k.faces.variant key=name style=plain
+@avatar.choice.colours app.area.choice area=$avatar.area input="avatar.colours" type=k.faces.colour key=name
+@avatar.choice.sizes app.area.choice area=$avatar.area input="avatar.sizes" type=ui.avatar.size key=grade
+@avatar.choice.directions app.area.choice area=$avatar.area input="avatar.directions" type=ui.avatar.step key=place
+@avatar.choice.features app.area.choice area=$avatar.area input="avatar.features" type=ui.avatar.size key=none
+@avatar.choice.featureValues app.area.choice area=$avatar.area input="avatar.featureValues" type=ui.avatar.size key=none
+@avatar.choice.resizeRelated app.area.choice area=$avatar.area input="avatar.resizeRelated" type=ui.avatar.size key=none
+@avatar.choice.sizeRelated app.area.choice area=$avatar.area input="avatar.sizeRelated" type=ui.avatar.size key=none
+@avatar.min app.area.constant area=$avatar.area input="avatar.minScale" value=0.6
+@avatar.max app.area.constant area=$avatar.area input="avatar.maxScale" value=1.5
