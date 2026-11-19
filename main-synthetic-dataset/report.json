@@ -1,7 +1,7 @@
 {
- "accepted": 15677,
+ "accepted": 16257,
  "quarantined": 165,
- "rejected": 3708,
+ "rejected": 3800,
  "compounds": 38,
  "rejectedSample": [
   {
@@ -94,14 +94,15 @@
   "human-complex": 465,
   "human-simplified": 679,
   "mechanical": 8890,
-  "mechanical-typo": 4038
+  "mechanical-typo": 4038,
+  "mechanical-question": 580
  },
  "byWorld": {
-  "avatar": 8685,
-  "calendar": 458,
-  "diagram": 1768,
-  "document": 1378,
-  "drawing": 3388
+  "avatar": 8721,
+  "calendar": 506,
+  "diagram": 1912,
+  "document": 1438,
+  "drawing": 3680
  },
  "byOperation": {
   "avatar.part.change": 6602,
@@ -202,6 +203,11 @@
   "drawing.page.clear": 10,
   "drawing.observe": 7,
   "drawing.undo": 5,
-  "drawing.redo": 5
+  "drawing.redo": 5,
+  "part.observe": 36,
+  "meeting.observe": 48,
+  "node.observe": 144,
+  "block.observe": 60,
+  "drawn.observe": 292
  }
 }

@@ -43,11 +43,11 @@ skill [`generate-reader-datasets`](https://github.com/ml-circuits-research/sopla
 | UI-enum combination seeds | 1,421 | every button value × parameter subsets |
 | catalog-kind seeds | 259 | drawing k.objects + avatar catalog presets, deterministic cap 120/op |
 
-## Final assembly (19 November 2026, rounds 1+2)
+## Final assembly (19 November 2026, rounds 1+2 + questions)
 
 | | examples |
 | --- | ---: |
-| **total accepted** | **15,677** |
+| **total accepted** | **16,257** |
 | human-equivalent (round 1) | 732 |
 | human-complex (round 1) | 465 |
 | human-simplified (round 1, dropped/blurred optionals — completion signal) | 679 |
@@ -55,10 +55,9 @@ skill [`generate-reader-datasets`](https://github.com/ml-circuits-research/sopla
 | human-syn (out-of-vocabulary synonyms: cottage, dinghy, appointment…; labels canonical, `alias_of`) | 274 |
 | human-reorder (values-first, topicalization, dangling phrases) | 287 |
 | human-compound (two intents, one message — trains the cutter; per-segment spans) | 38 |
-| mechanical (verb/article/order frames + catalog synonym surfaces) | 8,890 |
-| mechanical-typo (deterministic slips on kind words, labels canonical) | 4,038 |
-| by area | drawing 3,388 · avatar 8,685 · diagram 1,768 · document 1,378 · calendar 458 |
-| rejected duplicates (old corpora + in-set) | 3,708 |
+| mechanical-question (read-path questions: count/exists/values/colour × UI kinds) | 580 |
+| act=ask total (questions over the observed world) | 851 |
+| rejected duplicates (old corpora + in-set) | 3,800 |
 | quarantined (double-occurrence surfaces; mechanical only) | 165 |
 
 99 distinct operations. The per-area imbalance is the honest shape of the UI surface
@@ -68,11 +67,13 @@ seed. The diversity matrix (`matrix.md`) reports first-word dominance per area �
 the check the previous corpus failed; the human tiers hold every opener at ≤8
 texts, most ≤2.
 
-Robustness tiers (round 2): the reader now sees, with canonical labels,
-real typing slips (typos claimed per surface, `typo_of`), plausible synonyms the
-catalog does NOT declare (`cottage`, `dinghy`, `appointment`, `rhombus`… with
-`alias_unverified`), reword-order games, and two-intent compounds with independently
-spanned requests for the splitter.
+
+Read-path questions (audit round): the earlier assembly had question-shaped
+politeness but almost no genuine interrogatives over the observed world —
+`questions-mechanical.mjs` mints `drawn/node/block/meeting.observe` seeds over the
+UI kind inventories (168 seeds) and validates 580 question variants ("How many
+boats are there?", "Is there a lake?", "Which paragraphs do we have?", "What
+colour is the circle?"), each labeled `act=ask` with the query operation wire.
 
 ## What is deliberately NOT here yet (next batches, honestly)
 
