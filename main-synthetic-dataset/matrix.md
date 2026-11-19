@@ -1,21 +1,25 @@
 # Diversity matrix
 
-Examples: **26144**
+Examples: **26243**
 
 | area | examples |
 | --- | ---: |
-| avatar | 10255 |
-| calendar | 612 |
-| diagram | 2271 |
-| document | 1915 |
-| drawing | 11091 |
+| avatar | 10337 |
+| calendar | 615 |
+| diagram | 2274 |
+| document | 1919 |
+| drawing | 11098 |
 
 | tier | examples |
 | --- | ---: |
+| compound | 20 |
 | human-complex | 465 |
 | human-compound | 51 |
+| human-correction | 40 |
 | human-equivalent | 732 |
 | human-mislead | 96 |
+| human-preference | 23 |
+| human-prohibition | 16 |
 | human-reorder | 287 |
 | human-simplified | 679 |
 | human-syn | 274 |

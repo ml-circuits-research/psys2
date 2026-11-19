@@ -1,12 +1,28 @@
 {
- "accepted": 26144,
+ "accepted": 26243,
  "quarantined": 60,
- "rejected": 7983,
- "compounds": 51,
+ "rejected": 7988,
+ "compounds": 71,
  "rejectedSample": [
   {
-   "seedId": "ux-0003",
+   "seedId": "ux-0034",
    "reason": "duplicate"
+  },
+  {
+   "seedId": "ux-0854",
+   "reason": "surface-missing:node.kind:circle"
+  },
+  {
+   "seedId": "ux-0860",
+   "reason": "surface-missing:node.kind:rectangle"
+  },
+  {
+   "seedId": "ux-0866",
+   "reason": "surface-missing:node.kind:square"
+  },
+  {
+   "seedId": "ux-0872",
+   "reason": "surface-missing:node.kind:diamond"
   },
   {
    "seedId": "ux-0003",
@@ -29,23 +45,7 @@
    "reason": "duplicate"
   },
   {
-   "seedId": "ux-0004",
-   "reason": "duplicate"
-  },
-  {
-   "seedId": "ux-0004",
-   "reason": "duplicate"
-  },
-  {
-   "seedId": "ux-0004",
-   "reason": "duplicate"
-  },
-  {
-   "seedId": "ux-0004",
-   "reason": "duplicate"
-  },
-  {
-   "seedId": "ux-0004",
+   "seedId": "ux-0003",
    "reason": "duplicate"
   },
   {
@@ -96,6 +96,10 @@
   "human-equivalent": 732,
   "human-complex": 465,
   "human-simplified": 679,
+  "human-correction": 40,
+  "human-preference": 23,
+  "human-prohibition": 16,
+  "compound": 20,
   "mechanical": 10527,
   "mechanical-typo": 4920,
   "mechanical-orphan": 923,
@@ -106,27 +110,27 @@
   "mechanical-numberwords": 214
  },
  "byWorld": {
-  "avatar": 10255,
-  "calendar": 612,
-  "diagram": 2271,
-  "document": 1915,
-  "drawing": 11091
+  "avatar": 10337,
+  "calendar": 615,
+  "drawing": 11098,
+  "diagram": 2274,
+  "document": 1919
  },
  "byOperation": {
   "avatar.part.change": 8008,
   "avatar.part.feature": 29,
-  "avatar.face.compose": 162,
+  "avatar.face.compose": 186,
   "avatar.face.name": 62,
   "avatar.face.resize": 63,
   "avatar.part.move": 28,
   "avatar.part.resize": 29,
   "avatar.clear": 29,
   "avatar.face.expression": 44,
-  "avatar.face.preset": 337,
+  "avatar.face.preset": 392,
   "avatar.face.select": 34,
   "avatar.ids.show": 107,
   "avatar.part.add": 1199,
-  "compound": 51,
+  "compound": 71,
   "part.observe": 72,
   "calendar.event.add": 69,
   "calendar.meeting.change": 278,

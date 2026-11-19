@@ -65,6 +65,9 @@ skill [`generate-reader-datasets`](https://github.com/ml-circuits-research/sopla
 | coverage gate (`coverage.mjs --min 20`) | **571/571 catalog values — 100%** |
 | integrity | 0 duplicate texts, 0 span/surface mismatches, 107/107 operations covered, orphan seeds 6 |
 | completion.requirements examples | 2,338 (was 537) |
+| corrections ("no, the other one") | 40 — fill:context, previous turn in context.previous, constraints bound from-previous |
+| preferences & prohibitions ("from now on always…", "never… again") | 39 — character:preference on rule claims, polarity:negative on prohibitions (existing label fields, no new wire shapes) |
+| conditionals ("if there are none — make one") | 20 compounds splitting an ask-intent and a make-intent in one message (the cutter learns hypothesis+action) |
 
 Labels are always COPIED from the seed skeletons; nothing is re-authenticated from the
 phrase. `typos`/`syn` claims keep canonical labels with `typo_of`/`alias_of` evidence.
@@ -76,8 +79,9 @@ value under the minimum fails with the trigger list that names the batch to writ
 - ~~Compound multi-request messages~~ **delivered in round 2**: 38 two-intent
   compounds with per-segment spans (`tier: human-compound`), generated and
   validated through the same assembler.
-- **Correction/ambiguity pairs** ("no, the other one") — needs `context.previous`
-  plus an alternatives extension field; Review 29 behaviour.
+- ~~Correction/ambiguity pairs~~ **delivered**: 40 two-turn corrections (fill:context,
+  context.previous, from-previous constraint claims); which candidate loses is the
+  runtime choice's ranked-exclusion behavior, deliberately not a reader label.
 - **Execution verification**: unlike `ui-natural-v1`, these recipes were NOT
   executed through the editors (`nativeTool: null`, `executed: false` in the seed
   provenance). Mechanical + structural validation only. The compile-verified loop
