@@ -1,5 +1,5 @@
 {
-  "version": "b69b61eac5",
+  "version": "0838d583f4",
   "worlds": [
     "core",
     "ui.shell",
@@ -377,8 +377,8 @@
     "worlds/words/ed.json": "6b969840b04e8c56",
     "worlds/words.bloom.json": "0710f3899a6043f6"
   },
-  "builtAt": "2026-11-19T15:13:58.205Z",
-  "commit": "7376df8f-dirty",
+  "builtAt": "2026-11-19T15:33:11.872Z",
+  "commit": "fec9d679-dirty",
   "catalog": "9e99bc5246ec2ac0b576b7aebccd32bd628ea503",
   "assets": {
     "app.mjs": "8b566c1830",
@@ -770,6 +770,7 @@
     "ui/progress.mjs": "7bac51c606",
     "ui/settings-catalog.mjs": "85b09bd65e",
     "ui/settings.mjs": "58bce9726b",
+    "ui/sop-primitives.mjs": "97aebbf866",
     "ui/speech.mjs": "34d22c1c40",
     "ui/state-diff.mjs": "03ab70eff8",
     "ui/tabs/avatar.mjs": "a81a5692be",
