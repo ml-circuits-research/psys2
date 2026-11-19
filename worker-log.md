@@ -235,3 +235,6 @@ Integrated build verified the full count/delete/existence sequence and recorded 
 
 2026-11-19 — Query and creation adapters ground kind words through SOPWorlds 0.225.1 `std.ground` policies declared in query-reading/creation policy SOP; the fixed edit ceiling and per-adapter cost loops are gone. Knowledge kind_of/is_a edges come from catalog facts. Gate 651 pass/3 skip; new test: "man" → person with the relation, moon without, cat/car order-independent.
 Chromium (rebuilt webchat): "Is there a hous?" → yes, noted "hous" as house; "Draw a man" created the composite. Open: "Is there a man?" gets no action from the reader, and queries do not match catalog composites (man) by concept.
+
+2026-11-19 — Avatar as a SOP world (not yet wired into the tab): a w.face instance changed only by library std.acts; worlds/ui.avatar/render-projection.sop derives shown variants (expressions override mouth/eyebrows/eyes), slot transforms, mirrored slots, points, one fill per shape (tint > part colour > rgb > colour name, stratified) and orientation from k.faces. docs/webchat/ui/sop-primitives.mjs only draws those facts. Child/robot/girl render fully from the catalog; the old fallback-data path draws no robot.
+New test 2/2 (duplicate head refused, happy → "big smile", resize and undo); gate 653 pass/3 skip.
