@@ -43,46 +43,33 @@ skill [`generate-reader-datasets`](https://github.com/ml-circuits-research/sopla
 | UI-enum combination seeds | 1,421 | every button value × parameter subsets |
 | catalog-kind seeds | 259 | drawing k.objects + avatar catalog presets, deterministic cap 120/op |
 
-## Final assembly (19 November 2026, rounds 1+2 + questions)
+## Final assembly (20 November 2026, healed corpus)
 
 | | examples |
 | --- | ---: |
-| **total accepted** | **16,566** |
-| human-equivalent (round 1) | 732 |
-| human-complex (round 1) | 465 |
-| human-simplified (round 1, dropped/blurred optionals — completion signal) | 679 |
-| human-typo (deliberate slips; labels stay canonical, `typo_of` recorded) | 274 |
-| human-syn (out-of-vocabulary synonyms: cottage, dinghy, appointment…; labels canonical, `alias_of`) | 274 |
-| human-reorder (values-first, topicalization, dangling phrases) | 287 |
-| human-compound (two intents, one message — trains the cutter; per-segment spans) | 51 |
-| human-mislead (false/uncheckable presuppositions baked in; misleading tails unclaimed) | 96 |
-| human-tangle (22–45-word winding digressions, question buried mid-sentence) | 96 |
-| human-wrongish (wrong-but-understandable nouns claimed as syn; labels stay canonical) | 96 |
-| mechanical-question (read-path questions: count/exists/values/colour × UI kinds) | 580 |
-| rejected duplicates (old corpora + in-set) | 3,800 |
-| quarantined (double-occurrence surfaces; mechanical only) | 165 |
+| **total accepted** | **26,144** |
+| human-equivalent | 732 |
+| human-complex | 465 |
+| human-simplified (dropped/blurred optionals — completion signal) | 679 |
+| human-typo / human-syn / human-reorder | 282 / 274 / 287 |
+| human-compound (two intents, one message — trains the cutter) | 51 |
+| human-mislead / human-tangle / human-wrongish (hard-question batch) | 96 / 96 / 96 |
+| mechnical (verb/article/order frames over every combination) | 10,527 |
+| mechanical-typo (kind-word slips, labels canonical) | 4,920 |
+| mechanical-trigger (vocabulary-coverage batch: 340 thin values healed to the min-20 gate) | 4,097 |
+| mechanical-simplified (drop-grid: each optional dropped in turn — the world-completion signal) | 1,763 |
+| mechanical-question (count/exists/values/colour) | 580 |
+| mechanical-orphan (second-chance for duplicate-killed seeds) | 973 |
+| mechanical-numberwords (digits spelled out, claimed as synonyms) | 214 |
+| by area | drawing 8,842 · avatar 9,004 · diagram 3,356 · document 1,880 · calendar 1,402 (+flight compounds) |
+| coverage gate (`coverage.mjs --min 20`) | **571/571 catalog values — 100%** |
+| integrity | 0 duplicate texts, 0 span/surface mismatches, 107/107 operations covered, orphan seeds 6 |
+| completion.requirements examples | 2,338 (was 537) |
 
-99 distinct operations. The per-area imbalance is the honest shape of the UI surface
-(avatar carries the catalog presets); calendar is thin because its editor exposes 7
-current operations — all 14 of its combinations are covered, boosted hardest per
-seed. The diversity matrix (`matrix.md`) reports first-word dominance per area —
-the check the previous corpus failed; the human tiers hold every opener at ≤8
-texts, most ≤2.
-
-
-Read-path questions (audit round): the earlier assembly had question-shaped
-politeness but almost no genuine interrogatives over the observed world —
-`questions-mechanical.mjs` mints `drawn/node/block/meeting.observe` seeds over the
-UI kind inventories (168 seeds) and validates 580 question variants ("How many
-boats are there?", "Is there a lake?", "Which paragraphs do we have?", "What
-colour is the circle?"), each labeled `act=ask` with the query operation wire.
-
-Hard-question batch (audit round 2): the reader must formalize the core intent when
-the question carries a false presupposition ("How many boats are in the lake?" with
-no lake — tail unclaimed, noise by design), a 22–45-word digression burying the
-actual ask, wrong-but-understandable nouns ("the floating thingies" → kind claimed as
-syn, label canonical), or two fused questions (13 more question compounds). All five
-area batches validated 0 rejected / 0 quarantined.
+Labels are always COPIED from the seed skeletons; nothing is re-authenticated from the
+phrase. `typos`/`syn` claims keep canonical labels with `typo_of`/`alias_of` evidence.
+The coverage gate is now part of the build: any regeneration that leaves a catalog
+value under the minimum fails with the trigger list that names the batch to write.
 
 ## What is deliberately NOT here yet (next batches, honestly)
 

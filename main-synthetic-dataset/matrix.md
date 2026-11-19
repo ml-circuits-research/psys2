@@ -1,14 +1,14 @@
 # Diversity matrix
 
-Examples: **20058**
+Examples: **26144**
 
 | area | examples |
 | --- | ---: |
-| avatar | 8810 |
-| calendar | 588 |
-| diagram | 2027 |
-| document | 1782 |
-| drawing | 6851 |
+| avatar | 10255 |
+| calendar | 612 |
+| diagram | 2271 |
+| document | 1915 |
+| drawing | 11091 |
 
 | tier | examples |
 | --- | ---: |
@@ -23,19 +23,22 @@ Examples: **20058**
 | human-typo | 282 |
 | human-wrongish | 96 |
 | mechanical | 10527 |
+| mechanical-numberwords | 214 |
 | mechanical-orphan | 923 |
 | mechanical-orphan2 | 50 |
 | mechanical-question | 580 |
+| mechanical-simplified | 1763 |
+| mechanical-trigger | 4109 |
 | mechanical-typo | 4920 |
 
-Words per example: min 2, median 6, p90 10, max 46.
+Words per example: min 2, median 6, p90 9, max 46.
 
 Operations covered: 107 distinct; thinnest: avatar.observe (5), avatar.undo (5), avatar.redo (5), diagram.observe (5), diagram.undo (5), diagram.redo (5), document.observe (5), document.undo (5).
 
 ## Filler dominance check (first word per area; the previous corpus failed here)
 
-- **avatar**: change:34%, can:10%, a:9%, make:8%, set:8%, update:7%
-- **calendar**: change:6%, a:3%, can:3%, add:2%, remove:2%, how:2%
-- **diagram**: add:13%, change:10%, can:7%, a:7%, make:3%, set:3%
-- **document**: change:15%, add:14%, can:7%, a:7%, set:3%, make:3%
-- **drawing**: add:35%, give:12%, can:12%, a:3%, make:3%, i:2%
+- **avatar**: change:29%, give:10%, can:8%, a:7%, make:6%, set:6%
+- **calendar**: change:6%, give:3%, a:2%, can:2%, add:2%, remove:2%
+- **diagram**: add:12%, change:9%, give:7%, can:6%, a:6%, place:4%
+- **document**: change:14%, add:13%, can:6%, a:6%, give:4%, set:3%
+- **drawing**: add:22%, give:9%, can:9%, i:4%, put:3%, make:3%
