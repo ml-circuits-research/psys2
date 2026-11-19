@@ -1,0 +1,53 @@
+{
+ "format": "psys2.ui-human-report/1",
+ "seeds": 188,
+ "seedsAuthored": 188,
+ "examples": 4284,
+ "rejected": 228,
+ "rejectReasons": {
+  "duplicate": 228
+ },
+ "byTier": {
+  "equivalent": 1894,
+  "complex": 940,
+  "simplified": 1450
+ },
+ "byWorld": {
+  "drawing": 968,
+  "diagram": 1091,
+  "calendar": 319,
+  "document": 1094,
+  "avatar": 812
+ },
+ "linkedToExecutedNativeCall": 3483,
+ "withAmbiguousSurface": 144,
+ "seedsBelow20": [
+  "ui-natural-00109",
+  "ui-natural-00244"
+ ],
+ "seedsMissing": [],
+ "rejectSamples": {
+  "duplicate": [
+   {
+    "seed": "ui-natural-00012",
+    "text": "paint the house blue"
+   },
+   {
+    "seed": "ui-natural-00012",
+    "text": "change the house to blue"
+   },
+   {
+    "seed": "ui-natural-00012",
+    "text": "give the house a blue colour"
+   },
+   {
+    "seed": "ui-natural-00016",
+    "text": "pick the house"
+   },
+   {
+    "seed": "ui-natural-00030",
+    "text": "get rid of the circle"
+   }
+  ]
+ }
+}

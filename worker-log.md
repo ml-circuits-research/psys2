@@ -230,3 +230,5 @@ Chromium verified the changing house/tree population and the real query graph in
 Integrated build verified the full count/delete/existence sequence and recorded SOP derivation. 650 passed, 3 skipped; deadlines remain unchanged.
 
 2026-11-18 — Public 6d32d74ccd: actual chat “Draw a man” selected the grounded man concept, dispatched drawing.catalog.make and created one composite in an empty instance. Current-status distinguishes this from the isolated lexical query failure. Gate: 650 passed, 3 skipped.
+
+2026-11-19 — ui-human-v1: 188 executed seeds (one per editor × operation × key set) × 24 agent-authored paraphrases (equivalent/complex/simplified). `python3 assemble.py`: 4,284 accepted, 228 duplicates rejected, 3,483 linked to executed native calls; omitted/vague values recorded as completion requirements. Not yet trained.
