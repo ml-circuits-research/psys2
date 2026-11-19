@@ -47,16 +47,18 @@ skill [`generate-reader-datasets`](https://github.com/ml-circuits-research/sopla
 
 | | examples |
 | --- | ---: |
-| **total accepted** | **16,257** |
+| **total accepted** | **16,566** |
 | human-equivalent (round 1) | 732 |
 | human-complex (round 1) | 465 |
 | human-simplified (round 1, dropped/blurred optionals — completion signal) | 679 |
 | human-typo (deliberate slips; labels stay canonical, `typo_of` recorded) | 274 |
 | human-syn (out-of-vocabulary synonyms: cottage, dinghy, appointment…; labels canonical, `alias_of`) | 274 |
 | human-reorder (values-first, topicalization, dangling phrases) | 287 |
-| human-compound (two intents, one message — trains the cutter; per-segment spans) | 38 |
+| human-compound (two intents, one message — trains the cutter; per-segment spans) | 51 |
+| human-mislead (false/uncheckable presuppositions baked in; misleading tails unclaimed) | 96 |
+| human-tangle (22–45-word winding digressions, question buried mid-sentence) | 96 |
+| human-wrongish (wrong-but-understandable nouns claimed as syn; labels stay canonical) | 96 |
 | mechanical-question (read-path questions: count/exists/values/colour × UI kinds) | 580 |
-| act=ask total (questions over the observed world) | 851 |
 | rejected duplicates (old corpora + in-set) | 3,800 |
 | quarantined (double-occurrence surfaces; mechanical only) | 165 |
 
@@ -74,6 +76,13 @@ politeness but almost no genuine interrogatives over the observed world —
 UI kind inventories (168 seeds) and validates 580 question variants ("How many
 boats are there?", "Is there a lake?", "Which paragraphs do we have?", "What
 colour is the circle?"), each labeled `act=ask` with the query operation wire.
+
+Hard-question batch (audit round 2): the reader must formalize the core intent when
+the question carries a false presupposition ("How many boats are in the lake?" with
+no lake — tail unclaimed, noise by design), a 22–45-word digression burying the
+actual ask, wrong-but-understandable nouns ("the floating thingies" → kind claimed as
+syn, label canonical), or two fused questions (13 more question compounds). All five
+area batches validated 0 rejected / 0 quarantined.
 
 ## What is deliberately NOT here yet (next batches, honestly)
 

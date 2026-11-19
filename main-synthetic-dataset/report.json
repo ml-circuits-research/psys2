@@ -1,8 +1,8 @@
 {
- "accepted": 16257,
+ "accepted": 16566,
  "quarantined": 165,
  "rejected": 3800,
- "compounds": 38,
+ "compounds": 51,
  "rejectedSample": [
   {
    "seedId": "syn-0003",
@@ -86,10 +86,13 @@
   }
  ],
  "byTier": {
-  "human-typo": 274,
+  "human-typo": 282,
   "human-syn": 274,
   "human-reorder": 287,
-  "human-compound": 38,
+  "human-compound": 51,
+  "human-mislead": 96,
+  "human-tangle": 96,
+  "human-wrongish": 96,
   "human-equivalent": 732,
   "human-complex": 465,
   "human-simplified": 679,
@@ -98,11 +101,11 @@
   "mechanical-question": 580
  },
  "byWorld": {
-  "avatar": 8721,
-  "calendar": 506,
-  "diagram": 1912,
-  "document": 1438,
-  "drawing": 3680
+  "avatar": 8759,
+  "calendar": 546,
+  "diagram": 1977,
+  "document": 1478,
+  "drawing": 3806
  },
  "byOperation": {
   "avatar.part.change": 6602,
@@ -118,7 +121,8 @@
   "avatar.face.select": 31,
   "avatar.ids.show": 98,
   "avatar.part.add": 1202,
-  "compound": 38,
+  "compound": 51,
+  "part.observe": 72,
   "calendar.event.add": 58,
   "calendar.meeting.change": 234,
   "calendar.meeting.move": 35,
@@ -126,6 +130,7 @@
   "calendar.events.remove": 34,
   "calendar.meeting.remove": 25,
   "calendar.observe": 32,
+  "meeting.observe": 86,
   "diagram.group.change": 169,
   "diagram.link.change": 307,
   "diagram.node.change": 158,
@@ -140,6 +145,7 @@
   "diagram.node.place": 30,
   "diagram.node.select": 36,
   "diagram.selection.remove": 31,
+  "node.observe": 206,
   "document.block.mark": 111,
   "document.section.mark": 110,
   "document.block.change": 275,
@@ -151,6 +157,7 @@
   "document.section.make": 53,
   "document.table.make": 38,
   "document.write": 37,
+  "block.observe": 98,
   "drawing.part.change": 120,
   "drawing.objects.transform": 30,
   "drawing.catalog.make": 115,
@@ -168,6 +175,7 @@
   "drawing.object.select": 25,
   "drawing.object.ungroup": 25,
   "drawing.objects.select": 19,
+  "drawn.observe": 414,
   "avatar.part.select": 7,
   "avatar.part.remove": 10,
   "avatar.observe": 5,
@@ -203,11 +211,6 @@
   "drawing.page.clear": 10,
   "drawing.observe": 7,
   "drawing.undo": 5,
-  "drawing.redo": 5,
-  "part.observe": 36,
-  "meeting.observe": 48,
-  "node.observe": 144,
-  "block.observe": 60,
-  "drawn.observe": 292
+  "drawing.redo": 5
  }
 }
