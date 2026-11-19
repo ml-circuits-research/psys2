@@ -1,0 +1,672 @@
+{"seedId":"q-0001","tier":"mechanical-question","text":"How many faces are there?","surfaces":{"0":"How many","kind":"face"}}
+{"seedId":"q-0001","tier":"mechanical-question","text":"Tell me the number of faces.","surfaces":{"0":"number","kind":"face"}}
+{"seedId":"q-0001","tier":"mechanical-question","text":"Count the faces for me.","surfaces":{"0":"Count","kind":"face"}}
+{"seedId":"q-0001","tier":"mechanical-question","text":"Of the things on display, how many are faces?","surfaces":{"0":"how many","kind":"face"}}
+{"seedId":"q-0002","tier":"mechanical-question","text":"Is there a face?","surfaces":{"0":"Is there","kind":"face"}}
+{"seedId":"q-0002","tier":"mechanical-question","text":"Do we have a face anywhere?","surfaces":{"0":"Do we have","kind":"face"}}
+{"seedId":"q-0002","tier":"mechanical-question","text":"Any face at all?","surfaces":{"0":"Any","kind":"face"}}
+{"seedId":"q-0002","tier":"mechanical-question","text":"Does a face exist?","surfaces":{"0":"exist","kind":"face"}}
+{"seedId":"q-0003","tier":"mechanical-question","text":"What faces are there?","surfaces":{"0":"What","kind":"face"}}
+{"seedId":"q-0003","tier":"mechanical-question","text":"Which faces do we have?","surfaces":{"0":"Which","kind":"face"}}
+{"seedId":"q-0003","tier":"mechanical-question","text":"List the faces.","surfaces":{"0":"List","kind":"face"}}
+{"seedId":"q-0003","tier":"mechanical-question","text":"Show me every face.","surfaces":{"0":"Show","kind":"face"}}
+{"seedId":"q-0004","tier":"mechanical-question","text":"How many parts are there?","surfaces":{"0":"How many","kind":"part"}}
+{"seedId":"q-0004","tier":"mechanical-question","text":"Tell me the number of parts.","surfaces":{"0":"number","kind":"part"}}
+{"seedId":"q-0004","tier":"mechanical-question","text":"Count the parts for me.","surfaces":{"0":"Count","kind":"part"}}
+{"seedId":"q-0004","tier":"mechanical-question","text":"Of the things on display, how many are parts?","surfaces":{"0":"how many","kind":"part"}}
+{"seedId":"q-0005","tier":"mechanical-question","text":"Is there a part?","surfaces":{"0":"Is there","kind":"part"}}
+{"seedId":"q-0005","tier":"mechanical-question","text":"Do we have a part anywhere?","surfaces":{"0":"Do we have","kind":"part"}}
+{"seedId":"q-0005","tier":"mechanical-question","text":"Any part at all?","surfaces":{"0":"Any","kind":"part"}}
+{"seedId":"q-0005","tier":"mechanical-question","text":"Does a part exist?","surfaces":{"0":"exist","kind":"part"}}
+{"seedId":"q-0006","tier":"mechanical-question","text":"What parts are there?","surfaces":{"0":"What","kind":"part"}}
+{"seedId":"q-0006","tier":"mechanical-question","text":"Which parts do we have?","surfaces":{"0":"Which","kind":"part"}}
+{"seedId":"q-0006","tier":"mechanical-question","text":"List the parts.","surfaces":{"0":"List","kind":"part"}}
+{"seedId":"q-0006","tier":"mechanical-question","text":"Show me every part.","surfaces":{"0":"Show","kind":"part"}}
+{"seedId":"q-0007","tier":"mechanical-question","text":"How many presets are there?","surfaces":{"0":"How many","kind":"preset"}}
+{"seedId":"q-0007","tier":"mechanical-question","text":"Tell me the number of presets.","surfaces":{"0":"number","kind":"preset"}}
+{"seedId":"q-0007","tier":"mechanical-question","text":"Count the presets for me.","surfaces":{"0":"Count","kind":"preset"}}
+{"seedId":"q-0007","tier":"mechanical-question","text":"Of the things on display, how many are presets?","surfaces":{"0":"how many","kind":"preset"}}
+{"seedId":"q-0008","tier":"mechanical-question","text":"Is there a preset?","surfaces":{"0":"Is there","kind":"preset"}}
+{"seedId":"q-0008","tier":"mechanical-question","text":"Do we have a preset anywhere?","surfaces":{"0":"Do we have","kind":"preset"}}
+{"seedId":"q-0008","tier":"mechanical-question","text":"Any preset at all?","surfaces":{"0":"Any","kind":"preset"}}
+{"seedId":"q-0008","tier":"mechanical-question","text":"Does a preset exist?","surfaces":{"0":"exist","kind":"preset"}}
+{"seedId":"q-0009","tier":"mechanical-question","text":"What presets are there?","surfaces":{"0":"What","kind":"preset"}}
+{"seedId":"q-0009","tier":"mechanical-question","text":"Which presets do we have?","surfaces":{"0":"Which","kind":"preset"}}
+{"seedId":"q-0009","tier":"mechanical-question","text":"List the presets.","surfaces":{"0":"List","kind":"preset"}}
+{"seedId":"q-0009","tier":"mechanical-question","text":"Show me every preset.","surfaces":{"0":"Show","kind":"preset"}}
+{"seedId":"q-0010","tier":"mechanical-question","text":"How many meetings are there?","surfaces":{"0":"How many","kind":"meeting"}}
+{"seedId":"q-0010","tier":"mechanical-question","text":"Tell me the number of meetings.","surfaces":{"0":"number","kind":"meeting"}}
+{"seedId":"q-0010","tier":"mechanical-question","text":"Count the meetings for me.","surfaces":{"0":"Count","kind":"meeting"}}
+{"seedId":"q-0010","tier":"mechanical-question","text":"Of the things on display, how many are meetings?","surfaces":{"0":"how many","kind":"meeting"}}
+{"seedId":"q-0011","tier":"mechanical-question","text":"Is there a meeting?","surfaces":{"0":"Is there","kind":"meeting"}}
+{"seedId":"q-0011","tier":"mechanical-question","text":"Do we have a meeting anywhere?","surfaces":{"0":"Do we have","kind":"meeting"}}
+{"seedId":"q-0011","tier":"mechanical-question","text":"Any meeting at all?","surfaces":{"0":"Any","kind":"meeting"}}
+{"seedId":"q-0011","tier":"mechanical-question","text":"Does a meeting exist?","surfaces":{"0":"exist","kind":"meeting"}}
+{"seedId":"q-0012","tier":"mechanical-question","text":"What meetings are there?","surfaces":{"0":"What","kind":"meeting"}}
+{"seedId":"q-0012","tier":"mechanical-question","text":"Which meetings do we have?","surfaces":{"0":"Which","kind":"meeting"}}
+{"seedId":"q-0012","tier":"mechanical-question","text":"List the meetings.","surfaces":{"0":"List","kind":"meeting"}}
+{"seedId":"q-0012","tier":"mechanical-question","text":"Show me every meeting.","surfaces":{"0":"Show","kind":"meeting"}}
+{"seedId":"q-0013","tier":"mechanical-question","text":"How many calendars are there?","surfaces":{"0":"How many","kind":"calendar"}}
+{"seedId":"q-0013","tier":"mechanical-question","text":"Tell me the number of calendars.","surfaces":{"0":"number","kind":"calendar"}}
+{"seedId":"q-0013","tier":"mechanical-question","text":"Count the calendars for me.","surfaces":{"0":"Count","kind":"calendar"}}
+{"seedId":"q-0013","tier":"mechanical-question","text":"Of the things on display, how many are calendars?","surfaces":{"0":"how many","kind":"calendar"}}
+{"seedId":"q-0014","tier":"mechanical-question","text":"Is there a calendar?","surfaces":{"0":"Is there","kind":"calendar"}}
+{"seedId":"q-0014","tier":"mechanical-question","text":"Do we have a calendar anywhere?","surfaces":{"0":"Do we have","kind":"calendar"}}
+{"seedId":"q-0014","tier":"mechanical-question","text":"Any calendar at all?","surfaces":{"0":"Any","kind":"calendar"}}
+{"seedId":"q-0014","tier":"mechanical-question","text":"Does a calendar exist?","surfaces":{"0":"exist","kind":"calendar"}}
+{"seedId":"q-0015","tier":"mechanical-question","text":"What calendars are there?","surfaces":{"0":"What","kind":"calendar"}}
+{"seedId":"q-0015","tier":"mechanical-question","text":"Which calendars do we have?","surfaces":{"0":"Which","kind":"calendar"}}
+{"seedId":"q-0015","tier":"mechanical-question","text":"List the calendars.","surfaces":{"0":"List","kind":"calendar"}}
+{"seedId":"q-0015","tier":"mechanical-question","text":"Show me every calendar.","surfaces":{"0":"Show","kind":"calendar"}}
+{"seedId":"q-0016","tier":"mechanical-question","text":"How many persons are there?","surfaces":{"0":"How many","kind":"person"}}
+{"seedId":"q-0016","tier":"mechanical-question","text":"Tell me the number of persons.","surfaces":{"0":"number","kind":"person"}}
+{"seedId":"q-0016","tier":"mechanical-question","text":"Count the persons for me.","surfaces":{"0":"Count","kind":"person"}}
+{"seedId":"q-0016","tier":"mechanical-question","text":"Of the things on display, how many are persons?","surfaces":{"0":"how many","kind":"person"}}
+{"seedId":"q-0017","tier":"mechanical-question","text":"Is there a person?","surfaces":{"0":"Is there","kind":"person"}}
+{"seedId":"q-0017","tier":"mechanical-question","text":"Do we have a person anywhere?","surfaces":{"0":"Do we have","kind":"person"}}
+{"seedId":"q-0017","tier":"mechanical-question","text":"Any person at all?","surfaces":{"0":"Any","kind":"person"}}
+{"seedId":"q-0017","tier":"mechanical-question","text":"Does a person exist?","surfaces":{"0":"exist","kind":"person"}}
+{"seedId":"q-0018","tier":"mechanical-question","text":"What persons are there?","surfaces":{"0":"What","kind":"person"}}
+{"seedId":"q-0018","tier":"mechanical-question","text":"Which persons do we have?","surfaces":{"0":"Which","kind":"person"}}
+{"seedId":"q-0018","tier":"mechanical-question","text":"List the persons.","surfaces":{"0":"List","kind":"person"}}
+{"seedId":"q-0018","tier":"mechanical-question","text":"Show me every person.","surfaces":{"0":"Show","kind":"person"}}
+{"seedId":"q-0019","tier":"mechanical-question","text":"How many rooms are there?","surfaces":{"0":"How many","kind":"room"}}
+{"seedId":"q-0019","tier":"mechanical-question","text":"Tell me the number of rooms.","surfaces":{"0":"number","kind":"room"}}
+{"seedId":"q-0019","tier":"mechanical-question","text":"Count the rooms for me.","surfaces":{"0":"Count","kind":"room"}}
+{"seedId":"q-0019","tier":"mechanical-question","text":"Of the things on display, how many are rooms?","surfaces":{"0":"how many","kind":"room"}}
+{"seedId":"q-0020","tier":"mechanical-question","text":"Is there a room?","surfaces":{"0":"Is there","kind":"room"}}
+{"seedId":"q-0020","tier":"mechanical-question","text":"Do we have a room anywhere?","surfaces":{"0":"Do we have","kind":"room"}}
+{"seedId":"q-0020","tier":"mechanical-question","text":"Any room at all?","surfaces":{"0":"Any","kind":"room"}}
+{"seedId":"q-0020","tier":"mechanical-question","text":"Does a room exist?","surfaces":{"0":"exist","kind":"room"}}
+{"seedId":"q-0021","tier":"mechanical-question","text":"What rooms are there?","surfaces":{"0":"What","kind":"room"}}
+{"seedId":"q-0021","tier":"mechanical-question","text":"Which rooms do we have?","surfaces":{"0":"Which","kind":"room"}}
+{"seedId":"q-0021","tier":"mechanical-question","text":"List the rooms.","surfaces":{"0":"List","kind":"room"}}
+{"seedId":"q-0021","tier":"mechanical-question","text":"Show me every room.","surfaces":{"0":"Show","kind":"room"}}
+{"seedId":"q-0022","tier":"mechanical-question","text":"How many circles are there?","surfaces":{"0":"How many","kind":"circle"}}
+{"seedId":"q-0022","tier":"mechanical-question","text":"Tell me the number of circles.","surfaces":{"0":"number","kind":"circle"}}
+{"seedId":"q-0022","tier":"mechanical-question","text":"Count the circles for me.","surfaces":{"0":"Count","kind":"circle"}}
+{"seedId":"q-0022","tier":"mechanical-question","text":"Of the things on display, how many are circles?","surfaces":{"0":"how many","kind":"circle"}}
+{"seedId":"q-0023","tier":"mechanical-question","text":"Is there a circle?","surfaces":{"0":"Is there","kind":"circle"}}
+{"seedId":"q-0023","tier":"mechanical-question","text":"Do we have a circle anywhere?","surfaces":{"0":"Do we have","kind":"circle"}}
+{"seedId":"q-0023","tier":"mechanical-question","text":"Any circle at all?","surfaces":{"0":"Any","kind":"circle"}}
+{"seedId":"q-0023","tier":"mechanical-question","text":"Does a circle exist?","surfaces":{"0":"exist","kind":"circle"}}
+{"seedId":"q-0024","tier":"mechanical-question","text":"What circles are there?","surfaces":{"0":"What","kind":"circle"}}
+{"seedId":"q-0024","tier":"mechanical-question","text":"Which circles do we have?","surfaces":{"0":"Which","kind":"circle"}}
+{"seedId":"q-0024","tier":"mechanical-question","text":"List the circles.","surfaces":{"0":"List","kind":"circle"}}
+{"seedId":"q-0024","tier":"mechanical-question","text":"Show me every circle.","surfaces":{"0":"Show","kind":"circle"}}
+{"seedId":"q-0025","tier":"mechanical-question","text":"What colour is the circle?","surfaces":{"0":"What colour","kind":"circle"}}
+{"seedId":"q-0025","tier":"mechanical-question","text":"What colour are the circles?","surfaces":{"0":"What colour","kind":"circle"}}
+{"seedId":"q-0025","tier":"mechanical-question","text":"The circle — what colour is it?","surfaces":{"0":"what colour","kind":"circle"}}
+{"seedId":"q-0025","tier":"mechanical-question","text":"Colour of the circle, please.","surfaces":{"0":"Colour","kind":"circle"}}
+{"seedId":"q-0026","tier":"mechanical-question","text":"How many rectangles are there?","surfaces":{"0":"How many","kind":"rectangle"}}
+{"seedId":"q-0026","tier":"mechanical-question","text":"Tell me the number of rectangles.","surfaces":{"0":"number","kind":"rectangle"}}
+{"seedId":"q-0026","tier":"mechanical-question","text":"Count the rectangles for me.","surfaces":{"0":"Count","kind":"rectangle"}}
+{"seedId":"q-0026","tier":"mechanical-question","text":"Of the things on display, how many are rectangles?","surfaces":{"0":"how many","kind":"rectangle"}}
+{"seedId":"q-0027","tier":"mechanical-question","text":"Is there a rectangle?","surfaces":{"0":"Is there","kind":"rectangle"}}
+{"seedId":"q-0027","tier":"mechanical-question","text":"Do we have a rectangle anywhere?","surfaces":{"0":"Do we have","kind":"rectangle"}}
+{"seedId":"q-0027","tier":"mechanical-question","text":"Any rectangle at all?","surfaces":{"0":"Any","kind":"rectangle"}}
+{"seedId":"q-0027","tier":"mechanical-question","text":"Does a rectangle exist?","surfaces":{"0":"exist","kind":"rectangle"}}
+{"seedId":"q-0028","tier":"mechanical-question","text":"What rectangles are there?","surfaces":{"0":"What","kind":"rectangle"}}
+{"seedId":"q-0028","tier":"mechanical-question","text":"Which rectangles do we have?","surfaces":{"0":"Which","kind":"rectangle"}}
+{"seedId":"q-0028","tier":"mechanical-question","text":"List the rectangles.","surfaces":{"0":"List","kind":"rectangle"}}
+{"seedId":"q-0028","tier":"mechanical-question","text":"Show me every rectangle.","surfaces":{"0":"Show","kind":"rectangle"}}
+{"seedId":"q-0029","tier":"mechanical-question","text":"What colour is the rectangle?","surfaces":{"0":"What colour","kind":"rectangle"}}
+{"seedId":"q-0029","tier":"mechanical-question","text":"What colour are the rectangles?","surfaces":{"0":"What colour","kind":"rectangle"}}
+{"seedId":"q-0029","tier":"mechanical-question","text":"The rectangle — what colour is it?","surfaces":{"0":"what colour","kind":"rectangle"}}
+{"seedId":"q-0029","tier":"mechanical-question","text":"Colour of the rectangle, please.","surfaces":{"0":"Colour","kind":"rectangle"}}
+{"seedId":"q-0030","tier":"mechanical-question","text":"How many squares are there?","surfaces":{"0":"How many","kind":"square"}}
+{"seedId":"q-0030","tier":"mechanical-question","text":"Tell me the number of squares.","surfaces":{"0":"number","kind":"square"}}
+{"seedId":"q-0030","tier":"mechanical-question","text":"Count the squares for me.","surfaces":{"0":"Count","kind":"square"}}
+{"seedId":"q-0030","tier":"mechanical-question","text":"Of the things on display, how many are squares?","surfaces":{"0":"how many","kind":"square"}}
+{"seedId":"q-0031","tier":"mechanical-question","text":"Is there a square?","surfaces":{"0":"Is there","kind":"square"}}
+{"seedId":"q-0031","tier":"mechanical-question","text":"Do we have a square anywhere?","surfaces":{"0":"Do we have","kind":"square"}}
+{"seedId":"q-0031","tier":"mechanical-question","text":"Any square at all?","surfaces":{"0":"Any","kind":"square"}}
+{"seedId":"q-0031","tier":"mechanical-question","text":"Does a square exist?","surfaces":{"0":"exist","kind":"square"}}
+{"seedId":"q-0032","tier":"mechanical-question","text":"What squares are there?","surfaces":{"0":"What","kind":"square"}}
+{"seedId":"q-0032","tier":"mechanical-question","text":"Which squares do we have?","surfaces":{"0":"Which","kind":"square"}}
+{"seedId":"q-0032","tier":"mechanical-question","text":"List the squares.","surfaces":{"0":"List","kind":"square"}}
+{"seedId":"q-0032","tier":"mechanical-question","text":"Show me every square.","surfaces":{"0":"Show","kind":"square"}}
+{"seedId":"q-0033","tier":"mechanical-question","text":"What colour is the square?","surfaces":{"0":"What colour","kind":"square"}}
+{"seedId":"q-0033","tier":"mechanical-question","text":"What colour are the squares?","surfaces":{"0":"What colour","kind":"square"}}
+{"seedId":"q-0033","tier":"mechanical-question","text":"The square — what colour is it?","surfaces":{"0":"what colour","kind":"square"}}
+{"seedId":"q-0033","tier":"mechanical-question","text":"Colour of the square, please.","surfaces":{"0":"Colour","kind":"square"}}
+{"seedId":"q-0034","tier":"mechanical-question","text":"How many diamonds are there?","surfaces":{"0":"How many","kind":"diamond"}}
+{"seedId":"q-0034","tier":"mechanical-question","text":"Tell me the number of diamonds.","surfaces":{"0":"number","kind":"diamond"}}
+{"seedId":"q-0034","tier":"mechanical-question","text":"Count the diamonds for me.","surfaces":{"0":"Count","kind":"diamond"}}
+{"seedId":"q-0034","tier":"mechanical-question","text":"Of the things on display, how many are diamonds?","surfaces":{"0":"how many","kind":"diamond"}}
+{"seedId":"q-0035","tier":"mechanical-question","text":"Is there a diamond?","surfaces":{"0":"Is there","kind":"diamond"}}
+{"seedId":"q-0035","tier":"mechanical-question","text":"Do we have a diamond anywhere?","surfaces":{"0":"Do we have","kind":"diamond"}}
+{"seedId":"q-0035","tier":"mechanical-question","text":"Any diamond at all?","surfaces":{"0":"Any","kind":"diamond"}}
+{"seedId":"q-0035","tier":"mechanical-question","text":"Does a diamond exist?","surfaces":{"0":"exist","kind":"diamond"}}
+{"seedId":"q-0036","tier":"mechanical-question","text":"What diamonds are there?","surfaces":{"0":"What","kind":"diamond"}}
+{"seedId":"q-0036","tier":"mechanical-question","text":"Which diamonds do we have?","surfaces":{"0":"Which","kind":"diamond"}}
+{"seedId":"q-0036","tier":"mechanical-question","text":"List the diamonds.","surfaces":{"0":"List","kind":"diamond"}}
+{"seedId":"q-0036","tier":"mechanical-question","text":"Show me every diamond.","surfaces":{"0":"Show","kind":"diamond"}}
+{"seedId":"q-0037","tier":"mechanical-question","text":"What colour is the diamond?","surfaces":{"0":"What colour","kind":"diamond"}}
+{"seedId":"q-0037","tier":"mechanical-question","text":"What colour are the diamonds?","surfaces":{"0":"What colour","kind":"diamond"}}
+{"seedId":"q-0037","tier":"mechanical-question","text":"The diamond — what colour is it?","surfaces":{"0":"what colour","kind":"diamond"}}
+{"seedId":"q-0037","tier":"mechanical-question","text":"Colour of the diamond, please.","surfaces":{"0":"Colour","kind":"diamond"}}
+{"seedId":"q-0038","tier":"mechanical-question","text":"How many ellipses are there?","surfaces":{"0":"How many","kind":"ellipse"}}
+{"seedId":"q-0038","tier":"mechanical-question","text":"Tell me the number of ellipses.","surfaces":{"0":"number","kind":"ellipse"}}
+{"seedId":"q-0038","tier":"mechanical-question","text":"Count the ellipses for me.","surfaces":{"0":"Count","kind":"ellipse"}}
+{"seedId":"q-0038","tier":"mechanical-question","text":"Of the things on display, how many are ellipses?","surfaces":{"0":"how many","kind":"ellipse"}}
+{"seedId":"q-0039","tier":"mechanical-question","text":"Is there an ellipse?","surfaces":{"0":"Is there","kind":"ellipse"}}
+{"seedId":"q-0039","tier":"mechanical-question","text":"Do we have an ellipse anywhere?","surfaces":{"0":"Do we have","kind":"ellipse"}}
+{"seedId":"q-0039","tier":"mechanical-question","text":"Any ellipse at all?","surfaces":{"0":"Any","kind":"ellipse"}}
+{"seedId":"q-0039","tier":"mechanical-question","text":"Does an ellipse exist?","surfaces":{"0":"exist","kind":"ellipse"}}
+{"seedId":"q-0040","tier":"mechanical-question","text":"What ellipses are there?","surfaces":{"0":"What","kind":"ellipse"}}
+{"seedId":"q-0040","tier":"mechanical-question","text":"Which ellipses do we have?","surfaces":{"0":"Which","kind":"ellipse"}}
+{"seedId":"q-0040","tier":"mechanical-question","text":"List the ellipses.","surfaces":{"0":"List","kind":"ellipse"}}
+{"seedId":"q-0040","tier":"mechanical-question","text":"Show me every ellipse.","surfaces":{"0":"Show","kind":"ellipse"}}
+{"seedId":"q-0041","tier":"mechanical-question","text":"What colour is the ellipse?","surfaces":{"0":"What colour","kind":"ellipse"}}
+{"seedId":"q-0041","tier":"mechanical-question","text":"What colour are the ellipses?","surfaces":{"0":"What colour","kind":"ellipse"}}
+{"seedId":"q-0041","tier":"mechanical-question","text":"The ellipse — what colour is it?","surfaces":{"0":"what colour","kind":"ellipse"}}
+{"seedId":"q-0041","tier":"mechanical-question","text":"Colour of the ellipse, please.","surfaces":{"0":"Colour","kind":"ellipse"}}
+{"seedId":"q-0042","tier":"mechanical-question","text":"How many triangles are there?","surfaces":{"0":"How many","kind":"triangle"}}
+{"seedId":"q-0042","tier":"mechanical-question","text":"Tell me the number of triangles.","surfaces":{"0":"number","kind":"triangle"}}
+{"seedId":"q-0042","tier":"mechanical-question","text":"Count the triangles for me.","surfaces":{"0":"Count","kind":"triangle"}}
+{"seedId":"q-0042","tier":"mechanical-question","text":"Of the things on display, how many are triangles?","surfaces":{"0":"how many","kind":"triangle"}}
+{"seedId":"q-0043","tier":"mechanical-question","text":"Is there a triangle?","surfaces":{"0":"Is there","kind":"triangle"}}
+{"seedId":"q-0043","tier":"mechanical-question","text":"Do we have a triangle anywhere?","surfaces":{"0":"Do we have","kind":"triangle"}}
+{"seedId":"q-0043","tier":"mechanical-question","text":"Any triangle at all?","surfaces":{"0":"Any","kind":"triangle"}}
+{"seedId":"q-0043","tier":"mechanical-question","text":"Does a triangle exist?","surfaces":{"0":"exist","kind":"triangle"}}
+{"seedId":"q-0044","tier":"mechanical-question","text":"What triangles are there?","surfaces":{"0":"What","kind":"triangle"}}
+{"seedId":"q-0044","tier":"mechanical-question","text":"Which triangles do we have?","surfaces":{"0":"Which","kind":"triangle"}}
+{"seedId":"q-0044","tier":"mechanical-question","text":"List the triangles.","surfaces":{"0":"List","kind":"triangle"}}
+{"seedId":"q-0044","tier":"mechanical-question","text":"Show me every triangle.","surfaces":{"0":"Show","kind":"triangle"}}
+{"seedId":"q-0045","tier":"mechanical-question","text":"What colour is the triangle?","surfaces":{"0":"What colour","kind":"triangle"}}
+{"seedId":"q-0045","tier":"mechanical-question","text":"What colour are the triangles?","surfaces":{"0":"What colour","kind":"triangle"}}
+{"seedId":"q-0045","tier":"mechanical-question","text":"The triangle — what colour is it?","surfaces":{"0":"what colour","kind":"triangle"}}
+{"seedId":"q-0045","tier":"mechanical-question","text":"Colour of the triangle, please.","surfaces":{"0":"Colour","kind":"triangle"}}
+{"seedId":"q-0046","tier":"mechanical-question","text":"How many hexagons are there?","surfaces":{"0":"How many","kind":"hexagon"}}
+{"seedId":"q-0046","tier":"mechanical-question","text":"Tell me the number of hexagons.","surfaces":{"0":"number","kind":"hexagon"}}
+{"seedId":"q-0046","tier":"mechanical-question","text":"Count the hexagons for me.","surfaces":{"0":"Count","kind":"hexagon"}}
+{"seedId":"q-0046","tier":"mechanical-question","text":"Of the things on display, how many are hexagons?","surfaces":{"0":"how many","kind":"hexagon"}}
+{"seedId":"q-0047","tier":"mechanical-question","text":"Is there a hexagon?","surfaces":{"0":"Is there","kind":"hexagon"}}
+{"seedId":"q-0047","tier":"mechanical-question","text":"Do we have a hexagon anywhere?","surfaces":{"0":"Do we have","kind":"hexagon"}}
+{"seedId":"q-0047","tier":"mechanical-question","text":"Any hexagon at all?","surfaces":{"0":"Any","kind":"hexagon"}}
+{"seedId":"q-0047","tier":"mechanical-question","text":"Does a hexagon exist?","surfaces":{"0":"exist","kind":"hexagon"}}
+{"seedId":"q-0048","tier":"mechanical-question","text":"What hexagons are there?","surfaces":{"0":"What","kind":"hexagon"}}
+{"seedId":"q-0048","tier":"mechanical-question","text":"Which hexagons do we have?","surfaces":{"0":"Which","kind":"hexagon"}}
+{"seedId":"q-0048","tier":"mechanical-question","text":"List the hexagons.","surfaces":{"0":"List","kind":"hexagon"}}
+{"seedId":"q-0048","tier":"mechanical-question","text":"Show me every hexagon.","surfaces":{"0":"Show","kind":"hexagon"}}
+{"seedId":"q-0049","tier":"mechanical-question","text":"What colour is the hexagon?","surfaces":{"0":"What colour","kind":"hexagon"}}
+{"seedId":"q-0049","tier":"mechanical-question","text":"What colour are the hexagons?","surfaces":{"0":"What colour","kind":"hexagon"}}
+{"seedId":"q-0049","tier":"mechanical-question","text":"The hexagon — what colour is it?","surfaces":{"0":"what colour","kind":"hexagon"}}
+{"seedId":"q-0049","tier":"mechanical-question","text":"Colour of the hexagon, please.","surfaces":{"0":"Colour","kind":"hexagon"}}
+{"seedId":"q-0050","tier":"mechanical-question","text":"How many stars are there?","surfaces":{"0":"How many","kind":"star"}}
+{"seedId":"q-0050","tier":"mechanical-question","text":"Tell me the number of stars.","surfaces":{"0":"number","kind":"star"}}
+{"seedId":"q-0050","tier":"mechanical-question","text":"Count the stars for me.","surfaces":{"0":"Count","kind":"star"}}
+{"seedId":"q-0050","tier":"mechanical-question","text":"Of the things on display, how many are stars?","surfaces":{"0":"how many","kind":"star"}}
+{"seedId":"q-0051","tier":"mechanical-question","text":"Is there a star?","surfaces":{"0":"Is there","kind":"star"}}
+{"seedId":"q-0051","tier":"mechanical-question","text":"Do we have a star anywhere?","surfaces":{"0":"Do we have","kind":"star"}}
+{"seedId":"q-0051","tier":"mechanical-question","text":"Any star at all?","surfaces":{"0":"Any","kind":"star"}}
+{"seedId":"q-0051","tier":"mechanical-question","text":"Does a star exist?","surfaces":{"0":"exist","kind":"star"}}
+{"seedId":"q-0052","tier":"mechanical-question","text":"What stars are there?","surfaces":{"0":"What","kind":"star"}}
+{"seedId":"q-0052","tier":"mechanical-question","text":"Which stars do we have?","surfaces":{"0":"Which","kind":"star"}}
+{"seedId":"q-0052","tier":"mechanical-question","text":"List the stars.","surfaces":{"0":"List","kind":"star"}}
+{"seedId":"q-0052","tier":"mechanical-question","text":"Show me every star.","surfaces":{"0":"Show","kind":"star"}}
+{"seedId":"q-0053","tier":"mechanical-question","text":"What colour is the star?","surfaces":{"0":"What colour","kind":"star"}}
+{"seedId":"q-0053","tier":"mechanical-question","text":"What colour are the stars?","surfaces":{"0":"What colour","kind":"star"}}
+{"seedId":"q-0053","tier":"mechanical-question","text":"The star — what colour is it?","surfaces":{"0":"what colour","kind":"star"}}
+{"seedId":"q-0053","tier":"mechanical-question","text":"Colour of the star, please.","surfaces":{"0":"Colour","kind":"star"}}
+{"seedId":"q-0054","tier":"mechanical-question","text":"How many texts are there?","surfaces":{"0":"How many","kind":"text"}}
+{"seedId":"q-0054","tier":"mechanical-question","text":"Tell me the number of texts.","surfaces":{"0":"number","kind":"text"}}
+{"seedId":"q-0054","tier":"mechanical-question","text":"Count the texts for me.","surfaces":{"0":"Count","kind":"text"}}
+{"seedId":"q-0054","tier":"mechanical-question","text":"Of the things on display, how many are texts?","surfaces":{"0":"how many","kind":"text"}}
+{"seedId":"q-0055","tier":"mechanical-question","text":"Is there a text?","surfaces":{"0":"Is there","kind":"text"}}
+{"seedId":"q-0055","tier":"mechanical-question","text":"Do we have a text anywhere?","surfaces":{"0":"Do we have","kind":"text"}}
+{"seedId":"q-0055","tier":"mechanical-question","text":"Any text at all?","surfaces":{"0":"Any","kind":"text"}}
+{"seedId":"q-0055","tier":"mechanical-question","text":"Does a text exist?","surfaces":{"0":"exist","kind":"text"}}
+{"seedId":"q-0056","tier":"mechanical-question","text":"What texts are there?","surfaces":{"0":"What","kind":"text"}}
+{"seedId":"q-0056","tier":"mechanical-question","text":"Which texts do we have?","surfaces":{"0":"Which","kind":"text"}}
+{"seedId":"q-0056","tier":"mechanical-question","text":"List the texts.","surfaces":{"0":"List","kind":"text"}}
+{"seedId":"q-0056","tier":"mechanical-question","text":"Show me every text.","surfaces":{"0":"Show","kind":"text"}}
+{"seedId":"q-0057","tier":"mechanical-question","text":"What colour is the text?","surfaces":{"0":"What colour","kind":"text"}}
+{"seedId":"q-0057","tier":"mechanical-question","text":"What colour are the texts?","surfaces":{"0":"What colour","kind":"text"}}
+{"seedId":"q-0057","tier":"mechanical-question","text":"The text — what colour is it?","surfaces":{"0":"what colour","kind":"text"}}
+{"seedId":"q-0057","tier":"mechanical-question","text":"Colour of the text, please.","surfaces":{"0":"Colour","kind":"text"}}
+{"seedId":"q-0058","tier":"mechanical-question","text":"How many paragraphs are there?","surfaces":{"0":"How many","kind":"paragraph"}}
+{"seedId":"q-0058","tier":"mechanical-question","text":"Tell me the number of paragraphs.","surfaces":{"0":"number","kind":"paragraph"}}
+{"seedId":"q-0058","tier":"mechanical-question","text":"Count the paragraphs for me.","surfaces":{"0":"Count","kind":"paragraph"}}
+{"seedId":"q-0058","tier":"mechanical-question","text":"Of the things on display, how many are paragraphs?","surfaces":{"0":"how many","kind":"paragraph"}}
+{"seedId":"q-0059","tier":"mechanical-question","text":"Is there a paragraph?","surfaces":{"0":"Is there","kind":"paragraph"}}
+{"seedId":"q-0059","tier":"mechanical-question","text":"Do we have a paragraph anywhere?","surfaces":{"0":"Do we have","kind":"paragraph"}}
+{"seedId":"q-0059","tier":"mechanical-question","text":"Any paragraph at all?","surfaces":{"0":"Any","kind":"paragraph"}}
+{"seedId":"q-0059","tier":"mechanical-question","text":"Does a paragraph exist?","surfaces":{"0":"exist","kind":"paragraph"}}
+{"seedId":"q-0060","tier":"mechanical-question","text":"What paragraphs are there?","surfaces":{"0":"What","kind":"paragraph"}}
+{"seedId":"q-0060","tier":"mechanical-question","text":"Which paragraphs do we have?","surfaces":{"0":"Which","kind":"paragraph"}}
+{"seedId":"q-0060","tier":"mechanical-question","text":"List the paragraphs.","surfaces":{"0":"List","kind":"paragraph"}}
+{"seedId":"q-0060","tier":"mechanical-question","text":"Show me every paragraph.","surfaces":{"0":"Show","kind":"paragraph"}}
+{"seedId":"q-0061","tier":"mechanical-question","text":"How many headings are there?","surfaces":{"0":"How many","kind":"heading"}}
+{"seedId":"q-0061","tier":"mechanical-question","text":"Tell me the number of headings.","surfaces":{"0":"number","kind":"heading"}}
+{"seedId":"q-0061","tier":"mechanical-question","text":"Count the headings for me.","surfaces":{"0":"Count","kind":"heading"}}
+{"seedId":"q-0061","tier":"mechanical-question","text":"Of the things on display, how many are headings?","surfaces":{"0":"how many","kind":"heading"}}
+{"seedId":"q-0062","tier":"mechanical-question","text":"Is there a heading?","surfaces":{"0":"Is there","kind":"heading"}}
+{"seedId":"q-0062","tier":"mechanical-question","text":"Do we have a heading anywhere?","surfaces":{"0":"Do we have","kind":"heading"}}
+{"seedId":"q-0062","tier":"mechanical-question","text":"Any heading at all?","surfaces":{"0":"Any","kind":"heading"}}
+{"seedId":"q-0062","tier":"mechanical-question","text":"Does a heading exist?","surfaces":{"0":"exist","kind":"heading"}}
+{"seedId":"q-0063","tier":"mechanical-question","text":"What headings are there?","surfaces":{"0":"What","kind":"heading"}}
+{"seedId":"q-0063","tier":"mechanical-question","text":"Which headings do we have?","surfaces":{"0":"Which","kind":"heading"}}
+{"seedId":"q-0063","tier":"mechanical-question","text":"List the headings.","surfaces":{"0":"List","kind":"heading"}}
+{"seedId":"q-0063","tier":"mechanical-question","text":"Show me every heading.","surfaces":{"0":"Show","kind":"heading"}}
+{"seedId":"q-0064","tier":"mechanical-question","text":"How many quotes are there?","surfaces":{"0":"How many","kind":"quote"}}
+{"seedId":"q-0064","tier":"mechanical-question","text":"Tell me the number of quotes.","surfaces":{"0":"number","kind":"quote"}}
+{"seedId":"q-0064","tier":"mechanical-question","text":"Count the quotes for me.","surfaces":{"0":"Count","kind":"quote"}}
+{"seedId":"q-0064","tier":"mechanical-question","text":"Of the things on display, how many are quotes?","surfaces":{"0":"how many","kind":"quote"}}
+{"seedId":"q-0065","tier":"mechanical-question","text":"Is there a quote?","surfaces":{"0":"Is there","kind":"quote"}}
+{"seedId":"q-0065","tier":"mechanical-question","text":"Do we have a quote anywhere?","surfaces":{"0":"Do we have","kind":"quote"}}
+{"seedId":"q-0065","tier":"mechanical-question","text":"Any quote at all?","surfaces":{"0":"Any","kind":"quote"}}
+{"seedId":"q-0065","tier":"mechanical-question","text":"Does a quote exist?","surfaces":{"0":"exist","kind":"quote"}}
+{"seedId":"q-0066","tier":"mechanical-question","text":"What quotes are there?","surfaces":{"0":"What","kind":"quote"}}
+{"seedId":"q-0066","tier":"mechanical-question","text":"Which quotes do we have?","surfaces":{"0":"Which","kind":"quote"}}
+{"seedId":"q-0066","tier":"mechanical-question","text":"List the quotes.","surfaces":{"0":"List","kind":"quote"}}
+{"seedId":"q-0066","tier":"mechanical-question","text":"Show me every quote.","surfaces":{"0":"Show","kind":"quote"}}
+{"seedId":"q-0067","tier":"mechanical-question","text":"How many sections are there?","surfaces":{"0":"How many","kind":"section"}}
+{"seedId":"q-0067","tier":"mechanical-question","text":"Tell me the number of sections.","surfaces":{"0":"number","kind":"section"}}
+{"seedId":"q-0067","tier":"mechanical-question","text":"Count the sections for me.","surfaces":{"0":"Count","kind":"section"}}
+{"seedId":"q-0067","tier":"mechanical-question","text":"Of the things on display, how many are sections?","surfaces":{"0":"how many","kind":"section"}}
+{"seedId":"q-0068","tier":"mechanical-question","text":"Is there a section?","surfaces":{"0":"Is there","kind":"section"}}
+{"seedId":"q-0068","tier":"mechanical-question","text":"Do we have a section anywhere?","surfaces":{"0":"Do we have","kind":"section"}}
+{"seedId":"q-0068","tier":"mechanical-question","text":"Any section at all?","surfaces":{"0":"Any","kind":"section"}}
+{"seedId":"q-0068","tier":"mechanical-question","text":"Does a section exist?","surfaces":{"0":"exist","kind":"section"}}
+{"seedId":"q-0069","tier":"mechanical-question","text":"What sections are there?","surfaces":{"0":"What","kind":"section"}}
+{"seedId":"q-0069","tier":"mechanical-question","text":"Which sections do we have?","surfaces":{"0":"Which","kind":"section"}}
+{"seedId":"q-0069","tier":"mechanical-question","text":"List the sections.","surfaces":{"0":"List","kind":"section"}}
+{"seedId":"q-0069","tier":"mechanical-question","text":"Show me every section.","surfaces":{"0":"Show","kind":"section"}}
+{"seedId":"q-0070","tier":"mechanical-question","text":"How many tables are there?","surfaces":{"0":"How many","kind":"table"}}
+{"seedId":"q-0070","tier":"mechanical-question","text":"Tell me the number of tables.","surfaces":{"0":"number","kind":"table"}}
+{"seedId":"q-0070","tier":"mechanical-question","text":"Count the tables for me.","surfaces":{"0":"Count","kind":"table"}}
+{"seedId":"q-0070","tier":"mechanical-question","text":"Of the things on display, how many are tables?","surfaces":{"0":"how many","kind":"table"}}
+{"seedId":"q-0071","tier":"mechanical-question","text":"Is there a table?","surfaces":{"0":"Is there","kind":"table"}}
+{"seedId":"q-0071","tier":"mechanical-question","text":"Do we have a table anywhere?","surfaces":{"0":"Do we have","kind":"table"}}
+{"seedId":"q-0071","tier":"mechanical-question","text":"Any table at all?","surfaces":{"0":"Any","kind":"table"}}
+{"seedId":"q-0071","tier":"mechanical-question","text":"Does a table exist?","surfaces":{"0":"exist","kind":"table"}}
+{"seedId":"q-0072","tier":"mechanical-question","text":"What tables are there?","surfaces":{"0":"What","kind":"table"}}
+{"seedId":"q-0072","tier":"mechanical-question","text":"Which tables do we have?","surfaces":{"0":"Which","kind":"table"}}
+{"seedId":"q-0072","tier":"mechanical-question","text":"List the tables.","surfaces":{"0":"List","kind":"table"}}
+{"seedId":"q-0072","tier":"mechanical-question","text":"Show me every table.","surfaces":{"0":"Show","kind":"table"}}
+{"seedId":"q-0073","tier":"mechanical-question","text":"How many circles are there?","surfaces":{"0":"How many","kind":"circle"}}
+{"seedId":"q-0073","tier":"mechanical-question","text":"Tell me the number of circles.","surfaces":{"0":"number","kind":"circle"}}
+{"seedId":"q-0073","tier":"mechanical-question","text":"Count the circles for me.","surfaces":{"0":"Count","kind":"circle"}}
+{"seedId":"q-0073","tier":"mechanical-question","text":"Of the things on display, how many are circles?","surfaces":{"0":"how many","kind":"circle"}}
+{"seedId":"q-0074","tier":"mechanical-question","text":"Is there a circle?","surfaces":{"0":"Is there","kind":"circle"}}
+{"seedId":"q-0074","tier":"mechanical-question","text":"Do we have a circle anywhere?","surfaces":{"0":"Do we have","kind":"circle"}}
+{"seedId":"q-0074","tier":"mechanical-question","text":"Any circle at all?","surfaces":{"0":"Any","kind":"circle"}}
+{"seedId":"q-0074","tier":"mechanical-question","text":"Does a circle exist?","surfaces":{"0":"exist","kind":"circle"}}
+{"seedId":"q-0075","tier":"mechanical-question","text":"What circles are there?","surfaces":{"0":"What","kind":"circle"}}
+{"seedId":"q-0075","tier":"mechanical-question","text":"Which circles do we have?","surfaces":{"0":"Which","kind":"circle"}}
+{"seedId":"q-0075","tier":"mechanical-question","text":"List the circles.","surfaces":{"0":"List","kind":"circle"}}
+{"seedId":"q-0075","tier":"mechanical-question","text":"Show me every circle.","surfaces":{"0":"Show","kind":"circle"}}
+{"seedId":"q-0076","tier":"mechanical-question","text":"What colour is the circle?","surfaces":{"0":"What colour","kind":"circle"}}
+{"seedId":"q-0076","tier":"mechanical-question","text":"What colour are the circles?","surfaces":{"0":"What colour","kind":"circle"}}
+{"seedId":"q-0076","tier":"mechanical-question","text":"The circle — what colour is it?","surfaces":{"0":"what colour","kind":"circle"}}
+{"seedId":"q-0076","tier":"mechanical-question","text":"Colour of the circle, please.","surfaces":{"0":"Colour","kind":"circle"}}
+{"seedId":"q-0077","tier":"mechanical-question","text":"How many squares are there?","surfaces":{"0":"How many","kind":"square"}}
+{"seedId":"q-0077","tier":"mechanical-question","text":"Tell me the number of squares.","surfaces":{"0":"number","kind":"square"}}
+{"seedId":"q-0077","tier":"mechanical-question","text":"Count the squares for me.","surfaces":{"0":"Count","kind":"square"}}
+{"seedId":"q-0077","tier":"mechanical-question","text":"Of the things on display, how many are squares?","surfaces":{"0":"how many","kind":"square"}}
+{"seedId":"q-0078","tier":"mechanical-question","text":"Is there a square?","surfaces":{"0":"Is there","kind":"square"}}
+{"seedId":"q-0078","tier":"mechanical-question","text":"Do we have a square anywhere?","surfaces":{"0":"Do we have","kind":"square"}}
+{"seedId":"q-0078","tier":"mechanical-question","text":"Any square at all?","surfaces":{"0":"Any","kind":"square"}}
+{"seedId":"q-0078","tier":"mechanical-question","text":"Does a square exist?","surfaces":{"0":"exist","kind":"square"}}
+{"seedId":"q-0079","tier":"mechanical-question","text":"What squares are there?","surfaces":{"0":"What","kind":"square"}}
+{"seedId":"q-0079","tier":"mechanical-question","text":"Which squares do we have?","surfaces":{"0":"Which","kind":"square"}}
+{"seedId":"q-0079","tier":"mechanical-question","text":"List the squares.","surfaces":{"0":"List","kind":"square"}}
+{"seedId":"q-0079","tier":"mechanical-question","text":"Show me every square.","surfaces":{"0":"Show","kind":"square"}}
+{"seedId":"q-0080","tier":"mechanical-question","text":"What colour is the square?","surfaces":{"0":"What colour","kind":"square"}}
+{"seedId":"q-0080","tier":"mechanical-question","text":"What colour are the squares?","surfaces":{"0":"What colour","kind":"square"}}
+{"seedId":"q-0080","tier":"mechanical-question","text":"The square — what colour is it?","surfaces":{"0":"what colour","kind":"square"}}
+{"seedId":"q-0080","tier":"mechanical-question","text":"Colour of the square, please.","surfaces":{"0":"Colour","kind":"square"}}
+{"seedId":"q-0081","tier":"mechanical-question","text":"How many rectangles are there?","surfaces":{"0":"How many","kind":"rectangle"}}
+{"seedId":"q-0081","tier":"mechanical-question","text":"Tell me the number of rectangles.","surfaces":{"0":"number","kind":"rectangle"}}
+{"seedId":"q-0081","tier":"mechanical-question","text":"Count the rectangles for me.","surfaces":{"0":"Count","kind":"rectangle"}}
+{"seedId":"q-0081","tier":"mechanical-question","text":"Of the things on display, how many are rectangles?","surfaces":{"0":"how many","kind":"rectangle"}}
+{"seedId":"q-0082","tier":"mechanical-question","text":"Is there a rectangle?","surfaces":{"0":"Is there","kind":"rectangle"}}
+{"seedId":"q-0082","tier":"mechanical-question","text":"Do we have a rectangle anywhere?","surfaces":{"0":"Do we have","kind":"rectangle"}}
+{"seedId":"q-0082","tier":"mechanical-question","text":"Any rectangle at all?","surfaces":{"0":"Any","kind":"rectangle"}}
+{"seedId":"q-0082","tier":"mechanical-question","text":"Does a rectangle exist?","surfaces":{"0":"exist","kind":"rectangle"}}
+{"seedId":"q-0083","tier":"mechanical-question","text":"What rectangles are there?","surfaces":{"0":"What","kind":"rectangle"}}
+{"seedId":"q-0083","tier":"mechanical-question","text":"Which rectangles do we have?","surfaces":{"0":"Which","kind":"rectangle"}}
+{"seedId":"q-0083","tier":"mechanical-question","text":"List the rectangles.","surfaces":{"0":"List","kind":"rectangle"}}
+{"seedId":"q-0083","tier":"mechanical-question","text":"Show me every rectangle.","surfaces":{"0":"Show","kind":"rectangle"}}
+{"seedId":"q-0084","tier":"mechanical-question","text":"What colour is the rectangle?","surfaces":{"0":"What colour","kind":"rectangle"}}
+{"seedId":"q-0084","tier":"mechanical-question","text":"What colour are the rectangles?","surfaces":{"0":"What colour","kind":"rectangle"}}
+{"seedId":"q-0084","tier":"mechanical-question","text":"The rectangle — what colour is it?","surfaces":{"0":"what colour","kind":"rectangle"}}
+{"seedId":"q-0084","tier":"mechanical-question","text":"Colour of the rectangle, please.","surfaces":{"0":"Colour","kind":"rectangle"}}
+{"seedId":"q-0085","tier":"mechanical-question","text":"How many triangles are there?","surfaces":{"0":"How many","kind":"triangle"}}
+{"seedId":"q-0085","tier":"mechanical-question","text":"Tell me the number of triangles.","surfaces":{"0":"number","kind":"triangle"}}
+{"seedId":"q-0085","tier":"mechanical-question","text":"Count the triangles for me.","surfaces":{"0":"Count","kind":"triangle"}}
+{"seedId":"q-0085","tier":"mechanical-question","text":"Of the things on display, how many are triangles?","surfaces":{"0":"how many","kind":"triangle"}}
+{"seedId":"q-0086","tier":"mechanical-question","text":"Is there a triangle?","surfaces":{"0":"Is there","kind":"triangle"}}
+{"seedId":"q-0086","tier":"mechanical-question","text":"Do we have a triangle anywhere?","surfaces":{"0":"Do we have","kind":"triangle"}}
+{"seedId":"q-0086","tier":"mechanical-question","text":"Any triangle at all?","surfaces":{"0":"Any","kind":"triangle"}}
+{"seedId":"q-0086","tier":"mechanical-question","text":"Does a triangle exist?","surfaces":{"0":"exist","kind":"triangle"}}
+{"seedId":"q-0087","tier":"mechanical-question","text":"What triangles are there?","surfaces":{"0":"What","kind":"triangle"}}
+{"seedId":"q-0087","tier":"mechanical-question","text":"Which triangles do we have?","surfaces":{"0":"Which","kind":"triangle"}}
+{"seedId":"q-0087","tier":"mechanical-question","text":"List the triangles.","surfaces":{"0":"List","kind":"triangle"}}
+{"seedId":"q-0087","tier":"mechanical-question","text":"Show me every triangle.","surfaces":{"0":"Show","kind":"triangle"}}
+{"seedId":"q-0088","tier":"mechanical-question","text":"What colour is the triangle?","surfaces":{"0":"What colour","kind":"triangle"}}
+{"seedId":"q-0088","tier":"mechanical-question","text":"What colour are the triangles?","surfaces":{"0":"What colour","kind":"triangle"}}
+{"seedId":"q-0088","tier":"mechanical-question","text":"The triangle — what colour is it?","surfaces":{"0":"what colour","kind":"triangle"}}
+{"seedId":"q-0088","tier":"mechanical-question","text":"Colour of the triangle, please.","surfaces":{"0":"Colour","kind":"triangle"}}
+{"seedId":"q-0089","tier":"mechanical-question","text":"How many stars are there?","surfaces":{"0":"How many","kind":"star"}}
+{"seedId":"q-0089","tier":"mechanical-question","text":"Tell me the number of stars.","surfaces":{"0":"number","kind":"star"}}
+{"seedId":"q-0089","tier":"mechanical-question","text":"Count the stars for me.","surfaces":{"0":"Count","kind":"star"}}
+{"seedId":"q-0089","tier":"mechanical-question","text":"Of the things on display, how many are stars?","surfaces":{"0":"how many","kind":"star"}}
+{"seedId":"q-0090","tier":"mechanical-question","text":"Is there a star?","surfaces":{"0":"Is there","kind":"star"}}
+{"seedId":"q-0090","tier":"mechanical-question","text":"Do we have a star anywhere?","surfaces":{"0":"Do we have","kind":"star"}}
+{"seedId":"q-0090","tier":"mechanical-question","text":"Any star at all?","surfaces":{"0":"Any","kind":"star"}}
+{"seedId":"q-0090","tier":"mechanical-question","text":"Does a star exist?","surfaces":{"0":"exist","kind":"star"}}
+{"seedId":"q-0091","tier":"mechanical-question","text":"What stars are there?","surfaces":{"0":"What","kind":"star"}}
+{"seedId":"q-0091","tier":"mechanical-question","text":"Which stars do we have?","surfaces":{"0":"Which","kind":"star"}}
+{"seedId":"q-0091","tier":"mechanical-question","text":"List the stars.","surfaces":{"0":"List","kind":"star"}}
+{"seedId":"q-0091","tier":"mechanical-question","text":"Show me every star.","surfaces":{"0":"Show","kind":"star"}}
+{"seedId":"q-0092","tier":"mechanical-question","text":"What colour is the star?","surfaces":{"0":"What colour","kind":"star"}}
+{"seedId":"q-0092","tier":"mechanical-question","text":"What colour are the stars?","surfaces":{"0":"What colour","kind":"star"}}
+{"seedId":"q-0092","tier":"mechanical-question","text":"The star — what colour is it?","surfaces":{"0":"what colour","kind":"star"}}
+{"seedId":"q-0092","tier":"mechanical-question","text":"Colour of the star, please.","surfaces":{"0":"Colour","kind":"star"}}
+{"seedId":"q-0093","tier":"mechanical-question","text":"How many hearts are there?","surfaces":{"0":"How many","kind":"heart"}}
+{"seedId":"q-0093","tier":"mechanical-question","text":"Tell me the number of hearts.","surfaces":{"0":"number","kind":"heart"}}
+{"seedId":"q-0093","tier":"mechanical-question","text":"Count the hearts for me.","surfaces":{"0":"Count","kind":"heart"}}
+{"seedId":"q-0093","tier":"mechanical-question","text":"Of the things on display, how many are hearts?","surfaces":{"0":"how many","kind":"heart"}}
+{"seedId":"q-0094","tier":"mechanical-question","text":"Is there a heart?","surfaces":{"0":"Is there","kind":"heart"}}
+{"seedId":"q-0094","tier":"mechanical-question","text":"Do we have a heart anywhere?","surfaces":{"0":"Do we have","kind":"heart"}}
+{"seedId":"q-0094","tier":"mechanical-question","text":"Any heart at all?","surfaces":{"0":"Any","kind":"heart"}}
+{"seedId":"q-0094","tier":"mechanical-question","text":"Does a heart exist?","surfaces":{"0":"exist","kind":"heart"}}
+{"seedId":"q-0095","tier":"mechanical-question","text":"What hearts are there?","surfaces":{"0":"What","kind":"heart"}}
+{"seedId":"q-0095","tier":"mechanical-question","text":"Which hearts do we have?","surfaces":{"0":"Which","kind":"heart"}}
+{"seedId":"q-0095","tier":"mechanical-question","text":"List the hearts.","surfaces":{"0":"List","kind":"heart"}}
+{"seedId":"q-0095","tier":"mechanical-question","text":"Show me every heart.","surfaces":{"0":"Show","kind":"heart"}}
+{"seedId":"q-0096","tier":"mechanical-question","text":"What colour is the heart?","surfaces":{"0":"What colour","kind":"heart"}}
+{"seedId":"q-0096","tier":"mechanical-question","text":"What colour are the hearts?","surfaces":{"0":"What colour","kind":"heart"}}
+{"seedId":"q-0096","tier":"mechanical-question","text":"The heart — what colour is it?","surfaces":{"0":"what colour","kind":"heart"}}
+{"seedId":"q-0096","tier":"mechanical-question","text":"Colour of the heart, please.","surfaces":{"0":"Colour","kind":"heart"}}
+{"seedId":"q-0097","tier":"mechanical-question","text":"How many lines are there?","surfaces":{"0":"How many","kind":"line"}}
+{"seedId":"q-0097","tier":"mechanical-question","text":"Tell me the number of lines.","surfaces":{"0":"number","kind":"line"}}
+{"seedId":"q-0097","tier":"mechanical-question","text":"Count the lines for me.","surfaces":{"0":"Count","kind":"line"}}
+{"seedId":"q-0097","tier":"mechanical-question","text":"Of the things on display, how many are lines?","surfaces":{"0":"how many","kind":"line"}}
+{"seedId":"q-0098","tier":"mechanical-question","text":"Is there a line?","surfaces":{"0":"Is there","kind":"line"}}
+{"seedId":"q-0098","tier":"mechanical-question","text":"Do we have a line anywhere?","surfaces":{"0":"Do we have","kind":"line"}}
+{"seedId":"q-0098","tier":"mechanical-question","text":"Any line at all?","surfaces":{"0":"Any","kind":"line"}}
+{"seedId":"q-0098","tier":"mechanical-question","text":"Does a line exist?","surfaces":{"0":"exist","kind":"line"}}
+{"seedId":"q-0099","tier":"mechanical-question","text":"What lines are there?","surfaces":{"0":"What","kind":"line"}}
+{"seedId":"q-0099","tier":"mechanical-question","text":"Which lines do we have?","surfaces":{"0":"Which","kind":"line"}}
+{"seedId":"q-0099","tier":"mechanical-question","text":"List the lines.","surfaces":{"0":"List","kind":"line"}}
+{"seedId":"q-0099","tier":"mechanical-question","text":"Show me every line.","surfaces":{"0":"Show","kind":"line"}}
+{"seedId":"q-0100","tier":"mechanical-question","text":"What colour is the line?","surfaces":{"0":"What colour","kind":"line"}}
+{"seedId":"q-0100","tier":"mechanical-question","text":"What colour are the lines?","surfaces":{"0":"What colour","kind":"line"}}
+{"seedId":"q-0100","tier":"mechanical-question","text":"The line — what colour is it?","surfaces":{"0":"what colour","kind":"line"}}
+{"seedId":"q-0100","tier":"mechanical-question","text":"Colour of the line, please.","surfaces":{"0":"Colour","kind":"line"}}
+{"seedId":"q-0101","tier":"mechanical-question","text":"How many arrows are there?","surfaces":{"0":"How many","kind":"arrow"}}
+{"seedId":"q-0101","tier":"mechanical-question","text":"Tell me the number of arrows.","surfaces":{"0":"number","kind":"arrow"}}
+{"seedId":"q-0101","tier":"mechanical-question","text":"Count the arrows for me.","surfaces":{"0":"Count","kind":"arrow"}}
+{"seedId":"q-0101","tier":"mechanical-question","text":"Of the things on display, how many are arrows?","surfaces":{"0":"how many","kind":"arrow"}}
+{"seedId":"q-0102","tier":"mechanical-question","text":"Is there an arrow?","surfaces":{"0":"Is there","kind":"arrow"}}
+{"seedId":"q-0102","tier":"mechanical-question","text":"Do we have an arrow anywhere?","surfaces":{"0":"Do we have","kind":"arrow"}}
+{"seedId":"q-0102","tier":"mechanical-question","text":"Any arrow at all?","surfaces":{"0":"Any","kind":"arrow"}}
+{"seedId":"q-0102","tier":"mechanical-question","text":"Does an arrow exist?","surfaces":{"0":"exist","kind":"arrow"}}
+{"seedId":"q-0103","tier":"mechanical-question","text":"What arrows are there?","surfaces":{"0":"What","kind":"arrow"}}
+{"seedId":"q-0103","tier":"mechanical-question","text":"Which arrows do we have?","surfaces":{"0":"Which","kind":"arrow"}}
+{"seedId":"q-0103","tier":"mechanical-question","text":"List the arrows.","surfaces":{"0":"List","kind":"arrow"}}
+{"seedId":"q-0103","tier":"mechanical-question","text":"Show me every arrow.","surfaces":{"0":"Show","kind":"arrow"}}
+{"seedId":"q-0104","tier":"mechanical-question","text":"What colour is the arrow?","surfaces":{"0":"What colour","kind":"arrow"}}
+{"seedId":"q-0104","tier":"mechanical-question","text":"What colour are the arrows?","surfaces":{"0":"What colour","kind":"arrow"}}
+{"seedId":"q-0104","tier":"mechanical-question","text":"The arrow — what colour is it?","surfaces":{"0":"what colour","kind":"arrow"}}
+{"seedId":"q-0104","tier":"mechanical-question","text":"Colour of the arrow, please.","surfaces":{"0":"Colour","kind":"arrow"}}
+{"seedId":"q-0105","tier":"mechanical-question","text":"How many lakes are there?","surfaces":{"0":"How many","kind":"lake"}}
+{"seedId":"q-0105","tier":"mechanical-question","text":"Tell me the number of lakes.","surfaces":{"0":"number","kind":"lake"}}
+{"seedId":"q-0105","tier":"mechanical-question","text":"Count the lakes for me.","surfaces":{"0":"Count","kind":"lake"}}
+{"seedId":"q-0105","tier":"mechanical-question","text":"Of the things on display, how many are lakes?","surfaces":{"0":"how many","kind":"lake"}}
+{"seedId":"q-0106","tier":"mechanical-question","text":"Is there a lake?","surfaces":{"0":"Is there","kind":"lake"}}
+{"seedId":"q-0106","tier":"mechanical-question","text":"Do we have a lake anywhere?","surfaces":{"0":"Do we have","kind":"lake"}}
+{"seedId":"q-0106","tier":"mechanical-question","text":"Any lake at all?","surfaces":{"0":"Any","kind":"lake"}}
+{"seedId":"q-0106","tier":"mechanical-question","text":"Does a lake exist?","surfaces":{"0":"exist","kind":"lake"}}
+{"seedId":"q-0107","tier":"mechanical-question","text":"What lakes are there?","surfaces":{"0":"What","kind":"lake"}}
+{"seedId":"q-0107","tier":"mechanical-question","text":"Which lakes do we have?","surfaces":{"0":"Which","kind":"lake"}}
+{"seedId":"q-0107","tier":"mechanical-question","text":"List the lakes.","surfaces":{"0":"List","kind":"lake"}}
+{"seedId":"q-0107","tier":"mechanical-question","text":"Show me every lake.","surfaces":{"0":"Show","kind":"lake"}}
+{"seedId":"q-0108","tier":"mechanical-question","text":"What colour is the lake?","surfaces":{"0":"What colour","kind":"lake"}}
+{"seedId":"q-0108","tier":"mechanical-question","text":"What colour are the lakes?","surfaces":{"0":"What colour","kind":"lake"}}
+{"seedId":"q-0108","tier":"mechanical-question","text":"The lake — what colour is it?","surfaces":{"0":"what colour","kind":"lake"}}
+{"seedId":"q-0108","tier":"mechanical-question","text":"Colour of the lake, please.","surfaces":{"0":"Colour","kind":"lake"}}
+{"seedId":"q-0109","tier":"mechanical-question","text":"How many houses are there?","surfaces":{"0":"How many","kind":"house"}}
+{"seedId":"q-0109","tier":"mechanical-question","text":"Tell me the number of houses.","surfaces":{"0":"number","kind":"house"}}
+{"seedId":"q-0109","tier":"mechanical-question","text":"Count the houses for me.","surfaces":{"0":"Count","kind":"house"}}
+{"seedId":"q-0109","tier":"mechanical-question","text":"Of the things on display, how many are houses?","surfaces":{"0":"how many","kind":"house"}}
+{"seedId":"q-0110","tier":"mechanical-question","text":"Is there a house?","surfaces":{"0":"Is there","kind":"house"}}
+{"seedId":"q-0110","tier":"mechanical-question","text":"Do we have a house anywhere?","surfaces":{"0":"Do we have","kind":"house"}}
+{"seedId":"q-0110","tier":"mechanical-question","text":"Any house at all?","surfaces":{"0":"Any","kind":"house"}}
+{"seedId":"q-0110","tier":"mechanical-question","text":"Does a house exist?","surfaces":{"0":"exist","kind":"house"}}
+{"seedId":"q-0111","tier":"mechanical-question","text":"What houses are there?","surfaces":{"0":"What","kind":"house"}}
+{"seedId":"q-0111","tier":"mechanical-question","text":"Which houses do we have?","surfaces":{"0":"Which","kind":"house"}}
+{"seedId":"q-0111","tier":"mechanical-question","text":"List the houses.","surfaces":{"0":"List","kind":"house"}}
+{"seedId":"q-0111","tier":"mechanical-question","text":"Show me every house.","surfaces":{"0":"Show","kind":"house"}}
+{"seedId":"q-0112","tier":"mechanical-question","text":"What colour is the house?","surfaces":{"0":"What colour","kind":"house"}}
+{"seedId":"q-0112","tier":"mechanical-question","text":"What colour are the houses?","surfaces":{"0":"What colour","kind":"house"}}
+{"seedId":"q-0112","tier":"mechanical-question","text":"The house — what colour is it?","surfaces":{"0":"what colour","kind":"house"}}
+{"seedId":"q-0112","tier":"mechanical-question","text":"Colour of the house, please.","surfaces":{"0":"Colour","kind":"house"}}
+{"seedId":"q-0113","tier":"mechanical-question","text":"How many trees are there?","surfaces":{"0":"How many","kind":"tree"}}
+{"seedId":"q-0113","tier":"mechanical-question","text":"Tell me the number of trees.","surfaces":{"0":"number","kind":"tree"}}
+{"seedId":"q-0113","tier":"mechanical-question","text":"Count the trees for me.","surfaces":{"0":"Count","kind":"tree"}}
+{"seedId":"q-0113","tier":"mechanical-question","text":"Of the things on display, how many are trees?","surfaces":{"0":"how many","kind":"tree"}}
+{"seedId":"q-0114","tier":"mechanical-question","text":"Is there a tree?","surfaces":{"0":"Is there","kind":"tree"}}
+{"seedId":"q-0114","tier":"mechanical-question","text":"Do we have a tree anywhere?","surfaces":{"0":"Do we have","kind":"tree"}}
+{"seedId":"q-0114","tier":"mechanical-question","text":"Any tree at all?","surfaces":{"0":"Any","kind":"tree"}}
+{"seedId":"q-0114","tier":"mechanical-question","text":"Does a tree exist?","surfaces":{"0":"exist","kind":"tree"}}
+{"seedId":"q-0115","tier":"mechanical-question","text":"What trees are there?","surfaces":{"0":"What","kind":"tree"}}
+{"seedId":"q-0115","tier":"mechanical-question","text":"Which trees do we have?","surfaces":{"0":"Which","kind":"tree"}}
+{"seedId":"q-0115","tier":"mechanical-question","text":"List the trees.","surfaces":{"0":"List","kind":"tree"}}
+{"seedId":"q-0115","tier":"mechanical-question","text":"Show me every tree.","surfaces":{"0":"Show","kind":"tree"}}
+{"seedId":"q-0116","tier":"mechanical-question","text":"What colour is the tree?","surfaces":{"0":"What colour","kind":"tree"}}
+{"seedId":"q-0116","tier":"mechanical-question","text":"What colour are the trees?","surfaces":{"0":"What colour","kind":"tree"}}
+{"seedId":"q-0116","tier":"mechanical-question","text":"The tree — what colour is it?","surfaces":{"0":"what colour","kind":"tree"}}
+{"seedId":"q-0116","tier":"mechanical-question","text":"Colour of the tree, please.","surfaces":{"0":"Colour","kind":"tree"}}
+{"seedId":"q-0117","tier":"mechanical-question","text":"How many suns are there?","surfaces":{"0":"How many","kind":"sun"}}
+{"seedId":"q-0117","tier":"mechanical-question","text":"Tell me the number of suns.","surfaces":{"0":"number","kind":"sun"}}
+{"seedId":"q-0117","tier":"mechanical-question","text":"Count the suns for me.","surfaces":{"0":"Count","kind":"sun"}}
+{"seedId":"q-0117","tier":"mechanical-question","text":"Of the things on display, how many are suns?","surfaces":{"0":"how many","kind":"sun"}}
+{"seedId":"q-0118","tier":"mechanical-question","text":"Is there a sun?","surfaces":{"0":"Is there","kind":"sun"}}
+{"seedId":"q-0118","tier":"mechanical-question","text":"Do we have a sun anywhere?","surfaces":{"0":"Do we have","kind":"sun"}}
+{"seedId":"q-0118","tier":"mechanical-question","text":"Any sun at all?","surfaces":{"0":"Any","kind":"sun"}}
+{"seedId":"q-0118","tier":"mechanical-question","text":"Does a sun exist?","surfaces":{"0":"exist","kind":"sun"}}
+{"seedId":"q-0119","tier":"mechanical-question","text":"What suns are there?","surfaces":{"0":"What","kind":"sun"}}
+{"seedId":"q-0119","tier":"mechanical-question","text":"Which suns do we have?","surfaces":{"0":"Which","kind":"sun"}}
+{"seedId":"q-0119","tier":"mechanical-question","text":"List the suns.","surfaces":{"0":"List","kind":"sun"}}
+{"seedId":"q-0119","tier":"mechanical-question","text":"Show me every sun.","surfaces":{"0":"Show","kind":"sun"}}
+{"seedId":"q-0120","tier":"mechanical-question","text":"What colour is the sun?","surfaces":{"0":"What colour","kind":"sun"}}
+{"seedId":"q-0120","tier":"mechanical-question","text":"What colour are the suns?","surfaces":{"0":"What colour","kind":"sun"}}
+{"seedId":"q-0120","tier":"mechanical-question","text":"The sun — what colour is it?","surfaces":{"0":"what colour","kind":"sun"}}
+{"seedId":"q-0120","tier":"mechanical-question","text":"Colour of the sun, please.","surfaces":{"0":"Colour","kind":"sun"}}
+{"seedId":"q-0121","tier":"mechanical-question","text":"How many clouds are there?","surfaces":{"0":"How many","kind":"cloud"}}
+{"seedId":"q-0121","tier":"mechanical-question","text":"Tell me the number of clouds.","surfaces":{"0":"number","kind":"cloud"}}
+{"seedId":"q-0121","tier":"mechanical-question","text":"Count the clouds for me.","surfaces":{"0":"Count","kind":"cloud"}}
+{"seedId":"q-0121","tier":"mechanical-question","text":"Of the things on display, how many are clouds?","surfaces":{"0":"how many","kind":"cloud"}}
+{"seedId":"q-0122","tier":"mechanical-question","text":"Is there a cloud?","surfaces":{"0":"Is there","kind":"cloud"}}
+{"seedId":"q-0122","tier":"mechanical-question","text":"Do we have a cloud anywhere?","surfaces":{"0":"Do we have","kind":"cloud"}}
+{"seedId":"q-0122","tier":"mechanical-question","text":"Any cloud at all?","surfaces":{"0":"Any","kind":"cloud"}}
+{"seedId":"q-0122","tier":"mechanical-question","text":"Does a cloud exist?","surfaces":{"0":"exist","kind":"cloud"}}
+{"seedId":"q-0123","tier":"mechanical-question","text":"What clouds are there?","surfaces":{"0":"What","kind":"cloud"}}
+{"seedId":"q-0123","tier":"mechanical-question","text":"Which clouds do we have?","surfaces":{"0":"Which","kind":"cloud"}}
+{"seedId":"q-0123","tier":"mechanical-question","text":"List the clouds.","surfaces":{"0":"List","kind":"cloud"}}
+{"seedId":"q-0123","tier":"mechanical-question","text":"Show me every cloud.","surfaces":{"0":"Show","kind":"cloud"}}
+{"seedId":"q-0124","tier":"mechanical-question","text":"What colour is the cloud?","surfaces":{"0":"What colour","kind":"cloud"}}
+{"seedId":"q-0124","tier":"mechanical-question","text":"What colour are the clouds?","surfaces":{"0":"What colour","kind":"cloud"}}
+{"seedId":"q-0124","tier":"mechanical-question","text":"The cloud — what colour is it?","surfaces":{"0":"what colour","kind":"cloud"}}
+{"seedId":"q-0124","tier":"mechanical-question","text":"Colour of the cloud, please.","surfaces":{"0":"Colour","kind":"cloud"}}
+{"seedId":"q-0125","tier":"mechanical-question","text":"How many cars are there?","surfaces":{"0":"How many","kind":"car"}}
+{"seedId":"q-0125","tier":"mechanical-question","text":"Tell me the number of cars.","surfaces":{"0":"number","kind":"car"}}
+{"seedId":"q-0125","tier":"mechanical-question","text":"Count the cars for me.","surfaces":{"0":"Count","kind":"car"}}
+{"seedId":"q-0125","tier":"mechanical-question","text":"Of the things on display, how many are cars?","surfaces":{"0":"how many","kind":"car"}}
+{"seedId":"q-0126","tier":"mechanical-question","text":"Is there a car?","surfaces":{"0":"Is there","kind":"car"}}
+{"seedId":"q-0126","tier":"mechanical-question","text":"Do we have a car anywhere?","surfaces":{"0":"Do we have","kind":"car"}}
+{"seedId":"q-0126","tier":"mechanical-question","text":"Any car at all?","surfaces":{"0":"Any","kind":"car"}}
+{"seedId":"q-0126","tier":"mechanical-question","text":"Does a car exist?","surfaces":{"0":"exist","kind":"car"}}
+{"seedId":"q-0127","tier":"mechanical-question","text":"What cars are there?","surfaces":{"0":"What","kind":"car"}}
+{"seedId":"q-0127","tier":"mechanical-question","text":"Which cars do we have?","surfaces":{"0":"Which","kind":"car"}}
+{"seedId":"q-0127","tier":"mechanical-question","text":"List the cars.","surfaces":{"0":"List","kind":"car"}}
+{"seedId":"q-0127","tier":"mechanical-question","text":"Show me every car.","surfaces":{"0":"Show","kind":"car"}}
+{"seedId":"q-0128","tier":"mechanical-question","text":"What colour is the car?","surfaces":{"0":"What colour","kind":"car"}}
+{"seedId":"q-0128","tier":"mechanical-question","text":"What colour are the cars?","surfaces":{"0":"What colour","kind":"car"}}
+{"seedId":"q-0128","tier":"mechanical-question","text":"The car — what colour is it?","surfaces":{"0":"what colour","kind":"car"}}
+{"seedId":"q-0128","tier":"mechanical-question","text":"Colour of the car, please.","surfaces":{"0":"Colour","kind":"car"}}
+{"seedId":"q-0129","tier":"mechanical-question","text":"How many flowers are there?","surfaces":{"0":"How many","kind":"flower"}}
+{"seedId":"q-0129","tier":"mechanical-question","text":"Tell me the number of flowers.","surfaces":{"0":"number","kind":"flower"}}
+{"seedId":"q-0129","tier":"mechanical-question","text":"Count the flowers for me.","surfaces":{"0":"Count","kind":"flower"}}
+{"seedId":"q-0129","tier":"mechanical-question","text":"Of the things on display, how many are flowers?","surfaces":{"0":"how many","kind":"flower"}}
+{"seedId":"q-0130","tier":"mechanical-question","text":"Is there a flower?","surfaces":{"0":"Is there","kind":"flower"}}
+{"seedId":"q-0130","tier":"mechanical-question","text":"Do we have a flower anywhere?","surfaces":{"0":"Do we have","kind":"flower"}}
+{"seedId":"q-0130","tier":"mechanical-question","text":"Any flower at all?","surfaces":{"0":"Any","kind":"flower"}}
+{"seedId":"q-0130","tier":"mechanical-question","text":"Does a flower exist?","surfaces":{"0":"exist","kind":"flower"}}
+{"seedId":"q-0131","tier":"mechanical-question","text":"What flowers are there?","surfaces":{"0":"What","kind":"flower"}}
+{"seedId":"q-0131","tier":"mechanical-question","text":"Which flowers do we have?","surfaces":{"0":"Which","kind":"flower"}}
+{"seedId":"q-0131","tier":"mechanical-question","text":"List the flowers.","surfaces":{"0":"List","kind":"flower"}}
+{"seedId":"q-0131","tier":"mechanical-question","text":"Show me every flower.","surfaces":{"0":"Show","kind":"flower"}}
+{"seedId":"q-0132","tier":"mechanical-question","text":"What colour is the flower?","surfaces":{"0":"What colour","kind":"flower"}}
+{"seedId":"q-0132","tier":"mechanical-question","text":"What colour are the flowers?","surfaces":{"0":"What colour","kind":"flower"}}
+{"seedId":"q-0132","tier":"mechanical-question","text":"The flower — what colour is it?","surfaces":{"0":"what colour","kind":"flower"}}
+{"seedId":"q-0132","tier":"mechanical-question","text":"Colour of the flower, please.","surfaces":{"0":"Colour","kind":"flower"}}
+{"seedId":"q-0133","tier":"mechanical-question","text":"How many cats are there?","surfaces":{"0":"How many","kind":"cat"}}
+{"seedId":"q-0133","tier":"mechanical-question","text":"Tell me the number of cats.","surfaces":{"0":"number","kind":"cat"}}
+{"seedId":"q-0133","tier":"mechanical-question","text":"Count the cats for me.","surfaces":{"0":"Count","kind":"cat"}}
+{"seedId":"q-0133","tier":"mechanical-question","text":"Of the things on display, how many are cats?","surfaces":{"0":"how many","kind":"cat"}}
+{"seedId":"q-0134","tier":"mechanical-question","text":"Is there a cat?","surfaces":{"0":"Is there","kind":"cat"}}
+{"seedId":"q-0134","tier":"mechanical-question","text":"Do we have a cat anywhere?","surfaces":{"0":"Do we have","kind":"cat"}}
+{"seedId":"q-0134","tier":"mechanical-question","text":"Any cat at all?","surfaces":{"0":"Any","kind":"cat"}}
+{"seedId":"q-0134","tier":"mechanical-question","text":"Does a cat exist?","surfaces":{"0":"exist","kind":"cat"}}
+{"seedId":"q-0135","tier":"mechanical-question","text":"What cats are there?","surfaces":{"0":"What","kind":"cat"}}
+{"seedId":"q-0135","tier":"mechanical-question","text":"Which cats do we have?","surfaces":{"0":"Which","kind":"cat"}}
+{"seedId":"q-0135","tier":"mechanical-question","text":"List the cats.","surfaces":{"0":"List","kind":"cat"}}
+{"seedId":"q-0135","tier":"mechanical-question","text":"Show me every cat.","surfaces":{"0":"Show","kind":"cat"}}
+{"seedId":"q-0136","tier":"mechanical-question","text":"What colour is the cat?","surfaces":{"0":"What colour","kind":"cat"}}
+{"seedId":"q-0136","tier":"mechanical-question","text":"What colour are the cats?","surfaces":{"0":"What colour","kind":"cat"}}
+{"seedId":"q-0136","tier":"mechanical-question","text":"The cat — what colour is it?","surfaces":{"0":"what colour","kind":"cat"}}
+{"seedId":"q-0136","tier":"mechanical-question","text":"Colour of the cat, please.","surfaces":{"0":"Colour","kind":"cat"}}
+{"seedId":"q-0137","tier":"mechanical-question","text":"How many dogs are there?","surfaces":{"0":"How many","kind":"dog"}}
+{"seedId":"q-0137","tier":"mechanical-question","text":"Tell me the number of dogs.","surfaces":{"0":"number","kind":"dog"}}
+{"seedId":"q-0137","tier":"mechanical-question","text":"Count the dogs for me.","surfaces":{"0":"Count","kind":"dog"}}
+{"seedId":"q-0137","tier":"mechanical-question","text":"Of the things on display, how many are dogs?","surfaces":{"0":"how many","kind":"dog"}}
+{"seedId":"q-0138","tier":"mechanical-question","text":"Is there a dog?","surfaces":{"0":"Is there","kind":"dog"}}
+{"seedId":"q-0138","tier":"mechanical-question","text":"Do we have a dog anywhere?","surfaces":{"0":"Do we have","kind":"dog"}}
+{"seedId":"q-0138","tier":"mechanical-question","text":"Any dog at all?","surfaces":{"0":"Any","kind":"dog"}}
+{"seedId":"q-0138","tier":"mechanical-question","text":"Does a dog exist?","surfaces":{"0":"exist","kind":"dog"}}
+{"seedId":"q-0139","tier":"mechanical-question","text":"What dogs are there?","surfaces":{"0":"What","kind":"dog"}}
+{"seedId":"q-0139","tier":"mechanical-question","text":"Which dogs do we have?","surfaces":{"0":"Which","kind":"dog"}}
+{"seedId":"q-0139","tier":"mechanical-question","text":"List the dogs.","surfaces":{"0":"List","kind":"dog"}}
+{"seedId":"q-0139","tier":"mechanical-question","text":"Show me every dog.","surfaces":{"0":"Show","kind":"dog"}}
+{"seedId":"q-0140","tier":"mechanical-question","text":"What colour is the dog?","surfaces":{"0":"What colour","kind":"dog"}}
+{"seedId":"q-0140","tier":"mechanical-question","text":"What colour are the dogs?","surfaces":{"0":"What colour","kind":"dog"}}
+{"seedId":"q-0140","tier":"mechanical-question","text":"The dog — what colour is it?","surfaces":{"0":"what colour","kind":"dog"}}
+{"seedId":"q-0140","tier":"mechanical-question","text":"Colour of the dog, please.","surfaces":{"0":"Colour","kind":"dog"}}
+{"seedId":"q-0141","tier":"mechanical-question","text":"How many fishs are there?","surfaces":{"0":"How many","kind":"fish"}}
+{"seedId":"q-0141","tier":"mechanical-question","text":"Tell me the number of fishs.","surfaces":{"0":"number","kind":"fish"}}
+{"seedId":"q-0141","tier":"mechanical-question","text":"Count the fishs for me.","surfaces":{"0":"Count","kind":"fish"}}
+{"seedId":"q-0141","tier":"mechanical-question","text":"Of the things on display, how many are fishs?","surfaces":{"0":"how many","kind":"fish"}}
+{"seedId":"q-0142","tier":"mechanical-question","text":"Is there a fish?","surfaces":{"0":"Is there","kind":"fish"}}
+{"seedId":"q-0142","tier":"mechanical-question","text":"Do we have a fish anywhere?","surfaces":{"0":"Do we have","kind":"fish"}}
+{"seedId":"q-0142","tier":"mechanical-question","text":"Any fish at all?","surfaces":{"0":"Any","kind":"fish"}}
+{"seedId":"q-0142","tier":"mechanical-question","text":"Does a fish exist?","surfaces":{"0":"exist","kind":"fish"}}
+{"seedId":"q-0143","tier":"mechanical-question","text":"What fishs are there?","surfaces":{"0":"What","kind":"fish"}}
+{"seedId":"q-0143","tier":"mechanical-question","text":"Which fishs do we have?","surfaces":{"0":"Which","kind":"fish"}}
+{"seedId":"q-0143","tier":"mechanical-question","text":"List the fishs.","surfaces":{"0":"List","kind":"fish"}}
+{"seedId":"q-0143","tier":"mechanical-question","text":"Show me every fish.","surfaces":{"0":"Show","kind":"fish"}}
+{"seedId":"q-0144","tier":"mechanical-question","text":"What colour is the fish?","surfaces":{"0":"What colour","kind":"fish"}}
+{"seedId":"q-0144","tier":"mechanical-question","text":"What colour are the fishs?","surfaces":{"0":"What colour","kind":"fish"}}
+{"seedId":"q-0144","tier":"mechanical-question","text":"The fish — what colour is it?","surfaces":{"0":"what colour","kind":"fish"}}
+{"seedId":"q-0144","tier":"mechanical-question","text":"Colour of the fish, please.","surfaces":{"0":"Colour","kind":"fish"}}
+{"seedId":"q-0145","tier":"mechanical-question","text":"How many birds are there?","surfaces":{"0":"How many","kind":"bird"}}
+{"seedId":"q-0145","tier":"mechanical-question","text":"Tell me the number of birds.","surfaces":{"0":"number","kind":"bird"}}
+{"seedId":"q-0145","tier":"mechanical-question","text":"Count the birds for me.","surfaces":{"0":"Count","kind":"bird"}}
+{"seedId":"q-0145","tier":"mechanical-question","text":"Of the things on display, how many are birds?","surfaces":{"0":"how many","kind":"bird"}}
+{"seedId":"q-0146","tier":"mechanical-question","text":"Is there a bird?","surfaces":{"0":"Is there","kind":"bird"}}
+{"seedId":"q-0146","tier":"mechanical-question","text":"Do we have a bird anywhere?","surfaces":{"0":"Do we have","kind":"bird"}}
+{"seedId":"q-0146","tier":"mechanical-question","text":"Any bird at all?","surfaces":{"0":"Any","kind":"bird"}}
+{"seedId":"q-0146","tier":"mechanical-question","text":"Does a bird exist?","surfaces":{"0":"exist","kind":"bird"}}
+{"seedId":"q-0147","tier":"mechanical-question","text":"What birds are there?","surfaces":{"0":"What","kind":"bird"}}
+{"seedId":"q-0147","tier":"mechanical-question","text":"Which birds do we have?","surfaces":{"0":"Which","kind":"bird"}}
+{"seedId":"q-0147","tier":"mechanical-question","text":"List the birds.","surfaces":{"0":"List","kind":"bird"}}
+{"seedId":"q-0147","tier":"mechanical-question","text":"Show me every bird.","surfaces":{"0":"Show","kind":"bird"}}
+{"seedId":"q-0148","tier":"mechanical-question","text":"What colour is the bird?","surfaces":{"0":"What colour","kind":"bird"}}
+{"seedId":"q-0148","tier":"mechanical-question","text":"What colour are the birds?","surfaces":{"0":"What colour","kind":"bird"}}
+{"seedId":"q-0148","tier":"mechanical-question","text":"The bird — what colour is it?","surfaces":{"0":"what colour","kind":"bird"}}
+{"seedId":"q-0148","tier":"mechanical-question","text":"Colour of the bird, please.","surfaces":{"0":"Colour","kind":"bird"}}
+{"seedId":"q-0149","tier":"mechanical-question","text":"How many boats are there?","surfaces":{"0":"How many","kind":"boat"}}
+{"seedId":"q-0149","tier":"mechanical-question","text":"Tell me the number of boats.","surfaces":{"0":"number","kind":"boat"}}
+{"seedId":"q-0149","tier":"mechanical-question","text":"Count the boats for me.","surfaces":{"0":"Count","kind":"boat"}}
+{"seedId":"q-0149","tier":"mechanical-question","text":"Of the things on display, how many are boats?","surfaces":{"0":"how many","kind":"boat"}}
+{"seedId":"q-0150","tier":"mechanical-question","text":"Is there a boat?","surfaces":{"0":"Is there","kind":"boat"}}
+{"seedId":"q-0150","tier":"mechanical-question","text":"Do we have a boat anywhere?","surfaces":{"0":"Do we have","kind":"boat"}}
+{"seedId":"q-0150","tier":"mechanical-question","text":"Any boat at all?","surfaces":{"0":"Any","kind":"boat"}}
+{"seedId":"q-0150","tier":"mechanical-question","text":"Does a boat exist?","surfaces":{"0":"exist","kind":"boat"}}
+{"seedId":"q-0151","tier":"mechanical-question","text":"What boats are there?","surfaces":{"0":"What","kind":"boat"}}
+{"seedId":"q-0151","tier":"mechanical-question","text":"Which boats do we have?","surfaces":{"0":"Which","kind":"boat"}}
+{"seedId":"q-0151","tier":"mechanical-question","text":"List the boats.","surfaces":{"0":"List","kind":"boat"}}
+{"seedId":"q-0151","tier":"mechanical-question","text":"Show me every boat.","surfaces":{"0":"Show","kind":"boat"}}
+{"seedId":"q-0152","tier":"mechanical-question","text":"What colour is the boat?","surfaces":{"0":"What colour","kind":"boat"}}
+{"seedId":"q-0152","tier":"mechanical-question","text":"What colour are the boats?","surfaces":{"0":"What colour","kind":"boat"}}
+{"seedId":"q-0152","tier":"mechanical-question","text":"The boat — what colour is it?","surfaces":{"0":"what colour","kind":"boat"}}
+{"seedId":"q-0152","tier":"mechanical-question","text":"Colour of the boat, please.","surfaces":{"0":"Colour","kind":"boat"}}
+{"seedId":"q-0153","tier":"mechanical-question","text":"How many persons are there?","surfaces":{"0":"How many","kind":"person"}}
+{"seedId":"q-0153","tier":"mechanical-question","text":"Tell me the number of persons.","surfaces":{"0":"number","kind":"person"}}
+{"seedId":"q-0153","tier":"mechanical-question","text":"Count the persons for me.","surfaces":{"0":"Count","kind":"person"}}
+{"seedId":"q-0153","tier":"mechanical-question","text":"Of the things on display, how many are persons?","surfaces":{"0":"how many","kind":"person"}}
+{"seedId":"q-0154","tier":"mechanical-question","text":"Is there a person?","surfaces":{"0":"Is there","kind":"person"}}
+{"seedId":"q-0154","tier":"mechanical-question","text":"Do we have a person anywhere?","surfaces":{"0":"Do we have","kind":"person"}}
+{"seedId":"q-0154","tier":"mechanical-question","text":"Any person at all?","surfaces":{"0":"Any","kind":"person"}}
+{"seedId":"q-0154","tier":"mechanical-question","text":"Does a person exist?","surfaces":{"0":"exist","kind":"person"}}
+{"seedId":"q-0155","tier":"mechanical-question","text":"What persons are there?","surfaces":{"0":"What","kind":"person"}}
+{"seedId":"q-0155","tier":"mechanical-question","text":"Which persons do we have?","surfaces":{"0":"Which","kind":"person"}}
+{"seedId":"q-0155","tier":"mechanical-question","text":"List the persons.","surfaces":{"0":"List","kind":"person"}}
+{"seedId":"q-0155","tier":"mechanical-question","text":"Show me every person.","surfaces":{"0":"Show","kind":"person"}}
+{"seedId":"q-0156","tier":"mechanical-question","text":"What colour is the person?","surfaces":{"0":"What colour","kind":"person"}}
+{"seedId":"q-0156","tier":"mechanical-question","text":"What colour are the persons?","surfaces":{"0":"What colour","kind":"person"}}
+{"seedId":"q-0156","tier":"mechanical-question","text":"The person — what colour is it?","surfaces":{"0":"what colour","kind":"person"}}
+{"seedId":"q-0156","tier":"mechanical-question","text":"Colour of the person, please.","surfaces":{"0":"Colour","kind":"person"}}
+{"seedId":"q-0157","tier":"mechanical-question","text":"How many balloons are there?","surfaces":{"0":"How many","kind":"balloon"}}
+{"seedId":"q-0157","tier":"mechanical-question","text":"Tell me the number of balloons.","surfaces":{"0":"number","kind":"balloon"}}
+{"seedId":"q-0157","tier":"mechanical-question","text":"Count the balloons for me.","surfaces":{"0":"Count","kind":"balloon"}}
+{"seedId":"q-0157","tier":"mechanical-question","text":"Of the things on display, how many are balloons?","surfaces":{"0":"how many","kind":"balloon"}}
+{"seedId":"q-0158","tier":"mechanical-question","text":"Is there a balloon?","surfaces":{"0":"Is there","kind":"balloon"}}
+{"seedId":"q-0158","tier":"mechanical-question","text":"Do we have a balloon anywhere?","surfaces":{"0":"Do we have","kind":"balloon"}}
+{"seedId":"q-0158","tier":"mechanical-question","text":"Any balloon at all?","surfaces":{"0":"Any","kind":"balloon"}}
+{"seedId":"q-0158","tier":"mechanical-question","text":"Does a balloon exist?","surfaces":{"0":"exist","kind":"balloon"}}
+{"seedId":"q-0159","tier":"mechanical-question","text":"What balloons are there?","surfaces":{"0":"What","kind":"balloon"}}
+{"seedId":"q-0159","tier":"mechanical-question","text":"Which balloons do we have?","surfaces":{"0":"Which","kind":"balloon"}}
+{"seedId":"q-0159","tier":"mechanical-question","text":"List the balloons.","surfaces":{"0":"List","kind":"balloon"}}
+{"seedId":"q-0159","tier":"mechanical-question","text":"Show me every balloon.","surfaces":{"0":"Show","kind":"balloon"}}
+{"seedId":"q-0160","tier":"mechanical-question","text":"What colour is the balloon?","surfaces":{"0":"What colour","kind":"balloon"}}
+{"seedId":"q-0160","tier":"mechanical-question","text":"What colour are the balloons?","surfaces":{"0":"What colour","kind":"balloon"}}
+{"seedId":"q-0160","tier":"mechanical-question","text":"The balloon — what colour is it?","surfaces":{"0":"what colour","kind":"balloon"}}
+{"seedId":"q-0160","tier":"mechanical-question","text":"Colour of the balloon, please.","surfaces":{"0":"Colour","kind":"balloon"}}
+{"seedId":"q-0161","tier":"mechanical-question","text":"How many rockets are there?","surfaces":{"0":"How many","kind":"rocket"}}
+{"seedId":"q-0161","tier":"mechanical-question","text":"Tell me the number of rockets.","surfaces":{"0":"number","kind":"rocket"}}
+{"seedId":"q-0161","tier":"mechanical-question","text":"Count the rockets for me.","surfaces":{"0":"Count","kind":"rocket"}}
+{"seedId":"q-0161","tier":"mechanical-question","text":"Of the things on display, how many are rockets?","surfaces":{"0":"how many","kind":"rocket"}}
+{"seedId":"q-0162","tier":"mechanical-question","text":"Is there a rocket?","surfaces":{"0":"Is there","kind":"rocket"}}
+{"seedId":"q-0162","tier":"mechanical-question","text":"Do we have a rocket anywhere?","surfaces":{"0":"Do we have","kind":"rocket"}}
+{"seedId":"q-0162","tier":"mechanical-question","text":"Any rocket at all?","surfaces":{"0":"Any","kind":"rocket"}}
+{"seedId":"q-0162","tier":"mechanical-question","text":"Does a rocket exist?","surfaces":{"0":"exist","kind":"rocket"}}
+{"seedId":"q-0163","tier":"mechanical-question","text":"What rockets are there?","surfaces":{"0":"What","kind":"rocket"}}
+{"seedId":"q-0163","tier":"mechanical-question","text":"Which rockets do we have?","surfaces":{"0":"Which","kind":"rocket"}}
+{"seedId":"q-0163","tier":"mechanical-question","text":"List the rockets.","surfaces":{"0":"List","kind":"rocket"}}
+{"seedId":"q-0163","tier":"mechanical-question","text":"Show me every rocket.","surfaces":{"0":"Show","kind":"rocket"}}
+{"seedId":"q-0164","tier":"mechanical-question","text":"What colour is the rocket?","surfaces":{"0":"What colour","kind":"rocket"}}
+{"seedId":"q-0164","tier":"mechanical-question","text":"What colour are the rockets?","surfaces":{"0":"What colour","kind":"rocket"}}
+{"seedId":"q-0164","tier":"mechanical-question","text":"The rocket — what colour is it?","surfaces":{"0":"what colour","kind":"rocket"}}
+{"seedId":"q-0164","tier":"mechanical-question","text":"Colour of the rocket, please.","surfaces":{"0":"Colour","kind":"rocket"}}
+{"seedId":"q-0165","tier":"mechanical-question","text":"How many moons are there?","surfaces":{"0":"How many","kind":"moon"}}
+{"seedId":"q-0165","tier":"mechanical-question","text":"Tell me the number of moons.","surfaces":{"0":"number","kind":"moon"}}
+{"seedId":"q-0165","tier":"mechanical-question","text":"Count the moons for me.","surfaces":{"0":"Count","kind":"moon"}}
+{"seedId":"q-0165","tier":"mechanical-question","text":"Of the things on display, how many are moons?","surfaces":{"0":"how many","kind":"moon"}}
+{"seedId":"q-0166","tier":"mechanical-question","text":"Is there a moon?","surfaces":{"0":"Is there","kind":"moon"}}
+{"seedId":"q-0166","tier":"mechanical-question","text":"Do we have a moon anywhere?","surfaces":{"0":"Do we have","kind":"moon"}}
+{"seedId":"q-0166","tier":"mechanical-question","text":"Any moon at all?","surfaces":{"0":"Any","kind":"moon"}}
+{"seedId":"q-0166","tier":"mechanical-question","text":"Does a moon exist?","surfaces":{"0":"exist","kind":"moon"}}
+{"seedId":"q-0167","tier":"mechanical-question","text":"What moons are there?","surfaces":{"0":"What","kind":"moon"}}
+{"seedId":"q-0167","tier":"mechanical-question","text":"Which moons do we have?","surfaces":{"0":"Which","kind":"moon"}}
+{"seedId":"q-0167","tier":"mechanical-question","text":"List the moons.","surfaces":{"0":"List","kind":"moon"}}
+{"seedId":"q-0167","tier":"mechanical-question","text":"Show me every moon.","surfaces":{"0":"Show","kind":"moon"}}
+{"seedId":"q-0168","tier":"mechanical-question","text":"What colour is the moon?","surfaces":{"0":"What colour","kind":"moon"}}
+{"seedId":"q-0168","tier":"mechanical-question","text":"What colour are the moons?","surfaces":{"0":"What colour","kind":"moon"}}
+{"seedId":"q-0168","tier":"mechanical-question","text":"The moon — what colour is it?","surfaces":{"0":"what colour","kind":"moon"}}
+{"seedId":"q-0168","tier":"mechanical-question","text":"Colour of the moon, please.","surfaces":{"0":"Colour","kind":"moon"}}

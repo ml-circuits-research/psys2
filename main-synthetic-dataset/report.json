@@ -1,88 +1,88 @@
 {
- "accepted": 16566,
- "quarantined": 165,
- "rejected": 3800,
+ "accepted": 20058,
+ "quarantined": 60,
+ "rejected": 7398,
  "compounds": 51,
  "rejectedSample": [
   {
-   "seedId": "syn-0003",
+   "seedId": "ux-0003",
    "reason": "duplicate"
   },
   {
-   "seedId": "syn-0003",
+   "seedId": "ux-0003",
    "reason": "duplicate"
   },
   {
-   "seedId": "syn-0003",
+   "seedId": "ux-0003",
    "reason": "duplicate"
   },
   {
-   "seedId": "syn-0003",
+   "seedId": "ux-0003",
    "reason": "duplicate"
   },
   {
-   "seedId": "syn-0003",
+   "seedId": "ux-0003",
    "reason": "duplicate"
   },
   {
-   "seedId": "syn-0003",
+   "seedId": "ux-0003",
    "reason": "duplicate"
   },
   {
-   "seedId": "syn-0004",
+   "seedId": "ux-0004",
    "reason": "duplicate"
   },
   {
-   "seedId": "syn-0004",
+   "seedId": "ux-0004",
    "reason": "duplicate"
   },
   {
-   "seedId": "syn-0004",
+   "seedId": "ux-0004",
    "reason": "duplicate"
   },
   {
-   "seedId": "syn-0004",
+   "seedId": "ux-0004",
    "reason": "duplicate"
   },
   {
-   "seedId": "syn-0004",
+   "seedId": "ux-0004",
    "reason": "duplicate"
   },
   {
-   "seedId": "syn-0004",
+   "seedId": "ux-0004",
    "reason": "duplicate"
   }
  ],
  "quarantinedSample": [
   {
-   "seedId": "syn-0289",
+   "seedId": "ux-0192",
    "reason": "ambiguous-surface",
-   "text": "Intro small — change a small, please"
+   "text": "hat — add a hard hat, please"
   },
   {
-   "seedId": "syn-0289",
+   "seedId": "ux-0192",
    "reason": "ambiguous-surface",
-   "text": "a small for me, Intro small"
+   "text": "a hard hat for me, hat"
   },
   {
-   "seedId": "syn-0289",
+   "seedId": "ux-0192",
    "reason": "ambiguous-surface",
-   "text": "can you change a small Intro small?"
+   "text": "can you add a hard hat hat?"
   },
   {
-   "seedId": "syn-0645",
+   "seedId": "ux-0192",
    "reason": "ambiguous-surface",
-   "text": "Intro small — change a small round, please"
+   "text": "add a hadr hat hat"
   },
   {
-   "seedId": "syn-0645",
+   "seedId": "ux-0192",
    "reason": "ambiguous-surface",
-   "text": "a small round for me, Intro small"
+   "text": "add a had hat hat"
   },
   {
-   "seedId": "syn-0645",
+   "seedId": "ux-0192",
    "reason": "ambiguous-surface",
-   "text": "can you change a small round Intro small?"
+   "text": "add a harrd hat hat"
   }
  ],
  "byTier": {
@@ -96,114 +96,118 @@
   "human-equivalent": 732,
   "human-complex": 465,
   "human-simplified": 679,
-  "mechanical": 8890,
-  "mechanical-typo": 4038,
+  "mechanical": 10527,
+  "mechanical-typo": 4920,
+  "mechanical-orphan": 923,
+  "mechanical-orphan2": 50,
   "mechanical-question": 580
  },
  "byWorld": {
-  "avatar": 8759,
-  "calendar": 546,
-  "diagram": 1977,
-  "document": 1478,
-  "drawing": 3806
+  "avatar": 8810,
+  "calendar": 588,
+  "diagram": 2027,
+  "document": 1782,
+  "drawing": 6851
  },
  "byOperation": {
-  "avatar.part.change": 6602,
+  "avatar.part.change": 6622,
   "avatar.part.feature": 29,
-  "avatar.face.compose": 139,
+  "avatar.face.compose": 147,
   "avatar.face.name": 59,
   "avatar.face.resize": 60,
   "avatar.part.move": 28,
   "avatar.part.resize": 29,
-  "avatar.clear": 19,
-  "avatar.face.expression": 40,
-  "avatar.face.preset": 309,
-  "avatar.face.select": 31,
+  "avatar.clear": 29,
+  "avatar.face.expression": 41,
+  "avatar.face.preset": 313,
+  "avatar.face.select": 32,
   "avatar.ids.show": 98,
-  "avatar.part.add": 1202,
+  "avatar.part.add": 1199,
   "compound": 51,
   "part.observe": 72,
-  "calendar.event.add": 58,
-  "calendar.meeting.change": 234,
+  "calendar.event.add": 66,
+  "calendar.meeting.change": 257,
   "calendar.meeting.move": 35,
   "calendar.event.select": 32,
-  "calendar.events.remove": 34,
-  "calendar.meeting.remove": 25,
+  "calendar.events.remove": 35,
+  "calendar.meeting.remove": 35,
   "calendar.observe": 32,
   "meeting.observe": 86,
-  "diagram.group.change": 169,
+  "diagram.group.change": 171,
   "diagram.link.change": 307,
   "diagram.node.change": 158,
   "diagram.group.chart.make": 103,
   "diagram.group.make": 59,
-  "diagram.node.make": 491,
+  "diagram.node.make": 503,
   "diagram.node.resize": 30,
   "diagram.group.place": 30,
   "diagram.group.resize": 30,
   "diagram.link.make": 29,
-  "diagram.link.select": 35,
+  "diagram.link.select": 36,
   "diagram.node.place": 30,
-  "diagram.node.select": 36,
+  "diagram.node.select": 37,
   "diagram.selection.remove": 31,
   "node.observe": 206,
-  "document.block.mark": 111,
-  "document.section.mark": 110,
-  "document.block.change": 275,
-  "document.block.make": 204,
-  "document.block.select": 54,
-  "document.section.select": 31,
-  "document.compose": 82,
+  "document.block.mark": 133,
+  "document.section.mark": 132,
+  "document.block.change": 317,
+  "document.block.make": 278,
+  "document.block.select": 62,
+  "document.section.select": 39,
+  "document.compose": 98,
   "document.section.change": 99,
-  "document.section.make": 53,
-  "document.table.make": 38,
-  "document.write": 37,
+  "document.section.make": 77,
+  "document.table.make": 54,
+  "document.write": 54,
   "block.observe": 98,
-  "drawing.part.change": 120,
+  "drawing.part.change": 121,
   "drawing.objects.transform": 30,
-  "drawing.catalog.make": 115,
-  "drawing.object.change": 139,
-  "drawing.object.group": 103,
+  "drawing.catalog.make": 989,
+  "drawing.object.change": 162,
+  "drawing.object.group": 116,
   "drawing.part.place": 30,
-  "drawing.object.make": 2527,
-  "drawing.object.place": 28,
-  "drawing.part.extract": 26,
-  "drawing.part.remove": 29,
+  "drawing.object.make": 4637,
+  "drawing.object.place": 29,
+  "drawing.part.extract": 27,
+  "drawing.part.remove": 30,
   "drawing.part.select": 27,
-  "drawing.ids.show": 57,
-  "drawing.object.parts": 25,
-  "drawing.object.remove": 28,
-  "drawing.object.select": 25,
-  "drawing.object.ungroup": 25,
-  "drawing.objects.select": 19,
+  "drawing.ids.show": 67,
+  "drawing.object.parts": 26,
+  "drawing.object.remove": 29,
+  "drawing.object.select": 26,
+  "drawing.object.ungroup": 26,
+  "drawing.objects.select": 26,
   "drawn.observe": 414,
   "avatar.part.select": 7,
   "avatar.part.remove": 10,
+  "avatar.parts.remove": 10,
   "avatar.observe": 5,
   "avatar.undo": 5,
   "avatar.redo": 5,
-  "diagram.node.remove": 9,
+  "diagram.node.remove": 10,
   "diagram.node.layout": 67,
-  "diagram.link.remove": 9,
+  "diagram.link.remove": 10,
   "diagram.page.clear": 10,
   "diagram.observe": 5,
   "diagram.undo": 5,
   "diagram.redo": 5,
   "diagram.group.select": 7,
-  "diagram.group.layout": 91,
-  "diagram.group.remove": 9,
-  "diagram.group.chart.adopt": 6,
+  "diagram.group.layout": 98,
+  "diagram.group.remove": 10,
+  "diagram.group.ungroup": 9,
+  "diagram.group.chart.adopt": 7,
   "document.title.change": 11,
   "document.block.align": 11,
   "document.section.align": 11,
   "document.block.reorder": 9,
   "document.list.make": 46,
-  "document.list.change": 87,
-  "document.table.change": 29,
+  "document.list.change": 125,
+  "document.table.change": 43,
   "document.container.change": 11,
   "document.rewrite": 11,
-  "document.block.remove": 9,
-  "document.section.remove": 9,
-  "document.section.reorder": 8,
+  "document.block.remove": 10,
+  "document.section.remove": 10,
+  "document.section.reorder": 9,
   "document.remove": 10,
   "document.observe": 5,
   "document.undo": 5,
@@ -211,6 +215,7 @@
   "drawing.page.clear": 10,
   "drawing.observe": 7,
   "drawing.undo": 5,
-  "drawing.redo": 5
+  "drawing.redo": 5,
+  "diagram.ids.show": 14
  }
 }

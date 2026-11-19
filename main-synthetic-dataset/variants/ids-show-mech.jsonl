@@ -1,0 +1,14 @@
+{"seedId": "did-00", "tier": "mechanical", "text": "Show the object ID labels temporary", "surfaces": {"0": "temporary", "kind": "ID labels"}}
+{"seedId": "did-00", "tier": "mechanical", "text": "Can you toggle the IDs temporary?", "surfaces": {"0": "temporary", "kind": "IDs"}}
+{"seedId": "did-00", "tier": "mechanical", "text": "Put the ID labels on, temporary please", "surfaces": {"0": "temporary", "kind": "ID labels"}}
+{"seedId": "did-00", "tier": "mechanical", "text": "IDs temporary, thanks", "surfaces": {"0": "temporary", "kind": "IDs"}}
+{"seedId": "did-00-5", "tier": "mechanical", "text": "Show the object ID labels temporary for 5 seconds", "surfaces": {"0": "temporary", "1": "5", "kind": "ID labels"}}
+{"seedId": "did-00-5", "tier": "mechanical", "text": "Can you toggle the IDs temporary? 5 seconds", "surfaces": {"0": "temporary", "1": "5", "kind": "IDs"}}
+{"seedId": "did-00-5", "tier": "mechanical", "text": "IDs temporary, 5 seconds, thanks", "surfaces": {"0": "temporary", "1": "5", "kind": "IDs"}}
+{"seedId": "did-00-10", "tier": "mechanical", "text": "Show the object ID labels temporary for 10 seconds", "surfaces": {"0": "temporary", "1": "10", "kind": "ID labels"}}
+{"seedId": "did-00-10", "tier": "mechanical", "text": "Can you toggle the IDs temporary? 10 seconds", "surfaces": {"0": "temporary", "1": "10", "kind": "IDs"}}
+{"seedId": "did-00-10", "tier": "mechanical", "text": "IDs temporary, 10 seconds, thanks", "surfaces": {"0": "temporary", "1": "10", "kind": "IDs"}}
+{"seedId": "did-01", "tier": "mechanical", "text": "Show the object ID labels permanent", "surfaces": {"0": "permanent", "kind": "ID labels"}}
+{"seedId": "did-01", "tier": "mechanical", "text": "Can you toggle the IDs permanent?", "surfaces": {"0": "permanent", "kind": "IDs"}}
+{"seedId": "did-01", "tier": "mechanical", "text": "Put the ID labels on, permanent please", "surfaces": {"0": "permanent", "kind": "ID labels"}}
+{"seedId": "did-01", "tier": "mechanical", "text": "IDs permanent, thanks", "surfaces": {"0": "permanent", "kind": "IDs"}}
