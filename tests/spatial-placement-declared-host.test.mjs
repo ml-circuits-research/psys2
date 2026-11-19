@@ -8,7 +8,6 @@ import {routeNewEngine} from '../src/dialog/reader-routing.mjs';
 import {performGesture} from './fixtures/editor-gesture.mjs';
 import {createDrawingHost,initialDrawingState} from '../worlds/art.draw/declared-host.mjs';
 import {createDiagramHost,initialDiagramState} from '../worlds/diagram.sketch/declared-host.mjs';
-import {createAvatarHost} from '../worlds/ui.avatar/declared-host.mjs';
 
 const webchat=new URL('../docs/webchat/',import.meta.url);
 const deployment=JSON.parse(readFileSync(new URL('models/sop-bert/deployment.json',webchat),'utf8'));
@@ -156,16 +155,4 @@ test('Diagram projects group membership and moving rendered link endpoints with 
  assert.deepEqual(other.boxes.map(box=>box.entity),[other.viewport]);
 });
 
-test('Avatar observes a visible attachment following a resized anchor without treating it as a peer',()=>{
- const host=createAvatarHost({instanceId:'avatar.observed'}),before=host.observeSpatial();
- const relation=before.relations.find(row=>row.kind==='anchored_to'&&row.subject==='hat'&&row.object==='head');
- assert.ok(relation);
- assert.deepEqual(before.occupants,[]);
- assert.equal(makeCall(host,'avatar.part.resize',{ids:['head'],scale:1.3}).status,'changed');
- const after=host.observeSpatial(),rider=after.boxes.find(row=>row.entity==='hat'),prior=before.boxes.find(row=>row.entity==='hat');
- assert.notEqual(rider.min_y,prior.min_y);
- assert.notEqual(rider.revision,prior.revision);
- assert.ok(after.relations.some(row=>row.subject===relation.subject&&row.object===relation.object&&row.kind===relation.kind));
- assert.equal(makeCall(host,'avatar.undo',{}).status,'changed');
- assert.equal(observedBox(host,'hat').min_y,prior.min_y);
-});
+

@@ -3,7 +3,7 @@ import {readFileSync,writeFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
 import {createHash} from 'node:crypto';
 import {DEMO_AVATAR_DATA} from './demo-tool-profile.mjs';
-import {createAvatarHost,initialAvatarState} from '../../worlds/ui.avatar/declared-host.mjs';
+import {createAvatarArea,emptyAvatarState} from '../../worlds/ui.avatar/sop-avatar.mjs';
 import {createDrawingHost,initialDrawingState} from '../../worlds/art.draw/declared-host.mjs';
 import {createDiagramHost,initialDiagramState} from '../../worlds/diagram.sketch/declared-host.mjs';
 import {createDocumentHost,initialDocumentState} from '../../worlds/docs.editor/declared-host.mjs';
@@ -13,8 +13,8 @@ const bytes=readFileSync(input),rows=gunzipSync(bytes).toString().trim().split('
 const hash=value=>createHash('sha256').update('native-tool-check-1\n'+value).digest('hex');rows.sort((a,b)=>hash(a.source_path+':'+a.source_id).localeCompare(hash(b.source_path+':'+b.source_id)));
 const checked=[],start=performance.now();
 for(const [index,row]of rows.slice(0,Number(limit)).entries()){
- const state=row.world==='drawing'?initialDrawingState():row.world==='diagram'?initialDiagramState():row.world==='document'?initialDocumentState():row.world==='avatar'?initialAvatarState(DEMO_AVATAR_DATA):initialCalendarState();
- const factory={drawing:createDrawingHost,diagram:createDiagramHost,document:createDocumentHost,calendar:createCalendarHost,avatar:createAvatarHost}[row.world],host=await factory({state,instanceId:'corpus-check-'+index,...(row.world==='avatar'?{data:DEMO_AVATAR_DATA}:{})});let seq=0;
+ const state=row.world==='drawing'?initialDrawingState():row.world==='diagram'?initialDiagramState():row.world==='document'?initialDocumentState():row.world==='avatar'?emptyAvatarState():initialCalendarState();
+ const factory={drawing:createDrawingHost,diagram:createDiagramHost,document:createDocumentHost,calendar:createCalendarHost,avatar:createAvatarArea}[row.world],host=await factory({state,instanceId:'corpus-check-'+index,...(row.world==='avatar'?{data:DEMO_AVATAR_DATA}:{})});let seq=0;
  const call=async(operation,args)=>{const result=await host.invoke({invocation:'call-'+(++seq),expectedVersion:host.observe().version,operation,args});if(!['changed','unchanged'].includes(result.status))throw Error(JSON.stringify({operation,args,status:result.status,reason:result.reason,code:result.code}));return result;};
  let setup=true,error=null;const objects=row.context.existing,counts={},ids={};
  try{

@@ -9,15 +9,13 @@ import {readInstanceState} from '../src/vendor/sopworld/sopworld.mjs';
 import {NATIVE_AREAS,createAreaHost} from '../src/dialog/app-reader-context.mjs';
 import {CATALOG_PIN} from '../src/knowledge/catalog-pin.mjs';
 import {toNativeCalendarState,createCalendarHost} from '../worlds/time.calendar/declared-host.mjs';
-import {toNativeAvatarState} from '../worlds/ui.avatar/canonical-state.mjs';
-import {createAvatarHost} from '../worlds/ui.avatar/declared-host.mjs';
 import {nativeObservationObjects} from '../src/dialog/instance-facts.mjs';
 
 const fixture=JSON.parse(await readFile(new URL('./fixtures/instance-3ce-saved-worlds.json',import.meta.url),'utf8'));
 const records=await Promise.all(fixture.records.map(async({world,instanceId,revision,wires,wiresFile})=>({world,instanceId,revision,wires:wires??await readFile(new URL('./fixtures/'+wiresFile,import.meta.url),'utf8')})));
 const archives=new Map(records.map(record=>[record.world,readInstanceState(record.wires)]));
 const semantic=objects=>objects.map(object=>{const copy=structuredClone(object);if(copy.metadata){delete copy.metadata.inputs;if(!Object.keys(copy.metadata).length)delete copy.metadata;}return copy;});
-const projection=(world,state)=>world==='art.draw'?toNativeDrawingState(state):world==='time.calendar'?toNativeCalendarState(state):world==='ui.avatar'?toNativeAvatarState(state):state;
+const projection=(world,state)=>world==='art.draw'?toNativeDrawingState(state):world==='time.calendar'?toNativeCalendarState(state):state;
 const session=()=>({isession:{state:{}},engine:{loader:{readFile:(world,file)=>readFile(new URL(`../worlds/${world}/${file}`,import.meta.url),'utf8')}}});
 function difference(actual,expected,at='$'){
  if(isDeepStrictEqual(actual,expected))return null;

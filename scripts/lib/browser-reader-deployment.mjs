@@ -25,7 +25,7 @@ export async function refreshBrowserReaderDeployment(outDir){
    'lib/dialog/native-intent-reader.mjs','lib/dialog/native-binding-candidates.mjs','lib/dialog/native-tool-controls.mjs',
    'worlds/native-tool-host.mjs','worlds/native-tool-arguments.mjs','lib/vendor/sopworld/capability-call.mjs','worlds/native-spatial-observation.mjs','worlds/native-spatial-interface.mjs',
    'worlds/app.project/reader-admission-policy-source.mjs','worlds/app.project/reader-admission-schema-source.mjs','worlds/app.project/spatial-profile.mjs','worlds/art.draw/declared-host.mjs','worlds/diagram.sketch/declared-host.mjs',
-   'worlds/ui.avatar/declared-host.mjs','worlds/docs.editor/declared-host.mjs',
+   'worlds/ui.avatar/sop-avatar.mjs','worlds/sop-area.mjs','worlds/sop-world-host.mjs','worlds/catalog-world.mjs','worlds/sop-primitives.mjs','worlds/docs.editor/declared-host.mjs',
    'worlds/art.draw/canonical-state.mjs','worlds/art.draw/state-schema-source.mjs',
    'worlds/diagram.sketch/canonical-state.mjs','worlds/diagram.sketch/state-schema-source.mjs','worlds/diagram.sketch/arrows.mjs',
    'worlds/docs.editor/canonical-state.mjs','worlds/docs.editor/state-schema-source.mjs',

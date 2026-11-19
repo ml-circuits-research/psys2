@@ -12,8 +12,7 @@ import {siteCatalogFiles} from '../scripts/lib/site-catalog.mjs';
 import {createKnowledgeSource} from '../src/loaders/knowledge-source.mjs';
 import {createDrawingHost,initialDrawingState} from '../worlds/art.draw/declared-host.mjs';
 import {drawingPartsOf} from '../worlds/art.draw/part-tools.mjs';
-import {createAvatarHost,initialAvatarState} from '../worlds/ui.avatar/declared-host.mjs';
-import {toNativeAvatarState} from '../worlds/ui.avatar/canonical-state.mjs';
+import {createAvatarArea,emptyAvatarState,avatarAreaStateWorld} from '../worlds/ui.avatar/sop-avatar.mjs';
 import {readFile} from 'node:fs/promises';
 import path from 'node:path';
 
@@ -87,9 +86,9 @@ test('pinned vocabulary dependencies remain available to lookups, actual hosts a
  const added=invokeToolCommand(drawHost,{invocation:'owned-source-create',expectedVersion:drawHost.observe().version,operation:'drawing.catalog.make',args:{name:'apple',x:120,y:180,size:80}});
  assert.equal(added.status,'changed');assert.equal(drawing.objects[0].semanticKind,'apple');assert.ok(drawingPartsOf(drawing.objects[0]).length>1);
  const faces=await knowledge.faces();assert.ok(faces?.aliases.glasses?.includes('eyeglasses'));
- const avatar=initialAvatarState(faces),avatarHost=createAvatarHost({state:avatar,instanceId:'owned-source-avatar',knowledge});
+ const avatar=emptyAvatarState(),avatarHost=await createAvatarArea({state:avatar,instanceId:'owned-source-avatar',knowledge});
  const resized=invokeToolCommand(avatarHost,{invocation:'owned-source-resize',expectedVersion:avatarHost.observe().version,operation:'avatar.part.resize',args:{ids:['eyes'],scale:1.1}});
- assert.equal(resized.status,'changed');assert.equal(toNativeAvatarState(avatar).face.adj.eyes.s,1.1);
+ assert.equal(resized.status,'changed');assert.equal(avatarAreaStateWorld(avatar).ofType('w.face.eyes')[0].attrs.size[0],'1.1');
  const catalog=JSON.parse(await readFile(path.join(dir,'index.json'),'utf8')),served=new Set(await siteCatalogFiles(dir));
  for(const world of [...catalog.worlds,...catalog.schemas])if(world.vocabulary)assert.ok(served.has(world.vocabulary),world.vocabulary+' must travel with the site catalog');
 });

@@ -24,7 +24,7 @@ test('webchat build produces a bundle the browser loader can run', async () => {
     assert.deepEqual(again.files, info.files, 'idempotent');
     await assert.rejects(stat(path.join(out,'worlds/kids.common/ops.mjs')),{code:'ENOENT'});
     assert.ok(await stat(path.join(out,'worlds/art.draw/ops.mjs')));
-    for(const file of ['facedraw.mjs','facelogic.mjs','motion.mjs','default-motion.mjs'])assert.ok(await stat(path.join(out,'worlds/ui.avatar',file)),'Avatar visual resource '+file);
+    for(const file of ['ui.avatar/sop-avatar.mjs','ui.avatar/area-sources.mjs','sop-area.mjs','sop-world-host.mjs','catalog-world.mjs','sop-primitives.mjs'])assert.ok(await stat(path.join(out,'worlds',file)),'Avatar SOP area resource '+file);
     for(const file of ['ui/tabs/map.mjs','ui/tabs/music.mjs','vendor/map','vendor/music'])await assert.rejects(stat(path.join(out,file)),{code:'ENOENT'});
     for(const file of Object.keys(info.assets))assert.doesNotMatch(file,/^worlds\/(?:kids\.|calc\.|geo\.|media\.|games\.|talk\/|plan\.)/);
 

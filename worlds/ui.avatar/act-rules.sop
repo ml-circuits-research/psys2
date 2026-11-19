@@ -186,11 +186,11 @@
 @ob.face.preset.o app.observe.object id=face kind=face sourceType=ui.avatar.face binding=avatar.face name=?n base=?p characterKind=?k
 @observe.face core.rule when=$ob.face not=$ob.face.any then=$ob.face.o
 @observe.face.preset core.rule when=$ob.face.preset when=$ob.face.kind then=$ob.face.preset.o
-@ob.part w.face.part kind=?kind variant=?v
+@ob.part w.face.part kind=?kind variant=?v size=?size x=?x y=?y
 @ob.slot w.face.slot part=?kind slot=?slot
 @ob.sel app.area.view key=selected value=?slot
-@ob.part.o app.observe.object id=?slot kind=?slot sourceType=ui.avatar.part binding=avatar.part variant=?v selected=false
-@ob.part.sel.o app.observe.object id=?slot kind=?slot sourceType=ui.avatar.part binding=avatar.part variant=?v selected=true
+@ob.part.o app.observe.object id=?slot kind=?slot sourceType=ui.avatar.part binding=avatar.part variant=?v size=?size x=?x y=?y selected=false
+@ob.part.sel.o app.observe.object id=?slot kind=?slot sourceType=ui.avatar.part binding=avatar.part variant=?v size=?size x=?x y=?y selected=true
 @observe.part core.rule when=$ob.part when=$ob.slot not=$ob.sel then=$ob.part.o
 @observe.part.selected core.rule when=$ob.part when=$ob.slot when=$ob.sel then=$ob.part.sel.o
 @ob.opt.face w.face.face style=?style
@@ -222,3 +222,19 @@
 @ids.temporary app.observe.option id=idsMode value=temporary
 @ids.always app.observe.option id=idsMode value=always
 @ids.off app.observe.option id=idsMode value=off
+@ob.in.expr w.face.face expression=?e
+@ob.in.expr.o app.observe.input id=face key=expression value=?e
+@observe.expression core.rule when=$ob.in.expr then=$ob.in.expr.o
+@ob.in.colour w.face.part kind=?kind colour=?c
+@ob.in.colour.slot w.face.slot part=?kind slot=?slot
+@ob.in.colour.o app.observe.input id=?slot key=colour value=?c
+@observe.colour core.rule when=$ob.in.colour when=$ob.in.colour.slot then=$ob.in.colour.o
+@ob.in.skin w.face.face skin=?c
+@ob.in.skin.o app.observe.input id=face key=skin value=?c
+@observe.skin core.rule when=$ob.in.skin then=$ob.in.skin.o
+@ob.in.hair w.face.face hair_colour=?c
+@ob.in.hair.o app.observe.input id=face key=hair_colour value=?c
+@observe.hair core.rule when=$ob.in.hair then=$ob.in.hair.o
+@ob.in.ids app.area.view key=ids value=?m
+@ob.in.ids.o app.observe.input id=face key=ids value=?m
+@observe.ids core.rule when=$ob.in.ids then=$ob.in.ids.o

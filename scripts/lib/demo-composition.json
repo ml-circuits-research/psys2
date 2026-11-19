@@ -76,7 +76,9 @@
         "module": "worlds/art.draw/declared-host.mjs",
         "factory": "createCanonicalDrawingHost"
       },
-      "sourceFiles": ["instance-schema.sop"]
+      "sourceFiles": [
+        "instance-schema.sop"
+      ]
     },
     "diagram.sketch": {
       "profileFiles": [
@@ -84,7 +86,9 @@
         "legend.sop"
       ],
       "schemaWorld": "pattern.diagram.sketch",
-      "sourceFiles": ["instance-schema.sop"],
+      "sourceFiles": [
+        "instance-schema.sop"
+      ],
       "schemaFiles": [
         {
           "file": "instance-schema.sop",
@@ -159,7 +163,9 @@
         "legend.sop"
       ],
       "schemaWorld": "pattern.docs.editor",
-      "sourceFiles": ["state-schema.sop"],
+      "sourceFiles": [
+        "state-schema.sop"
+      ],
       "schemaFiles": [
         {
           "file": "state-schema.sop",
@@ -200,18 +206,19 @@
         }
       ],
       "nativeInitializer": {
-        "module": "worlds/ui.avatar/declared-host.mjs",
-        "export": "initialAvatarState"
+        "module": "worlds/ui.avatar/sop-avatar.mjs",
+        "export": "emptyAvatarState"
       },
       "nativeHost": {
-        "module": "worlds/ui.avatar/declared-host.mjs",
-        "factory": "createAvatarHost"
+        "module": "worlds/ui.avatar/sop-avatar.mjs",
+        "factory": "createAvatarArea"
       },
       "runtimeModules": [
-        "worlds/ui.avatar/facedraw.mjs",
-        "worlds/ui.avatar/facelogic.mjs",
-        "worlds/ui.avatar/motion.mjs",
-        "worlds/ui.avatar/default-motion.mjs"
+        "worlds/sop-area.mjs",
+        "worlds/sop-world-host.mjs",
+        "worlds/catalog-world.mjs",
+        "worlds/sop-primitives.mjs",
+        "worlds/ui.avatar/area-sources.mjs"
       ]
     }
   },

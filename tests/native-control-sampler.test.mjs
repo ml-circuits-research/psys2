@@ -6,12 +6,12 @@ import {createDrawingHost,initialDrawingState} from '../worlds/art.draw/declared
 import {createDiagramHost,initialDiagramState} from '../worlds/diagram.sketch/declared-host.mjs';
 import {createCalendarHost,initialCalendarState} from '../worlds/time.calendar/declared-host.mjs';
 import {createDocumentHost,initialDocumentState} from '../worlds/docs.editor/declared-host.mjs';
-import {createAvatarHost,initialAvatarState} from '../worlds/ui.avatar/declared-host.mjs';
+import {createAvatarArea,emptyAvatarState} from '../worlds/ui.avatar/sop-avatar.mjs';
 import {createNativeToolHost,nativeToken} from '../worlds/native-tool-host.mjs';
 const randomSource=()=>{let seed=713;return ()=>((seed=(seed*16807)%2147483647)-1)/2147483646;};
 const invoke=(host,p)=>invokeToolCommand(host,{invocation:crypto.randomUUID(),expectedVersion:host.observe().version,...p});
 for(const [name,initial,create] of [
- ['Drawing',initialDrawingState,createDrawingHost],['Diagram',initialDiagramState,createDiagramHost],['Calendar',initialCalendarState,createCalendarHost],['Documents',initialDocumentState,createDocumentHost],['Avatar',initialAvatarState,createAvatarHost],
+ ['Drawing',initialDrawingState,createDrawingHost],['Diagram',initialDiagramState,createDiagramHost],['Calendar',initialCalendarState,createCalendarHost],['Documents',initialDocumentState,createDocumentHost],['Avatar',emptyAvatarState,createAvatarArea],
 ])test(name+' dice samples real changing declared native actions on isolated clones',async()=>{
  const state=initial(),factory=({state})=>create({state,instanceId:'sample-'+name}),host=await factory({state}),random=randomSource();
  for(let n=0;n<5;n++){

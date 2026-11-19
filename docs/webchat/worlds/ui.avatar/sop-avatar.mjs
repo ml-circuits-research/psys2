@@ -3,9 +3,9 @@
 // only passes the application's loader and catalog reader to the generic area.
 import {World,parse,serialize} from '../../lib/vendor/sopworld/sopworld.mjs?v=851c80bc87';
 import NATIVE_INTERFACE from './native-interface-source.mjs?v=e227fb4b70';
-import {createSopArea,initialSopAreaState,projectSopArea} from '../sop-area.mjs?v=bb469b06f6';
+import {createSopArea,initialSopAreaState,projectSopArea} from '../sop-area.mjs?v=4da1f109ee';
 import {readBundledAvatar,BUNDLED_AVATAR_FILES} from '../../lib/knowledge/bundled-avatar.mjs?v=731c50cf54';
-import AREA_SOURCES from './area-sources.mjs?v=2a13c00166';
+import AREA_SOURCES from './area-sources.mjs?v=8857264490';
 
 const bundledLoader = { readFile: async (world, file) => AREA_SOURCES[world + '/' + file] ?? null };
 

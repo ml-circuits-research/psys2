@@ -129,6 +129,5 @@ const child = (script) => { const r = spawnSync('node', [path.join(ROOT, 'script
 child('build-bundled-geo.mjs');   // the k.geo subset the map reads with no network
 
 if (!process.argv.includes('--no-acts')) child('build-acts-lexicon.mjs');
-if (!process.argv.includes('--no-face')) child('build-default-face.mjs');
 done('build-bundled-subset');
 if (childStale) process.exit(1);

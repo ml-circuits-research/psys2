@@ -101,10 +101,16 @@ export function createSopWorldHost({ base, kinds, state, instanceId, scope, tool
     return { status: 'supported', changed: compiled.calls.map((call) => read(call, 'act')) };
   };
   const handlers = Object.fromEntries(declared.map((op) => [op.id, handler(op.id)]));
-  const view = (data) => worldOf(base, data).ofType('app.observe.object').map((fact) => ({
-    id: read(fact, 'id'), kind: read(fact, 'kind'), sourceType: read(fact, 'sourceType'),
-    inputs: Object.keys(fact.attrs).filter((key) => !['id', 'kind', 'sourceType', 'binding'].includes(key))
-      .map((key) => ({ binding: read(fact, 'binding') + '.' + key, key, values: [nativeToken(typed(fact.attrs[key][0]))] })),
-  }));
+  // Observed objects: each app.observe.object, with the optional app.observe.input facts of the same id merged in.
+  const view = (data) => {
+    const world = worldOf(base, data), extra = new Map();
+    for (const fact of world.ofType('app.observe.input')) (extra.get(read(fact, 'id')) ?? extra.set(read(fact, 'id'), []).get(read(fact, 'id'))).push(fact);
+    return world.ofType('app.observe.object').map((fact) => {
+      const binding = read(fact, 'binding'), input = (key, raw) => ({ binding: binding + '.' + key, key, values: [nativeToken(typed(raw))] });
+      return { id: read(fact, 'id'), kind: read(fact, 'kind'), sourceType: read(fact, 'sourceType'),
+        inputs: [...Object.keys(fact.attrs).filter((key) => !['id', 'kind', 'sourceType', 'binding'].includes(key)).map((key) => input(key, fact.attrs[key][0])),
+          ...(extra.get(read(fact, 'id')) ?? []).map((row) => input(read(row, 'key'), row.attrs.value[0]))] };
+    });
+  };
   return createNativeToolHost({ state, instanceId, scope, toolInterface, operations, handlers, view, ...limits });
 }

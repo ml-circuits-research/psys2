@@ -7,7 +7,7 @@ import {createDrawingHost,initialDrawingState} from '../worlds/art.draw/declared
 import {createDiagramHost,initialDiagramState} from '../worlds/diagram.sketch/declared-host.mjs';
 import {createCalendarHost,initialCalendarState} from '../worlds/time.calendar/declared-host.mjs';
 import {createDocumentHost,initialDocumentState} from '../worlds/docs.editor/declared-host.mjs';
-import {createAvatarHost,initialAvatarState} from '../worlds/ui.avatar/declared-host.mjs';
+import {createAvatarArea,emptyAvatarState} from '../worlds/ui.avatar/sop-avatar.mjs';
 let sequence=0;
 const invoke=(host,operation,args)=>{const r=invokeToolCommand(host,{invocation:'facts.'+(++sequence),expectedVersion:host.observe().version,operation,args});assert.equal(r.status,'changed',JSON.stringify(r));return r;};
 test('actual observations from five independent native hosts become exact instance facts',async()=>{
@@ -20,7 +20,7 @@ test('actual observations from five independent native hosts become exact instan
  invoke(calendar,'calendar.meeting.add',{id:'event',title:'Plan',start:1000,duration:100,participants:[],room:null,calendar:'work',notes:'Exact notes'});
  const docs=createDocumentHost({state:initialDocumentState(),instanceId:'facts.docs'});
  invoke(docs,'document.write',{title:'Notes',blocks:[{kind:'heading',text:'Heading',level:2},{kind:'paragraph',text:'Body'}]});
- const avatar=createAvatarHost({state:initialAvatarState(),instanceId:'facts.avatar'});
+ const avatar=await createAvatarArea({state:emptyAvatarState(),instanceId:'facts.avatar'});
  for(const host of [drawing,diagram,calendar,docs,avatar]){
   const observation=host.observe(),objects=nativeObservationObjects(observation);
   assert.ok(objects.length);assert.deepEqual(compareInstanceObjects(objects,observation),{ok:true});

@@ -12,7 +12,7 @@ const fixed = [
   'worlds-source-browser.test.mjs', 'catalog-wait-declared-host.test.mjs',
   'work-files.test.mjs',
   'calendar-avatar-selection.test.mjs',
-  'avatar-composition.test.mjs', 'calendar-single-editor.test.mjs', 'native-clear-editors.test.mjs', 'native-control-sampler.test.mjs', 'native-sop-dispatch.test.mjs', 'instance-store.test.mjs',
+  'calendar-single-editor.test.mjs', 'native-clear-editors.test.mjs', 'native-control-sampler.test.mjs', 'native-sop-dispatch.test.mjs', 'instance-store.test.mjs',
   'demo-tool-profile.test.mjs', 'diagram-charts-composition.test.mjs', 'selected-reader-source.test.mjs', 'declaration-alignments.test.mjs', 'reader-calibration-measurement.test.mjs', 'best-effort-execution.test.mjs',
   'candidate-execution-measurement.test.mjs', 'reader-stage-counts.test.mjs',
   'verified-reader-provider.test.mjs', 'actual-reader-replay.test.mjs', 'browser-reader-host.test.mjs', 'browser-reader-route.test.mjs', 'app-reader-context.test.mjs', 'reader-probe-selection.test.mjs', 'new-engine.test.mjs', 'reader-routing.test.mjs', 'functional-context-seeding.test.mjs', 'declared-dispatch.test.mjs', 'native-selection.test.mjs', 'observation-query.test.mjs', 'property-selection.test.mjs',
