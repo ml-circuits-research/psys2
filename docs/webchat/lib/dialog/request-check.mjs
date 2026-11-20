@@ -1,7 +1,7 @@
 // Read-only historical predicate checking; no reader or native invocation.
-import {evaluateRequestPredicates,resolveRequestTargets,str,projectTemplates} from '../vendor/sopworld/sopworld.mjs?v=47abc4a87a';
-import {copyHostData} from '../../worlds/native-tool-host.mjs?v=cfffe619de';
-import {selectNativeObjects} from './native-selection.mjs?v=93e28276b8';
+import {evaluateRequestPredicates,resolveRequestTargets,str,projectTemplates} from '../vendor/sopworld/sopworld.mjs?v=a37e1846b3';
+import {copyHostData} from '../../worlds/native-tool-host.mjs?v=d7b8bd54d9';
+import {selectNativeObjects} from './native-selection.mjs?v=0e5a33ae98';
 const ref=v=>typeof v==='string'&&v.startsWith('$')?v.slice(1):null;
 const unknown=reason=>({truth:'unknown',evidence:[],reason});
 /** Plans and mappings are declared semantic bindings, not model truth predictions. */

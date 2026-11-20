@@ -64,7 +64,7 @@
 @native.diagram.sketch.value.58 std.capability.item index=0 value=$native.diagram.sketch.value.57
 @native.diagram.sketch.value.59 std.capability.list member=$native.diagram.sketch.value.58
 @native.diagram.sketch.value.60 std.capability.arg name="sample" value=$native.diagram.sketch.value.59
-@native.diagram.sketch.op.diagram.node.change.metadata app.native.metadata operation=$native.diagram.sketch.op.diagram.node.change field=$native.diagram.sketch.value.60
+@native.diagram.sketch.op.diagram.node.change.metadata app.native.metadata operation=$native.diagram.sketch.op.diagram.node.change field=$native.diagram.sketch.value.60 field=$native.diagram.sketch.reflow.effect
 @native.diagram.sketch.op.diagram.node.select std.capability.operation scope=$native.diagram.sketch.scope name="diagram.node.select" act=pick on="diagram.sketch.node" order=2 eligible=true
 @native.diagram.sketch.op.diagram.node.select.param.ids std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.select name="ids" kind=array required=true
 @native.diagram.sketch.op.diagram.node.select.param.edges std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.select name="edges" kind=array
@@ -85,7 +85,7 @@
 @native.diagram.sketch.value.79 std.capability.arg name="idsKey" value="ids"
 @native.diagram.sketch.value.80 std.capability.record entry=$native.diagram.sketch.value.76 entry=$native.diagram.sketch.value.77 entry=$native.diagram.sketch.value.78 entry=$native.diagram.sketch.value.79
 @native.diagram.sketch.value.81 std.capability.arg name="spatial" value=$native.diagram.sketch.value.80
-# The diagram lays out its unpinned nodes again when a node is placed or made (a tree or layered layout): the other
+# The diagram lays out its unpinned nodes again when a node is placed, made, changed or resized (a tree or layered layout): the other
 # nodes may change only their x and y (effectScope reflow), a declared dependent layout, not an unintended effect.
 @native.diagram.sketch.reflow.x std.capability.item index=0 value="x"
 @native.diagram.sketch.reflow.y std.capability.item index=1 value="y"
@@ -105,7 +105,7 @@
 @native.diagram.sketch.value.89 std.capability.arg name="frame" value="diagram.canvas"
 @native.diagram.sketch.value.90 std.capability.record entry=$native.diagram.sketch.value.87 entry=$native.diagram.sketch.value.88 entry=$native.diagram.sketch.value.89
 @native.diagram.sketch.value.91 std.capability.arg name="coordinates" value=$native.diagram.sketch.value.90
-@native.diagram.sketch.op.diagram.node.resize.metadata app.native.metadata operation=$native.diagram.sketch.op.diagram.node.resize field=$native.diagram.sketch.value.91
+@native.diagram.sketch.op.diagram.node.resize.metadata app.native.metadata operation=$native.diagram.sketch.op.diagram.node.resize field=$native.diagram.sketch.value.91 field=$native.diagram.sketch.reflow.effect
 @native.diagram.sketch.op.diagram.node.layout std.capability.operation scope=$native.diagram.sketch.scope name="diagram.node.layout" act=change on="diagram.sketch.node" order=6 eligible=true
 @native.diagram.sketch.op.diagram.node.layout.param.ids std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.layout name="ids" kind=array required=true
 @native.diagram.sketch.op.diagram.node.layout.param.layout std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.layout name="layout" kind=string required=true enum="tree" enum="grid" enum="row" enum="column" enum="circle" enum="radial" enum="layers" enumClosed=true
@@ -393,3 +393,4 @@
 @native.diagram.sketch.selection.effect std.capability.arg name="effectScope" value=$native.diagram.sketch.selection.scope
 @native.diagram.sketch.op.diagram.node.select.metadata app.native.metadata operation=$native.diagram.sketch.op.diagram.node.select field=$native.diagram.sketch.selection.effect
 @native.diagram.sketch.op.diagram.link.select.metadata app.native.metadata operation=$native.diagram.sketch.op.diagram.link.select field=$native.diagram.sketch.selection.effect
+@native.diagram.sketch.op.diagram.node.scale.metadata app.native.metadata operation=$native.diagram.sketch.op.diagram.node.scale field=$native.diagram.sketch.reflow.effect

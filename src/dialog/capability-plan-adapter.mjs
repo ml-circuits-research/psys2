@@ -285,9 +285,15 @@ function saidLists(nodes,bindings){
   });
 }
 export function compileNativeCapability(candidate, context) {
-  const nodes=saidLists(identityNamesToSelectors(declaredActForm(parse(candidate.wires)),context?.bindings),context?.bindings), {world,scope}=compilerWorld(context,nodes);
+  const nodes=saidLists(declaredActForm(parse(candidate.wires)),context?.bindings), {world,scope}=compilerWorld(context,nodes);
   if(!nodes.some(w=>w.type==='std.request'&&w.id===candidate.request))return readPlan(world,'@compile.result std.compile.result status=not-applicable reason=request-root');
-  return readPlan(world,world.compileRequest(serialize([...nodes,contextWire('capability.context',candidate.request,scope)])));
+  const plan=readPlan(world,world.compileRequest(serialize([...nodes,contextWire('capability.context',candidate.request,scope)])));
+  // Only when no object has the said name (a line has none), the identity selector alone picks the target.
+  if(plan?.reason!=='target')return plan;
+  const named=identityNamesToSelectors(nodes,context?.bindings);
+  if(named.every((wire,i)=>wire===nodes[i]))return plan;
+  const second=compilerWorld(context,named);
+  return readPlan(second.world,second.world.compileRequest(serialize([...named,contextWire('capability.context',candidate.request,second.scope)])));
 }
 
 export function compileNativeQuery(sop,context){

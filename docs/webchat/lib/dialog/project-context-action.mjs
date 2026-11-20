@@ -1,15 +1,15 @@
-import { historyHeads } from './history-journal.mjs?v=5c2f095aac';
-import {nativeKindCandidates} from './native-binding-candidates.mjs?v=700d8228e2';
+import { historyHeads } from './history-journal.mjs?v=99bcb89726';
+import {nativeKindCandidates} from './native-binding-candidates.mjs?v=bcfb5eaa6b';
 // Bind model-declared context references to actual native objects; never inspect source words.
-import {quote,str} from '../vendor/sopworld/sopworld.mjs?v=47abc4a87a';
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=6099bbfa7d';
-import {executionPolicyWorld} from './execution-policy.mjs?v=352c75cd30';
-import {readReferenceTurn,resolveObservedReference} from './reference-policy.mjs?v=a1b9acbdc3';
-import {observeGroundedProjection,projectGroundedRequest} from './grounded-projection.mjs?v=2e4e5b7af2';
-import {flatRequestProjection} from './request-projection.mjs?v=41669048d2';
-import {bridgeRawStructure} from './raw-structural-bridge.mjs?v=6fda7824b0';
-import {comparativeSteps} from './comparative-projection.mjs?v=ffb26f7b6f';
-import {referenceProjection} from './reference-projection.mjs?v=3083a78a02';
+import {quote,str} from '../vendor/sopworld/sopworld.mjs?v=a37e1846b3';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=36c8c0327a';
+import {executionPolicyWorld} from './execution-policy.mjs?v=2fb036fccd';
+import {readReferenceTurn,resolveObservedReference} from './reference-policy.mjs?v=d1b881e1d6';
+import {observeGroundedProjection,projectGroundedRequest} from './grounded-projection.mjs?v=b0c1a3961b';
+import {flatRequestProjection} from './request-projection.mjs?v=daa867a8df';
+import {bridgeRawStructure} from './raw-structural-bridge.mjs?v=aaa7e35757';
+import {comparativeSteps} from './comparative-projection.mjs?v=4bc933529a';
+import {referenceProjection} from './reference-projection.mjs?v=7b9600ecc5';
 export async function projectContextAction(proposal,session,{bindings,registry,view}={}) {
  const raw=proposal?.raw,r=raw?.requests?.[0],area=NATIVE_AREAS[view],readerArea=bindings?.readerAreaByView?.[view]??area?.area;
  if(!area||!bindings||!registry||proposal.coverage?.complete||raw?.requestCount!==1||raw.coverage?.truncated||!r?.target||r.target.kind||r.target.name)return null;

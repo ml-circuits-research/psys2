@@ -11,7 +11,7 @@
 //   - amounts (k.expect.amount), comparative steps and act forms from the execution knowledge and policy.
 // Nothing here names a word, a sentence or a tool. Not wired into the app route: the reader does not yet emit frames.
 // The library functions are passed in (lib) until the vendored library includes src/semantic-frame.mjs.
-import { parse, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=47abc4a87a';
+import { parse, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=a37e1846b3';
 
 const take = (wire, key) => { const v = wire?.attrs?.[key]?.[0]; return v === undefined ? undefined : str(v); };
 

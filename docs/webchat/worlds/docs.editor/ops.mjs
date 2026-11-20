@@ -1,2 +1,2 @@
 // Native initial state only; no legacy grammar executor.
-export{emptyDocumentArea as initialState}from"./sop-document.mjs?v=1dc541ede9";
+export{emptyDocumentArea as initialState}from"./sop-document.mjs?v=64d02767fd";

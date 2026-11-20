@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-import { parse, quote, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=47abc4a87a';
+import { parse, quote, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=a37e1846b3';
 import { decodeCapabilityCall } from '../vendor/sopworld/capability-call.mjs?v=ed3b773c65';
 import POLICY from '../../worlds/app.project/capability-policy.mjs?v=281892343f';
 import CLOCK from '../../worlds/app.project/clock-projection-source.mjs?v=7d09f121c5';
-import { executionPolicyWorld } from './execution-policy.mjs?v=352c75cd30';
-import { projectionModule } from './composition-knowledge.mjs?v=ec2bbc4afe';
-import { sceneDefaultModule, writeSceneDefaults } from './scene-placement-defaults.mjs?v=e3a0eb43cd';
-import { nativeKindCandidates } from './native-binding-candidates.mjs?v=700d8228e2';
-import { observedReaderContext } from './native-reader-context.mjs?v=498064d92a';
+import { executionPolicyWorld } from './execution-policy.mjs?v=2fb036fccd';
+import { projectionModule } from './composition-knowledge.mjs?v=372596c8db';
+import { sceneDefaultModule, writeSceneDefaults } from './scene-placement-defaults.mjs?v=881cf3bcf0';
+import { nativeKindCandidates } from './native-binding-candidates.mjs?v=bcfb5eaa6b';
+import { observedReaderContext } from './native-reader-context.mjs?v=219b156c19';
 import { budget } from './budget.mjs?v=00bce6e369';
 import { en } from '../lang/en.mjs?v=189c882fb6';
 
@@ -285,9 +285,15 @@ function saidLists(nodes,bindings){
   });
 }
 export function compileNativeCapability(candidate, context) {
-  const nodes=saidLists(identityNamesToSelectors(declaredActForm(parse(candidate.wires)),context?.bindings),context?.bindings), {world,scope}=compilerWorld(context,nodes);
+  const nodes=saidLists(declaredActForm(parse(candidate.wires)),context?.bindings), {world,scope}=compilerWorld(context,nodes);
   if(!nodes.some(w=>w.type==='std.request'&&w.id===candidate.request))return readPlan(world,'@compile.result std.compile.result status=not-applicable reason=request-root');
-  return readPlan(world,world.compileRequest(serialize([...nodes,contextWire('capability.context',candidate.request,scope)])));
+  const plan=readPlan(world,world.compileRequest(serialize([...nodes,contextWire('capability.context',candidate.request,scope)])));
+  // Only when no object has the said name (a line has none), the identity selector alone picks the target.
+  if(plan?.reason!=='target')return plan;
+  const named=identityNamesToSelectors(nodes,context?.bindings);
+  if(named.every((wire,i)=>wire===nodes[i]))return plan;
+  const second=compilerWorld(context,named);
+  return readPlan(second.world,second.world.compileRequest(serialize([...named,contextWire('capability.context',candidate.request,second.scope)])));
 }
 
 export function compileNativeQuery(sop,context){
