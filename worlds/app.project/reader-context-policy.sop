@@ -7,6 +7,8 @@
 @context.display.diagram app.readerContext.display on="diagram.sketch.node" binding="diagram.node.label"
 # A diagram group (a chart, a container) is named by its label: "sort Grocery spend", "on Revenue, ..." name the chart.
 @context.display.group app.readerContext.display on="diagram.sketch.group" binding="diagram.group.label"
+# A chart series is named by its label: "make the Target series gray", "kill the 2024 series".
+@context.display.series app.readerContext.display on="diagram.sketch.series" binding="diagram.series.label"
 @context.display.document app.readerContext.display on="docs.editor.document" binding="document.title"
 @context.display.block app.readerContext.display on="docs.editor.block" binding="document.block.name"
 @context.display.section app.readerContext.display on="docs.editor.section" binding="document.block.name"

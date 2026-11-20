@@ -61,6 +61,9 @@
 # focused or most recent one when it exists, a new step otherwise. Bars and slices are chart points of a chart group,
 # which the reader names by the chart family.
 @interpret.family.diagram.node app.interpret.family area=diagram family=node kind=w.diagram.node
+# A series of a chart ("add a series named Budget with 40 and 41", "rename the series Costs") is a w.diagram.series of
+# its chart group (worlds/diagram.sketch/chart-shape.sop), a class published after the binding table was exported.
+@interpret.family.diagram.series app.interpret.family area=diagram family=series kind=w.diagram.series
 
 # Diagram nodes placed relative to another node ("put Review below Draft", "a box called Deliver under Bake"): the
 # node.position / node.anchor pair reads as the drawing's relation pair does (like= names the area key whose canonical

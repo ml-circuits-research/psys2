@@ -58,18 +58,26 @@
 @shp.g.hw core.calc out=?hw fn=div args=?cw args=2
 @shp.g.b core.calc out=?b fn=add args=?ph args=10
 @shp.g.lab core.calc out=?lab fn=add args=?ph args=28
-@shp.g.cell core.calc out=?cell fn=add args=?ph args=36
-@shp.g.out ui.diagram.cgeo group=?g cw=?cw hw=?hw ph=?ph base=?b lab=?lab cell=?cell total=?tt
-@chart.geometry core.rule when=$shp.g.a when=$shp.g.l with=$shp.g.hw with=$shp.g.b with=$shp.g.lab with=$shp.g.cell then=$shp.g.out
+@shp.g.x ui.diagram.cextra group=?g h=?eh
+@shp.g.cell1 core.calc out=?cell1 fn=add args=?ph args=36
+@shp.g.cell core.calc out=?cell fn=add args=?cell1 args=?eh
+@shp.g.out ui.diagram.cgeo group=?g cw=?cw hw=?hw ph=?ph base=?b lab=?lab cell=?cell total=?tt extra=?eh
+@chart.geometry core.rule when=$shp.g.a when=$shp.g.l when=$shp.g.x with=$shp.g.hw with=$shp.g.b with=$shp.g.lab with=$shp.g.cell1 with=$shp.g.cell then=$shp.g.out
+# Room under the plot for a legend of series (none without series).
+@shp.gx.c ui.diagram.chart group=?g
+@shp.gx.any ui.diagram.sers group=?g count=?anyk
+@shp.gx.out ui.diagram.cextra group=?g h=0
+@chart.legend.room.none core.rule when=$shp.gx.c not=$shp.gx.any then=$shp.gx.out
 # The x axis title's line under the plot's top: under the category labels of a standing chart, under the last
 # category of a lying one.
-@shp.ft.g ui.diagram.cgeo group=?g ph=?ph total=?tt
+@shp.ft.g ui.diagram.cgeo group=?g ph=?ph total=?tt extra=?eh
 @shp.ft.h ui.diagram.chor group=?g
-@shp.ft.v core.calc out=?fy fn=add args=?ph args=44
+@shp.ft.v1 core.calc out=?fy1 fn=add args=?ph args=44
+@shp.ft.v core.calc out=?fy fn=add args=?fy1 args=?eh
 @shp.ft.l core.calc out=?fl fn=add args=?tt args=24
 @shp.ft.ov ui.diagram.cfoot group=?g y=?fy
 @shp.ft.ol ui.diagram.cfoot group=?g y=?fl
-@chart.foot.standing core.rule when=$shp.ft.g not=$shp.ft.h with=$shp.ft.v then=$shp.ft.ov
+@chart.foot.standing core.rule when=$shp.ft.g not=$shp.ft.h with=$shp.ft.v1 with=$shp.ft.v then=$shp.ft.ov
 @chart.foot.lying core.rule when=$shp.ft.g when=$shp.ft.h with=$shp.ft.l then=$shp.ft.ol
 # A lying chart's cells: one column as wide as the labels, the plot and the values; a row per category.
 @shp.lc.g ui.diagram.cgeo group=?g cw=?cw ph=?ph
@@ -272,3 +280,384 @@
 @shp.ym.o w.diagram.group code=?id y_min=?v
 @shp.ym.oo app.observe.input id=?id key=yMin value=?v
 @observe.chart.ymin core.rule when=$shp.ym.o then=$shp.ym.oo
+
+# ---- Series: a chart group's series beyond its first (w.diagram.series), each value a w.diagram.datum ----
+# The members' own values are a chart's first series. diagram.chart.series.add makes a series of the chart named
+# (`chart`: its code or title; none named: the chart made last), its said values paired with the categories in order
+# (more values than categories is refused); change renames, recolours or gives it new values (a category without a
+# value takes one); remove removes it with its values. A series has no position or size of its own: its bars and lines
+# are drawn from the chart's geometry.
+@shp.sers.type core.type of=ui.diagram.sers
+@shp.srank.type core.type of=ui.diagram.srank
+@shp.schart.type core.type of=ui.diagram.schart
+@shp.dpos.type core.type of=ui.diagram.dpos
+@shp.cstack.type core.type of=ui.diagram.cstack
+@shp.bslot.type core.type of=ui.diagram.bslot
+@shp.dcum.type core.type of=ui.diagram.dcum
+@shp.ctotal.type core.type of=ui.diagram.ctotal
+@shp.ccand.type core.type of=ui.diagram.ccand
+@shp.ctop.type core.type of=ui.diagram.ctop
+@shp.catx.type core.type of=ui.diagram.catx
+@shp.dseg.type core.type of=ui.diagram.dseg
+@shp.cextra.type core.type of=ui.diagram.cextra
+@shp.scol.type core.type of=ui.diagram.scol
+@shp.nx.s w.diagram.series n=?z
+@shp.nx.so ui.diagram.next of=series top=?top
+@next.series core.aggregate over=$shp.nx.s max=?top args=?z default=0 then=$shp.nx.so
+# The chart a series command names: by code or title; none named, the chart made last.
+@shp.sc.r app.act.request operation="diagram.chart.series.add" chart=?c
+@shp.sc.gc w.diagram.group code=?c
+@shp.sc.ch ui.diagram.chart group=?c
+@shp.sc.out ui.diagram.schart group=?c
+@series.chart.code core.rule when=$shp.sc.r when=$shp.sc.gc when=$shp.sc.ch then=$shp.sc.out
+@shp.sc.gl w.diagram.group code=?g label=?c
+@shp.sc.chl ui.diagram.chart group=?g
+@shp.sc.outl ui.diagram.schart group=?g
+@series.chart.title core.rule when=$shp.sc.r when=$shp.sc.gl when=$shp.sc.chl then=$shp.sc.outl
+@shp.sc.r0 app.act.request operation="diagram.chart.series.add"
+@shp.sc.anyc app.act.request chart=?anyc
+@shp.sc.cg ui.diagram.chart group=?g
+@shp.sc.gn w.diagram.group code=?g n=?gn
+@shp.sc.last ui.diagram.clast n=?ln
+@shp.clast.type core.type of=ui.diagram.clast
+@series.chart.newest core.aggregate over=$shp.sc.cg over=$shp.sc.gn max=?ln args=?gn then=$shp.sc.last
+@shp.sc.is core.check fn=eq args=?gn args=?ln
+@series.chart.last core.rule when=$shp.sc.r0 not=$shp.sc.anyc when=$shp.sc.cg when=$shp.sc.gn when=$shp.sc.last if=$shp.sc.is then=$shp.sc.outl
+@shp.sc.anyg ui.diagram.schart group=?anyg
+@shp.sc.miss app.act.refuse reason=missing-chart
+@series.chart.missing core.rule when=$shp.sc.r0 not=$shp.sc.anyg then=$shp.sc.miss
+# The series and its values.
+@shp.sa.r app.act.request operation="diagram.chart.series.add" label=?l
+@shp.sa.c ui.diagram.schart group=?g
+@shp.sa.g w.diagram.group code=?g
+@shp.sa.nx ui.diagram.next of=series top=?top
+@shp.sa.z core.calc out=?z fn=add args=?top args=1
+@shp.sa.code core.calc out=?code fn=concat args=s args=?z
+@shp.sa.mk app.act.call act=make kind=w.diagram.series code=?code label=?l group=$shp.sa.g n=?z order=1 ref=new.series
+@series.add core.rule when=$shp.sa.r when=$shp.sa.c when=$shp.sa.g when=$shp.sa.nx with=$shp.sa.z with=$shp.sa.code then=$shp.sa.mk
+@shp.sa.col app.act.request operation="diagram.chart.series.add" colour=?col
+@shp.sa.cola app.act.arg call=new.series attr=colour value=?col
+@series.add.colour core.rule when=$shp.sa.r when=$shp.sa.c when=$shp.sa.col then=$shp.sa.cola
+@shp.sa.vi app.act.item param="values" n=?i value=?v
+@shp.sa.mp ui.diagram.mpos node=?m group=?g pos=?p
+@shp.sa.mn w.diagram.node code=?m
+@shp.sa.i1 core.calc out=?i1 fn=add args=?i args=1
+@shp.sa.at core.check fn=eq args=?p args=?i1
+@shp.sa.dcode core.calc out=?dcode fn=concat args=?code args="." args=?i1
+@shp.sa.dmk app.act.call act=make kind=w.diagram.datum code=?dcode series=new.series node=$shp.sa.mn value=?v order=2
+@series.add.value core.rule when=$shp.sa.r when=$shp.sa.c when=$shp.sa.g when=$shp.sa.nx with=$shp.sa.z with=$shp.sa.code when=$shp.sa.vi with=$shp.sa.i1 when=$shp.sa.mp if=$shp.sa.at when=$shp.sa.mn with=$shp.sa.dcode then=$shp.sa.dmk
+@shp.sa.anyp ui.diagram.mpos node=?anym group=?g pos=?i1
+@shp.sa.over app.act.refuse reason=invalid-chart-data
+@series.add.overflow core.rule when=$shp.sa.r when=$shp.sa.c when=$shp.sa.vi with=$shp.sa.i1 not=$shp.sa.anyp then=$shp.sa.over
+# Changing a series: its name, its colour, its values (by category in order; a category without one takes one).
+@shp.se.r app.act.request operation="diagram.chart.series.change" id=?s
+@shp.se.s w.diagram.series code=?s group=$shp.se.g
+@shp.se.g w.diagram.group code=?g
+@shp.se.any w.diagram.series code=?s
+@shp.se.miss app.act.refuse reason=missing-series
+@series.change.missing core.rule when=$shp.se.r not=$shp.se.any then=$shp.se.miss
+@shp.se.l app.act.request operation="diagram.chart.series.change" label=?l
+@shp.se.lc app.act.call act=change thing=$shp.se.s attr=label value=?l order=1
+@series.change.label core.rule when=$shp.se.r when=$shp.se.s when=$shp.se.g when=$shp.se.l then=$shp.se.lc
+@shp.se.c app.act.request operation="diagram.chart.series.change" colour=?col
+@shp.se.cc app.act.call act=change thing=$shp.se.s attr=colour value=?col order=1
+@series.change.colour core.rule when=$shp.se.r when=$shp.se.s when=$shp.se.g when=$shp.se.c then=$shp.se.cc
+@shp.se.vi app.act.item param="values" n=?i value=?v
+@shp.se.i1 core.calc out=?i1 fn=add args=?i args=1
+@shp.se.mp ui.diagram.mpos node=?m group=?g pos=?i1
+@shp.se.mn w.diagram.node code=?m
+@shp.se.d w.diagram.datum series=$shp.se.s node=$shp.se.mn
+@shp.se.dc app.act.call act=change thing=$shp.se.d attr=value value=?v order=1
+@series.change.value core.rule when=$shp.se.r when=$shp.se.s when=$shp.se.g when=$shp.se.vi with=$shp.se.i1 when=$shp.se.mp when=$shp.se.mn when=$shp.se.d then=$shp.se.dc
+@shp.se.dcode core.calc out=?dcode fn=concat args=?s args="." args=?i1
+@shp.se.dmk app.act.call act=make kind=w.diagram.datum code=?dcode series=$shp.se.s node=$shp.se.mn value=?v order=1
+@series.change.value.new core.rule when=$shp.se.r when=$shp.se.s when=$shp.se.g when=$shp.se.vi with=$shp.se.i1 when=$shp.se.mp when=$shp.se.mn not=$shp.se.d with=$shp.se.dcode then=$shp.se.dmk
+@shp.se.anyp ui.diagram.mpos node=?anym group=?g pos=?i1
+@series.change.overflow core.rule when=$shp.se.r when=$shp.se.s when=$shp.se.g when=$shp.se.vi with=$shp.se.i1 not=$shp.se.anyp then=$shp.sa.over
+@shp.se.n1 app.act.request label=?n1
+@shp.se.n2 app.act.request colour=?n2
+@shp.se.n3 app.act.item param="values" n=?n3
+@shp.se.none app.act.refuse reason=missing-property
+@series.change.none core.rule when=$shp.se.r not=$shp.se.n1 not=$shp.se.n2 not=$shp.se.n3 then=$shp.se.none
+@shp.sr.r app.act.request operation="diagram.chart.series.remove" id=?s
+@shp.sr.s w.diagram.series code=?s
+@shp.sr.c app.act.call act=remove thing=$shp.sr.s order=1
+@series.remove core.rule when=$shp.sr.r when=$shp.sr.s then=$shp.sr.c
+@series.remove.missing core.rule when=$shp.sr.r not=$shp.sr.s then=$shp.se.miss
+# What a reader observes of a series: its name, its colour and its chart.
+@shp.ob.s w.diagram.series code=?id label=?label group=$shp.ob.g
+@shp.ob.g w.diagram.group code=?g
+@shp.ob.out app.observe.object id=?id kind=series sourceType=diagram.sketch.series binding=diagram.series label=?label selected=false
+@observe.series core.rule when=$shp.ob.s when=$shp.ob.g then=$shp.ob.out
+@shp.ob.co app.observe.input id=?id key=chart value=?g
+@observe.series.chart core.rule when=$shp.ob.s when=$shp.ob.g then=$shp.ob.co
+@shp.ob.c w.diagram.series code=?id colour=?col
+@shp.ob.cc app.observe.input id=?id key=colour value=?col
+@observe.series.colour core.rule when=$shp.ob.c then=$shp.ob.cc
+
+# ---- Drawing the series ----
+# Each series' place among its chart's series (by n), each value's category position, how the series are set out.
+@shp.sr2.s w.diagram.series code=?s n=?n group=?gref
+@shp.sr2.s2 w.diagram.series code=?s group=$shp.sr2.g
+@shp.sr2.g w.diagram.group code=?g
+@shp.sr2.rk core.rank of=$shp.sr2.s by=n within=?gref out=?r
+@shp.sr2.out ui.diagram.srank series=?s group=?g r=?r
+@series.rank core.rule when=$shp.sr2.s with=$shp.sr2.rk when=$shp.sr2.s2 when=$shp.sr2.g then=$shp.sr2.out
+@shp.cs.r ui.diagram.srank series=?s group=?g
+@shp.cs.out ui.diagram.sers group=?g count=?k
+@series.count core.aggregate over=$shp.cs.r by=?g count=?k then=$shp.cs.out
+@shp.dp.d w.diagram.datum code=?d series=$shp.dp.s node=$shp.dp.n value=?v
+@shp.dp.s w.diagram.series code=?s
+@shp.dp.n w.diagram.node code=?c
+@shp.dp.r ui.diagram.srank series=?s group=?g r=?r
+@shp.dp.m ui.diagram.mpos node=?c group=?g pos=?p
+@shp.dp.out ui.diagram.dpos datum=?d series=?s node=?c group=?g r=?r pos=?p v=?v
+@series.value.place core.rule when=$shp.dp.d when=$shp.dp.s when=$shp.dp.n when=$shp.dp.r when=$shp.dp.m then=$shp.dp.out
+@shp.st.c ui.diagram.chart group=?g
+@shp.st.f ui.diagram.cfmt group=?g slot=stacking v=?m
+@shp.st.out ui.diagram.cstack group=?g mode=?m
+@chart.stacking core.rule when=$shp.st.c when=$shp.st.f then=$shp.st.out
+# A bar chart whose series stand side by side shares each category's bar room among them: slot i of k (the members'
+# own bars are slot 0) is centred at off + 2 h i from the category's centre.
+@shp.bs.c ui.diagram.chart group=?g form=bar
+@shp.bs.n ui.diagram.sers group=?g count=?sk
+@shp.bs.m ui.diagram.cstack group=?g mode=none
+@shp.bs.h ui.diagram.bhalf group=?g h=?bh
+@shp.bs.k core.calc out=?k fn=add args=?sk args=1
+@shp.bs.hk core.calc out=?hk fn=div args=?bh args=?k
+@shp.bs.k1 core.calc out=?k1 fn=sub args=?k args=1
+@shp.bs.o1 core.calc out=?o1 fn=mul args=?k1 args=?hk
+@shp.bs.off core.calc out=?off fn=sub args=0 args=?o1
+@shp.bs.out ui.diagram.bslot group=?g h=?hk off=?off
+@chart.slots.side core.rule when=$shp.bs.c when=$shp.bs.n when=$shp.bs.m when=$shp.bs.h with=$shp.bs.k with=$shp.bs.hk with=$shp.bs.k1 with=$shp.bs.o1 with=$shp.bs.off then=$shp.bs.out
+@shp.bs.cc ui.diagram.chart group=?g
+@shp.bs.one ui.diagram.bslot group=?g h=?bh off=0
+@shp.bs.anyser ui.diagram.sers group=?g count=?anysk
+@chart.slots.one core.rule when=$shp.bs.cc when=$shp.bs.h not=$shp.bs.anyser then=$shp.bs.one
+@shp.bs.stk ui.diagram.cstack group=?g mode=?sm
+@shp.bs.notnone core.check fn=neq args=?sm args=none
+@chart.slots.stacked core.rule when=$shp.bs.cc when=$shp.bs.h when=$shp.bs.anyser when=$shp.bs.stk if=$shp.bs.notnone then=$shp.bs.one
+@shp.bs.notbar ui.diagram.chart group=?g form=line
+@chart.slots.line core.rule when=$shp.bs.notbar when=$shp.bs.h when=$shp.bs.anyser then=$shp.bs.one
+# Stacked: each category's running total up to each series (the members' value at 0), and its total.
+@shp.cu.m ui.diagram.inside group=?g node=?c
+@shp.cu.v w.diagram.node code=?c value=?v
+@shp.cu.ch ui.diagram.chart group=?g
+@shp.cu.o0 ui.diagram.dcum node=?c r=0 v=?v
+@chart.cumulative.first core.rule when=$shp.cu.m when=$shp.cu.v when=$shp.cu.ch then=$shp.cu.o0
+@shp.cu.prev ui.diagram.dcum node=?c r=?r0 v=?a
+@shp.cu.mm ui.diagram.inside group=?g node=?c
+@shp.cu.sr ui.diagram.srank series=?s group=?g r=?r
+@shp.cu.r1 core.calc out=?rp fn=sub args=?r args=1
+@shp.cu.at core.check fn=eq args=?r0 args=?rp
+@shp.cu.dv ui.diagram.dpos series=?s node=?c v=?dv
+@shp.cu.anyd ui.diagram.dpos series=?s node=?c v=?anydv
+@shp.cu.sum core.calc out=?b fn=add args=?a args=?dv
+@shp.cu.o1 ui.diagram.dcum node=?c r=?r v=?b
+@shp.cu.o2 ui.diagram.dcum node=?c r=?r v=?a
+@chart.cumulative.next core.rule when=$shp.cu.mm when=$shp.cu.sr with=$shp.cu.r1 when=$shp.cu.prev if=$shp.cu.at when=$shp.cu.dv with=$shp.cu.sum then=$shp.cu.o1
+@chart.cumulative.gap core.rule when=$shp.cu.mm when=$shp.cu.sr with=$shp.cu.r1 when=$shp.cu.prev if=$shp.cu.at not=$shp.cu.anyd then=$shp.cu.o2
+@shp.ct.m ui.diagram.inside group=?g node=?c
+@shp.ct.n ui.diagram.sers group=?g count=?k
+@shp.ct.c ui.diagram.dcum node=?c r=?k v=?t
+@shp.ct.out ui.diagram.ctotal node=?c v=?t
+@chart.total core.rule when=$shp.ct.m when=$shp.ct.n when=$shp.ct.c then=$shp.ct.out
+# The top of the value axis when the chart names none: the largest value drawn (each series' values side by side,
+# each category's total when stacked; 100 for shares).
+@shp.cc.c ui.diagram.chart group=?g
+@shp.cc.i ui.diagram.inside group=?g node=?c
+@shp.cc.v w.diagram.node code=?c value=?v
+@shp.cc.pct ui.diagram.cstack group=?g mode=percent
+@shp.cc.o ui.diagram.ccand group=?g v=?v
+@chart.top.member core.rule when=$shp.cc.c when=$shp.cc.i when=$shp.cc.v not=$shp.cc.pct then=$shp.cc.o
+@shp.cc.d ui.diagram.dpos group=?g v=?dv
+@shp.cc.none ui.diagram.cstack group=?g mode=none
+@shp.cc.od ui.diagram.ccand group=?g v=?dv
+@chart.top.series core.rule when=$shp.cc.d when=$shp.cc.none then=$shp.cc.od
+@shp.cc.stk ui.diagram.cstack group=?g mode=stacked
+@shp.cc.t ui.diagram.ctotal node=?c v=?t
+@shp.cc.ot ui.diagram.ccand group=?g v=?t
+@chart.top.stacked core.rule when=$shp.cc.c when=$shp.cc.stk when=$shp.cc.i when=$shp.cc.t then=$shp.cc.ot
+@shp.cc.o100 ui.diagram.ccand group=?g v=100
+@chart.top.percent core.rule when=$shp.cc.c when=$shp.cc.pct then=$shp.cc.o100
+@shp.tp.c ui.diagram.ccand group=?g v=?v
+@shp.tp.out ui.diagram.ctop group=?g value=?m
+@chart.top core.aggregate over=$shp.tp.c by=?g max=?m args=?v then=$shp.tp.out
+# Shares: a member's bar is its share of its category's total.
+@shp.pc.c ui.diagram.cstack group=?g mode=percent
+@shp.pc.i ui.diagram.inside group=?g node=?c
+@shp.pc.v w.diagram.node code=?c value=?v
+@shp.pc.t ui.diagram.ctotal node=?c v=?t
+@shp.pc.pos core.check fn=gt args=?t args=0
+@shp.pc.f core.calc out=?f fn=div args=?v args=?t
+@shp.pc.out ui.diagram.cfrac node=?c f=?f
+@chart.share.percent core.rule when=$shp.pc.c when=$shp.pc.i when=$shp.pc.v when=$shp.pc.t if=$shp.pc.pos with=$shp.pc.f then=$shp.pc.out
+# A category's centre on a standing chart.
+@shp.cx.p ui.diagram.mpos node=?c group=?g
+@shp.cx.cc ui.diagram.ccol node=?c col=?col
+@shp.cx.gb ui.diagram.ubox unit=?g x0=?gx
+@shp.cx.pad ui.diagram.gpad group=?g pad=?pad
+@shp.cx.geo ui.diagram.cgeo group=?g cw=?cw hw=?hw
+@shp.cx.hz ui.diagram.chor group=?g
+@shp.cx.a core.calc out=?a fn=mul args=?col args=?cw
+@shp.cx.b core.calc out=?b fn=add args=?gx args=?pad
+@shp.cx.x1 core.calc out=?x1 fn=add args=?a args=?b
+@shp.cx.x core.calc out=?x fn=add args=?x1 args=?hw
+@shp.cx.out ui.diagram.catx node=?c x=?x
+@chart.category.centre core.rule when=$shp.cx.p when=$shp.cx.cc when=$shp.cx.gb when=$shp.cx.pad when=$shp.cx.geo not=$shp.cx.hz with=$shp.cx.a with=$shp.cx.b with=$shp.cx.x1 with=$shp.cx.x then=$shp.cx.out
+# Each value's segment along the value axis (from, to) and its centre across: side by side from the floor, in its slot;
+# stacked between the running totals; as shares between the running totals over the category's total.
+@shp.sg.d ui.diagram.dpos datum=?d node=?c group=?g r=?r v=?v
+@shp.sg.x ui.diagram.catx node=?c x=?cx
+@shp.sg.bs ui.diagram.bslot group=?g h=?h off=?off
+@shp.sg.lo ui.diagram.cfloor group=?g value=?lo
+@shp.sg.none ui.diagram.cstack group=?g mode=none
+@shp.sg.w core.calc out=?w fn=mul args=?h args=2
+@shp.sg.wr core.calc out=?wr fn=mul args=?w args=?r
+@shp.sg.x1 core.calc out=?x1 fn=add args=?cx args=?off
+@shp.sg.xc core.calc out=?xc fn=add args=?x1 args=?wr
+@shp.sg.out ui.diagram.dseg datum=?d group=?g a=?lo b=?v x=?xc h=?h
+@shp.sg.bar ui.diagram.chart group=?g form=bar
+@shp.sg.line ui.diagram.chart group=?g form=line
+@shp.sg.outl ui.diagram.dseg datum=?d group=?g a=?lo b=?v x=?cx h=?h
+@series.segment.line core.rule when=$shp.sg.d when=$shp.sg.x when=$shp.sg.bs when=$shp.sg.lo when=$shp.sg.none when=$shp.sg.line then=$shp.sg.outl
+@series.segment.side core.rule when=$shp.sg.d when=$shp.sg.x when=$shp.sg.bs when=$shp.sg.lo when=$shp.sg.none when=$shp.sg.bar with=$shp.sg.w with=$shp.sg.wr with=$shp.sg.x1 with=$shp.sg.xc then=$shp.sg.out
+@shp.sg.stk ui.diagram.cstack group=?g mode=stacked
+@shp.sg.r1 core.calc out=?rp fn=sub args=?r args=1
+@shp.sg.ca ui.diagram.dcum node=?c r=?rp v=?a
+@shp.sg.cb ui.diagram.dcum node=?c r=?r v=?b
+@shp.sg.outs ui.diagram.dseg datum=?d group=?g a=?a b=?b x=?cx h=?h
+@series.segment.stacked core.rule when=$shp.sg.d when=$shp.sg.x when=$shp.sg.bs when=$shp.sg.stk with=$shp.sg.r1 when=$shp.sg.ca when=$shp.sg.cb then=$shp.sg.outs
+@shp.sg.pct ui.diagram.cstack group=?g mode=percent
+@shp.sg.t ui.diagram.ctotal node=?c v=?t
+@shp.sg.tp core.check fn=gt args=?t args=0
+@shp.sg.pa1 core.calc out=?pa1 fn=mul args=?a args=100
+@shp.sg.pa core.calc out=?pa fn=div args=?pa1 args=?t
+@shp.sg.pb1 core.calc out=?pb1 fn=mul args=?b args=100
+@shp.sg.pb core.calc out=?pb fn=div args=?pb1 args=?t
+@shp.sg.outp ui.diagram.dseg datum=?d group=?g a=?pa b=?pb x=?cx h=?h
+@series.segment.percent core.rule when=$shp.sg.d when=$shp.sg.x when=$shp.sg.bs when=$shp.sg.pct with=$shp.sg.r1 when=$shp.sg.ca when=$shp.sg.cb when=$shp.sg.t if=$shp.sg.tp with=$shp.sg.pa1 with=$shp.sg.pa with=$shp.sg.pb1 with=$shp.sg.pb then=$shp.sg.outp
+# A series' colour: its own, else the next swatch of the vivid palette after the members'.
+@shp.sc2.s ui.diagram.srank series=?s r=?r
+@shp.sc2.own w.diagram.series code=?s colour=?col
+@shp.sc2.u ui.diagram.usecol c=?col
+@chart.series.colour.use core.rule when=$shp.sc2.own then=$shp.sc2.u
+@shp.sc2.rgb ui.diagram.rgb colour=?col rgb=?rgb
+@shp.sc2.o ui.diagram.scol series=?s rgb=?rgb
+@chart.series.colour.own core.rule when=$shp.sc2.s when=$shp.sc2.own when=$shp.sc2.rgb then=$shp.sc2.o
+@shp.sc2.any w.diagram.series code=?s colour=?anycol
+@shp.sc2.cnt ui.diagram.scount name=vivid n=?kc
+@shp.sc2.vp ui.diagram.spal name=vivid
+@chart.series.palette core.rule when=$shp.sc2.s then=$shp.sc2.vp
+@shp.sc2.m core.calc out=?m fn=mod args=?r args=?kc
+@shp.sc2.j core.calc out=?j fn=add args=?m args=1
+@shp.sc2.sw k.styles.swatch theme=vivid n=?j colour=?scol
+@shp.sc2.op ui.diagram.scol series=?s rgb=?scol
+@chart.series.colour.palette core.rule when=$shp.sc2.s not=$shp.sc2.any when=$shp.sc2.cnt with=$shp.sc2.m with=$shp.sc2.j when=$shp.sc2.sw then=$shp.sc2.op
+# A value's bar on a standing bar chart: between its segment's ends on the value axis (at least 2 high), clamped to the plot.
+@shp.db.s ui.diagram.dseg datum=?d group=?g a=?a b=?b x=?xc h=?h
+@shp.db.c ui.diagram.chart group=?g form=bar
+@shp.db.hz ui.diagram.chor group=?g
+@shp.db.gb ui.diagram.ubox unit=?g y0=?gy
+@shp.db.pad ui.diagram.gpad group=?g top=?top
+@shp.db.geo ui.diagram.cgeo group=?g ph=?ph base=?bo
+@shp.db.mx ui.diagram.cscale group=?g value=?mx
+@shp.db.lo ui.diagram.cfloor group=?g value=?lo
+@shp.db.p ui.diagram.dpos datum=?d series=?s
+@shp.db.col ui.diagram.scol series=?s rgb=?rgb
+@shp.db.rg core.calc out=?rg fn=sub args=?mx args=?lo
+@shp.db.fa1 core.calc out=?fa1 fn=sub args=?a args=?lo
+@shp.db.fa2 core.calc out=?fa2 fn=div args=?fa1 args=?rg
+@shp.db.fa core.calc out=?fa fn=clamp args=?fa2 args=0 args=1
+@shp.db.fb1 core.calc out=?fb1 fn=sub args=?b args=?lo
+@shp.db.fb2 core.calc out=?fb2 fn=div args=?fb1 args=?rg
+@shp.db.fb core.calc out=?fb fn=clamp args=?fb2 args=0 args=1
+@shp.db.base1 core.calc out=?base1 fn=add args=?gy args=?top
+@shp.db.base core.calc out=?base fn=add args=?base1 args=?bo
+@shp.db.ya1 core.calc out=?ya1 fn=mul args=?fa args=?ph
+@shp.db.ya core.calc out=?ya fn=sub args=?base args=?ya1
+@shp.db.yb1 core.calc out=?yb1 fn=mul args=?fb args=?ph
+@shp.db.yb core.calc out=?yb fn=sub args=?base args=?yb1
+@shp.db.hh1 core.calc out=?hh1 fn=sub args=?ya args=?yb
+@shp.db.hh core.calc out=?hh fn=max args=?hh1 args=2
+@shp.db.x0 core.calc out=?x0 fn=sub args=?xc args=?h
+@shp.db.w core.calc out=?w fn=mul args=?h args=2
+@shp.db.y0 core.calc out=?y0 fn=sub args=?ya args=?hh
+@shp.db.out ui.diagram.draw part=?d source=?d slot=?g order=3 z=0 shape=rectangle x=?x0 y=?y0 w=?w h=?hh cx=0 cy=0 tx=0 ty=0 scale=1 side=left outline="#3e5068" round=2
+@shp.db.fill ui.diagram.fill source=?d part=?d fill=?rgb
+@series.bar.draw core.rule when=$shp.db.s when=$shp.db.c not=$shp.db.hz when=$shp.db.gb when=$shp.db.pad when=$shp.db.geo when=$shp.db.mx when=$shp.db.lo with=$shp.db.rg with=$shp.db.fa1 with=$shp.db.fa2 with=$shp.db.fa with=$shp.db.fb1 with=$shp.db.fb2 with=$shp.db.fb with=$shp.db.base1 with=$shp.db.base with=$shp.db.ya1 with=$shp.db.ya with=$shp.db.yb1 with=$shp.db.yb with=$shp.db.hh1 with=$shp.db.hh with=$shp.db.x0 with=$shp.db.w with=$shp.db.y0 then=$shp.db.out
+@series.bar.fill core.rule when=$shp.db.s when=$shp.db.c not=$shp.db.hz when=$shp.db.p when=$shp.db.col then=$shp.db.fill
+# A series of a line or area chart: a line through its values at the categories' centres.
+@shp.dl.s ui.diagram.dseg datum=?d group=?g b=?b x=?xc
+@shp.dl.c ui.diagram.chart group=?g form=line
+@shp.dl.p ui.diagram.dpos datum=?d series=?s pos=?pos
+@shp.dl.gb ui.diagram.ubox unit=?g y0=?gy
+@shp.dl.pad ui.diagram.gpad group=?g top=?top
+@shp.dl.geo ui.diagram.cgeo group=?g ph=?ph base=?bo
+@shp.dl.mx ui.diagram.cscale group=?g value=?mx
+@shp.dl.lo ui.diagram.cfloor group=?g value=?lo
+@shp.dl.rg core.calc out=?rg fn=sub args=?mx args=?lo
+@shp.dl.f1 core.calc out=?f1 fn=sub args=?b args=?lo
+@shp.dl.f2 core.calc out=?f2 fn=div args=?f1 args=?rg
+@shp.dl.f core.calc out=?f fn=clamp args=?f2 args=0 args=1
+@shp.dl.b1 core.calc out=?b1 fn=add args=?gy args=?top
+@shp.dl.base core.calc out=?base fn=add args=?b1 args=?bo
+@shp.dl.y1 core.calc out=?y1 fn=mul args=?f args=?ph
+@shp.dl.y core.calc out=?y fn=sub args=?base args=?y1
+@shp.dl.src core.calc out=?src fn=concat args=?s args=".line"
+@shp.dl.pt ui.diagram.point source=?src n=?pos x=?xc y=?y
+@series.line.point core.rule when=$shp.dl.s when=$shp.dl.c when=$shp.dl.p when=$shp.dl.gb when=$shp.dl.pad when=$shp.dl.geo when=$shp.dl.mx when=$shp.dl.lo with=$shp.dl.rg with=$shp.dl.f1 with=$shp.dl.f2 with=$shp.dl.f with=$shp.dl.b1 with=$shp.dl.base with=$shp.dl.y1 with=$shp.dl.y with=$shp.dl.src then=$shp.dl.pt
+@shp.dw.r ui.diagram.srank series=?s group=?g
+@shp.dw.c ui.diagram.chart group=?g form=line
+@shp.dw.lw ui.diagram.cfmt group=?g slot=line_width v=?lw
+@shp.dw.col ui.diagram.scol series=?s rgb=?rgb
+@shp.dw.src core.calc out=?src fn=concat args=?s args=".line"
+@shp.dw.d ui.diagram.draw part=?s source=?src slot=?g order=2 z=1 shape=line x=0 y=0 w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left stroke=?lw
+@shp.dw.f ui.diagram.fill source=?src part=?s fill=?rgb
+@series.line.draw core.rule when=$shp.dw.r when=$shp.dw.c when=$shp.dw.lw with=$shp.dw.src then=$shp.dw.d
+@series.line.fill core.rule when=$shp.dw.r when=$shp.dw.c when=$shp.dw.col with=$shp.dw.src then=$shp.dw.f
+# The legend of a chart with series: a swatch and the name of each series under the category labels (the members'
+# own values first, named by the chart's measure, else "Series 1"), one to a line; the chart grows to hold it.
+@shp.ce.n ui.diagram.sers group=?g count=?k
+@shp.ce.r1 core.calc out=?rows1 fn=add args=?k args=1
+@shp.ce.rows core.calc out=?rows fn=mul args=?rows1 args=1
+@shp.ce.h core.calc out=?eh fn=mul args=?rows args=18
+@shp.ce.out ui.diagram.cextra group=?g h=?eh
+@chart.legend.room core.rule when=$shp.ce.n with=$shp.ce.r1 with=$shp.ce.rows with=$shp.ce.h then=$shp.ce.out
+@shp.lg.r ui.diagram.srank series=?s group=?g r=?r
+@shp.lg.l w.diagram.series code=?s label=?t
+@shp.lg.col ui.diagram.scol series=?s rgb=?rgb
+@shp.lg.gb ui.diagram.ubox unit=?g x0=?gx y0=?gy
+@shp.lg.pad ui.diagram.gpad group=?g pad=?pad top=?top
+@shp.lg.geo ui.diagram.cgeo group=?g lab=?lab
+@shp.lg.hz ui.diagram.chor group=?g
+@shp.lg.c1 core.calc out=?c1 fn=mul args=?r args=0
+@shp.lg.c2 core.calc out=?c2 fn=mul args=?c1 args=0
+@shp.lg.x1 core.calc out=?x1 fn=add args=?gx args=?pad
+@shp.lg.x core.calc out=?x fn=add args=?x1 args=?c2
+@shp.lg.w1 core.calc out=?w1 fn=mul args=?r args=1
+@shp.lg.w2 core.calc out=?w2 fn=mul args=?w1 args=18
+@shp.lg.y1 core.calc out=?y1 fn=add args=?gy args=?top
+@shp.lg.y2 core.calc out=?y2 fn=add args=?y1 args=?lab
+@shp.lg.y3 core.calc out=?y3 fn=add args=?y2 args=24
+@shp.lg.y core.calc out=?y fn=add args=?y3 args=?w2
+@shp.lg.out ui.diagram.legend node=?s x=?x y=?y text=?t fill=?rgb
+@chart.legend.series core.rule when=$shp.lg.r when=$shp.lg.l when=$shp.lg.col when=$shp.lg.gb when=$shp.lg.pad when=$shp.lg.geo not=$shp.lg.hz with=$shp.lg.c1 with=$shp.lg.c2 with=$shp.lg.x1 with=$shp.lg.x with=$shp.lg.w1 with=$shp.lg.w2 with=$shp.lg.y1 with=$shp.lg.y2 with=$shp.lg.y3 with=$shp.lg.y then=$shp.lg.out
+@shp.lf.n ui.diagram.sers group=?g
+@shp.lf.m ui.diagram.mpos node=?c group=?g pos=1
+@shp.lf.st ui.diagram.nst node=?c key=fill v=?rgb
+@shp.lf.gb ui.diagram.ubox unit=?g x0=?gx y0=?gy
+@shp.lf.pad ui.diagram.gpad group=?g pad=?pad top=?top
+@shp.lf.geo ui.diagram.cgeo group=?g lab=?lab
+@shp.lf.hz ui.diagram.chor group=?g
+@shp.lf.ms w.diagram.group code=?g measure=?t
+@shp.lf.anyms w.diagram.group code=?g measure=?anyt
+@shp.lf.x core.calc out=?x fn=add args=?gx args=?pad
+@shp.lf.y1 core.calc out=?y1 fn=add args=?gy args=?top
+@shp.lf.y2 core.calc out=?y2 fn=add args=?y1 args=?lab
+@shp.lf.y core.calc out=?y fn=add args=?y2 args=24
+@shp.lf.key core.calc out=?key fn=concat args=?g args=".series"
+@shp.lf.out ui.diagram.legend node=?key x=?x y=?y text=?t fill=?rgb
+@shp.lf.out1 ui.diagram.legend node=?key x=?x y=?y text="Series 1" fill=?rgb
+@chart.legend.first core.rule when=$shp.lf.n when=$shp.lf.m when=$shp.lf.st when=$shp.lf.gb when=$shp.lf.pad when=$shp.lf.geo not=$shp.lf.hz when=$shp.lf.ms with=$shp.lf.x with=$shp.lf.y1 with=$shp.lf.y2 with=$shp.lf.y with=$shp.lf.key then=$shp.lf.out
+@chart.legend.first.unnamed core.rule when=$shp.lf.n when=$shp.lf.m when=$shp.lf.st when=$shp.lf.gb when=$shp.lf.pad when=$shp.lf.geo not=$shp.lf.hz not=$shp.lf.anyms with=$shp.lf.x with=$shp.lf.y1 with=$shp.lf.y2 with=$shp.lf.y with=$shp.lf.key then=$shp.lf.out1

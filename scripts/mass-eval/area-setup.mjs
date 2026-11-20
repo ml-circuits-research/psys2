@@ -65,7 +65,13 @@ export async function seedContext(world,existing,{knowledge,bindings}={}){
   const labels=points.length?points.map(p=>p.name):['A','B','C'],values=labels.map((_,i)=>i+1);
   for(const item of charts){const first=String(item.kind).split(' ')[0],layout=chartLayouts.includes(first)?first:'bar';const r=note(item,await call('diagram.group.chart.make',{label:item.name||'Chart',labels,values,layout}));
    if(r.ok)for(const p of points)ids.set(p.name,r.created?.[0]?.id);}
-  for(const item of [...points,...series])if(!charts.length)failures.push({index:item.index,kind:item.kind,reason:'chart-member-without-chart'});else seeded++;
+  for(const item of points)if(!charts.length)failures.push({index:item.index,kind:item.kind,reason:'chart-member-without-chart'});else seeded++;
+  // A series of the chart (the chart's own values are its first): made by the chart's series command on the first chart.
+  const chartId=charts.map(c=>ids.get(c.name)).find(Boolean)??host.observe().objects.find(o=>o.sourceType==='diagram.sketch.group')?.id;
+  for(const [i,item] of series.entries()){
+   if(!chartId){failures.push({index:item.index,kind:item.kind,reason:'chart-member-without-chart'});continue;}
+   note(item,await call('diagram.chart.series.add',{chart:chartId,label:item.name||'Series '+(i+2),values:labels.map((_,k)=>k+2+i)}));
+  }
   for(const item of groups){const n=nativeNodes();if(!n.length){failures.push({index:item.index,kind:item.kind,reason:'group-needs-nodes'});continue;}note(item,await call('diagram.group.make',{name:item.name||'Group',ids:n.slice(0,2)}));}
  }else if(world==='document'){
   const doc=()=>host.observe().objects.find(o=>o.sourceType==='docs.editor.document')?.id;

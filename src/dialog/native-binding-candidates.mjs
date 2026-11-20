@@ -8,13 +8,13 @@ import { budget } from './budget.mjs';
 // Declared kind bindings (execution-policy.sop app.execution.kindBinding) give a table kind without a native family
 // binding the operation and fixed argument that draw it; every lemma of the kind in the table takes it.
 let declaredKinds;
-const kindDeclarations=()=>declaredKinds??=executionPolicyWorld().ofType('app.execution.kindBinding').map(row=>Object.fromEntries(['area','kind','operation','parameter','value'].map(key=>[key,str(row.attrs[key][0])])));
+const kindDeclarations=()=>declaredKinds??=executionPolicyWorld().ofType('app.execution.kindBinding').map(row=>Object.fromEntries(['area','kind','operation','parameter','value'].filter(key=>row.attrs[key]?.length).map(key=>[key,str(row.attrs[key][0])])));
 function withDeclaredKind(row){
  if(row.nativeFamilyBinding)return row;
  const declared=kindDeclarations().filter(d=>d.area===row.area&&d.kind===row.canonical);
  if(declared.length!==1)return row;
  const [d]=declared;
- return {...row,nativeFamilyBinding:{operation:d.operation,arguments:{[d.parameter]:d.value},declaration:'execution-policy.sop app.execution.kindBinding',boundary:'Declared kind binding: the kind is drawn by this operation with this argument.'}};
+ return {...row,nativeFamilyBinding:{operation:d.operation,...(d.parameter?{arguments:{[d.parameter]:d.value}}:{}),declaration:'execution-policy.sop app.execution.kindBinding',boundary:'Declared kind binding: the kind is drawn by this operation with this argument.'}};
 }
 export function nativeKindCandidates(bindings) {
  return [...(bindings.kinds??[]).map(withDeclaredKind),...(bindings.families??[]).filter(f=>f.nativeFamilyBinding).map(f=>({...f,lemma:f.type,familyIdentity:true})),...(bindings.unresolved??[]).filter(r=>r.family==='kinds'&&r.reason==='ambiguous-canonical-kind'&&r.rawDescriptor).flatMap(r=>(r.candidates??[]).filter(c=>c.nativeFamilyBinding).map(c=>({...c,area:r.rawDescriptor.area,type:r.rawDescriptor.type,lemma:r.rawDescriptor.kind})))];

@@ -14,11 +14,15 @@
 //     the reader's chart.grid is the chart group's gridlines) binds to that parameter of the operation's source type,
 //     replacing the table's row; its declared said values (app.execution.keyValue) are its class values, each given to
 //     the tool as its declared parameter value (valueMap, a lookup the request compiler resolves);
+//     A family whose class was published after the export (no kind row) reads as the class a declared kind binding
+//     makes, takes that binding's operation as its family binding, and its keys left unbound for want of a source type
+//     bind to the parameters of their names on that source type (3b, 4b, 4c);
 //  6. a kind named by the modifier of its compound lemmas ("a pie" for "pie chart", "pie graph": the compound's last
 //     word a lemma of its family's own class) is that kind, when every such compound names the same kind.
 import {parse,str} from '../vendor/sopworld/sopworld.mjs';
 import {interpretationPolicy} from './interpretation-policy.mjs';
 import {executionPolicyWorld} from './execution-policy.mjs';
+import EXECUTION_POLICY from '../../worlds/app.project/execution-policy-source.mjs';
 import DRAW from '../../worlds/art.draw/native-interface-source.mjs';
 import DIAGRAM from '../../worlds/diagram.sketch/native-interface-source.mjs';
 import CHARTS from '../../worlds/data.charts/native-interface-source.mjs';
@@ -59,7 +63,7 @@ async function nativeParameters(){
 }
 
 let kindOperations;
-const declaredKindOperations=()=>kindOperations??=executionPolicyWorld().ofType('app.execution.kindBinding').map(row=>({area:one(row,'area'),kind:one(row,'kind'),operation:one(row,'operation'),parameter:one(row,'parameter'),value:one(row,'value')}));
+const declaredKindOperations=()=>kindOperations??=executionPolicyWorld().ofType('app.execution.kindBinding').map(row=>({id:row.id,area:one(row,'area'),kind:one(row,'kind'),operation:one(row,'operation'),parameter:one(row,'parameter'),value:one(row,'value')}));
 
 let keyAlignments;
 const declaredKeyAlignments=()=>keyAlignments??=(()=>{
@@ -133,9 +137,13 @@ export async function completeBindings(bindings){
  for(const f of interpretationPolicy().partial.families){
   if(families.some(row=>row.area===f.area&&row.type===f.type))continue;
   const kind=(bindings.kinds??[]).find(row=>row.area===f.area&&row.canonical===f.kind);
-  if(!kind)continue;
-  families.push({area:f.area,type:f.type,canonical:kind.canonical,sourceWire:kind.sourceWire,sourceWorld:kind.sourceWorld,moduleVersion:kind.moduleVersion,sourceSnapshotSHA:kind.sourceSnapshotSHA,
-   alignment:{kind:'explicit-raw-family-identity',authority:'interpretation-policy.sop app.interpret.family'}});
+  if(kind){families.push({area:f.area,type:f.type,canonical:kind.canonical,sourceWire:kind.sourceWire,sourceWorld:kind.sourceWorld,moduleVersion:kind.moduleVersion,sourceSnapshotSHA:kind.sourceSnapshotSHA,
+   alignment:{kind:'explicit-raw-family-identity',authority:'interpretation-policy.sop app.interpret.family'}});continue;}
+  // 3b. A class published after the table was exported (no kind row) is read when a kind binding declares the
+  // operation that makes it (execution-policy.sop app.execution.kindBinding): that declaration is its provenance.
+  const declared=declaredKindOperations().find(d=>d.area===f.area&&d.kind===f.kind);
+  if(declared)families.push({area:f.area,type:f.type,canonical:f.kind,sourceWire:declared.id,sourceWorld:'app.project',moduleVersion:'1',sourceSnapshotSHA:await digest(EXECUTION_POLICY),
+   alignment:{kind:'explicit-raw-family-identity',authority:'interpretation-policy.sop app.interpret.family; execution-policy.sop app.execution.kindBinding'}});
  }
  // 4. A family named without a kind word ("make the flower green", "rename Start") denotes any object of its source
  // type: a family without a native family binding takes the one binding its own kind rows share (the export's family
@@ -153,15 +161,36 @@ export async function completeBindings(bindings){
    const sourceType=own?.sourceType??params.find(p=>p.operation===operation)?.sourceType;
    if(!operation||!sourceType)continue;
    // The family's own class as a kind ("a chart": w.chart.chart, drawn as a bar chart) keeps that kind's arguments.
-   const args=k.canonical===f.canonical?(own?.arguments??(declared?.length===1?{[declared[0].parameter]:declared[0].value}:undefined)):undefined;
+   const args=k.canonical===f.canonical?(own?.arguments??(declared?.length===1&&declared[0].parameter?{[declared[0].parameter]:declared[0].value}:undefined)):undefined;
    if(args){shared.clear();shared.set('own',{...(own??{operation,sourceType,sourcePath:'worlds/app.project/execution-policy.sop'}),arguments:args});break;}
    shared.set(sourceType+'\0'+operation,own??{operation,sourceType,sourcePath:'worlds/app.project/execution-policy.sop'});
+  }
+  // 4b. A family with no kind rows of its own (a class published after the export) takes the operation its class's
+  // declared kind binding names, with that operation's source type.
+  if(!shared.size&&!(bindings.kinds??[]).some(k=>k.area===f.area&&k.type===f.type)){
+   const declared=declaredKindOperations().filter(d=>d.area===f.area&&d.kind===f.canonical);
+   const sourceType=declared.length===1?params.find(p=>p.operation===declared[0].operation)?.sourceType:undefined;
+   if(sourceType)shared.set(sourceType+'\0'+declared[0].operation,{operation:declared[0].operation,sourceType,sourcePath:'worlds/app.project/execution-policy.sop'});
   }
   if(shared.size!==1)continue;
   const [b]=shared.values();
   const binding={operation:b.operation,sourceType:b.sourceType,exportName:b.exportName,sourcePath:b.sourcePath,sourceSha256:b.sourceSha256,arguments:b.arguments,
    boundary:'Family eligibility only (declared-bindings.mjs: the binding its kind rows share).'};
   families[index]={...f,nativeFamilyBinding:Object.fromEntries(Object.entries(binding).filter(([,value])=>value!==undefined))};
+ }
+ // 4c. A key the table left unbound for want of a native source type ("no-native-source-type": series.label before
+ // series were published) binds, once its family has a native family binding, to the parameter of the key's own name
+ // on that source type (the export's native-parameter rule).
+ for(const gap of bindings.coverage??[]){
+  if(gap.status!=='unbound'||gap.reason!=='no-native-source-type'||typeof gap.key!=='string'||!gap.key.includes('.'))continue;
+  if(properties.some(row=>row.area===gap.area&&row.key===gap.key))continue;
+  const [type,parameter]=gap.key.split('.'),family=families.find(f=>f.area===gap.area&&f.type===type&&f.nativeFamilyBinding?.sourceType);
+  if(!family)continue;
+  const sourceType=family.nativeFamilyBinding.sourceType,p=params.find(x=>x.sourceType===sourceType&&x.parameter===parameter);
+  if(!p)continue;
+  properties.push({area:gap.area,key:gap.key,valueKind:'string',canonical:sourceType+'.'+parameter,sourceWire:p.wire,sourceSnapshotSHA:p.sourceSha256,sourceWorld:p.world,moduleVersion:'1',
+   hostBinding:{id:p.operation,sourceType,key:parameter,operation:p.operation,parameter},...(p.enum?{classValues:p.enum}:{}),...(!p.enum&&numericOf(sourceType,parameter)?{numeric:true}:{}),
+   alignment:{kind:'native-parameter-by-name',authority:'declared-bindings.mjs: the export rule over the live native interface and the declared family'}});
  }
  // 6. Kind modifiers of compound lemmas ("pie" of "pie chart" where "chart" names the family's own class).
  let kinds=bindings.kinds??[];

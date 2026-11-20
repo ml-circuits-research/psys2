@@ -108,12 +108,13 @@
 @actOperation.act core.slot of=app.execution.actOperation key=act kind=atom present=true
 # A catalog kind drawn by a native operation with one fixed argument (a chart kind and the chart group's layout), for
 # kinds the deployed binding table names without a native family binding. Every lemma of the kind in the table takes it.
+# Without parameter and value the operation makes the class itself (a chart series: diagram.chart.series.add).
 @kindBinding.type core.type of=app.execution.kindBinding closed=true
 @kindBinding.area core.slot of=app.execution.kindBinding key=area kind=atom present=true
 @kindBinding.kind core.slot of=app.execution.kindBinding key=kind kind=atom present=true
 @kindBinding.operation core.slot of=app.execution.kindBinding key=operation kind=string present=true
-@kindBinding.parameter core.slot of=app.execution.kindBinding key=parameter kind=string present=true
-@kindBinding.value core.slot of=app.execution.kindBinding key=value kind=string present=true
+@kindBinding.parameter core.slot of=app.execution.kindBinding key=parameter kind=string
+@kindBinding.value core.slot of=app.execution.kindBinding key=value kind=string
 # A reader key aligned with a native parameter of another name (the reader's chart.grid is the chart group's
 # gridlines), for keys the deployed binding table leaves unbound or binds to a retired source type. The key binds to
 # that parameter of the operation's own source type (declared-bindings.mjs). Its said values (app.execution.keyValue)

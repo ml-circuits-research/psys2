@@ -170,7 +170,7 @@ test('every declared operation is compiled or refused with its reason, never sim
   const result=run('@c '+op.id+' '+args);assert.equal(result.status,'refused',op.id);assert.ok(result.reason,op.id+' has a reason');}
  // Undo and redo belong to the application's journal; observe reads the view.
  const own=host.bindings().map(op=>op.id).filter(id=>id.startsWith('diagram.'));
- assert.deepEqual(own.length,59);
+ assert.deepEqual(own.length,62);
 });
 
 test('the area declares its geometry and measures a command for placement',async()=>{

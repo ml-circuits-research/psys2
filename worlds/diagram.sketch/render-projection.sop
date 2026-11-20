@@ -440,9 +440,10 @@
 @cm.n w.diagram.node code=?c value=?v
 @cm.out ui.diagram.cmax group=?g value=?m
 @dg.cmax core.aggregate over=$cm.c over=$cm.i over=$cm.n by=?g max=?m args=?v default=1 then=$cm.out
-# The top of the value axis: the chart's y_max when it has one, else its largest value.
+# The top of the value axis: the chart's y_max when it has one, else its largest value drawn (chart-shape.sop
+# ui.diagram.ctop: with its series side by side or stacked, or 100 for shares).
 @dg.cscale.type core.type of=ui.diagram.cscale
-@cs.m ui.diagram.cmax group=?g value=?m
+@cs.m ui.diagram.ctop group=?g value=?m
 @cs.y w.diagram.group code=?g y_max=?ym
 @cs.any w.diagram.group code=?g y_max=?anyym
 @cs.o1 ui.diagram.cscale group=?g value=?ym
@@ -682,13 +683,14 @@
 @nc.ch ui.diagram.chart group=?g form=?form
 @nc.fr ui.diagram.cfrac node=?c f=?f
 @nc.dir ui.diagram.cdir group=?g iy=?iy
-@nc.bh ui.diagram.bhalf group=?g h=?bh
+@nc.bh ui.diagram.bslot group=?g h=?bh off=?off
 @nc.geo ui.diagram.cgeo group=?g cw=?cw hw=?hw ph=?ph base=?bo
 @nc.hz ui.diagram.chor group=?g
 @nc.a core.calc out=?a fn=mul args=?col args=?cw
 @nc.b core.calc out=?b fn=add args=?gx args=?pad
 @nc.cx1 core.calc out=?cx1 fn=add args=?a args=?b
-@nc.cx core.calc out=?cx fn=add args=?cx1 args=?hw
+@nc.cxm core.calc out=?cxm fn=add args=?cx1 args=?hw
+@nc.cx core.calc out=?cx fn=add args=?cxm args=?off
 @nc.base1 core.calc out=?base1 fn=add args=?gy args=?top
 @nc.base core.calc out=?base fn=add args=?base1 args=?bo
 @nc.h1 core.calc out=?h1 fn=mul args=?f args=?ph
@@ -706,7 +708,7 @@
 @nc.hh core.calc out=?hh fn=div args=?h args=2
 @nc.cy core.calc out=?cy fn=add args=?y0 args=?hh
 @nc.out.b ui.diagram.nbox node=?c x0=?x0 y0=?y0 x1=?x1 y1=?y1 cx=?cx cy=?cy w=?bw h=?h
-@dg.nbox.bar core.rule when=$nc.p when=$nc.cc when=$nc.gb when=$nc.pad when=$nc.ch when=$nc.fr when=$nc.dir when=$nc.bh when=$nc.geo not=$nc.hz with=$nc.a with=$nc.b with=$nc.cx1 with=$nc.cx with=$nc.base1 with=$nc.base with=$nc.h1 with=$nc.h0 with=$nc.h if=$nc.isbar with=$nc.x0 with=$nc.x1 with=$nc.bw with=$nc.t1 with=$nc.t2 with=$nc.yt with=$nc.y0 with=$nc.y1 with=$nc.hh with=$nc.cy then=$nc.out.b
+@dg.nbox.bar core.rule when=$nc.p when=$nc.cc when=$nc.gb when=$nc.pad when=$nc.ch when=$nc.fr when=$nc.dir when=$nc.bh when=$nc.geo not=$nc.hz with=$nc.a with=$nc.b with=$nc.cx1 with=$nc.cxm with=$nc.cx with=$nc.base1 with=$nc.base with=$nc.h1 with=$nc.h0 with=$nc.h if=$nc.isbar with=$nc.x0 with=$nc.x1 with=$nc.bw with=$nc.t1 with=$nc.t2 with=$nc.yt with=$nc.y0 with=$nc.y1 with=$nc.hh with=$nc.cy then=$nc.out.b
 @nc.isline core.check fn=eq args=?form args=line
 @nc.ms ui.diagram.cfmt group=?g slot=marker_size v=?ms
 @nc.mh core.calc out=?mh fn=div args=?ms args=2
@@ -719,7 +721,7 @@
 @nc.ly0 core.calc out=?ly0 fn=sub args=?ly args=?mh
 @nc.ly1 core.calc out=?ly1 fn=add args=?ly args=?mh
 @nc.out.l ui.diagram.nbox node=?c x0=?lx0 y0=?ly0 x1=?lx1 y1=?ly1 cx=?cx cy=?ly w=?ms h=?ms
-@dg.nbox.line core.rule when=$nc.p when=$nc.cc when=$nc.gb when=$nc.pad when=$nc.ch when=$nc.fr when=$nc.dir when=$nc.ms when=$nc.geo with=$nc.a with=$nc.b with=$nc.cx1 with=$nc.cx with=$nc.base1 with=$nc.base with=$nc.h1 with=$nc.h0 with=$nc.h if=$nc.isline with=$nc.yt with=$nc.mh with=$nc.l1 with=$nc.l2 with=$nc.l3 with=$nc.ly with=$nc.lx0 with=$nc.lx1 with=$nc.ly0 with=$nc.ly1 then=$nc.out.l
+@dg.nbox.line core.rule when=$nc.p when=$nc.cc when=$nc.gb when=$nc.pad when=$nc.ch when=$nc.fr when=$nc.dir when=$nc.ms when=$nc.geo when=$nc.bh with=$nc.a with=$nc.b with=$nc.cx1 with=$nc.cxm with=$nc.cx with=$nc.base1 with=$nc.base with=$nc.h1 with=$nc.h0 with=$nc.h if=$nc.isline with=$nc.yt with=$nc.mh with=$nc.l1 with=$nc.l2 with=$nc.l3 with=$nc.ly with=$nc.lx0 with=$nc.lx1 with=$nc.ly0 with=$nc.ly1 then=$nc.out.l
 
 # ---- Edge routes ----
 # The end of an edge at a node: a node of its own leaves from the middle of its bottom and is entered at the middle of
@@ -1087,7 +1089,7 @@
 @dg.chartmember core.rule when=$cmb.p when=$cmb.c then=$cmb.out
 @dcl.m ui.diagram.chartmember node=?c group=?g
 @dcl.n w.diagram.node code=?c label=?t
-@dcl.b ui.diagram.nbox node=?c cx=?cx
+@dcl.b ui.diagram.catx node=?c x=?cx
 @dcl.gb ui.diagram.ubox unit=?g y0=?gy
 @dcl.pad ui.diagram.gpad group=?g top=?top
 @dcl.s core.calc out=?src fn=concat args=?c args=".label"

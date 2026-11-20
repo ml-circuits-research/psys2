@@ -231,6 +231,13 @@
 @chart.width.measure app.execution.observedMeasure concept=diagram.sketch.group.width sourceType="diagram.sketch.group" parameter="width" binding="diagram.group.width" order=16
 @chart.height.values app.execution.values concept=diagram.sketch.group.height valueType="k.expect.scale" nameKey="step" valueKey="size_factor" codec=degree
 @chart.height.measure app.execution.observedMeasure concept=diagram.sketch.group.height sourceType="diagram.sketch.group" parameter="height" binding="diagram.group.height" order=17
+# A chart's series beyond its first (w.diagram.series) is made by diagram.chart.series.add, changed and removed by its
+# series operations; its values are numbers said as a list; the chart a new series belongs to is the one named.
+@series.kind app.execution.kindBinding area=diagram kind=w.diagram.series operation="diagram.chart.series.add"
+@series.key.values app.execution.keyBinding area=diagram key="series.values" operation="diagram.chart.series.add" parameter="values" codec="number-list"
+@series.key.chart app.execution.keyBinding area=diagram key="series.chart" operation="diagram.chart.series.add" parameter="chart"
+# A series named by its label ("make the Target series gray") is picked by the label it is observed with.
+@series.label.observed app.execution.observedMeasure concept=diagram.sketch.series.label sourceType="diagram.sketch.series" parameter="label" binding="diagram.series.label" order=18
 @chart.key.diagram_background app.execution.keyBinding area=diagram key="diagram.background" operation="diagram.page.change" parameter="background"
 @chart.key.page_background app.execution.keyBinding area=diagram key="page.background" operation="diagram.page.change" parameter="background"
 @chart.key.page_title app.execution.keyBinding area=diagram key="page.title" operation="diagram.page.change" parameter="title"

@@ -416,6 +416,23 @@
 @native.diagram.sketch.op.diagram.chart.format.param.width std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="width" kind=number min=60 max=2000
 @native.diagram.sketch.op.diagram.chart.format.param.height std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="height" kind=number min=60 max=2000
 @native.diagram.sketch.op.diagram.chart.format.param.effect std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="effect" kind=string enum="none" enum="shadow" enum="glow" enumClosed=true
+# The series of a chart beyond its first (chart-shape.sop): made on the chart named (its code or title; the chart made
+# last when none is named) with its values paired with the categories in order; renamed, recoloured, given new values;
+# removed with its values.
+@native.diagram.sketch.op.diagram.chart.series.add std.capability.operation scope=$native.diagram.sketch.scope name="diagram.chart.series.add" act=make on="diagram.sketch.series" order=52 eligible=true
+@native.diagram.sketch.op.diagram.chart.series.add.param.chart std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.series.add name="chart" kind=string
+@native.diagram.sketch.op.diagram.chart.series.add.param.label std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.series.add name="label" kind=string required=true
+@native.diagram.sketch.op.diagram.chart.series.add.param.values std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.series.add name="values" kind=array
+@native.diagram.sketch.op.diagram.chart.series.add.param.colour std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.series.add name="colour" kind=string
+@native.diagram.sketch.op.diagram.chart.series.add.param.colour.source.enum app.native.parameter parameter=$native.diagram.sketch.op.diagram.chart.series.add.param.colour field=enum input=$native.diagram.sketch.input.diagram.colours
+@native.diagram.sketch.op.diagram.chart.series.change std.capability.operation scope=$native.diagram.sketch.scope name="diagram.chart.series.change" act=change on="diagram.sketch.series" order=53 eligible=true
+@native.diagram.sketch.op.diagram.chart.series.change.param.id std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.series.change name="id" kind=string required=true
+@native.diagram.sketch.op.diagram.chart.series.change.param.label std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.series.change name="label" kind=string
+@native.diagram.sketch.op.diagram.chart.series.change.param.values std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.series.change name="values" kind=array
+@native.diagram.sketch.op.diagram.chart.series.change.param.colour std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.series.change name="colour" kind=string
+@native.diagram.sketch.op.diagram.chart.series.change.param.colour.source.enum app.native.parameter parameter=$native.diagram.sketch.op.diagram.chart.series.change.param.colour field=enum input=$native.diagram.sketch.input.diagram.colours
+@native.diagram.sketch.op.diagram.chart.series.remove std.capability.operation scope=$native.diagram.sketch.scope name="diagram.chart.series.remove" act=remove on="diagram.sketch.series" order=54 eligible=true
+@native.diagram.sketch.op.diagram.chart.series.remove.param.id std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.series.remove name="id" kind=string required=true
 # A chart asked for by its dimension and measure (act-rules.sop): the categories' dimension, what the values measure, how
 # they are aggregated; only the largest `top` categories, or those above or below a value.
 @native.diagram.sketch.op.diagram.group.chart.make.param.dimension std.capability.parameter operation=$native.diagram.sketch.op.diagram.group.chart.make name="dimension" kind=string

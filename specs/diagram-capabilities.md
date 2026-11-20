@@ -174,10 +174,24 @@ none, off). Not applied and disclosed: effects the chart has no drawing for (gra
 centimetres (the gold value keeps the number only; a unit-aware length reading is missing), an axis range said as one
 span ("from 0 to 10": both keys carry the whole span).
 
+Series (chart-shape.sop; catalog `w.diagram.series` and `w.diagram.datum`): a chart's members are its first series;
+`diagram.chart.series.add` (`chart`: the chart's code or title, the chart made last when none is named; `label`;
+`values` paired with the categories in order, more values than categories refused [invalid-chart-data]; `colour`)
+makes another, `diagram.chart.series.change` (`id`, `label`, `colour`, `values`: a category without a value takes
+one) and `diagram.chart.series.remove` (`id`, with its values). A bar chart draws its series side by side in each
+category's room (stacking none), on top of each other (stacked: the axis top is the largest category total) or as
+shares of each category's total (percent: the axis runs to 100, the members' bars are shares too); a line or area
+chart draws a line per series; each series takes its own colour or the next `vivid` swatch, and a legend under the
+category labels names the series (the first by the chart's measure, else "Series 1"). Series are observed as
+`diagram.sketch.series` objects named by their label (label, colour, chart; their values are not observed: a list
+input would lose repeated values and order). The reader's series family reads as `w.diagram.series` (interpretation
+policy, completed by declared-bindings.mjs 3b/4b/4c: a class published after the table's export is read through its
+declared kind binding, and its keys bind to the parameters of their names), `series.values` as numbers, `series.chart`
+as the chart. Not yet: lying charts and pies draw only the first series; a series picked by its position ("the second
+series": `series.index`), series reorder and merge, a second value axis.
+
 Not yet (each needs a rule set or a mechanism, listed honestly; from the owner's request and
 management/data-drop/pilot/FEATURE-REQUESTS.md B1-B12):
-- several series per chart (grouped and stacked bars, several lines, series rename/recolour/reorder/merge, a second
-  value axis): needs `w.diagram.series` and `w.diagram.datum` facts and grouped/stacked placement rules;
 - tick density, trend lines and moving averages (least-squares sums in rules), callout annotations;
 - error bars and their caps (needs an error value per category: `w.diagram.node` has none), colour bars, panels,
   marker shapes and marker intervals, legend position for bar and line charts (a single series has no legend),

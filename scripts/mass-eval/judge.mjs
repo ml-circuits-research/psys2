@@ -6,7 +6,7 @@ import {colorHex} from '../../worlds/art.draw/scene.mjs';
 import {positiveCardinalProof} from '../../src/dialog/key-reader-value-proof.mjs';
 
 const IGNORED_INPUTS=new Set(['selected','index','version']);
-const TOP={drawing:/^art\.draw\.object$/,diagram:/^diagram\.sketch\.(node|link|group)$|^data\.charts\./,document:/^docs\.editor\.(document|section|block)$/,calendar:/^time\.calendar\./,avatar:/^ui\.avatar\./};
+const TOP={drawing:/^art\.draw\.object$/,diagram:/^diagram\.sketch\.(node|link|group|series)$|^data\.charts\./,document:/^docs\.editor\.(document|section|block)$/,calendar:/^time\.calendar\./,avatar:/^ui\.avatar\./};
 const lc=s=>String(s??'').toLowerCase().trim();
 const unq=v=>{const s=String(v);if(s.startsWith('"')){try{return JSON.parse(s);}catch{return s;}}return s;};
 const singular=w=>{w=lc(w).replace(/^(the|a|an|that|this|those|these|my|her|his|its|some|all)\s+/,'');return w.endsWith('ies')?w.slice(0,-3)+'y':w.endsWith('ses')||w.endsWith('xes')||w.endsWith('ches')||w.endsWith('shes')?w.slice(0,-2):w.endsWith('s')&&!w.endsWith('ss')?w.slice(0,-1):w;};

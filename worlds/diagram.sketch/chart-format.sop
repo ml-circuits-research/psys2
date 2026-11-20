@@ -347,7 +347,8 @@
 @cfx.fr.rp core.check fn=gt args=?rg args=0
 @cfx.fr.f core.calc out=?f fn=div args=?dv args=?rg
 @cfx.fr.out ui.diagram.cfrac node=?c f=?f
-@chart.share.linear core.rule when=$cfx.fr.ch when=$cfx.fr.i when=$cfx.fr.v when=$cfx.fr.mx when=$cfx.fr.lo not=$cfx.fr.log with=$cfx.fr.d with=$cfx.fr.r if=$cfx.fr.rp with=$cfx.fr.f then=$cfx.fr.out
+@cfx.fr.pct ui.diagram.cstack group=?g mode=percent
+@chart.share.linear core.rule when=$cfx.fr.ch when=$cfx.fr.i when=$cfx.fr.v when=$cfx.fr.mx when=$cfx.fr.lo not=$cfx.fr.log not=$cfx.fr.pct with=$cfx.fr.d with=$cfx.fr.r if=$cfx.fr.rp with=$cfx.fr.f then=$cfx.fr.out
 @cfx.fr.lv ui.diagram.lg v=?v l=?lv
 @cfx.fr.lm ui.diagram.lg v=?mx l=?lm
 @cfx.fr.lpos core.check fn=gt args=?lm args=0

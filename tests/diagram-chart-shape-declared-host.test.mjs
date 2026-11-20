@@ -50,3 +50,26 @@ test('a standing chart sized by hand shares its width among its categories; heig
  assert.match(view().svg,/drop-shadow/);
  assert.equal(run('diagram.chart.format id="g1" width=20').status,'refused','below the size limits');
 });
+
+test('series of a chart: made on the chart made last with values by category, side by side, stacked or as shares; renamed, recoloured, removed',async()=>{
+ const {state,ok,run,view,host}=await area();
+ ok(MAKE);
+ ok('diagram.chart.series.add label="Costs" values=2 values=4 values=6');
+ const s1=host.observe().objects.find(o=>o.sourceType==='diagram.sketch.series');
+ assert.equal(s1.id,'s1');assert.ok(s1.inputs.some(i=>i.key==='chart'&&i.values[0]==='"g1"'),'a series of the chart made last');
+ const side=view();
+ assert.ok(Math.abs(rect(side.svg,'n1').w-18)<0.01,'two series share the category room: each bar half as wide');
+ assert.ok(/<rect[^>]*data-select="g1"|Costs/.test(side.svg),'the series is drawn and named in the legend');
+ assert.ok(texts(side.svg).some(t=>t.text==='Costs')&&texts(side.svg).some(t=>t.text==='Series 1'));
+ assert.equal(view().inputs.g1.height,160);
+ ok('diagram.chart.format id="g1" stacking="stacked" axisSide="left"');
+ assert.ok(texts(view().svg).some(t=>t.text==='9'),'the axis top is the largest category total (Feb: 5 + 4)');
+ ok('diagram.chart.format id="g1" stacking="percent"');
+ assert.ok(texts(view().svg).some(t=>t.text==='100'),'shares: the axis runs to 100');
+ assert.equal(Math.round(rect(view().svg,'n3').h),Math.round(160*2/8),'Mar: 2 of 2 + 6');
+ ok('diagram.chart.series.change id="s1" label="Budget" colour="red"');
+ assert.ok(texts(view().svg).some(t=>t.text==='Budget'));
+ assert.equal(run('diagram.chart.series.add label="Too many" values=1 values=2 values=3 values=4').status,'refused','more values than categories');
+ ok('diagram.chart.series.remove id="s1"');
+ assert.equal(host.observe().objects.filter(o=>o.sourceType==='diagram.sketch.series').length,0);
+});
