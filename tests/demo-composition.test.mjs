@@ -43,7 +43,8 @@ test('demo exposes authored native interfaces and the actual host uses those cap
   if(!profile.nativeHost)continue;
   const source=await readFile(new URL('../worlds/'+id+'/native-interface.sop',import.meta.url),'utf8');
   assert.equal(await loader.readFile(id,'native-interface.sop'),source);
-  const native=parse(source).filter(wire=>wire.type==='std.capability.operation');
+  // The host lists its own operations first, in their declared order= (not their position in the file), then composed ones.
+  const native=parse(source).filter(wire=>wire.type==='std.capability.operation').sort((a,b)=>Number(str(a.attrs.order[0]))-Number(str(b.attrs.order[0])));
   const module=await import('../'+profile.nativeHost.module);
   const initial=(await loader.loadOps(id)).initialState();
   const host=await module[profile.nativeHost.factory]({state:initial,instanceId:'composition-interface-test'});
