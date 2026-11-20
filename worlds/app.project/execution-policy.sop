@@ -41,7 +41,14 @@
 @edge.from app.execution.reference concept=w.diagram.edge.from sourceType="diagram.sketch.node"
 @edge.to app.execution.reference concept=w.diagram.edge.to sourceType="diagram.sketch.node"
 # "connect the circles": a chain over every circle in reading order; "connect Start to all circles": a star from Start.
-@edge.population app.execution.linkPattern from=w.diagram.edge.from to=w.diagram.edge.to open=chain hub=star max=16 patternConcept=diagram.sketch.link.pattern
+@edge.population app.execution.linkPattern from=w.diagram.edge.from to=w.diagram.edge.to open=chain hub=star max=16 patternConcept=diagram.sketch.link.pattern named=chain named=cycle named=all hubName="label" hubName="name"
+@note.population.lines app.execution.populationNote case=lines one="I joined {members} with 1 line ({pattern})." many="I joined {members} with {count} lines ({pattern})."
+@note.population.targets app.execution.populationNote case=targets many="I applied it to all {count} matching objects ({members})."
+@note.pattern.chain app.execution.linkPatternNote pattern=chain text="a chain in reading order"
+@note.pattern.star app.execution.linkPatternNote pattern=star text="a star from the named one"
+@note.pattern.all app.execution.linkPatternNote pattern=all text="every pair"
+@note.pattern.cycle app.execution.linkPatternNote pattern=cycle text="a cycle in reading order"
+@note.standIn app.execution.standInNote key="name" text="There is no drawing of {asked}, so I drew {drawn}."
 # "arrange" with what to arrange it as ("lay it out as a tree") changes the layout; with nothing more said ("improve the
 # layout", "tidy it up") it is the page's declared improvement (diagram.layout.improve), disclosed and undoable.
 @act.arrange app.execution.actForm act=arrange mode=existing as=change results=some

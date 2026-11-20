@@ -39,3 +39,8 @@
 @other.recent std.decide.criterion of=app.other n=2 name=recent measure=order dir=max
 @focus.specific std.decide.criterion of=app.focus n=3 name=specific measure=exact dir=max
 @other.specific std.decide.criterion of=app.other n=3 name=specific measure=exact dir=max
+
+# An act on the referent that says nothing more: a make says nothing to make; an arrangement is the page's declared
+# improvement of the resolved target ("improve the layout"); other acts ("trash it", "copy this one") are bridged.
+@ref.bare.make app.reference.bare act="make" use=none
+@ref.bare.arrange app.reference.bare act="arrange" use=grounded

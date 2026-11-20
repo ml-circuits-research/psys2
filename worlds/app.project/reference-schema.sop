@@ -1,4 +1,4 @@
-@ref.module core.module name=app.reference exports=app.reference.reading exports=app.reference.resolution exports=app.reference.object exports=app.reference.mapping exports=app.reference.match exports=app.reference.act
+@ref.module core.module name=app.reference exports=app.reference.reading exports=app.reference.resolution exports=app.reference.object exports=app.reference.mapping exports=app.reference.match exports=app.reference.act exports=app.reference.bare
 @ref.reading core.type of=app.reference.reading closed=true
 @ref.reading.turn core.slot of=app.reference.reading key=turn kind=string present=true
 @ref.reading.act core.slot of=app.reference.reading key=act kind=string present=true
@@ -28,3 +28,10 @@
 # An act whose context reference resolves through the focus (reference-policy.sop).
 @ref.act core.type of=app.reference.act closed=true
 @ref.act.act core.slot of=app.reference.act key=act kind=string present=true
+
+# An act on a context referent that says nothing more ("trash it", "improve the layout"): use=none is not read as an
+# act on the referent (a make of nothing); use=grounded is projected directly as the act on the resolved target; any
+# other act is projected through the structural bridge with the resolved target (project-context-action.mjs).
+@ref.bare core.type of=app.reference.bare closed=true
+@ref.bare.act core.slot of=app.reference.bare key=act kind=string present=true
+@ref.bare.use core.slot of=app.reference.bare key=use kind=atom enum=none enum=grounded present=true

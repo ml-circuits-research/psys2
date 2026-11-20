@@ -114,3 +114,6 @@
 
 # The drawing page (the canvas) is the object of drawing.page.change; "wipe the canvas", "show the IDs for ten seconds".
 @interpret.familyOperation.drawing.page app.interpret.familyOperation area=drawing family=page operation="drawing.page.change"
+# A key said of an existing family ("the flower's pose") binds to the parameter of the operation that changes it,
+# before the one that makes it.
+@interpret.parameterAct.change app.interpret.parameterAct act=change

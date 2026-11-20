@@ -1,4 +1,4 @@
-@interpret.module core.module name=app.interpret version=1 exports=app.interpret.retry exports=app.interpret.compare exports=app.interpret.coordination exports=app.interpret.language exports=app.interpret.note exports=app.interpret.default exports=app.interpret.drop exports=app.interpret.fallback exports=app.interpret.family exports=app.interpret.familyOperation exports=app.interpret.relation exports=app.interpret.relationValue exports=app.interpret.controlVerb exports=app.interpret.controlModifier
+@interpret.module core.module name=app.interpret version=1 exports=app.interpret.retry exports=app.interpret.compare exports=app.interpret.coordination exports=app.interpret.language exports=app.interpret.note exports=app.interpret.default exports=app.interpret.drop exports=app.interpret.fallback exports=app.interpret.family exports=app.interpret.familyOperation exports=app.interpret.parameterAct exports=app.interpret.relation exports=app.interpret.relationValue exports=app.interpret.controlVerb exports=app.interpret.controlModifier
 
 # A re-reading of the same text under a reduced context, tried in order while the reading stays incomplete.
 @interpret.retry.type core.type of=app.interpret.retry closed=true
@@ -84,3 +84,8 @@
 @interpret.familyOperation.area core.slot of=app.interpret.familyOperation key=area kind=atom present=true
 @interpret.familyOperation.family core.slot of=app.interpret.familyOperation key=family kind=atom present=true
 @interpret.familyOperation.operation core.slot of=app.interpret.familyOperation key=operation kind=string present=true
+
+# A key the deployed binding table predates binds to the parameter of its name on its family's source type
+# (sopworld completeStructuralBindings): an operation of these acts first, in order, else the first declaring it.
+@interpret.parameterAct.type core.type of=app.interpret.parameterAct closed=true
+@interpret.parameterAct.act core.slot of=app.interpret.parameterAct key=act kind=atom many=true present=true

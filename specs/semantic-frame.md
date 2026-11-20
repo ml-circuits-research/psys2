@@ -96,6 +96,10 @@ The reading is admitted in parts, not as a whole:
 The §5 rules run on the current key route; no retrain. Code: `src/dialog/partial-admission.mjs`,
 `src/dialog/declared-bindings.mjs`, the `partial` mode of `raw-structural-bridge.mjs`, `assessPartialProposal` in
 `reader-admission.mjs`, `dispatchPartial` in `reader-routing.mjs`. Every decision is declared:
+(2026-11-20: the binding-table completion rules, the line patterns over a population with their reading order and the
+closest drawable relative are sopworld library mechanisms (`completeStructuralBindings`, `populationPairs`/`readingOrder`,
+`nearestRelative`, 0.244.0); PSys2 only passes its declared rows: `app.interpret.parameterAct`, `app.execution.linkPattern`
+`named=`/`hubName=`, `populationNote`, `linkPatternNote`, `standInNote`, `app.reference.bare`.)
 
 | Was refusal-first | Now | Declared in |
 | --- | --- | --- |

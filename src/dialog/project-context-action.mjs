@@ -4,7 +4,7 @@ import {nativeKindCandidates} from './native-binding-candidates.mjs';
 import {quote,str} from '../vendor/sopworld/sopworld.mjs';
 import {NATIVE_AREAS} from './app-reader-context.mjs';
 import {executionPolicyWorld} from './execution-policy.mjs';
-import {readReferenceTurn,resolveObservedReference} from './reference-policy.mjs';
+import {readReferenceTurn,resolveObservedReference,referencePolicyWorld} from './reference-policy.mjs';
 import {observeGroundedProjection,projectGroundedRequest} from './grounded-projection.mjs';
 import {flatRequestProjection} from './request-projection.mjs';
 import {bridgeRawStructure} from './raw-structural-bridge.mjs';
@@ -23,6 +23,8 @@ function containerOwned(r,bindings,area){
  if(!member||own&&member.canonical===own.canonical)return false;   // a property of the container's own object (the page)
  return (bindings.containment??[]).some(c=>c.area===area&&c.containerType===container&&(c.type===r.target?.type||container===r.target?.type));
 }
+// What an act on the referent that says nothing more does (reference-policy.sop app.reference.bare: none | grounded).
+const bareUse=act=>{const row=referencePolicyWorld().ofType('app.reference.bare').find(r=>str(r.attrs.act?.[0])===act);return row?str(row.attrs.use[0]):undefined;};
 export async function projectContextAction(proposal,session,{bindings,registry,view}={}) {
  const raw=proposal?.raw,r=raw?.requests?.[0],area=NATIVE_AREAS[view],readerArea=bindings?.readerAreaByView?.[view]??area?.area;
  if(!area||!bindings||!registry||proposal.coverage?.complete||raw?.requestCount!==1||raw.coverage?.truncated||!r?.target||r.target.kind||r.target.name)return null;
@@ -46,13 +48,13 @@ export async function projectContextAction(proposal,session,{bindings,registry,v
   if(!previous||!last||!Object.keys(last.after).every(key=>JSON.stringify(session.isession.state[key])===JSON.stringify(last.after[key])))return null;
   const prior=flatRequestProjection(previous);if(!prior.ok||prior.request.act!==r.act||prior.targets.length!==1||!prior.results.length)return null;
   inherited=prior.results;rewind=last.before;
- }else if(!Array.isArray(r.constraints)||!r.constraints.length&&r.act==='make')return null;   // an act on the referent may say nothing more ("improve the layout", "trash it", "copy this one")
+ }else if(!Array.isArray(r.constraints)||!r.constraints.length&&bareUse(r.act)==='none')return null;   // an act on the referent may say nothing more ("improve the layout", "trash it", "copy this one")
  const canonical=selected.canonical,values=[];
  // A reading beyond plain stated values (a comparative step, several results, a class value its span only evidences:
  // legend "hide" said as "get rid of the legend"; a selector that picks among the family: "the May value", "the third
  // bar") is projected by the same bridge as any other reading, with the context target bound to the kind the observed
  // reference resolution chose.
- if(!other&&(!r.constraints.length&&r.act!=='arrange'||r.constraints.some(c=>c.operator!=='eq'||c.phase==='selector'||typeof c.value==='string'&&typeof c.value_span==='string'&&c.value!==c.value_span))){
+ if(!other&&(!r.constraints.length&&bareUse(r.act)!=='grounded'||r.constraints.some(c=>c.operator!=='eq'||c.phase==='selector'||typeof c.value==='string'&&typeof c.value_span==='string'&&c.value!==c.value_span))){
   const bindingSha256=proposal.provenance?.bindingsSha256;
   const bridgeOptions={bindings,bindingSha256,comparatives:comparativeSteps(),references:referenceProjection(),contextTarget:{kind:canonical,declaration:selected.object.source}};
   const usable=b=>b&&!b.diagnostics.length&&b.decoded?.candidates?.length===1&&!b.decoded.issues?.length;

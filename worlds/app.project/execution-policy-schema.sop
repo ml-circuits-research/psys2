@@ -1,4 +1,4 @@
-@policy.module core.module name=app.execution version=2 imports=std.capability exports=app.execution.values exports=app.execution.observedProperty exports=app.execution.observedMeasure exports=app.execution.observedField exports=app.execution.preview exports=app.execution.comparative exports=app.execution.comparativeFactor exports=app.execution.comparativeStep exports=app.execution.ordinal exports=app.execution.knowledge exports=app.execution.instant exports=app.execution.requestValue exports=app.execution.clockTime exports=app.execution.instantBase exports=app.execution.instantFocus exports=app.execution.actForm exports=app.execution.linkPattern exports=app.execution.flow exports=app.execution.canvasUnit exports=app.execution.lengthUnit exports=app.execution.reference exports=app.execution.actOperation exports=app.execution.kindBinding exports=app.execution.keyBinding exports=app.execution.keyValue exports=app.execution.amount exports=app.execution.range exports=app.execution.position
+@policy.module core.module name=app.execution version=2 imports=std.capability exports=app.execution.values exports=app.execution.observedProperty exports=app.execution.observedMeasure exports=app.execution.observedField exports=app.execution.preview exports=app.execution.comparative exports=app.execution.comparativeFactor exports=app.execution.comparativeStep exports=app.execution.ordinal exports=app.execution.knowledge exports=app.execution.instant exports=app.execution.requestValue exports=app.execution.clockTime exports=app.execution.instantBase exports=app.execution.instantFocus exports=app.execution.actForm exports=app.execution.linkPattern exports=app.execution.linkPatternNote exports=app.execution.populationNote exports=app.execution.standInNote exports=app.execution.flow exports=app.execution.canvasUnit exports=app.execution.lengthUnit exports=app.execution.reference exports=app.execution.actOperation exports=app.execution.kindBinding exports=app.execution.keyBinding exports=app.execution.keyValue exports=app.execution.amount exports=app.execution.range exports=app.execution.position
 @values.type core.type of=app.execution.values closed=true
 @values.concept core.slot of=app.execution.values key=concept kind=atom present=true
 @values.type.slot core.slot of=app.execution.values key=valueType kind=string present=true
@@ -104,6 +104,24 @@
 # patternConcept: the concept a request names its pattern by (chain, cycle, star, all: every pair); without it the
 # open and hub patterns above apply.
 @linkPattern.patternConcept core.slot of=app.execution.linkPattern key=patternConcept kind=atom
+# named: the patterns a request may name by patternConcept (the sopworld library's POPULATION_PATTERNS); another named
+# pattern reads as open. hubName: the observed fields whose value names the hub (besides its code).
+@linkPattern.named core.slot of=app.execution.linkPattern key=named kind=atom enum=chain enum=cycle enum=all enum=star many=true
+@linkPattern.hubName core.slot of=app.execution.linkPattern key=hubName kind=string many=true
+# The reply's words for the lines made over a population: {members} the joined objects, {count} the lines, {pattern}
+# the pattern's wording (app.execution.linkPatternNote); one= for one line, many= for several.
+@populationNote.type core.type of=app.execution.populationNote closed=true
+@populationNote.case core.slot of=app.execution.populationNote key=case kind=atom enum=lines enum=targets present=true
+@populationNote.one core.slot of=app.execution.populationNote key=one kind=string
+@populationNote.many core.slot of=app.execution.populationNote key=many kind=string present=true
+@linkPatternNote.type core.type of=app.execution.linkPatternNote closed=true
+@linkPatternNote.pattern core.slot of=app.execution.linkPatternNote key=pattern kind=atom enum=chain enum=cycle enum=all enum=star present=true
+@linkPatternNote.text core.slot of=app.execution.linkPatternNote key=text kind=string present=true
+# A made object named after the kind asked for and observed as another kind (a stand-in, the closest drawable relative):
+# key= the observed field holding the asked name; text= the reply, {asked} and {drawn} each with its article.
+@standInNote.type core.type of=app.execution.standInNote closed=true
+@standInNote.key core.slot of=app.execution.standInNote key=key kind=string present=true
+@standInNote.text core.slot of=app.execution.standInNote key=text kind=string present=true
 # An operation that also answers another act: "improve the layout", "tidy it up" (arrange with nothing more said) is
 # the page's declared best-effort improvement, an operation with no parameters of its own.
 @actOperation.type core.type of=app.execution.actOperation closed=true

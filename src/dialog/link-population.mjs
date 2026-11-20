@@ -1,15 +1,18 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Lines between a population (execution-policy.sop app.execution.linkPattern): when one end of a line names several
 // observed objects ("connect the circles": the kind lemma of the phrase, after its determiners, matches every circle)
-// the request is expanded into one request per line of the declared pattern: a chain in reading order when the other
-// end is not said, a star from the other end when it names one object. Nothing here names a word or a kind.
-import {parse,serialize,str,quote} from '../vendor/sopworld/sopworld.mjs';
+// the request is expanded into one request per pair of the declared pattern. The patterns, their pairs and the reading
+// order are the sopworld library's (populationPairs, readingOrder); the declaration says which pattern applies when
+// the other end is not said (open=), when it names one object (hub=), which patterns a request may name (named=), the
+// observed fields that name the hub (hubName=) and how many lines at most (max=). Nothing here names a word or a kind.
+import {parse,serialize,str,quote,populationPairs,readingOrder} from '../vendor/sopworld/sopworld.mjs';
 import {LANG_EN_FACTS} from '../lang/en.facts.generated.mjs';
 import {en} from '../lang/en.mjs';
 import {executionPolicyWorld} from './execution-policy.mjs';
 import {budget} from './budget.mjs';
 
 const one=(row,key)=>row?.attrs[key]?.length?str(row.attrs[key][0]):undefined;
+const all=(row,key)=>(row?.attrs[key]??[]).map(str);
 let determiners;
 const dets=()=>determiners??=new Set(parse(LANG_EN_FACTS.determiners).map(w=>str(w.attrs.text?.[0]??'')).filter(Boolean).map(t=>t.toLowerCase()));
 
@@ -27,13 +30,8 @@ function population(phrase,objects,sourceType,hypernyms=new Set()){
  const found=objects.filter(o=>{budget.tick('link-population.match');return o.sourceType===sourceType&&(every||String(o.kind).toLowerCase()===head);});
  return found.length>=2?found:null;
 }
-const centre=o=>{const v=k=>Number(o.inputs?.find(i=>i.key===k)?.values?.[0]);return {x:v('x'),y:v('y'),h:v('height')||0};};
-/** Reading order: rows top to bottom (a row is within half the taller height), then left to right. */
-function readingOrder(objects){
- return [...objects].sort((a,b)=>{const p=centre(a),q=centre(b),band=Math.max(p.h,q.h,1)/2;
-  if(Number.isFinite(p.y)&&Number.isFinite(q.y)&&Math.abs(p.y-q.y)>band)return p.y-q.y;
-  return (p.x||0)-(q.x||0)||String(a.id).localeCompare(String(b.id));});
-}
+const centre=o=>{const v=k=>Number(o.inputs?.find(i=>i.key===k)?.values?.[0]);return {x:v('x'),y:v('y'),height:v('height')||0};};
+const unquote=v=>String(v??'').replace(/^"|"$/g,'');
 
 /** The expanded candidates for a line request whose end names a population, or null. */
 export function linkPopulationCandidates(candidate,objects,{bindings,area}={}){
@@ -52,21 +50,22 @@ export function linkPopulationCandidates(candidate,objects,{bindings,area}={}){
   const patternConcept=one(pattern,'patternConcept'),named=patternConcept&&rows.find(w=>w.type==='std.request.constraint'&&one(w,'concept')===patternConcept);
   const groups=ends.map(c=>c?population(one(c,'value'),objects,sourceType,hypernyms):null);
   const at=groups.findIndex(Boolean);if(at<0)continue;
-  const members=readingOrder(groups[at]),other=ends[1-at];
+  const members=readingOrder(groups[at],centre),other=ends[1-at];
   if(groups[1-at])continue;   // two populations: not declared
-  let pairs,kind=named?one(named,'value'):null;
-  if(kind==='all'&&!other){pairs=[];for(let i=0;i<members.length;i++)for(let j=i+1;j<members.length;j++){budget.tick('link-population.pairs');pairs.push([members[i].id,members[j].id]);}}
-  else if(kind==='cycle'&&!other)pairs=[...members.slice(1).map((o,i)=>[members[i].id,o.id]),[members.at(-1).id,members[0].id]];
-  else if(!other)pairs=members.slice(1).map((o,i)=>[members[i].id,o.id]);
+  const said=named?one(named,'value'):null;
+  let kind,hub;
+  if(!other)kind=all(pattern,'named').includes(said)?said:one(pattern,'open');
   else{
-   const said=String(one(other,'value')??'').toLowerCase();
-   const hub=objects.filter(o=>o.sourceType===sourceType&&(String(o.id).toLowerCase()===said||o.inputs?.some(i=>['label','name'].includes(i.key)&&String(i.values?.[0]??'').replace(/^"|"$/g,'').toLowerCase()===said)));
-   if(hub.length!==1)continue;
-   pairs=members.filter(o=>o.id!==hub[0].id).map(o=>at===0?[o.id,hub[0].id]:[hub[0].id,o.id]);
+   // The other end names one object: by its code or by a declared naming field (hubName=).
+   const name=String(one(other,'value')??'').toLowerCase(),fields=all(pattern,'hubName');
+   const hubs=objects.filter(o=>o.sourceType===sourceType&&(String(o.id).toLowerCase()===name||o.inputs?.some(i=>fields.includes(i.key)&&unquote(i.values?.[0]).toLowerCase()===name)));
+   if(hubs.length!==1)continue;
+   kind=one(pattern,'hub');hub=hubs[0].id;
   }
-  if(pairs.length<1||pairs.length>max)continue;
+  const pairs=populationPairs(members,kind,{hub,hubFirst:at===1,max,tick:()=>budget.tick('link-population.pairs')});
+  if(!pairs?.length)continue;
   const fromRow=ends[0]??ends[1];
-  return {pattern:other?one(pattern,'hub'):['all','cycle'].includes(kind)?kind:one(pattern,'open'),declaration:pattern.id,members:members.map(o=>o.id),candidates:pairs.map(([a,b],k)=>{
+  return {pattern:kind,declaration:pattern.id,members:members.map(o=>o.id),candidates:pairs.map(([a,b],k)=>{
    const out=rows.filter(w=>w!==named).map(w=>({...w,attrs:{...w.attrs}}));
    if(named){const request=out.find(w=>w.type==='std.request');if(request&&String(request.attrs.root?.[0]??'')==='$'+named.id)delete request.attrs.root;}
    const set=(concept,value)=>{let c=out.find(w=>w.type==='std.request.constraint'&&one(w,'concept')===concept);
@@ -80,4 +79,10 @@ export function linkPopulationCandidates(candidate,objects,{bindings,area}={}){
   })};
  }
  return null;
+}
+
+/** The declared wording of a pattern made over a population (app.execution.linkPatternNote), or the pattern's name. */
+export function linkPatternNote(pattern){
+ const row=executionPolicyWorld().ofType('app.execution.linkPatternNote').find(r=>one(r,'pattern')===pattern);
+ return row?one(row,'text'):pattern;
 }
