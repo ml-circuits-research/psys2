@@ -231,6 +231,7 @@
 | calendar.meeting.time | 4,656 |
 | diagram.chart.type | 4,612 |
 | drawing.drawn.name | 4,444 |
+| diagram.chart.dimension | 4,064 |
 | diagram.node.ids | 4,040 |
 | calendar.meeting.title | 3,757 |
 | drawing.drawn.size | 3,691 |
@@ -279,8 +280,7 @@
 | diagram.point.value | 559 |
 | document.block.level | 553 |
 | diagram.node.layout | 542 |
-| document.block.text | 516 |
-| … 183 more | 26,739 |
+| … 205 more | 28,992 |
 
 ## Style (top 40)
 

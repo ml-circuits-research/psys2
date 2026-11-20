@@ -105,5 +105,167 @@
     }
    }
   }
+ },
+ "diagram": {
+  "chart": {
+   "keys": {
+    "dimension": {
+     "head": "span",
+     "concept": "chart.dimension",
+     "src": "the dimension a chart is broken down by (\"sales by month\": month); diagram.group.chart.make {dimension}, k.charts.category (data drops chart.dimension)"
+    },
+    "fontSize": {
+     "head": "span",
+     "concept": "font.size",
+     "src": "chart group formatting in the Diagram tab (worlds/diagram.sketch/chart-format.sop; data drops dg-batch-05 frame chart.font.size)"
+    },
+    "axisSide": {
+     "head": "class",
+     "concept": "axis.side",
+     "values": [
+      "left",
+      "right"
+     ],
+     "src": "chart group formatting in the Diagram tab (worlds/diagram.sketch/chart-format.sop; data drops dg-batch-05 frame chart.axis.position)"
+    },
+    "invert": {
+     "head": "class",
+     "concept": "axis.invert",
+     "values": [
+      "x",
+      "y",
+      "none"
+     ],
+     "src": "chart group formatting in the Diagram tab (worlds/diagram.sketch/chart-format.sop; data drops dg-batch-05 frame chart.axis.invert)"
+    },
+    "lineStyle": {
+     "head": "class",
+     "concept": "line.style",
+     "values": [
+      "solid",
+      "dashed",
+      "dotted",
+      "dash_dot"
+     ],
+     "src": "chart group formatting in the Diagram tab (worlds/diagram.sketch/chart-format.sop; data drops dg-batch-05 frame chart.line.style)"
+    },
+    "precision": {
+     "head": "number",
+     "concept": "precision",
+     "src": "chart group formatting in the Diagram tab (worlds/diagram.sketch/chart-format.sop; data drops dg-batch-05 frame chart.pie.precision, chart.tick.precision)"
+    },
+    "tickFormat": {
+     "head": "class",
+     "concept": "tick.format",
+     "values": [
+      "plain",
+      "magnitude",
+      "power"
+     ],
+     "src": "chart group formatting in the Diagram tab (worlds/diagram.sketch/chart-format.sop; data drops dg-batch-05 frame chart.tick.format)"
+    },
+    "barWidth": {
+     "head": "span",
+     "concept": "bar.width",
+     "src": "chart group formatting in the Diagram tab (worlds/diagram.sketch/chart-format.sop; data drops dg-batch-05 frame chart.bar.width)"
+    },
+    "barHeight": {
+     "head": "span",
+     "concept": "bar.width",
+     "src": "chart group formatting in the Diagram tab (worlds/diagram.sketch/chart-format.sop; data drops dg-batch-05 frame chart.bar.height)"
+    },
+    "barGap": {
+     "head": "span",
+     "concept": "bar.gap",
+     "src": "chart group formatting in the Diagram tab (worlds/diagram.sketch/chart-format.sop; data drops dg-batch-05 frame chart.bar.gap)"
+    },
+    "lineWidth": {
+     "head": "span",
+     "concept": "line.width",
+     "src": "chart group formatting in the Diagram tab (worlds/diagram.sketch/chart-format.sop; data drops dg-batch-05 frame chart.line.width)"
+    },
+    "axisScale": {
+     "head": "class",
+     "concept": "axis.scale",
+     "values": [
+      "linear",
+      "log"
+     ],
+     "src": "chart group formatting in the Diagram tab (worlds/diagram.sketch/chart-format.sop; data drops dg-batch-05 frame chart.axis.scale)"
+    },
+    "markerSize": {
+     "head": "span",
+     "concept": "marker.size",
+     "src": "chart group formatting in the Diagram tab (worlds/diagram.sketch/chart-format.sop; data drops dg-batch-05 frame chart.marker.size)"
+    },
+    "markerEdge": {
+     "head": "span",
+     "concept": "marker.edge",
+     "src": "chart group formatting in the Diagram tab (worlds/diagram.sketch/chart-format.sop; data drops dg-batch-05 frame chart.marker.edge)"
+    },
+    "pieRadius": {
+     "head": "span",
+     "concept": "pie.radius",
+     "src": "chart group formatting in the Diagram tab (worlds/diagram.sketch/chart-format.sop; data drops dg-batch-05 frame chart.pie.radius)"
+    },
+    "gridStyle": {
+     "head": "class",
+     "concept": "grid.style",
+     "values": [
+      "solid",
+      "dashed",
+      "dotted"
+     ],
+     "src": "chart group formatting in the Diagram tab (worlds/diagram.sketch/chart-format.sop; data drops dg-batch-05 frame chart.grid.style)"
+    },
+    "titlePosition": {
+     "head": "class",
+     "concept": "title.position",
+     "values": [
+      "top",
+      "top_left",
+      "bottom"
+     ],
+     "src": "chart group formatting in the Diagram tab (worlds/diagram.sketch/chart-format.sop; data drops dg-batch-05 frame chart.title.position)"
+    },
+    "titleWeight": {
+     "head": "class",
+     "concept": "font.weight",
+     "values": [
+      "normal",
+      "bold"
+     ],
+     "src": "chart group formatting in the Diagram tab (worlds/diagram.sketch/chart-format.sop; data drops dg-batch-05 frame chart.titleStyle)"
+    },
+    "titleColour": {
+     "head": "candidate",
+     "concept": "colour",
+     "src": "chart group formatting in the Diagram tab (worlds/diagram.sketch/chart-format.sop; data drops dg-batch-05 frame chart.titleStyle)"
+    }
+   }
+  },
+  "diagram": {
+   "keys": {
+    "background": {
+     "head": "candidate",
+     "concept": "colour",
+     "src": "the page background of the Diagram tab (diagram.page.change {background}; data drops diagram.background)"
+    }
+   }
+  },
+  "page": {
+   "keys": {
+    "background": {
+     "head": "candidate",
+     "concept": "colour",
+     "src": "the page background of the Diagram tab (diagram.page.change {background}; data drops diagram.background)"
+    },
+    "title": {
+     "head": "span",
+     "concept": "name",
+     "src": "the page title of the Diagram tab (diagram.page.change {title}; data drops page.title)"
+    }
+   }
+  }
  }
 }

@@ -782,6 +782,39 @@
   "chart": {
    "doc": "chart data and display (old data.charts)",
    "keys": {
+    "axisScale": {
+     "concept": "axis.scale",
+     "head": "class",
+     "src": "chart group formatting in the Diagram tab (worlds/diagram.sketch/chart-format.sop; data drops dg-batch-05 frame chart.axis.scale)",
+     "values": [
+      "linear",
+      "log"
+     ]
+    },
+    "axisSide": {
+     "concept": "axis.side",
+     "head": "class",
+     "src": "chart group formatting in the Diagram tab (worlds/diagram.sketch/chart-format.sop; data drops dg-batch-05 frame chart.axis.position)",
+     "values": [
+      "left",
+      "right"
+     ]
+    },
+    "barGap": {
+     "concept": "bar.gap",
+     "head": "span",
+     "src": "chart group formatting in the Diagram tab (worlds/diagram.sketch/chart-format.sop; data drops dg-batch-05 frame chart.bar.gap)"
+    },
+    "barHeight": {
+     "concept": "bar.width",
+     "head": "span",
+     "src": "chart group formatting in the Diagram tab (worlds/diagram.sketch/chart-format.sop; data drops dg-batch-05 frame chart.bar.height)"
+    },
+    "barWidth": {
+     "concept": "bar.width",
+     "head": "span",
+     "src": "chart group formatting in the Diagram tab (worlds/diagram.sketch/chart-format.sop; data drops dg-batch-05 frame chart.bar.width)"
+    },
     "colour": {
      "concept": "colour",
      "head": "candidate",
@@ -791,6 +824,11 @@
      "concept": "literal_data",
      "head": "span",
      "src": "chart.make datasets"
+    },
+    "dimension": {
+     "concept": "chart.dimension",
+     "head": "span",
+     "src": "the dimension a chart is broken down by (\"sales by month\": month); diagram.group.chart.make {dimension}, k.charts.category (data drops chart.dimension)"
     },
     "effect": {
      "concept": "effect",
@@ -807,6 +845,11 @@
       "outline"
      ]
     },
+    "fontSize": {
+     "concept": "font.size",
+     "head": "span",
+     "src": "chart group formatting in the Diagram tab (worlds/diagram.sketch/chart-format.sop; data drops dg-batch-05 frame chart.font.size)"
+    },
     "grid": {
      "concept": "gridlines",
      "head": "class",
@@ -814,6 +857,16 @@
      "values": [
       "show",
       "hide"
+     ]
+    },
+    "gridStyle": {
+     "concept": "grid.style",
+     "head": "class",
+     "src": "chart group formatting in the Diagram tab (worlds/diagram.sketch/chart-format.sop; data drops dg-batch-05 frame chart.grid.style)",
+     "values": [
+      "solid",
+      "dashed",
+      "dotted"
      ]
     },
     "height": {
@@ -840,6 +893,16 @@
      "head": "candidate",
      "src": "Native parameter: chart.remove.ids"
     },
+    "invert": {
+     "concept": "axis.invert",
+     "head": "class",
+     "src": "chart group formatting in the Diagram tab (worlds/diagram.sketch/chart-format.sop; data drops dg-batch-05 frame chart.axis.invert)",
+     "values": [
+      "x",
+      "y",
+      "none"
+     ]
+    },
     "labels": {
      "concept": "name",
      "head": "span",
@@ -859,6 +922,32 @@
       "right"
      ]
     },
+    "lineStyle": {
+     "concept": "line.style",
+     "head": "class",
+     "src": "chart group formatting in the Diagram tab (worlds/diagram.sketch/chart-format.sop; data drops dg-batch-05 frame chart.line.style)",
+     "values": [
+      "solid",
+      "dashed",
+      "dotted",
+      "dash_dot"
+     ]
+    },
+    "lineWidth": {
+     "concept": "line.width",
+     "head": "span",
+     "src": "chart group formatting in the Diagram tab (worlds/diagram.sketch/chart-format.sop; data drops dg-batch-05 frame chart.line.width)"
+    },
+    "markerEdge": {
+     "concept": "marker.edge",
+     "head": "span",
+     "src": "chart group formatting in the Diagram tab (worlds/diagram.sketch/chart-format.sop; data drops dg-batch-05 frame chart.marker.edge)"
+    },
+    "markerSize": {
+     "concept": "marker.size",
+     "head": "span",
+     "src": "chart group formatting in the Diagram tab (worlds/diagram.sketch/chart-format.sop; data drops dg-batch-05 frame chart.marker.size)"
+    },
     "max": {
      "concept": "axis.max",
      "head": "number",
@@ -873,6 +962,16 @@
      "concept": "colour",
      "head": "candidate",
      "src": "palette"
+    },
+    "pieRadius": {
+     "concept": "pie.radius",
+     "head": "span",
+     "src": "chart group formatting in the Diagram tab (worlds/diagram.sketch/chart-format.sop; data drops dg-batch-05 frame chart.pie.radius)"
+    },
+    "precision": {
+     "concept": "precision",
+     "head": "number",
+     "src": "chart group formatting in the Diagram tab (worlds/diagram.sketch/chart-format.sop; data drops dg-batch-05 frame chart.pie.precision, chart.tick.precision)"
     },
     "series": {
      "concept": "name",
@@ -932,10 +1031,44 @@
       "off"
      ]
     },
+    "tickFormat": {
+     "concept": "tick.format",
+     "head": "class",
+     "src": "chart group formatting in the Diagram tab (worlds/diagram.sketch/chart-format.sop; data drops dg-batch-05 frame chart.tick.format)",
+     "values": [
+      "plain",
+      "magnitude",
+      "power"
+     ]
+    },
     "title": {
      "concept": "name",
      "head": "span",
      "src": "chart.make/change title"
+    },
+    "titleColour": {
+     "concept": "colour",
+     "head": "candidate",
+     "src": "chart group formatting in the Diagram tab (worlds/diagram.sketch/chart-format.sop; data drops dg-batch-05 frame chart.titleStyle)"
+    },
+    "titlePosition": {
+     "concept": "title.position",
+     "head": "class",
+     "src": "chart group formatting in the Diagram tab (worlds/diagram.sketch/chart-format.sop; data drops dg-batch-05 frame chart.title.position)",
+     "values": [
+      "top",
+      "top_left",
+      "bottom"
+     ]
+    },
+    "titleWeight": {
+     "concept": "font.weight",
+     "head": "class",
+     "src": "chart group formatting in the Diagram tab (worlds/diagram.sketch/chart-format.sop; data drops dg-batch-05 frame chart.titleStyle)",
+     "values": [
+      "normal",
+      "bold"
+     ]
     },
     "type": {
      "concept": "type",
@@ -987,6 +1120,11 @@
   "diagram": {
    "doc": "a diagram as a whole",
    "keys": {
+    "background": {
+     "concept": "colour",
+     "head": "candidate",
+     "src": "the page background of the Diagram tab (diagram.page.change {background}; data drops diagram.background)"
+    },
     "by": {
      "concept": "colour.by",
      "head": "class",
@@ -1596,6 +1734,11 @@
   "page": {
    "doc": "Native diagram.sketch.page",
    "keys": {
+    "background": {
+     "concept": "colour",
+     "head": "candidate",
+     "src": "the page background of the Diagram tab (diagram.page.change {background}; data drops diagram.background)"
+    },
     "duration": {
      "concept": "duration",
      "head": "number",
@@ -1610,6 +1753,11 @@
       "always",
       "off"
      ]
+    },
+    "title": {
+     "concept": "name",
+     "head": "span",
+     "src": "the page title of the Diagram tab (diagram.page.change {title}; data drops page.title)"
     }
    }
   },
@@ -2279,6 +2427,11 @@
      "head": "number",
      "src": "addThings n"
     },
+    "cut": {
+     "concept": "cut",
+     "head": "number",
+     "src": "art.draw cut (drawing.object.make / catalog.make / object.change {cut}): the share of the thing beyond the page edge (0 touching, 0.5 half cut off)"
+    },
     "direction": {
      "concept": "direction",
      "head": "class",
@@ -2304,6 +2457,17 @@
      "head": "candidate",
      "src": "Authored semantic intent; requires world-informed completion"
     },
+    "edge": {
+     "concept": "edge",
+     "head": "class",
+     "src": "art.draw edge (drawing.object.make / catalog.make / object.change {edge}): the side of the page a thing touches or is cut off by (occlusion-rules.sop)",
+     "values": [
+      "left",
+      "right",
+      "top",
+      "bottom"
+     ]
+    },
     "effect": {
      "concept": "effect",
      "head": "candidate",
@@ -2316,6 +2480,26 @@
       "long_shadow",
       "blur",
       "soft"
+     ]
+    },
+    "expression": {
+     "concept": "expression",
+     "head": "class",
+     "src": "art.draw expression (drawing.object.make / catalog.make / object.change {expression}, drawing.person.expression): a k.faces expression, or a word or k.feelings feeling that names one (figure-rules.sop)",
+     "values": [
+      "angry",
+      "crying",
+      "frowning",
+      "happy",
+      "laughing",
+      "sad",
+      "scared",
+      "shocked",
+      "sleepy",
+      "smiling",
+      "surprised",
+      "talking",
+      "wink"
      ]
     },
     "facing": {
@@ -2425,6 +2609,28 @@
      "head": "candidate",
      "src": "Native parameter: drawing.object.change.outline"
     },
+    "pose": {
+     "concept": "pose",
+     "head": "class",
+     "src": "art.draw pose (drawing.object.make / catalog.make / object.change {pose}, drawing.person.pose): a k.faces pose of the figure (figure-rules.sop)",
+     "values": [
+      "arms up",
+      "clapping",
+      "cross legged",
+      "dancing",
+      "hands on hips",
+      "holding",
+      "jumping",
+      "kicking",
+      "pointing",
+      "reaching up",
+      "running",
+      "sitting",
+      "standing",
+      "walking",
+      "waving"
+     ]
+    },
     "relation": {
      "concept": "spatial_relation",
      "head": "class",
@@ -2482,6 +2688,35 @@
      "head": "span",
      "src": "Native parameter: drawing.object.change.text"
     },
+    "trait": {
+     "concept": "trait",
+     "head": "class",
+     "src": "art.draw trait (drawing.object.make / catalog.make / object.change {trait}): a k.faces trait (colours set, parts added or taken away)",
+     "values": [
+      "bald",
+      "beard and moustache",
+      "bearded",
+      "blond",
+      "brown-haired",
+      "brown-skinned",
+      "curly-haired",
+      "dark-haired",
+      "dark-skinned",
+      "freckled",
+      "ginger",
+      "grey-haired",
+      "light-skinned",
+      "long-haired",
+      "mohawk",
+      "moustached",
+      "olive-skinned",
+      "pale-skinned",
+      "ponytail",
+      "short-haired",
+      "spectacled",
+      "tanned"
+     ]
+    },
     "turn": {
      "concept": "turn",
      "head": "candidate+number",
@@ -2496,6 +2731,11 @@
       "half",
       "full"
      ]
+    },
+    "wear": {
+     "concept": "garment",
+     "head": "candidate",
+     "src": "art.draw wear (drawing.object.make / catalog.make {wear}): a k.wearables thing worn by the person made"
     },
     "weight": {
      "concept": "weight",

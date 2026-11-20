@@ -687,8 +687,8 @@
       "name": "data-drop-v1",
       "path": "training/sop-bert/data/data-drop-v1/accepted.jsonl",
       "description": "Diagram/Drawing rows of the data-request drops, validated and normalised by data-drop-v1/import.py",
-      "gitCommit": "67d03064fba1ed83455c2f896b502f72a443581a",
-      "sha256": "01ecf4b442268fc4d98b2716299ca2572a27a8d6a3c037ef0f36fe93ee6e800b",
+      "gitCommit": "cb7a7e99229f443b3cc2d80e421af2811735e25a",
+      "sha256": "0e87eb09b42baec5cad84a560c06d39eeacb7e5411d523a3048215fd41a153bc",
       "rowsIn": 16934,
       "rowsKept": 16934,
       "rowsDropped": 0,
@@ -931,11 +931,11 @@
   },
   "files": {
     "STATS.md": {
-      "sha256": "3e9b0dc24ff8d165b696992f9b2a5673d11bbb4b9805c9dd16e90253ca3859e8",
+      "sha256": "9f22553c724666dae1916534c01098dbaf1e50155485a261a8f63898598697a6",
       "bytes": 8139
     },
     "VALIDATION.md": {
-      "sha256": "5c964c1e1e5d45d1ea8772b51e411c8537e1499b3053d538fe14bcac67c6d2fd",
+      "sha256": "78e7f14876586b70a0d4c1b38a302debf64efe5ccea85b8123ca4a09eefff637",
       "bytes": 13718
     },
     "audit-sample.md": {
@@ -943,20 +943,20 @@
       "bytes": 44413
     },
     "dev.jsonl": {
-      "sha256": "cc8199f352d210ce758ed1a02bd1a9c04ae623a0ab911acadc6794c8d2249e53",
-      "bytes": 4839415
+      "sha256": "cc26e47c9ebf48f82d54e6d07ca08313f3f111a4a2f75403dcddf81f0516e048",
+      "bytes": 4858371
     },
     "inventory.json": {
-      "sha256": "94c30e30ab39b3eca35ae13eed67e859cbb10c5e855b2dc9efcf913f718ab34a",
-      "bytes": 61409
+      "sha256": "a64a0b67273c6ca518e5370586d99786d25959bdc676d3c1669317b3089b3317",
+      "bytes": 69236
     },
     "test.jsonl": {
-      "sha256": "b6354fc45dd58482405c274fb7ffe5787d57645e610b1a3a396467fcd9aa92bf",
-      "bytes": 2413172
+      "sha256": "9e9b6b799db06f1be0b59e5f1c32ab7eb6a1b63bd31653724fa7aca55d694842",
+      "bytes": 2423805
     },
     "train.jsonl.gz": {
-      "sha256": "e0fb0ef3234dde61a767444a59b1872483a40ecb175cd25f2d93f1a3c10e595b",
-      "bytes": 5062261
+      "sha256": "7e288207a848b046a28a3fdb7881dc2556c614708a200dd0c3ac9835bf6c0904",
+      "bytes": 5065055
     }
   },
   "policy": {

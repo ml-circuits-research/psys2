@@ -149,6 +149,7 @@
 30. [diagram · data-drop-v1 · train · None] “put up a bar chart with one bar per name”  — context: (empty)
   - span “put up a bar chart with one bar per name”: **make**/do trigger=“put up”; target chart new indefinite
     - chart.type = "bar" from “bar chart” [eq, result]
+    - chart.dimension = "name" from “name” [eq, result]
 
 31. [diagram · data-drop-v1 · train · None] “quick one: give the online series the name Direct orders”  — context: Monthly profit, Online
   - span “give the online series the name Direct orders”: **change**/do trigger=“give”; target series existing definite fill=context

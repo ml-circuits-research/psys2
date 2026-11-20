@@ -127,6 +127,106 @@ def facing_keys(world, q, stats):
             c['key'] = 'drawn.facing'; stats['drawn.direction in a static sense (facing/looking/turned) -> drawn.facing'] += 1
 
 
+# The drops' chart frames that have a declared reader key (inventory.json; bound by execution-policy.sop
+# app.execution.keyBinding to the Diagram's chart group, chart make or page): frame -> key. The said value stays as the
+# worker wrote it unless a normaliser below says otherwise (the key's declared said values cover the drops' forms);
+# a value that is "same" (a reference to another object's setting) stays a need.
+CHART_FRAMES = {
+    'chart.dimension': 'chart.dimension', 'chart.font.size': 'chart.fontSize', 'chart.axis.position': 'chart.axisSide',
+    'chart.axis.invert': 'chart.invert', 'chart.line.style': 'chart.lineStyle', 'chart.pie.precision': 'chart.precision',
+    'chart.tick.precision': 'chart.precision', 'chart.tick.format': 'chart.tickFormat', 'chart.bar.width': 'chart.barWidth',
+    'chart.bar.height': 'chart.barHeight', 'chart.bar.gap': 'chart.barGap', 'chart.line.width': 'chart.lineWidth',
+    'chart.axis.scale': 'chart.axisScale', 'chart.marker.size': 'chart.markerSize', 'chart.marker.edge': 'chart.markerEdge',
+    'chart.pie.radius': 'chart.pieRadius', 'chart.grid.style': 'chart.gridStyle', 'chart.title.position': 'chart.titlePosition',
+}
+NUMBER_WORDS = {'whole': 0, 'zero': 0, 'no': 0, 'one': 1, 'two': 2, 'three': 3, 'four': 4}
+
+
+def chart_value(frame, value, nspan):
+    """The key and value a chart frame's said value becomes, or None when the key cannot hold it (it stays a need)."""
+    v = str(value or '').strip().lower()
+    if not v or v.startswith('same'):
+        return None
+    key = CHART_FRAMES.get(frame)
+    if frame == 'chart.axis.position':
+        side = v.split()[-1]
+        return (key, side) if v.startswith('y') and side in ('left', 'right') else None   # the x axis on top: not declared
+    if frame in ('chart.pie.precision', 'chart.tick.precision'):
+        words = re.findall(r'[a-z]+|\d+', v)
+        n = next((int(w) if w.isdigit() else NUMBER_WORDS[w] for w in words if w.isdigit() or w in NUMBER_WORDS), None)
+        return (key, str(n)) if n is not None and 0 <= n <= 4 else None
+    if frame == 'chart.title.position':
+        return (key, v.replace(' ', '_')) if v in ('top', 'top left', 'bottom') else None
+    canonical = {'chart.tick.format': {'powers of ten': 'power', 'magnitudes': 'magnitude'}, 'chart.line.style': {'dash-dot': 'dash_dot'},
+                 'chart.axis.scale': {'both log': 'log'}, 'chart.axis.invert': {'off': 'none'}}.get(frame)
+    if canonical is not None:
+        v = canonical.get(v, v)
+    if frame == 'chart.marker.edge' and v in ('off', 'none'):
+        return key, 'off'
+    if frame == 'chart.titleStyle':
+        return None
+    return (key, v) if key else None
+
+
+def chart_keys(world, q, n, place):
+    """Constraints for a chart, title-style, background or page-title need; [] when the need stays."""
+    frame, value, nspan = n.get('frame'), n.get('value'), n.get('span')
+    surface = nspan if place(nspan) else (str(value) if place(str(value)) else None)
+    if world != 'diagram' or not surface:
+        return []
+    target = q.get('target') or {}
+    if frame == 'chart.titleStyle':
+        v = str(value or '').strip().lower()
+        out = [('chart.titleWeight', 'bold')] if 'bold' in v.split() else []
+        colour = ' '.join(w for w in v.split() if w != 'bold')
+        if colour and colour in official_colours():
+            out.append(('chart.titleColour', colour))
+        return [{'key': k, 'value': x, 'value_span': surface, 'operator': 'eq', 'phase': 'result'} for k, x in out]
+    if frame in ('diagram.background', 'page.title'):
+        if q.get('act') != 'change' or target.get('fill') in ('description', 'all') or str(value or '').lower().startswith('same'):
+            return []   # several pages or another object's setting: the Diagram tab has one page
+        if frame == 'diagram.background':
+            if str(value).lower() not in catalog_colours():
+                return []   # not a colour the catalog knows ("a nice background"): stays a need
+            key = 'page.background' if target.get('type') == 'page' else 'diagram.background'
+            return [{'key': key, 'value': str(value).lower(), 'value_span': surface, 'operator': 'eq', 'phase': 'result'}]
+        return [{'key': 'page.title', 'value': str(value), 'value_span': surface, 'operator': 'eq', 'phase': 'result'}]
+    kv = chart_value(frame, value, nspan)
+    if not kv:
+        return []
+    return [{'key': kv[0], 'value': kv[1], 'value_span': surface, 'operator': 'eq', 'phase': 'result'}]
+
+
+_COLOURS = None
+_CATALOG_COLOURS = None
+
+
+def catalog_colours():
+    """The colour names of k.colours at the catalog pin (the site copy docs/webchat/catalog/<pin>/), which the page's
+    background rules look up."""
+    global _CATALOG_COLOURS
+    if _CATALOG_COLOURS is None:
+        pin = re.search(r"commit: '([0-9a-f]{40})'", (REPO / 'src/knowledge/catalog-pin.mjs').read_text()).group(1)
+        names = set()
+        for shard in sorted((REPO / 'docs/webchat/catalog' / pin / 'k.colours' / 'shards').glob('*.sop')):
+            names.update(m.strip('"').lower() for m in re.findall(r' k\.colours\.colour name=("[^"]*"|\S+)', shard.read_text()))
+        _CATALOG_COLOURS = names
+    return _CATALOG_COLOURS
+
+
+def official_colours():
+    """Colour names the official inventory's diagram colour keys accept, and the catalog's two-word names the drops use."""
+    global _COLOURS
+    if _COLOURS is None:
+        names = set()
+        for typ in INVENTORY.get('diagram', {}).values():
+            for k in (typ.get('keys') or {}).values():
+                if k.get('concept') == 'colour':
+                    names.update(k.get('values') or [])
+        _COLOURS = names | {'dark blue', 'dark red', 'dark green', 'dark orange', 'navy', 'teal', 'black', 'red'}
+    return _COLOURS
+
+
 def needs_to_keys(world, q, needs, stats):
     """Needs whose meaning has a declared key become that constraint (the worker's recurring frames); the rest stay needs."""
     span = q.get('span') or ''
@@ -152,10 +252,12 @@ def needs_to_keys(world, q, needs, stats):
             c = {'key': 'drawn.facing', 'value': str(value).lower(), 'value_span': nspan if place(nspan) else str(value), 'operator': 'eq', 'phase': 'result'}
         elif world == 'drawing' and frame == 'drawn.region' and place(nspan):
             c = {'key': 'drawn.at', 'value': value, 'value_span': nspan, 'operator': 'region', 'phase': 'result'}
-        if c:
-            c.update({'polarity': 'positive', 'character': 'requirement'})
-            q.setdefault('constraints', []).append(c)
-            stats[f'needs {frame} -> constraint {c["key"]}'] += 1
+        cs = [c] if c else chart_keys(world, q, n, place)
+        if cs:
+            for c in cs:
+                c.update({'polarity': 'positive', 'character': 'requirement'})
+                q.setdefault('constraints', []).append(c)
+                stats[f'needs {frame} -> constraint {c["key"]}'] += 1
         else:
             keep.append(n)
     return keep
@@ -389,6 +491,35 @@ def main():
     frozen = {p.stem: [json.loads(l) for l in p.read_text().splitlines() if l.strip()] for p in sorted(FROZEN.glob('*.jsonl'))
               if not p.name.endswith(('.needs.jsonl', '.residual.jsonl'))}
     metas = {p.name[:-len('.meta.json')]: json.loads(p.read_text()) for p in FROZEN.glob('*.meta.json')}
+    # A frozen batch keeps its rows, but needs whose frame has gained a declared key since it was imported become that
+    # constraint (needs_to_keys is idempotent on what it already moved); the frozen file and its needs are rewritten.
+    for name, rows in frozen.items():
+        upgraded = collections.Counter()
+        for r in rows:
+            for q in r.get('requests') or []:
+                if not q.get('needs'):
+                    continue
+                needs = q['needs'] if isinstance(q['needs'], list) else [q['needs']]
+                kept = needs_to_keys(r['world'], q, needs, upgraded)
+                if len(kept) != len(needs):
+                    q['needs'] = kept
+                    if not kept:
+                        del q['needs']
+        if upgraded:
+            (FROZEN / f'{name}.jsonl').write_text(''.join(json.dumps(r, ensure_ascii=False) + '\n' for r in rows))
+            needs_path = FROZEN / f'{name}.needs.jsonl'
+            if needs_path.exists():
+                left = collections.Counter((row['text'], n.get('frame')) for row in rows for q in row.get('requests') or [] for n in (q.get('needs') or []) if isinstance(n, dict))
+                kept_rows = []
+                for line in needs_path.read_text().splitlines():
+                    if not line.strip():
+                        continue
+                    nr = json.loads(line)
+                    if left[(nr.get('text'), nr.get('frame'))] > 0:
+                        left[(nr.get('text'), nr.get('frame'))] -= 1
+                        kept_rows.append(nr)
+                needs_path.write_text(''.join(json.dumps(nr, ensure_ascii=False) + '\n' for nr in kept_rows))
+            print(f'{name}: needs upgraded to keys {dict(upgraded)}', file=sys.stderr)
     # A frozen batch is not re-read unless the worker re-signed it (a DONE marker newer than the import): then its rows are
     # replaced by the re-signed files, or, for a residual marker, the residual rows are added beside the consumed bulk.
     resigned = {}
