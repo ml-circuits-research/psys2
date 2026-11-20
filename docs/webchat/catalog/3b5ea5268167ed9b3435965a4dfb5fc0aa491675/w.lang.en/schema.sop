@@ -100,6 +100,8 @@
 @w.lang.en.number.kind core.slot of=w.lang.en.number key=kind id=true required=true enum=cardinal enum=ordinal enum=times enum=multiple enum=group enum=fraction core.source="hand-core 1"
 @w.lang.en.number.value core.slot of=w.lang.en.number key=value kind=number core.source="hand-core 1"
 @w.lang.en.number.value_about core.slot of=w.lang.en.number key=value_about excludes=value kind=number core.source="hand-core 1"
+# `misspelled`: a common misspelling of a number word (fourty), read as that number and never written.
+@w.lang.en.number.misspelled core.slot of=w.lang.en.number key=misspelled kind=boolean core.source="hand-core 1"
 @w.lang.en.ordinal core.type of=w.lang.en.ordinal shared=true closed=true core.source="psys2 78f45863"
 @w.lang.en.ordinal.text core.slot of=w.lang.en.ordinal key=text id=true required=true kind=atom core.source="psys2 78f45863"
 @w.lang.en.ordinal.value core.slot of=w.lang.en.ordinal key=value required=true kind=integer core.source="psys2 78f45863"

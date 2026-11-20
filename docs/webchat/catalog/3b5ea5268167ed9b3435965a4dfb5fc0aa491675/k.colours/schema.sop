@@ -34,6 +34,8 @@
 @k.colours.colour.complement core.slot of=k.colours.colour key=complement kind=atom kind=string type=k.colours.colour by=name core.source="hand-core 1"
 @k.colours.colour.kind core.slot of=k.colours.colour key=kind enum=metallic enum=primary enum=secondary enum=neutral core.source="hand-core 1"
 @k.colours.colour.thing core.slot of=k.colours.colour key=thing many=true kind=atom kind=string type=k.objects.object by=name core.source="hand-core 1"
+# `first`: a name that also names a thing (violet, rose, coral, lemon) but that people mean as the colour first, so a reader keeps it a colour word.
+@k.colours.colour.first core.slot of=k.colours.colour key=first kind=boolean core.source="hand-core 1"
 
 # The basic view: the colours with basic=true, one fact each, by rule (written out by tools/derive.mjs). A slot that
 # takes only a basic colour joins it (`type=k.colours.basic by=name`): k.values.coloured, k.drawing.part, the family.

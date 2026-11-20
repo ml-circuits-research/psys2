@@ -3,7 +3,7 @@
 // data.charts operations, which the area's act rules refuse (they are not part of its w.diagram instance).
 import NATIVE_INTERFACE from './native-interface-source.mjs?v=2d66a430be';
 import AREA_SOURCES from './area-sources.mjs?v=271c502e7f';
-import {BUNDLED_AREAS} from '../../lib/knowledge/bundled-areas.mjs?v=812ce73125';
+import {BUNDLED_AREAS} from '../../lib/knowledge/bundled-areas.mjs?v=95569485a9';
 import {chartToolInterface} from '../data.charts/declared-host.mjs?v=7a0f21a9a8';
 import {sopAreaAdapter} from '../sop-area-adapter.mjs?v=56b49a51bd';
 

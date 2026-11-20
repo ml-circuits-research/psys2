@@ -1,6 +1,6 @@
 import { captureHistory, initializeHistory, restoreHistory } from './history-journal.mjs?v=a4ae88133a';
 import {isAuthoredRequest} from './authored-request-tool.mjs?v=6526247abe';
-import { interpretationPolicy } from './interpretation-policy.mjs?v=c57edbec02';
+import { interpretationPolicy } from './interpretation-policy.mjs?v=95c5ac8e35';
 // SPDX-License-Identifier: AGPL-3.0-only
 /**
  * C2 dialog pipeline (spec 06). Browser-safe.
@@ -13,7 +13,7 @@ import { interpretationPolicy } from './interpretation-policy.mjs?v=c57edbec02';
  * Without it all input is treated as English.
  */
 
-import { loadWorlds } from '../worlds/index.mjs?v=a13501b30c';
+import { loadWorlds } from '../worlds/index.mjs?v=ed25787d01';
 import { validateWorldSet } from '../worlds/validate.mjs?v=af0869a8e0';
 
 
@@ -21,8 +21,8 @@ import { perf } from './stage-perf.mjs?v=8b73796daa';
 import { guard, TurnAborted } from './turn-guard.mjs?v=34ed257fec';
 import { createBudget, installBudget, releaseBudget, isBudgetExceeded, budget } from './budget.mjs?v=00bce6e369';
 
-import { attachValues } from '../knowledge/values.mjs?v=b99dbd4c27';
-import { attachArrangement } from '../knowledge/arrangement.mjs?v=1d6de960e8';
+import { attachValues } from '../knowledge/values.mjs?v=65d279aba6';
+import { attachArrangement } from '../knowledge/arrangement.mjs?v=e5227bc44c';
 
 /**
  * The world states of a session: one entry per world, seeded from the world's native initializer (`initialState` of its ops module).
@@ -244,7 +244,7 @@ export class DialogSession {
         }
       }
     }
-    const reply = await (await import('./reader-routing.mjs?v=24640655f2')).routeNewEngine(this, english, { ...opts, language: 'en' });
+    const reply = await (await import('./reader-routing.mjs?v=c1a1d50ca8')).routeNewEngine(this, english, { ...opts, language: 'en' });
     reply.trace = { ...reply.trace, english, ...(translation ? { translation } : {}), ...(detection ? { languageDetection: detection } : {}) };
     if (language !== 'en') {
       try {

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // The language World the host realises frames with (the summary's sentences, the sampler's chips): the generation templates of w.lang.en, its irregular plurals,
 // auxiliaries and prepositions, the verbs of k.actions and the joins of the schemas, from the bundled subset of the catalog. Browser-safe: no `node:*`.
-import { BUNDLED_COMPOSE } from '../knowledge/bundled-compose.mjs?v=77e2666c4c';
+import { BUNDLED_COMPOSE } from '../knowledge/bundled-compose.mjs?v=4b18616184';
 
 const langWorlds = new WeakMap();
 /** The library World of the language alone: the generation templates of w.lang.en (acts and discourse), its irregular plurals, auxiliaries and prepositions, the verbs of k.actions and the joins of the schemas: what `englishOf` reads (src/lang/en-generate.mjs). Small: the dice and the summary do not need the rest of the knowledge. */

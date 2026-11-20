@@ -34357,6 +34357,7 @@
   "k.animals/shards/invertebrates",
   "k.attributes/shards/drawn-noto",
   "k.attributes/shards/same-c",
+  "k.colours/shards/colour-first",
   "k.colours/shards/colours-css",
   "k.commonsense/shards/derived",
   "k.expect/shards/scenes",
@@ -48151,6 +48152,9 @@
  "eightieth": [
   "w.lang.en/shards/number-words"
  ],
+ "eightteen": [
+  "w.lang.en/shards/number-misspellings"
+ ],
  "eighty": [
   "k.words/shards/ei",
   "k.words/shards/frequency-e",
@@ -55183,6 +55187,8 @@
  "first": [
   "k.attributes/shards/aspects",
   "k.attributes/shards/narration",
+  "k.colours/schema.sop",
+  "k.kinds/shards/relations-colours",
   "k.kinds/shards/relations-time",
   "k.procedures/shards/from-knowledge",
   "k.time/schema.sop",
@@ -55521,6 +55527,9 @@
  "fives": [
   "k.words/shards/fi",
   "k.words/shards/frequency-f"
+ ],
+ "fiveteen": [
+  "w.lang.en/shards/number-misspellings"
  ],
  "fix": [
   "k.actions/shards/actions-make-change",
@@ -57561,6 +57570,9 @@
  ],
  "fourth_window": [
   "k.objects/shards/vehicles"
+ ],
+ "fourty": [
+  "w.lang.en/shards/number-misspellings"
  ],
  "fowl": [
   "k.objects/shards/noto-animal-bird-03"
@@ -85897,6 +85909,7 @@
   "k.attributes/shards/numbers-g-o",
   "k.attributes/shards/same-l",
   "k.attributes/shards/things-glosses",
+  "k.colours/shards/colour-first",
   "k.colours/shards/colours",
   "k.colours/shards/colours-common",
   "k.food/shards/fruit",
@@ -101265,6 +101278,9 @@
   "w.lang.en/shards/closed-classes",
   "w.lang.en/shards/number-words",
   "w.lang.en/shards/numbers"
+ ],
+ "ninty": [
+  "w.lang.en/shards/number-misspellings"
  ],
  "nio": [
   "k.units/shards/currencies"
@@ -123401,6 +123417,7 @@
   "k.attributes/shards/same-r",
   "k.attributes/shards/things-nature",
   "k.attributes/shards/things-wikidata",
+  "k.colours/shards/colour-first",
   "k.colours/shards/colours",
   "k.colours/shards/colours-common",
   "k.expect/shards/scenes",
@@ -155517,6 +155534,7 @@
   "k.attributes/shards/numbers-p-z",
   "k.attributes/shards/same-v",
   "k.attributes/shards/things-nature",
+  "k.colours/shards/colour-first",
   "k.colours/shards/colours",
   "k.colours/shards/colours-css",
   "k.kinds/shards/kind",

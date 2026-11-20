@@ -1,18 +1,18 @@
 // Assemble trusted native observations and dispatch the compiler's SOP call.
 import {World,parse,serialize,str,quote} from '../vendor/sopworld/sopworld.mjs?v=4cf6e60057';
-import SOURCE from './new-engine-source.mjs?v=89df1e7c92';
-import {readPlacementProfile,rememberPlacement} from '../../worlds/app.project/spatial-profile.mjs?v=70ad4f2468';
+import SOURCE from './new-engine-source.mjs?v=6af687905b';
+import {readPlacementProfile,rememberPlacement} from '../../worlds/app.project/spatial-profile.mjs?v=f60a97175d';
 import {placementInterfaceSop} from '../../worlds/native-spatial-interface.mjs?v=f1f08b66d7';
-import {NATIVE_AREAS,createAreaHost} from './app-reader-context.mjs?v=c6f234c44e';
+import {NATIVE_AREAS,createAreaHost} from './app-reader-context.mjs?v=fd5e58c701';
 import {identityRegistryFor,instanceIdFor} from './instance-identity.mjs?v=024ef1ca83';
 import {nativeKindCandidates,nativeCreationCandidates} from './native-binding-candidates.mjs?v=23ab5f219d';
 import {invokeObservedNativeTool} from './native-tool-activity.mjs?v=9e7d8073a0';
-import {describeNativeControl,verifyNativeControlEffect} from './native-control-intent.mjs?v=85f1c0eeb9';
+import {describeNativeControl,verifyNativeControlEffect} from './native-control-intent.mjs?v=999c87cd52';
 import {placementSearchProvider,z3Status} from './placement-search-provider.mjs?v=0675893eb5';
-import {en} from '../lang/en.mjs?v=63a0a6f36a';
+import {en} from '../lang/en.mjs?v=1072ad24cc';
 import {placementHypotheses} from './placement-default-policy.mjs?v=75fb3f0237';
-import {identityConcepts} from './capability-plan-adapter.mjs?v=eaca1dbb82';
-import {executeNativeCapability} from './capability-plan-execution.mjs?v=1d1698c8a2';
+import {identityConcepts} from './capability-plan-adapter.mjs?v=c03ed3134d';
+import {executeNativeCapability} from './capability-plan-execution.mjs?v=11ad56d308';
 import {budget} from './budget.mjs?v=00bce6e369';
 import {executionPolicyWorld} from './execution-policy.mjs?v=abb458111b';
 

@@ -1,6 +1,6 @@
 import {World,quote,serialize} from '../vendor/sopworld/sopworld.mjs?v=4cf6e60057';
 import {groundMention} from './lexical-grounding.mjs?v=b00e8bc2b1';
-import {createAreaHost,NATIVE_AREAS} from './app-reader-context.mjs?v=c6f234c44e';
+import {createAreaHost,NATIVE_AREAS} from './app-reader-context.mjs?v=fd5e58c701';
 import {nativeCreationCandidates} from './native-binding-candidates.mjs?v=23ab5f219d';
 import POLICY from '../../worlds/app.project/query-reading-policy-source.mjs?v=cf7b2d9297';
 import {detachGroundedRequest} from './grounded-projection.mjs?v=0185c6d256';

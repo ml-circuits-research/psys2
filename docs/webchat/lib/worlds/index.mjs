@@ -9,7 +9,7 @@
 import { parse, get, getAll } from '../soplang/index.mjs?v=c57881f705';
 import { Legends } from '../legends/index.mjs?v=45bd60c654';
 import { readDescriptionWires, slotDeclarations } from './describe.mjs?v=06c346ca73';
-import { lexIndex } from './lexicon.mjs?v=682a1836d4';
+import { lexIndex } from './lexicon.mjs?v=75888e0bd9';
 import { budget } from '../dialog/budget.mjs?v=00bce6e369';
 
 const FILES = ['world.sop', 'legend.sop', 'lexicon.sop', 'patterns.sop', 'operations.sop', 'kb.sop', 'templates.sop', 'tests.sop'];

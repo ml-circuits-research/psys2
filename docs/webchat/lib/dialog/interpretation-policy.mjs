@@ -4,8 +4,8 @@
 // confidence at which a detected input language replaces the selected one. The routing code reads these facts; it
 // holds no order, bound or threshold of its own.
 import {World,str} from '../vendor/sopworld/sopworld.mjs?v=4cf6e60057';
-import SCHEMA from '../../worlds/app.project/interpretation-schema-source.mjs?v=b701881cd4';
-import POLICY from '../../worlds/app.project/interpretation-policy-source.mjs?v=0c7d4d3350';
+import SCHEMA from '../../worlds/app.project/interpretation-schema-source.mjs?v=e68d45b0f3';
+import POLICY from '../../worlds/app.project/interpretation-policy-source.mjs?v=124df3b40f';
 
 const MODULE='app.interpret';
 let loaded=null,policy=null;
@@ -42,7 +42,9 @@ export function interpretationPolicy(source=POLICY){
  const families=world.ofType(MODULE+'.family').map(row=>({area:one(row,'area'),type:one(row,'family'),kind:one(row,'kind')}));
  const relations=world.ofType(MODULE+'.relation').map(row=>({id:row.id,area:one(row,'area'),key:one(row,'key'),anchor:one(row,'anchor'),like:one(row,'like'),
   values:Object.fromEntries(world.ofType(MODULE+'.relationValue').filter(v=>v.attrs.of?.[0]==='$'+row.id).map(v=>[one(v,'value'),one(v,'relation')]))}));
- const result=Object.freeze({retries,notes,compare,coordination,language:{id:detect[0].id,minConfidence:Number(one(detect[0],'min.confidence'))},partial:{defaults,drops,fallbacks,families,relations}});
+ const control={verbs:Object.fromEntries(world.ofType(MODULE+'.controlVerb').map(row=>[one(row,'act'),one(row,'text')])),modifiers:Object.fromEntries(world.ofType(MODULE+'.controlModifier').map(row=>[one(row,'parameter'),one(row,'text')]))};
+ if(!control.verbs.other)throw Error('invalid-interpretation-policy: a control verb for act other');
+ const result=Object.freeze({retries,notes,compare,coordination,control,language:{id:detect[0].id,minConfidence:Number(one(detect[0],'min.confidence'))},partial:{defaults,drops,fallbacks,families,relations}});
  if(source===POLICY)policy=result;
  return result;
 }

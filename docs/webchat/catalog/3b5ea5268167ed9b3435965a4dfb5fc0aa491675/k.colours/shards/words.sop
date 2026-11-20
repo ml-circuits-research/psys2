@@ -25,6 +25,7 @@
 @k.colours.word.key.colour.temperature core.word text=temperature means=k.colours.colour.temperature core.source="hand-core 1"
 @k.colours.word.key.colour.kind core.word text=kind means=k.colours.colour.kind core.source="hand-core 1"
 @k.colours.word.key.colour.thing core.word text=thing means=k.colours.colour.thing core.source="hand-core 1"
+@k.colours.word.key.colour.first core.word text=first means=k.colours.colour.first core.source="hand-core 1"
 @k.colours.word.key.basic.derived core.word text=derived means=k.colours.basic.derived core.source="hand-core 1"
 @k.colours.word.key.mix.b core.word text=b means=k.colours.mix.b core.source="hand-core 1"
 @k.colours.word.key.mix.gives core.word text=gives means=k.colours.mix.gives core.source="hand-core 1"

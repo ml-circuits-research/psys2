@@ -1,0 +1,10 @@
+# k.colours/shards/colour-first: colour names that also name things (violet, rose, coral, lemon) but that people mean as
+# the colour first, so a reader keeps them colour words (first=true).
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@k.colours.first.violet k.colours.colour name=violet first=true core.source="hand-core 1"
+@k.colours.first.rose k.colours.colour name=rose first=true core.source="hand-core 1"
+@k.colours.first.coral k.colours.colour name=coral first=true core.source="hand-core 1"
+@k.colours.first.lemon k.colours.colour name=lemon first=true core.source="hand-core 1"

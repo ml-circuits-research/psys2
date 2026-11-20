@@ -22,10 +22,10 @@
 //  6. a kind named by the modifier of its compound lemmas ("a pie" for "pie chart", "pie graph": the compound's last
 //     word a lemma of its family's own class) is that kind, when every such compound names the same kind.
 import {parse,str} from '../vendor/sopworld/sopworld.mjs?v=4cf6e60057';
-import {interpretationPolicy} from './interpretation-policy.mjs?v=c57edbec02';
+import {interpretationPolicy} from './interpretation-policy.mjs?v=95c5ac8e35';
 import {executionPolicyWorld} from './execution-policy.mjs?v=abb458111b';
-import {declaredValueRows} from './declared-value-readings.mjs?v=545ce31b26';
-import {numberWords,numberInfo} from '../knowledge/values.mjs?v=b99dbd4c27';
+import {declaredValueRows} from './declared-value-readings.mjs?v=132508ec8f';
+import {numberWords,numberInfo} from '../knowledge/values.mjs?v=65d279aba6';
 import EXECUTION_POLICY from '../../worlds/app.project/execution-policy-source.mjs?v=b5a27440da';
 import DRAW from '../../worlds/art.draw/native-interface-source.mjs?v=afabeecb4f';
 import DIAGRAM from '../../worlds/diagram.sketch/native-interface-source.mjs?v=2d66a430be';

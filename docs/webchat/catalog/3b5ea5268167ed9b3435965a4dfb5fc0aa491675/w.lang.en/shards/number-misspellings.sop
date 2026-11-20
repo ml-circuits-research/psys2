@@ -1,0 +1,10 @@
+# w.lang.en/shards/number-misspellings: number words people commonly misspell (fiveteen, eightteen, fourty, ninty), read as
+# the number they mean and never written (misspelled=true).
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@w.lang.en.number.misspelled.fiveteen w.lang.en.number text=fiveteen kind=cardinal value=15 misspelled=true core.source="hand-core 1"
+@w.lang.en.number.misspelled.eightteen w.lang.en.number text=eightteen kind=cardinal value=18 misspelled=true core.source="hand-core 1"
+@w.lang.en.number.misspelled.fourty w.lang.en.number text=fourty kind=cardinal value=40 misspelled=true core.source="hand-core 1"
+@w.lang.en.number.misspelled.ninty w.lang.en.number text=ninty kind=cardinal value=90 misspelled=true core.source="hand-core 1"

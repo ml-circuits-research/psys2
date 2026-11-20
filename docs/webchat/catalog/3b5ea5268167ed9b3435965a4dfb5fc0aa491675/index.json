@@ -1,5 +1,5 @@
 {
- "version": "dfa90827ae6e",
+ "version": "981ee7f3db77",
  "sopworld": "747b51e",
  "worlds": [
   {
@@ -4711,8 +4711,8 @@
     {
      "id": "k.attributes/shards/narration",
      "path": "k.attributes/shards/narration.sop",
-     "wires": 1496,
-     "bytes": 290122,
+     "wires": 1497,
+     "bytes": 290303,
      "keys": [
       "a",
       "about",
@@ -13086,6 +13086,23 @@
    },
    "shards": [
     {
+     "id": "k.colours/shards/colour-first",
+     "path": "k.colours/shards/colour-first.sop",
+     "wires": 4,
+     "bytes": 650,
+     "keys": [
+      "coral",
+      "lemon",
+      "rose",
+      "violet"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
      "id": "k.colours/shards/colours-common",
      "path": "k.colours/shards/colours-common.sop",
      "wires": 44,
@@ -13378,8 +13395,8 @@
     {
      "id": "k.colours/shards/words",
      "path": "k.colours/shards/words.sop",
-     "wires": 21,
-     "bytes": 3066,
+     "wires": 22,
+     "bytes": 3175,
      "keys": [],
      "sources": [
       "hand-core-1"
@@ -34770,8 +34787,8 @@
     {
      "id": "k.kinds/shards/relations-colours",
      "path": "k.kinds/shards/relations-colours.sop",
-     "wires": 17,
-     "bytes": 3935,
+     "wires": 18,
+     "bytes": 4115,
      "keys": [
       "a",
       "b",
@@ -34781,6 +34798,7 @@
       "darker",
       "derived",
       "family",
+      "first",
       "gives",
       "k.colours.basic",
       "k.colours.colour",
@@ -96289,6 +96307,23 @@
      ],
      "sources": [
       "psys2-78f45863"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "w.lang.en/shards/number-misspellings",
+     "path": "w.lang.en/shards/number-misspellings.sop",
+     "wires": 4,
+     "bytes": 819,
+     "keys": [
+      "eightteen",
+      "fiveteen",
+      "fourty",
+      "ninty"
+     ],
+     "sources": [
+      "hand-core-1"
      ],
      "license": "CC0-1.0",
      "warnings": []
