@@ -1,7 +1,7 @@
 @mode.make std.capability.mode act=make target=new
 @mode.change std.capability.mode act=change target=existing requireResult=true selector=true selectorUnique=true
-@mode.place std.capability.mode act=place target=existing requireResult=true
-@mode.remove std.capability.mode act=remove target=existing
+@mode.place std.capability.mode act=place target=existing requireResult=true selector=true selectorUnique=true
+@mode.remove std.capability.mode act=remove target=existing selector=true
 @mode.arrange std.capability.mode act=arrange target=existing
 
 # The kind a target names fills a tool's kind parameter when one of its words is a declared value of it. A family
