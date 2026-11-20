@@ -9,23 +9,25 @@ const MAX_MODULES = 128;
 export async function catalogWorld(readText, { modules, shardsOf = () => [], use = modules, options = {} } = {}) {
   const index = JSON.parse(await readText('index.json'));
   const entries = new Map([...(index.worlds ?? []), ...(index.schemas ?? [])].map((entry) => [entry.id, entry]));
-  const library = {}, pending = [...modules];
-  while (pending.length) {
-    const id = pending.pop();
-    if (library[id] !== undefined) continue;
-    const entry = entries.get(id);
-    if (!entry?.schema) throw Error('catalog-module-unavailable:' + id);
-    if (Object.keys(library).length >= MAX_MODULES) throw Error('catalog-module-budget');
-    library[id] = await readText(entry.schema);
-    for (const dependency of entry.depends ?? []) if (entries.has(dependency)) pending.push(dependency);
+  // Each wave of schemas (the named modules, then what they depend on) and every named shard is read at once: the
+  // reads are independent, and a catalog served over the network costs one round trip per wave, not one per file.
+  const library = {};
+  let wave = [...new Set(modules)];
+  while (wave.length) {
+    for (const id of wave) if (!entries.get(id)?.schema) throw Error('catalog-module-unavailable:' + id);
+    if (Object.keys(library).length + wave.length > MAX_MODULES) throw Error('catalog-module-budget');
+    const texts = await Promise.all(wave.map((id) => readText(entries.get(id).schema)));
+    wave.forEach((id, n) => { library[id] = texts[n]; });
+    wave = [...new Set(wave.flatMap((id) => entries.get(id).depends ?? []))].filter((id) => entries.has(id) && library[id] === undefined);
   }
   // options: World options a caller declares (a derivation depth budget), passed through unchanged.
   const world = new World({ ...options, library });
   const loaded = world.load(use.map((id, n) => `@catalog.use.${n} core.use world=${id}`).join('\n'));
   if (!loaded.ok) throw Error('catalog-load-refused');
-  for (const id of modules) for (const path of shardsOf(entries.get(id))) {
-    const told = world.tell(await readText(path), { factsOnly: true });
+  const paths = modules.flatMap((id) => shardsOf(entries.get(id))), shardTexts = await Promise.all(paths.map((path) => readText(path)));
+  paths.forEach((path, n) => {
+    const told = world.tell(shardTexts[n], { factsOnly: true });
     if (!told.ok) throw Error('catalog-shard-refused:' + path);
-  }
+  });
   return world;
 }

@@ -53,11 +53,13 @@ export async function areaBase({ world, loader, readCatalog }) {
     // calls=instance: the compiled calls run in a world of the instance schema (and knowledge schemas) without the
     // area's rules, so an act does not re-derive the area's projection (an area whose rules derive deeply asks for it).
     const callBase = read(area, 'calls') === 'instance' ? base.fork() : null;
-    for (const rules of owned('app.area.rules').sort((a, b) => Number(read(a, 'n')) - Number(read(b, 'n')))) {
-      // world=: a rule file another area owns and shares (the face rules of the Avatar tab, read by the Drawing tab).
-      const source = await loader.readFile(read(rules, 'world') ?? world, read(rules, 'file'));
-      if (!source || !base.load(source).ok) throw Error('area-rules-refused:' + read(rules, 'file'));
-    }
+    // The rule files in their declared order, loaded as one source: the world compiles its rules once, not once per
+    // file. A refusal names the files (the area is not built).
+    // world=: a rule file another area owns and shares (the face rules of the Avatar tab, read by the Drawing tab).
+    const ruleFiles = owned('app.area.rules').sort((a, b) => Number(read(a, 'n')) - Number(read(b, 'n'))),
+      ruleSources = await Promise.all(ruleFiles.map((rules) => loader.readFile(read(rules, 'world') ?? world, read(rules, 'file'))));
+    ruleFiles.forEach((rules, n) => { if (!ruleSources[n]) throw Error('area-rules-refused:' + read(rules, 'file')); });
+    if (ruleFiles.length && !base.load(ruleSources.join('\n')).ok) throw Error('area-rules-refused:' + ruleFiles.map((rules) => read(rules, 'file')).join(','));
     const kinds = base.ofType('std.schema.kind').map((kind) => read(kind, 'of')).filter((kind) => instances.some((id) => kind.startsWith(id + '.')));
     return { base, callBase, area, owned, declarations, kinds, instance, lookups, loadedShards: new Set(), readCatalog };
   })();
@@ -98,11 +100,14 @@ async function ensureLookups(declared, state, args = {}) {
     // What the area offers by name (its declared choices) is drawable before any command names it.
     for (const offered of Object.values(choices(declared))) for (const value of [].concat(offered)) if (typeof value === 'string') values.add(value);
     const entry = entries.get(read(lookup, 'world'));
-    for (const shard of entry?.shards ?? []) {
-      const path = typeof shard === 'string' ? shard : shard.path, keys = typeof shard === 'string' ? [] : shard.keys ?? [];
-      if (declared.loadedShards.has(path) || !keys.some((k) => values.has(k))) continue;
-      declared.shardTexts ??= new Map();
-      if (!declared.shardTexts.has(path)) declared.shardTexts.set(path, await declared.readCatalog(path));
+    // The candidate shards (index keys naming a looked-up value) are read at once, then told in index order.
+    const paths = (entry?.shards ?? []).filter((shard) => typeof shard !== 'string' && (shard.keys ?? []).some((k) => values.has(k)))
+      .map((shard) => shard.path).filter((path) => !declared.loadedShards.has(path));
+    declared.shardTexts ??= new Map();
+    const missing = paths.filter((path) => !declared.shardTexts.has(path)), texts = await Promise.all(missing.map((path) => declared.readCatalog(path)));
+    missing.forEach((path, n) => declared.shardTexts.set(path, texts[n]));
+    for (const path of paths) {
+      if (declared.loadedShards.has(path)) continue;
       const text = declared.shardTexts.get(path);
       if (!definesAny(text, entry.indexedFields, values)) continue;
       declared.loadedShards.add(path);

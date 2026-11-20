@@ -3,7 +3,7 @@
 import NATIVE_INTERFACE from './native-interface-source.mjs?v=eacc432785';
 import AREA_SOURCES from './area-sources.mjs?v=0dc6759588';
 import {BUNDLED_AREAS} from '../../lib/knowledge/bundled-areas.mjs?v=f639f6a52b';
-import {sopAreaAdapter} from '../sop-area-adapter.mjs?v=ce0f6408ed';
+import {sopAreaAdapter} from '../sop-area-adapter.mjs?v=ee3421cbaf';
 
 const area = sopAreaAdapter({ world: 'ui.avatar', instance: 'w.face', interfaceSource: NATIVE_INTERFACE, sources: AREA_SOURCES, offline: BUNDLED_AREAS['ui.avatar'] });
 export const emptyAvatarState = area.empty, canonicalAvatarArea = area.canonical, createAvatarArea = area.create,

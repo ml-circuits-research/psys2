@@ -1,7 +1,7 @@
 import {readAuthoredRequest} from './authored-request-tool.mjs?v=1afc9437bc';
 import {parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=47abc4a87a';
 import {historyPolicy} from './history-policy.mjs?v=5b8eee412a';
-import {observeHistory,createHistoryTool} from './history-tool.mjs?v=ca9df9694a';
+import {observeHistory,createHistoryTool} from './history-tool.mjs?v=6871f51612';
 import {invokeObservedNativeTool} from './native-tool-activity.mjs?v=4e27e4efe9';
 
 const area={world:'app.history',stateWorld:true};
