@@ -36,6 +36,16 @@ Issue counts on the untouched source rows (per request or constraint where the i
 | measure_span-not-in-span | 20 |
 | anchor_span-not-in-span | 15 |
 
+### ui-coverage-v2 (3,180 rows)
+
+| issue | rows |
+| --- | ---: |
+| warning:selector-not-in-context | 95 |
+| warning:value-span-ambiguous | 54 |
+| warning:target-name_span-ambiguous | 28 |
+| warning:target-kind_span-ambiguous | 11 |
+| warning:numeric-value-not-in-surface | 6 |
+
 ### ui-relations-v1 (5,374 rows)
 
 | issue | rows |
@@ -83,6 +93,14 @@ Fixed or converted:
 | definite-description-name-to-kind | 224 |
 | absolute-degree-word-as-degree | 95 |
 | class-value-outside-bank-unlabelled | 88 |
+| key-meeting.length-for-duration | 18 |
+| act-arrange-for-diagram.group.layout | 17 |
+| act-group-for-diagram.group.make | 7 |
+| act-connect-for-diagram.link.make | 6 |
+| text-target-for-document.write | 6 |
+| act-arrange-for-diagram.node.layout | 5 |
+| act-remove-for-diagram.selection.remove | 5 |
+| act-ungroup-for-diagram.group.ungroup | 5 |
 | comparative-as-delta-step | 3 |
 | anchor-span-as-anchor-mention | 3 |
 
@@ -106,6 +124,14 @@ Fixed or converted:
 | absolute-degree-word-as-degree | 110 |
 | comparative-as-delta-step | 61 |
 | anchor-span-as-anchor-mention | 60 |
+| act-arrange-for-diagram.node.layout | 46 |
+| act-connect-for-diagram.link.make | 46 |
+| act-remove-for-diagram.selection.remove | 45 |
+| key-meeting.length-for-duration | 40 |
+| act-group-for-diagram.group.make | 23 |
+| act-arrange-for-diagram.group.layout | 23 |
+| act-ungroup-for-diagram.group.ungroup | 23 |
+| text-target-for-document.write | 23 |
 
 Dropped:
 
@@ -122,6 +148,27 @@ Kept with a warning (not an error; see README):
 | selector-not-in-context | 1,119 |
 | value-span-ambiguous | 303 |
 | target-name_span-ambiguous | 131 |
+
+### ui-coverage-v2: 3,180 in, 3,180 kept
+
+Fixed or converted:
+
+| fix | rows |
+| --- | ---: |
+| definite-description-name-to-kind | 66 |
+| comparative-as-delta-step | 55 |
+| absolute-degree-word-as-degree | 50 |
+| anchor-span-as-anchor-mention | 26 |
+
+Kept with a warning (not an error; see README):
+
+| warning | rows |
+| --- | ---: |
+| selector-not-in-context | 95 |
+| value-span-ambiguous | 57 |
+| target-name_span-ambiguous | 28 |
+| target-kind_span-ambiguous | 11 |
+| numeric-value-not-in-surface | 6 |
 
 ### ui-relations-v1: 5,374 in, 5,374 kept
 
@@ -191,7 +238,7 @@ Dropped:
 | reason | rows |
 | --- | ---: |
 | dropped:avatar-label-or-text-nonsense | 8,717 |
-| dropped:balance-cap-per-family | 3,617 |
+| dropped:balance-cap-per-family | 3,616 |
 | dropped:mechanical-keyword-text-for-existing-object | 2,644 |
 | dropped:balance-cap-per-operation | 2,628 |
 | dropped:avatar-variant-not-attested-for-slot | 1,007 |
@@ -212,8 +259,8 @@ Dropped:
 | dropped:compound-part-operation-without-written-selector-template | 9 |
 | dropped:compound-part-calendar-placeholder-values-not-text-evidence | 8 |
 | dropped:compound-part-avatar-label-or-text-nonsense | 7 |
+| dropped:duplicate-text | 6 |
 | dropped:compound-part-avatar-question-about-face-or-preset-not-parts | 5 |
-| dropped:duplicate-text | 5 |
 | dropped:avatar-selector-not-face | 4 |
 | dropped:compound-part-make-generic-object-with-placeholder-name | 3 |
 | dropped:compound-part-numeric-selector-without-referent | 2 |

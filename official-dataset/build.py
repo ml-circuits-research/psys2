@@ -32,6 +32,7 @@ KNOWLEDGE = WORKSPACE / 'sop-knowledge-worlds' / 'docs' / 'worlds'
 SOURCES = [
     ('ui-natural-v1', DATA / 'ui-natural-v1' / 'authored.jsonl', 'C1 commands executed through the editors (natural, synonym, elliptical, omission)'),
     ('ui-human-v1', DATA / 'ui-human-v1' / 'examples.jsonl', 'human paraphrases (equivalent/complex/simplified) of executed ui-natural seeds'),
+    ('ui-coverage-v2', DATA / 'ui-coverage-v2' / 'examples.jsonl', 'case coverage of every tab operation, at least 20 rows per case (build.py)'),
     ('ui-relations-v1', DATA / 'ui-relations-v1' / 'examples.jsonl', 'relative-position placement requests (generate.py)'),
     ('ui-comparatives-v1', DATA / 'ui-comparatives-v1' / 'examples.jsonl', 'comparative changes of existing objects (generate.py)'),
     ('demo-tool-profile', DATA / 'demo-tool-profile' / 'active.jsonl.gz', 'the corpus of the deployed reader: haiku-v1/v2 authored data plus demo tool supplements'),
@@ -347,6 +348,32 @@ def degree_fix(row, stats):
                     stats['comparative-as-delta-step'] += 1
             elif vs.lower() in ABSOLUTE_DEGREES and c.get('operator') == 'eq':
                 c['operator'] = 'degree'; stats['absolute-degree-word-as-degree'] += 1
+    return row
+
+
+# One label per intent across corpora (majority of the old corpus and the coverage corpus).
+ACT_BY_OPERATION = {'diagram.link.make': ('link', 'connect'), 'diagram.node.layout': ('node', 'arrange'), 'diagram.group.layout': ('group', 'arrange'),
+                    'diagram.selection.remove': ('sketch', 'remove'), 'diagram.group.make': ('group', 'group'), 'diagram.group.ungroup': ('group', 'ungroup')}
+KEY_RENAMES = {('calendar', 'meeting.duration'): 'meeting.length'}
+
+
+def harmonise(row, stats):
+    for c in (c for q in row['requests'] for c in q.get('constraints') or []):
+        new = KEY_RENAMES.get((row['world'], c['key']))
+        if new:
+            c['key'] = new; stats[f'key-{new}-for-duration'] += 1
+    if len(row['requests']) != 1:
+        return row
+    q = row['requests'][0]
+    typ_act = ACT_BY_OPERATION.get(row.get('operation'))
+    if typ_act and q['target'].get('type') == typ_act[0] and q['act'] != typ_act[1]:
+        q['act'] = typ_act[1]; stats[f'act-{typ_act[1]}-for-{row["operation"]}'] += 1
+    if row.get('operation') == 'document.write' and q['target'].get('type') == 'document':
+        q['target']['type'] = 'text'
+        for c in q.get('constraints') or []:
+            if c['key'].startswith('document.'):
+                c['key'] = 'text.' + c['key'].split('.', 1)[1]
+        stats['text-target-for-document.write'] += 1
     return row
 
 
@@ -932,7 +959,7 @@ def main():
                 row = anchors_fix(ui_row(name, r, i), fixes[name], inv)
                 if name == 'ui-human-v1':
                     row = qualitative_fix(row, fixes[name])
-            row = degree_fix(definite_description_fix(row, fixes[name], kind_lemmas), fixes[name])
+            row = harmonise(degree_fix(definite_description_fix(row, fixes[name], kind_lemmas), fixes[name]), fixes[name])
             e, w, f = validator.check(row)
             for x in f:
                 fixes[name][x] += 1

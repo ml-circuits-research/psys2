@@ -397,7 +397,7 @@
         "avatar-label-or-text-nonsense": 3253,
         "balance-cap-per-operation": 1315,
         "mechanical-keyword-text-for-existing-object": 888,
-        "balance-cap-per-family": 805,
+        "balance-cap-per-family": 803,
         "not-assembled:surface-missing-or-not-unique": 422,
         "avatar-variant-not-attested-for-slot": 288,
         "placeholder-value-for-color": 192,
@@ -406,7 +406,7 @@
         "calendar-placeholder-values-not-text-evidence": 56,
         "avatar-preset-shape": 48,
         "make-without-single-kind": 27,
-        "duplicate-text": 14,
+        "duplicate-text": 16,
         "value-not-in-class-bank": 14,
         "make-generic-object-with-placeholder-name": 14
       }
@@ -529,13 +529,13 @@
         "mechanical-keyword-text-for-existing-object": 256,
         "avatar-label-or-text-nonsense": 163,
         "not-assembled:duplicate-of-another-variant": 110,
-        "balance-cap-per-family": 104,
+        "balance-cap-per-family": 102,
         "not-assembled:surface-missing-or-not-unique": 79,
         "avatar-preset-shape": 48,
         "avatar-part-shape": 46,
         "calendar-placeholder-values-not-text-evidence": 36,
         "avatar-variant-not-attested-for-slot": 21,
-        "duplicate-text": 10,
+        "duplicate-text": 12,
         "value-not-in-class-bank": 8,
         "placeholder-value-for-color": 6,
         "make-generic-object-with-placeholder-name": 6,
@@ -544,7 +544,7 @@
     }
   ],
   "builder": "official-dataset/build.py",
-  "builderSha256": "924734ac8954ca46111ba25cf47e53bafce40d4e2bbbf031c63ab81d5c672bda",
+  "builderSha256": "fc331a63c011bd36665f4395d43036c8f41d9a6be838e2e19eb2336a78fb6a29",
   "sources": [
     {
       "name": "ui-natural-v1",
@@ -558,10 +558,18 @@
       "dropReasons": {},
       "fixes": {
         "absolute-degree-word-as-degree": 95,
+        "act-arrange-for-diagram.group.layout": 17,
+        "act-arrange-for-diagram.node.layout": 5,
+        "act-connect-for-diagram.link.make": 6,
+        "act-group-for-diagram.group.make": 7,
+        "act-remove-for-diagram.selection.remove": 5,
+        "act-ungroup-for-diagram.group.ungroup": 5,
         "anchor-span-as-anchor-mention": 3,
         "class-value-outside-bank-unlabelled": 88,
         "comparative-as-delta-step": 3,
-        "definite-description-name-to-kind": 224
+        "definite-description-name-to-kind": 224,
+        "key-meeting.length-for-duration": 18,
+        "text-target-for-document.write": 6
       }
     },
     {
@@ -580,11 +588,36 @@
       },
       "fixes": {
         "absolute-degree-word-as-degree": 110,
+        "act-arrange-for-diagram.group.layout": 23,
+        "act-arrange-for-diagram.node.layout": 46,
+        "act-connect-for-diagram.link.make": 46,
+        "act-group-for-diagram.group.make": 23,
+        "act-remove-for-diagram.selection.remove": 45,
+        "act-ungroup-for-diagram.group.ungroup": 23,
         "anchor-span-as-anchor-mention": 60,
         "class-value-outside-bank-unlabelled": 330,
         "comparative-as-delta-step": 61,
         "definite-description-name-to-kind": 504,
-        "qualitative-value-unlabelled": 329
+        "key-meeting.length-for-duration": 40,
+        "qualitative-value-unlabelled": 329,
+        "text-target-for-document.write": 23
+      }
+    },
+    {
+      "name": "ui-coverage-v2",
+      "path": "training/sop-bert/data/ui-coverage-v2/examples.jsonl",
+      "description": "case coverage of every tab operation, at least 20 rows per case (build.py)",
+      "gitCommit": "bae5dc5fc4d3f4f4c9ac70d679ecae11c8259878",
+      "sha256": "399bc288581a6f55b8b9899f02ead62eb1bd0b8c35eea5652fcd89ee5c44ab30",
+      "rowsIn": 3180,
+      "rowsKept": 3180,
+      "rowsDropped": 0,
+      "dropReasons": {},
+      "fixes": {
+        "absolute-degree-word-as-degree": 50,
+        "anchor-span-as-anchor-mention": 26,
+        "comparative-as-delta-step": 55,
+        "definite-description-name-to-kind": 66
       }
     },
     {
@@ -606,7 +639,7 @@
       "name": "ui-comparatives-v1",
       "path": "training/sop-bert/data/ui-comparatives-v1/examples.jsonl",
       "description": "comparative changes of existing objects (generate.py)",
-      "gitCommit": null,
+      "gitCommit": "f167ea139bcb0f5c4e1da3ac1ac1bbbf14dfcc39",
       "sha256": "2187f35ba9dd758f60b312cde9792fbf464bdb1b4803db1ef8d50f956f032fdf",
       "rowsIn": 786,
       "rowsKept": 786,
@@ -649,7 +682,7 @@
         "dropped:avatar-question-about-face-or-preset-not-parts": 72,
         "dropped:avatar-selector-not-face": 4,
         "dropped:avatar-variant-not-attested-for-slot": 1007,
-        "dropped:balance-cap-per-family": 3617,
+        "dropped:balance-cap-per-family": 3616,
         "dropped:balance-cap-per-operation": 2628,
         "dropped:calendar-placeholder-values-not-text-evidence": 551,
         "dropped:compound-part-avatar-label-or-text-nonsense": 7,
@@ -662,7 +695,7 @@
         "dropped:compound-part-placeholder-value-for-color": 2,
         "dropped:compound-part-placeholder-value-for-edges": 1,
         "dropped:compound-part-value-not-in-class-bank": 1,
-        "dropped:duplicate-text": 5,
+        "dropped:duplicate-text": 6,
         "dropped:make-generic-object-with-placeholder-name": 142,
         "dropped:make-without-single-kind": 47,
         "dropped:mechanical-keyword-text-for-existing-object": 2644,
@@ -795,11 +828,11 @@
     }
   ],
   "splits": {
-    "train": 38941,
-    "dev": 4637,
-    "test": 4524
+    "train": 41870,
+    "dev": 5128,
+    "test": 4880
   },
-  "families": 22404,
+  "families": 23299,
   "leakedFamilies": 0,
   "labelConflictsResolvedByPriority": {
     "ui-natural-v1<-demo-tool-profile": 5,
@@ -808,10 +841,11 @@
   },
   "previousMessageAugmentation": {
     "ui-natural-v1": 314,
-    "ui-human-v1": 714,
+    "ui-human-v1": 716,
+    "ui-coverage-v2": 595,
     "ui-relations-v1": 1370,
     "ui-comparatives-v1": 154,
-    "main-synthetic": 1214
+    "main-synthetic": 1213
   },
   "kindVocabulary": {
     "path": "docs/webchat/models/sop-bert/1139b40bff92d2b19a034164774580a15e28a7063f83c8bee35c19f02add9e6e/bindings.json",
@@ -819,38 +853,39 @@
   },
   "files": {
     "STATS.md": {
-      "sha256": "fc6e59547985e6d4e9b31ebed9182ab36453d109edfec01cec85c1f1e63efc7f",
-      "bytes": 6474
+      "sha256": "07cf8dcd0557287deaf1a4677a9aea57ed6f4a0331a3326740ca696e0e048587",
+      "bytes": 6737
     },
     "VALIDATION.md": {
-      "sha256": "cf9380b73824cc0f541b921efdeca314e3bfd9d769a3e0d241ba6f70a11b141e",
-      "bytes": 7332
+      "sha256": "6d7db347f7cc531960807feacadb4898dc641b74373048d459124353f7ec1742",
+      "bytes": 8817
     },
     "audit-sample.md": {
-      "sha256": "a02e3bcbdb177e1412bf24dce2b0ae9a4c39315c2bc176f6f64121b3aef65368",
-      "bytes": 44486
+      "sha256": "675753491a31f986c0cbd6dce8b6ef0973d556ffddfa46c6a77688aadc68a2bc",
+      "bytes": 44203
     },
     "dev.jsonl": {
-      "sha256": "b1f1d813c9f708f72a9738db6ff1ae51f7348a076445b65d6117977363d1e253",
-      "bytes": 4884013
+      "sha256": "64dde3106184a7a358a3e245608ccd61f63966e273c7a4e8b7732558c7daf948",
+      "bytes": 5580145
     },
     "inventory.json": {
       "sha256": "e3c7fbe6eef59087f70e0797b5f959ff5ce42951ed9f5ecb6813b6842c4e11da",
       "bytes": 50976
     },
     "test.jsonl": {
-      "sha256": "3382028bf83c356ee977a74a63e9d25d9edc0e2974e65bfdb02835977a1a8dc7",
-      "bytes": 4856861
+      "sha256": "f4c20aad67c5380b2ece846bd50c5e5c57febf8be4a20e77986c76a291d6c1be",
+      "bytes": 5316443
     },
     "train.jsonl.gz": {
-      "sha256": "08c604bd0c8a03d5e5253a31941911ba13fa66576c99e76c90d0656e11359bb4",
-      "bytes": 1978992
+      "sha256": "f38544751e31e08af90c60d322b216b9e28d402ca14d0b71593a4a7f6e1722a9",
+      "bytes": 2183001
     }
   },
   "policy": {
     "priority": [
       "ui-natural-v1",
       "ui-human-v1",
+      "ui-coverage-v2",
       "ui-relations-v1",
       "ui-comparatives-v1",
       "demo-tool-profile",
