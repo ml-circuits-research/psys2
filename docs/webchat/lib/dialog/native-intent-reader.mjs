@@ -1,6 +1,6 @@
 // Exact interpreter for declared UI intent wires; it never guesses words or operations.
 import{decodeCapabilityCall}from'../vendor/sopworld/capability-call.mjs?v=ed3b773c65';
-import{parse,str}from'../vendor/sopworld/sopworld.mjs?v=b665fdbe3d';
+import{parse,str}from'../vendor/sopworld/sopworld.mjs?v=9c4b6331ca';
 import{copyHostData,validateNativeArguments}from'../../worlds/native-tool-arguments.mjs?v=ed48209b92';
 const identifier=/^[A-Za-z_][A-Za-z0-9_-]*(?:\.[A-Za-z0-9_][A-Za-z0-9_-]*)*$/;
 const forbidden=new Set(['__proto__','constructor','prototype']);

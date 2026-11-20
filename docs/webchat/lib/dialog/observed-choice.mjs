@@ -1,5 +1,5 @@
 // A tool supplies measured alternatives. The receiving world's criteria decide how to compare them.
-import {parse,serialize} from '../vendor/sopworld/sopworld.mjs?v=b665fdbe3d';
+import {parse,serialize} from '../vendor/sopworld/sopworld.mjs?v=9c4b6331ca';
 
 export function compileObservedChoice(world,policy,observations) {
   const atom = /^[A-Za-z_][A-Za-z0-9_.-]*$/;

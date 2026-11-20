@@ -1,9 +1,9 @@
-import { parse,str,nearestName } from '../vendor/sopworld/sopworld.mjs?v=b665fdbe3d';
-import { compileNativeQuery } from './capability-plan-adapter.mjs?v=b38c1d262d';
-import { createAreaHost,NATIVE_AREAS } from './app-reader-context.mjs?v=88f1ec4c07';
+import { parse,str,nearestName } from '../vendor/sopworld/sopworld.mjs?v=9c4b6331ca';
+import { compileNativeQuery } from './capability-plan-adapter.mjs?v=16499b12a4';
+import { createAreaHost,NATIVE_AREAS } from './app-reader-context.mjs?v=5b4805a7a9';
 import { instanceIdFor } from './instance-identity.mjs?v=024ef1ca83';
-import { namedColourCodes } from '../knowledge/values.mjs?v=1a6f2f3174';
-import { executionPolicyWorld } from './execution-policy.mjs?v=a69d3aac5f';
+import { namedColourCodes } from '../knowledge/values.mjs?v=75ef016e50';
+import { executionPolicyWorld } from './execution-policy.mjs?v=17cd89337e';
 
 const value=(row,key)=>str(row?.attrs[key]?.[0]);
 const memberName=row=>value(row,'name')??value(row,'kind')+' '+value(row,'id');

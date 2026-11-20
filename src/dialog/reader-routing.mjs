@@ -160,18 +160,6 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
    return {proposal:read,contextProjection:null};
   }
  };
- // A reading the declared composition policy takes (compose-policy.sop: a new drawing with no kind, an open word, a
- // scene or a diagram kind the knowledge can fill) is composed from knowledge with a recorded seed, as one undoable turn.
- try{
-  const reading=composeReading(proposal);
-  const start=reading&&await composeStart(session,reading,{knowledge:session.engine?.knowledge});
-  if(start){
-   const request=composeRequest(session,start);
-   observe(session,{nodeIds:['component:library','execution:compose-policy'],phase:'stage',operation:'app.compose',label:'Compose from knowledge',text,request});
-   const composed=await executeCompose(session,request,{view:context.area});
-   if(composed)return {...composed,trace:{...composed.trace,readerRouting:{primary:'sop-bert',selected:'compose',rawReading:proposal?.raw?.requests??null,unresolved:proposal?.failures??[]}}};
-  }
- }catch(error){observe(session,{nodeIds:['component:reader'],phase:'error',operation:'app.compose',label:'Compose from knowledge',text,error:String(error?.message??error)});}
  // A make reading that saw several kinds for its one target, or left a list after its kind unread, is a
  // coordination of noun phrases: each is read and made, together (coordination-routing.mjs), before any re-reading
  // drops one of them.
@@ -188,6 +176,18 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
    });
   if(grouped)return grouped;
  }
+ // After coordination (several kinds read for one target are made, never composed): a reading the declared composition policy takes (compose-policy.sop: a new drawing with no kind, an open word, a
+ // scene or a diagram kind the knowledge can fill) is composed from knowledge with a recorded seed, as one undoable turn.
+ try{
+  const reading=composeReading(proposal);
+  const start=reading&&await composeStart(session,reading,{knowledge:session.engine?.knowledge});
+  if(start){
+   const request=composeRequest(session,start);
+   observe(session,{nodeIds:['component:library','execution:compose-policy'],phase:'stage',operation:'app.compose',label:'Compose from knowledge',text,request});
+   const composed=await executeCompose(session,request,{view:context.area});
+   if(composed)return {...composed,trace:{...composed.trace,readerRouting:{primary:'sop-bert',selected:'compose',rawReading:proposal?.raw?.requests??null,unresolved:proposal?.failures??[]}}};
+  }
+ }catch(error){observe(session,{nodeIds:['component:reader'],phase:'error',operation:'app.compose',label:'Compose from knowledge',text,error:String(error?.message??error)});}
  let projected=await project(proposal),contextRetry=null;
  // The previous utterance and the observed objects are priors for the reader. While the reading
  // conditioned on them stays incomplete, the declared re-readings (interpretation-policy.sop

@@ -1,6 +1,6 @@
-import { captureHistory, initializeHistory, restoreHistory } from './history-journal.mjs?v=aadefe2e4d';
-import {isAuthoredRequest} from './authored-request-tool.mjs?v=c38bda5155';
-import { interpretationPolicy } from './interpretation-policy.mjs?v=eb3a627b22';
+import { captureHistory, initializeHistory, restoreHistory } from './history-journal.mjs?v=0d3803bc7e';
+import {isAuthoredRequest} from './authored-request-tool.mjs?v=0c4b78f098';
+import { interpretationPolicy } from './interpretation-policy.mjs?v=79c1776d10';
 // SPDX-License-Identifier: AGPL-3.0-only
 /**
  * C2 dialog pipeline (spec 06). Browser-safe.
@@ -13,7 +13,7 @@ import { interpretationPolicy } from './interpretation-policy.mjs?v=eb3a627b22';
  * Without it all input is treated as English.
  */
 
-import { loadWorlds } from '../worlds/index.mjs?v=0ee50b471e';
+import { loadWorlds } from '../worlds/index.mjs?v=cadeb0ee91';
 import { validateWorldSet } from '../worlds/validate.mjs?v=af0869a8e0';
 
 
@@ -21,8 +21,8 @@ import { perf } from './stage-perf.mjs?v=8b73796daa';
 import { guard, TurnAborted } from './turn-guard.mjs?v=34ed257fec';
 import { createBudget, installBudget, releaseBudget, isBudgetExceeded, budget } from './budget.mjs?v=00bce6e369';
 
-import { attachValues } from '../knowledge/values.mjs?v=1a6f2f3174';
-import { attachArrangement } from '../knowledge/arrangement.mjs?v=a9fda4aab0';
+import { attachValues } from '../knowledge/values.mjs?v=75ef016e50';
+import { attachArrangement } from '../knowledge/arrangement.mjs?v=547d8c6296';
 
 /**
  * The world states of a session: one entry per world, seeded from the world's native initializer (`initialState` of its ops module).
@@ -244,7 +244,7 @@ export class DialogSession {
         }
       }
     }
-    const reply = await (await import('./reader-routing.mjs?v=bd8d0d2cc5')).routeNewEngine(this, english, { ...opts, language: 'en' });
+    const reply = await (await import('./reader-routing.mjs?v=0b2ccdf1aa')).routeNewEngine(this, english, { ...opts, language: 'en' });
     reply.trace = { ...reply.trace, english, ...(translation ? { translation } : {}), ...(detection ? { languageDetection: detection } : {}) };
     if (language !== 'en') {
       try {

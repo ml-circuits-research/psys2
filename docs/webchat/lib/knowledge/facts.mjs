@@ -11,7 +11,7 @@
  * A hit says only WHICH knowledge to load. It never decides the world of a message (spec 17, section 3).
  */
 
-import { en } from '../lang/en.mjs?v=40d8d7165d';
+import { en } from '../lang/en.mjs?v=6a69000b47';
 import { parseLine, parseShard } from './catalog.mjs?v=339ac7a09d';
 import { buildFaces } from './faces.mjs?v=04604e141f';
 

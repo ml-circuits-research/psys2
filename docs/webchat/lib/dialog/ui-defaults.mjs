@@ -2,7 +2,7 @@
 // Declared values of the editor tabs' own controls (worlds/app.project/ui-defaults.sop): a new item's starting value,
 // keyboard steps, minimum sizes, the frame before the area reports one. The page hands them to a tab as host.ui(view);
 // the tab holds no such number of its own. Browser-safe: no `node:*`.
-import {World,str} from '../vendor/sopworld/sopworld.mjs?v=b665fdbe3d';
+import {World,str} from '../vendor/sopworld/sopworld.mjs?v=9c4b6331ca';
 import SCHEMA from '../../worlds/app.project/ui-defaults-schema-source.mjs?v=e3824eb9c4';
 import VALUES from '../../worlds/app.project/ui-defaults-source.mjs?v=f6c4b29bad';
 

@@ -2,9 +2,9 @@
 // std.ground policy. This module only gathers evidence: the knowledge relations the
 // policy says to follow (read from catalog facts that name each term) and the
 // candidates' own measurements. Admission, costs and ranking belong to the policy.
-import {parse,quote,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=b665fdbe3d';
+import {parse,quote,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=9c4b6331ca';
 import {budget} from './budget.mjs?v=00bce6e369';
-import {lemmaCandidates} from '../knowledge/facts.mjs?v=6de05197c7';
+import {lemmaCandidates} from '../knowledge/facts.mjs?v=7b98ba662e';
 
 const LOOKUPS=48,EDGES=2048;
 const atom=/^[A-Za-z_][A-Za-z0-9_.-]*$/;

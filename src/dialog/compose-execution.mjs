@@ -92,6 +92,8 @@ export function conversationFacts(session, { limit = 8 } = {}) {
 export function composeReading(proposal) {
   const raw = proposal?.raw, r = raw?.requests?.[0];
   if (!r || raw.requests.length !== 1 || typeof raw.area !== 'string') return null;
+  // A reading that saw kinds it could not hold ("a cat and 2 dogs" for one target) said what to make: it is not composed.
+  if ((proposal.failures ?? []).some((f) => f.detail?.reason === 'ambiguous-global-mention')) return null;
   const target = r.target ?? {}, word = target.kind_span ?? target.kind;
   const unbound = (proposal.failures ?? []).some((f) => f.reason === 'unresolved-canonical-kind-binding');
   let canonical;

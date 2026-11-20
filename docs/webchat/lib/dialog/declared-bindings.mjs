@@ -11,18 +11,18 @@
 //  - interpretation-policy.sop: app.interpret.family, familyOperation, relation, parameterAct;
 //  - execution-policy.sop: app.execution.kindBinding, keyBinding/keyValue, position, canvasUnit, lengthUnit;
 //  - the constructor policy's discriminator, the catalog words of catalog values, the ordinal words of k.values.
-import {parse,str,completeStructuralBindings} from '../vendor/sopworld/sopworld.mjs?v=b665fdbe3d';
-import {interpretationPolicy} from './interpretation-policy.mjs?v=eb3a627b22';
-import {executionPolicyWorld} from './execution-policy.mjs?v=a69d3aac5f';
-import {declaredValueRows} from './declared-value-readings.mjs?v=69be6d8534';
-import {numberWords,numberInfo} from '../knowledge/values.mjs?v=1a6f2f3174';
+import {parse,str,completeStructuralBindings} from '../vendor/sopworld/sopworld.mjs?v=9c4b6331ca';
+import {interpretationPolicy} from './interpretation-policy.mjs?v=79c1776d10';
+import {executionPolicyWorld} from './execution-policy.mjs?v=17cd89337e';
+import {declaredValueRows} from './declared-value-readings.mjs?v=c45cf325f6';
+import {numberWords,numberInfo} from '../knowledge/values.mjs?v=75ef016e50';
 import EXECUTION_POLICY from '../../worlds/app.project/execution-policy-source.mjs?v=7a772b3c7d';
 import CAPABILITY_POLICY from '../../worlds/app.project/capability-policy.mjs?v=281892343f';
 import DRAW from '../../worlds/art.draw/native-interface-source.mjs?v=f4a3429198';
-import DIAGRAM from '../../worlds/diagram.sketch/native-interface-source.mjs?v=595d3de650';
+import DIAGRAM from '../../worlds/diagram.sketch/native-interface-source.mjs?v=7fba29bc2c';
 import CHARTS from '../../worlds/data.charts/native-interface-source.mjs?v=6c0dc1d746';
 import CONSTRUCTORS from '../../worlds/app.project/constructor-policy-source.mjs?v=91bc3b4d74';
-import {BUNDLED_DIAGRAMS} from '../knowledge/bundled-diagrams.mjs?v=1268854caf';
+import {BUNDLED_DIAGRAMS} from '../knowledge/bundled-diagrams.mjs?v=2e5a58ec48';
 import DOCUMENT from '../../worlds/docs.editor/native-interface-source.mjs?v=e247358200';
 import CALENDAR from '../../worlds/time.calendar/native-interface-source.mjs?v=3945d7d8fa';
 import AVATAR from '../../worlds/ui.avatar/native-interface-source.mjs?v=488ad9f49d';

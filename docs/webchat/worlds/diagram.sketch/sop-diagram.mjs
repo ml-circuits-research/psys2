@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // The Diagram tab: the generic SOP area adapter over worlds/diagram.sketch/area.sop. Its interface composes the
 // data.charts operations, which the area's act rules refuse (they are not part of its w.diagram instance).
-import NATIVE_INTERFACE from './native-interface-source.mjs?v=595d3de650';
-import AREA_SOURCES from './area-sources.mjs?v=9424e1a6cc';
-import {BUNDLED_AREAS} from '../../lib/knowledge/bundled-areas.mjs?v=777e4ec0a3';
-import {chartToolInterface} from '../data.charts/declared-host.mjs?v=facd7bce45';
-import {sopAreaAdapter} from '../sop-area-adapter.mjs?v=f475ad86b2';
+import NATIVE_INTERFACE from './native-interface-source.mjs?v=7fba29bc2c';
+import AREA_SOURCES from './area-sources.mjs?v=97be0aa887';
+import {BUNDLED_AREAS} from '../../lib/knowledge/bundled-areas.mjs?v=a566aa1c34';
+import {chartToolInterface} from '../data.charts/declared-host.mjs?v=5ba8ad05bf';
+import {sopAreaAdapter} from '../sop-area-adapter.mjs?v=855753181f';
 
 const area = sopAreaAdapter({ world: 'diagram.sketch', instance: ['w.diagram', 'w.preferences'], interfaceSource: NATIVE_INTERFACE, interfaceImports: { 'data.charts': chartToolInterface },
   sources: AREA_SOURCES, offline: BUNDLED_AREAS['diagram.sketch'] });

@@ -5,15 +5,15 @@
 // defaults, admitted act classes, reply wording and the run-time fallback ladder (interpretation-policy.sop), the
 // admission decision (reader-admission-policy.sop) and every binding (the deployed binding table). Nothing here names a
 // word, a sentence, a tool or a world.
-import {bridgeRawStructure,pruneLabel} from './raw-structural-bridge.mjs?v=92c8bd8c43';
-import {decodeModelGraphs} from './model-graph-decoder.mjs?v=8f5eac6b37';
-import {comparativeSteps} from './comparative-projection.mjs?v=2a218cec90';
-import {referenceProjection} from './reference-projection.mjs?v=8730d4822b';
-import {interpretationPolicy} from './interpretation-policy.mjs?v=eb3a627b22';
-import {declaredRetargets,declaredSpanRoles} from './raw-reading-policy.mjs?v=ca60ede675';
-import {en} from '../lang/en.mjs?v=40d8d7165d';
+import {bridgeRawStructure,pruneLabel} from './raw-structural-bridge.mjs?v=edc9da77e9';
+import {decodeModelGraphs} from './model-graph-decoder.mjs?v=5153ca8dfa';
+import {comparativeSteps} from './comparative-projection.mjs?v=1fcefe54e3';
+import {referenceProjection} from './reference-projection.mjs?v=e42aaa1abf';
+import {interpretationPolicy} from './interpretation-policy.mjs?v=79c1776d10';
+import {declaredRetargets,declaredSpanRoles} from './raw-reading-policy.mjs?v=6f47dba579';
+import {en} from '../lang/en.mjs?v=6a69000b47';
 import {budget} from './budget.mjs?v=00bce6e369';
-import {readLexicalPhrase} from '../vendor/sopworld/sopworld.mjs?v=b665fdbe3d';
+import {readLexicalPhrase} from '../vendor/sopworld/sopworld.mjs?v=9c4b6331ca';
 
 const scalarsOf=text=>Array.from(text);
 // Adjacent mentions of one target-kind head that only whitespace or a hyphen separates and that together spell a

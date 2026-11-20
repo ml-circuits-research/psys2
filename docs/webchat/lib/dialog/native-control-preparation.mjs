@@ -1,5 +1,5 @@
 // Shared declaration-driven knowledge preparation for UI and interpreted controls.
-import{NATIVE_AREAS,createAreaHost}from'./app-reader-context.mjs?v=88f1ec4c07';
+import{NATIVE_AREAS,createAreaHost}from'./app-reader-context.mjs?v=5b4805a7a9';
 import{identityRegistryFor,instanceIdFor}from'./instance-identity.mjs?v=024ef1ca83';
 export async function prepareNativeControlHost(session,{view,operation,args={},host=null,invocation=null}={}){
  const area=NATIVE_AREAS[view];if(!area)throw Error('unknown-native-area');

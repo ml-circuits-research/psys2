@@ -5,10 +5,10 @@
 // order are the sopworld library's (populationPairs, readingOrder); the declaration says which pattern applies when
 // the other end is not said (open=), when it names one object (hub=), which patterns a request may name (named=), the
 // observed fields that name the hub (hubName=) and how many lines at most (max=). Nothing here names a word or a kind.
-import {parse,serialize,str,quote,populationPairs,readingOrder} from '../vendor/sopworld/sopworld.mjs?v=b665fdbe3d';
-import {LANG_EN_FACTS} from '../lang/en.facts.generated.mjs?v=38238d05cf';
-import {en} from '../lang/en.mjs?v=40d8d7165d';
-import {executionPolicyWorld} from './execution-policy.mjs?v=a69d3aac5f';
+import {parse,serialize,str,quote,populationPairs,readingOrder} from '../vendor/sopworld/sopworld.mjs?v=9c4b6331ca';
+import {LANG_EN_FACTS} from '../lang/en.facts.generated.mjs?v=ec6a2d71ba';
+import {en} from '../lang/en.mjs?v=6a69000b47';
+import {executionPolicyWorld} from './execution-policy.mjs?v=17cd89337e';
 import {budget} from './budget.mjs?v=00bce6e369';
 
 const one=(row,key)=>row?.attrs[key]?.length?str(row.attrs[key][0]):undefined;

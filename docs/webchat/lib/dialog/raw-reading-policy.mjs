@@ -3,11 +3,11 @@
 // a raw reader proposal and the deployed binding table's rows are told to the policy world as facts; what its rules
 // conclude (a target re-read as a joining line's or a container's members, the end a population phrase fills, a
 // population reference) is applied here field by field. Nothing here decides: no act, key, kind or word is named.
-import {World,serialize,quote,str} from '../vendor/sopworld/sopworld.mjs?v=b665fdbe3d';
+import {World,serialize,quote,str} from '../vendor/sopworld/sopworld.mjs?v=9c4b6331ca';
 import SCHEMA from '../../worlds/app.project/raw-reading-schema-source.mjs?v=070cbfcd33';
 import POLICY from '../../worlds/app.project/raw-reading-policy-source.mjs?v=a7e9e47fc7';
-import {executionPolicyWorld} from './execution-policy.mjs?v=a69d3aac5f';
-import {en} from '../lang/en.mjs?v=40d8d7165d';
+import {executionPolicyWorld} from './execution-policy.mjs?v=17cd89337e';
+import {en} from '../lang/en.mjs?v=6a69000b47';
 
 let base=null;
 function policyWorld(){

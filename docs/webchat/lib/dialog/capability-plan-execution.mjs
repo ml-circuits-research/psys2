@@ -1,18 +1,18 @@
-import { readSceneDefaults } from './scene-placement-defaults.mjs?v=bba55caf94';
-import { solveDefaultPlacement, solveGroupPlacement } from './default-placement.mjs?v=430e45ad2f';
-import { en } from '../lang/en.mjs?v=40d8d7165d';
-import { quote, str } from '../vendor/sopworld/sopworld.mjs?v=b665fdbe3d';
-import { executionPolicyWorld } from './execution-policy.mjs?v=a69d3aac5f';
+import { readSceneDefaults } from './scene-placement-defaults.mjs?v=03af9b7ec4';
+import { solveDefaultPlacement, solveGroupPlacement } from './default-placement.mjs?v=f2cd0b65ce';
+import { en } from '../lang/en.mjs?v=6a69000b47';
+import { quote, str } from '../vendor/sopworld/sopworld.mjs?v=9c4b6331ca';
+import { executionPolicyWorld } from './execution-policy.mjs?v=17cd89337e';
 // SPDX-License-Identifier: AGPL-3.0-only
-import { compileNativeCapability } from './capability-plan-adapter.mjs?v=b38c1d262d';
-import { linkPopulationCandidates, linkPatternNote } from './link-population.mjs?v=9b0d028a25';
-import { readDegreeBases } from './degree-bases.mjs?v=b2d0be1edd';
-import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=88f1ec4c07';
+import { compileNativeCapability } from './capability-plan-adapter.mjs?v=16499b12a4';
+import { linkPopulationCandidates, linkPatternNote } from './link-population.mjs?v=185e9e26be';
+import { readDegreeBases } from './degree-bases.mjs?v=947db12471';
+import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=5b4805a7a9';
 import { instanceIdFor } from './instance-identity.mjs?v=024ef1ca83';
-import { prepareNativeControlHost } from './native-control-preparation.mjs?v=ca8357919c';
-import { invokeObservedNativeTool } from './native-tool-activity.mjs?v=a227d7593e';
-import { retainPropertyEffect } from './property-effect-evidence.mjs?v=07094ccfdf';
-import { describeNativeControl, verifyNativeControlEffect } from './native-control-intent.mjs?v=a68dcd8935';
+import { prepareNativeControlHost } from './native-control-preparation.mjs?v=a46cbf5524';
+import { invokeObservedNativeTool } from './native-tool-activity.mjs?v=59baa93d85';
+import { retainPropertyEffect } from './property-effect-evidence.mjs?v=44311f592e';
+import { describeNativeControl, verifyNativeControlEffect } from './native-control-intent.mjs?v=76d588c853';
 
 function reply(text, supported, trace = {}) {
   return { text, parts: [{ text, translate: false }], statuses: [supported ? 'supported' : 'unsupported'],
@@ -297,7 +297,7 @@ export async function executeNativeGroup(session, members, { view, invocation = 
   // "Created a cat and 2 dogs." The kinds in the order asked, each with its number.
   const counts = new Map();
   for (const { kind } of made) counts.set(kind, (counts.get(kind) ?? 0) + 1);
-  const phrase = ([kind, count]) => count === 1 ? 'a ' + kind : count + ' ' + en.plural(kind);
+  const phrase = ([kind, count]) => count === 1 ? withArticle(kind) : count + ' ' + en.plural(kind);
   const list = [...counts].map(phrase), joined = list.length > 1 ? list.slice(0, -1).join(', ') + ' and ' + list.at(-1) : list[0];
   const notes = [...new Set([...made.map(({ substituted }) => substituted?.note).filter(Boolean), ...members.flatMap(({ plan }) => plan.notes)])];
   const crowded = made.filter(({ subject }) => subject.overlaps);

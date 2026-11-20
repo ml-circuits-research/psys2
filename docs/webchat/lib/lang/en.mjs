@@ -29,7 +29,7 @@
  *   oneAnaphora(ct, anchor, env)  "and a yellow one" repeats the previous command with its noun and the new modifiers
  */
 import { parse } from '../soplang/index.mjs?v=c57881f705';
-import { LANG_EN_FACTS } from './en.facts.generated.mjs?v=38238d05cf';
+import { LANG_EN_FACTS } from './en.facts.generated.mjs?v=ec6a2d71ba';
 import { LANG_EN_LOCAL } from './en.local.mjs?v=38d1132d3b';
 
 const all = (w, k) => w.attrs[k] ?? [];

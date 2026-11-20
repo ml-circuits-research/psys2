@@ -5,7 +5,7 @@
 // become app.execution.preview facts, and the capability policy turns those into std.capability.base for the
 // parameters their properties bind (worlds/app.project/capability-policy.sop). Nothing here names a tool,
 // a parameter or a word.
-import { parse } from '../vendor/sopworld/sopworld.mjs?v=b665fdbe3d';
+import { parse } from '../vendor/sopworld/sopworld.mjs?v=9c4b6331ca';
 
 const first = (row, key) => row.attrs[key]?.[0];
 const scaled = (row) => ['degree', 'factor'].includes(first(row, 'operator')) && first(row, 'polarity') === 'positive';

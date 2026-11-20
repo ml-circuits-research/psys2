@@ -2,8 +2,8 @@
 // The Avatar tab: the generic SOP area adapter over worlds/ui.avatar/area.sop.
 import NATIVE_INTERFACE from './native-interface-source.mjs?v=488ad9f49d';
 import AREA_SOURCES from './area-sources.mjs?v=adce5de422';
-import {BUNDLED_AREAS} from '../../lib/knowledge/bundled-areas.mjs?v=777e4ec0a3';
-import {sopAreaAdapter} from '../sop-area-adapter.mjs?v=f475ad86b2';
+import {BUNDLED_AREAS} from '../../lib/knowledge/bundled-areas.mjs?v=a566aa1c34';
+import {sopAreaAdapter} from '../sop-area-adapter.mjs?v=855753181f';
 
 const area = sopAreaAdapter({ world: 'ui.avatar', instance: ['w.face', 'w.preferences'], interfaceSource: NATIVE_INTERFACE, sources: AREA_SOURCES, offline: BUNDLED_AREAS['ui.avatar'] });
 export const emptyAvatarState = area.empty, canonicalAvatarArea = area.canonical, createAvatarArea = area.create,

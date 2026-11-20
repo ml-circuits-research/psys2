@@ -3,7 +3,7 @@
 // context re-readings, the bounds of reading comparison, which readings go to the coordination reader first, and the
 // confidence at which a detected input language replaces the selected one. The routing code reads these facts; it
 // holds no order, bound or threshold of its own.
-import {World,str} from '../vendor/sopworld/sopworld.mjs?v=b665fdbe3d';
+import {World,str} from '../vendor/sopworld/sopworld.mjs?v=9c4b6331ca';
 import SCHEMA from '../../worlds/app.project/interpretation-schema-source.mjs?v=b4de129364';
 import POLICY from '../../worlds/app.project/interpretation-policy-source.mjs?v=1cd84ae532';
 

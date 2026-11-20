@@ -1,26 +1,27 @@
-import {en} from '../lang/en.mjs?v=40d8d7165d';
-import {isScopedRemoval} from './capability-plan-execution.mjs?v=88611e213f';
-import {projectRemovalAction} from './project-removal-action.mjs?v=a10b1c326f';
-import { captureHistory, recordHistory, restoreHistory } from './history-journal.mjs?v=aadefe2e4d';
-import {projectReaderHeadAlternative} from './reader-head-alternative.mjs?v=4f439ee075';
-import {parse} from '../vendor/sopworld/sopworld.mjs?v=b665fdbe3d';
-import {writeReaderSource} from './reader-source.mjs?v=83e0720174';
-import {isAuthoredRequest,readAuthoredRequest} from './authored-request-tool.mjs?v=c38bda5155';
+import {en} from '../lang/en.mjs?v=6a69000b47';
+import {isScopedRemoval} from './capability-plan-execution.mjs?v=dd9b517a02';
+import {projectRemovalAction} from './project-removal-action.mjs?v=f9c83121ef';
+import { captureHistory, recordHistory, restoreHistory } from './history-journal.mjs?v=0d3803bc7e';
+import {projectReaderHeadAlternative} from './reader-head-alternative.mjs?v=2f0d253b4a';
+import {parse} from '../vendor/sopworld/sopworld.mjs?v=9c4b6331ca';
+import {writeReaderSource} from './reader-source.mjs?v=1baaf5ba91';
+import {isAuthoredRequest,readAuthoredRequest} from './authored-request-tool.mjs?v=0c4b78f098';
 // Model-first proposal routing. Calibration authority belongs to host configuration,
 // never to a model output, evaluation annotation or grammar proposal.
-import {requestCompositionPolicy,scheduleFollowingCut}from './request-composition-policy.mjs?v=6ac953cb12';
-import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=dcb2d5e381';
-import {projectQueryAction,recoverQueryProjection} from './project-query-action.mjs?v=96c26601df';
-import {projectContextAction} from './project-context-action.mjs?v=8686e24dd6';
-import {projectCodeReference} from './project-code-reference.mjs?v=ef8c51094b';
-import {projectCreateAction} from './project-create-action.mjs?v=e43e73a51d';
-import {assessReaderProposal,assessPartialProposal} from './reader-admission.mjs?v=5b1aeaf4f4';
-import {bestPartialReading,fallbackLadder,partialNote} from './partial-admission.mjs?v=966b51987c';
-import {completeBindings} from './declared-bindings.mjs?v=a91a89359d';
-import {projectQuantities,amountsOf,quantityNote} from './quantity-projection.mjs?v=032cac6ee5';
-import {routeCoordination} from './coordination-routing.mjs?v=5f8a7cfbba';
-import {declaredKnowledge} from './declared-execution.mjs?v=dcb2d5e381';
-import {interpretationPolicy,coordinationEligible,comparisonBounds,retryNote} from './interpretation-policy.mjs?v=eb3a627b22';
+import {requestCompositionPolicy,scheduleFollowingCut}from './request-composition-policy.mjs?v=fc8dc8891b';
+import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=71b2c6118b';
+import {projectQueryAction,recoverQueryProjection} from './project-query-action.mjs?v=ffa4949844';
+import {projectContextAction} from './project-context-action.mjs?v=1a1013ac52';
+import {projectCodeReference} from './project-code-reference.mjs?v=d68daba93a';
+import {projectCreateAction} from './project-create-action.mjs?v=e1f7c7d4ee';
+import {assessReaderProposal,assessPartialProposal} from './reader-admission.mjs?v=98c3823184';
+import {bestPartialReading,fallbackLadder,partialNote} from './partial-admission.mjs?v=e9cad6ac45';
+import {completeBindings} from './declared-bindings.mjs?v=bfb97a7f6e';
+import {projectQuantities,amountsOf,quantityNote} from './quantity-projection.mjs?v=dcecb1afb2';
+import {routeCoordination} from './coordination-routing.mjs?v=f68c1d237a';
+import {declaredKnowledge} from './declared-execution.mjs?v=71b2c6118b';
+import {interpretationPolicy,coordinationEligible,comparisonBounds,retryNote} from './interpretation-policy.mjs?v=79c1776d10';
+import {composeReading,composeStart,composeRequest,executeCompose} from './compose-execution.mjs?v=51cc3de257';
 let amounts;
 // The named amounts of the execution knowledge (k.expect.amount), read once.
 const knownAmounts=()=>amounts??=amountsOf(declaredKnowledge('k.expect.amount'));
@@ -175,6 +176,18 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
    });
   if(grouped)return grouped;
  }
+ // After coordination (several kinds read for one target are made, never composed): a reading the declared composition policy takes (compose-policy.sop: a new drawing with no kind, an open word, a
+ // scene or a diagram kind the knowledge can fill) is composed from knowledge with a recorded seed, as one undoable turn.
+ try{
+  const reading=composeReading(proposal);
+  const start=reading&&await composeStart(session,reading,{knowledge:session.engine?.knowledge});
+  if(start){
+   const request=composeRequest(session,start);
+   observe(session,{nodeIds:['component:library','execution:compose-policy'],phase:'stage',operation:'app.compose',label:'Compose from knowledge',text,request});
+   const composed=await executeCompose(session,request,{view:context.area});
+   if(composed)return {...composed,trace:{...composed.trace,readerRouting:{primary:'sop-bert',selected:'compose',rawReading:proposal?.raw?.requests??null,unresolved:proposal?.failures??[]}}};
+  }
+ }catch(error){observe(session,{nodeIds:['component:reader'],phase:'error',operation:'app.compose',label:'Compose from knowledge',text,error:String(error?.message??error)});}
  let projected=await project(proposal),contextRetry=null;
  // The previous utterance and the observed objects are priors for the reader. While the reading
  // conditioned on them stays incomplete, the declared re-readings (interpretation-policy.sop
@@ -349,6 +362,14 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
   interpretation:proposal?.interpretation??null,unresolved:preservedProviderTrace?proposal.interpretation.unresolved:(proposal?.failures??[]),...(contextRetry?{contextRetry}:{}),...(projectionErrors.length?{projectionErrors}:{}),...(coordinationError?{coordinationError}:{}),proposalCandidates:providerCandidates,rawReading:proposal?.raw?.requests??null,model:{provenance,coverage:(preservedProviderTrace?providerCoverage:proposal?.coverage)??null,candidates:preservedProviderTrace?providerCandidates.length:(proposal?.candidates?.length??0),eligible:!!eligible}}}};
 }
 
+/** One routed turn, recorded for later turns that build on the conversation (what the reader read, never the text). */
+export async function routeNewEngine(session,text,options={}){
+ const result=await routeNewEngineTurn(session,text,options);
+ const requests=result?.trace?.readerRouting?.rawReading;
+ if(Array.isArray(requests)&&requests.length&&!result.trace?.compose)
+  session.composeTurns=[...(session.composeTurns??[]).slice(-15),{area:options.view??session.isession?.state?.['ui.shell']?.activeTab??null,requests:structuredClone(requests)}];
+ return result;
+}
 /** Apply the declared source-order schedule to actual model cuts, never source words. */
 // AREA RE-READING (interpretation-policy.sop app.interpret.areaRetry): the active editor is a prior over the live
 // editors, not a clamp. A request no tool of the active editor can take, for a declared reason, is read again in each
@@ -372,12 +393,12 @@ const liveViews=(session,NATIVE_AREAS)=>Object.entries(NATIVE_AREAS).filter(([,a
 // ("add a box to the diagram", "in the drawing") is read in that editor first; when it does not apply fully there it is
 // read as usual. The words are the registry's; the request's words are compared by their singular (w.lang.en).
 async function mentionedView(session,text,active){
- const {NATIVE_AREAS}=await import('./app-reader-context.mjs?v=88f1ec4c07');
+ const {NATIVE_AREAS}=await import('./app-reader-context.mjs?v=5b4805a7a9');
  const said=new Set([...String(text).toLowerCase().matchAll(/[\p{L}\p{N}]+/gu)].flatMap(m=>[m[0],en.singular(m[0],'lemma')]));
  const named=liveViews(session,NATIVE_AREAS).filter(([view,area])=>view!==active&&(area.words??[]).some(word=>word.split(/\s+/).every(part=>said.has(part.toLowerCase())))).map(([view])=>view);
  return named.length===1?named[0]:null;
 }
-export async function routeNewEngine(session,text,options={}){
+async function routeNewEngineTurn(session,text,options={}){
  const shell=session.isession?.state?.['ui.shell'];
  let mention=null;
  if(!options.view&&!isAuthoredRequest(text)&&shell?.activeTab){
@@ -395,7 +416,7 @@ export async function routeNewEngine(session,text,options={}){
  if(!rule||options.view||isAuthoredRequest(text)||!shell?.activeTab||first?.statuses?.includes('supported'))return withMention(first);
  const reasons=new Set(unboundReasons(first).filter(reason=>rule.reasons.includes(reason)));
  if(!reasons.size)return withMention(first);
- const {NATIVE_AREAS}=await import('./app-reader-context.mjs?v=88f1ec4c07');
+ const {NATIVE_AREAS}=await import('./app-reader-context.mjs?v=5b4805a7a9');
  // The knowledge prior: only an editor whose bindings bind a kind word the reading saw is a hypothesis (declared area order among them);
  // a word no other editor binds is not re-read there (each re-reading costs the reader passes of a whole turn).
  const said=new Set(),collect=(value,depth=0)=>{if(depth>8||!value||typeof value!=='object')return;for(const [key,item] of Object.entries(value)){if((key==='kind'||key==='kind_span')&&typeof item==='string')said.add(item.toLowerCase());else collect(item,depth+1);}};
