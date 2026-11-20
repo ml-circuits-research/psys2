@@ -71,6 +71,9 @@ const snaps = new Map();             // undo id -> engine snapshot (a ring: the 
 const SNAP_KEEP = 24;
 let lastTurnEnd = 0;
 let readerPrevious=null,readerStatus={state:'unavailable'},readerObservation=null,readerDiagnostics=[],readerReady=null;
+// Inspection records of the translation boundary and the suggestion sampler (Worlds map; specs/worlds-inspector.md).
+let readerDeployment=null;
+const translationRecord={calls:0,failures:0,last:null,lastFailure:null},samplerRecord={runs:0,last:null};
 const budgetMod = { createBudget: null };
 let btSeq = 0;
 const btPending = new Map();         // id -> { resolve, reject } of a call to the page's browser translator / detector
@@ -121,8 +124,6 @@ function applySettings(s, extra) {
   if (s && typeof s === 'object') { for (const k of Object.keys(settings)) if (!(k in s)) delete settings[k]; Object.assign(settings, s); }
   if (!session || !mods) return;
   mods.tl.applyTimeLimits(settings);
-  Object.assign(session, mods.rc.sessionOptions(settings));
-  session.fastPath = settings.fastPath === true;
   if (session.settings && typeof session.settings === 'object') session.settings.formalizer = settings.formalizer;
   session.setOption?.('formalizer', settings.formalizer);
 
@@ -144,13 +145,13 @@ async function init(m) {
     worldActivity(['execution:placement-geometry'], 'stage', 'Load the placement solver', { operation: 'z3.preload', state: status.state, isolated: status.isolated });
   }).catch(() => {});
   globalThis.__psys2LazyRoEn = true; // prevent eager loading of retired language tables
-  const [dialog, loadersMod, soplang, rc, g, tl, lang, wlMod, areaMod] = await Promise.all([
+  const [dialog, loadersMod, soplang, g, tl, lang, wlMod, areaMod] = await Promise.all([
     imp('lib/dialog/index.mjs'), imp('lib/loaders/bundle-loader.mjs'), imp('lib/soplang/index.mjs'),
-    imp('lib/dialog/runtime-config.mjs'), imp('lib/formalizer/guard.mjs'), imp('lib/dialog/time-limits.mjs'), imp('ui/language.mjs'), imp('ui/world-loader.mjs'), imp('lib/dialog/app-reader-context.mjs')]);
+    imp('lib/dialog/turn-guard.mjs'), imp('lib/dialog/time-limits.mjs'), imp('ui/language.mjs'), imp('ui/world-loader.mjs'), imp('lib/dialog/app-reader-context.mjs')]);
   loaders = loadersMod;
   tabWorlds = m.tabWorlds ?? {}; universe = m.onlyWorlds ? new Set(m.onlyWorlds) : null;
   try { const b = await imp('lib/dialog/budget.mjs'); budgetMod.createBudget = b.createBudget ?? null; } catch { budgetMod.createBudget = null; }   // agent B's step budget, when this build has it
-  mods = { tl, dialog, rc, guard: g.guard, TurnAborted: g.TurnAborted, soplang, lang, ...areaMod };
+  mods = { tl, dialog, guard: g.guard, TurnAborted: g.TurnAborted, soplang, lang, ...areaMod };
   Object.assign(mods,await imp('lib/dialog/project-world.mjs'));
   Object.assign(mods,await imp('worlds/app.project/spatial-profile.mjs'));
   Object.assign(mods,await imp('lib/dialog/instance-identity.mjs'));
@@ -190,9 +191,12 @@ async function init(m) {
     btPending.set(id, { resolve: value => { clearTimeout(timer); resolve(value); }, reject: error => { clearTimeout(timer); reject(error); } });
     post({ type: 'bt', id, op, ...payload });
   });
+  const recordTranslation = (op, payload, call) => { const started = performance.now(), operation = 'translation.' + op; translationRecord.calls++; worldActivity(['component:reasoner'], 'start', op === 'detect' ? 'Detect input language' : 'Machine translate', { operation, ...payload });
+    return call.then(value => { translationRecord.last = { op, ...payload, ok: true, time: Date.now() }; worldActivity(['component:reasoner'], 'end', op === 'detect' ? 'Detect input language' : 'Machine translate', { operation, durationMs: performance.now() - started }); return value; },
+      error => { translationRecord.failures++; translationRecord.lastFailure = translationRecord.last = { op, ...payload, ok: false, error: String(error?.message ?? error), time: Date.now() }; worldActivity(['component:reasoner'], 'error', op === 'detect' ? 'Detect input language' : 'Machine translate', { operation, durationMs: performance.now() - started, error: String(error?.message ?? error) }); throw error; }); };
   const translator = { usage: [], detectUsage: [], resetUsage() {},
-    machineTranslate: (text, { from, to }) => browserCall('translate', { text, from, to }),
-    detectInput: text => browserCall('detect', { text }) };
+    machineTranslate: (text, { from, to }) => recordTranslation('translate', { from, to }, browserCall('translate', { text, from, to })),
+    detectInput: text => recordTranslation('detect', {}, browserCall('detect', { text })) };
   evt('boot-step', { id: 'worlds', op: 'end', bytes: bundleBytes, count: startIds.length });
   evt('boot-step', { id: 'reasoner', op: 'start' });
   engine = await dialog.createEngine({ loader: loadersMod.createBundleLoader(bundle), translator, options: { reasoner: 'matrix', applicationAreas: worldLoader.index.retiredAreas ?? [] } });   // the product reasoner (spec 15): the page never selects ops, the test oracle
@@ -232,10 +236,10 @@ async function installSopReader(imp){
   readerStatus={state:'loading'};evt('sop-reader-status',readerStatus);worldActivity(['component:reader'],'start','Initialize SOP-BERT');
   try{
     const response=await fetch(vurl('models/sop-bert/deployment.json'));if(!response.ok)throw Error('SOP-BERT deployment HTTP '+response.status);
-    const deployment=await response.json();if(deployment.format!=='psys2.browser-reader-deployment/1')throw Error('unsupported-reader-deployment');
+    const deployment=await response.json();if(deployment.format!=='psys2.browser-reader-deployment/1')throw Error('unsupported-reader-deployment');readerDeployment=deployment;
     const [{createBrowserReaderHost},{createAppReaderContext},{readReaderSource}]=await Promise.all([imp('lib/dialog/browser-reader-host.mjs'),imp('lib/dialog/app-reader-context.mjs'),imp('lib/dialog/reader-source.mjs')]);
     const getContext=createAppReaderContext({includeObservationIdentity:true,getState:()=>session.isession.state,getPrevious:()=>readerPrevious,getInstanceId:world=>mods.instanceIdFor(session,world),getIdentityRegistry:world=>mods.identityRegistryFor(session,world),onObservation:value=>{readerObservation=value;if(value.contextSelection)worldActivity(['component:reader',...(value.world?['interpreter:'+value.world]:[])],'stage','Select reader context',{operation:'reader.context.select',world:value.world,contextSelection:value.contextSelection});}});
-    const host=await createBrowserReaderHost({manifestURL:abs(deployment.manifestPath),manifestSha256:deployment.manifestSha256,tokenizerArtifact:deployment.tokenizerArtifact,bindingsArtifact:deployment.bindingsArtifact,tokenizerConfigArtifact:deployment.tokenizerConfigArtifact,runtimeIdentity:deployment.runtimeIdentity,getContext,resolveURL:rel=>abs(rel),recordDiagnostics:async diagnostic=>{readerDiagnostics.push(diagnostic);if(readerDiagnostics.length>64)readerDiagnostics.shift();const selection=diagnostic.result?.auxiliary?.contextSelection;if(selection)worldActivity(['component:reader'],'stage','Fit reader context to model budget',{operation:'reader.context.fit',contextSelection:selection});}});
+    const host=await createBrowserReaderHost({manifestURL:abs(deployment.manifestPath),manifestSha256:deployment.manifestSha256,tokenizerArtifact:deployment.tokenizerArtifact,bindingsArtifact:deployment.bindingsArtifact,tokenizerConfigArtifact:deployment.tokenizerConfigArtifact,runtimeIdentity:deployment.runtimeIdentity,getContext,resolveURL:rel=>abs(rel),recordDiagnostics:async diagnostic=>{readerDiagnostics.push(diagnostic);if(readerDiagnostics.length>64)readerDiagnostics.shift();if(diagnostic.component==='cutter'){const packet=diagnostic.result?.packet;worldActivity(['component:reader'],'stage','Cut the text into requests',{operation:'reader.cut',text:packet?.source?.text??null,spans:packet?.spans??[],coverage:packet?.coverage??null,unresolved:packet?.unresolved??[],minimumProbability:diagnostic.result?.auxiliary?.minimumProbability??null});}const selection=diagnostic.result?.auxiliary?.contextSelection;if(selection)worldActivity(['component:reader'],'stage','Fit reader context to model budget',{operation:'reader.context.fit',contextSelection:selection});}});
     const inputEvidence=sourceSop=>{try{return {text:readReaderSource(sourceSop),wires:sourceSop};}catch{return {};}};
     engine.requestReader={...host.provider,async *proposeRequests(sourceSop){
       const correlationId='reader:'+crypto.randomUUID(),started=performance.now();let index=0;
@@ -402,7 +406,7 @@ const handlers = {
       noteWorlds(reply);
       return { reply, before: loadedBefore(before, had), state: stateOf(), meta: metaOf(), usage: (translator.usage ?? []).map((u) => ({ ...u })), detection: (translator.detectUsage ?? []).map((u) => ({ ...u })),
         budget: budget ? { ticks: budget.ticks, bySite: { ...budget.bySite } } : null, ort: true };
-    } catch(error){worldActivity(['component:reasoner'],'error','Session request failed',{error:String(error?.message??error)});throw error;} finally { active.delete(m.id); lastTurnEnd = performance.now(); faultNow = null; sendOrt(); }
+    } catch(error){worldActivity(['component:reasoner'],'error','Session request failed',{error:String(error?.message??error),...(error?.name==='TurnAborted'||error?.name==='BudgetExceeded'?{reason:error.reason??error.name,stage:error.stage??null,limits:{...(mods.tl.LIMITS??{})},budgetBySite:error.bySite??null}:{})});throw error;} finally { active.delete(m.id); lastTurnEnd = performance.now(); faultNow = null; sendOrt(); }
   },
   async nativeTools(m) {
     const {NATIVE_AREAS,createAreaHost}=await import(vurl('lib/dialog/app-reader-context.mjs'));
@@ -445,7 +449,7 @@ const handlers = {
     progress.stage('Read catalog index for inspection');
     if(!knowledgeReadFiles.has('index.json'))await knowledgeInspectionSource?.text('index.json',{purpose:'inspection',requestId:m.id});
     progress.stage('Load inspection modules');canonicalizeSessionStates();
-    const [{NATIVE_AREAS},{observeNativeInstanceWorlds},{inspectWorldsRuntime},{describePlacementSearch}]=await Promise.all([import(vurl('lib/dialog/app-reader-context.mjs')),import(vurl('lib/dialog/instance-persistence.mjs')),import(vurl('lib/dialog/worlds-inspection.mjs')),import(vurl('lib/dialog/placement-search-inspection.mjs'))]);
+    const [{NATIVE_AREAS},{observeNativeInstanceWorlds},{inspectWorldsRuntime,summarizeReaderBindings},{describePlacementSearch}]=await Promise.all([import(vurl('lib/dialog/app-reader-context.mjs')),import(vurl('lib/dialog/instance-persistence.mjs')),import(vurl('lib/dialog/worlds-inspection.mjs')),import(vurl('lib/dialog/placement-search-inspection.mjs'))]);
     const available=Object.entries(NATIVE_AREAS).filter(([,area])=>loadedIds.has(area.world)&&session.isession.state[area.world]);
     progress.stage('Observe live instance facts');
     const instances=await observeNativeInstanceWorlds(session,{worlds:available.map(([,area])=>area.world),includeHostInterface:true,prepareKnowledge:false});
@@ -454,7 +458,9 @@ const handlers = {
     const {serialize,version,build,SCHEMA_TYPES,STAGES,TURN_STAGES}=await import(vurl('lib/vendor/sopworld/sopworld.mjs'));
     const instanceCaches=Object.entries(session.instanceWorlds??{}).map(([world,cache])=>({world,wireCount:cache.wires?.size??0,wires:serialize([...(cache.wires?.values?.()??[])])}));
     progress.stage('Describe runtime packages');
-    const baseGraph=inspectWorldsRuntime({nativePackages:Object.entries(worldLoader.composition?.profiles??{}).filter(([,profile])=>profile.nativeHost||profile.nativeInitializer).map(([id])=>id),index:worldLoader.index,bundle:worldLoader.bundleOf([...loadedIds],absModule),loaded:[...loadedIds],instances,hosts,knowledgeFiles:[...knowledgeReadFiles].map(([path,text])=>({path,text,purposes:[...(knowledgeReadPurposes.get(path)??[])]})),reader:readerStatus,nativeStates:session.isession.state,instanceCaches,sessionMeta:metaOf(),libraryInfo:{version,build,schemaTypes:[...SCHEMA_TYPES],stages:STAGES,turnStages:TURN_STAGES},placementSearch:describePlacementSearch({activity:activityLog})});
+    const baseGraph=inspectWorldsRuntime({nativePackages:Object.entries(worldLoader.composition?.profiles??{}).filter(([,profile])=>profile.nativeHost||profile.nativeInitializer).map(([id])=>id),index:worldLoader.index,bundle:worldLoader.bundleOf([...loadedIds],absModule),loaded:[...loadedIds],instances,hosts,knowledgeFiles:[...knowledgeReadFiles].map(([path,text])=>({path,text,purposes:[...(knowledgeReadPurposes.get(path)??[])]})),reader:readerStatus,nativeStates:session.isession.state,instanceCaches,sessionMeta:metaOf(),libraryInfo:{version,build,schemaTypes:[...SCHEMA_TYPES],stages:STAGES,turnStages:TURN_STAGES},placementSearch:describePlacementSearch({activity:activityLog}),
+      readerBindings:(()=>{try{const bindings=engine.requestReader?.bindings?.();return bindings?summarizeReaderBindings(bindings,{sha256:readerDeployment?.bindingsArtifact?.sha256??null,bytes:readerDeployment?.bindingsArtifact?.bytes??null}):null;}catch{return null;}})(),
+      readerDiagnostics:readerDiagnostics.slice(),turnLimits:{limits:{...(mods.tl.LIMITS??{})},specs:mods.tl.TIME_LIMIT_SPECS??null,budget:!!budgetMod.createBudget},translation:{...translationRecord,language:settings.language??null},sampler:{...samplerRecord}});
     const {describeWorldsNodes}=await import(vurl('lib/dialog/worlds-node-metadata.mjs'));
     const {inspectExecutionWorlds}=await import(vurl('lib/dialog/execution-world-inspection.mjs'));
     progress.stage('Read execution knowledge and episodes');
@@ -572,7 +578,7 @@ const handlers = {
   async placementSearchStatus() { const {z3Status}=await import(vurl('lib/dialog/placement-search-provider.mjs'));return z3Status(); },
   async sample(m) {
     if (samplerRun || foregroundWaiting || turnRunning() || warming) return { items: [], available: true, reason: 'busy' };
-    sampleActivityId = m.id;
+    sampleActivityId = m.id;samplerRecord.runs++;const sampleStarted=performance.now();worldActivity(['component:reader'],'start','Sample suggestions',{operation:'suggestion.sample',view:m.tab??session.isession.state['ui.shell']?.activeTab??null,mode:m.mode??'one'});
     const run = (async () => {
       const [{NATIVE_AREAS},{createNativeRequestSampler}] = await Promise.all([import(vurl('lib/dialog/app-reader-context.mjs')),import(vurl('lib/dialog/native-request-sampler.mjs'))]);
       const view = m.tab ?? session.isession.state['ui.shell']?.activeTab, area = NATIVE_AREAS[view];
@@ -590,7 +596,8 @@ const handlers = {
       return result;
     })();
     samplerRun = run;
-    try { return await run; } finally { if (samplerRun === run) samplerRun = null; if (sampleActivityId === m.id) sampleActivityId = null; }
+    try { const result = await run; samplerRecord.last = { view: m.tab ?? session.isession.state['ui.shell']?.activeTab ?? null, mode: m.mode ?? 'one', items: result?.items?.length ?? 0, available: result?.available ?? null, reason: result?.reason ?? null, durationMs: performance.now() - sampleStarted, time: Date.now() }; worldActivity(['component:reader'], 'end', 'Sample suggestions', { operation: 'suggestion.sample', ...samplerRecord.last }); return result; }
+    finally { if (samplerRun === run) samplerRun = null; if (sampleActivityId === m.id) sampleActivityId = null; }
   },
   async warm() { return null; },
   /** The page needs a world now (its tab opens, the user names it): loads it and answers which worlds are loaded. */

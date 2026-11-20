@@ -1,3 +1,4 @@
+import{PINNED_CATALOG}from'./fixtures/pinned-catalog.mjs';
 import {invokeToolCommand} from '../src/dialog/native-control-intent.mjs';
 import {drawingObjects} from './drawing-state.mjs';
 import {emptyAvatarState,avatarAreaStateWorld} from '../worlds/ui.avatar/sop-avatar.mjs';
@@ -10,7 +11,7 @@ import{projectContextAction}from'../src/dialog/project-context-action.mjs';impor
 import{createFacts}from'../src/knowledge/facts.mjs';import{createKnowledgeSource}from'../src/loaders/knowledge-source.mjs';
 import{createDrawingArea,emptyDrawingState}from'../worlds/art.draw/sop-drawing.mjs';
 const inventory=JSON.parse(await readFile(new URL('../training/sop-bert/data/ui-natural-v1/inventory.json',import.meta.url),'utf8'));
-const knowledge=createFacts({source:createKnowledgeSource(new URL('../../sop-knowledge-worlds/docs/worlds/',import.meta.url).pathname)}),faces=await knowledge.faces();
+const knowledge=createFacts({source:createKnowledgeSource(PINNED_CATALOG.pathname)}),faces=await knowledge.faces();
 const overlay=await exportNativeReaderBindings({inventory,knowledge}),bindings=mergeNativeReaderBindings({format:'sop.structural-bindings/1',kinds:[],properties:[],families:[],units:[]},overlay),sha=createHash('sha256').update(JSON.stringify(bindings)).digest('hex');
 const raw=(area,type,key,value)=>{const text='change '+type+' to '+value,start=text.indexOf(value);return{format:RAW_STRUCTURAL_FORMAT,area,source:{text,unit:'unicode-scalar'},model:{kind:'structural-graph',sha256:'a'.repeat(64),decoderVersion:1},requestCount:1,coverage:{complete:true,truncated:false},unresolved:[],ranges:[{path:['requests','0','constraints','0','value_span'],range:[start,start+value.length]}],requests:[{span:text,trigger:'change',act:'change',mood:'do',target:{type,mode:'existing'},constraints:[{key:type+'.'+key,value,value_span:value,operator:'eq',phase:'result',character:'requirement',polarity:'positive'}]}]};};
 test('gold requests use actual native family/property declarations for avatar composition and drawing labels',async()=>{

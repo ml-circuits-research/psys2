@@ -1,0 +1,168 @@
+# k.layouts: named arrangements of things in a picture (row, grid, ring, landscape, face, room), the places on a
+# drawable thing where another thing sits or attaches (the seat of a chair, the top of a head, the surface of a
+# lake), and which kinds of thing join which (a roof on a wall, a wheel on a car, a hat on a head, an arrow on a
+# box). So that a picture can be laid out, and things put on or joined to each other, from knowledge.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@k.layouts core.module name=k.layouts version=4 imports=k.named exports=layout exports=slot exports=relation exports=anchor exports=joins exports=outline exports=outline_point exports=terrain exports=handle exports=terrain_part core.source="hand-core 1"
+
+# A named arrangement. `kind` is `repeating` when it arranges any number of like things (a row, a ring) and `fixed`
+# when it has named places, each for its own kind of thing (a landscape, a face). `about` says it in one sentence;
+# `ordered=true` says that the order of the things means something (the steps of a flow); `usual_for` names what
+# is usually arranged so (short phrases; many). Other names of the arrangement are core.word facts.
+@k.layouts.layout core.type of=k.layouts.layout shared=true closed=true core.source="hand-core 1"
+@k.layouts.layout.name core.slot of=k.layouts.layout key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.layouts.layout.kind core.slot of=k.layouts.layout key=kind required=true enum=repeating enum=fixed core.source="hand-core 1"
+@k.layouts.layout.about core.slot of=k.layouts.layout key=about required=true kind=string core.source="hand-core 1"
+@k.layouts.layout.ordered core.slot of=k.layouts.layout key=ordered kind=boolean core.source="hand-core 1"
+@k.layouts.layout.usual_for core.slot of=k.layouts.layout key=usual_for many=true required=true kind=string core.source="hand-core 1"
+
+# A place of an arrangement. `count` is `one` thing or `many`; `pair=true` says that the place is there twice, once
+# on each side of the middle line (the eyes of a face); `optional=true` that it may stay empty; `fills` (many) names the kinds drawn as the whole slot (the
+# ground of a landscape: ground, land, sand; its sky: sky), sized and placed as the slot's box; `holds` names what
+# usually goes there (many); `role` names explicitly assigned structural roles it accepts; `arranged` names the arrangement of the things inside the place, where they have one
+# (each row of a grid is a `row`); `x`, `y`, `w`, `h` are the usual box of the place in the frame of the whole
+# arrangement, 0 to 100, x to the right and y down, where the arrangement has usual places (the sky of a landscape
+# is its upper half). The box of a pair is that of its left one. The boxes may overlap.
+@k.layouts.slot core.type of=k.layouts.slot shared=true closed=true core.source="hand-core 1"
+@k.layouts.slot.layout core.slot of=k.layouts.slot key=layout id=true required=true kind=atom kind=string type=k.layouts.layout by=name core.source="hand-core 1"
+@k.layouts.slot.name core.slot of=k.layouts.slot key=name id=true required=true kind=atom core.source="hand-core 1"
+@k.layouts.slot.role core.slot of=k.layouts.slot key=role kind=atom kind=string many=true core.source="hand-core 1"
+@k.layouts.slot.count core.slot of=k.layouts.slot key=count required=true enum=one enum=many core.source="hand-core 1"
+@k.layouts.slot.pair core.slot of=k.layouts.slot key=pair kind=boolean core.source="hand-core 1"
+@k.layouts.slot.optional core.slot of=k.layouts.slot key=optional kind=boolean core.source="hand-core 1"
+@k.layouts.slot.holds core.slot of=k.layouts.slot key=holds many=true kind=atom kind=string core.source="hand-core 1"
+@k.layouts.slot.fills core.slot of=k.layouts.slot key=fills many=true kind=atom kind=string core.source="hand-core 1"
+@k.layouts.slot.arranged core.slot of=k.layouts.slot key=arranged kind=atom kind=string type=k.layouts.layout by=name core.source="hand-core 1"
+@k.layouts.slot.x core.slot of=k.layouts.slot key=x kind=number min=0 max=100 core.source="hand-core 1"
+@k.layouts.slot.y core.slot of=k.layouts.slot key=y kind=number min=0 max=100 core.source="hand-core 1"
+@k.layouts.slot.w core.slot of=k.layouts.slot key=w kind=number min=0 max=100 core.source="hand-core 1"
+@k.layouts.slot.h core.slot of=k.layouts.slot key=h kind=number min=0 max=100 core.source="hand-core 1"
+
+# How two places of an arrangement sit to each other: what is in `a` is `rel` what is in `b`. `left_of` and `above`
+# compare the middles; `inside`: a lies within b; `around`: a surrounds b; `on`: a rests on the upper edge of b;
+# `behind`: a is further away and drawn first; `beside`: a is next to b, on either side; `aligned_row`: the middles
+# are at one height; `aligned_column`: the middles are one above the other; `same_size`; `smaller_than`;
+# `evenly_spaced`: the gaps are equal; `apart`: they do not touch; `joined_to`: a line or an arrow goes from a to
+# b. When `a` and `b` are the same place with many things, `among` says between which of them the relation holds:
+# `neighbours` (from each thing to the next, in order) or `all` (between any two).
+@k.layouts.relation core.type of=k.layouts.relation shared=true closed=true core.source="hand-core 1"
+@k.layouts.relation.layout core.slot of=k.layouts.relation key=layout id=true required=true kind=atom kind=string type=k.layouts.layout by=name core.source="hand-core 1"
+@k.layouts.relation.a core.slot of=k.layouts.relation key=a id=true required=true kind=atom core.source="hand-core 1"
+@k.layouts.relation.rel core.slot of=k.layouts.relation key=rel id=true required=true enum=left_of enum=above enum=inside enum=around enum=on enum=behind enum=beside enum=aligned_row enum=aligned_column enum=same_size enum=smaller_than enum=evenly_spaced enum=apart enum=joined_to core.source="hand-core 1"
+@k.layouts.relation.b core.slot of=k.layouts.relation key=b id=true required=true kind=atom core.source="hand-core 1"
+@k.layouts.relation.among core.slot of=k.layouts.relation key=among enum=neighbours enum=all core.source="hand-core 1"
+
+# A place on a drawable thing where another thing sits or attaches. `of` names the k.objects object, `name` the
+# place. `kind`: `seat` (someone sits there), `surface` (things stand or lie on it), `top` (the highest place: a hat
+# on a head, a flag on a tower), `handle` (a hand holds the thing there), `hand` (the thing holds another there),
+# `opening` (things go in and out: a door, the slot of a mailbox), `inside` (things are in it: a cup, the crown of a
+# tree), `water` (things float or swim on it), `roof` (the roof of a building), `hook` (the thing hangs by it, or
+# another hangs from it), `base` (the thing itself stands or sits there on another). `x`, `y`, `w`, `h` are the box
+# of the place in the 0 to 100 frame of the object: a line when `w` or `h` is 0 (the upper edge of a seat), a point
+# when both are. `part` names the part of the object that the place lies on; it is absent where the parts of the
+# drawing have no names (imported drawings) or no part marks the place: the box is then all there is. `holds` names
+# what usually goes there (many); for a `base`, `on` names what the thing stands or sits on. `named=model`: the
+# place was chosen by a language model, from the named parts of the object or by looking at the drawing under a
+# grid, only where sure, and looked at again drawn on the object.
+@k.layouts.anchor core.type of=k.layouts.anchor extends=k.named.labelled shared=true closed=true core.source="hand-core 1"
+@k.layouts.anchor.of core.slot of=k.layouts.anchor key=of id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.layouts.anchor.name core.slot of=k.layouts.anchor key=name id=true required=true kind=atom core.source="hand-core 1"
+@k.layouts.anchor.kind core.slot of=k.layouts.anchor key=kind required=true enum=seat enum=surface enum=top enum=handle enum=hand enum=opening enum=inside enum=water enum=roof enum=hook enum=base core.source="hand-core 1"
+@k.layouts.anchor.x core.slot of=k.layouts.anchor key=x required=true kind=number min=0 max=100 core.source="hand-core 1"
+@k.layouts.anchor.y core.slot of=k.layouts.anchor key=y required=true kind=number min=0 max=100 core.source="hand-core 1"
+@k.layouts.anchor.w core.slot of=k.layouts.anchor key=w required=true kind=number min=0 max=100 core.source="hand-core 1"
+@k.layouts.anchor.h core.slot of=k.layouts.anchor key=h required=true kind=number min=0 max=100 core.source="hand-core 1"
+@k.layouts.anchor.part core.slot of=k.layouts.anchor key=part kind=atom core.source="hand-core 1"
+@k.layouts.anchor.holds core.slot of=k.layouts.anchor key=holds many=true kind=atom kind=string core.source="hand-core 1"
+@k.layouts.anchor.on core.slot of=k.layouts.anchor key=on many=true kind=atom kind=string core.source="hand-core 1"
+
+# Which kind of thing joins which: `a` is `rel` `b`. `part_of`: a is a part of b (a wheel of a car); `attaches_to`: a
+# is fixed to b (a roof to a wall, an arrow to a box); `sits_on`: a rests on b and can be taken off (a hat on a head,
+# a lid on a pot); `hangs_from`; `goes_in`: a is put into b (a key into a lock); `worn_on`: a is worn on that part
+# of the body; `grows_on`; `held_in`; `connects`: a joins two of b (a bridge two banks, an arrow two boxes). `side`
+# says where on b: `top`, `bottom`, `side` (left or right), `front`, `back`, `end`, `edge`, `corner`, `centre`,
+# `inside`, `around`. Kinds are named by their common English noun. `named=model`: written by a language model, only
+# where sure.
+@k.layouts.joins core.type of=k.layouts.joins extends=k.named.labelled shared=true closed=true core.source="hand-core 1"
+@k.layouts.joins.a core.slot of=k.layouts.joins key=a id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.layouts.joins.rel core.slot of=k.layouts.joins key=rel id=true required=true enum=part_of enum=attaches_to enum=sits_on enum=hangs_from enum=goes_in enum=worn_on enum=grows_on enum=held_in enum=connects enum=around core.source="hand-core 1"
+@k.layouts.joins.b core.slot of=k.layouts.joins key=b id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.layouts.joins.side core.slot of=k.layouts.joins key=side enum=top enum=bottom enum=side enum=front enum=back enum=end enum=edge enum=corner enum=centre enum=inside enum=around core.source="hand-core 1"
+
+# An outline (block 09:50 item F): the edge of a shape as an ordered closed path of points in the 0 to 100 frame (x
+# right, y down), the first point the topmost (then the leftmost), going round clockwise; the layout `outline` spaces
+# things evenly along it ("a diagram in the shape of a house"). `name` the shape as a request names it (house,
+# triangle); `from` the type it is derived from: k.shapes.shape (the shape by its geometry: `shape` names it) or
+# k.objects.object (the silhouette of the drawing `drawing`, traced); `points` how many points the path has;
+# `tolerance` the largest distance, in frame units, of the drawing's traced edge from the path (0 for a geometry).
+# Derived by tools/outlines-core.mjs; an outline keeps the licence of the drawing it is traced from.
+@k.layouts.outline core.type of=k.layouts.outline shared=true closed=true core.source="hand-core 1"
+@k.layouts.outline.name core.slot of=k.layouts.outline key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.layouts.outline.from core.slot of=k.layouts.outline key=from required=true enum=k.shapes.shape enum=k.objects.object core.source="hand-core 1"
+@k.layouts.outline.shape core.slot of=k.layouts.outline key=shape kind=atom kind=string type=k.shapes.shape by=name core.source="hand-core 1"
+@k.layouts.outline.drawing core.slot of=k.layouts.outline key=drawing kind=atom kind=string type=k.objects.object by=name core.source="hand-core 1"
+@k.layouts.outline.points core.slot of=k.layouts.outline key=points required=true kind=integer min=3 core.source="hand-core 1"
+@k.layouts.outline.tolerance core.slot of=k.layouts.outline key=tolerance required=true kind=number min=0 core.source="hand-core 1"
+# A point of an outline: `outline` its name, `n` its place on the path (from 1), `x` and `y` in the frame.
+@k.layouts.outline_point core.type of=k.layouts.outline_point shared=true closed=true core.source="hand-core 1"
+@k.layouts.outline_point.outline core.slot of=k.layouts.outline_point key=outline id=true required=true kind=atom kind=string type=k.layouts.outline by=name core.source="hand-core 1"
+@k.layouts.outline_point.n core.slot of=k.layouts.outline_point key=n id=true required=true kind=integer min=1 core.source="hand-core 1"
+@k.layouts.outline_point.x core.slot of=k.layouts.outline_point key=x required=true kind=number min=0 max=100 core.source="hand-core 1"
+@k.layouts.outline_point.y core.slot of=k.layouts.outline_point key=y required=true kind=number min=0 max=100 core.source="hand-core 1"
+
+# A terrain feature (owner, 2026-11-20): a piece of the landscape itself rather than a thing standing in it: the sky
+# and the ground of a view, a river, a lake, a road, a hill. A picture draws it from its handles, never from a fixed
+# picture, so that it stays what it is when people bend, widen, raise or move it, and keeps its own rules: the banks
+# of a river run side by side, the shore of a lake follows its water, the ground stays below the horizon. `name` is
+# the kind (the name a request uses); `form` says how its shape follows from its handles: `view` (the whole picture:
+# the sky above its `horizon` handle and the ground below it), `band` (a strip along a course from its `start` handle
+# through its `bend` handle to its `end` handle, as wide as each end's handle `w` there and widening evenly between:
+# narrow far away at the horizon, wide in front), `area` (a closed outline through its `outline` handles in their
+# order, rounded), `silhouette` (a ridge through its `outline` handles, closed along its base: hills, mountains).
+# `lies` is where it lies in the depth of a landscape: `view` (the whole picture), `horizon` (far away, its base on
+# the horizon), `ground` (on the ground between the horizon and the front), `through` (from the horizon to the front
+# of the picture: a river or a road coming towards the viewer). `variants` is how many outlines an `area` has (its
+# handles say which variant they belong to); an object takes one of them, so two lakes are not the same shape.
+@k.layouts.terrain core.type of=k.layouts.terrain shared=true closed=true core.source="hand-core 1"
+@k.layouts.terrain.name core.slot of=k.layouts.terrain key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.layouts.terrain.form core.slot of=k.layouts.terrain key=form required=true enum=view enum=band enum=area enum=silhouette core.source="hand-core 1"
+@k.layouts.terrain.lies core.slot of=k.layouts.terrain key=lies required=true enum=view enum=horizon enum=ground enum=through core.source="hand-core 1"
+@k.layouts.terrain.variants core.slot of=k.layouts.terrain key=variants kind=integer min=1 core.source="hand-core 1"
+# A handle of a terrain feature: a point (and, for some, a size) that people move or change, in the 0 to 100 frame of
+# the feature's box (x right, y down). `n` is its place among the handles, from 0 (the index a host gives the part);
+# `role` what it does: `start`, `bend` and `end` of a band, `horizon` of a view, `outline` (a point of the outline of
+# an area or the ridge of a silhouette, in order), `peak` (an outline point that is the top: snow lies there);
+# `variant` the outline it belongs to (absent: every variant); `x`, `y` the point; `w` the width of a band at that
+# handle, `h` its height (0 for a point).
+@k.layouts.handle core.type of=k.layouts.handle shared=true closed=true core.source="hand-core 1"
+@k.layouts.handle.of core.slot of=k.layouts.handle key=of id=true required=true kind=atom kind=string type=k.layouts.terrain by=name core.source="hand-core 1"
+@k.layouts.handle.name core.slot of=k.layouts.handle key=name id=true required=true kind=atom core.source="hand-core 1"
+@k.layouts.handle.n core.slot of=k.layouts.handle key=n required=true kind=integer min=0 core.source="hand-core 1"
+@k.layouts.handle.role core.slot of=k.layouts.handle key=role required=true enum=start enum=bend enum=end enum=horizon enum=outline enum=peak core.source="hand-core 1"
+@k.layouts.handle.variant core.slot of=k.layouts.handle key=variant kind=integer min=1 core.source="hand-core 1"
+@k.layouts.handle.x core.slot of=k.layouts.handle key=x required=true kind=number min=0 max=100 core.source="hand-core 1"
+@k.layouts.handle.y core.slot of=k.layouts.handle key=y required=true kind=number min=0 max=100 core.source="hand-core 1"
+@k.layouts.handle.w core.slot of=k.layouts.handle key=w required=true kind=number min=0 max=100 core.source="hand-core 1"
+@k.layouts.handle.h core.slot of=k.layouts.handle key=h required=true kind=number min=0 max=100 core.source="hand-core 1"
+# A drawn part of a terrain feature and how it follows from the handles. `form`: `fill` (the shape itself: the band,
+# the outline or the silhouette), `above` and `below` (for a view: the share `from` to `to`, 0 to 100, of the room
+# above or below the horizon, top to bottom: the sky in bands that lighten towards the horizon, the ground in bands
+# that darken towards the front), `edge` (a line along the `side` left or right of a band: a bank, a kerb), `middle`
+# (the middle line of a band, dashed: the lane marks of a road, the current of a river), `shore` (the outline grown
+# by `grow` per cent of its size around its middle: the shore round a lake; a negative grow draws a smaller copy
+# inside, a lighter middle that gives water depth), `cap` (the top `grow` per cent of a silhouette around each `peak`
+# handle: snow). `colour` is its colour (a k.colours name), `rgb` the exact shade; `z` its draw order among the parts.
+@k.layouts.terrain_part core.type of=k.layouts.terrain_part shared=true closed=true core.source="hand-core 1"
+@k.layouts.terrain_part.of core.slot of=k.layouts.terrain_part key=of id=true required=true kind=atom kind=string type=k.layouts.terrain by=name core.source="hand-core 1"
+@k.layouts.terrain_part.name core.slot of=k.layouts.terrain_part key=name id=true required=true kind=atom core.source="hand-core 1"
+@k.layouts.terrain_part.form core.slot of=k.layouts.terrain_part key=form required=true enum=fill enum=above enum=below enum=edge enum=middle enum=shore enum=cap core.source="hand-core 1"
+@k.layouts.terrain_part.side core.slot of=k.layouts.terrain_part key=side enum=left enum=right core.source="hand-core 1"
+@k.layouts.terrain_part.from core.slot of=k.layouts.terrain_part key=from kind=number min=0 max=100 core.source="hand-core 1"
+@k.layouts.terrain_part.to core.slot of=k.layouts.terrain_part key=to kind=number min=0 max=100 core.source="hand-core 1"
+@k.layouts.terrain_part.grow core.slot of=k.layouts.terrain_part key=grow kind=number min=-90 max=100 core.source="hand-core 1"
+@k.layouts.terrain_part.colour core.slot of=k.layouts.terrain_part key=colour required=true kind=atom kind=string core.source="hand-core 1"
+@k.layouts.terrain_part.rgb core.slot of=k.layouts.terrain_part key=rgb kind=string core.source="hand-core 1"
+@k.layouts.terrain_part.z core.slot of=k.layouts.terrain_part key=z required=true kind=integer core.source="hand-core 1"

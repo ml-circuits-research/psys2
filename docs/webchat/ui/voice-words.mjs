@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Voice words for every language (SETTINGS-COHERENT item 3). The voice layer (end-of-turn, stop-microphone, cancel, address words, the cheap noise check)
-// works on a few short word lists. The lists exist in English only (SOURCE below); for another selected language each entry is translated ONCE by the
+// works on a few short word lists (end-of-turn and microphone commands only; no list decides whether a message reaches the engine, ui/voice-noise.mjs). The lists exist in English only (SOURCE below); for another selected language each entry is translated ONCE by the
 // translation layer (browser Translator, else the on-device model) and cached in the browser, so no language, Romanian included, has a hand-written list.
 // Pure: no DOM, no node:*; the translator and the storage are passed in.
 
@@ -18,17 +18,13 @@ export const SOURCE = Object.freeze({
   openVerbs: ['play', 'draw', 'add', 'make', 'open', 'show', 'create', 'set', 'delete', 'remove', 'put', 'move', 'change', 'write', 'start', 'give', 'tell', 'find', 'search', 'call', 'name', 'rename', 'select', 'insert', 'append', 'turn', 'switch', 'go', 'take', 'bring', 'place', 'paint', 'color', 'colour', 'fill', 'rotate', 'resize', 'increase', 'decrease', 'sing'],
   determiners: ['this', 'these', 'those', 'some', 'my', 'your', 'his', 'her', 'its', 'our', 'their', 'another', 'every', 'each', 'any'],
   numbers: ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'twenty', 'thirty', 'forty', 'fifty', 'hundred'],
-  questionStarters: ['what can i say', 'what can i do', 'what can i ask', 'what do you know', 'what can you do', 'who are you', 'how do i', 'help me', 'help'],
-  questionWords: ['what', 'how', 'who', 'where', 'when', 'which', 'why', 'is', 'are', 'does', 'do', 'can', 'could'],
-  commandVerbs: ['draw', 'make', 'add', 'put', 'move', 'delete', 'remove', 'show', 'open', 'close', 'play', 'start', 'set', 'change', 'turn', 'go', 'find', 'search', 'tell', 'give', 'create', 'write', 'rename', 'select', 'undo', 'redo', 'clear', 'erase', 'paint', 'color', 'fill', 'rotate', 'resize', 'zoom', 'list', 'display', 'become', 'sing', 'stop', 'next', 'cancel', 'please', 'switch', 'pick', 'choose', 'guess', 'read', 'say'],
   fragments: ['a', 'an', 'the', 'this', 'that', 'these', 'those', 'it', 'he', 'she', 'we', 'they', 'you', 'i', 'me', 'my', 'is', 'are', 'was', 'be', 'do', 'does', 'did', 'to', 'of', 'in', 'on', 'at', 'for', 'and', 'or', 'but', 'so', 'if', 'where', 'which', 'there', 'here', 'well', 'yes', 'no', 'ok', 'sure'],
   knownOneWord: ['undo', 'redo', 'help', 'next', 'back', 'again', 'reset', 'clear', 'pause', 'resume'],
-  nouns: ['house', 'heart', 'tree', 'sun', 'cloud', 'fish', 'flower', 'map', 'music', 'song', 'game', 'diagram', 'chart', 'document', 'title', 'chapter', 'robot', 'avatar', 'circle', 'square', 'triangle', 'animal', 'cow'],
 });
 /** The lists whose translated entries are matched on a word stem (inflected languages), not only exactly. */
-const STEMMED = new Set(['commandVerbs', 'nouns', 'openVerbs']);
+const STEMMED = new Set(['openVerbs']);
 /** Lists of phrases: translated as a whole; every other list is single words. */
-const PHRASES = new Set(['stopPhrases', 'questionStarters']);
+const PHRASES = new Set(['stopPhrases']);
 
 export const fold = (t) => String(t ?? '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^\p{L}\p{N}\s'-]+/gu, ' ').replace(/-+/g, ' ').replace(/\s+/g, ' ').trim();
 
@@ -53,7 +49,7 @@ export function addressWordsText(lang = extraLang) {
 
 const cleanTranslation = (name, src, out) => {
   const t = fold(out);
-  if (!t || t === fold(src) && name !== 'nouns' && name !== 'address') return null;
+  if (!t || t === fold(src) && name !== 'address') return null;
   const words = t.split(' ');
   if (PHRASES.has(name)) return words.length <= 6 ? t : null;
   if (words.length > 2) return null;

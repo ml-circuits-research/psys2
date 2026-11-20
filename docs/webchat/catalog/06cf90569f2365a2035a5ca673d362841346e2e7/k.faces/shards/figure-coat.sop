@@ -1,0 +1,42 @@
+# k.faces/shards/figure-coat: the variants of the slot `coat` in the style `figure`: features, and parts with a primitive shape, a box in the frame of the figure, a draw order and colours; points for lines and polygons.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: tools/figures-core.mjs
+
+# coat: jacket
+@k.faces.figure.coat.jacket k.faces.variant slot=coat name=jacket style=figure length=short kind=jacket core.source="hand-core 1"
+@k.faces.figure.coat.jacket.left_side k.faces.part slot=coat of=jacket name=left_side shape=polygon x=28 y=30 w=21 h=34 z=1 colour=brown colour=black colour=blue colour=green colour=grey colour=red rgb="#7A5230" core.source="hand-core 1"
+@k.faces.figure.coat.jacket.right_side k.faces.part slot=coat of=jacket name=right_side shape=polygon x=51 y=30 w=21 h=34 z=1 colour=brown colour=black colour=blue colour=green colour=grey colour=red rgb="#7A5230" core.source="hand-core 1"
+@k.faces.figure.coat.jacket.left_side.p1 k.faces.point part=$k.faces.figure.coat.jacket.left_side n=1 x=39 y=30 core.source="hand-core 1"
+@k.faces.figure.coat.jacket.left_side.p2 k.faces.point part=$k.faces.figure.coat.jacket.left_side n=2 x=49 y=30 core.source="hand-core 1"
+@k.faces.figure.coat.jacket.left_side.p3 k.faces.point part=$k.faces.figure.coat.jacket.left_side n=3 x=49 y=64 core.source="hand-core 1"
+@k.faces.figure.coat.jacket.left_side.p4 k.faces.point part=$k.faces.figure.coat.jacket.left_side n=4 x=39 y=64 core.source="hand-core 1"
+@k.faces.figure.coat.jacket.left_side.p5 k.faces.point part=$k.faces.figure.coat.jacket.left_side n=5 x=40 y=43 core.source="hand-core 1"
+@k.faces.figure.coat.jacket.left_side.p6 k.faces.point part=$k.faces.figure.coat.jacket.left_side n=6 x=34 y=56 core.source="hand-core 1"
+@k.faces.figure.coat.jacket.left_side.p7 k.faces.point part=$k.faces.figure.coat.jacket.left_side n=7 x=28 y=53 core.source="hand-core 1"
+@k.faces.figure.coat.jacket.right_side.p1 k.faces.point part=$k.faces.figure.coat.jacket.right_side n=1 x=72 y=53 core.source="hand-core 1"
+@k.faces.figure.coat.jacket.right_side.p2 k.faces.point part=$k.faces.figure.coat.jacket.right_side n=2 x=66 y=56 core.source="hand-core 1"
+@k.faces.figure.coat.jacket.right_side.p3 k.faces.point part=$k.faces.figure.coat.jacket.right_side n=3 x=60 y=43 core.source="hand-core 1"
+@k.faces.figure.coat.jacket.right_side.p4 k.faces.point part=$k.faces.figure.coat.jacket.right_side n=4 x=61 y=64 core.source="hand-core 1"
+@k.faces.figure.coat.jacket.right_side.p5 k.faces.point part=$k.faces.figure.coat.jacket.right_side n=5 x=51 y=64 core.source="hand-core 1"
+@k.faces.figure.coat.jacket.right_side.p6 k.faces.point part=$k.faces.figure.coat.jacket.right_side n=6 x=51 y=30 core.source="hand-core 1"
+@k.faces.figure.coat.jacket.right_side.p7 k.faces.point part=$k.faces.figure.coat.jacket.right_side n=7 x=61 y=30 core.source="hand-core 1"
+
+# coat: coat
+@k.faces.figure.coat.coat k.faces.variant slot=coat name=coat style=figure length=long feel=thick kind=coat core.source="hand-core 1"
+@k.faces.figure.coat.coat.left_side k.faces.part slot=coat of=coat name=left_side shape=polygon x=28 y=30 w=21 h=50 z=1 colour=brown colour=black colour=blue colour=green colour=grey colour=red rgb="#5B4636" core.source="hand-core 1"
+@k.faces.figure.coat.coat.right_side k.faces.part slot=coat of=coat name=right_side shape=polygon x=51 y=30 w=21 h=50 z=1 colour=brown colour=black colour=blue colour=green colour=grey colour=red rgb="#5B4636" core.source="hand-core 1"
+@k.faces.figure.coat.coat.left_side.p1 k.faces.point part=$k.faces.figure.coat.coat.left_side n=1 x=39 y=30 core.source="hand-core 1"
+@k.faces.figure.coat.coat.left_side.p2 k.faces.point part=$k.faces.figure.coat.coat.left_side n=2 x=49 y=30 core.source="hand-core 1"
+@k.faces.figure.coat.coat.left_side.p3 k.faces.point part=$k.faces.figure.coat.coat.left_side n=3 x=49 y=80 core.source="hand-core 1"
+@k.faces.figure.coat.coat.left_side.p4 k.faces.point part=$k.faces.figure.coat.coat.left_side n=4 x=36 y=80 core.source="hand-core 1"
+@k.faces.figure.coat.coat.left_side.p5 k.faces.point part=$k.faces.figure.coat.coat.left_side n=5 x=40 y=43 core.source="hand-core 1"
+@k.faces.figure.coat.coat.left_side.p6 k.faces.point part=$k.faces.figure.coat.coat.left_side n=6 x=34 y=56 core.source="hand-core 1"
+@k.faces.figure.coat.coat.left_side.p7 k.faces.point part=$k.faces.figure.coat.coat.left_side n=7 x=28 y=53 core.source="hand-core 1"
+@k.faces.figure.coat.coat.right_side.p1 k.faces.point part=$k.faces.figure.coat.coat.right_side n=1 x=72 y=53 core.source="hand-core 1"
+@k.faces.figure.coat.coat.right_side.p2 k.faces.point part=$k.faces.figure.coat.coat.right_side n=2 x=66 y=56 core.source="hand-core 1"
+@k.faces.figure.coat.coat.right_side.p3 k.faces.point part=$k.faces.figure.coat.coat.right_side n=3 x=60 y=43 core.source="hand-core 1"
+@k.faces.figure.coat.coat.right_side.p4 k.faces.point part=$k.faces.figure.coat.coat.right_side n=4 x=64 y=80 core.source="hand-core 1"
+@k.faces.figure.coat.coat.right_side.p5 k.faces.point part=$k.faces.figure.coat.coat.right_side n=5 x=51 y=80 core.source="hand-core 1"
+@k.faces.figure.coat.coat.right_side.p6 k.faces.point part=$k.faces.figure.coat.coat.right_side n=6 x=51 y=30 core.source="hand-core 1"
+@k.faces.figure.coat.coat.right_side.p7 k.faces.point part=$k.faces.figure.coat.coat.right_side n=7 x=61 y=30 core.source="hand-core 1"

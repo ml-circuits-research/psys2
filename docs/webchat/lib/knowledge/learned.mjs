@@ -8,8 +8,8 @@
  * The wires written: a kind-of fact is a word sense (`k.words.sense ... is_a=`), an ability or a material is a fact of the thing's attributes (`k.attributes.thing ... can= / material=`: their one home in the catalog, KR1), a habitat or an inability a commonsense fact (`k.commonsense.thing ... cannot= / at=`), a thing of
  * the user is `session.learned.own kind= name= owner=user`.
  */
-import { parseFact, lemmaCandidates } from './facts.mjs?v=2787597521';
-import { parseTeachTyped } from './teach-typed.mjs?v=f5a9c51220';
+import { parseFact, lemmaCandidates } from './facts.mjs?v=9d0fd71b24';
+import { parseTeachTyped } from './teach-typed.mjs?v=fe370741dd';
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };
 // TEMPORARY (until k.actions / k.commonsense carry the abilities of kinds): the verbs read as an ability when a bare plural says them ("ducks float"). Other forms need no list.

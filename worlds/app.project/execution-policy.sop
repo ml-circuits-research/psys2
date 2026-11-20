@@ -5,6 +5,10 @@
 @calendar.duration std.capability.seed operation="calendar.meeting.add" parameter="duration" source=value value=1800000 phase=missing order=122 notice="I used a 30-minute duration."
 @calendar.participants std.capability.seed operation="calendar.meeting.add" parameter="participants" source=value value=$empty phase=missing order=123
 @calendar.room std.capability.seed operation="calendar.meeting.add" parameter="room" source=value value=null phase=missing order=124
+# A diagram node named only by its family ("a box", "a node", "a step") is drawn with the usual shape of a step of the
+# diagram's default form: a flowchart (w.diagram.diagram.form default) draws a process step as a rectangle
+# (k.diagrams.shape.flowchart.process). The reply says so; the shape can be changed or the step undone.
+@diagram.node.shape std.capability.seed operation="diagram.node.make" kind=w.diagram.node parameter="kind" source=value value="rectangle" phase=missing order=125 notice="I chose the shape; you can change it or undo."
 @colour app.execution.values concept=colour valueType="k.colours.colour" nameKey="name" valueKey="rgb" codec=lookup
 @drawing.colour app.execution.observedProperty concept=colour sourceType="art.draw.object" parameter="color" binding="drawing.object.color" format=rgb codec=lookup order=0
 @size app.execution.values concept=size valueType="k.expect.scale" nameKey="step" valueKey="size_factor" codec=degree
@@ -30,3 +34,11 @@
 @start app.execution.values concept=w.calendar.event.start valueType="k.time.hour" nameKey="name" valueKey="n" codec=lookup
 @start.phrases app.execution.knowledge concept=w.calendar.event.start valueType="k.time.clock_phrase"
 @start.instant app.execution.instant concept=w.calendar.event.start sourceType="time.calendar.meeting" binding="calendar.meeting.start" zoneOffset=0
+# "connect" with a new target makes the joining line; the ends of a diagram line name observed diagram nodes.
+@act.connect app.execution.actForm act=connect mode=new as=make
+@edge.from app.execution.reference concept=w.diagram.edge.from sourceType="diagram.sketch.node"
+@edge.to app.execution.reference concept=w.diagram.edge.to sourceType="diagram.sketch.node"
+# "arrange" with what to arrange it as ("lay it out as a tree") changes the layout; with nothing more said ("improve the
+# layout", "tidy it up") it is the page's declared improvement (diagram.layout.improve), disclosed and undoable.
+@act.arrange app.execution.actForm act=arrange mode=existing as=change results=some
+@arrange.improve app.execution.actOperation operation="diagram.layout.improve" act=arrange

@@ -5,15 +5,15 @@
  * formalize(text, { worlds, session, source }) -> { segments, wires }
  * `worlds` is a WorldSet; `session` is a FormSession or any object with a `.form` FormSession.
  */
-import { guard } from '../guard.mjs';
-import { perf } from '../perf.mjs';
+import { guard } from '../../dialog/turn-guard.mjs';
+import { perf } from '../../dialog/stage-perf.mjs';
 import { lexIndex } from '../../worlds/lexicon.mjs';
 import { analyze, tokenize, QUESTION_WORDS, correctTokens, isOldFiller, editDistance } from './normalize.mjs';
 import { compilePattern, matchTokens, wordBag, prefilterPasses, prefilterNeeds, BUILTIN_CLASSES, PatternError } from './matcher.mjs';
 import { buildWires, substituteEmit, dummySlots, SEGMENT_SLOT } from './emit.mjs';
 import { routeScores } from './router.mjs';
 import { createRouter, wildTokens, contextFromFocus, normalizeContext, defaultRouter, isGameControl, gameControlAction, namingTables } from '../routing.mjs';
-import { FormSession, STOP_WORDS, isPronoun } from './session.mjs';
+import { FormSession, STOP_WORDS, isPronoun } from '../../interpreter/form-session.mjs';
 import { selfCorrect, repetition, joinText, MARKER_RE, SEP_RE } from './expand.mjs';
 import { en } from '../../lang/en.mjs';   // English: shared argument, verb ellipsis, one-anaphora (facts of handover/lang.en)
 import { parse } from '../../soplang/index.mjs';
@@ -22,11 +22,11 @@ import { readingVariants, dropStyleIn } from './variants.mjs';
 import { annotateUnread } from '../completeness.mjs';
 import { isCatchAll } from '../typed-world.mjs';
 
-export { FormSession } from './session.mjs';
+export { FormSession } from '../../interpreter/form-session.mjs';
 export { createRouter, createPriorityRouter, emptyContext } from '../routing.mjs';
 export { analyze, splitSentences, tokenize, editDistance, correctTokens, SHORT_TYPOS } from './normalize.mjs';
 export { compilePattern, matchTokens } from './matcher.mjs';
-export { singularLemma, pluralize } from './lemma.mjs';
+export { singularLemma, pluralize } from '../../lang/lemma.mjs';
 
 const compiledCache = new WeakMap();
 /** Compile (memoized) a pattern object; returns { compiled } or { error }. */

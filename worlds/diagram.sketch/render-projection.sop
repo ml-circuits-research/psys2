@@ -80,17 +80,19 @@
 @dg.orient.type core.type of=ui.diagram.orient
 
 # Constants: the page, the gaps between levels and units, a group's padding and label band, the gap between cells.
-@dg.const ui.diagram.const w=1000 h=700 margin=40 gapx=48 gapy=80 pad=16 top=30 cell=28 lane=26 lanestep=14
+# The gaps are scaled by the page's spacing (layout-modes.sop derives ui.diagram.const from these).
+@dg.const0.type core.type of=ui.diagram.const0
+@dg.const ui.diagram.const0 w=1000 h=700 margin=40 gapx=48 gapy=80 pad=16 top=30 cell=28 lane=26 lanestep=14
 
 # The medium size of each shape (w, h) and how a long label widens it: the width only, both sides, or not at all.
 @dg.base.rectangle ui.diagram.base shape=rectangle w=120 h=56 grow=w kind=box
 @dg.base.rounded ui.diagram.base shape=rounded_rectangle w=120 h=56 grow=w kind=box round=12
-@dg.base.document ui.diagram.base shape=document w=120 h=60 grow=w kind=box
+@dg.base.document ui.diagram.base shape=document w=120 h=64 grow=w kind=poly
 @dg.base.double ui.diagram.base shape=double_rectangle w=124 h=56 grow=w kind=box
 @dg.base.square ui.diagram.base shape=square w=68 h=68 grow=both kind=box
 @dg.base.circle ui.diagram.base shape=circle w=68 h=68 grow=both kind=round
 @dg.base.ellipse ui.diagram.base shape=ellipse w=124 h=60 grow=w kind=round
-@dg.base.oval ui.diagram.base shape=oval w=124 h=56 grow=w kind=round
+@dg.base.oval ui.diagram.base shape=oval w=124 h=56 grow=w kind=stadium
 @dg.base.dot ui.diagram.base shape=dot w=18 h=18 grow=none kind=round
 @dg.base.diamond ui.diagram.base shape=diamond w=116 h=72 grow=w kind=poly
 @dg.base.triangle ui.diagram.base shape=triangle w=80 h=70 grow=both kind=poly
@@ -99,6 +101,10 @@
 @dg.base.parallelogram ui.diagram.base shape=parallelogram w=128 h=56 grow=w kind=poly
 @dg.base.chevron ui.diagram.base shape=chevron w=116 h=56 grow=w kind=poly
 @dg.base.text ui.diagram.base shape=text w=110 h=30 grow=w kind=text
+@dg.base.cylinder ui.diagram.base shape=cylinder w=110 h=76 grow=w kind=cylinder
+@dg.base.cloud ui.diagram.base shape=cloud w=136 h=84 grow=w kind=poly
+@dg.base.actor ui.diagram.base shape=actor w=56 h=96 grow=none kind=actor
+@dg.base.note ui.diagram.base shape=note w=124 h=66 grow=w kind=poly
 
 # Size grades.
 @dg.grade.tiny ui.diagram.grade size=tiny f=0.5
@@ -365,7 +371,8 @@
 @so.o ui.diagram.ord unit=?u level=?l key=?k
 @so.r core.rank of=$so.o by=key within=?l out=?p
 @so.out ui.diagram.slot unit=?u level=?l pos=?p
-@dg.slot core.rule when=$so.o with=$so.r then=$so.out
+@so.lay ui.diagram.lay value=flow
+@dg.slot core.rule when=$so.o when=$so.lay with=$so.r then=$so.out
 
 # ---- Groups: padding, columns and cells ----
 @gp.g w.diagram.group code=?g
@@ -394,6 +401,8 @@
 @dg.gcols.row core.rule when=$gk.lr when=$gk.n then=$gk.out.n
 @dg.gcols.bar core.rule when=$gk.lb when=$gk.n then=$gk.out.n
 @dg.gcols.line core.rule when=$gk.ll when=$gk.n then=$gk.out.n
+@gk.la w.diagram.group code=?g layout=area
+@dg.gcols.area core.rule when=$gk.la when=$gk.n then=$gk.out.n
 @gk.anyl w.diagram.group code=?g layout=?anylayout
 @dg.gcols.default core.rule when=$gk.g when=$gk.n not=$gk.anyl then=$gk.out.n
 @gk.out.1 ui.diagram.gcols group=?g cols=1
@@ -412,11 +421,22 @@
 @ch.out.l ui.diagram.chart group=?g form=line
 @dg.chart.bar core.rule when=$ch.g then=$ch.out.b
 @dg.chart.line core.rule when=$ch.gl then=$ch.out.l
+@ch.ga w.diagram.group code=?g layout=area
+@dg.chart.area core.rule when=$ch.ga then=$ch.out.l
 @cm.c ui.diagram.chart group=?g
 @cm.i ui.diagram.inside group=?g node=?c
 @cm.n w.diagram.node code=?c value=?v
 @cm.out ui.diagram.cmax group=?g value=?m
 @dg.cmax core.aggregate over=$cm.c over=$cm.i over=$cm.n by=?g max=?m args=?v default=1 then=$cm.out
+# The top of the value axis: the chart's y_max when it has one, else its largest value.
+@dg.cscale.type core.type of=ui.diagram.cscale
+@cs.m ui.diagram.cmax group=?g value=?m
+@cs.y w.diagram.group code=?g y_max=?ym
+@cs.any w.diagram.group code=?g y_max=?anyym
+@cs.o1 ui.diagram.cscale group=?g value=?ym
+@cs.o2 ui.diagram.cscale group=?g value=?m
+@dg.cscale.set core.rule when=$cs.m when=$cs.y then=$cs.o1
+@dg.cscale.max core.rule when=$cs.m not=$cs.any then=$cs.o2
 
 # Cell size: the largest member and the gap between cells; a chart's cells are 56 wide and 196 high (a 160 high plot
 # and two label lines).
@@ -465,7 +485,7 @@
 
 # ---- Placement of flow units: rows by level ----
 @ls.s ui.diagram.slot unit=?u level=?l
-@ls.d ui.diagram.udim unit=?u w=?w h=?h
+@ls.d ui.diagram.ldim unit=?u w=?w h=?h
 @ls.h ui.diagram.lstat.height level=?l value=?m
 @dg.lstat.height core.aggregate over=$ls.s over=$ls.d by=?l max=?m args=?h then=$ls.h
 @ls.w ui.diagram.lstat.width level=?l value=?m
@@ -492,7 +512,8 @@
 @th.cnt ui.diagram.extent.levels value=?n
 @dg.extent.levels core.aggregate over=$th.n count=?n then=$th.cnt
 @tp.l ui.diagram.lstat.above level=?l value=?above
-@tp.c ui.diagram.const h=?ph margin=?mg gapy=?gy
+@tp.c ui.diagram.const margin=?mg gapy=?gy
+@tp.lp ui.diagram.lpage h=?ph
 @tp.rows ui.diagram.extent.rows value=?rh
 @tp.lv ui.diagram.extent.levels value=?nl
 @tp.g1 core.calc out=?g1 fn=sub args=?nl args=1
@@ -505,7 +526,7 @@
 @tp.t1 core.calc out=?t1 fn=add args=?t0 args=?above
 @tp.t core.calc out=?t fn=add args=?t1 args=?ix
 @tp.out ui.diagram.ltop level=?l top=?t
-@dg.ltop core.rule when=$tp.l when=$tp.c when=$tp.rows when=$tp.lv with=$tp.g1 with=$tp.g2 with=$tp.th with=$tp.free with=$tp.half with=$tp.t0 with=$tp.ix with=$tp.t1 with=$tp.t then=$tp.out
+@dg.ltop core.rule when=$tp.l when=$tp.c when=$tp.lp when=$tp.rows when=$tp.lv with=$tp.g1 with=$tp.g2 with=$tp.th with=$tp.free with=$tp.half with=$tp.t0 with=$tp.ix with=$tp.t1 with=$tp.t then=$tp.out
 # The widest row, so every row is centred on the same page width.
 @wr.w ui.diagram.lstat.width value=?w level=?l
 @wr.n ui.diagram.lstat.count value=?n level=?l
@@ -519,16 +540,17 @@
 @ww.out ui.diagram.extent.widest value=?m
 @dg.extent.widest core.aggregate over=$ww.r max=?m args=?t default=0 then=$ww.out
 @pw.e ui.diagram.extent.widest value=?m
-@pw.c ui.diagram.const w=?pw margin=?mg
+@pw.c ui.diagram.const margin=?mg
+@pw.lp ui.diagram.lpage w=?pw
 @pw.m2 core.calc out=?m2 fn=mul args=?mg args=2
 @pw.need core.calc out=?need fn=add args=?m args=?m2
 @pw.w core.calc out=?w fn=max args=?pw args=?need
 @pw.out ui.diagram.extent.pagew value=?w
-@dg.extent.pagew core.rule when=$pw.e when=$pw.c with=$pw.m2 with=$pw.need with=$pw.w then=$pw.out
+@dg.extent.pagew core.rule when=$pw.e when=$pw.c when=$pw.lp with=$pw.m2 with=$pw.need with=$pw.w then=$pw.out
 # Units before a unit in its row, and its left edge.
 @ub.a ui.diagram.slot unit=?a level=?l pos=?pa
 @ub.b ui.diagram.slot unit=?b level=?l pos=?pb
-@ub.d ui.diagram.udim unit=?a w=?w
+@ub.d ui.diagram.ldim unit=?a w=?w
 @ub.lt core.check fn=lt args=?pa args=?pb
 @ub.out ui.diagram.ubefore unit=?b before=?a w=?w
 @dg.ubefore core.rule when=$ub.a when=$ub.b when=$ub.d if=$ub.lt then=$ub.out
@@ -540,7 +562,7 @@
 @ul.zero ui.diagram.uleft unit=?u key=widths value=0
 @dg.uleft.first core.rule when=$ul.s not=$ul.has then=$ul.zero
 @bx.s ui.diagram.slot unit=?u level=?l pos=?p
-@bx.d ui.diagram.udim unit=?u w=?w h=?h
+@bx.d ui.diagram.ldim unit=?u w=?w h=?h
 @bx.left ui.diagram.uleft unit=?u key=widths value=?before
 @bx.row ui.diagram.lstat.row level=?l value=?row
 @bx.lh ui.diagram.lstat.height level=?l value=?lh
@@ -556,7 +578,7 @@
 @bx.dy1 core.calc out=?dy1 fn=sub args=?lh args=?h
 @bx.dy core.calc out=?dy fn=div args=?dy1 args=2
 @bx.y0 core.calc out=?y0 fn=add args=?t args=?dy
-@bx.out ui.diagram.ubox unit=?u x0=?x0 y0=?y0 w=?w h=?h level=?l
+@bx.out ui.diagram.lbox unit=?u x0=?x0 y0=?y0 w=?w h=?h level=?l
 @dg.ubox.flow core.rule when=$bx.s when=$bx.d when=$bx.left when=$bx.row when=$bx.lh when=$bx.top when=$bx.pw when=$bx.c with=$bx.f1 with=$bx.f2 with=$bx.p1 with=$bx.g with=$bx.x1 with=$bx.x0 with=$bx.dy1 with=$bx.dy with=$bx.y0 then=$bx.out
 
 # A pinned unit: its centre where it was put.
@@ -614,7 +636,7 @@
 @nc.gb ui.diagram.ubox unit=?g x0=?gx y0=?gy
 @nc.pad ui.diagram.gpad group=?g pad=?pad top=?top
 @nc.ch ui.diagram.chart group=?g form=?form
-@nc.max ui.diagram.cmax group=?g value=?mx
+@nc.max ui.diagram.cscale group=?g value=?mx
 @nc.v w.diagram.node code=?c value=?v
 @nc.a core.calc out=?a fn=mul args=?col args=56
 @nc.b core.calc out=?b fn=add args=?gx args=?pad
@@ -624,7 +646,8 @@
 @nc.base core.calc out=?base fn=add args=?base1 args=170
 @nc.f core.calc out=?f fn=div args=?v args=?mx
 @nc.h1 core.calc out=?h1 fn=mul args=?f args=160
-@nc.h core.calc out=?h fn=max args=?h1 args=4
+@nc.h0 core.calc out=?h0 fn=min args=?h1 args=160
+@nc.h core.calc out=?h fn=max args=?h0 args=4
 @nc.isbar core.check fn=eq args=?form args=bar
 @nc.x0 core.calc out=?x0 fn=sub args=?cx args=18
 @nc.x1 core.calc out=?x1 fn=add args=?cx args=18
@@ -632,7 +655,7 @@
 @nc.hh core.calc out=?hh fn=div args=?h args=2
 @nc.cy core.calc out=?cy fn=sub args=?base args=?hh
 @nc.out.b ui.diagram.nbox node=?c x0=?x0 y0=?y0 x1=?x1 y1=?base cx=?cx cy=?cy w=36 h=?h
-@dg.nbox.bar core.rule when=$nc.p when=$nc.gb when=$nc.pad when=$nc.ch when=$nc.max when=$nc.v with=$nc.a with=$nc.b with=$nc.cx1 with=$nc.cx with=$nc.base1 with=$nc.base with=$nc.f with=$nc.h1 with=$nc.h if=$nc.isbar with=$nc.x0 with=$nc.x1 with=$nc.y0 with=$nc.hh with=$nc.cy then=$nc.out.b
+@dg.nbox.bar core.rule when=$nc.p when=$nc.gb when=$nc.pad when=$nc.ch when=$nc.max when=$nc.v with=$nc.a with=$nc.b with=$nc.cx1 with=$nc.cx with=$nc.base1 with=$nc.base with=$nc.f with=$nc.h1 with=$nc.h0 with=$nc.h if=$nc.isbar with=$nc.x0 with=$nc.x1 with=$nc.y0 with=$nc.hh with=$nc.cy then=$nc.out.b
 @nc.isline core.check fn=eq args=?form args=line
 @nc.ly core.calc out=?ly fn=sub args=?base args=?h
 @nc.lx0 core.calc out=?lx0 fn=sub args=?cx args=6
@@ -640,7 +663,7 @@
 @nc.ly0 core.calc out=?ly0 fn=sub args=?ly args=6
 @nc.ly1 core.calc out=?ly1 fn=add args=?ly args=6
 @nc.out.l ui.diagram.nbox node=?c x0=?lx0 y0=?ly0 x1=?lx1 y1=?ly1 cx=?cx cy=?ly w=12 h=12
-@dg.nbox.line core.rule when=$nc.p when=$nc.gb when=$nc.pad when=$nc.ch when=$nc.max when=$nc.v with=$nc.a with=$nc.b with=$nc.cx1 with=$nc.cx with=$nc.base1 with=$nc.base with=$nc.f with=$nc.h1 with=$nc.h if=$nc.isline with=$nc.ly with=$nc.lx0 with=$nc.lx1 with=$nc.ly0 with=$nc.ly1 then=$nc.out.l
+@dg.nbox.line core.rule when=$nc.p when=$nc.gb when=$nc.pad when=$nc.ch when=$nc.max when=$nc.v with=$nc.a with=$nc.b with=$nc.cx1 with=$nc.cx with=$nc.base1 with=$nc.base with=$nc.f with=$nc.h1 with=$nc.h0 with=$nc.h if=$nc.isline with=$nc.ly with=$nc.lx0 with=$nc.lx1 with=$nc.ly0 with=$nc.ly1 then=$nc.out.l
 
 # ---- Edge routes ----
 # The end of an edge at a node: a node of its own leaves from the middle of its bottom and is entered at the middle of
@@ -693,14 +716,15 @@
 @rt.lb ui.diagram.level unit=?ub level=?lb
 @rt.next core.calc out=?ln fn=add args=?la args=1
 @rt.adj core.check fn=eq args=?ln args=?lb
+@rt.gap ui.diagram.eway edge=?e way=gap
 @rt.out.next ui.diagram.route edge=?e way=next a=?a b=?b la=?la lb=?lb ua=?ua ub=?ub
-@dg.route.next core.rule when=$rt.e when=$rt.a when=$rt.b when=$rt.ua when=$rt.ub when=$rt.fw when=$rt.la when=$rt.lb with=$rt.next if=$rt.adj then=$rt.out.next
+@dg.route.next core.rule when=$rt.e when=$rt.gap when=$rt.a when=$rt.b when=$rt.ua when=$rt.ub when=$rt.fw when=$rt.la when=$rt.lb with=$rt.next if=$rt.adj then=$rt.out.next
 @rt.ne core.check fn=neq args=?ua args=?ub
 @rt.nadj core.check fn=neq args=?ln args=?lb
 @rt.out.lane ui.diagram.route edge=?e way=lane a=?a b=?b la=?la lb=?lb ua=?ua ub=?ub
-@dg.route.lane.skip core.rule when=$rt.e when=$rt.a when=$rt.b when=$rt.ua when=$rt.ub when=$rt.fw when=$rt.la when=$rt.lb with=$rt.next if=$rt.nadj then=$rt.out.lane
+@dg.route.lane.skip core.rule when=$rt.e when=$rt.gap when=$rt.a when=$rt.b when=$rt.ua when=$rt.ub when=$rt.fw when=$rt.la when=$rt.lb with=$rt.next if=$rt.nadj then=$rt.out.lane
 @rt.bk ui.diagram.back a=?ua b=?ub
-@dg.route.lane.back core.rule when=$rt.e when=$rt.a when=$rt.b when=$rt.ua when=$rt.ub when=$rt.bk when=$rt.la when=$rt.lb then=$rt.out.lane
+@dg.route.lane.back core.rule when=$rt.e when=$rt.gap when=$rt.a when=$rt.b when=$rt.ua when=$rt.ub when=$rt.bk when=$rt.la when=$rt.lb then=$rt.out.lane
 @rt.eq core.check fn=eq args=?ua args=?ub
 @rt.ga ui.diagram.mpos node=?a group=?ua
 @rt.out.inside ui.diagram.route edge=?e way=inside a=?a b=?b la=0 lb=0
@@ -712,8 +736,8 @@
 @rt.pa ui.diagram.flow unit=?ua
 @rt.pb ui.diagram.flow unit=?ub
 @rt.out.direct ui.diagram.route edge=?e way=direct a=?a b=?b la=0 lb=0 ua=?ua ub=?ub
-@dg.route.direct.a core.rule when=$rt.e when=$rt.a when=$rt.b when=$rt.ua when=$rt.ub not=$rt.pa if=$rt.ne then=$rt.out.direct
-@dg.route.direct.b core.rule when=$rt.e when=$rt.a when=$rt.b when=$rt.ua when=$rt.ub not=$rt.pb if=$rt.ne then=$rt.out.direct
+@dg.route.direct.a core.rule when=$rt.e when=$rt.gap when=$rt.a when=$rt.b when=$rt.ua when=$rt.ub not=$rt.pa if=$rt.ne then=$rt.out.direct
+@dg.route.direct.b core.rule when=$rt.e when=$rt.gap when=$rt.a when=$rt.b when=$rt.ua when=$rt.ub not=$rt.pb if=$rt.ne then=$rt.out.direct
 
 # The lane of each lane edge: right of every unit, one step further out per lane edge.
 @rg.b ui.diagram.ubox x0=?x0 w=?w
@@ -761,8 +785,8 @@
 @pt.22 ui.diagram.point source=?e n=22 x=?cx y=?qy
 @pt.23 ui.diagram.point source=?e n=23 x=?qx y=?qy
 @pt.ne.r ui.diagram.route edge=?e way=?way
-@pt.notin core.check fn=neq args=?way args=inside
-@pt.notself core.check fn=neq args=?way args=self
+@pt.notin core.check fn=matches args=?way args="^(next|lane|direct)$"
+@pt.notself core.check fn=matches args=?way args="^(next|lane|direct)$"
 @dg.point.out.1 core.rule when=$pt.r when=$pt.ne.r when=$pt.o when=$pt.i if=$pt.notin if=$pt.notself then=$pt.1
 @dg.point.out.2 core.rule when=$pt.r when=$pt.ne.r when=$pt.o when=$pt.i if=$pt.notin if=$pt.notself then=$pt.2
 @dg.point.out.3 core.rule when=$pt.r when=$pt.ne.r when=$pt.o when=$pt.i if=$pt.notin if=$pt.notself then=$pt.3
@@ -961,19 +985,17 @@
 # Layers (order): 1 group frames, 2 edges, 3 nodes, 4 labels, 5 codes. A colour is a k.colours name ("gray" is its
 # "grey") or an #rrggbb value; a node's label is white on a dark colour.
 @rgb.k k.colours.colour name=?c rgb=?rgb
-@rgb.n w.diagram.node colour=?c
-@rgb.e w.diagram.edge colour=?c
+@rgb.n ui.diagram.usecol c=?c
 @rgb.out ui.diagram.rgb colour=?c rgb=?rgb
 @dg.rgb.node core.rule when=$rgb.n when=$rgb.k then=$rgb.out
-@dg.rgb.edge core.rule when=$rgb.e when=$rgb.k then=$rgb.out
 @rga.a ui.diagram.alias colour=?c as=?a
+@rga.u ui.diagram.usecol c=?c
 @rga.k k.colours.colour name=?a rgb=?rgb
 @rga.out ui.diagram.rgb colour=?c rgb=?rgb
-@dg.rgb.alias core.rule when=$rga.a when=$rga.k then=$rga.out
+@dg.rgb.alias core.rule when=$rga.a when=$rga.u when=$rga.k then=$rga.out
 @rgh.hex core.check fn=matches args=?c args="^#[0-9a-fA-F]{6}$"
 @rgh.out ui.diagram.rgb colour=?c rgb=?c
 @dg.rgb.hex.node core.rule when=$rgb.n if=$rgh.hex then=$rgh.out
-@dg.rgb.hex.edge core.rule when=$rgb.e if=$rgh.hex then=$rgh.out
 @dg.dark.type core.type of=ui.diagram.dark
 @ik.n w.diagram.node code=?id colour=?c
 @ik.d k.colours.colour name=?c tone=dark
@@ -1000,78 +1022,7 @@
 @ik.out.d ui.diagram.ink node=?id ink="#1f2933"
 @dg.ink.light core.rule when=$ik.any not=$ik.dk then=$ik.out.d
 
-# Group frames, with the group's label in its band.
-@df.u ui.diagram.unit unit=?g kind=group
-@df.nf w.diagram.group code=?g framed=false
-@df.b ui.diagram.ubox unit=?g x0=?x y0=?y w=?w h=?h
-@df.out ui.diagram.draw part=?g source=?g slot=?g order=1 z=0 shape=rectangle x=?x y=?y w=?w h=?h cx=0 cy=0 tx=0 ty=0 scale=1 side=left outline="#9aa5b1" round=10
-@df.fill ui.diagram.fill source=?g part=?g fill="#f2f5fa"
-@dg.draw.group core.rule when=$df.u when=$df.b not=$df.nf then=$df.out
-@dg.fill.group core.rule when=$df.u when=$df.b not=$df.nf then=$df.fill
-@dfl.g w.diagram.group code=?g label=?t
-@dfl.s core.calc out=?src fn=concat args=?g args=".label"
-@dfl.x core.calc out=?lx fn=add args=?x args=12
-@dfl.y core.calc out=?ly fn=add args=?y args=20
-@dfl.out ui.diagram.draw part=?g source=?src slot=?g order=4 z=0 shape=text text=?t x=?lx y=?ly w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left font=13 weight=bold
-@dfl.fill ui.diagram.fill source=?src part=?g fill="#3e4c59"
-@dg.draw.group.label core.rule when=$df.u when=$df.b when=$dfl.g not=$df.nf with=$dfl.s with=$dfl.x with=$dfl.y then=$dfl.out
-@dg.fill.group.label core.rule when=$df.u when=$df.b when=$dfl.g not=$df.nf with=$dfl.s with=$dfl.x with=$dfl.y then=$dfl.fill
-
-# Nodes: a box (rounded where its shape says), a round shape or a polygon of the shape's outline, filled with the
-# node's colour (a light blue when it has none) and outlined.
-@dn.n w.diagram.node code=?c shape=?s
-@dn.b ui.diagram.nbox node=?c x0=?x0 y0=?y0 w=?w h=?h cx=?cx cy=?cy
-@dn.box ui.diagram.base shape=?s kind=box
-@dn.rd ui.diagram.base shape=?s round=?r
-@dg.dotted.type core.type of=ui.diagram.dotted
-@dn.lc ui.diagram.chart group=?lg form=line
-@dn.lm ui.diagram.mpos node=?lc group=?lg
-@dn.lo ui.diagram.dotted node=?lc
-@dg.dotted core.rule when=$dn.lc when=$dn.lm then=$dn.lo
-@dn.dot ui.diagram.dotted node=?c
-@dn.out.dot ui.diagram.draw part=?c source=?c slot=?c order=3 z=0 shape=oval x=?x0 y=?y0 w=?w h=?h cx=0 cy=0 tx=0 ty=0 scale=1 side=left outline="#1d6fe8"
-@dg.draw.node.dot core.rule when=$dn.n when=$dn.b when=$dn.dot then=$dn.out.dot
-@dn.out.box ui.diagram.draw part=?c source=?c slot=?c order=3 z=0 shape=rectangle x=?x0 y=?y0 w=?w h=?h cx=0 cy=0 tx=0 ty=0 scale=1 side=left outline="#3e5068" round=?r
-@dg.draw.node.box core.rule when=$dn.n when=$dn.b when=$dn.box when=$dn.rd not=$dn.dot then=$dn.out.box
-@dn.out.sq ui.diagram.draw part=?c source=?c slot=?c order=3 z=0 shape=rectangle x=?x0 y=?y0 w=?w h=?h cx=0 cy=0 tx=0 ty=0 scale=1 side=left outline="#3e5068" round=4
-@dg.draw.node.square core.rule when=$dn.n when=$dn.b when=$dn.box not=$dn.rd not=$dn.dot then=$dn.out.sq
-@dn.round ui.diagram.base shape=?s kind=round
-@dn.out.round ui.diagram.draw part=?c source=?c slot=?c order=3 z=0 shape=oval x=?x0 y=?y0 w=?w h=?h cx=0 cy=0 tx=0 ty=0 scale=1 side=left outline="#3e5068"
-@dg.draw.node.round core.rule when=$dn.n when=$dn.b when=$dn.round not=$dn.dot then=$dn.out.round
-@dn.poly ui.diagram.base shape=?s kind=poly
-@dn.out.poly ui.diagram.draw part=?c source=?c slot=?c order=3 z=0 shape=polygon x=?x0 y=?y0 w=?w h=?h cx=0 cy=0 tx=0 ty=0 scale=1 side=left outline="#3e5068"
-@dg.draw.node.poly core.rule when=$dn.n when=$dn.b when=$dn.poly not=$dn.dot then=$dn.out.poly
-@dp.n w.diagram.node code=?c shape=?s
-@dp.b ui.diagram.nbox node=?c w=?w h=?h cx=?cx cy=?cy
-@dp.o ui.diagram.outline shape=?s n=?i fx=?fx fy=?fy
-@dp.ax core.calc out=?ax fn=mul args=?fx args=?w
-@dp.ay core.calc out=?ay fn=mul args=?fy args=?h
-@dp.x core.calc out=?x fn=add args=?cx args=?ax
-@dp.y core.calc out=?y fn=add args=?cy args=?ay
-@dp.out ui.diagram.point source=?c n=?i x=?x y=?y
-@dg.point.node core.rule when=$dp.n when=$dp.b when=$dp.o not=$dn.dot with=$dp.ax with=$dp.ay with=$dp.x with=$dp.y then=$dp.out
-@dnf.n w.diagram.node code=?c colour=?col
-@dnf.rgb ui.diagram.rgb colour=?col rgb=?rgb
-@dnf.d ui.diagram.draw part=?c source=?c
-@dnf.out ui.diagram.fill source=?c part=?c fill=?rgb
-@dg.fill.node core.rule when=$dnf.n when=$dnf.rgb when=$dnf.d then=$dnf.out
-@dnd.n w.diagram.node code=?c
-@dnd.has w.diagram.node code=?c colour=?anyc
-@dnd.d ui.diagram.draw part=?c source=?c
-@dnd.out ui.diagram.fill source=?c part=?c fill="#dce8f8"
-@dg.fill.node.default core.rule when=$dnd.n when=$dnd.d not=$dnd.has then=$dnd.out
-
-# A node's label in its middle; a chart member's label under the plot and its value over the bar or point.
-@dl.n w.diagram.node code=?c label=?t
-@dl.b ui.diagram.nbox node=?c cx=?cx cy=?cy
-@dl.ink ui.diagram.ink node=?c ink=?ink
-@dl.s core.calc out=?src fn=concat args=?c args=".label"
-@dl.y core.calc out=?ty fn=add args=?cy args=5
-@dl.out ui.diagram.draw part=?c source=?src slot=?c order=4 z=0 shape=text text=?t x=?cx y=?ty w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left anchor=middle
-@dl.fill ui.diagram.fill source=?src part=?c fill=?ink
-@dg.draw.label core.rule when=$dl.n when=$dl.b when=$dl.ink not=$dl.chartm with=$dl.s with=$dl.y then=$dl.out
-@dg.fill.label core.rule when=$dl.n when=$dl.b when=$dl.ink not=$dl.chartm with=$dl.s with=$dl.y then=$dl.fill
-@dl.chartm ui.diagram.chartmember node=?c
+# A chart member (its label and value are drawn below; style-projection.sop draws the other nodes' labels).
 @dg.chartmember.type core.type of=ui.diagram.chartmember
 @cmb.p ui.diagram.mpos node=?c group=?g
 @cmb.c ui.diagram.chart group=?g
@@ -1089,15 +1040,16 @@
 @dcl.fill ui.diagram.fill source=?src part=?c fill="#1f2933"
 @dg.draw.chart.label core.rule when=$dcl.m when=$dcl.n when=$dcl.b when=$dcl.gb when=$dcl.pad with=$dcl.s with=$dcl.y1 with=$dcl.y then=$dcl.out
 @dg.fill.chart.label core.rule when=$dcl.m when=$dcl.n when=$dcl.b when=$dcl.gb when=$dcl.pad with=$dcl.s with=$dcl.y1 with=$dcl.y then=$dcl.fill
-@dcv.m ui.diagram.chartmember node=?c
+@dcv.m ui.diagram.chartmember node=?c group=?g
+@dcv.off w.diagram.group code=?g value_labels=false
 @dcv.n w.diagram.node code=?c value=?v
 @dcv.b ui.diagram.nbox node=?c cx=?cx y0=?y0
 @dcv.s core.calc out=?src fn=concat args=?c args=".value"
 @dcv.y core.calc out=?ty fn=sub args=?y0 args=6
 @dcv.out ui.diagram.draw part=?c source=?src slot=?c order=4 z=0 shape=text text=?v x=?cx y=?ty w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left anchor=middle font=11
 @dcv.fill ui.diagram.fill source=?src part=?c fill="#52606d"
-@dg.draw.chart.value core.rule when=$dcv.m when=$dcv.n when=$dcv.b with=$dcv.s with=$dcv.y then=$dcv.out
-@dg.fill.chart.value core.rule when=$dcv.m when=$dcv.n when=$dcv.b with=$dcv.s with=$dcv.y then=$dcv.fill
+@dg.draw.chart.value core.rule when=$dcv.m when=$dcv.n when=$dcv.b not=$dcv.off with=$dcv.s with=$dcv.y then=$dcv.out
+@dg.fill.chart.value core.rule when=$dcv.m when=$dcv.n when=$dcv.b not=$dcv.off with=$dcv.s with=$dcv.y then=$dcv.fill
 # A line chart: its points joined in order, and the baseline of every chart.
 @dll.c ui.diagram.chart group=?g form=line
 @dll.p ui.diagram.mpos node=?c group=?g pos=?p
@@ -1138,14 +1090,6 @@
 @dg.dash.type core.type of=ui.diagram.dash
 @dg.dash.dashed ui.diagram.dash style=dashed dash="8 5"
 @dg.dash.dotted ui.diagram.dash style=dotted dash="2 4"
-@dg.ewidth.type core.type of=ui.diagram.ewidth
-@ew.w w.diagram.edge code=?e width=?sw
-@ew.out ui.diagram.ewidth edge=?e w=?sw
-@dg.ewidth.set core.rule when=$ew.w then=$ew.out
-@ew.e w.diagram.edge code=?e
-@ew.has w.diagram.edge code=?e width=?anyw
-@ew.out2 ui.diagram.ewidth edge=?e w=2
-@dg.ewidth.default core.rule when=$ew.e not=$ew.has then=$ew.out2
 @dei.w ui.diagram.ewidth edge=?e w=?sw
 @de.out ui.diagram.draw part=?e source=?e slot=?e order=2 z=0 shape=line x=0 y=0 w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left stroke=?sw
 @dg.draw.edge.solid core.rule when=$de.e when=$de.r when=$dei.w not=$de.st then=$de.out
@@ -1155,18 +1099,14 @@
 @ded.d ui.diagram.dash style=?style dash=?dash
 @ded.out ui.diagram.draw part=?e source=?e slot=?e order=2 z=0 shape=line x=0 y=0 w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left stroke=?sw dash=?dash
 @dg.draw.edge.dashed core.rule when=$de.e when=$de.r when=$dei.w when=$ded.st when=$ded.d then=$ded.out
-@def.e w.diagram.edge code=?e colour=?col
-@def.rgb ui.diagram.rgb colour=?col rgb=?rgb
-@def.out ui.diagram.fill source=?e part=?e fill=?rgb
-@dg.fill.edge core.rule when=$def.e when=$def.rgb when=$de.r then=$def.out
-@ded2.has w.diagram.edge code=?e colour=?anyc
-@ded2.out ui.diagram.fill source=?e part=?e fill="#52606d"
-@dg.fill.edge.default core.rule when=$de.e when=$de.r not=$ded2.has then=$ded2.out
 @dg.ecolour.type core.type of=ui.diagram.ecolour
-@ec.f ui.diagram.fill source=?e part=?e fill=?f
+@ec.f ui.diagram.ecol edge=?e rgb=?f
 @ec.e w.diagram.edge code=?e
 @ec.out ui.diagram.ecolour edge=?e fill=?f
 @dg.ecolour core.rule when=$ec.e when=$ec.f then=$ec.out
+@ef.r ui.diagram.route edge=?e
+@ef.out ui.diagram.fill source=?e part=?e fill=?f
+@dg.fill.edge core.rule when=$ec.e when=$ec.f when=$ef.r then=$ef.out
 
 # Arrowheads: where each route ends and which way it points there.
 @dg.tip.type core.type of=ui.diagram.tip
@@ -1180,8 +1120,8 @@
 @dg.tipside.bottom ui.diagram.tipside side=bottom role=out pointing=up
 @dg.tipside.right.out ui.diagram.tipside side=right role=out pointing=left
 @tq.r ui.diagram.route edge=?e way=?way a=?a b=?b
-@tq.ni core.check fn=neq args=?way args=inside
-@tq.ns core.check fn=neq args=?way args=self
+@tq.ni core.check fn=matches args=?way args="^(next|lane|direct)$"
+@tq.ns core.check fn=matches args=?way args="^(next|lane|direct)$"
 @tq.hi ui.diagram.end node=?b role=in px=?x py=?y side=?side
 @tq.hs ui.diagram.tipside side=?side role=in pointing=?pt
 @tq.head ui.diagram.tip edge=?e at=head x=?x y=?y pointing=?pt
@@ -1198,6 +1138,7 @@
 @dg.tip.self.tail core.rule when=$tps.r when=$tps.b then=$tps.tail
 @dt.t ui.diagram.tip edge=?e at=head x=?x y=?y pointing=?pt
 @dt.none w.diagram.edge code=?e direction=none
+@dt.back w.diagram.edge code=?e direction=back
 @dt.b ui.diagram.tipbox pointing=?pt dx=?dx dy=?dy w=?w h=?h
 @dt.c ui.diagram.ecolour edge=?e fill=?f
 @dt.s core.calc out=?src fn=concat args=?e args=".head"
@@ -1206,29 +1147,34 @@
 @dt.out ui.diagram.draw part=?e source=?src slot=?e order=2 z=1 shape=triangle x=?bx y=?by w=?w h=?h cx=0 cy=0 tx=0 ty=0 scale=1 side=left
 @dt.o ui.diagram.orient source=?src pointing=?pt
 @dt.f ui.diagram.fill source=?src part=?e fill=?f
-@dg.draw.head core.rule when=$dt.t when=$dt.b when=$dt.c not=$dt.none with=$dt.s with=$dt.x with=$dt.y then=$dt.out
-@dg.orient.head core.rule when=$dt.t when=$dt.b when=$dt.c not=$dt.none with=$dt.s with=$dt.x with=$dt.y then=$dt.o
-@dg.fill.head core.rule when=$dt.t when=$dt.b when=$dt.c not=$dt.none with=$dt.s with=$dt.x with=$dt.y then=$dt.f
+@dg.draw.head core.rule when=$dt.t when=$dt.b when=$dt.c not=$dt.none not=$dt.back with=$dt.s with=$dt.x with=$dt.y then=$dt.out
+@dg.orient.head core.rule when=$dt.t when=$dt.b when=$dt.c not=$dt.none not=$dt.back with=$dt.s with=$dt.x with=$dt.y then=$dt.o
+@dg.fill.head core.rule when=$dt.t when=$dt.b when=$dt.c not=$dt.none not=$dt.back with=$dt.s with=$dt.x with=$dt.y then=$dt.f
 @dtt.t ui.diagram.tip edge=?e at=tail x=?x y=?y pointing=?pt
 @dtt.both w.diagram.edge code=?e direction=both
+@dtt.back w.diagram.edge code=?e direction=back
 @dtt.s core.calc out=?src fn=concat args=?e args=".tail"
 @dtt.out ui.diagram.draw part=?e source=?src slot=?e order=2 z=1 shape=triangle x=?bx y=?by w=?w h=?h cx=0 cy=0 tx=0 ty=0 scale=1 side=left
 @dtt.o ui.diagram.orient source=?src pointing=?pt
 @dtt.f ui.diagram.fill source=?src part=?e fill=?f
 @dg.draw.tail core.rule when=$dtt.t when=$dtt.both when=$dt.b when=$dt.c with=$dtt.s with=$dt.x with=$dt.y then=$dtt.out
+@dg.draw.tail.back core.rule when=$dtt.t when=$dtt.back when=$dt.b when=$dt.c with=$dtt.s with=$dt.x with=$dt.y then=$dtt.out
 @dg.orient.tail core.rule when=$dtt.t when=$dtt.both when=$dt.b when=$dt.c with=$dtt.s with=$dt.x with=$dt.y then=$dtt.o
+@dg.orient.tail.back core.rule when=$dtt.t when=$dtt.back when=$dt.b when=$dt.c with=$dtt.s with=$dt.x with=$dt.y then=$dtt.o
 @dg.fill.tail core.rule when=$dtt.t when=$dtt.both when=$dt.b when=$dt.c with=$dtt.s with=$dt.x with=$dt.y then=$dtt.f
+@dg.fill.tail.back core.rule when=$dtt.t when=$dtt.back when=$dt.b when=$dt.c with=$dtt.s with=$dt.x with=$dt.y then=$dtt.f
 
 # An edge's label beside the line where it turns towards its target (point 11).
 @del.e w.diagram.edge code=?e label=?t
-@del.p ui.diagram.point source=?e n=11 x=?x y=?y
+@del.p ui.diagram.mid edge=?e x=?x y=?y
 @del.s core.calc out=?src fn=concat args=?e args=".label"
 @del.x core.calc out=?lx fn=add args=?x args=6
 @del.y core.calc out=?ly fn=add args=?y args=14
 @del.out ui.diagram.draw part=?e source=?src slot=?e order=4 z=1 shape=text text=?t x=?lx y=?ly w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left font=12
-@del.fill ui.diagram.fill source=?src part=?e fill="#334e68"
+@del.ink ui.diagram.pagecol key=label rgb=?lc
+@del.fill ui.diagram.fill source=?src part=?e fill=?lc
 @dg.draw.edge.label core.rule when=$del.e when=$del.p with=$del.s with=$del.x with=$del.y then=$del.out
-@dg.fill.edge.label core.rule when=$del.e when=$del.p with=$del.s with=$del.x with=$del.y then=$del.fill
+@dg.fill.edge.label core.rule when=$del.e when=$del.p when=$del.ink with=$del.s with=$del.x with=$del.y then=$del.fill
 
 # Codes, while the view shows them: over the top left of each node and group, and by each edge's label place.
 @dc.v app.area.view key=ids value=?m
@@ -1244,7 +1190,7 @@
 @dcg.b ui.diagram.ubox unit=?c x0=?x y0=?y
 @dg.draw.code.group core.rule when=$dc.v when=$dcg.u when=$dcg.b if=$dc.off with=$dc.s with=$dc.y then=$dc.out
 @dg.fill.code.group core.rule when=$dc.v when=$dcg.u when=$dcg.b if=$dc.off with=$dc.s with=$dc.y then=$dc.fill
-@dce.p ui.diagram.point source=?c n=11 x=?x y=?y
+@dce.p ui.diagram.mid edge=?c x=?x y=?y
 @dce.e w.diagram.edge code=?c
 @dce.x core.calc out=?tx fn=add args=?x args=6
 @dce.y core.calc out=?ty fn=sub args=?y args=4

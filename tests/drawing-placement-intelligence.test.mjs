@@ -114,7 +114,8 @@ test('"a sun above the house" keeps the house\'s centre line; "a boat on the lak
  // The water of a lake is its k.layouts anchor (x=3 y=22 w=94 h=56 in the frame of the drawing).
  const water={x0:l.x0+.03*lake.size,y0:l.y0+.22*lake.size,x1:l.x0+.97*lake.size,y1:l.y0+.78*lake.size};
  assert.ok(w.x0>=water.x0&&w.x1<=water.x1&&w.y0>=water.y0&&w.y1<=water.y1,'in the water '+JSON.stringify(boat));
- assert.ok(boat.size<160&&boat.size>=.5*(water.y1-water.y0),'drawn smaller to fit the water, still visible: '+boat.size);
+ // (The lake is drawn from its outline handles, landscape-rules.sop: the boat fits the room inside its water.)
+ assert.ok(boat.size<160&&boat.size>=.45*(water.y1-water.y0),'drawn smaller to fit the water, still visible: '+boat.size);
 });
 
 test('"a boat in the lake" places the boat within the lake, beside what already floats there',async()=>{

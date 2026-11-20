@@ -1,0 +1,18 @@
+# k.kinds/shards/relations-parts: the keys of the types of k.parts read as relations: 13 relations, each with the kind of its subject and the class, types and senses of its object (from the joins declared on the slots, by rule from the schemas, and by value from the shards, as found says).
+# sources: hand-core 1 (computed in this repository from the schemas and shards of the knowledge worlds: tools/relations-core.mjs)
+# license: CC0-1.0
+# script: tools/relations-core.mjs
+
+@k.kinds.relation.k.parts.called.part k.kinds.relation type=k.parts.called key=part subject=word object=thing object_type=k.parts.name found=value core.source="hand-core 1"
+@k.kinds.relation.k.parts.called.also k.kinds.relation type=k.parts.called key=also subject=word object=word object_type=k.words.sense found=value core.source="hand-core 1"
+@k.kinds.relation.k.parts.inherited.from k.kinds.relation type=k.parts.inherited key=from subject=word object=word object_type=k.words.sense found=value core.source="hand-core 1"
+@k.kinds.relation.k.parts.inherited.steps k.kinds.relation type=k.parts.inherited key=steps subject=word object=number found=schema core.source="hand-core 1"
+@k.kinds.relation.k.parts.inherited.has k.kinds.relation type=k.parts.inherited key=has subject=word object=word found=value core.source="hand-core 1"
+@k.kinds.relation.k.parts.inherited.plain k.kinds.relation type=k.parts.inherited key=plain subject=word object=word object_type=k.words.sense found=value core.source="hand-core 1"
+@k.kinds.relation.k.parts.name.of k.kinds.relation type=k.parts.name key=of subject=name object=thing object_type=k.attributes.drawn object_type=k.attributes.thing object_type=k.objects.object found=value core.source="hand-core 1"
+@k.kinds.relation.k.parts.name.slot k.kinds.relation type=k.parts.name key=slot subject=name object=thing object_type=k.faces.slot found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.parts.usual.has k.kinds.relation type=k.parts.usual key=has subject=word object=word object_type=k.words.sense found=value core.source="hand-core 1"
+@k.kinds.relation.k.parts.usual.named k.kinds.relation type=k.parts.usual key=named subject=word object=value found=schema core.source="hand-core 1"
+@k.kinds.relation.k.parts.whole.gloss k.kinds.relation type=k.parts.whole key=gloss subject=word object=text found=schema core.source="hand-core 1"
+@k.kinds.relation.k.parts.whole.has k.kinds.relation type=k.parts.whole key=has subject=word object=word found=value core.source="hand-core 1"
+@k.kinds.relation.k.parts.whole.plain k.kinds.relation type=k.parts.whole key=plain subject=word object=word object_type=k.words.sense found=value core.source="hand-core 1"

@@ -1,0 +1,181 @@
+{"batch": "dg-batch-02", "text": "make the title bold", "frame": "chart.titleStyle", "value": "bold", "span": "bold"}
+{"batch": "dg-batch-02", "text": "bold the title", "frame": "chart.titleStyle", "value": "bold", "span": "bold"}
+{"batch": "dg-batch-02", "text": "the title should be bold", "frame": "chart.titleStyle", "value": "bold", "span": "bold"}
+{"batch": "dg-batch-02", "text": "put the title in bold", "frame": "chart.titleStyle", "value": "bold", "span": "bold"}
+{"batch": "dg-batch-02", "text": "colour the title dark blue", "frame": "chart.titleStyle", "value": "dark blue", "span": "dark blue"}
+{"batch": "dg-batch-02", "text": "make the title teal", "frame": "chart.titleStyle", "value": "teal", "span": "teal"}
+{"batch": "dg-batch-02", "text": "can you bold the title on the Revenue chart", "frame": "chart.titleStyle", "value": "bold", "span": "bold"}
+{"batch": "dg-batch-02", "text": "I'd like the title in red", "frame": "chart.titleStyle", "value": "red", "span": "red"}
+{"batch": "dg-batch-02", "text": "switch the title to bold", "frame": "chart.titleStyle", "value": "bold", "span": "bold"}
+{"batch": "dg-batch-02", "text": "give the title a dark blue colour", "frame": "chart.titleStyle", "value": "dark blue", "span": "dark blue"}
+{"batch": "dg-batch-02", "text": "set the title to bold", "frame": "chart.titleStyle", "value": "bold", "span": "bold"}
+{"batch": "dg-batch-02", "text": "please make the title bold", "frame": "chart.titleStyle", "value": "bold", "span": "bold"}
+{"batch": "dg-batch-02", "text": "colour the title of the Expenses by department chart dark orange", "frame": "chart.titleStyle", "value": "dark orange", "span": "dark orange"}
+{"batch": "dg-batch-02", "text": "everything else on the slide is bold, so make the title bold too", "frame": "chart.titleStyle", "value": "bold", "span": "bold"}
+{"batch": "dg-batch-02", "text": "bold the title and colour it dark blue", "frame": "chart.titleStyle", "value": "bold", "span": "bold"}
+{"batch": "dg-batch-02", "text": "bold the title and colour it dark blue", "frame": "chart.titleStyle", "value": "dark blue", "span": "dark blue"}
+{"batch": "dg-batch-02", "text": "for the boardroom the title has to pop, make it bold", "frame": "chart.titleStyle", "value": "bold", "span": "bold"}
+{"batch": "dg-batch-02", "text": "brand rules say teal titles, colour this one teal", "frame": "chart.titleStyle", "value": "teal", "span": "teal"}
+{"batch": "dg-batch-02", "text": "title in bold", "frame": "chart.titleStyle", "value": "bold", "span": "bold"}
+{"batch": "dg-batch-02", "text": "dark blue title", "frame": "chart.titleStyle", "value": "dark blue", "span": "dark blue"}
+{"batch": "dg-batch-02", "text": "bold, the title", "frame": "chart.titleStyle", "value": "bold", "span": "bold"}
+{"batch": "dg-batch-02", "text": "make the tile bold", "frame": "chart.titleStyle", "value": "bold", "span": "bold"}
+{"batch": "dg-batch-02", "text": "colour the titel dark blue", "frame": "chart.titleStyle", "value": "dark blue", "span": "dark blue"}
+{"batch": "dg-batch-02", "text": "stick August on the end with 41", "frame": "point.position", "value": "end", "span": "on the end"}
+{"batch": "dg-batch-02", "text": "add May right after April with 34", "frame": "point.position", "value": "after April", "span": "right after April"}
+{"batch": "dg-batch-02", "text": "add June at the very end, value 60, so the chart covers the half year", "frame": "point.position", "value": "end", "span": "at the very end"}
+{"batch": "dg-batch-02", "text": "add an April category with 55 and make sure it lands after March", "frame": "point.position", "value": "after March", "span": "after March"}
+{"batch": "dg-batch-02", "text": "add three more steps", "frame": "node.n (operator=count, character=requirement)", "value": "three", "span": "three"}
+{"batch": "dg-batch-02", "text": "I need three boxes for the process", "frame": "node.n (operator=count, character=requirement)", "value": "three", "span": "three"}
+{"batch": "dg-batch-02", "text": "put in a couple of extra steps", "frame": "node.n (operator=count, character=requirement)", "value": "a couple", "span": "a couple"}
+{"batch": "dg-batch-02", "text": "give me four new boxes", "frame": "node.n (operator=count, character=requirement)", "value": "four", "span": "four"}
+{"batch": "dg-batch-02", "text": "hey, give me four new boxes", "frame": "node.n (operator=count, character=requirement)", "value": "four", "span": "four"}
+{"batch": "dg-batch-02", "text": "two more steps at the end of the flow", "frame": "node.n (operator=count, character=requirement)", "value": "two", "span": "two"}
+{"batch": "dg-batch-02", "text": "insert five boxes for the tiers of the org chart", "frame": "node.n (operator=count, character=requirement)", "value": "five", "span": "five"}
+{"batch": "dg-batch-02", "text": "expand the chain with three more nodes", "frame": "node.n (operator=count, character=requirement)", "value": "three", "span": "three"}
+{"batch": "dg-batch-02", "text": "can you do three more steps for me?", "frame": "node.n (operator=count, character=requirement)", "value": "three", "span": "three"}
+{"batch": "dg-batch-02", "text": "the missing part is five steps at the bottom", "frame": "node.n (operator=count, character=requirement)", "value": "five", "span": "five"}
+{"batch": "dg-batch-02", "text": "queue up three more steps, will you", "frame": "node.n (operator=count, character=requirement)", "value": "three", "span": "three"}
+{"batch": "dg-batch-02", "text": "queue up three more steps, will you, please", "frame": "node.n (operator=count, character=requirement)", "value": "three", "span": "three"}
+{"batch": "dg-batch-02", "text": "four boxes across the top is what I want", "frame": "node.n (operator=count, character=requirement)", "value": "four", "span": "four"}
+{"batch": "dg-batch-02", "text": "let's have three extra stages then", "frame": "node.n (operator=count, character=requirement)", "value": "three", "span": "extra"}
+{"batch": "dg-batch-02", "text": "add three steps between Start and Bake", "frame": "node.n (operator=count, character=requirement)", "value": "three", "span": "three"}
+{"batch": "dg-batch-02", "text": "add four diamond steps after Order, one for each check", "frame": "node.n (operator=count, character=requirement)", "value": "four", "span": "four"}
+{"batch": "dg-batch-02", "text": "I want three numbered steps under Bake", "frame": "node.n (operator=count, character=requirement)", "value": "three", "span": "three"}
+{"batch": "dg-batch-02", "text": "the same three boxes before Order as well", "frame": "node.n (operator=count, character=requirement)", "value": "three", "span": "three"}
+{"batch": "dg-batch-02", "text": "five steps in a column, turquoise ones", "frame": "node.n (operator=count, character=requirement)", "value": "five", "span": "five"}
+{"batch": "dg-batch-02", "text": "add some more steps", "frame": "node.n (operator=count, character=requirement)", "value": "some", "span": "some"}
+{"batch": "dg-batch-02", "text": "throw a few more steps at the end", "frame": "node.n (operator=count, character=requirement)", "value": "a few", "span": "a few"}
+{"batch": "dg-batch-02", "text": "ad tree more steps", "frame": "node.n (operator=count, character=requirement)", "value": "three", "span": "tree"}
+{"batch": "dg-batch-02", "text": "add three more stpes at the end", "frame": "node.n (operator=count, character=requirement)", "value": "three", "span": "three"}
+{"batch": "dg-batch-02", "text": "give the diamond a nudge clockwise", "frame": "node.rotate", "value": "clockwise", "span": "clockwise"}
+{"batch": "dg-batch-02", "text": "make Order a square one", "frame": "node.size", "value": "square", "span": "square"}
+{"batch": "dg-batch-02", "text": "standard size for the new step", "frame": "node.size", "value": "standard", "span": "standard size"}
+{"batch": "dg-batch-02", "text": "fix the Start font size, it's tiny", "frame": "node.fontSize", "value": "readable", "span": "fix"}
+{"batch": "dg-batch-02", "text": "give the diagram a green background", "frame": "diagram.background", "value": "green", "span": "green background"}
+{"batch": "dg-batch-02", "text": "hey, give the diagram a green background", "frame": "diagram.background", "value": "green", "span": "green background"}
+{"batch": "dg-batch-02", "text": "set the canvas background to ivory", "frame": "diagram.background", "value": "ivory", "span": "ivory"}
+{"batch": "dg-batch-02", "text": "change the background colour to soft blue", "frame": "diagram.background", "value": "soft blue", "span": "soft blue"}
+{"batch": "dg-batch-02", "text": "the background should be white", "frame": "diagram.background", "value": "white", "span": "white"}
+{"batch": "dg-batch-02", "text": "the background should be white, please", "frame": "diagram.background", "value": "white", "span": "white"}
+{"batch": "dg-batch-02", "text": "put a pale grey background behind the flow", "frame": "diagram.background", "value": "pale grey", "span": "pale grey"}
+{"batch": "dg-batch-02", "text": "wash the background in light beige", "frame": "diagram.background", "value": "light beige", "span": "light beige"}
+{"batch": "dg-batch-02", "text": "I'd like the background a warm cream", "frame": "diagram.background", "value": "warm cream", "span": "warm cream"}
+{"batch": "dg-batch-02", "text": "swap the current background for white", "frame": "diagram.background", "value": "white", "span": "white"}
+{"batch": "dg-batch-02", "text": "clear the background to plain white", "frame": "diagram.background", "value": "white", "span": "plain white"}
+{"batch": "dg-batch-02", "text": "a fresh background colour: mint", "frame": "diagram.background", "value": "mint", "span": "mint"}
+{"batch": "dg-batch-02", "text": "throw some colour behind everything, sky blue", "frame": "diagram.background", "value": "sky blue", "span": "sky blue"}
+{"batch": "dg-batch-02", "text": "shade the backdrop pale yellow", "frame": "diagram.background", "value": "pale yellow", "span": "pale yellow"}
+{"batch": "dg-batch-02", "text": "set the background to a deep charcoal with a subtle gradient", "frame": "diagram.background", "value": "deep charcoal", "span": "deep charcoal"}
+{"batch": "dg-batch-02", "text": "the background should be midnight blue with a glow around the edges", "frame": "diagram.background", "value": "midnight blue", "span": "midnight blue"}
+{"batch": "dg-batch-02", "text": "background: deep green, shadows under the boxes too", "frame": "diagram.background", "value": "deep green", "span": "deep green"}
+{"batch": "dg-batch-02", "text": "give the whole canvas a parchment white with soft shadow", "frame": "diagram.background", "value": "parchment white", "span": "parchment white"}
+{"batch": "dg-batch-02", "text": "make the background flat green and take off any animation", "frame": "diagram.background", "value": "green", "span": "green"}
+{"batch": "dg-batch-02", "text": "change the background", "frame": "diagram.background", "value": "default", "span": "background"}
+{"batch": "dg-batch-02", "text": "pick a nice background for me", "frame": "diagram.background", "value": "nice", "span": "background"}
+{"batch": "dg-batch-02", "text": "make the backdrop less dark", "frame": "diagram.background", "value": "lighter", "span": "less dark"}
+{"batch": "dg-batch-02", "text": "set the bakcground to white", "frame": "diagram.background", "value": "white", "span": "white"}
+{"batch": "dg-batch-02", "text": "give the diagram a gren background", "frame": "diagram.background", "value": "green", "span": "gren background"}
+{"batch": "dg-batch-02", "text": "apply the pastel theme with a white background as well", "frame": "diagram.background", "value": "white", "span": "white background"}
+{"batch": "dg-batch-02", "text": "pastel theme throughout, with a calm blue as the anchor colour", "frame": "diagram.colour", "value": "calm blue", "span": "calm blue"}
+{"batch": "dg-batch-02", "text": "drop in three boxes and connect them in order", "frame": "node.n (operator=count, character=requirement)", "value": "three", "span": "three"}
+{"batch": "dg-batch-02", "text": "set the background to white and add a pastel theme", "frame": "diagram.background", "value": "white", "span": "white"}
+{"batch": "dg-batch-02", "text": "add two steps and rotate the first one 45 degrees", "frame": "node.n (operator=count, character=requirement)", "value": "two", "span": "two"}
+{"batch": "dg-batch-02", "text": "add three decision boxes, colour them amber, and link them left to right", "frame": "node.n (operator=count, character=requirement)", "value": "three", "span": "three"}
+{"batch": "dg-batch-02", "text": "add a couple of boxes and chain them", "frame": "node.n (operator=count, character=requirement)", "value": "a couple", "span": "a couple"}
+{"batch": "dg-batch-02", "text": "where is the Review step?", "frame": "node.position", "value": "where", "span": "where"}
+{"batch": "dg-batch-02", "text": "where did you put the Collect box?", "frame": "node.position", "value": "where", "span": "where"}
+{"batch": "dg-batch-02", "text": "where on the page is Check?", "frame": "node.position", "value": "where", "span": "where"}
+{"batch": "dg-batch-02", "text": "where does the Start node sit?", "frame": "node.position", "value": "where", "span": "where"}
+{"batch": "dg-batch-02", "text": "I can't find the Publish step — where is it?", "frame": "node.position", "value": "where", "span": "where"}
+{"batch": "dg-batch-02", "text": "where is the diamond in the layout?", "frame": "node.position", "value": "where", "span": "where"}
+{"batch": "dg-batch-02", "text": "which part of the canvas holds the Review step?", "frame": "node.position", "value": "which part", "span": "which part"}
+{"batch": "dg-batch-02", "text": "where's the Review step placed on the canvas?", "frame": "node.position", "value": "where", "span": "where"}
+{"batch": "dg-batch-02", "text": "point me to the Publish oval's position", "frame": "node.position", "value": "position", "span": "position"}
+{"batch": "dg-batch-02", "text": "give me the coordinates of the Collect step", "frame": "node.position", "value": "coordinates", "span": "coordinates"}
+{"batch": "dg-batch-02", "text": "where abouts did the Collect box land?", "frame": "node.position", "value": "where", "span": "where"}
+{"batch": "dg-batch-02", "text": "which corner has the Start oval?", "frame": "node.position", "value": "which corner", "span": "which corner"}
+{"batch": "dg-batch-02", "text": "my screen's scrolled weirdly — where exactly is the Review step on the canvas?", "frame": "node.position", "value": "where exactly", "span": "where exactly"}
+{"batch": "dg-batch-02", "text": "so I can describe it on the call, where has the Start oval ended up?", "frame": "node.position", "value": "where", "span": "where"}
+{"batch": "dg-batch-02", "text": "which quarter of the page is the Collect box in?", "frame": "node.position", "value": "which quarter", "span": "which quarter"}
+{"batch": "dg-batch-02", "text": "where does the Review box sit relative to the rest of the flow — top, middle or bottom?", "frame": "node.position", "value": "where", "span": "where"}
+{"batch": "dg-batch-02", "text": "where's Review?", "frame": "node.position", "value": "where", "span": "where"}
+{"batch": "dg-batch-02", "text": "where's the diamond?", "frame": "node.position", "value": "where", "span": "where"}
+{"batch": "dg-batch-02", "text": "where's Publish?", "frame": "node.position", "value": "where", "span": "where"}
+{"batch": "dg-batch-02", "text": "hey, where is the Review step?", "frame": "node.position", "value": "where", "span": "where"}
+{"batch": "dg-batch-02", "text": "quick one — where's the Collect box?", "frame": "node.position", "value": "where", "span": "where"}
+{"batch": "dg-batch-02", "text": "where in the flow does the Review box sit, roughly?", "frame": "node.position", "value": "where", "span": "where"}
+{"batch": "dg-batch-02", "text": "where si the Review step?", "frame": "node.position", "value": "where", "span": "where"}
+{"batch": "dg-batch-02", "text": "wher did you put the Collect box?", "frame": "node.position", "value": "wher", "span": "wher"}
+{"batch": "dg-batch-02", "text": "add three more boxes below Review — no, undo that", "frame": "node.n (operator=count, character=requirement)", "value": 3, "span": "three"}
+{"batch": "dg-batch-02", "text": "can you make two extra ovals? no wait, undo that", "frame": "node.n (operator=count, character=requirement)", "value": 2, "span": "two"}
+{"batch": "dg-batch-02", "text": "throw in four more steps, please — hmm, scrap that", "frame": "node.n (operator=count, character=requirement)", "value": 4, "span": "four"}
+{"batch": "dg-batch-02", "text": "I'd like half a dozen extra boxes across the bottom — no, take it back", "frame": "node.n (operator=count, character=requirement)", "value": 6, "span": "half a dozen"}
+{"batch": "dg-batch-02", "text": "make a couple of extra rectangles after Collect — actually never mind", "frame": "node.n (operator=count, character=requirement)", "value": 2, "span": "a couple"}
+{"batch": "dg-batch-02", "text": "five more boxes after Collect — actually, no, undo that", "frame": "node.n (operator=count, character=requirement)", "value": 5, "span": "five"}
+{"batch": "dg-batch-02", "text": "three extra decision diamonds then — no, take that back", "frame": "node.n (operator=count, character=requirement)", "value": 3, "span": "three"}
+{"batch": "dg-batch-02", "text": "put in a few more steps — no, undo that, I want to see what we have first", "frame": "node.n (operator=count, character=requirement)", "value": "few", "span": "a few"}
+{"batch": "dg-batch-02", "text": "add four empty boxes under the flow — scrap that, undo", "frame": "node.n (operator=count, character=requirement)", "value": 4, "span": "four"}
+{"batch": "dg-batch-02", "text": "another two boxes after Collect please — wait no, undo it", "frame": "node.n (operator=count, character=requirement)", "value": 2, "span": "another two"}
+{"batch": "dg-batch-02", "text": "eight more steps along the bottom — no, stop, undo everything you'd have done", "frame": "node.n (operator=count, character=requirement)", "value": 8, "span": "eight"}
+{"batch": "dg-batch-02", "text": "give me seven boxes in a grid — no wait, undo, the diagram's crowded already", "frame": "node.n (operator=count, character=requirement)", "value": 7, "span": "seven"}
+{"batch": "dg-batch-02", "text": "for the error handling I'd like three more boxes in a row after Review — hmm, actually undo that, let me think", "frame": "node.n (operator=count, character=requirement)", "value": 3, "span": "three"}
+{"batch": "dg-batch-02", "text": "quick thing: make two extra ovals like the Start node — no, undo it, my manager vetoed the change", "frame": "node.n (operator=count, character=requirement)", "value": 2, "span": "two"}
+{"batch": "dg-batch-02", "text": "give me six boxes stacked on the right — wait no, put it back the way it was before I confuse myself", "frame": "node.n (operator=count, character=requirement)", "value": 6, "span": "six"}
+{"batch": "dg-batch-02", "text": "I need nine more boxes to cover the exception paths — scrap that for now, undo, we're out of room on the canvas", "frame": "node.n (operator=count, character=requirement)", "value": 9, "span": "nine"}
+{"batch": "dg-batch-02", "text": "another five boxes — no, undo", "frame": "node.n (operator=count, character=requirement)", "value": 5, "span": "another five"}
+{"batch": "dg-batch-02", "text": "two ovals — no wait, undo", "frame": "node.n (operator=count, character=requirement)", "value": 2, "span": "two"}
+{"batch": "dg-batch-02", "text": "more boxes, four of them... undo that", "frame": "node.n (operator=count, character=requirement)", "value": 4, "span": "four"}
+{"batch": "dg-batch-02", "text": "hey — add three more boxes below Review — no, undo that", "frame": "node.n (operator=count, character=requirement)", "value": 3, "span": "three"}
+{"batch": "dg-batch-02", "text": "can you make two extra ovals? no wait, undo that, thanks", "frame": "node.n (operator=count, character=requirement)", "value": 2, "span": "two"}
+{"batch": "dg-batch-02", "text": "make another four boxes next to Review — hold on, scrap that", "frame": "node.n (operator=count, character=requirement)", "value": 4, "span": "another four"}
+{"batch": "dg-batch-02", "text": "add three more boxse below Review — no, undo that", "frame": "node.n (operator=count, character=requirement)", "value": 3, "span": "three"}
+{"batch": "dg-batch-02", "text": "five more boxes after Collect — actually, no, undo taht", "frame": "node.n (operator=count, character=requirement)", "value": 5, "span": "five"}
+{"batch": "dg-batch-02", "text": "I always want the arrows dashed, so set the existing ones now", "frame": "standing-preference", "value": "always", "span": "always"}
+{"batch": "dg-batch-02", "text": "from now on, every arrow should be dashed — do the current ones too", "frame": "standing-preference", "value": "from now on", "span": "from now on"}
+{"batch": "dg-batch-02", "text": "make every arrow dashed, and keep that style whenever you draw new links", "frame": "standing-preference", "value": "whenever you draw new links", "span": "whenever you draw new links"}
+{"batch": "dg-batch-02", "text": "dashed arrows are the house style — apply it to this flow, please", "frame": "standing-preference", "value": "house style", "span": "house style"}
+{"batch": "dg-batch-02", "text": "whenever you draw a new arrow, make it dashed — and switch the current ones over too", "frame": "standing-preference", "value": "whenever you draw a new arrow", "span": "whenever you draw a new arrow"}
+{"batch": "dg-batch-02", "text": "every link in my diagrams comes out dashed — these ones are no exception", "frame": "standing-preference", "value": "in my diagrams", "span": "in my diagrams"}
+{"batch": "dg-batch-02", "text": "please make each arrow dashed, that's how I like them from now on", "frame": "standing-preference", "value": "from now on", "span": "from now on"}
+{"batch": "dg-batch-02", "text": "my flows always get dashed arrows — these should match my usual style", "frame": "standing-preference", "value": "always", "span": "always"}
+{"batch": "dg-batch-02", "text": "from today arrows are dashed in everything I make over here", "frame": "standing-preference", "value": "from today", "span": "from today"}
+{"batch": "dg-batch-02", "text": "my default from now on is dashed arrows — restyle the ones on the page to fit", "frame": "standing-preference", "value": "from now on", "span": "from now on"}
+{"batch": "dg-batch-02", "text": "the arrows I work with are always dashed, so bring these in line", "frame": "standing-preference", "value": "always", "span": "always"}
+{"batch": "dg-batch-02", "text": "keep the whole toolbar default for me: arrows dashed, starting with this diagram", "frame": "standing-preference", "value": "whole toolbar default", "span": "whole toolbar default"}
+{"batch": "dg-batch-02", "text": "for consistency with my template work, any arrows you draw for me should be dashed — please restyle the ones on the page to match", "frame": "standing-preference", "value": "for consistency with my template work", "span": "for consistency with my template work"}
+{"batch": "dg-batch-02", "text": "I gave you a style guide yesterday: arrows are always dashed. Make sure this flow follows it", "frame": "standing-preference", "value": "always", "span": "always"}
+{"batch": "dg-batch-02", "text": "the team standard says dashed arrows everywhere and always — apply it to this flowchart now, and please remember it for next time", "frame": "standing-preference", "value": "always", "span": "always"}
+{"batch": "dg-batch-02", "text": "every project of mine has dashed arrows, so when you connect things here, they should come out dashed too — redo the existing ones to match", "frame": "standing-preference", "value": "every project of mine", "span": "every project of mine"}
+{"batch": "dg-batch-02", "text": "all arrows dashed from now on, please", "frame": "standing-preference", "value": "from now on", "span": "from now on"}
+{"batch": "dg-batch-02", "text": "arrows dashed, as always", "frame": "standing-preference", "value": "as always", "span": "as always"}
+{"batch": "dg-batch-02", "text": "dashed arrows, every time", "frame": "standing-preference", "value": "every time", "span": "every time"}
+{"batch": "dg-batch-02", "text": "hey — I always want the arrows dashed, so set the existing ones now", "frame": "standing-preference", "value": "always", "span": "always"}
+{"batch": "dg-batch-02", "text": "make every arrow dashed, and keep that style whenever you draw new links, thanks", "frame": "standing-preference", "value": "whenever you draw new links", "span": "whenever you draw new links"}
+{"batch": "dg-batch-02", "text": "on every page I touch here, arrows end up dashed — these too, please", "frame": "standing-preference", "value": "every page I touch here", "span": "every page I touch here"}
+{"batch": "dg-batch-02", "text": "make all teh arrows dashed, please keep it that way", "frame": "standing-preference", "value": "keep it that way", "span": "keep it that way"}
+{"batch": "dg-batch-02", "text": "i always want the arrows dashed", "frame": "standing-preference", "value": "always", "span": "always"}
+{"batch": "dg-batch-02", "text": "keep everything pastel, that's my preference for diagrams", "frame": "preference", "value": "my preference", "span": "my preference"}
+{"batch": "dg-batch-02", "text": "I prefer pastel tones — apply that here too", "frame": "preference", "value": "I prefer", "span": "I prefer"}
+{"batch": "dg-batch-02", "text": "from now on I want everything pastel", "frame": "preference", "value": "from now on", "span": "from now on"}
+{"batch": "dg-batch-02", "text": "make the flow pastel too — pastel is my standard look", "frame": "preference", "value": "my standard look", "span": "my standard look"}
+{"batch": "dg-batch-02", "text": "always keep the palette pastel, including this diagram", "frame": "preference", "value": "always", "span": "always"}
+{"batch": "dg-batch-02", "text": "pastel colours are the house preference — theme this flow now", "frame": "preference", "value": "house preference", "span": "house preference"}
+{"batch": "dg-batch-02", "text": "whenever I get a diagram from you I want it pastel — this one included", "frame": "preference", "value": "whenever I get a diagram from you", "span": "whenever I get a diagram from you"}
+{"batch": "dg-batch-02", "text": "soft is how I like my work: keep this flow pastel like the rest", "frame": "preference", "value": "how I like my work", "span": "how I like my work"}
+{"batch": "dg-batch-02", "text": "my standing preference is pastel — retheme the page now please", "frame": "preference", "value": "standing preference", "span": "standing preference"}
+{"batch": "dg-batch-02", "text": "everything I draw over here should stay pastel — this diagram too", "frame": "preference", "value": "everything I draw over here", "span": "everything I draw over here"}
+{"batch": "dg-batch-02", "text": "keep it pastel across the board, that's just my taste", "frame": "preference", "value": "my taste", "span": "my taste"}
+{"batch": "dg-batch-02", "text": "pastel it up please — and yes, that's the style for every diagram I make here", "frame": "preference", "value": "every diagram I make here", "span": "every diagram I make here"}
+{"batch": "dg-batch-02", "text": "for the client decks everything is pastel these days — bring this flow in line too", "frame": "preference", "value": "for the client decks", "span": "for the client decks"}
+{"batch": "dg-batch-02", "text": "my template says pastel tones throughout — match this flowchart to it, and remember that's what I always want", "frame": "preference", "value": "my template", "span": "my template"}
+{"batch": "dg-batch-02", "text": "consistency question: I always work in pastels with you, so please recolour this diagram accordingly and note it for next time", "frame": "preference", "value": "I always work in pastels", "span": "I always work in pastels"}
+{"batch": "dg-batch-02", "text": "the investor pack demands soft colours, and my preference since day one has been pastel — theme the page to match", "frame": "preference", "value": "my preference", "span": "my preference"}
+{"batch": "dg-batch-02", "text": "everything pastel, as usual", "frame": "preference", "value": "as usual", "span": "as usual"}
+{"batch": "dg-batch-02", "text": "pastel as always", "frame": "preference", "value": "as always", "span": "as always"}
+{"batch": "dg-batch-02", "text": "pastel from now on", "frame": "preference", "value": "from now on", "span": "from now on"}
+{"batch": "dg-batch-02", "text": "hey — keep everything pastel, my preference for diagrams", "frame": "preference", "value": "my preference", "span": "my preference"}
+{"batch": "dg-batch-02", "text": "keep everything pastel please, that's my preference for diagrams", "frame": "preference", "value": "my preference", "span": "my preference"}
+{"batch": "dg-batch-02", "text": "keep it pastel like all my other diagrams, please", "frame": "preference", "value": "all my other diagrams", "span": "all my other diagrams"}
+{"batch": "dg-batch-02", "text": "keep everything pasel, that's my preference for diagrams", "frame": "preference", "value": "my preference", "span": "my preference"}
+{"batch": "dg-batch-02", "text": "i prefer pastel tones, apply that here too", "frame": "preference", "value": "i prefer", "span": "i prefer"}

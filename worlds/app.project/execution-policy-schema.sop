@@ -1,4 +1,4 @@
-@policy.module core.module name=app.execution version=2 imports=std.capability exports=app.execution.values exports=app.execution.observedProperty exports=app.execution.observedMeasure exports=app.execution.observedField exports=app.execution.preview exports=app.execution.comparative exports=app.execution.comparativeFactor exports=app.execution.comparativeStep exports=app.execution.ordinal exports=app.execution.knowledge exports=app.execution.instant exports=app.execution.requestValue exports=app.execution.clockTime exports=app.execution.instantBase exports=app.execution.instantFocus
+@policy.module core.module name=app.execution version=2 imports=std.capability exports=app.execution.values exports=app.execution.observedProperty exports=app.execution.observedMeasure exports=app.execution.observedField exports=app.execution.preview exports=app.execution.comparative exports=app.execution.comparativeFactor exports=app.execution.comparativeStep exports=app.execution.ordinal exports=app.execution.knowledge exports=app.execution.instant exports=app.execution.requestValue exports=app.execution.clockTime exports=app.execution.instantBase exports=app.execution.instantFocus exports=app.execution.actForm exports=app.execution.reference exports=app.execution.actOperation
 @values.type core.type of=app.execution.values closed=true
 @values.concept core.slot of=app.execution.values key=concept kind=atom present=true
 @values.type.slot core.slot of=app.execution.values key=valueType kind=string present=true
@@ -76,3 +76,21 @@
 @instantFocus.type core.type of=app.execution.instantFocus closed=true
 @instantFocus.scope core.slot of=app.execution.instantFocus key=scope kind=ref to=std.capability.scope present=true
 @instantFocus.concept core.slot of=app.execution.instantFocus key=concept kind=atom present=true
+# An act that compiles as another act when its target has a mode: "connect A to B" with a new target makes the line
+# that joins them (k.actions.act.connect: "a line runs between them"), so it is compiled as making that line.
+@actForm.type core.type of=app.execution.actForm closed=true
+@actForm.act core.slot of=app.execution.actForm key=act kind=atom present=true
+@actForm.mode core.slot of=app.execution.actForm key=mode kind=atom enum=new enum=existing present=true
+@actForm.as core.slot of=app.execution.actForm key=as kind=atom present=true
+@actForm.results core.slot of=app.execution.actForm key=results kind=atom enum=some enum=none
+# A concept whose values name observed objects of `sourceType` (a line's ends): an object is named by its code, by
+# its name (its label) or by its kind, and the value given to the tool is its code. A name or kind that several
+# objects share names none of them (the lookup stays ambiguous and the value is not applied).
+@reference.type core.type of=app.execution.reference closed=true
+@reference.concept core.slot of=app.execution.reference key=concept kind=atom present=true
+@reference.on core.slot of=app.execution.reference key=sourceType kind=string present=true
+# An operation that also answers another act: "improve the layout", "tidy it up" (arrange with nothing more said) is
+# the page's declared best-effort improvement, an operation with no parameters of its own.
+@actOperation.type core.type of=app.execution.actOperation closed=true
+@actOperation.operation core.slot of=app.execution.actOperation key=operation kind=string present=true
+@actOperation.act core.slot of=app.execution.actOperation key=act kind=atom present=true

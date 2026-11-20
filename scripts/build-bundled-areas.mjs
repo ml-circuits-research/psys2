@@ -22,6 +22,8 @@ for (const world of readdirSync(path.join(ROOT, 'worlds')).filter((w) => existsS
   if (!declaration.load(readFileSync(path.join(ROOT, 'worlds', world, 'area.sop'), 'utf8')).ok) throw Error('invalid area.sop: ' + world);
   const [area] = declaration.ofType('app.area'), offline = declaration.ofType('app.area.offline').flatMap((f) => read(f, 'prefix'));
   const knowledge = read(area, 'knowledge'), modules = [...read(area, 'instance'), ...knowledge];
+  // app.area.subset: the shard prefixes a knowledge module is loaded with (worlds/sop-area.mjs), per module.
+  const subsets = new Map(declaration.ofType('app.area.subset').map((f) => [read(f, 'world')[0], { prefixes: read(f, 'prefix'), strict: read(f, 'strict')[0] === 'true' }]));
   const files = {}, kept = { worlds: [], schemas: [] }, pending = [...modules], seen = new Set();
   while (pending.length) {
     const id = pending.pop();
@@ -33,7 +35,8 @@ for (const world of readdirSync(path.join(ROOT, 'worlds')).filter((w) => existsS
     const shards = knowledge.includes(id) ? (entry.shards ?? []).map((s) => typeof s === 'string' ? s : s.path).filter((p) => {
       const name = path.basename(p, '.sop');
       if (name === 'words') return false;
-      return !offline.length || offline.some((prefix) => name.startsWith(prefix)) || !name.includes('-');
+      const subset = subsets.get(id), prefixes = subset?.prefixes ?? offline;
+      return !prefixes.length || prefixes.some((prefix) => name.startsWith(prefix)) || (!subset?.strict && !name.includes('-'));
     }) : [];
     for (const shard of shards) files[shard] = readFileSync(path.join(dir, shard), 'utf8');
     (index.worlds?.some((w) => w.id === id) ? kept.worlds : kept.schemas).push({ id, schema: entry.schema, depends: entry.depends ?? [], shards });
@@ -42,7 +45,7 @@ for (const world of readdirSync(path.join(ROOT, 'worlds')).filter((w) => existsS
   // Lookup worlds (app.area.lookup): the schema, its dependencies and the shards whose index keys name a value the
   // area offers by choice (the facts of each app.area.choice type, read from the area's rule files) or the lookup names
   // as a fixed value (value=...).
-  const ruleText = declaration.ofType('app.area.rules').map((f) => readFileSync(path.join(ROOT, 'worlds', world, read(f, 'file')[0]), 'utf8')).join('\n');
+  const ruleText = declaration.ofType('app.area.rules').map((f) => readFileSync(path.join(ROOT, 'worlds', read(f, 'world')[0] ?? world, read(f, 'file')[0]), 'utf8')).join('\n');
   const offered = new Set(declaration.ofType('app.area.choice').flatMap((choice) => {
     const [type] = read(choice, 'type'), [key] = read(choice, 'key');
     return [...ruleText.matchAll(new RegExp('^@\\S+ ' + type.replace(/\./g, '\\.') + ' .*?\\b' + key + '=("[^"]*"|\\S+)', 'gm'))].map((m) => m[1].replace(/^"|"$/g, ''));

@@ -21,6 +21,9 @@ export async function build(dir) {
   // a declaration-only schema (declare=yes): the world's files are its own; only the schema as a module is written, for the world's ops.mjs (declaredExecutor)
   if (schema.declared) return { files: { 'schema.declared.mjs': `// GENERATED from schema.sop by scripts/build-schema-world.mjs (declare=yes). Never edited by hand.\nexport const SCHEMA = ${JSON.stringify(serializeSchema(schema))};\n` }, schema };
   const files = generate(schema, ns, rel, isCanonicalSentence);
+  // ops.mjs binds the schema to the world's JS hooks; a world whose JS executor was retired (no hooks module: its acts run from SOP) keeps only the generated SOP files
+  const hooksFile = (/from '\.\/([^']+)'/.exec(files['ops.mjs'] ?? '') ?? [])[1];
+  if (files['ops.mjs'] && hooksFile && !(await readFile(path.join(dir, hooksFile), 'utf8').catch(() => null))) delete files['ops.mjs'];
   // hand-written vocabulary a world keeps beside the generated one (the legend words of the diagram engine: shape names, colours ...): appended to the generated lexicon.sop
   const extra = await readFile(path.join(dir, 'lexicon.extra.sop'), 'utf8').catch(() => null);
   if (extra) files['lexicon.sop'] += `\n# ---- lexicon.extra.sop (hand-written, appended by the generator)\n${extra}`;

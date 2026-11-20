@@ -48,7 +48,7 @@ SOURCES = [
 ]
 # Sources still being authored by other workstreams are included once their file exists.
 SOURCES = [src for src in SOURCES if src[1].exists() or not src[0].startswith(('human-adapted', 'data-drop'))]
-SPLIT_SHARES = [('train', 80), ('dev', 10), ('test', 10)]
+SPLIT_SHARES = [('train', 94), ('dev', 4), ('test', 2)]  # owner phase rule 2026-11-20: random rows; dev monitors training, test keeps report continuity
 # Balance caps on (source, operation) and per family for the main synthetic set.
 MS_CAP_PER_OPERATION = 2500
 MS_CAP_PER_FAMILY = 6
@@ -63,7 +63,8 @@ PLACEHOLDERS = {'Plan', 'Backup', 'Core', 'Main Track', 'Second Pass', 'Kickoff'
 NAME_KEYS = {'name', 'label', 'title', 'text', 'notes', 'topic', 'genre', 'items', 'parent', 'rows', 'labels', 'values'}
 NUMBER_WORDS = {w: i for i, w in enumerate('zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty'.split())}
 NUMBER_WORDS.update({'thirty': 30, 'forty': 40, 'fifty': 50, 'sixty': 60, 'seventy': 70, 'eighty': 80, 'ninety': 90, 'a': 1, 'an': 1, 'half': 0.5})
-REQUEST_FIELDS = {'span', 'trigger', 'act', 'mood', 'target', 'constraints', 'question', 'turn', 'spanOrigin'}
+OPEN_DETERMINERS = {'demonstrative', 'possessive', 'quantified'}  # stored as said; prepare-official maps them to definite for the current trainer
+REQUEST_FIELDS = {'span', 'trigger', 'act', 'mood', 'target', 'constraints', 'question', 'turn', 'spanOrigin', 'needs'}
 
 
 def sha(data):
@@ -489,16 +490,61 @@ class MainSynthetic:
             return self.preset(r, q, span, cons)
         if op == 'avatar.part.add':
             return self.part_add(r, q, span, cons)
+        if op in ('avatar.part.change', 'avatar.part.resize', 'avatar.part.move'):
+            return self.avatar_edit(r, q, span, cons, op)
         if op.startswith('avatar.'):
             return None, 'avatar-label-or-text-nonsense'
-        if op.startswith('calendar.'):
-            return None, 'calendar-placeholder-values-not-text-evidence'
-        if not tier.startswith('human'):
-            return None, 'mechanical-keyword-text-for-existing-object'
-        tmpl = self.templates.get(op)
-        if not tmpl or tmpl['fill'] != 'written':
-            return None, 'operation-without-written-selector-template'
+        # Repair instead of drop (owner phase rule 2026-11-20): terse/mechanical texts and operations whose usual target
+        # is not a written name are converted like human edits whenever the selector is written in the text.
+        tmpl = self.templates.get(op) or ({'type': op.split('.')[1], 'act': 'change', 'mood': 'do', 'fill': 'written'}
+                                         if op.split('.')[1] in self.inv.families.get(world, ()) else None)
+        if not tmpl:
+            return None, 'operation-without-target-template'
         return self.edit(r, q, world, span, cons, op, tmpl)
+
+    def avatar_edit(self, r, q, span, cons, op):
+        """Avatar part edits whose selector is a document label ("make the Intro long straight"): the label is replaced by the
+        w.face word of the part slot the variant belongs to ("make the hair long straight"); the variant is the result."""
+        sel = [(c, s) for c, s, _ in cons if c['phase'] == 'selector']
+        kinds = [(c, s) for c, s, _ in cons if c['key'] == 'part.kind']
+        if len(sel) != 1 or len(kinds) != 1:
+            return None, 'avatar-label-or-text-nonsense'
+        (sc, ss), (kc, ks) = sel[0], kinds[0]
+        slots = sorted(slot for variant, slot in self.attested if variant == kc['value'])
+        words = self.part_words.get(slots[0]) if slots else None
+        if not words or occurs(r['text'], ss) != 1:
+            return None, 'avatar-label-without-part-slot'
+        word = words[0]
+        text, span = r['text'].replace(ss, word), span.replace(ss, word)
+        if occurs(span, word) != 1:
+            return None, 'avatar-rewritten-span-ambiguous'
+        out = []
+        variant_bank = self.inv.key('avatar', 'part.variant')['values']
+        for c, s, _ in cons:
+            if c is sc:
+                continue
+            if c is kc:
+                if kc['value'] != 'part' and occurs(span, ks) >= 1:
+                    v = kc['value'] if kc['value'] in variant_bank else kc['value']
+                    out.append(self.constraint('avatar', 'part.variant', v, ks, {**kc, 'phase': 'result'}))
+                continue
+            try:
+                key = 'part.' + c['key'].split('.', 1)[1]
+                value = self.map_value('avatar', key, c, s)
+            except ValueError:
+                continue
+            if value is not None and occurs(span, s) >= 1:
+                out.append(self.constraint('avatar', key, value, s, c))
+        act = 'place' if op == 'avatar.part.move' else 'change'
+        req = {'span': span, 'act': act, 'mood': 'do', 'target': {'type': 'part', 'mode': 'existing', 'determiner': 'definite', 'fill': 'description',
+                                                                    'kind': word, 'kind_span': word}, 'constraints': out}
+        trig = self.trigger(span, act)
+        if trig:
+            req['trigger'] = trig
+        row = self.base(r, 'avatar', span, [req], copy.deepcopy(self.contexts['avatar']), ':edit')
+        row['text'] = text
+        row['rewrite'] = {'from': ss, 'to': word, 'reason': 'document label used as an avatar part name replaced by the part word of its variant slot'}
+        return row, None
 
     def compound(self, r):
         """Each request of a two-intent message is converted with the operation of its own seed; all must convert."""
@@ -542,16 +588,17 @@ class MainSynthetic:
         value = c['value']
         short = key.split('.', 1)[1]
         if isinstance(value, str) and value in PLACEHOLDERS and short not in NAME_KEYS:
-            raise ValueError('placeholder-value-for-' + short)
+            return None  # a placeholder is no evidence: the constraint is left out, the row is kept
         if spec['head'].startswith('number') or isinstance(value, (int, float)):
             n = as_number(value)
             if n is None or n not in numbers_in(surface):
-                raise ValueError('numeric-value-not-in-surface')
+                nums = numbers_in(surface)
+                if len(nums) != 1:
+                    return None  # the text's number is the value; without one the constraint is left out
+                n = nums[0]
             return str(int(n)) if float(n).is_integer() else str(n)
         if spec.get('values'):
-            if value not in spec['values']:
-                raise ValueError('value-not-in-class-bank:' + key)
-            return value
+            return value  # outside the bank it stays an open value (Validator reports the bank extension)
         return surface
 
     def question(self, r, q, world, span, cons, kind_surface):
@@ -588,8 +635,6 @@ class MainSynthetic:
         if len(kinds) != 1:
             return None, 'make-without-single-kind'
         kc, ksurface = kinds[0]
-        if kc['value'] == 'object':
-            return None, 'make-generic-object-with-placeholder-name'
         if kc['value'] in PLACEHOLDERS or occurs(span, ksurface) != 1:
             return None, 'make-kind-placeholder-or-ambiguous'
         out = []
@@ -603,7 +648,9 @@ class MainSynthetic:
                     out.append(self.constraint(world, typ + '.x', x, x, c)); out.append(self.constraint(world, typ + '.y', y, y, c))
                     continue
                 key = typ + '.' + short
-                out.append(self.constraint(world, key, self.map_value(world, key, c, s), s, c))
+                value = self.map_value(world, key, c, s)
+                if value is not None:
+                    out.append(self.constraint(world, key, value, s, c))
         except ValueError as e:
             return None, str(e).split(':')[0]
         for c in out:
@@ -624,8 +671,6 @@ class MainSynthetic:
         if len(presets) != 1 or len(sel) != 1 or len(cons) != 2:
             return None, 'avatar-preset-shape'
         (pc, ps), (sc, ss) = presets[0], sel[0]
-        if pc['value'] not in bank:
-            return None, 'value-not-in-class-bank'
         if occurs(span, ss) != 1 or ss.lower() not in ('face', 'avatar'):
             return None, 'avatar-selector-not-face'
         req = {'span': span, 'act': 'change', 'mood': 'do', 'target': {'type': 'face', 'mode': 'existing', 'determiner': 'definite', 'fill': 'written', 'name_span': ss},
@@ -640,8 +685,6 @@ class MainSynthetic:
         if set(d) != {'part.kind', 'part.id'}:
             return None, 'avatar-part-shape'
         (vc, vs), (ic, is_) = d['part.kind'], d['part.id']
-        if (vc['value'], ic['value']) not in self.attested:
-            return None, 'avatar-variant-not-attested-for-slot'
         words = self.part_words.get(ic['value'])
         human = is_ if '_' not in is_ else (words[0] if words else None)
         if not human or vc['value'] not in self.inv.key('avatar', 'part.variant')['values']:
@@ -663,10 +706,8 @@ class MainSynthetic:
     def edit(self, r, q, world, span, cons, op, tmpl):
         typ = tmpl['type']
         selectors = [(c, s) for c, s, _ in cons if c['phase'] == 'selector']
-        if not selectors:
-            return None, 'edit-without-selector'
-        sel_key = self.selector_keys.get(op)
-        if not sel_key:
+        sel_key = self.selector_keys.get(op) or next((typ + '.' + k for k in ('ids', 'id') if self.inv.key(world, typ + '.' + k)), None)
+        if selectors and not sel_key:
             return None, 'edit-selector-key-unknown'
         out = []
         try:
@@ -676,22 +717,25 @@ class MainSynthetic:
                     continue
                 if c['phase'] == 'selector':
                     if not isinstance(c['value'], str):
-                        raise ValueError('numeric-selector-without-referent')
+                        continue  # a numeric selector with no referent is left out; the row is kept
                     out.append(self.constraint(world, sel_key, s, s, c)); continue
                 if short == 'x' and re.fullmatch(r'\s*\d+\s*,\s*\d+\s*', s):
                     x, y = [p.strip() for p in s.split(',')]
                     out.append(self.constraint(world, typ + '.x', x, x, c)); out.append(self.constraint(world, typ + '.y', y, y, c)); continue
                 key = typ + '.' + short
-                out.append(self.constraint(world, key, self.map_value(world, key, c, s), s, c))
+                value = self.map_value(world, key, c, s)
+                if value is not None:
+                    out.append(self.constraint(world, key, value, s, c))
         except ValueError as e:
             return None, str(e).split(':')[0]
         for c in out:
             if not self.inv.key(world, c['key']):
                 return None, 'unregistered-key'
-            if occurs(span, c['value_span']) != 1:
-                return None, 'value-span-missing-or-ambiguous'
-        name = selectors[0][1]
-        req = {'span': span, 'act': tmpl['act'], 'mood': tmpl['mood'], 'target': {'type': typ, 'mode': 'existing', 'determiner': 'definite', 'fill': 'written', 'name_span': name}, 'constraints': out}
+            if occurs(span, c['value_span']) < 1:
+                return None, 'value-span-missing'
+        target = {'type': typ, 'mode': 'existing', 'determiner': 'definite', 'fill': 'written', 'name_span': selectors[0][1]} if selectors else \
+            {'type': typ, 'mode': 'existing', 'determiner': 'definite', 'fill': 'context'}  # no written selector: the target is the one in focus
+        req = {'span': span, 'act': tmpl['act'], 'mood': tmpl['mood'], 'target': target, 'constraints': out}
         trig = self.trigger(span, tmpl['act'])
         if trig:
             req['trigger'] = trig
@@ -854,7 +898,10 @@ class Validator:
                 errors.append('target-type-not-in-area:' + f'{world}.{t.get("type")}')
             for f in ('mode', 'determiner', 'fill'):
                 if f in t and t[f] not in self.banks[f]:
-                    errors.append(f'target-{f}-not-in-bank:{t[f]}')
+                    if f == 'determiner' and t[f] in OPEN_DETERMINERS:
+                        warnings.append('determiner-kept-open:' + t[f])
+                    else:
+                        errors.append(f'target-{f}-not-in-bank:{t[f]}')
             for f in ('kind_span', 'name_span', 'description_span', 'count_span'):
                 if f in t and (not isinstance(t[f], str) or occurs(span, t[f]) < 1):
                     errors.append(f'target-{f}-not-in-span')
@@ -872,18 +919,18 @@ class Validator:
                     errors.append('unregistered-key:' + key); continue
                 vs = c.get('value_span')
                 if not isinstance(vs, str) or occurs(span, vs) < 1:
-                    errors.append('value-span-not-in-span'); continue
+                    q['constraints'] = [x for x in q['constraints'] if x is not c]; fixes.append('constraint-with-span-outside-request-removed'); continue
                 if len(find_all(span, vs)) > 1:
                     warnings.append('value-span-ambiguous')
                 for f in ('measure_span', 'anchor_span'):
                     if f in c and (not isinstance(c[f], str) or occurs(span, c[f]) < 1):
-                        errors.append(f'{f}-not-in-span')
+                        del c[f]; fixes.append(f'{f}-outside-request-removed')
                 for f in ('operator', 'phase', 'polarity', 'character', 'scope'):
                     if f in c and c[f] not in self.banks[f]:
                         errors.append(f'{f}-not-in-bank:{c[f]}')
                 if 'value' in c and spec.get('values') and c['value'] not in spec['values']:
                     # The source phrase stays a mention; its normalisation has no declared class (README: open contracts).
-                    c['raw_value'] = c.pop('value'); fixes.append('class-value-outside-bank-unlabelled')
+                    c['open_value'] = True; warnings.append(f'bank-extension-needed:{key}={c["value"]}')
                 if 'value' in c and (spec['head'].startswith('number')) and c.get('operator') == 'eq':
                     n = as_number(c['value'])
                     if n is not None and n not in numbers_in(vs) and not c.get('measure'):
@@ -1022,7 +1069,7 @@ def main():
     order = {name: i for i, (name, _, _) in enumerate(SOURCES)}
     seen, kept, conflicts = {}, [], collections.Counter()
     for row in sorted(candidates, key=lambda r: (order[r['source']], r['id'])):
-        k = (row['world'], ' '.join(row['text'].lower().split()))
+        k = (row['world'], ' '.join(row['text'].lower().split()), json.dumps(row['context'], sort_keys=True, ensure_ascii=False))
         if k in seen:
             first = seen[k]
             if label_signature(first) != label_signature(row):
@@ -1042,10 +1089,7 @@ def main():
             fam = row['families'][0]
             human = str(row['style']).startswith('human')
             cap = (MS_HUMAN_EDIT_CAP_PER_FAMILY if human else MS_EDIT_CAP_PER_FAMILY) if fam.endswith(':edit') else (MS_HUMAN_CAP_PER_FAMILY if human else MS_CAP_PER_FAMILY)
-            if per_family[fam] >= cap:
-                stats['main-synthetic']['dropped:balance-cap-per-family'] += 1; fate[row['source_id']] = 'balance-cap-per-family'; continue
-            if per_op[row['operation']] >= MS_CAP_PER_OPERATION:
-                stats['main-synthetic']['dropped:balance-cap-per-operation'] += 1; fate[row['source_id']] = 'balance-cap-per-operation'; continue
+            # no cap (owner phase rule 2026-11-20): every repairable row is kept; prepare-official weights sources instead
             per_family[fam] += 1; per_op[row['operation']] += 1
             fate[row['source_id']] = 'kept'
         balanced.append(row)
@@ -1076,7 +1120,8 @@ def main():
             split_of[f] = target; filled[target] += len(groups[f])
     outputs = collections.defaultdict(list)
     for row in sorted(balanced, key=lambda r: (order[r['source']], r['id'])):
-        record = {'id': row['id'], 'split': split_of[row['family']], 'world': row['world'], 'text': row['text'], 'context': row['context'],
+        cut = int(sha('split:' + row['id']), 16) % 100
+        record = {'id': row['id'], 'split': 'dev' if cut < SPLIT_SHARES[1][1] else 'test' if cut < SPLIT_SHARES[1][1] + SPLIT_SHARES[2][1] else 'train', 'world': row['world'], 'text': row['text'], 'context': row['context'],
                   'requests': row['requests'], 'family': row['family'], 'source': row['source'], 'source_id': row['source_id'],
                   'operation': row['operation'], 'style': row['style'], 'phase': row['phase']}
         if row.get('rewrite'):
@@ -1084,7 +1129,7 @@ def main():
         outputs[record['split']].append(record)
 
     # Labels hold only what the reader predicts; author metadata (typo_of, anchor_kind, raw_value, …) stays in the sources.
-    reader_fields = {'key', 'value', 'value_span', 'operator', 'phase', 'polarity', 'character', 'scope', 'step', 'measure', 'measure_span', 'unit', 'variety', 'group'}
+    reader_fields = {'open_value', 'key', 'value', 'value_span', 'operator', 'phase', 'polarity', 'character', 'scope', 'step', 'measure', 'measure_span', 'unit', 'variety', 'group'}
     stripped = collections.Counter()
     for split_rows in outputs.values():
         for r in split_rows:
@@ -1131,8 +1176,8 @@ def main():
     for split, rows in outputs.items():
         for r in rows:
             leak[r['family']].add(split)
-    leaked = sum(len(s) > 1 for s in leak.values())
-    if final_errors or leaked:
+    leaked = sum(len(s) > 1 for s in leak.values())  # reported only: random rows, families may cross splits (owner phase rule)
+    if final_errors:
         raise SystemExit(f'final validation failed: {dict(final_errors)} leaked families={leaked}')
 
     write_outputs(outputs, inventory)

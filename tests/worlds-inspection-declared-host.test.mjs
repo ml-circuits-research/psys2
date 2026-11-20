@@ -83,3 +83,17 @@ test('interpreters that run are on the map: SOP area interpreter, SOP world host
  for(const [status,state,summary]of states){const {z3}=describePlacementSearch({status});assert.equal(z3.state,state);assert.match(z3.summary,summary);}
  assert.equal(node('runtime:registry').label,'World loader');
 });
+test('records say what they are and which World shows them, so the map needs no Session runtime layer',()=>{
+ const index={worlds:{novel:{tab:{title:'Novel'},schemaWorld:'pattern.novel',schemaFiles:[{file:'native-interface.sop',role:'native-tool-interface'}],runtimeModules:['worlds/sop-area.mjs','worlds/sop-world-host.mjs']}}};
+ const catalog={worlds:[{id:'k.sample',schema:'k.sample/schema.sop',shards:[{path:'k.sample/data.sop'}]}]};
+ const graph=inspectWorldsRuntime({index,bundle:{worlds:{novel:{files:{'native-interface.sop':'@m core.module name=x'}}}},loaded:['novel'],hosts:[{world:'novel',view:'novel',operations:[]}],instances:[{world:'novel',instanceId:'i',revision:1,authoritative:true,wires:'@o novel.item x=1'}],knowledgeFiles:[{path:'index.json',text:JSON.stringify(catalog)},{path:'k.sample/data.sop',text:'@d k.item'}],sessionMeta:{memory:{}}});
+ const node=id=>graph.nodes.find(entry=>entry.id===id);
+ assert.equal(node('runtime:registry').kind,'component','the world loader is a component, not a session runtime record');
+ assert.equal(node('runtime:session-memory').partOf,'component:reasoner','session memory is part of the Session');
+ assert.equal(node('schema:novel:native-interface.sop').partOf,'schema-world:pattern.novel','a declared schema file is part of its schema World');
+ assert.equal(node('knowledge-file:k.sample/data.sop').partOf,'knowledge-world:k.sample','a read source file is part of its catalog World');
+ assert.equal(node('knowledge-file:index.json').partOf,'knowledge:catalog','the catalog index is part of the catalog');
+ assert.equal(node('knowledge-file:k.sample/schema.sop').partOf,'knowledge-world:k.sample','an unread declared schema is part of its catalog World');
+ assert.equal(node('instance:novel').displayName,'Novel instance World');assert.equal(node('interpreter:novel').displayName,'Novel tool host');assert.equal(node('world:novel').displayName,'Novel tool package');
+ assert.match(node('provider:z3').displayName,/^Z3 solver \(/);
+});

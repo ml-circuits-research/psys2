@@ -71,6 +71,13 @@ function interfaceFacts({ area, view, bindings, host, observation, focus, target
   const observed = executionPolicy.ofType('app.execution.observedProperty');
   const measures = executionPolicy.ofType('app.execution.observedMeasure');
   const normalizedBindings = new Set(observed.filter((row) => row.attrs.format).map((row) => take(row, 'binding')));
+  // A reference concept's values are the observed objects it can name (capability-policy.sop: by code, name or kind).
+  const references = new Set(executionPolicy.ofType('app.execution.reference').map((row) => take(row, 'concept')));
+  // A parameter that takes one of its declared names (an enum: the diagram's colour names) takes the said name itself,
+  // not the value a lookup would give for it (an RGB code).
+  const named = new Set((typeof host.bindings === 'function' ? host.bindings() : []).flatMap((operation) =>
+    Object.entries(operation.params ?? {}).filter(([, parameter]) => Array.isArray(parameter.enum) && parameter.enum.length)
+      .map(([name]) => operation.on + '\0' + name)));
   const codecs = { 'number-list': 'number.list', 'string-list': 'string.list' };
   let propertyOrder = Math.max(-1, ...[...observed, ...measures].map((row) => Number(take(row, 'order')))) + 1;
   for (const row of bindings.properties || []) {
@@ -78,7 +85,7 @@ function interfaceFacts({ area, view, bindings, host, observation, focus, target
     if (row.area !== readerArea || !sourceTypes.has(binding?.sourceType)) continue;
     write(NS + 'property', { scope, concept: row.canonical, on: quote(binding.sourceType), parameter: quote(binding.parameter),
       binding: binding.id ? quote(binding.id) : undefined,
-      codec: codecs[binding.codec] || (take(valueMappings.get(row.canonical), 'codec') === 'lookup' ? 'lookup' : undefined), order: String(propertyOrder++) });
+      codec: codecs[binding.codec] || (references.has(row.canonical) || take(valueMappings.get(row.canonical), 'codec') === 'lookup' && !named.has(binding.sourceType + '\0' + binding.parameter) ? 'lookup' : undefined), order: String(propertyOrder++) });
   }
   // The single-valued observations of the objects a preview of a compiled call creates (degree-bases.mjs).
   for (const { operation, kind, objects } of previews) for (const object of objects) for (const field of object.inputs ?? []) {
@@ -163,6 +170,8 @@ function readPlan(world,sop) {
       id: take(row, 'id'), status: take(row, 'status'), support: support(row),
     })),
     covered: values(result, 'covered'),
+    // A count the family declares repeatable (std.capability.repeat): the call is made that many times.
+    repeat: Number(result?.attrs.repeat?.[0]) > 1 ? Number(result.attrs.repeat[0]) : 1,
     operation: call?.operation, args: call?.args ?? {}, toolInput, alternatives,
   };
 }
@@ -200,8 +209,20 @@ function compilerWorld(context, nodes) {
 function contextWire(id,request,scope) {
   return {id,type:NS+'context',attrs:{request:[ref(request)],scope:[scope]}};
 }
+// A declared act form (execution-policy.sop app.execution.actForm): the request's act compiles as another act when
+// its target has the declared mode ("connect A to B" makes the line between them).
+function declaredActForm(nodes) {
+  const request=nodes.find(wire=>wire.type==='std.request'),act=take(request,'act');
+  const target=nodes.find(wire=>wire.type==='std.request.target'&&wire.attrs.request?.[0]==='$'+request?.id);
+  // `results`: whether the request says what to change (a constraint that is not the target's selector).
+  const selectors=new Set(nodes.filter(wire=>wire.type==='std.request.target').flatMap(wire=>values(wire,'selector')));
+  const results=nodes.some(wire=>wire.type==='std.request.constraint'&&!selectors.has('$'+wire.id))?'some':'none';
+  const form=executionPolicyWorld().ofType('app.execution.actForm').find(row=>take(row,'act')===act&&take(row,'mode')===take(target,'mode')&&(!row.attrs.results||take(row,'results')===results));
+  if(!form)return nodes;
+  return nodes.map(wire=>wire===request?{...wire,attrs:{...wire.attrs,act:[take(form,'as')]}}:wire);
+}
 export function compileNativeCapability(candidate, context) {
-  const nodes=parse(candidate.wires), {world,scope}=compilerWorld(context,nodes);
+  const nodes=declaredActForm(parse(candidate.wires)), {world,scope}=compilerWorld(context,nodes);
   if(!nodes.some(w=>w.type==='std.request'&&w.id===candidate.request))return readPlan(world,'@compile.result std.compile.result status=not-applicable reason=request-root');
   return readPlan(world,world.compileRequest(serialize([...nodes,contextWire('capability.context',candidate.request,scope)])));
 }

@@ -1,24 +1,34 @@
-import {isScopedRemoval} from './capability-plan-execution.mjs?v=b5b7130aa4';
-import {projectRemovalAction} from './project-removal-action.mjs?v=9202d95168';
-import { captureHistory, recordHistory, restoreHistory } from './history-journal.mjs?v=632292883d';
-import {projectReaderHeadAlternative} from './reader-head-alternative.mjs?v=1f1a1712aa';
-import {parse} from '../vendor/sopworld/sopworld.mjs?v=4a094fcca4';
-import {writeReaderSource} from './reader-source.mjs?v=6f38ed2f42';
-import {isAuthoredRequest,readAuthoredRequest} from './authored-request-tool.mjs?v=4020b7d0da';
+import {isScopedRemoval} from './capability-plan-execution.mjs?v=f22db9ce21';
+import {projectRemovalAction} from './project-removal-action.mjs?v=3d29115cca';
+import { captureHistory, recordHistory, restoreHistory } from './history-journal.mjs?v=e0e2a6790c';
+import {projectReaderHeadAlternative} from './reader-head-alternative.mjs?v=7359d34a30';
+import {parse} from '../vendor/sopworld/sopworld.mjs?v=915a9d5c18';
+import {writeReaderSource} from './reader-source.mjs?v=cbef78f4a7';
+import {isAuthoredRequest,readAuthoredRequest} from './authored-request-tool.mjs?v=fdab6933a6';
 // Model-first proposal routing. Calibration authority belongs to host configuration,
 // never to a model output, evaluation annotation or grammar proposal.
-import {requestCompositionPolicy,scheduleFollowingCut}from './request-composition-policy.mjs?v=d43237e419';
-import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=a0fd73ae03';
-import {projectQueryAction,recoverQueryProjection} from './project-query-action.mjs?v=51d0afe7b6';
-import {projectContextAction} from './project-context-action.mjs?v=2449f31174';
-import {projectCreateAction} from './project-create-action.mjs?v=fee68d12d0';
-import {assessReaderProposal} from './reader-admission.mjs?v=8ec6f54ff0';
+import {requestCompositionPolicy,scheduleFollowingCut}from './request-composition-policy.mjs?v=a9ade5b7c7';
+import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=f8b8d381ca';
+import {projectQueryAction,recoverQueryProjection} from './project-query-action.mjs?v=060c721f69';
+import {projectContextAction} from './project-context-action.mjs?v=ef9db7fe4d';
+import {projectCodeReference} from './project-code-reference.mjs?v=db165fa8a7';
+import {projectCreateAction} from './project-create-action.mjs?v=d530231d1d';
+import {assessReaderProposal} from './reader-admission.mjs?v=7537d719a0';
+import {projectQuantities,amountsOf,quantityNote} from './quantity-projection.mjs?v=d03426ef51';
+import {routeCoordination} from './coordination-routing.mjs?v=ff7f05839a';
+import {declaredKnowledge} from './declared-execution.mjs?v=f8b8d381ca';
+import {interpretationPolicy,coordinationEligible,comparisonBounds,retryNote} from './interpretation-policy.mjs?v=2b023fe676';
+let amounts;
+// The named amounts of the execution knowledge (k.expect.amount), read once.
+const knownAmounts=()=>amounts??=amountsOf(declaredKnowledge('k.expect.amount'));
 const unavailable=reason=>({candidates:[],coverage:{complete:false,executable:false,graphProposal:false},failures:[{reason}]});
 const noDeclaredAction = () => {
  const text='I could not identify an action to apply. Nothing changed.';
  return {text,parts:[{text,translate:false}],statuses:['unsupported'],answers:[],segments:[],state:{},effects:[],
   trace:{legacy:false,engine:'new',reason:'no-declared-action'}};
 };
+// World-activity events never change a reading; a failing subscriber is ignored.
+const observe=(session,event)=>{try{session.engine?.onWorldActivity?.(event);}catch{/* Observation cannot change the reading. */}};
 // The source ranges a reading anchored: every span it emitted, and the several mentions it saw for
 // one key it could not hold ("draw a cat and 2 dogs": "cat" and "dogs" for the one target kind).
 function readMentions(read){
@@ -78,27 +88,58 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
  const context={area:options.view??session.isession.state['ui.shell']?.activeTab};
  let contextProjection=null,bindings=null,registry=null;
  try{bindings=provider?.bindings?.();registry=provider?.registry?.();}catch{/* Missing bindings leave the model observations unprojected. */}
- const projectionOptions={bindings,registry,view:context.area};
+ const projectionOptions={bindings,registry,view:context.area},projectionErrors=[];
  const project=async(read)=>{
   try{
+   const coded=await projectCodeReference(read,session,projectionOptions);
+   if(coded)return {proposal:coded.proposal,contextProjection:coded};
    const contextual=await projectContextAction(read,session,projectionOptions);
    if(contextual)return {proposal:contextual.proposal,contextProjection:contextual};
    const query=await projectQueryAction(read,session,projectionOptions);
    if(query)return {proposal:await recoverQueryProjection(query,session,{...projectionOptions,provider}),contextProjection:null};
-   return {proposal:await projectCreateAction(read,session,projectionOptions)??read,contextProjection:null};
-  }catch{return {proposal:read,contextProjection:null};/* A failed projection preserves the available model observations. */}
+   const created=await projectCreateAction(read,session,projectionOptions)??read;
+   const counted=projectQuantities(created,{amounts:knownAmounts(),bindings,view:context.area});
+   // An implicit count or a kind read by its singular is a projection of the reading: it lights the map and is traced.
+   if(counted!==created)observe(session,{nodeIds:['component:reader'],phase:'stage',operation:'app.reader.quantity',label:'Read implicit counts and plural kinds',text,
+    quantities:(counted.candidates??[]).map(candidate=>candidate.quantities).filter(Boolean)});
+   return {proposal:counted,contextProjection:null};
+  }catch(error){
+   // A failed projection preserves the available model observations; the failure is traced, not hidden.
+   const projectionError=String(error?.message??error);
+   projectionErrors.push(projectionError);
+   observe(session,{nodeIds:['component:reader'],phase:'error',operation:'app.reader.projection',label:'Project the reading onto the editor',text,error:projectionError});
+   return {proposal:read,contextProjection:null};
+  }
  };
+ // A make reading that saw several kinds for its one target, or left a list after its kind unread, is a
+ // coordination of noun phrases: each is read and made, together (coordination-routing.mjs), before any re-reading
+ // drops one of them.
+ // Which readings go there first is declared (interpretation-policy.sop app.interpret.coordination).
+ let coordinationError=null;
+ const coordinationRule=coordinationEligible(proposal);
+ if(coordinationRule){
+  const grouped=await routeCoordination(session,text,proposal,{provider,project,bindings,view:context.area,
+   admit:(read,partText)=>assessReaderProposal({proposal:read,text:partText,provenance,admission:session.engine?.requestReaderAdmission,area:context.area}),
+   dispatch:candidate=>dispatchRequest(session,candidate,text,options,bindings)}).catch(error=>{
+    coordinationError=String(error?.message??error);
+    observe(session,{nodeIds:['component:reader'],phase:'error',operation:'app.reader.coordination',label:'Read the request as a coordination',text,rule:coordinationRule.id,error:coordinationError});
+    return null;
+   });
+  if(grouped)return grouped;
+ }
  let projected=await project(proposal),contextRetry=null;
- // The previous utterance and the observed objects are priors for the reader. When the reading
- // conditioned on them stays unusable, the same text read without the previous message, then
- // also without the observed objects, are the next hypotheses; the first usable one is routed
- // and every attempted reading stays in the trace.
- const retries=[['independent','proposeIndependent'],['literal','proposeLiteral']],readings=[];
- for(const [profile,method] of retries){
-  if(projected.proposal.coverage?.complete||typeof provider?.[method]!=='function')break;
-  let alternate=null;
-  try{alternate=await provider[method](writeReaderSource(text));}catch{/* No such reading is available. */}
-  if(!alternate)continue;
+ // The previous utterance and the observed objects are priors for the reader. While the reading
+ // conditioned on them stays incomplete, the declared re-readings (interpretation-policy.sop
+ // app.interpret.retry, in their order) are the next hypotheses; the first complete one is routed
+ // and every attempt, also an unavailable or failed one, stays in the trace and lights the map.
+ const readings=[];
+ for(const {profile,method,label,when} of interpretationPolicy().retries){
+  if(when==='incomplete'&&projected.proposal.coverage?.complete)break;
+  if(typeof provider?.[method]!=='function'){((contextRetry??={attempts:[]}).unavailable??=[]).push({profile,reason:'provider-has-no-'+method});break;}
+  let alternate=null,failure=null;
+  try{alternate=await provider[method](writeReaderSource(text));}catch(error){failure=String(error?.message??error);}
+  observe(session,{nodeIds:['component:reader'],phase:alternate?'stage':'end',operation:'app.reader.retry',label,text,profile,available:!!alternate,...(failure?{error:failure}:{})});
+  if(!alternate){((contextRetry??={attempts:[]}).unavailable??=[]).push({profile,reason:failure?'failed':'no-reading',...(failure?{error:failure}:{})});continue;}
   const retried=await project(alternate),complete=!!retried.proposal.coverage?.complete;
   // A question read without part of what the first reading saw ("who is eyes a cat?" read as "how
   // many cats") is a different question: it is not answered. A request keeps its applied part and
@@ -112,8 +153,7 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
    contextRetry.used=profile;contextRetry.primary={rawReading:proposal?.raw?.requests??null,failures:proposal?.failures??[]};
    if(dropped.length)contextRetry.dropped=dropped;
    proposal=alternate;projected=retried;
-   try{session.engine?.onWorldActivity?.({nodeIds:['component:reader'],phase:'stage',operation:'app.reader.retry',
-    label:profile==='literal'?'Read the request without the previous message or the observed objects':'Read the request without the previous message',text});}catch{/* Observation cannot change the reading. */}
+   observe(session,{nodeIds:['component:reader'],phase:'end',operation:'app.reader.retry',label,text,profile,used:true});
   }
  }
  const providerCoverage=proposal?.coverage;
@@ -164,7 +204,9 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
  let candidate=decision.candidate,comparison=removalComparison??provenAlternative;
  const eligible=decision.admitted,reason=decision.reason;
  const interpretations=proposal?.interpretation?.profile==='declared-creation/1'?proposal.candidates:providerCandidates;
- if(eligible && decision.mode==='uncalibrated-best-effort' && !contextProjection && !removalComparison && interpretations.length>1 && interpretations.length<=16){
+ // Comparison bounds per admission mode are declared (interpretation-policy.sop app.interpret.compare).
+ const bounds=comparisonBounds(decision.mode);
+ if(eligible && bounds && !contextProjection && !removalComparison && interpretations.length>=bounds.min && interpretations.length<=bounds.max){
   const admitted=interpretations.filter(option=>assessReaderProposal({proposal:{...proposal,candidates:[option]},text,provenance,area:context.area}).admitted);
   if(admitted.length>1){
    comparison=await compareDeclaredReadings(session,admitted,{view:context.area,bindings,unapplied:proposal.interpretation?.unapplied});
@@ -210,6 +252,9 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
    result.parts=[{text:result.text,translate:false}];
    result.trace={...result.trace,interpretation:proposal.interpretation};
   }
+  const quantity=quantityNote(candidate);
+  if(candidate?.quantities&&result)result.trace={...result.trace,quantities:candidate.quantities};
+  if(quantity&&result?.statuses?.includes('supported')){result.text+=' '+quantity;result.parts=[{text:result.text,translate:false}];}
   if(result&&decision.uncertain&&result.statuses?.includes('supported')){
    const note=result.trace?.uncertainty?.length||result.trace?.interpretation?'':'I used the most likely reading; you can correct it or undo.';
    if(note){result.text+=' '+note;result.parts=[{text:result.text,translate:false}];}
@@ -217,12 +262,13 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
  }
  if(result&&contextRetry?.used&&result.statuses?.includes('supported')){
   if(contextRetry.dropped?.length)result.text+=' I did not apply '+quoted(contextRetry.dropped)+'.';
-  result.text+=contextRetry.used!=='literal'?' I read this message on its own, without the previous one.':contextRetry.attempts.some(attempt=>attempt.profile==='independent')?' I read this message on its own, without the previous one or the objects on the page.':' I read this message on its own, without the objects on the page.';result.parts=[{text:result.text,translate:false}];
+  const note=retryNote(contextRetry.used,new Set(contextRetry.attempts.map(attempt=>attempt.profile)));
+  if(note)result.text+=' '+note;result.parts=[{text:result.text,translate:false}];
  }
  result??={text:message,parts:[{text:message,translate:false}],statuses:['unsupported'],answers:[],segments:[],state:{},effects:[],newEngine:true,trace:{legacy:false,engine:'new',reason:options.language&&options.language!=='en'?'language':'reading'}};
  return {...result,trace:{...result.trace,...(eligible?{reading:candidate}:{}),...(comparison?{readingComparison:comparison.sop}:{}),readerRouting:{primary:'sop-bert',selected:eligible?'sop-bert':null,reason,
   admission:{mode:decision.mode??null,uncertain:!!provenAlternative||(decision.uncertain??false),alternatives:decision.alternatives??[],scoreDefinition:decision.scoreDefinition,score:decision.score,proposalEligible:decision.eligible,assessment:decision.assessment,decisionSop:decision.decisionSop??null},
-  interpretation:proposal?.interpretation??null,unresolved:preservedProviderTrace?proposal.interpretation.unresolved:(proposal?.failures??[]),...(contextRetry?{contextRetry}:{}),proposalCandidates:providerCandidates,rawReading:proposal?.raw?.requests??null,model:{provenance,coverage:(preservedProviderTrace?providerCoverage:proposal?.coverage)??null,candidates:preservedProviderTrace?providerCandidates.length:(proposal?.candidates?.length??0),eligible:!!eligible}}}};
+  interpretation:proposal?.interpretation??null,unresolved:preservedProviderTrace?proposal.interpretation.unresolved:(proposal?.failures??[]),...(contextRetry?{contextRetry}:{}),...(projectionErrors.length?{projectionErrors}:{}),...(coordinationError?{coordinationError}:{}),proposalCandidates:providerCandidates,rawReading:proposal?.raw?.requests??null,model:{provenance,coverage:(preservedProviderTrace?providerCoverage:proposal?.coverage)??null,candidates:preservedProviderTrace?providerCandidates.length:(proposal?.candidates?.length??0),eligible:!!eligible}}}};
 }
 
 /** Apply the declared source-order schedule to actual model cuts, never source words. */

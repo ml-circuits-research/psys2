@@ -112,14 +112,15 @@
       "rowsIn": 164,
       "alreadyInExamples": 164,
       "assembledHere": 0,
-      "kept": 20,
-      "dropped": 144,
+      "kept": 26,
+      "dropped": 138,
       "dropReasons": {
-        "avatar-label-or-text-nonsense": 126,
-        "compound-part-avatar-label-or-text-nonsense": 7,
-        "avatar-variant-not-attested-for-slot": 6,
+        "avatar-label-or-text-nonsense": 90,
+        "avatar-label-without-part-slot": 36,
+        "compound-part-avatar-label-or-text-nonsense": 5,
         "avatar-selector-not-face": 4,
-        "compound-part-avatar-variant-not-attested-for-slot": 1
+        "compound-part-avatar-label-without-part-slot": 2,
+        "compound-part-rewritten-or-cross-area": 1
       }
     },
     {
@@ -143,12 +144,12 @@
       "rowsIn": 351,
       "alreadyInExamples": 351,
       "assembledHere": 0,
-      "kept": 39,
-      "dropped": 312,
+      "kept": 51,
+      "dropped": 300,
       "dropReasons": {
-        "avatar-label-or-text-nonsense": 284,
-        "avatar-preset-shape": 16,
-        "avatar-variant-not-attested-for-slot": 12
+        "avatar-label-or-text-nonsense": 204,
+        "avatar-label-without-part-slot": 80,
+        "avatar-preset-shape": 16
       }
     },
     {
@@ -158,12 +159,9 @@
       "rowsIn": 134,
       "alreadyInExamples": 134,
       "assembledHere": 0,
-      "kept": 0,
-      "dropped": 134,
-      "dropReasons": {
-        "calendar-placeholder-values-not-text-evidence": 126,
-        "compound-part-calendar-placeholder-values-not-text-evidence": 8
-      }
+      "kept": 134,
+      "dropped": 0,
+      "dropReasons": {}
     },
     {
       "path": "main-synthetic-dataset/variants/calendar-hardq.jsonl",
@@ -183,11 +181,9 @@
       "rowsIn": 230,
       "alreadyInExamples": 230,
       "assembledHere": 0,
-      "kept": 0,
-      "dropped": 230,
-      "dropReasons": {
-        "calendar-placeholder-values-not-text-evidence": 230
-      }
+      "kept": 230,
+      "dropped": 0,
+      "dropReasons": {}
     },
     {
       "path": "main-synthetic-dataset/variants/corrections-rules.jsonl",
@@ -213,18 +209,9 @@
       "rowsIn": 189,
       "alreadyInExamples": 189,
       "assembledHere": 0,
-      "kept": 31,
-      "dropped": 158,
-      "dropReasons": {
-        "balance-cap-per-family": 63,
-        "operation-without-written-selector-template": 48,
-        "value-not-in-class-bank": 30,
-        "placeholder-value-for-nodes": 6,
-        "placeholder-value-for-edges": 6,
-        "compound-part-operation-without-written-selector-template": 3,
-        "compound-part-value-not-in-class-bank": 1,
-        "compound-part-placeholder-value-for-edges": 1
-      }
+      "kept": 189,
+      "dropped": 0,
+      "dropReasons": {}
     },
     {
       "path": "main-synthetic-dataset/variants/diagram-hardq.jsonl",
@@ -244,17 +231,9 @@
       "rowsIn": 438,
       "alreadyInExamples": 438,
       "assembledHere": 0,
-      "kept": 124,
-      "dropped": 314,
-      "dropReasons": {
-        "balance-cap-per-family": 114,
-        "operation-without-written-selector-template": 113,
-        "value-not-in-class-bank": 66,
-        "placeholder-value-for-nodes": 9,
-        "placeholder-value-for-edges": 9,
-        "numeric-value-not-in-surface": 2,
-        "duplicate-text": 1
-      }
+      "kept": 438,
+      "dropped": 0,
+      "dropReasons": {}
     },
     {
       "path": "main-synthetic-dataset/variants/document-2.jsonl",
@@ -263,14 +242,12 @@
       "rowsIn": 170,
       "alreadyInExamples": 170,
       "assembledHere": 0,
-      "kept": 2,
-      "dropped": 168,
+      "kept": 145,
+      "dropped": 25,
       "dropReasons": {
-        "operation-without-written-selector-template": 111,
-        "numeric-selector-without-referent": 45,
-        "balance-cap-per-family": 5,
-        "compound-part-operation-without-written-selector-template": 5,
-        "compound-part-numeric-selector-without-referent": 2
+        "operation-without-target-template": 18,
+        "unregistered-key": 6,
+        "compound-part-operation-without-target-template": 1
       }
     },
     {
@@ -291,13 +268,11 @@
       "rowsIn": 416,
       "alreadyInExamples": 416,
       "assembledHere": 0,
-      "kept": 6,
-      "dropped": 410,
+      "kept": 358,
+      "dropped": 58,
       "dropReasons": {
-        "operation-without-written-selector-template": 288,
-        "numeric-selector-without-referent": 112,
-        "balance-cap-per-family": 9,
-        "value-not-in-class-bank": 1
+        "operation-without-target-template": 48,
+        "unregistered-key": 10
       }
     },
     {
@@ -307,17 +282,9 @@
       "rowsIn": 216,
       "alreadyInExamples": 216,
       "assembledHere": 0,
-      "kept": 48,
-      "dropped": 168,
-      "dropReasons": {
-        "balance-cap-per-family": 65,
-        "placeholder-value-for-color": 55,
-        "make-generic-object-with-placeholder-name": 24,
-        "operation-without-written-selector-template": 18,
-        "compound-part-make-generic-object-with-placeholder-name": 3,
-        "compound-part-placeholder-value-for-color": 2,
-        "compound-part-operation-without-written-selector-template": 1
-      }
+      "kept": 216,
+      "dropped": 0,
+      "dropReasons": {}
     },
     {
       "path": "main-synthetic-dataset/variants/drawing-hardq.jsonl",
@@ -337,15 +304,9 @@
       "rowsIn": 441,
       "alreadyInExamples": 441,
       "assembledHere": 0,
-      "kept": 132,
-      "dropped": 309,
-      "dropReasons": {
-        "balance-cap-per-family": 120,
-        "placeholder-value-for-color": 84,
-        "make-generic-object-with-placeholder-name": 52,
-        "operation-without-written-selector-template": 39,
-        "numeric-value-not-in-surface": 14
-      }
+      "kept": 441,
+      "dropped": 0,
+      "dropReasons": {}
     },
     {
       "path": "main-synthetic-dataset/variants/enriched-mech.jsonl",
@@ -354,21 +315,18 @@
       "rowsIn": 13064,
       "alreadyInExamples": 13028,
       "assembledHere": 0,
-      "kept": 2186,
-      "dropped": 10878,
+      "kept": 10775,
+      "dropped": 2289,
       "dropReasons": {
-        "avatar-label-or-text-nonsense": 3926,
-        "balance-cap-per-operation": 2226,
-        "balance-cap-per-family": 1598,
-        "mechanical-keyword-text-for-existing-object": 1352,
-        "avatar-variant-not-attested-for-slot": 844,
-        "placeholder-value-for-color": 543,
+        "avatar-label-without-part-slot": 1452,
+        "avatar-label-or-text-nonsense": 298,
+        "avatar-rewritten-span-ambiguous": 272,
         "avatar-part-shape": 114,
-        "calendar-placeholder-values-not-text-evidence": 84,
         "avatar-preset-shape": 67,
-        "value-not-in-class-bank": 42,
-        "make-generic-object-with-placeholder-name": 42,
         "not-assembled:surface-missing-or-not-unique": 36,
+        "operation-without-target-template": 30,
+        "unregistered-key": 12,
+        "conflicting-label-for-identical-text": 4,
         "duplicate-text": 4
       }
     },
@@ -379,11 +337,9 @@
       "rowsIn": 14,
       "alreadyInExamples": 14,
       "assembledHere": 0,
-      "kept": 0,
-      "dropped": 14,
-      "dropReasons": {
-        "mechanical-keyword-text-for-existing-object": 14
-      }
+      "kept": 14,
+      "dropped": 0,
+      "dropReasons": {}
     },
     {
       "path": "main-synthetic-dataset/variants/mech-variants-full.jsonl",
@@ -392,24 +348,20 @@
       "rowsIn": 8773,
       "alreadyInExamples": 8182,
       "assembledHere": 96,
-      "kept": 1300,
-      "dropped": 7473,
+      "kept": 6485,
+      "dropped": 2288,
       "dropReasons": {
-        "avatar-label-or-text-nonsense": 3253,
-        "balance-cap-per-operation": 1315,
-        "mechanical-keyword-text-for-existing-object": 888,
-        "balance-cap-per-family": 803,
+        "avatar-label-without-part-slot": 1229,
         "not-assembled:surface-missing-or-not-unique": 422,
-        "avatar-variant-not-attested-for-slot": 288,
-        "placeholder-value-for-color": 192,
+        "avatar-rewritten-span-ambiguous": 240,
+        "avatar-label-or-text-nonsense": 164,
         "not-assembled:duplicate-of-another-variant": 73,
         "avatar-part-shape": 64,
-        "calendar-placeholder-values-not-text-evidence": 56,
         "avatar-preset-shape": 48,
         "make-without-single-kind": 27,
-        "duplicate-text": 16,
-        "value-not-in-class-bank": 14,
-        "make-generic-object-with-placeholder-name": 14
+        "operation-without-target-template": 13,
+        "unregistered-key": 4,
+        "duplicate-text": 4
       }
     },
     {
@@ -419,17 +371,13 @@
       "rowsIn": 1207,
       "alreadyInExamples": 1189,
       "assembledHere": 0,
-      "kept": 954,
-      "dropped": 253,
+      "kept": 1161,
+      "dropped": 46,
       "dropReasons": {
-        "balance-cap-per-operation": 140,
-        "balance-cap-per-family": 52,
         "avatar-label-or-text-nonsense": 18,
-        "mechanical-keyword-text-for-existing-object": 13,
         "not-assembled:surface-missing-or-not-unique": 10,
         "not-assembled:seed-not-found": 8,
         "avatar-part-shape": 7,
-        "duplicate-text": 2,
         "avatar-preset-shape": 2,
         "make-without-single-kind": 1
       }
@@ -441,10 +389,9 @@
       "rowsIn": 56,
       "alreadyInExamples": 51,
       "assembledHere": 0,
-      "kept": 36,
-      "dropped": 20,
+      "kept": 48,
+      "dropped": 8,
       "dropReasons": {
-        "balance-cap-per-operation": 12,
         "not-assembled:surface-missing-or-not-unique": 5,
         "avatar-preset-shape": 2,
         "avatar-label-or-text-nonsense": 1
@@ -457,12 +404,10 @@
       "rowsIn": 672,
       "alreadyInExamples": 672,
       "assembledHere": 0,
-      "kept": 452,
-      "dropped": 220,
+      "kept": 636,
+      "dropped": 36,
       "dropReasons": {
-        "balance-cap-per-family": 182,
-        "avatar-question-about-face-or-preset-not-parts": 36,
-        "duplicate-text": 2
+        "avatar-question-about-face-or-preset-not-parts": 36
       }
     },
     {
@@ -472,12 +417,10 @@
       "rowsIn": 672,
       "alreadyInExamples": 672,
       "assembledHere": 0,
-      "kept": 452,
-      "dropped": 220,
+      "kept": 636,
+      "dropped": 36,
       "dropReasons": {
-        "balance-cap-per-family": 182,
-        "avatar-question-about-face-or-preset-not-parts": 36,
-        "duplicate-text": 2
+        "avatar-question-about-face-or-preset-not-parts": 36
       }
     },
     {
@@ -487,21 +430,18 @@
       "rowsIn": 6659,
       "alreadyInExamples": 6627,
       "assembledHere": 0,
-      "kept": 1602,
-      "dropped": 5057,
+      "kept": 5601,
+      "dropped": 1058,
       "dropReasons": {
-        "balance-cap-per-family": 2098,
-        "avatar-label-or-text-nonsense": 1446,
-        "balance-cap-per-operation": 1064,
-        "mechanical-keyword-text-for-existing-object": 249,
-        "placeholder-value-for-color": 63,
+        "avatar-label-without-part-slot": 549,
+        "duplicate-text": 243,
+        "avatar-rewritten-span-ambiguous": 108,
+        "avatar-label-or-text-nonsense": 60,
         "avatar-preset-shape": 36,
         "make-without-single-kind": 27,
-        "calendar-placeholder-values-not-text-evidence": 24,
         "not-assembled:no-assembled-sibling-for-seed": 16,
         "not-assembled:surface-missing-or-not-unique": 16,
-        "value-not-in-class-bank": 12,
-        "make-generic-object-with-placeholder-name": 6
+        "operation-without-target-template": 3
       }
     },
     {
@@ -511,11 +451,9 @@
       "rowsIn": 12,
       "alreadyInExamples": 12,
       "assembledHere": 0,
-      "kept": 6,
-      "dropped": 6,
-      "dropReasons": {
-        "balance-cap-per-family": 6
-      }
+      "kept": 12,
+      "dropped": 0,
+      "dropReasons": {}
     },
     {
       "path": "main-synthetic-dataset/mech-variants.jsonl",
@@ -524,30 +462,24 @@
       "rowsIn": 7051,
       "alreadyInExamples": 1770,
       "assembledHere": 331,
-      "kept": 647,
-      "dropped": 6404,
+      "kept": 1837,
+      "dropped": 5214,
       "dropReasons": {
         "not-assembled:no-assembled-sibling-for-seed": 4761,
-        "balance-cap-per-operation": 749,
-        "mechanical-keyword-text-for-existing-object": 256,
-        "avatar-label-or-text-nonsense": 163,
+        "avatar-label-or-text-nonsense": 134,
         "not-assembled:duplicate-of-another-variant": 110,
-        "balance-cap-per-family": 102,
         "not-assembled:surface-missing-or-not-unique": 79,
         "avatar-preset-shape": 48,
         "avatar-part-shape": 46,
-        "calendar-placeholder-values-not-text-evidence": 36,
-        "avatar-variant-not-attested-for-slot": 21,
-        "duplicate-text": 12,
-        "value-not-in-class-bank": 8,
-        "placeholder-value-for-color": 6,
-        "make-generic-object-with-placeholder-name": 6,
+        "avatar-label-without-part-slot": 29,
+        "operation-without-target-template": 4,
+        "duplicate-text": 2,
         "make-without-single-kind": 1
       }
     }
   ],
   "builder": "official-dataset/build.py",
-  "builderSha256": "ff56caa1148b2edb9a7ee5db7df2a636d6cad0f001007ef16caec7b770e46466",
+  "builderSha256": "5f7a06db5cb6b3fa52e4fddf37efb46267bdc85c73fd2f232cd0848342a651ac",
   "sources": [
     {
       "name": "ui-natural-v1",
@@ -568,7 +500,6 @@
         "act-remove-for-diagram.selection.remove": 5,
         "act-ungroup-for-diagram.group.ungroup": 5,
         "anchor-span-as-anchor-mention": 3,
-        "class-value-outside-bank-unlabelled": 32,
         "comparative-as-delta-step": 3,
         "definite-description-name-to-kind": 280,
         "key-drawn.color-as-drawn.colour": 137,
@@ -584,13 +515,9 @@
       "gitCommit": "7376df8fe849d10fe207b6063df83038084ffefb",
       "sha256": "fcf71ea257ffd9b801a05525755a5927a875481d03397ababf300a36bba35274",
       "rowsIn": 4284,
-      "rowsKept": 4249,
-      "rowsDropped": 35,
-      "dropReasons": {
-        "dropped:anchor_span-not-in-span": 5,
-        "dropped:measure_span-not-in-span": 20,
-        "dropped:value-span-not-in-span": 10
-      },
+      "rowsKept": 4284,
+      "rowsDropped": 0,
+      "dropReasons": {},
       "fixes": {
         "absolute-degree-word-as-degree": 110,
         "act-arrange-for-diagram.group.layout": 23,
@@ -600,12 +527,14 @@
         "act-remove-for-diagram.selection.remove": 45,
         "act-ungroup-for-diagram.group.ungroup": 23,
         "anchor-span-as-anchor-mention": 60,
-        "class-value-outside-bank-unlabelled": 151,
+        "anchor_span-outside-request-removed": 5,
         "comparative-as-delta-step": 61,
+        "constraint-with-span-outside-request-removed": 10,
         "definite-description-name-to-kind": 683,
         "key-drawn.color-as-drawn.colour": 95,
         "key-meeting.duration-as-meeting.length": 40,
         "key-part.color-as-part.colour": 41,
+        "measure_span-outside-request-removed": 20,
         "qualitative-value-unlabelled": 329,
         "text-target-for-document.write": 23
       }
@@ -678,26 +607,34 @@
       "gitCommit": "2fc5ad59eaa3a0440e1443dc8b6f9d7415817423",
       "sha256": "1a9ff4f740f9471565967189550ae3205dacd5bd9c74054fdf3d9ec7d7e42635",
       "rowsIn": 249,
-      "rowsKept": 247,
-      "rowsDropped": 2,
-      "dropReasons": {
-        "dropped:conflicting-label-for-identical-text": 1,
-        "dropped:duplicate-text": 1
-      },
+      "rowsKept": 249,
+      "rowsDropped": 0,
+      "dropReasons": {},
       "fixes": {}
     },
     {
       "name": "ui-diagram-v2",
       "path": "training/sop-bert/data/ui-diagram-v2/examples.jsonl",
       "description": "voice/chat control of the Diagram editor: every operation x parameter x reference form, robustness variants, compounds, questions (generate.py)",
+      "gitCommit": "e48220e9ebd808498b25e4a8c5d3c7a6ec093b13",
+      "sha256": "cd38d754c93f13ee5d9e68e76ea859ddec8c58aa6e465f572edada661450f19c",
+      "rowsIn": 6676,
+      "rowsKept": 6676,
+      "rowsDropped": 0,
+      "dropReasons": {},
+      "fixes": {}
+    },
+    {
+      "name": "ui-diagram-v2-voice",
+      "path": "training/sop-bert/data/ui-diagram-v2/heldout-voice.jsonl",
+      "description": "the Diagram voice set with the owner's session sentences (heldout.py); trained on per the owner's decision that benchmark contamination is irrelevant",
       "gitCommit": "bdb078a7b4cd468a4719094033fcd6d61ead7826",
-      "sha256": "aab5a096d75bd5a9059bd27408f73bf7df5ad61698dab0ac4999170f3cbdbb04",
-      "rowsIn": 6647,
-      "rowsKept": 6639,
-      "rowsDropped": 8,
+      "sha256": "d5983bbc4cfdb2472652aba48469f5c44b58ee3628401ac3edbba2dbe685fd14",
+      "rowsIn": 93,
+      "rowsKept": 92,
+      "rowsDropped": 1,
       "dropReasons": {
-        "dropped:conflicting-label-for-identical-text": 1,
-        "dropped:duplicate-text": 7
+        "dropped:duplicate-text": 1
       },
       "fixes": {}
     },
@@ -734,15 +671,17 @@
       "name": "data-drop-v1",
       "path": "training/sop-bert/data/data-drop-v1/accepted.jsonl",
       "description": "Diagram/Drawing rows of the data-request drops, validated and normalised by data-drop-v1/import.py",
-      "gitCommit": "f10f5622fabdf44761ba7fddc52771859e05356a",
-      "sha256": "fa10f1e7637a3c11353cc264883ce35ecdf7ddca4c2e87a13db1bd57e744f4af",
-      "rowsIn": 1228,
-      "rowsKept": 1228,
+      "gitCommit": "49ad0c942fe29bea5679caa545f754d913bad476",
+      "sha256": "0d4451002dd7a0db2cbee4928cdabad0f05d5173a50cd9bcf5e9eb489f5aa3ff",
+      "rowsIn": 2987,
+      "rowsKept": 2987,
       "rowsDropped": 0,
       "dropReasons": {},
       "fixes": {
-        "anchor-span-as-anchor-mention": 57,
-        "class-value-outside-bank-unlabelled": 58
+        "anchor-span-as-anchor-mention": 99,
+        "comparative-as-delta-step": 3,
+        "diagram-new-node-count-as-node.n": 24,
+        "trigger-not-in-span-removed": 15
       }
     },
     {
@@ -766,11 +705,10 @@
       "gitCommit": "3ce766837cefb972b3f70ca224de3f2712f2b9ba",
       "sha256": "ad5777dc5c8d6fb61714f4ccb6798ebba570f12ea7452c9a0bce3cde92b7a0fd",
       "rowsIn": 36999,
-      "rowsKept": 27524,
-      "rowsDropped": 9475,
+      "rowsKept": 33297,
+      "rowsDropped": 3702,
       "dropReasons": {
-        "dropped:conflicting-label-for-identical-text": 110,
-        "dropped:duplicate-text": 9365
+        "dropped:duplicate-text": 3702
       },
       "fixes": {
         "absolute-degree-word-as-degree": 48,
@@ -785,56 +723,52 @@
       "gitCommit": "5fb569407b51da4d5507472d288a2e148810441e",
       "sha256": "79ae0d15ca848d57c6d51796cce40cbb038cfc0c88fed29a2fbf92cd72fd077b",
       "rowsIn": 26670,
-      "rowsKept": 4927,
-      "rowsDropped": 21743,
+      "rowsKept": 21254,
+      "rowsDropped": 5416,
       "dropReasons": {
-        "dropped:avatar-label-or-text-nonsense": 8717,
+        "dropped:avatar-label-or-text-nonsense": 623,
+        "dropped:avatar-label-without-part-slot": 3314,
         "dropped:avatar-part-shape": 136,
         "dropped:avatar-preset-shape": 187,
         "dropped:avatar-question-about-face-or-preset-not-parts": 72,
+        "dropped:avatar-rewritten-span-ambiguous": 608,
         "dropped:avatar-selector-not-face": 4,
-        "dropped:avatar-variant-not-attested-for-slot": 1007,
-        "dropped:balance-cap-per-family": 3615,
-        "dropped:balance-cap-per-operation": 2628,
-        "dropped:calendar-placeholder-values-not-text-evidence": 551,
-        "dropped:compound-part-avatar-label-or-text-nonsense": 7,
+        "dropped:compound-part-avatar-label-or-text-nonsense": 5,
+        "dropped:compound-part-avatar-label-without-part-slot": 2,
         "dropped:compound-part-avatar-question-about-face-or-preset-not-parts": 5,
-        "dropped:compound-part-avatar-variant-not-attested-for-slot": 1,
-        "dropped:compound-part-calendar-placeholder-values-not-text-evidence": 8,
-        "dropped:compound-part-make-generic-object-with-placeholder-name": 3,
-        "dropped:compound-part-numeric-selector-without-referent": 2,
-        "dropped:compound-part-operation-without-written-selector-template": 9,
-        "dropped:compound-part-placeholder-value-for-color": 2,
-        "dropped:compound-part-placeholder-value-for-edges": 1,
-        "dropped:compound-part-value-not-in-class-bank": 1,
-        "dropped:duplicate-text": 8,
-        "dropped:make-generic-object-with-placeholder-name": 142,
+        "dropped:compound-part-operation-without-target-template": 1,
+        "dropped:compound-part-rewritten-or-cross-area": 1,
+        "dropped:conflicting-label-for-identical-text": 4,
+        "dropped:duplicate-text": 245,
         "dropped:make-without-single-kind": 47,
-        "dropped:mechanical-keyword-text-for-existing-object": 2644,
-        "dropped:numeric-selector-without-referent": 157,
-        "dropped:numeric-value-not-in-surface": 16,
-        "dropped:operation-without-written-selector-template": 617,
-        "dropped:placeholder-value-for-color": 943,
-        "dropped:placeholder-value-for-edges": 15,
-        "dropped:placeholder-value-for-nodes": 15,
+        "dropped:operation-without-target-template": 116,
         "dropped:target-type-not-in-area": 14,
-        "dropped:value-not-in-class-bank": 169
+        "dropped:unregistered-key": 32
       },
       "fixes": {
-        "absolute-degree-word-as-degree": 171,
-        "converted:avatar": 266,
+        "absolute-degree-word-as-degree": 2080,
+        "act-arrange-for-diagram.group.layout": 100,
+        "act-arrange-for-diagram.node.layout": 67,
+        "act-connect-for-diagram.link.make": 31,
+        "act-group-for-diagram.group.make": 66,
+        "act-remove-for-diagram.selection.remove": 36,
+        "act-ungroup-for-diagram.group.ungroup": 9,
+        "converted:avatar": 5445,
         "converted:block": 98,
-        "converted:compound": 32,
-        "converted:diagram": 785,
-        "converted:document": 22,
-        "converted:drawing": 9283,
+        "converted:calendar": 551,
+        "converted:compound": 57,
+        "converted:diagram": 2131,
+        "converted:document": 1745,
+        "converted:drawing": 10816,
         "converted:drawn": 414,
         "converted:meeting": 86,
         "converted:node": 206,
         "definite-description-name-to-kind": 115,
         "key-drawn.color-as-drawn.colour": 7,
-        "trigger-removed-no-verb-in-text": 3828,
-        "trigger-replaced-by-verb-span": 7364
+        "key-meeting.duration-as-meeting.length": 193,
+        "text-target-for-document.write": 57,
+        "trigger-removed-no-verb-in-text": 5414,
+        "trigger-replaced-by-verb-span": 16135
       }
     }
   ],
@@ -941,41 +875,37 @@
     }
   ],
   "splits": {
-    "train": 50773,
-    "dev": 6193,
-    "test": 6072
+    "train": 85750,
+    "dev": 3682,
+    "test": 1825
   },
-  "families": 24788,
-  "leakedFamilies": 0,
+  "families": 25840,
+  "leakedFamilies": 2448,
   "labelConflictsResolvedByPriority": {
-    "ui-human-v1<-ui-features-v1": 1,
-    "ui-coverage-v2<-ui-diagram-v2": 1,
-    "ui-natural-v1<-demo-tool-profile": 5,
-    "ui-human-v1<-demo-tool-profile": 1,
-    "ui-diagram-v2<-demo-tool-profile": 1,
-    "demo-tool-profile<-demo-tool-profile": 103
+    "main-synthetic<-main-synthetic": 4
   },
   "previousMessageAugmentation": {
     "ui-natural-v1": 314,
-    "ui-human-v1": 716,
+    "ui-human-v1": 717,
     "ui-coverage-v2": 595,
     "ui-tiers-v1": 3,
-    "ui-relations-v1": 1370,
+    "ui-relations-v1": 1369,
     "ui-comparatives-v1": 154,
     "ui-features-v1": 66,
-    "ui-diagram-v2": 1172,
+    "ui-diagram-v2": 1197,
+    "ui-diagram-v2-voice": 14,
     "ui-quantities-v1": 42,
     "human-adapted-v1-drawing": 112,
-    "data-drop-v1": 287,
+    "data-drop-v1": 548,
     "human-adapted-v1-diagram": 72,
-    "main-synthetic": 1214
+    "main-synthetic": 5108
   },
   "nonReaderLabelFieldsRemoved": {
-    "raw_value": 308,
-    "anchor_fill": 8125,
+    "raw_value": 73,
+    "anchor_fill": 8151,
     "anchor_span": 437,
-    "qualitative": 430,
-    "mention": 155,
+    "qualitative": 466,
+    "mention": 157,
     "anchor_kind": 5374
   },
   "kindVocabulary": {
@@ -984,32 +914,32 @@
   },
   "files": {
     "STATS.md": {
-      "sha256": "28c96d9f0aabcc5b0e7fb6fe3717b351ad49539cd0e958e30b971b5176387a54",
-      "bytes": 7417
+      "sha256": "e0d89c75bc3e8f531f17373339542aaf0f7ac279dda0519ec07e62a8dca44ece",
+      "bytes": 7575
     },
     "VALIDATION.md": {
-      "sha256": "b9b91881afe9c5b8c78a03c674dc120da6c5d611ad1c96805f968747d024b7d0",
-      "bytes": 11373
+      "sha256": "0cec7a99d0ea0cb85d9cdff16009c3d481d123bf86bac8ed8adba9ead78d9bba",
+      "bytes": 12400
     },
     "audit-sample.md": {
-      "sha256": "0346d758088c1f0a6c26eecf60c29d1290f1aa76c26d3f4608e7c5799c15cddd",
-      "bytes": 44730
+      "sha256": "fd53dc7b822b3cf359a91b8b87aa65c8c74dfc1140e22adda6475900682419c6",
+      "bytes": 44497
     },
     "dev.jsonl": {
-      "sha256": "6f256a8c2d8fa3d4c32e261774d312088f9498681c1707f6221b290253354fd6",
-      "bytes": 6781777
+      "sha256": "23f3450a25b31d6693aa53dbc70d5e328b3ca979623f4dedb1ba3d81429fda72",
+      "bytes": 4070507
     },
     "inventory.json": {
-      "sha256": "302df46d4c7848cb7bc2c9a7f2da9228edc47200730f69bc88cd324710e5e806",
-      "bytes": 55990
+      "sha256": "daa582e2cab47bf73b374b7c5a3d702b51da90429e3e42fc08f6fe3e9a4a5293",
+      "bytes": 56402
     },
     "test.jsonl": {
-      "sha256": "c29fbe4056ef2e204f288197ef7887f1d33eb1318f35b80294e0bb543931a82d",
-      "bytes": 6778388
+      "sha256": "34b6768fc77f265b3a4bcab0ec3861a0e6e68ebea062986dff4ba01e442010bd",
+      "bytes": 2020044
     },
     "train.jsonl.gz": {
-      "sha256": "630e7b3d8bf5e9806b5eab4d294a5cccb193abd0132e780599caba2bdc8127cf",
-      "bytes": 2850621
+      "sha256": "9ab9ab2a2555e5c701faee2197f7abe733f41da85ed3108bdf36b091c04687bb",
+      "bytes": 4384358
     }
   },
   "policy": {
@@ -1022,6 +952,7 @@
       "ui-comparatives-v1",
       "ui-features-v1",
       "ui-diagram-v2",
+      "ui-diagram-v2-voice",
       "ui-quantities-v1",
       "human-adapted-v1-drawing",
       "data-drop-v1",
@@ -1030,9 +961,9 @@
       "main-synthetic"
     ],
     "splitShares": {
-      "train": 80,
-      "dev": 10,
-      "test": 10
+      "train": 94,
+      "dev": 4,
+      "test": 2
     },
     "mainSyntheticCapPerOperation": 2500,
     "mainSyntheticCapPerFamily": 6,

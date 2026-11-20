@@ -15,8 +15,8 @@
  *
  * Output: { id, text, status: 'understood' | 'not_understood', winner, produced, notUnderstood, why, trace }.
  */
-import { perf } from '../formalizer/perf.mjs';
-import { guard } from '../formalizer/guard.mjs';
+import { perf } from './stage-perf.mjs';
+import { guard } from './turn-guard.mjs';
 import { formalize, FormSession } from '../formalizer/index.mjs';
 import { youTarget } from '../formalizer/rules/index.mjs';
 import { serialize } from '../soplang/index.mjs';

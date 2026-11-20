@@ -2,6 +2,7 @@
 // preset, the presets' kinds, the features of each part and the feature command, the colour scope and fitting colours,
 // the words for a part and the optional slots. All are rules of worlds/ui.avatar/act-rules.sop over the catalog
 // (k.faces); the expected values here are read from the same catalog, not written per part.
+import{PINNED_CATALOG}from'./fixtures/pinned-catalog.mjs';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
@@ -11,7 +12,7 @@ import {toolInvocationContext} from '../worlds/native-tool-host.mjs';
 import NATIVE_INTERFACE from '../worlds/ui.avatar/native-interface-source.mjs';
 import {parse,str} from '../src/vendor/sopworld/sopworld.mjs';
 
-const K=new URL('../../sop-knowledge-worlds/docs/worlds/',import.meta.url);
+const K=PINNED_CATALOG;
 const available=existsSync(new URL('k.faces/shards/words.sop',K));
 const skip=available?false:'knowledge with k.faces unavailable';
 const options={world:'ui.avatar',interfaceSource:NATIVE_INTERFACE,

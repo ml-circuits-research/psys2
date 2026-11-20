@@ -1,0 +1,45 @@
+# k.wearables: what is worn where. The places on the body where things are worn, and the things people wear:
+# where each is worn, what else it covers, in which layer, with its drawing in k.objects and its variant in k.faces.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written); the shards are written by tools/wearables-core.mjs
+
+@k.wearables core.module name=k.wearables version=2 imports=k.named exports=place exports=wearable core.source="hand-core 1"
+
+# A place on the body where things are worn. `x`, `y`, `w`, `h` are its box on the drawing `person` of k.objects, in
+# the frame of that drawing (0 to 100, x to the right, y downwards): the anchor for a thing worn there.
+# `pair=true`: there are two (ears, hands, feet); the box is the one on the viewer's left and the other is its
+# mirror image at x=50. `face_slot` names the k.faces slot (style plain) that draws what is worn there on a face:
+# the box of that slot is the anchor on a face. `body_part` names the k.body part. `named=model`: the box was
+# placed by a language model and checked by drawing it on the person.
+@k.wearables.place core.type of=k.wearables.place extends=k.named.labelled shared=true closed=true core.source="hand-core 1"
+@k.wearables.place.name core.slot of=k.wearables.place key=name id=true required=true kind=atom core.source="hand-core 1"
+@k.wearables.place.about core.slot of=k.wearables.place key=about required=true kind=string core.source="hand-core 1"
+@k.wearables.place.face_slot core.slot of=k.wearables.place key=face_slot kind=atom type=k.faces.slot by=name core.source="hand-core 1"
+@k.wearables.place.body_part core.slot of=k.wearables.place key=body_part kind=atom type=k.body.part by=name core.source="hand-core 1"
+@k.wearables.place.x core.slot of=k.wearables.place key=x required=true kind=number min=0 max=100 core.source="hand-core 1"
+@k.wearables.place.y core.slot of=k.wearables.place key=y required=true kind=number min=0 max=100 core.source="hand-core 1"
+@k.wearables.place.w core.slot of=k.wearables.place key=w required=true kind=number min=0 max=100 core.source="hand-core 1"
+@k.wearables.place.h core.slot of=k.wearables.place key=h required=true kind=number min=0 max=100 core.source="hand-core 1"
+@k.wearables.place.pair core.slot of=k.wearables.place key=pair kind=boolean core.source="hand-core 1"
+
+# A thing people wear. `worn_on` names the place it sits on; `covers` (many) the other places it also covers (a
+# coat: arms, legs). `layer`: under (next to the skin), main, over (on top of the main clothes); a host draws
+# under first. `pair=true`: two are worn (shoes, gloves). `drawing` names its drawing in k.objects, where there
+# is one; `face_slot` and `face` name the k.faces slot and its variant (style plain) that show it on a face (cap:
+# slot hat, variant "cap"; bow tie: slot shoulders, variant "bow tie"). `figure_slot` and `figure` name the slot and
+# variant of the style figure of k.faces that show it on a whole drawn person (t-shirt: slot top, variant "t-shirt"). `worn_for` (many) says when or why it is worn (cold, rain, sun, sleep, swimming, sport,
+# work, safety, party, looks). Other words are core.word facts (trousers: pants; jumper: sweater).
+@k.wearables.wearable core.type of=k.wearables.wearable shared=true closed=true core.source="hand-core 1"
+@k.wearables.wearable.name core.slot of=k.wearables.wearable key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.wearables.wearable.kind core.slot of=k.wearables.wearable key=kind required=true enum=headwear enum=eyewear enum=facewear enum=neckwear enum=top enum=coat enum=whole enum=bottom enum=underwear enum=footwear enum=handwear enum=jewellery enum=accessory enum=protective enum=bag enum=device core.source="hand-core 1"
+@k.wearables.wearable.worn_on core.slot of=k.wearables.wearable key=worn_on required=true kind=atom type=k.wearables.place by=name core.source="hand-core 1"
+@k.wearables.wearable.covers core.slot of=k.wearables.wearable key=covers many=true kind=atom type=k.wearables.place by=name core.source="hand-core 1"
+@k.wearables.wearable.layer core.slot of=k.wearables.wearable key=layer required=true enum=under enum=main enum=over core.source="hand-core 1"
+@k.wearables.wearable.pair core.slot of=k.wearables.wearable key=pair kind=boolean core.source="hand-core 1"
+@k.wearables.wearable.drawing core.slot of=k.wearables.wearable key=drawing kind=atom kind=string type=k.objects.object by=name core.source="hand-core 1"
+@k.wearables.wearable.face_slot core.slot of=k.wearables.wearable key=face_slot kind=atom type=k.faces.slot by=name core.source="hand-core 1"
+@k.wearables.wearable.face core.slot of=k.wearables.wearable key=face kind=atom kind=string core.source="hand-core 1"
+@k.wearables.wearable.figure_slot core.slot of=k.wearables.wearable key=figure_slot kind=atom type=k.faces.slot by=name core.source="hand-core 1"
+@k.wearables.wearable.figure core.slot of=k.wearables.wearable key=figure kind=atom kind=string core.source="hand-core 1"
+@k.wearables.wearable.worn_for core.slot of=k.wearables.wearable key=worn_for many=true kind=atom kind=string core.source="hand-core 1"

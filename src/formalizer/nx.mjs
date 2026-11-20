@@ -26,8 +26,8 @@ import { lexIndex } from '../worlds/lexicon.mjs';
 import { compilePattern, formalize } from './rules/index.mjs';
 import { candidateSegmentations } from './dispatcher-runtime.mjs';
 import { atom } from '../soplang/index.mjs';
-import { perf } from './perf.mjs';
-import { guard, TurnAborted } from './guard.mjs';
+import { perf } from '../dialog/stage-perf.mjs';
+import { guard, TurnAborted } from '../dialog/turn-guard.mjs';
 
 import { NX_STRATEGIES, DEFAULT_NX_STRATEGY, normalizeNxStrategy } from './nx-strategy.mjs';
 export { NX_STRATEGIES, DEFAULT_NX_STRATEGY, normalizeNxStrategy };

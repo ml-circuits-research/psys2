@@ -8,6 +8,7 @@
 // Multi-selection lives here (the area's view keeps one selected id); it is sent with the declared select commands.
 import { mountInspectorSplitter } from '../pane-splitter.mjs';
 import { makeInspector } from './diagram/inspector.mjs';
+import { makePageBar, makeStylePanels, TOOLS_STYLE } from './diagram/tools.mjs';
 
 const VIEW = 'diagram', WORLD = 'diagram.sketch';
 const NS = 'http://www.w3.org/2000/svg';
@@ -62,7 +63,7 @@ const STYLE = `
 `;
 function ensureCss() {
   if (document.getElementById('p2-diagram-css')) return;
-  const style = document.createElement('style'); style.id = 'p2-diagram-css'; style.textContent = STYLE; document.head.append(style);
+  const style = document.createElement('style'); style.id = 'p2-diagram-css'; style.textContent = STYLE + TOOLS_STYLE; document.head.append(style);
 }
 
 /** The tab's model of a projection: nodes, links and groups by id with their observed geometry and inputs. */
@@ -70,11 +71,11 @@ function modelOf(state) {
   const node = new Map(), link = new Map(), group = new Map(), inputs = state?.inputs ?? {}, boxes = state?.boxes ?? {};
   for (const object of state?.objects ?? []) {
     const input = inputs[object.id] ?? {}, id = object.id, selected = object.selected === 'true' || object.selected === true;
-    if (object.binding === 'diagram.node') node.set(id, { id, kind: object.kind, x: Number(object.x), y: Number(object.y), w: Number(object.width), h: Number(object.height), box: boxes[id] ?? null, label: input.label, colour: input.colour, size: input.size, value: input.value, group: input.group, selected });
-    else if (object.binding === 'diagram.link') link.set(id, { id, from: object.from, to: object.to, label: input.label, colour: input.colour, style: input.style, arrow: input.arrow, width: input.width, selected });
-    else if (object.binding === 'diagram.group') group.set(id, { id, label: object.label ?? input.label, layout: input.layout, scale: input.scale, members: [].concat(input.members ?? []), box: boxes[id] ?? null, selected });
+    if (object.binding === 'diagram.node') node.set(id, { id, kind: object.kind, x: Number(object.x), y: Number(object.y), w: Number(object.width), h: Number(object.height), box: boxes[id] ?? null, label: input.label, colour: input.colour, size: input.size, value: input.value, group: input.group, outline: input.outline, textColour: input.textColour, fontSize: input.fontSize, fontWeight: input.fontWeight, effect: input.effect, opacity: input.opacity, corner: input.corner, rotation: input.rotation, role: input.role, selected });
+    else if (object.binding === 'diagram.link') link.set(id, { id, from: object.from, to: object.to, label: input.label, colour: input.colour, style: input.style, arrow: input.arrow, width: input.width, route: input.route, way: input.way, selected });
+    else if (object.binding === 'diagram.group') group.set(id, { id, label: object.label ?? input.label, layout: input.layout, scale: input.scale, members: [].concat(input.members ?? []), box: boxes[id] ?? null, xLabel: input.xLabel, yLabel: input.yLabel, valueLabels: input.valueLabels, gridlines: input.gridlines, legend: input.legend, yMax: input.yMax, selected });
   }
-  return { node, link, group, options: state?.options ?? {}, view: state?.runtime?.view ?? {}, frame: state?.frame ?? { w: 1000, h: 700 }, pending: !!state?.pending };
+  return { node, link, group, inputs, options: state?.options ?? {}, view: state?.runtime?.view ?? {}, frame: state?.frame ?? { w: 1000, h: 700 }, pending: !!state?.pending };
 }
 const innerOf = (svg) => String(svg ?? '').replace(/^\s*<svg[^>]*>/, '').replace(/<\/svg>\s*$/, '');
 
@@ -97,6 +98,7 @@ function make(holder, host) {
   const svg = sv('svg', { class: 'dg-svg', role: 'img', tabindex: '0', preserveAspectRatio: 'xMidYMid meet' });
   const layer = sv('g', { class: 'dg-layer' }, svg), overlay = sv('g', { class: 'dg-overlay' }, svg);
   board.append(svg, hint);
+  const pagebar = html('div', 'dg-pagebar'); pagebar.setAttribute('aria-label', 'Page layout and style');
   const tools = html('div', 'dg-tools'), caption = html('p', 'dg-caption'); caption.setAttribute('aria-live', 'polite');
 
   const toolCall = async (operation, args = {}) => {
@@ -149,7 +151,7 @@ function make(holder, host) {
 
   const workspace = html('div', 'dg-workspace'), inspector = html('aside', 'dg-inspector'); inspector.setAttribute('aria-label', 'Inspector');
   workspace.append(board, inspector);
-  holder.replaceChildren(tools, workspace, caption);
+  holder.replaceChildren(tools, pagebar, workspace, caption);
   const closeInspectorSplitter = mountInspectorSplitter(workspace, inspector, { id: 'diagram', width: 300, persist: host?.persistent !== false });
 
   // ---- selection: kept here, sent with the declared select commands ----
@@ -161,7 +163,11 @@ function make(holder, host) {
     if (sel.links.length) return toolCall('diagram.link.select', { ids: sel.links });
     return toolCall('diagram.node.select', { ids: [] });
   };
-  const inspectorUi = makeInspector(inspector, { tool: toolCall, model: () => m, selection: () => sel, select, html, btn, focusBoard: () => svg.focus() });
+  const baseInspector = makeInspector(inspector, { tool: toolCall, model: () => m, selection: () => sel, select, html, btn, focusBoard: () => svg.focus() });
+  const panels = html('div'); inspector.append(panels);
+  const stylePanels = makeStylePanels(panels, { tool: toolCall, model: () => m, selection: () => sel, html, btn });
+  const pageBar = makePageBar(pagebar, { tool: toolCall, model: () => m, html, btn });
+  const inspectorUi = { ...baseInspector, sync() { baseInspector.sync(); stylePanels.sync(); pageBar.sync(() => [...sel.nodes]); }, declare(ops) { baseInspector.declare(ops); stylePanels.declare(ops); pageBar.declare(ops); } };
   // The projection is the authority: what it observes as selected (the area keeps a key per selected node and
   // connection) is the selection, also when it changes elsewhere (chat, undo). The order of picking is kept.
   function reconcile() {
@@ -234,7 +240,12 @@ function make(holder, host) {
   }
   function fitBase() {
     let box = null;
-    try { const b = layer.getBBox(); if (b.width > 0 && b.height > 0) box = { x1: b.x, y1: b.y, x2: b.x + b.width, y2: b.y + b.height }; } catch { /* not rendered */ }
+    try {
+      // The objects' extent (a themed page's background rectangle is not an object).
+      for (const element of layer.querySelectorAll('[data-select]')) { const b = element.getBBox(); if (!(b.width > 0 || b.height > 0)) continue;
+        box = box ? { x1: Math.min(box.x1, b.x), y1: Math.min(box.y1, b.y), x2: Math.max(box.x2, b.x + b.width), y2: Math.max(box.y2, b.y + b.height) } : { x1: b.x, y1: b.y, x2: b.x + b.width, y2: b.y + b.height }; }
+      if (!box) { const b = layer.getBBox(); if (b.width > 0 && b.height > 0) box = { x1: b.x, y1: b.y, x2: b.x + b.width, y2: b.y + b.height }; }
+    } catch { /* not rendered */ }
     if (!box) return { x: 0, y: 0, w: m.frame.w, h: m.frame.h };
     let { x1, y1, x2, y2 } = box; x1 -= FIT_PAD; y1 -= FIT_PAD; x2 += FIT_PAD; y2 += FIT_PAD;
     if (x2 - x1 < FIT_MIN.w) { const c = (x1 + x2) / 2; x1 = c - FIT_MIN.w / 2; x2 = c + FIT_MIN.w / 2; }

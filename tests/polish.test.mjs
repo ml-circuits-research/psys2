@@ -7,7 +7,7 @@ import { createEngine } from '../src/dialog/index.mjs';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createTranslator } from '../src/translate/index.mjs';
 import { tokenize } from '../src/formalizer/rules/normalize.mjs';
-import { singularLemma, pluralize } from '../src/formalizer/rules/lemma.mjs';
+import { singularLemma, pluralize } from '../src/lang/lemma.mjs';
 import { compilePattern, matchTokens } from '../src/formalizer/rules/matcher.mjs';
 import { withArticle } from '../src/interpreter/render.mjs';
 import { capabilities } from '../worlds/ui.help/ops.mjs';

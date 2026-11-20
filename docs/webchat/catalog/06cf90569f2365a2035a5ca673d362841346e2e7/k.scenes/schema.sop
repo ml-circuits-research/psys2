@@ -1,0 +1,97 @@
+# k.scenes: typical scenes and where things usually are: for every drawable thing its usual place and its relative
+# size, and for each scene what is usually there, how many, where in the picture, what happens there, and the time
+# and weather that fit. So that "draw a beach" can be composed from things that have drawings.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@k.scenes core.module name=k.scenes version=4 imports=k.named exports=thing exports=scene exports=has exports=support exports=surface exports=light core.source="hand-core 1"
+
+# The usual place and the relative size of a thing, named as its drawing in k.objects (the same name), as a word or a
+# stand-in there, or as a thing of a scene that nothing draws (a stage). `place` is where one usually sees it: in the `sky` (also: in the air), on the `ground` (outdoors),
+# on or in the `water`, `indoors`, or `on_thing`: on another thing, which `on` names (a hat on a head, a roof on a
+# house). A thing indoors may also name what it is usually on (`place=indoors on=table`). `size` is the size of the
+# real thing among five classes: `tiny` fits in a closed hand (a coin, a bee, a berry); `small` is held in one or
+# two hands (a cup, a book, a cat, a shoe); `medium` is carried in both arms, up to the size of a person (a chair,
+# a dog, a bicycle, a person); `large` is bigger than a person, up to a truck (a car, a horse, a bed, a tent);
+# `huge` is bigger than a truck (a house, a tree, a ship, a mountain, the sun). KR1 item 3: where the thing has a
+# `k.attributes.number.size_about` (its longest side in metres, the one home of its size), `size` is computed from
+# it (under 0.1 m tiny, 0.8 m small, 2 m medium, 6 m large, else huge: tools/lib/size-class.mjs), never labelled
+# apart; it is labelled only where no number exists. A key is left out where the thing
+# has no usual place or the size is not plain. `named=model`: the label was given by a language model from the
+# name of the thing, and only where sure; a sample was checked against the drawings.
+@k.scenes.thing core.type of=k.scenes.thing extends=k.named.labelled shared=true closed=true core.source="hand-core 1"
+@k.scenes.thing.name core.slot of=k.scenes.thing key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.scenes.thing.place core.slot of=k.scenes.thing key=place enum=sky enum=ground enum=water enum=indoors enum=on_thing core.source="hand-core 1"
+@k.scenes.thing.on core.slot of=k.scenes.thing key=on many=true kind=atom kind=string core.source="hand-core 1"
+@k.scenes.thing.size core.slot of=k.scenes.thing key=size enum=tiny enum=small enum=medium enum=large enum=huge core.source="hand-core 1"
+
+# A thing that is on another thing says which.
+@k.scenes.on_what.fact k.scenes.thing name=?thing place=on_thing core.absent=on
+@k.scenes.on_what core.deny when=$k.scenes.on_what.fact why="?thing is said to be on another thing, but not on which." core.source="hand-core 1"
+
+# A scene, named by its common English name. `kind` says whether it is `outdoors`, `indoors`, `underwater` or in
+# `space`; `ground` names what covers the ground (sand, grass, snow, floor); `time`, `weather` and `season` are those
+# that fit (left out when any fits); `happens` names what people or animals usually do there (a verb or a short
+# phrase); `drawing` names a k.objects object that draws the whole scene, where one exists.
+# `time` is a part of the day of k.time (`k.time.part_of_day`: morning, afternoon, evening, night; KR1 item 5: the
+# daytime, once `day`, is the morning and the afternoon), a declared join.
+@k.scenes.scene core.type of=k.scenes.scene shared=true closed=true core.source="hand-core 1"
+@k.scenes.scene.name core.slot of=k.scenes.scene key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.scenes.scene.kind core.slot of=k.scenes.scene key=kind required=true enum=outdoors enum=indoors enum=underwater enum=space core.source="hand-core 1"
+@k.scenes.scene.ground core.slot of=k.scenes.scene key=ground kind=atom kind=string core.source="hand-core 1"
+@k.scenes.scene.time core.slot of=k.scenes.scene key=time many=true kind=atom type=k.time.part_of_day by=name core.source="hand-core 1"
+@k.scenes.scene.weather core.slot of=k.scenes.scene key=weather many=true enum=sunny enum=cloudy enum=rainy enum=snowy enum=windy enum=stormy enum=foggy core.source="hand-core 1"
+@k.scenes.scene.season core.slot of=k.scenes.scene key=season many=true kind=atom type=k.time.season by=name core.source="hand-core 1"
+@k.scenes.scene.happens core.slot of=k.scenes.scene key=happens many=true kind=atom kind=string core.source="hand-core 1"
+@k.scenes.scene.drawing core.slot of=k.scenes.scene key=drawing kind=atom kind=string type=k.objects.object by=name core.source="hand-core 1"
+
+# What is usually in a scene: one fact per scene and thing. `count` is how many there usually are; `where` is the
+# layer of the picture: `sky` (the top, outdoors), `ceiling` (the top, indoors), `background` (far away, behind the
+# rest), `wall` (on the back wall of a room), `ground` (standing on the ground or the floor), `water` (on or in the
+# water of the scene), `foreground` (near, in front of the rest); `side` is `left`, `centre` or `right` where the
+# thing has a usual side; `on` names another thing of the same scene that it is on or in (a duck on the pond, a cup
+# on the table), and a thing on or in the water of a scene that is not all water says on which water (a boat on the
+# sea); `fills=true` says that the thing fills its layer from side to side (the sea behind a beach, the road of a
+# street); `drawing` names the k.objects object that draws the thing, where one exists. `thing` names a thing of this
+# world (`k.scenes.thing`, with its place and size), not a drawing: an acrobat is a thing of the circus, drawn by the
+# person (a k.objects stand-in), a beach ball is drawn by "ball beach" (a word of that object); the join of `thing` is
+# to k.scenes.thing, that of `drawing` to k.objects.object, and both close for every fact (a stage, a till, a diving
+# board and a mobile have no drawable kind and so no drawing; tests/k.scenes.test.mjs lists them).
+@k.scenes.has core.type of=k.scenes.has shared=true closed=true core.source="hand-core 1"
+@k.scenes.has.scene core.slot of=k.scenes.has key=scene id=true required=true kind=atom kind=string type=k.scenes.scene by=name core.source="hand-core 1"
+@k.scenes.has.thing core.slot of=k.scenes.has key=thing id=true required=true kind=atom kind=string type=k.scenes.thing by=name core.source="hand-core 1"
+@k.scenes.has.count core.slot of=k.scenes.has key=count required=true kind=integer min=1 core.source="hand-core 1"
+@k.scenes.has.where core.slot of=k.scenes.has key=where required=true enum=sky enum=ceiling enum=background enum=wall enum=ground enum=water enum=foreground core.source="hand-core 1"
+@k.scenes.has.side core.slot of=k.scenes.has key=side enum=left enum=centre enum=right core.source="hand-core 1"
+@k.scenes.has.on core.slot of=k.scenes.has key=on kind=atom kind=string type=k.scenes.thing by=name core.source="hand-core 1"
+@k.scenes.has.fills core.slot of=k.scenes.has key=fills kind=boolean core.source="hand-core 1"
+@k.scenes.has.drawing core.slot of=k.scenes.has key=drawing kind=atom kind=string type=k.objects.object by=name core.source="hand-core 1"
+
+# Support (owner, 2026-11-20): what holds a thing up in a picture and what it keeps out of, so that it is never drawn
+# where it cannot be: a house in a river, a tree in a lake, a fish on a road. `name` is a place of k.scenes.thing
+# (`ground`, `water`, `sky`: it holds for every thing of that place) or the name of one thing (it adds to what its
+# place says). `on` names the surfaces it stands, floats, swims or flies on; where the page has one of them, the thing
+# goes there (a boat on the water, a car on the road). `avoids` names the surfaces whose inside it keeps out of (a
+# house stays out of the water); a surface the thing's own row puts it `on` is not avoided (a car is on the road
+# although ground things keep off it). The surfaces: `ground` (land to stand on), `water` (to float or swim in),
+# `road` (to drive on), `air` (the sky, to fly in).
+@k.scenes.support core.type of=k.scenes.support shared=true closed=true core.source="hand-core 1"
+@k.scenes.support.name core.slot of=k.scenes.support key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.scenes.support.on core.slot of=k.scenes.support key=on many=true enum=ground enum=water enum=road enum=air core.source="hand-core 1"
+@k.scenes.support.avoids core.slot of=k.scenes.support key=avoids many=true enum=ground enum=water enum=road enum=air core.source="hand-core 1"
+
+# A surface: the part of a drawable thing that others stand, float or drive on, and which surface it is. `of` names
+# the thing (a terrain feature of k.layouts or a k.objects object), `part` its part (a terrain part or an object
+# part), `surface` the surface it is (as in k.scenes.support).
+@k.scenes.surface core.type of=k.scenes.surface shared=true closed=true core.source="hand-core 1"
+@k.scenes.surface.of core.slot of=k.scenes.surface key=of id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.scenes.surface.part core.slot of=k.scenes.surface key=part id=true required=true kind=atom core.source="hand-core 1"
+@k.scenes.surface.surface core.slot of=k.scenes.surface key=surface required=true enum=ground enum=water enum=road enum=air core.source="hand-core 1"
+
+# A light of a landscape: a thing in the sky that shines (k.attributes can=shine: the sun, the moon, a star). A picture
+# lights its scene from the largest one on the page: shadows fall away from it and side faces turn from it.
+@k.scenes.light core.type of=k.scenes.light shared=true closed=true core.source="hand-core 1"
+@k.scenes.light.name core.slot of=k.scenes.light key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+
+# Words for the types and keys of this world.

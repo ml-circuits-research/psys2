@@ -1,5 +1,6 @@
 // The Avatar tab defined by worlds/ui.avatar/area.sop through the generic SOP area: catalog loading by index,
 // the declared start state and the drawing all come from SOP declarations.
+import{PINNED_CATALOG}from'./fixtures/pinned-catalog.mjs';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
@@ -8,7 +9,7 @@ import {createSopArea,initialSopAreaState,renderSopArea} from '../worlds/sop-are
 import {toolInvocationContext} from '../worlds/native-tool-host.mjs';
 import NATIVE_INTERFACE from '../worlds/ui.avatar/native-interface-source.mjs';
 
-const K=new URL('../../sop-knowledge-worlds/docs/worlds/',import.meta.url);
+const K=PINNED_CATALOG;
 const available=existsSync(new URL('w.face/schema.sop',K))&&readFileSync(new URL('w.face/schema.sop',K),'utf8').includes('w.face.slot');
 const options={world:'ui.avatar',interfaceSource:NATIVE_INTERFACE,
  loader:{readFile:(world,file)=>readFile(new URL('../worlds/'+world+'/'+file,import.meta.url),'utf8').catch(()=>null)},

@@ -18,7 +18,7 @@
  */
 import { formalize } from '../formalizer/rules/index.mjs';
 import { createDispatcherRuntime, candidateSegmentations } from '../formalizer/dispatcher-runtime.mjs';
-import { perf } from '../formalizer/perf.mjs';
+import { perf } from './stage-perf.mjs';
 import { createDispatchValidator } from './dispatch-validate.mjs';
 import { rerankPrediction, normalizeRouting, isSymbolic } from './symbolic-router.mjs';
 

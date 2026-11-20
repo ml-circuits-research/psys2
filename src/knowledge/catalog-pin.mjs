@@ -9,7 +9,7 @@
  */
 export const CATALOG_PIN = Object.freeze({
   repo: 'https://github.com/ml-circuits-research/sop-knowledge-worlds',
-  commit: '668fc36aacc4f7c193bab47f75e9ededdef9b811',   // ordered face features (length, size on k.values scales) and the hair group of w.face.
+  commit: '06cf90569f2365a2035a5ca673d362841346e2e7',   // terrain features from handles and support, surfaces and lights (06cf9056), after the w.diagram editor (page, styles, effects, charts) and k.styles, after people and parts (36cca794) and the diagram node words (7a9ee0c8).
   path: 'docs/worlds',
 });
 

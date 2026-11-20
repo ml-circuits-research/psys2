@@ -91,7 +91,7 @@ function make(holder, host) {
     const p = partsOf(o.id).find((q) => String(q.index) === String(index));
     if (!p) return null;
     const x = num(input(p.id, 'x')), y = num(input(p.id, 'y')), w = num(input(p.id, 'width')), h = num(input(p.id, 'height'));
-    return { id: p.id, object: o.id, index: num(p.index), name: p.name ?? p.kind, x, y, width: w, height: h, color: input(p.id, 'color'), bounds: { x0: x - w / 2, y0: y - h / 2, x1: x + w / 2, y1: y + h / 2 } };
+    return { id: p.id, object: o.id, index: num(p.index), name: p.name ?? p.kind, x, y, width: w, height: h, color: input(p.id, 'color'), variant: p.variant, look: p.look, bounds: { x0: x - w / 2, y0: y - h / 2, x1: x + w / 2, y1: y + h / 2 } };
   }
   function selectionBounds(ids = selectedIds()) {
     const boxes = ids.map(boxOf).filter(Boolean);
@@ -197,6 +197,19 @@ function make(holder, host) {
   partColour.addEventListener('change', () => { const p = currentPart(); if (p) tool('drawing.part.change', { id: p.object, index: p.index, color: partColour.value }); });
   const partAction = (label, operation) => { const b = el('button', 'dr-act', label); b.type = 'button'; b.addEventListener('click', () => { const p = currentPart(); if (p) tool(operation, { id: p.object, index: p.index }); }); editor.append(b); return b; };
   const extractPart = partAction('Extract part', 'drawing.part.extract'), deletePart = partAction('Delete part', 'drawing.part.remove');
+  // People and parts (worlds/art.draw/act-rules.sop): a look part (a person's hair, hat, clothes; eyes put on the sun)
+  // takes another variant of its slot; a part of the drawing takes another outline; a part is added to the object by
+  // the word for it; a person gets a different look. The options are the area's observed options.
+  const partLook = control('Part look', 'select'), partShape = control('Part shape', 'select');
+  partLook.addEventListener('change', () => { const p = currentPart(); if (p && partLook.value) tool('drawing.part.change', { id: p.object, index: p.index, variant: partLook.value }); });
+  partShape.addEventListener('change', () => { const p = currentPart(); if (p && partShape.value) tool('drawing.part.change', { id: p.object, index: p.index, shape: partShape.value }); });
+  const addPartName = control('Add part'), addPartButton = el('button', 'dr-act', 'Add part'); addPartButton.type = 'button'; editor.append(addPartButton);
+  const addPart = () => { const o = focus(), word = addPartName.value.trim(); if (o && word) { tool('drawing.part.add', { id: o.id, kind: word }); addPartName.value = ''; } };
+  addPartButton.addEventListener('click', addPart); addPartName.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); addPart(); } });
+  const varyButton = el('button', 'dr-act', 'Different look'); varyButton.type = 'button'; editor.append(varyButton);
+  varyButton.addEventListener('click', () => { const o = focus(); if (o) tool('drawing.person.vary', { id: o.id }); });
+  const emotion = control('Emotion', 'select'); emotion.addEventListener('change', () => { const o = focus(); if (o && emotion.value) tool('drawing.person.expression', { id: o.id, expression: emotion.value }); });
+  const traits = el('p', 'dr-traits', ''); editor.append(traits);
   const groupName = control('Group label'); groupName.value = '';
   const groupButton = el('button', 'dr-act', 'Group objects'); groupButton.type = 'button'; groupButton.addEventListener('click', () => { const ids = selectedIds(); if (ids.length > 1) tool('drawing.object.group', { ids, name: groupName.value.trim() || 'Group', ...(groupName.value.trim() ? { label: groupName.value.trim() } : {}) }); }); editor.append(groupButton);
   const ungroup = el('button', 'dr-act', 'Ungroup'); ungroup.type = 'button'; ungroup.addEventListener('click', () => { const o = focus(), group = o?.binding === 'drawing.group' ? o.id : o?.in; if (group) tool('drawing.object.ungroup', { id: group }); }); editor.append(ungroup);
@@ -227,6 +240,14 @@ function make(holder, host) {
     for (const inputEl of [groupName, groupButton]) visible(inputEl, multi);
     visible(ungroup, !multi && !!(group || parent));
     for (const inputEl of [partX, partY, partWidth, partHeight, partColour, extractPart, deletePart]) { visible(inputEl, !!part && !multi); inputEl.disabled = !part; }
+    const looks = part ? (state.options?.[part.id] ?? []).map(String) : [], person = object ? partsOf(object.id).some((p) => p.look !== undefined) : false;
+    visible(partLook, !!part && !multi && looks.length > 0); partLook.textContent = ''; partLook.append(option('', 'Look…')); for (const v of looks) partLook.append(option(v, v)); partLook.value = part?.variant ?? '';
+    visible(partShape, !!part && !multi && !looks.length); partShape.textContent = ''; partShape.append(option('', 'Shape…')); for (const v of [...(state.options?.shape ?? [])].map(String).sort()) partShape.append(option(v, v));
+    for (const inputEl of [addPartName, addPartButton]) visible(inputEl, !!object && !multi);
+    visible(varyButton, person && !multi);
+    visible(emotion, !!object && !multi && (person || input(object.id, 'faceable') === true)); emotion.textContent = ''; emotion.append(option('', 'Emotion…')); for (const v of [...(state.options?.expression ?? [])].map(String).sort()) emotion.append(option(v, v));
+    const age = object ? input(object.id, 'age') : null, sex = object ? input(object.id, 'sex') : null;
+    traits.textContent = object && (age || sex) ? 'Traits: ' + [age, sex].filter(Boolean).join(', ') : ''; visible(traits, !!traits.textContent);
     partChoice.textContent = ''; partChoice.append(option('', 'Whole object'));
     for (const p of object ? partsOf(object.id) : []) partChoice.append(option(String(p.index), `${num(p.index) + 1}. ${String(p.name ?? p.kind).replace(/_/g, ' ')}`));
     partChoice.value = part ? String(part.index) : '';

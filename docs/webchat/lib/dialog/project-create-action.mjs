@@ -1,14 +1,14 @@
-import {World,parse,quote,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=4a094fcca4';
-import {groundMention} from './lexical-grounding.mjs?v=54dda8a64b';
-import POLICY from '../../worlds/app.project/creation-policy-source.mjs?v=3e93d5fe4f';
-import SCHEMA from '../../worlds/app.project/creation-schema-source.mjs?v=70feb54316';
-import {executionPolicyWorld} from './execution-policy.mjs?v=e0fcf658a6';
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=5fafad74f7';
-import {nativeCreationCandidates} from './native-binding-candidates.mjs?v=90e22dfa4c';
+import {World,parse,quote,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=915a9d5c18';
+import {groundMention} from './lexical-grounding.mjs?v=ed4fefcfd1';
+import POLICY from '../../worlds/app.project/creation-policy-source.mjs?v=07639399d8';
+import SCHEMA from '../../worlds/app.project/creation-schema-source.mjs?v=11101d9d84';
+import {executionPolicyWorld} from './execution-policy.mjs?v=0af0e2a963';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=4350a070af';
+import {nativeCreationCandidates} from './native-binding-candidates.mjs?v=ab1e2fea3d';
 import {budget} from './budget.mjs?v=00bce6e369';
-import {observeGroundedProjection,projectGroundedRequest} from './grounded-projection.mjs?v=903308e9c9';
-import {positiveCardinalProof} from './key-reader-value-proof.mjs?v=a031638a2f';
-import {compileObservedChoice} from './observed-choice.mjs?v=d7587c7617';
+import {observeGroundedProjection,projectGroundedRequest} from './grounded-projection.mjs?v=a0de8558ea';
+import {positiveCardinalProof} from './key-reader-value-proof.mjs?v=e7bcfe99f2';
+import {compileObservedChoice} from './observed-choice.mjs?v=4b644fabf3';
 
 const field=(fact,key)=>str(fact.attrs[key]?.[0]);
 let loaded;
@@ -17,13 +17,14 @@ function creationPolicy(source){
  if(source===POLICY&&loaded)return loaded;
  const world=new World({library:{'app.creation':SCHEMA}});
  if(!world.tell(source).ok)throw Error('invalid-creation-policy');
- const config={world};
+ // Retention limits are declared facts (creation-policy.sop app.creation.limits); a policy without exactly one is invalid.
+ const limits=world.ofType('app.creation.limits');
+ if(limits.length!==1)throw Error('invalid-creation-policy-limits');
+ const config={world,retained:Number(field(limits[0],'alternatives')),batch:Number(field(limits[0],'batch')),lemma:Number(field(limits[0],'lemma'))};
  if(source===POLICY)loaded=config;
  return config;
 }
 const valueKeys=new Set(['key','value','value_span','phase','operator','polarity','character']);
-const retainedLimit=5;
-const choiceBatchLimit=200;
 
 function sourceEvidence(raw){
  const chars=Array.from(raw.source.text),ranges=raw.ranges??[];
@@ -41,12 +42,12 @@ function sourceEvidence(raw){
 // A stated kind word is grounded by the declared std.ground policy: exact identity,
 // spelling repair and the kind relations it follows. Without a word, the reader's
 // family and type rank the constructors.
-async function groundConstructors({world},choices,lexical,readType,knowledge){
- if(lexical.length>64)return {options:[]};
- const candidates=choices.filter(choice=>{budget.tick('creation.rank');return choice.mapping.lemma.length<=64;});
+async function groundConstructors({world,retained:retainedLimit,lemma:lemmaLimit},choices,lexical,readType,knowledge){
+ if(lexical.length>lemmaLimit)return {options:[],limit:{lemma:lemmaLimit,length:lexical.length}};
+ const candidates=choices.filter(choice=>{budget.tick('creation.rank');return choice.mapping.lemma.length<=lemmaLimit;});
  if(!candidates.length)return {options:[]};
  const decision=await groundMention(world,'app.creation',lexical,candidates.map(({mapping})=>({lemma:mapping.lemma,
-  measures:{otherType:Number(mapping.type!==readType),otherFamily:0}})),knowledge);
+  measures:{otherType:Number(mapping.type!==readType)}})),knowledge);
  if(decision.selected===undefined)return {options:[]};
  const ties=new Set([decision.selected,...decision.ties]),used=new Set(),options=[],equivalent=[];
  for(const index of [decision.selected,...decision.alternatives]){
@@ -65,21 +66,21 @@ async function groundConstructors({world},choices,lexical,readType,knowledge){
 // diagram). A family whose kinds all differ from it (a drawing of any catalog kind) has no default:
 // ranking every kind by criteria that cannot tell two kinds apart would pick the first in catalog
 // order, so nothing is created and the request stays honestly unresolved.
-function rankConstructors({world},choices,readType,family){
+function rankConstructors({world,retained:retainedLimit,batch:choiceBatchLimit},choices,readType,family){
  const candidates=[];
  for(const choice of choices){
   budget.tick('creation.rank');
   const mapping=choice.mapping;
   if(mapping.type!==readType||!family||mapping.canonical!==family)continue;
-  candidates.push({...choice,distance:0,otherType:false,otherFamily:false});
+  candidates.push({...choice,distance:0,otherType:false});
  }
  if(!candidates.length)return {options:[]};
  let options=[],equivalent=[],trace;
  for(let offset=0;offset<candidates.length;offset+=choiceBatchLimit-retainedLimit){
   budget.tick('creation.rank.batch');
   const batch=[...options,...candidates.slice(offset,offset+choiceBatchLimit-retainedLimit)];
-  trace=compileObservedChoice(world,'app.creation',batch.map(({distance,otherType,otherFamily})=>({
-   distance,otherType:Number(otherType),otherFamily:Number(otherFamily),
+  trace=compileObservedChoice(world,'app.creation',batch.map(({distance,otherType})=>({
+   distance,otherType:Number(otherType),
   })));
   if(trace.selected===undefined)return {options:[]};
   const used=new Set(),ties=new Set([trace.selected,...trace.ties]);

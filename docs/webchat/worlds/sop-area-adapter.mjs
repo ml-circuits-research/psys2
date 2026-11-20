@@ -2,8 +2,8 @@
 // A SOP area's place in the application, for any tab: the state carrier, host creation with the application's
 // catalog (or the generated offline subset), the view projection and the persisted instance world. Nothing here
 // names a tab; each tab passes its world id, its native interface, its area files and its offline subset.
-import {World, parse, serialize} from '../lib/vendor/sopworld/sopworld.mjs?v=4a094fcca4';
-import {createSopArea, initialSopAreaState, projectSopArea} from './sop-area.mjs?v=82d5b31243';
+import {World, parse, serialize} from '../lib/vendor/sopworld/sopworld.mjs?v=915a9d5c18';
+import {createSopArea, initialSopAreaState, projectSopArea} from './sop-area.mjs?v=202315d15e';
 
 export const emptyAreaState = () => ({ sop: '', runtime: { view: {} } });
 
@@ -30,14 +30,16 @@ export function sopAreaAdapter({ world, interfaceSource, interfaceImports = {}, 
     if (!state.sop) Object.assign(state, await initialSopAreaState(options));
     return createSopArea({ ...options, state, instanceId, identityRegistry, args });
   }
-  // The instance schema's declarations (types, slots, constraints); its own data facts are knowledge, not state.
-  const declarations = serialize(parse(offline[instance + '/schema.sop']).filter((wire) =>
-    Object.values(wire.attrs).flat().some((token) => token.startsWith('?')) || (wire.type.startsWith('core.') && wire.type !== 'core.word')));
+  // The instance schemas' declarations (types, slots, constraints); their own data facts are knowledge, not state. An
+  // area may hold several instance modules (instance: a list, the first the main one).
+  const instances = [].concat(instance);
+  const declarations = instances.map((id) => serialize(parse(offline[id + '/schema.sop']).filter((wire) =>
+    Object.values(wire.attrs).flat().some((token) => token.startsWith('?')) || (wire.type.startsWith('core.') && wire.type !== 'core.word')))).join('\n');
   function stateWorld(state) {
     const live = new World();
     // Instance kinds extend std.schema.thing; its declarations come with the library.
     if (!live.load('@area.state.schema core.use world=std.schema\n' + declarations).ok) throw Error('area-schema-unavailable');
-    const kinds = new Set([...live.matrix.values()].filter((node) => node.type === 'core.type').map((type) => type.attrs.of[0]).filter((type) => type.startsWith(instance + '.')));
+    const kinds = new Set([...live.matrix.values()].filter((node) => node.type === 'core.type').map((type) => type.attrs.of[0]).filter((type) => instances.some((id) => type.startsWith(id + '.'))));
     if (state?.sop) {
       if (parse(state.sop).some((wire) => wire.pattern || !kinds.has(wire.type))) throw Error('area-state-foreign-fact');
       if (!live.tell(state.sop, { factsOnly: true }).ok) throw Error('invalid-area-state');

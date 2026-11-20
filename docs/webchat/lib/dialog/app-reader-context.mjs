@@ -1,23 +1,41 @@
 // Actual application state only. No request annotations or invented semantic types.
-import {observedReaderContext} from './native-reader-context.mjs?v=2b51a49ee8';
-import {isAuthoredRequest} from './authored-request-tool.mjs?v=4020b7d0da';
-import {createDrawingArea,canonicalDrawingArea,projectDrawingArea,drawingAreaStateWorld} from '../../worlds/art.draw/sop-drawing.mjs?v=c15295ba22';
-import {createDiagramArea,canonicalDiagramArea,projectDiagramArea,diagramAreaStateWorld} from '../../worlds/diagram.sketch/sop-diagram.mjs?v=a3bca7ebe3';
-import {createDocumentArea,canonicalDocumentArea,projectDocumentArea,documentAreaStateWorld} from '../../worlds/docs.editor/sop-document.mjs?v=f38b8e3d50';
-import {createAvatarArea,canonicalAvatarArea,projectAvatarArea,avatarAreaStateWorld} from '../../worlds/ui.avatar/sop-avatar.mjs?v=af71abb2b3';
-import {createCalendarArea,canonicalCalendarArea,projectCalendarArea,calendarAreaStateWorld} from '../../worlds/time.calendar/sop-calendar.mjs?v=33cc75e4e4';
-export const NATIVE_AREAS={
- avatar:{area:'avatar',world:'ui.avatar',create:createAvatarArea,prepare:createAvatarArea,canonicalizeState:canonicalAvatarArea,projectState:projectAvatarArea,
-  stateWorld:avatarAreaStateWorld,separateRuntime:true,historySelection:[['runtime','view','selected']],historyView:[['runtime','view','ids']]},
- draw:{area:'drawing',world:'art.draw',create:createDrawingArea,prepare:createDrawingArea,canonicalizeState:canonicalDrawingArea,projectState:projectDrawingArea,
-  stateWorld:drawingAreaStateWorld,separateRuntime:true,historySelection:[['runtime','view','selected'],['runtime','view','part']],historyView:[['runtime','view','ids']]},
- diagram:{area:'diagram',world:'diagram.sketch',create:createDiagramArea,prepare:createDiagramArea,canonicalizeState:canonicalDiagramArea,projectState:projectDiagramArea,
-  stateWorld:diagramAreaStateWorld,separateRuntime:true,historySelection:[['runtime','view','selected']],historyView:[['runtime','view','ids']]},
- editor:{area:'document',world:'docs.editor',create:createDocumentArea,prepare:createDocumentArea,canonicalizeState:canonicalDocumentArea,projectState:projectDocumentArea,
-  stateWorld:documentAreaStateWorld,separateRuntime:true,historySelection:[['runtime','view','selected'],['runtime','view','from'],['runtime','view','to'],['runtime','view','at']]},
- calendar:{area:'calendar',world:'time.calendar',create:createCalendarArea,prepare:createCalendarArea,canonicalizeState:canonicalCalendarArea,projectState:projectCalendarArea,
-  stateWorld:calendarAreaStateWorld,separateRuntime:true,historySelection:[['runtime','view','selected']]},
+import {observedReaderContext} from './native-reader-context.mjs?v=3989e6374d';
+import {isAuthoredRequest} from './authored-request-tool.mjs?v=fdab6933a6';
+import {createDrawingArea,canonicalDrawingArea,projectDrawingArea,drawingAreaStateWorld} from '../../worlds/art.draw/sop-drawing.mjs?v=609a7dbd11';
+import {createDiagramArea,canonicalDiagramArea,projectDiagramArea,diagramAreaStateWorld} from '../../worlds/diagram.sketch/sop-diagram.mjs?v=de2585bbef';
+import {createDocumentArea,canonicalDocumentArea,projectDocumentArea,documentAreaStateWorld} from '../../worlds/docs.editor/sop-document.mjs?v=857de7fcac';
+import {createAvatarArea,canonicalAvatarArea,projectAvatarArea,avatarAreaStateWorld} from '../../worlds/ui.avatar/sop-avatar.mjs?v=55bfbe24b2';
+import {createCalendarArea,canonicalCalendarArea,projectCalendarArea,calendarAreaStateWorld} from '../../worlds/time.calendar/sop-calendar.mjs?v=9fb5824cd6';
+import {World,str} from '../vendor/sopworld/sopworld.mjs?v=915a9d5c18';
+import AREA_SCHEMA from '../../worlds/app.project/area-registry-schema-source.mjs?v=3e2ce9c453';
+import AREA_REGISTRY from '../../worlds/app.project/area-registry-source.mjs?v=a9e593f4ad';
+// The native host of each world (code: the factories its module exports). Which views exist, their reader area,
+// focus paths and view-only history paths are declared facts (worlds/app.project/area-registry.sop).
+const NATIVE_HOSTS={
+ 'ui.avatar':{create:createAvatarArea,canonicalizeState:canonicalAvatarArea,projectState:projectAvatarArea,stateWorld:avatarAreaStateWorld},
+ 'art.draw':{create:createDrawingArea,canonicalizeState:canonicalDrawingArea,projectState:projectDrawingArea,stateWorld:drawingAreaStateWorld},
+ 'diagram.sketch':{create:createDiagramArea,canonicalizeState:canonicalDiagramArea,projectState:projectDiagramArea,stateWorld:diagramAreaStateWorld},
+ 'docs.editor':{create:createDocumentArea,canonicalizeState:canonicalDocumentArea,projectState:projectDocumentArea,stateWorld:documentAreaStateWorld},
+ 'time.calendar':{create:createCalendarArea,canonicalizeState:canonicalCalendarArea,projectState:projectCalendarArea,stateWorld:calendarAreaStateWorld},
 };
+/** Reads the declared area registry into the view table the runtime uses. A view whose world has no native host, or a malformed registry, throws. */
+export function loadAreaRegistry(source=AREA_REGISTRY,hosts=NATIVE_HOSTS){
+ const world=new World({library:{'app.area':AREA_SCHEMA}}),told=world.tell(source);
+ if(!told.ok)throw Error('invalid-area-registry: '+JSON.stringify(told.violations??told.errors??[]).slice(0,400));
+ const one=(row,key)=>str(row.attrs[key][0]),paths=world.ofType('app.area.path'),areas={};
+ for(const row of world.ofType('app.area.view')){
+  const view=one(row,'view'),id=one(row,'world'),host=hosts[id];
+  if(!host)throw Error('area-registry-view-without-native-host: '+view+' '+id);
+  const pathsOf=role=>paths.filter(path=>one(path,'view')===view&&one(path,'role')===role).sort((a,b)=>Number(one(a,'order'))-Number(one(b,'order'))).map(path=>path.attrs.key.map(str));
+  const focus=pathsOf('focus'),historyView=pathsOf('history.view');
+  areas[view]={area:one(row,'area'),world:id,create:host.create,prepare:host.create,canonicalizeState:host.canonicalizeState,projectState:host.projectState,stateWorld:host.stateWorld,
+   separateRuntime:one(row,'separate.runtime')==='true',historySelection:focus,...(historyView.length?{historyView}:{}),declaration:row.id};
+ }
+ for(const path of paths)if(!areas[one(path,'view')])throw Error('area-registry-path-without-view: '+path.id);
+ return areas;
+}
+export const NATIVE_AREAS=loadAreaRegistry();
+export const inspectAreaRegistry=()=>({source:'worlds/app.project/area-registry.sop',wires:AREA_REGISTRY,schema:AREA_SCHEMA});
 /** Application composition: the same declared policy guards controls and spoken requests. */
 export async function createAreaHost(area,{loader,knowledge,prepareKnowledge=true,...options}={}){
  if(!area)throw Error('unknown-native-area');

@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // The Avatar tab: the generic SOP area adapter over worlds/ui.avatar/area.sop.
-import NATIVE_INTERFACE from './native-interface-source.mjs?v=837d6b28c5';
-import AREA_SOURCES from './area-sources.mjs?v=1cc780e230';
-import {BUNDLED_AREAS} from '../../lib/knowledge/bundled-areas.mjs?v=62f634faf2';
-import {sopAreaAdapter} from '../sop-area-adapter.mjs?v=2d8bc4c05f';
+import NATIVE_INTERFACE from './native-interface-source.mjs?v=74da0bb7ce';
+import AREA_SOURCES from './area-sources.mjs?v=ad35e0ae90';
+import {BUNDLED_AREAS} from '../../lib/knowledge/bundled-areas.mjs?v=1cad66f270';
+import {sopAreaAdapter} from '../sop-area-adapter.mjs?v=c7f4d493c4';
 
 const area = sopAreaAdapter({ world: 'ui.avatar', instance: 'w.face', interfaceSource: NATIVE_INTERFACE, sources: AREA_SOURCES, offline: BUNDLED_AREAS['ui.avatar'] });
 export const emptyAvatarState = area.empty, canonicalAvatarArea = area.canonical, createAvatarArea = area.create,

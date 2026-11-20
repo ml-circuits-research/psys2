@@ -42,8 +42,8 @@ function drawingSession(reader,extra={}){
 test('grounding a mention over more candidates than one library request holds ranks the same admitted set',async()=>{
  const world=new World({library:{'app.creation':SCHEMA}});
  assert.ok(world.tell(POLICY).ok);
- const filler=Array.from({length:3000},(_,n)=>({lemma:'filler'+n.toString(36),measures:{otherType:1,otherFamily:0}}));
- const named=[{lemma:'mountain lake',measures:{otherType:0,otherFamily:0}},{lemma:'lake',measures:{otherType:1,otherFamily:0}},{lemma:'lane',measures:{otherType:0,otherFamily:0}}];
+ const filler=Array.from({length:3000},(_,n)=>({lemma:'filler'+n.toString(36),measures:{otherType:1}}));
+ const named=[{lemma:'mountain lake',measures:{otherType:0}},{lemma:'lake',measures:{otherType:1}},{lemma:'lane',measures:{otherType:0}}];
  const small=await groundMention(world,'app.creation','lake',named);
  for(const candidates of [[...named,...filler],[...filler,...named],[filler[0],named[0],...filler.slice(1),named[1],named[2]]]){
   const decision=await groundMention(world,'app.creation','lake',candidates);

@@ -17,7 +17,7 @@ import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
 import { createTranslator } from '../src/translate/index.mjs';
 import { sessionOptions, settingsForMode } from '../src/dialog/runtime-config.mjs';
-import { TurnAborted } from '../src/formalizer/guard.mjs';
+import { TurnAborted } from '../src/dialog/turn-guard.mjs';
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const argv = process.argv.slice(2);

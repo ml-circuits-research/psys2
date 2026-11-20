@@ -2,12 +2,15 @@
 @ref.choices core.use world=std.choice
 @ref.criteria core.use world=std.decide
 
-# Resolve a contextual target from the current turn, or retarget the previous change.
+# Resolve a contextual target from the current turn (a change, or an arrangement: "improve the layout" of the page
+# in view), or retarget the previous change.
 @read.focus app.reference.reading turn=?turn act="change" mood="do" fill="context" mode="existing"
+@read.arrange app.reference.reading turn=?turn act="arrange" mood="do" fill="context" mode="existing"
 @read.other app.reference.reading turn=?turn act="change" mood="do" quantifier="other" fragment="replaces"
 @result.focus app.reference.resolution turn=?turn policy=app.focus values=stated
 @result.other app.reference.resolution turn=?turn policy=app.other values=previous
 @route.focus core.rule when=$read.focus not=$read.other then=$result.focus
+@route.arrange core.rule when=$read.arrange then=$result.focus
 @route.other core.rule when=$read.other then=$result.other
 
 # An exact kind or a matching family binds a live object to a reader meaning.

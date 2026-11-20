@@ -24,7 +24,10 @@ export async function buildFaces(facts) {
   try {
     const world = await facts.world('k.faces');
     if (!world) return null;
-    const presetWires = await facts.wires('k.faces.preset');
+    // The presets of a face style: a style drawn in the frame of a drawing (k.faces.frame: the figure, a whole person's
+    // body and clothes) is not a face.
+    const framed = new Set((await facts.wires('k.faces.frame').catch(() => [])).map((w) => one(w, 'style')));
+    const presetWires = (await facts.wires('k.faces.preset')).filter((w) => !framed.has(one(w, 'style')));
     if (!presetWires.length) return null;
     const home = world.shards.find((s) => s.id === presetWires[0].shard);
     const same = (sh) => sh.sources?.length === home.sources?.length && sh.sources.every((x) => home.sources.includes(x));

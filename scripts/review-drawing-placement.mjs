@@ -4,7 +4,10 @@
 // person looking at the page would: water things in the water when there is water (else low on the page), sky
 // things in the sky, ground things on the ground, everything on the page, no overlaps except a declared containment
 // (a k.layouts anchor of the container that holds the kind: a boat on the lake's water), no object centred on
-// another, sizes ordered as k.scenes size classes say. It writes one SVG (and, with chromium, one PNG) per scene.
+// another, sizes ordered as k.scenes size classes say, and nothing that stands on the ground in the water or on a road
+// (the water of a river or a lake, a road: the surfaces the area observes; k.scenes says what stands on the ground and
+// what drives on roads). A terrain feature (k.layouts.terrain: the view, a river, a road, a lake) lies in the land: it is
+// checked by its surfaces, not by its box. It writes one SVG (and, with chromium, one PNG) per scene.
 //   node scripts/review-drawing-placement.mjs [--out <dir>] [--png] [--catalog <docs/worlds dir>] [--scene <name>] [--rules] [--z3 <z3-solver build/node.js>]
 // By default each object is placed as the application places it (the area's declared placement problem, std.problem);
 // --rules runs the bare command instead (the area's grid of spots).
@@ -31,12 +34,23 @@ const EXPECT = {
   horizon: ['hill', 'mountain'],
 };
 const SIZE_RANK = {tiny: 0, small: 1, medium: 2, large: 3, huge: 4};
+// The picture scale of the size classes the area declares (worlds/art.draw/act-rules.sop ui.draw.scale), to tell a thing
+// drawn farther (smaller than its class) from one drawn at full size.
+const CLASS_PX = {tiny: 45, small: 70, medium: 100, large: 130, huge: 160};
 export const SCENES = {
   'lake-scene': ['lake', 'boat', 'fish', 'duck', 'house', 'tree', 'sun', 'cloud', 'bird', 'person', 'car', 'road', 'cat', 'moon', 'flower'],
   'no-water': ['boat', 'fish', 'house', 'sun', 'tree'],
   'water-later': ['boat', 'house', 'lake', 'fish', 'duck'],
   'pond-life': ['lake', 'boat', 'fish', 'duck', 'fish', 'tree', 'bird'],
   'crowded': ['house', 'house', 'tree', 'tree', 'tree', 'person', 'person', 'car', 'car', 'dog', 'cat', 'flower', 'flower', 'sun', 'cloud', 'cloud', 'bird', 'bird', 'hill', 'road'],
+  // Landscapes (owner, 2026-11-20: "you put a house in the middle of the river"): terrain drawn first or later.
+  'river-scene': ['landscape', 'river', 'house', 'tree', 'boat', 'fish', 'person', 'tree', 'house', 'car', 'cloud', 'sun', 'bird', 'flower', 'dog'],
+  'river-later': ['house', 'tree', 'person', 'river', 'house', 'tree', 'boat', 'cat'],
+  'road-scene': ['landscape', 'road', 'car', 'house', 'tree', 'person', 'car', 'dog', 'house', 'tree', 'flower', 'bicycle'],
+  'hill-scene': ['landscape', 'hill', 'mountain', 'hill', 'lake', 'house', 'tree', 'boat', 'duck', 'road', 'car', 'flower', 'sun', 'cloud'],
+  'river-road': ['river', 'road', 'house', 'tree', 'house', 'tree', 'person', 'car', 'boat', 'lake', 'tree', 'house'],
+  // People and animals beside a house (coordinator 2026-11-20: people stacked in the air, children as big as adults).
+  'people': ['girl', 'sun', 'house', 'boy', 'man', 'woman', 'cat', 'dog', 'tree'],
 };
 
 const arg = (name) => { const i = process.argv.indexOf(name); return i > 0 ? process.argv[i + 1] : undefined; };
@@ -63,11 +77,33 @@ export function knowledge(dir) {
     const path = join(fallback, 'k.layouts/shards/anchors.sop');
     if (existsSync(path)) anchors = parse(readFileSync(path, 'utf8')).filter((w) => w.type === 'k.layouts.anchor');
   }
-  return {size, anchors: anchors.map((w) => ({of: val(w, 'of'), name: val(w, 'name'), x: +val(w, 'x'), y: +val(w, 'y'), w: +val(w, 'w'), h: +val(w, 'h'),
+  // Where each kind stands (k.scenes place), what drives on roads or floats (k.scenes.support), and which kinds are
+  // terrain features lying in the land (k.layouts.terrain, all but those standing on the horizon).
+  const place = new Map(wires('k.scenes', 'k.scenes.thing').map((w) => [val(w, 'name'), val(w, 'place')]));
+  const on = new Map(wires('k.scenes', 'k.scenes.support').map((w) => [val(w, 'name'), (w.attrs.on ?? []).map((raw) => raw.startsWith('"') ? str(raw) : raw)]));
+  const terrain = new Map(wires('k.layouts', 'k.layouts.terrain').map((w) => [val(w, 'name'), val(w, 'lies')]));
+  // The box of a terrain feature's handles in its 0..100 frame (where it is drawn within its square).
+  const extent = new Map();
+  for (const w of wires('k.layouts', 'k.layouts.handle')) {
+    const e = extent.get(val(w, 'of')) ?? {x0: 100, y0: 100, x1: 0, y1: 0, w: 0}, x = +val(w, 'x'), y = +val(w, 'y');
+    extent.set(val(w, 'of'), {x0: Math.min(e.x0, x), y0: Math.min(e.y0, y), x1: Math.max(e.x1, x), y1: Math.max(e.y1, y), w: Math.max(e.w, +val(w, 'w'))});
+  }
+  // How tall each kind of person is among people (k.people.kind height_about: an adult man 100), and what it is drawn as.
+  const height = new Map(wires('k.people', 'k.people.kind').filter((w) => val(w, 'height_about') !== undefined).map((w) => [val(w, 'name'), +val(w, 'height_about')]));
+  for (const w of wires('k.people', 'k.people.kind')) if (val(w, 'drawing') && !place.has(val(w, 'name')) && place.has(val(w, 'drawing'))) place.set(val(w, 'name'), place.get(val(w, 'drawing')));
+  return {size, place, on, terrain, extent, height, anchors: anchors.map((w) => ({of: val(w, 'of'), name: val(w, 'name'), x: +val(w, 'x'), y: +val(w, 'y'), w: +val(w, 'w'), h: +val(w, 'h'),
     holds: (w.attrs.holds ?? []).map((raw) => raw.startsWith('"') ? str(raw) : raw)}))};
 }
 
-const box = (o) => ({x0: o.x - o.size / 2, y0: o.y - o.size / 2, x1: o.x + o.size / 2, y1: o.y + o.size / 2});
+const square = (o) => ({x0: o.x - o.size / 2, y0: o.y - o.size / 2, x1: o.x + o.size / 2, y1: o.y + o.size / 2});
+// What an object covers: its square, or for a terrain feature what its handles span (widened by its widest band).
+let extents = new Map();
+const box = (o) => {
+  const e = extents.get(o.kind), q = square(o);
+  if (!e || o.kind === 'landscape') return q;
+  const s = o.size / 100, pad = e.w / 2;
+  return {x0: q.x0 + Math.max(0, e.x0 - pad) * s, y0: q.y0 + e.y0 * s, x1: q.x0 + Math.min(100, e.x1 + pad) * s, y1: q.y0 + Math.max(e.y1, e.y0 + 1) * s};
+};
 const overlap = (a, b) => Math.max(0, Math.min(a.x1, b.x1) - Math.max(a.x0, b.x0)) * Math.max(0, Math.min(a.y1, b.y1) - Math.max(a.y0, b.y0));
 const inBox = (x, y, b) => x >= b.x0 - 1e-9 && x <= b.x1 + 1e-9 && y >= b.y0 - 1e-9 && y <= b.y1 + 1e-9;
 const anchorBox = (o, a) => { const s = o.size / 100, x0 = o.x - o.size / 2, y0 = o.y - o.size / 2; return {x0: x0 + a.x * s, y0: y0 + a.y * s, x1: x0 + (a.x + a.w) * s, y1: y0 + (a.y + a.h) * s}; };
@@ -79,16 +115,33 @@ function contained(inner, outer, k) {
     : inBox(inner.x, inner.y, anchorBox(outer, a))));
 }
 
-export function review(objects, k) {
+const rbox = (r) => ({x0: r.min_x, y0: r.min_y, x1: r.max_x, y1: r.max_y});
+
+// surfaces: the regions the area observes ({entity, kind, min_x, ...}); only water and road are checked.
+export function review(objects, k, surfaces = []) {
   const failures = [], notes = [];
+  extents = k.extent ?? new Map();
   const fail = (o, why) => failures.push(`${o.id} ${o.kind} (${o.x},${o.y} size ${o.size}): ${why}`);
-  const waters = objects.filter((o) => k.anchors.some((a) => a.of === o.kind && a.name === 'water'));
-  for (const o of objects) {
+  const inLand = (o) => k.terrain.has(o.kind) && k.terrain.get(o.kind) !== 'horizon';
+  const waters = objects.filter((o) => k.anchors.some((a) => a.of === o.kind && a.name === 'water') || surfaces.some((r) => r.entity === o.id && r.kind === 'water'));
+  // In the water: the centre in a water region of that object (a river or a lake drawn from its handles), else in its anchor.
+  const inWater = (o, w) => surfaces.some((r) => r.entity === w.id && r.kind === 'water' && inBox(o.x, o.y, rbox(r))) || contained(o, w, k);
+  // On a surface of another object that its kind is on (a car on a road, a boat on a lake): held there, as in a container.
+  const held = (o, t) => surfaces.some((r) => r.entity === t.id && (k.on.get(o.kind) ?? (k.place.get(o.kind) === 'water' ? ['water'] : [])).includes(r.kind) && inBox(o.x, o.y, rbox(r)));
+  for (const o of objects.filter((x) => x.kind !== 'landscape')) {
     const b = box(o);
+    // Nothing that stands on the ground in the water or on a road, unless it is on that surface (a car on a road).
+    if (k.place.get(o.kind) === 'ground' && !inLand(o)) for (const r of surfaces.filter((r) => ['water', 'road'].includes(r.kind) && r.entity !== o.id))
+      if (!(k.on.get(o.kind) ?? []).includes(r.kind) && overlap(b, rbox(r)) > 0) { fail(o, `stands in the ${r.kind} of ${r.entity} ${objects.find((x) => x.id === r.entity)?.kind}`); break; }
+    if (inLand(o)) {
+      if (k.terrain.get(o.kind) === 'through' && Math.abs(b.y0 - HORIZON) > 1) fail(o, 'does not come from the horizon');
+      if (b.x0 < 0 || b.y0 < 0 || b.x1 > W || b.y1 > H) fail(o, 'leaves the page');
+      continue;
+    }
     if (b.x0 < 0 || b.y0 < 0 || b.x1 > W || b.y1 > H) fail(o, 'leaves the page');
     if (EXPECT.water.includes(o.kind)) {
       // Water drawn after the thing is no reason to move it; a thing drawn after the water goes in.
-      const earlier = waters.filter((w) => w.z < o.z), holder = waters.find((w) => w.id !== o.id && contained(o, w, k));
+      const earlier = waters.filter((w) => w.z < o.z), holder = waters.find((w) => w.id !== o.id && inWater(o, w));
       if (earlier.length && !holder) fail(o, 'not in the water although ' + waters.map((w) => w.id + ' ' + w.kind).join(', ') + ' is on the page');
       if (!earlier.length && o.y <= HORIZON) fail(o, 'no water on the page, yet it is not low on the page');
     }
@@ -100,12 +153,30 @@ export function review(objects, k) {
   }
   for (let i = 0; i < objects.length; i++) for (let j = i + 1; j < objects.length; j++) {
     const a = objects[i], b = objects[j];
+    if ([a, b].some((x) => inLand(x) || x.kind === 'landscape')) continue;
     if (Math.hypot(a.x - b.x, a.y - b.y) < 10) fail(b, 'centred on ' + a.id + ' ' + a.kind);
     const area = overlap(box(a), box(b));
     if (area > 0 && !contained(a, b, k) && !contained(b, a, k)) fail(b, `overlaps ${a.id} ${a.kind} by ${Math.round(area)} px²`);
   }
+  // Standing things side by side: nothing that stands on the ground floats over another standing thing (their boxes
+  // share a fifth of the narrower width across, and one stands right on top of the other).
+  // (What drives on a road, one behind another, is held by the road: left out.)
+  const standing = objects.filter((o) => k.place.get(o.kind) === 'ground' && !inLand(o) && o.kind !== 'landscape' && !k.terrain.has(o.kind) && !objects.some((t) => t !== o && held(o, t)));
+  for (const a of standing) for (const b of standing) {
+    if (a === b) continue;
+    const p = box(a), q = box(b), across = Math.min(p.x1, q.x1) - Math.max(p.x0, q.x0);
+    // Stacked: its foot within half the other's height above the other's top while both are drawn at the same depth
+    // scale (drawn size over the size of its class, a person by its height): smaller, it stands behind, farther away.
+    const scale = (o) => o.size / ((CLASS_PX[k.size.get(o.kind)] ?? o.size) * (k.height?.get(o.kind) ?? 100) / 100);
+    if (across > 0.2 * Math.min(p.x1 - p.x0, q.x1 - q.x0) && p.y1 <= q.y0 + 1e-9 && q.y0 - p.y1 < 0.5 * (q.y1 - q.y0) && Math.abs(scale(a) - scale(b)) <= 0.05 * scale(b)) fail(a, `floats over ${b.id} ${b.kind}`);
+  }
+  // People by their heights (k.people height_about): a child is drawn smaller than an adult at the same depth.
+  for (const a of standing) for (const b of standing) {
+    const ha = k.height?.get(a.kind), hb = k.height?.get(b.kind);
+    if (ha !== undefined && hb !== undefined && ha > hb && Math.abs(box(a).y1 - box(b).y1) < 60 && a.size <= b.size) fail(a, `drawn no bigger than ${b.id} ${b.kind} although it is taller (${ha} against ${hb})`);
+  }
   // Relative sizes: a thing of a larger k.scenes size class is not drawn smaller, unless it sits in a container.
-  const free = objects.filter((o) => !objects.some((t) => t.id !== o.id && contained(o, t, k)));
+  const free = objects.filter((o) => !inLand(o) && o.kind !== 'landscape' && !objects.some((t) => t.id !== o.id && (contained(o, t, k) || inWater(o, t) || held(o, t))));
   for (const a of free) for (const b of free) {
     const ra = SIZE_RANK[k.size.get(a.kind)], rb = SIZE_RANK[k.size.get(b.kind)];
     // Drawn smaller is fine when it is also farther away: its base higher on the page (perspective).
@@ -139,7 +210,9 @@ export async function buildScene(kinds, {catalog, rules = false, solveMs = [], p
   }
   const objects = parse(state.sop).filter((w) => w.type === 'w.drawing.object').map((w) => ({id: val(w, 'code'), kind: val(w, 'drawing'),
     x: Number(val(w, 'x')), y: Number(val(w, 'y')), size: Number(val(w, 'size')), z: Number(val(w, 'z'))}));
-  return {state, objects, statuses};
+  // The surfaces the area observes on the final page (the water of rivers and lakes, roads).
+  const surfaces = (await createDrawingArea({state, knowledge: reader ?? undefined})).observeSpatial().regions ?? [];
+  return {state, objects, statuses, surfaces};
 }
 
 async function main() {
@@ -158,10 +231,10 @@ async function main() {
   const only = arg('--scene');
   for (const [name, kinds] of Object.entries(SCENES).filter(([name]) => !only || name === only)) {
     const solveMs = [], t0 = performance.now();
-    const {state, objects, statuses} = await buildScene(kinds, {catalog, rules: process.argv.includes('--rules'), solveMs, provider});
+    const {state, objects, statuses, surfaces} = await buildScene(kinds, {catalog, rules: process.argv.includes('--rules'), solveMs, provider});
     const sceneMs = performance.now() - t0;
     const refused = statuses.filter(([, s]) => s !== 'changed');
-    const {failures, notes} = review(objects, k);
+    const {failures, notes} = review(objects, k, surfaces);
     failed += failures.length + refused.length;
     console.log(`\n== ${name}: ${objects.length} objects, ${failures.length} failed checks${refused.length ? ', refused: ' + refused.map((r) => r.join(' ')).join('; ') : ''}; ${Math.round(sceneMs)} ms${solveMs.length ? ', placement solve ' + Math.round(solveMs.reduce((a, b) => a + b, 0) / solveMs.length) + ' ms mean, ' + Math.round(Math.max(...solveMs)) + ' ms max' : ''}`);
     for (const o of objects) console.log(`   ${o.id.padEnd(4)} ${o.kind.padEnd(8)} x=${o.x} y=${o.y} size=${o.size}`);

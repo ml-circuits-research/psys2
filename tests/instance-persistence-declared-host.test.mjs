@@ -20,7 +20,8 @@ async function populated(){
  s.nativeInstanceIds=Object.fromEntries(Object.values(NATIVE_AREAS).map(a=>[a.world,'stable.'+a.world]));
  const hosts={};for(const [key,area] of Object.entries(NATIVE_AREAS))hosts[key]=await createAreaHost(area,{state:s.isession.state[area.world],instanceId:s.nativeInstanceIds[area.world],loader:s.engine.loader});
  invoke(hosts.draw,'drawing.object.make',{kind:'triangle',name:'Peak',x:123,y:200,color:'#112233'});
- const made=invoke(hosts.diagram,'diagram.node.make',{kind:'circle',n:2});const ids=made.after.objects.map(o=>o.id);invoke(hosts.diagram,'diagram.link.make',{from:ids[0],to:ids[1]});
+ const made=invoke(hosts.diagram,'diagram.node.make',{kind:'circle',n:2});const ids=made.after.objects.filter(o=>o.sourceType==='diagram.sketch.node').map(o=>o.id);   // the observed page (diagram.sketch.page) is not a node
+invoke(hosts.diagram,'diagram.link.make',{from:ids[0],to:ids[1]});
  for(const kind of ['person','room'])invoke(hosts.calendar,`calendar.${kind}.add`,{id:kind,label:kind});   // the calendar "calendar" is declared by the area
  invoke(hosts.calendar,'calendar.meeting.add',{id:'event',title:'Planning',start:1000,duration:100,participants:['person'],room:'room',calendar:'calendar',notes:'Exact notes'});
  invoke(hosts.editor,'document.write',{title:'Notes',blocks:[{kind:'heading',text:'Heading',level:2},{kind:'paragraph',text:'Body'}]});

@@ -2,20 +2,21 @@
 import {readFileSync,writeFileSync} from 'node:fs';
 import {gunzipSync} from 'node:zlib';
 import {createHash} from 'node:crypto';
-import {DEMO_AVATAR_DATA} from './demo-tool-profile.mjs';
-import {createAvatarArea,emptyAvatarState} from '../../worlds/ui.avatar/sop-avatar.mjs';
-import {createDrawingHost,initialDrawingState} from '../../worlds/art.draw/declared-host.mjs';
-import {createDiagramHost,initialDiagramState} from '../../worlds/diagram.sketch/declared-host.mjs';
-import {createDocumentHost,initialDocumentState} from '../../worlds/docs.editor/declared-host.mjs';
-import {createCalendarHost,initialCalendarState} from '../../worlds/time.calendar/declared-host.mjs';
+import {invokeToolCommand} from '../../src/dialog/native-control-intent.mjs';
+import {emptyAreaState} from '../../worlds/sop-area-adapter.mjs';
+import {createAvatarArea} from '../../worlds/ui.avatar/sop-avatar.mjs';
+import {createDrawingArea} from '../../worlds/art.draw/sop-drawing.mjs';
+import {createDiagramArea} from '../../worlds/diagram.sketch/sop-diagram.mjs';
+import {createDocumentArea} from '../../worlds/docs.editor/sop-document.mjs';
+import {createCalendarArea} from '../../worlds/time.calendar/sop-calendar.mjs';
 const [input,output,limit='1000']=process.argv.slice(2);if(!output)throw Error('usage: check-demo-native-tools.mjs CORPUS_GZ OUTPUT_JSON [LIMIT]');
 const bytes=readFileSync(input),rows=gunzipSync(bytes).toString().trim().split('\n').map(JSON.parse).filter(row=>row.phase==='direct');
 const hash=value=>createHash('sha256').update('native-tool-check-1\n'+value).digest('hex');rows.sort((a,b)=>hash(a.source_path+':'+a.source_id).localeCompare(hash(b.source_path+':'+b.source_id)));
 const checked=[],start=performance.now();
 for(const [index,row]of rows.slice(0,Number(limit)).entries()){
- const state=row.world==='drawing'?initialDrawingState():row.world==='diagram'?initialDiagramState():row.world==='document'?initialDocumentState():row.world==='avatar'?emptyAvatarState():initialCalendarState();
- const factory={drawing:createDrawingHost,diagram:createDiagramHost,document:createDocumentHost,calendar:createCalendarHost,avatar:createAvatarArea}[row.world],host=await factory({state,instanceId:'corpus-check-'+index,...(row.world==='avatar'?{data:DEMO_AVATAR_DATA}:{})});let seq=0;
- const call=async(operation,args)=>{const result=await host.invoke({invocation:'call-'+(++seq),expectedVersion:host.observe().version,operation,args});if(!['changed','unchanged'].includes(result.status))throw Error(JSON.stringify({operation,args,status:result.status,reason:result.reason,code:result.code}));return result;};
+ const state=emptyAreaState();
+ const factory={drawing:createDrawingArea,diagram:createDiagramArea,document:createDocumentArea,calendar:createCalendarArea,avatar:createAvatarArea}[row.world],host=await factory({state,instanceId:'corpus-check-'+index});let seq=0;
+ const call=async(operation,args)=>{const result=invokeToolCommand(host,{invocation:'call-'+(++seq),expectedVersion:host.observe().version,operation,args});if(!['changed','unchanged'].includes(result.status))throw Error(JSON.stringify({operation,args,status:result.status,reason:result.reason,code:result.code}));return result;};
  let setup=true,error=null;const objects=row.context.existing,counts={},ids={};
  try{
   if(row.world==='document'&&objects.length)await call('document.write',{title:objects.find(o=>o.kind==='document')?.name??'Draft',blocks:[]});

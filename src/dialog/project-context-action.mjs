@@ -30,7 +30,7 @@ export async function projectContextAction(proposal,session,{bindings,registry,v
   if(!previous||!last||!Object.keys(last.after).every(key=>JSON.stringify(session.isession.state[key])===JSON.stringify(last.after[key])))return null;
   const prior=flatRequestProjection(previous);if(!prior.ok||prior.request.act!==r.act||prior.targets.length!==1||!prior.results.length)return null;
   inherited=prior.results;rewind=last.before;
- }else if(!Array.isArray(r.constraints)||!r.constraints.length)return null;
+ }else if(!Array.isArray(r.constraints)||!r.constraints.length&&r.act!=='arrange')return null;   // an arrangement may say nothing more ("improve the layout")
  const canonical=selected.canonical,values=[];
  // A reading beyond plain stated values (a comparative step, several results) is projected by the same bridge as any
  // other reading, with the context target bound to the kind the observed reference resolution chose.

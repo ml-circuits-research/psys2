@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
 import { createTranslator } from '../src/translate/index.mjs';
-import { guard, TurnAborted, withDeadline } from '../src/formalizer/guard.mjs';
+import { guard, TurnAborted, withDeadline } from '../src/dialog/turn-guard.mjs';
 import { restrictedSet } from '../src/formalizer/spell.mjs';
 import { addNoise, rng } from '../scripts/fuzz-turns.mjs';
 

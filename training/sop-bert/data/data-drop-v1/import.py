@@ -2,8 +2,8 @@
 """Import the Diagram/Drawing data drops (management/data-drop/<batch>/*.jsonl, format of
 management/DATA-REQUEST-diagram-drawing.md) into this folder for official-dataset/build.py.
 
-Per batch: normalise the few request-format differences to the trainer's label inventory (act ask -> answer, determiners
-demonstrative/possessive/quantified -> definite, operator count -> eq on node.n / drawn.count, `needs` collected and removed),
+Per batch: normalise the few request-format differences to the trainer's label inventory (act ask -> answer, operator count -> eq on
+node.n / drawn.count; determiners and `needs` are kept as written),
 validate every row (world, request fields, label banks and keys of the merged inventory, verbatim spans, references present
 in context.existing, official Validator and row conversions, duplicates against the official dataset and earlier drops) and
 write management/data-drop/<batch>/FEEDBACK.md (accepted/rejected counts with reasons and examples, normalisations).
@@ -59,6 +59,17 @@ def official_texts():
     return seen
 
 
+def one_edit(a, b):
+    if abs(len(a) - len(b)) > 1 or min(len(a), len(b)) < 4:
+        return False
+    if len(a) == len(b):
+        d = [i for i in range(len(a)) if a[i] != b[i]]
+        return len(d) == 1 or (len(d) == 2 and d[1] == d[0] + 1 and a[d[0]] == b[d[1]] and a[d[1]] == b[d[0]])
+    if len(a) > len(b):
+        a, b = b, a
+    return any(b[:i] + b[i + 1:] == a for i in range(len(b)))
+
+
 def ref_in_context(surface, existing):
     low = re.sub(r'^(the|a|an|this|that|these|those|my|our)\s+', '', surface.lower().strip(' "\'')).strip()
     if not low or POPULATION.search(low):
@@ -69,6 +80,8 @@ def ref_in_context(surface, existing):
             v = str(e.get(f, '')).lower()
             if v and (v == low or low in v or v in low or (words & set(re.findall(r'[a-z0-9?]+', v)) - {'the', 'a', 'of', 'to'})):
                 return True
+            if v and any(one_edit(w, x) for w in words for x in re.findall(r'[a-z0-9?]+', v)):
+                return True  # a typo of a visible name ("Chek" for Check)
     return False
 
 
@@ -82,6 +95,16 @@ def normalise(row, stats):
         moved = []
         kept = []
         for c in q.get('constraints') or []:
+            if isinstance(c, dict) and c.get('key') == 'node.rotate':
+                c['key'] = 'node.rotation'; stats['node.rotate -> node.rotation (declared parameter name)'] += 1
+            typ, _, name = str(c.get('key', '')).partition('.') if isinstance(c, dict) else ('', '', '')
+            bad_meta = isinstance(c, dict) and any(f in c and c[f] not in INVENTORY['request']['constraint']['keys'][f]['values']
+                                                   for f in ('operator', 'phase', 'polarity', 'character'))
+            if isinstance(c, dict) and 'key' in c and c['key'] != 'question.ask' and (name not in INVENTORY.get(world, {}).get(typ, {}).get('keys', {}) or bad_meta):
+                moved.append({'frame': c['key'] + (' (' + ', '.join(f'{f}={c[f]}' for f in ('operator', 'character') if f in c) + ')' if bad_meta else ''),
+                              'value': c.get('value'), 'span': c.get('value_span')})
+                stats['constraint with an undeclared key or meta value kept as needs (row kept)'] += 1
+                continue
             if isinstance(c, dict) and 'key' not in c and ('frame' in c or 'span' in c):
                 moved.append(c); stats['`needs` written inside constraints (no key) moved to needs'] += 1
             elif isinstance(c, dict) and c.get('key') == 'question.ask':
@@ -104,9 +127,7 @@ def normalise(row, stats):
         if moved:
             q['needs'] = (q.get('needs') if isinstance(q.get('needs'), list) else [q['needs']] if q.get('needs') else []) + moved
         t = q.get('target') or {}
-        if t.get('determiner') in DETERMINERS and DETERMINERS[t['determiner']] != t['determiner']:
-            stats[f'determiner {t["determiner"]} -> definite'] += 1
-            t['determiner'] = DETERMINERS[t['determiner']]
+        # determiners are stored as said (demonstrative, possessive, quantified); prepare-official maps them for the current trainer
         for c in q.get('constraints') or []:
             if c.get('operator') == 'count':
                 stats['operator count -> eq'] += 1
@@ -123,9 +144,10 @@ def normalise(row, stats):
                     stats['chart.type span extended to the whole kind phrase ("bar" -> "bar chart")'] += 1
             for f in ('anchor_fill', 'anchor_kind', 'typo_of', 'alias_of'):
                 c.pop(f, None)
-        needs = q.pop('needs', None)
+        needs = q.get('needs')  # kept in the stored labels (request field) for the semantic-frame migration; also summarised
         if needs:
-            yield needs if isinstance(needs, list) else [needs]
+            q['needs'] = needs if isinstance(needs, list) else [needs]
+            yield q['needs']
 
 
 def check(row, seen, official_seen):
@@ -137,7 +159,7 @@ def check(row, seen, official_seen):
         return ['empty-text']
     if SLOT_ID.search(text):
         errs.append('tool-or-slot-id-in-text')
-    k = (world, norm(text))
+    k = (world, norm(text), json.dumps(row.get('context'), sort_keys=True))
     if k in official_seen:
         errs.append('text-already-in-official-dataset')
     elif k in seen:
@@ -194,7 +216,8 @@ def done_batches():
 def main():
     frozen = {p.stem: [json.loads(l) for l in p.read_text().splitlines() if l.strip()] for p in sorted(FROZEN.glob('*.jsonl')) if not p.name.endswith('.needs.jsonl')}
     done = done_batches()
-    batches = sorted(p for p in DROP.iterdir() if p.is_dir() and p.name not in frozen and (p.name in done or len(sys.argv) > 1)) if DROP.exists() else []
+    consumed = {'pilot', 'dg-batch-01'}  # imported before the DONE protocol; only their top-level files as imported then (parts/ never)
+    batches = sorted(p for p in DROP.iterdir() if p.is_dir() and p.name not in frozen and (p.name in done or p.name in consumed or len(sys.argv) > 1)) if DROP.exists() else []
     official_seen = set()  # owner decision 2026-11-20: rows are never rejected for being in the official dataset or a benchmark; the build keeps one copy of identical texts
     seen, accepted, needs_all, needs_count = set(), [], collections.defaultdict(list), collections.Counter()
     summary = {}
@@ -231,7 +254,7 @@ def main():
                         if len(examples[e]) < 5:
                             examples[e].append(f'{path.name}:{i} {row.get("text")!r}')
                     continue
-                seen.add((row['world'], norm(row['text'])))
+                seen.add((row['world'], norm(row['text']), json.dumps(row.get('context'), sort_keys=True)))
                 kept += 1
                 per_world[row['world']] += 1
                 for c in row.get('classes') or []:
@@ -268,7 +291,7 @@ def main():
             lines += ['## Normalised on import (not an error; the trainer label inventory differs from the request format)', '']
             lines += [f'- {k}: {v}' for k, v in stats.most_common()] + ['']
         if batch_needs:
-            lines += ['## `needs` received (collected for the compilation stream, removed from the imported labels)', '']
+            lines += ['## `needs` received (collected for the compilation stream, kept in the stored labels as `request.needs`)', '']
             lines += [f'- {k}: {v}' for k, v in batch_needs.most_common()] + ['']
         lines += ['## Systematic issues to fix in the next batches', '',
                   '- A `name_span` must be the words of the text. "turn the car into a truck" with `name_span: "Car"` (the context name) is a '

@@ -1,0 +1,107 @@
+# Face part rules shared by every tab that holds w.face faces (authored): the Avatar tab (one face) and the Drawing tab
+# (a face and a figure for each person drawn, and faces put on things: eyes on the sun). A tab says which part of
+# which face a command edits (ui.face.edit) or adds (ui.face.add); these rules compile that to std.acts calls on the
+# part of that face, joined on the face, so several faces live in one instance. The value tables (size grades, move
+# steps, which face key a tinted part's colour sets) are facts here, not code.
+@fx.face.tables.size core.type of=ui.avatar.size
+@fx.face.tables.step core.type of=ui.avatar.step
+@fx.face.tables.tint core.type of=ui.avatar.tint
+@fx.face.edit.type core.type of=ui.face.edit
+@fx.face.add.type core.type of=ui.face.add
+@fx.face.feature.type core.type of=ui.avatar.feature
+@fx.size.tiny ui.avatar.size grade=tiny scale=0.6
+@fx.size.small ui.avatar.size grade=small scale=0.8
+@fx.size.default ui.avatar.size grade=default scale=1
+@fx.size.big ui.avatar.size grade=big scale=1.2
+@fx.size.huge ui.avatar.size grade=huge scale=1.5
+@fx.step.up ui.avatar.step place=up dx=0 dy=-3
+@fx.step.down ui.avatar.step place=down dx=0 dy=3
+@fx.step.left ui.avatar.step place=left dx=-3 dy=0
+@fx.step.right ui.avatar.step place=right dx=3 dy=0
+@fx.tint.skin ui.avatar.tint tint=skin attr=skin
+@fx.tint.hair ui.avatar.tint tint=hair attr=hair_colour
+@fx.tint.eyes ui.avatar.tint tint=eyes attr=eye_colour
+@fx.tint.clothes ui.avatar.tint tint=clothes attr=clothes
+
+# The part an edit names: the part of the face's kind for the slot (w.face.slot), on that face.
+@fx.fe.face w.face.face style=?style
+@fx.fe.slot w.face.slot slot=?slot part=?kind
+@fx.fe.part w.face.part kind=?kind face=$fx.fe.face
+
+# Add a part to a face (a part of that kind already there is given the variant instead).
+@fx.fa.add ui.face.add face=$fx.fe.face slot=?slot variant=?v
+@fx.fa.call app.act.call act=make kind=?kind variant=?v face=$fx.fe.face order=1
+@fx.face.add core.rule when=$fx.fe.face when=$fx.fa.add when=$fx.fe.slot not=$fx.fe.part then=$fx.fa.call
+@fx.fa.chg app.act.call act=change thing=$fx.fe.part attr=variant value=?v order=1
+@fx.face.add.present core.rule when=$fx.fe.face when=$fx.fa.add when=$fx.fe.slot when=$fx.fe.part then=$fx.fa.chg
+
+# Change the variant, the size (a grade or a scale) or the place of a part, or remove it.
+@fx.fe.v ui.face.edit face=$fx.fe.face slot=?slot variant=?v
+@fx.fe.v.call app.act.call act=change thing=$fx.fe.part attr=variant value=?v order=1
+@fx.face.edit.variant core.rule when=$fx.fe.face when=$fx.fe.v when=$fx.fe.slot when=$fx.fe.part then=$fx.fe.v.call
+@fx.fe.g ui.face.edit face=$fx.fe.face slot=?slot grade=?grade
+@fx.fe.g.table ui.avatar.size grade=?grade scale=?scale
+@fx.fe.g.call app.act.call act=change thing=$fx.fe.part attr=size value=?scale order=1
+@fx.face.edit.grade core.rule when=$fx.fe.face when=$fx.fe.g when=$fx.fe.g.table when=$fx.fe.slot when=$fx.fe.part then=$fx.fe.g.call
+@fx.fe.s ui.face.edit face=$fx.fe.face slot=?slot scale=?scale
+@fx.face.edit.scale core.rule when=$fx.fe.face when=$fx.fe.s when=$fx.fe.slot when=$fx.fe.part then=$fx.fe.g.call
+@fx.fe.mv ui.face.edit face=$fx.fe.face slot=?slot place=?place
+@fx.fe.mv.step ui.avatar.step place=?place dx=?dx dy=?dy
+@fx.fe.mv.part w.face.part kind=?kind face=$fx.fe.face x=?x y=?y
+@fx.fe.mv.nx core.calc out=?nx fn=add args=?x args=?dx
+@fx.fe.mv.ny core.calc out=?ny fn=add args=?y args=?dy
+@fx.fe.mv.cx app.act.call act=change thing=$fx.fe.mv.part attr=x value=?nx order=1
+@fx.fe.mv.cy app.act.call act=change thing=$fx.fe.mv.part attr=y value=?ny order=2
+@fx.face.edit.move.x core.rule when=$fx.fe.face when=$fx.fe.mv when=$fx.fe.mv.step when=$fx.fe.slot when=$fx.fe.mv.part with=$fx.fe.mv.nx then=$fx.fe.mv.cx
+@fx.face.edit.move.y core.rule when=$fx.fe.face when=$fx.fe.mv when=$fx.fe.mv.step when=$fx.fe.slot when=$fx.fe.mv.part with=$fx.fe.mv.ny then=$fx.fe.mv.cy
+@fx.fe.x ui.face.edit face=$fx.fe.face slot=?slot x=?nx
+@fx.fe.x.call app.act.call act=change thing=$fx.fe.part attr=x value=?nx order=1
+@fx.face.edit.x core.rule when=$fx.fe.face when=$fx.fe.x when=$fx.fe.slot when=$fx.fe.part then=$fx.fe.x.call
+@fx.fe.y ui.face.edit face=$fx.fe.face slot=?slot y=?ny
+@fx.fe.y.call app.act.call act=change thing=$fx.fe.part attr=y value=?ny order=2
+@fx.face.edit.y core.rule when=$fx.fe.face when=$fx.fe.y when=$fx.fe.slot when=$fx.fe.part then=$fx.fe.y.call
+@fx.fe.rm ui.face.edit face=$fx.fe.face slot=?slot remove=true
+@fx.fe.rm.call app.act.call act=remove thing=$fx.fe.part order=1
+@fx.face.edit.remove core.rule when=$fx.fe.face when=$fx.fe.rm when=$fx.fe.slot when=$fx.fe.part then=$fx.fe.rm.call
+
+# A colour on a tinted part sets the face colour its tint names; an untinted part takes its own colour.
+@fx.fe.c ui.face.edit face=$fx.fe.face slot=?slot colour=?c
+@fx.fe.c.shown ui.avatar.shown part=$fx.fe.part slot=?slot variant=?v
+@fx.fe.c.kp k.faces.part slot=?slot of=?v tint=?tint
+@fx.fe.c.table ui.avatar.tint tint=?tint attr=?attr
+@fx.fe.c.tinted app.act.call act=change thing=$fx.fe.face attr=?attr value=?c order=1
+@fx.face.edit.colour.tint core.rule when=$fx.fe.face when=$fx.fe.c when=$fx.fe.slot when=$fx.fe.part when=$fx.fe.c.shown when=$fx.fe.c.kp when=$fx.fe.c.table then=$fx.fe.c.tinted
+@fx.fe.c.anyTint k.faces.part slot=?slot of=?v tint=?anyTint
+@fx.fe.c.own app.act.call act=change thing=$fx.fe.part attr=colour value=?c order=1
+@fx.face.edit.colour.own core.rule when=$fx.fe.face when=$fx.fe.c when=$fx.fe.slot when=$fx.fe.part when=$fx.fe.c.shown not=$fx.fe.c.anyTint then=$fx.fe.c.own
+
+# The plain-word features of the variants (k.faces.variant: shape, size, length, feel, age, kind), one fact per value,
+# so a feature is read by its name: what a part offers, what it shows and what a feature edit asks for.
+@fx.ft.shape.v k.faces.variant slot=?slot style=?style name=?v shape=?x
+@fx.ft.shape.o ui.avatar.feature slot=?slot style=?style variant=?v property=shape value=?x
+@fx.feature.shape core.rule when=$fx.ft.shape.v then=$fx.ft.shape.o
+@fx.ft.size.v k.faces.variant slot=?slot style=?style name=?v size=?x
+@fx.ft.size.o ui.avatar.feature slot=?slot style=?style variant=?v property=size value=?x
+@fx.feature.size core.rule when=$fx.ft.size.v then=$fx.ft.size.o
+@fx.ft.length.v k.faces.variant slot=?slot style=?style name=?v length=?x
+@fx.ft.length.o ui.avatar.feature slot=?slot style=?style variant=?v property=length value=?x
+@fx.feature.length core.rule when=$fx.ft.length.v then=$fx.ft.length.o
+@fx.ft.feel.v k.faces.variant slot=?slot style=?style name=?v feel=?x
+@fx.ft.feel.o ui.avatar.feature slot=?slot style=?style variant=?v property=feel value=?x
+@fx.feature.feel core.rule when=$fx.ft.feel.v then=$fx.ft.feel.o
+@fx.ft.age.v k.faces.variant slot=?slot style=?style name=?v age=?x
+@fx.ft.age.o ui.avatar.feature slot=?slot style=?style variant=?v property=age value=?x
+@fx.feature.age core.rule when=$fx.ft.age.v then=$fx.ft.age.o
+@fx.ft.kind.v k.faces.variant slot=?slot style=?style name=?v kind=?x
+@fx.ft.kind.o ui.avatar.feature slot=?slot style=?style variant=?v property=kind value=?x
+@fx.feature.kind core.rule when=$fx.ft.kind.v then=$fx.ft.kind.o
+
+# A feature for a part of a face: a part that already shows the feature keeps its variant; otherwise it takes the first
+# variant of its slot and style with the feature, in the catalog's sequence; no such variant: nothing changes here (a
+# tab refuses when no part of what it named could take it).
+@fx.ff.e ui.face.edit face=$fx.fe.face slot=?slot property=?prop value=?x
+@fx.ff.part w.face.part kind=?kind face=$fx.fe.face variant=?now
+@fx.ff.held ui.avatar.feature slot=?slot style=?style variant=?now property=?prop value=?x
+@fx.ff.cand ui.avatar.feature slot=?slot style=?style property=?prop value=?x variant=?c core.select=first
+@fx.ff.call app.act.call act=change thing=$fx.ff.part attr=variant value=?c order=1
+@fx.face.edit.feature core.rule when=$fx.fe.face when=$fx.ff.e when=$fx.fe.slot when=$fx.ff.part not=$fx.ff.held when=$fx.ff.cand then=$fx.ff.call

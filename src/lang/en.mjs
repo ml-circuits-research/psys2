@@ -165,6 +165,21 @@ export function createLangEn(source = LANG_EN_FACTS, local = LANG_EN_LOCAL) {
     return w;
   }
 
+  /** The plural of a lowercase noun: an irregular one of the facts, else the first `inflect op=plural` rule that fits (suffix, after=consonant). */
+  const pluralRules = () => cached('pl', () => of('inflect').filter((w) => one(w, 'op') === 'plural').sort((a, b) => Number(one(a, 'order')) - Number(one(b, 'order'))));
+  const irregularPlural = () => cached('irr-pl', () => new Map(of('irregular').map((w) => [one(w, 'singular'), one(w, 'plural')])));
+  function plural(word) {
+    const w = String(word);
+    if (irregularPlural().has(w)) return irregularPlural().get(w);
+    for (const r of pluralRules()) {
+      const sfx = all(r, 'suffix'), hit = sfx.length ? sfx.find((x) => w.endsWith(x)) : '';
+      if (hit === undefined) continue;
+      if (one(r, 'after') === 'consonant' && /[aeiou]/.test(w.charAt(w.length - (hit?.length ?? 0) - 1))) continue;
+      return w.slice(0, w.length - Number(one(r, 'drop') ?? 0)) + (one(r, 'add') ?? '');
+    }
+    return w;
+  }
+
   // ---- ellipsis markers ----
   const ordered = (type) => cached(`e:${type}`, () => of(type).sort((a, b) => Number(one(a, 'order') ?? 0) - Number(one(b, 'order') ?? 0)).map((w) => one(w, 'text').split(' ')));
   const leads = () => ordered('ellipsis.lead');
@@ -427,7 +442,7 @@ export function createLangEn(source = LANG_EN_FACTS, local = LANG_EN_LOCAL) {
     return { mods, lead, bare, candidates: out };
   }
 
-  return { words, fn, ordinals, numerals, refers, anaphorRegex, singular, verbForms, leads, trails, repeats, starters, splitList, splitThings, bareDistributes, sharedArgument, ellipsisPrefixes, oneAnaphora, frames, nounPhrase, negatedRequest, timeRelation, timeComparison, cutWords, sequenceWords, joinerKeeps, cardJoiners, frameLeads, corrections, leadOnly, answers, answerRegex, answerWords, questionWords, facts: () => norm };
+  return { words, fn, ordinals, numerals, refers, anaphorRegex, singular, plural, verbForms, leads, trails, repeats, starters, splitList, splitThings, bareDistributes, sharedArgument, ellipsisPrefixes, oneAnaphora, frames, nounPhrase, negatedRequest, timeRelation, timeComparison, cutWords, sequenceWords, joinerKeeps, cardJoiners, frameLeads, corrections, leadOnly, answers, answerRegex, answerWords, questionWords, facts: () => norm };
 }
 
 /**

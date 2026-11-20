@@ -1,6 +1,7 @@
 // E3 (spec 03 section 2c): operation descriptions. The loader's pattern generator and its switch PSYS_GEN_PATTERNS were deleted in P6 (spec 16 section 15);
 // describePatterns stays a pure function (tested here). The reader route that read describe.sop in full was deleted 2026-11-15 (reviewer decision; spec 16 section 7):
 // a world's describe.sop holds only `slot=` declarations, and no world ships one with wording.
+import { exampleSentences } from '../src/formalizer/rules/shapes.mjs';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
@@ -33,7 +34,7 @@ test('describe wires read into descriptions; a word that means something else is
 });
 
 test('a quantified optional item expands to every count form and drops the absent slots from the emit', () => {
-  const list = describePatterns({ id: 'x', op: 'x.buy', intent: 'statement', emit: '@{_} x.buy item={i1} count={n1}\n@{_1} x.buy item={i2} count={n2}', args: [makeArg({ name: 'i1', cls: 'number', qty: 'n1' }), makeArg({ name: 'i2', cls: 'number', optional: true, qty: 'n2' }, { prep: ['and'] })], verb: ['buy'], frames: ['stmt'] });
+  const list = describePatterns({ id: 'x', op: 'x.buy', intent: 'statement', emit: '@{_} x.buy item={i1} count={n1}\n@{_1} x.buy item={i2} count={n2}', args: [makeArg({ name: 'i1', cls: 'number', qty: 'n1' }), makeArg({ name: 'i2', cls: 'number', optional: true, qty: 'n2' }, { prep: ['and'] })], verb: ['buy'], frames: ['stmt'] }, { exampleSentences });
   assert.equal(list.length, 6);   // 2 forms of the first item x 3 of the optional second (number, article, absent)
   const absent = list.filter((p) => !p.emit.includes('@{_1}'));
   assert.equal(absent.length, 2);

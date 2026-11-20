@@ -2,8 +2,8 @@
  * Per-session state of the rule formalizer: counters, agent entities and mention recency
  * (spec 03 section 3). Browser-safe.
  */
-import { makeWire, str, atom } from '../../soplang/index.mjs';
-import { en } from '../../lang/en.mjs';
+import { makeWire, str, atom } from '../soplang/index.mjs';
+import { en } from '../lang/en.mjs';
 
 const PRONOUNS = en.refers('session.agent');   // pronoun -> what it stands for: m, f, any, user, assistant (handover/lang.en pronouns)
 

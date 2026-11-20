@@ -88,6 +88,12 @@ New: a Length select (`avatar.part.change {ids, length}`) from the change comman
 | Button "Ungroup" | one selected with members or more than one part | `drawing.object.ungroup {id}` | `drawing.object.ungroup {id}` for groups | restored for groups; taking apart a single multi-part object is dropped: needs a take-apart SOP rule |
 | ID labels over objects | `idDisplay` always, or temporary until expiry | local only (display of state) | drawn on the canvas from view key ids and boxes | restored |
 
+| Inspector: "Part look" (the variants of a look part's slot: a person's hair, hat, clothes; eyes on the sun) | a look part selected | new | `drawing.part.change {id, index, variant}` (look-rules.sop on the part's face) | new |
+| Inspector: "Part shape" (basic shapes and the k.layouts outlines: irregular, star, heart) | a part of the drawing selected | new | `drawing.part.change {id, index, shape}` | new |
+| Inspector: "Add part" text and button (a part by its word: hat, t-shirt, eyes, chimney) | one object selected | new | `drawing.part.add {id, kind}` | new |
+| Inspector: "Different look" | a person selected | new | `drawing.person.vary {id}` | new |
+| Inspector: "Emotion" (k.faces expressions) and "Traits: <age>, <sex>" (observed inputs `age`, `sex`) | a person, or a thing that can show a face (observed `faceable`), selected | new | `drawing.person.expression {id, expression}` | new |
+
 ## Diagram
 
 | Old control | Shown when | Operation and arguments | New declaration / gesture | Status |
@@ -100,7 +106,7 @@ New: a Length select (`avatar.part.change {ids, length}`) from the change comman
 | Toggle "Select multiple" | always | local only (mode) | mode; `diagram.node.select {ids, edges}` | restored |
 | Toggle "Connect": tap source node, then destination node | always | source: `diagram.node.select {ids: [from]}`; destination: `diagram.link.make {from, to}` | `diagram.link.make {from,to}`; new: drag from a node's connect handle onto another node | improved |
 | Button "Clear diagram" | always | `diagram.page.clear {}` | `diagram.page.clear {}` | restored |
-| Button "Chart" (opens the numeric group draft) | always | local only | numeric group form -> `diagram.group.chart.make` | restored; pie and doughnut refused by the rules (`chart-layout-not-declared`), refusal shown |
+| Button "Chart" (opens the numeric group draft) | always | local only | numeric group form -> `diagram.group.chart.make` | restored; pie, doughnut and area are drawn by the rules (ring-projection.sop) |
 | Zoom buttons "-", "+", percentage; Ctrl/Cmd+wheel; two-finger pinch; keys "+", "-", "0" (fit) | always | local only | view only; change no state | restored |
 | Toggle "Object ID" | always | `diagram.ids.show {mode: 'off' or 'always'}` | `diagram.ids.show {mode}`; codes drawn by the SOP rules | restored (codes start hidden, the area default) |
 | Buttons "Undo", "Redo" | always | `undo {}`, `redo {}` | `diagram.undo {}`, `diagram.redo {}` | restored |
@@ -139,7 +145,7 @@ New: a Length select (`avatar.part.change {ids, length}`) from the change comman
 | Select "Arrowheads" (forward, both, none) | 1+ connection | `diagram.link.change {ids, arrow}` | `diagram.link.change {arrow}` | restored |
 | Number "Line width" (0.5 to 12) | 1+ connection | `diagram.link.change {ids, width}` | `diagram.link.change {width}` | restored |
 | Button "Connect nodes" | 2+ nodes, no connection selected; enabled when from differs from to | `diagram.link.make {from, to}` | `diagram.link.make` | restored |
-| Draft: "Numeric group label", select "Chart layout" (bar, line, pie, doughnut), textarea "Chart data" (label, number per line), "Create numeric group" | after "Chart" | `diagram.group.chart.make {label, labels, values, layout}`; Cancel local | `diagram.group.chart.make {label,labels,values,layout}` | restored (pie/doughnut refused, see Chart) |
+| Draft: "Numeric group label", select "Chart layout" (bar, line, pie, doughnut), textarea "Chart data" (label, number per line), "Create numeric group" | after "Chart" | `diagram.group.chart.make {label, labels, values, layout}`; Cancel local | `diagram.group.chart.make {label,labels,values,layout}` | restored (bar, line, area, pie, doughnut) |
 | Button "Convert to editable group" | a saved (legacy) chart active | `diagram.group.chart.adopt {id}` | none | dropped: no legacy charts in the area; the rules refuse `chart.adopt` |
 | "Group Object ID" readout (group id, or next free `g<n>`) | group selected or 2+ nodes | local only | from the projection | restored |
 | Text "Group label" | group selected or 2+ nodes | group: `diagram.group.change {id, label}`; else used by Group selected | `diagram.group.change {label}` / used by group.make | restored |
@@ -151,6 +157,12 @@ New: a Length select (`avatar.part.change {ids, length}`) from the change comman
 | Button "Ungroup" | group selected | `diagram.group.ungroup {id}` | `diagram.group.ungroup {id}` | restored |
 | Button "Delete group" | group selected | `diagram.group.remove {id}` | `diagram.group.remove {id}` | restored |
 | Member buttons (label · id) | group selected | `diagram.node.select {ids: [member]}` | `diagram.node.select` | restored |
+| New: page bar (theme, colour by, layout, direction, spacing, lines, Improve layout, Number steps) | always | none (new) | `diagram.style.apply`, `diagram.colour.by`, `diagram.layout`, `diagram.layout.improve`, `diagram.steps.number` (specs/diagram-capabilities.md) | improved |
+| New: Style panel (shape palette, fill/outline/text swatches, font size, bold, effect, opacity, corner) | 1+ node | none (new) | `diagram.node.change {kind|colour|outline|textColour|fontSize|fontWeight|effect|opacity|corner}` | improved |
+| New: Arrange and connect (align x6, distribute x2, chain/loop/to first/all, duplicate, merge, split) | 1+ node (align 2+, distribute 3+) | none (new) | `diagram.nodes.align`, `diagram.nodes.distribute`, `diagram.links.connect`, `diagram.node.duplicate`, `diagram.node.merge`, `diagram.node.split` | improved |
+| New: Link tools (route, reverse, insert node); arrowheads also `back` | 1+ connection | none (new) | `diagram.link.change {route}`, `diagram.link.reverse`, `diagram.node.insert` | improved |
+| New: Chart panel (data table: category, value, remove, add; axis titles, values, gridlines, legend) | a chart group selected | none (new) | `diagram.chart.*`, `diagram.chart.format` | improved |
+| Fit to view | always | local only | fits the objects (not a themed page's background) | improved |
 
 ## Documents
 
@@ -227,3 +239,8 @@ Restored (2026-11-20): `tests/mobile-editors-touch-browser.test.mjs` again start
 - Avatar "Resizing also adjusts the attached parts": a part resize changes only the listed parts; needs a resize rule over a declared attachment relation (parts inside or resting on a slot) and its `resizeRelated` observation.
 - Avatar compose by kind or base keeps no explicit part edits (`specs/avatar-native-controls.md` says explicit edits are retained): the preset rules replace every part; needs explicit-edit facts in the w.face instance and rules that keep them over a new base.
 - Diagram pie and doughnut charts are refused by the rules (`chart-layout-not-declared`).
+- People and parts (2026-11-20, `specs/people-and-parts.md`): every part of a person (face and clothes) and every face put
+  on a thing is a part of its object (index after the drawing's own parts), so the existing part controls (choice,
+  colour, move, size, delete) edit it; the new controls above add parts, variants, outlines, expressions and a different
+  look. The Avatar tab shows the same person model (its body with clothes framed under the face) and its part choice,
+  Look, Colour, Add and Delete controls reach the body's clothes (slots body, top, bottom, shoes, coat).

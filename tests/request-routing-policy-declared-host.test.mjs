@@ -117,8 +117,10 @@ test('actual declared capability, spatial and history interpreters route once an
   assert.match(mixed.trace.readingComparison,/no-common-interpreter-comparison/);
   assert.equal(mixed.trace.readerRouting.admission.alternatives.length,2);
   assert.deepEqual(observe(),['house','fish','house']);
-  assert.equal(compilations.length,1);
-  assert.match(compilations[0],/std.interpret.input/);
-  assert.doesNotMatch(compilations[0],/unknown-relation/);
+  // One reading comparison; the default placement's declared region choice (std.choice) is a separate request.
+  const interpreted=compilations.filter(sop=>/std.interpret.input/.test(sop));
+  assert.equal(interpreted.length,1);
+  assert.equal(compilations.length-interpreted.length,compilations.filter(sop=>/std.choice.request/.test(sop)).length);
+  assert.doesNotMatch(interpreted[0],/unknown-relation/);
  }finally{World.prototype.compileRequest=original;}
 });

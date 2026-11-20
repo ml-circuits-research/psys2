@@ -1,0 +1,229 @@
+# art.draw perspective and depth (owner, 2026-11-20): the page is a view with a horizon (landscape-rules.sop: the
+# view's horizon handle, else the foot of the sky of the page's layout) and a ground plane below it. How deep a thing
+# stands is where its foot is between the horizon (far) and the foot of the page (near).
+#  - Occlusion by depth: every object is drawn in a layer (ui.draw.layer, read by worlds/sop-primitives.mjs): the
+#    view first, then the things of the sky, then what lies on the horizon (hills: the lower foot in front), then the
+#    terrain on the ground (lakes, rivers, roads), then the things standing or floating on the ground or water in the
+#    order of their foot (the nearer in front), and things with no place (basic shapes) on top, in the order drawn.
+#  - Depth of a thing: a thing that stands on the ground (k.scenes place ground) casts a shadow on the ground under its
+#    foot, away from the light, and shows a side face (its parts once more, darker, shifted away from the light behind
+#    it); both fade and flatten with distance (farther is flatter and lighter).
+#  - Perspective: moving a thing that stands on the ground nearer or farther scales it by its depth (a house moved up
+#    towards the horizon gets smaller), from 0.4 of its size at the horizon to its full size at the foot of the page.
+@pv.layer.type core.type of=ui.draw.layer
+@pv.ground.type core.type of=ui.draw.ground
+@pv.placed.type core.type of=ui.draw.placedlayer
+@pv.light.type core.type of=ui.draw.light
+@pv.depth.type core.type of=ui.draw.depthscale
+
+# The light comes from the upper left: side faces and shadows fall to the right (dx per unit of depth, dy up the page),
+# unless a light of the landscape is on the page (k.scenes.light: the sun, the moon): then from the largest one, each
+# shadow and side face falling away from it, across by how far the thing is from the light (a whole unit at 200 or
+# more page units, none right under it).
+@pv.light ui.draw.light dx=1 dy=-0.6 shade="#24313b" shadow="#1d2b16"
+@pv.lightdir.type core.type of=ui.draw.lightdir
+@pv.lightsrc.type core.type of=ui.draw.lightsource
+@pv.ls.o w.drawing.object code=?lid drawing=?lk x=?lx size=?ls
+@pv.ls.k k.scenes.light name=?lk
+@pv.ls.best core.aggregate over=$pv.ls.o over=$pv.ls.k argmax=?best args=?ls pick=?lid ties=first then=$pv.ls.out
+@pv.ls.out ui.draw.lightsource object=?best
+@pv.ld.src ui.draw.lightsource object=?lid
+@pv.ld.lo w.drawing.object code=?lid x=?lx
+@pv.ld.o w.drawing.object code=?id x=?x
+@pv.ld.d0 core.calc out=?d0 fn=sub args=?x args=?lx
+@pv.ld.d1 core.calc out=?d1 fn=div args=?d0 args=200
+@pv.ld.d core.calc out=?d fn=clamp args=?d1 args=-1 args=1
+@pv.ld.out ui.draw.lightdir object=?id dx=?d
+@pv.light.from.source core.rule when=$pv.ld.src when=$pv.ld.lo when=$pv.ld.o with=$pv.ld.d0 with=$pv.ld.d1 with=$pv.ld.d then=$pv.ld.out
+@pv.ld.any ui.draw.lightsource object=?anyl
+@pv.ld.def ui.draw.light dx=?ldx
+@pv.ld.def.out ui.draw.lightdir object=?id dx=?ldx
+@pv.light.default core.rule when=$pv.ld.o not=$pv.ld.any when=$pv.ld.def then=$pv.ld.def.out
+# Depth scale of the ground plane: a thing at the horizon is drawn at near of its size at the foot of the page.
+@pv.depth ui.draw.depthscale near=0.4
+
+
+# Where each object stands (its k.scenes place): its kind's own, else that of the drawing its kind is drawn as
+# (k.people.kind drawing: a girl stands where a person stands).
+@pv.placeof.type core.type of=ui.draw.placeof
+@pv.po.o w.drawing.object code=?id drawing=?k
+@pv.po.own k.scenes.thing name=?k place=?p
+@pv.po.out ui.draw.placeof object=?id place=?p
+@pv.place.own core.rule when=$pv.po.o when=$pv.po.own then=$pv.po.out
+@pv.po.any k.scenes.thing name=?k place=?anyp
+@pv.po.drawn k.people.kind name=?k drawing=?d
+@pv.po.dplace k.scenes.thing name=?d place=?p
+@pv.place.drawn core.rule when=$pv.po.o not=$pv.po.any when=$pv.po.drawn when=$pv.po.dplace then=$pv.po.out
+
+# Layers.
+@pv.o w.drawing.object code=?id drawing=?k y=?y z=?z
+@pv.ext ui.draw.extent object=?id w=?ow h=?oh
+@pv.half core.calc out=?hh fn=div args=?oh args=2
+@pv.base core.calc out=?base fn=add args=?y args=?hh
+@pv.view ui.draw.terrain object=?id lies=view
+@pv.view.o ui.draw.layer slot=?id order=-30000
+@pv.layer.view core.rule when=$pv.o when=$pv.view then=$pv.view.o
+@pv.far ui.draw.terrain object=?id lies=horizon
+@pv.far.n core.calc out=?n fn=add args=-20000 args=?base
+@pv.far.o ui.draw.layer slot=?id order=?n
+@pv.layer.far core.rule when=$pv.o when=$pv.far when=$pv.ext with=$pv.half with=$pv.base with=$pv.far.n then=$pv.far.o
+@pv.land ui.draw.terrain object=?id lies=?l
+@pv.land.ground core.check fn=matches args=?l args="^(ground|through)$"
+@pv.land.n core.calc out=?n fn=add args=-10000 args=?z
+@pv.land.o ui.draw.layer slot=?id order=?n
+@pv.layer.land core.rule when=$pv.o when=$pv.land if=$pv.land.ground with=$pv.land.n then=$pv.land.o
+@pv.terrain ui.draw.terrain object=?id
+@pv.sky ui.draw.placeof object=?id place=sky
+@pv.sky.n core.calc out=?n fn=add args=-25000 args=?z
+@pv.sky.o ui.draw.layer slot=?id order=?n
+@pv.mark ui.draw.placedlayer object=?id
+@pv.layer.sky core.rule when=$pv.o not=$pv.terrain when=$pv.sky with=$pv.sky.n then=$pv.sky.o
+@pv.layer.sky.mark core.rule when=$pv.o not=$pv.terrain when=$pv.sky then=$pv.mark
+@pv.stand ui.draw.placeof object=?id place=?p
+@pv.stand.ground core.check fn=matches args=?p args="^(ground|water)$"
+@pv.stand.o ui.draw.layer slot=?id order=?base
+@pv.layer.stand core.rule when=$pv.o not=$pv.terrain when=$pv.stand if=$pv.stand.ground when=$pv.ext with=$pv.half with=$pv.base then=$pv.stand.o
+@pv.layer.stand.mark core.rule when=$pv.o not=$pv.terrain when=$pv.stand if=$pv.stand.ground then=$pv.mark
+@pv.rest.n core.calc out=?n fn=add args=10000 args=?z
+@pv.rest.o ui.draw.layer slot=?id order=?n
+@pv.layer.rest core.rule when=$pv.o not=$pv.terrain not=$pv.mark with=$pv.rest.n then=$pv.rest.o
+
+# The depth of what stands on the ground: t from 0 at the horizon to 1 at the foot of the page, and the strength of
+# its shadow and side face (0.35 far, 1 near).
+@pv.g.o w.drawing.object code=?id drawing=?k x=?x y=?y z=?z
+@pv.g.k ui.draw.placeof object=?id place=ground
+@pv.g.hz ui.draw.horizon y=?hy
+@pv.g.page ui.draw.page h=?ph
+@pv.g.ext ui.draw.extent object=?id w=?ow h=?oh
+@pv.g.hh core.calc out=?hh fn=div args=?oh args=2
+@pv.g.base core.calc out=?base fn=add args=?y args=?hh
+@pv.g.room core.calc out=?room fn=sub args=?ph args=?hy
+@pv.g.d core.calc out=?d fn=sub args=?base args=?hy
+@pv.g.t0 core.calc out=?t0 fn=div args=?d args=?room
+@pv.g.t core.calc out=?t fn=clamp args=?t0 args=0 args=1
+@pv.g.k1 core.calc out=?k1 fn=mul args=?t args=0.65
+@pv.g.str core.calc out=?str fn=add args=?k1 args=0.35
+@pv.g.out ui.draw.ground object=?id x=?x base=?base w=?ow h=?oh t=?t k=?str layer=?z
+@pv.ground core.rule when=$pv.g.o when=$pv.g.k not=$pv.terrain when=$pv.g.hz when=$pv.g.page when=$pv.g.ext with=$pv.g.hh with=$pv.g.base with=$pv.g.room with=$pv.g.d with=$pv.g.t0 with=$pv.g.t with=$pv.g.k1 with=$pv.g.str then=$pv.g.out
+
+# The shadow: a flat oval under the foot, shifted away from the light, wider than deep, flatter and fainter far away.
+@pv.sh.g ui.draw.ground object=?id x=?x base=?base w=?ow t=?t k=?str layer=?z
+@pv.sh.l ui.draw.light shadow=?ink
+@pv.sh.dir ui.draw.lightdir object=?id dx=?ldx
+@pv.sh.w core.calc out=?sw fn=mul args=?ow args=0.92
+@pv.sh.h0 core.calc out=?h0 fn=mul args=?t args=0.08
+@pv.sh.h1 core.calc out=?h1 fn=add args=?h0 args=0.08
+@pv.sh.h core.calc out=?sh fn=mul args=?ow args=?h1
+@pv.sh.off core.calc out=?off fn=mul args=?ow args=?ldx args=0.12
+@pv.sh.cx core.calc out=?cx fn=add args=?x args=?off
+@pv.sh.hw core.calc out=?hw fn=div args=?sw args=2
+@pv.sh.hd core.calc out=?hd fn=div args=?sh args=2
+@pv.sh.x0 core.calc out=?x0 fn=sub args=?cx args=?hw
+@pv.sh.y0 core.calc out=?y0 fn=sub args=?base args=?hd
+@pv.sh.op core.calc out=?op fn=mul args=?str args=0.24
+@pv.sh.src core.calc out=?src fn=concat args=?id args="~shadow"
+@pv.sh.draw ui.draw.draw part=?src source=?src slot=?id order=?z z=-2 shape=oval x=?x0 y=?y0 w=?sw h=?sh cx=0 cy=0 tx=0 ty=0 scale=1 side=left opacity=?op
+@pv.sh.fill ui.draw.chosen source=?src part=?src fill=?ink
+@pv.shadow core.rule when=$pv.sh.g when=$pv.sh.l when=$pv.sh.dir with=$pv.sh.w with=$pv.sh.h0 with=$pv.sh.h1 with=$pv.sh.h with=$pv.sh.off with=$pv.sh.cx with=$pv.sh.hw with=$pv.sh.hd with=$pv.sh.x0 with=$pv.sh.y0 with=$pv.sh.op with=$pv.sh.src then=$pv.sh.draw
+@pv.shadow.fill core.rule when=$pv.sh.g when=$pv.sh.l with=$pv.sh.src then=$pv.sh.fill
+
+# The side face: each solid part of the drawing once more behind the object, darker, shifted away from the light by a
+# share of the object's size that shrinks with distance.
+@pv.sd.g ui.draw.ground object=?id w=?ow k=?str
+@pv.sd.l ui.draw.light dy=?ldy shade=?ink
+@pv.sd.dir ui.draw.lightdir object=?id dx=?ldx
+@pv.sd.d ui.draw.draw part=?id source=?src slot=?id order=?o z=?pz shape=?sh x=?px y=?py w=?pw h=?ph cx=?cx cy=?cy tx=?tx ty=?ty scale=?sc sx=?sx sy=?sy side=?side
+@pv.sd.solid core.check fn=matches args=?sh args="^(rectangle|square|circle|oval|triangle|polygon)$"
+@pv.sd.u core.calc out=?u fn=mul args=?ow args=?str args=0.035
+@pv.sd.dx core.calc out=?ddx fn=mul args=?u args=?ldx
+@pv.sd.dy core.calc out=?ddy fn=mul args=?u args=?ldy
+@pv.sd.tx core.calc out=?tx2 fn=add args=?tx args=?ddx
+@pv.sd.ty core.calc out=?ty2 fn=add args=?ty args=?ddy
+@pv.sd.op core.calc out=?op fn=mul args=?str args=0.3
+@pv.sd.part core.calc out=?pp fn=concat args=?id args="~side"
+@pv.sd.out ui.draw.draw part=?pp source=?src slot=?id order=?o z=-1 shape=?sh x=?px y=?py w=?pw h=?ph cx=?cx cy=?cy tx=?tx2 ty=?ty2 scale=?sc sx=?sx sy=?sy side=?side opacity=?op
+@pv.sd.fill ui.draw.chosen source=?src part=?pp fill=?ink
+@pv.side.face core.rule when=$pv.sd.g when=$pv.sd.l when=$pv.sd.dir when=$pv.sd.d if=$pv.sd.solid with=$pv.sd.u with=$pv.sd.dx with=$pv.sd.dy with=$pv.sd.tx with=$pv.sd.ty with=$pv.sd.op with=$pv.sd.part then=$pv.sd.out
+@pv.side.face.fill core.rule when=$pv.sd.g when=$pv.sd.l when=$pv.sd.d if=$pv.sd.solid with=$pv.sd.part then=$pv.sd.fill
+
+# Perspective when a thing that stands on the ground is moved: its size (and its own width and height) scales by the
+# depth scale at its new foot over the one at its old foot, while both are below the horizon.
+@pv.mv.req app.act.request operation="drawing.object.place" y=?ny
+@pv.mv.item app.act.item param="ids" value=?id
+@pv.mv.o w.drawing.object code=?id drawing=?k y=?oy size=?s
+@pv.mv.k ui.draw.placeof object=?id place=ground
+@pv.mv.bd ui.draw.backdrop object=?id
+@pv.mv.hz ui.draw.horizon y=?hy
+@pv.mv.page ui.draw.page h=?ph
+@pv.mv.ds ui.draw.depthscale near=?near
+@pv.mv.below.old core.check fn=gt args=?oy args=?hy
+@pv.mv.below.new core.check fn=gt args=?ny args=?hy
+@pv.mv.moved core.check fn=neq args=?ny args=?oy
+@pv.mv.room core.calc out=?room fn=sub args=?ph args=?hy
+@pv.mv.span core.calc out=?span fn=sub args=1 args=?near
+@pv.mv.a0 core.calc out=?a0 fn=sub args=?oy args=?hy
+@pv.mv.a1 core.calc out=?a1 fn=div args=?a0 args=?room
+@pv.mv.a2 core.calc out=?a2 fn=min args=?a1 args=1
+@pv.mv.a3 core.calc out=?a3 fn=mul args=?a2 args=?span
+@pv.mv.da core.calc out=?da fn=add args=?a3 args=?near
+@pv.mv.b0 core.calc out=?b0 fn=sub args=?ny args=?hy
+@pv.mv.b1 core.calc out=?b1 fn=div args=?b0 args=?room
+@pv.mv.b2 core.calc out=?b2 fn=min args=?b1 args=1
+@pv.mv.b3 core.calc out=?b3 fn=mul args=?b2 args=?span
+@pv.mv.db core.calc out=?db fn=add args=?b3 args=?near
+@pv.mv.f core.calc out=?f fn=div args=?db args=?da
+@pv.mv.s0 core.calc out=?s0 fn=mul args=?s args=?f
+@pv.mv.s1 core.calc out=?s1 fn=round args=?s0 args=1
+@pv.mv.call app.act.call act=change thing=$pv.mv.o attr=size value=?s1 order=3
+@pv.move.depth core.rule when=$pv.mv.req when=$pv.mv.item when=$pv.mv.o when=$pv.mv.k not=$pv.mv.bd when=$pv.mv.hz when=$pv.mv.page when=$pv.mv.ds if=$pv.mv.below.old if=$pv.mv.below.new if=$pv.mv.moved with=$pv.mv.room with=$pv.mv.span with=$pv.mv.a0 with=$pv.mv.a1 with=$pv.mv.a2 with=$pv.mv.a3 with=$pv.mv.da with=$pv.mv.b0 with=$pv.mv.b1 with=$pv.mv.b2 with=$pv.mv.b3 with=$pv.mv.db with=$pv.mv.f with=$pv.mv.s0 with=$pv.mv.s1 then=$pv.mv.call
+@pv.mw.o w.drawing.object code=?id width=?w
+@pv.mw.v core.calc out=?w1 fn=mul args=?w args=?f
+@pv.mw.r core.calc out=?w2 fn=round args=?w1 args=1
+@pv.mw.call app.act.call act=change thing=$pv.mv.o attr=width value=?w2 order=4
+@pv.move.depth.width core.rule when=$pv.mv.req when=$pv.mv.item when=$pv.mv.o when=$pv.mw.o when=$pv.mv.k not=$pv.mv.bd when=$pv.mv.hz when=$pv.mv.page when=$pv.mv.ds if=$pv.mv.below.old if=$pv.mv.below.new if=$pv.mv.moved with=$pv.mv.room with=$pv.mv.span with=$pv.mv.a0 with=$pv.mv.a1 with=$pv.mv.a2 with=$pv.mv.a3 with=$pv.mv.da with=$pv.mv.b0 with=$pv.mv.b1 with=$pv.mv.b2 with=$pv.mv.b3 with=$pv.mv.db with=$pv.mv.f with=$pv.mw.v with=$pv.mw.r then=$pv.mw.call
+@pv.mh.o w.drawing.object code=?id height=?h
+@pv.mh.v core.calc out=?h1 fn=mul args=?h args=?f
+@pv.mh.r core.calc out=?h2 fn=round args=?h1 args=1
+@pv.mh.call app.act.call act=change thing=$pv.mv.o attr=height value=?h2 order=5
+@pv.move.depth.height core.rule when=$pv.mv.req when=$pv.mv.item when=$pv.mv.o when=$pv.mh.o when=$pv.mv.k not=$pv.mv.bd when=$pv.mv.hz when=$pv.mv.page when=$pv.mv.ds if=$pv.mv.below.old if=$pv.mv.below.new if=$pv.mv.moved with=$pv.mv.room with=$pv.mv.span with=$pv.mv.a0 with=$pv.mv.a1 with=$pv.mv.a2 with=$pv.mv.a3 with=$pv.mv.da with=$pv.mv.b0 with=$pv.mv.b1 with=$pv.mv.b2 with=$pv.mv.b3 with=$pv.mv.db with=$pv.mv.f with=$pv.mh.v with=$pv.mh.r then=$pv.mh.call
+
+# How big a person is drawn: the size of the drawing its kind is drawn as (k.people.kind drawing: the person), scaled
+# by its height among people (k.people.kind height_about, an adult man 100: a child 65 to 70), so a child is drawn
+# smaller than an adult (before the size class of the drawing, after a size the command asks for).
+@pv.hp.sub ui.draw.subject kind=?k
+@pv.hp.kind k.people.kind name=?k height_about=?hp drawing=?d
+@pv.hp.class k.scenes.thing name=?d size=?c
+@pv.hp.scale ui.draw.scale class=?c size=?cs
+@pv.hp.s0 core.calc out=?s0 fn=mul args=?cs args=?hp args=0.01
+@pv.hp.s1 core.calc out=?s1 fn=div args=?s0 args=2
+@pv.hp.s2 core.calc out=?s2 fn=round args=?s1
+@pv.hp.s core.calc out=?s fn=mul args=?s2 args=2
+@pv.hp.o ui.draw.sizing rank=1.5 size=?s
+@pv.size.people core.rule when=$pv.hp.sub when=$pv.hp.kind when=$pv.hp.class when=$pv.hp.scale with=$pv.hp.s0 with=$pv.hp.s1 with=$pv.hp.s2 with=$pv.hp.s then=$pv.hp.o
+
+# Nothing that stands on the ground floats over another standing thing or stands right under one: the column across a
+# standing thing's width, above it up to the horizon and below it down to the foot of the page, is a region (kind
+# standing) a new standing thing keeps out of where it can (app.place.avoid, soft: less than an overlap costs).
+# Standing things go side by side on the ground.
+@pv.st.g ui.draw.ground object=?id x=?x base=?base w=?ow h=?oh
+@pv.st.hw core.calc out=?hw fn=div args=?ow args=2
+@pv.st.x0 core.calc out=?x0 fn=sub args=?x args=?hw
+@pv.st.x1 core.calc out=?x1 fn=add args=?x args=?hw
+@pv.st.top core.calc out=?top fn=sub args=?base args=?oh
+@pv.st.hz ui.draw.horizon y=?up
+@pv.st.page ui.draw.page h=?down
+@pv.st.above app.observe.region of=?id kind=standing x0=?x0 y0=?up x1=?x1 y1=?top
+@pv.st.below app.observe.region of=?id kind=standing x0=?x0 y0=?base x1=?x1 y1=?down
+@pv.st.room core.check fn=lt args=?up args=?top
+@pv.standing.above core.rule when=$pv.st.g when=$pv.st.hz with=$pv.st.hw with=$pv.st.x0 with=$pv.st.x1 with=$pv.st.top if=$pv.st.room then=$pv.st.above
+@pv.st.under core.check fn=lt args=?base args=?down
+@pv.standing.below core.rule when=$pv.st.g when=$pv.st.page with=$pv.st.hw with=$pv.st.x0 with=$pv.st.x1 if=$pv.st.under then=$pv.st.below
+@pv.sa.sub ui.draw.subject kind=?k
+@pv.sa.as ui.draw.as kind=?k as=?a
+@pv.sa.place k.scenes.thing name=?a place=ground
+@pv.sa.terrain k.layouts.terrain name=?a
+@pv.sa.o app.place.avoid surface=standing strength=soft weight=3000
+# A thing that goes onto a road (k.scenes.support on=road: a car) drives along it, one behind another, so it keeps to
+# its surface instead.
+@pv.sa.goes ui.draw.goes surface=?gs
+@pv.avoid.standing core.rule when=$pv.sa.sub when=$pv.sa.as when=$pv.sa.place not=$pv.sa.terrain not=$pv.sa.goes then=$pv.sa.o

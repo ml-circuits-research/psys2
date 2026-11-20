@@ -1,13 +1,14 @@
 // The avatar as a SOP world: a w.face instance driven by the library's generic acts, drawn from facts that
-// worlds/ui.avatar/render-projection.sop derives with k.faces geometry. No avatar-specific JavaScript decides
+// worlds/art.draw/look-projection.sop (the people's look projection the Avatar shares) derives with k.faces geometry. No avatar-specific JavaScript decides
 // what is drawn; docs/webchat/ui/sop-primitives.mjs only draws the derived primitives.
+import{PINNED_CATALOG}from'./fixtures/pinned-catalog.mjs';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync,readdirSync,existsSync} from 'node:fs';
 import {World} from '../src/vendor/sopworld/sopworld.mjs';
 import {renderPrimitives} from '../worlds/sop-primitives.mjs';
 
-const K=new URL('../../sop-knowledge-worlds/docs/worlds/',import.meta.url);
+const K=PINNED_CATALOG;
 const read=path=>readFileSync(new URL(path,K),'utf8');
 const available=existsSync(new URL('w.face/schema.sop',K))&&read('w.face/schema.sop').includes('w.face.slot');
 const TYPES={draw:'ui.avatar.draw',fill:'ui.avatar.fill',point:'ui.avatar.point',orient:'ui.avatar.orient'};
@@ -17,10 +18,10 @@ function avatarWorld(){
  const library=Object.fromEntries(readdirSync(K).filter(d=>existsSync(new URL(d+'/schema.sop',K))).map(d=>[d,read(d+'/schema.sop')]));
  const world=new World({library});
  const must=(result,what)=>assert.equal(result.ok,true,what+' '+JSON.stringify(result.violations?.[0]));
- must(world.load('@acts core.use world=std.acts\n@face core.use world=w.face\n@faces core.use world=k.faces'),'schemas');
- for(const file of readdirSync(new URL('k.faces/shards/',K)).filter(f=>f.startsWith('plain-')||['slots.sop','colours.sop','presets.sop'].includes(f)))
+ must(world.load('@acts core.use world=std.acts\n@face core.use world=w.face\n@faces core.use world=k.faces\n@parts core.use world=k.parts\n@objects core.use world=k.objects'),'schemas');
+ for(const file of readdirSync(new URL('k.faces/shards/',K)).filter(f=>f.startsWith('plain-')||f.startsWith('figure-')||['slots.sop','colours.sop','presets.sop'].includes(f)))
   must(world.tell(read('k.faces/shards/'+file),{factsOnly:true}),file);
- must(world.load(readFileSync(new URL('../worlds/ui.avatar/render-projection.sop',import.meta.url),'utf8')),'projection');
+ must(world.load(readFileSync(new URL('../worlds/art.draw/look-projection.sop',import.meta.url),'utf8')),'projection');
  return {world,must};
 }
 function compose({world,must},preset){

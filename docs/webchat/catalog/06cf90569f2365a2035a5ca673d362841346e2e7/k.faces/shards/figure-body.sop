@@ -1,0 +1,31 @@
+# k.faces/shards/figure-body: the variants of the slot `body` in the style `figure`: features, and parts with a primitive shape, a box in the frame of the figure, a draw order and colours; points for lines and polygons.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: tools/figures-core.mjs
+
+# body: bare
+@k.faces.figure.body.bare k.faces.variant slot=body name=bare style=figure kind=body core.source="hand-core 1"
+@k.faces.figure.body.bare.neck k.faces.part slot=body of=bare name=neck shape=rectangle x=46 y=26 w=8 h=8 z=1 colour=pink colour=brown tint=skin core.source="hand-core 1"
+@k.faces.figure.body.bare.torso k.faces.part slot=body of=bare name=torso shape=rectangle x=40 y=32 w=20 h=30 z=1 colour=pink colour=brown tint=skin core.source="hand-core 1"
+@k.faces.figure.body.bare.left_arm k.faces.part slot=body of=bare name=left_arm shape=polygon x=30 y=33 w=14 h=22 z=1 colour=pink colour=brown tint=skin core.source="hand-core 1"
+@k.faces.figure.body.bare.right_arm k.faces.part slot=body of=bare name=right_arm shape=polygon x=56 y=33 w=14 h=22 z=1 colour=pink colour=brown tint=skin core.source="hand-core 1"
+@k.faces.figure.body.bare.left_hand k.faces.part slot=body of=bare name=left_hand shape=circle x=28 y=51 w=6 h=6 z=2 colour=pink colour=brown tint=skin core.source="hand-core 1"
+@k.faces.figure.body.bare.right_hand k.faces.part slot=body of=bare name=right_hand shape=circle x=66 y=51 w=6 h=6 z=2 colour=pink colour=brown tint=skin core.source="hand-core 1"
+@k.faces.figure.body.bare.left_leg k.faces.part slot=body of=bare name=left_leg shape=polygon x=41 y=61 w=8 h=29 z=1 colour=pink colour=brown tint=skin core.source="hand-core 1"
+@k.faces.figure.body.bare.right_leg k.faces.part slot=body of=bare name=right_leg shape=polygon x=51 y=61 w=8 h=29 z=1 colour=pink colour=brown tint=skin core.source="hand-core 1"
+@k.faces.figure.body.bare.left_arm.p1 k.faces.point part=$k.faces.figure.body.bare.left_arm n=1 x=41 y=33 core.source="hand-core 1"
+@k.faces.figure.body.bare.left_arm.p2 k.faces.point part=$k.faces.figure.body.bare.left_arm n=2 x=44 y=36 core.source="hand-core 1"
+@k.faces.figure.body.bare.left_arm.p3 k.faces.point part=$k.faces.figure.body.bare.left_arm n=3 x=34 y=55 core.source="hand-core 1"
+@k.faces.figure.body.bare.left_arm.p4 k.faces.point part=$k.faces.figure.body.bare.left_arm n=4 x=30 y=53 core.source="hand-core 1"
+@k.faces.figure.body.bare.right_arm.p1 k.faces.point part=$k.faces.figure.body.bare.right_arm n=1 x=70 y=53 core.source="hand-core 1"
+@k.faces.figure.body.bare.right_arm.p2 k.faces.point part=$k.faces.figure.body.bare.right_arm n=2 x=66 y=55 core.source="hand-core 1"
+@k.faces.figure.body.bare.right_arm.p3 k.faces.point part=$k.faces.figure.body.bare.right_arm n=3 x=56 y=36 core.source="hand-core 1"
+@k.faces.figure.body.bare.right_arm.p4 k.faces.point part=$k.faces.figure.body.bare.right_arm n=4 x=59 y=33 core.source="hand-core 1"
+@k.faces.figure.body.bare.left_leg.p1 k.faces.point part=$k.faces.figure.body.bare.left_leg n=1 x=41 y=61 core.source="hand-core 1"
+@k.faces.figure.body.bare.left_leg.p2 k.faces.point part=$k.faces.figure.body.bare.left_leg n=2 x=49 y=61 core.source="hand-core 1"
+@k.faces.figure.body.bare.left_leg.p3 k.faces.point part=$k.faces.figure.body.bare.left_leg n=3 x=48 y=90 core.source="hand-core 1"
+@k.faces.figure.body.bare.left_leg.p4 k.faces.point part=$k.faces.figure.body.bare.left_leg n=4 x=42 y=90 core.source="hand-core 1"
+@k.faces.figure.body.bare.right_leg.p1 k.faces.point part=$k.faces.figure.body.bare.right_leg n=1 x=58 y=90 core.source="hand-core 1"
+@k.faces.figure.body.bare.right_leg.p2 k.faces.point part=$k.faces.figure.body.bare.right_leg n=2 x=52 y=90 core.source="hand-core 1"
+@k.faces.figure.body.bare.right_leg.p3 k.faces.point part=$k.faces.figure.body.bare.right_leg n=3 x=51 y=61 core.source="hand-core 1"
+@k.faces.figure.body.bare.right_leg.p4 k.faces.point part=$k.faces.figure.body.bare.right_leg n=4 x=59 y=61 core.source="hand-core 1"

@@ -20,7 +20,6 @@
  * first clause of a compound question and the words between its two clauses), subject (default `i`).
  * Emit templates: `{slot}` placeholders; an optional quantified argument that is absent drops the tokens / lines that use it.
  */
-import { exampleSentences } from '../formalizer/rules/shapes.mjs';
 import { get, getAll } from '../soplang/index.mjs';
 
 export const INTENT_FRAMES = {
@@ -98,9 +97,10 @@ function applyEmit(emit, subst, absent) {
  * Generate the pattern objects of one description: `[{ id, form, match, emit, kind, priority, example: [] }]`.
  * @param {object} d  { id (without `describe.`), op, intent, emit, args: [makeArg(...)], verb, tverb, noun, ask, rest, pre, mid, subject (arrays of words), noSubject, frames, skip (arrays),
  *                      priority, shortPriority, bareVerb (boolean), kind, sample ({slot: value}), example (array) }
- * @param {object} [o]  { phrases, lexicons, lg } `lg` are the language settings (`EN` by default; `lg.frames`, `lg.intentFrames`, `lg.lead`, `lg.tail` replace the English tables)
+ * @param {object} [o]  { phrases, lexicons, lg, exampleSentences } `exampleSentences` is the legacy pattern compiler's sentence generator (src/formalizer/rules/shapes.mjs), passed by the historical grammar tools; `lg` are the language settings (`EN` by default; `lg.frames`, `lg.intentFrames`, `lg.lead`, `lg.tail` replace the English tables)
  */
-export function describePatterns(d, { phrases = null, lexicons = null, lg = EN } = {}) {
+export function describePatterns(d, { phrases = null, lexicons = null, lg = EN, exampleSentences = null } = {}) {
+  if (typeof exampleSentences !== 'function') throw new Error('describePatterns needs the legacy pattern compiler (exampleSentences)');
   const intent = d.intent;
   const FR = lg.frames ?? FRAMES, IF = lg.intentFrames ?? INTENT_FRAMES;
   if (!IF[intent]) throw new Error(`describe '${d.id}': unknown intent '${intent}' (${Object.keys(IF).join(', ')})`);

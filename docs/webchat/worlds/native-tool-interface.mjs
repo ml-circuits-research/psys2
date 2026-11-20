@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // One authored SOP interface supplies both native parameter admission and compiler facts.
-import { World, parse, quote, str } from '../lib/vendor/sopworld/sopworld.mjs?v=4a094fcca4';
+import { World, parse, quote, str } from '../lib/vendor/sopworld/sopworld.mjs?v=915a9d5c18';
 import { budget } from '../lib/dialog/budget.mjs?v=00bce6e369';
 
 const NS = 'std.capability.';
@@ -33,7 +33,7 @@ const forbidden = new Set(['__proto__', 'constructor', 'prototype']);
 const parameterFields = ['kind', 'required', 'nullable', 'min', 'max', 'enum', 'default'];
 const inheritedFields = new Set(['id', 'act', 'on', 'params']);
 const interfaceTypes = new Set([
-  ...['scope', 'operation', 'parameter', 'seed', 'arg', 'record', 'list', 'item'].map(type => NS + type),
+  ...['scope', 'operation', 'parameter', 'seed', 'repeat', 'property', 'arg', 'record', 'list', 'item'].map(type => NS + type),
   ...['metadata', 'input', 'parameter', 'compose'].map(type => ABI + type),
 ]);
 let validators;
@@ -180,6 +180,13 @@ export function readNativeToolInterface(source, { imports = {} } = {}) {
   const overrides = lookupBy(of(ABI + 'parameter'), 'parameter');
   const uses = of(ABI + 'compose');
   const operationNames = new Set(rows.map(row => first(row, 'name')));
+  // A family that may be made several times by one request (std.capability.repeat on act concept max).
+  const families = new Set(rows.map(row => first(row, 'on')));
+  const repeats = of(NS + 'repeat');
+  if (repeats.some(row => !families.has(first(row, 'on')))) throw Error('unknown-native-interface-repeat-family');
+  // A request concept the area binds to one of its parameters itself ("three boxes": count to the node tool's n).
+  const properties = of(NS + 'property');
+  if (properties.some(row => !families.has(first(row, 'on')))) throw Error('unknown-native-interface-property-family');
   const seeds = new Map();
   for (const seed of of(NS + 'seed')) {
     const operation = first(seed, 'operation');
@@ -231,6 +238,7 @@ export function readNativeToolInterface(source, { imports = {} } = {}) {
             facts.set(entry.operation.id, { ...entry.operation, attrs: { ...entry.operation.attrs, scope: [scope], order: [String(order)] } });
             for (const wire of [...entry.parameters, ...entry.seeds, ...entry.values]) facts.set(wire.id, wire);
           }
+          for (const row of [...repeats, ...properties]) facts.set(row.id, { ...row, attrs: { ...row.attrs, scope: [scope] } });
           return [...facts.values()];
         },
       };

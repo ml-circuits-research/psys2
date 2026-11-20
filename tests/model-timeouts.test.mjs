@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine, isModelTimeout } from '../src/dialog/index.mjs';
 import { createEncoderFormalizer } from '../src/formalizer/strategy.mjs';
-import { OrtTimeout } from '../src/formalizer/ort-client.mjs';
+import { OrtTimeout } from '../src/dialog/ort-client.mjs';
 
 const loader = createFsLoader({ roots: [DEFAULT_ROOT] });
 const plain = await createEngine({ loader, options: { reasoner: 'matrix' } });

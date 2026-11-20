@@ -198,6 +198,21 @@
       "outline"
      ],
      "src": "visual effects on nodes"
+    },
+    "rotation": {
+     "head": "number",
+     "concept": "rotation",
+     "src": "diagram.node.change {rotation} degrees (specs/diagram-capabilities.md)"
+    },
+    "opacity": {
+     "head": "number",
+     "concept": "opacity",
+     "src": "diagram.node.change {opacity} 0.1-1"
+    },
+    "corner": {
+     "head": "number",
+     "concept": "corner.radius",
+     "src": "diagram.node.change {corner} 0-40"
     }
    }
   },

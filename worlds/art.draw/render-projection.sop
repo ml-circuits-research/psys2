@@ -50,11 +50,13 @@
 @form.o w.drawing.object code=?id drawing=?k
 @form.own k.objects.object name=?k
 @form.own.o ui.draw.form object=?id form=?k
-@form.direct core.rule when=$form.o when=$form.own then=$form.own.o
+# A terrain feature (k.layouts.terrain) is drawn from its handles (landscape-rules.sop), not from a picture.
+@form.terrain k.layouts.terrain name=?k
+@form.direct core.rule when=$form.o when=$form.own not=$form.terrain then=$form.own.o
 @form.parent k.people.kind name=?k kind_of=?p
 @form.parent.obj k.objects.object name=?p
 @form.parent.o ui.draw.form object=?id form=?p
-@form.inherited core.rule when=$form.o when=$form.parent when=$form.parent.obj not=$form.own then=$form.parent.o
+@form.inherited core.rule when=$form.o when=$form.parent when=$form.parent.obj not=$form.own not=$form.terrain then=$form.parent.o
 
 # Parts of the form, scaled about the object's centre: the 0..100 frame maps onto the object's box (its extent). A part's
 # index is its place in the drawing's layer order (from 0), the index part edits name; a removed part is not drawn.
@@ -71,12 +73,14 @@
 @pr.ix ui.draw.index object=?id source=$pr.kp index=?i
 @pr.removed w.drawing.part object=$pr.o index=?i removed=true
 @pr.moved w.drawing.part object=$pr.o index=?i dx=?mdx
+@pr.hidden ui.draw.hidden object=?id source=$pr.kp
+@pr.shaped w.drawing.part object=$pr.o index=?i shape=?anyShape
 @pr.k core.calc out=?scale fn=div args=?s args=100
 @pr.ext ui.draw.extent object=?id w=?ow h=?oh
 @pr.sx core.calc out=?sx fn=div args=?ow args=100
 @pr.sy core.calc out=?sy fn=div args=?oh args=100
 @pr.out ui.draw.draw part=?id source=$pr.kp slot=?id order=?layer z=?pz shape=?shape x=?px y=?py w=?pw h=?ph cx=50 cy=50 tx=?x ty=?y scale=?scale sx=?sx sy=?sy side=left
-@project.parts core.rule when=$pr.o when=$pr.f when=$pr.kp when=$pr.ix not=$pr.removed not=$pr.moved when=$pr.ext with=$pr.k with=$pr.sx with=$pr.sy then=$pr.out
+@project.parts core.rule when=$pr.o when=$pr.f when=$pr.kp when=$pr.ix not=$pr.removed not=$pr.moved not=$pr.hidden not=$pr.shaped when=$pr.ext with=$pr.k with=$pr.sx with=$pr.sy then=$pr.out
 
 # The geometry of each part in the drawing's 0..100 frame: its own centre (cx, cy) and size (pw, ph), and where it is
 # drawn: its centre moved by its edit (ex, ey) and its size as edited (fw, fh). A geometry edit stores dx, dy, width
@@ -105,6 +109,7 @@
 @pe.g ui.draw.partgeo object=?id source=$pe.kp index=?i cx=?cx cy=?cy ex=?ex ey=?ey fw=?fw fh=?fh
 @pe.edit w.drawing.part object=$pe.o index=?i dx=?dx
 @pe.removed w.drawing.part object=$pe.o index=?i removed=true
+@pe.shaped w.drawing.part object=$pe.o index=?i shape=?anyShape
 @pe.pt k.objects.point part=$pe.kp
 @pe.ext ui.draw.extent object=?id w=?ow h=?oh
 @pe.k core.calc out=?scale fn=div args=?s args=100
@@ -115,7 +120,7 @@
 @pe.bx core.calc out=?bx fn=sub args=?ex args=?hw
 @pe.by core.calc out=?by fn=sub args=?ey args=?hh
 @pe.box.out ui.draw.draw part=?id source=$pe.kp slot=?id order=?layer z=?pz shape=?shape x=?bx y=?by w=?fw h=?fh cx=50 cy=50 tx=?x ty=?y scale=?scale sx=?sx sy=?sy side=left
-@project.parts.edited.box core.rule when=$pe.o when=$pe.kp when=$pe.g when=$pe.edit not=$pe.removed not=$pe.pt when=$pe.ext with=$pe.k with=$pe.sx with=$pe.sy with=$pe.hw with=$pe.hh with=$pe.bx with=$pe.by then=$pe.box.out
+@project.parts.edited.box core.rule when=$pe.o when=$pe.kp when=$pe.g when=$pe.edit not=$pe.removed not=$pe.shaped not=$pe.pt when=$pe.ext with=$pe.k with=$pe.sx with=$pe.sy with=$pe.hw with=$pe.hh with=$pe.bx with=$pe.by then=$pe.box.out
 @pe.fwm core.calc out=?fwm fn=max args=?fw args=0.01
 @pe.fhm core.calc out=?fhm fn=max args=?fh args=0.01
 @pe.pwm core.calc out=?pwm fn=max args=?pw args=0.01
@@ -131,7 +136,7 @@
 @pe.tx core.calc out=?tx fn=add args=?x args=?vx
 @pe.ty core.calc out=?ty fn=add args=?y args=?vy
 @pe.pts.out ui.draw.draw part=?id source=$pe.kp slot=?id order=?layer z=?pz shape=?shape x=?px y=?py w=?pw h=?ph cx=?cx cy=?cy tx=?tx ty=?ty scale=?scale sx=?sx2 sy=?sy2 side=left
-@project.parts.edited.points core.rule when=$pe.o when=$pe.kp when=$pe.g when=$pe.edit not=$pe.removed when=$pe.pt when=$pe.ext with=$pe.k with=$pe.sx with=$pe.sy with=$pe.fwm with=$pe.fhm with=$pe.pwm with=$pe.phm with=$pe.kx with=$pe.ky with=$pe.sx2 with=$pe.sy2 with=$pe.ux with=$pe.uy with=$pe.vx with=$pe.vy with=$pe.tx with=$pe.ty then=$pe.pts.out
+@project.parts.edited.points core.rule when=$pe.o when=$pe.kp when=$pe.g when=$pe.edit not=$pe.removed not=$pe.shaped when=$pe.pt when=$pe.ext with=$pe.k with=$pe.sx with=$pe.sy with=$pe.fwm with=$pe.fhm with=$pe.pwm with=$pe.phm with=$pe.kx with=$pe.ky with=$pe.sx2 with=$pe.sy2 with=$pe.ux with=$pe.uy with=$pe.vx with=$pe.vy with=$pe.tx with=$pe.ty then=$pe.pts.out
 
 @pp.draw ui.draw.draw source=?src
 @pp.k k.objects.point part=?src n=?n x=?x y=?y
@@ -211,7 +216,8 @@
 @f.default.chosen ui.draw.chosen source=?src part=?id
 @f.default.edited ui.draw.edited source=?src part=?id
 @f.default.o ui.draw.fill source=?src part=?id fill="#9aa5b1"
-@fill.default core.rule when=$f.default.draw not=$f.default.has not=$f.default.chosen not=$f.default.edited then=$f.default.o
+@f.default.look ui.avatar.fill source=?src part=?id
+@fill.default core.rule when=$f.default.draw not=$f.default.has not=$f.default.chosen not=$f.default.edited not=$f.default.look then=$f.default.o
 
 # Labels under the object, centred on it.
 @l.o w.drawing.object code=?id label=?text x=?x y=?y size=?s z=?layer
@@ -256,3 +262,182 @@
 @kind.balloon ui.draw.kind drawing=balloon
 @kind.rocket ui.draw.kind drawing=rocket
 @kind.moon ui.draw.kind drawing=moon
+
+# Looks (w.drawing.object look): the w.face faces an object is drawn with, over its drawing. A face of a style with a
+# frame on the drawing (k.faces.frame: the figure of a person, its body and clothes) fills the drawing's frame; another
+# face (style plain: a person's face, eyes put on the sun) sits on the part of the drawing that bears a face
+# (k.parts.called also=face: the head, the sun's disc), the style's head slot fitted into that part's box. Each part of
+# a look is drawn by the Avatar tab's projection (ui.avatar.draw, in the frame of its style: ui.avatar/render-projection.sop)
+# and mapped onto the page here, after the drawing's own parts (the figure, then the face); a mirrored slot is flipped
+# about the middle of its look. The parts of the drawing a look replaces are not drawn (ui.draw.hidden).
+@lk.mount.type core.type of=ui.draw.mount
+@lk.lookkey.type core.type of=ui.draw.lookkey
+@lk.lookpart.type core.type of=ui.draw.lookpart
+@lk.partcount.type core.type of=ui.draw.partcount
+@lk.hidden.type core.type of=ui.draw.hidden
+@lk.order.type core.type of=ui.draw.lookorder
+@lk.haslook.type core.type of=ui.draw.haslook
+@hl.face w.face.face style=?st
+@hl.o w.drawing.object code=?id look=$hl.face
+@hl.out ui.draw.haslook object=?id style=?st
+@look.has core.rule when=$hl.face when=$hl.o then=$hl.out
+# A face slot an object's body draws itself (ui.person.replaced: its neck and shoulders) is not added to its face.
+@lk.skip.type core.type of=ui.draw.skipslot
+@hb.has ui.draw.haslook object=?id style=?bs
+@hb.frame k.faces.frame style=?bs
+@hb.rep ui.person.replaced slot=?slot
+@hb.out ui.draw.skipslot object=?id slot=?slot
+@look.skip core.rule when=$hb.has when=$hb.frame when=$hb.rep then=$hb.out
+@lk.order.figure ui.draw.lookorder style=figure n=1
+@lk.order.plain ui.draw.lookorder style=plain n=2
+
+# Where each look's frame lies on its object, in the drawing's 0..100 frame: its top left corner and its size.
+@mt.face w.face.face style=?st
+@mt.o w.drawing.object code=?id look=$mt.face
+@mt.f ui.draw.form object=?id form=?k
+@mt.frame k.faces.frame style=?st drawing=?k
+@mt.frame.o ui.draw.mount object=?id face=$mt.face x=0 y=0 size=100
+@mount.frame core.rule when=$mt.face when=$mt.o when=$mt.f when=$mt.frame then=$mt.frame.o
+@mt.called k.parts.called of=?k part=?pn also=face
+@mt.kp k.objects.part of=?k name=?pn x=?px y=?py w=?pw h=?ph
+@mt.head k.faces.slot style=?st name=head x=?hx y=?hy w=?hw h=?hh
+@mt.sx core.calc out=?sx fn=div args=?pw args=?hw
+@mt.sy core.calc out=?sy fn=div args=?ph args=?hh
+@mt.s core.calc out=?s fn=min args=?sx args=?sy
+@mt.size core.calc out=?ms fn=mul args=?s args=100
+@mt.hcx core.calc out=?hcx fn=add args=?hx args=?hw2
+@mt.hw2 core.calc out=?hw2 fn=div args=?hw args=2
+@mt.hcy core.calc out=?hcy fn=add args=?hy args=?hh2
+@mt.hh2 core.calc out=?hh2 fn=div args=?hh args=2
+@mt.pw2 core.calc out=?pw2 fn=div args=?pw args=2
+@mt.ph2 core.calc out=?ph2 fn=div args=?ph args=2
+@mt.pcx core.calc out=?pcx fn=add args=?px args=?pw2
+@mt.pcy core.calc out=?pcy fn=add args=?py args=?ph2
+@mt.ux core.calc out=?ux fn=mul args=?hcx args=?s
+@mt.uy core.calc out=?uy fn=mul args=?hcy args=?s
+@mt.mx core.calc out=?mx fn=sub args=?pcx args=?ux
+@mt.my core.calc out=?my fn=sub args=?pcy args=?uy
+@mt.part.o ui.draw.mount object=?id face=$mt.face x=?mx y=?my size=?ms part=$mt.kp
+@mount.part core.rule when=$mt.face when=$mt.o when=$mt.f not=$mt.frame when=$mt.called when=$mt.kp when=$mt.head with=$mt.sx with=$mt.sy with=$mt.s with=$mt.size with=$mt.hw2 with=$mt.hh2 with=$mt.hcx with=$mt.hcy with=$mt.pw2 with=$mt.ph2 with=$mt.pcx with=$mt.pcy with=$mt.ux with=$mt.uy with=$mt.mx with=$mt.my then=$mt.part.o
+
+# The parts of the drawing a look replaces: what the frame of its style hides; the parts inside the part a face sits on
+# (the eyes of a stick figure's head), and that part itself when the face has a head of its own.
+@hd.face w.face.face style=?st
+@hd.o w.drawing.object code=?id look=$hd.face
+@hd.f ui.draw.form object=?id form=?k
+@hd.frame k.faces.frame style=?st drawing=?k hides=?pn
+@hd.kp k.objects.part of=?k name=?pn
+@hd.out ui.draw.hidden object=?id source=$hd.kp
+@hide.frame core.rule when=$hd.face when=$hd.o when=$hd.f when=$hd.frame when=$hd.kp then=$hd.out
+@hm.face w.face.face
+@hm.mp k.objects.part of=?k name=?pn
+@hm.m ui.draw.mount object=?id face=$hm.face part=$hm.mp
+@hm.in k.objects.part of=?k inside=?pn
+@hm.in.out ui.draw.hidden object=?id source=$hm.in
+@hide.inside core.rule when=$hm.face when=$hm.mp when=$hm.m when=$hm.in then=$hm.in.out
+@hm.head w.face.head face=$hm.face
+@hm.self.out ui.draw.hidden object=?id source=$hm.mp
+@hide.mount core.rule when=$hm.face when=$hm.mp when=$hm.m when=$hm.head then=$hm.self.out
+
+# The index of each look part: after the drawing's own parts, in the order the looks are drawn (the figure, then the
+# face) and, in a look, the order of its slots.
+@pc.ix ui.draw.index object=?id
+@pc.count core.aggregate over=$pc.ix by=?id count=?n then=$pc.out
+@pc.out ui.draw.partcount object=?id n=?n
+@li.face w.face.face style=?st
+@li.o w.drawing.object code=?id look=$li.face
+@li.wp w.face.part kind=?kind face=$li.face
+@li.slot w.face.slot part=?kind slot=?slot
+@li.ks k.faces.slot style=?st name=?slot z=?sz
+@li.ord ui.draw.lookorder style=?st n=?n
+@li.k1 core.calc out=?k1 fn=mul args=?n args=100
+@li.key core.calc out=?key fn=add args=?k1 args=?sz
+@li.out ui.draw.lookkey object=?id part=$li.wp key=?key slot=?slot face=$li.face
+@look.key core.rule when=$li.face when=$li.o when=$li.wp when=$li.slot when=$li.ks when=$li.ord with=$li.k1 with=$li.key then=$li.out
+@lr.k ui.draw.lookkey object=?id part=?p key=?key slot=?slot face=?f
+@lr.rank core.rank of=$lr.k by=key out=?r within=?id
+@lr.n ui.draw.partcount object=?id n=?n
+@lr.i0 core.calc out=?i0 fn=add args=?n args=?r
+@lr.i core.calc out=?i fn=sub args=?i0 args=1
+@lr.out ui.draw.lookpart object=?id index=?i part=?p slot=?slot face=?f
+@look.index core.rule when=$lr.k when=$lr.n with=$lr.rank with=$lr.i0 with=$lr.i then=$lr.out
+
+# Each primitive of a look part on the page: the style frame maps into the look's box on the drawing, the drawing's
+# frame onto the object's box.
+@ld.face w.face.face style=?st
+@ld.wp w.face.part face=$ld.face
+@ld.draw ui.avatar.draw part=$ld.wp source=?src order=?ao z=?z shape=?shape x=?x y=?y w=?w h=?h cx=?cx cy=?cy tx=?tx ty=?ty scale=?k side=?side
+@ld.m ui.draw.mount object=?id face=$ld.face x=?mx y=?my size=?ms
+@ld.o w.drawing.object code=?id x=?X y=?Y z=?layer
+@ld.ext ui.draw.extent object=?id w=?ow h=?oh
+@ld.ord ui.draw.lookorder style=?st n=?n
+@ld.osx core.calc out=?osx fn=div args=?ow args=100
+@ld.osy core.calc out=?osy fn=div args=?oh args=100
+@ld.f core.calc out=?f fn=div args=?ms args=100
+@ld.kf core.calc out=?kf fn=mul args=?k args=?f
+@ld.psx core.calc out=?psx fn=mul args=?kf args=?osx
+@ld.psy core.calc out=?psy fn=mul args=?kf args=?osy
+@ld.txf core.calc out=?txf fn=mul args=?tx args=?f
+@ld.tyf core.calc out=?tyf fn=mul args=?ty args=?f
+@ld.dx core.calc out=?dx fn=add args=?mx args=?txf
+@ld.dy core.calc out=?dy fn=add args=?my args=?tyf
+@ld.ux core.calc out=?ux fn=sub args=?dx args=50
+@ld.uy core.calc out=?uy fn=sub args=?dy args=50
+@ld.vx core.calc out=?vx fn=mul args=?ux args=?osx
+@ld.vy core.calc out=?vy fn=mul args=?uy args=?osy
+@ld.ptx core.calc out=?ptx fn=add args=?vx args=?X
+@ld.pty core.calc out=?pty fn=add args=?vy args=?Y
+@ld.hf core.calc out=?hf fn=mul args=50 args=?f
+@ld.ax0 core.calc out=?ax0 fn=add args=?mx args=?hf
+@ld.ax1 core.calc out=?ax1 fn=sub args=?ax0 args=50
+@ld.ax2 core.calc out=?ax2 fn=mul args=?ax1 args=?osx
+@ld.axis core.calc out=?axis fn=add args=?ax2 args=?X
+@ld.o1 core.calc out=?o1 fn=mul args=?n args=0.3
+@ld.o2 core.calc out=?o2 fn=mul args=?ao args=0.01
+@ld.po core.calc out=?po fn=add args=?layer args=?o1 args=?o2
+@ld.out ui.draw.draw part=$ld.wp source=?src slot=?id order=?po z=?z shape=?shape x=?x y=?y w=?w h=?h cx=?cx cy=?cy tx=?ptx ty=?pty scale=?psx sx=?psx sy=?psy side=?side axis=?axis
+@project.looks core.rule when=$ld.face when=$ld.wp when=$ld.draw when=$ld.m when=$ld.o when=$ld.ext when=$ld.ord with=$ld.osx with=$ld.osy with=$ld.f with=$ld.kf with=$ld.psx with=$ld.psy with=$ld.txf with=$ld.tyf with=$ld.dx with=$ld.dy with=$ld.ux with=$ld.uy with=$ld.vx with=$ld.vy with=$ld.ptx with=$ld.pty with=$ld.hf with=$ld.ax0 with=$ld.ax1 with=$ld.ax2 with=$ld.axis with=$ld.o1 with=$ld.o2 with=$ld.po then=$ld.out
+@lf.fill ui.avatar.fill source=?src part=?p fill=?fl
+@lf.draw ui.draw.draw source=?src part=?p
+@lf.out ui.draw.fill source=?src part=?p fill=?fl
+@fill.looks core.rule when=$lf.fill when=$lf.draw then=$lf.out
+@lpt.p ui.avatar.point source=?src n=?n x=?x y=?y
+@lpt.out ui.draw.point source=?src n=?n x=?x y=?y
+@project.look.points core.rule when=$lpt.p then=$lpt.out
+@lor.o ui.avatar.orient source=?src opens=?o
+@lor.out ui.draw.orient source=?src opens=?o
+@project.look.opens core.rule when=$lor.o then=$lor.out
+@lor.p ui.avatar.orient source=?src pointing=?p
+@lor.pout ui.draw.orient source=?src pointing=?p
+@project.look.pointing core.rule when=$lor.p then=$lor.pout
+
+# A part drawn with another outline (w.drawing.part shape): a basic shape (ui.draw.shape) or an outline of k.layouts
+# (irregular, star, heart: its points in a 0..100 frame) fills the part's box as drawn now (its geometry edit included).
+@sh.o w.drawing.object code=?id x=?x y=?y z=?layer
+@sh.kp k.objects.part z=?pz
+@sh.g ui.draw.partgeo object=?id source=$sh.kp index=?i ex=?ex ey=?ey fw=?fw fh=?fh
+@sh.e w.drawing.part object=$sh.o index=?i shape=?shape
+@sh.removed w.drawing.part object=$sh.o index=?i removed=true
+@sh.hidden ui.draw.hidden object=?id source=$sh.kp
+@sh.ext ui.draw.extent object=?id w=?ow h=?oh
+@sh.sx core.calc out=?sx fn=div args=?ow args=100
+@sh.sy core.calc out=?sy fn=div args=?oh args=100
+@sh.hw core.calc out=?hw fn=div args=?fw args=2
+@sh.hh core.calc out=?hh fn=div args=?fh args=2
+@sh.bx core.calc out=?bx fn=sub args=?ex args=?hw
+@sh.by core.calc out=?by fn=sub args=?ey args=?hh
+@sh.basic ui.draw.shape drawing=?shape shape=?prim
+@sh.basic.o ui.draw.draw part=?id source=$sh.kp slot=?id order=?layer z=?pz shape=?prim x=?bx y=?by w=?fw h=?fh cx=50 cy=50 tx=?x ty=?y scale=?sx sx=?sx sy=?sy side=left
+@project.parts.shaped.basic core.rule when=$sh.o when=$sh.kp when=$sh.g when=$sh.e not=$sh.removed not=$sh.hidden when=$sh.basic when=$sh.ext with=$sh.sx with=$sh.sy with=$sh.hw with=$sh.hh with=$sh.bx with=$sh.by then=$sh.basic.o
+@sh.outline k.layouts.outline name=?shape
+@sh.outline.o ui.draw.draw part=?id source=$sh.kp slot=?id order=?layer z=?pz shape=polygon x=?bx y=?by w=?fw h=?fh cx=50 cy=50 tx=?x ty=?y scale=?sx sx=?sx sy=?sy side=left
+@project.parts.shaped.outline core.rule when=$sh.o when=$sh.kp when=$sh.g when=$sh.e not=$sh.removed not=$sh.hidden not=$sh.basic when=$sh.outline when=$sh.ext with=$sh.sx with=$sh.sy with=$sh.hw with=$sh.hh with=$sh.bx with=$sh.by then=$sh.outline.o
+@sp2.pt k.layouts.outline_point outline=?shape n=?n x=?ox y=?oy
+@sp2.kx core.calc out=?kx fn=mul args=?ox args=?fw
+@sp2.ky core.calc out=?ky fn=mul args=?oy args=?fh
+@sp2.qx core.calc out=?qx fn=div args=?kx args=100
+@sp2.qy core.calc out=?qy fn=div args=?ky args=100
+@sp2.px core.calc out=?px fn=add args=?bx args=?qx
+@sp2.py core.calc out=?py fn=add args=?by args=?qy
+@sp2.out ui.draw.point source=$sh.kp n=?n x=?px y=?py
+@project.parts.shaped.points core.rule when=$sh.o when=$sh.kp when=$sh.g when=$sh.e not=$sh.removed not=$sh.hidden not=$sh.basic when=$sh.outline when=$sp2.pt with=$sh.hw with=$sh.hh with=$sh.bx with=$sh.by with=$sp2.kx with=$sp2.ky with=$sp2.qx with=$sp2.qy with=$sp2.px with=$sp2.py then=$sp2.out

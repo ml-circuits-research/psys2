@@ -1,0 +1,22 @@
+# k.objects/shards/ground: ground, land, sand, sky. Drawings that fill a band of a picture (k.layouts.slot fills: the
+# ground and the sky of a landscape): one part filling the frame, which a host stretches over the band. Parts with a
+# primitive shape, a box in the 0 to 100 frame of the object (x right, y down), a draw order z, typical colours and the exact colour it is drawn in (rgb).
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+# ground
+@k.objects.ground k.objects.object name=ground core.source="hand-core 1"
+@k.objects.ground.surface k.objects.part of=ground name=surface shape=rectangle x=0 y=0 w=100 h=100 z=0 colour=green colour=brown rgb="#7A9A3A" core.source="hand-core 1"
+
+# land
+@k.objects.land k.objects.object name=land core.source="hand-core 1"
+@k.objects.land.surface k.objects.part of=land name=surface shape=rectangle x=0 y=0 w=100 h=100 z=0 colour=green rgb="#8DB85A" core.source="hand-core 1"
+
+# sand
+@k.objects.sand k.objects.object name=sand core.source="hand-core 1"
+@k.objects.sand.surface k.objects.part of=sand name=surface shape=rectangle x=0 y=0 w=100 h=100 z=0 colour=yellow colour=brown rgb="#E3CF8F" core.source="hand-core 1"
+
+# sky
+@k.objects.sky k.objects.object name=sky core.source="hand-core 1"
+@k.objects.sky.surface k.objects.part of=sky name=surface shape=rectangle x=0 y=0 w=100 h=100 z=0 colour=blue rgb="#BFE3F7" core.source="hand-core 1"

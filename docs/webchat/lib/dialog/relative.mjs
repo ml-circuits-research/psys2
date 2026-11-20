@@ -15,7 +15,7 @@
  * the directions, the positions and the scene's nouns), so a request of its own ("move the tree to the left") is never taken here.
  */
 import { budget } from './budget.mjs?v=00bce6e369';
-import { GRAMMAR } from './continuation.mjs?v=720419774d';
+import { GRAMMAR } from './continuation.mjs?v=62246377e0';
 import { describeReferent } from './meta.mjs?v=aa6dfcad14';
 
 const tokens = (t) => String(t ?? '').toLowerCase().replace(/['’]/g, '').match(/[\p{L}\p{N}]+/gu) ?? [];

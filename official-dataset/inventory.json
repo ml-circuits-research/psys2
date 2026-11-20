@@ -1363,6 +1363,11 @@
      "head": "candidate+step",
      "src": "s.node.colour"
     },
+    "corner": {
+     "concept": "corner.radius",
+     "head": "number",
+     "src": "diagram.node.change {corner} 0-40"
+    },
     "edge": {
      "concept": "align.edge",
      "head": "class",
@@ -1460,6 +1465,11 @@
      "head": "number",
      "src": "Native parameter: diagram.node.make.n"
     },
+    "opacity": {
+     "concept": "opacity",
+     "head": "number",
+     "src": "diagram.node.change {opacity} 0.1-1"
+    },
     "outline": {
      "concept": "outline",
      "head": "candidate",
@@ -1509,6 +1519,11 @@
       "input",
       "output"
      ]
+    },
+    "rotation": {
+     "concept": "rotation",
+     "head": "number",
+     "src": "diagram.node.change {rotation} degrees (specs/diagram-capabilities.md)"
     },
     "shape": {
      "concept": "shape",

@@ -1,0 +1,23 @@
+{
+  "format": "sop.request-cutter-run/1",
+  "complete": true,
+  "role": "trained-cutter-only",
+  "steps": 7851,
+  "bestEpoch": 2,
+  "epochsCompleted": 3,
+  "confidenceCalibrated": false,
+  "executionEligible": false,
+  "checkpointSha256": "8e47033fd37a57345625fb41764a4b645984308a0ce5ca0d2e42975ede986f05",
+  "configSha256": "77ef498712bf805cb943ae7767172a141946a579af028bf5e286787a3859c03b",
+  "trainingConfigSha256": "b37ed0cfc7ac54f53821af5b38d9ceaceb93b76e7fec2c98d861d1ff8015fa1c",
+  "trainerSha256": "507155965cb278c676a0e5d185d887c9db185fe5a71e640478348d79140136d5",
+  "dataManifestSha256": "1d24205e5c6bed89dfdf200672567f889f43c94f67af4beb0bbb47fddb47ded4",
+  "calibration": {
+    "f1": 0.9968056949895044,
+    "fn": 20,
+    "fp": 15,
+    "precision": 0.9972607742878014,
+    "recall": 0.9963510308337895,
+    "tp": 5461
+  }
+}

@@ -1,7 +1,9 @@
 # Native tool interface owned by diagram.sketch.
 @native.diagram.sketch.scope std.capability.scope instance="diagram.sketch" version="1"
+# A count said in a request ("add three boxes") is the node tool's own n (one call that makes n nodes, in its layout).
+@native.diagram.sketch.count std.capability.property scope=$native.diagram.sketch.scope concept=count on="diagram.sketch.node" parameter="n" order=0
 @native.diagram.sketch.op.diagram.node.make std.capability.operation scope=$native.diagram.sketch.scope name="diagram.node.make" act=make on="diagram.sketch.node" order=0 eligible=true
-@native.diagram.sketch.op.diagram.node.make.param.kind std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.make name="kind" kind=string required=true enum="circle" enum="rectangle" enum="square" enum="diamond" enum="ellipse" enum="triangle" enum="hexagon" enum="star" enum="text" enumClosed=true
+@native.diagram.sketch.op.diagram.node.make.param.kind std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.make name="kind" kind=string enum="rectangle" enum="rounded_rectangle" enum="square" enum="circle" enum="ellipse" enum="oval" enum="diamond" enum="parallelogram" enum="hexagon" enum="triangle" enum="star" enum="chevron" enum="double_rectangle" enum="document" enum="cylinder" enum="cloud" enum="actor" enum="note" enum="text" enum="dot" enumClosed=true
 @native.diagram.sketch.op.diagram.node.make.param.label std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.make name="label" kind=string
 @native.diagram.sketch.op.diagram.node.make.param.n std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.make name="n" kind=integer min=1 max=12 default=1
 @native.diagram.sketch.op.diagram.node.make.param.colour std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.make name="colour" kind=string
@@ -44,7 +46,7 @@
 @native.diagram.sketch.op.diagram.node.change.param.size std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.change name="size" kind=string enum="tiny" enum="small" enum="medium" enum="large" enum="huge" enumClosed=true
 @native.diagram.sketch.op.diagram.node.change.param.label std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.change name="label" kind=string
 @native.diagram.sketch.op.diagram.node.change.param.value std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.change name="value" kind=number
-@native.diagram.sketch.op.diagram.node.change.param.kind std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.change name="kind" kind=string enum="circle" enum="rectangle" enum="square" enum="diamond" enum="ellipse" enum="triangle" enum="hexagon" enum="star" enum="text" enumClosed=true
+@native.diagram.sketch.op.diagram.node.change.param.kind std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.change name="kind" kind=string enum="rectangle" enum="rounded_rectangle" enum="square" enum="circle" enum="ellipse" enum="oval" enum="diamond" enum="parallelogram" enum="hexagon" enum="triangle" enum="star" enum="chevron" enum="double_rectangle" enum="document" enum="cylinder" enum="cloud" enum="actor" enum="note" enum="text" enum="dot" enumClosed=true
 @native.diagram.sketch.value.44 std.capability.arg name="on" value="diagram.sketch.node"
 @native.diagram.sketch.value.45 std.capability.arg name="many" value=true
 @native.diagram.sketch.value.46 std.capability.record entry=$native.diagram.sketch.value.44 entry=$native.diagram.sketch.value.45
@@ -111,7 +113,7 @@
 @native.diagram.sketch.op.diagram.link.change.param.colour std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.change name="colour" kind=string
 @native.diagram.sketch.op.diagram.link.change.param.colour.source.enum app.native.parameter parameter=$native.diagram.sketch.op.diagram.link.change.param.colour field=enum input=$native.diagram.sketch.input.diagram.colours
 @native.diagram.sketch.op.diagram.link.change.param.style std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.change name="style" kind=string enum="solid" enum="dashed" enum="dotted" enumClosed=true
-@native.diagram.sketch.op.diagram.link.change.param.arrow std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.change name="arrow" kind=string enum="forward" enum="both" enum="none" enumClosed=true
+@native.diagram.sketch.op.diagram.link.change.param.arrow std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.change name="arrow" kind=string enum="forward" enum="back" enum="both" enum="none" enumClosed=true
 @native.diagram.sketch.op.diagram.link.change.param.width std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.change name="width" kind=number min=0.5 max=12
 @native.diagram.sketch.op.diagram.link.remove std.capability.operation scope=$native.diagram.sketch.scope name="diagram.link.remove" act=remove on="diagram.sketch.link" order=10 eligible=true
 @native.diagram.sketch.op.diagram.link.remove.param.ids std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.remove name="ids" kind=array required=true
@@ -162,7 +164,7 @@
 @native.diagram.sketch.op.diagram.group.change.param.size std.capability.parameter operation=$native.diagram.sketch.op.diagram.group.change name="size" kind=string enum="tiny" enum="small" enum="medium" enum="large" enum="huge" enumClosed=true
 @native.diagram.sketch.op.diagram.group.layout std.capability.operation scope=$native.diagram.sketch.scope name="diagram.group.layout" act=place on="diagram.sketch.group" order=20 eligible=true
 @native.diagram.sketch.op.diagram.group.layout.param.id std.capability.parameter operation=$native.diagram.sketch.op.diagram.group.layout name="id" kind=string required=true
-@native.diagram.sketch.op.diagram.group.layout.param.layout std.capability.parameter operation=$native.diagram.sketch.op.diagram.group.layout name="layout" kind=string required=true enum="free" enum="tree" enum="grid" enum="row" enum="column" enum="circle" enum="radial" enum="layers" enum="bar" enum="line" enum="pie" enum="doughnut" enumClosed=true
+@native.diagram.sketch.op.diagram.group.layout.param.layout std.capability.parameter operation=$native.diagram.sketch.op.diagram.group.layout name="layout" kind=string required=true enum="row" enum="column" enum="grid" enum="circle" enum="bar" enum="line" enum="area" enum="pie" enum="doughnut" enum="free" enum="tree" enum="radial" enum="layers" enumClosed=true
 @native.diagram.sketch.op.diagram.group.resize std.capability.operation scope=$native.diagram.sketch.scope name="diagram.group.resize" act=change on="diagram.sketch.group" order=21 eligible=true
 @native.diagram.sketch.op.diagram.group.resize.param.id std.capability.parameter operation=$native.diagram.sketch.op.diagram.group.resize name="id" kind=string required=true
 @native.diagram.sketch.op.diagram.group.resize.param.scale std.capability.parameter operation=$native.diagram.sketch.op.diagram.group.resize name="scale" kind=number required=true min=0.05 max=20
@@ -184,7 +186,7 @@
 @native.diagram.sketch.op.diagram.group.chart.make.param.label std.capability.parameter operation=$native.diagram.sketch.op.diagram.group.chart.make name="label" kind=string required=true
 @native.diagram.sketch.op.diagram.group.chart.make.param.labels std.capability.parameter operation=$native.diagram.sketch.op.diagram.group.chart.make name="labels" kind=array required=true
 @native.diagram.sketch.op.diagram.group.chart.make.param.values std.capability.parameter operation=$native.diagram.sketch.op.diagram.group.chart.make name="values" kind=array required=true
-@native.diagram.sketch.op.diagram.group.chart.make.param.layout std.capability.parameter operation=$native.diagram.sketch.op.diagram.group.chart.make name="layout" kind=string required=true enum="bar" enum="line" enum="pie" enum="doughnut" enumClosed=true
+@native.diagram.sketch.op.diagram.group.chart.make.param.layout std.capability.parameter operation=$native.diagram.sketch.op.diagram.group.chart.make name="layout" kind=string required=true enum="bar" enum="line" enum="area" enum="pie" enum="doughnut" enumClosed=true
 @native.diagram.sketch.value.184 std.capability.arg name="prefix" value="Values"
 @native.diagram.sketch.value.185 std.capability.record entry=$native.diagram.sketch.value.184
 @native.diagram.sketch.value.186 std.capability.arg name="unique" value=$native.diagram.sketch.value.185
@@ -256,6 +258,115 @@
 @native.diagram.sketch.value.252 std.capability.record entry=$native.diagram.sketch.value.251
 @native.diagram.sketch.value.253 std.capability.arg name="intent" value=$native.diagram.sketch.value.252
 @native.diagram.sketch.op.diagram.group.chart.metadata app.native.metadata operation=$native.diagram.sketch.op.diagram.group.chart field=$native.diagram.sketch.value.241 field=$native.diagram.sketch.value.244 field=$native.diagram.sketch.value.253
+# Styles of nodes and links (outline, text colour, font, role, route), added to the editor operations.
+@native.diagram.sketch.op.diagram.node.make.param.outline std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.make name="outline" kind=string
+@native.diagram.sketch.op.diagram.node.make.param.outline.source.enum app.native.parameter parameter=$native.diagram.sketch.op.diagram.node.make.param.outline field=enum input=$native.diagram.sketch.input.diagram.colours
+@native.diagram.sketch.op.diagram.node.make.param.textColour std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.make name="textColour" kind=string
+@native.diagram.sketch.op.diagram.node.make.param.textColour.source.enum app.native.parameter parameter=$native.diagram.sketch.op.diagram.node.make.param.textColour field=enum input=$native.diagram.sketch.input.diagram.colours
+@native.diagram.sketch.op.diagram.node.make.param.role std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.make name="role" kind=string enum="start" enum="end" enum="process" enum="decision" enum="data" enum="document" enum="subprocess" enum="connector" enum="database" enum="actor" enum="note" enum="external" enumClosed=true
+@native.diagram.sketch.op.diagram.node.change.param.outline std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.change name="outline" kind=string
+@native.diagram.sketch.op.diagram.node.change.param.outline.source.enum app.native.parameter parameter=$native.diagram.sketch.op.diagram.node.change.param.outline field=enum input=$native.diagram.sketch.input.diagram.colours
+@native.diagram.sketch.op.diagram.node.change.param.textColour std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.change name="textColour" kind=string
+@native.diagram.sketch.op.diagram.node.change.param.textColour.source.enum app.native.parameter parameter=$native.diagram.sketch.op.diagram.node.change.param.textColour field=enum input=$native.diagram.sketch.input.diagram.colours
+@native.diagram.sketch.op.diagram.node.change.param.fontSize std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.change name="fontSize" kind=number min=8 max=48
+@native.diagram.sketch.op.diagram.node.change.param.fontWeight std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.change name="fontWeight" kind=string enum="normal" enum="bold" enumClosed=true
+@native.diagram.sketch.op.diagram.node.change.param.role std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.change name="role" kind=string enum="start" enum="end" enum="process" enum="decision" enum="data" enum="document" enum="subprocess" enum="connector" enum="database" enum="actor" enum="note" enum="external" enumClosed=true
+@native.diagram.sketch.op.diagram.node.change.param.effect std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.change name="effect" kind=string enum="none" enum="shadow" enum="glow" enumClosed=true
+@native.diagram.sketch.op.diagram.node.change.param.opacity std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.change name="opacity" kind=number min=0.1 max=1
+@native.diagram.sketch.op.diagram.node.change.param.corner std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.change name="corner" kind=number min=0 max=40
+@native.diagram.sketch.op.diagram.link.make.param.label std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.make name="label" kind=string
+@native.diagram.sketch.op.diagram.link.make.param.colour std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.make name="colour" kind=string
+@native.diagram.sketch.op.diagram.link.make.param.colour.source.enum app.native.parameter parameter=$native.diagram.sketch.op.diagram.link.make.param.colour field=enum input=$native.diagram.sketch.input.diagram.colours
+@native.diagram.sketch.op.diagram.link.make.param.style std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.make name="style" kind=string enum="solid" enum="dashed" enum="dotted" enumClosed=true
+@native.diagram.sketch.op.diagram.link.make.param.arrow std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.make name="arrow" kind=string enum="forward" enum="back" enum="both" enum="none" enumClosed=true
+@native.diagram.sketch.op.diagram.link.change.param.route std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.change name="route" kind=string enum="orthogonal" enum="straight" enum="curved" enumClosed=true
+# The page layout, styles and editing tools (act-tools.sop).
+@native.diagram.sketch.op.diagram.layout std.capability.operation scope=$native.diagram.sketch.scope name="diagram.layout" act=change on="diagram.sketch.page" order=28 eligible=true
+@native.diagram.sketch.op.diagram.layout.param.layout std.capability.parameter operation=$native.diagram.sketch.op.diagram.layout name="layout" kind=string enum="tree" enum="layered" enum="row" enum="column" enum="grid" enum="circle" enum="radial" enum="free" enumClosed=true
+@native.diagram.sketch.op.diagram.layout.param.direction std.capability.parameter operation=$native.diagram.sketch.op.diagram.layout name="direction" kind=string enum="down" enum="right" enum="up" enum="left" enumClosed=true
+@native.diagram.sketch.op.diagram.layout.param.spacing std.capability.parameter operation=$native.diagram.sketch.op.diagram.layout name="spacing" kind=string enum="compact" enum="normal" enum="loose" enumClosed=true
+@native.diagram.sketch.op.diagram.layout.param.route std.capability.parameter operation=$native.diagram.sketch.op.diagram.layout name="route" kind=string enum="orthogonal" enum="straight" enum="curved" enumClosed=true
+@native.diagram.sketch.op.diagram.layout.improve std.capability.operation scope=$native.diagram.sketch.scope name="diagram.layout.improve" act=change on="diagram.sketch.page" order=29 eligible=true
+@native.diagram.sketch.op.diagram.steps.number std.capability.operation scope=$native.diagram.sketch.scope name="diagram.steps.number" act=change on="diagram.sketch.page" order=30 eligible=true
+@native.diagram.sketch.op.diagram.steps.number.param.mode std.capability.parameter operation=$native.diagram.sketch.op.diagram.steps.number name="mode" kind=string required=true enum="on" enum="off" enumClosed=true
+@native.diagram.sketch.op.diagram.nodes.align std.capability.operation scope=$native.diagram.sketch.scope name="diagram.nodes.align" act=place on="diagram.sketch.node" order=31 eligible=true
+@native.diagram.sketch.op.diagram.nodes.align.param.ids std.capability.parameter operation=$native.diagram.sketch.op.diagram.nodes.align name="ids" kind=array required=true
+@native.diagram.sketch.op.diagram.nodes.align.param.edge std.capability.parameter operation=$native.diagram.sketch.op.diagram.nodes.align name="edge" kind=string required=true enum="left" enum="centre" enum="right" enum="top" enum="middle" enum="bottom" enumClosed=true
+@native.diagram.sketch.op.diagram.nodes.distribute std.capability.operation scope=$native.diagram.sketch.scope name="diagram.nodes.distribute" act=place on="diagram.sketch.node" order=32 eligible=true
+@native.diagram.sketch.op.diagram.nodes.distribute.param.ids std.capability.parameter operation=$native.diagram.sketch.op.diagram.nodes.distribute name="ids" kind=array required=true
+@native.diagram.sketch.op.diagram.nodes.distribute.param.axis std.capability.parameter operation=$native.diagram.sketch.op.diagram.nodes.distribute name="axis" kind=string required=true enum="horizontal" enum="vertical" enumClosed=true
+@native.diagram.sketch.op.diagram.style.apply std.capability.operation scope=$native.diagram.sketch.scope name="diagram.style.apply" act=change on="diagram.sketch.node" order=33 eligible=true
+@native.diagram.sketch.input.diagram.themes app.native.input name="diagram.themes"
+@native.diagram.sketch.op.diagram.style.apply.param.theme std.capability.parameter operation=$native.diagram.sketch.op.diagram.style.apply name="theme" kind=string required=true
+@native.diagram.sketch.op.diagram.style.apply.param.theme.source.enum app.native.parameter parameter=$native.diagram.sketch.op.diagram.style.apply.param.theme field=enum input=$native.diagram.sketch.input.diagram.themes
+@native.diagram.sketch.op.diagram.style.apply.param.ids std.capability.parameter operation=$native.diagram.sketch.op.diagram.style.apply name="ids" kind=array
+@native.diagram.sketch.op.diagram.style.apply.param.role std.capability.parameter operation=$native.diagram.sketch.op.diagram.style.apply name="role" kind=string enum="start" enum="end" enum="process" enum="decision" enum="data" enum="document" enum="subprocess" enum="connector" enum="database" enum="actor" enum="note" enum="external" enumClosed=true
+@native.diagram.sketch.op.diagram.style.apply.param.kind std.capability.parameter operation=$native.diagram.sketch.op.diagram.style.apply name="kind" kind=string enum="rectangle" enum="rounded_rectangle" enum="square" enum="circle" enum="ellipse" enum="oval" enum="diamond" enum="parallelogram" enum="hexagon" enum="triangle" enum="star" enum="chevron" enum="double_rectangle" enum="document" enum="cylinder" enum="cloud" enum="actor" enum="note" enum="text" enum="dot" enumClosed=true
+@native.diagram.sketch.op.diagram.colour.by std.capability.operation scope=$native.diagram.sketch.scope name="diagram.colour.by" act=change on="diagram.sketch.node" order=34 eligible=true
+@native.diagram.sketch.op.diagram.colour.by.param.by std.capability.parameter operation=$native.diagram.sketch.op.diagram.colour.by name="by" kind=string required=true enum="level" enum="shape" enum="role" enum="group" enumClosed=true
+@native.diagram.sketch.op.diagram.colour.by.param.theme std.capability.parameter operation=$native.diagram.sketch.op.diagram.colour.by name="theme" kind=string
+@native.diagram.sketch.op.diagram.colour.by.param.theme.source.enum app.native.parameter parameter=$native.diagram.sketch.op.diagram.colour.by.param.theme field=enum input=$native.diagram.sketch.input.diagram.themes
+@native.diagram.sketch.op.diagram.links.connect std.capability.operation scope=$native.diagram.sketch.scope name="diagram.links.connect" act=make on="diagram.sketch.link" order=35 eligible=true
+@native.diagram.sketch.op.diagram.links.connect.param.ids std.capability.parameter operation=$native.diagram.sketch.op.diagram.links.connect name="ids" kind=array required=true
+@native.diagram.sketch.op.diagram.links.connect.param.pattern std.capability.parameter operation=$native.diagram.sketch.op.diagram.links.connect name="pattern" kind=string required=true enum="chain" enum="cycle" enum="star" enum="all" enumClosed=true
+@native.diagram.sketch.op.diagram.links.connect.param.hub std.capability.parameter operation=$native.diagram.sketch.op.diagram.links.connect name="hub" kind=string
+@native.diagram.sketch.op.diagram.links.connect.param.confirm std.capability.parameter operation=$native.diagram.sketch.op.diagram.links.connect name="confirm" kind=boolean
+@native.diagram.sketch.op.diagram.link.reverse std.capability.operation scope=$native.diagram.sketch.scope name="diagram.link.reverse" act=change on="diagram.sketch.link" order=36 eligible=true
+@native.diagram.sketch.op.diagram.link.reverse.param.ids std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.reverse name="ids" kind=array required=true
+@native.diagram.sketch.op.diagram.node.insert std.capability.operation scope=$native.diagram.sketch.scope name="diagram.node.insert" act=make on="diagram.sketch.node" order=37 eligible=true
+@native.diagram.sketch.op.diagram.node.insert.param.link std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.insert name="link" kind=string required=true
+@native.diagram.sketch.op.diagram.node.insert.param.kind std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.insert name="kind" kind=string enum="rectangle" enum="rounded_rectangle" enum="square" enum="circle" enum="ellipse" enum="oval" enum="diamond" enum="parallelogram" enum="hexagon" enum="triangle" enum="star" enum="chevron" enum="double_rectangle" enum="document" enum="cylinder" enum="cloud" enum="actor" enum="note" enum="text" enum="dot" enumClosed=true
+@native.diagram.sketch.op.diagram.node.insert.param.label std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.insert name="label" kind=string
+@native.diagram.sketch.op.diagram.node.duplicate std.capability.operation scope=$native.diagram.sketch.scope name="diagram.node.duplicate" act=make on="diagram.sketch.node" order=38 eligible=true
+@native.diagram.sketch.op.diagram.node.duplicate.param.ids std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.duplicate name="ids" kind=array required=true
+@native.diagram.sketch.op.diagram.node.merge std.capability.operation scope=$native.diagram.sketch.scope name="diagram.node.merge" act=change on="diagram.sketch.node" order=39 eligible=true
+@native.diagram.sketch.op.diagram.node.merge.param.ids std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.merge name="ids" kind=array required=true
+@native.diagram.sketch.op.diagram.node.merge.param.label std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.merge name="label" kind=string
+@native.diagram.sketch.op.diagram.node.split std.capability.operation scope=$native.diagram.sketch.scope name="diagram.node.split" act=make on="diagram.sketch.node" order=40 eligible=true
+@native.diagram.sketch.op.diagram.node.split.param.id std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.split name="id" kind=string required=true
+@native.diagram.sketch.op.diagram.node.split.param.label std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.split name="label" kind=string
+# Charts: values, categories and formatting of a chart group (act-tools.sop).
+@native.diagram.sketch.op.diagram.chart.value std.capability.operation scope=$native.diagram.sketch.scope name="diagram.chart.value" act=change on="diagram.sketch.group" order=41 eligible=true
+@native.diagram.sketch.op.diagram.chart.value.param.id std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.value name="id" kind=string required=true
+@native.diagram.sketch.op.diagram.chart.value.param.category std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.value name="category" kind=string required=true
+@native.diagram.sketch.op.diagram.chart.value.param.value std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.value name="value" kind=number required=true
+@native.diagram.sketch.op.diagram.chart.category.add std.capability.operation scope=$native.diagram.sketch.scope name="diagram.chart.category.add" act=make on="diagram.sketch.node" order=42 eligible=true
+@native.diagram.sketch.op.diagram.chart.category.add.param.id std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.category.add name="id" kind=string required=true
+@native.diagram.sketch.op.diagram.chart.category.add.param.label std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.category.add name="label" kind=string required=true
+@native.diagram.sketch.op.diagram.chart.category.add.param.value std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.category.add name="value" kind=number required=true
+@native.diagram.sketch.op.diagram.chart.category.remove std.capability.operation scope=$native.diagram.sketch.scope name="diagram.chart.category.remove" act=remove on="diagram.sketch.node" order=43 eligible=true
+@native.diagram.sketch.op.diagram.chart.category.remove.param.id std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.category.remove name="id" kind=string required=true
+@native.diagram.sketch.op.diagram.chart.category.remove.param.category std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.category.remove name="category" kind=string required=true
+@native.diagram.sketch.op.diagram.chart.category.rename std.capability.operation scope=$native.diagram.sketch.scope name="diagram.chart.category.rename" act=change on="diagram.sketch.node" order=44 eligible=true
+@native.diagram.sketch.op.diagram.chart.category.rename.param.id std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.category.rename name="id" kind=string required=true
+@native.diagram.sketch.op.diagram.chart.category.rename.param.category std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.category.rename name="category" kind=string required=true
+@native.diagram.sketch.op.diagram.chart.category.rename.param.label std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.category.rename name="label" kind=string required=true
+@native.diagram.sketch.op.diagram.chart.format std.capability.operation scope=$native.diagram.sketch.scope name="diagram.chart.format" act=change on="diagram.sketch.group" order=45 eligible=true
+@native.diagram.sketch.op.diagram.chart.format.param.id std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="id" kind=string required=true
+@native.diagram.sketch.op.diagram.chart.format.param.title std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="title" kind=string
+@native.diagram.sketch.op.diagram.chart.format.param.xLabel std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="xLabel" kind=string
+@native.diagram.sketch.op.diagram.chart.format.param.yLabel std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="yLabel" kind=string
+@native.diagram.sketch.op.diagram.chart.format.param.valueLabels std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="valueLabels" kind=boolean
+@native.diagram.sketch.op.diagram.chart.format.param.gridlines std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="gridlines" kind=boolean
+@native.diagram.sketch.op.diagram.chart.format.param.legend std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="legend" kind=string enum="none" enum="right" enum="bottom" enumClosed=true
+@native.diagram.sketch.op.diagram.link.improve std.capability.operation scope=$native.diagram.sketch.scope name="diagram.link.improve" act=change on="diagram.sketch.link" order=46 eligible=true
+@native.diagram.sketch.op.diagram.link.improve.param.ids std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.improve name="ids" kind=array required=true
+@native.diagram.sketch.op.diagram.nodes.swap std.capability.operation scope=$native.diagram.sketch.scope name="diagram.nodes.swap" act=place on="diagram.sketch.node" order=47 eligible=true
+@native.diagram.sketch.op.diagram.nodes.swap.param.ids std.capability.parameter operation=$native.diagram.sketch.op.diagram.nodes.swap name="ids" kind=array required=true
+@native.diagram.sketch.op.diagram.node.scale std.capability.operation scope=$native.diagram.sketch.scope name="diagram.node.scale" act=change on="diagram.sketch.node" order=48 eligible=true
+@native.diagram.sketch.op.diagram.node.scale.param.ids std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.scale name="ids" kind=array required=true
+@native.diagram.sketch.op.diagram.node.scale.param.factor std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.scale name="factor" kind=number required=true min=0.1 max=10
+@native.diagram.sketch.op.diagram.chart.highlight std.capability.operation scope=$native.diagram.sketch.scope name="diagram.chart.highlight" act=change on="diagram.sketch.group" order=49 eligible=true
+@native.diagram.sketch.op.diagram.chart.highlight.param.id std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.highlight name="id" kind=string required=true
+@native.diagram.sketch.op.diagram.chart.highlight.param.test std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.highlight name="test" kind=string required=true enum="below" enum="above" enumClosed=true
+@native.diagram.sketch.op.diagram.chart.highlight.param.value std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.highlight name="value" kind=number required=true
+@native.diagram.sketch.op.diagram.chart.highlight.param.colour std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.highlight name="colour" kind=string required=true
+@native.diagram.sketch.op.diagram.chart.highlight.param.colour.source.enum app.native.parameter parameter=$native.diagram.sketch.op.diagram.chart.highlight.param.colour field=enum input=$native.diagram.sketch.input.diagram.colours
+@native.diagram.sketch.op.diagram.chart.sort std.capability.operation scope=$native.diagram.sketch.scope name="diagram.chart.sort" act=change on="diagram.sketch.group" order=50 eligible=true
+@native.diagram.sketch.op.diagram.chart.sort.param.id std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.sort name="id" kind=string required=true
+@native.diagram.sketch.op.diagram.chart.sort.param.order std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.sort name="order" kind=string required=true enum="ascending" enum="descending" enum="label" enumClosed=true
+@native.diagram.sketch.op.diagram.chart.format.param.yMax std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="yMax" kind=number
+@native.diagram.sketch.op.diagram.node.change.param.rotation std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.change name="rotation" kind=number min=-360 max=360
 @native.diagram.sketch.chart-composition app.native.compose module=data.charts state="chartTools" exclude="chart.undo" exclude="chart.redo" omit="sample"
 # Selecting nodes or connections changes only the declared selection key of what it selects and deselects.
 @native.diagram.sketch.selection.key std.capability.arg name="key" value="selected"

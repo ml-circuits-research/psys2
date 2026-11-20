@@ -11,7 +11,7 @@
  */
 import { vocabularyOf, openVocab, lexiconWordsOf, editDistance, SHORT_TYPOS } from './rules/index.mjs';
 import { isNumberWord } from './rules/numbers.mjs';
-import { guard } from './guard.mjs';
+import { guard } from '../dialog/turn-guard.mjs';
 import { budget } from '../dialog/budget.mjs';
 import { namingTables } from './routing.mjs';
 import { lexIndex } from '../worlds/lexicon.mjs';

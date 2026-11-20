@@ -47,7 +47,7 @@ test('a part-of parent is not kind evidence and a known word is never spelling-r
  const world=new World({library:{'app.creation':SCHEMA}});
  assert.ok(world.tell(POLICY).ok);
  const lemmas=['cat','person','sun','star','circle','round','dog','lake','pond'];
- const ground=async mention=>{const decision=await groundMention(world,'app.creation',mention,lemmas.map(lemma=>({lemma,measures:{otherType:0,otherFamily:0}})),knowledge);
+ const ground=async mention=>{const decision=await groundMention(world,'app.creation',mention,lemmas.map(lemma=>({lemma,measures:{otherType:0}})),knowledge);
   return {...decision,lemma:decision.selected===undefined?undefined:lemmas[decision.selected]};};
  const eyes=await ground('eyes');
  assert.equal(eyes.lemma,undefined,'"eyes" is a part of a cat, a person and the sun, not a kind of any of them');
@@ -75,7 +75,7 @@ test('"draw a cat and 2 dogs": two kinds for one target create nothing, and the 
 });
 
 test('"some eyes" with a sun on the page does not create a cat; "draw the ground" does not create a circle',async()=>{
- for(const [text,kind] of [['some eyes','eyes'],['draw the ground','ground']]){
+ for(const [text,kind] of [['some eyes','eyes']]){
   const read=reading(text,{...make(kind),trigger:kind==='eyes'?'eyes':'draw'},{failures:[unbound]});
   const session=await drawingSession({propose:async()=>read},[{kind:'sun'}]);
   const reply=await routeNewEngine(session,text,{view:'draw'});
@@ -83,6 +83,12 @@ test('"some eyes" with a sun on the page does not create a cat; "draw the ground
   assert.deepEqual(kinds(session),['sun']);
   assert.match(reply.text,new RegExp('"'+kind+'"'));
  }
+ // The ground is a drawing of the catalog now (k.objects ground: it fills the ground of the page): it is drawn as itself,
+ // never spelling-repaired to "round" (a circle).
+ const read=reading('draw the ground',{...make('ground'),trigger:'draw'},{failures:[unbound]});
+ const session=await drawingSession({propose:async()=>read},[{kind:'sun'}]);
+ await routeNewEngine(session,'draw the ground',{view:'draw'});
+ assert.ok(!kinds(session).includes('circle'),kinds(session).join());
 });
 
 test('"who is eyes a cat?" is not answered as a count of cats',async()=>{

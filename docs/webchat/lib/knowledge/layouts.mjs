@@ -14,7 +14,7 @@
  * layout that has slot boxes is solved from its places (`places`), no code. The local table `FALLBACK` is used only when the catalog has no layouts or no network.
  */
 import { parseLine } from './catalog.mjs?v=339ac7a09d';
-import { createFacts } from './facts.mjs?v=2787597521';
+import { createFacts } from './facts.mjs?v=9d0fd71b24';
 
 export const GENERATORS = ['row', 'column', 'grid', 'ring', 'corners', 'stack', 'flow', 'tree', 'landscape', 'scatter', 'face', 'height'];
 

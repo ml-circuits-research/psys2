@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
 import { createDispatchValidator } from '../src/dialog/dispatch-validate.mjs';
-import { perf } from '../src/formalizer/perf.mjs';
+import { perf } from '../src/dialog/stage-perf.mjs';
 
 const engine = await createEngine({ loader: createFsLoader({ roots: [DEFAULT_ROOT] }) });
 const W = (...pairs) => pairs.map(([world, score]) => ({ world, score }));

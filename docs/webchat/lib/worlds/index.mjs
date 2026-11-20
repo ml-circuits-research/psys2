@@ -8,10 +8,8 @@
  */
 import { parse, get, getAll } from '../soplang/index.mjs?v=c57881f705';
 import { Legends } from '../legends/index.mjs?v=45bd60c654';
-import { expandShape } from '../formalizer/rules/shapes.mjs?v=5d5cc75c7e';
-import { readDescriptionWires, slotDeclarations } from './describe.mjs?v=956f430777';
-import { checkPattern } from '../formalizer/rules/index.mjs?v=c533c34761';
-import { lexIndex } from './lexicon.mjs?v=f36325d3cc';
+import { readDescriptionWires, slotDeclarations } from './describe.mjs?v=06c346ca73';
+import { lexIndex } from './lexicon.mjs?v=8e9f67c0a9';
 import { budget } from '../dialog/budget.mjs?v=00bce6e369';
 
 const FILES = ['world.sop', 'legend.sop', 'lexicon.sop', 'patterns.sop', 'operations.sop', 'kb.sop', 'templates.sop', 'tests.sop'];
@@ -270,7 +268,12 @@ function buildWorld(id, files, ops, { fns = null, voice = null, toState = null, 
 }
 
 /** Load every world the loader lists. Never throws on world content errors; see `allErrors()`. */
-export async function loadWorlds(loader, { reasoner = 'matrix' } = {}) {
+/**
+ * `patterns` is the legacy pattern compiler ({ expandShape, checkPattern } from src/formalizer/rules), passed only by the
+ * historical grammar tools (src/cli.mjs). The application composition loads no grammar: a world that declares `core.shape`
+ * without it gets a visible load error instead of silently generated patterns.
+ */
+export async function loadWorlds(loader, { reasoner = 'matrix', patterns = null } = {}) {
   const set = new WorldSet();
   const ids = await loader.listWorlds();
   const built = new Map();
@@ -309,7 +312,7 @@ export async function loadWorlds(loader, { reasoner = 'matrix' } = {}) {
     set.legends.add(w.legendWires, { worldId: id });
   }
   resolveLexiconExtends(set);
-  expandShapes(set);
+  expandShapes(set, patterns);
   for (const w of set.list()) {
     w.kb = [];
     for (const raw of w.kbRaw) {
@@ -358,8 +361,13 @@ function resolveLexiconExtends(set) {
  * appended to the world's own (hand-written first, so their order wins ties). Each generated pattern goes through `checkPattern`;
  * problems are load errors of the world. A shape that cannot be expanded is an error and generates nothing.
  */
-function expandShapes(set) {
+function expandShapes(set, patterns) {
   if (!set.list().some((w) => w.shapes.length)) return;
+  if (!patterns?.expandShape || !patterns?.checkPattern) {
+    for (const w of set.list()) if (w.shapes.length) w.errors.push({ file: 'patterns.sop', message: `${w.shapes.length} core.shape declaration(s) need the legacy pattern compiler, which this composition does not load` });
+    return;
+  }
+  const { expandShape, checkPattern } = patterns;
   const lex = lexIndex(set);
   for (const w of set.list()) {
     for (const shape of w.shapes) {

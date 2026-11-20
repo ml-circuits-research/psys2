@@ -1,0 +1,26 @@
+# k.styles/shards/words: the English words of k.styles (its types and theme names), stored beside the world.
+# sources: hand-core 1 (written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@k.styles.word.theme core.word text=theme text=themes text=style text=styles text="colour scheme" text="color scheme" text=look text=skin means=k.styles.theme core.source="hand-core 1"
+@k.styles.word.role core.word text="role colours" text="colours by role" means=k.styles.role core.source="hand-core 1"
+@k.styles.word.swatch core.word text=palette text=palettes text=swatch text=swatches means=k.styles.swatch core.source="hand-core 1"
+@k.styles.word.theme.name core.word text=classic text=default text=pastel text=pastels text=soft text=dark text="dark mode" text=night text=blueprint text=monochrome text="black and white" text=greyscale text=grayscale text=highlight text=highlighted text=vivid text=bright text=colourful text=colorful text=ocean text=sea text=forest text=green text=sunset text=warm text=flowchart means=k.styles.theme.name core.source="hand-core 1"
+
+# Words for the keys, by rule: the name of each key, and everyday words for some (tools/key-words.mjs).
+@k.styles.word.key.theme.about core.word text=about means=k.styles.theme.about core.source="hand-core 1"
+@k.styles.word.key.theme.fill core.word text=fill means=k.styles.theme.fill core.source="hand-core 1"
+@k.styles.word.key.theme.outline core.word text=outline means=k.styles.theme.outline core.source="hand-core 1"
+@k.styles.word.key.theme.text core.word text=text means=k.styles.theme.text core.source="hand-core 1"
+@k.styles.word.key.theme.edge core.word text=edge means=k.styles.theme.edge core.source="hand-core 1"
+@k.styles.word.key.theme.background core.word text=background means=k.styles.theme.background core.source="hand-core 1"
+@k.styles.word.key.theme.group core.word text=group means=k.styles.theme.group core.source="hand-core 1"
+@k.styles.word.key.theme.weight core.word text=weight means=k.styles.theme.weight core.source="hand-core 1"
+@k.styles.word.key.theme.width core.word text=width means=k.styles.theme.width core.source="hand-core 1"
+@k.styles.word.key.role.role core.word text=role means=k.styles.role.role core.source="hand-core 1"
+@k.styles.word.key.role.fill core.word text=fill means=k.styles.role.fill core.source="hand-core 1"
+@k.styles.word.key.role.outline core.word text=outline means=k.styles.role.outline core.source="hand-core 1"
+@k.styles.word.key.role.text core.word text=text means=k.styles.role.text core.source="hand-core 1"
+@k.styles.word.key.swatch.n core.word text=n means=k.styles.swatch.n core.source="hand-core 1"
+@k.styles.word.key.swatch.colour core.word text=colour means=k.styles.swatch.colour core.source="hand-core 1"

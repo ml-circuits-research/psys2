@@ -9,25 +9,32 @@
 @area.draw.type core.type of=app.area.draw
 @area.offline.type core.type of=app.area.offline
 
-@avatar.area app.area world=ui.avatar instance=w.face knowledge=k.faces knowledge=k.values scope="ui.avatar" frame.w=100 frame.h=100
-@avatar.rules.1 app.area.rules area=$avatar.area file="render-projection.sop" n=1
-@avatar.rules.2 app.area.rules area=$avatar.area file="act-rules.sop" n=2
+@avatar.area app.area world=ui.avatar instance=w.face knowledge=k.faces knowledge=k.values knowledge=k.parts scope="ui.avatar" frame.w=100 frame.h=100
+# The Avatar is a view of one person of the Drawing tab's model: the look projection, the look edit rules and the
+# person composition are the Drawing tab's (art.draw), so every garment, face part or trait the people's knowledge and
+# rules gain reaches this tab too; view-projection.sop frames that person on the face.
+@area.subset.type core.type of=app.area.subset
+@area.lookup.type core.type of=app.area.lookup
+@avatar.subset.parts app.area.subset area=$avatar.area world=k.parts prefix="names" prefix="psys2" strict=true
+@avatar.lookup.person app.area.lookup area=$avatar.area world=k.objects value=person
+@avatar.rules.1 app.area.rules area=$avatar.area world=art.draw file="look-projection.sop" n=1
+@avatar.rules.2 app.area.rules area=$avatar.area file="view-projection.sop" n=2
+@avatar.rules.3 app.area.rules area=$avatar.area world=art.draw file="look-rules.sop" n=3
+@avatar.rules.4 app.area.rules area=$avatar.area world=art.draw file="person-rules.sop" n=4
+@avatar.rules.5 app.area.rules area=$avatar.area file="act-rules.sop" n=5
 @avatar.make app.area.make area=$avatar.area kind=w.face.face name="Avatar" style=plain
 @avatar.start app.area.command area=$avatar.area sop="@start avatar.face.preset preset=\"girl\""
-@avatar.offline app.area.offline area=$avatar.area prefix="plain-"
-@avatar.draw app.area.draw area=$avatar.area draw=ui.avatar.draw fill=ui.avatar.fill point=ui.avatar.point orient=ui.avatar.orient select=slot
+@avatar.offline app.area.offline area=$avatar.area prefix="plain-" prefix="figure-"
+@avatar.draw app.area.draw area=$avatar.area draw=ui.avatar.view fill=ui.avatar.fill point=ui.avatar.point orient=ui.avatar.orient select=slot
 
 # The interface's open choices, read from the same world.
 @avatar.choice.kinds app.area.choice area=$avatar.area input="avatar.characterKinds" type=k.faces.preset key=kind style=plain
 @avatar.choice.presets app.area.choice area=$avatar.area input="avatar.presets" type=k.faces.preset key=name style=plain
 @avatar.choice.expressions app.area.choice area=$avatar.area input="avatar.expressions" type=k.faces.expression key=name style=plain
 @avatar.choice.slots app.area.choice area=$avatar.area input="avatar.visibleSlots" type=w.face.slot key=slot
-@avatar.choice.variants app.area.choice area=$avatar.area input="avatar.variants" type=k.faces.variant key=name style=plain
+@avatar.choice.variants app.area.choice area=$avatar.area input="avatar.variants" type=ui.avatar.variantChoice key=name
 @avatar.choice.colours app.area.choice area=$avatar.area input="avatar.colours" type=k.faces.colour key=name
 @avatar.choice.sizes app.area.choice area=$avatar.area input="avatar.sizes" type=ui.avatar.size key=grade
-# A part's length: the steps of the scale the catalog declares for it (k.faces.feature) and the relative steps of
-# act-rules.sop (one step longer or shorter).
-@avatar.choice.lengths app.area.choice area=$avatar.area input="avatar.lengths" type=ui.avatar.lengthChoice key=value
 @avatar.choice.directions app.area.choice area=$avatar.area input="avatar.directions" type=ui.avatar.step key=place
 # The features a part can be given (act-rules.sop: ui.avatar.feature, from the plain-word features of the variants).
 @avatar.choice.features app.area.choice area=$avatar.area input="avatar.features" type=ui.avatar.feature key=property style=plain

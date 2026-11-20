@@ -1,17 +1,17 @@
-import { readSceneDefaults } from './scene-placement-defaults.mjs?v=a09495374e';
-import { executeSpatialPlacement } from './spatial-placement-execution.mjs?v=fe4f66506c';
-import { compareNativeReadings, compileNativeCapability } from './capability-plan-adapter.mjs?v=eacf7cbae1';
-import { readDegreeBases } from './degree-bases.mjs?v=36c04c74ae';
-import { NATIVE_AREAS,createAreaHost } from './app-reader-context.mjs?v=5fafad74f7';
+import { readSceneDefaults } from './scene-placement-defaults.mjs?v=2ae634c0b5';
+import { executeSpatialPlacement } from './spatial-placement-execution.mjs?v=c6fa89980e';
+import { compareNativeReadings, compileNativeCapability } from './capability-plan-adapter.mjs?v=2ef61a1684';
+import { readDegreeBases } from './degree-bases.mjs?v=ed81fd7916';
+import { NATIVE_AREAS,createAreaHost } from './app-reader-context.mjs?v=4350a070af';
 import { instanceIdFor } from './instance-identity.mjs?v=024ef1ca83';
-import { describeRouteComparison,resolveRequestRoute } from './request-routing-policy.mjs?v=45e2483548';
-import { executeHistoryRequest } from './history-execution.mjs?v=2b18313206';
-import { executeNativeQuery } from './native-query-execution.mjs?v=d3f93c6dd3';
-import { executeNativeCapability } from './capability-plan-execution.mjs?v=b5b7130aa4';
-import { executionValueSource } from './execution-policy.mjs?v=e0fcf658a6';
-import { inspectCachedExecutionSource } from './execution-world-inspection.mjs?v=a0fd73ae03';
-import { World, str } from '../vendor/sopworld/sopworld.mjs?v=4a094fcca4';
-import SOURCE from './new-engine-source.mjs?v=493adf1652';
+import { describeRouteComparison,resolveRequestRoute } from './request-routing-policy.mjs?v=f298c06ae9';
+import { executeHistoryRequest } from './history-execution.mjs?v=7092cf7ba1';
+import { executeNativeQuery } from './native-query-execution.mjs?v=7eec541843';
+import { executeNativeCapability } from './capability-plan-execution.mjs?v=f22db9ce21';
+import { executionValueSource } from './execution-policy.mjs?v=0af0e2a963';
+import { inspectCachedExecutionSource } from './execution-world-inspection.mjs?v=f8b8d381ca';
+import { World, str } from '../vendor/sopworld/sopworld.mjs?v=915a9d5c18';
+import SOURCE from './new-engine-source.mjs?v=fc6b6a1c57';
 let knowledge;
 const source = () => knowledge ??= World.fromJSON(SOURCE.snapshot, { library: SOURCE.schemaModules });
 export const inspectDeclaredExecutionSourceWorld = (options) => inspectCachedExecutionSource(knowledge, options);
@@ -20,6 +20,10 @@ export function declaredPropertyValues(concept) {
   return config ? source().ofType(config.valueType).map((wire) => str(wire.attrs[config.nameKey]?.[0]))
     .filter((value) => typeof value === 'string') : [];
 }
+/** The rows of one type of the execution knowledge (the catalog modules the build pins: k.expect amounts, ...). */
+export const declaredKnowledge = (type) => source().ofType(type);
+/** The execution knowledge world itself (what a capability compilation reads values from). */
+export const executionKnowledge = () => source();
 const unavailable=(text,reason)=>({text,parts:[{text,translate:false}],statuses:['unsupported'],answers:[],segments:[],state:{},effects:[],
   trace:{legacy:false,engine:'new',reason}});
 const interpreters=new Map([

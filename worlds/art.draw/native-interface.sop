@@ -1,5 +1,7 @@
 # Native tool interface owned by art.draw.
 @native.art.draw.scope std.capability.scope instance="art.draw" version="1"
+# A drawn thing may be made several times by one request ("draw three houses"): a count compiles to that many make calls, placed together.
+@native.art.draw.repeat.make std.capability.repeat scope=$native.art.draw.scope on="art.draw.object" act=make concept=count max=16
 @native.art.draw.op.drawing.object.make std.capability.operation scope=$native.art.draw.scope name="drawing.object.make" act=make on="art.draw.object" order=0 eligible=true
 @native.art.draw.op.drawing.object.make.param.kind std.capability.parameter operation=$native.art.draw.op.drawing.object.make name="kind" kind=string required=true
 @native.art.draw.input.drawing.kinds app.native.input name="drawing.kinds" required=true
@@ -12,6 +14,8 @@
 @native.art.draw.op.drawing.object.make.param.y std.capability.parameter operation=$native.art.draw.op.drawing.object.make name="y" kind=number
 @native.art.draw.op.drawing.object.make.param.size std.capability.parameter operation=$native.art.draw.op.drawing.object.make name="size" kind=number min=0.001
 @native.art.draw.op.drawing.object.make.param.color std.capability.parameter operation=$native.art.draw.op.drawing.object.make name="color" kind=string nullable=true
+@native.art.draw.op.drawing.object.make.param.age std.capability.parameter operation=$native.art.draw.op.drawing.object.make name="age" kind=string
+@native.art.draw.op.drawing.object.make.param.sex std.capability.parameter operation=$native.art.draw.op.drawing.object.make name="sex" kind=string
 @native.art.draw.value.13 std.capability.arg name="enum" value=true
 @native.art.draw.value.14 std.capability.record entry=$native.art.draw.value.13
 @native.art.draw.value.15 std.capability.arg name="kind" value=$native.art.draw.value.14
@@ -58,6 +62,8 @@
 @native.art.draw.op.drawing.catalog.make.param.x std.capability.parameter operation=$native.art.draw.op.drawing.catalog.make name="x" kind=number
 @native.art.draw.op.drawing.catalog.make.param.y std.capability.parameter operation=$native.art.draw.op.drawing.catalog.make name="y" kind=number
 @native.art.draw.op.drawing.catalog.make.param.size std.capability.parameter operation=$native.art.draw.op.drawing.catalog.make name="size" kind=number min=0.001
+@native.art.draw.op.drawing.catalog.make.param.age std.capability.parameter operation=$native.art.draw.op.drawing.catalog.make name="age" kind=string
+@native.art.draw.op.drawing.catalog.make.param.sex std.capability.parameter operation=$native.art.draw.op.drawing.catalog.make name="sex" kind=string
 @native.art.draw.value.57 std.capability.arg name="argument" value="name"
 @native.art.draw.value.58 std.capability.arg name="load" value="thing"
 @native.art.draw.value.59 std.capability.record entry=$native.art.draw.value.57 entry=$native.art.draw.value.58
@@ -202,6 +208,9 @@
 @native.art.draw.op.drawing.part.change.param.color std.capability.parameter operation=$native.art.draw.op.drawing.part.change name="color" kind=string
 @native.art.draw.op.drawing.part.change.param.width std.capability.parameter operation=$native.art.draw.op.drawing.part.change name="width" kind=number min=0.01
 @native.art.draw.op.drawing.part.change.param.height std.capability.parameter operation=$native.art.draw.op.drawing.part.change name="height" kind=number min=0.01
+@native.art.draw.op.drawing.part.change.param.variant std.capability.parameter operation=$native.art.draw.op.drawing.part.change name="variant" kind=string
+@native.art.draw.op.drawing.part.change.param.length std.capability.parameter operation=$native.art.draw.op.drawing.part.change name="length" kind=string
+@native.art.draw.op.drawing.part.change.param.shape std.capability.parameter operation=$native.art.draw.op.drawing.part.change name="shape" kind=string
 @native.art.draw.op.drawing.part.place std.capability.operation scope=$native.art.draw.scope name="drawing.part.place" act=place on="art.draw.part" order=16 eligible=true
 @native.art.draw.op.drawing.part.place.param.id std.capability.parameter operation=$native.art.draw.op.drawing.part.place name="id" kind=string required=true
 @native.art.draw.op.drawing.part.place.param.index std.capability.parameter operation=$native.art.draw.op.drawing.part.place name="index" kind=integer required=true min=0
@@ -283,3 +292,18 @@
 @native.art.draw.selection.many.record std.capability.record entry=$native.art.draw.selection.many.projection
 @native.art.draw.selection.many.effect std.capability.arg name="effectScope" value=$native.art.draw.selection.many.record
 @native.art.draw.op.drawing.objects.select.metadata app.native.metadata operation=$native.art.draw.op.drawing.objects.select field=$native.art.draw.selection.many.effect
+# A part added to an object by the word for it (art.draw/act-rules.sop: a part a look of the object can wear or show, a
+# face put on a thing that bears one, a removed part of the drawing put back); a different look for a person.
+@native.art.draw.op.drawing.part.add std.capability.operation scope=$native.art.draw.scope name="drawing.part.add" act=make on="art.draw.part" order=21 eligible=true
+@native.art.draw.op.drawing.part.add.param.id std.capability.parameter operation=$native.art.draw.op.drawing.part.add name="id" kind=string required=true
+@native.art.draw.op.drawing.part.add.param.kind std.capability.parameter operation=$native.art.draw.op.drawing.part.add name="kind" kind=string required=true
+@native.art.draw.op.drawing.part.add.param.variant std.capability.parameter operation=$native.art.draw.op.drawing.part.add name="variant" kind=string
+@native.art.draw.op.drawing.part.add.param.color std.capability.parameter operation=$native.art.draw.op.drawing.part.add name="color" kind=string
+@native.art.draw.op.drawing.part.add.metadata app.native.metadata operation=$native.art.draw.op.drawing.part.add field=$native.art.draw.part.effect
+@native.art.draw.op.drawing.person.vary std.capability.operation scope=$native.art.draw.scope name="drawing.person.vary" act=change on="art.draw.object" order=22 eligible=true
+@native.art.draw.op.drawing.person.vary.param.id std.capability.parameter operation=$native.art.draw.op.drawing.person.vary name="id" kind=string required=true
+@native.art.draw.op.drawing.person.vary.metadata app.native.metadata operation=$native.art.draw.op.drawing.person.vary field=$native.art.draw.part.effect
+@native.art.draw.op.drawing.person.expression std.capability.operation scope=$native.art.draw.scope name="drawing.person.expression" act=change on="art.draw.object" order=23 eligible=true
+@native.art.draw.op.drawing.person.expression.param.id std.capability.parameter operation=$native.art.draw.op.drawing.person.expression name="id" kind=string required=true
+@native.art.draw.op.drawing.person.expression.param.expression std.capability.parameter operation=$native.art.draw.op.drawing.person.expression name="expression" kind=string required=true
+@native.art.draw.op.drawing.person.expression.metadata app.native.metadata operation=$native.art.draw.op.drawing.person.expression field=$native.art.draw.part.effect

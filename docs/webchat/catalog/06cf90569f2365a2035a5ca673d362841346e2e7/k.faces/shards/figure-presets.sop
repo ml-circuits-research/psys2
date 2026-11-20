@@ -1,0 +1,16 @@
+# k.faces/shards/figure-presets: outfits of the style `figure`: one variant per slot it fills, the colour of the clothes (and default skin, hair and eye colours, which the face of a person sets), with the ages and sexes they suit (k.people.kind age, sex).
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: tools/figures-core.mjs
+
+@k.faces.figure.preset.baby_clothes k.faces.preset name="baby clothes" style=figure kind=human age=baby sex=female sex=male body=bare bottom=shorts top=t-shirt skin=light hair_colour=brown eye_colour=brown clothes=yellow core.source="hand-core 1"
+@k.faces.figure.preset.boy_clothes k.faces.preset name="boy clothes" style=figure kind=human age=child sex=male body=bare bottom=shorts shoes=trainers top=t-shirt skin=light hair_colour=brown eye_colour=brown clothes=green core.source="hand-core 1"
+@k.faces.figure.preset.boy_in_jeans k.faces.preset name="boy in jeans" style=figure kind=human age=child sex=male body=bare bottom=jeans shoes=trainers top=jumper skin=light hair_colour=brown eye_colour=brown clothes=red core.source="hand-core 1"
+@k.faces.figure.preset.girl_clothes k.faces.preset name="girl clothes" style=figure kind=human age=child sex=female body=bare shoes=shoes top=dress skin=light hair_colour=brown eye_colour=brown clothes=pink core.source="hand-core 1"
+@k.faces.figure.preset.girl_in_a_skirt k.faces.preset name="girl in a skirt" style=figure kind=human age=child sex=female body=bare bottom=skirt shoes=trainers top=t-shirt skin=light hair_colour=brown eye_colour=brown clothes=yellow core.source="hand-core 1"
+@k.faces.figure.preset.man_clothes k.faces.preset name="man clothes" style=figure kind=human age=adult sex=male body=bare bottom=trousers shoes=shoes top=shirt skin=light hair_colour=brown eye_colour=brown clothes=blue core.source="hand-core 1"
+@k.faces.figure.preset.man_in_a_jacket k.faces.preset name="man in a jacket" style=figure kind=human age=adult sex=male body=bare bottom=jeans shoes=boots top=t-shirt coat=jacket skin=light hair_colour=brown eye_colour=brown clothes=grey core.source="hand-core 1"
+@k.faces.figure.preset.woman_clothes k.faces.preset name="woman clothes" style=figure kind=human age=adult sex=female body=bare shoes=shoes top=dress skin=light hair_colour=brown eye_colour=brown clothes=purple core.source="hand-core 1"
+@k.faces.figure.preset.woman_in_jeans k.faces.preset name="woman in jeans" style=figure kind=human age=adult sex=female body=bare bottom=jeans shoes=trainers top=shirt skin=light hair_colour=brown eye_colour=brown clothes=orange core.source="hand-core 1"
+@k.faces.figure.preset.old_man_clothes k.faces.preset name="old man clothes" style=figure kind=human age=old sex=male body=bare bottom=trousers shoes=shoes top=shirt coat=coat skin=light hair_colour=brown eye_colour=brown clothes=white core.source="hand-core 1"
+@k.faces.figure.preset.old_woman_clothes k.faces.preset name="old woman clothes" style=figure kind=human age=old sex=female body=bare bottom=skirt shoes=shoes top=jumper skin=light hair_colour=brown eye_colour=brown clothes=pink core.source="hand-core 1"

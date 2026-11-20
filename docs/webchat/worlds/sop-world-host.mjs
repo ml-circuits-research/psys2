@@ -5,8 +5,8 @@
 //  3. this interpreter runs the calls through the library's generic acts (World.act) and keeps the resulting
 //     instance facts and the view keys as the tool state. Undo and redo belong to the application's journal.
 // The objects a reader observes come from app.observe.object facts the same rules derive.
-import {parse, quote, serialize, str} from '../lib/vendor/sopworld/sopworld.mjs?v=4a094fcca4';
-import {createNativeToolHost, nativeToken} from './native-tool-host.mjs?v=f2c2d48456';
+import {parse, quote, serialize, str} from '../lib/vendor/sopworld/sopworld.mjs?v=915a9d5c18';
+import {createNativeToolHost, nativeToken} from './native-tool-host.mjs?v=a1c19dd178';
 
 const CALLS = 512;
 const atom = /^[A-Za-z_][A-Za-z0-9_.-]*$/;
@@ -196,7 +196,9 @@ export function createSopWorldHost({ base, callBase = null, kinds, state, instan
     const [made] = worldOf(base, { sop: result.sop, runtime: empty.runtime }).ofType('app.observe.box');
     if (!made) return null;
     const width = Number(read(made, 'x1')) - Number(read(made, 'x0')), height = Number(read(made, 'y1')) - Number(read(made, 'y0'));
-    return Number.isFinite(width) && Number.isFinite(height) ? { width, height } : null;
+    // The surfaces what it makes keeps out of (app.place.avoid), for the relation placement (std.placement.kind avoids).
+    const avoids = [...new Set(compiled.world.ofType('app.place.avoid').map((fact) => read(fact, 'surface')).filter(Boolean))];
+    return Number.isFinite(width) && Number.isFinite(height) ? { width, height, ...(avoids.length ? { avoids } : {}) } : null;
   };
   // Where a command would place a new object, as the rules declare it for a placement problem: the candidate regions
   // (app.place.region, in the order the rules rank them, with the size the object has there) and the objective
@@ -211,7 +213,16 @@ export function createSopWorldHost({ base, callBase = null, kinds, state, instan
       .sort((a, b) => a.tier - b.tier || a.order - b.order || (a.key < b.key ? -1 : a.key > b.key ? 1 : 0));
     const [objective] = compiled.world.ofType('app.place.objective');
     if (!regions.length || !objective) return null;
-    return { regions, objective: Object.fromEntries(Object.keys(objective.attrs).map((key) => [key, typed(objective.attrs[key][0])])) };
+    // The surfaces the new object keeps out of (app.place.avoid: the water of a river for a house).
+    // (strength=soft weight=: a preference, e.g. the columns above and below standing things.)
+    const avoid = [...new Set(compiled.world.ofType('app.place.avoid').filter((fact) => read(fact, 'strength') !== 'soft').map((fact) => read(fact, 'surface')).filter(Boolean))];
+    const prefer = compiled.world.ofType('app.place.avoid').filter((fact) => read(fact, 'strength') === 'soft').map((fact) => ({ surface: read(fact, 'surface'), weight: num(fact, 'weight') }));
+    // The share of its size a new object occupies across and down, where its rules say (a band, an outline).
+    const [foot] = compiled.world.ofType('app.place.footprint');
+    const footprint = foot ? { w: num(foot, 'w'), h: num(foot, 'h') } : undefined;
+    // How firmly it keeps clear of observed objects (app.place.peers strength=hard: a thing that lies in the land).
+    const [peers] = compiled.world.ofType('app.place.peers');
+    return { regions, avoid, ...(prefer.length ? { prefer } : {}), ...(footprint ? { footprint } : {}), ...(peers ? { peers: read(peers, 'strength') } : {}), objective: Object.fromEntries(Object.keys(objective.attrs).map((key) => [key, typed(objective.attrs[key][0])])) };
   };
   return createNativeToolHost({ state, instanceId, scope, toolInterface, operations, handlers, view, ...(spatialObservation ? { spatial, measure, placement } : {}), ...limits });
 }

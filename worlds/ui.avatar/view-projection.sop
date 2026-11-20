@@ -1,0 +1,49 @@
+# The Avatar view (authored): the Avatar tab shows one person of the Drawing tab's model, large and framed on the face.
+# Its parts are drawn by the shared look projection (art.draw/look-projection.sop: ui.avatar.draw, each in the frame of
+# its style); the face (a style with a head) is drawn as it is, in the 0..100 frame of the face; the body (a style drawn
+# in the frame of a drawing: the figure, k.faces.frame) is mapped into the face's frame as the person drawing places them:
+# the face sits on the part of that drawing that bears a face (k.parts.called also=face), its head slot fitted into the
+# part's box, so the view shows the neck, the shoulders and the clothes under the face, and every garment of the people's
+# knowledge. The body is drawn behind the face.
+@vw.view.type core.type of=ui.avatar.view
+
+@vw.face w.face.face
+@vw.head ui.look.head face=$vw.face
+@vw.wp w.face.part face=$vw.face
+@vw.d ui.avatar.draw part=$vw.wp source=?src slot=?slot order=?o z=?z shape=?shape x=?x y=?y w=?w h=?h cx=?cx cy=?cy tx=?tx ty=?ty scale=?k side=?side
+@vw.out ui.avatar.view part=$vw.wp source=?src slot=?slot order=?o z=?z shape=?shape x=?x y=?y w=?w h=?h cx=?cx cy=?cy tx=?tx ty=?ty scale=?k side=?side
+@view.head core.rule when=$vw.face when=$vw.head when=$vw.wp when=$vw.d then=$vw.out
+
+@vb.face w.face.face style=?bs
+@vb.body ui.look.body face=$vb.face
+@vb.frame k.faces.frame style=?bs drawing=?dr
+@vb.hf w.face.face style=?hs
+@vb.hfh ui.look.head face=$vb.hf
+@vb.called k.parts.called of=?dr part=?pn also=face
+@vb.kp k.objects.part of=?dr name=?pn x=?px y=?py w=?pw h=?ph
+@vb.hs k.faces.slot style=?hs name=head x=?hx y=?hy w=?hw h=?hh
+@vb.wp w.face.part face=$vb.face
+@vb.d ui.avatar.draw part=$vb.wp source=?src slot=?slot order=?o z=?z shape=?shape x=?x y=?y w=?w h=?h cx=?cx cy=?cy tx=?tx ty=?ty scale=?k side=?side
+@vb.sx core.calc out=?sx fn=div args=?pw args=?hw
+@vb.sy core.calc out=?sy fn=div args=?ph args=?hh
+@vb.s core.calc out=?s fn=min args=?sx args=?sy
+@vb.hw2 core.calc out=?hw2 fn=div args=?hw args=2
+@vb.hh2 core.calc out=?hh2 fn=div args=?hh args=2
+@vb.hcx core.calc out=?hcx fn=add args=?hx args=?hw2
+@vb.hcy core.calc out=?hcy fn=add args=?hy args=?hh2
+@vb.pw2 core.calc out=?pw2 fn=div args=?pw args=2
+@vb.ph2 core.calc out=?ph2 fn=div args=?ph args=2
+@vb.pcx core.calc out=?pcx fn=add args=?px args=?pw2
+@vb.pcy core.calc out=?pcy fn=add args=?py args=?ph2
+@vb.ux core.calc out=?ux fn=mul args=?hcx args=?s
+@vb.uy core.calc out=?uy fn=mul args=?hcy args=?s
+@vb.mx core.calc out=?mx fn=sub args=?pcx args=?ux
+@vb.my core.calc out=?my fn=sub args=?pcy args=?uy
+@vb.k2 core.calc out=?k2 fn=div args=?k args=?s
+@vb.tx1 core.calc out=?tx1 fn=sub args=?tx args=?mx
+@vb.ty1 core.calc out=?ty1 fn=sub args=?ty args=?my
+@vb.tx2 core.calc out=?tx2 fn=div args=?tx1 args=?s
+@vb.ty2 core.calc out=?ty2 fn=div args=?ty1 args=?s
+@vb.o2 core.calc out=?o2 fn=sub args=?o args=10
+@vb.out ui.avatar.view part=$vb.wp source=?src slot=?slot order=?o2 z=?z shape=?shape x=?x y=?y w=?w h=?h cx=?cx cy=?cy tx=?tx2 ty=?ty2 scale=?k2 side=?side
+@view.body core.rule when=$vb.face when=$vb.body when=$vb.frame when=$vb.hf when=$vb.hfh when=$vb.called when=$vb.kp when=$vb.hs when=$vb.wp when=$vb.d with=$vb.sx with=$vb.sy with=$vb.s with=$vb.hw2 with=$vb.hh2 with=$vb.hcx with=$vb.hcy with=$vb.pw2 with=$vb.ph2 with=$vb.pcx with=$vb.pcy with=$vb.ux with=$vb.uy with=$vb.mx with=$vb.my with=$vb.k2 with=$vb.tx1 with=$vb.ty1 with=$vb.tx2 with=$vb.ty2 with=$vb.o2 then=$vb.out

@@ -184,7 +184,8 @@
 @ct.fits core.check fn=gte args=?s1 args=?need
 @ct.key core.calc out=?key fn=concat args=?host args=- args=?an
 @ct.out ui.draw.region key=?key tier=1 order=?oz host=?host x0=?bx0 y0=?by0 x1=?bx1 y1=?by1 size=?s1
-@region.container core.rule when=$ct.auto when=$ct.into when=$ct.anchor when=$ct.o when=$ct.s when=$ct.page with=$ct.sc with=$ct.half with=$ct.ox0 with=$ct.oy0 with=$ct.dx with=$ct.dy with=$ct.bw with=$ct.bh with=$ct.bx0 with=$ct.by0 with=$ct.bx1 with=$ct.by1 with=$ct.rw with=$ct.rh with=$ct.s0 with=$ct.s0h with=$ct.s0r with=$ct.s1 with=$ct.need if=$ct.fits with=$ct.key then=$ct.out
+@ct.terrain ui.draw.backdrop object=?host
+@region.container core.rule when=$ct.auto when=$ct.into when=$ct.anchor when=$ct.o not=$ct.terrain when=$ct.s when=$ct.page with=$ct.sc with=$ct.half with=$ct.ox0 with=$ct.oy0 with=$ct.dx with=$ct.dy with=$ct.bw with=$ct.bh with=$ct.bx0 with=$ct.by0 with=$ct.bx1 with=$ct.by1 with=$ct.rw with=$ct.rh with=$ct.s0 with=$ct.s0h with=$ct.s0r with=$ct.s1 with=$ct.need if=$ct.fits with=$ct.key then=$ct.out
 # (2) The area whose layout slot holds the kind; (3) the area of its k.scenes place; (5) the page.
 @rh.auto ui.draw.auto kind=?k
 @rh.as ui.draw.as kind=?k as=?a
@@ -421,7 +422,8 @@
 @cat.name.arg app.act.arg call=new.object attr=name value=?kind
 @make.catalog.name core.rule when=$cat.req when=$cat.known then=$cat.name.arg
 @cat.unknown app.act.refuse reason=drawing-not-in-catalog
-@make.catalog.unknown core.rule when=$cat.req not=$cat.known then=$cat.unknown
+@cat.unknown.people k.people.kind name=?kind
+@make.catalog.unknown core.rule when=$cat.req not=$cat.known not=$cat.unknown.people then=$cat.unknown
 @make.x.req app.act.request x=?v
 @make.x.arg app.act.arg call=new.object attr=x value=?v
 @make.x core.rule when=$make.x.req then=$make.x.arg
@@ -510,19 +512,21 @@
 @part.obj w.drawing.object code=?id
 @part.edit w.drawing.part object=$part.obj index=?i
 @part.any w.drawing.part object=$part.obj index=?i
+# A look part's index (a part of a person's face or clothes) is edited through its face (look edits, below).
+@part.lk ui.draw.lookpart object=?id index=?i
 @part.colour.req app.act.request operation="drawing.part.change" id=?id index=?i color=?v
 @part.colour.new app.act.call act=make kind=w.drawing.part object=$part.obj index=?i colour=?v order=1
 @part.colour.chg app.act.call act=change thing=$part.edit attr=colour value=?v order=1
 @part.colour.geo ui.draw.partedit object=?id index=?i
-@part.colour.make core.rule when=$part.colour.req when=$part.obj not=$part.any not=$part.colour.geo then=$part.colour.new
+@part.colour.make core.rule when=$part.colour.req when=$part.obj not=$part.lk not=$part.any not=$part.colour.geo then=$part.colour.new
 @part.colour.arg app.act.arg call=new.part attr=colour value=?v
-@part.colour.with.geometry core.rule when=$part.colour.req when=$part.obj not=$part.any when=$part.colour.geo then=$part.colour.arg
-@part.colour.change core.rule when=$part.colour.req when=$part.obj when=$part.edit then=$part.colour.chg
+@part.colour.with.geometry core.rule when=$part.colour.req when=$part.obj not=$part.lk not=$part.any when=$part.colour.geo then=$part.colour.arg
+@part.colour.change core.rule when=$part.colour.req when=$part.obj not=$part.lk when=$part.edit then=$part.colour.chg
 @part.rm.req app.act.request operation="drawing.part.remove" id=?id index=?i
 @part.rm.new app.act.call act=make kind=w.drawing.part object=$part.obj index=?i removed=true order=1
 @part.rm.chg app.act.call act=change thing=$part.edit attr=removed value=true order=1
-@part.remove.make core.rule when=$part.rm.req when=$part.obj not=$part.any then=$part.rm.new
-@part.remove.change core.rule when=$part.rm.req when=$part.obj when=$part.edit then=$part.rm.chg
+@part.remove.make core.rule when=$part.rm.req when=$part.obj not=$part.lk not=$part.any then=$part.rm.new
+@part.remove.change core.rule when=$part.rm.req when=$part.obj not=$part.lk when=$part.edit then=$part.rm.chg
 
 # Geometry edits of one part (render-projection.sop, ui.draw.partgeo): drawing.part.place moves its centre to x, y and
 # drawing.part.change resizes it to width, height, both in page units, about its centre. The edit keeps the move (dx,
@@ -741,7 +745,8 @@
 @obp.removed w.drawing.part object=$obp.o index=?i removed=true
 @obp.pid core.calc out=?pid fn=concat args=?id args="." args=?i
 @obp.out app.observe.object id=?pid kind=?name sourceType=art.draw.part binding=drawing.part in=?id role=?name name=?name index=?i
-@draw.observe.part core.rule when=$obp.o when=$obp.kp when=$obp.ix not=$obp.removed with=$obp.pid then=$obp.out
+@obp.hidden ui.draw.hidden object=?id source=$obp.kp
+@draw.observe.part core.rule when=$obp.o when=$obp.kp when=$obp.ix not=$obp.removed not=$obp.hidden with=$obp.pid then=$obp.out
 @ob.member.type core.type of=app.observe.member
 @sp.frame app.observe.frame id=drawing.canvas x0=0 y0=0 x1=1000 y1=700 evidence=rectangle
 @sp.o w.drawing.object code=?id x=?x y=?y
@@ -753,7 +758,8 @@
 @sp.x1 core.calc out=?x1 fn=add args=?x args=?hw
 @sp.y1 core.calc out=?y1 fn=add args=?y args=?hh
 @sp.box app.observe.box id=?id x0=?x0 y0=?y0 x1=?x1 y1=?y1 occupant=true
-@spatial.box core.rule when=$sp.o when=$sp.ext with=$sp.hw with=$sp.hh with=$sp.x0 with=$sp.y0 with=$sp.x1 with=$sp.y1 then=$sp.box
+@sp.backdrop ui.draw.backdrop object=?id
+@spatial.box core.rule when=$sp.o not=$sp.backdrop when=$sp.ext with=$sp.hw with=$sp.hh with=$sp.x0 with=$sp.y0 with=$sp.x1 with=$sp.y1 then=$sp.box
 # Where other things go on each object (its k.layouts anchors: the water of a lake, the surface of a table), in page
 # units, with the kinds each holds: placement puts "a boat in the lake" into the water, "a cup on the table" on it.
 @rg.o w.drawing.object code=?id drawing=?k x=?x y=?y size=?s
@@ -771,7 +777,8 @@
 @rg.x1 core.calc out=?x1 fn=add args=?x0 args=?bw
 @rg.y1 core.calc out=?y1 fn=add args=?y0 args=?bh
 @rg.out app.observe.region of=?id kind=?ak holds=?h x0=?x0 y0=?y0 x1=?x1 y1=?y1
-@spatial.region core.rule when=$rg.o when=$rg.a with=$rg.sc with=$rg.half with=$rg.ox with=$rg.oy with=$rg.dx with=$rg.dy with=$rg.bw with=$rg.bh with=$rg.x0 with=$rg.y0 with=$rg.x1 with=$rg.y1 then=$rg.out
+@rg.terrain ui.draw.backdrop object=?id
+@spatial.region core.rule when=$rg.o not=$rg.terrain when=$rg.a with=$rg.sc with=$rg.half with=$rg.ox with=$rg.oy with=$rg.dx with=$rg.dy with=$rg.bw with=$rg.bh with=$rg.x0 with=$rg.y0 with=$rg.x1 with=$rg.y1 then=$rg.out
 @op.object w.drawing.object code=?id
 @op.object.o app.observe.option id=object value=?id
 @draw.option.object core.rule when=$op.object then=$op.object.o
@@ -832,3 +839,454 @@
 @op.colour k.colours.colour name=?c rgb=?rgb
 @op.colour.o app.observe.option id=colour value=?c
 @draw.option.colour core.rule when=$op.colour then=$op.colour.o
+
+# People (authored; art.draw/person-rules.sop composes them): a kind drawn as a drawing that a body style is drawn on
+# (k.faces.frame: the drawing person) is made with a look: a face (style plain, on the part that bears a face) and a
+# body with clothes (style figure). Its age and sex are the kind's (k.people.kind: a boy is a male child) or the
+# command's (age=, sex=: "an old person"); which face and which outfit of that age and sex is chosen by the object's
+# seed (its layer when it has none), so two people of one kind look different and the same page draws the same.
+@person.drawnas.type core.type of=ui.draw.drawnas
+@person.figured.type core.type of=ui.draw.figured
+@dn.sub ui.draw.subject kind=?k
+@dn.own k.objects.object name=?k
+@dn.own.o ui.draw.drawnas kind=?k drawing=?k
+@drawn.as.own core.rule when=$dn.sub when=$dn.own then=$dn.own.o
+@dn.people k.people.kind name=?k drawing=?d
+@dn.people.o ui.draw.drawnas kind=?k drawing=?d
+@drawn.as.people core.rule when=$dn.sub not=$dn.own when=$dn.people then=$dn.people.o
+@fg.as ui.draw.drawnas kind=?k drawing=?d
+@fg.frame k.faces.frame style=?bs drawing=?d
+@fg.o ui.draw.figured kind=?k body=?bs
+@figured core.rule when=$fg.as when=$fg.frame then=$fg.o
+# A people kind is made by its catalog name: known through k.people.kind, drawn as its declared drawing.
+@cat.people k.people.kind name=?kind drawing=?pd
+@cat.people.drawing k.objects.object name=?pd
+@make.catalog.people core.rule when=$cat.req not=$cat.known when=$cat.people when=$cat.people.drawing when=$make.t when=$next.n with=$next.z with=$next.code then=$make.call
+@make.catalog.people.select core.rule when=$cat.req not=$cat.known when=$cat.people when=$cat.people.drawing when=$make.t when=$next.n with=$next.z with=$next.code then=$made.select.view
+@make.catalog.people.name core.rule when=$cat.req not=$cat.known when=$cat.people when=$cat.people.drawing then=$cat.name.arg
+
+# The person to compose: its key is the new object's code; the traits are the command's, else the kind's.
+@pw.fg ui.draw.figured kind=?k body=?bs
+@pw.seed core.calc out=?seed fn=add args=?top args=1
+@pw.face.o ui.person.want key=?code style=plain seed=?seed
+@person.want.face core.rule when=$pw.fg when=$next.n with=$next.z with=$next.code with=$pw.seed then=$pw.face.o
+@pw.req.age app.act.request age=?a
+@pw.req.sex app.act.request sex=?x
+@pw.kind.age k.people.kind name=?k age=?a
+@pw.kind.sex k.people.kind name=?k sex=?x
+@pw.age.o ui.person.want key=?code age=?a
+@pw.sex.o ui.person.want key=?code sex=?x
+@person.want.age.asked core.rule when=$pw.fg when=$pw.req.age when=$next.n with=$next.z with=$next.code then=$pw.age.o
+@person.want.age.kind core.rule when=$pw.fg not=$pw.req.age when=$pw.kind.age when=$next.n with=$next.z with=$next.code then=$pw.age.o
+@person.want.sex.asked core.rule when=$pw.fg when=$pw.req.sex when=$next.n with=$next.z with=$next.code then=$pw.sex.o
+@person.want.sex.kind core.rule when=$pw.fg not=$pw.req.sex when=$pw.kind.sex when=$next.n with=$next.z with=$next.code then=$pw.sex.o
+@pw.anyage.o ui.person.want key=?code age=any
+@pw.anysex.o ui.person.want key=?code sex=any
+@person.want.age.any core.rule when=$pw.fg not=$pw.req.age not=$pw.kind.age when=$next.n with=$next.z with=$next.code then=$pw.anyage.o
+@person.want.sex.any core.rule when=$pw.fg not=$pw.req.sex not=$pw.kind.sex when=$next.n with=$next.z with=$next.code then=$pw.anysex.o
+# The outfit: of the age and sex of the face chosen (a face for both sexes leaves the outfit's sex free).
+@pw.pick ui.person.pick key=?code preset=?p
+@pw.body.key core.calc out=?bkey fn=concat args=?code args=".body"
+@pw.seed3 core.calc out=?bseed fn=add args=?seed args=?top
+@pw.body.o ui.person.bodywant key=?bkey style=?bs seed=?bseed
+@person.want.body core.rule when=$pw.fg when=$next.n with=$next.z with=$next.code with=$pw.seed when=$pw.pick with=$pw.body.key with=$pw.seed3 then=$pw.body.o
+@pw.pa k.faces.preset name=?p style=plain age=?a
+@pw.px k.faces.preset name=?p style=plain sex=?x
+@pw.body.age ui.person.bodywant key=?bkey age=?a
+@pw.body.sex ui.person.bodywant key=?bkey sex=?x
+@person.want.body.age core.rule when=$pw.fg when=$next.n with=$next.z with=$next.code when=$pw.pick when=$pw.pa with=$pw.body.key then=$pw.body.age
+@person.want.body.sex core.rule when=$pw.fg when=$next.n with=$next.z with=$next.code when=$pw.pick when=$pw.px with=$pw.body.key then=$pw.body.sex
+@pw.pxany k.faces.preset name=?p style=plain sex=?anySex
+@pw.body.anysex ui.person.bodywant key=?bkey sex=any
+@person.want.body.anysex core.rule when=$pw.fg when=$next.n with=$next.z with=$next.code when=$pw.pick not=$pw.pxany with=$pw.body.key then=$pw.body.anysex
+
+# The calls: the face and the body are made before the object, their parts after them; the object takes both as its look.
+@pm.face.call app.act.call act=make kind=w.face.face style=plain order=0.1 ref=new.face
+@pm.face.parts ui.person.parts face=new.face preset=?p order=0.3 part=0.2 withBody=true
+@person.make.face core.rule when=$pw.fg when=$next.n with=$next.z with=$next.code when=$pw.pick then=$pm.face.call
+@person.make.face.parts core.rule when=$pw.fg when=$next.n with=$next.z with=$next.code when=$pw.pick then=$pm.face.parts
+@pm.bpick ui.person.bodypick key=?bkey preset=?o
+@pm.body.call app.act.call act=make kind=w.face.face style=?bs order=0.1 ref=new.body
+@pm.body.parts ui.person.parts face=new.body preset=?o order=0.3 part=0.2
+@person.make.body core.rule when=$pw.fg when=$next.n with=$next.z with=$next.code with=$pw.body.key when=$pm.bpick then=$pm.body.call
+@person.make.body.parts core.rule when=$pw.fg when=$next.n with=$next.z with=$next.code with=$pw.body.key when=$pm.bpick then=$pm.body.parts
+@pm.look.face app.act.arg call=new.object attr=look value=new.face
+@pm.look.body app.act.arg call=new.object attr=look value=new.body
+@person.look.face core.rule when=$pw.fg when=$next.n with=$next.z with=$next.code when=$pw.pick then=$pm.look.face
+@person.look.body core.rule when=$pw.fg when=$next.n with=$next.z with=$next.code with=$pw.body.key when=$pm.bpick then=$pm.look.body
+
+# The person's skin (on its face and its body), its hair (unless the face is an old person's, whose hair is grey or
+# white) and its clothes, chosen by its seed among the catalog's colours; set after the presets' own colours.
+@pc2.skin.w ui.person.colourwant key=?code of=skin seed=?seed natural=true
+@pc2.hair.w ui.person.colourwant key=?code of=hair seed=?hseed natural=true
+@pc2.clothes.w ui.person.colourwant key=?code of=clothes seed=?cseed
+@pc2.hseed core.calc out=?hseed fn=mul args=?seed args=3
+@pc2.cseed core.calc out=?cseed fn=mul args=?seed args=7
+@person.tone.skin core.rule when=$pw.fg when=$next.n with=$next.z with=$next.code with=$pw.seed then=$pc2.skin.w
+@pc2.old k.faces.preset name=?p style=plain age=old
+@person.tone.hair core.rule when=$pw.fg when=$next.n with=$next.z with=$next.code with=$pw.seed with=$pc2.hseed when=$pw.pick not=$pc2.old then=$pc2.hair.w
+@person.tone.clothes core.rule when=$pw.fg when=$next.n with=$next.z with=$next.code with=$pw.seed with=$pc2.cseed then=$pc2.clothes.w
+@pc2.skin ui.person.colourpick key=?code of=skin colour=?c
+@pc2.hair ui.person.colourpick key=?code of=hair colour=?c
+@pc2.clothes ui.person.colourpick key=?code of=clothes colour=?c
+@pc2.face.skin app.act.call act=change thing=new.face attr=skin value=?c order=0.4
+@pc2.body.skin app.act.call act=change thing=new.body attr=skin value=?c order=0.4
+@pc2.face.hair app.act.call act=change thing=new.face attr=hair_colour value=?c order=0.4
+@pc2.body.clothes app.act.call act=change thing=new.body attr=clothes value=?c order=0.4
+@person.set.face.skin core.rule when=$pw.fg when=$next.n with=$next.z with=$next.code when=$pw.pick when=$pc2.skin then=$pc2.face.skin
+@person.set.body.skin core.rule when=$pw.fg when=$next.n with=$next.z with=$next.code with=$pw.body.key when=$pm.bpick when=$pc2.skin then=$pc2.body.skin
+@person.set.face.hair core.rule when=$pw.fg when=$next.n with=$next.z with=$next.code when=$pw.pick when=$pc2.hair then=$pc2.face.hair
+@person.set.body.clothes core.rule when=$pw.fg when=$next.n with=$next.z with=$next.code with=$pw.body.key when=$pm.bpick when=$pc2.clothes then=$pc2.body.clothes
+
+# Removing an object removes its looks (their parts, then the faces); clearing the page removes every look.
+@rl.face w.face.face
+@rl.o w.drawing.object code=?id look=$rl.face
+@rl.part w.face.part face=$rl.face
+@rl.part.call app.act.call act=remove thing=$rl.part order=2
+@rl.face.call app.act.call act=remove thing=$rl.face order=3
+@remove.look.parts core.rule when=$remove.req when=$obj.item when=$rl.face when=$rl.o when=$rl.part then=$rl.part.call
+@remove.look.faces core.rule when=$remove.req when=$obj.item when=$rl.face when=$rl.o then=$rl.face.call
+@cl.part w.face.part
+@cl.face w.face.face
+@cl.part.call app.act.call act=remove thing=$cl.part order=2
+@cl.face.call app.act.call act=remove thing=$cl.face order=3
+@clear.look.parts core.rule when=$clear.req when=$cl.part then=$cl.part.call
+@clear.look.faces core.rule when=$clear.req when=$cl.face then=$cl.face.call
+
+# Edits of a look part by its index (drawing.part.change, .place, .remove: the editor and the reader address every part
+# of an object alike): the look rules (look-rules.sop) compile them on that part of its face. A width or a height scales
+# the part (within the face's size range), a place moves it in its face's frame.
+@lp.face w.face.face
+@lp.lp ui.draw.lookpart object=?id index=?i face=$lp.face slot=?slot
+@lp.c.req app.act.request operation="drawing.part.change" id=?id index=?i color=?c
+@lp.c.o ui.face.edit face=$lp.face slot=?slot colour=?c
+@look.edit.colour core.rule when=$lp.c.req when=$lp.face when=$lp.lp then=$lp.c.o
+@lp.v.req app.act.request operation="drawing.part.change" id=?id index=?i variant=?v
+@lp.v.o ui.face.edit face=$lp.face slot=?slot variant=?v
+@look.edit.variant core.rule when=$lp.v.req when=$lp.face when=$lp.lp then=$lp.v.o
+@lp.l.req app.act.request operation="drawing.part.change" id=?id index=?i length=?l
+@lp.l.o ui.face.edit face=$lp.face slot=?slot property=length value=?l
+@look.edit.length core.rule when=$lp.l.req when=$lp.face when=$lp.lp then=$lp.l.o
+@lp.rm.req app.act.request operation="drawing.part.remove" id=?id index=?i
+@lp.rm.o ui.face.edit face=$lp.face slot=?slot remove=true
+@look.edit.remove core.rule when=$lp.rm.req when=$lp.face when=$lp.lp then=$lp.rm.o
+@lp.w.req app.act.request operation="drawing.part.change" id=?id index=?i width=?nw
+@lp.h.req app.act.request operation="drawing.part.change" id=?id index=?i height=?nh
+@lp.geo.w app.observe.input id=?pid key=width value=?pw
+@lp.geo.h app.observe.input id=?pid key=height value=?ph
+@lp.pid core.calc out=?pid fn=concat args=?id args="." args=?i
+@lp.size w.face.part face=$lp.face kind=?kind size=?sz
+@lp.kind w.face.slot slot=?slot part=?kind
+@lp.kw core.calc out=?kw fn=div args=?nw args=?pw
+@lp.kh core.calc out=?kh fn=div args=?nh args=?ph
+@lp.k1w core.calc out=?k1 fn=mul args=?kw args=?sz
+@lp.k1h core.calc out=?k1 fn=mul args=?kh args=?sz
+@lp.k2 core.calc out=?k2 fn=clamp args=?k1 args=0.6 args=1.5
+@lp.k3 core.calc out=?k3 fn=round args=?k2 args=1
+@lp.s.o ui.face.edit face=$lp.face slot=?slot scale=?k3
+@look.edit.width core.rule when=$lp.w.req when=$lp.face when=$lp.lp with=$lp.pid when=$lp.geo.w when=$lp.kind when=$lp.size with=$lp.kw with=$lp.k1w with=$lp.k2 with=$lp.k3 then=$lp.s.o
+@look.edit.height core.rule when=$lp.h.req not=$lp.w.req when=$lp.face when=$lp.lp with=$lp.pid when=$lp.geo.h when=$lp.kind when=$lp.size with=$lp.kh with=$lp.k1h with=$lp.k2 with=$lp.k3 then=$lp.s.o
+@lp.pl.req app.act.request operation="drawing.part.place" id=?id index=?i x=?nx y=?ny
+@lp.m ui.draw.mount object=?id face=$lp.face size=?ms
+@lp.ext ui.draw.extent object=?id w=?ow h=?oh
+@lp.geo.x app.observe.input id=?pid key=x value=?px
+@lp.geo.y app.observe.input id=?pid key=y value=?py
+@lp.xy w.face.part face=$lp.face kind=?kind x=?fx y=?fy
+@lp.f core.calc out=?f fn=div args=?ms args=100
+@lp.fx core.calc out=?fxs fn=mul args=?ow args=?f
+@lp.fy core.calc out=?fys fn=mul args=?oh args=?f
+@lp.ddx core.calc out=?ddx fn=sub args=?nx args=?px
+@lp.ddy core.calc out=?ddy fn=sub args=?ny args=?py
+@lp.qx core.calc out=?qx fn=div args=?ddx args=?fxs
+@lp.qy core.calc out=?qy fn=div args=?ddy args=?fys
+@lp.qx100 core.calc out=?qx1 fn=mul args=?qx args=100
+@lp.qy100 core.calc out=?qy1 fn=mul args=?qy args=100
+@lp.nfx core.calc out=?nfx0 fn=add args=?fx args=?qx1
+@lp.nfy core.calc out=?nfy0 fn=add args=?fy args=?qy1
+@lp.cfx core.calc out=?nfx1 fn=clamp args=?nfx0 args=-50 args=50
+@lp.cfy core.calc out=?nfy1 fn=clamp args=?nfy0 args=-50 args=50
+@lp.rfx core.calc out=?nfx fn=round args=?nfx1
+@lp.rfy core.calc out=?nfy fn=round args=?nfy1
+@lp.x.o ui.face.edit face=$lp.face slot=?slot x=?nfx
+@lp.y.o ui.face.edit face=$lp.face slot=?slot y=?nfy
+@look.edit.place.x core.rule when=$lp.pl.req when=$lp.face when=$lp.lp when=$lp.m when=$lp.ext with=$lp.pid when=$lp.geo.x when=$lp.kind when=$lp.xy with=$lp.f with=$lp.fx with=$lp.ddx with=$lp.qx with=$lp.qx100 with=$lp.nfx with=$lp.cfx with=$lp.rfx then=$lp.x.o
+@look.edit.place.y core.rule when=$lp.pl.req when=$lp.face when=$lp.lp when=$lp.m when=$lp.ext with=$lp.pid when=$lp.geo.y when=$lp.kind when=$lp.xy with=$lp.f with=$lp.fy with=$lp.ddy with=$lp.qy with=$lp.qy100 with=$lp.nfy with=$lp.cfy with=$lp.rfy then=$lp.y.o
+
+# Add a part to an object by the word for it (drawing.part.add kind=: "a hat", "eyes", "a red t-shirt", "the chimney"):
+# the slot a part name draws (k.parts.name slot), the slot and variant a wearable is shown with (k.wearables face or
+# figure), a variant named by its kind (k.faces.variant kind: a cap) or a slot by its own name. It is added to the
+# object's look of the style that has the slot (a part of that kind already there takes the new variant); a thing with
+# no face yet that has a part bearing one (the sun's disc) is given a face for it. Without a variant: the variant the
+# word names, else the first of the slot. A part of the drawing itself that was removed is put back.
+@part.add.slot.type core.type of=ui.draw.addslot
+@pd.req app.act.request operation="drawing.part.add" id=?id kind=?w
+@pd.skip ui.draw.skipslot object=?id slot=?slot
+@pd.name k.parts.name name=?w slot=?slot
+@pd.slot.o ui.draw.addslot slot=?slot
+@add.slot.name core.rule when=$pd.req when=$pd.name then=$pd.slot.o
+@pd.alias core.word text=?w means=?n of=k.parts.name.name
+@pd.alias.name k.parts.name name=?n slot=?slot
+@add.slot.alias core.rule when=$pd.req when=$pd.alias when=$pd.alias.name then=$pd.slot.o
+@pd.own w.face.slot slot=?w
+@pd.own.o ui.draw.addslot slot=?w
+@add.slot.own core.rule when=$pd.req when=$pd.own then=$pd.own.o
+@pd.wf k.wearables.wearable name=?w face_slot=?slot face=?v
+@pd.slotv.o ui.draw.addslot slot=?slot variant=?v
+@add.slot.wear.face core.rule when=$pd.req when=$pd.wf then=$pd.slotv.o
+@pd.wb k.wearables.wearable name=?w figure_slot=?slot figure=?v
+@add.slot.wear.body core.rule when=$pd.req when=$pd.wb then=$pd.slotv.o
+@pd.vk k.faces.variant kind=?w slot=?slot name=?v style=?vs
+@pd.vk.o ui.draw.addslot slot=?slot variant=?v style=?vs
+@add.slot.variant core.rule when=$pd.req when=$pd.vk then=$pd.vk.o
+@pd.face w.face.face style=?st
+@pd.o w.drawing.object code=?id look=$pd.face
+@pd.ks k.faces.slot style=?st name=?slot
+@pd.asked app.act.request operation="drawing.part.add" variant=?v
+@pd.any.asked app.act.request operation="drawing.part.add" variant=?anyV
+@pd.named ui.draw.addslot slot=?slot variant=?v
+@pd.any.named ui.draw.addslot slot=?slot variant=?anyNamed
+@pd.slot ui.draw.addslot slot=?slot
+@pd.first k.faces.variant slot=?slot style=?st name=?v core.select=first
+@pd.add.o ui.face.add face=$pd.face slot=?slot variant=?v
+@add.part.asked core.rule when=$pd.req not=$pd.skip when=$pd.slot when=$pd.face when=$pd.o when=$pd.ks when=$pd.asked then=$pd.add.o
+@add.part.named core.rule when=$pd.req not=$pd.skip when=$pd.face when=$pd.o when=$pd.ks not=$pd.any.asked when=$pd.named then=$pd.add.o
+@add.part.first core.rule when=$pd.req not=$pd.skip when=$pd.slot when=$pd.face when=$pd.o when=$pd.ks not=$pd.any.asked not=$pd.any.named when=$pd.first then=$pd.add.o
+# A colour with the part: a tinted variant of the slot sets that colour of the look (a red t-shirt: the clothes).
+@pd.c.req app.act.request operation="drawing.part.add" color=?c
+@pd.c.v k.faces.variant slot=?slot style=?st name=?pv
+@pd.c.kpv k.faces.part slot=?slot of=?pv tint=?tint
+@pd.c.table ui.avatar.tint tint=?tint attr=?attr
+@pd.c.call app.act.call act=change thing=$pd.face attr=?attr value=?c order=2
+@add.part.colour core.rule when=$pd.req not=$pd.skip when=$pd.c.req when=$pd.slot when=$pd.face when=$pd.o when=$pd.ks when=$pd.c.v when=$pd.c.kpv when=$pd.c.table then=$pd.c.call
+# A thing with no face yet: a face is made for its part that bears one, with the part asked for.
+@pn.o w.drawing.object code=?id
+@pn.f ui.draw.form object=?id form=?k
+@pn.called k.parts.called of=?k also=face
+@pn.ks k.faces.slot style=?hs name=?slot
+@pn.head k.faces.slot style=?hs name=head
+@pn.noframe k.faces.frame style=?hs
+@pn.has ui.draw.haslook object=?id style=?hs
+@pn.first k.faces.variant slot=?slot style=?hs name=?v core.select=first
+@pn.face.call app.act.call act=make kind=w.face.face style=?hs order=0.5 ref=new.face
+@pn.part.call app.act.call act=make kind=?kind variant=?v face=new.face order=0.6
+@pn.slotkind w.face.slot slot=?slot part=?kind
+@pn.look.call app.act.call act=change thing=$pn.o attr=look value=new.face order=0.7
+@add.face.make core.rule when=$pd.req when=$pd.slot when=$pn.o when=$pn.f when=$pn.called when=$pn.ks when=$pn.head not=$pn.noframe not=$pn.has then=$pn.face.call
+@add.face.part core.rule when=$pd.req when=$pd.slot when=$pn.o when=$pn.f when=$pn.called when=$pn.ks when=$pn.head not=$pn.noframe not=$pn.has when=$pn.slotkind when=$pn.first then=$pn.part.call
+@add.face.look core.rule when=$pd.req when=$pd.slot when=$pn.o when=$pn.f when=$pn.called when=$pn.ks when=$pn.head not=$pn.noframe not=$pn.has then=$pn.look.call
+# A removed part of the drawing itself, named by its name or kind, is put back.
+@pb.o w.drawing.object code=?id
+@pb.ix ui.draw.index object=?id source=$pb.kp index=?i
+@pb.kp k.objects.part name=?w
+@pb.kpk k.objects.part kind=?w
+@pb.ixk ui.draw.index object=?id source=$pb.kpk index=?i
+@pb.edit w.drawing.part object=$pb.o index=?i removed=true
+@pb.call app.act.call act=change thing=$pb.edit attr=removed value=false order=1
+@add.back.name core.rule when=$pd.req when=$pb.o when=$pb.kp when=$pb.ix when=$pb.edit then=$pb.call
+@add.back.kind core.rule when=$pd.req when=$pb.o when=$pb.kpk when=$pb.ixk when=$pb.edit then=$pb.call
+@pd.none.slot ui.draw.addslot
+@pd.none.back w.drawing.part object=$pb.o removed=true
+@pd.refuse app.act.refuse reason=part-not-known-for-this-thing
+@add.part.unknown core.rule when=$pd.req when=$pb.o not=$pd.none.slot not=$pd.none.back then=$pd.refuse
+
+# A different look (drawing.person.vary): the person takes the next seed; its face and body are composed again with the
+# preset and outfit of that seed (the same kind, age and sex), replacing the parts they had.
+@vy.req app.act.request operation="drawing.person.vary" id=?id
+@vy.o w.drawing.object code=?id z=?z
+@vy.seed w.drawing.object code=?id seed=?s
+@vy.n1 core.calc out=?ns fn=add args=?s args=1
+@vy.n2 core.calc out=?ns fn=add args=?z args=1
+@vy.seed.call app.act.call act=change thing=$vy.o attr=seed value=?ns order=1
+@vary.seed.next core.rule when=$vy.req when=$vy.o when=$vy.seed with=$vy.n1 then=$vy.seed.call
+@vary.seed.first core.rule when=$vy.req when=$vy.o not=$vy.seed with=$vy.n2 then=$vy.seed.call
+@vy.want.face ui.person.want key=?id style=plain seed=?ns
+@vary.want.next core.rule when=$vy.req when=$vy.o when=$vy.seed with=$vy.n1 then=$vy.want.face
+@vary.want.first core.rule when=$vy.req when=$vy.o not=$vy.seed with=$vy.n2 then=$vy.want.face
+@vy.dr w.drawing.object code=?id drawing=?k
+@vy.kage k.people.kind name=?k age=?a
+@vy.ksex k.people.kind name=?k sex=?x
+@vy.age.o ui.person.want key=?id age=?a
+@vy.sex.o ui.person.want key=?id sex=?x
+@vary.want.age core.rule when=$vy.req when=$vy.dr when=$vy.kage then=$vy.age.o
+@vary.want.sex core.rule when=$vy.req when=$vy.dr when=$vy.ksex then=$vy.sex.o
+@vy.anyage.o ui.person.want key=?id age=any
+@vy.anysex.o ui.person.want key=?id sex=any
+@vary.want.age.any core.rule when=$vy.req when=$vy.dr not=$vy.kage then=$vy.anyage.o
+@vary.want.sex.any core.rule when=$vy.req when=$vy.dr not=$vy.ksex then=$vy.anysex.o
+@vy.pick ui.person.pick key=?id preset=?p
+@vy.bkey core.calc out=?bkey fn=concat args=?id args=".body"
+@vy.bw ui.person.bodywant key=?bkey style=figure seed=?ns
+@vary.body.next core.rule when=$vy.req when=$vy.o when=$vy.seed with=$vy.n1 with=$vy.bkey then=$vy.bw
+@vary.body.first core.rule when=$vy.req when=$vy.o not=$vy.seed with=$vy.n2 with=$vy.bkey then=$vy.bw
+@vy.pa k.faces.preset name=?p style=plain age=?a
+@vy.px k.faces.preset name=?p style=plain sex=?x
+@vy.bage ui.person.bodywant key=?bkey age=?a
+@vy.bsex ui.person.bodywant key=?bkey sex=?x
+@vary.body.age core.rule when=$vy.req when=$vy.o when=$vy.pick when=$vy.pa with=$vy.bkey then=$vy.bage
+@vary.body.sex core.rule when=$vy.req when=$vy.o when=$vy.pick when=$vy.px with=$vy.bkey then=$vy.bsex
+@vy.pxany k.faces.preset name=?p style=plain sex=?anySex
+@vy.bany ui.person.bodywant key=?bkey sex=any
+@vary.body.anysex core.rule when=$vy.req when=$vy.o when=$vy.pick not=$vy.pxany with=$vy.bkey then=$vy.bany
+@vy.face w.face.face
+@vy.head ui.look.head face=$vy.face
+@vy.body ui.look.body face=$vy.face
+@vy.of w.drawing.object code=?id look=$vy.face
+@vy.old w.face.part face=$vy.face
+@vy.clear app.act.call act=remove thing=$vy.old order=2
+@vary.clear core.rule when=$vy.req when=$vy.face when=$vy.of when=$vy.old then=$vy.clear
+@vy.hparts ui.person.parts face=$vy.face preset=?p order=4 part=3 withBody=true
+@vary.face core.rule when=$vy.req when=$vy.face when=$vy.of when=$vy.head when=$vy.pick then=$vy.hparts
+@vy.bpick ui.person.bodypick key=?bkey preset=?o
+@vy.bparts ui.person.parts face=$vy.face preset=?o order=4 part=3
+@vary.body core.rule when=$vy.req when=$vy.face when=$vy.of when=$vy.body with=$vy.bkey when=$vy.bpick then=$vy.bparts
+
+# A look part is observed under its object like the drawing's own parts (id <code>.<index>), as the word that names it
+# (k.parts.name slot: "hair" for the front and the back hair, "shirt" for what is worn on the upper body), with its slot
+# as its name and role, its variant, the colour it is drawn in and its box on the page: an editor and a reader address
+# "her hair" or "his hat" as any part.
+@ol.face w.face.face style=?st
+@ol.lp ui.draw.lookpart object=?id index=?i part=$ol.wp slot=?slot face=$ol.face
+@ol.wp w.face.part face=$ol.face variant=?v
+@ol.pid core.calc out=?pid fn=concat args=?id args="." args=?i
+@ol.word k.parts.name name=?word slot=?slot
+@ol.out app.observe.object id=?pid kind=?word sourceType=art.draw.part binding=drawing.part in=?id role=?slot name=?slot index=?i variant=?v look=?st
+@draw.observe.look.part core.rule when=$ol.face when=$ol.wp when=$ol.lp when=$ol.word with=$ol.pid then=$ol.out
+@ol.out.slot app.observe.object id=?pid kind=?slot sourceType=art.draw.part binding=drawing.part in=?id role=?slot name=?slot index=?i variant=?v look=?st
+@draw.observe.look.part.slot core.rule when=$ol.face when=$ol.wp when=$ol.lp not=$ol.word with=$ol.pid then=$ol.out.slot
+@og.lp ui.draw.lookpart object=?id index=?i slot=?slot face=$ol.face
+@og.ks k.faces.slot style=?st name=?slot x=?sx y=?sy w=?sw h=?sh
+@og.m ui.draw.mount object=?id face=$ol.face x=?mx y=?my size=?ms
+@og.o w.drawing.object code=?id x=?X y=?Y
+@og.ext ui.draw.extent object=?id w=?ow h=?oh
+@og.f core.calc out=?f fn=div args=?ms args=100
+@og.hw core.calc out=?hw fn=div args=?sw args=2
+@og.hh core.calc out=?hh fn=div args=?sh args=2
+@og.cx core.calc out=?cx fn=add args=?sx args=?hw
+@og.cy core.calc out=?cy fn=add args=?sy args=?hh
+@og.dx0 core.calc out=?dx0 fn=mul args=?cx args=?f
+@og.dy0 core.calc out=?dy0 fn=mul args=?cy args=?f
+@og.dx core.calc out=?dx fn=add args=?mx args=?dx0
+@og.dy core.calc out=?dy fn=add args=?my args=?dy0
+@og.ux core.calc out=?ux fn=sub args=?dx args=50
+@og.uy core.calc out=?uy fn=sub args=?dy args=50
+@og.osx core.calc out=?osx fn=div args=?ow args=100
+@og.osy core.calc out=?osy fn=div args=?oh args=100
+@og.vx core.calc out=?vx fn=mul args=?ux args=?osx
+@og.vy core.calc out=?vy fn=mul args=?uy args=?osy
+@og.px core.calc out=?px fn=add args=?vx args=?X
+@og.py core.calc out=?py fn=add args=?vy args=?Y
+@og.pw0 core.calc out=?pw0 fn=mul args=?sw args=?f
+@og.ph0 core.calc out=?ph0 fn=mul args=?sh args=?f
+@og.pw core.calc out=?pw fn=mul args=?pw0 args=?osx
+@og.ph core.calc out=?ph fn=mul args=?ph0 args=?osy
+@og.x.o app.observe.input id=?pid key=x value=?px
+@og.y.o app.observe.input id=?pid key=y value=?py
+@og.w.o app.observe.input id=?pid key=width value=?pw
+@og.h.o app.observe.input id=?pid key=height value=?ph
+@draw.observe.look.x core.rule when=$ol.face when=$og.lp when=$og.ks when=$og.m when=$og.o when=$og.ext with=$ol.pid with=$og.f with=$og.hw with=$og.cx with=$og.dx0 with=$og.dx with=$og.ux with=$og.osx with=$og.vx with=$og.px then=$og.x.o
+@draw.observe.look.y core.rule when=$ol.face when=$og.lp when=$og.ks when=$og.m when=$og.o when=$og.ext with=$ol.pid with=$og.f with=$og.hh with=$og.cy with=$og.dy0 with=$og.dy with=$og.uy with=$og.osy with=$og.vy with=$og.py then=$og.y.o
+@draw.observe.look.width core.rule when=$ol.face when=$og.lp when=$og.ks when=$og.m when=$og.ext with=$ol.pid with=$og.f with=$og.pw0 with=$og.osx with=$og.pw then=$og.w.o
+@draw.observe.look.height core.rule when=$ol.face when=$og.lp when=$og.ks when=$og.m when=$og.ext with=$ol.pid with=$og.f with=$og.ph0 with=$og.osy with=$og.ph then=$og.h.o
+@oc.fill ui.draw.fill part=?p fill=?fl
+@oc.lp ui.draw.lookpart object=?id index=?i part=?p
+@oc.pid core.calc out=?pid fn=concat args=?id args="." args=?i
+@oc.o app.observe.input id=?pid key=color value=?fl
+@draw.observe.look.colour core.rule when=$oc.lp when=$oc.fill with=$oc.pid then=$oc.o
+# The traits of a person: its kind's age and sex (k.people.kind), else those of the preset of its face (so "the girl",
+# "her" can name her).
+@ot.face w.face.face preset=?p
+@ot.head ui.look.head face=$ot.face
+@ot.o w.drawing.object code=?id look=$ot.face
+@ot.age k.faces.preset name=?p age=?a
+@ot.sex k.faces.preset name=?p sex=?x
+@ot.age.o app.observe.input id=?id key=age value=?a
+@ot.sex.o app.observe.input id=?id key=sex value=?x
+@ot.k w.drawing.object code=?id drawing=?k
+@ot.kage k.people.kind name=?k age=?a
+@ot.ksex k.people.kind name=?k sex=?x
+@ot.kage.any k.people.kind name=?k age=?anyA
+@ot.ksex.any k.people.kind name=?k sex=?anyX
+@draw.observe.age.kind core.rule when=$ot.k when=$ot.kage then=$ot.age.o
+@draw.observe.sex.kind core.rule when=$ot.k when=$ot.ksex then=$ot.sex.o
+@draw.observe.age core.rule when=$ot.face when=$ot.head when=$ot.o when=$ot.k not=$ot.kage.any when=$ot.age then=$ot.age.o
+@draw.observe.sex core.rule when=$ot.face when=$ot.head when=$ot.o when=$ot.k not=$ot.ksex.any when=$ot.sex then=$ot.sex.o
+
+# Another outline for a part of the drawing (drawing.part.change shape=: "make the lake irregular", "a round roof"): a
+# basic shape the tab draws or an outline k.layouts has; the part keeps its box. Another name is refused.
+@psh.req app.act.request operation="drawing.part.change" id=?id index=?i shape=?shape
+@psh.obj w.drawing.object code=?id
+@psh.lk ui.draw.lookpart object=?id index=?i
+@psh.edit w.drawing.part object=$psh.obj index=?i
+@psh.basic ui.draw.shape drawing=?shape
+@psh.outline k.layouts.outline name=?shape
+@psh.ok.type core.type of=ui.draw.shapeok
+@psh.ok ui.draw.shapeok shape=?shape
+@shape.ok.basic core.rule when=$psh.req when=$psh.basic then=$psh.ok
+@shape.ok.outline core.rule when=$psh.req when=$psh.outline then=$psh.ok
+@psh.isok ui.draw.shapeok shape=?shape
+@psh.new app.act.call act=make kind=w.drawing.part object=$psh.obj index=?i shape=?shape order=1
+@psh.chg app.act.call act=change thing=$psh.edit attr=shape value=?shape order=1
+@part.shape.make core.rule when=$psh.req when=$psh.obj not=$psh.lk not=$psh.edit when=$psh.isok then=$psh.new
+@part.shape.change core.rule when=$psh.req when=$psh.obj not=$psh.lk when=$psh.edit when=$psh.isok then=$psh.chg
+@psh.no app.act.refuse reason=shape-not-known
+@part.shape.unknown core.rule when=$psh.req not=$psh.isok then=$psh.no
+
+# What an editor offers for parts: the variants a look part's slot has in its style, and the outlines a part of the
+# drawing can take (the basic shapes and the outlines k.layouts has).
+@opv.lp ui.draw.lookpart object=?id index=?i slot=?slot face=$opv.face
+@opv.face w.face.face style=?st
+@opv.v k.faces.variant slot=?slot style=?st name=?v
+@opv.pid core.calc out=?pid fn=concat args=?id args="." args=?i
+@opv.o app.observe.option id=?pid value=?v
+@draw.option.look.variant core.rule when=$opv.face when=$opv.lp when=$opv.v with=$opv.pid then=$opv.o
+@ops.basic ui.draw.shape shape=?s drawing=?d
+@ops.basic.o app.observe.option id=shape value=?d
+@draw.option.shape.basic core.rule when=$ops.basic then=$ops.basic.o
+@ops.outline k.layouts.outline name=?n from=k.shapes.shape
+@ops.outline.o app.observe.option id=shape value=?n
+@draw.option.shape.outline core.rule when=$ops.outline then=$ops.outline.o
+
+# An expression on a drawn face (drawing.person.expression: "make the sun smile", "make her angry"): the look rules'
+# expression of k.faces on the object's face (its mouth, eyebrows and eyes drawn as the expression's while it is set; the
+# look projection draws the override). A thing with no face yet that bears one is given a face with the expression's
+# mouth and eyes.
+@ex2.req app.act.request operation="drawing.person.expression" id=?id expression=?e
+@ex2.face w.face.face style=?st
+@ex2.head ui.look.head face=$ex2.face
+@ex2.o w.drawing.object code=?id look=$ex2.face
+@ex2.k k.faces.expression name=?e style=?st
+@ex2.call app.act.call act=change thing=$ex2.face attr=expression value=?e order=1
+@person.expression core.rule when=$ex2.req when=$ex2.face when=$ex2.head when=$ex2.o when=$ex2.k then=$ex2.call
+@ex2.n.o w.drawing.object code=?id
+@ex2.n.f ui.draw.form object=?id form=?k
+@ex2.n.called k.parts.called of=?k also=face
+@ex2.n.has ui.draw.haslook object=?id style=?hs
+@ex2.n.head k.faces.slot style=?hs name=head
+@ex2.n.noframe k.faces.frame style=?hs
+@ex2.n.k k.faces.expression name=?e style=?hs
+@ex2.n.face app.act.call act=make kind=w.face.face style=?hs expression=?e order=0.5 ref=new.face
+@ex2.n.mouth.k k.faces.expression name=?e style=?hs mouth=?mv
+@ex2.n.mouth app.act.call act=make kind=w.face.mouth variant=?mv face=new.face order=0.6
+@ex2.n.eyes.k k.faces.expression name=?e style=?hs eyes=?ev
+@ex2.n.eyes app.act.call act=make kind=w.face.eyes variant=?ev face=new.face order=0.6
+@ex2.n.anyeyes k.faces.expression name=?e style=?hs eyes=?anyEyes
+@ex2.n.first k.faces.variant slot=eyes style=?hs name=?fv core.select=first
+@ex2.n.eyes.first app.act.call act=make kind=w.face.eyes variant=?fv face=new.face order=0.6
+@ex2.n.look app.act.call act=change thing=$ex2.n.o attr=look value=new.face order=0.7
+@thing.expression.face core.rule when=$ex2.req when=$ex2.n.o when=$ex2.n.f when=$ex2.n.called when=$ex2.n.head not=$ex2.n.noframe not=$ex2.n.has when=$ex2.n.k then=$ex2.n.face
+@thing.expression.mouth core.rule when=$ex2.req when=$ex2.n.o when=$ex2.n.f when=$ex2.n.called when=$ex2.n.head not=$ex2.n.noframe not=$ex2.n.has when=$ex2.n.mouth.k then=$ex2.n.mouth
+@thing.expression.eyes core.rule when=$ex2.req when=$ex2.n.o when=$ex2.n.f when=$ex2.n.called when=$ex2.n.head not=$ex2.n.noframe not=$ex2.n.has when=$ex2.n.eyes.k then=$ex2.n.eyes
+@thing.expression.eyes.first core.rule when=$ex2.req when=$ex2.n.o when=$ex2.n.f when=$ex2.n.called when=$ex2.n.head not=$ex2.n.noframe not=$ex2.n.has when=$ex2.n.k not=$ex2.n.anyeyes when=$ex2.n.first then=$ex2.n.eyes.first
+@thing.expression.look core.rule when=$ex2.req when=$ex2.n.o when=$ex2.n.f when=$ex2.n.called when=$ex2.n.head not=$ex2.n.noframe not=$ex2.n.has when=$ex2.n.k then=$ex2.n.look
+@ex2.unknown k.faces.expression name=?e
+@ex2.no app.act.refuse reason=expression-not-known
+@expression.unknown core.rule when=$ex2.req not=$ex2.unknown then=$ex2.no
+@opx.k k.faces.expression name=?e style=plain
+@opx.o app.observe.option id=expression value=?e
+@draw.option.expression core.rule when=$opx.k then=$opx.o
+# An object that can show a face (its drawing has a part that bears one): an editor offers it expressions.
+@of.o w.drawing.object code=?id
+@of.f ui.draw.form object=?id form=?k
+@of.called k.parts.called of=?k also=face
+@of.out app.observe.input id=?id key=faceable value=true
+@draw.observe.faceable core.rule when=$of.o when=$of.f when=$of.called then=$of.out

@@ -1,5 +1,6 @@
 // The avatar's native commands run through the generic SOP world host: each command compiles to std.acts
-// calls by worlds/ui.avatar/act-rules.sop; no avatar-specific handler exists in JavaScript.
+// calls by worlds/ui.avatar/act-rules.sop and face-rules.sop; no avatar-specific handler exists in JavaScript.
+import{PINNED_CATALOG}from'./fixtures/pinned-catalog.mjs';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync,readdirSync,existsSync} from 'node:fs';
@@ -9,7 +10,7 @@ import {toolInvocationContext} from '../worlds/native-tool-host.mjs';
 import {createSopWorldHost,initialSopWorldState,worldOf} from '../worlds/sop-world-host.mjs';
 import NATIVE_INTERFACE from '../worlds/ui.avatar/native-interface-source.mjs';
 
-const K=new URL('../../sop-knowledge-worlds/docs/worlds/',import.meta.url),W=new URL('../worlds/',import.meta.url);
+const K=PINNED_CATALOG,W=new URL('../worlds/',import.meta.url);
 const read=path=>readFileSync(new URL(path,K),'utf8'),local=path=>readFileSync(new URL(path,W),'utf8');
 const available=existsSync(new URL('w.face/schema.sop',K))&&read('w.face/schema.sop').includes('w.face.slot');
 const value=v=>v?.startsWith('"')?str(v):v;
@@ -18,10 +19,10 @@ function baseWorld(){
  const library=Object.fromEntries(readdirSync(K).filter(d=>existsSync(new URL(d+'/schema.sop',K))).map(d=>[d,read(d+'/schema.sop')]));
  const world=new World({library});
  const must=(r,what)=>assert.equal(r.ok,true,what+' '+JSON.stringify(r.violations?.[0]));
- must(world.load('@acts core.use world=std.acts\n@face core.use world=w.face\n@faces core.use world=k.faces'),'schemas');
- for(const file of readdirSync(new URL('k.faces/shards/',K)).filter(f=>f.startsWith('plain-')||['slots.sop','colours.sop','presets.sop'].includes(f)))
+ must(world.load('@acts core.use world=std.acts\n@face core.use world=w.face\n@faces core.use world=k.faces\n@parts core.use world=k.parts\n@objects core.use world=k.objects'),'schemas');
+ for(const file of readdirSync(new URL('k.faces/shards/',K)).filter(f=>f.startsWith('plain-')||f.startsWith('figure-')||['slots.sop','colours.sop','presets.sop'].includes(f)))
   must(world.tell(read('k.faces/shards/'+file),{factsOnly:true}),file);
- for(const file of ['ui.avatar/render-projection.sop','app.project/act-schema.sop','ui.avatar/act-rules.sop'])must(world.load(local(file)),file);
+ for(const file of ['art.draw/look-projection.sop','ui.avatar/view-projection.sop','app.project/act-schema.sop','art.draw/look-rules.sop','art.draw/person-rules.sop','ui.avatar/act-rules.sop'])must(world.load(local(file)),file);
  return world;
 }
 // Interface choices read from the same SOP world (the facts the interface enumerates).
@@ -34,7 +35,7 @@ function realize(world){
   'avatar.minScale':0.6,'avatar.maxScale':1.5,'avatar.variants':all('k.faces.variant','name',plain),
   'avatar.colours':all('k.faces.colour','name'),'avatar.features':['length'],'avatar.featureValues':['long'],
   'avatar.sizes':all('ui.avatar.size','grade'),'avatar.directions':all('ui.avatar.step','place'),
-  'avatar.resizeRelated':[],'avatar.sizeRelated':[],'avatar.lengths':all('ui.avatar.shift','step'),
+  'avatar.resizeRelated':[],'avatar.sizeRelated':[],
  });
 }
 function session(){

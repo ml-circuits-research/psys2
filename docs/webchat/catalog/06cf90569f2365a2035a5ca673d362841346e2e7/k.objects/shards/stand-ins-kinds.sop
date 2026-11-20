@@ -1,0 +1,29 @@
+# k.objects/shards/stand-ins-kinds: 12 common things with no drawing at all, drawn by the drawing of their kind (a stand-in: the host says "drawn as a ..."), the parent one step up in k.kinds that a world of the catalog states by name (k.attributes kind, k.animals, k.food, k.wearables). Written by tools/stand-ins-kinds.mjs.
+# sources: hand-core 1 (the kind facts of the hand-written worlds, read through k.kinds.parent)
+# license: CC0-1.0
+# script: tools/stand-ins-kinds.mjs
+
+# buzzard (a New World vulture that is common in South America and Central America and the southern United States): a kind of bird, by k.animals.animal
+@k.objects.kinds.buzzard k.objects.stand_in name=buzzard drawing=bird core.source="hand-core 1"
+# cloak (anything that covers or conceals): a kind of coat, by k.wearables.wearable
+@k.objects.kinds.cloak k.objects.stand_in name=cloak drawing=coat core.source="hand-core 1"
+# condor (the largest flying birds in the western hemisphere): a kind of bird, by k.animals.animal
+@k.objects.kinds.condor k.objects.stand_in name=condor drawing=bird core.source="hand-core 1"
+# gingerbread (cake flavored with ginger): a kind of sweet, by k.food.food
+@k.objects.kinds.gingerbread k.objects.stand_in name=gingerbread drawing=sweet core.source="hand-core 1"
+# goulash (a rich meat stew highly seasoned with paprika): a kind of dish, by k.food.food
+@k.objects.kinds.goulash k.objects.stand_in name=goulash drawing=dish core.source="hand-core 1"
+# gravy (a sauce made by adding stock, flour, or other ingredients to the juice and fat that drips from cooking meats): a kind of sauce, by k.food.food
+@k.objects.kinds.gravy k.objects.stand_in name=gravy drawing=sauce core.source="hand-core 1"
+# guacamole (a dip made of mashed avocado mixed with chopped onions and other seasonings): a kind of sauce, by k.food.food
+@k.objects.kinds.guacamole k.objects.stand_in name=guacamole drawing=sauce core.source="hand-core 1"
+# hummus (a thick spread made from mashed chickpeas, tahini, lemon juice and garlic): a kind of dish, by k.food.food
+@k.objects.kinds.hummus k.objects.stand_in name=hummus drawing=dish core.source="hand-core 1"
+# mall (a public area set aside as a pedestrian walk): a kind of building, by k.attributes.thing
+@k.objects.kinds.mall k.objects.stand_in name=mall drawing=building core.source="hand-core 1"
+# paella (saffron-flavored dish made of rice with shellfish and chicken): a kind of dish, by k.food.food
+@k.objects.kinds.paella k.objects.stand_in name=paella drawing=dish core.source="hand-core 1"
+# pike (a broad highway designed for high-speed traffic): a kind of fish, by k.animals.animal
+@k.objects.kinds.pike k.objects.stand_in name=pike drawing=fish core.source="hand-core 1"
+# stork (large mostly Old World wading birds typically having white-and-black plumage): a kind of bird, by k.animals.animal
+@k.objects.kinds.stork k.objects.stand_in name=stork drawing=bird core.source="hand-core 1"

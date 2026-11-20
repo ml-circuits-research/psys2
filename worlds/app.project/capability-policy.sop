@@ -2,8 +2,12 @@
 @mode.change std.capability.mode act=change target=existing requireResult=true selector=true selectorUnique=true
 @mode.place std.capability.mode act=place target=existing requireResult=true
 @mode.remove std.capability.mode act=remove target=existing
+@mode.arrange std.capability.mode act=arrange target=existing
 
-@seed.kind std.capability.seed parameter="kind" source=kind phase=initial order=10 required=true replace=true
+# The kind a target names fills a tool's kind parameter when one of its words is a declared value of it. A family
+# word ("box", "node") names no value: a declared default for that family may fill it (execution-policy.sop), and an
+# operation whose kind parameter stays empty is refused for its missing required argument.
+@seed.kind std.capability.seed parameter="kind" source=kind phase=initial order=10 replace=true
 @seed.identities std.capability.seed parameter="ids" source=target.list phase=initial order=11 replace=true
 @seed.identity std.capability.seed parameter="id" source=target.id phase=initial order=12 unlessParameter="ids" replace=true
 @seed.allocation std.capability.seed act=make parameter="id" source=fresh.id phase=initial order=13 parameterRequired=true replace=true
@@ -79,3 +83,22 @@
 @observed.lower core.calc fn=lower args=?hex out=?canonical
 @observed.normal std.capability.field object=?object binding=?binding key=?key value=?canonical
 @observed.rgb.install core.rule when=$observed.rgb when=$observed.raw with=$observed.hex with=$observed.lower then=$observed.normal
+
+# A reference concept (app.execution.reference) names an observed object by its code, its name or its kind; each
+# is a lookup value of the concept whose value is the object's code. Shared names and kinds stay ambiguous.
+@ref.source app.execution.reference concept=?concept sourceType=?on
+@ref.object std.capability.object id=?id on=?on
+@ref.by.id std.capability.value concept=?concept label=?id value=?id
+@ref.id.install core.rule when=$ref.source when=$ref.object then=$ref.by.id
+@ref.named std.capability.object id=?id on=?on name=?name
+@ref.by.name std.capability.value concept=?concept label=?name value=?id
+@ref.name.install core.rule when=$ref.source when=$ref.named then=$ref.by.name
+@ref.kinded std.capability.object id=?id on=?on kind=?kind
+@ref.by.kind std.capability.value concept=?concept label=?kind value=?id
+@ref.kind.install core.rule when=$ref.source when=$ref.kinded then=$ref.by.kind
+
+# An operation declared to answer another act (app.execution.actOperation) is offered for that act on its own source type.
+@actop.source app.execution.actOperation operation=?name act=?act
+@actop.tool std.capability.operation scope=?scope name=?name on=?on order=?order
+@actop.alias std.capability.operation scope=?scope name=?name on=?on act=?act order=?order eligible=true
+@actop.install core.rule when=$actop.source when=$actop.tool then=$actop.alias

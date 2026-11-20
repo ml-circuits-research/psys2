@@ -19,7 +19,7 @@ import { en } from '../lang/en.mjs';
 import { numberWords, numberValue } from '../knowledge/values.mjs';
 import { ACT_VERBS } from '../../worlds/acts/verbs.generated.mjs';
 import { personView } from './person-view.mjs';
-import { guard } from '../formalizer/guard.mjs';
+import { guard } from './turn-guard.mjs';
 import { within, TIMED_OUT } from './knowledge-lookup.mjs';
 
 export { personView };

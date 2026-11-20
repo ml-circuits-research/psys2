@@ -1,0 +1,16 @@
+@area.registry.module core.module name=app.area version=1 exports=app.area.view exports=app.area.path
+
+# One editor view of the application: the tab id the page shows, the reader's area name and the world whose state it edits.
+@area.view.type core.type of=app.area.view closed=true
+@area.view.view core.slot of=app.area.view key=view kind=atom id=true present=true
+@area.view.area core.slot of=app.area.view key=area kind=atom present=true
+@area.view.world core.slot of=app.area.view key=world kind=atom present=true
+@area.view.runtime core.slot of=app.area.view key=separate.runtime kind=boolean present=true
+
+# A path into the area's projected state: `focus` paths hold what the person selected (reader focus), `history.view`
+# paths hold view-only state that undo/redo restores without counting it as a change.
+@area.path.type core.type of=app.area.path closed=true
+@area.path.view core.slot of=app.area.path key=view kind=atom present=true
+@area.path.role core.slot of=app.area.path key=role kind=atom enum=focus enum=history.view present=true
+@area.path.order core.slot of=app.area.path key=order kind=integer min=0 present=true
+@area.path.key core.slot of=app.area.path key=key kind=string many=true present=true

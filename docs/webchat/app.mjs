@@ -28,9 +28,8 @@ import { renderTrace } from './ui/trace.mjs';
 import { findDispatcherModel, versionLabel } from './ui/dispatcher-host.mjs';
 import { findNormalizerModel } from './ui/normalizer-host.mjs';
 import { createEngineClient,createLoadTimings } from './ui/engine-client.mjs';
-import { normalizeNxStrategy } from './lib/formalizer/nx-strategy.mjs';
 import { DEFAULT_SETTINGS, SETTINGS_KEY, loadSettings, applyReading } from './ui/settings.mjs';
-import { guard, TurnAborted, withDeadline, LOAD_WAIT_CAP_MS } from './lib/formalizer/guard.mjs';
+import { guard, TurnAborted, withDeadline, LOAD_WAIT_CAP_MS } from './lib/dialog/turn-guard.mjs';
 import { turnRecord, summarize, outcomeOf, executedActs } from './lib/dialog/conversation.mjs';
 import { personView } from './lib/dialog/person-view.mjs';
 import { LIMITS, TIME_LIMIT_SPECS, TIME_LIMIT_DEFAULTS, applyTimeLimits, clampLimit } from './lib/dialog/time-limits.mjs';
@@ -46,7 +45,7 @@ import { snapshotState, describeChanges, turnBaseline, turnAfter, sopChanges } f
 const HERE = new URL('.', import.meta.url);
 
 /** Editor tabs come first; Settings and the final Worlds inspector form a separate utility section. */
-export const TAB_ORDER = ['draw', 'diagram', 'calendar', 'editor', 'avatar', 'settings', 'worlds'];
+export const TAB_ORDER = ['diagram', 'draw', 'calendar', 'editor', 'avatar', 'settings', 'worlds'];
 export const TABS = [
   { id: 'editor', label: 'Documents', world: 'docs.editor', make: createEditor },
 ];
@@ -123,7 +122,7 @@ export async function mountPsys2(element, options = {}) {
   const plugins = await loadTabPlugins(base);
   const builtin = [...TABS,{id:'settings',label:'Settings',settingsPage:true},{id:'worlds',label:'Worlds',architecture:true}].map((t, i) => ({ order: (i + 1) * 10, ...t }));
   const byOrder = [...builtin.filter((t) => !plugins.some((p) => p.id === t.id)), ...plugins].sort((a, b) => (a.order ?? 100) - (b.order ?? 100));
-  // the owner's order (2026-11-14); a tab not listed goes to the end in its current order
+  // the owner's order (2026-11-14; Diagram first since 2026-11-20); a tab not listed goes to the end in its current order
   const rank = (t) => { const i = TAB_ORDER.indexOf(t.id); return i < 0 ? TAB_ORDER.length : i; };
   const allTabs = byOrder.map((t, i) => ({ t, i })).sort((a, b) => rank(a.t) - rank(b.t) || a.i - b.i).map((x) => x.t);
   const tabDefs = allTabs.filter((t) => !options.tabs || options.tabs.includes(t.id));
@@ -1268,7 +1267,6 @@ export async function mountPsys2(element, options = {}) {
   // ---------- queue (MIC2) ----------
   // One turn runs at a time, but typing and speaking never wait: a message that arrives during a turn becomes a chip above the input and is sent when the turn ends.
   let queueSeq = 0, dropAsk = null, dropAskTimer = 0;
-  const YESNO = /^(yes|yeah|yep|yup|no|nope|ok|okay|sure|da|nu|bine)[.!\s]*$/i;
   const lastBotAsks = () => { const b = [...log.querySelectorAll('.p2-msg.is-bot:not(.is-typing):not(.is-note):not(.is-hint):not(.is-collapsed) .p2-bubble')].at(-1); return /\?\s*$/.test(b?.textContent ?? ''); };
   function renderQueue() {
     const chips = queue.map((it) => h('span', { class: 'p2-qchip', role: 'listitem' },
@@ -1295,15 +1293,13 @@ export async function mountPsys2(element, options = {}) {
     clearTimeout(dropAskTimer); dropAskTimer = setTimeout(() => done(false), 6000);
     renderQueue();
   }
-  /** The turn ended: the next waiting message runs. A bare yes/no whose question the previous turn already closed is shown greyed and skipped. */
+  /** The turn ended: the next waiting message runs. Every waiting message reaches the engine in order; none is skipped by the page. */
   function drainQueue() {
     while (!turn && !destroyed && !dropAsk && queue.length) {
       const it = queue.shift(); renderQueue();
-      if (YESNO.test(it.text.trim()) && !lastBotAsks()) {
-        addMessage('user', h('span', {}, it.text, h('small', { class: 'p2-skipped-note' }, ' skipped: the question was already answered')), { className: 'is-skipped' });
-        continue;
-      }
-      dispatch(it.text, it.mode, { ...it.voice, queueMs: Math.round(performance.now() - it.queuedAt) });
+      const queueMs = Math.round(performance.now() - it.queuedAt);
+      emitWorldActivity({ operation: 'chat.queue.dispatch', phase: 'end', nodeIds: [], purpose: 'queued message', text: it.text, mode: it.mode, queueMs, at: Date.now() });
+      dispatch(it.text, it.mode, { ...it.voice, queueMs });
     }
   }
   const dispatch = (t, mode, voice) => {
@@ -1329,21 +1325,22 @@ export async function mountPsys2(element, options = {}) {
   };
   /** A spoken message (VOICE): logged with how it ended (final | pause-plausible | pause-timeout | mic-stop) and the wait in ms. */
   const sendVoice = (text, how, waitMs) => send(text, 'voice', { endType: how, waitMs: Math.round(waitMs ?? 0) });
-  // NOISE: a spoken message with no complete reading, no world word and no direct address is room talk: ignored, shown greyed, one tap sends it anyway
+  // VOICE ADMISSION (ui/voice-noise.mjs): every spoken message reaches the engine, except one the wake-word setting holds back: shown greyed, one tap sends it anyway
   const slowDevice = (() => { try { const best = Math.min(measureSpeed().ms, measureSpeed().ms, measureSpeed().ms); return best > (options.slowMs ?? 45); } catch { return false; } })();   // about 10 ms on a desktop; a 6x throttle or a mid-range phone is well above 45
   const throttled = () => slowDevice;
   function showIgnored(text, how, waitMs) {
     const sendAnyway = h('button', { class: 'p2-btn-text', type: 'button', 'aria-label': `Send anyway: ${text}`, onclick: () => { wrap.msg.classList.remove('is-ignored'); btnWrap.remove(); sendVoice(text, how, waitMs); } }, 'tap to send anyway');
-    const btnWrap = h('small', { class: 'p2-skipped-note' }, ' ignored (not a command) — ', sendAnyway);
+    const btnWrap = h('small', { class: 'p2-skipped-note' }, ' held back (wake word setting) — ', sendAnyway);
     const wrap = addMessage('user', h('span', {}, text, btnWrap), { className: 'is-skipped is-ignored' });
     if (settings.logPhrases) { try { phrases.add({ ...buildRecord({ text, mode: 'voice', language: language.get(), recLang: speech?.recLang?.() ?? null, tab: view, reply: null, endType: how ?? null, waitMs: waitMs ?? null }), status: 'ignored', ignored: true }); if (!settingsEl.hidden) renderPhraseLog(); } catch (e) { console.warn('phrase log failed', e); } }
   }
   async function routeVoice(text, how, waitMs) {
     let verdict = { ignore: false };
     try {
-      verdict = await classifyVoice(text, { dryRead: (t, o) => session?.dryRead?.(t, { ...o, signal: undefined }), language: language.get(), wake: settings.wakeWord === true, slow: throttled() });
-    } catch { verdict = { ignore: false }; }
+      verdict = await classifyVoice(text, { wake: settings.wakeWord === true });
+    } catch { verdict = { ignore: false, reason: 'admission check failed: admitted' }; }
     if (destroyed) return;
+    emitWorldActivity({ operation: 'voice.admission', phase: 'end', nodeIds: [], purpose: 'voice admission', text, admitted: !verdict.ignore, reason: verdict.reason ?? null, at: Date.now() });
     if (verdict.ignore) { showIgnored(text, how, waitMs); speech?.setWorking(isBusy()); return; }
     sendVoice(text, how, waitMs);
     speech?.setWorking(isBusy());
@@ -1425,7 +1422,6 @@ export async function mountPsys2(element, options = {}) {
   }
   function disable(btn, why) { btn.disabled = true; label(btn, `${btn.getAttribute('aria-label')} (unavailable: ${why})`); }
   const mobileUA = (() => { try { return navigator.userAgentData?.mobile === true || /Android|iPhone|iPad|Mobi/i.test(navigator.userAgent ?? ''); } catch { return false; } })();
-  const GAME_VIEWS = new Set(['arith', 'tasks']);
   const micLock = options.micLock === false || options.persist === false && options.micLock !== true ? null : createMicLock({ onLost: () => speech?.lost() });   // FREEZE: only one tab listens; without storage (tests) no lock unless asked
   function blockedNote() {
     const m = note(h('span', {}, 'The microphone is in use in another tab — use it here? ', h('button', { class: 'p2-btn-text', type: 'button', onclick: () => { m.msg.remove(); speech.takeOver(); } }, 'Use it here')));
@@ -1435,7 +1431,7 @@ export async function mountPsys2(element, options = {}) {
     plausible: async (t, { signal } = {}) => { if (signal?.aborted) return false; return !!(await session?.dryRead?.(t, { language: language.get(), signal }))?.complete; },   // dry run: no effects, bounded, cancellable, one in flight
     pauseWhileWorking: true, slow: () => throttled(), cumulative: mobileUA,
     lock: micLock,
-    allowShort: (t) => lastBotAsks() || GAME_VIEWS.has(view) || /^\d+$/.test(String(t).trim()),   // a one-word answer to an open question or a game move is not a fragment
+    allowShort: (t) => lastBotAsks() || /^\d+$/.test(String(t).trim()),   // a one-word answer to an open question or a game move is not a fragment
     onIgnored: ({ reason }) => { (globalThis.__psys2VoiceDrops ??= []).push({ reason, t: Date.now() }); },
     onBlocked: () => { settings.handsFree = false; blockedNote(); syncMic(); },
     onLost: () => { settings.handsFree = false; flashHint('The microphone moved to another tab.'); syncMic(); },

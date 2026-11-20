@@ -1,0 +1,57 @@
+# k.faces/shards/figure-bottom: the variants of the slot `bottom` in the style `figure`: features, and parts with a primitive shape, a box in the frame of the figure, a draw order and colours; points for lines and polygons.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: tools/figures-core.mjs
+
+# bottom: trousers
+@k.faces.figure.bottom.trousers k.faces.variant slot=bottom name=trousers style=figure length=long kind=trousers core.source="hand-core 1"
+@k.faces.figure.bottom.trousers.waist k.faces.part slot=bottom of=trousers name=waist shape=rectangle x=40 y=58 w=20 h=4 z=1 colour=blue colour=black colour=brown colour=grey colour=green colour=red colour=white rgb="#2F3E5C" core.source="hand-core 1"
+@k.faces.figure.bottom.trousers.left_leg k.faces.part slot=bottom of=trousers name=left_leg shape=polygon x=40 y=60 w=10 h=28 z=1 colour=blue colour=black colour=brown colour=grey colour=green colour=red colour=white rgb="#2F3E5C" core.source="hand-core 1"
+@k.faces.figure.bottom.trousers.right_leg k.faces.part slot=bottom of=trousers name=right_leg shape=polygon x=50 y=60 w=10 h=28 z=1 colour=blue colour=black colour=brown colour=grey colour=green colour=red colour=white rgb="#2F3E5C" core.source="hand-core 1"
+@k.faces.figure.bottom.trousers.left_leg.p1 k.faces.point part=$k.faces.figure.bottom.trousers.left_leg n=1 x=40 y=60 core.source="hand-core 1"
+@k.faces.figure.bottom.trousers.left_leg.p2 k.faces.point part=$k.faces.figure.bottom.trousers.left_leg n=2 x=50 y=60 core.source="hand-core 1"
+@k.faces.figure.bottom.trousers.left_leg.p3 k.faces.point part=$k.faces.figure.bottom.trousers.left_leg n=3 x=49 y=88 core.source="hand-core 1"
+@k.faces.figure.bottom.trousers.left_leg.p4 k.faces.point part=$k.faces.figure.bottom.trousers.left_leg n=4 x=41 y=88 core.source="hand-core 1"
+@k.faces.figure.bottom.trousers.right_leg.p1 k.faces.point part=$k.faces.figure.bottom.trousers.right_leg n=1 x=50 y=60 core.source="hand-core 1"
+@k.faces.figure.bottom.trousers.right_leg.p2 k.faces.point part=$k.faces.figure.bottom.trousers.right_leg n=2 x=60 y=60 core.source="hand-core 1"
+@k.faces.figure.bottom.trousers.right_leg.p3 k.faces.point part=$k.faces.figure.bottom.trousers.right_leg n=3 x=59 y=88 core.source="hand-core 1"
+@k.faces.figure.bottom.trousers.right_leg.p4 k.faces.point part=$k.faces.figure.bottom.trousers.right_leg n=4 x=51 y=88 core.source="hand-core 1"
+
+# bottom: jeans
+@k.faces.figure.bottom.jeans k.faces.variant slot=bottom name=jeans style=figure length=long kind=jeans core.source="hand-core 1"
+@k.faces.figure.bottom.jeans.waist k.faces.part slot=bottom of=jeans name=waist shape=rectangle x=40 y=58 w=20 h=4 z=1 colour=blue colour=black colour=grey rgb="#4A6FA5" core.source="hand-core 1"
+@k.faces.figure.bottom.jeans.left_leg k.faces.part slot=bottom of=jeans name=left_leg shape=polygon x=40 y=60 w=10 h=28 z=1 colour=blue colour=black colour=grey rgb="#4A6FA5" core.source="hand-core 1"
+@k.faces.figure.bottom.jeans.right_leg k.faces.part slot=bottom of=jeans name=right_leg shape=polygon x=50 y=60 w=10 h=28 z=1 colour=blue colour=black colour=grey rgb="#4A6FA5" core.source="hand-core 1"
+@k.faces.figure.bottom.jeans.seam k.faces.part slot=bottom of=jeans name=seam shape=line x=50 y=62 w=0 h=8 z=2 colour=blue rgb="#2E4A75" core.source="hand-core 1"
+@k.faces.figure.bottom.jeans.left_leg.p1 k.faces.point part=$k.faces.figure.bottom.jeans.left_leg n=1 x=40 y=60 core.source="hand-core 1"
+@k.faces.figure.bottom.jeans.left_leg.p2 k.faces.point part=$k.faces.figure.bottom.jeans.left_leg n=2 x=50 y=60 core.source="hand-core 1"
+@k.faces.figure.bottom.jeans.left_leg.p3 k.faces.point part=$k.faces.figure.bottom.jeans.left_leg n=3 x=49 y=88 core.source="hand-core 1"
+@k.faces.figure.bottom.jeans.left_leg.p4 k.faces.point part=$k.faces.figure.bottom.jeans.left_leg n=4 x=41 y=88 core.source="hand-core 1"
+@k.faces.figure.bottom.jeans.right_leg.p1 k.faces.point part=$k.faces.figure.bottom.jeans.right_leg n=1 x=50 y=60 core.source="hand-core 1"
+@k.faces.figure.bottom.jeans.right_leg.p2 k.faces.point part=$k.faces.figure.bottom.jeans.right_leg n=2 x=60 y=60 core.source="hand-core 1"
+@k.faces.figure.bottom.jeans.right_leg.p3 k.faces.point part=$k.faces.figure.bottom.jeans.right_leg n=3 x=59 y=88 core.source="hand-core 1"
+@k.faces.figure.bottom.jeans.right_leg.p4 k.faces.point part=$k.faces.figure.bottom.jeans.right_leg n=4 x=51 y=88 core.source="hand-core 1"
+@k.faces.figure.bottom.jeans.seam.p1 k.faces.point part=$k.faces.figure.bottom.jeans.seam n=1 x=50 y=62 core.source="hand-core 1"
+@k.faces.figure.bottom.jeans.seam.p2 k.faces.point part=$k.faces.figure.bottom.jeans.seam n=2 x=50 y=70 core.source="hand-core 1"
+
+# bottom: shorts
+@k.faces.figure.bottom.shorts k.faces.variant slot=bottom name=shorts style=figure length=short kind=shorts core.source="hand-core 1"
+@k.faces.figure.bottom.shorts.waist k.faces.part slot=bottom of=shorts name=waist shape=rectangle x=40 y=58 w=20 h=4 z=1 colour=blue colour=black colour=brown colour=grey colour=green colour=red colour=white rgb="#6B5B3E" core.source="hand-core 1"
+@k.faces.figure.bottom.shorts.left_leg k.faces.part slot=bottom of=shorts name=left_leg shape=polygon x=40 y=60 w=10 h=12 z=1 colour=blue colour=black colour=brown colour=grey colour=green colour=red colour=white rgb="#6B5B3E" core.source="hand-core 1"
+@k.faces.figure.bottom.shorts.right_leg k.faces.part slot=bottom of=shorts name=right_leg shape=polygon x=50 y=60 w=10 h=12 z=1 colour=blue colour=black colour=brown colour=grey colour=green colour=red colour=white rgb="#6B5B3E" core.source="hand-core 1"
+@k.faces.figure.bottom.shorts.left_leg.p1 k.faces.point part=$k.faces.figure.bottom.shorts.left_leg n=1 x=40 y=60 core.source="hand-core 1"
+@k.faces.figure.bottom.shorts.left_leg.p2 k.faces.point part=$k.faces.figure.bottom.shorts.left_leg n=2 x=50 y=60 core.source="hand-core 1"
+@k.faces.figure.bottom.shorts.left_leg.p3 k.faces.point part=$k.faces.figure.bottom.shorts.left_leg n=3 x=49 y=72 core.source="hand-core 1"
+@k.faces.figure.bottom.shorts.left_leg.p4 k.faces.point part=$k.faces.figure.bottom.shorts.left_leg n=4 x=41 y=72 core.source="hand-core 1"
+@k.faces.figure.bottom.shorts.right_leg.p1 k.faces.point part=$k.faces.figure.bottom.shorts.right_leg n=1 x=50 y=60 core.source="hand-core 1"
+@k.faces.figure.bottom.shorts.right_leg.p2 k.faces.point part=$k.faces.figure.bottom.shorts.right_leg n=2 x=60 y=60 core.source="hand-core 1"
+@k.faces.figure.bottom.shorts.right_leg.p3 k.faces.point part=$k.faces.figure.bottom.shorts.right_leg n=3 x=59 y=72 core.source="hand-core 1"
+@k.faces.figure.bottom.shorts.right_leg.p4 k.faces.point part=$k.faces.figure.bottom.shorts.right_leg n=4 x=51 y=72 core.source="hand-core 1"
+
+# bottom: skirt
+@k.faces.figure.bottom.skirt k.faces.variant slot=bottom name=skirt style=figure length=medium kind=skirt core.source="hand-core 1"
+@k.faces.figure.bottom.skirt.skirt k.faces.part slot=bottom of=skirt name=skirt shape=polygon x=34 y=58 w=32 h=18 z=1 colour=blue colour=red colour=black colour=green colour=grey colour=purple colour=pink rgb="#3A4F8A" core.source="hand-core 1"
+@k.faces.figure.bottom.skirt.skirt.p1 k.faces.point part=$k.faces.figure.bottom.skirt.skirt n=1 x=40 y=58 core.source="hand-core 1"
+@k.faces.figure.bottom.skirt.skirt.p2 k.faces.point part=$k.faces.figure.bottom.skirt.skirt n=2 x=60 y=58 core.source="hand-core 1"
+@k.faces.figure.bottom.skirt.skirt.p3 k.faces.point part=$k.faces.figure.bottom.skirt.skirt n=3 x=66 y=76 core.source="hand-core 1"
+@k.faces.figure.bottom.skirt.skirt.p4 k.faces.point part=$k.faces.figure.bottom.skirt.skirt n=4 x=34 y=76 core.source="hand-core 1"

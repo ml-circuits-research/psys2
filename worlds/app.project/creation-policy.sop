@@ -11,10 +11,13 @@
 @creation.ground.word std.ground.policy name=app.creation.word measure=distance maxSpelling=0 stepCost=0.5 maxSteps=2 follow=lemma follow=kind_of follow=is_a follow=is_a.kind
 @creation.edit std.decide.criterion of=app.creation n=1 name=lexical.distance measure=distance dir=min
 @creation.type std.decide.criterion of=app.creation n=2 name=reader.type measure=otherType dir=min
-@creation.family std.decide.criterion of=app.creation n=3 name=family.default measure=otherFamily dir=min
 @creation.word.edit std.decide.criterion of=app.creation.word n=1 name=lexical.distance measure=distance dir=min
 @creation.word.type std.decide.criterion of=app.creation.word n=2 name=reader.type measure=otherType dir=min
-@creation.word.family std.decide.criterion of=app.creation.word n=3 name=family.default measure=otherFamily dir=min
+
+# Retention: at most `alternatives` distinct constructors are kept as ranked alternatives of one creation, the
+# no-word ranking compares `batch` observed options at a time, and a stated word or catalog lemma longer than
+# `lemma` characters is not grounded (the request stays unresolved and says so).
+@creation.limits app.creation.limits alternatives=5 batch=200 lemma=64
 
 @kind app.creation.role concept=kind role=kind
 @shape app.creation.role concept=shape role=kind

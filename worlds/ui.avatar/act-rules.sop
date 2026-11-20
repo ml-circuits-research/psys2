@@ -1,84 +1,54 @@
 # ui.avatar act rules (authored). Each native avatar command compiles to ordered std.acts calls on the w.face
-# instance through these rules; worlds/sop-world-host.mjs only runs the derived calls. Value tables (size grades,
-# move steps, which face key a tinted part's colour sets) are facts here, not code.
-@avatar.tables.size core.type of=ui.avatar.size
-@avatar.tables.step core.type of=ui.avatar.step
-@avatar.tables.tint core.type of=ui.avatar.tint
-@size.tiny ui.avatar.size grade=tiny scale=0.6
-@size.small ui.avatar.size grade=small scale=0.8
-@size.default ui.avatar.size grade=default scale=1
-@size.big ui.avatar.size grade=big scale=1.2
-@size.huge ui.avatar.size grade=huge scale=1.5
-@step.up ui.avatar.step place=up dx=0 dy=-3
-@step.down ui.avatar.step place=down dx=0 dy=3
-@step.left ui.avatar.step place=left dx=-3 dy=0
-@step.right ui.avatar.step place=right dx=3 dy=0
-@tint.skin ui.avatar.tint tint=skin attr=skin
-@tint.hair ui.avatar.tint tint=hair attr=hair_colour
-@tint.eyes ui.avatar.tint tint=eyes attr=eye_colour
-@tint.clothes ui.avatar.tint tint=clothes attr=clothes
+# instance through these rules and the face rules shared with the Drawing tab (face-rules.sop); worlds/sop-world-host.mjs
+# only runs the derived calls.
+# The edits of parts go through the face rules this tab shares with the Drawing tab (face-rules.sop: the value tables
+# and the compiled calls, joined on the face); here each command names the part of the tab's one face it edits.
+@av.face w.face.face
+@av.item app.act.item param="ids" value=?slot
 
 # Add a part to the face.
 @add.req app.act.request operation="avatar.part.add" id=?slot variant=?v
 @add.slot w.face.slot slot=?slot part=?kind
-@add.face w.face.face
-@add.call app.act.call act=make kind=?kind variant=?v face=$add.face order=1
-@add core.rule when=$add.req when=$add.slot when=$add.face then=$add.call
+@add.o ui.face.add face=$av.face slot=?slot variant=?v
+@add core.rule when=$add.req when=$add.slot when=$av.face then=$add.o
 
 # Change the variant, colour or size grade of listed parts.
-@chg.item app.act.item param="ids" value=?slot
-@chg.slot w.face.slot slot=?slot part=?kind
-@chg.part w.face.part kind=?kind
 @chg.v.req app.act.request operation="avatar.part.change" variant=?v
-@chg.v.call app.act.call act=change thing=$chg.part attr=variant value=?v order=1
-@change.variant core.rule when=$chg.v.req when=$chg.item when=$chg.slot when=$chg.part then=$chg.v.call
+@chg.v.o ui.face.edit face=$av.face slot=?slot variant=?v
+@change.variant core.rule when=$chg.v.req when=$av.item when=$av.face then=$chg.v.o
 @chg.s.req app.act.request operation="avatar.part.change" size=?grade
-@chg.s.table ui.avatar.size grade=?grade scale=?scale
-@chg.s.call app.act.call act=change thing=$chg.part attr=size value=?scale order=1
-@change.size core.rule when=$chg.s.req when=$chg.s.table when=$chg.item when=$chg.slot when=$chg.part then=$chg.s.call
-# A colour on a tinted part sets the face colour its tint names; an untinted part takes its own colour.
+@chg.s.o ui.face.edit face=$av.face slot=?slot grade=?grade
+@change.size core.rule when=$chg.s.req when=$av.item when=$av.face then=$chg.s.o
 @chg.c.req app.act.request operation="avatar.part.change" colour=?c
-@chg.c.face w.face.face style=?style
-@chg.c.shown ui.avatar.shown part=$chg.part slot=?slot variant=?v
-@chg.c.kp k.faces.part slot=?slot of=?v tint=?tint
-@chg.c.table ui.avatar.tint tint=?tint attr=?attr
-@chg.c.tinted app.act.call act=change thing=$chg.c.face attr=?attr value=?c order=1
-@change.colour.tint core.rule when=$chg.c.req when=$chg.item when=$chg.slot when=$chg.part when=$chg.c.face when=$chg.c.shown when=$chg.c.kp when=$chg.c.table then=$chg.c.tinted
-@chg.c.anyTint k.faces.part slot=?slot of=?v tint=?anyTint
-@chg.c.own app.act.call act=change thing=$chg.part attr=colour value=?c order=1
-@change.colour.own core.rule when=$chg.c.req when=$chg.item when=$chg.slot when=$chg.part when=$chg.c.shown not=$chg.c.anyTint then=$chg.c.own
+@chg.c.o ui.face.edit face=$av.face slot=?slot colour=?c
+@change.colour core.rule when=$chg.c.req when=$av.item when=$av.face then=$chg.c.o
 
 # Resize listed parts; move them one step.
 @rsz.req app.act.request operation="avatar.part.resize" scale=?scale
-@rsz.call app.act.call act=change thing=$chg.part attr=size value=?scale order=1
-@resize core.rule when=$rsz.req when=$chg.item when=$chg.slot when=$chg.part then=$rsz.call
+@rsz.o ui.face.edit face=$av.face slot=?slot scale=?scale
+@resize core.rule when=$rsz.req when=$av.item when=$av.face then=$rsz.o
 @mv.req app.act.request operation="avatar.part.move" place=?place
-@mv.step ui.avatar.step place=?place dx=?dx dy=?dy
-@mv.part w.face.part kind=?kind x=?x y=?y
-@mv.nx core.calc out=?nx fn=add args=?x args=?dx
-@mv.ny core.calc out=?ny fn=add args=?y args=?dy
-@mv.cx app.act.call act=change thing=$mv.part attr=x value=?nx order=1
-@mv.cy app.act.call act=change thing=$mv.part attr=y value=?ny order=2
-@move.x core.rule when=$mv.req when=$mv.step when=$chg.item when=$chg.slot when=$mv.part with=$mv.nx then=$mv.cx
-@move.y core.rule when=$mv.req when=$mv.step when=$chg.item when=$chg.slot when=$mv.part with=$mv.ny then=$mv.cy
+@mv.o ui.face.edit face=$av.face slot=?slot place=?place
+@move core.rule when=$mv.req when=$av.item when=$av.face then=$mv.o
 
 # Remove listed parts (one, several, or all of them).
 @rm.req.one app.act.request operation="avatar.part.remove"
 @rm.req.many app.act.request operation="avatar.parts.remove"
 @rm.req.all app.act.request operation="avatar.clear"
-@rm.call app.act.call act=remove thing=$chg.part order=1
-@remove.one core.rule when=$rm.req.one when=$chg.item when=$chg.slot when=$chg.part then=$rm.call
-@remove.many core.rule when=$rm.req.many when=$chg.item when=$chg.slot when=$chg.part then=$rm.call
-@remove.all core.rule when=$rm.req.all when=$chg.item when=$chg.slot when=$chg.part then=$rm.call
+@rm.o ui.face.edit face=$av.face slot=?slot remove=true
+@remove.one core.rule when=$rm.req.one when=$av.item when=$av.face then=$rm.o
+@remove.many core.rule when=$rm.req.many when=$av.item when=$av.face then=$rm.o
+@remove.all core.rule when=$rm.req.all when=$av.item when=$av.face then=$rm.o
 
 # Face keys: expression, name.
 @ex.req app.act.request operation="avatar.face.expression" expression=?e
 @ex.face w.face.face
+@ex.face.head ui.look.head face=$ex.face
 @ex.call app.act.call act=change thing=$ex.face attr=expression value=?e order=1
-@expression core.rule when=$ex.req when=$ex.face then=$ex.call
+@expression core.rule when=$ex.req when=$ex.face when=$ex.face.head then=$ex.call
 @nm.req app.act.request operation="avatar.face.name" name=?n
 @nm.call app.act.call act=change thing=$ex.face attr=name value=?n order=1
-@name core.rule when=$nm.req when=$ex.face then=$nm.call
+@name core.rule when=$nm.req when=$ex.face when=$ex.face.head then=$nm.call
 
 # A preset (or a composition by base or by character kind) replaces every part with the preset's parts
 # and sets the face colours it names.
@@ -86,6 +56,7 @@
 @ps.base.req app.act.request operation="avatar.face.compose" base=?p
 @ps.kind.req app.act.request operation="avatar.face.compose" characterKind=?k
 @ps.face w.face.face style=?style
+@ps.face.head ui.look.head face=$ps.face
 @ps.chosen.type core.type of=ui.avatar.chosen
 @ps.chosen ui.avatar.chosen preset=?p
 @choose.preset core.rule when=$ps.req then=$ps.chosen
@@ -94,80 +65,48 @@
 # the first preset of the kind in the catalog's sequence, in the face's style. A named base wins over the kind.
 @ps.kept.type core.type of=ui.avatar.keptKind
 @ps.kept.face w.face.face style=?style preset=?cp
+@ps.kept.face.head ui.look.head face=$ps.kept.face
 @ps.kept.k k.faces.preset name=?cp style=?style kind=?k
 @ps.kept.o ui.avatar.keptKind kind=?k
-@kind.kept core.rule when=$ps.kept.face when=$ps.kept.k then=$ps.kept.o
+@kind.kept core.rule when=$ps.kept.face when=$ps.kept.face.head when=$ps.kept.k then=$ps.kept.o
 @ps.kind.kept ui.avatar.keptKind kind=?k
 @ps.kind.base app.act.request operation="avatar.face.compose" base=?anyBase
 @ps.bykind k.faces.preset kind=?k style=?style name=?p core.select=first
-@choose.kind core.rule when=$ps.kind.req not=$ps.kind.base when=$ps.face not=$ps.kind.kept when=$ps.bykind then=$ps.chosen
+@choose.kind core.rule when=$ps.kind.req not=$ps.kind.base when=$ps.face when=$ps.face.head not=$ps.kind.kept when=$ps.bykind then=$ps.chosen
 @ps.pick ui.avatar.chosen preset=?p
 @ps.old w.face.part
 @ps.clear app.act.call act=remove thing=$ps.old order=1
 @preset.clear core.rule when=$ps.pick when=$ps.old then=$ps.clear
 @ps.k k.faces.preset name=?p style=?style
-@ps.call.face app.act.call act=change thing=$ps.face attr=preset value=?p order=3
-@preset.face core.rule when=$ps.pick when=$ps.face when=$ps.k then=$ps.call.face
-@ps.skin.k k.faces.preset name=?p style=?style skin=?c
-@ps.skin.call app.act.call act=change thing=$ps.face attr=skin value=?c order=3
-@preset.colour.skin core.rule when=$ps.pick when=$ps.face when=$ps.skin.k then=$ps.skin.call
-@ps.hair_colour.k k.faces.preset name=?p style=?style hair_colour=?c
-@ps.hair_colour.call app.act.call act=change thing=$ps.face attr=hair_colour value=?c order=3
-@preset.colour.hair_colour core.rule when=$ps.pick when=$ps.face when=$ps.hair_colour.k then=$ps.hair_colour.call
-@ps.eye_colour.k k.faces.preset name=?p style=?style eye_colour=?c
-@ps.eye_colour.call app.act.call act=change thing=$ps.face attr=eye_colour value=?c order=3
-@preset.colour.eye_colour core.rule when=$ps.pick when=$ps.face when=$ps.eye_colour.k then=$ps.eye_colour.call
-@ps.clothes.k k.faces.preset name=?p style=?style clothes=?c
-@ps.clothes.call app.act.call act=change thing=$ps.face attr=clothes value=?c order=3
-@preset.colour.clothes core.rule when=$ps.pick when=$ps.face when=$ps.clothes.k then=$ps.clothes.call
-@ps.slot.hair_back.k k.faces.preset name=?p style=?style hair_back=?v
-@ps.slot.hair_back.call app.act.call act=make kind=w.face.hair_back variant=?v face=$ps.face order=2
-@preset.slot.hair_back core.rule when=$ps.pick when=$ps.face when=$ps.slot.hair_back.k then=$ps.slot.hair_back.call
-@ps.slot.shoulders.k k.faces.preset name=?p style=?style shoulders=?v
-@ps.slot.shoulders.call app.act.call act=make kind=w.face.shoulders variant=?v face=$ps.face order=2
-@preset.slot.shoulders core.rule when=$ps.pick when=$ps.face when=$ps.slot.shoulders.k then=$ps.slot.shoulders.call
-@ps.slot.neck.k k.faces.preset name=?p style=?style neck=?v
-@ps.slot.neck.call app.act.call act=make kind=w.face.neck variant=?v face=$ps.face order=2
-@preset.slot.neck core.rule when=$ps.pick when=$ps.face when=$ps.slot.neck.k then=$ps.slot.neck.call
-@ps.slot.ears.k k.faces.preset name=?p style=?style ears=?v
-@ps.slot.ears.call app.act.call act=make kind=w.face.ears variant=?v face=$ps.face order=2
-@preset.slot.ears core.rule when=$ps.pick when=$ps.face when=$ps.slot.ears.k then=$ps.slot.ears.call
-@ps.slot.head.k k.faces.preset name=?p style=?style head=?v
-@ps.slot.head.call app.act.call act=make kind=w.face.head variant=?v face=$ps.face order=2
-@preset.slot.head core.rule when=$ps.pick when=$ps.face when=$ps.slot.head.k then=$ps.slot.head.call
-@ps.slot.cheeks.k k.faces.preset name=?p style=?style cheeks=?v
-@ps.slot.cheeks.call app.act.call act=make kind=w.face.cheeks variant=?v face=$ps.face order=2
-@preset.slot.cheeks core.rule when=$ps.pick when=$ps.face when=$ps.slot.cheeks.k then=$ps.slot.cheeks.call
-@ps.slot.beard.k k.faces.preset name=?p style=?style beard=?v
-@ps.slot.beard.call app.act.call act=make kind=w.face.beard variant=?v face=$ps.face order=2
-@preset.slot.beard core.rule when=$ps.pick when=$ps.face when=$ps.slot.beard.k then=$ps.slot.beard.call
-@ps.slot.mouth.k k.faces.preset name=?p style=?style mouth=?v
-@ps.slot.mouth.call app.act.call act=make kind=w.face.mouth variant=?v face=$ps.face order=2
-@preset.slot.mouth core.rule when=$ps.pick when=$ps.face when=$ps.slot.mouth.k then=$ps.slot.mouth.call
-@ps.slot.moustache.k k.faces.preset name=?p style=?style moustache=?v
-@ps.slot.moustache.call app.act.call act=make kind=w.face.moustache variant=?v face=$ps.face order=2
-@preset.slot.moustache core.rule when=$ps.pick when=$ps.face when=$ps.slot.moustache.k then=$ps.slot.moustache.call
-@ps.slot.nose.k k.faces.preset name=?p style=?style nose=?v
-@ps.slot.nose.call app.act.call act=make kind=w.face.nose variant=?v face=$ps.face order=2
-@preset.slot.nose core.rule when=$ps.pick when=$ps.face when=$ps.slot.nose.k then=$ps.slot.nose.call
-@ps.slot.eyes.k k.faces.preset name=?p style=?style eyes=?v
-@ps.slot.eyes.call app.act.call act=make kind=w.face.eyes variant=?v face=$ps.face order=2
-@preset.slot.eyes core.rule when=$ps.pick when=$ps.face when=$ps.slot.eyes.k then=$ps.slot.eyes.call
-@ps.slot.eyebrows.k k.faces.preset name=?p style=?style eyebrows=?v
-@ps.slot.eyebrows.call app.act.call act=make kind=w.face.eyebrows variant=?v face=$ps.face order=2
-@preset.slot.eyebrows core.rule when=$ps.pick when=$ps.face when=$ps.slot.eyebrows.k then=$ps.slot.eyebrows.call
-@ps.slot.glasses.k k.faces.preset name=?p style=?style glasses=?v
-@ps.slot.glasses.call app.act.call act=make kind=w.face.glasses variant=?v face=$ps.face order=2
-@preset.slot.glasses core.rule when=$ps.pick when=$ps.face when=$ps.slot.glasses.k then=$ps.slot.glasses.call
-@ps.slot.hair_front.k k.faces.preset name=?p style=?style hair_front=?v
-@ps.slot.hair_front.call app.act.call act=make kind=w.face.hair_front variant=?v face=$ps.face order=2
-@preset.slot.hair_front core.rule when=$ps.pick when=$ps.face when=$ps.slot.hair_front.k then=$ps.slot.hair_front.call
-@ps.slot.earrings.k k.faces.preset name=?p style=?style earrings=?v
-@ps.slot.earrings.call app.act.call act=make kind=w.face.earrings variant=?v face=$ps.face order=2
-@preset.slot.earrings core.rule when=$ps.pick when=$ps.face when=$ps.slot.earrings.k then=$ps.slot.earrings.call
-@ps.slot.hat.k k.faces.preset name=?p style=?style hat=?v
-@ps.slot.hat.call app.act.call act=make kind=w.face.hat variant=?v face=$ps.face order=2
-@preset.slot.hat core.rule when=$ps.pick when=$ps.face when=$ps.slot.hat.k then=$ps.slot.hat.call
+# The preset's parts and colours, and the person's body: the composition the Drawing tab's people use
+# (art.draw/person-rules.sop). A preset of a person (with an age) gives the face a body with clothes (a face of the style
+# figure: made here when the avatar has none) in an outfit of the preset's age and sex, and the face leaves out the
+# slots the body draws; the Avatar shows that person framed on the face (view-projection.sop).
+@ps.parts ui.person.parts face=$ps.face preset=?p order=3 part=2
+@preset.parts core.rule when=$ps.pick when=$ps.face when=$ps.face.head when=$ps.k not=$ps.aged then=$ps.parts
+@ps.aged k.faces.preset name=?p style=?style age=?anyAge
+@ps.parts.body ui.person.parts face=$ps.face preset=?p order=3 part=2 withBody=true
+@preset.parts.body core.rule when=$ps.pick when=$ps.face when=$ps.face.head when=$ps.k when=$ps.aged then=$ps.parts.body
+@ps.want ui.person.bodywant key=avatar.body style=figure seed=0
+@preset.want core.rule when=$ps.pick when=$ps.face when=$ps.face.head when=$ps.k when=$ps.aged then=$ps.want
+@ps.age k.faces.preset name=?p style=?style age=?a
+@ps.want.age ui.person.bodywant key=avatar.body age=?a
+@preset.want.age core.rule when=$ps.pick when=$ps.face when=$ps.face.head when=$ps.age then=$ps.want.age
+@ps.sex k.faces.preset name=?p style=?style sex=?x
+@ps.want.sex ui.person.bodywant key=avatar.body sex=?x
+@preset.want.sex core.rule when=$ps.pick when=$ps.face when=$ps.face.head when=$ps.sex then=$ps.want.sex
+@ps.anysex ui.person.bodywant key=avatar.body sex=any
+@preset.want.anysex core.rule when=$ps.pick when=$ps.face when=$ps.face.head when=$ps.aged not=$ps.sex then=$ps.anysex
+@ps.outfit ui.person.bodypick key=avatar.body preset=?o
+@ps.body w.face.face
+@ps.body.is ui.look.body face=$ps.body
+@ps.body.parts ui.person.parts face=$ps.body preset=?o order=3 part=2
+@preset.body.parts core.rule when=$ps.pick when=$ps.face when=$ps.face.head when=$ps.aged when=$ps.outfit when=$ps.body when=$ps.body.is then=$ps.body.parts
+@ps.anybody ui.look.body
+@ps.body.make app.act.call act=make kind=w.face.face style=figure order=1 ref=new.body
+@preset.body.make core.rule when=$ps.pick when=$ps.face when=$ps.face.head when=$ps.aged when=$ps.outfit not=$ps.anybody then=$ps.body.make
+@ps.new.parts ui.person.parts face=new.body preset=?o order=3 part=2
+@preset.body.new core.rule when=$ps.pick when=$ps.face when=$ps.face.head when=$ps.aged when=$ps.outfit not=$ps.anybody then=$ps.new.parts
 
 # View keys. Undo and redo are the application's journal.
 @sel.req app.act.request operation="avatar.part.select" id=?id
@@ -183,33 +122,14 @@
 @fr.view app.act.view key=scale value=?s
 @face.resize core.rule when=$fr.req then=$fr.view
 
-# The plain-word features of the variants (k.faces.variant: shape, size, length, feel, age, kind), one fact per value,
-# so a feature is read by its name: what a part offers, what it shows and what `avatar.part.feature` asks for.
-@feature.type core.type of=ui.avatar.feature
-@ft.shape.v k.faces.variant slot=?slot style=?style name=?v shape=?x
-@ft.shape.o ui.avatar.feature slot=?slot style=?style variant=?v property=shape value=?x
-@feature.shape core.rule when=$ft.shape.v then=$ft.shape.o
-@ft.size.v k.faces.variant slot=?slot style=?style name=?v size=?x
-@ft.size.o ui.avatar.feature slot=?slot style=?style variant=?v property=size value=?x
-@feature.size core.rule when=$ft.size.v then=$ft.size.o
-@ft.length.v k.faces.variant slot=?slot style=?style name=?v length=?x
-@ft.length.o ui.avatar.feature slot=?slot style=?style variant=?v property=length value=?x
-@feature.length core.rule when=$ft.length.v then=$ft.length.o
-@ft.feel.v k.faces.variant slot=?slot style=?style name=?v feel=?x
-@ft.feel.o ui.avatar.feature slot=?slot style=?style variant=?v property=feel value=?x
-@feature.feel core.rule when=$ft.feel.v then=$ft.feel.o
-@ft.age.v k.faces.variant slot=?slot style=?style name=?v age=?x
-@ft.age.o ui.avatar.feature slot=?slot style=?style variant=?v property=age value=?x
-@feature.age core.rule when=$ft.age.v then=$ft.age.o
-@ft.kind.v k.faces.variant slot=?slot style=?style name=?v kind=?x
-@ft.kind.o ui.avatar.feature slot=?slot style=?style variant=?v property=kind value=?x
-@feature.kind core.rule when=$ft.kind.v then=$ft.kind.o
+# The plain-word features of the variants (ui.avatar.feature) are derived by face-rules.sop.
 
 # A feature for a part: a part that already shows the feature keeps its variant (nothing changes); otherwise it takes
 # the first variant of its slot and style with the feature, in the catalog's sequence; an absent part is added with
 # it. No such variant: refused.
 @fe.req app.act.request operation="avatar.part.feature" id=?slot property=?prop value=?x
 @fe.face w.face.face style=?style
+@fe.face.head ui.look.head face=$fe.face
 @fe.slot w.face.slot slot=?slot part=?kind
 @fe.part w.face.part kind=?kind variant=?now
 @fe.anyPart w.face.part kind=?kind
@@ -217,21 +137,24 @@
 @fe.cand ui.avatar.feature slot=?slot style=?style property=?prop value=?x variant=?c core.select=first
 @fe.anyCand ui.avatar.feature slot=?slot style=?style property=?prop value=?x
 @fe.change app.act.call act=change thing=$fe.part attr=variant value=?c order=1
-@feature.change core.rule when=$fe.req when=$fe.face when=$fe.slot when=$fe.part not=$fe.held when=$fe.cand then=$fe.change
+@feature.change core.rule when=$fe.req when=$fe.face when=$fe.face.head when=$fe.slot when=$fe.part not=$fe.held when=$fe.cand then=$fe.change
 @fe.make app.act.call act=make kind=?kind variant=?c face=$fe.face order=1
-@feature.add core.rule when=$fe.req when=$fe.face when=$fe.slot not=$fe.anyPart when=$fe.cand then=$fe.make
+@feature.add core.rule when=$fe.req when=$fe.face when=$fe.face.head when=$fe.slot not=$fe.anyPart when=$fe.cand then=$fe.make
 @fe.none app.act.refuse reason=unavailable-feature-combination
-@feature.refuse core.rule when=$fe.req when=$fe.face not=$fe.anyCand then=$fe.none
+@feature.refuse core.rule when=$fe.req when=$fe.face when=$fe.face.head not=$fe.anyCand then=$fe.none
 
 # What a reader observes: the face and each part, by its slot.
 @ob.face w.face.face name=?n
+@ob.face.head ui.look.head face=$ob.face
 @ob.face.preset w.face.face name=?n preset=?p style=?style
+@ob.face.preset.head ui.look.head face=$ob.face.preset
 @ob.face.kind k.faces.preset name=?p style=?style kind=?k
 @ob.face.any w.face.face preset=?anyPreset
+@ob.face.any.head ui.look.head face=$ob.face.any
 @ob.face.o app.observe.object id=face kind=face sourceType=ui.avatar.face binding=avatar.face name=?n
 @ob.face.preset.o app.observe.object id=face kind=face sourceType=ui.avatar.face binding=avatar.face name=?n base=?p characterKind=?k
-@observe.face core.rule when=$ob.face not=$ob.face.any then=$ob.face.o
-@observe.face.preset core.rule when=$ob.face.preset when=$ob.face.kind then=$ob.face.preset.o
+@observe.face core.rule when=$ob.face when=$ob.face.head not=$ob.face.any then=$ob.face.o
+@observe.face.preset core.rule when=$ob.face.preset when=$ob.face.preset.head when=$ob.face.kind then=$ob.face.preset.o
 @ob.part w.face.part kind=?kind variant=?v size=?size x=?x y=?y
 @ob.slot w.face.slot part=?kind slot=?slot
 @ob.sel app.area.view key=selected value=?slot
@@ -246,12 +169,13 @@
 @observe.option core.rule when=$ob.opt.face when=$ob.opt.slot when=$ob.opt.v then=$ob.opt.o
 # Options a view offers for the face and its parts.
 @op.preset.face w.face.face style=?style
+@op.preset.face.head ui.look.head face=$op.preset.face
 @op.preset.k k.faces.preset style=?style name=?p
 @op.preset.o app.observe.option id=preset value=?p
-@option.preset core.rule when=$op.preset.face when=$op.preset.k then=$op.preset.o
+@option.preset core.rule when=$op.preset.face when=$op.preset.face.head when=$op.preset.k then=$op.preset.o
 @op.expr.k k.faces.expression style=?style name=?e
 @op.expr.o app.observe.option id=expression value=?e
-@option.expression core.rule when=$op.preset.face when=$op.expr.k then=$op.expr.o
+@option.expression core.rule when=$op.preset.face when=$op.preset.face.head when=$op.expr.k then=$op.expr.o
 @op.size.t ui.avatar.size grade=?g
 @op.size.o app.observe.option id=size value=?g
 @option.size core.rule when=$op.size.t then=$op.size.o
@@ -269,18 +193,21 @@
 @ids.always app.observe.option id=idsMode value=always
 @ids.off app.observe.option id=idsMode value=off
 @ob.in.expr w.face.face expression=?e
+@ob.in.expr.head ui.look.head face=$ob.in.expr
 @ob.in.expr.o app.observe.input id=face key=expression value=?e
-@observe.expression core.rule when=$ob.in.expr then=$ob.in.expr.o
+@observe.expression core.rule when=$ob.in.expr when=$ob.in.expr.head then=$ob.in.expr.o
 @ob.in.colour w.face.part kind=?kind colour=?c
 @ob.in.colour.slot w.face.slot part=?kind slot=?slot
 @ob.in.colour.o app.observe.input id=?slot key=colour value=?c
 @observe.colour core.rule when=$ob.in.colour when=$ob.in.colour.slot then=$ob.in.colour.o
 @ob.in.skin w.face.face skin=?c
+@ob.in.skin.head ui.look.head face=$ob.in.skin
 @ob.in.skin.o app.observe.input id=face key=skin value=?c
-@observe.skin core.rule when=$ob.in.skin then=$ob.in.skin.o
+@observe.skin core.rule when=$ob.in.skin when=$ob.in.skin.head then=$ob.in.skin.o
 @ob.in.hair w.face.face hair_colour=?c
+@ob.in.hair.head ui.look.head face=$ob.in.hair
 @ob.in.hair.o app.observe.input id=face key=hair_colour value=?c
-@observe.hair core.rule when=$ob.in.hair then=$ob.in.hair.o
+@observe.hair core.rule when=$ob.in.hair when=$ob.in.hair.head then=$ob.in.hair.o
 @ob.in.ids app.area.view key=ids value=?m
 @ob.in.ids.o app.observe.input id=face key=ids value=?m
 @observe.ids core.rule when=$ob.in.ids then=$ob.in.ids.o
@@ -288,15 +215,16 @@
 # What an editor shows next to the controls, read from the catalog for the face's style.
 # The kind of each preset (id=preset, key=<preset>, value=<kind>): the bases a character kind offers.
 @ob.pk.face w.face.face style=?style
+@ob.pk.face.head ui.look.head face=$ob.pk.face
 @ob.pk.k k.faces.preset style=?style name=?p kind=?k
 @ob.pk.o app.observe.input id=preset key=?p value=?k
-@observe.preset.kind core.rule when=$ob.pk.face when=$ob.pk.k then=$ob.pk.o
+@observe.preset.kind core.rule when=$ob.pk.face when=$ob.pk.face.head when=$ob.pk.k then=$ob.pk.o
 # Features: the values each slot's variants offer (features.<property>) and those its shown variant has
 # (feature.<property>).
 @ob.fs.f ui.avatar.feature slot=?slot style=?style property=?prop value=?x
 @ob.fs.key core.calc out=?key fn=concat args="features." args=?prop
 @ob.fs.o app.observe.input id=?slot key=?key value=?x
-@observe.features core.rule when=$ob.pk.face when=$ob.fs.f with=$ob.fs.key then=$ob.fs.o
+@observe.features core.rule when=$ob.pk.face when=$ob.pk.face.head when=$ob.fs.f with=$ob.fs.key then=$ob.fs.o
 @ob.fc.shown ui.avatar.shown slot=?slot style=?style variant=?v
 @ob.fc.f ui.avatar.feature slot=?slot style=?style variant=?v property=?prop value=?x
 @ob.fc.key core.calc out=?key fn=concat args="feature." args=?prop
@@ -342,7 +270,7 @@
 # A slot the face may leave empty (k.faces.slot optional=true).
 @ob.op.slot k.faces.slot style=?style name=?slot optional=true
 @ob.op.o app.observe.input id=?slot key=optional value=true
-@observe.optional core.rule when=$ob.pk.face when=$ob.op.slot then=$ob.op.o
+@observe.optional core.rule when=$ob.pk.face when=$ob.pk.face.head when=$ob.op.slot then=$ob.op.o
 
 # The length of listed parts, along the catalog's declared scale (k.faces.feature key=length: the k.values scale
 # whose ranks order short < medium < long). A part of a group (w.face.slot group: her hair is the back and the front
@@ -354,14 +282,6 @@
 @avatar.tables.shift core.type of=ui.avatar.shift
 @shift.more ui.avatar.shift step=more offset=1
 @shift.less ui.avatar.shift step=less offset=-1
-@len.choice.type core.type of=ui.avatar.lengthChoice
-@len.ch.feature k.faces.feature key=length scale=?scale
-@len.ch.step k.values.step scale=?scale name=?n
-@len.ch.out ui.avatar.lengthChoice value=?n
-@length.choice.step core.rule when=$len.ch.feature when=$len.ch.step then=$len.ch.out
-@len.ch.shift ui.avatar.shift step=?s
-@len.ch.shift.out ui.avatar.lengthChoice value=?s
-@length.choice.shift core.rule when=$len.ch.shift then=$len.ch.shift.out
 @len.member.type core.type of=ui.avatar.member
 @len.rank.type core.type of=ui.avatar.rank
 @len.outranked.type core.type of=ui.avatar.outranked
@@ -381,6 +301,7 @@
 
 # The rank of each member the face has, on the declared scale of length.
 @len.face w.face.face style=?style
+@len.face.head ui.look.head face=$len.face
 @len.feature k.faces.feature key=length scale=?scale
 @len.r.member ui.avatar.member slot=?m
 @len.r.slot w.face.slot slot=?m part=?kind
@@ -388,7 +309,7 @@
 @len.r.variant k.faces.variant slot=?m style=?style name=?v length=?l
 @len.r.step k.values.step scale=?scale name=?l rank=?r
 @len.r.out ui.avatar.rank slot=?m rank=?r variant=?v
-@length.rank core.rule when=$len.req when=$len.face when=$len.feature when=$len.r.member when=$len.r.slot when=$len.r.part when=$len.r.variant when=$len.r.step then=$len.r.out
+@length.rank core.rule when=$len.req when=$len.face when=$len.face.head when=$len.feature when=$len.r.member when=$len.r.slot when=$len.r.part when=$len.r.variant when=$len.r.step then=$len.r.out
 @len.o.a ui.avatar.rank slot=?a rank=?ra
 @len.o.b ui.avatar.rank slot=?b rank=?rb
 @len.o.longer core.check fn=gt args=?rb args=?ra
@@ -412,13 +333,13 @@
 @len.c.member ui.avatar.member slot=?m
 @len.c.variant k.faces.variant slot=?m style=?style name=?c length=?n
 @len.c.out ui.avatar.candidate slot=?m variant=?c
-@length.candidate core.rule when=$len.req when=$len.face when=$len.c.goal when=$len.c.member when=$len.c.variant then=$len.c.out
+@length.candidate core.rule when=$len.req when=$len.face when=$len.face.head when=$len.c.goal when=$len.c.member when=$len.c.variant then=$len.c.out
 @len.f.cand ui.avatar.candidate slot=?m variant=?c
 @len.f.rank ui.avatar.rank slot=?m variant=?v
 @len.f.now k.faces.variant slot=?m style=?style name=?v feel=?feel
 @len.f.same k.faces.variant slot=?m style=?style name=?c feel=?feel
 @len.f.out ui.avatar.fit slot=?m variant=?c
-@length.fit core.rule when=$len.face when=$len.f.cand when=$len.f.rank when=$len.f.now when=$len.f.same then=$len.f.out
+@length.fit core.rule when=$len.face when=$len.face.head when=$len.f.cand when=$len.f.rank when=$len.f.now when=$len.f.same then=$len.f.out
 # An empty slot of the group takes the feel of the group's longest part.
 @len.fe.cand ui.avatar.candidate slot=?m variant=?c
 @len.fe.has ui.avatar.rank slot=?m
@@ -427,7 +348,7 @@
 @len.fe.now k.faces.variant slot=?t style=?style name=?v feel=?feel
 @len.fe.same k.faces.variant slot=?m style=?style name=?c feel=?feel
 @len.fe.out ui.avatar.fit slot=?m variant=?c
-@length.fit.empty core.rule when=$len.face when=$len.fe.cand not=$len.fe.has when=$len.fe.top not=$len.fe.top.not when=$len.fe.now when=$len.fe.same then=$len.fe.out
+@length.fit.empty core.rule when=$len.face when=$len.face.head when=$len.fe.cand not=$len.fe.has when=$len.fe.top not=$len.fe.top.not when=$len.fe.now when=$len.fe.same then=$len.fe.out
 
 # Down: a member longer than the goal takes a variant of the goal's step (one with its feel when there is one), or
 # leaves the face when its slot is optional and has none.
@@ -445,7 +366,7 @@
 @length.down.any core.rule when=$len.req when=$len.d.goal when=$len.d.rank if=$len.d.longer when=$len.d.slot when=$len.d.part not=$len.d.anyfit when=$len.d.cand then=$len.d.call
 @len.d.optional k.faces.slot style=?style name=?m optional=true
 @len.d.remove app.act.call act=remove thing=$len.d.part order=1
-@length.down.remove core.rule when=$len.req when=$len.face when=$len.d.goal when=$len.d.rank if=$len.d.longer when=$len.d.slot when=$len.d.part not=$len.d.anycand when=$len.d.optional then=$len.d.remove
+@length.down.remove core.rule when=$len.req when=$len.face when=$len.face.head when=$len.d.goal when=$len.d.rank if=$len.d.longer when=$len.d.slot when=$len.d.part not=$len.d.anycand when=$len.d.optional then=$len.d.remove
 
 # Up: when the group is shorter than the goal, its longest member takes a variant of the goal's step; when that slot
 # has none, an empty slot of the group gets one.
@@ -470,11 +391,28 @@
 @len.e.anyfit ui.avatar.fit slot=?e
 @len.e.cand ui.avatar.candidate slot=?e variant=?c
 @len.e.face w.face.face
+@len.e.face.head ui.look.head face=$len.e.face
 @len.e.make app.act.call act=make kind=?ekind variant=?c face=$len.e.face order=2
-@length.up.add.fit core.rule when=$len.req when=$len.u.goal when=$len.u.top not=$len.u.top.not if=$len.u.shorter not=$len.u.anycand when=$len.e.member not=$len.e.has when=$len.e.slot not=$len.e.part when=$len.e.fit when=$len.e.face then=$len.e.make
-@length.up.add.any core.rule when=$len.req when=$len.u.goal when=$len.u.top not=$len.u.top.not if=$len.u.shorter not=$len.u.anycand when=$len.e.member not=$len.e.has when=$len.e.slot not=$len.e.part not=$len.e.anyfit when=$len.e.cand when=$len.e.face then=$len.e.make
+@length.up.add.fit core.rule when=$len.req when=$len.u.goal when=$len.u.top not=$len.u.top.not if=$len.u.shorter not=$len.u.anycand when=$len.e.member not=$len.e.has when=$len.e.slot not=$len.e.part when=$len.e.fit when=$len.e.face when=$len.e.face.head then=$len.e.make
+@length.up.add.any core.rule when=$len.req when=$len.u.goal when=$len.u.top not=$len.u.top.not if=$len.u.shorter not=$len.u.anycand when=$len.e.member not=$len.e.has when=$len.e.slot not=$len.e.part not=$len.e.anyfit when=$len.e.cand when=$len.e.face when=$len.e.face.head then=$len.e.make
 
 # Refused: no step there (past the end of the scale, or a name the scale does not have), or no part with a length.
+# The parameter takes any word: the step names and the relative steps are values of the execution policy's ordinal
+# concept (capability-policy.sop), resolved through its lookup; anything else is refused here.
 @len.no.goal ui.avatar.goal
 @len.no.goal.o app.act.refuse reason=feature-scale-end
 @length.refuse.end core.rule when=$len.req when=$len.feature not=$len.no.goal then=$len.no.goal.o
+
+# The variants a part can take: those of the styles people are drawn in (the styles of presets that suit an age: the
+# face and the body with its clothes), so the Avatar offers every garment of the people's knowledge.
+@vc.type core.type of=ui.avatar.variantChoice
+@vc.p k.faces.preset style=?st age=?a
+@vc.v k.faces.variant style=?st name=?v
+@vc.o ui.avatar.variantChoice name=?v style=?st
+@variant.choice core.rule when=$vc.p when=$vc.v then=$vc.o
+# The body of the person takes the skin of the face's preset (the outfit's own colours are defaults).
+@ps.skin.k k.faces.preset name=?p style=?style skin=?c
+@ps.body.skin app.act.call act=change thing=$ps.body attr=skin value=?c order=4
+@preset.body.skin core.rule when=$ps.pick when=$ps.face when=$ps.face.head when=$ps.skin.k when=$ps.aged when=$ps.body when=$ps.body.is then=$ps.body.skin
+@ps.new.skin app.act.call act=change thing=new.body attr=skin value=?c order=4
+@preset.body.skin.new core.rule when=$ps.pick when=$ps.face when=$ps.face.head when=$ps.skin.k when=$ps.aged when=$ps.outfit not=$ps.anybody then=$ps.new.skin

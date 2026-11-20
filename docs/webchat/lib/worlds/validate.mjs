@@ -1,5 +1,4 @@
 /** Static validation of a loaded WorldSet (used by `test-world` and tests). Browser-safe. */
-import { checkPattern } from '../formalizer/rules/index.mjs?v=c533c34761';
 
 const STATUS = new Set(['supported', 'missing', 'conflicting', 'ambiguous', 'unsupported', 'budget', 'error']);
 const MODES = new Set(['value', 'exists', 'list', 'count']);
@@ -9,7 +8,7 @@ const MODES = new Set(['value', 'exists', 'list', 'count']);
  * templates and knowledge-base provenance.
  * @returns {string[]} human-readable problems (empty when the set is consistent)
  */
-export function validateWorldSet(set) {
+export function validateWorldSet(set, { checkPattern = null } = {}) {
   const out = [];
   const L = set.legends;
   const loc = (e) => (e.source ? `${e.source}:${e.line ?? '?'}: ` : e.line ? `line ${e.line}: ` : '');
@@ -27,7 +26,8 @@ export function validateWorldSet(set) {
       for (const e of L.validateWire(x, { lookup })) out.push(`${w.id}: ${loc(e)}${x.id}: ${e.message}`);
     }
     for (const k of w.kbRaw) if (!k.entries.some((e) => e.key === 'core.source')) out.push(`${w.id}: kb wire '${k.id}' has no core.source`);
-    for (const p of w.patterns) for (const m of checkPattern(p, set)) out.push(`${w.id}: ${m}`);
+    if (w.patterns.length && !checkPattern) out.push(`${w.id}: ${w.patterns.length} legacy pattern(s) are not checked: the pattern compiler is not loaded`);
+    else for (const p of w.patterns) for (const m of checkPattern(p, set)) out.push(`${w.id}: ${m}`);
     for (const o of w.operations) {
       if (o.impl !== 'matrix' && typeof w.ops[o.impl] !== 'function') out.push(`${w.id}: operation ${o.id}: ops.mjs has no function '${o.impl}'`);
       if (!['query', 'compute', 'action'].includes(o.semantics)) out.push(`${w.id}: operation ${o.id}: unknown semantics '${o.semantics}'`);

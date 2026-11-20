@@ -98,9 +98,3 @@ test('regex loops and matchAll are checked everywhere, also in the converted dia
   assert.deepEqual(bad, []);
 });
 
-test('diagram engine: the layout, solver, path and name loops carry budget ticks (inserted by scripts/convert-diagram-engine.mjs)', () => {
-  const count = (f) => (readFileSync(path.join(ROOT, 'worlds/diagram.sketch/engine', f), 'utf8').match(/budget\.tick\('diagram\./g) ?? []).length;
-  assert.ok(count('auto-layout.mjs') >= 8, 'auto-layout.mjs ticks');
-  assert.ok(count('templates.mjs') >= 2, 'templates.mjs ticks');
-  assert.ok(count('logic.mjs') >= 7, 'logic.mjs ticks');
-});

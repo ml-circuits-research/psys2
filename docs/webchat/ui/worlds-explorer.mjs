@@ -3,58 +3,66 @@
 import {h} from './util.mjs';
 
 const NS='http://www.w3.org/2000/svg';
+// Role names of the actual record kinds (detail subtitles and accessible names).
 const KINDS={
- world:['Tool package','◎'],
- schema:['Schema / declarations','▦'],knowledge:['Knowledge','◈'],
- instance:['World instance','●'],interpreter:['Interpreter','⚙'],
- component:['Implementation component','⬡'],runtime:['Runtime implementation','⏵'],
- structure:['Runtime structure','▤'],storage:['Storage adapter','▰'],
- adapter:['Adapter','⇄'],method:['Method','ƒ'],episode:['Episode','◷'],
- project:['Project','◇']
+ world:'Tool package',schema:'Schema / declarations',knowledge:'Knowledge',instance:'World instance',interpreter:'Interpreter',
+ component:'Implementation component',runtime:'Runtime record',structure:'Runtime structure',storage:'Storage adapter',
+ adapter:'Adapter',method:'Method',episode:'Episode',project:'Project'
 };
-const KIND_HELP={
- world:'An application package containing SOP declarations, methods or initial facts. A package is not automatically a concrete world instance.',
- schema:'Reusable types, slots, constraints and rules that describe or validate worlds. Schema source is distinct from live instance facts.',
- knowledge:'Published reusable knowledge or catalog source. A published entry may contain a world pattern or a knowledge base; its exact role is shown only when declared.',
- instance:'Concrete facts for one world instance. The record states whether these facts are authoritative operational state or an observation from a native adapter.',
- project:'A registry linking application domains, schema identities and live instances. Its implementation and source show what is operational SOP state.',
- interpreter:'Executes or validates declared commands. Its implementation may be JavaScript, SOP mechanisms or a combination; it is distinct from the text reader.',
- adapter:'Connects tools or native editor data to the rest of the system. Any JavaScript behavior and remaining semantic responsibility are disclosed in its details.',
- component:'An implementation component such as a reader, formalizer or executor. Being visible here does not make its internal behavior a SOP World.',
- runtime:'Native runtime data or a JavaScript implementation structure. Serialization into SOP does not by itself make this structure a reasoning mechanism.',
- structure:'A property or collection held by the runtime. It remains distinct from an independently declared SOP World.',
- storage:'An adapter for explicit work files, browser storage or model artifacts. Inspect the record for what it actually stores.',
- method:'A declared procedure or mechanism. Availability does not prove it participated in a particular decision.',
- episode:'Retained evidence or an observed activity record. It documents only the execution boundaries actually recorded.'
+// Map encoding: shape = role, colour = implementation, hollow = catalog entry not read in this session.
+const ROLES={
+ tool:{label:'Interpreter or tool',meaning:'Reads, checks or runs commands, or is an application package that declares them.',shape:'hexagon'},
+ instance:{label:'Instance World',meaning:'Current facts of one tab or of the session, held as an SOP World.',shape:'circle'},
+ runtime:{label:'Session record',meaning:'Session state kept as JavaScript data, not as an SOP World.',shape:'triangle'},
+ knowledge:{label:'Knowledge World',meaning:'Reusable knowledge or an operational policy, linked by reference.',shape:'diamond'},
+ schema:{label:'Schema',meaning:'Types, slots and rules that validate Worlds.',shape:'square'},
 };
+const ROLE_ORDER=Object.keys(ROLES);
+const roleKindOf=node=>({instance:'instance',project:'instance',knowledge:'knowledge',schema:'schema',runtime:'runtime',structure:'runtime',episode:'runtime'})[node.kind]??'tool';
 const displayName=node=>node.displayName??node.help?.title??node.label??node.id;
 const kindOf=node=>Object.hasOwn(KINDS,node.kind)?node.kind:'component';
 const hasTools=node=>Array.isArray(node.tools)?node.tools.length>0:node.tools&&typeof node.tools==='object'?Object.keys(node.tools).length>0:node.tools!==undefined&&node.tools!==null;
 const isSopRecord=node=>node.representation==='sop';
 const representationOf=node=>node.representation??'javascript';
 const REPRESENTATIONS={
- javascript:['JavaScript / native data','#efa66e'],sop:['SOP Lang','#65d7b4'],
- model:['SOP-BERT','#72a8ff'],catalog:['Catalog metadata','#b2a7d9'],
+ javascript:['JavaScript','#efa66e'],sop:['SOP Lang','#65d7b4'],
+ model:['Trained model','#72a8ff'],catalog:['Catalog data (JSON)','#b2a7d9'],
 };
 const representationMeta=node=>REPRESENTATIONS[representationOf(node)]??REPRESENTATIONS.javascript;
-const roleOf=node=>node.role??KINDS[kindOf(node)][0];
+const roleOf=node=>node.role??KINDS[kindOf(node)];
 const USAGE={available:['A','Catalog only','Catalog entry; runtime use has not been recorded.'], 'inspection-only':['I','Inspected only','Read for inspection only; this does not demonstrate runtime reasoning.'], 'runtime-read':['R','Source read','The runtime read this source. Access alone does not prove reasoning participation.']};
 let explorerSequence=0;
 const textOf=value=>value===null?'null':value===undefined?'undefined':typeof value==='string'?value:JSON.stringify(value);
 const valueType=value=>value===null?'null':Array.isArray(value)?'array':typeof value;
 const entriesOf=value=>value!==null&&typeof value==='object'?Object.entries(value):[];
 function svg(tag,attrs={},text){const node=document.createElementNS(NS,tag);for(const [key,value] of Object.entries(attrs))node.setAttribute(key,String(value));if(attrs['font-size'])node.style.fontSize=`calc(${attrs['font-size']}px * var(--worlds-font-scale,1))`;if(text!==undefined)node.textContent=text;return node;}
+const SHAPES={hexagon:'0,-8 7,-4 7,4 0,8 -7,4 -7,-4',diamond:'0,-8.5 8.5,0 0,8.5 -8.5,0',triangle:'0,-8 8,6.5 -8,6.5'};
+function shapeElement(shape,attrs){
+ if(shape==='circle')return svg('circle',{r:7,...attrs});
+ if(shape==='square')return svg('rect',{x:-6.5,y:-6.5,width:13,height:13,rx:2,...attrs});
+ return svg('polygon',{points:SHAPES[shape],...attrs});
+}
+// One renderer for map nodes and legend samples: the legend shows exactly the glyphs on the map.
+function glyphKey(node,usage){return [roleKindOf(node),representationOf(node),usage==='available'?'hollow':'filled'].join('|');}
 function worldGlyph(node,usage){
- const kind=kindOf(node),[,icon]=KINDS[kind],[,color]=representationMeta(node);
- const glyph=svg('g',{class:'p2-worlds-glyph','data-glyph-kind':kind,'data-usage':usage??'unknown',
-  'data-representation':representationOf(node),style:'--world-color:'+color});
- glyph.append(svg('circle',{r:8.5,fill:'#263b52',stroke:color,'stroke-width':1.5}),
-  svg('text',{x:0,y:4.5,'text-anchor':'middle',fill:'#dce4ef','font-size':13},icon));
- if(USAGE[usage]){
-  const [letter,badgeLabel]=USAGE[usage],badge=svg('text',{x:9,y:-8,fill:'#c6d5e4','font-size':7,'data-usage-badge':usage},letter);
-  badge.append(svg('title',{},badgeLabel));glyph.append(badge);
- }
+ const role=roleKindOf(node),[,color]=representationMeta(node),hollow=usage==='available';
+ const glyph=svg('g',{class:'p2-worlds-glyph','data-glyph-role':role,'data-representation':representationOf(node),'data-fill':hollow?'hollow':'filled',style:'--world-color:'+color});
+ glyph.append(shapeElement(ROLES[role].shape,{class:'p2-worlds-shape',fill:hollow?'none':color,'fill-opacity':hollow?1:.3,stroke:color,'stroke-width':1.6}));
  return glyph;
+}
+// Audit marks of a JavaScript component: D (domain logic in JS) or G (generic), and a dashed ring when it has no activity hook.
+const BADGES={'domain-logic':['D','#ff8a7a','Domain logic in JavaScript: it decides with words, kinds, areas, thresholds, orderings or fallbacks that belong in SOP rules or knowledge.'],generic:['G','#8fd8ae','Generic JavaScript: parsing, transport, rendering primitives, solver plumbing or storage, with no domain decision.']};
+function auditMarks(node){
+ if(!node.audit)return [];const [letter,color]=BADGES[node.audit.badge]??BADGES.generic,marks=[];
+ if(!node.audit.activityHook)marks.push(svg('circle',{r:10.5,class:'p2-worlds-silent-ring','data-silent-ring':''}));
+ const badge=svg('g',{class:'p2-worlds-badge',transform:'translate(7,-8)','data-badge':node.audit.badge});badge.append(svg('circle',{r:4.6,fill:color}),svg('text',{x:0,y:2.4,'text-anchor':'middle','font-size':6.5},letter));marks.push(badge);
+ return marks;
+}
+// Wraps a caption into at most two lines of the given character budget, ellipsizing the rest.
+function captionLines(text,budget){
+ const words=String(text).split(/\s+/).filter(Boolean),lines=[''];
+ for(const word of words){const next=(lines.at(-1)+' '+word).trim();if(next.length<=budget||!lines.at(-1))lines[lines.length-1]=next;else if(lines.length<2)lines.push(word);else{lines[1]+=' '+word;}}
+ return lines.map(line=>line.length>budget?line.slice(0,Math.max(1,budget-1))+'…':line);
 }
 function styles(){
  if(document.getElementById('p2-worlds-explorer-style'))return;
@@ -63,14 +71,15 @@ function styles(){
 .p2-worlds *{box-sizing:border-box}.p2-worlds button,.p2-worlds input,.p2-worlds-dialog button{font:inherit;color:inherit;border:1px solid #98acc044;border-radius:7px;background:#829ab512;padding:8px 11px}.p2-worlds button,.p2-worlds-dialog button{cursor:pointer}.p2-worlds button:hover,.p2-worlds-dialog button:hover{background:#829ab527}.p2-worlds button:disabled,.p2-worlds-dialog button:disabled{opacity:.35;cursor:default}.p2-worlds button:focus-visible,.p2-worlds [tabindex]:focus-visible,.p2-worlds-dialog button:focus-visible{outline:2px solid #81baff;outline-offset:2px}
 .p2-worlds-toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:12px 16px;border-bottom:1px solid #96abc02a}.p2-worlds-toolbar h2{font-size:17px;margin:0 10px 0 0}.p2-worlds-search{flex:1;min-width:160px;max-width:400px}.p2-worlds-status{font-size:12px;opacity:.75;margin-left:auto}.p2-worlds-status[role=alert]{color:#ffb6b6;opacity:1}
 .p2-worlds-legend{display:block;max-height:260px;overflow:auto;gap:15px;flex-wrap:wrap;padding:8px 16px;font-size:12px;color:#a4b5ca}.p2-worlds-legend summary{cursor:pointer;display:flex;align-items:center;gap:12px;flex-wrap:wrap;list-style-position:inside}.p2-worlds-legend-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px;margin:14px 0}.p2-worlds-legend-item{display:grid;grid-template-columns:28px minmax(0,1fr);gap:8px;padding:10px;border:1px solid #91a9c62b;border-radius:7px}.p2-worlds-legend-symbol{width:26px;height:26px}.p2-worlds-legend-item strong{color:#d8e5f5;font-size:13px}.p2-worlds-legend-item p{margin:5px 0 0;line-height:1.5;font-size:12px}.p2-worlds-legend-note{font-size:12px;line-height:1.5;margin:9px 0}.p2-worlds-help-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin:18px 0 24px}.p2-worlds-help-card{padding:16px 18px;border:1px solid #98acc033;border-radius:8px;min-width:0}.p2-worlds-help-card h3{font-size:15px}.p2-worlds-help-card ul{margin:8px 0 0;padding-left:19px;line-height:1.65}.p2-worlds-help-card li{margin:5px 0;overflow-wrap:anywhere}.p2-worlds-help-card p{font-size:13px;margin:5px 0}.p2-worlds-kind-note{font-size:13px!important;color:#b7c9df}
-.p2-worlds-graph-pane{position:relative;flex:1;min-height:240px;min-width:0;overflow:hidden;background:radial-gradient(circle at 50% 45%,#526f9a16,transparent 65%)}.p2-worlds-graph{display:block;width:100%;height:100%;touch-action:none;cursor:grab}.p2-worlds-graph:active{cursor:grabbing}.p2-worlds-graph text{font-family:inherit;pointer-events:none}.p2-worlds-node{cursor:pointer}.p2-worlds-node rect{fill:#202d3e;stroke:var(--world-color);stroke-width:1.5;transition:fill .15s,stroke-width .15s}.p2-worlds-node:hover rect{fill:#2b3d53;stroke-width:2.5}.p2-worlds-node.active rect{fill:#304e42;stroke-width:4;filter:drop-shadow(0 0 8px var(--world-color))}.p2-worlds-node.dim{opacity:.25}.p2-worlds-edge{stroke:#9ab0ca35;stroke-width:1.3;fill:none}.p2-worlds-edge.connected{stroke:#b8d5ff;stroke-width:2.2}.p2-worlds-edge-label{fill:#c4d4e8;font-size:12px;paint-order:stroke;stroke:#141b25;stroke-width:5;opacity:0}.p2-worlds-edge-label.connected{opacity:1}.p2-worlds-graph-hint{position:absolute;bottom:10px;left:16px;right:16px;font-size:11px;color:#90a4bf;pointer-events:none}.p2-worlds-empty{position:absolute;inset:40px;display:grid;place-items:center;font-size:15px;color:#a2b4cd;text-align:center}
+.p2-worlds-graph-pane{position:relative;flex:1;min-height:240px;min-width:0;overflow:hidden;background:radial-gradient(circle at 50% 45%,#526f9a16,transparent 65%)}.p2-worlds-graph{display:block;width:100%;height:100%;touch-action:none;cursor:grab}.p2-worlds-graph:active{cursor:grabbing}.p2-worlds-graph text{font-family:inherit;pointer-events:none}.p2-worlds-node{cursor:pointer}.p2-worlds-node.dim{opacity:.25}.p2-worlds-edge{stroke:#9ab0ca35;stroke-width:1.3;fill:none}.p2-worlds-edge.connected{stroke:#b8d5ff;stroke-width:2.2}.p2-worlds-graph-hint{position:absolute;top:12px;right:16px;max-width:calc(100% - 270px);text-align:right;font-size:11px;color:#90a4bf;pointer-events:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.p2-worlds-empty{position:absolute;inset:40px;display:grid;place-items:center;font-size:15px;color:#a2b4cd;text-align:center}
 .p2-worlds-log-grip{height:7px;cursor:row-resize;touch-action:none;background:#90aaca20;flex:0 0 7px}.p2-worlds-log-grip:after{content:"";display:block;width:40px;height:2px;margin:2px auto;background:#9bb4ce88;border-radius:2px}.p2-worlds-events{overflow:hidden;flex-shrink:0;border-top:1px solid #96abc02a;flex:0 0 124px;min-height:70px;display:flex;flex-direction:column}.p2-worlds-events header{flex-wrap:wrap;display:flex;align-items:center;gap:10px;padding:8px 16px;font-size:12px}.p2-worlds-events header button{padding:3px 7px;font-size:11px}.p2-worlds-playback-status{font-size:11px;opacity:.8}.p2-worlds-log-tools{display:flex;gap:8px;padding:3px 16px 7px}.p2-worlds-log-tools input{flex:1;min-width:80px;font-size:12px;padding:4px 8px}.p2-worlds-log-tools button{font-size:11px;padding:4px 8px}.p2-worlds-events.collapsed .p2-worlds-log-tools,.p2-worlds-events.collapsed .p2-worlds-event-list,.p2-worlds-events.collapsed .p2-worlds-log-grip{display:none}.p2-worlds-event-error{color:#ffb4b4}.p2-worlds-event-world,.p2-worlds-event-result,.p2-worlds-event-duration{color:#9fb4cf;font-size:11px;white-space:nowrap}.p2-worlds-live{color:#7ee0b8}.p2-worlds-event-count{opacity:.6;margin-left:auto}.p2-worlds-event-list{flex:1;min-height:0;overflow:auto;padding:0 16px 8px;display:flex;flex-direction:column;gap:3px}.p2-worlds-event{display:flex;gap:12px;align-items:baseline;text-align:left;width:100%;padding:5px 7px!important;border:0!important;background:transparent!important;font-size:12px!important}.p2-worlds-event time{opacity:.5;white-space:nowrap;font-size:11px}.p2-worlds-event-phase{color:#99bde8;min-width:70px}.p2-worlds-event-label{overflow-wrap:anywhere}.p2-worlds-event.empty{opacity:.6}
 .p2-worlds-dialog{color:#e4ebf5;font:inherit;position:fixed;inset:24px;margin:0;width:calc(100vw - 48px);height:calc(100dvh - 48px);max-width:none;max-height:none;padding:0;border:1px solid #627b97;border-radius:12px;background:#182231;color:#e4ebf5;box-shadow:0 25px 100px #0009;font:14px/1.5 system-ui,sans-serif;overflow:hidden}.p2-worlds-dialog-shell{height:100%;display:flex;flex-direction:column}.p2-worlds-dialog-header{display:flex;align-items:center;gap:10px;padding:16px 20px;border-bottom:1px solid #98acc033}.p2-worlds-dialog-header h2{margin:0;font-size:20px;line-height:1.3;overflow-wrap:anywhere}.p2-worlds-dialog-subtitle{font-size:12px;color:#a0b3cb;margin-top:4px;overflow-wrap:anywhere}.p2-worlds-dialog-heading{flex:1;min-width:0}.p2-worlds-dialog button{font-size:13px}.p2-worlds-detail-tabs{display:flex;gap:5px;padding:10px 20px;border-bottom:1px solid #98acc033;overflow:auto;flex:0 0 auto}.p2-worlds-detail-tabs button{white-space:nowrap;background:transparent;border-color:transparent}.p2-worlds-detail-tabs button[aria-selected=true]{background:#344c6b;color:#fff;border-color:#6c9cd0}.p2-worlds-detail-body{flex:1;overflow:auto;padding:22px 28px;min-height:0}.p2-worlds-detail-body h3{font-size:17px;margin:0 0 14px}.p2-worlds-detail-body p{max-width:1000px;font-size:15px;line-height:1.7;overflow-wrap:anywhere}.p2-worlds-detail-body dl{display:grid;grid-template-columns:minmax(100px,160px) minmax(0,1fr);gap:12px 20px;max-width:1100px;font-size:14px}.p2-worlds-detail-body dt{color:#9fb3ce}.p2-worlds-detail-body dd{margin:0;overflow-wrap:anywhere}.p2-worlds-detail-body pre{font:13px/1.7 ui-monospace,SFMono-Regular,Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere;tab-size:2;margin:16px 0}.p2-worlds-detail-summary{color:#a7bbd4;font-size:13px!important}.p2-worlds-note{border-left:3px solid #a8b7d4;padding:10px 16px;background:#829ab510}.p2-worlds-property-path{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin-bottom:16px}.p2-worlds-property-path button{padding:5px 9px;font-size:12px}.p2-worlds-property-table{border-collapse:collapse;width:100%;table-layout:fixed;font-size:14px}.p2-worlds-property-table th{text-align:left;color:#9fb3ce;font-size:12px;font-weight:500}.p2-worlds-property-table th,.p2-worlds-property-table td{padding:12px 10px;border-bottom:1px solid #98acc022;vertical-align:top;overflow-wrap:anywhere}.p2-worlds-property-table th:first-child{width:28%}.p2-worlds-property-table th:nth-child(2){width:13%}.p2-worlds-property-table button{text-align:left;font-size:14px;background:#7399c119;max-width:100%;overflow-wrap:anywhere}.p2-worlds-property-type{color:#a5b5cd;font:12px ui-monospace,monospace}.p2-worlds-scalar{white-space:pre-wrap;overflow-wrap:anywhere}.p2-worlds-tool-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}.p2-worlds-tool-card{margin:0 0 16px;padding:16px 18px;border:1px solid #98acc033;border-radius:8px;min-width:0}.p2-worlds-tool-card h4{font-size:15px;margin:0 0 8px;overflow-wrap:anywhere}.p2-worlds-tool-card p{font-size:13px;margin:5px 0}.p2-worlds-connection{display:grid;grid-template-columns:30px minmax(120px,200px) minmax(0,1fr);gap:12px;align-items:center;padding:13px 0;border-bottom:1px solid #98acc022}.p2-worlds-connection button{text-align:left;overflow-wrap:anywhere}.p2-worlds-connection-label{color:#a8bed8;font-size:13px}.p2-worlds-modal-actions{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.p2-worlds-nav-summary{font-size:13px;color:#a1b4ce;max-width:1000px;margin:0 0 18px}.p2-worlds-collection-member{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid #98acc022}.p2-worlds-collection-member button{text-align:left}
-.p2-worlds-node rect.p2-worlds-hit{fill:transparent;stroke:none}.p2-worlds-node:hover circle{fill:#47688b;stroke-width:2.5}.p2-worlds-node.active circle{fill:#6bc59e;stroke:#b8ffe0;stroke-width:3;filter:drop-shadow(0 0 7px #70e2b4)}.p2-worlds-edge{stroke:#a3bfd54d;stroke-width:.65;opacity:.36;pointer-events:stroke}.p2-worlds-graph.highlighting .p2-worlds-edge{opacity:.07}.p2-worlds-graph.highlighting .p2-worlds-edge.connected{stroke:#c3e0ff;opacity:1;stroke-width:1.4}.p2-worlds-graph .p2-worlds-edge.playing-edge{stroke:#a5ffca;opacity:1;stroke-width:2.3}.p2-worlds-graph [data-layout-group].active rect{stroke:#81c6a8;stroke-width:2}.p2-worlds-tooltip{position:absolute;z-index:3;max-width:340px;display:flex;flex-direction:column;gap:5px;padding:12px 14px;border:1px solid #7291b2;border-radius:8px;background:#1c2b3df5;box-shadow:0 5px 25px #0008;pointer-events:none;font-size:12px;overflow-wrap:anywhere}.p2-worlds-tooltip[hidden]{display:none}.p2-worlds-tooltip strong{font-size:14px}.p2-worlds-tooltip span{color:#adc0d8}.p2-worlds-dialog{inset:12px;width:calc(100vw - 24px);height:calc(100dvh - 24px)}
+.p2-worlds-node rect.p2-worlds-hit{fill:transparent;stroke:none}.p2-worlds-node:hover rect.p2-worlds-hit,.p2-worlds-node:focus rect.p2-worlds-hit{fill:#8fb4dc14}.p2-worlds-node:focus{outline:none}.p2-worlds-shape{transition:stroke-width .15s,fill-opacity .15s}.p2-worlds-node:hover .p2-worlds-shape{stroke-width:2.6}.p2-worlds-node.active .p2-worlds-shape{fill-opacity:.85;stroke-width:3;filter:drop-shadow(0 0 7px var(--world-color))}.p2-worlds-node.active .p2-worlds-caption{fill:#ffffff;font-weight:600}.p2-worlds-edge{fill:none;stroke:#a3bfd5;stroke-width:.8;opacity:.22;pointer-events:stroke}.p2-worlds-edge,.p2-worlds-edge.is-background{opacity:0}.p2-worlds-graph.show-links .p2-worlds-edge{opacity:.28}.p2-worlds-graph.show-links .p2-worlds-edge.is-background{opacity:.08}.p2-worlds-edge-label{fill:#e1ecf8;paint-order:stroke;stroke:#141b25;stroke-width:4px;pointer-events:none}.p2-worlds-graph.highlighting .p2-worlds-edge{opacity:.07}.p2-worlds-graph.highlighting .p2-worlds-edge.connected{stroke:#c3e0ff;opacity:1;stroke-width:1.4}.p2-worlds-graph .p2-worlds-edge.playing-edge{stroke:#a5ffca;opacity:1;stroke-width:2.3}.p2-worlds-graph [data-layout-group].active rect{stroke:#81c6a8;stroke-width:2}.p2-worlds-tooltip{position:absolute;z-index:3;max-width:340px;display:flex;flex-direction:column;gap:5px;padding:12px 14px;border:1px solid #7291b2;border-radius:8px;background:#1c2b3df5;box-shadow:0 5px 25px #0008;pointer-events:none;font-size:12px;overflow-wrap:anywhere}.p2-worlds-tooltip[hidden]{display:none}.p2-worlds-tooltip strong{font-size:14px}.p2-worlds-tooltip span{color:#adc0d8}.p2-worlds-dialog{inset:12px;width:calc(100vw - 24px);height:calc(100dvh - 24px)}
 .p2-worlds [hidden]{display:none!important}.p2-worlds-dialog{position:relative;inset:auto;margin:0;width:100%;height:100%;flex:1;min-height:0;border:0;border-radius:0;box-shadow:none;max-width:none;max-height:none}.p2-worlds-detail-breadcrumbs{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:8px 16px;border-bottom:1px solid #98acc022;max-height:105px;overflow:auto;flex:0 0 auto;font-size:12px}.p2-worlds-detail-breadcrumbs button{padding:4px 8px;font-size:12px}.p2-worlds-detail-breadcrumbs span{opacity:.6}.p2-worlds-detail-breadcrumbs strong{font-size:12px}.p2-worlds-dialog-header{flex-wrap:wrap}.p2-worlds-dialog-heading{min-width:160px}
-.p2-worlds-playback-bar[hidden]{display:none}.p2-worlds-events{flex:1;min-height:0;max-height:none;border-top:0}.p2-worlds-map-shell{flex:1;min-height:0;min-width:0;display:flex;overflow:hidden}.p2-worlds-legend{flex:0 0 126px;width:126px;max-height:none;overflow:auto;padding:12px;border-right:1px solid #98acc02b}.p2-worlds-legend.is-open{flex-basis:285px;width:285px}.p2-worlds-legend summary{display:flex;flex-direction:column;align-items:flex-start;gap:4px;cursor:pointer;font-size:calc(15px * var(--worlds-font-scale,1))}.p2-worlds-legend summary:before{content:'▸';font-size:14px}.p2-worlds-legend details[open]>summary:before{content:'▾'}.p2-worlds-legend-grid{display:flex;flex-direction:column;gap:12px;margin:16px 0}.p2-worlds-legend-item{display:grid;grid-template-columns:26px minmax(0,1fr);padding:12px 0;border:0;border-bottom:1px solid #91a9c62b;border-radius:0}.p2-worlds-legend-item strong{font-size:calc(15px * var(--worlds-font-scale,1))}.p2-worlds-legend-item p,.p2-worlds-legend-note{font-size:calc(14px * var(--worlds-font-scale,1));line-height:1.65}.p2-worlds-playback-bar{display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:9px 16px;border-bottom:1px solid #98acc02b;flex:0 0 auto}.p2-worlds-playback-bar button{font-size:calc(12px * var(--worlds-font-scale,1));padding:5px 8px}.p2-worlds-playback-bar[hidden]{display:none}.p2-worlds-events{flex:1;min-height:0;border:0;overflow:hidden}.p2-worlds-events header{padding:14px 20px;flex:0 0 auto}.p2-worlds-events h3{font-size:calc(19px * var(--worlds-font-scale,1));margin:0}.p2-worlds-events .p2-worlds-event{font-size:calc(14px * var(--worlds-font-scale,1))!important;padding:9px 8px!important}.p2-worlds-events time{font-size:calc(12px * var(--worlds-font-scale,1))}.p2-worlds-detail-body{font-size:calc(15px * var(--worlds-font-scale,1));line-height:1.65}.p2-worlds-detail-body p{font-size:calc(16px * var(--worlds-font-scale,1))}.p2-worlds-detail-body h3{font-size:calc(19px * var(--worlds-font-scale,1));margin:12px 0 16px}.p2-worlds-detail-body dl,.p2-worlds-property-table{font-size:calc(15px * var(--worlds-font-scale,1))}.p2-worlds-detail-body pre{font-size:calc(14px * var(--worlds-font-scale,1))}.p2-worlds-dialog button,.p2-worlds-detail-tabs button,.p2-worlds-detail-breadcrumbs button{font-size:calc(14px * var(--worlds-font-scale,1))}.p2-worlds-detail-breadcrumbs{font-size:calc(14px * var(--worlds-font-scale,1));padding:9px 16px}.p2-worlds-detail-breadcrumbs strong{font-size:inherit}.p2-worlds-help-card p,.p2-worlds-detail-summary{font-size:calc(14px * var(--worlds-font-scale,1))!important}.p2-worlds-toolbar button,.p2-worlds-toolbar input{font-size:calc(14px * var(--worlds-font-scale,1))}
+.p2-worlds-playback-bar[hidden]{display:none}.p2-worlds-events{flex:1;min-height:0;max-height:none;border-top:0}.p2-worlds-map-shell{flex:1;min-height:0;min-width:0;display:flex;overflow:hidden}.p2-worlds-legend{flex:0 0 126px;width:126px;max-height:none;overflow:auto;padding:12px;border-right:1px solid #98acc02b}.p2-worlds-legend.is-open{position:absolute;inset:8px auto 8px 8px;z-index:4;width:min(320px,calc(100% - 16px));max-height:calc(100% - 16px);border:1px solid #98acc044;border-radius:8px;background:#182231f5;box-shadow:0 10px 40px #0009}.p2-worlds-legend summary{display:flex;flex-direction:column;align-items:flex-start;gap:4px;cursor:pointer;font-size:calc(15px * var(--worlds-font-scale,1))}.p2-worlds-legend summary:before{content:'▸';font-size:14px}.p2-worlds-legend details[open]>summary:before{content:'▾'}.p2-worlds-legend-grid{display:flex;flex-direction:column;gap:2px;margin:10px 0}.p2-worlds-legend-item{display:grid;grid-template-columns:26px minmax(0,1fr);gap:8px;padding:7px 0;border:0;border-bottom:1px solid #91a9c62b;border-radius:0}.p2-worlds-legend-item strong{font-size:calc(13px * var(--worlds-font-scale,1))}.p2-worlds-legend-item p,.p2-worlds-legend-note{font-size:calc(12px * var(--worlds-font-scale,1));line-height:1.45;margin:2px 0 0}.p2-worlds-playback-bar{display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:9px 16px;border-bottom:1px solid #98acc02b;flex:0 0 auto}.p2-worlds-playback-bar button{font-size:calc(12px * var(--worlds-font-scale,1));padding:5px 8px}.p2-worlds-playback-bar[hidden]{display:none}.p2-worlds-events{flex:1;min-height:0;border:0;overflow:hidden}.p2-worlds-events header{padding:14px 20px;flex:0 0 auto}.p2-worlds-events h3{font-size:calc(19px * var(--worlds-font-scale,1));margin:0}.p2-worlds-events .p2-worlds-event{font-size:calc(14px * var(--worlds-font-scale,1))!important;padding:9px 8px!important}.p2-worlds-events time{font-size:calc(12px * var(--worlds-font-scale,1))}.p2-worlds-detail-body{font-size:calc(15px * var(--worlds-font-scale,1));line-height:1.65}.p2-worlds-detail-body p{font-size:calc(16px * var(--worlds-font-scale,1))}.p2-worlds-detail-body h3{font-size:calc(19px * var(--worlds-font-scale,1));margin:12px 0 16px}.p2-worlds-detail-body dl,.p2-worlds-property-table{font-size:calc(15px * var(--worlds-font-scale,1))}.p2-worlds-detail-body pre{font-size:calc(14px * var(--worlds-font-scale,1))}.p2-worlds-dialog button,.p2-worlds-detail-tabs button,.p2-worlds-detail-breadcrumbs button{font-size:calc(14px * var(--worlds-font-scale,1))}.p2-worlds-detail-breadcrumbs{font-size:calc(14px * var(--worlds-font-scale,1));padding:9px 16px}.p2-worlds-detail-breadcrumbs strong{font-size:inherit}.p2-worlds-help-card p,.p2-worlds-detail-summary{font-size:calc(14px * var(--worlds-font-scale,1))!important}.p2-worlds-toolbar button,.p2-worlds-toolbar input{font-size:calc(14px * var(--worlds-font-scale,1))}
 .p2-worlds-map-shell{position:relative}.p2-worlds-legend:not(.is-open){position:absolute;z-index:4;top:8px;left:8px;width:auto;max-width:calc(100% - 16px);padding:7px 10px;border:1px solid #98acc044;border-radius:8px;background:#182231ed;max-height:48px;overflow:hidden}.p2-worlds-legend:not(.is-open) summary{flex-direction:row;align-items:center;gap:7px}.p2-worlds-legend:not(.is-open) summary span{font-size:12px;color:#a4b5ca}.p2-worlds-legend.is-open{min-width:0}.p2-worlds-toolbar,.p2-worlds-playback-bar{flex-shrink:0}.p2-worlds-search{min-width:0}.p2-worlds-help-grid,.p2-worlds-tool-list{grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr))}
-.p2-worlds-source-files{display:flex;flex-wrap:wrap;gap:7px 16px;max-height:160px;overflow:auto;line-height:1.5;margin:14px 0}.p2-worlds-source-files a[aria-current=page]{color:#e3f0ff;font-weight:600}.p2-worlds-selected-source{font-size:14px;overflow-wrap:anywhere}.p2-worlds-glyph[data-usage=available] circle{fill:none}.p2-worlds-node[data-usage=available].active circle{fill:none}.p2-worlds-usage{font-size:14px!important;color:#b5c8dd}.p2-worlds a.p2-worlds-link{color:#a8cdf4;text-decoration:underline;text-underline-offset:3px;border:0!important;background:none!important;border-radius:0!important;padding:0!important;cursor:pointer;overflow-wrap:anywhere}.p2-worlds a.p2-worlds-link:hover{color:#e2efff}.p2-worlds-detail-breadcrumbs a{font-size:inherit}.p2-worlds-detail-body .p2-worlds-why{font-size:calc(17px * var(--worlds-font-scale,1));max-width:940px;margin:0 0 14px}.p2-worlds-detail-body .p2-worlds-help-card,.p2-worlds-tool-card{border:0;border-bottom:1px solid #98acc02b;border-radius:0;padding:12px 0;margin:0}.p2-worlds-detail-body .p2-worlds-note{border:0;background:none;padding:0}.p2-worlds-detail-tabs button{border:0!important;border-radius:0!important;background:none!important}.p2-worlds-detail-tabs button[aria-selected=true]{box-shadow:inset 0 -2px #81baff}.p2-worlds-node.active circle{fill:color-mix(in srgb,var(--world-color) 32%,#263b52);stroke:var(--world-color);filter:drop-shadow(0 0 7px var(--world-color))}
+.p2-worlds-source-files{display:flex;flex-wrap:wrap;gap:7px 16px;max-height:160px;overflow:auto;line-height:1.5;margin:14px 0}.p2-worlds-source-files a[aria-current=page]{color:#e3f0ff;font-weight:600}.p2-worlds-selected-source{font-size:14px;overflow-wrap:anywhere}.p2-worlds-usage{font-size:14px!important;color:#b5c8dd}.p2-worlds a.p2-worlds-link{color:#a8cdf4;text-decoration:underline;text-underline-offset:3px;border:0!important;background:none!important;border-radius:0!important;padding:0!important;cursor:pointer;overflow-wrap:anywhere}.p2-worlds a.p2-worlds-link:hover{color:#e2efff}.p2-worlds-detail-breadcrumbs a{font-size:inherit}.p2-worlds-detail-body .p2-worlds-why{font-size:calc(17px * var(--worlds-font-scale,1));max-width:940px;margin:0 0 14px}.p2-worlds-detail-body .p2-worlds-help-card,.p2-worlds-tool-card{border:0;border-bottom:1px solid #98acc02b;border-radius:0;padding:12px 0;margin:0}.p2-worlds-detail-body .p2-worlds-note{border:0;background:none;padding:0}.p2-worlds-detail-tabs button{border:0!important;border-radius:0!important;background:none!important}.p2-worlds-detail-tabs button[aria-selected=true]{box-shadow:inset 0 -2px #81baff}
+.p2-worlds-badge{pointer-events:none}.p2-worlds-badge text{font-weight:700;fill:#141b25}.p2-worlds-silent-ring{fill:none;stroke:#ffd27a;stroke-width:1;stroke-dasharray:2 2;opacity:.85}.p2-worlds-audit-table{width:100%;border-collapse:collapse;font-size:12px;margin:8px 0 14px}.p2-worlds-audit-table th,.p2-worlds-audit-table td{border-bottom:1px solid #96abc02a;padding:5px 7px;text-align:left;vertical-align:top;overflow-wrap:anywhere;white-space:pre-line}.p2-worlds-audit-table td.is-domain{color:#ffb2a6;font-weight:600}.p2-worlds-audit-table td.is-generic{color:#9fe0b8}.p2-worlds-audit-secret{color:#ffd27a}.p2-worlds-legend-badge{display:flex;align-items:center;gap:8px;margin:4px 0}.p2-worlds-legend-badge svg{width:20px;height:20px;flex:0 0 20px}
 @media(max-width:700px){.p2-worlds{min-height:0}.p2-worlds-toolbar h2{display:none}.p2-worlds-toolbar input{flex-basis:100%;max-width:none;width:100%}.p2-worlds-toolbar button{padding:7px 9px}.p2-worlds-toolbar{gap:5px}.p2-worlds-status{font-size:11px}.p2-worlds-playback-bar{gap:5px;padding:7px 10px}.p2-worlds-playback-bar .p2-worlds-live{font-size:12px}.p2-worlds-playback-status{flex-basis:100%;overflow-wrap:anywhere}.p2-worlds-playback-bar button{padding:5px 7px;font-size:12px}.p2-worlds-graph-pane{min-height:180px}.p2-worlds-legend.is-open{position:absolute;inset:8px auto 8px 8px;z-index:4;width:min(285px,calc(100% - 16px));max-height:calc(100% - 16px);border:1px solid #98acc044;border-radius:8px;background:#182231f5}.p2-worlds-detail-breadcrumbs{padding:7px 10px;max-height:90px}.p2-worlds-detail-body{padding:12px}.p2-worlds-detail-body dl{grid-template-columns:minmax(80px,30%) minmax(0,1fr);gap:8px}.p2-worlds-connection{grid-template-columns:20px minmax(65px,30%) minmax(0,1fr);gap:6px}.p2-worlds-events .p2-worlds-event{flex-wrap:wrap;gap:5px 9px}.p2-worlds-event-label{flex-basis:100%;text-align:left}.p2-worlds-event-world{white-space:normal;overflow-wrap:anywhere}.p2-worlds-log-tools{flex-wrap:wrap;padding:4px 10px}.p2-worlds-log-tools input{flex-basis:100%}}
 @media(max-width:700px){.p2-worlds-toolbar{padding:8px 10px;gap:6px;flex-wrap:nowrap;overflow-x:auto;flex:0 0 auto}.p2-worlds-toolbar>*{flex-shrink:0}.p2-worlds-toolbar .p2-worlds-search{flex:0 0 140px;min-width:140px}.p2-worlds-playback-bar{flex-wrap:nowrap;overflow-x:auto;padding:7px 10px}.p2-worlds-playback-bar>*{flex-shrink:0}.p2-worlds-playback-status{max-width:190px;white-space:normal}.p2-worlds-toolbar h2{font-size:15px}.p2-worlds-status{width:auto;margin-left:0;white-space:nowrap}.p2-worlds-dialog{inset:auto;width:100%;height:100%;border-radius:0}.p2-worlds-dialog-header{padding:12px;gap:6px}.p2-worlds-dialog-header h2{font-size:17px}.p2-worlds-detail-tabs{padding:8px}.p2-worlds-detail-body{padding:16px}.p2-worlds-property-table th:first-child{width:25%}.p2-worlds-property-table th:nth-child(2){width:18%}.p2-worlds-events{flex-basis:110px}}
 ` }));
@@ -84,14 +93,14 @@ export function createWorldsExplorer({load,subscribe,copy,loadSources}={}){
  const effectiveUsage=node=>node.usage==='available'&&sourceResponses.get(node.id)?.sources?.some(source=>source.language==='sop'&&typeof source.text==='string')?'inspection-only':node.usage;
  const hasSopSource=node=>isSopRecord(node)&&(typeof node.wires==='string'&&node.wires.trim().length>0||Array.isArray(node.sourceFiles)&&node.sourceFiles.length>0);
  let disposed=false,generation=0,data={nodes:[],edges:[]},query='',totalEvents=0,events=[],layoutGroups=new Map(),memberships=new Map(),positions=new Map();
- let legendOpen=false;let viewAdjusted=false;let graphView=null,currentDetail=null,currentPage='map',fontScale=1,graphBounds={w:900,h:500};
+ let legendOpen=false;let viewAdjusted=false;let graphView=null,currentDetail=null,currentPage='map',fontScale=1,graphBounds={x:0,y:0,w:900,h:500};
  const seenEvents=new Set(),active=new Map(),nodeElements=new Map(),groupElements=new Map();
  let playbackQueue=[],playing=null,playbackTimer=null,playbackStarted=0,playbackElapsed=0,paused=false,viewVisible=true,visibilityPaused=false,clockRunning=false,explicitReplay=false,replayCommand="",logFrame=null,logQuery='';
  const element=h('section',{id:'worlds-view-'+(++explorerSequence),class:'p2-worlds','aria-label':'Worlds architecture'}),status=h('span',{class:'p2-worlds-status',role:'status'}),search=h('input',{class:'p2-worlds-search',type:'search',placeholder:'Find a world, object or component…','aria-label':'Find a world or component'});
  const graph=svg('svg',{class:'p2-worlds-graph','aria-label':'Runtime architecture graph',role:'group'}),graphPane=h('div',{class:'p2-worlds-graph-pane'},graph),legend=h('aside',{class:'p2-worlds-legend','aria-label':'World kinds legend'}),eventList=h('div',{class:'p2-worlds-event-list',role:'log','aria-label':'Runtime activation events'}),eventCount=h('span',{class:'p2-worlds-event-count'});
  const detailBreadcrumbs=h('nav',{class:'p2-worlds-detail-breadcrumbs','aria-label':'Worlds location'});
- const toolbar=h('header',{class:'p2-worlds-toolbar'},h('h2',{text:'Worlds'}),search,button('Activity log',showActivityLog,{'aria-label':'Open activity log'}),button('Refresh',()=>void refresh()),button('−',()=>zoom(1.2),{'aria-label':'Zoom out'}),button('+',()=>zoom(1/1.2),{'aria-label':'Zoom in'}),button('Fit',fit),button('About this view',()=>openDetails({id:'ui:architecture-notes',label:'About the architecture view',kind:'component',implementation:'Read-only JavaScript projection',why:'Shows the actual implementation records and available definitions in one map. Colours identify JavaScript, SOP sources and SOP-BERT; reading source does not establish reasoning use.',description:'World pattern: reusable schema. Knowledge base: general content. World instance: concrete state. Application SOP world packages can contain declarations, methods and initial facts; they are not all pure world patterns. Background groups organize the map visually; each icon is one actual record. They are not additional SOP worlds.',details:{limitations:data.limitations??[],actualNodes:data.nodes.length,actualLinks:data.edges.length}})),status);
- const tooltip=h('div',{class:'p2-worlds-tooltip',role:'tooltip',hidden:true});graphPane.append(tooltip,h('div',{class:'p2-worlds-graph-hint',text:'All actual records · hover for identity · click for details · drag to pan · scroll to zoom'}));
+ const toolbar=h('header',{class:'p2-worlds-toolbar'},h('h2',{text:'Worlds'}),search,button('Activity log',showActivityLog,{'aria-label':'Open activity log'}),button('Refresh',()=>void refresh()),button('−',()=>zoom(1.2),{'aria-label':'Zoom out'}),button('+',()=>zoom(1/1.2),{'aria-label':'Zoom in'}),button('Fit',fit),button('All links',event=>{const on=graph.classList.toggle('show-links');event.currentTarget.setAttribute('aria-pressed',String(on));},{'aria-pressed':'false','data-worlds-links':''}),button('About this view',()=>openDetails({id:'ui:architecture-notes',label:'About the architecture view',kind:'component',implementation:'Read-only JavaScript projection',why:'One map of the records this session actually has, read as a snapshot between actions: the worker waits for a running turn before it reads, so during a long action the map shows the previous state until Refresh. Rows are layers: tools and interpreters; JavaScript on the runtime path (every runtime JavaScript component with its generality badge, D for domain logic in JavaScript, G for generic, and a dashed ring when it has no activity hook); instances and session state; knowledge Worlds; schemas. Columns are the tabs (Diagram, Drawing, Calendar, Documents, Avatar) plus Shared for what all tabs use. Shape says what a record is, colour how it is implemented (SOP Lang, JavaScript, trained model, catalog data); the legend lists only the symbols on this map.',description:'There is no separate Session runtime layer any more. Every tab keeps its state as an SOP instance World, and so do the tab registry and the undo/redo journal, so they sit in the instances layer. The few records still kept as JavaScript (such as the application shell state, chat history and UI training pairs) sit next to them as session records, drawn as triangles so they are not mistaken for SOP Worlds. The world loader is a tool, so it sits with the tools; session memory is part of the Session (turn coordinator) and is listed inside it. Source files and schemas that belong to one World are listed inside that World. Layers and columns only arrange the map; they are not additional SOP Worlds. Activity retention: the worker and this page each keep the last 300 activity events; Copy retained log copies the page\'s 300.',details:{limitations:data.limitations??[],runtimeAudit:data.runtimeAudit??null,actualNodes:data.nodes.length,actualLinks:data.edges.length}})),status);
+ const tooltip=h('div',{class:'p2-worlds-tooltip',role:'tooltip',hidden:true});graphPane.append(tooltip,h('div',{class:'p2-worlds-graph-hint',text:'Snapshot read between actions (Refresh reads it again) · point at a record to see its links · click for details · drag to pan · scroll to zoom'}));
  const playbackStatus=h('span',{class:'p2-worlds-playback-status',role:'status','aria-live':'off'}),pauseButton=button('Pause',togglePause),logFilter=h('input',{type:'search',placeholder:'Filter log…','aria-label':'Filter activity log'}),logPanel=h('section',{class:'p2-worlds-events',role:'region','aria-label':'Activity log',hidden:true});
  const playbackBar=h('div',{class:'p2-worlds-playback-bar'},h('span',{class:'p2-worlds-live',text:'Recorded activity playback'}),playbackStatus,pauseButton,button('Stage details',showPlaybackStage),button('Clear playback',stopPlayback));
  logPanel.append(h('header',{},h('h3',{text:'Activity log'}),eventCount),h('div',{class:'p2-worlds-log-tools'},logFilter,...(copy?[button('Copy retained log',async()=>{try{await copy(JSON.stringify(events,null,2));}catch(error){setStatus('Copy log failed: '+error.message,true);}})]:[])),eventList);
@@ -105,37 +114,57 @@ export function createWorldsExplorer({load,subscribe,copy,loadSources}={}){
  const actualNode=id=>data.nodes.find(node=>node.id===id);
  const getNode=id=>actualNode(id);
  const related=node=>data.edges.filter(edge=>edge.from===node.id||edge.to===node.id);
- const matches=node=>!query||[node.id,node.label,node.displayName,node.help?.title,node.kind,node.description,node.implementation].some(value=>String(value??'').toLowerCase().includes(query));
- // Shared hubs are labelled on the map: the library, the reader, the loader and the interpreters every tab uses.
- const isSharedHub=id=>id===data.centralNodeId||['component:library','component:reader','runtime:registry','component:sop-area','component:sop-world-host','component:problem-compiler','provider:internal-search','provider:z3'].includes(id);
-
- // What the Session runtime layer holds, from the actual records: native state appears only for worlds without an authoritative SOP state.
- function sessionRuntimeDescription(){
-  const native=data.nodes.filter(node=>node.id.startsWith('native:')).map(node=>displayName(node)),areas=new Set(declaredAreas().map(area=>area.world));
-  const authoritative=data.nodes.filter(node=>node.kind==='instance'&&areas.has(node.details?.world)&&String(node.implementation??'').startsWith('Authoritative')).map(node=>actualNode('world:'+node.details.world)?.details?.tab?.title??node.details.world);
-  return 'JavaScript records of this session, not SOP Worlds: the world loader registry (which packages are loaded); session memory (conversational references, the global undo/redo journal, retained execution evidence, reader and placement settings); the retained execution journal; the page\'s UI training pairs and chat/event history; native state only for worlds without an authoritative SOP state: '
-   +(native.length?native.join(', '):'none')+'.'+(authoritative.length?' Editor tabs whose state is an authoritative SOP World: '+authoritative.join(', ')+'.':'')+' Records that carry SOP content link to the World that shows it.';
+ // An event lights the records it names and every audited JavaScript component that declares the event's operation
+ // as its own activity hook (src/dialog/runtime-component-registry.mjs); nothing else is inferred.
+ let operationOwners=new Map();
+ const indexOperations=()=>{operationOwners=new Map();for(const node of data.nodes)for(const operation of node.audit?.activity?.operations??[]){if(!operationOwners.has(operation))operationOwners.set(operation,[]);operationOwners.get(operation).push(node.id);}};
+ const declaredEmitters=event=>typeof event?.operation==='string'?(operationOwners.get(event.operation)??[]).filter(id=>!(event.nodeIds??[]).includes(id)):[];
+ const litIds=event=>[...new Set([...(event.nodeIds??[]),...declaredEmitters(event)])];
+ const matches=node=>!query||[node.id,node.label,node.displayName,node.help?.title,node.kind,node.description,node.implementation,node.audit?.badge==='domain-logic'?'domain logic in js':node.audit?'generic js':null,...(node.audit?.modules??[]).map(module=>module.path)].some(value=>String(value??'').toLowerCase().includes(query));
+ // Shared records are ordered first in the Shared column: the registry and session Worlds, then the components every tab uses.
+ const SHARED_ORDER=['project:application','instance:app.history','component:reasoner','component:reader','component:request-admission','component:control-interpreter','execution:module:declared-execution','component:sop-area','component:sop-world-host','component:problem-compiler','provider:z3','provider:internal-search','component:library','runtime:registry','runtime:activity-bus','knowledge:catalog'];
+ const sharedRank=id=>{const index=SHARED_ORDER.indexOf(id);return index<0?SHARED_ORDER.length:index;};
+ // Folding is presentation only: a record declared (partOf) or structurally used as a part of one owner is listed inside that owner.
+ let folds=new Map(),parts=new Map(),lastSize=null,edgeLabelLayer=null;
+ const visibleOf=id=>folds.get(id)??id;
+ function computeFolds(){
+  const byId=new Map(data.nodes.map(node=>[node.id,node])),parent=new Map(),incoming=new Map(),outgoing=new Map();
+  const add=(map,key,value)=>{if(!map.has(key))map.set(key,new Set());map.get(key).add(value);};
+  for(const edge of data.edges)if(byId.has(edge.from)&&byId.has(edge.to)&&edge.from!==edge.to){add(incoming,edge.to,edge.from);add(outgoing,edge.from,edge.to);}
+  const isPart=node=>node?.kind==='schema'||node?.id.startsWith('knowledge-file:');
+  for(const node of data.nodes){
+   if(typeof node.partOf==='string'&&byId.has(node.partOf)&&node.partOf!==node.id){parent.set(node.id,node.partOf);continue;}
+   // A declaration source used by exactly one knowledge or policy World is shown inside that World.
+   if(!isPart(node)||[...(outgoing.get(node.id)??[])].some(id=>!isPart(byId.get(id))))continue;
+   const owners=[...(incoming.get(node.id)??[])];
+   if(owners.length===1&&byId.get(owners[0]).kind==='knowledge')parent.set(node.id,owners[0]);
+  }
+  folds=new Map();parts=new Map();
+  for(const id of parent.keys()){
+   let root=id;const seen=new Set([id]);
+   for(const step of data.nodes){if(!parent.has(root))break;root=parent.get(root);if(seen.has(root)){root=id;break;}seen.add(root);}
+   if(root!==id){folds.set(id,root);if(!parts.has(root))parts.set(root,[]);parts.get(root).push(id);}
+  }
+ }
+ // What the instances layer holds, from the actual records.
+ function instancesDescription(){
+  const visible=data.nodes.filter(node=>!folds.has(node.id)),names=role=>visible.filter(node=>roleKindOf(node)===role).map(displayName);
+  const folded=data.nodes.filter(node=>folds.has(node.id)&&roleKindOf(node)==='runtime').map(node=>displayName(node)+' is part of '+displayName(actualNode(folds.get(node.id))));
+  const worlds=names('instance'),records=names('runtime');
+  return 'Current state. Instance Worlds (circles) hold SOP facts: '+(worlds.length?worlds.join(', '):'none')+'. Session records (triangles) are still kept as JavaScript data, not as SOP Worlds: '+(records.length?records.join(', '):'none')+'.'+(folded.length?' '+folded.join('; ')+'.':'');
  }
  function organize(){
   layoutGroups=new Map();memberships=new Map();
-  const layerOf=node=>{
-   if(node.id==='runtime:registry')return 'runtime';
-   if(isSharedHub(node.id))return 'tools';
-   if(['instance','project'].includes(node.kind))return 'instances';
-   if(node.kind==='schema')return 'schemas';
-   if(node.kind==='knowledge')return 'knowledge';
-   if(['runtime','structure','episode'].includes(node.kind))return 'runtime';
-   return 'tools';
-  };
   const definitions=[
-   ['tools','Tools/Interpreters','Tool packages and the components that read, validate or execute their commands: the SOP area interpreter and SOP world host of every tab, the tab tool adapters, the std.problem compiler with its search providers (internal search, Z3), the SOP-BERT reader, request admission and the SOP tool command reader'],
-   ['instances','World instances','Operational SOP state and separately identified observations'],
-   ['runtime','Session runtime (JavaScript)',sessionRuntimeDescription()],
-   ['knowledge','Knowledge Worlds','Published knowledge worlds of the catalog, their declared source files and the operational policy worlds; each record says whether its sources were read'],
-   ['schemas','Schemas and legends','Types, slots, rules and source declarations'],
+   ['tools','Tools and interpreters','What reads, checks or runs commands: each tab\'s tool package and tool host, the SOP area interpreter and SOP world host, the placement compiler with its solvers (internal search, Z3), the SOP-BERT reader, request admission, the session (turn coordinator), the world loader and the activity bus.'],
+   ['code','JavaScript on the runtime path','Every JavaScript component a chat turn or a UI action runs, from the declared component registry. Badge D: it makes domain decisions (words, kinds, areas, thresholds, orderings, fallbacks) that belong in SOP rules or knowledge; badge G: generic infrastructure. A dashed ring: no activity hook, so it can act without lighting up. Components already shown in another band carry the same badge there.'],
+   ['instances','Instances and session state',instancesDescription()],
+   ['knowledge','Knowledge Worlds','Published catalog Worlds and the operational policy Worlds. A catalog World lists its source files in its details; a hollow symbol means none of its sources were read in this session.'],
+   ['schemas','Schemas and legends','Types, slots and rules that validate the tab Worlds. A schema used by exactly one knowledge or policy World is listed inside that World.'],
   ];
+  const layerOf={tool:'tools',instance:'instances',runtime:'instances',knowledge:'knowledge',schema:'schemas'};
   for(const [id,label,description]of definitions)layoutGroups.set(id,{id,label,description,members:[]});
-  for(const node of data.nodes){const id=layerOf(node);layoutGroups.get(id).members.push(node.id);memberships.set(node.id,id);}
+  for(const node of data.nodes){const shown=actualNode(visibleOf(node.id))??node,id=shown.layer==='code'?'code':layerOf[roleKindOf(shown)];if(!folds.has(node.id))layoutGroups.get(id).members.push(node.id);memberships.set(node.id,id);}
  }
  function declaredAreas(){
   const supplied=Array.isArray(data.areas)?data.areas:[],unique=new Map();
@@ -155,72 +184,130 @@ export function createWorldsExplorer({load,subscribe,copy,loadSources}={}){
   return owners;
  }
  function applyView(){if(graphView)graph.setAttribute('viewBox',`${graphView.x} ${graphView.y} ${graphView.w} ${graphView.h}`);}
- function fit(){viewAdjusted=false;graphView={x:-20,y:-20,w:graphBounds.w+40,h:graphBounds.h+40};applyView();}
+ function fit(){viewAdjusted=false;graphView={...graphBounds};applyView();}
  function zoom(factor){fontScale=Math.max(.85,Math.min(1.6,fontScale*(factor<1?1.06:1/1.06)));element.style.setProperty('--worlds-font-scale',String(fontScale));if(!graphView)return;viewAdjusted=true;const view=graphView,w=view.w*factor,height=view.h*factor;if(w<150||w>18000)return;graphView={x:view.x+(view.w-w)/2,y:view.y+(view.h-height)/2,w,h:height};applyView();}
- function draw(){
-  organize();positions=new Map();nodeElements.clear();groupElements.clear();graph.replaceChildren();tooltip.hidden=true;
-  const defs=svg('defs'),marker=svg('marker',{id:'p2-worlds-arrow',viewBox:'0 0 10 10',refX:9,refY:5,markerWidth:4,markerHeight:4,orient:'auto-start-reverse'});marker.append(svg('path',{d:'M 0 0 L 10 5 L 0 10 z',fill:'#91a5bd'}));const lit=marker.cloneNode(true);lit.id='p2-worlds-active-arrow';lit.firstChild.setAttribute('fill','#a5ffca');defs.append(marker,lit);graph.append(defs);
-  const areas=declaredAreas(),owners=domainPlacement(areas),labelWidth=190,sharedWidth=270,domainWidth=170,gap=22,headerHeight=34;
-  const columns=[{world:null,label:'Shared / unassigned',x:labelWidth,width:sharedWidth},...areas.map((area,index)=>({...area,x:labelWidth+sharedWidth+index*domainWidth,width:domainWidth}))],width=labelWidth+sharedWidth+areas.length*domainWidth;
-  for(const column of columns)graph.append(svg('text',{x:column.x+12,y:18,fill:'#c3d4e9','font-size':14,'font-weight':600},column.label));
-  let y=headerHeight;
-  for(const layer of layoutGroups.values()){
-   const central=layer.members.filter(isSharedHub),cells=columns.map(column=>({...column,members:layer.members.filter(id=>!central.includes(id)&&(owners.get(id)??null)===column.world),count:Math.max(1,Math.floor((column.width-26)/gap))}));
-   const rows=Math.max(1,...cells.map(cell=>Math.ceil(cell.members.length/cell.count))),top=central.length?58:0,height=Math.max(100,rows*gap+42+top),background=svg('g',{'data-layout-group':layer.id,style:'--world-color:#8eaecf'});
-   background.append(svg('rect',{x:0,y,width,height,rx:10,fill:layer.id==='instances'?'#1b2c35':'#1c2838','fill-opacity':'.72',stroke:'#6c86a23f'}));
-   const words=layer.label.split(' '),lines=[''];for(const word of words){if((lines.at(-1)+' '+word).trim().length>20)lines.push(word);else lines[lines.length-1]=(lines.at(-1)+' '+word).trim();}lines.forEach((line,index)=>background.append(svg('text',{x:15,y:y+25+index*19,fill:'#c4d7ef','font-size':15,'font-weight':600},line)));
-   const about=svg('text',{x:15,y:y+25+lines.length*19+2,fill:'#9fc3ff','font-size':12,'text-decoration':'underline',class:'p2-worlds-layer-about',tabindex:0,role:'button','data-layer-about':layer.id,style:'cursor:pointer'},'What is in this layer?');
-   const openLayer=()=>openDetails({id:'ui:layer:'+layer.id,label:layer.label,kind:'component',implementation:'UI layout group',why:layer.description,description:layer.description,details:{records:layer.members.map(id=>displayName(actualNode(id)))}});
-   about.addEventListener('click',event=>{event.stopPropagation();openLayer();});about.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();openLayer();}});background.append(about);background.append(svg('text',{x:15,y:y+height-15,fill:'#8fa5c0','font-size':11},`${layer.members.length} actual records`),svg('title',{},layer.description+' — UI layout only, not an additional runtime world.'));
-   graph.append(background);groupElements.set(layer.id,background);
-   for(const cell of cells){graph.append(svg('path',{d:`M ${cell.x} ${y+top+8} V ${y+height-8}`,stroke:'#91a9c61a'}));cell.members.forEach((id,index)=>positions.set(id,{x:cell.x+18+(index%cell.count)*gap,y:y+top+23+Math.floor(index/cell.count)*gap}));}
-   central.forEach((id,index)=>{
-    const span=width-labelWidth,x=labelWidth+span/2+(index-(central.length-1)/2)*Math.min(142,span/(central.length+1)),hubY=y+20;
-    positions.set(id,{x,y:hubY});
-    graph.append(svg('text',{'data-hub-label':id,x,y:hubY+24,'text-anchor':'middle',fill:'#c3d4e9','font-size':12},displayName(actualNode(id))));
+ function measuredSize(){const w=graphPane.clientWidth,height=graphPane.clientHeight;return w>=50&&height>=50?{w,h:height}:null;}
+ // The map is laid out in the pane's own pixels: columns and rows fill the available width and height.
+ function plan(size,areas,owners){
+  const visible=data.nodes.filter(node=>!folds.has(node.id)),order=(a,b)=>sharedRank(a.id)-sharedRank(b.id)||ROLE_ORDER.indexOf(roleKindOf(a))-ROLE_ORDER.indexOf(roleKindOf(b))||a.id.split(':')[0].localeCompare(b.id.split(':')[0])||displayName(a).localeCompare(displayName(b));
+  const columns=[{world:null,label:'Shared by all tabs'},...areas];
+  const bands=[...layoutGroups.values()].filter(layer=>layer.members.length).map(layer=>{const cells=columns.map(column=>({column,members:visible.filter(node=>memberships.get(node.id)===layer.id&&(owners.get(node.id)??null)===column.world).sort(order)}));return {layer,cells,span:!areas.length||cells.slice(1).every(cell=>!cell.members.length)};});
+  const pad=10,headerH=(areas.length?24:4)+34,bandHead=24,bandPad=6,bandGap=8,W=size.w-2*pad;
+  const attempt=(sw,rh,tabW)=>{
+   const sharedW=W-tabW*areas.length;
+   let rows=0;const laid=bands.map(band=>{
+    const cells=band.span?[{...band.cells[0],x:pad,width:W}]:band.cells.map((cell,index)=>({...cell,x:index?pad+sharedW+(index-1)*tabW:pad,width:index?tabW:sharedW}));
+    for(const cell of cells){cell.perRow=Math.max(1,Math.floor(cell.width/sw));cell.rows=Math.ceil(cell.members.length/cell.perRow);}
+    const bandRows=Math.max(0,...cells.map(cell=>cell.rows));rows+=bandRows;return {...band,cells,rows:bandRows};
    });
-   y+=height+17;
+   const height=headerH+laid.reduce((sum,band)=>sum+bandHead+bandPad*2+Math.max(band.rows,.6)*rh,0)+bandGap*(laid.length-1)+pad*2;
+   return {sw,rh,tabW,sharedW,laid,rows,height};
+  };
+  let chosen=null;
+  search:for(const [sw,rh]of [[190,30],[170,30],[150,30],[132,30],[118,28],[104,26],[92,24]]){
+   const widths=areas.length?[...new Set([Math.min(sw,(W-sw)/areas.length),130,110,92].map(width=>Math.floor(Math.min(sw,width))).filter(width=>width>=Math.min(92,sw)&&W-width*areas.length>=sw))]:[0];
+   for(const tabW of widths.length?widths:[Math.max(40,Math.floor((W-sw)/areas.length))]){chosen=attempt(sw,rh,tabW);if(chosen.height<=size.h)break search;}
   }
-  graphBounds={w:Math.max(700,width),h:y};
-  for(const edge of data.edges){const a=positions.get(edge.from),b=positions.get(edge.to);if(!a||!b)continue;const length=Math.hypot(b.x-a.x,b.y-a.y)||1,ux=(b.x-a.x)/length,uy=(b.y-a.y)/length;const d=edge.from===edge.to?`M ${a.x+7} ${a.y-7} C ${a.x+27} ${a.y-35}, ${a.x-27} ${a.y-35}, ${a.x-7} ${a.y-9}`:`M ${a.x+ux*10} ${a.y+uy*10} Q ${(a.x+b.x)/2+12} ${(a.y+b.y)/2-15} ${b.x-ux*11} ${b.y-uy*11}`,path=svg('path',{d,class:'p2-worlds-edge','marker-end':'url(#p2-worlds-arrow)','data-edge-from':edge.from,'data-edge-to':edge.to});path.append(svg('title',{},`${actualNode(edge.from)?.label??edge.from} → ${edge.label??'connected'} → ${actualNode(edge.to)?.label??edge.to}`));graph.append(path);}
+  // Spare height widens the rows (up to 46 px) so the map uses the whole pane.
+  if(chosen.height<size.h&&chosen.rows)chosen=attempt(chosen.sw,Math.min(46,chosen.rh+(size.h-chosen.height)/chosen.rows),chosen.tabW);
+  return {...chosen,columns,pad,headerH,bandHead,bandPad,bandGap,W};
+ }
+ // The status line can change the pane size while drawing; a second pass lays the map out in the final size.
+ function draw(){for(const pass of [1,2]){drawPass();const settled=measuredSize();if(!settled||lastSize&&Math.abs(settled.w-lastSize.w)<=2&&Math.abs(settled.h-lastSize.h)<=2)break;}}
+ function drawPass(){
+  computeFolds();organize();positions=new Map();nodeElements.clear();groupElements.clear();graph.replaceChildren();tooltip.hidden=true;
+  const defs=svg('defs'),marker=svg('marker',{id:'p2-worlds-arrow',viewBox:'0 0 10 10',refX:9,refY:5,markerWidth:4,markerHeight:4,orient:'auto-start-reverse'});marker.append(svg('path',{d:'M 0 0 L 10 5 L 0 10 z',fill:'#91a5bd'}));const lit=marker.cloneNode(true);lit.id='p2-worlds-active-arrow';lit.firstChild.setAttribute('fill','#a5ffca');defs.append(marker,lit);graph.append(defs);
+  const measured=measuredSize(),size=measured??{w:900,h:560};lastSize=measured;
+  const areas=declaredAreas(),owners=domainPlacement(areas),layout=plan(size,areas,owners),{pad,headerH,bandHead,bandPad,bandGap,W,rh}=layout;
+  const background=svg('g',{class:'p2-worlds-backgrounds'}),edgeLayer=svg('g',{class:'p2-worlds-edges'}),nodeLayer=svg('g',{class:'p2-worlds-nodes'});edgeLabelLayer=svg('g',{class:'p2-worlds-edge-labels'});graph.append(background,edgeLayer,nodeLayer,edgeLabelLayer);
+  if(areas.length){const first=layout.laid.find(band=>!band.span)??layout.laid[0];for(const cell of first.cells.length>1?first.cells:[{x:pad,width:W,column:{label:'Shared by all tabs'}},...areas.map((area,index)=>({x:pad+layout.sharedW+index*layout.tabW,width:layout.tabW,column:area}))])background.append(svg('text',{x:cell.x+10,y:pad+headerH-8,fill:'#c3d4e9','font-size':13,'font-weight':600,'data-column-label':cell.column.world??'shared'},cell.column.label));}
+  const captionOf=(node,column)=>{let text=displayName(node);if(column.world&&typeof column.label==='string'&&text.toLowerCase().startsWith(column.label.toLowerCase()+' ')){text=text.slice(column.label.length+1);text=text.charAt(0).toUpperCase()+text.slice(1);}return text;};
+  let y=pad+headerH;const captions=new Map();
+  for(const band of layout.laid){
+   const layer=band.layer,height=bandHead+bandPad*2+Math.max(band.rows,.6)*rh,group=svg('g',{'data-layout-group':layer.id,style:'--world-color:#8eaecf'});
+   group.append(svg('rect',{x:pad,y,width:W,height,rx:8,fill:layer.id==='instances'?'#1b2c35':'#1c2838','fill-opacity':'.72',stroke:'#6c86a23f'}));
+   const title=svg('text',{x:pad+10,y:y+17,fill:'#d2e1f3','font-size':13,'font-weight':600},layer.label),count=svg('text',{x:pad+18+layer.label.length*7.4,y:y+17,fill:'#8fa5c0','font-size':11},`${layer.members.length} records`);
+   const about=svg('text',{x:pad+26+layer.label.length*7.4+((String(layer.members.length).length+8)*6),y:y+17,fill:'#9fc3ff','font-size':11,'text-decoration':'underline',class:'p2-worlds-layer-about',tabindex:0,role:'button','data-layer-about':layer.id,style:'cursor:pointer'},'What is in this layer?');
+   const openLayer=()=>openDetails({id:'ui:layer:'+layer.id,label:layer.label,kind:'component',implementation:'UI layout group',why:layer.description,description:layer.description,details:{records:layer.members.map(id=>displayName(actualNode(id)))}});
+   about.addEventListener('click',event=>{event.stopPropagation();openLayer();});about.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();openLayer();}});
+   group.append(title,count,about,svg('title',{},layer.description+' — UI layout only, not an additional runtime world.'));background.append(group);groupElements.set(layer.id,group);
+   const top=y+bandHead+bandPad;
+   band.cells.forEach((cell,index)=>{
+    if(!band.span&&index)background.append(svg('path',{d:`M ${cell.x} ${top-2} V ${y+height-6}`,stroke:'#91a9c61f'}));
+    const pitch=cell.width/cell.perRow;
+    cell.members.forEach((node,position)=>{positions.set(node.id,{x:cell.x+16+(position%cell.perRow)*pitch,y:top+Math.floor(position/cell.perRow)*rh+rh/2,pitch});captions.set(node.id,captionOf(node,cell.column));});
+   });
+   y+=height+bandGap;
+  }
+  const total=y-bandGap+pad;
+  graphBounds=total<=size.h?{x:0,y:0,w:size.w,h:size.h}:{x:-(total*size.w/size.h-size.w)/2,y:0,w:total*size.w/size.h,h:total};
+  // One line per related pair of shown records; lines at busy hubs stay hidden until a record is pointed at.
+  const pairs=new Map();
+  for(const edge of data.edges){const from=visibleOf(edge.from),to=visibleOf(edge.to);if(from===to||!positions.has(from)||!positions.has(to))continue;const key=from+'\n'+to;if(!pairs.has(key))pairs.set(key,{from,to,labels:[]});const labels=pairs.get(key).labels,label=edge.label??'connected';if(!labels.includes(label))labels.push(label);}
+  const degree=new Map();for(const {from,to}of pairs.values())for(const id of [from,to])degree.set(id,(degree.get(id)??0)+1);
+  for(const pair of pairs.values()){
+   const a=positions.get(pair.from),b=positions.get(pair.to),length=Math.hypot(b.x-a.x,b.y-a.y)||1,ux=(b.x-a.x)/length,uy=(b.y-a.y)/length,bend=Math.min(36,length*.12);
+   const cx=(a.x+b.x)/2-uy*bend,cy=(a.y+b.y)/2+ux*bend,busy=(degree.get(pair.from)??0)>10||(degree.get(pair.to)??0)>10;
+   const path=svg('path',{d:`M ${a.x+ux*9} ${a.y+uy*9} Q ${cx} ${cy} ${b.x-ux*10} ${b.y-uy*10}`,class:'p2-worlds-edge'+(busy?' is-background':''),'marker-end':'url(#p2-worlds-arrow)','data-edge-from':pair.from,'data-edge-to':pair.to,'data-edge-label':pair.labels.join(' · '),'data-mid':`${(a.x+2*cx+b.x)/4},${(a.y+2*cy+b.y)/4}`});
+   path.append(svg('title',{},`${displayName(actualNode(pair.from))} → ${displayName(actualNode(pair.to))}: ${pair.labels.join(' · ')}`));edgeLayer.append(path);
+  }
   for(const node of data.nodes){
-   const position=positions.get(node.id),type=roleOf(node),usage=effectiveUsage(node),[,color]=representationMeta(node);
+   const position=positions.get(node.id);if(!position)continue;
+   const type=roleOf(node),usage=effectiveUsage(node),[,color]=representationMeta(node),inside=parts.get(node.id)?.length??0;
    const group=svg('g',{transform:'translate('+position.x+','+position.y+')',class:'p2-worlds-node',tabindex:0,role:'button',
     'aria-label':displayName(node)+', '+type+', '+(node.implementation??''),'data-world-node':node.id,'data-world-role':type,
-    'data-layer':memberships.get(node.id),'data-representation':representationOf(node),'data-usage':usage??'unknown',style:'--world-color:'+color});
-   group.classList.toggle('active',active.has(node.id));group.classList.toggle('dim',!matches(node));
-   group.append(svg('rect',{x:-12,y:-12,width:24,height:24,rx:5,fill:'transparent',stroke:'none',class:'p2-worlds-hit'}),worldGlyph(node,usage),
-    svg('title',{},[node.label??node.id,node.id,type,node.implementation,node.description].filter(Boolean).join('\n')));
-   const activate=()=>openDetails(node);group.addEventListener('click',activate);group.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();activate();}});group.addEventListener('pointerenter',event=>showTooltip(node,event));group.addEventListener('pointermove',event=>positionTooltip(event));group.addEventListener('pointerleave',()=>{tooltip.hidden=true;highlight(null);});group.addEventListener('focus',()=>highlight(node.id));group.addEventListener('blur',()=>highlight(null));nodeElements.set(node.id,group);graph.append(group);
+    'data-layer':memberships.get(node.id),...(node.audit?{'data-audit-badge':node.audit.badge,'data-activity-hook':node.audit.activityHook?'declared':'none'}:{}),'data-representation':representationOf(node),'data-usage':usage??'unknown',style:'--world-color:'+color});
+   group.classList.toggle('active',active.has(node.id));
+   const budget=Math.max(6,Math.floor((position.pitch-30)/6.1)),lines=captionLines(captions.get(node.id),budget);
+   const label=svg('text',{x:13,y:lines.length>1?-2:4,fill:'#d6e2f0','font-size':11,class:'p2-worlds-caption','data-caption':''});
+   lines.forEach((line,index)=>label.append(svg('tspan',{x:13,dy:index?12:0},line)));
+   group.append(svg('rect',{x:-11,y:-13,width:Math.max(24,position.pitch-8),height:26,rx:5,class:'p2-worlds-hit'}),worldGlyph(node,usage),...auditMarks(node),label,
+    svg('title',{},[displayName(node),node.id,type,node.implementation,inside?`Contains ${inside} more records (listed in its details)`:null].filter(Boolean).join('\n')));
+   const activate=()=>openDetails(node);group.addEventListener('click',activate);group.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();activate();}});group.addEventListener('pointerenter',event=>showTooltip(node,event));group.addEventListener('pointermove',event=>positionTooltip(event));group.addEventListener('pointerleave',()=>{tooltip.hidden=true;highlight(null);});group.addEventListener('focus',()=>highlight(node.id));group.addEventListener('blur',()=>highlight(null));nodeElements.set(node.id,group);nodeLayer.append(group);
   }
+  graph.setAttribute('preserveAspectRatio','xMidYMin meet');
   renderLegend();if(!data.nodes.length)legend.append(h('span',{text:'No runtime records returned.'}));if(!graphView||!viewAdjusted)fit();else applyView();updateSearch();applyPlaybackHighlight();
  }
  function renderLegend(){
   const groups=new Map(),details=h('details',{open:legendOpen,'data-worlds-legend':''}),list=h('div',{class:'p2-worlds-legend-grid'});
   for(const node of data.nodes){
-   const usage=effectiveUsage(node),key=JSON.stringify([kindOf(node),roleOf(node),representationOf(node),usage]);
-   const row=groups.get(key);
-   if(row)row.count++;
-   else groups.set(key,{node,usage,count:1});
+   if(folds.has(node.id))continue;const usage=effectiveUsage(node),key=glyphKey(node,usage),row=groups.get(key);
+   if(row)row.count++;else groups.set(key,{node,usage,count:1});
   }
-  for(const {node,usage,count} of groups.values()){
-   const kind=kindOf(node),role=roleOf(node),[representation]=representationMeta(node);
-   const sample=svg('svg',{class:'p2-worlds-legend-symbol',viewBox:'-13 -13 26 26','aria-hidden':true});
-   sample.append(worldGlyph(node,usage));
-   const qualifiers=[representation,USAGE[usage]?.[1]].filter(Boolean).join(' · ');
-   list.append(h('article',{class:'p2-worlds-legend-item','data-legend-kind':kind,'data-legend-role':role},
-    sample,h('div',{},h('strong',{text:role+' ('+count+')'}),h('p',{text:qualifiers}),h('p',{text:KIND_HELP[kind]}))));
+  const rows=[...groups.values()].sort((a,b)=>ROLE_ORDER.indexOf(roleKindOf(a.node))-ROLE_ORDER.indexOf(roleKindOf(b.node))||representationOf(a.node).localeCompare(representationOf(b.node))||(a.usage==='available')-(b.usage==='available'));
+  const explained=new Set();
+  for(const {node,usage,count} of rows){
+   const role=roleKindOf(node),[representation]=representationMeta(node),hollow=usage==='available',meaning=hollow?'In the catalog; none of its sources were read in this session.':explained.has(role)?'Same role, implemented in '+representation+'.':ROLES[role].meaning;explained.add(role);
+   const sample=svg('svg',{class:'p2-worlds-legend-symbol',viewBox:'-10 -10 20 20','aria-hidden':true});sample.append(worldGlyph(node,usage));
+   list.append(h('article',{class:'p2-worlds-legend-item','data-legend-role':role,'data-legend-representation':representationOf(node),'data-legend-fill':hollow?'hollow':'filled'},
+    sample,h('div',{},h('strong',{text:`${ROLES[role].label} · ${representation}${hollow?' · not read yet':''} (${count})`}),h('p',{text:meaning}))));
   }
-  details.append(h('summary',{},h('strong',{text:'Legend'}),h('span',{text:groups.size+' symbols'})),list,
-   h('p',{class:'p2-worlds-legend-note',text:'Arrows show recorded relationships. Pulses replay activity. Rows and columns position the records on the map.'}));
+  const audited=data.nodes.filter(node=>node.audit&&!folds.has(node.id)),badgeRows=[];
+  for(const [badge,[letter,color,meaning]]of Object.entries(BADGES)){const count=audited.filter(node=>node.audit.badge===badge).length;if(!count)continue;const sample=svg('svg',{viewBox:'-10 -10 20 20','aria-hidden':true});const g=svg('g');g.append(svg('circle',{r:6,fill:color}),svg('text',{x:0,y:3,'text-anchor':'middle','font-size':8,'font-weight':700,fill:'#141b25'},letter));sample.append(g);badgeRows.push(h('div',{class:'p2-worlds-legend-badge','data-legend-badge':badge},sample,h('span',{text:`Badge ${letter} (${count}): ${meaning}`})));}
+  const silent=audited.filter(node=>!node.audit.activityHook).length;if(silent){const sample=svg('svg',{viewBox:'-12 -12 24 24','aria-hidden':true});sample.append(svg('circle',{r:10.5,class:'p2-worlds-silent-ring'}));badgeRows.push(h('div',{class:'p2-worlds-legend-badge','data-legend-badge':'silent'},sample,h('span',{text:`Dashed ring (${silent}): no activity hook; this JavaScript can change a result without lighting up the map or appearing in the activity log.`})));}
+  details.append(h('summary',{},h('strong',{text:'Legend'}),h('span',{text:groups.size+' symbols on this map'})),list,...badgeRows,
+   h('p',{class:'p2-worlds-legend-note',text:'Shape: what the record is. Colour: how it is implemented. Columns: the tab that owns it, or Shared. Point at a record to see its links; records with source files or schemas list them in their details. About this view: the map is a snapshot the worker reads between actions (it waits for a running turn), so during a long action it shows the previous state; Refresh reads it again. The worker and this page each retain the last 300 activity events; Copy retained log copies the page\'s.'}));
   details.addEventListener('toggle',()=>{legendOpen=details.open;legend.classList.toggle('is-open',legendOpen);});
   legend.classList.toggle('is-open',legendOpen);legend.replaceChildren(details);
-
  }
- function updateSearch(){for(const node of data.nodes)nodeElements.get(node.id)?.classList.toggle('dim',!matches(node));const count=data.nodes.filter(matches).length;setStatus(`${data.nodes.length} actual records · ${data.edges.length} actual links${query?' · '+count+' matches':''}`);}
- function showTooltip(node,event){tooltip.replaceChildren(h('strong',{text:displayName(node)}),...(node.label&&node.label!==displayName(node)?[h('span',{text:node.label})]:[]),h('span',{text:node.id}),h('span',{text:roleOf(node)}),h('span',{text:typeof node.implementation==='string'?node.implementation:JSON.stringify(node.implementation??'')}));if(USAGE[effectiveUsage(node)])tooltip.append(h('span',{text:USAGE[effectiveUsage(node)][1]}));if(node.why)tooltip.append(h('span',{text:node.why}));tooltip.hidden=false;positionTooltip(event);highlight(node.id);}
+ function updateSearch(){
+  for(const [id,group]of nodeElements)group.classList.toggle('dim',!(matches(actualNode(id))||(parts.get(id)??[]).some(part=>matches(actualNode(part)))));
+  const count=data.nodes.filter(matches).length;setStatus(`${data.nodes.length} records (${nodeElements.size} on the map) · ${data.edges.length} links${query?' · '+count+' matches':''}`);
+ }
+ function showTooltip(node,event){const inside=parts.get(node.id)?.length??0;tooltip.replaceChildren(h('strong',{text:displayName(node)}),...(node.label&&node.label!==displayName(node)?[h('span',{text:node.label})]:[]),h('span',{text:node.id}),h('span',{text:roleOf(node)}),h('span',{text:typeof node.implementation==='string'?node.implementation:JSON.stringify(node.implementation??'')}));if(node.status)tooltip.append(h('span',{text:'Status: '+node.status}));if(USAGE[effectiveUsage(node)])tooltip.append(h('span',{text:USAGE[effectiveUsage(node)][1]}));if(inside)tooltip.append(h('span',{text:`Contains ${inside} more records; click to list them.`}));if(node.why)tooltip.append(h('span',{text:node.why}));tooltip.hidden=false;positionTooltip(event);highlight(node.id);}
  function positionTooltip(event){const bounds=graphPane.getBoundingClientRect();const x=Math.max(8,Math.min(bounds.width-tooltip.offsetWidth-8,event.clientX-bounds.left+16)),y=Math.max(8,Math.min(bounds.height-tooltip.offsetHeight-8,event.clientY-bounds.top+16));tooltip.style.left=x+'px';tooltip.style.top=y+'px';}
- function highlight(id){graph.classList.toggle('highlighting',!!id);for(const line of graph.querySelectorAll('[data-edge-from]'))line.classList.toggle('connected',line.dataset.edgeFrom===id||line.dataset.edgeTo===id);}
+ function highlight(id){
+  graph.classList.toggle('highlighting',!!id);edgeLabelLayer?.replaceChildren();
+  const lines=[...graph.querySelectorAll('[data-edge-from]')],connected=lines.filter(line=>!!id&&(line.dataset.edgeFrom===id||line.dataset.edgeTo===id));
+  for(const line of lines)line.classList.toggle('connected',connected.includes(line));
+  // Relationship names appear for a record with few links, placed on each line and never on top of each other.
+  if(!edgeLabelLayer||connected.length>10)return;const placed=[];
+  for(const line of connected){
+   const [x,y]=line.dataset.mid.split(',').map(Number),text=line.dataset.edgeLabel.length>48?line.dataset.edgeLabel.slice(0,47)+'…':line.dataset.edgeLabel,box={x:x-text.length*2.8,y:y-9,w:text.length*5.6,h:12};
+   if(placed.some(other=>box.x<other.x+other.w&&other.x<box.x+box.w&&box.y<other.y+other.h&&other.y<box.y+box.h))continue;placed.push(box);
+   edgeLabelLayer.append(svg('text',{x,y,'text-anchor':'middle',class:'p2-worlds-edge-label','font-size':10},text));
+  }
+ }
  function closeDetails(){currentPage='map';dialog.hidden=true;logPanel.hidden=true;mapShell.hidden=false;renderPageBreadcrumbs();applyView();}
  function showActivityLog(){currentPage='log';dialog.hidden=true;mapShell.hidden=true;logPanel.hidden=false;renderPageBreadcrumbs();renderEvents();}
  function openDetails(node,tab='overview',path=[],page=0){
@@ -261,9 +348,21 @@ export function createWorldsExplorer({load,subscribe,copy,loadSources}={}){
   const status=[node.status,node.implementation,isSopRecord(node)&&!hasSopSource(node)?'Declared definition; SOP source is unavailable. See schema connections.':null].filter(value=>typeof value==='string'&&value).join(' · ');
   if(status)dialogBody.append(h('p',{class:'p2-worlds-detail-summary',text:status}));
   if(USAGE[usage])dialogBody.append(h('p',{class:'p2-worlds-usage','data-usage-label':usage},h('strong',{text:USAGE[usage][1]+' · '}),usage!==node.usage?USAGE[usage][2]:node.usageReason??USAGE[usage][2]));
+  if(node.audit)renderAudit(node.audit);
+  const inside=(parts.get(node.id)??[]).map(actualNode).filter(Boolean);
+  if(inside.length){const list=h('p',{class:'p2-worlds-detail-parts','data-detail-parts':''});inside.forEach((part,index)=>{if(index)list.append(' · ');list.append(link(displayName(part),()=>openDetails(part),{'data-open-part':part.id}));});dialogBody.append(h('h3',{text:`Shown inside this record on the map (${inside.length})`}),list);}
   const links=h('p',{class:'p2-worlds-detail-links'},link('Connections',()=>visitDetail({tab:'connections'})));
   if(node.details!==undefined)links.append(' · ',link('Properties',()=>visitDetail({tab:isSopRecord(node)?'implementation':'properties'})));
   links.append(' · ',link('Complete inspection record',()=>openDetails({id:node.id+'/inspection-record',label:displayName(node)+' · inspection record',kind:'structure',representation:'javascript',implementation:'JavaScript inspection record',why:'Every field returned for this record, including source metadata and help.',details:node},'properties')));dialogBody.append(links);
+ }
+ // Generality audit of a JavaScript component: its modules, the decisions they make, evidence, replacement and hidden behaviour.
+ function renderAudit(audit){
+  const [letter,,meaning]=BADGES[audit.badge]??BADGES.generic;
+  dialogBody.append(h('h3',{text:'Generality audit · badge '+letter}),h('p',{class:'p2-worlds-detail-summary','data-audit-summary':audit.badge,text:meaning+' '+(audit.activityHook?'Activity hook: lights up for '+[...(audit.activity.operations??[]).map(operation=>'operation '+operation),...(audit.activity.nodeIds??[]).map(id=>'events naming '+id)].join(', ')+'.':'No activity hook: it can act without lighting up the map.')}));
+  if(audit.actsOn?.length){const list=h('p',{class:'p2-worlds-detail-links'});audit.actsOn.forEach(([id,label],index)=>{if(index)list.append(' · ');const target=actualNode(id);list.append(target?link(label+': '+displayName(target),()=>openDetails(target),{'data-audit-target':id}):h('span',{text:label+': '+id}));});dialogBody.append(h('h4',{text:'Acts on'}),list);}
+  const table=h('table',{class:'p2-worlds-audit-table','data-audit-modules':''}),head=h('tr');for(const title of ['Module','Class','Decision','Evidence','SOP replacement','Hidden behaviour'])head.append(h('th',{text:title}));table.append(head);
+  for(const module of audit.modules){const row=h('tr',{'data-audit-module':module.path});row.append(h('td',{text:module.path}),h('td',{class:module.classification==='domain-logic'?'is-domain':'is-generic',text:module.classification+(module.generality&&module.generality!=='none'?' ('+module.generality+')':'')}),h('td',{text:module.decision??''}),h('td',{text:(module.evidence??[]).join('\n')}),h('td',{text:module.replacement??''}),h('td',{class:'p2-worlds-audit-secret',text:(module.secret??[]).join('\n')}));table.append(row);}
+  dialogBody.append(h('h4',{text:`Modules (${audit.modules.length})`}),table);
  }
  function renderSop(node){
   if(!hasSopSource(node)){dialogBody.append(h('p',{text:'No declared SOP source is available for this record.'}));return;}
@@ -299,7 +398,7 @@ export function createWorldsExplorer({load,subscribe,copy,loadSources}={}){
   try{const result=await loadSources(node,{offset});if(result?.nodeId!==node.id)throw Error('Source response identity mismatch.');
    const previous=offset?sourceResponses.get(node.id)?.sources??[]:[],sources=[...previous,...(result.sources??[])];sourceResponses.set(node.id,{...result,sources});
   }catch(error){sourceResponses.set(node.id,{...sourceResponses.get(node.id),status:'unavailable',error:String(error.message??error)});}
-  finally{sourceLoading.delete(node.id);if(!disposed){const group=nodeElements.get(node.id),usage=effectiveUsage(node);if(group){group.setAttribute('data-usage',usage??'unknown');const badge=group.querySelector('[data-usage-badge]');if(badge&&USAGE[usage]){badge.setAttribute('data-usage-badge',usage);badge.textContent=USAGE[usage][0];badge.append(svg('title',{},USAGE[usage][1]));}}if(currentDetail?.node.id===node.id)queueMicrotask(renderDetail);}}
+  finally{sourceLoading.delete(node.id);if(!disposed){const group=nodeElements.get(node.id),usage=effectiveUsage(node);if(group){group.setAttribute('data-usage',usage??'unknown');group.querySelector('.p2-worlds-glyph')?.replaceWith(worldGlyph(node,usage));}if(currentDetail?.node.id===node.id)queueMicrotask(renderDetail);}}
  }
  function renderSchema(node){
   const view=node.schemaView;dialogBody.append(h('h3',{text:'Schema and legend declarations'}),h('p',{class:'p2-worlds-detail-summary',text:isSopRecord(node)?'Readable index of the actual declarations. SOP Lang retains the exact source.':'Runtime-provided schema metadata. This implementation record does not expose SOP source.'}));
@@ -370,19 +469,23 @@ export function createWorldsExplorer({load,subscribe,copy,loadSources}={}){
   dialogBody.append(h('h3',{text:event.label??event.operation??'Recorded activity'}),h('p',{class:'p2-worlds-note',text:'Runtime timestamps and durations below are recorded evidence. Animation holds each stage for at least 500 ms; that playback delay is not execution time.'}));
   const fields=h('dl');for(const [label,value]of [['Event ID',event.id??event.sequence],['Runtime timestamp',event.time??event.timestamp],['Phase',event.phase],['Operation',event.operation],['World',event.world],['Status',event.status],['Runtime duration (ms)',event.durationMs??event.elapsedMs],['Error',event.error]])if(value!==undefined)fields.append(h('dt',{text:label}),h('dd',{text:typeof value==='string'?value:JSON.stringify(value)}));dialogBody.append(fields,h('h3',{text:'Recorded node references'}));
   for(const id of event.nodeIds??[]){const node=actualNode(id);dialogBody.append(node?link(displayName(node)+' · '+id,()=>openDetails(node),{'data-event-node':id}):h('p',{text:id+' — not present in the current architecture response.'}));}
+  const emitters=declaredEmitters(event).map(actualNode).filter(Boolean);
+  if(emitters.length){dialogBody.append(h('h3',{text:'JavaScript components that emit this operation'}),h('p',{class:'p2-worlds-note',text:'Lit because their registry entry declares "'+event.operation+'" as their activity hook.'}));for(const node of emitters)dialogBody.append(link(displayName(node)+' · '+node.id,()=>openDetails(node),{'data-event-emitter':node.id}));}
   const raw=JSON.stringify(event,null,2);if(copy)dialogBody.append(h('div',{class:'p2-worlds-modal-actions'},copyButton('Copy exact event',raw)));dialogBody.append(h('details',{},h('summary',{text:'Complete exact event payload'}),h('pre',{class:'p2-worlds-exact-event',text:raw})));
  }
  function applyPlaybackHighlight(){
+  // Recorded node identities light the record that shows them on the map (a folded part lights its owner).
+  const lit=new Set([...active.keys()].map(visibleOf)),stages=(playing?.events??[]).map(event=>new Set(litIds(event).map(visibleOf)));
   for (const edge of graph.querySelectorAll('[data-edge-from]')) {
-   const lit=playing?.events.some(event=>event.nodeIds?.includes(edge.dataset.edgeFrom)&&event.nodeIds.includes(edge.dataset.edgeTo))??false;
-   edge.classList.toggle('playing-edge',lit);
-   edge.setAttribute('marker-end',lit?'url(#p2-worlds-active-arrow)':'url(#p2-worlds-arrow)');
+   const on=stages.some(ids=>ids.has(edge.dataset.edgeFrom)&&ids.has(edge.dataset.edgeTo));
+   edge.classList.toggle('playing-edge',on);
+   edge.setAttribute('marker-end',on?'url(#p2-worlds-active-arrow)':'url(#p2-worlds-arrow)');
   }
-  for(const [id,node]of nodeElements)node.classList.toggle('active',active.has(id));for(const [groupId,node]of groupElements)node.classList.toggle('active',[...active.keys()].some(id=>memberships.get(id)===groupId));
+  for(const [id,node]of nodeElements)node.classList.toggle('active',lit.has(id));for(const [groupId,node]of groupElements)node.classList.toggle('active',[...lit].some(id=>memberships.get(id)===groupId));
  }
  function playbackKey(event){return typeof event.operation==='string'?JSON.stringify([event.operation,event.stage??null,event.correlationId??null,event.invocation??null,event.world??null]):null;}
- function appendPlaybackEvent(group,event){group.events.push(event);group.phase=event.phase;for(const id of event.nodeIds??[])if(!group.nodeSet.has(id)){group.nodeSet.add(id);group.nodeIds.push(id);if(group===playing)active.set(id,true);}if(group===playing)applyPlaybackHighlight();}
- function newPlaybackGroup(event){return {id:eventKey(event),key:playbackKey(event),operation:event.operation,stage:event.stage,phase:event.phase,nodeIds:[...new Set(event.nodeIds??[])],nodeSet:new Set(event.nodeIds??[]),events:[event]};}
+ function appendPlaybackEvent(group,event){group.events.push(event);group.phase=event.phase;for(const id of litIds(event))if(!group.nodeSet.has(id)){group.nodeSet.add(id);group.nodeIds.push(id);if(group===playing)active.set(id,true);}if(group===playing)applyPlaybackHighlight();}
+ function newPlaybackGroup(event){return {id:eventKey(event),key:playbackKey(event),operation:event.operation,stage:event.stage,phase:event.phase,nodeIds:litIds(event),nodeSet:new Set(litIds(event)),events:[event]};}
  function playbackGroups(recorded){const groups=[];for(const event of recorded){const key=playbackKey(event),last=groups.at(-1);if(key&&last?.key===key)appendPlaybackEvent(last,event);else groups.push(newPlaybackGroup(event));}return groups;}
  function showPlaybackStage(){if(!playing)return;const summary={grouping:'UI playback of consecutive actual events with the same explicit operation/stage/correlation/invocation/world',minimumPlaybackMs:500,eventIds:playing.events.map(eventKey),nodeIds:[...playing.nodeIds],events:[...playing.events]};openDetails({id:'playback:'+playing.id,label:'Recorded playback stage',kind:'episode',implementation:'UI grouping of recorded events',description:'This visual stage groups consecutive source records; it is not an additional runtime event or fabricated world participation. Every original event remains in the Activity log.',details:summary},'properties');}
  function updatePlaybackStatus(){
@@ -423,10 +526,12 @@ export function createWorldsExplorer({load,subscribe,copy,loadSources}={}){
   const incoming=[];for(const event of history){if(!event||typeof event!=='object'||seenEvents.has(eventKey(event)))continue;seenEvents.add(eventKey(event));incoming.push(event);totalEvents++;}
   if(incoming.length){events=[...incoming,...events].slice(-300);scheduleLogRender();}
  }
- async function refresh(){if(disposed)return false;const token=++generation;setStatus('Reading runtime…');try{const result=await load();if(disposed||token!==generation)return false;if(!result||!Array.isArray(result.nodes)||!Array.isArray(result.edges))throw Error('Runtime graph must provide nodes and edges.');const ids=new Set();for(const node of result.nodes){if(typeof node.id!=='string'||ids.has(node.id))throw Error('Runtime graph has a missing or duplicate node ID.');ids.add(node.id);}data=result;ingestHistory(result.activity??[]);draw();return true;}catch(error){if(!disposed&&token===generation)setStatus('Could not load Worlds: '+error.message,true);return false;}}
+ async function refresh(){if(disposed)return false;const token=++generation;setStatus('Reading runtime…');try{const result=await load();if(disposed||token!==generation)return false;if(!result||!Array.isArray(result.nodes)||!Array.isArray(result.edges))throw Error('Runtime graph must provide nodes and edges.');const ids=new Set();for(const node of result.nodes){if(typeof node.id!=='string'||ids.has(node.id))throw Error('Runtime graph has a missing or duplicate node ID.');ids.add(node.id);}const declared=(Array.isArray(result.componentLinks)?result.componentLinks:[]).filter(link=>ids.has(link.from)&&ids.has(link.to)&&!result.edges.some(edge=>edge.from===link.from&&edge.to===link.to&&edge.label===link.label));data={...result,edges:[...result.edges,...declared]};indexOperations();ingestHistory(result.activity??[]);draw();return true;}catch(error){if(!disposed&&token===generation)setStatus('Could not load Worlds: '+error.message,true);return false;}}
  search.addEventListener('input',()=>{query=search.value.toLowerCase().trim();updateSearch();});search.addEventListener('keydown',event=>{if(event.key==='Enter'){const first=data.nodes.find(matches);if(first)openDetails(first);}});
  let drag=null;graph.addEventListener('pointerdown',event=>{if(event.target.closest('[data-world-node],[data-layer-about]')||event.button!==0)return;viewAdjusted=true;drag={x:event.clientX,y:event.clientY,view:{...graphView}};graph.setPointerCapture(event.pointerId);});graph.addEventListener('pointermove',event=>{if(!drag)return;const rect=graph.getBoundingClientRect(),scale=Math.max(drag.view.w/Math.max(1,rect.width),drag.view.h/Math.max(1,rect.height));graphView.x=drag.view.x-(event.clientX-drag.x)*scale;graphView.y=drag.view.y-(event.clientY-drag.y)*scale;applyView();});for(const type of ['pointerup','pointercancel'])graph.addEventListener(type,()=>{drag=null;});graph.addEventListener('wheel',event=>{event.preventDefault();if(event.shiftKey||Math.abs(event.deltaX)>Math.abs(event.deltaY)){if(graphView){viewAdjusted=true;graphView.x+=(event.deltaX||event.deltaY)*graphView.w/Math.max(1,graphPane.clientWidth);applyView();}}else zoom(event.deltaY>0?1.12:1/1.12);},{passive:false});
  window.addEventListener('focus',syncPlaybackVisibility);window.addEventListener('blur',syncPlaybackVisibility);document.addEventListener('visibilitychange',syncPlaybackVisibility);
+ // The layout follows the pane: a real size change lays the map out again and fits it.
+ let resizeFrame=null;const resizeObserver=typeof ResizeObserver==='function'?new ResizeObserver(()=>{if(resizeFrame!==null)return;resizeFrame=setTimeout(()=>{resizeFrame=null;const size=measuredSize();if(disposed||!size||!data.nodes.length||currentPage!=='map')return;if(lastSize&&Math.abs(lastSize.w-size.w)<3&&Math.abs(lastSize.h-size.h)<3)return;viewAdjusted=false;draw();},30);}):null;resizeObserver?.observe(graphPane);
  const unsubscribe=typeof subscribe==='function'?subscribe(receive):null;renderEvents();renderPageBreadcrumbs();updatePlaybackStatus();void refresh();
- return {element,refresh,replayEvents,setVisible,destroy(){if(disposed)return;disposed=true;generation++;clearTimeout(playbackTimer);if(logFrame!==null)clearTimeout(logFrame);if(typeof unsubscribe==='function')unsubscribe();window.removeEventListener('focus',syncPlaybackVisibility);window.removeEventListener('blur',syncPlaybackVisibility);document.removeEventListener('visibilitychange',syncPlaybackVisibility);element.remove();}};
+ return {element,refresh,replayEvents,setVisible,destroy(){if(disposed)return;disposed=true;resizeObserver?.disconnect();if(resizeFrame!==null)clearTimeout(resizeFrame);generation++;clearTimeout(playbackTimer);if(logFrame!==null)clearTimeout(logFrame);if(typeof unsubscribe==='function')unsubscribe();window.removeEventListener('focus',syncPlaybackVisibility);window.removeEventListener('blur',syncPlaybackVisibility);document.removeEventListener('visibilitychange',syncPlaybackVisibility);element.remove();}};
 }

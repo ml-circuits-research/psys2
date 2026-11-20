@@ -29,7 +29,8 @@ test('Documents clear retains document identity/title and is undoable; section d
 });
 test('Avatar concrete deletion permits required parts, clear is empty/undoable and a preset recomposes',async()=>{
  const s=session('ui.avatar',emptyAvatarState()),state=()=>s.isession.state['ui.avatar'];
- const parts=()=>avatarAreaStateWorld(state()).wires.size-1;
+ // The parts of the person the Avatar shows (its face and its body are faces; the rest are parts).
+ const parts=()=>[...avatarAreaStateWorld(state()).wires.values()].filter(w=>w.type!=='w.face.face').length;
  assert.equal((await run(s,'avatar','avatar.face.select')).ok,true);
  const before=state().sop;assert.ok(parts()>5);
  assert.equal((await run(s,'avatar','avatar.parts.remove',{ids:['head']})).ok,true);assert.ok(!/ w\.face\.head /.test(state().sop));

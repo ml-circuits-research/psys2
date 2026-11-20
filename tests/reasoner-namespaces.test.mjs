@@ -6,7 +6,7 @@ import assert from 'node:assert/strict';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
 import { sessionOptions, settingsForMode } from '../src/dialog/runtime-config.mjs';
-import { FormSession } from '../src/formalizer/rules/session.mjs';
+import { FormSession } from '../src/interpreter/form-session.mjs';
 import { nsWorld, strip, qualify, inQuestion } from '../src/reasoner/ns.mjs';
 import * as lib from '../src/vendor/sopworld/sopworld.mjs';
 

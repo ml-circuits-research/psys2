@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { LIMITS, TIME_LIMIT_DEFAULTS, applyTimeLimits, clampLimit } from '../src/dialog/time-limits.mjs';
-import { createOrtClient } from '../src/formalizer/ort-client.mjs';
+import { createOrtClient } from '../src/dialog/ort-client.mjs';
 
 test('time limits: defaults, clamping and live apply', () => {
   assert.deepEqual({ ...LIMITS }, { ...TIME_LIMIT_DEFAULTS });

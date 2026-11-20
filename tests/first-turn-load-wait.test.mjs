@@ -8,7 +8,7 @@ import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
 import { createFacts } from '../src/knowledge/facts.mjs';
 import { createKnowledgeSource } from '../src/loaders/knowledge-source.mjs';
-import { guard, TurnAborted, LOAD_WAIT_CAP_MS } from '../src/formalizer/guard.mjs';
+import { guard, TurnAborted, LOAD_WAIT_CAP_MS } from '../src/dialog/turn-guard.mjs';
 
 const CATALOG = path.join(import.meta.dirname, 'fixtures/catalog');
 const OPTS = { language: 'en', formalizer: 'rules', spell: true, partial: true, bestEffort: true };

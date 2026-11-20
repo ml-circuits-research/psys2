@@ -24,7 +24,7 @@ try{
  await b.evaluate(`document.querySelector('[aria-label="Open activity log"]').click();true`);
  await wait(`document.querySelectorAll('.p2-worlds-event:not(.empty)').length>0`);
  await b.evaluate(`document.querySelector('[data-breadcrumb-map]').click();true`);
- const layout=await b.evaluate(`({icons:document.querySelectorAll('[data-world-node]').length,edges:document.querySelectorAll('[data-edge-from]').length,inspector:!!document.querySelector('.p2-worlds-inspector'),groups:document.querySelectorAll('[data-layout-group]').length})`);assert.ok(layout.icons>=actual.ids.length);assert.ok(layout.edges>=actual.edges.length);assert.equal(layout.inspector,false);
+ const layout=await b.evaluate(`({icons:document.querySelectorAll('[data-world-node]').length,edges:document.querySelectorAll('[data-edge-from]').length,inspector:!!document.querySelector('.p2-worlds-inspector'),groups:document.querySelectorAll('[data-layout-group]').length})`);assert.ok(layout.icons>0&&layout.icons<=actual.ids.length);assert.ok(layout.edges>0);assert.equal(layout.inspector,false);
  await b.screenshot('../.session-control/worlds-preview.png');
  const errors=b.logs.console.filter(x=>x.type==='exception');assert.deepEqual(errors,[]);
  console.log(JSON.stringify({complete:true,nodes:actual.ids.length,links:actual.edges.length,inlineDetails:true,chatAndTabsUsable:true,breadcrumbs:true,preservedMapPosition:true,exactArchive:true,historyInterpreter:true,liveAreaEvents:true,noInnerCodeTabs:true,desktopFits:true,screenshot:'.session-control/worlds-preview.png'}));

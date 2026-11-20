@@ -6,7 +6,7 @@
 //     again: not by a retry, a dry run, the voice end-of-turn check, the next identical message or a worker restart; the stored outcome is reused;
 //   - the page owns the ORT workers (MessageChannel bridge), so they are stopped with the engine worker.
 // Browser-safe, no `node:*`. `spawn` and `now` are injectable for tests.
-import { TurnAborted } from '../lib/formalizer/guard.mjs';
+import { TurnAborted } from '../lib/dialog/turn-guard.mjs';
 
 export const KNOWN_SLOW_TEXT = 'I stopped that same request earlier because it took too long, so I did not try it again. Please word it differently.';
 export const TOO_COMPLEX_TEXT = 'That was too complex for me. Try a shorter sentence.';

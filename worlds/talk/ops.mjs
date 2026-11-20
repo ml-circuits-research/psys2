@@ -15,7 +15,7 @@ import { habitatSentence } from '../../src/knowledge/commonsense.mjs';
 import { colourName, numberValue } from '../../src/knowledge/values.mjs';   // the one colour reader (k.values)
 import * as R from './records.mjs';   // the generic reading of the catalog: records of a thing, what a word means in the schemas, series, counts, sizes (no table of any world)   // the shared layout module: the parts diagram is laid out by it (specs/18)
 import { World, contrastOf } from '../../src/vendor/sopworld/sopworld.mjs';   // the library's contrast of a kind among its siblings (talk.contrast)
-import { pluralize as pluralOf } from '../../src/formalizer/rules/lemma.mjs';
+import { pluralize as pluralOf } from '../../src/lang/lemma.mjs';
 
 export const MAX_CARDS = 40;
 const MAX_PARTS = 60;

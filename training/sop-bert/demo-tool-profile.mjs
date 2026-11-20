@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // C1 data scope: annotation roles joined explicitly to real tool declarations.
 // These joins declare relevance only; they do not parse language or authorize execution.
-import {PREFIX} from '../../worlds/diagram.sketch/core.mjs';
 import {colourHex} from '../../src/knowledge/values.mjs';
 import {pathToFileURL} from 'node:url';
 import {createFacts} from '../../src/knowledge/facts.mjs';
@@ -14,14 +13,18 @@ const avatarState=emptyAvatarState(),avatarHost=await createAvatarArea({state:av
 // The avatar's declared choices: the enumerations of its realized native interface.
 const avatarChoices=Object.fromEntries(avatarHost.bindings().map(op=>[op.id,Object.fromEntries(Object.entries(op.params).filter(([,p])=>p.enum).map(([k,p])=>[k,p.enum]))]));
 const avatarSlots=Object.fromEntries(avatarHost.observe().objects.filter(o=>o.sourceType==='ui.avatar.part').map(o=>[o.id,JSON.parse(o.inputs.find(i=>i.key==='variant').values[0])]));
-import {drawingPartsOf} from '../../worlds/art.draw/part-tools.mjs';
-import {makeObject} from '../../worlds/art.draw/board.mjs';
-import {DRAWING_TOOL_BINDINGS} from '../../worlds/art.draw/declared-host.mjs';
-import {DIAGRAM_TOOL_BINDINGS} from '../../worlds/diagram.sketch/declared-host.mjs';
 import {CHART_TOOL_BINDINGS} from '../../worlds/data.charts/declared-host.mjs';
-import {DOCUMENT_TOOL_BINDINGS} from '../../worlds/docs.editor/declared-host.mjs';
-import {CALENDAR_TOOL_BINDINGS} from '../../worlds/time.calendar/declared-host.mjs';
-const declarations={drawing:DRAWING_TOOL_BINDINGS,diagram:[...DIAGRAM_TOOL_BINDINGS,...CHART_TOOL_BINDINGS],document:DOCUMENT_TOOL_BINDINGS,calendar:CALENDAR_TOOL_BINDINGS,avatar:avatarHost.bindings()};
+import {invokeToolCommand} from '../../src/dialog/native-control-intent.mjs';
+import {createDrawingArea} from '../../worlds/art.draw/sop-drawing.mjs';
+import {createDiagramArea} from '../../worlds/diagram.sketch/sop-diagram.mjs';
+import {createDocumentArea} from '../../worlds/docs.editor/sop-document.mjs';
+import {createCalendarArea} from '../../worlds/time.calendar/sop-calendar.mjs';
+// The tool declarations are the SOP areas' realized native interfaces; the diagram interface composes the chart operations.
+const drawingHost=await createDrawingArea({instanceId:'training-drawing-contract'}),diagramHost=await createDiagramArea({instanceId:'training-diagram-contract'});
+const chartIds=new Set(CHART_TOOL_BINDINGS.map(op=>op.id)),diagramBindings=diagramHost.bindings();
+const DRAWING_TOOL_BINDINGS=drawingHost.bindings(),DIAGRAM_TOOL_BINDINGS=diagramBindings.filter(op=>!chartIds.has(op.id));
+const DOCUMENT_TOOL_BINDINGS=(await createDocumentArea({instanceId:'training-document-contract'})).bindings(),CALENDAR_TOOL_BINDINGS=(await createCalendarArea({instanceId:'training-calendar-contract'})).bindings();
+const declarations={drawing:DRAWING_TOOL_BINDINGS,diagram:diagramBindings,document:DOCUMENT_TOOL_BINDINGS,calendar:CALENDAR_TOOL_BINDINGS,avatar:avatarHost.bindings()};
 const fields={},families={};
 const actRealizations={drawing:{place:['drawing.object.change'],arrange:['drawing.object.change']},diagram:{connect:['diagram.link.make'],disconnect:['diagram.link.remove'],arrange:['diagram.node.layout']},calendar:{arrange:['calendar.meeting.move'],connect:['calendar.meeting.change']},document:{place:['document.section.reorder']}};
 function field(area,key,operation,parameter,interpretation='literal-or-typed-value'){
@@ -83,11 +86,16 @@ for(const key of ['preset','expression','name'])field('avatar','face.'+key,'avat
 for(const key of ['variant','colour','size'])field('avatar','part.'+key,'avatar.part.change',key);
 field('avatar','part.ids','avatar.part.change','ids','exact observed slot labels to declared native slot ids');
 field('avatar','part.place','avatar.part.move','place');
-const partState={objects:[],nextId:1};const partObject=makeObject(partState,'house');
+// The constituent parts of a house as the drawing area observes them; the diagram node identity prefixes as the area assigns them.
+const call=(host,operation,args)=>invokeToolCommand(host,{invocation:globalThis.crypto.randomUUID(),expectedVersion:host.observe().version,operation,args});
+const value=(o,key)=>{const raw=o.inputs.find(i=>i.key===key)?.values[0];return raw===undefined?undefined:JSON.parse(raw);};
+call(drawingHost,'drawing.object.make',{kind:'house'});
+const drawingParts=drawingHost.observe().objects.filter(o=>o.sourceType==='art.draw.part').map(o=>({index:value(o,'index'),role:o.role,width:value(o,'width'),height:value(o,'height')})).sort((a,b)=>a.index-b.index);
+const nodePrefixes={};for(const kind of DIAGRAM_TOOL_BINDINGS.find(op=>op.id==='diagram.node.make').params.kind.enum){const made=call(diagramHost,'diagram.node.make',{kind});nodePrefixes[kind]=String(made.changed?.[0]??'').replace(/\d+$/,'');}
 family('drawing','part',DRAWING_TOOL_BINDINGS.filter(op=>op.on==='art.draw.part').map(op=>op.id));
 family('drawing','group',DRAWING_TOOL_BINDINGS.filter(op=>['drawing.object.group','drawing.object.ungroup'].includes(op.id)).map(op=>op.id));
 for(const key of ['owner','index','colour','width','height'])field('drawing','part.'+key,'drawing.part.change',{owner:'id',index:'index',colour:'color',width:'width',height:'height'}[key]);
 for(const key of ['x','y'])field('drawing','part.'+key,'drawing.part.place',key);
 for(const key of ['members','name'])field('drawing','group.'+key,'drawing.object.group',key==='members'?'ids':'name');
-export function demoToolProfile(){return {format:'psys2.demo-tool-profile/1',tabs:{drawing:'Drawing',diagram:'Diagram (including charts)',calendar:'Calendar',document:'Documents',avatar:'Avatar'},drawingParts:drawingPartsOf(partObject).map(part=>({index:part.index,role:part.role,width:part.width,height:part.height})),avatar:{capabilities:avatarChoices,initialSlots:avatarSlots,tintColours:Object.fromEntries(Object.entries(DEMO_AVATAR_DATA.colours).map(([role,values])=>[role,Object.keys(values)])),fixedColours:Object.fromEntries(DEMO_AVATAR_DATA.slots.map(slot=>[slot.name,[...new Set((slot.variants.find(v=>v.name===avatarSlots[slot.name])?.parts??[]).flatMap(p=>p.tint?[]:p.colour??[]))]])),objects:avatarHost.observe().objects.map(o=>({id:o.id,kind:o.kind,sourceType:o.sourceType}))},declarations,actRealizations,fields,families,nativeIdentity:{diagramNodePrefixes:PREFIX,diagramChartPrefix:'chart:'},normalizations:{colour:Object.fromEntries(['red','blue','green','yellow','purple','orange'].map(name=>[name,colourHex(name)]))},knowledgeReferences:[{path:'sop-knowledge-worlds/docs/worlds/w.chart/schema.sop',purpose:'chart, series, category and numeric point schemas; schema breadth does not imply renderer breadth'},{path:'sop-knowledge-worlds/docs/worlds/k.charts/shards/charts.sop',purpose:'declared chart kinds/forms; no spelling substitution for unavailable forms'},{path:'sop-knowledge-worlds/docs/worlds/w.calendar/schema.sop',purpose:'calendar resources and interval event identities'},{path:'sop-knowledge-worlds/docs/worlds/w.room/schema.sop',purpose:'room name and seating capacity'},{path:'sop-knowledge-worlds/docs/worlds/w.person/schema.sop',purpose:'person occupation belongs here, not to calendar management'},{path:'sop-knowledge-worlds/docs/worlds/w.document/schema.sop',purpose:'document, chapter, section and paragraph structure; genre/register joins to k.genres'}],boundary:'Annotation-to-tool relevance only. No row is certified executable or semantically correct by this profile. Composition/solver/knowledge-dependent roles remain visible; unsupported roles are never silently stripped.'};}
+export function demoToolProfile(){return {format:'psys2.demo-tool-profile/1',tabs:{drawing:'Drawing',diagram:'Diagram (including charts)',calendar:'Calendar',document:'Documents',avatar:'Avatar'},drawingParts,avatar:{capabilities:avatarChoices,initialSlots:avatarSlots,tintColours:Object.fromEntries(Object.entries(DEMO_AVATAR_DATA.colours).map(([role,values])=>[role,Object.keys(values)])),fixedColours:Object.fromEntries(DEMO_AVATAR_DATA.slots.map(slot=>[slot.name,[...new Set((slot.variants.find(v=>v.name===avatarSlots[slot.name])?.parts??[]).flatMap(p=>p.tint?[]:p.colour??[]))]])),objects:avatarHost.observe().objects.map(o=>({id:o.id,kind:o.kind,sourceType:o.sourceType}))},declarations,actRealizations,fields,families,nativeIdentity:{diagramNodePrefixes:nodePrefixes,diagramChartPrefix:'chart:'},normalizations:{colour:Object.fromEntries(['red','blue','green','yellow','purple','orange'].map(name=>[name,colourHex(name)]))},knowledgeReferences:[{path:'sop-knowledge-worlds/docs/worlds/w.chart/schema.sop',purpose:'chart, series, category and numeric point schemas; schema breadth does not imply renderer breadth'},{path:'sop-knowledge-worlds/docs/worlds/k.charts/shards/charts.sop',purpose:'declared chart kinds/forms; no spelling substitution for unavailable forms'},{path:'sop-knowledge-worlds/docs/worlds/w.calendar/schema.sop',purpose:'calendar resources and interval event identities'},{path:'sop-knowledge-worlds/docs/worlds/w.room/schema.sop',purpose:'room name and seating capacity'},{path:'sop-knowledge-worlds/docs/worlds/w.person/schema.sop',purpose:'person occupation belongs here, not to calendar management'},{path:'sop-knowledge-worlds/docs/worlds/w.document/schema.sop',purpose:'document, chapter, section and paragraph structure; genre/register joins to k.genres'}],boundary:'Annotation-to-tool relevance only. No row is certified executable or semantically correct by this profile. Composition/solver/knowledge-dependent roles remain visible; unsupported roles are never silently stripped.'};}
 if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href)process.stdout.write(JSON.stringify(demoToolProfile(),null,2)+'\n');

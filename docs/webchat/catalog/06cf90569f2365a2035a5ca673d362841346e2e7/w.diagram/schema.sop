@@ -1,0 +1,162 @@
+# w.diagram: a reusable world: diagrams of nodes, edges and groups (a flowchart of a recipe, the life cycle of a frog
+# as a cycle, a tree of kinds of animals, a Venn diagram of what cats and dogs share, a mind map of a topic). Declared
+# as data in the library's std.schema format; the acts of std.acts drive it; it has no function of its own, and two
+# denies (one code per thing of a kind, one membership per node and group). What each kind of diagram is (its structure, layout, shapes and the knowledge that fills it) is k.diagrams'.
+# sources: hand-core 1 (hand-written in this repository; block "04:40")
+# license: CC0-1.0
+# script: none (hand-written)
+# needs: sopworld with std.schema and std.acts (tools/sopworld/VERSION)
+
+@w.diagram core.module name=w.diagram version=1 exports=diagram exports=node exports=edge exports=group exports=member core.source="hand-core 1"
+@w.diagram.world std.schema.world name=w.diagram doc="diagrams of nodes joined by edges, in groups, laid out by the diagram's kind" core.source="hand-core 1"
+
+# A diagram. `title` what it shows; `form` its kind (the names of k.diagrams.kind form=: flowchart, tree, cycle, timeline,
+# mind_map, venn, org_chart, network, pipeline, table; not `kind`, which the act `make` reads as the kind of thing to
+# make); `layout` how its nodes are laid out (top_down, left_right, radial, circular, grid, overlapping, free); `topic`
+# what the diagram is about (a name of the catalog: frog, water cycle).
+@w.diagram.diagram core.type of=w.diagram.diagram extends=std.schema.thing closed=true core.source="hand-core 1"
+@w.diagram.diagram.title core.slot of=w.diagram.diagram key=title kind=atom kind=string core.source="hand-core 1"
+@w.diagram.diagram.form core.slot of=w.diagram.diagram key=form enum=flowchart enum=tree enum=cycle enum=timeline enum=mind_map enum=venn enum=org_chart enum=network enum=pipeline enum=table default=flowchart core.source="hand-core 1"
+@w.diagram.diagram.layout core.slot of=w.diagram.diagram key=layout enum=top_down enum=left_right enum=radial enum=circular enum=grid enum=overlapping enum=free core.source="hand-core 1"
+@w.diagram.diagram.topic core.slot of=w.diagram.diagram key=topic kind=atom kind=string core.source="hand-core 1"
+
+# For an editor, the page's settings (one diagram per page): `arrange` how the editor lays the page out (tree and
+# layered: levels by graph depth; row, column, grid; circle: one ring; radial: rings by level; free: where each node
+# was put), before `layout`; `direction` the way levels follow each other (down, right, up, left); `spacing` the gaps
+# (compact, normal, loose); `route` how links are drawn (orthogonal, straight, curved); `theme` the name of a visual
+# style (k.styles.theme) new nodes follow; `background` the page colour; `numbered` true when each node shows its step
+# number; `code` its identifier.
+@w.diagram.diagram.arrange core.slot of=w.diagram.diagram key=arrange enum=tree enum=layered enum=row enum=column enum=grid enum=circle enum=radial enum=free core.source="hand-core 1"
+@w.diagram.diagram.direction core.slot of=w.diagram.diagram key=direction enum=down enum=right enum=up enum=left core.source="hand-core 1"
+@w.diagram.diagram.spacing core.slot of=w.diagram.diagram key=spacing enum=compact enum=normal enum=loose core.source="hand-core 1"
+@w.diagram.diagram.route core.slot of=w.diagram.diagram key=route enum=orthogonal enum=straight enum=curved core.source="hand-core 1"
+@w.diagram.diagram.theme core.slot of=w.diagram.diagram key=theme kind=atom kind=string core.source="hand-core 1"
+@w.diagram.diagram.background core.slot of=w.diagram.diagram key=background kind=atom kind=string core.source="hand-core 1"
+@w.diagram.diagram.numbered core.slot of=w.diagram.diagram key=numbered kind=boolean core.source="hand-core 1"
+@w.diagram.diagram.code core.slot of=w.diagram.diagram key=code kind=atom kind=string core.source="hand-core 1"
+
+# A node: `label` its text, `diagram` its diagram, `role` what it is in the diagram (a flowchart's start, end, process,
+# decision, data, document, subprocess, connector; a tree's root and item; a cycle's stage; a timeline's event; a mind
+# map's centre and branch; a Venn diagram's item; an org chart's post; a network's node; a table's row, column, cell);
+# `shape` how it is drawn (k.diagrams.shape gives the usual one for each kind and role); `parent` the node it hangs
+# from (a tree, an org chart, a mind map); `group` the groups it is in (a Venn diagram's sets: one or several); `n` its
+# place in order (a step, a stage, an event), from 1; `x`, `y` where the layout put it; `colour`.
+@w.diagram.node core.type of=w.diagram.node extends=std.schema.thing closed=true core.source="hand-core 1"
+@w.diagram.node.label core.slot of=w.diagram.node key=label required=true kind=atom kind=string core.source="hand-core 1"
+@w.diagram.node.diagram core.slot of=w.diagram.node key=diagram type=w.diagram.diagram core.source="hand-core 1"
+@w.diagram.node.role core.slot of=w.diagram.node key=role enum=start enum=end enum=process enum=decision enum=data enum=document enum=subprocess enum=connector enum=root enum=item enum=stage enum=event enum=centre enum=branch enum=post enum=node enum=row enum=column enum=cell enum=database enum=actor enum=note enum=external core.source="hand-core 1"
+@w.diagram.node.shape core.slot of=w.diagram.node key=shape enum=oval enum=rectangle enum=rounded_rectangle enum=diamond enum=parallelogram enum=document enum=double_rectangle enum=circle enum=ellipse enum=dot enum=chevron enum=square enum=triangle enum=hexagon enum=star enum=text enum=cylinder enum=cloud enum=actor enum=note core.source="hand-core 1"
+@w.diagram.node.parent core.slot of=w.diagram.node key=parent type=w.diagram.node core.source="hand-core 1"
+@w.diagram.node.group core.slot of=w.diagram.node key=group many=true type=w.diagram.group core.source="hand-core 1"
+@w.diagram.node.n core.slot of=w.diagram.node key=n kind=integer min=1 step=1 core.source="hand-core 1"
+@w.diagram.node.x core.slot of=w.diagram.node key=x kind=number core.source="hand-core 1"
+@w.diagram.node.y core.slot of=w.diagram.node key=y kind=number core.source="hand-core 1"
+@w.diagram.node.colour core.slot of=w.diagram.node key=colour kind=atom kind=string core.source="hand-core 1"
+# For an editor: `code` the identifier tools and people use ("n1"); `size` a grade (tiny, small, medium, large, huge);
+# `width` and `height` an exact size that overrides the grade; `value` the number a node stands for (a bar of a chart);
+# `pinned` true when `x`, `y` were set by hand and the layout keeps them.
+@w.diagram.node.code core.slot of=w.diagram.node key=code kind=atom kind=string core.source="hand-core 1"
+@w.diagram.node.size core.slot of=w.diagram.node key=size enum=tiny enum=small enum=medium enum=large enum=huge core.source="hand-core 1"
+@w.diagram.node.width core.slot of=w.diagram.node key=width kind=number min=8 core.source="hand-core 1"
+@w.diagram.node.height core.slot of=w.diagram.node key=height kind=number min=8 core.source="hand-core 1"
+@w.diagram.node.value core.slot of=w.diagram.node key=value kind=number core.source="hand-core 1"
+@w.diagram.node.pinned core.slot of=w.diagram.node key=pinned kind=boolean core.source="hand-core 1"
+
+# Its style, for an editor: `outline` the colour of its border, `text_colour` the colour of its label, `font_size` the
+# label's size in pixels, `font_weight` normal or bold. Roles for software and business diagrams: database (drawn as a
+# cylinder), actor (a person), note (a comment), external (a system outside: a cloud). Shapes: cylinder, cloud, actor
+# (a stick figure), note (a sheet with a folded corner).
+@w.diagram.node.outline core.slot of=w.diagram.node key=outline kind=atom kind=string core.source="hand-core 1"
+@w.diagram.node.text_colour core.slot of=w.diagram.node key=text_colour kind=atom kind=string core.source="hand-core 1"
+@w.diagram.node.font_size core.slot of=w.diagram.node key=font_size kind=number min=6 max=72 core.source="hand-core 1"
+@w.diagram.node.font_weight core.slot of=w.diagram.node key=font_weight enum=normal enum=bold core.source="hand-core 1"
+# Effects, for an editor: `effect` a shadow under the shape or a glow round it (none: neither), `opacity` from 0.1 (faint)
+# to 1, `corner` the radius of a box's corners in pixels.
+@w.diagram.node.effect core.slot of=w.diagram.node key=effect enum=none enum=shadow enum=glow core.source="hand-core 1"
+@w.diagram.node.opacity core.slot of=w.diagram.node key=opacity kind=number min=0.1 max=1 core.source="hand-core 1"
+@w.diagram.node.corner core.slot of=w.diagram.node key=corner kind=number min=0 max=40 core.source="hand-core 1"
+# `rotation` the turn of a node about its centre, in degrees clockwise.
+@w.diagram.node.rotation core.slot of=w.diagram.node key=rotation kind=number min=-360 max=360 core.source="hand-core 1"
+
+# An edge from one node to another: `label` what the link says (yes, no, then, eats), `direction` forward (an arrow from
+# `from` to `to`; the default), both, or none (a line: a tree's branch, a network's link); `diagram` its diagram.
+@w.diagram.edge core.type of=w.diagram.edge extends=std.schema.thing closed=true core.source="hand-core 1"
+@w.diagram.edge.from core.slot of=w.diagram.edge key=from required=true type=w.diagram.node core.source="hand-core 1"
+@w.diagram.edge.to core.slot of=w.diagram.edge key=to required=true type=w.diagram.node core.source="hand-core 1"
+@w.diagram.edge.label core.slot of=w.diagram.edge key=label kind=atom kind=string core.source="hand-core 1"
+@w.diagram.edge.direction core.slot of=w.diagram.edge key=direction enum=forward enum=back enum=both enum=none default=forward core.source="hand-core 1"
+@w.diagram.edge.diagram core.slot of=w.diagram.edge key=diagram type=w.diagram.diagram core.source="hand-core 1"
+# For an editor: `code` ("e1"), `n` its place in the order edges were made, `colour`, `style` (solid, dashed, dotted)
+# and `width` of the line.
+@w.diagram.edge.code core.slot of=w.diagram.edge key=code kind=atom kind=string core.source="hand-core 1"
+@w.diagram.edge.n core.slot of=w.diagram.edge key=n kind=integer min=1 step=1 core.source="hand-core 1"
+@w.diagram.edge.colour core.slot of=w.diagram.edge key=colour kind=atom kind=string core.source="hand-core 1"
+@w.diagram.edge.style core.slot of=w.diagram.edge key=style enum=solid enum=dashed enum=dotted core.source="hand-core 1"
+@w.diagram.edge.width core.slot of=w.diagram.edge key=width kind=number min=0.5 max=12 core.source="hand-core 1"
+
+# `direction` back: the arrowhead at `from` only; `route` how it is drawn (orthogonal, straight, curved; the page's
+# route when it has none).
+@w.diagram.edge.route core.slot of=w.diagram.edge key=route enum=orthogonal enum=straight enum=curved core.source="hand-core 1"
+
+# A group of nodes drawn as one shape around them (a set of a Venn diagram, a lane, a cluster): `label`, `diagram`,
+# `shape` (circle, ellipse, rectangle, rounded_rectangle), `parent` the group it lies in (nested groups).
+@w.diagram.group core.type of=w.diagram.group extends=std.schema.thing closed=true core.source="hand-core 1"
+@w.diagram.group.label core.slot of=w.diagram.group key=label required=true kind=atom kind=string core.source="hand-core 1"
+@w.diagram.group.diagram core.slot of=w.diagram.group key=diagram type=w.diagram.diagram core.source="hand-core 1"
+@w.diagram.group.shape core.slot of=w.diagram.group key=shape enum=circle enum=ellipse enum=rectangle enum=rounded_rectangle default=circle core.source="hand-core 1"
+@w.diagram.group.parent core.slot of=w.diagram.group key=parent type=w.diagram.group core.source="hand-core 1"
+# For an editor: `code` ("g1" or the name it was given), `n` its place in order, `colour`; `layout` how its members
+# are set out inside it (row, column, grid; bar and line: the members' values as the bars or points of a chart);
+# circle: its members on a ring; pie and doughnut: the members' values as slices; `framed` false for an arrangement
+# drawn without its outline; `scale` the size of its members (1 as made); `x`, `y`
+# its centre, kept by the layout when `pinned` is true.
+@w.diagram.group.code core.slot of=w.diagram.group key=code kind=atom kind=string core.source="hand-core 1"
+@w.diagram.group.n core.slot of=w.diagram.group key=n kind=integer min=1 step=1 core.source="hand-core 1"
+@w.diagram.group.colour core.slot of=w.diagram.group key=colour kind=atom kind=string core.source="hand-core 1"
+@w.diagram.group.layout core.slot of=w.diagram.group key=layout enum=row enum=column enum=grid enum=circle enum=bar enum=line enum=area enum=pie enum=doughnut core.source="hand-core 1"
+@w.diagram.group.framed core.slot of=w.diagram.group key=framed kind=boolean core.source="hand-core 1"
+@w.diagram.group.scale core.slot of=w.diagram.group key=scale kind=number min=0.05 max=20 core.source="hand-core 1"
+@w.diagram.group.x core.slot of=w.diagram.group key=x kind=number core.source="hand-core 1"
+@w.diagram.group.y core.slot of=w.diagram.group key=y kind=number core.source="hand-core 1"
+@w.diagram.group.pinned core.slot of=w.diagram.group key=pinned kind=boolean core.source="hand-core 1"
+# A chart group's formatting: `x_label` and `y_label` the axes' titles, `value_labels` false to hide the values,
+# `gridlines` true for lines across the plot at each quarter, `legend` where the key of a pie or doughnut goes (none,
+# right, bottom); its title is its `label`, its categories its members (their labels) and its values theirs.
+@w.diagram.group.x_label core.slot of=w.diagram.group key=x_label kind=atom kind=string core.source="hand-core 1"
+@w.diagram.group.y_label core.slot of=w.diagram.group key=y_label kind=atom kind=string core.source="hand-core 1"
+@w.diagram.group.value_labels core.slot of=w.diagram.group key=value_labels kind=boolean core.source="hand-core 1"
+@w.diagram.group.gridlines core.slot of=w.diagram.group key=gridlines kind=boolean core.source="hand-core 1"
+@w.diagram.group.legend core.slot of=w.diagram.group key=legend enum=none enum=right enum=bottom core.source="hand-core 1"
+# `y_max` the top of a chart's value axis (a value above it is drawn at the top); the largest value when it has none.
+@w.diagram.group.y_max core.slot of=w.diagram.group key=y_max kind=number core.source="hand-core 1"
+
+# A node's membership in a group as a thing of its own, for an editor: std.acts cannot take a reference away, and
+# removing a group removes the things that refer to it, so a membership that comes and goes is made and removed.
+# Removing the group or the node removes it. (`w.diagram.node group=` stays the plain way to say it in data.)
+@w.diagram.member core.type of=w.diagram.member extends=std.schema.thing closed=true core.source="hand-core 1"
+@w.diagram.member.group core.slot of=w.diagram.member key=group required=true type=w.diagram.group core.source="hand-core 1"
+@w.diagram.member.node core.slot of=w.diagram.member key=node required=true type=w.diagram.node core.source="hand-core 1"
+
+# One thing of each kind per code; one membership per node and group.
+@w.diagram.code.first std.schema.thing kind=?kind code=?code
+@w.diagram.code.second std.schema.thing kind=?kind code=?code
+@w.diagram.code.other core.check fn=neq args=$w.diagram.code.first args=$w.diagram.code.second
+@w.diagram.code.unique core.deny when=$w.diagram.code.first when=$w.diagram.code.second if=$w.diagram.code.other why="The code ?code is already used by another ?kind." core.source="hand-core 1"
+@w.diagram.member.first w.diagram.member group=?g node=?n
+@w.diagram.member.second w.diagram.member group=?g node=?n
+@w.diagram.member.other core.check fn=neq args=$w.diagram.member.first args=$w.diagram.member.second
+@w.diagram.member.unique core.deny when=$w.diagram.member.first when=$w.diagram.member.second if=$w.diagram.member.other why="That node is already in that group." core.source="hand-core 1"
+
+# The kinds and the acts that apply to them. At most 20 diagrams, 500 nodes, 1,000 edges, 100 groups and 1,000 memberships.
+@w.diagram.kind.diagram std.schema.kind of=w.diagram.diagram world=w.diagram acts=make acts=remove acts=change acts=pick acts=ask acts=copy core.source="hand-core 1"
+@w.diagram.kind.node std.schema.kind of=w.diagram.node world=w.diagram acts=make acts=remove acts=change acts=place acts=connect acts=group acts=pick acts=ask acts=copy core.source="hand-core 1"
+@w.diagram.kind.edge std.schema.kind of=w.diagram.edge world=w.diagram acts=make acts=remove acts=change acts=pick acts=ask core.source="hand-core 1"
+@w.diagram.kind.group std.schema.kind of=w.diagram.group world=w.diagram acts=make acts=remove acts=change acts=pick acts=ask acts=copy core.source="hand-core 1"
+@w.diagram.kind.member std.schema.kind of=w.diagram.member world=w.diagram acts=make acts=remove acts=pick acts=ask core.source="hand-core 1"
+@w.diagram.limit.diagram std.schema.limit of=w.diagram.diagram max=20 core.source="hand-core 1"
+@w.diagram.limit.node std.schema.limit of=w.diagram.node max=500 core.source="hand-core 1"
+@w.diagram.limit.edge std.schema.limit of=w.diagram.edge max=1000 core.source="hand-core 1"
+@w.diagram.limit.group std.schema.limit of=w.diagram.group max=100 core.source="hand-core 1"
+@w.diagram.limit.member std.schema.limit of=w.diagram.member max=1000 core.source="hand-core 1"
+
+# Words: for the world (how a host finds it by name), its kinds and its keys.

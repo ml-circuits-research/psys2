@@ -8,9 +8,7 @@
  */
 import { parse, get, getAll } from '../soplang/index.mjs';
 import { Legends } from '../legends/index.mjs';
-import { expandShape } from '../formalizer/rules/shapes.mjs';
 import { readDescriptionWires, slotDeclarations } from './describe.mjs';
-import { checkPattern } from '../formalizer/rules/index.mjs';
 import { lexIndex } from './lexicon.mjs';
 import { budget } from '../dialog/budget.mjs';
 
@@ -270,7 +268,12 @@ function buildWorld(id, files, ops, { fns = null, voice = null, toState = null, 
 }
 
 /** Load every world the loader lists. Never throws on world content errors; see `allErrors()`. */
-export async function loadWorlds(loader, { reasoner = 'matrix' } = {}) {
+/**
+ * `patterns` is the legacy pattern compiler ({ expandShape, checkPattern } from src/formalizer/rules), passed only by the
+ * historical grammar tools (src/cli.mjs). The application composition loads no grammar: a world that declares `core.shape`
+ * without it gets a visible load error instead of silently generated patterns.
+ */
+export async function loadWorlds(loader, { reasoner = 'matrix', patterns = null } = {}) {
   const set = new WorldSet();
   const ids = await loader.listWorlds();
   const built = new Map();
@@ -309,7 +312,7 @@ export async function loadWorlds(loader, { reasoner = 'matrix' } = {}) {
     set.legends.add(w.legendWires, { worldId: id });
   }
   resolveLexiconExtends(set);
-  expandShapes(set);
+  expandShapes(set, patterns);
   for (const w of set.list()) {
     w.kb = [];
     for (const raw of w.kbRaw) {
@@ -358,8 +361,13 @@ function resolveLexiconExtends(set) {
  * appended to the world's own (hand-written first, so their order wins ties). Each generated pattern goes through `checkPattern`;
  * problems are load errors of the world. A shape that cannot be expanded is an error and generates nothing.
  */
-function expandShapes(set) {
+function expandShapes(set, patterns) {
   if (!set.list().some((w) => w.shapes.length)) return;
+  if (!patterns?.expandShape || !patterns?.checkPattern) {
+    for (const w of set.list()) if (w.shapes.length) w.errors.push({ file: 'patterns.sop', message: `${w.shapes.length} core.shape declaration(s) need the legacy pattern compiler, which this composition does not load` });
+    return;
+  }
+  const { expandShape, checkPattern } = patterns;
   const lex = lexIndex(set);
   for (const w of set.list()) {
     for (const shape of w.shapes) {

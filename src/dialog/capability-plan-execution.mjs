@@ -1,5 +1,6 @@
 import { readSceneDefaults } from './scene-placement-defaults.mjs';
-import { solveDefaultPlacement } from './default-placement.mjs';
+import { solveDefaultPlacement, solveGroupPlacement } from './default-placement.mjs';
+import { en } from '../lang/en.mjs';
 import { quote } from '../vendor/sopworld/sopworld.mjs';
 // SPDX-License-Identifier: AGPL-3.0-only
 import { compileNativeCapability } from './capability-plan-adapter.mjs';
@@ -47,7 +48,20 @@ function verifyRemovalPeers(plan, before, after, evidence) {
 }
 
 /** Compose authoritative observations, run the compiled native call and report the actual effect. */
-export async function executeNativeCapability(session, candidate, { bindings, view, focus, text, targetUnique, invocation = globalThis.crypto.randomUUID(), unapplied = [], compiledPlan, readKnowledge } = {}) {
+export async function executeNativeCapability(session, candidate, options = {}) {
+  const { view, invocation = globalThis.crypto.randomUUID() } = options;
+  const compiled = await compileNativePlan(session, candidate, options);
+  if (!compiled) return null;
+  const { area, nativeState, host, before, plan } = compiled;
+  if (plan.status === 'not-applicable') return null;
+  if (plan.status !== 'compiled') return refusal(plan, candidate);
+  // A count the family declares repeatable: that many objects, placed together in one problem.
+  if (plan.act === 'make' && plan.repeat > 1) return executeNativeGroup(session, [{ candidate, plan }], { view, invocation });
+  return runNativePlan(session, candidate, { area, nativeState, host, before, plan, view, invocation, text: options.text });
+}
+
+/** The compiled capability plan of a candidate against the live observation (degree previews and scene defaults as declared). */
+export async function compileNativePlan(session, candidate, { bindings, view, focus, targetUnique, unapplied = [], compiledPlan, readKnowledge } = {}) {
   const area = NATIVE_AREAS[view];
   const nativeState = area && session.isession.state[area.world];
   if (!nativeState || !bindings) return null;
@@ -65,9 +79,10 @@ export async function executeNativeCapability(session, candidate, { bindings, vi
     preflight:current=>preliminary ??= compileNativeCapability(current,context)});
   const plan = compiledPlan ?? (sceneDefaults ? compileNativeCapability(candidate,{...context,sceneDefaults})
     : preliminary ?? compileNativeCapability(candidate,context));
-  if (plan.status === 'not-applicable') return null;
-  if (plan.status !== 'compiled') return refusal(plan, candidate);
+  return { area, nativeState, host, before, plan };
+}
 
+async function runNativePlan(session, candidate, { area, nativeState, host, before, plan, view, invocation, text }) {
   let prepared;
   try {
     prepared = await prepareNativeControlHost(session, { view, operation: plan.operation, args: plan.args, host, invocation });
@@ -98,7 +113,7 @@ export async function executeNativeCapability(session, candidate, { bindings, vi
   if (placed?.solved) {
     try {
       session.engine?.onWorldActivity?.({ nodeIds: ['execution:placement-geometry','instance:' + area.world], world: area.world, operation: 'std.placement', phase: 'end',
-        label: 'Solved default placement', status: 'compiled', provider: placed.provider, candidates: placed.candidates, durationMs: placed.ms, region: placed.region, solves: placed.solves, search: placed.z3 });
+        label: 'Solved default placement', status: 'compiled', provider: placed.provider, candidates: placed.candidates, durationMs: placed.ms, region: placed.region, solves: placed.solves, search: placed.z3, defaulted: placed.defaulted, wires: placed.choice?.input + '\n' + placed.choice?.sop });
     } catch { /* Inspection does not affect dispatch. */ }
   }
   const callArgs = placed?.solved ? placed.args : plan.args, toolInput = placed?.solved ? placed.toolInput : plan.toolInput;
@@ -139,7 +154,7 @@ export async function executeNativeCapability(session, candidate, { bindings, vi
   const message = measured?.text ?? [said, ...notes].join(' ');
   return {
     ...reply(message, true, { assessment: measured?.assessment ?? receipt.status, journal: measured?.journal, receipt, reading: candidate, compiledSop: plan.sop,
-      ...(placed ? { solver: { provider: placed.solved ? placed.provider : null, compileMs: placed.ms, region: placed.region, solves: placed.solves, z3: placed.z3 } } : {}),
+      ...(placed ? { solver: { provider: placed.solved ? placed.provider : null, compileMs: placed.ms, region: placed.region, solves: placed.solves, z3: placed.z3, defaulted: placed.defaulted ?? [], choice: placed.choice?.sop ?? null } } : {}),
       controlIntent: toolInput, effectVerification: verification, binding: { operation: plan.operation, alternatives: plan.alternatives.filter((choice) => choice.reason) },
       uncertainty: notes, alternatives: plan.alternatives.filter((choice) => !choice.reason).map((choice) => choice.operation), partial: plan.skipped.length > 0 }),
     state: { [area.world]: structuredClone(session.isession.state[area.world]) },
@@ -161,4 +176,89 @@ async function placeByProblem(host, operation, plan) {
   placed.args = { ...args, [port.xKey]: placed.x, [port.yKey]: placed.y, ...(port.sizeKey && args[port.sizeKey] === undefined ? { [port.sizeKey]: placed.size } : {}) };
   placed.toolInput = call(placed.args);
   return placed;
+}
+
+/**
+ * Several new objects made by one request: a count the family declares repeatable ("draw three houses"), or
+ * coordinated things ("draw a cat and 2 dogs", one compiled plan each). All of them are placed together in one
+ * placement problem (solveGroupPlacement), then each call is made through the same observed native tool path as a
+ * single make, in order. The reply says what was made, and which of them could not keep clear of other objects.
+ * `members`: [{ candidate, plan }] with compiled make plans of the same area.
+ */
+export async function executeNativeGroup(session, members, { view, invocation = globalThis.crypto.randomUUID(), dropped = [] } = {}) {
+  const area = NATIVE_AREAS[view], nativeState = area && session.isession.state[area.world];
+  if (!nativeState || !members.length || members.some(({ plan }) => plan.status !== 'compiled' || plan.act !== 'make')) return null;
+  const original = structuredClone(nativeState);
+  const restore = (text, reason, trace = {}) => { session.isession.state[area.world] = original; return reply(text, false, { reason, ...trace }); };
+  // The knowledge each tool declares for its arguments (a catalog drawing by name), loaded for every member.
+  const lookups = {};
+  for (const { plan } of members) {
+    let prepared;
+    try { prepared = await prepareNativeControlHost(session, { view, operation: plan.operation, args: plan.args, invocation }); }
+    catch (error) { return restore(`I understood the request for ${plan.kind}, but could not load the knowledge required by its tool. Nothing changed.`, 'native-knowledge-unavailable', { error: String(error?.message ?? error) }); }
+    for (const input of prepared.bindings().find((op) => op.id === plan.operation)?.knowledgeInputs ?? []) {
+      const value = plan.args[input.argument];
+      if (value !== undefined && !(lookups[input.argument] ??= []).includes(value)) lookups[input.argument].push(value);
+    }
+  }
+  const host = await createAreaHost(area, { args: lookups, state: session.isession.state[area.world], instanceId: instanceIdFor(session, area.world),
+    loader: session.engine?.loader, knowledge: session.engine?.knowledge });
+  const subjects = members.flatMap(({ candidate, plan }) => Array.from({ length: plan.repeat ?? 1 }, () => ({ candidate, plan,
+    operation: host.bindings().find((op) => op.id === plan.operation) })));
+  if (subjects.some(({ operation }) => !operation) || subjects.length > 16) return restore('I could not apply that action. Nothing changed.', 'group-binding');
+  const scalar = (value) => typeof value === 'number' && Number.isFinite(value) || typeof value === 'boolean' || typeof value === 'string';
+  const token = (value) => typeof value === 'string' ? quote(value) : String(value);
+  const call = (operation, values) => '@placement.call ' + operation.id + Object.entries(values).map(([key, value]) => ' ' + key + '=' + token(value)).join('');
+  // One placement problem for every subject that asks for no place of its own.
+  const free = subjects.filter(({ plan, operation }) => operation.spatial?.xKey && operation.spatial?.yKey && plan.args[operation.spatial.xKey] === undefined &&
+    plan.args[operation.spatial.yKey] === undefined && Object.values(plan.args).every(scalar));
+  const placed = free.length ? await solveGroupPlacement(host, { intents: free.map(({ plan, operation }) => call(operation, plan.args)) }) : null;
+  if (placed?.solved) {
+    free.forEach((subject, i) => { const port = subject.operation.spatial, place = placed.places[i];
+      subject.args = { ...subject.plan.args, [port.xKey]: place.x, [port.yKey]: place.y, ...(port.sizeKey && subject.plan.args[port.sizeKey] === undefined ? { [port.sizeKey]: place.size } : {}) };
+      subject.overlaps = place.overlaps; });
+    try {
+      session.engine?.onWorldActivity?.({ nodeIds: ['execution:placement-geometry', 'instance:' + area.world], world: area.world, operation: 'std.placement', phase: 'end',
+        label: 'Solved group placement', status: 'compiled', provider: placed.provider, durationMs: placed.ms, subjects: free.length, solves: placed.solves, search: placed.z3, defaulted: placed.defaulted, wires: placed.choice?.input + '\n' + placed.choice?.sop });
+    } catch { /* Inspection does not affect dispatch. */ }
+  }
+  const made = [], receipts = [], verifications = [], refused = [];
+  for (const subject of subjects) {
+    const args = subject.args ?? subject.plan.args, observed = host.observe(), toolInput = call(subject.operation, args);
+    const intent = describeNativeControl({ operation: subject.operation, args, before: observed });
+    const receipt = await invokeObservedNativeTool(session, { area, host, invocation: globalThis.crypto.randomUUID(), expectedVersion: observed.version, sop: toolInput });
+    // The area's rules may refuse one thing (a kind it cannot draw) and accept the others: it is named, not made.
+    if (receipt.status === 'refused') { refused.push({ kind: subject.plan.kind, reason: receipt.reason }); continue; }
+    const after = host.observe();
+    verifications.push(verifyNativeControlEffect({ intent, before: observed, after, receipt }));
+    receipts.push(receipt);
+    const old = new Set(observed.objects.map((object) => object.id));
+    const object = after.objects.find((value) => !old.has(value.id) && (value.in ?? value.parent) === undefined);
+    made.push({ subject, object, kind: object?.kind ?? subject.plan.kind });
+  }
+  const refusedList = [...new Set(refused.map((r) => r.kind))];
+  if (!made.length) return restore('I could not make ' + refusedList.map((k) => 'a ' + k).join(' or ') + '. Nothing changed.', refused[0]?.reason ?? 'group-refused', { refused });
+  session.newEngineFocus = { ...session.newEngineFocus, [view]: made.at(-1)?.object?.id ?? null };
+  // "Created a cat and 2 dogs." The kinds in the order asked, each with its number.
+  const counts = new Map();
+  for (const { kind } of made) counts.set(kind, (counts.get(kind) ?? 0) + 1);
+  const phrase = ([kind, count]) => count === 1 ? 'a ' + kind : count + ' ' + en.plural(kind);
+  const list = [...counts].map(phrase), joined = list.length > 1 ? list.slice(0, -1).join(', ') + ' and ' + list.at(-1) : list[0];
+  const notes = [...new Set(members.flatMap(({ plan }) => plan.notes))];
+  const crowded = made.filter(({ subject }) => subject.overlaps);
+  if (crowded.length) notes.push(crowded.length === made.length ? 'There was no free room, so they overlap other objects.' : crowded.length + ' of them overlap other objects: there was no free room for them.');
+  if (refusedList.length) notes.push('I could not make ' + refusedList.map((k) => 'a ' + k).join(' or ') + ' here.');
+  const skipped = [...new Set(members.flatMap(({ plan }) => plan.skipped))];
+  if (skipped.length) notes.push('I could not apply ' + skipped.join(', ') + '.');
+  if (dropped.length) notes.push('I could not read ' + dropped.map((d) => JSON.stringify(d)).join(', ') + '.');
+  const message = ['Created ' + joined + '.', ...notes].join(' ');
+  return {
+    ...reply(message, true, { assessment: receipts.every((r) => r.status === 'changed') ? 'changed' : receipts.at(-1)?.status, receipts, reading: members[0].candidate,
+      readings: members.map(({ candidate }) => candidate), compiledSop: members.map(({ plan }) => plan.sop).join('\n'),
+      group: { made: made.map(({ object, kind, subject }) => ({ id: object?.id ?? null, kind, overlaps: !!subject.overlaps })), requested: subjects.length, refused },
+      ...(placed ? { solver: { provider: placed.solved ? placed.provider : null, compileMs: placed.ms, solves: placed.solves, z3: placed.z3 } } : {}),
+      effectVerification: verifications.find((v) => v.status !== 'verified') ?? verifications[0], uncertainty: notes, partial: skipped.length > 0 || dropped.length > 0 || refused.length > 0 }),
+    state: { [area.world]: structuredClone(session.isession.state[area.world]) },
+    effects: receipts.filter((r) => r.status === 'changed').map(() => ({ operation: members[0].plan.operation })),
+  };
 }

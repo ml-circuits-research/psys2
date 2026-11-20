@@ -6,8 +6,18 @@
   "complex": 836,
   "simplified": 1156
  },
- "errors": {},
- "errorExamples": {},
+ "errors": {
+  "text-already-in-official-dataset": 3180
+ },
+ "errorExamples": {
+  "text-already-in-official-dataset": [
+   "ui-coverage-v2-avatar-00001: 'rebuild the avatar from the old man base' ",
+   "ui-coverage-v2-avatar-00002: 'compose her as a queen' ",
+   "ui-coverage-v2-avatar-00003: 'start over with the bearded man as the base' ",
+   "ui-coverage-v2-avatar-00004: 'recompose the character on the woman with curly hair base' ",
+   "ui-coverage-v2-avatar-00005: 'Compose a fresh character using the alien base.' "
+  ]
+ },
  "notes": {
   "official-warning:selector-not-in-context": 95,
   "official-warning:value-span-ambiguous": 54,

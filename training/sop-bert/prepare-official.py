@@ -19,7 +19,31 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 OFFICIAL = ROOT.parents[1] / 'official-dataset'
 UI_SOURCES = {'ui-natural-v1', 'ui-human-v1', 'ui-features-v1', 'ui-quantities-v1', 'human-adapted-v1-drawing', 'human-adapted-v1-diagram'}  # executed UI recipes and their paraphrases, and the small avatar feature and quantity corpora; generated relations are already numerous
-SOURCE_WEIGHTS = {'ui-diagram-v2': 2}  # the Diagram voice corpus is large already: repeated twice, not ui_weight times
+SOURCE_WEIGHTS = {'ui-diagram-v2': 2, 'data-drop-v1': 2, 'main-synthetic': 0.5}  # sampling weights (owner phase rule 2026-11-20: weights at training time, no row discarded from the dataset)
+TRAINER_DETERMINERS = {'demonstrative': 'definite', 'possessive': 'definite', 'quantified': 'definite'}  # stored as said; the current determiner head has two classes
+
+
+def trainer_view(raw, inventory):
+    """The labels as the current trainer can take them: open values outside a closed bank lose their class (the mention stays),
+    determiners map to the two-class head. The dataset itself keeps everything."""
+    raw = json.loads(json.dumps(raw))
+    for q in raw.get('requests') or []:
+        t = q.get('target') or {}
+        if t.get('determiner') in TRAINER_DETERMINERS:
+            t['determiner'] = TRAINER_DETERMINERS[t['determiner']]
+        for c in q.get('constraints') or []:
+            typ, _, name = c['key'].partition('.')
+            bank = inventory.get(raw['world'], {}).get(typ, {}).get('keys', {}).get(name, {}).get('values')
+            if c.get('open_value') or (bank and 'value' in c and c['value'] not in bank):
+                c.pop('value', None)
+            c.pop('open_value', None)
+    return raw
+
+
+def repeats_of(source, row_id, ui_weight):
+    w = ui_weight if source in UI_SOURCES else SOURCE_WEIGHTS.get(source, 1)
+    whole, frac = int(w), w - int(w)
+    return whole + (1 if frac and int(hashlib.sha256(('w:' + row_id).encode()).hexdigest(), 16) % 1000 < frac * 1000 else 0)
 
 
 def sha(path):
@@ -53,6 +77,7 @@ def prepare(out, ui_weight=3, max_length=256):
     try:
         for split, path in splits.items():
             for raw in rows(path):
+                raw = trainer_view(raw, inventory)
                 authored.write(json.dumps({'source_path': 'official-dataset', 'source_id': raw['id'], 'text': raw['text'], 'requests': raw['requests'],
                                            'cohort': {'family': raw['family'], 'operation': raw['operation']}, 'world': raw['world']}, ensure_ascii=False) + '\n')
                 source = {'id': raw['id'], 'source_id': raw['id'], 'source_path': 'official-dataset', 'source': {'text': raw['text'], 'unit': 'unicode-scalar'},
@@ -65,7 +90,9 @@ def prepare(out, ui_weight=3, max_length=256):
                     record.update({'id': raw['id'] + ':' + str(index), 'source_id': raw['id'], 'source_path': 'official-dataset', 'split': split,
                                    'requestIndex': index, 'origin': raw['source'], 'splitGroup': raw['family'], 'operation': raw['operation']})
                     diagnostics.update(d['reason'] for d in record['diagnostics'])
-                    repeats = (ui_weight if raw['source'] in UI_SOURCES else SOURCE_WEIGHTS.get(raw['source'], 1)) if split == 'train' else 1
+                    repeats = repeats_of(raw['source'], raw['id'], ui_weight) if split == 'train' else 1
+                    if not repeats:
+                        continue
                     for r in range(repeats):
                         handles[split].write(json.dumps({**record, 'id': record['id'] + (f':w{r}' if repeats > 1 else '')}, ensure_ascii=False) + '\n')
                         counts[split + ':samples'] += 1

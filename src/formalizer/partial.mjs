@@ -8,7 +8,7 @@
  */
 
 import { QUESTION_WORDS } from './rules/normalize.mjs';
-import { guard } from './guard.mjs';
+import { guard } from '../dialog/turn-guard.mjs';
 
 /** True when `text` has a question cue (a question mark or a question word anywhere). */
 export const looksLikeQuestion = (text) => /\?/.test(text) || text.split(/\s+/).some((w) => QUESTION_WORDS.has(norm(w)));

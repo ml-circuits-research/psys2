@@ -1,7 +1,7 @@
 // FREEZE 5: ORT restart budget (2 per 5 minutes, then the models pause) and deadlines scaled by device speed.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { createOrtClient, OrtPaused, OrtTimeout, measureDeviceSpeed } from '../src/formalizer/ort-client.mjs';
+import { createOrtClient, OrtPaused, OrtTimeout, measureDeviceSpeed } from '../src/dialog/ort-client.mjs';
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 

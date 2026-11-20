@@ -87,8 +87,9 @@ function nativeCapabilityWires(host,operations,mappings,frame,{constructors=[],c
     const extent=measurements.get(material);
     if(!extent||!(extent.width>0)||!(extent.height>0))continue;
     const kind='native.spatial.kind.'+rows.length;
-    const {width,height,originX,originY}=extent;
-    rows.push(row(kind,'std.placement.kind',{binding:'$'+tool,concept:mapping.canonical,native:mapping.lemma,width,height,originX,originY}));
+    const {width,height,originX,originY,avoids=[]}=extent;
+    // avoids: the kinds of observed regions the kind keeps out of (the water of a river for a house: k.scenes.support).
+    rows.push(row(kind,'std.placement.kind',{binding:'$'+tool,concept:mapping.canonical,native:mapping.lemma,width,height,originX,originY,avoids:avoids.filter(a=>atom.test(a))}));
     for(const [key,value] of Object.entries(args))if(operation.act==='make'&&key!==kindKey)rows.push(row('native.spatial.argument.'+rows.length,'std.placement.argument',{binding:'$'+kind,key,value:scalar(value)}));
     placed.add(operation.act+' '+mapping.canonical);
     break;

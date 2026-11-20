@@ -2,13 +2,13 @@
 // A tab defined by its area.sop: which catalog modules form its instance and knowledge, which rule files
 // compile its commands and project its drawing, the things it starts with and the open choices of its native
 // interface. This module only reads that declaration; it holds no knowledge of any tab.
-import {World, parse, str} from '../lib/vendor/sopworld/sopworld.mjs?v=4a094fcca4';
+import {World, parse, str} from '../lib/vendor/sopworld/sopworld.mjs?v=915a9d5c18';
 import {budget} from '../lib/dialog/budget.mjs?v=00bce6e369';
-import {catalogWorld} from './catalog-world.mjs?v=40b9d1c678';
-import {readNativeToolInterface} from './native-tool-interface.mjs?v=91a5dd6e55';
-import {toolInvocationContext} from './native-tool-host.mjs?v=f2c2d48456';
-import {createSopWorldHost, forgetDerived, initialSopWorldState, worldOf} from './sop-world-host.mjs?v=250290c6bb';
-import {renderPrimitives} from './sop-primitives.mjs?v=4d2cb4b2fc';
+import {catalogWorld} from './catalog-world.mjs?v=e500104cdf';
+import {readNativeToolInterface} from './native-tool-interface.mjs?v=25c2472555';
+import {toolInvocationContext} from './native-tool-host.mjs?v=a1c19dd178';
+import {createSopWorldHost, forgetDerived, initialSopWorldState, worldOf} from './sop-world-host.mjs?v=c7b0b95b6b';
+import {renderPrimitives} from './sop-primitives.mjs?v=0cab1288f8';
 
 const read = (fact, key) => { const raw = fact?.attrs[key]?.[0]; return raw === undefined ? undefined : raw.startsWith('"') ? str(raw) : raw; };
 const all = (fact, key) => (fact?.attrs[key] ?? []).map((raw) => raw.startsWith('"') ? str(raw) : raw);
@@ -32,25 +32,33 @@ export async function areaBase({ world, loader, readCatalog }) {
     const text = await loader.readFile(world, 'area.sop');
     if (!text) throw Error('area-declaration-unavailable');
     const { area, owned, declarations } = declaration(text);
-    const instance = read(area, 'instance'), knowledge = all(area, 'knowledge');
+    // An area may hold several instance modules (instance= repeated: a drawing and the faces of the people on it);
+    // the first is its main one.
+    const instances = all(area, 'instance'), instance = instances[0], knowledge = all(area, 'knowledge');
+    // app.area.subset: for a knowledge module, only its shards named with one of the prefixes (and its shards named with
+    // no dash: slots, colours, presets), as an offline subset is chosen; every shard otherwise.
+    // strict=true: only the shards named with a prefix.
+    const subsets = new Map(owned('app.area.subset').map((fact) => [read(fact, 'world'), { prefixes: all(fact, 'prefix'), strict: read(fact, 'strict') === 'true' }]));
+    const inSubset = (id, path) => { const subset = subsets.get(id), name = path.split('/').pop().replace(/\.sop$/, ''); return !subset || subset.prefixes.some((prefix) => name.startsWith(prefix)) || (!subset.strict && !name.includes('-')); };
     const lookups = owned('app.area.lookup'), lookupWorlds = [...new Set(lookups.map((lookup) => read(lookup, 'world')))];
     // An area whose rules derive deeply declares its derivation depth (depth=); otherwise the library's default.
     const depth = Number(read(area, 'depth')), options = Number.isSafeInteger(depth) && depth > 0 ? { maxDepth: depth } : {};
     // An area whose pages hold many derived facts declares its rule-firing budget per derivation (steps=).
     const steps = Number(read(area, 'steps'));
     if (Number.isSafeInteger(steps) && steps > 0) options.maxSteps = steps;
-    const base = await catalogWorld(readCatalog, { modules: [instance, ...knowledge, ...lookupWorlds], use: ['std.acts', instance, ...knowledge, ...lookupWorlds], options,
-      shardsOf: (entry) => knowledge.includes(entry?.id) ? (entry.shards ?? []).map((shard) => typeof shard === 'string' ? shard : shard.path) : [] });
+    const base = await catalogWorld(readCatalog, { modules: [...instances, ...knowledge, ...lookupWorlds], use: ['std.acts', ...instances, ...knowledge, ...lookupWorlds], options,
+      shardsOf: (entry) => knowledge.includes(entry?.id) ? (entry.shards ?? []).map((shard) => typeof shard === 'string' ? shard : shard.path).filter((path) => inSubset(entry.id, path)) : [] });
     const actSchema = await loader.readFile('app.project', 'act-schema.sop');
     if (!base.load(actSchema).ok) throw Error('act-schema-refused');
     // calls=instance: the compiled calls run in a world of the instance schema (and knowledge schemas) without the
     // area's rules, so an act does not re-derive the area's projection (an area whose rules derive deeply asks for it).
     const callBase = read(area, 'calls') === 'instance' ? base.fork() : null;
     for (const rules of owned('app.area.rules').sort((a, b) => Number(read(a, 'n')) - Number(read(b, 'n')))) {
-      const source = await loader.readFile(world, read(rules, 'file'));
+      // world=: a rule file another area owns and shares (the face rules of the Avatar tab, read by the Drawing tab).
+      const source = await loader.readFile(read(rules, 'world') ?? world, read(rules, 'file'));
       if (!source || !base.load(source).ok) throw Error('area-rules-refused:' + read(rules, 'file'));
     }
-    const kinds = base.ofType('std.schema.kind').map((kind) => read(kind, 'of')).filter((kind) => kind.startsWith(instance + '.'));
+    const kinds = base.ofType('std.schema.kind').map((kind) => read(kind, 'of')).filter((kind) => instances.some((id) => kind.startsWith(id + '.')));
     return { base, callBase, area, owned, declarations, kinds, instance, lookups, loadedShards: new Set(), readCatalog };
   })();
   cache.set(world, promise);
@@ -180,7 +188,7 @@ export function observationSupport(world, state) {
 
 function drawTypes(declared) {
   const [draw] = declared.owned('app.area.draw');
-  return { types: Object.fromEntries(['draw', 'fill', 'point', 'orient'].map((k) => [k, read(draw, k)])), select: read(draw, 'select'),
+  return { types: Object.fromEntries(['draw', 'fill', 'point', 'orient', 'layer'].map((k) => [k, read(draw, k)]).filter(([, v]) => v !== undefined)), select: read(draw, 'select'),
     frame: { w: Number(read(declared.area, 'frame.w')), h: Number(read(declared.area, 'frame.h')) } };
 }
 

@@ -135,7 +135,7 @@ test('changes, selection, placement and removal update the instance in place',as
  ok('@c diagram.selection.remove nodes="n2" links="e1"');assert.doesNotMatch(state.sop,/code=n2 /);
  ok('@c diagram.ids.show mode="always"');assert.match(view().svg,/>n1</);
  ok('@c diagram.ids.show mode="off"');assert.doesNotMatch(view().svg,/>n1</);
- ok('@c diagram.page.clear');assert.equal(state.sop,'');assert.deepEqual(view().objects,[]);
+ ok('@c diagram.page.clear');assert.equal(state.sop,'');assert.deepEqual(view().objects.map(o=>o.id),['page'],'only the page is left');
 });
 
 test('charts: bars and points from the members\' values; what is not declared is refused',async()=>{
@@ -147,19 +147,19 @@ test('charts: bars and points from the members\' values; what is not declared is
  assert.match(view().svg,/>Spider</);
  ok('@c diagram.group.layout id="g1" layout="line"');
  assert.match(view().svg,/data-select="g1"><polyline/,'a line chart joins its points');
- assert.equal(run('@c diagram.group.chart.make label="P" labels="a" values=1 layout="pie"').reason,'chart-layout-not-declared');
+ ok('@c diagram.group.chart.make label="P" labels="a" values=1 layout="pie"');
  assert.equal(run('@c diagram.group.chart.make label="P" labels="a" labels="b" values=1 layout="bar"').reason,'invalid-chart-data');
- ok('@c diagram.node.make kind="rectangle" label="no value"');ok('@c diagram.group.make name="plain" ids="n4"');
+ ok('@c diagram.node.make kind="rectangle" label="no value"');ok('@c diagram.group.make name="plain" ids="n5"');
  assert.equal(run('@c diagram.group.layout id="plain" layout="bar"').reason,'explicit-numeric-values-required');
- assert.equal(run('@c diagram.group.layout id="plain" layout="pie"').reason,'group-layout-not-declared');
- assert.equal(state.sop.includes('layout=pie'),false);
+ assert.equal(run('@c diagram.group.layout id="plain" layout="pie"').reason,'explicit-numeric-values-required');
+ assert.equal(run('@c diagram.group.layout id="plain" layout="radial"').reason,'group-layout-not-declared');
 });
 
 test('every declared operation is compiled or refused with its reason, never simulated',async()=>{
  const {host,ok,run}=await area();
  ok('@c diagram.node.make kind="rectangle" label="A"');ok('@c diagram.node.make kind="rectangle" label="B"');ok('@c diagram.link.make from="n1" to="n2"');
  ok('@c diagram.group.make name="g" ids="n2"');
- const refused={'diagram.node.make kind="star" layout="circle"':'layout-not-declared','diagram.node.layout ids="n1" layout="radial"':'layout-not-declared',
+ const refused={'diagram.layout':'missing-property','diagram.node.split id="zz"':'missing-target','diagram.node.insert link="e9"':'missing-target',
   'diagram.group.chart id="g" type="bar"':'chart-composition-not-in-area','diagram.group.chart.adopt id="chart:1"':'chart-composition-not-in-area',
   'diagram.group.layout id="g" layout="free"':'group-layout-not-declared'};
  for(const [command,reason] of Object.entries(refused))assert.equal(run('@c '+command).reason,reason,command);
@@ -170,7 +170,7 @@ test('every declared operation is compiled or refused with its reason, never sim
   const result=run('@c '+op.id+' '+args);assert.equal(result.status,'refused',op.id);assert.ok(result.reason,op.id+' has a reason');}
  // Undo and redo belong to the application's journal; observe reads the view.
  const own=host.bindings().map(op=>op.id).filter(id=>id.startsWith('diagram.'));
- assert.deepEqual(own.length,28);
+ assert.deepEqual(own.length,51);
 });
 
 test('the area declares its geometry and measures a command for placement',async()=>{

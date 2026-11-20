@@ -9,7 +9,7 @@
  *  - A template whose placeholders cannot all be resolved is skipped (next candidate or fallback).
  */
 import { lexIndex } from '../worlds/lexicon.mjs';
-import { pluralize } from '../formalizer/rules/lemma.mjs';
+import { pluralize } from '../lang/lemma.mjs';
 
 const PLACEHOLDER = /\{([A-Za-z_][\w.]*)((?::[a-z]+)*)\}/g;
 

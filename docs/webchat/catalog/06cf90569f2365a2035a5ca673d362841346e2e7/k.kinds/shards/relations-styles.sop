@@ -1,0 +1,22 @@
+# k.kinds/shards/relations-styles: the keys of the types of k.styles read as relations: 17 relations, each with the kind of its subject and the class, types and senses of its object (from the joins declared on the slots, by rule from the schemas, and by value from the shards, as found says).
+# sources: hand-core 1 (computed in this repository from the schemas and shards of the knowledge worlds: tools/relations-core.mjs)
+# license: CC0-1.0
+# script: tools/relations-core.mjs
+
+@k.kinds.relation.k.styles.role.theme k.kinds.relation type=k.styles.role key=theme subject=role object=thing object_type=k.styles.theme found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.styles.role.role k.kinds.relation type=k.styles.role key=role subject=role object=word object_type=k.words.sense found=value core.source="hand-core 1"
+@k.kinds.relation.k.styles.role.fill k.kinds.relation type=k.styles.role key=fill subject=role object=text found=schema core.source="hand-core 1"
+@k.kinds.relation.k.styles.role.outline k.kinds.relation type=k.styles.role key=outline subject=role object=text found=schema core.source="hand-core 1"
+@k.kinds.relation.k.styles.role.text k.kinds.relation type=k.styles.role key=text subject=role object=text found=schema core.source="hand-core 1"
+@k.kinds.relation.k.styles.swatch.theme k.kinds.relation type=k.styles.swatch key=theme subject=swatch object=thing object_type=k.styles.theme found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.styles.swatch.n k.kinds.relation type=k.styles.swatch key=n subject=swatch object=number found=schema core.source="hand-core 1"
+@k.kinds.relation.k.styles.swatch.colour k.kinds.relation type=k.styles.swatch key=colour subject=swatch object=text found=schema core.source="hand-core 1"
+@k.kinds.relation.k.styles.theme.about k.kinds.relation type=k.styles.theme key=about subject=theme object=text found=schema core.source="hand-core 1"
+@k.kinds.relation.k.styles.theme.fill k.kinds.relation type=k.styles.theme key=fill subject=theme object=text found=schema core.source="hand-core 1"
+@k.kinds.relation.k.styles.theme.outline k.kinds.relation type=k.styles.theme key=outline subject=theme object=text found=schema core.source="hand-core 1"
+@k.kinds.relation.k.styles.theme.text k.kinds.relation type=k.styles.theme key=text subject=theme object=text found=schema core.source="hand-core 1"
+@k.kinds.relation.k.styles.theme.edge k.kinds.relation type=k.styles.theme key=edge subject=theme object=text found=schema core.source="hand-core 1"
+@k.kinds.relation.k.styles.theme.background k.kinds.relation type=k.styles.theme key=background subject=theme object=text found=schema core.source="hand-core 1"
+@k.kinds.relation.k.styles.theme.group k.kinds.relation type=k.styles.theme key=group subject=theme object=text found=schema core.source="hand-core 1"
+@k.kinds.relation.k.styles.theme.weight k.kinds.relation type=k.styles.theme key=weight subject=theme object=value found=schema core.source="hand-core 1"
+@k.kinds.relation.k.styles.theme.width k.kinds.relation type=k.styles.theme key=width subject=theme object=number found=schema core.source="hand-core 1"

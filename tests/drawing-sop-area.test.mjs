@@ -10,7 +10,9 @@ async function area() {
  const run=(command)=>host.invoke(command,toolInvocationContext('drawing-'+(n++),host.observe().version));
  return {state,host,run,view:()=>projectDrawingArea(state)};
 }
-const drawn=(svg,code)=>(svg.match(new RegExp('data-select="'+code+'"','g'))??[]).length;
+// The parts drawn for an object (its translucent depth cues, a ground shadow and side faces, perspective-rules.sop, aside).
+const drawn=(svg,code)=>(svg.match(new RegExp('data-select="'+code+'"><(?![^>]*opacity=)','g'))??[]).length;
+const cues=(svg,code)=>(svg.match(new RegExp('data-select="'+code+'"><[^>]*opacity=','g'))??[]).length;
 
 const objectsOf=(sop)=>[...sop.matchAll(/^@\S+ w\.drawing\.object .*$/gm)].map(([line])=>Object.fromEntries(['code','drawing','x','y','size']
  .map(key=>[key,line.match(new RegExp(' '+key+'=(\\S+)'))?.[1]]).map(([k,v])=>[k,/^-?\d/.test(v)?Number(v):v])));
@@ -23,6 +25,7 @@ test('a made object draws the parts of its k.objects drawing, in a free place, w
  assert.deepEqual(objects.filter(o=>!o.in).map(o=>[o.id,o.kind]),[['o1','house'],['o2','tree']]);
  assert.ok(objects.some(o=>o.in==='o1'&&o.kind==='roof'),'the parts are observed under their object');
  assert.equal(drawn(svg,'o1'),6);assert.equal(drawn(svg,'o2'),2);
+ assert.ok(cues(svg,'o1')>=2&&cues(svg,'o2')>=2,'each stands with a shadow and side faces');
  assert.match(svg,/<rect x="20" y="45" width="60" height="50" fill="#0000ff"\/>/,'the walls take the house colour');
  const [house,tree]=objectsOf(state.sop);
  assert.ok(house.y>350&&tree.y>350,'both stand on the ground, below the horizon of the landscape page');
@@ -97,10 +100,14 @@ test('objects fit into a box together; a move with the same box size changes onl
 
 test('the area declares the geometry placement reads: the page frame and a box per object',async()=>{
  const {host,run}=await area();
- run('@c drawing.object.make kind="lake" x=400 y=500 size=200');
+ run('@c drawing.object.make kind="house" x=400 y=500 size=200');
+ run('@c drawing.object.make kind="lake" x=750 y=500 size=200');
  const spatial=host.observeSpatial();
  assert.equal(spatial.frame,'drawing.canvas');
- const lake=spatial.boxes.find(box=>box.entity==='o1');
- assert.deepEqual([lake.min_x,lake.min_y,lake.max_x,lake.max_y],[300,400,500,600]);
+ const house=spatial.boxes.find(box=>box.entity==='o1');
+ assert.deepEqual([house.min_x,house.min_y,house.max_x,house.max_y],[300,400,500,600]);
+ // A lake lies in the land (k.layouts.terrain): no occupant, observed by the region of its water (landscape-rules.sop).
  assert.deepEqual(spatial.occupants,['o1']);
+ const water=spatial.regions.find(r=>r.entity==='o2'&&r.kind==='water');
+ assert.ok(water&&water.min_x>=650&&water.max_x<=850,'the water of the lake is a region of its box');
 });

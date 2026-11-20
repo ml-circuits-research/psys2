@@ -60,7 +60,8 @@ export function readProjection(svgText, parser) {
     if (!el) continue;
     const n = count.get(id) ?? 0; count.set(id, n + 1);
     const sx = Math.hypot(m[0], m[1]), sy = Math.hypot(m[2], m[3]), fill = el.getAttribute('fill'), stroke = el.getAttribute('stroke');
-    const base = { id, n, fill: cssHex(fill && fill !== 'none' ? fill : stroke) };
+    // opacity: a shadow or a side face the projection states as translucent (drawn as one flat wash).
+    const opacity = Number(el.getAttribute('opacity') ?? 1), base = { id, n, fill: cssHex(fill && fill !== 'none' ? fill : stroke), ...(opacity < 1 ? { alpha: opacity } : {}) };
     const tag = el.tagName.toLowerCase(), num = (k) => Number(el.getAttribute(k) ?? 0);
     if (tag === 'rect') {
       const [x0, y0] = at(m, num('x'), num('y')), [x1, y1] = at(m, num('x') + num('width'), num('y') + num('height'));
@@ -119,10 +120,13 @@ export function createRenderer(rough) {
       }
     };
     const push = (drawable, alpha = 1) => { if (drawable) out.push({ drawable, alpha }); };
-    if (it.shape === 'line' || it.shape === 'path') push(make({ ...common, stroke: it.fill, strokeWidth: Math.max(baseW, Math.min(it.stroke ?? 2, 8), 2), fill: undefined }));
+    if (it.alpha !== undefined && it.shape !== 'line' && it.shape !== 'path' && it.shape !== 'text') push(make({ ...common, roughness: common.roughness * 0.6, stroke: 'none', fill: it.fill, fillStyle: 'solid' }), it.alpha);
+    else if (it.shape === 'line' || it.shape === 'path') push(make({ ...common, stroke: it.fill, strokeWidth: Math.max(baseW, Math.min(it.stroke ?? 2, 8), 2), fill: undefined }));
     else if (it.shape !== 'text') {
       const [x0, y0, x1, y1] = itemBox(it), tiny = Math.min(x1 - x0, y1 - y0) < 26;
-      if (tiny) push(make({ ...common, stroke: OUTLINE, strokeWidth: baseW, fill: it.fill, fillStyle: 'solid' }));
+      // a page-wide area (the sky or the ground of a view): a soft wash with light strokes and no outline
+      if (x1 - x0 >= 900) { push(make({ ...common, roughness: 0.4, stroke: 'none', fill: it.fill, fillStyle: 'solid' })); push(make({ ...common, stroke: 'none', fill: shadeHex(it.fill, -0.04, 0), fillStyle: 'hachure', fillWeight: 1, hachureGap: 14, hachureAngle: -38 }), 0.35); }
+      else if (tiny) push(make({ ...common, stroke: OUTLINE, strokeWidth: baseW, fill: it.fill, fillStyle: 'solid' }));
       else {
         // crayon: a soft tinted base, then scribbled strokes of the colour, then the outline
         push(make({ ...common, stroke: 'none', fill: shadeHex(it.fill, 0.12, -0.05), fillStyle: 'solid' }), 0.9);

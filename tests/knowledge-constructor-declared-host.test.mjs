@@ -1,10 +1,11 @@
+import{PINNED_CATALOG}from'./fixtures/pinned-catalog.mjs';
 import test from'node:test';import assert from'node:assert/strict';
 import{executeDeclaredRequest}from'../src/dialog/declared-execution.mjs';
 import{nativeCreationCandidates}from'../src/dialog/native-binding-candidates.mjs';
 import{createFacts}from'../src/knowledge/facts.mjs';import{createKnowledgeSource}from'../src/loaders/knowledge-source.mjs';
 import{emptyDrawingState,projectDrawingArea}from'../worlds/art.draw/sop-drawing.mjs';import{existsSync}from'node:fs';import{readFile}from'node:fs/promises';
 // The Drawing area reads its schemas and k.objects drawings from the catalog checkout beside the repository.
-const CATALOG=new URL('../../sop-knowledge-worlds/docs/worlds/',import.meta.url),skip=existsSync(new URL('w.drawing/schema.sop',CATALOG))?false:'catalog checkout with w.drawing unavailable';
+const CATALOG=PINNED_CATALOG,skip=existsSync(new URL('w.drawing/schema.sop',CATALOG))?false:'catalog checkout with w.drawing unavailable';
 const objectsOf=state=>[...state.sop.matchAll(/^@\S+ w\.drawing\.object .*?\bcode=(\S+) drawing=("[^"]*"|\S+)/gm)].map(m=>({code:m[1],drawing:m[2].replace(/"/g,'')}));
 const candidate=kind=>({request:'request',wires:'@source std.request.source text="fixture"\n@request std.request act=make mood=do source=$source\n@target std.request.target request=$request mode=new kind='+kind});
 const bindingsFor=names=>({kinds:names.map(lemma=>({area:'drawing',type:'drawn',lemma,canonical:'fixture.kind.'+lemma,nativeFamilyBinding:{operation:'drawing.object.make',sourceType:'art.draw.object'}})),properties:[]});

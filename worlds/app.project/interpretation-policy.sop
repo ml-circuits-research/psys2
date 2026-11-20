@@ -1,0 +1,22 @@
+@interpret.schema core.use world=app.interpret prefix=false
+
+# The previous utterance and the observed objects are priors for the reader. While the reading conditioned on them
+# stays incomplete, the same text is read without the previous message, then also without the observed objects.
+# Every attempt (also an unavailable or failed one) is a world-activity event (app.reader.retry) and a trace entry;
+# the first complete one is routed and the reply names the context it actually left out. A re-reading the provider
+# cannot make (no previous message) shows that its drop was vacuous for later re-readings.
+@interpret.retry.independent app.interpret.retry profile=independent method=proposeIndependent order=1 when=incomplete drops=previous label="Read the request without the previous message"
+@interpret.retry.literal app.interpret.retry profile=literal method=proposeLiteral order=2 when=incomplete drops=previous drops=objects label="Read the request without the previous message or the observed objects"
+@interpret.note.previous app.interpret.note drops=previous text="I read this message on its own, without the previous one."
+@interpret.note.objects app.interpret.note drops=objects text="I read this message on its own, without the objects on the page."
+@interpret.note.both app.interpret.note drops=previous drops=objects text="I read this message on its own, without the previous one or the objects on the page."
+
+# Several admitted readings are compared by the declared interpreter only in uncalibrated best-effort mode and only
+# for a bounded number of proposals; outside the bounds the admitted top reading is routed (trace: readingComparison absent).
+@interpret.compare.best-effort app.interpret.compare mode=uncalibrated-best-effort min=2 max=16
+
+# A single make request is first offered to the coordination reader (noun phrases joined by and/commas).
+@interpret.coordination.make app.interpret.coordination act=make requests=1
+
+# A browser-detected input language replaces the selected one at or above this confidence.
+@interpret.language.detect app.interpret.language role=detect min.confidence=0.8

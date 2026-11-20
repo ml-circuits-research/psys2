@@ -7,8 +7,8 @@
  * Never ignores a negation: dropping "not" would turn the request into its opposite.
  */
 
-import { QUESTION_WORDS } from './rules/normalize.mjs?v=80acf1b614';
-import { guard } from './guard.mjs?v=551ea15752';
+import { QUESTION_WORDS } from './rules/normalize.mjs?v=2d35f2da62';
+import { guard } from '../dialog/turn-guard.mjs?v=34ed257fec';
 
 /** True when `text` has a question cue (a question mark or a question word anywhere). */
 export const looksLikeQuestion = (text) => /\?/.test(text) || text.split(/\s+/).some((w) => QUESTION_WORDS.has(norm(w)));

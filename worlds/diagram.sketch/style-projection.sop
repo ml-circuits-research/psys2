@@ -1,0 +1,499 @@
+# diagram.sketch styles and shapes (authored): how each node, frame and link is coloured and drawn.
+#
+# Colours, in order of precedence: what the node or link says (colour, outline, text_colour, width), the colours the
+# page's theme (k.styles.theme, named by w.diagram.diagram theme=) gives the node's role (k.styles.role), the theme's
+# own colours, and the editor's defaults (light blue fill, slate outline). A node with a colour of its own and no text
+# colour gets a label that reads on it (white on a dark colour). A page with a background or a theme is filled with it.
+# Each choice is the candidate of least precedence number (ui.diagram.scand, chosen by one aggregate per node and key).
+#
+# Shapes: a box (rounded as its shape says; a subprocess with double sides), a stadium (oval: the flowchart's
+# terminal), a round shape, a polygon of the shape's outline (diamond, parallelogram, hexagon, triangle, star, chevron,
+# document, note, cloud), a cylinder (its silhouette and its lid) and an actor (a stick figure with its label under
+# it). Outlines are fractions of the node's box about its centre (cylinder, document, note and cloud computed from
+# their curves: caps of 0.12 of the height, one wave, a folded corner, eight bumps).
+@st.usecol.type core.type of=ui.diagram.usecol
+@st.scand.type core.type of=ui.diagram.scand
+@st.nst.type core.type of=ui.diagram.nst
+@st.ecand.type core.type of=ui.diagram.ecand
+@st.est.type core.type of=ui.diagram.est
+@st.ecol.type core.type of=ui.diagram.ecol
+@st.ewidth.type core.type of=ui.diagram.ewidth
+@st.pagecol.type core.type of=ui.diagram.pagecol
+@st.pcand.type core.type of=ui.diagram.pcand
+@st.ptheme.type core.type of=ui.diagram.ptheme
+@st.ownlabel.type core.type of=ui.diagram.ownlabel
+@st.dotted.type core.type of=ui.diagram.dotted
+@st.step.type core.type of=ui.diagram.step
+@st.nlevel.type core.type of=ui.diagram.nlevel
+
+# Every colour something names, so its RGB is looked up (render-projection.sop: ui.diagram.rgb).
+@su.nc w.diagram.node colour=?c
+@su.no w.diagram.node outline=?c
+@su.nt w.diagram.node text_colour=?c
+@su.ec w.diagram.edge colour=?c
+@su.pb w.diagram.diagram background=?c
+@su.out ui.diagram.usecol c=?c
+@st.use.fill core.rule when=$su.nc then=$su.out
+@st.use.outline core.rule when=$su.no then=$su.out
+@st.use.text core.rule when=$su.nt then=$su.out
+@st.use.edge core.rule when=$su.ec then=$su.out
+@st.use.background core.rule when=$su.pb then=$su.out
+
+# The page's theme, when it names one the knowledge has.
+@spt.d w.diagram.diagram theme=?t
+@spt.k k.styles.theme name=?t
+@spt.out ui.diagram.ptheme name=?t
+@st.ptheme core.rule when=$spt.d when=$spt.k then=$spt.out
+
+# ---- Node colours, weight and size ----
+@sn.n w.diagram.node code=?c
+@sn.t ui.diagram.ptheme name=?t
+@sn.th k.styles.theme name=?t fill=?tf outline=?to text=?tt weight=?tw
+@sn.rl w.diagram.node code=?c role=?r
+@sn.tr k.styles.role theme=?t role=?r fill=?rf
+@sn.tro k.styles.role theme=?t role=?r outline=?ro
+@sn.trt k.styles.role theme=?t role=?r text=?rt
+@sn.f1n w.diagram.node code=?c colour=?col
+@sn.f1r ui.diagram.rgb colour=?col rgb=?v
+@sn.f1 ui.diagram.scand node=?c key=fill p=1 v=?v
+@st.fill.own core.rule when=$sn.f1n when=$sn.f1r then=$sn.f1
+@sn.f2 ui.diagram.scand node=?c key=fill p=2 v=?rf
+@st.fill.role core.rule when=$sn.rl when=$sn.t when=$sn.tr then=$sn.f2
+@sn.f3 ui.diagram.scand node=?c key=fill p=3 v=?tf
+@st.fill.theme core.rule when=$sn.n when=$sn.t when=$sn.th then=$sn.f3
+@sn.f9 ui.diagram.scand node=?c key=fill p=9 v="#dce8f8"
+@st.fill.default core.rule when=$sn.n then=$sn.f9
+@sn.o1n w.diagram.node code=?c outline=?col
+@sn.o1 ui.diagram.scand node=?c key=outline p=1 v=?v
+@st.outline.own core.rule when=$sn.o1n when=$sn.f1r then=$sn.o1
+@sn.o2 ui.diagram.scand node=?c key=outline p=2 v=?ro
+@st.outline.role core.rule when=$sn.rl when=$sn.t when=$sn.tro then=$sn.o2
+@sn.o3 ui.diagram.scand node=?c key=outline p=3 v=?to
+@st.outline.theme core.rule when=$sn.n when=$sn.t when=$sn.th then=$sn.o3
+@sn.o9 ui.diagram.scand node=?c key=outline p=9 v="#3e5068"
+@st.outline.default core.rule when=$sn.n then=$sn.o9
+@sn.t1n w.diagram.node code=?c text_colour=?col
+@sn.t1 ui.diagram.scand node=?c key=text p=1 v=?v
+@st.text.own core.rule when=$sn.t1n when=$sn.f1r then=$sn.t1
+@sn.ink ui.diagram.ink node=?c ink=?ink
+@sn.hasc w.diagram.node code=?c colour=?anyc
+@sn.t2 ui.diagram.scand node=?c key=text p=2 v=?ink
+@st.text.contrast core.rule when=$sn.hasc when=$sn.ink then=$sn.t2
+@sn.t3 ui.diagram.scand node=?c key=text p=3 v=?rt
+@st.text.role core.rule when=$sn.rl when=$sn.t when=$sn.trt then=$sn.t3
+@sn.t4 ui.diagram.scand node=?c key=text p=4 v=?tt
+@st.text.theme core.rule when=$sn.n when=$sn.t when=$sn.th then=$sn.t4
+@sn.t9 ui.diagram.scand node=?c key=text p=9 v=?ink
+@st.text.default core.rule when=$sn.n when=$sn.ink then=$sn.t9
+@sn.w1n w.diagram.node code=?c font_weight=?fw
+@sn.w1 ui.diagram.scand node=?c key=weight p=1 v=?fw
+@st.weight.own core.rule when=$sn.w1n then=$sn.w1
+@sn.w3 ui.diagram.scand node=?c key=weight p=3 v=?tw
+@st.weight.theme core.rule when=$sn.n when=$sn.t when=$sn.th then=$sn.w3
+@sn.w9 ui.diagram.scand node=?c key=weight p=9 v=normal
+@st.weight.default core.rule when=$sn.n then=$sn.w9
+@sn.s1n w.diagram.node code=?c font_size=?fs
+@sn.s1 ui.diagram.scand node=?c key=font p=1 v=?fs
+@st.font.own core.rule when=$sn.s1n then=$sn.s1
+@sn.s9 ui.diagram.scand node=?c key=font p=9 v=14
+@st.font.default core.rule when=$sn.n then=$sn.s9
+@sn.op1n w.diagram.node code=?c opacity=?ov
+@sn.op1 ui.diagram.scand node=?c key=opacity p=1 v=?ov
+@st.opacity.own core.rule when=$sn.op1n then=$sn.op1
+@sn.op9 ui.diagram.scand node=?c key=opacity p=9 v=1
+@st.opacity.default core.rule when=$sn.n then=$sn.op9
+@sn.ef1n w.diagram.node code=?c effect=?ev
+@sn.ef1 ui.diagram.scand node=?c key=effect p=1 v=?ev
+@st.effect.own core.rule when=$sn.ef1n then=$sn.ef1
+@sn.ef9 ui.diagram.scand node=?c key=effect p=9 v=none
+@st.effect.default core.rule when=$sn.n then=$sn.ef9
+@sn.cr1n w.diagram.node code=?c corner=?cv
+@sn.cr1 ui.diagram.scand node=?c key=corner p=1 v=?cv
+@st.corner.own core.rule when=$sn.cr1n then=$sn.cr1
+@sn.crn w.diagram.node code=?c shape=?cs
+@sn.crb ui.diagram.base shape=?cs round=?br
+@sn.cr8 ui.diagram.scand node=?c key=corner p=8 v=?br
+@st.corner.base core.rule when=$sn.crn when=$sn.crb then=$sn.cr8
+@sn.cr9 ui.diagram.scand node=?c key=corner p=9 v=4
+@st.corner.default core.rule when=$sn.n then=$sn.cr9
+@sn.ro1n w.diagram.node code=?c rotation=?rv
+@sn.ro1 ui.diagram.scand node=?c key=rotation p=1 v=?rv
+@st.rotation.own core.rule when=$sn.ro1n then=$sn.ro1
+@sn.ro9 ui.diagram.scand node=?c key=rotation p=9 v=0
+@st.rotation.default core.rule when=$sn.n then=$sn.ro9
+@sn.c ui.diagram.scand node=?c key=?k p=?p v=?v
+@sn.best ui.diagram.nst node=?c key=?k v=?best
+@st.nst core.aggregate over=$sn.c by=?c by=?k argmin=?best args=?p pick=?v ties=first then=$sn.best
+
+# ---- Link colour and width; the page's colours ----
+@se.e w.diagram.edge code=?e
+@se.t ui.diagram.ptheme name=?t
+@se.th k.styles.theme name=?t edge=?te width=?tw
+@se.c1n w.diagram.edge code=?e colour=?col
+@se.c1r ui.diagram.rgb colour=?col rgb=?v
+@se.c1 ui.diagram.ecand edge=?e key=colour p=1 v=?v
+@st.ecol.own core.rule when=$se.c1n when=$se.c1r then=$se.c1
+@se.c3 ui.diagram.ecand edge=?e key=colour p=3 v=?te
+@st.ecol.theme core.rule when=$se.e when=$se.t when=$se.th then=$se.c3
+@se.c9 ui.diagram.ecand edge=?e key=colour p=9 v="#52606d"
+@st.ecol.default core.rule when=$se.e then=$se.c9
+@se.w1n w.diagram.edge code=?e width=?w
+@se.w1 ui.diagram.ecand edge=?e key=width p=1 v=?w
+@st.ewidth.own core.rule when=$se.w1n then=$se.w1
+@se.w3 ui.diagram.ecand edge=?e key=width p=3 v=?tw
+@st.ewidth.theme core.rule when=$se.e when=$se.t when=$se.th then=$se.w3
+@se.w9 ui.diagram.ecand edge=?e key=width p=9 v=2
+@st.ewidth.default core.rule when=$se.e then=$se.w9
+@se.cand ui.diagram.ecand edge=?e key=?k p=?p v=?v
+@se.best ui.diagram.est edge=?e key=?k v=?best
+@st.est core.aggregate over=$se.cand by=?e by=?k argmin=?best args=?p pick=?v ties=first then=$se.best
+@se.bc ui.diagram.est edge=?e key=colour v=?v
+@se.ecol ui.diagram.ecol edge=?e rgb=?v
+@st.ecol core.rule when=$se.bc then=$se.ecol
+@se.bw ui.diagram.est edge=?e key=width v=?v
+@se.ew ui.diagram.ewidth edge=?e w=?v
+@st.ewidth core.rule when=$se.bw then=$se.ew
+@sg.k ui.diagram.const0 w=?anyw
+@sg.t ui.diagram.ptheme name=?t
+@sg.th k.styles.theme name=?t text=?tt group=?tg outline=?to background=?tb
+@sg.l3 ui.diagram.pcand key=label p=3 v=?tt
+@st.page.label.theme core.rule when=$sg.t when=$sg.th then=$sg.l3
+@sg.l9 ui.diagram.pcand key=label p=9 v="#334e68"
+@st.page.label.default core.rule when=$sg.k then=$sg.l9
+@sg.g3 ui.diagram.pcand key=frame p=3 v=?tg
+@st.page.frame.theme core.rule when=$sg.t when=$sg.th then=$sg.g3
+@sg.g9 ui.diagram.pcand key=frame p=9 v="#f2f5fa"
+@st.page.frame.default core.rule when=$sg.k then=$sg.g9
+@sg.o3 ui.diagram.pcand key=frameline p=3 v=?to
+@st.page.frameline.theme core.rule when=$sg.t when=$sg.th then=$sg.o3
+@sg.o9 ui.diagram.pcand key=frameline p=9 v="#9aa5b1"
+@st.page.frameline.default core.rule when=$sg.k then=$sg.o9
+@sg.gt3 ui.diagram.pcand key=frametext p=3 v=?tt
+@st.page.frametext.theme core.rule when=$sg.t when=$sg.th then=$sg.gt3
+@sg.gt9 ui.diagram.pcand key=frametext p=9 v="#3e4c59"
+@st.page.frametext.default core.rule when=$sg.k then=$sg.gt9
+@sg.bd w.diagram.diagram background=?bc
+@sg.br ui.diagram.rgb colour=?bc rgb=?bv
+@sg.b1 ui.diagram.pcand key=background p=1 v=?bv
+@st.page.background.own core.rule when=$sg.bd when=$sg.br then=$sg.b1
+@sg.b3 ui.diagram.pcand key=background p=3 v=?tb
+@st.page.background.theme core.rule when=$sg.t when=$sg.th then=$sg.b3
+@sg.pc ui.diagram.pcand key=?k p=?p v=?v
+@sg.best ui.diagram.pagecol key=?k rgb=?best
+@st.pagecol core.aggregate over=$sg.pc by=?k argmin=?best args=?p pick=?v ties=first then=$sg.best
+# The page's background: a rectangle over the whole page, under everything.
+@sb.c ui.diagram.pagecol key=background rgb=?bg
+@sb.p ui.diagram.page w=?w h=?h
+@sb.out ui.diagram.draw part=page source=page.background order=0 z=0 shape=rectangle x=0 y=0 w=?w h=?h cx=0 cy=0 tx=0 ty=0 scale=1 side=left
+@sb.fill ui.diagram.fill source=page.background part=page fill=?bg
+@st.draw.background core.rule when=$sb.c when=$sb.p then=$sb.out
+@st.fill.background core.rule when=$sb.c when=$sb.p then=$sb.fill
+
+# ---- Group frames, with the group's label in its band ----
+@sf.u ui.diagram.unit unit=?g kind=group
+@sf.nf w.diagram.group code=?g framed=false
+@sf.b ui.diagram.ubox unit=?g x0=?x y0=?y w=?w h=?h
+@sf.fc ui.diagram.pagecol key=frame rgb=?fc
+@sf.lc ui.diagram.pagecol key=frameline rgb=?lc
+@sf.out ui.diagram.draw part=?g source=?g slot=?g order=1 z=0 shape=rectangle x=?x y=?y w=?w h=?h cx=0 cy=0 tx=0 ty=0 scale=1 side=left outline=?lc round=10
+@sf.fill ui.diagram.fill source=?g part=?g fill=?fc
+@st.draw.group core.rule when=$sf.u when=$sf.b when=$sf.lc not=$sf.nf then=$sf.out
+@st.fill.group core.rule when=$sf.u when=$sf.b when=$sf.fc not=$sf.nf then=$sf.fill
+@sf.g w.diagram.group code=?g label=?t
+@sf.tc ui.diagram.pagecol key=frametext rgb=?tc
+@sf.s core.calc out=?src fn=concat args=?g args=".label"
+@sf.x core.calc out=?lx fn=add args=?x args=12
+@sf.y core.calc out=?ly fn=add args=?y args=20
+@sf.lout ui.diagram.draw part=?g source=?src slot=?g order=4 z=0 shape=text text=?t x=?lx y=?ly w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left font=13 weight=bold
+@sf.lfill ui.diagram.fill source=?src part=?g fill=?tc
+@st.draw.group.label core.rule when=$sf.u when=$sf.b when=$sf.g not=$sf.nf with=$sf.s with=$sf.x with=$sf.y then=$sf.lout
+@st.fill.group.label core.rule when=$sf.u when=$sf.b when=$sf.g when=$sf.tc not=$sf.nf with=$sf.s with=$sf.x with=$sf.y then=$sf.lfill
+
+# ---- Nodes ----
+@dg.slicemember.type core.type of=ui.diagram.slicemember
+@sd.lc ui.diagram.chart group=?lg form=line
+@sd.lm ui.diagram.mpos node=?lc group=?lg
+@sd.lo ui.diagram.dotted node=?lc
+@st.dotted core.rule when=$sd.lc when=$sd.lm then=$sd.lo
+@sd.n w.diagram.node code=?c shape=?s
+@sd.b ui.diagram.nbox node=?c x0=?x0 y0=?y0 x1=?x1 y1=?y1 w=?w h=?h cx=?cx cy=?cy
+@sd.dot ui.diagram.dotted node=?c
+@sd.sl ui.diagram.slicemember node=?c
+@sd.fo ui.diagram.nst node=?c key=fill v=?fill
+@sd.oo ui.diagram.nst node=?c key=outline v=?ol
+@sd.op ui.diagram.nst node=?c key=opacity v=?op
+@sd.ef ui.diagram.nst node=?c key=effect v=?ef
+@sd.cr ui.diagram.nst node=?c key=corner v=?r
+@sd.ro ui.diagram.nst node=?c key=rotation v=?rot
+@sd.out.dot ui.diagram.draw part=?c source=?c slot=?c order=3 z=0 shape=oval x=?x0 y=?y0 w=?w h=?h cx=0 cy=0 tx=0 ty=0 scale=1 side=left outline="#1d6fe8"
+@st.draw.node.dot core.rule when=$sd.n when=$sd.b when=$sd.dot then=$sd.out.dot
+@sd.box ui.diagram.base shape=?s kind=box
+@sd.out.sq ui.diagram.draw part=?c source=?c slot=?c order=3 z=0 shape=rectangle x=?x0 y=?y0 w=?w h=?h cx=0 cy=0 tx=0 ty=0 scale=1 side=left outline=?ol round=?r opacity=?op effect=?ef rotate=?rot rx=?cx ry=?cy
+@st.draw.node.box core.rule when=$sd.n when=$sd.b when=$sd.ro when=$sd.box when=$sd.oo when=$sd.cr when=$sd.op when=$sd.ef not=$sd.dot not=$sd.sl then=$sd.out.sq
+@sd.stad ui.diagram.base shape=?s kind=stadium
+@sd.hr core.calc out=?hr fn=div args=?h args=2
+@sd.out.stad ui.diagram.draw part=?c source=?c slot=?c order=3 z=0 shape=rectangle x=?x0 y=?y0 w=?w h=?h cx=0 cy=0 tx=0 ty=0 scale=1 side=left outline=?ol round=?hr opacity=?op effect=?ef rotate=?rot rx=?cx ry=?cy
+@st.draw.node.stadium core.rule when=$sd.n when=$sd.b when=$sd.ro when=$sd.op when=$sd.ef when=$sd.stad when=$sd.oo not=$sd.dot not=$sd.sl with=$sd.hr then=$sd.out.stad
+@sd.round ui.diagram.base shape=?s kind=round
+@sd.out.round ui.diagram.draw part=?c source=?c slot=?c order=3 z=0 shape=oval x=?x0 y=?y0 w=?w h=?h cx=0 cy=0 tx=0 ty=0 scale=1 side=left outline=?ol opacity=?op effect=?ef rotate=?rot rx=?cx ry=?cy
+@st.draw.node.round core.rule when=$sd.n when=$sd.b when=$sd.ro when=$sd.op when=$sd.ef when=$sd.round when=$sd.oo not=$sd.dot not=$sd.sl then=$sd.out.round
+@sd.poly ui.diagram.base shape=?s kind=poly
+@sd.out.poly ui.diagram.draw part=?c source=?c slot=?c order=3 z=0 shape=polygon x=?x0 y=?y0 w=?w h=?h cx=0 cy=0 tx=0 ty=0 scale=1 side=left outline=?ol opacity=?op effect=?ef rotate=?rot rx=?cx ry=?cy
+@st.draw.node.poly core.rule when=$sd.n when=$sd.b when=$sd.ro when=$sd.op when=$sd.ef when=$sd.poly when=$sd.oo not=$sd.dot not=$sd.sl then=$sd.out.poly
+@sd.cyl ui.diagram.base shape=?s kind=cylinder
+@st.draw.node.cylinder core.rule when=$sd.n when=$sd.b when=$sd.ro when=$sd.op when=$sd.ef when=$sd.cyl when=$sd.oo not=$sd.sl then=$sd.out.poly
+@sd.o ui.diagram.outline shape=?s n=?i fx=?fx fy=?fy
+@sd.ax core.calc out=?ax fn=mul args=?fx args=?w
+@sd.ay core.calc out=?ay fn=mul args=?fy args=?h
+@sd.px core.calc out=?px fn=add args=?cx args=?ax
+@sd.py core.calc out=?py fn=add args=?cy args=?ay
+@sd.pt ui.diagram.point source=?c n=?i x=?px y=?py
+@st.point.node core.rule when=$sd.n when=$sd.b when=$sd.o not=$sd.dot with=$sd.ax with=$sd.ay with=$sd.px with=$sd.py then=$sd.pt
+@sd.fill ui.diagram.fill source=?c part=?c fill=?fill
+@sd.d ui.diagram.draw part=?c source=?c
+@st.fill.node core.rule when=$sd.n when=$sd.d when=$sd.fo not=$sd.sl then=$sd.fill
+# A cylinder's lid: an ellipse over the top, a quarter of its height.
+@sd.lh core.calc out=?lh fn=mul args=?h args=0.24
+@sd.ls core.calc out=?lsrc fn=concat args=?c args=".lid"
+@sd.lid ui.diagram.draw part=?c source=?lsrc slot=?c order=3 z=1 shape=oval x=?x0 y=?y0 w=?w h=?lh cx=0 cy=0 tx=0 ty=0 scale=1 side=left outline=?ol opacity=?op effect=?ef rotate=?rot rx=?cx ry=?cy
+@sd.lidf ui.diagram.fill source=?lsrc part=?c fill=?fill
+@st.draw.node.lid core.rule when=$sd.n when=$sd.b when=$sd.ro when=$sd.op when=$sd.ef when=$sd.cyl when=$sd.oo not=$sd.sl with=$sd.lh with=$sd.ls then=$sd.lid
+@st.fill.node.lid core.rule when=$sd.n when=$sd.b when=$sd.cyl when=$sd.fo not=$sd.sl with=$sd.ls then=$sd.lidf
+# A subprocess: an inner line 8 in from each side.
+@sd.dbl core.check fn=eq args=?s args=double_rectangle
+@sd.lx core.calc out=?lx fn=add args=?x0 args=8
+@sd.rx core.calc out=?rx fn=sub args=?x1 args=8
+@sd.dl core.calc out=?dlsrc fn=concat args=?c args=".left"
+@sd.dr core.calc out=?drsrc fn=concat args=?c args=".right"
+@sd.dl1 ui.diagram.point source=?dlsrc n=1 x=?lx y=?y0
+@sd.dl2 ui.diagram.point source=?dlsrc n=2 x=?lx y=?y1
+@sd.dr1 ui.diagram.point source=?drsrc n=1 x=?rx y=?y0
+@sd.dr2 ui.diagram.point source=?drsrc n=2 x=?rx y=?y1
+@sd.dld ui.diagram.draw part=?c source=?dlsrc slot=?c order=3 z=1 shape=line x=0 y=0 w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left stroke=1.5
+@sd.drd ui.diagram.draw part=?c source=?drsrc slot=?c order=3 z=1 shape=line x=0 y=0 w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left stroke=1.5
+@sd.dlf ui.diagram.fill source=?dlsrc part=?c fill=?ol
+@sd.drf ui.diagram.fill source=?drsrc part=?c fill=?ol
+@st.double.l1 core.rule when=$sd.n when=$sd.b if=$sd.dbl with=$sd.lx with=$sd.dl then=$sd.dl1
+@st.double.l2 core.rule when=$sd.n when=$sd.b if=$sd.dbl with=$sd.lx with=$sd.dl then=$sd.dl2
+@st.double.r1 core.rule when=$sd.n when=$sd.b if=$sd.dbl with=$sd.rx with=$sd.dr then=$sd.dr1
+@st.double.r2 core.rule when=$sd.n when=$sd.b if=$sd.dbl with=$sd.rx with=$sd.dr then=$sd.dr2
+@st.double.ld core.rule when=$sd.n when=$sd.b if=$sd.dbl with=$sd.dl then=$sd.dld
+@st.double.rd core.rule when=$sd.n when=$sd.b if=$sd.dbl with=$sd.dr then=$sd.drd
+@st.double.lf core.rule when=$sd.n when=$sd.b when=$sd.oo if=$sd.dbl with=$sd.dl then=$sd.dlf
+@st.double.rf core.rule when=$sd.n when=$sd.b when=$sd.oo if=$sd.dbl with=$sd.dr then=$sd.drf
+# A note's folded corner.
+@sd.isnote core.check fn=eq args=?s args=note
+@sd.fx1 core.calc out=?fxa fn=mul args=?w args=0.28
+@sd.fx core.calc out=?fx2 fn=add args=?cx args=?fxa
+@sd.fy1 core.calc out=?fya fn=mul args=?h args=0.28
+@sd.fy core.calc out=?fy2 fn=add args=?y0 args=?fya
+@sd.fs core.calc out=?fsrc fn=concat args=?c args=".fold"
+@sd.f1 ui.diagram.point source=?fsrc n=1 x=?fx2 y=?y0
+@sd.f2 ui.diagram.point source=?fsrc n=2 x=?fx2 y=?fy2
+@sd.f3 ui.diagram.point source=?fsrc n=3 x=?x1 y=?fy2
+@sd.fd ui.diagram.draw part=?c source=?fsrc slot=?c order=3 z=1 shape=line x=0 y=0 w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left stroke=1.5
+@sd.ff ui.diagram.fill source=?fsrc part=?c fill=?ol
+@st.note.1 core.rule when=$sd.n when=$sd.b if=$sd.isnote with=$sd.fx1 with=$sd.fx with=$sd.fy1 with=$sd.fy with=$sd.fs then=$sd.f1
+@st.note.2 core.rule when=$sd.n when=$sd.b if=$sd.isnote with=$sd.fx1 with=$sd.fx with=$sd.fy1 with=$sd.fy with=$sd.fs then=$sd.f2
+@st.note.3 core.rule when=$sd.n when=$sd.b if=$sd.isnote with=$sd.fx1 with=$sd.fx with=$sd.fy1 with=$sd.fy with=$sd.fs then=$sd.f3
+@st.note.d core.rule when=$sd.n when=$sd.b if=$sd.isnote with=$sd.fs then=$sd.fd
+@st.note.f core.rule when=$sd.n when=$sd.b when=$sd.oo if=$sd.isnote with=$sd.fs then=$sd.ff
+# An actor: a head (a circle a quarter of the height across, at the top), a body, arms and two legs, in the outline
+# colour.
+@sa.n w.diagram.node code=?c shape=actor
+@sa.b ui.diagram.nbox node=?c x0=?x0 y0=?y0 x1=?x1 y1=?y1 w=?w h=?h cx=?cx cy=?cy
+@sa.o ui.diagram.nst node=?c key=outline v=?ol
+@sa.f ui.diagram.nst node=?c key=fill v=?fill
+@sa.hd core.calc out=?hd fn=mul args=?h args=0.26
+@sa.hr core.calc out=?hr fn=div args=?hd args=2
+@sa.hx core.calc out=?hx fn=sub args=?cx args=?hr
+@sa.neck core.calc out=?ny fn=add args=?y0 args=?hd
+@sa.hip1 core.calc out=?hp1 fn=mul args=?h args=0.66
+@sa.hip core.calc out=?hip fn=add args=?y0 args=?hp1
+@sa.arm1 core.calc out=?am1 fn=mul args=?h args=0.4
+@sa.arm core.calc out=?arm fn=add args=?y0 args=?am1
+@sa.head ui.diagram.draw part=?c source=?c slot=?c order=3 z=0 shape=oval x=?hx y=?y0 w=?hd h=?hd cx=0 cy=0 tx=0 ty=0 scale=1 side=left outline=?ol
+@sa.hfill ui.diagram.fill source=?c part=?c fill=?fill
+@st.actor.head core.rule when=$sa.n when=$sa.b when=$sa.o with=$sa.hd with=$sa.hr with=$sa.hx then=$sa.head
+@st.actor.headfill core.rule when=$sa.n when=$sa.b when=$sa.f then=$sa.hfill
+@sa.bs core.calc out=?bsrc fn=concat args=?c args=".body"
+@sa.as core.calc out=?asrc fn=concat args=?c args=".arms"
+@sa.b1 ui.diagram.point source=?bsrc n=1 x=?cx y=?ny
+@sa.b2 ui.diagram.point source=?bsrc n=2 x=?cx y=?hip
+@sa.b3 ui.diagram.point source=?bsrc n=3 x=?x0 y=?y1
+@sa.b4 ui.diagram.point source=?bsrc n=4 x=?cx y=?hip
+@sa.b5 ui.diagram.point source=?bsrc n=5 x=?x1 y=?y1
+@sa.a1 ui.diagram.point source=?asrc n=1 x=?x0 y=?arm
+@sa.a2 ui.diagram.point source=?asrc n=2 x=?x1 y=?arm
+@st.actor.b1 core.rule when=$sa.n when=$sa.b with=$sa.hd with=$sa.neck with=$sa.bs then=$sa.b1
+@st.actor.b2 core.rule when=$sa.n when=$sa.b with=$sa.hip1 with=$sa.hip with=$sa.bs then=$sa.b2
+@st.actor.b3 core.rule when=$sa.n when=$sa.b with=$sa.bs then=$sa.b3
+@st.actor.b4 core.rule when=$sa.n when=$sa.b with=$sa.hip1 with=$sa.hip with=$sa.bs then=$sa.b4
+@st.actor.b5 core.rule when=$sa.n when=$sa.b with=$sa.bs then=$sa.b5
+@st.actor.a1 core.rule when=$sa.n when=$sa.b with=$sa.arm1 with=$sa.arm with=$sa.as then=$sa.a1
+@st.actor.a2 core.rule when=$sa.n when=$sa.b with=$sa.arm1 with=$sa.arm with=$sa.as then=$sa.a2
+@sa.bd ui.diagram.draw part=?c source=?bsrc slot=?c order=3 z=1 shape=line x=0 y=0 w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left stroke=2.5
+@sa.ad ui.diagram.draw part=?c source=?asrc slot=?c order=3 z=1 shape=line x=0 y=0 w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left stroke=2.5
+@sa.bf ui.diagram.fill source=?bsrc part=?c fill=?ol
+@sa.af ui.diagram.fill source=?asrc part=?c fill=?ol
+@st.actor.bd core.rule when=$sa.n when=$sa.b with=$sa.bs then=$sa.bd
+@st.actor.ad core.rule when=$sa.n when=$sa.b with=$sa.as then=$sa.ad
+@st.actor.bf core.rule when=$sa.n when=$sa.b when=$sa.o with=$sa.bs then=$sa.bf
+@st.actor.af core.rule when=$sa.n when=$sa.b when=$sa.o with=$sa.as then=$sa.af
+
+# ---- Labels: in the middle of the node (under an actor, a little lower in a cylinder), in its text colour, size and
+# weight; a chart's members are labelled by their chart.
+@sow.cm ui.diagram.chartmember node=?c
+@sow.sm ui.diagram.slicemember node=?c
+@sow.n w.diagram.node code=?c
+@sow.out ui.diagram.ownlabel node=?c
+@st.ownlabel core.rule when=$sow.n not=$sow.cm not=$sow.sm then=$sow.out
+@sl.n w.diagram.node code=?c label=?t shape=?s
+@sl.own ui.diagram.ownlabel node=?c
+@sl.b ui.diagram.nbox node=?c cx=?cx cy=?cy y1=?y1 h=?h
+@sl.tc ui.diagram.nst node=?c key=text v=?ink
+@sl.fs ui.diagram.nst node=?c key=font v=?fs
+@sl.fw ui.diagram.nst node=?c key=weight v=?fw
+@sl.ro ui.diagram.nst node=?c key=rotation v=?rot
+@sl.src core.calc out=?src fn=concat args=?c args=".label"
+@sl.d1 core.calc out=?d1 fn=mul args=?fs args=0.36
+@sl.y core.calc out=?ty fn=add args=?cy args=?d1
+@sl.mid core.check fn=matches args=?s args="^(?!actor$|cylinder$)"
+@sl.out ui.diagram.draw part=?c source=?src slot=?c order=4 z=0 shape=text text=?t x=?cx y=?ty w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left anchor=middle font=?fs weight=?fw rotate=?rot rx=?cx ry=?cy
+@sl.fill ui.diagram.fill source=?src part=?c fill=?ink
+@st.draw.label core.rule when=$sl.n when=$sl.own when=$sl.b when=$sl.fs when=$sl.fw when=$sl.ro if=$sl.mid with=$sl.src with=$sl.d1 with=$sl.y then=$sl.out
+@sl.notactor core.check fn=neq args=?s args=actor
+@st.fill.label core.rule when=$sl.n when=$sl.own when=$sl.b when=$sl.tc if=$sl.notactor with=$sl.src then=$sl.fill
+@sl.cy core.check fn=eq args=?s args=cylinder
+@sl.cy1 core.calc out=?cyo fn=mul args=?h args=0.08
+@sl.cy2 core.calc out=?cyy fn=add args=?ty args=?cyo
+@sl.cout ui.diagram.draw part=?c source=?src slot=?c order=4 z=0 shape=text text=?t x=?cx y=?cyy w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left anchor=middle font=?fs weight=?fw
+@st.draw.label.cylinder core.rule when=$sl.n when=$sl.own when=$sl.b when=$sl.fs when=$sl.fw if=$sl.cy with=$sl.src with=$sl.d1 with=$sl.y with=$sl.cy1 with=$sl.cy2 then=$sl.cout
+@sl.ac core.check fn=eq args=?s args=actor
+@sl.ay core.calc out=?ayy fn=add args=?y1 args=?fs
+@sl.ot ui.diagram.pagecol key=label rgb=?pl
+@sl.aout ui.diagram.draw part=?c source=?src slot=?c order=4 z=0 shape=text text=?t x=?cx y=?ayy w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left anchor=middle font=?fs weight=?fw
+@sl.afill ui.diagram.fill source=?src part=?c fill=?pl
+@st.draw.label.actor core.rule when=$sl.n when=$sl.own when=$sl.b when=$sl.fs when=$sl.fw if=$sl.ac with=$sl.src with=$sl.ay then=$sl.aout
+@st.fill.label.actor.fix core.rule when=$sl.n when=$sl.own when=$sl.b when=$sl.ot if=$sl.ac with=$sl.src then=$sl.afill
+
+# ---- Step numbers, when the page shows them: a badge on each node's top left corner, in flow order (level, then the
+# order the nodes were made). ----
+@sx.n w.diagram.node code=?c n=?o
+@sx.u ui.diagram.unitof node=?c unit=?u
+@sx.l ui.diagram.level unit=?u level=?l
+@sx.out ui.diagram.nlevel node=?c level=?l order=?o
+@st.nlevel core.rule when=$sx.n when=$sx.u when=$sx.l then=$sx.out
+@sx.nl ui.diagram.level unit=?u
+@sx.out0 ui.diagram.nlevel node=?c level=0 order=?o
+@st.nlevel.none core.rule when=$sx.n when=$sx.u not=$sx.nl then=$sx.out0
+@sx.on w.diagram.diagram numbered=true
+@sx.nv ui.diagram.nlevel node=?c level=?l order=?o
+@sx.k1 core.calc out=?k1 fn=mul args=?l args=100000
+@sx.k core.calc out=?k fn=add args=?k1 args=?o
+@sx.st ui.diagram.step node=?c key=?k
+@st.step.key core.rule when=$sx.on when=$sx.nv with=$sx.k1 with=$sx.k then=$sx.st
+@sx.s ui.diagram.step node=?c key=?k
+@sx.rk core.rank of=$sx.s by=key out=?i
+@sx.b ui.diagram.nbox node=?c x0=?x0 y0=?y0
+@sx.ol ui.diagram.nst node=?c key=outline v=?ol
+@sx.bx core.calc out=?bx fn=sub args=?x0 args=9
+@sx.by core.calc out=?by fn=sub args=?y0 args=9
+@sx.tx core.calc out=?tx fn=add args=?x0 args=1
+@sx.ty core.calc out=?ty fn=add args=?y0 args=5
+@sx.src core.calc out=?src fn=concat args=?c args=".step"
+@sx.srct core.calc out=?srct fn=concat args=?c args=".stepno"
+@sx.badge ui.diagram.draw part=?c source=?src slot=?c order=5 z=0 shape=oval x=?bx y=?by w=20 h=20 cx=0 cy=0 tx=0 ty=0 scale=1 side=left
+@sx.bfill ui.diagram.fill source=?src part=?c fill=?ol
+@sx.text ui.diagram.draw part=?c source=?srct slot=?c order=5 z=1 shape=text text=?i x=?tx y=?ty w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left anchor=middle font=11 weight=bold
+@sx.tfill ui.diagram.fill source=?srct part=?c fill="#ffffff"
+@st.step.badge core.rule when=$sx.s when=$sx.b with=$sx.bx with=$sx.by with=$sx.src then=$sx.badge
+@st.step.badge.fill core.rule when=$sx.s when=$sx.b when=$sx.ol with=$sx.src then=$sx.bfill
+@st.step.text core.rule when=$sx.s when=$sx.b with=$sx.rk with=$sx.tx with=$sx.ty with=$sx.srct then=$sx.text
+@st.step.text.fill core.rule when=$sx.s when=$sx.b with=$sx.srct then=$sx.tfill
+# Outlines of the shapes computed from their curves.
+@st.ol.cylinder.1 ui.diagram.outline shape=cylinder n=1 fx=-0.5 fy=-0.38
+@st.ol.cylinder.2 ui.diagram.outline shape=cylinder n=2 fx=-0.5 fy=0.38
+@st.ol.cylinder.3 ui.diagram.outline shape=cylinder n=3 fx=-0.462 fy=0.426
+@st.ol.cylinder.4 ui.diagram.outline shape=cylinder n=4 fx=-0.354 fy=0.465
+@st.ol.cylinder.5 ui.diagram.outline shape=cylinder n=5 fx=-0.191 fy=0.491
+@st.ol.cylinder.6 ui.diagram.outline shape=cylinder n=6 fx=0.0 fy=0.5
+@st.ol.cylinder.7 ui.diagram.outline shape=cylinder n=7 fx=0.191 fy=0.491
+@st.ol.cylinder.8 ui.diagram.outline shape=cylinder n=8 fx=0.354 fy=0.465
+@st.ol.cylinder.9 ui.diagram.outline shape=cylinder n=9 fx=0.462 fy=0.426
+@st.ol.cylinder.10 ui.diagram.outline shape=cylinder n=10 fx=0.5 fy=0.38
+@st.ol.cylinder.11 ui.diagram.outline shape=cylinder n=11 fx=0.462 fy=-0.426
+@st.ol.cylinder.12 ui.diagram.outline shape=cylinder n=12 fx=0.354 fy=-0.465
+@st.ol.cylinder.13 ui.diagram.outline shape=cylinder n=13 fx=0.191 fy=-0.491
+@st.ol.cylinder.14 ui.diagram.outline shape=cylinder n=14 fx=0.0 fy=-0.5
+@st.ol.cylinder.15 ui.diagram.outline shape=cylinder n=15 fx=-0.191 fy=-0.491
+@st.ol.cylinder.16 ui.diagram.outline shape=cylinder n=16 fx=-0.354 fy=-0.465
+@st.ol.cylinder.17 ui.diagram.outline shape=cylinder n=17 fx=-0.462 fy=-0.426
+@st.ol.document.1 ui.diagram.outline shape=document n=1 fx=-0.5 fy=-0.5
+@st.ol.document.2 ui.diagram.outline shape=document n=2 fx=0.5 fy=-0.5
+@st.ol.document.3 ui.diagram.outline shape=document n=3 fx=0.5 fy=0.36
+@st.ol.document.4 ui.diagram.outline shape=document n=4 fx=0.417 fy=0.41
+@st.ol.document.5 ui.diagram.outline shape=document n=5 fx=0.333 fy=0.447
+@st.ol.document.6 ui.diagram.outline shape=document n=6 fx=0.25 fy=0.46
+@st.ol.document.7 ui.diagram.outline shape=document n=7 fx=0.167 fy=0.447
+@st.ol.document.8 ui.diagram.outline shape=document n=8 fx=0.083 fy=0.41
+@st.ol.document.9 ui.diagram.outline shape=document n=9 fx=0.0 fy=0.36
+@st.ol.document.10 ui.diagram.outline shape=document n=10 fx=-0.083 fy=0.31
+@st.ol.document.11 ui.diagram.outline shape=document n=11 fx=-0.167 fy=0.273
+@st.ol.document.12 ui.diagram.outline shape=document n=12 fx=-0.25 fy=0.26
+@st.ol.document.13 ui.diagram.outline shape=document n=13 fx=-0.333 fy=0.273
+@st.ol.document.14 ui.diagram.outline shape=document n=14 fx=-0.417 fy=0.31
+@st.ol.document.15 ui.diagram.outline shape=document n=15 fx=-0.5 fy=0.36
+@st.ol.note.1 ui.diagram.outline shape=note n=1 fx=-0.5 fy=-0.5
+@st.ol.note.2 ui.diagram.outline shape=note n=2 fx=0.28 fy=-0.5
+@st.ol.note.3 ui.diagram.outline shape=note n=3 fx=0.5 fy=-0.22
+@st.ol.note.4 ui.diagram.outline shape=note n=4 fx=0.5 fy=0.5
+@st.ol.note.5 ui.diagram.outline shape=note n=5 fx=-0.5 fy=0.5
+@st.ol.cloud.1 ui.diagram.outline shape=cloud n=1 fx=0.442 fy=0.0
+@st.ol.cloud.2 ui.diagram.outline shape=cloud n=2 fx=0.467 fy=0.062
+@st.ol.cloud.3 ui.diagram.outline shape=cloud n=3 fx=0.476 fy=0.127
+@st.ol.cloud.4 ui.diagram.outline shape=cloud n=4 fx=0.462 fy=0.191
+@st.ol.cloud.5 ui.diagram.outline shape=cloud n=5 fx=0.426 fy=0.246
+@st.ol.cloud.6 ui.diagram.outline shape=cloud n=6 fx=0.374 fy=0.287
+@st.ol.cloud.7 ui.diagram.outline shape=cloud n=7 fx=0.313 fy=0.313
+@st.ol.cloud.8 ui.diagram.outline shape=cloud n=8 fx=0.287 fy=0.374
+@st.ol.cloud.9 ui.diagram.outline shape=cloud n=9 fx=0.246 fy=0.426
+@st.ol.cloud.10 ui.diagram.outline shape=cloud n=10 fx=0.191 fy=0.462
+@st.ol.cloud.11 ui.diagram.outline shape=cloud n=11 fx=0.127 fy=0.476
+@st.ol.cloud.12 ui.diagram.outline shape=cloud n=12 fx=0.062 fy=0.467
+@st.ol.cloud.13 ui.diagram.outline shape=cloud n=13 fx=0.0 fy=0.442
+@st.ol.cloud.14 ui.diagram.outline shape=cloud n=14 fx=-0.062 fy=0.467
+@st.ol.cloud.15 ui.diagram.outline shape=cloud n=15 fx=-0.127 fy=0.476
+@st.ol.cloud.16 ui.diagram.outline shape=cloud n=16 fx=-0.191 fy=0.462
+@st.ol.cloud.17 ui.diagram.outline shape=cloud n=17 fx=-0.246 fy=0.426
+@st.ol.cloud.18 ui.diagram.outline shape=cloud n=18 fx=-0.287 fy=0.374
+@st.ol.cloud.19 ui.diagram.outline shape=cloud n=19 fx=-0.313 fy=0.313
+@st.ol.cloud.20 ui.diagram.outline shape=cloud n=20 fx=-0.374 fy=0.287
+@st.ol.cloud.21 ui.diagram.outline shape=cloud n=21 fx=-0.426 fy=0.246
+@st.ol.cloud.22 ui.diagram.outline shape=cloud n=22 fx=-0.462 fy=0.191
+@st.ol.cloud.23 ui.diagram.outline shape=cloud n=23 fx=-0.476 fy=0.127
+@st.ol.cloud.24 ui.diagram.outline shape=cloud n=24 fx=-0.467 fy=0.062
+@st.ol.cloud.25 ui.diagram.outline shape=cloud n=25 fx=-0.442 fy=0.0
+@st.ol.cloud.26 ui.diagram.outline shape=cloud n=26 fx=-0.467 fy=-0.062
+@st.ol.cloud.27 ui.diagram.outline shape=cloud n=27 fx=-0.476 fy=-0.127
+@st.ol.cloud.28 ui.diagram.outline shape=cloud n=28 fx=-0.462 fy=-0.191
+@st.ol.cloud.29 ui.diagram.outline shape=cloud n=29 fx=-0.426 fy=-0.246
+@st.ol.cloud.30 ui.diagram.outline shape=cloud n=30 fx=-0.374 fy=-0.287
+@st.ol.cloud.31 ui.diagram.outline shape=cloud n=31 fx=-0.313 fy=-0.313
+@st.ol.cloud.32 ui.diagram.outline shape=cloud n=32 fx=-0.287 fy=-0.374
+@st.ol.cloud.33 ui.diagram.outline shape=cloud n=33 fx=-0.246 fy=-0.426
+@st.ol.cloud.34 ui.diagram.outline shape=cloud n=34 fx=-0.191 fy=-0.462
+@st.ol.cloud.35 ui.diagram.outline shape=cloud n=35 fx=-0.127 fy=-0.476
+@st.ol.cloud.36 ui.diagram.outline shape=cloud n=36 fx=-0.062 fy=-0.467
+@st.ol.cloud.37 ui.diagram.outline shape=cloud n=37 fx=-0.0 fy=-0.442
+@st.ol.cloud.38 ui.diagram.outline shape=cloud n=38 fx=0.062 fy=-0.467
+@st.ol.cloud.39 ui.diagram.outline shape=cloud n=39 fx=0.127 fy=-0.476
+@st.ol.cloud.40 ui.diagram.outline shape=cloud n=40 fx=0.191 fy=-0.462
+@st.ol.cloud.41 ui.diagram.outline shape=cloud n=41 fx=0.246 fy=-0.426
+@st.ol.cloud.42 ui.diagram.outline shape=cloud n=42 fx=0.287 fy=-0.374
+@st.ol.cloud.43 ui.diagram.outline shape=cloud n=43 fx=0.313 fy=-0.313
+@st.ol.cloud.44 ui.diagram.outline shape=cloud n=44 fx=0.374 fy=-0.287
+@st.ol.cloud.45 ui.diagram.outline shape=cloud n=45 fx=0.426 fy=-0.246
+@st.ol.cloud.46 ui.diagram.outline shape=cloud n=46 fx=0.462 fy=-0.191
+@st.ol.cloud.47 ui.diagram.outline shape=cloud n=47 fx=0.476 fy=-0.127
+@st.ol.cloud.48 ui.diagram.outline shape=cloud n=48 fx=0.467 fy=-0.062

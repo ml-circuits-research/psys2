@@ -1,0 +1,40 @@
+# k.styles: named visual styles for pictures made of shapes and lines (a diagram, a chart, a drawing): colour themes
+# with a fill, an outline, a text colour, a line colour, a background and a frame colour, the colours a theme gives the
+# shapes of one role, and each theme's palette in order (a colour for each level, group or category). A host applies a
+# theme by copying its colours onto the things it names, and colours categories by the palette in order.
+# sources: hand-core 1 (the schema and the facts, hand-written in this repository; palettes after common practice in
+# visualisation: categorical palettes of distinct hues, light tints for pastel, light lines on a dark ground)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@k.styles core.module name=k.styles version=1 exports=theme exports=role exports=swatch core.source="hand-core 1"
+
+# A theme. `name`; `about` in words; `fill` the colour inside a shape; `outline` its border; `text` the colour of
+# labels; `edge` the colour of lines and arrows; `background` the page; `group` the inside of a frame around several
+# shapes; `weight` of labels (normal, bold); `width` of lines and outlines in pixels. Colours are #rrggbb values.
+@k.styles.theme core.type of=k.styles.theme shared=true closed=true core.source="hand-core 1"
+@k.styles.theme.name core.slot of=k.styles.theme key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.styles.theme.about core.slot of=k.styles.theme key=about required=true kind=string core.source="hand-core 1"
+@k.styles.theme.fill core.slot of=k.styles.theme key=fill required=true kind=string core.source="hand-core 1"
+@k.styles.theme.outline core.slot of=k.styles.theme key=outline required=true kind=string core.source="hand-core 1"
+@k.styles.theme.text core.slot of=k.styles.theme key=text required=true kind=string core.source="hand-core 1"
+@k.styles.theme.edge core.slot of=k.styles.theme key=edge required=true kind=string core.source="hand-core 1"
+@k.styles.theme.background core.slot of=k.styles.theme key=background required=true kind=string core.source="hand-core 1"
+@k.styles.theme.group core.slot of=k.styles.theme key=group required=true kind=string core.source="hand-core 1"
+@k.styles.theme.weight core.slot of=k.styles.theme key=weight enum=normal enum=bold default=normal core.source="hand-core 1"
+@k.styles.theme.width core.slot of=k.styles.theme key=width kind=number min=0.5 max=12 core.source="hand-core 1"
+
+# The colours a theme gives the shapes of one role (`role` a role of a diagram's node: start, end, process, decision,
+# data, document, subprocess, database ...): `fill`, `outline`, `text`.
+@k.styles.role core.type of=k.styles.role shared=true closed=true core.source="hand-core 1"
+@k.styles.role.theme core.slot of=k.styles.role key=theme id=true required=true kind=atom kind=string type=k.styles.theme by=name core.source="hand-core 1"
+@k.styles.role.role core.slot of=k.styles.role key=role id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.styles.role.fill core.slot of=k.styles.role key=fill required=true kind=string core.source="hand-core 1"
+@k.styles.role.outline core.slot of=k.styles.role key=outline kind=string core.source="hand-core 1"
+@k.styles.role.text core.slot of=k.styles.role key=text kind=string core.source="hand-core 1"
+
+# A theme's palette: the colour at place `n` (from 1), used in order for levels, groups, categories and slices.
+@k.styles.swatch core.type of=k.styles.swatch shared=true closed=true core.source="hand-core 1"
+@k.styles.swatch.theme core.slot of=k.styles.swatch key=theme id=true required=true kind=atom kind=string type=k.styles.theme by=name core.source="hand-core 1"
+@k.styles.swatch.n core.slot of=k.styles.swatch key=n id=true required=true kind=integer min=1 step=1 core.source="hand-core 1"
+@k.styles.swatch.colour core.slot of=k.styles.swatch key=colour required=true kind=string core.source="hand-core 1"

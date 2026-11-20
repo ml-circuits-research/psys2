@@ -1,0 +1,512 @@
+# art.draw landscape rules (owner, 2026-11-20): terrain features drawn from their handles, and what holds things up.
+#
+# A kind that k.layouts declares a terrain feature (k.layouts.terrain: the view of sky and ground, a river, a road, a
+# lake, a hill) is not drawn from a fixed k.objects picture (render-projection.sop leaves it out): its shape follows
+# from its handles (k.layouts.handle), which are its parts here, editable as any part is (drawing.part.place moves the
+# bend of a river or the horizon of the view; drawing.part.change width widens a band at that end), and from its
+# drawn parts (k.layouts.terrain_part): a band along its course whose banks run side by side, an outline whose shore
+# follows the water, the sky and the ground above and below the horizon. Everything is computed in page units.
+#
+# What holds things up (k.scenes.support, k.scenes.surface): the water, road, ground and sky parts of what is on the
+# page are observed as regions of that surface (app.observe.region kind=<surface>); a new object keeps out of every
+# surface its kind avoids (app.place.avoid: a house never in a river, a tree never in a lake) and goes onto a surface
+# its kind is on when the page has one (a boat on the water, a car on the road). The application compiles both into
+# the placement problem (src/dialog/default-placement.mjs, and the library's relation placement).
+@ls.terrain.type core.type of=ui.draw.terrain
+@ls.tvariant.type core.type of=ui.draw.tvariant
+@ls.thandle.type core.type of=ui.draw.thandle
+@ls.hpos.type core.type of=ui.draw.hpos
+@ls.sample.type core.type of=ui.draw.sample
+@ls.bandpt.type core.type of=ui.draw.bandpt
+@ls.apt.type core.type of=ui.draw.apt
+@ls.acount.type core.type of=ui.draw.acount
+@ls.horizon.type core.type of=ui.draw.horizon
+@ls.backdrop.type core.type of=ui.draw.backdrop
+@ls.tpart.type core.type of=ui.draw.tpart
+@ls.goes.type core.type of=ui.draw.goes
+@ls.box.type core.type of=ui.draw.tbox
+@ls.room.type core.type of=ui.draw.troom
+@ls.foot.type core.type of=app.place.footprint
+@ls.share.type core.type of=ui.draw.troomshare
+@ls.avoid.type core.type of=app.place.avoid
+
+# The kinds the tab offers by name include the terrain features it draws from handles.
+@ls.kind.landscape ui.draw.kind drawing=landscape
+@ls.kind.pond ui.draw.kind drawing=pond
+
+# The samples of a band's course: t from the far end (0) to the near end (1), with the weights of a quadratic curve
+# ((1-t)², 2t(1-t), t²) and 1-t. Arithmetic, not knowledge of any kind.
+@ls.sample.0 ui.draw.sample k=0 t=0 u=1 a=1 b=0 c=0
+@ls.sample.1 ui.draw.sample k=1 t=0.125 u=0.875 a=0.765625 b=0.21875 c=0.015625
+@ls.sample.2 ui.draw.sample k=2 t=0.25 u=0.75 a=0.5625 b=0.375 c=0.0625
+@ls.sample.3 ui.draw.sample k=3 t=0.375 u=0.625 a=0.390625 b=0.46875 c=0.140625
+@ls.sample.4 ui.draw.sample k=4 t=0.5 u=0.5 a=0.25 b=0.5 c=0.25
+@ls.sample.5 ui.draw.sample k=5 t=0.625 u=0.375 a=0.140625 b=0.46875 c=0.390625
+@ls.sample.6 ui.draw.sample k=6 t=0.75 u=0.25 a=0.0625 b=0.375 c=0.5625
+@ls.sample.7 ui.draw.sample k=7 t=0.875 u=0.125 a=0.015625 b=0.21875 c=0.765625
+@ls.sample.8 ui.draw.sample k=8 t=1 u=0 a=0 b=0 c=1
+
+# 1. Which objects are terrain features, and the outline variant each takes (by its layer: two lakes differ).
+@ls.o w.drawing.object code=?id drawing=?k z=?z
+@ls.t k.layouts.terrain name=?k form=?f lies=?l
+@ls.t.o ui.draw.terrain object=?id kind=?k form=?f lies=?l
+@ls.terrain core.rule when=$ls.o when=$ls.t then=$ls.t.o
+@ls.tv k.layouts.terrain name=?k variants=?nv
+@ls.tv.m core.calc out=?m fn=mod args=?z args=?nv
+@ls.tv.v core.calc out=?v fn=add args=?m args=1
+@ls.tv.o ui.draw.tvariant object=?id variant=?v
+@ls.variant core.rule when=$ls.o when=$ls.tv with=$ls.tv.m with=$ls.tv.v then=$ls.tv.o
+# A terrain feature that lies in the land (the view, a river, a road, a lake) is no occupant of the page: what it holds
+# up and keeps others out of is its surfaces. One that stands on the horizon (a hill) occupies its box as any thing.
+@ls.bd.o ui.draw.backdrop object=?id
+@ls.bd.notfar core.check fn=matches args=?l args="^(view|ground|through)$"
+@ls.backdrop core.rule when=$ls.o when=$ls.t if=$ls.bd.notfar then=$ls.bd.o
+@ls.bd.ext ui.draw.extent object=?id w=?w h=?h
+@ls.bd.obj w.drawing.object code=?id x=?x y=?y
+@ls.bd.hw core.calc out=?hw fn=div args=?w args=2
+@ls.bd.hh core.calc out=?hh fn=div args=?h args=2
+@ls.bd.x0 core.calc out=?x0 fn=sub args=?x args=?hw
+@ls.bd.y0 core.calc out=?y0 fn=sub args=?y args=?hh
+@ls.bd.x1 core.calc out=?x1 fn=add args=?x args=?hw
+@ls.bd.y1 core.calc out=?y1 fn=add args=?y args=?hh
+@ls.bd.box app.observe.box id=?id x0=?x0 y0=?y0 x1=?x1 y1=?y1 occupant=false
+@ls.backdrop.box core.rule when=$ls.bd.o when=$ls.bd.obj when=$ls.bd.ext with=$ls.bd.hw with=$ls.bd.hh with=$ls.bd.x0 with=$ls.bd.y0 with=$ls.bd.x1 with=$ls.bd.y1 then=$ls.bd.box
+
+# 2. The handles of each feature (those of its variant, and those of every variant) are its parts: their index is
+# their n, their geometry in the 0..100 frame is the point x, y with the size w, h, as edited (render-projection.sop's
+# ui.draw.partgeo, so the part edits of act-rules.sop move and resize them).
+@ls.h.v ui.draw.tvariant object=?id variant=?v
+@ls.h.k k.layouts.handle of=?k n=?i role=?r variant=?v x=?hx y=?hy w=?hw h=?hh
+@ls.h.any k.layouts.handle of=?k n=?i role=?r x=?hx y=?hy w=?hw h=?hh
+@ls.h.var k.layouts.handle of=?k n=?i variant=?anyv
+@ls.h.o ui.draw.thandle object=?id source=$ls.h.k index=?i role=?r cx=?hx cy=?hy pw=?hw ph=?hh
+@ls.h.o2 ui.draw.thandle object=?id source=$ls.h.any index=?i role=?r cx=?hx cy=?hy pw=?hw ph=?hh
+@ls.handle.variant core.rule when=$ls.o when=$ls.t when=$ls.h.v when=$ls.h.k then=$ls.h.o
+@ls.handle.every core.rule when=$ls.o when=$ls.t when=$ls.h.any not=$ls.h.var then=$ls.h.o2
+@ls.g.o w.drawing.object code=?id
+@ls.g.h ui.draw.thandle object=?id source=?src index=?i cx=?cx cy=?cy pw=?pw ph=?ph
+@ls.g.edit w.drawing.part object=$ls.g.o index=?i dx=?dx dy=?dy width=?fw height=?fh
+@ls.g.ex core.calc out=?ex fn=add args=?cx args=?dx
+@ls.g.ey core.calc out=?ey fn=add args=?cy args=?dy
+@ls.g.plain ui.draw.partgeo object=?id source=?src index=?i cx=?cx cy=?cy pw=?pw ph=?ph ex=?cx ey=?cy fw=?pw fh=?ph
+@ls.g.edited ui.draw.partgeo object=?id source=?src index=?i cx=?cx cy=?cy pw=?pw ph=?ph ex=?ex ey=?ey fw=?fw fh=?fh
+@ls.handle.geometry core.rule when=$ls.g.o when=$ls.g.h not=$ls.g.edit then=$ls.g.plain
+@ls.handle.geometry.edited core.rule when=$ls.g.o when=$ls.g.h when=$ls.g.edit with=$ls.g.ex with=$ls.g.ey then=$ls.g.edited
+# Each handle is observed as a part of its feature (a reader names "the horizon", "the bend of the river").
+@ls.ob.h ui.draw.thandle object=?id source=$ls.ob.k index=?i
+@ls.ob.k k.layouts.handle name=?name
+@ls.ob.pid core.calc out=?pid fn=concat args=?id args="." args=?i
+@ls.ob.out app.observe.object id=?pid kind=?name sourceType=art.draw.part binding=drawing.part in=?id role=?name name=?name index=?i
+@ls.observe.handle core.rule when=$ls.ob.k when=$ls.ob.h with=$ls.ob.pid then=$ls.ob.out
+# Where each handle is on the page: its point and its width in page units.
+@ls.hp.th ui.draw.thandle object=?id source=?src index=?i role=?r
+@ls.hp.g ui.draw.partgeo object=?id source=?src index=?i ex=?ex ey=?ey fw=?fw fh=?fh
+@ls.hp.o w.drawing.object code=?id x=?x y=?y
+@ls.hp.ext ui.draw.extent object=?id w=?ow h=?oh
+@ls.hp.sx core.calc out=?sx fn=div args=?ow args=100
+@ls.hp.sy core.calc out=?sy fn=div args=?oh args=100
+@ls.hp.ux core.calc out=?ux fn=sub args=?ex args=50
+@ls.hp.uy core.calc out=?uy fn=sub args=?ey args=50
+@ls.hp.vx core.calc out=?vx fn=mul args=?ux args=?sx
+@ls.hp.vy core.calc out=?vy fn=mul args=?uy args=?sy
+@ls.hp.px core.calc out=?px fn=add args=?x args=?vx
+@ls.hp.py core.calc out=?py fn=add args=?y args=?vy
+@ls.hp.pw core.calc out=?pw fn=mul args=?fw args=?sx
+@ls.hp.out ui.draw.hpos object=?id index=?i role=?r x=?px y=?py w=?pw
+@ls.handle.page core.rule when=$ls.hp.th when=$ls.hp.g when=$ls.hp.o when=$ls.hp.ext with=$ls.hp.sx with=$ls.hp.sy with=$ls.hp.ux with=$ls.hp.uy with=$ls.hp.vx with=$ls.hp.vy with=$ls.hp.px with=$ls.hp.py with=$ls.hp.pw then=$ls.hp.out
+
+# The drawn parts of each feature: the part's source on the page (code.part), its colour (the object's colour paints
+# its fill; else the part's own shade), its layer (the object's), its draw order (the part's z).
+@ls.tp.t ui.draw.terrain object=?id kind=?k
+@ls.tp.o w.drawing.object code=?id z=?layer
+@ls.tp.k k.layouts.terrain_part of=?k name=?pn form=?pf z=?pz rgb=?rgb
+@ls.tp.src core.calc out=?src fn=concat args=?id args="." args=?pn
+@ls.tp.out ui.draw.tpart object=?id kind=?k name=?pn form=?pf source=?src z=?pz layer=?layer rgb=?rgb
+@ls.terrain.part core.rule when=$ls.tp.t when=$ls.tp.o when=$ls.tp.k with=$ls.tp.src then=$ls.tp.out
+@ls.fc.p ui.draw.tpart object=?id source=?src rgb=?rgb
+@ls.fc.fill ui.draw.tpart object=?id source=?src form=fill
+@ls.fc.own w.drawing.object code=?id colour=?c
+@ls.fc.rgb ui.draw.rgb colour=?c rgb=?crgb
+@ls.fc.out ui.draw.colour source=?src part=?id fill=?rgb
+@ls.fc.chosen ui.draw.chosen source=?src part=?id fill=?crgb
+@ls.fill.own core.rule when=$ls.fc.p not=$ls.fc.own then=$ls.fc.out
+@ls.fill.not.main core.rule when=$ls.fc.p when=$ls.fc.own not=$ls.fc.fill then=$ls.fc.out
+@ls.fill.chosen core.rule when=$ls.fc.p when=$ls.fc.fill when=$ls.fc.own when=$ls.fc.rgb then=$ls.fc.chosen
+
+# 3. A band: the course is the quadratic curve from the start handle to the end handle that passes through the bend
+# handle halfway (its control point is 2·bend − (start + end)/2); at each sample its width goes evenly from the start
+# handle's width to the end handle's, so the banks run side by side and narrow towards the horizon.
+@ls.bn.t ui.draw.terrain object=?id form=band
+@ls.bn.s ui.draw.hpos object=?id role=start x=?sx y=?sy w=?sw
+@ls.bn.b ui.draw.hpos object=?id role=bend x=?bx y=?by
+@ls.bn.e ui.draw.hpos object=?id role=end x=?ex y=?ey w=?ew
+@ls.bn.k ui.draw.sample k=?k t=?t u=?u a=?a b=?b c=?c
+@ls.bn.mx core.calc out=?mx fn=add args=?sx args=?ex
+@ls.bn.my core.calc out=?my fn=add args=?sy args=?ey
+@ls.bn.hx core.calc out=?hx fn=div args=?mx args=2
+@ls.bn.hy core.calc out=?hy fn=div args=?my args=2
+@ls.bn.bx2 core.calc out=?bx2 fn=mul args=?bx args=2
+@ls.bn.by2 core.calc out=?by2 fn=mul args=?by args=2
+@ls.bn.cx core.calc out=?cx fn=sub args=?bx2 args=?hx
+@ls.bn.cy core.calc out=?cy fn=sub args=?by2 args=?hy
+@ls.bn.p1 core.calc out=?p1 fn=mul args=?a args=?sx
+@ls.bn.p2 core.calc out=?p2 fn=mul args=?b args=?cx
+@ls.bn.p3 core.calc out=?p3 fn=mul args=?c args=?ex
+@ls.bn.q1 core.calc out=?q1 fn=mul args=?a args=?sy
+@ls.bn.q2 core.calc out=?q2 fn=mul args=?b args=?cy
+@ls.bn.q3 core.calc out=?q3 fn=mul args=?c args=?ey
+@ls.bn.px core.calc out=?px fn=add args=?p1 args=?p2 args=?p3
+@ls.bn.py core.calc out=?py fn=add args=?q1 args=?q2 args=?q3
+@ls.bn.w1 core.calc out=?w1 fn=mul args=?u args=?sw
+@ls.bn.w2 core.calc out=?w2 fn=mul args=?t args=?ew
+@ls.bn.w core.calc out=?wd fn=add args=?w1 args=?w2
+@ls.bn.half core.calc out=?half fn=div args=?wd args=2
+@ls.bn.lx core.calc out=?lx fn=sub args=?px args=?half
+@ls.bn.rx core.calc out=?rx fn=add args=?px args=?half
+@ls.bn.out ui.draw.bandpt object=?id k=?k x=?px y=?py lx=?lx rx=?rx
+@ls.band.course core.rule when=$ls.bn.t when=$ls.bn.s when=$ls.bn.b when=$ls.bn.e when=$ls.bn.k with=$ls.bn.mx with=$ls.bn.my with=$ls.bn.hx with=$ls.bn.hy with=$ls.bn.bx2 with=$ls.bn.by2 with=$ls.bn.cx with=$ls.bn.cy with=$ls.bn.p1 with=$ls.bn.p2 with=$ls.bn.p3 with=$ls.bn.q1 with=$ls.bn.q2 with=$ls.bn.q3 with=$ls.bn.px with=$ls.bn.py with=$ls.bn.w1 with=$ls.bn.w2 with=$ls.bn.w with=$ls.bn.half with=$ls.bn.lx with=$ls.bn.rx then=$ls.bn.out
+# Its fill: down the left bank and back up the right one; an edge: the points of its side; the middle: the course.
+@ls.bf.p ui.draw.tpart object=?id source=?src form=fill z=?pz layer=?layer
+@ls.bf.t ui.draw.terrain object=?id form=band
+@ls.bf.pt ui.draw.bandpt object=?id k=?j y=?py lx=?lx rx=?rx
+@ls.bf.nl core.calc out=?n fn=add args=?j args=1
+@ls.bf.nr core.calc out=?n fn=sub args=18 args=?j
+@ls.bf.l ui.draw.point source=?src n=?n x=?lx y=?py
+@ls.bf.r ui.draw.point source=?src n=?n x=?rx y=?py
+@ls.band.fill.left core.rule when=$ls.bf.p when=$ls.bf.t when=$ls.bf.pt with=$ls.bf.nl then=$ls.bf.l
+@ls.band.fill.right core.rule when=$ls.bf.p when=$ls.bf.t when=$ls.bf.pt with=$ls.bf.nr then=$ls.bf.r
+@ls.bf.draw ui.draw.draw part=?id source=?src slot=?id order=?layer z=?pz shape=polygon x=0 y=0 w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left
+@ls.band.fill core.rule when=$ls.bf.p when=$ls.bf.t then=$ls.bf.draw
+@ls.be.p ui.draw.tpart object=?id kind=?k name=?pn source=?src form=edge z=?pz layer=?layer
+@ls.be.side k.layouts.terrain_part of=?k name=?pn side=left
+@ls.be.side.r k.layouts.terrain_part of=?k name=?pn side=right
+@ls.be.l ui.draw.point source=?src n=?n x=?lx y=?py
+@ls.be.r ui.draw.point source=?src n=?n x=?rx y=?py
+@ls.band.edge.left core.rule when=$ls.be.p when=$ls.be.side when=$ls.bf.pt with=$ls.bf.nl then=$ls.be.l
+@ls.band.edge.right core.rule when=$ls.be.p when=$ls.be.side.r when=$ls.bf.pt with=$ls.bf.nl then=$ls.be.r
+@ls.be.draw ui.draw.draw part=?id source=?src slot=?id order=?layer z=?pz shape=line x=0 y=0 w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left stroke=4
+@ls.band.edge core.rule when=$ls.be.p then=$ls.be.draw
+@ls.bm.p ui.draw.tpart object=?id source=?src form=middle z=?pz layer=?layer
+@ls.bm.pt ui.draw.bandpt object=?id k=?j x=?px y=?py
+@ls.bm.o ui.draw.point source=?src n=?n x=?px y=?py
+@ls.band.middle.points core.rule when=$ls.bm.p when=$ls.bm.pt with=$ls.bf.nl then=$ls.bm.o
+@ls.bm.draw ui.draw.draw part=?id source=?src slot=?id order=?layer z=?pz shape=line x=0 y=0 w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left stroke=3 dash="16 14"
+@ls.band.middle core.rule when=$ls.bm.p then=$ls.bm.draw
+# Its surface: the box of each stretch between two samples (a bent band is many boxes, not one).
+@ls.bs.t ui.draw.terrain object=?id kind=?k form=band
+@ls.bs.a ui.draw.bandpt object=?id k=?k0 y=?ya lx=?la rx=?ra
+@ls.bs.k1 core.calc out=?k1 fn=add args=?k0 args=1
+@ls.bs.b ui.draw.bandpt object=?id k=?k1 y=?yb lx=?lb rx=?rb
+@ls.bs.x0 core.calc out=?x0 fn=min args=?la args=?lb
+@ls.bs.x1 core.calc out=?x1 fn=max args=?ra args=?rb
+@ls.bs.y0 core.calc out=?y0 fn=min args=?ya args=?yb
+@ls.bs.y1 core.calc out=?y1 fn=max args=?ya args=?yb
+@ls.bs.out ui.draw.tbox object=?id kind=?k form=fill x0=?x0 y0=?y0 x1=?x1 y1=?y1
+# And a square across the band at each near sample, as wide as the band there: the room a boat or a car has on it.
+@ls.bq.a ui.draw.bandpt object=?id k=?j x=?px y=?py lx=?lx rx=?rx
+@ls.bq.near core.check fn=gte args=?j args=3
+@ls.bq.w core.calc out=?wd fn=sub args=?rx args=?lx
+@ls.bq.h core.calc out=?hw fn=div args=?wd args=2
+@ls.bq.y0 core.calc out=?y0 fn=sub args=?py args=?hw
+@ls.bq.y1 core.calc out=?y1 fn=add args=?py args=?hw
+@ls.bq.out ui.draw.troom object=?id kind=?k x0=?lx y0=?y0 x1=?rx y1=?y1
+@ls.band.across core.rule when=$ls.bs.t when=$ls.bq.a if=$ls.bq.near with=$ls.bq.w with=$ls.bq.h with=$ls.bq.y0 with=$ls.bq.y1 then=$ls.bq.out
+@ls.band.stretch core.rule when=$ls.bs.t when=$ls.bs.a with=$ls.bs.k1 when=$ls.bs.b with=$ls.bs.x0 with=$ls.bs.x1 with=$ls.bs.y0 with=$ls.bs.y1 then=$ls.bs.out
+
+# 4. An area: the outline through its handles in their order, rounded once (each side cut at a quarter and three
+# quarters of its length); a shore is that outline grown by its grow per cent around the middle of the feature.
+@ls.ar.t ui.draw.terrain object=?id form=area
+@ls.ar.h ui.draw.hpos object=?id
+@ls.ar.cnt core.aggregate over=$ls.ar.h by=?id count=?n then=$ls.ar.cnt.o
+@ls.ar.cnt.o ui.draw.acount object=?id n=?n
+@ls.ar.a ui.draw.hpos object=?id index=?i x=?xa y=?ya
+@ls.ar.c ui.draw.acount object=?id n=?n
+@ls.ar.j1 core.calc out=?j1 fn=add args=?i args=1
+@ls.ar.j core.calc out=?j fn=mod args=?j1 args=?n
+@ls.ar.b ui.draw.hpos object=?id index=?j x=?xb y=?yb
+@ls.ar.qa core.calc out=?qa fn=mul args=?xa args=0.75
+@ls.ar.qb core.calc out=?qb fn=mul args=?xb args=0.25
+@ls.ar.qx core.calc out=?qx fn=add args=?qa args=?qb
+@ls.ar.qc core.calc out=?qc fn=mul args=?ya args=0.75
+@ls.ar.qd core.calc out=?qd fn=mul args=?yb args=0.25
+@ls.ar.qy core.calc out=?qy fn=add args=?qc args=?qd
+@ls.ar.ra core.calc out=?ra fn=mul args=?xa args=0.25
+@ls.ar.rb core.calc out=?rb fn=mul args=?xb args=0.75
+@ls.ar.rx core.calc out=?rx fn=add args=?ra args=?rb
+@ls.ar.rc core.calc out=?rc fn=mul args=?ya args=0.25
+@ls.ar.rd core.calc out=?rd fn=mul args=?yb args=0.75
+@ls.ar.ry core.calc out=?ry fn=add args=?rc args=?rd
+@ls.ar.i2 core.calc out=?i2 fn=mul args=?i args=2
+@ls.ar.nq core.calc out=?nq fn=add args=?i2 args=1
+@ls.ar.nr core.calc out=?nr fn=add args=?i2 args=2
+@ls.ar.oq ui.draw.apt object=?id n=?nq x=?qx y=?qy
+@ls.ar.or ui.draw.apt object=?id n=?nr x=?rx y=?ry
+@ls.area.cut.first core.rule when=$ls.ar.t when=$ls.ar.a when=$ls.ar.c with=$ls.ar.j1 with=$ls.ar.j when=$ls.ar.b with=$ls.ar.qa with=$ls.ar.qb with=$ls.ar.qx with=$ls.ar.qc with=$ls.ar.qd with=$ls.ar.qy with=$ls.ar.i2 with=$ls.ar.nq then=$ls.ar.oq
+@ls.area.cut.second core.rule when=$ls.ar.t when=$ls.ar.a when=$ls.ar.c with=$ls.ar.j1 with=$ls.ar.j when=$ls.ar.b with=$ls.ar.ra with=$ls.ar.rb with=$ls.ar.rx with=$ls.ar.rc with=$ls.ar.rd with=$ls.ar.ry with=$ls.ar.i2 with=$ls.ar.nr then=$ls.ar.or
+@ls.af.p ui.draw.tpart object=?id source=?src form=fill z=?pz layer=?layer
+@ls.af.pt ui.draw.apt object=?id n=?n x=?x y=?y
+@ls.af.o ui.draw.point source=?src n=?n x=?x y=?y
+@ls.area.fill.points core.rule when=$ls.af.p when=$ls.ar.t when=$ls.af.pt then=$ls.af.o
+@ls.af.draw ui.draw.draw part=?id source=?src slot=?id order=?layer z=?pz shape=polygon x=0 y=0 w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left
+@ls.area.fill core.rule when=$ls.af.p when=$ls.ar.t then=$ls.af.draw
+@ls.as.p ui.draw.tpart object=?id kind=?k name=?pn source=?src form=shore z=?pz layer=?layer
+@ls.as.k k.layouts.terrain_part of=?k name=?pn grow=?g
+@ls.as.c w.drawing.object code=?id x=?cx y=?cy
+@ls.as.f0 core.calc out=?f0 fn=div args=?g args=100
+@ls.as.f core.calc out=?f fn=add args=?f0 args=1
+@ls.as.dx core.calc out=?dx fn=sub args=?x args=?cx
+@ls.as.dy core.calc out=?dy fn=sub args=?y args=?cy
+@ls.as.ex core.calc out=?ex fn=mul args=?dx args=?f
+@ls.as.ey core.calc out=?ey fn=mul args=?dy args=?f
+@ls.as.sx core.calc out=?sx fn=add args=?cx args=?ex
+@ls.as.sy core.calc out=?sy fn=add args=?cy args=?ey
+@ls.as.o ui.draw.point source=?src n=?n x=?sx y=?sy
+@ls.area.shore.points core.rule when=$ls.as.p when=$ls.as.k when=$ls.ar.t when=$ls.as.c when=$ls.af.pt with=$ls.as.f0 with=$ls.as.f with=$ls.as.dx with=$ls.as.dy with=$ls.as.ex with=$ls.as.ey with=$ls.as.sx with=$ls.as.sy then=$ls.as.o
+@ls.as.draw ui.draw.draw part=?id source=?src slot=?id order=?layer z=?pz shape=polygon x=0 y=0 w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left
+@ls.area.shore core.rule when=$ls.as.p when=$ls.ar.t then=$ls.as.draw
+# Its surface: the box of its outline.
+@ls.ab.t ui.draw.terrain object=?id kind=?k form=area
+@ls.ab.h ui.draw.hpos object=?id x=?x y=?y
+@ls.ab.x0 core.aggregate over=$ls.ab.h by=?id min=?v args=?x then=$ls.ab.x0.o
+@ls.ab.x0.o ui.draw.tbox.min object=?id axis=x v=?v
+@ls.ab.y0 core.aggregate over=$ls.ab.h by=?id min=?v args=?y then=$ls.ab.y0.o
+@ls.ab.y0.o ui.draw.tbox.min object=?id axis=y v=?v
+@ls.ab.x1 core.aggregate over=$ls.ab.h by=?id max=?v args=?x then=$ls.ab.x1.o
+@ls.ab.x1.o ui.draw.tbox.max object=?id axis=x v=?v
+@ls.ab.y1 core.aggregate over=$ls.ab.h by=?id max=?v args=?y then=$ls.ab.y1.o
+@ls.ab.y1.o ui.draw.tbox.max object=?id axis=y v=?v
+@ls.tbmin.type core.type of=ui.draw.tbox.min
+@ls.tbmax.type core.type of=ui.draw.tbox.max
+@ls.ab.a ui.draw.tbox.min object=?id axis=x v=?x0
+@ls.ab.b ui.draw.tbox.min object=?id axis=y v=?y0
+@ls.ab.c ui.draw.tbox.max object=?id axis=x v=?x1
+@ls.ab.d ui.draw.tbox.max object=?id axis=y v=?y1
+@ls.ab.out ui.draw.tbox object=?id kind=?k form=fill x0=?x0 y0=?y0 x1=?x1 y1=?y1
+@ls.area.box core.rule when=$ls.ab.t when=$ls.ab.a when=$ls.ab.b when=$ls.ab.c when=$ls.ab.d then=$ls.ab.out
+# The room in it for what floats there: the box of its outline less a tenth of its width and height on each side.
+@ls.ar.rw core.calc out=?rw fn=sub args=?x1 args=?x0
+@ls.ar.rh core.calc out=?rh fn=sub args=?y1 args=?y0
+@ls.ar.mx core.calc out=?mx fn=mul args=?rw args=0.1
+@ls.ar.my core.calc out=?my fn=mul args=?rh args=0.1
+@ls.ar.ix0 core.calc out=?ix0 fn=add args=?x0 args=?mx
+@ls.ar.iy0 core.calc out=?iy0 fn=add args=?y0 args=?my
+@ls.ar.ix1 core.calc out=?ix1 fn=sub args=?x1 args=?mx
+@ls.ar.iy1 core.calc out=?iy1 fn=sub args=?y1 args=?my
+@ls.ar.room ui.draw.troom object=?id kind=?k x0=?ix0 y0=?iy0 x1=?ix1 y1=?iy1
+@ls.area.room core.rule when=$ls.ab.t when=$ls.ab.a when=$ls.ab.b when=$ls.ab.c when=$ls.ab.d with=$ls.ar.rw with=$ls.ar.rh with=$ls.ar.mx with=$ls.ar.my with=$ls.ar.ix0 with=$ls.ar.iy0 with=$ls.ar.ix1 with=$ls.ar.iy1 then=$ls.ar.room
+
+# 5. A silhouette: the ridge through its handles in their order, closed along its foot; a cap is the fill shrunk to
+# its grow per cent around each peak handle (the snow on a peak follows the ridge).
+@ls.sl.t ui.draw.terrain object=?id form=silhouette
+@ls.sl.p ui.draw.tpart object=?id source=?src form=fill z=?pz layer=?layer
+@ls.sl.h ui.draw.hpos object=?id index=?i x=?x y=?y
+@ls.sl.n core.calc out=?n fn=add args=?i args=1
+@ls.sl.o ui.draw.point source=?src n=?n x=?x y=?y
+@ls.silhouette.points core.rule when=$ls.sl.t when=$ls.sl.p when=$ls.sl.h with=$ls.sl.n then=$ls.sl.o
+@ls.sl.draw ui.draw.draw part=?id source=?src slot=?id order=?layer z=?pz shape=polygon x=0 y=0 w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left
+@ls.silhouette.fill core.rule when=$ls.sl.t when=$ls.sl.p then=$ls.sl.draw
+@ls.sc.p ui.draw.tpart object=?id kind=?k name=?pn source=?src form=cap z=?pz layer=?layer
+@ls.sc.k k.layouts.terrain_part of=?k name=?pn grow=?g
+@ls.sc.peak ui.draw.hpos object=?id role=peak x=?cx y=?cy
+@ls.sc.f core.calc out=?f fn=div args=?g args=100
+@ls.sc.dx core.calc out=?dx fn=sub args=?x args=?cx
+@ls.sc.dy core.calc out=?dy fn=sub args=?y args=?cy
+@ls.sc.ex core.calc out=?ex fn=mul args=?dx args=?f
+@ls.sc.ey core.calc out=?ey fn=mul args=?dy args=?f
+@ls.sc.sx core.calc out=?sx fn=add args=?cx args=?ex
+@ls.sc.sy core.calc out=?sy fn=add args=?cy args=?ey
+@ls.sc.o ui.draw.point source=?src n=?n x=?sx y=?sy
+@ls.silhouette.cap.points core.rule when=$ls.sl.t when=$ls.sc.p when=$ls.sc.k when=$ls.sc.peak when=$ls.sl.h with=$ls.sl.n with=$ls.sc.f with=$ls.sc.dx with=$ls.sc.dy with=$ls.sc.ex with=$ls.sc.ey with=$ls.sc.sx with=$ls.sc.sy then=$ls.sc.o
+@ls.sc.draw ui.draw.draw part=?id source=?src slot=?id order=?layer z=?pz shape=polygon x=0 y=0 w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left
+@ls.silhouette.cap core.rule when=$ls.sl.t when=$ls.sc.p then=$ls.sc.draw
+
+# 6. The view: the sky above the horizon handle, the ground below it, each part a band of that room (from, to).
+@ls.vw.t ui.draw.terrain object=?id form=view
+@ls.vw.h ui.draw.hpos object=?id role=horizon y=?hy
+@ls.vw.page ui.draw.page w=?pw h=?ph
+@ls.vw.a ui.draw.tpart object=?id kind=?k name=?pn source=?src form=above z=?pz layer=?layer
+@ls.vw.b ui.draw.tpart object=?id kind=?k name=?pn source=?src form=below z=?pz layer=?layer
+@ls.vw.k k.layouts.terrain_part of=?k name=?pn from=?fr to=?to
+@ls.vw.a0 core.calc out=?y0 fn=mul args=?hy args=?fr args=0.01
+@ls.vw.a1 core.calc out=?y1 fn=mul args=?hy args=?to args=0.01
+@ls.vw.room core.calc out=?room fn=sub args=?ph args=?hy
+@ls.vw.b0r core.calc out=?b0r fn=mul args=?room args=?fr args=0.01
+@ls.vw.b1r core.calc out=?b1r fn=mul args=?room args=?to args=0.01
+@ls.vw.b0 core.calc out=?y0 fn=add args=?hy args=?b0r
+@ls.vw.b1 core.calc out=?y1 fn=add args=?hy args=?b1r
+@ls.vw.hh core.calc out=?bh fn=sub args=?y1 args=?y0
+@ls.vw.box ui.draw.tbox object=?id kind=?k form=?pn x0=0 y0=?y0 x1=?pw y1=?y1
+@ls.vw.draw ui.draw.draw part=?id source=?src slot=?id order=?layer z=?pz shape=rectangle x=0 y=?y0 w=?pw h=?bh cx=0 cy=0 tx=0 ty=0 scale=1 side=left
+@ls.view.above core.rule when=$ls.vw.t when=$ls.vw.h when=$ls.vw.page when=$ls.vw.a when=$ls.vw.k with=$ls.vw.a0 with=$ls.vw.a1 with=$ls.vw.hh then=$ls.vw.draw
+@ls.view.below core.rule when=$ls.vw.t when=$ls.vw.h when=$ls.vw.page when=$ls.vw.b when=$ls.vw.k with=$ls.vw.room with=$ls.vw.b0r with=$ls.vw.b1r with=$ls.vw.b0 with=$ls.vw.b1 with=$ls.vw.hh then=$ls.vw.draw
+@ls.view.above.box core.rule when=$ls.vw.t when=$ls.vw.h when=$ls.vw.page when=$ls.vw.a when=$ls.vw.k with=$ls.vw.a0 with=$ls.vw.a1 then=$ls.vw.box
+@ls.view.below.box core.rule when=$ls.vw.t when=$ls.vw.h when=$ls.vw.page when=$ls.vw.b when=$ls.vw.k with=$ls.vw.room with=$ls.vw.b0r with=$ls.vw.b1r with=$ls.vw.b0 with=$ls.vw.b1 then=$ls.vw.box
+# The horizon of the page: the view's horizon handle where the page has a view, else the foot of the sky of the page's
+# layout (k.layouts landscape: half the page).
+@ls.hz.h ui.draw.hpos role=horizon y=?hy
+@ls.hz.o ui.draw.horizon y=?hy
+@ls.horizon.view core.rule when=$ls.hz.h then=$ls.hz.o
+@ls.hz.any ui.draw.hpos role=horizon
+@ls.hz.page ui.draw.page layout=?l h=?ph
+@ls.hz.slot k.layouts.slot layout=?l name=sky y=?sy h=?sh
+@ls.hz.f core.calc out=?f fn=add args=?sy args=?sh
+@ls.hz.y core.calc out=?hy fn=mul args=?f args=?ph args=0.01
+@ls.horizon.layout core.rule when=$ls.hz.page when=$ls.hz.slot not=$ls.hz.any with=$ls.hz.f with=$ls.hz.y then=$ls.hz.o
+
+# 7. Surfaces: each box of a part that k.scenes says is a surface is a region of that surface (with its object).
+@ls.sf.b ui.draw.tbox object=?id kind=?k form=?pn x0=?x0 y0=?y0 x1=?x1 y1=?y1
+@ls.sf.part k.layouts.terrain_part of=?k name=?sp form=fill
+@ls.sf.s k.scenes.surface of=?k part=?sp surface=?s
+@ls.sf.out app.observe.region of=?id kind=?s x0=?x0 y0=?y0 x1=?x1 y1=?y1
+@ls.surface.fill core.rule when=$ls.sf.b when=$ls.sf.part when=$ls.sf.s then=$ls.sf.out
+@ls.sf.named ui.draw.tbox object=?id kind=?k form=?pn x0=?x0 y0=?y0 x1=?x1 y1=?y1
+@ls.sf.s2 k.scenes.surface of=?k part=?pn surface=?s
+@ls.surface.named core.rule when=$ls.sf.named when=$ls.sf.s2 then=$ls.sf.out
+
+# 8. Where a new terrain feature goes: the view fills the page; a feature that comes towards the viewer runs from the
+# horizon to the foot of the page, as tall as that room; it has no other region (it is homed there).
+@ls.rg.auto ui.draw.auto kind=?k
+@ls.rg.as ui.draw.as kind=?k as=?a
+@ls.rg.view k.layouts.terrain name=?a lies=view
+@ls.rg.page ui.draw.page w=?pw h=?ph
+@ls.rg.view.o ui.draw.region key=view tier=0 order=0 host=none x0=0 y0=0 x1=?pw y1=?ph size=?ph
+@ls.rg.view.w app.act.arg call=new.object attr=width value=?pw
+@ls.rg.view.h app.act.arg call=new.object attr=height value=?ph
+@ls.rg.homed ui.draw.homed kind=?k
+@ls.region.view core.rule when=$ls.rg.auto when=$ls.rg.as when=$ls.rg.view when=$ls.rg.page then=$ls.rg.view.o
+@ls.region.view.homed core.rule when=$ls.rg.auto when=$ls.rg.as when=$ls.rg.view then=$ls.rg.homed
+@ls.rg.vreq app.act.request operation="drawing.object.make" kind=?k
+@ls.rg.vterrain k.layouts.terrain name=?k lies=view
+@ls.region.view.width core.rule when=$ls.rg.vreq when=$ls.rg.vterrain when=$ls.rg.page then=$ls.rg.view.w
+@ls.region.view.height core.rule when=$ls.rg.vreq when=$ls.rg.vterrain when=$ls.rg.page then=$ls.rg.view.h
+@ls.rg.through k.layouts.terrain name=?a lies=through
+@ls.rg.hz ui.draw.horizon y=?hy
+@ls.rg.room core.calc out=?room fn=sub args=?ph args=?hy
+@ls.rg.through.o ui.draw.region key=through tier=0 order=0 host=none x0=0 y0=?hy x1=?pw y1=?ph size=?room
+@ls.region.through core.rule when=$ls.rg.auto when=$ls.rg.as when=$ls.rg.through when=$ls.rg.page when=$ls.rg.hz with=$ls.rg.room then=$ls.rg.through.o
+@ls.region.through.homed core.rule when=$ls.rg.auto when=$ls.rg.as when=$ls.rg.through then=$ls.rg.homed
+# Where the page has no room for it in full, it still comes from the horizon, shorter (it ends farther away), at these
+# shares of the room below the horizon, in order.
+@ls.throughstep.type core.type of=ui.draw.throughstep
+@ls.through.step.1 ui.draw.throughstep step=1 scale=0.7
+@ls.through.step.2 ui.draw.throughstep step=2 scale=0.5
+@ls.through.step.3 ui.draw.throughstep step=3 scale=0.3
+@ls.rg.far ui.draw.throughstep step=?st scale=?f
+@ls.rg.fs core.calc out=?fs fn=mul args=?room args=?f
+@ls.rg.fs2 core.calc out=?fs2 fn=round args=?fs
+@ls.rg.fy core.calc out=?fy fn=add args=?hy args=?fs2
+@ls.rg.ft core.calc out=?ft fn=mul args=?st args=0.1
+@ls.rg.fkey core.calc out=?fkey fn=concat args=through-shorter- args=?st
+@ls.rg.far.o ui.draw.region key=?fkey tier=?ft order=0 host=none x0=0 y0=?hy x1=?pw y1=?fy size=?fs2
+# A feature that lies on the ground (a lake) with no room anywhere at its size goes smaller onto the ground below the
+# horizon, at the same shares of its size, after every other region (smaller is farther away).
+@ls.rg.ground k.layouts.terrain name=?a lies=ground
+@ls.rg.gs ui.draw.size size=?gsz
+@ls.rg.gs1 core.calc out=?g1 fn=mul args=?gsz args=?f
+@ls.rg.gs2 core.calc out=?g2 fn=round args=?g1
+@ls.rg.gt0 core.calc out=?gt0 fn=mul args=?st args=0.1
+@ls.rg.gt core.calc out=?gt fn=add args=6 args=?gt0
+@ls.rg.gkey core.calc out=?gkey fn=concat args=ground-smaller- args=?st
+@ls.rg.ground.o ui.draw.region key=?gkey tier=?gt order=0 host=none x0=0 y0=?hy x1=?pw y1=?ph size=?g2 far=1
+@ls.region.ground.smaller core.rule when=$ls.rg.auto when=$ls.rg.as when=$ls.rg.ground when=$ls.rg.page when=$ls.rg.hz when=$ls.rg.far when=$ls.rg.gs with=$ls.rg.gs1 with=$ls.rg.gs2 with=$ls.rg.gt0 with=$ls.rg.gt with=$ls.rg.gkey then=$ls.rg.ground.o
+@ls.region.through.shorter core.rule when=$ls.rg.auto when=$ls.rg.as when=$ls.rg.through when=$ls.rg.page when=$ls.rg.hz when=$ls.rg.far with=$ls.rg.room with=$ls.rg.fs with=$ls.rg.fs2 with=$ls.rg.fy with=$ls.rg.ft with=$ls.rg.fkey then=$ls.rg.far.o
+
+# 9. What holds the new object up. It keeps out of every surface its place avoids, unless its own row puts it on that
+# surface, and out of every surface its own row avoids (the sky of a view for what stands on the ground: with a view,
+# a thing stands below its horizon wherever the horizon is); it goes onto a water or road surface its place or its own
+# row puts it on (the ground and the sky are the page's own bands, its regions already).
+@ls.av.sub ui.draw.subject kind=?k
+@ls.av.as ui.draw.as kind=?k as=?a
+@ls.av.place k.scenes.thing name=?a place=?p
+@ls.av.class k.scenes.support name=?p avoids=?s
+@ls.av.ownon k.scenes.support name=?a on=?s
+@ls.av.own k.scenes.support name=?a avoids=?s
+@ls.av.o app.place.avoid surface=?s
+# A terrain feature is part of the land or the sky itself: it keeps out of water and roads only, not out of the sky or
+# the ground of the view (a hill stands into the sky).
+@ls.av.terrain k.layouts.terrain name=?a
+@ls.av.held core.check fn=matches args=?s args="^(water|road)$"
+@ls.avoid.place core.rule when=$ls.av.sub when=$ls.av.as when=$ls.av.place when=$ls.av.class not=$ls.av.ownon not=$ls.av.terrain then=$ls.av.o
+@ls.avoid.own core.rule when=$ls.av.sub when=$ls.av.as when=$ls.av.own not=$ls.av.terrain then=$ls.av.o
+@ls.avoid.place.terrain core.rule when=$ls.av.sub when=$ls.av.as when=$ls.av.place when=$ls.av.class not=$ls.av.ownon when=$ls.av.terrain if=$ls.av.held then=$ls.av.o
+@ls.on.class k.scenes.support name=?p on=?s
+@ls.on.o ui.draw.goes surface=?s
+@ls.on.held core.check fn=matches args=?s args="^(water|road)$"
+@ls.goes.place core.rule when=$ls.rg.auto when=$ls.rg.as when=$ls.av.place when=$ls.on.class if=$ls.on.held then=$ls.on.o
+@ls.goes.own core.rule when=$ls.rg.auto when=$ls.rg.as when=$ls.av.ownon if=$ls.on.held then=$ls.on.o
+# Onto such a surface: each room of a terrain part that is that surface (a square across a band, the middle of a lake)
+# is a place for the new object (as the anchors of act-rules.sop are: with smaller variants after it), at no more than the share of the room that
+# the rooms of terrain give and no less than the declared fit of its own size.
+@ls.room.share ui.draw.troomshare share=0.85
+@ls.oc.g ui.draw.goes surface=?s
+@ls.oc.r ui.draw.troom object=?host kind=?tk x0=?x0 y0=?y0 x1=?x1 y1=?y1
+@ls.oc.tp k.layouts.terrain_part of=?tk name=?sp form=fill
+@ls.oc.sf k.scenes.surface of=?tk part=?sp surface=?s
+@ls.oc.o w.drawing.object code=?host z=?oz
+@ls.oc.size ui.draw.size size=?sz
+@ls.oc.page ui.draw.page fit=?fit
+@ls.oc.share ui.draw.troomshare share=?room
+@ls.oc.bw core.calc out=?bw fn=sub args=?x1 args=?x0
+@ls.oc.bh core.calc out=?bh fn=sub args=?y1 args=?y0
+@ls.oc.rw core.calc out=?rw fn=mul args=?bw args=?room
+@ls.oc.rh core.calc out=?rh fn=mul args=?bh args=?room
+@ls.oc.s0 core.calc out=?s0 fn=min args=?sz args=?rw args=?rh
+@ls.oc.s0h core.calc out=?s0h fn=div args=?s0 args=2
+@ls.oc.s0r core.calc out=?s0r fn=round args=?s0h
+@ls.oc.s1 core.calc out=?s1 fn=mul args=?s0r args=2
+@ls.oc.need core.calc out=?need fn=mul args=?sz args=?fit
+@ls.oc.fits core.check fn=gte args=?s1 args=?need
+@ls.oc.key core.calc out=?key fn=concat args=?host args=- args=?s args=- args=?x0 args=- args=?y0
+@ls.oc.out ui.draw.region key=?key tier=1 order=?oz host=?host x0=?x0 y0=?y0 x1=?x1 y1=?y1 size=?s1
+@ls.region.surface core.rule when=$ls.oc.g when=$ls.oc.r when=$ls.oc.tp when=$ls.oc.sf when=$ls.oc.o when=$ls.oc.size when=$ls.oc.page when=$ls.oc.share with=$ls.oc.bw with=$ls.oc.bh with=$ls.oc.rw with=$ls.oc.rh with=$ls.oc.s0 with=$ls.oc.s0h with=$ls.oc.s0r with=$ls.oc.s1 with=$ls.oc.need if=$ls.oc.fits with=$ls.oc.key then=$ls.oc.out
+
+# The footprint of a new terrain feature in the placement problem (app.place.footprint: shares of its size across and
+# down): the box of its handles, across widened by its widest handle (a band is as wide as its widest end), so a river
+# keeps clear of houses by its water, not by the square it is drawn in.
+@ls.fp.auto ui.draw.auto kind=?k
+@ls.fp.as ui.draw.as kind=?k as=?a
+@ls.fp.t k.layouts.terrain name=?a lies=?fl
+@ls.fp.lies core.check fn=matches args=?fl args="^(ground|through|horizon)$"
+@ls.fp.h k.layouts.handle of=?a x=?hx y=?hy w=?hw
+@ls.fp.x0 core.aggregate over=$ls.fp.h by=?a min=?v args=?hx then=$ls.fp.x0.o
+@ls.fp.x0.o ui.draw.tfoot of=?a key=x0 v=?v
+@ls.fp.x1 core.aggregate over=$ls.fp.h by=?a max=?v args=?hx then=$ls.fp.x1.o
+@ls.fp.x1.o ui.draw.tfoot of=?a key=x1 v=?v
+@ls.fp.y0 core.aggregate over=$ls.fp.h by=?a min=?v args=?hy then=$ls.fp.y0.o
+@ls.fp.y0.o ui.draw.tfoot of=?a key=y0 v=?v
+@ls.fp.y1 core.aggregate over=$ls.fp.h by=?a max=?v args=?hy then=$ls.fp.y1.o
+@ls.fp.y1.o ui.draw.tfoot of=?a key=y1 v=?v
+@ls.fp.w1 core.aggregate over=$ls.fp.h by=?a max=?v args=?hw then=$ls.fp.w1.o
+@ls.fp.w1.o ui.draw.tfoot of=?a key=w v=?v
+@ls.tfoot.type core.type of=ui.draw.tfoot
+@ls.fp.a ui.draw.tfoot of=?a key=x0 v=?x0
+@ls.fp.b ui.draw.tfoot of=?a key=x1 v=?x1
+@ls.fp.c ui.draw.tfoot of=?a key=y0 v=?y0
+@ls.fp.d ui.draw.tfoot of=?a key=y1 v=?y1
+@ls.fp.e ui.draw.tfoot of=?a key=w v=?mw
+@ls.fp.dx core.calc out=?dx fn=sub args=?x1 args=?x0
+@ls.fp.dw core.calc out=?dw fn=add args=?dx args=?mw
+@ls.fp.fw0 core.calc out=?fw0 fn=div args=?dw args=100
+@ls.fp.fw core.calc out=?fw fn=clamp args=?fw0 args=0.1 args=1
+@ls.fp.dy core.calc out=?dy fn=sub args=?y1 args=?y0
+@ls.fp.fh0 core.calc out=?fh0 fn=div args=?dy args=100
+@ls.fp.fh core.calc out=?fh fn=clamp args=?fh0 args=0.1 args=1
+@ls.fp.out app.place.footprint w=?fw h=?fh
+@ls.footprint core.rule when=$ls.fp.auto when=$ls.fp.as when=$ls.fp.t if=$ls.fp.lies when=$ls.fp.a when=$ls.fp.b when=$ls.fp.c when=$ls.fp.d when=$ls.fp.e with=$ls.fp.dx with=$ls.fp.dw with=$ls.fp.fw0 with=$ls.fp.fw with=$ls.fp.dy with=$ls.fp.fh0 with=$ls.fp.fh then=$ls.fp.out
+# A new feature that lies in the land (a lake, a river, a road) never covers what stands on the page: it keeps clear of
+# every observed object as a hard constraint where the page has room (app.place.peers), softly where it has none.
+@ls.pr.type core.type of=app.place.peers
+@ls.pr.t k.layouts.terrain name=?a lies=?pl
+@ls.pr.land core.check fn=matches args=?pl args="^(ground|through)$"
+@ls.pr.o app.place.peers strength=hard
+@ls.peers.hard core.rule when=$ls.fp.auto when=$ls.fp.as when=$ls.pr.t if=$ls.pr.land then=$ls.pr.o
+
+# What the water of a terrain feature holds, for a relation that puts a thing into it ("a boat in the lake"): each room
+# of a water part is a region of that surface holding the kinds the anchor of that kind of the feature holds (k.layouts
+# anchor water of the lake: boat, duck, swan, fish), as the anchors of drawn objects are (act-rules.sop).
+@ls.hd.r ui.draw.troom object=?id kind=?k x0=?x0 y0=?y0 x1=?x1 y1=?y1
+@ls.hd.tp k.layouts.terrain_part of=?k name=?sp form=fill
+@ls.hd.sf k.scenes.surface of=?k part=?sp surface=?s
+@ls.hd.a k.layouts.anchor of=?k kind=?s holds=?h
+@ls.hd.out app.observe.region of=?id kind=?s holds=?h x0=?x0 y0=?y0 x1=?x1 y1=?y1
+@ls.surface.holds core.rule when=$ls.hd.r when=$ls.hd.tp when=$ls.hd.sf when=$ls.hd.a then=$ls.hd.out

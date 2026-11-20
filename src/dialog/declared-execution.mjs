@@ -20,6 +20,10 @@ export function declaredPropertyValues(concept) {
   return config ? source().ofType(config.valueType).map((wire) => str(wire.attrs[config.nameKey]?.[0]))
     .filter((value) => typeof value === 'string') : [];
 }
+/** The rows of one type of the execution knowledge (the catalog modules the build pins: k.expect amounts, ...). */
+export const declaredKnowledge = (type) => source().ofType(type);
+/** The execution knowledge world itself (what a capability compilation reads values from). */
+export const executionKnowledge = () => source();
 const unavailable=(text,reason)=>({text,parts:[{text,translate:false}],statuses:['unsupported'],answers:[],segments:[],state:{},effects:[],
   trace:{legacy:false,engine:'new',reason}});
 const interpreters=new Map([

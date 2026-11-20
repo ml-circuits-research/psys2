@@ -1,7 +1,7 @@
 // Predicted raw structure -> declared canonical structure. No reader or gold input.
-import {copyHostData,snapshotHostData} from '../../worlds/native-tool-host.mjs?v=f2c2d48456';
-import {positiveCardinalProof} from './key-reader-value-proof.mjs?v=a031638a2f';
-import {decodeModelGraphs} from './model-graph-decoder.mjs?v=f3d6603a42';
+import {copyHostData,snapshotHostData} from '../../worlds/native-tool-host.mjs?v=a1c19dd178';
+import {positiveCardinalProof} from './key-reader-value-proof.mjs?v=e7bcfe99f2';
+import {decodeModelGraphs} from './model-graph-decoder.mjs?v=a077eae7a5';
 export const RAW_STRUCTURAL_FORMAT='psys2.raw-structural-predictions/1';
 // The node budget of a binding table (every kind of the pinned catalog's drawable providers, with their provenance).
 export const BINDING_NODES=250000;
@@ -51,6 +51,13 @@ export function bridgeRawStructure(prediction,{bindings,bindingSha256,comparativ
    if(found.length!==1)return null;const r=found[0];
    if(!['canonical','sourceWire','sourceWorld','moduleVersion'].every(k=>typeof r[k]==='string'&&r[k])||!hash(r.sourceSnapshotSHA))return null;return r;
   };
+  // The containment row whose container family has a kind of this lemma (one binding, or an ambiguity within it).
+  const containerOf=(area,type,lemma)=>{
+   if(table.containment!==undefined&&(!Array.isArray(table.containment)||table.containment.length>256))fail('invalid-containment-table');
+   const rows=(table.containment??[]).filter(row=>{tick();return row?.area===area&&row.type===type&&typeof row.member==='string'&&typeof row.sourceWire==='string'&&hash(row.sourceSnapshotSHA)&&
+    (lookup('kinds',{area,type:row.containerType,lemma})||(table.unresolved??[]).some(u=>u?.family==='kinds'&&u.rawDescriptor?.area===area&&u.rawDescriptor?.type===row.containerType&&u.rawDescriptor?.kind===lemma));});
+   return rows.length===1?rows[0]:null;
+  };
   for(const [index,original]of raw.requests.entries()){
    tick();const basePath=['requests',index],start=diagnostics.length;shape(original,keys.request,basePath);
    const rid=`r${index}`,tid=`t${index}`,evidence=[],label={id:rid,targets:[],constraints:[],evidence};projected.push(label);
@@ -70,7 +77,11 @@ export function bridgeRawStructure(prediction,{bindings,bindingSha256,comparativ
    const kind=lookup('kinds',{area:raw.area,type:target.type,lemma:target.kind});
    const family=target.mode!=='bound'&&!has(target,'kind')&&!has(target,'kind_span')&&typeof target.type==='string'?lookup('families',{area:raw.area,type:target.type}):null;
    const contextual=contextTarget&&target.fill==='context'&&!has(target,'kind')&&!has(target,'kind_span')&&!has(target,'name_span');
-   if(kind){t.kind=kind.canonical;anchor(['targets',tid,'kind'],target.kind_span||target.kind,kind.sourceWire,false,['target',target.kind_span?'kind_span':'kind']);}
+   // A new member named by a kind of the family it lies in ("a diagram with 5 nodes": a diagram of the page the nodes
+   // are made in) is a member of its own family; the containment is the declared slot (bindings.containment).
+   const container=!kind&&target.mode==='new'&&typeof target.kind==='string'?containerOf(raw.area,target.type,target.kind):null;
+   if(container){t.kind=container.member;anchor(['targets',tid,'kind'],target.kind_span||target.kind,container.sourceWire,false,['target',target.kind_span?'kind_span':'kind']);}
+   else if(kind){t.kind=kind.canonical;anchor(['targets',tid,'kind'],target.kind_span||target.kind,kind.sourceWire,false,['target',target.kind_span?'kind_span':'kind']);}
    else if(contextual){t.kind=contextTarget.kind;anchor(['targets',tid,'kind'],null,contextTarget.declaration,true);}
    else if(family){t.kind=family.canonical;anchor(['targets',tid,'kind'],null,family.sourceWire,true);}
    else if(target.mode!=='bound')unresolved('unresolved-canonical-kind-binding',['targets',tid,'kind']);

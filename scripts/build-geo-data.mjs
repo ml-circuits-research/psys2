@@ -22,7 +22,7 @@ import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import { singularLemma } from '../src/formalizer/rules/lemma.mjs';
+import { singularLemma } from '../src/lang/lemma.mjs';
 
 const REPO = fileURLToPath(new URL('..', import.meta.url));
 const WORLD = path.join(REPO, 'worlds/geo.map');

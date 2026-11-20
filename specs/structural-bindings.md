@@ -87,3 +87,25 @@ CLI adds `--alignments PATH`, requiring `--knowledge REPOSITORY`. Complete descr
 The export retains enum, kind, type/by, provider values and their explicitly owned aliases, cardinality and numeric limits. Typed temporal values retain their declared parser/context obligation. It does not infer relative dates, qualitative regions, live references or native effects from a property identity. Missing parent declarations contribute no inferred slots. Schema and fact identities use the library's separate namespaces. Cycles, conflicting source identities and exhausted source/join/value bounds fail generation.
 
 The measured whole-source results are in `training/results/declaration-alignments.md`; detailed value contracts can be regenerated as JSON outside Git. These proposals do not replace the deployed bindings or authorize admission. In particular `text.about` has two declared meanings (`topic` and `about`); its previous authorial alignment is not evidence that the mechanical join is unique.
+
+## Containment (2026-11-20)
+
+The exporter publishes `containment` rows: a kind family whose entity declares an optional slot typed by another
+family's entity of the same area lies in that family (`w.diagram.node.diagram` is a `w.diagram.diagram`; a required
+typed slot such as a line's ends is a thing the member needs, not where it lies). The bridge reads a new target whose
+kind lemma has no row for its own type, but names a kind (or an ambiguity) of exactly one container family, as a
+member of its own family ("a diagram with 5 nodes": five nodes on the page); the slot is the declaration of the kind
+evidence. An existing target is never re-read this way. See `specs/diagram-reading-analysis.md`.
+
+## Native-chain coverage (2026-11-20)
+
+For the areas with a declared native interface (`NATIVE_CHAIN_AREAS`: diagram, drawing) the exporter binds every
+inventory key that an operation parameter can consume, generated from the interface's SOP declarations
+(`declaredOperations` over `native-interface.sop`, no area instance) and the catalog: the reader family's source type
+(the interface's source type named by the family, or `SOURCE_TYPE_OF`), the parameter the descriptor names or the
+parameter of the key's name (or its other spelling) on that source type, and as concept the family entity's catalog
+slot of that name, a reviewed concept already bound to the same parameter, or the native parameter itself
+(`<sourceType>.<parameter>`, evidence: the interface file). Reviewed catalogue alignments keep precedence. Every
+inventory key appears in the artifact's `coverage` list as bound or unbound with its reason (`no-native-parameter`,
+`no-native-source-type`); `tests/binding-coverage-declared-host.test.mjs` re-checks the reasons against the current
+interfaces and fails when an interface gains a parameter the deployed bindings do not bind.

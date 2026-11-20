@@ -5,7 +5,7 @@ let client = null;
 const urlOf = (rel, base) => (globalThis.__psys2Url ? globalThis.__psys2Url(rel) : new URL(rel, base).href);
 export async function getOrtClient(base) {
   if (client) return client;
-  const { createOrtClient, measureDeviceSpeed } = await import(urlOf('lib/formalizer/ort-client.mjs', base));
+  const { createOrtClient, measureDeviceSpeed } = await import(urlOf('lib/dialog/ort-client.mjs', base));
   const { LIMITS } = await import(urlOf('lib/dialog/time-limits.mjs', base));
   const wv = globalThis.__psys2Mod?.['ui/ort-worker.mjs'];   // build-hash version (scripts/build-webchat.mjs): a stale cached worker is never paired with a newer client
   const url = new URL('ui/ort-worker.mjs', base).href + (wv ? `?v=${wv}` : '');

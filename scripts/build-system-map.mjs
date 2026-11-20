@@ -151,7 +151,7 @@ export async function measure() {
           for (const b of [].concat(st.by ?? [])) a.by[b] = (a.by[b] ?? 0) + 1;
         }
         const seg = r.segments.find((x) => x.match);
-        const log = s.dialogue.log.at(-1);
+        const log = s.dialogue?.log?.at(-1);   // the retired dialogue module is gone from the session; the new route keeps no per-turn log here
         const world = seg?.match.worldId ?? log?.world ?? null;
         if (!seg) unparsed++;
         const fired = new Set();

@@ -3,6 +3,7 @@
 // from the group's length), with refusal past either end of the scale. Hair is one group (w.face.slot group=hair: the
 // back and the front hair). The rules are worlds/ui.avatar/act-rules.sop; the comparative reaches the tab as the
 // relative step through the declared ordinal projection (worlds/app.project/comparative-projection.sop).
+import{PINNED_CATALOG}from'./fixtures/pinned-catalog.mjs';
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
@@ -17,7 +18,7 @@ import {routeNewEngine} from '../src/dialog/reader-routing.mjs';
 import {emptyAvatarState} from '../worlds/ui.avatar/sop-avatar.mjs';
 import {parse} from '../src/vendor/sopworld/sopworld.mjs';
 
-const K=new URL('../../sop-knowledge-worlds/docs/worlds/',import.meta.url);
+const K=PINNED_CATALOG;
 const available=existsSync(new URL('k.faces/shards/features.sop',K));
 const skip=available?false:'knowledge with k.faces.feature unavailable';
 const options={world:'ui.avatar',interfaceSource:NATIVE_INTERFACE,

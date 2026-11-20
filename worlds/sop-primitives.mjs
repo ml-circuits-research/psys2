@@ -24,13 +24,18 @@ const arc = ({ x, y, w, h }, opens = 'up') => ({
 // Optional styling a projection may state on a draw fact: outline (a colour drawn around a solid shape), round (the
 // corner radius of a rectangle), stroke (the width of a line or outline), dash (a line's dash pattern, numbers only),
 // anchor (start, middle or end of a text), font, weight (a text's size and weight), slant (italic), family (mono: a
-// monospaced face) and length (the width a text is set to, so its characters fall where a projection placed them).
+// monospaced face), length (the width a text is set to, so its characters fall where a projection placed them) and
+// opacity (0 to 1: a shadow, a side face) and effect (shadow: a soft shadow under the shape; glow: a halo of its
+// outline colour round it).
 function shapeSvg(box, shape, fill, points, orient, text, style = {}) {
   const width = Number.isFinite(style.stroke) && style.stroke > 0 ? f1(style.stroke) : 2;
   const outline = typeof style.outline === 'string' && /^#[0-9a-fA-F]{3,8}$|^[a-z]+$/.test(style.outline) ? ` stroke="${style.outline}" stroke-width="${width === 2 ? 1.5 : width}"` : '';
-  const solid = `fill="${fill}"${outline}`;
+  const alpha = Number.isFinite(style.opacity) && style.opacity >= 0 && style.opacity < 1 ? ` opacity="${f1(style.opacity)}"` : '';
+  const glow = typeof style.outline === 'string' && /^#[0-9a-fA-F]{3,8}$/.test(style.outline) ? style.outline : '#f5b700';
+  const effect = style.effect === 'shadow' ? ' style="filter:drop-shadow(2px 3px 2px rgba(0,0,0,0.35))"' : style.effect === 'glow' ? ` style="filter:drop-shadow(0 0 5px ${glow})"` : '';
+  const solid = `fill="${fill}"${outline}${alpha}${effect}`;
   const dash = typeof style.dash === 'string' && /^[\d. ]+$/.test(style.dash) ? ` stroke-dasharray="${style.dash}"` : '';
-  const stroke = `fill="none" stroke="${fill}" stroke-width="${width}" stroke-linecap="round" stroke-linejoin="round"${dash}`;
+  const stroke = `fill="none" stroke="${fill}" stroke-width="${width}" stroke-linecap="round" stroke-linejoin="round"${dash}${alpha}`;
   const round = Number.isFinite(style.round) && style.round > 0 ? ` rx="${f1(style.round)}"` : '';
   const anchor = ['start', 'middle', 'end'].includes(style.anchor) ? ` text-anchor="${style.anchor}"` : '';
   const font = Number.isFinite(style.font) && style.font > 0 ? f1(style.font) : 14, weight = style.weight === 'bold' ? ' font-weight="600"' : '';
@@ -50,7 +55,8 @@ function shapeSvg(box, shape, fill, points, orient, text, style = {}) {
 
 /**
  * world: a sopworld World holding the projection's facts. types: the fact type names of the projection
- * ({ draw, fill, point, orient }). frame: { w, h } of the drawing. Returns SVG text.
+ * ({ draw, fill, point, orient }, and optionally layer: facts `slot= order=` that put every draw of a slot in that
+ * layer, in place of its own order: occlusion by depth). frame: { w, h } of the drawing. Returns SVG text.
  */
 export function renderPrimitives(world, types, frame = { w: 100, h: 100 }, opts = {}) {
   const bySource = (type) => {
@@ -69,19 +75,27 @@ export function renderPrimitives(world, types, frame = { w: 100, h: 100 }, opts 
     list.push([num(fact, 'n'), num(fact, 'x'), num(fact, 'y')]);
     points.set(fact.attrs.source[0], list);
   }
-  const draws = world.ofType(types.draw).map((fact) => ({ fact, order: num(fact, 'order'), z: num(fact, 'z'), side: val(fact, 'side') }))
-    .sort((a, b) => a.order - b.order || (a.side === b.side ? 0 : a.side === 'left' ? -1 : 1) || a.z - b.z);
+  const layers = new Map();
+  if (types.layer) for (const fact of world.ofType(types.layer)) { const slot = fact.attrs.slot?.[0], order = num(fact, 'order'); if (slot !== undefined && Number.isFinite(order) && (!layers.has(slot) || order < layers.get(slot))) layers.set(slot, order); }
+  const layerOf = (fact) => { const slot = opts.select ? fact.attrs[opts.select]?.[0] : undefined; return slot !== undefined && layers.has(slot) ? layers.get(slot) : num(fact, 'order'); };
+  const draws = world.ofType(types.draw).map((fact) => ({ fact, order: layerOf(fact), own: num(fact, 'order'), z: num(fact, 'z'), side: val(fact, 'side') }))
+    .sort((a, b) => a.order - b.order || (a.own - b.own || 0) || (a.side === b.side ? 0 : a.side === 'left' ? -1 : 1) || a.z - b.z);
   const out = draws.map(({ fact, side }) => {
     const source = fact.attrs.source[0], part = fact.attrs.part?.[0] ?? '';
     const fill = val(fills.get(source + '|' + part)?.[0] ?? { attrs: { fill: ['grey'] } }, 'fill');
     const box = { x: num(fact, 'x'), y: num(fact, 'y'), w: num(fact, 'w'), h: num(fact, 'h') };
     const shape = val(fact, 'shape'), line = (points.get(source) ?? []).sort((a, b) => a[0] - b[0]).map(([, x, y]) => [x, y]);
     const move = `translate(${f1(num(fact, 'tx'))} ${f1(num(fact, 'ty'))}) scale(${fact.attrs.sx && fact.attrs.sy ? f1(num(fact, 'sx')) + ' ' + f1(num(fact, 'sy')) : f1(num(fact, 'scale'))}) translate(${f1(-num(fact, 'cx'))} ${f1(-num(fact, 'cy'))})`;
-    const flip = side === 'right' ? `matrix(-1 0 0 1 ${frame.w} 0) ` : '';
+    // A mirrored side is flipped about the frame's middle, or about the vertical line x = axis a fact states (a face
+    // drawn on a page, mirrored about its own middle).
+    const flip = side === 'right' ? `matrix(-1 0 0 1 ${fact.attrs.axis ? f1(2 * num(fact, 'axis')) : frame.w} 0) ` : '';
     const tag = opts.select && fact.attrs[opts.select] ? ` data-select="${String(val(fact, opts.select)).replace(/[<>&"]/g, '')}"` : '';
-    const style = { outline: val(fact, 'outline'), round: num(fact, 'round'), stroke: num(fact, 'stroke'), dash: val(fact, 'dash'), anchor: val(fact, 'anchor'), font: num(fact, 'font'), weight: val(fact, 'weight'), slant: val(fact, 'slant'), family: val(fact, 'family'), length: num(fact, 'length') };
-    return `<g transform="${flip}${move}"${tag}>${shapeSvg(box, shape, fill, line, orients.get(source) ?? {}, val(fact, 'text'), style)}</g>`;
+    const style = { outline: val(fact, 'outline'), round: num(fact, 'round'), stroke: num(fact, 'stroke'), dash: val(fact, 'dash'), anchor: val(fact, 'anchor'), font: num(fact, 'font'), weight: val(fact, 'weight'), slant: val(fact, 'slant'), family: val(fact, 'family'), length: num(fact, 'length'), opacity: fact.attrs.opacity ? num(fact, 'opacity') : undefined, effect: val(fact, 'effect') };
+    // rotate: degrees clockwise about (rx, ry), the point a projection names (a node's centre).
+    const turn = fact.attrs.rotate && num(fact, 'rotate') !== 0 ? `rotate(${f1(num(fact, 'rotate'))} ${f1(num(fact, 'rx'))} ${f1(num(fact, 'ry'))}) ` : '';
+    return `<g transform="${flip}${turn}${move}"${tag}>${shapeSvg(box, shape, fill, line, orients.get(source) ?? {}, val(fact, 'text'), style)}</g>`;
   });
   const size = opts.size ? ` width="${opts.size}" height="${f1((opts.size * frame.h) / frame.w)}"` : '';
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${frame.w} ${frame.h}"${size}>${out.join('')}</svg>`;
+  // What lies outside the frame is not shown (the Avatar frames a whole person on the face).
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${frame.w} ${frame.h}" overflow="hidden"${size}>${out.join('')}</svg>`;
 }

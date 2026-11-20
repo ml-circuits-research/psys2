@@ -1,0 +1,73 @@
+# k.scenes/shards/support: what holds a thing up in a picture and what it keeps out of, and which parts of drawable
+# things are surfaces (owner, 2026-11-20). The place rows hold for every thing of that place; the thing rows are
+# derived from k.kinds (35 ground things that are wheeled or motor vehicles or public transport, not on rails, are on the road).
+# sources: hand-core 1 (hand-written in this repository; the thing rows derived from k.kinds and k.scenes)
+# license: CC0-1.0
+# script: tools/support-core.mjs
+
+# Every thing of a place.
+@k.scenes.support.ground k.scenes.support name=ground on=ground avoids=water avoids=road avoids=air core.source="hand-core 1"
+@k.scenes.support.water k.scenes.support name=water on=water avoids=road avoids=air core.source="hand-core 1"
+@k.scenes.support.sky k.scenes.support name=sky on=air avoids=ground core.source="hand-core 1"
+
+# Ground things that drive: on the road where there is one (they keep out of the water as every ground thing does).
+@k.scenes.support.thing.ambulance k.scenes.support name=ambulance on=road core.source="hand-core 1"
+@k.scenes.support.thing.automobile k.scenes.support name=automobile on=road core.source="hand-core 1"
+@k.scenes.support.thing.autonomous_car k.scenes.support name="autonomous car" on=road core.source="hand-core 1"
+@k.scenes.support.thing.bicycle k.scenes.support name=bicycle on=road core.source="hand-core 1"
+@k.scenes.support.thing.buggy k.scenes.support name=buggy on=road core.source="hand-core 1"
+@k.scenes.support.thing.bus k.scenes.support name=bus on=road core.source="hand-core 1"
+@k.scenes.support.thing.car k.scenes.support name=car on=road core.source="hand-core 1"
+@k.scenes.support.thing.cargo_bike k.scenes.support name="cargo bike" on=road core.source="hand-core 1"
+@k.scenes.support.thing.cart k.scenes.support name=cart on=road core.source="hand-core 1"
+@k.scenes.support.thing.chariot k.scenes.support name=chariot on=road core.source="hand-core 1"
+@k.scenes.support.thing.delivery_truck k.scenes.support name="delivery truck" on=road core.source="hand-core 1"
+@k.scenes.support.thing.jeep k.scenes.support name=jeep on=road core.source="hand-core 1"
+@k.scenes.support.thing.kick_scooter k.scenes.support name="kick scooter" on=road core.source="hand-core 1"
+@k.scenes.support.thing.lorry k.scenes.support name=lorry on=road core.source="hand-core 1"
+@k.scenes.support.thing.moped k.scenes.support name=moped on=road core.source="hand-core 1"
+@k.scenes.support.thing.motorcycle k.scenes.support name=motorcycle on=road core.source="hand-core 1"
+@k.scenes.support.thing.oncoming_automobile k.scenes.support name="oncoming automobile" on=road core.source="hand-core 1"
+@k.scenes.support.thing.oncoming_bus k.scenes.support name="oncoming bus" on=road core.source="hand-core 1"
+@k.scenes.support.thing.oncoming_police_car k.scenes.support name="oncoming police car" on=road core.source="hand-core 1"
+@k.scenes.support.thing.oncoming_taxi k.scenes.support name="oncoming taxi" on=road core.source="hand-core 1"
+@k.scenes.support.thing.pickup_truck k.scenes.support name="pickup truck" on=road core.source="hand-core 1"
+@k.scenes.support.thing.police_car k.scenes.support name="police car" on=road core.source="hand-core 1"
+@k.scenes.support.thing.racing_car k.scenes.support name="racing car" on=road core.source="hand-core 1"
+@k.scenes.support.thing.railway_car k.scenes.support name="railway car" on=road core.source="hand-core 1"
+@k.scenes.support.thing.scooter k.scenes.support name=scooter on=road core.source="hand-core 1"
+@k.scenes.support.thing.skateboard k.scenes.support name=skateboard on=road core.source="hand-core 1"
+@k.scenes.support.thing.taxi k.scenes.support name=taxi on=road core.source="hand-core 1"
+@k.scenes.support.thing.tractor k.scenes.support name=tractor on=road core.source="hand-core 1"
+@k.scenes.support.thing.tram k.scenes.support name=tram on=road core.source="hand-core 1"
+@k.scenes.support.thing.tram_car k.scenes.support name="tram car" on=road core.source="hand-core 1"
+@k.scenes.support.thing.truck k.scenes.support name=truck on=road core.source="hand-core 1"
+@k.scenes.support.thing.van k.scenes.support name=van on=road core.source="hand-core 1"
+@k.scenes.support.thing.wagon k.scenes.support name=wagon on=road core.source="hand-core 1"
+@k.scenes.support.thing.wheelbarrow k.scenes.support name=wheelbarrow on=road core.source="hand-core 1"
+@k.scenes.support.thing.wheelchair k.scenes.support name=wheelchair on=road core.source="hand-core 1"
+
+# A bridge stands over water and roads.
+@k.scenes.support.thing.bridge k.scenes.support name=bridge on=water on=road core.source="hand-core 1"
+
+# Lights: things in the sky that shine (k.attributes can=shine).
+@k.scenes.light.moon k.scenes.light name=moon core.source="hand-core 1"
+@k.scenes.light.star k.scenes.light name=star core.source="hand-core 1"
+@k.scenes.light.sun k.scenes.light name=sun core.source="hand-core 1"
+
+# Surfaces: the parts of terrain features and the water anchors of drawn objects.
+@k.scenes.surface.landscape.sky_high k.scenes.surface of=landscape part=sky_high surface=air core.source="hand-core 1"
+@k.scenes.surface.landscape.sky_middle k.scenes.surface of=landscape part=sky_middle surface=air core.source="hand-core 1"
+@k.scenes.surface.landscape.sky_low k.scenes.surface of=landscape part=sky_low surface=air core.source="hand-core 1"
+@k.scenes.surface.landscape.ground_far k.scenes.surface of=landscape part=ground_far surface=ground core.source="hand-core 1"
+@k.scenes.surface.landscape.ground_middle k.scenes.surface of=landscape part=ground_middle surface=ground core.source="hand-core 1"
+@k.scenes.surface.landscape.ground_near k.scenes.surface of=landscape part=ground_near surface=ground core.source="hand-core 1"
+@k.scenes.surface.river.water k.scenes.surface of=river part=water surface=water core.source="hand-core 1"
+@k.scenes.surface.road.surface k.scenes.surface of=road part=surface surface=road core.source="hand-core 1"
+@k.scenes.surface.lake.water k.scenes.surface of=lake part=water surface=water core.source="hand-core 1"
+@k.scenes.surface.pond.water k.scenes.surface of=pond part=water surface=water core.source="hand-core 1"
+@k.scenes.surface.pool.water k.scenes.surface of=pool part=water surface=water core.source="hand-core 1"
+@k.scenes.surface.mountain_lake.water k.scenes.surface of="mountain lake" part=water surface=water core.source="hand-core 1"
+@k.scenes.surface.sea.water k.scenes.surface of=sea part=water surface=water core.source="hand-core 1"
+@k.scenes.surface.swamp.water k.scenes.surface of=swamp part=water surface=water core.source="hand-core 1"
+@k.scenes.surface.bridge.water k.scenes.surface of=bridge part=water surface=water core.source="hand-core 1"

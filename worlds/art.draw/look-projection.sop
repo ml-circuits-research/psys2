@@ -1,0 +1,148 @@
+# ui.avatar render projection (authored), shared with the Drawing tab (a face drawn on a person or a thing there). Derives drawing primitives from the live w.face instance and the
+# k.faces geometry: the shown variant (an expression replaces mouth, eyebrows and eyes), the slot box transform,
+# mirrored slots, polygon points, one fill per primitive and arc/triangle orientation. A renderer draws these
+# facts as they are; it makes no decision of its own.
+@fp.draw.type core.type of=ui.avatar.draw
+@fp.shown.type core.type of=ui.avatar.shown
+@fp.override.type core.type of=ui.avatar.override
+@fp.point.type core.type of=ui.avatar.point
+@fp.fill.type core.type of=ui.avatar.fill
+@fp.colour.type core.type of=ui.avatar.colour
+@fp.base.type core.type of=ui.avatar.base
+@fp.named.type core.type of=ui.avatar.named
+
+# Expression variants replace the part's own variant while the face holds the expression.
+@fp.ov.face w.face.face expression=?e style=?style
+@fp.ov.mouth.part w.face.mouth face=$fp.ov.face
+@fp.ov.mouth.k k.faces.expression name=?e style=?style mouth=?v
+@fp.ov.mouth.o ui.avatar.override part=$fp.ov.mouth.part variant=?v
+@fp.ov.mouth core.rule when=$fp.ov.face when=$fp.ov.mouth.part when=$fp.ov.mouth.k then=$fp.ov.mouth.o
+@fp.ov.brows.part w.face.eyebrows face=$fp.ov.face
+@fp.ov.brows.k k.faces.expression name=?e style=?style eyebrows=?v
+@fp.ov.brows.o ui.avatar.override part=$fp.ov.brows.part variant=?v
+@fp.ov.brows core.rule when=$fp.ov.face when=$fp.ov.brows.part when=$fp.ov.brows.k then=$fp.ov.brows.o
+@fp.ov.eyes.part w.face.eyes face=$fp.ov.face
+@fp.ov.eyes.k k.faces.expression name=?e style=?style eyes=?v
+@fp.ov.eyes.o ui.avatar.override part=$fp.ov.eyes.part variant=?v
+@fp.ov.eyes core.rule when=$fp.ov.face when=$fp.ov.eyes.part when=$fp.ov.eyes.k then=$fp.ov.eyes.o
+
+# The variant shown for each part, with its placement keys.
+@fp.sh.face w.face.face style=?style
+@fp.sh.part w.face.part kind=?kind variant=?own size=?k x=?dx y=?dy face=$fp.sh.face
+@fp.sh.slot w.face.slot part=?kind slot=?slot
+@fp.sh.over ui.avatar.override part=$fp.sh.part variant=?v
+@fp.sh.overAny ui.avatar.override part=$fp.sh.part
+@fp.sh.own.o ui.avatar.shown part=$fp.sh.part slot=?slot style=?style variant=?own k=?k dx=?dx dy=?dy
+@fp.sh.over.o ui.avatar.shown part=$fp.sh.part slot=?slot style=?style variant=?v k=?k dx=?dx dy=?dy
+@fp.shown.own core.rule when=$fp.sh.face when=$fp.sh.part when=$fp.sh.slot not=$fp.sh.overAny then=$fp.sh.own.o
+@fp.shown.over core.rule when=$fp.sh.face when=$fp.sh.part when=$fp.sh.slot when=$fp.sh.over then=$fp.sh.over.o
+
+# Primitives: each shape of the shown variant, scaled about its slot box centre and moved.
+@fp.pr.shown ui.avatar.shown part=?part slot=?slot style=?style variant=?v k=?k dx=?dx dy=?dy
+@fp.pr.box k.faces.slot style=?style name=?slot x=?sx y=?sy w=?sw h=?sh z=?order
+@fp.pr.kp k.faces.part slot=?slot of=?v shape=?shape x=?x y=?y w=?w h=?h z=?z
+@fp.pr.hw core.calc out=?hw fn=div args=?sw args=2
+@fp.pr.hh core.calc out=?hh fn=div args=?sh args=2
+@fp.pr.cx core.calc out=?cx fn=add args=?sx args=?hw
+@fp.pr.cy core.calc out=?cy fn=add args=?sy args=?hh
+@fp.pr.tx core.calc out=?tx fn=add args=?cx args=?dx
+@fp.pr.ty core.calc out=?ty fn=add args=?cy args=?dy
+@fp.pr.o ui.avatar.draw part=?part source=$fp.pr.kp slot=?slot order=?order z=?z shape=?shape x=?x y=?y w=?w h=?h cx=?cx cy=?cy tx=?tx ty=?ty scale=?k side=left
+@fp.project core.rule when=$fp.pr.shown when=$fp.pr.box when=$fp.pr.kp with=$fp.pr.hw with=$fp.pr.hh with=$fp.pr.cx with=$fp.pr.cy with=$fp.pr.tx with=$fp.pr.ty then=$fp.pr.o
+# A mirrored slot draws the same shapes a second time, flipped about the face's middle.
+@fp.mi.box k.faces.slot style=?style name=?slot x=?sx y=?sy w=?sw h=?sh z=?order mirror=true
+@fp.mi.o ui.avatar.draw part=?part source=$fp.pr.kp slot=?slot order=?order z=?z shape=?shape x=?x y=?y w=?w h=?h cx=?cx cy=?cy tx=?tx ty=?ty scale=?k side=right
+@fp.project.mirror core.rule when=$fp.pr.shown when=$fp.mi.box when=$fp.pr.kp with=$fp.pr.hw with=$fp.pr.hh with=$fp.pr.cx with=$fp.pr.cy with=$fp.pr.tx with=$fp.pr.ty then=$fp.mi.o
+
+# Points of polygons and lines.
+@fp.pt.draw ui.avatar.draw source=?src
+@fp.pt.k k.faces.point part=?src n=?n x=?x y=?y
+@fp.pt.o ui.avatar.point source=?src n=?n x=?x y=?y
+@fp.points core.rule when=$fp.pt.draw when=$fp.pt.k then=$fp.pt.o
+
+# Colours. A tinted shape takes the colour its tint names of the face the part belongs to (several faces may share an
+# instance); a part colour the shape offers comes next;
+# otherwise the shape's own rgb, else its first colour name.
+@fp.co.skin.kp k.faces.part tint=skin
+@fp.co.skin.wp w.face.part face=$fp.co.skin.face
+@fp.co.skin.draw ui.avatar.draw part=$fp.co.skin.wp source=$fp.co.skin.kp
+@fp.co.skin.face w.face.face skin=?n
+@fp.co.skin.c k.faces.colour of=skin name=?n rgb=?rgb
+@fp.co.skin.o ui.avatar.colour source=$fp.co.skin.kp part=$fp.co.skin.wp fill=?rgb
+@fp.fill.skin core.rule when=$fp.co.skin.kp when=$fp.co.skin.face when=$fp.co.skin.wp when=$fp.co.skin.draw when=$fp.co.skin.c then=$fp.co.skin.o
+@fp.co.skin_shade.kp k.faces.part tint=skin_shade
+@fp.co.skin_shade.wp w.face.part face=$fp.co.skin_shade.face
+@fp.co.skin_shade.draw ui.avatar.draw part=$fp.co.skin_shade.wp source=$fp.co.skin_shade.kp
+@fp.co.skin_shade.face w.face.face skin=?n
+@fp.co.skin_shade.c k.faces.colour of=skin name=?n shade=?rgb
+@fp.co.skin_shade.o ui.avatar.colour source=$fp.co.skin_shade.kp part=$fp.co.skin_shade.wp fill=?rgb
+@fp.fill.skin_shade core.rule when=$fp.co.skin_shade.kp when=$fp.co.skin_shade.face when=$fp.co.skin_shade.wp when=$fp.co.skin_shade.draw when=$fp.co.skin_shade.c then=$fp.co.skin_shade.o
+@fp.co.hair.kp k.faces.part tint=hair
+@fp.co.hair.wp w.face.part face=$fp.co.hair.face
+@fp.co.hair.draw ui.avatar.draw part=$fp.co.hair.wp source=$fp.co.hair.kp
+@fp.co.hair.face w.face.face hair_colour=?n
+@fp.co.hair.c k.faces.colour of=hair name=?n rgb=?rgb
+@fp.co.hair.o ui.avatar.colour source=$fp.co.hair.kp part=$fp.co.hair.wp fill=?rgb
+@fp.fill.hair core.rule when=$fp.co.hair.kp when=$fp.co.hair.face when=$fp.co.hair.wp when=$fp.co.hair.draw when=$fp.co.hair.c then=$fp.co.hair.o
+@fp.co.hair_shade.kp k.faces.part tint=hair_shade
+@fp.co.hair_shade.wp w.face.part face=$fp.co.hair_shade.face
+@fp.co.hair_shade.draw ui.avatar.draw part=$fp.co.hair_shade.wp source=$fp.co.hair_shade.kp
+@fp.co.hair_shade.face w.face.face hair_colour=?n
+@fp.co.hair_shade.c k.faces.colour of=hair name=?n shade=?rgb
+@fp.co.hair_shade.o ui.avatar.colour source=$fp.co.hair_shade.kp part=$fp.co.hair_shade.wp fill=?rgb
+@fp.fill.hair_shade core.rule when=$fp.co.hair_shade.kp when=$fp.co.hair_shade.face when=$fp.co.hair_shade.wp when=$fp.co.hair_shade.draw when=$fp.co.hair_shade.c then=$fp.co.hair_shade.o
+@fp.co.eyes.kp k.faces.part tint=eyes
+@fp.co.eyes.wp w.face.part face=$fp.co.eyes.face
+@fp.co.eyes.draw ui.avatar.draw part=$fp.co.eyes.wp source=$fp.co.eyes.kp
+@fp.co.eyes.face w.face.face eye_colour=?n
+@fp.co.eyes.c k.faces.colour of=eyes name=?n rgb=?rgb
+@fp.co.eyes.o ui.avatar.colour source=$fp.co.eyes.kp part=$fp.co.eyes.wp fill=?rgb
+@fp.fill.eyes core.rule when=$fp.co.eyes.kp when=$fp.co.eyes.face when=$fp.co.eyes.wp when=$fp.co.eyes.draw when=$fp.co.eyes.c then=$fp.co.eyes.o
+@fp.co.clothes.kp k.faces.part tint=clothes
+@fp.co.clothes.wp w.face.part face=$fp.co.clothes.face
+@fp.co.clothes.draw ui.avatar.draw part=$fp.co.clothes.wp source=$fp.co.clothes.kp
+@fp.co.clothes.face w.face.face clothes=?n
+@fp.co.clothes.c k.faces.colour of=clothes name=?n rgb=?rgb
+@fp.co.clothes.o ui.avatar.colour source=$fp.co.clothes.kp part=$fp.co.clothes.wp fill=?rgb
+@fp.fill.clothes core.rule when=$fp.co.clothes.kp when=$fp.co.clothes.face when=$fp.co.clothes.wp when=$fp.co.clothes.draw when=$fp.co.clothes.c then=$fp.co.clothes.o
+@fp.co.clothes_shade.kp k.faces.part tint=clothes_shade
+@fp.co.clothes_shade.wp w.face.part face=$fp.co.clothes_shade.face
+@fp.co.clothes_shade.draw ui.avatar.draw part=$fp.co.clothes_shade.wp source=$fp.co.clothes_shade.kp
+@fp.co.clothes_shade.face w.face.face clothes=?n
+@fp.co.clothes_shade.c k.faces.colour of=clothes name=?n shade=?rgb
+@fp.co.clothes_shade.o ui.avatar.colour source=$fp.co.clothes_shade.kp part=$fp.co.clothes_shade.wp fill=?rgb
+@fp.fill.clothes_shade core.rule when=$fp.co.clothes_shade.kp when=$fp.co.clothes_shade.face when=$fp.co.clothes_shade.wp when=$fp.co.clothes_shade.draw when=$fp.co.clothes_shade.c then=$fp.co.clothes_shade.o
+@fp.co.paint.kp k.faces.part colour=?c
+@fp.co.paint.part w.face.part colour=?c
+@fp.co.paint.draw ui.avatar.draw part=$fp.co.paint.part source=$fp.co.paint.kp
+@fp.co.paint.o ui.avatar.colour source=$fp.co.paint.kp part=$fp.co.paint.part fill=?c
+@fp.fill.paint core.rule when=$fp.co.paint.kp when=$fp.co.paint.part when=$fp.co.paint.draw then=$fp.co.paint.o
+@fp.co.own.kp k.faces.part rgb=?rgb
+@fp.co.own.draw ui.avatar.draw part=?part source=$fp.co.own.kp
+@fp.co.own.chosen ui.avatar.colour source=$fp.co.own.kp part=?part
+@fp.co.own.o ui.avatar.base source=$fp.co.own.kp part=?part fill=?rgb
+@fp.fill.own core.rule when=$fp.co.own.kp when=$fp.co.own.draw not=$fp.co.own.chosen then=$fp.co.own.o
+@fp.co.name.kp k.faces.part colour=?c
+@fp.co.name.draw ui.avatar.draw part=?part source=$fp.co.name.kp
+@fp.co.name.chosen ui.avatar.colour source=$fp.co.name.kp part=?part
+@fp.co.name.base ui.avatar.base source=$fp.co.name.kp part=?part
+@fp.co.name.o ui.avatar.named source=$fp.co.name.kp part=?part fill=?c
+@fp.fill.name core.rule when=$fp.co.name.kp when=$fp.co.name.draw not=$fp.co.name.chosen not=$fp.co.name.base then=$fp.co.name.o
+@fp.co.pick.c ui.avatar.colour source=?src part=?part fill=?f
+@fp.co.pick.o ui.avatar.fill source=?src part=?part fill=?f
+@fp.fill.chosen core.rule when=$fp.co.pick.c then=$fp.co.pick.o
+@fp.co.pick.b ui.avatar.base source=?src part=?part fill=?f
+@fp.fill.base core.rule when=$fp.co.pick.b then=$fp.co.pick.o
+@fp.co.pick.n ui.avatar.named source=?src part=?part fill=?f
+@fp.fill.named core.rule when=$fp.co.pick.n then=$fp.co.pick.o
+
+# Orientation of arcs and triangles, when the shape declares one.
+@fp.or.type core.type of=ui.avatar.orient
+@fp.or.kp k.faces.part opens=?o
+@fp.or.draw ui.avatar.draw source=$fp.or.kp
+@fp.or.o ui.avatar.orient source=$fp.or.kp opens=?o
+@fp.orient.opens core.rule when=$fp.or.kp when=$fp.or.draw then=$fp.or.o
+@fp.or.pt.kp k.faces.part pointing=?p
+@fp.or.pt.draw ui.avatar.draw source=$fp.or.pt.kp
+@fp.or.pt.o ui.avatar.orient source=$fp.or.pt.kp pointing=?p
+@fp.orient.pointing core.rule when=$fp.or.pt.kp when=$fp.or.pt.draw then=$fp.or.pt.o

@@ -53,7 +53,9 @@ function parseArgs(argv) {
 }
 
 async function makeEngine(roots) {
-  return createEngine({ loader: createFsLoader({ roots }), translator: await loadTranslator() });
+  // The historical grammar worlds need the legacy pattern compiler; the application composition never loads it.
+  const { checkPattern } = await import('./formalizer/rules/index.mjs'), { expandShape } = await import('./formalizer/rules/shapes.mjs');
+  return createEngine({ loader: createFsLoader({ roots }), translator: await loadTranslator(), options: { patterns: { checkPattern, expandShape } } });
 }
 
 const SELF = fileURLToPath(import.meta.url);

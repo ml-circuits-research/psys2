@@ -1,0 +1,25 @@
+@area.schema core.use world=app.area prefix=false
+
+# The application's editor views (the page tabs that edit a native SOP area). The page tab order and labels stay in
+# the page; what the reader, history and persistence need to know about each view is declared here.
+@area.avatar app.area.view view=avatar area=avatar world=ui.avatar separate.runtime=true
+@area.draw app.area.view view=draw area=drawing world=art.draw separate.runtime=true
+@area.diagram app.area.view view=diagram area=diagram world=diagram.sketch separate.runtime=true
+@area.editor app.area.view view=editor area=document world=docs.editor separate.runtime=true
+@area.calendar app.area.view view=calendar area=calendar world=time.calendar separate.runtime=true
+
+# Reader focus: the selection paths of each view's projected state.
+@area.avatar.focus.selected app.area.path view=avatar role=focus order=0 key=runtime key=view key=selected
+@area.draw.focus.selected app.area.path view=draw role=focus order=0 key=runtime key=view key=selected
+@area.draw.focus.part app.area.path view=draw role=focus order=1 key=runtime key=view key=part
+@area.diagram.focus.selected app.area.path view=diagram role=focus order=0 key=runtime key=view key=selected
+@area.editor.focus.selected app.area.path view=editor role=focus order=0 key=runtime key=view key=selected
+@area.editor.focus.from app.area.path view=editor role=focus order=1 key=runtime key=view key=from
+@area.editor.focus.to app.area.path view=editor role=focus order=2 key=runtime key=view key=to
+@area.editor.focus.at app.area.path view=editor role=focus order=3 key=runtime key=view key=at
+@area.calendar.focus.selected app.area.path view=calendar role=focus order=0 key=runtime key=view key=selected
+
+# View-only state restored by undo/redo.
+@area.avatar.history.ids app.area.path view=avatar role=history.view order=0 key=runtime key=view key=ids
+@area.draw.history.ids app.area.path view=draw role=history.view order=0 key=runtime key=view key=ids
+@area.diagram.history.ids app.area.path view=diagram role=history.view order=0 key=runtime key=view key=ids

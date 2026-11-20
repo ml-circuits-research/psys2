@@ -1,9 +1,9 @@
 {
   "format": "sop.semantic-alignment-catalogue/1",
-  "knowledgePin": "668fc36aacc4f7c193bab47f75e9ededdef9b811",
+  "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
   "inventory": {
     "path": "official-dataset/inventory.json",
-    "sha256": "da8966e3e1b1da1e64241a67659a2b7847afaf29291a494c9ae0b08946b66f7e"
+    "sha256": "302df46d4c7848cb7bc2c9a7f2da9228edc47200730f69bc88cd324710e5e806"
   },
   "prompt": {
     "path": "training/sop-bert/data/haiku-v2/INSTRUCTIONS-v2.md",
@@ -20,9 +20,9 @@
       "sourceWire": "w.drawing.object",
       "authority": "A drawn thing aligns the declared drawing object: a placed k.objects object or basic shape with size, colour and label.",
       "evidence": {
-        "knowledgePin": "668fc36aacc4f7c193bab47f75e9ededdef9b811",
+        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
         "path": "docs/worlds/w.drawing/schema.sop",
-        "sha256": "843a04c73c4f480379e1261aa9f0e5424a84aa86940756d240bc47c399c0e16b",
+        "sha256": "700ae643ceb95cb838f129fd6840c4687d2130378245cd2c7dd866add418d6e7",
         "sourceWire": "w.drawing.object",
         "sourceWorld": "w.drawing",
         "moduleVersion": "1",
@@ -38,9 +38,9 @@
       "sourceWire": "w.drawing.group",
       "authority": "A drawing group aligns the declared group of drawing objects.",
       "evidence": {
-        "knowledgePin": "668fc36aacc4f7c193bab47f75e9ededdef9b811",
+        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
         "path": "docs/worlds/w.drawing/schema.sop",
-        "sha256": "843a04c73c4f480379e1261aa9f0e5424a84aa86940756d240bc47c399c0e16b",
+        "sha256": "700ae643ceb95cb838f129fd6840c4687d2130378245cd2c7dd866add418d6e7",
         "sourceWire": "w.drawing.group",
         "sourceWorld": "w.drawing",
         "moduleVersion": "1",
@@ -56,7 +56,7 @@
       "sourceWire": "w.picture.picture",
       "authority": "Raw drawing-as-a-whole aligns the depicted picture container, not physical-page lexical meaning.",
       "evidence": {
-        "knowledgePin": "668fc36aacc4f7c193bab47f75e9ededdef9b811",
+        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
         "path": "docs/worlds/w.picture/schema.sop",
         "sha256": "d7c6978141d9b1261130af60395efd0cad83a902cee6216ba5e35f648f7f4f21",
         "sourceWire": "w.picture.picture",
@@ -74,9 +74,9 @@
       "sourceWire": "w.drawing.part",
       "authority": "A part of a drawn thing aligns the declared edited part of a drawing object.",
       "evidence": {
-        "knowledgePin": "668fc36aacc4f7c193bab47f75e9ededdef9b811",
+        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
         "path": "docs/worlds/w.drawing/schema.sop",
-        "sha256": "843a04c73c4f480379e1261aa9f0e5424a84aa86940756d240bc47c399c0e16b",
+        "sha256": "700ae643ceb95cb838f129fd6840c4687d2130378245cd2c7dd866add418d6e7",
         "sourceWire": "w.drawing.part",
         "sourceWorld": "w.drawing",
         "moduleVersion": "1",
@@ -92,7 +92,7 @@
       "sourceWire": "w.chart.chart",
       "authority": "Raw chart data/display aligns chart as a whole, not a series or point.",
       "evidence": {
-        "knowledgePin": "668fc36aacc4f7c193bab47f75e9ededdef9b811",
+        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
         "path": "docs/worlds/w.chart/schema.sop",
         "sha256": "7a3e8e921d5d5abdbc5e6d7468fcf46c3317d61f4215525c2279d2205ef27111",
         "sourceWire": "w.chart.chart",
@@ -105,8 +105,19 @@
       "area": "diagram",
       "type": "diagram",
       "rawMeaning": "a diagram as a whole",
-      "status": "unresolved",
-      "reason": "Inventory explicitly includes charts; chart.chart and diagram.diagram are separate direct thing subclasses."
+      "status": "aligned",
+      "canonical": "w.diagram.diagram",
+      "sourceWire": "w.diagram.diagram",
+      "authority": "Owner-authorized (2026-11-20): the Diagram tab observes its one page (id page, kind diagram) as the diagram; page operations (layout, improve, step numbers) act on it.",
+      "evidence": {
+        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "path": "docs/worlds/w.diagram/schema.sop",
+        "sha256": "f785d5f72701bbce0950d9cee884bab2fb4061f14dc3626ee7c27df63c480e05",
+        "sourceWire": "w.diagram.diagram",
+        "sourceWorld": "w.diagram",
+        "moduleVersion": "1",
+        "declaration": "@w.diagram.diagram core.type of=w.diagram.diagram extends=std.schema.thing closed=true core.source=\"hand-core 1\""
+      }
     },
     {
       "area": "diagram",
@@ -117,9 +128,9 @@
       "sourceWire": "w.diagram.group",
       "authority": "The native group of nodes aligns the declared node grouping.",
       "evidence": {
-        "knowledgePin": "668fc36aacc4f7c193bab47f75e9ededdef9b811",
+        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
         "path": "docs/worlds/w.diagram/schema.sop",
-        "sha256": "84b4f1587fe5de1593579dfc4e3f81262ac446e87594fa4ae205a432e1254fec",
+        "sha256": "f785d5f72701bbce0950d9cee884bab2fb4061f14dc3626ee7c27df63c480e05",
         "sourceWire": "w.diagram.group",
         "sourceWorld": "w.diagram",
         "moduleVersion": "1",
@@ -135,9 +146,9 @@
       "sourceWire": "w.diagram.edge",
       "authority": "Raw arrow between nodes aligns declared edge from/to nodes.",
       "evidence": {
-        "knowledgePin": "668fc36aacc4f7c193bab47f75e9ededdef9b811",
+        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
         "path": "docs/worlds/w.diagram/schema.sop",
-        "sha256": "84b4f1587fe5de1593579dfc4e3f81262ac446e87594fa4ae205a432e1254fec",
+        "sha256": "f785d5f72701bbce0950d9cee884bab2fb4061f14dc3626ee7c27df63c480e05",
         "sourceWire": "w.diagram.edge",
         "sourceWorld": "w.diagram",
         "moduleVersion": "1",
@@ -155,8 +166,19 @@
       "area": "diagram",
       "type": "page",
       "rawMeaning": "Native diagram.sketch.page",
-      "status": "unresolved",
-      "reason": "No owning family declaration reviewed for this official-dataset family."
+      "status": "aligned",
+      "canonical": "w.diagram.diagram",
+      "sourceWire": "w.diagram.diagram",
+      "authority": "Owner-authorized (2026-11-20): the Diagram tab observes its one page (id page, kind diagram) as the diagram; page operations (layout, improve, step numbers) act on it.",
+      "evidence": {
+        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "path": "docs/worlds/w.diagram/schema.sop",
+        "sha256": "f785d5f72701bbce0950d9cee884bab2fb4061f14dc3626ee7c27df63c480e05",
+        "sourceWire": "w.diagram.diagram",
+        "sourceWorld": "w.diagram",
+        "moduleVersion": "1",
+        "declaration": "@w.diagram.diagram core.type of=w.diagram.diagram extends=std.schema.thing closed=true core.source=\"hand-core 1\""
+      }
     },
     {
       "area": "diagram",
@@ -216,7 +238,7 @@
       "sourceWire": "w.document.document",
       "authority": "Raw document-as-a-whole aligns mutable document, not immutable text source/revision.",
       "evidence": {
-        "knowledgePin": "668fc36aacc4f7c193bab47f75e9ededdef9b811",
+        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
         "path": "docs/worlds/w.document/schema.sop",
         "sha256": "4532f68d9096b6db1b2396bd0ea5a9600dc96ab76b5f9e4110f3f4319e582f77",
         "sourceWire": "w.document.document",
@@ -241,7 +263,7 @@
       "sourceWire": "w.calendar.event",
       "authority": "Raw meeting is the event family; source word.event explicitly names meeting.",
       "evidence": {
-        "knowledgePin": "668fc36aacc4f7c193bab47f75e9ededdef9b811",
+        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
         "path": "docs/worlds/w.calendar/schema.sop",
         "sha256": "c9849573da85da02cd2c74eed6fa192344e1508aa05700b57251e8140db6a4e4",
         "sourceWire": "w.calendar.event",
@@ -259,7 +281,7 @@
       "sourceWire": "w.person.person",
       "authority": "Raw participant aligns person identity; participation requires a separate relation.",
       "evidence": {
-        "knowledgePin": "668fc36aacc4f7c193bab47f75e9ededdef9b811",
+        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
         "path": "docs/worlds/w.person/schema.sop",
         "sha256": "173aec25063dc3a6f31b934e5c6bab97c81595cf034e6d45d0b0ced6654b1c5e",
         "sourceWire": "w.person.person",
@@ -277,7 +299,7 @@
       "sourceWire": "w.room.room",
       "authority": "Raw room aligns room identity; booking availability is not implied.",
       "evidence": {
-        "knowledgePin": "668fc36aacc4f7c193bab47f75e9ededdef9b811",
+        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
         "path": "docs/worlds/w.room/schema.sop",
         "sha256": "eebff2f6d36c3aec724184282704aa05e42ede66b4c4014ea7e7226442314ca9",
         "sourceWire": "w.room.room",
@@ -295,9 +317,9 @@
       "sourceWire": "w.face.face",
       "authority": "The avatar face aligns the declared face instance, not its individual parts (was drawing.face).",
       "evidence": {
-        "knowledgePin": "668fc36aacc4f7c193bab47f75e9ededdef9b811",
+        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
         "path": "docs/worlds/w.face/schema.sop",
-        "sha256": "4d39ad97e4ef776dfb2fb3126967725d9bcb7c0b0978ae0357c0ed39839c7d8b",
+        "sha256": "3e5efddafc1681994bea84afd708d9d385f16cdb6d66c1f35c963dea61f12735",
         "sourceWire": "w.face.face",
         "sourceWorld": "w.face",
         "moduleVersion": "1",
@@ -334,7 +356,7 @@
         }
       },
       "evidence": {
-        "knowledgePin": "668fc36aacc4f7c193bab47f75e9ededdef9b811",
+        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
         "path": "docs/worlds/k.spatial2d/schema.sop",
         "sha256": "2717173818f598c8f6bd4c703843f7bff5723563839dbb56bf00221e8faa6798",
         "sourceWire": "k.spatial2d.relation.object",
@@ -408,7 +430,7 @@
         "parameter": "color"
       },
       "evidence": {
-        "knowledgePin": "668fc36aacc4f7c193bab47f75e9ededdef9b811",
+        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
         "path": "docs/worlds/k.attributes/shards/attributes.sop",
         "sha256": "997c44ffaa9bb05d24bd98e349430780b872c9f4ed9a91ec9e929a316b6197a5",
         "sourceWire": "k.attributes.attribute.colour",
@@ -431,8 +453,28 @@
         "head": "number",
         "src": "addThings n"
       },
-      "status": "unresolved",
-      "reason": "Missing owning semantic/value contract for numeric, qualitative or relative change; no implicit units or thresholds."
+      "status": "aligned",
+      "alignment": {
+        "area": "drawing",
+        "key": "drawn.count",
+        "sourceWire": "w.request.constraint.number",
+        "canonical": "count",
+        "valueKind": "string"
+      },
+      "evidence": {
+        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "path": "docs/worlds/w.request/schema.sop",
+        "sha256": "b752137dadac9c6163fcfba6d40fc28a048010cdf7411e2a5b6ccd7e13b7bc25",
+        "sourceWire": "w.request.constraint.number",
+        "sourceWorld": "w.request",
+        "moduleVersion": "1",
+        "declaration": "@w.request.constraint.number core.slot of=w.request.constraint key=number kind=number min=0 core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy",
+        "semanticBoundary": "The number of new drawn things asked for (the native make's count, w.request count `number`): it binds through the declared count port of the make operation only."
+      }
     },
     {
       "area": "drawing",
@@ -501,9 +543,9 @@
         "parameter": "height"
       },
       "evidence": {
-        "knowledgePin": "668fc36aacc4f7c193bab47f75e9ededdef9b811",
+        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
         "path": "docs/worlds/w.drawing/schema.sop",
-        "sha256": "843a04c73c4f480379e1261aa9f0e5424a84aa86940756d240bc47c399c0e16b",
+        "sha256": "700ae643ceb95cb838f129fd6840c4687d2130378245cd2c7dd866add418d6e7",
         "sourceWire": "w.drawing.object.height",
         "sourceWorld": "w.drawing",
         "moduleVersion": "1",
@@ -572,9 +614,9 @@
         "parameter": "label"
       },
       "evidence": {
-        "knowledgePin": "668fc36aacc4f7c193bab47f75e9ededdef9b811",
+        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
         "path": "docs/worlds/w.drawing/schema.sop",
-        "sha256": "843a04c73c4f480379e1261aa9f0e5424a84aa86940756d240bc47c399c0e16b",
+        "sha256": "700ae643ceb95cb838f129fd6840c4687d2130378245cd2c7dd866add418d6e7",
         "sourceWire": "w.drawing.object.label",
         "sourceWorld": "w.drawing",
         "moduleVersion": "1",
@@ -648,7 +690,7 @@
         }
       },
       "evidence": {
-        "knowledgePin": "668fc36aacc4f7c193bab47f75e9ededdef9b811",
+        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
         "path": "docs/worlds/k.spatial2d/schema.sop",
         "sha256": "2717173818f598c8f6bd4c703843f7bff5723563839dbb56bf00221e8faa6798",
         "sourceWire": "k.spatial2d.relation.kind",
@@ -683,7 +725,7 @@
         "parameter": "size"
       },
       "evidence": {
-        "knowledgePin": "668fc36aacc4f7c193bab47f75e9ededdef9b811",
+        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
         "path": "docs/worlds/k.attributes/shards/attributes.sop",
         "sha256": "997c44ffaa9bb05d24bd98e349430780b872c9f4ed9a91ec9e929a316b6197a5",
         "sourceWire": "k.attributes.attribute.size",
@@ -718,9 +760,9 @@
         "parameter": "width"
       },
       "evidence": {
-        "knowledgePin": "668fc36aacc4f7c193bab47f75e9ededdef9b811",
+        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
         "path": "docs/worlds/w.drawing/schema.sop",
-        "sha256": "843a04c73c4f480379e1261aa9f0e5424a84aa86940756d240bc47c399c0e16b",
+        "sha256": "700ae643ceb95cb838f129fd6840c4687d2130378245cd2c7dd866add418d6e7",
         "sourceWire": "w.drawing.object.width",
         "sourceWorld": "w.drawing",
         "moduleVersion": "1",
@@ -830,8 +872,31 @@
         "head": "candidate",
         "src": "native drawing part parameter"
       },
-      "status": "unresolved",
-      "reason": "Missing owning semantic/value contract for numeric, qualitative or relative change; no implicit units or thresholds."
+      "status": "aligned",
+      "alignment": {
+        "area": "drawing",
+        "key": "part.colour",
+        "sourceWire": "k.attributes.attribute.colour",
+        "canonical": "colour",
+        "valueKind": "string",
+        "host": "drawing",
+        "operation": "drawing.part.change",
+        "parameter": "color"
+      },
+      "evidence": {
+        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "path": "docs/worlds/k.attributes/shards/attributes.sop",
+        "sha256": "997c44ffaa9bb05d24bd98e349430780b872c9f4ed9a91ec9e929a316b6197a5",
+        "sourceWire": "k.attributes.attribute.colour",
+        "sourceWorld": "k.attributes",
+        "moduleVersion": "6",
+        "declaration": "@k.attributes.attribute.colour k.attributes.attribute name=colour holds=colour aspect=visual about=\"the colour a thing usually has\" default_type=k.objects.part default_key=colour core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy-or-explicit-source-backed-normalization",
+        "semanticBoundary": "Retains declared property identity and literal evidence only; no native conversion, qualitative threshold, reference binding or effect is asserted."
+      }
     },
     {
       "area": "drawing",
@@ -944,6 +1009,44 @@
     {
       "area": "diagram",
       "type": "chart",
+      "key": "chart.effect",
+      "descriptor": {
+        "concept": "effect",
+        "head": "class",
+        "src": "visual effects on a chart",
+        "values": [
+          "shadow",
+          "gradient",
+          "glow",
+          "rounded",
+          "animation",
+          "transparent",
+          "3d",
+          "outline"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "No reviewed semantic alignment; bound by the exporter's native-parameter chain when a declared operation parameter consumes it."
+    },
+    {
+      "area": "diagram",
+      "type": "chart",
+      "key": "chart.grid",
+      "descriptor": {
+        "concept": "gridlines",
+        "head": "class",
+        "src": "chart gridlines",
+        "values": [
+          "show",
+          "hide"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "No reviewed semantic alignment; bound by the exporter's native-parameter chain when a declared operation parameter consumes it."
+    },
+    {
+      "area": "diagram",
+      "type": "chart",
       "key": "chart.height",
       "descriptor": {
         "concept": "height",
@@ -1011,16 +1114,44 @@
       "type": "chart",
       "key": "chart.legend",
       "descriptor": {
-        "concept": "toggle",
+        "concept": "legend",
         "head": "class",
-        "src": "chart options legend",
+        "src": "legend position (show/hide existing)",
         "values": [
           "show",
-          "hide"
+          "hide",
+          "top",
+          "bottom",
+          "left",
+          "right"
         ]
       },
       "status": "unresolved",
       "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    },
+    {
+      "area": "diagram",
+      "type": "chart",
+      "key": "chart.max",
+      "descriptor": {
+        "concept": "axis.max",
+        "head": "number",
+        "src": "value axis maximum"
+      },
+      "status": "unresolved",
+      "reason": "No reviewed semantic alignment; bound by the exporter's native-parameter chain when a declared operation parameter consumes it."
+    },
+    {
+      "area": "diagram",
+      "type": "chart",
+      "key": "chart.min",
+      "descriptor": {
+        "concept": "axis.min",
+        "head": "number",
+        "src": "value axis minimum"
+      },
+      "status": "unresolved",
+      "reason": "No reviewed semantic alignment; bound by the exporter's native-parameter chain when a declared operation parameter consumes it."
     },
     {
       "area": "diagram",
@@ -1214,6 +1345,18 @@
     {
       "area": "diagram",
       "type": "chart",
+      "key": "chart.xLabel",
+      "descriptor": {
+        "concept": "axis.x.title",
+        "head": "span",
+        "src": "chart x-axis title (charts in the Diagram tab; owner priorities 2026-11-20)"
+      },
+      "status": "unresolved",
+      "reason": "No reviewed semantic alignment; bound by the exporter's native-parameter chain when a declared operation parameter consumes it."
+    },
+    {
+      "area": "diagram",
+      "type": "chart",
       "key": "chart.y",
       "descriptor": {
         "concept": "y",
@@ -1222,6 +1365,76 @@
       },
       "status": "unresolved",
       "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "diagram",
+      "type": "chart",
+      "key": "chart.yLabel",
+      "descriptor": {
+        "concept": "axis.y.title",
+        "head": "span",
+        "src": "chart y-axis title"
+      },
+      "status": "unresolved",
+      "reason": "No reviewed semantic alignment; bound by the exporter's native-parameter chain when a declared operation parameter consumes it."
+    },
+    {
+      "area": "diagram",
+      "type": "diagram",
+      "key": "diagram.by",
+      "descriptor": {
+        "concept": "colour.by",
+        "head": "class",
+        "src": "diagram.colour.by {by}",
+        "values": [
+          "level",
+          "shape",
+          "role",
+          "group"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "No reviewed semantic alignment; bound by the exporter's native-parameter chain when a declared operation parameter consumes it."
+    },
+    {
+      "area": "diagram",
+      "type": "diagram",
+      "key": "diagram.direction",
+      "descriptor": {
+        "concept": "direction",
+        "head": "class",
+        "src": "diagram.layout {direction}",
+        "values": [
+          "down",
+          "right",
+          "up",
+          "left"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "No reviewed semantic alignment; bound by the exporter's native-parameter chain when a declared operation parameter consumes it."
+    },
+    {
+      "area": "diagram",
+      "type": "diagram",
+      "key": "diagram.effect",
+      "descriptor": {
+        "concept": "effect",
+        "head": "class",
+        "src": "visual effects on the whole diagram",
+        "values": [
+          "shadow",
+          "gradient",
+          "glow",
+          "rounded",
+          "animation",
+          "transparent",
+          "3d",
+          "outline"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "No reviewed semantic alignment; bound by the exporter's native-parameter chain when a declared operation parameter consumes it."
     },
     {
       "area": "diagram",
@@ -1261,7 +1474,7 @@
       "descriptor": {
         "concept": "layout",
         "head": "class",
-        "src": "arrangeShapes / startDiagram layout",
+        "src": "diagram.layout {layout} (specs/diagram-capabilities.md)",
         "values": [
           "tree",
           "grid",
@@ -1269,11 +1482,88 @@
           "column",
           "circle",
           "radial",
-          "layers"
+          "layers",
+          "layered",
+          "free"
         ]
       },
       "status": "unresolved",
       "reason": "Raw diagram includes charts; graph-diagram-only layout lacks a proven target-kind applicability contract."
+    },
+    {
+      "area": "diagram",
+      "type": "diagram",
+      "key": "diagram.route",
+      "descriptor": {
+        "concept": "route",
+        "head": "class",
+        "src": "diagram.layout {route}",
+        "values": [
+          "orthogonal",
+          "straight",
+          "curved"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "No reviewed semantic alignment; bound by the exporter's native-parameter chain when a declared operation parameter consumes it."
+    },
+    {
+      "area": "diagram",
+      "type": "diagram",
+      "key": "diagram.spacing",
+      "descriptor": {
+        "concept": "spacing",
+        "head": "class",
+        "src": "diagram.layout {spacing}",
+        "values": [
+          "compact",
+          "normal",
+          "loose"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "No reviewed semantic alignment; bound by the exporter's native-parameter chain when a declared operation parameter consumes it."
+    },
+    {
+      "area": "diagram",
+      "type": "diagram",
+      "key": "diagram.steps",
+      "descriptor": {
+        "concept": "step.numbers",
+        "head": "class",
+        "src": "diagram.steps.number {mode}",
+        "values": [
+          "on",
+          "off"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "No reviewed semantic alignment; bound by the exporter's native-parameter chain when a declared operation parameter consumes it."
+    },
+    {
+      "area": "diagram",
+      "type": "diagram",
+      "key": "diagram.theme",
+      "descriptor": {
+        "concept": "theme",
+        "head": "class",
+        "src": "diagram.style.apply {theme} (k.styles.theme)",
+        "values": [
+          "pastel",
+          "dark",
+          "blueprint",
+          "monochrome",
+          "highlight",
+          "vivid",
+          "ocean",
+          "forest",
+          "sunset",
+          "print",
+          "flowchart"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "No reviewed semantic alignment; bound by the exporter's native-parameter chain when a declared operation parameter consumes it."
     },
     {
       "area": "diagram",
@@ -1346,12 +1636,15 @@
         "key": "group.label",
         "sourceWire": "w.diagram.group.label",
         "canonical": "w.diagram.group.label",
-        "valueKind": "string"
+        "valueKind": "string",
+        "host": "diagram",
+        "operation": "diagram.group.change",
+        "parameter": "label"
       },
       "evidence": {
-        "knowledgePin": "668fc36aacc4f7c193bab47f75e9ededdef9b811",
+        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
         "path": "docs/worlds/w.diagram/schema.sop",
-        "sha256": "84b4f1587fe5de1593579dfc4e3f81262ac446e87594fa4ae205a432e1254fec",
+        "sha256": "f785d5f72701bbce0950d9cee884bab2fb4061f14dc3626ee7c27df63c480e05",
         "sourceWire": "w.diagram.group.label",
         "sourceWorld": "w.diagram",
         "moduleVersion": "1",
@@ -1360,7 +1653,7 @@
       "valueContract": {
         "representation": "string",
         "source": "exact-copy-or-explicit-source-backed-normalization",
-        "semanticBoundary": "Retains declared property identity and literal evidence only; no native conversion, qualitative threshold, reference binding or effect is asserted."
+        "semanticBoundary": "Retains declared property identity and literal evidence only; the native chain binds it only on objects of the operation's source type (diagram nodes or lines), never on chart points."
       }
     },
     {
@@ -1487,15 +1780,39 @@
       "descriptor": {
         "concept": "arrow",
         "head": "candidate",
-        "src": "Native parameter: diagram.link.change.arrow",
+        "src": "diagram.link.change {arrow} back",
         "values": [
           "forward",
           "both",
-          "none"
+          "none",
+          "back"
         ]
       },
-      "status": "unresolved",
-      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      "status": "aligned",
+      "alignment": {
+        "area": "diagram",
+        "key": "link.arrow",
+        "sourceWire": "w.diagram.edge.direction",
+        "canonical": "w.diagram.edge.direction",
+        "valueKind": "string",
+        "host": "diagram",
+        "operation": "diagram.link.change",
+        "parameter": "arrow"
+      },
+      "evidence": {
+        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "path": "docs/worlds/w.diagram/schema.sop",
+        "sha256": "f785d5f72701bbce0950d9cee884bab2fb4061f14dc3626ee7c27df63c480e05",
+        "sourceWire": "w.diagram.edge.direction",
+        "sourceWorld": "w.diagram",
+        "moduleVersion": "1",
+        "declaration": "@w.diagram.edge.direction core.slot of=w.diagram.edge key=direction enum=forward enum=back enum=both enum=none default=forward core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy-of-declared-enum-value",
+        "semanticBoundary": "The value must be one of the declared values forward, both, none; any other value stays unapplied by the native parameter's closed enum."
+      }
     },
     {
       "area": "diagram",
@@ -1538,8 +1855,31 @@
         "head": "fill+span",
         "src": "s.link.from role=source"
       },
-      "status": "unresolved",
-      "reason": "Endpoint name requires target identity and relation ownership, not a string-to-reference coercion."
+      "status": "aligned",
+      "alignment": {
+        "area": "diagram",
+        "key": "link.from",
+        "sourceWire": "w.diagram.edge.from",
+        "canonical": "w.diagram.edge.from",
+        "valueKind": "string",
+        "host": "diagram",
+        "operation": "diagram.link.make",
+        "parameter": "from"
+      },
+      "evidence": {
+        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "path": "docs/worlds/w.diagram/schema.sop",
+        "sha256": "f785d5f72701bbce0950d9cee884bab2fb4061f14dc3626ee7c27df63c480e05",
+        "sourceWire": "w.diagram.edge.from",
+        "sourceWorld": "w.diagram",
+        "moduleVersion": "1",
+        "declaration": "@w.diagram.edge.from core.slot of=w.diagram.edge key=from required=true type=w.diagram.node core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "reference",
+        "source": "observed-object-name-code-or-kind",
+        "semanticBoundary": "The phrase names an observed diagram node by its code, its label or its kind; execution-policy.sop app.execution.reference resolves it to the node's code by declared lookup over the observation, and an ambiguous or unknown name stays unapplied. No string-to-reference coercion."
+      }
     },
     {
       "area": "diagram",
@@ -1568,12 +1908,15 @@
         "key": "link.label",
         "sourceWire": "w.diagram.edge.label",
         "canonical": "w.diagram.edge.label",
-        "valueKind": "string"
+        "valueKind": "string",
+        "host": "diagram",
+        "operation": "diagram.link.change",
+        "parameter": "label"
       },
       "evidence": {
-        "knowledgePin": "668fc36aacc4f7c193bab47f75e9ededdef9b811",
+        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
         "path": "docs/worlds/w.diagram/schema.sop",
-        "sha256": "84b4f1587fe5de1593579dfc4e3f81262ac446e87594fa4ae205a432e1254fec",
+        "sha256": "f785d5f72701bbce0950d9cee884bab2fb4061f14dc3626ee7c27df63c480e05",
         "sourceWire": "w.diagram.edge.label",
         "sourceWorld": "w.diagram",
         "moduleVersion": "1",
@@ -1582,7 +1925,7 @@
       "valueContract": {
         "representation": "string",
         "source": "exact-copy-or-explicit-source-backed-normalization",
-        "semanticBoundary": "Retains declared property identity and literal evidence only; no native conversion, qualitative threshold, reference binding or effect is asserted."
+        "semanticBoundary": "Retains declared property identity and literal evidence only; the native chain binds it only on objects of the operation's source type (diagram nodes or lines), never on chart points."
       }
     },
     {
@@ -1600,6 +1943,41 @@
     {
       "area": "diagram",
       "type": "link",
+      "key": "link.pattern",
+      "descriptor": {
+        "concept": "connect.pattern",
+        "head": "class",
+        "src": "diagram.links.connect {pattern}",
+        "values": [
+          "chain",
+          "cycle",
+          "star",
+          "all"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "No reviewed semantic alignment; bound by the exporter's native-parameter chain when a declared operation parameter consumes it."
+    },
+    {
+      "area": "diagram",
+      "type": "link",
+      "key": "link.route",
+      "descriptor": {
+        "concept": "route",
+        "head": "class",
+        "src": "diagram.link.change {route}",
+        "values": [
+          "orthogonal",
+          "straight",
+          "curved"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "No reviewed semantic alignment; bound by the exporter's native-parameter chain when a declared operation parameter consumes it."
+    },
+    {
+      "area": "diagram",
+      "type": "link",
       "key": "link.style",
       "descriptor": {
         "concept": "style",
@@ -1611,8 +1989,31 @@
           "dotted"
         ]
       },
-      "status": "unresolved",
-      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+      "status": "aligned",
+      "alignment": {
+        "area": "diagram",
+        "key": "link.style",
+        "sourceWire": "w.diagram.edge.style",
+        "canonical": "w.diagram.edge.style",
+        "valueKind": "string",
+        "host": "diagram",
+        "operation": "diagram.link.change",
+        "parameter": "style"
+      },
+      "evidence": {
+        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "path": "docs/worlds/w.diagram/schema.sop",
+        "sha256": "f785d5f72701bbce0950d9cee884bab2fb4061f14dc3626ee7c27df63c480e05",
+        "sourceWire": "w.diagram.edge.style",
+        "sourceWorld": "w.diagram",
+        "moduleVersion": "1",
+        "declaration": "@w.diagram.edge.style core.slot of=w.diagram.edge key=style enum=solid enum=dashed enum=dotted core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy-of-declared-enum-value",
+        "semanticBoundary": "The value must be one of the declared values solid, dashed, dotted; any other value stays unapplied by the native parameter's closed enum."
+      }
     },
     {
       "area": "diagram",
@@ -1623,8 +2024,31 @@
         "head": "fill+span",
         "src": "s.link.to role=goal"
       },
-      "status": "unresolved",
-      "reason": "Endpoint name requires target identity and relation ownership, not a string-to-reference coercion."
+      "status": "aligned",
+      "alignment": {
+        "area": "diagram",
+        "key": "link.to",
+        "sourceWire": "w.diagram.edge.to",
+        "canonical": "w.diagram.edge.to",
+        "valueKind": "string",
+        "host": "diagram",
+        "operation": "diagram.link.make",
+        "parameter": "to"
+      },
+      "evidence": {
+        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "path": "docs/worlds/w.diagram/schema.sop",
+        "sha256": "f785d5f72701bbce0950d9cee884bab2fb4061f14dc3626ee7c27df63c480e05",
+        "sourceWire": "w.diagram.edge.to",
+        "sourceWorld": "w.diagram",
+        "moduleVersion": "1",
+        "declaration": "@w.diagram.edge.to core.slot of=w.diagram.edge key=to required=true type=w.diagram.node core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "reference",
+        "source": "observed-object-name-code-or-kind",
+        "semanticBoundary": "The phrase names an observed diagram node by its code, its label or its kind; execution-policy.sop app.execution.reference resolves it to the node's code by declared lookup over the observation, and an ambiguous or unknown name stays unapplied. No string-to-reference coercion."
+      }
     },
     {
       "area": "diagram",
@@ -1635,8 +2059,31 @@
         "head": "number",
         "src": "Native parameter: diagram.link.change.width"
       },
-      "status": "unresolved",
-      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+      "status": "aligned",
+      "alignment": {
+        "area": "diagram",
+        "key": "link.width",
+        "sourceWire": "w.diagram.edge.width",
+        "canonical": "w.diagram.edge.width",
+        "valueKind": "string",
+        "host": "diagram",
+        "operation": "diagram.link.change",
+        "parameter": "width"
+      },
+      "evidence": {
+        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "path": "docs/worlds/w.diagram/schema.sop",
+        "sha256": "f785d5f72701bbce0950d9cee884bab2fb4061f14dc3626ee7c27df63c480e05",
+        "sourceWire": "w.diagram.edge.width",
+        "sourceWorld": "w.diagram",
+        "moduleVersion": "1",
+        "declaration": "@w.diagram.edge.width core.slot of=w.diagram.edge key=width kind=number min=0.5 max=12 core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy",
+        "semanticBoundary": "A plain number as said; the native parameter's bounds refuse other values. No unit conversion."
+      }
     },
     {
       "area": "diagram",
@@ -1680,6 +2127,22 @@
     {
       "area": "diagram",
       "type": "node",
+      "key": "node.axis",
+      "descriptor": {
+        "concept": "distribute.axis",
+        "head": "class",
+        "src": "diagram.nodes.distribute {axis}",
+        "values": [
+          "horizontal",
+          "vertical"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "No reviewed semantic alignment; bound by the exporter's native-parameter chain when a declared operation parameter consumes it."
+    },
+    {
+      "area": "diagram",
+      "type": "node",
       "key": "node.colour",
       "descriptor": {
         "concept": "colour",
@@ -1698,7 +2161,7 @@
         "parameter": "colour"
       },
       "evidence": {
-        "knowledgePin": "668fc36aacc4f7c193bab47f75e9ededdef9b811",
+        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
         "path": "docs/worlds/k.attributes/shards/attributes.sop",
         "sha256": "997c44ffaa9bb05d24bd98e349430780b872c9f4ed9a91ec9e929a316b6197a5",
         "sourceWire": "k.attributes.attribute.colour",
@@ -1715,6 +2178,26 @@
     {
       "area": "diagram",
       "type": "node",
+      "key": "node.edge",
+      "descriptor": {
+        "concept": "align.edge",
+        "head": "class",
+        "src": "diagram.nodes.align {edge}",
+        "values": [
+          "left",
+          "centre",
+          "right",
+          "top",
+          "middle",
+          "bottom"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "No reviewed semantic alignment; bound by the exporter's native-parameter chain when a declared operation parameter consumes it."
+    },
+    {
+      "area": "diagram",
+      "type": "node",
       "key": "node.edges",
       "descriptor": {
         "concept": "edges",
@@ -1723,6 +2206,56 @@
       },
       "status": "unresolved",
       "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "diagram",
+      "type": "node",
+      "key": "node.effect",
+      "descriptor": {
+        "concept": "effect",
+        "head": "class",
+        "src": "visual effects on nodes",
+        "values": [
+          "shadow",
+          "gradient",
+          "glow",
+          "rounded",
+          "animation",
+          "transparent",
+          "3d",
+          "outline"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "No reviewed semantic alignment; bound by the exporter's native-parameter chain when a declared operation parameter consumes it."
+    },
+    {
+      "area": "diagram",
+      "type": "node",
+      "key": "node.fontSize",
+      "descriptor": {
+        "concept": "font.size",
+        "head": "number",
+        "src": "diagram.node.change {fontSize} 8-48"
+      },
+      "status": "unresolved",
+      "reason": "No reviewed semantic alignment; bound by the exporter's native-parameter chain when a declared operation parameter consumes it."
+    },
+    {
+      "area": "diagram",
+      "type": "node",
+      "key": "node.fontWeight",
+      "descriptor": {
+        "concept": "font.weight",
+        "head": "class",
+        "src": "diagram.node.change {fontWeight}",
+        "values": [
+          "normal",
+          "bold"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "No reviewed semantic alignment; bound by the exporter's native-parameter chain when a declared operation parameter consumes it."
     },
     {
       "area": "diagram",
@@ -1768,8 +2301,31 @@
           "text"
         ]
       },
-      "status": "unresolved",
-      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+      "status": "aligned",
+      "alignment": {
+        "area": "diagram",
+        "key": "node.kind",
+        "sourceWire": "w.diagram.node.shape",
+        "canonical": "w.diagram.node.shape",
+        "valueKind": "string",
+        "host": "diagram",
+        "operation": "diagram.node.change",
+        "parameter": "kind"
+      },
+      "evidence": {
+        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "path": "docs/worlds/w.diagram/schema.sop",
+        "sha256": "f785d5f72701bbce0950d9cee884bab2fb4061f14dc3626ee7c27df63c480e05",
+        "sourceWire": "w.diagram.node.shape",
+        "sourceWorld": "w.diagram",
+        "moduleVersion": "1",
+        "declaration": "@w.diagram.node.shape core.slot of=w.diagram.node key=shape enum=oval enum=rectangle enum=rounded_rectangle enum=diamond enum=parallelogram enum=document enum=double_rectangle enum=circle enum=ellipse enum=dot enum=chevron enum=square enum=triangle enum=hexagon enum=star enum=text enum=cylinder enum=cloud enum=actor enum=note core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy-of-declared-enum-value",
+        "semanticBoundary": "The value must be one of the declared values circle, rectangle, square, diamond, ellipse, triangle, hexagon, star, text; any other value stays unapplied by the native parameter's closed enum."
+      }
     },
     {
       "area": "diagram",
@@ -1780,8 +2336,31 @@
         "head": "span",
         "src": "s.node.label"
       },
-      "status": "unresolved",
-      "reason": "Raw node includes chart bars/slices; graph-node-owned label lacks a proven target-kind applicability contract."
+      "status": "aligned",
+      "alignment": {
+        "area": "diagram",
+        "key": "node.label",
+        "sourceWire": "w.diagram.node.label",
+        "canonical": "w.diagram.node.label",
+        "valueKind": "string",
+        "host": "diagram",
+        "operation": "diagram.node.change",
+        "parameter": "label"
+      },
+      "evidence": {
+        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "path": "docs/worlds/w.diagram/schema.sop",
+        "sha256": "f785d5f72701bbce0950d9cee884bab2fb4061f14dc3626ee7c27df63c480e05",
+        "sourceWire": "w.diagram.node.label",
+        "sourceWorld": "w.diagram",
+        "moduleVersion": "1",
+        "declaration": "@w.diagram.node.label core.slot of=w.diagram.node key=label required=true kind=atom kind=string core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy-or-explicit-source-backed-normalization",
+        "semanticBoundary": "Retains declared property identity and literal evidence only; the native chain binds it only on objects of the operation's source type (diagram nodes or lines), never on chart points."
+      }
     },
     {
       "area": "diagram",
@@ -1813,8 +2392,40 @@
         "head": "number",
         "src": "Native parameter: diagram.node.make.n"
       },
+      "status": "aligned",
+      "alignment": {
+        "area": "diagram",
+        "key": "node.n",
+        "sourceWire": "w.request.constraint.number",
+        "canonical": "count",
+        "valueKind": "string"
+      },
+      "evidence": {
+        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "path": "docs/worlds/w.request/schema.sop",
+        "sha256": "b752137dadac9c6163fcfba6d40fc28a048010cdf7411e2a5b6ccd7e13b7bc25",
+        "sourceWire": "w.request.constraint.number",
+        "sourceWorld": "w.request",
+        "moduleVersion": "1",
+        "declaration": "@w.request.constraint.number core.slot of=w.request.constraint key=number kind=number min=0 core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy",
+        "semanticBoundary": "The number of new diagram nodes asked for (the native make's count parameter, w.request count `number`): it binds through the declared count port of the make operation only; a non-integer or out-of-range number is refused by the parameter."
+      }
+    },
+    {
+      "area": "diagram",
+      "type": "node",
+      "key": "node.outline",
+      "descriptor": {
+        "concept": "outline",
+        "head": "candidate",
+        "src": "diagram.node.change/make {outline} (k.colours names)"
+      },
       "status": "unresolved",
-      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+      "reason": "No reviewed semantic alignment; bound by the exporter's native-parameter chain when a declared operation parameter consumes it."
     },
     {
       "area": "diagram",
@@ -1861,11 +2472,35 @@
     {
       "area": "diagram",
       "type": "node",
+      "key": "node.role",
+      "descriptor": {
+        "concept": "role",
+        "head": "class",
+        "src": "diagram.node.make/change {role} (k.diagrams.shape flowchart roles)",
+        "values": [
+          "start",
+          "end",
+          "decision",
+          "process",
+          "data",
+          "document",
+          "subprocess",
+          "database",
+          "input",
+          "output"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "No reviewed semantic alignment; bound by the exporter's native-parameter chain when a declared operation parameter consumes it."
+    },
+    {
+      "area": "diagram",
+      "type": "node",
       "key": "node.shape",
       "descriptor": {
         "concept": "shape",
         "head": "class+step",
-        "src": "s.node.shape space=shape (step rounder)",
+        "src": "diagram.node.change {kind} shapes of specs/diagram-capabilities.md",
         "values": [
           "box",
           "rounded_box",
@@ -1880,11 +2515,42 @@
           "cloud",
           "note",
           "square",
-          "rectangle"
+          "rectangle",
+          "rounded_rectangle",
+          "oval",
+          "chevron",
+          "double_rectangle",
+          "document",
+          "actor",
+          "dot",
+          "text"
         ]
       },
-      "status": "unresolved",
-      "reason": "Raw node includes chart bars/slices; graph-node-only shape enum is not a whole-family semantic contract."
+      "status": "aligned",
+      "alignment": {
+        "area": "diagram",
+        "key": "node.shape",
+        "sourceWire": "w.diagram.node.shape",
+        "canonical": "w.diagram.node.shape",
+        "valueKind": "string",
+        "host": "diagram",
+        "operation": "diagram.node.change",
+        "parameter": "kind"
+      },
+      "evidence": {
+        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "path": "docs/worlds/w.diagram/schema.sop",
+        "sha256": "f785d5f72701bbce0950d9cee884bab2fb4061f14dc3626ee7c27df63c480e05",
+        "sourceWire": "w.diagram.node.shape",
+        "sourceWorld": "w.diagram",
+        "moduleVersion": "1",
+        "declaration": "@w.diagram.node.shape core.slot of=w.diagram.node key=shape enum=oval enum=rectangle enum=rounded_rectangle enum=diamond enum=parallelogram enum=document enum=double_rectangle enum=circle enum=ellipse enum=dot enum=chevron enum=square enum=triangle enum=hexagon enum=star enum=text enum=cylinder enum=cloud enum=actor enum=note core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy-of-declared-enum-value",
+        "semanticBoundary": "The value must be one of the declared values circle, rectangle, square, diamond, ellipse, triangle, hexagon, star, text; any other value stays unapplied by the native parameter's closed enum."
+      }
     },
     {
       "area": "diagram",
@@ -1914,7 +2580,7 @@
         "parameter": "size"
       },
       "evidence": {
-        "knowledgePin": "668fc36aacc4f7c193bab47f75e9ededdef9b811",
+        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
         "path": "docs/worlds/k.attributes/shards/attributes.sop",
         "sha256": "997c44ffaa9bb05d24bd98e349430780b872c9f4ed9a91ec9e929a316b6197a5",
         "sourceWire": "k.attributes.attribute.size",
@@ -1931,14 +2597,49 @@
     {
       "area": "diagram",
       "type": "node",
+      "key": "node.textColour",
+      "descriptor": {
+        "concept": "text.colour",
+        "head": "candidate",
+        "src": "diagram.node.change/make {textColour} (k.colours names)"
+      },
+      "status": "unresolved",
+      "reason": "No reviewed semantic alignment; bound by the exporter's native-parameter chain when a declared operation parameter consumes it."
+    },
+    {
+      "area": "diagram",
+      "type": "node",
       "key": "node.value",
       "descriptor": {
         "concept": "value",
         "head": "number",
         "src": "Native parameter: diagram.node.change.value"
       },
-      "status": "unresolved",
-      "reason": "Missing owning semantic/value contract for numeric, qualitative or relative change; no implicit units or thresholds."
+      "status": "aligned",
+      "alignment": {
+        "area": "diagram",
+        "key": "node.value",
+        "sourceWire": "w.diagram.node.value",
+        "canonical": "w.diagram.node.value",
+        "valueKind": "string",
+        "host": "diagram",
+        "operation": "diagram.node.change",
+        "parameter": "value"
+      },
+      "evidence": {
+        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "path": "docs/worlds/w.diagram/schema.sop",
+        "sha256": "f785d5f72701bbce0950d9cee884bab2fb4061f14dc3626ee7c27df63c480e05",
+        "sourceWire": "w.diagram.node.value",
+        "sourceWorld": "w.diagram",
+        "moduleVersion": "1",
+        "declaration": "@w.diagram.node.value core.slot of=w.diagram.node key=value kind=number core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy",
+        "semanticBoundary": "A plain number as said; the native parameter's bounds refuse other values. No unit conversion."
+      }
     },
     {
       "area": "diagram",
@@ -2992,7 +3693,7 @@
         "parameter": "topic"
       },
       "evidence": {
-        "knowledgePin": "668fc36aacc4f7c193bab47f75e9ededdef9b811",
+        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
         "path": "docs/worlds/w.document/schema.sop",
         "sha256": "4532f68d9096b6db1b2396bd0ea5a9600dc96ab76b5f9e4110f3f4319e582f77",
         "sourceWire": "w.document.document.topic",
@@ -3078,7 +3779,7 @@
         "parameter": "genre"
       },
       "evidence": {
-        "knowledgePin": "668fc36aacc4f7c193bab47f75e9ededdef9b811",
+        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
         "path": "docs/worlds/w.document/schema.sop",
         "sha256": "4532f68d9096b6db1b2396bd0ea5a9600dc96ab76b5f9e4110f3f4319e582f77",
         "sourceWire": "w.document.document.genre",
@@ -3156,7 +3857,7 @@
         "parameter": "title"
       },
       "evidence": {
-        "knowledgePin": "668fc36aacc4f7c193bab47f75e9ededdef9b811",
+        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
         "path": "docs/worlds/w.document/schema.sop",
         "sha256": "4532f68d9096b6db1b2396bd0ea5a9600dc96ab76b5f9e4110f3f4319e582f77",
         "sourceWire": "w.document.document.title",
@@ -3219,7 +3920,7 @@
         "parameter": "words"
       },
       "evidence": {
-        "knowledgePin": "668fc36aacc4f7c193bab47f75e9ededdef9b811",
+        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
         "path": "docs/worlds/w.document/schema.sop",
         "sha256": "4532f68d9096b6db1b2396bd0ea5a9600dc96ab76b5f9e4110f3f4319e582f77",
         "sourceWire": "w.document.document.words",
@@ -3520,7 +4221,7 @@
         "parameter": "start"
       },
       "evidence": {
-        "knowledgePin": "668fc36aacc4f7c193bab47f75e9ededdef9b811",
+        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
         "path": "docs/worlds/w.calendar/schema.sop",
         "sha256": "c9849573da85da02cd2c74eed6fa192344e1508aa05700b57251e8140db6a4e4",
         "sourceWire": "w.calendar.event.start",
@@ -3567,7 +4268,7 @@
         "parameter": "title"
       },
       "evidence": {
-        "knowledgePin": "668fc36aacc4f7c193bab47f75e9ededdef9b811",
+        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
         "path": "docs/worlds/w.calendar/schema.sop",
         "sha256": "c9849573da85da02cd2c74eed6fa192344e1508aa05700b57251e8140db6a4e4",
         "sourceWire": "w.calendar.event.title",
@@ -3626,7 +4327,7 @@
         "parameter": "label"
       },
       "evidence": {
-        "knowledgePin": "668fc36aacc4f7c193bab47f75e9ededdef9b811",
+        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
         "path": "docs/worlds/w.person/schema.sop",
         "sha256": "173aec25063dc3a6f31b934e5c6bab97c81595cf034e6d45d0b0ced6654b1c5e",
         "sourceWire": "w.person.person.name",
@@ -3706,7 +4407,7 @@
         "valueKind": "string"
       },
       "evidence": {
-        "knowledgePin": "668fc36aacc4f7c193bab47f75e9ededdef9b811",
+        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
         "path": "docs/worlds/w.room/schema.sop",
         "sha256": "eebff2f6d36c3aec724184282704aa05e42ede66b4c4014ea7e7226442314ca9",
         "sourceWire": "w.room.room.name",
@@ -3860,9 +4561,9 @@
         "valueKind": "string"
       },
       "evidence": {
-        "knowledgePin": "668fc36aacc4f7c193bab47f75e9ededdef9b811",
+        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
         "path": "docs/worlds/w.face/schema.sop",
-        "sha256": "4d39ad97e4ef776dfb2fb3126967725d9bcb7c0b0978ae0357c0ed39839c7d8b",
+        "sha256": "3e5efddafc1681994bea84afd708d9d385f16cdb6d66c1f35c963dea61f12735",
         "sourceWire": "w.face.face.name",
         "sourceWorld": "w.face",
         "moduleVersion": "1",
@@ -3990,6 +4691,46 @@
       },
       "status": "unresolved",
       "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "avatar",
+      "type": "part",
+      "key": "part.length",
+      "descriptor": {
+        "concept": "length",
+        "head": "class",
+        "src": "k.faces.variant.length on the k.values scale length (catalog)",
+        "values": [
+          "short",
+          "medium",
+          "long"
+        ]
+      },
+      "status": "aligned",
+      "alignment": {
+        "area": "avatar",
+        "key": "part.length",
+        "sourceWire": "k.faces.variant.length",
+        "canonical": "k.faces.variant.length",
+        "valueKind": "string",
+        "host": "avatar",
+        "operation": "avatar.part.change",
+        "parameter": "length"
+      },
+      "evidence": {
+        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "path": "docs/worlds/k.faces/schema.sop",
+        "sha256": "769b9c831491f12225c6cc2072ead4d1ef5e77be4e2cb83f942bc0040b583f7b",
+        "sourceWire": "k.faces.variant.length",
+        "sourceWorld": "k.faces",
+        "moduleVersion": "3",
+        "declaration": "@k.faces.variant.length core.slot of=k.faces.variant key=length enum=short enum=medium enum=long core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "declared-ordinal-scale-step-or-relative-step",
+        "semanticBoundary": "A step name of the catalog's scale of length (k.values) or a relative step (more, less) the Avatar tab resolves against the part's own length; the tab chooses the variant."
+      }
     },
     {
       "area": "avatar",
@@ -4382,46 +5123,6 @@
       },
       "status": "unresolved",
       "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
-    },
-    {
-      "area": "avatar",
-      "type": "part",
-      "key": "part.length",
-      "descriptor": {
-        "concept": "length",
-        "head": "class",
-        "src": "k.faces.variant.length on the k.values scale length (catalog)",
-        "values": [
-          "short",
-          "medium",
-          "long"
-        ]
-      },
-      "status": "aligned",
-      "alignment": {
-        "area": "avatar",
-        "key": "part.length",
-        "sourceWire": "k.faces.variant.length",
-        "canonical": "k.faces.variant.length",
-        "valueKind": "string",
-        "host": "avatar",
-        "operation": "avatar.part.change",
-        "parameter": "length"
-      },
-      "evidence": {
-        "knowledgePin": "668fc36aacc4f7c193bab47f75e9ededdef9b811",
-        "path": "docs/worlds/k.faces/schema.sop",
-        "sha256": "f800fa00745302ce658d0080d7c9c2ec6682b76d083e753a2f674b0bf162cef5",
-        "sourceWire": "k.faces.variant.length",
-        "sourceWorld": "k.faces",
-        "moduleVersion": "3",
-        "declaration": "@k.faces.variant.length core.slot of=k.faces.variant key=length enum=short enum=medium enum=long core.source=\"hand-core 1\""
-      },
-      "valueContract": {
-        "representation": "string",
-        "source": "declared-ordinal-scale-step-or-relative-step",
-        "semanticBoundary": "A step name of the catalog's scale of length (k.values) or a relative step (more, less) the Avatar tab resolves against the part's own length; the tab chooses the variant."
-      }
     }
   ],
   "sources": [
@@ -4447,7 +5148,7 @@
     },
     {
       "path": "docs/worlds/w.diagram/schema.sop",
-      "sha256": "84b4f1587fe5de1593579dfc4e3f81262ac446e87594fa4ae205a432e1254fec"
+      "sha256": "f785d5f72701bbce0950d9cee884bab2fb4061f14dc3626ee7c27df63c480e05"
     },
     {
       "path": "docs/worlds/w.document/schema.sop",
@@ -4455,11 +5156,11 @@
     },
     {
       "path": "docs/worlds/w.drawing/schema.sop",
-      "sha256": "843a04c73c4f480379e1261aa9f0e5424a84aa86940756d240bc47c399c0e16b"
+      "sha256": "700ae643ceb95cb838f129fd6840c4687d2130378245cd2c7dd866add418d6e7"
     },
     {
       "path": "docs/worlds/w.face/schema.sop",
-      "sha256": "4d39ad97e4ef776dfb2fb3126967725d9bcb7c0b0978ae0357c0ed39839c7d8b"
+      "sha256": "3e5efddafc1681994bea84afd708d9d385f16cdb6d66c1f35c963dea61f12735"
     },
     {
       "path": "docs/worlds/w.person/schema.sop",
@@ -4475,13 +5176,17 @@
     },
     {
       "path": "docs/worlds/k.faces/schema.sop",
-      "sha256": "f800fa00745302ce658d0080d7c9c2ec6682b76d083e753a2f674b0bf162cef5"
+      "sha256": "769b9c831491f12225c6cc2072ead4d1ef5e77be4e2cb83f942bc0040b583f7b"
+    },
+    {
+      "path": "docs/worlds/w.request/schema.sop",
+      "sha256": "b752137dadac9c6163fcfba6d40fc28a048010cdf7411e2a5b6ccd7e13b7bc25"
     }
   ],
   "coverage": {
     "families": 24,
-    "alignedFamilies": 12,
-    "properties": 230,
-    "alignedProperties": 21
+    "alignedFamilies": 14,
+    "properties": 253,
+    "alignedProperties": 33
   }
 }

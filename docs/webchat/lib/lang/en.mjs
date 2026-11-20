@@ -29,7 +29,7 @@
  *   oneAnaphora(ct, anchor, env)  "and a yellow one" repeats the previous command with its noun and the new modifiers
  */
 import { parse } from '../soplang/index.mjs?v=c57881f705';
-import { LANG_EN_FACTS } from './en.facts.generated.mjs?v=6c026a21b1';
+import { LANG_EN_FACTS } from './en.facts.generated.mjs?v=cbef8f4212';
 import { LANG_EN_LOCAL } from './en.local.mjs?v=38d1132d3b';
 
 const all = (w, k) => w.attrs[k] ?? [];
@@ -161,6 +161,21 @@ export function createLangEn(source = LANG_EN_FACTS, local = LANG_EN_LOCAL) {
       if (one(r, 'unless-is-singular') === 'yes' && w.endsWith('is') && !exceptions('is-plural', 'stem').some((s) => w.endsWith(`${s}s`))) continue;
       if (one(r, 'replace') != null) return w.slice(0, w.length - hit.length) + one(r, 'replace');
       return w.slice(0, w.length - Number(one(r, 'drop') ?? 0));
+    }
+    return w;
+  }
+
+  /** The plural of a lowercase noun: an irregular one of the facts, else the first `inflect op=plural` rule that fits (suffix, after=consonant). */
+  const pluralRules = () => cached('pl', () => of('inflect').filter((w) => one(w, 'op') === 'plural').sort((a, b) => Number(one(a, 'order')) - Number(one(b, 'order'))));
+  const irregularPlural = () => cached('irr-pl', () => new Map(of('irregular').map((w) => [one(w, 'singular'), one(w, 'plural')])));
+  function plural(word) {
+    const w = String(word);
+    if (irregularPlural().has(w)) return irregularPlural().get(w);
+    for (const r of pluralRules()) {
+      const sfx = all(r, 'suffix'), hit = sfx.length ? sfx.find((x) => w.endsWith(x)) : '';
+      if (hit === undefined) continue;
+      if (one(r, 'after') === 'consonant' && /[aeiou]/.test(w.charAt(w.length - (hit?.length ?? 0) - 1))) continue;
+      return w.slice(0, w.length - Number(one(r, 'drop') ?? 0)) + (one(r, 'add') ?? '');
     }
     return w;
   }
@@ -427,7 +442,7 @@ export function createLangEn(source = LANG_EN_FACTS, local = LANG_EN_LOCAL) {
     return { mods, lead, bare, candidates: out };
   }
 
-  return { words, fn, ordinals, numerals, refers, anaphorRegex, singular, verbForms, leads, trails, repeats, starters, splitList, splitThings, bareDistributes, sharedArgument, ellipsisPrefixes, oneAnaphora, frames, nounPhrase, negatedRequest, timeRelation, timeComparison, cutWords, sequenceWords, joinerKeeps, cardJoiners, frameLeads, corrections, leadOnly, answers, answerRegex, answerWords, questionWords, facts: () => norm };
+  return { words, fn, ordinals, numerals, refers, anaphorRegex, singular, plural, verbForms, leads, trails, repeats, starters, splitList, splitThings, bareDistributes, sharedArgument, ellipsisPrefixes, oneAnaphora, frames, nounPhrase, negatedRequest, timeRelation, timeComparison, cutWords, sequenceWords, joinerKeeps, cardJoiners, frameLeads, corrections, leadOnly, answers, answerRegex, answerWords, questionWords, facts: () => norm };
 }
 
 /**

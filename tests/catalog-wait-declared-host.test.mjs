@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createFacts } from '../src/knowledge/facts.mjs';
-import { guard } from '../src/formalizer/guard.mjs';
+import { guard } from '../src/dialog/turn-guard.mjs';
 
 test('a turn accounts for an in-flight catalog read started by background preload', async () => {
   let finish, reads = 0, clock = 0;

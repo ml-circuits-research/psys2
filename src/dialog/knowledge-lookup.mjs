@@ -12,7 +12,7 @@
 import { leftOut, requestOf } from './world-aware.mjs';
 import { planHostOf } from '../plan/host.mjs';
 import { diagramHostOf } from '../knowledge/diagram-world.mjs';
-import { guard } from '../formalizer/guard.mjs';
+import { guard } from './turn-guard.mjs';
 
 const clock = () => globalThis.performance?.now?.() ?? Date.now();
 const wordsOf = (t) => String(t ?? '').toLowerCase().match(/[\p{L}\p{N}-]+/gu) ?? [];

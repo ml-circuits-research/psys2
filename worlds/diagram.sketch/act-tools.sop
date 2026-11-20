@@ -1,0 +1,844 @@
+# diagram.sketch editing tools (authored): the page's layout and style, themes and colours by category, alignment,
+# many links at once, inserting, duplicating, merging and splitting nodes. Each command compiles to std.acts calls on
+# the w.diagram instance or to an explicit refusal, like act-rules.sop; the geometry it reads (boxes, levels) is the
+# projection's (render-projection.sop, layout-modes.sop), the colours of a theme and the palettes are k.styles'.
+@dgt.pageset.type core.type of=ui.diagram.pageset
+@dgt.ttarget.type core.type of=ui.diagram.ttarget
+@dgt.tval.type core.type of=ui.diagram.tval
+@dgt.anew.type core.type of=ui.diagram.anew
+@dgt.aspan.type core.type of=ui.diagram.aspan
+@dgt.dsel.type core.type of=ui.diagram.dsel
+@dgt.dspan.type core.type of=ui.diagram.dspan
+@dgt.palette.type core.type of=ui.diagram.palette
+@dgt.pcount.type core.type of=ui.diagram.pcount
+@dgt.ccat.type core.type of=ui.diagram.ccat
+@dgt.cidx.type core.type of=ui.diagram.cidx
+@dgt.pair.type core.type of=ui.diagram.pair
+@dgt.lcount.type core.type of=ui.diagram.icount
+@dgt.hub.type core.type of=ui.diagram.hub
+@dgt.ishape.type core.type of=ui.diagram.ishape
+@dgt.msel.type core.type of=ui.diagram.msel
+@dgt.merged.type core.type of=ui.diagram.merged
+
+# The new commands that name nodes by `ids` are refused when one of them is not a node (act-rules.sop: missing.node);
+# reverse names links (missing.edge).
+@nodeop.align ui.diagram.nodeop operation="diagram.nodes.align"
+@nodeop.distribute ui.diagram.nodeop operation="diagram.nodes.distribute"
+@nodeop.duplicate ui.diagram.nodeop operation="diagram.node.duplicate"
+@nodeop.merge ui.diagram.nodeop operation="diagram.node.merge"
+@nodeop.style ui.diagram.nodeop operation="diagram.style.apply"
+@nodeop.connect ui.diagram.nodeop operation="diagram.links.connect"
+@edgeop.reverse ui.diagram.edgeop operation="diagram.link.reverse"
+
+# ---- The page's settings: changed on the page, or a page made with them ----
+@t.page w.diagram.diagram code=?pc
+@t.ps ui.diagram.pageset key=?k value=?v
+@t.ps.c app.act.call act=change thing=$t.page attr=?k value=?v order=4
+@tool.page.change core.rule when=$t.ps when=$t.page then=$t.ps.c
+@t.ps.any ui.diagram.pageset key=?anyk
+@t.pg.any w.diagram.diagram code=?anypc
+@t.ps.make app.act.call act=make kind=w.diagram.diagram code=page order=4 ref=new.page
+@tool.page.make core.rule when=$t.ps.any not=$t.pg.any then=$t.ps.make
+@t.ps.arg app.act.arg call=new.page attr=?k value=?v
+@tool.page.make.arg core.rule when=$t.ps not=$t.pg.any then=$t.ps.arg
+
+# Unpinning: every node and group placed by hand goes back to the layout.
+@t.un.n w.diagram.node code=?unc pinned=true
+@t.un.nc app.act.call act=change thing=$t.un.n attr=pinned value=false order=1
+@t.un.g w.diagram.group code=?ung pinned=true
+@t.un.gc app.act.call act=change thing=$t.un.g attr=pinned value=false order=1
+
+# ---- Layout of the whole page ----
+# The layout (any but free hands every pinned node and group back to it; free pins each where it is now), the
+# direction, the spacing and the routes (a link with a route of its own takes the new one). Nothing named: refused.
+@t.ly.r app.act.request operation="diagram.layout" layout=?l
+@t.ly.ps ui.diagram.pageset key=arrange value=?l
+@tool.layout.arrange core.rule when=$t.ly.r then=$t.ly.ps
+@t.ly.np core.check fn=neq args=?l args=free
+@tool.layout.unpin.nodes core.rule when=$t.ly.r when=$t.un.n if=$t.ly.np then=$t.un.nc
+@tool.layout.unpin.groups core.rule when=$t.ly.r when=$t.un.g if=$t.ly.np then=$t.un.gc
+@t.ly.free core.check fn=eq args=?l args=free
+@t.fr.u ui.diagram.unitof node=?fc unit=?fc
+@t.fr.n w.diagram.node code=?fc
+@t.fr.b ui.diagram.nbox node=?fc cx=?fx cy=?fy
+@t.fr.x app.act.call act=change thing=$t.fr.n attr=x value=?fx order=2
+@t.fr.y app.act.call act=change thing=$t.fr.n attr=y value=?fy order=2
+@t.fr.p app.act.call act=change thing=$t.fr.n attr=pinned value=true order=3
+@tool.layout.free.x core.rule when=$t.ly.r when=$t.fr.u when=$t.fr.n when=$t.fr.b if=$t.ly.free then=$t.fr.x
+@tool.layout.free.y core.rule when=$t.ly.r when=$t.fr.u when=$t.fr.n when=$t.fr.b if=$t.ly.free then=$t.fr.y
+@tool.layout.free.pin core.rule when=$t.ly.r when=$t.fr.u when=$t.fr.n when=$t.fr.b if=$t.ly.free then=$t.fr.p
+@t.fg.g w.diagram.group code=?fg
+@t.fg.b ui.diagram.ubox unit=?fg x0=?gx y0=?gy w=?gw h=?gh
+@t.fg.hw core.calc out=?ghw fn=div args=?gw args=2
+@t.fg.hh core.calc out=?ghh fn=div args=?gh args=2
+@t.fg.cx core.calc out=?gcx fn=add args=?gx args=?ghw
+@t.fg.cy core.calc out=?gcy fn=add args=?gy args=?ghh
+@t.fg.x app.act.call act=change thing=$t.fg.g attr=x value=?gcx order=2
+@t.fg.y app.act.call act=change thing=$t.fg.g attr=y value=?gcy order=2
+@t.fg.p app.act.call act=change thing=$t.fg.g attr=pinned value=true order=3
+@tool.layout.free.group.x core.rule when=$t.ly.r when=$t.fg.g when=$t.fg.b if=$t.ly.free with=$t.fg.hw with=$t.fg.cx then=$t.fg.x
+@tool.layout.free.group.y core.rule when=$t.ly.r when=$t.fg.g when=$t.fg.b if=$t.ly.free with=$t.fg.hh with=$t.fg.cy then=$t.fg.y
+@tool.layout.free.group.pin core.rule when=$t.ly.r when=$t.fg.g when=$t.fg.b if=$t.ly.free then=$t.fg.p
+@t.ld.r app.act.request operation="diagram.layout" direction=?d
+@t.ld.ps ui.diagram.pageset key=direction value=?d
+@tool.layout.direction core.rule when=$t.ld.r then=$t.ld.ps
+@t.lsp.r app.act.request operation="diagram.layout" spacing=?s
+@t.lsp.ps ui.diagram.pageset key=spacing value=?s
+@tool.layout.spacing core.rule when=$t.lsp.r then=$t.lsp.ps
+@t.lr.r app.act.request operation="diagram.layout" route=?rv
+@t.lr.ps ui.diagram.pageset key=route value=?rv
+@tool.layout.route core.rule when=$t.lr.r then=$t.lr.ps
+@t.er.e w.diagram.edge code=?ere route=?old
+@t.er.c app.act.call act=change thing=$t.er.e attr=route value=?rv order=2
+@tool.layout.route.links core.rule when=$t.lr.r when=$t.er.e then=$t.er.c
+@t.ln.r app.act.request operation="diagram.layout"
+@t.ln.1 app.act.request layout=?n1
+@t.ln.2 app.act.request direction=?n2
+@t.ln.3 app.act.request spacing=?n3
+@t.ln.4 app.act.request route=?n4
+@t.ln.out app.act.refuse reason=missing-property
+@tool.layout.none core.rule when=$t.ln.r not=$t.ln.1 not=$t.ln.2 not=$t.ln.3 not=$t.ln.4 then=$t.ln.out
+
+# ---- Improve the layout: one best-effort step ----
+# Every node and group back to the layout; layered when the page has links (a grid when it has none); orthogonal routes
+# (through the gaps of a top-down flow, elbows otherwise) for every link; normal spacing.
+@t.im.r app.act.request operation="diagram.layout.improve"
+@tool.improve.unpin.nodes core.rule when=$t.im.r when=$t.un.n then=$t.un.nc
+@tool.improve.unpin.groups core.rule when=$t.im.r when=$t.un.g then=$t.un.gc
+@t.im.e w.diagram.edge code=?ime
+@t.im.layered ui.diagram.pageset key=arrange value=layered
+@tool.improve.layered core.rule when=$t.im.r when=$t.im.e then=$t.im.layered
+@t.im.grid ui.diagram.pageset key=arrange value=grid
+@tool.improve.grid core.rule when=$t.im.r not=$t.im.e then=$t.im.grid
+@t.im.sp ui.diagram.pageset key=spacing value=normal
+@tool.improve.spacing core.rule when=$t.im.r then=$t.im.sp
+@t.im.rt ui.diagram.pageset key=route value=orthogonal
+@tool.improve.route core.rule when=$t.im.r then=$t.im.rt
+@t.im.er w.diagram.edge code=?imr route=?imold
+@t.im.erc app.act.call act=change thing=$t.im.er attr=route value=orthogonal order=2
+@tool.improve.route.links core.rule when=$t.im.r when=$t.im.er then=$t.im.erc
+
+# ---- Number the steps ----
+@t.sn.r app.act.request operation="diagram.steps.number" mode=on
+@t.sn.on ui.diagram.pageset key=numbered value=true
+@tool.steps.on core.rule when=$t.sn.r then=$t.sn.on
+@t.sf.r app.act.request operation="diagram.steps.number" mode=off
+@t.sf.off ui.diagram.pageset key=numbered value=false
+@tool.steps.off core.rule when=$t.sf.r then=$t.sf.off
+
+# ---- Align: the nodes' left, right, top or bottom edges, or their centres, on one line ----
+# The line is the selection's outermost edge (left: the smallest left edge), or the middle of its extent (centre,
+# middle); each node keeps its place along the other axis and is pinned. A member of a group moves with its group.
+@t.al.r app.act.request operation="diagram.nodes.align" edge=?edge
+@t.al.i app.act.item param="ids" value=?id
+@t.al.b ui.diagram.nbox node=?id x0=?x0 y0=?y0 x1=?x1 y1=?y1 cx=?cx cy=?cy w=?w h=?h
+@t.al.minx ui.diagram.aspan key=minx value=?v
+@tool.align.minx core.aggregate over=$t.al.i over=$t.al.b min=?v args=?x0 then=$t.al.minx
+@t.al.maxx ui.diagram.aspan key=maxx value=?v
+@tool.align.maxx core.aggregate over=$t.al.i over=$t.al.b max=?v args=?x1 then=$t.al.maxx
+@t.al.miny ui.diagram.aspan key=miny value=?v
+@tool.align.miny core.aggregate over=$t.al.i over=$t.al.b min=?v args=?y0 then=$t.al.miny
+@t.al.maxy ui.diagram.aspan key=maxy value=?v
+@tool.align.maxy core.aggregate over=$t.al.i over=$t.al.b max=?v args=?y1 then=$t.al.maxy
+@t.al.n w.diagram.node code=?id
+@t.al.mnx ui.diagram.aspan key=minx value=?mnx
+@t.al.mxx ui.diagram.aspan key=maxx value=?mxx
+@t.al.mny ui.diagram.aspan key=miny value=?mny
+@t.al.mxy ui.diagram.aspan key=maxy value=?mxy
+@t.al.hw core.calc out=?hw fn=div args=?w args=2
+@t.al.hh core.calc out=?hh fn=div args=?h args=2
+@t.al.left core.check fn=eq args=?edge args=left
+@t.al.lx core.calc out=?nx fn=add args=?mnx args=?hw
+@t.al.o.x ui.diagram.anew node=?id x=?nx y=?cy
+@tool.align.left core.rule when=$t.al.r when=$t.al.i when=$t.al.n when=$t.al.b when=$t.al.mnx if=$t.al.left with=$t.al.hw with=$t.al.lx then=$t.al.o.x
+@t.al.right core.check fn=eq args=?edge args=right
+@t.al.rx core.calc out=?nx fn=sub args=?mxx args=?hw
+@tool.align.right core.rule when=$t.al.r when=$t.al.i when=$t.al.n when=$t.al.b when=$t.al.mxx if=$t.al.right with=$t.al.hw with=$t.al.rx then=$t.al.o.x
+@t.al.centre core.check fn=eq args=?edge args=centre
+@t.al.cs core.calc out=?cs fn=add args=?mnx args=?mxx
+@t.al.cx core.calc out=?nx fn=div args=?cs args=2
+@tool.align.centre core.rule when=$t.al.r when=$t.al.i when=$t.al.n when=$t.al.b when=$t.al.mnx when=$t.al.mxx if=$t.al.centre with=$t.al.cs with=$t.al.cx then=$t.al.o.x
+@t.al.o.y ui.diagram.anew node=?id x=?cx y=?ny
+@t.al.top core.check fn=eq args=?edge args=top
+@t.al.ty core.calc out=?ny fn=add args=?mny args=?hh
+@tool.align.top core.rule when=$t.al.r when=$t.al.i when=$t.al.n when=$t.al.b when=$t.al.mny if=$t.al.top with=$t.al.hh with=$t.al.ty then=$t.al.o.y
+@t.al.bottom core.check fn=eq args=?edge args=bottom
+@t.al.by core.calc out=?ny fn=sub args=?mxy args=?hh
+@tool.align.bottom core.rule when=$t.al.r when=$t.al.i when=$t.al.n when=$t.al.b when=$t.al.mxy if=$t.al.bottom with=$t.al.hh with=$t.al.by then=$t.al.o.y
+@t.al.middle core.check fn=eq args=?edge args=middle
+@t.al.ms core.calc out=?ms fn=add args=?mny args=?mxy
+@t.al.my core.calc out=?ny fn=div args=?ms args=2
+@tool.align.middle core.rule when=$t.al.r when=$t.al.i when=$t.al.n when=$t.al.b when=$t.al.mny when=$t.al.mxy if=$t.al.middle with=$t.al.ms with=$t.al.my then=$t.al.o.y
+# The new places (align and distribute): x, y and pinned; a member of a group is refused.
+@t.an.a ui.diagram.anew node=?id x=?x y=?y
+@t.an.n w.diagram.node code=?id
+@t.an.in ui.diagram.inside node=?id
+@t.an.cx app.act.call act=change thing=$t.an.n attr=x value=?x order=1
+@t.an.cy app.act.call act=change thing=$t.an.n attr=y value=?y order=2
+@t.an.cp app.act.call act=change thing=$t.an.n attr=pinned value=true order=3
+@tool.anew.x core.rule when=$t.an.a when=$t.an.n not=$t.an.in then=$t.an.cx
+@tool.anew.y core.rule when=$t.an.a when=$t.an.n not=$t.an.in then=$t.an.cy
+@tool.anew.pin core.rule when=$t.an.a when=$t.an.n not=$t.an.in then=$t.an.cp
+@t.an.out app.act.refuse reason=node-in-group-place-the-group
+@tool.anew.member core.rule when=$t.an.a when=$t.an.in then=$t.an.out
+
+# ---- Distribute: equal steps between the centres, from the first to the last along the axis ----
+@t.ds.r app.act.request operation="diagram.nodes.distribute" axis=?axis
+@t.ds.i app.act.item param="ids" value=?id
+@t.ds.b ui.diagram.nbox node=?id cx=?cx cy=?cy
+@t.ds.sel ui.diagram.dsel node=?id cx=?cx cy=?cy
+@tool.distribute.sel core.rule when=$t.ds.r when=$t.ds.i when=$t.ds.b then=$t.ds.sel
+@t.ds.s ui.diagram.dsel node=?id cx=?cx cy=?cy
+@t.ds.n ui.diagram.dspan key=count value=?v
+@tool.distribute.count core.aggregate over=$t.ds.s count=?v then=$t.ds.n
+@t.ds.mnx ui.diagram.dspan key=minx value=?v
+@tool.distribute.minx core.aggregate over=$t.ds.s min=?v args=?cx then=$t.ds.mnx
+@t.ds.mxx ui.diagram.dspan key=maxx value=?v
+@tool.distribute.maxx core.aggregate over=$t.ds.s max=?v args=?cx then=$t.ds.mxx
+@t.ds.mny ui.diagram.dspan key=miny value=?v
+@tool.distribute.miny core.aggregate over=$t.ds.s min=?v args=?cy then=$t.ds.mny
+@t.ds.mxy ui.diagram.dspan key=maxy value=?v
+@tool.distribute.maxy core.aggregate over=$t.ds.s max=?v args=?cy then=$t.ds.mxy
+@t.ds.cnt ui.diagram.dspan key=count value=?n
+@t.ds.many core.check fn=gt args=?n args=1
+@t.ds.n1 core.calc out=?n1 fn=sub args=?n args=1
+@t.ds.h core.check fn=eq args=?axis args=horizontal
+@t.ds.lo ui.diagram.dspan key=minx value=?lo
+@t.ds.hi ui.diagram.dspan key=maxx value=?hi
+@t.ds.rk core.rank of=$t.ds.s by=cx out=?k
+@t.ds.k0 core.calc out=?k0 fn=sub args=?k args=1
+@t.ds.span core.calc out=?span fn=sub args=?hi args=?lo
+@t.ds.step core.calc out=?step fn=div args=?span args=?n1
+@t.ds.off core.calc out=?off fn=mul args=?k0 args=?step
+@t.ds.nx core.calc out=?nx fn=add args=?lo args=?off
+@t.ds.ox ui.diagram.anew node=?id x=?nx y=?cy
+@tool.distribute.horizontal core.rule when=$t.ds.r when=$t.ds.s when=$t.ds.cnt when=$t.ds.lo when=$t.ds.hi if=$t.ds.h if=$t.ds.many with=$t.ds.n1 with=$t.ds.rk with=$t.ds.k0 with=$t.ds.span with=$t.ds.step with=$t.ds.off with=$t.ds.nx then=$t.ds.ox
+@t.ds.v core.check fn=eq args=?axis args=vertical
+@t.ds.vlo ui.diagram.dspan key=miny value=?vlo
+@t.ds.vhi ui.diagram.dspan key=maxy value=?vhi
+@t.ds.vrk core.rank of=$t.ds.s by=cy out=?vk
+@t.ds.vk0 core.calc out=?vk0 fn=sub args=?vk args=1
+@t.ds.vspan core.calc out=?vspan fn=sub args=?vhi args=?vlo
+@t.ds.vstep core.calc out=?vstep fn=div args=?vspan args=?n1
+@t.ds.voff core.calc out=?voff fn=mul args=?vk0 args=?vstep
+@t.ds.ny core.calc out=?ny fn=add args=?vlo args=?voff
+@t.ds.oy ui.diagram.anew node=?id x=?cx y=?ny
+@tool.distribute.vertical core.rule when=$t.ds.r when=$t.ds.s when=$t.ds.cnt when=$t.ds.vlo when=$t.ds.vhi if=$t.ds.v if=$t.ds.many with=$t.ds.n1 with=$t.ds.vrk with=$t.ds.vk0 with=$t.ds.vspan with=$t.ds.vstep with=$t.ds.voff with=$t.ds.ny then=$t.ds.oy
+
+# ---- Apply a theme ----
+# To the named nodes, the nodes of a role or a shape, or (none named) every node, every link and the page: a node
+# takes the theme's colours for its role where the theme has them, else the theme's fill, outline and text colour,
+# and the theme's label weight; a link the theme's line colour and width; the page the theme and its background.
+@t.sa.r app.act.request operation="diagram.style.apply" theme=?t
+@t.sa.th k.styles.theme name=?t fill=?tf outline=?to text=?tt edge=?te background=?tb weight=?tw width=?twd
+@t.sa.thany k.styles.theme name=?t
+@t.sa.unk app.act.refuse reason=unknown-theme
+@tool.style.unknown core.rule when=$t.sa.r not=$t.sa.thany then=$t.sa.unk
+@t.sa.i app.act.item param="ids" value=?c
+@t.sa.n w.diagram.node code=?c
+@t.sa.tg ui.diagram.ttarget node=?c
+@tool.style.target.ids core.rule when=$t.sa.r when=$t.sa.i when=$t.sa.n then=$t.sa.tg
+@t.sa.anyi app.act.item param="ids" value=?anyi
+@t.sa.rr app.act.request operation="diagram.style.apply" role=?r
+@t.sa.rn w.diagram.node code=?c role=?r
+@tool.style.target.role core.rule when=$t.sa.r when=$t.sa.rr when=$t.sa.rn not=$t.sa.anyi then=$t.sa.tg
+@t.sa.kr app.act.request operation="diagram.style.apply" kind=?k
+@t.sa.kn w.diagram.node code=?c shape=?k
+@tool.style.target.kind core.rule when=$t.sa.r when=$t.sa.kr when=$t.sa.kn not=$t.sa.anyi then=$t.sa.tg
+@t.sa.anyr app.act.request role=?anyr
+@t.sa.anyk app.act.request kind=?anyk
+@t.sa.all w.diagram.node code=?c
+@tool.style.target.all core.rule when=$t.sa.r when=$t.sa.all not=$t.sa.anyi not=$t.sa.anyr not=$t.sa.anyk then=$t.sa.tg
+@t.sa.t ui.diagram.ttarget node=?c
+@t.sa.tn w.diagram.node code=?c
+@t.sa.role w.diagram.node code=?c role=?nr
+@t.sa.tr k.styles.role theme=?t role=?nr fill=?rf
+@t.sa.trany k.styles.role theme=?t role=?nr
+@t.sa.tro k.styles.role theme=?t role=?nr outline=?ro
+@t.sa.trt k.styles.role theme=?t role=?nr text=?rt
+@t.sa.anyrole w.diagram.node code=?c role=?anyrole
+@t.sa.v.rf ui.diagram.tval node=?c key=colour v=?rf
+@tool.style.fill.role core.rule when=$t.sa.r when=$t.sa.t when=$t.sa.role when=$t.sa.tr then=$t.sa.v.rf
+@t.sa.v.tf ui.diagram.tval node=?c key=colour v=?tf
+@tool.style.fill.theme core.rule when=$t.sa.r when=$t.sa.th when=$t.sa.t when=$t.sa.role not=$t.sa.trany then=$t.sa.v.tf
+@tool.style.fill.norole core.rule when=$t.sa.r when=$t.sa.th when=$t.sa.t when=$t.sa.tn not=$t.sa.anyrole then=$t.sa.v.tf
+@t.sa.v.ro ui.diagram.tval node=?c key=outline v=?ro
+@tool.style.outline.role core.rule when=$t.sa.r when=$t.sa.t when=$t.sa.role when=$t.sa.tro then=$t.sa.v.ro
+@t.sa.v.to ui.diagram.tval node=?c key=outline v=?to
+@tool.style.outline.theme core.rule when=$t.sa.r when=$t.sa.th when=$t.sa.t when=$t.sa.role not=$t.sa.trany then=$t.sa.v.to
+@tool.style.outline.norole core.rule when=$t.sa.r when=$t.sa.th when=$t.sa.t when=$t.sa.tn not=$t.sa.anyrole then=$t.sa.v.to
+@t.sa.v.rt ui.diagram.tval node=?c key=text_colour v=?rt
+@tool.style.text.role core.rule when=$t.sa.r when=$t.sa.t when=$t.sa.role when=$t.sa.trt then=$t.sa.v.rt
+@t.sa.v.tt ui.diagram.tval node=?c key=text_colour v=?tt
+@tool.style.text.theme core.rule when=$t.sa.r when=$t.sa.th when=$t.sa.t when=$t.sa.role not=$t.sa.trany then=$t.sa.v.tt
+@tool.style.text.norole core.rule when=$t.sa.r when=$t.sa.th when=$t.sa.t when=$t.sa.tn not=$t.sa.anyrole then=$t.sa.v.tt
+@t.sa.v.w ui.diagram.tval node=?c key=font_weight v=?tw
+@tool.style.weight core.rule when=$t.sa.r when=$t.sa.th when=$t.sa.t then=$t.sa.v.w
+@t.tv.v ui.diagram.tval node=?c key=?k v=?v
+@t.tv.n w.diagram.node code=?c
+@t.tv.c app.act.call act=change thing=$t.tv.n attr=?k value=?v order=1
+@tool.tval core.rule when=$t.tv.v when=$t.tv.n then=$t.tv.c
+@t.sa.pt ui.diagram.pageset key=theme value=?t
+@tool.style.page.theme core.rule when=$t.sa.r when=$t.sa.th not=$t.sa.anyi not=$t.sa.anyr not=$t.sa.anyk then=$t.sa.pt
+@t.sa.pb ui.diagram.pageset key=background value=?tb
+@tool.style.page.background core.rule when=$t.sa.r when=$t.sa.th not=$t.sa.anyi not=$t.sa.anyr not=$t.sa.anyk then=$t.sa.pb
+@t.sa.e w.diagram.edge code=?sae
+@t.sa.ec app.act.call act=change thing=$t.sa.e attr=colour value=?te order=1
+@t.sa.ew app.act.call act=change thing=$t.sa.e attr=width value=?twd order=1
+@tool.style.links.colour core.rule when=$t.sa.r when=$t.sa.th when=$t.sa.e not=$t.sa.anyi not=$t.sa.anyr not=$t.sa.anyk then=$t.sa.ec
+@tool.style.links.width core.rule when=$t.sa.r when=$t.sa.th when=$t.sa.e not=$t.sa.anyi not=$t.sa.anyr not=$t.sa.anyk then=$t.sa.ew
+
+# ---- Colour by level, shape, role or group: the palette of a theme (vivid unless named), in order ----
+# A node takes the palette's colour at its category's place (round again after the last) and the theme's text colour.
+# Levels are the graph's (a node outside the level layout is level 0); shapes and roles in alphabetical order; groups
+# in the order they were made. A node with no role (or no group) keeps its colours.
+@t.cb.r app.act.request operation="diagram.colour.by" by=?by
+@t.cb.pt app.act.request operation="diagram.colour.by" theme=?p
+@t.cb.po ui.diagram.palette name=?p
+@tool.colourby.palette core.rule when=$t.cb.pt then=$t.cb.po
+@t.cb.anyp app.act.request operation="diagram.colour.by" theme=?anyp
+@t.cb.pv ui.diagram.palette name=vivid
+@tool.colourby.vivid core.rule when=$t.cb.r not=$t.cb.anyp then=$t.cb.pv
+@t.cb.pal ui.diagram.palette name=?p
+@t.cb.sw k.styles.swatch theme=?p n=?sn
+@t.cb.cnt ui.diagram.pcount name=?p n=?k
+@tool.colourby.count core.aggregate over=$t.cb.pal over=$t.cb.sw by=?p count=?k then=$t.cb.cnt
+@t.cb.lvl core.check fn=eq args=?by args=level
+@t.cb.nl ui.diagram.nlevel node=?c level=?l
+@t.cb.l1 core.calc out=?li fn=add args=?l args=1
+@t.cb.ix ui.diagram.cidx node=?c i=?li
+@tool.colourby.level core.rule when=$t.cb.r when=$t.cb.nl if=$t.cb.lvl with=$t.cb.l1 then=$t.cb.ix
+@t.cb.shp core.check fn=eq args=?by args=shape
+@t.cb.sn w.diagram.node code=?c shape=?cv
+@t.cb.cat ui.diagram.ccat value=?cv
+@tool.colourby.shape.cat core.rule when=$t.cb.r when=$t.cb.sn if=$t.cb.shp then=$t.cb.cat
+@t.cb.rol core.check fn=eq args=?by args=role
+@t.cb.rn w.diagram.node code=?c role=?cv
+@tool.colourby.role.cat core.rule when=$t.cb.r when=$t.cb.rn if=$t.cb.rol then=$t.cb.cat
+@t.cb.cc ui.diagram.ccat value=?cv
+@t.cb.crk core.rank of=$t.cb.cc by=value out=?ci
+@t.cb.cix ui.diagram.cidx node=?c i=?ci
+@tool.colourby.shape core.rule when=$t.cb.r when=$t.cb.sn when=$t.cb.cc if=$t.cb.shp with=$t.cb.crk then=$t.cb.cix
+@tool.colourby.role core.rule when=$t.cb.r when=$t.cb.rn when=$t.cb.cc if=$t.cb.rol with=$t.cb.crk then=$t.cb.cix
+@t.cb.grp core.check fn=eq args=?by args=group
+@t.cb.gi ui.diagram.inside node=?c group=?g
+@t.cb.gu ui.diagram.unit unit=?g kind=group order=?go
+@t.cb.grk core.rank of=$t.cb.gu by=order out=?gi
+@t.cb.gix ui.diagram.cidx node=?c i=?gi
+@tool.colourby.group core.rule when=$t.cb.r when=$t.cb.gi when=$t.cb.gu if=$t.cb.grp with=$t.cb.grk then=$t.cb.gix
+@t.cb.x ui.diagram.cidx node=?c i=?i
+@t.cb.pn ui.diagram.pcount name=?p n=?k
+@t.cb.i0 core.calc out=?i0 fn=sub args=?i args=1
+@t.cb.im core.calc out=?im fn=mod args=?i0 args=?k
+@t.cb.j core.calc out=?j fn=add args=?im args=1
+@t.cb.s k.styles.swatch theme=?p n=?j colour=?col
+@t.cb.th k.styles.theme name=?p text=?ptext
+@t.cb.vc ui.diagram.tval node=?c key=colour v=?col
+@tool.colourby.colour core.rule when=$t.cb.r when=$t.cb.x when=$t.cb.pal when=$t.cb.pn with=$t.cb.i0 with=$t.cb.im with=$t.cb.j when=$t.cb.s then=$t.cb.vc
+@t.cb.vt ui.diagram.tval node=?c key=text_colour v=?ptext
+@tool.colourby.text core.rule when=$t.cb.r when=$t.cb.x when=$t.cb.pal when=$t.cb.th then=$t.cb.vt
+
+# ---- Many links at once ----
+# chain: each node to the next, in the order named; cycle: a chain and the last back to the first; star: the hub (the
+# hub given, else the first named) to every other; all: every pair once. A pair already linked or a node with itself
+# is left out. All pairs of more than 10 links need confirm=true.
+@t.lc.r app.act.request operation="diagram.links.connect" pattern=?p
+@t.lc.ii app.act.item param="ids" value=?anyid
+@t.lc.cnt ui.diagram.icount value=?n
+@tool.connect.count core.aggregate over=$t.lc.ii count=?n then=$t.lc.cnt
+@t.lc.i app.act.item param="ids" n=?i value=?a
+@t.lc.j app.act.item param="ids" n=?j value=?b
+@t.lc.chain core.check fn=matches args=?p args="^(chain|cycle)$"
+@t.lc.i1 core.calc out=?i1 fn=add args=?i args=1
+@t.lc.next core.check fn=eq args=?j args=?i1
+@t.lc.pchain ui.diagram.pair a=?a b=?b k=?j
+@tool.connect.chain core.rule when=$t.lc.r when=$t.lc.i when=$t.lc.j if=$t.lc.chain with=$t.lc.i1 if=$t.lc.next then=$t.lc.pchain
+@t.lc.cyc core.check fn=eq args=?p args=cycle
+@t.lc.n ui.diagram.icount value=?n
+@t.lc.last core.calc out=?last fn=sub args=?n args=1
+@t.lc.islast core.check fn=eq args=?i args=?last
+@t.lc.isfirst core.check fn=eq args=?j args=0
+@t.lc.pcyc ui.diagram.pair a=?a b=?b k=?n
+@tool.connect.cycle core.rule when=$t.lc.r when=$t.lc.i when=$t.lc.j when=$t.lc.n if=$t.lc.cyc with=$t.lc.last if=$t.lc.islast if=$t.lc.isfirst then=$t.lc.pcyc
+@t.lc.star core.check fn=eq args=?p args=star
+@t.lc.hr app.act.request operation="diagram.links.connect" hub=?h
+@t.lc.hub ui.diagram.hub code=?h
+@tool.connect.hub.given core.rule when=$t.lc.hr then=$t.lc.hub
+@t.lc.anyh app.act.request operation="diagram.links.connect" hub=?anyh
+@t.lc.first app.act.item param="ids" n=0 value=?h
+@tool.connect.hub.first core.rule when=$t.lc.r when=$t.lc.first not=$t.lc.anyh if=$t.lc.star then=$t.lc.hub
+@t.lc.hb ui.diagram.hub code=?h
+@t.lc.j1 core.calc out=?j1 fn=add args=?j args=1
+@t.lc.pstar ui.diagram.pair a=?h b=?b k=?j1
+@tool.connect.star core.rule when=$t.lc.r when=$t.lc.hb when=$t.lc.j if=$t.lc.star with=$t.lc.j1 then=$t.lc.pstar
+@t.lc.hn w.diagram.node code=?h
+@t.lc.hmiss app.act.refuse reason=missing-target
+@tool.connect.hub.missing core.rule when=$t.lc.r when=$t.lc.hb not=$t.lc.hn then=$t.lc.hmiss
+@t.lc.all core.check fn=eq args=?p args=all
+@t.lc.lt core.check fn=lt args=?i args=?j
+@t.lc.kin core.calc out=?kin fn=mul args=?i args=?n
+@t.lc.kij core.calc out=?kij fn=add args=?kin args=?j1
+@t.lc.pall ui.diagram.pair a=?a b=?b k=?kij
+@tool.connect.all core.rule when=$t.lc.r when=$t.lc.i when=$t.lc.j when=$t.lc.n if=$t.lc.all if=$t.lc.lt with=$t.lc.j1 with=$t.lc.kin with=$t.lc.kij then=$t.lc.pall
+@t.lc.n1 core.calc out=?nm fn=sub args=?n args=1
+@t.lc.nn core.calc out=?nn fn=mul args=?n args=?nm
+@t.lc.pairs core.calc out=?pairs fn=div args=?nn args=2
+@t.lc.many core.check fn=gt args=?pairs args=10
+@t.lc.conf app.act.request operation="diagram.links.connect" confirm=true
+@t.lc.cout app.act.refuse reason=confirm-many-links
+@tool.connect.all.confirm core.rule when=$t.lc.r when=$t.lc.n if=$t.lc.all not=$t.lc.conf with=$t.lc.n1 with=$t.lc.nn with=$t.lc.pairs if=$t.lc.many then=$t.lc.cout
+@t.lp.p ui.diagram.pair a=?a b=?b k=?k
+@t.lp.na w.diagram.node code=?a
+@t.lp.nb w.diagram.node code=?b
+@t.lp.ne core.check fn=neq args=?a args=?b
+@t.lp.same w.diagram.edge from=$t.lp.na to=$t.lp.nb
+@t.lp.nx ui.diagram.next of=edge top=?top
+@t.lp.z core.calc out=?z fn=add args=?top args=?k
+@t.lp.code core.calc out=?code fn=concat args=e args=?z
+@t.lp.c app.act.call act=make kind=w.diagram.edge code=?code from=$t.lp.na to=$t.lp.nb n=?z direction=forward order=1
+@tool.connect.pair core.rule when=$t.lp.p when=$t.lp.na when=$t.lp.nb when=$t.lp.nx if=$t.lp.ne not=$t.lp.same with=$t.lp.z with=$t.lp.code then=$t.lp.c
+
+# ---- Insert a node in the middle of a link: from -> new -> to ----
+@t.in.r app.act.request operation="diagram.node.insert" link=?l
+@t.in.e w.diagram.edge code=?l from=$t.in.a to=$t.in.b
+@t.in.a w.diagram.node code=?ia
+@t.in.b w.diagram.node code=?ib
+@t.in.kr app.act.request operation="diagram.node.insert" kind=?k
+@t.in.ks ui.diagram.ishape shape=?k
+@tool.insert.shape core.rule when=$t.in.kr then=$t.in.ks
+@t.in.anyk app.act.request operation="diagram.node.insert" kind=?anyk
+@t.in.rect ui.diagram.ishape shape=rectangle
+@tool.insert.shape.default core.rule when=$t.in.r not=$t.in.anyk then=$t.in.rect
+@t.in.sh ui.diagram.ishape shape=?s
+@t.in.nx ui.diagram.next of=node top=?ntop
+@t.in.ex ui.diagram.next of=edge top=?etop
+@t.in.nz core.calc out=?nz fn=add args=?ntop args=1
+@t.in.ncode core.calc out=?ncode fn=concat args=n args=?nz
+@t.in.ez core.calc out=?ez fn=add args=?etop args=1
+@t.in.ecode core.calc out=?ecode fn=concat args=e args=?ez
+@t.in.mk app.act.call act=make kind=w.diagram.node code=?ncode shape=?s n=?nz order=1 ref=new.node.1
+@tool.insert.node core.rule when=$t.in.r when=$t.in.e when=$t.in.a when=$t.in.b when=$t.in.sh when=$t.in.nx with=$t.in.nz with=$t.in.ncode then=$t.in.mk
+@t.in.lr app.act.request operation="diagram.node.insert" label=?v
+@t.in.la app.act.arg call=new.node.1 attr=label value=?v
+@tool.insert.label core.rule when=$t.in.r when=$t.in.e when=$t.in.a when=$t.in.b when=$t.in.lr then=$t.in.la
+@t.in.to app.act.call act=change thing=$t.in.e attr=to value=new.node.1 order=2
+@tool.insert.cut core.rule when=$t.in.r when=$t.in.e when=$t.in.a when=$t.in.b then=$t.in.to
+@t.in.me app.act.call act=make kind=w.diagram.edge code=?ecode from=new.node.1 to=$t.in.b n=?ez direction=forward order=3
+@tool.insert.link core.rule when=$t.in.r when=$t.in.e when=$t.in.a when=$t.in.b when=$t.in.ex with=$t.in.ez with=$t.in.ecode then=$t.in.me
+@t.in.any w.diagram.edge code=?l
+@t.in.miss app.act.refuse reason=missing-target
+@tool.insert.missing core.rule when=$t.in.r not=$t.in.any then=$t.in.miss
+
+# ---- Reverse links: from and to swapped ----
+@t.rv.r app.act.request operation="diagram.link.reverse"
+@t.rv.i app.act.item param="ids" value=?id
+@t.rv.e w.diagram.edge code=?id from=$t.rv.a to=$t.rv.b
+@t.rv.a w.diagram.node code=?ra
+@t.rv.b w.diagram.node code=?rb
+@t.rv.f app.act.call act=change thing=$t.rv.e attr=from value=$t.rv.b order=1
+@t.rv.t app.act.call act=change thing=$t.rv.e attr=to value=$t.rv.a order=2
+@tool.reverse.from core.rule when=$t.rv.r when=$t.rv.i when=$t.rv.e when=$t.rv.a when=$t.rv.b then=$t.rv.f
+@tool.reverse.to core.rule when=$t.rv.r when=$t.rv.i when=$t.rv.e when=$t.rv.a when=$t.rv.b then=$t.rv.t
+
+# ---- Duplicate nodes: a copy of each (shape, label, colours, size, role, exact size, font, value), unconnected; a
+# pinned one 40 lower and to the right ----
+@t.du.r app.act.request operation="diagram.node.duplicate"
+@t.du.i app.act.item param="ids" n=?i value=?id
+@t.du.n w.diagram.node code=?id shape=?s
+@t.du.nx ui.diagram.next of=node top=?top
+@t.du.i1 core.calc out=?i1 fn=add args=?i args=1
+@t.du.z core.calc out=?z fn=add args=?top args=?i1
+@t.du.code core.calc out=?code fn=concat args=n args=?z
+@t.du.ref core.calc out=?ref fn=concat args="copy.node." args=?i1
+@t.du.mk app.act.call act=make kind=w.diagram.node code=?code shape=?s n=?z order=1 ref=?ref
+@tool.duplicate.node core.rule when=$t.du.r when=$t.du.i when=$t.du.n when=$t.du.nx with=$t.du.i1 with=$t.du.z with=$t.du.code with=$t.du.ref then=$t.du.mk
+@t.du.v.label w.diagram.node code=?id label=?v
+@t.du.v.colour w.diagram.node code=?id colour=?v
+@t.du.v.outline w.diagram.node code=?id outline=?v
+@t.du.v.text_colour w.diagram.node code=?id text_colour=?v
+@t.du.v.size w.diagram.node code=?id size=?v
+@t.du.v.role w.diagram.node code=?id role=?v
+@t.du.v.width w.diagram.node code=?id width=?v
+@t.du.v.height w.diagram.node code=?id height=?v
+@t.du.v.font_size w.diagram.node code=?id font_size=?v
+@t.du.v.font_weight w.diagram.node code=?id font_weight=?v
+@t.du.v.value w.diagram.node code=?id value=?v
+@t.du.a.label app.act.arg call=?ref attr=label value=?v
+@tool.duplicate.label core.rule when=$t.du.r when=$t.du.i when=$t.du.n when=$t.du.v.label with=$t.du.i1 with=$t.du.ref then=$t.du.a.label
+@t.du.a.colour app.act.arg call=?ref attr=colour value=?v
+@tool.duplicate.colour core.rule when=$t.du.r when=$t.du.i when=$t.du.n when=$t.du.v.colour with=$t.du.i1 with=$t.du.ref then=$t.du.a.colour
+@t.du.a.outline app.act.arg call=?ref attr=outline value=?v
+@tool.duplicate.outline core.rule when=$t.du.r when=$t.du.i when=$t.du.n when=$t.du.v.outline with=$t.du.i1 with=$t.du.ref then=$t.du.a.outline
+@t.du.a.text_colour app.act.arg call=?ref attr=text_colour value=?v
+@tool.duplicate.text_colour core.rule when=$t.du.r when=$t.du.i when=$t.du.n when=$t.du.v.text_colour with=$t.du.i1 with=$t.du.ref then=$t.du.a.text_colour
+@t.du.a.size app.act.arg call=?ref attr=size value=?v
+@tool.duplicate.size core.rule when=$t.du.r when=$t.du.i when=$t.du.n when=$t.du.v.size with=$t.du.i1 with=$t.du.ref then=$t.du.a.size
+@t.du.a.role app.act.arg call=?ref attr=role value=?v
+@tool.duplicate.role core.rule when=$t.du.r when=$t.du.i when=$t.du.n when=$t.du.v.role with=$t.du.i1 with=$t.du.ref then=$t.du.a.role
+@t.du.a.width app.act.arg call=?ref attr=width value=?v
+@tool.duplicate.width core.rule when=$t.du.r when=$t.du.i when=$t.du.n when=$t.du.v.width with=$t.du.i1 with=$t.du.ref then=$t.du.a.width
+@t.du.a.height app.act.arg call=?ref attr=height value=?v
+@tool.duplicate.height core.rule when=$t.du.r when=$t.du.i when=$t.du.n when=$t.du.v.height with=$t.du.i1 with=$t.du.ref then=$t.du.a.height
+@t.du.a.font_size app.act.arg call=?ref attr=font_size value=?v
+@tool.duplicate.font_size core.rule when=$t.du.r when=$t.du.i when=$t.du.n when=$t.du.v.font_size with=$t.du.i1 with=$t.du.ref then=$t.du.a.font_size
+@t.du.a.font_weight app.act.arg call=?ref attr=font_weight value=?v
+@tool.duplicate.font_weight core.rule when=$t.du.r when=$t.du.i when=$t.du.n when=$t.du.v.font_weight with=$t.du.i1 with=$t.du.ref then=$t.du.a.font_weight
+@t.du.a.value app.act.arg call=?ref attr=value value=?v
+@tool.duplicate.value core.rule when=$t.du.r when=$t.du.i when=$t.du.n when=$t.du.v.value with=$t.du.i1 with=$t.du.ref then=$t.du.a.value
+@t.du.pn w.diagram.node code=?id pinned=true x=?px y=?py
+@t.du.px core.calc out=?qx fn=add args=?px args=40
+@t.du.py core.calc out=?qy fn=add args=?py args=40
+@t.du.ax app.act.arg call=?ref attr=x value=?qx
+@t.du.ay app.act.arg call=?ref attr=y value=?qy
+@t.du.ap app.act.arg call=?ref attr=pinned value=true
+@tool.duplicate.x core.rule when=$t.du.r when=$t.du.i when=$t.du.pn with=$t.du.i1 with=$t.du.ref with=$t.du.px then=$t.du.ax
+@tool.duplicate.y core.rule when=$t.du.r when=$t.du.i when=$t.du.pn with=$t.du.i1 with=$t.du.ref with=$t.du.py then=$t.du.ay
+@tool.duplicate.pin core.rule when=$t.du.r when=$t.du.i when=$t.du.pn with=$t.du.i1 with=$t.du.ref then=$t.du.ap
+
+# ---- Merge nodes into the first named: it takes the others' links (a link between two of them goes), they go ----
+@t.mg.r app.act.request operation="diagram.node.merge"
+@t.mg.all app.act.item param="ids" value=?x
+@t.mg.sel ui.diagram.msel node=?x
+@tool.merge.sel core.rule when=$t.mg.r when=$t.mg.all then=$t.mg.sel
+@t.mg.f app.act.item param="ids" n=0 value=?f
+@t.mg.fn w.diagram.node code=?f
+@t.mg.o app.act.item param="ids" n=?i value=?o
+@t.mg.on w.diagram.node code=?o
+@t.mg.later core.check fn=gt args=?i args=0
+@t.mg.diff core.check fn=neq args=?o args=?f
+@t.mg.m ui.diagram.merged node=?o into=?f
+@tool.merge.merged core.rule when=$t.mg.r when=$t.mg.f when=$t.mg.fn when=$t.mg.o when=$t.mg.on if=$t.mg.later if=$t.mg.diff then=$t.mg.m
+@t.mm.m ui.diagram.merged node=?o into=?f
+@t.mm.on w.diagram.node code=?o
+@t.mm.fn w.diagram.node code=?f
+@t.mm.out w.diagram.edge from=$t.mm.on to=$t.mm.x
+@t.mm.in w.diagram.edge from=$t.mm.x to=$t.mm.on
+@t.mm.x w.diagram.node code=?x
+@t.mm.xs ui.diagram.msel node=?x
+@t.mm.co app.act.call act=change thing=$t.mm.out attr=from value=$t.mm.fn order=1
+@t.mm.ci app.act.call act=change thing=$t.mm.in attr=to value=$t.mm.fn order=1
+@t.mm.ro app.act.call act=remove thing=$t.mm.out order=1
+@t.mm.ri app.act.call act=remove thing=$t.mm.in order=1
+@tool.merge.out core.rule when=$t.mm.m when=$t.mm.on when=$t.mm.fn when=$t.mm.out when=$t.mm.x not=$t.mm.xs then=$t.mm.co
+@tool.merge.in core.rule when=$t.mm.m when=$t.mm.on when=$t.mm.fn when=$t.mm.in when=$t.mm.x not=$t.mm.xs then=$t.mm.ci
+@tool.merge.out.inner core.rule when=$t.mm.m when=$t.mm.on when=$t.mm.out when=$t.mm.x when=$t.mm.xs then=$t.mm.ro
+@tool.merge.in.inner core.rule when=$t.mm.m when=$t.mm.on when=$t.mm.in when=$t.mm.x when=$t.mm.xs then=$t.mm.ri
+@t.mm.rm app.act.call act=remove thing=$t.mm.on order=3
+@tool.merge.remove core.rule when=$t.mm.m when=$t.mm.on then=$t.mm.rm
+@t.mg.lr app.act.request operation="diagram.node.merge" label=?v
+@t.mg.lc app.act.call act=change thing=$t.mg.fn attr=label value=?v order=2
+@tool.merge.label core.rule when=$t.mg.r when=$t.mg.lr when=$t.mg.f when=$t.mg.fn then=$t.mg.lc
+
+# ---- Split a node: a new node after it takes its outgoing links and is joined to it ----
+@t.sp.r app.act.request operation="diagram.node.split" id=?c
+@t.sp.n w.diagram.node code=?c shape=?s
+@t.sp.nx ui.diagram.next of=node top=?ntop
+@t.sp.ex ui.diagram.next of=edge top=?etop
+@t.sp.nz core.calc out=?nz fn=add args=?ntop args=1
+@t.sp.ncode core.calc out=?ncode fn=concat args=n args=?nz
+@t.sp.ez core.calc out=?ez fn=add args=?etop args=1
+@t.sp.ecode core.calc out=?ecode fn=concat args=e args=?ez
+@t.sp.mk app.act.call act=make kind=w.diagram.node code=?ncode shape=?s n=?nz order=1 ref=split.node
+@tool.split.node core.rule when=$t.sp.r when=$t.sp.n when=$t.sp.nx with=$t.sp.nz with=$t.sp.ncode then=$t.sp.mk
+@t.sp.lr app.act.request operation="diagram.node.split" label=?v
+@t.sp.la app.act.arg call=split.node attr=label value=?v
+@tool.split.label core.rule when=$t.sp.r when=$t.sp.n when=$t.sp.lr then=$t.sp.la
+@t.sp.anyl app.act.request operation="diagram.node.split" label=?anyl
+@t.sp.ol w.diagram.node code=?c label=?ol
+@t.sp.l2 core.calc out=?l2 fn=concat args=?ol args=" 2"
+@t.sp.la2 app.act.arg call=split.node attr=label value=?l2
+@tool.split.label.own core.rule when=$t.sp.r when=$t.sp.ol not=$t.sp.anyl with=$t.sp.l2 then=$t.sp.la2
+@t.sp.v.colour w.diagram.node code=?c colour=?v
+@t.sp.a.colour app.act.arg call=split.node attr=colour value=?v
+@tool.split.colour core.rule when=$t.sp.r when=$t.sp.n when=$t.sp.v.colour then=$t.sp.a.colour
+@t.sp.v.outline w.diagram.node code=?c outline=?v
+@t.sp.a.outline app.act.arg call=split.node attr=outline value=?v
+@tool.split.outline core.rule when=$t.sp.r when=$t.sp.n when=$t.sp.v.outline then=$t.sp.a.outline
+@t.sp.v.text_colour w.diagram.node code=?c text_colour=?v
+@t.sp.a.text_colour app.act.arg call=split.node attr=text_colour value=?v
+@tool.split.text_colour core.rule when=$t.sp.r when=$t.sp.n when=$t.sp.v.text_colour then=$t.sp.a.text_colour
+@t.sp.v.size w.diagram.node code=?c size=?v
+@t.sp.a.size app.act.arg call=split.node attr=size value=?v
+@tool.split.size core.rule when=$t.sp.r when=$t.sp.n when=$t.sp.v.size then=$t.sp.a.size
+@t.sp.v.role w.diagram.node code=?c role=?v
+@t.sp.a.role app.act.arg call=split.node attr=role value=?v
+@tool.split.role core.rule when=$t.sp.r when=$t.sp.n when=$t.sp.v.role then=$t.sp.a.role
+@t.sp.v.width w.diagram.node code=?c width=?v
+@t.sp.a.width app.act.arg call=split.node attr=width value=?v
+@tool.split.width core.rule when=$t.sp.r when=$t.sp.n when=$t.sp.v.width then=$t.sp.a.width
+@t.sp.v.height w.diagram.node code=?c height=?v
+@t.sp.a.height app.act.arg call=split.node attr=height value=?v
+@tool.split.height core.rule when=$t.sp.r when=$t.sp.n when=$t.sp.v.height then=$t.sp.a.height
+@t.sp.v.font_size w.diagram.node code=?c font_size=?v
+@t.sp.a.font_size app.act.arg call=split.node attr=font_size value=?v
+@tool.split.font_size core.rule when=$t.sp.r when=$t.sp.n when=$t.sp.v.font_size then=$t.sp.a.font_size
+@t.sp.v.font_weight w.diagram.node code=?c font_weight=?v
+@t.sp.a.font_weight app.act.arg call=split.node attr=font_weight value=?v
+@tool.split.font_weight core.rule when=$t.sp.r when=$t.sp.n when=$t.sp.v.font_weight then=$t.sp.a.font_weight
+@t.sp.v.value w.diagram.node code=?c value=?v
+@t.sp.a.value app.act.arg call=split.node attr=value value=?v
+@tool.split.value core.rule when=$t.sp.r when=$t.sp.n when=$t.sp.v.value then=$t.sp.a.value
+@t.sp.out w.diagram.edge from=$t.sp.n
+@t.sp.mv app.act.call act=change thing=$t.sp.out attr=from value=split.node order=2
+@tool.split.move core.rule when=$t.sp.r when=$t.sp.n when=$t.sp.out then=$t.sp.mv
+@t.sp.me app.act.call act=make kind=w.diagram.edge code=?ecode from=$t.sp.n to=split.node n=?ez direction=forward order=3
+@tool.split.link core.rule when=$t.sp.r when=$t.sp.n when=$t.sp.ex with=$t.sp.ez with=$t.sp.ecode then=$t.sp.me
+@t.sp.any w.diagram.node code=?c
+@t.sp.miss app.act.refuse reason=missing-target
+@tool.split.missing core.rule when=$t.sp.r not=$t.sp.any then=$t.sp.miss
+
+# ---- What a reader and the editor observe of the new keys ----
+@t.ob.o w.diagram.node code=?id outline=?v
+@t.ob.oo app.observe.input id=?id key=outline value=?v
+@observe.node.outline core.rule when=$t.ob.o then=$t.ob.oo
+@t.ob.t w.diagram.node code=?id text_colour=?v
+@t.ob.to app.observe.input id=?id key=textColour value=?v
+@observe.node.text core.rule when=$t.ob.t then=$t.ob.to
+@t.ob.fs w.diagram.node code=?id font_size=?v
+@t.ob.fso app.observe.input id=?id key=fontSize value=?v
+@observe.node.fontsize core.rule when=$t.ob.fs then=$t.ob.fso
+@t.ob.fw w.diagram.node code=?id font_weight=?v
+@t.ob.fwo app.observe.input id=?id key=fontWeight value=?v
+@observe.node.fontweight core.rule when=$t.ob.fw then=$t.ob.fwo
+@t.ob.r w.diagram.node code=?id role=?v
+@t.ob.ro app.observe.input id=?id key=role value=?v
+@observe.node.role core.rule when=$t.ob.r then=$t.ob.ro
+@t.ob.er w.diagram.edge code=?id route=?v
+@t.ob.ero app.observe.input id=?id key=route value=?v
+@observe.link.route core.rule when=$t.ob.er then=$t.ob.ero
+@t.ob.ew ui.diagram.eway edge=?id way=?v
+@t.ob.ewo app.observe.input id=?id key=way value=?v
+@observe.link.way core.rule when=$t.ob.ew then=$t.ob.ewo
+@t.ob.p.arrange w.diagram.diagram arrange=?v
+@t.ob.po.arrange app.observe.input id=page key=arrange value=?v
+@observe.page.arrange core.rule when=$t.ob.p.arrange then=$t.ob.po.arrange
+@t.ob.p.direction w.diagram.diagram direction=?v
+@t.ob.po.direction app.observe.input id=page key=direction value=?v
+@observe.page.direction core.rule when=$t.ob.p.direction then=$t.ob.po.direction
+@t.ob.p.spacing w.diagram.diagram spacing=?v
+@t.ob.po.spacing app.observe.input id=page key=spacing value=?v
+@observe.page.spacing core.rule when=$t.ob.p.spacing then=$t.ob.po.spacing
+@t.ob.p.route w.diagram.diagram route=?v
+@t.ob.po.route app.observe.input id=page key=route value=?v
+@observe.page.route core.rule when=$t.ob.p.route then=$t.ob.po.route
+@t.ob.p.theme w.diagram.diagram theme=?v
+@t.ob.po.theme app.observe.input id=page key=theme value=?v
+@observe.page.theme core.rule when=$t.ob.p.theme then=$t.ob.po.theme
+@t.ob.p.background w.diagram.diagram background=?v
+@t.ob.po.background app.observe.input id=page key=background value=?v
+@observe.page.background core.rule when=$t.ob.p.background then=$t.ob.po.background
+@t.ob.p.numbered w.diagram.diagram numbered=?v
+@t.ob.po.numbered app.observe.input id=page key=numbered value=?v
+@observe.page.numbered core.rule when=$t.ob.p.numbered then=$t.ob.po.numbered
+@t.ob.lay ui.diagram.lay value=?v
+@t.ob.layo app.observe.input id=page key=layout value=?v
+@observe.page.layout core.rule when=$t.ob.lay then=$t.ob.layo
+@t.ob.dm ui.diagram.dmode value=?v
+@t.ob.dmo app.observe.input id=page key=flow value=?v
+@observe.page.flow core.rule when=$t.ob.dm then=$t.ob.dmo
+@t.op.t k.styles.theme name=?v
+@t.op.to app.observe.option id=theme value=?v
+@option.theme core.rule when=$t.op.t then=$t.op.to
+@t.ob.ef w.diagram.node code=?id effect=?v
+@t.ob.efo app.observe.input id=?id key=effect value=?v
+@observe.node.effect core.rule when=$t.ob.ef then=$t.ob.efo
+@t.ob.op w.diagram.node code=?id opacity=?v
+@t.ob.opo app.observe.input id=?id key=opacity value=?v
+@observe.node.opacity core.rule when=$t.ob.op then=$t.ob.opo
+@t.ob.cr w.diagram.node code=?id corner=?v
+@t.ob.cro app.observe.input id=?id key=corner value=?v
+@observe.node.corner core.rule when=$t.ob.cr then=$t.ob.cro
+
+# ---- Charts: a chart is a framed group whose members are its categories (their labels) with their values; its
+# title is the group's label and its type the group's layout (bar, line, area, pie, doughnut). ----
+@groupop.chart.value ui.diagram.groupop operation="diagram.chart.value"
+@groupop.chart.add ui.diagram.groupop operation="diagram.chart.category.add"
+@groupop.chart.remove ui.diagram.groupop operation="diagram.chart.category.remove"
+@groupop.chart.rename ui.diagram.groupop operation="diagram.chart.category.rename"
+@groupop.chart.format ui.diagram.groupop operation="diagram.chart.format"
+@dgt.cat.type core.type of=ui.diagram.cat
+# The category a command names: a member of the chart whose label (or code) it is; none is refused.
+@t.ct.r app.act.request id=?g category=?cat
+@t.ct.g w.diagram.group code=?g
+@t.ct.m ui.diagram.inside group=?g node=?c
+@t.ct.l w.diagram.node code=?c label=?cat
+@t.ct.out ui.diagram.cat node=?c
+@tool.chart.category.label core.rule when=$t.ct.r when=$t.ct.g when=$t.ct.m when=$t.ct.l then=$t.ct.out
+@t.ct.code core.check fn=eq args=?c args=?cat
+@tool.chart.category.code core.rule when=$t.ct.r when=$t.ct.g when=$t.ct.m if=$t.ct.code then=$t.ct.out
+@t.ct.any ui.diagram.cat node=?anyc
+@t.ct.miss app.act.refuse reason=missing-category
+@tool.chart.category.missing core.rule when=$t.ct.r when=$t.ct.g not=$t.ct.any then=$t.ct.miss
+@t.ct.c ui.diagram.cat node=?c
+@t.ct.n w.diagram.node code=?c
+# A category's value ("make March 40"), name, and removal.
+@t.cv.r app.act.request operation="diagram.chart.value" value=?v
+@t.cv.c app.act.call act=change thing=$t.ct.n attr=value value=?v order=1
+@tool.chart.value core.rule when=$t.cv.r when=$t.ct.c when=$t.ct.n then=$t.cv.c
+@t.cn.r app.act.request operation="diagram.chart.category.rename" label=?l
+@t.cn.c app.act.call act=change thing=$t.ct.n attr=label value=?l order=1
+@tool.chart.rename core.rule when=$t.cn.r when=$t.ct.c when=$t.ct.n then=$t.cn.c
+@t.cr.r app.act.request operation="diagram.chart.category.remove"
+@t.cr.c app.act.call act=remove thing=$t.ct.n order=1
+@tool.chart.remove core.rule when=$t.cr.r when=$t.ct.c when=$t.ct.n then=$t.cr.c
+# A new category at the end, with its value ("add a column for April").
+@t.ca.r app.act.request operation="diagram.chart.category.add" id=?g label=?l value=?v
+@t.ca.g w.diagram.group code=?g
+@t.ca.nx ui.diagram.next of=node top=?top
+@t.ca.z core.calc out=?z fn=add args=?top args=1
+@t.ca.code core.calc out=?code fn=concat args=n args=?z
+@t.ca.mk app.act.call act=make kind=w.diagram.node code=?code shape=rectangle label=?l value=?v n=?z order=1 ref=chart.node
+@t.ca.mem app.act.call act=make kind=w.diagram.member group=$t.ca.g node=chart.node order=2
+@tool.chart.add core.rule when=$t.ca.r when=$t.ca.g when=$t.ca.nx with=$t.ca.z with=$t.ca.code then=$t.ca.mk
+@tool.chart.add.member core.rule when=$t.ca.r when=$t.ca.g then=$t.ca.mem
+# Formatting: title, axis titles, value labels, gridlines, legend; nothing named is refused.
+@t.cf.r app.act.request operation="diagram.chart.format" id=?g
+@t.cf.g w.diagram.group code=?g
+@t.cf.t app.act.request operation="diagram.chart.format" title=?v
+@t.cf.tc app.act.call act=change thing=$t.cf.g attr=label value=?v order=1
+@tool.chart.format.title core.rule when=$t.cf.r when=$t.cf.g when=$t.cf.t then=$t.cf.tc
+@t.cf.x app.act.request operation="diagram.chart.format" xLabel=?v
+@t.cf.xc app.act.call act=change thing=$t.cf.g attr=x_label value=?v order=1
+@tool.chart.format.x core.rule when=$t.cf.r when=$t.cf.g when=$t.cf.x then=$t.cf.xc
+@t.cf.y app.act.request operation="diagram.chart.format" yLabel=?v
+@t.cf.yc app.act.call act=change thing=$t.cf.g attr=y_label value=?v order=1
+@tool.chart.format.y core.rule when=$t.cf.r when=$t.cf.g when=$t.cf.y then=$t.cf.yc
+@t.cf.v app.act.request operation="diagram.chart.format" valueLabels=?v
+@t.cf.vc app.act.call act=change thing=$t.cf.g attr=value_labels value=?v order=1
+@tool.chart.format.values core.rule when=$t.cf.r when=$t.cf.g when=$t.cf.v then=$t.cf.vc
+@t.cf.gl app.act.request operation="diagram.chart.format" gridlines=?v
+@t.cf.glc app.act.call act=change thing=$t.cf.g attr=gridlines value=?v order=1
+@tool.chart.format.grid core.rule when=$t.cf.r when=$t.cf.g when=$t.cf.gl then=$t.cf.glc
+@t.cf.lg app.act.request operation="diagram.chart.format" legend=?v
+@t.cf.lgc app.act.call act=change thing=$t.cf.g attr=legend value=?v order=1
+@tool.chart.format.legend core.rule when=$t.cf.r when=$t.cf.g when=$t.cf.lg then=$t.cf.lgc
+@t.cf.n1 app.act.request title=?f1
+@t.cf.n2 app.act.request xLabel=?f2
+@t.cf.n3 app.act.request yLabel=?f3
+@t.cf.n4 app.act.request valueLabels=?f4
+@t.cf.n5 app.act.request gridlines=?f5
+@t.cf.n6 app.act.request legend=?f6
+@t.cf.none app.act.refuse reason=missing-property
+@t.cf.n7 app.act.request yMax=?f7
+@tool.chart.format.none core.rule when=$t.cf.r not=$t.cf.n1 not=$t.cf.n2 not=$t.cf.n3 not=$t.cf.n4 not=$t.cf.n5 not=$t.cf.n6 not=$t.cf.n7 then=$t.cf.none
+@t.cg.f w.diagram.group code=?id x_label=?v
+@t.cg.fo app.observe.input id=?id key=xLabel value=?v
+@observe.chart.x core.rule when=$t.cg.f then=$t.cg.fo
+@t.cg.y w.diagram.group code=?id y_label=?v
+@t.cg.yo app.observe.input id=?id key=yLabel value=?v
+@observe.chart.y core.rule when=$t.cg.y then=$t.cg.yo
+@t.cg.v w.diagram.group code=?id value_labels=?v
+@t.cg.vo app.observe.input id=?id key=valueLabels value=?v
+@observe.chart.values core.rule when=$t.cg.v then=$t.cg.vo
+@t.cg.g w.diagram.group code=?id gridlines=?v
+@t.cg.go app.observe.input id=?id key=gridlines value=?v
+@observe.chart.grid core.rule when=$t.cg.g then=$t.cg.go
+@t.cg.l w.diagram.group code=?id legend=?v
+@t.cg.lo app.observe.input id=?id key=legend value=?v
+@observe.chart.legend core.rule when=$t.cg.l then=$t.cg.lo
+@t.ob.rot w.diagram.node code=?id rotation=?v
+@t.ob.rotc app.observe.input id=?id key=rotation value=?v
+@observe.node.rotation core.rule when=$t.ob.rot then=$t.ob.rotc
+@t.cg.ym w.diagram.group code=?id y_max=?v
+@t.cg.ymo app.observe.input id=?id key=yMax value=?v
+@observe.chart.ymax core.rule when=$t.cg.ym then=$t.cg.ymo
+
+# ---- The page as an observed object: the target of the page-wide commands (layout, theme, improve, numbers) ----
+@t.pg.k ui.diagram.const0 w=?anyw
+@t.pg.l ui.diagram.lay value=?lay
+@t.pg.d ui.diagram.dmode value=?dir
+@t.pg.o app.observe.object id=page kind=diagram sourceType=diagram.sketch.page binding=diagram.page layout=?lay direction=?dir selected=false
+@observe.page.object core.rule when=$t.pg.k when=$t.pg.l when=$t.pg.d then=$t.pg.o
+
+# ---- Tidy links: the declared look of a link (orthogonal route, solid, 2 wide); disclosed as such ----
+@edgeop.improve ui.diagram.edgeop operation="diagram.link.improve"
+@t.li.r app.act.request operation="diagram.link.improve"
+@t.li.i app.act.item param="ids" value=?id
+@t.li.e w.diagram.edge code=?id
+@t.li.c1 app.act.call act=change thing=$t.li.e attr=route value=orthogonal order=1
+@t.li.c2 app.act.call act=change thing=$t.li.e attr=style value=solid order=1
+@t.li.c3 app.act.call act=change thing=$t.li.e attr=width value=2 order=1
+@tool.link.improve.route core.rule when=$t.li.r when=$t.li.i when=$t.li.e then=$t.li.c1
+@tool.link.improve.style core.rule when=$t.li.r when=$t.li.i when=$t.li.e then=$t.li.c2
+@tool.link.improve.width core.rule when=$t.li.r when=$t.li.i when=$t.li.e then=$t.li.c3
+
+# ---- Swap two nodes: their places (pinned: their positions; in the layout: their order) ----
+@nodeop.swap ui.diagram.nodeop operation="diagram.nodes.swap"
+@t.sw.r app.act.request operation="diagram.nodes.swap"
+@t.sw.a app.act.item param="ids" n=0 value=?a
+@t.sw.b app.act.item param="ids" n=1 value=?b
+@t.sw.na w.diagram.node code=?a n=?oa
+@t.sw.nb w.diagram.node code=?b n=?ob
+@t.sw.ca app.act.call act=change thing=$t.sw.na attr=n value=?ob order=1
+@t.sw.cb app.act.call act=change thing=$t.sw.nb attr=n value=?oa order=1
+@tool.swap.order.a core.rule when=$t.sw.r when=$t.sw.a when=$t.sw.b when=$t.sw.na when=$t.sw.nb then=$t.sw.ca
+@tool.swap.order.b core.rule when=$t.sw.r when=$t.sw.a when=$t.sw.b when=$t.sw.na when=$t.sw.nb then=$t.sw.cb
+@t.sw.ba ui.diagram.nbox node=?a cx=?ax cy=?ay
+@t.sw.bb ui.diagram.nbox node=?b cx=?bx cy=?by
+@t.sw.pa w.diagram.node code=?a pinned=true
+@t.sw.pb w.diagram.node code=?b pinned=true
+@t.sw.xa app.act.call act=change thing=$t.sw.na attr=x value=?bx order=2
+@t.sw.ya app.act.call act=change thing=$t.sw.na attr=y value=?by order=2
+@t.sw.xb app.act.call act=change thing=$t.sw.nb attr=x value=?ax order=2
+@t.sw.yb app.act.call act=change thing=$t.sw.nb attr=y value=?ay order=2
+@t.sw.pina app.act.call act=change thing=$t.sw.na attr=pinned value=true order=3
+@t.sw.pinb app.act.call act=change thing=$t.sw.nb attr=pinned value=true order=3
+@tool.swap.xa core.rule when=$t.sw.r when=$t.sw.a when=$t.sw.b when=$t.sw.na when=$t.sw.nb when=$t.sw.ba when=$t.sw.bb when=$t.sw.pb then=$t.sw.xa
+@tool.swap.ya core.rule when=$t.sw.r when=$t.sw.a when=$t.sw.b when=$t.sw.na when=$t.sw.nb when=$t.sw.ba when=$t.sw.bb when=$t.sw.pb then=$t.sw.ya
+@tool.swap.pina core.rule when=$t.sw.r when=$t.sw.a when=$t.sw.b when=$t.sw.na when=$t.sw.nb when=$t.sw.pb then=$t.sw.pina
+@tool.swap.xb core.rule when=$t.sw.r when=$t.sw.a when=$t.sw.b when=$t.sw.na when=$t.sw.nb when=$t.sw.ba when=$t.sw.bb when=$t.sw.pa then=$t.sw.xb
+@tool.swap.yb core.rule when=$t.sw.r when=$t.sw.a when=$t.sw.b when=$t.sw.na when=$t.sw.nb when=$t.sw.ba when=$t.sw.bb when=$t.sw.pa then=$t.sw.yb
+@tool.swap.pinb core.rule when=$t.sw.r when=$t.sw.a when=$t.sw.b when=$t.sw.na when=$t.sw.nb when=$t.sw.pa then=$t.sw.pinb
+
+# ---- Scale nodes by a factor ("20% bigger": 1.2; "half the width" is a resize): their drawn size times it ----
+@nodeop.scale ui.diagram.nodeop operation="diagram.node.scale"
+@t.sc.r app.act.request operation="diagram.node.scale" factor=?f
+@t.sc.i app.act.item param="ids" value=?id
+@t.sc.n w.diagram.node code=?id
+@t.sc.d ui.diagram.dim0 node=?id w=?w h=?h
+@t.sc.w core.calc out=?nw fn=mul args=?w args=?f
+@t.sc.h core.calc out=?nh fn=mul args=?h args=?f
+@t.sc.cw app.act.call act=change thing=$t.sc.n attr=width value=?nw order=1
+@t.sc.ch app.act.call act=change thing=$t.sc.n attr=height value=?nh order=1
+@tool.scale.w core.rule when=$t.sc.r when=$t.sc.i when=$t.sc.n when=$t.sc.d with=$t.sc.w then=$t.sc.cw
+@tool.scale.h core.rule when=$t.sc.r when=$t.sc.i when=$t.sc.n when=$t.sc.d with=$t.sc.h then=$t.sc.ch
+
+# ---- Charts: colour the categories by a condition on their value; sort them; the top of the value axis ----
+@groupop.chart.highlight ui.diagram.groupop operation="diagram.chart.highlight"
+@groupop.chart.sort ui.diagram.groupop operation="diagram.chart.sort"
+@t.ch.r app.act.request operation="diagram.chart.highlight" id=?g test=?test value=?lim colour=?col
+@t.ch.g w.diagram.group code=?g
+@t.ch.m ui.diagram.inside group=?g node=?c
+@t.ch.n w.diagram.node code=?c value=?v
+@t.ch.below core.check fn=lt args=?v args=?lim
+@t.ch.above core.check fn=gt args=?v args=?lim
+@t.ch.istb core.check fn=eq args=?test args=below
+@t.ch.ista core.check fn=eq args=?test args=above
+@t.ch.c app.act.call act=change thing=$t.ch.n attr=colour value=?col order=1
+@tool.chart.highlight.below core.rule when=$t.ch.r when=$t.ch.g when=$t.ch.m when=$t.ch.n if=$t.ch.istb if=$t.ch.below then=$t.ch.c
+@tool.chart.highlight.above core.rule when=$t.ch.r when=$t.ch.g when=$t.ch.m when=$t.ch.n if=$t.ch.ista if=$t.ch.above then=$t.ch.c
+@t.so.r app.act.request operation="diagram.chart.sort" id=?g order=?ord
+@t.so.g w.diagram.group code=?g
+@dgt.csort.type core.type of=ui.diagram.csort
+@t.so.m ui.diagram.inside group=?g node=?c order=?o
+@t.so.n w.diagram.node code=?c value=?v label=?l
+@t.so.out ui.diagram.csort group=?g node=?c value=?v label=?l
+@tool.chart.sort.members core.rule when=$t.so.r when=$t.so.g when=$t.so.m when=$t.so.n then=$t.so.out
+@t.so.s ui.diagram.csort group=?g node=?c value=?v label=?l
+@t.so.min ui.diagram.gorder group=?g order=?first
+@t.so.asc core.check fn=eq args=?ord args=ascending
+@t.so.desc core.check fn=eq args=?ord args=descending
+@t.so.lab core.check fn=eq args=?ord args=label
+@t.so.ra core.rank of=$t.so.s by=value within=?g out=?k
+@t.so.rd core.rank of=$t.so.s by=value order=desc within=?g out=?k
+@t.so.rl core.rank of=$t.so.s by=label within=?g out=?k
+@t.so.k0 core.calc out=?k0 fn=sub args=?k args=1
+@t.so.nn core.calc out=?nn fn=add args=?first args=?k0
+@t.so.cn w.diagram.node code=?c
+@t.so.c app.act.call act=change thing=$t.so.cn attr=n value=?nn order=1
+@tool.chart.sort.ascending core.rule when=$t.so.r when=$t.so.s when=$t.so.min when=$t.so.cn if=$t.so.asc with=$t.so.ra with=$t.so.k0 with=$t.so.nn then=$t.so.c
+@tool.chart.sort.descending core.rule when=$t.so.r when=$t.so.s when=$t.so.min when=$t.so.cn if=$t.so.desc with=$t.so.rd with=$t.so.k0 with=$t.so.nn then=$t.so.c
+@tool.chart.sort.label core.rule when=$t.so.r when=$t.so.s when=$t.so.min when=$t.so.cn if=$t.so.lab with=$t.so.rl with=$t.so.k0 with=$t.so.nn then=$t.so.c
+@t.cf.ym app.act.request operation="diagram.chart.format" yMax=?v
+@t.cf.ymc app.act.call act=change thing=$t.cf.g attr=y_max value=?v order=1
+@tool.chart.format.ymax core.rule when=$t.cf.r when=$t.cf.g when=$t.cf.ym then=$t.cf.ymc

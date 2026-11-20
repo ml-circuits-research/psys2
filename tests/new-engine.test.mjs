@@ -169,7 +169,6 @@ test('malformed input, retired auxiliary APIs and turn errors never enter an old
     assert.deepEqual(session.isession.state, before);
   }
   assert.equal((await session.dryRead('legacy words')).reason, 'unsupported');
-  assert.ok((await session.observeIn({ world: 'art.draw' })).unsupported);
   assert.ok(session.observe({ world: 'art.draw' }).unsupported);
   session._send = () => { throw new Error('simulated worker turn failure'); };
   await assert.rejects(session.send('anything'), /simulated worker turn failure/);

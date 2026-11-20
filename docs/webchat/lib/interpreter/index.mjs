@@ -13,17 +13,17 @@
  *  - `ctx.worlds()` lists the loaded worlds (used by the chat capability);
  *  - `ctx.emit` accepts `{_}` / `{_1}` fresh-id placeholders like pattern emit templates.
  */
-import { guard, TurnAborted } from '../formalizer/guard.mjs?v=551ea15752';
+import { guard, TurnAborted } from '../dialog/turn-guard.mjs?v=34ed257fec';
 import { budget, isBudgetExceeded } from '../dialog/budget.mjs?v=00bce6e369';
 import { parse, makeWire, atom, str, ref, get } from '../soplang/index.mjs?v=c57881f705';
 import { Memory, WireStore } from './memory.mjs?v=723ca93429';
-import { Renderer, fallbackText, listText } from './render.mjs?v=9995749883';
-import { FormSession } from '../formalizer/rules/session.mjs?v=07dd7571dc';
+import { Renderer, fallbackText, listText } from './render.mjs?v=0ebba303cc';
+import { FormSession } from './form-session.mjs?v=290f303e6e';
 import { makeLang } from './lang.mjs?v=8ac27bf6ac';
-import { withLearned } from '../knowledge/learned.mjs?v=ba4ea01583';
+import { withLearned } from '../knowledge/learned.mjs?v=db88935bc6';
 
 export { Memory, WireStore } from './memory.mjs?v=723ca93429';
-export { Renderer } from './render.mjs?v=9995749883';
+export { Renderer } from './render.mjs?v=0ebba303cc';
 
 const STATUSES = new Set(['supported', 'missing', 'conflicting', 'ambiguous', 'unsupported', 'budget', 'error']);
 /**

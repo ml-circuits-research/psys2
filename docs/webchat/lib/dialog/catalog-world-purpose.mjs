@@ -1,7 +1,7 @@
 // Authored purpose comments, grounded in each WORLD.md and schema.sop at this pin.
 // Descriptions explain the available definitions; actual use needs runtime evidence.
 export const CATALOG_WORLD_PURPOSE_CONTEXT = Object.freeze({
- catalogCommit: '668fc36aacc4f7c193bab47f75e9ededdef9b811',
+ catalogCommit: '06cf90569f2365a2035a5ca673d362841346e2e7',
  definitionStatus: 'Definitions published in the pinned knowledge catalog.',
  runtimeUseStatus: 'Runtime use is not established by this metadata; a loaded definition alone does not show participation in a reasoning step.',
  sourcePath: '<world-id>/WORLD.md',
@@ -38,6 +38,7 @@ export const CATALOG_WORLD_PURPOSES = Object.freeze({
  'k.shapes': 'Describes flat shapes, lines and solids by their sides, corners, roundness and kind relationships. These properties support recognizing shapes, comparing them and relating everyday objects to geometry.',
  'k.space': 'Describes celestial bodies and astronomical kinds through orbit relations, order, physical properties and drawable counterparts. This supports questions and comparisons about the solar system and other named objects in space.',
  'k.story': 'Defines story elements, character goals, obstacles and constraints linking events. Its links to people, animals, scenes and actions supply structured choices for composing a coherent story.',
+ 'k.styles': 'Names visual themes (fill, outline, text, line, background and frame colours, label weight), the colours a theme gives each node role, and ordered palettes. The Diagram area applies them to whole pages, roles or chosen nodes and colours levels, shapes, groups and chart slices from a palette.',
  'k.spatial2d': 'Measures bounds, gaps, containment and attachment in versioned two-dimensional frames. Its policies define which relations constrain a placement and which distances can adapt to scoped preferences.',
  'k.time': 'Defines calendar and clock cycles, their members, ordering and duration relations. This provides the temporal structure needed to interpret months, weekdays, seasons, parts of a day and recurring order.',
  'k.units': 'Defines quantities, units, symbols and conversion factors or offsets relative to a base unit. These definitions let a consumer compare or convert compatible measurements without confusing their units.',

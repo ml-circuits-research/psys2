@@ -21,7 +21,7 @@ Issue counts on the untouched source rows (per request or constraint where the i
 | issue | rows |
 | --- | ---: |
 | warning:selector-not-in-context | 144 |
-| class-value-outside-bank-unlabelled | 88 |
+| warning:bank-extension-needed | 88 |
 | warning:value-span-ambiguous | 45 |
 | warning:target-name_span-ambiguous | 19 |
 
@@ -30,11 +30,11 @@ Issue counts on the untouched source rows (per request or constraint where the i
 | issue | rows |
 | --- | ---: |
 | warning:selector-not-in-context | 1,198 |
-| class-value-outside-bank-unlabelled | 449 |
+| warning:bank-extension-needed | 449 |
 | warning:value-span-ambiguous | 302 |
 | warning:target-name_span-ambiguous | 131 |
-| measure_span-not-in-span | 20 |
-| anchor_span-not-in-span | 15 |
+| measure_span-outside-request-removed | 20 |
+| anchor_span-outside-request-removed | 15 |
 
 ### ui-coverage-v2 (3,180 rows)
 
@@ -56,7 +56,7 @@ Issue counts on the untouched source rows (per request or constraint where the i
 
 | issue | rows |
 | --- | ---: |
-| class-value-outside-bank-unlabelled | 1,372 |
+| warning:bank-extension-needed | 1,372 |
 | warning:value-span-ambiguous | 2 |
 
 ### ui-comparatives-v1 (786 rows)
@@ -67,15 +67,22 @@ No issue found.
 
 No issue found.
 
-### ui-diagram-v2 (6,647 rows)
+### ui-diagram-v2 (6,676 rows)
 
 | issue | rows |
 | --- | ---: |
-| warning:selector-not-in-context | 215 |
-| warning:value-span-ambiguous | 64 |
-| warning:numeric-value-not-in-surface | 50 |
-| warning:target-name_span-ambiguous | 5 |
-| warning:target-kind_span-ambiguous | 4 |
+| warning:selector-not-in-context | 203 |
+| warning:value-span-ambiguous | 85 |
+| warning:numeric-value-not-in-surface | 37 |
+| warning:target-kind_span-ambiguous | 10 |
+| warning:target-description_span-ambiguous | 2 |
+| warning:target-name_span-ambiguous | 2 |
+
+### ui-diagram-v2-voice (93 rows)
+
+| issue | rows |
+| --- | ---: |
+| warning:selector-not-in-context | 3 |
 
 ### ui-quantities-v1 (174 rows)
 
@@ -93,14 +100,18 @@ No issue found.
 | warning:value-span-ambiguous | 2 |
 | warning:target-description_span-ambiguous | 1 |
 
-### data-drop-v1 (1,228 rows)
+### data-drop-v1 (2,987 rows)
 
 | issue | rows |
 | --- | ---: |
-| class-value-outside-bank-unlabelled | 58 |
-| warning:selector-not-in-context | 23 |
+| warning:selector-not-in-context | 373 |
+| warning:bank-extension-needed | 132 |
+| warning:determiner-kept-open | 24 |
+| trigger-not-in-span-removed | 15 |
+| warning:value-span-ambiguous | 12 |
 | warning:numeric-value-not-in-surface | 6 |
 | warning:target-kind_span-ambiguous | 5 |
+| warning:target-name_span-ambiguous | 2 |
 
 ### human-adapted-v1-diagram (538 rows)
 
@@ -147,7 +158,6 @@ Fixed or converted:
 | definite-description-name-to-kind | 280 |
 | key-drawn.color-as-drawn.colour | 137 |
 | absolute-degree-word-as-degree | 95 |
-| class-value-outside-bank-unlabelled | 32 |
 | key-meeting.duration-as-meeting.length | 18 |
 | act-arrange-for-diagram.group.layout | 17 |
 | key-part.color-as-part.colour | 9 |
@@ -166,9 +176,10 @@ Kept with a warning (not an error; see README):
 | --- | ---: |
 | selector-not-in-context | 136 |
 | value-span-ambiguous | 45 |
+| bank-extension-needed | 32 |
 | target-name_span-ambiguous | 19 |
 
-### ui-human-v1: 4,284 in, 4,249 kept
+### ui-human-v1: 4,284 in, 4,284 kept
 
 Fixed or converted:
 
@@ -176,7 +187,6 @@ Fixed or converted:
 | --- | ---: |
 | definite-description-name-to-kind | 683 |
 | qualitative-value-unlabelled | 329 |
-| class-value-outside-bank-unlabelled | 151 |
 | absolute-degree-word-as-degree | 110 |
 | key-drawn.color-as-drawn.colour | 95 |
 | comparative-as-delta-step | 61 |
@@ -190,14 +200,9 @@ Fixed or converted:
 | act-arrange-for-diagram.group.layout | 23 |
 | act-ungroup-for-diagram.group.ungroup | 23 |
 | text-target-for-document.write | 23 |
-
-Dropped:
-
-| reason | rows |
-| --- | ---: |
-| dropped:measure_span-not-in-span | 20 |
-| dropped:value-span-not-in-span | 10 |
-| dropped:anchor_span-not-in-span | 5 |
+| measure_span-outside-request-removed | 20 |
+| constraint-with-span-outside-request-removed | 10 |
+| anchor_span-outside-request-removed | 5 |
 
 Kept with a warning (not an error; see README):
 
@@ -205,6 +210,7 @@ Kept with a warning (not an error; see README):
 | --- | ---: |
 | selector-not-in-context | 1,119 |
 | value-span-ambiguous | 303 |
+| bank-extension-needed | 151 |
 | target-name_span-ambiguous | 131 |
 
 ### ui-coverage-v2: 3,180 in, 3,180 kept
@@ -262,33 +268,34 @@ Kept with a warning (not an error; see README):
 
 ### ui-comparatives-v1: 786 in, 786 kept
 
-### ui-features-v1: 249 in, 247 kept
+### ui-features-v1: 249 in, 249 kept
+
+### ui-diagram-v2: 6,676 in, 6,676 kept
+
+Kept with a warning (not an error; see README):
+
+| warning | rows |
+| --- | ---: |
+| selector-not-in-context | 203 |
+| value-span-ambiguous | 85 |
+| numeric-value-not-in-surface | 37 |
+| target-kind_span-ambiguous | 10 |
+| target-description_span-ambiguous | 2 |
+| target-name_span-ambiguous | 2 |
+
+### ui-diagram-v2-voice: 93 in, 92 kept
 
 Dropped:
 
 | reason | rows |
 | --- | ---: |
 | dropped:duplicate-text | 1 |
-| dropped:conflicting-label-for-identical-text | 1 |
-
-### ui-diagram-v2: 6,647 in, 6,639 kept
-
-Dropped:
-
-| reason | rows |
-| --- | ---: |
-| dropped:duplicate-text | 7 |
-| dropped:conflicting-label-for-identical-text | 1 |
 
 Kept with a warning (not an error; see README):
 
 | warning | rows |
 | --- | ---: |
-| selector-not-in-context | 215 |
-| value-span-ambiguous | 64 |
-| numeric-value-not-in-surface | 50 |
-| target-name_span-ambiguous | 5 |
-| target-kind_span-ambiguous | 4 |
+| selector-not-in-context | 3 |
 
 ### ui-quantities-v1: 174 in, 174 kept
 
@@ -323,24 +330,29 @@ Kept with a warning (not an error; see README):
 | value-span-ambiguous | 2 |
 | target-description_span-ambiguous | 1 |
 
-### data-drop-v1: 1,228 in, 1,228 kept
+### data-drop-v1: 2,987 in, 2,987 kept
 
 Fixed or converted:
 
 | fix | rows |
 | --- | ---: |
-| class-value-outside-bank-unlabelled | 58 |
-| anchor-span-as-anchor-mention | 57 |
+| anchor-span-as-anchor-mention | 99 |
+| diagram-new-node-count-as-node.n | 24 |
+| trigger-not-in-span-removed | 15 |
+| comparative-as-delta-step | 3 |
 
 Kept with a warning (not an error; see README):
 
 | warning | rows |
 | --- | ---: |
+| selector-not-in-context | 374 |
+| bank-extension-needed | 132 |
 | selector-with-empty-context | 31 |
-| selector-not-in-context | 23 |
-| value-span-ambiguous | 12 |
+| value-span-ambiguous | 24 |
+| determiner-kept-open | 24 |
 | numeric-value-not-in-surface | 6 |
 | target-kind_span-ambiguous | 5 |
+| target-name_span-ambiguous | 2 |
 
 ### human-adapted-v1-diagram: 538 in, 538 kept
 
@@ -359,7 +371,7 @@ Kept with a warning (not an error; see README):
 | target-kind_span-ambiguous | 5 |
 | selector-with-empty-context | 2 |
 
-### demo-tool-profile: 36,999 in, 27,524 kept
+### demo-tool-profile: 36,999 in, 33,297 kept
 
 Fixed or converted:
 
@@ -373,8 +385,7 @@ Dropped:
 
 | reason | rows |
 | --- | ---: |
-| dropped:duplicate-text | 9,365 |
-| dropped:conflicting-label-for-identical-text | 110 |
+| dropped:duplicate-text | 3,702 |
 
 Kept with a warning (not an error; see README):
 
@@ -385,72 +396,70 @@ Kept with a warning (not an error; see README):
 | value-span-ambiguous | 14 |
 | target-name_span-ambiguous | 6 |
 
-### main-synthetic: 26,670 in, 4,927 kept
+### main-synthetic: 26,670 in, 21,254 kept
 
 Fixed or converted:
 
 | fix | rows |
 | --- | ---: |
-| converted:drawing | 9,283 |
-| trigger-replaced-by-verb-span | 7,364 |
-| trigger-removed-no-verb-in-text | 3,828 |
-| converted:diagram | 785 |
+| trigger-replaced-by-verb-span | 16,135 |
+| converted:drawing | 10,816 |
+| converted:avatar | 5,445 |
+| trigger-removed-no-verb-in-text | 5,414 |
+| converted:diagram | 2,131 |
+| absolute-degree-word-as-degree | 2,080 |
+| converted:document | 1,745 |
+| converted:calendar | 551 |
 | converted:drawn | 414 |
-| converted:avatar | 266 |
 | converted:node | 206 |
-| absolute-degree-word-as-degree | 171 |
+| key-meeting.duration-as-meeting.length | 193 |
 | definite-description-name-to-kind | 115 |
+| act-arrange-for-diagram.group.layout | 100 |
 | converted:block | 98 |
 | converted:meeting | 86 |
-| converted:compound | 32 |
-| converted:document | 22 |
+| act-arrange-for-diagram.node.layout | 67 |
+| act-group-for-diagram.group.make | 66 |
+| converted:compound | 57 |
+| text-target-for-document.write | 57 |
+| act-remove-for-diagram.selection.remove | 36 |
+| act-connect-for-diagram.link.make | 31 |
+| act-ungroup-for-diagram.group.ungroup | 9 |
 | key-drawn.color-as-drawn.colour | 7 |
 
 Dropped:
 
 | reason | rows |
 | --- | ---: |
-| dropped:avatar-label-or-text-nonsense | 8,717 |
-| dropped:balance-cap-per-family | 3,615 |
-| dropped:mechanical-keyword-text-for-existing-object | 2,644 |
-| dropped:balance-cap-per-operation | 2,628 |
-| dropped:avatar-variant-not-attested-for-slot | 1,007 |
-| dropped:placeholder-value-for-color | 943 |
-| dropped:operation-without-written-selector-template | 617 |
-| dropped:calendar-placeholder-values-not-text-evidence | 551 |
+| dropped:avatar-label-without-part-slot | 3,314 |
+| dropped:avatar-label-or-text-nonsense | 623 |
+| dropped:avatar-rewritten-span-ambiguous | 608 |
+| dropped:duplicate-text | 245 |
 | dropped:avatar-preset-shape | 187 |
-| dropped:value-not-in-class-bank | 169 |
-| dropped:numeric-selector-without-referent | 157 |
-| dropped:make-generic-object-with-placeholder-name | 142 |
 | dropped:avatar-part-shape | 136 |
+| dropped:operation-without-target-template | 116 |
 | dropped:avatar-question-about-face-or-preset-not-parts | 72 |
 | dropped:make-without-single-kind | 47 |
-| dropped:numeric-value-not-in-surface | 16 |
-| dropped:placeholder-value-for-nodes | 15 |
-| dropped:placeholder-value-for-edges | 15 |
+| dropped:unregistered-key | 32 |
 | dropped:target-type-not-in-area | 14 |
-| dropped:compound-part-operation-without-written-selector-template | 9 |
-| dropped:compound-part-calendar-placeholder-values-not-text-evidence | 8 |
-| dropped:duplicate-text | 8 |
-| dropped:compound-part-avatar-label-or-text-nonsense | 7 |
+| dropped:compound-part-avatar-label-or-text-nonsense | 5 |
 | dropped:compound-part-avatar-question-about-face-or-preset-not-parts | 5 |
 | dropped:avatar-selector-not-face | 4 |
-| dropped:compound-part-make-generic-object-with-placeholder-name | 3 |
-| dropped:compound-part-numeric-selector-without-referent | 2 |
-| dropped:compound-part-placeholder-value-for-color | 2 |
-| dropped:compound-part-avatar-variant-not-attested-for-slot | 1 |
-| dropped:compound-part-value-not-in-class-bank | 1 |
-| dropped:compound-part-placeholder-value-for-edges | 1 |
+| dropped:conflicting-label-for-identical-text | 4 |
+| dropped:compound-part-avatar-label-without-part-slot | 2 |
+| dropped:compound-part-rewritten-or-cross-area | 1 |
+| dropped:compound-part-operation-without-target-template | 1 |
 
 Kept with a warning (not an error; see README):
 
 | warning | rows |
 | --- | ---: |
-| value-span-ambiguous | 2 |
-| target-name_span-ambiguous | 1 |
+| bank-extension-needed | 230 |
+| selector-not-in-context | 3 |
+| value-span-ambiguous | 3 |
+| target-name_span-ambiguous | 2 |
 
 ## Final check of the written splits
 
 - unresolved errors: **0**
-- families present in more than one split: **0**
-- label conflicts between identical texts, resolved by source priority: {'ui-human-v1<-ui-features-v1': 1, 'ui-coverage-v2<-ui-diagram-v2': 1, 'ui-natural-v1<-demo-tool-profile': 5, 'ui-human-v1<-demo-tool-profile': 1, 'ui-diagram-v2<-demo-tool-profile': 1, 'demo-tool-profile<-demo-tool-profile': 103}
+- families present in more than one split: **2448**
+- label conflicts between identical texts, resolved by source priority: {'main-synthetic<-main-synthetic': 4}

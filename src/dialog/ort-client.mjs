@@ -20,8 +20,8 @@
  * session survives a restart. `opts.deadlineMs` (a number or a function) is the default deadline of the session's calls; `opts.name` labels the log.
  */
 
-import { guard } from './guard.mjs';
-import { budget } from '../dialog/budget.mjs';
+import { guard } from './turn-guard.mjs';
+import { budget } from './budget.mjs';
 
 export class OrtTimeout extends Error {
   constructor(label, ms) { super(`${label} timed out after ${ms} ms`); this.name = 'OrtTimeout'; this.label = label; }

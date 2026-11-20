@@ -1,0 +1,658 @@
+# diagram.sketch layout modes (authored): the page's settings (w.diagram.diagram) choose how render-projection.sop
+# places the units and draws the links.
+#
+# Layout (the page's `arrange`, else its `layout`): tree, layered, top_down and left_right are the level layout of render-projection.sop (levels by the
+# longest path from a root, the order of first parents); row, column and grid place the units in the order they were
+# made in one row, one column or the smallest square grid; circle puts them on one ring (its radius from their sizes);
+# radial puts the roots in the middle and each level on a ring of its own, in the level's order. The level layout is
+# computed in layout space (ui.diagram.lbox) and turned by the direction: down as it is, up mirrored, right with the
+# levels from left to right, left mirrored again. Spacing scales the gaps between levels and units.
+#
+# Links: the way of each link (ui.diagram.eway) is its own route, else the page's, else gap routing for a top-down
+# level layout and straight lines for the others. Gap routes are render-projection.sop's (they cross no node);
+# elbows leave the side that faces the other end and turn once halfway; straight links are clipped at both outlines
+# (a box, a round shape or a diamond); curved links bend to the left of the line (a quadratic curve through eight
+# points). Each of these ends in an arrowhead turned along its last piece (ui.diagram.arrow).
+#
+# Geometry without a sine or a square root: the sine of an angle in degrees is Bhaskara I's approximation
+# 4x(180-x) / (40500 - x(180-x)) on each half turn (error below 0.002); the length of a vector is the "alpha max plus
+# beta min" estimate 0.96043 max + 0.39782 min (error below 4%), enough to clip a round outline and size an arrowhead.
+@lay.lay.type core.type of=ui.diagram.lay
+@lay.laymap.type core.type of=ui.diagram.laymap
+@lay.dir.type core.type of=ui.diagram.dir
+@lay.dmode.type core.type of=ui.diagram.dmode
+@lay.spacef.type core.type of=ui.diagram.spacef
+@lay.spc.type core.type of=ui.diagram.spc
+@lay.ldim.type core.type of=ui.diagram.ldim
+@lay.lpage.type core.type of=ui.diagram.lpage
+@lay.lbox.type core.type of=ui.diagram.lbox
+@lay.lbot.type core.type of=ui.diagram.lbot
+@lay.lspan.type core.type of=ui.diagram.lspan
+@lay.nflow.type core.type of=ui.diagram.nflow
+@lay.umax.type core.type of=ui.diagram.umax
+@lay.ustat.type core.type of=ui.diagram.ustat
+@lay.ring.type core.type of=ui.diagram.ring
+@lay.ringmax.type core.type of=ui.diagram.ringmax
+@lay.lcount.type core.type of=ui.diagram.lcount
+@lay.lring.type core.type of=ui.diagram.lring
+@lay.angle.type core.type of=ui.diagram.angle
+@lay.sinq.type core.type of=ui.diagram.sinq
+@lay.sine.type core.type of=ui.diagram.sine
+@lay.trig.type core.type of=ui.diagram.trig
+@lay.ortho.type core.type of=ui.diagram.ortho
+@lay.gapflow.type core.type of=ui.diagram.gapflow
+@lay.pway.type core.type of=ui.diagram.pway
+@lay.eway.type core.type of=ui.diagram.eway
+@lay.nkind.type core.type of=ui.diagram.nkind
+@lay.seg.type core.type of=ui.diagram.seg
+@lay.cut.type core.type of=ui.diagram.cut
+@lay.ends.type core.type of=ui.diagram.ends
+@lay.mid.type core.type of=ui.diagram.mid
+@lay.arrow.type core.type of=ui.diagram.arrow
+@lay.bez.type core.type of=ui.diagram.bez
+@lay.ctrl.type core.type of=ui.diagram.ctrl
+
+# ---- The page's settings ----
+@lay.map.tree ui.diagram.laymap from=tree to=flow
+@lay.map.layered ui.diagram.laymap from=layered to=flow
+@lay.map.top_down ui.diagram.laymap from=top_down to=flow
+@lay.map.left_right ui.diagram.laymap from=left_right to=flow
+@lay.map.free ui.diagram.laymap from=free to=flow
+@lay.map.overlapping ui.diagram.laymap from=overlapping to=flow
+@lay.map.row ui.diagram.laymap from=row to=row
+@lay.map.column ui.diagram.laymap from=column to=column
+@lay.map.grid ui.diagram.laymap from=grid to=grid
+@lay.map.circle ui.diagram.laymap from=circle to=circle
+@lay.map.circular ui.diagram.laymap from=circular to=circle
+@lay.map.radial ui.diagram.laymap from=radial to=radial
+@xm.k ui.diagram.const0 w=?anyw
+@xm.ar w.diagram.diagram arrange=?l
+@xm.d w.diagram.diagram layout=?l
+@xm.m ui.diagram.laymap from=?l to=?t
+@xm.out ui.diagram.lay value=?t
+@lay.lay.arrange core.rule when=$xm.ar when=$xm.m then=$xm.out
+@xm.arany w.diagram.diagram arrange=?anya
+@lay.lay core.rule when=$xm.d when=$xm.m not=$xm.arany then=$xm.out
+@xm.any w.diagram.diagram layout=?anyl
+@xm.def ui.diagram.lay value=flow
+@lay.lay.default core.rule when=$xm.k not=$xm.any not=$xm.arany then=$xm.def
+
+@xd.d w.diagram.diagram direction=?d
+@xd.out ui.diagram.dir value=?d
+@lay.dir core.rule when=$xd.d then=$xd.out
+@xd.lr w.diagram.diagram layout=left_right
+@xd.any w.diagram.diagram direction=?anyd
+@xd.right ui.diagram.dir value=right
+@lay.dir.leftright core.rule when=$xd.lr not=$xd.any then=$xd.right
+@xd.down ui.diagram.dir value=down
+@lay.dir.default core.rule when=$xm.k not=$xd.any not=$xd.lr then=$xd.down
+# The direction turns only the level layout; the others are drawn as they are.
+@xd.f ui.diagram.lay value=flow
+@xd.dv ui.diagram.dir value=?dv
+@xd.mode ui.diagram.dmode value=?dv
+@lay.dmode.flow core.rule when=$xd.f when=$xd.dv then=$xd.mode
+@xd.nf ui.diagram.lay value=?other
+@xd.isnf core.check fn=neq args=?other args=flow
+@xd.mdown ui.diagram.dmode value=down
+@lay.dmode.other core.rule when=$xd.nf if=$xd.isnf then=$xd.mdown
+
+@lay.spacef.compact ui.diagram.spacef name=compact f=0.6
+@lay.spacef.normal ui.diagram.spacef name=normal f=1
+@lay.spacef.loose ui.diagram.spacef name=loose f=1.6
+@xs.d w.diagram.diagram spacing=?s
+@xs.f ui.diagram.spacef name=?s f=?f
+@xs.out ui.diagram.spc f=?f
+@lay.spc core.rule when=$xs.d when=$xs.f then=$xs.out
+@xs.any w.diagram.diagram spacing=?anys
+@xs.one ui.diagram.spc f=1
+@lay.spc.default core.rule when=$xm.k not=$xs.any then=$xs.one
+@xc.b ui.diagram.const0 w=?w h=?h margin=?m gapx=?gx gapy=?gy pad=?p top=?t cell=?c lane=?l lanestep=?ls
+@xc.f ui.diagram.spc f=?f
+@xc.gx core.calc out=?gx2 fn=mul args=?gx args=?f
+@xc.gy core.calc out=?gy2 fn=mul args=?gy args=?f
+@xc.out ui.diagram.const w=?w h=?h margin=?m gapx=?gx2 gapy=?gy2 pad=?p top=?t cell=?c lane=?l lanestep=?ls
+@lay.const core.rule when=$xc.b when=$xc.f with=$xc.gx with=$xc.gy then=$xc.out
+
+# ---- Layout space: sizes and page turned for a sideways direction ----
+@xl.u ui.diagram.udim unit=?u w=?w h=?h
+@xl.m ui.diagram.dmode value=?d
+@xl.side core.check fn=matches args=?d args="^(right|left)$"
+@xl.up core.check fn=matches args=?d args="^(down|up)$"
+@xl.turned ui.diagram.ldim unit=?u w=?h h=?w
+@xl.plain ui.diagram.ldim unit=?u w=?w h=?h
+@lay.ldim.side core.rule when=$xl.u when=$xl.m if=$xl.side then=$xl.turned
+@lay.ldim.plain core.rule when=$xl.u when=$xl.m if=$xl.up then=$xl.plain
+@xl.c ui.diagram.const w=?pw h=?ph
+@xl.pt ui.diagram.lpage w=?ph h=?pw
+@xl.pp ui.diagram.lpage w=?pw h=?ph
+@lay.lpage.side core.rule when=$xl.c when=$xl.m if=$xl.side then=$xl.pt
+@lay.lpage.plain core.rule when=$xl.c when=$xl.m if=$xl.up then=$xl.pp
+
+# The extent of the level layout along its levels, to mirror it.
+@xb.b ui.diagram.lbox unit=?u y0=?y0 h=?h
+@xb.y1 core.calc out=?y1 fn=add args=?y0 args=?h
+@xb.bo ui.diagram.lbot unit=?u y0=?y0 y1=?y1
+@lay.lbot core.rule when=$xb.b with=$xb.y1 then=$xb.bo
+@xb.lb ui.diagram.lbot y0=?y0
+@xb.top ui.diagram.lspan key=top value=?m
+@lay.lspan.top core.aggregate over=$xb.lb min=?m args=?y0 then=$xb.top
+@xb.lb2 ui.diagram.lbot y1=?y1
+@xb.bot ui.diagram.lspan key=bottom value=?m
+@lay.lspan.bottom core.aggregate over=$xb.lb2 max=?m args=?y1 then=$xb.bot
+@xb.box ui.diagram.lbox unit=?u x0=?x0 y0=?y0 w=?w h=?h level=?l
+@xb.st ui.diagram.lspan key=top value=?ta
+@xb.sb ui.diagram.lspan key=bottom value=?tb
+@xb.sum core.calc out=?s fn=add args=?ta args=?tb
+@xb.y1b core.calc out=?y1 fn=add args=?y0 args=?h
+@xb.flip core.calc out=?fy fn=sub args=?s args=?y1
+@xb.down ui.diagram.dmode value=down
+@xb.o.down ui.diagram.ubox unit=?u x0=?x0 y0=?y0 w=?w h=?h level=?l
+@lay.ubox.down core.rule when=$xb.box when=$xb.down then=$xb.o.down
+@xb.upm ui.diagram.dmode value=up
+@xb.o.up ui.diagram.ubox unit=?u x0=?x0 y0=?fy w=?w h=?h level=?l
+@lay.ubox.up core.rule when=$xb.box when=$xb.upm when=$xb.st when=$xb.sb with=$xb.sum with=$xb.y1b with=$xb.flip then=$xb.o.up
+@xb.rightm ui.diagram.dmode value=right
+@xb.o.right ui.diagram.ubox unit=?u x0=?y0 y0=?x0 w=?h h=?w level=?l
+@lay.ubox.right core.rule when=$xb.box when=$xb.rightm then=$xb.o.right
+@xb.leftm ui.diagram.dmode value=left
+@xb.o.left ui.diagram.ubox unit=?u x0=?fy y0=?x0 w=?h h=?w level=?l
+@lay.ubox.left core.rule when=$xb.box when=$xb.leftm when=$xb.st when=$xb.sb with=$xb.sum with=$xb.y1b with=$xb.flip then=$xb.o.left
+
+# ---- Row, column and grid: the units in the order they were made ----
+@xg.f ui.diagram.flow unit=?u
+@xg.n ui.diagram.nflow value=?n
+@lay.nflow core.aggregate over=$xg.f count=?n then=$xg.n
+@xg.u ui.diagram.flow unit=?u order=?o
+@xg.r core.rank of=$xg.u by=order out=?r
+@xg.r0 core.calc out=?r0 fn=sub args=?r args=1
+@xg.row ui.diagram.lay value=row
+@xg.o.row ui.diagram.slot unit=?u level=0 pos=?r
+@lay.slot.row core.rule when=$xg.u when=$xg.row with=$xg.r then=$xg.o.row
+@xg.col ui.diagram.lay value=column
+@xg.o.col ui.diagram.slot unit=?u level=?r0 pos=1
+@lay.slot.column core.rule when=$xg.u when=$xg.col with=$xg.r with=$xg.r0 then=$xg.o.col
+@xg.grid ui.diagram.lay value=grid
+@xg.cols ui.diagram.gridcols m=?n cols=?c
+@xg.gl core.calc out=?gl fn=idiv args=?r0 args=?c
+@xg.gm core.calc out=?gm fn=mod args=?r0 args=?c
+@xg.gp core.calc out=?gp fn=add args=?gm args=1
+@xg.o.grid ui.diagram.slot unit=?u level=?gl pos=?gp
+@lay.slot.grid core.rule when=$xg.u when=$xg.grid when=$xg.n when=$xg.cols with=$xg.r with=$xg.r0 with=$xg.gl with=$xg.gm with=$xg.gp then=$xg.o.grid
+@xg.big core.check fn=gt args=?n args=16
+@xg.gl5 core.calc out=?gl fn=idiv args=?r0 args=5
+@xg.gm5 core.calc out=?gm fn=mod args=?r0 args=5
+@lay.slot.grid.big core.rule when=$xg.u when=$xg.grid when=$xg.n if=$xg.big with=$xg.r with=$xg.r0 with=$xg.gl5 with=$xg.gm5 with=$xg.gp then=$xg.o.grid
+
+# ---- Circle and radial: rings ----
+# The larger side of each placed unit, the largest, and their sum (the ring's length).
+@xr.u ui.diagram.flow unit=?u
+@xr.d ui.diagram.udim unit=?u w=?w h=?h
+@xr.m core.calc out=?m fn=max args=?w args=?h
+@xr.um ui.diagram.umax unit=?u m=?m
+@lay.umax core.rule when=$xr.u when=$xr.d with=$xr.m then=$xr.um
+@xr.a ui.diagram.umax m=?m
+@xr.mx ui.diagram.ustat key=max value=?v
+@lay.ustat.max core.aggregate over=$xr.a max=?v args=?m default=0 then=$xr.mx
+@xr.sm ui.diagram.ustat key=sum value=?v
+@lay.ustat.sum core.aggregate over=$xr.a sum=?v args=?m then=$xr.sm
+# One ring: its length is the units' larger sides and a gap after each; its radius that length over 2 pi (at least
+# 90), none for a single unit; its centre far enough from the page's corner for the ring and the largest unit.
+@xr.ci ui.diagram.lay value=circle
+@xr.n ui.diagram.nflow value=?n
+@xr.smv ui.diagram.ustat key=sum value=?sum
+@xr.mxv ui.diagram.ustat key=max value=?mx
+@xr.c ui.diagram.const margin=?mg gapx=?gx
+@xr.g1 core.calc out=?g1 fn=mul args=?n args=?gx
+@xr.len core.calc out=?len fn=add args=?sum args=?g1
+@xr.r1 core.calc out=?r1 fn=div args=?len args=6.2832
+@xr.r core.calc out=?rr fn=max args=?r1 args=90
+@xr.hm core.calc out=?hm fn=div args=?mx args=2
+@xr.c1 core.calc out=?c1 fn=add args=?mg args=?rr
+@xr.cc core.calc out=?cc fn=add args=?c1 args=?hm
+@xr.many core.check fn=gt args=?n args=1
+@xr.ring ui.diagram.ring level=0 r=?rr c=?cc
+@lay.ring.circle core.rule when=$xr.ci when=$xr.n when=$xr.smv when=$xr.mxv when=$xr.c if=$xr.many with=$xr.g1 with=$xr.len with=$xr.r1 with=$xr.r with=$xr.hm with=$xr.c1 with=$xr.cc then=$xr.ring
+@xr.one core.check fn=eq args=?n args=1
+@xr.c0 core.calc out=?c0 fn=add args=?mg args=?hm
+@xr.ring1 ui.diagram.ring level=0 r=0 c=?c0
+@lay.ring.circle.one core.rule when=$xr.ci when=$xr.n when=$xr.mxv when=$xr.c if=$xr.one with=$xr.hm with=$xr.c0 then=$xr.ring1
+# Each unit's angle: the units in the order they were made, the first at the top, clockwise.
+@xr.uo ui.diagram.flow unit=?u order=?o
+@xr.rk core.rank of=$xr.uo by=order out=?k
+@xr.k0 core.calc out=?k0 fn=sub args=?k args=1
+@xr.a1 core.calc out=?a1 fn=mul args=?k0 args=360
+@xr.a2 core.calc out=?a2 fn=div args=?a1 args=?n
+@xr.a3 core.calc out=?a3 fn=add args=?a2 args=270
+@xr.a4 core.calc out=?deg fn=mod args=?a3 args=360
+@xr.ang ui.diagram.angle deg=?deg
+@lay.angle.circle core.rule when=$xr.uo when=$xr.ci when=$xr.n with=$xr.rk with=$xr.k0 with=$xr.a1 with=$xr.a2 with=$xr.a3 with=$xr.a4 then=$xr.ang
+@xr.rg ui.diagram.ring level=0 r=?rr c=?cc
+@xr.tg ui.diagram.trig deg=?deg s=?s c=?co
+@xr.ud ui.diagram.udim unit=?u w=?w h=?h
+@xr.px1 core.calc out=?px1 fn=mul args=?rr args=?co
+@xr.py1 core.calc out=?py1 fn=mul args=?rr args=?s
+@xr.px core.calc out=?px fn=add args=?cc args=?px1
+@xr.py core.calc out=?py fn=add args=?cc args=?py1
+@xr.hw core.calc out=?hw fn=div args=?w args=2
+@xr.hh core.calc out=?hh fn=div args=?h args=2
+@xr.x0 core.calc out=?x0 fn=sub args=?px args=?hw
+@xr.y0 core.calc out=?y0 fn=sub args=?py args=?hh
+@xr.box ui.diagram.ubox unit=?u x0=?x0 y0=?y0 w=?w h=?h level=ring
+@lay.ubox.circle core.rule when=$xr.uo when=$xr.ci when=$xr.n when=$xr.rg when=$xr.ud with=$xr.rk with=$xr.k0 with=$xr.a1 with=$xr.a2 with=$xr.a3 with=$xr.a4 when=$xr.tg with=$xr.px1 with=$xr.py1 with=$xr.px with=$xr.py with=$xr.hw with=$xr.hh with=$xr.x0 with=$xr.y0 then=$xr.box
+
+# Radial: the units of each level (graph depth) on a ring of their own, in the level's order (a tree keeps its
+# branches together). The roots are the centre (one root) or a small ring; level k is k steps out (a step: the largest
+# unit and the gap between levels), further when its units need a longer ring.
+@xa.ra ui.diagram.lay value=radial
+@xa.l ui.diagram.ord unit=?u level=?l
+@xa.lc ui.diagram.lcount level=?l n=?c
+@lay.lcount core.aggregate over=$xa.l by=?l count=?c then=$xa.lc
+@xa.cnt ui.diagram.lcount level=?l n=?c
+@xa.mxv ui.diagram.ustat key=max value=?mx
+@xa.c ui.diagram.const margin=?mg gapx=?gx gapy=?gy
+@xa.st1 core.calc out=?st1 fn=add args=?mx args=?gy
+@xa.need1 core.calc out=?nd1 fn=add args=?mx args=?gx
+@xa.need2 core.calc out=?nd2 fn=mul args=?nd1 args=?c
+@xa.need core.calc out=?nd fn=div args=?nd2 args=6.2832
+@xa.out0 core.calc out=?o0 fn=mul args=?l args=?st1
+@xa.rr core.calc out=?rr fn=max args=?o0 args=?nd
+@xa.many core.check fn=gt args=?c args=1
+@xa.ring ui.diagram.lring level=?l r=?rr n=?c
+@lay.lring core.rule when=$xa.ra when=$xa.cnt when=$xa.mxv when=$xa.c if=$xa.many with=$xa.st1 with=$xa.need1 with=$xa.need2 with=$xa.need with=$xa.out0 with=$xa.rr then=$xa.ring
+@xa.one core.check fn=eq args=?c args=1
+@xa.ring1 ui.diagram.lring level=?l r=?o0 n=1
+@lay.lring.one core.rule when=$xa.ra when=$xa.cnt when=$xa.mxv when=$xa.c if=$xa.one with=$xa.st1 with=$xa.out0 then=$xa.ring1
+@xa.lr ui.diagram.lring r=?r
+@xa.big ui.diagram.ringmax value=?m
+@lay.ustat.ring core.aggregate over=$xa.lr max=?m args=?r default=0 then=$xa.big
+@xa.bigv ui.diagram.ringmax value=?rm
+@xa.hm core.calc out=?hm fn=div args=?mx args=2
+@xa.c1 core.calc out=?c1 fn=add args=?mg args=?rm
+@xa.cc core.calc out=?cc fn=add args=?c1 args=?hm
+@xa.centre ui.diagram.ring level=centre r=?rm c=?cc
+@lay.ring.radial core.rule when=$xa.ra when=$xa.bigv when=$xa.mxv when=$xa.c with=$xa.hm with=$xa.c1 with=$xa.cc then=$xa.centre
+@xa.o ui.diagram.ord unit=?u level=?l key=?key
+@xa.rk core.rank of=$xa.o by=key within=?l out=?k
+@xa.lrg ui.diagram.lring level=?l r=?rl n=?nl
+@xa.k0 core.calc out=?k0 fn=sub args=?k args=1
+@xa.a1 core.calc out=?a1 fn=mul args=?k0 args=360
+@xa.a2 core.calc out=?a2 fn=div args=?a1 args=?nl
+@xa.a3 core.calc out=?a3 fn=add args=?a2 args=270
+@xa.a4 core.calc out=?deg fn=mod args=?a3 args=360
+@xa.ang ui.diagram.angle deg=?deg
+@lay.angle.radial core.rule when=$xa.o when=$xa.ra when=$xa.lrg with=$xa.rk with=$xa.k0 with=$xa.a1 with=$xa.a2 with=$xa.a3 with=$xa.a4 then=$xa.ang
+@xa.cen ui.diagram.ring level=centre c=?cc
+@xa.tg ui.diagram.trig deg=?deg s=?s c=?co
+@xa.ud ui.diagram.udim unit=?u w=?w h=?h
+@xa.px1 core.calc out=?px1 fn=mul args=?rl args=?co
+@xa.py1 core.calc out=?py1 fn=mul args=?rl args=?s
+@xa.px core.calc out=?px fn=add args=?cc args=?px1
+@xa.py core.calc out=?py fn=add args=?cc args=?py1
+@xa.hw core.calc out=?hw fn=div args=?w args=2
+@xa.hh core.calc out=?hh fn=div args=?h args=2
+@xa.x0 core.calc out=?x0 fn=sub args=?px args=?hw
+@xa.y0 core.calc out=?y0 fn=sub args=?py args=?hh
+@xa.box ui.diagram.ubox unit=?u x0=?x0 y0=?y0 w=?w h=?h level=ring
+@lay.ubox.radial core.rule when=$xa.o when=$xa.ra when=$xa.lrg when=$xa.cen when=$xa.ud with=$xa.rk with=$xa.k0 with=$xa.a1 with=$xa.a2 with=$xa.a3 with=$xa.a4 when=$xa.tg with=$xa.px1 with=$xa.py1 with=$xa.px with=$xa.py with=$xa.hw with=$xa.hh with=$xa.x0 with=$xa.y0 then=$xa.box
+
+# ---- Sine and cosine of an angle in degrees (Bhaskara I) ----
+@xt.a ui.diagram.angle deg=?a
+@xt.q0 ui.diagram.sinq deg=?a
+@lay.sinq.self core.rule when=$xt.a then=$xt.q0
+@xt.a90 core.calc out=?b1 fn=add args=?a args=90
+@xt.b core.calc out=?b fn=mod args=?b1 args=360
+@xt.q90 ui.diagram.sinq deg=?b
+@lay.sinq.quarter core.rule when=$xt.a with=$xt.a90 with=$xt.b then=$xt.q90
+@xt.q ui.diagram.sinq deg=?x
+@xt.m core.calc out=?m fn=mod args=?x args=360
+@xt.low core.check fn=lte args=?m args=180
+@xt.m1 core.calc out=?m1 fn=sub args=180 args=?m
+@xt.p core.calc out=?p fn=mul args=?m args=?m1
+@xt.n4 core.calc out=?n4 fn=mul args=?p args=4
+@xt.dd core.calc out=?dd fn=sub args=40500 args=?p
+@xt.s core.calc out=?s fn=div args=?n4 args=?dd
+@xt.out ui.diagram.sine deg=?x s=?s
+@lay.sine.low core.rule when=$xt.q with=$xt.m if=$xt.low with=$xt.m1 with=$xt.p with=$xt.n4 with=$xt.dd with=$xt.s then=$xt.out
+@xt.high core.check fn=gt args=?m args=180
+@xt.h core.calc out=?h fn=sub args=?m args=180
+@xt.h1 core.calc out=?h1 fn=sub args=180 args=?h
+@xt.hp core.calc out=?hp fn=mul args=?h args=?h1
+@xt.hn core.calc out=?hn fn=mul args=?hp args=-4
+@xt.hd core.calc out=?hd fn=sub args=40500 args=?hp
+@xt.hs core.calc out=?hs fn=div args=?hn args=?hd
+@xt.hout ui.diagram.sine deg=?x s=?hs
+@lay.sine.high core.rule when=$xt.q with=$xt.m if=$xt.high with=$xt.h with=$xt.h1 with=$xt.hp with=$xt.hn with=$xt.hd with=$xt.hs then=$xt.hout
+@xt.sa ui.diagram.sine deg=?a s=?s
+@xt.sc ui.diagram.sine deg=?b s=?c
+@xt.trig ui.diagram.trig deg=?a s=?s c=?c
+@lay.trig core.rule when=$xt.a when=$xt.sa with=$xt.a90 with=$xt.b when=$xt.sc then=$xt.trig
+
+# ---- The way of each link ----
+@xw.lay ui.diagram.lay value=flow
+@xw.down ui.diagram.dmode value=down
+@xw.gf ui.diagram.gapflow value=yes
+@lay.gapflow core.rule when=$xw.lay when=$xw.down then=$xw.gf
+@xw.gfy ui.diagram.gapflow value=yes
+@xw.gap ui.diagram.ortho value=gap
+@lay.ortho.gap core.rule when=$xw.gfy then=$xw.gap
+@xw.k ui.diagram.const0 w=?anyw
+@xw.elbow ui.diagram.ortho value=elbow
+@lay.ortho.elbow core.rule when=$xw.k not=$xw.gfy then=$xw.elbow
+@xw.pr w.diagram.diagram route=orthogonal
+@xw.ov ui.diagram.ortho value=?ov
+@xw.p.o ui.diagram.pway value=?ov
+@lay.pway.orthogonal core.rule when=$xw.pr when=$xw.ov then=$xw.p.o
+@xw.ps w.diagram.diagram route=?pr
+@xw.psc core.check fn=matches args=?pr args="^(straight|curved)$"
+@xw.p.s ui.diagram.pway value=?pr
+@lay.pway.drawn core.rule when=$xw.ps if=$xw.psc then=$xw.p.s
+@xw.pany w.diagram.diagram route=?anyr
+@xw.pf ui.diagram.lay value=flow
+@lay.pway.flow core.rule when=$xw.pf when=$xw.ov not=$xw.pany then=$xw.p.o
+@xw.pnf ui.diagram.lay value=?pl
+@xw.pnfc core.check fn=neq args=?pl args=flow
+@xw.p.st ui.diagram.pway value=straight
+@lay.pway.other core.rule when=$xw.pnf not=$xw.pany if=$xw.pnfc then=$xw.p.st
+@xw.e w.diagram.edge code=?e
+@xw.eo w.diagram.edge code=?e route=orthogonal
+@xw.e.o ui.diagram.eway edge=?e way=?ov
+@lay.eway.orthogonal core.rule when=$xw.eo when=$xw.ov then=$xw.e.o
+@xw.es w.diagram.edge code=?e route=?er
+@xw.esc core.check fn=matches args=?er args="^(straight|curved)$"
+@xw.e.s ui.diagram.eway edge=?e way=?er
+@lay.eway.drawn core.rule when=$xw.es if=$xw.esc then=$xw.e.s
+@xw.eany w.diagram.edge code=?e route=?anyer
+@xw.pw ui.diagram.pway value=?pw
+@xw.e.p ui.diagram.eway edge=?e way=?pw
+@lay.eway.page core.rule when=$xw.e when=$xw.pw not=$xw.eany then=$xw.e.p
+
+# ---- Elbow, straight and curved links ----
+# How a node's outline cuts a line from its centre: a box, a round shape, or a diamond.
+@xn.n w.diagram.node code=?c shape=?s
+@xn.b ui.diagram.base shape=?s kind=round
+@xn.round ui.diagram.nkind node=?c kind=round
+@lay.nkind.round core.rule when=$xn.n when=$xn.b then=$xn.round
+@xn.dia core.check fn=eq args=?s args=diamond
+@xn.dk ui.diagram.nkind node=?c kind=diamond
+@lay.nkind.diamond core.rule when=$xn.n if=$xn.dia then=$xn.dk
+@xn.bb ui.diagram.base shape=?s kind=?k
+@xn.box core.check fn=neq args=?k args=round
+@xn.nd core.check fn=neq args=?s args=diamond
+@xn.bk ui.diagram.nkind node=?c kind=box
+@lay.nkind.box core.rule when=$xn.n when=$xn.bb if=$xn.box if=$xn.nd then=$xn.bk
+# A link between two units, drawn its own way.
+@xn.e w.diagram.edge code=?e from=$xn.ea to=$xn.eb
+@xn.ea w.diagram.node code=?a
+@xn.eb w.diagram.node code=?b
+@xn.ua ui.diagram.unitof node=?a unit=?ua
+@xn.ub ui.diagram.unitof node=?b unit=?ub
+@xn.ne core.check fn=neq args=?ua args=?ub
+@xn.w ui.diagram.eway edge=?e way=?way
+@xn.drawn core.check fn=matches args=?way args="^(elbow|straight|curved)$"
+@xn.route ui.diagram.route edge=?e way=?way a=?a b=?b la=0 lb=0
+@lay.route.drawn core.rule when=$xn.e when=$xn.ea when=$xn.eb when=$xn.ua when=$xn.ub when=$xn.w if=$xn.ne if=$xn.drawn then=$xn.route
+# The line from centre to centre and its parts.
+@xs2.r ui.diagram.route edge=?e way=?way a=?a b=?b
+@xs2.dr core.check fn=matches args=?way args="^(elbow|straight|curved)$"
+@xs2.ba ui.diagram.nbox node=?a cx=?ax cy=?ay w=?wa h=?ha
+@xs2.bb ui.diagram.nbox node=?b cx=?bx cy=?by w=?wb h=?hb
+@xs2.dx core.calc out=?dx fn=sub args=?bx args=?ax
+@xs2.dy core.calc out=?dy fn=sub args=?by args=?ay
+@xs2.adx core.calc out=?adx fn=abs args=?dx
+@xs2.ady core.calc out=?ady fn=abs args=?dy
+@xs2.out ui.diagram.seg edge=?e way=?way a=?a b=?b ax=?ax ay=?ay bx=?bx by=?by dx=?dx dy=?dy adx=?adx ady=?ady
+@lay.seg core.rule when=$xs2.r when=$xs2.ba when=$xs2.bb if=$xs2.dr with=$xs2.dx with=$xs2.dy with=$xs2.adx with=$xs2.ady then=$xs2.out
+# The fraction of the line inside each end's outline (t): a box the nearer of its sides, a diamond 1 / (u + v), a round
+# shape 1 / the length of (u, v), where u and v are the line's parts over the half sides.
+@xu.s ui.diagram.seg edge=?e a=?a b=?b adx=?adx ady=?ady
+@xu.na ui.diagram.nkind node=?n kind=?k
+@xu.nb ui.diagram.nbox node=?n w=?w h=?h
+@xu.ea core.check fn=eq args=?n args=?a
+@xu.eb core.check fn=eq args=?n args=?b
+@xu.hw core.calc out=?hw fn=div args=?w args=2
+@xu.hh core.calc out=?hh fn=div args=?h args=2
+@xu.ax core.calc out=?ex fn=max args=?adx args=0.001
+@xu.ay core.calc out=?ey fn=max args=?ady args=0.001
+@xu.u core.calc out=?u fn=div args=?ex args=?hw
+@xu.v core.calc out=?v fn=div args=?ey args=?hh
+@xu.mx core.calc out=?mx fn=max args=?u args=?v
+@xu.mn core.calc out=?mn fn=min args=?u args=?v
+@xu.isbox core.check fn=eq args=?k args=box
+@xu.tb core.calc out=?t fn=div args=1 args=?mx
+@xu.isdia core.check fn=eq args=?k args=diamond
+@xu.uv core.calc out=?uv fn=add args=?u args=?v
+@xu.td core.calc out=?t fn=div args=1 args=?uv
+@xu.isrnd core.check fn=eq args=?k args=round
+@xu.l1 core.calc out=?l1 fn=mul args=?mx args=0.96043
+@xu.l2 core.calc out=?l2 fn=mul args=?mn args=0.39782
+@xu.l core.calc out=?ln fn=add args=?l1 args=?l2
+@xu.tr core.calc out=?t fn=div args=1 args=?ln
+@xu.oa ui.diagram.cut edge=?e at=a t=?t hw=?hw hh=?hh
+@xu.ob ui.diagram.cut edge=?e at=b t=?t hw=?hw hh=?hh
+@lay.cut.a.box core.rule when=$xu.s when=$xu.na when=$xu.nb if=$xu.ea if=$xu.isbox with=$xu.hw with=$xu.hh with=$xu.ax with=$xu.ay with=$xu.u with=$xu.v with=$xu.mx with=$xu.tb then=$xu.oa
+@lay.cut.b.box core.rule when=$xu.s when=$xu.na when=$xu.nb if=$xu.eb if=$xu.isbox with=$xu.hw with=$xu.hh with=$xu.ax with=$xu.ay with=$xu.u with=$xu.v with=$xu.mx with=$xu.tb then=$xu.ob
+@lay.cut.a.diamond core.rule when=$xu.s when=$xu.na when=$xu.nb if=$xu.ea if=$xu.isdia with=$xu.hw with=$xu.hh with=$xu.ax with=$xu.ay with=$xu.u with=$xu.v with=$xu.uv with=$xu.td then=$xu.oa
+@lay.cut.b.diamond core.rule when=$xu.s when=$xu.na when=$xu.nb if=$xu.eb if=$xu.isdia with=$xu.hw with=$xu.hh with=$xu.ax with=$xu.ay with=$xu.u with=$xu.v with=$xu.uv with=$xu.td then=$xu.ob
+@lay.cut.a.round core.rule when=$xu.s when=$xu.na when=$xu.nb if=$xu.ea if=$xu.isrnd with=$xu.hw with=$xu.hh with=$xu.ax with=$xu.ay with=$xu.u with=$xu.v with=$xu.mx with=$xu.mn with=$xu.l1 with=$xu.l2 with=$xu.l with=$xu.tr then=$xu.oa
+@lay.cut.b.round core.rule when=$xu.s when=$xu.na when=$xu.nb if=$xu.eb if=$xu.isrnd with=$xu.hw with=$xu.hh with=$xu.ax with=$xu.ay with=$xu.u with=$xu.v with=$xu.mx with=$xu.mn with=$xu.l1 with=$xu.l2 with=$xu.l with=$xu.tr then=$xu.ob
+# The ends on the outlines: p (start) and q (end).
+@xe.s ui.diagram.seg edge=?e ax=?ax ay=?ay bx=?bx by=?by dx=?dx dy=?dy
+@xe.ca ui.diagram.cut edge=?e at=a t=?ta
+@xe.cb ui.diagram.cut edge=?e at=b t=?tb
+@xe.pxd core.calc out=?pxd fn=mul args=?dx args=?ta
+@xe.pyd core.calc out=?pyd fn=mul args=?dy args=?ta
+@xe.qxd core.calc out=?qxd fn=mul args=?dx args=?tb
+@xe.qyd core.calc out=?qyd fn=mul args=?dy args=?tb
+@xe.px core.calc out=?px fn=add args=?ax args=?pxd
+@xe.py core.calc out=?py fn=add args=?ay args=?pyd
+@xe.qx core.calc out=?qx fn=sub args=?bx args=?qxd
+@xe.qy core.calc out=?qy fn=sub args=?by args=?qyd
+@xe.out ui.diagram.ends edge=?e px=?px py=?py qx=?qx qy=?qy
+@lay.ends core.rule when=$xe.s when=$xe.ca when=$xe.cb with=$xe.pxd with=$xe.pyd with=$xe.qxd with=$xe.qyd with=$xe.px with=$xe.py with=$xe.qx with=$xe.qy then=$xe.out
+
+# Straight: the two ends; the middle carries the label; the arrowheads point along the line.
+@xq.s ui.diagram.seg edge=?e way=straight dx=?dx dy=?dy adx=?adx ady=?ady
+@xq.e ui.diagram.ends edge=?e px=?px py=?py qx=?qx qy=?qy
+@xq.mx1 core.calc out=?mx1 fn=add args=?px args=?qx
+@xq.my1 core.calc out=?my1 fn=add args=?py args=?qy
+@xq.mx core.calc out=?mx fn=div args=?mx1 args=2
+@xq.my core.calc out=?my fn=div args=?my1 args=2
+@xq.p1 ui.diagram.point source=?e n=1 x=?px y=?py
+@xq.p23 ui.diagram.point source=?e n=23 x=?qx y=?qy
+@xq.mid ui.diagram.mid edge=?e x=?mx y=?my
+@lay.straight.1 core.rule when=$xq.s when=$xq.e then=$xq.p1
+@lay.straight.23 core.rule when=$xq.s when=$xq.e then=$xq.p23
+@lay.straight.mid core.rule when=$xq.s when=$xq.e with=$xq.mx1 with=$xq.my1 with=$xq.mx with=$xq.my then=$xq.mid
+@xq.big core.calc out=?bg fn=max args=?adx args=?ady
+@xq.sml core.calc out=?sm fn=min args=?adx args=?ady
+@xq.l1 core.calc out=?l1 fn=mul args=?bg args=0.96043
+@xq.l2 core.calc out=?l2 fn=mul args=?sm args=0.39782
+@xq.l3 core.calc out=?l3 fn=add args=?l1 args=?l2
+@xq.l core.calc out=?ln fn=max args=?l3 args=0.001
+@xq.ux core.calc out=?ux fn=div args=?dx args=?ln
+@xq.uy core.calc out=?uy fn=div args=?dy args=?ln
+@xq.nux core.calc out=?nux fn=mul args=?ux args=-1
+@xq.nuy core.calc out=?nuy fn=mul args=?uy args=-1
+@xq.head ui.diagram.arrow edge=?e at=head x=?qx y=?qy ux=?ux uy=?uy
+@xq.tail ui.diagram.arrow edge=?e at=tail x=?px y=?py ux=?nux uy=?nuy
+@lay.straight.head core.rule when=$xq.s when=$xq.e with=$xq.big with=$xq.sml with=$xq.l1 with=$xq.l2 with=$xq.l3 with=$xq.l with=$xq.ux with=$xq.uy then=$xq.head
+@lay.straight.tail core.rule when=$xq.s when=$xq.e with=$xq.big with=$xq.sml with=$xq.l1 with=$xq.l2 with=$xq.l3 with=$xq.l with=$xq.ux with=$xq.uy with=$xq.nux with=$xq.nuy then=$xq.tail
+
+# Curved: a quadratic curve from p to q through a control point left of the middle (a fifth of the line out); eight
+# points along it (t = 1/8 ... 7/8).
+@lay.bez.1 ui.diagram.bez k=1 a=0.765625 b=0.21875 c=0.015625
+@lay.bez.2 ui.diagram.bez k=2 a=0.5625 b=0.375 c=0.0625
+@lay.bez.3 ui.diagram.bez k=3 a=0.390625 b=0.46875 c=0.140625
+@lay.bez.4 ui.diagram.bez k=4 a=0.25 b=0.5 c=0.25
+@lay.bez.5 ui.diagram.bez k=5 a=0.140625 b=0.46875 c=0.390625
+@lay.bez.6 ui.diagram.bez k=6 a=0.0625 b=0.375 c=0.5625
+@lay.bez.7 ui.diagram.bez k=7 a=0.015625 b=0.21875 c=0.765625
+@xv.s ui.diagram.seg edge=?e way=curved dx=?dx dy=?dy
+@xv.e ui.diagram.ends edge=?e px=?px py=?py qx=?qx qy=?qy
+@xv.mx1 core.calc out=?mx1 fn=add args=?px args=?qx
+@xv.my1 core.calc out=?my1 fn=add args=?py args=?qy
+@xv.mx core.calc out=?mx fn=div args=?mx1 args=2
+@xv.my core.calc out=?my fn=div args=?my1 args=2
+@xv.ox core.calc out=?ox fn=mul args=?dy args=0.2
+@xv.oy core.calc out=?oy fn=mul args=?dx args=-0.2
+@xv.cx core.calc out=?cx fn=add args=?mx args=?ox
+@xv.cy core.calc out=?cy fn=add args=?my args=?oy
+@xv.out ui.diagram.ctrl edge=?e px=?px py=?py qx=?qx qy=?qy cx=?cx cy=?cy
+@lay.ctrl core.rule when=$xv.s when=$xv.e with=$xv.mx1 with=$xv.my1 with=$xv.mx with=$xv.my with=$xv.ox with=$xv.oy with=$xv.cx with=$xv.cy then=$xv.out
+@xk.c ui.diagram.ctrl edge=?e px=?px py=?py qx=?qx qy=?qy cx=?cx cy=?cy
+@xk.b ui.diagram.bez k=?k a=?a b=?b c=?c
+@xk.x1 core.calc out=?x1 fn=mul args=?px args=?a
+@xk.x2 core.calc out=?x2 fn=mul args=?cx args=?b
+@xk.x3 core.calc out=?x3 fn=mul args=?qx args=?c
+@xk.x core.calc out=?x fn=add args=?x1 args=?x2 args=?x3
+@xk.y1 core.calc out=?y1 fn=mul args=?py args=?a
+@xk.y2 core.calc out=?y2 fn=mul args=?cy args=?b
+@xk.y3 core.calc out=?y3 fn=mul args=?qy args=?c
+@xk.y core.calc out=?y fn=add args=?y1 args=?y2 args=?y3
+@xk.n core.calc out=?n fn=add args=?k args=10
+@xk.pt ui.diagram.point source=?e n=?n x=?x y=?y
+@lay.curve.points core.rule when=$xk.c when=$xk.b with=$xk.x1 with=$xk.x2 with=$xk.x3 with=$xk.x with=$xk.y1 with=$xk.y2 with=$xk.y3 with=$xk.y with=$xk.n then=$xk.pt
+@xk.four core.check fn=eq args=?k args=4
+@xk.mid ui.diagram.mid edge=?e x=?x y=?y
+@lay.curve.mid core.rule when=$xk.c when=$xk.b if=$xk.four with=$xk.x1 with=$xk.x2 with=$xk.x3 with=$xk.x with=$xk.y1 with=$xk.y2 with=$xk.y3 with=$xk.y then=$xk.mid
+@xk.p1 ui.diagram.point source=?e n=1 x=?px y=?py
+@xk.p23 ui.diagram.point source=?e n=23 x=?qx y=?qy
+@lay.curve.1 core.rule when=$xk.c then=$xk.p1
+@lay.curve.23 core.rule when=$xk.c then=$xk.p23
+# The arrowheads point from the control point to each end.
+@xk.hdx core.calc out=?hdx fn=sub args=?qx args=?cx
+@xk.hdy core.calc out=?hdy fn=sub args=?qy args=?cy
+@xk.ha core.calc out=?hax fn=abs args=?hdx
+@xk.hb core.calc out=?hay fn=abs args=?hdy
+@xk.hbg core.calc out=?hbg fn=max args=?hax args=?hay
+@xk.hsm core.calc out=?hsm fn=min args=?hax args=?hay
+@xk.hl1 core.calc out=?hl1 fn=mul args=?hbg args=0.96043
+@xk.hl2 core.calc out=?hl2 fn=mul args=?hsm args=0.39782
+@xk.hl3 core.calc out=?hl3 fn=add args=?hl1 args=?hl2
+@xk.hl core.calc out=?hl fn=max args=?hl3 args=0.001
+@xk.hux core.calc out=?hux fn=div args=?hdx args=?hl
+@xk.huy core.calc out=?huy fn=div args=?hdy args=?hl
+@xk.head ui.diagram.arrow edge=?e at=head x=?qx y=?qy ux=?hux uy=?huy
+@lay.curve.head core.rule when=$xk.c with=$xk.hdx with=$xk.hdy with=$xk.ha with=$xk.hb with=$xk.hbg with=$xk.hsm with=$xk.hl1 with=$xk.hl2 with=$xk.hl3 with=$xk.hl with=$xk.hux with=$xk.huy then=$xk.head
+@xk.tdx core.calc out=?tdx fn=sub args=?px args=?cx
+@xk.tdy core.calc out=?tdy fn=sub args=?py args=?cy
+@xk.ta core.calc out=?tax fn=abs args=?tdx
+@xk.tb core.calc out=?tay fn=abs args=?tdy
+@xk.tbg core.calc out=?tbg fn=max args=?tax args=?tay
+@xk.tsm core.calc out=?tsm fn=min args=?tax args=?tay
+@xk.tl1 core.calc out=?tl1 fn=mul args=?tbg args=0.96043
+@xk.tl2 core.calc out=?tl2 fn=mul args=?tsm args=0.39782
+@xk.tl3 core.calc out=?tl3 fn=add args=?tl1 args=?tl2
+@xk.tl core.calc out=?tl fn=max args=?tl3 args=0.001
+@xk.tux core.calc out=?tux fn=div args=?tdx args=?tl
+@xk.tuy core.calc out=?tuy fn=div args=?tdy args=?tl
+@xk.tail ui.diagram.arrow edge=?e at=tail x=?px y=?py ux=?tux uy=?tuy
+@lay.curve.tail core.rule when=$xk.c with=$xk.tdx with=$xk.tdy with=$xk.ta with=$xk.tb with=$xk.tbg with=$xk.tsm with=$xk.tl1 with=$xk.tl2 with=$xk.tl3 with=$xk.tl with=$xk.tux with=$xk.tuy then=$xk.tail
+
+# Elbow: out of the side that faces the other end, across to halfway, along, and into the facing side of the target
+# (sideways when the ends are further apart across than down, else downwards).
+@xo.s ui.diagram.seg edge=?e way=elbow a=?a b=?b ax=?ax ay=?ay bx=?bx by=?by dx=?dx dy=?dy adx=?adx ady=?ady
+@xo.ba ui.diagram.nbox node=?a w=?wa h=?ha
+@xo.bb ui.diagram.nbox node=?b w=?wb h=?hb
+@xo.sx core.calc out=?sx fn=sign args=?dx
+@xo.sy core.calc out=?sy fn=sign args=?dy
+@xo.across core.check fn=gte args=?adx args=?ady
+@xo.hwa core.calc out=?hwa fn=div args=?wa args=2
+@xo.hwb core.calc out=?hwb fn=div args=?wb args=2
+@xo.oa core.calc out=?oa fn=mul args=?hwa args=?sx
+@xo.ob core.calc out=?ob fn=mul args=?hwb args=?sx
+@xo.px core.calc out=?px fn=add args=?ax args=?oa
+@xo.qx core.calc out=?qx fn=sub args=?bx args=?ob
+@xo.m1 core.calc out=?m1 fn=add args=?px args=?qx
+@xo.mx core.calc out=?mx fn=div args=?m1 args=2
+@xo.y1 core.calc out=?y1 fn=add args=?ay args=?by
+@xo.my core.calc out=?my fn=div args=?y1 args=2
+@xo.nsx core.calc out=?nsx fn=mul args=?sx args=-1
+@xo.h1 ui.diagram.point source=?e n=1 x=?px y=?ay
+@xo.h10 ui.diagram.point source=?e n=10 x=?mx y=?ay
+@xo.h11 ui.diagram.point source=?e n=11 x=?mx y=?by
+@xo.h23 ui.diagram.point source=?e n=23 x=?qx y=?by
+@xo.hmid ui.diagram.mid edge=?e x=?mx y=?my
+@xo.hhead ui.diagram.arrow edge=?e at=head x=?qx y=?by ux=?sx uy=0
+@xo.htail ui.diagram.arrow edge=?e at=tail x=?px y=?ay ux=?nsx uy=0
+@lay.elbow.across.1 core.rule when=$xo.s when=$xo.ba when=$xo.bb with=$xo.sx if=$xo.across with=$xo.hwa with=$xo.hwb with=$xo.oa with=$xo.ob with=$xo.px with=$xo.qx with=$xo.m1 with=$xo.mx then=$xo.h1
+@lay.elbow.across.10 core.rule when=$xo.s when=$xo.ba when=$xo.bb with=$xo.sx if=$xo.across with=$xo.hwa with=$xo.hwb with=$xo.oa with=$xo.ob with=$xo.px with=$xo.qx with=$xo.m1 with=$xo.mx then=$xo.h10
+@lay.elbow.across.11 core.rule when=$xo.s when=$xo.ba when=$xo.bb with=$xo.sx if=$xo.across with=$xo.hwa with=$xo.hwb with=$xo.oa with=$xo.ob with=$xo.px with=$xo.qx with=$xo.m1 with=$xo.mx then=$xo.h11
+@lay.elbow.across.23 core.rule when=$xo.s when=$xo.ba when=$xo.bb with=$xo.sx if=$xo.across with=$xo.hwa with=$xo.hwb with=$xo.oa with=$xo.ob with=$xo.px with=$xo.qx then=$xo.h23
+@lay.elbow.across.mid core.rule when=$xo.s when=$xo.ba when=$xo.bb with=$xo.sx if=$xo.across with=$xo.hwa with=$xo.hwb with=$xo.oa with=$xo.ob with=$xo.px with=$xo.qx with=$xo.m1 with=$xo.mx with=$xo.y1 with=$xo.my then=$xo.hmid
+@lay.elbow.across.head core.rule when=$xo.s when=$xo.ba when=$xo.bb with=$xo.sx if=$xo.across with=$xo.hwb with=$xo.ob with=$xo.qx then=$xo.hhead
+@lay.elbow.across.tail core.rule when=$xo.s when=$xo.ba when=$xo.bb with=$xo.sx if=$xo.across with=$xo.hwa with=$xo.oa with=$xo.px with=$xo.nsx then=$xo.htail
+@xo.down core.check fn=lt args=?adx args=?ady
+@xo.hha core.calc out=?hha fn=div args=?ha args=2
+@xo.hhb core.calc out=?hhb fn=div args=?hb args=2
+@xo.va core.calc out=?va fn=mul args=?hha args=?sy
+@xo.vb core.calc out=?vb fn=mul args=?hhb args=?sy
+@xo.vpy core.calc out=?vpy fn=add args=?ay args=?va
+@xo.vqy core.calc out=?vqy fn=sub args=?by args=?vb
+@xo.v1 core.calc out=?v1 fn=add args=?vpy args=?vqy
+@xo.vmy core.calc out=?vmy fn=div args=?v1 args=2
+@xo.x1 core.calc out=?x1 fn=add args=?ax args=?bx
+@xo.vmx core.calc out=?vmx fn=div args=?x1 args=2
+@xo.nsy core.calc out=?nsy fn=mul args=?sy args=-1
+@xo.v1p ui.diagram.point source=?e n=1 x=?ax y=?vpy
+@xo.v10 ui.diagram.point source=?e n=10 x=?ax y=?vmy
+@xo.v11 ui.diagram.point source=?e n=11 x=?bx y=?vmy
+@xo.v23 ui.diagram.point source=?e n=23 x=?bx y=?vqy
+@xo.vmid ui.diagram.mid edge=?e x=?vmx y=?vmy
+@xo.vhead ui.diagram.arrow edge=?e at=head x=?bx y=?vqy ux=0 uy=?sy
+@xo.vtail ui.diagram.arrow edge=?e at=tail x=?ax y=?vpy ux=0 uy=?nsy
+@lay.elbow.down.1 core.rule when=$xo.s when=$xo.ba when=$xo.bb with=$xo.sy if=$xo.down with=$xo.hha with=$xo.va with=$xo.vpy then=$xo.v1p
+@lay.elbow.down.10 core.rule when=$xo.s when=$xo.ba when=$xo.bb with=$xo.sy if=$xo.down with=$xo.hha with=$xo.hhb with=$xo.va with=$xo.vb with=$xo.vpy with=$xo.vqy with=$xo.v1 with=$xo.vmy then=$xo.v10
+@lay.elbow.down.11 core.rule when=$xo.s when=$xo.ba when=$xo.bb with=$xo.sy if=$xo.down with=$xo.hha with=$xo.hhb with=$xo.va with=$xo.vb with=$xo.vpy with=$xo.vqy with=$xo.v1 with=$xo.vmy then=$xo.v11
+@lay.elbow.down.23 core.rule when=$xo.s when=$xo.ba when=$xo.bb with=$xo.sy if=$xo.down with=$xo.hhb with=$xo.vb with=$xo.vqy then=$xo.v23
+@lay.elbow.down.mid core.rule when=$xo.s when=$xo.ba when=$xo.bb with=$xo.sy if=$xo.down with=$xo.hha with=$xo.hhb with=$xo.va with=$xo.vb with=$xo.vpy with=$xo.vqy with=$xo.v1 with=$xo.vmy with=$xo.x1 with=$xo.vmx then=$xo.vmid
+@lay.elbow.down.head core.rule when=$xo.s when=$xo.ba when=$xo.bb with=$xo.sy if=$xo.down with=$xo.hhb with=$xo.vb with=$xo.vqy then=$xo.vhead
+@lay.elbow.down.tail core.rule when=$xo.s when=$xo.ba when=$xo.bb with=$xo.sy if=$xo.down with=$xo.hha with=$xo.va with=$xo.vpy with=$xo.nsy then=$xo.vtail
+
+# Gap routes keep their label at the turn towards the target (point 11).
+@xm2.r ui.diagram.route edge=?e way=?way
+@xm2.g core.check fn=matches args=?way args="^(next|lane|direct|inside|self)$"
+@xm2.p ui.diagram.point source=?e n=11 x=?x y=?y
+@xm2.out ui.diagram.mid edge=?e x=?x y=?y
+@lay.mid.gap core.rule when=$xm2.r when=$xm2.p if=$xm2.g then=$xm2.out
+
+# ---- Arrowheads along any line ----
+# A head (forward, both) and a tail (both, back) as a triangle: its tip on the end, 11 long and 12 wide, turned along
+# the line; the end is also observed as the link's tip.
+@xh.a ui.diagram.arrow edge=?e at=?at x=?x y=?y ux=?ux uy=?uy
+@xh.c ui.diagram.ecolour edge=?e fill=?f
+@xh.bx1 core.calc out=?bx1 fn=mul args=?ux args=11
+@xh.by1 core.calc out=?by1 fn=mul args=?uy args=11
+@xh.bx core.calc out=?bx fn=sub args=?x args=?bx1
+@xh.by core.calc out=?by fn=sub args=?y args=?by1
+@xh.nx core.calc out=?nx fn=mul args=?uy args=-6
+@xh.ny core.calc out=?ny fn=mul args=?ux args=6
+@xh.lx core.calc out=?lx fn=add args=?bx args=?nx
+@xh.ly core.calc out=?ly fn=add args=?by args=?ny
+@xh.rx core.calc out=?rx fn=sub args=?bx args=?nx
+@xh.ry core.calc out=?ry fn=sub args=?by args=?ny
+@xh.src core.calc out=?src fn=concat args=?e args="." args=?at
+@xh.tip ui.diagram.tip edge=?e at=?at x=?x y=?y pointing=free
+@lay.arrow.tip core.rule when=$xh.a then=$xh.tip
+@xh.head core.check fn=eq args=?at args=head
+@xh.tail core.check fn=eq args=?at args=tail
+@xh.p1 ui.diagram.point source=?src n=1 x=?x y=?y
+@xh.p2 ui.diagram.point source=?src n=2 x=?lx y=?ly
+@xh.p3 ui.diagram.point source=?src n=3 x=?rx y=?ry
+@xh.draw ui.diagram.draw part=?e source=?src slot=?e order=2 z=1 shape=polygon x=0 y=0 w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left
+@xh.fill ui.diagram.fill source=?src part=?e fill=?f
+@dg.arrowshown.type core.type of=ui.diagram.arrowshown
+@xh.show ui.diagram.arrowshown edge=?e at=?at
+@xh.hd w.diagram.edge code=?e
+@xh.nohdir w.diagram.edge code=?e direction=none
+@xh.nobk w.diagram.edge code=?e direction=back
+@lay.arrow.shown.head.plain core.rule when=$xh.a when=$xh.hd if=$xh.head not=$xh.nohdir not=$xh.nobk then=$xh.show
+@xh.tb w.diagram.edge code=?e direction=both
+@lay.arrow.shown.tail.both core.rule when=$xh.a when=$xh.tb if=$xh.tail then=$xh.show
+@lay.arrow.shown.tail.back core.rule when=$xh.a when=$xh.nobk if=$xh.tail then=$xh.show
+@xh.s ui.diagram.arrowshown edge=?e at=?at
+@lay.arrow.p1 core.rule when=$xh.a when=$xh.s with=$xh.src then=$xh.p1
+@lay.arrow.p2 core.rule when=$xh.a when=$xh.s with=$xh.bx1 with=$xh.by1 with=$xh.bx with=$xh.by with=$xh.nx with=$xh.ny with=$xh.lx with=$xh.ly with=$xh.src then=$xh.p2
+@lay.arrow.p3 core.rule when=$xh.a when=$xh.s with=$xh.bx1 with=$xh.by1 with=$xh.bx with=$xh.by with=$xh.nx with=$xh.ny with=$xh.rx with=$xh.ry with=$xh.src then=$xh.p3
+@lay.arrow.draw core.rule when=$xh.a when=$xh.s with=$xh.src then=$xh.draw
+@lay.arrow.fill core.rule when=$xh.a when=$xh.s when=$xh.c with=$xh.src then=$xh.fill

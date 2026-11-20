@@ -1,15 +1,15 @@
-import { historyHeads } from './history-journal.mjs?v=632292883d';
-import {nativeKindCandidates} from './native-binding-candidates.mjs?v=90e22dfa4c';
+import { historyHeads } from './history-journal.mjs?v=e0e2a6790c';
+import {nativeKindCandidates} from './native-binding-candidates.mjs?v=ab1e2fea3d';
 // Bind model-declared context references to actual native objects; never inspect source words.
-import {quote,str} from '../vendor/sopworld/sopworld.mjs?v=4a094fcca4';
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=5fafad74f7';
-import {executionPolicyWorld} from './execution-policy.mjs?v=e0fcf658a6';
-import {readReferenceTurn,resolveObservedReference} from './reference-policy.mjs?v=5b4325859e';
-import {observeGroundedProjection,projectGroundedRequest} from './grounded-projection.mjs?v=903308e9c9';
-import {flatRequestProjection} from './request-projection.mjs?v=ddac844f0c';
-import {bridgeRawStructure} from './raw-structural-bridge.mjs?v=de5b6cb8f3';
-import {comparativeSteps} from './comparative-projection.mjs?v=f1a2cf667f';
-import {referenceProjection} from './reference-projection.mjs?v=4503acf01e';
+import {quote,str} from '../vendor/sopworld/sopworld.mjs?v=915a9d5c18';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=4350a070af';
+import {executionPolicyWorld} from './execution-policy.mjs?v=0af0e2a963';
+import {readReferenceTurn,resolveObservedReference} from './reference-policy.mjs?v=082598f51a';
+import {observeGroundedProjection,projectGroundedRequest} from './grounded-projection.mjs?v=a0de8558ea';
+import {flatRequestProjection} from './request-projection.mjs?v=709b7650df';
+import {bridgeRawStructure} from './raw-structural-bridge.mjs?v=7811961fdf';
+import {comparativeSteps} from './comparative-projection.mjs?v=0eb13e6592';
+import {referenceProjection} from './reference-projection.mjs?v=78e0470782';
 export async function projectContextAction(proposal,session,{bindings,registry,view}={}) {
  const raw=proposal?.raw,r=raw?.requests?.[0],area=NATIVE_AREAS[view],readerArea=bindings?.readerAreaByView?.[view]??area?.area;
  if(!area||!bindings||!registry||proposal.coverage?.complete||raw?.requestCount!==1||raw.coverage?.truncated||!r?.target||r.target.kind||r.target.name)return null;
@@ -30,7 +30,7 @@ export async function projectContextAction(proposal,session,{bindings,registry,v
   if(!previous||!last||!Object.keys(last.after).every(key=>JSON.stringify(session.isession.state[key])===JSON.stringify(last.after[key])))return null;
   const prior=flatRequestProjection(previous);if(!prior.ok||prior.request.act!==r.act||prior.targets.length!==1||!prior.results.length)return null;
   inherited=prior.results;rewind=last.before;
- }else if(!Array.isArray(r.constraints)||!r.constraints.length)return null;
+ }else if(!Array.isArray(r.constraints)||!r.constraints.length&&r.act!=='arrange')return null;   // an arrangement may say nothing more ("improve the layout")
  const canonical=selected.canonical,values=[];
  // A reading beyond plain stated values (a comparative step, several results) is projected by the same bridge as any
  // other reading, with the context target bound to the kind the observed reference resolution chose.

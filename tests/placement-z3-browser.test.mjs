@@ -60,8 +60,9 @@ test('every Drawing placement in the demo page is solved by Z3 when isolated, by
    const boat=await turn('draw a boat in the lake');
    assert.ok(boat.solved&&boat.effect,JSON.stringify(boat));
    assert.equal(boat.effect.status,'verified');
-   const water=boat.start.participants.find(p=>p.entity!==boat.effect.bounds.entity),b=boat.effect.bounds;
-   assert.ok(b.min_x>=water.min_x&&b.max_x<=water.max_x&&b.min_y>=water.min_y&&b.max_y<=water.max_y,JSON.stringify({water,b}));
+   // The lake lies in the land (landscape-rules.sop): the boat goes into a region of its water.
+   const b=boat.effect.bounds,inside=r=>b.min_x>=r.min_x&&b.max_x<=r.max_x&&b.min_y>=r.min_y&&b.max_y<=r.max_y;
+   assert.ok((boat.start.regions??[]).some(r=>r.kind==='water'&&inside(r)),JSON.stringify({regions:boat.start.regions,b}));
    return {lake,boat};
   };
 

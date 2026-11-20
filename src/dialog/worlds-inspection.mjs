@@ -5,6 +5,7 @@ import {inspectReaderContextPolicy} from './reader-context-policy.mjs';
 import {describeWorldsNodes} from './worlds-node-metadata.mjs';
 import {CATALOG_WORLD_PURPOSES} from './catalog-world-purpose.mjs';
 import {describePlacementSearch} from './placement-search-inspection.mjs';
+import {RUNTIME_COMPONENTS,componentAudit,auditRuntimeComponents} from './runtime-component-registry.mjs';
 
 export function inspectSchemaSource(source){
  if(typeof source!=='string')return {status:'source not loaded',legends:[],modules:[],types:[],slots:[],tools:[],parameters:[],language:[],documentation:[],languageStatus:'Source has not been read; no language binding is asserted.'};
@@ -15,7 +16,7 @@ export function inspectSchemaSource(source){
  }catch(error){return {status:'source parse failed',error:String(error?.message??error),legends:[],modules:[],types:[],slots:[],tools:[],parameters:[],language:[],documentation:[],languageStatus:'Source could not be parsed; no language binding is asserted.'};}
 }
 const SOP_AREA_MODULE='worlds/sop-area.mjs',SOP_WORLD_HOST_MODULE='worlds/sop-world-host.mjs';
-const SESSION_MEMORY_DESCRIPTION='Session runtime record (serializable JavaScript): the message counter and session languages; the conversation memory (discourse frames, dialogue, focus and last action: the conversational references); the recent worlds; the global undo/redo journal (history.sop holds the same SOP facts as the Session Undo and Redo World, payloads hold the editor snapshots it restores); retained execution evidence (newEngineJournal, shown as the Retained execution journal); the reader\'s previous reading and the placement spacing profile.';
+const SESSION_MEMORY_DESCRIPTION='Part of the Session (turn coordinator), kept as serializable JavaScript: the message counter and session languages; the conversation memory (discourse frames, dialogue, focus and last action: the conversational references); the recent worlds; the global undo/redo journal (history.sop holds the same SOP facts as the Session Undo and Redo World, payloads hold the editor snapshots it restores); retained execution evidence (newEngineJournal, shown as the Retained execution journal); the reader\'s previous reading and the placement spacing profile.';
 const solverName=provider=>({internal:'the internal search',z3:'Z3','declared-method':'the declared placement method (ranked directions, no search)'})[provider]??provider;
 /** Interpreters that run for every SOP area and for relation placement; the Z3 node carries its live load state. */
 function interpreterNodes(placementSearch){
@@ -23,17 +24,97 @@ function interpreterNodes(placementSearch){
  return [
   {id:'component:sop-area',label:'SOP area interpreter',kind:'interpreter',implementation:'JavaScript over declared SOP',description:'Reads each tab\'s area.sop: the catalog modules that form its instance and knowledge, the rule files that compile its commands and project its drawing, its initial things and the open choices of its native interface. It builds the tab\'s tool host from that declaration and holds no knowledge of any tab.',details:{source:SOP_AREA_MODULE,renderer:'worlds/sop-primitives.mjs'}},
   {id:'component:sop-world-host',label:'SOP world host',kind:'interpreter',implementation:'JavaScript + library acts',description:'Runs a tool command on a tab whose state is an SOP instance World: the command is told as app.act.request, the tab\'s authored rules derive ordered app.act.call facts (make, change, remove) and view facts, and the library\'s generic acts (World.act) apply them. The resulting instance facts are the tool state.',details:{source:SOP_WORLD_HOST_MODULE}},
-  {id:'component:problem-compiler',label:'std.problem compiler',kind:'interpreter',implementation:'SOPWorlds library (compileRequest, std.placement)',status:placementSearch?.lastSolvedBy?'last placement: '+placementSearch.lastSolvedBy:'no placement compiled yet',why:'Compiles a relation request ("put the sun above the house") with the observed geometry. A request the declared placement method covers is placed by its ranked directions without a search; a placement problem (std.problem) goes to a search provider (Z3 when ready, otherwise the internal search). '+(placementSearch?.lastSolvedBy?'The last placement in this session was answered by '+solverName(placementSearch.lastSolvedBy)+(placementSearch.lastStatus?' (status '+placementSearch.lastStatus+')':'')+'.':'No placement has been compiled in this session yet.'),description:'Compiles a relation request with the observed geometry, the placement objective and k.spatial2d. The declared placement method answers with ranked directions when it covers the request; otherwise the request becomes a std.problem (positions as variables, relations as constraints, declared costs as the objective) solved by a search provider. The result says which one placed it.',details:{source:'src/vendor/sopworld/sopworld.mjs',caller:'src/dialog/spatial-placement-execution.mjs',lastSolvedBy:placementSearch?.lastSolvedBy??null,lastStatus:placementSearch?.lastStatus??null,placementsCompiled:placementSearch?.placements??0}},
-  {id:'provider:internal-search',label:'Internal search',kind:'interpreter',implementation:'SOPWorlds library (JavaScript)',status:'always available',why:'Solves placement problems with the library\'s own bounded search. Always available; it answers whenever Z3 is not ready or declines a model.',description:'The library\'s bounded grid search over the problem\'s variables, checking each constraint as soon as its variables are assigned and keeping the cheapest assignments. It answers whenever Z3 is unavailable or declines a model.',details:{source:'src/vendor/sopworld/sopworld.mjs (solveInternal)',availability:'always available'}},
-  {id:'provider:z3',label:'Z3 SMT solver',displayName:'Z3 ('+z3.state+')',kind:'interpreter',implementation:'Z3 WebAssembly (z3-solver '+(z3.version??'unknown')+')',status:z3.state,why:'Solves placement problems with the Z3 SMT solver when the page can run it. '+z3.summary,description:'Solves the same std.problem as an SMT optimisation (integer and real position variables, relation constraints, soft costs) in a WebAssembly build loaded from the library site. '+z3.summary,details:z3},
+  {id:'component:problem-compiler',label:'std.problem compiler',displayName:'Placement compiler (std.problem)',kind:'interpreter',implementation:'SOPWorlds library (compileRequest, std.placement)',status:placementSearch?.lastSolvedBy?'last placement: '+placementSearch.lastSolvedBy:'no placement compiled yet',why:'Compiles a relation request ("put the sun above the house") with the observed geometry. A request the declared placement method covers is placed by its ranked directions without a search; a placement problem (std.problem) goes to a search provider (Z3 when ready, otherwise the internal search). '+(placementSearch?.lastSolvedBy?'The last placement in this session was answered by '+solverName(placementSearch.lastSolvedBy)+(placementSearch.lastStatus?' (status '+placementSearch.lastStatus+')':'')+'.':'No placement has been compiled in this session yet.'),description:'Compiles a relation request with the observed geometry, the placement objective and k.spatial2d. The declared placement method answers with ranked directions when it covers the request; otherwise the request becomes a std.problem (positions as variables, relations as constraints, declared costs as the objective) solved by a search provider. The result says which one placed it.',details:{source:'src/vendor/sopworld/sopworld.mjs',caller:'src/dialog/spatial-placement-execution.mjs',lastSolvedBy:placementSearch?.lastSolvedBy??null,lastStatus:placementSearch?.lastStatus??null,placementsCompiled:placementSearch?.placements??0}},
+  {id:'provider:internal-search',label:'Internal search',displayName:'Internal search solver',kind:'interpreter',implementation:'SOPWorlds library (JavaScript)',status:'always available',why:'Solves placement problems with the library\'s own bounded search. Always available; it answers whenever Z3 is not ready or declines a model.',description:'The library\'s bounded grid search over the problem\'s variables, checking each constraint as soon as its variables are assigned and keeping the cheapest assignments. It answers whenever Z3 is unavailable or declines a model.',details:{source:'src/vendor/sopworld/sopworld.mjs (solveInternal)',availability:'always available'}},
+  {id:'provider:z3',label:'Z3 SMT solver',displayName:'Z3 solver ('+z3.state+')',kind:'interpreter',implementation:'Z3 WebAssembly (z3-solver '+(z3.version??'unknown')+')',status:z3.state,why:'Solves placement problems with the Z3 SMT solver when the page can run it. '+z3.summary,description:'Solves the same std.problem as an SMT optimisation (integer and real position variables, relation constraints, soft costs) in a WebAssembly build loaded from the library site. '+z3.summary,details:z3},
  ];
 }
-export function inspectWorldsRuntime({index={},bundle={worlds:{}},loaded=[],instances=[],hosts=[],nativePackages=[],knowledgeFiles=[],reader={},nativeStates={},instanceCaches=[],sessionMeta=null,libraryInfo=null,placementSearch=describePlacementSearch()}={}){
+/** Summary of the deployed reader binding bundle (engine.requestReader.bindings()): identity, pins, sizes and key coverage per area. */
+export function summarizeReaderBindings(bindings,{sha256=null,bytes=null}={}){
+ if(!bindings||typeof bindings!=='object')return null;
+ const count=value=>Array.isArray(value)?value.length:0,byArea={};
+ for(const row of Array.isArray(bindings.coverage)?bindings.coverage:[]){const area=byArea[row.area]??={bound:[],unbound:[]};if(row.status==='bound')area.bound.push({key:row.key,by:row.by??null,operation:row.operation??null,parameter:row.parameter??null});else area.unbound.push({key:row.key,reason:row.reason??null});}
+ const kindWorlds={};for(const kind of Array.isArray(bindings.kinds)?bindings.kinds:[])if(typeof kind?.sourceWorld==='string')kindWorlds[kind.sourceWorld]=(kindWorlds[kind.sourceWorld]??0)+1;
+ const catalogue=bindings.catalogue??{},provenance=bindings.provenance??{};
+ return {format:bindings.format??null,sha256,bytes,knowledgePin:catalogue.knowledgePin??provenance.knowledgePin??null,baseKnowledgePin:catalogue.baseKnowledgePin??null,inventory:catalogue.inventory??null,libraryVersion:provenance.runtimeLibraryVersion??null,
+  sizes:{families:count(bindings.families),kinds:count(bindings.kinds),properties:count(bindings.properties),units:count(bindings.units),unresolved:count(bindings.unresolved)},
+  coverage:Object.fromEntries(Object.entries(byArea).map(([area,{bound,unbound}])=>[area,{bound:bound.length,total:bound.length+unbound.length,boundKeys:bound,unboundKeys:unbound}])),kindWorlds};
+}
+/** Per-turn reader evidence retained by the worker (cutter spans, key-reader packets, minimum probability, unresolved, context fit). */
+function summarizeReaderDiagnostics(diagnostics){
+ return diagnostics.map(diagnostic=>{const result=diagnostic?.result??{},packet=result.packet??{};
+  return {component:diagnostic?.component??null,text:packet.source?.text??null,...(Array.isArray(packet.spans)?{spans:packet.spans}:{}),coverage:packet.coverage??null,unresolved:packet.unresolved??[],minimumProbability:result.auxiliary?.minimumProbability??null,contextSelection:result.auxiliary?.contextSelection??null};});
+}
+/** Records of the reader's binding bundle and per-turn evidence, the turn limits, the translation boundary and the suggestion sampler. */
+function addReaderAndBoundaryRecords(nodes,edges,{readerBindings,readerDiagnostics,turnLimits,translation,sampler}){
+ const ids=new Set(nodes.map(node=>node.id)),links=[],link=(from,to,label)=>(ids.has(to)?edges.push({from,to,label}):links.push({from,to,label}));
+ const add=node=>{nodes.push(node);ids.add(node.id);};
+ // null: the worker has no bundle yet (reader loading or unavailable); the record is still shown so the map keeps one shape.
+ if(readerBindings!==undefined){
+  const coverage=readerBindings?Object.entries(readerBindings.coverage).map(([area,row])=>area+' '+row.bound+'/'+row.total).join(', '):'';
+  add({id:'component:reader-bindings',label:'Reader binding bundle',kind:'component',representation:'catalog',implementation:'Binding bundle (JSON, hash checked)',status:readerBindings?'keys bound: '+(coverage||'no coverage rows'):'not loaded: the reader has not supplied its bundle yet',
+   why:'Binds the lemmas and keys the reader proposes to canonical kinds, properties, units and native tool parameters. Coverage lists, per area the bundle covers, which inventory keys are bound and why the others are not; an area without coverage rows has no key bindings in this bundle. Built from the knowledge catalog at pin '+(readerBindings?.knowledgePin??'unknown')+'.',
+   description:'Deployed SOP-BERT binding bundle: identity, catalog pin, sizes and key coverage per area.',details:readerBindings??{loaded:false}});
+  link('component:reader','component:reader-bindings','binds proposals with');
+  for(const world of Object.keys(readerBindings?.kindWorlds??{}))link('component:reader-bindings','knowledge-world:'+world,'takes kind lemmas from');
+ }
+ if(Array.isArray(readerDiagnostics)){
+  const evidence=summarizeReaderDiagnostics(readerDiagnostics),cuts=evidence.filter(row=>row.component==='cutter');
+  add({id:'runtime:reader-evidence',label:'Reader evidence of the last turn',kind:'runtime',implementation:'JavaScript (worker retained diagnostics)',status:evidence.length?evidence.length+' model calls · cuts '+cuts.map(row=>JSON.stringify((row.spans??[]).map(span=>Array.isArray(span)?span:[span.start,span.end]))).join(' '):'no reader call in the last turn',
+   why:'The reader\'s own per-turn diagnostics, retained by the worker for the last turn: the cutter\'s spans (how the text was split into requests), each key-reader packet, the minimum head probability, unresolved items and how the context was fitted to the model budget.',
+   description:'Per-turn reader diagnostics (reset at each turn).',details:{calls:evidence}});
+  link('component:reader','runtime:reader-evidence','records its per-turn diagnostics in');
+ }
+ if(turnLimits){
+  add({id:'runtime:turn-limits',label:'Turn limits and budget',kind:'runtime',implementation:'JavaScript (time limits, guard, step budget)',status:'watchdog '+(turnLimits.limits?.watchdogMs??'?')+' ms'+(turnLimits.budget?' · step budget on':' · no step budget'),
+   why:'The live time limits of a turn (watchdog, model call deadlines, effect cap) and the step budget. A turn the guard aborts emits "Session request failed" with the reason, the stage it was in and these limits; a turn the page watchdog kills restarts the worker.',
+   description:'Turn deadlines, guard and step budget in force.',details:turnLimits});
+  link('runtime:turn-limits','component:reasoner','bounds each turn of');
+ }
+ if(translation){
+  add({id:'runtime:translation-boundary',label:'Translation boundary',kind:'runtime',implementation:'Browser translation APIs via the page (worker relay)',status:translation.lastFailure?'last failure: '+translation.lastFailure.error:translation.calls?translation.calls+' calls, no failure':'not used in this session',
+   why:'Translates non-English input to English and replies back at the system boundary, through the page\'s browser translator and language detector. It records each call and the last failure reason.',description:'Language detection and machine translation calls and their last failure.',details:translation});
+  link('runtime:translation-boundary','component:reasoner','translates input and replies for');
+ }
+ if(sampler){
+  add({id:'runtime:suggestion-sampler',label:'Suggestion sampler',kind:'runtime',implementation:'JavaScript (declared-tool sampler)',status:sampler.last?'last sample: '+(sampler.last.view??'?')+' · '+(sampler.last.items??0)+' items':'no sample yet',
+   why:'Samples example requests and control suggestions from the declared tools of a tab ("dice"). Its probe runs are marked as suggestion probes in the activity log and never change the editors.',description:'Suggestion sampler scope and its last run.',details:sampler});
+  link('runtime:suggestion-sampler','component:reader','probes the reader with');
+ }
+ return links;
+}
+/**
+ * Puts every declared runtime JavaScript component on the map. A component that names an existing record (node) decorates it
+ * with its audit; otherwise it becomes its own record in the JavaScript band, in the column of its area when it has one.
+ * Links to records of the base graph become edges; links to records only the merged worker graph holds are returned as
+ * componentLinks, which the explorer draws when both ends exist.
+ */
+function addRuntimeComponents(nodes,edges){
+ const byId=new Map(nodes.map(node=>[node.id,node])),pending=[];
+ for(const component of RUNTIME_COMPONENTS){
+  const audit=componentAudit(component),existing=component.node?byId.get(component.node):null;
+  let id;
+  if(existing){existing.audit=audit;id=existing.id;}
+  else{
+   id='js:'+component.id;
+   const node={id,label:component.label,kind:'component',layer:'code',representation:'javascript',implementation:component.uiHelper?'JavaScript UI helper':'JavaScript',role:component.uiHelper?'JavaScript UI helper':'JavaScript component',
+    status:(audit.badge==='domain-logic'?'domain logic in JS':'generic JS')+' · '+audit.modules.length+' module'+(audit.modules.length===1?'':'s')+(audit.activityHook?'':' · no activity hook'),
+    why:component.role,description:component.role,audit,details:{component:component.id,modules:component.modules.map(module=>module.path),classification:audit.counts,...(component.node?{decorates:component.node,decoratedRecordPresent:false}:{})}};
+   if(component.area)node.world=component.area;
+   nodes.push(node);byId.set(id,node);
+  }
+  for(const [target,label]of audit.actsOn)pending.push({from:id,to:target,label});
+ }
+ const links=[];
+ for(const link of pending){if(link.from===link.to)continue;if(byId.has(link.to))edges.push(link);else links.push(link);}
+ return links;
+}
+export function inspectWorldsRuntime({index={},bundle={worlds:{}},loaded=[],instances=[],hosts=[],nativePackages=[],knowledgeFiles=[],reader={},nativeStates={},instanceCaches=[],sessionMeta=null,libraryInfo=null,placementSearch=describePlacementSearch(),readerBindings=undefined,readerDiagnostics=null,turnLimits=null,translation=null,sampler=null}={}){
  const authoritative=new Set(instances.filter(record=>record.authoritative).map(record=>record.world));
  const schemaWorlds=new Map();
  const nodes=[],edges=[],loadedSet=new Set(loaded),hostByWorld=new Map(hosts.map(h=>[h.world,h]));
  const link=(from,to,label)=>edges.push({from,to,label});
- nodes.push({id:'runtime:registry',label:'World loader',kind:'runtime',implementation:'JavaScript',description:'Session runtime record: the versioned world index and which application packages this worker has loaded (bundle files and native modules). Editor domain resolution is handled by the separate operational SOP project World.',details:{index,loaded}});
+ nodes.push({id:'runtime:registry',label:'World loader',kind:'component',role:'Implementation component',implementation:'JavaScript',description:'Loads the application packages (bundle files and native modules) from the versioned world index and records which ones this worker has loaded. Editor domain resolution is handled by the separate operational SOP tab registry World.',details:{index,loaded}});
  for(const [id,info]of Object.entries(index.worlds??{})){
   const held=bundle.worlds?.[id],files=held?.files??{},host=hostByWorld.get(id);
   nodes.push({id:'world:'+id,label:id,kind:'world',packageHasNativeCode:!!host||nativePackages.includes(id),implementation:host||nativePackages.includes(id)?'SOP declarations + JavaScript adapter':'SOP Lang',status:loadedSet.has(id)?'loaded':'available, not loaded',description:info.summary||info.title||'Application SOP world package. Schema declarations, methods and initial facts may coexist in this package; inspect its actual files.',details:{...info,loaded:loadedSet.has(id),files:Object.keys(files),architectureRole:'Application SOP world package; not asserted to be a pure world pattern'},wires:Object.entries(files).map(([path,text])=>'# '+path+'\n'+text).join('\n\n')});
@@ -51,7 +132,7 @@ export function inspectWorldsRuntime({index={},bundle={worlds:{}},loaded=[],inst
   }
   for(const path of paths){
    const text=files[path],descriptor=declared.get(path)??{},key='schema:'+id+':'+path,loaded=typeof text==='string';
-   nodes.push({id:key,label:id+' / '+path,kind:'schema',implementation:'SOP Lang',status:loaded?'source loaded':'source declared, not loaded',description:descriptor.role==='native-tool-interface'?'Declared native tool interface: operations, targets and parameters. This source does not claim a complete semantic state schema.':'Exact schema, legend or policy source declared by this application package.',...(loaded?{wires:text}:{}),schemaView:inspectSchemaSource(text),details:{world:id,path,...descriptor,...(schemaWorld?{schemaWorld}:{}),loaded}});
+   nodes.push({id:key,label:id+' / '+path,kind:'schema',partOf:schemaWorldId&&declared.has(path)?schemaWorldId:'world:'+id,implementation:'SOP Lang',status:loaded?'source loaded':'source declared, not loaded',description:descriptor.role==='native-tool-interface'?'Declared native tool interface: operations, targets and parameters. This source does not claim a complete semantic state schema.':'Exact schema, legend or policy source declared by this application package.',...(loaded?{wires:text}:{}),schemaView:inspectSchemaSource(text),details:{world:id,path,...descriptor,...(schemaWorld?{schemaWorld}:{}),loaded}});
    link('world:'+id,key,declared.has(path)?'declares schema file':'contains declaration file');if(schemaWorldId&&declared.has(path))link(schemaWorldId,key,'declares source file');
   }
   if(host){
@@ -68,7 +149,7 @@ export function inspectWorldsRuntime({index={},bundle={worlds:{}},loaded=[],inst
  for(const [world,state]of Object.entries(nativeStates)){
   if(authoritative.has(world))continue;
   const nativeId='native:'+world;
-  nodes.push({id:nativeId,world,label:world+' native state',kind:'runtime',role:'Native editor state',implementation:'JavaScript',description:'Session runtime record: JavaScript state of a world that has no authoritative SOP state. Its fields are available in this record’s properties.',details:state});
+  nodes.push({id:nativeId,world,label:world+' native state',kind:'runtime',role:'Native editor state',implementation:'JavaScript',description:'JavaScript state of a world that has no authoritative SOP state (it is not an SOP World yet). Its fields are available in this record’s properties.',details:state});
   link('component:reasoner',nativeId,'owns native session state');
  }
 
@@ -82,9 +163,9 @@ export function inspectWorldsRuntime({index={},bundle={worlds:{}},loaded=[],inst
   if(hostByWorld.has(record.world))link('interpreter:'+record.world,'instance:'+record.world,record.authoritative?'reads and updates canonical facts':'projects observed facts');
  }
  if(sessionMeta){
-  nodes.push({id:'runtime:session-memory',label:'Session memory',kind:'runtime',implementation:'JavaScript',description:SESSION_MEMORY_DESCRIPTION,details:sessionMeta});link('component:reasoner','runtime:session-memory','owns session metadata');
+  nodes.push({id:'runtime:session-memory',label:'Session memory',kind:'runtime',partOf:'component:reasoner',implementation:'JavaScript',description:SESSION_MEMORY_DESCRIPTION,details:sessionMeta});link('component:reasoner','runtime:session-memory','owns session metadata');
  }
- nodes.push({id:'knowledge:catalog',label:'Knowledge',kind:'knowledge',implementation:'SOP Lang + JavaScript loader',description:'Shared catalog loaded by reference. The children show files actually read in this worker; no knowledge is copied into an instance by this inspector.',details:{filesRead:knowledgeFiles.length}});
+ nodes.push({id:'knowledge:catalog',label:'Knowledge',displayName:'Knowledge catalog',kind:'knowledge',implementation:'SOP Lang + JavaScript loader',description:'Shared catalog loaded by reference. The children show files actually read in this worker; no knowledge is copied into an instance by this inspector.',details:{filesRead:knowledgeFiles.length}});
  const knowledgeByPath=new Map(knowledgeFiles.map(file=>[file.path,file])),catalogText=knowledgeByPath.get('index.json')?.text;let catalogWorlds=[];
  try{const catalog=JSON.parse(catalogText??'null');if(Array.isArray(catalog?.worlds))catalogWorlds=catalog.worlds;}catch{/* The exact invalid source remains visible as a file. */}
  const sourcePaths=world=>[...new Set([world.schema,world.vocabulary,...(world.shards??[]).map(shard=>shard.path)].filter(Boolean))];
@@ -94,15 +175,15 @@ export function inspectWorldsRuntime({index={},bundle={worlds:{}},loaded=[],inst
   nodes.push({id,label:world.id,kind:'knowledge',implementation:'SOP Lang',status:loadedFiles.length===paths.length&&paths.length?'All declared sources read':loadedFiles.length?'Some sources read':'Source files available; not read',why:CATALOG_WORLD_PURPOSES[world.id],sourceFiles:paths.filter(path=>path.endsWith('.sop')).map(path=>({path,role:path===world.schema?'schema':'knowledge',loaded:knowledgeByPath.has(path)})),usage:loadedFiles.some(path=>knowledgeByPath.get(path)?.purposes?.includes('runtime'))?'runtime-read':loadedFiles.length?'inspection-only':'available',description:'A world published in the shared catalog. The catalog contains world patterns and knowledge bases; this entry does not explicitly declare which book role it has. Sources are linked, not copied into instances.',details:{...world,loadedFiles,architectureRole:'Published world; specific pattern/knowledge role not declared in catalog metadata'}});link('knowledge:catalog',id,'catalog world');
   for(const target of world.depends??[])if(catalogIds.has(target))link(id,'knowledge-world:'+target,'declares dependency');
   for(const path of loadedFiles)link(id,'knowledge-file:'+path,path===world.schema?'loaded schema':path===world.vocabulary?'loaded vocabulary':'loaded shard');
-  if(world.schema&&!knowledgeByPath.has(world.schema)){const schemaId='knowledge-file:'+world.schema;nodes.push({id:schemaId,label:world.schema,kind:'schema',implementation:'SOP Lang',description:'Schema declared by the catalog; its text has not been read by this worker.',why:CATALOG_WORLD_PURPOSES[world.id],sourceFiles:[{path:world.schema,role:'schema',loaded:false}],usage:'available',schemaView:inspectSchemaSource(undefined),details:{path:world.schema,loaded:false}});link(id,schemaId,'declares schema');}
+  if(world.schema&&!knowledgeByPath.has(world.schema)){const schemaId='knowledge-file:'+world.schema;nodes.push({id:schemaId,label:world.schema,kind:'schema',partOf:id,implementation:'SOP Lang',description:'Schema declared by the catalog; its text has not been read by this worker.',why:CATALOG_WORLD_PURPOSES[world.id],sourceFiles:[{path:world.schema,role:'schema',loaded:false}],usage:'available',schemaView:inspectSchemaSource(undefined),details:{path:world.schema,loaded:false}});link(id,schemaId,'declares schema');}
  }
- for(const file of knowledgeFiles){const id='knowledge-file:'+file.path;nodes.push({id,label:file.path,kind:catalogWorlds.some(world=>world.schema===file.path)?'schema':'knowledge',implementation:/\.sop$/.test(file.path)?'SOP Lang':'Catalog data',description:'Exact file text returned by the active knowledge source.',why:CATALOG_WORLD_PURPOSES[sourceOwners.get(file.path)],sourceFiles:[{path:file.path,role:'source',loaded:true}],usage:file.purposes?.includes('runtime')?'runtime-read':'inspection-only',wires:file.text,...(catalogWorlds.some(world=>world.schema===file.path)?{schemaView:inspectSchemaSource(file.text)}:{}),details:{path:file.path,loaded:true}});link('knowledge:catalog',id,'loaded file');}
+ for(const file of knowledgeFiles){const id='knowledge-file:'+file.path,owner=sourceOwners.get(file.path);nodes.push({id,label:file.path,partOf:owner?'knowledge-world:'+owner:'knowledge:catalog',kind:catalogWorlds.some(world=>world.schema===file.path)?'schema':'knowledge',implementation:/\.sop$/.test(file.path)?'SOP Lang':'Catalog data',description:'Exact file text returned by the active knowledge source.',why:CATALOG_WORLD_PURPOSES[sourceOwners.get(file.path)],sourceFiles:[{path:file.path,role:'source',loaded:true}],usage:file.purposes?.includes('runtime')?'runtime-read':'inspection-only',wires:file.text,...(catalogWorlds.some(world=>world.schema===file.path)?{schemaView:inspectSchemaSource(file.text)}:{}),details:{path:file.path,loaded:true}});link('knowledge:catalog',id,'loaded file');}
  if(libraryInfo){nodes.push({id:'component:library',label:'SOPWorlds library',kind:'component',implementation:'JavaScript + built-in SOP schemas',description:'Actual imported library version, schema type identities and exported pipeline declarations. These are implementation mechanisms, not independent instance worlds.',details:libraryInfo});link('component:reasoner','component:library','imports mechanisms');}
  nodes.push(...interpreterNodes(placementSearch));
  link('component:problem-compiler','provider:internal-search','solves with (always available)');
  link('component:problem-compiler','provider:z3','solves with when loaded');
  if(libraryInfo){link('component:sop-world-host','component:library','runs generic acts in');link('component:problem-compiler','component:library','implemented in');}
- nodes.push({id:'component:reader',label:'SOP-BERT',kind:'component',implementation:'Trained model + JavaScript',description:'Actual browser reader provider. This node does not imply that model internals are SOP reasoning.',details:reader});
+ nodes.push({id:'component:reader',label:'SOP-BERT',displayName:'SOP-BERT reader',kind:'component',implementation:'Trained model + JavaScript',description:'Actual browser reader provider. This node does not imply that model internals are SOP reasoning.',details:reader});
  const context=inspectReaderContextPolicy();
  nodes.push({id:'knowledge:reader-context',label:'Reader context policy',kind:'knowledge',implementation:'Operational SOP Lang World',
   description:'Defines the display bindings, exact mention evidence, hierarchy and focus used to select reader context.',
@@ -131,8 +212,8 @@ export function inspectWorldsRuntime({index={},bundle={worlds:{}},loaded=[],inst
  link('component:reader','component:request-admission','supplies candidate graphs');
  link('component:reasoner','component:request-admission','checks proposal admission through');
  link('component:reasoner','component:control-interpreter','routes exact tool commands and undo through');
- nodes.push({id:'component:reasoner',label:'Session',kind:'component',implementation:'JavaScript + SOP mechanisms',description:'Actual session.send execution boundary. Native UI controls invoke their declared host directly.'});
- nodes.push({id:'runtime:activity-bus',label:'Activity bus',kind:'component',implementation:'JavaScript worker event channel',description:'Actual world-activity events on the engine worker channel. Emits observed loading, reader, session and native invocation boundaries; it does not infer internal reasoning.',details:{workerEvent:'world-activity',retainedWorkerEvents:200,browserReplayWindow:300}});
+ nodes.push({id:'component:reasoner',label:'Session',displayName:'Session (turn coordinator)',kind:'component',implementation:'JavaScript + SOP mechanisms',description:'Actual session.send execution boundary. Native UI controls invoke their declared host directly.'});
+ nodes.push({id:'runtime:activity-bus',label:'Activity bus',kind:'component',implementation:'JavaScript worker event channel',description:'Actual world-activity events on the engine worker channel. Emits observed loading, reader, session and native invocation boundaries; it does not infer internal reasoning.',details:{workerEvent:'world-activity',retainedWorkerEvents:300,browserReplayWindow:300,retention:'The worker keeps its last 300 events (returned with each inspection); the page keeps its last 300 for the log and replay. Copy retained log copies the page\'s 300.'}});
  const silent=new Set(interpreterNodes().map(node=>node.id));
  for(const node of nodes.filter(node=>!silent.has(node.id)&&['interpreter','adapter'].includes(node.kind)||['component:reader','component:reasoner','knowledge:catalog'].includes(node.id)))link(node.id,'runtime:activity-bus','publishes observed activity');
  link('component:reasoner','component:reader','requestReader provider');
@@ -154,13 +235,16 @@ export function inspectWorldsRuntime({index={},bundle={worlds:{}},loaded=[],inst
  const titleOf=world=>index.worlds?.[world]?.tab?.title??index.worlds?.[world]?.title??world;
  for(const node of nodes){
   const world=node.details?.world;
-  if(node.id.startsWith('world:')){const title=titleOf(node.id.slice(6));node.displayName=title+(index.worlds?.[node.id.slice(6)]?.tab?' tools':'');node.help={purpose:'Declare the domain tools, source files and application bindings for '+title+'.',inputs:['Application composition declarations'],outputs:['Tool interface and schema references','Available domain source files'],limits:['This node is an application package, not a second copy of the editor state. Its linked instance contains the current facts.']};}
-  else if(node.kind==='instance'){node.displayName=titleOf(world)+(authoritative.has(world)?' World':' observed World');node.role=authoritative.has(world)?'Operational World instance':'Observed World instance';node.help={purpose:'Expose the current concrete objects and relationships for '+titleOf(world)+'.',inputs:[node.description],outputs:['Exact domain SOP facts','References to the declared schema'],limits:[authoritative.has(world)?'The tool adapter still executes mechanical operations in JavaScript.':'Native editor state remains authoritative; this SOP World observes its declared facts. Additional native properties are inspectable separately.']};}
-  else if(node.id.startsWith('native:'))node.displayName=titleOf(node.id.slice(7))+' native state';
-  else if(node.id.startsWith('interpreter:')){node.displayName=titleOf(node.id.slice(12))+' adapter';node.help={purpose:'Execute the declared tools against the actual editor state and expose observations.',inputs:['Concrete validated operation and parameters'],outputs:['Updated editor state','Object observations and effect status'],limits:['Native JavaScript code still contains domain semantics; listing its tool schema does not migrate those semantics into reasoning.']};}
+  if(node.id.startsWith('world:')){const title=titleOf(node.id.slice(6));node.displayName=title+(index.worlds?.[node.id.slice(6)]?.tab?' tool package':' package');node.help={purpose:'Declare the domain tools, source files and application bindings for '+title+'.',inputs:['Application composition declarations'],outputs:['Tool interface and schema references','Available domain source files'],limits:['This node is an application package, not a second copy of the editor state. Its linked instance contains the current facts.']};}
+  else if(node.kind==='instance'){node.displayName=titleOf(world)+(authoritative.has(world)?' instance World':' observed instance World');node.role=authoritative.has(world)?'Operational World instance':'Observed World instance';node.help={purpose:'Expose the current concrete objects and relationships for '+titleOf(world)+'.',inputs:[node.description],outputs:['Exact domain SOP facts','References to the declared schema'],limits:[authoritative.has(world)?'The tool adapter still executes mechanical operations in JavaScript.':'Native editor state remains authoritative; this SOP World observes its declared facts. Additional native properties are inspectable separately.']};}
+  else if(node.id.startsWith('native:'))node.displayName=titleOf(node.id.slice(7))+' state (JavaScript)';
+  else if(node.id.startsWith('interpreter:')){node.displayName=titleOf(node.id.slice(12))+((index.worlds?.[node.id.slice(12)]?.runtimeModules??[]).includes(SOP_WORLD_HOST_MODULE)?' tool host':' native adapter');node.help={purpose:'Execute the declared tools against the actual editor state and expose observations.',inputs:['Concrete validated operation and parameters'],outputs:['Updated editor state','Object observations and effect status'],limits:['Native JavaScript code still contains domain semantics; listing its tool schema does not migrate those semantics into reasoning.']};}
   else if(node.id.startsWith('schema-world:'))node.displayName=titleOf(world)+(node.details.completeStateSchema?' schema':' tool schema');
+  const area=world??node.world??(node.id.startsWith('world:')?node.id.slice(6):node.id.startsWith('native:')?node.id.slice(7):null);if(typeof area==='string'&&!node.areaTitle&&titleOf(area)!==area)node.areaTitle=titleOf(area);
   if(componentHelp[node.id])node.help=componentHelp[node.id];
   if(!node.help)node.help={purpose:node.description??'Inspect this actual runtime record.',inputs:[],outputs:[],limits:node.kind==='schema'?['Schema validity and declared tools do not prove natural-language recognition coverage.']:node.implementation?.includes('JavaScript')?['This is a native implementation component or structure, not an independent SOP World instance.']:[]};
  }
- return {nodes:describeWorldsNodes(nodes),edges,limitations:['This graph projects actual loader metadata, native bindings and snapshots; the graph is not yet an authoritative SOP project world.','A loaded/imported world is not proof it participated in a particular decision. Only observed runtime events animate nodes.']};
+ const recordLinks=addReaderAndBoundaryRecords(nodes,edges,{readerBindings,readerDiagnostics,turnLimits,translation,sampler});
+ const componentLinks=[...recordLinks,...addRuntimeComponents(nodes,edges)];
+ return {nodes:describeWorldsNodes(nodes),edges,componentLinks,runtimeAudit:auditRuntimeComponents(),limitations:['Every JavaScript module on the runtime path is registered in src/dialog/runtime-component-registry.mjs with its generality audit; a test fails when a runtime module is missing. Components without an activity hook (dashed ring) can act without lighting up.','This graph projects actual loader metadata, native bindings and snapshots; the graph is not yet an authoritative SOP project world.','A loaded/imported world is not proof it participated in a particular decision. Only observed runtime events animate nodes.']};
 }
