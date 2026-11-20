@@ -10,10 +10,21 @@ import {flatRequestProjection} from './request-projection.mjs';
 import {bridgeRawStructure} from './raw-structural-bridge.mjs';
 import {comparativeSteps} from './comparative-projection.mjs';
 import {referenceProjection} from './reference-projection.mjs';
+function containerOwned(r,bindings,area){
+ const keys=(r.constraints??[]).map(c=>c?.key);
+ if(!keys.length||keys.some(k=>typeof k!=='string'))return false;
+ const types=new Set(keys.map(k=>k.split('.')[0]));
+ if(types.size!==1)return false;
+ const [container]=types;
+ return (bindings.containment??[]).some(c=>c.area===area&&c.containerType===container&&(c.type===r.target?.type||container===r.target?.type));
+}
 export async function projectContextAction(proposal,session,{bindings,registry,view}={}) {
  const raw=proposal?.raw,r=raw?.requests?.[0],area=NATIVE_AREAS[view],readerArea=bindings?.readerAreaByView?.[view]??area?.area;
  if(!area||!bindings||!registry||proposal.coverage?.complete||raw?.requestCount!==1||raw.coverage?.truncated||!r?.target||r.target.kind||r.target.name)return null;
  const route=readReferenceTurn(r);if(!route)return null;
+ // Properties of a container said of a reference ("make it pastel") are read as the container's members by the partial
+ // reading (partial-admission.mjs containerProperty), not as one observed object.
+ if(containerOwned(r,bindings,readerArea))return null;
  const native=session.isession.state[area.world];if(!native)return null;
  const host=await area.create({state:native,instanceId:'context-'+globalThis.crypto.randomUUID()});
  const mappings=nativeKindCandidates(bindings).filter(mapping=>mapping.area===readerArea&&mapping.type===r.target.type);

@@ -92,6 +92,15 @@
 @reference.type core.type of=app.execution.reference closed=true
 @reference.concept core.slot of=app.execution.reference key=concept kind=atom present=true
 @reference.on core.slot of=app.execution.reference key=sourceType kind=string present=true
+# A population joined by lines: when one end of a line names several observed objects ("connect the circles": every
+# circle), the line is made between them by a declared pattern: chain (each to the next in reading order: top to
+# bottom, left to right) when the other end is not said, star (the said end to each of them) when it names one object.
+@linkPattern.type core.type of=app.execution.linkPattern closed=true
+@linkPattern.from core.slot of=app.execution.linkPattern key=from kind=atom present=true
+@linkPattern.to core.slot of=app.execution.linkPattern key=to kind=atom present=true
+@linkPattern.open core.slot of=app.execution.linkPattern key=open kind=atom enum=chain present=true
+@linkPattern.hub core.slot of=app.execution.linkPattern key=hub kind=atom enum=star present=true
+@linkPattern.max core.slot of=app.execution.linkPattern key=max kind=integer min=2 max=16 present=true
 # An operation that also answers another act: "improve the layout", "tidy it up" (arrange with nothing more said) is
 # the page's declared best-effort improvement, an operation with no parameters of its own.
 @actOperation.type core.type of=app.execution.actOperation closed=true

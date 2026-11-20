@@ -38,6 +38,8 @@
 @act.connect app.execution.actForm act=connect mode=new as=make of=w.diagram.edge
 @edge.from app.execution.reference concept=w.diagram.edge.from sourceType="diagram.sketch.node"
 @edge.to app.execution.reference concept=w.diagram.edge.to sourceType="diagram.sketch.node"
+# "connect the circles": a chain over every circle in reading order; "connect Start to all circles": a star from Start.
+@edge.population app.execution.linkPattern from=w.diagram.edge.from to=w.diagram.edge.to open=chain hub=star max=16
 # "arrange" with what to arrange it as ("lay it out as a tree") changes the layout; with nothing more said ("improve the
 # layout", "tidy it up") it is the page's declared improvement (diagram.layout.improve), disclosed and undoable.
 @act.arrange app.execution.actForm act=arrange mode=existing as=change results=some
