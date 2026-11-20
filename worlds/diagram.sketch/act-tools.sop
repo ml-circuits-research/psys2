@@ -720,7 +720,9 @@
 @t.cf.n6 app.act.request legend=?f6
 @t.cf.none app.act.refuse reason=missing-property
 @t.cf.n7 app.act.request yMax=?f7
-@tool.chart.format.none core.rule when=$t.cf.r not=$t.cf.n1 not=$t.cf.n2 not=$t.cf.n3 not=$t.cf.n4 not=$t.cf.n5 not=$t.cf.n6 not=$t.cf.n7 then=$t.cf.none
+@t.cf.n8 app.act.request layout=?f8
+@t.cf.n9 app.act.request palette=?f9
+@tool.chart.format.none core.rule when=$t.cf.r not=$t.cf.n1 not=$t.cf.n2 not=$t.cf.n3 not=$t.cf.n4 not=$t.cf.n5 not=$t.cf.n6 not=$t.cf.n7 not=$t.cf.n8 not=$t.cf.n9 then=$t.cf.none
 @t.cg.f w.diagram.group code=?id x_label=?v
 @t.cg.fo app.observe.input id=?id key=xLabel value=?v
 @observe.chart.x core.rule when=$t.cg.f then=$t.cg.fo
@@ -842,3 +844,25 @@
 @t.cf.ym app.act.request operation="diagram.chart.format" yMax=?v
 @t.cf.ymc app.act.call act=change thing=$t.cf.g attr=y_max value=?v order=1
 @tool.chart.format.ymax core.rule when=$t.cf.r when=$t.cf.g when=$t.cf.ym then=$t.cf.ymc
+# The chart's type changed in place: its group's layout (bar, line, area, pie, doughnut).
+@t.cf.ly app.act.request operation="diagram.chart.format" layout=?v
+@t.cf.lyc app.act.call act=change thing=$t.cf.g attr=layout value=?v order=1
+@tool.chart.format.layout core.rule when=$t.cf.r when=$t.cf.g when=$t.cf.ly then=$t.cf.lyc
+# A palette: each category takes the next swatch of the named theme, in the order of the categories.
+@t.cf.pl app.act.request operation="diagram.chart.format" palette=?p
+@t.cf.plp ui.diagram.palette name=?p
+@tool.chart.format.palette.name core.rule when=$t.cf.pl then=$t.cf.plp
+@dgt.cpal.type core.type of=ui.diagram.cpal
+@t.cf.pm ui.diagram.inside group=?g node=?c order=?o
+@t.cf.pmo ui.diagram.cpal group=?g node=?c order=?o
+@tool.chart.format.palette.members core.rule when=$t.cf.r when=$t.cf.pl when=$t.cf.pm then=$t.cf.pmo
+@t.cf.ps ui.diagram.cpal group=?g node=?c order=?o
+@t.cf.prk core.rank of=$t.cf.ps by=order within=?g out=?i
+@t.cf.pn ui.diagram.pcount name=?p n=?k
+@t.cf.pi0 core.calc out=?i0 fn=sub args=?i args=1
+@t.cf.pim core.calc out=?im fn=mod args=?i0 args=?k
+@t.cf.pj core.calc out=?j fn=add args=?im args=1
+@t.cf.psw k.styles.swatch theme=?p n=?j colour=?col
+@t.cf.pnode w.diagram.node code=?c
+@t.cf.pc app.act.call act=change thing=$t.cf.pnode attr=colour value=?col order=1
+@tool.chart.format.palette core.rule when=$t.cf.pl when=$t.cf.ps when=$t.cf.pn when=$t.cf.pnode with=$t.cf.prk with=$t.cf.pi0 with=$t.cf.pim with=$t.cf.pj when=$t.cf.psw then=$t.cf.pc

@@ -2,7 +2,8 @@
 // Evaluation worker process: one runner (one area base per tab and context, one gold provider, one deployed reader),
 // evaluates the rows the parent sends and answers with compact records.
 import {createRunner} from './runner.mjs';
-import {judgeRow,setKindTable} from './judge.mjs';
+import {judgeRow,setKindTable,setPropertyTable} from './judge.mjs';
+import {completeBindings} from '../../src/dialog/declared-bindings.mjs';
 import {classify,compareReading} from './causes.mjs';
 import {trainerRequest} from './gold-reader.mjs';
 import {usageClass,rowKeys,rowActs} from './data.mjs';
@@ -15,7 +16,7 @@ const runtimeRoot=process.env.MASS_EVAL_RUNTIME_ROOT||undefined;
 console.log=()=>{};console.warn=()=>{};console.info=()=>{};
 let runner;
 try{runner=await createRunner({levels,runtimeRoot});}catch(e){process.send({type:'fatal',error:String(e?.stack??e).slice(0,2000)});process.exit(1);}
-setKindTable(runner.bindings);
+setKindTable(runner.bindings);setPropertyTable(await completeBindings(runner.bindings));
 const inventory=JSON.parse(readFileSync(path.join(path.dirname(new URL(import.meta.url).pathname),'../../official-dataset/inventory.json'),'utf8'));
 const ok=v=>v==='success'||v==='plausible';
 const short=s=>typeof s==='string'?s.slice(0,240):s;

@@ -32,9 +32,10 @@ export async function projectContextAction(proposal,session,{bindings,registry,v
   inherited=prior.results;rewind=last.before;
  }else if(!Array.isArray(r.constraints)||!r.constraints.length&&r.act!=='arrange')return null;   // an arrangement may say nothing more ("improve the layout")
  const canonical=selected.canonical,values=[];
- // A reading beyond plain stated values (a comparative step, several results) is projected by the same bridge as any
- // other reading, with the context target bound to the kind the observed reference resolution chose.
- if(!other&&r.constraints.some(c=>c.operator!=='eq')){
+ // A reading beyond plain stated values (a comparative step, several results, a class value its span only evidences:
+ // legend "hide" said as "get rid of the legend") is projected by the same bridge as any other reading, with the
+ // context target bound to the kind the observed reference resolution chose.
+ if(!other&&r.constraints.some(c=>c.operator!=='eq'||typeof c.value==='string'&&typeof c.value_span==='string'&&c.value!==c.value_span)){
   const bindingSha256=proposal.provenance?.bindingsSha256;
   const bridged=bindingSha256?bridgeRawStructure(raw,{bindings,bindingSha256,comparatives:comparativeSteps(),references:referenceProjection(),contextTarget:{kind:canonical,declaration:selected.object.source}}):null;
   if(!bridged||bridged.diagnostics.length||bridged.decoded?.candidates?.length!==1||bridged.decoded.issues?.length)return null;

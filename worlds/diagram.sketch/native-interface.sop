@@ -366,6 +366,10 @@
 @native.diagram.sketch.op.diagram.chart.sort.param.id std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.sort name="id" kind=string required=true
 @native.diagram.sketch.op.diagram.chart.sort.param.order std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.sort name="order" kind=string required=true enum="ascending" enum="descending" enum="label" enumClosed=true
 @native.diagram.sketch.op.diagram.chart.format.param.yMax std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="yMax" kind=number
+# A chart's type changed in place (its group's layout) and the palette its categories are coloured from (a theme's swatches).
+@native.diagram.sketch.op.diagram.chart.format.param.layout std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="layout" kind=string enum="bar" enum="line" enum="area" enum="pie" enum="doughnut" enumClosed=true
+@native.diagram.sketch.op.diagram.chart.format.param.palette std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="palette" kind=string
+@native.diagram.sketch.op.diagram.chart.format.param.palette.source.enum app.native.parameter parameter=$native.diagram.sketch.op.diagram.chart.format.param.palette field=enum input=$native.diagram.sketch.input.diagram.themes
 @native.diagram.sketch.op.diagram.node.change.param.rotation std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.change name="rotation" kind=number min=-360 max=360
 @native.diagram.sketch.chart-composition app.native.compose module=data.charts state="chartTools" exclude="chart.undo" exclude="chart.redo" omit="sample"
 # Selecting nodes or connections changes only the declared selection key of what it selects and deselects.

@@ -3,12 +3,13 @@
 // usage: node scripts/mass-eval/debug-row.mjs <oracle|e2e> <row id>...
 import {createRunner,ROOT} from './runner.mjs';
 import {loadRows} from './data.mjs';
-import {judgeRow,diffObservations,setKindTable} from './judge.mjs';
+import {judgeRow,diffObservations,setKindTable,setPropertyTable} from './judge.mjs';
+import {completeBindings} from '../../src/dialog/declared-bindings.mjs';
 import {classify} from './causes.mjs';
 import path from 'node:path';
 const [level,...ids]=process.argv.slice(2);
 const {rows}=loadRows({root:ROOT,managementRoot:path.resolve(ROOT,'../management')});
-const runner=await createRunner({levels:[level]});setKindTable(runner.bindings);
+const runner=await createRunner({levels:[level]});setKindTable(runner.bindings);setPropertyTable(await completeBindings(runner.bindings));
 for(const id of ids){
  const row=rows.find(r=>r.id===id);if(!row){console.log('no row',id);continue;}
  const run=await runner.run(row,level),v=judgeRow(row,run),d=diffObservations(run.before,run.after,row.world);

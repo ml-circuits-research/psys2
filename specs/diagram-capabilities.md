@@ -121,11 +121,21 @@ and points; ring-projection.sop areas, slices, gridlines, axis titles, legends).
 | `diagram.chart.category.add` | `id`, `label`, `value` | a category at the end | "add a column for April with 25", "add a slice Other 3" |
 | `diagram.chart.category.remove` | `id`, `category` | remove a category | "remove February", "delete the last bar" |
 | `diagram.chart.category.rename` | `id`, `category`, `label` | rename a category | "rename Jan to January" |
-| `diagram.chart.format` | `id`, `title`, `xLabel`, `yLabel`, `valueLabels`, `gridlines`, `legend` (none, right, bottom), `yMax` (top of the value axis; values above it drawn at the top) | formatting [missing-property] | "call the chart Sales 2026", "label the y axis Units", "hide the values", "show gridlines", "put the legend on the right", "cap the y axis at 100" |
+| `diagram.chart.format` | `id`, `title`, `xLabel`, `yLabel`, `valueLabels`, `gridlines`, `legend` (none, right, bottom), `yMax` (top of the value axis; values above it drawn at the top), `layout` (bar, line, area, pie, doughnut: the chart type changed in place), `palette` (a `k.styles` theme: each category takes the theme's next swatch, in category order) | formatting [missing-property] | "call the chart Sales 2026", "label the y axis Units", "hide the values", "show gridlines", "put the legend on the right", "cap the y axis at 100", "convert that graph to a pie", "use a pastel palette" |
 | `diagram.chart.highlight` | `id`, `test` (below, above), `value`, `colour` | conditional colours: each category whose value is below (above) the threshold takes the colour | "make the months below 20 red", "colour the losing quarters red", "highlight values over 50 in green" |
 | `diagram.chart.sort` | `id`, `order` (ascending, descending, label) | reorder the categories | "sort the bars from highest to lowest", "sort alphabetically" |
 | `diagram.group.layout` | `id`, `layout` | chart type | "make it a line chart", "turn it into a doughnut", "show it as an area chart" |
 | `diagram.node.change` / `diagram.style.apply` | colour, `theme="highlight"` on a category | colour or highlight one bar or slice | "make the March bar red", "highlight the biggest slice" |
+
+The reader's chart keys reach these operations through declared key alignments (`execution-policy.sop`
+`app.execution.keyBinding`/`keyValue`, specs/semantic-frame.md §5): `chart.grid` → `gridlines` (show/hide),
+`chart.show_values`/`showValues` → `valueLabels`, `chart.legend`/`showLegend` → `legend` (show → right, hide → none,
+right, bottom), `chart.max` → `yMax`, `chart.sort` → `diagram.chart.sort order` (desc, asc, alpha), `chart.type` →
+`layout`, `chart.palette` → `palette` (pastel, monochrome, sunset, dark, forest, ocean, classic, vivid; warm → sunset,
+cool → ocean, rainbow and default → vivid), `chart.id` and `point.chart` → the group's `id` (the chart named).
+`chart.min`, `chart.horizontal`, `chart.stacked`, `chart.width`/`height` and `chart.effect` stay unbound and are
+disclosed: the catalog's `w.diagram.group` (closed, hand-core) has no slot for a value axis minimum, a bar
+orientation, stacking or a chart size, so no rule can keep them (needs catalog slots in sop-knowledge-worlds).
 
 Not yet (each needs a rule set or a mechanism, listed honestly; from the owner's request and
 management/data-drop/pilot/FEATURE-REQUESTS.md B1-B12):

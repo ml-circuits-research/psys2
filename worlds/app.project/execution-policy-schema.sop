@@ -1,4 +1,4 @@
-@policy.module core.module name=app.execution version=2 imports=std.capability exports=app.execution.values exports=app.execution.observedProperty exports=app.execution.observedMeasure exports=app.execution.observedField exports=app.execution.preview exports=app.execution.comparative exports=app.execution.comparativeFactor exports=app.execution.comparativeStep exports=app.execution.ordinal exports=app.execution.knowledge exports=app.execution.instant exports=app.execution.requestValue exports=app.execution.clockTime exports=app.execution.instantBase exports=app.execution.instantFocus exports=app.execution.actForm exports=app.execution.reference exports=app.execution.actOperation exports=app.execution.kindBinding
+@policy.module core.module name=app.execution version=2 imports=std.capability exports=app.execution.values exports=app.execution.observedProperty exports=app.execution.observedMeasure exports=app.execution.observedField exports=app.execution.preview exports=app.execution.comparative exports=app.execution.comparativeFactor exports=app.execution.comparativeStep exports=app.execution.ordinal exports=app.execution.knowledge exports=app.execution.instant exports=app.execution.requestValue exports=app.execution.clockTime exports=app.execution.instantBase exports=app.execution.instantFocus exports=app.execution.actForm exports=app.execution.reference exports=app.execution.actOperation exports=app.execution.kindBinding exports=app.execution.keyBinding exports=app.execution.keyValue
 @values.type core.type of=app.execution.values closed=true
 @values.concept core.slot of=app.execution.values key=concept kind=atom present=true
 @values.type.slot core.slot of=app.execution.values key=valueType kind=string present=true
@@ -102,3 +102,18 @@
 @kindBinding.operation core.slot of=app.execution.kindBinding key=operation kind=string present=true
 @kindBinding.parameter core.slot of=app.execution.kindBinding key=parameter kind=string present=true
 @kindBinding.value core.slot of=app.execution.kindBinding key=value kind=string present=true
+# A reader key aligned with a native parameter of another name (the reader's chart.grid is the chart group's
+# gridlines), for keys the deployed binding table leaves unbound or binds to a retired source type. The key binds to
+# that parameter of the operation's own source type (declared-bindings.mjs). Its said values (app.execution.keyValue)
+# are the reader's class values of the key, each given to the tool as the declared parameter value; a key without
+# declared values takes the parameter's own (a closed list, a number).
+@keyBinding.type core.type of=app.execution.keyBinding closed=true
+@keyBinding.area core.slot of=app.execution.keyBinding key=area kind=atom present=true
+@keyBinding.key core.slot of=app.execution.keyBinding key=key kind=string present=true
+@keyBinding.operation core.slot of=app.execution.keyBinding key=operation kind=string present=true
+@keyBinding.parameter core.slot of=app.execution.keyBinding key=parameter kind=string present=true
+@keyValue.type core.type of=app.execution.keyValue closed=true
+@keyValue.area core.slot of=app.execution.keyValue key=area kind=atom present=true
+@keyValue.key core.slot of=app.execution.keyValue key=key kind=string present=true
+@keyValue.said core.slot of=app.execution.keyValue key=said kind=string present=true
+@keyValue.value core.slot of=app.execution.keyValue key=value kind=string present=true

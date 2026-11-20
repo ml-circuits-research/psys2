@@ -9,7 +9,11 @@
 //  3. a family the table leaves unresolved reads as the class declared for it (interpretation-policy.sop
 //     app.interpret.family), with the provenance of that class's own kind row.
 //  4. a family without a native family binding takes the one its own kind rows share, own or declared (a target named
-//     without a kind word).
+//     without a kind word);
+//  5. a key declared aligned with a native parameter of another name (execution-policy.sop app.execution.keyBinding:
+//     the reader's chart.grid is the chart group's gridlines) binds to that parameter of the operation's source type,
+//     replacing the table's row; its declared said values (app.execution.keyValue) are its class values, each given to
+//     the tool as its declared parameter value (valueMap, a lookup the request compiler resolves).
 import {parse,str} from '../vendor/sopworld/sopworld.mjs';
 import {interpretationPolicy} from './interpretation-policy.mjs';
 import {executionPolicyWorld} from './execution-policy.mjs';
@@ -44,6 +48,15 @@ async function nativeParameters(){
 let kindOperations;
 const declaredKindOperations=()=>kindOperations??=executionPolicyWorld().ofType('app.execution.kindBinding').map(row=>({area:one(row,'area'),kind:one(row,'kind'),operation:one(row,'operation'),parameter:one(row,'parameter'),value:one(row,'value')}));
 
+let keyAlignments;
+const declaredKeyAlignments=()=>keyAlignments??=(()=>{
+ const world=executionPolicyWorld(),values=world.ofType('app.execution.keyValue').map(row=>({area:one(row,'area'),key:one(row,'key'),said:one(row,'said'),value:one(row,'value')}));
+ return world.ofType('app.execution.keyBinding').map(row=>({area:one(row,'area'),key:one(row,'key'),operation:one(row,'operation'),parameter:one(row,'parameter')}))
+  .map(d=>({...d,values:values.filter(v=>v.area===d.area&&v.key===d.key)}));
+})();
+// A declared parameter value typed as the parameter takes it (a boolean, a number, else the string itself).
+const typed=(kind,value)=>kind==='boolean'?value==='true':['number','integer'].includes(kind)&&Number.isFinite(Number(value))?Number(value):value;
+
 const completed=new WeakMap();
 /** The binding table completed from the live declarations; the same object when nothing is added. Memoized per table. */
 export async function completeBindings(bindings){
@@ -72,6 +85,18 @@ export async function completeBindings(bindings){
   properties.push({area:gap.area,key:gap.key,valueKind:'string',canonical:sourceType+'.'+parameter,sourceWire:p.wire,sourceSnapshotSHA:p.sourceSha256,sourceWorld:p.world,moduleVersion:'1',
    hostBinding:{id:p.operation,sourceType,key:parameter,operation:p.operation,parameter},...(p.enum?{classValues:p.enum}:{}),...(!p.enum&&numericOf(sourceType,parameter)?{numeric:true}:{}),
    alignment:{kind:'native-parameter-by-name',authority:'declared-bindings.mjs: the export rule over the live native interface'}});
+ }
+ // 5. Declared key alignments replace the table's row for their key (a retired source type, a parameter of another name).
+ for(const d of declaredKeyAlignments()){
+  const p=params.find(x=>x.operation===d.operation&&x.parameter===d.parameter);
+  if(!p)continue;
+  const sourceType=p.sourceType,valueMap=d.values.length?d.values.map(v=>({said:v.said,value:typed(p.kind,v.value)})):null;
+  const row={area:d.area,key:d.key,valueKind:'string',canonical:sourceType+'.'+d.parameter,sourceWire:p.wire,sourceSnapshotSHA:p.sourceSha256,sourceWorld:p.world,moduleVersion:'1',
+   hostBinding:{id:p.operation,sourceType,key:d.parameter,operation:p.operation,parameter:d.parameter},
+   ...(valueMap?{classValues:valueMap.map(v=>v.said),valueMap}:p.enum?{classValues:p.enum}:numericOf(sourceType,d.parameter)?{numeric:true}:{}),
+   alignment:{kind:'declared-key-parameter',authority:'execution-policy.sop app.execution.keyBinding'}};
+  const at=properties.findIndex(r=>r.area===d.area&&r.key===d.key);
+  if(at>=0)properties[at]=row;else properties.push(row);
  }
  // 3. Declared family readings.
  const families=[...(bindings.families??[])];

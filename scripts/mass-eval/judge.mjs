@@ -31,6 +31,11 @@ let KINDS=null;
 export function setKindTable(bindings){KINDS=new Map();for(const r of bindings?.kinds??[]){const k=r.area+'|'+lc(r.lemma);if(!KINDS.has(k))KINDS.set(k,new Set());KINDS.get(k).add(r.canonical);}
  FAMILIES=new Set((bindings?.families??[]).map(f=>f.canonical));}
 let FAMILIES=new Set();
+// Declared key alignments of the live binding table (declared-bindings.mjs rule 5): a key observed under its native
+// parameter's name (chart.grid as gridlines) and a said value as its declared parameter value (legend "hide" as none).
+let ALIGNED=new Map();
+export function setPropertyTable(bindings){ALIGNED=new Map();for(const r of bindings?.properties??[])if(r.alignment?.kind==='declared-key-parameter'&&r.hostBinding?.parameter)
+ ALIGNED.set(r.area+'|'+r.key,{parameter:r.hostBinding.parameter,values:new Map((r.valueMap??[]).map(v=>[lc(v.said),String(v.value)]))});}
 // A misspelt label kind ("diaamond") still names the object the application read as a close spelling.
 function edit(a,b){if(Math.abs(a.length-b.length)>2)return 9;const d=Array.from({length:a.length+1},(_,i)=>[i,...Array(b.length).fill(0)]);for(let j=1;j<=b.length;j++)d[0][j]=j;
  for(let i=1;i<=a.length;i++)for(let j=1;j<=b.length;j++)d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1));return d[a.length][b.length];}
@@ -91,9 +96,10 @@ function judgeRequest(req,ctx){
    const r=pairs.map(cmp),comparable=r.some(v=>v!==null);
    add('delta:'+c.key,comparable?r.some(v=>v===true):objs.length>0,comparable&&!!c.step,c.step);continue;}
   if(c.value===undefined||c.value===null||c.operator==='degree'||c.polarity==='negative'){add('value:'+c.key,objs.length>0,false,'not comparable');continue;}
-  const have=objs.flatMap(o=>inputsFor(o,c.key));
+  const aligned=ALIGNED.get(world+'|'+c.key),mapped=aligned?.values.get(lc(c.value));
+  const have=objs.flatMap(o=>{const own=inputsFor(o,c.key);return own.length||!aligned?own:inputsFor(o,aligned.parameter);});
   if(!have.length){add('value:'+c.key,objs.length>0,false,'no observed input');continue;}
-  add('value:'+c.key,have.some(h=>sameValue(c.value,h,c.key)),true,{want:c.value,have:have.slice(0,3)});
+  add('value:'+c.key,have.some(h=>sameValue(c.value,h,c.key)||mapped!==undefined&&sameValue(mapped,h,c.key)),true,{want:c.value,...(mapped!==undefined?{declared:mapped}:{}),have:have.slice(0,3)});
  }};
  const relationCheck=objs=>{
   if(!relation)return;const rel=RELATIONS[relation.value];

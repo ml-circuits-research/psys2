@@ -87,7 +87,7 @@ function interfaceFacts({ area, view, bindings, host, observation, focus, target
   // A selector on a parameter the policy fills with the target's own identity (std.capability.seed
   // source=target.list|target.id: "ids", "id") names the object itself ("the Plan label", "node n1"): its concept is
   // a reference concept of its source type (by code, name or kind), observed on each object as the object's code.
-  const identities = new Map();
+  const identities = new Map(), mappedConcepts = new Set();
   for (const row of bindings.properties || []) {
     const binding = row.hostBinding;
     if (row.area !== readerArea || !sourceTypes.has(binding?.sourceType)) continue;
@@ -97,9 +97,17 @@ function interfaceFacts({ area, view, bindings, host, observation, focus, target
       identities.set(row.canonical + '\0' + binding.sourceType, { sourceType: binding.sourceType, binding: observedAs, key: binding.parameter });
       write('app.execution.reference', { concept: row.canonical, sourceType: quote(binding.sourceType) });
     }
+    // A key declared with said values (declared-bindings.mjs rule 5: legend "hide" is the parameter's "none") resolves
+    // each said value through its declared parameter value.
+    const mapped = !identity && Array.isArray(row.valueMap) && row.valueMap.length;
+    if (mapped) for (const { said, value: datum } of row.valueMap) {
+      if (mappedConcepts.has(row.canonical + '\0' + said)) continue;
+      mappedConcepts.add(row.canonical + '\0' + said);
+      write(NS + 'value', { concept: row.canonical, label: quote(said), value: typeof datum === 'string' ? quote(datum) : token(datum) });
+    }
     write(NS + 'property', { scope, concept: row.canonical, on: quote(binding.sourceType), parameter: quote(binding.parameter),
       binding: observedAs ? quote(observedAs) : undefined,
-      codec: identity ? 'lookup' : codecs[binding.codec] || (references.has(row.canonical) || take(valueMappings.get(row.canonical), 'codec') === 'lookup' && !named.has(binding.sourceType + '\0' + binding.parameter) ? 'lookup' : undefined), order: String(propertyOrder++) });
+      codec: identity || mapped ? 'lookup' : codecs[binding.codec] || (references.has(row.canonical) || take(valueMappings.get(row.canonical), 'codec') === 'lookup' && !named.has(binding.sourceType + '\0' + binding.parameter) ? 'lookup' : undefined), order: String(propertyOrder++) });
   }
   // The single-valued observations of the objects a preview of a compiled call creates (degree-bases.mjs).
   for (const { operation, kind, objects } of previews) for (const object of objects) for (const field of object.inputs ?? []) {
