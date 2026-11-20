@@ -18684,6 +18684,9 @@
   "k.scenes/shards/scenes-indoors",
   "k.scenes/shards/things-b"
  ],
+ "books read": [
+  "k.charts/shards/measures"
+ ],
  "bookshelf": [
   "k.objects/shards/home"
  ],
@@ -34043,6 +34046,9 @@
   "k.words/shards/co-2",
   "k.words/shards/frequency-c"
  ],
+ "conversion rate": [
+  "k.charts/shards/measures"
+ ],
  "convert": [
   "k.actions/shards/verbs-change",
   "k.units/schema.sop",
@@ -37336,6 +37342,9 @@
  "customer": [
   "k.words/shards/cu",
   "k.words/shards/frequency-c"
+ ],
+ "customers": [
+  "k.charts/shards/measures"
  ],
  "customs": [
   "k.words/shards/cu",
@@ -44398,6 +44407,9 @@
   "k.words/shards/do",
   "k.words/shards/frequency-d"
  ],
+ "downloads": [
+  "k.charts/shards/measures"
+ ],
  "downside": [
   "k.words/shards/do",
   "k.words/shards/frequency-d"
@@ -49170,6 +49182,9 @@
   "k.words/shards/em",
   "k.words/shards/frequency-e"
  ],
+ "employees": [
+  "k.charts/shards/measures"
+ ],
  "employer": [
   "k.words/shards/em",
   "k.words/shards/frequency-e"
@@ -51029,6 +51044,9 @@
  "expense": [
   "k.words/shards/ex",
   "k.words/shards/frequency-e"
+ ],
+ "expenses": [
+  "k.charts/shards/measures"
  ],
  "expensive": [
   "k.attributes/schema.sop",
@@ -71769,6 +71787,12 @@
   "k.objects/shards/noto-place-building-03",
   "k.objects/shards/noto-time-01"
  ],
+ "hours of sleep": [
+  "k.charts/shards/measures"
+ ],
+ "hours of sunshine": [
+  "k.charts/shards/measures"
+ ],
  "house": [
   "k.attributes/shards/drawn-hand",
   "k.attributes/shards/numbers-g-o",
@@ -78363,6 +78387,10 @@
   "k.kinds/shards/relations-charts"
  ],
  "k.charts.kind": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-charts"
+ ],
+ "k.charts.measure": [
   "k.attributes/shards/narration",
   "k.kinds/shards/relations-charts"
  ],
@@ -92709,6 +92737,7 @@
   "k.attributes/shards/narration",
   "k.expect/schema.sop",
   "k.genres/schema.sop",
+  "k.kinds/shards/relations-charts",
   "k.kinds/shards/relations-expect",
   "k.kinds/shards/relations-genres",
   "k.kinds/shards/relations-motion",
@@ -93024,6 +93053,7 @@
   "k.kinds/shards/relations-interest",
   "k.kinds/shards/wordnet-1",
   "k.units/schema.sop",
+  "k.units/shards/measures",
   "k.words/shards/frequency-m",
   "k.words/shards/me",
   "w.diagram/schema.sop"
@@ -95054,6 +95084,7 @@
   "k.expect/schema.sop",
   "k.genres/schema.sop",
   "k.geo/shards/asia",
+  "k.kinds/shards/relations-charts",
   "k.kinds/shards/relations-expect",
   "k.kinds/shards/relations-genres",
   "k.kinds/shards/relations-motion",
@@ -104766,6 +104797,9 @@
   "k.words/shards/frequency-o",
   "k.words/shards/or"
  ],
+ "orders": [
+  "k.charts/shards/measures"
+ ],
  "ordinal": [
   "k.attributes/shards/narration",
   "k.charts/shards/charts",
@@ -113285,6 +113319,7 @@
   "k.attributes/shards/narration",
   "k.attributes/shards/ranges",
   "k.attributes/shards/typical",
+  "k.charts/shards/measures",
   "k.geo/schema.sop",
   "k.kinds/shards/relations-geo",
   "k.units/shards/measures",
@@ -117393,6 +117428,9 @@
  "rainer island": [
   "k.geo/shards/islands-europe"
  ],
+ "rainfall": [
+  "k.charts/shards/measures"
+ ],
  "rainforest": [
   "k.commonsense/shards/lives",
   "k.scenes/shards/scenes-nature",
@@ -120509,6 +120547,7 @@
   "k.words/shards/re"
  ],
  "revenue": [
+  "k.charts/shards/measures",
   "k.words/shards/frequency-r",
   "k.words/shards/re"
  ],
@@ -125076,6 +125115,7 @@
   "k.words/shards/sa"
  ],
  "sales": [
+  "k.charts/shards/measures",
   "k.words/shards/frequency-s",
   "k.words/shards/sa"
  ],
@@ -126091,6 +126131,7 @@
   "k.words/shards/sa"
  ],
  "satisfaction": [
+  "k.charts/shards/measures",
   "k.words/shards/frequency-s",
   "k.words/shards/sa"
  ],
@@ -127908,6 +127949,7 @@
   "k.actions/shards/actions-make-change"
  ],
  "score": [
+  "k.charts/shards/measures",
   "k.words/shards/frequency-s",
   "k.words/shards/sc",
   "k.objects/shards/noto-music-01"
@@ -138250,6 +138292,7 @@
   "k.genres/schema.sop",
   "k.kinds/shards/part_of",
   "k.kinds/shards/part_of-wordnet-3",
+  "k.kinds/shards/relations-charts",
   "k.kinds/shards/relations-motion",
   "k.kinds/shards/relations-procedures",
   "k.layouts/shards/joins",
@@ -138314,6 +138357,7 @@
  ],
  "steps": [
   "k.attributes/shards/narration",
+  "k.charts/shards/measures",
   "k.genres/schema.sop",
   "k.kinds/shards/relations-parts",
   "k.kinds/shards/relations-values",
@@ -139552,6 +139596,9 @@
  "student": [
   "k.words/shards/frequency-s",
   "k.words/shards/st"
+ ],
+ "students": [
+  "k.charts/shards/measures"
  ],
  "studio": [
   "k.words/shards/frequency-s",
@@ -143155,6 +143202,7 @@
   "w.tasks/schema.sop"
  ],
  "tasks": [
+  "k.charts/shards/measures",
   "k.procedures/schema.sop",
   "w.tasks/schema.sop"
  ],
@@ -143863,6 +143911,7 @@
   "k.attributes/shards/attributes",
   "k.attributes/shards/narration",
   "k.body/schema.sop",
+  "k.charts/shards/measures",
   "k.colours/schema.sop",
   "k.kinds/shards/relations-colours",
   "k.space/schema.sop",
@@ -149770,6 +149819,9 @@
   "k.words/shards/frequency-t",
   "k.words/shards/to"
  ],
+ "tourists": [
+  "k.charts/shards/measures"
+ ],
  "tournament": [
   "k.words/shards/frequency-t",
   "k.words/shards/to"
@@ -153183,6 +153235,7 @@
   "k.attributes/shards/typical",
   "k.expect/schema.sop",
   "k.genres/schema.sop",
+  "k.kinds/shards/relations-charts",
   "k.kinds/shards/relations-expect",
   "k.kinds/shards/relations-genres",
   "k.kinds/shards/relations-time",
@@ -155778,6 +155831,9 @@
   "k.words/shards/frequency-v",
   "k.words/shards/vi"
  ],
+ "visitors": [
+  "k.charts/shards/measures"
+ ],
  "visor": [
   "k.attributes/shards/drawn-mulberry",
   "k.attributes/shards/same-v",
@@ -156111,6 +156167,9 @@
  "vote": [
   "k.words/shards/frequency-v",
   "k.words/shards/vo"
+ ],
+ "votes": [
+  "k.charts/shards/measures"
  ],
  "voting": [
   "k.words/shards/frequency-v",

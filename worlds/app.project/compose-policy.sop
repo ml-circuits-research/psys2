@@ -1,0 +1,309 @@
+@compose.schema core.use world=app.compose prefix=false
+# COMPOSITION FROM KNOWLEDGE (random, "surprise me", "another one", "simpler", "something about what we discussed").
+# A request (app.compose.request: area, form, seed, source, optional subject, with, variant) is composed by these rules
+# from catalog knowledge: a scene of k.scenes for the Drawing tab, a diagram of ordered steps (k.procedures how-to
+# steps, k.time cycles) or a chart of k.charts categories with values drawn from the declared plausible range of a
+# k.charts measure for the Diagram tab. Every choice is a weighted, seeded draw of the library (sample_key with argmax,
+# rand, rand_between): the same seed gives the same result, the host records it, "another one" is the next seed. The
+# rules conclude app.compose.call facts (an operation of the area and its arguments, phase make or after) and
+# app.compose.list facts (the ordered items of an array argument); the host runs them through the area's declared
+# operations, places the made things together with the placement problem (std.problem, Z3 where available) and keeps
+# the whole as one undoable turn. Nothing here names a sentence; the words a reading may carry are the reader's.
+
+# ---- knowledge each form reads (host: facts.wireSource(type, {field, keys}); from= takes the keys from the names of
+# the rows of another loaded type; trigger=true: also read to decide whether a reading starts a composition).
+@load.scene.scenes app.compose.load form=scene trigger=true type="k.scenes.scene" field="kind" key="outdoors" key="underwater" key="space" key="indoors"
+@load.scene.has app.compose.load form=scene type="k.scenes.has" field="scene" from="k.scenes.scene" fromKey="name"
+# What the catalog marks sensitive (weapons, drugs, alcohol, tobacco) is never drawn unasked.
+@load.scene.sensitive app.compose.load form=scene type="k.kinds.sensitivity" field="name" from="k.scenes.has" fromKey="thing"
+@load.diagram.howto app.compose.load form=diagram type="k.procedures.howto" field="basis" key="cited" key="paraphrased" key="own"
+@load.diagram.steps app.compose.load form=diagram type="k.procedures.howto_step" field="howto" from="k.procedures.howto" fromKey="name"
+@load.diagram.cycles app.compose.load form=diagram type="k.time.cycle" field="of" key="k.time.stage"
+@load.diagram.stages app.compose.load form=diagram type="k.time.stage" field="cycle" from="k.time.cycle" fromKey="name"
+@load.diagram.shapes app.compose.load form=diagram type="k.diagrams.shape" field="kind" key="flowchart" key="cycle"
+@load.diagram.expect app.compose.load form=diagram type="k.expect.make" field="made_in" key="diagram"
+@load.chart.measures app.compose.load form=chart type="k.charts.measure" field="kind" key="count" key="money" key="amount" key="rate" key="temperature" key="score"
+@load.chart.categories app.compose.load form=chart type="k.charts.category" field="dimension" from="k.charts.measure" fromKey="dimension"
+
+# ---- detail: a variant ("simpler", "richer") wins over a stated preference (compose.detail), which wins over the
+# default. keep: the share of a scene's things drawn; maxcount: most of one thing; nodes: most diagram steps; cats:
+# most chart categories; subjects: most things placed (the host keeps the first by their draw).
+@detail.simple app.compose.detail level=simple keep=0.3 maxcount=1 nodes=4 cats=4 subjects=5
+@detail.default app.compose.detail level=default keep=0.6 maxcount=2 nodes=7 cats=6 subjects=9
+@detail.rich app.compose.detail level=rich keep=1 maxcount=4 nodes=12 cats=12 subjects=16
+@variant.simpler app.compose.variantLevel variant=simpler level=simple
+@variant.richer app.compose.variantLevel variant=richer level=rich
+@lv.v app.compose.request variant=?v
+@lv.m app.compose.variantLevel variant=?v level=?lv
+@lv.bv app.compose.levelByVariant level=?lv
+@level.from.variant core.rule when=$lv.v when=$lv.m then=$lv.bv
+@lv.chosen app.compose.levelByVariant level=?anyLevel
+@lv.byv app.compose.levelByVariant level=?lv
+@lv.pref app.compose.preference key="compose.detail" value=?lv
+@lv.anypref app.compose.preference key="compose.detail" value=?anyPref
+@lv.known app.compose.detail level=?lv
+@lv.out app.compose.level level=?lv
+@level.variant core.rule when=$lv.byv then=$lv.out
+@level.preference core.rule when=$lv.pref when=$lv.known not=$lv.chosen then=$lv.out
+@lv.default app.compose.request form=?anyForm
+@lv.default.out app.compose.level level=default
+@level.default core.rule when=$lv.default not=$lv.chosen not=$lv.anypref then=$lv.default.out
+
+# ---- the host's limits and fallbacks: at most `subjects` things placed by one composition (the group placement
+# limit); a drawn kind the tab's own list does not have is drawn from the catalog by name.
+@limit.make app.compose.limit subjects=16
+@fallback.drawing app.compose.fallback operation="drawing.object.make" parameter="kind" to="drawing.catalog.make" as="name"
+
+# ================================================================== SCENES (Drawing)
+# A scene of k.scenes, drawn in proportion to its weight (outdoor scenes, which the page's landscape layout draws
+# best, more often); a subject names the scene; a thing asked for ("with a dog") keeps the scenes that have it.
+@weight.outdoors app.compose.weight form=scene kind=outdoors weight=4
+@weight.underwater app.compose.weight form=scene kind=underwater weight=1
+@weight.space app.compose.weight form=scene kind=space weight=1
+@weight.indoors app.compose.weight form=scene kind=indoors weight=1
+@s.req app.compose.request form=scene source=random
+@s.subj app.compose.request form=scene source=random subject=?s
+@s.anysubj app.compose.request form=scene subject=?anySubject
+@s.scene k.scenes.scene name=?s kind=?k
+@s.w app.compose.weight form=scene kind=?k weight=?w
+@s.cand app.compose.candidate form=scene name=?s weight=?w
+@scene.subject core.rule when=$s.subj when=$s.scene when=$s.w then=$s.cand
+@scene.any core.rule when=$s.req not=$s.anysubj when=$s.scene when=$s.w then=$s.cand
+@s.c app.compose.candidate form=scene name=?s weight=?w
+@s.with app.compose.request form=scene with=?t
+@s.anywith app.compose.request form=scene with=?anyThing
+@s.has k.scenes.has scene=?s thing=?t
+@s.elig app.compose.eligible form=scene name=?s weight=?w
+@scene.with core.rule when=$s.c when=$s.with when=$s.has then=$s.elig
+@scene.nowith core.rule when=$s.c not=$s.anywith then=$s.elig
+@s.e app.compose.eligible form=scene name=?s weight=?w
+@s.seed app.compose.request form=scene seed=?seed
+@s.key core.calc out=?key fn=sample_key args=?seed args=?s args=?w
+@s.keyed app.compose.keyed request=$s.seed form=scene name=?s key=?key
+@scene.key core.rule when=$s.e when=$s.seed with=$s.key then=$s.keyed
+@s.p.req app.compose.request form=scene
+@s.p.k app.compose.keyed request=$s.p.req name=?n key=?key
+@s.p.best core.calc out=?pick fn=argmax over=$s.p.k args=?key pick=?n ties=first
+@s.p.out app.compose.chosen form=scene name=?pick
+@scene.pick core.rule when=$s.p.req with=$s.p.best then=$s.p.out
+
+# The things of the chosen scene: each kept by a seeded draw below the level's share, as many as a draw between 1 and
+# the smaller of its usual count and the level's most; the thing asked for always, once at least. A thing is drawn by
+# the drawing its scene names (k.scenes.has drawing=), else by its own name. `order` is the draw, the order the host
+# places and caps them in.
+@m.ch app.compose.chosen form=scene name=?s
+@m.req app.compose.request form=scene seed=?seed
+@m.lvl app.compose.level level=?lv
+@m.det app.compose.detail level=?lv keep=?p maxcount=?mc
+@m.has.d k.scenes.has scene=?s thing=?t count=?c drawing=?d
+@m.has k.scenes.has scene=?s thing=?t count=?c
+@m.anyd k.scenes.has scene=?s thing=?t drawing=?anyDrawing
+@m.u core.calc out=?u fn=rand args=?seed args=?t args="keep"
+@m.keep core.check fn=lt args=?u args=?p
+@m.max core.calc out=?mx fn=min args=?c args=?mc
+@m.n core.calc out=?n fn=rand_between args=?seed args=?t args=1 args=?mx
+@m.with app.compose.request form=scene with=?t
+@m.sens k.kinds.sensitivity name=?t
+@m.call.d app.compose.call form=scene phase=make operation="drawing.object.make" kind=?d count=?n order=?u thing=?t
+@m.call app.compose.call form=scene phase=make operation="drawing.object.make" kind=?t count=?n order=?u thing=?t
+@scene.member.drawing core.rule when=$m.ch when=$m.req when=$m.lvl when=$m.det when=$m.has.d not=$m.with not=$m.sens with=$m.u if=$m.keep with=$m.max with=$m.n then=$m.call.d
+@scene.member.own core.rule when=$m.ch when=$m.req when=$m.lvl when=$m.det when=$m.has not=$m.anyd not=$m.with not=$m.sens with=$m.u if=$m.keep with=$m.max with=$m.n then=$m.call
+@m.w.call.d app.compose.call form=scene phase=make operation="drawing.object.make" kind=?d count=1 order=0 thing=?t
+@m.w.call app.compose.call form=scene phase=make operation="drawing.object.make" kind=?t count=1 order=0 thing=?t
+@scene.with.drawing core.rule when=$m.ch when=$m.with when=$m.has.d then=$m.w.call.d
+@scene.with.own core.rule when=$m.ch when=$m.with when=$m.has not=$m.anyd then=$m.w.call
+# An outdoor scene is drawn on its landscape (the page's ground and sky: a terrain kind of the tab), first.
+@backdrop.outdoors app.compose.weight form=backdrop kind=outdoors thing=landscape
+@b.ch app.compose.chosen form=scene name=?s
+@b.scene k.scenes.scene name=?s kind=?k
+@b.w app.compose.weight form=backdrop kind=?k thing=?t
+@b.call app.compose.call form=scene phase=make operation="drawing.object.make" kind=?t count=1 order=-1 thing=?t
+@scene.backdrop core.rule when=$b.ch when=$b.scene when=$b.w then=$b.call
+@f.ch app.compose.chosen form=scene name=?s
+@f.found app.compose.found form=scene subject=?s
+@scene.found core.rule when=$f.ch then=$f.found
+@reply.scene app.compose.reply form=scene source=random text="I drew {a subject} scene, chosen at random from what I know (seed {seed}). Say \"another one\" for a different one, or \"simpler\"."
+
+# ================================================================== DIAGRAMS (Diagram tab)
+# A diagram kind of k.diagrams whose steps the loaded knowledge orders: a flowchart of the steps of an everyday
+# procedure (k.procedures how-to steps), a cycle of the stages of a k.time cycle. A kind and a topic are drawn
+# together, in proportion to the kind's weight; a subject names the kind, `with` the topic. The steps become nodes
+# shaped as k.diagrams says for their role, at most the level's `nodes`, joined in order (a cycle closes) and laid out.
+@form.flowchart app.compose.form area=diagram kind=flowchart canonical="k.diagrams.kind.flowchart" source=howto pattern=chain layout=column weight=3
+@form.cycle app.compose.form area=diagram kind=cycle canonical="k.diagrams.kind.cycle" source=cycle pattern=cycle layout=circle weight=2
+@d.hs k.procedures.howto_step howto=?topic n=?n about=?label role=?role
+@d.hs.out app.compose.step source=howto topic=?topic n=?n label=?label role=?role
+@diagram.step.howto core.rule when=$d.hs then=$d.hs.out
+@d.st k.time.stage cycle=?topic n=?n name=?label
+@d.st.out app.compose.step source=cycle topic=?topic n=?n label=?label role=stage
+@diagram.step.cycle core.rule when=$d.st then=$d.st.out
+@d.ht k.procedures.howto name=?topic
+@d.ht.out app.compose.topic source=howto topic=?topic
+@diagram.topic.howto core.rule when=$d.ht then=$d.ht.out
+@d.cy k.time.cycle name=?topic
+@d.cy.out app.compose.topic source=cycle topic=?topic
+@diagram.topic.cycle core.rule when=$d.cy then=$d.cy.out
+@d.req app.compose.request form=diagram source=random
+@d.subj app.compose.request form=diagram source=random subject=?k
+@d.anysubj app.compose.request form=diagram subject=?anySubject
+@d.form app.compose.form kind=?k source=?src weight=?w
+@d.topic app.compose.topic source=?src topic=?topic
+@d.cand app.compose.candidate form=diagram kind=?k name=?topic weight=?w
+@diagram.subject core.rule when=$d.subj when=$d.form when=$d.topic then=$d.cand
+@diagram.any core.rule when=$d.req not=$d.anysubj when=$d.form when=$d.topic then=$d.cand
+@d.c app.compose.candidate form=diagram kind=?k name=?topic weight=?w
+@d.with app.compose.request form=diagram with=?topic
+@d.anywith app.compose.request form=diagram with=?anyTopic
+@d.elig app.compose.eligible form=diagram kind=?k name=?topic weight=?w
+@diagram.with core.rule when=$d.c when=$d.with then=$d.elig
+@diagram.nowith core.rule when=$d.c not=$d.anywith then=$d.elig
+@d.e app.compose.eligible form=diagram kind=?k name=?topic weight=?w
+@d.seed app.compose.request form=diagram seed=?seed
+@d.salt core.calc out=?salt fn=concat args=?k args=": " args=?topic
+@d.key core.calc out=?key fn=sample_key args=?seed args=?salt args=?w
+@d.keyed app.compose.keyed request=$d.seed form=diagram kind=?k name=?topic salt=?salt key=?key
+@diagram.key core.rule when=$d.e when=$d.seed with=$d.salt with=$d.key then=$d.keyed
+@d.p.req app.compose.request form=diagram
+@d.p.k app.compose.keyed request=$d.p.req salt=?salt key=?key
+@d.p.best core.calc out=?pick fn=argmax over=$d.p.k args=?key pick=?salt ties=first
+@d.p.out app.compose.chosen form=diagram salt=?pick
+@diagram.pick core.rule when=$d.p.req with=$d.p.best then=$d.p.out
+@dc.ch app.compose.chosen form=diagram salt=?salt
+@dc.k app.compose.keyed form=diagram salt=?salt kind=?k name=?topic
+@dc.f app.compose.form kind=?k source=?src pattern=?pattern layout=?layout
+@dc.step app.compose.step source=?src topic=?topic n=?n label=?label role=?role
+@dc.lvl app.compose.level level=?lv
+@dc.det app.compose.detail level=?lv nodes=?mn
+@dc.le core.check fn=lte args=?n args=?mn
+@dc.shape k.diagrams.shape kind=?k role=?role shape=?sh
+@dc.anyshape k.diagrams.shape kind=?k role=?role
+@dc.call.s app.compose.call form=diagram phase=make operation="diagram.node.make" kind=?sh label=?label order=?n
+@dc.call app.compose.call form=diagram phase=make operation="diagram.node.make" kind="rectangle" label=?label order=?n
+@diagram.node.shaped core.rule when=$dc.ch when=$dc.k when=$dc.f when=$dc.step when=$dc.lvl when=$dc.det if=$dc.le when=$dc.shape then=$dc.call.s
+@diagram.node.plain core.rule when=$dc.ch when=$dc.k when=$dc.f when=$dc.step when=$dc.lvl when=$dc.det if=$dc.le not=$dc.anyshape then=$dc.call
+@dc.links app.compose.call form=diagram phase=after operation="diagram.links.connect" ids="@made" pattern=?pattern order=1
+@dc.arrange app.compose.call form=diagram phase=after operation="diagram.node.layout" ids="@made" layout=?layout order=2
+@dc.found app.compose.found form=diagram subject=?k topic=?topic
+@diagram.connect core.rule when=$dc.ch when=$dc.k when=$dc.f then=$dc.links then=$dc.arrange then=$dc.found
+@reply.diagram app.compose.reply form=diagram source=random text="I made {a subject} of {topic}, chosen at random from what I know (seed {seed}). Say \"another one\" for a different one."
+
+# ================================================================== CHARTS (Diagram tab)
+# A measure of k.charts (its plausible range, step and the dimensions it is usually broken down by) and one of its
+# dimensions are drawn together; a subject names the dimension or the measure. The dimension's usual categories, in
+# order and at most the level's `cats`, each take a value drawn from the measure's range on its step. The reply says
+# the values are invented.
+@c.req app.compose.request form=chart source=random
+@c.anysubj app.compose.request form=chart subject=?anySubject
+@c.subj.dim app.compose.request form=chart source=random subject=?dim
+@c.subj.m app.compose.request form=chart source=random subject=?m
+@c.m k.charts.measure name=?m dimension=?dim
+@c.cand app.compose.candidate form=chart kind=?m name=?dim weight=1
+@chart.any core.rule when=$c.req not=$c.anysubj when=$c.m then=$c.cand
+@chart.subject.dimension core.rule when=$c.subj.dim when=$c.m then=$c.cand
+@chart.subject.measure core.rule when=$c.subj.m when=$c.m then=$c.cand
+@c.e app.compose.candidate form=chart kind=?m name=?dim weight=?w
+@c.seed app.compose.request form=chart seed=?seed
+@c.salt core.calc out=?salt fn=concat args=?m args=" by " args=?dim
+@c.key core.calc out=?key fn=sample_key args=?seed args=?salt args=?w
+@c.keyed app.compose.keyed request=$c.seed form=chart kind=?m name=?dim salt=?salt key=?key
+@chart.key core.rule when=$c.e when=$c.seed with=$c.salt with=$c.key then=$c.keyed
+@c.p.req app.compose.request form=chart
+@c.p.k app.compose.keyed request=$c.p.req salt=?salt key=?key
+@c.p.best core.calc out=?pick fn=argmax over=$c.p.k args=?key pick=?salt ties=first
+@c.p.out app.compose.chosen form=chart salt=?pick
+@chart.pick core.rule when=$c.p.req with=$c.p.best then=$c.p.out
+@cc.ch app.compose.chosen form=chart salt=?salt
+@cc.k app.compose.keyed form=chart salt=?salt kind=?m name=?dim
+@cc.m k.charts.measure name=?m min=?lo max=?hi step=?step
+@cc.req app.compose.request form=chart seed=?seed
+@cc.cat k.charts.category dimension=?dim n=?n label=?lab
+@cc.lvl app.compose.level level=?lv
+@cc.det app.compose.detail level=?lv cats=?mk
+@cc.le core.check fn=lte args=?n args=?mk
+@cc.vsalt core.calc out=?vs fn=concat args=?salt args=" " args=?n
+@cc.v core.calc out=?v fn=rand_between args=?seed args=?vs args=?lo args=?hi args=?step
+@cc.label app.compose.list form=chart operation="diagram.group.chart.make" parameter="labels" n=?n value=?lab
+@cc.value app.compose.list form=chart operation="diagram.group.chart.make" parameter="values" n=?n value=?v
+@chart.categories core.rule when=$cc.ch when=$cc.k when=$cc.m when=$cc.req when=$cc.cat when=$cc.lvl when=$cc.det if=$cc.le with=$cc.vsalt with=$cc.v then=$cc.label then=$cc.value
+@cc.layout.req app.compose.request form=chart layout=?layout
+@cc.anylayout app.compose.request form=chart layout=?anyLayout
+@cc.call.l app.compose.call form=chart phase=make operation="diagram.group.chart.make" label=?salt layout=?layout order=0
+@cc.call app.compose.call form=chart phase=make operation="diagram.group.chart.make" label=?salt layout="bar" order=0
+@cc.found app.compose.found form=chart subject=?salt invented=true
+@chart.call.layout core.rule when=$cc.ch when=$cc.layout.req then=$cc.call.l then=$cc.found
+@chart.call core.rule when=$cc.ch not=$cc.anylayout then=$cc.call then=$cc.found
+@reply.chart app.compose.reply form=chart source=random text="I made a chart of {subject}. The values are invented: drawn at random from a plausible range (seed {seed}); you can change them or undo."
+
+# ================================================================== FROM THE CONVERSATION
+# What earlier turns said, as the reader read them (the host states them, never re-reading the text): the things
+# mentioned (app.compose.mention), the numbers said with what they count (app.compose.number), the steps said in order
+# (app.compose.said). A drawing of the mentioned things, a diagram of the said steps joined in order, a chart of the
+# numbers. When nothing usable was said, no call is concluded and the host says so and offers a random one.
+@v.scene.req app.compose.request form=scene source=conversation
+@v.mention app.compose.mention n=?n thing=?t
+@v.scene.call app.compose.call form=scene phase=make operation="drawing.object.make" kind=?t count=1 order=?n thing=?t
+@v.scene.found app.compose.found form=scene subject="what we talked about"
+@conversation.scene core.rule when=$v.scene.req when=$v.mention then=$v.scene.call then=$v.scene.found
+@v.d.req app.compose.request form=diagram source=conversation
+@v.said app.compose.said n=?n text=?label
+@v.d.call app.compose.call form=diagram phase=make operation="diagram.node.make" kind="rectangle" label=?label order=?n
+@v.d.links app.compose.call form=diagram phase=after operation="diagram.links.connect" ids="@made" pattern="chain" order=1
+@v.d.arrange app.compose.call form=diagram phase=after operation="diagram.node.layout" ids="@made" layout="column" order=2
+@v.d.found app.compose.found form=diagram subject="the steps you described"
+@conversation.diagram core.rule when=$v.d.req when=$v.said then=$v.d.call then=$v.d.links then=$v.d.arrange then=$v.d.found
+@v.c.req app.compose.request form=chart source=conversation
+@v.number app.compose.number n=?n value=?v label=?lab
+@v.c.label app.compose.list form=chart operation="diagram.group.chart.make" parameter="labels" n=?n value=?lab
+@v.c.value app.compose.list form=chart operation="diagram.group.chart.make" parameter="values" n=?n value=?v
+@v.c.call app.compose.call form=chart phase=make operation="diagram.group.chart.make" label="the numbers you mentioned" layout="bar" order=0
+@v.c.found app.compose.found form=chart subject="the numbers you mentioned"
+@conversation.chart core.rule when=$v.c.req when=$v.number then=$v.c.label then=$v.c.value then=$v.c.call then=$v.c.found
+@reply.scene.conversation app.compose.reply form=scene source=conversation text="I drew the things we talked about."
+@reply.diagram.conversation app.compose.reply form=diagram source=conversation text="I made a diagram of the steps you described, in the order you said them."
+@reply.chart.conversation app.compose.reply form=chart source=conversation text="I charted the numbers you mentioned."
+@reply.none.conversation app.compose.reply form=any source=none text="I could not find anything to use in what we said so far. Say \"surprise me\" and I will make a random one."
+
+# ================================================================== WHEN A READING IS A COMPOSITION
+# The reading of a turn (app.compose.reading: area, act, mode, type, the kind word the reader read, whether it bound to
+# a kind of the tab, its canonical kind) starts a composition (app.compose.start) when:
+# - it makes a new thing of a family that has no default thing of its own (a drawing with no kind: "draw something
+#   nice", "another one" read as a new drawn thing with no kind); right after a composition of the tab it is the next
+#   one of the same subject (variant another);
+# - its kind word is an open word of the tab (app.compose.open: words that name no kind, only a picture or "something");
+# - its kind word, bound to no kind of the tab, names a scene the knowledge has ("draw a farm");
+# - its kind (bound or not) is a diagram kind the knowledge can fill (app.compose.form).
+# The open words are a stopgap until the reader carries a composition key (worker-log: request.compose, request.source,
+# request.variant); they are listed here, never in code.
+@trigger.drawing app.compose.trigger area=drawing type=drawn form=scene empty=true
+@open.something app.compose.open area=drawing word=something form=scene
+@open.anything app.compose.open area=drawing word=anything form=scene
+@open.picture app.compose.open area=drawing word=picture form=scene
+@open.scene app.compose.open area=drawing word=scene form=scene
+@open.landscape app.compose.open area=drawing word=landscape form=scene
+@open.drawing app.compose.open area=drawing word=drawing form=scene
+@open.diagram app.compose.open area=diagram word=diagram form=diagram
+@t.r app.compose.reading area=?a act=make mode=new type=?ty
+@t.word app.compose.reading word=?anyWord
+@t.tr app.compose.trigger area=?a type=?ty form=?f empty=true
+@t.last app.compose.last area=?a form=?f
+@t.anylast app.compose.last area=?a
+@t.start.new app.compose.start area=?a form=?f
+@t.start.next app.compose.start area=?a form=?f variant=another
+@start.empty core.rule when=$t.r not=$t.word when=$t.tr not=$t.anylast then=$t.start.new
+@start.next core.rule when=$t.r not=$t.word when=$t.tr when=$t.last then=$t.start.next
+@o.r app.compose.reading area=?a act=make mode=new word=?w
+@o.open app.compose.open area=?a word=?w form=?f
+@o.start app.compose.start area=?a form=?f
+@start.open core.rule when=$o.r when=$o.open then=$o.start
+@n.r app.compose.reading area=drawing act=make mode=new word=?w bound=false
+@n.scene k.scenes.scene name=?w
+@n.start app.compose.start area=drawing form=scene subject=?w
+@start.scene core.rule when=$n.r when=$n.scene then=$n.start
+@k.r app.compose.reading area=?a act=make mode=new word=?w
+@k.form app.compose.form area=?a kind=?w
+@k.start app.compose.start area=?a form=diagram subject=?w
+@start.diagram.word core.rule when=$k.r when=$k.form then=$k.start
+@k.rc app.compose.reading area=?a act=make mode=new canonical=?c
+@k.formc app.compose.form area=?a kind=?k canonical=?c
+@k.startc app.compose.start area=?a form=diagram subject=?k
+@start.diagram.kind core.rule when=$k.rc when=$k.formc then=$k.startc

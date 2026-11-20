@@ -39,6 +39,8 @@ for (const [source, module] of [
   ['ui-defaults.sop', 'ui-defaults-source.mjs'],
   ['voice-words-schema.sop', 'voice-words-schema-source.mjs'],
   ['voice-words.sop', 'voice-words-source.mjs'],
+  ['compose-schema.sop', 'compose-schema-source.mjs'],
+  ['compose-policy.sop', 'compose-policy-source.mjs'],
 ]) {
   const text = readFileSync(new URL(source, folder), 'utf8');
   emit(fileURLToPath(new URL(module, folder)), '// Generated from ' + source + '.\nexport default ' + JSON.stringify(text) + ';\n');

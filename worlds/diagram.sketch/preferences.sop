@@ -9,6 +9,9 @@
 @pref.diagram.ids w.preferences.default key=ids field=value value=off scope=app about="object IDs off"
 # Declared only (no effect yet): where new things go when a command does not say ("always put new things on the right").
 @pref.diagram.placement w.preferences.default key=placement.side field=value value=auto scope=app about="wherever there is room"
+# How much a composition from knowledge draws ("keep it simple", "make them detailed"): read by the composition policy
+# (worlds/app.project/compose-policy.sop compose.detail: simple, default, rich) for random and "another one" requests.
+@pref.diagram.compose.detail w.preferences.default key=compose.detail field=value value=default scope=app about="the usual amount of detail"
 @pref.diagram.op.state app.pref.operation role=state operation="diagram.preference.state"
 @pref.diagram.op.reset app.pref.operation role=reset operation="diagram.preference.reset"
 

@@ -1,0 +1,61 @@
+# The types of the composition policy (compose-policy.sop): random, surprise and conversation-grounded content of the
+# Drawing and Diagram tabs, composed from catalog knowledge by declared rules with the library's seeded sampling
+# (sopworld rand, rand_between, sample_key). The host (src/dialog/compose-execution.mjs) states the reading, the
+# request, the preferences, what the conversation mentioned and the knowledge the policy declares to load; it executes
+# the calls the rules conclude, through the area's own declared operations, as one undoable turn.
+@compose.module core.module name=app.compose exports=app.compose.reading exports=app.compose.last exports=app.compose.open exports=app.compose.trigger exports=app.compose.start exports=app.compose.request exports=app.compose.preference exports=app.compose.variantLevel exports=app.compose.levelByVariant exports=app.compose.level exports=app.compose.detail exports=app.compose.load exports=app.compose.weight exports=app.compose.form exports=app.compose.candidate exports=app.compose.eligible exports=app.compose.keyed exports=app.compose.chosen exports=app.compose.step exports=app.compose.topic exports=app.compose.call exports=app.compose.list exports=app.compose.mention exports=app.compose.number exports=app.compose.said exports=app.compose.reply exports=app.compose.fallback exports=app.compose.limit exports=app.compose.measure exports=app.compose.notice exports=app.compose.found
+
+# What the reader read (one request of the turn) and what the area last composed.
+@compose.reading.type core.type of=app.compose.reading
+@compose.reading.area core.slot of=app.compose.reading key=area kind=atom present=true
+@compose.reading.act core.slot of=app.compose.reading key=act kind=atom
+@compose.reading.mode core.slot of=app.compose.reading key=mode kind=atom
+@compose.reading.type.slot core.slot of=app.compose.reading key=type kind=atom
+@compose.reading.word core.slot of=app.compose.reading key=word kind=string
+@compose.reading.bound core.slot of=app.compose.reading key=bound kind=boolean
+@compose.reading.canonical core.slot of=app.compose.reading key=canonical kind=string
+@compose.last.type core.type of=app.compose.last
+@compose.open.type core.type of=app.compose.open
+@compose.trigger.type core.type of=app.compose.trigger
+@compose.start.type core.type of=app.compose.start
+
+# The composition asked for, its detail level, the preferences in force.
+@compose.request.type core.type of=app.compose.request
+@compose.request.area core.slot of=app.compose.request key=area kind=atom present=true
+@compose.request.form core.slot of=app.compose.request key=form enum=scene enum=diagram enum=chart present=true
+@compose.request.seed core.slot of=app.compose.request key=seed kind=integer present=true
+@compose.request.source core.slot of=app.compose.request key=source enum=random enum=conversation present=true
+@compose.request.subject core.slot of=app.compose.request key=subject kind=string
+@compose.request.with core.slot of=app.compose.request key=with kind=string
+@compose.request.variant core.slot of=app.compose.request key=variant enum=another enum=similar enum=simpler enum=richer
+@compose.preference.type core.type of=app.compose.preference
+@compose.variantLevel.type core.type of=app.compose.variantLevel
+@compose.levelByVariant.type core.type of=app.compose.levelByVariant
+@compose.level.type core.type of=app.compose.level
+@compose.detail.type core.type of=app.compose.detail
+
+# Declared data: which knowledge to load, weights, diagram forms, limits, fallbacks, reply wording.
+@compose.load.type core.type of=app.compose.load
+@compose.weight.type core.type of=app.compose.weight
+@compose.form.type core.type of=app.compose.form
+@compose.limit.type core.type of=app.compose.limit
+@compose.fallback.type core.type of=app.compose.fallback
+@compose.reply.type core.type of=app.compose.reply
+@compose.notice.type core.type of=app.compose.notice
+@compose.measure.type core.type of=app.compose.measure
+
+# Derived: candidates, keys, the choice, the steps and topics of a diagram, the calls and their list arguments.
+@compose.candidate.type core.type of=app.compose.candidate
+@compose.eligible.type core.type of=app.compose.eligible
+@compose.keyed.type core.type of=app.compose.keyed
+@compose.chosen.type core.type of=app.compose.chosen
+@compose.step.type core.type of=app.compose.step
+@compose.topic.type core.type of=app.compose.topic
+@compose.call.type core.type of=app.compose.call
+@compose.list.type core.type of=app.compose.list
+@compose.found.type core.type of=app.compose.found
+
+# What the conversation mentioned, from the reader's own outputs of earlier turns.
+@compose.mention.type core.type of=app.compose.mention
+@compose.number.type core.type of=app.compose.number
+@compose.said.type core.type of=app.compose.said

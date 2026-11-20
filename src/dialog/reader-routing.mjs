@@ -21,6 +21,7 @@ import {projectQuantities,amountsOf,quantityNote} from './quantity-projection.mj
 import {routeCoordination} from './coordination-routing.mjs';
 import {declaredKnowledge} from './declared-execution.mjs';
 import {interpretationPolicy,coordinationEligible,comparisonBounds,retryNote} from './interpretation-policy.mjs';
+import {composeReading,composeStart,composeRequest,executeCompose} from './compose-execution.mjs';
 let amounts;
 // The named amounts of the execution knowledge (k.expect.amount), read once.
 const knownAmounts=()=>amounts??=amountsOf(declaredKnowledge('k.expect.amount'));
@@ -159,6 +160,18 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
    return {proposal:read,contextProjection:null};
   }
  };
+ // A reading the declared composition policy takes (compose-policy.sop: a new drawing with no kind, an open word, a
+ // scene or a diagram kind the knowledge can fill) is composed from knowledge with a recorded seed, as one undoable turn.
+ try{
+  const reading=composeReading(proposal);
+  const start=reading&&await composeStart(session,reading,{knowledge:session.engine?.knowledge});
+  if(start){
+   const request=composeRequest(session,start);
+   observe(session,{nodeIds:['component:library','execution:compose-policy'],phase:'stage',operation:'app.compose',label:'Compose from knowledge',text,request});
+   const composed=await executeCompose(session,request,{view:context.area});
+   if(composed)return {...composed,trace:{...composed.trace,readerRouting:{primary:'sop-bert',selected:'compose',rawReading:proposal?.raw?.requests??null,unresolved:proposal?.failures??[]}}};
+  }
+ }catch(error){observe(session,{nodeIds:['component:reader'],phase:'error',operation:'app.compose',label:'Compose from knowledge',text,error:String(error?.message??error)});}
  // A make reading that saw several kinds for its one target, or left a list after its kind unread, is a
  // coordination of noun phrases: each is read and made, together (coordination-routing.mjs), before any re-reading
  // drops one of them.
@@ -349,6 +362,14 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
   interpretation:proposal?.interpretation??null,unresolved:preservedProviderTrace?proposal.interpretation.unresolved:(proposal?.failures??[]),...(contextRetry?{contextRetry}:{}),...(projectionErrors.length?{projectionErrors}:{}),...(coordinationError?{coordinationError}:{}),proposalCandidates:providerCandidates,rawReading:proposal?.raw?.requests??null,model:{provenance,coverage:(preservedProviderTrace?providerCoverage:proposal?.coverage)??null,candidates:preservedProviderTrace?providerCandidates.length:(proposal?.candidates?.length??0),eligible:!!eligible}}}};
 }
 
+/** One routed turn, recorded for later turns that build on the conversation (what the reader read, never the text). */
+export async function routeNewEngine(session,text,options={}){
+ const result=await routeNewEngineTurn(session,text,options);
+ const requests=result?.trace?.readerRouting?.rawReading;
+ if(Array.isArray(requests)&&requests.length&&!result.trace?.compose)
+  session.composeTurns=[...(session.composeTurns??[]).slice(-15),{area:options.view??session.isession?.state?.['ui.shell']?.activeTab??null,requests:structuredClone(requests)}];
+ return result;
+}
 /** Apply the declared source-order schedule to actual model cuts, never source words. */
 // AREA RE-READING (interpretation-policy.sop app.interpret.areaRetry): the active editor is a prior over the live
 // editors, not a clamp. A request no tool of the active editor can take, for a declared reason, is read again in each
@@ -377,7 +398,7 @@ async function mentionedView(session,text,active){
  const named=liveViews(session,NATIVE_AREAS).filter(([view,area])=>view!==active&&(area.words??[]).some(word=>word.split(/\s+/).every(part=>said.has(part.toLowerCase())))).map(([view])=>view);
  return named.length===1?named[0]:null;
 }
-export async function routeNewEngine(session,text,options={}){
+async function routeNewEngineTurn(session,text,options={}){
  const shell=session.isession?.state?.['ui.shell'];
  let mention=null;
  if(!options.view&&!isAuthoredRequest(text)&&shell?.activeTab){

@@ -10,7 +10,7 @@
 # license: CC0-1.0
 # script: none (hand-written); the shards are written by tools/charts-core.mjs
 
-@k.charts core.module name=k.charts version=1 exports=source exports=kind exports=encoding exports=relationship exports=rule exports=category core.source="hand-core 1"
+@k.charts core.module name=k.charts version=1 exports=source exports=kind exports=encoding exports=relationship exports=rule exports=category exports=measure core.source="hand-core 1"
 
 # A published work a fact rests on: `name` a short id (author and year), `cite` the reference, `year`.
 @k.charts.source core.type of=k.charts.source shared=true closed=true core.source="hand-core 1"
@@ -79,3 +79,16 @@
 @k.charts.category.label core.slot of=k.charts.category key=label required=true kind=atom kind=string core.source="hand-core 1"
 
 # Its English words are in w.lang.en (shard words-k.charts, KR3).
+
+# A measure charts usually show (sales, visitors, temperature): `kind` the kind of quantity, `unit`, a plausible range
+# (`min`, `max`) and `step` for the value of one category, `dimension` the dimensions (of k.charts.category) it is
+# usually broken down by. A host asked for a chart with invented values draws them from this range and says so.
+@k.charts.measure core.type of=k.charts.measure shared=true closed=true core.source="hand-core 1"
+@k.charts.measure.name core.slot of=k.charts.measure key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.charts.measure.kind core.slot of=k.charts.measure key=kind required=true enum=count enum=money enum=amount enum=rate enum=temperature enum=score core.source="hand-core 1"
+@k.charts.measure.unit core.slot of=k.charts.measure key=unit required=true kind=string core.source="hand-core 1"
+@k.charts.measure.min core.slot of=k.charts.measure key=min required=true kind=number core.source="hand-core 1"
+@k.charts.measure.max core.slot of=k.charts.measure key=max required=true kind=number core.source="hand-core 1"
+@k.charts.measure.step core.slot of=k.charts.measure key=step required=true kind=number min=0 core.source="hand-core 1"
+@k.charts.measure.dimension core.slot of=k.charts.measure key=dimension many=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.charts.measure.about core.slot of=k.charts.measure key=about required=true kind=string core.source="hand-core 1"

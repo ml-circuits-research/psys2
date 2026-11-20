@@ -1,4 +1,4 @@
-# k.kinds/shards/relations-charts: the keys of the types of k.charts read as relations: 28 relations, each with the kind of its subject and the class, types and senses of its object (from the joins declared on the slots, by rule from the schemas, and by value from the shards, as found says).
+# k.kinds/shards/relations-charts: the keys of the types of k.charts read as relations: 35 relations, each with the kind of its subject and the class, types and senses of its object (from the joins declared on the slots, by rule from the schemas, and by value from the shards, as found says).
 # sources: hand-core 1 (computed in this repository from the schemas and shards of the knowledge worlds: tools/relations-core.mjs)
 # license: CC0-1.0
 # script: tools/relations-core.mjs
@@ -15,6 +15,13 @@
 @k.kinds.relation.k.charts.kind.whole k.kinds.relation type=k.charts.kind key=whole subject=kind object=boolean found=schema core.source="hand-core 1"
 @k.kinds.relation.k.charts.kind.about k.kinds.relation type=k.charts.kind key=about subject=kind object=text found=schema core.source="hand-core 1"
 @k.kinds.relation.k.charts.kind.source k.kinds.relation type=k.charts.kind key=source subject=kind object=thing object_type=k.charts.source found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.charts.measure.kind k.kinds.relation type=k.charts.measure key=kind subject=measure object=kind found=schema core.source="hand-core 1"
+@k.kinds.relation.k.charts.measure.unit k.kinds.relation type=k.charts.measure key=unit subject=measure object=text found=schema core.source="hand-core 1"
+@k.kinds.relation.k.charts.measure.min k.kinds.relation type=k.charts.measure key=min subject=measure object=number found=schema core.source="hand-core 1"
+@k.kinds.relation.k.charts.measure.max k.kinds.relation type=k.charts.measure key=max subject=measure object=number found=schema core.source="hand-core 1"
+@k.kinds.relation.k.charts.measure.step k.kinds.relation type=k.charts.measure key=step subject=measure object=number found=schema core.source="hand-core 1"
+@k.kinds.relation.k.charts.measure.dimension k.kinds.relation type=k.charts.measure key=dimension subject=measure object=word object_type=k.words.sense found=value core.source="hand-core 1"
+@k.kinds.relation.k.charts.measure.about k.kinds.relation type=k.charts.measure key=about subject=measure object=text found=schema core.source="hand-core 1"
 @k.kinds.relation.k.charts.rank.encoding k.kinds.relation type=k.charts.rank key=encoding subject=rank object=thing object_type=k.charts.encoding found=declared object_by=name core.source="hand-core 1"
 @k.kinds.relation.k.charts.rank.data k.kinds.relation type=k.charts.rank key=data subject=rank object=value found=schema core.source="hand-core 1"
 @k.kinds.relation.k.charts.rank.source k.kinds.relation type=k.charts.rank key=source subject=rank object=thing object_type=k.charts.source found=declared object_by=name core.source="hand-core 1"

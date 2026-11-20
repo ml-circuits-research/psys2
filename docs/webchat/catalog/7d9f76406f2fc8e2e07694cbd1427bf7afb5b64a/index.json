@@ -1,5 +1,5 @@
 {
- "version": "ddcd5872bd95",
+ "version": "47188df4355d",
  "sopworld": "747b51e",
  "worlds": [
   {
@@ -4711,8 +4711,8 @@
     {
      "id": "k.attributes/shards/narration",
      "path": "k.attributes/shards/narration.sop",
-     "wires": 1497,
-     "bytes": 290304,
+     "wires": 1505,
+     "bytes": 291764,
      "keys": [
       "a",
       "about",
@@ -4990,6 +4990,7 @@
       "k.charts.category",
       "k.charts.encoding",
       "k.charts.kind",
+      "k.charts.measure",
       "k.charts.rank",
       "k.charts.relationship",
       "k.charts.rule",
@@ -12906,6 +12907,7 @@
     "k.charts.category",
     "k.charts.encoding",
     "k.charts.kind",
+    "k.charts.measure",
     "k.charts.relationship",
     "k.charts.rule",
     "k.charts.source"
@@ -12919,6 +12921,9 @@
      "name"
     ],
     "k.charts.kind": [
+     "name"
+    ],
+    "k.charts.measure": [
      "name"
     ],
     "k.charts.relationship": [
@@ -13033,6 +13038,41 @@
       "treemap",
       "volume",
       "zelazny1985"
+     ],
+     "sources": [
+      "hand-core-1"
+     ],
+     "license": "CC0-1.0",
+     "warnings": []
+    },
+    {
+     "id": "k.charts/shards/measures",
+     "path": "k.charts/shards/measures.sop",
+     "wires": 22,
+     "bytes": 6354,
+     "keys": [
+      "books read",
+      "conversion rate",
+      "customers",
+      "downloads",
+      "employees",
+      "expenses",
+      "hours of sleep",
+      "hours of sunshine",
+      "orders",
+      "population",
+      "rainfall",
+      "revenue",
+      "sales",
+      "satisfaction",
+      "score",
+      "steps",
+      "students",
+      "tasks",
+      "temperature",
+      "tourists",
+      "visitors",
+      "votes"
      ],
      "sources": [
       "hand-core-1"
@@ -34749,8 +34789,8 @@
     {
      "id": "k.kinds/shards/relations-charts",
      "path": "k.kinds/shards/relations-charts.sop",
-     "wires": 28,
-     "bytes": 5236,
+     "wires": 35,
+     "bytes": 6360,
      "keys": [
       "about",
       "categories_max",
@@ -34762,6 +34802,7 @@
       "k.charts.category",
       "k.charts.encoding",
       "k.charts.kind",
+      "k.charts.measure",
       "k.charts.rank",
       "k.charts.relationship",
       "k.charts.rule",
@@ -34769,12 +34810,16 @@
       "kind",
       "label",
       "mark",
+      "max",
+      "min",
       "n",
       "points_min",
       "rank",
       "relationship",
       "series",
       "source",
+      "step",
+      "unit",
       "whole",
       "x",
       "y",
@@ -65485,8 +65530,8 @@
     {
      "id": "k.units/shards/measures",
      "path": "k.units/shards/measures.sop",
-     "wires": 387,
-     "bytes": 55066,
+     "wires": 390,
+     "bytes": 55575,
      "keys": [
       "after",
       "age_years_about",
@@ -65672,6 +65717,7 @@
       "max_words",
       "max_x",
       "max_y",
+      "measure",
       "measurement",
       "median",
       "method",

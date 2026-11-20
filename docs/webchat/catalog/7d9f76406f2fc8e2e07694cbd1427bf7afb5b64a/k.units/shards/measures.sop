@@ -1,4 +1,4 @@
-# k.units/shards/measures: in which unit the numbers of every knowledge world are given (w.reader.en, k.geo, k.animals, k.music, k.body, k.space, k.objects, k.faces, k.drawing, k.composition2d, k.layouts, k.spatial2d, k.wearables, k.actions, k.words, k.attributes, k.commonsense, k.parts, k.people, k.scenes, k.expect, k.shapes, k.time, k.units, k.values, w.lang.en, k.motion, w.lang.ro, k.interest, k.genres, k.charts, k.styles, k.diagrams, k.story, k.procedures): 387 slots, each with its unit, with what it counts, as a place in an order, as a position in a frame, or as a plain number.
+# k.units/shards/measures: in which unit the numbers of every knowledge world are given (w.reader.en, k.geo, k.animals, k.music, k.body, k.space, k.objects, k.faces, k.drawing, k.composition2d, k.layouts, k.spatial2d, k.wearables, k.actions, k.words, k.attributes, k.commonsense, k.parts, k.people, k.scenes, k.expect, k.shapes, k.time, k.units, k.values, w.lang.en, k.motion, w.lang.ro, k.interest, k.genres, k.charts, k.styles, k.diagrams, k.story, k.procedures): 390 slots, each with its unit, with what it counts, as a place in an order, as a position in a frame, or as a plain number.
 # sources: hand-core 1 (hand-written in this repository: tools/measures-core.mjs)
 # license: CC0-1.0
 # script: tools/measures-core.mjs
@@ -350,6 +350,9 @@
 @k.units.measure.k.charts.rule.categories_max k.units.measure world=k.charts type=rule key=categories_max counts="category or slice" core.source="hand-core 1"
 @k.units.measure.k.charts.rule.points_min k.units.measure world=k.charts type=rule key=points_min counts="value of a series" core.source="hand-core 1"
 @k.units.measure.k.charts.category.n k.units.measure world=k.charts type=category key=n ordinal=true core.source="hand-core 1"
+@k.units.measure.k.charts.measure.min k.units.measure world=k.charts type=measure key=min counts="unit named by the unit key of the same fact" core.source="hand-core 1"
+@k.units.measure.k.charts.measure.max k.units.measure world=k.charts type=measure key=max counts="unit named by the unit key of the same fact" core.source="hand-core 1"
+@k.units.measure.k.charts.measure.step k.units.measure world=k.charts type=measure key=step counts="unit named by the unit key of the same fact" core.source="hand-core 1"
 @k.units.measure.k.styles.theme.width k.units.measure world=k.styles type=theme key=width plain=true core.source="hand-core 1"
 @k.units.measure.k.styles.swatch.n k.units.measure world=k.styles type=swatch key=n ordinal=true core.source="hand-core 1"
 @k.units.measure.k.styles.fill.gap k.units.measure world=k.styles type=fill key=gap plain=true core.source="hand-core 1"
