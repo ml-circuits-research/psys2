@@ -1,0 +1,7 @@
+@voice.module core.module name=app.voice version=1 exports=app.voice.word
+
+# An English word or phrase of a voice list (address, stopPhrases, stopVerbs, micNouns, cancel, openEndings, openVerbs,
+# determiners, numbers, fragments, knownOneWord), in list order.
+@voice.word.type core.type of=app.voice.word closed=true
+@voice.word.list core.slot of=app.voice.word key=list kind=atom present=true
+@voice.word.text core.slot of=app.voice.word key=text kind=string present=true

@@ -1,0 +1,2 @@
+// Generated from voice-words-schema.sop.
+export default "@voice.module core.module name=app.voice version=1 exports=app.voice.word\n\n# An English word or phrase of a voice list (address, stopPhrases, stopVerbs, micNouns, cancel, openEndings, openVerbs,\n# determiners, numbers, fragments, knownOneWord), in list order.\n@voice.word.type core.type of=app.voice.word closed=true\n@voice.word.list core.slot of=app.voice.word key=list kind=atom present=true\n@voice.word.text core.slot of=app.voice.word key=text kind=string present=true\n";
