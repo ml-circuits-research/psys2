@@ -1,6 +1,6 @@
 /** Singular lemmatizer and a matching pluralizer (spec 03 section 2). Browser-safe. */
 
-import { en } from './en.mjs?v=3eccaf3ffb';
+import { en } from './en.mjs?v=63a0a6f36a';
 
 /**
  * Singular lemma of a lowercase word. Irregular plurals first (`irregular` maps plural -> singular, the lexicon's `plural=` entries), then the facts of handover/lang.en (shards/morphology.sop, set `lemma`):
