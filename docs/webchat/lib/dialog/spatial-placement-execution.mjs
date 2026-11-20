@@ -1,16 +1,16 @@
 // Assemble trusted native observations and dispatch the compiler's SOP call.
-import {World,parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=915a9d5c18';
-import SOURCE from './new-engine-source.mjs?v=fc6b6a1c57';
-import {readPlacementProfile,rememberPlacement} from '../../worlds/app.project/spatial-profile.mjs?v=0ba4682807';
-import {placementInterfaceSop} from '../../worlds/native-spatial-interface.mjs?v=db9d5c75c7';
-import {NATIVE_AREAS,createAreaHost} from './app-reader-context.mjs?v=4350a070af';
+import {World,parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=ebb9691a80';
+import SOURCE from './new-engine-source.mjs?v=851e2195f9';
+import {readPlacementProfile,rememberPlacement} from '../../worlds/app.project/spatial-profile.mjs?v=3e0d29f7be';
+import {placementInterfaceSop} from '../../worlds/native-spatial-interface.mjs?v=7d092cdb0c';
+import {NATIVE_AREAS,createAreaHost} from './app-reader-context.mjs?v=d38b40aa45';
 import {identityRegistryFor,instanceIdFor} from './instance-identity.mjs?v=024ef1ca83';
-import {nativeKindCandidates,nativeCreationCandidates} from './native-binding-candidates.mjs?v=ab1e2fea3d';
-import {invokeObservedNativeTool} from './native-tool-activity.mjs?v=3ef60a0ba5';
-import {describeNativeControl,verifyNativeControlEffect} from './native-control-intent.mjs?v=94c93dc9d8';
+import {nativeKindCandidates,nativeCreationCandidates} from './native-binding-candidates.mjs?v=14f2fb40a4';
+import {invokeObservedNativeTool} from './native-tool-activity.mjs?v=cc5fd5eab3';
+import {describeNativeControl,verifyNativeControlEffect} from './native-control-intent.mjs?v=c67c7927c2';
 import {placementSearchProvider,z3Status} from './placement-search-provider.mjs?v=0675893eb5';
 import {en} from '../lang/en.mjs?v=fcc7af993a';
-import {placementHypotheses} from './placement-default-policy.mjs?v=e2e7db903c';
+import {placementHypotheses} from './placement-default-policy.mjs?v=ddb8330106';
 
 const read = (row,key) => row?.attrs[key]?.length===1 ? str(row.attrs[key][0]) : undefined;
 const ref = (row,key) => {

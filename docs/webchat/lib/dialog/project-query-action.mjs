@@ -1,13 +1,13 @@
-import {World,quote,serialize} from '../vendor/sopworld/sopworld.mjs?v=915a9d5c18';
-import {groundMention} from './lexical-grounding.mjs?v=ed4fefcfd1';
-import {createAreaHost,NATIVE_AREAS} from './app-reader-context.mjs?v=4350a070af';
-import {nativeCreationCandidates} from './native-binding-candidates.mjs?v=ab1e2fea3d';
+import {World,quote,serialize} from '../vendor/sopworld/sopworld.mjs?v=ebb9691a80';
+import {groundMention} from './lexical-grounding.mjs?v=61e1f2852f';
+import {createAreaHost,NATIVE_AREAS} from './app-reader-context.mjs?v=d38b40aa45';
+import {nativeCreationCandidates} from './native-binding-candidates.mjs?v=14f2fb40a4';
 import POLICY from '../../worlds/app.project/query-reading-policy-source.mjs?v=cf7b2d9297';
-import {detachGroundedRequest} from './grounded-projection.mjs?v=a0de8558ea';
+import {detachGroundedRequest} from './grounded-projection.mjs?v=aea5c5fcb9';
 import GROUNDED_SCHEMA from '../../worlds/app.project/grounded-projection-schema-source.mjs?v=b6d275f29d';
 import SCHEMA from '../../worlds/app.project/query-reading-schema-source.mjs?v=2d9e000e63';
 import {budget} from './budget.mjs?v=00bce6e369';
-import {writeReaderSource} from './reader-source.mjs?v=cbef78f4a7';
+import {writeReaderSource} from './reader-source.mjs?v=fa3c9741d2';
 
 const kind='app.query.read';
 const atom=value=>typeof value==='string'&&/^[A-Za-z_][A-Za-z0-9_.-]*$/.test(value)?value:undefined;

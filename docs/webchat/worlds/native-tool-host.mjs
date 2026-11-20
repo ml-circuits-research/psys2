@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-import {parse, str} from '../lib/vendor/sopworld/sopworld.mjs?v=915a9d5c18';
-import {readNativeIntent} from '../lib/dialog/native-intent-reader.mjs?v=02c71f2c0b';
+import {parse, str} from '../lib/vendor/sopworld/sopworld.mjs?v=ebb9691a80';
+import {readNativeIntent} from '../lib/dialog/native-intent-reader.mjs?v=e374272610';
 import {copyHostData, validateNativeArguments, validHostId as text, checkOperation} from './native-tool-arguments.mjs?v=ed48209b92';
 export {copyHostData, freezeHostData, snapshotHostData, validateNativeArguments, nativeToken} from './native-tool-arguments.mjs?v=ed48209b92';
 

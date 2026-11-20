@@ -2,7 +2,7 @@
 // The determiners that make a noun phrase a definite reference ("the lake", "that tree"), read once from the
 // language world's determiner facts (w.lang.en.det definite=yes). The raw-structure bridge uses them to read a
 // relation anchor phrase as a kind lemma; nothing here names a word.
-import {parse,str} from '../vendor/sopworld/sopworld.mjs?v=915a9d5c18';
+import {parse,str} from '../vendor/sopworld/sopworld.mjs?v=ebb9691a80';
 import {LANG_EN_FACTS} from '../lang/en.facts.generated.mjs?v=cbef8f4212';
 let table;
 export function referenceProjection(){

@@ -1,6 +1,6 @@
 // Explicit neural structure -> published request graphs. No reading or execution.
-import {serializeRequestGraph,inspectRequest,prepareRequestBatch} from '../vendor/sopworld/sopworld.mjs?v=915a9d5c18';
-import {copyHostData} from '../../worlds/native-tool-host.mjs?v=a1c19dd178';
+import {serializeRequestGraph,inspectRequest,prepareRequestBatch} from '../vendor/sopworld/sopworld.mjs?v=ebb9691a80';
+import {copyHostData} from '../../worlds/native-tool-host.mjs?v=48825109bb';
 export const STRUCTURAL_PREDICTIONS_FORMAT='psys2.structural-predictions/1';
 const plain=v=>v!==null&&typeof v==='object'&&!Array.isArray(v);
 const nonempty=v=>typeof v==='string'&&v.length>0;
