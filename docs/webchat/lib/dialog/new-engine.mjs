@@ -1,6 +1,6 @@
 // Detached development and measurement entry point for the actual declared executor.
 import { parse, str } from '../vendor/sopworld/sopworld.mjs?v=4cf6e60057';
-import { executeDeclaredRequest } from './declared-execution.mjs?v=06b081331c';
+import { executeDeclaredRequest } from './declared-execution.mjs?v=5a184ec217';
 import { createDrawingArea } from '../../worlds/art.draw/sop-drawing.mjs?v=34d7048ed4';
 
 const graphTypes = new Set(['std.request', 'std.request.source', 'std.request.target', 'std.request.constraint']);

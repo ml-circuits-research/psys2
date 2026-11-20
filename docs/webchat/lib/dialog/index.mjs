@@ -13,7 +13,7 @@ import { interpretationPolicy } from './interpretation-policy.mjs?v=95c5ac8e35';
  * Without it all input is treated as English.
  */
 
-import { loadWorlds } from '../worlds/index.mjs?v=c396068848';
+import { loadWorlds } from '../worlds/index.mjs?v=0d97cdc6fd';
 import { validateWorldSet } from '../worlds/validate.mjs?v=af0869a8e0';
 
 
@@ -244,7 +244,7 @@ export class DialogSession {
         }
       }
     }
-    const reply = await (await import('./reader-routing.mjs?v=2f2f1969d3')).routeNewEngine(this, english, { ...opts, language: 'en' });
+    const reply = await (await import('./reader-routing.mjs?v=325f043c36')).routeNewEngine(this, english, { ...opts, language: 'en' });
     reply.trace = { ...reply.trace, english, ...(translation ? { translation } : {}), ...(detection ? { languageDetection: detection } : {}) };
     if (language !== 'en') {
       try {

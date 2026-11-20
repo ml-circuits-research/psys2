@@ -5,7 +5,7 @@
 // end is not said, a star from the other end when it names one object. Nothing here names a word or a kind.
 import {parse,serialize,str,quote} from '../vendor/sopworld/sopworld.mjs?v=4cf6e60057';
 import {LANG_EN_FACTS} from '../lang/en.facts.generated.mjs?v=c3f375bc20';
-import {en} from '../lang/en.mjs?v=1072ad24cc';
+import {en} from '../lang/en.mjs?v=06e31cd85c';
 import {executionPolicyWorld} from './execution-policy.mjs?v=abb458111b';
 import {budget} from './budget.mjs?v=00bce6e369';
 

@@ -9,10 +9,10 @@ import {nativeKindCandidates,nativeCreationCandidates} from './native-binding-ca
 import {invokeObservedNativeTool} from './native-tool-activity.mjs?v=9e7d8073a0';
 import {describeNativeControl,verifyNativeControlEffect} from './native-control-intent.mjs?v=999c87cd52';
 import {placementSearchProvider,z3Status} from './placement-search-provider.mjs?v=0675893eb5';
-import {en} from '../lang/en.mjs?v=1072ad24cc';
+import {en} from '../lang/en.mjs?v=06e31cd85c';
 import {placementHypotheses} from './placement-default-policy.mjs?v=75fb3f0237';
-import {identityConcepts} from './capability-plan-adapter.mjs?v=c03ed3134d';
-import {executeNativeCapability,drawnAs} from './capability-plan-execution.mjs?v=cd29858fe1';
+import {identityConcepts} from './capability-plan-adapter.mjs?v=d2b0a98bc9';
+import {executeNativeCapability,drawnAs} from './capability-plan-execution.mjs?v=153439859c';
 import {budget} from './budget.mjs?v=00bce6e369';
 import {executionPolicyWorld} from './execution-policy.mjs?v=abb458111b';
 

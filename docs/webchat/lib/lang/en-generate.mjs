@@ -12,7 +12,7 @@ const TYPE_KEYS = new Set(['class', 'kind', 'is']);   // the keys that say what 
 
 /** The generator of a language world: `lib` is the sopworld namespace, `world` the library World that holds w.lang.en's templates, irregular plurals, auxiliaries and onsets. */
 export function englishOf(lib, world) {
-  const irregular = new Map(world.ofType('w.lang.en.irregular').map((w) => [bare(w.attrs.singular?.[0]), bare(w.attrs.plural?.[0])]));
+  const irregular = new Map(world.ofType('w.lang.en.irregular').filter((w) => bare(w.attrs.read_only?.[0]) !== 'yes').map((w) => [bare(w.attrs.singular?.[0]), bare(w.attrs.plural?.[0])]));
   const preps = new Set(world.ofType('w.lang.en.prep').map((w) => bare(w.attrs.text?.[0])));
   const aux = new Set(world.ofType('w.lang.en.aux').map((w) => bare(w.attrs.text?.[0])));
   const verbs = new Set(world.ofType('k.actions.action').map((w) => bare(w.attrs.name?.[0])));

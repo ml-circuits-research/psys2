@@ -8,7 +8,7 @@ import {NATIVE_AREAS} from './app-reader-context.mjs?v=6d09553e34';
 import {nativeKindCandidates} from './native-binding-candidates.mjs?v=23ab5f219d';
 import {bridgeRawStructure} from './raw-structural-bridge.mjs?v=78467599aa';
 import {comparativeSteps} from './comparative-projection.mjs?v=2367e21e55';
-import {referenceProjection} from './reference-projection.mjs?v=a287835d53';
+import {referenceProjection} from './reference-projection.mjs?v=9cde0c881d';
 
 // Reader diagnostics that only concern the identity heads the code replaces, or a constraint the reader could not
 // form (its metadata without a key); every other unresolved head keeps the reading incomplete.

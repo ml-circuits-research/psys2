@@ -20,7 +20,7 @@
  *     partitive(part, refs)     the question text for a part of a set (the wording is the domain's)
  *     other?(np, opts)          "the other one"; the domain knows its focus
  */
-import { en } from './en.mjs?v=1072ad24cc';
+import { en } from './en.mjs?v=06e31cd85c';
 
 export function readNounPhrase(text, dom, opts = {}) {
   const np = en.nounPhrase(text);

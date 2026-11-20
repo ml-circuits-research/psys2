@@ -5,11 +5,11 @@
 // Browser-safe: no `node:*` imports; the library module and the world registry are passed in.
 import { colourWordSet, colourLexiconWords } from '../knowledge/values.mjs?v=fedba1c1bc';
 import { languageWorld } from './compose-world.mjs?v=b4fef6d9a5';
-import { englishOf } from '../lang/en-generate.mjs?v=84a99c355e';
+import { englishOf } from '../lang/en-generate.mjs?v=19f58d0740';
+import { en } from '../lang/en.mjs?v=06e31cd85c';   // the prepositions of w.lang.en: an attribute named like one cannot be said in "Set X <attr> to V"
 import { prefetchSensitive, sensitiveMap, dropSensitive } from '../knowledge/sensitive.mjs?v=45d6df6ec8';
 
 const NOT_SAMPLED = new Set(['place', 'connect', 'group', 'send', 'save', 'load', 'redo']);   // acts the library cannot frame (a place, a second thing, a host act): left to typing
-const FUNCTION_WORDS = new Set(['to', 'from', 'at', 'until', 'in', 'on', 'by', 'of']);   // attributes named like prepositions cannot be said in "Set X <attr> to V"
 const GENERIC_NOUNS = new Set(['object', 'item', 'shape', 'thing', 'things', 'items', 'objects', 'shapes']);   // words that name every kind, not one
 const SIMPLE =/^[a-z]+$/;
 const bare = (v) => String(v).replace(/^"|"$/g, '').replace(/^\$/, '');
@@ -111,9 +111,9 @@ export function realise(frame, schema, ids, labelOf, entries, en) {
     case 'ask': {
       const l = label(a.thing);
       if (!l) return null;
-      return a.attr && !FUNCTION_WORDS.has(a.attr) ? say('ask', { topic: a.attr, thing: l }) : null;   // a question with no attribute has no form that every world reads
+      return a.attr && !en.words('prep').has(a.attr) ? say('ask', { topic: a.attr, thing: l }) : null;   // a question with no attribute has no form that every world reads
     }
-    case 'change': { const l = label(a.thing); return l && a.attr && !FUNCTION_WORDS.has(a.attr) && a.value != null ? say('change', { attribute: a.attr, thing: l, value: bare(a.value) }) : null; }
+    case 'change': { const l = label(a.thing); return l && a.attr && !en.words('prep').has(a.attr) && a.value != null ? say('change', { attribute: a.attr, thing: l, value: bare(a.value) }) : null; }
     case 'redo': return say('redo', {});
     default: return null;
   }

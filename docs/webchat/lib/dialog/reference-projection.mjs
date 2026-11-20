@@ -7,7 +7,7 @@
 import {parse,str} from '../vendor/sopworld/sopworld.mjs?v=4cf6e60057';
 import {LANG_EN_FACTS} from '../lang/en.facts.generated.mjs?v=c3f375bc20';
 import QUERY_POLICY from '../../worlds/app.project/query-reading-policy-source.mjs?v=cf7b2d9297';
-import {en} from '../lang/en.mjs?v=1072ad24cc';
+import {en} from '../lang/en.mjs?v=06e31cd85c';
 let table;
 export function referenceProjection(){
  if(table)return table;

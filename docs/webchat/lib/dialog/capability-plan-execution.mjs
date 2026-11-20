@@ -1,10 +1,10 @@
 import { readSceneDefaults } from './scene-placement-defaults.mjs?v=b16bbeacf7';
 import { solveDefaultPlacement, solveGroupPlacement } from './default-placement.mjs?v=d0f4003790';
-import { en } from '../lang/en.mjs?v=1072ad24cc';
+import { en } from '../lang/en.mjs?v=06e31cd85c';
 import { quote } from '../vendor/sopworld/sopworld.mjs?v=4cf6e60057';
 // SPDX-License-Identifier: AGPL-3.0-only
-import { compileNativeCapability } from './capability-plan-adapter.mjs?v=c03ed3134d';
-import { linkPopulationCandidates } from './link-population.mjs?v=88f3f91005';
+import { compileNativeCapability } from './capability-plan-adapter.mjs?v=d2b0a98bc9';
+import { linkPopulationCandidates } from './link-population.mjs?v=c91f99657d';
 import { readDegreeBases } from './degree-bases.mjs?v=eaec18197f';
 import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=6d09553e34';
 import { instanceIdFor } from './instance-identity.mjs?v=024ef1ca83';
