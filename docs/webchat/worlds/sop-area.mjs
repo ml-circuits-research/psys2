@@ -8,7 +8,7 @@ import {catalogWorld} from './catalog-world.mjs?v=932d383a34';
 import {readNativeToolInterface} from './native-tool-interface.mjs?v=9f16f37657';
 import {toolInvocationContext} from './native-tool-host.mjs?v=d7b8bd54d9';
 import {createSopWorldHost, forgetDerived, initialSopWorldState, worldOf} from './sop-world-host.mjs?v=73ea5bb385';
-import {renderPrimitives} from './sop-primitives.mjs?v=9e06903d96';
+import {renderPrimitives} from './sop-primitives.mjs?v=2fc551236d';
 
 const read = (fact, key) => { const raw = fact?.attrs[key]?.[0]; return raw === undefined ? undefined : raw.startsWith('"') ? str(raw) : raw; };
 const all = (fact, key) => (fact?.attrs[key] ?? []).map((raw) => raw.startsWith('"') ? str(raw) : raw);

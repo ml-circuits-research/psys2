@@ -3,11 +3,11 @@ import {groundMention} from './lexical-grounding.mjs?v=e49eb788e4';
 import POLICY from '../../worlds/app.project/creation-policy-source.mjs?v=07639399d8';
 import SCHEMA from '../../worlds/app.project/creation-schema-source.mjs?v=11101d9d84';
 import {executionPolicyWorld} from './execution-policy.mjs?v=8a365cbdf0';
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=015c47867d';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=282e1d2c12';
 import {nativeCreationCandidates} from './native-binding-candidates.mjs?v=0fb3ccec6b';
 import {budget} from './budget.mjs?v=00bce6e369';
 import {observeGroundedProjection,projectGroundedRequest} from './grounded-projection.mjs?v=b0c1a3961b';
-import {positiveCardinalProof} from './key-reader-value-proof.mjs?v=8158373532';
+import {positiveCardinalProof} from './key-reader-value-proof.mjs?v=2c6e07ddb9';
 import {compileObservedChoice} from './observed-choice.mjs?v=f7e0516487';
 
 const field=(fact,key)=>str(fact.attrs[key]?.[0]);

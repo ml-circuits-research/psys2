@@ -2,8 +2,8 @@
 // The Calendar tab: the generic SOP area adapter over worlds/time.calendar/area.sop.
 import NATIVE_INTERFACE from './native-interface-source.mjs?v=3945d7d8fa';
 import AREA_SOURCES from './area-sources.mjs?v=a53c154f8c';
-import {BUNDLED_AREAS} from '../../lib/knowledge/bundled-areas.mjs?v=676be4d666';
-import {sopAreaAdapter} from '../sop-area-adapter.mjs?v=951a35e1ed';
+import {BUNDLED_AREAS} from '../../lib/knowledge/bundled-areas.mjs?v=a8ac70dc44';
+import {sopAreaAdapter} from '../sop-area-adapter.mjs?v=1ef9d4713a';
 
 const area = sopAreaAdapter({ world: 'time.calendar', instance: 'w.meetings', interfaceSource: NATIVE_INTERFACE, sources: AREA_SOURCES, offline: BUNDLED_AREAS['time.calendar'] });
 export const emptyCalendarArea = area.empty, canonicalCalendarArea = area.canonical, createCalendarArea = area.create,
