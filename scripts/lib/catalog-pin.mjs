@@ -7,7 +7,7 @@
  *   import { pinnedCatalog } from './lib/catalog-pin.mjs';
  *   const { dir, commit } = pinnedCatalog();      // dir = the docs/worlds folder at the pin
  */
-import { existsSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
+import { existsSync, mkdirSync, writeFileSync, rmSync, renameSync } from 'node:fs';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
@@ -26,16 +26,30 @@ const run = (cmd, args, opts = {}) => {
 export function pinnedCatalog({ pin = CATALOG_PIN, cache = process.env.PSYS2_CATALOG_CACHE || join(REPO, '.cache') } = {}) {
   const root = join(cache, 'catalog', pin.commit), dir = join(root, pin.path), done = join(root, '.complete');
   if (!existsSync(done)) {
+    // Concurrent test processes may all find the folder missing: each clones and extracts into its own temporary folder and renames it into place,
+    // so no process ever reads or deletes another one's half-written extraction; the loser of a rename race discards its copy.
+    const tag = `.tmp-${process.pid}-${Date.now()}`;
     const clone = join(cache, 'catalog-repo');
-    if (!existsSync(join(clone, '.git'))) { mkdirSync(cache, { recursive: true }); run('git', ['clone', '-q', '--no-checkout', pin.repo, clone]); }
+    if (!existsSync(join(clone, '.git'))) {
+      mkdirSync(cache, { recursive: true });
+      const tmpClone = `${clone}${tag}`;
+      run('git', ['clone', '-q', '--no-checkout', pin.repo, tmpClone]);
+      try { renameSync(tmpClone, clone); } catch { rmSync(tmpClone, { recursive: true, force: true }); }
+    }
     const has = spawnSync('git', ['-C', clone, 'cat-file', '-e', `${pin.commit}^{commit}`]).status === 0;
     if (!has) run('git', ['-C', clone, 'fetch', '-q', 'origin']);
-    rmSync(root, { recursive: true, force: true });
-    mkdirSync(root, { recursive: true });
-    const tar = spawnSync('git', ['-C', clone, 'archive', '--format=tar', pin.commit, pin.path], { maxBuffer: 1 << 30 });
-    if (tar.status !== 0) throw new Error(`git archive ${pin.commit}: ${String(tar.stderr).trim()}`);
-    run('tar', ['-x', '-C', root], { input: tar.stdout });
-    writeFileSync(done, `${pin.commit}\n`);
+    const tmpRoot = `${root}${tag}`;
+    mkdirSync(tmpRoot, { recursive: true });
+    try {
+      const tar = spawnSync('git', ['-C', clone, 'archive', '--format=tar', pin.commit, pin.path], { maxBuffer: 1 << 30 });
+      if (tar.status !== 0) throw new Error(`git archive ${pin.commit}: ${String(tar.stderr).trim()}`);
+      run('tar', ['-x', '-C', tmpRoot], { input: tar.stdout });
+      writeFileSync(join(tmpRoot, '.complete'), `${pin.commit}\n`);
+      if (!existsSync(done)) {
+        if (existsSync(root)) rmSync(root, { recursive: true, force: true }); // an incomplete folder left by an interrupted older run
+        try { renameSync(tmpRoot, root); } catch (error) { if (!existsSync(done)) throw error; }
+      }
+    } finally { rmSync(tmpRoot, { recursive: true, force: true }); }
   }
   return { dir, commit: pin.commit, short: pin.commit.slice(0, 7), url: catalogUrl(pin) };
 }
