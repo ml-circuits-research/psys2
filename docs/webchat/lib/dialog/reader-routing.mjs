@@ -1,24 +1,24 @@
-import {isScopedRemoval} from './capability-plan-execution.mjs?v=2b238b15f8';
-import {projectRemovalAction} from './project-removal-action.mjs?v=95708890ba';
+import {isScopedRemoval} from './capability-plan-execution.mjs?v=ac3b7bcb4e';
+import {projectRemovalAction} from './project-removal-action.mjs?v=6aae14d2b3';
 import { captureHistory, recordHistory, restoreHistory } from './history-journal.mjs?v=aadefe2e4d';
-import {projectReaderHeadAlternative} from './reader-head-alternative.mjs?v=e01b547c00';
+import {projectReaderHeadAlternative} from './reader-head-alternative.mjs?v=ef1c467437';
 import {parse} from '../vendor/sopworld/sopworld.mjs?v=b665fdbe3d';
 import {writeReaderSource} from './reader-source.mjs?v=83e0720174';
 import {isAuthoredRequest,readAuthoredRequest} from './authored-request-tool.mjs?v=c38bda5155';
 // Model-first proposal routing. Calibration authority belongs to host configuration,
 // never to a model output, evaluation annotation or grammar proposal.
 import {requestCompositionPolicy,scheduleFollowingCut}from './request-composition-policy.mjs?v=6ac953cb12';
-import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=bc14c149ab';
-import {projectQueryAction,recoverQueryProjection} from './project-query-action.mjs?v=5b3d0ccb76';
-import {projectContextAction} from './project-context-action.mjs?v=c61cd43ebf';
-import {projectCodeReference} from './project-code-reference.mjs?v=5b316d1ca4';
-import {projectCreateAction} from './project-create-action.mjs?v=1d870d40f4';
+import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=5b087e95bd';
+import {projectQueryAction,recoverQueryProjection} from './project-query-action.mjs?v=bd6f19366a';
+import {projectContextAction} from './project-context-action.mjs?v=c6ebc95546';
+import {projectCodeReference} from './project-code-reference.mjs?v=2788810b89';
+import {projectCreateAction} from './project-create-action.mjs?v=890b398e8f';
 import {assessReaderProposal,assessPartialProposal} from './reader-admission.mjs?v=5b1aeaf4f4';
-import {bestPartialReading,fallbackLadder,partialNote} from './partial-admission.mjs?v=b0fd6a3131';
-import {completeBindings} from './declared-bindings.mjs?v=87587534a1';
-import {projectQuantities,amountsOf,quantityNote} from './quantity-projection.mjs?v=4b587e0ca1';
-import {routeCoordination} from './coordination-routing.mjs?v=b583145c0a';
-import {declaredKnowledge} from './declared-execution.mjs?v=bc14c149ab';
+import {bestPartialReading,fallbackLadder,partialNote} from './partial-admission.mjs?v=022100ac9e';
+import {completeBindings} from './declared-bindings.mjs?v=61e78c29ef';
+import {projectQuantities,amountsOf,quantityNote} from './quantity-projection.mjs?v=972f270ff5';
+import {routeCoordination} from './coordination-routing.mjs?v=8ab4ba302c';
+import {declaredKnowledge} from './declared-execution.mjs?v=5b087e95bd';
 import {interpretationPolicy,coordinationEligible,comparisonBounds,retryNote} from './interpretation-policy.mjs?v=eb3a627b22';
 let amounts;
 // The named amounts of the execution knowledge (k.expect.amount), read once.
@@ -361,7 +361,7 @@ export async function routeNewEngine(session,text,options={}){
  if(!rule||options.view||isAuthoredRequest(text)||!shell?.activeTab||first?.statuses?.includes('supported'))return first;
  const reasons=new Set(unboundReasons(first).filter(reason=>rule.reasons.includes(reason)));
  if(!reasons.size)return first;
- const {NATIVE_AREAS}=await import('./app-reader-context.mjs?v=85d3e9cbb5');
+ const {NATIVE_AREAS}=await import('./app-reader-context.mjs?v=aa61a3dfdf');
  // The knowledge prior: only an editor whose bindings bind a kind word the reading saw is a hypothesis (declared area order among them);
  // a word no other editor binds is not re-read there (each re-reading costs the reader passes of a whole turn).
  const said=new Set(),collect=(value,depth=0)=>{if(depth>8||!value||typeof value!=='object')return;for(const [key,item] of Object.entries(value)){if((key==='kind'||key==='kind_span')&&typeof item==='string')said.add(item.toLowerCase());else collect(item,depth+1);}};

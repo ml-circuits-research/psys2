@@ -3,18 +3,18 @@ import {World,parse,serialize,str,quote} from '../vendor/sopworld/sopworld.mjs?v
 import SOURCE from './new-engine-source.mjs?v=6f84387b01';
 import {readPlacementProfile,rememberPlacement} from '../../worlds/app.project/spatial-profile.mjs?v=3db578da88';
 import {placementInterfaceSop} from '../../worlds/native-spatial-interface.mjs?v=a3fde8e9c2';
-import {NATIVE_AREAS,createAreaHost} from './app-reader-context.mjs?v=85d3e9cbb5';
+import {NATIVE_AREAS,createAreaHost} from './app-reader-context.mjs?v=aa61a3dfdf';
 import {identityRegistryFor,instanceIdFor} from './instance-identity.mjs?v=024ef1ca83';
-import {nativeKindCandidates,nativeCreationCandidates} from './native-binding-candidates.mjs?v=a7b8646a23';
+import {nativeKindCandidates,nativeCreationCandidates} from './native-binding-candidates.mjs?v=645ee9c93c';
 import {invokeObservedNativeTool} from './native-tool-activity.mjs?v=a227d7593e';
 import {describeNativeControl,verifyNativeControlEffect} from './native-control-intent.mjs?v=a68dcd8935';
 import {placementSearchProvider,z3Status} from './placement-search-provider.mjs?v=ebe12db63b';
 import {en} from '../lang/en.mjs?v=40d8d7165d';
 import {placementHypotheses,placementDisclosure} from './placement-default-policy.mjs?v=33cea8d7b8';
-import {identityConcepts} from './capability-plan-adapter.mjs?v=9921237814';
-import {executeNativeCapability,drawnAs} from './capability-plan-execution.mjs?v=2b238b15f8';
+import {identityConcepts} from './capability-plan-adapter.mjs?v=ed44dc10eb';
+import {executeNativeCapability,drawnAs} from './capability-plan-execution.mjs?v=ac3b7bcb4e';
 import {budget} from './budget.mjs?v=00bce6e369';
-import {executionPolicyWorld} from './execution-policy.mjs?v=c5b63898f5';
+import {executionPolicyWorld} from './execution-policy.mjs?v=839e38c58f';
 
 const read = (row,key) => row?.attrs[key]?.length===1 ? str(row.attrs[key][0]) : undefined;
 const ref = (row,key) => {

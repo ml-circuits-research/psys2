@@ -10,7 +10,7 @@
 //    by its singular too, like a counted kind, so it binds what its singular binds.
 import {parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=b665fdbe3d';
 import {en} from '../lang/en.mjs?v=40d8d7165d';
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=85d3e9cbb5';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=aa61a3dfdf';
 
 const attr=(wire,key)=>{const raw=wire?.attrs[key]?.[0];return raw===undefined?undefined:raw.startsWith('"')?str(raw):raw;};
 const words=text=>[...String(text).matchAll(/[\p{L}\p{N}]+/gu)].map(m=>m[0].toLowerCase());

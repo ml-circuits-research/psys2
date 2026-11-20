@@ -6,7 +6,7 @@
 import {World,serialize,quote,str} from '../vendor/sopworld/sopworld.mjs?v=b665fdbe3d';
 import SCHEMA from '../../worlds/app.project/raw-reading-schema-source.mjs?v=23651ba431';
 import POLICY from '../../worlds/app.project/raw-reading-policy-source.mjs?v=e852e7357a';
-import {executionPolicyWorld} from './execution-policy.mjs?v=c5b63898f5';
+import {executionPolicyWorld} from './execution-policy.mjs?v=839e38c58f';
 
 let base=null;
 function policyWorld(){

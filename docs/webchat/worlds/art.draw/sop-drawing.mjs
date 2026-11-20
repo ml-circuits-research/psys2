@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // The Drawing tab: the generic SOP area adapter over worlds/art.draw/area.sop.
-import NATIVE_INTERFACE from './native-interface-source.mjs?v=afabeecb4f';
-import AREA_SOURCES from './area-sources.mjs?v=c11a71db9e';
+import NATIVE_INTERFACE from './native-interface-source.mjs?v=1e6a10b944';
+import AREA_SOURCES from './area-sources.mjs?v=6c11f6c5e8';
 import {BUNDLED_AREAS} from '../../lib/knowledge/bundled-areas.mjs?v=777e4ec0a3';
 import {sopAreaAdapter} from '../sop-area-adapter.mjs?v=f475ad86b2';
 

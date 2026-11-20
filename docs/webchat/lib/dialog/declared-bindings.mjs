@@ -13,12 +13,12 @@
 //  - the constructor policy's discriminator, the catalog words of catalog values, the ordinal words of k.values.
 import {parse,str,completeStructuralBindings} from '../vendor/sopworld/sopworld.mjs?v=b665fdbe3d';
 import {interpretationPolicy} from './interpretation-policy.mjs?v=eb3a627b22';
-import {executionPolicyWorld} from './execution-policy.mjs?v=c5b63898f5';
-import {declaredValueRows} from './declared-value-readings.mjs?v=3d006a381b';
+import {executionPolicyWorld} from './execution-policy.mjs?v=839e38c58f';
+import {declaredValueRows} from './declared-value-readings.mjs?v=228bf697ad';
 import {numberWords,numberInfo} from '../knowledge/values.mjs?v=1a6f2f3174';
-import EXECUTION_POLICY from '../../worlds/app.project/execution-policy-source.mjs?v=12008b54a1';
+import EXECUTION_POLICY from '../../worlds/app.project/execution-policy-source.mjs?v=58f8af40a9';
 import CAPABILITY_POLICY from '../../worlds/app.project/capability-policy.mjs?v=281892343f';
-import DRAW from '../../worlds/art.draw/native-interface-source.mjs?v=afabeecb4f';
+import DRAW from '../../worlds/art.draw/native-interface-source.mjs?v=1e6a10b944';
 import DIAGRAM from '../../worlds/diagram.sketch/native-interface-source.mjs?v=595d3de650';
 import CHARTS from '../../worlds/data.charts/native-interface-source.mjs?v=6c0dc1d746';
 import CONSTRUCTORS from '../../worlds/app.project/constructor-policy-source.mjs?v=91bc3b4d74';
