@@ -19,7 +19,7 @@
 @area.field.type core.type of=app.area.field
 @area.lookup.type core.type of=app.area.lookup
 
-@drawing.area app.area world=art.draw instance=w.drawing instance=w.face knowledge=k.colours knowledge=k.faces knowledge=k.wearables knowledge=k.parts knowledge=k.styles knowledge=k.feelings scope="drawing.object-lifecycle" frame.w=1000 frame.h=700 spatial=true
+@drawing.area app.area world=art.draw instance=w.drawing instance=w.face knowledge=k.colours knowledge=k.faces knowledge=k.wearables knowledge=k.parts knowledge=k.styles knowledge=k.feelings scope="drawing.object-lifecycle" frame.w=1000 frame.h=700 spatial=true calls=instance
 @area.subset.type core.type of=app.area.subset
 @drawing.subset.faces app.area.subset area=$drawing.area world=k.faces prefix="plain-" prefix="figure-"
 @drawing.subset.parts app.area.subset area=$drawing.area world=k.parts prefix="names" prefix="psys2" strict=true

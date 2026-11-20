@@ -177,7 +177,7 @@
 @pe.bx core.calc out=?bx fn=sub args=?ex args=?hw
 @pe.by core.calc out=?by fn=sub args=?ey args=?hh
 @pe.box.out ui.draw.draw part=?id source=$pe.kp slot=?id order=?layer z=?pz shape=?shape x=?bx y=?by w=?fw h=?fh cx=50 cy=50 tx=?x ty=?y scale=?scale sx=?sx sy=?sy side=left
-@project.parts.edited.box core.rule when=$pe.o when=$pe.kp when=$pe.g when=$pe.edit not=$pe.removed not=$pe.shaped not=$pe.pt when=$pe.ext with=$pe.k with=$pe.hw with=$pe.hh with=$pe.bx with=$pe.by then=$pe.box.out
+@project.parts.edited.box core.rule when=$pe.o when=$pe.edit when=$pe.g when=$pe.kp not=$pe.removed not=$pe.shaped not=$pe.pt when=$pe.ext with=$pe.k with=$pe.hw with=$pe.hh with=$pe.bx with=$pe.by then=$pe.box.out
 @pe.fwm core.calc out=?fwm fn=max args=?fw args=0.01
 @pe.fhm core.calc out=?fhm fn=max args=?fh args=0.01
 @pe.pwm core.calc out=?pwm fn=max args=?pw args=0.01
@@ -193,7 +193,7 @@
 @pe.tx core.calc out=?tx fn=add args=?x args=?vx
 @pe.ty core.calc out=?ty fn=add args=?y args=?vy
 @pe.pts.out ui.draw.draw part=?id source=$pe.kp slot=?id order=?layer z=?pz shape=?shape x=?px y=?py w=?pw h=?ph cx=?cx cy=?cy tx=?tx ty=?ty scale=?scale sx=?sx2 sy=?sy2 side=left
-@project.parts.edited.points core.rule when=$pe.o when=$pe.kp when=$pe.g when=$pe.edit not=$pe.removed not=$pe.shaped when=$pe.pt when=$pe.ext with=$pe.k with=$pe.fwm with=$pe.fhm with=$pe.pwm with=$pe.phm with=$pe.kx with=$pe.ky with=$pe.sx2 with=$pe.sy2 with=$pe.ux with=$pe.uy with=$pe.vx with=$pe.vy with=$pe.tx with=$pe.ty then=$pe.pts.out
+@project.parts.edited.points core.rule when=$pe.o when=$pe.edit when=$pe.g when=$pe.kp not=$pe.removed not=$pe.shaped when=$pe.pt when=$pe.ext with=$pe.k with=$pe.fwm with=$pe.fhm with=$pe.pwm with=$pe.phm with=$pe.kx with=$pe.ky with=$pe.sx2 with=$pe.sy2 with=$pe.ux with=$pe.uy with=$pe.vx with=$pe.vy with=$pe.tx with=$pe.ty then=$pe.pts.out
 
 @pp.draw ui.draw.draw source=?src
 @pp.k k.objects.point part=?src n=?n x=?x y=?y
@@ -479,10 +479,10 @@
 @sh.by core.calc out=?by fn=sub args=?ey args=?hh
 @sh.basic ui.draw.shape drawing=?shape shape=?prim
 @sh.basic.o ui.draw.draw part=?id source=$sh.kp slot=?id order=?layer z=?pz shape=?prim x=?bx y=?by w=?fw h=?fh cx=50 cy=50 tx=?x ty=?y scale=?sx sx=?sx sy=?sy side=left
-@project.parts.shaped.basic core.rule when=$sh.o when=$sh.kp when=$sh.g when=$sh.e not=$sh.removed not=$sh.hidden when=$sh.basic when=$sh.ext with=$sh.hw with=$sh.hh with=$sh.bx with=$sh.by then=$sh.basic.o
+@project.parts.shaped.basic core.rule when=$sh.o when=$sh.e when=$sh.g when=$sh.kp not=$sh.removed not=$sh.hidden when=$sh.basic when=$sh.ext with=$sh.hw with=$sh.hh with=$sh.bx with=$sh.by then=$sh.basic.o
 @sh.outline k.layouts.outline name=?shape
 @sh.outline.o ui.draw.draw part=?id source=$sh.kp slot=?id order=?layer z=?pz shape=polygon x=?bx y=?by w=?fw h=?fh cx=50 cy=50 tx=?x ty=?y scale=?sx sx=?sx sy=?sy side=left
-@project.parts.shaped.outline core.rule when=$sh.o when=$sh.kp when=$sh.g when=$sh.e not=$sh.removed not=$sh.hidden not=$sh.basic when=$sh.outline when=$sh.ext with=$sh.hw with=$sh.hh with=$sh.bx with=$sh.by then=$sh.outline.o
+@project.parts.shaped.outline core.rule when=$sh.o when=$sh.e when=$sh.g when=$sh.kp not=$sh.removed not=$sh.hidden not=$sh.basic when=$sh.outline when=$sh.ext with=$sh.hw with=$sh.hh with=$sh.bx with=$sh.by then=$sh.outline.o
 @sp2.pt k.layouts.outline_point outline=?shape n=?n x=?ox y=?oy
 @sp2.kx core.calc out=?kx fn=mul args=?ox args=?fw
 @sp2.ky core.calc out=?ky fn=mul args=?oy args=?fh
@@ -491,4 +491,4 @@
 @sp2.px core.calc out=?px fn=add args=?bx args=?qx
 @sp2.py core.calc out=?py fn=add args=?by args=?qy
 @sp2.out ui.draw.point source=$sh.kp n=?n x=?px y=?py
-@project.parts.shaped.points core.rule when=$sh.o when=$sh.kp when=$sh.g when=$sh.e not=$sh.removed not=$sh.hidden not=$sh.basic when=$sh.outline when=$sp2.pt with=$sh.hw with=$sh.hh with=$sh.bx with=$sh.by with=$sp2.kx with=$sp2.ky with=$sp2.qx with=$sp2.qy with=$sp2.px with=$sp2.py then=$sp2.out
+@project.parts.shaped.points core.rule when=$sh.o when=$sh.e when=$sh.g when=$sh.kp not=$sh.removed not=$sh.hidden not=$sh.basic when=$sh.outline when=$sp2.pt with=$sh.hw with=$sh.hh with=$sh.bx with=$sh.by with=$sp2.kx with=$sp2.ky with=$sp2.qx with=$sp2.qy with=$sp2.px with=$sp2.py then=$sp2.out

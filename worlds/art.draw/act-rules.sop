@@ -886,7 +886,7 @@
 @obp.pid core.calc out=?pid fn=concat args=?id args="." args=?i
 @obp.out app.observe.object id=?pid kind=?name sourceType=art.draw.part binding=drawing.part in=?id role=?name name=?name index=?i
 @obp.hidden ui.draw.hidden object=?id source=$obp.kp
-@draw.observe.part core.rule when=$obp.o when=$obp.kp when=$obp.ix not=$obp.removed not=$obp.hidden with=$obp.pid then=$obp.out
+@draw.observe.part core.rule when=$obp.o when=$obp.ix when=$obp.kp not=$obp.removed not=$obp.hidden with=$obp.pid then=$obp.out
 @ob.member.type core.type of=app.observe.member
 @sp.frame app.observe.frame id=drawing.canvas x0=0 y0=0 x1=1000 y1=700 evidence=rectangle
 @sp.o w.drawing.object code=?id x=?x y=?y

@@ -8,10 +8,10 @@ import {parse,serialize,quote} from '../vendor/sopworld/sopworld.mjs?v=a37e1846b
 import {writeReaderSource} from './reader-source.mjs?v=dd456294b1';
 import {coordinationParts} from './coordination-split.mjs?v=7c2d3d1c47';
 import {resolveRequestRoute} from './request-routing-policy.mjs?v=162ba0e305';
-import {compileNativePlan,executeNativeGroup} from './capability-plan-execution.mjs?v=45009cadd9';
-import {executionKnowledge} from './declared-execution.mjs?v=b25c7000c1';
+import {compileNativePlan,executeNativeGroup} from './capability-plan-execution.mjs?v=ff0f67647e';
+import {executionKnowledge} from './declared-execution.mjs?v=dd94bf6331';
 import {recordHistory} from './history-journal.mjs?v=99bcb89726';
-import {quantityNote} from './quantity-projection.mjs?v=cbd5eee513';
+import {quantityNote} from './quantity-projection.mjs?v=87ebfdd5c0';
 
 const reply=(text,supported,trace={})=>({text,parts:[{text,translate:false}],statuses:[supported?'supported':'unsupported'],answers:[],segments:[],state:{},effects:[],newEngine:true,trace:{legacy:false,engine:'new',...trace}});
 const attr=(wire,key)=>wire?.attrs[key]?.[0];
