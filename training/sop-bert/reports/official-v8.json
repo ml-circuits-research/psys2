@@ -1,0 +1,537 @@
+{
+ "format": "psys2.official-reader-report/1",
+ "dataset": "official-dataset/ (commit 49ad0c94)",
+ "keyRun": {
+  "checkpointSha256": "dfce993b9ce3706d7bd30c5aa28d9a7815647b7f4659846a3d185b9debaed8f2",
+  "epochs": 3,
+  "devPositiveBioGlobalExact": 0.8419,
+  "devDecodedMentionF1": 0.9567,
+  "warmStart": "v7 checkpoint ff23f070"
+ },
+ "cutterRun": "official-cutter-run-v4 (fresh, 3 epochs, best epoch 3)",
+ "bundle": {
+  "manifestSha256": "466b941f927e7b06bb379c762c734c1ff69a24160bf2b454ca2e5bd69ca10e9a",
+  "bindings": "bindings-v11-06cf9056 (part A, as deployed with v7)"
+ },
+ "test": {
+  "v6-cond": {
+   "rows": 6585,
+   "intentExact": 0.559,
+   "sourceSpansExact": 0.5377,
+   "completeReaderMeaningExact": 0.378,
+   "perArea": {
+    "drawing": {
+     "rows": 2580,
+     "intentExact": 0.7097,
+     "completeReaderMeaningExact": 0.4705
+    },
+    "diagram": {
+     "rows": 2407,
+     "intentExact": 0.4844,
+     "completeReaderMeaningExact": 0.4358
+    },
+    "calendar": {
+     "rows": 406,
+     "intentExact": 0.2365,
+     "completeReaderMeaningExact": 0.1084
+    },
+    "document": {
+     "rows": 892,
+     "intentExact": 0.5202,
+     "completeReaderMeaningExact": 0.1872
+    },
+    "avatar": {
+     "rows": 300,
+     "intentExact": 0.4133,
+     "completeReaderMeaningExact": 0.05
+    }
+   }
+  },
+  "v6-cutter": {
+   "rows": 6585,
+   "intentExact": 0.4923,
+   "sourceSpansExact": 0.4785,
+   "completeReaderMeaningExact": 0.2873,
+   "segmentationExact": 0.9795,
+   "perArea": {
+    "drawing": {
+     "rows": 2580,
+     "intentExact": 0.6581,
+     "completeReaderMeaningExact": 0.4585
+    },
+    "diagram": {
+     "rows": 2407,
+     "intentExact": 0.3594,
+     "completeReaderMeaningExact": 0.2011
+    },
+    "calendar": {
+     "rows": 406,
+     "intentExact": 0.2241,
+     "completeReaderMeaningExact": 0.1059
+    },
+    "document": {
+     "rows": 892,
+     "intentExact": 0.5202,
+     "completeReaderMeaningExact": 0.1872
+    },
+    "avatar": {
+     "rows": 300,
+     "intentExact": 0.4133,
+     "completeReaderMeaningExact": 0.05
+    }
+   }
+  },
+  "v7-cond": {
+   "rows": 6585,
+   "intentExact": 0.5766,
+   "sourceSpansExact": 0.583,
+   "completeReaderMeaningExact": 0.4305,
+   "perArea": {
+    "drawing": {
+     "rows": 2580,
+     "intentExact": 0.7682,
+     "completeReaderMeaningExact": 0.564
+    },
+    "diagram": {
+     "rows": 2407,
+     "intentExact": 0.5023,
+     "completeReaderMeaningExact": 0.4724
+    },
+    "calendar": {
+     "rows": 406,
+     "intentExact": 0.2537,
+     "completeReaderMeaningExact": 0.1108
+    },
+    "document": {
+     "rows": 892,
+     "intentExact": 0.3341,
+     "completeReaderMeaningExact": 0.1973
+    },
+    "avatar": {
+     "rows": 300,
+     "intentExact": 0.6833,
+     "completeReaderMeaningExact": 0.0733
+    }
+   }
+  },
+  "v7-cutter": {
+   "rows": 6585,
+   "intentExact": 0.5036,
+   "sourceSpansExact": 0.5185,
+   "completeReaderMeaningExact": 0.318,
+   "segmentationExact": 0.9795,
+   "perArea": {
+    "drawing": {
+     "rows": 2580,
+     "intentExact": 0.7047,
+     "completeReaderMeaningExact": 0.5004
+    },
+    "diagram": {
+     "rows": 2407,
+     "intentExact": 0.3743,
+     "completeReaderMeaningExact": 0.2331
+    },
+    "calendar": {
+     "rows": 406,
+     "intentExact": 0.2365,
+     "completeReaderMeaningExact": 0.1084
+    },
+    "document": {
+     "rows": 892,
+     "intentExact": 0.333,
+     "completeReaderMeaningExact": 0.1973
+    },
+    "avatar": {
+     "rows": 300,
+     "intentExact": 0.68,
+     "completeReaderMeaningExact": 0.0733
+    }
+   }
+  },
+  "v8-cond": {
+   "rows": 6585,
+   "intentExact": 0.6767,
+   "sourceSpansExact": 0.6443,
+   "completeReaderMeaningExact": 0.4442,
+   "perArea": {
+    "drawing": {
+     "rows": 2580,
+     "intentExact": 0.7791,
+     "completeReaderMeaningExact": 0.6306
+    },
+    "diagram": {
+     "rows": 2407,
+     "intentExact": 0.6984,
+     "completeReaderMeaningExact": 0.4703
+    },
+    "calendar": {
+     "rows": 406,
+     "intentExact": 0.2217,
+     "completeReaderMeaningExact": 0.1059
+    },
+    "document": {
+     "rows": 892,
+     "intentExact": 0.5919,
+     "completeReaderMeaningExact": 0.1244
+    },
+    "avatar": {
+     "rows": 300,
+     "intentExact": 0.49,
+     "completeReaderMeaningExact": 0.04
+    }
+   }
+  },
+  "v8-cutter": {
+   "rows": 6585,
+   "intentExact": 0.5998,
+   "sourceSpansExact": 0.5748,
+   "completeReaderMeaningExact": 0.3157,
+   "segmentationExact": 0.9827,
+   "perArea": {
+    "drawing": {
+     "rows": 2580,
+     "intentExact": 0.714,
+     "completeReaderMeaningExact": 0.5244
+    },
+    "diagram": {
+     "rows": 2407,
+     "intentExact": 0.5634,
+     "completeReaderMeaningExact": 0.2331
+    },
+    "calendar": {
+     "rows": 406,
+     "intentExact": 0.2094,
+     "completeReaderMeaningExact": 0.1059
+    },
+    "document": {
+     "rows": 892,
+     "intentExact": 0.5874,
+     "completeReaderMeaningExact": 0.1233
+    },
+    "avatar": {
+     "rows": 300,
+     "intentExact": 0.4767,
+     "completeReaderMeaningExact": 0.04
+    }
+   }
+  }
+ },
+ "heldoutVoice": {
+  "v6-cond": {
+   "rows": 102,
+   "intentExact": 0.2353,
+   "sourceSpansExact": 0.3627,
+   "completeReaderMeaningExact": 0.0294,
+   "perArea": {
+    "diagram": {
+     "rows": 102,
+     "intentExact": 0.2353,
+     "completeReaderMeaningExact": 0.0294
+    }
+   }
+  },
+  "v6-cutter": {
+   "rows": 102,
+   "intentExact": 0.1961,
+   "sourceSpansExact": 0.2843,
+   "completeReaderMeaningExact": 0.0294,
+   "segmentationExact": 0.8725,
+   "perArea": {
+    "diagram": {
+     "rows": 102,
+     "intentExact": 0.1961,
+     "completeReaderMeaningExact": 0.0294
+    }
+   }
+  },
+  "v7-cond": {
+   "rows": 102,
+   "intentExact": 0.1961,
+   "sourceSpansExact": 0.3235,
+   "completeReaderMeaningExact": 0.0098,
+   "perArea": {
+    "diagram": {
+     "rows": 102,
+     "intentExact": 0.1961,
+     "completeReaderMeaningExact": 0.0098
+    }
+   }
+  },
+  "v7-cutter": {
+   "rows": 102,
+   "intentExact": 0.1765,
+   "sourceSpansExact": 0.2745,
+   "completeReaderMeaningExact": 0.0098,
+   "segmentationExact": 0.8725,
+   "perArea": {
+    "diagram": {
+     "rows": 102,
+     "intentExact": 0.1765,
+     "completeReaderMeaningExact": 0.0098
+    }
+   }
+  },
+  "v8-cond": {
+   "rows": 102,
+   "intentExact": 0.549,
+   "sourceSpansExact": 0.6667,
+   "completeReaderMeaningExact": 0.098,
+   "perArea": {
+    "diagram": {
+     "rows": 102,
+     "intentExact": 0.549,
+     "completeReaderMeaningExact": 0.098
+    }
+   }
+  },
+  "v8-cutter": {
+   "rows": 102,
+   "intentExact": 0.4902,
+   "sourceSpansExact": 0.598,
+   "completeReaderMeaningExact": 0.0784,
+   "segmentationExact": 0.9608,
+   "perArea": {
+    "diagram": {
+     "rows": 102,
+     "intentExact": 0.4902,
+     "completeReaderMeaningExact": 0.0784
+    }
+   }
+  }
+ },
+ "appRouteProbes": {
+  "supported": {
+   "v7-rebound": 15,
+   "v8": 15,
+   "of": 22
+  },
+  "rows": [
+   {
+    "text": "ad a diagram with 5 nodes",
+    "v7rebound": "supported",
+    "v8": "supported",
+    "v8answer": "Created 5 objects of kind rectangle. I chose the shape; you can change it or undo.",
+    "v8failures": [],
+    "v8wires": "@__model_source std.request.source text=\"ad a diagram with 5 nodes\"\n@r0 std.request act=make mood=do root=$c0_0 source=$__model_source\n@t0 std.request.target determiner=indefinite kind=w.diagram.node mode=new request=$r0\n@c0_0 std.request.constraint character=requirement concept=count operator=eq polarity=positive request=$r0 source=$__model_source source.end=19 source.start=18 target=$t0 value=\"5\""
+   },
+   {
+    "text": "add another box",
+    "v7rebound": "supported",
+    "v8": "supported",
+    "v8answer": "Created a rectangle. I chose the shape; you can change it or undo.",
+    "v8failures": [],
+    "v8wires": "@__model_source std.request.source text=\"add another box\"\n@r0 std.request act=make mood=do source=$__model_source\n@t0 std.request.target determiner=indefinite kind=w.diagram.node mode=new request=$r0"
+   },
+   {
+    "text": "add a box",
+    "v7rebound": "supported",
+    "v8": "supported",
+    "v8answer": "Created a rectangle. I chose the shape; you can change it or undo.",
+    "v8failures": [],
+    "v8wires": "@__model_source std.request.source text=\"add a box\"\n@r0 std.request act=make mood=do source=$__model_source\n@t0 std.request.target determiner=indefinite kind=w.diagram.node mode=new request=$r0"
+   },
+   {
+    "text": "add a circle",
+    "v7rebound": "supported",
+    "v8": "supported",
+    "v8answer": "Created a circle. I used the most likely reading; you can correct it or undo.",
+    "v8failures": [],
+    "v8wires": "@__model_source std.request.source text=\"add a circle\"\n@r0 std.request act=make mood=do source=$__model_source\n@t0 std.request.target determiner=indefinite kind=k.shapes.shape.circle mode=new request=$r0"
+   },
+   {
+    "text": "add another circle",
+    "v7rebound": "supported",
+    "v8": "supported",
+    "v8answer": "Created a circle. I used the most likely reading; you can correct it or undo.",
+    "v8failures": [],
+    "v8wires": "@__model_source std.request.source text=\"add another circle\"\n@r0 std.request act=make mood=do source=$__model_source\n@t0 std.request.target determiner=indefinite kind=k.shapes.shape.circle mode=new request=$r0"
+   },
+   {
+    "text": "connect alle lements",
+    "v7rebound": "unsupported",
+    "v8": "unsupported",
+    "v8answer": "I could not identify an action to apply. Nothing changed.",
+    "v8failures": [
+     "incomplete-provider-coverage:requests.0",
+     "provider-unresolved:requests.0 {\"reason\":\"illegal-I-after-O\",\"key\":\"request.target.kind\"}",
+     "provider-unresolved:requests.0 {\"reason\":\"presence-span-inconsistent\",\"key\":\"diagram.link.from\",\"head\":{\"area\":\"diagram\",\"property\":\"link.from\",\"present\":true,\"ranges\":[]}}"
+    ],
+    "v8wires": ""
+   },
+   {
+    "text": "connect all elements",
+    "v7rebound": "unsupported",
+    "v8": "unsupported",
+    "v8answer": "I could not identify an action to apply. Nothing changed.",
+    "v8failures": [
+     "unresolved-canonical-kind-binding:requests.0.targets.t0.kind",
+     "unprojected-population-reference:requests.0.targets.t0",
+     "description-reference-without-predicate:requests.0.targets.t0"
+    ],
+    "v8wires": ""
+   },
+   {
+    "text": "connect cirles with an arraw",
+    "v7rebound": "supported",
+    "v8": "supported",
+    "v8answer": "Created a rectangle. I chose the shape; you can change it or undo. I could not apply w.diagram.edge.from ci.",
+    "v8failures": [
+     "incomplete-provider-coverage:requests.0",
+     "provider-unresolved:requests.0 {\"reason\":\"presence-span-inconsistent\",\"key\":\"diagram.link.from\",\"head\":{\"area\":\"diagram\",\"property\":\"link.from\",\"present\":false,\"ranges\":[[8,10]]}}",
+     "provider-unresolved:requests.0 {\"reason\":\"presence-span-inconsistent\",\"key\":\"request.target.kind\",\"head\":{\"path\":\"target.kind\",\"present\":true,\"ranges\":[]}}"
+    ],
+    "v8wires": ""
+   },
+   {
+    "text": "improve layout",
+    "v7rebound": "supported",
+    "v8": "supported",
+    "v8answer": "Updated the diagram. I took the reference as the diagram.",
+    "v8failures": [
+     "context-reference-not-bound:requests.0.targets.t0",
+     "incomplete-structural-coverage:coverage"
+    ],
+    "v8wires": ""
+   },
+   {
+    "text": "make the line e1 to look better",
+    "v7rebound": "unsupported",
+    "v8": "unsupported",
+    "v8answer": "I could not identify an action to apply. Nothing changed.",
+    "v8failures": [],
+    "v8wires": "@__model_source std.request.source text=\"make the line e1 to look better\"\n@r0 std.request act=arrange mood=do source=$__model_source\n@t0 std.request.target determiner=definite kind=w.diagram.edge mode=existing name=\"e1\" request=$r0 selector=$c0_0\n@c0_0 std.request.constraint character=requirement concept=diagram.sketch.link.ids operator=eq polarity=positive request=$r0 source=$__model_source source.end=16 source.start=14 target=$t0 value=\"e1\""
+   },
+   {
+    "text": "make it pastel",
+    "v7rebound": "unsupported",
+    "v8": "unsupported",
+    "v8answer": "I understood the requested action and object, but could not bind their required tool arguments. Nothing changed.",
+    "v8failures": [
+     "context-reference-not-bound:requests.0.targets.t0",
+     "incomplete-structural-coverage:coverage"
+    ],
+    "v8wires": ""
+   },
+   {
+    "text": "colour each level differently",
+    "v7rebound": "unsupported",
+    "v8": "unsupported",
+    "v8answer": "I understood the requested action and object, but could not bind their required tool arguments. Nothing changed.",
+    "v8failures": [
+     "context-reference-not-bound:requests.0.targets.t0",
+     "incomplete-structural-coverage:coverage"
+    ],
+    "v8wires": ""
+   },
+   {
+    "text": "add a bar chart of sales by month",
+    "v7rebound": "supported",
+    "v8": "supported",
+    "v8answer": "Created a group. I used \"chart\" as the name. I used sample data; you can change it or undo. I could not apply data.charts.chart.type bar.",
+    "v8failures": [],
+    "v8wires": "@__model_source std.request.source text=\"add a bar chart of sales by month\"\n@r0 std.request act=make mood=do root=$c0_0 source=$__model_source\n@t0 std.request.target determiner=indefinite kind=w.chart.chart mode=new request=$r0\n@c0_0 std.request.constraint character=requirement concept=data.charts.chart.type operator=eq polarity=positive request=$r0 source=$__model_source source.end=9 source.start=6 target=$t0 value=\"bar\""
+   },
+   {
+    "text": "lay out the diagram as a tree",
+    "v7rebound": "supported",
+    "v8": "supported",
+    "v8answer": "Updated the diagram. I took the reference as the diagram.",
+    "v8failures": [
+     "incomplete-provider-coverage:requests.0",
+     "provider-unresolved:requests.0 {\"reason\":\"metadata-presence-inconsistent\",\"key\":\"request.constraint.character\"}",
+     "provider-unresolved:requests.0 {\"reason\":\"metadata-presence-inconsistent\",\"key\":\"request.constraint.operator\"}"
+    ],
+    "v8wires": ""
+   },
+   {
+    "text": "connect Start to End",
+    "v7rebound": "supported",
+    "v8": "supported",
+    "v8answer": "Created a link. I used the most likely reading; you can correct it or undo.",
+    "v8failures": [],
+    "v8wires": "@__model_source std.request.source text=\"connect Start to End\"\n@r0 std.request act=connect mood=do source=$__model_source\n@t0 std.request.target determiner=indefinite kind=w.diagram.edge mode=new request=$r0\n@c0_0 std.request.constraint character=requirement concept=w.diagram.edge.from operator=eq polarity=positive request=$r0 source=$__model_source source.end=13 source.start=8 target=$t0 value=\"Start\"\n@c0_1 std.request.constraint character=requirement concept=w.diagram.edge.to operator=eq polarity=positive request=$r0 source=$__model_source source.end=20 source.start=17 target=$t0 value=\"End\""
+   },
+   {
+    "text": "make Login red and move it to the top",
+    "v7rebound": "supported",
+    "v8": "supported",
+    "v8answer": "Updated the rectangle. For \"move it to the top\": I understood the requested action and object, but could not bind their required tool arguments. Nothing changed. I did not apply \"top\" (no tool here ta",
+    "v8failures": [
+     "unresolved-canonical-kind-binding:requests.0.targets.t0.kind",
+     "incomplete-structural-coverage:coverage",
+     "incomplete-provider-coverage:requests.0"
+    ],
+    "v8wires": ""
+   },
+   {
+    "text": "add three boxes and connect them in order",
+    "v7rebound": "supported",
+    "v8": "supported",
+    "v8answer": "Created a rectangle. I chose the shape; you can change it or undo. I could not apply count three. I could not apply \"connect them in order\".",
+    "v8failures": [
+     "unresolved-canonical-kind-binding:requests.0.targets.t0.kind",
+     "context-reference-not-bound:requests.0.targets.t0",
+     "unresolved-source-value-normalization:requests.0.constraints.c0_0.value"
+    ],
+    "v8wires": "@__model_source std.request.source text=\"add three boxes and connect them in order\"\n@r0 std.request act=make mood=do root=$c0_0 source=$__model_source\n@t0 std.request.target determiner=indefinite kind=w.diagram.node mode=new request=$r0\n@c0_0 std.request.constraint character=requirement concept=count operator=eq polarity=positive request=$r0 source=$__model_source source.end=9 source.start=4 target=$t0 value=\"three\""
+   },
+   {
+    "text": "how many circles are there",
+    "v7rebound": "supported",
+    "v8": "supported",
+    "v8answer": "Count: 2. I did not apply \"circles\" (I applied it to one object, not to all). You can undo this.",
+    "v8failures": [
+     "incomplete-provider-coverage:requests.0",
+     "provider-unresolved:requests.0 {\"reason\":\"illegal-I-after-O\",\"key\":\"request.request.act\"}",
+     "provider-unresolved:requests.0 {\"reason\":\"missing-or-ambiguous-act-anchor\",\"key\":\"request.request.act\"}"
+    ],
+    "v8wires": ""
+   },
+   {
+    "text": "delete e1",
+    "v7rebound": "unsupported",
+    "v8": "unsupported",
+    "v8answer": "I could not identify an action to apply. Nothing changed.",
+    "v8failures": [],
+    "v8wires": "@__model_source std.request.source text=\"delete e1\"\n@r0 std.request act=remove mood=do source=$__model_source\n@t0 std.request.target determiner=definite kind=w.diagram.edge mode=existing name=\"e1\" request=$r0 selector=$c0_0\n@c0_0 std.request.constraint character=requirement concept=diagram.sketch.link.ids operator=eq polarity=positive request=$r0 source=$__model_source source.end=9 source.start=7 target=$t0 value=\"e1\""
+   },
+   {
+    "text": "make all the boxes blue",
+    "v7rebound": "supported",
+    "v8": "supported",
+    "v8answer": "Updated the circle. I used the most recent matching circle. I did not apply \"the\" (I applied it to one object, not to all). You can undo this.",
+    "v8failures": [
+     "incomplete-provider-coverage:requests.0",
+     "provider-unresolved:requests.0 {\"reason\":\"illegal-I-after-O\",\"key\":\"request.target.description\"}",
+     "provider-unresolved:requests.0 {\"reason\":\"presence-span-inconsistent\",\"key\":\"request.target.description\",\"head\":{\"path\":\"target.description_span\",\"present\":false,\"ranges\":[[9,12]]}}"
+    ],
+    "v8wires": ""
+   },
+   {
+    "text": "make the circles red",
+    "v7rebound": "supported",
+    "v8": "supported",
+    "v8answer": "Updated the circle. I used the most recent matching circle. I did not apply \"circles\" (I applied it to one object, not to all). You can undo this.",
+    "v8failures": [
+     "unprojected-population-reference:requests.0.targets.t0",
+     "quantifier-binder-not-projected:requests.0.targets.t0",
+     "incomplete-structural-coverage:coverage"
+    ],
+    "v8wires": ""
+   },
+   {
+    "text": "align these at the top",
+    "v7rebound": "unsupported",
+    "v8": "unsupported",
+    "v8answer": "I understood the requested action and object, but could not bind their required tool arguments. Nothing changed.",
+    "v8failures": [
+     "unresolved-canonical-kind-binding:requests.0.targets.t0.kind",
+     "context-reference-not-bound:requests.0.targets.t0",
+     "incomplete-structural-coverage:coverage"
+    ],
+    "v8wires": ""
+   }
+  ]
+ },
+ "scope": "Test: official-dataset test split of commit 49ad0c94 (6,585 cuts); v6/v7 cutter rows use cutter v3, v8 uses cutter v4. Held-out voice set: training/sop-bert/data/ui-diagram-v2/heldout-voice.jsonl (102 cuts, owner session sentences verbatim), not in the v8 training data. Cutter-mode totals understate multi-request rows (evaluator compound alignment) and rows whose context exceeds 256 tokens count as truncated."
+}

@@ -1,0 +1,73 @@
+{
+  "artifactRole": "trained",
+  "autocast": "bfloat16",
+  "batchSize": 16,
+  "classCountsTrainOnly": [
+    133343,
+    56115,
+    442841
+  ],
+  "classWeightsTrainOnly": [
+    1.5806329041144518,
+    3.7559713683210076,
+    0.4759413273236519
+  ],
+  "codec": {
+    "format": "sop.request-cutter-codec/1",
+    "input": "source-only",
+    "labels": [
+      "O",
+      "B",
+      "I"
+    ],
+    "spanEnd": "exclusive",
+    "specialAndPadding": "ignored",
+    "transitionPolicy": "illegal-I-after-O-unresolved",
+    "truncation": "unresolved",
+    "unit": "unicode-scalar"
+  },
+  "codecSha256": "64fd854a5711acd8f675c7669e2426b12676b200fa3b1a9da6f67ad60e7f8213",
+  "encoder": "/home/salboaie/work/sopworlds/.session-control/hf-cache/models--distilbert--distilbert-base-uncased/snapshots/12040accade4e8a0f71eabdb258fecc2e7e948be",
+  "encoderFiles": {
+    "config.json": "69c94b0222d5d1f4b0ad027ca7416cdafb98378cbbb8305d0bf47c9365c60c83",
+    "model.safetensors": "5e3f1108e3cb34ee048634875d8482665b65ac713291a7e32396fb18f6ff0063",
+    "tokenizer.json": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+    "tokenizer_config.json": "a025160ef0431f1a392f6f050c1310f4c5d9fb6f275932dbccba73c4d214bf10",
+    "vocab.txt": "07eced375cec144d27c900241f3e339478dec958f92fddbc551f295c992038a3"
+  },
+  "epochs": 3,
+  "executionEligible": false,
+  "format": "sop.request-cutter-model/1",
+  "graphConfidence": null,
+  "inputPadding": "max_length",
+  "lr": 2e-05,
+  "maxLength": 192,
+  "minEpochs": 3,
+  "optimizerInitialization": "fresh-AdamW",
+  "patience": 1,
+  "provenance": {
+    "authoredTrainSupplementCount": 0,
+    "exclusionCount": 6072,
+    "exclusionSha256": "a2f9e5dabcb41019d9b488098d1a27b9c3c94931fb80f739df7f2965dbde5bf4",
+    "manifestSha256": "c45c7df4359914fdd5d9965a13f24f1a6b14ed1ef742ef65744b379de83a81f8",
+    "outputs": {
+      "calibration": "f559f4e69669edcc26c402b14c30e1d8d998088a35c45079f46ede7233d81c94",
+      "train": "386ef0bbd2fc1abd3153d85bc699cc493f351cbd718ba51ffaf2d5e63bc74d2b"
+    },
+    "sourceCount": 63038,
+    "sourceHashes": {
+      "official.jsonl": "727142f21882b9fc42732a225cd1686f94841ff87ad0707e65a40e1b6dc591e4"
+    },
+    "supervision": "original-request-span-only"
+  },
+  "seed": 20261117,
+  "selectionMetric": "calibration.span.f1",
+  "torch": "2.14.1+cu130",
+  "trainerSha256": "507155965cb278c676a0e5d185d887c9db185fe5a71e640478348d79140136d5",
+  "trainingInputPadding": "dynamic",
+  "transformers": "5.22.2",
+  "warmCheckpointSha256": null,
+  "warmDeploymentManifestSha256": null,
+  "warmManifestSha256": null,
+  "warmRole": "pretrained"
+}

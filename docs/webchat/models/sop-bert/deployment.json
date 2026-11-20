@@ -1,8 +1,8 @@
 {
   "format": "psys2.browser-reader-deployment/1",
-  "manifestPath": "models/sop-bert/2794fa0577a4aee72ae1cc4ea5bcc29983743e2746b3c48aa8782c617c98361f/manifest.json",
-  "manifestSha256": "2794fa0577a4aee72ae1cc4ea5bcc29983743e2746b3c48aa8782c617c98361f",
-  "artifactBase": "models/sop-bert/2794fa0577a4aee72ae1cc4ea5bcc29983743e2746b3c48aa8782c617c98361f/",
+  "manifestPath": "models/sop-bert/466b941f927e7b06bb379c762c734c1ff69a24160bf2b454ca2e5bd69ca10e9a/manifest.json",
+  "manifestSha256": "466b941f927e7b06bb379c762c734c1ff69a24160bf2b454ca2e5bd69ca10e9a",
+  "artifactBase": "models/sop-bert/466b941f927e7b06bb379c762c734c1ff69a24160bf2b454ca2e5bd69ca10e9a/",
   "tokenizerArtifact": {
     "path": "tokenizer.json",
     "sha256": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
