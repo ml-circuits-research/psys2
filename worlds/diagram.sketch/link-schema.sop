@@ -13,6 +13,8 @@
 @lk.dgl.edge.label_at core.slot of=w.diagram.edge key=diagram.sketch.label_at kind=number min=0 max=1
 # from_free and to_free: no longer used (a free end has no node: link-geometry.sop); kept so older states still load.
 @lk.dgl.edge.from_free core.slot of=w.diagram.edge key=diagram.sketch.from_free kind=boolean
+# diagram.sketch.from_x/from_y/to_x/to_y: a free end's point before w.diagram had from_x, from_y, to_x, to_y (catalog
+# 71d6260d); no longer used, kept so older states still load.
 @lk.dgl.edge.from_x core.slot of=w.diagram.edge key=diagram.sketch.from_x kind=number
 @lk.dgl.edge.from_y core.slot of=w.diagram.edge key=diagram.sketch.from_y kind=number
 @lk.dgl.edge.to_free core.slot of=w.diagram.edge key=diagram.sketch.to_free kind=boolean

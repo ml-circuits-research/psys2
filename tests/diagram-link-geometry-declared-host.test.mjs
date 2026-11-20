@@ -173,6 +173,10 @@ test('routes keep off other nodes; links between the same nodes fan out',async()
  // Each runs along its own height between A and B (14 apart), not on top of the other.
  const level=(pts)=>pts.find((p,i)=>i&&near(p[1],pts[i-1][1])&&p[0]>v.boxes.n1.x1&&p[0]<v.boxes.n2.x0)?.[1]??pts[0][1];
  assert.ok(Math.abs(level(there)-level(back))>=10,'the two links fan out: '+level(there)+' / '+level(back));
+ // The three links on A's right side leave or enter it at points of their own, in order of where they go.
+ const atA=[line(v,'e1')[0],there[0],back.at(-1)];
+ assert.equal(new Set(atA.map(p=>p.join(','))).size,3,'distinct points on A: '+JSON.stringify(atA));
+ for(const p of atA)assert.ok(near(p[0],v.boxes.n1.x1),'on the right side of A');
 });
 
 test('named ports: a decision has yes, no and else; a database a lid; unknown names are refused',async()=>{

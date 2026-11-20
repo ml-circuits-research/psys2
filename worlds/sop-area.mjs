@@ -2,7 +2,7 @@
 // A tab defined by its area.sop: which catalog modules form its instance and knowledge, which rule files
 // compile its commands and project its drawing, the things it starts with and the open choices of its native
 // interface. This module only reads that declaration; it holds no knowledge of any tab.
-import {World, parse, str} from '../src/vendor/sopworld/sopworld.mjs';
+import {World, parse, serialize, str} from '../src/vendor/sopworld/sopworld.mjs';
 import {budget} from '../src/dialog/budget.mjs';
 import {catalogWorld} from './catalog-world.mjs';
 import {readNativeToolInterface} from './native-tool-interface.mjs';
@@ -63,6 +63,14 @@ export async function areaBase({ world, loader, readCatalog }) {
     // The key namespaces the area's own rule files declare (core.namespace prefix=...): an area may keep kinds of its own
     // under them in its state (diagram.sketch's bends of a link), besides the instance modules' kinds.
     const owns = ruleFiles.flatMap((rules, n) => read(rules, 'world') ? [] : [...ruleSources[n].matchAll(/^@\S+ core\.namespace prefix=(\S+)/gm)].map((match) => match[1]));
+    // The world the calls run in (calls=instance) holds the schema the area's own rule files add to its instance: the
+    // slots it gives instance types and the kinds of its own namespaces (diagram.sketch's link sides and bends).
+    if (callBase) {
+      const ownsType = (type) => instances.some((id) => type.startsWith(id + '.')) || owns.some((prefix) => type.startsWith(prefix));
+      const schema = ruleFiles.flatMap((rules, n) => read(rules, 'world') ? [] : parse(ruleSources[n])).filter((wire) => !wire.pattern && (wire.type === 'core.namespace'
+        || (['core.slot', 'core.type', 'std.schema.kind', 'std.schema.limit'].includes(wire.type) && ownsType(String(wire.attrs.of?.[0] ?? '')))));
+      if (schema.length && !callBase.load(serialize(schema)).ok) throw Error('area-call-schema-refused');
+    }
     const kinds = base.ofType('std.schema.kind').map((kind) => read(kind, 'of')).filter((kind) => instances.some((id) => kind.startsWith(id + '.')) || owns.some((prefix) => kind.startsWith(prefix)));
     return { base, callBase, area, owned, declarations, kinds, instance, lookups, loadedShards: new Set(), readCatalog };
   })();

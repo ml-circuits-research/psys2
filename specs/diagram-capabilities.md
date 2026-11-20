@@ -237,15 +237,21 @@ are shared; each is a UI case in `training/sop-bert/data/ui-coverage-v2/cases.py
 Link geometry (`worlds/diagram.sketch/link-schema.sop`, `link-geometry.sop`; `tests/diagram-link-geometry-declared-host.test.mjs`,
 9 tests; browser `tests/diagram-link-edit-browser.test.mjs`): a link with a side, a free end or a bend, every curved or
 elbow-routed link between two units, and links sharing their two nodes are drawn by the area's router, not the page's
-gap routing (which keeps top-down flows, links inside a group and loops). Orthogonal pieces choose the least costly of
-four plain ways, then of corridors 24 beyond each node a plain way crosses (10000 per node crossed or passed within 6,
-400 per end against its stub, length, 20 per turn); curves without bends choose their bow (0.2 to 0.9 either side) by the
-fewest sample points near other nodes; links between the same nodes fan out (14 apart along a side, 12 for straight
-lines, 0.35 more bow). A free end has no node (the link is made again without it). Moving the nodes at both ends of a
-link moves its bends; while a node is dragged its links follow (a dashed line for a link with one end moved). Named
-ports (in, out; yes, no, else; lid, base) are declared in link-geometry.sop until k.diagrams carries them. The keys are
-the area's own (`diagram.sketch.*` on `w.diagram.edge`, the kind `diagram.sketch.bend`), queued for `w.diagram` at a later
-knowledge pin. Measured: a 12-node grid with 15 orthogonal links, 1.0 s per command (0.2 s without the router).
+gap routing (which keeps top-down flows, links inside a group and loops). Orthogonal pieces first try the way their ends
+ask for; only when it crosses a node (or passes within 6) or leaves an end against its stub, the four plain ways and then
+corridors 24 beyond each node those cross; the cost is the sum of its parts (10000 per node crossed, 400 per end against
+its stub, length, 20 per turn). The links on one side of a node leave it at points of their own, in order of where each
+goes (14 apart, less on a short side), so they neither overlap nor cross at the node; crossings between links elsewhere
+are not counted (no cheap order-free measure in the rules). Curves without bends try the small bow first and the others
+(0.2 to 0.9 either side) only when it passes near another node; links between the same nodes fan out (12 for straight
+lines, 0.35 more bow). A free end has no node (w.diagram.edge from/to are optional and a free end has from_x/from_y,
+to_x/to_y since catalog 71d6260d; the link is made again without the end, as std.acts cannot take a reference away).
+Named ports come from k.diagrams.port (every shape's in and out; a decision's yes, no, else; a database's lid, base).
+Moving the nodes at both ends of a link moves its bends; while a node is dragged its links follow. The sides, marks,
+label place and port names stay the area's keys (`diagram.sketch.*`) and bends its own kind `diagram.sketch.bend`.
+The area's calls run in the instance world (calls=instance, with the area's own schema declarations), so an act no
+longer re-derives the picture incrementally. Measured (12-node grid, 15 orthogonal links): 0.32 s per link command,
+0.39 s per node change, 0.36 s per projection (before: 3.1 s, 1.2 s on origin; 0.12 s projection without the router).
 
 Delivered and tested (`tests/diagram-capabilities-declared-host.test.mjs`, 10 tests): every operation above except the
 items listed as not yet. Layouts are checked by geometry (no overlaps, a ring of equal radii, outer rings for deeper

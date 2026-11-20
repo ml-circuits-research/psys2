@@ -19,7 +19,7 @@
 @area.lookup.type core.type of=app.area.lookup
 @area.subset.type core.type of=app.area.subset
 
-@diagram.area app.area world=diagram.sketch instance=w.diagram instance=w.preferences knowledge=k.colours knowledge=k.styles knowledge=k.charts knowledge=k.values scope="diagram.nodes-links-and-charts" frame.w=1000 frame.h=700 spatial=true depth=64
+@diagram.area app.area world=diagram.sketch instance=w.diagram instance=w.preferences knowledge=k.colours knowledge=k.styles knowledge=k.charts knowledge=k.values scope="diagram.nodes-links-and-charts" frame.w=1000 frame.h=700 spatial=true depth=64 calls=instance
 @diagram.rules.0 app.area.rules area=$diagram.area file="link-schema.sop" n=0
 @diagram.rules.1 app.area.rules area=$diagram.area file="render-projection.sop" n=1
 @diagram.rules.2 app.area.rules area=$diagram.area file="layout-modes.sop" n=2
