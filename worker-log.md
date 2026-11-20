@@ -385,3 +385,7 @@ Open: garment/pose rows still carry needs (the importer's needs→keys mapping i
 2026-11-20 — sopworld 0.243.0 placement fallbacks: an anchor at the page edge takes the closest feasible place (declared layout.method fallback=shrink/shift/side, minShare=0.6, fallbackDirections=near) and the reply says which (app.placement.disclosure); near_distance objective term keeps near subjects close (impala by the house: 385 away -> beside it).
 Run: npm test 737 pass/1 fail (batched reader loss, training env in a worktree). Mass-eval seed 498660 before/after: management/benchmark/2026-11-20-f58a4105f-place-{before,after}.
 Open: moves cannot shrink (place tool has no size); a downward move rescaled by art.draw perspective reports differing geometry.
+
+2026-11-20 — Official real-use test (`node scripts/real-use-eval.mjs`; owner: replaces test-split metrics). Fixed 1% (A, 1039 rows) + fresh random 1% (B) of training data run end to end with the deployed reader (bundle 466b941f); Stage A deterministic (reply pattern + diff judge + reader vs gold), Stage B hand-judged on records + PNGs; owner L0–L4 scale.
+Result (management/real-use/2026-11-20-466b941f/REPORT.md): L2+ A/B — drawing 50%/45%, diagram 21%/30%, document 0%/0%, calendar 1%/7%, avatar 1%/0%; all 27%/30%. L0 49% (mostly reader nothing-read, binding gap), L1 24% (chart type/data, drawing relations, calendar date/time, names unbound).
+Measurement only; no runtime change. Stage A vs hand grades agree 95% on the L2+ boundary.
