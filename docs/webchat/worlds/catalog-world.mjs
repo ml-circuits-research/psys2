@@ -2,7 +2,7 @@
 // Build a World from the knowledge catalog by its own index: the schemas of the named modules and of
 // everything they depend on become the World's library, and the shards a caller names are told as facts.
 // Generic: no world, type or tab is named here. readText(path) reads a catalog file (index.json, schemas, shards).
-import {World} from '../lib/vendor/sopworld/sopworld.mjs?v=adaae660f3';
+import {World} from '../lib/vendor/sopworld/sopworld.mjs?v=47abc4a87a';
 
 const MAX_MODULES = 128;
 

@@ -2,13 +2,13 @@
 // A tab defined by its area.sop: which catalog modules form its instance and knowledge, which rule files
 // compile its commands and project its drawing, the things it starts with and the open choices of its native
 // interface. This module only reads that declaration; it holds no knowledge of any tab.
-import {World, parse, str} from '../lib/vendor/sopworld/sopworld.mjs?v=adaae660f3';
+import {World, parse, str} from '../lib/vendor/sopworld/sopworld.mjs?v=47abc4a87a';
 import {budget} from '../lib/dialog/budget.mjs?v=00bce6e369';
-import {catalogWorld} from './catalog-world.mjs?v=e9a1db2760';
-import {readNativeToolInterface} from './native-tool-interface.mjs?v=8f6eb4a031';
-import {toolInvocationContext} from './native-tool-host.mjs?v=bbba707302';
-import {createSopWorldHost, forgetDerived, initialSopWorldState, worldOf} from './sop-world-host.mjs?v=948c561c29';
-import {renderPrimitives} from './sop-primitives.mjs?v=0cab1288f8';
+import {catalogWorld} from './catalog-world.mjs?v=bd05095fa9';
+import {readNativeToolInterface} from './native-tool-interface.mjs?v=2164423411';
+import {toolInvocationContext} from './native-tool-host.mjs?v=cfffe619de';
+import {createSopWorldHost, forgetDerived, initialSopWorldState, worldOf} from './sop-world-host.mjs?v=f2c9431781';
+import {renderPrimitives} from './sop-primitives.mjs?v=9e06903d96';
 
 const read = (fact, key) => { const raw = fact?.attrs[key]?.[0]; return raw === undefined ? undefined : raw.startsWith('"') ? str(raw) : raw; };
 const all = (fact, key) => (fact?.attrs[key] ?? []).map((raw) => raw.startsWith('"') ? str(raw) : raw);
@@ -188,7 +188,7 @@ export function observationSupport(world, state) {
 
 function drawTypes(declared) {
   const [draw] = declared.owned('app.area.draw');
-  return { types: Object.fromEntries(['draw', 'fill', 'point', 'orient', 'layer'].map((k) => [k, read(draw, k)]).filter(([, v]) => v !== undefined)), select: read(draw, 'select'),
+  return { types: Object.fromEntries(['draw', 'fill', 'point', 'orient', 'layer', 'pose', 'style', 'filter'].map((k) => [k, read(draw, k)]).filter(([, v]) => v !== undefined)), select: read(draw, 'select'),
     frame: { w: Number(read(declared.area, 'frame.w')), h: Number(read(declared.area, 'frame.h')) } };
 }
 

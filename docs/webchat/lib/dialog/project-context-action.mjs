@@ -1,15 +1,15 @@
-import { historyHeads } from './history-journal.mjs?v=09b4ada522';
-import {nativeKindCandidates} from './native-binding-candidates.mjs?v=3f377ef0da';
+import { historyHeads } from './history-journal.mjs?v=5c2f095aac';
+import {nativeKindCandidates} from './native-binding-candidates.mjs?v=4478fc55d9';
 // Bind model-declared context references to actual native objects; never inspect source words.
-import {quote,str} from '../vendor/sopworld/sopworld.mjs?v=adaae660f3';
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=ea51e681e9';
-import {executionPolicyWorld} from './execution-policy.mjs?v=14c31ede61';
-import {readReferenceTurn,resolveObservedReference} from './reference-policy.mjs?v=36b7d84866';
-import {observeGroundedProjection,projectGroundedRequest} from './grounded-projection.mjs?v=6db2fbf267';
-import {flatRequestProjection} from './request-projection.mjs?v=9b843a357b';
-import {bridgeRawStructure} from './raw-structural-bridge.mjs?v=063f7176ce';
-import {comparativeSteps} from './comparative-projection.mjs?v=afc0e8132e';
-import {referenceProjection} from './reference-projection.mjs?v=60bf20ca4a';
+import {quote,str} from '../vendor/sopworld/sopworld.mjs?v=47abc4a87a';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=b5088cf061';
+import {executionPolicyWorld} from './execution-policy.mjs?v=7209abb3bf';
+import {readReferenceTurn,resolveObservedReference} from './reference-policy.mjs?v=a1b9acbdc3';
+import {observeGroundedProjection,projectGroundedRequest} from './grounded-projection.mjs?v=2e4e5b7af2';
+import {flatRequestProjection} from './request-projection.mjs?v=41669048d2';
+import {bridgeRawStructure} from './raw-structural-bridge.mjs?v=c407c8cba0';
+import {comparativeSteps} from './comparative-projection.mjs?v=3f67d76881';
+import {referenceProjection} from './reference-projection.mjs?v=c5fe83c15e';
 export async function projectContextAction(proposal,session,{bindings,registry,view}={}) {
  const raw=proposal?.raw,r=raw?.requests?.[0],area=NATIVE_AREAS[view],readerArea=bindings?.readerAreaByView?.[view]??area?.area;
  if(!area||!bindings||!registry||proposal.coverage?.complete||raw?.requestCount!==1||raw.coverage?.truncated||!r?.target||r.target.kind||r.target.name)return null;
@@ -32,9 +32,10 @@ export async function projectContextAction(proposal,session,{bindings,registry,v
   inherited=prior.results;rewind=last.before;
  }else if(!Array.isArray(r.constraints)||!r.constraints.length&&r.act!=='arrange')return null;   // an arrangement may say nothing more ("improve the layout")
  const canonical=selected.canonical,values=[];
- // A reading beyond plain stated values (a comparative step, several results) is projected by the same bridge as any
- // other reading, with the context target bound to the kind the observed reference resolution chose.
- if(!other&&r.constraints.some(c=>c.operator!=='eq')){
+ // A reading beyond plain stated values (a comparative step, several results, a class value its span only evidences:
+ // legend "hide" said as "get rid of the legend") is projected by the same bridge as any other reading, with the
+ // context target bound to the kind the observed reference resolution chose.
+ if(!other&&r.constraints.some(c=>c.operator!=='eq'||typeof c.value==='string'&&typeof c.value_span==='string'&&c.value!==c.value_span)){
   const bindingSha256=proposal.provenance?.bindingsSha256;
   const bridged=bindingSha256?bridgeRawStructure(raw,{bindings,bindingSha256,comparatives:comparativeSteps(),references:referenceProjection(),contextTarget:{kind:canonical,declaration:selected.object.source}}):null;
   if(!bridged||bridged.diagnostics.length||bridged.decoded?.candidates?.length!==1||bridged.decoded.issues?.length)return null;

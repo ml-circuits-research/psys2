@@ -1,16 +1,17 @@
 // Assemble trusted native observations and dispatch the compiler's SOP call.
-import {World,parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=adaae660f3';
-import SOURCE from './new-engine-source.mjs?v=7009192db0';
-import {readPlacementProfile,rememberPlacement} from '../../worlds/app.project/spatial-profile.mjs?v=689010eb4c';
-import {placementInterfaceSop} from '../../worlds/native-spatial-interface.mjs?v=8455938b89';
-import {NATIVE_AREAS,createAreaHost} from './app-reader-context.mjs?v=ea51e681e9';
+import {World,parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=47abc4a87a';
+import SOURCE from './new-engine-source.mjs?v=ab65981151';
+import {readPlacementProfile,rememberPlacement} from '../../worlds/app.project/spatial-profile.mjs?v=a97eb34904';
+import {placementInterfaceSop} from '../../worlds/native-spatial-interface.mjs?v=5bfec28b25';
+import {NATIVE_AREAS,createAreaHost} from './app-reader-context.mjs?v=b5088cf061';
 import {identityRegistryFor,instanceIdFor} from './instance-identity.mjs?v=024ef1ca83';
-import {nativeKindCandidates,nativeCreationCandidates} from './native-binding-candidates.mjs?v=3f377ef0da';
-import {invokeObservedNativeTool} from './native-tool-activity.mjs?v=889f65b730';
-import {describeNativeControl,verifyNativeControlEffect} from './native-control-intent.mjs?v=0b30ce5478';
+import {nativeKindCandidates,nativeCreationCandidates} from './native-binding-candidates.mjs?v=4478fc55d9';
+import {invokeObservedNativeTool} from './native-tool-activity.mjs?v=4e27e4efe9';
+import {describeNativeControl,verifyNativeControlEffect} from './native-control-intent.mjs?v=247912d40c';
 import {placementSearchProvider,z3Status} from './placement-search-provider.mjs?v=0675893eb5';
-import {en} from '../lang/en.mjs?v=fcc7af993a';
-import {placementHypotheses} from './placement-default-policy.mjs?v=9b43b5632b';
+import {en} from '../lang/en.mjs?v=67053bde71';
+import {placementHypotheses} from './placement-default-policy.mjs?v=8426c57e33';
+import {identityConcepts} from './capability-plan-adapter.mjs?v=4d58543aee';
 
 const read = (row,key) => row?.attrs[key]?.length===1 ? str(row.attrs[key][0]) : undefined;
 const ref = (row,key) => {
@@ -40,6 +41,20 @@ const activity=(session,area,details)=>{
 };
 const reply=(text,supported,trace={},state={},effects=[])=>({text,parts:[{text,translate:false}],statuses:[supported?'supported':'unsupported'],answers:[],segments:[],state,effects,newEngine:true,trace:{legacy:false,engine:'new',...trace}});
 
+// A target picked by its identity (a selector on a concept the policy fills with the target's own code: "drag n4
+// near n2", node.ids = n4) is the object of that code or name: the placement compiler matches a target's name with an
+// observed name or entity, so the selector becomes the target's name.
+function identitySelectorsAsNames(wires,identity){
+ if(!identity.size)return wires;
+ const rows=parse(wires),byId=new Map(rows.map(row=>[row.id,row])),drop=new Set();
+ for(const target of rows.filter(row=>row.type==='std.request.target')){
+  const c=byId.get(ref(target,'selector'));
+  if(!c||c.type!=='std.request.constraint'||read(c,'operator')!=='eq'||read(c,'polarity')!=='positive'||!identity.has(read(c,'concept')))continue;
+  const value=read(c,'value');if(typeof value!=='string'||!value||read(target,'name')!==undefined&&read(target,'name')!==value)continue;
+  target.attrs.name=[c.attrs.value[0].startsWith('"')?c.attrs.value[0]:JSON.stringify(value)];delete target.attrs.selector;drop.add(c.id);
+ }
+ return drop.size?serialize(rows.filter(row=>!drop.has(row.id))):wires;
+}
 export async function executeSpatialPlacement(session,candidate,{bindings,view}={}) {
  const area=NATIVE_AREAS[view],state=area&&session.isession.state[area.world];
  const fail=(reason,details={})=>reply(reason==='stale-observation'
@@ -53,6 +68,7 @@ export async function executeSpatialPlacement(session,candidate,{bindings,view}=
   host=await createAreaHost(area,hostOptions);
   if(!host.observeSpatial)return fail('spatial-observation-unavailable');
   const areaId=bindings.readerAreaByView?.[view]??area.area;
+  {const named=identitySelectorsAsNames(candidate.wires,identityConcepts(bindings,areaId));if(named!==candidate.wires)candidate={...candidate,wires:named};}
   const concepts=new Set(parse(candidate.wires).filter(wire=>wire.type==='std.request.target').map(wire=>read(wire,'kind')).filter(Boolean));
   const constructors=nativeCreationCandidates(bindings,host.bindings(),areaId).filter(pair=>pair.mapping.area===areaId&&concepts.has(pair.mapping.canonical));
   // A constructor that reads declared knowledge for its kind argument (a catalog drawing by name) gets it loaded for

@@ -1,16 +1,16 @@
-import { readSceneDefaults } from './scene-placement-defaults.mjs?v=d2c1d40d2b';
-import { solveDefaultPlacement, solveGroupPlacement } from './default-placement.mjs?v=2b85fd249a';
-import { en } from '../lang/en.mjs?v=fcc7af993a';
-import { quote } from '../vendor/sopworld/sopworld.mjs?v=adaae660f3';
+import { readSceneDefaults } from './scene-placement-defaults.mjs?v=e3a0eb43cd';
+import { solveDefaultPlacement, solveGroupPlacement } from './default-placement.mjs?v=d1258d019f';
+import { en } from '../lang/en.mjs?v=67053bde71';
+import { quote } from '../vendor/sopworld/sopworld.mjs?v=47abc4a87a';
 // SPDX-License-Identifier: AGPL-3.0-only
-import { compileNativeCapability } from './capability-plan-adapter.mjs?v=05cb875efe';
-import { readDegreeBases } from './degree-bases.mjs?v=246c95be42';
-import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=ea51e681e9';
+import { compileNativeCapability } from './capability-plan-adapter.mjs?v=4d58543aee';
+import { readDegreeBases } from './degree-bases.mjs?v=60c663fa63';
+import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=b5088cf061';
 import { instanceIdFor } from './instance-identity.mjs?v=024ef1ca83';
-import { prepareNativeControlHost } from './native-control-preparation.mjs?v=a1a936521a';
-import { invokeObservedNativeTool } from './native-tool-activity.mjs?v=889f65b730';
-import { retainPropertyEffect } from './property-effect-evidence.mjs?v=396ad7b9a2';
-import { describeNativeControl, verifyNativeControlEffect } from './native-control-intent.mjs?v=0b30ce5478';
+import { prepareNativeControlHost } from './native-control-preparation.mjs?v=8a4a3c7bab';
+import { invokeObservedNativeTool } from './native-tool-activity.mjs?v=4e27e4efe9';
+import { retainPropertyEffect } from './property-effect-evidence.mjs?v=9380173153';
+import { describeNativeControl, verifyNativeControlEffect } from './native-control-intent.mjs?v=247912d40c';
 
 function reply(text, supported, trace = {}) {
   return { text, parts: [{ text, translate: false }], statuses: [supported ? 'supported' : 'unsupported'],

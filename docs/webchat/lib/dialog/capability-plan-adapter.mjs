@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-import { parse, quote, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=adaae660f3';
+import { parse, quote, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=47abc4a87a';
 import { decodeCapabilityCall } from '../vendor/sopworld/capability-call.mjs?v=ed3b773c65';
 import POLICY from '../../worlds/app.project/capability-policy.mjs?v=5b78666e16';
 import CLOCK from '../../worlds/app.project/clock-projection-source.mjs?v=7d09f121c5';
-import { executionPolicyWorld } from './execution-policy.mjs?v=14c31ede61';
-import { projectionModule } from './composition-knowledge.mjs?v=ca34a8983e';
-import { sceneDefaultModule, writeSceneDefaults } from './scene-placement-defaults.mjs?v=d2c1d40d2b';
-import { nativeKindCandidates } from './native-binding-candidates.mjs?v=3f377ef0da';
-import { observedReaderContext } from './native-reader-context.mjs?v=5a1689c823';
+import { executionPolicyWorld } from './execution-policy.mjs?v=7209abb3bf';
+import { projectionModule } from './composition-knowledge.mjs?v=ec2bbc4afe';
+import { sceneDefaultModule, writeSceneDefaults } from './scene-placement-defaults.mjs?v=e3a0eb43cd';
+import { nativeKindCandidates } from './native-binding-candidates.mjs?v=4478fc55d9';
+import { observedReaderContext } from './native-reader-context.mjs?v=5545d96476';
 import { budget } from './budget.mjs?v=00bce6e369';
 
 const NS = 'std.capability.';
@@ -87,7 +87,7 @@ function interfaceFacts({ area, view, bindings, host, observation, focus, target
   // A selector on a parameter the policy fills with the target's own identity (std.capability.seed
   // source=target.list|target.id: "ids", "id") names the object itself ("the Plan label", "node n1"): its concept is
   // a reference concept of its source type (by code, name or kind), observed on each object as the object's code.
-  const identities = new Map();
+  const identities = new Map(), mappedConcepts = new Set();
   for (const row of bindings.properties || []) {
     const binding = row.hostBinding;
     if (row.area !== readerArea || !sourceTypes.has(binding?.sourceType)) continue;
@@ -97,9 +97,17 @@ function interfaceFacts({ area, view, bindings, host, observation, focus, target
       identities.set(row.canonical + '\0' + binding.sourceType, { sourceType: binding.sourceType, binding: observedAs, key: binding.parameter });
       write('app.execution.reference', { concept: row.canonical, sourceType: quote(binding.sourceType) });
     }
+    // A key declared with said values (declared-bindings.mjs rule 5: legend "hide" is the parameter's "none") resolves
+    // each said value through its declared parameter value.
+    const mapped = !identity && Array.isArray(row.valueMap) && row.valueMap.length;
+    if (mapped) for (const { said, value: datum } of row.valueMap) {
+      if (mappedConcepts.has(row.canonical + '\0' + said)) continue;
+      mappedConcepts.add(row.canonical + '\0' + said);
+      write(NS + 'value', { concept: row.canonical, label: quote(said), value: typeof datum === 'string' ? quote(datum) : token(datum) });
+    }
     write(NS + 'property', { scope, concept: row.canonical, on: quote(binding.sourceType), parameter: quote(binding.parameter),
       binding: observedAs ? quote(observedAs) : undefined,
-      codec: identity ? 'lookup' : codecs[binding.codec] || (references.has(row.canonical) || take(valueMappings.get(row.canonical), 'codec') === 'lookup' && !named.has(binding.sourceType + '\0' + binding.parameter) ? 'lookup' : undefined), order: String(propertyOrder++) });
+      codec: identity || mapped ? 'lookup' : codecs[binding.codec] || (references.has(row.canonical) || take(valueMappings.get(row.canonical), 'codec') === 'lookup' && !named.has(binding.sourceType + '\0' + binding.parameter) ? 'lookup' : undefined), order: String(propertyOrder++) });
   }
   // The single-valued observations of the objects a preview of a compiled call creates (degree-bases.mjs).
   for (const { operation, kind, objects } of previews) for (const object of objects) for (const field of object.inputs ?? []) {
@@ -193,6 +201,10 @@ function readPlan(world,sop) {
 }
 
 let declarations;
+/** The concepts an area's binding table binds to an identity parameter (std.capability.seed source=target.list|target.id). */
+export function identityConcepts(bindings, readerArea) {
+  return new Set((bindings?.properties || []).filter((row) => row.area === readerArea && identityParameters().has(row.hostBinding?.parameter)).map((row) => row.canonical));
+}
 export function inspectCapabilityPolicy() {
   return { loaded: !!declarations, source: 'worlds/app.project/capability-policy.sop', wires: POLICY };
 }

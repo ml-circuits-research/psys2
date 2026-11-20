@@ -1,7 +1,7 @@
 // Predicted raw structure -> declared canonical structure. No reader or gold input.
-import {copyHostData,snapshotHostData} from '../../worlds/native-tool-host.mjs?v=bbba707302';
-import {positiveCardinalProof,spelledNumberProof} from './key-reader-value-proof.mjs?v=c4f61d7783';
-import {decodeModelGraphs} from './model-graph-decoder.mjs?v=e5883e04cb';
+import {copyHostData,snapshotHostData} from '../../worlds/native-tool-host.mjs?v=cfffe619de';
+import {positiveCardinalProof,spelledNumberProof} from './key-reader-value-proof.mjs?v=f1a44b5c44';
+import {decodeModelGraphs} from './model-graph-decoder.mjs?v=46bc8261d1';
 export const RAW_STRUCTURAL_FORMAT='psys2.raw-structural-predictions/1';
 // The node budget of a binding table (every kind of the pinned catalog's drawable providers, with their provenance).
 export const BINDING_NODES=250000;
@@ -106,7 +106,7 @@ export function bridgeRawStructure(prediction,{bindings,bindingSha256,comparativ
    else if(['context','previous_reply','journal_step'].includes(target.fill))unresolved('context-reference-not-bound',['targets',tid]);
    else if(target.fill==='all'&&target.mode!=='bound')unresolved('unprojected-population-reference',['targets',tid]);
    else if(target.fill!==undefined&&!['written','description','all'].includes(target.fill))unresolved('unknown-target-fill',['targets',tid]);
-   const phase={selector:[],result:[]},conditions=original.constraints??[];if(!Array.isArray(conditions)||conditions.length>256)fail('constraint-budget',basePath);
+   const phase={selector:[],result:[]},anchorOf=new Map();let conditions=original.constraints??[];if(!Array.isArray(conditions)||conditions.length>256)fail('constraint-budget',basePath);
    const cardinal=original.act==='make'&&t.mode==='new'?positiveCardinalProof(target.count_span):null;
    const countRange=cardinal&&(target.count===undefined||target.count===cardinal.value)&&span
     ?locate(original.span,target.count_span,span[0],[...rawPath,'target','count_span'],span):null;
@@ -121,6 +121,17 @@ export function bridgeRawStructure(prediction,{bindings,bindingSha256,comparativ
    // A relative position is two mentions (the relation and its anchor, README of official-dataset): their declared
    // binding roles pair them in source order into one relation constraint whose goal is the anchor target.
    const roleOf=condition=>condition&&typeof condition==='object'?lookup('properties',{area:raw.area,key:condition.key})?.projection?.kind:undefined;
+   // A relation mention that carries its anchor phrase itself (anchor_span: "a box under Bake") is the same pair: its
+   // anchor mention is the anchor key of the relation key's family (projection relation-anchor), with that phrase.
+   {const given=conditions.map(roleOf);if(given.filter(r=>r==='relation').length>given.filter(r=>r==='relation-anchor').length){
+    const extra=[];for(const [ri,rc] of conditions.entries()){
+     if(given[ri]!=='relation'||typeof rc.anchor_span!=='string'||!rc.anchor_span||typeof rc.key!=='string')continue;
+     const family=rc.key.split('.')[0],anchorKey=(table.properties??[]).find(p=>p.area===raw.area&&p.projection?.kind==='relation-anchor'&&p.key.split('.')[0]===family)?.key;
+     if(!anchorKey)continue;
+     const ac={key:anchorKey,value:rc.anchor_span,value_span:rc.anchor_span,operator:'relation',phase:'selector',polarity:'positive',...(has(rc,'character')?{character:rc.character}:{})};anchorOf.set(ac,ri);extra.push(ac);
+    }
+    if(extra.length)conditions=[...conditions,...extra];
+   }}
    const roles=conditions.map(roleOf),relationAt=roles.flatMap((r,i)=>r==='relation'?[i]:[]),anchorAt=roles.flatMap((r,i)=>r==='relation-anchor'?[i]:[]);
    const paired=new Set();
    const consume=(ci,field,literal)=>{const p=[...rawPath,'constraints',String(ci),field];if(span&&ranges.has(JSON.stringify(p)))return locate(original.span,literal,span[0],p,span);return null;};
@@ -141,7 +152,7 @@ export function bridgeRawStructure(prediction,{bindings,bindingSha256,comparativ
      const aprop=lookup('properties',{area:raw.area,key:ac.key}),phrase=typeof ac.value_span==='string'?ac.value_span:'',determiner=definite.find(d=>phrase.toLowerCase().startsWith(d.toLowerCase()+' '));
      const lemma=determiner?phrase.slice(determiner.length+1):phrase,akind=lemma?lookup('kinds',{area:raw.area,type:target.type,lemma}):null;
      const a={id:aid,mode:'existing'};label.targets.push(a);if(determiner)a.determiner='definite';
-     const outer=span?locate(original.span,phrase,span[0],[...rawPath,'constraints',String(ai),'value_span'],span):null;consume(ai,'value',ac.value);
+     const outer=span?locate(original.span,phrase,span[0],anchorOf.has(ac)?[...rawPath,'constraints',String(anchorOf.get(ac)),'anchor_span']:[...rawPath,'constraints',String(ai),'value_span'],span):null;if(!anchorOf.has(ac))consume(ai,'value',ac.value);
      const afamily=!akind&&lemma&&typeof target.type==='string'?lookup('families',{area:raw.area,type:target.type}):null;
      if(akind&&outer){a.kind=akind.canonical;const at=outer[0]+Array.from(phrase).length-Array.from(lemma).length;evidence.push({path:['targets',aid,'kind'],ranges:[[at,outer[1]]],origin:'declaration',declaration:akind.sourceWire});}
      // Otherwise the phrase is the name of an observed member of the family ("to the left of House"), as a target

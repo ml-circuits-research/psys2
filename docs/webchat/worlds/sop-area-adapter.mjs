@@ -2,8 +2,8 @@
 // A SOP area's place in the application, for any tab: the state carrier, host creation with the application's
 // catalog (or the generated offline subset), the view projection and the persisted instance world. Nothing here
 // names a tab; each tab passes its world id, its native interface, its area files and its offline subset.
-import {World, parse, serialize} from '../lib/vendor/sopworld/sopworld.mjs?v=adaae660f3';
-import {createSopArea, initialSopAreaState, projectSopArea} from './sop-area.mjs?v=ede12e52eb';
+import {World, parse, serialize} from '../lib/vendor/sopworld/sopworld.mjs?v=47abc4a87a';
+import {createSopArea, initialSopAreaState, projectSopArea} from './sop-area.mjs?v=670acbb260';
 
 export const emptyAreaState = () => ({ sop: '', runtime: { view: {} } });
 
@@ -35,10 +35,15 @@ export function sopAreaAdapter({ world, interfaceSource, interfaceImports = {}, 
   const instances = [].concat(instance);
   const declarations = instances.map((id) => serialize(parse(offline[id + '/schema.sop']).filter((wire) =>
     Object.values(wire.attrs).flat().some((token) => token.startsWith('?')) || (wire.type.startsWith('core.') && wire.type !== 'core.word')))).join('\n');
+  // An area may give its instance types slots of its own, under a key namespace it owns (core.namespace open=true and
+  // core.slot of=<instance type> in its rule files: art.draw's facing on the shared w.drawing object); its state is
+  // read with them.
+  const extensions = serialize(Object.values(sources).flatMap((text) => parse(text)).filter((wire) => !wire.pattern
+    && (wire.type === 'core.namespace' || (wire.type === 'core.slot' && instances.some((id) => String(wire.attrs.of?.[0]).startsWith(id + '.'))))));
   function stateWorld(state) {
     const live = new World();
     // Instance kinds extend std.schema.thing; its declarations come with the library.
-    if (!live.load('@area.state.schema core.use world=std.schema\n' + declarations).ok) throw Error('area-schema-unavailable');
+    if (!live.load('@area.state.schema core.use world=std.schema\n' + declarations + '\n' + extensions).ok) throw Error('area-schema-unavailable');
     const kinds = new Set([...live.matrix.values()].filter((node) => node.type === 'core.type').map((type) => type.attrs.of[0]).filter((type) => instances.some((id) => type.startsWith(id + '.'))));
     if (state?.sop) {
       if (parse(state.sop).some((wire) => wire.pattern || !kinds.has(wire.type))) throw Error('area-state-foreign-fact');

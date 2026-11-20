@@ -3,9 +3,9 @@
 // context re-readings, the bounds of reading comparison, which readings go to the coordination reader first, and the
 // confidence at which a detected input language replaces the selected one. The routing code reads these facts; it
 // holds no order, bound or threshold of its own.
-import {World,str} from '../vendor/sopworld/sopworld.mjs?v=adaae660f3';
-import SCHEMA from '../../worlds/app.project/interpretation-schema-source.mjs?v=e539f05841';
-import POLICY from '../../worlds/app.project/interpretation-policy-source.mjs?v=1ce82dfefe';
+import {World,str} from '../vendor/sopworld/sopworld.mjs?v=47abc4a87a';
+import SCHEMA from '../../worlds/app.project/interpretation-schema-source.mjs?v=b701881cd4';
+import POLICY from '../../worlds/app.project/interpretation-policy-source.mjs?v=600b9a3cef';
 
 const MODULE='app.interpret';
 let loaded=null,policy=null;
@@ -40,7 +40,9 @@ export function interpretationPolicy(source=POLICY){
  const fallbacks=world.ofType(MODULE+'.fallback').map(row=>({step:one(row,'step'),order:Number(one(row,'order')),text:one(row,'text')})).sort((a,b)=>a.order-b.order);
  if(new Set(fallbacks.map(f=>f.order)).size!==fallbacks.length)throw Error('invalid-interpretation-policy: fallback orders must be distinct');
  const families=world.ofType(MODULE+'.family').map(row=>({area:one(row,'area'),type:one(row,'family'),kind:one(row,'kind')}));
- const result=Object.freeze({retries,notes,compare,coordination,language:{id:detect[0].id,minConfidence:Number(one(detect[0],'min.confidence'))},partial:{defaults,drops,fallbacks,families}});
+ const relations=world.ofType(MODULE+'.relation').map(row=>({id:row.id,area:one(row,'area'),key:one(row,'key'),anchor:one(row,'anchor'),like:one(row,'like'),
+  values:Object.fromEntries(world.ofType(MODULE+'.relationValue').filter(v=>v.attrs.of?.[0]==='$'+row.id).map(v=>[one(v,'value'),one(v,'relation')]))}));
+ const result=Object.freeze({retries,notes,compare,coordination,language:{id:detect[0].id,minConfidence:Number(one(detect[0],'min.confidence'))},partial:{defaults,drops,fallbacks,families,relations}});
  if(source===POLICY)policy=result;
  return result;
 }
