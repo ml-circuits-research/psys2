@@ -1,16 +1,16 @@
 import { readSceneDefaults } from './scene-placement-defaults.mjs?v=b16bbeacf7';
 import { solveDefaultPlacement, solveGroupPlacement } from './default-placement.mjs?v=d0f4003790';
-import { en } from '../lang/en.mjs?v=2cc06b9b27';
+import { en } from '../lang/en.mjs?v=40d8d7165d';
 import { quote } from '../vendor/sopworld/sopworld.mjs?v=4cf6e60057';
 // SPDX-License-Identifier: AGPL-3.0-only
-import { compileNativeCapability } from './capability-plan-adapter.mjs?v=f025714aa6';
-import { linkPopulationCandidates } from './link-population.mjs?v=968c0c2088';
+import { compileNativeCapability } from './capability-plan-adapter.mjs?v=1b494105bc';
+import { linkPopulationCandidates } from './link-population.mjs?v=cd87f26617';
 import { readDegreeBases } from './degree-bases.mjs?v=eaec18197f';
-import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=da248134c0';
+import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=01e44f5b60';
 import { instanceIdFor } from './instance-identity.mjs?v=024ef1ca83';
-import { prepareNativeControlHost } from './native-control-preparation.mjs?v=2c2c1833a9';
+import { prepareNativeControlHost } from './native-control-preparation.mjs?v=57a03d2c0f';
 import { invokeObservedNativeTool } from './native-tool-activity.mjs?v=9e7d8073a0';
-import { retainPropertyEffect } from './property-effect-evidence.mjs?v=c3fbfafbe9';
+import { retainPropertyEffect } from './property-effect-evidence.mjs?v=3a39cd7967';
 import { describeNativeControl, verifyNativeControlEffect } from './native-control-intent.mjs?v=999c87cd52';
 
 function reply(text, supported, trace = {}) {

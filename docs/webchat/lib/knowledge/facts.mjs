@@ -11,6 +11,7 @@
  * A hit says only WHICH knowledge to load. It never decides the world of a message (spec 17, section 3).
  */
 
+import { en } from '../lang/en.mjs?v=40d8d7165d';
 import { parseLine, parseShard } from './catalog.mjs?v=339ac7a09d';
 import { buildFaces } from './faces.mjs?v=04604e141f';
 
@@ -24,12 +25,17 @@ const clock = () => globalThis.performance?.now?.() ?? Date.now();
 /** Runs `fn` after a backoff (an unreachable catalog is asked again later, not remembered as empty for the session); the timer never keeps a process alive. */
 const retryLater = (fn, ms = 30000) => { const t = setTimeout(fn, ms); t.unref?.(); };
 
-/** The lemma candidates of a word, most likely first: the word, then the singular forms of a regular plural. Pure, no vocabulary. */
+/**
+ * The lemma candidates of a word, most likely first: the word, the singular the language world gives (w.lang.en irregular plurals and its
+ * lemma rules: mice -> mouse, leaves -> leaf, people -> person), then the other singular spellings a regular plural can come from, tried
+ * against the vocabulary (knives -> knif / knife, heroes -> hero, firemen -> fireman). Pure, no vocabulary.
+ */
 export function lemmaCandidates(word) {
   const w = String(word ?? '').toLowerCase().replace(/[’']s$/, '').replace(/[^\p{L}\p{N} -]/gu, '').trim();
   if (!w) return [];
   const out = [w];
   const add = (x) => { if (x.length >= 2 && !out.includes(x)) out.push(x); };
+  add(en.singular(w, 'lemma'));
   if (/ies$/.test(w)) add(`${w.slice(0, -3)}y`);
   if (/ves$/.test(w)) { add(`${w.slice(0, -3)}f`); add(`${w.slice(0, -3)}fe`); }
   if (/(?:ses|xes|zes|ches|shes|oes)$/.test(w)) add(w.slice(0, -2));

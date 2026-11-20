@@ -24288,7 +24288,8 @@
   "k.objects/shards/nature-2",
   "k.scenes/shards/things-c",
   "k.words/shards/ca",
-  "k.words/shards/frequency-c"
+  "k.words/shards/frequency-c",
+  "w.lang.en/shards/hand-morphology"
  ],
  "calgary": [
   "k.geo/shards/north-america"
@@ -48680,7 +48681,8 @@
   "k.objects/shards/mulberry-celebration-item-02",
   "k.scenes/shards/things-e",
   "k.words/shards/el",
-  "k.words/shards/frequency-e"
+  "k.words/shards/frequency-e",
+  "w.lang.en/shards/hand-morphology"
  ],
  "elfrida": [
   "k.people/shards/given-names-e"
@@ -66875,6 +66877,7 @@
   "k.words/shards/frequency-h",
   "k.words/shards/ha",
   "w.lang.en/shards/arithmetic",
+  "w.lang.en/shards/hand-morphology",
   "w.lang.en/shards/number-words",
   "k.objects/shards/openmoji-food-drink-01"
  ],
@@ -71090,7 +71093,8 @@
  "hoof": [
   "k.kinds/shards/part_of",
   "k.words/shards/frequency-h",
-  "k.words/shards/ho"
+  "k.words/shards/ho",
+  "w.lang.en/shards/hand-morphology"
  ],
  "hoof1": [
   "k.objects/shards/noto-animal-mammal-03",
@@ -84528,6 +84532,7 @@
   "k.scenes/shards/things-l",
   "k.words/shards/frequency-l",
   "k.words/shards/le",
+  "w.lang.en/shards/hand-morphology",
   "k.objects/shards/noto-plant-other-01"
  ],
  "leaf fluttering in wind": [
@@ -88078,6 +88083,7 @@
   "k.parts/shards/l",
   "k.words/shards/frequency-l",
   "k.words/shards/lo",
+  "w.lang.en/shards/hand-morphology",
   "k.objects/shards/noto-food-prepared-01"
  ],
  "loan": [
@@ -127534,7 +127540,8 @@
   "k.wearables/shards/wearables",
   "k.words/shards/frequency-s",
   "k.words/shards/sc",
-  "w.face/schema.sop"
+  "w.face/schema.sop",
+  "w.lang.en/shards/hand-morphology"
  ],
  "scarfs": [
   "k.wearables/shards/wearables"
@@ -129076,7 +129083,8 @@
  ],
  "self": [
   "k.words/shards/frequency-s",
-  "k.words/shards/se"
+  "k.words/shards/se",
+  "w.lang.en/shards/hand-morphology"
  ],
  "self-control": [
   "k.words/shards/se"
@@ -130468,6 +130476,7 @@
   "w.lang.en/shards/morphology"
  ],
  "sheaf": [
+  "w.lang.en/shards/hand-morphology",
   "k.objects/shards/noto-plant-other-01"
  ],
  "sheaf of rice": [
@@ -130602,7 +130611,8 @@
   "k.scenes/shards/scenes-indoors",
   "k.scenes/shards/things-s",
   "k.words/shards/frequency-s",
-  "k.words/shards/sh"
+  "k.words/shards/sh",
+  "w.lang.en/shards/hand-morphology"
  ],
  "shell": [
   "k.attributes/shards/drawn-hand",
@@ -144920,7 +144930,8 @@
  "thief": [
   "k.kinds/shards/wordnet-2",
   "k.words/shards/frequency-t",
-  "k.words/shards/th"
+  "k.words/shards/th",
+  "w.lang.en/shards/hand-morphology"
  ],
  "thierry": [
   "k.people/shards/given-names-t"
@@ -160514,7 +160525,8 @@
   "k.scenes/shards/scenes-nature",
   "k.scenes/shards/things-w",
   "k.words/shards/frequency-w",
-  "k.words/shards/wo"
+  "k.words/shards/wo",
+  "w.lang.en/shards/hand-morphology"
  ],
  "wolf spider": [
   "k.kinds/shards/wordnet-2"

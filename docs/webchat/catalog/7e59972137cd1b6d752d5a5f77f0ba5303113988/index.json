@@ -1,5 +1,5 @@
 {
- "version": "8d8879c1d9c4",
+ "version": "ddcd5872bd95",
  "sopworld": "747b51e",
  "worlds": [
   {
@@ -96161,25 +96161,37 @@
     {
      "id": "w.lang.en/shards/hand-morphology",
      "path": "w.lang.en/shards/hand-morphology.sop",
-     "wires": 17,
-     "bytes": 2130,
+     "wires": 29,
+     "bytes": 3452,
      "keys": [
       "aircraft",
       "bison",
+      "calf",
       "deer",
+      "elf",
       "fireman",
       "fish",
       "fisherman",
+      "half",
+      "hoof",
+      "leaf",
+      "loaf",
       "moose",
       "person",
       "policeman",
       "postman",
       "salmon",
+      "scarf",
+      "self",
       "series",
+      "sheaf",
       "sheep",
+      "shelf",
       "snowman",
       "species",
+      "thief",
       "trout",
+      "wolf",
       "woman"
      ],
      "sources": [
@@ -96221,8 +96233,8 @@
     {
      "id": "w.lang.en/shards/irregular-forms",
      "path": "w.lang.en/shards/irregular-forms.sop",
-     "wires": 503,
-     "bytes": 70205,
+     "wires": 515,
+     "bytes": 71957,
      "keys": [],
      "sources": [
       "hand-core-1",

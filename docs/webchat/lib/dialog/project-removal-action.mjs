@@ -1,7 +1,7 @@
 // Ground an existing-object mention in the current application's declared vocabulary.
 import {parse,str} from '../vendor/sopworld/sopworld.mjs?v=4cf6e60057';
-import {LANG_EN_FACTS} from '../lang/en.facts.generated.mjs?v=b2f1950656';
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=da248134c0';
+import {LANG_EN_FACTS} from '../lang/en.facts.generated.mjs?v=38238d05cf';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=01e44f5b60';
 import {nativeKindCandidates} from './native-binding-candidates.mjs?v=8423e98bc7';
 import {projectGroundedRequest,observeGroundedProjection,resolveGroundedMention} from './grounded-projection.mjs?v=0185c6d256';
 

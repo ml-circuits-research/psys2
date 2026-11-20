@@ -1,5 +1,6 @@
 # w.lang.en/shards/hand-morphology: plurals the rules and WordNet's exception list do not give: person and people, and
-# nouns whose plural is the singular (sheep, deer, fish), and woman and the -man words WordNet forms by a rule of its own.
+# nouns whose plural is the singular (sheep, deer, fish), woman and the -man words WordNet forms by a rule of its own, and
+# the -f nouns whose plural is -ves (leaf and leaves, wolf and wolves) that WordNet's exception list leaves out.
 # sources: hand-core 1 (English, written in this repository)
 # license: CC0-1.0
 # script: none (hand-written)
@@ -21,3 +22,15 @@
 @w.lang.en.irregular.postman w.lang.en.irregular singular=postman plural=postmen core.source="hand-core 1"
 @w.lang.en.irregular.fisherman w.lang.en.irregular singular=fisherman plural=fishermen core.source="hand-core 1"
 @w.lang.en.irregular.snowman w.lang.en.irregular singular=snowman plural=snowmen core.source="hand-core 1"
+@w.lang.en.irregular.leaf w.lang.en.irregular singular=leaf plural=leaves core.source="hand-core 1"
+@w.lang.en.irregular.wolf w.lang.en.irregular singular=wolf plural=wolves core.source="hand-core 1"
+@w.lang.en.irregular.loaf w.lang.en.irregular singular=loaf plural=loaves core.source="hand-core 1"
+@w.lang.en.irregular.half w.lang.en.irregular singular=half plural=halves core.source="hand-core 1"
+@w.lang.en.irregular.shelf w.lang.en.irregular singular=shelf plural=shelves core.source="hand-core 1"
+@w.lang.en.irregular.thief w.lang.en.irregular singular=thief plural=thieves core.source="hand-core 1"
+@w.lang.en.irregular.calf w.lang.en.irregular singular=calf plural=calves core.source="hand-core 1"
+@w.lang.en.irregular.elf w.lang.en.irregular singular=elf plural=elves core.source="hand-core 1"
+@w.lang.en.irregular.self w.lang.en.irregular singular=self plural=selves core.source="hand-core 1"
+@w.lang.en.irregular.scarf w.lang.en.irregular singular=scarf plural=scarves core.source="hand-core 1"
+@w.lang.en.irregular.hoof w.lang.en.irregular singular=hoof plural=hooves core.source="hand-core 1"
+@w.lang.en.irregular.sheaf w.lang.en.irregular singular=sheaf plural=sheaves core.source="hand-core 1"

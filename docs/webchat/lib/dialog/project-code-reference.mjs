@@ -4,11 +4,11 @@
 // reading is re-bridged with the object's own family (a node for n2, a link for e1), its identity restatements
 // (an `ids` selector with the code) dropped, and the object as the declared context target; the reply says how the
 // code was taken. Nothing here inspects words: only the reader's name span and the observed codes.
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=da248134c0';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=01e44f5b60';
 import {nativeKindCandidates} from './native-binding-candidates.mjs?v=8423e98bc7';
-import {bridgeRawStructure} from './raw-structural-bridge.mjs?v=c9d33055fd';
-import {comparativeSteps} from './comparative-projection.mjs?v=5f817bce08';
-import {referenceProjection} from './reference-projection.mjs?v=a417645182';
+import {bridgeRawStructure} from './raw-structural-bridge.mjs?v=be9cef3635';
+import {comparativeSteps} from './comparative-projection.mjs?v=affa9dae6f';
+import {referenceProjection} from './reference-projection.mjs?v=11a28bb246';
 
 // Reader diagnostics that only concern the identity heads the code replaces, or a constraint the reader could not
 // form (its metadata without a key); every other unresolved head keeps the reading incomplete.

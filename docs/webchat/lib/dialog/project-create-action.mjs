@@ -1,13 +1,13 @@
 import {World,parse,quote,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=4cf6e60057';
-import {groundMention} from './lexical-grounding.mjs?v=b00e8bc2b1';
+import {groundMention} from './lexical-grounding.mjs?v=20300f4057';
 import POLICY from '../../worlds/app.project/creation-policy-source.mjs?v=07639399d8';
 import SCHEMA from '../../worlds/app.project/creation-schema-source.mjs?v=11101d9d84';
 import {executionPolicyWorld} from './execution-policy.mjs?v=fc7a8e4440';
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=da248134c0';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=01e44f5b60';
 import {nativeCreationCandidates} from './native-binding-candidates.mjs?v=8423e98bc7';
 import {budget} from './budget.mjs?v=00bce6e369';
 import {observeGroundedProjection,projectGroundedRequest} from './grounded-projection.mjs?v=0185c6d256';
-import {positiveCardinalProof} from './key-reader-value-proof.mjs?v=03a1cd7b4e';
+import {positiveCardinalProof} from './key-reader-value-proof.mjs?v=ff54404423';
 import {compileObservedChoice} from './observed-choice.mjs?v=331cc85b90';
 
 const field=(fact,key)=>str(fact.attrs[key]?.[0]);

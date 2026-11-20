@@ -13,7 +13,7 @@ import { interpretationPolicy } from './interpretation-policy.mjs?v=95c5ac8e35';
  * Without it all input is treated as English.
  */
 
-import { loadWorlds } from '../worlds/index.mjs?v=656102b156';
+import { loadWorlds } from '../worlds/index.mjs?v=ae3f0e3e5d';
 import { validateWorldSet } from '../worlds/validate.mjs?v=af0869a8e0';
 
 
@@ -21,8 +21,8 @@ import { perf } from './stage-perf.mjs?v=8b73796daa';
 import { guard, TurnAborted } from './turn-guard.mjs?v=34ed257fec';
 import { createBudget, installBudget, releaseBudget, isBudgetExceeded, budget } from './budget.mjs?v=00bce6e369';
 
-import { attachValues } from '../knowledge/values.mjs?v=2a29aaa4d2';
-import { attachArrangement } from '../knowledge/arrangement.mjs?v=453051e7e7';
+import { attachValues } from '../knowledge/values.mjs?v=3b49c0cf3a';
+import { attachArrangement } from '../knowledge/arrangement.mjs?v=a9fda4aab0';
 
 /**
  * The world states of a session: one entry per world, seeded from the world's native initializer (`initialState` of its ops module).
@@ -244,7 +244,7 @@ export class DialogSession {
         }
       }
     }
-    const reply = await (await import('./reader-routing.mjs?v=b52168aaa5')).routeNewEngine(this, english, { ...opts, language: 'en' });
+    const reply = await (await import('./reader-routing.mjs?v=f3f86b235f')).routeNewEngine(this, english, { ...opts, language: 'en' });
     reply.trace = { ...reply.trace, english, ...(translation ? { translation } : {}), ...(detection ? { languageDetection: detection } : {}) };
     if (language !== 'en') {
       try {

@@ -4,7 +4,7 @@
 // candidates' own measurements. Admission, costs and ranking belong to the policy.
 import {parse,quote,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=4cf6e60057';
 import {budget} from './budget.mjs?v=00bce6e369';
-import {lemmaCandidates} from '../knowledge/facts.mjs?v=9d0fd71b24';
+import {lemmaCandidates} from '../knowledge/facts.mjs?v=6de05197c7';
 
 const LOOKUPS=48,EDGES=2048;
 const atom=/^[A-Za-z_][A-Za-z0-9_.-]*$/;

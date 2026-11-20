@@ -1,8 +1,8 @@
 import { parse,str } from '../vendor/sopworld/sopworld.mjs?v=4cf6e60057';
-import { compileNativeQuery } from './capability-plan-adapter.mjs?v=f025714aa6';
-import { createAreaHost,NATIVE_AREAS } from './app-reader-context.mjs?v=da248134c0';
+import { compileNativeQuery } from './capability-plan-adapter.mjs?v=1b494105bc';
+import { createAreaHost,NATIVE_AREAS } from './app-reader-context.mjs?v=01e44f5b60';
 import { instanceIdFor } from './instance-identity.mjs?v=024ef1ca83';
-import { nearestColourName } from '../knowledge/values.mjs?v=2a29aaa4d2';
+import { nearestColourName } from '../knowledge/values.mjs?v=3b49c0cf3a';
 
 const value=(row,key)=>str(row?.attrs[key]?.[0]);
 const memberName=row=>value(row,'name')??value(row,'kind')+' '+value(row,'id');

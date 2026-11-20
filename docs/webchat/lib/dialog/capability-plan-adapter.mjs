@@ -9,7 +9,7 @@ import { sceneDefaultModule, writeSceneDefaults } from './scene-placement-defaul
 import { nativeKindCandidates } from './native-binding-candidates.mjs?v=8423e98bc7';
 import { observedReaderContext } from './native-reader-context.mjs?v=551cd52c49';
 import { budget } from './budget.mjs?v=00bce6e369';
-import { en } from '../lang/en.mjs?v=2cc06b9b27';
+import { en } from '../lang/en.mjs?v=40d8d7165d';
 
 const NS = 'std.capability.';
 const take = (wire, key) => str(wire?.attrs[key]?.[0]);
