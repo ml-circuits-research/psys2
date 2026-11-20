@@ -3,7 +3,7 @@
 # Diagram command into std.acts calls (or an explicit refusal) and derives what a reader observes; layout-modes.sop
 # and style-projection.sop add the page's layouts, routes, themes and shapes, act-tools.sop the editing tools (styles,
 # alignment, many links at once, insert, merge, split). k.colours turns colour names into RGB and says which colours
-# are dark; k.styles holds the themes and palettes; k.diagrams (looked up for flowcharts) the usual shape of a role. The layout derives deeply (levels by graph depth, then
+# are dark; k.styles holds the themes and palettes; k.charts the typical categories of a chart's dimension; k.values the comparatives; k.diagrams (looked up for flowcharts) the usual shape of a role. The layout derives deeply (levels by graph depth, then
 # rows, then routes), so the area asks for a derivation depth of 64.
 @area.types core.type of=app.area
 @area.rules.type core.type of=app.area.rules
@@ -16,14 +16,20 @@
 @area.control.type core.type of=app.area.control
 @area.field.type core.type of=app.area.field
 @area.lookup.type core.type of=app.area.lookup
+@area.subset.type core.type of=app.area.subset
 
-@diagram.area app.area world=diagram.sketch instance=w.diagram knowledge=k.colours knowledge=k.styles scope="diagram.nodes-links-and-charts" frame.w=1000 frame.h=700 spatial=true depth=64
+@diagram.area app.area world=diagram.sketch instance=w.diagram knowledge=k.colours knowledge=k.styles knowledge=k.charts knowledge=k.values scope="diagram.nodes-links-and-charts" frame.w=1000 frame.h=700 spatial=true depth=64
 @diagram.rules.1 app.area.rules area=$diagram.area file="render-projection.sop" n=1
 @diagram.rules.2 app.area.rules area=$diagram.area file="layout-modes.sop" n=2
 @diagram.rules.3 app.area.rules area=$diagram.area file="style-projection.sop" n=3
 @diagram.rules.4 app.area.rules area=$diagram.area file="ring-projection.sop" n=4
 @diagram.rules.5 app.area.rules area=$diagram.area file="act-rules.sop" n=5
 @diagram.rules.6 app.area.rules area=$diagram.area file="act-tools.sop" n=6
+@diagram.rules.7 app.area.rules area=$diagram.area file="chart-format.sop" n=7
+# k.charts: the typical categories of a dimension (a chart asked for by its dimension alone); k.values: the comparatives
+# ("bigger", "thinner") a chart's numeric formatting moves along.
+@diagram.subset.charts app.area.subset area=$diagram.area world=k.charts prefix="categories" strict=true
+@diagram.subset.values app.area.subset area=$diagram.area world=k.values prefix="scales" strict=true
 @diagram.lookup.shapes app.area.lookup area=$diagram.area world=k.diagrams value=flowchart
 @diagram.choice.themes app.area.choice area=$diagram.area input="diagram.themes" type=k.styles.theme key=name
 @diagram.choice.colours app.area.choice area=$diagram.area input="diagram.colours" type=ui.diagram.colour key=name

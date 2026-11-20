@@ -107,15 +107,19 @@
 # ---- Pie and doughnut groups ----
 @yq.g w.diagram.group code=?g layout=?l
 @yq.isp core.check fn=matches args=?l args="^(pie|doughnut)$"
-@yq.out ui.diagram.pie group=?g form=?l r=90
-@pie.group core.rule when=$yq.g if=$yq.isp then=$yq.out
+@yq.r ui.diagram.cfmt group=?g slot=pie_radius v=?r
+@yq.out ui.diagram.pie group=?g form=?l r=?r
+@pie.group core.rule when=$yq.g when=$yq.r if=$yq.isp then=$yq.out
 @yq.u ui.diagram.unit unit=?g kind=group
-@yq.p ui.diagram.pie group=?g
+@yq.p ui.diagram.pie group=?g r=?r
 @yq.gp ui.diagram.gpad group=?g pad=?pad top=?top
-@yq.w core.calc out=?w fn=add args=320 args=?pad args=?pad
-@yq.h core.calc out=?h fn=add args=250 args=?top args=?pad
+@yq.d2 core.calc out=?d2 fn=mul args=?r args=2
+@yq.w0 core.calc out=?w0 fn=add args=?d2 args=140
+@yq.h0 core.calc out=?h0 fn=add args=?d2 args=70
+@yq.w core.calc out=?w fn=add args=?w0 args=?pad args=?pad
+@yq.h core.calc out=?h fn=add args=?h0 args=?top args=?pad
 @yq.dim ui.diagram.pdim group=?g w=?w h=?h
-@pie.udim core.rule when=$yq.u when=$yq.p when=$yq.gp with=$yq.w with=$yq.h then=$yq.dim
+@pie.udim core.rule when=$yq.u when=$yq.p when=$yq.gp with=$yq.d2 with=$yq.w0 with=$yq.h0 with=$yq.w with=$yq.h then=$yq.dim
 @rg.pdim.type core.type of=ui.diagram.pdim
 @yq.pv ui.diagram.pdim group=?g w=?pw h=?ph
 @yq.anyl w.diagram.group code=?g legend=?anyleg
@@ -266,13 +270,14 @@
 @yl.y1 core.calc out=?y1 fn=add args=?vy args=12
 @yl.box ui.diagram.nbox node=?c x0=?x0 y0=?y0 x1=?x1 y1=?y1 cx=?vx cy=?vy w=24 h=24
 @pie.nbox core.rule when=$yl.s with=$yl.h with=$yl.m1 with=$yl.m when=$yl.t with=$yl.rv1 with=$yl.rv with=$yl.vx1 with=$yl.vy1 with=$yl.vx with=$yl.vy with=$yl.x0 with=$yl.x1 with=$yl.y0 with=$yl.y1 then=$yl.box
-@yl.v w.diagram.node code=?c value=?v
+@yl.v ui.diagram.vtext node=?c text=?v
+@yl.fs ui.diagram.cfmt group=?g slot=font_size v=?fs
 @yl.vy5 core.calc out=?vy5 fn=add args=?vy args=4
 @yl.vsrc core.calc out=?vsrc fn=concat args=?c args=".value"
-@yl.vd ui.diagram.draw part=?c source=?vsrc slot=?c order=4 z=0 shape=text text=?v x=?vx y=?vy5 w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left anchor=middle font=12 weight=bold
+@yl.vd ui.diagram.draw part=?c source=?vsrc slot=?c order=4 z=0 shape=text text=?v x=?vx y=?vy5 w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left anchor=middle font=?fs weight=bold
 @yl.vf ui.diagram.fill source=?vsrc part=?c fill="#ffffff"
 @yl.off w.diagram.group code=?g value_labels=false
-@pie.value core.rule when=$yl.s not=$yl.off with=$yl.h with=$yl.m1 with=$yl.m when=$yl.t when=$yl.v with=$yl.rv1 with=$yl.rv with=$yl.vx1 with=$yl.vy1 with=$yl.vx with=$yl.vy with=$yl.vy5 with=$yl.vsrc then=$yl.vd
+@pie.value core.rule when=$yl.s when=$yl.fs not=$yl.off with=$yl.h with=$yl.m1 with=$yl.m when=$yl.t when=$yl.v with=$yl.rv1 with=$yl.rv with=$yl.vx1 with=$yl.vy1 with=$yl.vx with=$yl.vy with=$yl.vy5 with=$yl.vsrc then=$yl.vd
 @pie.value.fill core.rule when=$yl.s not=$yl.off when=$yl.v with=$yl.vsrc then=$yl.vf
 @yl.lb w.diagram.node code=?c label=?txt
 @yl.rl core.calc out=?rl fn=add args=?r args=20
@@ -282,10 +287,10 @@
 @yl.ly2 core.calc out=?ly2 fn=add args=?cy args=?ly1
 @yl.ly core.calc out=?ly fn=add args=?ly2 args=4
 @yl.lsrc core.calc out=?lsrc fn=concat args=?c args=".label"
-@yl.ld ui.diagram.draw part=?c source=?lsrc slot=?c order=4 z=0 shape=text text=?txt x=?lx y=?ly w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left anchor=middle font=12
+@yl.ld ui.diagram.draw part=?c source=?lsrc slot=?c order=4 z=0 shape=text text=?txt x=?lx y=?ly w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left anchor=middle font=?fs
 @yl.lc ui.diagram.pagecol key=label rgb=?lcol
 @yl.lf ui.diagram.fill source=?lsrc part=?c fill=?lcol
-@pie.label core.rule when=$yl.s with=$yl.h with=$yl.m1 with=$yl.m when=$yl.t when=$yl.lb with=$yl.rl with=$yl.lx1 with=$yl.ly1 with=$yl.lx with=$yl.ly2 with=$yl.ly with=$yl.lsrc then=$yl.ld
+@pie.label core.rule when=$yl.s when=$yl.fs with=$yl.h with=$yl.m1 with=$yl.m when=$yl.t when=$yl.lb with=$yl.rl with=$yl.lx1 with=$yl.ly1 with=$yl.lx with=$yl.ly2 with=$yl.ly with=$yl.lsrc then=$yl.ld
 @pie.label.fill core.rule when=$yl.s when=$yl.lb when=$yl.lc with=$yl.lsrc then=$yl.lf
 
 # ---- Chart formatting: gridlines, axis titles, an area under a line, a legend for slices ----
@@ -306,28 +311,40 @@
 @yg.b1 core.calc out=?b1 fn=add args=?y args=?top
 @yg.base core.calc out=?base fn=add args=?b1 args=170
 @yg.dy core.calc out=?dy fn=mul args=?k args=40
-@yg.yy core.calc out=?yy fn=sub args=?base args=?dy
+@yg.dir ui.diagram.cdir group=?g iy=?iy
+@yg.yy0 core.calc out=?yy0 fn=sub args=?base args=?dy
+@yg.e1 core.calc out=?ge1 fn=mul args=?dy args=2
+@yg.e2 core.calc out=?ge2 fn=sub args=?ge1 args=160
+@yg.e3 core.calc out=?ge3 fn=mul args=?ge2 args=?iy
+@yg.yy core.calc out=?yy fn=add args=?yy0 args=?ge3
 @yg.src core.calc out=?src fn=concat args=?g args=".grid." args=?k
 @yg.p1 ui.diagram.point source=?src n=1 x=?x0 y=?yy
 @yg.p2 ui.diagram.point source=?src n=2 x=?x1 y=?yy
-@yg.d ui.diagram.draw part=?g source=?src slot=?g order=2 z=0 shape=line x=0 y=0 w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left stroke=1 dash="3 3"
+@yg.gs ui.diagram.cfmt group=?g slot=grid_style v=?gs
+@yg.gd ui.diagram.gdash style=?gs dash=?gdash
+@yg.solid core.check fn=eq args=?gs args=solid
+@yg.d ui.diagram.draw part=?g source=?src slot=?g order=2 z=0 shape=line x=0 y=0 w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left stroke=1 dash=?gdash
+@yg.ds ui.diagram.draw part=?g source=?src slot=?g order=2 z=0 shape=line x=0 y=0 w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left stroke=1
 @yg.f ui.diagram.fill source=?src part=?g fill="#c3cbd5"
-@chart.grid.p1 core.rule when=$yg.c when=$yg.on when=$yg.q when=$yg.b when=$yg.p with=$yg.x0 with=$yg.xr with=$yg.x1 with=$yg.b1 with=$yg.base with=$yg.dy with=$yg.yy with=$yg.src then=$yg.p1
-@chart.grid.p2 core.rule when=$yg.c when=$yg.on when=$yg.q when=$yg.b when=$yg.p with=$yg.x0 with=$yg.xr with=$yg.x1 with=$yg.b1 with=$yg.base with=$yg.dy with=$yg.yy with=$yg.src then=$yg.p2
-@chart.grid.draw core.rule when=$yg.c when=$yg.on when=$yg.q when=$yg.b when=$yg.p with=$yg.src then=$yg.d
+@chart.grid.p1 core.rule when=$yg.c when=$yg.on when=$yg.q when=$yg.b when=$yg.p with=$yg.x0 with=$yg.xr with=$yg.x1 with=$yg.b1 with=$yg.base when=$yg.dir with=$yg.dy with=$yg.yy0 with=$yg.e1 with=$yg.e2 with=$yg.e3 with=$yg.yy with=$yg.src then=$yg.p1
+@chart.grid.p2 core.rule when=$yg.c when=$yg.on when=$yg.q when=$yg.b when=$yg.p with=$yg.x0 with=$yg.xr with=$yg.x1 with=$yg.b1 with=$yg.base when=$yg.dir with=$yg.dy with=$yg.yy0 with=$yg.e1 with=$yg.e2 with=$yg.e3 with=$yg.yy with=$yg.src then=$yg.p2
+@chart.grid.draw core.rule when=$yg.c when=$yg.on when=$yg.q when=$yg.b when=$yg.p when=$yg.gs when=$yg.gd with=$yg.src then=$yg.d
+@chart.grid.draw.solid core.rule when=$yg.c when=$yg.on when=$yg.q when=$yg.b when=$yg.p when=$yg.gs if=$yg.solid with=$yg.src then=$yg.ds
 @chart.grid.fill core.rule when=$yg.c when=$yg.on when=$yg.q when=$yg.b when=$yg.p with=$yg.src then=$yg.f
 # Axis titles: the y title at the right end of the title band, the x title under the category labels.
 @ya.c ui.diagram.chart group=?g
 @ya.b ui.diagram.ubox unit=?g x0=?x y0=?y w=?w
 @ya.p ui.diagram.gpad group=?g pad=?pad top=?top
 @ya.yl w.diagram.group code=?g y_label=?t
+@ya.fs ui.diagram.cfmt group=?g slot=font_size v=?fs
+@ya.fv core.calc out=?fv fn=sub args=?fs args=1
 @ya.yx1 core.calc out=?yx1 fn=add args=?x args=?w
 @ya.yx core.calc out=?yx fn=sub args=?yx1 args=?pad
 @ya.yy core.calc out=?yy fn=add args=?y args=20
 @ya.ys core.calc out=?ys fn=concat args=?g args=".ytitle"
-@ya.yd ui.diagram.draw part=?g source=?ys slot=?g order=4 z=0 shape=text text=?t x=?yx y=?yy w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left font=11 slant=italic anchor=end
+@ya.yd ui.diagram.draw part=?g source=?ys slot=?g order=4 z=0 shape=text text=?t x=?yx y=?yy w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left font=?fv slant=italic anchor=end
 @ya.yf ui.diagram.fill source=?ys part=?g fill="#52606d"
-@chart.ytitle core.rule when=$ya.c when=$ya.b when=$ya.p when=$ya.yl with=$ya.yx1 with=$ya.yx with=$ya.yy with=$ya.ys then=$ya.yd
+@chart.ytitle core.rule when=$ya.c when=$ya.b when=$ya.p when=$ya.yl when=$ya.fs with=$ya.fv with=$ya.yx1 with=$ya.yx with=$ya.yy with=$ya.ys then=$ya.yd
 @chart.ytitle.fill core.rule when=$ya.c when=$ya.b when=$ya.p when=$ya.yl with=$ya.ys then=$ya.yf
 @ya.xl w.diagram.group code=?g x_label=?t
 @ya.hw core.calc out=?hw fn=div args=?w args=2
@@ -335,9 +352,9 @@
 @ya.xy1 core.calc out=?xy1 fn=add args=?y args=?top
 @ya.xy core.calc out=?xy fn=add args=?xy1 args=204
 @ya.xs core.calc out=?xs fn=concat args=?g args=".xtitle"
-@ya.xd ui.diagram.draw part=?g source=?xs slot=?g order=4 z=0 shape=text text=?t x=?xx y=?xy w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left font=11 anchor=middle slant=italic
+@ya.xd ui.diagram.draw part=?g source=?xs slot=?g order=4 z=0 shape=text text=?t x=?xx y=?xy w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left font=?fv anchor=middle slant=italic
 @ya.xf ui.diagram.fill source=?xs part=?g fill="#52606d"
-@chart.xtitle core.rule when=$ya.c when=$ya.b when=$ya.p when=$ya.xl with=$ya.hw with=$ya.xx with=$ya.xy1 with=$ya.xy with=$ya.xs then=$ya.xd
+@chart.xtitle core.rule when=$ya.c when=$ya.b when=$ya.p when=$ya.xl when=$ya.fs with=$ya.fv with=$ya.hw with=$ya.xx with=$ya.xy1 with=$ya.xy with=$ya.xs then=$ya.xd
 @chart.xtitle.fill core.rule when=$ya.c when=$ya.b when=$ya.p when=$ya.xl with=$ya.xs then=$ya.xf
 # An area chart: the region between the line and the baseline, filled lightly.
 @yz.g w.diagram.group code=?g layout=area
@@ -347,13 +364,16 @@
 @yz.gp ui.diagram.gpad group=?g top=?top
 @yz.src core.calc out=?src fn=concat args=?g args=".area"
 @yz.b1 core.calc out=?b1 fn=add args=?gy args=?top
-@yz.base core.calc out=?base fn=add args=?b1 args=170
+@yz.dir ui.diagram.cdir group=?g iy=?iy
+@yz.b2 core.calc out=?b2 fn=add args=?b1 args=170
+@yz.b3 core.calc out=?b3 fn=mul args=?iy args=160
+@yz.base core.calc out=?base fn=sub args=?b2 args=?b3
 @yz.nt core.calc out=?nt fn=add args=?p args=10
 @yz.nb core.calc out=?nb fn=sub args=1000 args=?p
 @yz.pt ui.diagram.point source=?src n=?nt x=?cx y=?cy
 @yz.pb ui.diagram.point source=?src n=?nb x=?cx y=?base
 @chart.area.top core.rule when=$yz.g when=$yz.m when=$yz.b with=$yz.src with=$yz.nt then=$yz.pt
-@chart.area.bottom core.rule when=$yz.g when=$yz.m when=$yz.b when=$yz.gb when=$yz.gp with=$yz.src with=$yz.b1 with=$yz.base with=$yz.nb then=$yz.pb
+@chart.area.bottom core.rule when=$yz.g when=$yz.m when=$yz.b when=$yz.gb when=$yz.gp when=$yz.dir with=$yz.src with=$yz.b1 with=$yz.b2 with=$yz.b3 with=$yz.base with=$yz.nb then=$yz.pb
 @yz.d ui.diagram.draw part=?g source=?src slot=?g order=2 z=0 shape=polygon x=0 y=0 w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left opacity=0.3
 @yz.f ui.diagram.fill source=?src part=?g fill="#1d6fe8"
 @yz.gu ui.diagram.ubox unit=?g
@@ -361,7 +381,10 @@
 @chart.area.fill core.rule when=$yz.g when=$yz.gu with=$yz.src then=$yz.f
 # A legend of a pie or doughnut (legend=right or bottom): a swatch and the label of each slice, in order, under the
 # disc (bottom) or in a column right of it (right); the group grows to hold it (the disc keeps its place).
-@yy.p ui.diagram.pie group=?g
+@yy.p ui.diagram.pie group=?g r=?r
+@yy.d2 core.calc out=?yd2 fn=mul args=?r args=2
+@yy.rxo core.calc out=?rxo fn=add args=?yd2 args=152
+@yy.byo core.calc out=?byo fn=add args=?yd2 args=82
 @yy.lr w.diagram.group code=?g legend=right
 @yy.lb w.diagram.group code=?g legend=bottom
 @yy.s ui.diagram.slice node=?c group=?g
@@ -372,7 +395,7 @@
 @yy.f ui.diagram.fill source=?c part=?c fill=?col
 @yy.p0 core.calc out=?p0 fn=sub args=?pos args=1
 @yy.ry core.calc out=?ry1 fn=mul args=?p0 args=18
-@yy.rx core.calc out=?rx fn=add args=?gx args=332
+@yy.rx core.calc out=?rx fn=add args=?gx args=?rxo
 @yy.ry2 core.calc out=?ry2 fn=add args=?gy args=?top
 @yy.ry3 core.calc out=?ry3 fn=add args=?ry2 args=?ry1
 @yy.ry4 core.calc out=?ry4 fn=add args=?ry3 args=12
@@ -383,13 +406,13 @@
 @yy.by1 core.calc out=?by1 fn=idiv args=?p0 args=3
 @yy.by2 core.calc out=?by2 fn=mul args=?by1 args=18
 @yy.by3 core.calc out=?by3 fn=add args=?gy args=?top
-@yy.by4 core.calc out=?by4 fn=add args=?by3 args=262
+@yy.by4 core.calc out=?by4 fn=add args=?by3 args=?byo
 @yy.by core.calc out=?by fn=add args=?by4 args=?by2
 @rg.legend.type core.type of=ui.diagram.legend
 @yy.out.r ui.diagram.legend node=?c x=?rx y=?ry4 text=?t fill=?col
 @yy.out.b ui.diagram.legend node=?c x=?bx y=?by text=?t fill=?col
-@chart.legend.right core.rule when=$yy.p when=$yy.lr when=$yy.s when=$yy.ps when=$yy.lab when=$yy.gb when=$yy.gp when=$yy.f with=$yy.p0 with=$yy.ry with=$yy.rx with=$yy.ry2 with=$yy.ry3 with=$yy.ry4 then=$yy.out.r
-@chart.legend.bottom core.rule when=$yy.p when=$yy.lb when=$yy.s when=$yy.ps when=$yy.lab when=$yy.gb when=$yy.gp when=$yy.f with=$yy.p0 with=$yy.bx1 with=$yy.bx2 with=$yy.bx3 with=$yy.bx with=$yy.by1 with=$yy.by2 with=$yy.by3 with=$yy.by4 with=$yy.by then=$yy.out.b
+@chart.legend.right core.rule when=$yy.p when=$yy.lr when=$yy.s when=$yy.ps when=$yy.lab when=$yy.gb when=$yy.gp when=$yy.f with=$yy.d2 with=$yy.rxo with=$yy.p0 with=$yy.ry with=$yy.rx with=$yy.ry2 with=$yy.ry3 with=$yy.ry4 then=$yy.out.r
+@chart.legend.bottom core.rule when=$yy.p when=$yy.lb when=$yy.s when=$yy.ps when=$yy.lab when=$yy.gb when=$yy.gp when=$yy.f with=$yy.d2 with=$yy.byo with=$yy.p0 with=$yy.bx1 with=$yy.bx2 with=$yy.bx3 with=$yy.bx with=$yy.by1 with=$yy.by2 with=$yy.by3 with=$yy.by4 with=$yy.by then=$yy.out.b
 @yv.l ui.diagram.legend node=?c x=?x y=?y text=?t fill=?col
 @yv.sy core.calc out=?sy fn=sub args=?y args=10
 @yv.tx core.calc out=?tx fn=add args=?x args=16

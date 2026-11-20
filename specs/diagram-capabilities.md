@@ -116,12 +116,14 @@ and points; ring-projection.sop areas, slices, gridlines, axis titles, legends).
 
 | Operation | Parameters | Does | Human ways to ask |
 | --- | --- | --- | --- |
-| `diagram.group.chart.make` | `label`, `labels`, `values`, `layout` | make a chart | "add a bar chart of sales by month: January 10, February 20", "a pie chart of the votes" |
+| `diagram.group.chart.make` | `label`, `labels`, `values` (both optional), `layout`, `dimension`, `measure`, `aggregate` (count, sum, avg, min, max), `top`, `above`, `below` | make a chart. Its categories: the said labels with their values (pairing up [invalid-chart-data]); labels without values take sample values; no labels: the typical categories of the said dimension (`k.charts.category`: months, quarters, regions, roles, payment methods ... 41 dimensions), else the dimension's name with A-D, else A, B, C, all with sample values, the group marked `sample=true` and the reply saying so. Only the `top` largest, or the categories above/below a value, are drawn. The dimension is the x axis title, the measure (with its aggregate: "total sales", "number of staff") the y axis title | "add a bar chart of sales by month: January 10, February 20", "a pie chart of the votes", "a bar chart of staff by rank", "revenue per region, top 3" |
 | `diagram.chart.value` | `id`, `category` (label or code), `value` | set one value [missing-category] | "make March 40", "set the value of Yes to 7" |
 | `diagram.chart.category.add` | `id`, `label`, `value` | a category at the end | "add a column for April with 25", "add a slice Other 3" |
 | `diagram.chart.category.remove` | `id`, `category` | remove a category | "remove February", "delete the last bar" |
 | `diagram.chart.category.rename` | `id`, `category`, `label` | rename a category | "rename Jan to January" |
 | `diagram.chart.format` | `id`, `title`, `xLabel`, `yLabel`, `valueLabels`, `gridlines`, `legend` (none, right, bottom), `yMax` (top of the value axis; values above it drawn at the top), `layout` (bar, line, area, pie, doughnut: the chart type changed in place), `palette` (a `k.styles` theme: each category takes the theme's next swatch, in category order) | formatting [missing-property] | "call the chart Sales 2026", "label the y axis Units", "hide the values", "show gridlines", "put the legend on the right", "cap the y axis at 100", "convert that graph to a pie", "use a pastel palette" |
+| `diagram.chart.format` (chart-format.sop) | number properties `fontSize` (6-40, 12), `lineWidth` (0.5-12, 2), `markerSize` (2-40, 12), `markerEdge` (0-8, 1.5), `barWidth` (the share of the category's room, 0.1-1), `barGap` (the same slot the other way round), `pieRadius` (30-300, 90), `precision` (0-4 decimals); named properties `titleWeight` (normal, bold), `titleColour`, `titlePosition` (top, top_left, bottom), `axisSide` (left, right: the value axis with its numbers), `invert` (none, x: categories from the right, y: bars from the top), `axisScale` (linear, log: decades, log10 from powers of ten and an interpolated mantissa table), `tickFormat` (plain, magnitude: 1.2k 3M, power: 10³ 2.5×10³), `lineStyle` (solid, dashed, dotted, dash_dot), `gridStyle` (solid, dashed, dotted) | a number property takes a number (clamped to its limits), a comparative of `k.values` (bigger, smaller, thicker, thinner, wider, narrower, larger, longer, shorter: one step of x1.25 / x0.8 from the current value), a word for the usual value (medium, normal, default, original) or for none (off, none: the lower limit); any other word is refused [unknown-degree]. Each property is observed under its parameter's name | "make the font bigger", "put the y axis on the right", "invert the x axis", "dashed line", "log scale", "show the ticks as powers of ten", "one decimal place", "wider bars", "no gap between the bars", "a bigger pie", "make the title bold dark blue" |
+| `diagram.page.change` | `background` (a colour name of `k.colours`), `title` | the page's background and its title (drawn centred at the top) [missing-property] | "give the diagram a green background", "name this page Bean Ledger" |
 | `diagram.chart.highlight` | `id`, `test` (below, above), `value`, `colour` | conditional colours: each category whose value is below (above) the threshold takes the colour | "make the months below 20 red", "colour the losing quarters red", "highlight values over 50 in green" |
 | `diagram.chart.sort` | `id`, `order` (ascending, descending, label) | reorder the categories | "sort the bars from highest to lowest", "sort alphabetically" |
 | `diagram.group.layout` | `id`, `layout` | chart type | "make it a line chart", "turn it into a doughnut", "show it as an area chart" |
@@ -140,6 +142,14 @@ A chart made with values only numbers its categories ("1", "2"); one made withou
 "add a pie chart" as the node named A.) A chart point named without a kind word ("set March to 40", "add September
 with 58") stays unbound: it needs a chart-point class in the binding table and a declared verification of the bars a
 value change re-lays out.
+The data drops' chart frames (management/data-drop dg-batch-01..05 `needs`) are declared as reader keys for v9 and
+bound the same way: `chart.fontSize`, `chart.lineWidth`, `chart.markerSize`, `chart.markerEdge`, `chart.barWidth`,
+`chart.barHeight` (→ `barWidth`), `chart.barGap`, `chart.pieRadius`, `chart.precision`, `chart.titleWeight`,
+`chart.titleColour`, `chart.titlePosition`, `chart.axisSide`, `chart.invert` (off → none), `chart.axisScale` (both
+log → log), `chart.tickFormat` (powers of ten → power, magnitudes → magnitude), `chart.lineStyle` (dash-dot →
+dash_dot), `chart.gridStyle` → `diagram.chart.format`; `chart.dimension`, `chart.measure`, `chart.aggregate`,
+`chart.top`, `chart.above`, `chart.below` → `diagram.group.chart.make`; `diagram.background`, `page.background`,
+`page.title` → `diagram.page.change`.
 `chart.min`, `chart.horizontal`, `chart.stacked`, `chart.width`/`height` and `chart.effect` stay unbound and are
 disclosed: the catalog's `w.diagram.group` (closed, hand-core) has no slot for a value axis minimum, a bar
 orientation, stacking or a chart size, so no rule can keep them (needs catalog slots in sop-knowledge-worlds).
@@ -148,8 +158,12 @@ Not yet (each needs a rule set or a mechanism, listed honestly; from the owner's
 management/data-drop/pilot/FEATURE-REQUESTS.md B1-B12):
 - several series per chart (grouped and stacked bars, several lines, series rename/recolour/reorder/merge, a second
   value axis): needs `w.diagram.series` and `w.diagram.datum` facts and grouped/stacked placement rules;
-- horizontal bars, tick density and logarithmic axes, trend lines and moving averages (least-squares sums in rules),
-  callout annotations;
+- horizontal bars, tick density, trend lines and moving averages (least-squares sums in rules), callout annotations;
+- error bars and their caps (needs an error value per category: `w.diagram.node` has none), colour bars, panels,
+  marker shapes and marker intervals, legend position for bar and line charts (a single series has no legend),
+  the x axis on top, a chart's place on the page by region ("on the left", "below the image"), bins (a histogram
+  needs the raw values, not categories), aggregation over records (no table of records in the Diagram tab: the
+  aggregate names the y axis title only), a filter on category names ("only 2023");
 - gradients and rounded bars (the renderer has no gradient definitions; bars are rectangles of the box rules);
 - swimlanes by actor (groups as full-width lanes), jump-overs at crossings, a crossing-count objective;
 - organic (force) layout through std.problem/Z3 (see Status);

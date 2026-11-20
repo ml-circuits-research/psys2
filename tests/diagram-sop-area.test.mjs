@@ -161,7 +161,7 @@ test('every declared operation is compiled or refused with its reason, never sim
  ok('@c diagram.group.make name="g" ids="n2"');
  const refused={'diagram.layout':'missing-property','diagram.node.split id="zz"':'missing-target','diagram.node.insert link="e9"':'missing-target',
   'diagram.group.chart id="g" type="bar"':'chart-composition-not-in-area','diagram.group.chart.adopt id="chart:1"':'chart-composition-not-in-area',
-  'diagram.group.layout id="g" layout="free"':'group-layout-not-declared'};
+  'diagram.group.layout id="g" layout="free"':'group-layout-not-declared','diagram.page.change':'missing-property'};
  for(const [command,reason] of Object.entries(refused))assert.equal(run('@c '+command).reason,reason,command);
  // The composed data.charts commands are not this area's instance: each is refused, none silently accepted.
  const charts=host.bindings().filter(op=>op.id.startsWith('chart.'));
@@ -170,7 +170,7 @@ test('every declared operation is compiled or refused with its reason, never sim
   const result=run('@c '+op.id+' '+args);assert.equal(result.status,'refused',op.id);assert.ok(result.reason,op.id+' has a reason');}
  // Undo and redo belong to the application's journal; observe reads the view.
  const own=host.bindings().map(op=>op.id).filter(id=>id.startsWith('diagram.'));
- assert.deepEqual(own.length,51);
+ assert.deepEqual(own.length,52);
 });
 
 test('the area declares its geometry and measures a command for placement',async()=>{

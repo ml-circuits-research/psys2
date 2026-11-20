@@ -194,8 +194,8 @@
 @native.diagram.sketch.op.diagram.group.ungroup.param.id std.capability.parameter operation=$native.diagram.sketch.op.diagram.group.ungroup name="id" kind=string required=true
 @native.diagram.sketch.op.diagram.group.chart.make std.capability.operation scope=$native.diagram.sketch.scope name="diagram.group.chart.make" act=make on="diagram.sketch.group" order=25 eligible=true
 @native.diagram.sketch.op.diagram.group.chart.make.param.label std.capability.parameter operation=$native.diagram.sketch.op.diagram.group.chart.make name="label" kind=string required=true
-@native.diagram.sketch.op.diagram.group.chart.make.param.labels std.capability.parameter operation=$native.diagram.sketch.op.diagram.group.chart.make name="labels" kind=array required=true
-@native.diagram.sketch.op.diagram.group.chart.make.param.values std.capability.parameter operation=$native.diagram.sketch.op.diagram.group.chart.make name="values" kind=array required=true
+@native.diagram.sketch.op.diagram.group.chart.make.param.labels std.capability.parameter operation=$native.diagram.sketch.op.diagram.group.chart.make name="labels" kind=array
+@native.diagram.sketch.op.diagram.group.chart.make.param.values std.capability.parameter operation=$native.diagram.sketch.op.diagram.group.chart.make name="values" kind=array
 @native.diagram.sketch.op.diagram.group.chart.make.param.layout std.capability.parameter operation=$native.diagram.sketch.op.diagram.group.chart.make name="layout" kind=string required=true enum="bar" enum="line" enum="area" enum="pie" enum="doughnut" enumClosed=true
 @native.diagram.sketch.value.184 std.capability.arg name="prefix" value="Values"
 @native.diagram.sketch.value.185 std.capability.record entry=$native.diagram.sketch.value.184
@@ -383,6 +383,37 @@
 @native.diagram.sketch.op.diagram.chart.format.param.layout std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="layout" kind=string enum="bar" enum="line" enum="area" enum="pie" enum="doughnut" enumClosed=true
 @native.diagram.sketch.op.diagram.chart.format.param.palette std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="palette" kind=string
 @native.diagram.sketch.op.diagram.chart.format.param.palette.source.enum app.native.parameter parameter=$native.diagram.sketch.op.diagram.chart.format.param.palette field=enum input=$native.diagram.sketch.input.diagram.themes
+# A chart group's formatting (chart-format.sop): a number property takes a number or a word that moves it (bigger,
+# thinner, medium, off); a named one one of its values; the title colour one of the page's colours.
+@native.diagram.sketch.op.diagram.chart.format.param.fontSize std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="fontSize" kind=string
+@native.diagram.sketch.op.diagram.chart.format.param.lineWidth std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="lineWidth" kind=string
+@native.diagram.sketch.op.diagram.chart.format.param.markerSize std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="markerSize" kind=string
+@native.diagram.sketch.op.diagram.chart.format.param.markerEdge std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="markerEdge" kind=string
+@native.diagram.sketch.op.diagram.chart.format.param.barWidth std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="barWidth" kind=string
+@native.diagram.sketch.op.diagram.chart.format.param.barGap std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="barGap" kind=string
+@native.diagram.sketch.op.diagram.chart.format.param.pieRadius std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="pieRadius" kind=string
+@native.diagram.sketch.op.diagram.chart.format.param.precision std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="precision" kind=integer min=0 max=4
+@native.diagram.sketch.op.diagram.chart.format.param.titleWeight std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="titleWeight" kind=string enum="normal" enum="bold" enumClosed=true
+@native.diagram.sketch.op.diagram.chart.format.param.titleColour std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="titleColour" kind=string
+@native.diagram.sketch.op.diagram.chart.format.param.titlePosition std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="titlePosition" kind=string enum="top" enum="top_left" enum="bottom" enumClosed=true
+@native.diagram.sketch.op.diagram.chart.format.param.axisSide std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="axisSide" kind=string enum="left" enum="right" enumClosed=true
+@native.diagram.sketch.op.diagram.chart.format.param.invert std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="invert" kind=string enum="none" enum="x" enum="y" enumClosed=true
+@native.diagram.sketch.op.diagram.chart.format.param.axisScale std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="axisScale" kind=string enum="linear" enum="log" enumClosed=true
+@native.diagram.sketch.op.diagram.chart.format.param.tickFormat std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="tickFormat" kind=string enum="plain" enum="magnitude" enum="power" enumClosed=true
+@native.diagram.sketch.op.diagram.chart.format.param.lineStyle std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="lineStyle" kind=string enum="solid" enum="dashed" enum="dotted" enum="dash_dot" enumClosed=true
+@native.diagram.sketch.op.diagram.chart.format.param.gridStyle std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="gridStyle" kind=string enum="solid" enum="dashed" enum="dotted" enumClosed=true
+# A chart asked for by its dimension and measure (act-rules.sop): the categories' dimension, what the values measure, how
+# they are aggregated; only the largest `top` categories, or those above or below a value.
+@native.diagram.sketch.op.diagram.group.chart.make.param.dimension std.capability.parameter operation=$native.diagram.sketch.op.diagram.group.chart.make name="dimension" kind=string
+@native.diagram.sketch.op.diagram.group.chart.make.param.measure std.capability.parameter operation=$native.diagram.sketch.op.diagram.group.chart.make name="measure" kind=string
+@native.diagram.sketch.op.diagram.group.chart.make.param.aggregate std.capability.parameter operation=$native.diagram.sketch.op.diagram.group.chart.make name="aggregate" kind=string enum="count" enum="sum" enum="avg" enum="min" enum="max" enumClosed=true
+@native.diagram.sketch.op.diagram.group.chart.make.param.top std.capability.parameter operation=$native.diagram.sketch.op.diagram.group.chart.make name="top" kind=integer min=1 max=50
+@native.diagram.sketch.op.diagram.group.chart.make.param.above std.capability.parameter operation=$native.diagram.sketch.op.diagram.group.chart.make name="above" kind=number
+@native.diagram.sketch.op.diagram.group.chart.make.param.below std.capability.parameter operation=$native.diagram.sketch.op.diagram.group.chart.make name="below" kind=number
+# The page's background colour and title (chart-format.sop).
+@native.diagram.sketch.op.diagram.page.change std.capability.operation scope=$native.diagram.sketch.scope name="diagram.page.change" act=change on="diagram.sketch.page" order=51 eligible=true
+@native.diagram.sketch.op.diagram.page.change.param.background std.capability.parameter operation=$native.diagram.sketch.op.diagram.page.change name="background" kind=string
+@native.diagram.sketch.op.diagram.page.change.param.title std.capability.parameter operation=$native.diagram.sketch.op.diagram.page.change name="title" kind=string
 @native.diagram.sketch.op.diagram.node.change.param.rotation std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.change name="rotation" kind=number min=-360 max=360
 @native.diagram.sketch.chart-composition app.native.compose module=data.charts state="chartTools" exclude="chart.undo" exclude="chart.redo" omit="sample"
 # Selecting nodes or connections changes only the declared selection key of what it selects and deselects.

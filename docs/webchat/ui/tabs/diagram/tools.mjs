@@ -54,6 +54,10 @@ export function makePageBar(bar, { tool, model, html, btn }) {
   const direction = select('Direction', (value) => tool('diagram.layout', { direction: value }));
   const spacing = select('Spacing', (value) => tool('diagram.layout', { spacing: value }));
   const route = select('Lines', (value) => tool('diagram.layout', { route: value }));
+  const background = select('Background', (value) => tool('diagram.page.change', { background: value }));
+  const titleWrap = html('label', '', 'Page title '), pageTitle = html('input'); pageTitle.setAttribute('aria-label', 'Page title'); pageTitle.size = 14;
+  pageTitle.addEventListener('change', () => { if (pageTitle.value.trim()) tool('diagram.page.change', { title: pageTitle.value.trim() }); });
+  titleWrap.append(pageTitle); bar.append(titleWrap);
   const improve = btn('Improve layout', 'Tidy the layout: back to the automatic layout, orthogonal lines, normal spacing', () => tool('diagram.layout.improve', {}));
   const steps = btn('Number steps', 'Show or hide step numbers', () => tool('diagram.steps.number', { mode: page().numbered === true ? 'off' : 'on' }));
   bar.append(improve, steps);
@@ -66,10 +70,12 @@ export function makePageBar(bar, { tool, model, html, btn }) {
       fill(direction, values(ops, 'diagram.layout', 'direction').enum ?? [], '—');
       fill(spacing, values(ops, 'diagram.layout', 'spacing').enum ?? [], '—');
       fill(route, values(ops, 'diagram.layout', 'route').enum ?? [], '—');
+      fill(background, values(ops, 'diagram.page.change', 'background').enum ?? model().options.colour ?? [], '—');
     },
     sync(selected) {
       selectionIds.current = () => selected();
       const p = page(), put = (input, value) => { if (document.activeElement !== input) input.value = value ?? ''; };
+      put(background, p.background); put(pageTitle, p.title);
       put(theme, p.theme); put(layout, p.arrange); put(direction, p.direction); put(spacing, p.spacing); put(route, p.route); colourBy.value = '';
       steps.setAttribute('aria-pressed', String(p.numbered === true));
     },
@@ -152,8 +158,23 @@ export function makeStylePanels(host, { tool, model, selection, html, btn }) {
   condTest.setAttribute('aria-label', 'Colour values'); condValue.type = 'number'; condValue.style.width = '64px'; condValue.setAttribute('aria-label', 'Threshold'); condColour.setAttribute('aria-label', 'Condition colour');
   condRow.append(condTest, condValue, condColour, btn('Colour', 'Colour the categories whose value is below or above the threshold', () => { const g = selection().group; if (g && condTest.value && condValue.value !== '' && condColour.value) tool('diagram.chart.highlight', { id: g, test: condTest.value, value: Number(condValue.value), colour: condColour.value }); }));
   const toggles = html('div', 'dg-row'); toggles.append(valueLabels, gridlines, legend, sort);
+  // Formatting of the chart group (chart-format.sop): every list from the declared parameters; a number property also
+  // takes a step (A− and A+ send the words the rules move it by).
+  const styleRow = html('div', 'dg-chart-form');
+  const choose = (label, param) => { const wrap = html('label', '', label), input = html('select'); input.setAttribute('aria-label', label); input.dataset.param = param; wrap.append(input); styleRow.append(wrap);
+    input.addEventListener('change', () => { if (input.value) format({ [param]: input.value }); }); return input; };
+  const amount = (label, param, step, text = true) => { const wrap = html('label', '', label), input = html('input'); input.type = 'number'; input.step = step; input.setAttribute('aria-label', label); input.dataset.param = param; wrap.append(input); styleRow.append(wrap);
+    input.addEventListener('change', () => { if (input.value !== '') format({ [param]: text ? String(input.value) : Number(input.value) }); }); return input; };
+  const fontSizeInput = amount('Chart font size', 'fontSize', '1'), titleWeight = choose('Title weight', 'titleWeight'), titleColour = choose('Title colour', 'titleColour'), titlePosition = choose('Title position', 'titlePosition');
+  const axisSide = choose('Value axis', 'axisSide'), invert = choose('Invert axis', 'invert'), axisScale = choose('Axis scale', 'axisScale'), tickFormat = choose('Number format', 'tickFormat');
+  const precision = amount('Decimals', 'precision', '1', false), lineStyle = choose('Chart line style', 'lineStyle'), lineWidthInput = amount('Chart line width', 'lineWidth', '0.5');
+  const markerSize = amount('Marker size', 'markerSize', '1'), markerEdge = amount('Marker edge', 'markerEdge', '0.5'), barWidthInput = amount('Bar width (share)', 'barWidth', '0.05');
+  const pieRadius = amount('Pie radius', 'pieRadius', '5'), gridStyle = choose('Grid style', 'gridStyle');
+  const chartFontRow = html('div', 'dg-row');
+  chartFontRow.append(btn('A−', 'Smaller chart text', () => format({ fontSize: 'smaller' })), btn('A+', 'Bigger chart text', () => format({ fontSize: 'bigger' })));
+  const formatInputs = [fontSizeInput, titleWeight, titleColour, titlePosition, axisSide, invert, axisScale, tickFormat, precision, lineStyle, lineWidthInput, markerSize, markerEdge, barWidthInput, pieRadius, gridStyle];
   chart.append(condRow);
-  chart.append(table, addRow, formatRow, toggles);
+  chart.append(table, addRow, formatRow, toggles, chartFontRow, styleRow);
   const currentGroup = () => model().group.get(selection().group);
 
   function swatches(grid, colours) {
@@ -173,6 +194,9 @@ export function makeStylePanels(host, { tool, model, selection, html, btn }) {
       const fillSel = (input, list) => { input.replaceChildren(); const b = html('option', '', '—'); b.value = ''; input.append(b); for (const v of list) { const o = html('option', '', v); o.value = v; input.append(o); } };
       fillSel(effect, values(ops, 'diagram.node.change', 'effect').enum ?? []); fillSel(routeSel, values(ops, 'diagram.link.change', 'route').enum ?? []);
       fillSel(legend, values(ops, 'diagram.chart.format', 'legend').enum ?? []);
+      for (const input of [titleWeight, titlePosition, axisSide, invert, axisScale, tickFormat, lineStyle, gridStyle]) fillSel(input, values(ops, 'diagram.chart.format', input.dataset.param).enum ?? []);
+      fillSel(titleColour, values(ops, 'diagram.chart.format', 'titleColour').enum ?? colours);
+      const limit = values(ops, 'diagram.chart.format', 'precision'); if (limit.min !== undefined) precision.min = limit.min; if (limit.max !== undefined) precision.max = limit.max;
       fillSel(sort, values(ops, 'diagram.chart.sort', 'order').enum ?? []); fillSel(condTest, values(ops, 'diagram.chart.highlight', 'test').enum ?? []); fillSel(condColour, colours);
     },
     sync() {
@@ -204,6 +228,7 @@ export function makeStylePanels(host, { tool, model, selection, html, btn }) {
         row.append(cellA, cellB, cellC); table.append(row);
       }
       if (document.activeElement !== yMax) yMax.value = group.yMax ?? ''; if (document.activeElement !== xLabel) xLabel.value = group.xLabel ?? ''; if (document.activeElement !== yLabel) yLabel.value = group.yLabel ?? '';
+      for (const input of formatInputs) if (document.activeElement !== input) input.value = group.inputs?.[input.dataset.param] ?? '';
       valueLabels.setAttribute('aria-pressed', String(group.valueLabels !== false)); gridlines.setAttribute('aria-pressed', String(group.gridlines === true)); legend.value = group.legend ?? '';
     },
   };

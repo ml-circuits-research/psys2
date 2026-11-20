@@ -1,0 +1,532 @@
+# diagram.sketch chart formatting (authored): how a chart group is drawn beyond its data, each property a slot of
+# w.diagram.group (the catalog's chart formatting slots). One table says, per property, the parameter of
+# diagram.chart.format that sets it, its kind (a number or one of named values), its value when the chart has none of
+# its own and its limits. The rules are generic over that table: a said number is set within the limits; a comparative
+# of k.values ("bigger", "thinner", "wider") moves the chart's current value one step up or down (an inverse property,
+# the gap between bars, moves the other way); a word for the usual value ("medium", "normal") sets the table's value;
+# a word for none ("off", "none") sets the lower limit (the upper one of an inverse property); a named value is set as
+# said. What the chart has is observed as an input of the group (the parameter's name). The value axis (its side, its
+# scale, its numbers) and the page's title are drawn here; render-projection.sop, ring-projection.sop and
+# style-projection.sop read the resolved values (ui.diagram.cfmt) for fonts, bars, lines, markers, pies and gridlines.
+@cfx.cprop.type core.type of=ui.diagram.cprop
+@cfx.cown.type core.type of=ui.diagram.cown
+@cfx.cfmt.type core.type of=ui.diagram.cfmt
+@cfx.cset.type core.type of=ui.diagram.cset
+@cfx.cstep.type core.type of=ui.diagram.cstep
+@cfx.creset.type core.type of=ui.diagram.creset
+@cfx.czero.type core.type of=ui.diagram.czero
+@cfx.cmore.type core.type of=ui.diagram.cmore
+
+# ---- The properties: slot, parameter, kind, the usual value, limits; primary=false: another parameter of the slot ----
+@cfx.p.font ui.diagram.cprop slot=font_size param=fontSize kind=number base=12 min=6 max=40 inverse=false primary=true
+@cfx.p.lw ui.diagram.cprop slot=line_width param=lineWidth kind=number base=2 min=0.5 max=12 inverse=false primary=true
+@cfx.p.ms ui.diagram.cprop slot=marker_size param=markerSize kind=number base=12 min=2 max=40 inverse=false primary=true
+@cfx.p.me ui.diagram.cprop slot=marker_edge param=markerEdge kind=number base=1.5 min=0 max=8 inverse=false primary=true
+@cfx.p.bw ui.diagram.cprop slot=bar_width param=barWidth kind=number base=0.64 min=0.1 max=1 inverse=false primary=true
+@cfx.p.bg ui.diagram.cprop slot=bar_width param=barGap kind=number base=0.64 min=0.1 max=1 inverse=true primary=false
+@cfx.p.pr ui.diagram.cprop slot=pie_radius param=pieRadius kind=number base=90 min=30 max=300 inverse=false primary=true
+@cfx.p.prec ui.diagram.cprop slot=precision param=precision kind=number base=0 min=0 max=4 inverse=false primary=true
+@cfx.p.tw ui.diagram.cprop slot=title_weight param=titleWeight kind=enum base=bold primary=true
+@cfx.p.tc ui.diagram.cprop slot=title_colour param=titleColour kind=enum base=none primary=true
+@cfx.p.tp ui.diagram.cprop slot=title_position param=titlePosition kind=enum base=top_left primary=true
+@cfx.p.ya ui.diagram.cprop slot=y_axis param=axisSide kind=enum base=none primary=true
+@cfx.p.inv ui.diagram.cprop slot=invert param=invert kind=enum base=none primary=true
+@cfx.p.as ui.diagram.cprop slot=axis_scale param=axisScale kind=enum base=linear primary=true
+@cfx.p.tf ui.diagram.cprop slot=tick_format param=tickFormat kind=enum base=plain primary=true
+@cfx.p.ls ui.diagram.cprop slot=line_style param=lineStyle kind=enum base=solid primary=true
+@cfx.p.gs ui.diagram.cprop slot=grid_style param=gridStyle kind=enum base=fine primary=true
+# One step up or down: a quarter more, a fifth less (an inverse property the other way round).
+@cfx.step.up ui.diagram.cstep way=up inverse=false factor=1.25
+@cfx.step.down ui.diagram.cstep way=down inverse=false factor=0.8
+@cfx.step.up.inv ui.diagram.cstep way=up inverse=true factor=0.8
+@cfx.step.down.inv ui.diagram.cstep way=down inverse=true factor=1.25
+# The scales of k.values whose comparatives say more or less of a chart's size, width or thickness.
+@cfx.scale.size ui.diagram.cmore name=size
+@cfx.scale.width ui.diagram.cmore name=width
+@cfx.scale.thickness ui.diagram.cmore name=thickness
+@cfx.scale.length ui.diagram.cmore name=length
+@cfx.scale.height ui.diagram.cmore name=height
+@cfx.scale.distance ui.diagram.cmore name=distance
+# Words for the usual value, and for none.
+@cfx.reset.medium ui.diagram.creset word=medium
+@cfx.reset.normal ui.diagram.creset word=normal
+@cfx.reset.default ui.diagram.creset word=default
+@cfx.reset.regular ui.diagram.creset word=regular
+@cfx.reset.standard ui.diagram.creset word=standard
+@cfx.reset.usual ui.diagram.creset word=usual
+@cfx.reset.original ui.diagram.creset word=original
+@cfx.zero.off ui.diagram.czero word=off
+@cfx.zero.none ui.diagram.czero word=none
+@cfx.zero.no ui.diagram.czero word=no
+@cfx.zero.remove ui.diagram.czero word=remove
+@cfx.zero.hide ui.diagram.czero word=hide
+
+# ---- What the chart has of its own, and the value each property resolves to ----
+@cfx.o1 w.diagram.group code=?g font_size=?v
+@cfx.o1.o ui.diagram.cown group=?g slot=font_size v=?v
+@chart.own.font_size core.rule when=$cfx.o1 then=$cfx.o1.o
+@cfx.o2 w.diagram.group code=?g line_width=?v
+@cfx.o2.o ui.diagram.cown group=?g slot=line_width v=?v
+@chart.own.line_width core.rule when=$cfx.o2 then=$cfx.o2.o
+@cfx.o3 w.diagram.group code=?g marker_size=?v
+@cfx.o3.o ui.diagram.cown group=?g slot=marker_size v=?v
+@chart.own.marker_size core.rule when=$cfx.o3 then=$cfx.o3.o
+@cfx.o4 w.diagram.group code=?g marker_edge=?v
+@cfx.o4.o ui.diagram.cown group=?g slot=marker_edge v=?v
+@chart.own.marker_edge core.rule when=$cfx.o4 then=$cfx.o4.o
+@cfx.o5 w.diagram.group code=?g bar_width=?v
+@cfx.o5.o ui.diagram.cown group=?g slot=bar_width v=?v
+@chart.own.bar_width core.rule when=$cfx.o5 then=$cfx.o5.o
+@cfx.o6 w.diagram.group code=?g pie_radius=?v
+@cfx.o6.o ui.diagram.cown group=?g slot=pie_radius v=?v
+@chart.own.pie_radius core.rule when=$cfx.o6 then=$cfx.o6.o
+@cfx.o7 w.diagram.group code=?g precision=?v
+@cfx.o7.o ui.diagram.cown group=?g slot=precision v=?v
+@chart.own.precision core.rule when=$cfx.o7 then=$cfx.o7.o
+@cfx.o8 w.diagram.group code=?g title_weight=?v
+@cfx.o8.o ui.diagram.cown group=?g slot=title_weight v=?v
+@chart.own.title_weight core.rule when=$cfx.o8 then=$cfx.o8.o
+@cfx.o9 w.diagram.group code=?g title_colour=?v
+@cfx.o9.o ui.diagram.cown group=?g slot=title_colour v=?v
+@chart.own.title_colour core.rule when=$cfx.o9 then=$cfx.o9.o
+@cfx.o10 w.diagram.group code=?g title_position=?v
+@cfx.o10.o ui.diagram.cown group=?g slot=title_position v=?v
+@chart.own.title_position core.rule when=$cfx.o10 then=$cfx.o10.o
+@cfx.o11 w.diagram.group code=?g y_axis=?v
+@cfx.o11.o ui.diagram.cown group=?g slot=y_axis v=?v
+@chart.own.y_axis core.rule when=$cfx.o11 then=$cfx.o11.o
+@cfx.o12 w.diagram.group code=?g invert=?v
+@cfx.o12.o ui.diagram.cown group=?g slot=invert v=?v
+@chart.own.invert core.rule when=$cfx.o12 then=$cfx.o12.o
+@cfx.o13 w.diagram.group code=?g axis_scale=?v
+@cfx.o13.o ui.diagram.cown group=?g slot=axis_scale v=?v
+@chart.own.axis_scale core.rule when=$cfx.o13 then=$cfx.o13.o
+@cfx.o14 w.diagram.group code=?g tick_format=?v
+@cfx.o14.o ui.diagram.cown group=?g slot=tick_format v=?v
+@chart.own.tick_format core.rule when=$cfx.o14 then=$cfx.o14.o
+@cfx.o15 w.diagram.group code=?g line_style=?v
+@cfx.o15.o ui.diagram.cown group=?g slot=line_style v=?v
+@chart.own.line_style core.rule when=$cfx.o15 then=$cfx.o15.o
+@cfx.o16 w.diagram.group code=?g grid_style=?v
+@cfx.o16.o ui.diagram.cown group=?g slot=grid_style v=?v
+@chart.own.grid_style core.rule when=$cfx.o16 then=$cfx.o16.o
+
+@cfx.f.o ui.diagram.cown group=?g slot=?s v=?v
+@cfx.f.oo ui.diagram.cfmt group=?g slot=?s v=?v
+@chart.cfmt.own core.rule when=$cfx.f.o then=$cfx.f.oo
+@cfx.f.g w.diagram.group code=?g
+@cfx.f.p ui.diagram.cprop slot=?s base=?b primary=true
+@cfx.f.any ui.diagram.cown group=?g slot=?s v=?anyv
+@cfx.f.bo ui.diagram.cfmt group=?g slot=?s v=?b
+@chart.cfmt.base core.rule when=$cfx.f.g when=$cfx.f.p not=$cfx.f.any then=$cfx.f.bo
+# Observed: each property the chart has, under its parameter's name.
+@cfx.ob.o ui.diagram.cown group=?g slot=?s v=?v
+@cfx.ob.p ui.diagram.cprop slot=?s param=?p primary=true
+@cfx.ob.out app.observe.input id=?g key=?p value=?v
+@observe.chart.format core.rule when=$cfx.ob.o when=$cfx.ob.p then=$cfx.ob.out
+# The title colour is looked up (render-projection.sop: ui.diagram.rgb).
+@cfx.tc.u w.diagram.group title_colour=?c
+@cfx.tc.out ui.diagram.usecol c=?c
+@chart.use.title_colour core.rule when=$cfx.tc.u then=$cfx.tc.out
+
+# ---- Setting a property (diagram.chart.format) ----
+@cfx.q1 app.act.request operation="diagram.chart.format" fontSize=?v
+@cfx.q1.o ui.diagram.cset param=fontSize said=?v
+@chart.say.fontSize core.rule when=$cfx.q1 then=$cfx.q1.o
+@cfx.q2 app.act.request operation="diagram.chart.format" lineWidth=?v
+@cfx.q2.o ui.diagram.cset param=lineWidth said=?v
+@chart.say.lineWidth core.rule when=$cfx.q2 then=$cfx.q2.o
+@cfx.q3 app.act.request operation="diagram.chart.format" markerSize=?v
+@cfx.q3.o ui.diagram.cset param=markerSize said=?v
+@chart.say.markerSize core.rule when=$cfx.q3 then=$cfx.q3.o
+@cfx.q4 app.act.request operation="diagram.chart.format" markerEdge=?v
+@cfx.q4.o ui.diagram.cset param=markerEdge said=?v
+@chart.say.markerEdge core.rule when=$cfx.q4 then=$cfx.q4.o
+@cfx.q5 app.act.request operation="diagram.chart.format" barWidth=?v
+@cfx.q5.o ui.diagram.cset param=barWidth said=?v
+@chart.say.barWidth core.rule when=$cfx.q5 then=$cfx.q5.o
+@cfx.q6 app.act.request operation="diagram.chart.format" barGap=?v
+@cfx.q6.o ui.diagram.cset param=barGap said=?v
+@chart.say.barGap core.rule when=$cfx.q6 then=$cfx.q6.o
+@cfx.q7 app.act.request operation="diagram.chart.format" pieRadius=?v
+@cfx.q7.o ui.diagram.cset param=pieRadius said=?v
+@chart.say.pieRadius core.rule when=$cfx.q7 then=$cfx.q7.o
+@cfx.q8 app.act.request operation="diagram.chart.format" precision=?v
+@cfx.q8.o ui.diagram.cset param=precision said=?v
+@chart.say.precision core.rule when=$cfx.q8 then=$cfx.q8.o
+@cfx.q9 app.act.request operation="diagram.chart.format" titleWeight=?v
+@cfx.q9.o ui.diagram.cset param=titleWeight said=?v
+@chart.say.titleWeight core.rule when=$cfx.q9 then=$cfx.q9.o
+@cfx.q10 app.act.request operation="diagram.chart.format" titleColour=?v
+@cfx.q10.o ui.diagram.cset param=titleColour said=?v
+@chart.say.titleColour core.rule when=$cfx.q10 then=$cfx.q10.o
+@cfx.q11 app.act.request operation="diagram.chart.format" titlePosition=?v
+@cfx.q11.o ui.diagram.cset param=titlePosition said=?v
+@chart.say.titlePosition core.rule when=$cfx.q11 then=$cfx.q11.o
+@cfx.q12 app.act.request operation="diagram.chart.format" axisSide=?v
+@cfx.q12.o ui.diagram.cset param=axisSide said=?v
+@chart.say.axisSide core.rule when=$cfx.q12 then=$cfx.q12.o
+@cfx.q13 app.act.request operation="diagram.chart.format" invert=?v
+@cfx.q13.o ui.diagram.cset param=invert said=?v
+@chart.say.invert core.rule when=$cfx.q13 then=$cfx.q13.o
+@cfx.q14 app.act.request operation="diagram.chart.format" axisScale=?v
+@cfx.q14.o ui.diagram.cset param=axisScale said=?v
+@chart.say.axisScale core.rule when=$cfx.q14 then=$cfx.q14.o
+@cfx.q15 app.act.request operation="diagram.chart.format" tickFormat=?v
+@cfx.q15.o ui.diagram.cset param=tickFormat said=?v
+@chart.say.tickFormat core.rule when=$cfx.q15 then=$cfx.q15.o
+@cfx.q16 app.act.request operation="diagram.chart.format" lineStyle=?v
+@cfx.q16.o ui.diagram.cset param=lineStyle said=?v
+@chart.say.lineStyle core.rule when=$cfx.q16 then=$cfx.q16.o
+@cfx.q17 app.act.request operation="diagram.chart.format" gridStyle=?v
+@cfx.q17.o ui.diagram.cset param=gridStyle said=?v
+@chart.say.gridStyle core.rule when=$cfx.q17 then=$cfx.q17.o
+
+@cfx.s.r app.act.request operation="diagram.chart.format" id=?g
+@cfx.s.g w.diagram.group code=?g
+@cfx.s.s ui.diagram.cset param=?p said=?v
+# A named value is set as said (the declared parameter's closed list has admitted it).
+@cfx.s.pe ui.diagram.cprop param=?p slot=?s kind=enum
+@cfx.s.ce app.act.call act=change thing=$cfx.s.g attr=?s value=?v order=1
+@chart.set.named core.rule when=$cfx.s.r when=$cfx.s.g when=$cfx.s.s when=$cfx.s.pe then=$cfx.s.ce
+# A number, within the limits (a said number may come as text: lower() gives it back as a number).
+@cfx.s.pn ui.diagram.cprop param=?p slot=?s kind=number base=?b min=?lo max=?hi inverse=?inv
+@cfx.s.isn core.check fn=matches args=?v args="^[0-9.]+$"
+@cfx.s.n core.calc out=?n fn=lower args=?v
+@cfx.s.k core.calc out=?k fn=clamp args=?n args=?lo args=?hi
+@cfx.s.cn app.act.call act=change thing=$cfx.s.g attr=?s value=?k order=1
+@chart.set.number core.rule when=$cfx.s.r when=$cfx.s.g when=$cfx.s.s when=$cfx.s.pn if=$cfx.s.isn with=$cfx.s.n with=$cfx.s.k then=$cfx.s.cn
+# A comparative: one step from what the chart has now.
+@cfx.s.cmp k.values.comparative text=?v scale=?sc way=?w degree=comparative
+@cfx.s.sc ui.diagram.cmore name=?sc
+@cfx.s.st ui.diagram.cstep way=?w inverse=?inv factor=?f
+@cfx.s.cur ui.diagram.cfmt group=?g slot=?s v=?cur
+@cfx.s.m core.calc out=?m fn=mul args=?cur args=?f
+@cfx.s.mk core.calc out=?mk fn=clamp args=?m args=?lo args=?hi
+@cfx.s.mr core.calc out=?mr fn=round args=?mk args=3
+@cfx.s.cd app.act.call act=change thing=$cfx.s.g attr=?s value=?mr order=1
+@chart.set.step core.rule when=$cfx.s.r when=$cfx.s.g when=$cfx.s.s when=$cfx.s.pn when=$cfx.s.cmp when=$cfx.s.sc when=$cfx.s.st when=$cfx.s.cur with=$cfx.s.m with=$cfx.s.mk with=$cfx.s.mr then=$cfx.s.cd
+# The usual value; none.
+@cfx.s.rs ui.diagram.creset word=?v
+@cfx.s.cb app.act.call act=change thing=$cfx.s.g attr=?s value=?b order=1
+@chart.set.usual core.rule when=$cfx.s.r when=$cfx.s.g when=$cfx.s.s when=$cfx.s.pn when=$cfx.s.rs then=$cfx.s.cb
+@cfx.s.zr ui.diagram.czero word=?v
+@cfx.s.pz ui.diagram.cprop param=?p slot=?s kind=number min=?lo max=?hi inverse=false
+@cfx.s.pzi ui.diagram.cprop param=?p slot=?s kind=number min=?lo max=?hi inverse=true
+@cfx.s.cz app.act.call act=change thing=$cfx.s.g attr=?s value=?lo order=1
+@cfx.s.czi app.act.call act=change thing=$cfx.s.g attr=?s value=?hi order=1
+@chart.set.none core.rule when=$cfx.s.r when=$cfx.s.g when=$cfx.s.s when=$cfx.s.pz when=$cfx.s.zr then=$cfx.s.cz
+@chart.set.none.inverse core.rule when=$cfx.s.r when=$cfx.s.g when=$cfx.s.s when=$cfx.s.pzi when=$cfx.s.zr then=$cfx.s.czi
+# A word for a number property that is none of these is refused, never guessed.
+@cfx.s.anycmp k.values.comparative text=?v scale=?anysc degree=comparative
+@cfx.s.out app.act.refuse reason=unknown-degree
+@cfx.s.word core.check fn=matches args=?v args="[^0-9.]"
+@chart.set.unknown core.rule when=$cfx.s.r when=$cfx.s.s when=$cfx.s.pn if=$cfx.s.word not=$cfx.s.anycmp not=$cfx.s.rs not=$cfx.s.zr then=$cfx.s.out
+
+# ---- The value axis: drawn when the chart has a side for it, a scale or a number format ----
+@cfx.yax.type core.type of=ui.diagram.yaxis
+@cfx.ya.c ui.diagram.chart group=?g
+@cfx.ya.own w.diagram.group code=?g y_axis=?side
+@cfx.ya.out ui.diagram.yaxis group=?g side=?side
+@chart.axis.side core.rule when=$cfx.ya.c when=$cfx.ya.own then=$cfx.ya.out
+@cfx.ya.any w.diagram.group code=?g y_axis=?anyside
+@cfx.ya.sc w.diagram.group code=?g axis_scale=?anysc
+@cfx.ya.tf w.diagram.group code=?g tick_format=?anytf
+@cfx.ya.left ui.diagram.yaxis group=?g side=left
+@chart.axis.scale core.rule when=$cfx.ya.c when=$cfx.ya.sc not=$cfx.ya.any then=$cfx.ya.left
+@chart.axis.format core.rule when=$cfx.ya.c when=$cfx.ya.tf not=$cfx.ya.any then=$cfx.ya.left
+# An axis drawn the other way: x the categories from the right (ix=1), y the values from the top (iy=1).
+@cfx.cinv.type core.type of=ui.diagram.cinv
+@cfx.inv.none ui.diagram.cinv value=none ix=0 iy=0
+@cfx.inv.x ui.diagram.cinv value=x ix=1 iy=0
+@cfx.inv.y ui.diagram.cinv value=y iy=1 ix=0
+@cfx.cdir.type core.type of=ui.diagram.cdir
+@cfx.cd.f ui.diagram.cfmt group=?g slot=invert v=?iv
+@cfx.cd.t ui.diagram.cinv value=?iv ix=?ix iy=?iy
+@cfx.cd.out ui.diagram.cdir group=?g ix=?ix iy=?iy
+@chart.direction core.rule when=$cfx.cd.f when=$cfx.cd.t then=$cfx.cd.out
+# A member's column as drawn: its own, or counted from the right.
+@cfx.ccol.type core.type of=ui.diagram.ccol
+@cfx.cc.p ui.diagram.mpos node=?c group=?g col=?col
+@cfx.cc.ch ui.diagram.chart group=?g
+@cfx.cc.d ui.diagram.cdir group=?g ix=?ix
+@cfx.cc.n ui.diagram.gstat group=?g key=count value=?n
+@cfx.cc.a core.calc out=?a fn=sub args=?n args=1
+@cfx.cc.b core.calc out=?b fn=mul args=?col args=2
+@cfx.cc.e core.calc out=?e fn=sub args=?a args=?b
+@cfx.cc.f core.calc out=?f fn=mul args=?ix args=?e
+@cfx.cc.dc core.calc out=?dc fn=add args=?col args=?f
+@cfx.cc.out ui.diagram.ccol node=?c col=?dc
+@chart.column core.rule when=$cfx.cc.p when=$cfx.cc.ch when=$cfx.cc.d when=$cfx.cc.n with=$cfx.cc.a with=$cfx.cc.b with=$cfx.cc.e with=$cfx.cc.f with=$cfx.cc.dc then=$cfx.cc.out
+
+# ---- Logarithms for a log scale (log10 from powers of ten and a table of mantissas, interpolated) ----
+@cfx.pow.type core.type of=ui.diagram.pow10
+@cfx.pow.0 ui.diagram.pow10 e=0 p=1 sup="⁰"
+@cfx.pow.1 ui.diagram.pow10 e=1 p=10 sup="¹"
+@cfx.pow.2 ui.diagram.pow10 e=2 p=100 sup="²"
+@cfx.pow.3 ui.diagram.pow10 e=3 p=1000 sup="³"
+@cfx.pow.4 ui.diagram.pow10 e=4 p=10000 sup="⁴"
+@cfx.pow.5 ui.diagram.pow10 e=5 p=100000 sup="⁵"
+@cfx.pow.6 ui.diagram.pow10 e=6 p=1000000 sup="⁶"
+@cfx.pow.7 ui.diagram.pow10 e=7 p=10000000 sup="⁷"
+@cfx.pow.8 ui.diagram.pow10 e=8 p=100000000 sup="⁸"
+@cfx.pow.9 ui.diagram.pow10 e=9 p=1000000000 sup="⁹"
+@cfx.lm.type core.type of=ui.diagram.lmant
+@cfx.lm.1 ui.diagram.lmant m=1 l=0 next=0.30103
+@cfx.lm.2 ui.diagram.lmant m=2 l=0.30103 next=0.47712
+@cfx.lm.3 ui.diagram.lmant m=3 l=0.47712 next=0.60206
+@cfx.lm.4 ui.diagram.lmant m=4 l=0.60206 next=0.69897
+@cfx.lm.5 ui.diagram.lmant m=5 l=0.69897 next=0.77815
+@cfx.lm.6 ui.diagram.lmant m=6 l=0.77815 next=0.84510
+@cfx.lm.7 ui.diagram.lmant m=7 l=0.84510 next=0.90309
+@cfx.lm.8 ui.diagram.lmant m=8 l=0.90309 next=0.95424
+@cfx.lm.9 ui.diagram.lmant m=9 l=0.95424 next=1
+@cfx.lgneed.type core.type of=ui.diagram.lgneed
+@cfx.lgc.type core.type of=ui.diagram.lgc
+@cfx.lge.type core.type of=ui.diagram.lge
+@cfx.lg.type core.type of=ui.diagram.lg
+@cfx.ln.g w.diagram.group code=?g axis_scale=log
+@cfx.ln.i ui.diagram.inside group=?g node=?c
+@cfx.ln.v w.diagram.node code=?c value=?v
+@cfx.ln.out ui.diagram.lgneed v=?v
+@chart.log.need.value core.rule when=$cfx.ln.g when=$cfx.ln.i when=$cfx.ln.v then=$cfx.ln.out
+@cfx.ln.s ui.diagram.cscale group=?g value=?sv
+@cfx.ln.so ui.diagram.lgneed v=?sv
+@chart.log.need.scale core.rule when=$cfx.ln.g when=$cfx.ln.s then=$cfx.ln.so
+@cfx.lc.n ui.diagram.lgneed v=?v
+@cfx.lc.p ui.diagram.pow10 e=?e p=?p
+@cfx.lc.le core.check fn=lte args=?p args=?v
+@cfx.lc.out ui.diagram.lgc v=?v e=?e
+@chart.log.exponent.candidate core.rule when=$cfx.lc.n when=$cfx.lc.p if=$cfx.lc.le then=$cfx.lc.out
+@cfx.le.c ui.diagram.lgc v=?v e=?e
+@cfx.le.out ui.diagram.lge v=?v e=?m
+@chart.log.exponent core.aggregate over=$cfx.le.c by=?v max=?m args=?e then=$cfx.le.out
+@cfx.lg.e ui.diagram.lge v=?v e=?e
+@cfx.lg.p ui.diagram.pow10 e=?e p=?p
+@cfx.lg.m core.calc out=?m fn=div args=?v args=?p
+@cfx.lg.mi core.calc out=?mi fn=idiv args=?m args=1
+@cfx.lg.t ui.diagram.lmant m=?mi l=?l next=?nx
+@cfx.lg.f core.calc out=?f fn=sub args=?m args=?mi
+@cfx.lg.d core.calc out=?d fn=sub args=?nx args=?l
+@cfx.lg.fd core.calc out=?fd fn=mul args=?f args=?d
+@cfx.lg.l1 core.calc out=?l1 fn=add args=?e args=?l
+@cfx.lg.lv core.calc out=?lv fn=add args=?l1 args=?fd
+@cfx.lg.out ui.diagram.lg v=?v l=?lv
+@chart.log core.rule when=$cfx.lg.e when=$cfx.lg.p with=$cfx.lg.m with=$cfx.lg.mi when=$cfx.lg.t with=$cfx.lg.f with=$cfx.lg.d with=$cfx.lg.fd with=$cfx.lg.l1 with=$cfx.lg.lv then=$cfx.lg.out
+# A member's share of the value axis (0 to 1): its value over the axis top, or on a log scale their logarithms (a value
+# under 1 at the foot of the axis).
+@cfx.cfrac.type core.type of=ui.diagram.cfrac
+@cfx.fr.ch ui.diagram.chart group=?g
+@cfx.fr.i ui.diagram.inside group=?g node=?c
+@cfx.fr.v w.diagram.node code=?c value=?v
+@cfx.fr.mx ui.diagram.cscale group=?g value=?mx
+@cfx.fr.log w.diagram.group code=?g axis_scale=log
+@cfx.fr.f core.calc out=?f fn=div args=?v args=?mx
+@cfx.fr.out ui.diagram.cfrac node=?c f=?f
+@chart.share.linear core.rule when=$cfx.fr.ch when=$cfx.fr.i when=$cfx.fr.v when=$cfx.fr.mx not=$cfx.fr.log with=$cfx.fr.f then=$cfx.fr.out
+@cfx.fr.lv ui.diagram.lg v=?v l=?lv
+@cfx.fr.lm ui.diagram.lg v=?mx l=?lm
+@cfx.fr.lpos core.check fn=gt args=?lm args=0
+@cfx.fr.lf core.calc out=?lf fn=div args=?lv args=?lm
+@cfx.fr.lout ui.diagram.cfrac node=?c f=?lf
+@chart.share.log core.rule when=$cfx.fr.ch when=$cfx.fr.i when=$cfx.fr.v when=$cfx.fr.mx when=$cfx.fr.log when=$cfx.fr.lv when=$cfx.fr.lm if=$cfx.fr.lpos with=$cfx.fr.lf then=$cfx.fr.lout
+@cfx.fr.small core.check fn=lt args=?v args=1
+@cfx.fr.zout ui.diagram.cfrac node=?c f=0
+@chart.share.log.small core.rule when=$cfx.fr.ch when=$cfx.fr.i when=$cfx.fr.v when=$cfx.fr.log if=$cfx.fr.small then=$cfx.fr.zout
+
+# ---- The axis line and its numbers ----
+@cfx.tick.type core.type of=ui.diagram.tickv
+@cfx.tk.type core.type of=ui.diagram.tickk
+@cfx.tk.0 ui.diagram.tickk k=0
+@cfx.tk.1 ui.diagram.tickk k=1
+@cfx.tk.2 ui.diagram.tickk k=2
+@cfx.tk.3 ui.diagram.tickk k=3
+@cfx.tk.4 ui.diagram.tickk k=4
+@cfx.ax.type core.type of=ui.diagram.axpos
+# Where the axis stands: left of the plot or right of it; its foot and its top (the other way round when inverted).
+@cfx.ap.a ui.diagram.yaxis group=?g side=?side
+@cfx.ap.b ui.diagram.ubox unit=?g x0=?x y0=?y w=?w
+@cfx.ap.p ui.diagram.gpad group=?g pad=?pad top=?top
+@cfx.ap.d ui.diagram.cdir group=?g iy=?iy
+@cfx.ap.l core.check fn=eq args=?side args=left
+@cfx.ap.r core.check fn=eq args=?side args=right
+@cfx.ap.xl1 core.calc out=?xl1 fn=add args=?x args=?pad
+@cfx.ap.xl core.calc out=?xl fn=sub args=?xl1 args=6
+@cfx.ap.xr1 core.calc out=?xr1 fn=add args=?x args=?w
+@cfx.ap.xr2 core.calc out=?xr2 fn=sub args=?xr1 args=?pad
+@cfx.ap.xr core.calc out=?xr fn=add args=?xr2 args=6
+@cfx.ap.b1 core.calc out=?b1 fn=add args=?y args=?top
+@cfx.ap.base core.calc out=?base fn=add args=?b1 args=170
+@cfx.ap.out.l ui.diagram.axpos group=?g x=?xl base=?base iy=?iy anchor=end dx=-5
+@cfx.ap.out.r ui.diagram.axpos group=?g x=?xr base=?base iy=?iy anchor=start dx=5
+@chart.axis.left core.rule when=$cfx.ap.a when=$cfx.ap.b when=$cfx.ap.p when=$cfx.ap.d if=$cfx.ap.l with=$cfx.ap.xl1 with=$cfx.ap.xl with=$cfx.ap.b1 with=$cfx.ap.base then=$cfx.ap.out.l
+@chart.axis.right core.rule when=$cfx.ap.a when=$cfx.ap.b when=$cfx.ap.p when=$cfx.ap.d if=$cfx.ap.r with=$cfx.ap.xr1 with=$cfx.ap.xr2 with=$cfx.ap.xr with=$cfx.ap.b1 with=$cfx.ap.base then=$cfx.ap.out.r
+@cfx.al.a ui.diagram.axpos group=?g x=?x base=?base
+@cfx.al.t core.calc out=?t fn=sub args=?base args=160
+@cfx.al.s core.calc out=?src fn=concat args=?g args=".yaxis"
+@cfx.al.p1 ui.diagram.point source=?src n=1 x=?x y=?base
+@cfx.al.p2 ui.diagram.point source=?src n=2 x=?x y=?t
+@cfx.al.d ui.diagram.draw part=?g source=?src slot=?g order=2 z=0 shape=line x=0 y=0 w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left stroke=1
+@cfx.al.f ui.diagram.fill source=?src part=?g fill="#7b8794"
+@chart.axis.line.1 core.rule when=$cfx.al.a with=$cfx.al.t with=$cfx.al.s then=$cfx.al.p1
+@chart.axis.line.2 core.rule when=$cfx.al.a with=$cfx.al.t with=$cfx.al.s then=$cfx.al.p2
+@chart.axis.line.draw core.rule when=$cfx.al.a with=$cfx.al.s then=$cfx.al.d
+@chart.axis.line.fill core.rule when=$cfx.al.a with=$cfx.al.s then=$cfx.al.f
+# The numbers of a linear axis: at its foot and at each quarter of its top.
+@cfx.tl.a ui.diagram.axpos group=?g base=?base iy=?iy
+@cfx.tl.lin w.diagram.group code=?g axis_scale=log
+@cfx.tl.k ui.diagram.tickk k=?k
+@cfx.tl.s ui.diagram.cscale group=?g value=?mx
+@cfx.tl.v1 core.calc out=?v1 fn=mul args=?mx args=?k
+@cfx.tl.v core.calc out=?v fn=div args=?v1 args=4
+@cfx.tl.dy core.calc out=?dy fn=mul args=?k args=40
+@cfx.tl.y1 core.calc out=?y1 fn=sub args=?base args=?dy
+@cfx.tl.e1 core.calc out=?e1 fn=mul args=?dy args=2
+@cfx.tl.e2 core.calc out=?e2 fn=sub args=?e1 args=160
+@cfx.tl.e3 core.calc out=?e3 fn=mul args=?e2 args=?iy
+@cfx.tl.y core.calc out=?ty fn=add args=?y1 args=?e3
+@cfx.tl.out ui.diagram.tickv group=?g k=?k v=?v y=?ty
+@chart.ticks.linear core.rule when=$cfx.tl.a when=$cfx.tl.k when=$cfx.tl.s not=$cfx.tl.lin with=$cfx.tl.v1 with=$cfx.tl.v with=$cfx.tl.dy with=$cfx.tl.y1 with=$cfx.tl.e1 with=$cfx.tl.e2 with=$cfx.tl.e3 with=$cfx.tl.y then=$cfx.tl.out
+# The numbers of a log axis: each power of ten up to its top, where its logarithm falls.
+@cfx.tg.a ui.diagram.axpos group=?g base=?base iy=?iy
+@cfx.tg.log w.diagram.group code=?g axis_scale=log
+@cfx.tg.s ui.diagram.cscale group=?g value=?mx
+@cfx.tg.lm ui.diagram.lg v=?mx l=?lm
+@cfx.tg.pos core.check fn=gt args=?lm args=0
+@cfx.tg.p ui.diagram.pow10 e=?e p=?p
+@cfx.tg.le core.check fn=lte args=?p args=?mx
+@cfx.tg.f core.calc out=?f fn=div args=?e args=?lm
+@cfx.tg.dy core.calc out=?dy fn=mul args=?f args=160
+@cfx.tg.y1 core.calc out=?y1 fn=sub args=?base args=?dy
+@cfx.tg.e1 core.calc out=?e1 fn=mul args=?dy args=2
+@cfx.tg.e2 core.calc out=?e2 fn=sub args=?e1 args=160
+@cfx.tg.e3 core.calc out=?e3 fn=mul args=?e2 args=?iy
+@cfx.tg.y core.calc out=?ty fn=add args=?y1 args=?e3
+@cfx.tg.out ui.diagram.tickv group=?g k=?e v=?p y=?ty
+@chart.ticks.log core.rule when=$cfx.tg.a when=$cfx.tg.log when=$cfx.tg.s when=$cfx.tg.lm if=$cfx.tg.pos when=$cfx.tg.p if=$cfx.tg.le with=$cfx.tg.f with=$cfx.tg.dy with=$cfx.tg.y1 with=$cfx.tg.e1 with=$cfx.tg.e2 with=$cfx.tg.e3 with=$cfx.tg.y then=$cfx.tg.out
+# How a number is written: plain (to the chart's precision, else two decimals at most); magnitude (1.2k, 3.5M); power
+# (a power of ten as 10³, another number as 2.5×10³).
+@cfx.ntext.type core.type of=ui.diagram.ntext
+@cfx.nt.t ui.diagram.tickv group=?g v=?v
+@cfx.nt.f ui.diagram.cfmt group=?g slot=tick_format v=?tf
+@cfx.nt.pr ui.diagram.cown group=?g slot=precision v=?d
+@cfx.nt.anypr ui.diagram.cown group=?g slot=precision v=?anyd
+@cfx.nt.isplain core.check fn=eq args=?tf args=plain
+@cfx.nt.r core.calc out=?r fn=round args=?v args=?d
+@cfx.nt.r2 core.calc out=?r2 fn=round args=?v args=2
+@cfx.nt.o1 ui.diagram.ntext group=?g v=?v text=?r
+@cfx.nt.o2 ui.diagram.ntext group=?g v=?v text=?r2
+@chart.number.plain.precision core.rule when=$cfx.nt.t when=$cfx.nt.f when=$cfx.nt.pr if=$cfx.nt.isplain with=$cfx.nt.r then=$cfx.nt.o1
+@chart.number.plain core.rule when=$cfx.nt.t when=$cfx.nt.f not=$cfx.nt.anypr if=$cfx.nt.isplain with=$cfx.nt.r2 then=$cfx.nt.o2
+@cfx.nt.ismag core.check fn=eq args=?tf args=magnitude
+@cfx.nt.m6 core.check fn=gte args=?v args=1000000
+@cfx.nt.m3 core.check fn=gte args=?v args=1000
+@cfx.nt.lt6 core.check fn=lt args=?v args=1000000
+@cfx.nt.lt3 core.check fn=lt args=?v args=1000
+@cfx.nt.d6 core.calc out=?d6 fn=div args=?v args=1000000
+@cfx.nt.d6r core.calc out=?d6r fn=round args=?d6 args=1
+@cfx.nt.t6 core.calc out=?t6 fn=concat args=?d6r args="M"
+@cfx.nt.d3 core.calc out=?d3 fn=div args=?v args=1000
+@cfx.nt.d3r core.calc out=?d3r fn=round args=?d3 args=1
+@cfx.nt.t3 core.calc out=?t3 fn=concat args=?d3r args="k"
+@cfx.nt.om6 ui.diagram.ntext group=?g v=?v text=?t6
+@cfx.nt.om3 ui.diagram.ntext group=?g v=?v text=?t3
+@chart.number.millions core.rule when=$cfx.nt.t when=$cfx.nt.f if=$cfx.nt.ismag if=$cfx.nt.m6 with=$cfx.nt.d6 with=$cfx.nt.d6r with=$cfx.nt.t6 then=$cfx.nt.om6
+@chart.number.thousands core.rule when=$cfx.nt.t when=$cfx.nt.f if=$cfx.nt.ismag if=$cfx.nt.m3 if=$cfx.nt.lt6 with=$cfx.nt.d3 with=$cfx.nt.d3r with=$cfx.nt.t3 then=$cfx.nt.om3
+@chart.number.units core.rule when=$cfx.nt.t when=$cfx.nt.f if=$cfx.nt.ismag if=$cfx.nt.lt3 with=$cfx.nt.r2 then=$cfx.nt.o2
+@cfx.nt.ispow core.check fn=eq args=?tf args=power
+@cfx.nt.lt1 core.check fn=lt args=?v args=1
+@chart.number.power.small core.rule when=$cfx.nt.t when=$cfx.nt.f if=$cfx.nt.ispow if=$cfx.nt.lt1 with=$cfx.nt.r2 then=$cfx.nt.o2
+@cfx.np.t ui.diagram.tickv group=?g v=?v
+@cfx.np.f ui.diagram.cfmt group=?g slot=tick_format v=power
+@cfx.np.c ui.diagram.pow10 e=?e p=?p
+@cfx.np.le core.check fn=lte args=?p args=?v
+@cfx.np.out ui.diagram.pwc v=?v e=?e
+@chart.number.power.exponent core.rule when=$cfx.np.t when=$cfx.np.f when=$cfx.np.c if=$cfx.np.le then=$cfx.np.out
+@cfx.pwc.type core.type of=ui.diagram.pwc
+@cfx.pwe.type core.type of=ui.diagram.pwe
+@cfx.pe.c ui.diagram.pwc v=?v e=?e
+@cfx.pe.out ui.diagram.pwe v=?v e=?m
+@chart.number.power.top core.aggregate over=$cfx.pe.c by=?v max=?m args=?e then=$cfx.pe.out
+@cfx.pw.t ui.diagram.tickv group=?g v=?v
+@cfx.pw.f ui.diagram.cfmt group=?g slot=tick_format v=power
+@cfx.pw.e ui.diagram.pwe v=?v e=?e
+@cfx.pw.p ui.diagram.pow10 e=?e p=?p sup=?sup
+@cfx.pw.m core.calc out=?m fn=div args=?v args=?p
+@cfx.pw.mr core.calc out=?mr fn=round args=?m args=1
+@cfx.pw.one core.check fn=eq args=?mr args=1
+@cfx.pw.notone core.check fn=neq args=?mr args=1
+@cfx.pw.t1 core.calc out=?t1 fn=concat args="10" args=?sup
+@cfx.pw.t2 core.calc out=?t2 fn=concat args=?mr args="×10" args=?sup
+@cfx.pw.o1 ui.diagram.ntext group=?g v=?v text=?t1
+@cfx.pw.o2 ui.diagram.ntext group=?g v=?v text=?t2
+@chart.number.power.ten core.rule when=$cfx.pw.t when=$cfx.pw.f when=$cfx.pw.e when=$cfx.pw.p with=$cfx.pw.m with=$cfx.pw.mr if=$cfx.pw.one with=$cfx.pw.t1 then=$cfx.pw.o1
+@chart.number.power core.rule when=$cfx.pw.t when=$cfx.pw.f when=$cfx.pw.e when=$cfx.pw.p with=$cfx.pw.m with=$cfx.pw.mr if=$cfx.pw.notone with=$cfx.pw.t2 then=$cfx.pw.o2
+@cfx.td.t ui.diagram.tickv group=?g k=?k v=?v y=?ty
+@cfx.td.a ui.diagram.axpos group=?g x=?x anchor=?an dx=?dx
+@cfx.td.n ui.diagram.ntext group=?g v=?v text=?txt
+@cfx.td.fs ui.diagram.cfmt group=?g slot=font_size v=?fs
+@cfx.td.f core.calc out=?f fn=sub args=?fs args=1
+@cfx.td.x core.calc out=?tx fn=add args=?x args=?dx
+@cfx.td.y core.calc out=?yy fn=add args=?ty args=4
+@cfx.td.s core.calc out=?src fn=concat args=?g args=".tick." args=?k
+@cfx.td.d ui.diagram.draw part=?g source=?src slot=?g order=4 z=0 shape=text text=?txt x=?tx y=?yy w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left anchor=?an font=?f
+@cfx.td.fl ui.diagram.fill source=?src part=?g fill="#52606d"
+@chart.tick.draw core.rule when=$cfx.td.t when=$cfx.td.a when=$cfx.td.n when=$cfx.td.fs with=$cfx.td.f with=$cfx.td.x with=$cfx.td.y with=$cfx.td.s then=$cfx.td.d
+@chart.tick.fill core.rule when=$cfx.td.t when=$cfx.td.a when=$cfx.td.n with=$cfx.td.s then=$cfx.td.fl
+
+# ---- A value as written on the chart: rounded to its precision when it has one ----
+@cfx.vtext.type core.type of=ui.diagram.vtext
+@cfx.vt.i ui.diagram.inside group=?g node=?c
+@cfx.vt.v w.diagram.node code=?c value=?v
+@cfx.vt.p ui.diagram.cown group=?g slot=precision v=?d
+@cfx.vt.anyp ui.diagram.cown group=?g slot=precision v=?anyd
+@cfx.vt.r core.calc out=?r fn=round args=?v args=?d
+@cfx.vt.o1 ui.diagram.vtext node=?c text=?r
+@cfx.vt.o2 ui.diagram.vtext node=?c text=?v
+@chart.value.text.precision core.rule when=$cfx.vt.i when=$cfx.vt.v when=$cfx.vt.p with=$cfx.vt.r then=$cfx.vt.o1
+@chart.value.text core.rule when=$cfx.vt.i when=$cfx.vt.v not=$cfx.vt.anyp then=$cfx.vt.o2
+# A bar's half width: its share of the category's room (56 wide), else 18.
+@cfx.bh.type core.type of=ui.diagram.bhalf
+@cfx.bh.ch ui.diagram.chart group=?g
+@cfx.bh.o ui.diagram.cown group=?g slot=bar_width v=?bw
+@cfx.bh.any ui.diagram.cown group=?g slot=bar_width v=?anybw
+@cfx.bh.h core.calc out=?h fn=mul args=?bw args=28
+@cfx.bh.out ui.diagram.bhalf group=?g h=?h
+@cfx.bh.d ui.diagram.bhalf group=?g h=18
+@chart.bar.half core.rule when=$cfx.bh.ch when=$cfx.bh.o with=$cfx.bh.h then=$cfx.bh.out
+@chart.bar.half.default core.rule when=$cfx.bh.ch not=$cfx.bh.any then=$cfx.bh.d
+# A gridline's dashes: fine dashes when the chart names no style.
+@cfx.gd.type core.type of=ui.diagram.gdash
+@cfx.gd.fine ui.diagram.gdash style=fine dash="3 3"
+@cfx.gd.dashed ui.diagram.gdash style=dashed dash="6 4"
+@cfx.gd.dotted ui.diagram.gdash style=dotted dash="1.5 3"
+@cfx.ld.type core.type of=ui.diagram.ldash
+@cfx.ld.dashed ui.diagram.ldash style=dashed dash="8 5"
+@cfx.ld.dotted ui.diagram.ldash style=dotted dash="2 4"
+@cfx.ld.dashdot ui.diagram.ldash style=dash_dot dash="8 4 2 4"
+
+# ---- The page's title: centred above everything ----
+@cfx.pt.d w.diagram.diagram title=?t
+@cfx.pt.p ui.diagram.page w=?w
+@cfx.pt.x core.calc out=?x fn=div args=?w args=2
+@cfx.pt.c ui.diagram.pagecol key=frametext rgb=?tc
+@cfx.pt.out ui.diagram.draw part=page source=page.title slot=page order=4 z=0 shape=text text=?t x=?x y=26 w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left anchor=middle font=18 weight=bold
+@cfx.pt.fill ui.diagram.fill source=page.title part=page fill=?tc
+@page.title.draw core.rule when=$cfx.pt.d when=$cfx.pt.p with=$cfx.pt.x then=$cfx.pt.out
+@page.title.fill core.rule when=$cfx.pt.d when=$cfx.pt.c then=$cfx.pt.fill
+@cfx.pt.o app.observe.input id=page key=title value=?t
+@observe.page.title core.rule when=$cfx.pt.d then=$cfx.pt.o
+
+# ---- The page's background and title (diagram.page.change) ----
+@cfx.pc.b app.act.request operation="diagram.page.change" background=?c
+@cfx.pc.bo ui.diagram.pageset key=background value=?c
+@page.change.background core.rule when=$cfx.pc.b then=$cfx.pc.bo
+@cfx.pc.t app.act.request operation="diagram.page.change" title=?t
+@cfx.pc.to ui.diagram.pageset key=title value=?t
+@page.change.title core.rule when=$cfx.pc.t then=$cfx.pc.to
+@cfx.pc.r app.act.request operation="diagram.page.change"
+@cfx.pc.n1 app.act.request background=?anyb
+@cfx.pc.n2 app.act.request title=?anyt
+@cfx.pc.none app.act.refuse reason=missing-property
+@page.change.none core.rule when=$cfx.pc.r not=$cfx.pc.n1 not=$cfx.pc.n2 then=$cfx.pc.none

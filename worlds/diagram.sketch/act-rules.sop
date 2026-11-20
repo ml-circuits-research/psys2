@@ -586,24 +586,144 @@
 @a.cg.gcode core.calc out=?gcode fn=concat args=g args=?gz
 @a.cg.g app.act.call act=make kind=w.diagram.group code=?gcode label=?label n=?gz layout=?l order=2 ref=new.group
 @chart.make.group core.rule when=$a.cg.r when=$a.cg.gnx if=$a.cg.ok with=$a.cg.gz with=$a.cg.gcode then=$a.cg.g
+# The categories it draws (ui.diagram.citem): the said labels with their values; said labels without values, with sample
+# values; no labels: the typical categories of the said dimension (k.charts.category), else that dimension's name with
+# A, B, C, D, else A, B and C, all with sample values (the chart is then marked as a sample). Labels and values said
+# both must pair up.
+@dga.citem.type core.type of=ui.diagram.citem
+@dga.cdrop.type core.type of=ui.diagram.cdrop
+@dga.csample.type core.type of=ui.diagram.csample
+@dga.cgeneric.type core.type of=ui.diagram.cgeneric
+@dga.cdefault.type core.type of=ui.diagram.cdefault
+@dga.aggword.type core.type of=ui.diagram.aggword
+@chart.sample.1 ui.diagram.csample n=1 value=42
+@chart.sample.2 ui.diagram.csample n=2 value=35
+@chart.sample.3 ui.diagram.csample n=3 value=28
+@chart.sample.4 ui.diagram.csample n=4 value=51
+@chart.sample.5 ui.diagram.csample n=5 value=19
+@chart.sample.6 ui.diagram.csample n=6 value=33
+@chart.sample.7 ui.diagram.csample n=7 value=47
+@chart.sample.8 ui.diagram.csample n=8 value=24
+@chart.sample.9 ui.diagram.csample n=9 value=38
+@chart.sample.10 ui.diagram.csample n=10 value=30
+@chart.sample.11 ui.diagram.csample n=11 value=45
+@chart.sample.12 ui.diagram.csample n=12 value=26
+@chart.generic.1 ui.diagram.cgeneric n=1 suffix=A
+@chart.generic.2 ui.diagram.cgeneric n=2 suffix=B
+@chart.generic.3 ui.diagram.cgeneric n=3 suffix=C
+@chart.generic.4 ui.diagram.cgeneric n=4 suffix=D
+@chart.default.1 ui.diagram.cdefault n=1 label="A" value=3
+@chart.default.2 ui.diagram.cdefault n=2 label="B" value=5
+@chart.default.3 ui.diagram.cdefault n=3 label="C" value=2
 @a.cg.li app.act.item param="labels" n=?i value=?t
 @a.cg.vi app.act.item param="values" n=?i value=?v
-@a.cg.nnx ui.diagram.next of=node top=?ntop
 @a.cg.i1 core.calc out=?i1 fn=add args=?i args=1
-@a.cg.nz core.calc out=?nz fn=add args=?ntop args=?i1
+@a.cg.it ui.diagram.citem n=?i1 label=?t value=?v
+# Labels the policy numbered after the values ("1", "2", ...: execution-policy.sop, no labels said) are not names: with
+# a dimension said, its typical categories name the values in order (beyond them the numbers stay).
+@dga.cnamed.type core.type of=ui.diagram.cnamed
+@a.cg.lx app.act.item param="labels" n=?i value=?t
+@a.cg.lxv core.calc out=?tv fn=lower args=?t
+@a.cg.lxn core.check fn=neq args=?tv args=?i1
+@a.cg.named ui.diagram.cnamed request=yes
+@chart.labels.named core.rule when=$a.cg.r when=$a.cg.lx with=$a.cg.i1 with=$a.cg.lxv if=$a.cg.lxn then=$a.cg.named
+@a.cg.isnamed ui.diagram.cnamed request=yes
+@a.cg.nodim app.act.request dimension=?nodim
+@chart.item.said core.rule when=$a.cg.r when=$a.cg.li when=$a.cg.vi not=$a.cg.nodim if=$a.cg.ok with=$a.cg.i1 then=$a.cg.it
+@chart.item.said.named core.rule when=$a.cg.r when=$a.cg.li when=$a.cg.vi when=$a.cg.isnamed if=$a.cg.ok with=$a.cg.i1 then=$a.cg.it
+@a.cg.kcv k.charts.category dimension=?d n=?i1 label=?kt
+@a.cg.kcno k.charts.category dimension=?d n=?i1
+@a.cg.it.kv ui.diagram.citem n=?i1 label=?kt value=?v
+@a.cg.gnv ui.diagram.cgeneric n=?i1 suffix=?suf
+@a.cg.gno ui.diagram.cgeneric n=?i1
+@a.cg.gtv core.calc out=?gt fn=concat args=?d args=" " args=?suf
+@a.cg.it.gv ui.diagram.citem n=?i1 label=?gt value=?v
+@chart.item.dimension.values core.rule when=$a.cg.r when=$a.cg.dim when=$a.cg.li when=$a.cg.vi not=$a.cg.isnamed if=$a.cg.ok with=$a.cg.i1 when=$a.cg.kcv then=$a.cg.it.kv
+@chart.item.dimension.values.beyond core.rule when=$a.cg.r when=$a.cg.dim when=$a.cg.li when=$a.cg.vi not=$a.cg.isnamed if=$a.cg.ok with=$a.cg.i1 when=$a.cg.anykc not=$a.cg.kcno then=$a.cg.it
+@chart.item.dimension.values.named core.rule when=$a.cg.r when=$a.cg.dim when=$a.cg.li when=$a.cg.vi not=$a.cg.isnamed if=$a.cg.ok with=$a.cg.i1 not=$a.cg.anykc when=$a.cg.gnv with=$a.cg.gtv then=$a.cg.it.gv
+@chart.item.dimension.values.named.beyond core.rule when=$a.cg.r when=$a.cg.dim when=$a.cg.li when=$a.cg.vi not=$a.cg.isnamed if=$a.cg.ok with=$a.cg.i1 not=$a.cg.anykc not=$a.cg.gno then=$a.cg.it
+@a.cg.anyv app.act.item param="values" n=?anyvn
+@a.cg.anyl app.act.item param="labels" n=?anyln
+@a.cg.sm ui.diagram.csample n=?sn value=?sv
+@a.cg.sm.n core.calc out=?sm fn=mod args=?i args=12
+@a.cg.sm.n1 core.calc out=?sn fn=add args=?sm args=1
+@a.cg.it.s ui.diagram.citem n=?i1 label=?t value=?sv
+@chart.item.said.label core.rule when=$a.cg.r when=$a.cg.li not=$a.cg.anyv if=$a.cg.ok with=$a.cg.i1 with=$a.cg.sm.n with=$a.cg.sm.n1 when=$a.cg.sm then=$a.cg.it.s
+@a.cg.dim app.act.request operation="diagram.group.chart.make" dimension=?d
+@a.cg.kc k.charts.category dimension=?d n=?n label=?kt
+@a.cg.anykc k.charts.category dimension=?d n=?anykn
+@a.cg.ks ui.diagram.csample n=?n value=?kv
+@a.cg.it.k ui.diagram.citem n=?n label=?kt value=?kv
+@chart.item.dimension core.rule when=$a.cg.r when=$a.cg.dim not=$a.cg.anyl if=$a.cg.ok when=$a.cg.kc when=$a.cg.ks then=$a.cg.it.k
+@a.cg.gn ui.diagram.cgeneric n=?n suffix=?suf
+@a.cg.gt core.calc out=?gt fn=concat args=?d args=" " args=?suf
+@a.cg.it.g ui.diagram.citem n=?n label=?gt value=?kv
+@chart.item.dimension.named core.rule when=$a.cg.r when=$a.cg.dim not=$a.cg.anyl if=$a.cg.ok not=$a.cg.anykc when=$a.cg.gn when=$a.cg.ks with=$a.cg.gt then=$a.cg.it.g
+@a.cg.anyd app.act.request dimension=?anyd
+@a.cg.df ui.diagram.cdefault n=?n label=?dt value=?dv
+@a.cg.it.d ui.diagram.citem n=?n label=?dt value=?dv
+@chart.item.default core.rule when=$a.cg.r not=$a.cg.anyd not=$a.cg.anyl if=$a.cg.ok when=$a.cg.df then=$a.cg.it.d
+# Only the largest `top`, those above `above`, those below `below`.
+@a.cg.ci ui.diagram.citem n=?n label=?t value=?v
+@a.cg.drop ui.diagram.cdrop n=?n
+@a.cg.top app.act.request operation="diagram.group.chart.make" top=?k
+@a.cg.rk core.rank of=$a.cg.ci by=value order=desc out=?r
+@a.cg.over core.check fn=gt args=?r args=?k
+@chart.item.top core.rule when=$a.cg.r when=$a.cg.top when=$a.cg.ci with=$a.cg.rk if=$a.cg.over then=$a.cg.drop
+@a.cg.ab app.act.request operation="diagram.group.chart.make" above=?lim
+@a.cg.notab core.check fn=lte args=?v args=?lim
+@chart.item.above core.rule when=$a.cg.r when=$a.cg.ab when=$a.cg.ci if=$a.cg.notab then=$a.cg.drop
+@a.cg.be app.act.request operation="diagram.group.chart.make" below=?blim
+@a.cg.notbe core.check fn=gte args=?v args=?blim
+@chart.item.below core.rule when=$a.cg.r when=$a.cg.be when=$a.cg.ci if=$a.cg.notbe then=$a.cg.drop
+# One rectangle node per category kept, a member of the new group.
+@a.cg.keep ui.diagram.citem n=?n label=?t value=?v
+@a.cg.dropped ui.diagram.cdrop n=?n
+@a.cg.nnx ui.diagram.next of=node top=?ntop
+@a.cg.nz core.calc out=?nz fn=add args=?ntop args=?n
 @a.cg.ncode core.calc out=?ncode fn=concat args=n args=?nz
-@a.cg.ref core.calc out=?ref fn=concat args="new.node." args=?i1
+@a.cg.ref core.calc out=?ref fn=concat args="new.node." args=?n
 @a.cg.n app.act.call act=make kind=w.diagram.node code=?ncode shape=rectangle label=?t value=?v n=?nz order=1 ref=?ref
-@chart.make.node core.rule when=$a.cg.r when=$a.cg.li when=$a.cg.vi when=$a.cg.nnx if=$a.cg.ok with=$a.cg.i1 with=$a.cg.nz with=$a.cg.ncode with=$a.cg.ref then=$a.cg.n
+@chart.make.node core.rule when=$a.cg.r when=$a.cg.keep not=$a.cg.dropped when=$a.cg.nnx with=$a.cg.nz with=$a.cg.ncode with=$a.cg.ref then=$a.cg.n
 @a.cg.mem app.act.call act=make kind=w.diagram.member group=new.group node=?ref order=3
-@chart.make.member core.rule when=$a.cg.r when=$a.cg.li when=$a.cg.vi when=$a.cg.nnx if=$a.cg.ok with=$a.cg.i1 with=$a.cg.nz with=$a.cg.ncode with=$a.cg.ref then=$a.cg.mem
+@chart.make.member core.rule when=$a.cg.r when=$a.cg.keep not=$a.cg.dropped when=$a.cg.nnx with=$a.cg.nz with=$a.cg.ncode with=$a.cg.ref then=$a.cg.mem
 @a.cg.lab.v app.act.item param="labels" n=?i
 @a.cg.val.v app.act.item param="values" n=?i
 @a.cg.unpaired app.act.refuse reason=invalid-chart-data
-@chart.make.unpaired.label core.rule when=$a.cg.r when=$a.cg.lab.v not=$a.cg.val.v then=$a.cg.unpaired
+@chart.make.unpaired.label core.rule when=$a.cg.r when=$a.cg.lab.v when=$a.cg.anyv not=$a.cg.val.v then=$a.cg.unpaired
 @a.cg.lab.w app.act.item param="labels" n=?j
 @a.cg.val.w app.act.item param="values" n=?j
 @chart.make.unpaired.value core.rule when=$a.cg.r when=$a.cg.val.w not=$a.cg.lab.w then=$a.cg.unpaired
+# What the chart shows: its dimension (the x axis title), its measure and aggregate (the y axis title: "average sales",
+# "number of stadiums"), and that its values are a sample when none were said.
+@chart.agg.count ui.diagram.aggword aggregate=count prefix="number of " alone="count"
+@chart.agg.sum ui.diagram.aggword aggregate=sum prefix="total " alone="total"
+@chart.agg.avg ui.diagram.aggword aggregate=avg prefix="average " alone="average"
+@chart.agg.min ui.diagram.aggword aggregate=min prefix="minimum " alone="minimum"
+@chart.agg.max ui.diagram.aggword aggregate=max prefix="maximum " alone="maximum"
+@a.cg.dx app.act.arg call=new.group attr=x_label value=?d
+@a.cg.dd app.act.arg call=new.group attr=dimension value=?d
+@chart.make.dimension.title core.rule when=$a.cg.r when=$a.cg.dim if=$a.cg.ok then=$a.cg.dx
+@chart.make.dimension core.rule when=$a.cg.r when=$a.cg.dim if=$a.cg.ok then=$a.cg.dd
+@a.cg.ms app.act.request operation="diagram.group.chart.make" measure=?m
+@a.cg.ag app.act.request operation="diagram.group.chart.make" aggregate=?ag
+@a.cg.anyag app.act.request aggregate=?anyag
+@a.cg.anyms app.act.request measure=?anyms
+@a.cg.aw ui.diagram.aggword aggregate=?ag prefix=?pre alone=?alone
+@a.cg.my app.act.arg call=new.group attr=y_label value=?m
+@a.cg.mm app.act.arg call=new.group attr=measure value=?m
+@a.cg.am app.act.arg call=new.group attr=aggregate value=?ag
+@a.cg.amt core.calc out=?amt fn=concat args=?pre args=?m
+@a.cg.amy app.act.arg call=new.group attr=y_label value=?amt
+@a.cg.aay app.act.arg call=new.group attr=y_label value=?alone
+@chart.make.measure core.rule when=$a.cg.r when=$a.cg.ms if=$a.cg.ok then=$a.cg.mm
+@chart.make.measure.title core.rule when=$a.cg.r when=$a.cg.ms not=$a.cg.anyag if=$a.cg.ok then=$a.cg.my
+@chart.make.aggregate core.rule when=$a.cg.r when=$a.cg.ag if=$a.cg.ok then=$a.cg.am
+@chart.make.aggregate.title core.rule when=$a.cg.r when=$a.cg.ag when=$a.cg.ms when=$a.cg.aw if=$a.cg.ok with=$a.cg.amt then=$a.cg.amy
+@chart.make.aggregate.alone core.rule when=$a.cg.r when=$a.cg.ag when=$a.cg.aw not=$a.cg.anyms if=$a.cg.ok then=$a.cg.aay
+@a.cg.smp app.act.arg call=new.group attr=sample value=true
+@chart.make.sample.labels core.rule when=$a.cg.r not=$a.cg.anyl if=$a.cg.ok then=$a.cg.smp
+@chart.make.sample.values core.rule when=$a.cg.r not=$a.cg.anyv if=$a.cg.ok then=$a.cg.smp
 
 # Charts of the data.charts composition (diagram.group.chart, diagram.group.chart.adopt and the composed chart.*
 # commands) are not part of this area's instance: refused, never simulated.

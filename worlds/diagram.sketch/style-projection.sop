@@ -199,15 +199,47 @@
 @sf.fill ui.diagram.fill source=?g part=?g fill=?fc
 @st.draw.group core.rule when=$sf.u when=$sf.b when=$sf.lc not=$sf.nf then=$sf.out
 @st.fill.group core.rule when=$sf.u when=$sf.b when=$sf.fc not=$sf.nf then=$sf.fill
+# The label: at the top left of the band (top: centred; bottom: under the members), one size above the group's font,
+# bold unless the group says normal, in the page's frame text colour or the group's title colour (chart-format.sop).
+@dg.tpos.type core.type of=ui.diagram.tpos
+@sp.b ui.diagram.ubox unit=?g x0=?x y0=?y w=?w h=?h
+@sp.f ui.diagram.cfmt group=?g slot=title_position v=?tp
+@sp.istl core.check fn=eq args=?tp args=top_left
+@sp.ist core.check fn=eq args=?tp args=top
+@sp.isb core.check fn=eq args=?tp args=bottom
+@sp.lx core.calc out=?lx fn=add args=?x args=12
+@sp.ly core.calc out=?ly fn=add args=?y args=20
+@sp.hw core.calc out=?hw fn=div args=?w args=2
+@sp.cx core.calc out=?cx fn=add args=?x args=?hw
+@sp.yh core.calc out=?yh fn=add args=?y args=?h
+@sp.by core.calc out=?by fn=sub args=?yh args=8
+@sp.o1 ui.diagram.tpos group=?g x=?lx y=?ly anchor=start
+@sp.o2 ui.diagram.tpos group=?g x=?cx y=?ly anchor=middle
+@sp.o3 ui.diagram.tpos group=?g x=?lx y=?by anchor=start
+@st.title.top_left core.rule when=$sp.b when=$sp.f if=$sp.istl with=$sp.lx with=$sp.ly then=$sp.o1
+@st.title.top core.rule when=$sp.b when=$sp.f if=$sp.ist with=$sp.hw with=$sp.cx with=$sp.ly then=$sp.o2
+@st.title.bottom core.rule when=$sp.b when=$sp.f if=$sp.isb with=$sp.lx with=$sp.yh with=$sp.by then=$sp.o3
+@dg.tcol.type core.type of=ui.diagram.tcol
+@sc.o ui.diagram.cown group=?g slot=title_colour v=?c
+@sc.any ui.diagram.cown group=?g slot=title_colour v=?anyc
+@sc.r ui.diagram.rgb colour=?c rgb=?rgb
+@sc.u ui.diagram.unit unit=?g kind=group
+@sc.tc ui.diagram.pagecol key=frametext rgb=?tc
+@sc.out1 ui.diagram.tcol group=?g rgb=?rgb
+@sc.out2 ui.diagram.tcol group=?g rgb=?tc
+@st.title.colour.own core.rule when=$sc.o when=$sc.r then=$sc.out1
+@st.title.colour.page core.rule when=$sc.u when=$sc.tc not=$sc.any then=$sc.out2
 @sf.g w.diagram.group code=?g label=?t
-@sf.tc ui.diagram.pagecol key=frametext rgb=?tc
+@sf.tp ui.diagram.tpos group=?g x=?lx y=?ly anchor=?an
+@sf.tc ui.diagram.tcol group=?g rgb=?tc
+@sf.fs ui.diagram.cfmt group=?g slot=font_size v=?fs
+@sf.tw ui.diagram.cfmt group=?g slot=title_weight v=?tw
 @sf.s core.calc out=?src fn=concat args=?g args=".label"
-@sf.x core.calc out=?lx fn=add args=?x args=12
-@sf.y core.calc out=?ly fn=add args=?y args=20
-@sf.lout ui.diagram.draw part=?g source=?src slot=?g order=4 z=0 shape=text text=?t x=?lx y=?ly w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left font=13 weight=bold
+@sf.f core.calc out=?tf fn=add args=?fs args=1
+@sf.lout ui.diagram.draw part=?g source=?src slot=?g order=4 z=0 shape=text text=?t x=?lx y=?ly w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left anchor=?an font=?tf weight=?tw
 @sf.lfill ui.diagram.fill source=?src part=?g fill=?tc
-@st.draw.group.label core.rule when=$sf.u when=$sf.b when=$sf.g not=$sf.nf with=$sf.s with=$sf.x with=$sf.y then=$sf.lout
-@st.fill.group.label core.rule when=$sf.u when=$sf.b when=$sf.g when=$sf.tc not=$sf.nf with=$sf.s with=$sf.x with=$sf.y then=$sf.lfill
+@st.draw.group.label core.rule when=$sf.u when=$sf.b when=$sf.g when=$sf.tp when=$sf.fs when=$sf.tw not=$sf.nf with=$sf.s with=$sf.f then=$sf.lout
+@st.fill.group.label core.rule when=$sf.u when=$sf.b when=$sf.g when=$sf.tc not=$sf.nf with=$sf.s then=$sf.lfill
 
 # ---- Nodes ----
 @dg.slicemember.type core.type of=ui.diagram.slicemember
@@ -225,8 +257,15 @@
 @sd.ef ui.diagram.nst node=?c key=effect v=?ef
 @sd.cr ui.diagram.nst node=?c key=corner v=?r
 @sd.ro ui.diagram.nst node=?c key=rotation v=?rot
-@sd.out.dot ui.diagram.draw part=?c source=?c slot=?c order=3 z=0 shape=oval x=?x0 y=?y0 w=?w h=?h cx=0 cy=0 tx=0 ty=0 scale=1 side=left outline="#1d6fe8"
-@st.draw.node.dot core.rule when=$sd.n when=$sd.b when=$sd.dot then=$sd.out.dot
+@sd.mg ui.diagram.mpos node=?c group=?g
+@sd.me ui.diagram.cfmt group=?g slot=marker_edge v=?me
+@sd.edge core.check fn=gt args=?me args=0
+@sd.noedge core.check fn=lte args=?me args=0
+@sd.out.dot.e ui.diagram.draw part=?c source=?c slot=?c order=3 z=0 shape=oval x=?x0 y=?y0 w=?w h=?h cx=0 cy=0 tx=0 ty=0 scale=1 side=left outline="#1d6fe8" stroke=?me
+@sd.out.dot.n ui.diagram.draw part=?c source=?c slot=?c order=3 z=0 shape=oval x=?x0 y=?y0 w=?w h=?h cx=0 cy=0 tx=0 ty=0 scale=1 side=left
+# A line chart's dots: outlined as wide as the chart's marker edge (none at 0); a dot outside a chart as before.
+@st.draw.node.dot core.rule when=$sd.n when=$sd.b when=$sd.dot when=$sd.mg when=$sd.me if=$sd.edge then=$sd.out.dot.e
+@st.draw.node.dot.bare core.rule when=$sd.n when=$sd.b when=$sd.dot when=$sd.mg when=$sd.me if=$sd.noedge then=$sd.out.dot.n
 @sd.box ui.diagram.base shape=?s kind=box
 @sd.out.sq ui.diagram.draw part=?c source=?c slot=?c order=3 z=0 shape=rectangle x=?x0 y=?y0 w=?w h=?h cx=0 cy=0 tx=0 ty=0 scale=1 side=left outline=?ol round=?r opacity=?op effect=?ef rotate=?rot rx=?cx ry=?cy
 @st.draw.node.box core.rule when=$sd.n when=$sd.b when=$sd.ro when=$sd.box when=$sd.oo when=$sd.cr when=$sd.op when=$sd.ef not=$sd.dot not=$sd.sl then=$sd.out.sq
