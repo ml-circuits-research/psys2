@@ -90,3 +90,24 @@
 # The drawing's relation pair (declared by the binding table) also takes "between".
 @interpret.relation.drawing.drawn app.interpret.relation area=drawing key="drawn.relation" anchor="drawn.anchor" like="drawn.relation"
 @interpret.relation.drawing.drawn.between app.interpret.relationValue of=$interpret.relation.drawing.drawn value="between" relation=between
+
+# How a UI gesture is said back as a command when its operation declares no intent verb or parameter label
+# (act `other`: an act with no row of its own).
+@interpret.controlVerb.group app.interpret.controlVerb act=group text="Group"
+@interpret.controlVerb.ungroup app.interpret.controlVerb act=ungroup text="Ungroup"
+@interpret.controlVerb.make app.interpret.controlVerb act=make text="Create"
+@interpret.controlVerb.change app.interpret.controlVerb act=change text="Update"
+@interpret.controlVerb.place app.interpret.controlVerb act=place text="Move"
+@interpret.controlVerb.remove app.interpret.controlVerb act=remove text="Delete"
+@interpret.controlVerb.pick app.interpret.controlVerb act=pick text="Select"
+@interpret.controlVerb.ask app.interpret.controlVerb act=ask text="Show"
+@interpret.controlVerb.undo app.interpret.controlVerb act=undo text="Undo"
+@interpret.controlVerb.redo app.interpret.controlVerb act=redo text="Redo"
+@interpret.controlVerb.other app.interpret.controlVerb act=other text="Apply"
+@interpret.controlModifier.name app.interpret.controlModifier parameter=name text="named"
+@interpret.controlModifier.label app.interpret.controlModifier parameter=label text="named"
+@interpret.controlModifier.title app.interpret.controlModifier parameter=title text="titled"
+@interpret.controlModifier.colour app.interpret.controlModifier parameter=colour text="coloured"
+@interpret.controlModifier.color app.interpret.controlModifier parameter=color text="coloured"
+@interpret.controlModifier.kind app.interpret.controlModifier parameter=kind text="of kind"
+@interpret.controlModifier.type app.interpret.controlModifier parameter=type text="of type"

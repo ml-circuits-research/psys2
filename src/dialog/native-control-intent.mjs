@@ -4,6 +4,7 @@ import {copyHostData,validateNativeArguments,toolInvocationContext} from '../../
 import {compactNativeIntent} from './native-intent-reader.mjs';
 
 import {historyControlQuery} from './history-control-query.mjs';
+import {interpretationPolicy} from './interpretation-policy.mjs';
 
 // The page calls this with its gesture and the active editor's declared interface.
 export async function editorGestureSop(operation,args,loadDeclarations){
@@ -62,7 +63,6 @@ function canonical(value,depth=0){
 const equal=(a,b)=>JSON.stringify(canonical(a))===JSON.stringify(canonical(b));
 const readable=value=>typeof value==='string'?quote(value):typeof value==='number'&&Object.is(value,-0)?'-0':JSON.stringify(value);
 const words=value=>String(value).replace(/([a-z0-9])([A-Z])/g,'$1 $2').replace(/[._-]+/g,' ').toLowerCase();
-const verbs={group:'Group',ungroup:'Ungroup',make:'Create',change:'Update',place:'Move',remove:'Delete',pick:'Select',ask:'Show',undo:'Undo',redo:'Redo'};
 const validObservation=o=>!!o&&o.complete===true&&typeof o.instanceId==='string'&&typeof o.version==='string'&&Array.isArray(o.objects);
 const resultIdentity=(op,args)=>{const key=Object.hasOwn(op.result??{},'identityParameter')?op.result.identityParameter:'id';return key===null?undefined:args[key];};
 const selectedIds=(op,args)=>op.act==='make'?[]:typeof args.id==='string'?[args.id]:Array.isArray(args.ids)&&args.ids.every(x=>typeof x==='string')?[...args.ids]:[];
@@ -84,12 +84,12 @@ export function describeNativeControl({operation,args={},before,parameterBinding
   return decoded?.ok?decoded.value:null;
  };
  const type=op.intent?.subject??words(op.on.split('.').at(-1)),targetText=ids.length?ids.map(id=>readable(displayName(id)??id)).join(', '):`${op.intent?.determiner??(/^[aeiou]/i.test(type)?'an':'a')} ${type}`;
- let text=`${op.intent?.verb??verbs[op.act]??'Apply'} ${targetText}`,ranges=[];
+ const wording=interpretationPolicy().control;
+ let text=`${op.intent?.verb??wording.verbs[op.act]??wording.verbs.other} ${targetText}`,ranges=[];
  const fields=Object.entries(values).filter(([key,value])=>(!['id','ids'].includes(key)||op.intent?.parameters?.[key]?.role==='source')&&op.intent?.parameters?.[key]?.hidden!==true&&!(op.intent?.parameters?.[key]?.hiddenIfEmpty&&(value===''||Array.isArray(value)&&value.length===0)));
- const modifiers={name:'named',label:'named',title:'titled',colour:'coloured',color:'coloured',kind:'of kind',type:'of type'};
  for(const [index,[parameter,value]]of fields.entries()){
   text+=index?', ':' ';
-  const metadata=op.intent?.parameters?.[parameter],modifier=metadata?.label??modifiers[parameter]??'with '+words(parameter);
+  const metadata=op.intent?.parameters?.[parameter],modifier=metadata?.label??wording.modifiers[parameter]??'with '+words(parameter);
   text+=modifier+' ';let rendered=readable(value),origin='text';
   if(metadata?.reference===true&&typeof value==='string'&&displayName(value)!==null){rendered=readable(displayName(value));origin='observed-identity-label';}
   else if(metadata?.reference===true&&Array.isArray(value)){rendered=value.map(v=>readable(displayName(v)??v)).join(', ');origin='observed-identity-labels';}
@@ -118,7 +118,7 @@ export function describeNativeControl({operation,args={},before,parameterBinding
  });
  const targetRows=targets.map((target,index)=>{const id=`control.target.${index}`;lines.push(`@${id} app.control.target ${Object.entries(target).map(([k,v])=>`${k}=${quote(v)}`).join(' ')}`);return id;});
  lines.push(...valueRows,`@control.intent app.control.intent operation=${quote(op.id)} act=${quote(op.act)} mood="do" on=${quote(op.on)} source=$control.source${validObservation(observation)?` instance=${quote(observation.instanceId)} version=${quote(observation.version)}`:''}${argumentsRows.map(id=>` argument=$${id}`).join('')}${targetRows.map(id=>` target=$${id}`).join('')}`);
- const expandedWires=lines.join('\n'),compact=admitted.ok?compactNativeIntent(op,values,{id:(verbs[op.act]??op.act).toLowerCase()}):null;
+ const expandedWires=lines.join('\n'),compact=admitted.ok?compactNativeIntent(op,values,{id:(wording.verbs[op.act]??op.act).toLowerCase()}):null;
  return {format:NATIVE_CONTROL_INTENT_FORMAT,text,wires:compact??expandedWires,expandedWires,schema:compact?op.id:'app.control.intent',semantics:'exact declared tool command; execution requires its matching declaration',expected:{operation:op.id,act:op.act,sourceType:op.on,args:values,providedArgs:input,defaults:admitted.defaults??[],validArguments:admitted.ok,argumentIssue:admitted.ok?null:admitted.reason,declaration:op,targets,parameterBindings:bindings,before:validObservation(observation)?{instanceId:observation.instanceId,version:observation.version}:null},sourceRanges:ranges};
 }
 

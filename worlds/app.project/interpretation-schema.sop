@@ -1,4 +1,4 @@
-@interpret.module core.module name=app.interpret version=1 exports=app.interpret.retry exports=app.interpret.compare exports=app.interpret.coordination exports=app.interpret.language exports=app.interpret.note exports=app.interpret.default exports=app.interpret.drop exports=app.interpret.fallback exports=app.interpret.family exports=app.interpret.relation exports=app.interpret.relationValue
+@interpret.module core.module name=app.interpret version=1 exports=app.interpret.retry exports=app.interpret.compare exports=app.interpret.coordination exports=app.interpret.language exports=app.interpret.note exports=app.interpret.default exports=app.interpret.drop exports=app.interpret.fallback exports=app.interpret.family exports=app.interpret.relation exports=app.interpret.relationValue exports=app.interpret.controlVerb exports=app.interpret.controlModifier
 
 # A re-reading of the same text under a reduced context, tried in order while the reading stays incomplete.
 @interpret.retry.type core.type of=app.interpret.retry closed=true
@@ -68,3 +68,12 @@
 @interpret.relationValue.relation core.slot of=app.interpret.relationValue key=of kind=ref to=app.interpret.relation present=true
 @interpret.relationValue.value core.slot of=app.interpret.relationValue key=value kind=string present=true
 @interpret.relationValue.name core.slot of=app.interpret.relationValue key=relation kind=atom present=true
+# How a UI gesture is said back as a command (src/dialog/native-control-intent.mjs) when its operation declares no
+# intent verb or parameter label: the verb of each act, the words before a parameter's value, and the verb of an
+# act with no row.
+@interpret.controlVerb.type core.type of=app.interpret.controlVerb closed=true
+@interpret.controlVerb.act core.slot of=app.interpret.controlVerb key=act kind=atom id=true present=true
+@interpret.controlVerb.text core.slot of=app.interpret.controlVerb key=text kind=string present=true
+@interpret.controlModifier.type core.type of=app.interpret.controlModifier closed=true
+@interpret.controlModifier.parameter core.slot of=app.interpret.controlModifier key=parameter kind=atom id=true present=true
+@interpret.controlModifier.text core.slot of=app.interpret.controlModifier key=text kind=string present=true
