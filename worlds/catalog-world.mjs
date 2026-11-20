@@ -3,6 +3,7 @@
 // everything they depend on become the World's library, and the shards a caller names are told as facts.
 // Generic: no world, type or tab is named here. readText(path) reads a catalog file (index.json, schemas, shards).
 import {World} from '../src/vendor/sopworld/sopworld.mjs';
+import {budget} from '../src/dialog/budget.mjs';
 
 const MAX_MODULES = 128;
 
@@ -13,6 +14,7 @@ export async function catalogWorld(readText, { modules, shardsOf = () => [], use
   // read at once (a catalog served over the network costs one round trip, not one per file or per dependency level).
   const ids = [];
   for (let wave = [...new Set(modules)]; wave.length;) {
+    budget.tick('catalog-world.dependencies');
     for (const id of wave) if (!entries.get(id)?.schema) throw Error('catalog-module-unavailable:' + id);
     ids.push(...wave);
     if (ids.length > MAX_MODULES) throw Error('catalog-module-budget');
