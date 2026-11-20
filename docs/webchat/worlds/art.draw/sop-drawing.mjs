@@ -2,7 +2,7 @@
 // The Drawing tab: the generic SOP area adapter over worlds/art.draw/area.sop.
 import NATIVE_INTERFACE from './native-interface-source.mjs?v=d0dfc2def5';
 import AREA_SOURCES from './area-sources.mjs?v=d2d4c5594b';
-import {BUNDLED_AREAS} from '../../lib/knowledge/bundled-areas.mjs?v=9759c39928';
+import {BUNDLED_AREAS} from '../../lib/knowledge/bundled-areas.mjs?v=85016e196d';
 import {sopAreaAdapter} from '../sop-area-adapter.mjs?v=f99d1e78b1';
 
 const area = sopAreaAdapter({ world: 'art.draw', instance: ['w.drawing', 'w.face'], interfaceSource: NATIVE_INTERFACE, sources: AREA_SOURCES, offline: BUNDLED_AREAS['art.draw'] });
