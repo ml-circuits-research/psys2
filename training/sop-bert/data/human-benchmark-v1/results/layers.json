@@ -1,0 +1,303 @@
+{
+ "drawing": {
+  "n": 329,
+  "pass": 36,
+  "partial": 16,
+  "primary": {
+   "reader": 215,
+   "binding": 34,
+   "semantics": 18,
+   "compiler": 13,
+   "other": 9,
+   "rule/operation": 4
+  },
+  "flags": {
+   "reader:inconsistent-heads": 214,
+   "binding:property-key-unbound": 59,
+   "binding:kind-word-unbound": 49,
+   "binding:reference": 30,
+   "compiler:no-query/step-projection": 24,
+   "semantics:executed-wrong-or-partial": 24,
+   "reader:cross-area-key": 14,
+   "compiler:native-binding-gap": 8,
+   "compiler:unbound-target": 6,
+   "compiler:tool-binding": 3,
+   "rule/operation:drawing-not-in-catalog": 3,
+   "rule/operation:no-declared-action": 2,
+   "reader:no-request": 1
+  },
+  "expressibility": {
+   "bound": 168,
+   "no-key": 147,
+   "key-unbound": 14
+  },
+  "passByExpressibility": {
+   "bound": 35,
+   "no-key": 1
+  },
+  "examples": {
+   "reader": [
+    "1 inch to the right of his knee is a medium soccer ball",
+    "bear with arms up facing the boy and girl mad",
+    "a medium cat is about 1\" right of the dog facing left",
+    "bottom of the left side a brown colored football is placed",
+    "there is a busy tree on the right side. trunk is 1 inch from the bottom. the top and right",
+    "left of screen is big bushy tree hole facing right, bottom of trunk about middle of grass,"
+   ],
+   "binding": [
+    "small apple tree on left 4 inches from bottom touching frame on left done",
+    "soda at left bottom corner, can i check",
+    "rain cloud in upper right hand corner",
+    "add a golf cart",
+    "add a fruit basket",
+    "Can we put a hand on the door?"
+   ],
+   "semantics": [
+    "a large tree is on the right, 3/4 is hide on right and top.",
+    "Put a donut next to the cake.",
+    "Have the cat be eating a donut",
+    "Let's add birds to the sky",
+    "Have the dog wear a hat.",
+    "Add birds to the sky."
+   ],
+   "compiler": [
+    "add a phone next to the apple",
+    "add men in suits",
+    "Put a truck on the street.",
+    "Make the rocket further away.",
+    "put buildings in place of trees",
+    "Have the dog be wearing boots"
+   ],
+   "other": [
+    "let the door be red",
+    "remove the door",
+    "The door could be cracked.",
+    "let the walls be painted",
+    "Give the women scars on her face.",
+    "Add a small dog next to the car."
+   ],
+   "rule/operation": [
+    "draw a boy and a girl",
+    "make sunt green",
+    "draw a grandfather",
+    "draw a little girl"
+   ]
+  }
+ },
+ "diagram": {
+  "n": 290,
+  "pass": 18,
+  "partial": 4,
+  "primary": {
+   "reader": 228,
+   "binding": 29,
+   "compiler": 4,
+   "semantics": 4,
+   "rule/operation": 4,
+   "other": 3
+  },
+  "flags": {
+   "reader:inconsistent-heads": 227,
+   "binding:kind-word-unbound": 144,
+   "binding:property-key-unbound": 117,
+   "binding:reference": 50,
+   "rule/operation:chart-composition-not-in-area": 30,
+   "reader:cross-area-key": 19,
+   "compiler:no-query/step-projection": 14,
+   "compiler:native-binding-gap": 14,
+   "semantics:executed-wrong-or-partial": 5,
+   "reader:no-request": 1
+  },
+  "expressibility": {
+   "key-unbound": 136,
+   "bound": 55,
+   "no-key": 99
+  },
+  "passByExpressibility": {
+   "bound": 13,
+   "key-unbound": 5
+  },
+  "examples": {
+   "reader": [
+    "Show average earnings by genre.",
+    "make a bar chart of avgerage profit by state, with state on x axis.",
+    "Show me a bar chart of total profit by region, and stack the bars by ship status",
+    "Column Chart of Avg (Profit) by Segment vs each Ship Mode",
+    "Trend for average horsepower over time across different origin",
+    "Please show me a histogram of weights with 500 intervals."
+   ],
+   "compiler": [
+    "show me a histogram of movie length",
+    "Add an red arrow on the left side of page.",
+    "Insert a yellow \" arrow\" shape.",
+    "add another box"
+   ],
+   "binding": [
+    "gross per genre over time",
+    "count by origin",
+    "remove shape 2",
+    "remove it again",
+    "repeat step 1",
+    "remove 1st shape"
+   ],
+   "other": [
+    "swap the 1st shape and the 3rd shape",
+    "rearrange",
+    "delete the circle"
+   ],
+   "semantics": [
+    "Finally, insert a green star.",
+    "Make the background color blue. Insert a rectangle.",
+    "Create a green rectangle.",
+    "arrange the diagram's elements as a hexagon"
+   ],
+   "rule/operation": [
+    "Create a page and copy the chart.",
+    "diagram of evolution chatgpt",
+    "please provide a diagram with the classifications of periodontitis from 1986 and towards",
+    "give me a chart"
+   ]
+  }
+ },
+ "avatar": {
+  "n": 228,
+  "pass": 0,
+  "partial": 0,
+  "primary": {
+   "reader": 199,
+   "binding": 28,
+   "rule/operation": 1
+  },
+  "flags": {
+   "binding:property-key-unbound": 200,
+   "reader:inconsistent-heads": 199,
+   "binding:kind-word-unbound": 152,
+   "binding:reference": 74,
+   "reader:cross-area-key": 41,
+   "compiler:no-query/step-projection": 14,
+   "rule/operation:no-declared-action": 1,
+   "compiler:native-binding-gap": 1
+  },
+  "expressibility": {
+   "no-key": 16,
+   "key-unbound": 197,
+   "bound": 15
+  },
+  "passByExpressibility": {},
+  "examples": {
+   "reader": [
+    "Could someone please remove the double chin and slim her face?",
+    "Can someone change her jersey/hat to a green Seahawks jersey/hat?",
+    "Could someone please make her straight faced (not smiling)? Thank you so so much in advanc",
+    "Could someone turn her into Thanos? (making face purple, adding lines to chin)? Thank you.",
+    "Can someone add her 2nd ear?",
+    "Can someone PLEASE give this girl very dark brown/black hair so that it stands out more fr"
+   ],
+   "rule/operation": [
+    "Can some one fix the eyes?"
+   ],
+   "binding": [
+    "can someone make her bald so I can see what she looks like, thanks guys.",
+    "Can someone add a stubble beard?",
+    "Remove that one piece of hair from her",
+    "Could someone make her look bald?",
+    "Can someone please make her hair fully blonde?",
+    "Can someone remove the hair from her face please! :)"
+   ]
+  }
+ },
+ "calendar": {
+  "n": 220,
+  "pass": 11,
+  "partial": 0,
+  "primary": {
+   "reader": 164,
+   "binding": 45
+  },
+  "flags": {
+   "reader:inconsistent-heads": 164,
+   "binding:property-key-unbound": 134,
+   "compiler:no-query/step-projection": 68,
+   "binding:reference": 68,
+   "binding:kind-word-unbound": 54,
+   "compiler:unapplied-scheduling-details": 15
+  },
+  "expressibility": {
+   "bound": 107,
+   "no-key": 30,
+   "key-unbound": 83
+  },
+  "passByExpressibility": {
+   "no-key": 3,
+   "bound": 6,
+   "key-unbound": 2
+  },
+  "examples": {
+   "reader": [
+    "remind me about mike's birthdays",
+    "add eva's birthday party at roller jam for twelve thirty p. m. on may seventh",
+    "schedule a lunch meeting with brent on wednesday at noon",
+    "book a meeting with chelsea",
+    "remind me of the event in my calendar",
+    "thirty minute reminder on meeting for tuesday"
+   ],
+   "binding": [
+    "tell me when the event starts",
+    "set any appointment for this event in my calendar",
+    "give me a three day notification before my chemistry exam please",
+    "set a birthday event for wednesday",
+    "my daughter's anniversary is thursday send me a reminder",
+    "what are the events coming up soon"
+   ]
+  }
+ },
+ "document": {
+  "n": 204,
+  "pass": 0,
+  "partial": 0,
+  "primary": {
+   "reader": 185,
+   "binding": 15,
+   "rule/operation": 4
+  },
+  "flags": {
+   "reader:inconsistent-heads": 185,
+   "binding:kind-word-unbound": 157,
+   "binding:property-key-unbound": 107,
+   "binding:reference": 85,
+   "reader:cross-area-key": 21,
+   "compiler:no-query/step-projection": 7,
+   "rule/operation:no-declared-action": 6
+  },
+  "expressibility": {
+   "key-unbound": 89,
+   "no-key": 36,
+   "bound": 79
+  },
+  "passByExpressibility": {},
+  "examples": {
+   "reader": [
+    "Moved Heading \"1.4. Structures of Provision\" from left to mid",
+    "Moved \"Access to education and training in Europe: Qualitative Reviews\" from mid to top ri",
+    "Added alphabetical pointers to the headings of the page.",
+    "\"Remove\" the \"Bullets\" of last two lines from right side of it and made it both lines the ",
+    "Moved \"Competitive Gains in Wholesale and Retail Markets\" from left to mid. Moved page num",
+    "Text\"Hazelwood Power Corporation\" with the alphabetical bullet (f) following sentence \"(tr"
+   ],
+   "binding": [
+    "bold the heading  of section under 1st paragraph of the page",
+    "Removed \"(on-line publication)\" from start of the page",
+    "bold some words from the text",
+    "change page no 2-29 with 7-29",
+    "remove alphabetics and add pointer at the start of every paragraph",
+    "Swapped first two points of the page."
+   ],
+   "rule/operation": [
+    "How to write a formal letter?",
+    "Write a romantic poem comparing love to a plant.",
+    "Write a letter from a cat to its owner, explaining why it has been sleeping on the keyboar",
+    "Write an e-mail to the office asking employees to clean their coffee mugs rather than leav"
+   ]
+  }
+ }
+}

@@ -1,0 +1,427 @@
+[
+ {
+  "class": "create",
+  "n": 79,
+  "pass": 11,
+  "partial": 4,
+  "passRate": 0.139,
+  "topLayer": [
+   [
+    "reader",
+    52
+   ],
+   [
+    "bindings",
+    7
+   ]
+  ],
+  "examples": [
+   "add back shape from step 1 into second spot",
+   "add the shape that was removed on step 2",
+   "return the third shape, but in the first position"
+  ]
+ },
+ {
+  "class": "compose-scene",
+  "n": 6,
+  "pass": 0,
+  "partial": 0,
+  "passRate": 0.0,
+  "topLayer": [
+   [
+    "reader",
+    6
+   ]
+  ],
+  "examples": [
+   "Create a new page. Insert a blue arrow on the right.",
+   "1. Create a five-bubble mind map with the words \"World War II Changes ",
+   "flowchart to read a Philippine name province name and will display its"
+  ]
+ },
+ {
+  "class": "place-relative",
+  "n": 17,
+  "pass": 5,
+  "partial": 0,
+  "passRate": 0.294,
+  "topLayer": [
+   [
+    "reader",
+    10
+   ],
+   [
+    "compiler",
+    1
+   ]
+  ],
+  "examples": [
+   "Add an red arrow on the left side of page.",
+   "Move the arrow to the right side of the picture.",
+   "Add a red circle to the bottom right of the page."
+  ]
+ },
+ {
+  "class": "move/position",
+  "n": 20,
+  "pass": 0,
+  "partial": 0,
+  "passRate": 0.0,
+  "topLayer": [
+   [
+    "reader",
+    18
+   ],
+   [
+    "other",
+    1
+   ]
+  ],
+  "examples": [
+   "swap shapes 3 and 4",
+   "swap first 2 shapes",
+   "swap the 1st shape and the 3rd shape"
+  ]
+ },
+ {
+  "class": "quantify",
+  "n": 73,
+  "pass": 3,
+  "partial": 1,
+  "passRate": 0.041,
+  "topLayer": [
+   [
+    "reader",
+    60
+   ],
+   [
+    "bindings",
+    7
+   ]
+  ],
+  "examples": [
+   "try making the line width thicker, thicken the graph lines, change the",
+   "This is a histogram with gray bars, 8 bins, title Energy, both axes in",
+   "Insert a rectangle into the page and set its height as 5."
+  ]
+ },
+ {
+  "class": "refer",
+  "n": 90,
+  "pass": 12,
+  "partial": 1,
+  "passRate": 0.133,
+  "topLayer": [
+   [
+    "reader",
+    65
+   ],
+   [
+    "bindings",
+    7
+   ]
+  ],
+  "examples": [
+   "Column Chart of Avg (Profit) by Segment vs each Ship Mode",
+   "line chart of AVG budget of each release year",
+   "For each data element, draw a circle at (its sales, profit) with the p"
+  ]
+ },
+ {
+  "class": "modify-attribute",
+  "n": 18,
+  "pass": 0,
+  "partial": 1,
+  "passRate": 0.0,
+  "topLayer": [
+   [
+    "reader",
+    15
+   ],
+   [
+    "semantics",
+    1
+   ]
+  ],
+  "examples": [
+   "Title page 3 \"Efforts to Control Housing Prices,\" and insert a triangl",
+   "insert a star shape into the page and give the page a purple backgroun",
+   "Make the background color blue. Insert a rectangle."
+  ]
+ },
+ {
+  "class": "part-edit",
+  "n": 2,
+  "pass": 0,
+  "partial": 0,
+  "passRate": 0.0,
+  "topLayer": [
+   [
+    "reader",
+    2
+   ]
+  ],
+  "examples": [
+   "How to shift a subtree of a tree horizontally",
+   "How to change the shape of the mindmap children?"
+  ]
+ },
+ {
+  "class": "arrange/layout",
+  "n": 36,
+  "pass": 0,
+  "partial": 1,
+  "passRate": 0.0,
+  "topLayer": [
+   [
+    "reader",
+    24
+   ],
+   [
+    "bindings",
+    5
+   ]
+  ],
+  "examples": [
+   "swap shapes 3 and 4",
+   "swap first 2 shapes",
+   "swap the 1st shape and the 3rd shape"
+  ]
+ },
+ {
+  "class": "connect/structure",
+  "n": 40,
+  "pass": 0,
+  "partial": 1,
+  "passRate": 0.0,
+  "topLayer": [
+   [
+    "reader",
+    34
+   ],
+   [
+    "bindings",
+    5
+   ]
+  ],
+  "examples": [
+   "Using all the classes create a UML class diagram with the correct arro",
+   "make a UML state diagram for the classes Initialize, ControlPanel, Tem",
+   "create a state diagram for those classes"
+  ]
+ },
+ {
+  "class": "chart-create",
+  "n": 81,
+  "pass": 0,
+  "partial": 0,
+  "passRate": 0.0,
+  "topLayer": [
+   [
+    "reader",
+    77
+   ],
+   [
+    "rule/operation",
+    2
+   ]
+  ],
+  "examples": [
+   "Show average earnings by genre.",
+   "make a bar chart of avgerage profit by state, with state on x axis.",
+   "Show me a bar chart of total profit by region, and stack the bars by s"
+  ]
+ },
+ {
+  "class": "chart-data-edit",
+  "n": 1,
+  "pass": 0,
+  "partial": 0,
+  "passRate": 0.0,
+  "topLayer": [
+   [
+    "reader",
+    1
+   ]
+  ],
+  "examples": [
+   "Inflation in the US in 2022 was 8% and in 2023 it is projected to be 4"
+  ]
+ },
+ {
+  "class": "chart-formatting",
+  "n": 40,
+  "pass": 0,
+  "partial": 0,
+  "passRate": 0.0,
+  "topLayer": [
+   [
+    "reader",
+    38
+   ],
+   [
+    "bindings",
+    2
+   ]
+  ],
+  "examples": [
+   "set origin colors to: europe, blue, japan, orange, usa, red",
+   "Make the bars stacked with the ship status",
+   "precision digits hsould be at 2 and radius smaller"
+  ]
+ },
+ {
+  "class": "remove",
+  "n": 14,
+  "pass": 0,
+  "partial": 0,
+  "passRate": 0.0,
+  "topLayer": [
+   [
+    "reader",
+    8
+   ],
+   [
+    "bindings",
+    6
+   ]
+  ],
+  "examples": [
+   "remove shape 2",
+   "remove it again",
+   "remove the leftmost shape"
+  ]
+ },
+ {
+  "class": "vague-aesthetic",
+  "n": 26,
+  "pass": 3,
+  "partial": 1,
+  "passRate": 0.115,
+  "topLayer": [
+   [
+    "reader",
+    16
+   ],
+   [
+    "bindings",
+    5
+   ]
+  ],
+  "examples": [
+   "insert a star into the page left after the title.",
+   "Insert an arrow into the page, and move it the top corner of the page.",
+   "insert a star shape into the page. move the star to the left corner of"
+  ]
+ },
+ {
+  "class": "correction/undo",
+  "n": 10,
+  "pass": 0,
+  "partial": 0,
+  "passRate": 0.0,
+  "topLayer": [
+   [
+    "reader",
+    8
+   ],
+   [
+    "bindings",
+    2
+   ]
+  ],
+  "examples": [
+   "add back shape from step 1 into second spot",
+   "remove it again",
+   "add it back"
+  ]
+ },
+ {
+  "class": "question",
+  "n": 21,
+  "pass": 3,
+  "partial": 0,
+  "passRate": 0.143,
+  "topLayer": [
+   [
+    "reader",
+    15
+   ],
+   [
+    "bindings",
+    3
+   ]
+  ],
+  "examples": [
+   "how mileage varies for different cylinder type",
+   "Are audience rating and critic rating related",
+   "shoe me the ControlPanel UML class diagram. after that show me the Tem"
+  ]
+ },
+ {
+  "class": "compound/multi-step",
+  "n": 109,
+  "pass": 4,
+  "partial": 2,
+  "passRate": 0.037,
+  "topLayer": [
+   [
+    "reader",
+    92
+   ],
+   [
+    "bindings",
+    7
+   ]
+  ],
+  "examples": [
+   "set origin colors to: europe, blue, japan, orange, usa, red",
+   "swap shapes 3 and 4",
+   "swap first 2 shapes"
+  ]
+ },
+ {
+  "class": "fragment/follow-up",
+  "n": 67,
+  "pass": 1,
+  "partial": 0,
+  "passRate": 0.015,
+  "topLayer": [
+   [
+    "reader",
+    60
+   ],
+   [
+    "bindings",
+    3
+   ]
+  ],
+  "examples": [
+   "Trend for average horsepower over time across different origin",
+   "Count by Weight Buckets",
+   "budget over time"
+  ]
+ },
+ {
+  "class": "conversational/complaint",
+  "n": 10,
+  "pass": 7,
+  "partial": 1,
+  "passRate": 0.7,
+  "topLayer": [
+   [
+    "reader",
+    2
+   ],
+   [
+    "semantics",
+    1
+   ]
+  ],
+  "examples": [
+   "I cant see the image show in another way",
+   "can you make it into image?",
+   "Can I get a image of it"
+  ]
+ }
+]

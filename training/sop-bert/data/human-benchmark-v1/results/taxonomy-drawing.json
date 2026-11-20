@@ -1,0 +1,365 @@
+[
+ {
+  "class": "create",
+  "n": 193,
+  "pass": 23,
+  "partial": 16,
+  "passRate": 0.119,
+  "topLayer": [
+   [
+    "reader",
+    123
+   ],
+   [
+    "semantics",
+    25
+   ]
+  ],
+  "examples": [
+   "1 inch to the right of his knee is a medium soccer ball",
+   "bear with arms up facing the boy and girl mad",
+   "a medium cat is about 1\" right of the dog facing left"
+  ]
+ },
+ {
+  "class": "compose-scene",
+  "n": 16,
+  "pass": 0,
+  "partial": 0,
+  "passRate": 0.0,
+  "topLayer": [
+   [
+    "reader",
+    10
+   ],
+   [
+    "bindings",
+    4
+   ]
+  ],
+  "examples": [
+   "medium cloud on left top side, cut off at top, a bit behind tree, larg",
+   "girl facing right, snake in throwing hand, snake faces right",
+   "a cat should be watching the parakeet while sitting in a flower pot"
+  ]
+ },
+ {
+  "class": "place-relative",
+  "n": 134,
+  "pass": 7,
+  "partial": 8,
+  "passRate": 0.052,
+  "topLayer": [
+   [
+    "reader",
+    87
+   ],
+   [
+    "semantics",
+    15
+   ]
+  ],
+  "examples": [
+   "1 inch to the right of his knee is a medium soccer ball",
+   "bear with arms up facing the boy and girl mad",
+   "a medium cat is about 1\" right of the dog facing left"
+  ]
+ },
+ {
+  "class": "move/position",
+  "n": 9,
+  "pass": 0,
+  "partial": 0,
+  "passRate": 0.0,
+  "topLayer": [
+   [
+    "reader",
+    9
+   ]
+  ],
+  "examples": [
+   "have the sun rise instead of set.",
+   "The 16 and 17 block moved down a little but switched places."
+  ]
+ },
+ {
+  "class": "quantify",
+  "n": 35,
+  "pass": 3,
+  "partial": 7,
+  "passRate": 0.086,
+  "topLayer": [
+   [
+    "reader",
+    16
+   ],
+   [
+    "semantics",
+    8
+   ]
+  ],
+  "examples": [
+   "next to her legs small balloons sitting there.",
+   "swap one of the man for a woman",
+   "Add hot air balloons"
+  ]
+ },
+ {
+  "class": "refer",
+  "n": 58,
+  "pass": 3,
+  "partial": 1,
+  "passRate": 0.052,
+  "topLayer": [
+   [
+    "reader",
+    45
+   ],
+   [
+    "representation",
+    5
+   ]
+  ],
+  "examples": [
+   "1 inch to the right of his knee is a medium soccer ball",
+   "cat facing left. 1 inch to right of boy. his eyes same level as boys s",
+   "large round tree to the left of the picture. we can not see the top of"
+  ]
+ },
+ {
+  "class": "modify-attribute",
+  "n": 55,
+  "pass": 4,
+  "partial": 1,
+  "passRate": 0.073,
+  "topLayer": [
+   [
+    "reader",
+    36
+   ],
+   [
+    "semantics",
+    5
+   ]
+  ],
+  "examples": [
+   "the girl and boy are seated and the boy is holding a small pink shovel",
+   "it's grey with a light blue wing",
+   "she is looking left and wearing a hat with the star on the left"
+  ]
+ },
+ {
+  "class": "part-edit",
+  "n": 79,
+  "pass": 2,
+  "partial": 3,
+  "passRate": 0.025,
+  "topLayer": [
+   [
+    "reader",
+    64
+   ],
+   [
+    "semantics",
+    6
+   ]
+  ],
+  "examples": [
+   "1 inch to the right of his knee is a medium soccer ball",
+   "there is a busy tree on the right side. trunk is 1 inch from the botto",
+   "left of screen is big bushy tree hole facing right, bottom of trunk ab"
+  ]
+ },
+ {
+  "class": "arrange/layout",
+  "n": 9,
+  "pass": 0,
+  "partial": 0,
+  "passRate": 0.0,
+  "topLayer": [
+   [
+    "reader",
+    8
+   ],
+   [
+    "representation",
+    1
+   ]
+  ],
+  "examples": [
+   "Pick up the 20 box and sit it down below and even with the 19 box.",
+   "place block 2's bottom by block 3's top such that their sides are para",
+   "take block 3 and place it by block 4 such that its bottom touches the "
+  ]
+ },
+ {
+  "class": "connect/structure",
+  "n": 0
+ },
+ {
+  "class": "chart-create",
+  "n": 0
+ },
+ {
+  "class": "chart-data-edit",
+  "n": 0
+ },
+ {
+  "class": "chart-formatting",
+  "n": 0
+ },
+ {
+  "class": "remove",
+  "n": 12,
+  "pass": 3,
+  "partial": 1,
+  "passRate": 0.25,
+  "topLayer": [
+   [
+    "reader",
+    7
+   ],
+   [
+    "semantics",
+    2
+   ]
+  ],
+  "examples": [
+   "remove the door",
+   "Remove the car.",
+   "The car should be removed."
+  ]
+ },
+ {
+  "class": "vague-aesthetic",
+  "n": 16,
+  "pass": 1,
+  "partial": 0,
+  "passRate": 0.062,
+  "topLayer": [
+   [
+    "reader",
+    12
+   ],
+   [
+    "bindings",
+    2
+   ]
+  ],
+  "examples": [
+   "on the right is a small slide swing",
+   "make it sunny",
+   "Let the sun shine."
+  ]
+ },
+ {
+  "class": "correction/undo",
+  "n": 9,
+  "pass": 0,
+  "partial": 1,
+  "passRate": 0.0,
+  "topLayer": [
+   [
+    "reader",
+    6
+   ],
+   [
+    "semantics",
+    2
+   ]
+  ],
+  "examples": [
+   "right side bottom big size dog, facing left. covers girls back leg.",
+   "to right of bird running smiling boy looking right, horizon just above",
+   "have the sun rise instead of set."
+  ]
+ },
+ {
+  "class": "question",
+  "n": 15,
+  "pass": 2,
+  "partial": 0,
+  "passRate": 0.133,
+  "topLayer": [
+   [
+    "reader",
+    11
+   ],
+   [
+    "bindings",
+    2
+   ]
+  ],
+  "examples": [
+   "under the tree in the middle a white small ball, can i check now?",
+   "soda at left bottom corner, can i check",
+   "Can it be a cake on the plate?"
+  ]
+ },
+ {
+  "class": "compound/multi-step",
+  "n": 38,
+  "pass": 1,
+  "partial": 2,
+  "passRate": 0.026,
+  "topLayer": [
+   [
+    "reader",
+    28
+   ],
+   [
+    "semantics",
+    3
+   ]
+  ],
+  "examples": [
+   "there is a busy tree on the right side. trunk is 1 inch from the botto",
+   "cat facing left. 1 inch to right of boy. his eyes same level as boys s",
+   "the girl and boy are seated and the boy is holding a small pink shovel"
+  ]
+ },
+ {
+  "class": "fragment/follow-up",
+  "n": 39,
+  "pass": 1,
+  "partial": 0,
+  "passRate": 0.026,
+  "topLayer": [
+   [
+    "reader",
+    35
+   ],
+   [
+    "bindings",
+    2
+   ]
+  ],
+  "examples": [
+   "bear with arms up facing the boy and girl mad",
+   "bottom of the left side a brown colored football is placed",
+   "left of screen is big bushy tree hole facing right, bottom of trunk ab"
+  ]
+ },
+ {
+  "class": "conversational/complaint",
+  "n": 10,
+  "pass": 6,
+  "partial": 0,
+  "passRate": 0.6,
+  "topLayer": [
+   [
+    "reader",
+    3
+   ],
+   [
+    "semantics",
+    1
+   ]
+  ],
+  "examples": [
+   "good work thanks",
+   "not yet",
+   "okay, let me check."
+  ]
+ }
+]

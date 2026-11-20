@@ -1,0 +1,150 @@
+{
+ "reader": "b8b1a4dd32a13c44555225fe894e8357766d95071a86f9a5e32a93fc39fda28a",
+ "psys2Commit": "dede8b3b",
+ "route": "routeNewEngine (app route), probe-bundle --run semantics",
+ "tabs": {
+  "drawing": {
+   "all": {
+    "n": 329,
+    "pass": 36,
+    "partial": 16
+   },
+   "actionable": {
+    "n": 324,
+    "pass": 31,
+    "partial": 16
+   },
+   "owner": {
+    "n": 73,
+    "pass": 11,
+    "partial": 4
+   },
+   "corpus": {
+    "n": 256,
+    "pass": 25,
+    "partial": 12
+   },
+   "sources": {
+    "CoDraw": 100,
+    "MagicBrush": 126,
+    "BLOCKS": 30,
+    "owner-phrase-log": 73
+   }
+  },
+  "diagram": {
+   "all": {
+    "n": 290,
+    "pass": 18,
+    "partial": 4
+   },
+   "actionable": {
+    "n": 283,
+    "pass": 11,
+    "partial": 4
+   },
+   "owner": {
+    "n": 38,
+    "pass": 2,
+    "partial": 1
+   },
+   "corpus": {
+    "n": 252,
+    "pass": 16,
+    "partial": 3
+   },
+   "sources": {
+    "NLVCorpus": 32,
+    "SCONE (Tangrams)": 25,
+    "ChartDialog": 51,
+    "PPTC": 57,
+    "WildChat-1M": 59,
+    "TeX.StackExchange titles": 28,
+    "owner-phrase-log": 38
+   }
+  },
+  "calendar": {
+   "all": {
+    "n": 220,
+    "pass": 11,
+    "partial": 0
+   },
+   "actionable": {
+    "n": 214,
+    "pass": 7,
+    "partial": 0
+   },
+   "owner": {
+    "n": 0,
+    "pass": 0,
+    "partial": 0
+   },
+   "corpus": {
+    "n": 220,
+    "pass": 11,
+    "partial": 0
+   },
+   "sources": {
+    "MASSIVE": 88,
+    "CLINC150": 35,
+    "SMCalFlow": 97
+   }
+  },
+  "avatar": {
+   "all": {
+    "n": 228,
+    "pass": 0,
+    "partial": 0
+   },
+   "actionable": {
+    "n": 228,
+    "pass": 0,
+    "partial": 0
+   },
+   "owner": {
+    "n": 8,
+    "pass": 0,
+    "partial": 0
+   },
+   "corpus": {
+    "n": 220,
+    "pass": 0,
+    "partial": 0
+   },
+   "sources": {
+    "RealEdit (r/PhotoshopRequest post titles/bodies)": 92,
+    "MagicBrush": 79,
+    "Emu Edit test set": 49,
+    "owner-phrase-log": 8
+   }
+  },
+  "document": {
+   "all": {
+    "n": 204,
+    "pass": 0,
+    "partial": 0
+   },
+   "actionable": {
+    "n": 204,
+    "pass": 0,
+    "partial": 0
+   },
+   "owner": {
+    "n": 3,
+    "pass": 0,
+    "partial": 0
+   },
+   "corpus": {
+    "n": 201,
+    "pass": 0,
+    "partial": 0
+   },
+   "sources": {
+    "DocEdit": 81,
+    "PPTC": 57,
+    "OASST1": 48,
+    "Dolly": 15,
+    "owner-phrase-log": 3
+   }
+  }
+ }
+}
