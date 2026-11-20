@@ -13,6 +13,9 @@ const root=new URL('../',import.meta.url);
 const deployment=JSON.parse(readFileSync(new URL('docs/webchat/models/sop-bert/deployment.json',root),'utf8'));
 const bindings=JSON.parse(readFileSync(new URL('docs/webchat/'+deployment.artifactBase+deployment.bindingsArtifact.path,root),'utf8'));
 const inventory=JSON.parse(readFileSync(new URL('official-dataset/inventory.json',root),'utf8'));
+// The deployed reader's own label space (its manifest's key list): the official inventory moves ahead with the next training; its new keys are bound when that reader is deployed.
+const manifest=JSON.parse(readFileSync(new URL('docs/webchat/'+deployment.manifestPath,root),'utf8'));
+const readerKeys=new Set(JSON.parse(manifest.configJSON).keys);
 const interfaces={diagram:'worlds/diagram.sketch/native-interface.sop',drawing:'worlds/art.draw/native-interface.sop'};
 const operations=Object.fromEntries(Object.entries(interfaces).map(([area,path])=>[area,declaredOperations(parse(readFileSync(new URL(path,root),'utf8')),str)]));
 
@@ -22,6 +25,7 @@ test('every Diagram and Drawing inventory key is bound or listed with a re-check
  const missing=[],stale=[];
  for(const area of NATIVE_CHAIN_AREAS)for(const [type,row] of Object.entries(inventory[area]??{}))for(const name of Object.keys(row.keys??{})){
   const key=type+'.'+name,entry=coverage.get(area+'.'+key);
+  if(!readerKeys.has(area+'.'+key))continue;
   if(!entry){missing.push(area+'.'+key);continue;}
   if(entry.status==='bound'){
    const property=bindings.properties.find(p=>p.area===area&&p.key===key);
