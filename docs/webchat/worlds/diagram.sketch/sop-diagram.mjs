@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // The Diagram tab: the generic SOP area adapter over worlds/diagram.sketch/area.sop. Its interface composes the
 // data.charts operations, which the area's act rules refuse (they are not part of its w.diagram instance).
-import NATIVE_INTERFACE from './native-interface-source.mjs?v=faacd6758b';
-import AREA_SOURCES from './area-sources.mjs?v=4c9f6a26b4';
+import NATIVE_INTERFACE from './native-interface-source.mjs?v=b8c1149c98';
+import AREA_SOURCES from './area-sources.mjs?v=65d0fd4b41';
 import {BUNDLED_AREAS} from '../../lib/knowledge/bundled-areas.mjs?v=7c126abd3d';
 import {chartToolInterface} from '../data.charts/declared-host.mjs?v=e372c72f84';
 import {sopAreaAdapter} from '../sop-area-adapter.mjs?v=e5af35262f';

@@ -18,9 +18,9 @@
 //     word a lemma of its family's own class) is that kind, when every such compound names the same kind.
 import {parse,str} from '../vendor/sopworld/sopworld.mjs?v=b95dcf7c63';
 import {interpretationPolicy} from './interpretation-policy.mjs?v=f4e999ddda';
-import {executionPolicyWorld} from './execution-policy.mjs?v=52a52e9ec3';
+import {executionPolicyWorld} from './execution-policy.mjs?v=a4fd91036a';
 import DRAW from '../../worlds/art.draw/native-interface-source.mjs?v=afabeecb4f';
-import DIAGRAM from '../../worlds/diagram.sketch/native-interface-source.mjs?v=faacd6758b';
+import DIAGRAM from '../../worlds/diagram.sketch/native-interface-source.mjs?v=b8c1149c98';
 import CHARTS from '../../worlds/data.charts/native-interface-source.mjs?v=6c0dc1d746';
 import DOCUMENT from '../../worlds/docs.editor/native-interface-source.mjs?v=e247358200';
 import CALENDAR from '../../worlds/time.calendar/native-interface-source.mjs?v=3945d7d8fa';

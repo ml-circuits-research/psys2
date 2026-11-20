@@ -6,7 +6,7 @@
 import {parse,serialize,str,quote} from '../vendor/sopworld/sopworld.mjs?v=b95dcf7c63';
 import {LANG_EN_FACTS} from '../lang/en.facts.generated.mjs?v=742ead90b3';
 import {en} from '../lang/en.mjs?v=3eccaf3ffb';
-import {executionPolicyWorld} from './execution-policy.mjs?v=52a52e9ec3';
+import {executionPolicyWorld} from './execution-policy.mjs?v=a4fd91036a';
 import {budget} from './budget.mjs?v=00bce6e369';
 
 const one=(row,key)=>row?.attrs[key]?.length?str(row.attrs[key][0]):undefined;

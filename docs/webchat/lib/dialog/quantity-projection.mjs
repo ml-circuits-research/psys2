@@ -8,7 +8,7 @@
 //    plural's own binding stays as an alternative in the trace.
 import {parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=b95dcf7c63';
 import {en} from '../lang/en.mjs?v=3eccaf3ffb';
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=548a72e573';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=f81bdf3a12';
 
 const attr=(wire,key)=>{const raw=wire?.attrs[key]?.[0];return raw===undefined?undefined:raw.startsWith('"')?str(raw):raw;};
 const words=text=>[...String(text).matchAll(/[\p{L}\p{N}]+/gu)].map(m=>m[0].toLowerCase());
