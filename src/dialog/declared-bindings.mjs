@@ -298,6 +298,20 @@ export async function completeBindings(bindings){
  // 8. Kinds for the closed native values of a family's make operation that no kind row names.
  const enumKinds=nativeValueKinds(kinds,params);
  if(enumKinds.length)kinds=[...kinds,...enumKinds];
+ // 9. A key the deployed table predates (declared for a later reader: drawn.wear, drawn.pose) binds by the export's own
+ // rule: <family type>.<parameter> to the parameter of that name on the family's source type (the first operation
+ // declaring it, change before make), unless the table already has the key.
+ for(const f of families){
+  const sourceType=f.nativeFamilyBinding?.sourceType;if(!sourceType)continue;
+  const ofType=params.filter(p=>p.sourceType===sourceType&&p.parameter&&!['id','ids','x','y'].includes(p.parameter));
+  for(const parameter of new Set(ofType.map(p=>p.parameter))){
+   const key=f.type+'.'+parameter;if(properties.some(row=>row.area===f.area&&row.key===key))continue;
+   const choices=ofType.filter(q=>q.parameter===parameter),p=choices.find(q=>/\.change$/.test(q.operation))??choices[0];
+   properties.push({area:f.area,key,valueKind:'string',canonical:sourceType+'.'+parameter,sourceWire:p.wire,sourceSnapshotSHA:p.sourceSha256,sourceWorld:p.world,moduleVersion:'1',
+    hostBinding:{id:p.operation,sourceType,key:parameter,operation:p.operation,parameter},...(p.enum?{classValues:p.enum}:numericOf(sourceType,parameter)?{numeric:true}:{}),
+    alignment:{kind:'native-parameter-by-name',authority:'declared-bindings.mjs: completion 9, the export rule for keys the table predates'}});
+  }
+ }
  // Declared length units (execution-policy.sop app.execution.canvasUnit / lengthUnit) for values said with a unit.
  const pol=executionPolicyWorld(),all=(r,k)=>(r.attrs[k]??[]).map(str);
  const lengthUnits=[...pol.ofType('app.execution.canvasUnit').map(r=>({unit:one(r,'unit'),words:all(r,'word'),factor:1})),

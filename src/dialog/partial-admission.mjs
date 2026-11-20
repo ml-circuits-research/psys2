@@ -140,6 +140,11 @@ function kindReadings(raw,bindings){
   if(lemmas.has(phrase))found=phrase;
   if(!found)for(const [w,sg] of forms){const hit=[w,sg].find(x=>lemmas.has(x)&&lemmas.get(x).canonical!==family);if(hit){found=hit;break;}}
   if(!found)for(const [w,sg] of forms){const hit=[w,sg].find(x=>lemmas.has(x));if(hit){found=hit;break;}}
+  // A letter typed twice ("carr", "catt") is the word with it once, when that is a declared kind.
+  if(!found&&forms.length===1){const [w]=forms[0];for(let i=1;i<w.length&&!found;i++){budget.tick('kind-reading.double');if(w[i]===w[i-1]){const once=w.slice(0,i)+w.slice(i+1);if(lemmas.has(once))found=once;}}}
+  // Two neighbouring letters swapped ("pesron", "cluod") before any other single edit.
+  if(!found&&forms.length===1){const [w]=forms[0];const swaps=[];for(let i=1;i<w.length;i++){budget.tick('kind-reading.swap');const t=w.slice(0,i-1)+w[i]+w[i-1]+w.slice(i+1);if(t!==w&&lemmas.has(t))swaps.push(t);}
+   if(new Set(swaps.map(t=>lemmas.get(t).canonical)).size===1)found=swaps[0];}
   if(!found&&forms.length===1){const [w]=forms[0],max=w.length>6?2:1;
    const near=[...lemmas.keys()].filter(l=>!l.includes(' ')&&Math.abs(l.length-w.length)<=max&&editWithin(w,l,max));
    const kinds=new Set(near.map(l=>lemmas.get(l).canonical));if(w.length>=4&&kinds.size===1)found=near[0];}

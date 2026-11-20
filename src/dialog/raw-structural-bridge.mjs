@@ -255,9 +255,21 @@ export function bridgeRawStructure(prediction,{bindings,bindingSha256,comparativ
     if(!comparative&&!['eq','less.equal','greater.equal','degree','region'].includes(condition.operator))unresolved('requires-operator-reference-projection',path);
     if(['each','group'].includes(condition.scope))c.scope=condition.scope;else if(has(condition,'scope'))unresolved('unknown-condition-scope',[...path,'scope']);
     if(has(condition,'measure_span')&&!has(condition,'measure')&&!has(condition,'unit'))unresolved('unowned-measure-span',[...path,'measure_span']);
-    if(has(condition,'measure')&&condition.measure!==condition.value)unresolved('requires-measure-projection',[...path,'measure']);
+    // The measure the value states (its number) is the value read: "53" of "53 pixels" for a numeric property.
+    const measured=has(condition,'measure')&&c.value&&String(c.value.value)===String(condition.measure).trim();
+    if(measured&&has(condition,'measure_span'))consume(ci,'measure_span',condition.measure_span);
+    if(has(condition,'measure')&&condition.measure!==condition.value&&!measured)unresolved('requires-measure-projection',[...path,'measure']);
     for(const field of ['group','variety','step','anchor_fill','anchor_span'])if(has(condition,field)&&!(field==='step'&&comparative))unresolved(`requires-declared-${field}-projection`,[...path,field]);
-    if(has(condition,'unit')){const unit=lookup('units',{lemma:condition.unit});if(unit){c.unit=unit.canonical;anchor([...path,'unit'],condition.measure_span||condition.value_span,unit.sourceWire,false,['constraints',String(ci),condition.measure_span?'measure_span':'value_span']);}else unresolved('unresolved-unit-binding',[...path,'unit']);}
+    // A unit said for a numeric property with a declared length unit: its own unit (canvas pixels) needs nothing; a
+    // declared conversion scales the value (table.lengthUnits, declared-bindings.mjs); either way no unit is left.
+    let unitDone=false;
+    if(has(condition,'unit')&&prop?.numeric===true&&c.value&&/^[-+]?\d+(\.\d+)?$/.test(String(c.value.value))){
+     const conv=unitWord({...prop,unit:prop.unit??'canvas.pixel'})(String(condition.unit).toLowerCase());
+     const plural=conv===null?unitWord({...prop,unit:prop.unit??'canvas.pixel'})(String(condition.unit).toLowerCase()+'s'):null;
+     const found=conv&&conv!==true?conv:plural&&plural!==true?plural:null;
+     if(found){c.value={...c.value,value:String(+(Number(c.value.value)*found.factor).toFixed(6))};unitDone=true;}
+    }
+    if(has(condition,'unit')&&!unitDone){const unit=lookup('units',{lemma:condition.unit});if(unit){c.unit=unit.canonical;anchor([...path,'unit'],condition.measure_span||condition.value_span,unit.sourceWire,false,['constraints',String(ci),condition.measure_span?'measure_span':'value_span']);}else unresolved('unresolved-unit-binding',[...path,'unit']);}
     const bounds=span?locate(original.span,condition.value_span,span[0],[...rawPath,'constraints',String(ci),'value_span'],span):null;if(bounds)c.source=bounds;
    }
    const and=table.projectionPolicy?.unmarkedConditions==='and'&&hash(table.projectionPolicy.sourcePromptSha256);
