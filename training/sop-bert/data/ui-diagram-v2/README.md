@@ -57,3 +57,19 @@ requests and questions. Deterministic generator, no network: `python3 heldout.py
 ## Result (measured)
 
 See `coverage.json` and `validation.json` for the current numbers (rows per case and variant, 0 errors required).
+
+## Reader labels -> part B's chart and effect operations (specs/diagram-capabilities.md, Charts)
+
+| Reader label | Operation |
+| --- | --- |
+| make `chart` with `chart.type`, `chart.title`, `chart.labels`/`chart.values` | `diagram.group.chart.make {layout, label, labels, values}` |
+| change `chart` `chart.type` | `diagram.group.layout {id, layout}` |
+| change `point` (`chart.labels` selector) `point.value` | `diagram.chart.value {id, category, value}` |
+| make `point` `chart.labels` (+ `point.value`) | `diagram.chart.category.add {id, label, value}` |
+| remove `point` (`chart.labels` selector) | `diagram.chart.category.remove {id, category}` |
+| change `point` `chart.labels` selector + `chart.labels` result | `diagram.chart.category.rename {id, category, label}` |
+| change `chart` `chart.title` / `chart.xLabel` / `chart.yLabel` / `chart.show_values` / `chart.grid` / `chart.legend` | `diagram.chart.format {title, xLabel, yLabel, valueLabels, gridlines, legend}` (hide -> none) |
+| `node.effect` shadow/glow (negative polarity -> none); transparent; rounded | `diagram.node.change {effect}`; `opacity`; `corner` |
+
+Labels with no operation yet (series, stacking, sorting, palettes, gradients, axis range) stay what the text says; the
+compiler refuses them with the operation's reason until part B declares them.

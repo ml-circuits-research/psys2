@@ -39,6 +39,7 @@ DETERMINERS = {'definite': 'definite', 'indefinite': 'indefinite', 'demonstrativ
 SLOT_ID = re.compile(r'\b(?:[a-z]+_[a-z_]+|chart:\d+|seg-\d+)\b')
 REF_KEYS = {'node.ids', 'link.ids', 'group.id', 'group.ids', 'drawn.ids', 'drawn.id', 'drawn.anchor', 'node.anchor', 'part.owner', 'chart.id'}
 POPULATION = re.compile(r'\b(all|every|each|everything|them|these|those|it|its|this|that|selected|selection|one|ones|both|other|others|rest)\b', re.I)
+WRAP = re.compile(r"^(hey|please|quick one|hmm|one more thing|ok|okay|so|um|uh|can you|could you|would you)[,:—\- ]+|[,— ]+(please|thanks|thank you|go on|if you can|cheers|pls)[.!?]*$", re.I)
 QUAL = {'some', 'a few', 'few', 'several', 'many', 'lots', 'a lot of', 'a couple of', 'more', 'a handful of'}
 
 
@@ -78,6 +79,26 @@ def normalise(row, stats):
             q['act'] = 'answer'; stats['act ask -> answer'] += 1
             q.setdefault('mood', 'ask')
             q.setdefault('question', {'ask': 'describe'})
+        moved = []
+        kept = []
+        for c in q.get('constraints') or []:
+            if isinstance(c, dict) and 'key' not in c and ('frame' in c or 'span' in c):
+                moved.append(c); stats['`needs` written inside constraints (no key) moved to needs'] += 1
+            elif isinstance(c, dict) and c.get('key') == 'question.ask':
+                q['question'] = {'ask': c.get('value') or 'describe'}
+                if q.get('act') != 'answer':
+                    q['act'] = 'answer'
+                q['mood'] = q.get('mood') if q.get('mood') in ('ask', 'check') else 'ask'
+                if not q.get('trigger') and isinstance(c.get('value_span'), str):
+                    q['trigger'] = c['value_span']
+                stats['question.ask written as a constraint moved to question.ask'] += 1
+            elif isinstance(c, dict) and c.get('character') == 'discard':
+                stats['constraint with character discard (an old value) removed'] += 1
+            else:
+                kept.append(c)
+        q['constraints'] = kept
+        if moved:
+            q['needs'] = (q.get('needs') if isinstance(q.get('needs'), list) else [q['needs']] if q.get('needs') else []) + moved
         t = q.get('target') or {}
         if t.get('determiner') in DETERMINERS and DETERMINERS[t['determiner']] != t['determiner']:
             stats[f'determiner {t["determiner"]} -> definite'] += 1
@@ -145,7 +166,7 @@ def check(row, seen, official_seen):
     probe = {'text': text, 'world': world, 'context': copy.deepcopy(row.get('context') or {'existing': [], 'previous': None}),
              'requests': copy.deepcopy(reqs)}
     e, w, f = VALIDATOR.check(probe)
-    return ['official:' + x.split(':')[0] + (':' + x.split(':', 1)[1] if ':' in x and x.startswith(('unregistered-key', 'act-not', 'target-type')) else '') for x in e]
+    return ['official:' + (x if x.startswith(('unregistered-key', 'act-not', 'target-type', 'question-ask', 'operator', 'character', 'phase')) else x.split(':')[0]) for x in e]
 
 
 def main():
@@ -193,10 +214,25 @@ def main():
                                  'context': row.get('context') or {'existing': [], 'previous': None}, 'requests': row['requests'],
                                  'style': 'drop-' + str(row.get('tier') or 'equivalent'), 'tier': row.get('tier'), 'phase': 'direct',
                                  'cohort': {'recipeFamily': f'drop:{batch.name}:{fam}', 'classes': row.get('classes') or []}})
-        summary[batch.name] = {'rows': total, 'accepted': kept, 'rejected': rejected}
+        cores = collections.defaultdict(set)
+        for path in files:
+            for line in path.read_text().splitlines():
+                try:
+                    r = json.loads(line)
+                except json.JSONDecodeError:
+                    continue
+                t = r.get('text') or ''
+                for _ in range(3):
+                    t = WRAP.sub('', t.strip())
+                cores[r.get('family')].add(norm(t))
+        distinct = sum(len(v) for v in cores.values())
+        summary[batch.name] = {'rows': total, 'accepted': kept, 'rejected': rejected, 'distinctCoresAfterWrappers': distinct}
         lines = [f'# Import feedback: {batch.name}', '',
                  f'Rows {total}: **accepted {kept}**, rejected {rejected} (importer `psys2/training/sop-bert/data/data-drop-v1/import.py`).',
-                 f'Accepted per tab: {dict(per_world)}; per class: {dict(per_class.most_common())}.', '']
+                 f'Accepted per tab: {dict(per_world)}; per class: {dict(per_class.most_common())}.',
+                 f'Paraphrase variety: {distinct} distinct texts once greeting/politeness wrappers ("hey,", "quick one —", "please", ", thanks", "— go on") '
+                 f'are removed, over {len(cores)} families ({total} rows). Wrappers are robustness, not paraphrases: each family needs 20+ real '
+                 'rewordings (other verbs, word order, references, omissions, register), with wrappers as ~10% extra variants.', '']
         if reasons:
             lines += ['## Rejected rows by reason (a row can have several reasons)', '', '| reason | rows | examples |', '| --- | ---: | --- |']
             lines += [f'| {r} | {n} | {"<br>".join(e.replace("|", "/") for e in examples[r])} |' for r, n in reasons.most_common()]
@@ -207,6 +243,19 @@ def main():
         if batch_needs:
             lines += ['## `needs` received (collected for the compilation stream, removed from the imported labels)', '']
             lines += [f'- {k}: {v}' for k, v in batch_needs.most_common()] + ['']
+        lines += ['## Systematic issues to fix in the next batches', '',
+                  '- A `name_span` must be the words of the text. "turn the car into a truck" with `name_span: "Car"` (the context name) is a '
+                  'definite description: `fill: description`, `kind: car`, `kind_span: car`; names are only real names or visible codes.',
+                  '- A request `span` must cover every span of its labels: a value span outside the request span ("if Test passes ... — draw both arrows" '
+                  'with span "draw both arrows") is rejected; make the span the clause that holds all of them (or the whole sentence).',
+                  '- `needs` belong in `request.needs`, not in `constraints` (moved on import this time); a question kind is `question: {ask: ...}`, '
+                  'not a `question.ask` constraint (moved on import this time); a replaced old value ("from 30 to 40") gets no constraint, '
+                  'not `character: discard`.',
+                  '- Target types are `chart`, `node`, ... exactly: typo variants belong in the text, never in label fields (`chhart`).',
+                  '- A relation anchor must name an object of `context.existing` (or a new object of the same message: put the anchor on the '
+                  'request that creates it only after the creating request, and keep it in the text verbatim).',
+                  '- Category dimensions ("a pie chart of the staff by rank") are not category labels: `chart.labels` holds the category '
+                  'words themselves ("Q1", "North"); a dimension stays unlabelled or in `needs` (`chart.dimension`).', '']
         lines += ['## Notes for the next batch', '',
                   '- acts: `answer` (with `mood: ask|check` and `question.ask`) is the trainer form of `ask`; `link.style` is the dash/dot key '
                   '(`link.pattern` is chain/cycle/star/all); determiners are `definite` / `indefinite`.',
