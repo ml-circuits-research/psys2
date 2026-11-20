@@ -1,13 +1,13 @@
 # Statistics
 
-109,668 messages; train 103,028, dev 4,426, test 2,214.
+187,553 messages; train 176,331, dev 7,496, test 3,726.
 
 ## Tab (world) × split
 
 | world | train | dev | test | total |
 | --- | ---: | ---: | ---: | ---: |
-| drawing | 40,262 | 1,756 | 882 | 42,900 |
-| diagram | 34,616 | 1,453 | 741 | 36,810 |
+| drawing | 77,621 | 3,287 | 1,641 | 82,549 |
+| diagram | 70,560 | 2,992 | 1,494 | 75,046 |
 | document | 11,568 | 498 | 242 | 12,308 |
 | avatar | 8,904 | 368 | 190 | 9,462 |
 | calendar | 7,678 | 351 | 159 | 8,188 |
@@ -16,9 +16,9 @@
 
 | source | rows |
 | --- | ---: |
+| data-drop-v1 | 97,590 |
 | demo-tool-profile | 33,297 |
 | main-synthetic | 26,362 |
-| data-drop-v1 | 19,705 |
 | ui-diagram-v2 | 7,875 |
 | ui-relations-v1 | 6,744 |
 | ui-human-v1 | 5,001 |
@@ -37,35 +37,36 @@
 
 | requests | rows |
 | --- | ---: |
-| 1 | 99,345 |
-| 2 | 8,718 |
-| 3 | 844 |
+| 1 | 147,982 |
+| 2 | 27,529 |
+| 3 | 4,497 |
+| 4 | 2,311 |
+| 6 | 1,952 |
+| 5 | 1,847 |
 | 0 | 660 |
-| 4 | 85 |
-| 5 | 12 |
-| 6 | 3 |
-| 7 | 1 |
+| 7 | 501 |
+| 8 | 274 |
 
 ## Act
 
 | act | rows |
 | --- | ---: |
-| make | 53,623 |
-| change | 39,586 |
-| answer | 7,062 |
-| place | 6,609 |
-| connect | 3,501 |
-| remove | 3,418 |
-| arrange | 2,148 |
-| select | 1,756 |
-| group | 650 |
-| undo | 409 |
+| make | 116,325 |
+| change | 90,056 |
+| answer | 11,339 |
+| place | 9,401 |
+| remove | 7,245 |
+| arrange | 6,523 |
+| connect | 4,069 |
+| undo | 2,168 |
+| select | 1,877 |
+| group | 1,201 |
+| redo | 795 |
+| copy | 514 |
 | ungroup | 326 |
-| redo | 214 |
-| merge | 111 |
-| reverse | 108 |
-| copy | 107 |
-| split | 102 |
+| reverse | 313 |
+| merge | 135 |
+| split | 126 |
 | repeat | 7 |
 | disconnect | 1 |
 
@@ -73,27 +74,27 @@
 
 | world.type | rows |
 | --- | ---: |
-| drawing.drawn | 42,642 |
-| diagram.node | 17,497 |
-| diagram.chart | 12,975 |
+| drawing.drawn | 109,763 |
+| diagram.chart | 42,058 |
+| diagram.node | 27,996 |
+| diagram.diagram | 9,594 |
+| drawing.page | 9,248 |
 | avatar.part | 8,337 |
+| diagram.link | 7,900 |
 | calendar.meeting | 7,432 |
 | document.section | 7,288 |
-| diagram.link | 5,350 |
+| drawing.part | 4,756 |
 | document.text | 3,168 |
 | document.block | 2,720 |
-| diagram.group | 2,107 |
-| drawing.part | 2,097 |
+| diagram.group | 2,699 |
+| diagram.page | 2,284 |
+| drawing.group | 1,725 |
 | calendar.calendar | 1,370 |
-| diagram.diagram | 1,189 |
 | avatar.face | 1,169 |
-| diagram.page | 1,001 |
-| diagram.point | 694 |
+| diagram.point | 724 |
+| diagram.series | 720 |
 | diagram.sketch | 681 |
-| drawing.page | 560 |
-| diagram.series | 409 |
 | calendar.room | 283 |
-| drawing.group | 263 |
 | document.document | 249 |
 | document.inline | 136 |
 | calendar.person | 121 |
@@ -102,9 +103,9 @@
 
 | operation | rows |
 | --- | ---: |
-| none | 31,143 |
+| none | 79,780 |
+| compound | 35,403 |
 | drawing.object.make | 19,978 |
-| compound | 6,155 |
 | avatar.part.change | 5,727 |
 | drawing.object.change | 5,496 |
 | document.block.change | 3,113 |
@@ -168,138 +169,244 @@
 
 | relation | rows |
 | --- | ---: |
-| below | 3,412 |
+| next to | 10,229 |
+| on | 8,680 |
+| below | 3,657 |
+| in | 2,868 |
+| above | 2,380 |
+| behind | 2,262 |
+| under | 1,972 |
 | left_of | 1,717 |
-| in | 1,343 |
-| near | 962 |
+| near | 1,566 |
+| on top of | 1,550 |
+| by | 1,431 |
+| in front of | 1,095 |
+| beside | 1,015 |
 | right_of | 876 |
-| above | 798 |
-| on | 562 |
-| under | 121 |
-| by | 109 |
-| behind | 105 |
-| in front of | 89 |
-| next to | 76 |
-| next_to | 64 |
-| left of | 62 |
-| beside | 44 |
+| between | 796 |
+| along | 672 |
+| over | 520 |
+| left of | 479 |
+| next_to | 420 |
+| around | 404 |
+| right of | 334 |
+| aligned | 132 |
+| even | 124 |
+| in_front_of | 123 |
+| touching | 107 |
+| across | 104 |
+| at | 98 |
+| on each side of | 94 |
+| mirrored | 90 |
+| in the middle of | 86 |
+| level with | 77 |
+| to the right of | 73 |
+| past | 69 |
+| inside | 63 |
+| level | 63 |
+| same column | 62 |
+| same shape | 53 |
+| same row | 52 |
+| row below | 49 |
+| opposite | 46 |
+| in line | 45 |
+| away from | 42 |
+| in line with | 40 |
+| underneath | 38 |
+| beneath | 38 |
+| close to | 34 |
 | to | 34 |
-| over | 31 |
-| right of | 30 |
-| between | 21 |
+| at the bottom of | 31 |
+| against | 30 |
+| close | 30 |
+| aligned with | 29 |
+| facing | 28 |
+| up_and_down | 28 |
+| all_over | 28 |
+| throughout | 28 |
+| on either side of | 28 |
+| settle on | 28 |
+| row under | 28 |
+| even with | 27 |
+| both_sides | 27 |
+| touches | 27 |
+| below and to the left of | 25 |
+| on every side of | 24 |
+| closer | 24 |
+| in place of | 24 |
+| checkerboard | 24 |
+| flush | 24 |
 | at the top of | 21 |
-| in_front_of | 17 |
-| along | 15 |
-| around | 13 |
-| underneath | 13 |
+| over the lake | 21 |
+| closer to | 21 |
+| swap | 20 |
+| higher | 16 |
+| corner | 16 |
+| from | 13 |
+| almost even with | 11 |
+| up against | 11 |
+| adjacent | 11 |
+| east of | 11 |
+| resting on | 11 |
+| wrapped round | 10 |
+| to the left of | 10 |
+| immediately to the west of | 10 |
+| on the west side of | 10 |
+| sitting on | 10 |
+| onto | 10 |
 | off | 9 |
+| down | 9 |
+| next to the gate | 9 |
+| clear of | 9 |
+| directly beneath | 9 |
+| on the left side of | 9 |
+| to the west of | 8 |
 | out of | 7 |
-| at the bottom of | 5 |
-| inside | 4 |
-| close to | 4 |
+| lower | 7 |
+| by the gate | 7 |
+| beside the gate | 7 |
+| around the gate | 7 |
+| above the lake | 7 |
+| middle | 6 |
+| round every side of | 5 |
 | into | 4 |
-| away from | 3 |
-| from | 3 |
+| left | 3 |
+| right of it | 3 |
+| left neighbour | 3 |
+| to the left of the one added back | 3 |
 | for | 3 |
-| against | 3 |
 | towards | 3 |
 | nearest | 3 |
 | outside | 2 |
+| right | 2 |
+| left of it | 2 |
+| to its right | 2 |
+| to the left of it | 2 |
 | round | 2 |
 | up to | 2 |
-| at | 2 |
 | near side of | 2 |
 | up | 2 |
-| past | 1 |
+| next to it | 1 |
+| to the left | 1 |
+| on the left | 1 |
+| right-hand neighbour | 1 |
+| just left of it | 1 |
+| before the last one | 1 |
+| on its left | 1 |
+| on its right | 1 |
+| to the right of it | 1 |
+| between figure three and figure four | 1 |
+| after the second figure | 1 |
+| between the second and third | 1 |
+| after the last one | 1 |
+| between the first two figures | 1 |
+| to its left | 1 |
+| to the left of the figure deleted | 1 |
+| right of the one that moved | 1 |
+| to the right of the one we deleted | 1 |
+| on the left of the figure that just moved | 1 |
+| left of the restored one | 1 |
+| to the right of the figure added back | 1 |
+| just right of the one that moved | 1 |
+| left of the one | 1 |
+| beside it | 1 |
+| immediately to the right of the one | 1 |
+| left neighbour of the figure | 1 |
+| right of the restored one | 1 |
+| to the left of the restored one | 1 |
+| previous | 1 |
+| between the second and third slots | 1 |
+| failed | 1 |
 | other side of | 1 |
 | in towards | 1 |
-| on each side of | 1 |
 | up by | 1 |
+| neighbour | 1 |
 
 ## Constraint keys (top 60)
 
 | key | rows |
 | --- | ---: |
-| drawing.drawn.anchor | 10,605 |
-| drawing.drawn.relation | 10,592 |
+| drawing.drawn.anchor | 47,626 |
+| drawing.drawn.relation | 47,503 |
+| drawing.drawn.size | 35,651 |
+| drawing.drawn.colour | 29,945 |
+| drawing.drawn.at | 15,873 |
+| drawing.drawn.count | 12,730 |
+| diagram.chart.type | 12,313 |
+| drawing.drawn.facing | 9,973 |
 | avatar.part.variant | 7,039 |
-| drawing.drawn.colour | 6,394 |
+| diagram.node.label | 6,359 |
+| drawing.drawn.pose | 5,990 |
+| diagram.node.colour | 5,809 |
 | calendar.meeting.day | 5,802 |
-| diagram.node.label | 5,517 |
 | document.section.content | 5,429 |
-| diagram.node.colour | 5,426 |
+| diagram.chart.dimension | 4,959 |
 | calendar.meeting.time | 4,656 |
-| diagram.chart.type | 4,617 |
+| diagram.node.position | 4,451 |
 | drawing.drawn.name | 4,444 |
-| diagram.chart.dimension | 4,064 |
+| diagram.link.to | 4,161 |
 | diagram.node.ids | 4,040 |
+| diagram.link.from | 4,040 |
 | calendar.meeting.title | 3,757 |
-| drawing.drawn.size | 3,691 |
-| diagram.link.to | 3,684 |
 | calendar.meeting.length | 3,647 |
-| diagram.link.from | 3,566 |
+| drawing.drawn.direction | 3,545 |
+| diagram.chart.labels | 3,531 |
+| drawing.part.owner | 3,506 |
 | calendar.meeting.calendar | 3,465 |
-| diagram.chart.labels | 2,938 |
+| drawing.drawn.expression | 3,348 |
 | avatar.part.size | 2,821 |
+| diagram.chart.title | 2,744 |
+| diagram.diagram.kind | 2,388 |
 | avatar.part.colour | 2,339 |
+| diagram.chart.legend | 2,131 |
+| diagram.chart.sort | 2,012 |
+| drawing.drawn.label | 1,864 |
+| diagram.chart.grid | 1,681 |
 | drawing.drawn.ids | 1,660 |
-| drawing.drawn.at | 1,589 |
+| diagram.node.n | 1,615 |
+| diagram.chart.show_values | 1,599 |
+| diagram.node.size | 1,583 |
 | avatar.part.id | 1,562 |
+| diagram.node.anchor | 1,553 |
+| diagram.chart.fontSize | 1,549 |
+| diagram.node.x | 1,545 |
+| diagram.chart.values | 1,509 |
 | diagram.link.ids | 1,471 |
-| diagram.chart.title | 1,456 |
+| drawing.drawn.kind | 1,450 |
 | document.block.id | 1,429 |
-| diagram.chart.values | 1,391 |
 | diagram.group.id | 1,358 |
+| diagram.chart.yLabel | 1,332 |
+| diagram.chart.xLabel | 1,303 |
 | drawing.drawn.width | 1,240 |
-| diagram.node.size | 1,224 |
-| drawing.part.owner | 1,213 |
 | calendar.calendar.name | 1,180 |
+| diagram.node.y | 1,129 |
 | document.text.about | 1,101 |
-| diagram.node.position | 1,071 |
 | document.text.title | 1,057 |
 | document.text.words | 1,044 |
 | calendar.meeting.id | 1,038 |
 | calendar.meeting.room | 1,007 |
-| document.text.content | 961 |
-| drawing.drawn.height | 950 |
-| diagram.node.n | 906 |
-| drawing.drawn.facing | 837 |
-| avatar.part.ids | 809 |
-| document.section.id | 779 |
-| diagram.node.anchor | 779 |
-| drawing.drawn.label | 755 |
-| drawing.part.index | 684 |
-| document.block.name | 683 |
-| drawing.drawn.x | 650 |
-| drawing.drawn.y | 650 |
-| drawing.part.id | 644 |
-| drawing.drawn.kind | 614 |
-| diagram.diagram.layout | 593 |
-| document.block.rows | 568 |
-| diagram.group.ids | 563 |
-| diagram.point.value | 559 |
-| document.block.level | 553 |
-| diagram.node.layout | 545 |
-| … 217 more | 30,918 |
+| drawing.part.colour | 992 |
+| … 223 more | 52,789 |
 
 ## Style (top 40)
 
 | style | rows |
 | --- | ---: |
+| drop-equivalent | 65,533 |
 | haiku-v2 | 17,506 |
+| drop-complex | 16,721 |
 | haiku-v1 | 14,706 |
-| drop-equivalent | 12,349 |
 | mechanical | 10,291 |
+| drop-simplified | 8,556 |
 | relation-natural | 6,744 |
 | mechanical-trigger | 5,111 |
 | mechanical-typo | 4,789 |
-| drop-complex | 3,569 |
+| drop-equivalent-robustness | 4,587 |
 | human-equivalent | 2,904 |
 | human-simplified | 2,397 |
-| drop-simplified | 2,060 |
+| drop-simplified-fragment | 2,109 |
 | direct | 1,770 |
 | diagram-equivalent | 1,581 |
-| drop-equivalent-robustness | 1,581 |
 | coverage-equivalent | 1,570 |
 | human-complex | 1,540 |
 | coverage-simplified | 1,439 |
@@ -325,12 +432,11 @@
 | diagram-simplified-typo | 270 |
 | mechanical-numberwords | 250 |
 | diagram-equivalent-nospace | 224 |
-| diagram-simplified-asr | 224 |
-| … 55 more | 3,668 |
+| … 55 more | 3,830 |
 
 ## Text length
 
 | measure | min | median | p90 | max |
 | --- | ---: | ---: | ---: | ---: |
-| characters | 2 | 41 | 88 | 268 |
-| words | 1 | 8 | 16 | 51 |
+| characters | 2 | 51 | 120 | 379 |
+| words | 1 | 10 | 24 | 72 |

@@ -479,7 +479,7 @@
     }
   ],
   "builder": "official-dataset/build.py",
-  "builderSha256": "16181cb146585b969b7ec660deb95d5b752d6d2053d21a8d0fedb431cf9ef092",
+  "builderSha256": "661065cb03860cefabfdddf382c433a6cf08052d10085ef741e57c11aab94378",
   "sources": [
     {
       "name": "ui-natural-v1",
@@ -685,19 +685,22 @@
     },
     {
       "name": "data-drop-v1",
-      "path": "training/sop-bert/data/data-drop-v1/accepted.jsonl",
+      "path": "training/sop-bert/data/data-drop-v1/accepted.jsonl.gz",
       "description": "Diagram/Drawing rows of the data-request drops, validated and normalised by data-drop-v1/import.py",
-      "gitCommit": "b3795bf97bebe9da1e15d294d7793f099a2c0c30",
-      "sha256": "582a856ea3863fbc1d0ccfc8c712244b654da7f3df54dd7b34c75d96f4fc4c75",
-      "rowsIn": 16934,
-      "rowsKept": 16934,
-      "rowsDropped": 0,
-      "dropReasons": {},
+      "gitCommit": null,
+      "sha256": "755281c7a0d994db99066d6e65490c947cba3f6c9212f5f6ab8ae77ae54fcb4a",
+      "rowsIn": 87013,
+      "rowsKept": 87012,
+      "rowsDropped": 1,
+      "dropReasons": {
+        "dropped:duplicate-text": 1
+      },
       "fixes": {
-        "anchor-span-as-anchor-mention": 1291,
-        "comparative-as-delta-step": 79,
-        "constraint-with-span-outside-request-removed": 93,
-        "trigger-not-in-span-removed": 288
+        "absolute-degree-word-as-degree": 12,
+        "anchor-span-as-anchor-mention": 34809,
+        "comparative-as-delta-step": 304,
+        "constraint-with-span-outside-request-removed": 478,
+        "trigger-not-in-span-removed": 1963
       }
     },
     {
@@ -891,12 +894,12 @@
     }
   ],
   "splits": {
-    "train": 103028,
-    "dev": 4426,
-    "test": 2214
+    "train": 176331,
+    "dev": 7496,
+    "test": 3726
   },
-  "families": 26315,
-  "leakedFamilies": 2797,
+  "families": 26942,
+  "leakedFamilies": 3311,
   "labelConflictsResolvedByPriority": {
     "main-synthetic<-main-synthetic": 4
   },
@@ -913,50 +916,50 @@
     "ui-drawing-style-v1": 307,
     "ui-quantities-v1": 42,
     "human-adapted-v1-drawing": 112,
-    "data-drop-v1": 2771,
+    "data-drop-v1": 10578,
     "human-adapted-v1-diagram": 72,
     "main-synthetic": 5108
   },
   "nonReaderLabelFieldsRemoved": {
-    "raw_value": 149,
+    "raw_value": 374,
     "anchor_fill": 8151,
     "anchor_span": 437,
-    "qualitative": 682,
+    "qualitative": 11816,
     "mention": 158,
     "anchor_kind": 5374
   },
   "kindVocabulary": {
-    "path": "docs/webchat/models/sop-bert/21c90ff0f0f2092db49182b055d54420d7ce85a53f28f9d41478201f373928c1/bindings.json",
-    "sha256": "f726447ebd90515a8e6faee99a89ab792a98b0acf3cce8ae661b5f0cffa14911"
+    "path": "docs/webchat/models/sop-bert/41b4fa40f97188656ded0af98e51a25250f47f9a5c4cf5c4c1f43dbf85e16a1c/bindings.json",
+    "sha256": "117477f1e4e296ba030916e46c6b55b705557d05580e700e8c089a24907923b9"
   },
   "files": {
     "STATS.md": {
-      "sha256": "f8547518dfa1ac3479830a58eeb6c6f970a21684e76886bb3d4cef43d37e944c",
-      "bytes": 8145
+      "sha256": "772acf87aeb331b183f89938ea9f4074abf5e195e5b55633f8a34d02f072e251",
+      "bytes": 10795
     },
     "VALIDATION.md": {
-      "sha256": "437df00072db9f05dee397c69ec178b35d9267bb0dd28a4b1c16acc51afc348d",
-      "bytes": 13718
+      "sha256": "8922312317cafa108a0cfd5b2213a06cf188aaeb38b5bbc36a8d824f83b3f827",
+      "bytes": 13911
     },
     "audit-sample.md": {
-      "sha256": "94c12f0c6cb82221810392f194aae8f10f3845be30056cb09d74790095ead0f5",
-      "bytes": 44473
+      "sha256": "0b24690b0e0a02f1eb3a3f7261cd2a304533d24c2df8a0a02efc0107ac52eef4",
+      "bytes": 48188
     },
     "dev.jsonl": {
-      "sha256": "3566c02654ceaf858965e944cb9bb402edb6207cd9bc451bcfea7ecd8d4673c9",
-      "bytes": 4863146
+      "sha256": "39b06a43a09bcd133d36ea670b5c92b09e5dcfa0ab655cd705e88f7dd14d5492",
+      "bytes": 10274568
     },
     "inventory.json": {
       "sha256": "7e3a41aeafd524375c7e21208e0b0fa595daf71c48f42aea3e26a92a4b2be8dd",
       "bytes": 85534
     },
     "test.jsonl": {
-      "sha256": "58fa4405a9f7c481638794f0b689ad462835f4efc9e6ab826340f56ffe288a1d",
-      "bytes": 2426269
+      "sha256": "9108dc82a9d9ad3e07a248fe336a6efaff44d31b0ff72b096e3b1ce82654c7ff",
+      "bytes": 5122908
     },
     "train.jsonl.gz": {
-      "sha256": "15727254d1608e36bab9867a766303a0833d2a990c270b935400d051a93dd2f5",
-      "bytes": 5063913
+      "sha256": "b523e9be158ee9968860968e7ca9fd241eec36bffc9acd6893f9241ceb8d0923",
+      "bytes": 9268921
     }
   },
   "policy": {

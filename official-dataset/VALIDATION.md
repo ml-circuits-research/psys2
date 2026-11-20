@@ -108,21 +108,22 @@ No issue found.
 | warning:value-span-ambiguous | 2 |
 | warning:target-description_span-ambiguous | 1 |
 
-### data-drop-v1 (16,934 rows)
+### data-drop-v1 (87,013 rows)
 
 | issue | rows |
 | --- | ---: |
-| warning:bank-extension-needed | 2,170 |
-| warning:selector-not-in-context | 620 |
-| warning:determiner-kept-open | 409 |
-| warning:value-span-ambiguous | 308 |
-| trigger-not-in-span-removed | 288 |
-| warning:target-kind_span-ambiguous | 127 |
-| constraint-with-span-outside-request-removed | 93 |
-| warning:target-kind-without-source-span | 39 |
-| warning:numeric-value-not-in-surface | 27 |
-| warning:target-count_span-ambiguous | 13 |
-| warning:target-description_span-ambiguous | 11 |
+| warning:bank-extension-needed | 34,624 |
+| warning:determiner-kept-open | 11,942 |
+| warning:selector-not-in-context | 9,145 |
+| trigger-not-in-span-removed | 1,963 |
+| warning:target-kind_span-ambiguous | 1,958 |
+| warning:value-span-ambiguous | 1,854 |
+| warning:target-kind-without-source-span | 547 |
+| constraint-with-span-outside-request-removed | 478 |
+| warning:numeric-value-not-in-surface | 247 |
+| warning:target-description_span-ambiguous | 90 |
+| warning:selector-with-empty-context | 50 |
+| warning:target-count_span-ambiguous | 16 |
 | warning:target-name_span-ambiguous | 5 |
 
 ### human-adapted-v1-diagram (538 rows)
@@ -360,31 +361,38 @@ Kept with a warning (not an error; see README):
 | value-span-ambiguous | 2 |
 | target-description_span-ambiguous | 1 |
 
-### data-drop-v1: 16,934 in, 16,934 kept
+### data-drop-v1: 87,013 in, 87,012 kept
 
 Fixed or converted:
 
 | fix | rows |
 | --- | ---: |
-| anchor-span-as-anchor-mention | 1,291 |
-| trigger-not-in-span-removed | 288 |
-| constraint-with-span-outside-request-removed | 93 |
-| comparative-as-delta-step | 79 |
+| anchor-span-as-anchor-mention | 34,809 |
+| trigger-not-in-span-removed | 1,963 |
+| constraint-with-span-outside-request-removed | 478 |
+| comparative-as-delta-step | 304 |
+| absolute-degree-word-as-degree | 12 |
+
+Dropped:
+
+| reason | rows |
+| --- | ---: |
+| dropped:duplicate-text | 1 |
 
 Kept with a warning (not an error; see README):
 
 | warning | rows |
 | --- | ---: |
-| bank-extension-needed | 2,163 |
-| selector-not-in-context | 663 |
-| determiner-kept-open | 409 |
-| value-span-ambiguous | 342 |
-| target-kind_span-ambiguous | 127 |
-| target-kind-without-source-span | 39 |
-| selector-with-empty-context | 31 |
-| numeric-value-not-in-surface | 27 |
-| target-count_span-ambiguous | 13 |
-| target-description_span-ambiguous | 11 |
+| bank-extension-needed | 34,617 |
+| selector-not-in-context | 19,468 |
+| determiner-kept-open | 11,942 |
+| value-span-ambiguous | 2,146 |
+| target-kind_span-ambiguous | 1,958 |
+| target-kind-without-source-span | 547 |
+| numeric-value-not-in-surface | 246 |
+| target-description_span-ambiguous | 90 |
+| selector-with-empty-context | 81 |
+| target-count_span-ambiguous | 16 |
 | target-name_span-ambiguous | 5 |
 
 ### human-adapted-v1-diagram: 538 in, 538 kept
@@ -494,5 +502,5 @@ Kept with a warning (not an error; see README):
 ## Final check of the written splits
 
 - unresolved errors: **0**
-- families present in more than one split: **2797**
+- families present in more than one split: **3311**
 - label conflicts between identical texts, resolved by source priority: {'main-synthetic<-main-synthetic': 4}

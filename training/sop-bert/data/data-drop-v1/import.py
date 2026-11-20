@@ -8,7 +8,7 @@ node.n / drawn.count; determiners and `needs` are kept as written),
 validate every row (world, request fields, label banks and keys of the merged inventory, verbatim spans, references present
 in context.existing, official Validator and row conversions, duplicates against the official dataset and earlier drops) and
 write management/data-drop/<batch>/FEEDBACK.md (accepted/rejected counts with reasons and examples, normalisations).
-Accepted rows of all batches go to accepted.jsonl (source `data-drop-v1` of the official build); `needs` of all batches are
+Accepted rows of all batches go to accepted.jsonl.gz (source `data-drop-v1` of the official build); `needs` of all batches are
 summarised in management/data-drop/NEEDS-SUMMARY.md for the compilation stream. Deterministic; re-run after every drop:
     python3 import.py && python3 ../../../../official-dataset/build.py
 """
@@ -45,6 +45,7 @@ SLOT_ID = re.compile(r'\b(?:[a-z]+_[a-z_]+|chart:\d+|seg-\d+)\b')
 REF_KEYS = {'node.ids', 'link.ids', 'group.id', 'group.ids', 'drawn.ids', 'drawn.id', 'drawn.anchor', 'node.anchor', 'chart.id'}  # part.owner may name a part of an object ("the roof")
 POPULATION = re.compile(r'\b(all|every|each|everything|them|these|those|it|its|this|that|selected|selection|one|ones|both|other|others|rest|her|him|his|she|he|they|their)\b', re.I)
 WRAP = re.compile(r"^(hey|please|quick one|hmm|one more thing|ok|okay|so|um|uh|can you|could you|would you)[,:—\- ]+|[,— ]+(please|thanks|thank you|go on|if you can|cheers|pls)[.!?]*$", re.I)
+STRICT = True  # quality review 2026-11-20: target/act words missing from the text reject the row (labels missing drop the label)
 HOLD_RATE = 0.05  # quality gate (coordinator, 2026-11-20): a batch rejecting more than 5% of its rows is held
 QUAL = {'some', 'a few', 'few', 'several', 'many', 'lots', 'a lot of', 'a couple of', 'more', 'a handful of'}
 
@@ -402,6 +403,8 @@ def normalise(row, stats):
             del t[f]; stats[f'target {f}: null removed'] += 1
         if q.get('trigger') is None and 'trigger' in q:
             del q['trigger']
+        if t.get('fill') == 'new' and t.get('mode') == 'new':
+            del t['fill']; stats['target fill new on a new target removed (mode new says it)'] += 1
         if t.get('fill') == 'pronoun':
             t['fill'] = 'context'; stats['target fill pronoun -> context'] += 1
         if t.get('fill') == 'ordinal':
@@ -410,7 +413,12 @@ def normalise(row, stats):
         if span:
             for f in ('kind_span', 'name_span', 'description_span', 'count_span'):
                 if isinstance(t.get(f), str) and not (official.find_all(span, t[f]) or t[f] in span):
-                    del t[f]; stats[f'target {f} not in the request text removed (row kept)'] += 1
+                    if STRICT and f in ('kind_span', 'name_span'):
+                        row['_strict_reject'] = f'target-{f}-not-in-text'  # strict import: the target's words must be in the text
+                    else:
+                        del t[f]; stats[f'target {f} not in the request text removed (row kept)'] += 1
+            if STRICT and isinstance(q.get('trigger'), str) and q['trigger'] and q['trigger'] not in span:
+                row['_strict_reject'] = 'trigger-not-in-text'
             before = len(q.get('constraints') or [])
             q['constraints'] = [c for c in q.get('constraints') or [] if not (isinstance(c, dict) and isinstance(c.get('value_span'), str)
                                                                              and not (official.find_all(span, c['value_span']) or c['value_span'] in span))]
@@ -651,6 +659,8 @@ def main():
                     row['_family_tier'] = fam_tiers[row['family']].most_common(1)[0][0]
                 needs = [n for group in normalise(row, stats) for n in group] if isinstance(row.get('requests'), list) else []
                 errs = check(row, seen, official_seen)
+                if row.get('_strict_reject'):
+                    errs = (errs or []) + [row.pop('_strict_reject')]
                 for n in needs:
                     frame = str((n or {}).get('frame', 'unspecified')) if isinstance(n, dict) else str(n)
                     batch_needs_rows.append({'batch': batch.name, 'text': row.get('text'), 'frame': frame,
@@ -760,7 +770,10 @@ def main():
     for name, mode in resigned.items():
         summary.setdefault(name, {})['resigned'] = mode
     summary.update({name: {'waiting': why} for name, why in waiting.items()})
-    (HERE / 'accepted.jsonl').write_text(''.join(json.dumps(r, ensure_ascii=False) + '\n' for r in accepted))
+    import gzip  # over 100 MB as text (GitHub's file limit): stored gzipped, deterministic (no name, mtime 0)
+    with open(HERE / 'accepted.jsonl.gz', 'wb') as raw, gzip.GzipFile(fileobj=raw, mode='wb', mtime=0, filename='') as z:
+        z.write(''.join(json.dumps(r, ensure_ascii=False) + '\n' for r in accepted).encode())
+    (HERE / 'accepted.jsonl').unlink(missing_ok=True)
     every = [json.loads(l) for p in sorted(FROZEN.glob('*.needs.jsonl')) for l in p.read_text().splitlines() if l.strip()]
     if every:
         by = collections.defaultdict(list)

@@ -1,15 +1,3 @@
-{"batch": "pilot", "text": "change the value for March from 30 to 40", "frame": "point.value (operator=eq, character=discard)", "value": "30", "span": "30"}
-{"batch": "pilot", "text": "please change the value for March from 30 to 40", "frame": "point.value (operator=eq, character=discard)", "value": "30", "span": "30"}
-{"batch": "pilot", "text": "change the value for March from 30 to 40 please", "frame": "point.value (operator=eq, character=discard)", "value": "30", "span": "30"}
-{"batch": "pilot", "text": "change the value for March from 30 to 40, thanks", "frame": "point.value (operator=eq, character=discard)", "value": "30", "span": "30"}
-{"batch": "pilot", "text": "change the value for March from 30 to 40 — go on", "frame": "point.value (operator=eq, character=discard)", "value": "30", "span": "30"}
-{"batch": "pilot", "text": "March should be 40, not 30", "frame": "point.value (operator=eq, character=discard)", "value": "30", "span": "30"}
-{"batch": "pilot", "text": "please March should be 40, not 30", "frame": "point.value (operator=eq, character=discard)", "value": "30", "span": "30"}
-{"batch": "pilot", "text": "March should be 40, not 30 please", "frame": "point.value (operator=eq, character=discard)", "value": "30", "span": "30"}
-{"batch": "pilot", "text": "March should be 40, not 30, thanks", "frame": "point.value (operator=eq, character=discard)", "value": "30", "span": "30"}
-{"batch": "pilot", "text": "March should be 40, not 30 — go on", "frame": "point.value (operator=eq, character=discard)", "value": "30", "span": "30"}
-{"batch": "pilot", "text": "March 40 instead of 30", "frame": "point.value (operator=eq, character=discard)", "value": "30", "span": "30"}
-{"batch": "pilot", "text": "March 40 instead of 30, if you can", "frame": "point.value (operator=eq, character=discard)", "value": "30", "span": "30"}
 {"batch": "pilot", "text": "rotate the first box about 15 degrees", "frame": "node.rotate", "value": "15 degrees", "span": "15 degrees"}
 {"batch": "pilot", "text": "please rotate the first box about 15 degrees", "frame": "node.rotate", "value": "15 degrees", "span": "15 degrees"}
 {"batch": "pilot", "text": "rotate the first box about 15 degrees please", "frame": "node.rotate", "value": "15 degrees", "span": "15 degrees"}
@@ -42,7 +30,6 @@
 {"batch": "pilot", "text": "highlight the best month in green — go on", "frame": "chart.condition", "value": "max → green", "span": "best month in green"}
 {"batch": "pilot", "text": "colour the losers red", "frame": "chart.condition", "value": "negative → red", "span": "losers red"}
 {"batch": "pilot", "text": "colour the losers red, if you can", "frame": "chart.condition", "value": "negative → red", "span": "losers red"}
-{"batch": "pilot", "text": "change the vaalue for March from 30 to 40 please", "frame": "point.value (operator=eq, character=discard)", "value": "30", "span": "30"}
 {"batch": "pilot", "text": "rotate the first box abbout 15 degrees, thanks", "frame": "node.rotate", "value": "15 degrees", "span": "15 degrees"}
 {"batch": "pilot", "text": "please tuurn the Start box slightly to the right", "frame": "node.rotate", "value": "right", "span": "slightly to the right"}
 {"batch": "pilot", "text": "turn the Sttart box slightly to the right, thanks", "frame": "node.rotate", "value": "right", "span": "slightly to the right"}
@@ -98,3 +85,4 @@
 {"batch": "pilot", "text": "hmm, yes, and a bit bigger than the cat", "frame": "drawn.perspective", "value": "bigger than the cat", "span": "bigger than the cat"}
 {"batch": "pilot", "text": "one more thing: yes, and a bit bigger than the cat", "frame": "drawn.perspective", "value": "bigger than the cat", "span": "bigger than the cat"}
 {"batch": "pilot", "text": "give the trrees a shadow, thanks", "frame": "drawn.shadow", "value": "on", "span": "a shadow"}
+{"batch": "pilot", "text": "hmm, there's room to the left of the hoouse — the tree goes there", "frame": "drawn.relation.anchor", "value": "the hoouse", "span": "the hoouse"}

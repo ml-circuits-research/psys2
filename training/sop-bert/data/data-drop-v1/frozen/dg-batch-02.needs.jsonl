@@ -2,6 +2,8 @@
 {"batch": "dg-batch-02", "text": "add May right after April with 34", "frame": "point.position", "value": "after April", "span": "right after April"}
 {"batch": "dg-batch-02", "text": "add June at the very end, value 60, so the chart covers the half year", "frame": "point.position", "value": "end", "span": "at the very end"}
 {"batch": "dg-batch-02", "text": "add an April category with 55 and make sure it lands after March", "frame": "point.position", "value": "after March", "span": "after March"}
+{"batch": "dg-batch-02", "text": "put a step in between n3 and n4", "frame": "node.relation.anchor", "value": "n3 and n4", "span": "n3 and n4"}
+{"batch": "dg-batch-02", "text": "stick an approval box between n3 and n4", "frame": "node.relation.anchor", "value": "n3 and n4", "span": "n3 and n4"}
 {"batch": "dg-batch-02", "text": "give the diamond a nudge clockwise", "frame": "node.rotation", "value": "clockwise", "span": "clockwise"}
 {"batch": "dg-batch-02", "text": "fix the Start font size, it's tiny", "frame": "node.fontSize", "value": "readable", "span": "fix"}
 {"batch": "dg-batch-02", "text": "pastel theme throughout, with a calm blue as the anchor colour", "frame": "diagram.colour", "value": "calm blue", "span": "calm blue"}

@@ -36,7 +36,7 @@ SC = WORK / '.session-control'
 DROP = WORK / 'management' / 'data-drop'
 BENCH = WORK / 'management' / 'benchmark'
 SAMPLE = BENCH / 'worker-reading-sample-v1.jsonl'
-ACCEPTED = ROOT / 'data' / 'data-drop-v1' / 'accepted.jsonl'
+ACCEPTED = ROOT / 'data' / 'data-drop-v1' / 'accepted.jsonl.gz'
 MODELS = REPO / 'docs' / 'webchat' / 'models' / 'sop-bert'
 EARLY = {'pilot', 'dg-batch-01', 'dg-batch-02', 'dg-batch-03', 'dw-batch-01', 'dw-batch-02'}  # first drops; later ones are `new`
 # Groups: `in-v8-train` = batches whose rows are in the v8 training split (read from the dataset commit, not assumed);
@@ -87,7 +87,7 @@ def v8_training():
 
 def accepted_rows():
     """Importer rows with a unique id: a residual row that reuses an id of its batch's bulk gets '#<text sha prefix>'."""
-    rows = [json.loads(l) for l in ACCEPTED.read_text().splitlines() if l.strip()]
+    rows = [json.loads(l) for l in gzip.open(ACCEPTED, 'rt').read().splitlines() if l.strip()]
     counts = collections.Counter(r['id'] for r in rows)
     for r in rows:
         if counts[r['id']] > 1:
