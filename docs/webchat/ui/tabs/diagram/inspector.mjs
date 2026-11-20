@@ -70,6 +70,8 @@ export function makeInspector(inspector, { tool, model, selection, select, html,
   const groupColour = field(groupForm, 'Group colour', 'select'), groupSize = field(groupForm, 'Group size', 'select');
   const groupX = field(groupForm, 'Group X', 'input', 'number'), groupY = field(groupForm, 'Group Y', 'input', 'number'); groupX.step = groupY.step = 'any';
   const groupScale = field(groupForm, 'Scale group', 'input', 'number'); groupScale.step = '0.1';
+  const groupRegion = field(groupForm, 'Place group at', 'select');
+  groupRegion.addEventListener('change', () => { const group = currentGroup(); if (group && groupRegion.value) tool('diagram.group.place', { id: group.id, at: groupRegion.value }); groupRegion.value = ''; });
   const currentGroup = () => model().group.get(selection().group);
   // The next free group name: g<k> after every code in use (the rules refuse a name that is taken).
   const nextGroupName = () => { const m = model(), taken = new Set([...m.node.keys(), ...m.link.keys(), ...m.group.keys()]); for (let n = 1; n <= 10000; n++) if (!taken.has('g' + n)) return 'g' + n; return null; };
@@ -121,17 +123,22 @@ export function makeInspector(inspector, { tool, model, selection, select, html,
   const chartPanel = html('section', 'dg-chart-tools'), chartForm = html('div', 'dg-chart-form');
   chartPanel.append(html('h3', '', 'New numeric group'), chartForm);
   const chartTitle = field(chartForm, 'Numeric group label'), chartLayout = field(chartForm, 'Chart layout', 'select'), chartData = field(chartForm, 'Chart data', 'textarea');
-  chartData.placeholder = 'Label, number — one per line';
+  chartData.placeholder = 'Label, number[, error] per line, or a pasted table; a label said again is one more record of it';
+  const chartAggregate = field(chartForm, 'Aggregate records', 'select'), chartBins = field(chartForm, 'Histogram bins', 'input', 'number');
   const chartStatus = html('p', 'dg-empty-selection');
   chartForm.append(btn('Create numeric group', 'Create editable numeric nodes and their group', async () => {
     const labels = [], numbers = [];
+    // A pasted table works too: a first line without a number (its header) is skipped; cells split by commas, semicolons or tabs.
+    const errors = [];
     for (const line of chartData.value.split('\n').filter((row) => row.trim())) {
-      const at = line.lastIndexOf(','), number = Number(line.slice(at + 1));
-      if (at < 1 || !line.slice(at + 1).trim() || !Number.isFinite(number)) { chartStatus.textContent = 'Use one label, number per line.'; return; }
-      labels.push(line.slice(0, at).trim()); numbers.push(number);
+      const cells = line.split(/[,;\t]/).map((cell) => cell.trim()), label = cells[0], number = Number(cells[1]), error = cells.length > 2 ? Number(cells[2]) : NaN;
+      if (cells.length < 2 || !label || cells[1] === '' || !Number.isFinite(number)) { if (!labels.length && cells.length > 1) continue; chartStatus.textContent = 'Use one label, number per line.'; return; }
+      labels.push(label); numbers.push(number); if (Number.isFinite(error)) errors.push(error);
     }
     chartStatus.textContent = '';
-    const reply = await tool('diagram.group.chart.make', { label: chartTitle.value.trim() || 'Data group', labels, values: numbers, layout: chartLayout.value });
+    const bins = Number(chartBins.value);
+    const reply = await tool('diagram.group.chart.make', { label: chartTitle.value.trim() || 'Data group', labels, values: numbers, layout: chartLayout.value,
+      ...(chartAggregate.value ? { aggregate: chartAggregate.value } : {}), ...(bins >= 2 ? { bins } : {}), ...(errors.length === numbers.length ? { errors } : {}) });
     if (reply?.ok) { chartDraft = false; sync(); }
   }), btn('Cancel', 'Cancel numeric group creation', () => { chartDraft = false; sync(); }), chartStatus);
 
@@ -158,6 +165,7 @@ export function makeInspector(inspector, { tool, model, selection, select, html,
     const size = values(ops, 'diagram.node.resize', 'width');
     for (const input of [nodeWidth, nodeHeight]) { if (size.min !== undefined) input.min = size.min; if (size.max !== undefined) input.max = size.max; }
     fill(groupLayout, values(ops, 'diagram.group.layout', 'layout').enum ?? [], { blank: '—' });
+    fill(groupRegion, values(ops, 'diagram.group.place', 'at').enum ?? [], { blank: '—' });
     fill(groupColour, values(ops, 'diagram.group.change', 'colour').enum ?? m.options.colour ?? [], { blank: '—' });
     fill(groupSize, values(ops, 'diagram.group.change', 'size').enum ?? m.options.size ?? [], { blank: '—' });
     const scale = values(ops, 'diagram.group.resize', 'scale'); if (scale.min !== undefined) groupScale.min = scale.min; if (scale.max !== undefined) groupScale.max = scale.max;
@@ -168,6 +176,8 @@ export function makeInspector(inspector, { tool, model, selection, select, html,
     fill(linkFromSide, values(ops, 'diagram.link.change', 'fromSide').enum ?? []); fill(linkToSide, values(ops, 'diagram.link.change', 'toSide').enum ?? []);
     fill(linkHead, values(ops, 'diagram.link.change', 'head').enum ?? []); fill(linkTail, values(ops, 'diagram.link.change', 'tail').enum ?? []);
     fill(chartLayout, values(ops, 'diagram.group.chart.make', 'layout').enum ?? []);
+    fill(chartAggregate, values(ops, 'diagram.group.chart.make', 'aggregate').enum ?? [], { blank: 'sum' });
+    const binLimits = values(ops, 'diagram.group.chart.make', 'bins'); if (binLimits.min !== undefined) chartBins.min = binLimits.min; if (binLimits.max !== undefined) chartBins.max = binLimits.max;
     sync();
   }
 
@@ -190,7 +200,7 @@ export function makeInspector(inspector, { tool, model, selection, select, html,
     groupHeading.textContent = group ? 'Group properties' : nodes.length + ' selected objects';
     put(groupId, group?.id ?? nextGroupName() ?? '');
     makeGroup.hidden = !!group; makeGroup.disabled = nodes.length < 2;
-    for (const input of [groupLayout, groupColour, groupSize, groupX, groupY, groupScale]) hide(input, !group);
+    for (const input of [groupLayout, groupColour, groupSize, groupX, groupY, groupScale, groupRegion]) hide(input, !group);
     ungroup.hidden = removeGroup.hidden = !group;
     if (group) {
       put(groupLabel, group.label ?? ''); put(groupLayout, group.layout ?? ''); put(groupScale, group.scale ?? 1);

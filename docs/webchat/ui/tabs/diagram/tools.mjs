@@ -170,13 +170,16 @@ export function makeStylePanels(host, { tool, model, selection, html, btn }) {
   const precision = amount('Decimals', 'precision', '1', false), lineStyle = choose('Chart line style', 'lineStyle'), lineWidthInput = amount('Chart line width', 'lineWidth', '0.5', false);
   const markerSize = amount('Marker size', 'markerSize', '1', false), markerEdge = amount('Marker edge', 'markerEdge', '0.5', false), barWidthInput = amount('Bar width (share)', 'barWidth', '0.05', false);
   const pieRadius = amount('Pie radius', 'pieRadius', '5', false), gridStyle = choose('Grid style', 'gridStyle');
+  const xAxis = choose('Category axis', 'xAxis'), errorCap = amount('Error bar caps', 'errorCap', '1', false);
+  const errorBars = btn('Error bars', 'Show or hide the error bars (the categories need errors)', () => format({ errorBars: currentGroup()?.inputs?.errorBars !== true }));
   const chartFontRow = html('div', 'dg-row');
   // A− and A+: one point down or up from the size the chart is observed with, within the declared limits.
   const stepFont = (by) => { const g = currentGroup(), limit = values(ops, 'diagram.chart.format', 'fontSize'), now = Number(g?.inputs?.fontSize);
     if (!g || !Number.isFinite(now)) return; format({ fontSize: Math.min(limit.max ?? now + by, Math.max(limit.min ?? now + by, now + by)) }); };
   chartFontRow.append(btn('A−', 'Smaller chart text', () => stepFont(-1)), btn('A+', 'Bigger chart text', () => stepFont(1)));
-  const formatInputs = [fontSizeInput, titleWeight, titleColour, titlePosition, axisSide, invert, axisScale, tickFormat, precision, lineStyle, lineWidthInput, markerSize, markerEdge, barWidthInput, pieRadius, gridStyle];
+  const formatInputs = [fontSizeInput, titleWeight, titleColour, titlePosition, axisSide, invert, axisScale, tickFormat, precision, lineStyle, lineWidthInput, markerSize, markerEdge, barWidthInput, pieRadius, gridStyle, xAxis, errorCap];
   chart.append(condRow);
+  chartFontRow.append(errorBars);
   chart.append(table, addRow, formatRow, toggles, chartFontRow, styleRow);
   const currentGroup = () => model().group.get(selection().group);
 
@@ -197,9 +200,9 @@ export function makeStylePanels(host, { tool, model, selection, html, btn }) {
       const fillSel = (input, list) => { input.replaceChildren(); const b = html('option', '', '—'); b.value = ''; input.append(b); for (const v of list) { const o = html('option', '', v); o.value = v; input.append(o); } };
       fillSel(effect, values(ops, 'diagram.node.change', 'effect').enum ?? []); fillSel(routeSel, values(ops, 'diagram.link.change', 'route').enum ?? []);
       fillSel(legend, values(ops, 'diagram.chart.format', 'legend').enum ?? []);
-      for (const input of [titleWeight, titlePosition, axisSide, invert, axisScale, tickFormat, lineStyle, gridStyle]) fillSel(input, values(ops, 'diagram.chart.format', input.dataset.param).enum ?? []);
+      for (const input of [titleWeight, titlePosition, axisSide, invert, axisScale, tickFormat, lineStyle, gridStyle, xAxis]) fillSel(input, values(ops, 'diagram.chart.format', input.dataset.param).enum ?? []);
       fillSel(titleColour, values(ops, 'diagram.chart.format', 'titleColour').enum ?? colours);
-      for (const input of [precision, fontSizeInput, lineWidthInput, markerSize, markerEdge, barWidthInput, pieRadius]) { const limit = values(ops, 'diagram.chart.format', input.dataset.param); if (limit.min !== undefined) input.min = limit.min; if (limit.max !== undefined) input.max = limit.max; }
+      for (const input of [precision, fontSizeInput, lineWidthInput, markerSize, markerEdge, barWidthInput, pieRadius, errorCap]) { const limit = values(ops, 'diagram.chart.format', input.dataset.param); if (limit.min !== undefined) input.min = limit.min; if (limit.max !== undefined) input.max = limit.max; }
       fillSel(sort, values(ops, 'diagram.chart.sort', 'order').enum ?? []); fillSel(condTest, values(ops, 'diagram.chart.highlight', 'test').enum ?? []); fillSel(condColour, colours);
     },
     sync() {
@@ -232,6 +235,7 @@ export function makeStylePanels(host, { tool, model, selection, html, btn }) {
       }
       if (document.activeElement !== yMax) yMax.value = group.yMax ?? ''; if (document.activeElement !== xLabel) xLabel.value = group.xLabel ?? ''; if (document.activeElement !== yLabel) yLabel.value = group.yLabel ?? '';
       for (const input of formatInputs) if (document.activeElement !== input) input.value = group.inputs?.[input.dataset.param] ?? '';
+      errorBars.setAttribute('aria-pressed', String(group.inputs?.errorBars === true));
       valueLabels.setAttribute('aria-pressed', String(group.valueLabels !== false)); gridlines.setAttribute('aria-pressed', String(group.gridlines === true)); legend.value = group.legend ?? '';
     },
   };
