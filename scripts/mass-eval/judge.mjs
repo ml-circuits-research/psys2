@@ -102,7 +102,10 @@ function judgeRequest(req,ctx){
   const aligned=ALIGNED.get(world+'|'+c.key),mapped=aligned?.values.get(lc(c.value));
   const have=objs.flatMap(o=>{const own=inputsFor(o,c.key);return own.length||!aligned?own:inputsFor(o,aligned.parameter);});
   if(!have.length){add('value:'+c.key,objs.length>0,false,'no observed input');continue;}
-  add('value:'+c.key,have.some(h=>sameValue(c.value,h,c.key)||mapped!==undefined&&sameValue(mapped,h,c.key)),true,{want:c.value,...(mapped!==undefined?{declared:mapped}:{}),have:have.slice(0,3)});
+  // A list said for an observation of several values (a chart's values observed as a set): the same items, any order.
+  const items=typeof c.value==='string'?c.value.split(/\s*,\s*/).filter(Boolean):[];
+  const asSet=items.length>1&&have.length===items.length&&[...items].sort().every((w,i)=>sameValue(w,[...have].map(String).sort()[i],c.key));
+  add('value:'+c.key,asSet||have.some(h=>sameValue(c.value,h,c.key)||mapped!==undefined&&sameValue(mapped,h,c.key)),true,{want:c.value,...(mapped!==undefined?{declared:mapped}:{}),have:have.slice(0,3)});
  }};
  const relationCheck=objs=>{
   if(!relation)return;const rel=RELATIONS[relation.value];
