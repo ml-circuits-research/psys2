@@ -9,6 +9,7 @@ import {openBrowserReaderRoute} from '../scripts/lib/browser-reader-route.mjs';
 import {turnOf,refusalOf,rawReadingSop,toJSON,exportRecords} from '../docs/webchat/ui/phrase-log.mjs';
 import {sopChanges} from '../docs/webchat/ui/state-diff.mjs';
 import {readBatch} from '../scripts/ingest-failures.mjs';
+import {functionalTurnLimitsScript} from './fixtures/load-aware.mjs';
 
 const chrome=process.env.CHROME??'/usr/bin/chromium';
 const skip=await access(chrome).then(()=>false,()=>'Chromium unavailable');
@@ -44,7 +45,8 @@ test('the turn record: reader requests and reading as SOP, the dispatched circui
 });
 
 test('three turns in the demo page export asked, read, compiled and happened per turn with SOP',{skip,timeout:600000},async()=>{
- const b=await openBrowserReaderRoute({chrome,timeoutMs:180000});
+ // The record of each turn is checked, not its latency: the turn watchdog is raised so the full gate's CPU load cannot cut a turn off.
+ const b=await openBrowserReaderRoute({chrome,timeoutMs:180000,initScripts:[functionalTurnLimitsScript()]});
  try{
   await b.evaluate(`(()=>{window.__blobs=[];const o=URL.createObjectURL.bind(URL);URL.createObjectURL=x=>{window.__blobs.push(x);return o(x);};})()`);
   await b.evaluate(`window.psys2.showTab('draw')`);await delay(500);

@@ -12,6 +12,7 @@ import {fileURLToPath} from 'node:url';
 import {openBrowserReaderRoute} from '../scripts/lib/browser-reader-route.mjs';
 import {Z3_BASE} from '../src/dialog/placement-search-provider.mjs';
 import {z3Version} from '../src/vendor/sopworld/smt-z3.mjs';
+import {functionalTurnLimitsScript} from './fixtures/load-aware.mjs';
 
 const chrome=process.env.CHROME??'/usr/bin/chromium';
 const mirror=fileURLToPath(new URL(`../../soplang-words-lib/docs/vendor/z3-solver-${z3Version}/`,import.meta.url));
@@ -23,7 +24,8 @@ const GUARD='psys2.reloadedForIsolation';
 
 test('every Drawing placement in the demo page is solved by Z3 when isolated, by the disclosed internal search otherwise',{skip,timeout:300000},async()=>{
  // The first page keeps its one-time isolation reload used, so it stays not isolated.
- const browser=await openBrowserReaderRoute({chrome,timeoutMs:120000,initScripts:[`try{sessionStorage.setItem('${GUARD}','1')}catch{}`]}),fetched={};
+  // The placement each turn reports is checked, not its latency: the turn watchdog is raised (saved setting, kept across the reload) so gate load cannot cut a turn off.
+ const browser=await openBrowserReaderRoute({chrome,timeoutMs:120000,initScripts:[`try{sessionStorage.setItem('${GUARD}','1')}catch{}`,functionalTurnLimitsScript()]}),fetched={};
  try{
   browser.on(async m=>{
    if(m.method!=='Fetch.requestPaused')return;
