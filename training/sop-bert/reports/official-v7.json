@@ -1,0 +1,278 @@
+{
+ "format": "psys2.official-reader-report/1",
+ "dataset": "official-dataset/ (commit 2fc5ad59)",
+ "keyRun": {
+  "checkpointSha256": "ff23f070a0145aca5a56b7dd34080b8922c94f03ad4b4bf76c09231b6c0f0ac1",
+  "epochs": 3,
+  "devPositiveBioGlobalExact": 0.8973,
+  "devDecodedMentionF1": 0.9714,
+  "warmStart": "v6 checkpoint 5c2211cb"
+ },
+ "cutterRun": "official-cutter-run-v3 best epoch 2",
+ "bundle": {
+  "manifestSha256": "291f851b51198c45f456447a000c9a85512f1132086bfc50fc9dd7abf5a79163",
+  "exportedManifest": "0a564545791aa23fedd89dc76ae272192c6249d61d56c1dd88cb4a23a55bd9b4",
+  "bindingsSha256": "6836dd20cb797222b0ffd3bc0029ec1651481102fbbd54b04b82aea663f723ff",
+  "installed": true
+ },
+ "test": {
+  "rows": 5392,
+  "v7Conditional": {
+   "intentExact": 0.6313,
+   "globalFieldsExact": 0.9114,
+   "sourceSpansExact": 0.6296,
+   "completeReaderMeaningExact": 0.4668
+  },
+  "v6Conditional": {
+   "intentExact": 0.6144,
+   "globalFieldsExact": 0.8961,
+   "sourceSpansExact": 0.5799,
+   "completeReaderMeaningExact": 0.4088
+  },
+  "v7WithCutter": {
+   "intentExact": 0.5616,
+   "globalFieldsExact": 0.8381,
+   "sourceSpansExact": 0.5662,
+   "completeReaderMeaningExact": 0.3613,
+   "segmentationExact": 0.9943
+  },
+  "v6WithCutter": {
+   "intentExact": 0.5501,
+   "globalFieldsExact": 0.8233,
+   "sourceSpansExact": 0.5213,
+   "completeReaderMeaningExact": 0.3242,
+   "segmentationExact": 0.9943
+  },
+  "unchangedLabelRows": {
+   "rows": 3416,
+   "v7ConditionalIntent": 0.6777,
+   "v6ConditionalIntent": 0.6593,
+   "v7ConditionalComplete": 0.5612,
+   "v6ConditionalComplete": 0.4769
+  }
+ },
+ "appRouteProbes": {
+  "supported": {
+   "v7": 23,
+   "of": 28
+  },
+  "rows": [
+   {
+    "text": "add a tree",
+    "area": "drawing",
+    "status": "supported",
+    "answer": "Created a tree. I used the most likely reading; you can correct it or undo.",
+    "failures": []
+   },
+   {
+    "text": "make the house blue",
+    "area": "drawing",
+    "status": "supported",
+    "answer": "Updated the house. I used the most likely reading; you can correct it or undo.",
+    "failures": []
+   },
+   {
+    "text": "draw a boat in the lake",
+    "area": "drawing",
+    "status": "supported",
+    "answer": "Created boat o7 at (333.5, 491). You can undo this change. I used the most likely reading; you can correct it or undo.",
+    "failures": []
+   },
+   {
+    "text": "put the sun above the house",
+    "area": "drawing",
+    "status": "supported",
+    "answer": "Created sun o7 at (581, 353). There was no sun on the page, so I drew a new one. You can undo this change.",
+    "failures": []
+   },
+   {
+    "text": "add a house next to the lake and left of the tree",
+    "area": "drawing",
+    "status": "unsupported",
+    "answer": "I could not apply the requested placement. Nothing changed.",
+    "failures": [
+     "incomplete-provider-coverage:requests.0",
+     "provider-unresolved:requests.0 {\"reason\":\"illegal-I-after-O\",\"key\":\"drawing.drawn.relation\"}",
+     "provider-unresolved:requests.0 {\"reason\":\"presence-span-inconsistent\",\"key\":\"drawing.drawn.relation\",\"head\":{\"area\":\"drawing\",\"property\":\"drawn.relation\",\"present\":true,\"ranges\":[]}}"
+    ]
+   },
+   {
+    "text": "draw a big yellow sun",
+    "area": "drawing",
+    "status": "supported",
+    "answer": "Created a sun. I used the most likely reading; you can correct it or undo.",
+    "failures": []
+   },
+   {
+    "text": "draw a lake",
+    "area": "drawing",
+    "status": "supported",
+    "answer": "Created a lake. I used the most likely reading; you can correct it or undo.",
+    "failures": []
+   },
+   {
+    "text": "draw a cloud",
+    "area": "drawing",
+    "status": "supported",
+    "answer": "Created a cloud. I used the most likely reading; you can correct it or undo.",
+    "failures": []
+   },
+   {
+    "text": "put a tree to the left of the house",
+    "area": "drawing",
+    "status": "supported",
+    "answer": "Created tree o7 at (479, 595). You can undo this change. I used the most likely reading; you can correct it or undo.",
+    "failures": []
+   },
+   {
+    "text": "draw a sun above the house",
+    "area": "drawing",
+    "status": "supported",
+    "answer": "Created sun o7 at (581, 353). You can undo this change. I used the most likely reading; you can correct it or undo.",
+    "failures": []
+   },
+   {
+    "text": "add a duck in the lake",
+    "area": "drawing",
+    "status": "supported",
+    "answer": "Created duck o7 at (332.5, 472.5). You can undo this change. I used the most likely reading; you can correct it or undo.",
+    "failures": []
+   },
+   {
+    "text": "Draw a fish in the lake.",
+    "area": "drawing",
+    "status": "supported",
+    "answer": "Created fish o7 at (332.5, 472.5). You can undo this change. I used the most likely reading; you can correct it or undo.",
+    "failures": []
+   },
+   {
+    "text": "Draw a tree to the left of the house.",
+    "area": "drawing",
+    "status": "supported",
+    "answer": "Created tree o7 at (479, 595). You can undo this change. I used the most likely reading; you can correct it or undo.",
+    "failures": []
+   },
+   {
+    "text": "draw a boat",
+    "area": "drawing",
+    "status": "supported",
+    "answer": "Created a boat. I used the most likely reading; you can correct it or undo.",
+    "failures": []
+   },
+   {
+    "text": "make the house blue",
+    "area": "drawing",
+    "status": "supported",
+    "answer": "Updated the house. I used the most likely reading; you can correct it or undo.",
+    "failures": []
+   },
+   {
+    "text": "move the meeting to 3pm",
+    "area": "calendar",
+    "status": "unsupported",
+    "answer": "I could not find an object to apply that action to. Nothing changed.",
+    "failures": []
+   },
+   {
+    "text": "make her hair shorter",
+    "area": "avatar",
+    "status": "supported",
+    "answer": "Updated the hair_front. I used the most likely reading; you can correct it or undo.",
+    "failures": []
+   },
+   {
+    "text": "make her hair shorter",
+    "area": "drawing",
+    "status": "unsupported",
+    "answer": "I could not identify an action to apply. Nothing changed.",
+    "failures": [
+     "incomplete-provider-coverage:requests.0",
+     "provider-unresolved:requests.0 {\"reason\":\"cross-area-key-unresolved\",\"key\":\"avatar.part.length\",\"head\":{\"area\":\"avatar\",\"property\":\"part.length\",\"present\":true,\"ranges\":[[14,21]]}}",
+     "provider-unresolved:requests.0 {\"reason\":\"metadata-presence-inconsistent\",\"key\":\"request.constraint.character\"}"
+    ]
+   },
+   {
+    "text": "make the house bigger",
+    "area": "drawing",
+    "status": "supported",
+    "answer": "Updated the house. I used the most likely reading; you can correct it or undo.",
+    "failures": []
+   },
+   {
+    "text": "make it smaller",
+    "area": "drawing",
+    "status": "supported",
+    "answer": "Updated the cloud. I took the reference as the cloud.",
+    "failures": [
+     "context-reference-not-bound:requests.0.targets.t0",
+     "incomplete-structural-coverage:coverage"
+    ]
+   },
+   {
+    "text": "make the sun a bit smaller",
+    "area": "drawing",
+    "status": "supported",
+    "answer": "Updated the sun. I used the most likely reading; you can correct it or undo.",
+    "failures": []
+   },
+   {
+    "text": "make the box wider",
+    "area": "drawing",
+    "status": "supported",
+    "answer": "Updated the rectangle. I used the most likely reading; you can correct it or undo.",
+    "failures": []
+   },
+   {
+    "text": "give her long hair",
+    "area": "avatar",
+    "status": "unsupported",
+    "answer": "I could not identify an action to apply. Nothing changed.",
+    "failures": [
+     "incomplete-provider-coverage:requests.0",
+     "provider-unresolved:requests.0 {\"reason\":\"presence-class-inconsistent\",\"key\":\"request.target.fill\"}",
+     "incomplete-model-coverage:coverage"
+    ]
+   },
+   {
+    "text": "make the hair longer",
+    "area": "avatar",
+    "status": "supported",
+    "answer": "Updated the hair_front. I used the most likely reading; you can correct it or undo.",
+    "failures": []
+   },
+   {
+    "text": "cut her hair shorter",
+    "area": "avatar",
+    "status": "supported",
+    "answer": "Updated the hair_front. I used the most likely reading; you can correct it or undo.",
+    "failures": []
+   },
+   {
+    "text": "give her short hair",
+    "area": "avatar",
+    "status": "supported",
+    "answer": "Updated the hair_front. I used the most likely reading; you can correct it or undo.",
+    "failures": []
+   },
+   {
+    "text": "make her hair curly",
+    "area": "avatar",
+    "status": "unsupported",
+    "answer": "I could not identify an action to apply. Nothing changed.",
+    "failures": [
+     "unresolved-canonical-property-binding:requests.0.constraints.c0_0.concept",
+     "unresolved-value-representation:requests.0.constraints.c0_0.value",
+     "unconsumed-predicted-range:requests.0.constraints.0.value"
+    ]
+   },
+   {
+    "text": "let her hair grow a bit longer",
+    "area": "avatar",
+    "status": "supported",
+    "answer": "Updated the hair_front. I used the most likely reading; you can correct it or undo.",
+    "failures": []
+   }
+  ]
+ },
+ "scope": "Reader metrics: evaluate-demo-reader.py on official-dataset test (gold cuts and cutter v3); v6 on the same rebuilt test set. Probes: probe-bundle.mjs --run, the 22 v6 probes plus 6 avatar feature probes, current src runtime and bindings."
+}
