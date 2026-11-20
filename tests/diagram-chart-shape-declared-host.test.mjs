@@ -121,3 +121,18 @@ test('a point value changed by an amount, places observed, series drawn on lying
  ok('diagram.group.layout id="g1" layout="pie"');
  svg=view().svg;assert.equal((svg.match(/<polygon/g)||[]).length,6,'a pie with a series draws it as a ring');
 });
+
+test('treemap layout: each member a rectangle as wide as its share, filling the plot, coloured from the palette',async()=>{
+ const {ok,view,host}=await area();
+ ok('diagram.group.chart.make label="Budget" layout="treemap" labels="Rent" labels="Food" labels="Fun" values=50 values=30 values=20');
+ const v=view().svg,a=rect(v,'n1'),b=rect(v,'n2'),c=rect(v,'n3');
+ assert.equal(Math.round(a.w),180,'half of a 360 wide plot');assert.equal(Math.round(b.w),108);assert.equal(Math.round(c.w),72);
+ assert.ok(Math.abs(a.x+a.w-b.x)<0.5&&Math.abs(b.x+b.w-c.x)<0.5,'side by side, filling the plot');
+ assert.equal(Math.round(a.h),220);
+ assert.ok(texts(v).some(t=>t.text==='Rent')&&texts(v).some(t=>t.text==='50'),'labelled with its value');
+ const fills=[...v.matchAll(/data-select="n\d"><rect [^>]*fill="(#[0-9a-f]+)"/gi)].map(m=>m[1]);
+ assert.equal(new Set(fills).size,3,'a colour each');
+ assert.ok(host.observe().objects.filter(o=>o.sourceType==='diagram.sketch.point').length===3,'the members are chart points');
+ ok('diagram.chart.format id="g1" layout="bar"');
+ assert.ok(rect(view().svg,'n1').w<60,'back to bars');
+});

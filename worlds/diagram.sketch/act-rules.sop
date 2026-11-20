@@ -97,6 +97,46 @@
 @a.ma.role.r app.act.request operation="diagram.node.make" role=?v
 @a.ma.role.a app.act.arg call=?ref attr=role value=?v
 @make.node.role core.rule when=$a.ma.m when=$a.ma.role.r then=$a.ma.role.a
+# A picture's image and caption, a table's rows and columns (catalog w.diagram.node source, caption, rows, columns).
+@a.ma.source.r app.act.request operation="diagram.node.make" source=?v
+@a.ma.source.a app.act.arg call=?ref attr=source value=?v
+@make.node.source core.rule when=$a.ma.m when=$a.ma.source.r then=$a.ma.source.a
+@a.ma.caption.r app.act.request operation="diagram.node.make" caption=?v
+@a.ma.caption.a app.act.arg call=?ref attr=caption value=?v
+@make.node.caption core.rule when=$a.ma.m when=$a.ma.caption.r then=$a.ma.caption.a
+@a.ma.rows.r app.act.request operation="diagram.node.make" rows=?v
+@a.ma.rows.a app.act.arg call=?ref attr=rows value=?v
+@make.node.rows core.rule when=$a.ma.m when=$a.ma.rows.r then=$a.ma.rows.a
+@a.ma.columns.r app.act.request operation="diagram.node.make" columns=?v
+@a.ma.columns.a app.act.arg call=?ref attr=columns value=?v
+@make.node.columns core.rule when=$a.ma.m when=$a.ma.columns.r then=$a.ma.columns.a
+# A table's cell texts (`cells`, in reading order: along the first row, then the next), each a w.diagram.cell of the
+# table made; the columns are the said ones, else 3. More texts than cells is refused.
+@dga.tcols.type core.type of=ui.diagram.tcols
+@a.tc.r app.act.request operation="diagram.node.make" columns=?k
+@a.tc.o ui.diagram.tcols request=make cols=?k
+@table.make.cols core.rule when=$a.tc.r then=$a.tc.o
+@a.tc.r0 app.act.request operation="diagram.node.make"
+@a.tc.any app.act.request columns=?anyk
+@a.tc.o3 ui.diagram.tcols request=make cols=3
+@table.make.cols.default core.rule when=$a.tc.r0 not=$a.tc.any then=$a.tc.o3
+@a.mc.m ui.diagram.made ref=?ref
+@a.mc.r app.act.request operation="diagram.node.make"
+@a.mc.k ui.diagram.tcols request=make cols=?k
+@a.mc.i app.act.item param="cells" n=?i value=?t
+@a.mc.row1 core.calc out=?r0 fn=idiv args=?i args=?k
+@a.mc.row core.calc out=?row fn=add args=?r0 args=1
+@a.mc.col1 core.calc out=?c0 fn=mod args=?i args=?k
+@a.mc.col core.calc out=?col fn=add args=?c0 args=1
+@a.mc.call app.act.call act=make kind=w.diagram.cell node=?ref row=?row column=?col text=?t order=2
+@make.table.cell core.rule when=$a.mc.m when=$a.mc.r when=$a.mc.k when=$a.mc.i with=$a.mc.row1 with=$a.mc.row with=$a.mc.col1 with=$a.mc.col then=$a.mc.call
+@a.mc.rows app.act.request operation="diagram.node.make" rows=?rs
+@a.mc.over core.check fn=gt args=?row args=?rs
+@a.mc.refuse app.act.refuse reason=table-cells-beyond-rows
+@make.table.cells.over core.rule when=$a.mc.r when=$a.mc.rows when=$a.mc.k when=$a.mc.i with=$a.mc.row1 with=$a.mc.row if=$a.mc.over then=$a.mc.refuse
+@a.mc.norows app.act.request rows=?anyrs
+@a.mc.over3 core.check fn=gt args=?row args=3
+@make.table.cells.over.default core.rule when=$a.mc.r not=$a.mc.norows when=$a.mc.k when=$a.mc.i with=$a.mc.row1 with=$a.mc.row if=$a.mc.over3 then=$a.mc.refuse
 @a.ma.xy.r app.act.request operation="diagram.node.make" x=?x y=?y
 @a.ma.xy.i0 core.calc out=?i0 fn=sub args=?i args=1
 @a.ma.xy.dx core.calc out=?dx fn=mul args=?i0 args=140
@@ -185,6 +225,43 @@
 @a.cn.rotation.r app.act.request operation="diagram.node.change" rotation=?v
 @a.cn.rotation.c app.act.call act=change thing=$a.it.n attr=rotation value=?v order=1
 @change.node.rotation core.rule when=$a.cn.rotation.r when=$a.it.i when=$a.it.n then=$a.cn.rotation.c
+@a.cn.source.r app.act.request operation="diagram.node.change" source=?v
+@a.cn.source.c app.act.call act=change thing=$a.it.n attr=source value=?v order=1
+@change.node.source core.rule when=$a.cn.source.r when=$a.it.i when=$a.it.n then=$a.cn.source.c
+@a.cn.caption.r app.act.request operation="diagram.node.change" caption=?v
+@a.cn.caption.c app.act.call act=change thing=$a.it.n attr=caption value=?v order=1
+@change.node.caption core.rule when=$a.cn.caption.r when=$a.it.i when=$a.it.n then=$a.cn.caption.c
+@a.cn.rows.r app.act.request operation="diagram.node.change" rows=?v
+@a.cn.rows.c app.act.call act=change thing=$a.it.n attr=rows value=?v order=1
+@change.node.rows core.rule when=$a.cn.rows.r when=$a.it.i when=$a.it.n then=$a.cn.rows.c
+@a.cn.columns.r app.act.request operation="diagram.node.change" columns=?v
+@a.cn.columns.c app.act.call act=change thing=$a.it.n attr=columns value=?v order=1
+@change.node.columns core.rule when=$a.cn.columns.r when=$a.it.i when=$a.it.n then=$a.cn.columns.c
+# A table's cell texts changed (`cells` in reading order, over the table's columns: its own, else 3): a cell with a
+# text takes the new one, one without gets one.
+@a.tcc.r app.act.request operation="diagram.node.change"
+@a.tcc.i app.act.item param="cells" n=?i value=?t
+@a.tcc.id app.act.item param="ids" value=?id
+@a.tcc.n w.diagram.node code=?id
+@a.tcc.own w.diagram.node code=?id columns=?k
+@a.tcc.anyk w.diagram.node code=?id columns=?anyk
+@a.tcc.req app.act.request operation="diagram.node.change" columns=?k
+@a.tcc.anyreq app.act.request columns=?anyrk
+@a.tcc.ko ui.diagram.tcols request=?id cols=?k
+@a.tcc.k3 ui.diagram.tcols request=?id cols=3
+@table.change.cols.said core.rule when=$a.tcc.r when=$a.tcc.id when=$a.tcc.n when=$a.tcc.req then=$a.tcc.ko
+@table.change.cols.own core.rule when=$a.tcc.r when=$a.tcc.id when=$a.tcc.own not=$a.tcc.anyreq then=$a.tcc.ko
+@table.change.cols.default core.rule when=$a.tcc.r when=$a.tcc.id when=$a.tcc.n not=$a.tcc.anyk not=$a.tcc.anyreq then=$a.tcc.k3
+@a.tcc.k ui.diagram.tcols request=?id cols=?k
+@a.tcc.row1 core.calc out=?r0 fn=idiv args=?i args=?k
+@a.tcc.row core.calc out=?row fn=add args=?r0 args=1
+@a.tcc.col1 core.calc out=?c0 fn=mod args=?i args=?k
+@a.tcc.col core.calc out=?col fn=add args=?c0 args=1
+@a.tcc.cell w.diagram.cell node=$a.tcc.n row=?row column=?col
+@a.tcc.set app.act.call act=change thing=$a.tcc.cell attr=text value=?t order=2
+@change.table.cell core.rule when=$a.tcc.r when=$a.tcc.i when=$a.tcc.id when=$a.tcc.n when=$a.tcc.k with=$a.tcc.row1 with=$a.tcc.row with=$a.tcc.col1 with=$a.tcc.col when=$a.tcc.cell then=$a.tcc.set
+@a.tcc.mk app.act.call act=make kind=w.diagram.cell node=$a.tcc.n row=?row column=?col text=?t order=2
+@change.table.cell.new core.rule when=$a.tcc.r when=$a.tcc.i when=$a.tcc.id when=$a.tcc.n when=$a.tcc.k with=$a.tcc.row1 with=$a.tcc.row with=$a.tcc.col1 with=$a.tcc.col not=$a.tcc.cell then=$a.tcc.mk
 @a.cn.none.r app.act.request operation="diagram.node.change"
 @a.cn.none.o app.act.request outline=?a6
 @a.cn.none.t app.act.request textColour=?a7
@@ -200,8 +277,13 @@
 @a.cn.none.l app.act.request label=?a3
 @a.cn.none.v app.act.request value=?a4
 @a.cn.none.k app.act.request kind=?a5
+@a.cn.none.src app.act.request source=?a15
+@a.cn.none.cap app.act.request caption=?a16
+@a.cn.none.rws app.act.request rows=?a17
+@a.cn.none.cls app.act.request columns=?a18
+@a.cn.none.cel app.act.item param="cells"
 @a.cn.none.out app.act.refuse reason=missing-property
-@change.node.none core.rule when=$a.cn.none.r not=$a.cn.none.c not=$a.cn.none.s not=$a.cn.none.l not=$a.cn.none.v not=$a.cn.none.k not=$a.cn.none.o not=$a.cn.none.t not=$a.cn.none.fs not=$a.cn.none.fw not=$a.cn.none.ro not=$a.cn.none.ef not=$a.cn.none.op not=$a.cn.none.cr not=$a.cn.none.rt then=$a.cn.none.out
+@change.node.none core.rule when=$a.cn.none.r not=$a.cn.none.c not=$a.cn.none.s not=$a.cn.none.l not=$a.cn.none.v not=$a.cn.none.k not=$a.cn.none.o not=$a.cn.none.t not=$a.cn.none.fs not=$a.cn.none.fw not=$a.cn.none.ro not=$a.cn.none.ef not=$a.cn.none.op not=$a.cn.none.cr not=$a.cn.none.rt not=$a.cn.none.src not=$a.cn.none.cap not=$a.cn.none.rws not=$a.cn.none.cls not=$a.cn.none.cel then=$a.cn.none.out
 
 # Select nodes (and edges): the view's selection.
 @a.sel.n.r app.act.request operation="diagram.node.select"
@@ -555,13 +637,13 @@
 # Lay a group out: row, column, grid, circle, or its members' values as a bar, line, pie or doughnut chart (every
 # member needs a value). Free, tree, layers and radial layouts of a group are not declared here.
 @a.gl.r app.act.request operation="diagram.group.layout" layout=?l
-@a.gl.ok core.check fn=matches args=?l args="^(row|column|grid|circle|bar|line|area|pie|doughnut|scatter|radar)$"
+@a.gl.ok core.check fn=matches args=?l args="^(row|column|grid|circle|bar|line|area|pie|doughnut|scatter|radar|treemap)$"
 @a.gl.c app.act.call act=change thing=$a.ig.g attr=layout value=?l order=1
 @group.layout core.rule when=$a.gl.r when=$a.ig.r when=$a.ig.g if=$a.gl.ok then=$a.gl.c
 @a.gl.no core.check fn=matches args=?l args="^(free|tree|layers|radial)$"
 @a.gl.no.out app.act.refuse reason=group-layout-not-declared
 @group.layout.refused core.rule when=$a.gl.r if=$a.gl.no then=$a.gl.no.out
-@a.gl.chart core.check fn=matches args=?l args="^(bar|line|area|pie|doughnut|scatter|radar)$"
+@a.gl.chart core.check fn=matches args=?l args="^(bar|line|area|pie|doughnut|scatter|radar|treemap)$"
 @a.gl.nv w.diagram.node code=?mid value=?anyv
 @a.gl.nv.out app.act.refuse reason=explicit-numeric-values-required
 @group.layout.values core.rule when=$a.gl.r when=$a.ig.r when=$a.ig.g when=$a.ig.m when=$a.ig.n not=$a.gl.nv if=$a.gl.chart then=$a.gl.nv.out
@@ -590,7 +672,7 @@
 # A chart group: one rectangle node per label with its value, in a framed group laid out as a chart. The
 # labels and values must pair up; pie and doughnut charts draw the values as slices.
 @a.cg.r app.act.request operation="diagram.group.chart.make" label=?label layout=?l
-@a.cg.ok core.check fn=matches args=?l args="^(bar|line|area|pie|doughnut|scatter|radar)$"
+@a.cg.ok core.check fn=matches args=?l args="^(bar|line|area|pie|doughnut|scatter|radar|treemap)$"
 @a.cg.gnx ui.diagram.next of=group top=?gtop
 @a.cg.gz core.calc out=?gz fn=add args=?gtop args=1
 @a.cg.gcode core.calc out=?gcode fn=concat args=g args=?gz
@@ -900,6 +982,19 @@
 @a.oi.group ui.diagram.inside node=?id group=?g
 @a.oi.group.o app.observe.input id=?id key=group value=?g
 @observe.node.group core.rule when=$a.oi.group then=$a.oi.group.o
+# A picture's image and caption, a table's rows and columns.
+@a.oi.source w.diagram.node code=?id source=?v
+@a.oi.source.o app.observe.input id=?id key=source value=?v
+@observe.node.source core.rule when=$a.oi.source then=$a.oi.source.o
+@a.oi.caption w.diagram.node code=?id caption=?v
+@a.oi.caption.o app.observe.input id=?id key=caption value=?v
+@observe.node.caption core.rule when=$a.oi.caption then=$a.oi.caption.o
+@a.oi.rows w.diagram.node code=?id rows=?v
+@a.oi.rows.o app.observe.input id=?id key=rows value=?v
+@observe.node.rows core.rule when=$a.oi.rows then=$a.oi.rows.o
+@a.oi.columns w.diagram.node code=?id columns=?v
+@a.oi.columns.o app.observe.input id=?id key=columns value=?v
+@observe.node.columns core.rule when=$a.oi.columns then=$a.oi.columns.o
 @a.oe.e w.diagram.edge code=?id from=$a.oe.a to=$a.oe.b
 @a.oe.a w.diagram.node code=?a
 @a.oe.b w.diagram.node code=?b

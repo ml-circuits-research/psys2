@@ -1129,3 +1129,114 @@
 @chart.any.pie core.rule when=$shp.ac2.p then=$shp.ac2.out
 @shp.ac2.r ui.diagram.radar group=?g
 @chart.any.radar core.rule when=$shp.ac2.r then=$shp.ac2.out
+# ---- Treemap: each member a rectangle as large as its share of the whole (the sum of the members' values), the
+# rectangles filling the plot from left to right in the order the members were made (a slice layout: one strip). The
+# plot is the chart's width and height when set, else 360 by 220. Each member is coloured from the page's palette
+# (its own colour first), labelled in its middle with its value under the label, and observed as a chart point. ----
+@shp.tm.type core.type of=ui.diagram.treemap
+@shp.tmm.type core.type of=ui.diagram.tmmember
+@shp.tmt.type core.type of=ui.diagram.tmtotal
+@shp.tmb.type core.type of=ui.diagram.tmbefore
+@shp.tmc.type core.type of=ui.diagram.tmcum
+@shp.tm.g w.diagram.group code=?g layout=treemap
+@shp.tm.w w.diagram.group code=?g width=?w
+@shp.tm.h w.diagram.group code=?g height=?h
+@shp.tm.anyw w.diagram.group code=?g width=?anyw
+@shp.tm.anyh w.diagram.group code=?g height=?anyh
+@shp.tm.o1 ui.diagram.treemap group=?g w=?w h=?h
+@shp.tm.o2 ui.diagram.treemap group=?g w=?w h=220
+@shp.tm.o3 ui.diagram.treemap group=?g w=360 h=?h
+@shp.tm.o4 ui.diagram.treemap group=?g w=360 h=220
+@chart.treemap.sized core.rule when=$shp.tm.g when=$shp.tm.w when=$shp.tm.h then=$shp.tm.o1
+@chart.treemap.wide core.rule when=$shp.tm.g when=$shp.tm.w not=$shp.tm.anyh then=$shp.tm.o2
+@chart.treemap.tall core.rule when=$shp.tm.g when=$shp.tm.h not=$shp.tm.anyw then=$shp.tm.o3
+@chart.treemap core.rule when=$shp.tm.g not=$shp.tm.anyw not=$shp.tm.anyh then=$shp.tm.o4
+# Its size: the plot, the padding round it and the title band over it.
+@shp.tu.u ui.diagram.unit unit=?g kind=group
+@shp.tu.t ui.diagram.treemap group=?g w=?pw h=?ph
+@shp.tu.p ui.diagram.gpad group=?g pad=?pad top=?top
+@shp.tu.p2 core.calc out=?p2 fn=mul args=?pad args=2
+@shp.tu.w core.calc out=?w fn=add args=?pw args=?p2
+@shp.tu.h1 core.calc out=?h1 fn=add args=?ph args=?top
+@shp.tu.h2 core.calc out=?h2 fn=add args=?h1 args=?pad
+@shp.tu.h core.calc out=?h fn=add args=?h2 args=10
+@shp.tu.out ui.diagram.udim unit=?g w=?w h=?h
+@chart.treemap.size core.rule when=$shp.tu.u when=$shp.tu.t when=$shp.tu.p with=$shp.tu.p2 with=$shp.tu.w with=$shp.tu.h1 with=$shp.tu.h2 with=$shp.tu.h then=$shp.tu.out
+# Its members with a value, their total, and the values before each one in order.
+@shp.tv.t ui.diagram.treemap group=?g
+@shp.tv.i ui.diagram.inside group=?g node=?c
+@shp.tv.v w.diagram.node code=?c value=?v
+@shp.tv.pos core.check fn=gt args=?v args=0
+@shp.tv.out ui.diagram.tmmember node=?c group=?g v=?v
+@chart.treemap.member core.rule when=$shp.tv.t when=$shp.tv.i when=$shp.tv.v if=$shp.tv.pos then=$shp.tv.out
+@shp.tt.m ui.diagram.tmmember group=?g v=?v
+@shp.tt.out ui.diagram.tmtotal group=?g v=?s
+@chart.treemap.total core.aggregate over=$shp.tt.m by=?g sum=?s args=?v then=$shp.tt.out
+@shp.tb.a ui.diagram.tmmember node=?a group=?g v=?va
+@shp.tb.b ui.diagram.tmmember node=?b group=?g
+@shp.tb.ia ui.diagram.inside group=?g node=?a order=?oa
+@shp.tb.ib ui.diagram.inside group=?g node=?b order=?ob
+@shp.tb.lt core.check fn=lt args=?oa args=?ob
+@shp.tb.out ui.diagram.tmbefore node=?b before=?a v=?va
+@chart.treemap.before core.rule when=$shp.tb.a when=$shp.tb.b when=$shp.tb.ia when=$shp.tb.ib if=$shp.tb.lt then=$shp.tb.out
+@shp.tc.b ui.diagram.tmbefore node=?b v=?va
+@shp.tc.out ui.diagram.tmcum node=?b v=?cv
+@chart.treemap.cum core.aggregate over=$shp.tc.b by=?b sum=?cv args=?va then=$shp.tc.out
+@shp.tc.m ui.diagram.tmmember node=?c
+@shp.tc.nb ui.diagram.tmbefore node=?c
+@shp.tc.zero ui.diagram.tmcum node=?c v=0
+@chart.treemap.cum.first core.rule when=$shp.tc.m not=$shp.tc.nb then=$shp.tc.zero
+# Each member's rectangle: from its running share across the plot, as wide as its share, the plot's height.
+@shp.tr.m ui.diagram.tmmember node=?c group=?g v=?v
+@shp.tr.c ui.diagram.tmcum node=?c v=?cv
+@shp.tr.s ui.diagram.tmtotal group=?g v=?s
+@shp.tr.t ui.diagram.treemap group=?g w=?pw h=?ph
+@shp.tr.gb ui.diagram.ubox unit=?g x0=?gx y0=?gy
+@shp.tr.p ui.diagram.gpad group=?g pad=?pad top=?top
+@shp.tr.a1 core.calc out=?a1 fn=mul args=?cv args=?pw
+@shp.tr.a core.calc out=?a fn=div args=?a1 args=?s
+@shp.tr.w1 core.calc out=?w1 fn=mul args=?v args=?pw
+@shp.tr.w core.calc out=?w fn=div args=?w1 args=?s
+@shp.tr.b core.calc out=?b fn=add args=?gx args=?pad
+@shp.tr.x0 core.calc out=?x0 fn=add args=?b args=?a
+@shp.tr.x1 core.calc out=?x1 fn=add args=?x0 args=?w
+@shp.tr.yt core.calc out=?yt fn=add args=?gy args=?top
+@shp.tr.y0 core.calc out=?y0 fn=add args=?yt args=10
+@shp.tr.y1 core.calc out=?y1 fn=add args=?y0 args=?ph
+@shp.tr.hw core.calc out=?hw fn=div args=?w args=2
+@shp.tr.hh core.calc out=?hh fn=div args=?ph args=2
+@shp.tr.cx core.calc out=?cx fn=add args=?x0 args=?hw
+@shp.tr.cy core.calc out=?cy fn=add args=?y0 args=?hh
+@shp.tr.out ui.diagram.nbox node=?c x0=?x0 y0=?y0 x1=?x1 y1=?y1 cx=?cx cy=?cy w=?w h=?ph
+@chart.treemap.box core.rule when=$shp.tr.m when=$shp.tr.c when=$shp.tr.s when=$shp.tr.t when=$shp.tr.gb when=$shp.tr.p with=$shp.tr.a1 with=$shp.tr.a with=$shp.tr.w1 with=$shp.tr.w with=$shp.tr.b with=$shp.tr.x0 with=$shp.tr.x1 with=$shp.tr.yt with=$shp.tr.y0 with=$shp.tr.y1 with=$shp.tr.hw with=$shp.tr.hh with=$shp.tr.cx with=$shp.tr.cy then=$shp.tr.out
+# Its colour: the member's own, else the next swatch of the page's palette (a candidate under the node's own colour).
+@shp.tf.m ui.diagram.tmmember node=?c group=?g
+@shp.tf.i ui.diagram.inside group=?g node=?c order=?o
+@shp.tf.rk core.rank of=$shp.tf.i by=order within=?g out=?pos
+@shp.tf.sp ui.diagram.spal name=?p
+@shp.tf.pc ui.diagram.scount name=?p n=?kc
+@shp.tf.p0 core.calc out=?p0 fn=sub args=?pos args=1
+@shp.tf.pm core.calc out=?pm fn=mod args=?p0 args=?kc
+@shp.tf.pj core.calc out=?pj fn=add args=?pm args=1
+@shp.tf.sw k.styles.swatch theme=?p n=?pj colour=?scol
+@shp.tf.out ui.diagram.scand node=?c key=fill p=1.5 v=?scol
+@chart.treemap.colour core.rule when=$shp.tf.m when=$shp.tf.i with=$shp.tf.rk when=$shp.tf.sp when=$shp.tf.pc with=$shp.tf.p0 with=$shp.tf.pm with=$shp.tf.pj when=$shp.tf.sw then=$shp.tf.out
+# Its value under its label, and the member as a point of the chart.
+@shp.tl.m ui.diagram.tmmember node=?c group=?g
+@shp.tl.t ui.diagram.vtext node=?c text=?v
+@shp.tl.b ui.diagram.nbox node=?c cx=?cx cy=?cy
+@shp.tl.fs ui.diagram.cfmt group=?g slot=font_size v=?fs
+@shp.tl.ink ui.diagram.nst node=?c key=text v=?ink
+@shp.tl.d core.calc out=?d fn=mul args=?fs args=1.4
+@shp.tl.y core.calc out=?ty fn=add args=?cy args=?d
+@shp.tl.f core.calc out=?f fn=sub args=?fs args=1
+@shp.tl.src core.calc out=?src fn=concat args=?c args=".value"
+@shp.tl.out ui.diagram.draw part=?c source=?src slot=?c order=4 z=0 shape=text text=?v x=?cx y=?ty w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left anchor=middle font=?f
+@shp.tl.fill ui.diagram.fill source=?src part=?c fill=?ink
+@chart.treemap.value core.rule when=$shp.tl.m when=$shp.tl.t when=$shp.tl.b when=$shp.tl.fs with=$shp.tl.d with=$shp.tl.y with=$shp.tl.f with=$shp.tl.src then=$shp.tl.out
+@chart.treemap.value.fill core.rule when=$shp.tl.m when=$shp.tl.t when=$shp.tl.ink with=$shp.tl.src then=$shp.tl.fill
+@shp.tmp.m ui.diagram.tmmember node=?c group=?g
+@shp.tmp.out ui.diagram.cpoint node=?c group=?g
+@chart.point.treemap core.rule when=$shp.tmp.m then=$shp.tmp.out
+@shp.ac2.t ui.diagram.treemap group=?g
+@chart.any.treemap core.rule when=$shp.ac2.t then=$shp.ac2.out

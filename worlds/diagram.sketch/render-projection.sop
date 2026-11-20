@@ -105,6 +105,8 @@
 @dg.base.cloud ui.diagram.base shape=cloud w=136 h=84 grow=w kind=poly
 @dg.base.actor ui.diagram.base shape=actor w=56 h=96 grow=none kind=actor
 @dg.base.note ui.diagram.base shape=note w=124 h=66 grow=w kind=poly
+@dg.base.picture ui.diagram.base shape=picture w=120 h=90 grow=none kind=box
+@dg.base.table ui.diagram.base shape=table w=192 h=84 grow=none kind=box
 
 # Size grades.
 @dg.grade.tiny ui.diagram.grade size=tiny f=0.5
@@ -233,10 +235,33 @@
 @d0.f1 core.calc out=?gw fn=mul args=?bw args=?f
 @d0.f2 core.calc out=?gh fn=mul args=?bh args=?f
 @d0.g.out ui.diagram.gsize node=?c w=?gw h=?gh grow=?g
-@dg.gsize.graded core.rule when=$d0.n when=$d0.b when=$d0.sz when=$d0.gr not=$d0.ex with=$d0.f1 with=$d0.f2 then=$d0.g.out
+@dg.gsize.graded core.rule when=$d0.n when=$d0.b when=$d0.sz when=$d0.gr not=$d0.ex not=$d0.gd with=$d0.f1 with=$d0.f2 then=$d0.g.out
 @d0.p.out ui.diagram.gsize node=?c w=?bw h=?bh grow=?g
-@dg.gsize.plain core.rule when=$d0.n when=$d0.b not=$d0.sz not=$d0.ex then=$d0.p.out
+@dg.gsize.plain core.rule when=$d0.n when=$d0.b not=$d0.sz not=$d0.ex not=$d0.gd then=$d0.p.out
 @dg.gsize.type core.type of=ui.diagram.gsize
+# A table given its rows or columns is as large as its grid: 64 a column, 28 a row (ui.diagram.tgrid: 3 unless given),
+# times its grade.
+@dg.gridsized.type core.type of=ui.diagram.gridsized
+@d0.gd ui.diagram.gridsized node=?c
+@d0g.r w.diagram.node code=?c shape=table rows=?anyr
+@d0g.k w.diagram.node code=?c shape=table columns=?anyk
+@d0g.out ui.diagram.gridsized node=?c
+@dg.gridsized.rows core.rule when=$d0g.r then=$d0g.out
+@dg.gridsized.cols core.rule when=$d0g.k then=$d0g.out
+@d0g.s ui.diagram.gridsized node=?c
+@d0g.g ui.diagram.tgrid node=?c rows=?r cols=?k
+@d0g.ex w.diagram.node code=?c width=?anyw
+@d0g.sz w.diagram.node code=?c size=?z
+@d0g.anysz w.diagram.node code=?c size=?anyz
+@d0g.gr ui.diagram.grade size=?z f=?f
+@d0g.w1 core.calc out=?w1 fn=mul args=?k args=64
+@d0g.h1 core.calc out=?h1 fn=mul args=?r args=28
+@d0g.w2 core.calc out=?w2 fn=mul args=?w1 args=?f
+@d0g.h2 core.calc out=?h2 fn=mul args=?h1 args=?f
+@d0g.o1 ui.diagram.gsize node=?c w=?w1 h=?h1 grow=none
+@d0g.o2 ui.diagram.gsize node=?c w=?w2 h=?h2 grow=none
+@dg.gsize.grid core.rule when=$d0g.s when=$d0g.g not=$d0g.ex not=$d0g.anysz with=$d0g.w1 with=$d0g.h1 then=$d0g.o1
+@dg.gsize.grid.graded core.rule when=$d0g.s when=$d0g.g when=$d0g.sz when=$d0g.gr not=$d0g.ex with=$d0g.w1 with=$d0g.h1 with=$d0g.w2 with=$d0g.h2 then=$d0g.o2
 @dgw.g ui.diagram.gsize node=?c w=?w h=?h grow=?g
 @dgw.l ui.diagram.lwidth node=?c w=?lw
 @dgw.nl ui.diagram.lwidth node=?c

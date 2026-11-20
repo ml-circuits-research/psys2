@@ -16,7 +16,7 @@ test('chart keys bind to the chart group operations with declared values',async(
  const t=await completeBindings(table()),row=key=>t.properties.find(r=>r.area==='diagram'&&r.key===key);
  assert.equal(row('chart.type').hostBinding.operation,'diagram.chart.format');
  assert.equal(row('chart.type').canonical,'diagram.sketch.group.layout');
- assert.deepEqual(row('chart.type').classValues,['bar','line','area','pie','doughnut','scatter','radar']);
+ assert.deepEqual(row('chart.type').classValues,['bar','line','area','pie','doughnut','scatter','radar','treemap']);
  assert.deepEqual(row('chart.grid').valueMap.find(v=>v.said==='hide'),{said:'hide',value:false});
  assert.deepEqual(row('chart.legend').valueMap.find(v=>v.said==='hide'),{said:'hide',value:'none'});
  assert.equal(row('chart.sort').hostBinding.operation,'diagram.chart.sort');

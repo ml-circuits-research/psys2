@@ -181,6 +181,7 @@ export const RUNTIME_COMPONENTS=[
  ]},
  {id:"bundled-knowledge",label:"Bundled knowledge tables",role:"Knowledge tables bundled in JavaScript for offline use.",actsOn:[],activity:null,modules:[
   {"path":"src/knowledge/bundled-areas.mjs","classification":"data","generality":"none","role":"Generated offline catalog file subsets for the five SOP areas. Already catalog-derived SOP data.","decision":"none (data)"},
+  {"path":"src/knowledge/bundled-diagrams.mjs","classification":"data","generality":"none","role":"Generated offline k.diagrams/w.diagram schemas, vocabularies and knowledge files (the catalog words of values read by declared-bindings completion 8). Already catalog-derived SOP data.","decision":"none (data)"},
   {"path":"src/knowledge/bundled-arrangement.mjs","classification":"data","generality":"none","role":"Generated supports/face arrangement table from k.scenes/k.layouts. Already catalog-derived SOP data.","decision":"none (data)"},
   {"path":"src/knowledge/bundled-compose.mjs","classification":"data","generality":"none","role":"Generated offline catalog files for composition (k.story, k.scenes...). Already catalog-derived SOP data.","decision":"none (data)"},
   {"path":"src/knowledge/bundled-objects.mjs","classification":"data","generality":"none","role":"Generated offline k.objects drawings of 20 built-in kinds. Already catalog-derived SOP data.","decision":"none (data)"},

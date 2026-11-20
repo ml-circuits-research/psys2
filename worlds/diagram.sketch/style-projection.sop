@@ -405,11 +405,11 @@
 @sl.src core.calc out=?src fn=concat args=?c args=".label"
 @sl.d1 core.calc out=?d1 fn=mul args=?fs args=0.36
 @sl.y core.calc out=?ty fn=add args=?cy args=?d1
-@sl.mid core.check fn=matches args=?s args="^(?!actor$|cylinder$)"
+@sl.mid core.check fn=matches args=?s args="^(?!actor$|cylinder$|picture$|table$)"
 @sl.out ui.diagram.draw part=?c source=?src slot=?c order=4 z=0 shape=text text=?t x=?cx y=?ty w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left anchor=middle font=?fs weight=?fw rotate=?rot rx=?cx ry=?cy
 @sl.fill ui.diagram.fill source=?src part=?c fill=?ink
 @st.draw.label core.rule when=$sl.n when=$sl.own when=$sl.b when=$sl.fs when=$sl.fw when=$sl.ro if=$sl.mid with=$sl.src with=$sl.d1 with=$sl.y then=$sl.out
-@sl.notactor core.check fn=neq args=?s args=actor
+@sl.notactor core.check fn=matches args=?s args="^(?!actor$|picture$|table$)"
 @st.fill.label core.rule when=$sl.n when=$sl.own when=$sl.b when=$sl.tc if=$sl.notactor with=$sl.src then=$sl.fill
 @sl.cy core.check fn=eq args=?s args=cylinder
 @sl.cy1 core.calc out=?cyo fn=mul args=?h args=0.08
@@ -422,7 +422,191 @@
 @sl.aout ui.diagram.draw part=?c source=?src slot=?c order=4 z=0 shape=text text=?t x=?cx y=?ayy w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left anchor=middle font=?fs weight=?fw
 @sl.afill ui.diagram.fill source=?src part=?c fill=?pl
 @st.draw.label.actor core.rule when=$sl.n when=$sl.own when=$sl.b when=$sl.fs when=$sl.fw if=$sl.ac with=$sl.src with=$sl.ay then=$sl.aout
-@st.fill.label.actor.fix core.rule when=$sl.n when=$sl.own when=$sl.b when=$sl.ot if=$sl.ac with=$sl.src then=$sl.afill
+@st.fill.label.actor.fix core.rule when=$sl.n when=$sl.own when=$sl.b when=$sl.ot if=$sl.outside with=$sl.src then=$sl.afill
+@sl.outside core.check fn=matches args=?s args="^(actor|picture|table)$"
+# A picture's label under its frame (its caption, when it has one, under that, smaller and in italics); a table's label
+# over its grid.
+@sl.pic core.check fn=eq args=?s args=picture
+@st.draw.label.picture core.rule when=$sl.n when=$sl.own when=$sl.b when=$sl.fs when=$sl.fw if=$sl.pic with=$sl.src with=$sl.ay then=$sl.aout
+@slc.n w.diagram.node code=?c shape=picture caption=?t
+@slc.b ui.diagram.nbox node=?c cx=?cx y1=?y1
+@slc.fs ui.diagram.nst node=?c key=font v=?fs
+@slc.ot ui.diagram.pagecol key=label rgb=?pl
+@slc.lab w.diagram.node code=?c label=?anyl
+@slc.f1 core.calc out=?cf fn=mul args=?fs args=0.85
+@slc.d1 core.calc out=?d1 fn=mul args=?fs args=2.2
+@slc.d0 core.calc out=?d0 fn=add args=?fs args=0
+@slc.y core.calc out=?cy fn=add args=?y1 args=?d1
+@slc.y0 core.calc out=?cy0 fn=add args=?y1 args=?d0
+@slc.src core.calc out=?src fn=concat args=?c args=".caption"
+@slc.out ui.diagram.draw part=?c source=?src slot=?c order=4 z=0 shape=text text=?t x=?cx y=?cy w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left anchor=middle font=?cf slant=italic
+@slc.out0 ui.diagram.draw part=?c source=?src slot=?c order=4 z=0 shape=text text=?t x=?cx y=?cy0 w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left anchor=middle font=?cf slant=italic
+@slc.fill ui.diagram.fill source=?src part=?c fill=?pl
+@st.draw.caption core.rule when=$slc.n when=$slc.b when=$slc.fs when=$slc.lab with=$slc.f1 with=$slc.d1 with=$slc.y with=$slc.src then=$slc.out
+@st.draw.caption.alone core.rule when=$slc.n when=$slc.b when=$slc.fs not=$slc.lab with=$slc.f1 with=$slc.d0 with=$slc.y0 with=$slc.src then=$slc.out0
+@st.fill.caption core.rule when=$slc.n when=$slc.b when=$slc.ot with=$slc.src then=$slc.fill
+@sl.tab core.check fn=eq args=?s args=table
+@slt.b ui.diagram.nbox node=?c cx=?cx y0=?y0
+@slt.y core.calc out=?ty fn=sub args=?y0 args=6
+@slt.out ui.diagram.draw part=?c source=?src slot=?c order=4 z=0 shape=text text=?t x=?cx y=?ty w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left anchor=middle font=?fs weight=?fw
+@st.draw.label.table core.rule when=$sl.n when=$sl.own when=$slt.b when=$sl.fs when=$sl.fw if=$sl.tab with=$sl.src with=$slt.y then=$slt.out
+
+# ---- Pictures and tables ----
+# A picture is an image frame (drawn as a box) with a placeholder picture in it: hills and a sun, polygons of fractions
+# of its box about its centre (ui.diagram.glyph), in its outline colour, half seen. Its image (`source`) is kept and
+# observed; the page draws the placeholder for it.
+@dg.glyph.type core.type of=ui.diagram.glyph
+@sg.n w.diagram.node code=?c shape=?s
+@sg.b ui.diagram.nbox node=?c w=?w h=?h cx=?cx cy=?cy
+@sg.g ui.diagram.glyph shape=?s part=?p n=?i fx=?fx fy=?fy
+@sg.ax core.calc out=?ax fn=mul args=?fx args=?w
+@sg.ay core.calc out=?ay fn=mul args=?fy args=?h
+@sg.px core.calc out=?px fn=add args=?cx args=?ax
+@sg.py core.calc out=?py fn=add args=?cy args=?ay
+@sg.src core.calc out=?src fn=concat args=?c args=".glyph." args=?p
+@sg.pt ui.diagram.point source=?src n=?i x=?px y=?py
+@st.glyph.point core.rule when=$sg.n when=$sg.b when=$sg.g with=$sg.ax with=$sg.ay with=$sg.px with=$sg.py with=$sg.src then=$sg.pt
+@sg.gp ui.diagram.glyph shape=?s part=?p n=1
+@sg.oo ui.diagram.nst node=?c key=outline v=?ol
+@sg.d ui.diagram.draw part=?c source=?src slot=?c order=3 z=1 shape=polygon x=0 y=0 w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left opacity=0.5
+@sg.f ui.diagram.fill source=?src part=?c fill=?ol
+@st.glyph.draw core.rule when=$sg.n when=$sg.gp with=$sg.src then=$sg.d
+@st.glyph.fill core.rule when=$sg.n when=$sg.gp when=$sg.oo with=$sg.src then=$sg.f
+@st.gl.picture.hill.1 ui.diagram.glyph shape=picture part=hill n=1 fx=-0.38 fy=0.36
+@st.gl.picture.hill.2 ui.diagram.glyph shape=picture part=hill n=2 fx=-0.12 fy=-0.08
+@st.gl.picture.hill.3 ui.diagram.glyph shape=picture part=hill n=3 fx=0.04 fy=0.12
+@st.gl.picture.hill.4 ui.diagram.glyph shape=picture part=hill n=4 fx=0.16 fy=0.0
+@st.gl.picture.hill.5 ui.diagram.glyph shape=picture part=hill n=5 fx=0.38 fy=0.36
+@st.gl.picture.sun.1 ui.diagram.glyph shape=picture part=sun n=1 fx=0.22 fy=-0.36
+@st.gl.picture.sun.2 ui.diagram.glyph shape=picture part=sun n=2 fx=0.27 fy=-0.33
+@st.gl.picture.sun.3 ui.diagram.glyph shape=picture part=sun n=3 fx=0.29 fy=-0.26
+@st.gl.picture.sun.4 ui.diagram.glyph shape=picture part=sun n=4 fx=0.27 fy=-0.19
+@st.gl.picture.sun.5 ui.diagram.glyph shape=picture part=sun n=5 fx=0.22 fy=-0.16
+@st.gl.picture.sun.6 ui.diagram.glyph shape=picture part=sun n=6 fx=0.17 fy=-0.19
+@st.gl.picture.sun.7 ui.diagram.glyph shape=picture part=sun n=7 fx=0.15 fy=-0.26
+@st.gl.picture.sun.8 ui.diagram.glyph shape=picture part=sun n=8 fx=0.17 fy=-0.33
+# A table is a grid (drawn as a box): its rows and columns (3 unless given: ui.diagram.tgrid), a line between each two,
+# the first row shaded as its header, and each cell's text (w.diagram.cell) in the middle of its cell.
+@dg.tgrid.type core.type of=ui.diagram.tgrid
+# The places of the lines inside a grid (between rows 1 and 40, columns 1 and 20).
+@dg.tline.type core.type of=ui.diagram.tline
+@dg.tline.1 ui.diagram.tline i=1
+@dg.tline.2 ui.diagram.tline i=2
+@dg.tline.3 ui.diagram.tline i=3
+@dg.tline.4 ui.diagram.tline i=4
+@dg.tline.5 ui.diagram.tline i=5
+@dg.tline.6 ui.diagram.tline i=6
+@dg.tline.7 ui.diagram.tline i=7
+@dg.tline.8 ui.diagram.tline i=8
+@dg.tline.9 ui.diagram.tline i=9
+@dg.tline.10 ui.diagram.tline i=10
+@dg.tline.11 ui.diagram.tline i=11
+@dg.tline.12 ui.diagram.tline i=12
+@dg.tline.13 ui.diagram.tline i=13
+@dg.tline.14 ui.diagram.tline i=14
+@dg.tline.15 ui.diagram.tline i=15
+@dg.tline.16 ui.diagram.tline i=16
+@dg.tline.17 ui.diagram.tline i=17
+@dg.tline.18 ui.diagram.tline i=18
+@dg.tline.19 ui.diagram.tline i=19
+@dg.tline.20 ui.diagram.tline i=20
+@dg.tline.21 ui.diagram.tline i=21
+@dg.tline.22 ui.diagram.tline i=22
+@dg.tline.23 ui.diagram.tline i=23
+@dg.tline.24 ui.diagram.tline i=24
+@dg.tline.25 ui.diagram.tline i=25
+@dg.tline.26 ui.diagram.tline i=26
+@dg.tline.27 ui.diagram.tline i=27
+@dg.tline.28 ui.diagram.tline i=28
+@dg.tline.29 ui.diagram.tline i=29
+@dg.tline.30 ui.diagram.tline i=30
+@dg.tline.31 ui.diagram.tline i=31
+@dg.tline.32 ui.diagram.tline i=32
+@dg.tline.33 ui.diagram.tline i=33
+@dg.tline.34 ui.diagram.tline i=34
+@dg.tline.35 ui.diagram.tline i=35
+@dg.tline.36 ui.diagram.tline i=36
+@dg.tline.37 ui.diagram.tline i=37
+@dg.tline.38 ui.diagram.tline i=38
+@dg.tline.39 ui.diagram.tline i=39
+@dg.trows.type core.type of=ui.diagram.trows
+@dg.tcolsn.type core.type of=ui.diagram.tcolsn
+@stg.n w.diagram.node code=?c shape=table
+@stg.r w.diagram.node code=?c shape=table rows=?r
+@stg.anyr w.diagram.node code=?c rows=?anyr
+@stg.k w.diagram.node code=?c shape=table columns=?k
+@stg.anyk w.diagram.node code=?c columns=?anyk
+@stg.or ui.diagram.trows node=?c v=?r
+@stg.or3 ui.diagram.trows node=?c v=3
+@stg.ok ui.diagram.tcolsn node=?c v=?k
+@stg.ok3 ui.diagram.tcolsn node=?c v=3
+@st.table.rows core.rule when=$stg.r then=$stg.or
+@st.table.rows.default core.rule when=$stg.n not=$stg.anyr then=$stg.or3
+@st.table.cols core.rule when=$stg.k then=$stg.ok
+@st.table.cols.default core.rule when=$stg.n not=$stg.anyk then=$stg.ok3
+@stg.tr ui.diagram.trows node=?c v=?r
+@stg.tk ui.diagram.tcolsn node=?c v=?k
+@stg.out ui.diagram.tgrid node=?c rows=?r cols=?k
+@st.table.grid core.rule when=$stg.tr when=$stg.tk then=$stg.out
+@stl.g ui.diagram.tgrid node=?c rows=?r cols=?k
+@stl.b ui.diagram.nbox node=?c x0=?x0 y0=?y0 x1=?x1 y1=?y1 w=?w h=?h
+@stl.oo ui.diagram.nst node=?c key=outline v=?ol
+@stl.i ui.diagram.tline i=?i
+@stl.ltr core.check fn=lt args=?i args=?r
+@stl.ltk core.check fn=lt args=?i args=?k
+@stl.rh core.calc out=?rh fn=div args=?h args=?r
+@stl.ry1 core.calc out=?ry1 fn=mul args=?rh args=?i
+@stl.ry core.calc out=?ry fn=add args=?y0 args=?ry1
+@stl.rs core.calc out=?rsrc fn=concat args=?c args=".row." args=?i
+@stl.r1 ui.diagram.point source=?rsrc n=1 x=?x0 y=?ry
+@stl.r2 ui.diagram.point source=?rsrc n=2 x=?x1 y=?ry
+@stl.rd ui.diagram.draw part=?c source=?rsrc slot=?c order=3 z=1 shape=line x=0 y=0 w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left stroke=1
+@stl.rf ui.diagram.fill source=?rsrc part=?c fill=?ol
+@st.table.row.1 core.rule when=$stl.g when=$stl.b when=$stl.i if=$stl.ltr with=$stl.rh with=$stl.ry1 with=$stl.ry with=$stl.rs then=$stl.r1
+@st.table.row.2 core.rule when=$stl.g when=$stl.b when=$stl.i if=$stl.ltr with=$stl.rh with=$stl.ry1 with=$stl.ry with=$stl.rs then=$stl.r2
+@st.table.row.draw core.rule when=$stl.g when=$stl.b when=$stl.i if=$stl.ltr with=$stl.rs then=$stl.rd
+@st.table.row.fill core.rule when=$stl.g when=$stl.b when=$stl.oo when=$stl.i if=$stl.ltr with=$stl.rs then=$stl.rf
+@stl.cw core.calc out=?cw fn=div args=?w args=?k
+@stl.cx1 core.calc out=?cx1 fn=mul args=?cw args=?i
+@stl.cx core.calc out=?cx fn=add args=?x0 args=?cx1
+@stl.cs core.calc out=?csrc fn=concat args=?c args=".col." args=?i
+@stl.c1 ui.diagram.point source=?csrc n=1 x=?cx y=?y0
+@stl.c2 ui.diagram.point source=?csrc n=2 x=?cx y=?y1
+@stl.cd ui.diagram.draw part=?c source=?csrc slot=?c order=3 z=1 shape=line x=0 y=0 w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left stroke=1
+@stl.cf ui.diagram.fill source=?csrc part=?c fill=?ol
+@st.table.col.1 core.rule when=$stl.g when=$stl.b when=$stl.i if=$stl.ltk with=$stl.cw with=$stl.cx1 with=$stl.cx with=$stl.cs then=$stl.c1
+@st.table.col.2 core.rule when=$stl.g when=$stl.b when=$stl.i if=$stl.ltk with=$stl.cw with=$stl.cx1 with=$stl.cx with=$stl.cs then=$stl.c2
+@st.table.col.draw core.rule when=$stl.g when=$stl.b when=$stl.i if=$stl.ltk with=$stl.cs then=$stl.cd
+@st.table.col.fill core.rule when=$stl.g when=$stl.b when=$stl.oo when=$stl.i if=$stl.ltk with=$stl.cs then=$stl.cf
+@sth.hs core.calc out=?hsrc fn=concat args=?c args=".header"
+@sth.out ui.diagram.draw part=?c source=?hsrc slot=?c order=3 z=1 shape=rectangle x=?x0 y=?y0 w=?w h=?rh cx=0 cy=0 tx=0 ty=0 scale=1 side=left opacity=0.25
+@sth.f ui.diagram.fill source=?hsrc part=?c fill=?ol
+@st.table.header core.rule when=$stl.g when=$stl.b with=$stl.rh with=$sth.hs then=$sth.out
+@st.table.header.fill core.rule when=$stl.g when=$stl.b when=$stl.oo with=$sth.hs then=$sth.f
+@stc.cell w.diagram.cell node=$stc.node row=?row column=?col text=?t
+@stc.node w.diagram.node code=?c
+@stc.g ui.diagram.tgrid node=?c rows=?r cols=?k
+@stc.b ui.diagram.nbox node=?c x0=?x0 y0=?y0 w=?w h=?h
+@stc.fs ui.diagram.nst node=?c key=font v=?fs
+@stc.tc ui.diagram.nst node=?c key=text v=?ink
+@stc.in core.check fn=lte args=?row args=?r
+@stc.ink core.check fn=lte args=?col args=?k
+@stc.rh core.calc out=?rh fn=div args=?h args=?r
+@stc.cw core.calc out=?cw fn=div args=?w args=?k
+@stc.r0 core.calc out=?r0 fn=sub args=?row args=0.5
+@stc.c0 core.calc out=?c0 fn=sub args=?col args=0.5
+@stc.y1 core.calc out=?y1 fn=mul args=?r0 args=?rh
+@stc.f3 core.calc out=?f3 fn=mul args=?fs args=0.32
+@stc.y2 core.calc out=?y2 fn=add args=?y1 args=?f3
+@stc.y core.calc out=?ty fn=add args=?y0 args=?y2
+@stc.x1 core.calc out=?x1 fn=mul args=?c0 args=?cw
+@stc.x core.calc out=?tx fn=add args=?x0 args=?x1
+@stc.f core.calc out=?cf fn=mul args=?fs args=0.85
+@stc.src core.calc out=?src fn=concat args=?c args=".cell." args=?row args="." args=?col
+@stc.out ui.diagram.draw part=?c source=?src slot=?c order=4 z=0 shape=text text=?t x=?tx y=?ty w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left anchor=middle font=?cf
+@stc.fill ui.diagram.fill source=?src part=?c fill=?ink
+@st.table.cell core.rule when=$stc.cell when=$stc.node when=$stc.g when=$stc.b when=$stc.fs if=$stc.in if=$stc.ink with=$stc.rh with=$stc.cw with=$stc.r0 with=$stc.c0 with=$stc.y1 with=$stc.f3 with=$stc.y2 with=$stc.y with=$stc.x1 with=$stc.x with=$stc.f with=$stc.src then=$stc.out
+@st.table.cell.fill core.rule when=$stc.cell when=$stc.node when=$stc.g when=$stc.b when=$stc.tc if=$stc.in if=$stc.ink with=$stc.src then=$stc.fill
 
 # ---- Step numbers, when the page shows them: a badge on each node's top left corner, in flow order (level, then the
 # order the nodes were made). ----

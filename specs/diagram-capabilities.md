@@ -37,8 +37,8 @@ background, numbered, layout, flow): the target of the page-wide operations (lay
 
 | Operation | Parameters | Does | Human ways to ask |
 | --- | --- | --- | --- |
-| `diagram.node.make` | `kind` (shape, below), `label`, `n` (1-12), `colour`, `outline`, `textColour`, `size`, `role`, `layout` (row, column, grid, circle, radial: an arrangement of the new nodes), `x`, `y` | make nodes; a `role` without a `kind` takes the role's flowchart shape from `k.diagrams.shape` | "draw a rectangle called Api", "add three red circles in a row", "add a decision node Is it hot?", "put a database called Users", "add five nodes in a circle", "add a start node" |
-| `diagram.node.change` | `ids`, `colour` (fill), `outline`, `textColour`, `fontSize` (8-48), `fontWeight` (normal, bold), `size`, `label`, `value`, `kind`, `role`, `effect` (none, shadow, glow), `opacity` (0.1-1), `corner` (0-40), `rotation` (-360-360, degrees clockwise) | change what is given; nothing given [missing-property] | "make Api blue", "give it a red border", "white text on the decision", "make the labels bigger / font size 18", "bold label", "turn it into a diamond", "make Db a cylinder", "mark it as the start", "add a shadow to Api", "make it glow", "make it half transparent", "round the corners more", "rotate it 45 degrees", "tilt the label box a little" |
+| `diagram.node.make` | `kind` (shape, below), `label`, `n` (1-12), `colour`, `outline`, `textColour`, `size`, `role`, `layout` (row, column, grid, circle, radial: an arrangement of the new nodes), `x`, `y`; a picture's `source` and `caption`, a table's `rows` (1-40), `columns` (1-20) and `cells` (texts in reading order) | make nodes; a `role` without a `kind` takes the role's flowchart shape from `k.diagrams.shape` | "draw a rectangle called Api", "add three red circles in a row", "add a decision node Is it hot?", "put a database called Users", "add five nodes in a circle", "add a start node" |
+| `diagram.node.change` | `ids`, `colour` (fill), `outline`, `textColour`, `fontSize` (8-48), `fontWeight` (normal, bold), `size`, `label`, `value`, `kind`, `role`, `effect` (none, shadow, glow), `opacity` (0.1-1), `corner` (0-40), `rotation` (-360-360, degrees clockwise), `source`, `caption`, `rows`, `columns`, `cells` | change what is given; nothing given [missing-property] | "make Api blue", "give it a red border", "white text on the decision", "make the labels bigger / font size 18", "bold label", "turn it into a diamond", "make Db a cylinder", "mark it as the start", "add a shadow to Api", "make it glow", "make it half transparent", "round the corners more", "rotate it 45 degrees", "tilt the label box a little" |
 | `diagram.node.select` | `ids`, `edges` | the view's selection | "select Api and Db", "select nothing" |
 | `diagram.node.remove` | `ids` | remove nodes with their links | "delete Api", "remove these" |
 | `diagram.node.place` | `ids`, `x`, `y` | move (pin) nodes; a group member moves with its group [node-in-group-place-the-group] | "move Api to 200, 300", "drag it down" |
@@ -53,10 +53,25 @@ background, numbered, layout, flow): the target of the page-wide operations (lay
 
 Shapes (`kind`): rectangle, rounded_rectangle, square, circle, ellipse, oval (stadium: start/end), diamond (decision),
 parallelogram (input/output), hexagon (preparation), triangle, star, chevron, double_rectangle (subprocess), document,
-cylinder (database), cloud, actor (person), note, text, dot.
+cylinder (database), cloud, actor (person), note, text, dot, picture, table.
 Human names a reader maps to them: box -> rectangle; rounded box, pill -> rounded_rectangle / oval; rhombus,
 decision -> diamond; input/output, data -> parallelogram; database, db, store -> cylinder; person, user, stick figure
 -> actor; comment, sticky note -> note; internet, external system -> cloud; terminal, start/end -> oval.
+
+Pictures and tables (catalog `w.diagram.node` shapes `picture`, `table`, slots `source`, `caption`, `rows`, `columns`
+and `w.diagram.cell`; style-projection.sop). A picture is an image frame (120 by 90, resizable like any node) with a
+placeholder picture in it (hills and a sun: `ui.diagram.glyph` polygons of fractions of its box, in its outline colour,
+half seen), its label under the frame and its `caption` under that (italic); its `source` (the image's address or name)
+is kept and observed, and the page draws the placeholder for it (no image loading yet). A table is a grid of `rows` by
+`columns` (3 by 3 unless given; 64 a column and 28 a row when either is given, else 192 by 84; resizable), a line
+between each two rows and columns, the first row shaded as its header, its label over the grid and each cell's text
+(`w.diagram.cell` node, row, column, text) in the middle of its cell. `cells` on `diagram.node.make` and
+`diagram.node.change` are the texts in reading order (along the first row, then the next) over the table's columns; a
+change gives a cell a new text or makes it; more texts than the rows hold is refused [table-cells-beyond-rows]. Kind
+words: the reader's binding table gains `picture`, `table` (and the catalog's words of these values: image, photo,
+photograph, illustration, data table) through declared-bindings.mjs completion 8. Not yet: a cell named by its row and
+column ("the first row of the table becomes P1, P2, P3 and P4" needs a cell selector), rows and columns added or removed
+in place, an image drawn from its source.
 
 ## Links
 
@@ -222,6 +237,15 @@ radar chart" as a kind word stays unbound: a kind added to k.charts reaches the 
 which is exported with the reader (training), so it needs a k.charts kind and a re-export, or a live completion of
 kind rows from the pinned catalog). Not yet: x-axis numbers of a
 scatter chart (its x values are written by its category labels), a radar legend and its value axis numbers.
+
+Treemap (chart-shape.sop; catalog layout `treemap` of `w.diagram.group`, kind `k.charts.kind.treemap`):
+`diagram.group.chart.make`, `diagram.chart.format` and `diagram.group.layout` take it. Each member with a value is a
+rectangle as wide as its share of the members' total, the rectangles filling the plot from left to right in the order
+the members were made (a slice layout, one strip), the plot the chart's `width` and `height` when set, else 360 by 220;
+each member is coloured from the page's palette (its own colour first), labelled in its middle with its value under the
+label, and observed as a chart point (`diagram.sketch.point`). Kind binding: `k.charts.kind.treemap` draws a treemap;
+the words "treemap", "tree map" reach the binding table through completion 8 (with "doughnut" and "radar", the other
+chart layouts no kind row named). Not yet: a squarified layout (rows of near-square rectangles), nested treemaps.
 
 Not yet (each needs a rule set or a mechanism, listed honestly; from the owner's request and
 management/data-drop/pilot/FEATURE-REQUESTS.md B1-B12):

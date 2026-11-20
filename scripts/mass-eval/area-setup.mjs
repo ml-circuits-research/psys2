@@ -51,7 +51,8 @@ export async function seedContext(world,existing,{knowledge,bindings}={}){
   // A chart named by its kind ("bar chart", "line graph", "pie chart", "scatter plot") is a chart group drawn with the
   // declared layout its first word names (diagram.group.chart.make layout), else as bars.
   const chartLayouts=ops.get('diagram.group.chart.make')?.params?.layout?.enum??[];
-  const isChart=k=>k==='chart'||/ (chart|graph|plot)$/.test(String(k));
+  // A chart named by a declared chart layout alone ("the treemap", "the radar") is that chart too.
+  const isChart=k=>k==='chart'||/ (chart|graph|plot)$/.test(String(k))||chartLayouts.includes(String(k));
   for(const item of items){const k=item.kind;(k==='link'||k==='arrow'||k==='edge'?links:isChart(k)?charts:k==='group'?groups:k==='point'?points:k==='series'?series:nodes).push(item);}
   const nodeKinds=kindEnum('diagram.node.make');
   for(const item of nodes){
@@ -66,7 +67,7 @@ export async function seedContext(world,existing,{knowledge,bindings}={}){
   const owner=new Map();{let current=charts[0]??null;for(const item of items){if(charts.includes(item))current=item;else if(points.includes(item)||series.includes(item))owner.set(item,current);}}
   const labelsOf=chart=>{const own=points.filter(p=>owner.get(p)===chart);return own.length?own.map(p=>p.name):['A','B','C'];};
   const chartIds=new Map();
-  for(const item of charts){const first=String(item.kind).split(' ')[0],layout=chartLayouts.includes(first)?first:'bar',labels=labelsOf(item);const r=note(item,await call('diagram.group.chart.make',{label:item.name||'Chart',labels,values:labels.map((_,i)=>i+1),layout}));
+  for(const item of charts){const first=String(item.kind).replace(/-/g,'_').split(' ')[0],layout=chartLayouts.includes(first)?first:'bar',labels=labelsOf(item);const r=note(item,await call('diagram.group.chart.make',{label:item.name||'Chart',labels,values:labels.map((_,i)=>i+1),layout}));
    if(r.ok){chartIds.set(item,r.created?.[0]?.id??ids.get(item.name));for(const p of points)if(owner.get(p)===item)ids.set(p.name,r.created?.[0]?.id);}}
   for(const item of points)if(!charts.length)failures.push({index:item.index,kind:item.kind,reason:'chart-member-without-chart'});else seeded++;
   // A series of the chart (the chart's own values are its first): made by the chart's series command.
