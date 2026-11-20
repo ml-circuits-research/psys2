@@ -5,9 +5,9 @@ import { quote } from '../vendor/sopworld/sopworld.mjs?v=a37e1846b3';
 // SPDX-License-Identifier: AGPL-3.0-only
 import { compileNativeCapability } from './capability-plan-adapter.mjs?v=a46dbf044d';
 import { readDegreeBases } from './degree-bases.mjs?v=96e65008ac';
-import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=13cea74ead';
+import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=f720d09c3d';
 import { instanceIdFor } from './instance-identity.mjs?v=024ef1ca83';
-import { prepareNativeControlHost } from './native-control-preparation.mjs?v=ffbc690c88';
+import { prepareNativeControlHost } from './native-control-preparation.mjs?v=691748fc99';
 import { invokeObservedNativeTool } from './native-tool-activity.mjs?v=50362a2706';
 import { retainPropertyEffect } from './property-effect-evidence.mjs?v=0c522c370a';
 import { describeNativeControl, verifyNativeControlEffect } from './native-control-intent.mjs?v=51b1d1bd5f';
