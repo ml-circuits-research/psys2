@@ -1,4 +1,4 @@
-# diagram tab: sources (252 scored items + 18 setup items; 130 node/edge diagram, 122 chart)
+# diagram tab: sources (295 scored + 45 setup items; 150 node/edge diagram, 145 chart)
 
 Corpora (licence checked on the official page or repository; per the later owner update every adapted item is marked redistributable:true, and the real licence is recorded on each item):
 - PPTC (Guo et al. 2023). MIT (github.com/gydpku/PPTC). Instructions written by crowd workers who use PowerPoint (paper, Sec. data collection). Pool: 105 unique shape-insertion turns and 119 chart turns in the test split. Sampled 30 shapes and 16 chart-creation turns at random (seed 3), plus their chart follow-up turns as sessions. Kept 33 shape + 28 chart items, then dropped 4 near-duplicate shape items. 57 items.
@@ -8,6 +8,8 @@ Corpora (licence checked on the official page or repository; per the later owner
 - TeX.StackExchange question titles. CC BY-SA 3.0/4.0. Top-voted 787 questions in the tags flow-charts, tikz-arrows, tikz-trees and diagrams. Random order (seed 7): 150 inspected, about 37% express a diagram edit, and the first 28 relevant titles were kept. 28 items.
 - SCONE Tangrams (Long et al. 2016). CC BY-SA 4.0 (nlp.stanford.edu/projects/scone; zip fetched via the Wayback Machine because the site refused connections). 5 random test sessions (seed 5) of 5 utterances each. Effects are computed from the world-state diffs. 25 items.
 
+- Targeted supplement (owner steer: chart data edits, chart formatting, layout, effects): 43 lines picked by keyword, marked "selection" on each item. Sources: PPTC table-cell edits (table -> chart data) and rotations; OSWorld Calc/Impress tasks (Apache-2.0, github.com/xlang-ai/OSWorld; human-written, 47 Calc + 47 Impress inspected, 13 used); TeX.SE effect/layout/vague titles (13).
+- construction[0] is the primary usage class (16-class owner taxonomy). Counts: create 85, chart-formatting 36, compose 34, refer 28, place-relative 18, arrange/layout 15, compound 14, chart-data-edit 13, fragment/follow-up 10, modify-attribute 10, question 7, connect/structure 7, correction/undo 6, formatting/effects 5, quantify 4, vague-aesthetic 3.
 Adaptation rules:
 - slide -> page. picture/image/title/content landmarks -> seeded nodes "Image" (rectangle), "Title" and "Content" (text).
 - Tool names dropped (TikZ, LaTeX, mermaid, plantUML, Power BI, vis.js, "write code").
@@ -19,4 +21,5 @@ Adaptation rules:
 Known gaps:
 - No public human corpus of node/edge editing commands was found (searched for diagram-edit, flowchart, graph-editor and mind-map corpora; the KG-editing study by Shahriari et al. 2025 released no utterances).
 - Diagram connect/label/style coverage therefore relies on TeX.SE titles (how-to phrasing, often a question or fragment) and WildChat creation requests. Few explicit "connect A to B" utterances exist.
+- No human legend edits were found. Effects (shadow, gradient, rotation) and vague-aesthetic requests are thin (3-5 items each).
 - ChartDialog and NLV utterances give no data values: effects check chart type and encodings or style only.

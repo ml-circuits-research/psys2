@@ -1,14 +1,32 @@
 [
  {
-  "class": "create",
-  "n": 79,
-  "pass": 11,
-  "partial": 4,
-  "passRate": 0.139,
+  "class": "formatting/effects",
+  "n": 5,
+  "pass": 0,
+  "partial": 0,
+  "passRate": 0.0,
   "topLayer": [
    [
     "reader",
-    52
+    5
+   ]
+  ],
+  "examples": [
+   "Please make the background blue on all my pages. I was stuck by findin",
+   "Then rotate it left with 45 degree.",
+   "Rotate left by 90 degree."
+  ]
+ },
+ {
+  "class": "create",
+  "n": 157,
+  "pass": 11,
+  "partial": 4,
+  "passRate": 0.07,
+  "topLayer": [
+   [
+    "reader",
+    127
    ],
    [
     "bindings",
@@ -16,39 +34,43 @@
    ]
   ],
   "examples": [
-   "add back shape from step 1 into second spot",
-   "add the shape that was removed on step 2",
-   "return the third shape, but in the first position"
+   "Show average earnings by genre.",
+   "make a bar chart of avgerage profit by state, with state on x axis.",
+   "Show me a bar chart of total profit by region, and stack the bars by s"
   ]
  },
  {
   "class": "compose-scene",
-  "n": 6,
+  "n": 36,
   "pass": 0,
   "partial": 0,
   "passRate": 0.0,
   "topLayer": [
    [
     "reader",
-    6
+    32
+   ],
+   [
+    "rule/operation",
+    2
    ]
   ],
   "examples": [
    "Create a new page. Insert a blue arrow on the right.",
-   "1. Create a five-bubble mind map with the words \"World War II Changes ",
-   "flowchart to read a Philippine name province name and will display its"
+   "Using all the classes create a UML class diagram with the correct arro",
+   "make a UML state diagram for the classes Initialize, ControlPanel, Tem"
   ]
  },
  {
   "class": "place-relative",
-  "n": 17,
-  "pass": 5,
+  "n": 25,
+  "pass": 8,
   "partial": 0,
-  "passRate": 0.294,
+  "passRate": 0.32,
   "topLayer": [
    [
     "reader",
-    10
+    15
    ],
    [
     "compiler",
@@ -63,14 +85,14 @@
  },
  {
   "class": "move/position",
-  "n": 20,
+  "n": 23,
   "pass": 0,
   "partial": 0,
   "passRate": 0.0,
   "topLayer": [
    [
     "reader",
-    18
+    21
    ],
    [
     "other",
@@ -85,14 +107,14 @@
  },
  {
   "class": "quantify",
-  "n": 73,
+  "n": 86,
   "pass": 3,
   "partial": 1,
-  "passRate": 0.041,
+  "passRate": 0.035,
   "topLayer": [
    [
     "reader",
-    60
+    73
    ],
    [
     "bindings",
@@ -107,18 +129,18 @@
  },
  {
   "class": "refer",
-  "n": 90,
+  "n": 111,
   "pass": 12,
   "partial": 1,
-  "passRate": 0.133,
+  "passRate": 0.108,
   "topLayer": [
    [
     "reader",
-    65
+    84
    ],
    [
     "bindings",
-    7
+    9
    ]
   ],
   "examples": [
@@ -129,14 +151,14 @@
  },
  {
   "class": "modify-attribute",
-  "n": 18,
+  "n": 29,
   "pass": 0,
   "partial": 1,
   "passRate": 0.0,
   "topLayer": [
    [
     "reader",
-    15
+    26
    ],
    [
     "semantics",
@@ -168,14 +190,14 @@
  },
  {
   "class": "arrange/layout",
-  "n": 36,
+  "n": 48,
   "pass": 0,
   "partial": 1,
   "passRate": 0.0,
   "topLayer": [
    [
     "reader",
-    24
+    36
    ],
    [
     "bindings",
@@ -190,14 +212,14 @@
  },
  {
   "class": "connect/structure",
-  "n": 40,
+  "n": 44,
   "pass": 0,
   "partial": 1,
   "passRate": 0.0,
   "topLayer": [
    [
     "reader",
-    34
+    38
    ],
    [
     "bindings",
@@ -212,14 +234,14 @@
  },
  {
   "class": "chart-create",
-  "n": 81,
+  "n": 88,
   "pass": 0,
   "partial": 0,
   "passRate": 0.0,
   "topLayer": [
    [
     "reader",
-    77
+    84
    ],
    [
     "rule/operation",
@@ -234,34 +256,40 @@
  },
  {
   "class": "chart-data-edit",
-  "n": 1,
+  "n": 14,
   "pass": 0,
   "partial": 0,
   "passRate": 0.0,
   "topLayer": [
    [
     "reader",
+    12
+   ],
+   [
+    "rule/operation",
     1
    ]
   ],
   "examples": [
-   "Inflation in the US in 2022 was 8% and in 2023 it is projected to be 4"
+   "Inflation in the US in 2022 was 8% and in 2023 it is projected to be 4",
+   "Insert Jan, Feb, Mar, April into the chart,",
+   "Change the first row of the chart data to \"T1\",\"T2\",\"T3\",\"T4\"."
   ]
  },
  {
   "class": "chart-formatting",
-  "n": 40,
+  "n": 48,
   "pass": 0,
   "partial": 0,
   "passRate": 0.0,
   "topLayer": [
    [
     "reader",
-    38
+    45
    ],
    [
     "bindings",
-    2
+    3
    ]
   ],
   "examples": [
@@ -294,14 +322,14 @@
  },
  {
   "class": "vague-aesthetic",
-  "n": 26,
+  "n": 31,
   "pass": 3,
   "partial": 1,
-  "passRate": 0.115,
+  "passRate": 0.097,
   "topLayer": [
    [
     "reader",
-    16
+    21
    ],
    [
     "bindings",
@@ -316,14 +344,14 @@
  },
  {
   "class": "correction/undo",
-  "n": 10,
-  "pass": 0,
+  "n": 14,
+  "pass": 2,
   "partial": 0,
-  "passRate": 0.0,
+  "passRate": 0.143,
   "topLayer": [
    [
     "reader",
-    8
+    10
    ],
    [
     "bindings",
@@ -338,18 +366,18 @@
  },
  {
   "class": "question",
-  "n": 21,
-  "pass": 3,
+  "n": 25,
+  "pass": 4,
   "partial": 0,
-  "passRate": 0.143,
+  "passRate": 0.16,
   "topLayer": [
    [
     "reader",
-    15
+    17
    ],
    [
     "bindings",
-    3
+    4
    ]
   ],
   "examples": [
@@ -360,14 +388,14 @@
  },
  {
   "class": "compound/multi-step",
-  "n": 109,
+  "n": 129,
   "pass": 4,
   "partial": 2,
-  "passRate": 0.037,
+  "passRate": 0.031,
   "topLayer": [
    [
     "reader",
-    92
+    111
    ],
    [
     "bindings",
@@ -382,18 +410,18 @@
  },
  {
   "class": "fragment/follow-up",
-  "n": 67,
+  "n": 83,
   "pass": 1,
   "partial": 0,
-  "passRate": 0.015,
+  "passRate": 0.012,
   "topLayer": [
    [
     "reader",
-    60
+    73
    ],
    [
     "bindings",
-    3
+    6
    ]
   ],
   "examples": [

@@ -26,7 +26,7 @@ Items are counted per tab. Owner items are the phrase logs and sessions; setup t
 | Tab | Items | Owner items | Setup turns |
 | --- | --- | --- | --- |
 | drawing | 329 | 73 | – |
-| diagram | 290 | 38 | 18 |
+| diagram | 333 | 38 | 45 |
 | calendar | 220 | – | – |
 | avatar | 228 | 8 | – |
 | document | 204 | 3 | 6 |

@@ -3,7 +3,8 @@
 usage: taxonomy.py items.jsonl[,items2.jsonl] scored.jsonl[,scored2.jsonl] TAB > table"""
 import json, re, sys, collections
 
-CLASSES = ['create', 'compose-scene', 'place-relative', 'move/position', 'quantify', 'refer', 'modify-attribute', 'part-edit',
+ALIAS = {'compose': 'compose-scene', 'arrange/layout/align/distribute': 'arrange/layout', 'formatting/effects': 'formatting/effects'}
+CLASSES = ['formatting/effects', 'create', 'compose-scene', 'place-relative', 'move/position', 'quantify', 'refer', 'modify-attribute', 'part-edit',
            'arrange/layout', 'connect/structure', 'chart-create', 'chart-data-edit', 'chart-formatting', 'remove', 'vague-aesthetic',
            'correction/undo', 'question', 'compound/multi-step', 'fragment/follow-up', 'conversational/complaint']
 CHART = re.compile(r'\b(chart|plot|graph|bar|bars|pie|histogram|scatter|line chart|axis|axes|legend|series|values?|data)\b', re.I)
@@ -14,6 +15,8 @@ CORR = re.compile(r'\b(undo|revert|back|wrong|no,|not that|instead|again|go back
 def classes(it):
     t = it['text']; cons = set(c.lower() for c in it.get('construction', [])); eff = it['expect']['effects']
     types = [e['type'] for e in eff]; out = set()
+    first = (it.get('construction') or [''])[0].lower(); first = ALIAS.get(first, first)
+    if first in CLASSES: out.add(first)
     creates = [e for e in eff if e['type'] == 'create']
     chartish = any('chart' in (e.get('kind') or '') or 'chart' in (e.get('target') or '') or e.get('property') in ('series', 'values', 'data', 'axis', 'legend', 'chart type', 'type')
                    for e in eff) or ('chart' in ' '.join(cons))

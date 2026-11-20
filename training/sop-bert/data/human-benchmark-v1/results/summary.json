@@ -33,12 +33,12 @@
   },
   "diagram": {
    "all": {
-    "n": 290,
+    "n": 333,
     "pass": 18,
     "partial": 4
    },
    "actionable": {
-    "n": 283,
+    "n": 326,
     "pass": 11,
     "partial": 4
    },
@@ -48,7 +48,7 @@
     "partial": 1
    },
    "corpus": {
-    "n": 252,
+    "n": 295,
     "pass": 16,
     "partial": 3
    },
@@ -56,9 +56,10 @@
     "NLVCorpus": 32,
     "SCONE (Tangrams)": 25,
     "ChartDialog": 51,
-    "PPTC": 57,
+    "PPTC": 74,
     "WildChat-1M": 59,
-    "TeX.StackExchange titles": 28,
+    "TeX.StackExchange titles": 41,
+    "OSWorld": 13,
     "owner-phrase-log": 38
    }
   },

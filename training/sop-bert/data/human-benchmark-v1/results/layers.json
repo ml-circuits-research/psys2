@@ -85,33 +85,33 @@
   }
  },
  "diagram": {
-  "n": 290,
+  "n": 333,
   "pass": 18,
   "partial": 4,
   "primary": {
-   "reader": 228,
-   "binding": 29,
+   "reader": 269,
+   "binding": 30,
+   "rule/operation": 5,
    "compiler": 4,
    "semantics": 4,
-   "rule/operation": 4,
    "other": 3
   },
   "flags": {
-   "reader:inconsistent-heads": 227,
-   "binding:kind-word-unbound": 144,
-   "binding:property-key-unbound": 117,
-   "binding:reference": 50,
-   "rule/operation:chart-composition-not-in-area": 30,
-   "reader:cross-area-key": 19,
+   "reader:inconsistent-heads": 268,
+   "binding:kind-word-unbound": 168,
+   "binding:property-key-unbound": 135,
+   "binding:reference": 62,
+   "rule/operation:chart-composition-not-in-area": 37,
+   "reader:cross-area-key": 26,
+   "compiler:native-binding-gap": 15,
    "compiler:no-query/step-projection": 14,
-   "compiler:native-binding-gap": 14,
    "semantics:executed-wrong-or-partial": 5,
    "reader:no-request": 1
   },
   "expressibility": {
-   "key-unbound": 136,
-   "bound": 55,
-   "no-key": 99
+   "key-unbound": 145,
+   "bound": 59,
+   "no-key": 129
   },
   "passByExpressibility": {
    "bound": 13,
@@ -155,7 +155,8 @@
     "Create a page and copy the chart.",
     "diagram of evolution chatgpt",
     "please provide a diagram with the classifications of periodontitis from 1986 and towards",
-    "give me a chart"
+    "give me a chart",
+    "Insert the following data into the chart, \"SMS\", \"WeChat\", \"QQ\" and \"DingTalk\"."
    ]
   }
  },

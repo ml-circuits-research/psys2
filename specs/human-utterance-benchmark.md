@@ -9,13 +9,13 @@ The owner asked: *"Is there a dataset of typical utterances people make, so we t
 world, adding knowledge and rules? I feel we do something wrong in principle and only fix small steps."*
 
 **Yes, such datasets exist,** for every tab except node/edge diagram editing (§2). Using real human lines as the backbone
-changes the picture sharply. We built a benchmark of 1,271 real human utterances, adapted only in vocabulary to our world,
+changes the picture sharply. We built a benchmark of 1,314 real human utterances, adapted only in vocabulary to our world,
 and ran it end to end through the app route. It succeeds on:
 
 | Tab | Success |
 | --- | --- |
 | Drawing | 11% |
-| Diagram | 6% |
+| Diagram | 5% |
 | Calendar | 5% |
 | Avatar | 0% |
 | Document | 0% |
@@ -92,7 +92,7 @@ our own users through the phrase log.
 | Tab | Items | Corpus items | Owner items | Sources |
 | --- | ---: | ---: | ---: | --- |
 | Drawing | 329 | 256 | 73 | CoDraw 100, MagicBrush 126, BLOCKS 30 |
-| Diagram | 290 (+18 setup) | 252 (122 charts) | 38 | PPTC 57, WildChat 59, ChartDialog 51, NLV 32, TeX.SE 28, SCONE 25 |
+| Diagram | 333 (+45 setup) | 295 (145 charts) | 38 | PPTC 74, WildChat 59, ChartDialog 51, TeX.SE 41, NLV 32, SCONE 25, OSWorld 13 |
 | Calendar | 220 | 220 | 0 | MASSIVE 88, CLINC 35, SMCalFlow 97 |
 | Avatar | 228 | 220 | 8 | RealEdit 92, MagicBrush 79, Emu 49 |
 | Document | 204 (+6 setup) | 201 | 3 | DocEdit 81, PPTC 57, OASST 48, Dolly 15 |
@@ -122,7 +122,7 @@ python3 taxonomy.py items scored
 | Tab | Pass | Partial | Pass, actionable items only | Owner items |
 | --- | ---: | ---: | ---: | ---: |
 | Drawing | 36/329 (10.9%) | 16 | 31/324 | 11/73 |
-| Diagram | 18/290 (6.2%) | 4 | 11/283 | 2/38 |
+| Diagram | 18/333 (5.4%) | 4 | 11/326 | 2/38 |
 | Calendar | 11/220 (5.0%) | 0 | 7/214 | – |
 | Avatar | 0/228 | 0 | 0/228 | 0/8 |
 | Document | 0/204 | 0 | 0/204 | 0/3 |
@@ -136,13 +136,13 @@ flag.
 
 | Flag | Drawing | Diagram | Calendar | Avatar | Document |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| reader: heads inconsistent (presence/span/BIO/act anchor) | 73% | 83% | 78% | 87% | 91% |
-| reader: key from another area | 5% | 7% | – | 18% | 10% |
+| reader: heads inconsistent (presence/span/BIO/act anchor) | 73% | 85% | 78% | 87% | 91% |
+| reader: key from another area | 5% | 8% | – | 18% | 10% |
 | binding: predicted property key has no semantic binding | 20% | 43% | 64% | 88% | 52% |
 | binding: kind word unbound | 17% | 53% | 26% | 67% | 77% |
-| binding: reference (anaphor, population) not bound | 10% | 18% | 33% | 32% | 42% |
-| compiler: no query/step projection, or arguments not bound | 8% + 6% | 5% + 5% | 33% + 7% | 6% | 3% |
-| rule/operation missing or refused | 1% | 11% (charts refused: `chart-composition-not-in-area`) | – | – | 3% |
+| binding: reference (anaphor, population) not bound | 10% | 20% | 33% | 32% | 42% |
+| compiler: no query/step projection, or arguments not bound | 8% + 6% | 4% + 5% | 33% + 7% | 6% | 3% |
+| rule/operation missing or refused | 1% | 12% (charts refused: `chart-composition-not-in-area`) | – | – | 3% |
 | executed, wrong or partial outcome | 8% | 2% | 1% | – | – |
 
 Examples by layer:
@@ -171,12 +171,12 @@ This is a static analysis of the expected effects against `inventory.json` and t
 | Tab | Bound key exists | Key exists, unbound | No key in the scheme | Passes among "bound" |
 | --- | ---: | ---: | ---: | ---: |
 | Drawing | 168 | 14 | 147 | 35 (21%) |
-| Diagram | 55 | 136 | 99 | 13 (24%) |
+| Diagram | 59 | 145 | 129 | 13 (22%) |
 | Calendar | 107 | 83 | 30 | 6 |
 | Avatar | 15 | 197 | 16 | 0 |
 | Document | 79 | 89 | 36 | 0 |
 
-So 45% of drawing and 34% of diagram human requests cannot be expressed at all. Examples:
+So 45% of drawing and 39% of diagram human requests cannot be expressed at all. Examples:
 - vague quantities ("some clouds")
 - part add ("put eyes on the sun")
 - shape ("irregular")
@@ -194,25 +194,26 @@ items in the class; "pass" is the measured pass rate.
 
 | Class | Real examples | Needs (knowledge + capability) | Drawing items, pass | Diagram items, pass |
 | --- | --- | --- | --- | --- |
-| create | "add a lighthouse", "Insert a rectangle to its right." | kind lexicon → catalog kinds (people too), default size and placement | 193, 12% | 79, 14% |
-| compose scene / several things | "draw a landscape with water, ground, sky, clouds, sun, 2 different houses", "create a five-bubble mind map" | scene knowledge (`k.scenes`, layout bands), coordination → request batch, one placement problem | 16, 0% | 6, 0% |
-| place relative | "1 inch to the right of his knee is a medium soccer ball", "Put a car next to the child." | relation bank, landmark reference, distance with unit, parts as landmarks, Z3 placement | 134, 5% | 17, 29% |
-| move / position | "move the house down", "swap shapes 3 and 4", "move summary to around the middle" | direction and amount, regions, swap, absolute position | 9, 0% | 20, 0% |
-| quantify | "draw some clouds", "add 5 random nodes", "a few balloons" | numerals; vague amounts (`k.expect.amount`); repeat-make in the compiler | 35, 9% | 73, 4% |
-| refer (anaphora, population, ordinal, id) | "put him on the swing", "remove shape 2", "the line e1", "all elements" | discourse referents, population and ordinal selectors, identifiers, names | 58, 5% | 90, 13% |
-| modify attribute (colour, size, style, shape) | "let the cat be white", "Create a green rectangle", "the lake shape should be iregulat" | one property concept per attribute, bound per area by knowledge; shape values (`k.shapes`) | 55, 7% | 18, 0% |
+| create | "add a lighthouse", "Insert a rectangle to its right." | kind lexicon → catalog kinds (people too), default size and placement | 193, 12% | 157, 7% |
+| compose scene / several things | "draw a landscape with water, ground, sky, clouds, sun, 2 different houses", "create a five-bubble mind map" | scene knowledge (`k.scenes`, layout bands), coordination → request batch, one placement problem | 16, 0% | 36, 0% |
+| place relative | "1 inch to the right of his knee is a medium soccer ball", "Put a car next to the child." | relation bank, landmark reference, distance with unit, parts as landmarks, Z3 placement | 134, 5% | 25, 32% |
+| move / position | "move the house down", "swap shapes 3 and 4", "move summary to around the middle" | direction and amount, regions, swap, absolute position | 9, 0% | 23, 0% |
+| quantify | "draw some clouds", "add 5 random nodes", "a few balloons" | numerals; vague amounts (`k.expect.amount`); repeat-make in the compiler | 35, 9% | 86, 4% |
+| refer (anaphora, population, ordinal, id) | "put him on the swing", "remove shape 2", "the line e1", "all elements" | discourse referents, population and ordinal selectors, identifiers, names | 58, 5% | 111, 11% |
+| modify attribute (colour, size, style, shape) | "let the cat be white", "Create a green rectangle", "the lake shape should be iregulat" | one property concept per attribute, bound per area by knowledge; shape values (`k.shapes`) | 55, 7% | 29, 0% |
 | part edit (drawing) | "make the roof blue", "Give the car a pig logo", "put some yes to the sun" | `k.parts.called`, part observation, part-add operation, layout anchors | 79, 3% | 2, 0% |
-| arrange / layout / align / distribute | "arrange the elements better", "split into 3 levels", "arrange as a hexagon with the circle in the middle" | layout kinds (tree, grid, circle, hexagon), bands, align/distribute, aesthetic objective | 9, 0% | 36, 0% |
-| connect / structure | "connect all elements", "connect cirles with an arraw", "UML class diagram with the correct arrows" | link creation over populations, arrow style, diagram kinds (flowchart, tree, mind map) | – | 40, 0% |
-| chart create | "make a bar chart of average profit by state", "Show average earnings by genre." | chart kinds; data binding (series, aggregation); chart as diagram kind | – | 81, 0% |
-| chart data edit | "Inflation in the US in 2022 was 8%…", "make sales for March 40" | series and point references, value edit, rename, add/remove series | – | 1, 0% (thin in corpora; needs authored and owner data) |
-| chart formatting | "Make the bars stacked", "set origin colors to: europe, blue, …", axis labels, legend | chart properties (stacked, legend, axis title, palette, type change) | – | 40, 0% |
+| arrange / layout / align / distribute | "arrange the elements better", "split into 3 levels", "arrange as a hexagon with the circle in the middle" | layout kinds (tree, grid, circle, hexagon), bands, align/distribute, aesthetic objective | 9, 0% | 48, 0% |
+| connect / structure | "connect all elements", "connect cirles with an arraw", "UML class diagram with the correct arrows" | link creation over populations, arrow style, diagram kinds (flowchart, tree, mind map) | – | 44, 0% |
+| chart create | "make a bar chart of average profit by state", "Show average earnings by genre." | chart kinds; data binding (series, aggregation); chart as diagram kind | – | 88, 0% |
+| chart data edit | "Insert Jan, Feb, Mar, April into the chart,", "Add a new series named \"Profit\" right next to the 'CGOS' series" | series and point references, value edit, rename, add/remove series | – | 14, 0% (mostly table edits retargeted to charts; single-value edits need authored and owner data) |
+| chart formatting | "Make the bars stacked", "set origin colors to: europe, blue, …", axis labels, legend | chart properties (stacked, legend, axis title, palette, type change) | – | 48, 0% |
 | remove | "Remove the car.", "remove it again" | references; undo of a removal | 12, 25% | 14, 0% |
-| vague aesthetic | "make the diagram prettier", "it is ugly draw a different person" | an aesthetic objective that maps to layout, variety and style defaults; disclose the choice | 16, 6% | 26, 12% |
-| correction / undo | "no, put problems back where it was", "wrong, move problems higher" | journal reference, previous position, repair of the previous reading | 9, 0% | 10, 0% |
-| question | "who is eyes a cat?", "how mileage varies for different cylinder type" | query projections, explanation of the last grounding | 15, 13% | 21, 14% |
-| compound / multi-step | "Create a triangle. Move it to the right side of the page." | cutter, shared arguments, dependency order | 38, 3% | 109, 4% |
-| fragment / follow-up | "down", "on the lake", "and higher still", "more" | the previous request as a frame to complete | 39, 3% | 67, 1% |
+| vague aesthetic | "make the diagram prettier", "it is ugly draw a different person" | an aesthetic objective that maps to layout, variety and style defaults; disclose the choice | 16, 6% | 31, 10% |
+| correction / undo | "no, put problems back where it was", "wrong, move problems higher" | journal reference, previous position, repair of the previous reading | 9, 0% | 14, 14% |
+| question | "who is eyes a cat?", "how mileage varies for different cylinder type" | query projections, explanation of the last grounding | 15, 13% | 25, 16% |
+| compound / multi-step | "Create a triangle. Move it to the right side of the page." | cutter, shared arguments, dependency order | 38, 3% | 129, 3% |
+| fragment / follow-up | "down", "on the lake", "and higher still", "more" | the previous request as a frame to complete | 39, 3% | 83, 1% |
+| formatting / effects | "Draw shadow in a better way", "Rotate left by 90 degree.", "make the background blue on all my pages" | style and effect properties (shadow, gradient, rotation, background) | – | 5, 0% |
 | conversational / complaint | "good work thanks", "you are stupid" | dialogue acts (no change, polite reply) | 10, 60% | 10, 70% |
 
 What actually works today: single-object create, a few relative creates, remove, and replies to chit-chat. Everything
