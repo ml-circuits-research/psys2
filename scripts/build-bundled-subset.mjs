@@ -54,7 +54,7 @@ for (const w of await facts.wires('k.colours.colour')) {
   const m = byName.get(n) ?? byName.set(n, { id: `k.colours.bundled.${n.replace(/\W+/g, '_')}`, type: 'k.colours.colour', f: { name: [n] } }).get(n);
   for (const k of ['rgb', 'rgb_about', 'family', 'basic']) if (w.f[k]?.[0] && !m.f[k]) m.f[k] = [w.f[k][0]];
   // `core=true`: the catalog describes the colour itself (tone, temperature, a kind: the hand-written colours people mean first), not only a CSS or common name with a value
-  if (w.f.tone || w.f.temperature || w.f.kind || w.f.basic?.[0] === 'true') m.f.core = ['true'];
+  if (w.f.tone || w.f.temperature || w.f.kind || w.f.basic?.[0] === 'true' || w.f.first?.[0] === 'true') m.f.core = ['true'];   // first=true: a name people mean as the colour first (violet, rose)
 }
 for (const m of byName.values()) if (m.f.rgb && m.f.rgb_about) delete m.f.rgb_about;
 const colours = [...byName.values()];

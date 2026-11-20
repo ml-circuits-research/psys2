@@ -19,7 +19,7 @@ import { parseLine } from './catalog.mjs';
 import { BUNDLED_VALUES } from './bundled-values.mjs';
 
 const lc = (s) => String(s ?? '').toLowerCase().replace(/[_-]+/g, ' ').replace(/\s+/g, ' ').trim();   // glue-lint: tool-data (colour name)
-const state = { colours: new Map(), numbers: new Map(), from: 'none', loading: null };
+const state = { colours: new Map(), numbers: new Map(), misspelt: new Map(), from: 'none', loading: null };
 
 /** The other words for a colour: the catalog's (`core.word of=k.colours.colour.name`: gray, blk, grn, bloo, ginger ...), read with the colours. */
 let SPELLING = {};
@@ -29,7 +29,7 @@ const derived = (t, to) => t.length > to.length && t.startsWith(to.slice(0, Math
 /** Two colour names side by side ("blue green", a word of k.colours for teal): the grammar reads them (a colour and a value: "the table that is blue green"), not the colour reader. */
 const compound = (k) => k.includes(' ') && k.split(' ').every((w) => state.colours.has(w));
 function absorb(wires) {
-  const colours = new Map(), numbers = new Map(), spelling = {};
+  const colours = new Map(), numbers = new Map(), misspelt = new Map(), spelling = {};
   for (const w of wires) {
     if (w.type === 'core.word' && (w.f.of ?? []).includes('k.colours.colour.name') && w.f.means?.[0]) { const to = lc(w.f.means[0]); for (const t of (w.f.text ?? []).map(lc)) if (!derived(t, to)) spelling[t] = to; continue; }   // the catalog's other words for a colour (blk, grn, light-blue)
     if (w.type === 'k.colours.colour' && w.f.name?.[0]) {
@@ -39,11 +39,11 @@ function absorb(wires) {
       if (!c.rgb || (!c.exact && w.f.rgb)) { const rgb = w.f.rgb?.[0] ?? w.f.rgb_about?.[0]; if (rgb) { c.rgb = rgb; c.exact = !!w.f.rgb; } }
       c.basic ??= w.f.family?.[0] ?? null;
       c.thing ||= w.f.thing?.[0] === 'true';
-      c.core ||= w.f.core?.[0] === 'true' || !!(w.f.tone || w.f.temperature || w.f.kind) || w.f.basic?.[0] === 'true';
+      c.core ||= w.f.core?.[0] === 'true' || w.f.first?.[0] === 'true' || !!(w.f.tone || w.f.temperature || w.f.kind) || w.f.basic?.[0] === 'true';
       if (!old) colours.set(name, c);
-    } else if (w.type === 'k.values.number' && w.f.text?.[0]) { const t = lc(w.f.text[0]); (numbers.get(t) ?? numbers.set(t, []).get(t)).push({ value: Number(w.f.value?.[0] ?? w.f.value_about?.[0]), kind: w.f.kind?.[0] ?? 'cardinal' }); }   // one text can be two kinds (third: ordinal and fraction)
+    } else if (w.type === 'k.values.number' && w.f.text?.[0]) { const t = lc(w.f.text[0]), into = w.f.misspelled?.[0] === 'true' ? misspelt : numbers; (into.get(t) ?? into.set(t, []).get(t)).push({ value: Number(w.f.value?.[0] ?? w.f.value_about?.[0]), kind: w.f.kind?.[0] ?? 'cardinal' }); }   // one text can be two kinds (third: ordinal and fraction)
   }
-  return { colours, numbers, spelling };
+  return { colours, numbers, misspelt, spelling };
 }
 
 /** Seeds the readers from the bundled subset (idempotent). */
@@ -53,7 +53,7 @@ export function seedValues() {
   for (const text of Object.values(BUNDLED_VALUES)) for (const line of text.split('\n')) { const w = line.charCodeAt(0) === 64 ? parseLine(line) : null; if (w) wires.push({ type: w.type, f: w.attrs }); }
   const got = absorb(wires);
   SPELLING = { ...got.spelling };
-  Object.assign(state, { colours: got.colours, numbers: got.numbers }, { from: 'bundled' });
+  Object.assign(state, { colours: got.colours, numbers: got.numbers, misspelt: got.misspelt }, { from: 'bundled' });
 }
 seedValues();
 
@@ -72,7 +72,7 @@ export function loadValues(facts) {
       if (wires.length) {
         const got = absorb(wires);
         if (got.colours.size) { for (const [n, c] of got.colours) { const old = state.colours.get(n); if (old) { c.thing = old.thing; c.core = old.core; } } state.colours = got.colours; }   // thing and core are derived once, at build time: the catalog's own colour wires do not carry them
-        if (got.numbers.size) state.numbers = got.numbers;
+        if (got.numbers.size) { state.numbers = got.numbers; state.misspelt = got.misspelt; }
         if (Object.keys(got.spelling).length) SPELLING = { ...got.spelling };
         state.from = 'catalog';
       }
@@ -115,15 +115,10 @@ export function nearestColourName(code) {
 }
 export const basicColour = (name) => state.colours.get(colourName(name))?.basic ?? null;
 export const colourNames = () => [...state.colours.keys()];
-/**
- * COLOUR_FIRST: names that are also drawable things (violet, rose, coral, lemon) but that people mean as colours first; they stay colour words of the lexicon as they were before the colour
- * words came from the catalog. Transitional: the catalog needs a marker for the colour sense of such a name (questions.md), then this list goes.
- */
-const COLOUR_FIRST = new Set(['violet', 'rose', 'coral', 'lemon']);
 /** The colour words a formalizer lexicon may hold: every phrase of the reader except a name that is also a drawable thing and that no basic colour, k.colours entry or colour-first rule vouches for (tomato, plum, salmon, wheat). */
-export const colourLexiconWords = () => colourPhrases().filter((p) => { const c = state.colours.get(p); return !c || !c.thing || c.core || c.basic === c.name || COLOUR_FIRST.has(p); });
+export const colourLexiconWords = () => colourPhrases().filter((p) => { const c = state.colours.get(p); return !c || !c.thing || c.core || c.basic === c.name; });
 /** Is `word` one of the colours people mean first: a basic or core colour of the catalog or a colour-first name (red, orange, violet)? A colour name that is only a shade of a basic colour ("peru" is brown) stays free for a name of the catalog's geography. */
-export function isCoreColour(word) { const p = colourName(word); if (!p) return false; const c = state.colours.get(p); return !c || !!c.core || c.basic === c.name || COLOUR_FIRST.has(p); }
+export function isCoreColour(word) { const p = colourName(word); if (!p) return false; const c = state.colours.get(p); return !c || !!c.core || c.basic === c.name; }
 /** Every phrase that reads as a colour: the names and the spellings (for building a recogniser), longest first. */
 export const colourPhrases = () => [...state.colours.keys(), ...Object.keys(SPELLING).filter((k) => !compound(k))].sort((a, b) => b.length - a.length || a.localeCompare(b));
 /** The basic colours (the catalog's `basic` values: a name that is its own basic colour), in the catalog's order. */
@@ -138,4 +133,6 @@ export const numberInfo = (word, kind = null) => { wake(); const l = state.numbe
 export const numberValue = (word, kind = null) => numberInfo(word, kind)?.value ?? null;
 export const numberWords = (kind = null) => [...state.numbers].filter(([, l]) => !kind || l.some((v) => v.kind === kind)).map(([k]) => k);
 /** The word of a whole number of a kind ("cardinal": 12 -> "twelve", "ordinal": 3 -> "third"), or null. */
+/** `{ value, kind }` of a common misspelling of a number word ("fourty": w.lang.en.number misspelled=true), read and never written; null otherwise. */
+export const misspeltNumber = (word, kind = null) => { wake(); const l = state.misspelt.get(lc(word)); return (kind ? l?.find((x) => x.kind === kind) : l?.[0]) ?? null; };
 export const numberWordOf = (n, kind = 'cardinal') => { for (const [w, l] of state.numbers) if (l.some((v) => v.kind === kind && v.value === n)) return w; return null; };
