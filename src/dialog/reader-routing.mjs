@@ -82,8 +82,14 @@ async function dispatchRequest(session,candidate,text,options,bindings,contextPr
 // back; the steps that ran are one undo group. The reply names every dropped role.
 async function dispatchPartial(session,plan,text,options,bindings,refused=null){
  const area=options.view??session.isession.state['ui.shell']?.activeTab;
- const before=structuredClone(session.isession.state),journal=captureHistory(session,false);
- const rollback=()=>{if(!restoreHistory(session,journal,{},false))throw Error('invalid-partial-history-checkpoint');Object.assign(session.isession.state,structuredClone(before));};
+ // The state worlds by reference (an executed step replaces a world's state object; hosts may hold the original) and
+ // as a copy for change detection.
+ const references={...session.isession.state},before=structuredClone(session.isession.state),journal=captureHistory(session,false);
+ const rollback=()=>{
+  if(!restoreHistory(session,journal,{},false))throw Error('invalid-partial-history-checkpoint');
+  for(const key of Object.keys(session.isession.state))if(!Object.hasOwn(references,key))delete session.isession.state[key];
+  for(const [key,value] of Object.entries(references))if(session.isession.state[key]!==value)session.isession.state[key]=value;
+ };
  const supported=r=>r?.statuses?.includes('supported');
  // refused: the editor's reply to a complete reading it could not apply; the ladder starts from there.
  const first=refused??await dispatchRequest(session,plan.decision.candidate,text,options,bindings,null,null,plan.decision.alternatives);

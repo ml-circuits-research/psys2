@@ -23,15 +23,15 @@ function joinKindMentions(raw,failures,bindings,cuts){
   const request=(changed??raw).requests?.[index];if(!request||request.target?.kind)continue;
   const offset=cuts?.[index]?.[0]??0,text=scalarsOf(raw.source.text),ranges=[...detail.head.ranges].sort((a,b)=>a[0]-b[0]).map(([a,b])=>[a+offset,b+offset]);
   const type=request.target?.type,area=raw.area,declared=lemma=>(bindings.kinds??[]).some(k=>k.area===area&&k.type===type&&k.lemma===lemma);
-  const adjacent=!ranges.some((r,i)=>i>0&&!/^[\s-]+$/.test(text.slice(ranges[i-1][1],r[0]).join('')));
-  let span=adjacent?[ranges[0][0],ranges.at(-1)[1]]:null,lemma=span?text.slice(...span).join(''):null;
-  // Otherwise the mentions are several things in one request: the first that names a declared kind is made and the
-  // others are disclosed (ranked by source order; the coordination reader had its turn before partial admission).
-  if(!span||!declared(lemma)){
-   span=ranges.find(r=>declared(text.slice(...r).join('')))??null;lemma=span?text.slice(...span).join(''):null;
-   if(!span)continue;
-   for(const r of ranges)if(r!==span)(skipped??=[]).push({request:index,reason:'several-kind-mentions',role:'theme',text:text.slice(...r).join('')});
-  }
+  // Runs of adjacent mentions, each joined into one span; a joined run that spells a declared kind is one mention.
+  const runs=[];for(const r of ranges){const last=runs.at(-1);if(last&&/^[\s-]+$/.test(text.slice(last.at(-1)[1],r[0]).join('')))last.push(r);else runs.push([r]);}
+  const options=runs.flatMap(run=>run.length>1?[[run[0][0],run.at(-1)[1]],...run]:run);
+  // Otherwise the mentions are several things in one request: the first that names a declared kind (a joined run
+  // before its own parts) is made and the others are disclosed (ranked by source order; the coordination reader had
+  // its turn before partial admission).
+  const span=options.find(r=>declared(text.slice(...r).join('')))??null,lemma=span?text.slice(...span).join(''):null;
+  if(!span)continue;
+  for(const r of ranges)if(r[1]<=span[0]||r[0]>=span[1])(skipped??=[]).push({request:index,reason:'several-kind-mentions',role:'theme',text:text.slice(...r).join('')});
   changed??=structuredClone(raw);
   const target=changed.requests[index].target;target.kind=lemma;target.kind_span=lemma;
   changed.ranges=[...(changed.ranges??[]).filter(r=>JSON.stringify(r.path)!==JSON.stringify(['requests',String(index),'target','kind_span'])),{path:['requests',String(index),'target','kind_span'],range:span}];
