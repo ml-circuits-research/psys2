@@ -479,7 +479,7 @@
     }
   ],
   "builder": "official-dataset/build.py",
-  "builderSha256": "b5986c3705b9dc62385dc268b724f991862a12e403b352af9205da3f9a6d754a",
+  "builderSha256": "16181cb146585b969b7ec660deb95d5b752d6d2053d21a8d0fedb431cf9ef092",
   "sources": [
     {
       "name": "ui-natural-v1",
@@ -687,8 +687,8 @@
       "name": "data-drop-v1",
       "path": "training/sop-bert/data/data-drop-v1/accepted.jsonl",
       "description": "Diagram/Drawing rows of the data-request drops, validated and normalised by data-drop-v1/import.py",
-      "gitCommit": "7326d3a06dd30fc9b3255e2bcbb6ed5ea8e3ea03",
-      "sha256": "39a62018903de5fa828eb6a5819a915d80cce232e19495398db53a1876db170c",
+      "gitCommit": "67d03064fba1ed83455c2f896b502f72a443581a",
+      "sha256": "01ecf4b442268fc4d98b2716299ca2572a27a8d6a3c037ef0f36fe93ee6e800b",
       "rowsIn": 16934,
       "rowsKept": 16934,
       "rowsDropped": 0,
@@ -891,12 +891,12 @@
     }
   ],
   "splits": {
-    "train": 103030,
-    "dev": 4424,
+    "train": 103028,
+    "dev": 4426,
     "test": 2214
   },
   "families": 26315,
-  "leakedFamilies": 2795,
+  "leakedFamilies": 2797,
   "labelConflictsResolvedByPriority": {
     "main-synthetic<-main-synthetic": 4
   },
@@ -931,20 +931,20 @@
   },
   "files": {
     "STATS.md": {
-      "sha256": "65d2c85cd2ee146c674ba3a1473b7e112e4d1cbc34956a7d2efe50bd558f48d0",
+      "sha256": "3e9b0dc24ff8d165b696992f9b2a5673d11bbb4b9805c9dd16e90253ca3859e8",
       "bytes": 8139
     },
     "VALIDATION.md": {
-      "sha256": "f6e1f3100396c33336f0d68eb0754acc570425c92328deed5ff4e9b55800f274",
-      "bytes": 13529
+      "sha256": "5c964c1e1e5d45d1ea8772b51e411c8537e1499b3053d538fe14bcac67c6d2fd",
+      "bytes": 13718
     },
     "audit-sample.md": {
-      "sha256": "c23152eef27dc8560d682630fc83da0b05e26044a1f1d2594ebfd141ae834ac0",
-      "bytes": 44394
+      "sha256": "ad3ac5edb17a2a5ce1549651968036172a26ba6731b309331286dd025801e14c",
+      "bytes": 44413
     },
     "dev.jsonl": {
-      "sha256": "541ad1e99f0ef5ec3386285b2a782557ae4501224dac7aa545dca3a2a3dc7d4c",
-      "bytes": 4835788
+      "sha256": "cc8199f352d210ce758ed1a02bd1a9c04ae623a0ab911acadc6794c8d2249e53",
+      "bytes": 4839415
     },
     "inventory.json": {
       "sha256": "94c30e30ab39b3eca35ae13eed67e859cbb10c5e855b2dc9efcf913f718ab34a",
@@ -955,8 +955,8 @@
       "bytes": 2413172
     },
     "train.jsonl.gz": {
-      "sha256": "90be8ec157a0c37006a540968c53725c2df7220f881b51c838dfa5bafa860a83",
-      "bytes": 5062622
+      "sha256": "e0fb0ef3234dde61a767444a59b1872483a40ecb175cd25f2d93f1a3c10e595b",
+      "bytes": 5062261
     }
   },
   "policy": {

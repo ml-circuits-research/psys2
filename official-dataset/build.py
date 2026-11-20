@@ -1189,6 +1189,8 @@ def main():
         for r in rows:
             leak[r['family']].add(split)
     leaked = sum(len(s) > 1 for s in leak.values())  # reported only: random rows, families may cross splits (owner phase rule)
+    ids = collections.Counter(r['id'] for rows in outputs.values() for r in rows)
+    final_errors.update({'duplicate-row-id': n - 1 for k, n in ids.items() if n > 1} if any(n > 1 for n in ids.values()) else {})
     if final_errors:
         raise SystemExit(f'final validation failed: {dict(final_errors)} leaked families={leaked}')
 

@@ -460,7 +460,7 @@ def main():
                 for c in row.get('classes') or []:
                     per_class[c] += 1
                 fam = str(row.get('family') or hashlib.sha256(row['text'].encode()).hexdigest()[:12])
-                accepted.append({'id': f'{batch.name}-{path.stem}-{i:05d}', 'world': row['world'], 'text': row['text'],
+                accepted.append({'id': f'{batch.name}-{"residual-" if resigned.get(batch.name) == "residual" else ""}{path.stem}-{i:05d}', 'world': row['world'], 'text': row['text'],
                                  'context': row.get('context') or {'existing': [], 'previous': None}, 'requests': row['requests'],
                                  'style': 'drop-' + str(row.get('tier') or 'equivalent') + ''.join('-' + f for f in ('robustness', 'fragment') if row.get(f)),
                                  'tier': row.get('tier'), **{f: True for f in ('robustness', 'fragment') if row.get(f)}, 'phase': 'direct',
@@ -528,9 +528,16 @@ def main():
     keep_frozen = {n: rows for n, rows in frozen.items() if not (n in imported and resigned.get(n) != 'residual')}
     residuals = [json.loads(l) for p in sorted(FROZEN.glob('*.residual.jsonl')) if p.name[:-len('.residual.jsonl')] not in imported
                  for l in p.read_text().splitlines() if l.strip()]
+    for r in residuals:  # residual rows share line numbers with their batch's consumed bulk: their ids say residual
+        b = r['cohort']['recipeFamily'].split(':')[1]
+        if not r['id'].startswith(b + '-residual-'):
+            r['id'] = r['id'].replace(b + '-', b + '-residual-', 1)
     accepted = [r for rows in keep_frozen.values() for r in rows] + residuals + accepted
     contract = collections.Counter()
     accepted = [official_contract(r, contract) for r in accepted]
+    ids = collections.Counter(r['id'] for r in accepted)
+    if any(n > 1 for n in ids.values()):
+        raise SystemExit('duplicate imported row ids: ' + ', '.join(k for k, n in ids.items() if n > 1)[:300])
     summary['officialContract'] = dict(contract)
     summary.update({name: {'frozen': len(rows)} for name, rows in keep_frozen.items() if name not in summary})
     for name, mode in resigned.items():

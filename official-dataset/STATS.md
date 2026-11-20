@@ -1,13 +1,13 @@
 # Statistics
 
-109,668 messages; train 103,030, dev 4,424, test 2,214.
+109,668 messages; train 103,028, dev 4,426, test 2,214.
 
 ## Tab (world) × split
 
 | world | train | dev | test | total |
 | --- | ---: | ---: | ---: | ---: |
 | drawing | 40,262 | 1,756 | 882 | 42,900 |
-| diagram | 34,618 | 1,451 | 741 | 36,810 |
+| diagram | 34,616 | 1,453 | 741 | 36,810 |
 | document | 11,568 | 498 | 242 | 12,308 |
 | avatar | 8,904 | 368 | 190 | 9,462 |
 | calendar | 7,678 | 351 | 159 | 8,188 |
@@ -37,8 +37,8 @@
 
 | requests | rows |
 | --- | ---: |
-| 1 | 99,346 |
-| 2 | 8,717 |
+| 1 | 99,345 |
+| 2 | 8,718 |
 | 3 | 844 |
 | 0 | 660 |
 | 4 | 85 |
@@ -50,7 +50,7 @@
 
 | act | rows |
 | --- | ---: |
-| make | 53,622 |
+| make | 53,623 |
 | change | 39,586 |
 | answer | 7,062 |
 | place | 6,609 |
@@ -74,7 +74,7 @@
 | world.type | rows |
 | --- | ---: |
 | drawing.drawn | 42,642 |
-| diagram.node | 17,496 |
+| diagram.node | 17,497 |
 | diagram.chart | 12,975 |
 | avatar.part | 8,337 |
 | calendar.meeting | 7,432 |
@@ -102,9 +102,9 @@
 
 | operation | rows |
 | --- | ---: |
-| none | 31,144 |
+| none | 31,143 |
 | drawing.object.make | 19,978 |
-| compound | 6,154 |
+| compound | 6,155 |
 | avatar.part.change | 5,727 |
 | drawing.object.change | 5,496 |
 | document.block.change | 3,113 |
@@ -258,14 +258,14 @@
 | document.text.words | 1,044 |
 | calendar.meeting.id | 1,038 |
 | calendar.meeting.room | 1,007 |
-| diagram.node.position | 988 |
+| diagram.node.position | 987 |
 | document.text.content | 961 |
 | drawing.drawn.height | 950 |
-| diagram.node.n | 905 |
+| diagram.node.n | 906 |
 | avatar.part.ids | 809 |
-| diagram.node.anchor | 780 |
 | drawing.drawn.facing | 780 |
 | document.section.id | 779 |
+| diagram.node.anchor | 779 |
 | drawing.drawn.label | 725 |
 | drawing.part.index | 684 |
 | document.block.name | 683 |
@@ -288,12 +288,12 @@
 | --- | ---: |
 | haiku-v2 | 17,506 |
 | haiku-v1 | 14,706 |
-| drop-equivalent | 12,348 |
+| drop-equivalent | 12,349 |
 | mechanical | 10,291 |
 | relation-natural | 6,744 |
 | mechanical-trigger | 5,111 |
 | mechanical-typo | 4,789 |
-| drop-complex | 3,570 |
+| drop-complex | 3,569 |
 | human-equivalent | 2,904 |
 | human-simplified | 2,397 |
 | drop-simplified | 2,060 |

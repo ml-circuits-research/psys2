@@ -494,5 +494,5 @@ Kept with a warning (not an error; see README):
 ## Final check of the written splits
 
 - unresolved errors: **0**
-- families present in more than one split: **2795**
+- families present in more than one split: **2797**
 - label conflicts between identical texts, resolved by source priority: {'main-synthetic<-main-synthetic': 4}
