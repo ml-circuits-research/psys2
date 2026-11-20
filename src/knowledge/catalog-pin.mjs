@@ -9,7 +9,7 @@
  */
 export const CATALOG_PIN = Object.freeze({
   repo: 'https://github.com/ml-circuits-research/sop-knowledge-worlds',
-  commit: '4e3e1b4427b723710db3f7f4f07e28c6ff1e0ded',   // w.diagram pictures, tables and table cells, the treemap layout and the k.charts treemap kind (186915bd, 4e3e1b44), after colour-first names in k.colours (first=true) and number misspellings in w.lang.en (misspelled=true) (3b5ea526), after w.diagram edges with free ends and named ports (71d6260d)
+  commit: '7e59972137cd1b6d752d5a5f77f0ba5303113988',   // the -f plurals in -ves in w.lang.en (7e599721), after w.diagram pictures, tables and table cells, the treemap layout and the k.charts treemap kind (186915bd, 4e3e1b44), after colour-first names in k.colours (first=true) and number misspellings in w.lang.en (misspelled=true) (3b5ea526), after w.diagram edges with free ends and named ports (71d6260d)
   path: 'docs/worlds',
 });
 
