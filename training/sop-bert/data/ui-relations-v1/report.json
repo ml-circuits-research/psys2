@@ -1,0 +1,25 @@
+{
+ "examples": 890,
+ "byRelation": {
+  "near": 178,
+  "left": 258,
+  "right": 258,
+  "on": 65,
+  "above": 84,
+  "below": 19,
+  "in": 28
+ },
+ "byAct": {
+  "make": 800,
+  "place": 90
+ },
+ "subjects": 22,
+ "anchors": [
+  "lake",
+  "tree",
+  "house",
+  "mountain",
+  "road",
+  "hill"
+ ]
+}
