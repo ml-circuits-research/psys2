@@ -53,6 +53,12 @@ def main():
         if row['status'] != 'aligned' or not e:
             return row
         b = source(e['path'])
+        if b is not None and e['declaration'] not in b.decode().split('\n'):
+            # the same wire re-declared (an enum value added, a flag dropped): the alignment follows the new declaration
+            line = next((l for l in b.decode().split('\n') if l.startswith('@' + e['sourceWire'] + ' ')), None)
+            if line:
+                e['declaration'] = line
+                stats['redeclared'] = stats.get('redeclared', 0) + 1
         if b is None or e['declaration'] not in b.decode().split('\n'):
             stats['lostDeclaration'] += 1
             return {k: v for k, v in row.items() if k not in ('alignment', 'evidence', 'valueContract', 'canonical', 'sourceWire', 'authority')} | \

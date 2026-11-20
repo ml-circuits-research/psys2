@@ -45,6 +45,7 @@ SLOT_ID = re.compile(r'\b(?:[a-z]+_[a-z_]+|chart:\d+|seg-\d+)\b')
 REF_KEYS = {'node.ids', 'link.ids', 'group.id', 'group.ids', 'drawn.ids', 'drawn.id', 'drawn.anchor', 'node.anchor', 'chart.id'}  # part.owner may name a part of an object ("the roof")
 POPULATION = re.compile(r'\b(all|every|each|everything|them|these|those|it|its|this|that|selected|selection|one|ones|both|other|others|rest|her|him|his|she|he|they|their)\b', re.I)
 WRAP = re.compile(r"^(hey|please|quick one|hmm|one more thing|ok|okay|so|um|uh|can you|could you|would you)[,:—\- ]+|[,— ]+(please|thanks|thank you|go on|if you can|cheers|pls)[.!?]*$", re.I)
+HOLD_RATE = 0.05  # quality gate (coordinator, 2026-11-20): a batch rejecting more than 5% of its rows is held
 QUAL = {'some', 'a few', 'few', 'several', 'many', 'lots', 'a lot of', 'a couple of', 'more', 'a handful of'}
 
 
@@ -274,6 +275,9 @@ def needs_to_keys(world, q, needs, stats):
     for n in split_merged(needs, span, stats):
         if not isinstance(n, dict):
             keep.append(n); continue
+        if not (isinstance(n.get('span'), str) and n['span'] and n['span'].lower() in span.lower()):
+            stats['need without its words in the request (internal code) rejected'] += 1
+            continue
         frame, value, nspan = n.get('frame'), n.get('value'), n.get('span')
         if frame == 'drawn.emotion':
             frame = n['frame'] = 'drawn.expression'; stats['needs drawn.emotion folded into drawn.expression'] += 1
@@ -292,7 +296,44 @@ def needs_to_keys(world, q, needs, stats):
             c = {'key': 'drawn.facing', 'value': str(value).lower(), 'value_span': nspan if place(nspan) else str(value), 'operator': 'eq', 'phase': 'result'}
         elif world == 'drawing' and frame == 'drawn.region' and place(nspan):
             c = {'key': 'drawn.at', 'value': value, 'value_span': nspan, 'operator': 'region', 'phase': 'result'}
+        garment = None
+        if not c and world == 'drawing' and frame == 'part.garment':
+            v = str(value or '').lower()
+            if v in ('off', 'remove', 'take off', 'without'):
+                if q.get('act') != 'remove':
+                    q['act'] = 'remove'
+                stats['needs part.garment off -> remove the part (drawing.part.remove)'] += 1
+                continue
+            if (q.get('target') or {}).get('type') == 'part':
+                stats['needs part.garment on -> the part made on its owner (part target + part.owner)'] += 1
+                continue
+            if (q.get('target') or {}).get('type') == 'drawn' and place(nspan):
+                c = {'key': 'drawn.wear', 'value': nspan, 'value_span': nspan, 'operator': 'eq', 'phase': 'result'}
+        if not c and world == 'drawing' and frame == 'drawn.occlusion' and isinstance(nspan, str):
+            m = re.search(r'\bbehind\s+((?:the|a|an|that|this)\s+[\w-]+)', nspan)
+            if m and place(m.group(1)):
+                c = {'key': 'drawn.behind', 'value': m.group(1), 'value_span': m.group(1), 'operator': 'relation', 'phase': 'selector'}
+        if not c and world == 'drawing' and frame == 'drawn.action' and re.match(r'hold', str(value or ''), re.I):
+            m = re.search(r'\bhold(?:s|ing)?\s+((?:the|a|an|her|his|their)\s+[\w-]+)', span)
+            if m:
+                c = {'key': 'drawn.holds', 'value': m.group(1), 'value_span': m.group(1), 'operator': 'eq', 'phase': 'result'}
         cs = [c] if c else chart_keys(world, q, n, place)
+        if not cs and isinstance(frame, str):
+            # A frame naming a declared key (or its dotted spelling) becomes that constraint (person, scene, preference, page keys).
+            typ, _, rest = frame.partition('.')
+            parts = [x for x in rest.split('.') if x]
+            name = parts[0] + ''.join(x[:1].upper() + x[1:] for x in parts[1:]) if parts else ''
+            spec = INVENTORY.get(world, {}).get(typ, {}).get('keys', {}).get(name)
+            if spec and (place(nspan) or place(str(value or ''))):
+                surface = nspan if place(nspan) else str(value)
+                vals = [str(v) for v in spec.get('values') or []]
+                low = str(value or '').lower().replace('_', ' ')
+                val = next((v for v in vals if v.lower() == low), value) if vals else (surface if spec['head'] in ('span', 'fill+span') else value)
+                g = {'key': f'{typ}.{name}', 'value': val, 'value_span': surface, 'operator': 'eq', 'phase': 'result'}
+                if spec['head'].startswith('number'):
+                    nums = re.findall(r'\d+(?:\.\d+)?', surface)
+                    g = {**g, 'value': nums[0]} if len(nums) == 1 else None
+                cs = [g] if g else []
         if cs:
             for c in cs:
                 c.update({'polarity': 'positive', 'character': 'requirement'})
@@ -649,8 +690,13 @@ def main():
                 cores[r.get('family')].add(norm(t))
         distinct = sum(len(v) for v in cores.values())
         summary[batch.name] = {'rows': total, 'accepted': kept, 'rejected': rejected, 'distinctCoresAfterWrappers': distinct}
+        held = total and rejected / total > HOLD_RATE
+        if held:  # a batch losing more than 5% of its rows is held back whole until the worker fixes it
+            accepted = [r for r in accepted if r['cohort']['recipeFamily'].split(':')[1] != batch.name]
+            summary[batch.name]['held'] = True
         lines = [f'# Import feedback: {batch.name}', '',
-                 f'Rows {total}: **accepted {kept}**, rejected {rejected} (importer `psys2/training/sop-bert/data/data-drop-v1/import.py`).',
+                 f'Rows {total}: **accepted {kept}**, rejected {rejected} ({100 * rejected / max(1, total):.1f}%) (importer `psys2/training/sop-bert/data/data-drop-v1/import.py`).'
+                 + (' **Batch HELD: more than 5% of its rows were rejected; none of it is imported until a fixed re-signed batch arrives.**' if held else ''),
                  f'Accepted per tab: {dict(per_world)}; per class: {dict(per_class.most_common())}.',
                  f'Paraphrase variety: {distinct} distinct texts once greeting/politeness wrappers ("hey,", "quick one —", "please", ", thanks", "— go on") '
                  f'are removed, over {len(cores)} families ({total} rows). Wrappers are robustness, not paraphrases: each family needs 20+ real '

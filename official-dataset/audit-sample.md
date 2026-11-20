@@ -376,9 +376,11 @@
 72. [drawing · data-drop-v1 · train · None] “swap the cloud for a little grey rain cloud”  — context: Fish, Bird, Bird 2, Boat, Cat, Tree
   - span “swap the cloud for a little grey rain cloud”: **change**/do trigger=“swap”; target drawn existing definite fill=description kind=cloud kind_span=“cloud”
     - drawn.colour = "grey" from “grey” [eq, result]
+    - drawn.variant = "rain cloud" from “a little grey rain cloud” [eq, result]
 
 73. [drawing · data-drop-v1 · train · None] “let the house front be stone”  — context: House, Tree, Sun, Cloud
   - span “let the house front be stone”: **change**/do trigger=“let”; target part existing definite fill=description kind=front kind_span=“house front”
+    - drawn.material = "stone" from “stone” [eq, result]
 
 74. [drawing · data-drop-v1 · train · None] “which of the boats is the tiniest?”  — context: Boat, Boat 2, Boat 3, Lake, Tree
   - span “which of the boats is the tiniest?”: **answer**/ask trigger=“which”; target drawn existing definite fill=all kind=boat kind_span=“boats”

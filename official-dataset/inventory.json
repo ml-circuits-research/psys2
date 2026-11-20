@@ -104,6 +104,60 @@
     }
    }
   },
+  "figure": {
+   "doc": "native avatar figure (declared operations)",
+   "keys": {
+    "about": {
+     "concept": "about",
+     "head": "span",
+     "src": "native parameter avatar.figure.describe.about (worlds/ui.avatar/native-interface.sop)"
+    },
+    "age": {
+     "concept": "age",
+     "head": "span",
+     "src": "native parameter avatar.figure.describe.age (worlds/ui.avatar/native-interface.sop)"
+    },
+    "colour": {
+     "concept": "colour",
+     "head": "span",
+     "src": "native parameter avatar.figure.describe.colour (worlds/ui.avatar/native-interface.sop)"
+    },
+    "kind": {
+     "concept": "kind",
+     "head": "span",
+     "src": "native parameter avatar.figure.describe.kind (worlds/ui.avatar/native-interface.sop)"
+    },
+    "person": {
+     "concept": "person",
+     "head": "span",
+     "src": "native parameter avatar.figure.describe.person (worlds/ui.avatar/native-interface.sop)"
+    },
+    "preset": {
+     "concept": "preset",
+     "head": "span",
+     "src": "native parameter avatar.figure.describe.preset (worlds/ui.avatar/native-interface.sop)"
+    },
+    "sex": {
+     "concept": "sex",
+     "head": "class",
+     "src": "native parameter avatar.figure.describe.sex (worlds/ui.avatar/native-interface.sop)",
+     "values": [
+      "female",
+      "male"
+     ]
+    },
+    "traits": {
+     "concept": "traits",
+     "head": "span",
+     "src": "native parameter avatar.figure.describe.traits (worlds/ui.avatar/native-interface.sop)"
+    },
+    "without": {
+     "concept": "without",
+     "head": "span",
+     "src": "native parameter avatar.figure.describe.without (worlds/ui.avatar/native-interface.sop)"
+    }
+   }
+  },
   "part": {
    "doc": "exposed native part",
    "keys": {
@@ -524,6 +578,34 @@
      ]
     }
    }
+  },
+  "preference": {
+   "doc": "native avatar preference (declared operations)",
+   "keys": {
+    "about": {
+     "concept": "about",
+     "head": "span",
+     "src": "native parameter avatar.preference.state.about (worlds/ui.avatar/native-interface.sop)"
+    },
+    "field": {
+     "concept": "field",
+     "head": "span",
+     "src": "native parameter avatar.preference.state.field (worlds/ui.avatar/native-interface.sop)"
+    },
+    "key": {
+     "concept": "key",
+     "head": "class",
+     "src": "native parameter avatar.preference.state.key (worlds/ui.avatar/native-interface.sop)",
+     "values": [
+      "ids"
+     ]
+    },
+    "value": {
+     "concept": "value",
+     "head": "span",
+     "src": "native parameter avatar.preference.state.value (worlds/ui.avatar/native-interface.sop)"
+    }
+   }
   }
  },
  "calendar": {
@@ -782,6 +864,28 @@
   "chart": {
    "doc": "chart data and display (old data.charts)",
    "keys": {
+    "above": {
+     "concept": "above",
+     "head": "number",
+     "src": "native parameter diagram.group.chart.make.above (worlds/diagram.sketch/native-interface.sop)"
+    },
+    "add": {
+     "concept": "add",
+     "head": "number",
+     "src": "native parameter diagram.chart.point.change.add (worlds/diagram.sketch/native-interface.sop)"
+    },
+    "aggregate": {
+     "concept": "aggregate",
+     "head": "class",
+     "src": "native parameter diagram.group.chart.make.aggregate (worlds/diagram.sketch/native-interface.sop)",
+     "values": [
+      "count",
+      "sum",
+      "avg",
+      "min",
+      "max"
+     ]
+    },
     "at": {
      "concept": "region",
      "head": "class",
@@ -831,6 +935,26 @@
      "head": "span",
      "src": "chart group formatting in the Diagram tab (worlds/diagram.sketch/chart-format.sop; data drops dg-batch-05 frame chart.bar.width)"
     },
+    "below": {
+     "concept": "below",
+     "head": "number",
+     "src": "native parameter diagram.group.chart.make.below (worlds/diagram.sketch/native-interface.sop)"
+    },
+    "bins": {
+     "concept": "bins",
+     "head": "number",
+     "src": "native parameter diagram.group.chart.make.bins (worlds/diagram.sketch/native-interface.sop)"
+    },
+    "category": {
+     "concept": "category",
+     "head": "span",
+     "src": "native parameter diagram.chart.value.category (worlds/diagram.sketch/native-interface.sop)"
+    },
+    "chart": {
+     "concept": "chart",
+     "head": "span",
+     "src": "native parameter diagram.chart.series.add.chart (worlds/diagram.sketch/native-interface.sop)"
+    },
     "colour": {
      "concept": "colour",
      "head": "candidate",
@@ -875,6 +999,11 @@
      "head": "span",
      "src": "the caps of a chart's error bars (data drops chart.errorbar.cap)"
     },
+    "errors": {
+     "concept": "errors",
+     "head": "span",
+     "src": "native parameter diagram.group.chart.make.errors (worlds/diagram.sketch/native-interface.sop)"
+    },
     "fontSize": {
      "concept": "font.size",
      "head": "span",
@@ -897,6 +1026,15 @@
       "solid",
       "dashed",
       "dotted"
+     ]
+    },
+    "gridlines": {
+     "concept": "gridlines",
+     "head": "class",
+     "src": "native parameter diagram.chart.format.gridlines (worlds/diagram.sketch/native-interface.sop)",
+     "values": [
+      "on",
+      "off"
      ]
     },
     "height": {
@@ -933,11 +1071,31 @@
       "none"
      ]
     },
+    "label": {
+     "concept": "label",
+     "head": "span",
+     "src": "native parameter diagram.group.chart.make.label (worlds/diagram.sketch/native-interface.sop)"
+    },
     "labels": {
      "concept": "name",
      "head": "span",
      "many": true,
      "src": "bar/slice/point labels"
+    },
+    "layout": {
+     "concept": "layout",
+     "head": "class",
+     "src": "native parameter diagram.group.chart.make.layout (worlds/diagram.sketch/native-interface.sop)",
+     "values": [
+      "bar",
+      "line",
+      "area",
+      "pie",
+      "doughnut",
+      "scatter",
+      "radar",
+      "treemap"
+     ]
     },
     "legend": {
      "concept": "legend",
@@ -983,10 +1141,39 @@
      "head": "number",
      "src": "value axis maximum"
     },
+    "measure": {
+     "concept": "measure",
+     "head": "span",
+     "src": "native parameter diagram.group.chart.make.measure (worlds/diagram.sketch/native-interface.sop)"
+    },
     "min": {
      "concept": "axis.min",
      "head": "number",
      "src": "value axis minimum"
+    },
+    "only": {
+     "concept": "only",
+     "head": "span",
+     "src": "native parameter diagram.group.chart.make.only (worlds/diagram.sketch/native-interface.sop)"
+    },
+    "order": {
+     "concept": "order",
+     "head": "class",
+     "src": "native parameter diagram.chart.sort.order (worlds/diagram.sketch/native-interface.sop)",
+     "values": [
+      "ascending",
+      "descending",
+      "label"
+     ]
+    },
+    "orientation": {
+     "concept": "orientation",
+     "head": "class",
+     "src": "native parameter diagram.chart.format.orientation (worlds/diagram.sketch/native-interface.sop)",
+     "values": [
+      "vertical",
+      "horizontal"
+     ]
     },
     "palette": {
      "concept": "colour",
@@ -1068,6 +1255,30 @@
       "off"
      ]
     },
+    "stacking": {
+     "concept": "stacking",
+     "head": "class",
+     "src": "native parameter diagram.chart.format.stacking (worlds/diagram.sketch/native-interface.sop)",
+     "values": [
+      "none",
+      "stacked",
+      "percent"
+     ]
+    },
+    "subtract": {
+     "concept": "subtract",
+     "head": "number",
+     "src": "native parameter diagram.chart.point.change.subtract (worlds/diagram.sketch/native-interface.sop)"
+    },
+    "test": {
+     "concept": "test",
+     "head": "class",
+     "src": "native parameter diagram.chart.highlight.test (worlds/diagram.sketch/native-interface.sop)",
+     "values": [
+      "below",
+      "above"
+     ]
+    },
     "tickFormat": {
      "concept": "tick.format",
      "head": "class",
@@ -1107,6 +1318,11 @@
       "bold"
      ]
     },
+    "top": {
+     "concept": "top",
+     "head": "number",
+     "src": "native parameter diagram.group.chart.make.top (worlds/diagram.sketch/native-interface.sop)"
+    },
     "type": {
      "concept": "type",
      "head": "candidate",
@@ -1119,6 +1335,20 @@
       "radar",
       "polarArea",
       "scatter"
+     ]
+    },
+    "value": {
+     "concept": "value",
+     "head": "number",
+     "src": "native parameter diagram.chart.value.value (worlds/diagram.sketch/native-interface.sop)"
+    },
+    "valueLabels": {
+     "concept": "valueLabels",
+     "head": "class",
+     "src": "native parameter diagram.chart.format.valueLabels (worlds/diagram.sketch/native-interface.sop)",
+     "values": [
+      "on",
+      "off"
      ]
     },
     "values": {
@@ -1160,6 +1390,16 @@
      "concept": "axis.y.title",
      "head": "span",
      "src": "chart y-axis title"
+    },
+    "yMax": {
+     "concept": "yMax",
+     "head": "number",
+     "src": "native parameter diagram.chart.format.yMax (worlds/diagram.sketch/native-interface.sop)"
+    },
+    "yMin": {
+     "concept": "yMin",
+     "head": "number",
+     "src": "native parameter diagram.chart.format.yMin (worlds/diagram.sketch/native-interface.sop)"
     }
    }
   },
@@ -1406,6 +1646,11 @@
   "link": {
    "doc": "an arrow between nodes (book 7.2 t.link)",
    "keys": {
+    "after": {
+     "concept": "after",
+     "head": "number",
+     "src": "native parameter diagram.link.bend.add.after (worlds/diagram.sketch/native-interface.sop)"
+    },
     "arrow": {
      "concept": "arrow",
      "head": "candidate",
@@ -1416,6 +1661,16 @@
       "none",
       "back"
      ]
+    },
+    "at": {
+     "concept": "at",
+     "head": "span",
+     "src": "native parameter diagram.link.attach.at (worlds/diagram.sketch/native-interface.sop)"
+    },
+    "bend": {
+     "concept": "bend",
+     "head": "number",
+     "src": "native parameter diagram.link.bend.move.bend (worlds/diagram.sketch/native-interface.sop)"
     },
     "colour": {
      "concept": "colour",
@@ -1442,10 +1697,71 @@
       "white"
      ]
     },
+    "end": {
+     "concept": "end",
+     "head": "class",
+     "src": "native parameter diagram.link.attach.end (worlds/diagram.sketch/native-interface.sop)",
+     "values": [
+      "from",
+      "to",
+      "start",
+      "end",
+      "source",
+      "target",
+      "tail",
+      "head",
+      "left",
+      "right",
+      "top",
+      "bottom",
+      "upper",
+      "lower"
+     ]
+    },
     "from": {
      "concept": "reference",
      "head": "fill+span",
      "src": "s.link.from role=source"
+    },
+    "fromPort": {
+     "concept": "fromPort",
+     "head": "span",
+     "src": "native parameter diagram.link.change.fromPort (worlds/diagram.sketch/native-interface.sop)"
+    },
+    "fromSide": {
+     "concept": "fromSide",
+     "head": "class",
+     "src": "native parameter diagram.link.change.fromSide (worlds/diagram.sketch/native-interface.sop)",
+     "values": [
+      "auto",
+      "top",
+      "right",
+      "bottom",
+      "left",
+      "centre"
+     ]
+    },
+    "fromX": {
+     "concept": "fromX",
+     "head": "number",
+     "src": "native parameter diagram.link.change.fromX (worlds/diagram.sketch/native-interface.sop)"
+    },
+    "fromY": {
+     "concept": "fromY",
+     "head": "number",
+     "src": "native parameter diagram.link.change.fromY (worlds/diagram.sketch/native-interface.sop)"
+    },
+    "head": {
+     "concept": "head",
+     "head": "class",
+     "src": "native parameter diagram.link.change.head (worlds/diagram.sketch/native-interface.sop)",
+     "values": [
+      "arrow",
+      "open",
+      "diamond",
+      "circle",
+      "none"
+     ]
     },
     "ids": {
      "concept": "ids",
@@ -1456,6 +1772,26 @@
      "concept": "label",
      "head": "candidate",
      "src": "Native parameter: diagram.link.change.label"
+    },
+    "labelAt": {
+     "concept": "labelAt",
+     "head": "class",
+     "src": "native parameter diagram.link.change.labelAt (worlds/diagram.sketch/native-interface.sop)",
+     "values": [
+      "start",
+      "middle",
+      "end"
+     ]
+    },
+    "labelPosition": {
+     "concept": "labelPosition",
+     "head": "number",
+     "src": "native parameter diagram.link.change.labelPosition (worlds/diagram.sketch/native-interface.sop)"
+    },
+    "node": {
+     "concept": "node",
+     "head": "span",
+     "src": "native parameter diagram.link.attach.node (worlds/diagram.sketch/native-interface.sop)"
     },
     "nodes": {
      "concept": "nodes",
@@ -1473,6 +1809,11 @@
       "all"
      ]
     },
+    "port": {
+     "concept": "port",
+     "head": "span",
+     "src": "native parameter diagram.link.attach.port (worlds/diagram.sketch/native-interface.sop)"
+    },
     "route": {
      "concept": "route",
      "head": "class",
@@ -1481,6 +1822,19 @@
       "orthogonal",
       "straight",
       "curved"
+     ]
+    },
+    "side": {
+     "concept": "side",
+     "head": "class",
+     "src": "native parameter diagram.link.attach.side (worlds/diagram.sketch/native-interface.sop)",
+     "values": [
+      "auto",
+      "top",
+      "right",
+      "bottom",
+      "left",
+      "centre"
      ]
     },
     "style": {
@@ -1493,15 +1847,65 @@
       "dotted"
      ]
     },
+    "tail": {
+     "concept": "tail",
+     "head": "class",
+     "src": "native parameter diagram.link.change.tail (worlds/diagram.sketch/native-interface.sop)",
+     "values": [
+      "arrow",
+      "open",
+      "diamond",
+      "circle",
+      "none"
+     ]
+    },
     "to": {
      "concept": "reference",
      "head": "fill+span",
      "src": "s.link.to role=goal"
     },
+    "toPort": {
+     "concept": "toPort",
+     "head": "span",
+     "src": "native parameter diagram.link.change.toPort (worlds/diagram.sketch/native-interface.sop)"
+    },
+    "toSide": {
+     "concept": "toSide",
+     "head": "class",
+     "src": "native parameter diagram.link.change.toSide (worlds/diagram.sketch/native-interface.sop)",
+     "values": [
+      "auto",
+      "top",
+      "right",
+      "bottom",
+      "left",
+      "centre"
+     ]
+    },
+    "toX": {
+     "concept": "toX",
+     "head": "number",
+     "src": "native parameter diagram.link.change.toX (worlds/diagram.sketch/native-interface.sop)"
+    },
+    "toY": {
+     "concept": "toY",
+     "head": "number",
+     "src": "native parameter diagram.link.change.toY (worlds/diagram.sketch/native-interface.sop)"
+    },
     "width": {
      "concept": "width",
      "head": "number",
      "src": "Native parameter: diagram.link.change.width"
+    },
+    "x": {
+     "concept": "x",
+     "head": "number",
+     "src": "native parameter diagram.link.detach.x (worlds/diagram.sketch/native-interface.sop)"
+    },
+    "y": {
+     "concept": "y",
+     "head": "number",
+     "src": "native parameter diagram.link.detach.y (worlds/diagram.sketch/native-interface.sop)"
     }
    }
   },
@@ -1829,6 +2233,32 @@
      "concept": "value",
      "head": "number",
      "src": "Native parameter: chart.point.change.value"
+    }
+   }
+  },
+  "preference": {
+   "doc": "native diagram preference (declared operations)",
+   "keys": {
+    "about": {
+     "concept": "about",
+     "head": "span",
+     "src": "native parameter diagram.preference.state.about (worlds/diagram.sketch/native-interface.sop)"
+    },
+    "key": {
+     "concept": "key",
+     "head": "class",
+     "src": "native parameter diagram.preference.state.key (worlds/diagram.sketch/native-interface.sop)",
+     "values": [
+      "link.style",
+      "palette",
+      "ids",
+      "placement.side"
+     ]
+    },
+    "value": {
+     "concept": "value",
+     "head": "span",
+     "src": "native parameter diagram.preference.state.value (worlds/diagram.sketch/native-interface.sop)"
     }
    }
   },
@@ -3331,6 +3761,7 @@
       "document",
       "drawn",
       "face",
+      "figure",
       "group",
       "inline",
       "link",
@@ -3340,6 +3771,7 @@
       "part",
       "person",
       "point",
+      "preference",
       "room",
       "section",
       "series",

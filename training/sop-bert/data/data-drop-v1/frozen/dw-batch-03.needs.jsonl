@@ -103,30 +103,6 @@
 {"batch": "dw-batch-03", "text": "paint the second huose the same colour as the first house", "frame": "drawn.match", "value": "colour; the first house", "span": "the same colour as the first house"}
 {"batch": "dw-batch-03", "text": "hey — paint the second house the same colour as the first house", "frame": "drawn.match", "value": "colour; the first house", "span": "the same colour as the first house"}
 {"batch": "dw-batch-03", "text": "give the tree the same shade as the second house, thanks", "frame": "drawn.match", "value": "colour; the second house", "span": "the same shade as the second house"}
-{"batch": "dw-batch-03", "text": "get rid of the words on the sign", "frame": "drawn.label", "value": "off", "span": "the words on the sign"}
-{"batch": "dw-batch-03", "text": "wipe the writing off the gate", "frame": "drawn.label", "value": "off", "span": "the writing"}
-{"batch": "dw-batch-03", "text": "take the sign's letters down", "frame": "drawn.label", "value": "off", "span": "the sign's letters"}
-{"batch": "dw-batch-03", "text": "the sign should have no words on it", "frame": "drawn.label", "value": "off", "span": "no words on it"}
-{"batch": "dw-batch-03", "text": "clear the label off the gate", "frame": "drawn.label", "value": "off", "span": "the label"}
-{"batch": "dw-batch-03", "text": "blank the sign", "frame": "drawn.label", "value": "off", "span": "blank"}
-{"batch": "dw-batch-03", "text": "erase the letters on the sign", "frame": "drawn.label", "value": "off", "span": "the letters on the sign"}
-{"batch": "dw-batch-03", "text": "can you strip the words off the gate?", "frame": "drawn.label", "value": "off", "span": "the words"}
-{"batch": "dw-batch-03", "text": "lose the lettering on the gate", "frame": "drawn.label", "value": "off", "span": "the lettering"}
-{"batch": "dw-batch-03", "text": "delete the words on the sign", "frame": "drawn.label", "value": "off", "span": "the words on the sign"}
-{"batch": "dw-batch-03", "text": "I'd rather the sign had nothing written on it", "frame": "drawn.label", "value": "off", "span": "nothing written on it"}
-{"batch": "dw-batch-03", "text": "get rid of the words on the sign and paint it blue instead", "frame": "drawn.label", "value": "off", "span": "the words on the sign"}
-{"batch": "dw-batch-03", "text": "wipe the label off the gate and off the sign too", "frame": "drawn.label", "value": "off", "span": "the label"}
-{"batch": "dw-batch-03", "text": "wipe the label off the gate and off the sign too", "frame": "drawn.label", "value": "off", "span": "the label"}
-{"batch": "dw-batch-03", "text": "strip the words off the sign, then repaint it green", "frame": "drawn.label", "value": "off", "span": "the words"}
-{"batch": "dw-batch-03", "text": "the gate and the sign both lose their lettering", "frame": "drawn.label", "value": "off", "span": "the gate"}
-{"batch": "dw-batch-03", "text": "the gate and the sign both lose their lettering", "frame": "drawn.label", "value": "off", "span": "the sign"}
-{"batch": "dw-batch-03", "text": "no words on the sign", "frame": "drawn.label", "value": "off", "span": "no words"}
-{"batch": "dw-batch-03", "text": "the gate, blank", "frame": "drawn.label", "value": "off", "span": "blank"}
-{"batch": "dw-batch-03", "text": "words gone from the sign", "frame": "drawn.label", "value": "off", "span": "words gone"}
-{"batch": "dw-batch-03", "text": "get rid fo the words on the sign", "frame": "drawn.label", "value": "off", "span": "the words on the sign"}
-{"batch": "dw-batch-03", "text": "wipe the writting off the gate", "frame": "drawn.label", "value": "off", "span": "the writting"}
-{"batch": "dw-batch-03", "text": "hey, get rid of the words on the sign", "frame": "drawn.label", "value": "off", "span": "the words on the sign"}
-{"batch": "dw-batch-03", "text": "wipe the writing off the gate, please", "frame": "drawn.label", "value": "off", "span": "the writing"}
 {"batch": "dw-batch-03", "text": "let the big clock show six", "frame": "drawn.display", "value": "six", "span": "six"}
 {"batch": "dw-batch-03", "text": "make the clock show noon", "frame": "drawn.display", "value": "noon", "span": "noon"}
 {"batch": "dw-batch-03", "text": "have the clock face read midnight", "frame": "drawn.display", "value": "midnight", "span": "midnight"}
@@ -230,30 +206,6 @@
 {"batch": "dw-batch-03", "text": "the basket should be ful of apples", "frame": "drawn.content", "value": "apples", "span": "ful of apples"}
 {"batch": "dw-batch-03", "text": "hey, the basket should be full of apples", "frame": "drawn.content", "value": "apples", "span": "full of apples"}
 {"batch": "dw-batch-03", "text": "fill the basket with plums, please", "frame": "drawn.content", "value": "plums", "span": "plums"}
-{"batch": "dw-batch-03", "text": "put red caps on both girls", "frame": "part.garment", "value": "on", "span": "put red caps on both girls"}
-{"batch": "dw-batch-03", "text": "get both boys into sunhats", "frame": "part.garment", "value": "on", "span": "get both boys into sunhats"}
-{"batch": "dw-batch-03", "text": "give the two girls matching scarves", "frame": "part.garment", "value": "on", "span": "give the two girls matching scarves"}
-{"batch": "dw-batch-03", "text": "both boys should be wearing boots", "frame": "part.garment", "value": "on", "span": "boots"}
-{"batch": "dw-batch-03", "text": "have both girls in sun hats", "frame": "part.garment", "value": "on", "span": "have both girls in sun hats"}
-{"batch": "dw-batch-03", "text": "a cap for each of the boys", "frame": "part.garment", "value": "on", "span": "a cap for each of the boys"}
-{"batch": "dw-batch-03", "text": "both girls need woolly hats at once", "frame": "part.garment", "value": "on", "span": "woolly hats"}
-{"batch": "dw-batch-03", "text": "can you pop little caps on both girls?", "frame": "part.garment", "value": "on", "span": "can you pop little caps on both girls?"}
-{"batch": "dw-batch-03", "text": "I'd put boots on the two boys", "frame": "part.garment", "value": "on", "span": "I'd put boots on the two boys"}
-{"batch": "dw-batch-03", "text": "warm mittens for both girls", "frame": "part.garment", "value": "on", "span": "warm mittens for both girls"}
-{"batch": "dw-batch-03", "text": "dress both boys in raincoats", "frame": "part.garment", "value": "on", "span": "dress both boys in raincoats"}
-{"batch": "dw-batch-03", "text": "put red caps on both girls and blue ones on the boys", "frame": "part.garment", "value": "on", "span": "put red caps on both girls and blue ones on the boys"}
-{"batch": "dw-batch-03", "text": "put red caps on both girls and blue ones on the boys", "frame": "part.garment", "value": "on", "span": "put red caps on both girls and blue ones on the boys"}
-{"batch": "dw-batch-03", "text": "give both boys wool scarves against the cold", "frame": "part.garment", "value": "on", "span": "give both boys wool scarves against the cold"}
-{"batch": "dw-batch-03", "text": "both girls get sun hats, the boys caps", "frame": "part.garment", "value": "on", "span": "both girls get sun hats, the boys caps"}
-{"batch": "dw-batch-03", "text": "both girls get sun hats, the boys caps", "frame": "part.garment", "value": "on", "span": "both girls get sun hats, the boys caps"}
-{"batch": "dw-batch-03", "text": "hats for both boys and a ribbon on the dog", "frame": "part.garment", "value": "on", "span": "hats for both boys and a ribbon on the dog"}
-{"batch": "dw-batch-03", "text": "caps for both girls", "frame": "part.garment", "value": "on", "span": "caps for both girls"}
-{"batch": "dw-batch-03", "text": "same hats for the two boys", "frame": "part.garment", "value": "on", "span": "same hats for the two boys"}
-{"batch": "dw-batch-03", "text": "caps for the two of them", "frame": "part.garment", "value": "on", "span": "the two of them"}
-{"batch": "dw-batch-03", "text": "put red caps on both girsl", "frame": "part.garment", "value": "on", "span": "put red caps on both girsl"}
-{"batch": "dw-batch-03", "text": "give the two girls maching scarves", "frame": "part.garment", "value": "on", "span": "give the two girls maching scarves"}
-{"batch": "dw-batch-03", "text": "hey, put red caps on both girls", "frame": "part.garment", "value": "on", "span": "put red caps on both girls"}
-{"batch": "dw-batch-03", "text": "get both boys into sunhats, please", "frame": "part.garment", "value": "on", "span": "get both boys into sunhats"}
 {"batch": "dw-batch-03", "text": "make the two houses different colours", "frame": "drawn.distinct", "value": "colours", "span": "different colours"}
 {"batch": "dw-batch-03", "text": "give the two trees different greens", "frame": "drawn.distinct", "value": "greens", "span": "different greens"}
 {"batch": "dw-batch-03", "text": "the two birds should look different from each other", "frame": "drawn.distinct", "value": "different", "span": "look different from each other"}

@@ -1,59 +1,10 @@
 {"batch": "dg-batch-04", "text": "a new blank page at the end of the deck", "frame": "page.position", "value": "after the last page", "span": "at the end of the deck"}
 {"batch": "dg-batch-04", "text": "a new page before this one, for context", "frame": "page.position", "value": "before the current page", "span": "before this one"}
-{"batch": "dg-batch-04", "text": "add one more page and name it Roast Timing", "frame": "page.title", "value": "Roast Timing", "span": "Roast Timing"}
-{"batch": "dg-batch-04", "text": "spin up another page called Culvert Repair", "frame": "page.title", "value": "Culvert Repair", "span": "Culvert Repair"}
-{"batch": "dg-batch-04", "text": "hey, spin up another page called Culvert Repair", "frame": "page.title", "value": "Culvert Repair", "span": "Culvert Repair"}
-{"batch": "dg-batch-04", "text": "a second page, this one titled Roast Timing", "frame": "page.title", "value": "Roast Timing", "span": "Roast Timing"}
-{"batch": "dg-batch-04", "text": "let's start a new page, name it Culvert Repair", "frame": "page.title", "value": "Culvert Repair", "span": "Culvert Repair"}
-{"batch": "dg-batch-04", "text": "could you open a page named Roast Timing?", "frame": "page.title", "value": "Roast Timing", "span": "Roast Timing"}
-{"batch": "dg-batch-04", "text": "one more page in the deck: Culvert Repair on the tab", "frame": "page.title", "value": "Culvert Repair", "span": "Culvert Repair"}
-{"batch": "dg-batch-04", "text": "one more page in the deck: Culvert Repair on the tab, please", "frame": "page.title", "value": "Culvert Repair", "span": "Culvert Repair"}
-{"batch": "dg-batch-04", "text": "a fresh page going by the name Roast Timing", "frame": "page.title", "value": "Roast Timing", "span": "Roast Timing"}
-{"batch": "dg-batch-04", "text": "new page, and it's Culvert Repair", "frame": "page.title", "value": "Culvert Repair", "span": "Culvert Repair"}
-{"batch": "dg-batch-04", "text": "I'd want a further page, labelled Roast Timing", "frame": "page.title", "value": "Roast Timing", "span": "Roast Timing"}
-{"batch": "dg-batch-04", "text": "make that roadworks log page we talked about, Culvert Repair", "frame": "page.title", "value": "Culvert Repair", "span": "Culvert Repair"}
-{"batch": "dg-batch-04", "text": "how about one more page, Roast Timing for its name?", "frame": "page.title", "value": "Roast Timing", "span": "Roast Timing"}
-{"batch": "dg-batch-04", "text": "right: one more page, Culvert Repair written on the tab", "frame": "page.title", "value": "Culvert Repair", "span": "Culvert Repair"}
-{"batch": "dg-batch-04", "text": "a new page called Roast Timing, and nothing else on it yet", "frame": "page.title", "value": "Roast Timing", "span": "called Roast Timing"}
 {"batch": "dg-batch-04", "text": "a new page called Roast Timing, and nothing else on it yet", "frame": "page.blank", "value": "empty", "span": "nothing else on it yet"}
-{"batch": "dg-batch-04", "text": "one more page, named Culvert Repair, parked at the end of the deck", "frame": "page.title", "value": "Culvert Repair", "span": "named Culvert Repair"}
 {"batch": "dg-batch-04", "text": "one more page, named Culvert Repair, parked at the end of the deck", "frame": "page.position", "value": "after the last page", "span": "the end of the deck"}
-{"batch": "dg-batch-04", "text": "another page, call it Roast Timing, and keep it as bare as this one", "frame": "page.title", "value": "Roast Timing", "span": "call it Roast Timing"}
 {"batch": "dg-batch-04", "text": "another page, call it Roast Timing, and keep it as bare as this one", "frame": "page.blank", "value": "like the current page", "span": "as bare as this one"}
-{"batch": "dg-batch-04", "text": "a new page named Culvert Repair to close the story on", "frame": "page.title", "value": "Culvert Repair", "span": "named Culvert Repair"}
-{"batch": "dg-batch-04", "text": "one further page, titled Roast Timing, ahead of the flowchart page", "frame": "page.title", "value": "Roast Timing", "span": "titled Roast Timing"}
 {"batch": "dg-batch-04", "text": "one further page, titled Roast Timing, ahead of the flowchart page", "frame": "page.position", "value": "before the diagram page", "span": "ahead of the flowchart page"}
-{"batch": "dg-batch-04", "text": "another page with its name on it", "frame": "page.title", "value": "fitting", "span": "its name on it"}
-{"batch": "dg-batch-04", "text": "one more page, you know the one", "frame": "page.title", "value": "the obvious one", "span": "you know the one"}
-{"batch": "dg-batch-04", "text": "a new page, tab left to taste", "frame": "page.title", "value": "to taste", "span": "left to taste"}
-{"batch": "dg-batch-04", "text": "ad one more page and name it Roast Timing", "frame": "page.title", "value": "Roast Timing", "span": "Roast Timing"}
-{"batch": "dg-batch-04", "text": "one more page, claled Culvert Repair", "frame": "page.title", "value": "Culvert Repair", "span": "Culvert Repair"}
-{"batch": "dg-batch-04", "text": "a new page with its heading on", "frame": "node.label", "value": "the usual", "span": "its heading"}
-{"batch": "dg-batch-04", "text": "two more pages, and keep their backdrop the same as the rest", "frame": "diagram.background", "value": "same as the others", "span": "the same as the rest"}
-{"batch": "dg-batch-04", "text": "hey, two more pages, and keep their backdrop the same as the rest", "frame": "diagram.background", "value": "same as the others", "span": "the same as the rest"}
-{"batch": "dg-batch-04", "text": "add another pair of pages, matching backdrop and all", "frame": "diagram.background", "value": "same as the others", "span": "matching backdrop"}
-{"batch": "dg-batch-04", "text": "let's create two further pages with the same backdrop as the rest", "frame": "diagram.background", "value": "same as the others", "span": "the same backdrop as the rest"}
-{"batch": "dg-batch-04", "text": "could you spin out two more pages, backdrop copied from the rest?", "frame": "diagram.background", "value": "same as the others", "span": "backdrop copied from the rest"}
-{"batch": "dg-batch-04", "text": "I'd take two new pages, backdrop same as the rest", "frame": "diagram.background", "value": "same as the others", "span": "backdrop same as the rest"}
-{"batch": "dg-batch-04", "text": "two extra pages, please, dressed like all the rest", "frame": "diagram.background", "value": "same as the others", "span": "dressed like all the rest"}
-{"batch": "dg-batch-04", "text": "a couple more pages, wallpaper to match the others", "frame": "diagram.background", "value": "same as the others", "span": "wallpaper to match the others"}
-{"batch": "dg-batch-04", "text": "a couple more pages, wallpaper to match the others, please", "frame": "diagram.background", "value": "same as the others", "span": "wallpaper to match the others"}
-{"batch": "dg-batch-04", "text": "one and one more page, both sharing the house backdrop of the rest", "frame": "diagram.background", "value": "same as the others", "span": "sharing the house backdrop"}
-{"batch": "dg-batch-04", "text": "right: another two pages, painted same as the rest", "frame": "diagram.background", "value": "same as the others", "span": "painted same as the rest"}
-{"batch": "dg-batch-04", "text": "how about two more pages, background equal to the rest?", "frame": "diagram.background", "value": "same as the others", "span": "background equal to the rest"}
-{"batch": "dg-batch-04", "text": "two fresh pages for the deck, backdrop in line with the rest", "frame": "diagram.background", "value": "same as the others", "span": "backdrop in line with the rest"}
-{"batch": "dg-batch-04", "text": "open two more pages and hold their backdrop to the rest", "frame": "diagram.background", "value": "same as the others", "span": "hold their backdrop to the rest"}
-{"batch": "dg-batch-04", "text": "two more blank pages, and their backdrop same as the rest of the deck", "frame": "diagram.background", "value": "same as the others", "span": "same as the rest of the deck"}
-{"batch": "dg-batch-04", "text": "two further pages, backdrop from the rest, margins clean", "frame": "diagram.background", "value": "same as the others", "span": "backdrop from the rest"}
-{"batch": "dg-batch-04", "text": "add two more pages, then wash them in the deck's own backdrop like the rest", "frame": "diagram.background", "value": "same as the others", "span": "the deck's own backdrop"}
 {"batch": "dg-batch-04", "text": "two more pages behind this one, backdrop matched to the rest", "frame": "page.position", "value": "after the current page", "span": "behind this one"}
-{"batch": "dg-batch-04", "text": "two more pages behind this one, backdrop matched to the rest", "frame": "diagram.background", "value": "same as the others", "span": "backdrop matched to the rest"}
-{"batch": "dg-batch-04", "text": "one more page, then a second, both with the same backdrop as the rest", "frame": "diagram.background", "value": "same as the others", "span": "the same backdrop as the rest"}
-{"batch": "dg-batch-04", "text": "another two pages, dressed like the deck", "frame": "diagram.background", "value": "fitting the deck", "span": "dressed like the deck"}
-{"batch": "dg-batch-04", "text": "a couple more pages to keep things going", "frame": "diagram.background", "value": "as the deck wants", "span": "keep things going"}
-{"batch": "dg-batch-04", "text": "two more pages, same dressing as usual", "frame": "diagram.background", "value": "as usual", "span": "same dressing as usual"}
-{"batch": "dg-batch-04", "text": "two more pages, and keep their bakdrop the same as the rest", "frame": "diagram.background", "value": "same as the others", "span": "the same as the rest"}
-{"batch": "dg-batch-04", "text": "two more pagse, backdrop same as the rest", "frame": "diagram.background", "value": "same as the others", "span": "backdrop same as the rest"}
 {"batch": "dg-batch-04", "text": "make the title ink navy on pages 3, 8, 10 and 21", "frame": "page.titleColour", "value": "navy", "span": "navy"}
 {"batch": "dg-batch-04", "text": "the title colour goes olive for pages 2, 9, 11 and 15", "frame": "page.titleColour", "value": "olive", "span": "olive"}
 {"batch": "dg-batch-04", "text": "hey, the title colour goes olive for pages 2, 9, 11 and 15", "frame": "page.titleColour", "value": "olive", "span": "olive"}
@@ -79,103 +30,55 @@
 {"batch": "dg-batch-04", "text": "make the title ink navy on paegs 3, 8, 10 and 21", "frame": "page.titleColour", "value": "navy", "span": "navy"}
 {"batch": "dg-batch-04", "text": "let's tint the page titels olive on pages 2, 9, 11 and 15", "frame": "page.titleColour", "value": "olive", "span": "olive"}
 {"batch": "dg-batch-04", "text": "the text on page 2 goes navy, while page 3 gets a amber backdrop", "frame": "page.textColour", "value": "navy", "span": "navy"}
-{"batch": "dg-batch-04", "text": "the text on page 2 goes navy, while page 3 gets a amber backdrop", "frame": "diagram.background", "value": "amber", "span": "amber"}
 {"batch": "dg-batch-04", "text": "I want plum writing on page 2, and the backdrop on page 3 in olive", "frame": "page.textColour", "value": "plum", "span": "plum"}
-{"batch": "dg-batch-04", "text": "I want plum writing on page 2, and the backdrop on page 3 in olive", "frame": "diagram.background", "value": "olive", "span": "olive"}
 {"batch": "dg-batch-04", "text": "let's set page 2's text in navy, page 3's backdrop in amber, side by side", "frame": "page.textColour", "value": "navy", "span": "navy"}
-{"batch": "dg-batch-04", "text": "let's set page 2's text in navy, page 3's backdrop in amber, side by side", "frame": "diagram.background", "value": "amber", "span": "amber"}
 {"batch": "dg-batch-04", "text": "hey, let's set page 2's text in navy, page 3's backdrop in amber, side by side", "frame": "page.textColour", "value": "navy", "span": "navy"}
-{"batch": "dg-batch-04", "text": "hey, let's set page 2's text in navy, page 3's backdrop in amber, side by side", "frame": "diagram.background", "value": "amber", "span": "amber"}
 {"batch": "dg-batch-04", "text": "page 2 carries plum ink, page 3 the olive wash", "frame": "page.textColour", "value": "plum", "span": "plum"}
-{"batch": "dg-batch-04", "text": "page 2 carries plum ink, page 3 the olive wash", "frame": "diagram.background", "value": "olive", "span": "olive"}
 {"batch": "dg-batch-04", "text": "could you make the text on page 2 navy and the background of page 3 amber?", "frame": "page.textColour", "value": "navy", "span": "navy"}
-{"batch": "dg-batch-04", "text": "could you make the text on page 2 navy and the background of page 3 amber?", "frame": "diagram.background", "value": "amber", "span": "amber"}
 {"batch": "dg-batch-04", "text": "one turn, two pages: plum text on page 2, olive behind page 3", "frame": "page.textColour", "value": "plum", "span": "plum"}
-{"batch": "dg-batch-04", "text": "one turn, two pages: plum text on page 2, olive behind page 3", "frame": "diagram.background", "value": "olive", "span": "olive"}
 {"batch": "dg-batch-04", "text": "the page 2 words turn navy and page 3 goes amber behind", "frame": "page.textColour", "value": "navy", "span": "navy"}
-{"batch": "dg-batch-04", "text": "the page 2 words turn navy and page 3 goes amber behind", "frame": "diagram.background", "value": "amber", "span": "amber"}
 {"batch": "dg-batch-04", "text": "I'd put plum on the page 2 writing and olive around page 3", "frame": "page.textColour", "value": "plum", "span": "plum"}
-{"batch": "dg-batch-04", "text": "I'd put plum on the page 2 writing and olive around page 3", "frame": "diagram.background", "value": "olive", "span": "olive"}
 {"batch": "dg-batch-04", "text": "right: page 2 text in navy, page 3 ground in amber", "frame": "page.textColour", "value": "navy", "span": "navy"}
-{"batch": "dg-batch-04", "text": "right: page 2 text in navy, page 3 ground in amber", "frame": "diagram.background", "value": "amber", "span": "amber"}
 {"batch": "dg-batch-04", "text": "how about plum for the page 2 text and a olive page 3 backdrop?", "frame": "page.textColour", "value": "plum", "span": "plum"}
-{"batch": "dg-batch-04", "text": "how about plum for the page 2 text and a olive page 3 backdrop?", "frame": "diagram.background", "value": "olive", "span": "olive"}
 {"batch": "dg-batch-04", "text": "how about plum for the page 2 text and a olive page 3 backdrop?, please", "frame": "page.textColour", "value": "plum", "span": "plum"}
-{"batch": "dg-batch-04", "text": "how about plum for the page 2 text and a olive page 3 backdrop?, please", "frame": "diagram.background", "value": "olive", "span": "olive"}
 {"batch": "dg-batch-04", "text": "page 2 reads in navy, then page 3 sits on amber", "frame": "page.textColour", "value": "navy", "span": "navy"}
-{"batch": "dg-batch-04", "text": "page 2 reads in navy, then page 3 sits on amber", "frame": "diagram.background", "value": "amber", "span": "amber"}
 {"batch": "dg-batch-04", "text": "please to colour the page 2 text plum and the page 3 ground olive", "frame": "page.textColour", "value": "plum", "span": "plum"}
-{"batch": "dg-batch-04", "text": "please to colour the page 2 text plum and the page 3 ground olive", "frame": "diagram.background", "value": "olive", "span": "olive"}
 {"batch": "dg-batch-04", "text": "page 2 text in navy, page 3 backdrop in amber, and neither bleeds into the other", "frame": "page.textColour", "value": "navy", "span": "navy"}
-{"batch": "dg-batch-04", "text": "page 2 text in navy, page 3 backdrop in amber, and neither bleeds into the other", "frame": "diagram.background", "value": "amber", "span": "amber"}
 {"batch": "dg-batch-04", "text": "set the page 2 ink plum first; the page 3 wash olive once that's seen to", "frame": "page.textColour", "value": "plum", "span": "plum"}
-{"batch": "dg-batch-04", "text": "set the page 2 ink plum first; the page 3 wash olive once that's seen to", "frame": "diagram.background", "value": "olive", "span": "olive"}
 {"batch": "dg-batch-04", "text": "the reader wants navy words on page 2 and amber air around page 3", "frame": "page.textColour", "value": "navy", "span": "navy"}
-{"batch": "dg-batch-04", "text": "the reader wants navy words on page 2 and amber air around page 3", "frame": "diagram.background", "value": "amber", "span": "amber"}
 {"batch": "dg-batch-04", "text": "page 2: plum text colour; page 3: olive background, both as I say", "frame": "page.textColour", "value": "plum", "span": "plum"}
-{"batch": "dg-batch-04", "text": "page 2: plum text colour; page 3: olive background, both as I say", "frame": "diagram.background", "value": "olive", "span": "olive"}
 {"batch": "dg-batch-04", "text": "treat page 2's writing to navy and lay amber behind page 3, in one go", "frame": "page.textColour", "value": "navy", "span": "navy"}
-{"batch": "dg-batch-04", "text": "treat page 2's writing to navy and lay amber behind page 3, in one go", "frame": "diagram.background", "value": "amber", "span": "amber"}
 {"batch": "dg-batch-04", "text": "the page 2 text wants one colour, page 3 another behind it", "frame": "page.textColour", "value": "one colour", "span": "one colour"}
-{"batch": "dg-batch-04", "text": "the page 2 text wants one colour, page 3 another behind it", "frame": "diagram.background", "value": "another", "span": "another behind it"}
 {"batch": "dg-batch-04", "text": "sort the ink out on page 2 and the ground on page 3", "frame": "page.textColour", "value": "sorted", "span": "sort the ink out"}
-{"batch": "dg-batch-04", "text": "sort the ink out on page 2 and the ground on page 3", "frame": "diagram.background", "value": "seen to", "span": "the ground on page 3"}
 {"batch": "dg-batch-04", "text": "page 2 and page 3, a colour each for writing and wall", "frame": "page.textColour", "value": "fitting", "span": "page 2 and page 3, a colour each for writing and wall"}
-{"batch": "dg-batch-04", "text": "page 2 and page 3, a colour each for writing and wall", "frame": "diagram.background", "value": "fitting", "span": "page 2 and page 3, a colour each for writing and wall"}
 {"batch": "dg-batch-04", "text": "the text on page 2 goes navy, while page 3 gets a amber bakdrop", "frame": "page.textColour", "value": "navy", "span": "navy"}
-{"batch": "dg-batch-04", "text": "the text on page 2 goes navy, while page 3 gets a amber bakdrop", "frame": "diagram.background", "value": "amber", "span": "amber"}
 {"batch": "dg-batch-04", "text": "the text on page 2 goes plum, whiel page 3 gets a olive wash", "frame": "page.textColour", "value": "plum", "span": "plum"}
-{"batch": "dg-batch-04", "text": "the text on page 2 goes plum, whiel page 3 gets a olive wash", "frame": "diagram.background", "value": "olive", "span": "olive"}
 {"batch": "dg-batch-04", "text": "bold the text on page 9, a amber backdrop behind pages 7 and 8, and the picture stands 3 tall on page 0", "frame": "page.textWeight", "value": "bold", "span": "bold"}
-{"batch": "dg-batch-04", "text": "bold the text on page 9, a amber backdrop behind pages 7 and 8, and the picture stands 3 tall on page 0", "frame": "diagram.background", "value": "amber", "span": "amber backdrop"}
 {"batch": "dg-batch-04", "text": "hey, bold the text on page 9, a amber backdrop behind pages 7 and 8, and the picture stands 3 tall on page 0", "frame": "page.textWeight", "value": "bold", "span": "bold"}
-{"batch": "dg-batch-04", "text": "hey, bold the text on page 9, a amber backdrop behind pages 7 and 8, and the picture stands 3 tall on page 0", "frame": "diagram.background", "value": "amber", "span": "amber backdrop"}
 {"batch": "dg-batch-04", "text": "let's have page 5's words bold, pages 2 and 6 in olive, and the page 0 picture 4 tall", "frame": "page.textWeight", "value": "bold", "span": "bold"}
-{"batch": "dg-batch-04", "text": "let's have page 5's words bold, pages 2 and 6 in olive, and the page 0 picture 4 tall", "frame": "diagram.background", "value": "olive", "span": "olive"}
 {"batch": "dg-batch-04", "text": "page 9: bold words; pages 7 and 8: amber grounds; page 0: the picture 3 tall", "frame": "page.textWeight", "value": "bold", "span": "bold"}
-{"batch": "dg-batch-04", "text": "page 9: bold words; pages 7 and 8: amber grounds; page 0: the picture 3 tall", "frame": "diagram.background", "value": "amber", "span": "amber grounds"}
 {"batch": "dg-batch-04", "text": "I'd bold page 5's text, wash pages 2 and 6 in olive, and leave the page 0 picture at 4 tall", "frame": "page.textWeight", "value": "bold", "span": "bold"}
-{"batch": "dg-batch-04", "text": "I'd bold page 5's text, wash pages 2 and 6 in olive, and leave the page 0 picture at 4 tall", "frame": "diagram.background", "value": "olive", "span": "I'd bold page 5's text, wash pages 2 and 6 in olive, and leave the page 0 picture at 4 tall"}
 {"batch": "dg-batch-04", "text": "could you bold the writing on page 9, put amber behind pages 7 and 8, and take the page 0 picture up to 3?", "frame": "page.textWeight", "value": "bold", "span": "bold"}
-{"batch": "dg-batch-04", "text": "could you bold the writing on page 9, put amber behind pages 7 and 8, and take the page 0 picture up to 3?", "frame": "diagram.background", "value": "amber", "span": "could you bold the writing on page 9, put amber behind pages 7 and 8, and take the page 0 picture up to 3?"}
 {"batch": "dg-batch-04", "text": "one pass: page 5 bold ink, pages 2 and 6 olive, page 0 picture 4", "frame": "page.textWeight", "value": "bold", "span": "bold"}
-{"batch": "dg-batch-04", "text": "one pass: page 5 bold ink, pages 2 and 6 olive, page 0 picture 4", "frame": "diagram.background", "value": "olive", "span": "one pass: page 5 bold ink, pages 2 and 6 olive, page 0 picture 4"}
 {"batch": "dg-batch-04", "text": "one pass: page 5 bold ink, pages 2 and 6 olive, page 0 picture 4, please", "frame": "page.textWeight", "value": "bold", "span": "bold"}
-{"batch": "dg-batch-04", "text": "one pass: page 5 bold ink, pages 2 and 6 olive, page 0 picture 4, please", "frame": "diagram.background", "value": "olive", "span": "one pass: page 5 bold ink, pages 2 and 6 olive, page 0 picture 4"}
 {"batch": "dg-batch-04", "text": "the text on page 9 turns bold, pages 7 and 8 go amber behind, and the picture on page 0 rises to 3", "frame": "page.textWeight", "value": "bold", "span": "bold"}
-{"batch": "dg-batch-04", "text": "the text on page 9 turns bold, pages 7 and 8 go amber behind, and the picture on page 0 rises to 3", "frame": "diagram.background", "value": "amber", "span": "the text on page 9 turns bold, pages 7 and 8 go amber behind, and the picture on page 0 rises to 3"}
 {"batch": "dg-batch-04", "text": "right: bold words page 5, olive backdrop pages 2 and 6, a 4-tall picture on page 0", "frame": "page.textWeight", "value": "bold", "span": "bold"}
-{"batch": "dg-batch-04", "text": "right: bold words page 5, olive backdrop pages 2 and 6, a 4-tall picture on page 0", "frame": "diagram.background", "value": "olive", "span": "olive backdrop"}
 {"batch": "dg-batch-04", "text": "how about bold text on page 9, amber behind pages 7 and 8, and the page 0 picture 3 tall?", "frame": "page.textWeight", "value": "bold", "span": "bold"}
-{"batch": "dg-batch-04", "text": "how about bold text on page 9, amber behind pages 7 and 8, and the page 0 picture 3 tall?", "frame": "diagram.background", "value": "amber", "span": "how about bold text on page 9, amber behind pages 7 and 8, and the page 0 picture 3 tall?"}
 {"batch": "dg-batch-04", "text": "bold matters: page 5 text, pages 2 and 6 backdrop in olive, page 0 picture to 4 tall", "frame": "page.textWeight", "value": "bold", "span": "bold"}
-{"batch": "dg-batch-04", "text": "bold matters: page 5 text, pages 2 and 6 backdrop in olive, page 0 picture to 4 tall", "frame": "diagram.background", "value": "olive", "span": "bold matters: page 5 text, pages 2 and 6 backdrop in olive, page 0 picture to 4 tall"}
 {"batch": "dg-batch-04", "text": "page 9 gets bold writing, pages 7 and 8 the amber wash, page 0 a picture 3 tall", "frame": "page.textWeight", "value": "bold", "span": "bold"}
-{"batch": "dg-batch-04", "text": "page 9 gets bold writing, pages 7 and 8 the amber wash, page 0 a picture 3 tall", "frame": "diagram.background", "value": "amber", "span": "page 9 gets bold writing, pages 7 and 8 the amber wash, page 0 a picture 3 tall"}
 {"batch": "dg-batch-04", "text": "please to do three: bold page 5 text, olive pages 2 and 6, 4-tall picture on page 0", "frame": "page.textWeight", "value": "bold", "span": "bold"}
-{"batch": "dg-batch-04", "text": "please to do three: bold page 5 text, olive pages 2 and 6, 4-tall picture on page 0", "frame": "diagram.background", "value": "olive", "span": "please to do three: bold page 5 text, olive pages 2 and 6, 4-tall picture on page 0"}
 {"batch": "dg-batch-04", "text": "bold the page 9 text, amber the grounds of pages 7 and 8 to match each other, and the page 0 picture exactly 3 tall", "frame": "page.textWeight", "value": "bold", "span": "bold"}
-{"batch": "dg-batch-04", "text": "bold the page 9 text, amber the grounds of pages 7 and 8 to match each other, and the page 0 picture exactly 3 tall", "frame": "diagram.background", "value": "amber", "span": "amber the grounds"}
 {"batch": "dg-batch-04", "text": "the page 5 text bold once and for all, pages 2 and 6 in olive for the pair, the page 0 picture a steady 4", "frame": "page.textWeight", "value": "bold", "span": "bold"}
-{"batch": "dg-batch-04", "text": "the page 5 text bold once and for all, pages 2 and 6 in olive for the pair, the page 0 picture a steady 4", "frame": "diagram.background", "value": "olive", "span": "the page 5 text bold once and for all, pages 2 and 6 in olive for the pair, the page 0 picture a steady 4"}
 {"batch": "dg-batch-04", "text": "before noon: bold page 9 words, amber on both pages 7 and 8, picture on page 0 at 3 tall", "frame": "page.textWeight", "value": "bold", "span": "bold"}
-{"batch": "dg-batch-04", "text": "before noon: bold page 9 words, amber on both pages 7 and 8, picture on page 0 at 3 tall", "frame": "diagram.background", "value": "amber", "span": "before noon: bold page 9 words, amber on both pages 7 and 8, picture on page 0 at 3 tall"}
 {"batch": "dg-batch-04", "text": "bold text for page 5, a matching olive pair on pages 2 and 6, and the page 0 picture brought up to 4 tall", "frame": "page.textWeight", "value": "bold", "span": "bold"}
-{"batch": "dg-batch-04", "text": "bold text for page 5, a matching olive pair on pages 2 and 6, and the page 0 picture brought up to 4 tall", "frame": "diagram.background", "value": "olive", "span": "bold text for page 5, a matching olive pair on pages 2 and 6, and the page 0 picture brought up to 4 tall"}
 {"batch": "dg-batch-04", "text": "page 9 bold ink to wake the reader, pages 7 and 8 in amber behind, and page 0's picture 3 tall to fill the corner", "frame": "page.textWeight", "value": "bold", "span": "bold"}
-{"batch": "dg-batch-04", "text": "page 9 bold ink to wake the reader, pages 7 and 8 in amber behind, and page 0's picture 3 tall to fill the corner", "frame": "diagram.background", "value": "amber", "span": "page 9 bold ink to wake the reader, pages 7 and 8 in amber behind, and page 0's picture 3 tall to fill the corner"}
 {"batch": "dg-batch-04", "text": "the page 5 text could do with some weight, pages 2 and 6 need a backdrop, and the page 0 picture wants resizing", "frame": "page.textWeight", "value": "some weight", "span": "some weight"}
-{"batch": "dg-batch-04", "text": "the page 5 text could do with some weight, pages 2 and 6 need a backdrop, and the page 0 picture wants resizing", "frame": "diagram.background", "value": "chosen", "span": "a backdrop"}
 {"batch": "dg-batch-04", "text": "the page 5 text could do with some weight, pages 2 and 6 need a backdrop, and the page 0 picture wants resizing", "frame": "node.height", "value": "resized", "span": "resizing"}
 {"batch": "dg-batch-04", "text": "three little jobs: bold the page 9 writing, dress pages 7 and 8, sort the page 0 picture's size", "frame": "page.textWeight", "value": "bold", "span": "bold"}
-{"batch": "dg-batch-04", "text": "three little jobs: bold the page 9 writing, dress pages 7 and 8, sort the page 0 picture's size", "frame": "diagram.background", "value": "dressed", "span": "dress pages 7 and 8"}
 {"batch": "dg-batch-04", "text": "three little jobs: bold the page 9 writing, dress pages 7 and 8, sort the page 0 picture's size", "frame": "node.height", "value": "as fits", "span": "size"}
 {"batch": "dg-batch-04", "text": "bold words on page 5, one backdrop for pages 2 and 6, a taller picture on page 0", "frame": "page.textWeight", "value": "bold", "span": "bold"}
-{"batch": "dg-batch-04", "text": "bold words on page 5, one backdrop for pages 2 and 6, a taller picture on page 0", "frame": "diagram.background", "value": "one", "span": "one backdrop"}
 {"batch": "dg-batch-04", "text": "bold the text on page 9, a amber backdrop behind pages 7 and 8, and the picutre stands 3 tall on page 0", "frame": "page.textWeight", "value": "bold", "span": "bold"}
-{"batch": "dg-batch-04", "text": "bold the text on page 9, a amber backdrop behind pages 7 and 8, and the picutre stands 3 tall on page 0", "frame": "diagram.background", "value": "amber", "span": "amber backdrop"}
 {"batch": "dg-batch-04", "text": "bodl the text on page 5, a olive backdrop behind pages 2 and 6, and the picture stands 4 tall on page 0", "frame": "page.textWeight", "value": "bold", "span": "bodl the text on page 5, a olive backdrop behind pages 2 and 6, and the picture stands 4 tall on page 0"}
-{"batch": "dg-batch-04", "text": "bodl the text on page 5, a olive backdrop behind pages 2 and 6, and the picture stands 4 tall on page 0", "frame": "diagram.background", "value": "olive", "span": "olive backdrop"}
 {"batch": "dg-batch-04", "text": "jot today's date, 7.18, on page 0, and nudge the picture on page 0 up to the top", "frame": "page.date", "value": "7.18", "span": "today's date, 7.18"}
 {"batch": "dg-batch-04", "text": "hey, jot today's date, 7.18, on page 0, and nudge the picture on page 0 up to the top", "frame": "page.date", "value": "7.18", "span": "today's date, 7.18"}
 {"batch": "dg-batch-04", "text": "let's stamp page 0 with today's date, 14.3, and float the picture to the top", "frame": "page.date", "value": "14.3", "span": "today's date, 14.3"}
@@ -196,11 +99,8 @@
 {"batch": "dg-batch-04", "text": "the page 0 gets today's date, 14.3, and its picture hoisted to the top before the reader arrives", "frame": "page.date", "value": "14.3", "span": "today's date, 14.3"}
 {"batch": "dg-batch-04", "text": "drop the date 7.18 onto page 0, then walk the picture up top, corner to corner", "frame": "page.date", "value": "7.18", "span": "drop the date 7.18 onto page 0, then walk the picture up top, corner to corner"}
 {"batch": "dg-batch-04", "text": "the date on page 0 wants today's mark, and the picture belongs higher", "frame": "page.date", "value": "today", "span": "today's mark"}
-{"batch": "dg-batch-04", "text": "the date on page 0 wants today's mark, and the picture belongs higher", "frame": "node.position", "value": "higher", "span": "higher"}
 {"batch": "dg-batch-04", "text": "sort the date out on page 0 and find the picture a better spot", "frame": "page.date", "value": "today's", "span": "the date"}
-{"batch": "dg-batch-04", "text": "sort the date out on page 0 and find the picture a better spot", "frame": "node.position", "value": "higher", "span": "a better spot"}
 {"batch": "dg-batch-04", "text": "page 0: date stamped however today reads, picture raised", "frame": "page.date", "value": "today", "span": "however today reads"}
-{"batch": "dg-batch-04", "text": "page 0: date stamped however today reads, picture raised", "frame": "node.position", "value": "higher", "span": "raised"}
 {"batch": "dg-batch-04", "text": "jot today's date, 7.18, on page 0, and nudge the picutre on page 0 up to the top", "frame": "page.date", "value": "7.18", "span": "today's date, 7.18"}
 {"batch": "dg-batch-04", "text": "jot today's dat, 14.3, on page 0, and nudge the picture up to the top", "frame": "page.date", "value": "14.3", "span": "jot today's dat, 14.3, on page 0, and nudge the picture up to the top"}
 {"batch": "dg-batch-04", "text": "on page 4: first picture over to the right; the same shift on page 7", "frame": "page.position", "value": "right", "span": "to the right"}
@@ -297,9 +197,6 @@
 {"batch": "dg-batch-04", "text": "a table and its top row, you know the sort", "frame": "table.header", "value": "the usual sort", "span": "you know the sort"}
 {"batch": "dg-batch-04", "text": "a talbe, with the header row saying Vineyard, Barrel and Mouth", "frame": "table.header", "value": "Vineyard, Barrel and Mouth", "span": "Vineyard, Barrel and Mouth"}
 {"batch": "dg-batch-04", "text": "enter Rider, Tool nad Miles into the frist row of a table", "frame": "table.header", "value": "Rider, Tool and Miles", "span": "enter Rider, Tool nad Miles into the frist row of a table"}
-{"batch": "dg-batch-04", "text": "the table belongs elsewhere, down where the text runs out", "frame": "node.position", "value": "beneath the text", "span": "down where the text runs out"}
-{"batch": "dg-batch-04", "text": "put the table somewhere less in the way", "frame": "node.position", "value": "less in the way", "span": "somewhere less in the way"}
-{"batch": "dg-batch-04", "text": "the table wants lowering a touch", "frame": "node.position", "value": "lower", "span": "lowering"}
 {"batch": "dg-batch-04", "text": "change the first row of the table to P1, P2, P3 and P4", "frame": "table.cells", "value": "P1, P2, P3, P4", "span": "P1, P2, P3 and P4"}
 {"batch": "dg-batch-04", "text": "rewrite the table's top row as M1, M2, M3 and M4", "frame": "table.cells", "value": "M1, M2, M3, M4", "span": "M1, M2, M3 and M4"}
 {"batch": "dg-batch-04", "text": "the first row of the table becomes P1, P2, P3 and P4", "frame": "table.cells", "value": "P1, P2, P3, P4", "span": "P1, P2, P3 and P4"}
@@ -324,15 +221,6 @@
 {"batch": "dg-batch-04", "text": "the table's opening row could do with re-entering", "frame": "table.cells", "value": "re-entered", "span": "re-entering"}
 {"batch": "dg-batch-04", "text": "change the frist row of the table to P1, P2, P3 and P4", "frame": "table.cells", "value": "P1, P2, P3, P4", "span": "P1, P2, P3 and P4"}
 {"batch": "dg-batch-04", "text": "rewrite the table's top row as M1, M2, M3 nad M4", "frame": "table.cells", "value": "M1, M2, M3, M4", "span": "rewrite the table's top row as M1, M2, M3 nad M4"}
-{"batch": "dg-batch-04", "text": "the usual four story steps, chained as ever", "frame": "link.pattern", "value": "chain", "span": "chained as ever"}
-{"batch": "dg-batch-04", "text": "a few timeline events, linked however reads best", "frame": "link.pattern", "value": "chain", "span": "linked"}
-{"batch": "dg-batch-04", "text": "second-row steps in, arrows the usual way", "frame": "link.pattern", "value": "chain", "span": "the usual way"}
-{"batch": "dg-batch-04", "text": "one of those text boxes, usual words", "frame": "node.label", "value": "the usual byline", "span": "usual words"}
-{"batch": "dg-batch-04", "text": "a text box, contents to taste", "frame": "node.label", "value": "fitting", "span": "contents to taste"}
-{"batch": "dg-batch-04", "text": "another text box, whatever line suits", "frame": "node.label", "value": "whatever suits", "span": "whatever line suits"}
-{"batch": "dg-batch-04", "text": "the n3 content box needs its body copy", "frame": "node.label", "value": "the standard copy", "span": "its body copy"}
-{"batch": "dg-batch-04", "text": "sort the n3 box out with a decent sentence", "frame": "node.label", "value": "decent", "span": "a decent sentence"}
-{"batch": "dg-batch-04", "text": "the n3 part wants filling, usual words", "frame": "node.label", "value": "the usual", "span": "usual words"}
 {"batch": "dg-batch-04", "text": "make a bullet list with 5 items: Crush early, Press gently, Age cool, Rack twice and Cork dry", "frame": "list.items", "value": "Crush early, Press gently, Age cool, Rack twice, Cork dry", "span": "Crush early, Press gently, Age cool, Rack twice and Cork dry"}
 {"batch": "dg-batch-04", "text": "hey, make a bullet list with 5 items: Crush early, Press gently, Age cool, Rack twice and Cork dry", "frame": "list.items", "value": "Crush early, Press gently, Age cool, Rack twice, Cork dry", "span": "Crush early, Press gently, Age cool, Rack twice and Cork dry"}
 {"batch": "dg-batch-04", "text": "a bullet list of five: Check the pads, True the wheels, Oil the chain, Torque the stem and Wipe it down", "frame": "list.items", "value": "Check the pads, True the wheels, Oil the chain, Torque the stem, Wipe it down", "span": "Check the pads, True the wheels, Oil the chain, Torque the stem and Wipe it down"}
@@ -349,7 +237,6 @@
 {"batch": "dg-batch-04", "text": "please to create a bullet list with 5 items, Check the pads through Wipe it down", "frame": "list.items", "value": "Check the pads, True the wheels, Oil the chain, Torque the stem, Wipe it down", "span": "Check the pads through Wipe it down"}
 {"batch": "dg-batch-04", "text": "a bullet list of 5 items — Crush early, Press gently, Age cool, Rack twice and Cork dry — with the entries tight to the left", "frame": "list.items", "value": "Crush early, Press gently, Age cool, Rack twice, Cork dry", "span": "Crush early, Press gently, Age cool, Rack twice and Cork dry"}
 {"batch": "dg-batch-04", "text": "one list with the 5 items Check the pads, True the wheels, Oil the chain, Torque the stem and Wipe it down, double-spaced for the reader", "frame": "list.items", "value": "Check the pads, True the wheels, Oil the chain, Torque the stem, Wipe it down", "span": "Check the pads, True the wheels, Oil the chain, Torque the stem and Wipe it down"}
-{"batch": "dg-batch-04", "text": "one list with the 5 items Check the pads, True the wheels, Oil the chain, Torque the stem and Wipe it down, double-spaced for the reader", "frame": "diagram.spacing", "value": "double", "span": "double-spaced"}
 {"batch": "dg-batch-04", "text": "the bullet list: Crush early, Press gently, Age cool, Rack twice, Cork dry — five items, in just that order", "frame": "list.items", "value": "Crush early, Press gently, Age cool, Rack twice, Cork dry", "span": "Crush early, Press gently, Age cool, Rack twice, Cork dry"}
 {"batch": "dg-batch-04", "text": "a 5-item list Check the pads, True the wheels, Oil the chain, Torque the stem and Wipe it down in the middle of the page, bullets plain", "frame": "list.items", "value": "Check the pads, True the wheels, Oil the chain, Torque the stem, Wipe it down", "span": "Check the pads, True the wheels, Oil the chain, Torque the stem and Wipe it down"}
 {"batch": "dg-batch-04", "text": "build the bullet list from Crush early, Press gently, Age cool, Rack twice and Cork dry, then let each of the five ride its own line", "frame": "list.items", "value": "Crush early, Press gently, Age cool, Rack twice, Cork dry", "span": "Crush early, Press gently, Age cool, Rack twice and Cork dry"}
@@ -357,51 +244,18 @@
 {"batch": "dg-batch-04", "text": "one of those quick lists, items to taste", "frame": "list.items", "value": "to taste", "span": "to taste"}
 {"batch": "dg-batch-04", "text": "make a bullet list with 5 items: Crush early, Press gently, Age cool, Rack twice adn Cork dry", "frame": "list.items", "value": "Crush early, Press gently, Age cool, Rack twice, Cork dry", "span": "make a bullet list with 5 items: Crush early, Press gently, Age cool, Rack twice adn Cork dry"}
 {"batch": "dg-batch-04", "text": "a bulit list of five: Check the pads, True the wheels, Oil the chain, Torque the stem and Wipe it down", "frame": "list.items", "value": "Check the pads, True the wheels, Oil the chain, Torque the stem, Wipe it down", "span": "Check the pads, True the wheels, Oil the chain, Torque the stem and Wipe it down"}
-{"batch": "dg-batch-04", "text": "the usual heading, italic touch to it", "frame": "node.label", "value": "the standard one", "span": "the usual heading"}
-{"batch": "dg-batch-04", "text": "a title up top, italic however the house style runs it", "frame": "node.label", "value": "house style", "span": "however the house style runs it"}
-{"batch": "dg-batch-04", "text": "one more italic headline, words to taste", "frame": "node.label", "value": "opening words", "span": "words to taste"}
-{"batch": "dg-batch-04", "text": "a small circle in the corner, tastefully coloured", "frame": "node.colour", "value": "tasteful", "span": "tastefully coloured"}
-{"batch": "dg-batch-04", "text": "the usual little corner circle, colour to match", "frame": "node.colour", "value": "to match", "span": "colour to match"}
-{"batch": "dg-batch-04", "text": "a small circle, that corner spot, one of your good colours", "frame": "node.colour", "value": "one of the good ones", "span": "one of your good colours"}
 {"batch": "dg-batch-04", "text": "another one of those tilted triangles, lean to taste", "frame": "node.rotate", "value": "as drawn", "span": "lean to taste"}
 {"batch": "dg-batch-04", "text": "a triangle on the tilt, the house lean", "frame": "node.rotate", "value": "house lean", "span": "the house lean"}
 {"batch": "dg-batch-04", "text": "one of those turned triangles, nothing fussy", "frame": "node.rotate", "value": "nothing fussy", "span": "nothing fussy"}
 {"batch": "dg-batch-04", "text": "a star, star-sized, whatever the canvas runs to", "frame": "node.height", "value": "standard", "span": "star-sized"}
 {"batch": "dg-batch-04", "text": "one more star, usual size", "frame": "node.width", "value": "the usual", "span": "usual size"}
 {"batch": "dg-batch-04", "text": "a star and its measurements, house standard", "frame": "node.height", "value": "house standard", "span": "house standard"}
-{"batch": "dg-batch-04", "text": "a cloud shape over by the table, wherever it sits best", "frame": "node.position", "value": "near the table", "span": "by the table"}
-{"batch": "dg-batch-04", "text": "one cloud, table side, to taste", "frame": "node.position", "value": "to taste", "span": "to taste"}
-{"batch": "dg-batch-04", "text": "the usual cloud against the table", "frame": "node.position", "value": "the usual spot", "span": "the usual cloud against the table"}
-{"batch": "dg-batch-04", "text": "a star shape by the image, wherever it hangs best", "frame": "node.position", "value": "near the image", "span": "by the image"}
-{"batch": "dg-batch-04", "text": "one star for the picture's corner, to taste", "frame": "node.position", "value": "to taste", "span": "to taste"}
-{"batch": "dg-batch-04", "text": "the usual star next to the image", "frame": "node.position", "value": "the usual spot", "span": "next to the image"}
-{"batch": "dg-batch-04", "text": "a ward-logo picture in its usual corner", "frame": "node.position", "value": "the usual corner", "span": "its usual corner"}
-{"batch": "dg-batch-04", "text": "the logo as a picture, corner to taste", "frame": "node.position", "value": "to taste", "span": "corner to taste"}
-{"batch": "dg-batch-04", "text": "one logo picture, top corner somewhere", "frame": "node.position", "value": "top corner", "span": "top corner somewhere"}
 {"batch": "dg-batch-04", "text": "the picture could go square, whatever width reads best", "frame": "node.width", "value": "as reads best", "span": "whatever width reads best"}
 {"batch": "dg-batch-04", "text": "square it up, the picture, width to taste", "frame": "node.width", "value": "to taste", "span": "width to taste"}
 {"batch": "dg-batch-04", "text": "one square picture, house width", "frame": "node.width", "value": "house", "span": "house width"}
-{"batch": "dg-batch-04", "text": "uh, an arrow for those two, (Mark, Dig)", "frame": "link.to", "value": "Dig", "span": "Dig"}
-{"batch": "dg-batch-04", "text": "erm — an arrow there, first to second, you know the pair", "frame": "link.to", "value": "the second", "span": "second"}
-{"batch": "dg-batch-04", "text": "an arrow, mm, for the obvious two", "frame": "link.to", "value": "the obvious second", "span": "the obvious two"}
-{"batch": "dg-batch-04", "text": "the picture and triangle — the order between them wants sorting", "frame": "node.position", "value": "below the triangle", "span": "order between them"}
-{"batch": "dg-batch-04", "text": "make sure those two read right, picture under shape", "frame": "node.position", "value": "beneath", "span": "under shape"}
-{"batch": "dg-batch-04", "text": "check the picture sits where it should", "frame": "node.position", "value": "where it should", "span": "where it should"}
-{"batch": "dg-batch-04", "text": "one of those menu rectangles, drawn wherever it reads best", "frame": "node.position", "value": "reads best", "span": "wherever it reads best"}
-{"batch": "dg-batch-04", "text": "a rectangle off the menu, house position", "frame": "node.position", "value": "house", "span": "house position"}
-{"batch": "dg-batch-04", "text": "the usual rectangle, you know where", "frame": "node.position", "value": "the usual place", "span": "you know where"}
 {"batch": "dg-batch-04", "text": "a square, more of less the same height it usually takes", "frame": "node.height", "value": "the usual", "span": "the same height it usually takes"}
 {"batch": "dg-batch-04", "text": "one square, height to taste", "frame": "node.height", "value": "to taste", "span": "to taste"}
 {"batch": "dg-batch-04", "text": "the usual little square and its usual height", "frame": "node.height", "value": "the usual", "span": "usual height"}
-{"batch": "dg-batch-04", "text": "the shape could do with its colour, and its name to match", "frame": "node.colour", "value": "fitting", "span": "its colour"}
-{"batch": "dg-batch-04", "text": "the shape could do with its colour, and its name to match", "frame": "node.label", "value": "to match", "span": "its name to match"}
-{"batch": "dg-batch-04", "text": "sort the shape's colour out and let the word follow", "frame": "node.colour", "value": "sorted", "span": "colour out"}
-{"batch": "dg-batch-04", "text": "sort the shape's colour out and let the word follow", "frame": "node.label", "value": "following", "span": "the word follow"}
-{"batch": "dg-batch-04", "text": "one colour for the shape, name on it echoing", "frame": "node.colour", "value": "chosen", "span": "one colour"}
-{"batch": "dg-batch-04", "text": "one colour for the shape, name on it echoing", "frame": "node.label", "value": "echoing", "span": "echoing"}
-{"batch": "dg-batch-04", "text": "a old culvert picture, then somewhere over on the right", "frame": "node.position", "value": "right side", "span": "somewhere over on the right"}
-{"batch": "dg-batch-04", "text": "one more picture — the south slope one — and its spot sorted later", "frame": "node.position", "value": "later, as fits", "span": "its spot sorted later"}
-{"batch": "dg-batch-04", "text": "a picture of the old culvert, and off it goes, rightish", "frame": "node.position", "value": "right", "span": "rightish"}
 {"batch": "dg-batch-04", "text": "the two pictures want angling, the first less than the second", "frame": "node.rotate", "value": "less", "span": "angling, the first less"}
 {"batch": "dg-batch-04", "text": "the two pictures want angling, the first less than the second", "frame": "node.rotate", "value": "more", "span": "angling"}
 {"batch": "dg-batch-04", "text": "both pictures could use a turn, differently", "frame": "node.rotate", "value": "first angle", "span": "a turn"}
@@ -415,26 +269,10 @@
 {"batch": "dg-batch-04", "text": "the picture needs its height sorted, and this page its name", "frame": "node.height", "value": "sorted", "span": "its height sorted"}
 {"batch": "dg-batch-04", "text": "sort out the picture's size and the page's title, whichever way reads best", "frame": "node.height", "value": "as reads best", "span": "size"}
 {"batch": "dg-batch-04", "text": "the picture could stand prouder, and the page wants a title", "frame": "node.height", "value": "prouder height", "span": "stand prouder"}
-{"batch": "dg-batch-04", "text": "an image of the sorter, then shift it low wherever it fits", "frame": "node.position", "value": "low", "span": "low wherever it fits"}
-{"batch": "dg-batch-04", "text": "one cellar hand-ish image, and park it wherever reads well", "frame": "node.position", "value": "wherever reads well", "span": "wherever reads well"}
-{"batch": "dg-batch-04", "text": "insert the image of the sorter and see it settled low in its own time", "frame": "node.position", "value": "low", "span": "settled low"}
-{"batch": "dg-batch-04", "text": "one more line chart, data to taste", "frame": "chart.labels", "value": "to taste", "span": "data to taste"}
-{"batch": "dg-batch-04", "text": "the chart wants its proper title", "frame": "chart.title", "value": "proper", "span": "its proper title"}
-{"batch": "dg-batch-04", "text": "sort the chart's name out, would you", "frame": "chart.title", "value": "sorted", "span": "name out"}
-{"batch": "dg-batch-04", "text": "the chart could carry one of your usual titles", "frame": "chart.title", "value": "the usual", "span": "one of your usual titles"}
-{"batch": "dg-batch-04", "text": "a pie chart with its name on, whatever it should be", "frame": "chart.title", "value": "as fits", "span": "its name on"}
-{"batch": "dg-batch-04", "text": "one named pie chart, house title", "frame": "chart.title", "value": "the house one", "span": "house title"}
-{"batch": "dg-batch-04", "text": "the usual titled pie chart, fresh from the deck", "frame": "chart.title", "value": "usual", "span": "the usual titled pie chart"}
 {"batch": "dg-batch-04", "text": "the chart could go smaller, whatever reads best", "frame": "chart.width", "value": "as reads best", "span": "reads best"}
 {"batch": "dg-batch-04", "text": "sort the chart's size out", "frame": "chart.width", "value": "sorted", "span": "size out"}
 {"batch": "dg-batch-04", "text": "the chart wants trimming to a decent footprint", "frame": "chart.height", "value": "decent", "span": "decent footprint"}
 {"batch": "dg-batch-04", "text": "the treemap could do with a better spot than the rim", "frame": "chart.position", "value": "a better spot", "span": "a better spot"}
-{"batch": "dg-batch-04", "text": "a line chart, X and Y as ever, entries the usual", "frame": "chart.labels", "value": "the usual", "span": "entries the usual"}
-{"batch": "dg-batch-04", "text": "the normal X-and-Y line chart, numbers house-picked", "frame": "chart.values", "value": "house-picked", "span": "numbers house-picked"}
-{"batch": "dg-batch-04", "text": "the chart could do with a bar-chart look, data as it is", "frame": "chart.type", "value": "bar", "span": "the chart could do with a bar-chart look, data as it is"}
-{"batch": "dg-batch-04", "text": "try it as a bar one, the data staying put", "frame": "chart.type", "value": "bar", "span": "a bar one"}
-{"batch": "dg-batch-04", "text": "see the chart in bars for once", "frame": "chart.type", "value": "bar", "span": "in bars"}
-{"batch": "dg-batch-04", "text": "a bar chart of the usual marks, and off to the left somewhere", "frame": "chart.labels", "value": "the usual", "span": "the usual marks"}
 {"batch": "dg-batch-04", "text": "add a bar chart with Week one at 20 and Week two at 30, parked on the left side", "frame": "chart.position", "value": "left", "span": "on the left side"}
 {"batch": "dg-batch-04", "text": "a bar chart: Dawn roast 22, Dusk roast 34 — home it on the left", "frame": "chart.position", "value": "left", "span": "a bar chart: Dawn roast 22, Dusk roast 34 — home it on the left"}
 {"batch": "dg-batch-04", "text": "let's bar up Week one at 20 and Week two at 30, left side of the page", "frame": "chart.position", "value": "left", "span": "let's bar up Week one at 20 and Week two at 30, left side of the page"}
@@ -455,12 +293,9 @@
 {"batch": "dg-batch-04", "text": "the brew pair, Dawn roast at 22 and Dusk roast at 34 — a bar chart sited left before the demo", "frame": "chart.position", "value": "left", "span": "the brew pair, Dawn roast at 22 and Dusk roast at 34 — a bar chart sited left before the demo"}
 {"batch": "dg-batch-04", "text": "bars for Week one and Week two at 20 and 30, one chart, left-hand berth, no clutter with it", "frame": "chart.position", "value": "left", "span": "bars for Week one and Week two at 20 and 30, one chart, left-hand berth, no clutter with it"}
 {"batch": "dg-batch-04", "text": "a bar chart over on the left, values as they come", "frame": "chart.position", "value": "left", "span": "over on the left"}
-{"batch": "dg-batch-04", "text": "one more of those left-side bar charts, data to taste", "frame": "chart.labels", "value": "to taste", "span": "data to taste"}
 {"batch": "dg-batch-04", "text": "the usual bar chart, left side if you'd be so kind", "frame": "chart.position", "value": "left", "span": "left side"}
 {"batch": "dg-batch-04", "text": "ad a bar chart with Week one at 20 and Week two at 30, parked on the left side", "frame": "chart.position", "value": "left", "span": "on the left side"}
 {"batch": "dg-batch-04", "text": "add a bar chart with Dawn roast at 22 and Dusk roast at 34, parked on the lfet side", "frame": "chart.position", "value": "left", "span": "add a bar chart with Dawn roast at 22 and Dusk roast at 34, parked on the lfet side"}
-{"batch": "dg-batch-04", "text": "a line chart across the years, reading as usual", "frame": "chart.labels", "value": "the usual years", "span": "the years"}
-{"batch": "dg-batch-04", "text": "the usual year-by-year line chart, values sensible", "frame": "chart.values", "value": "sensible", "span": "values sensible"}
 {"batch": "dg-batch-04", "text": "a new page, the title Tasting Rules, and set its font to Garamond", "frame": "node.fontFamily", "value": "Garamond", "span": "Garamond"}
 {"batch": "dg-batch-04", "text": "hey, a new page, the title Tasting Rules, and set its font to Garamond", "frame": "node.fontFamily", "value": "Garamond", "span": "Garamond"}
 {"batch": "dg-batch-04", "text": "start one more page, punch in Brew Notes as its title, then the typeface Verdana", "frame": "node.fontFamily", "value": "Verdana", "span": "Verdana"}
@@ -555,50 +390,8 @@
 {"batch": "dg-batch-04", "text": "the e1 arrow wants beefing up and a roll, sizes to taste", "frame": "link.rotate", "value": "rolled", "span": "a roll"}
 {"batch": "dg-batch-04", "text": "make the e1 arrwo larger — width 5.0, height 4.0 — and rotate it 90 degree", "frame": "link.height", "value": "4", "span": "4.0"}
 {"batch": "dg-batch-04", "text": "make the e1 arrwo larger — width 5.0, height 4.0 — and rotate it 90 degree", "frame": "link.rotate", "value": "90", "span": "90 degree"}
-{"batch": "dg-batch-04", "text": "the Crush box could use some emphasis, your pick of which", "frame": "node.fontWeight", "value": "emphasis", "span": "some emphasis"}
-{"batch": "dg-batch-04", "text": "put a bit of weight behind Sort, style to suit", "frame": "node.fontWeight", "value": "weight", "span": "a bit of weight"}
-{"batch": "dg-batch-04", "text": "the Crush text wants livening up typographically", "frame": "node.fontWeight", "value": "lively", "span": "livening up"}
-{"batch": "dg-batch-04", "text": "the n3 and n4 blanks want their proper words", "frame": "node.label", "value": "standard", "span": "the n3 and n4 blanks want their proper words"}
-{"batch": "dg-batch-04", "text": "the n3 and n4 blanks want their proper words", "frame": "node.label", "value": "standard", "span": "the n3 and n4 blanks want their proper words"}
-{"batch": "dg-batch-04", "text": "sort out the naming on those two blanks", "frame": "node.label", "value": "named properly", "span": "the naming"}
-{"batch": "dg-batch-04", "text": "sort out the naming on those two blanks", "frame": "node.label", "value": "named properly", "span": "naming"}
-{"batch": "dg-batch-04", "text": "the n3 and n4 placeholders could be told apart with words", "frame": "node.label", "value": "telling words", "span": "told apart with words"}
-{"batch": "dg-batch-04", "text": "the n3 and n4 placeholders could be told apart with words", "frame": "node.label", "value": "telling words", "span": "told apart"}
-{"batch": "dg-batch-04", "text": "the n3, n4 and n5 boxes want their own words, whatever fits", "frame": "node.label", "value": "whatever fits", "span": "their own words"}
-{"batch": "dg-batch-04", "text": "the n3, n4 and n5 boxes want their own words, whatever fits", "frame": "node.label", "value": "whatever fits", "span": "their own words"}
-{"batch": "dg-batch-04", "text": "the n3, n4 and n5 boxes want their own words, whatever fits", "frame": "node.label", "value": "whatever fits", "span": "whatever fits"}
-{"batch": "dg-batch-04", "text": "sort the labelling out on the trio, and square the textboxes up", "frame": "node.label", "value": "sorted", "span": "the labelling"}
-{"batch": "dg-batch-04", "text": "sort the labelling out on the trio, and square the textboxes up", "frame": "node.layout", "value": "squared up", "span": "square the textboxes up"}
-{"batch": "dg-batch-04", "text": "give the little boxes better words and a tidier line", "frame": "node.label", "value": "better words", "span": "better words"}
-{"batch": "dg-batch-04", "text": "give the little boxes better words and a tidier line", "frame": "node.layout", "value": "tidier", "span": "a tidier line"}
-{"batch": "dg-batch-04", "text": "the same Lane Works textbox goes on pages 9, 10 and 7, and the picture height to 7", "frame": "page.title", "value": "Lane Works", "span": "Lane Works"}
-{"batch": "dg-batch-04", "text": "rename the topic textbox on pages 3, 4 and 6 to Ward Rounds, then set the picture 6 tall", "frame": "page.title", "value": "Ward Rounds", "span": "Ward Rounds"}
-{"batch": "dg-batch-04", "text": "let's have Lane Works sitting on pages 9, 10 and 7, and the picture standing 7", "frame": "page.title", "value": "Lane Works", "span": "Lane Works"}
-{"batch": "dg-batch-04", "text": "hey, let's have Lane Works sitting on pages 9, 10 and 7, and the picture standing 7", "frame": "page.title", "value": "Lane Works", "span": "Lane Works"}
-{"batch": "dg-batch-04", "text": "could you carry Ward Rounds across pages 3, 4 and 6, and take the picture up to 6?", "frame": "page.title", "value": "Ward Rounds", "span": "Ward Rounds"}
-{"batch": "dg-batch-04", "text": "one title, three pages — 9, 10, 7 — all reading Lane Works; meanwhile the picture grows to 7", "frame": "page.title", "value": "Lane Works", "span": "Lane Works"}
-{"batch": "dg-batch-04", "text": "I'd write Ward Rounds over pages 3, 4 and 6, and lift the picture to 6 in height", "frame": "page.title", "value": "Ward Rounds", "span": "Ward Rounds"}
-{"batch": "dg-batch-04", "text": "right, pages 9, 10 and 7 take Lane Works for their textbox, and the picture takes 7", "frame": "page.title", "value": "Lane Works", "span": "Lane Works"}
-{"batch": "dg-batch-04", "text": "right, pages 9, 10 and 7 take Lane Works for their textbox, and the picture takes 7, please", "frame": "page.title", "value": "Lane Works", "span": "Lane Works"}
-{"batch": "dg-batch-04", "text": "how about the Ward Rounds title on pages 3, 4 and 6, with the picture at 6 high?", "frame": "page.title", "value": "Ward Rounds", "span": "Ward Rounds"}
-{"batch": "dg-batch-04", "text": "the title Lane Works repeats across pages 9, 10 and 7; the picture height moves to 7", "frame": "page.title", "value": "Lane Works", "span": "Lane Works"}
-{"batch": "dg-batch-04", "text": "stamp Ward Rounds over the listed pages 3, 4 and 6, and re-height the picture to 6", "frame": "page.title", "value": "Ward Rounds", "span": "Ward Rounds"}
-{"batch": "dg-batch-04", "text": "the pages 9, 10 and 7 share the one textbox, Lane Works, while the picture takes 7 for its height", "frame": "page.title", "value": "Lane Works", "span": "Lane Works"}
-{"batch": "dg-batch-04", "text": "please to change the textbox on pages 3, 4 and 6 to Ward Rounds, and the picture height to 6", "frame": "page.title", "value": "Ward Rounds", "span": "Ward Rounds"}
-{"batch": "dg-batch-04", "text": "the Lane Works textbox rolls out on pages 9, 10 and 7 identically, the picture rises to 7, and both settle quietly", "frame": "page.title", "value": "Lane Works", "span": "Lane Works"}
-{"batch": "dg-batch-04", "text": "retitle pages 3, 4 and 6 with the one Ward Rounds before the handover, then stretch the picture to 6", "frame": "page.title", "value": "Ward Rounds", "span": "Ward Rounds"}
-{"batch": "dg-batch-04", "text": "one title trio — pages 9, 10 and 7 each carrying Lane Works — and a 7-tall picture to finish the set", "frame": "page.title", "value": "Lane Works", "span": "Lane Works"}
-{"batch": "dg-batch-04", "text": "the selected pages 3, 4 and 6 go over to Ward Rounds, and the picture goes up to 6, margins respected", "frame": "page.title", "value": "Ward Rounds", "span": "Ward Rounds"}
-{"batch": "dg-batch-04", "text": "match the textbox to Lane Works on pages 9, 10 and 7, then walk the picture height to 7 once", "frame": "page.title", "value": "Lane Works", "span": "Lane Works"}
-{"batch": "dg-batch-04", "text": "those pages share a title by the feel of it, and the picture needs height", "frame": "page.title", "value": "shared", "span": "a title"}
 {"batch": "dg-batch-04", "text": "those pages share a title by the feel of it, and the picture needs height", "frame": "node.height", "value": "settled", "span": "needs height"}
-{"batch": "dg-batch-04", "text": "one proper title for the set, and sort the picture's size too", "frame": "page.title", "value": "proper", "span": "one proper title"}
 {"batch": "dg-batch-04", "text": "one proper title for the set, and sort the picture's size too", "frame": "node.height", "value": "sorted", "span": "size"}
-{"batch": "dg-batch-04", "text": "the listed pages want titling alike, the picture a taller stand", "frame": "page.title", "value": "fitting", "span": "titling alike"}
-{"batch": "dg-batch-04", "text": "the same Lane Works texbtx goes on pages 9, 10 and 7, and the picture height to 7", "frame": "page.title", "value": "Lane Works", "span": "Lane Works"}
-{"batch": "dg-batch-04", "text": "the same Ward Rounds textbox goes on paegs 3, 4 and 6, and the picture height to 6", "frame": "page.title", "value": "Ward Rounds", "span": "Ward Rounds"}
-{"batch": "dg-batch-04", "text": "a new page with a centred title wherever it sits best", "frame": "node.label", "value": "standard", "span": "a centred title"}
-{"batch": "dg-batch-04", "text": "a fresh page, heading centred, words to the house taste", "frame": "node.label", "value": "the house words", "span": "the house taste"}
 {"batch": "dg-batch-04", "text": "add a note matching the Log title, and make the title font bold", "frame": "node.match", "value": "Log", "span": "add a note matching the Log title"}
 {"batch": "dg-batch-04", "text": "hey, add a note matching the Log title, and make the title font bold", "frame": "node.match", "value": "Log", "span": "add a note matching the Log title"}
 {"batch": "dg-batch-04", "text": "a note cut to the Crush title's cloth, and the Crush font goes bold", "frame": "node.match", "value": "Crush", "span": "a note cut to the Crush title's cloth"}
@@ -619,10 +412,7 @@
 {"batch": "dg-batch-04", "text": "the Crush title acquires a twin note and keeps its own bold, both before noon", "frame": "node.match", "value": "Crush", "span": "the Crush title acquires a twin note"}
 {"batch": "dg-batch-04", "text": "note on the page matching Log, title bold, one tidy pass altogether", "frame": "node.match", "value": "Log", "span": "note on the page matching Log"}
 {"batch": "dg-batch-04", "text": "a note of the same kidney as the Crush title, and the title could stand some weight", "frame": "node.match", "value": "Crush", "span": "the same kidney"}
-{"batch": "dg-batch-04", "text": "a note of the same kidney as the Crush title, and the title could stand some weight", "frame": "node.fontWeight", "value": "bolder", "span": "some weight"}
 {"batch": "dg-batch-04", "text": "one of those notes that echoes the heading — Log, that is — and a bolder title too", "frame": "node.match", "value": "Log", "span": "echoes the heading"}
-{"batch": "dg-batch-04", "text": "one of those notes that echoes the heading — Log, that is — and a bolder title too", "frame": "node.fontWeight", "value": "bolder", "span": "a bolder"}
 {"batch": "dg-batch-04", "text": "a note belted out in the title's voice, then some heft on the words of Crush", "frame": "node.match", "value": "Crush", "span": "the title's voice"}
-{"batch": "dg-batch-04", "text": "a note belted out in the title's voice, then some heft on the words of Crush", "frame": "node.fontWeight", "value": "heavier", "span": "some heft"}
 {"batch": "dg-batch-04", "text": "ad a note matching the Log title, and make the title font bold", "frame": "node.match", "value": "Log", "span": "ad a note matching the Log title"}
 {"batch": "dg-batch-04", "text": "add a note matching the Crush tltie, and make the title font bold", "frame": "node.match", "value": "Crush", "span": "add a note matching the Crush tltie"}

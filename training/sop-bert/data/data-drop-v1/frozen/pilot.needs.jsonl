@@ -26,11 +26,6 @@
 {"batch": "pilot", "text": "one more thing: could you tilt that first box by about 15 degrees, clockwise", "frame": "node.rotate", "value": "15 degrees clockwise", "span": "15 degrees, clockwise"}
 {"batch": "pilot", "text": "box tilted a bit", "frame": "node.rotate", "value": "a bit", "span": "a bit"}
 {"batch": "pilot", "text": "box tilted a bit, if you can", "frame": "node.rotate", "value": "a bit", "span": "a bit"}
-{"batch": "pilot", "text": "set the background of the whole diagram to white", "frame": "diagram.background", "value": "white", "span": "background"}
-{"batch": "pilot", "text": "please set the background of the whole diagram to white", "frame": "diagram.background", "value": "white", "span": "background"}
-{"batch": "pilot", "text": "set the background of the whole diagram to white please", "frame": "diagram.background", "value": "white", "span": "background"}
-{"batch": "pilot", "text": "set the background of the whole diagram to white, thanks", "frame": "diagram.background", "value": "white", "span": "background"}
-{"batch": "pilot", "text": "set the background of the whole diagram to white — go on", "frame": "diagram.background", "value": "white", "span": "background"}
 {"batch": "pilot", "text": "hey, oh and one more thing — the links shouldn't stay black either", "frame": "link.colour (operator=eq, character=stop-change)", "value": "black", "span": "black"}
 {"batch": "pilot", "text": "quick one — oh and one more thing — the links shouldn't stay black either", "frame": "link.colour (operator=eq, character=stop-change)", "value": "black", "span": "black"}
 {"batch": "pilot", "text": "hmm, oh and one more thing — the links shouldn't stay black either", "frame": "link.colour (operator=eq, character=stop-change)", "value": "black", "span": "black"}
@@ -45,10 +40,6 @@
 {"batch": "pilot", "text": "highlight the best month in green please", "frame": "chart.condition", "value": "max → green", "span": "best month in green"}
 {"batch": "pilot", "text": "highlight the best month in green, thanks", "frame": "chart.condition", "value": "max → green", "span": "best month in green"}
 {"batch": "pilot", "text": "highlight the best month in green — go on", "frame": "chart.condition", "value": "max → green", "span": "best month in green"}
-{"batch": "pilot", "text": "hey, any month that lost money should stand out, red for example", "frame": "chart.condition", "value": "negative → red", "span": "lost money should stand out"}
-{"batch": "pilot", "text": "quick one — any month that lost money should stand out, red for example", "frame": "chart.condition", "value": "negative → red", "span": "lost money should stand out"}
-{"batch": "pilot", "text": "hmm, any month that lost money should stand out, red for example", "frame": "chart.condition", "value": "negative → red", "span": "lost money should stand out"}
-{"batch": "pilot", "text": "one more thing: any month that lost money should stand out, red for example", "frame": "chart.condition", "value": "negative → red", "span": "lost money should stand out"}
 {"batch": "pilot", "text": "colour the losers red", "frame": "chart.condition", "value": "negative → red", "span": "losers red"}
 {"batch": "pilot", "text": "colour the losers red, if you can", "frame": "chart.condition", "value": "negative → red", "span": "losers red"}
 {"batch": "pilot", "text": "change the vaalue for March from 30 to 40 please", "frame": "point.value (operator=eq, character=discard)", "value": "30", "span": "30"}
@@ -57,20 +48,6 @@
 {"batch": "pilot", "text": "turn the Sttart box slightly to the right, thanks", "frame": "node.rotate", "value": "right", "span": "slightly to the right"}
 {"batch": "pilot", "text": "turn the Sttart box slightly to the right — go on", "frame": "node.rotate", "value": "right", "span": "slightly to the right"}
 {"batch": "pilot", "text": "make the baars below 20 red please", "frame": "chart.condition", "value": "value below 20 → red", "span": "below 20 red"}
-{"batch": "pilot", "text": "let the boy wear a jacket", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "pilot", "text": "please let the boy wear a jacket", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "pilot", "text": "let the boy wear a jacket please", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "pilot", "text": "let the boy wear a jacket, thanks", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "pilot", "text": "let the boy wear a jacket — go on", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "pilot", "text": "make the girl ginger", "frame": "drawn.trait", "value": "ginger hair", "span": "ginger"}
-{"batch": "pilot", "text": "please make the girl ginger", "frame": "drawn.trait", "value": "ginger hair", "span": "ginger"}
-{"batch": "pilot", "text": "make the girl ginger please", "frame": "drawn.trait", "value": "ginger hair", "span": "ginger"}
-{"batch": "pilot", "text": "make the girl ginger, thanks", "frame": "drawn.trait", "value": "ginger hair", "span": "ginger"}
-{"batch": "pilot", "text": "make the girl ginger — go on", "frame": "drawn.trait", "value": "ginger hair", "span": "ginger"}
-{"batch": "pilot", "text": "hey, it's cold out — could the boy get a warm jacket on?", "frame": "part.garment", "value": "on", "span": "on"}
-{"batch": "pilot", "text": "quick one — it's cold out — could the boy get a warm jacket on?", "frame": "part.garment", "value": "on", "span": "on"}
-{"batch": "pilot", "text": "hmm, it's cold out — could the boy get a warm jacket on?", "frame": "part.garment", "value": "on", "span": "on"}
-{"batch": "pilot", "text": "one more thing: it's cold out — could the boy get a warm jacket on?", "frame": "part.garment", "value": "on", "span": "on"}
 {"batch": "pilot", "text": "hey, give the scene some depth — hills far away, the house close to us", "frame": "drawn.depth", "value": "far", "span": "far away"}
 {"batch": "pilot", "text": "hey, give the scene some depth — hills far away, the house close to us", "frame": "drawn.depth", "value": "near", "span": "close to us"}
 {"batch": "pilot", "text": "quick one — give the scene some depth — hills far away, the house close to us", "frame": "drawn.depth", "value": "far", "span": "far away"}
@@ -85,15 +62,10 @@
 {"batch": "pilot", "text": "give the trees a shadow, thanks", "frame": "drawn.shadow", "value": "on", "span": "a shadow"}
 {"batch": "pilot", "text": "give the trees a shadow — go on", "frame": "drawn.shadow", "value": "on", "span": "a shadow"}
 {"batch": "pilot", "text": "the sun is on the left, shadows to the right", "frame": "drawn.shadow", "value": "right", "span": "right"}
-{"batch": "pilot", "text": "the sun is on the left, shadows to the right", "frame": "drawn.depth", "value": "sun left", "span": null}
 {"batch": "pilot", "text": "please the sun is on the left, shadows to the right", "frame": "drawn.shadow", "value": "right", "span": "right"}
-{"batch": "pilot", "text": "please the sun is on the left, shadows to the right", "frame": "drawn.depth", "value": "sun left", "span": null}
 {"batch": "pilot", "text": "the sun is on the left, shadows to the right please", "frame": "drawn.shadow", "value": "right", "span": "right"}
-{"batch": "pilot", "text": "the sun is on the left, shadows to the right please", "frame": "drawn.depth", "value": "sun left", "span": null}
 {"batch": "pilot", "text": "the sun is on the left, shadows to the right, thanks", "frame": "drawn.shadow", "value": "right", "span": "right"}
-{"batch": "pilot", "text": "the sun is on the left, shadows to the right, thanks", "frame": "drawn.depth", "value": "sun left", "span": null}
 {"batch": "pilot", "text": "the sun is on the left, shadows to the right — go on", "frame": "drawn.shadow", "value": "right", "span": "right"}
-{"batch": "pilot", "text": "the sun is on the left, shadows to the right — go on", "frame": "drawn.depth", "value": "sun left", "span": null}
 {"batch": "pilot", "text": "make the house look like it's seen from the street", "frame": "drawn.perspective", "value": "front", "span": "seen from the street"}
 {"batch": "pilot", "text": "please make the house look like it's seen from the street", "frame": "drawn.perspective", "value": "front", "span": "seen from the street"}
 {"batch": "pilot", "text": "make the house look like it's seen from the street please", "frame": "drawn.perspective", "value": "front", "span": "seen from the street"}
@@ -110,11 +82,6 @@
 {"batch": "pilot", "text": "make the dog chase the cat please", "frame": "drawn.action", "value": "chase", "span": "chase"}
 {"batch": "pilot", "text": "make the dog chase the cat, thanks", "frame": "drawn.action", "value": "chase", "span": "chase"}
 {"batch": "pilot", "text": "make the dog chase the cat — go on", "frame": "drawn.action", "value": "chase", "span": "chase"}
-{"batch": "pilot", "text": "the boy flying a kite", "frame": "drawn.action", "value": "fly", "span": null}
-{"batch": "pilot", "text": "please the boy flying a kite", "frame": "drawn.action", "value": "fly", "span": null}
-{"batch": "pilot", "text": "the boy flying a kite please", "frame": "drawn.action", "value": "fly", "span": null}
-{"batch": "pilot", "text": "the boy flying a kite, thanks", "frame": "drawn.action", "value": "fly", "span": null}
-{"batch": "pilot", "text": "the boy flying a kite — go on", "frame": "drawn.action", "value": "fly", "span": null}
 {"batch": "pilot", "text": "have the two people shake hands", "frame": "drawn.action", "value": "shake hands", "span": "shake hands"}
 {"batch": "pilot", "text": "please have the two people shake hands", "frame": "drawn.action", "value": "shake hands", "span": "shake hands"}
 {"batch": "pilot", "text": "have the two people shake hands please", "frame": "drawn.action", "value": "shake hands", "span": "shake hands"}
@@ -126,14 +93,8 @@
 {"batch": "pilot", "text": "one more thing: the boy should look like he's running after the kite", "frame": "drawn.action", "value": "run", "span": "he's running"}
 {"batch": "pilot", "text": "running boy", "frame": "drawn.action", "value": "run", "span": "running"}
 {"batch": "pilot", "text": "running boy, if you can", "frame": "drawn.action", "value": "run", "span": "running"}
-{"batch": "pilot", "text": "hey, the sun looks bored — two eyes and a smile would fix that", "frame": "part.owner", "value": "sun", "span": "the sun"}
-{"batch": "pilot", "text": "quick one — the sun looks bored — two eyes and a smile would fix that", "frame": "part.owner", "value": "sun", "span": "the sun"}
-{"batch": "pilot", "text": "hmm, the sun looks bored — two eyes and a smile would fix that", "frame": "part.owner", "value": "sun", "span": "the sun"}
-{"batch": "pilot", "text": "one more thing: the sun looks bored — two eyes and a smile would fix that", "frame": "part.owner", "value": "sun", "span": "the sun"}
 {"batch": "pilot", "text": "hey, yes, and a bit bigger than the cat", "frame": "drawn.perspective", "value": "bigger than the cat", "span": "bigger than the cat"}
 {"batch": "pilot", "text": "quick one — yes, and a bit bigger than the cat", "frame": "drawn.perspective", "value": "bigger than the cat", "span": "bigger than the cat"}
 {"batch": "pilot", "text": "hmm, yes, and a bit bigger than the cat", "frame": "drawn.perspective", "value": "bigger than the cat", "span": "bigger than the cat"}
 {"batch": "pilot", "text": "one more thing: yes, and a bit bigger than the cat", "frame": "drawn.perspective", "value": "bigger than the cat", "span": "bigger than the cat"}
-{"batch": "pilot", "text": "hmm, it's cold out — coould the boy get a warm jacket on?", "frame": "part.garment", "value": "on", "span": "on"}
 {"batch": "pilot", "text": "give the trrees a shadow, thanks", "frame": "drawn.shadow", "value": "on", "span": "a shadow"}
-{"batch": "pilot", "text": "the boy flying a kiite", "frame": "drawn.action", "value": "fly", "span": null}

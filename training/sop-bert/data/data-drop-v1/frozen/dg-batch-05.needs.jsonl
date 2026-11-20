@@ -1,5 +1,3 @@
-{"batch": "dg-batch-05", "text": "the same treatment for the font on the department chart", "frame": "chart.font.size", "value": "same", "span": "the same"}
-{"batch": "dg-batch-05", "text": "the same font treatment on the profit chart now", "frame": "chart.font.size", "value": "same", "span": "the same"}
 {"batch": "dg-batch-05", "text": "make the title font smaller", "frame": "chart.font.title", "value": "smaller", "span": "smaller"}
 {"batch": "dg-batch-05", "text": "title font smaller", "frame": "chart.font.title", "value": "smaller", "span": "smaller"}
 {"batch": "dg-batch-05", "text": "can you make the title font smaller?", "frame": "chart.font.title", "value": "smaller", "span": "smaller"}
@@ -56,10 +54,6 @@
 {"batch": "dg-batch-05", "text": "one more thing: keep the legend font bigger", "frame": "chart.font.legend", "value": "bigger", "span": "bigger"}
 {"batch": "dg-batch-05", "text": "how about biigger legend font?", "frame": "chart.font.legend", "value": "bigger", "span": "biigger"}
 {"batch": "dg-batch-05", "text": "the legend font on Sales by month should be biggger", "frame": "chart.font.legend", "value": "bigger", "span": "biggger"}
-{"batch": "dg-batch-05", "text": "the department chart could use the same grid lines treatment", "frame": "chart.grid", "value": "same", "span": "the same"}
-{"batch": "dg-batch-05", "text": "copy the same grid lines treatment over to the sales chart", "frame": "chart.grid", "value": "same", "span": "the same"}
-{"batch": "dg-batch-05", "text": "and the same on the claims chart for the grid lines", "frame": "chart.grid.style", "value": "same", "span": "the same"}
-{"batch": "dg-batch-05", "text": "the same goes for the grid lines on the revenue trend", "frame": "chart.grid.style", "value": "same", "span": "the same"}
 {"batch": "dg-batch-05", "text": "make the grid lines orange", "frame": "chart.grid.colour", "value": "orange", "span": "orange"}
 {"batch": "dg-batch-05", "text": "grid lines orange", "frame": "chart.grid.colour", "value": "orange", "span": "orange"}
 {"batch": "dg-batch-05", "text": "can you make the grid lines orange?", "frame": "chart.grid.colour", "value": "orange", "span": "orange"}
@@ -176,23 +170,9 @@
 {"batch": "dg-batch-05", "text": "and the same on the department chart for the y axis", "frame": "chart.axis.invert", "value": "same", "span": "the same"}
 {"batch": "dg-batch-05", "text": "the same goes for the x axis on the claims chart", "frame": "chart.axis.invert", "value": "same", "span": "the same"}
 {"batch": "dg-batch-05", "text": "pass the same y axis change on to the orders chart", "frame": "chart.axis.invert", "value": "same", "span": "the same"}
-{"batch": "dg-batch-05", "text": "carry the same y axis scale change over to the department chart", "frame": "chart.axis.scale", "value": "same", "span": "the same"}
-{"batch": "dg-batch-05", "text": "the profit chart could use the same y axis scale treatment", "frame": "chart.axis.scale", "value": "same", "span": "the same"}
-{"batch": "dg-batch-05", "text": "copy the same axis scales treatment over to the revenue trend", "frame": "chart.axis.scale", "value": "same", "span": "the same"}
 {"batch": "dg-batch-05", "text": "the same treatment for the x axis on the revenue trend", "frame": "chart.axis.position", "value": "same", "span": "the same"}
 {"batch": "dg-batch-05", "text": "the same y axis treatment on the department chart now", "frame": "chart.axis.position", "value": "same", "span": "the same"}
 {"batch": "dg-batch-05", "text": "pass the same y axis change on to the claims chart", "frame": "chart.axis.position", "value": "same", "span": "the same"}
-{"batch": "dg-batch-05", "text": "do the same on the revenue trend — the online series there as well", "frame": "series.label", "value": "same", "span": "the same"}
-{"batch": "dg-batch-05", "text": "the department chart could use the same chart treatment", "frame": "chart.title", "value": "same", "span": "the same"}
-{"batch": "dg-batch-05", "text": "then the same on the profit chart — the revenue line too", "frame": "series.colour", "value": "same", "span": "the same"}
-{"batch": "dg-batch-05", "text": "and the same on the revenue trend for the line", "frame": "chart.line.width", "value": "same", "span": "the same"}
-{"batch": "dg-batch-05", "text": "the same goes for the line on the claims chart", "frame": "chart.line.width", "value": "same", "span": "the same"}
-{"batch": "dg-batch-05", "text": "pass the same line change on to the profit chart", "frame": "chart.line.style", "value": "same", "span": "the same"}
-{"batch": "dg-batch-05", "text": "do the same on the revenue trend — the line there as well", "frame": "chart.line.style", "value": "same", "span": "the same"}
-{"batch": "dg-batch-05", "text": "the claims chart could use the same line treatment", "frame": "chart.line.style", "value": "same", "span": "the same"}
-{"batch": "dg-batch-05", "text": "copy the same line treatment over to the profit chart", "frame": "chart.line.style", "value": "same", "span": "the same"}
-{"batch": "dg-batch-05", "text": "the same treatment for the y axis tick labels on the claims chart", "frame": "chart.tick.format", "value": "same", "span": "the same"}
-{"batch": "dg-batch-05", "text": "the same goes for the markers on the revenue trend", "frame": "chart.marker.size", "value": "same", "span": "the same"}
 {"batch": "dg-batch-05", "text": "make the markers diamonds", "frame": "chart.marker.type", "value": "diamonds", "span": "diamonds"}
 {"batch": "dg-batch-05", "text": "markers diamonds", "frame": "chart.marker.type", "value": "diamonds", "span": "diamonds"}
 {"batch": "dg-batch-05", "text": "can you make the markers diamonds?", "frame": "chart.marker.type", "value": "diamonds", "span": "diamonds"}
@@ -277,7 +257,6 @@
 {"batch": "dg-batch-05", "text": "excuse me — flip the marker interval over to every fifth point", "frame": "chart.marker.interval", "value": "every fifth point", "span": "every fifth point"}
 {"batch": "dg-batch-05", "text": "I'd like the marker interval everyfifth point on the profit chart", "frame": "chart.marker.interval", "value": "every fifth point", "span": "everyfifth point"}
 {"batch": "dg-batch-05", "text": "could you set the marker interval to eviry fifth point?", "frame": "chart.marker.interval", "value": "every fifth point", "span": "eviry fifth point"}
-{"batch": "dg-batch-05", "text": "copy the same marker borders treatment over to the profit chart", "frame": "chart.marker.edge", "value": "same", "span": "the same"}
 {"batch": "dg-batch-05", "text": "the same treatment for the error bars on the department chart", "frame": "chart.errorbar", "value": "same", "span": "the same"}
 {"batch": "dg-batch-05", "text": "the same goes for the error bars on the sales chart", "frame": "chart.errorbar", "value": "same", "span": "the same"}
 {"batch": "dg-batch-05", "text": "pass the same caps on the error bars change on to the sales chart", "frame": "chart.errorbar.cap", "value": "same", "span": "the same"}
@@ -312,12 +291,6 @@
 {"batch": "dg-batch-05", "text": "how about rid error bars?", "frame": "chart.errorbar.colour", "value": "red", "span": "rid"}
 {"batch": "dg-batch-05", "text": "the error bars on the sales chart need to be rd", "frame": "chart.errorbar.colour", "value": "red", "span": "rd"}
 {"batch": "dg-batch-05", "text": "go for red red error bars on the sales chart", "frame": "chart.errorbar.colour", "value": "red", "span": "red red"}
-{"batch": "dg-batch-05", "text": "the same treatment for the colour scheme on the department chart", "frame": "chart.palette", "value": "same", "span": "the same"}
-{"batch": "dg-batch-05", "text": "the same goes for the colour scheme on the sales chart", "frame": "chart.palette", "value": "same", "span": "the same"}
-{"batch": "dg-batch-05", "text": "pass the same bars change on to the orders chart", "frame": "chart.effect", "value": "same", "span": "the same"}
-{"batch": "dg-batch-05", "text": "carry the same bars change over to the department chart", "frame": "chart.bar.width", "value": "same", "span": "the same"}
-{"batch": "dg-batch-05", "text": "the orders chart could use the same bars treatment", "frame": "chart.bar.width", "value": "same", "span": "the same"}
-{"batch": "dg-batch-05", "text": "copy the same bar width treatment over to the sales chart", "frame": "chart.bar.width", "value": "same", "span": "the same"}
 {"batch": "dg-batch-05", "text": "make the bar borders navy", "frame": "chart.bar.edge.colour", "value": "navy", "span": "navy"}
 {"batch": "dg-batch-05", "text": "bar borders navy", "frame": "chart.bar.edge.colour", "value": "navy", "span": "navy"}
 {"batch": "dg-batch-05", "text": "can you make the bar borders navy?", "frame": "chart.bar.edge.colour", "value": "navy", "span": "navy"}
@@ -374,11 +347,6 @@
 {"batch": "dg-batch-05", "text": "one more thing: keep the bar borders thicker", "frame": "chart.bar.edge.width", "value": "thicker", "span": "thicker"}
 {"batch": "dg-batch-05", "text": "bar borders thicker thicker", "frame": "chart.bar.edge.width", "value": "thicker", "span": "thicker thicker"}
 {"batch": "dg-batch-05", "text": "flip the bar borders over to thiccker", "frame": "chart.bar.edge.width", "value": "thicker", "span": "thiccker"}
-{"batch": "dg-batch-05", "text": "pass the same order bars change on to the department chart", "frame": "chart.colour", "value": "same", "span": "the same"}
-{"batch": "dg-batch-05", "text": "do the same on the orders chart — the gaps between the bars there as well", "frame": "chart.bar.gap", "value": "same", "span": "the same"}
-{"batch": "dg-batch-05", "text": "the sales chart could use the same revenue bars treatment", "frame": "chart.horizontal", "value": "same", "span": "the same"}
-{"batch": "dg-batch-05", "text": "then the same on the staff pie — the pie radius too", "frame": "chart.pie.radius", "value": "same", "span": "the same"}
-{"batch": "dg-batch-05", "text": "the same treatment for the pie radius on the budget pie", "frame": "chart.pie.radius", "value": "same", "span": "the same"}
 {"batch": "dg-batch-05", "text": "pull the ops slice out", "frame": "chart.pie.explode", "value": "exploded", "span": "pull the ops slice out"}
 {"batch": "dg-batch-05", "text": "separate the ops slice from the rest", "frame": "chart.pie.explode", "value": "exploded", "span": "separate the ops slice from the rest"}
 {"batch": "dg-batch-05", "text": "explode the ops slice a little", "frame": "chart.pie.explode", "value": "exploded", "span": "explode the ops slice a little"}
@@ -465,7 +433,6 @@
 {"batch": "dg-batch-05", "text": "um, try running a thick grey border along the slice edges", "frame": "chart.pie.edge", "value": "thick grey", "span": "a thick grey border"}
 {"batch": "dg-batch-05", "text": "let's trace slices with e thick grey border", "frame": "chart.pie.edge", "value": "thick grey", "span": "e thick grey border"}
 {"batch": "dg-batch-05", "text": "try running a thick grye border along the slice edges", "frame": "chart.pie.edge", "value": "thick grey", "span": "a thick grye border"}
-{"batch": "dg-batch-05", "text": "copy the same chart legend treatment over to the sales chart", "frame": "chart.legend", "value": "same", "span": "the same"}
 {"batch": "dg-batch-05", "text": "make the bin count ten", "frame": "chart.style.bin", "value": "ten", "span": "ten"}
 {"batch": "dg-batch-05", "text": "bin count ten", "frame": "chart.style.bin", "value": "ten", "span": "ten"}
 {"batch": "dg-batch-05", "text": "can you make the bin count ten?", "frame": "chart.style.bin", "value": "ten", "span": "ten"}
@@ -554,8 +521,6 @@
 {"batch": "dg-batch-05", "text": "give the department chart the same tick numbers treatment", "frame": "chart.tick.precision", "value": "same", "span": "the same"}
 {"batch": "dg-batch-05", "text": "do the same to the percentages on the staff pie", "frame": "chart.pie.precision", "value": "same", "span": "the same"}
 {"batch": "dg-batch-05", "text": "hand the same slice percentages change to the budget pie", "frame": "chart.pie.precision", "value": "same", "span": "the same"}
-{"batch": "dg-batch-05", "text": "the sales chart should match — the same x tick numbers too", "frame": "chart.tick.format", "value": "same", "span": "the same"}
-{"batch": "dg-batch-05", "text": "duplicate the same y tick numbers treatment on the profit chart", "frame": "chart.tick.format", "value": "same", "span": "the same"}
 {"batch": "dg-batch-05", "text": "put the percentage labels nearer the slices", "frame": "chart.pie.pct.dist", "value": "near", "span": "nearer the slices"}
 {"batch": "dg-batch-05", "text": "move the percentage labels nearer the slices", "frame": "chart.pie.pct.dist", "value": "near", "span": "nearer the slices"}
 {"batch": "dg-batch-05", "text": "percentage labels nearer the slices", "frame": "chart.pie.pct.dist", "value": "near", "span": "nearer the slices"}
@@ -584,8 +549,6 @@
 {"batch": "dg-batch-05", "text": "quick one: I want the percentage labels nearer the slices instead", "frame": "chart.pie.pct.dist", "value": "near", "span": "nearer the slices"}
 {"batch": "dg-batch-05", "text": "the percentage labels should sit neaer the slices", "frame": "chart.pie.pct.dist", "value": "near", "span": "the percentage labels"}
 {"batch": "dg-batch-05", "text": "shift the percentage labels nerer the slices", "frame": "chart.pie.pct.dist", "value": "near", "span": "shift the percentage"}
-{"batch": "dg-batch-05", "text": "and the same on the department chart for the x axis", "frame": "chart.xLabel", "value": "same", "span": "the same"}
-{"batch": "dg-batch-05", "text": "do the same to the y axis on the sales chart", "frame": "chart.yLabel", "value": "same", "span": "the same"}
 {"batch": "dg-batch-05", "text": "put the y axis label on the right", "frame": "chart.axislabel.position", "value": "y right", "span": "on the right"}
 {"batch": "dg-batch-05", "text": "move the y axis label on the right", "frame": "chart.axislabel.position", "value": "y right", "span": "on the right"}
 {"batch": "dg-batch-05", "text": "y axis label on the right", "frame": "chart.axislabel.position", "value": "y right", "span": "on the right"}
@@ -784,8 +747,6 @@
 {"batch": "dg-batch-05", "text": "quick one: I want the x and y axes the other way", "frame": "chart.axis.swap", "value": "yes", "span": "I want the x and y axes the other way"}
 {"batch": "dg-batch-05", "text": "the aes should trade places", "frame": "chart.axis.swap", "value": "yes", "span": "the aes should"}
 {"batch": "dg-batch-05", "text": "the axs the other way round", "frame": "chart.axis.swap", "value": "yes", "span": "the axs the"}
-{"batch": "dg-batch-05", "text": "the department chart should match — the same values too", "frame": "chart.show_values", "value": "same", "span": "the same"}
-{"batch": "dg-batch-05", "text": "copy the same values change over to the sales chart", "frame": "chart.show_values", "value": "same", "span": "the same"}
 {"batch": "dg-batch-05", "text": "turn the value labels vertical", "frame": "chart.datalabel.angle", "value": "vertical", "span": "vertical"}
 {"batch": "dg-batch-05", "text": "twist the value labels vertical", "frame": "chart.datalabel.angle", "value": "vertical", "span": "vertical"}
 {"batch": "dg-batch-05", "text": "angle the value labels vertical", "frame": "chart.datalabel.angle", "value": "vertical", "span": "vertical"}
@@ -875,10 +836,6 @@
 {"batch": "dg-batch-05", "text": "ok — keep the negative bars below the zero line", "frame": "chart.negative.bars", "value": "below", "span": "below the zero line"}
 {"batch": "dg-batch-05", "text": "could you set the negative bars to below the zreo line?", "frame": "chart.negative.bars", "value": "below", "span": "could you set"}
 {"batch": "dg-batch-05", "text": "set the negative bars bleow the zero line, that's the tweak", "frame": "chart.negative.bars", "value": "below", "span": "set the negative"}
-{"batch": "dg-batch-05", "text": "duplicate the same bars treatment on the sales chart", "frame": "chart.sort", "value": "same", "span": "the same"}
-{"batch": "dg-batch-05", "text": "and the same bars likewise on the orders chart", "frame": "chart.sort", "value": "same", "span": "the same"}
-{"batch": "dg-batch-05", "text": "give the profit chart the same chart title treatment", "frame": "chart.title.position", "value": "same", "span": "the same"}
-{"batch": "dg-batch-05", "text": "do the same to the chart title on the revenue trend", "frame": "chart.title.position", "value": "same", "span": "the same"}
 {"batch": "dg-batch-05", "text": "rename the legend Sales channels", "frame": "chart.legend.title", "value": "Sales channels", "span": "Sales channels"}
 {"batch": "dg-batch-05", "text": "call the legend Sales channels", "frame": "chart.legend.title", "value": "Sales channels", "span": "Sales channels"}
 {"batch": "dg-batch-05", "text": "the legend should be called Sales channels", "frame": "chart.legend.title", "value": "Sales channels", "span": "Sales channels"}
@@ -937,7 +894,6 @@
 {"batch": "dg-batch-05", "text": "hey — keep the legend smaller", "frame": "chart.legend.size", "value": "small", "span": "smaller"}
 {"batch": "dg-batch-05", "text": "can you make the legend smaller smaller?", "frame": "chart.legend.size", "value": "small", "span": "can you make"}
 {"batch": "dg-batch-05", "text": "keep the legend smallre", "frame": "chart.legend.size", "value": "small", "span": "keep the legend"}
-{"batch": "dg-batch-05", "text": "and the same legend likewise on the department chart", "frame": "chart.legend", "value": "same", "span": "the same"}
 {"batch": "dg-batch-05", "text": "make the claims line a second axis on the right", "frame": "chart.axis.dual", "value": "claims right", "span": "a second axis on the right"}
 {"batch": "dg-batch-05", "text": "claims line a second axis on the right", "frame": "chart.axis.dual", "value": "claims right", "span": "a second axis on the right"}
 {"batch": "dg-batch-05", "text": "can you make the claims line a second axis on the right?", "frame": "chart.axis.dual", "value": "claims right", "span": "a second axis on the right"}
@@ -967,7 +923,6 @@
 {"batch": "dg-batch-05", "text": "ok — set the claims line a second axis on the right, that's the tweak", "frame": "chart.axis.dual", "value": "claims right", "span": "a second axis on the right"}
 {"batch": "dg-batch-05", "text": "keep the claims line e second axis on the right", "frame": "chart.axis.dual", "value": "claims right", "span": "keep the claims"}
 {"batch": "dg-batch-05", "text": "set the claims line asecond axis on the right, that's the tweak", "frame": "chart.axis.dual", "value": "claims right", "span": "set the claims"}
-{"batch": "dg-batch-05", "text": "do the same to the colour scale on the order scatter", "frame": "chart.palette", "value": "same", "span": "the same"}
 {"batch": "dg-batch-05", "text": "make the colour bar horizontal", "frame": "chart.colorbar.orientation", "value": "horizontal", "span": "horizontal"}
 {"batch": "dg-batch-05", "text": "colour bar horizontal", "frame": "chart.colorbar.orientation", "value": "horizontal", "span": "horizontal"}
 {"batch": "dg-batch-05", "text": "can you make the colour bar horizontal?", "frame": "chart.colorbar.orientation", "value": "horizontal", "span": "horizontal"}
@@ -1224,8 +1179,6 @@
 {"batch": "dg-batch-05", "text": "one more thing: Order value by quantity: markers pointed down", "frame": "chart.marker.type", "value": "pointed down", "span": "pointed down"}
 {"batch": "dg-batch-05", "text": "could you set the markers to poined down?", "frame": "chart.marker.type", "value": "pointed down", "span": "could you set"}
 {"batch": "dg-batch-05", "text": "I want the markers pointed dwn on the order scatter", "frame": "chart.marker.type", "value": "pointed down", "span": "I want the"}
-{"batch": "dg-batch-05", "text": "then the same on the department chart — the bars too", "frame": "chart.bar.height", "value": "same", "span": "the same"}
-{"batch": "dg-batch-05", "text": "give the department chart the same bar height treatment", "frame": "chart.bar.height", "value": "same", "span": "the same"}
 {"batch": "dg-batch-05", "text": "make the marker edges orange", "frame": "chart.marker.edge.colour", "value": "orange", "span": "orange"}
 {"batch": "dg-batch-05", "text": "marker edges orange", "frame": "chart.marker.edge.colour", "value": "orange", "span": "orange"}
 {"batch": "dg-batch-05", "text": "can you make the marker edges orange?", "frame": "chart.marker.edge.colour", "value": "orange", "span": "orange"}
@@ -1254,7 +1207,6 @@
 {"batch": "dg-batch-05", "text": "hey — keep the marker edges orange", "frame": "chart.marker.edge.colour", "value": "orange", "span": "orange"}
 {"batch": "dg-batch-05", "text": "keep the marker edges orannge", "frame": "chart.marker.edge.colour", "value": "orange", "span": "keep the marker"}
 {"batch": "dg-batch-05", "text": "I want the marker edges urange on the revenue trend", "frame": "chart.marker.edge.colour", "value": "orange", "span": "I want the"}
-{"batch": "dg-batch-05", "text": "hand the same marker borders change to the sales heatmap", "frame": "chart.marker.edge", "value": "same", "span": "the same"}
 {"batch": "dg-batch-05", "text": "make the error bars thicker", "frame": "chart.errorbar.width", "value": "thicker", "span": "thicker"}
 {"batch": "dg-batch-05", "text": "error bars thicker", "frame": "chart.errorbar.width", "value": "thicker", "span": "thicker"}
 {"batch": "dg-batch-05", "text": "can you make the error bars thicker?", "frame": "chart.errorbar.width", "value": "thicker", "span": "thicker"}
@@ -1340,37 +1292,6 @@
 {"batch": "dg-batch-05", "text": "one more thing: keep the callout arrow heads solid", "frame": "chart.callout.style", "value": "solid", "span": "solid"}
 {"batch": "dg-batch-05", "text": "Order value by quantity: callout arrow heads soolid", "frame": "chart.callout.style", "value": "solid", "span": "Order value by"}
 {"batch": "dg-batch-05", "text": "callout arrow heads sollid", "frame": "chart.callout.style", "value": "solid", "span": "callout arrow heads"}
-{"batch": "dg-batch-05", "text": "give the department chart the same chart type treatment", "frame": "chart.type", "value": "same", "span": "the same"}
-{"batch": "dg-batch-05", "text": "do the same to the chart type on the sales chart", "frame": "chart.type", "value": "same", "span": "the same"}
-{"batch": "dg-batch-05", "text": "make the font a middle size", "frame": "chart.font.size", "value": "medium", "span": "a middle size"}
-{"batch": "dg-batch-05", "text": "font a middle size", "frame": "chart.font.size", "value": "medium", "span": "a middle size"}
-{"batch": "dg-batch-05", "text": "can you make the font a middle size?", "frame": "chart.font.size", "value": "medium", "span": "a middle size"}
-{"batch": "dg-batch-05", "text": "I'd like the font a middle size on the revenue trend", "frame": "chart.font.size", "value": "medium", "span": "a middle size"}
-{"batch": "dg-batch-05", "text": "let's have the font a middle size on the revenue trend", "frame": "chart.font.size", "value": "medium", "span": "a middle size"}
-{"batch": "dg-batch-05", "text": "the font on Revenue trend want to be a middle size", "frame": "chart.font.size", "value": "medium", "span": "a middle size"}
-{"batch": "dg-batch-05", "text": "try the font a middle size", "frame": "chart.font.size", "value": "medium", "span": "a middle size"}
-{"batch": "dg-batch-05", "text": "go for a middle size font on the revenue trend", "frame": "chart.font.size", "value": "medium", "span": "a middle size"}
-{"batch": "dg-batch-05", "text": "could you set the font to a middle size?", "frame": "chart.font.size", "value": "medium", "span": "a middle size"}
-{"batch": "dg-batch-05", "text": "do the font a middle size on the revenue trend", "frame": "chart.font.size", "value": "medium", "span": "a middle size"}
-{"batch": "dg-batch-05", "text": "I want the font a middle size on the revenue trend", "frame": "chart.font.size", "value": "medium", "span": "a middle size"}
-{"batch": "dg-batch-05", "text": "how about a middle size font?", "frame": "chart.font.size", "value": "medium", "span": "a middle size"}
-{"batch": "dg-batch-05", "text": "half the stand-up was grumbling that the numbers were impossible to read from the corridor screen; to settle it, make the font a middle size going forward, and put the y axis on the right", "frame": "chart.font.size", "value": "medium", "span": "a middle size"}
-{"batch": "dg-batch-05", "text": "when the board dials in tomorrow morning the first chart they open is Revenue trend, so for their sake make the font a middle size before the meeting starts — while you're at it, make the markers a bit bigger", "frame": "chart.font.size", "value": "medium", "span": "a middle size"}
-{"batch": "dg-batch-05", "text": "I showed Revenue trend round the team; they didn't argue with the numbers but not with how it reads at a glance, so as a first pass make the font a middle size, then we revisit next week; plus give it the title Revenue by month", "frame": "chart.font.size", "value": "medium", "span": "a middle size"}
-{"batch": "dg-batch-05", "text": "set the font a middle size, that's the tweak, also show both grid lines", "frame": "chart.font.size", "value": "medium", "span": "a middle size"}
-{"batch": "dg-batch-05", "text": "keep the font a middle size. and then put the y axis on the right", "frame": "chart.font.size", "value": "medium", "span": "a middle size"}
-{"batch": "dg-batch-05", "text": "flip the font over to a middle size — while you're at it, drop the legend on the right", "frame": "chart.font.size", "value": "medium", "span": "a middle size"}
-{"batch": "dg-batch-05", "text": "font a middle size. title Revenue by month", "frame": "chart.font.size", "value": "medium", "span": "a middle size"}
-{"batch": "dg-batch-05", "text": "the font on Revenue trend want to be a middle size. markers bigger", "frame": "chart.font.size", "value": "medium", "span": "a middle size"}
-{"batch": "dg-batch-05", "text": "the missing piece: font a middle size on the revenue trend. show grid lines", "frame": "chart.font.size", "value": "medium", "span": "a middle size"}
-{"batch": "dg-batch-05", "text": "hand the same font change to the profit chart", "frame": "chart.font.size", "value": "same", "span": "the same"}
-{"batch": "dg-batch-05", "text": "while you're there, make the font a middle size", "frame": "chart.font.size", "value": "medium", "span": "a middle size"}
-{"batch": "dg-batch-05", "text": "and also Revenue trend: font a middle size", "frame": "chart.font.size", "value": "medium", "span": "a middle size"}
-{"batch": "dg-batch-05", "text": "um, the missing piece: font a middle size on the revenue trend", "frame": "chart.font.size", "value": "medium", "span": "a middle size"}
-{"batch": "dg-batch-05", "text": "sorry to nag, but set the font a middle size, that's the tweak", "frame": "chart.font.size", "value": "medium", "span": "a middle size"}
-{"batch": "dg-batch-05", "text": "I'd like the font amiddle size on the revenue trend", "frame": "chart.font.size", "value": "medium", "span": "I'd like the"}
-{"batch": "dg-batch-05", "text": "the missing piece: font a middle size size on the revenue trend", "frame": "chart.font.size", "value": "medium", "span": "the missing piece:"}
-{"batch": "dg-batch-05", "text": "duplicate the same rent series treatment on the staff pie", "frame": "series.label", "value": "same", "span": "the same"}
 {"batch": "dg-batch-05", "text": "put the line width back to the original size", "frame": "chart.revert", "value": "original", "span": "the original size"}
 {"batch": "dg-batch-05", "text": "change the line width back to the original size", "frame": "chart.revert", "value": "original", "span": "the original size"}
 {"batch": "dg-batch-05", "text": "take the line width back to the original size", "frame": "chart.revert", "value": "original", "span": "the original size"}
@@ -1400,34 +1321,6 @@
 {"batch": "dg-batch-05", "text": "ok — could you take the line width back to the original size?", "frame": "chart.revert", "value": "original", "span": "the original size"}
 {"batch": "dg-batch-05", "text": "could you take the line width back to the original siez?", "frame": "chart.revert", "value": "original", "span": "could you take"}
 {"batch": "dg-batch-05", "text": "restore the line width to the origianl size", "frame": "chart.revert", "value": "original", "span": "restore the line"}
-{"batch": "dg-batch-05", "text": "put the line back to the medium weight", "frame": "chart.line.width", "value": "medium", "span": "the medium weight"}
-{"batch": "dg-batch-05", "text": "change the line back to the medium weight", "frame": "chart.line.width", "value": "medium", "span": "the medium weight"}
-{"batch": "dg-batch-05", "text": "take the line back to the medium weight", "frame": "chart.line.width", "value": "medium", "span": "the medium weight"}
-{"batch": "dg-batch-05", "text": "line back to the medium weight", "frame": "chart.line.width", "value": "medium", "span": "the medium weight"}
-{"batch": "dg-batch-05", "text": "return the line to the medium weight", "frame": "chart.line.width", "value": "medium", "span": "the medium weight"}
-{"batch": "dg-batch-05", "text": "can you put the line back to the medium weight?", "frame": "chart.line.width", "value": "medium", "span": "the medium weight"}
-{"batch": "dg-batch-05", "text": "restore the line to the medium weight", "frame": "chart.line.width", "value": "medium", "span": "the medium weight"}
-{"batch": "dg-batch-05", "text": "let's have the line at the medium weight again", "frame": "chart.line.width", "value": "medium", "span": "the medium weight"}
-{"batch": "dg-batch-05", "text": "the line should be the medium weight again", "frame": "chart.line.width", "value": "medium", "span": "the medium weight"}
-{"batch": "dg-batch-05", "text": "give the line the medium weight once more", "frame": "chart.line.width", "value": "medium", "span": "the medium weight"}
-{"batch": "dg-batch-05", "text": "try the line at the medium weight again", "frame": "chart.line.width", "value": "medium", "span": "the medium weight"}
-{"batch": "dg-batch-05", "text": "we want the line back at the medium weight", "frame": "chart.line.width", "value": "medium", "span": "the medium weight"}
-{"batch": "dg-batch-05", "text": "I keep squinting at Monthly profit every time I paste it into the weekly newsletter; this week, put the line back to the medium weight as well, would you — while you're at it, drop the legend on the right", "frame": "chart.line.width", "value": "medium", "span": "the medium weight"}
-{"batch": "dg-batch-05", "text": "for the monthly ops review on Friday I need the profit chart legible from the back of the conference room, so put the line back to the medium weight before we circulate it wider — while you're at it, make the markers a bit bigger", "frame": "chart.line.width", "value": "medium", "span": "the medium weight"}
-{"batch": "dg-batch-05", "text": "I showed Monthly profit round the team; they didn't argue with the numbers but not with how it reads at a glance, so as a first pass put the line back to the medium weight, then we revisit next week, and put the y axis on the right", "frame": "chart.line.width", "value": "medium", "span": "the medium weight"}
-{"batch": "dg-batch-05", "text": "I'd like the line returned to the medium weight; plus make the font a bit bigger", "frame": "chart.line.width", "value": "medium", "span": "the medium weight"}
-{"batch": "dg-batch-05", "text": "shift the line back to the medium weight, could you also make the markers a bit bigger", "frame": "chart.line.width", "value": "medium", "span": "the medium weight"}
-{"batch": "dg-batch-05", "text": "could you take the line back to the medium weight; plus drop the legend on the right", "frame": "chart.line.width", "value": "medium", "span": "the medium weight"}
-{"batch": "dg-batch-05", "text": "line back to the medium weight. font bigger", "frame": "chart.line.width", "value": "medium", "span": "the medium weight"}
-{"batch": "dg-batch-05", "text": "the line should be the medium weight again. markers bigger", "frame": "chart.line.width", "value": "medium", "span": "the medium weight"}
-{"batch": "dg-batch-05", "text": "Monthly profit: line back to the medium weight. title Monthly P&L", "frame": "chart.line.width", "value": "medium", "span": "the medium weight"}
-{"batch": "dg-batch-05", "text": "give the claims chart the same line treatment", "frame": "chart.line.width", "value": "same", "span": "the same"}
-{"batch": "dg-batch-05", "text": "while you're there, put the line back to the medium weight", "frame": "chart.line.width", "value": "medium", "span": "the medium weight"}
-{"batch": "dg-batch-05", "text": "and also Monthly profit: line back to the medium weight", "frame": "chart.line.width", "value": "medium", "span": "the medium weight"}
-{"batch": "dg-batch-05", "text": "quick one: could you take the line back to the medium weight?", "frame": "chart.line.width", "value": "medium", "span": "the medium weight"}
-{"batch": "dg-batch-05", "text": "ok — I'd like the line returned to the medium weight", "frame": "chart.line.width", "value": "medium", "span": "the medium weight"}
-{"batch": "dg-batch-05", "text": "I'd like the line returned to thi medium weight", "frame": "chart.line.width", "value": "medium", "span": "I'd like the"}
-{"batch": "dg-batch-05", "text": "can you put the line back to themedium weight?", "frame": "chart.line.width", "value": "medium", "span": "can you put"}
 {"batch": "dg-batch-05", "text": "make the grid lines in both directions", "frame": "chart.grid.axis", "value": "both", "span": "in both directions"}
 {"batch": "dg-batch-05", "text": "grid lines in both directions", "frame": "chart.grid.axis", "value": "both", "span": "in both directions"}
 {"batch": "dg-batch-05", "text": "can you make the grid lines in both directions?", "frame": "chart.grid.axis", "value": "both", "span": "in both directions"}
@@ -1484,7 +1377,6 @@
 {"batch": "dg-batch-05", "text": "sorry to nag, but go without connecting line on the revenue trend", "frame": "chart.line.show", "value": "off", "span": "go without connecting line on the revenue trend"}
 {"batch": "dg-batch-05", "text": "could you drop the connecting connecting line altogether?", "frame": "chart.line.show", "value": "off", "span": "could you drop"}
 {"batch": "dg-batch-05", "text": "no connecting line line this time", "frame": "chart.line.show", "value": "off", "span": "no connecting line"}
-{"batch": "dg-batch-05", "text": "carry the same gaps between the bars change over to the orders chart", "frame": "chart.bar.gap", "value": "same", "span": "the same"}
 {"batch": "dg-batch-05", "text": "split the department chart into one chart per region", "frame": "chart.panels", "value": "separate", "span": "one chart per region"}
 {"batch": "dg-batch-05", "text": "break the department chart out into one chart per region", "frame": "chart.panels", "value": "separate", "span": "one chart per region"}
 {"batch": "dg-batch-05", "text": "separate the department chart into one chart per region", "frame": "chart.panels", "value": "separate", "span": "one chart per region"}

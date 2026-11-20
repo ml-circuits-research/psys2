@@ -225,49 +225,49 @@
 | avatar.part.variant | 7,039 |
 | drawing.drawn.colour | 6,394 |
 | calendar.meeting.day | 5,802 |
-| diagram.node.label | 5,476 |
+| diagram.node.label | 5,517 |
 | document.section.content | 5,429 |
-| diagram.node.colour | 5,403 |
+| diagram.node.colour | 5,426 |
 | calendar.meeting.time | 4,656 |
-| diagram.chart.type | 4,612 |
+| diagram.chart.type | 4,617 |
 | drawing.drawn.name | 4,444 |
 | diagram.chart.dimension | 4,064 |
 | diagram.node.ids | 4,040 |
 | calendar.meeting.title | 3,757 |
 | drawing.drawn.size | 3,691 |
-| diagram.link.to | 3,680 |
+| diagram.link.to | 3,684 |
 | calendar.meeting.length | 3,647 |
 | diagram.link.from | 3,566 |
 | calendar.meeting.calendar | 3,465 |
-| diagram.chart.labels | 2,932 |
+| diagram.chart.labels | 2,938 |
 | avatar.part.size | 2,821 |
 | avatar.part.colour | 2,339 |
 | drawing.drawn.ids | 1,660 |
 | drawing.drawn.at | 1,589 |
 | avatar.part.id | 1,562 |
 | diagram.link.ids | 1,471 |
-| diagram.chart.title | 1,448 |
+| diagram.chart.title | 1,456 |
 | document.block.id | 1,429 |
-| diagram.chart.values | 1,389 |
+| diagram.chart.values | 1,391 |
 | diagram.group.id | 1,358 |
 | drawing.drawn.width | 1,240 |
+| diagram.node.size | 1,224 |
 | drawing.part.owner | 1,213 |
-| diagram.node.size | 1,208 |
 | calendar.calendar.name | 1,180 |
 | document.text.about | 1,101 |
+| diagram.node.position | 1,071 |
 | document.text.title | 1,057 |
 | document.text.words | 1,044 |
 | calendar.meeting.id | 1,038 |
 | calendar.meeting.room | 1,007 |
-| diagram.node.position | 987 |
 | document.text.content | 961 |
 | drawing.drawn.height | 950 |
 | diagram.node.n | 906 |
+| drawing.drawn.facing | 837 |
 | avatar.part.ids | 809 |
-| drawing.drawn.facing | 780 |
 | document.section.id | 779 |
 | diagram.node.anchor | 779 |
-| drawing.drawn.label | 725 |
+| drawing.drawn.label | 755 |
 | drawing.part.index | 684 |
 | document.block.name | 683 |
 | drawing.drawn.x | 650 |
@@ -279,8 +279,8 @@
 | diagram.group.ids | 563 |
 | diagram.point.value | 559 |
 | document.block.level | 553 |
-| diagram.node.layout | 542 |
-| … 209 more | 29,208 |
+| diagram.node.layout | 545 |
+| … 217 more | 30,918 |
 
 ## Style (top 40)
 

@@ -3,45 +3,8 @@
 {"batch": "dg-batch-02", "text": "add June at the very end, value 60, so the chart covers the half year", "frame": "point.position", "value": "end", "span": "at the very end"}
 {"batch": "dg-batch-02", "text": "add an April category with 55 and make sure it lands after March", "frame": "point.position", "value": "after March", "span": "after March"}
 {"batch": "dg-batch-02", "text": "give the diamond a nudge clockwise", "frame": "node.rotation", "value": "clockwise", "span": "clockwise"}
-{"batch": "dg-batch-02", "text": "make Order a square one", "frame": "node.size", "value": "square", "span": "square"}
-{"batch": "dg-batch-02", "text": "standard size for the new step", "frame": "node.size", "value": "standard", "span": "standard size"}
 {"batch": "dg-batch-02", "text": "fix the Start font size, it's tiny", "frame": "node.fontSize", "value": "readable", "span": "fix"}
-{"batch": "dg-batch-02", "text": "change the background colour to soft blue", "frame": "diagram.background", "value": "soft blue", "span": "soft blue"}
-{"batch": "dg-batch-02", "text": "put a pale grey background behind the flow", "frame": "diagram.background", "value": "pale grey", "span": "pale grey"}
-{"batch": "dg-batch-02", "text": "wash the background in light beige", "frame": "diagram.background", "value": "light beige", "span": "light beige"}
-{"batch": "dg-batch-02", "text": "I'd like the background a warm cream", "frame": "diagram.background", "value": "warm cream", "span": "warm cream"}
-{"batch": "dg-batch-02", "text": "shade the backdrop pale yellow", "frame": "diagram.background", "value": "pale yellow", "span": "pale yellow"}
-{"batch": "dg-batch-02", "text": "set the background to a deep charcoal with a subtle gradient", "frame": "diagram.background", "value": "deep charcoal", "span": "deep charcoal"}
-{"batch": "dg-batch-02", "text": "background: deep green, shadows under the boxes too", "frame": "diagram.background", "value": "deep green", "span": "deep green"}
-{"batch": "dg-batch-02", "text": "give the whole canvas a parchment white with soft shadow", "frame": "diagram.background", "value": "parchment white", "span": "parchment white"}
-{"batch": "dg-batch-02", "text": "change the background", "frame": "diagram.background", "value": "default", "span": "background"}
-{"batch": "dg-batch-02", "text": "pick a nice background for me", "frame": "diagram.background", "value": "nice", "span": "background"}
-{"batch": "dg-batch-02", "text": "make the backdrop less dark", "frame": "diagram.background", "value": "lighter", "span": "less dark"}
 {"batch": "dg-batch-02", "text": "pastel theme throughout, with a calm blue as the anchor colour", "frame": "diagram.colour", "value": "calm blue", "span": "calm blue"}
-{"batch": "dg-batch-02", "text": "where is the Review step?", "frame": "node.position", "value": "where", "span": "where"}
-{"batch": "dg-batch-02", "text": "where did you put the Collect box?", "frame": "node.position", "value": "where", "span": "where"}
-{"batch": "dg-batch-02", "text": "where on the page is Check?", "frame": "node.position", "value": "where", "span": "where"}
-{"batch": "dg-batch-02", "text": "where does the Start node sit?", "frame": "node.position", "value": "where", "span": "where"}
-{"batch": "dg-batch-02", "text": "I can't find the Publish step — where is it?", "frame": "node.position", "value": "where", "span": "where"}
-{"batch": "dg-batch-02", "text": "where is the diamond in the layout?", "frame": "node.position", "value": "where", "span": "where"}
-{"batch": "dg-batch-02", "text": "which part of the canvas holds the Review step?", "frame": "node.position", "value": "which part", "span": "which part"}
-{"batch": "dg-batch-02", "text": "where's the Review step placed on the canvas?", "frame": "node.position", "value": "where", "span": "where"}
-{"batch": "dg-batch-02", "text": "point me to the Publish oval's position", "frame": "node.position", "value": "position", "span": "position"}
-{"batch": "dg-batch-02", "text": "give me the coordinates of the Collect step", "frame": "node.position", "value": "coordinates", "span": "coordinates"}
-{"batch": "dg-batch-02", "text": "where abouts did the Collect box land?", "frame": "node.position", "value": "where", "span": "where"}
-{"batch": "dg-batch-02", "text": "which corner has the Start oval?", "frame": "node.position", "value": "which corner", "span": "which corner"}
-{"batch": "dg-batch-02", "text": "my screen's scrolled weirdly — where exactly is the Review step on the canvas?", "frame": "node.position", "value": "where exactly", "span": "where exactly"}
-{"batch": "dg-batch-02", "text": "so I can describe it on the call, where has the Start oval ended up?", "frame": "node.position", "value": "where", "span": "where"}
-{"batch": "dg-batch-02", "text": "which quarter of the page is the Collect box in?", "frame": "node.position", "value": "which quarter", "span": "which quarter"}
-{"batch": "dg-batch-02", "text": "where does the Review box sit relative to the rest of the flow — top, middle or bottom?", "frame": "node.position", "value": "where", "span": "where"}
-{"batch": "dg-batch-02", "text": "where's Review?", "frame": "node.position", "value": "where", "span": "where"}
-{"batch": "dg-batch-02", "text": "where's the diamond?", "frame": "node.position", "value": "where", "span": "where"}
-{"batch": "dg-batch-02", "text": "where's Publish?", "frame": "node.position", "value": "where", "span": "where"}
-{"batch": "dg-batch-02", "text": "hey, where is the Review step?", "frame": "node.position", "value": "where", "span": "where"}
-{"batch": "dg-batch-02", "text": "quick one — where's the Collect box?", "frame": "node.position", "value": "where", "span": "where"}
-{"batch": "dg-batch-02", "text": "where in the flow does the Review box sit, roughly?", "frame": "node.position", "value": "where", "span": "where"}
-{"batch": "dg-batch-02", "text": "where si the Review step?", "frame": "node.position", "value": "where", "span": "where"}
-{"batch": "dg-batch-02", "text": "wher did you put the Collect box?", "frame": "node.position", "value": "wher", "span": "wher"}
 {"batch": "dg-batch-02", "text": "I always want the arrows dashed, so set the existing ones now", "frame": "standing-preference", "value": "always", "span": "always"}
 {"batch": "dg-batch-02", "text": "from now on, every arrow should be dashed — do the current ones too", "frame": "standing-preference", "value": "from now on", "span": "from now on"}
 {"batch": "dg-batch-02", "text": "make every arrow dashed, and keep that style whenever you draw new links", "frame": "standing-preference", "value": "whenever you draw new links", "span": "whenever you draw new links"}
@@ -89,3 +52,4 @@
 {"batch": "dg-batch-02", "text": "keep everything pastel please, that's my preference for diagrams", "frame": "preference", "value": "my preference", "span": "my preference"}
 {"batch": "dg-batch-02", "text": "keep it pastel like all my other diagrams, please", "frame": "preference", "value": "all my other diagrams", "span": "all my other diagrams"}
 {"batch": "dg-batch-02", "text": "keep everything pasel, that's my preference for diagrams", "frame": "preference", "value": "my preference", "span": "my preference"}
+{"batch": "dg-batch-02", "text": "i prefer pastel tones, apply that here too", "frame": "preference", "value": "i prefer", "span": "i prefer"}
