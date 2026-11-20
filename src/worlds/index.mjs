@@ -388,10 +388,5 @@ function expandShapes(set, patterns) {
   }
 }
 
-/**
- * Tabs of worlds that declare none in their manifest: the Documents tab is built into the page and the shell (worlds/ui.shell/ops.mjs `TABS.editor`).
- * The one table the engine, the discourse, ASTRA and the page's worker read (architecture review 2026-11-15, A1; it goes when docs.editor declares `tab=editor`).
- */
-export const BUILTIN_TAB = Object.freeze({ 'docs.editor': 'editor' });
-/** The tab id of a world of `set`: its manifest's `tab=`, else the built-in table; null for a world with no tab. */
-export const tabOfWorld = (set, id) => set?.get?.(id)?.tab?.id ?? BUILTIN_TAB[id] ?? null;
+/** The tab id of a world of `set`: its manifest's `tab=` (docs.editor declares `tab=editor` like every editor); null for a world with no tab. */
+export const tabOfWorld = (set, id) => set?.get?.(id)?.tab?.id ?? null;
