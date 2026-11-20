@@ -211,6 +211,14 @@ export async function completeBindings(bindings){
   if(declared)families.push({area:f.area,type:f.type,canonical:f.kind,sourceWire:declared.id,sourceWorld:'app.project',moduleVersion:'1',sourceSnapshotSHA:await digest(EXECUTION_POLICY),
    alignment:{kind:'explicit-raw-family-identity',authority:'interpretation-policy.sop app.interpret.family; execution-policy.sop app.execution.kindBinding'}});
  }
+ // 3b. Declared family operations (interpretation-policy.sop app.interpret.familyOperation): a family the table gives
+ // no operation binds to the declared operation and its source type.
+ for(const d of interpretationPolicy().partial.familyOperations??[]){
+  const at=families.findIndex(f=>f.area===d.area&&f.type===d.type&&!f.nativeFamilyBinding);
+  const p=params.find(x=>x.operation===d.operation);
+  if(at<0||!p)continue;
+  families[at]={...families[at],nativeFamilyBinding:{operation:d.operation,sourceType:p.sourceType,sourcePath:'worlds/app.project/interpretation-policy.sop',boundary:'Family eligibility only (declared family operation).'}};
+ }
  // 4. A family named without a kind word ("make the flower green", "rename Start") denotes any object of its source
  // type: a family without a native family binding takes the one binding its own kind rows share (the export's family
  // rule, applied to families that also have kind words), so an existing target matches by name or label.

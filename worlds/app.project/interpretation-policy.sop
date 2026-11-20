@@ -111,3 +111,6 @@
 @interpret.controlModifier.color app.interpret.controlModifier parameter=color text="coloured"
 @interpret.controlModifier.kind app.interpret.controlModifier parameter=kind text="of kind"
 @interpret.controlModifier.type app.interpret.controlModifier parameter=type text="of type"
+
+# The drawing page (the canvas) is the object of drawing.page.change; "wipe the canvas", "show the IDs for ten seconds".
+@interpret.familyOperation.drawing.page app.interpret.familyOperation area=drawing family=page operation="drawing.page.change"
