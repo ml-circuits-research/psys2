@@ -3,7 +3,7 @@ import {test} from 'node:test';
 import {parse,str} from '../src/vendor/sopworld/sopworld.mjs';
 import {performGesture} from './fixtures/editor-gesture.mjs';
 import {routeNewEngine} from '../src/dialog/reader-routing.mjs';
-import {initialDrawingState} from '../worlds/art.draw/declared-host.mjs';
+import {emptyDrawingState} from '../worlds/art.draw/sop-drawing.mjs';
 
 const query=(operations=['count','members','values','exists'],colour='red')=>`@s std.request.source text="Which houses are red?"
 @r std.request act=inspect mood=ask source=$s ${operations.map((_,i)=>'query=$q'+i).join(' ')}
@@ -18,7 +18,7 @@ test('authored query answers from two real coloured Drawing objects without writ
   nativeFamilyBinding:{operation:'drawing.object.make',sourceType:'art.draw.object'}}],properties:[
   {area:'drawing',key:'drawn.colour',canonical:'colour',hostBinding:{id:'drawing.object.change',sourceType:'art.draw.object',parameter:'color'}}]},
   onWorldActivity:event=>events.push(event)},
-  isession:{state:{[drawing]:initialDrawingState()}},newEngineLastAction:{draw:{label:'previous'}}};
+  isession:{state:{[drawing]:emptyDrawingState()}},newEngineLastAction:{draw:{label:'previous'}}};
  for(const [name,color]of [['Crimson cottage','#ff0000'],['Blue bungalow','#0000ff']]){
   const result=await performGesture(session,{view,operation:'drawing.object.make',args:{kind:'house',name,color}});
   assert.equal(result.ok,true);

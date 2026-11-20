@@ -1,5 +1,5 @@
 // Exact declared-value proofs; no language rules or domain vocabulary.
-import {numberValue} from '../knowledge/values.mjs?v=0196f87026';
+import {numberValue} from '../knowledge/values.mjs?v=e41f2d0f6b';
 import {selectedProbability} from './model-selection-score.mjs?v=ac3ac10191';
 export function classifierAlternative(bank,logits){
  if(!Array.isArray(bank)||!Array.isArray(logits)||logits.length!==bank.length||!logits.length||logits.some(v=>typeof v!=='number'||!Number.isFinite(v)))return {index:null,state:'invalid',probability:null};

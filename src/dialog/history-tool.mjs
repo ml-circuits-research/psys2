@@ -17,7 +17,9 @@ const projected=(owner,state)=>owner?.projectState?owner.projectState(state):sta
 function content(world,state){
  const owner=areaForWorld(world);
  const canonical=owner?.canonicalizeState?owner.canonicalizeState(state):state;
- const copy=structuredClone(projected(owner,canonical));
+ // An area whose runtime is separate compares its carrier (SOP plus runtime) without the view keys; its projection
+ // also derives selection marks, which are not content.
+ const copy=structuredClone(owner?.separateRuntime?canonical:projected(owner,canonical));
  for(const path of [...(owner?.historySelection??[]),...(owner?.historyView??[])]){
   const node=path.slice(0,-1).reduce((value,key)=>value?.[key],copy);
   if(node&&typeof node==='object')delete node[path.at(-1)];

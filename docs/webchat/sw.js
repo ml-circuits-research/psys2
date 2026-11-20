@@ -12,6 +12,18 @@
 //   - Not managed here: the model files (models/**: kept by their own sha256-keyed caches), other origins, range requests, anything not in the manifest (passed through and logged).
 // GENERATION: bump it in the same commit as a release that must start every browser from clean caches; ui/assets.mjs (CACHE_GENERATION) clears the rest once.
 const GENERATION = 1;
+// CROSS-ORIGIN ISOLATION: every same-origin response this worker serves carries COOP/COEP, so the page and its workers are cross-origin isolated (SharedArrayBuffer), which
+// the library's Z3 provider for placement needs (src/dialog/placement-search-provider.mjs). The first visit, before this worker controls the page, is not isolated: placement then
+// uses the internal search; the next start is. COEP `credentialless` keeps cross-origin no-cors subresources working without CORP headers (browsers without it, e.g. Safari,
+// stay non-isolated and use the internal search). Set ISOLATE = false to turn it off; nothing else depends on it.
+const ISOLATE = true;
+const ISOLATION_HEADERS = { 'Cross-Origin-Opener-Policy': 'same-origin', 'Cross-Origin-Embedder-Policy': 'credentialless', 'Cross-Origin-Resource-Policy': 'same-origin' };
+const isolated = (res) => {
+  if (!ISOLATE || !res || res.status < 200 || res.type === 'opaque' || res.type === 'opaqueredirect' || res.headers.get('cross-origin-embedder-policy')) return res;
+  const headers = new Headers(res.headers);
+  for (const [k, v] of Object.entries(ISOLATION_HEADERS)) headers.set(k, v);
+  return new Response(res.body, { status: res.status, statusText: res.statusText, headers });
+};
 const ASSETS = `psys2-assets-g${GENERATION}`, META = `psys2-manifest-g${GENERATION}`;
 const MANIFEST_KEY = '/__psys2/manifest', INDEX_KEY = '/__psys2/index';
 const SELF_MANAGED = /^models(-mt)?\//;
@@ -103,8 +115,8 @@ self.addEventListener('fetch', (e) => {
   const url = new URL(r.url);
   const path = scopePath(url);
   if (path == null) return;                                           // another origin
-  if (r.mode === 'navigate') { e.respondWith(navigation(r)); return; }
+  if (r.mode === 'navigate') { e.respondWith(navigation(r).then(isolated)); return; }
   if (path === 'build-info.json' || path === 'sw.js') { e.respondWith(fetch(r, { cache: 'no-store' })); return; }
   if (SELF_MANAGED.test(path)) return;
-  e.respondWith(assetResponse(r, path, url));
+  e.respondWith(assetResponse(r, path, url).then(isolated));
 });

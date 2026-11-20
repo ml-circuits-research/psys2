@@ -10,9 +10,9 @@
  * `fellBack(path)` says the last read of that path was served by `back`: `facts.mjs` then keeps `unreachable()` true (a miss is "I cannot reach it", not "it does not exist")
  * and asks the primary again after a backoff. Generated data: `scripts/build-bundled-subset.mjs`.
  */
-import { BUNDLED_VALUES, BUNDLED_VALUES_INDEX } from './bundled-values.mjs?v=b1d428cc74';
-import { BUNDLED_OBJECTS, BUNDLED_OBJECTS_INDEX } from './bundled-objects.mjs?v=8c1ef0592f';
-import { BUNDLED_TIME, BUNDLED_TIME_INDEX } from './bundled-time.mjs?v=8550f535da';
+import { BUNDLED_VALUES, BUNDLED_VALUES_INDEX } from './bundled-values.mjs?v=ed285d63b3';
+import { BUNDLED_OBJECTS, BUNDLED_OBJECTS_INDEX } from './bundled-objects.mjs?v=8acca95682';
+import { BUNDLED_TIME, BUNDLED_TIME_INDEX } from './bundled-time.mjs?v=d8f3f7093c';
 const BUNDLED_SHARDS = { ...BUNDLED_VALUES, ...BUNDLED_OBJECTS, ...BUNDLED_TIME }, BUNDLED_INDEX = [...BUNDLED_VALUES_INDEX, ...BUNDLED_OBJECTS_INDEX, ...BUNDLED_TIME_INDEX];
 
 /** index.json and vocab.json of the bundled subset (same format as the catalog's). */

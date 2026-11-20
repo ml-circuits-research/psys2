@@ -53,11 +53,11 @@ function compile(base, state, operation, args) {
   }
   const told = world.tell(serialize([request, ...items]), { factsOnly: true });
   if (!told.ok) return { world, calls: [], views: [], refusal: 'invalid-request' };
-  // An optional argument arrives as app.act.arg call=<label> attr=<key> value=<v> and joins the call with that label.
+  // An optional argument arrives as app.act.arg call=<label> attr=<key> value=<v> and joins the call with that ref.
   const extra = new Map();
   for (const arg of world.ofType('app.act.arg')) (extra.get(read(arg, 'call')) ?? extra.set(read(arg, 'call'), []).get(read(arg, 'call'))).push(arg);
   const calls = world.ofType('app.act.call').map((fact) => {
-    const args = extra.get(read(fact, 'label')) ?? [];
+    const args = extra.get(read(fact, 'ref')) ?? [];
     const attrs = { ...fact.attrs }, seen = new Set();
     for (const arg of args) { const key = read(arg, 'attr'); attrs[key] = [...(seen.has(key) ? attrs[key] : []), ...arg.attrs.value]; seen.add(key); }
     const merged = args.length ? { ...fact, attrs } : fact;
@@ -74,7 +74,7 @@ function run(base, state, kinds, calls) {
   for (const call of calls) {
     const act = read(call, 'act'), args = {};
     for (const [key, values] of Object.entries(call.attrs)) {
-      if (['act', 'order', 'label'].includes(key)) continue;
+      if (['act', 'order', 'ref'].includes(key)) continue;
       const one = (raw) => raw.startsWith('$') ? (made.get(ref(raw)) ?? ref(raw)) : ['kind', 'attr'].includes(key) ? (raw.startsWith('"') ? str(raw) : raw) : raw;
       args[key] = values.length > 1 ? values.map(one) : one(values[0]);
     }
@@ -83,7 +83,7 @@ function run(base, state, kinds, calls) {
       const result = world.act({ action: 'make', args: Object.fromEntries(Object.entries(args).map(([k, v]) => [k, k === 'kind' ? v : Array.isArray(v) ? v.map((x) => world.has(String(x)) ? '$' + x : x) : world.has(String(v)) ? '$' + v : v])) });
       if (!result.ok) return { refusal: result.violations?.[0]?.why ?? 'refused' };
       const created = world.ofType(args.kind).find((fact) => !before.has(fact.id));
-      if (created && call.attrs.label) made.set(read(call, 'label'), created.id);
+      if (created && call.attrs.ref) made.set(read(call, 'ref'), created.id);
     } else {
       // A value naming a thing of the world is a reference, as in make.
       if (args.value !== undefined) args.value = Array.isArray(args.value) ? args.value.map((x) => world.has(String(x)) ? '$' + x : x) : world.has(String(args.value)) ? '$' + args.value : args.value;
@@ -98,7 +98,7 @@ function run(base, state, kinds, calls) {
  * base: a World with the instance schema, knowledge, the tab's act rules and observation projection loaded.
  * kinds: the instance kinds kept as state. toolInterface/operations: the declared native interface.
  */
-export function createSopWorldHost({ base, kinds, state, instanceId, scope, toolInterface, operations, ...limits }) {
+export function createSopWorldHost({ base, kinds, state, instanceId, scope, toolInterface, operations, spatialObservation = false, ...limits }) {
   const declared = toolInterface?.bindings ?? operations;
   const handler = (operation) => (ctx, args) => {
     const s = ctx.state, r = (s.runtime ??= { view: {} }), compiled = compile(base, s, operation, args);
@@ -107,8 +107,12 @@ export function createSopWorldHost({ base, kinds, state, instanceId, scope, tool
     if (!compiled.calls.length) return { status: 'supported', changed: compiled.views.length ? ['view'] : [] };
     const result = run(base, s, kinds, compiled.calls);
     if (result.refusal) return { status: 'missing', code: result.refusal };
+    // What changed: the observed objects that appeared, went or differ (their ids, as tools and focus use them).
+    const before = new Map(view(s).map((object) => [object.id, JSON.stringify(object)]));
     s.sop = result.sop;
-    return { status: 'supported', changed: compiled.calls.map((call) => read(call, 'act')) };
+    const after = new Map(view(s).map((object) => [object.id, JSON.stringify(object)]));
+    const changed = [...new Set([...before.keys(), ...after.keys()])].filter((id) => before.get(id) !== after.get(id));
+    return { status: 'supported', changed: changed.length ? changed : compiled.calls.map((call) => read(call, 'act')) };
   };
   const handlers = Object.fromEntries(declared.map((op) => [op.id, handler(op.id)]));
   // Observed objects: each app.observe.object, with the optional app.observe.input facts of the same id merged in.
@@ -117,14 +121,38 @@ export function createSopWorldHost({ base, kinds, state, instanceId, scope, tool
     for (const fact of world.ofType('app.observe.input')) (extra.get(read(fact, 'id')) ?? extra.set(read(fact, 'id'), []).get(read(fact, 'id'))).push(fact);
     return world.ofType('app.observe.object').map((fact) => {
       const binding = read(fact, 'binding'), input = (key, raw) => ({ binding: binding + '.' + key, key, values: [nativeToken(typed(raw))] });
-      const inputs = Object.keys(fact.attrs).filter((key) => !['id', 'kind', 'sourceType', 'binding'].includes(key)).map((key) => input(key, fact.attrs[key][0]));
+      const inputs = Object.keys(fact.attrs).filter((key) => !['id', 'kind', 'sourceType', 'binding', 'in', 'role'].includes(key)).map((key) => input(key, fact.attrs[key][0]));
       // Several app.observe.input facts with one key are one input with several values.
       for (const row of extra.get(read(fact, 'id')) ?? []) {
         const key = read(row, 'key'), same = inputs.find((entry) => entry.key === key);
         if (same) same.values.push(nativeToken(typed(row.attrs.value[0]))); else inputs.push(input(key, row.attrs.value[0]));
       }
-      return { id: read(fact, 'id'), kind: read(fact, 'kind'), sourceType: read(fact, 'sourceType'), inputs };
+      // `in` and `role` place an observed part under its owner, as structure rather than an input.
+      return { id: read(fact, 'id'), kind: read(fact, 'kind'), sourceType: read(fact, 'sourceType'), ...(fact.attrs.in ? { in: read(fact, 'in'), role: read(fact, 'role') ?? 'member' } : {}), inputs };
     });
   };
-  return createNativeToolHost({ state, instanceId, scope, toolInterface, operations, handlers, view, ...limits });
+  // Geometry for placement, when the rules declare it: app.observe.frame, app.observe.box and app.observe.relation.
+  const spatial = (data) => {
+    const world = worldOf(base, data), [frame] = world.ofType('app.observe.frame');
+    if (!frame) return null;
+    const name = read(frame, 'id'), box = (fact) => ({ entity: read(fact, 'id'), scope: name, min_x: Number(read(fact, 'x0')), min_y: Number(read(fact, 'y0')),
+      max_x: Number(read(fact, 'x1')), max_y: Number(read(fact, 'y1')), evidence: read(fact, 'evidence') ?? 'bounds' });
+    const boxes = [box(frame), ...world.ofType('app.observe.box').map(box)];
+    const relations = world.ofType('app.observe.relation').map((fact) => ({ subject: read(fact, 'subject'), object: read(fact, 'object'), kind: read(fact, 'kind'), scope: name }));
+    const occupants = world.ofType('app.observe.box').filter((fact) => read(fact, 'occupant') === 'true').map((fact) => read(fact, 'id'));
+    return { frame: name, scope: name, container: name, bounds: name, boxes, relations, occupants, unknown: [] };
+  };
+  // The extent a command would give a new object: the command run on an empty copy, measured by the declared box of
+  // what it creates (null when it creates nothing or is refused).
+  const measure = (operation, args) => {
+    const empty = { sop: '', runtime: { view: {} } }, compiled = compile(base, empty, operation, args);
+    if (compiled.refusal || !compiled.calls.length) return null;
+    const result = run(base, empty, kinds, compiled.calls);
+    if (result.refusal) return null;
+    const [made] = worldOf(base, { sop: result.sop, runtime: empty.runtime }).ofType('app.observe.box');
+    if (!made) return null;
+    const width = Number(read(made, 'x1')) - Number(read(made, 'x0')), height = Number(read(made, 'y1')) - Number(read(made, 'y0'));
+    return Number.isFinite(width) && Number.isFinite(height) ? { width, height } : null;
+  };
+  return createNativeToolHost({ state, instanceId, scope, toolInterface, operations, handlers, view, ...(spatialObservation ? { spatial, measure } : {}), ...limits });
 }

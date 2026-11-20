@@ -9,6 +9,7 @@ import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import path from 'node:path';
 import { World, str } from '../src/vendor/sopworld/sopworld.mjs';
 import { catalogFolder, emit, done, stamp } from './lib/generated.mjs';
+import { definesAny } from '../worlds/sop-area.mjs';
 
 const { dir, commit } = await catalogFolder();
 const ROOT = path.join(import.meta.dirname, '..');
@@ -37,6 +38,29 @@ for (const world of readdirSync(path.join(ROOT, 'worlds')).filter((w) => existsS
     for (const shard of shards) files[shard] = readFileSync(path.join(dir, shard), 'utf8');
     (index.worlds?.some((w) => w.id === id) ? kept.worlds : kept.schemas).push({ id, schema: entry.schema, depends: entry.depends ?? [], shards });
     for (const dependency of entry.depends ?? []) pending.push(dependency);
+  }
+  // Lookup worlds (app.area.lookup): the schema, its dependencies and the shards whose index keys name a value the
+  // area offers by choice (the facts of each app.area.choice type, read from the area's rule files) or the lookup names
+  // as a fixed value (value=...).
+  const ruleText = declaration.ofType('app.area.rules').map((f) => readFileSync(path.join(ROOT, 'worlds', world, read(f, 'file')[0]), 'utf8')).join('\n');
+  const offered = new Set(declaration.ofType('app.area.choice').flatMap((choice) => {
+    const [type] = read(choice, 'type'), [key] = read(choice, 'key');
+    return [...ruleText.matchAll(new RegExp('^@\\S+ ' + type.replace(/\./g, '\\.') + ' .*?\\b' + key + '=("[^"]*"|\\S+)', 'gm'))].map((m) => m[1].replace(/^"|"$/g, ''));
+  }));
+  for (const lookup of declaration.ofType('app.area.lookup')) {
+    const pendingLookup = [...read(lookup, 'world')];
+    while (pendingLookup.length) {
+      const id = pendingLookup.pop(), entry = entries.get(id);
+      if (!entry || seen.has(id)) continue;
+      seen.add(id);
+      files[entry.schema] = readFileSync(path.join(dir, entry.schema), 'utf8');
+      const wanted = new Set([...offered, ...read(lookup, 'value')]);
+      const shards = read(lookup, 'world').includes(id) ? (entry.shards ?? []).filter((s) => typeof s !== 'string' && (s.keys ?? []).some((k) => wanted.has(k))).map((s) => s.path)
+        .filter((p) => definesAny(readFileSync(path.join(dir, p), 'utf8'), entry.indexedFields, wanted)) : [];
+      for (const shard of shards) files[shard] = readFileSync(path.join(dir, shard), 'utf8');
+      (index.worlds?.some((w) => w.id === id) ? kept.worlds : kept.schemas).push({ id, schema: entry.schema, depends: entry.depends ?? [], indexedFields: entry.indexedFields, shards: (entry.shards ?? []).filter((s) => shards.includes(typeof s === 'string' ? s : s.path)) });
+      for (const dependency of entry.depends ?? []) pendingLookup.push(dependency);
+    }
   }
   files['index.json'] = JSON.stringify(kept);
   areas[world] = files;

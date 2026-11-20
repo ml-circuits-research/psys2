@@ -1,8 +1,7 @@
 // Actual application state only. No request annotations or invented semantic types.
 import {observedReaderContext} from './native-reader-context.mjs';
 import {isAuthoredRequest} from './authored-request-tool.mjs';
-import {createCanonicalDrawingHost} from '../../worlds/art.draw/declared-host.mjs';
-import {DRAWING_STATE_INTERFACE} from '../../worlds/art.draw/canonical-state.mjs';
+import {createDrawingArea,canonicalDrawingArea,projectDrawingArea,drawingAreaStateWorld} from '../../worlds/art.draw/sop-drawing.mjs';
 import {createCanonicalDiagramHost,DIAGRAM_STATE_INTERFACE} from '../../worlds/diagram.sketch/declared-host.mjs';
 import {createDocumentHost,DOCUMENT_STATE_INTERFACE} from '../../worlds/docs.editor/declared-host.mjs';
 import {createAvatarArea,canonicalAvatarArea,projectAvatarArea,avatarAreaStateWorld} from '../../worlds/ui.avatar/sop-avatar.mjs';
@@ -10,8 +9,8 @@ import {createCalendarArea,canonicalCalendarArea,projectCalendarArea,calendarAre
 export const NATIVE_AREAS={
  avatar:{area:'drawing',world:'ui.avatar',create:createAvatarArea,prepare:createAvatarArea,canonicalizeState:canonicalAvatarArea,projectState:projectAvatarArea,
   stateWorld:avatarAreaStateWorld,separateRuntime:true,historySelection:[['runtime','view','selected']],historyView:[['runtime','view','ids']]},
- draw:{area:'drawing',world:'art.draw',create:createCanonicalDrawingHost,...DRAWING_STATE_INTERFACE,
-  historySelection:[['selected'],['selectedIds'],['selectedPart']],historyView:[['idDisplay']]},
+ draw:{area:'drawing',world:'art.draw',create:createDrawingArea,prepare:createDrawingArea,canonicalizeState:canonicalDrawingArea,projectState:projectDrawingArea,
+  stateWorld:drawingAreaStateWorld,separateRuntime:true,historySelection:[['runtime','view','selected'],['runtime','view','part']],historyView:[['runtime','view','ids']]},
  diagram:{area:'diagram',world:'diagram.sketch',create:createCanonicalDiagramHost,...DIAGRAM_STATE_INTERFACE,historySelection:[['selected'],['chartTools','active']],historyView:[['idDisplay']]},
  editor:{area:'document',world:'docs.editor',create:createDocumentHost,...DOCUMENT_STATE_INTERFACE,historySelection:[['selection']]},
  calendar:{area:'calendar',world:'time.calendar',create:createCalendarArea,prepare:createCalendarArea,canonicalizeState:canonicalCalendarArea,projectState:projectCalendarArea,

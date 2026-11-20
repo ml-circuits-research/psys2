@@ -1,7 +1,7 @@
 // Retain an observed equality effect as a replayable SOP assessment.
-import { World, assessPropertyChange, parse, quote, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=f63db0e6f1';
+import { World, assessPropertyChange, parse, quote, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=d7baa85342';
 import { budget } from './budget.mjs?v=00bce6e369';
-import SOURCE from './new-engine-source.mjs?v=a6e490571b';
+import SOURCE from './new-engine-source.mjs?v=958dfc6231';
 
 const attr = (wire, key) => wire?.attrs[key]?.[0];
 const fact = (id, type, fields) => ({ id, type, attrs: Object.fromEntries(Object.entries(fields).map(([key, value]) => [key, [].concat(value)])) });

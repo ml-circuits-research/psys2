@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-import { readNativeToolInterface } from '../native-tool-interface.mjs?v=e95afa438f';
-import NATIVE_INTERFACE from './native-interface-source.mjs?v=5482776709';
+import { readNativeToolInterface } from '../native-tool-interface.mjs?v=3d7a7fb301';
+import NATIVE_INTERFACE from './native-interface-source.mjs?v=34931ba191';
 import {budget} from '../../lib/dialog/budget.mjs?v=00bce6e369';
-import {canonicalDrawingState,toNativeDrawingState} from './canonical-state.mjs?v=3d2c64cc75';
+import {canonicalDrawingState,toNativeDrawingState} from './canonical-state.mjs?v=e08b2394c6';
 import {spatialBox} from '../native-spatial-observation.mjs?v=ced85b9a29';
-import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs?v=7ebbcaef36';
-import {initialState,makeObject,remember,undoStep,redoStep,newPage} from './board.mjs?v=9e412af6c8';
-import {drawingPartHandlers,drawingPartsOf,makeKnowledgeDrawing,restoreMembers,drawingObjectsOf,findDrawingObject,replaceDrawingObject,independentDrawingIds,colourDrawingObject} from './part-tools.mjs?v=8acf681325';
-import {KINDS,W,H,bbox,objectMatrix} from './scene.mjs?v=d4b9555dfa';
+import {createNativeToolHost,nativeToken} from '../native-tool-host.mjs?v=88ae92bf04';
+import {initialState,makeObject,remember,undoStep,redoStep,newPage} from './board.mjs?v=e823eaa3d8';
+import {drawingPartHandlers,drawingPartsOf,makeKnowledgeDrawing,restoreMembers,drawingObjectsOf,findDrawingObject,replaceDrawingObject,independentDrawingIds,colourDrawingObject} from './part-tools.mjs?v=17ab2483bf';
+import {KINDS,W,H,bbox,objectMatrix} from './scene.mjs?v=181b35f116';
 export {initialState as initialDrawingState};
 export const initialCanonicalDrawingState=()=>canonicalDrawingState(initialState());
 const toolInterface = readNativeToolInterface(NATIVE_INTERFACE).realize({ 'drawing.kinds': Object.keys(KINDS) });

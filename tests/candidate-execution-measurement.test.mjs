@@ -1,19 +1,19 @@
 import test from 'node:test';import assert from 'node:assert/strict';
 import {measureCandidateExecution} from '../scripts/lib/candidate-execution-measurement.mjs';
 import {measureCandidateExecutionNode} from '../scripts/lib/candidate-executor-identity.mjs';
-import {toNativeDrawingState} from '../worlds/art.draw/canonical-state.mjs';
-import {initialState,makeObject} from '../worlds/art.draw/board.mjs';
+import {drawingObjects,drawingState} from './drawing-state.mjs';
 const text='fixture source';
 const candidate={request:'r',wires:`@s std.request.source text="${text}"\n@r std.request act=change mood=do source=$s root=$c\n@t std.request.target request=$r mode=existing kind=circle\n@c std.request.constraint request=$r target=$t concept=colour operator=eq value=purple character=requirement polarity=positive`};
-const fixture=()=>{const board=initialState();board.objects=[{...makeObject(board,'circle'),color:'red'}];return {state:{'art.draw':board,'ui.shell':{activeTab:'draw'}},candidate,text,view:'draw',identity:{model:'synthetic-graph-fixture',executor:'actual-import'},expectation:{status:'unreviewed'}};};
+const oneCircle=await drawingState([{kind:'circle',color:'red'}]),twoCircles=await drawingState([{kind:'circle',color:'red'},{kind:'circle'}]);
+const fixture=(board=oneCircle)=>{board=structuredClone(board);return {state:{'art.draw':board,'ui.shell':{activeTab:'draw'}},candidate,text,view:'draw',identity:{model:'synthetic-graph-fixture',executor:'actual-import'},expectation:{status:'unreviewed'}};};
 test('actual detached executor changes only the fresh state and retains typed observation evidence without correctness',async()=>{
  const input=fixture(),original=structuredClone(input);const out=await measureCandidateExecution(input);
- assert.equal(out.status,'observed');assert.equal(out.reply.trace.assessment,'changed');assert.equal(toNativeDrawingState(out.after['art.draw']).objects[0].color,'#800080');assert.equal(out.receipt.status,'changed');assert.equal(out.journal.length,1);assert.equal(out.originalUnchanged,true);assert.deepEqual(input,original);assert.equal(out.intent.correct,null);assert.equal(out.admission.eligible,false);
+ assert.equal(out.status,'observed');assert.equal(out.reply.trace.assessment,'changed');assert.equal(drawingObjects(out.after['art.draw'])[0].color,'#800080');assert.equal(out.receipt.status,'changed');assert.equal(out.journal.length,1);assert.equal(out.originalUnchanged,true);assert.deepEqual(input,original);assert.equal(out.intent.correct,null);assert.equal(out.admission.eligible,false);
  const again=await measureCandidateExecution(input);assert.equal(again.reply.trace.assessment,'changed');assert.notEqual(again.journal[0].invocation,out.journal[0].invocation);
- toNativeDrawingState(out.after['art.draw']).objects[0].color='mutated evidence';assert.deepEqual(input,original);
+ out.after['art.draw'].sop=out.after['art.draw'].sop.replace(/colour=\S+/,'colour=mutated');assert.deepEqual(input,original);
 });
 test('unsupported area, ambiguity and malformed graphs retain no-effect refusals rather than correct labels',async()=>{
- for(const change of [x=>x.view='calendar',x=>x.state['art.draw'].objects.push(makeObject(x.state['art.draw'],'circle')),x=>x.candidate={request:'r',wires:'not a graph'}]){
+ for(const change of [x=>x.view='calendar',x=>x.state['art.draw']=structuredClone(twoCircles),x=>x.candidate={request:'r',wires:'not a graph'}]){
   const input=fixture();change(input);const out=await measureCandidateExecution(input);assert.equal(out.executed,true);assert.deepEqual(out.reply.statuses,['unsupported']);assert.equal(out.stateChanged,false);assert.equal(out.intent.correct,null);assert.equal(out.originalUnchanged,true);
  }
 });

@@ -2,12 +2,12 @@ import assert from 'node:assert/strict';
 import {test} from 'node:test';
 import {parse} from '../src/vendor/sopworld/sopworld.mjs';
 import {projectQueryAction,recoverQueryProjection} from '../src/dialog/project-query-action.mjs';
-import {initialDrawingState} from '../worlds/art.draw/declared-host.mjs';
+import {emptyDrawingState} from '../worlds/art.draw/sop-drawing.mjs';
 
 const bindings={kinds:[{area:'drawing',type:'drawn',lemma:'house',canonical:'fixture.house',nativeFamilyBinding:{operation:'drawing.object.make'}}],
  properties:[{area:'drawing',key:'drawn.colour',canonical:'colour'}]};
 const options={view:'draw',bindings};
-const session={isession:{state:{'art.draw':initialDrawingState()}}};
+const session={isession:{state:{'art.draw':emptyDrawingState()}}};
 const proposalFor=(text,request,ranges)=>({failures:[{reason:'requires-declared-query-projection'}],raw:{source:{text},requestCount:1,
  requests:[{act:'answer',mood:'ask',constraints:[],...request}],
  ranges:ranges.map(([path,range])=>({path:['requests','0',...path],range}))}});

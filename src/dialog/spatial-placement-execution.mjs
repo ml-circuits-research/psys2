@@ -8,6 +8,7 @@ import {identityRegistryFor,instanceIdFor} from './instance-identity.mjs';
 import {nativeKindCandidates} from './native-binding-candidates.mjs';
 import {invokeObservedNativeTool} from './native-tool-activity.mjs';
 import {describeNativeControl,verifyNativeControlEffect} from './native-control-intent.mjs';
+import {placementSearchProvider,placementSearchStatus} from './placement-search-provider.mjs';
 
 const read = (row,key) => row?.attrs[key]?.length===1 ? str(row.attrs[key][0]) : undefined;
 const ref = (row,key) => {
@@ -60,9 +61,13 @@ export async function executeSpatialPlacement(session,candidate,{bindings,view}=
   const admitted=context.tell(native.configuration+'\n'+profile,{factsOnly:true});
   if(!admitted.ok)return fail('spatial-context-rejected',{diagnostics:admitted.violations});
   activity(session,area,{phase:'start',label:'Compile placement from observed geometry',instance:observation.instanceId,revision,frame,scope,participants:boxesForTrace(spatial),profile});
-  sop=context.compileRequest(candidate.wires+'\n'+native.context);
+  // Z3 solves the placement problem where the page can run it (loaded on the first one); otherwise the call
+  // stays synchronous with the library's internal search.
+  const provider=placementSearchProvider();
+  sop=provider?await context.compileRequest(candidate.wires+'\n'+native.context,{provider}):context.compileRequest(candidate.wires+'\n'+native.context);
   proposal=parse(sop).find(wire=>['std.placement.result','std.compile.result'].includes(wire.type));
-  activity(session,area,{phase:'end',label:'Compiled placement from observed geometry',durationMs:performance.now()-started,status:read(proposal,'status'),sop});
+  activity(session,area,{phase:'end',label:'Compiled placement from observed geometry',durationMs:performance.now()-started,status:read(proposal,'status'),
+   provider:read(proposal,'provider'),search:provider?placementSearchStatus():undefined,sop});
  }catch(error){
   if(error?.name==='BudgetExceeded'||error?.name==='TurnAborted')throw error;
   return fail('spatial-compilation-error',{error:String(error?.message??error)});

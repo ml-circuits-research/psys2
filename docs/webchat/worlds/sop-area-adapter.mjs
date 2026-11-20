@@ -2,8 +2,8 @@
 // A SOP area's place in the application, for any tab: the state carrier, host creation with the application's
 // catalog (or the generated offline subset), the view projection and the persisted instance world. Nothing here
 // names a tab; each tab passes its world id, its native interface, its area files and its offline subset.
-import {World, parse, serialize} from '../lib/vendor/sopworld/sopworld.mjs?v=f63db0e6f1';
-import {createSopArea, initialSopAreaState, projectSopArea} from './sop-area.mjs?v=b187877fc5';
+import {World, parse, serialize} from '../lib/vendor/sopworld/sopworld.mjs?v=d7baa85342';
+import {createSopArea, initialSopAreaState, projectSopArea} from './sop-area.mjs?v=55af10d6c2';
 
 export const emptyAreaState = () => ({ sop: '', runtime: { view: {} } });
 
@@ -20,12 +20,15 @@ export function sopAreaAdapter({ world, interfaceSource, sources, offline, insta
   const loader = { readFile: async (owner, file) => sources[owner + '/' + file] ?? null };
   const readOffline = async (file) => { if (!Object.hasOwn(offline, file)) throw Error('not-bundled:' + file); return offline[file]; };
   let readCatalog = null;
-  async function create({ state = emptyAreaState(), instanceId = world + '.prepared', identityRegistry, knowledge } = {}) {
+  async function create({ state = emptyAreaState(), instanceId = world + '.prepared', identityRegistry, knowledge, args } = {}) {
     // The application's catalog when it has one, else the offline subset of the pinned catalog.
     if (typeof knowledge?.readText === 'function') readCatalog = (file) => knowledge.readText(file);
+    // A state that is not this area's carrier is refused, never read as an empty area.
+    if (state === null || typeof state !== 'object' || typeof (state.sop ?? '') !== 'string' || Object.keys(state).some((key) => !['sop', 'runtime'].includes(key))) throw Error('invalid-area-state');
+    if (state.sop) stateWorld(state);
     const options = { world, interfaceSource, loader, readCatalog: readCatalog ?? readOffline };
     if (!state.sop) Object.assign(state, await initialSopAreaState(options));
-    return createSopArea({ ...options, state, instanceId, identityRegistry });
+    return createSopArea({ ...options, state, instanceId, identityRegistry, args });
   }
   // The instance schema's declarations (types, slots, constraints); its own data facts are knowledge, not state.
   const declarations = serialize(parse(offline[instance + '/schema.sop']).filter((wire) =>

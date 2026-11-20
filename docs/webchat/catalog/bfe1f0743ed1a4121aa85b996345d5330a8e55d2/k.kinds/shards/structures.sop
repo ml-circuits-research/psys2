@@ -1,4 +1,4 @@
-# k.kinds/shards/structures: the structures of worlds, for alignment: 8 structures with their roles (direction, cardinality, required) and 6 constraints, and how 27 worlds are each (49 forms, 228 roles cast to their types, keys and acts).
+# k.kinds/shards/structures: the structures of worlds, for alignment: 8 structures with their roles (direction, cardinality, required) and 6 constraints, and how 28 worlds are each (50 forms, 230 roles cast to their types, keys and acts).
 # sources: hand-core 1 (hand-written in this repository: tools/structures-core.mjs)
 # license: CC0-1.0
 # script: tools/structures-core.mjs
@@ -75,6 +75,9 @@
 @k.kinds.cast.w.text.sequence.end.w_text_span_end k.kinds.cast world=w.text structure=sequence role=end filler=w.text.span.end as=key core.source="hand-core 1"
 @k.kinds.cast.w.text.sequence.sequence.w_text_source k.kinds.cast world=w.text structure=sequence role=sequence filler=w.text.source as=type core.source="hand-core 1"
 @k.kinds.cast.w.text.sequence.element_of.w_text_span_source k.kinds.cast world=w.text structure=sequence role=element_of filler=w.text.span.source as=key core.source="hand-core 1"
+@k.kinds.form.w.drawing.whole_with_parts k.kinds.form world=w.drawing structure="whole with parts" about="a drawing whose placed objects are its parts" core.source="hand-core 1"
+@k.kinds.cast.w.drawing.whole_with_parts.whole.w_drawing_group k.kinds.cast world=w.drawing structure="whole with parts" role=whole filler=w.drawing.group as=type core.source="hand-core 1"
+@k.kinds.cast.w.drawing.whole_with_parts.part.w_drawing_object k.kinds.cast world=w.drawing structure="whole with parts" role=part filler=w.drawing.object as=type core.source="hand-core 1"
 @k.kinds.form.w.meetings.sequence k.kinds.form world=w.meetings structure=sequence about="meetings in order of their start times, on calendars and in rooms" core.source="hand-core 1"
 @k.kinds.cast.w.meetings.sequence.element.w_meetings_meeting k.kinds.cast world=w.meetings structure=sequence role=element filler=w.meetings.meeting as=type core.source="hand-core 1"
 @k.kinds.cast.w.meetings.sequence.position.w_meetings_meeting_start k.kinds.cast world=w.meetings structure=sequence role=position filler=w.meetings.meeting.start as=key core.source="hand-core 1"

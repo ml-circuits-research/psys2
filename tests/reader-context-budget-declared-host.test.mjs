@@ -3,15 +3,17 @@ import test from'node:test';import assert from'node:assert/strict';
 import{createAppReaderContext}from'../src/dialog/app-reader-context.mjs';
 import{observedReaderContext}from'../src/dialog/native-reader-context.mjs';
 import{fitKeyReaderContext}from'../src/dialog/key-reader-inference.mjs';
-import{createDrawingHost,initialDrawingState}from'../worlds/art.draw/declared-host.mjs';
-const board=()=>{const state=initialDrawingState(),host=createDrawingHost({state,instanceId:'context-hierarchy-test'});for(const kind of ['house','car','tree'])invokeToolCommand(host,{invocation:kind,expectedVersion:host.observe().version,operation:'drawing.object.make',args:{kind,name:kind}});return {state,host};};
-test('model context ranks actual roots and requested descendants while full observation and legacy identity indexing remain complete',async()=>{
- const {state,host}=board(),observation=host.observe(),before=structuredClone(observation);let retained;
+import{createDrawingArea,emptyDrawingState}from'../worlds/art.draw/sop-drawing.mjs';
+const board=async()=>{const state=emptyDrawingState(),host=await createDrawingArea({state});for(const kind of ['house','car','tree'])invokeToolCommand(host,{invocation:kind,expectedVersion:host.observe().version,operation:'drawing.object.make',args:{kind,name:kind}});return {state,host};};
+// The Drawing SOP area observes each drawn k.objects part under its object (role = the part name).
+test('model context ranks actual roots and requested descendants while full observation and legacy identity indexing remain complete',
+ async()=>{
+ const {state,host}=await board(),observation=host.observe(),before=structuredClone(observation);let retained;
  const read=createAppReaderContext({getState:()=>({'ui.shell':{activeTab:'draw'},'art.draw':state}),getInstanceId:()=>observation.instanceId,onObservation:value=>retained=value});
  const compact=await read('Add another object');assert.equal(compact.context.existing.length,3);assert.deepEqual(new Set(compact.context.existing.map(row=>row.kind)),new Set(['house','car','tree']));assert.ok(retained.observation.objects.length>3);assert.ok(retained.contextSelection.omittedDescendants>0);
  const full=observedReaderContext('drawing',observation);assert.equal(full.context.existing.length,observation.objects.length);assert.deepEqual(observation,before);
  const roof=observation.objects.find(object=>object.role==='roof');assert.ok(roof);const referenced=await read('Move the roof');assert.ok(retained.contextSelection.rankedIds.includes(roof.id));assert.ok(referenced.context.existing.some(row=>row.name==='roof'));
- const index=JSON.parse(roof.id)[2];state.runtime.selectedPart={id:roof.in,index};const focused=await read('Move it');assert.ok(retained.contextSelection.rankedIds.includes(roof.id));assert.ok(focused.context.existing.length>=3,'other root alternatives remain available');
+ state.runtime.view.selected=roof.id;const focused=await read('Move it');assert.ok(retained.contextSelection.rankedIds.includes(roof.id));assert.ok(focused.context.existing.length>=3,'other root alternatives remain available');
 });
 const fakeTokenizer=seen=>async([text],options)=>{seen.push(text);const count=(text+' '+options.text_pair[0]).match(/[\p{L}\p{N}_]+|[^\s]/gu).length+3;return {input_ids:{dims:[1,count],data:BigInt64Array.from(Array(count).fill(1),BigInt)},attention_mask:{dims:[1,count],data:BigInt64Array.from(Array(count).fill(1),BigInt)}};};
 test('actual context token fitting removes optional context rather than shortening the request or mutating native context',async()=>{

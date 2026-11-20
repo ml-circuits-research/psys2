@@ -6,8 +6,7 @@ import{inspectDeclaredExecutionSourceWorld,declaredPropertyValues}from'../src/di
 import{serialize,World,parse,SCHEMA_TYPES}from'../src/vendor/sopworld/sopworld.mjs';
 import SOURCE from'../src/dialog/new-engine-source.mjs';
 import{CATALOG_PIN}from'../src/knowledge/catalog-pin.mjs';
-import{makeObject}from'../worlds/art.draw/board.mjs';
-import{initialDrawingState}from'../worlds/art.draw/declared-host.mjs';
+import{drawingState}from'./drawing-state.mjs';
 const lookup=(graph,id)=>graph.nodes.find(node=>node.id===id);
 test('inspection shows exact available pinned snapshot without initializing the lazy source World',async()=>{
  assert.equal(inspectDeclaredExecutionSourceWorld().loaded,false);
@@ -51,7 +50,7 @@ test('actual declared property lookup initializes only its owning cache and insp
  before.snapshot.log[0].wires[0].id='inspection-mutation';assert.notEqual(inspectDeclaredExecutionSourceWorld().snapshot.log[0].wires[0].id,'inspection-mutation');
 });
 test('actual executed journal evidence becomes an inspectable SOP World with real standard module sources',async()=>{
- const text='Change the colour of the circle to purple.',state=initialDrawingState();state.objects=[{...makeObject(state,'circle'),color:'red'}];
+ const text='Change the colour of the circle to purple.',state=await drawingState([{kind:'circle',color:'red'}]);
  const session={isession:{state:{'ui.shell':{activeTab:'draw'},'art.draw':state}},newEngineJournal:[]};
  const candidate={request:'r',wires:'@source std.request.source text='+JSON.stringify(text)+'\n@r std.request act=change mood=do source=$source root=$condition\n@target std.request.target request=$r mode=existing kind=circle\n@condition std.request.constraint request=$r target=$target concept=colour operator=eq value=purple character=requirement polarity=positive'};
  const result=await executeRequestCandidate(session,candidate,text,{view:'draw',language:'en',invocation:'actual-inspection-operation'});assert.equal(result.trace.assessment,'changed');

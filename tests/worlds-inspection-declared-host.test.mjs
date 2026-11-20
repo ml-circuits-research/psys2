@@ -1,4 +1,3 @@
-import {toNativeDrawingState} from '../worlds/art.draw/canonical-state.mjs';
 import test from'node:test';import assert from'node:assert/strict';
 import{inspectWorldsRuntime}from'../src/dialog/worlds-inspection.mjs';
 test('architecture inspector exposes exact held files, actual state structures and labeled declarations without claiming reasoning',()=>{
@@ -28,13 +27,13 @@ test('architecture inspector exposes exact held files, actual state structures a
  const ids=new Set(result.nodes.map(n=>n.id));for(const edge of result.edges){assert.ok(ids.has(edge.from),edge.from);assert.ok(ids.has(edge.to),edge.to);}
 });
 import{performGesture}from'./fixtures/editor-gesture.mjs';
-import{initialDrawingState}from'../worlds/art.draw/declared-host.mjs';
+import{emptyDrawingState as initialDrawingState}from'../worlds/art.draw/sop-drawing.mjs';
 test('native execution emits actual host invocation boundaries and observer exceptions cannot alter effects',async()=>{
  const events=[],session={isession:{state:{'art.draw':initialDrawingState()}},engine:{onWorldActivity:event=>events.push(event)}};
  const result=await performGesture(session,{view:'draw',operation:'drawing.ids.show',args:{mode:'always'}});
  assert.equal(result.ok,true);assert.deepEqual(events.map(e=>e.phase),['start','end']);assert.equal(events[0].invocation,events[1].invocation);assert.equal(events[0].args.mode,'always');assert.equal(events[0].args.duration,4000);assert.ok(events[1].durationMs>=0);assert.equal(events[1].result.status,'changed');assert.equal(events[1].status,'changed');assert.equal(events[0].operation,'drawing.ids.show');assert.ok(events[0].nodeIds.includes('interpreter:art.draw'));
  session.engine.onWorldActivity=()=>{throw Error('broken observer');};
- assert.equal((await performGesture(session,{view:'draw',operation:'drawing.ids.show',args:{mode:'off'}})).ok,true);assert.equal(toNativeDrawingState(session.isession.state['art.draw']).idDisplay.mode,'off');
+ assert.equal((await performGesture(session,{view:'draw',operation:'drawing.ids.show',args:{mode:'off'}})).ok,true);assert.equal(session.isession.state['art.draw'].runtime.view.ids,'off');
 });
 
 import{inspectSchemaSource}from'../src/dialog/worlds-inspection.mjs';

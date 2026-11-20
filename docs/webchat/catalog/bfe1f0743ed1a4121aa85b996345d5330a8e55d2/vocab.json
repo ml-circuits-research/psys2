@@ -24700,6 +24700,7 @@
   "k.objects/shards/things-2",
   "k.words/shards/ca",
   "k.words/shards/frequency-c",
+  "w.drawing/schema.sop",
   "w.picture/schema.sop"
  ],
  "canvass": [
@@ -31189,6 +31190,7 @@
   "k.kinds/shards/relations-geo",
   "k.words/shards/co-1",
   "k.words/shards/frequency-c",
+  "w.drawing/schema.sop",
   "w.meetings/schema.sop",
   "w.text/schema.sop"
  ],
@@ -31670,6 +31672,7 @@
   "k.words/shards/frequency-c",
   "w.chart/schema.sop",
   "w.diagram/schema.sop",
+  "w.drawing/schema.sop",
   "w.face/schema.sop",
   "w.lang.en/shards/hand-grammar",
   "w.map/schema.sop",
@@ -32382,7 +32385,8 @@
  ],
  "component": [
   "k.words/shards/co-1",
-  "k.words/shards/frequency-c"
+  "k.words/shards/frequency-c",
+  "w.drawing/schema.sop"
  ],
  "compose": [
   "k.words/shards/co-1",
@@ -43977,7 +43981,8 @@
   "k.space/schema.sop",
   "k.wearables/schema.sop",
   "k.words/shards/dr",
-  "k.words/shards/frequency-d"
+  "k.words/shards/frequency-d",
+  "w.drawing/schema.sop"
  ],
  "drawing pin": [
   "k.attributes/shards/drawn-mulberry",
@@ -64186,7 +64191,8 @@
   "k.words/shards/frequency-g",
   "k.words/shards/gr",
   "w.chart/schema.sop",
-  "w.diagram/schema.sop"
+  "w.diagram/schema.sop",
+  "w.drawing/schema.sop"
  ],
  "group photo": [
   "k.layouts/shards/layouts",
@@ -64205,7 +64211,8 @@
   "k.attributes/shards/narration",
   "k.diagrams/schema.sop",
   "k.kinds/shards/relations-diagrams",
-  "w.diagram/schema.sop"
+  "w.diagram/schema.sop",
+  "w.drawing/schema.sop"
  ],
  "grouse": [
   "k.kinds/shards/part_of-wordnet-1",
@@ -67941,6 +67948,7 @@
   "k.values/shards/scales",
   "k.words/shards/frequency-h",
   "k.words/shards/he",
+  "w.drawing/schema.sop",
   "w.lang.en/shards/hand-grammar"
  ],
  "height_about": [
@@ -70040,6 +70048,12 @@
  ],
  "horizontal axis": [
   "w.chart/schema.sop"
+ ],
+ "horizontal position": [
+  "w.drawing/schema.sop"
+ ],
+ "horizontal shift": [
+  "w.drawing/schema.sop"
  ],
  "horizontal surface": [
   "k.kinds/shards/wordnet-2"
@@ -72829,6 +72843,7 @@
   "k.units/shards/measures",
   "k.words/shards/frequency-i",
   "k.words/shards/in",
+  "w.drawing/schema.sop",
   "w.lang.en/shards/core-plurals",
   "k.objects/shards/noto-office-01",
   "k.objects/shards/noto-office-02"
@@ -74662,6 +74677,7 @@
   "k.layouts/shards/layouts",
   "k.words/shards/frequency-i",
   "k.words/shards/it",
+  "w.drawing/schema.sop",
   "w.list/schema.sop"
  ],
  "items": [
@@ -79868,6 +79884,7 @@
   "w.diagram/schema.sop",
   "w.dialogue/schema.sop",
   "w.document/schema.sop",
+  "w.drawing/schema.sop",
   "w.face/schema.sop",
   "w.list/schema.sop",
   "w.map/schema.sop",
@@ -81457,6 +81474,7 @@
   "k.words/shards/la",
   "w.chart/schema.sop",
   "w.diagram/schema.sop",
+  "w.drawing/schema.sop",
   "w.map/schema.sop",
   "w.meetings/schema.sop",
   "w.picture/schema.sop"
@@ -82944,6 +82962,7 @@
   "k.wearables/schema.sop",
   "k.words/shards/frequency-l",
   "k.words/shards/la",
+  "w.drawing/schema.sop",
   "w.map/schema.sop"
  ],
  "layers": [
@@ -91939,7 +91958,8 @@
   "k.kinds/shards/relations-geo",
   "k.words/shards/frequency-m",
   "k.words/shards/me",
-  "w.diagram/schema.sop"
+  "w.diagram/schema.sop",
+  "w.drawing/schema.sop"
  ],
  "members": [
   "k.geo/schema.sop"
@@ -97722,6 +97742,7 @@
   "w.chart/schema.sop",
   "w.diagram/schema.sop",
   "w.dialogue/schema.sop",
+  "w.drawing/schema.sop",
   "w.face/schema.sop",
   "w.lang.en/shards/hand-grammar",
   "w.list/schema.sop",
@@ -101174,6 +101195,7 @@
   "k.spatial2d/schema.sop",
   "k.words/shards/frequency-o",
   "k.words/shards/ob",
+  "w.drawing/schema.sop",
   "w.list/schema.sop",
   "w.request/schema.sop"
  ],
@@ -105510,6 +105532,7 @@
   "k.words/shards/frequency-p",
   "k.words/shards/pa",
   "w.document/schema.sop",
+  "w.drawing/schema.sop",
   "w.face/schema.sop"
  ],
  "part of": [
@@ -108376,6 +108399,7 @@
   "k.scenes/shards/things-p",
   "k.words/shards/frequency-p",
   "k.words/shards/pi",
+  "w.drawing/schema.sop",
   "w.picture/schema.sop",
   "k.objects/shards/noto-arts-crafts-01"
  ],
@@ -108445,6 +108469,7 @@
   "k.kinds/shards/wordnet-2",
   "k.words/shards/frequency-p",
   "k.words/shards/pi",
+  "w.drawing/schema.sop",
   "k.objects/shards/noto-game-02"
  ],
  "piece of cloth": [
@@ -117424,6 +117449,9 @@
   "k.actions/shards/verbs-remove",
   "k.words/shards/frequency-r",
   "k.words/shards/re"
+ ],
+ "removed": [
+  "w.drawing/schema.sop"
  ],
  "rempang island": [
   "k.geo/shards/islands-asia"
@@ -127916,6 +127944,7 @@
   "k.words/shards/frequency-s",
   "k.words/shards/sh",
   "w.diagram/schema.sop",
+  "w.drawing/schema.sop",
   "w.lang.en/shards/hand-grammar",
   "w.seating/schema.sop",
   "k.objects/shards/noto-tool-04"
@@ -130409,6 +130438,7 @@
   "k.words/shards/frequency-s",
   "k.words/shards/si",
   "w.document/schema.sop",
+  "w.drawing/schema.sop",
   "w.face/schema.sop",
   "w.lang.en/shards/hand-grammar",
   "w.seating/schema.sop"
@@ -130538,7 +130568,8 @@
   "k.kinds/shards/wordnet-2",
   "k.objects/schema.sop",
   "k.words/shards/frequency-s",
-  "k.words/shards/sk"
+  "k.words/shards/sk",
+  "w.drawing/schema.sop"
  ],
  "skewer": [
   "k.kinds/shards/part_of",
@@ -142202,6 +142233,7 @@
   "k.words/shards/frequency-t",
   "k.words/shards/th",
   "w.dialogue/schema.sop",
+  "w.drawing/schema.sop",
   "w.list/schema.sop",
   "w.person/schema.sop"
  ],
@@ -152062,6 +152094,12 @@
   "k.objects/shards/mulberry-building-contents-04",
   "k.scenes/shards/things-v"
  ],
+ "vertical position": [
+  "w.drawing/schema.sop"
+ ],
+ "vertical shift": [
+  "w.drawing/schema.sop"
+ ],
  "vertical traffic light": [
   "k.attributes/shards/drawn-noto",
   "k.attributes/shards/same-v",
@@ -153414,6 +153452,15 @@
   "k.kinds/shards/structures"
  ],
  "w.document.slide.document": [
+  "k.kinds/shards/structures"
+ ],
+ "w.drawing": [
+  "k.kinds/shards/structures"
+ ],
+ "w.drawing.group": [
+  "k.kinds/shards/structures"
+ ],
+ "w.drawing.object": [
   "k.kinds/shards/structures"
  ],
  "w.face": [
@@ -156360,6 +156407,7 @@
   "k.values/shards/scales",
   "k.words/shards/frequency-w",
   "k.words/shards/wi",
+  "w.drawing/schema.sop",
   "w.lang.en/shards/hand-grammar"
  ],
  "wiebke": [

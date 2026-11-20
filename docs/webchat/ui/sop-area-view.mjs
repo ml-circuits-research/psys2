@@ -5,7 +5,7 @@
 const css = `
 .p2-area{display:flex;height:100%;min-height:0;gap:12px;box-sizing:border-box;padding:12px}
 .p2-area-stage{flex:1;min-width:0;display:flex;align-items:center;justify-content:center;background:#e8edf5;border-radius:12px;position:relative}
-.p2-area-stage>svg{max-width:100%;max-height:100%;width:min(100%,520px);height:auto;cursor:pointer}
+.p2-area-stage>svg{max-width:100%;max-height:100%;width:min(100%,520px);height:auto;cursor:pointer}.p2-area-wide .p2-area-stage>svg{width:100%}
 .p2-area-stage [data-selected="true"]{outline:none;filter:drop-shadow(0 0 1.2px #1d6fe8) drop-shadow(0 0 1.2px #1d6fe8)}
 .p2-area-inspector{width:260px;flex:none;overflow:auto;display:flex;flex-direction:column;gap:10px;font:14px system-ui,sans-serif}
 .p2-area-inspector label{display:flex;flex-direction:column;gap:4px}
@@ -45,7 +45,7 @@ export function createSopAreaView(container, host = null, { world, view, editor 
     const form = el('form', 'p2-area-form', { 'aria-label': item.label }), title = el('div', ''); title.textContent = item.label; form.append(title);
     const inputs = item.fields.map((field) => {
       const wrap = el('label', ''), input = el('input', '', { 'aria-label': field.label, required: 'true',
-        type: field.input === 'datetime' ? 'datetime-local' : field.input === 'minutes' ? 'number' : 'text' });
+        type: field.input === 'datetime' ? 'datetime-local' : ['minutes', 'number'].includes(field.input) ? 'number' : 'text' });
       if (field.input === 'minutes') input.setAttribute('min', '1');
       wrap.append(document.createTextNode(field.label), input); form.append(wrap);
       return [field, input];
@@ -56,7 +56,7 @@ export function createSopAreaView(container, host = null, { world, view, editor 
       const args = argsOf(item, item.param === 'id' && item.target === null ? 'item-' + Date.now().toString(36) : undefined);
       for (const [field, input] of inputs) {
         const raw = input.value;
-        args[field.param] = field.input === 'datetime' ? Date.parse(raw + 'Z') : field.input === 'minutes' ? Math.round(Number(raw) * field.scale) : raw;
+        args[field.param] = field.input === 'datetime' ? Date.parse(raw + 'Z') : field.input === 'minutes' ? Math.round(Number(raw) * field.scale) : field.input === 'number' ? Number(raw) * field.scale : raw;
       }
       if (item.param && args[item.param] === undefined) delete args[item.param];
       control(item.operation, args);

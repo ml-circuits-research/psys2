@@ -1,14 +1,13 @@
 import { World } from '../src/vendor/sopworld/sopworld.mjs';
 import {invokeToolCommand} from '../src/dialog/native-control-intent.mjs';
 import {toNativeDiagramState} from '../worlds/diagram.sketch/canonical-state.mjs';
-import {toNativeDrawingState} from '../worlds/art.draw/canonical-state.mjs';
+import {drawingObjects,drawingState} from './drawing-state.mjs';
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { readFile } from 'node:fs/promises';
 import { executeDeclaredRequest } from '../src/dialog/declared-execution.mjs';
 import { performGesture } from './fixtures/editor-gesture.mjs';
 import { routeNewEngine } from '../src/dialog/reader-routing.mjs';
-import { createDrawingHost, initialDrawingState } from '../worlds/art.draw/declared-host.mjs';
 import { createDiagramHost, initialDiagramState } from '../worlds/diagram.sketch/declared-host.mjs';
 import { initialDocumentState } from '../worlds/docs.editor/declared-host.mjs';
 import {emptyCalendarArea,calendarAreaStateWorld} from '../worlds/time.calendar/sop-calendar.mjs';
@@ -48,9 +47,7 @@ async function invoke(host, operation, args) {
 }
 
 test('Drawing compiled change uses actual recency, named matches and valid focus', async () => {
-  const state = initialDrawingState(), host = createDrawingHost({ state, instanceId: 'seed-drawing' });
-  await invoke(host, 'drawing.object.make', { kind: 'house', name: 'First', label: 'First' });
-  await invoke(host, 'drawing.object.make', { kind: 'house', name: 'Last', label: 'Last' });
+  const state = await drawingState([{ kind: 'house', name: 'First', label: 'First' }, { kind: 'house', name: 'Last', label: 'Last' }]);
   const { value, activity } = session('art.draw', state);
   const bindings = binding('drawing', 'canonical.house', 'house', 'drawing.object.make', 'art.draw.object', { label: 'label' });
   value.engine.nativeBindings = bindings;
@@ -59,18 +56,18 @@ test('Drawing compiled change uses actual recency, named matches and valid focus
   const latest = await run('By recency');
   assert.equal(latest.statuses[0], 'supported');
   assert.equal(latest.trace.authored, true);
-  assert.deepEqual(toNativeDrawingState(state).objects.map((object) => object.label), ['First', 'By recency']);
+  assert.deepEqual(drawingObjects(state).map((object) => object.label), ['First', 'By recency']);
   assert.match(latest.trace.compiledSop, /std\.capability\.result status=compiled.*act=change/);
   assert.match(latest.trace.compiledSop, /std\.capability\.call operation="drawing.object.change"/);
   assert.equal(new World().compileToolInput(latest.trace.compiledSop), latest.trace.controlIntent);
   assert.equal(latest.trace.controlIntent, activity.find((event) => event.operation === 'drawing.object.change' && event.phase === 'start').sop);
   assert.equal((await run('By name', 'First')).statuses[0], 'supported');
-  assert.deepEqual(toNativeDrawingState(state).objects.map((object) => object.label), ['By name', 'By recency']);
+  assert.deepEqual(drawingObjects(state).map((object) => object.label), ['By name', 'By recency']);
   assert.equal((await run('By focus')).statuses[0], 'supported');
-  assert.deepEqual(toNativeDrawingState(state).objects.map((object) => object.label), ['By focus', 'By recency']);
+  assert.deepEqual(drawingObjects(state).map((object) => object.label), ['By focus', 'By recency']);
   const undo = '@r std.request act=undo mood=do source=$s\n@s std.request.source text="Undo the last action"';
   assert.equal((await routeNewEngine(value, undo, { view: 'draw' })).statuses[0], 'supported');
-  assert.deepEqual(toNativeDrawingState(value.isession.state['art.draw']).objects.map((object) => object.label), ['By name', 'By recency']);
+  assert.deepEqual(drawingObjects(value.isession.state['art.draw']).map((object) => object.label), ['By name', 'By recency']);
 });
 
 test('Diagram compiled place and remove reach real tool mutations', async () => {

@@ -1,13 +1,14 @@
 // Assemble trusted native observations and dispatch the compiler's SOP call.
-import {World,parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=f63db0e6f1';
-import SOURCE from './new-engine-source.mjs?v=a6e490571b';
-import {readPlacementProfile,rememberPlacement} from '../../worlds/app.project/spatial-profile.mjs?v=2a281acb84';
-import {placementInterfaceSop} from '../../worlds/native-spatial-interface.mjs?v=3aea765c85';
-import {NATIVE_AREAS,createAreaHost} from './app-reader-context.mjs?v=986e3b26ec';
+import {World,parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=d7baa85342';
+import SOURCE from './new-engine-source.mjs?v=958dfc6231';
+import {readPlacementProfile,rememberPlacement} from '../../worlds/app.project/spatial-profile.mjs?v=88734d0fd8';
+import {placementInterfaceSop} from '../../worlds/native-spatial-interface.mjs?v=a405365d05';
+import {NATIVE_AREAS,createAreaHost} from './app-reader-context.mjs?v=4534239d2c';
 import {identityRegistryFor,instanceIdFor} from './instance-identity.mjs?v=024ef1ca83';
-import {nativeKindCandidates} from './native-binding-candidates.mjs?v=47e88cf354';
-import {invokeObservedNativeTool} from './native-tool-activity.mjs?v=60dbd287dd';
-import {describeNativeControl,verifyNativeControlEffect} from './native-control-intent.mjs?v=2b545b087f';
+import {nativeKindCandidates} from './native-binding-candidates.mjs?v=3d9e3ab3c2';
+import {invokeObservedNativeTool} from './native-tool-activity.mjs?v=9e87f5a7be';
+import {describeNativeControl,verifyNativeControlEffect} from './native-control-intent.mjs?v=3df4fc1be1';
+import {placementSearchProvider,placementSearchStatus} from './placement-search-provider.mjs?v=56ddeecd24';
 
 const read = (row,key) => row?.attrs[key]?.length===1 ? str(row.attrs[key][0]) : undefined;
 const ref = (row,key) => {
@@ -60,9 +61,13 @@ export async function executeSpatialPlacement(session,candidate,{bindings,view}=
   const admitted=context.tell(native.configuration+'\n'+profile,{factsOnly:true});
   if(!admitted.ok)return fail('spatial-context-rejected',{diagnostics:admitted.violations});
   activity(session,area,{phase:'start',label:'Compile placement from observed geometry',instance:observation.instanceId,revision,frame,scope,participants:boxesForTrace(spatial),profile});
-  sop=context.compileRequest(candidate.wires+'\n'+native.context);
+  // Z3 solves the placement problem where the page can run it (loaded on the first one); otherwise the call
+  // stays synchronous with the library's internal search.
+  const provider=placementSearchProvider();
+  sop=provider?await context.compileRequest(candidate.wires+'\n'+native.context,{provider}):context.compileRequest(candidate.wires+'\n'+native.context);
   proposal=parse(sop).find(wire=>['std.placement.result','std.compile.result'].includes(wire.type));
-  activity(session,area,{phase:'end',label:'Compiled placement from observed geometry',durationMs:performance.now()-started,status:read(proposal,'status'),sop});
+  activity(session,area,{phase:'end',label:'Compiled placement from observed geometry',durationMs:performance.now()-started,status:read(proposal,'status'),
+   provider:read(proposal,'provider'),search:provider?placementSearchStatus():undefined,sop});
  }catch(error){
   if(error?.name==='BudgetExceeded'||error?.name==='TurnAborted')throw error;
   return fail('spatial-compilation-error',{error:String(error?.message??error)});

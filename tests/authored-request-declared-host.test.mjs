@@ -2,7 +2,7 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {routeNewEngine} from '../src/dialog/reader-routing.mjs';
-import {initialDrawingState} from '../worlds/art.draw/declared-host.mjs';
+import {emptyDrawingState} from '../worlds/art.draw/sop-drawing.mjs';
 import {performGesture} from './fixtures/editor-gesture.mjs';
 
 const webchat=new URL('../docs/webchat/',import.meta.url);
@@ -17,7 +17,7 @@ const request=[
   '@near std.request.constraint request=$r target=$fish concept=place operator=relation relation=near goal=$house polarity=positive character=requirement',
 ];
 test('a pasted request executes and undoes through Drawing without a reader',async()=>{
-  const session={isession:{state:{'ui.shell':{activeTab:'draw'},'art.draw':initialDrawingState()}},engine:{nativeBindings:bindings}};
+  const session={isession:{state:{'ui.shell':{activeTab:'draw'},'art.draw':emptyDrawingState()}},engine:{nativeBindings:bindings}};
   const seed=await performGesture(session,{view:'draw',operation:'drawing.object.make',args:{kind:'house',x:350,y:300}});
   assert.ok(seed.ok);
   const before=structuredClone(session.isession.state['art.draw']);

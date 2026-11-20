@@ -1,9 +1,9 @@
 // Shared declaration-driven knowledge preparation for UI and interpreted controls.
-import{NATIVE_AREAS,createAreaHost}from'./app-reader-context.mjs?v=986e3b26ec';
+import{NATIVE_AREAS,createAreaHost}from'./app-reader-context.mjs?v=4534239d2c';
 import{identityRegistryFor,instanceIdFor}from'./instance-identity.mjs?v=024ef1ca83';
 export async function prepareNativeControlHost(session,{view,operation,args={},host=null,invocation=null}={}){
  const area=NATIVE_AREAS[view];if(!area)throw Error('unknown-native-area');
- const create=()=>createAreaHost(area,{state:session.isession.state[area.world],instanceId:instanceIdFor(session,area.world),identityRegistry:identityRegistryFor(session,area.world),loader:session.engine?.loader,knowledge:session.engine?.knowledge});
+ const create=()=>createAreaHost(area,{args,state:session.isession.state[area.world],instanceId:instanceIdFor(session,area.world),identityRegistry:identityRegistryFor(session,area.world),loader:session.engine?.loader,knowledge:session.engine?.knowledge});
  host??=await create();
  const inputs=host.bindings().find(declaration=>declaration.id===operation)?.knowledgeInputs??[];
  for(const input of inputs){

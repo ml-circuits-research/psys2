@@ -1,12 +1,12 @@
-import { historyHeads } from './history-journal.mjs?v=fe5fd5739d';
-import {nativeKindCandidates} from './native-binding-candidates.mjs?v=47e88cf354';
+import { historyHeads } from './history-journal.mjs?v=d82b9e4f4e';
+import {nativeKindCandidates} from './native-binding-candidates.mjs?v=3d9e3ab3c2';
 // Bind model-declared context references to actual native objects; never inspect source words.
-import {quote,str} from '../vendor/sopworld/sopworld.mjs?v=f63db0e6f1';
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=986e3b26ec';
-import {executionPolicyWorld} from './execution-policy.mjs?v=f38fce6e0b';
-import {readReferenceTurn,resolveObservedReference} from './reference-policy.mjs?v=a712303559';
-import {observeGroundedProjection,projectGroundedRequest} from './grounded-projection.mjs?v=79fcaba592';
-import {flatRequestProjection} from './request-projection.mjs?v=389b281fed';
+import {quote,str} from '../vendor/sopworld/sopworld.mjs?v=d7baa85342';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=4534239d2c';
+import {executionPolicyWorld} from './execution-policy.mjs?v=82534c6cdf';
+import {readReferenceTurn,resolveObservedReference} from './reference-policy.mjs?v=5d16ed8525';
+import {observeGroundedProjection,projectGroundedRequest} from './grounded-projection.mjs?v=a74052e774';
+import {flatRequestProjection} from './request-projection.mjs?v=091717bb02';
 export async function projectContextAction(proposal,session,{bindings,registry,view}={}) {
  const raw=proposal?.raw,r=raw?.requests?.[0],area=NATIVE_AREAS[view],readerArea=bindings?.readerAreaByView?.[view]??area?.area;
  if(!area||!bindings||!registry||proposal.coverage?.complete||raw?.requestCount!==1||raw.coverage?.truncated||!r?.target||r.target.kind||r.target.name)return null;

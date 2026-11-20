@@ -1,5 +1,5 @@
 import { test } from 'node:test';
-import {toNativeDrawingState} from '../worlds/art.draw/canonical-state.mjs';
+import {drawingObjects} from './drawing-state.mjs';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { parse } from '../src/vendor/sopworld/sopworld.mjs';
@@ -7,7 +7,7 @@ import { routeNewEngine } from '../src/dialog/reader-routing.mjs';
 import { performGesture } from './fixtures/editor-gesture.mjs';
 import { identityRegistryFor, instanceIdFor } from '../src/dialog/instance-identity.mjs';
 import { createNativeToolHost } from '../worlds/native-tool-host.mjs';
-import { createDrawingHost, initialDrawingState } from '../worlds/art.draw/declared-host.mjs';
+import { createDrawingArea, emptyDrawingState } from '../worlds/art.draw/sop-drawing.mjs';
 import { createDiagramHost, initialDiagramState } from '../worlds/diagram.sketch/declared-host.mjs';
 import { observePlacementCorrection, placementProfileSop, placementProfileSnapshot, readPlacementProfile, rememberPlacement, restorePlacementProfile, withdrawPlacementCorrection } from '../worlds/app.project/spatial-profile.mjs';
 
@@ -29,20 +29,24 @@ function request(act) {
 function setup() {
   let candidate = request('make');
   const world = 'art.draw', view = 'draw';
-  const session = { isession:{state:{[world]:initialDrawingState(),'ui.shell':{activeTab:view}}}, engine:{ requestReader:{
+  const session = { isession:{state:{[world]:emptyDrawingState(),'ui.shell':{activeTab:view}}}, engine:{ requestReader:{
     bindings:()=>bindings, provenance:()=>({modelSha256:'a'.repeat(64),decoderVersion:1}),
     propose:async()=>({coverage:{complete:true,graphProposal:true},candidates:[candidate],failures:[],selectionScore:{definition:'psys2.model-minimum/1',value:.85}}),
   } } };
   const control = (operation,args) => performGesture(session,{view,operation,args});
-  const spatial = () => createDrawingHost({state:session.isession.state[world],instanceId:instanceIdFor(session,world)}).observeSpatial();
+  const spatial = async () => (await createDrawingArea({state:session.isession.state[world],instanceId:instanceIdFor(session,world)})).observeSpatial();
   async function run(act = 'make') {
     candidate = request(act);
     const result = await routeNewEngine(session,text,{view});
     assert.equal(result.statuses[0],'supported',result.trace.error??result.trace.reason);
-    return result.trace.receipt.changed[0];
+    return createdBy(result.trace.receipt);
   }
   return {session,world,control,spatial,run};
 }
+
+// The object a creation receipt added, read from the receipt's own before/after observations (the SOP area's
+// receipt.changed names the acts it ran, e.g. 'make', not the entities).
+const createdBy = receipt => receipt.after.objects.map(o=>o.id).find(id=>!receipt.before.objects.some(o=>o.id===id));
 
 const command = (act,clearance) =>
   '@spacing app.spatial-profile.'+act+' relation=near metric=near_distance'+(clearance===undefined?'':' clearance='+clearance);
@@ -55,27 +59,27 @@ function gap(spatial,subject,anchor) {
 
 test('exact SOP preference changes actual compiled placement and undo is scoped across pages', async () => {
   const {session,world,control,spatial,run} = setup();
-  const anchor = (await control('drawing.object.make',{kind:'house',x:390,y:350})).receipt.changed[0];
-  const set = input=>placementProfileSop(session,spatial(),input);
-  assert.equal(set({clearance:34}).ok,false);
-  assert.equal(set(command('set','-1')).ok,false);
-  assert.equal(set(command('set',34)+'\n@bad core.type of=unknown').ok,false);
-  assert.equal(set(command('set',34)).clearance,34);
+  const anchor = createdBy((await control('drawing.object.make',{kind:'house',x:390,y:350})).receipt);
+  const set = async input=>placementProfileSop(session,await spatial(),input);
+  assert.equal((await set({clearance:34})).ok,false);
+  assert.equal((await set(command('set','-1'))).ok,false);
+  assert.equal((await set(command('set',34)+'\n@bad core.type of=unknown')).ok,false);
+  assert.equal((await set(command('set',34))).clearance,34);
 
   const diagram = await createDiagramHost({state:initialDiagramState(),instanceId:instanceIdFor(session,'diagram.sketch')});
   assert.equal(placementProfileSop(session,diagram.observeSpatial(),command('inspect')).clearance,null);
   assert.equal(placementProfileSop(session,diagram.observeSpatial(),command('set',27)).clearance,27);
   const fish = await run();
-  assert.equal(gap(spatial(),fish,anchor),34);
-  assert.equal(set(command('set',42)).clearance,42);
+  assert.equal(gap(await spatial(),fish,anchor),34);
+  assert.equal((await set(command('set',42))).clearance,42);
   await run('place');
-  assert.equal(gap(spatial(),fish,anchor),42);
-  assert.equal(set(command('undo')).clearance,34);
+  assert.equal(gap(await spatial(),fish,anchor),42);
+  assert.equal((await set(command('undo'))).clearance,34);
   await run('place');
-  assert.equal(gap(spatial(),fish,anchor),34);
-  assert.equal(set(command('undo')).clearance,null);
+  assert.equal(gap(await spatial(),fish,anchor),34);
+  assert.equal((await set(command('undo'))).clearance,null);
   await run('place');
-  assert.equal(gap(spatial(),fish,anchor),12);
+  assert.equal(gap(await spatial(),fish,anchor),12);
   assert.equal(placementProfileSop(session,diagram.observeSpatial(),command('inspect')).clearance,27);
 
   const portable = placementProfileSnapshot(session);
@@ -86,32 +90,32 @@ test('exact SOP preference changes actual compiled placement and undo is scoped 
 
 test('two independently verified placement corrections change the next compiled position and undo withdraws one', async () => {
   const {session,world,control,spatial,run} = setup();
-  const anchor = (await control('drawing.object.make',{kind:'house',x:390,y:350})).receipt.changed[0];
+  const anchor = createdBy((await control('drawing.object.make',{kind:'house',x:390,y:350})).receipt);
   const fish = await run();
   const move = async distance => {
-    const object = toNativeDrawingState(session.isession.state[world]).objects.find(row=>row.id===fish);
+    const object = drawingObjects(session.isession.state[world]).find(row=>row.id===fish);
     return control('drawing.object.place',{ids:[fish],x:object.x+distance,y:object.y});
   };
-  assert.equal(gap(spatial(),fish,anchor),12);
+  assert.equal(gap(await spatial(),fish,anchor),12);
   assert.equal((await move(0)).intentRecord.verification.status,'verified');
   assert.equal(placementProfileSnapshot(session).corrections.length,0);
   assert.equal((await move(8)).intentRecord.verification.status,'verified');
   assert.equal(placementProfileSnapshot(session).corrections.length,1);
-  assert.equal(gap(spatial(),fish,anchor),20);
+  assert.equal(gap(await spatial(),fish,anchor),20);
 
   await run('place');
-  assert.equal(gap(spatial(),fish,anchor),12);
+  assert.equal(gap(await spatial(),fish,anchor),12);
   assert.equal((await move(8)).intentRecord.verification.status,'verified');
   assert.equal(placementProfileSnapshot(session).corrections.length,2);
 
   const entries = session.newEngineUndo.length;
   await run('place');
-  assert.equal(gap(spatial(),fish,anchor),20);
+  assert.equal(gap(await spatial(),fish,anchor),20);
   if (session.newEngineUndo.length > entries) await control('undo',{});
   assert.equal((await control('undo',{})).ok,true);
   assert.equal(placementProfileSnapshot(session).corrections.length,1);
   await run('place');
-  assert.equal(gap(spatial(),fish,anchor),12);
+  assert.equal(gap(await spatial(),fish,anchor),12);
 });
 
 test('profile evidence remains withdrawable without losing later entries and rejects incomparable observations', () => {

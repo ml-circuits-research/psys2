@@ -30,7 +30,8 @@ export async function areaBase({ world, loader, readCatalog }) {
     if (!text) throw Error('area-declaration-unavailable');
     const { area, owned, declarations } = declaration(text);
     const instance = read(area, 'instance'), knowledge = all(area, 'knowledge');
-    const base = await catalogWorld(readCatalog, { modules: [instance, ...knowledge], use: ['std.acts', instance, ...knowledge],
+    const lookups = owned('app.area.lookup'), lookupWorlds = [...new Set(lookups.map((lookup) => read(lookup, 'world')))];
+    const base = await catalogWorld(readCatalog, { modules: [instance, ...knowledge, ...lookupWorlds], use: ['std.acts', instance, ...knowledge, ...lookupWorlds],
       shardsOf: (entry) => knowledge.includes(entry?.id) ? (entry.shards ?? []).map((shard) => typeof shard === 'string' ? shard : shard.path) : [] });
     const actSchema = await loader.readFile('app.project', 'act-schema.sop');
     if (!base.load(actSchema).ok) throw Error('act-schema-refused');
@@ -39,10 +40,57 @@ export async function areaBase({ world, loader, readCatalog }) {
       if (!source || !base.load(source).ok) throw Error('area-rules-refused:' + read(rules, 'file'));
     }
     const kinds = base.ofType('std.schema.kind').map((kind) => read(kind, 'of')).filter((kind) => kind.startsWith(instance + '.'));
-    return { base, area, owned, declarations, kinds, instance };
+    return { base, area, owned, declarations, kinds, instance, lookups, loadedShards: new Set(), readCatalog };
   })();
   cache.set(world, promise);
   try { const value = await promise; resolved.set(world, value); return value; } catch (error) { cache.delete(world); throw error; }
+}
+
+/**
+ * Whether a shard holds a fact of an indexed type whose indexed field has one of the values: the index keys are
+ * coarse (one key list per shard), the indexed fields say which facts define a name.
+ */
+export function definesAny(text, indexedFields, values) {
+  if (!indexedFields) return true;
+  for (const line of text.split('\n')) {
+    const [, type, rest] = line.match(/^@\S+ (\S+) (.*)$/) ?? [];
+    for (const field of indexedFields[type] ?? []) for (const [, raw] of rest.matchAll(new RegExp('(?:^| )' + field + '=("[^"]*"|\\S+)', 'g')))
+      if (values.has(raw.replace(/^"|"$/g, ''))) return true;
+  }
+  return false;
+}
+
+/**
+ * Knowledge by lookup: for each declared app.area.lookup, the values of an instance key, of named command
+ * arguments, its fixed values and the area's declared choices select the catalog shards whose index keys contain them; each shard is told once into the base.
+ */
+async function ensureLookups(declared, state, args = {}) {
+  if (!declared.lookups.length) return;
+  declared.index ??= JSON.parse(await declared.readCatalog('index.json'));
+  const entries = new Map([...(declared.index.worlds ?? []), ...(declared.index.schemas ?? [])].map((entry) => [entry.id, entry]));
+  const live = state?.sop ? worldOf(declared.base, state) : null;
+  for (const lookup of declared.lookups) {
+    const values = new Set();
+    const [from, key] = [read(lookup, 'from'), read(lookup, 'key')];
+    if (live && from && key) for (const fact of live.ofType(from)) for (const raw of fact.attrs[key] ?? []) values.add(raw.startsWith('"') ? str(raw) : raw);
+    for (const name of all(lookup, 'arg')) for (const value of [].concat(args[name] ?? [])) if (typeof value === 'string') values.add(value);
+    // Fixed values the area always looks up (value=...: the layout its page follows).
+    for (const value of all(lookup, 'value')) values.add(value);
+    // What the area offers by name (its declared choices) is drawable before any command names it.
+    for (const offered of Object.values(choices(declared))) for (const value of [].concat(offered)) if (typeof value === 'string') values.add(value);
+    const entry = entries.get(read(lookup, 'world'));
+    for (const shard of entry?.shards ?? []) {
+      const path = typeof shard === 'string' ? shard : shard.path, keys = typeof shard === 'string' ? [] : shard.keys ?? [];
+      if (declared.loadedShards.has(path) || !keys.some((k) => values.has(k))) continue;
+      declared.shardTexts ??= new Map();
+      if (!declared.shardTexts.has(path)) declared.shardTexts.set(path, await declared.readCatalog(path));
+      const text = declared.shardTexts.get(path);
+      if (!definesAny(text, entry.indexedFields, values)) continue;
+      declared.loadedShards.add(path);
+      const told = declared.base.tell(text, { factsOnly: true });
+      if (!told.ok) throw Error('lookup-shard-refused:' + path);
+    }
+  }
 }
 
 /** The interface's open choices, each read from the facts its declaration names. */
@@ -57,10 +105,11 @@ function choices({ base, owned }) {
   return values;
 }
 
-export async function createSopArea({ world, loader, readCatalog, state, instanceId, identityRegistry, interfaceSource }) {
+export async function createSopArea({ world, loader, readCatalog, state, instanceId, identityRegistry, interfaceSource, args }) {
   const declared = await areaBase({ world, loader, readCatalog });
+  await ensureLookups(declared, state, args);
   const toolInterface = readNativeToolInterface(interfaceSource).realize(choices(declared));
-  const host = createSopWorldHost({ base: declared.base, kinds: declared.kinds, state, instanceId, scope: read(declared.area, 'scope'), toolInterface, identityRegistry });
+  const host = createSopWorldHost({ base: declared.base, kinds: declared.kinds, state, instanceId, scope: read(declared.area, 'scope'), toolInterface, identityRegistry, spatialObservation: read(declared.area, 'spatial') === 'true' });
   return host;
 }
 
@@ -95,7 +144,8 @@ function drawTypes(declared) {
  */
 export function projectSopArea(world, state, opts = {}) {
   const declared = resolved.get(world);
-  if (!declared || !state?.sop) return { sop: state?.sop ?? '', runtime: state?.runtime ?? { view: {} }, pending: true };
+  if (!declared) return { sop: state?.sop ?? '', runtime: state?.runtime ?? { view: {} }, pending: true };
+  state = { sop: state?.sop ?? '', runtime: state?.runtime ?? { view: {} } };
   const live = worldOf(declared.base, state), { types, select, frame } = drawTypes(declared);
   const objects = live.ofType('app.observe.object').map((fact) => Object.fromEntries(Object.keys(fact.attrs).map((k) => [k, read(fact, k)])));
   const options = {};
@@ -109,7 +159,7 @@ export function projectSopArea(world, state, opts = {}) {
       fields: declared.declarations.ofType('app.area.field').filter((field) => field.attrs.control?.[0] === '$' + control.id)
         .sort((a, b) => Number(read(a, 'n')) - Number(read(b, 'n')))
         .map((field) => ({ param: read(field, 'param'), label: read(field, 'label'), input: read(field, 'input'), scale: Number(read(field, 'scale') ?? 1) })),
-      available: read(control, 'target') !== 'selected' || (selected !== null && selected !== 'face' && (when === undefined || (when === 'present') === present)) };
+      available: read(control, 'target') !== 'selected' || (selected !== null && !all(control, 'except').includes(selected) && (when === undefined || (when === 'present') === present)) };
   });
   // The state itself travels with what is derived from it, so a projection canonicalizes back to its state.
   return { sop: state.sop, runtime: state.runtime ?? { view: {} }, svg: renderPrimitives(live, types, frame, { ...opts, select }), objects, options, controls, selected };

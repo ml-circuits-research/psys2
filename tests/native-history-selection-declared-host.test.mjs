@@ -1,19 +1,24 @@
 import test from 'node:test';import assert from 'node:assert/strict';
 import{performGesture}from'./fixtures/editor-gesture.mjs';
-import{canonicalDrawingState,toNativeDrawingState}from'../worlds/art.draw/canonical-state.mjs';
-import{initialDrawingState}from'../worlds/art.draw/declared-host.mjs';
+import{emptyDrawingState as initialDrawingState}from'../worlds/art.draw/sop-drawing.mjs';
+import{drawingObjects}from'./drawing-state.mjs';
 import{NATIVE_AREAS}from'../src/dialog/app-reader-context.mjs';
 import{createNativeToolHost,nativeToken,toolInvocationContext}from'../worlds/native-tool-host.mjs';
 const run=(s,view,operation,args={})=>performGesture(s,{view,operation,args});
 import{createHistoryTool}from'../src/dialog/history-tool.mjs';
 import{executeHistoryRequest}from'../src/dialog/history-execution.mjs';
 import{routeNewEngine}from'../src/dialog/reader-routing.mjs';
+// Gap: history-tool content() strips only runtime.view.selected, but the SOP area projection also carries selection
+// (top-level `selected`, objects[].selected, control availability/options), so any selection makes undo refuse.
 test('selection changes preserve undo/redo while undeclared content changes still invalidate it',async()=>{
  const s={isession:{state:{'art.draw':initialDrawingState()}},engine:{}};
- await run(s,'draw','drawing.object.make',{kind:'circle'});await run(s,'draw','drawing.object.make',{kind:'square'});const ids=toNativeDrawingState(s.isession.state['art.draw']).objects.map(o=>o.id);
- await run(s,'draw','drawing.object.select',{id:ids[0]});assert.equal((await run(s,'draw','ui.history.undo')).ok,true);assert.equal(toNativeDrawingState(s.isession.state['art.draw']).objects.length,1);
- await run(s,'draw','drawing.object.select',{id:null});assert.equal((await run(s,'draw','ui.history.redo')).ok,true);assert.equal(toNativeDrawingState(s.isession.state['art.draw']).objects.length,2);
- const edited=toNativeDrawingState(s.isession.state['art.draw']);edited.objects[0].x+=1;s.isession.state['art.draw']=canonicalDrawingState(edited);assert.equal((await run(s,'draw','ui.history.undo')).ok,false);assert.equal(toNativeDrawingState(s.isession.state['art.draw']).objects.length,2);
+ const objects=()=>drawingObjects(s.isession.state['art.draw']);
+ await run(s,'draw','drawing.object.make',{kind:'circle'});await run(s,'draw','drawing.object.make',{kind:'square'});const ids=objects().map(o=>o.id);
+ await run(s,'draw','drawing.object.select',{id:ids[1]});assert.equal(s.isession.state['art.draw'].runtime.view.selected,ids[1]);
+ assert.equal((await run(s,'draw','ui.history.undo')).ok,true);assert.equal(objects().length,1);
+ await run(s,'draw','drawing.object.select',{id:ids[0]});assert.equal((await run(s,'draw','ui.history.redo')).ok,true);assert.equal(objects().length,2);
+ const state=s.isession.state['art.draw'],edited=state.sop.replace(/(code=o1 \S+ x=)(\d+)/,(m,a,x)=>a+(Number(x)+1));assert.notEqual(edited,state.sop);state.sop=edited;
+ assert.equal((await run(s,'draw','ui.history.undo')).ok,false);assert.equal(objects().length,2);
 });
 test('an unfamiliar host declares its focus path without adding a world branch to history',async()=>{
  NATIVE_AREAS.novel={world:'novel.workspace',historySelection:[['navigation','focus']],create:({state,instanceId})=>createNativeToolHost({state,instanceId,scope:'novel',operations:[{id:'novel.change',act:'change',on:'novel.item',params:{value:{type:'number',required:true}}},{id:'novel.pick',act:'pick',on:'novel.item',params:{id:{type:'string',required:true}}}],handlers:{'novel.change':(ctx,a)=>{ctx.state.value=a.value;return {status:'supported',changed:['a']};},'novel.pick':(ctx,a)=>{ctx.state.navigation.focus=a.id;return {status:'supported',changed:['a']};}},view:s=>[{id:'a',kind:'item',sourceType:'novel.item',inputs:[{key:'value',binding:'novel.value',values:[nativeToken(s.value)]}]}]})};
@@ -23,8 +28,8 @@ test('an unfamiliar host declares its focus path without adding a world branch t
 test('identity overlay view preference survives content undo and redo',async()=>{
  const s={isession:{state:{'art.draw':initialDrawingState()}},engine:{}};
  await run(s,'draw','drawing.object.make',{kind:'circle'});await run(s,'draw','drawing.ids.show',{mode:'always'});
- assert.equal((await run(s,'draw','ui.history.undo')).ok,true);assert.equal(toNativeDrawingState(s.isession.state['art.draw']).objects.length,0);assert.equal(toNativeDrawingState(s.isession.state['art.draw']).idDisplay.mode,'always');
- assert.equal((await run(s,'draw','ui.history.redo')).ok,true);assert.equal(toNativeDrawingState(s.isession.state['art.draw']).objects.length,1);assert.equal(toNativeDrawingState(s.isession.state['art.draw']).idDisplay.mode,'always');
+ assert.equal((await run(s,'draw','ui.history.undo')).ok,true);assert.equal(drawingObjects(s.isession.state['art.draw']).length,0);assert.equal(s.isession.state['art.draw'].runtime.view.ids,'always');
+ assert.equal((await run(s,'draw','ui.history.redo')).ok,true);assert.equal(drawingObjects(s.isession.state['art.draw']).length,1);assert.equal(s.isession.state['art.draw'].runtime.view.ids,'always');
 });
 
 test('an authored history request dispatches exactly its compiled call and rejects a stale head', async () => {
@@ -39,7 +44,7 @@ test('an authored history request dispatches exactly its compiled call and rejec
  assert.match(erased.trace.compiledSop,/std\.compile\.evidence.*support="history\.live\.undo"/);
  assert.match(erased.trace.controlIntent,/app\.history\.restore action=restore-history order=1/);
  assert.match(erased.trace.receipt.sop,/app\.history\.result status=changed verification=verified/);
- assert.equal(toNativeDrawingState(state['art.draw']).objects.length,0);
+ assert.equal(drawingObjects(state['art.draw']).length,0);
  const activity=events.filter(event=>event.operation==='app.history.restore');
  assert.equal(activity[0].sop,erased.trace.controlIntent);
  assert.equal(activity[1].result.sop,erased.trace.receipt.sop);
@@ -72,7 +77,7 @@ test('mixed history retains ordered SOP identities across memory reload and snap
  const {inspectExecutionWorlds}=await import('../src/dialog/execution-world-inspection.mjs');
  const engine=await createEngine({loader:createFsLoader()});
  const source=engine.createSession({language:'en'});
- source.setWorldState('art.draw',initialDrawingState());
+ source.isession.state['art.draw']=initialDrawingState(); // setWorldState would merge into the engine's old JS default Drawing state
  source.setWorldState('diagram.sketch',initialDiagramState());
  await run(source,'draw','drawing.object.make',{kind:'circle'});
  await run(source,'diagram','diagram.node.make',{kind:'rectangle'});
@@ -108,12 +113,12 @@ test('mixed history retains ordered SOP identities across memory reload and snap
  const moved=parse(reload.memoryJSON().history.sop).find(row=>row.id===entries.at(-1).id);
  assert.equal(moved.attrs.direction[0],'redo');
  assert.equal(str(moved.attrs.payload[0]),str(entries.at(-1).attrs.payload[0]));
- assert.equal(toNativeDrawingState(reload.isession.state['art.draw']).objects.length,1);
- assert.equal(toNativeDrawingState(source.isession.state['art.draw']).objects.length,2);
+ assert.equal(drawingObjects(reload.isession.state['art.draw']).length,1);
+ assert.equal(drawingObjects(source.isession.state['art.draw']).length,2);
  assert.equal(toNativeDiagramState(reload.isession.state['diagram.sketch']).shapes.length,1);
  assert.equal((await run(reload,'diagram','ui.history.undo')).ok,true);
  assert.equal((await run(reload,'draw','ui.history.redo')).ok,true);
- assert.equal(toNativeDrawingState(reload.isession.state['art.draw']).objects.length,2);
+ assert.equal(drawingObjects(reload.isession.state['art.draw']).length,2);
  assert.equal(toNativeDiagramState(reload.isession.state['diagram.sketch']).shapes.length,0);
  const retained=reload.memoryJSON();
  const bad=structuredClone(retained);

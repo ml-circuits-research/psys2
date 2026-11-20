@@ -5,10 +5,10 @@ import {createKnowledgeSource} from '../src/loaders/knowledge-source.mjs';
 import {createFacts} from '../src/knowledge/facts.mjs';
 import {CATALOG_PIN} from '../src/knowledge/catalog-pin.mjs';
 import {compareDeclaredReadings,executeDeclaredRequest} from '../src/dialog/declared-execution.mjs';
-import {toNativeDrawingState} from '../worlds/art.draw/canonical-state.mjs';
+import {drawingObjects} from './drawing-state.mjs';
 import {createDiagramHost,initialDiagramState} from "../worlds/diagram.sketch/declared-host.mjs";
 import {toNativeDiagramState} from "../worlds/diagram.sketch/canonical-state.mjs";
-import {initialDrawingState} from '../worlds/art.draw/declared-host.mjs';
+import {emptyDrawingState} from '../worlds/art.draw/sop-drawing.mjs';
 import {parse} from '../src/vendor/sopworld/sopworld.mjs';
 import {performGesture} from './fixtures/editor-gesture.mjs';
 
@@ -18,10 +18,10 @@ const bindings = JSON.parse(readFileSync(new URL(deployment.artifactBase+deploym
 const catalog = process.env.SCENE_TEST_CATALOG ?? new URL('catalog/'+CATALOG_PIN.commit+'/',root).pathname;
 const world = 'art.draw', view = 'draw';
 const setup = () => ({
-  isession: {state:{[world]:initialDrawingState(),'ui.shell':{activeTab:view}}},
+  isession: {state:{[world]:emptyDrawingState(),'ui.shell':{activeTab:view}}},
   engine: {knowledge:createFacts({source:createKnowledgeSource(catalog)})},
 });
-const observe = session => toNativeDrawingState(session.isession.state[world]).objects;
+const observe = session => drawingObjects(session.isession.state[world]);
 async function draw(session, name, coordinates = {}) {
   const kind = bindings.kinds.find(row=>row.area==='drawing' && row.lemma===name).canonical;
   const candidate={request:'r',wires:[

@@ -1,5 +1,5 @@
 {
- "version": "d27ddc9ef781",
+ "version": "8ff8384a4aee",
  "sopworld": "747b51e",
  "worlds": [
   {
@@ -35585,8 +35585,8 @@
     {
      "id": "k.kinds/shards/structures",
      "path": "k.kinds/shards/structures.sop",
-     "wires": 338,
-     "bytes": 62310,
+     "wires": 341,
+     "bytes": 62866,
      "keys": [
       "assigned",
       "assignment",
@@ -35757,6 +35757,9 @@
       "w.document.sentence.paragraph",
       "w.document.slide",
       "w.document.slide.document",
+      "w.drawing",
+      "w.drawing.group",
+      "w.drawing.object",
       "w.face",
       "w.face.face",
       "w.face.part",
@@ -96894,6 +96897,102 @@
    ],
    "wires": 57,
    "bytes": 10593,
+   "sources": [
+    "hand-core-1"
+   ],
+   "license": "CC0-1.0",
+   "warnings": []
+  },
+  {
+   "id": "w.drawing",
+   "version": "1",
+   "schema": "w.drawing/schema.sop",
+   "vocabulary": "w.drawing/shards/words.sop",
+   "depends": [],
+   "about": "a drawing of placed objects with sizes, colours, labels, groups and edited parts",
+   "names": [
+    "drawing",
+    "picture",
+    "canvas",
+    "sketch"
+   ],
+   "kinds": [
+    {
+     "type": "w.drawing.object",
+     "acts": [
+      "make",
+      "remove",
+      "change",
+      "place",
+      "pick",
+      "ask",
+      "group"
+     ],
+     "attributes": [
+      "code",
+      "drawing",
+      "x",
+      "y",
+      "size",
+      "width",
+      "height",
+      "colour",
+      "label",
+      "name",
+      "z"
+     ],
+     "words": [
+      "object",
+      "shape",
+      "thing",
+      "item"
+     ]
+    },
+    {
+     "type": "w.drawing.group",
+     "acts": [
+      "make",
+      "remove",
+      "change",
+      "pick",
+      "ask"
+     ],
+     "attributes": [
+      "code",
+      "member",
+      "label"
+     ],
+     "words": [
+      "group",
+      "groups"
+     ]
+    },
+    {
+     "type": "w.drawing.part",
+     "acts": [
+      "make",
+      "remove",
+      "change"
+     ],
+     "attributes": [
+      "object",
+      "index",
+      "colour",
+      "dx",
+      "dy",
+      "width",
+      "height",
+      "removed"
+     ],
+     "words": [
+      "part",
+      "component",
+      "piece"
+     ]
+    }
+   ],
+   "wires": 39,
+   "bytes": 5284,
    "sources": [
     "hand-core-1"
    ],

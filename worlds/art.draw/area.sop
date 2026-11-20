@@ -1,0 +1,33 @@
+# The Drawing tab as a SOP area (read by worlds/sop-area.mjs). The instance is a w.drawing world; how each kind
+# is drawn is looked up in k.objects (and k.people for kinds drawn as their parent kind) when the instance or a
+# command names it; k.scenes says where a kind usually is (new objects prefer a free slot there); k.colours turns
+# colour names into RGB. Where a new object goes reads k.layouts too: the page is laid out as its landscape (looked
+# up by that fixed value), and the anchors of the objects on the page say what they hold (the water of a lake).
+@area.types core.type of=app.area
+@area.rules.type core.type of=app.area.rules
+@area.make.type core.type of=app.area.make
+@area.command.type core.type of=app.area.command
+@area.choice.type core.type of=app.area.choice
+@area.constant.type core.type of=app.area.constant
+@area.draw.type core.type of=app.area.draw
+@area.offline.type core.type of=app.area.offline
+@area.control.type core.type of=app.area.control
+@area.field.type core.type of=app.area.field
+@area.lookup.type core.type of=app.area.lookup
+
+@drawing.area app.area world=art.draw instance=w.drawing knowledge=k.colours scope="drawing.object-lifecycle" frame.w=1000 frame.h=700 spatial=true
+@drawing.rules.1 app.area.rules area=$drawing.area file="render-projection.sop" n=1
+@drawing.rules.2 app.area.rules area=$drawing.area file="act-rules.sop" n=2
+@drawing.lookup.objects app.area.lookup area=$drawing.area world=k.objects from=w.drawing.object key=drawing arg=kind arg=name
+@drawing.lookup.scenes app.area.lookup area=$drawing.area world=k.scenes from=w.drawing.object key=drawing arg=kind arg=name
+@drawing.lookup.layouts app.area.lookup area=$drawing.area world=k.layouts from=w.drawing.object key=drawing arg=kind arg=name value=landscape
+@drawing.lookup.people app.area.lookup area=$drawing.area world=k.people from=w.drawing.object key=drawing arg=kind arg=name
+@drawing.choice.kinds app.area.choice area=$drawing.area input="drawing.kinds" type=ui.draw.kind key=drawing
+@drawing.draw app.area.draw area=$drawing.area draw=ui.draw.draw fill=ui.draw.fill point=ui.draw.point orient=ui.draw.orient select=slot
+
+@drawing.control.select app.area.control area=$drawing.area n=1 label="Selection" operation="drawing.object.select" param=id options=object
+@drawing.control.move app.area.control area=$drawing.area n=2 label="Move" operation="drawing.object.place" target=selected list=ids when=present options=none
+@drawing.field.move.x app.area.field control=$drawing.control.move n=1 param=x label="x" input=number
+@drawing.field.move.y app.area.field control=$drawing.control.move n=2 param=y label="y" input=number
+@drawing.control.remove app.area.control area=$drawing.area n=3 label="Delete" operation="drawing.object.remove" target=selected list=ids when=present
+@drawing.control.clear app.area.control area=$drawing.area n=4 label="Clear drawing" operation="drawing.page.clear"

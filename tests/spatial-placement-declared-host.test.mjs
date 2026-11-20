@@ -1,12 +1,12 @@
 import {invokeToolCommand} from '../src/dialog/native-control-intent.mjs';
 import {test} from 'node:test';
-import {toNativeDrawingState} from '../worlds/art.draw/canonical-state.mjs';
+import {drawingObjects} from './drawing-state.mjs';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {parse,str} from '../src/vendor/sopworld/sopworld.mjs';
 import {routeNewEngine} from '../src/dialog/reader-routing.mjs';
 import {performGesture} from './fixtures/editor-gesture.mjs';
-import {createDrawingHost,initialDrawingState} from '../worlds/art.draw/declared-host.mjs';
+import {createDrawingArea,emptyDrawingState} from '../worlds/art.draw/sop-drawing.mjs';
 import {createDiagramHost,initialDiagramState} from '../worlds/diagram.sketch/declared-host.mjs';
 
 const webchat=new URL('../docs/webchat/',import.meta.url);
@@ -29,6 +29,9 @@ const parseResult=reply=>{
  return {summary,call:get('call'),choice:get('choice'),options:wires.filter(wire=>wire.type==='std.placement.option'),measurements};
 };
 const observedBox=(host,id)=>host.observeSpatial().boxes.find(box=>box.entity===id);
+// The object a creation receipt added, read from the receipt's own before/after observations (the SOP area's
+// receipt.changed names the acts it ran, e.g. 'make', not the entities).
+const createdBy=receipt=>receipt.after.objects.map(o=>o.id).find(id=>!receipt.before.objects.some(o=>o.id===id));
 const makeCall=(host,operation,args)=>invokeToolCommand(host,{operation,args,invocation:crypto.randomUUID(),expectedVersion:host.observe().version});
 
 function sessionFor(view,world,state,read) {
@@ -42,15 +45,15 @@ function sessionFor(view,world,state,read) {
 }
 
 for(const editor of [
- {view:'draw',area:'drawing',world:'art.draw',make:'drawing.object.make',place:'drawing.object.place',initial:initialDrawingState,host:createDrawingHost,anchor:'house',target:'fish'},
+ {view:'draw',area:'drawing',world:'art.draw',make:'drawing.object.make',place:'drawing.object.place',initial:emptyDrawingState,host:createDrawingArea,anchor:'house',target:'fish'},
  {view:'diagram',area:'diagram',world:'diagram.sketch',make:'diagram.node.make',place:'diagram.node.place',initial:initialDiagramState,host:createDiagramHost,anchor:'rectangle',target:'circle'},
 ])test(editor.area+' compiles the same owned request after a manual anchor move, applies exact geometry and undoes both creations',async()=>{
  const {view,area,world,make,place,initial,host,anchor,target}=editor;
  const candidate=graph(area,target,anchor),{session,activities,control,run}=sessionFor(view,world,initial(),candidate);
  const placed=await control(make,{kind:anchor,x:275,y:300});
- const anchorId=placed.receipt.changed[0],anchorBefore=structuredClone(session.isession.state[world]),first=await run();
+ const anchorId=createdBy(placed.receipt),anchorBefore=structuredClone(session.isession.state[world]),first=await run();
  assert.equal(first.statuses[0],'supported',first.trace.error??first.trace.reason);
- const compiled=parseResult(first),newId=first.trace.receipt.changed[0];
+ const compiled=parseResult(first),newId=createdBy(first.trace.receipt);
  assert.equal(compiled.call.type,make);
  assert.equal(selected(compiled.call,'kind'),target);
  assert.equal(selected(compiled.choice,'anchor'),anchorId);
@@ -71,7 +74,7 @@ for(const editor of [
  assert.equal(second.statuses[0],'supported',second.trace.error??second.trace.reason);
  const replay=parseResult(second),after=await host({state:session.isession.state[world],instanceId:'independent.second'});
  assert.equal(Number(selected(replay.call,'x'))-Number(selected(compiled.call,'x')),200);
- assert.equal(observedBox(after,second.trace.receipt.changed[0]).min_x-observedBox(after,anchorId).max_x,12);
+ assert.equal(observedBox(after,createdBy(second.trace.receipt)).min_x-observedBox(after,anchorId).max_x,12);
  assert.notEqual(selected(replay.summary,'revision'),selected(compiled.summary,'revision'));
  assert.equal((await control('undo',{})).ok,true);
  assert.deepEqual(session.isession.state[world],movedState);
@@ -79,9 +82,9 @@ for(const editor of [
 
 test('Drawing uses a less crowded orientation and refuses a compiled call after live geometry changes',async()=>{
  const world='art.draw',make='drawing.object.make',place='drawing.object.place',candidate=graph('drawing','fish','house');
- const {session,control,run}=sessionFor('draw',world,initialDrawingState(),candidate);
- const anchor=(await control(make,{kind:'house',x:400,y:350})).receipt.changed[0];
- const blocker=(await control(make,{kind:'square',x:592,y:350})).receipt.changed[0];
+ const {session,control,run}=sessionFor('draw',world,emptyDrawingState(),candidate);
+ const anchor=createdBy((await control(make,{kind:'house',x:400,y:350})).receipt);
+ const blocker=createdBy((await control(make,{kind:'square',x:592,y:350})).receipt);
  const result=await run(),{choice,options,measurements}=parseResult(result);
  assert.equal(result.statuses[0],'supported',result.trace.error??result.trace.reason);
  assert.equal(selected(choice,'anchor'),anchor);
@@ -92,7 +95,7 @@ test('Drawing uses a less crowded orientation and refuses a compiled call after 
  assert.equal((await control('undo',{})).ok,true);
 
  // Mutate through the same concrete tool a manual movement uses, after compile.
- const board=session.isession.state[world],external=createDrawingHost({state:board,instanceId:'manual.move'});
+ const board=session.isession.state[world],external=await createDrawingArea({state:board,instanceId:'manual.move'});
  session.engine.onWorldActivity=event=>{
   if(event.operation==='std.placement'&&event.phase==='end'&&event.status==='compiled'){
    assert.equal(makeCall(external,place,{ids:[anchor],x:350,y:350}).status,'changed');
@@ -101,12 +104,12 @@ test('Drawing uses a less crowded orientation and refuses a compiled call after 
  const stale=await run();
  assert.equal(stale.statuses[0],'unsupported');
  assert.equal(stale.trace.reason,'stale-observation');
- assert.deepEqual(toNativeDrawingState(board).objects.map(object=>object.id),[anchor,blocker]);
- assert.equal(toNativeDrawingState(board).objects[0].x,350);
+ assert.deepEqual(drawingObjects(board).map(object=>object.id),[anchor,blocker]);
+ assert.equal(drawingObjects(board)[0].x,350);
 });
 
 test('Drawing checks hard frame containment before ranking alternatives',async()=>{
- const {control,run}=sessionFor('draw','art.draw',initialDrawingState(),graph('drawing','fish','house'));
+ const {control,run}=sessionFor('draw','art.draw',emptyDrawingState(),graph('drawing','fish','house'));
  await control('drawing.object.make',{kind:'house',x:840,y:350});
  const result=await run(),{choice,options,measurements}=parseResult(result);
  assert.equal(result.statuses[0],'supported',result.trace.error??result.trace.reason);
@@ -118,17 +121,17 @@ test('Drawing checks hard frame containment before ranking alternatives',async()
 });
 
 test('Drawing compiles a spatial move of an existing object and retains its appearance',async()=>{
- const {session,control,run}=sessionFor('draw','art.draw',initialDrawingState(),graph('drawing','fish','house','place'));
- const anchor=(await control('drawing.object.make',{kind:'house',x:300,y:300})).receipt.changed[0];
- const fish=(await control('drawing.object.make',{kind:'fish',x:120,y:300,color:'#112233',size:130})).receipt.changed[0];
+ const {session,control,run}=sessionFor('draw','art.draw',emptyDrawingState(),graph('drawing','fish','house','place'));
+ const anchor=createdBy((await control('drawing.object.make',{kind:'house',x:300,y:300})).receipt);
+ const fish=createdBy((await control('drawing.object.make',{kind:'fish',x:120,y:300,color:'#112233',size:130})).receipt);
  const board=session.isession.state['art.draw'],prior=structuredClone(board),result=await run();
  assert.equal(result.statuses[0],'supported',result.trace.error??result.trace.reason);
  const {call,choice}=parseResult(result);
  assert.equal(call.type,'drawing.object.place');
  assert.equal(selected(choice,'anchor'),anchor);
  assert.deepEqual(call.attrs.ids.map(str),[fish]);
- assert.equal(toNativeDrawingState(board).objects.find(o=>o.id===fish).color,'#112233');
- assert.equal(toNativeDrawingState(board).objects.find(o=>o.id===fish).size,130);
+ assert.equal(drawingObjects(board).find(o=>o.id===fish).color,'#112233');
+ assert.equal(drawingObjects(board).find(o=>o.id===fish).size,130);
  assert.equal((await control('undo',{})).ok,true);
  assert.deepEqual(session.isession.state['art.draw'],prior);
 });

@@ -8,7 +8,7 @@ import {snapshotNativeInstances,restoreNativeInstances,observeNativeInstanceWorl
 import {readInstanceState,serializeInstanceState,str,parse,serialize,SCHEMA_TYPES} from '../src/vendor/sopworld/sopworld.mjs';
 import {NATIVE_AREAS,createAreaHost} from '../src/dialog/app-reader-context.mjs';
 import {nativeObservationObjects} from '../src/dialog/instance-facts.mjs';
-import {initialDrawingState} from '../worlds/art.draw/declared-host.mjs';
+import {emptyDrawingState as initialDrawingState} from '../worlds/art.draw/sop-drawing.mjs';
 import {createDiagramHost,initialDiagramState} from '../worlds/diagram.sketch/declared-host.mjs';
 import {emptyCalendarArea as initialCalendarState,calendarAreaStateWorld} from '../worlds/time.calendar/sop-calendar.mjs';
 import {initialCanonicalDocumentState} from '../worlds/docs.editor/declared-host.mjs';

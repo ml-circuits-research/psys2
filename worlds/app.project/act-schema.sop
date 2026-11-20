@@ -13,3 +13,6 @@
 @area.view core.type of=app.area.view
 @observe.input core.type of=app.observe.input
 @observe.option.type core.type of=app.observe.option
+@observe.frame.type core.type of=app.observe.frame
+@observe.box.type core.type of=app.observe.box
+@observe.relation.type core.type of=app.observe.relation

@@ -2,75 +2,81 @@ import {invokeToolCommand} from '../src/dialog/native-control-intent.mjs';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { serialize, serializeInstanceState } from '../src/vendor/sopworld/sopworld.mjs';
+import { serialize } from '../src/vendor/sopworld/sopworld.mjs';
 import { performGesture } from './fixtures/editor-gesture.mjs';
-import { observeNativeInstanceWorlds, restoreNativeInstances, snapshotNativeInstances, NATIVE_INSTANCE_SCHEMA } from '../src/dialog/instance-persistence.mjs';
-import { nativeObservationObjects } from '../src/dialog/instance-facts.mjs';
-import { CATALOG_PIN } from '../src/knowledge/catalog-pin.mjs';
-import { createCanonicalDrawingHost, createDrawingHost, initialDrawingState } from '../worlds/art.draw/declared-host.mjs';
+import { observeNativeInstanceWorlds, restoreNativeInstances, snapshotNativeInstances } from '../src/dialog/instance-persistence.mjs';
+import { createDrawingHost, initialDrawingState } from '../worlds/art.draw/declared-host.mjs';
+import { emptyDrawingState, drawingAreaStateWorld } from '../worlds/art.draw/sop-drawing.mjs';
+import { drawingObjects } from './drawing-state.mjs';
 import { canonicalDrawingState, DRAWING_STATE_SCHEMA, drawingStateWorld, toNativeDrawingState } from '../worlds/art.draw/canonical-state.mjs';
 
 const domain='art.draw';
 const drawing = session => session.isession.state[domain];
 const control = (session,operation,args={}) => performGesture(session,{view:'draw',operation,args});
 
-test('Drawing authority commits editable grouped vectors and movement as typed SOP facts across undo and save/load',async()=>{
- const session={isession:{state:{[domain]:initialDrawingState()}}};
+// The Drawing tab is the SOP area over worlds/art.draw/area.sop: its state is w.drawing facts plus view runtime.
+const groupCode = session => drawing(session).sop.match(/w\.drawing\.group .*?code=(\S+)/)?.[1];
+async function groupedScene(session){
  const house=(await control(session,'drawing.object.make',{kind:'house',x:180,y:240})).receipt.changed[0];
  const square=(await control(session,'drawing.object.make',{kind:'square',x:400,y:240})).receipt.changed[0];
- const group=(await control(session,'drawing.object.group',{ids:[house,square]})).receipt.changed[0];
- const vectorChange=await control(session,'drawing.part.change',{id:group,index:0,color:'#224466'});
- assert.equal(vectorChange.ok,true,''+vectorChange.receipt.reason);
+ const grouped=await control(session,'drawing.object.group',{ids:[house,square]});
+ assert.equal(grouped.ok,true,''+grouped.receipt.reason);
+ return {house,square,group:groupCode(session),grouped};
+}
+
+test('Drawing authority commits grouped objects, part edits and movement as SOP facts across undo and save/load',async()=>{
+ const session={isession:{state:{[domain]:emptyDrawingState()}}};
+ const {house,square,group}=await groupedScene(session);
+ assert.ok(group,'the group is a w.drawing.group fact');
+ const partChange=await control(session,'drawing.part.change',{id:house,index:0,color:'#224466'});
+ assert.equal(partChange.ok,true,''+partChange.receipt.reason);
  assert.deepEqual(Object.keys(drawing(session)).sort(),['runtime','sop']);
- const original=drawingStateWorld(drawing(session)).ofType('art.draw.state.object').find(fact=>fact.attrs.id[0]===JSON.stringify(group));
- const moved=await control(session,'drawing.object.place',{ids:[group],x:650,y:280});
+ const facts=()=>drawingAreaStateWorld(drawing(session));
+ const object=code=>facts().ofType('w.drawing.object').find(fact=>fact.attrs.code[0]===code);
+ const original=object(house);
+ const moved=await control(session,'drawing.object.place',{ids:[house],x:650,y:280});
  assert.equal(moved.ok,true);
- const live=drawingStateWorld(drawing(session));
- assert.equal(live.get(original.id).attrs.x[0],'650');
- assert.ok(live.ofType('art.draw.state.vector').some(wire=>wire.attrs.c?.[0]==='"#224466"'));
- assert.ok(live.ofType('art.draw.state.point').length);
+ assert.equal(object(house).id,original.id,'movement revises the same fact');
+ assert.equal(object(house).attrs.x[0],'650');
+ const groupFact=facts().ofType('w.drawing.group').find(fact=>fact.attrs.code[0]===group);
+ assert.deepEqual(groupFact.attrs.member,[ '$'+object(house).id,'$'+object(square).id ]);
+ assert.ok(facts().ofType('w.drawing.part').some(wire=>wire.attrs.object[0]==='$'+original.id&&wire.attrs.colour?.[0]==='"#224466"'));
  assert.equal((await control(session,'undo')).ok,true);
- assert.equal(drawingStateWorld(drawing(session)).get(original.id).attrs.x[0],original.attrs.x[0]);
+ assert.equal(object(house).attrs.x[0],original.attrs.x[0]);
  assert.equal((await control(session,'redo')).ok,true);
- const native=toNativeDrawingState(drawing(session));
+ assert.equal(object(house).attrs.x[0],'650');
  const [exported]=await snapshotNativeInstances(session,{worlds:[domain]});
  assert.equal(exported.wires,drawing(session).sop);
- assert.match(exported.wires,/art\.draw\.state\.vector/);
+ assert.match(exported.wires,/w\.drawing\.group /);assert.match(exported.wires,/w\.drawing\.part /);
  assert.doesNotMatch(exported.wires,/std\.instance\.snapshot|has\.history|has\.future/);
  const restored={isession:{state:{}}};
  await restoreNativeInstances(restored,[exported]);
  assert.equal(drawing(restored).sop,exported.wires);
  assert.equal(typeof exported.runtime,'string');
  assert.deepEqual(drawing(restored).runtime,drawing(session).runtime);
- assert.deepEqual(toNativeDrawingState(drawing(restored)).objects,native.objects);
+ assert.deepEqual(drawingObjects(drawing(restored)),drawingObjects(drawing(session)));
  const [observed]=await observeNativeInstanceWorlds(restored,{worlds:[domain]});
  assert.equal(observed.authoritative,true);
  assert.equal(observed.instanceId,exported.instanceId);
- assert.ok(observed.observation.objects.some(object=>object.id===square&&object.in===group));
- assert.ok(observed.observation.objects.some(object=>object.sourceType==='art.draw.part'));
+ assert.deepEqual(observed.observation.objects.filter(o=>o.sourceType==='art.draw.object').map(o=>o.id),[house,square]);
+ // Ungrouping removes only the group; members keep their identities and part edits.
+ assert.equal((await control(restored,'drawing.object.ungroup',{id:group})).ok,true);
+ assert.doesNotMatch(drawing(restored).sop,/w\.drawing\.group /);
+ assert.deepEqual(drawingObjects(drawing(restored)).map(o=>o.id),[house,square]);
+ assert.match(drawing(restored).sop,/w\.drawing\.part .*colour="#224466"/);
 });
 
-test('Drawing loads verified legacy native archives into typed authority without losing scene data or history',async()=>{
- const native=initialDrawingState(),instanceId='drawing.legacy';
- const host=createDrawingHost({state:native,instanceId});
- const invoke=(operation,args)=>invokeToolCommand(host,{invocation:crypto.randomUUID(),operation,args,expectedVersion:host.observe().version});
- const [square]=invoke('drawing.object.make',{kind:'square',x:125,y:135}).changed;
- invoke('drawing.object.place',{ids:[square],x:300,y:200});
- native.scenes.push({id:'scene1',kind:'practice',region:null,members:[square],fresh:false});
- const old=serializeInstanceState({instanceId,world:domain,schemaVersion:NATIVE_INSTANCE_SCHEMA,revision:4,
-  objects:nativeObservationObjects(host.observe()),projection:native,metadata:{knowledge:{version:CATALOG_PIN.commit},projection:'native-host-data/1'}});
- const restored={isession:{state:{}}};
- await restoreNativeInstances(restored,[{instanceId,world:domain,revision:4,wires:old}]);
- const state=drawing(restored);
- assert.equal(typeof state.sop,'string');
- assert.deepEqual(toNativeDrawingState(state),native);
- const reopened=createCanonicalDrawingHost({state,instanceId});
- const nativeUndo=invokeToolCommand(reopened,{operation:'drawing.undo',args:{},invocation:'drawing.legacy.undo',expectedVersion:reopened.observe().version});
- assert.equal(nativeUndo.status,'changed');
- assert.equal(toNativeDrawingState(drawing(restored)).objects[0].x,125);
- const [after]=await snapshotNativeInstances(restored,{worlds:[domain]});
- assert.equal(after.instanceId,instanceId);
- assert.ok(after.revision>4);
+test('Drawing observation names the group and its members and the edited parts',async()=>{
+ const session={isession:{state:{[domain]:emptyDrawingState()}}};
+ const {square,group,grouped}=await groupedScene(session);
+ assert.ok(grouped.receipt.changed.includes(group),'the new group is reported changed (its members too: they are now observed under it)');
+ // Part edits address an object's own drawn parts (a group has members, not parts).
+ const partChange=await control(session,'drawing.part.change',{id:square,index:0,color:'#224466'});
+ assert.equal(partChange.ok,true,''+partChange.receipt.reason);
+ const [observed]=await observeNativeInstanceWorlds(session,{worlds:[domain]});
+ assert.ok(observed.observation.objects.some(object=>object.id===group));
+ assert.ok(observed.observation.objects.some(object=>object.id===square&&object.in===group));
+ assert.ok(observed.observation.objects.some(object=>object.sourceType==='art.draw.part'));
 });
 
 test('Drawing state schema matches the published file and canonical wire identities survive order changes',()=>{

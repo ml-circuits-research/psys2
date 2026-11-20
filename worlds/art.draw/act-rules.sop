@@ -1,0 +1,569 @@
+# art.draw act rules (authored). Each native Drawing command compiles to std.acts calls on the w.drawing
+# instance; worlds/sop-world-host.mjs only runs them. Objects are addressed by their code.
+@draw.default.type core.type of=ui.draw.default
+@draw.next.type core.type of=ui.draw.next
+@draw.default ui.draw.default x=500 y=350 size=120
+
+
+# Where a new object goes, and how big it is, when the command names no place (worlds/art.draw/coverage.md):
+#  1. Its size: the size the command asks for; else, for a thing others float in (a k.layouts anchor of a declared
+#     kind: the water of a lake), the holder size; else the drawn size of its k.scenes size class; else the default.
+#     A kind with no facts of its own is sized and placed as the kind it is a kind of (k.people kind_of).
+#  2. The regions it may go to, in order: (1) the inside of an object on the page whose k.layouts anchor of a declared
+#     kind holds the kind (a boat on the lake's water, a bird in the crown of a tree), when the kind fits there at
+#     no less than the declared share of its size; (2) the region of the page layout (k.layouts landscape: sky, far,
+#     ground, water, foreground) whose slot holds the kind; (3) the region named by the kind's k.scenes place (the
+#     sun in the sky, a fish in the water); (4) the regions of (1) to (3) for the object made smaller, in their
+#     upper part (farther away); (5) the whole page, only for a kind with no region of (2) or (3).
+#  3. In each region the declared grid of spots (centre first, then the edges, then between; the middle row, then
+#     the lower and the higher one), each
+#     keeping the object inside its region when it fits there and always on the page; then the spots that touch an
+#     object on the page from its right or its left, in each row.
+#  4. The first spot (by region, then order) whose box keeps the declared gap from every object except its
+#     container and whose centre is not on an object's centre; when none is free, the spot that overlaps the
+#     fewest objects and is not centred on one.
+# A command that gives x or y keeps the default place for what it does not give and the size of step 1.
+@draw.subject.type core.type of=ui.draw.subject
+@draw.as.type core.type of=ui.draw.as
+@draw.auto.type core.type of=ui.draw.auto
+@draw.page.type core.type of=ui.draw.page
+@draw.scale.type core.type of=ui.draw.scale
+@draw.into.type core.type of=ui.draw.into
+@draw.sizing.type core.type of=ui.draw.sizing
+@draw.sizerank.type core.type of=ui.draw.sizerank
+@draw.size.type core.type of=ui.draw.size
+@draw.area.type core.type of=ui.draw.area
+@draw.region.type core.type of=ui.draw.region
+@draw.grid.type core.type of=ui.draw.grid
+@draw.candidate.type core.type of=ui.draw.candidate
+@draw.blocker.type core.type of=ui.draw.blocker
+@draw.free.type core.type of=ui.draw.free
+@draw.crowd.type core.type of=ui.draw.crowd
+@draw.stacked.type core.type of=ui.draw.stacked
+@draw.spare.type core.type of=ui.draw.spare
+@draw.best.type core.type of=ui.draw.best
+@draw.target.type core.type of=ui.draw.target
+@draw.beside.type core.type of=ui.draw.beside
+@draw.homed.type core.type of=ui.draw.homed
+
+# The page is laid out as a k.layouts landscape of its own size; objects keep a gap of 10; a contained object takes
+# at most 0.6 of its container's place and goes there only at no less than half its own size; when its own regions
+# are full it is tried there again at 0.7 of its size, in their upper 0.6 (smaller is farther away), before the
+# rest of the page.
+@draw.page ui.draw.page layout=landscape w=1000 h=700 gap=10 room=0.6 fit=0.5 shrink=0.7 far=0.6
+# Drawn sizes of the k.scenes size classes (a picture scale, not the real one), and of things others float in.
+@draw.scale.tiny ui.draw.scale class=tiny size=45
+@draw.scale.small ui.draw.scale class=small size=70
+@draw.scale.medium ui.draw.scale class=medium size=100
+@draw.scale.large ui.draw.scale class=large size=130
+@draw.scale.huge ui.draw.scale class=huge size=160
+@draw.scale.water ui.draw.scale anchor=water size=320
+# The two sides of an object a new one may touch (right first).
+@draw.beside.right ui.draw.beside side=1 n=1
+@draw.beside.left ui.draw.beside side=-1 n=2
+# The anchor kinds a new object is put into by default (on, at the top of or on the roof of are asked for).
+@draw.into.water ui.draw.into anchor=water
+@draw.into.inside ui.draw.into anchor=inside
+# The spots of a region: x and y as shares (0 to 100) of the room the object has there, in order.
+@grid.1 ui.draw.grid n=1 fx=50 fy=50
+@grid.2 ui.draw.grid n=2 fx=0 fy=50
+@grid.3 ui.draw.grid n=3 fx=100 fy=50
+@grid.4 ui.draw.grid n=4 fx=15 fy=50
+@grid.5 ui.draw.grid n=5 fx=85 fy=50
+@grid.6 ui.draw.grid n=6 fx=32 fy=50
+@grid.7 ui.draw.grid n=7 fx=68 fy=50
+@grid.8 ui.draw.grid n=8 fx=50 fy=100
+@grid.9 ui.draw.grid n=9 fx=0 fy=100
+@grid.10 ui.draw.grid n=10 fx=100 fy=100
+@grid.11 ui.draw.grid n=11 fx=15 fy=100
+@grid.12 ui.draw.grid n=12 fx=85 fy=100
+@grid.13 ui.draw.grid n=13 fx=32 fy=100
+@grid.14 ui.draw.grid n=14 fx=68 fy=100
+@grid.15 ui.draw.grid n=15 fx=50 fy=0
+@grid.16 ui.draw.grid n=16 fx=0 fy=0
+@grid.17 ui.draw.grid n=17 fx=100 fy=0
+@grid.18 ui.draw.grid n=18 fx=15 fy=0
+@grid.19 ui.draw.grid n=19 fx=85 fy=0
+@grid.20 ui.draw.grid n=20 fx=32 fy=0
+@grid.21 ui.draw.grid n=21 fx=68 fy=0
+
+# The kind a command makes, and the kinds whose facts stand for it: its own, and the one it is a kind of.
+@sb.make app.act.request operation="drawing.object.make" kind=?k
+@sb.cat app.act.request operation="drawing.catalog.make" name=?k
+@sb.out ui.draw.subject kind=?k
+@subject.make core.rule when=$sb.make then=$sb.out
+@subject.catalog core.rule when=$sb.cat then=$sb.out
+@as.sub ui.draw.subject kind=?k
+@as.self ui.draw.as kind=?k as=?k
+@as.own core.rule when=$as.sub then=$as.self
+@as.parent k.people.kind name=?k kind_of=?p
+@as.parent.o ui.draw.as kind=?k as=?p
+@as.inherited core.rule when=$as.sub when=$as.parent then=$as.parent.o
+@ex.x app.act.request x=?ax
+@ex.y app.act.request y=?ay
+@au.out ui.draw.auto kind=?k
+@auto core.rule when=$as.sub not=$ex.x not=$ex.y then=$au.out
+
+# 1. The size.
+@sz.sub ui.draw.subject kind=?k
+@sz.as ui.draw.as kind=?k as=?a
+@sz.req app.act.request size=?s
+@sz.req.o ui.draw.sizing rank=0 size=?s
+@size.asked core.rule when=$sz.sub when=$sz.req then=$sz.req.o
+@sz.anchor k.layouts.anchor of=?a kind=?ak
+@sz.scale.a ui.draw.scale anchor=?ak size=?s
+@sz.anchor.o ui.draw.sizing rank=1 size=?s
+@size.holder core.rule when=$sz.sub when=$sz.as when=$sz.anchor when=$sz.scale.a then=$sz.anchor.o
+@sz.scene k.scenes.thing name=?a size=?c
+@sz.scale.c ui.draw.scale class=?c size=?s
+@sz.scene.o ui.draw.sizing rank=2 size=?s
+@size.class core.rule when=$sz.sub when=$sz.as when=$sz.scene when=$sz.scale.c then=$sz.scene.o
+@sz.def ui.draw.default size=?s
+@sz.def.o ui.draw.sizing rank=3 size=?s
+@size.default core.rule when=$sz.sub when=$sz.def then=$sz.def.o
+@sz.all ui.draw.sizing rank=?r size=?s
+@sz.min core.aggregate over=$sz.all min=?best args=?r then=$sz.best
+@sz.best ui.draw.sizerank rank=?best
+@sz.top ui.draw.sizerank rank=?r
+@sz.chosen ui.draw.sizing rank=?r size=?s
+@sz.max core.aggregate over=$sz.top over=$sz.chosen max=?best args=?s then=$sz.out
+@sz.out ui.draw.size size=?best
+
+# 2. The regions. The areas of the page: each slot of its layout, in page units.
+@pa.page ui.draw.page layout=?l w=?pw h=?ph
+@pa.slot k.layouts.slot layout=?l name=?r x=?x y=?y w=?w h=?h
+@pa.kx core.calc out=?kx fn=div args=?pw args=100
+@pa.ky core.calc out=?ky fn=div args=?ph args=100
+@pa.x0 core.calc out=?x0 fn=mul args=?x args=?kx
+@pa.y0 core.calc out=?y0 fn=mul args=?y args=?ky
+@pa.xw core.calc out=?xw fn=add args=?x args=?w
+@pa.yh core.calc out=?yh fn=add args=?y args=?h
+@pa.x1 core.calc out=?x1 fn=mul args=?xw args=?kx
+@pa.y1 core.calc out=?y1 fn=mul args=?yh args=?ky
+@pa.out ui.draw.area name=?r x0=?x0 y0=?y0 x1=?x1 y1=?y1
+@page.area core.rule when=$pa.page when=$pa.slot with=$pa.kx with=$pa.ky with=$pa.x0 with=$pa.y0 with=$pa.xw with=$pa.yh with=$pa.x1 with=$pa.y1 then=$pa.out
+# (1) Into an object on the page whose anchor holds the kind.
+@ct.auto ui.draw.auto kind=?k
+@ct.into ui.draw.into anchor=?ak
+@ct.anchor k.layouts.anchor of=?c name=?an kind=?ak holds=?k x=?ax y=?ay w=?aw h=?ah
+@ct.o w.drawing.object code=?host drawing=?c x=?ox y=?oy size=?os z=?oz
+@ct.s ui.draw.size size=?s
+@ct.page ui.draw.page room=?room fit=?fit
+@ct.sc core.calc out=?sc fn=div args=?os args=100
+@ct.half core.calc out=?oh fn=div args=?os args=2
+@ct.ox0 core.calc out=?ox0 fn=sub args=?ox args=?oh
+@ct.oy0 core.calc out=?oy0 fn=sub args=?oy args=?oh
+@ct.dx core.calc out=?dx fn=mul args=?ax args=?sc
+@ct.dy core.calc out=?dy fn=mul args=?ay args=?sc
+@ct.bw core.calc out=?bw fn=mul args=?aw args=?sc
+@ct.bh core.calc out=?bh fn=mul args=?ah args=?sc
+@ct.bx0 core.calc out=?bx0 fn=add args=?ox0 args=?dx
+@ct.by0 core.calc out=?by0 fn=add args=?oy0 args=?dy
+@ct.bx1 core.calc out=?bx1 fn=add args=?bx0 args=?bw
+@ct.by1 core.calc out=?by1 fn=add args=?by0 args=?bh
+@ct.rw core.calc out=?rw fn=mul args=?bw args=?room
+@ct.rh core.calc out=?rh fn=mul args=?bh args=?room
+@ct.s0 core.calc out=?s0 fn=min args=?s args=?rw args=?rh
+@ct.s0h core.calc out=?s0h fn=div args=?s0 args=2
+@ct.s0r core.calc out=?s0r fn=round args=?s0h
+@ct.s1 core.calc out=?s1 fn=mul args=?s0r args=2
+@ct.need core.calc out=?need fn=mul args=?s args=?fit
+@ct.fits core.check fn=gte args=?s1 args=?need
+@ct.key core.calc out=?key fn=concat args=?host args=- args=?an
+@ct.out ui.draw.region key=?key tier=1 order=?oz host=?host x0=?bx0 y0=?by0 x1=?bx1 y1=?by1 size=?s1
+@region.container core.rule when=$ct.auto when=$ct.into when=$ct.anchor when=$ct.o when=$ct.s when=$ct.page with=$ct.sc with=$ct.half with=$ct.ox0 with=$ct.oy0 with=$ct.dx with=$ct.dy with=$ct.bw with=$ct.bh with=$ct.bx0 with=$ct.by0 with=$ct.bx1 with=$ct.by1 with=$ct.rw with=$ct.rh with=$ct.s0 with=$ct.s0h with=$ct.s0r with=$ct.s1 with=$ct.need if=$ct.fits with=$ct.key then=$ct.out
+# (2) The area whose layout slot holds the kind; (3) the area of its k.scenes place; (5) the page.
+@rh.auto ui.draw.auto kind=?k
+@rh.as ui.draw.as kind=?k as=?a
+@rh.page ui.draw.page layout=?l
+@rh.slot k.layouts.slot layout=?l name=?r holds=?a
+@rh.area ui.draw.area name=?r x0=?x0 y0=?y0 x1=?x1 y1=?y1
+@rh.s ui.draw.size size=?s
+@rh.key core.calc out=?key fn=concat args=holds- args=?r
+@rh.out ui.draw.region key=?key tier=2 order=0 host=none x0=?x0 y0=?y0 x1=?x1 y1=?y1 size=?s
+@region.holds core.rule when=$rh.auto when=$rh.as when=$rh.page when=$rh.slot when=$rh.area when=$rh.s with=$rh.key then=$rh.out
+@rp.scene k.scenes.thing name=?a place=?r
+@rp.key core.calc out=?key fn=concat args=place- args=?r
+@rp.out ui.draw.region key=?key tier=3 order=0 host=none x0=?x0 y0=?y0 x1=?x1 y1=?y1 size=?s
+@region.place core.rule when=$rh.auto when=$rh.as when=$rp.scene when=$rh.area when=$rh.s with=$rp.key then=$rp.out
+# (4) The regions of (1) to (3) again, their upper part, for the object made smaller (farther away).
+@rs.r ui.draw.region key=?rk tier=?t host=?host x0=?x0 y0=?y0 x1=?x1 y1=?y1 size=?s
+@rs.page ui.draw.page shrink=?f far=?far
+@rs.dh core.calc out=?dh fn=sub args=?y1 args=?y0
+@rs.fh core.calc out=?fh fn=mul args=?dh args=?far
+@rs.y1 core.calc out=?fy1 fn=add args=?y0 args=?fh
+@rs.low core.check fn=lt args=?t args=4
+@rs.s core.calc out=?s1 fn=mul args=?s args=?f
+@rs.s2 core.calc out=?s3 fn=div args=?s1 args=2
+@rs.s3 core.calc out=?s4 fn=round args=?s3
+@rs.s4 core.calc out=?s2 fn=mul args=?s4 args=2
+@rs.key core.calc out=?key fn=concat args=smaller- args=?rk
+@rs.out ui.draw.region key=?key tier=4 order=?t host=?host x0=?x0 y0=?y0 x1=?x1 y1=?fy1 size=?s2
+@region.smaller core.rule when=$rs.r when=$rs.page if=$rs.low with=$rs.s with=$rs.s2 with=$rs.s3 with=$rs.s4 with=$rs.dh with=$rs.fh with=$rs.y1 with=$rs.key then=$rs.out
+# A kind with a region of its own stays there (overlapping the fewest objects when it is full); the page is for the
+# kinds with none.
+@hm.out ui.draw.homed kind=?k
+@homed.holds core.rule when=$rh.auto when=$rh.as when=$rh.page when=$rh.slot then=$hm.out
+@homed.place core.rule when=$rh.auto when=$rh.as when=$rp.scene when=$rh.area then=$hm.out
+@rw.homed ui.draw.homed kind=?k
+@rw.page ui.draw.page w=?pw h=?ph
+@rw.out ui.draw.region key=page tier=5 order=0 host=none x0=0 y0=0 x1=?pw y1=?ph size=?s
+@region.page core.rule when=$rh.auto not=$rw.homed when=$rw.page when=$rh.s then=$rw.out
+
+# 3. The spots of each region: inside it when the object fits there, on the page always.
+@cd.r ui.draw.region key=?rk tier=?t order=?o host=?host x0=?x0 y0=?y0 x1=?x1 y1=?y1 size=?s
+@cd.g ui.draw.grid n=?n fx=?fx fy=?fy
+@cd.page ui.draw.page w=?pw h=?ph
+@cd.hs core.calc out=?hs fn=div args=?s args=2
+@cd.lx core.calc out=?lx fn=add args=?x0 args=?hs
+@cd.ly core.calc out=?ly fn=add args=?y0 args=?hs
+@cd.ux core.calc out=?ux fn=sub args=?x1 args=?hs
+@cd.uy core.calc out=?uy fn=sub args=?y1 args=?hs
+@cd.sx core.calc out=?sx fn=add args=?x0 args=?x1
+@cd.sy core.calc out=?sy fn=add args=?y0 args=?y1
+@cd.mx core.calc out=?mx fn=div args=?sx args=2
+@cd.my core.calc out=?my fn=div args=?sy args=2
+@cd.lx2 core.calc out=?lx2 fn=min args=?lx args=?mx
+@cd.ly2 core.calc out=?ly2 fn=min args=?ly args=?my
+@cd.wx core.calc out=?wx fn=sub args=?ux args=?lx2
+@cd.wy core.calc out=?wy fn=sub args=?uy args=?ly2
+@cd.wx2 core.calc out=?wx2 fn=max args=?wx args=0
+@cd.wy2 core.calc out=?wy2 fn=max args=?wy args=0
+@cd.px core.calc out=?px fn=mul args=?wx2 args=?fx
+@cd.py core.calc out=?py fn=mul args=?wy2 args=?fy
+@cd.qx core.calc out=?qx fn=div args=?px args=100
+@cd.qy core.calc out=?qy fn=div args=?py args=100
+@cd.cx core.calc out=?cx fn=add args=?lx2 args=?qx
+@cd.cy core.calc out=?cy fn=add args=?ly2 args=?qy
+@cd.hx core.calc out=?hx fn=sub args=?pw args=?hs
+@cd.hy core.calc out=?hy fn=sub args=?ph args=?hs
+@cd.kx core.calc out=?kx fn=clamp args=?cx args=?hs args=?hx
+@cd.ky core.calc out=?ky fn=clamp args=?cy args=?hs args=?hy
+@cd.rx core.calc out=?rx fn=round args=?kx
+@cd.ry core.calc out=?ry fn=round args=?ky
+@cd.rs core.calc out=?rs fn=round args=?s
+@cd.t5 core.calc out=?t5 fn=mul args=?t args=10000000
+@cd.o2 core.calc out=?o2 fn=mul args=?o args=10000
+@cd.score core.calc out=?score fn=add args=?t5 args=?o2 args=?n
+@cd.id core.calc out=?cid fn=concat args=?rk args=. args=?n
+@cd.out ui.draw.candidate id=?cid x=?rx y=?ry size=?rs host=?host score=?score
+@spot core.rule when=$cd.r when=$cd.g when=$cd.page with=$cd.hs with=$cd.lx with=$cd.ly with=$cd.ux with=$cd.uy with=$cd.sx with=$cd.sy with=$cd.mx with=$cd.my with=$cd.lx2 with=$cd.ly2 with=$cd.wx with=$cd.wy with=$cd.wx2 with=$cd.wy2 with=$cd.px with=$cd.py with=$cd.qx with=$cd.qy with=$cd.cx with=$cd.cy with=$cd.hx with=$cd.hy with=$cd.kx with=$cd.ky with=$cd.rx with=$cd.ry with=$cd.rs with=$cd.t5 with=$cd.o2 with=$cd.score with=$cd.id then=$cd.out
+
+# Beside each object on the page, in each row of the grid: the spots that touch it from the left and the right
+# with the gap between (after the grid spots of the same region).
+@bs.r ui.draw.region key=?rk tier=?t order=?o host=?host x0=?x0 y0=?y0 x1=?x1 y1=?y1 size=?s
+@bs.o w.drawing.object code=?oid x=?ox size=?os z=?oz
+@bs.side ui.draw.beside side=?side n=?j
+@bs.g ui.draw.grid n=?gn fx=50 fy=?fy
+@bs.page ui.draw.page w=?pw h=?ph gap=?g
+@bs.other core.check fn=neq args=?oid args=?host
+@bs.hs core.calc out=?hs fn=div args=?s args=2
+@bs.oh core.calc out=?oh fn=div args=?os args=2
+@bs.d1 core.calc out=?d1 fn=add args=?hs args=?oh args=?g
+@bs.d core.calc out=?d fn=mul args=?d1 args=?side
+@bs.bx core.calc out=?bx fn=add args=?ox args=?d
+@bs.ly core.calc out=?ly fn=add args=?y0 args=?hs
+@bs.uy core.calc out=?uy fn=sub args=?y1 args=?hs
+@bs.sy core.calc out=?sy fn=add args=?y0 args=?y1
+@bs.my core.calc out=?my fn=div args=?sy args=2
+@bs.ly2 core.calc out=?ly2 fn=min args=?ly args=?my
+@bs.wy core.calc out=?wy fn=sub args=?uy args=?ly2
+@bs.wy2 core.calc out=?wy2 fn=max args=?wy args=0
+@bs.py core.calc out=?py fn=mul args=?wy2 args=?fy
+@bs.qy core.calc out=?qy fn=div args=?py args=100
+@bs.cy core.calc out=?cy fn=add args=?ly2 args=?qy
+@bs.lx core.calc out=?lx fn=add args=?x0 args=?hs
+@bs.ux core.calc out=?ux fn=sub args=?x1 args=?hs
+@bs.inx core.check fn=lte args=?lx args=?bx
+@bs.inx2 core.check fn=lte args=?bx args=?ux
+@bs.hx core.calc out=?hx fn=sub args=?pw args=?hs
+@bs.hy core.calc out=?hy fn=sub args=?ph args=?hs
+@bs.ky core.calc out=?ky fn=clamp args=?cy args=?hs args=?hy
+@bs.rx core.calc out=?rx fn=round args=?bx
+@bs.ry core.calc out=?ry fn=round args=?ky
+@bs.rs core.calc out=?rs fn=round args=?s
+@bs.t5 core.calc out=?t5 fn=mul args=?t args=10000000
+@bs.o2 core.calc out=?o2 fn=mul args=?o args=10000
+@bs.n1 core.calc out=?n1 fn=mul args=?oz args=100
+@bs.n2 core.calc out=?n2 fn=mul args=?gn args=2
+@bs.score core.calc out=?score fn=add args=?t5 args=?o2 args=1000 args=?n1 args=?n2 args=?j
+@bs.id core.calc out=?cid fn=concat args=?rk args=.beside. args=?oid args=. args=?gn args=. args=?j
+@bs.out ui.draw.candidate id=?cid x=?rx y=?ry size=?rs host=?host score=?score
+@spot.beside core.rule when=$bs.r when=$bs.o when=$bs.side when=$bs.g when=$bs.page if=$bs.other with=$bs.hs with=$bs.oh with=$bs.d1 with=$bs.d with=$bs.bx with=$bs.ly with=$bs.uy with=$bs.sy with=$bs.my with=$bs.ly2 with=$bs.wy with=$bs.wy2 with=$bs.py with=$bs.qy with=$bs.cy with=$bs.lx with=$bs.ux if=$bs.inx if=$bs.inx2 with=$bs.hx with=$bs.hy with=$bs.ky with=$bs.rx with=$bs.ry with=$bs.rs with=$bs.t5 with=$bs.o2 with=$bs.n1 with=$bs.n2 with=$bs.score with=$bs.id then=$bs.out
+
+# 4. The first free spot; else the least crowded one that is not centred on an object.
+@bk.c ui.draw.candidate id=?cid x=?cx y=?cy size=?s host=?host
+@bk.o w.drawing.object code=?oid x=?ox y=?oy size=?os
+@bk.page ui.draw.page gap=?g
+@bk.other core.check fn=neq args=?oid args=?host
+@bk.dx core.calc out=?dx fn=sub args=?cx args=?ox
+@bk.dy core.calc out=?dy fn=sub args=?cy args=?oy
+@bk.ax core.calc out=?ax fn=abs args=?dx
+@bk.ay core.calc out=?ay fn=abs args=?dy
+@bk.ss core.calc out=?ss fn=add args=?s args=?os
+@bk.sh core.calc out=?sh fn=div args=?ss args=2
+@bk.reach core.calc out=?reach fn=add args=?sh args=?g
+@bk.nx core.check fn=lt args=?ax args=?reach
+@bk.ny core.check fn=lt args=?ay args=?reach
+@bk.out ui.draw.blocker candidate=?cid object=?oid
+@blocked core.rule when=$bk.c when=$bk.o when=$bk.page if=$bk.other with=$bk.dx with=$bk.dy with=$bk.ax with=$bk.ay with=$bk.ss with=$bk.sh with=$bk.reach if=$bk.nx if=$bk.ny then=$bk.out
+@st.near core.check fn=lt args=?ax args=20
+@st.neary core.check fn=lt args=?ay args=20
+@st.out ui.draw.stacked candidate=?cid
+@stacked core.rule when=$bk.c when=$bk.o with=$bk.dx with=$bk.dy with=$bk.ax with=$bk.ay if=$st.near if=$st.neary then=$st.out
+@fr.c ui.draw.candidate id=?cid score=?score
+@fr.b ui.draw.blocker candidate=?cid
+@fr.out ui.draw.free candidate=?cid score=?score
+@fr.st ui.draw.stacked candidate=?cid
+@free core.rule when=$fr.c not=$fr.b not=$fr.st then=$fr.out
+@fr.all ui.draw.free candidate=?cid score=?score
+@fr.best core.aggregate over=$fr.all argmin=?best args=?score pick=?cid ties=first then=$fr.best.o
+@fr.best.o ui.draw.best candidate=?best from=free
+@cw.b ui.draw.blocker candidate=?cid object=?oid
+@cw.count core.aggregate over=$cw.b by=?cid count=?n then=$cw.out
+@cw.out ui.draw.crowd candidate=?cid count=?n
+@sp.crowd ui.draw.crowd candidate=?cid count=?n
+@sp.c ui.draw.candidate id=?cid score=?score
+@sp.st ui.draw.stacked candidate=?cid
+@sp.any ui.draw.free candidate=?other
+@sp.m core.calc out=?m fn=mul args=?n args=10000000
+@sp.score core.calc out=?s2 fn=add args=?m args=?score
+@sp.out ui.draw.spare candidate=?cid score=?s2
+@spare core.rule when=$sp.crowd when=$sp.c not=$sp.st not=$sp.any with=$sp.m with=$sp.score then=$sp.out
+@sp.all ui.draw.spare candidate=?cid score=?score
+@sp.best core.aggregate over=$sp.all argmin=?best args=?score pick=?cid ties=first then=$sp.best.o
+@sp.best.o ui.draw.best candidate=?best from=spare
+@tg.best ui.draw.best candidate=?cid
+@tg.c ui.draw.candidate id=?cid x=?x y=?y size=?s
+@tg.out ui.draw.target x=?x y=?y size=?s
+@target.chosen core.rule when=$tg.best when=$tg.c then=$tg.out
+# A command that names x or y: the default place for the rest, the size of step 1.
+@te.sub ui.draw.subject kind=?k
+@te.d ui.draw.default x=?x y=?y
+@te.s ui.draw.size size=?s
+@te.out ui.draw.target x=?x y=?y size=?s
+@target.given.x core.rule when=$te.sub when=$ex.x when=$te.d when=$te.s then=$te.out
+@target.given.y core.rule when=$te.sub when=$ex.y when=$te.d when=$te.s then=$te.out
+
+# The next object takes the layer after the highest one and the code "o" + that layer.
+@next.o w.drawing.object z=?z
+@next.max core.aggregate over=$next.o max=?top args=?z default=0 then=$next.fact
+@next.fact ui.draw.next top=?top
+@next.n ui.draw.next top=?top
+@next.z core.calc out=?nz fn=add args=?top args=1
+@next.code core.calc out=?code fn=concat args=o args=?nz
+
+# Make an object of a kind (or of a catalog drawing), at the place and size chosen above unless the command says.
+@make.req app.act.request operation="drawing.object.make" kind=?kind
+@cat.req app.act.request operation="drawing.catalog.make" name=?kind
+@make.t ui.draw.target x=?x y=?y size=?s
+@make.call app.act.call act=make kind=w.drawing.object code=?code drawing=?kind x=?x y=?y size=?s z=?nz order=1 ref=new.object
+@make core.rule when=$make.req when=$make.t when=$next.n with=$next.z with=$next.code then=$make.call
+@cat.known k.objects.object name=?kind
+@make.catalog core.rule when=$cat.req when=$cat.known when=$make.t when=$next.n with=$next.z with=$next.code then=$make.call
+# A drawing made from the catalog is named after it, the name the command asked for.
+@cat.name.arg app.act.arg call=new.object attr=name value=?kind
+@make.catalog.name core.rule when=$cat.req when=$cat.known then=$cat.name.arg
+@cat.unknown app.act.refuse reason=drawing-not-in-catalog
+@make.catalog.unknown core.rule when=$cat.req not=$cat.known then=$cat.unknown
+@make.x.req app.act.request x=?v
+@make.x.arg app.act.arg call=new.object attr=x value=?v
+@make.x core.rule when=$make.x.req then=$make.x.arg
+@make.y.req app.act.request y=?v
+@make.y.arg app.act.arg call=new.object attr=y value=?v
+@make.y core.rule when=$make.y.req then=$make.y.arg
+@make.size.req app.act.request size=?v
+@make.size.arg app.act.arg call=new.object attr=size value=?v
+@make.size core.rule when=$make.size.req then=$make.size.arg
+@make.label.req app.act.request operation="drawing.object.make" label=?v
+@make.label.arg app.act.arg call=new.object attr=label value=?v
+@make.label core.rule when=$make.label.req then=$make.label.arg
+@make.name.req app.act.request operation="drawing.object.make" name=?v
+@make.name.arg app.act.arg call=new.object attr=name value=?v
+@make.name core.rule when=$make.name.req then=$make.name.arg
+@make.width.req app.act.request operation="drawing.object.make" width=?v
+@make.width.arg app.act.arg call=new.object attr=width value=?v
+@make.width core.rule when=$make.width.req then=$make.width.arg
+@make.height.req app.act.request operation="drawing.object.make" height=?v
+@make.height.arg app.act.arg call=new.object attr=height value=?v
+@make.height core.rule when=$make.height.req then=$make.height.arg
+@make.colour.req app.act.request operation="drawing.object.make" color=?v
+@make.colour.arg app.act.arg call=new.object attr=colour value=?v
+@make.colour core.rule when=$make.colour.req then=$make.colour.arg
+
+# Change, place or remove listed objects.
+@obj.item app.act.item param="ids" value=?id
+@obj.thing w.drawing.object code=?id
+@chg.label.req app.act.request operation="drawing.object.change" label=?v
+@chg.label.call app.act.call act=change thing=$obj.thing attr=label value=?v order=1
+@change.label core.rule when=$chg.label.req when=$obj.item when=$obj.thing then=$chg.label.call
+@chg.name.req app.act.request operation="drawing.object.change" name=?v
+@chg.name.call app.act.call act=change thing=$obj.thing attr=name value=?v order=1
+@change.name core.rule when=$chg.name.req when=$obj.item when=$obj.thing then=$chg.name.call
+@chg.width.req app.act.request operation="drawing.object.change" width=?v
+@chg.width.call app.act.call act=change thing=$obj.thing attr=width value=?v order=1
+@change.width core.rule when=$chg.width.req when=$obj.item when=$obj.thing then=$chg.width.call
+@chg.height.req app.act.request operation="drawing.object.change" height=?v
+@chg.height.call app.act.call act=change thing=$obj.thing attr=height value=?v order=1
+@change.height core.rule when=$chg.height.req when=$obj.item when=$obj.thing then=$chg.height.call
+@chg.x.req app.act.request operation="drawing.object.change" x=?v
+@chg.x.call app.act.call act=change thing=$obj.thing attr=x value=?v order=1
+@change.x core.rule when=$chg.x.req when=$obj.item when=$obj.thing then=$chg.x.call
+@chg.y.req app.act.request operation="drawing.object.change" y=?v
+@chg.y.call app.act.call act=change thing=$obj.thing attr=y value=?v order=1
+@change.y core.rule when=$chg.y.req when=$obj.item when=$obj.thing then=$chg.y.call
+@chg.size.req app.act.request operation="drawing.object.change" size=?v
+@chg.size.call app.act.call act=change thing=$obj.thing attr=size value=?v order=1
+@change.size core.rule when=$chg.size.req when=$obj.item when=$obj.thing then=$chg.size.call
+@chg.colour.req app.act.request operation="drawing.object.change" color=?v
+@chg.colour.call app.act.call act=change thing=$obj.thing attr=colour value=?v order=1
+@change.colour core.rule when=$chg.colour.req when=$obj.item when=$obj.thing then=$chg.colour.call
+@place.req app.act.request operation="drawing.object.place" x=?x y=?y
+@place.x app.act.call act=change thing=$obj.thing attr=x value=?x order=1
+@place.y app.act.call act=change thing=$obj.thing attr=y value=?y order=2
+@place.cx core.rule when=$place.req when=$obj.item when=$obj.thing then=$place.x
+@place.cy core.rule when=$place.req when=$obj.item when=$obj.thing then=$place.y
+@remove.req app.act.request operation="drawing.object.remove"
+@remove.call app.act.call act=remove thing=$obj.thing order=1
+@remove core.rule when=$remove.req when=$obj.item when=$obj.thing then=$remove.call
+@clear.req app.act.request operation="drawing.page.clear"
+@clear.thing w.drawing.object code=?any
+@clear.call app.act.call act=remove thing=$clear.thing order=1
+@clear core.rule when=$clear.req when=$clear.thing then=$clear.call
+
+# Groups.
+@group.req app.act.request operation="drawing.object.group"
+@group.call app.act.call act=make kind=w.drawing.group code=?code order=1 ref=new.group
+@group core.rule when=$group.req when=$next.n with=$next.z with=$group.code then=$group.call
+@group.code core.calc out=?code fn=concat args=g args=?nz
+@group.member app.act.arg call=new.group attr=member value=$obj.thing
+@group.members core.rule when=$group.req when=$obj.item when=$obj.thing then=$group.member
+@group.label.req app.act.request operation="drawing.object.group" label=?v
+@group.label.arg app.act.arg call=new.group attr=label value=?v
+@group.label core.rule when=$group.label.req then=$group.label.arg
+@ungroup.req app.act.request operation="drawing.object.ungroup" id=?id
+@ungroup.thing w.drawing.group code=?id
+@ungroup.call app.act.call act=remove thing=$ungroup.thing order=1
+@ungroup core.rule when=$ungroup.req when=$ungroup.thing then=$ungroup.call
+
+# Edits of one part: recolour or resize (a new edit, or a change of the existing one), remove.
+@part.obj w.drawing.object code=?id
+@part.edit w.drawing.part object=$part.obj index=?i
+@part.any w.drawing.part object=$part.obj index=?i
+@part.colour.req app.act.request operation="drawing.part.change" id=?id index=?i color=?v
+@part.colour.new app.act.call act=make kind=w.drawing.part object=$part.obj index=?i colour=?v order=1
+@part.colour.chg app.act.call act=change thing=$part.edit attr=colour value=?v order=1
+@part.colour.make core.rule when=$part.colour.req when=$part.obj not=$part.any then=$part.colour.new
+@part.colour.change core.rule when=$part.colour.req when=$part.obj when=$part.edit then=$part.colour.chg
+@part.size.req app.act.request operation="drawing.part.change" width=?w
+@part.size.no app.act.refuse reason=part-size-not-declared
+@part.size core.rule when=$part.size.req then=$part.size.no
+@part.height.req app.act.request operation="drawing.part.change" height=?h
+@part.height.no app.act.refuse reason=part-size-not-declared
+@part.height core.rule when=$part.height.req then=$part.height.no
+@part.rm.req app.act.request operation="drawing.part.remove" id=?id index=?i
+@part.rm.new app.act.call act=make kind=w.drawing.part object=$part.obj index=?i removed=true order=1
+@part.rm.chg app.act.call act=change thing=$part.edit attr=removed value=true order=1
+@part.remove.make core.rule when=$part.rm.req when=$part.obj not=$part.any then=$part.rm.new
+@part.remove.change core.rule when=$part.rm.req when=$part.obj when=$part.edit then=$part.rm.chg
+@part.place.req app.act.request operation="drawing.part.place"
+@part.place.no app.act.refuse reason=part-move-not-declared
+@part.place core.rule when=$part.place.req then=$part.place.no
+@part.extract.req app.act.request operation="drawing.part.extract"
+@part.extract.no app.act.refuse reason=part-extract-not-declared
+@part.extract core.rule when=$part.extract.req then=$part.extract.no
+@fit.req app.act.request operation="drawing.objects.transform"
+@fit.no app.act.refuse reason=fit-box-not-declared
+@fit core.rule when=$fit.req then=$fit.no
+
+# View keys.
+@sel.req app.act.request operation="drawing.object.select" id=?id
+@sel.view app.act.view key=selected value=?id
+@select core.rule when=$sel.req then=$sel.view
+@sels.req app.act.request operation="drawing.objects.select"
+@sels.view app.act.view key=selected value=?id
+@select.many core.rule when=$sels.req when=$obj.item then=$sels.view
+@ids.req app.act.request operation="drawing.ids.show" mode=?m
+@ids.view app.act.view key=ids value=?m
+@ids core.rule when=$ids.req then=$ids.view
+@psel.req app.act.request operation="drawing.part.select" id=?id index=?i
+@psel.view app.act.view key=part value=?i
+@part.select core.rule when=$psel.req then=$psel.view
+
+# What a reader observes, and the geometry placement needs.
+@ob.o w.drawing.object code=?id drawing=?k x=?x y=?y size=?s
+@ob.sel app.area.view key=selected value=?id
+@ob.o.o app.observe.object id=?id kind=?k sourceType=art.draw.object binding=drawing.object x=?x y=?y size=?s selected=false
+@ob.o.sel app.observe.object id=?id kind=?k sourceType=art.draw.object binding=drawing.object x=?x y=?y size=?s selected=true
+@ob.grouped.o w.drawing.object code=?id
+@ob.grouped w.drawing.group code=?g member=$ob.grouped.o
+@ob.member app.observe.object id=?id kind=?k sourceType=art.draw.object binding=drawing.object x=?x y=?y size=?s selected=false in=?g role=member
+@ob.member.sel app.observe.object id=?id kind=?k sourceType=art.draw.object binding=drawing.object x=?x y=?y size=?s selected=true in=?g role=member
+@ob.member.tag app.observe.member id=?id
+@ob.member.mark core.rule when=$ob.grouped.o when=$ob.grouped then=$ob.member.tag
+@ob.is.member app.observe.member id=?id
+@draw.observe.object core.rule when=$ob.o not=$ob.sel not=$ob.is.member then=$ob.o.o
+@draw.observe.object.selected core.rule when=$ob.o when=$ob.sel not=$ob.is.member then=$ob.o.sel
+@draw.observe.object.member core.rule when=$ob.o when=$ob.grouped.o when=$ob.grouped not=$ob.sel then=$ob.member
+@draw.observe.object.member.selected core.rule when=$ob.o when=$ob.grouped.o when=$ob.grouped when=$ob.sel then=$ob.member.sel
+@ob.in.label w.drawing.object code=?id label=?v
+@ob.in.label.o app.observe.input id=?id key=label value=?v
+@draw.observe.label core.rule when=$ob.in.label then=$ob.in.label.o
+@ob.in.name w.drawing.object code=?id name=?v
+@ob.in.name.o app.observe.input id=?id key=name value=?v
+@draw.observe.name core.rule when=$ob.in.name then=$ob.in.name.o
+@ob.in.colour w.drawing.object code=?id colour=?v
+@ob.in.colour.o app.observe.input id=?id key=color value=?v
+@draw.observe.colour core.rule when=$ob.in.colour then=$ob.in.colour.o
+@ob.in.width w.drawing.object code=?id width=?v
+@ob.in.width.o app.observe.input id=?id key=width value=?v
+@draw.observe.width core.rule when=$ob.in.width then=$ob.in.width.o
+@ob.in.height w.drawing.object code=?id height=?v
+@ob.in.height.o app.observe.input id=?id key=height value=?v
+@draw.observe.height core.rule when=$ob.in.height then=$ob.in.height.o
+# Each drawn part of an object is observed under it (id <code>.<index>, its k.objects name as kind), so a reader can
+# name "the roof" of the house; a removed part is not observed.
+@obp.o w.drawing.object code=?id
+@obp.kp k.objects.part name=?name
+@obp.ix ui.draw.index object=?id source=$obp.kp index=?i
+@obp.removed w.drawing.part object=$obp.o index=?i removed=true
+@obp.pid core.calc out=?pid fn=concat args=?id args="." args=?i
+@obp.out app.observe.object id=?pid kind=?name sourceType=art.draw.part binding=drawing.part in=?id role=?name name=?name index=?i
+@draw.observe.part core.rule when=$obp.o when=$obp.kp when=$obp.ix not=$obp.removed with=$obp.pid then=$obp.out
+@ob.member.type core.type of=app.observe.member
+@sp.frame app.observe.frame id=drawing.canvas x0=0 y0=0 x1=1000 y1=700 evidence=rectangle
+@sp.o w.drawing.object code=?id x=?x y=?y size=?s
+@sp.h core.calc out=?h fn=div args=?s args=2
+@sp.x0 core.calc out=?x0 fn=sub args=?x args=?h
+@sp.y0 core.calc out=?y0 fn=sub args=?y args=?h
+@sp.x1 core.calc out=?x1 fn=add args=?x args=?h
+@sp.y1 core.calc out=?y1 fn=add args=?y args=?h
+@sp.box app.observe.box id=?id x0=?x0 y0=?y0 x1=?x1 y1=?y1 occupant=true
+@spatial.box core.rule when=$sp.o with=$sp.h with=$sp.x0 with=$sp.y0 with=$sp.x1 with=$sp.y1 then=$sp.box
+@op.object w.drawing.object code=?id
+@op.object.o app.observe.option id=object value=?id
+@draw.option.object core.rule when=$op.object then=$op.object.o
+@op.kind ui.draw.kind drawing=?k
+@op.kind.o app.observe.option id=kind value=?k
+@draw.option.kind core.rule when=$op.kind then=$op.kind.o
+
+# Selecting nothing (id=null) clears the selection.
+@sel.none.req app.act.request operation="drawing.object.select"
+@sel.none.any app.act.request operation="drawing.object.select" id=?any
+@sel.none.view app.act.view key=selected
+@select.none core.rule when=$sel.none.req not=$sel.none.any then=$sel.none.view
+
+# Groups are observed as objects of their own; a part's drawn colour is an observed input of the part.
+@obg.g w.drawing.group code=?id
+@obg.out app.observe.object id=?id kind=group sourceType=art.draw.group binding=drawing.group
+@draw.observe.group core.rule when=$obg.g then=$obg.out
+@obg.mo w.drawing.object code=?mc
+@obg.m w.drawing.group code=?id member=$obg.mo
+@obg.min app.observe.input id=?id key=member value=?mc
+@draw.observe.member core.rule when=$obg.mo when=$obg.m then=$obg.min
+@obc.kp k.objects.part name=?name
+@obc.ix ui.draw.index object=?id source=$obc.kp index=?i
+@obc.fill ui.draw.fill source=$obc.kp part=?id fill=?f
+@obc.pid core.calc out=?pid fn=concat args=?id args="." args=?i
+@obc.out app.observe.input id=?pid key=color value=?f
+@draw.observe.part.colour core.rule when=$obc.kp when=$obc.ix when=$obc.fill with=$obc.pid then=$obc.out

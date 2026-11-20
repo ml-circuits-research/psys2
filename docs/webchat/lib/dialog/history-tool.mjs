@@ -1,9 +1,9 @@
 // The concrete session journal owns restoration. The compiler supplies one observed head.
-import {parse, quote, serialize, str} from '../vendor/sopworld/sopworld.mjs?v=f63db0e6f1';
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=986e3b26ec';
-import {historyHeads,stageHistoryMove} from './history-journal.mjs?v=fe5fd5739d';
-import {readToolInvocation} from '../../worlds/native-tool-host.mjs?v=7ebbcaef36';
-import {discardPlacementLinks,withdrawPlacementCorrection} from '../../worlds/app.project/spatial-profile.mjs?v=2a281acb84';
+import {parse, quote, serialize, str} from '../vendor/sopworld/sopworld.mjs?v=d7baa85342';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=4534239d2c';
+import {historyHeads,stageHistoryMove} from './history-journal.mjs?v=d82b9e4f4e';
+import {readToolInvocation} from '../../worlds/native-tool-host.mjs?v=88ae92bf04';
+import {discardPlacementLinks,withdrawPlacementCorrection} from '../../worlds/app.project/spatial-profile.mjs?v=88734d0fd8';
 
 const areaForWorld=world=>Object.values(NATIVE_AREAS).find(area=>area.world===world);
 const directions=['undo','redo'];
@@ -17,7 +17,9 @@ const projected=(owner,state)=>owner?.projectState?owner.projectState(state):sta
 function content(world,state){
  const owner=areaForWorld(world);
  const canonical=owner?.canonicalizeState?owner.canonicalizeState(state):state;
- const copy=structuredClone(projected(owner,canonical));
+ // An area whose runtime is separate compares its carrier (SOP plus runtime) without the view keys; its projection
+ // also derives selection marks, which are not content.
+ const copy=structuredClone(owner?.separateRuntime?canonical:projected(owner,canonical));
  for(const path of [...(owner?.historySelection??[]),...(owner?.historyView??[])]){
   const node=path.slice(0,-1).reduce((value,key)=>value?.[key],copy);
   if(node&&typeof node==='object')delete node[path.at(-1)];

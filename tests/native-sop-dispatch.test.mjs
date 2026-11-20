@@ -1,13 +1,13 @@
 import {toNativeDiagramState} from '../worlds/diagram.sketch/canonical-state.mjs';
 import { test } from 'node:test';
-import {toNativeDrawingState} from '../worlds/art.draw/canonical-state.mjs';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import {describeNativeControl} from '../src/dialog/native-control-intent.mjs';
 import {prepareNativeControlHost} from '../src/dialog/native-control-preparation.mjs';
 import { invokeNativeControl } from '../src/dialog/native-tool-controls.mjs';
 import { invokeObservedNativeTool } from '../src/dialog/native-tool-activity.mjs';
-import { createDrawingHost, initialDrawingState } from '../worlds/art.draw/declared-host.mjs';
+import { createDrawingArea, emptyDrawingState as initialDrawingState } from '../worlds/art.draw/sop-drawing.mjs';
+import { drawingObjects } from './drawing-state.mjs';
 import { initialDiagramState } from '../worlds/diagram.sketch/declared-host.mjs';
 import { initialCanonicalDocumentState } from '../worlds/docs.editor/declared-host.mjs';
 import { toNativeDocumentState } from '../worlds/docs.editor/canonical-state.mjs';
@@ -35,7 +35,7 @@ test('the shared native control route executes recorded SOP in all editor areas'
     },
   };
   const cases = [
-    ['draw', 'drawing.object.make', { kind: 'circle', x: 120, y: 130 }, () => toNativeDrawingState(state['art.draw']).objects[0]?.x, 120],
+    ['draw', 'drawing.object.make', { kind: 'circle', x: 120, y: 130 }, () => drawingObjects(state['art.draw'])[0]?.x, 120],
     ['diagram', 'diagram.node.make', { kind: 'rectangle', x: 230, y: 240 }, () => toNativeDiagramState(state['diagram.sketch']).shapes[0]?.y, 240],
     ['editor', 'document.write', { title: 'Report', blocks: [{ kind: 'paragraph', text: 'Measured' }] },
       () => toNativeDocumentState(state['docs.editor']).blocks[0]?.text, 'Measured'],
@@ -60,13 +60,13 @@ test('the shared native control route executes recorded SOP in all editor areas'
   const restored=await invokeNativeControl(session,{view:'draw',sop:undo});
   assert.equal(restored.intentRecord.inputSop,undo);
   assert.equal(restored.intentRecord.text,'Undo my drawing edit.');
-  assert.equal(toNativeDrawingState(state['art.draw']).objects.length,0);
+  assert.equal(drawingObjects(state['art.draw']).length,0);
   assert.match(activity.find((event) => event.operation === 'document.write' && event.phase === 'start').sop, /app\.control\.intent/);
 });
 
 test('native dispatch requires valid SOP and resolves only the live host declaration', async () => {
   const state = initialDrawingState();
-  const host = createDrawingHost({ state, instanceId: 'compiled-dispatch' });
+  const host = await createDrawingArea({ state, instanceId: 'compiled-dispatch' });
   const area = { world: 'art.draw' };
   const expectedVersion = host.observe().version;
   const before = structuredClone(state);
@@ -81,5 +81,5 @@ test('native dispatch requires valid SOP and resolves only the live host declara
     area, host, expectedVersion, sop: '@call drawing.object.make kind="circle" x=100 y=150',
   });
   assert.equal(receipt.status, 'changed');
-  assert.deepEqual([state.objects[0].x, state.objects[0].y], [100, 150]);
+  assert.deepEqual([drawingObjects(state)[0].x, drawingObjects(state)[0].y], [100, 150]);
 });

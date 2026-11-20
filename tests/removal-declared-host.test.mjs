@@ -2,12 +2,12 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {routeNewEngine} from '../src/dialog/reader-routing.mjs';
 import {performGesture} from './fixtures/editor-gesture.mjs';
-import {initialDrawingState} from '../worlds/art.draw/declared-host.mjs';
+import {emptyDrawingState} from '../worlds/art.draw/sop-drawing.mjs';
 import {initialDiagramState} from '../worlds/diagram.sketch/declared-host.mjs';
 import {createAreaHost,NATIVE_AREAS} from '../src/dialog/app-reader-context.mjs';
 
 const cases=[
- {view:'draw',area:'drawing',type:'drawn',sourceType:'art.draw.object',make:'drawing.object.make',remove:'drawing.object.remove',initial:initialDrawingState,kinds:['tree','house']},
+ {view:'draw',area:'drawing',type:'drawn',sourceType:'art.draw.object',make:'drawing.object.make',remove:'drawing.object.remove',initial:emptyDrawingState,kinds:['tree','house']},
  {view:'diagram',area:'diagram',type:'node',sourceType:'diagram.sketch.node',make:'diagram.node.make',remove:'diagram.node.remove',initial:initialDiagramState,kinds:['circle','rectangle']},
 ];
 const mention=(context,noun)=>{

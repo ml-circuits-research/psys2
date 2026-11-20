@@ -6,11 +6,12 @@ import {World,retainSelectiveCalibration,quote,parse} from '../src/vendor/sopwor
 import {readFileSync} from 'node:fs';
 import {compileReaderAdmission,readerCalibrationErrorLimit} from '../src/dialog/reader-policy.mjs';
 import POLICY from '../worlds/app.project/reader-admission-policy-source.mjs';
-import {canonicalDrawingState,toNativeDrawingState} from '../worlds/art.draw/canonical-state.mjs';
-import {initialState,makeObject} from '../worlds/art.draw/board.mjs';
+import {drawingState,drawingObjects} from './drawing-state.mjs';
 const text='Change the colour of the circle to purple.';
-const setup=()=>{const s=initialState();s.objects=[{...makeObject(s,'circle'),color:'red'}];return {engine:{},isession:{state:{'art.draw':canonicalDrawingState(s),'ui.shell':{activeTab:'draw'}}},newEngineJournal:[]};};
-const drawing=session=>toNativeDrawingState(session.isession.state['art.draw']);
+// One red circle (o1) made through the Drawing area's own command; each test gets its own copy.
+const redCircle=await drawingState([{kind:'circle',color:'red'}]);
+const setup=()=>({engine:{},isession:{state:{'art.draw':structuredClone(redCircle),'ui.shell':{activeTab:'draw'}}},newEngineJournal:[]});
+const drawing=session=>({objects:drawingObjects(session.isession.state['art.draw'])});
 const provenance={modelSha256:'a'.repeat(64),decoderVersion:1};
 const candidate=()=>({request:'r',wires:`@source std.request.source text=${quote(text)}\n@r std.request act=change mood=do source=$source root=$c\n@t std.request.target request=$r mode=existing kind=circle\n@c std.request.constraint request=$r target=$t concept=colour operator=eq value="purple" character=requirement polarity=positive`});
 const proposal=()=>({candidates:[candidate()],coverage:{complete:true,executable:false,graphProposal:true},graphConfidence:null,failures:[],selectionScore:{definition:'psys2.model-minimum/1',value:0.95}});

@@ -34,16 +34,16 @@
 @avatar.max app.area.constant area=$avatar.area input="avatar.maxScale" value=1.5
 
 # The controls of the tab's inspector. A view builds them generically: each sends its operation with the chosen
-# option as `param`; `target=selected` adds the selected object (as `list` when declared), `when` limits a
+# option as `param`; `target=selected` adds the selected object (as `list` when declared; `except` names selections it does not apply to), `when` limits a
 # control to a selected object that exists or not. Options come from app.observe.option facts.
 @area.control.type core.type of=app.area.control
 @avatar.control.preset app.area.control area=$avatar.area n=1 label="Composition" operation="avatar.face.preset" param=preset options=preset
 @avatar.control.expression app.area.control area=$avatar.area n=2 label="Emotion" operation="avatar.face.expression" param=expression options=expression
 @avatar.control.ids app.area.control area=$avatar.area n=3 label="Object IDs" operation="avatar.ids.show" param=mode options=idsMode
 @avatar.control.select app.area.control area=$avatar.area n=4 label="Selection" operation="avatar.part.select" param=id options=object
-@avatar.control.variant app.area.control area=$avatar.area n=5 label="Look" operation="avatar.part.change" param=variant options=selected target=selected list=ids when=present
-@avatar.control.add app.area.control area=$avatar.area n=6 label="Add" operation="avatar.part.add" param=variant options=selected target=selected list=id when=absent
-@avatar.control.size app.area.control area=$avatar.area n=7 label="Size" operation="avatar.part.change" param=size options=size target=selected list=ids when=present
-@avatar.control.colour app.area.control area=$avatar.area n=8 label="Colour" operation="avatar.part.change" param=colour options=colour target=selected list=ids when=present
-@avatar.control.move app.area.control area=$avatar.area n=9 label="Move" operation="avatar.part.move" param=place options=place target=selected list=ids when=present
-@avatar.control.remove app.area.control area=$avatar.area n=10 label="Delete" operation="avatar.parts.remove" target=selected list=ids when=present
+@avatar.control.variant app.area.control area=$avatar.area n=5 label="Look" operation="avatar.part.change" param=variant options=selected target=selected except=face list=ids when=present
+@avatar.control.add app.area.control area=$avatar.area n=6 label="Add" operation="avatar.part.add" param=variant options=selected target=selected except=face list=id when=absent
+@avatar.control.size app.area.control area=$avatar.area n=7 label="Size" operation="avatar.part.change" param=size options=size target=selected except=face list=ids when=present
+@avatar.control.colour app.area.control area=$avatar.area n=8 label="Colour" operation="avatar.part.change" param=colour options=colour target=selected except=face list=ids when=present
+@avatar.control.move app.area.control area=$avatar.area n=9 label="Move" operation="avatar.part.move" param=place options=place target=selected except=face list=ids when=present
+@avatar.control.remove app.area.control area=$avatar.area n=10 label="Delete" operation="avatar.parts.remove" target=selected except=face list=ids when=present

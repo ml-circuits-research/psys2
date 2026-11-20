@@ -4,8 +4,8 @@ import { World,parse } from '../src/vendor/sopworld/sopworld.mjs';
 import { resolveRequestRoute } from '../src/dialog/request-routing-policy.mjs';
 import { compareDeclaredReadings } from '../src/dialog/declared-execution.mjs';
 import { routeNewEngine } from '../src/dialog/reader-routing.mjs';
-import { initialDrawingState } from '../worlds/art.draw/declared-host.mjs';
-import { toNativeDrawingState } from '../worlds/art.draw/canonical-state.mjs';
+import { emptyDrawingState } from '../worlds/art.draw/sop-drawing.mjs';
+import { drawingObjects } from './drawing-state.mjs';
 
 function request(act,body=''){
  return {request:'request',wires:'@source std.request.source text="Observed request"\n'
@@ -50,8 +50,8 @@ test('actual declared capability, spatial and history interpreters route once an
  const bindings={kinds:['house','fish'].map(lemma=>({area:'drawing',type:'drawn',lemma,canonical:'fixture.'+lemma,
   nativeFamilyBinding:{operation:'drawing.object.make',sourceType:'art.draw.object'}})),properties:[]};
  const session={engine:{nativeBindings:bindings,onWorldActivity:event=>activities.push(event)},
-  isession:{state:{[world]:initialDrawingState()}}};
- const observe=()=>toNativeDrawingState(session.isession.state[world]).objects.map(({kind})=>kind);
+  isession:{state:{[world]:emptyDrawingState()}}};
+ const observe=()=>drawingObjects(session.isession.state[world]).map(({kind})=>kind);
  const run=async(candidate,method)=>{
   const start=activities.length;
   const result=await routeNewEngine(session,candidate.wires,{view:'draw'});

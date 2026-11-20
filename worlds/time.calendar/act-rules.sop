@@ -5,7 +5,7 @@
 
 # calendar: add, change, remove.
 @calendar.add.req app.act.request operation="calendar.calendar.add" id=?id label=?v
-@calendar.add.call app.act.call act=make kind=w.meetings.calendar code=?id label=?v order=1 label=new.calendar
+@calendar.add.call app.act.call act=make kind=w.meetings.calendar code=?id label=?v order=1 ref=new.calendar
 @calendar.add core.rule when=$calendar.add.req then=$calendar.add.call
 @calendar.thing w.meetings.calendar code=?id
 @calendar.remove.req app.act.request operation="calendar.calendar.remove" id=?id
@@ -23,7 +23,7 @@
 
 # person: add, change, remove.
 @person.add.req app.act.request operation="calendar.person.add" id=?id label=?v
-@person.add.call app.act.call act=make kind=w.meetings.person code=?id label=?v order=1 label=new.person
+@person.add.call app.act.call act=make kind=w.meetings.person code=?id label=?v order=1 ref=new.person
 @person.add core.rule when=$person.add.req then=$person.add.call
 @person.thing w.meetings.person code=?id
 @person.remove.req app.act.request operation="calendar.person.remove" id=?id
@@ -35,7 +35,7 @@
 
 # room: add, change, remove.
 @room.add.req app.act.request operation="calendar.room.add" id=?id label=?v
-@room.add.call app.act.call act=make kind=w.meetings.room code=?id label=?v order=1 label=new.room
+@room.add.call app.act.call act=make kind=w.meetings.room code=?id label=?v order=1 ref=new.room
 @room.add core.rule when=$room.add.req then=$room.add.call
 @room.thing w.meetings.room code=?id
 @room.remove.req app.act.request operation="calendar.room.remove" id=?id
@@ -62,10 +62,10 @@
 @event.add.req app.act.request operation="calendar.event.add" id=?id title=?t start=?s duration=?d
 @event.cal.default ui.calendar.default calendar=?c
 @event.cal w.meetings.calendar code=?c
-@event.add.call app.act.call act=make kind=w.meetings.meeting code=?id title=?t start=?s duration=?d calendar=$event.cal order=1 label=new.meeting
+@event.add.call app.act.call act=make kind=w.meetings.meeting code=?id title=?t start=?s duration=?d calendar=$event.cal order=1 ref=new.meeting
 @event.add core.rule when=$event.add.req when=$event.cal.default when=$event.cal then=$event.add.call
 @meeting.add.req app.act.request operation="calendar.meeting.add" id=?id title=?t start=?s duration=?d
-@meeting.add.call app.act.call act=make kind=w.meetings.meeting code=?id title=?t start=?s duration=?d order=1 label=new.meeting
+@meeting.add.call app.act.call act=make kind=w.meetings.meeting code=?id title=?t start=?s duration=?d order=1 ref=new.meeting
 @meeting.add core.rule when=$meeting.add.req then=$meeting.add.call
 @notes.add.req app.act.request notes=?n
 @notes.add.arg app.act.arg call=new.meeting attr=notes value=?n
@@ -102,7 +102,7 @@
 @meeting.change.cal.call app.act.call act=change thing=$meeting.thing attr=calendar value=$cal.add.thing order=1
 @meeting.change.cal core.rule when=$meeting.change.cal.req when=$meeting.thing when=$cal.add.thing then=$meeting.change.cal.call
 @meeting.change.people.req app.act.request operation="calendar.meeting.change" id=?id
-@meeting.change.people.call app.act.call act=change thing=$meeting.thing attr=participant order=1 label=change.people
+@meeting.change.people.call app.act.call act=change thing=$meeting.thing attr=participant order=1 ref=change.people
 @meeting.change.people core.rule when=$meeting.change.people.req when=$meeting.thing when=$people.item then=$meeting.change.people.call
 @meeting.change.people.arg app.act.arg call=change.people attr=value value=$people.person
 @meeting.change.people.value core.rule when=$meeting.change.people.req when=$people.item when=$people.person then=$meeting.change.people.arg

@@ -1,0 +1,180 @@
+# art.draw render projection (authored): what is drawn for each w.drawing object, derived with k.objects.
+# A kind with its own drawing in k.objects draws its parts in the 0..100 frame, scaled to the object's size
+# about its centre; a basic shape is one declared primitive; a kind with no drawing of its own draws the one of
+# the kind it is a kind of (k.people kind_of). The object's colour paints the drawing's largest part.
+@d.draw.type core.type of=ui.draw.draw
+@d.fill.type core.type of=ui.draw.fill
+@d.colour.type core.type of=ui.draw.colour
+@d.chosen.type core.type of=ui.draw.chosen
+@d.area.type core.type of=ui.draw.area
+@d.main.type core.type of=ui.draw.main
+@d.rgb.type core.type of=ui.draw.rgb
+@d.edited.type core.type of=ui.draw.edited
+@d.index.type core.type of=ui.draw.index
+@d.point.type core.type of=ui.draw.point
+@d.orient.type core.type of=ui.draw.orient
+@d.form.type core.type of=ui.draw.form
+@d.shape.type core.type of=ui.draw.shape
+@d.kind.type core.type of=ui.draw.kind
+
+# Basic shapes: one primitive filling the object's box.
+@shape.circle ui.draw.shape drawing=circle shape=circle
+@shape.oval ui.draw.shape drawing=oval shape=oval
+@shape.square ui.draw.shape drawing=square shape=square
+@shape.rectangle ui.draw.shape drawing=rectangle shape=rectangle
+@shape.triangle ui.draw.shape drawing=triangle shape=triangle
+@shape.patch ui.draw.shape drawing=patch shape=oval
+@shape.line ui.draw.shape drawing=line shape=line
+@line.o w.drawing.object code=?id drawing=line
+@line.p1 ui.draw.point source=?id n=1 x=0 y=50
+@line.p2 ui.draw.point source=?id n=2 x=100 y=50
+@line.start core.rule when=$line.o then=$line.p1
+@line.end core.rule when=$line.o then=$line.p2
+
+# The drawing an object uses: its own, else the one of the kind it is a kind of.
+@form.o w.drawing.object code=?id drawing=?k
+@form.own k.objects.object name=?k
+@form.own.o ui.draw.form object=?id form=?k
+@form.direct core.rule when=$form.o when=$form.own then=$form.own.o
+@form.parent k.people.kind name=?k kind_of=?p
+@form.parent.obj k.objects.object name=?p
+@form.parent.o ui.draw.form object=?id form=?p
+@form.inherited core.rule when=$form.o when=$form.parent when=$form.parent.obj not=$form.own then=$form.parent.o
+
+# Parts of the form, scaled about the object's centre: the 0..100 frame maps onto the object's size. A part's
+# index is its place in the drawing's layer order (from 0), the index part edits name; a removed part is not drawn.
+@ix.o w.drawing.object code=?id
+@ix.f ui.draw.form object=?id form=?k
+@ix.kp k.objects.part of=?k z=?pz
+@ix.rank core.rank of=$ix.kp by=z out=?r within=?k
+@ix.i core.calc out=?i fn=sub args=?r args=1
+@ix.out ui.draw.index object=?id source=$ix.kp index=?i
+@project.index core.rule when=$ix.o when=$ix.f when=$ix.kp with=$ix.rank with=$ix.i then=$ix.out
+@pr.o w.drawing.object code=?id x=?x y=?y size=?s z=?layer
+@pr.f ui.draw.form object=?id form=?k
+@pr.kp k.objects.part of=?k shape=?shape x=?px y=?py w=?pw h=?ph z=?pz
+@pr.ix ui.draw.index object=?id source=$pr.kp index=?i
+@pr.removed w.drawing.part object=$pr.o index=?i removed=true
+@pr.k core.calc out=?scale fn=div args=?s args=100
+@pr.out ui.draw.draw part=?id source=$pr.kp slot=?id order=?layer z=?pz shape=?shape x=?px y=?py w=?pw h=?ph cx=50 cy=50 tx=?x ty=?y scale=?scale side=left
+@project.parts core.rule when=$pr.o when=$pr.f when=$pr.kp when=$pr.ix not=$pr.removed with=$pr.k then=$pr.out
+@pp.draw ui.draw.draw source=?src
+@pp.k k.objects.point part=?src n=?n x=?x y=?y
+@pp.o ui.draw.point source=?src n=?n x=?x y=?y
+@project.points core.rule when=$pp.draw when=$pp.k then=$pp.o
+@po.kp k.objects.part opens=?open
+@po.draw ui.draw.draw source=$po.kp
+@po.o ui.draw.orient source=$po.kp opens=?open
+@project.orient core.rule when=$po.kp when=$po.draw then=$po.o
+
+# Basic shapes.
+@ps.o w.drawing.object code=?id drawing=?k x=?x y=?y size=?s z=?layer
+@ps.shape ui.draw.shape drawing=?k shape=?shape
+@ps.k core.calc out=?scale fn=div args=?s args=100
+@ps.out ui.draw.draw part=?id source=?id slot=?id order=?layer z=0 shape=?shape x=0 y=0 w=100 h=100 cx=50 cy=50 tx=?x ty=?y scale=?scale side=left
+@project.shape core.rule when=$ps.o when=$ps.shape with=$ps.k then=$ps.out
+
+# A colour value is a k.colours name or an #rrggbb value, which is its own RGB.
+@rgb.name k.colours.colour name=?c rgb=?rgb
+@rgb.name.o ui.draw.rgb colour=?c rgb=?rgb
+@colour.named core.rule when=$rgb.name then=$rgb.name.o
+@rgb.obj w.drawing.object colour=?c
+@rgb.part w.drawing.part colour=?c
+@rgb.hex core.check fn=matches args=?c args="^#[0-9a-fA-F]{6}$"
+@rgb.hex.o ui.draw.rgb colour=?c rgb=?c
+@colour.hex.object core.rule when=$rgb.obj if=$rgb.hex then=$rgb.hex.o
+@colour.hex.part core.rule when=$rgb.part if=$rgb.hex then=$rgb.hex.o
+
+# Colours: the object's colour paints the largest part of its drawing (and a basic shape), the other parts keep
+# their own first colour; an edited part takes its edit.
+@c.o w.drawing.object code=?id colour=?c
+@c.rgb ui.draw.rgb colour=?c rgb=?rgb
+@e.o w.drawing.object code=?id
+@e.part w.drawing.part object=$e.o index=?i colour=?c
+@e.ix ui.draw.index object=?id source=?src index=?i
+@e.rgb ui.draw.rgb colour=?c rgb=?rgb
+@e.out ui.draw.edited source=?src part=?id fill=?rgb
+@colour.edited core.rule when=$e.o when=$e.part when=$e.ix when=$e.rgb then=$e.out
+@ar.f ui.draw.form form=?k
+@ar.kp k.objects.part of=?k w=?w h=?h
+@ar.a core.calc out=?area fn=mul args=?w args=?h
+@ar.out ui.draw.area form=?k source=$ar.kp area=?area
+@project.area core.rule when=$ar.f when=$ar.kp with=$ar.a then=$ar.out
+@main.a ui.draw.area form=?k source=?src area=?area
+@main.out ui.draw.main form=?k source=?best
+@main core.aggregate over=$main.a by=?k argmax=?best args=?area pick=?src ties=first then=$main.out
+@c.main.f ui.draw.form object=?id form=?k
+@c.main ui.draw.main form=?k source=?src
+@c.main.draw ui.draw.draw part=?id source=?src
+@c.main.edited ui.draw.edited source=?src part=?id
+@c.main.out ui.draw.chosen source=?src part=?id fill=?rgb
+@colour.main core.rule when=$c.o when=$c.rgb when=$c.main.f when=$c.main when=$c.main.draw not=$c.main.edited then=$c.main.out
+@c.shape.draw ui.draw.draw part=?id source=?id
+@c.shape.out ui.draw.chosen source=?id part=?id fill=?rgb
+@colour.shape core.rule when=$c.o when=$c.rgb when=$c.shape.draw then=$c.shape.out
+@c.own.kp k.objects.part colour=?pc
+@c.own.draw ui.draw.draw part=?id source=$c.own.kp
+@c.own.rgb k.colours.colour name=?pc rgb=?rgb
+@c.chosen ui.draw.chosen source=$c.own.kp part=?id
+@c.edited ui.draw.edited source=$c.own.kp part=?id
+@c.own.out ui.draw.colour source=$c.own.kp part=?id fill=?rgb
+@colour.own core.rule when=$c.own.kp when=$c.own.draw when=$c.own.rgb not=$c.chosen not=$c.edited then=$c.own.out
+@f.edited ui.draw.edited source=?src part=?id fill=?f
+@f.edited.o ui.draw.fill source=?src part=?id fill=?f
+@fill.edited core.rule when=$f.edited then=$f.edited.o
+@f.chosen ui.draw.chosen source=?src part=?id fill=?f
+@f.chosen.o ui.draw.fill source=?src part=?id fill=?f
+@fill.chosen core.rule when=$f.chosen then=$f.chosen.o
+@f.c ui.draw.colour source=?src part=?id fill=?f
+@f.o ui.draw.fill source=?src part=?id fill=?f
+@fill.own core.rule when=$f.c then=$f.o
+@f.default.draw ui.draw.draw source=?src part=?id
+@f.default.has ui.draw.colour source=?src part=?id
+@f.default.chosen ui.draw.chosen source=?src part=?id
+@f.default.edited ui.draw.edited source=?src part=?id
+@f.default.o ui.draw.fill source=?src part=?id fill="#9aa5b1"
+@fill.default core.rule when=$f.default.draw not=$f.default.has not=$f.default.chosen not=$f.default.edited then=$f.default.o
+
+# Labels under the object.
+@l.o w.drawing.object code=?id label=?text x=?x y=?y size=?s z=?layer
+@l.h core.calc out=?h fn=div args=?s args=2
+@l.y core.calc out=?ly fn=add args=?y args=?h
+@l.y2 core.calc out=?ty fn=add args=?ly args=18
+@l.out ui.draw.draw part=?id source=?text slot=?id order=?layer z=99 shape=text text=?text x=?x y=?ty w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left
+@label core.rule when=$l.o with=$l.h with=$l.y with=$l.y2 then=$l.out
+@l.ink ui.draw.chosen source=?text part=?id fill="#1f2933"
+@label.ink core.rule when=$l.o then=$l.ink
+
+# The kinds the Drawing tab offers by name (drawing.object.make); any k.objects drawing is reachable through drawing.catalog.make.
+@kind.circle ui.draw.kind drawing=circle
+@kind.oval ui.draw.kind drawing=oval
+@kind.square ui.draw.kind drawing=square
+@kind.rectangle ui.draw.kind drawing=rectangle
+@kind.triangle ui.draw.kind drawing=triangle
+@kind.star ui.draw.kind drawing=star
+@kind.heart ui.draw.kind drawing=heart
+@kind.line ui.draw.kind drawing=line
+@kind.arrow ui.draw.kind drawing=arrow
+@kind.lake ui.draw.kind drawing=lake
+@kind.river ui.draw.kind drawing=river
+@kind.road ui.draw.kind drawing=road
+@kind.field ui.draw.kind drawing=field
+@kind.patch ui.draw.kind drawing=patch
+@kind.hill ui.draw.kind drawing=hill
+@kind.house ui.draw.kind drawing=house
+@kind.tree ui.draw.kind drawing=tree
+@kind.sun ui.draw.kind drawing=sun
+@kind.cloud ui.draw.kind drawing=cloud
+@kind.car ui.draw.kind drawing=car
+@kind.flower ui.draw.kind drawing=flower
+@kind.cat ui.draw.kind drawing=cat
+@kind.dog ui.draw.kind drawing=dog
+@kind.fish ui.draw.kind drawing=fish
+@kind.bird ui.draw.kind drawing=bird
+@kind.boat ui.draw.kind drawing=boat
+@kind.mountain ui.draw.kind drawing=mountain
+@kind.rainbow ui.draw.kind drawing=rainbow
+@kind.person ui.draw.kind drawing=person
+@kind.balloon ui.draw.kind drawing=balloon
+@kind.rocket ui.draw.kind drawing=rocket
+@kind.moon ui.draw.kind drawing=moon

@@ -1,6 +1,6 @@
 // Literal document editing tools. Uses the real block/mark model, never a language reader.
-import {commit,sync,addBlock} from './document.mjs?v=bb449fec98';
-import {getText,addMark,cutMark,spliceText,containers} from './model.mjs?v=7dfba6bc28';
+import {commit,sync,addBlock} from './document.mjs?v=b5cf4de4b6';
+import {getText,addMark,cutMark,spliceText,containers} from './model.mjs?v=213a55713a';
 export const documentTextId=(id,at='0')=>JSON.stringify([id,at]);
 const fail=code=>({status:'missing',code}),done=changed=>({status:'supported',changed});
 const strings=items=>Array.isArray(items)&&items.length>0&&items.length<=500&&items.every(t=>typeof t==='string');

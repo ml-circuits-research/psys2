@@ -1,5 +1,4 @@
 import {invokeToolCommand} from '../src/dialog/native-control-intent.mjs';
-import {toNativeDrawingState} from '../worlds/art.draw/canonical-state.mjs';
 import {test} from 'node:test';import assert from 'node:assert/strict';
 import {createDrawingHost,initialDrawingState} from '../worlds/art.draw/declared-host.mjs';
 const call=(h,operation,args,invocation=crypto.randomUUID())=>invokeToolCommand(h,{invocation,expectedVersion:h.observe().version,operation,args});
@@ -42,19 +41,23 @@ test('extract, group, move and ungroup retain actual constituents and undo rathe
 
 import {THINGS} from '../worlds/art.draw/things.catalog.mjs';
 import {performGesture} from './fixtures/editor-gesture.mjs';
+import {emptyDrawingState} from '../worlds/art.draw/sop-drawing.mjs';
+import {drawingObjects} from './drawing-state.mjs';
+// The Drawing tab is the SOP area (worlds/art.draw/area.sop); part extraction is refused there on purpose.
 test('compound UI capture retains source references and leaves unsupported projections unverified',async()=>{
- const state=initialDrawingState(),session={isession:{state:{'art.draw':state}}};
+ const session={isession:{state:{'art.draw':emptyDrawingState()}}};
  const run=(operation,args)=>performGesture(session,{view:'draw',operation,args});
- const current=()=>toNativeDrawingState(session.isession.state['art.draw']);
- await run('drawing.object.make',{kind:'house',name:'Home'});const root=current().objects[0].id;
- const roof=drawingPartsOf(current().objects[0]).find(p=>p.role==='roof');
- const extracted=await run('drawing.part.extract',{id:root,index:roof.index});
- assert.equal(extracted.ok,true);assert.equal(extracted.intentRecord.verification.status,'unverified');assert.equal(current().objects.length,2);assert.equal(current().objects.find(o=>o.id!==root).origin.role,'roof');
- const ids=current().objects.map(o=>o.id),grouped=await run('drawing.object.group',{ids,name:'Editable home'});
- assert.equal(grouped.ok,true);assert.equal(grouped.intentRecord.verification.status,'unverified');assert.equal(current().objects.length,1);assert.equal(current().objects[0].shape.members.length,2);
- const ungrouped=await run('drawing.object.ungroup',{id:current().objects[0].id});
- assert.equal(ungrouped.ok,true);assert.equal(ungrouped.intentRecord.verification.status,'unverified');assert.deepEqual(current().objects.map(o=>o.id),ids);assert.ok(current().objects.every(o=>partsOf(o).length));
- for(const record of [extracted,grouped,ungrouped].map(r=>r.intentRecord))assert.ok(record.text.includes('from '));
+ const sop=()=>session.isession.state['art.draw'].sop;
+ await run('drawing.object.make',{kind:'house',name:'Home'});await run('drawing.object.make',{kind:'tree'});const ids=drawingObjects(session.isession.state['art.draw']).map(o=>o.id);
+ const before=sop(),extracted=await run('drawing.part.extract',{id:ids[0],index:1});
+ assert.equal(extracted.ok,false);assert.equal(extracted.receipt.reason,'part-extract-not-declared');assert.equal(sop(),before);
+ const grouped=await run('drawing.object.group',{ids,label:'Editable home'});
+ assert.equal(grouped.ok,true);assert.equal(grouped.intentRecord.verification.status,'unverified');
+ const group=sop().match(/w\.drawing\.group .*?code=(\S+)/)?.[1];assert.ok(group);assert.match(sop(),/w\.drawing\.group .*label="Editable home"/);
+ const ungrouped=await run('drawing.object.ungroup',{id:group});
+ assert.equal(ungrouped.ok,true);assert.equal(ungrouped.intentRecord.verification.status,'unverified');assert.doesNotMatch(sop(),/w\.drawing\.group /);
+ assert.deepEqual(drawingObjects(session.isession.state['art.draw']).map(o=>o.id),ids);
+ for(const record of [grouped,ungrouped].map(r=>r.intentRecord))assert.ok(record.text.includes('from '),record.text);
 });
 test('knowledge drawings use worker-loaded actual constituents, keep meaning and reject UI-supplied geometry',()=>{
  const state=initialDrawingState(),knowledge={peek:name=>name==='chair'?{name:'chair',objects:[{parts:THINGS.chair}]}:null},h=createDrawingHost({state,instanceId:'catalogue',knowledge});
