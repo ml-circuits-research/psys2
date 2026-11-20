@@ -61,6 +61,9 @@ export async function seedContext(world,existing,{knowledge,bindings}={}){
    note(item,await call('diagram.node.make',{kind,...(item.name?{label:item.name}:{})}));
   }
   const nativeNodes=()=>host.observe().objects.filter(o=>o.sourceType==='diagram.sketch.node').map(o=>o.id);
+  // A context that lists links (or groups) has the nodes they join: unnamed endpoint nodes are made when the context
+  // names fewer than the links need (the context is a summary of the page, not every object on it).
+  for(let need=(links.length?2:groups.length?1:0)-nativeNodes().length;need>0;need--)await call('diagram.node.make',{kind:'rectangle'});
   for(const item of links){const n=nativeNodes();if(n.length<2){failures.push({index:item.index,kind:item.kind,reason:'link-needs-two-nodes'});continue;}
    const i=links.indexOf(item)%(n.length-1);note(item,await call('diagram.link.make',{from:n[i],to:n[i+1],...(item.name&&!/^e\d+$/.test(item.name)?{label:item.name}:{})}));}
   // Points and series listed after a chart are that chart's (before any chart: the first chart's).
