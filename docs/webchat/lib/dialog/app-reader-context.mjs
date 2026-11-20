@@ -1,11 +1,11 @@
 // Actual application state only. No request annotations or invented semantic types.
 import {observedReaderContext} from './native-reader-context.mjs?v=219b156c19';
 import {isAuthoredRequest} from './authored-request-tool.mjs?v=451ae12d70';
-import {createDrawingArea,canonicalDrawingArea,projectDrawingArea,drawingAreaStateWorld} from '../../worlds/art.draw/sop-drawing.mjs?v=b6eff2cd2d';
-import {createDiagramArea,canonicalDiagramArea,projectDiagramArea,diagramAreaStateWorld} from '../../worlds/diagram.sketch/sop-diagram.mjs?v=7ea84f9994';
-import {createDocumentArea,canonicalDocumentArea,projectDocumentArea,documentAreaStateWorld} from '../../worlds/docs.editor/sop-document.mjs?v=7308c956ef';
-import {createAvatarArea,canonicalAvatarArea,projectAvatarArea,avatarAreaStateWorld} from '../../worlds/ui.avatar/sop-avatar.mjs?v=4e8c80425e';
-import {createCalendarArea,canonicalCalendarArea,projectCalendarArea,calendarAreaStateWorld} from '../../worlds/time.calendar/sop-calendar.mjs?v=df0cfa7f36';
+import {createDrawingArea,canonicalDrawingArea,projectDrawingArea,drawingAreaStateWorld} from '../../worlds/art.draw/sop-drawing.mjs?v=3d78d5c115';
+import {createDiagramArea,canonicalDiagramArea,projectDiagramArea,diagramAreaStateWorld} from '../../worlds/diagram.sketch/sop-diagram.mjs?v=9f151a35c3';
+import {createDocumentArea,canonicalDocumentArea,projectDocumentArea,documentAreaStateWorld} from '../../worlds/docs.editor/sop-document.mjs?v=31317e8334';
+import {createAvatarArea,canonicalAvatarArea,projectAvatarArea,avatarAreaStateWorld} from '../../worlds/ui.avatar/sop-avatar.mjs?v=2edf9d0840';
+import {createCalendarArea,canonicalCalendarArea,projectCalendarArea,calendarAreaStateWorld} from '../../worlds/time.calendar/sop-calendar.mjs?v=58715ddff4';
 import {World,str} from '../vendor/sopworld/sopworld.mjs?v=a37e1846b3';
 import AREA_SCHEMA from '../../worlds/app.project/area-registry-schema-source.mjs?v=3e2ce9c453';
 import AREA_REGISTRY from '../../worlds/app.project/area-registry-source.mjs?v=a9e593f4ad';

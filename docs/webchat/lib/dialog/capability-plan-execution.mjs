@@ -5,12 +5,12 @@ import { quote } from '../vendor/sopworld/sopworld.mjs?v=a37e1846b3';
 // SPDX-License-Identifier: AGPL-3.0-only
 import { compileNativeCapability } from './capability-plan-adapter.mjs?v=06daba0018';
 import { readDegreeBases } from './degree-bases.mjs?v=96e65008ac';
-import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=b82f8fc380';
+import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=5822676a45';
 import { instanceIdFor } from './instance-identity.mjs?v=024ef1ca83';
-import { prepareNativeControlHost } from './native-control-preparation.mjs?v=a85d2159c0';
+import { prepareNativeControlHost } from './native-control-preparation.mjs?v=95d00cf9bc';
 import { invokeObservedNativeTool } from './native-tool-activity.mjs?v=50362a2706';
 import { retainPropertyEffect } from './property-effect-evidence.mjs?v=c3128d6455';
-import { describeNativeControl, verifyNativeControlEffect } from './native-control-intent.mjs?v=51b1d1bd5f';
+import { describeNativeControl, verifyNativeControlEffect } from './native-control-intent.mjs?v=e251e8e929';
 
 function reply(text, supported, trace = {}) {
   return { text, parts: [{ text, translate: false }], statuses: [supported ? 'supported' : 'unsupported'],

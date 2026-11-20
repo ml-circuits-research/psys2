@@ -3,7 +3,7 @@
 import NATIVE_INTERFACE from './native-interface-source.mjs?v=d0dfc2def5';
 import AREA_SOURCES from './area-sources.mjs?v=4044be97ff';
 import {BUNDLED_AREAS} from '../../lib/knowledge/bundled-areas.mjs?v=676be4d666';
-import {sopAreaAdapter} from '../sop-area-adapter.mjs?v=25639c5373';
+import {sopAreaAdapter} from '../sop-area-adapter.mjs?v=951a35e1ed';
 
 const area = sopAreaAdapter({ world: 'art.draw', instance: ['w.drawing', 'w.face'], interfaceSource: NATIVE_INTERFACE, sources: AREA_SOURCES, offline: BUNDLED_AREAS['art.draw'] });
 export const emptyDrawingState = area.empty, canonicalDrawingArea = area.canonical, createDrawingArea = area.create,

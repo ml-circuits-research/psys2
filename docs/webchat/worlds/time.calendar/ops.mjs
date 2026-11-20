@@ -1,2 +1,2 @@
 // Native initial state only; no legacy grammar executor.
-export{emptyCalendarArea as initialState}from"./sop-calendar.mjs?v=df0cfa7f36";
+export{emptyCalendarArea as initialState}from"./sop-calendar.mjs?v=58715ddff4";

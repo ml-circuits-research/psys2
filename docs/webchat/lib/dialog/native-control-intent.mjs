@@ -84,7 +84,7 @@ export function describeNativeControl({operation,args={},before,parameterBinding
   return decoded?.ok?decoded.value:null;
  };
  const type=op.intent?.subject??words(op.on.split('.').at(-1)),targetText=ids.length?ids.map(id=>readable(displayName(id)??id)).join(', '):`${op.intent?.determiner??(/^[aeiou]/i.test(type)?'an':'a')} ${type}`;
- let text=`${verbs[op.act]??'Apply'} ${targetText}`,ranges=[];
+ let text=`${op.intent?.verb??verbs[op.act]??'Apply'} ${targetText}`,ranges=[];
  const fields=Object.entries(values).filter(([key,value])=>(!['id','ids'].includes(key)||op.intent?.parameters?.[key]?.role==='source')&&op.intent?.parameters?.[key]?.hidden!==true&&!(op.intent?.parameters?.[key]?.hiddenIfEmpty&&(value===''||Array.isArray(value)&&value.length===0)));
  const modifiers={name:'named',label:'named',title:'titled',colour:'coloured',color:'coloured',kind:'of kind',type:'of type'};
  for(const [index,[parameter,value]]of fields.entries()){

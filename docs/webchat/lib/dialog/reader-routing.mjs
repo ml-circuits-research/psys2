@@ -1,5 +1,5 @@
-import {isScopedRemoval} from './capability-plan-execution.mjs?v=29f8a6f3b0';
-import {projectRemovalAction} from './project-removal-action.mjs?v=53db255d44';
+import {isScopedRemoval} from './capability-plan-execution.mjs?v=6284fe2c85';
+import {projectRemovalAction} from './project-removal-action.mjs?v=74c3023710';
 import { captureHistory, recordHistory, restoreHistory } from './history-journal.mjs?v=99bcb89726';
 import {projectReaderHeadAlternative} from './reader-head-alternative.mjs?v=fb3d54d81a';
 import {parse} from '../vendor/sopworld/sopworld.mjs?v=a37e1846b3';
@@ -8,17 +8,17 @@ import {isAuthoredRequest,readAuthoredRequest} from './authored-request-tool.mjs
 // Model-first proposal routing. Calibration authority belongs to host configuration,
 // never to a model output, evaluation annotation or grammar proposal.
 import {requestCompositionPolicy,scheduleFollowingCut}from './request-composition-policy.mjs?v=35215a85aa';
-import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=3f88837bfa';
-import {projectQueryAction,recoverQueryProjection} from './project-query-action.mjs?v=4ea6230198';
-import {projectContextAction} from './project-context-action.mjs?v=c79c2dac82';
-import {projectCodeReference} from './project-code-reference.mjs?v=60ab86bab2';
-import {projectCreateAction} from './project-create-action.mjs?v=0067f47b23';
+import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=3fb7e18db2';
+import {projectQueryAction,recoverQueryProjection} from './project-query-action.mjs?v=912fd4e1c6';
+import {projectContextAction} from './project-context-action.mjs?v=d644429b90';
+import {projectCodeReference} from './project-code-reference.mjs?v=f4f3d84b8e';
+import {projectCreateAction} from './project-create-action.mjs?v=383bee3f54';
 import {assessReaderProposal,assessPartialProposal} from './reader-admission.mjs?v=670b29ba79';
 import {bestPartialReading,fallbackLadder,partialNote} from './partial-admission.mjs?v=dfd7662d10';
-import {completeBindings} from './declared-bindings.mjs?v=0f7dc38fee';
-import {projectQuantities,amountsOf,quantityNote} from './quantity-projection.mjs?v=302d25cf76';
-import {routeCoordination} from './coordination-routing.mjs?v=27b30f2f23';
-import {declaredKnowledge} from './declared-execution.mjs?v=3f88837bfa';
+import {completeBindings} from './declared-bindings.mjs?v=0d4c922445';
+import {projectQuantities,amountsOf,quantityNote} from './quantity-projection.mjs?v=6bcaca625a';
+import {routeCoordination} from './coordination-routing.mjs?v=da34d1de8f';
+import {declaredKnowledge} from './declared-execution.mjs?v=3fb7e18db2';
 import {interpretationPolicy,coordinationEligible,comparisonBounds,retryNote} from './interpretation-policy.mjs?v=9f28a38d01';
 let amounts;
 // The named amounts of the execution knowledge (k.expect.amount), read once.
