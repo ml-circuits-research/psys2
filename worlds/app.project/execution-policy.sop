@@ -176,6 +176,20 @@
 @chart.key.chart_lineStyle.dotted app.execution.keyValue area=diagram key="chart.lineStyle" said="dotted" value="dotted"
 @chart.key.chart_lineStyle.dash_dot app.execution.keyValue area=diagram key="chart.lineStyle" said="dash_dot" value="dash_dot"
 @chart.key.chart_lineStyle.dash_dot_hyphen app.execution.keyValue area=diagram key="chart.lineStyle" said="dash-dot" value="dash_dot"
+# Error bars, the category axis on top, a chart placed by a region of the page, the categories kept and a histogram's bins.
+@chart.key.chart_errorBars app.execution.keyBinding area=diagram key="chart.errorBars" operation="diagram.chart.format" parameter="errorBars"
+@chart.key.chart_errorBars.show app.execution.keyValue area=diagram key="chart.errorBars" said="show" value="true"
+@chart.key.chart_errorBars.hide app.execution.keyValue area=diagram key="chart.errorBars" said="hide" value="false"
+@chart.key.chart_errorBars.remove app.execution.keyValue area=diagram key="chart.errorBars" said="remove" value="false"
+@chart.key.chart_errorCap app.execution.keyBinding area=diagram key="chart.errorCap" operation="diagram.chart.format" parameter="errorCap"
+@chart.errorCap.values app.execution.values concept=diagram.sketch.group.errorCap valueType="k.expect.scale" nameKey="step" valueKey="size_factor" codec=degree
+@chart.errorCap.measure app.execution.observedMeasure concept=diagram.sketch.group.errorCap sourceType="diagram.sketch.group" parameter="errorCap" binding="diagram.group.errorCap" order=16
+@chart.key.chart_xAxis app.execution.keyBinding area=diagram key="chart.xAxis" operation="diagram.chart.format" parameter="xAxis"
+@chart.key.chart_at app.execution.keyBinding area=diagram key="chart.at" operation="diagram.group.place" parameter="at"
+@chart.key.chart_bins app.execution.keyBinding area=diagram key="chart.bins" operation="diagram.group.chart.make" parameter="bins"
+@chart.key.chart_only app.execution.keyBinding area=diagram key="chart.only" operation="diagram.group.chart.make" parameter="only" codec="string-list"
+@chart.key.chart_errors app.execution.keyBinding area=diagram key="chart.errors" operation="diagram.group.chart.make" parameter="errors" codec="number-list"
+@chart.key.legend.top_right app.execution.keyValue area=diagram key="chart.legend" said="top right" value="right"
 @chart.key.chart_gridStyle app.execution.keyBinding area=diagram key="chart.gridStyle" operation="diagram.chart.format" parameter="gridStyle"
 @chart.key.chart_dimension app.execution.keyBinding area=diagram key="chart.dimension" operation="diagram.group.chart.make" parameter="dimension"
 @chart.key.chart_measure app.execution.keyBinding area=diagram key="chart.measure" operation="diagram.group.chart.make" parameter="measure"

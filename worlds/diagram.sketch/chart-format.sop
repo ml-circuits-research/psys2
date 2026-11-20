@@ -35,6 +35,8 @@
 @cfx.p.as ui.diagram.cprop slot=axis_scale param=axisScale kind=enum base=linear primary=true measure=false
 @cfx.p.tf ui.diagram.cprop slot=tick_format param=tickFormat kind=enum base=plain primary=true measure=false
 @cfx.p.ls ui.diagram.cprop slot=line_style param=lineStyle kind=enum base=solid primary=true measure=false
+@cfx.p.ec ui.diagram.cprop slot=error_cap param=errorCap kind=number base=6 min=0 max=30 inverse=false primary=true measure=true
+@cfx.p.xa ui.diagram.cprop slot=x_axis param=xAxis kind=enum base=bottom primary=true measure=false
 @cfx.p.gs ui.diagram.cprop slot=grid_style param=gridStyle kind=enum base=fine primary=true measure=false
 # One step up or down: a quarter more, a fifth less (an inverse property the other way round).
 @cfx.step.up ui.diagram.cstep way=up inverse=false factor=1.25
@@ -108,6 +110,12 @@
 @cfx.o15 w.diagram.group code=?g line_style=?v
 @cfx.o15.o ui.diagram.cown group=?g slot=line_style v=?v
 @chart.own.line_style core.rule when=$cfx.o15 then=$cfx.o15.o
+@cfx.o18 w.diagram.group code=?g error_cap=?v
+@cfx.o18.o ui.diagram.cown group=?g slot=error_cap v=?v
+@chart.own.error_cap core.rule when=$cfx.o18 then=$cfx.o18.o
+@cfx.o17 w.diagram.group code=?g x_axis=?v
+@cfx.o17.o ui.diagram.cown group=?g slot=x_axis v=?v
+@chart.own.x_axis core.rule when=$cfx.o17 then=$cfx.o17.o
 @cfx.o16 w.diagram.group code=?g grid_style=?v
 @cfx.o16.o ui.diagram.cown group=?g slot=grid_style v=?v
 @chart.own.grid_style core.rule when=$cfx.o16 then=$cfx.o16.o
@@ -184,6 +192,12 @@
 @cfx.q16 app.act.request operation="diagram.chart.format" lineStyle=?v
 @cfx.q16.o ui.diagram.cset param=lineStyle said=?v
 @chart.say.lineStyle core.rule when=$cfx.q16 then=$cfx.q16.o
+@cfx.q19 app.act.request operation="diagram.chart.format" errorCap=?v
+@cfx.q19.o ui.diagram.cset param=errorCap said=?v
+@chart.say.errorCap core.rule when=$cfx.q19 then=$cfx.q19.o
+@cfx.q18 app.act.request operation="diagram.chart.format" xAxis=?v
+@cfx.q18.o ui.diagram.cset param=xAxis said=?v
+@chart.say.xAxis core.rule when=$cfx.q18 then=$cfx.q18.o
 @cfx.q17 app.act.request operation="diagram.chart.format" gridStyle=?v
 @cfx.q17.o ui.diagram.cset param=gridStyle said=?v
 @chart.say.gridStyle core.rule when=$cfx.q17 then=$cfx.q17.o
@@ -549,3 +563,166 @@
 @cfx.pc.n2 app.act.request title=?anyt
 @cfx.pc.none app.act.refuse reason=missing-property
 @page.change.none core.rule when=$cfx.pc.r not=$cfx.pc.n1 not=$cfx.pc.n2 then=$cfx.pc.none
+
+# ---- The category axis on top: the category labels and the x title above the plot (the plot moves down) ----
+@cfx.xtop.type core.type of=ui.diagram.xtop
+@cfx.xt.c ui.diagram.chart group=?g
+@cfx.xt.o w.diagram.group code=?g x_axis=top
+@cfx.xt.out ui.diagram.xtop group=?g
+@chart.axis.x.top core.rule when=$cfx.xt.c when=$cfx.xt.o then=$cfx.xt.out
+
+# ---- A legend for a bar or line chart (legend=right or bottom): a swatch in each category's fill and its label, right
+# of the plot or under it; the group grows to hold it ----
+@cfx.lgd.c ui.diagram.chart group=?g
+@cfx.lgd.r w.diagram.group code=?g legend=right
+@cfx.lgd.b w.diagram.group code=?g legend=bottom
+@cfx.lgd.m ui.diagram.mpos node=?c group=?g pos=?pos
+@cfx.lgd.t w.diagram.node code=?c label=?t
+@cfx.lgd.f ui.diagram.nst node=?c key=fill v=?col
+@cfx.lgd.gb ui.diagram.ubox unit=?g x0=?gx y0=?gy
+@cfx.lgd.gp ui.diagram.gpad group=?g pad=?pad top=?top
+@cfx.lgd.gc ui.diagram.gcell group=?g cols=?cols
+@cfx.lgd.p0 core.calc out=?p0 fn=sub args=?pos args=1
+@cfx.lgd.pw1 core.calc out=?pw1 fn=mul args=?cols args=56
+@cfx.lgd.pw2 core.calc out=?pw2 fn=add args=?pw1 args=?pad
+@cfx.lgd.pw3 core.calc out=?pw3 fn=add args=?pw2 args=?pad
+@cfx.lgd.rx1 core.calc out=?rx1 fn=add args=?gx args=?pw3
+@cfx.lgd.rx core.calc out=?rx fn=add args=?rx1 args=4
+@cfx.lgd.ry1 core.calc out=?ry1 fn=mul args=?p0 args=18
+@cfx.lgd.ry2 core.calc out=?ry2 fn=add args=?gy args=?top
+@cfx.lgd.ry3 core.calc out=?ry3 fn=add args=?ry2 args=?ry1
+@cfx.lgd.ry core.calc out=?ry fn=add args=?ry3 args=12
+@cfx.lgd.out.r ui.diagram.legend node=?c x=?rx y=?ry text=?t fill=?col
+@chart.legend.bars.right core.rule when=$cfx.lgd.c when=$cfx.lgd.r when=$cfx.lgd.m when=$cfx.lgd.t when=$cfx.lgd.f when=$cfx.lgd.gb when=$cfx.lgd.gp when=$cfx.lgd.gc with=$cfx.lgd.p0 with=$cfx.lgd.pw1 with=$cfx.lgd.pw2 with=$cfx.lgd.pw3 with=$cfx.lgd.rx1 with=$cfx.lgd.rx with=$cfx.lgd.ry1 with=$cfx.lgd.ry2 with=$cfx.lgd.ry3 with=$cfx.lgd.ry then=$cfx.lgd.out.r
+@cfx.lgd.bx1 core.calc out=?bx1 fn=mod args=?p0 args=3
+@cfx.lgd.bx2 core.calc out=?bx2 fn=mul args=?bx1 args=106
+@cfx.lgd.bx3 core.calc out=?bx3 fn=add args=?gx args=?pad
+@cfx.lgd.bx core.calc out=?bx fn=add args=?bx3 args=?bx2
+@cfx.lgd.by1 core.calc out=?by1 fn=idiv args=?p0 args=3
+@cfx.lgd.by2 core.calc out=?by2 fn=mul args=?by1 args=18
+@cfx.lgd.by3 core.calc out=?by3 fn=add args=?gy args=?top
+@cfx.lgd.by4 core.calc out=?by4 fn=add args=?by3 args=226
+@cfx.lgd.by core.calc out=?by fn=add args=?by4 args=?by2
+@cfx.lgd.out.b ui.diagram.legend node=?c x=?bx y=?by text=?t fill=?col
+@chart.legend.bars.bottom core.rule when=$cfx.lgd.c when=$cfx.lgd.b when=$cfx.lgd.m when=$cfx.lgd.t when=$cfx.lgd.f when=$cfx.lgd.gb when=$cfx.lgd.gp with=$cfx.lgd.p0 with=$cfx.lgd.bx1 with=$cfx.lgd.bx2 with=$cfx.lgd.bx3 with=$cfx.lgd.bx with=$cfx.lgd.by1 with=$cfx.lgd.by2 with=$cfx.lgd.by3 with=$cfx.lgd.by4 with=$cfx.lgd.by then=$cfx.lgd.out.b
+
+# ---- A group placed by a region of the page (diagram.group.place at=...): its box against that side or corner of the
+# frame (a margin of 40), or its centre in the middle; pinned there ----
+@dgt.region.type core.type of=ui.diagram.region
+@cfx.rg.l ui.diagram.region at=left fx=0 fy=0.5
+@cfx.rg.r ui.diagram.region at=right fx=1 fy=0.5
+@cfx.rg.t ui.diagram.region at=top fx=0.5 fy=0
+@cfx.rg.b ui.diagram.region at=bottom fx=0.5 fy=1
+@cfx.rg.c ui.diagram.region at=center fx=0.5 fy=0.5
+@cfx.rg.tl ui.diagram.region at=top_left fx=0 fy=0
+@cfx.rg.tr ui.diagram.region at=top_right fx=1 fy=0
+@cfx.rg.bl ui.diagram.region at=bottom_left fx=0 fy=1
+@cfx.rg.br ui.diagram.region at=bottom_right fx=1 fy=1
+@cfx.pl.r app.act.request operation="diagram.group.place" id=?g at=?at
+@cfx.pl.g w.diagram.group code=?g
+@cfx.pl.reg ui.diagram.region at=?at fx=?fx fy=?fy
+@cfx.pl.d ui.diagram.udim unit=?g w=?w h=?h
+@cfx.pl.k ui.diagram.const0 w=?fw h=?fh margin=?m
+@cfx.pl.hw core.calc out=?hw fn=div args=?w args=2
+@cfx.pl.hh core.calc out=?hh fn=div args=?h args=2
+@cfx.pl.x0 core.calc out=?x0 fn=add args=?m args=?hw
+@cfx.pl.xs1 core.calc out=?xs1 fn=sub args=?fw args=?m
+@cfx.pl.xs2 core.calc out=?xs2 fn=sub args=?xs1 args=?hw
+@cfx.pl.xr core.calc out=?xr fn=sub args=?xs2 args=?x0
+@cfx.pl.xf core.calc out=?xf fn=mul args=?xr args=?fx
+@cfx.pl.x core.calc out=?x fn=add args=?x0 args=?xf
+@cfx.pl.y0 core.calc out=?y0 fn=add args=?m args=?hh
+@cfx.pl.ys1 core.calc out=?ys1 fn=sub args=?fh args=?m
+@cfx.pl.ys2 core.calc out=?ys2 fn=sub args=?ys1 args=?hh
+@cfx.pl.yr core.calc out=?yr fn=sub args=?ys2 args=?y0
+@cfx.pl.yf core.calc out=?yf fn=mul args=?yr args=?fy
+@cfx.pl.y core.calc out=?y fn=add args=?y0 args=?yf
+@cfx.pl.cx app.act.call act=change thing=$cfx.pl.g attr=x value=?x order=1
+@cfx.pl.cy app.act.call act=change thing=$cfx.pl.g attr=y value=?y order=2
+@cfx.pl.cp app.act.call act=change thing=$cfx.pl.g attr=pinned value=true order=3
+@group.place.region.x core.rule when=$cfx.pl.r when=$cfx.pl.g when=$cfx.pl.reg when=$cfx.pl.d when=$cfx.pl.k with=$cfx.pl.hw with=$cfx.pl.x0 with=$cfx.pl.xs1 with=$cfx.pl.xs2 with=$cfx.pl.xr with=$cfx.pl.xf with=$cfx.pl.x then=$cfx.pl.cx
+@group.place.region.y core.rule when=$cfx.pl.r when=$cfx.pl.g when=$cfx.pl.reg when=$cfx.pl.d when=$cfx.pl.k with=$cfx.pl.hh with=$cfx.pl.y0 with=$cfx.pl.ys1 with=$cfx.pl.ys2 with=$cfx.pl.yr with=$cfx.pl.yf with=$cfx.pl.y then=$cfx.pl.cy
+@group.place.region.pin core.rule when=$cfx.pl.r when=$cfx.pl.g when=$cfx.pl.reg then=$cfx.pl.cp
+@cfx.pl.rq app.act.request operation="diagram.group.place"
+@cfx.pl.ax app.act.request x=?anyx
+@cfx.pl.aa app.act.request at=?anyat
+@cfx.pl.none app.act.refuse reason=missing-property
+@group.place.none core.rule when=$cfx.pl.rq not=$cfx.pl.ax not=$cfx.pl.aa then=$cfx.pl.none
+
+# ---- Error bars (errorBars=true): from value - error to value + error of each member with an error, capped; shown
+# only when some member has one (a chart without errors refuses them: nothing to draw, never invented) ----
+@cfx.eb.r app.act.request operation="diagram.chart.format" id=?g errorBars=?on
+@cfx.eb.g w.diagram.group code=?g
+@cfx.eb.c app.act.call act=change thing=$cfx.eb.g attr=error_bars value=?on order=1
+@dgt.cerr.type core.type of=ui.diagram.cerr
+@cfx.eb.e ui.diagram.cerr group=?g
+@cfx.eb.has1 ui.diagram.inside group=?g node=?c
+@cfx.eb.has2 w.diagram.node code=?c error=?ev
+@cfx.eb.has ui.diagram.cerr group=?g
+@chart.errors.present core.rule when=$cfx.eb.has1 when=$cfx.eb.has2 then=$cfx.eb.has
+@cfx.eb.true core.check fn=eq args=?on args=true
+@cfx.eb.false core.check fn=eq args=?on args=false
+@chart.error.bars.show core.rule when=$cfx.eb.r when=$cfx.eb.g when=$cfx.eb.e if=$cfx.eb.true then=$cfx.eb.c
+@chart.error.bars.hide core.rule when=$cfx.eb.r when=$cfx.eb.g if=$cfx.eb.false then=$cfx.eb.c
+@cfx.eb.no app.act.refuse reason=missing-error-values
+@chart.error.bars.none core.rule when=$cfx.eb.r when=$cfx.eb.g not=$cfx.eb.e if=$cfx.eb.true then=$cfx.eb.no
+@cfx.eb.o w.diagram.group code=?id error_bars=?v
+@cfx.eb.oo app.observe.input id=?id key=errorBars value=?v
+@observe.chart.error.bars core.rule when=$cfx.eb.o then=$cfx.eb.oo
+@cfx.eo.n w.diagram.node code=?id error=?v
+@cfx.eo.o app.observe.input id=?id key=error value=?v
+@observe.node.error core.rule when=$cfx.eo.n then=$cfx.eo.o
+@cfx.ed.g w.diagram.group code=?g error_bars=true
+@cfx.ed.ch ui.diagram.chart group=?g form=?form
+@cfx.ed.lin w.diagram.group code=?g axis_scale=log
+@cfx.ed.m ui.diagram.inside group=?g node=?c
+@cfx.ed.n w.diagram.node code=?c error=?e
+@cfx.ed.b ui.diagram.nbox node=?c cx=?cx cy=?cy y0=?y0 y1=?y1
+@cfx.ed.d ui.diagram.cdir group=?g iy=?iy
+@cfx.ed.s ui.diagram.cscale group=?g value=?mx
+@cfx.ed.cap ui.diagram.cfmt group=?g slot=error_cap v=?cap
+@cfx.ed.isbar core.check fn=eq args=?form args=bar
+@cfx.ed.isline core.check fn=eq args=?form args=line
+@cfx.ed.dy core.calc out=?dyb fn=sub args=?y1 args=?y0
+@cfx.ed.dy2 core.calc out=?dyi fn=mul args=?dyb args=?iy
+@cfx.ed.vb core.calc out=?vy fn=add args=?y0 args=?dyi
+@cfx.ed.ep1 core.calc out=?ep1 fn=mul args=?e args=160
+@cfx.ed.ep core.calc out=?ep fn=div args=?ep1 args=?mx
+@dgt.cerrend.type core.type of=ui.diagram.cerrend
+@cfx.ed.out ui.diagram.cerrend node=?c group=?g x=?cx y=?vy d=?ep cap=?cap
+@cfx.ed.outl ui.diagram.cerrend node=?c group=?g x=?cx y=?cy d=?ep cap=?cap
+@chart.error.end.bar core.rule when=$cfx.ed.g when=$cfx.ed.ch not=$cfx.ed.lin when=$cfx.ed.m when=$cfx.ed.n when=$cfx.ed.b when=$cfx.ed.d when=$cfx.ed.s when=$cfx.ed.cap if=$cfx.ed.isbar with=$cfx.ed.dy with=$cfx.ed.dy2 with=$cfx.ed.vb with=$cfx.ed.ep1 with=$cfx.ed.ep then=$cfx.ed.out
+@chart.error.end.line core.rule when=$cfx.ed.g when=$cfx.ed.ch not=$cfx.ed.lin when=$cfx.ed.m when=$cfx.ed.n when=$cfx.ed.b when=$cfx.ed.s when=$cfx.ed.cap if=$cfx.ed.isline with=$cfx.ed.ep1 with=$cfx.ed.ep then=$cfx.ed.outl
+@cfx.ew.e ui.diagram.cerrend node=?c x=?x y=?y d=?d cap=?cap
+@cfx.ew.lo core.calc out=?lo fn=add args=?y args=?d
+@cfx.ew.hi core.calc out=?hi fn=sub args=?y args=?d
+@cfx.ew.xl core.calc out=?xl fn=sub args=?x args=?cap
+@cfx.ew.xr core.calc out=?xr fn=add args=?x args=?cap
+@cfx.ew.s core.calc out=?src fn=concat args=?c args=".error"
+@cfx.ew.s1 core.calc out=?src1 fn=concat args=?c args=".errorcap.1"
+@cfx.ew.s2 core.calc out=?src2 fn=concat args=?c args=".errorcap.2"
+@cfx.ew.p1 ui.diagram.point source=?src n=1 x=?x y=?lo
+@cfx.ew.p2 ui.diagram.point source=?src n=2 x=?x y=?hi
+@cfx.ew.d ui.diagram.draw part=?c source=?src slot=?c order=4 z=0 shape=line x=0 y=0 w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left stroke=1.5
+@cfx.ew.f ui.diagram.fill source=?src part=?c fill="#323f4b"
+@cfx.ew.c1a ui.diagram.point source=?src1 n=1 x=?xl y=?lo
+@cfx.ew.c1b ui.diagram.point source=?src1 n=2 x=?xr y=?lo
+@cfx.ew.c2a ui.diagram.point source=?src2 n=1 x=?xl y=?hi
+@cfx.ew.c2b ui.diagram.point source=?src2 n=2 x=?xr y=?hi
+@cfx.ew.d1 ui.diagram.draw part=?c source=?src1 slot=?c order=4 z=0 shape=line x=0 y=0 w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left stroke=1.5
+@cfx.ew.d2 ui.diagram.draw part=?c source=?src2 slot=?c order=4 z=0 shape=line x=0 y=0 w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left stroke=1.5
+@cfx.ew.f1 ui.diagram.fill source=?src1 part=?c fill="#323f4b"
+@cfx.ew.f2 ui.diagram.fill source=?src2 part=?c fill="#323f4b"
+@cfx.ew.hascap core.check fn=gt args=?cap args=0
+@chart.error.p1 core.rule when=$cfx.ew.e with=$cfx.ew.lo with=$cfx.ew.hi with=$cfx.ew.s then=$cfx.ew.p1
+@chart.error.p2 core.rule when=$cfx.ew.e with=$cfx.ew.lo with=$cfx.ew.hi with=$cfx.ew.s then=$cfx.ew.p2
+@chart.error.draw core.rule when=$cfx.ew.e with=$cfx.ew.s then=$cfx.ew.d
+@chart.error.fill core.rule when=$cfx.ew.e with=$cfx.ew.s then=$cfx.ew.f
+@chart.error.cap.1a core.rule when=$cfx.ew.e if=$cfx.ew.hascap with=$cfx.ew.lo with=$cfx.ew.xl with=$cfx.ew.s1 then=$cfx.ew.c1a
+@chart.error.cap.1b core.rule when=$cfx.ew.e if=$cfx.ew.hascap with=$cfx.ew.lo with=$cfx.ew.xr with=$cfx.ew.s1 then=$cfx.ew.c1b
+@chart.error.cap.2a core.rule when=$cfx.ew.e if=$cfx.ew.hascap with=$cfx.ew.hi with=$cfx.ew.xl with=$cfx.ew.s2 then=$cfx.ew.c2a
+@chart.error.cap.2b core.rule when=$cfx.ew.e if=$cfx.ew.hascap with=$cfx.ew.hi with=$cfx.ew.xr with=$cfx.ew.s2 then=$cfx.ew.c2b
+@chart.error.cap.1 core.rule when=$cfx.ew.e if=$cfx.ew.hascap with=$cfx.ew.s1 then=$cfx.ew.d1
+@chart.error.cap.2 core.rule when=$cfx.ew.e if=$cfx.ew.hascap with=$cfx.ew.s2 then=$cfx.ew.d2
+@chart.error.cap.f1 core.rule when=$cfx.ew.e if=$cfx.ew.hascap with=$cfx.ew.s1 then=$cfx.ew.f1
+@chart.error.cap.f2 core.rule when=$cfx.ew.e if=$cfx.ew.hascap with=$cfx.ew.s2 then=$cfx.ew.f2

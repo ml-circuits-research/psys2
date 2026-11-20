@@ -180,8 +180,10 @@
 @native.diagram.sketch.op.diagram.group.resize.param.scale std.capability.parameter operation=$native.diagram.sketch.op.diagram.group.resize name="scale" kind=number required=true min=0.05 max=20
 @native.diagram.sketch.op.diagram.group.place std.capability.operation scope=$native.diagram.sketch.scope name="diagram.group.place" act=place on="diagram.sketch.group" order=22 eligible=true
 @native.diagram.sketch.op.diagram.group.place.param.id std.capability.parameter operation=$native.diagram.sketch.op.diagram.group.place name="id" kind=string required=true
-@native.diagram.sketch.op.diagram.group.place.param.x std.capability.parameter operation=$native.diagram.sketch.op.diagram.group.place name="x" kind=number required=true
-@native.diagram.sketch.op.diagram.group.place.param.y std.capability.parameter operation=$native.diagram.sketch.op.diagram.group.place name="y" kind=number required=true
+@native.diagram.sketch.op.diagram.group.place.param.x std.capability.parameter operation=$native.diagram.sketch.op.diagram.group.place name="x" kind=number
+@native.diagram.sketch.op.diagram.group.place.param.y std.capability.parameter operation=$native.diagram.sketch.op.diagram.group.place name="y" kind=number
+# A region of the page in place of x and y (chart-format.sop): the group's box against that side, corner or the middle.
+@native.diagram.sketch.op.diagram.group.place.param.at std.capability.parameter operation=$native.diagram.sketch.op.diagram.group.place name="at" kind=string enum="left" enum="right" enum="top" enum="bottom" enum="center" enum="top_left" enum="top_right" enum="bottom_left" enum="bottom_right" enumClosed=true
 @native.diagram.sketch.value.169 std.capability.arg name="dimension" value="length"
 @native.diagram.sketch.value.170 std.capability.arg name="unit" value="canvas.pixel"
 @native.diagram.sketch.value.171 std.capability.arg name="frame" value="diagram.canvas"
@@ -383,6 +385,9 @@
 @native.diagram.sketch.op.diagram.chart.format.param.layout std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="layout" kind=string enum="bar" enum="line" enum="area" enum="pie" enum="doughnut" enumClosed=true
 @native.diagram.sketch.op.diagram.chart.format.param.palette std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="palette" kind=string
 @native.diagram.sketch.op.diagram.chart.format.param.palette.source.enum app.native.parameter parameter=$native.diagram.sketch.op.diagram.chart.format.param.palette field=enum input=$native.diagram.sketch.input.diagram.themes
+@native.diagram.sketch.op.diagram.chart.format.param.errorBars std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="errorBars" kind=boolean
+@native.diagram.sketch.op.diagram.chart.format.param.errorCap std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="errorCap" kind=number min=0 max=30
+@native.diagram.sketch.op.diagram.chart.format.param.xAxis std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="xAxis" kind=string enum="bottom" enum="top" enumClosed=true
 # A chart group's formatting (chart-format.sop): a number property takes a number within its limits (a comparative,
 # "bigger", is the execution policy's step from the observed value); the gap between bars a word (none, wider,
 # narrower) or a number; a named property one of its values; the title colour a colour name.
@@ -419,6 +424,12 @@
 @native.diagram.sketch.op.diagram.group.chart.make.param.top std.capability.parameter operation=$native.diagram.sketch.op.diagram.group.chart.make name="top" kind=integer min=1 max=50
 @native.diagram.sketch.op.diagram.group.chart.make.param.above std.capability.parameter operation=$native.diagram.sketch.op.diagram.group.chart.make name="above" kind=number
 @native.diagram.sketch.op.diagram.group.chart.make.param.below std.capability.parameter operation=$native.diagram.sketch.op.diagram.group.chart.make name="below" kind=number
+# Records said several times under one label are aggregated (sum unless `aggregate` says otherwise); `only` keeps the
+# categories it names; `sort` orders them; `bins` makes a histogram of the values.
+@native.diagram.sketch.op.diagram.group.chart.make.param.only std.capability.parameter operation=$native.diagram.sketch.op.diagram.group.chart.make name="only" kind=array
+@native.diagram.sketch.op.diagram.group.chart.make.param.sort std.capability.parameter operation=$native.diagram.sketch.op.diagram.group.chart.make name="sort" kind=string enum="ascending" enum="descending" enum="label" enumClosed=true
+@native.diagram.sketch.op.diagram.group.chart.make.param.bins std.capability.parameter operation=$native.diagram.sketch.op.diagram.group.chart.make name="bins" kind=integer min=2 max=20
+@native.diagram.sketch.op.diagram.group.chart.make.param.errors std.capability.parameter operation=$native.diagram.sketch.op.diagram.group.chart.make name="errors" kind=array
 # The page's background colour and title (chart-format.sop).
 @native.diagram.sketch.op.diagram.page.change std.capability.operation scope=$native.diagram.sketch.scope name="diagram.page.change" act=change on="diagram.sketch.page" order=51 eligible=true
 @native.diagram.sketch.op.diagram.page.change.param.background std.capability.parameter operation=$native.diagram.sketch.op.diagram.page.change name="background" kind=string

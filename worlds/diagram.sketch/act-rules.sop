@@ -639,8 +639,11 @@
 @chart.labels.named core.rule when=$a.cg.r when=$a.cg.lx with=$a.cg.i1 with=$a.cg.lxv if=$a.cg.lxn then=$a.cg.named
 @a.cg.isnamed ui.diagram.cnamed request=yes
 @a.cg.nodim app.act.request dimension=?nodim
-@chart.item.said core.rule when=$a.cg.r when=$a.cg.li when=$a.cg.vi not=$a.cg.nodim if=$a.cg.ok with=$a.cg.i1 then=$a.cg.it
-@chart.item.said.named core.rule when=$a.cg.r when=$a.cg.li when=$a.cg.vi when=$a.cg.isnamed if=$a.cg.ok with=$a.cg.i1 then=$a.cg.it
+@a.cg.iscount app.act.request operation="diagram.group.chart.make" aggregate=count
+@a.cg.it1 ui.diagram.citem n=?i1 label=?t value=1
+@chart.item.counted core.rule when=$a.cg.r when=$a.cg.li when=$a.cg.iscount if=$a.cg.ok with=$a.cg.i1 then=$a.cg.it1
+@chart.item.said core.rule when=$a.cg.r when=$a.cg.li when=$a.cg.vi not=$a.cg.nodim not=$a.cg.iscount if=$a.cg.ok with=$a.cg.i1 then=$a.cg.it
+@chart.item.said.named core.rule when=$a.cg.r when=$a.cg.li when=$a.cg.vi when=$a.cg.isnamed not=$a.cg.iscount if=$a.cg.ok with=$a.cg.i1 then=$a.cg.it
 @a.cg.kcv k.charts.category dimension=?d n=?i1 label=?kt
 @a.cg.kcno k.charts.category dimension=?d n=?i1
 @a.cg.it.kv ui.diagram.citem n=?i1 label=?kt value=?v
@@ -658,7 +661,7 @@
 @a.cg.sm.n core.calc out=?sm fn=mod args=?i args=12
 @a.cg.sm.n1 core.calc out=?sn fn=add args=?sm args=1
 @a.cg.it.s ui.diagram.citem n=?i1 label=?t value=?sv
-@chart.item.said.label core.rule when=$a.cg.r when=$a.cg.li not=$a.cg.anyv if=$a.cg.ok with=$a.cg.i1 with=$a.cg.sm.n with=$a.cg.sm.n1 when=$a.cg.sm then=$a.cg.it.s
+@chart.item.said.label core.rule when=$a.cg.r when=$a.cg.li not=$a.cg.anyv not=$a.cg.iscount if=$a.cg.ok with=$a.cg.i1 with=$a.cg.sm.n with=$a.cg.sm.n1 when=$a.cg.sm then=$a.cg.it.s
 @a.cg.dim app.act.request operation="diagram.group.chart.make" dimension=?d
 @a.cg.kc k.charts.category dimension=?d n=?n label=?kt
 @a.cg.anykc k.charts.category dimension=?d n=?anykn
@@ -672,10 +675,107 @@
 @a.cg.anyd app.act.request dimension=?anyd
 @a.cg.df ui.diagram.cdefault n=?n label=?dt value=?dv
 @a.cg.it.d ui.diagram.citem n=?n label=?dt value=?dv
-@chart.item.default core.rule when=$a.cg.r not=$a.cg.anyd not=$a.cg.anyl if=$a.cg.ok when=$a.cg.df then=$a.cg.it.d
-# Only the largest `top`, those above `above`, those below `below`.
-@a.cg.ci ui.diagram.citem n=?n label=?t value=?v
+@chart.item.default core.rule when=$a.cg.r not=$a.cg.anyd not=$a.cg.anyl not=$a.cg.anyv if=$a.cg.ok when=$a.cg.df then=$a.cg.it.d
+# The said records are aggregated by category (ui.diagram.ccat): a label said several times ("Ana 3, Bob 5, Ana 2") is
+# one category whose value is the sum of its records, or their count, average, minimum or maximum (`aggregate`); the
+# category stands where its label was first said. With `bins`, the values are a distribution instead: the range from
+# the smallest to the largest value is cut into `bins` equal ranges, each a category counting its records (a histogram).
+@dga.ccat.type core.type of=ui.diagram.ccat
+@dga.cagg.type core.type of=ui.diagram.cagg
+@dga.cbin.type core.type of=ui.diagram.cbin
+@dga.cbinx.type core.type of=ui.diagram.cbinx
+@dga.cstat.type core.type of=ui.diagram.cstat
+@dga.corder.type core.type of=ui.diagram.corder
+@a.ag.ci ui.diagram.citem n=?n label=?t value=?v
+@a.ag.nobins app.act.request bins=?nobins
+@a.ag.first ui.diagram.cagg label=?t key=first value=?m
+@chart.records.first core.aggregate over=$a.ag.ci by=?t min=?m args=?n then=$a.ag.first
+@a.ag.sum ui.diagram.cagg label=?t key=sum value=?m
+@chart.records.sum core.aggregate over=$a.ag.ci by=?t sum=?m args=?v then=$a.ag.sum
+@a.ag.cnt ui.diagram.cagg label=?t key=count value=?m
+@chart.records.count core.aggregate over=$a.ag.ci by=?t count=?m then=$a.ag.cnt
+@a.ag.max ui.diagram.cagg label=?t key=max value=?m
+@chart.records.max core.aggregate over=$a.ag.ci by=?t max=?m args=?v then=$a.ag.max
+@a.ag.min ui.diagram.cagg label=?t key=min value=?m
+@chart.records.min core.aggregate over=$a.ag.ci by=?t min=?m args=?v then=$a.ag.min
+@a.ag.f ui.diagram.cagg label=?t key=first value=?n
+@a.ag.k ui.diagram.cagg label=?t key=?ak value=?av
+@a.ag.req app.act.request operation="diagram.group.chart.make" aggregate=?ak
+@a.ag.any app.act.request aggregate=?anyak
+@a.ag.out ui.diagram.ccat n=?n label=?t value=?av
+@chart.category.aggregate core.rule when=$a.cg.r when=$a.ag.req when=$a.ag.f when=$a.ag.k not=$a.ag.nobins then=$a.ag.out
+@a.ag.s ui.diagram.cagg label=?t key=sum value=?av
+@chart.category.sum core.rule when=$a.cg.r not=$a.ag.any when=$a.ag.f when=$a.ag.s not=$a.ag.nobins then=$a.ag.out
+@a.ag.avs ui.diagram.cagg label=?t key=sum value=?sv
+@a.ag.avc ui.diagram.cagg label=?t key=count value=?cv
+@a.ag.avg app.act.request operation="diagram.group.chart.make" aggregate=avg
+@a.ag.av core.calc out=?a1 fn=div args=?sv args=?cv
+@a.ag.avr core.calc out=?a2 fn=round args=?a1 args=2
+@a.ag.aout ui.diagram.ccat n=?n label=?t value=?a2
+@chart.category.average core.rule when=$a.cg.r when=$a.ag.avg when=$a.ag.f when=$a.ag.avs when=$a.ag.avc not=$a.ag.nobins with=$a.ag.av with=$a.ag.avr then=$a.ag.aout
+# Bins: the range of the values, each record's bin, the count of each bin (an empty bin counts 0).
+@chart.binx.0 ui.diagram.cbinx k=0
+@chart.binx.1 ui.diagram.cbinx k=1
+@chart.binx.2 ui.diagram.cbinx k=2
+@chart.binx.3 ui.diagram.cbinx k=3
+@chart.binx.4 ui.diagram.cbinx k=4
+@chart.binx.5 ui.diagram.cbinx k=5
+@chart.binx.6 ui.diagram.cbinx k=6
+@chart.binx.7 ui.diagram.cbinx k=7
+@chart.binx.8 ui.diagram.cbinx k=8
+@chart.binx.9 ui.diagram.cbinx k=9
+@chart.binx.10 ui.diagram.cbinx k=10
+@chart.binx.11 ui.diagram.cbinx k=11
+@chart.binx.12 ui.diagram.cbinx k=12
+@chart.binx.13 ui.diagram.cbinx k=13
+@chart.binx.14 ui.diagram.cbinx k=14
+@chart.binx.15 ui.diagram.cbinx k=15
+@chart.binx.16 ui.diagram.cbinx k=16
+@chart.binx.17 ui.diagram.cbinx k=17
+@chart.binx.18 ui.diagram.cbinx k=18
+@chart.binx.19 ui.diagram.cbinx k=19
+@a.bn.r app.act.request operation="diagram.group.chart.make" bins=?nb
+@a.bn.ci ui.diagram.citem n=?n value=?v
+@a.bn.lo ui.diagram.cstat key=lo value=?m
+@chart.bins.low core.aggregate over=$a.bn.r over=$a.bn.ci by=?nb min=?m args=?v then=$a.bn.lo
+@a.bn.hi ui.diagram.cstat key=hi value=?m
+@chart.bins.high core.aggregate over=$a.bn.r over=$a.bn.ci by=?nb max=?m args=?v then=$a.bn.hi
+@a.bn.l ui.diagram.cstat key=lo value=?lo
+@a.bn.h ui.diagram.cstat key=hi value=?hi
+@a.bn.span core.calc out=?sp fn=sub args=?hi args=?lo
+@a.bn.sp1 core.calc out=?sp1 fn=max args=?sp args=1
+@a.bn.w core.calc out=?w fn=div args=?sp1 args=?nb
+@a.bn.d core.calc out=?d fn=sub args=?v args=?lo
+@a.bn.b0 core.calc out=?b0 fn=idiv args=?d args=?w
+@a.bn.nb1 core.calc out=?nb1 fn=sub args=?nb args=1
+@a.bn.b core.calc out=?b fn=min args=?b0 args=?nb1
+@a.bn.out ui.diagram.cbin n=?n k=?b
+@chart.bins.record core.rule when=$a.cg.r when=$a.bn.r when=$a.bn.ci when=$a.bn.l when=$a.bn.h with=$a.bn.span with=$a.bn.sp1 with=$a.bn.w with=$a.bn.d with=$a.bn.b0 with=$a.bn.nb1 with=$a.bn.b then=$a.bn.out
+@a.bn.rec ui.diagram.cbin n=?n k=?k
+@a.bn.cnt ui.diagram.cagg label=?k key=bin value=?c
+@chart.bins.count core.aggregate over=$a.bn.rec by=?k count=?c then=$a.bn.cnt
+@a.bn.x ui.diagram.cbinx k=?k
+@a.bn.inr core.check fn=lt args=?k args=?nb
+@a.bn.k1 core.calc out=?k1 fn=add args=?k args=1
+@a.bn.blo1 core.calc out=?blo1 fn=mul args=?k args=?w
+@a.bn.blo2 core.calc out=?blo2 fn=add args=?lo args=?blo1
+@a.bn.blo core.calc out=?blo fn=round args=?blo2 args=2
+@a.bn.bhi1 core.calc out=?bhi1 fn=mul args=?k1 args=?w
+@a.bn.bhi2 core.calc out=?bhi2 fn=add args=?lo args=?bhi1
+@a.bn.bhi core.calc out=?bhi fn=round args=?bhi2 args=2
+@a.bn.lab core.calc out=?blab fn=concat args=?blo args="–" args=?bhi
+@a.bn.c ui.diagram.cagg label=?k key=bin value=?bc
+@a.bn.anyc ui.diagram.cagg label=?k key=bin value=?anybc
+@a.bn.cat ui.diagram.ccat n=?k1 label=?blab value=?bc
+@a.bn.cat0 ui.diagram.ccat n=?k1 label=?blab value=0
+@chart.bins.category core.rule when=$a.cg.r when=$a.bn.r when=$a.bn.x if=$a.bn.inr when=$a.bn.l when=$a.bn.h with=$a.bn.span with=$a.bn.sp1 with=$a.bn.w with=$a.bn.k1 with=$a.bn.blo1 with=$a.bn.blo2 with=$a.bn.blo with=$a.bn.bhi1 with=$a.bn.bhi2 with=$a.bn.bhi with=$a.bn.lab when=$a.bn.c then=$a.bn.cat
+@chart.bins.category.empty core.rule when=$a.cg.r when=$a.bn.r when=$a.bn.x if=$a.bn.inr when=$a.bn.l when=$a.bn.h with=$a.bn.span with=$a.bn.sp1 with=$a.bn.w with=$a.bn.k1 with=$a.bn.blo1 with=$a.bn.blo2 with=$a.bn.blo with=$a.bn.bhi1 with=$a.bn.bhi2 with=$a.bn.bhi with=$a.bn.lab not=$a.bn.anyc then=$a.bn.cat0
+# Only the categories `only` names; only the largest `top`, those above `above`, those below `below`.
+@a.cg.ci ui.diagram.ccat n=?n label=?t value=?v
 @a.cg.drop ui.diagram.cdrop n=?n
+@a.cg.onlyany app.act.item param="only" n=?anyon
+@a.cg.onlyt app.act.item param="only" value=?t
+@chart.item.only core.rule when=$a.cg.r when=$a.cg.onlyany when=$a.cg.ci not=$a.cg.onlyt then=$a.cg.drop
 @a.cg.top app.act.request operation="diagram.group.chart.make" top=?k
 @a.cg.rk core.rank of=$a.cg.ci by=value order=desc out=?r
 @a.cg.over core.check fn=gt args=?r args=?k
@@ -686,24 +786,57 @@
 @a.cg.be app.act.request operation="diagram.group.chart.make" below=?blim
 @a.cg.notbe core.check fn=gte args=?v args=?blim
 @chart.item.below core.rule when=$a.cg.r when=$a.cg.be when=$a.cg.ci if=$a.cg.notbe then=$a.cg.drop
-# One rectangle node per category kept, a member of the new group.
-@a.cg.keep ui.diagram.citem n=?n label=?t value=?v
+# The order of the categories kept: where they were said, or sorted (`sort`: ascending, descending, label).
+@a.cg.kept ui.diagram.ccat n=?n label=?t value=?v
 @a.cg.dropped ui.diagram.cdrop n=?n
+@a.cg.anysort app.act.request sort=?anysort
+@a.cg.ord ui.diagram.corder n=?n pos=?n
+@chart.order.said core.rule when=$a.cg.r when=$a.cg.kept not=$a.cg.dropped not=$a.cg.anysort then=$a.cg.ord
+@a.cg.so.asc app.act.request operation="diagram.group.chart.make" sort=ascending
+@a.cg.so.desc app.act.request operation="diagram.group.chart.make" sort=descending
+@a.cg.so.lab app.act.request operation="diagram.group.chart.make" sort=label
+@dga.ckept.type core.type of=ui.diagram.ckept
+@a.cg.kf ui.diagram.ckept n=?n label=?t value=?v
+@chart.kept core.rule when=$a.cg.r when=$a.cg.kept not=$a.cg.dropped then=$a.cg.kf
+@a.cg.kk ui.diagram.ckept n=?n label=?t value=?v
+@a.cg.rka core.rank of=$a.cg.kk by=value out=?p
+@a.cg.rkd core.rank of=$a.cg.kk by=value order=desc out=?p
+@a.cg.rkl core.rank of=$a.cg.kk by=label out=?p
+@a.cg.ordp ui.diagram.corder n=?n pos=?p
+@chart.order.ascending core.rule when=$a.cg.r when=$a.cg.so.asc when=$a.cg.kk with=$a.cg.rka then=$a.cg.ordp
+@chart.order.descending core.rule when=$a.cg.r when=$a.cg.so.desc when=$a.cg.kk with=$a.cg.rkd then=$a.cg.ordp
+@chart.order.label core.rule when=$a.cg.r when=$a.cg.so.lab when=$a.cg.kk with=$a.cg.rkl then=$a.cg.ordp
+# One rectangle node per category kept, a member of the new group, in that order.
+@a.cg.keep ui.diagram.ckept n=?n label=?t value=?v
+@a.cg.kpos ui.diagram.corder n=?n pos=?pos
 @a.cg.nnx ui.diagram.next of=node top=?ntop
-@a.cg.nz core.calc out=?nz fn=add args=?ntop args=?n
+@a.cg.nz core.calc out=?nz fn=add args=?ntop args=?pos
 @a.cg.ncode core.calc out=?ncode fn=concat args=n args=?nz
 @a.cg.ref core.calc out=?ref fn=concat args="new.node." args=?n
 @a.cg.n app.act.call act=make kind=w.diagram.node code=?ncode shape=rectangle label=?t value=?v n=?nz order=1 ref=?ref
-@chart.make.node core.rule when=$a.cg.r when=$a.cg.keep not=$a.cg.dropped when=$a.cg.nnx with=$a.cg.nz with=$a.cg.ncode with=$a.cg.ref then=$a.cg.n
+@chart.make.node core.rule when=$a.cg.r when=$a.cg.keep when=$a.cg.kpos when=$a.cg.nnx with=$a.cg.nz with=$a.cg.ncode with=$a.cg.ref then=$a.cg.n
 @a.cg.mem app.act.call act=make kind=w.diagram.member group=new.group node=?ref order=3
-@chart.make.member core.rule when=$a.cg.r when=$a.cg.keep not=$a.cg.dropped when=$a.cg.nnx with=$a.cg.nz with=$a.cg.ncode with=$a.cg.ref then=$a.cg.mem
+@chart.make.member core.rule when=$a.cg.r when=$a.cg.keep when=$a.cg.kpos when=$a.cg.nnx with=$a.cg.nz with=$a.cg.ncode with=$a.cg.ref then=$a.cg.mem
+# Errors said with the values (`errors`, in the order of the values): the error of the category made from that record.
+@a.cg.er app.act.item param="errors" n=?ei value=?e
+@a.cg.ei1 core.calc out=?n fn=add args=?ei args=1
+@a.cg.eref core.calc out=?eref fn=concat args="new.node." args=?n
+@a.cg.ekept ui.diagram.ckept n=?n
+@a.cg.earg app.act.arg call=?eref attr=error value=?e
+@chart.make.error core.rule when=$a.cg.r when=$a.cg.er with=$a.cg.ei1 when=$a.cg.ekept with=$a.cg.eref then=$a.cg.earg
 @a.cg.lab.v app.act.item param="labels" n=?i
 @a.cg.val.v app.act.item param="values" n=?i
 @a.cg.unpaired app.act.refuse reason=invalid-chart-data
-@chart.make.unpaired.label core.rule when=$a.cg.r when=$a.cg.lab.v when=$a.cg.anyv not=$a.cg.val.v then=$a.cg.unpaired
+@chart.make.unpaired.label core.rule when=$a.cg.r when=$a.cg.lab.v when=$a.cg.anyv not=$a.cg.val.v not=$a.cg.iscount then=$a.cg.unpaired
 @a.cg.lab.w app.act.item param="labels" n=?j
 @a.cg.val.w app.act.item param="values" n=?j
-@chart.make.unpaired.value core.rule when=$a.cg.r when=$a.cg.val.w not=$a.cg.lab.w then=$a.cg.unpaired
+@a.cg.binsd app.act.request operation="diagram.group.chart.make" bins=?binsd
+@chart.make.unpaired.value core.rule when=$a.cg.r when=$a.cg.val.w not=$a.cg.lab.w not=$a.cg.binsd then=$a.cg.unpaired
+# Values said alone for a histogram are its records.
+@a.cg.bv app.act.item param="values" n=?i value=?v
+@a.cg.bvi core.calc out=?i1 fn=add args=?i args=1
+@a.cg.bvo ui.diagram.citem n=?i1 label=?i1 value=?v
+@chart.item.bins.values core.rule when=$a.cg.r when=$a.cg.binsd when=$a.cg.bv not=$a.cg.anyl with=$a.cg.bvi then=$a.cg.bvo
 # What the chart shows: its dimension (the x axis title), its measure and aggregate (the y axis title: "average sales",
 # "number of stadiums"), and that its values are a sample when none were said.
 @chart.agg.count ui.diagram.aggword aggregate=count prefix="number of " alone="count"

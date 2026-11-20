@@ -359,8 +359,12 @@
 @ya.xs core.calc out=?xs fn=concat args=?g args=".xtitle"
 @ya.xd ui.diagram.draw part=?g source=?xs slot=?g order=4 z=0 shape=text text=?t x=?xx y=?xy w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left font=?fv anchor=middle slant=italic
 @ya.xf ui.diagram.fill source=?xs part=?g fill="#52606d"
-@chart.xtitle core.rule when=$ya.c when=$ya.b when=$ya.p when=$ya.xl when=$ya.fs when=$ya.ft with=$ya.fv with=$ya.hw with=$ya.xx with=$ya.xy1 with=$ya.xy with=$ya.xs then=$ya.xd
-@chart.xtitle.fill core.rule when=$ya.c when=$ya.b when=$ya.p when=$ya.xl with=$ya.xs then=$ya.xf
+@ya.xt ui.diagram.xtop group=?g
+@ya.xyt core.calc out=?xy fn=sub args=?xy1 args=38
+@chart.xtitle.top core.rule when=$ya.c when=$ya.b when=$ya.p when=$ya.xl when=$ya.fs when=$ya.xt with=$ya.fv with=$ya.hw with=$ya.xx with=$ya.xy1 with=$ya.xyt with=$ya.xs then=$ya.xd
+@chart.xtitle.top.fill core.rule when=$ya.c when=$ya.b when=$ya.p when=$ya.xl when=$ya.xt with=$ya.xs then=$ya.xf
+@chart.xtitle core.rule when=$ya.c when=$ya.b when=$ya.p when=$ya.xl when=$ya.fs when=$ya.ft not=$ya.xt with=$ya.fv with=$ya.hw with=$ya.xx with=$ya.xy1 with=$ya.xy with=$ya.xs then=$ya.xd
+@chart.xtitle.fill core.rule when=$ya.c when=$ya.b when=$ya.p when=$ya.xl not=$ya.xt with=$ya.xs then=$ya.xf
 # An area chart: the region between the line and the baseline, filled lightly.
 @yz.g w.diagram.group code=?g layout=area
 @yz.m ui.diagram.mpos node=?c group=?g pos=?p

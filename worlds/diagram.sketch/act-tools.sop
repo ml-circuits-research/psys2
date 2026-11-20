@@ -689,8 +689,21 @@
 @t.ca.code core.calc out=?code fn=concat args=n args=?z
 @t.ca.mk app.act.call act=make kind=w.diagram.node code=?code shape=rectangle label=?l value=?v n=?z order=1 ref=chart.node
 @t.ca.mem app.act.call act=make kind=w.diagram.member group=$t.ca.g node=chart.node order=2
-@tool.chart.add core.rule when=$t.ca.r when=$t.ca.g when=$t.ca.nx with=$t.ca.z with=$t.ca.code then=$t.ca.mk
-@tool.chart.add.member core.rule when=$t.ca.r when=$t.ca.g then=$t.ca.mem
+# A category the chart already has takes the new value as one more record of it (added to its value: values said across
+# turns, "add 3 more for Ana"); a new label is a new category at the end.
+@dgt.chas.type core.type of=ui.diagram.chas
+@t.ch2.i ui.diagram.inside group=?g node=?c
+@t.ch2.n w.diagram.node code=?c label=?l
+@t.ch2.o ui.diagram.chas group=?g label=?l node=?c
+@tool.chart.has core.rule when=$t.ch2.i when=$t.ch2.n then=$t.ch2.o
+@t.ca.has ui.diagram.chas group=?g label=?l
+@t.ca.hc ui.diagram.chas group=?g label=?l node=?c
+@t.ca.hn w.diagram.node code=?c value=?old
+@t.ca.sum core.calc out=?nv fn=add args=?old args=?v
+@t.ca.hchg app.act.call act=change thing=$t.ca.hn attr=value value=?nv order=1
+@tool.chart.add.record core.rule when=$t.ca.r when=$t.ca.g when=$t.ca.hc when=$t.ca.hn with=$t.ca.sum then=$t.ca.hchg
+@tool.chart.add core.rule when=$t.ca.r when=$t.ca.g when=$t.ca.nx not=$t.ca.has with=$t.ca.z with=$t.ca.code then=$t.ca.mk
+@tool.chart.add.member core.rule when=$t.ca.r when=$t.ca.g not=$t.ca.has then=$t.ca.mem
 # Formatting: title, axis titles, value labels, gridlines, legend; nothing named is refused.
 @t.cf.r app.act.request operation="diagram.chart.format" id=?g
 @t.cf.g w.diagram.group code=?g
@@ -729,7 +742,8 @@
 @t.cf.n9 app.act.request palette=?f9
 @t.cf.n11 ui.diagram.cset param=?f11
 @t.cf.n12 app.act.request yMin=?f12
-@tool.chart.format.none core.rule when=$t.cf.r not=$t.cf.n12 not=$t.cf.n1 not=$t.cf.n2 not=$t.cf.n3 not=$t.cf.n4 not=$t.cf.n5 not=$t.cf.n6 not=$t.cf.n7 not=$t.cf.n8 not=$t.cf.n9 not=$t.cf.n10 not=$t.cf.n11 then=$t.cf.none
+@t.cf.n13 app.act.request errorBars=?f13
+@tool.chart.format.none core.rule when=$t.cf.r not=$t.cf.n12 not=$t.cf.n1 not=$t.cf.n2 not=$t.cf.n3 not=$t.cf.n4 not=$t.cf.n5 not=$t.cf.n6 not=$t.cf.n7 not=$t.cf.n8 not=$t.cf.n9 not=$t.cf.n10 not=$t.cf.n11 not=$t.cf.n13 then=$t.cf.none
 @t.cg.f w.diagram.group code=?id x_label=?v
 @t.cg.fo app.observe.input id=?id key=xLabel value=?v
 @observe.chart.x core.rule when=$t.cg.f then=$t.cg.fo

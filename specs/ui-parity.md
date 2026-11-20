@@ -174,6 +174,7 @@ New: a Length select (`avatar.part.change {ids, length}`) from the change comman
 | New: Link tools (route, reverse, insert node); arrowheads also `back` | 1+ connection | none (new) | `diagram.link.change {route}`, `diagram.link.reverse`, `diagram.node.insert` | improved |
 | New: Chart panel (data table: category, value, remove, add; axis titles, values, gridlines, legend) | a chart group selected | none (new) | `diagram.chart.*`, `diagram.chart.format` | improved |
 | New: Chart formatting (A−/A+ and chart font size, title weight/colour/position, value axis side, invert axis, axis scale, number format, decimals, line style and width, marker size and edge, bar width, pie radius, grid style) | a chart group selected | none (new) | `diagram.chart.format {fontSize|titleWeight|titleColour|titlePosition|axisSide|invert|axisScale|tickFormat|precision|lineStyle|lineWidth|markerSize|markerEdge|barWidth|pieRadius|gridStyle}` (chart-format.sop) | improved |
+| New: chart form Aggregate records, Histogram bins, data lines `label, number[, error]` or a pasted table; chart panel Error bars, Error bar caps, Category axis; group panel Place group at | chart form / a chart or group selected | none (new) | `diagram.group.chart.make {aggregate|bins|errors}`, `diagram.chart.format {errorBars|errorCap|xAxis}`, `diagram.group.place {at}` | improved |
 | New: page bar Background and Page title | always | none (new) | `diagram.page.change {background|title}` | improved |
 | Fit to view | always | local only | fits the objects (not a themed page's background) | improved |
 

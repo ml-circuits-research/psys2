@@ -380,11 +380,18 @@
 @gp.c ui.diagram.const pad=?p top=?t
 @gp.ax ui.diagram.yaxis group=?g side=?anyside
 @gp.out.f ui.diagram.gpad group=?g pad=?p top=?t
-@dg.gpad.framed core.rule when=$gp.g when=$gp.c not=$gp.nf not=$gp.ax then=$gp.out.f
+@gp.xt ui.diagram.xtop group=?g
+@dg.gpad.framed core.rule when=$gp.g when=$gp.c not=$gp.nf not=$gp.ax not=$gp.xt then=$gp.out.f
+# The category axis on top: the plot moves down under the labels (chart-format.sop ui.diagram.xtop).
+@gp.xtt core.calc out=?xt fn=add args=?t args=44
+@gp.out.xt ui.diagram.gpad group=?g pad=?p top=?xt
+@gp.out.xta ui.diagram.gpad group=?g pad=?ap top=?xt
+@dg.gpad.xtop core.rule when=$gp.g when=$gp.c when=$gp.xt not=$gp.nf not=$gp.ax with=$gp.xtt then=$gp.out.xt
+@dg.gpad.xtop.axis core.rule when=$gp.g when=$gp.c when=$gp.xt when=$gp.ax not=$gp.nf with=$gp.axp with=$gp.xtt then=$gp.out.xta
 # A chart with a value axis leaves room for its numbers (chart-format.sop ui.diagram.yaxis).
 @gp.axp core.calc out=?ap fn=add args=?p args=30
 @gp.out.a ui.diagram.gpad group=?g pad=?ap top=?t
-@dg.gpad.axis core.rule when=$gp.g when=$gp.c when=$gp.ax not=$gp.nf with=$gp.axp then=$gp.out.a
+@dg.gpad.axis core.rule when=$gp.g when=$gp.c when=$gp.ax not=$gp.nf not=$gp.xt with=$gp.axp then=$gp.out.a
 @gp.out.u ui.diagram.gpad group=?g pad=8 top=8
 @dg.gpad.bare core.rule when=$gp.nf then=$gp.out.u
 @gs.i ui.diagram.inside group=?g node=?c
@@ -487,8 +494,35 @@
 @ug2.h1 core.calc out=?h1 fn=mul args=?rows args=?ch
 @ug2.h2 core.calc out=?h2 fn=add args=?top args=?pad
 @ug2.h core.calc out=?h fn=add args=?h1 args=?h2
-@ug2.out ui.diagram.udim unit=?g w=?w h=?h
-@dg.udim.group core.rule when=$ug2.u when=$ug2.c when=$ug2.p with=$ug2.w1 with=$ug2.w2 with=$ug2.w with=$ug2.h1 with=$ug2.h2 with=$ug2.h then=$ug2.out
+@ug2.ex ui.diagram.gextra group=?g w=?ew h=?eh
+@ug2.wx core.calc out=?wx fn=add args=?w args=?ew
+@ug2.hx core.calc out=?hx fn=add args=?h args=?eh
+@ug2.outx ui.diagram.udim unit=?g w=?wx h=?hx
+@dg.udim.group core.rule when=$ug2.u when=$ug2.c when=$ug2.p when=$ug2.ex with=$ug2.w1 with=$ug2.w2 with=$ug2.w with=$ug2.h1 with=$ug2.h2 with=$ug2.h with=$ug2.wx with=$ug2.hx then=$ug2.outx
+# What a group holds besides its cells: a bar or line chart's legend right of the plot (130 wide) or under it (a row of
+# three entries per 18).
+@dg.gextra.type core.type of=ui.diagram.gextra
+@dg.glegend.type core.type of=ui.diagram.glegend
+@gx.c ui.diagram.chart group=?g
+@gx.l w.diagram.group code=?g legend=?side
+@gx.side core.check fn=matches args=?side args="^(right|bottom)$"
+@gx.lo ui.diagram.glegend group=?g side=?side
+@dg.glegend core.rule when=$gx.c when=$gx.l if=$gx.side then=$gx.lo
+@gx.g w.diagram.group code=?g
+@gx.any ui.diagram.glegend group=?g side=?anyside
+@gx.o0 ui.diagram.gextra group=?g w=0 h=0
+@dg.gextra.none core.rule when=$gx.g not=$gx.any then=$gx.o0
+@gx.r ui.diagram.glegend group=?g side=right
+@gx.or ui.diagram.gextra group=?g w=130 h=0
+@dg.gextra.right core.rule when=$gx.r then=$gx.or
+@gx.b ui.diagram.glegend group=?g side=bottom
+@gx.n ui.diagram.gstat group=?g key=count value=?n
+@gx.r1 core.calc out=?r1 fn=add args=?n args=2
+@gx.r2 core.calc out=?r2 fn=idiv args=?r1 args=3
+@gx.r3 core.calc out=?r3 fn=mul args=?r2 args=18
+@gx.r4 core.calc out=?r4 fn=add args=?r3 args=10
+@gx.ob ui.diagram.gextra group=?g w=0 h=?r4
+@dg.gextra.bottom core.rule when=$gx.b when=$gx.n with=$gx.r1 with=$gx.r2 with=$gx.r3 with=$gx.r4 then=$gx.ob
 
 # ---- Placement of flow units: rows by level ----
 @ls.s ui.diagram.slot unit=?u level=?l
@@ -1064,8 +1098,12 @@
 @dcl.fs ui.diagram.cfmt group=?g slot=font_size v=?fs
 @dcl.out ui.diagram.draw part=?c source=?src slot=?c order=4 z=0 shape=text text=?t x=?cx y=?ty w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left anchor=middle font=?fs
 @dcl.fill ui.diagram.fill source=?src part=?c fill="#1f2933"
-@dg.draw.chart.label core.rule when=$dcl.m when=$dcl.n when=$dcl.b when=$dcl.gb when=$dcl.pad when=$dcl.fs when=$dcl.geo not=$dcl.hz with=$dcl.s with=$dcl.y1 with=$dcl.y then=$dcl.out
-@dg.fill.chart.label core.rule when=$dcl.m when=$dcl.n when=$dcl.b when=$dcl.gb when=$dcl.pad not=$dcl.hz with=$dcl.s then=$dcl.fill
+@dcl.xt ui.diagram.xtop group=?g
+@dcl.yt core.calc out=?ty fn=sub args=?y1 args=18
+@dg.draw.chart.label.top core.rule when=$dcl.m when=$dcl.n when=$dcl.b when=$dcl.gb when=$dcl.pad when=$dcl.fs when=$dcl.xt not=$dcl.hz with=$dcl.s with=$dcl.y1 with=$dcl.yt then=$dcl.out
+@dg.fill.chart.label.top core.rule when=$dcl.m when=$dcl.n when=$dcl.b when=$dcl.gb when=$dcl.pad when=$dcl.xt not=$dcl.hz with=$dcl.s then=$dcl.fill
+@dg.draw.chart.label core.rule when=$dcl.m when=$dcl.n when=$dcl.b when=$dcl.gb when=$dcl.pad when=$dcl.fs when=$dcl.geo not=$dcl.hz not=$dcl.xt with=$dcl.s with=$dcl.y1 with=$dcl.y then=$dcl.out
+@dg.fill.chart.label core.rule when=$dcl.m when=$dcl.n when=$dcl.b when=$dcl.gb when=$dcl.pad not=$dcl.hz not=$dcl.xt with=$dcl.s then=$dcl.fill
 @dcv.m ui.diagram.chartmember node=?c group=?g
 @dcv.off w.diagram.group code=?g value_labels=false
 @dcv.n ui.diagram.vtext node=?c text=?v

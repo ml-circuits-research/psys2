@@ -144,3 +144,34 @@ test('a reading of "put the y axis on the right" compiles to the chart format to
   host:readNativeToolInterface(DIAGRAM,{imports:{'data.charts':chartToolInterface}}).realize({'diagram.themes':['pastel'],'diagram.colours':['red']}),observation:{instanceId:'fixture',version:'1',scope:'diagram',complete:true,objects:[group]},focus:'g1',unapplied:[]});
  assert.equal(plan.status,'compiled',JSON.stringify(plan).slice(0,600));assert.equal(plan.operation,'diagram.chart.format');assert.equal(plan.args.axisSide,'right');
 });
+
+test('records: a label said again is aggregated (sum, count, average), sorted, filtered by name; a histogram counts values in bins; a value added later is one more record',async()=>{
+ const {state,ok,view}=await area();
+ const cats=(from)=>nodes(state).slice(from).map(n=>[n.label,n.value]);
+ ok('diagram.group.chart.make label="Sum" layout="bar" labels="Ana" labels="Bob" labels="Ana" labels="Cy" values=3 values=5 values=2 values=1');
+ assert.deepEqual(cats(0),[['Ana',5],['Bob',5],['Cy',1]]);
+ ok('diagram.group.chart.make label="Count" layout="bar" aggregate="count" labels="Ana" labels="Bob" labels="Ana"');
+ assert.deepEqual(cats(3),[['Ana',2],['Bob',1]]);assert.equal(view().inputs.g2.yLabel,'count');
+ ok('diagram.group.chart.make label="Avg" layout="bar" aggregate="avg" labels="x" labels="x" labels="y" values=2 values=5 values=4 sort="descending"');
+ assert.deepEqual(cats(5),[['y',4],['x',3.5]]);
+ ok('diagram.group.chart.make label="Only" layout="bar" labels="a" labels="b" labels="c" values=1 values=2 values=3 only="a" only="c"');
+ assert.deepEqual(cats(7),[['a',1],['c',3]]);
+ ok('diagram.group.chart.make label="Histogram" layout="bar" bins=3 values=1 values=2 values=2 values=5 values=9 values=10');
+ assert.deepEqual(cats(9),[['1–4',3],['4–7',1],['7–10',2]]);
+ ok('diagram.chart.category.add id="g1" label="Ana" value=4');
+ assert.deepEqual(cats(0).slice(0,1),[['Ana',9]],'added to the category the chart has');
+});
+
+test('the category axis on top, a legend for bars, a chart placed by a region, error bars from said errors (refused without errors)',async()=>{
+ const {ok,run,view}=await area();
+ ok('diagram.group.chart.make label="S" layout="bar" labels="Ana" labels="Bob" values=3 values=5 errors=1 errors=2');
+ const below=text(view().svg,'Ana').y;
+ ok('diagram.chart.format id="g1" xAxis="top" legend="right"');
+ const svg=view().svg;assert.ok(text(svg,'Ana').y<rect(svg,'n1').y,'labels above the bars');assert.ok(text(svg,'Ana').y<below);
+ assert.equal(texts(svg).filter(t=>t.text==='Bob').length,2,'a category label and its legend entry');
+ ok('diagram.group.place id="g1" at="left"');assert.match(view().svg,/<rect x="40" y="[\d.]+" width="[\d.]+" height="[\d.]+" rx="10"/,'its box against the left margin');
+ ok('diagram.chart.format id="g1" errorBars=true errorCap=8');
+ assert.equal((view().svg.match(/stroke="#323f4b"/g)??[]).length,6,'two bars, each a line and two caps');
+ ok('diagram.group.chart.make label="T" layout="bar" labels="A" values=10');
+ assert.equal(run('diagram.chart.format id="g2" errorBars=true').reason,'missing-error-values');
+});
