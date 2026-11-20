@@ -1,7 +1,8 @@
 // Source-only two-model proposals. No parser fallback or execution admission.
 import {readReaderSource} from './reader-source.mjs?v=49f139fd1e';
-import {copyHostData} from '../../worlds/native-tool-host.mjs?v=78168a6b62';
-import {bridgeRawStructure,RAW_STRUCTURAL_FORMAT} from './raw-structural-bridge.mjs?v=435e5c11c1';
+import {copyHostData,freezeHostData} from '../../worlds/native-tool-host.mjs?v=6e8a05d4e9';
+import {bridgeRawStructure,RAW_STRUCTURAL_FORMAT} from './raw-structural-bridge.mjs?v=18c6368f46';
+import {comparativeSteps} from './comparative-projection.mjs?v=47420ad488';
 const hash=x=>typeof x==='string'&&/^[a-f0-9]{64}$/.test(x);
 const digest=async x=>Array.from(new Uint8Array(await globalThis.crypto.subtle.digest('SHA-256',new TextEncoder().encode(x))),b=>b.toString(16).padStart(2,'0')).join('');
 const same=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
@@ -11,7 +12,7 @@ export async function createKeyReaderPipeline({cutter,reader,getContext,cutterMo
  if(typeof getContext!=='function'||typeof bindingsJSON!=='string'||bindingsJSON.length>4000000||!hash(bindingsSha256)||![maxText,maxRequests,maxBytes,budget,decoderBudget].every(n=>Number.isSafeInteger(n)&&n>0)||maxRequests>32||maxBytes>4000000)throw Error('invalid-pipeline-options');
  const identities={cutter:modelIdentity(cutterModel),reader:modelIdentity(readerModel)};
  if(await digest(bindingsJSON)!==bindingsSha256)throw Error('binding-hash-mismatch');
- const bindings=copyHostData(JSON.parse(bindingsJSON),{maxBytes});
+ const bindings=freezeHostData(JSON.parse(bindingsJSON),{maxBytes});
  const pipelineSha256=await digest(JSON.stringify({format:'psys2.key-reader-pipeline/1',...identities,bindingsSha256}));
  const provenance={modelSha256:pipelineSha256,decoderVersion:1,models:identities,bindingsSha256,architecture:'source-cutter/request-key-heads',calibration:null};
  let independentInput=null;
@@ -59,7 +60,7 @@ export async function createKeyReaderPipeline({cutter,reader,getContext,cutterMo
    }
    raw={format:RAW_STRUCTURAL_FORMAT,source:{text,unit:'unicode-scalar'},area:context.area,model:{kind:'structural-graph',sha256:pipelineSha256,decoderVersion:1},requestCount:cut.spans.length,requests,ranges,coverage:{complete:failures.length===0,truncated:false},unresolved:copy(failures)};
    if(!recordedContext&&cut.spans.length===1&&context.context?.previous!=null)independentInput={sourceSop,cut,context,profiles:new Set()};
-   const bridge=bridgeRawStructure(raw,{bindings,bindingSha256:bindingsSha256,budget,decoderBudget,maxBytes});
+   const bridge=bridgeRawStructure(raw,{bindings,bindingSha256:bindingsSha256,comparatives:comparativeSteps(),budget,decoderBudget,maxBytes});
    failures.push(...bridge.diagnostics.map(issue=>({reason:issue.reason,path:issue.path})));const decoded=bridge.decoded;failures.push(...(decoded?.issues??[]));
    return {candidates:failures.length?[]:(decoded?.candidates??[]),coverage:{complete:failures.length===0&&decoded?.coverage?.complete===true,graphProposal:decoded?.coverage?.graphProposal===true,executable:false},failures,raw,provenance:copy(provenance),graphConfidence:null,sourceCut,steps,...(observation?{sourceObservation:copy(observation)}:{})};
   }catch(error){fail(String(error?.message??'pipeline-failed'));return {candidates:[],coverage:{complete:false,graphProposal:false,executable:false},failures,raw,provenance:copy(provenance),graphConfidence:null,sourceCut,steps};}

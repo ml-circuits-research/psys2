@@ -1,11 +1,12 @@
 // Predicted raw structure -> declared canonical structure. No reader or gold input.
-import {copyHostData} from '../../worlds/native-tool-host.mjs';
+import {copyHostData,snapshotHostData} from '../../worlds/native-tool-host.mjs';
 import {positiveCardinalProof} from './key-reader-value-proof.mjs';
 import {decodeModelGraphs} from './model-graph-decoder.mjs';
 export const RAW_STRUCTURAL_FORMAT='psys2.raw-structural-predictions/1';
 const has=(o,k)=>Object.hasOwn(o,k),hash=v=>typeof v==='string'&&/^[a-f0-9]{64}$/.test(v);
 const keys={request:['span','trigger','mood','act','target','constraints','question','turn'],target:['type','mode','fill','determiner','kind','kind_span','name_span','description_span','ordinal','count','count_span','quantifier'],constraint:['key','value','value_span','operator','phase','polarity','character','step','measure','measure_span','unit','anchor_span','anchor_fill','variety','scope','group']};
-export function bridgeRawStructure(prediction,{bindings,bindingSha256,budget=200000,maxBytes=4000000,decoderBudget=200000}={}){
+// comparatives: the declared factors of comparative steps (comparative-projection.mjs), [{concept,step,factor,declaration}].
+export function bridgeRawStructure(prediction,{bindings,bindingSha256,comparatives=[],budget=200000,maxBytes=4000000,decoderBudget=200000}={}){
  let raw,table,steps=0;const diagnostics=[],projected=[];
  const fail=(reason,path=[])=>{throw {reason,path};};
  const tick=(n=1)=>{steps+=n;if(steps>budget)fail('bridge-budget');};
@@ -19,11 +20,12 @@ export function bridgeRawStructure(prediction,{bindings,bindingSha256,budget=200
  };
  try{
   if(!Number.isSafeInteger(budget)||budget<1||!Number.isSafeInteger(decoderBudget)||decoderBudget<1||!Number.isSafeInteger(maxBytes)||maxBytes<1||maxBytes>4000000)fail('invalid-budget');
-  raw=copyHostData(prediction,{maxBytes});table=copyHostData(bindings,{maxBytes});
+  raw=copyHostData(prediction,{maxBytes});table=snapshotHostData(bindings,{maxBytes});
   shape(raw,['format','source','area','model','coverage','requestCount','requests','unresolved','ranges'],[]);
   shape(raw.source,['text','unit'],['source']);shape(raw.coverage,['complete','truncated'],['coverage']);
   if(raw.format!==RAW_STRUCTURAL_FORMAT||raw.source?.unit!=='unicode-scalar'||typeof raw.source.text!=='string'||typeof raw.area!=='string')fail('invalid-raw-envelope');
   if(table.format!=='sop.structural-bindings/1'||!hash(bindingSha256))fail('invalid-binding-snapshot');
+  if(!Array.isArray(comparatives)||comparatives.length>256||comparatives.some(r=>!r||!['concept','step','declaration'].every(k=>typeof r[k]==='string'&&r[k])||!(Number.isFinite(r.factor)&&r.factor>0)))fail('invalid-comparative-projection');
   if(table.families!==undefined&&(!Array.isArray(table.families)||table.families.length>256))fail('invalid-family-binding-table');
   for(const row of table.families??[]){tick();if(!row||!['area','type','canonical','sourceWire','sourceWorld','moduleVersion'].every(k=>typeof row[k]==='string'&&row[k])||!hash(row.sourceSnapshotSHA)||row.alignment?.kind!=='explicit-raw-family-identity')fail('invalid-family-binding-record');}
   if(!Array.isArray(raw.requests)||raw.requests.length>32||raw.requestCount!==raw.requests.length||!Number.isSafeInteger(raw.requestCount))issue('unresolved-or-overflow-request-count',['requestCount']);
@@ -86,7 +88,15 @@ export function bridgeRawStructure(prediction,{bindings,bindingSha256,budget=200
     if(phase[c.phase])phase[c.phase].push([cid,condition]);
     const prop=lookup('properties',{area:raw.area,key:condition.key});
     if(prop){c.concept=prop.canonical;anchor([...path,'concept'],condition.value_span,prop.sourceWire,true,['constraints',String(ci),'value_span']);}else unresolved('unresolved-canonical-property-binding',[...path,'concept']);
-    if(has(condition,'value')){
+    // A comparative without a number (operator=delta step=more|less) becomes the declared factor of its step on the
+    // value the target has now; the raw value word is only evidence of the step.
+    const steps=prop&&condition.operator==='delta'&&typeof condition.step==='string'&&!['measure','measure_span','unit'].some(k=>has(condition,k))
+     ?comparatives.filter(r=>{tick();return r.concept===prop.canonical&&r.step===condition.step;}):[];
+    const comparative=steps.length===1?steps[0]:null;
+    if(comparative){
+     Object.assign(c,{operator:'factor',baseline:'before',anchor:prop.canonical,value:{kind:'literal',value:String(comparative.factor)}});
+     for(const key of ['value','anchor'])anchor([...path,key],condition.value_span,comparative.declaration,true,['constraints',String(ci),'value_span']);
+    }else if(has(condition,'value')){
      if(['literal','string'].includes(prop?.valueKind)&&typeof condition.value==='string'){
       const supplied=has(condition,'value_span'),literal=supplied?condition.value_span:condition.value;
       const valuePath=[...rawPath,'constraints',String(ci),'value'],hasCopy=ranges.has(JSON.stringify(valuePath));
@@ -104,11 +114,11 @@ export function bridgeRawStructure(prediction,{bindings,bindingSha256,budget=200
       }
      }else unresolved('unresolved-value-representation',[...path,'value']);
     }
-    if(!['eq','less.equal','greater.equal','degree','region'].includes(condition.operator))unresolved('requires-operator-reference-projection',path);
+    if(!comparative&&!['eq','less.equal','greater.equal','degree','region'].includes(condition.operator))unresolved('requires-operator-reference-projection',path);
     if(['each','group'].includes(condition.scope))c.scope=condition.scope;else if(has(condition,'scope'))unresolved('unknown-condition-scope',[...path,'scope']);
     if(has(condition,'measure_span')&&!has(condition,'measure')&&!has(condition,'unit'))unresolved('unowned-measure-span',[...path,'measure_span']);
     if(has(condition,'measure')&&condition.measure!==condition.value)unresolved('requires-measure-projection',[...path,'measure']);
-    for(const field of ['group','variety','step','anchor_fill','anchor_span'])if(has(condition,field))unresolved(`requires-declared-${field}-projection`,[...path,field]);
+    for(const field of ['group','variety','step','anchor_fill','anchor_span'])if(has(condition,field)&&!(field==='step'&&comparative))unresolved(`requires-declared-${field}-projection`,[...path,field]);
     if(has(condition,'unit')){const unit=lookup('units',{lemma:condition.unit});if(unit){c.unit=unit.canonical;anchor([...path,'unit'],condition.measure_span||condition.value_span,unit.sourceWire,false,['constraints',String(ci),condition.measure_span?'measure_span':'value_span']);}else unresolved('unresolved-unit-binding',[...path,'unit']);}
     const bounds=span?locate(original.span,condition.value_span,span[0],[...rawPath,'constraints',String(ci),'value_span'],span):null;if(bounds)c.source=bounds;
    }

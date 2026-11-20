@@ -55,3 +55,13 @@ test('constructor policy retains same-family alternatives and treats absence as 
   ['fixture.sprout','new.catalog'],['fixture.sprout','new.second'],
  ]);
 });
+
+test('constructor pairs derived for a frozen binding table are reused only while the declared operations and area stay the same',async()=>{
+ const {freezeHostData}=await import('../worlds/native-tool-host.mjs');
+ const bindings=freezeHostData({kinds:[{area:'novel',lemma:'catalog',canonical:'novel.catalog',nativeFamilyBinding:{operation:'create.catalog'}}],families:[],unresolved:[]});
+ const operations=[{id:'create.catalog',act:'make',on:'novel.catalog',params:{}}];
+ const first=nativeCreationCandidates(bindings,operations,'novel'),again=nativeCreationCandidates(bindings,structuredClone(operations),'novel');
+ assert.deepEqual(again,first);assert.equal(first.length,1);assert.equal(again[0].mapping,first[0].mapping);
+ assert.deepEqual(nativeCreationCandidates(bindings,[{...operations[0],id:'create.other'}],'novel'),[]);
+ assert.deepEqual(nativeCreationCandidates(bindings,operations,'elsewhere'),[]);
+});

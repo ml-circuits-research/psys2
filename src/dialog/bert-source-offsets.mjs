@@ -13,8 +13,19 @@ export async function createBertSourceOffsetAuthority({tokenizer,tokenizerJSON,t
  if(profile.truncation!==null&&(profile.truncation?.direction!=='Right'||profile.truncation?.strategy!=='LongestFirst'||profile.truncation?.stride!==0)||profile.padding!==null&&(profile.padding?.direction!=='Right'||profile.padding?.pad_token!=='[PAD]'||profile.padding?.pad_id!==model.vocab['[PAD]' ]||profile.padding?.pad_to_multiple_of!==null))reject('unsupported-padding-truncation-profile');
  const expectedAdded=['[PAD]','[UNK]','[CLS]','[SEP]','[MASK]'];
  if(!Array.isArray(profile.added_tokens)||!same(profile.added_tokens.map(t=>t.content),expectedAdded)||profile.added_tokens.some(t=>t.special!==true||t.normalized!==false||t.single_word!==false||t.lstrip!==false||t.rstrip!==false||model.vocab[t.content]!==t.id))reject('unsupported-added-tokens');
+ // The pinned profile side is canonicalised once. A component configuration object that already
+ // matched it is compared again only when the tokenizer holds a different object, vocabulary object or size
+ // (the vocabulary comparison is the expensive part and runs twice per traced input).
+ const expected={normalizer:JSON.stringify(stable(normalizer)),model:JSON.stringify(stable(model)),post:JSON.stringify(stable(post)),added:JSON.stringify(stable(profile.added_tokens))};
+ const verified=new WeakMap();
+ const matches=(actual,key)=>{
+  if(!actual||typeof actual!=='object')return JSON.stringify(stable(actual))===expected[key];
+  const size=Object.keys(actual).length+(actual.vocab&&typeof actual.vocab==='object'?Object.keys(actual.vocab).length:0),seen=verified.get(actual);
+  if(seen?.key===key&&seen.size===size&&seen.vocab===actual.vocab)return true;
+  const ok=JSON.stringify(stable(actual))===expected[key];if(ok)verified.set(actual,{key,size,vocab:actual.vocab});return ok;
+ };
  const assertComponents=()=>{
-  if(tokenizer.normalizer?.constructor?.name!=='BertNormalizer'||tokenizer.pre_tokenizer?.constructor?.name!=='BertPreTokenizer'||tokenizer.model?.constructor?.name!=='WordPieceTokenizer'||tokenizer.post_processor?.constructor?.name!=='TemplateProcessing'||!same(tokenizer.normalizer?.config,normalizer)||!same(tokenizer.model?.config,model)||!same(tokenizer.post_processor?.config,post)||tokenizer.padding_side!=='right'||typeof tokenizer.normalizer?.normalize!=='function'||typeof tokenizer.pre_tokenizer?.pre_tokenize_text!=='function'||typeof tokenizer.model?.encode!=='function'||!same(tokenizer.added_tokens?.map(t=>({id:t.id,content:t.content,single_word:t.single_word,lstrip:t.lstrip,rstrip:t.rstrip,normalized:t.normalized,special:t.special})),profile.added_tokens))reject('component-profile-mismatch');
+  if(tokenizer.normalizer?.constructor?.name!=='BertNormalizer'||tokenizer.pre_tokenizer?.constructor?.name!=='BertPreTokenizer'||tokenizer.model?.constructor?.name!=='WordPieceTokenizer'||tokenizer.post_processor?.constructor?.name!=='TemplateProcessing'||!matches(tokenizer.normalizer?.config,'normalizer')||!matches(tokenizer.model?.config,'model')||!matches(tokenizer.post_processor?.config,'post')||tokenizer.padding_side!=='right'||typeof tokenizer.normalizer?.normalize!=='function'||typeof tokenizer.pre_tokenizer?.pre_tokenize_text!=='function'||typeof tokenizer.model?.encode!=='function'||JSON.stringify(stable(tokenizer.added_tokens?.map(t=>({id:t.id,content:t.content,single_word:t.single_word,lstrip:t.lstrip,rstrip:t.rstrip,normalized:t.normalized,special:t.special}))))!==expected.added)reject('component-profile-mismatch');
  };
  assertComponents();
  const provenance={id:'bert-component-trace',version:2,profileSha256:await digest(JSON.stringify({normalizer,pre_tokenizer:profile.pre_tokenizer,model:{type:model.type,continuing_subword_prefix:model.continuing_subword_prefix,max_input_chars_per_word:model.max_input_chars_per_word},post_processor:post,policy:'single-or-pair;untruncated-right-padding;no-added-token-input;no-supplementary-cjk'})),tokenizerSha256};

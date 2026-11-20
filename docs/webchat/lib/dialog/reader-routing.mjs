@@ -1,18 +1,18 @@
-import {isScopedRemoval} from './capability-plan-execution.mjs?v=df8ed6639b';
-import {projectRemovalAction} from './project-removal-action.mjs?v=ee3911caac';
+import {isScopedRemoval} from './capability-plan-execution.mjs?v=3b783512bf';
+import {projectRemovalAction} from './project-removal-action.mjs?v=394cafd831';
 import { captureHistory, recordHistory, restoreHistory } from './history-journal.mjs?v=1c9667c210';
-import {projectReaderHeadAlternative} from './reader-head-alternative.mjs?v=eecb878fbb';
+import {projectReaderHeadAlternative} from './reader-head-alternative.mjs?v=56ada71512';
 import {parse} from '../vendor/sopworld/sopworld.mjs?v=22a3f6e48e';
 import {writeReaderSource} from './reader-source.mjs?v=49f139fd1e';
 import {isAuthoredRequest,readAuthoredRequest} from './authored-request-tool.mjs?v=687fe97da8';
 // Model-first proposal routing. Calibration authority belongs to host configuration,
 // never to a model output, evaluation annotation or grammar proposal.
 import {requestCompositionPolicy,scheduleFollowingCut}from './request-composition-policy.mjs?v=db2fa3dca9';
-import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=21d295982b';
-import {projectQueryAction,recoverQueryProjection} from './project-query-action.mjs?v=ee5ee91b6b';
-import {projectContextAction} from './project-context-action.mjs?v=7ed995070f';
-import {projectCreateAction} from './project-create-action.mjs?v=6d1b6d8138';
-import {assessReaderProposal} from './reader-admission.mjs?v=2e348f06fe';
+import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=1e2dd9034b';
+import {projectQueryAction,recoverQueryProjection} from './project-query-action.mjs?v=05c1ad1bdf';
+import {projectContextAction} from './project-context-action.mjs?v=31edc7281c';
+import {projectCreateAction} from './project-create-action.mjs?v=a60c085db0';
+import {assessReaderProposal} from './reader-admission.mjs?v=21740eba78';
 const unavailable=reason=>({candidates:[],coverage:{complete:false,executable:false,graphProposal:false},failures:[{reason}]});
 const noDeclaredAction = () => {
  const text='I could not identify an action to apply. Nothing changed.';

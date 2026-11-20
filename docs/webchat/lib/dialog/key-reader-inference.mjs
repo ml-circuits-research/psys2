@@ -1,9 +1,9 @@
 // Actual two-stage neural computation. Artifact loading and empirical admission are separate.
 import {validateKeyReaderLayout} from './key-reader-layout.mjs?v=13da6b9284';
-import {copyHostData} from '../../worlds/native-tool-host.mjs?v=78168a6b62';
+import {copyHostData} from '../../worlds/native-tool-host.mjs?v=6e8a05d4e9';
 import {canonicalLiteralProof,positiveCardinalProof,positiveIntegerLiteralProof} from './key-reader-value-proof.mjs?v=1da711100a';
 import {selectedProbability,binaryDecisionProbability} from './model-selection-score.mjs?v=ac3ac10191';
-import {createKeyReaderPacketAdapter} from './key-reader-packet.mjs?v=6184ed5554';
+import {createKeyReaderPacketAdapter} from './key-reader-packet.mjs?v=43133047a4';
 const hash=x=>typeof x==='string'&&/^[a-f0-9]{64}$/.test(x);
 const object=x=>x!==null&&typeof x==='object'&&!Array.isArray(x);
 const digest=async x=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(x))),b=>b.toString(16).padStart(2,'0')).join('');
@@ -88,6 +88,7 @@ export async function createKeyReaderInference({manifest,tokenizer,encoder,heads
  for(const key of config.keys)if(Object.hasOwn(config.banks,key)){const row={key,start:width,end:width+config.banks[key].length};banks.push(row);bankMap.set(key,row);width=row.end;}
  if(width>65536)throw Error('class-output-layout-budget');
  const provenance={format:m.format,artifactRole:m.artifactRole,model,configSha256:m.configSha256,encoderSha256:m.encoderSha256,headsSha256:m.headsSha256,checkpointSha256:m.checkpointSha256,weightRepresentation:m.weightRepresentation,calibration:null,executionEligible:false};
+ const readings=new Map();
  async function infer(text,{area,context=null}={}){
   let steps=0;const tick=(n=1)=>{steps+=n;if(steps>budget)throw Error('key-runtime-budget');};
   const raw={source:{text:typeof text==='string'?text:'',unit:'unicode-scalar'},request:{span:typeof text==='string'?text:'',target:{},constraints:[]},ranges:[],coverage:{complete:false,truncated:false,support:support(config)},unresolved:[],model};
@@ -102,15 +103,24 @@ export async function createKeyReaderInference({manifest,tokenizer,encoder,heads
    if(length>config.maxLength||(inputPadding==='max_length'&&length!==config.maxLength)||mask.length!==length||fullMask.length!==fullIds.length||[...mask,...fullMask].some(n=>n!==0&&n!==1))throw Error('invalid-tokenizer-shape');
    raw.coverage.truncated=fullMask.reduce((a,b)=>a+b,0)>mask.reduce((a,b)=>a+b,0);if(raw.coverage.truncated)throw Error('source-or-context-truncated');
    const authority=checkOffsets(await offsetAuthority({text,contextJson:contextJSON,tokenIds:ids,attentionMask:mask,fullTokenIds:fullIds,fullAttentionMask:fullMask,maxLength:config.maxLength}),text,ids,mask,m,tick);offsetProvenance=authority.provenance;
-   const output=await encoder({input_ids:encoded.input_ids,attention_mask:encoded.attention_mask});
-   const hidden=tensorValues(output.hidden,[1,length,m.hiddenWidth],tick),bio=tensorValues(output.bio_logits,[1,config.bioKeys.length,length,3],tick),presence=tensorValues(output.presence_logits,[1,config.keys.length],tick);
+   // The same utterance and fitted context give the same model input: a repeated reading (a context
+   // retry whose fitted context did not change) reuses the validated outputs instead of running the graphs again.
+   const readingKey=text+'\u0000'+contextJSON,cached=readings.get(readingKey);
+   let hidden,bio,presence;
+   if(cached){({hidden,bio,presence}=cached);tick(hidden.length+bio.length+presence.length);}
+   else{const output=await encoder({input_ids:encoded.input_ids,attention_mask:encoded.attention_mask});
+    hidden=tensorValues(output.hidden,[1,length,m.hiddenWidth],tick);bio=tensorValues(output.bio_logits,[1,config.bioKeys.length,length,3],tick);presence=tensorValues(output.presence_logits,[1,config.keys.length],tick);}
    for(let i=0;i<presence.length;i++)if(config.registry[config.keys[i]].role!=='derived')probability(binaryDecisionProbability(presence[i]));
    const byKey=new Map();for(let i=0;i<config.bioKeys.length;i++){tick();const value=spansFor(bio,i,length,authority,mask,tick);byKey.set(config.bioKeys[i],value.spans);if(value.reason)issue(value.reason,config.bioKeys[i]);}
    const queries=[{kind:'global',span:[0,1],index:-1}],queryMap=new Map();
    for(const key of config.keys){tick();if(config.registry[key].role!=='domain')continue;for(const span of byKey.get(key)??[]){tick();if(queries.length>=maxQueries)throw Error('mention-query-overflow');queryMap.set(key+':'+span.tokens.join(':'),queries.length);queries.push({kind:'domain',key,span:span.tokens,index:config.keys.indexOf(key)});}}
    if(queries.length*width>4194304)throw Error('class-output-budget');auxiliary.queryCount=queries.length;
-   const result=await heads({hidden:makeTensor('float32',Float32Array.from(hidden),[length,m.hiddenWidth]),spans:makeTensor('int64',BigInt64Array.from(queries.flatMap(q=>q.span),BigInt),[queries.length,2]),key_indices:makeTensor('int64',BigInt64Array.from(queries.map(q=>q.index),BigInt),[queries.length])});
-   const logits=tensorValues(result.class_logits,[queries.length,width],tick),emitted=new Set();
+   let logits;
+   if(cached?.logits){logits=cached.logits;tick(logits.length);}
+   else{const result=await heads({hidden:makeTensor('float32',Float32Array.from(hidden),[length,m.hiddenWidth]),spans:makeTensor('int64',BigInt64Array.from(queries.flatMap(q=>q.span),BigInt),[queries.length,2]),key_indices:makeTensor('int64',BigInt64Array.from(queries.map(q=>q.index),BigInt),[queries.length])});
+    logits=tensorValues(result.class_logits,[queries.length,width],tick);
+    readings.delete(readingKey);readings.set(readingKey,{hidden,bio,presence,logits});if(readings.size>8)readings.delete(readings.keys().next().value);}
+   const emitted=new Set();
    const field=(key,row)=>{const layout=bankMap.get(key);if(!layout)throw Error('missing-class-layout');const values=logits.slice(row*width+layout.start,row*width+layout.end),index=choice(values);tick(values.length);if(index===null){issue('invalid-or-ambiguous-class',key);return {exists:false};}probability(selectedProbability(values,index));const entry=config.banks[key][index];auxiliary.selectedLogits.push({key,query:row,index,logit:values[index]});if(entry.state==='absent')return {exists:false};if(entry.state!=='value'){issue('unknown-class',key);return {exists:false};}return {exists:true,value:copyHostData(entry.value)};};
    for(let ki=0;ki<config.keys.length;ki++){
     tick();const key=config.keys[ki],spec=config.registry[key],spans=byKey.get(key)??[],present=presence[ki]===0?null:presence[ki]>0;if(present===null)issue('unknown-presence',key);if(spec.role==='derived')continue;

@@ -45,6 +45,11 @@ test('actual two-stage computation matches Python normalizer for repeated-key pe
  assert.deepEqual(result.raw,expected);assert.equal(calls.encoder,1);assert.equal(calls.heads,1);assert.deepEqual(result.raw.request.constraints.map(c=>c.phase),['selector','result']);assert.equal(result.graphConfidence,null);assert.equal(result.provenance.executionEligible,false);assert.equal(result.diagnostics.support.length,135);
  assert.equal(calls.pairs[0][0],'{"area": "drawing", "context": {"existing": []}}');
 });
+test('a repeated reading of the same text and fitted context reuses the validated outputs; another context runs the graphs',async()=>{
+ const {reader,calls}=await setup(),first=await reader.infer('😀x',{area:'drawing',context:{existing:[]}}),again=await reader.infer('😀x',{area:'drawing',context:{existing:[]}});
+ assert.equal(calls.encoder,1);assert.equal(calls.heads,1);assert.deepEqual(again.raw,first.raw);assert.deepEqual(again.auxiliary.selectedLogits,first.auxiliary.selectedLogits);
+ await reader.infer('😀x',{area:'drawing',context:{existing:[],previous:'add a box'}});assert.equal(calls.encoder,2);assert.equal(calls.heads,2);
+});
 test('read retains full diagnostics before handing the closed packet to the pipeline',async()=>{const {reader,calls}=await setup();const packet=await reader.read('😀x',{area:'drawing'});assert.equal(calls.diagnostics.length,1);assert.deepEqual(Object.keys(packet.coverage).sort(),['complete','truncated']);assert.equal(calls.diagnostics[0].diagnostics.support.length,135);});
 test('missing offset authority refuses before encoder and never constructs source evidence',async()=>{const {reader,calls}=await setup({offsetAuthority:async()=>null});const result=await reader.infer('😀x',{area:'drawing'});assert.equal(calls.encoder,0);assert.equal(result.raw.coverage.complete,false);assert.equal(result.raw.ranges.length,0);assert.equal(result.raw.unresolved[0].reason,'exact-source-offsets-unavailable');});
 test('malformed neural output and low work allowance produce incomplete packets',async()=>{for(const change of [{encoder:async()=>({hidden:tensor([NaN],[1,192,2])})},{budget:1}]){const {reader}=await setup(change),result=await reader.infer('😀x',{area:'drawing'});assert.equal(result.raw.coverage.complete,false);assert.ok(result.raw.unresolved.length);assert.equal(result.graphConfidence,null);}});

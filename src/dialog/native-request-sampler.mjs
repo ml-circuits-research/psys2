@@ -32,6 +32,21 @@ export function samplingSchema({area,operations,observation,bindings}) {
  return {schema:{id:area,acts:new Set(Object.values(kinds).flatMap(k=>k.acts)),kinds,attrs,flags:{name:true}},things};
 }
 
+// A probe is a background reading: its awaits settle as microtasks, so a host message (the user's next
+// turn) is only seen after a task boundary. Every reader call first yields one task and gives the probe up
+// when the host asked for the engine; a turn then waits at most for one model call, not for whole probes.
+const nextTask = () => new Promise(resolve => setTimeout(resolve, 0));
+export class SampleYielded extends Error { constructor() { super('sample-yielded'); this.name = 'SampleYielded'; } }
+export function preemptibleEngine(engine, shouldYield) {
+ const reader = engine?.requestReader;
+ if (!reader) return engine;
+ const gate = async () => { await nextTask(); if (shouldYield()) throw new SampleYielded(); };
+ const wrapped = Object.create(reader);
+ for (const method of ['propose', 'proposeIndependent', 'proposeLiteral']) if (typeof reader[method] === 'function') wrapped[method] = async (...args) => { await gate(); return reader[method](...args); };
+ if (typeof reader.proposeRequests === 'function') wrapped.proposeRequests = async function* (...args) { await gate(); const sequence = reader.proposeRequests(...args); while (true) { const step = await sequence.next(); if (step.done) return; yield step.value; await gate(); } };
+ return Object.create(engine, { requestReader: { value: wrapped, enumerable: true, writable: true, configurable: true } });
+}
+
 /** No probe mutates the real session. Only normal neural reads with a matching effect are offered. */
 export function createNativeRequestSampler() {
  let current=null;
@@ -41,10 +56,12 @@ export function createNativeRequestSampler() {
   current=samplingSchema({area,operations:host.bindings(),observation,bindings});
   const proposals=sampler.sample(mode,{worldId:area,count:Math.min(maxProbes,Math.max(count,8))});
   const items=[];let probes=0;
+  const engine=preemptibleEngine(session.engine,shouldYield);
   for(const proposal of proposals) {
+   await nextTask();
    if(shouldYield()||probes>=maxProbes||items.length>=count)break;
    probes++;
-   const fork={engine:session.engine,isession:{state:structuredClone(session.isession.state)},
+   const fork={engine,isession:{state:structuredClone(session.isession.state)},
     newEngineFocus:structuredClone(session.newEngineFocus??{}),newEngineLastAction:structuredClone(session.newEngineLastAction??{})};
    if(session.historyJournal)restoreHistory(fork,captureHistory(session));
    else if(session.newEngineUndo?.length||session.newEngineRedo?.length)restoreHistory(fork,undefined,session);

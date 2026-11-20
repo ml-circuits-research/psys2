@@ -1,11 +1,11 @@
 import {projectJournalAction} from './project-journal-action.mjs?v=788b14e2f8';
 import {combineModelScores} from './model-selection-score.mjs?v=ac3ac10191';
 // Verify artifact bytes, then assemble actual injected neural sessions. No admission.
-import {copyHostData} from '../../worlds/native-tool-host.mjs?v=78168a6b62';
-import {createCutterInference} from './cutter-inference.mjs?v=0028cfcc4a';
-import {createKeyReaderInference} from './key-reader-inference.mjs?v=b919213107';
-import {createBertSourceOffsetAuthority} from './bert-source-offsets.mjs?v=9b7b99f458';
-import {createKeyReaderPipeline} from './key-reader-pipeline.mjs?v=078aba8cfe';
+import {copyHostData,freezeHostData} from '../../worlds/native-tool-host.mjs?v=6e8a05d4e9';
+import {createCutterInference} from './cutter-inference.mjs?v=808b180bab';
+import {createKeyReaderInference} from './key-reader-inference.mjs?v=0930db37f2';
+import {createBertSourceOffsetAuthority} from './bert-source-offsets.mjs?v=d88d1e36fe';
+import {createKeyReaderPipeline} from './key-reader-pipeline.mjs?v=5004c3f9a3';
 
 const hash=x=>typeof x==='string'&&/^[a-f0-9]{64}$/.test(x);
 const object=x=>x!==null&&typeof x==='object'&&!Array.isArray(x);
@@ -154,7 +154,9 @@ export async function createVerifiedReaderProvider({
   return proposal?{...projectJournalAction(proposal),
    selectionScore:combineModelScores([componentScores.cutter,componentScores['key-reader']])}:null;
  }
- const scoredProvider={...provider,registry:()=>copyHostData(JSON.parse(m.configJSON).registry),bindings:()=>copyHostData(JSON.parse(bindingsJSON)),async propose(sourceSop){decisionScores=[];const proposal=await provider.propose(sourceSop);return scoreProposal(proposal);},
+ // The authenticated registry and binding table are read on every turn: one frozen snapshot each, shared read-only.
+ const registrySnapshot=freezeHostData(JSON.parse(m.configJSON).registry),bindingsSnapshot=freezeHostData(JSON.parse(bindingsJSON));
+ const scoredProvider={...provider,registry:()=>registrySnapshot,bindings:()=>bindingsSnapshot,async propose(sourceSop){decisionScores=[];const proposal=await provider.propose(sourceSop);return scoreProposal(proposal);},
   proposeIndependent:sourceSop=>scoreRepeat(provider.proposeIndependent,sourceSop),
   proposeLiteral:sourceSop=>scoreRepeat(provider.proposeLiteral,sourceSop),
   async *proposeRequests(sourceSop){const sequence=provider.proposeRequests(sourceSop);delete componentScores.cutter;while(true){decisionScores=[];delete componentScores['key-reader'];const step=await sequence.next();if(step.done)return;const proposal=scoreProposal(step.value);proposal.selectionScore=combineModelScores([componentScores.cutter,componentScores['key-reader']]);yield proposal;}}};

@@ -1,6 +1,7 @@
 // Prove a foreign head has a grounded equivalent before trying a structural projection.
 import {World, quote, serialize} from '../vendor/sopworld/sopworld.mjs';
 import {bridgeRawStructure} from './raw-structural-bridge.mjs';
+import {comparativeSteps} from './comparative-projection.mjs';
 import SCHEMA from '../../worlds/app.project/reader-head-schema-source.mjs';
 import POLICY from '../../worlds/app.project/reader-head-policy-source.mjs';
 
@@ -62,7 +63,7 @@ export function proveReaderHeadAlternative(raw, bindings, cutStart=0){
 export function projectReaderHeadAlternative(raw,{bindings,bindingSha256,cutStart}={}){
  const proof=proveReaderHeadAlternative(raw,bindings,cutStart);
  if(!proof)return null;
- const trial=bridgeRawStructure({...raw,coverage:{complete:true,truncated:false},unresolved:[]},{bindings,bindingSha256});
+ const trial=bridgeRawStructure({...raw,coverage:{complete:true,truncated:false},unresolved:[]},{bindings,bindingSha256,comparatives:comparativeSteps()});
  if(trial.decoded?.coverage?.complete!==true||trial.diagnostics.length||trial.decoded.candidates?.length!==1)return null;
  return {candidate:trial.decoded.candidates[0],proof};
 }

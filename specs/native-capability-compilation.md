@@ -35,6 +35,18 @@ without the unresolved degree, previews that call on a copy of the state through
 properties bind, so the degree scales exactly the value the area would otherwise give (its knowledge size
 class). An unknown word, an ambiguous scale or a missing base leaves the condition skipped and reported.
 
+A comparative without a number ("make the house bigger", "make it smaller") reaches the reader as
+`operator=delta step=more|less`. The declared comparative projection
+(`worlds/app.project/comparative-projection.sop`, evaluated once by `src/dialog/comparative-projection.mjs`)
+derives `app.execution.comparativeFactor concept step factor` for each concept whose degree values come from
+`k.expect.scale`: a step moves `offset` places from the `default` step (the catalog: "bigger" moves one step up),
+and its factor is that step's `size_factor` over the default's (currently more 1.4, less 0.7). The raw-structure
+bridge turns such a condition into `operator=factor baseline=before anchor=<concept> value=<factor>`, the library's
+change relative to the observed value; a step on a concept without a declared scale, or a step with a measured
+amount (`measure`, `unit`), stays an unresolved decision. Open: an absolute degree on an existing target
+("make the house big") still multiplies the observed value, because the library's degree base for a selected
+target is its observed value; it should use the kind's base (a library change).
+
 ## Authority for a native interface
 
 Each editor owns `worlds/<editor>/native-interface.sop`. It declares the same

@@ -5,8 +5,8 @@
 import {World, str} from '../lib/vendor/sopworld/sopworld.mjs?v=22a3f6e48e';
 import {catalogWorld} from './catalog-world.mjs?v=4124fae5aa';
 import {readNativeToolInterface} from './native-tool-interface.mjs?v=3628e649ea';
-import {toolInvocationContext} from './native-tool-host.mjs?v=78168a6b62';
-import {createSopWorldHost, forgetDerived, initialSopWorldState, worldOf} from './sop-world-host.mjs?v=6e8eb79d9c';
+import {toolInvocationContext} from './native-tool-host.mjs?v=6e8a05d4e9';
+import {createSopWorldHost, forgetDerived, initialSopWorldState, worldOf} from './sop-world-host.mjs?v=d372f242f8';
 import {renderPrimitives} from './sop-primitives.mjs?v=0b15a3316a';
 
 const read = (fact, key) => { const raw = fact?.attrs[key]?.[0]; return raw === undefined ? undefined : raw.startsWith('"') ? str(raw) : raw; };

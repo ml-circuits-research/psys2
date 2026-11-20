@@ -73,6 +73,21 @@ and deterministic assemblySha256. The main admission loader still supplies its
 own verified runtime identity and empirical record. No probability, cohort
 precision, threshold or execution permission is inferred here.
 
+## Per-turn reuse
+
+`provider.bindings()` and `provider.registry()` return one deeply frozen snapshot
+each (`freezeHostData`), made once from the authenticated bytes; routing, the
+structural bridge (`snapshotHostData`) and the constructor-candidate derivation
+read it without another parse or deep copy (the 3.3 MB table cost about 150 ms
+per turn in the browser). Constructor pairs derived for a frozen table are reused
+while the declared operation metadata and area are unchanged. The cutter reuses
+its validated logits for a repeated text, and the key reader reuses its validated
+encoder/head outputs for a repeated text with the same fitted context JSON (a
+context retry whose fitted context did not change); any other input runs the
+graphs. The offset authority canonicalises the pinned profile once and compares a
+tokenizer component configuration again whenever the tokenizer holds a different
+configuration object, vocabulary object or size.
+
 ## Source fixtures
 
 Eight Node fixtures use only synthetic graph bytes/session implementations and

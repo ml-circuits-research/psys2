@@ -1,4 +1,4 @@
-@policy.module core.module name=app.execution version=2 imports=std.capability exports=app.execution.values exports=app.execution.observedProperty exports=app.execution.observedMeasure exports=app.execution.observedField exports=app.execution.preview
+@policy.module core.module name=app.execution version=2 imports=std.capability exports=app.execution.values exports=app.execution.observedProperty exports=app.execution.observedMeasure exports=app.execution.observedField exports=app.execution.preview exports=app.execution.comparative exports=app.execution.comparativeFactor
 @values.type core.type of=app.execution.values closed=true
 @values.concept core.slot of=app.execution.values key=concept kind=atom present=true
 @values.type.slot core.slot of=app.execution.values key=valueType kind=string present=true
@@ -31,3 +31,10 @@
 @field.binding core.slot of=app.execution.observedField key=binding kind=string present=true
 @field.key core.slot of=app.execution.observedField key=key kind=string present=true
 @field.value core.slot of=app.execution.observedField key=value kind=any many=true
+@comparativeStep.type core.type of=app.execution.comparative closed=true
+@comparativeStep.step core.slot of=app.execution.comparative key=step kind=atom present=true
+@comparativeStep.offset core.slot of=app.execution.comparative key=offset kind=integer present=true
+@comparativeFactor.type core.type of=app.execution.comparativeFactor closed=true
+@comparativeFactor.concept core.slot of=app.execution.comparativeFactor key=concept kind=atom present=true
+@comparativeFactor.step core.slot of=app.execution.comparativeFactor key=step kind=atom present=true
+@comparativeFactor.value core.slot of=app.execution.comparativeFactor key=factor kind=number present=true

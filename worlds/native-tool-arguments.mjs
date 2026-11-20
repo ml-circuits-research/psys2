@@ -16,6 +16,19 @@ export function copyHostData(value,{maxNodes=100000,maxBytes=4000000}={}) {
   stack.delete(v);return out;
  };return copy(value,0);
 }
+// A frozen owned snapshot is copied once at the boundary and then shared read-only:
+// readers that only need an owned, unchanging view take it without another deep copy.
+const frozenHostData=new WeakMap();
+export function freezeHostData(value,{maxNodes=100000,maxBytes=4000000}={}) {
+ const out=copyHostData(value,{maxNodes,maxBytes});
+ const freeze=(v,depth)=>{if(depth>48)throw new RangeError('host-data-budget');if(v&&typeof v==='object'&&!Object.isFrozen(v)){for(const key of Object.keys(v))freeze(v[key],depth+1);Object.freeze(v);}};
+ freeze(out,0);if(out&&typeof out==='object')frozenHostData.set(out,{maxNodes,maxBytes});return out;
+}
+/** Read-only owned view: a frozen snapshot made within the same limits is returned as is; anything else is copied. */
+export function snapshotHostData(value,{maxNodes=100000,maxBytes=4000000}={}) {
+ const limits=value&&typeof value==='object'?frozenHostData.get(value):undefined;
+ return limits&&limits.maxNodes<=maxNodes&&limits.maxBytes<=maxBytes?value:copyHostData(value,{maxNodes,maxBytes});
+}
 export const validHostId=v=>typeof v==='string'&&v.length>0&&v.length<=4096;
 export const nativeToken=value=>typeof value==='string'?JSON.stringify(value):String(value);
 

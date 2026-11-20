@@ -1,6 +1,6 @@
 // Actual native observations and an authored projection provide reader context.
 import {str} from '../vendor/sopworld/sopworld.mjs?v=22a3f6e48e';
-import {copyHostData} from '../../worlds/native-tool-host.mjs?v=78168a6b62';
+import {copyHostData} from '../../worlds/native-tool-host.mjs?v=6e8a05d4e9';
 import {contextClass,readerContextPolicy} from './reader-context-policy.mjs?v=95bbe7ef31';
 export const REPLAY_CONTEXT_PROFILE='psys2.native-reader-context/1';
 

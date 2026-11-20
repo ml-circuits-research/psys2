@@ -134,6 +134,15 @@ test('request sampling reads capability declarations and actual objects in an ad
  const shape=samplingSchema({area:'fixture',operations:[{id:'fixture.make',act:'make',on:'fixture.entity',params:{kind:{enum:['widget']}}},{id:'fixture.change',act:'change',on:'fixture.entity',params:{height:{type:'number',min:1,max:8}}}],observation:{objects:[{id:'current',kind:'widget',inputs:[]}]},bindings:{kinds:[{area:'fixture',lemma:'widget',nativeFamilyBinding:{operation:'fixture.make'}}],properties:[{area:'fixture',canonical:'height',hostBinding:{operation:'fixture.change',parameter:'height'}}]}});
  assert.deepEqual(shape.schema.kinds.widget.acts,['make','change']);assert.deepEqual(shape.things.map(t=>t.id),['current']);assert.equal(shape.schema.attrs.height.max,8);
 });
+test('background probes yield to a host task before the next reader call',async()=>{
+ // Reader calls that settle as microtasks would otherwise run every probe before a host message (a task) is seen.
+ const bindings={kinds:[{area:'drawing',lemma:'circle',canonical:'fixture.circle',nativeFamilyBinding:{operation:'drawing.object.make'}}],properties:[]};
+ let reads=0;const session={isession:{state:{'art.draw':emptyDrawingState(),'ui.shell':{activeTab:'draw'}}},engine:{requestReader:{bindings:()=>bindings,provenance:()=>provenance,propose:async()=>{reads++;return {candidates:[],failures:[{reason:'fixture-unread'}],coverage:{complete:false}};}}}};
+ const before=structuredClone(session.isession.state),host=await createDrawingArea({state:structuredClone(session.isession.state['art.draw']),instanceId:'yield-test'});
+ let hostAsked=false;setTimeout(()=>{hostAsked=true;},0);
+ const result=await createNativeRequestSampler().sample({session,area:'drawing',view:'draw',world:'art.draw',host,createHost:createDrawingArea,bindings,count:4,shouldYield:()=>hostAsked});
+ assert.equal(reads,0,'a pending host task is honoured before the next reader call');assert.equal(result.probes,0);assert.equal(result.items.length,0);assert.deepEqual(session.isession.state,before);
+});
 test('dice probes use the normal reader on an isolated state and reject a non-changing reader',async()=>{
  const bindings={kinds:[{area:'drawing',lemma:'circle',canonical:'fixture.circle',nativeFamilyBinding:{operation:'drawing.object.make'}}],properties:[]};
  const session={isession:{state:{'art.draw':emptyDrawingState(),'ui.shell':{activeTab:'draw'}}},engine:{requestReader:{bindings:()=>bindings,provenance:()=>provenance,propose:async sourceSop=>({coverage:{complete:true,graphProposal:true},failures:[],selectionScore:{definition:'psys2.model-minimum/1',value:0.7},candidates:[{request:'r',wires:`@s std.request.source text=${JSON.stringify(readReaderSource(sourceSop))}\n@r std.request act=make mood=do source=$s\n@t std.request.target request=$r mode=new kind=fixture.circle`}]})}}};

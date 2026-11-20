@@ -2,11 +2,11 @@
 import { parse, quote, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=22a3f6e48e';
 import { decodeCapabilityCall } from '../vendor/sopworld/capability-call.mjs?v=ed3b773c65';
 import POLICY from '../../worlds/app.project/capability-policy.mjs?v=725d669cd9';
-import { executionPolicyWorld } from './execution-policy.mjs?v=e90a29683e';
+import { executionPolicyWorld } from './execution-policy.mjs?v=e8bfdad087';
 import { projectionModule } from './composition-knowledge.mjs?v=d06011eb6a';
 import { sceneDefaultModule, writeSceneDefaults } from './scene-placement-defaults.mjs?v=bd8049ff8b';
-import { nativeKindCandidates } from './native-binding-candidates.mjs?v=8594ec01dd';
-import { observedReaderContext } from './native-reader-context.mjs?v=8107ecbe10';
+import { nativeKindCandidates } from './native-binding-candidates.mjs?v=9860e110fe';
+import { observedReaderContext } from './native-reader-context.mjs?v=8a38092080';
 import { budget } from './budget.mjs?v=00bce6e369';
 
 const NS = 'std.capability.';

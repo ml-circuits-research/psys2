@@ -135,6 +135,10 @@ test('verifies all bytes before constructing actual injected sessions; assembly 
  assert.equal(built.verified.calibration,null);assert.equal(built.verified.executionEligible,false);
  assert.equal(f.diagnostics.length,2);assert.equal(built.verified.files.cutter.sha256,f.manifest.cutterSha256);
  assert.match(built.verified.implementationTrust,/external host attestation/);
+ // The authenticated binding table and registry are one frozen snapshot each, read on every turn without another parse or copy.
+ const bindings=built.provider.bindings(),registry=built.provider.registry();
+ assert.equal(built.provider.bindings(),bindings);assert.equal(built.provider.registry(),registry);assert.ok(Object.isFrozen(bindings)&&Object.isFrozen(registry));
+ assert.throws(()=>{'use strict';bindings.format='changed';},TypeError);
 });
 test('wrong manifest/config/tokenizer/binding/graph bytes never create sessions or tokenizer',async()=>{
  for(const failure of ['manifest','config','tokenizer.json','bindings.json','encoder.onnx']){

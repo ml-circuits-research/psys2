@@ -2,9 +2,9 @@ import {World,parse,quote,serialize,str} from '../vendor/sopworld/sopworld.mjs?v
 import {groundMention} from './lexical-grounding.mjs?v=77a217a2f1';
 import POLICY from '../../worlds/app.project/creation-policy-source.mjs?v=055ab92c2d';
 import SCHEMA from '../../worlds/app.project/creation-schema-source.mjs?v=70feb54316';
-import {executionPolicyWorld} from './execution-policy.mjs?v=e90a29683e';
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=ac79ca0665';
-import {nativeCreationCandidates} from './native-binding-candidates.mjs?v=8594ec01dd';
+import {executionPolicyWorld} from './execution-policy.mjs?v=e8bfdad087';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=cf97438a76';
+import {nativeCreationCandidates} from './native-binding-candidates.mjs?v=9860e110fe';
 import {budget} from './budget.mjs?v=00bce6e369';
 import {observeGroundedProjection,projectGroundedRequest} from './grounded-projection.mjs?v=2365ae30e0';
 import {positiveCardinalProof} from './key-reader-value-proof.mjs?v=1da711100a';

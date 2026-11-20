@@ -1,4 +1,4 @@
-import{budget}from'./core.mjs?v=cdf0aace25';
+import{budget}from'./core.mjs?v=0c47ee79a4';
 // Numeric group layouts are actual editable node and link geometry.
 export const CHART_LAYOUTS=['bar','line','pie','doughnut'];
 export const GROUP_LAYOUTS=['free','tree','grid','row','column','circle','radial','layers',...CHART_LAYOUTS];

@@ -83,6 +83,13 @@ test('single-template tokenizer reaches injected cutter call; scalar cuts and fu
  assert.equal(result.graphConfidence,null);assert.equal(result.provenance.executionEligible,false);
 });
 
+test('a repeated text reuses the validated cut logits; another text runs the model',async()=>{
+ const {component,calls}=await setup({logits:[[0,4,1],[0,1,4],[4,0,1]]});
+ const first=await component.infer('😀x y'),again=await component.infer('😀x y');
+ assert.equal(calls.model.length,1);assert.deepEqual(again.packet,first.packet);assert.deepEqual(again.auxiliary,first.auxiliary);assert.equal(calls.authority.length,2);
+ await component.infer('x y');assert.equal(calls.model.length,2);
+});
+
 test('closed cut envelope and diagnostics do not mutate internal provenance or delivered packet',async()=>{
  const {component,calls}=await setup({logits:[[0,4,1]],record:r=>{r.packet.spans=[];r.packet.model.sha256='f'.repeat(64);}});
  const identity=component.provenance().model;

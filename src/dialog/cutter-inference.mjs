@@ -71,6 +71,7 @@ export async function createCutterInference({manifest,tokenizer,model,offsetAuth
   configSha256:m.cutterConfigSha256,checkpointSha256:m.cutterCheckpointSha256,graphSha256:m.cutterSha256,
   tokenizerSha256:m.tokenizerSha256,trainerSha256:m.cutterTrainerSha256,codecSha256:m.cutterCodecSha256,
   dtype:m.dtype,weightRepresentation:m.weightRepresentation,calibration:null,executionEligible:false};
+ const cutLogits=new Map();
  async function infer(text){
   let steps=0;const tick=(n=1)=>{steps+=n;if(steps>budget)throw Error('cutter-runtime-budget');};
   const packet={source:{text:typeof text==='string'?text:'',unit:'unicode-scalar'},spans:[],
@@ -93,7 +94,10 @@ export async function createCutterInference({manifest,tokenizer,model,offsetAuth
    const authority=checkAuthority(await offsetAuthority({text,tokenIds:ids,attentionMask:mask,
     fullTokenIds:fullIds,fullAttentionMask:fullMask,maxLength:config.maxLength}),text,ids,mask,active,m,tick);
    offsetProvenance=authority.provenance;
-   const logits=bioValues(await model({input_ids:encoded.input_ids,attention_mask:encoded.attention_mask}),ids.length,tick);
+   // The cut depends on the text alone: a repeated text (a background probe, then the same text sent) reuses the validated logits.
+   let logits=cutLogits.get(text);
+   if(logits)tick(logits.length);
+   else{logits=bioValues(await model({input_ids:encoded.input_ids,attention_mask:encoded.attention_mask}),ids.length,tick);cutLogits.set(text,logits);if(cutLogits.size>8)cutLogits.delete(cutLogits.keys().next().value);}
    let current=null;
    for(let i=1;i<active-1;i++){
     tick();const values=logits.slice(i*3,i*3+3),label=choose(values),range=authority.offsets[i];

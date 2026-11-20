@@ -2,7 +2,7 @@
 import {parse, str} from '../src/vendor/sopworld/sopworld.mjs';
 import {readNativeIntent} from '../src/dialog/native-intent-reader.mjs';
 import {copyHostData, validateNativeArguments, validHostId as text, checkOperation} from './native-tool-arguments.mjs';
-export {copyHostData, validateNativeArguments, nativeToken} from './native-tool-arguments.mjs';
+export {copyHostData, freezeHostData, snapshotHostData, validateNativeArguments, nativeToken} from './native-tool-arguments.mjs';
 
 export function toolInvocationContext(invocation, expectedVersion) {
  if (!text(invocation) || !text(expectedVersion)) throw Error('invalid-tool-invocation');

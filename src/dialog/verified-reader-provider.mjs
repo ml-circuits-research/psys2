@@ -1,7 +1,7 @@
 import {projectJournalAction} from './project-journal-action.mjs';
 import {combineModelScores} from './model-selection-score.mjs';
 // Verify artifact bytes, then assemble actual injected neural sessions. No admission.
-import {copyHostData} from '../../worlds/native-tool-host.mjs';
+import {copyHostData,freezeHostData} from '../../worlds/native-tool-host.mjs';
 import {createCutterInference} from './cutter-inference.mjs';
 import {createKeyReaderInference} from './key-reader-inference.mjs';
 import {createBertSourceOffsetAuthority} from './bert-source-offsets.mjs';
@@ -154,7 +154,9 @@ export async function createVerifiedReaderProvider({
   return proposal?{...projectJournalAction(proposal),
    selectionScore:combineModelScores([componentScores.cutter,componentScores['key-reader']])}:null;
  }
- const scoredProvider={...provider,registry:()=>copyHostData(JSON.parse(m.configJSON).registry),bindings:()=>copyHostData(JSON.parse(bindingsJSON)),async propose(sourceSop){decisionScores=[];const proposal=await provider.propose(sourceSop);return scoreProposal(proposal);},
+ // The authenticated registry and binding table are read on every turn: one frozen snapshot each, shared read-only.
+ const registrySnapshot=freezeHostData(JSON.parse(m.configJSON).registry),bindingsSnapshot=freezeHostData(JSON.parse(bindingsJSON));
+ const scoredProvider={...provider,registry:()=>registrySnapshot,bindings:()=>bindingsSnapshot,async propose(sourceSop){decisionScores=[];const proposal=await provider.propose(sourceSop);return scoreProposal(proposal);},
   proposeIndependent:sourceSop=>scoreRepeat(provider.proposeIndependent,sourceSop),
   proposeLiteral:sourceSop=>scoreRepeat(provider.proposeLiteral,sourceSop),
   async *proposeRequests(sourceSop){const sequence=provider.proposeRequests(sourceSop);delete componentScores.cutter;while(true){decisionScores=[];delete componentScores['key-reader'];const step=await sequence.next();if(step.done)return;const proposal=scoreProposal(step.value);proposal.selectionScore=combineModelScores([componentScores.cutter,componentScores['key-reader']]);yield proposal;}}};

@@ -26,4 +26,8 @@ test('actual BERT component trace matches fast-tokenizer scalar offsets and refu
  const single=await packet('set blue',192,true),paired=await packet('set blue');assert.notDeepEqual(single.fullTokenIds,paired.fullTokenIds);await assert.rejects(authority({...single,fullTokenIds:paired.fullTokenIds}),/full-token-parity/);for(const value of [null,42,{}])await assert.rejects(authority({...single,contextJson:value}),/invalid-input/);await assert.rejects(authority(await packet('word '.repeat(100),16,true)),/truncation/);
  const small=await createBertSourceOffsetAuthority({...options,budget:1});await assert.rejects(small(await packet('set blue')),/budget/);
  const old=tokenizer.padding_side;tokenizer.padding_side='left';await assert.rejects(authority(await packet('set blue')),/component-profile-mismatch/);tokenizer.padding_side=old;
+ // A component configuration verified once is still compared again when the tokenizer holds a different object or vocabulary.
+ const modelConfig=tokenizer.model.config;await authority(await packet('set blue'));
+ tokenizer.model.config={...modelConfig,vocab:{...modelConfig.vocab,blue:modelConfig.vocab.red}};await assert.rejects(authority(await packet('set blue')),/component-profile-mismatch/);
+ const vocab=modelConfig.vocab;tokenizer.model.config=modelConfig;modelConfig.vocab={...vocab,blue:vocab.red};await assert.rejects(authority(await packet('set blue')),/component-profile-mismatch/);
 });

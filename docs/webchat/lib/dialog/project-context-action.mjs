@@ -1,9 +1,9 @@
 import { historyHeads } from './history-journal.mjs?v=1c9667c210';
-import {nativeKindCandidates} from './native-binding-candidates.mjs?v=8594ec01dd';
+import {nativeKindCandidates} from './native-binding-candidates.mjs?v=9860e110fe';
 // Bind model-declared context references to actual native objects; never inspect source words.
 import {quote,str} from '../vendor/sopworld/sopworld.mjs?v=22a3f6e48e';
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=ac79ca0665';
-import {executionPolicyWorld} from './execution-policy.mjs?v=e90a29683e';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=cf97438a76';
+import {executionPolicyWorld} from './execution-policy.mjs?v=e8bfdad087';
 import {readReferenceTurn,resolveObservedReference} from './reference-policy.mjs?v=65dd0cf88e';
 import {observeGroundedProjection,projectGroundedRequest} from './grounded-projection.mjs?v=2365ae30e0';
 import {flatRequestProjection} from './request-projection.mjs?v=b78aa0140d';

@@ -1,7 +1,7 @@
 // One versioned eligibility/score protocol shared by C1 measurement and C2 routing.
 // The score selects the entire complete/unique cohort; it is not confidence.
 import {serializeRequestGraph,parse,str,assessSelectiveCalibration} from '../vendor/sopworld/sopworld.mjs?v=22a3f6e48e';
-import {copyHostData} from '../../worlds/native-tool-host.mjs?v=78168a6b62';
+import {copyHostData} from '../../worlds/native-tool-host.mjs?v=6e8a05d4e9';
 import {MODEL_SELECTION_SCORE} from './model-selection-score.mjs?v=ac3ac10191';
 import {compileReaderAdmission} from './reader-policy.mjs?v=7e4dd78e81';
 export const READER_SCORE_DEFINITION=MODEL_SELECTION_SCORE;

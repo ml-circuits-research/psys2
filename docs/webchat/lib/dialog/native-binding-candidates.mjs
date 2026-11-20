@@ -25,9 +25,18 @@ const scalar = value => value === undefined ? [] : [quote(value)];
 const wire = (id, type, attrs) => ({ id, type: 'app.constructor.' + type, attrs, pattern: false });
 const indexOfReference = (row, key) => Number(row.attrs[key][0].split('.').at(-1));
 
+// A frozen binding table cannot change, so the constructor pairs derived for it are reused while the
+// declared operation metadata the facts are built from (and the area) stay the same.
+const derivedPairs = new WeakMap();
+const operationEvidence = operations => JSON.stringify(operations.map(operation => [operation.id, operation.act, operation.on, operation.requires?.length ?? 0,
+ operation.knowledgeInputs?.length ?? 0, Object.entries(operation.params).map(([name, parameter]) => [name, parameter.enum ?? []])]));
+
 /** Project actual tool metadata and retain all constructor pairs derived by SOP. */
 export function nativeCreationCandidates(bindings, operations, area) {
- const mappings = nativeKindCandidates(bindings);
+ const memo = bindings && typeof bindings === 'object' && Object.isFrozen(bindings) ? (derivedPairs.get(bindings) ?? derivedPairs.set(bindings, { mappings: nativeKindCandidates(bindings).map(row => Object.freeze(row)), pairs: new Map() }).get(bindings)) : null;
+ const key = memo ? JSON.stringify([area ?? null, operationEvidence(operations)]) : null, known = memo?.pairs.get(key);
+ if (known) return known.map(([mapping, operation]) => ({ mapping: memo.mappings[mapping], operation: operations[operation] }));
+ const mappings = memo?.mappings ?? nativeKindCandidates(bindings);
  const world = constructorWorld(), facts = [wire('constructor.query.input', 'scope', { area: scalar(area) })];
  for (const [index, mapping] of mappings.entries()) {
   budget.tick('constructor.mapping');
@@ -52,7 +61,7 @@ export function nativeCreationCandidates(bindings, operations, area) {
   }
  }
  if (!world.tell(serialize(facts), { factsOnly: true }).ok) throw Error('invalid-native-constructor-evidence');
- const pairs = world.ofType('app.constructor.candidate').map(row => [indexOfReference(row, 'mapping'), indexOfReference(row, 'operation')]);
- return pairs.sort(([am, ao], [bm, bo]) => am - bm || ao - bo)
-  .map(([mapping, operation]) => ({ mapping: mappings[mapping], operation: operations[operation] }));
+ const pairs = world.ofType('app.constructor.candidate').map(row => [indexOfReference(row, 'mapping'), indexOfReference(row, 'operation')]).sort(([am, ao], [bm, bo]) => am - bm || ao - bo);
+ if (memo) { if (memo.pairs.size >= 32) memo.pairs.delete(memo.pairs.keys().next().value); memo.pairs.set(key, pairs); }
+ return pairs.map(([mapping, operation]) => ({ mapping: mappings[mapping], operation: operations[operation] }));
 }
