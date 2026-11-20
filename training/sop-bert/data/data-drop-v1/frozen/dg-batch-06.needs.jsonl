@@ -1650,11 +1650,9 @@
 {"batch": "dg-batch-06", "text": "the Start connector runs across the Scan one — reroute the pair so they never cross", "frame": "diagram.noCross", "value": "never cross", "span": "never cross"}
 {"batch": "dg-batch-06", "text": "no crossing arrows in the flow, keep the Root line clear of the Trim line, and check every other pair too", "frame": "diagram.noCross", "value": "every other pair", "span": "every other pair"}
 {"batch": "dg-batch-06", "text": "route every arrow so that no two of them cross, and keep that as the rule for all future edits on this flowchart", "frame": "diagram.noCross", "value": "no two of them cross", "span": "no two of them cross"}
-{"batch": "dg-batch-06", "text": "route every arrow so that no two of them cross, and keep that as the rule for all future edits on this flowchart", "frame": "preference.scope", "value": "all future edits", "span": "all future edits on this flowchart"}
 {"batch": "dg-batch-06", "text": "the layout is a mess at the crossings: pull the arrows apart so no line crosses another, give the long connectors detours around the busy middle, and keep the reading order clean from Root to Grow", "frame": "diagram.noCross", "value": "no line crosses another", "span": "no line crosses another"}
 {"batch": "dg-batch-06", "text": "ok, now make the whole flowchart crossing-free like the other one", "frame": "diagram.noCross", "value": "crossing-free", "span": "crossing-free"}
 {"batch": "dg-batch-06", "text": "untangle it so nothing crosses, and stamp the no-cross rule on the whole page", "frame": "diagram.noCross", "value": "nothing crosses", "span": "nothing crosses"}
-{"batch": "dg-batch-06", "text": "untangle it so nothing crosses, and stamp the no-cross rule on the whole page", "frame": "preference.scope", "value": "whole page", "span": "the whole page"}
 {"batch": "dg-batch-06", "text": "no crossings, however you do it", "frame": "diagram.noCross", "value": "no crossings", "span": "no crossings"}
 {"batch": "dg-batch-06", "text": "a planar layout would be nice", "frame": "diagram.noCross", "value": "planar", "span": "planar layout"}
 {"batch": "dg-batch-06", "text": "crossing-free is all I ask, layout is up to you", "frame": "diagram.noCross", "value": "crossing-free", "span": "crossing-free"}

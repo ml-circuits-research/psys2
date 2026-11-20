@@ -600,6 +600,11 @@
       "ids"
      ]
     },
+    "scope": {
+     "concept": "scope",
+     "head": "span",
+     "src": "avatar.preference.state/reset {scope} (standing preferences)"
+    },
     "value": {
      "concept": "value",
      "head": "span",
@@ -2244,6 +2249,11 @@
      "head": "span",
      "src": "native parameter diagram.preference.state.about (worlds/diagram.sketch/native-interface.sop)"
     },
+    "field": {
+     "concept": "field",
+     "head": "span",
+     "src": "diagram.preference.state/reset {field} (standing preferences)"
+    },
     "key": {
      "concept": "key",
      "head": "class",
@@ -2254,6 +2264,11 @@
       "ids",
       "placement.side"
      ]
+    },
+    "scope": {
+     "concept": "scope",
+     "head": "span",
+     "src": "diagram.preference.state/reset {scope} (standing preferences)"
     },
     "value": {
      "concept": "value",
@@ -3464,6 +3479,36 @@
      "src": "native drawing part parameter"
     }
    }
+  },
+  "preference": {
+   "doc": "native drawing preference (declared operations)",
+   "keys": {
+    "about": {
+     "concept": "about",
+     "head": "span",
+     "src": "drawing.preference.state/reset {about} (standing preferences)"
+    },
+    "field": {
+     "concept": "field",
+     "head": "span",
+     "src": "drawing.preference.state/reset {field} (standing preferences)"
+    },
+    "key": {
+     "concept": "key",
+     "head": "span",
+     "src": "drawing.preference.state/reset {key} (standing preferences)"
+    },
+    "scope": {
+     "concept": "scope",
+     "head": "span",
+     "src": "drawing.preference.state/reset {scope} (standing preferences)"
+    },
+    "value": {
+     "concept": "value",
+     "head": "span",
+     "src": "drawing.preference.state/reset {value} (standing preferences)"
+    }
+   }
   }
  },
  "request": {
@@ -3630,7 +3675,7 @@
     "act": {
      "concept": "act",
      "head": "candidate",
-     "src": "diagram.node.merge / node.split / link.reverse",
+     "src": "avatar.figure.describe/default, <area>.preference.state/reset",
      "values": [
       "make",
       "place",
@@ -3654,7 +3699,10 @@
       "compute",
       "merge",
       "split",
-      "reverse"
+      "reverse",
+      "describe",
+      "reset",
+      "set"
      ]
     },
     "mood": {

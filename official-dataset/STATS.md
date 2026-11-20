@@ -373,6 +373,7 @@
 | diagram.chart.values | 1,509 |
 | diagram.link.ids | 1,471 |
 | drawing.drawn.kind | 1,450 |
+| drawing.preference.scope | 1,442 |
 | document.block.id | 1,429 |
 | diagram.group.id | 1,358 |
 | diagram.chart.yLabel | 1,332 |
@@ -385,8 +386,7 @@
 | document.text.words | 1,044 |
 | calendar.meeting.id | 1,038 |
 | calendar.meeting.room | 1,007 |
-| drawing.part.colour | 992 |
-| … 223 more | 52,789 |
+| … 225 more | 53,783 |
 
 ## Style (top 40)
 

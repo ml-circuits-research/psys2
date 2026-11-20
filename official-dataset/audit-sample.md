@@ -426,6 +426,7 @@
     - drawn.anchor = "the storyteller" from “the storyteller” [relation, selector]
   - span “keep the people in the foreground from now on”: **place**/do trigger=“keep”; target group existing definite fill=context
     - drawn.at = "foreground" from “in the foreground” [region, result]
+    - preference.scope = "from now on" from “from now on” [eq, result]
 
 77. [drawing · data-drop-v1 · train · compound] “make the little car by the gate deep cobalt blue, and give the surface a pearlescent paint look”  — context: House, Tree, Sun, Cloud, Lake, Boat
   - span “make the little car by the gate deep cobalt blue”: **change**/do trigger=“make”; target drawn existing definite fill=description kind=car kind_span=“car” description_span=“the little car by the gate”
