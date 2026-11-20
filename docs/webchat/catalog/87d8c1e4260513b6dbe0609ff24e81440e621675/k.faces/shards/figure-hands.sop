@@ -1,0 +1,14 @@
+# k.faces/shards/figure-hands: the variants of the slot `hands` in the style `figure`: features, and parts with a primitive shape, a box in the frame of the figure, a draw order and colours; points for lines and polygons.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: tools/figures-core.mjs
+
+# hands: gloves
+@k.faces.figure.hands.gloves k.faces.variant slot=hands name=gloves style=figure kind=gloves core.source="hand-core 1"
+@k.faces.figure.hands.gloves.left_glove k.faces.part slot=hands of=gloves name=left_glove shape=circle x=27.4 y=50.4 w=7.2 h=7.2 z=1 colour=black colour=brown colour=white colour=red colour=blue rgb="#3B3B3B" bone=left_forearm core.source="hand-core 1"
+@k.faces.figure.hands.gloves.right_glove k.faces.part slot=hands of=gloves name=right_glove shape=circle x=65.4 y=50.4 w=7.2 h=7.2 z=1 colour=black colour=brown colour=white colour=red colour=blue rgb="#3B3B3B" bone=right_forearm core.source="hand-core 1"
+
+# hands: mittens
+@k.faces.figure.hands.mittens k.faces.variant slot=hands name=mittens style=figure feel=thick kind=mittens core.source="hand-core 1"
+@k.faces.figure.hands.mittens.left_mitten k.faces.part slot=hands of=mittens name=left_mitten shape=oval x=26.8 y=49.5 w=8.4 h=9 z=1 colour=red colour=blue colour=green colour=white rgb="#C62828" bone=left_forearm core.source="hand-core 1"
+@k.faces.figure.hands.mittens.right_mitten k.faces.part slot=hands of=mittens name=right_mitten shape=oval x=64.8 y=49.5 w=8.4 h=9 z=1 colour=red colour=blue colour=green colour=white rgb="#C62828" bone=right_forearm core.source="hand-core 1"

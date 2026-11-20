@@ -1,0 +1,81 @@
+# k.charts: which chart fits which data (block 15:35 item 2), from the visualisation literature: the kinds of chart
+# (bar, stacked bar, line, pie, scatter, histogram ...), the data types each axis takes (Mackinlay's expressiveness:
+# a chart expresses all the facts of the data and only those), the visual encodings ranked by how accurately they are
+# read (Cleveland and McGill's ranking; Mackinlay's per data type: effectiveness), the relationships data can show
+# (Few's: time series, ranking, part-to-whole, deviation, distribution, correlation, nominal comparison) and the
+# selection rules from a relationship to the kinds that show it, best first, with their conditions. A host's planner
+# reads them: the data's relationship and types give the candidate kinds; the conditions remove some; the rank orders
+# the rest; the kind's `form` is the w.chart form that draws it.
+# sources: hand-core 1 (the schema and the facts, hand-written in this repository; the works cited are k.charts.source facts)
+# license: CC0-1.0
+# script: none (hand-written); the shards are written by tools/charts-core.mjs
+
+@k.charts core.module name=k.charts version=1 exports=source exports=kind exports=encoding exports=relationship exports=rule exports=category core.source="hand-core 1"
+
+# A published work a fact rests on: `name` a short id (author and year), `cite` the reference, `year`.
+@k.charts.source core.type of=k.charts.source shared=true closed=true core.source="hand-core 1"
+@k.charts.source.name core.slot of=k.charts.source key=name id=true required=true kind=atom core.source="hand-core 1"
+@k.charts.source.cite core.slot of=k.charts.source key=cite required=true kind=string core.source="hand-core 1"
+@k.charts.source.year core.slot of=k.charts.source key=year required=true kind=integer core.source="hand-core 1"
+
+# A kind of chart. `name`; `form` the form of w.chart that draws it (bar, line, pie, scatter, area); `mark` what stands
+# for one value (bar, line, point, slice, area); `encoding` the visual channel that carries the values (an encoding
+# below); `x` (many) the data types the categories or the horizontal axis may have; `y` (many) those of the values;
+# `whole=true`: the values must be the parts of one whole (they add up to it); `about` in words; `source`.
+@k.charts.kind core.type of=k.charts.kind shared=true closed=true core.source="hand-core 1"
+@k.charts.kind.name core.slot of=k.charts.kind key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.charts.kind.form core.slot of=k.charts.kind key=form required=true enum=bar enum=line enum=pie enum=scatter enum=area core.source="hand-core 1"
+@k.charts.kind.mark core.slot of=k.charts.kind key=mark required=true enum=bar enum=line enum=point enum=slice enum=area core.source="hand-core 1"
+@k.charts.kind.encoding core.slot of=k.charts.kind key=encoding required=true kind=atom type=k.charts.encoding by=name core.source="hand-core 1"
+@k.charts.kind.x core.slot of=k.charts.kind key=x many=true required=true enum=nominal enum=ordinal enum=quantitative enum=time core.source="hand-core 1"
+@k.charts.kind.y core.slot of=k.charts.kind key=y many=true required=true enum=nominal enum=ordinal enum=quantitative enum=time core.source="hand-core 1"
+@k.charts.kind.whole core.slot of=k.charts.kind key=whole kind=boolean core.source="hand-core 1"
+@k.charts.kind.about core.slot of=k.charts.kind key=about required=true kind=string core.source="hand-core 1"
+@k.charts.kind.source core.slot of=k.charts.kind key=source many=true kind=atom type=k.charts.source by=name core.source="hand-core 1"
+
+# A visual encoding (a channel): `name` (position, length, angle, area, colour hue ...); `about`. Its rank for a data
+# type is a k.charts.rank fact.
+@k.charts.encoding core.type of=k.charts.encoding shared=true closed=true core.source="hand-core 1"
+@k.charts.encoding.name core.slot of=k.charts.encoding key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.charts.encoding.about core.slot of=k.charts.encoding key=about required=true kind=string core.source="hand-core 1"
+
+# How accurately an encoding is read for data of a type: `encoding`, `data` (quantitative, ordinal, nominal), `rank`
+# (1: the most accurate), `source` (the ranking it comes from: one rank fact per source and data type).
+@k.charts.rank core.type of=k.charts.rank shared=true closed=true core.source="hand-core 1"
+@k.charts.rank.encoding core.slot of=k.charts.rank key=encoding id=true required=true kind=atom kind=string type=k.charts.encoding by=name core.source="hand-core 1"
+@k.charts.rank.data core.slot of=k.charts.rank key=data id=true required=true enum=quantitative enum=ordinal enum=nominal core.source="hand-core 1"
+@k.charts.rank.source core.slot of=k.charts.rank key=source id=true required=true kind=atom type=k.charts.source by=name core.source="hand-core 1"
+@k.charts.rank.rank core.slot of=k.charts.rank key=rank required=true kind=integer min=1 core.source="hand-core 1"
+
+# What data can show (a relationship of its values): `name` (time series, ranking, part-to-whole, deviation,
+# distribution, correlation, nominal comparison); `about`; `source`.
+@k.charts.relationship core.type of=k.charts.relationship shared=true closed=true core.source="hand-core 1"
+@k.charts.relationship.name core.slot of=k.charts.relationship key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.charts.relationship.about core.slot of=k.charts.relationship key=about required=true kind=string core.source="hand-core 1"
+@k.charts.relationship.source core.slot of=k.charts.relationship key=source many=true kind=atom type=k.charts.source by=name core.source="hand-core 1"
+
+# A selection rule: data that shows `relationship` is shown by `kind`, `rank` among the kinds for that relationship
+# (1: the best); the rule holds only under its conditions: `categories_max` (at most so many categories or slices),
+# `series` (one or several series of values: one whole or several wholes), `points_min` (at least so many values per
+# series); `about` why, in words; `source` the works that say it.
+@k.charts.rule core.type of=k.charts.rule shared=true closed=true core.source="hand-core 1"
+@k.charts.rule.relationship core.slot of=k.charts.rule key=relationship id=true required=true kind=atom kind=string type=k.charts.relationship by=name core.source="hand-core 1"
+@k.charts.rule.kind core.slot of=k.charts.rule key=kind id=true required=true kind=atom kind=string type=k.charts.kind by=name core.source="hand-core 1"
+@k.charts.rule.rank core.slot of=k.charts.rule key=rank required=true kind=integer min=1 core.source="hand-core 1"
+@k.charts.rule.categories_max core.slot of=k.charts.rule key=categories_max kind=integer min=2 core.source="hand-core 1"
+@k.charts.rule.series core.slot of=k.charts.rule key=series enum=one enum=several core.source="hand-core 1"
+@k.charts.rule.points_min core.slot of=k.charts.rule key=points_min kind=integer min=2 core.source="hand-core 1"
+@k.charts.rule.about core.slot of=k.charts.rule key=about required=true kind=string core.source="hand-core 1"
+@k.charts.rule.source core.slot of=k.charts.rule key=source many=true required=true kind=atom type=k.charts.source by=name core.source="hand-core 1"
+
+# The typical categories of a dimension a chart is broken down by (sales by month, staff by role, customers by
+# payment method): `dimension` the dimension's name (month, region, payment method), `n` the place of the category in
+# the usual order, from 1, `label` the category. A host that is asked for a chart by its dimension alone, with no data,
+# draws these categories with sample values and says that the values are a sample. Conventional values (the months of
+# the year, the four quarters), not data about the world.
+@k.charts.category core.type of=k.charts.category shared=true closed=true core.source="hand-core 1"
+@k.charts.category.dimension core.slot of=k.charts.category key=dimension id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.charts.category.n core.slot of=k.charts.category key=n id=true required=true kind=integer min=1 core.source="hand-core 1"
+@k.charts.category.label core.slot of=k.charts.category key=label required=true kind=atom kind=string core.source="hand-core 1"
+
+# Its English words are in w.lang.en (shard words-k.charts, KR3).

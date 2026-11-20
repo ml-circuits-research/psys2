@@ -1,0 +1,39 @@
+# k.faces/shards/figure-neckwear: the variants of the slot `neckwear` in the style `figure`: features, and parts with a primitive shape, a box in the frame of the figure, a draw order and colours; points for lines and polygons.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: tools/figures-core.mjs
+
+# neckwear: scarf
+@k.faces.figure.neckwear.scarf k.faces.variant slot=neckwear name=scarf style=figure length=long feel=thick kind=scarf core.source="hand-core 1"
+@k.faces.figure.neckwear.scarf.wrap k.faces.part slot=neckwear of=scarf name=wrap shape=rectangle x=42 y=28.5 w=16 h=5.5 z=1 colour=red colour=blue colour=green colour=yellow colour=purple rgb="#C0392B" core.source="hand-core 1"
+@k.faces.figure.neckwear.scarf.tail k.faces.part slot=neckwear of=scarf name=tail shape=polygon x=51 y=32 w=6.5 h=16 z=2 colour=red colour=blue colour=green colour=yellow colour=purple rgb="#A93226" core.source="hand-core 1"
+@k.faces.figure.neckwear.scarf.tail.p1 k.faces.point part=$k.faces.figure.neckwear.scarf.tail n=1 x=51 y=32 core.source="hand-core 1"
+@k.faces.figure.neckwear.scarf.tail.p2 k.faces.point part=$k.faces.figure.neckwear.scarf.tail n=2 x=56 y=32 core.source="hand-core 1"
+@k.faces.figure.neckwear.scarf.tail.p3 k.faces.point part=$k.faces.figure.neckwear.scarf.tail n=3 x=57.5 y=48 core.source="hand-core 1"
+@k.faces.figure.neckwear.scarf.tail.p4 k.faces.point part=$k.faces.figure.neckwear.scarf.tail n=4 x=52.5 y=48 core.source="hand-core 1"
+
+# neckwear: tie
+@k.faces.figure.neckwear.tie k.faces.variant slot=neckwear name=tie style=figure length=long kind=tie core.source="hand-core 1"
+@k.faces.figure.neckwear.tie.knot k.faces.part slot=neckwear of=tie name=knot shape=polygon x=48.5 y=31 w=3 h=3 z=1 colour=red colour=blue colour=green colour=black rgb="#1F4E9A" core.source="hand-core 1"
+@k.faces.figure.neckwear.tie.blade k.faces.part slot=neckwear of=tie name=blade shape=polygon x=47.5 y=34 w=5 h=19 z=1 colour=red colour=blue colour=green colour=black rgb="#1F4E9A" core.source="hand-core 1"
+@k.faces.figure.neckwear.tie.knot.p1 k.faces.point part=$k.faces.figure.neckwear.tie.knot n=1 x=48.5 y=31 core.source="hand-core 1"
+@k.faces.figure.neckwear.tie.knot.p2 k.faces.point part=$k.faces.figure.neckwear.tie.knot n=2 x=51.5 y=31 core.source="hand-core 1"
+@k.faces.figure.neckwear.tie.knot.p3 k.faces.point part=$k.faces.figure.neckwear.tie.knot n=3 x=51 y=34 core.source="hand-core 1"
+@k.faces.figure.neckwear.tie.knot.p4 k.faces.point part=$k.faces.figure.neckwear.tie.knot n=4 x=49 y=34 core.source="hand-core 1"
+@k.faces.figure.neckwear.tie.blade.p1 k.faces.point part=$k.faces.figure.neckwear.tie.blade n=1 x=49 y=34 core.source="hand-core 1"
+@k.faces.figure.neckwear.tie.blade.p2 k.faces.point part=$k.faces.figure.neckwear.tie.blade n=2 x=51 y=34 core.source="hand-core 1"
+@k.faces.figure.neckwear.tie.blade.p3 k.faces.point part=$k.faces.figure.neckwear.tie.blade n=3 x=52.5 y=50 core.source="hand-core 1"
+@k.faces.figure.neckwear.tie.blade.p4 k.faces.point part=$k.faces.figure.neckwear.tie.blade n=4 x=50 y=53 core.source="hand-core 1"
+@k.faces.figure.neckwear.tie.blade.p5 k.faces.point part=$k.faces.figure.neckwear.tie.blade n=5 x=47.5 y=50 core.source="hand-core 1"
+
+# neckwear: bow tie
+@k.faces.figure.neckwear.bow_tie k.faces.variant slot=neckwear name="bow tie" style=figure length=short kind="bow tie" core.source="hand-core 1"
+@k.faces.figure.neckwear.bow_tie.left_wing k.faces.part slot=neckwear of="bow tie" name=left_wing shape=polygon x=44 y=30 w=6 h=5 z=1 colour=red colour=black colour=blue rgb="#B71C1C" core.source="hand-core 1"
+@k.faces.figure.neckwear.bow_tie.right_wing k.faces.part slot=neckwear of="bow tie" name=right_wing shape=polygon x=50 y=30 w=6 h=5 z=1 colour=red colour=black colour=blue rgb="#B71C1C" core.source="hand-core 1"
+@k.faces.figure.neckwear.bow_tie.knot k.faces.part slot=neckwear of="bow tie" name=knot shape=circle x=48.8 y=31.3 w=2.4 h=2.4 z=2 colour=red colour=black colour=blue rgb="#7F0000" core.source="hand-core 1"
+@k.faces.figure.neckwear.bow_tie.left_wing.p1 k.faces.point part=$k.faces.figure.neckwear.bow_tie.left_wing n=1 x=44 y=30 core.source="hand-core 1"
+@k.faces.figure.neckwear.bow_tie.left_wing.p2 k.faces.point part=$k.faces.figure.neckwear.bow_tie.left_wing n=2 x=50 y=32.5 core.source="hand-core 1"
+@k.faces.figure.neckwear.bow_tie.left_wing.p3 k.faces.point part=$k.faces.figure.neckwear.bow_tie.left_wing n=3 x=44 y=35 core.source="hand-core 1"
+@k.faces.figure.neckwear.bow_tie.right_wing.p1 k.faces.point part=$k.faces.figure.neckwear.bow_tie.right_wing n=1 x=56 y=30 core.source="hand-core 1"
+@k.faces.figure.neckwear.bow_tie.right_wing.p2 k.faces.point part=$k.faces.figure.neckwear.bow_tie.right_wing n=2 x=50 y=32.5 core.source="hand-core 1"
+@k.faces.figure.neckwear.bow_tie.right_wing.p3 k.faces.point part=$k.faces.figure.neckwear.bow_tie.right_wing n=3 x=56 y=35 core.source="hand-core 1"

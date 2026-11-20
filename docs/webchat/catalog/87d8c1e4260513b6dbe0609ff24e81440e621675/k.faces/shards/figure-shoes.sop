@@ -1,0 +1,50 @@
+# k.faces/shards/figure-shoes: the variants of the slot `shoes` in the style `figure`: features, and parts with a primitive shape, a box in the frame of the figure, a draw order and colours; points for lines and polygons.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: tools/figures-core.mjs
+
+# shoes: shoes
+@k.faces.figure.shoes.shoes k.faces.variant slot=shoes name=shoes style=figure kind=shoes core.source="hand-core 1"
+@k.faces.figure.shoes.shoes.left_shoe k.faces.part slot=shoes of=shoes name=left_shoe shape=oval x=39 y=88 w=12 h=5 z=1 colour=brown colour=black colour=red colour=white colour=blue rgb="#3A2A20" bone=left_shin core.source="hand-core 1"
+@k.faces.figure.shoes.shoes.right_shoe k.faces.part slot=shoes of=shoes name=right_shoe shape=oval x=49 y=88 w=12 h=5 z=1 colour=brown colour=black colour=red colour=white colour=blue rgb="#3A2A20" bone=right_shin core.source="hand-core 1"
+
+# shoes: boots
+@k.faces.figure.shoes.boots k.faces.variant slot=shoes name=boots style=figure length=long kind=boots core.source="hand-core 1"
+@k.faces.figure.shoes.boots.left_boot k.faces.part slot=shoes of=boots name=left_boot shape=polygon x=39 y=81 w=12 h=12 z=1 colour=brown colour=black colour=red colour=white colour=blue rgb="#4A3426" bone=left_shin core.source="hand-core 1"
+@k.faces.figure.shoes.boots.right_boot k.faces.part slot=shoes of=boots name=right_boot shape=polygon x=49 y=81 w=12 h=12 z=1 colour=brown colour=black colour=red colour=white colour=blue rgb="#4A3426" bone=right_shin core.source="hand-core 1"
+@k.faces.figure.shoes.boots.left_boot.p1 k.faces.point part=$k.faces.figure.shoes.boots.left_boot n=1 x=41 y=81 core.source="hand-core 1"
+@k.faces.figure.shoes.boots.left_boot.p2 k.faces.point part=$k.faces.figure.shoes.boots.left_boot n=2 x=48.4 y=81 core.source="hand-core 1"
+@k.faces.figure.shoes.boots.left_boot.p3 k.faces.point part=$k.faces.figure.shoes.boots.left_boot n=3 x=49 y=89 core.source="hand-core 1"
+@k.faces.figure.shoes.boots.left_boot.p4 k.faces.point part=$k.faces.figure.shoes.boots.left_boot n=4 x=51 y=93 core.source="hand-core 1"
+@k.faces.figure.shoes.boots.left_boot.p5 k.faces.point part=$k.faces.figure.shoes.boots.left_boot n=5 x=39 y=93 core.source="hand-core 1"
+@k.faces.figure.shoes.boots.left_boot.p6 k.faces.point part=$k.faces.figure.shoes.boots.left_boot n=6 x=40.6 y=89 core.source="hand-core 1"
+@k.faces.figure.shoes.boots.right_boot.p1 k.faces.point part=$k.faces.figure.shoes.boots.right_boot n=1 x=59.4 y=89 core.source="hand-core 1"
+@k.faces.figure.shoes.boots.right_boot.p2 k.faces.point part=$k.faces.figure.shoes.boots.right_boot n=2 x=61 y=93 core.source="hand-core 1"
+@k.faces.figure.shoes.boots.right_boot.p3 k.faces.point part=$k.faces.figure.shoes.boots.right_boot n=3 x=49 y=93 core.source="hand-core 1"
+@k.faces.figure.shoes.boots.right_boot.p4 k.faces.point part=$k.faces.figure.shoes.boots.right_boot n=4 x=51 y=89 core.source="hand-core 1"
+@k.faces.figure.shoes.boots.right_boot.p5 k.faces.point part=$k.faces.figure.shoes.boots.right_boot n=5 x=51.6 y=81 core.source="hand-core 1"
+@k.faces.figure.shoes.boots.right_boot.p6 k.faces.point part=$k.faces.figure.shoes.boots.right_boot n=6 x=59 y=81 core.source="hand-core 1"
+
+# shoes: trainers
+@k.faces.figure.shoes.trainers k.faces.variant slot=shoes name=trainers style=figure kind=trainers core.source="hand-core 1"
+@k.faces.figure.shoes.trainers.left_shoe k.faces.part slot=shoes of=trainers name=left_shoe shape=oval x=39 y=88 w=12 h=5 z=1 colour=white colour=grey colour=black colour=blue rgb="#F2F2F2" bone=left_shin core.source="hand-core 1"
+@k.faces.figure.shoes.trainers.right_shoe k.faces.part slot=shoes of=trainers name=right_shoe shape=oval x=49 y=88 w=12 h=5 z=1 colour=white colour=grey colour=black colour=blue rgb="#F2F2F2" bone=right_shin core.source="hand-core 1"
+@k.faces.figure.shoes.trainers.left_stripe k.faces.part slot=shoes of=trainers name=left_stripe shape=line x=41 y=90 w=8 h=0 z=2 colour=red colour=blue rgb="#D64541" bone=left_shin core.source="hand-core 1"
+@k.faces.figure.shoes.trainers.right_stripe k.faces.part slot=shoes of=trainers name=right_stripe shape=line x=51 y=90 w=8 h=0 z=2 colour=red colour=blue rgb="#D64541" bone=right_shin core.source="hand-core 1"
+@k.faces.figure.shoes.trainers.left_stripe.p1 k.faces.point part=$k.faces.figure.shoes.trainers.left_stripe n=1 x=41 y=90 core.source="hand-core 1"
+@k.faces.figure.shoes.trainers.left_stripe.p2 k.faces.point part=$k.faces.figure.shoes.trainers.left_stripe n=2 x=49 y=90 core.source="hand-core 1"
+@k.faces.figure.shoes.trainers.right_stripe.p1 k.faces.point part=$k.faces.figure.shoes.trainers.right_stripe n=1 x=51 y=90 core.source="hand-core 1"
+@k.faces.figure.shoes.trainers.right_stripe.p2 k.faces.point part=$k.faces.figure.shoes.trainers.right_stripe n=2 x=59 y=90 core.source="hand-core 1"
+
+# shoes: sandals
+@k.faces.figure.shoes.sandals k.faces.variant slot=shoes name=sandals style=figure kind=sandals core.source="hand-core 1"
+@k.faces.figure.shoes.sandals.left_sole k.faces.part slot=shoes of=sandals name=left_sole shape=oval x=39.5 y=90 w=11 h=3.5 z=1 colour=brown colour=black rgb="#8B5A2B" bone=left_shin core.source="hand-core 1"
+@k.faces.figure.shoes.sandals.right_sole k.faces.part slot=shoes of=sandals name=right_sole shape=oval x=49.5 y=90 w=11 h=3.5 z=1 colour=brown colour=black rgb="#8B5A2B" bone=right_shin core.source="hand-core 1"
+@k.faces.figure.shoes.sandals.left_strap k.faces.part slot=shoes of=sandals name=left_strap shape=line x=42 y=87.5 w=6 h=2 z=2 colour=brown colour=black rgb="#6B4423" bone=left_shin core.source="hand-core 1"
+@k.faces.figure.shoes.sandals.right_strap k.faces.part slot=shoes of=sandals name=right_strap shape=line x=52 y=87.5 w=6 h=2 z=2 colour=brown colour=black rgb="#6B4423" bone=right_shin core.source="hand-core 1"
+@k.faces.figure.shoes.sandals.left_strap.p1 k.faces.point part=$k.faces.figure.shoes.sandals.left_strap n=1 x=42 y=89.5 core.source="hand-core 1"
+@k.faces.figure.shoes.sandals.left_strap.p2 k.faces.point part=$k.faces.figure.shoes.sandals.left_strap n=2 x=45 y=87.5 core.source="hand-core 1"
+@k.faces.figure.shoes.sandals.left_strap.p3 k.faces.point part=$k.faces.figure.shoes.sandals.left_strap n=3 x=48 y=89.5 core.source="hand-core 1"
+@k.faces.figure.shoes.sandals.right_strap.p1 k.faces.point part=$k.faces.figure.shoes.sandals.right_strap n=1 x=52 y=89.5 core.source="hand-core 1"
+@k.faces.figure.shoes.sandals.right_strap.p2 k.faces.point part=$k.faces.figure.shoes.sandals.right_strap n=2 x=55 y=87.5 core.source="hand-core 1"
+@k.faces.figure.shoes.sandals.right_strap.p3 k.faces.point part=$k.faces.figure.shoes.sandals.right_strap n=3 x=58 y=89.5 core.source="hand-core 1"

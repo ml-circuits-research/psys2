@@ -1,0 +1,210 @@
+# k.faces: faces built from replaceable parts, like a police sketch: slots (the places of a face), variants (one
+# drawable shape for a slot, with plain features a person would say), presets (named faces), expressions and colour
+# lists. The parts use the conventions of k.objects (primitive shapes, boxes, points as wires, colours), so the
+# renderer of k.objects draws them. The frame of a face is 0 to 100 on both axes, x to the right and y downwards.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@k.faces core.module name=k.faces version=3 imports=k.named imports=k.drawing imports=k.values exports=slot exports=variant exports=feature exports=part exports=point exports=colour exports=preset exports=expression exports=expression.goal exports=canon exports=frame exports=bone exports=pose exports=turn exports=trait exports=trait.part core.source="hand-core 1"
+
+# A place of a face in one style: its anchor box in the face frame and its draw order (lower first). The parts of a
+# variant lie inside the box of its slot. `mirror=true`: the slot is a pair (eyes, eyebrows, ears, cheeks, earrings);
+# its box and its variants are the side on the viewer's left, and the renderer draws the other side mirrored at
+# x = 50. `optional=true`: a face may leave the slot empty (no beard, no hat). Styles do not share slots: a style
+# drawn elsewhere has its own boxes.
+@k.faces.slot core.type of=k.faces.slot shared=true closed=true core.source="hand-core 1"
+@k.faces.slot.style core.slot of=k.faces.slot key=style id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.faces.slot.name core.slot of=k.faces.slot key=name id=true required=true kind=atom core.source="hand-core 1"
+@k.faces.slot.x core.slot of=k.faces.slot key=x required=true kind=number min=0 max=100 core.source="hand-core 1"
+@k.faces.slot.y core.slot of=k.faces.slot key=y required=true kind=number min=0 max=100 core.source="hand-core 1"
+@k.faces.slot.w core.slot of=k.faces.slot key=w required=true kind=number min=0 max=100 core.source="hand-core 1"
+@k.faces.slot.h core.slot of=k.faces.slot key=h required=true kind=number min=0 max=100 core.source="hand-core 1"
+@k.faces.slot.z core.slot of=k.faces.slot key=z required=true kind=integer core.source="hand-core 1"
+@k.faces.slot.mirror core.slot of=k.faces.slot key=mirror kind=boolean core.source="hand-core 1"
+@k.faces.slot.optional core.slot of=k.faces.slot key=optional kind=boolean core.source="hand-core 1"
+
+# One drawable shape for a slot. The features are plain words: `shape`, `size`, `length`, `feel` (many), `age` (for
+# whom it fits, where the drawing shows it; many) and `kind` (what a person would call it: ponytail, goatee, cap).
+# `style` keeps the drawings of one hand together: a face does not mix styles unless asked. `named=model`: a
+# language model gave the features by looking at an imported drawing.
+@k.faces.variant core.type of=k.faces.variant extends=k.named.labelled shared=true closed=true core.source="hand-core 1"
+@k.faces.variant.slot core.slot of=k.faces.variant key=slot id=true required=true kind=atom type=k.faces.slot by=name core.source="hand-core 1"
+@k.faces.variant.name core.slot of=k.faces.variant key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.faces.variant.style core.slot of=k.faces.variant key=style required=true kind=atom kind=string core.source="hand-core 1"
+@k.faces.variant.shape core.slot of=k.faces.variant key=shape enum=round enum=oval enum=long enum=square enum=heart core.source="hand-core 1"
+@k.faces.variant.size core.slot of=k.faces.variant key=size enum=small enum=medium enum=large core.source="hand-core 1"
+@k.faces.variant.length core.slot of=k.faces.variant key=length enum=short enum=medium enum=long core.source="hand-core 1"
+@k.faces.variant.feel core.slot of=k.faces.variant key=feel many=true enum=thin enum=thick enum=curly enum=straight enum=wavy enum=bushy enum=arched enum=flat enum=wide enum=narrow enum=open enum=closed enum=smiling enum=sad enum=surprised core.source="hand-core 1"
+@k.faces.variant.age core.slot of=k.faces.variant key=age many=true enum=child enum=adult enum=old core.source="hand-core 1"
+@k.faces.variant.kind core.slot of=k.faces.variant key=kind kind=atom kind=string core.source="hand-core 1"
+
+# A feature of the variants whose values are the steps of an ordered scale of k.values: the ranks of the scale order
+# the values of the key, so a host can move a part one step along it ("longer hair": a variant of the next step, of
+# the same slot and style) or set it to a step ("long hair"). `key` names a key of k.faces.variant; `scale` the
+# k.values scale whose step names are its values (length: short < medium < long).
+@k.faces.feature core.type of=k.faces.feature shared=true closed=true core.source="hand-core 1"
+@k.faces.feature.key core.slot of=k.faces.feature key=key id=true required=true enum=length enum=size core.source="hand-core 1"
+@k.faces.feature.scale core.slot of=k.faces.feature key=scale required=true kind=atom kind=string type=k.values.scale by=name core.source="hand-core 1"
+
+# A part of a variant, a part of k.drawing (as the parts of k.objects): a primitive shape with a box in the face frame, a draw order inside the
+# variant and typical colours. `slot` and `of` name the variant. `tint` says which colour of the face fills the part
+# (skin, hair, eyes, clothes; `skin_shade`, `hair_shade`, `clothes_shade`: the darker tone of that colour, for lines
+# and folds on it); a part without `tint` keeps its own colour (`rgb`, or the colour name).
+@k.faces.part core.type of=k.faces.part extends=k.drawing.part shared=true closed=true core.source="hand-core 1"
+@k.faces.part.slot core.slot of=k.faces.part key=slot id=true required=true kind=atom type=k.faces.slot by=name core.source="hand-core 1"
+@k.faces.part.of core.slot of=k.faces.part key=of id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.faces.part.name core.slot of=k.faces.part key=name id=true required=true kind=atom core.source="hand-core 1"
+@k.faces.part.kind core.slot of=k.faces.part key=kind kind=atom core.source="hand-core 1"
+@k.faces.part.tint core.slot of=k.faces.part key=tint enum=skin enum=skin_shade enum=hair enum=hair_shade enum=eyes enum=clothes enum=clothes_shade core.source="hand-core 1"
+# `bone`: the bone of the style's skeleton (k.faces.bone) the part moves with when the figure takes a pose (a sleeve with
+# the upper arm, a shoe with the shin); a part with no bone stays where it is drawn.
+@k.faces.part.bone core.slot of=k.faces.part key=bone kind=atom core.source="hand-core 1"
+
+# A point of a line or polygon part, in the face frame, in drawing order.
+@k.faces.point core.type of=k.faces.point extends=k.drawing.point shared=true closed=true core.source="hand-core 1"
+@k.faces.point.part core.slot of=k.faces.point key=part id=true required=true kind=ref to=k.faces.part core.source="hand-core 1"
+
+# A named colour for skin, hair, eyes or clothes: `rgb` as a string of the form "#RRGGBB", `shade` the darker tone
+# used for lines on it. `natural=true`: a colour people have; `natural=false`: for robots and cartoon faces.
+@k.faces.colour core.type of=k.faces.colour shared=true closed=true core.source="hand-core 1"
+@k.faces.colour.of core.slot of=k.faces.colour key=of id=true required=true enum=skin enum=hair enum=eyes enum=clothes core.source="hand-core 1"
+@k.faces.colour.name core.slot of=k.faces.colour key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.faces.colour.rgb core.slot of=k.faces.colour key=rgb required=true kind=string core.source="hand-core 1"
+@k.faces.colour.shade core.slot of=k.faces.colour key=shade required=true kind=string core.source="hand-core 1"
+@k.faces.colour.natural core.slot of=k.faces.colour key=natural required=true kind=boolean core.source="hand-core 1"
+
+# A named face: the name of one variant for each slot it fills (a slot left out is empty) and its four colours (names
+# of k.faces.colour facts). A face of a style that draws a head has a head, eyes and a mouth; a preset of the style
+# `figure` (a whole person's clothes: an outfit) fills the slots of that style instead. `age` and `sex` (many): the
+# ages and sexes of people (k.people.kind age, sex) the preset suits, so a host drawing a boy picks among the presets
+# that suit a male child; a preset without them suits no kind of person in particular (a robot, a clown).
+@k.faces.preset core.type of=k.faces.preset shared=true closed=true core.source="hand-core 1"
+@k.faces.preset.name core.slot of=k.faces.preset key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.faces.preset.style core.slot of=k.faces.preset key=style required=true kind=atom kind=string type=k.faces.canon by=style core.source="hand-core 1"
+@k.faces.preset.kind core.slot of=k.faces.preset key=kind required=true enum=human enum=robot enum=alien core.source="hand-core 1"
+@k.faces.preset.head core.slot of=k.faces.preset key=head kind=atom kind=string core.source="hand-core 1"
+@k.faces.preset.ears core.slot of=k.faces.preset key=ears kind=atom kind=string core.source="hand-core 1"
+@k.faces.preset.neck core.slot of=k.faces.preset key=neck kind=atom kind=string core.source="hand-core 1"
+@k.faces.preset.hair_back core.slot of=k.faces.preset key=hair_back kind=atom kind=string core.source="hand-core 1"
+@k.faces.preset.hair_front core.slot of=k.faces.preset key=hair_front kind=atom kind=string core.source="hand-core 1"
+@k.faces.preset.eyebrows core.slot of=k.faces.preset key=eyebrows kind=atom kind=string core.source="hand-core 1"
+@k.faces.preset.eyes core.slot of=k.faces.preset key=eyes kind=atom kind=string core.source="hand-core 1"
+@k.faces.preset.nose core.slot of=k.faces.preset key=nose kind=atom kind=string core.source="hand-core 1"
+@k.faces.preset.mouth core.slot of=k.faces.preset key=mouth kind=atom kind=string core.source="hand-core 1"
+@k.faces.preset.cheeks core.slot of=k.faces.preset key=cheeks kind=atom kind=string core.source="hand-core 1"
+@k.faces.preset.beard core.slot of=k.faces.preset key=beard kind=atom kind=string core.source="hand-core 1"
+@k.faces.preset.moustache core.slot of=k.faces.preset key=moustache kind=atom kind=string core.source="hand-core 1"
+@k.faces.preset.glasses core.slot of=k.faces.preset key=glasses kind=atom kind=string core.source="hand-core 1"
+@k.faces.preset.hat core.slot of=k.faces.preset key=hat kind=atom kind=string core.source="hand-core 1"
+@k.faces.preset.earrings core.slot of=k.faces.preset key=earrings kind=atom kind=string core.source="hand-core 1"
+@k.faces.preset.shoulders core.slot of=k.faces.preset key=shoulders kind=atom kind=string core.source="hand-core 1"
+@k.faces.preset.body core.slot of=k.faces.preset key=body kind=atom kind=string core.source="hand-core 1"
+@k.faces.preset.top core.slot of=k.faces.preset key=top kind=atom kind=string core.source="hand-core 1"
+@k.faces.preset.bottom core.slot of=k.faces.preset key=bottom kind=atom kind=string core.source="hand-core 1"
+@k.faces.preset.shoes core.slot of=k.faces.preset key=shoes kind=atom kind=string core.source="hand-core 1"
+@k.faces.preset.coat core.slot of=k.faces.preset key=coat kind=atom kind=string core.source="hand-core 1"
+@k.faces.preset.age core.slot of=k.faces.preset key=age many=true enum=baby enum=child enum=adult enum=old core.source="hand-core 1"
+@k.faces.preset.sex core.slot of=k.faces.preset key=sex many=true enum=female enum=male core.source="hand-core 1"
+@k.faces.preset.skin core.slot of=k.faces.preset key=skin required=true kind=atom kind=string core.source="hand-core 1"
+@k.faces.preset.hair_colour core.slot of=k.faces.preset key=hair_colour required=true kind=atom kind=string core.source="hand-core 1"
+@k.faces.preset.eye_colour core.slot of=k.faces.preset key=eye_colour required=true kind=atom kind=string core.source="hand-core 1"
+@k.faces.preset.clothes core.slot of=k.faces.preset key=clothes required=true kind=atom kind=string type=k.colours.colour by=name core.source="hand-core 1"
+
+# An expression: the variants of mouth, eyebrows and eyes a face switches to (a key left out stays as the face has
+# it). `one_eye`: the variant for the eye on the viewer's right only (a wink). `mouth_alt`: the second mouth of a
+# pair that alternates (talking: open, closed).
+@k.faces.expression core.type of=k.faces.expression shared=true closed=true core.source="hand-core 1"
+@k.faces.expression.name core.slot of=k.faces.expression key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.faces.expression.style core.slot of=k.faces.expression key=style required=true kind=atom kind=string type=k.faces.canon by=style core.source="hand-core 1"
+@k.faces.expression.mouth core.slot of=k.faces.expression key=mouth kind=atom kind=string core.source="hand-core 1"
+@k.faces.expression.mouth_alt core.slot of=k.faces.expression key=mouth_alt kind=atom kind=string core.source="hand-core 1"
+@k.faces.expression.eyebrows core.slot of=k.faces.expression key=eyebrows kind=atom kind=string core.source="hand-core 1"
+@k.faces.expression.eyes core.slot of=k.faces.expression key=eyes kind=atom kind=string core.source="hand-core 1"
+@k.faces.expression.one_eye core.slot of=k.faces.expression key=one_eye kind=atom kind=string core.source="hand-core 1"
+# `cheeks`: the variant of the cheeks the expression shows (crying: a tear), drawn while it is set even on a face
+# with no cheeks of its own.
+@k.faces.expression.cheeks core.slot of=k.faces.expression key=cheeks kind=atom kind=string core.source="hand-core 1"
+
+# Sparse cartoon expression goals select compatible constituent features, not one fixed whole face.
+@k.faces.expression.goal core.type of=k.faces.expression.goal shared=true closed=true core.source="hand-core 1"
+@k.faces.expression.goal.expression core.slot of=k.faces.expression.goal key=expression required=true kind=atom type=k.faces.expression by=name core.source="hand-core 1"
+@k.faces.expression.goal.slot core.slot of=k.faces.expression.goal key=slot required=true kind=atom type=k.faces.slot by=name core.source="hand-core 1"
+@k.faces.expression.goal.property core.slot of=k.faces.expression.goal key=property required=true kind=atom kind=string core.source="hand-core 1"
+@k.faces.expression.goal.value core.slot of=k.faces.expression.goal key=value required=true kind=atom kind=string core.source="hand-core 1"
+
+# The proportion canon of a style (Q47): where the eyes, brows, nose, mouth and ears of its faces go, as fractions of
+# the box of the style's slot `head` (0 at its top or left, 1 at its bottom or right). `eye_line`, `nose_line` (the
+# bottom of the nose), `mouth_line`: heights; `eye_width`: a fraction of the head's width; `eye_gap` (the space
+# between the eyes) and `brow_above` (the brow line above the eye line): in eye widths. The ears lie between the
+# brow line and the nose line. A host that draws a new part for the style places it by these lines. A style that draws no face (`figure`: a whole
+# person) has a canon with its name and no proportions.
+@k.faces.canon core.type of=k.faces.canon shared=true closed=true core.source="hand-core 1"
+@k.faces.canon.style core.slot of=k.faces.canon key=style id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.faces.canon.name core.slot of=k.faces.canon key=name required=true kind=atom kind=string core.source="hand-core 1"
+@k.faces.canon.eye_line core.slot of=k.faces.canon key=eye_line kind=number min=0 max=1 core.source="hand-core 1"
+@k.faces.canon.nose_line core.slot of=k.faces.canon key=nose_line kind=number min=0 max=1 core.source="hand-core 1"
+@k.faces.canon.mouth_line core.slot of=k.faces.canon key=mouth_line kind=number min=0 max=1 core.source="hand-core 1"
+@k.faces.canon.eye_width core.slot of=k.faces.canon key=eye_width kind=number min=0 max=1 core.source="hand-core 1"
+@k.faces.canon.eye_gap core.slot of=k.faces.canon key=eye_gap kind=number min=0 core.source="hand-core 1"
+@k.faces.canon.brow_above core.slot of=k.faces.canon key=brow_above kind=number min=0 core.source="hand-core 1"
+@k.faces.canon.about core.slot of=k.faces.canon key=about kind=string core.source="hand-core 1"
+
+# Words for the types and keys of this world.
+# the kinds of being a face shows (psys2 Q31): "a person", "a human", "a robot" pick presets by kind
+# The names of the slots and the words a person says for each: the slot keeps the style data name (eyes, hair_front), the part kind keeps its singular name (k.expect.part eye, hair; its `slot` key names the slot), the other name is a word here.
+
+# Where a style is drawn when it is not a face of its own: on a drawing of k.objects, in that drawing's frame (the
+# style `figure` is drawn in the frame of the drawing `person`, as the boxes of k.wearables.place are). `hides` (many):
+# the parts of the drawing the style replaces where it is drawn (a figure replaces the stick body, arms and legs).
+@k.faces.frame core.type of=k.faces.frame shared=true closed=true core.source="hand-core 1"
+@k.faces.frame.style core.slot of=k.faces.frame key=style id=true required=true kind=atom kind=string type=k.faces.canon by=style core.source="hand-core 1"
+@k.faces.frame.drawing core.slot of=k.faces.frame key=drawing id=true required=true kind=atom kind=string type=k.objects.object by=name core.source="hand-core 1"
+@k.faces.frame.hides core.slot of=k.faces.frame key=hides many=true kind=atom core.source="hand-core 1"
+@k.faces.frame.about core.slot of=k.faces.frame key=about kind=string core.source="hand-core 1"
+
+# The skeleton of a style drawn as a whole person (the style figure): a bone is a limb that turns about its joint (`x`,
+# `y` in the frame of the style, as drawn standing with the arms down); `parent` is the bone it hangs from (a forearm
+# from the upper arm: it moves with it), `level` how many bones lie between it and the body (1: an upper arm, a thigh;
+# 2: a forearm, a shin). A part of a variant names its bone (k.faces.part bone).
+@k.faces.bone core.type of=k.faces.bone shared=true closed=true core.source="hand-core 1"
+@k.faces.bone.style core.slot of=k.faces.bone key=style id=true required=true kind=atom kind=string type=k.faces.canon by=style core.source="hand-core 1"
+@k.faces.bone.name core.slot of=k.faces.bone key=name id=true required=true kind=atom core.source="hand-core 1"
+@k.faces.bone.parent core.slot of=k.faces.bone key=parent kind=atom core.source="hand-core 1"
+@k.faces.bone.x core.slot of=k.faces.bone key=x required=true kind=number min=0 max=100 core.source="hand-core 1"
+@k.faces.bone.y core.slot of=k.faces.bone key=y required=true kind=number min=0 max=100 core.source="hand-core 1"
+@k.faces.bone.level core.slot of=k.faces.bone key=level required=true kind=integer min=1 max=3 core.source="hand-core 1"
+# A pose of a style with a skeleton (sitting, waving, arms up, kicking): its turns (k.faces.turn) say how far each bone
+# turns from the standing figure; a bone with no turn stays as drawn. `holds` names the hand a held thing goes in and
+# `hold_x`, `hold_y` where that hand is in the pose (in the frame of the style), so a host puts "a kite in her hand"
+# there. A figure looks to the right of the page: a host mirrors a person who faces left, pose and all.
+@k.faces.pose core.type of=k.faces.pose shared=true closed=true core.source="hand-core 1"
+@k.faces.pose.name core.slot of=k.faces.pose key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.faces.pose.style core.slot of=k.faces.pose key=style id=true required=true kind=atom kind=string type=k.faces.canon by=style core.source="hand-core 1"
+@k.faces.pose.about core.slot of=k.faces.pose key=about kind=string core.source="hand-core 1"
+@k.faces.pose.holds core.slot of=k.faces.pose key=holds kind=atom core.source="hand-core 1"
+@k.faces.pose.hold_x core.slot of=k.faces.pose key=hold_x kind=number min=0 max=100 core.source="hand-core 1"
+@k.faces.pose.hold_y core.slot of=k.faces.pose key=hold_y kind=number min=0 max=100 core.source="hand-core 1"
+# How far one bone turns in a pose: `angle` in degrees, clockwise on the page (the frame's y goes down).
+@k.faces.turn core.type of=k.faces.turn shared=true closed=true core.source="hand-core 1"
+@k.faces.turn.pose core.slot of=k.faces.turn key=pose id=true required=true kind=atom kind=string type=k.faces.pose by=name core.source="hand-core 1"
+@k.faces.turn.style core.slot of=k.faces.turn key=style id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.faces.turn.bone core.slot of=k.faces.turn key=bone id=true required=true kind=atom type=k.faces.bone by=name core.source="hand-core 1"
+@k.faces.turn.angle core.slot of=k.faces.turn key=angle required=true kind=number min=-360 max=360 core.source="hand-core 1"
+
+# A trait a person is drawn with (ginger, blond, bald, bearded, freckled): the face colours it sets (`hair_colour`,
+# `skin`, `eye_colour`: names of k.faces.colour) and, as k.faces.trait.part facts, the slots it fills with a variant or
+# empties (`remove=true`: bald takes the hair away).
+@k.faces.trait core.type of=k.faces.trait shared=true closed=true core.source="hand-core 1"
+@k.faces.trait.name core.slot of=k.faces.trait key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.faces.trait.style core.slot of=k.faces.trait key=style id=true required=true kind=atom kind=string type=k.faces.canon by=style core.source="hand-core 1"
+@k.faces.trait.about core.slot of=k.faces.trait key=about kind=string core.source="hand-core 1"
+@k.faces.trait.hair_colour core.slot of=k.faces.trait key=hair_colour kind=atom kind=string core.source="hand-core 1"
+@k.faces.trait.skin core.slot of=k.faces.trait key=skin kind=atom kind=string core.source="hand-core 1"
+@k.faces.trait.eye_colour core.slot of=k.faces.trait key=eye_colour kind=atom kind=string core.source="hand-core 1"
+@k.faces.trait.part core.type of=k.faces.trait.part shared=true closed=true core.source="hand-core 1"
+@k.faces.trait.part.trait core.slot of=k.faces.trait.part key=trait id=true required=true kind=atom kind=string type=k.faces.trait by=name core.source="hand-core 1"
+@k.faces.trait.part.style core.slot of=k.faces.trait.part key=style id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.faces.trait.part.slot core.slot of=k.faces.trait.part key=slot id=true required=true kind=atom type=k.faces.slot by=name core.source="hand-core 1"
+@k.faces.trait.part.variant core.slot of=k.faces.trait.part key=variant kind=atom kind=string core.source="hand-core 1"
+@k.faces.trait.part.remove core.slot of=k.faces.trait.part key=remove kind=boolean core.source="hand-core 1"

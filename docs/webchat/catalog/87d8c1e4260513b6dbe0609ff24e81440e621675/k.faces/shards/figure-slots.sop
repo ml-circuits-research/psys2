@@ -1,0 +1,15 @@
+# k.faces/shards/figure-slots: the slots of the style `figure`: the layers of a whole person (a box in the frame of the drawing person of k.objects, 0 to 100, x right, y down), drawn in their order: the bare body, then what is worn on the legs, on the feet, on the upper body and over everything. The frame (k.faces.frame) says on which drawing the style is drawn and which of its parts it replaces.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: tools/figures-core.mjs
+
+@k.faces.figure.slot.back k.faces.slot style=figure name=back x=28 y=28 w=44 h=54 z=-1 optional=true core.source="hand-core 1"
+@k.faces.figure.slot.body k.faces.slot style=figure name=body x=24 y=24 w=52 h=70 z=0 core.source="hand-core 1"
+@k.faces.figure.slot.bottom k.faces.slot style=figure name=bottom x=33 y=56 w=34 h=36 z=1 optional=true core.source="hand-core 1"
+@k.faces.figure.slot.shoes k.faces.slot style=figure name=shoes x=35 y=80 w=30 h=16 z=2 optional=true core.source="hand-core 1"
+@k.faces.figure.slot.top k.faces.slot style=figure name=top x=24 y=29 w=52 h=54 z=3 optional=true core.source="hand-core 1"
+@k.faces.figure.slot.coat k.faces.slot style=figure name=coat x=22 y=28 w=56 h=54 z=4 optional=true core.source="hand-core 1"
+@k.faces.figure.slot.neckwear k.faces.slot style=figure name=neckwear x=40 y=26 w=20 h=28 z=5 optional=true core.source="hand-core 1"
+@k.faces.figure.slot.hands k.faces.slot style=figure name=hands x=24 y=48 w=52 h=12 z=6 optional=true core.source="hand-core 1"
+@k.faces.figure.canon.figure k.faces.canon style=figure name=figure about="The style figure draws a whole person, not a face: it states no face proportions. Its frame is the frame of the drawing person of k.objects." core.source="hand-core 1"
+@k.faces.figure.frame.person k.faces.frame style=figure drawing=person hides=body hides=left_arm hides=right_arm hides=left_leg hides=right_leg about="A figure is drawn in the frame of the drawing person and replaces its stick body, arms and legs." core.source="hand-core 1"

@@ -1,0 +1,25 @@
+# k.faces/shards/figure-back: the variants of the slot `back` in the style `figure`: features, and parts with a primitive shape, a box in the frame of the figure, a draw order and colours; points for lines and polygons.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: tools/figures-core.mjs
+
+# back: cape
+@k.faces.figure.back.cape k.faces.variant slot=back name=cape style=figure length=long kind=cape core.source="hand-core 1"
+@k.faces.figure.back.cape.cape k.faces.part slot=back of=cape name=cape shape=polygon x=30 y=30 w=40 h=50 z=1 colour=red colour=blue colour=black colour=purple colour=green rgb="#B22234" core.source="hand-core 1"
+@k.faces.figure.back.cape.lining k.faces.part slot=back of=cape name=lining shape=polygon x=34 y=31 w=32 h=48 z=2 colour=red colour=blue colour=black colour=purple colour=green rgb="#7A1520" core.source="hand-core 1"
+@k.faces.figure.back.cape.cape.p1 k.faces.point part=$k.faces.figure.back.cape.cape n=1 x=39 y=30 core.source="hand-core 1"
+@k.faces.figure.back.cape.cape.p2 k.faces.point part=$k.faces.figure.back.cape.cape n=2 x=61 y=30 core.source="hand-core 1"
+@k.faces.figure.back.cape.cape.p3 k.faces.point part=$k.faces.figure.back.cape.cape n=3 x=70 y=80 core.source="hand-core 1"
+@k.faces.figure.back.cape.cape.p4 k.faces.point part=$k.faces.figure.back.cape.cape n=4 x=30 y=80 core.source="hand-core 1"
+@k.faces.figure.back.cape.lining.p1 k.faces.point part=$k.faces.figure.back.cape.lining n=1 x=41 y=31 core.source="hand-core 1"
+@k.faces.figure.back.cape.lining.p2 k.faces.point part=$k.faces.figure.back.cape.lining n=2 x=59 y=31 core.source="hand-core 1"
+@k.faces.figure.back.cape.lining.p3 k.faces.point part=$k.faces.figure.back.cape.lining n=3 x=66 y=79 core.source="hand-core 1"
+@k.faces.figure.back.cape.lining.p4 k.faces.point part=$k.faces.figure.back.cape.lining n=4 x=34 y=79 core.source="hand-core 1"
+
+# back: cloak
+@k.faces.figure.back.cloak k.faces.variant slot=back name=cloak style=figure length=long feel=thick kind=cloak core.source="hand-core 1"
+@k.faces.figure.back.cloak.cloak k.faces.part slot=back of=cloak name=cloak shape=polygon x=29 y=29 w=42 h=53 z=1 colour=brown colour=black colour=grey colour=green colour=purple rgb="#4B3B5C" core.source="hand-core 1"
+@k.faces.figure.back.cloak.cloak.p1 k.faces.point part=$k.faces.figure.back.cloak.cloak n=1 x=38 y=29 core.source="hand-core 1"
+@k.faces.figure.back.cloak.cloak.p2 k.faces.point part=$k.faces.figure.back.cloak.cloak n=2 x=62 y=29 core.source="hand-core 1"
+@k.faces.figure.back.cloak.cloak.p3 k.faces.point part=$k.faces.figure.back.cloak.cloak n=3 x=71 y=82 core.source="hand-core 1"
+@k.faces.figure.back.cloak.cloak.p4 k.faces.point part=$k.faces.figure.back.cloak.cloak n=4 x=29 y=82 core.source="hand-core 1"
