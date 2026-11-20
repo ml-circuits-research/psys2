@@ -69,7 +69,7 @@ test('a random flowchart is the ordered steps of a known procedure, joined and l
   const s = session('diagram');
   const made = await executeCompose(s, { form: 'diagram', source: 'random', seed: 6, subject: 'flowchart', with: 'making tea' }, { view: 'diagram' });
   assert.deepEqual(made.statuses, ['supported'], JSON.stringify(made.trace));
-  assert.match(made.text, /^I made a flowchart of making tea/);
+  assert.match(made.text, /^I made a flowchart for "making tea"/);
   const labels = rows(s, 'w.diagram.node').map((w) => val(w, 'label'));
   assert.deepEqual(labels.slice(0, 3), ['Boil water', 'Put a tea bag in a cup', 'Pour the hot water into the cup']);
   assert.equal(rows(s, 'w.diagram.edge').length, labels.length - 1, 'the steps are joined in a chain');

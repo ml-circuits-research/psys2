@@ -185,13 +185,14 @@
 @dc.arrange app.compose.call form=diagram phase=after operation="diagram.node.layout" ids="@made" layout=?layout order=2
 @dc.found app.compose.found form=diagram subject=?k topic=?topic
 @diagram.connect core.rule when=$dc.ch when=$dc.k when=$dc.f then=$dc.links then=$dc.arrange then=$dc.found
-@reply.diagram app.compose.reply form=diagram source=random text="I made {a subject} of {topic}, chosen at random from what I know (seed {seed}). Say \"another one\" for a different one."
+@reply.diagram app.compose.reply form=diagram source=random text="I made {a subject} for \"{topic}\", chosen at random from what I know (seed {seed}). Say \"another one\" for a different one."
 
 # ================================================================== CHARTS (Diagram tab)
 # A measure of k.charts (its plausible range, step and the dimensions it is usually broken down by) and one of its
 # dimensions are drawn together; a subject names the dimension or the measure. The dimension's usual categories, in
-# order and at most the level's `cats`, each take a value drawn from the measure's range on its step. The reply says
-# the values are invented.
+# order and at most the level's `cats`, each take a value: a level drawn once from the middle half of the range, and each
+# category's value within a quarter of the range around it (on the step, kept in the range), so the values vary as
+# such values do rather than jumping across the whole range. The reply says the values are invented.
 @c.req app.compose.request form=chart source=random
 @c.anysubj app.compose.request form=chart subject=?anySubject
 @c.subj.dim app.compose.request form=chart source=random subject=?dim
@@ -221,10 +222,20 @@
 @cc.det app.compose.detail level=?lv cats=?mk
 @cc.le core.check fn=lte args=?n args=?mk
 @cc.vsalt core.calc out=?vs fn=concat args=?salt args=" " args=?n
-@cc.v core.calc out=?v fn=rand_between args=?seed args=?vs args=?lo args=?hi args=?step
+@cc.range core.calc out=?range fn=sub args=?hi args=?lo
+@cc.quarter core.calc out=?quarter fn=mul args=?range args=0.25
+@cc.steps core.calc out=?steps fn=idiv args=?quarter args=?step
+@cc.spread core.calc out=?spread fn=mul args=?steps args=?step
+@cc.low core.calc out=?low fn=mul args=?spread args=-1
+@cc.blo core.calc out=?blo fn=add args=?lo args=?spread
+@cc.bhi core.calc out=?bhi fn=sub args=?hi args=?spread
+@cc.base core.calc out=?base fn=rand_between args=?seed args=?salt args=?blo args=?bhi args=?step
+@cc.d core.calc out=?d fn=rand_between args=?seed args=?vs args=?low args=?spread args=?step
+@cc.sum core.calc out=?sum fn=add args=?base args=?d
+@cc.v core.calc out=?v fn=clamp args=?sum args=?lo args=?hi
 @cc.label app.compose.list form=chart operation="diagram.group.chart.make" parameter="labels" n=?n value=?lab
 @cc.value app.compose.list form=chart operation="diagram.group.chart.make" parameter="values" n=?n value=?v
-@chart.categories core.rule when=$cc.ch when=$cc.k when=$cc.m when=$cc.req when=$cc.cat when=$cc.lvl when=$cc.det if=$cc.le with=$cc.vsalt with=$cc.v then=$cc.label then=$cc.value
+@chart.categories core.rule when=$cc.ch when=$cc.k when=$cc.m when=$cc.req when=$cc.cat when=$cc.lvl when=$cc.det if=$cc.le with=$cc.vsalt with=$cc.range with=$cc.quarter with=$cc.steps with=$cc.spread with=$cc.low with=$cc.blo with=$cc.bhi with=$cc.base with=$cc.d with=$cc.sum with=$cc.v then=$cc.label then=$cc.value
 @cc.layout.req app.compose.request form=chart layout=?layout
 @cc.anylayout app.compose.request form=chart layout=?anyLayout
 @cc.call.l app.compose.call form=chart phase=make operation="diagram.group.chart.make" label=?salt layout=?layout order=0
@@ -261,7 +272,7 @@
 @reply.scene.conversation app.compose.reply form=scene source=conversation text="I drew the things we talked about."
 @reply.diagram.conversation app.compose.reply form=diagram source=conversation text="I made a diagram of the steps you described, in the order you said them."
 @reply.chart.conversation app.compose.reply form=chart source=conversation text="I charted the numbers you mentioned."
-@reply.none.conversation app.compose.reply form=any source=none text="I could not find anything to use in what we said so far. Say \"surprise me\" and I will make a random one."
+@reply.none.conversation app.compose.reply form=any source=none text="I could not find anything to use in what we said so far, so nothing changed. Say \"draw something random\" or \"make a random flowchart\" and I will make a random one."
 
 # ================================================================== WHEN A READING IS A COMPOSITION
 # The reading of a turn (app.compose.reading: area, act, mode, type, the kind word the reader read, whether it bound to

@@ -297,7 +297,7 @@ export async function executeNativeGroup(session, members, { view, invocation = 
   // "Created a cat and 2 dogs." The kinds in the order asked, each with its number.
   const counts = new Map();
   for (const { kind } of made) counts.set(kind, (counts.get(kind) ?? 0) + 1);
-  const phrase = ([kind, count]) => count === 1 ? 'a ' + kind : count + ' ' + en.plural(kind);
+  const phrase = ([kind, count]) => count === 1 ? withArticle(kind) : count + ' ' + en.plural(kind);
   const list = [...counts].map(phrase), joined = list.length > 1 ? list.slice(0, -1).join(', ') + ' and ' + list.at(-1) : list[0];
   const notes = [...new Set([...made.map(({ substituted }) => substituted?.note).filter(Boolean), ...members.flatMap(({ plan }) => plan.notes)])];
   const crowded = made.filter(({ subject }) => subject.overlaps);
