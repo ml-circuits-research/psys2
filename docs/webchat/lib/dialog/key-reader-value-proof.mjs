@@ -1,6 +1,6 @@
 // Exact declared-value proofs; no language rules or domain vocabulary.
-import {numberValue} from '../knowledge/values.mjs?v=f5245110e9';
-import {parseNumberRun} from '../formalizer/rules/numbers.mjs?v=f8ce5c7caf';
+import {numberValue} from '../knowledge/values.mjs?v=d1e2be276f';
+import {parseNumberRun} from '../formalizer/rules/numbers.mjs?v=bac81a4d22';
 import {budget} from './budget.mjs?v=00bce6e369';
 import {selectedProbability} from './model-selection-score.mjs?v=ac3ac10191';
 export function classifierAlternative(bank,logits){

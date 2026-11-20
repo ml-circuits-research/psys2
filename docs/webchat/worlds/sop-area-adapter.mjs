@@ -3,7 +3,7 @@
 // catalog (or the generated offline subset), the view projection and the persisted instance world. Nothing here
 // names a tab; each tab passes its world id, its native interface, its area files and its offline subset.
 import {World, parse, serialize} from '../lib/vendor/sopworld/sopworld.mjs?v=a37e1846b3';
-import {createSopArea, initialSopAreaState, projectSopArea} from './sop-area.mjs?v=005abc4033';
+import {createSopArea, initialSopAreaState, projectSopArea} from './sop-area.mjs?v=1ebbf192a9';
 
 export const emptyAreaState = () => ({ sop: '', runtime: { view: {} } });
 

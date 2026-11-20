@@ -5,7 +5,7 @@
 // (query-reading-policy.sop app.query.read.head: "what" asks the values of a property, "how many" a count) that
 // project an annotated question into a std.request.query.
 import {parse,str} from '../vendor/sopworld/sopworld.mjs?v=a37e1846b3';
-import {LANG_EN_FACTS} from '../lang/en.facts.generated.mjs?v=c042db2219';
+import {LANG_EN_FACTS} from '../lang/en.facts.generated.mjs?v=70d1b21063';
 import QUERY_POLICY from '../../worlds/app.project/query-reading-policy-source.mjs?v=cf7b2d9297';
 let table;
 export function referenceProjection(){

@@ -7,8 +7,8 @@
 //    the kind the reader binds for "house", not a thing whose own name is the plural (the emoji "houses"); the
 //    plural's own binding stays as an alternative in the trace.
 import {parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=a37e1846b3';
-import {en} from '../lang/en.mjs?v=189c882fb6';
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=f720d09c3d';
+import {en} from '../lang/en.mjs?v=0451d0d207';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=b82f8fc380';
 
 const attr=(wire,key)=>{const raw=wire?.attrs[key]?.[0];return raw===undefined?undefined:raw.startsWith('"')?str(raw):raw;};
 const words=text=>[...String(text).matchAll(/[\p{L}\p{N}]+/gu)].map(m=>m[0].toLowerCase());

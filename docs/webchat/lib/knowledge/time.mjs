@@ -13,7 +13,7 @@
  *   timeKinds()                             the kinds of time this reader knows
  */
 import { parseLine } from './catalog.mjs?v=339ac7a09d';
-import { BUNDLED_TIME } from './bundled-time.mjs?v=f62d2e2bca';
+import { BUNDLED_TIME } from './bundled-time.mjs?v=c5a12b2fea';
 
 const lc = (s) => String(s ?? '').toLowerCase().replace(/[_-]+/g, ' ').replace(/\s+/g, ' ').trim();
 const KINDS = { 'k.time.weekday': 'day', 'k.time.month': 'month', 'k.time.season': 'season', 'k.time.part_of_day': 'part', 'k.time.hour': 'clock' };

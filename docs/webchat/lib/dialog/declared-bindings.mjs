@@ -20,11 +20,11 @@ import {parse,str} from '../vendor/sopworld/sopworld.mjs?v=a37e1846b3';
 import {interpretationPolicy} from './interpretation-policy.mjs?v=9f28a38d01';
 import {executionPolicyWorld} from './execution-policy.mjs?v=0dd078cd76';
 import DRAW from '../../worlds/art.draw/native-interface-source.mjs?v=d0dfc2def5';
-import DIAGRAM from '../../worlds/diagram.sketch/native-interface-source.mjs?v=0e26b6bf1a';
+import DIAGRAM from '../../worlds/diagram.sketch/native-interface-source.mjs?v=40a9c109d0';
 import CHARTS from '../../worlds/data.charts/native-interface-source.mjs?v=6c0dc1d746';
 import DOCUMENT from '../../worlds/docs.editor/native-interface-source.mjs?v=e247358200';
 import CALENDAR from '../../worlds/time.calendar/native-interface-source.mjs?v=3945d7d8fa';
-import AVATAR from '../../worlds/ui.avatar/native-interface-source.mjs?v=85fff1b7c4';
+import AVATAR from '../../worlds/ui.avatar/native-interface-source.mjs?v=488ad9f49d';
 
 const INTERFACES=[['art.draw',DRAW],['diagram.sketch',DIAGRAM],['data.charts',CHARTS],['docs.editor',DOCUMENT],['time.calendar',CALENDAR],['ui.avatar',AVATAR]];
 const digest=async text=>Array.from(new Uint8Array(await globalThis.crypto.subtle.digest('SHA-256',new TextEncoder().encode(text))),b=>b.toString(16).padStart(2,'0')).join('');
