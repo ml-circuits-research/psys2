@@ -1,0 +1,2502 @@
+{
+ "avatar": {
+  "face": {
+   "doc": "exposed native face",
+   "keys": {
+    "base": {
+     "concept": "base",
+     "head": "candidate",
+     "src": "Native parameter: avatar.face.compose.base",
+     "values": [
+      "baby",
+      "child",
+      "girl",
+      "boy",
+      "woman",
+      "man",
+      "old woman",
+      "old man",
+      "bearded man",
+      "woman with curly hair",
+      "robot",
+      "alien",
+      "clown",
+      "queen"
+     ]
+    },
+    "characterKind": {
+     "concept": "characterKind",
+     "head": "candidate",
+     "src": "Native parameter: avatar.face.compose.characterKind",
+     "values": [
+      "human",
+      "robot",
+      "alien"
+     ]
+    },
+    "duration": {
+     "concept": "duration",
+     "head": "number",
+     "src": "Native parameter: avatar.ids.show.duration"
+    },
+    "expression": {
+     "concept": "expression",
+     "head": "class",
+     "src": "actual avatar native capability parameters",
+     "values": [
+      "happy",
+      "sad",
+      "angry",
+      "surprised",
+      "sleepy",
+      "wink",
+      "talking"
+     ]
+    },
+    "id": {
+     "concept": "id",
+     "head": "candidate",
+     "src": "Native parameter: avatar.face.compose.id",
+     "values": [
+      "face"
+     ]
+    },
+    "mode": {
+     "concept": "mode",
+     "head": "candidate",
+     "src": "Native parameter: avatar.ids.show.mode",
+     "values": [
+      "temporary",
+      "always",
+      "off"
+     ]
+    },
+    "name": {
+     "concept": "name",
+     "head": "span",
+     "src": "actual avatar native capability parameters"
+    },
+    "preset": {
+     "concept": "preset",
+     "head": "class",
+     "src": "actual avatar native capability parameters",
+     "values": [
+      "baby",
+      "child",
+      "girl",
+      "boy",
+      "woman",
+      "man",
+      "old woman",
+      "old man",
+      "bearded man",
+      "woman with curly hair",
+      "robot",
+      "alien",
+      "clown",
+      "queen"
+     ]
+    },
+    "scale": {
+     "concept": "scale",
+     "head": "number",
+     "src": "Native parameter: avatar.face.resize.scale"
+    }
+   }
+  },
+  "part": {
+   "doc": "exposed native part",
+   "keys": {
+    "colour": {
+     "concept": "colour",
+     "head": "class",
+     "src": "actual avatar native capability parameters",
+     "values": [
+      "amber",
+      "auburn",
+      "black",
+      "blond",
+      "blue",
+      "brown",
+      "dark brown",
+      "green",
+      "grey",
+      "hazel",
+      "light",
+      "metal grey",
+      "olive",
+      "orange",
+      "pale",
+      "pink",
+      "purple",
+      "red",
+      "tan",
+      "white",
+      "yellow"
+     ]
+    },
+    "id": {
+     "concept": "id",
+     "head": "candidate",
+     "src": "Native parameter: avatar.part.select.id",
+     "values": [
+      "hair_back",
+      "shoulders",
+      "neck",
+      "ears",
+      "head",
+      "cheeks",
+      "beard",
+      "mouth",
+      "moustache",
+      "nose",
+      "eyes",
+      "eyebrows",
+      "glasses",
+      "hair_front",
+      "earrings",
+      "hat"
+     ]
+    },
+    "ids": {
+     "concept": "reference",
+     "head": "span",
+     "src": "actual avatar native capability parameters"
+    },
+    "place": {
+     "concept": "place",
+     "head": "class",
+     "src": "actual avatar native capability parameters",
+     "values": [
+      "up",
+      "down",
+      "left",
+      "right"
+     ]
+    },
+    "property": {
+     "concept": "property",
+     "head": "candidate",
+     "src": "Native parameter: avatar.part.feature.property",
+     "values": [
+      "length",
+      "feel",
+      "kind",
+      "age",
+      "size",
+      "shape"
+     ]
+    },
+    "scale": {
+     "concept": "scale",
+     "head": "number",
+     "src": "Native parameter: avatar.part.resize.scale"
+    },
+    "size": {
+     "concept": "size",
+     "head": "class",
+     "src": "actual avatar native capability parameters",
+     "values": [
+      "tiny",
+      "small",
+      "default",
+      "big",
+      "huge"
+     ]
+    },
+    "value": {
+     "concept": "value",
+     "head": "candidate",
+     "src": "Native parameter: avatar.part.feature.value",
+     "values": [
+      "long",
+      "medium",
+      "straight",
+      "wavy",
+      "curly",
+      "bob",
+      "ponytail",
+      "pigtails",
+      "bun",
+      "afro",
+      "child",
+      "large",
+      "t-shirt",
+      "v-neck",
+      "shirt",
+      "suit",
+      "hoodie",
+      "tank top",
+      "robot",
+      "lab coat",
+      "scrubs",
+      "chef jacket",
+      "apron",
+      "overalls",
+      "safety vest",
+      "uniform",
+      "fire jacket",
+      "sailor collar",
+      "space suit",
+      "robe",
+      "cloak",
+      "cape",
+      "fur-trimmed coat",
+      "football shirt",
+      "waistcoat and bow tie",
+      "boiler suit",
+      "adult",
+      "small",
+      "square",
+      "thin",
+      "narrow",
+      "thick",
+      "wide",
+      "tapered",
+      "necklace",
+      "round",
+      "pointed",
+      "oval",
+      "heart",
+      "box",
+      "blush",
+      "freckles",
+      "dimple",
+      "wrinkles",
+      "scar",
+      "mole",
+      "tear",
+      "old",
+      "short",
+      "bushy",
+      "full beard",
+      "chinstrap",
+      "goatee",
+      "long beard",
+      "soul patch",
+      "sideburns",
+      "stubble",
+      "smiling",
+      "closed",
+      "open",
+      "flat",
+      "sad",
+      "surprised",
+      "smirk",
+      "full lips",
+      "grin",
+      "tongue out",
+      "gritted teeth",
+      "half open",
+      "pressed lips",
+      "teeth on lip",
+      "tongue tip",
+      "handlebar",
+      "walrus",
+      "pencil",
+      "chevron",
+      "button",
+      "dot",
+      "half closed",
+      "lashes",
+      "looking down",
+      "looking up",
+      "looking aside",
+      "arched",
+      "angry",
+      "sunglasses",
+      "cat-eye",
+      "monocle",
+      "visor",
+      "fringe",
+      "side parting",
+      "spikes",
+      "bald on top",
+      "receding",
+      "centre parting",
+      "mohawk",
+      "tuft",
+      "stud",
+      "hoop",
+      "drop",
+      "pearl",
+      "star",
+      "cap",
+      "beanie",
+      "top hat",
+      "crown",
+      "cowboy hat",
+      "party hat",
+      "bow",
+      "antenna",
+      "sun hat",
+      "chef hat",
+      "hard hat",
+      "fire helmet",
+      "police cap",
+      "pilot cap",
+      "nurse cap",
+      "sailor cap",
+      "military helmet",
+      "space helmet",
+      "knight helmet",
+      "pirate hat",
+      "witch hat",
+      "wizard hat",
+      "santa hat",
+      "beret",
+      "fedora",
+      "swimming cap",
+      "wig",
+      "headscarf",
+      "flower wreath"
+     ]
+    },
+    "variant": {
+     "concept": "variant",
+     "head": "class",
+     "src": "actual avatar native capability parameters",
+     "values": [
+      "Santa hat",
+      "afro",
+      "angry",
+      "antenna",
+      "apron",
+      "arched",
+      "bald on top",
+      "beanie",
+      "beret",
+      "big smile",
+      "blush",
+      "bob",
+      "boiler suit",
+      "bolt",
+      "bow",
+      "bow tie",
+      "box",
+      "bun",
+      "bushy",
+      "button",
+      "cap",
+      "cape",
+      "cat-eye",
+      "centre parting",
+      "chef hat",
+      "chef jacket",
+      "chevron",
+      "chinstrap",
+      "cloak",
+      "closed",
+      "cowboy hat",
+      "crown",
+      "curly",
+      "dimple",
+      "dot",
+      "downcast",
+      "drop",
+      "fedora",
+      "fire helmet",
+      "fire jacket",
+      "flower wreath",
+      "football shirt",
+      "freckles",
+      "fringe",
+      "frown",
+      "full",
+      "full lips",
+      "fur coat",
+      "goatee",
+      "grille",
+      "grin",
+      "gritted",
+      "half open",
+      "handlebar",
+      "happy",
+      "hard hat",
+      "headscarf",
+      "heart",
+      "hoodie",
+      "hoop",
+      "judge wig",
+      "knight helmet",
+      "lab coat",
+      "large",
+      "large hoop",
+      "lashes",
+      "lip bite",
+      "long",
+      "long curly",
+      "long sides",
+      "long straight",
+      "long wavy",
+      "looking in",
+      "looking out",
+      "looking up",
+      "medium",
+      "metal plate",
+      "military helmet",
+      "mohawk",
+      "mole",
+      "monocle",
+      "narrow",
+      "necklace",
+      "neutral",
+      "nurse cap",
+      "open",
+      "oval",
+      "overalls",
+      "party hat",
+      "pearl",
+      "pencil",
+      "pigtails",
+      "pilot cap",
+      "pipe",
+      "pirate hat",
+      "pointed",
+      "police cap",
+      "ponytail",
+      "pressed",
+      "raised",
+      "receding",
+      "robe",
+      "round",
+      "round blush",
+      "sad",
+      "safety vest",
+      "sailor cap",
+      "sailor collar",
+      "scar",
+      "scrubs",
+      "shirt",
+      "short",
+      "side parting",
+      "sideburns",
+      "sleepy",
+      "small",
+      "small round",
+      "smile",
+      "smirk",
+      "soul patch",
+      "space helmet",
+      "space suit",
+      "spikes",
+      "square",
+      "star",
+      "straight",
+      "stubble",
+      "stud",
+      "suit",
+      "sun hat",
+      "sunglasses",
+      "surprised",
+      "swimming cap",
+      "t-shirt",
+      "talking",
+      "tank top",
+      "tapered",
+      "tear",
+      "thick",
+      "thick arched",
+      "thin",
+      "tongue out",
+      "tongue tip",
+      "top hat",
+      "tuft",
+      "uniform",
+      "v-neck",
+      "visor",
+      "walrus",
+      "wavy",
+      "wide",
+      "witch hat",
+      "wizard hat",
+      "wrinkles"
+     ]
+    }
+   }
+  }
+ },
+ "calendar": {
+  "calendar": {
+   "doc": "exposed native calendar",
+   "keys": {
+    "colour": {
+     "concept": "colour",
+     "head": "candidate",
+     "src": "calendar.calendar.add/change colour"
+    },
+    "id": {
+     "concept": "id",
+     "head": "candidate",
+     "src": "Native parameter: calendar.calendar.add.id"
+    },
+    "label": {
+     "concept": "label",
+     "head": "candidate",
+     "src": "Native parameter: calendar.calendar.add.label"
+    },
+    "name": {
+     "concept": "name",
+     "head": "span",
+     "src": "calendar.calendar.add/change label"
+    }
+   }
+  },
+  "meeting": {
+   "doc": "a meeting (book 7.4 t.meeting)",
+   "keys": {
+    "agenda": {
+     "concept": "literal_text",
+     "head": "span",
+     "src": "notes / agenda"
+    },
+    "calendar": {
+     "concept": "reference",
+     "head": "span",
+     "src": "calendar.meeting.add/change calendar identity"
+    },
+    "day": {
+     "concept": "day",
+     "head": "candidate+span",
+     "src": "s.meet.start part=start (day): today, tomorrow, weekday, date, next week"
+    },
+    "duration": {
+     "concept": "duration",
+     "head": "number",
+     "src": "Native parameter: calendar.meeting.add.duration"
+    },
+    "end": {
+     "concept": "time",
+     "head": "span",
+     "src": "until 5"
+    },
+    "free": {
+     "concept": "free_search",
+     "head": "class",
+     "src": "book 6.8 / 7.4: nearest free time",
+     "values": [
+      "nearest_free",
+      "first_free",
+      "common_free"
+     ]
+    },
+    "id": {
+     "concept": "id",
+     "head": "candidate",
+     "src": "Native parameter: calendar.meeting.add.id"
+    },
+    "ids": {
+     "concept": "ids",
+     "head": "candidate",
+     "src": "Native parameter: calendar.events.remove.ids"
+    },
+    "length": {
+     "concept": "duration",
+     "head": "number+class+step",
+     "src": "s.meet.length part=duration"
+    },
+    "notes": {
+     "concept": "notes",
+     "head": "candidate",
+     "src": "Native parameter: calendar.meeting.add.notes"
+    },
+    "participants": {
+     "concept": "participants",
+     "head": "candidate",
+     "src": "Native parameter: calendar.meeting.add.participants"
+    },
+    "people": {
+     "concept": "person",
+     "head": "fill+span",
+     "many": true,
+     "src": "s.meet.people role=participant many=true"
+    },
+    "relation": {
+     "concept": "time_relation",
+     "head": "class",
+     "src": "relative to another meeting",
+     "values": [
+      "before",
+      "after",
+      "same_time",
+      "during",
+      "between",
+      "not_overlapping"
+     ]
+    },
+    "relation_anchor": {
+     "concept": "reference",
+     "head": "fill+span",
+     "src": "the other meeting"
+    },
+    "room": {
+     "concept": "reference",
+     "head": "fill+span",
+     "src": "s.meet.room relation=in"
+    },
+    "shift": {
+     "concept": "delta",
+     "head": "number+class",
+     "src": "move by an amount"
+    },
+    "start": {
+     "concept": "start",
+     "head": "number",
+     "src": "Native parameter: calendar.meeting.add.start"
+    },
+    "time": {
+     "concept": "time",
+     "head": "candidate+span+step",
+     "src": "s.meet.start (clock or region morning/afternoon; step earlier/later)"
+    },
+    "timezone": {
+     "concept": "timezone",
+     "head": "candidate",
+     "src": "Authored explicit temporal intent; native epoch normalization remains completion"
+    },
+    "title": {
+     "concept": "name",
+     "head": "span",
+     "src": "s.meet.title"
+    }
+   }
+  },
+  "person": {
+   "doc": "a participant (w.person)",
+   "keys": {
+    "id": {
+     "concept": "id",
+     "head": "candidate",
+     "src": "Native parameter: calendar.person.add.id"
+    },
+    "label": {
+     "concept": "label",
+     "head": "candidate",
+     "src": "Native parameter: calendar.person.add.label"
+    },
+    "name": {
+     "concept": "person",
+     "head": "span",
+     "src": "person name"
+    }
+   }
+  },
+  "room": {
+   "doc": "a room (book 7.4 t.room)",
+   "keys": {
+    "capacity": {
+     "concept": "capacity",
+     "head": "number",
+     "src": "Native parameter: calendar.room.add.capacity"
+    },
+    "id": {
+     "concept": "id",
+     "head": "candidate",
+     "src": "Native parameter: calendar.room.add.id"
+    },
+    "label": {
+     "concept": "label",
+     "head": "candidate",
+     "src": "Native parameter: calendar.room.add.label"
+    },
+    "location": {
+     "concept": "place",
+     "head": "span",
+     "src": "calendar.room.add/change location"
+    },
+    "name": {
+     "concept": "name",
+     "head": "span",
+     "src": "room name"
+    },
+    "seats": {
+     "concept": "quantity",
+     "head": "number",
+     "src": "s.room.seats counts=w.person"
+    }
+   }
+  }
+ },
+ "conversation": {
+  "turn": {
+   "doc": "relation to the conversation",
+   "keys": {
+    "area": {
+     "concept": "area",
+     "head": "class",
+     "src": "which area a cross-area request points to (send a chart to the document)",
+     "values": [
+      "drawing",
+      "diagram",
+      "document",
+      "calendar"
+     ]
+    },
+    "fragment": {
+     "concept": "fragment",
+     "head": "class",
+     "src": "book 6.4: fragments complete the previous request",
+     "values": [
+      "adds",
+      "replaces",
+      "repeats",
+      "more",
+      "less",
+      "confirms",
+      "rejects"
+     ]
+    },
+    "objection": {
+     "concept": "objection",
+     "head": "class",
+     "src": "book 6.11.1 objections about the previous reply",
+     "values": [
+      "wrong_target",
+      "wrong_value",
+      "too_much",
+      "too_little",
+      "missing_part",
+      "unexpected",
+      "general"
+     ]
+    },
+    "repeat_count": {
+     "concept": "count",
+     "head": "number",
+     "src": "undo twice, again 3 times"
+    }
+   }
+  }
+ },
+ "diagram": {
+  "chart": {
+   "doc": "chart data and display (old data.charts)",
+   "keys": {
+    "colour": {
+     "concept": "colour",
+     "head": "candidate",
+     "src": "Native parameter: chart.change.colour"
+    },
+    "datasets": {
+     "concept": "literal_data",
+     "head": "span",
+     "src": "chart.make datasets"
+    },
+    "height": {
+     "concept": "height",
+     "head": "number",
+     "src": "Native parameter: chart.place.height"
+    },
+    "horizontal": {
+     "concept": "toggle",
+     "head": "class",
+     "src": "horizontal",
+     "values": [
+      "on",
+      "off"
+     ]
+    },
+    "id": {
+     "concept": "id",
+     "head": "candidate",
+     "src": "Native parameter: diagram.group.chart.id"
+    },
+    "ids": {
+     "concept": "ids",
+     "head": "candidate",
+     "src": "Native parameter: chart.remove.ids"
+    },
+    "labels": {
+     "concept": "name",
+     "head": "span",
+     "many": true,
+     "src": "bar/slice/point labels"
+    },
+    "legend": {
+     "concept": "toggle",
+     "head": "class",
+     "src": "chart options legend",
+     "values": [
+      "show",
+      "hide"
+     ]
+    },
+    "palette": {
+     "concept": "colour",
+     "head": "candidate",
+     "src": "palette"
+    },
+    "series": {
+     "concept": "name",
+     "head": "span",
+     "many": true,
+     "src": "series names"
+    },
+    "showLegend": {
+     "concept": "showLegend",
+     "head": "candidate",
+     "src": "Native parameter: chart.change.showLegend"
+    },
+    "showValues": {
+     "concept": "showValues",
+     "head": "candidate",
+     "src": "Native parameter: chart.change.showValues"
+    },
+    "show_values": {
+     "concept": "toggle",
+     "head": "class",
+     "src": "showValues",
+     "values": [
+      "show",
+      "hide"
+     ]
+    },
+    "sort": {
+     "concept": "sort",
+     "head": "class",
+     "src": "sort",
+     "values": [
+      "desc",
+      "asc",
+      "alpha",
+      "given"
+     ]
+    },
+    "source": {
+     "concept": "data_source",
+     "head": "class+span",
+     "src": "chart.fromList/fromHoldings/...; book: meetings per person from the calendar",
+     "values": [
+      "calendar",
+      "document",
+      "list",
+      "prices",
+      "holdings",
+      "typed"
+     ]
+    },
+    "stacked": {
+     "concept": "toggle",
+     "head": "class",
+     "src": "stacked",
+     "values": [
+      "on",
+      "off"
+     ]
+    },
+    "title": {
+     "concept": "name",
+     "head": "span",
+     "src": "chart.make/change title"
+    },
+    "type": {
+     "concept": "type",
+     "head": "candidate",
+     "src": "Native parameter: diagram.group.chart.type",
+     "values": [
+      "bar",
+      "line",
+      "pie",
+      "doughnut",
+      "radar",
+      "polarArea",
+      "scatter"
+     ]
+    },
+    "values": {
+     "concept": "quantity",
+     "head": "span",
+     "many": true,
+     "src": "chart.setValues"
+    },
+    "width": {
+     "concept": "width",
+     "head": "number",
+     "src": "Native parameter: chart.place.width"
+    },
+    "x": {
+     "concept": "x",
+     "head": "number",
+     "src": "Native parameter: chart.place.x"
+    },
+    "y": {
+     "concept": "y",
+     "head": "number",
+     "src": "Native parameter: chart.place.y"
+    }
+   }
+  },
+  "diagram": {
+   "doc": "a diagram as a whole",
+   "keys": {
+    "kind": {
+     "concept": "diagram_kind",
+     "head": "candidate",
+     "src": "startDiagram kind; charts are a kind of diagram",
+     "values": [
+      "flowchart",
+      "tree",
+      "org_chart",
+      "mind_map",
+      "network",
+      "sequence",
+      "timeline",
+      "venn",
+      "state_machine",
+      "bar_chart",
+      "line_chart",
+      "pie_chart",
+      "doughnut_chart",
+      "scatter_chart",
+      "radar_chart",
+      "area_chart",
+      "table"
+     ]
+    },
+    "layout": {
+     "concept": "layout",
+     "head": "class",
+     "src": "arrangeShapes / startDiagram layout",
+     "values": [
+      "tree",
+      "grid",
+      "row",
+      "column",
+      "circle",
+      "radial",
+      "layers"
+     ]
+    }
+   }
+  },
+  "group": {
+   "doc": "Native diagram.sketch.group",
+   "keys": {
+    "colour": {
+     "concept": "colour",
+     "head": "candidate",
+     "src": "Native parameter: diagram.group.change.colour",
+     "values": [
+      "red",
+      "orange",
+      "yellow",
+      "gold",
+      "lime",
+      "green",
+      "teal",
+      "cyan",
+      "blue",
+      "navy",
+      "indigo",
+      "purple",
+      "magenta",
+      "pink",
+      "brown",
+      "gray",
+      "black",
+      "white"
+     ]
+    },
+    "id": {
+     "concept": "id",
+     "head": "candidate",
+     "src": "Native parameter: diagram.group.select.id"
+    },
+    "ids": {
+     "concept": "ids",
+     "head": "candidate",
+     "src": "Native parameter: diagram.group.make.ids"
+    },
+    "label": {
+     "concept": "label",
+     "head": "candidate",
+     "src": "Native parameter: diagram.group.make.label"
+    },
+    "labels": {
+     "concept": "labels",
+     "head": "candidate",
+     "src": "Native parameter: diagram.group.chart.make.labels"
+    },
+    "layout": {
+     "concept": "layout",
+     "head": "candidate",
+     "src": "Native parameter: diagram.group.layout.layout",
+     "values": [
+      "free",
+      "tree",
+      "grid",
+      "row",
+      "column",
+      "circle",
+      "radial",
+      "layers",
+      "bar",
+      "line",
+      "pie",
+      "doughnut"
+     ]
+    },
+    "name": {
+     "concept": "name",
+     "head": "candidate",
+     "src": "Native parameter: diagram.group.make.name"
+    },
+    "scale": {
+     "concept": "scale",
+     "head": "number",
+     "src": "Native parameter: diagram.group.resize.scale"
+    },
+    "size": {
+     "concept": "size",
+     "head": "candidate",
+     "src": "Native parameter: diagram.group.change.size",
+     "values": [
+      "tiny",
+      "small",
+      "medium",
+      "large",
+      "huge"
+     ]
+    },
+    "values": {
+     "concept": "values",
+     "head": "candidate",
+     "src": "Native parameter: diagram.group.chart.make.values"
+    },
+    "x": {
+     "concept": "x",
+     "head": "number",
+     "src": "Native parameter: diagram.group.place.x"
+    },
+    "y": {
+     "concept": "y",
+     "head": "number",
+     "src": "Native parameter: diagram.group.place.y"
+    }
+   }
+  },
+  "link": {
+   "doc": "an arrow between nodes (book 7.2 t.link)",
+   "keys": {
+    "arrow": {
+     "concept": "arrow",
+     "head": "candidate",
+     "src": "Native parameter: diagram.link.change.arrow",
+     "values": [
+      "forward",
+      "both",
+      "none"
+     ]
+    },
+    "colour": {
+     "concept": "colour",
+     "head": "candidate",
+     "src": "Native parameter: diagram.link.change.colour",
+     "values": [
+      "red",
+      "orange",
+      "yellow",
+      "gold",
+      "lime",
+      "green",
+      "teal",
+      "cyan",
+      "blue",
+      "navy",
+      "indigo",
+      "purple",
+      "magenta",
+      "pink",
+      "brown",
+      "gray",
+      "black",
+      "white"
+     ]
+    },
+    "from": {
+     "concept": "reference",
+     "head": "fill+span",
+     "src": "s.link.from role=source"
+    },
+    "ids": {
+     "concept": "ids",
+     "head": "candidate",
+     "src": "Native parameter: diagram.link.select.ids"
+    },
+    "label": {
+     "concept": "label",
+     "head": "candidate",
+     "src": "Native parameter: diagram.link.change.label"
+    },
+    "nodes": {
+     "concept": "nodes",
+     "head": "candidate",
+     "src": "Native parameter: diagram.link.select.nodes"
+    },
+    "style": {
+     "concept": "style",
+     "head": "candidate",
+     "src": "Native parameter: diagram.link.change.style",
+     "values": [
+      "solid",
+      "dashed",
+      "dotted"
+     ]
+    },
+    "to": {
+     "concept": "reference",
+     "head": "fill+span",
+     "src": "s.link.to role=goal"
+    },
+    "width": {
+     "concept": "width",
+     "head": "number",
+     "src": "Native parameter: diagram.link.change.width"
+    }
+   }
+  },
+  "node": {
+   "doc": "a node / box / bar / slice (book 7.2 t.node)",
+   "keys": {
+    "anchor": {
+     "concept": "reference",
+     "head": "fill+span",
+     "src": "the anchor node"
+    },
+    "at": {
+     "concept": "region",
+     "head": "class",
+     "src": "s.node.at",
+     "values": [
+      "corner",
+      "top",
+      "bottom",
+      "left",
+      "right",
+      "center",
+      "top_left",
+      "top_right",
+      "bottom_left",
+      "bottom_right",
+      "middle",
+      "background",
+      "foreground"
+     ]
+    },
+    "colour": {
+     "concept": "colour",
+     "head": "candidate+step",
+     "src": "s.node.colour"
+    },
+    "edges": {
+     "concept": "edges",
+     "head": "candidate",
+     "src": "Native parameter: diagram.node.select.edges"
+    },
+    "height": {
+     "concept": "height",
+     "head": "number",
+     "src": "Native parameter: diagram.node.resize.height"
+    },
+    "ids": {
+     "concept": "ids",
+     "head": "candidate",
+     "src": "Native parameter: diagram.node.change.ids"
+    },
+    "kind": {
+     "concept": "kind",
+     "head": "candidate",
+     "src": "Native parameter: diagram.node.make.kind",
+     "values": [
+      "circle",
+      "rectangle",
+      "square",
+      "diamond",
+      "ellipse",
+      "triangle",
+      "hexagon",
+      "star",
+      "text"
+     ]
+    },
+    "label": {
+     "concept": "name",
+     "head": "span",
+     "src": "s.node.label"
+    },
+    "layout": {
+     "concept": "layout",
+     "head": "candidate",
+     "src": "Native parameter: diagram.node.make.layout",
+     "values": [
+      "tree",
+      "grid",
+      "row",
+      "column",
+      "circle",
+      "radial",
+      "layers"
+     ]
+    },
+    "n": {
+     "concept": "n",
+     "head": "number",
+     "src": "Native parameter: diagram.node.make.n"
+    },
+    "position": {
+     "concept": "spatial_relation",
+     "head": "class",
+     "src": "moveShapes place/anchor",
+     "values": [
+      "in",
+      "on",
+      "under",
+      "above",
+      "below",
+      "next_to",
+      "left_of",
+      "right_of",
+      "between",
+      "behind",
+      "in_front_of",
+      "near",
+      "around",
+      "inside",
+      "outside",
+      "along"
+     ]
+    },
+    "relation": {
+     "concept": "relation",
+     "head": "candidate",
+     "src": "Authored semantic intent; requires world-informed completion"
+    },
+    "shape": {
+     "concept": "shape",
+     "head": "class+step",
+     "src": "s.node.shape space=shape (step rounder)",
+     "values": [
+      "box",
+      "rounded_box",
+      "circle",
+      "ellipse",
+      "diamond",
+      "hexagon",
+      "triangle",
+      "star",
+      "cylinder",
+      "parallelogram",
+      "cloud",
+      "note",
+      "square",
+      "rectangle"
+     ]
+    },
+    "size": {
+     "concept": "size",
+     "head": "class+step",
+     "src": "setShapes size",
+     "values": [
+      "tiny",
+      "small",
+      "default",
+      "big",
+      "huge"
+     ]
+    },
+    "value": {
+     "concept": "value",
+     "head": "number",
+     "src": "Native parameter: diagram.node.change.value"
+    },
+    "width": {
+     "concept": "width",
+     "head": "number",
+     "src": "Native parameter: diagram.node.resize.width"
+    },
+    "x": {
+     "concept": "x",
+     "head": "number",
+     "src": "Native parameter: diagram.node.make.x"
+    },
+    "y": {
+     "concept": "y",
+     "head": "number",
+     "src": "Native parameter: diagram.node.make.y"
+    }
+   }
+  },
+  "page": {
+   "doc": "Native diagram.sketch.page",
+   "keys": {
+    "duration": {
+     "concept": "duration",
+     "head": "number",
+     "src": "Native parameter: diagram.ids.show.duration"
+    },
+    "mode": {
+     "concept": "mode",
+     "head": "candidate",
+     "src": "Native parameter: diagram.ids.show.mode",
+     "values": [
+      "temporary",
+      "always",
+      "off"
+     ]
+    }
+   }
+  },
+  "point": {
+   "doc": "Native data.charts.point",
+   "keys": {
+    "chart": {
+     "concept": "chart",
+     "head": "candidate",
+     "src": "Native parameter: chart.point.change.chart"
+    },
+    "index": {
+     "concept": "index",
+     "head": "number",
+     "src": "Native parameter: chart.point.change.index"
+    },
+    "series": {
+     "concept": "series",
+     "head": "number",
+     "src": "Native parameter: chart.point.change.series"
+    },
+    "value": {
+     "concept": "value",
+     "head": "number",
+     "src": "Native parameter: chart.point.change.value"
+    }
+   }
+  },
+  "series": {
+   "doc": "Native data.charts.series",
+   "keys": {
+    "chart": {
+     "concept": "chart",
+     "head": "candidate",
+     "src": "Native parameter: chart.series.add.chart"
+    },
+    "colour": {
+     "concept": "colour",
+     "head": "candidate",
+     "src": "Native parameter: chart.series.add.colour"
+    },
+    "index": {
+     "concept": "index",
+     "head": "number",
+     "src": "Native parameter: chart.series.change.index"
+    },
+    "label": {
+     "concept": "label",
+     "head": "candidate",
+     "src": "Native parameter: chart.series.add.label"
+    },
+    "values": {
+     "concept": "values",
+     "head": "candidate",
+     "src": "Native parameter: chart.series.add.values"
+    }
+   }
+  },
+  "sketch": {
+   "doc": "Native diagram.sketch",
+   "keys": {
+    "links": {
+     "concept": "links",
+     "head": "candidate",
+     "src": "Native parameter: diagram.selection.remove.links"
+    },
+    "nodes": {
+     "concept": "nodes",
+     "head": "candidate",
+     "src": "Native parameter: diagram.selection.remove.nodes"
+    }
+   }
+  }
+ },
+ "document": {
+  "block": {
+   "doc": "Native docs.editor.block",
+   "keys": {
+    "align": {
+     "concept": "align",
+     "head": "candidate",
+     "src": "Native parameter: document.block.align.align",
+     "values": [
+      "left",
+      "center",
+      "right",
+      "justify"
+     ]
+    },
+    "at": {
+     "concept": "at",
+     "head": "candidate",
+     "src": "Native parameter: document.block.select.at"
+    },
+    "attrs": {
+     "concept": "attrs",
+     "head": "candidate",
+     "src": "Native parameter: document.block.mark.attrs"
+    },
+    "checked": {
+     "concept": "checked",
+     "head": "candidate",
+     "src": "Native parameter: document.list.change.checked"
+    },
+    "enabled": {
+     "concept": "enabled",
+     "head": "candidate",
+     "src": "Native parameter: document.block.mark.enabled"
+    },
+    "from": {
+     "concept": "from",
+     "head": "number",
+     "src": "Native parameter: document.block.select.from"
+    },
+    "header": {
+     "concept": "header",
+     "head": "candidate",
+     "src": "Native parameter: document.table.make.header"
+    },
+    "id": {
+     "concept": "id",
+     "head": "candidate",
+     "src": "Native parameter: document.block.select.id"
+    },
+    "ids": {
+     "concept": "ids",
+     "head": "candidate",
+     "src": "Native parameter: document.block.reorder.ids"
+    },
+    "items": {
+     "concept": "items",
+     "head": "candidate",
+     "src": "Native parameter: document.list.make.items"
+    },
+    "kind": {
+     "concept": "kind",
+     "head": "candidate",
+     "src": "Native parameter: document.block.make.kind",
+     "values": [
+      "paragraph",
+      "heading",
+      "quote"
+     ]
+    },
+    "level": {
+     "concept": "level",
+     "head": "number",
+     "src": "Native parameter: document.block.make.level"
+    },
+    "mark": {
+     "concept": "mark",
+     "head": "candidate",
+     "src": "Native parameter: document.block.mark.mark",
+     "values": [
+      "link",
+      "bold",
+      "italic",
+      "underline",
+      "strike",
+      "code",
+      "highlight"
+     ]
+    },
+    "name": {
+     "concept": "name",
+     "head": "candidate",
+     "src": "Native parameter: document.list.make.name"
+    },
+    "parent": {
+     "concept": "parent",
+     "head": "candidate",
+     "src": "Native parameter: document.list.make.parent"
+    },
+    "rows": {
+     "concept": "rows",
+     "head": "candidate",
+     "src": "Native parameter: document.table.make.rows"
+    },
+    "style": {
+     "concept": "style",
+     "head": "candidate",
+     "src": "Native parameter: document.list.make.style",
+     "values": [
+      "bullet",
+      "numbered",
+      "task"
+     ]
+    },
+    "text": {
+     "concept": "text",
+     "head": "candidate",
+     "src": "Native parameter: document.block.make.text"
+    },
+    "to": {
+     "concept": "to",
+     "head": "number",
+     "src": "Native parameter: document.block.select.to"
+    }
+   }
+  },
+  "document": {
+   "doc": "Native docs.editor.document",
+   "keys": {
+    "blocks": {
+     "concept": "blocks",
+     "head": "candidate",
+     "src": "Native parameter: document.write.blocks"
+    },
+    "chapters": {
+     "concept": "chapters",
+     "head": "number",
+     "src": "Native parameter: document.compose.chapters"
+    },
+    "genre": {
+     "concept": "genre",
+     "head": "candidate",
+     "src": "Native parameter: document.write.genre"
+    },
+    "id": {
+     "concept": "id",
+     "head": "candidate",
+     "src": "Native parameter: document.title.change.id"
+    },
+    "property": {
+     "concept": "property",
+     "head": "candidate",
+     "src": "Native parameter: document.rewrite.property",
+     "values": [
+      "tone",
+      "length"
+     ]
+    },
+    "title": {
+     "concept": "title",
+     "head": "candidate",
+     "src": "Native parameter: document.title.change.title"
+    },
+    "topic": {
+     "concept": "topic",
+     "head": "candidate",
+     "src": "Native parameter: document.write.topic"
+    },
+    "value": {
+     "concept": "value",
+     "head": "candidate",
+     "src": "Native parameter: document.rewrite.value"
+    },
+    "words": {
+     "concept": "words",
+     "head": "number",
+     "src": "Native parameter: document.compose.words"
+    }
+   }
+  },
+  "inline": {
+   "doc": "formatting, lists, tasks, tables (old docs.editor)",
+   "keys": {
+    "align": {
+     "concept": "align",
+     "head": "class",
+     "src": "old align",
+     "values": [
+      "left",
+      "center",
+      "right",
+      "justify"
+     ]
+    },
+    "enabled": {
+     "concept": "toggle",
+     "head": "class",
+     "src": "actual literal editing parameter",
+     "values": [
+      "on",
+      "off"
+     ]
+    },
+    "format": {
+     "concept": "format",
+     "head": "class",
+     "src": "old style/highlight/link",
+     "values": [
+      "link",
+      "bold",
+      "italic",
+      "underline",
+      "strike",
+      "code",
+      "highlight"
+     ]
+    },
+    "from": {
+     "concept": "index",
+     "head": "number",
+     "src": "actual literal editing parameter"
+    },
+    "highlight_colour": {
+     "concept": "colour",
+     "head": "candidate",
+     "src": "actual literal editing parameter"
+    },
+    "items": {
+     "concept": "literal_list",
+     "head": "span",
+     "src": "actual literal editing parameter"
+    },
+    "link_target": {
+     "concept": "literal_text",
+     "head": "span",
+     "src": "old link"
+    },
+    "list_kind": {
+     "concept": "list_kind",
+     "head": "class",
+     "src": "doc.addList",
+     "values": [
+      "bullet",
+      "numbered",
+      "task"
+     ]
+    },
+    "rows": {
+     "concept": "literal_table",
+     "head": "span",
+     "src": "actual literal editing parameter"
+    },
+    "to": {
+     "concept": "index",
+     "head": "number",
+     "src": "actual literal editing parameter"
+    }
+   }
+  },
+  "section": {
+   "doc": "a part of a document (book 7.3 t.section)",
+   "keys": {
+    "after": {
+     "concept": "after",
+     "head": "candidate",
+     "src": "Native parameter: document.section.make.after"
+    },
+    "align": {
+     "concept": "align",
+     "head": "candidate",
+     "src": "Native parameter: document.section.change.align",
+     "values": [
+      "left",
+      "center",
+      "right",
+      "justify"
+     ]
+    },
+    "at": {
+     "concept": "at",
+     "head": "candidate",
+     "src": "Native parameter: document.section.select.at"
+    },
+    "attrs": {
+     "concept": "attrs",
+     "head": "candidate",
+     "src": "Native parameter: document.section.mark.attrs"
+    },
+    "content": {
+     "concept": "literal_text",
+     "head": "span",
+     "src": "text the user dictates to insert/replace (doc.addParagraph, doc.dictate)"
+    },
+    "count": {
+     "concept": "count",
+     "head": "number",
+     "src": "three paragraphs"
+    },
+    "enabled": {
+     "concept": "enabled",
+     "head": "candidate",
+     "src": "Native parameter: document.section.mark.enabled"
+    },
+    "from": {
+     "concept": "from",
+     "head": "number",
+     "src": "Native parameter: document.section.select.from"
+    },
+    "id": {
+     "concept": "id",
+     "head": "candidate",
+     "src": "Native parameter: document.section.select.id"
+    },
+    "ids": {
+     "concept": "ids",
+     "head": "candidate",
+     "src": "Native parameter: document.section.remove.ids"
+    },
+    "kind": {
+     "concept": "kind",
+     "head": "candidate",
+     "src": "Native parameter: document.section.change.kind",
+     "values": [
+      "heading"
+     ]
+    },
+    "length": {
+     "concept": "length",
+     "head": "class+step",
+     "src": "s.sec.length",
+     "values": [
+      "very_short",
+      "short",
+      "medium",
+      "long",
+      "very_long"
+     ]
+    },
+    "level": {
+     "concept": "heading_level",
+     "head": "class",
+     "src": "old heading level",
+     "values": [
+      "1",
+      "2",
+      "3"
+     ]
+    },
+    "mark": {
+     "concept": "mark",
+     "head": "candidate",
+     "src": "Native parameter: document.section.mark.mark",
+     "values": [
+      "link",
+      "bold",
+      "italic",
+      "underline",
+      "strike",
+      "code",
+      "highlight"
+     ]
+    },
+    "name": {
+     "concept": "name",
+     "head": "candidate",
+     "src": "Native parameter: document.section.change.name"
+    },
+    "order": {
+     "concept": "order_relation",
+     "head": "class",
+     "src": "s.sec.order",
+     "values": [
+      "before",
+      "after",
+      "first",
+      "last",
+      "top",
+      "bottom",
+      "swap"
+     ]
+    },
+    "order_anchor": {
+     "concept": "reference",
+     "head": "fill+span",
+     "src": "the other section"
+    },
+    "parent": {
+     "concept": "parent",
+     "head": "candidate",
+     "src": "Native parameter: document.section.make.parent"
+    },
+    "role": {
+     "concept": "part_kind",
+     "head": "candidate",
+     "src": "s.sec.role",
+     "values": [
+      "greeting",
+      "introduction",
+      "body",
+      "conclusion",
+      "signature",
+      "chapter",
+      "paragraph",
+      "heading",
+      "list",
+      "table",
+      "apology",
+      "explanation",
+      "summary",
+      "closing",
+      "subject",
+      "abstract",
+      "methods",
+      "results",
+      "references",
+      "item"
+     ]
+    },
+    "text": {
+     "concept": "text",
+     "head": "candidate",
+     "src": "Native parameter: document.section.change.text"
+    },
+    "to": {
+     "concept": "to",
+     "head": "number",
+     "src": "Native parameter: document.section.select.to"
+    },
+    "words": {
+     "concept": "measure",
+     "head": "number",
+     "src": "s.sec.length unit=word"
+    }
+   }
+  },
+  "text": {
+   "doc": "a document as a whole (book 7.3 t.text)",
+   "keys": {
+    "about": {
+     "concept": "topic",
+     "head": "span",
+     "src": "s.text.about"
+    },
+    "chapters": {
+     "concept": "count",
+     "head": "number",
+     "src": "writeText chapters / keepChapters"
+    },
+    "content": {
+     "concept": "literal_text",
+     "head": "span",
+     "src": "document.write blocks: literal paragraph body"
+    },
+    "genre": {
+     "concept": "kind",
+     "head": "candidate",
+     "src": "s.text.genre (k.genres)",
+     "values": [
+      "letter",
+      "email",
+      "report",
+      "story",
+      "note",
+      "memo",
+      "essay",
+      "summary",
+      "article",
+      "invitation",
+      "announcement",
+      "speech",
+      "cover_letter",
+      "complaint",
+      "review",
+      "recipe",
+      "list",
+      "minutes",
+      "proposal",
+      "poem",
+      "press_release",
+      "newsletter",
+      "itinerary",
+      "lab_report",
+      "cv"
+     ]
+    },
+    "id": {
+     "concept": "id",
+     "head": "candidate",
+     "src": "Native parameter: document.container.change.id"
+    },
+    "length": {
+     "concept": "length",
+     "head": "class+step",
+     "src": "writeText words (region)",
+     "values": [
+      "very_short",
+      "short",
+      "medium",
+      "long",
+      "very_long"
+     ]
+    },
+    "text": {
+     "concept": "text",
+     "head": "candidate",
+     "src": "Native parameter: document.container.change.text"
+    },
+    "title": {
+     "concept": "name",
+     "head": "span",
+     "src": "s.text.title"
+    },
+    "tone": {
+     "concept": "tone",
+     "head": "class+step",
+     "src": "s.text.tone space=tone",
+     "values": [
+      "formal",
+      "informal",
+      "friendly",
+      "warm",
+      "cold",
+      "polite",
+      "firm",
+      "neutral",
+      "enthusiastic",
+      "apologetic",
+      "humorous",
+      "serious",
+      "persuasive",
+      "simple"
+     ]
+    },
+    "words": {
+     "concept": "measure",
+     "head": "number",
+     "src": "writeText words"
+    }
+   }
+  }
+ },
+ "drawing": {
+  "drawn": {
+   "doc": "a drawn thing (book 7.1 t.drawn)",
+   "keys": {
+    "anchor": {
+     "concept": "reference",
+     "head": "fill+span",
+     "src": "the other thing of the relation"
+    },
+    "at": {
+     "concept": "region",
+     "head": "class",
+     "src": "s.drawn.at means=place space=page (regions)",
+     "values": [
+      "corner",
+      "top",
+      "bottom",
+      "left",
+      "right",
+      "center",
+      "top_left",
+      "top_right",
+      "bottom_left",
+      "bottom_right",
+      "middle",
+      "background",
+      "foreground"
+     ]
+    },
+    "color": {
+     "concept": "color",
+     "head": "candidate",
+     "src": "Native parameter: drawing.object.make.color"
+    },
+    "colour": {
+     "concept": "colour",
+     "head": "candidate+step",
+     "src": "s.drawn.colour space=colour (k.colours; step darker/lighter)"
+    },
+    "count": {
+     "concept": "count",
+     "head": "number",
+     "src": "addThings n"
+    },
+    "direction": {
+     "concept": "direction",
+     "head": "class",
+     "src": "a move step",
+     "values": [
+      "up",
+      "down",
+      "left",
+      "right",
+      "closer",
+      "apart",
+      "forward",
+      "backward"
+     ]
+    },
+    "distance": {
+     "concept": "measure",
+     "head": "number",
+     "src": "move by N"
+    },
+    "distanceGrade": {
+     "concept": "distanceGrade",
+     "head": "candidate",
+     "src": "Authored semantic intent; requires world-informed completion"
+    },
+    "height": {
+     "concept": "height",
+     "head": "number",
+     "src": "Native parameter: drawing.object.make.height"
+    },
+    "id": {
+     "concept": "id",
+     "head": "candidate",
+     "src": "Native parameter: drawing.object.select.id"
+    },
+    "ids": {
+     "concept": "ids",
+     "head": "candidate",
+     "src": "Native parameter: drawing.object.change.ids"
+    },
+    "kind": {
+     "concept": "kind",
+     "head": "candidate",
+     "src": "s.drawn.kind (knowledge kind tree with images)"
+    },
+    "label": {
+     "concept": "label",
+     "head": "candidate",
+     "src": "Native parameter: drawing.object.make.label"
+    },
+    "name": {
+     "concept": "name",
+     "head": "span",
+     "src": "label given by the user"
+    },
+    "relation": {
+     "concept": "spatial_relation",
+     "head": "class",
+     "src": "s.drawn.in/on + moveThings relation",
+     "values": [
+      "in",
+      "on",
+      "under",
+      "above",
+      "below",
+      "next_to",
+      "left_of",
+      "right_of",
+      "between",
+      "behind",
+      "in_front_of",
+      "near",
+      "around",
+      "inside",
+      "outside",
+      "along"
+     ]
+    },
+    "size": {
+     "concept": "size",
+     "head": "number+class+step",
+     "src": "s.drawn.size space=size"
+    },
+    "width": {
+     "concept": "width",
+     "head": "number",
+     "src": "Native parameter: drawing.object.make.width"
+    },
+    "x": {
+     "concept": "x",
+     "head": "number",
+     "src": "Native parameter: drawing.object.make.x"
+    },
+    "y": {
+     "concept": "y",
+     "head": "number",
+     "src": "Native parameter: drawing.object.make.y"
+    }
+   }
+  },
+  "group": {
+   "doc": "exposed native group",
+   "keys": {
+    "members": {
+     "concept": "reference",
+     "head": "span",
+     "src": "drawing.object.group ids"
+    },
+    "name": {
+     "concept": "name",
+     "head": "span",
+     "src": "drawing.object.group name"
+    }
+   }
+  },
+  "page": {
+   "doc": "Native art.draw.page",
+   "keys": {
+    "duration": {
+     "concept": "duration",
+     "head": "number",
+     "src": "Native parameter: drawing.ids.show.duration"
+    },
+    "mode": {
+     "concept": "mode",
+     "head": "candidate",
+     "src": "Native parameter: drawing.ids.show.mode",
+     "values": [
+      "temporary",
+      "always",
+      "off"
+     ]
+    }
+   }
+  },
+  "part": {
+   "doc": "a part of a drawn thing (petal, roof, window, wheel)",
+   "keys": {
+    "color": {
+     "concept": "color",
+     "head": "candidate",
+     "src": "Native parameter: drawing.part.change.color"
+    },
+    "colour": {
+     "concept": "colour",
+     "head": "candidate",
+     "src": "native drawing part parameter"
+    },
+    "height": {
+     "concept": "height",
+     "head": "number",
+     "src": "native drawing part parameter"
+    },
+    "id": {
+     "concept": "id",
+     "head": "candidate",
+     "src": "Native parameter: drawing.part.select.id"
+    },
+    "index": {
+     "concept": "ordinal",
+     "head": "number",
+     "src": "native drawing part parameter"
+    },
+    "owner": {
+     "concept": "reference",
+     "head": "span",
+     "src": "native drawing part parameter"
+    },
+    "width": {
+     "concept": "width",
+     "head": "number",
+     "src": "native drawing part parameter"
+    },
+    "x": {
+     "concept": "x",
+     "head": "number",
+     "src": "native drawing part parameter"
+    },
+    "y": {
+     "concept": "y",
+     "head": "number",
+     "src": "native drawing part parameter"
+    }
+   }
+  }
+ },
+ "request": {
+  "constraint": {
+   "doc": "one condition on a target (selector or desired result)",
+   "keys": {
+    "character": {
+     "concept": "character",
+     "head": "class",
+     "src": "std.request.constraint.character",
+     "values": [
+      "requirement",
+      "preference",
+      "assumption"
+     ]
+    },
+    "concept": {
+     "concept": "concept",
+     "head": "candidate",
+     "src": "std.request.constraint.concept: which (type,key) of the area"
+    },
+    "operator": {
+     "concept": "operator",
+     "head": "class",
+     "src": "std.request.constraint.operator",
+     "values": [
+      "eq",
+      "less.equal",
+      "greater.equal",
+      "degree",
+      "region",
+      "relation",
+      "same",
+      "occurred",
+      "delta",
+      "factor"
+     ]
+    },
+    "phase": {
+     "concept": "phase",
+     "head": "class",
+     "src": "std.request.constraint.phase / selector vs result",
+     "values": [
+      "selector",
+      "result"
+     ]
+    },
+    "polarity": {
+     "concept": "polarity",
+     "head": "class",
+     "src": "std.request.constraint.polarity",
+     "values": [
+      "positive",
+      "negative"
+     ]
+    },
+    "scope": {
+     "concept": "scope",
+     "head": "class",
+     "src": "std.request.constraint.scope",
+     "values": [
+      "each",
+      "group"
+     ]
+    },
+    "step": {
+     "concept": "step",
+     "head": "step",
+     "src": "degree words: bigger, a bit warmer, much later",
+     "values": [
+      "more",
+      "much_more",
+      "less",
+      "much_less"
+     ]
+    },
+    "variety": {
+     "concept": "variety",
+     "head": "class",
+     "src": "constraint across members (two different houses, random colours)",
+     "values": [
+      "same",
+      "different",
+      "random",
+      "matching",
+      "alternating"
+     ]
+    }
+   }
+  },
+  "logic": {
+   "doc": "logical structure",
+   "keys": {
+    "group": {
+     "concept": "group.operator",
+     "head": "class",
+     "src": "std.request.group.operator",
+     "values": [
+      "and",
+      "or"
+     ]
+    },
+    "negated": {
+     "concept": "not",
+     "head": "span",
+     "src": "std.request.not: words of the negated condition"
+    },
+    "quantifier": {
+     "concept": "quant.kind",
+     "head": "class",
+     "src": "std.request.quant.kind",
+     "values": [
+      "all",
+      "any",
+      "each",
+      "none",
+      "both",
+      "some",
+      "other",
+      "every_except"
+     ]
+    }
+   }
+  },
+  "question": {
+   "doc": "what is asked (pending contract: question projection)",
+   "keys": {
+    "ask": {
+     "concept": "ask",
+     "head": "class",
+     "src": "answer projection; chart computations included",
+     "values": [
+      "what",
+      "which",
+      "count",
+      "exists",
+      "where",
+      "when",
+      "who",
+      "list",
+      "describe",
+      "why",
+      "how",
+      "how_much",
+      "compare",
+      "total",
+      "average",
+      "max",
+      "min",
+      "difference",
+      "percent"
+     ]
+    },
+    "asked_key": {
+     "concept": "concept",
+     "head": "candidate",
+     "src": "which key is asked: 'what colour is it' -> colour"
+    }
+   }
+  },
+  "request": {
+   "doc": "one request",
+   "keys": {
+    "act": {
+     "concept": "act",
+     "head": "candidate",
+     "src": "std.request.act (open atom; candidates from w.legend.act)",
+     "values": [
+      "make",
+      "place",
+      "change",
+      "remove",
+      "connect",
+      "disconnect",
+      "group",
+      "ungroup",
+      "copy",
+      "select",
+      "send",
+      "save",
+      "show",
+      "arrange",
+      "undo",
+      "redo",
+      "repeat",
+      "answer",
+      "object",
+      "compute"
+     ]
+    },
+    "mood": {
+     "concept": "mood",
+     "head": "class",
+     "src": "std.request.mood",
+     "values": [
+      "do",
+      "propose",
+      "check",
+      "ask"
+     ]
+    }
+   }
+  },
+  "target": {
+   "doc": "the thing acted on or asked about",
+   "keys": {
+    "count": {
+     "concept": "count",
+     "head": "number",
+     "src": "how many new things / how many selected"
+    },
+    "description": {
+     "concept": "description",
+     "head": "span",
+     "src": "selector words, e.g. 'the red one'"
+    },
+    "determiner": {
+     "concept": "determiner",
+     "head": "class",
+     "src": "std.request.target.determiner",
+     "values": [
+      "definite",
+      "indefinite"
+     ]
+    },
+    "fill": {
+     "concept": "target.fill",
+     "head": "class",
+     "src": "how an existing target is given",
+     "values": [
+      "written",
+      "context",
+      "description",
+      "all",
+      "previous_reply",
+      "journal_step"
+     ]
+    },
+    "kind": {
+     "concept": "kind",
+     "head": "candidate",
+     "src": "std.request.target.kind (candidates: kinds of the area + knowledge kind tree)"
+    },
+    "mode": {
+     "concept": "target.mode",
+     "head": "class",
+     "src": "std.request.target.mode",
+     "values": [
+      "new",
+      "existing",
+      "bound"
+     ]
+    },
+    "name": {
+     "concept": "name",
+     "head": "span",
+     "src": "std.request.target.name"
+    },
+    "ordinal": {
+     "concept": "ordinal",
+     "head": "class",
+     "src": "selector by order or extreme",
+     "values": [
+      "first",
+      "second",
+      "third",
+      "fourth",
+      "fifth",
+      "last",
+      "second_last",
+      "next",
+      "previous",
+      "newest",
+      "oldest",
+      "biggest",
+      "smallest",
+      "top",
+      "bottom",
+      "leftmost",
+      "rightmost"
+     ]
+    },
+    "type": {
+     "concept": "target.type",
+     "head": "class",
+     "src": "explicit tool-owned request family",
+     "values": [
+      "block",
+      "calendar",
+      "chart",
+      "diagram",
+      "document",
+      "drawn",
+      "face",
+      "group",
+      "inline",
+      "link",
+      "meeting",
+      "node",
+      "page",
+      "part",
+      "person",
+      "point",
+      "room",
+      "section",
+      "series",
+      "sketch",
+      "text"
+     ]
+    }
+   }
+  }
+ }
+}

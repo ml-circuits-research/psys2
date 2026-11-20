@@ -1,0 +1,834 @@
+{
+  "format": "psys2.official-reader-dataset/1",
+  "mainSyntheticFiles": [
+    {
+      "path": "main-synthetic-dataset/seeds-full.jsonl",
+      "gitCommit": "5689a0ca1979abc1b1ad51144b9e7d873a815140",
+      "kind": "seeds (labels)",
+      "rowsIn": 4109,
+      "seedsWithAssembledExamples": 2646,
+      "note": "labels reach the dataset through examples.jsonl or assembled variants"
+    },
+    {
+      "path": "main-synthetic-dataset/seeds-all.jsonl",
+      "gitCommit": "4a216e0a1f10e2d8c6da14f79edabc9b247750ef",
+      "kind": "seeds (labels)",
+      "rowsIn": 1680,
+      "seedsWithAssembledExamples": 227,
+      "note": "labels reach the dataset through examples.jsonl or assembled variants"
+    },
+    {
+      "path": "main-synthetic-dataset/seeds-trigger.jsonl",
+      "gitCommit": "5689a0ca1979abc1b1ad51144b9e7d873a815140",
+      "kind": "seeds (labels)",
+      "rowsIn": 15,
+      "seedsWithAssembledExamples": 15,
+      "note": "labels reach the dataset through examples.jsonl or assembled variants"
+    },
+    {
+      "path": "main-synthetic-dataset/agent-seeds/avatar.jsonl",
+      "gitCommit": "4a216e0a1f10e2d8c6da14f79edabc9b247750ef",
+      "kind": "seeds (labels)",
+      "rowsIn": 26,
+      "seedsWithAssembledExamples": 26,
+      "note": "labels reach the dataset through examples.jsonl or assembled variants"
+    },
+    {
+      "path": "main-synthetic-dataset/agent-seeds/calendar.jsonl",
+      "gitCommit": "4a216e0a1f10e2d8c6da14f79edabc9b247750ef",
+      "kind": "seeds (labels)",
+      "rowsIn": 14,
+      "seedsWithAssembledExamples": 14,
+      "note": "labels reach the dataset through examples.jsonl or assembled variants"
+    },
+    {
+      "path": "main-synthetic-dataset/agent-seeds/diagram.jsonl",
+      "gitCommit": "4a216e0a1f10e2d8c6da14f79edabc9b247750ef",
+      "kind": "seeds (labels)",
+      "rowsIn": 30,
+      "seedsWithAssembledExamples": 30,
+      "note": "labels reach the dataset through examples.jsonl or assembled variants"
+    },
+    {
+      "path": "main-synthetic-dataset/agent-seeds/document.jsonl",
+      "gitCommit": "4a216e0a1f10e2d8c6da14f79edabc9b247750ef",
+      "kind": "seeds (labels)",
+      "rowsIn": 26,
+      "seedsWithAssembledExamples": 26,
+      "note": "labels reach the dataset through examples.jsonl or assembled variants"
+    },
+    {
+      "path": "main-synthetic-dataset/agent-seeds/drawing.jsonl",
+      "gitCommit": "4a216e0a1f10e2d8c6da14f79edabc9b247750ef",
+      "kind": "seeds (labels)",
+      "rowsIn": 34,
+      "seedsWithAssembledExamples": 34,
+      "note": "labels reach the dataset through examples.jsonl or assembled variants"
+    },
+    {
+      "path": "main-synthetic-dataset/agent-seeds/questions-avatar.jsonl",
+      "gitCommit": "c216056dc40cf71cf566323ca805b6365782f451",
+      "kind": "seeds (labels)",
+      "rowsIn": 4,
+      "seedsWithAssembledExamples": 4,
+      "note": "labels reach the dataset through examples.jsonl or assembled variants"
+    },
+    {
+      "path": "main-synthetic-dataset/agent-seeds/questions-calendar.jsonl",
+      "gitCommit": "c216056dc40cf71cf566323ca805b6365782f451",
+      "kind": "seeds (labels)",
+      "rowsIn": 4,
+      "seedsWithAssembledExamples": 4,
+      "note": "labels reach the dataset through examples.jsonl or assembled variants"
+    },
+    {
+      "path": "main-synthetic-dataset/agent-seeds/questions-diagram.jsonl",
+      "gitCommit": "c216056dc40cf71cf566323ca805b6365782f451",
+      "kind": "seeds (labels)",
+      "rowsIn": 10,
+      "seedsWithAssembledExamples": 10,
+      "note": "labels reach the dataset through examples.jsonl or assembled variants"
+    },
+    {
+      "path": "main-synthetic-dataset/agent-seeds/questions-document.jsonl",
+      "gitCommit": "c216056dc40cf71cf566323ca805b6365782f451",
+      "kind": "seeds (labels)",
+      "rowsIn": 6,
+      "seedsWithAssembledExamples": 6,
+      "note": "labels reach the dataset through examples.jsonl or assembled variants"
+    },
+    {
+      "path": "main-synthetic-dataset/agent-seeds/questions-drawing.jsonl",
+      "gitCommit": "c216056dc40cf71cf566323ca805b6365782f451",
+      "kind": "seeds (labels)",
+      "rowsIn": 20,
+      "seedsWithAssembledExamples": 20,
+      "note": "labels reach the dataset through examples.jsonl or assembled variants"
+    },
+    {
+      "path": "main-synthetic-dataset/variants/avatar-2.jsonl",
+      "gitCommit": "8e29dd343ba6774c8464724319c11438fed69b44",
+      "kind": "variants (texts)",
+      "rowsIn": 164,
+      "alreadyInExamples": 164,
+      "assembledHere": 0,
+      "kept": 20,
+      "dropped": 144,
+      "dropReasons": {
+        "avatar-label-or-text-nonsense": 126,
+        "compound-part-avatar-label-or-text-nonsense": 7,
+        "avatar-variant-not-attested-for-slot": 6,
+        "avatar-selector-not-face": 4,
+        "compound-part-avatar-variant-not-attested-for-slot": 1
+      }
+    },
+    {
+      "path": "main-synthetic-dataset/variants/avatar-hardq.jsonl",
+      "gitCommit": "c216056dc40cf71cf566323ca805b6365782f451",
+      "kind": "variants (texts)",
+      "rowsIn": 38,
+      "alreadyInExamples": 38,
+      "assembledHere": 0,
+      "kept": 0,
+      "dropped": 38,
+      "dropReasons": {
+        "avatar-question-about-face-or-preset-not-parts": 36,
+        "compound-part-avatar-question-about-face-or-preset-not-parts": 2
+      }
+    },
+    {
+      "path": "main-synthetic-dataset/variants/avatar.jsonl",
+      "gitCommit": "4a216e0a1f10e2d8c6da14f79edabc9b247750ef",
+      "kind": "variants (texts)",
+      "rowsIn": 351,
+      "alreadyInExamples": 351,
+      "assembledHere": 0,
+      "kept": 39,
+      "dropped": 312,
+      "dropReasons": {
+        "avatar-label-or-text-nonsense": 284,
+        "avatar-preset-shape": 16,
+        "avatar-variant-not-attested-for-slot": 12
+      }
+    },
+    {
+      "path": "main-synthetic-dataset/variants/calendar-2.jsonl",
+      "gitCommit": "8e29dd343ba6774c8464724319c11438fed69b44",
+      "kind": "variants (texts)",
+      "rowsIn": 134,
+      "alreadyInExamples": 134,
+      "assembledHere": 0,
+      "kept": 0,
+      "dropped": 134,
+      "dropReasons": {
+        "calendar-placeholder-values-not-text-evidence": 126,
+        "compound-part-calendar-placeholder-values-not-text-evidence": 8
+      }
+    },
+    {
+      "path": "main-synthetic-dataset/variants/calendar-hardq.jsonl",
+      "gitCommit": "c216056dc40cf71cf566323ca805b6365782f451",
+      "kind": "variants (texts)",
+      "rowsIn": 40,
+      "alreadyInExamples": 40,
+      "assembledHere": 0,
+      "kept": 40,
+      "dropped": 0,
+      "dropReasons": {}
+    },
+    {
+      "path": "main-synthetic-dataset/variants/calendar.jsonl",
+      "gitCommit": "4a216e0a1f10e2d8c6da14f79edabc9b247750ef",
+      "kind": "variants (texts)",
+      "rowsIn": 230,
+      "alreadyInExamples": 230,
+      "assembledHere": 0,
+      "kept": 0,
+      "dropped": 230,
+      "dropReasons": {
+        "calendar-placeholder-values-not-text-evidence": 230
+      }
+    },
+    {
+      "path": "main-synthetic-dataset/variants/corrections-rules.jsonl",
+      "gitCommit": "5fb569407b51da4d5507472d288a2e148810441e",
+      "kind": "variants (texts)",
+      "rowsIn": 104,
+      "alreadyInExamples": 100,
+      "assembledHere": 0,
+      "kept": 30,
+      "dropped": 74,
+      "dropReasons": {
+        "avatar-preset-shape": 28,
+        "avatar-label-or-text-nonsense": 25,
+        "target-type-not-in-area": 14,
+        "not-assembled:compound-variant-not-in-examples": 4,
+        "compound-part-avatar-question-about-face-or-preset-not-parts": 3
+      }
+    },
+    {
+      "path": "main-synthetic-dataset/variants/diagram-2.jsonl",
+      "gitCommit": "8e29dd343ba6774c8464724319c11438fed69b44",
+      "kind": "variants (texts)",
+      "rowsIn": 189,
+      "alreadyInExamples": 189,
+      "assembledHere": 0,
+      "kept": 31,
+      "dropped": 158,
+      "dropReasons": {
+        "balance-cap-per-family": 63,
+        "operation-without-written-selector-template": 48,
+        "value-not-in-class-bank": 30,
+        "placeholder-value-for-nodes": 6,
+        "placeholder-value-for-edges": 6,
+        "compound-part-operation-without-written-selector-template": 3,
+        "compound-part-value-not-in-class-bank": 1,
+        "compound-part-placeholder-value-for-edges": 1
+      }
+    },
+    {
+      "path": "main-synthetic-dataset/variants/diagram-hardq.jsonl",
+      "gitCommit": "c216056dc40cf71cf566323ca805b6365782f451",
+      "kind": "variants (texts)",
+      "rowsIn": 65,
+      "alreadyInExamples": 65,
+      "assembledHere": 0,
+      "kept": 65,
+      "dropped": 0,
+      "dropReasons": {}
+    },
+    {
+      "path": "main-synthetic-dataset/variants/diagram.jsonl",
+      "gitCommit": "4a216e0a1f10e2d8c6da14f79edabc9b247750ef",
+      "kind": "variants (texts)",
+      "rowsIn": 438,
+      "alreadyInExamples": 438,
+      "assembledHere": 0,
+      "kept": 125,
+      "dropped": 313,
+      "dropReasons": {
+        "balance-cap-per-family": 114,
+        "operation-without-written-selector-template": 113,
+        "value-not-in-class-bank": 66,
+        "placeholder-value-for-nodes": 9,
+        "placeholder-value-for-edges": 9,
+        "numeric-value-not-in-surface": 2
+      }
+    },
+    {
+      "path": "main-synthetic-dataset/variants/document-2.jsonl",
+      "gitCommit": "8e29dd343ba6774c8464724319c11438fed69b44",
+      "kind": "variants (texts)",
+      "rowsIn": 170,
+      "alreadyInExamples": 170,
+      "assembledHere": 0,
+      "kept": 2,
+      "dropped": 168,
+      "dropReasons": {
+        "operation-without-written-selector-template": 111,
+        "numeric-selector-without-referent": 45,
+        "balance-cap-per-family": 5,
+        "compound-part-operation-without-written-selector-template": 5,
+        "compound-part-numeric-selector-without-referent": 2
+      }
+    },
+    {
+      "path": "main-synthetic-dataset/variants/document-hardq.jsonl",
+      "gitCommit": "c216056dc40cf71cf566323ca805b6365782f451",
+      "kind": "variants (texts)",
+      "rowsIn": 40,
+      "alreadyInExamples": 40,
+      "assembledHere": 0,
+      "kept": 40,
+      "dropped": 0,
+      "dropReasons": {}
+    },
+    {
+      "path": "main-synthetic-dataset/variants/document.jsonl",
+      "gitCommit": "4a216e0a1f10e2d8c6da14f79edabc9b247750ef",
+      "kind": "variants (texts)",
+      "rowsIn": 416,
+      "alreadyInExamples": 416,
+      "assembledHere": 0,
+      "kept": 6,
+      "dropped": 410,
+      "dropReasons": {
+        "operation-without-written-selector-template": 288,
+        "numeric-selector-without-referent": 112,
+        "balance-cap-per-family": 9,
+        "value-not-in-class-bank": 1
+      }
+    },
+    {
+      "path": "main-synthetic-dataset/variants/drawing-2.jsonl",
+      "gitCommit": "8e29dd343ba6774c8464724319c11438fed69b44",
+      "kind": "variants (texts)",
+      "rowsIn": 216,
+      "alreadyInExamples": 216,
+      "assembledHere": 0,
+      "kept": 48,
+      "dropped": 168,
+      "dropReasons": {
+        "balance-cap-per-family": 65,
+        "placeholder-value-for-color": 55,
+        "make-generic-object-with-placeholder-name": 24,
+        "operation-without-written-selector-template": 18,
+        "compound-part-make-generic-object-with-placeholder-name": 3,
+        "compound-part-placeholder-value-for-color": 2,
+        "compound-part-operation-without-written-selector-template": 1
+      }
+    },
+    {
+      "path": "main-synthetic-dataset/variants/drawing-hardq.jsonl",
+      "gitCommit": "c216056dc40cf71cf566323ca805b6365782f451",
+      "kind": "variants (texts)",
+      "rowsIn": 126,
+      "alreadyInExamples": 126,
+      "assembledHere": 0,
+      "kept": 126,
+      "dropped": 0,
+      "dropReasons": {}
+    },
+    {
+      "path": "main-synthetic-dataset/variants/drawing.jsonl",
+      "gitCommit": "4a216e0a1f10e2d8c6da14f79edabc9b247750ef",
+      "kind": "variants (texts)",
+      "rowsIn": 441,
+      "alreadyInExamples": 441,
+      "assembledHere": 0,
+      "kept": 132,
+      "dropped": 309,
+      "dropReasons": {
+        "balance-cap-per-family": 120,
+        "placeholder-value-for-color": 84,
+        "make-generic-object-with-placeholder-name": 52,
+        "operation-without-written-selector-template": 39,
+        "numeric-value-not-in-surface": 14
+      }
+    },
+    {
+      "path": "main-synthetic-dataset/variants/enriched-mech.jsonl",
+      "gitCommit": "06ed584d35b39024762a229e06af2b7ec65f93e1",
+      "kind": "variants (texts)",
+      "rowsIn": 13064,
+      "alreadyInExamples": 13028,
+      "assembledHere": 0,
+      "kept": 2186,
+      "dropped": 10878,
+      "dropReasons": {
+        "avatar-label-or-text-nonsense": 3926,
+        "balance-cap-per-operation": 2226,
+        "balance-cap-per-family": 1598,
+        "mechanical-keyword-text-for-existing-object": 1352,
+        "avatar-variant-not-attested-for-slot": 844,
+        "placeholder-value-for-color": 543,
+        "avatar-part-shape": 114,
+        "calendar-placeholder-values-not-text-evidence": 84,
+        "avatar-preset-shape": 67,
+        "value-not-in-class-bank": 42,
+        "make-generic-object-with-placeholder-name": 42,
+        "not-assembled:surface-missing-or-not-unique": 36,
+        "duplicate-text": 4
+      }
+    },
+    {
+      "path": "main-synthetic-dataset/variants/ids-show-mech.jsonl",
+      "gitCommit": "06ed584d35b39024762a229e06af2b7ec65f93e1",
+      "kind": "variants (texts)",
+      "rowsIn": 14,
+      "alreadyInExamples": 14,
+      "assembledHere": 0,
+      "kept": 0,
+      "dropped": 14,
+      "dropReasons": {
+        "mechanical-keyword-text-for-existing-object": 14
+      }
+    },
+    {
+      "path": "main-synthetic-dataset/variants/mech-variants-full.jsonl",
+      "gitCommit": "06ed584d35b39024762a229e06af2b7ec65f93e1",
+      "kind": "variants (texts)",
+      "rowsIn": 8773,
+      "alreadyInExamples": 8182,
+      "assembledHere": 96,
+      "kept": 1300,
+      "dropped": 7473,
+      "dropReasons": {
+        "avatar-label-or-text-nonsense": 3253,
+        "balance-cap-per-operation": 1315,
+        "mechanical-keyword-text-for-existing-object": 888,
+        "balance-cap-per-family": 805,
+        "not-assembled:surface-missing-or-not-unique": 422,
+        "avatar-variant-not-attested-for-slot": 288,
+        "placeholder-value-for-color": 192,
+        "not-assembled:duplicate-of-another-variant": 73,
+        "avatar-part-shape": 64,
+        "calendar-placeholder-values-not-text-evidence": 56,
+        "avatar-preset-shape": 48,
+        "make-without-single-kind": 27,
+        "duplicate-text": 14,
+        "value-not-in-class-bank": 14,
+        "make-generic-object-with-placeholder-name": 14
+      }
+    },
+    {
+      "path": "main-synthetic-dataset/variants/orphans-mech.jsonl",
+      "gitCommit": "06ed584d35b39024762a229e06af2b7ec65f93e1",
+      "kind": "variants (texts)",
+      "rowsIn": 1207,
+      "alreadyInExamples": 1189,
+      "assembledHere": 0,
+      "kept": 954,
+      "dropped": 253,
+      "dropReasons": {
+        "balance-cap-per-operation": 140,
+        "balance-cap-per-family": 52,
+        "avatar-label-or-text-nonsense": 18,
+        "mechanical-keyword-text-for-existing-object": 13,
+        "not-assembled:surface-missing-or-not-unique": 10,
+        "not-assembled:seed-not-found": 8,
+        "avatar-part-shape": 7,
+        "duplicate-text": 2,
+        "avatar-preset-shape": 2,
+        "make-without-single-kind": 1
+      }
+    },
+    {
+      "path": "main-synthetic-dataset/variants/orphans2-mech.jsonl",
+      "gitCommit": "06ed584d35b39024762a229e06af2b7ec65f93e1",
+      "kind": "variants (texts)",
+      "rowsIn": 56,
+      "alreadyInExamples": 51,
+      "assembledHere": 0,
+      "kept": 36,
+      "dropped": 20,
+      "dropReasons": {
+        "balance-cap-per-operation": 12,
+        "not-assembled:surface-missing-or-not-unique": 5,
+        "avatar-preset-shape": 2,
+        "avatar-label-or-text-nonsense": 1
+      }
+    },
+    {
+      "path": "main-synthetic-dataset/variants/q2-var.jsonl",
+      "gitCommit": "06ed584d35b39024762a229e06af2b7ec65f93e1",
+      "kind": "variants (texts)",
+      "rowsIn": 672,
+      "alreadyInExamples": 672,
+      "assembledHere": 0,
+      "kept": 452,
+      "dropped": 220,
+      "dropReasons": {
+        "balance-cap-per-family": 184,
+        "avatar-question-about-face-or-preset-not-parts": 36
+      }
+    },
+    {
+      "path": "main-synthetic-dataset/variants/questions.jsonl",
+      "gitCommit": "bcbc71130ef44565aa22c11fbf107fbc4a88cb58",
+      "kind": "variants (texts)",
+      "rowsIn": 672,
+      "alreadyInExamples": 672,
+      "assembledHere": 0,
+      "kept": 452,
+      "dropped": 220,
+      "dropReasons": {
+        "balance-cap-per-family": 184,
+        "avatar-question-about-face-or-preset-not-parts": 36
+      }
+    },
+    {
+      "path": "main-synthetic-dataset/variants/trigger-batch.jsonl",
+      "gitCommit": "5689a0ca1979abc1b1ad51144b9e7d873a815140",
+      "kind": "variants (texts)",
+      "rowsIn": 6659,
+      "alreadyInExamples": 6627,
+      "assembledHere": 0,
+      "kept": 1602,
+      "dropped": 5057,
+      "dropReasons": {
+        "balance-cap-per-family": 2098,
+        "avatar-label-or-text-nonsense": 1446,
+        "balance-cap-per-operation": 1064,
+        "mechanical-keyword-text-for-existing-object": 249,
+        "placeholder-value-for-color": 63,
+        "avatar-preset-shape": 36,
+        "make-without-single-kind": 27,
+        "calendar-placeholder-values-not-text-evidence": 24,
+        "not-assembled:no-assembled-sibling-for-seed": 16,
+        "not-assembled:surface-missing-or-not-unique": 16,
+        "value-not-in-class-bank": 12,
+        "make-generic-object-with-placeholder-name": 6
+      }
+    },
+    {
+      "path": "main-synthetic-dataset/variants/turquoise-fix.jsonl",
+      "gitCommit": "5689a0ca1979abc1b1ad51144b9e7d873a815140",
+      "kind": "variants (texts)",
+      "rowsIn": 12,
+      "alreadyInExamples": 12,
+      "assembledHere": 0,
+      "kept": 6,
+      "dropped": 6,
+      "dropReasons": {
+        "balance-cap-per-family": 6
+      }
+    },
+    {
+      "path": "main-synthetic-dataset/mech-variants.jsonl",
+      "gitCommit": "4a216e0a1f10e2d8c6da14f79edabc9b247750ef",
+      "kind": "variants (texts)",
+      "rowsIn": 7051,
+      "alreadyInExamples": 1770,
+      "assembledHere": 331,
+      "kept": 647,
+      "dropped": 6404,
+      "dropReasons": {
+        "not-assembled:no-assembled-sibling-for-seed": 4761,
+        "balance-cap-per-operation": 749,
+        "mechanical-keyword-text-for-existing-object": 256,
+        "avatar-label-or-text-nonsense": 163,
+        "not-assembled:duplicate-of-another-variant": 110,
+        "balance-cap-per-family": 104,
+        "not-assembled:surface-missing-or-not-unique": 79,
+        "avatar-preset-shape": 48,
+        "avatar-part-shape": 46,
+        "calendar-placeholder-values-not-text-evidence": 36,
+        "avatar-variant-not-attested-for-slot": 21,
+        "duplicate-text": 10,
+        "value-not-in-class-bank": 8,
+        "placeholder-value-for-color": 6,
+        "make-generic-object-with-placeholder-name": 6,
+        "make-without-single-kind": 1
+      }
+    }
+  ],
+  "builder": "official-dataset/build.py",
+  "builderSha256": "1aad8e053d2f6c0af105ce0241d0075d5d908858c0b339d244ac4c0a3ae0b481",
+  "sources": [
+    {
+      "name": "ui-natural-v1",
+      "path": "training/sop-bert/data/ui-natural-v1/authored.jsonl",
+      "description": "C1 commands executed through the editors (natural, synonym, elliptical, omission)",
+      "gitCommit": "af6b83c1364c4f41d7d19fc12550c42c55b153cb",
+      "sha256": "290686ff94dbefc015cf844daa998b26da7f665164b87a352a6f41f710b9d895",
+      "rowsIn": 1474,
+      "rowsKept": 1474,
+      "rowsDropped": 0,
+      "dropReasons": {},
+      "fixes": {
+        "anchor-span-as-anchor-mention": 3,
+        "class-value-outside-bank-unlabelled": 88
+      }
+    },
+    {
+      "name": "ui-human-v1",
+      "path": "training/sop-bert/data/ui-human-v1/examples.jsonl",
+      "description": "human paraphrases (equivalent/complex/simplified) of executed ui-natural seeds",
+      "gitCommit": "7376df8fe849d10fe207b6063df83038084ffefb",
+      "sha256": "fcf71ea257ffd9b801a05525755a5927a875481d03397ababf300a36bba35274",
+      "rowsIn": 4284,
+      "rowsKept": 4249,
+      "rowsDropped": 35,
+      "dropReasons": {
+        "dropped:anchor_span-not-in-span": 5,
+        "dropped:measure_span-not-in-span": 20,
+        "dropped:value-span-not-in-span": 10
+      },
+      "fixes": {
+        "anchor-span-as-anchor-mention": 60,
+        "class-value-outside-bank-unlabelled": 330,
+        "qualitative-value-unlabelled": 329
+      }
+    },
+    {
+      "name": "ui-relations-v1",
+      "path": "training/sop-bert/data/ui-relations-v1/examples.jsonl",
+      "description": "relative-position placement requests (generate.py)",
+      "gitCommit": "56c9f6b6bd528673ed117cfb8145555fda00b1f0",
+      "sha256": "49ee752e50536130d818e6b1aca6e3b84a7a57832bd38200c547c63164e7d024",
+      "rowsIn": 890,
+      "rowsKept": 890,
+      "rowsDropped": 0,
+      "dropReasons": {},
+      "fixes": {
+        "anchor-span-as-anchor-mention": 890,
+        "relation-value-renamed-to-bank": 516
+      }
+    },
+    {
+      "name": "demo-tool-profile",
+      "path": "training/sop-bert/data/demo-tool-profile/active.jsonl.gz",
+      "description": "the corpus of the deployed reader: haiku-v1/v2 authored data plus demo tool supplements",
+      "gitCommit": "3ce766837cefb972b3f70ca224de3f2712f2b9ba",
+      "sha256": "ad5777dc5c8d6fb61714f4ccb6798ebba570f12ea7452c9a0bce3cde92b7a0fd",
+      "rowsIn": 36999,
+      "rowsKept": 27525,
+      "rowsDropped": 9474,
+      "dropReasons": {
+        "dropped:conflicting-label-for-identical-text": 103,
+        "dropped:duplicate-text": 9371
+      },
+      "fixes": {
+        "anchor-span-as-anchor-mention": 2274
+      }
+    },
+    {
+      "name": "main-synthetic",
+      "path": "main-synthetic-dataset/examples.jsonl",
+      "description": "owner synthetic set (generate-reader-datasets skill); converted, mostly dropped",
+      "gitCommit": "5fb569407b51da4d5507472d288a2e148810441e",
+      "sha256": "79ae0d15ca848d57c6d51796cce40cbb038cfc0c88fed29a2fbf92cd72fd077b",
+      "rowsIn": 26670,
+      "rowsKept": 4928,
+      "rowsDropped": 21742,
+      "dropReasons": {
+        "dropped:avatar-label-or-text-nonsense": 8717,
+        "dropped:avatar-part-shape": 136,
+        "dropped:avatar-preset-shape": 187,
+        "dropped:avatar-question-about-face-or-preset-not-parts": 72,
+        "dropped:avatar-selector-not-face": 4,
+        "dropped:avatar-variant-not-attested-for-slot": 1007,
+        "dropped:balance-cap-per-family": 3617,
+        "dropped:balance-cap-per-operation": 2628,
+        "dropped:calendar-placeholder-values-not-text-evidence": 551,
+        "dropped:compound-part-avatar-label-or-text-nonsense": 7,
+        "dropped:compound-part-avatar-question-about-face-or-preset-not-parts": 5,
+        "dropped:compound-part-avatar-variant-not-attested-for-slot": 1,
+        "dropped:compound-part-calendar-placeholder-values-not-text-evidence": 8,
+        "dropped:compound-part-make-generic-object-with-placeholder-name": 3,
+        "dropped:compound-part-numeric-selector-without-referent": 2,
+        "dropped:compound-part-operation-without-written-selector-template": 9,
+        "dropped:compound-part-placeholder-value-for-color": 2,
+        "dropped:compound-part-placeholder-value-for-edges": 1,
+        "dropped:compound-part-value-not-in-class-bank": 1,
+        "dropped:duplicate-text": 5,
+        "dropped:make-generic-object-with-placeholder-name": 142,
+        "dropped:make-without-single-kind": 47,
+        "dropped:mechanical-keyword-text-for-existing-object": 2644,
+        "dropped:numeric-selector-without-referent": 157,
+        "dropped:numeric-value-not-in-surface": 16,
+        "dropped:operation-without-written-selector-template": 617,
+        "dropped:placeholder-value-for-color": 943,
+        "dropped:placeholder-value-for-edges": 15,
+        "dropped:placeholder-value-for-nodes": 15,
+        "dropped:target-type-not-in-area": 14,
+        "dropped:value-not-in-class-bank": 169
+      },
+      "fixes": {
+        "converted:avatar": 266,
+        "converted:block": 98,
+        "converted:compound": 32,
+        "converted:diagram": 785,
+        "converted:document": 22,
+        "converted:drawing": 9283,
+        "converted:drawn": 414,
+        "converted:meeting": 86,
+        "converted:node": 206,
+        "trigger-removed-no-verb-in-text": 3828,
+        "trigger-replaced-by-verb-span": 7364
+      }
+    }
+  ],
+  "vocabularyInputs": [
+    {
+      "path": "sop-knowledge-worlds/docs/worlds/w.face/shards/words.sop",
+      "gitCommit": null,
+      "sha256": "4bcf05e8776b34416a59e553ac79ebef26bf66da73ce6f294aa7c52fd42ca973"
+    },
+    {
+      "path": "sop-knowledge-worlds/docs/worlds/k.actions/shards/verbs-ask.sop",
+      "gitCommit": null,
+      "sha256": "ccec16e716de9ecd7c7ad4a0d47b218499dd13ddf996d67bdc7a100b17b6c66a"
+    },
+    {
+      "path": "sop-knowledge-worlds/docs/worlds/k.actions/shards/verbs-change.sop",
+      "gitCommit": null,
+      "sha256": "3076248b57d87abe8e64db4337a5cc0a4e7b747e605f994f5d119305d8bac842"
+    },
+    {
+      "path": "sop-knowledge-worlds/docs/worlds/k.actions/shards/verbs-connect.sop",
+      "gitCommit": null,
+      "sha256": "bd6583303a66f8165f800051a0e19728e6aa44e730530f00ac8d8c4a5208b991"
+    },
+    {
+      "path": "sop-knowledge-worlds/docs/worlds/k.actions/shards/verbs-copy.sop",
+      "gitCommit": null,
+      "sha256": "9ee6673eba59abb32c3ab033db401e089c559a65ad10195373740f495f91d092"
+    },
+    {
+      "path": "sop-knowledge-worlds/docs/worlds/k.actions/shards/verbs-deselect.sop",
+      "gitCommit": null,
+      "sha256": "89aee05926b2d1f7805c9ceb6c8f60b41daf368925e64f767b11950ad595f6bb"
+    },
+    {
+      "path": "sop-knowledge-worlds/docs/worlds/k.actions/shards/verbs-farewell.sop",
+      "gitCommit": null,
+      "sha256": "6a73d632c45ab0be52e749cdc07291ce653ad5898d34cd6afae2deedee520513"
+    },
+    {
+      "path": "sop-knowledge-worlds/docs/worlds/k.actions/shards/verbs-greet.sop",
+      "gitCommit": null,
+      "sha256": "8718a3b7fb35324b3ff9738dc30272035676db59864a16001bb894caf66a75c5"
+    },
+    {
+      "path": "sop-knowledge-worlds/docs/worlds/k.actions/shards/verbs-group.sop",
+      "gitCommit": null,
+      "sha256": "d6ab9b87d8158dba0ddc12a6b2f05402f81f61d3f12720910fb6833145d27c9d"
+    },
+    {
+      "path": "sop-knowledge-worlds/docs/worlds/k.actions/shards/verbs-load.sop",
+      "gitCommit": null,
+      "sha256": "8b981b97edcd29f320aa14f31b522f929e85ccebbc512fca38c1d84f1550d92a"
+    },
+    {
+      "path": "sop-knowledge-worlds/docs/worlds/k.actions/shards/verbs-make.sop",
+      "gitCommit": null,
+      "sha256": "af9939a829c05c41ae26da50a14082a64a85a75ce000e547e7d48fcc7259901a"
+    },
+    {
+      "path": "sop-knowledge-worlds/docs/worlds/k.actions/shards/verbs-pick.sop",
+      "gitCommit": null,
+      "sha256": "c270112e1c372560767680289dabc220fa7cf95e5a633bcd937d6347c2390ce5"
+    },
+    {
+      "path": "sop-knowledge-worlds/docs/worlds/k.actions/shards/verbs-place.sop",
+      "gitCommit": null,
+      "sha256": "c9e06913b3c4201925d6c43344918b6c0eb77a3da6c4e003d5f7bd7866bceaad"
+    },
+    {
+      "path": "sop-knowledge-worlds/docs/worlds/k.actions/shards/verbs-redo.sop",
+      "gitCommit": null,
+      "sha256": "f334182e0949a14172f03bf7a556354bc673ba8abb36341ddf621a1fa9422114"
+    },
+    {
+      "path": "sop-knowledge-worlds/docs/worlds/k.actions/shards/verbs-remove.sop",
+      "gitCommit": null,
+      "sha256": "078e445cd193d7e017aa0f6c4dcdb62dc6d085bf82434f16e52804f750c139b0"
+    },
+    {
+      "path": "sop-knowledge-worlds/docs/worlds/k.actions/shards/verbs-save.sop",
+      "gitCommit": null,
+      "sha256": "1dd2932629dd0d87587c837683be18de0c9232484d17284481679263cfad5cd0"
+    },
+    {
+      "path": "sop-knowledge-worlds/docs/worlds/k.actions/shards/verbs-send.sop",
+      "gitCommit": null,
+      "sha256": "bc5e917f895273ed3ccdb26fef750a65a6219d955b4a316d494ed6f7b30b4970"
+    },
+    {
+      "path": "sop-knowledge-worlds/docs/worlds/k.actions/shards/verbs-take_apart.sop",
+      "gitCommit": null,
+      "sha256": "117148c157bba3af696216037099891f03f3f20c0ce506fe7f0ef02760e2ae82"
+    },
+    {
+      "path": "sop-knowledge-worlds/docs/worlds/k.actions/shards/verbs-thank.sop",
+      "gitCommit": null,
+      "sha256": "8942aaa694825680e96eb83acb7009a99e4aba05a8b9289ff292e7e3b0ce5ae3"
+    },
+    {
+      "path": "sop-knowledge-worlds/docs/worlds/k.actions/shards/verbs-undo.sop",
+      "gitCommit": null,
+      "sha256": "060b0b040cad2ee04ea0b5235c2ef9363f4d7eefa959e816e9def9eb8761000c"
+    }
+  ],
+  "splits": {
+    "train": 31688,
+    "dev": 3779,
+    "test": 3599
+  },
+  "families": 21335,
+  "leakedFamilies": 0,
+  "labelConflictsResolvedByPriority": {
+    "demo-tool-profile<-demo-tool-profile": 103
+  },
+  "files": {
+    "STATS.md": {
+      "sha256": "b9e084aac08f2ab9d0a6faa3bbf7f2aa5a1a65e61d9675f24b9275344750b951",
+      "bytes": 6356
+    },
+    "VALIDATION.md": {
+      "sha256": "1bc79ad47786506b460cbd039eb2555d30b78f35122ede5c22d01c864ce3b82f",
+      "bytes": 6596
+    },
+    "audit-sample.md": {
+      "sha256": "ff1db92ca842b142c79f094298e491b205478e589d3b87553ce95e8b0d41689b",
+      "bytes": 45099
+    },
+    "dev.jsonl": {
+      "sha256": "44bc60243dbc6ac4576f4fdc35d6c1711eddd269316b5fb1297331eb996c3490",
+      "bytes": 3892410
+    },
+    "inventory.json": {
+      "sha256": "e3c7fbe6eef59087f70e0797b5f959ff5ce42951ed9f5ecb6813b6842c4e11da",
+      "bytes": 50976
+    },
+    "test.jsonl": {
+      "sha256": "15543621c66cd6147789fc289f1cab39426f74846af4b1c3a73629fa3c85a1b3",
+      "bytes": 3793794
+    },
+    "train.jsonl.gz": {
+      "sha256": "c861755fb731b59632a23d055738d1085899e33ce0c75145a876bfa4efa498d4",
+      "bytes": 1619212
+    }
+  },
+  "policy": {
+    "priority": [
+      "ui-natural-v1",
+      "ui-human-v1",
+      "ui-relations-v1",
+      "demo-tool-profile",
+      "main-synthetic"
+    ],
+    "splitShares": {
+      "train": 80,
+      "dev": 10,
+      "test": 10
+    },
+    "mainSyntheticCapPerOperation": 2500,
+    "mainSyntheticCapPerFamily": 6,
+    "mainSyntheticEditCapPerFamily": 3,
+    "mainSyntheticHumanCapPerFamily": 40,
+    "mainSyntheticHumanEditCapPerFamily": 8
+  }
+}
