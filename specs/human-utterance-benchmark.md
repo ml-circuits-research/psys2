@@ -324,6 +324,16 @@ corpora. Benchmark texts are excluded by construction, so `human-benchmark-v1` s
 
 | Tab | Status | Rows / gaps | Ready for inclusion |
 | --- | --- | --- | --- |
-| diagram | being authored (taxonomy-driven, charts included) | – | not yet |
-| drawing | being authored (CoDraw, MagicBrush, BLOCKS lines; taxonomy-driven) | – | not yet |
+| diagram | committed with this change; `validate.py` passes (official Validator 0 errors / 0 fixes, no benchmark overlap) | 538 rows (612 requests; 176 marked `structural-fill` for chart data edits, node/edge editing, ids and quantifiers that no corpus line expresses) / 256 gaps | **ready**: `build.py` already lists `human-adapted-v1-diagram`; rebuild `official-dataset` and retrain once together with ui-diagram-v2 |
+| drawing | committed (`bdf6cb06`), `validate.py` passes (official Validator 0 errors / 0 fixes, no benchmark overlap) | 558 rows / 525 gaps (CoDraw 282, MagicBrush 198, SCONE 43, BLOCKS 35) | **ready**: `build.py` already lists `human-adapted-v1-drawing`; the committed official files hold an early 28-row version, so rebuild `official-dataset` before training |
 | calendar, avatar, document | deprioritised by the owner (2026-11-20); not started | – | – |
+
+Main gaps reported by the two corpora (they confirm §4):
+- **Drawing:** missing `drawn.facing` (149 records), `pose` (126), `expression` (103), `align` (94), `offset` from an edge or anchor (92), `crop` (72), `holds`/worn (44) and `cover`/occlusion (27).
+- **Diagram:**
+  - chart display keys such as axis scale or position, markers, line style, error bars and fonts (49)
+  - node and page geometry: rotation, "a bit to the left", swap, page background (36)
+  - chart data fields and filters (31)
+  - conversation-level meaning (20), link details (16), generated-diagram topic (16), vague goals (15)
+- **One label decision follows the official convention but should change with §6:** a whole diagram ("draw a flow chart")
+  is a new `node` whose kind is the diagram kind. A `diagram` frame role would be cleaner.

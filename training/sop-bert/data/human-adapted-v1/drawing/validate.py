@@ -7,7 +7,7 @@ their request span; count values match their numeral; vague quantity words never
 primary usage class first in `construction`; no duplicate texts (examples and gap-only lines; a labelled example may also
 have a gap record for its unlabelled part); no text already in the official
 dataset; no text and no (corpus, source id) of the held-out human benchmark items (HB_ITEMS directory, default the
-scratchpad path used when the rows were written; the check is reported as skipped when that directory is absent).
+committed training/sop-bert/data/human-benchmark-v1/items; the check is reported as skipped when that directory is absent).
 """
 import collections
 import glob
@@ -29,7 +29,7 @@ NUM = {w: str(i) for i, w in enumerate('zero one two three four five six seven e
 VAGUE = re.compile(r'\b(some|a few|several|many|a couple of|a handful of)\b', re.I)
 CLASSES = {'create', 'compose-scene', 'place-relative', 'quantify', 'refer', 'modify-attribute', 'arrange/layout/align/distribute',
            'part-edit', 'formatting/effects', 'vague-aesthetic', 'correction/undo', 'question', 'compound/multi-step', 'fragment/follow-up'}
-HB_ITEMS = os.environ.get('HB_ITEMS', '/tmp/claude-1000/-home-salboaie-work-sopworlds/e0d4fecb-d4ef-4d72-846e-9721a03b2466/scratchpad/hb/items')
+HB_ITEMS = os.environ.get('HB_ITEMS', str(Path(__file__).resolve().parents[2] / 'human-benchmark-v1' / 'items'))
 norm = lambda t: ' '.join(re.findall(r"[a-z0-9']+", t.lower()))
 
 
