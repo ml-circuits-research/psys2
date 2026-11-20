@@ -21,12 +21,8 @@ import { BUNDLED_VALUES } from './bundled-values.mjs?v=7aa52357e6';
 const lc = (s) => String(s ?? '').toLowerCase().replace(/[_-]+/g, ' ').replace(/\s+/g, ' ').trim();   // glue-lint: tool-data (colour name)
 const state = { colours: new Map(), numbers: new Map(), from: 'none', loading: null };
 
-/**
- * The other words for a colour: the catalog's (`core.word of=k.colours.colour.name`: blk, grn, bloo, ginger ...), read with the colours; and the one it lacks, the US spelling "gray"
- * (TEMPORARY, [KNOW] questions.md Q30).
- */
-const LOCAL_SPELLING = { gray: 'grey' };
-let SPELLING = { ...LOCAL_SPELLING };
+/** The other words for a colour: the catalog's (`core.word of=k.colours.colour.name`: gray, blk, grn, bloo, ginger ...), read with the colours. */
+let SPELLING = {};
 
 /** A derived form of a colour name (its plural "reds", an adjective "sandy", "golden", "silvery"): the grammar reads it, the colour reader does not respell it (a sandy floor is a floor of sand). */
 const derived = (t, to) => t.length > to.length && t.startsWith(to.slice(0, Math.max(3, to.length - 1))) && /(?:s|es|y|ey|en|ish)$/.test(t) && !t.includes(' ');   // glue-lint: tool-data (colour name)
@@ -56,7 +52,7 @@ export function seedValues() {
   const wires = [];
   for (const text of Object.values(BUNDLED_VALUES)) for (const line of text.split('\n')) { const w = line.charCodeAt(0) === 64 ? parseLine(line) : null; if (w) wires.push({ type: w.type, f: w.attrs }); }
   const got = absorb(wires);
-  SPELLING = { ...got.spelling, ...LOCAL_SPELLING };
+  SPELLING = { ...got.spelling };
   Object.assign(state, { colours: got.colours, numbers: got.numbers }, { from: 'bundled' });
 }
 seedValues();
@@ -77,7 +73,7 @@ export function loadValues(facts) {
         const got = absorb(wires);
         if (got.colours.size) { for (const [n, c] of got.colours) { const old = state.colours.get(n); if (old) { c.thing = old.thing; c.core = old.core; } } state.colours = got.colours; }   // thing and core are derived once, at build time: the catalog's own colour wires do not carry them
         if (got.numbers.size) state.numbers = got.numbers;
-        if (Object.keys(got.spelling).length) SPELLING = { ...got.spelling, ...LOCAL_SPELLING };
+        if (Object.keys(got.spelling).length) SPELLING = { ...got.spelling };
         state.from = 'catalog';
       }
     } catch { /* the seed stays */ }
