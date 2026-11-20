@@ -1,5 +1,5 @@
 {
-  "version": "9cacaeaeeb",
+  "version": "67f9b2617d",
   "worlds": [
     "core",
     "ui.shell",
@@ -779,7 +779,7 @@
     "models-mt/ro/toEn/lex.50.50.roen.s2t.bin.gz": "3b3fdee9bb",
     "models-mt/ro/toEn/model.roen.intgemm.alphas.bin.gz": "217b5a3bf0",
     "models-mt/ro/toEn/vocab.roen.spm.gz": "0f7ce73533",
-    "style.css": "4a8f88d312",
+    "style.css": "58be16b734",
     "ui/about.mjs": "a51ea76c7a",
     "ui/action-log.mjs": "19b13d599b",
     "ui/assets.mjs": "1787538064",
@@ -828,7 +828,7 @@
     "ui/work-files.mjs": "278e38f333",
     "ui/world-code.mjs": "8be09959f2",
     "ui/world-loader.mjs": "ae492183e0",
-    "ui/worlds-explorer.mjs": "eafd59b9b2",
+    "ui/worlds-explorer.mjs": "98de0cb1ec",
     "vendor/bergamot/bergamot-translator-worker.js": "cf3192f885",
     "vendor/bergamot/bergamot-translator-worker.wasm": "95a2b58dd6",
     "vendor/bergamot/LICENSES.md": "98bef6fc01",
