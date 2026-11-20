@@ -80,14 +80,20 @@
 # `rotation` the turn of a node about its centre, in degrees clockwise.
 @w.diagram.node.rotation core.slot of=w.diagram.node key=rotation kind=number min=-360 max=360 core.source="hand-core 1"
 
-# An edge from one node to another: `label` what the link says (yes, no, then, eats), `direction` forward (an arrow from
+# An edge from one node to another (`from`, `to`; an end without a node is free, below): `label` what the link says (yes, no, then, eats), `direction` forward (an arrow from
 # `from` to `to`; the default), both, or none (a line: a tree's branch, a network's link); `diagram` its diagram.
 @w.diagram.edge core.type of=w.diagram.edge extends=std.schema.thing closed=true core.source="hand-core 1"
-@w.diagram.edge.from core.slot of=w.diagram.edge key=from required=true type=w.diagram.node core.source="hand-core 1"
-@w.diagram.edge.to core.slot of=w.diagram.edge key=to required=true type=w.diagram.node core.source="hand-core 1"
+@w.diagram.edge.from core.slot of=w.diagram.edge key=from type=w.diagram.node core.source="hand-core 1"
+@w.diagram.edge.to core.slot of=w.diagram.edge key=to type=w.diagram.node core.source="hand-core 1"
 @w.diagram.edge.label core.slot of=w.diagram.edge key=label kind=atom kind=string core.source="hand-core 1"
 @w.diagram.edge.direction core.slot of=w.diagram.edge key=direction enum=forward enum=back enum=both enum=none default=forward core.source="hand-core 1"
 @w.diagram.edge.diagram core.slot of=w.diagram.edge key=diagram type=w.diagram.diagram core.source="hand-core 1"
+# An end of an edge may be free (an arrow pointing at nothing yet, a line drawn off the page's things): it has no node
+# and ends at a point of the page, `from_x` and `from_y` for its start, `to_x` and `to_y` for its end.
+@w.diagram.edge.from_x core.slot of=w.diagram.edge key=from_x kind=number core.source="hand-core 1"
+@w.diagram.edge.from_y core.slot of=w.diagram.edge key=from_y kind=number core.source="hand-core 1"
+@w.diagram.edge.to_x core.slot of=w.diagram.edge key=to_x kind=number core.source="hand-core 1"
+@w.diagram.edge.to_y core.slot of=w.diagram.edge key=to_y kind=number core.source="hand-core 1"
 # For an editor: `code` ("e1"), `n` its place in the order edges were made, `colour`, `style` (solid, dashed, dotted)
 # and `width` of the line.
 @w.diagram.edge.code core.slot of=w.diagram.edge key=code kind=atom kind=string core.source="hand-core 1"

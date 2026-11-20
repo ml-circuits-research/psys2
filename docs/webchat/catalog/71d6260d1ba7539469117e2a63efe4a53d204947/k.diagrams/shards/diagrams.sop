@@ -1,4 +1,4 @@
-# k.diagrams/shards/diagrams: 10 kinds of diagram (structure, layout, arrangement, edges, roles, uses), 24 shape conventions, 25 ways the catalog's knowledge fills them, and the 10 works they rest on.
+# k.diagrams/shards/diagrams: 10 kinds of diagram (structure, layout, arrangement, edges, roles, uses), 24 shape conventions, 7 named ports, 25 ways the catalog's knowledge fills them, and the 10 works they rest on.
 # sources: hand-core 1 (hand-written in this repository: tools/diagrams-core.mjs; the works cited are the k.diagrams.source facts)
 # license: CC0-1.0
 # script: tools/diagrams-core.mjs
@@ -47,6 +47,13 @@
 @k.diagrams.shape.comparison_table.row k.diagrams.shape kind="comparison table" role=row shape=rectangle about="the header of a row: a thing compared" core.source="hand-core 1"
 @k.diagrams.shape.comparison_table.column k.diagrams.shape kind="comparison table" role=column shape=rectangle about="the header of a column: a feature" core.source="hand-core 1"
 @k.diagrams.shape.comparison_table.cell k.diagrams.shape kind="comparison table" role=cell shape=rectangle about="the value of a feature for a thing" core.source="hand-core 1"
+@k.diagrams.port.every.in k.diagrams.port every=true name=in side=top about="where the flow comes in: the top of any node" source=iso5807 core.source="hand-core 1"
+@k.diagrams.port.every.out k.diagrams.port every=true name=out side=bottom about="where the flow goes on: the bottom of any node" source=iso5807 core.source="hand-core 1"
+@k.diagrams.port.diamond.yes k.diagrams.port shape=diamond name=yes side=bottom about="a decision's yes branch, straight on down" source=iso5807 core.source="hand-core 1"
+@k.diagrams.port.diamond.no k.diagrams.port shape=diamond name=no side=right about="a decision's no branch, out of its right corner" source=iso5807 core.source="hand-core 1"
+@k.diagrams.port.diamond.else k.diagrams.port shape=diamond name=else side=left about="a decision's other branch, out of its left corner" source=iso5807 core.source="hand-core 1"
+@k.diagrams.port.cylinder.lid k.diagrams.port shape=cylinder name=lid side=top about="the lid of a stored-data cylinder (a database), where data is written" source=iso5807 core.source="hand-core 1"
+@k.diagrams.port.cylinder.base k.diagrams.port shape=cylinder name=base side=bottom about="the base of a stored-data cylinder" source=iso5807 core.source="hand-core 1"
 @k.diagrams.fill.flowchart.k_procedures_step.after k.diagrams.fill kind=flowchart type=k.procedures.step key=after gives=edges topic=method about="the steps of a method of k.procedures, each joined to the steps it comes after" core.source="hand-core 1"
 @k.diagrams.fill.flowchart.k_procedures_step.n k.diagrams.fill kind=flowchart type=k.procedures.step key=n gives=order topic=method about="the steps of a method in their order" core.source="hand-core 1"
 @k.diagrams.fill.tree.k_kinds_parent.is_a k.diagrams.fill kind=tree type=k.kinds.parent key=is_a gives=edges topic=is_a about="kinds under their kinds (the up edges of k.kinds: a cow under farm animal and under mammal)" core.source="hand-core 1"

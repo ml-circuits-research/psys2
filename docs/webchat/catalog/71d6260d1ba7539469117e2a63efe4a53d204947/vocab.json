@@ -33494,6 +33494,9 @@
   "k.words/shards/co-2",
   "k.words/shards/frequency-c"
  ],
+ "connection point": [
+  "k.diagrams/schema.sop"
+ ],
  "connective tissue": [
   "k.kinds/shards/wordnet-1",
   "k.kinds/shards/wordnet-2"
@@ -49273,6 +49276,12 @@
   "w.document/schema.sop",
   "w.timeline/schema.sop"
  ],
+ "end point x": [
+  "w.diagram/schema.sop"
+ ],
+ "end point y": [
+  "w.diagram/schema.sop"
+ ],
  "end_1": [
   "k.objects/shards/food-3"
  ],
@@ -50616,6 +50625,9 @@
   "k.people/shards/given-names-e"
  ],
  "every": [
+  "k.attributes/shards/narration",
+  "k.diagrams/schema.sop",
+  "k.kinds/shards/relations-diagrams",
   "k.values/shards/sets",
   "k.words/shards/ev",
   "k.words/shards/frequency-e",
@@ -50639,6 +50651,9 @@
  ],
  "every second": [
   "k.values/shards/sets"
+ ],
+ "every shape": [
+  "k.diagrams/schema.sop"
  ],
  "every thing": [
   "w.lang.en/shards/closed-classes",
@@ -57911,6 +57926,18 @@
  "free": [
   "k.words/shards/fr",
   "k.words/shards/frequency-f"
+ ],
+ "free end x": [
+  "w.diagram/schema.sop"
+ ],
+ "free end y": [
+  "w.diagram/schema.sop"
+ ],
+ "free start x": [
+  "w.diagram/schema.sop"
+ ],
+ "free start y": [
+  "w.diagram/schema.sop"
  ],
  "free-reed": [
   "k.kinds/shards/part_of-wordnet-2"
@@ -78368,6 +78395,10 @@
   "k.kinds/shards/relations-diagrams"
  ],
  "k.diagrams.kind": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-diagrams"
+ ],
+ "k.diagrams.port": [
   "k.attributes/shards/narration",
   "k.kinds/shards/relations-diagrams"
  ],
@@ -99413,6 +99444,9 @@
  "named by a model": [
   "k.named/schema.sop"
  ],
+ "named port": [
+  "k.diagrams/schema.sop"
+ ],
  "namekagon": [
   "k.geo/shards/north-america"
  ],
@@ -113330,6 +113364,7 @@
   "k.objects/shards/noto-food-prepared-04"
  ],
  "port": [
+  "k.diagrams/schema.sop",
   "k.scenes/shards/scenes-town",
   "k.words/shards/frequency-p",
   "k.words/shards/po"
@@ -131839,6 +131874,8 @@
  ],
  "side": [
   "k.attributes/shards/narration",
+  "k.diagrams/schema.sop",
+  "k.kinds/shards/relations-diagrams",
   "k.kinds/shards/relations-layouts",
   "k.kinds/shards/relations-scenes",
   "k.kinds/shards/wordnet-1",
@@ -137687,6 +137724,12 @@
  ],
  "start from": [
   "w.face/schema.sop"
+ ],
+ "start point x": [
+  "w.diagram/schema.sop"
+ ],
+ "start point y": [
+  "w.diagram/schema.sop"
  ],
  "start_at": [
   "k.attributes/shards/narration",

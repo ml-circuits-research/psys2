@@ -1,5 +1,5 @@
 {
- "version": "967bfd7c2e64",
+ "version": "dfa90827ae6e",
  "sopworld": "747b51e",
  "worlds": [
   {
@@ -4711,8 +4711,8 @@
     {
      "id": "k.attributes/shards/narration",
      "path": "k.attributes/shards/narration.sop",
-     "wires": 1490,
-     "bytes": 289023,
+     "wires": 1496,
+     "bytes": 290122,
      "keys": [
       "a",
       "about",
@@ -4866,6 +4866,7 @@
       "equals",
       "equals_key",
       "event",
+      "every",
       "evidence",
       "example",
       "expand",
@@ -5005,6 +5006,7 @@
       "k.composition2d.subject",
       "k.diagrams.fill",
       "k.diagrams.kind",
+      "k.diagrams.port",
       "k.diagrams.shape",
       "k.diagrams.source",
       "k.diagrams.topic",
@@ -13965,6 +13967,7 @@
    "exports": [
     "k.diagrams.fill",
     "k.diagrams.kind",
+    "k.diagrams.port",
     "k.diagrams.shape",
     "k.diagrams.source",
     "k.diagrams.topic"
@@ -13991,8 +13994,8 @@
     {
      "id": "k.diagrams/shards/diagrams",
      "path": "k.diagrams/shards/diagrams.sop",
-     "wires": 69,
-     "bytes": 17495,
+     "wires": 76,
+     "bytes": 18735,
      "keys": [
       "after",
       "b",
@@ -14176,8 +14179,8 @@
     {
      "id": "k.diagrams/shards/words",
      "path": "k.diagrams/shards/words.sop",
-     "wires": 42,
-     "bytes": 5874,
+     "wires": 49,
+     "bytes": 6664,
      "keys": [],
      "sources": [
       "hand-core-1"
@@ -34856,20 +34859,22 @@
     {
      "id": "k.kinds/shards/relations-diagrams",
      "path": "k.kinds/shards/relations-diagrams.sop",
-     "wires": 28,
-     "bytes": 5319,
+     "wires": 34,
+     "bytes": 6381,
      "keys": [
       "about",
       "arranged",
       "by",
       "cite",
       "edges",
+      "every",
       "form",
       "from",
       "gives",
       "groups",
       "k.diagrams.fill",
       "k.diagrams.kind",
+      "k.diagrams.port",
       "k.diagrams.shape",
       "k.diagrams.source",
       "k.diagrams.topic",
@@ -34880,6 +34885,7 @@
       "nodes",
       "role",
       "shape",
+      "side",
       "source",
       "structure",
       "topic",
@@ -97904,6 +97910,10 @@
       "label",
       "direction",
       "diagram",
+      "from_x",
+      "from_y",
+      "to_x",
+      "to_y",
       "code",
       "n",
       "colour",
@@ -98057,8 +98067,8 @@
      ]
     }
    ],
-   "wires": 143,
-   "bytes": 26277,
+   "wires": 147,
+   "bytes": 26916,
    "sources": [
     "hand-core-1"
    ],

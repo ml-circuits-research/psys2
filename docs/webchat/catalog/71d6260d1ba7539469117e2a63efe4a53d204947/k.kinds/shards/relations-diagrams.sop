@@ -1,4 +1,4 @@
-# k.kinds/shards/relations-diagrams: the keys of the types of k.diagrams read as relations: 28 relations, each with the kind of its subject and the class, types and senses of its object (from the joins declared on the slots, by rule from the schemas, and by value from the shards, as found says).
+# k.kinds/shards/relations-diagrams: the keys of the types of k.diagrams read as relations: 34 relations, each with the kind of its subject and the class, types and senses of its object (from the joins declared on the slots, by rule from the schemas, and by value from the shards, as found says).
 # sources: hand-core 1 (computed in this repository from the schemas and shards of the knowledge worlds: tools/relations-core.mjs)
 # license: CC0-1.0
 # script: tools/relations-core.mjs
@@ -20,6 +20,12 @@
 @k.kinds.relation.k.diagrams.kind.groups k.kinds.relation type=k.diagrams.kind key=groups subject=kind object=value object_type=k.values.reply found=value core.source="hand-core 1"
 @k.kinds.relation.k.diagrams.kind.usual_for k.kinds.relation type=k.diagrams.kind key=usual_for subject=kind object=text found=schema core.source="hand-core 1"
 @k.kinds.relation.k.diagrams.kind.source k.kinds.relation type=k.diagrams.kind key=source subject=kind object=thing object_type=k.diagrams.source found=declared object_by=name core.source="hand-core 1"
+@k.kinds.relation.k.diagrams.port.shape k.kinds.relation type=k.diagrams.port key=shape subject=port object=value object_type=k.shapes.shape object_sense=shape found=value core.source="hand-core 1"
+@k.kinds.relation.k.diagrams.port.every k.kinds.relation type=k.diagrams.port key=every subject=port object=boolean found=schema core.source="hand-core 1"
+@k.kinds.relation.k.diagrams.port.name k.kinds.relation type=k.diagrams.port key=name subject=port object=word object_type=k.words.sense found=value core.source="hand-core 1"
+@k.kinds.relation.k.diagrams.port.side k.kinds.relation type=k.diagrams.port key=side subject=port object=value object_type=k.values.position found=value core.source="hand-core 1"
+@k.kinds.relation.k.diagrams.port.about k.kinds.relation type=k.diagrams.port key=about subject=port object=text found=schema core.source="hand-core 1"
+@k.kinds.relation.k.diagrams.port.source k.kinds.relation type=k.diagrams.port key=source subject=port object=thing object_type=k.diagrams.source found=declared object_by=name core.source="hand-core 1"
 @k.kinds.relation.k.diagrams.shape.kind k.kinds.relation type=k.diagrams.shape key=kind subject=shape object=kind object_type=k.diagrams.kind found=declared object_by=name core.source="hand-core 1"
 @k.kinds.relation.k.diagrams.shape.role k.kinds.relation type=k.diagrams.shape key=role subject=shape object=value found=schema core.source="hand-core 1"
 @k.kinds.relation.k.diagrams.shape.shape k.kinds.relation type=k.diagrams.shape key=shape subject=shape object=value found=schema core.source="hand-core 1"

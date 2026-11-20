@@ -1,4 +1,4 @@
-# k.attributes/shards/narration: which keys of the catalog a composition may narrate (463 of 1490 slots of the k.* types), how salient each is and in which form it is said (block 00:05 item 1).
+# k.attributes/shards/narration: which keys of the catalog a composition may narrate (468 of 1496 slots of the k.* types), how salient each is and in which form it is said (block 00:05 item 1).
 # sources: hand-core 1 (computed by rules from the catalog's own facts: k.attributes.typical and found, k.attributes.shows, k.units.measure, k.faces slots, tests/*.questions.jsonl)
 # license: CC0-1.0
 # script: tools/narration-core.mjs
@@ -273,6 +273,12 @@
 @k.attributes.narration.k.diagrams.shape.shape k.attributes.narration type=k.diagrams.shape key=shape narrate=yes salience=0.3 form=relation basis=measured core.source="hand-core 1"
 @k.attributes.narration.k.diagrams.shape.about k.attributes.narration type=k.diagrams.shape key=about narrate=yes salience=0.3 form=text basis=measured core.source="hand-core 1"
 @k.attributes.narration.k.diagrams.shape.source k.attributes.narration type=k.diagrams.shape key=source narrate=no salience=0 why="metadata: where a fact comes from or how sure it is" core.source="hand-core 1"
+@k.attributes.narration.k.diagrams.port.shape k.attributes.narration type=k.diagrams.port key=shape narrate=yes salience=0.21 form=relation basis=measured core.source="hand-core 1"
+@k.attributes.narration.k.diagrams.port.every k.attributes.narration type=k.diagrams.port key=every narrate=yes salience=0.09 form=state basis=measured core.source="hand-core 1"
+@k.attributes.narration.k.diagrams.port.name k.attributes.narration type=k.diagrams.port key=name narrate=yes salience=0.3 form=relation basis=measured core.source="hand-core 1"
+@k.attributes.narration.k.diagrams.port.side k.attributes.narration type=k.diagrams.port key=side narrate=yes salience=0.3 form=relation basis=measured core.source="hand-core 1"
+@k.attributes.narration.k.diagrams.port.about k.attributes.narration type=k.diagrams.port key=about narrate=yes salience=0.3 form=text basis=measured core.source="hand-core 1"
+@k.attributes.narration.k.diagrams.port.source k.attributes.narration type=k.diagrams.port key=source narrate=no salience=0 why="metadata: where a fact comes from or how sure it is" core.source="hand-core 1"
 @k.attributes.narration.k.diagrams.fill.kind k.attributes.narration type=k.diagrams.fill key=kind narrate=no salience=0 why="part of the subject of a fact of several keys (red and yellow give orange)" core.source="hand-core 1"
 @k.attributes.narration.k.diagrams.fill.type k.attributes.narration type=k.diagrams.fill key=type narrate=no salience=0 why="part of the subject of a fact of several keys (red and yellow give orange)" core.source="hand-core 1"
 @k.attributes.narration.k.diagrams.fill.key k.attributes.narration type=k.diagrams.fill key=key narrate=no salience=0 why="part of the subject of a fact of several keys (red and yellow give orange)" core.source="hand-core 1"

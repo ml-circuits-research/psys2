@@ -7,7 +7,7 @@
 # license: CC0-1.0
 # script: none (hand-written); the shards are written by tools/diagrams-core.mjs
 
-@k.diagrams core.module name=k.diagrams version=3 exports=kind exports=shape exports=fill exports=source exports=topic core.source="hand-core 1"
+@k.diagrams core.module name=k.diagrams version=3 exports=kind exports=shape exports=port exports=fill exports=source exports=topic core.source="hand-core 1"
 
 # A published work a fact rests on: `name` a short id (author and year: venn1880), `cite` the reference, `year`.
 @k.diagrams.source core.type of=k.diagrams.source shared=true closed=true core.source="hand-core 1"
@@ -42,6 +42,17 @@
 @k.diagrams.shape.shape core.slot of=k.diagrams.shape key=shape required=true enum=oval enum=rectangle enum=rounded_rectangle enum=diamond enum=parallelogram enum=document enum=double_rectangle enum=circle enum=ellipse enum=dot enum=chevron enum=cylinder enum=cloud enum=actor enum=note core.source="hand-core 1"
 @k.diagrams.shape.about core.slot of=k.diagrams.shape key=about required=true kind=string core.source="hand-core 1"
 @k.diagrams.shape.source core.slot of=k.diagrams.shape key=source many=true kind=atom type=k.diagrams.source by=name core.source="hand-core 1"
+
+# A named port of a node: the side (`side`: top, right, bottom, left) a link of a diagram drawn top to bottom leaves or
+# enters by that `name` (a decision's yes, no and else; a database's lid; every node's in and out), for nodes of one
+# `shape` (a value of w.diagram.node.shape) or, with `every` true, for nodes of every shape (a shape's own name wins).
+@k.diagrams.port core.type of=k.diagrams.port shared=true closed=true core.source="hand-core 1"
+@k.diagrams.port.shape core.slot of=k.diagrams.port key=shape kind=atom kind=string core.source="hand-core 1"
+@k.diagrams.port.every core.slot of=k.diagrams.port key=every kind=boolean core.source="hand-core 1"
+@k.diagrams.port.name core.slot of=k.diagrams.port key=name required=true kind=atom kind=string core.source="hand-core 1"
+@k.diagrams.port.side core.slot of=k.diagrams.port key=side required=true enum=top enum=right enum=bottom enum=left core.source="hand-core 1"
+@k.diagrams.port.about core.slot of=k.diagrams.port key=about required=true kind=string core.source="hand-core 1"
+@k.diagrams.port.source core.slot of=k.diagrams.port key=source many=true kind=atom type=k.diagrams.source by=name core.source="hand-core 1"
 
 # Which knowledge of the catalog fills a kind of diagram: the facts of `type`, through its key `key` (the key that
 # makes the structure: the parent, the next stage, the step after, the neighbour), each fact a node or an edge as

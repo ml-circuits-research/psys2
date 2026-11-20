@@ -119,3 +119,7 @@
 @w.diagram.word.node.error core.word text=error text=uncertainty text="error margin" text="plus or minus" means=w.diagram.node.error core.source="hand-core 1"
 @w.diagram.word.group.error_bars core.word text="error bars" text="error bar" text=whiskers means=w.diagram.group.error_bars core.source="hand-core 1"
 @w.diagram.word.group.error_cap core.word text="error bar caps" text=caps text="cap size" means=w.diagram.group.error_cap core.source="hand-core 1"
+@w.diagram.word.edge.from_x core.word text="start point x" text="free start x" means=w.diagram.edge.from_x core.source="hand-core 1"
+@w.diagram.word.edge.from_y core.word text="start point y" text="free start y" means=w.diagram.edge.from_y core.source="hand-core 1"
+@w.diagram.word.edge.to_x core.word text="end point x" text="free end x" means=w.diagram.edge.to_x core.source="hand-core 1"
+@w.diagram.word.edge.to_y core.word text="end point y" text="free end y" means=w.diagram.edge.to_y core.source="hand-core 1"
