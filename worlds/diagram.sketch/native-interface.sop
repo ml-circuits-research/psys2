@@ -38,7 +38,7 @@
 @native.diagram.sketch.scene.count std.capability.arg name="countKey" value="n"
 @native.diagram.sketch.value.34 std.capability.record entry=$native.diagram.sketch.value.30 entry=$native.diagram.sketch.value.31 entry=$native.diagram.sketch.value.32 entry=$native.diagram.sketch.value.33 entry=$native.diagram.sketch.scene.count
 @native.diagram.sketch.value.35 std.capability.arg name="spatial" value=$native.diagram.sketch.value.34
-@native.diagram.sketch.op.diagram.node.make.metadata app.native.metadata operation=$native.diagram.sketch.op.diagram.node.make field=$native.diagram.sketch.value.29 field=$native.diagram.sketch.value.35
+@native.diagram.sketch.op.diagram.node.make.metadata app.native.metadata operation=$native.diagram.sketch.op.diagram.node.make field=$native.diagram.sketch.value.29 field=$native.diagram.sketch.value.35 field=$native.diagram.sketch.reflow.effect
 @native.diagram.sketch.op.diagram.node.change std.capability.operation scope=$native.diagram.sketch.scope name="diagram.node.change" act=change on="diagram.sketch.node" order=1 eligible=true
 @native.diagram.sketch.op.diagram.node.change.param.ids std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.change name="ids" kind=array required=true
 @native.diagram.sketch.op.diagram.node.change.param.colour std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.change name="colour" kind=string
@@ -85,7 +85,17 @@
 @native.diagram.sketch.value.79 std.capability.arg name="idsKey" value="ids"
 @native.diagram.sketch.value.80 std.capability.record entry=$native.diagram.sketch.value.76 entry=$native.diagram.sketch.value.77 entry=$native.diagram.sketch.value.78 entry=$native.diagram.sketch.value.79
 @native.diagram.sketch.value.81 std.capability.arg name="spatial" value=$native.diagram.sketch.value.80
-@native.diagram.sketch.op.diagram.node.place.metadata app.native.metadata operation=$native.diagram.sketch.op.diagram.node.place field=$native.diagram.sketch.value.75 field=$native.diagram.sketch.value.81
+# The diagram lays out its unpinned nodes again when a node is placed or made (a tree or layered layout): the other
+# nodes may change only their x and y (effectScope reflow), a declared dependent layout, not an unintended effect.
+@native.diagram.sketch.reflow.x std.capability.item index=0 value="x"
+@native.diagram.sketch.reflow.y std.capability.item index=1 value="y"
+@native.diagram.sketch.reflow.list std.capability.list member=$native.diagram.sketch.reflow.x member=$native.diagram.sketch.reflow.y
+@native.diagram.sketch.reflow.keys std.capability.arg name="keys" value=$native.diagram.sketch.reflow.list
+@native.diagram.sketch.reflow.record std.capability.record entry=$native.diagram.sketch.reflow.keys
+@native.diagram.sketch.reflow.arg std.capability.arg name="reflow" value=$native.diagram.sketch.reflow.record
+@native.diagram.sketch.reflow.scope std.capability.record entry=$native.diagram.sketch.reflow.arg
+@native.diagram.sketch.reflow.effect std.capability.arg name="effectScope" value=$native.diagram.sketch.reflow.scope
+@native.diagram.sketch.op.diagram.node.place.metadata app.native.metadata operation=$native.diagram.sketch.op.diagram.node.place field=$native.diagram.sketch.value.75 field=$native.diagram.sketch.value.81 field=$native.diagram.sketch.reflow.effect
 @native.diagram.sketch.op.diagram.node.resize std.capability.operation scope=$native.diagram.sketch.scope name="diagram.node.resize" act=change on="diagram.sketch.node" order=5 eligible=true
 @native.diagram.sketch.op.diagram.node.resize.param.ids std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.resize name="ids" kind=array required=true
 @native.diagram.sketch.op.diagram.node.resize.param.width std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.resize name="width" kind=number required=true min=8 max=4096

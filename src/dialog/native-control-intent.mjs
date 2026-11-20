@@ -188,7 +188,8 @@ export function verifyNativeControlEffect({intent,before,after,receipt}={}){
  const stateObject=o=>({id:o.id,kind:o.kind,sourceType:o.sourceType,inputs:(o.inputs??[]).map(({source,version,sourceType,...i})=>i)});
  if(ids.length&&op.act!=='remove')for(const object of after.objects)if(object.sourceType===op.on&&!ids.includes(object.id)&&old.has(object.id)&&!equal(stateObject(old.get(object.id)),stateObject(object))){
   const policies=(op.effectScope?.related??[]).filter(r=>r.id===object.id&&(!r.when||Array.isArray(args[r.when.parameter])&&args[r.when.parameter].includes(r.when.includes)&&Object.hasOwn(args,r.when.provided)));
-  const allowed=new Set([...policies.flatMap(r=>r.keys??[]),...(ancestors.has(object.id)?ancestorPolicy.keys:[])]),prior=stateObject(old.get(object.id)),current=stateObject(object);
+  // reflow: the keys every other object of the source type may change when the area lays itself out again (declared).
+  const allowed=new Set([...policies.flatMap(r=>r.keys??[]),...(ancestors.has(object.id)?ancestorPolicy.keys:[]),...(op.effectScope?.reflow?.keys??[])]),prior=stateObject(old.get(object.id)),current=stateObject(object);
   const oldInputs=new Map(prior.inputs.map(i=>[i.key,i])),nextInputs=new Map(current.inputs.map(i=>[i.key,i]));
   const changedKeys=[...new Set([...oldInputs.keys(),...nextInputs.keys()])].filter(k=>!equal(oldInputs.get(k)??null,nextInputs.get(k)??null));
   if(selectionPolicy&&prior.kind===current.kind&&changedKeys.length>0&&changedKeys.every(key=>key===selectionPolicy.key)){add('$scope','met',{target:object.id,reason:'declared-selection-state',changedKeys});continue;}

@@ -201,6 +201,10 @@ function readPlan(world,sop) {
 }
 
 let declarations;
+/** The concepts an area's binding table binds to an identity parameter (std.capability.seed source=target.list|target.id). */
+export function identityConcepts(bindings, readerArea) {
+  return new Set((bindings?.properties || []).filter((row) => row.area === readerArea && identityParameters().has(row.hostBinding?.parameter)).map((row) => row.canonical));
+}
 export function inspectCapabilityPolicy() {
   return { loaded: !!declarations, source: 'worlds/app.project/capability-policy.sop', wires: POLICY };
 }

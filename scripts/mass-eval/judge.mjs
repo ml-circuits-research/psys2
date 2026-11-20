@@ -51,7 +51,7 @@ const order=v=>{for(const sc of ORDINAL){const i=sc.indexOf(lc(v));if(i>=0)retur
 const matchesName=(o,name)=>{if(!name)return true;const n=lc(name).replace(/^(the|a|an)\s+/,'');return mentions(o).some(w=>w===n||singular(w)===singular(n));};
 function box(o){const m=inputMap(o),x=num(m.x?.[0]),y=num(m.y?.[0]);if(x===null||y===null)return null;const w=num(m.width?.[0])??num(m.size?.[0])??0,h=num(m.height?.[0])??num(m.size?.[0])??0;return {x,y,w,h,x0:x-w/2,x1:x+w/2,y0:y-h/2,y1:y+h/2};}
 const RELATIONS={
- left_of:(a,b)=>a.x<b.x,right_of:(a,b)=>a.x>b.x,above:(a,b)=>a.y<b.y,below:(a,b)=>a.y>b.y,under:(a,b)=>a.y>b.y,over:(a,b)=>a.y<b.y,
+ left_of:(a,b)=>a.x<b.x,left:(a,b)=>a.x<b.x,right:(a,b)=>a.x>b.x,right_of:(a,b)=>a.x>b.x,above:(a,b)=>a.y<b.y,below:(a,b)=>a.y>b.y,under:(a,b)=>a.y>b.y,over:(a,b)=>a.y<b.y,
  near:(a,b)=>Math.hypot(a.x-b.x,a.y-b.y)<=Math.max(a.w,a.h,b.w,b.h)*2.5+40,next_to:(a,b)=>Math.hypot(a.x-b.x,a.y-b.y)<=Math.max(a.w,a.h,b.w,b.h)*2.5+40,beside:(a,b)=>Math.hypot(a.x-b.x,a.y-b.y)<=Math.max(a.w,a.h,b.w,b.h)*2.5+40,
  in:(a,b)=>a.x>=b.x0&&a.x<=b.x1&&a.y>=b.y0&&a.y<=b.y1,inside:(a,b)=>a.x>=b.x0&&a.x<=b.x1&&a.y>=b.y0&&a.y<=b.y1,on:(a,b)=>a.x>=b.x0-a.w&&a.x<=b.x1+a.w&&a.y<=b.y1+a.h,
 };
@@ -87,8 +87,11 @@ function judgeRequest(req,ctx){
  const {diff,before,world,reply}=ctx,checks=[],t=req.target??{},act=req.act,cs=req.constraints??[];
  // A check without a comparable observation is recorded as ok:null (not verified), never as passed.
  const add=(name,ok,hard=true,detail)=>checks.push({name,ok:hard?ok:(ok?null:false),hard,...(detail!==undefined?{detail}:{})});
- const results=cs.filter(c=>c.phase!=='selector'&&!/\.(relation|anchor|relation_anchor)$/.test(c.key));
- const relation=cs.find(c=>/\.relation$/.test(c.key)&&c.value),anchorC=cs.find(c=>/\.(anchor|relation_anchor)$/.test(c.key));
+ // A relative position is a relation mention (key .relation, or any result constraint with operator relation such as
+ // diagram node.position) and its anchor mention (.anchor / .relation_anchor).
+ const isRelation=c=>c.phase!=='selector'&&(/\.relation$/.test(c.key)||c.operator==='relation');
+ const results=cs.filter(c=>c.phase!=='selector'&&!isRelation(c)&&!/\.(anchor|relation_anchor)$/.test(c.key));
+ const relation=cs.find(c=>isRelation(c)&&c.value),anchorC=cs.find(c=>/\.(anchor|relation_anchor)$/.test(c.key));
  const valueChecks=objs=>{for(const c of results){
   if(c.operator==='delta'){
    const k=c.key.split('.').pop(),grow=['more','much_more'].includes(c.step),pairs=diff.changed.filter(d=>objs.includes(d.object)).map(d=>[inputsFor(d.before,k)[0]??inputsFor(d.before,'size')[0]??inputsFor(d.before,'scale')[0],inputsFor(d.object,k)[0]??inputsFor(d.object,'size')[0]??inputsFor(d.object,'scale')[0]]);
@@ -103,7 +106,7 @@ function judgeRequest(req,ctx){
  }};
  const relationCheck=objs=>{
   if(!relation)return;const rel=RELATIONS[relation.value];
-  const anchorText=anchorC?.value_span??anchorC?.value;const anchors=(before?.objects??[]).filter(o=>(TOP[world]?.test(o.sourceType)??true)&&anchorText&&(matchesName(o,anchorText)||matchesKind(o,anchorText,world)));
+  const anchorText=anchorC?.value_span??anchorC?.value??relation.anchor_span;const anchors=(before?.objects??[]).filter(o=>(TOP[world]?.test(o.sourceType)??true)&&anchorText&&(matchesName(o,anchorText)||matchesKind(o,anchorText,world)));
   if(!rel||!anchors.length){add('relation:'+relation.value,objs.length>0,false,anchors.length?'relation not geometric':'anchor not found');return;}
   const ok=objs.length>0&&objs.every(o=>{const a=box(o);return a&&anchors.some(an=>{const b=box(an);return b&&rel(a,b);});});
   const measurable=objs.every(o=>box(o))&&anchors.some(an=>box(an));

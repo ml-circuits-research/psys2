@@ -1,4 +1,4 @@
-@interpret.module core.module name=app.interpret version=1 exports=app.interpret.retry exports=app.interpret.compare exports=app.interpret.coordination exports=app.interpret.language exports=app.interpret.note exports=app.interpret.default exports=app.interpret.drop exports=app.interpret.fallback exports=app.interpret.family
+@interpret.module core.module name=app.interpret version=1 exports=app.interpret.retry exports=app.interpret.compare exports=app.interpret.coordination exports=app.interpret.language exports=app.interpret.note exports=app.interpret.default exports=app.interpret.drop exports=app.interpret.fallback exports=app.interpret.family exports=app.interpret.relation exports=app.interpret.relationValue
 
 # A re-reading of the same text under a reduced context, tried in order while the reading stays incomplete.
 @interpret.retry.type core.type of=app.interpret.retry closed=true
@@ -55,3 +55,16 @@
 @interpret.family.area core.slot of=app.interpret.family key=area kind=atom present=true
 @interpret.family.family core.slot of=app.interpret.family key=family kind=atom present=true
 @interpret.family.kind core.slot of=app.interpret.family key=kind kind=atom present=true
+
+# A relative position of an area read as two mentions (a relation key and its anchor key, README of official-dataset)
+# whose binding table has no relation projection: the keys' roles and the spatial relation each value names (the
+# relation names of the placement method, app.project/spatial-placement.sop). A value with no row stays disclosed.
+@interpret.relation.type core.type of=app.interpret.relation closed=true
+@interpret.relation.area core.slot of=app.interpret.relation key=area kind=atom present=true
+@interpret.relation.key core.slot of=app.interpret.relation key=key kind=string present=true
+@interpret.relation.anchor core.slot of=app.interpret.relation key=anchor kind=string present=true
+@interpret.relation.like core.slot of=app.interpret.relation key=like kind=string present=true
+@interpret.relationValue.type core.type of=app.interpret.relationValue closed=true
+@interpret.relationValue.relation core.slot of=app.interpret.relationValue key=of kind=ref to=app.interpret.relation present=true
+@interpret.relationValue.value core.slot of=app.interpret.relationValue key=value kind=string present=true
+@interpret.relationValue.name core.slot of=app.interpret.relationValue key=relation kind=atom present=true

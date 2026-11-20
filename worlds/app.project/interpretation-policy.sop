@@ -61,3 +61,19 @@
 # focused or most recent one when it exists, a new step otherwise. Bars and slices are chart points of a chart group,
 # which the reader names by the chart family.
 @interpret.family.diagram.node app.interpret.family area=diagram family=node kind=w.diagram.node
+
+# Diagram nodes placed relative to another node ("put Review below Draft", "a box called Deliver under Bake"): the
+# node.position / node.anchor pair reads as the drawing's relation pair does (like= names the area key whose canonical
+# relation concept and anchor role it shares); its values name the placement method's relations. "after"/"before"
+# depend on the flow direction and "between" on two anchors: not declared, so they stay disclosed.
+@interpret.relation.diagram.node app.interpret.relation area=diagram key="node.position" anchor="node.anchor" like="drawn.relation"
+@interpret.relation.diagram.node.above app.interpret.relationValue of=$interpret.relation.diagram.node value="above" relation=above
+@interpret.relation.diagram.node.top app.interpret.relationValue of=$interpret.relation.diagram.node value="on top of" relation=above
+@interpret.relation.diagram.node.below app.interpret.relationValue of=$interpret.relation.diagram.node value="below" relation=below
+@interpret.relation.diagram.node.under app.interpret.relationValue of=$interpret.relation.diagram.node value="under" relation=below
+@interpret.relation.diagram.node.leftof app.interpret.relationValue of=$interpret.relation.diagram.node value="left_of" relation=left
+@interpret.relation.diagram.node.left app.interpret.relationValue of=$interpret.relation.diagram.node value="left" relation=left
+@interpret.relation.diagram.node.rightof app.interpret.relationValue of=$interpret.relation.diagram.node value="right_of" relation=right
+@interpret.relation.diagram.node.right app.interpret.relationValue of=$interpret.relation.diagram.node value="right" relation=right
+@interpret.relation.diagram.node.nextto app.interpret.relationValue of=$interpret.relation.diagram.node value="next_to" relation=near
+@interpret.relation.diagram.node.near app.interpret.relationValue of=$interpret.relation.diagram.node value="near" relation=near

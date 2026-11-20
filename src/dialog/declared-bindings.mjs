@@ -98,6 +98,20 @@ export async function completeBindings(bindings){
   const at=properties.findIndex(r=>r.area===d.area&&r.key===d.key);
   if(at>=0)properties[at]=row;else properties.push(row);
  }
+ // 1b. Declared relation pairs (interpretation-policy.sop app.interpret.relation): a relation key and its anchor key take
+ // the projection roles of the named like= key (its canonical relation concept), with the declared value names.
+ for(const r of interpretationPolicy().partial.relations??[]){
+  const like=properties.find(row=>row.key===r.like&&row.projection?.kind==='relation');
+  const likeAnchor=like&&properties.find(row=>row.area===like.area&&row.projection?.kind==='relation-anchor');
+  if(!like||!likeAnchor)continue;
+  const provenance={sourceWire:r.id,sourceWorld:'app.project',moduleVersion:'1',sourceSnapshotSHA:like.sourceSnapshotSHA,
+   alignment:{kind:'declared-relation-pair',authority:'interpretation-policy.sop app.interpret.relation'}};
+  for(const row of [{key:r.key,canonical:like.canonical,valueKind:like.valueKind,projection:{kind:'relation',values:r.values}},{key:r.anchor,canonical:likeAnchor.canonical,valueKind:likeAnchor.valueKind,projection:{kind:'relation-anchor'}}]){
+   const at=properties.findIndex(p=>p.area===r.area&&p.key===row.key);
+   const declared={area:r.area,...row,...provenance};
+   if(at<0)properties.push(declared);else if(!properties[at].projection)properties[at]=declared;
+  }
+ }
  // 3. Declared family readings.
  const families=[...(bindings.families??[])];
  for(const f of interpretationPolicy().partial.families){
