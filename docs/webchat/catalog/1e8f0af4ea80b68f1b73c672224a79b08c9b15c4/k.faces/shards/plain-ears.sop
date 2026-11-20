@@ -36,3 +36,8 @@
 @k.faces.plain.ears.square k.faces.variant slot=ears name=square style=plain shape=square kind=robot core.source="hand-core 1"
 @k.faces.plain.ears.square.ear k.faces.part slot=ears of=square name=ear shape=rectangle x=15 y=43 w=12 h=12 z=1 colour=grey tint=skin core.source="hand-core 1"
 @k.faces.plain.ears.square.bolt k.faces.part slot=ears of=square name=bolt shape=circle x=16 y=46 w=6 h=6 z=2 colour=grey rgb="#9AA4AE" core.source="hand-core 1"
+
+# ears: dial
+@k.faces.plain.ears.dial k.faces.variant slot=ears name=dial style=plain shape=round kind=robot core.source="hand-core 1"
+@k.faces.plain.ears.dial.ear k.faces.part slot=ears of=dial name=ear shape=circle x=15 y=42 w=13 h=13 z=1 colour=white colour=blue tint=skin core.source="hand-core 1"
+@k.faces.plain.ears.dial.dial k.faces.part slot=ears of=dial name=dial kind=light shape=circle x=18 y=45 w=7 h=7 z=2 colour=blue rgb="#7FC4F2" core.source="hand-core 1"

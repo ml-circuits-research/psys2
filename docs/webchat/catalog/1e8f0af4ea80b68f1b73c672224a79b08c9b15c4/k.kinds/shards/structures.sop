@@ -1,4 +1,4 @@
-# k.kinds/shards/structures: the structures of worlds, for alignment: 8 structures with their roles (direction, cardinality, required) and 6 constraints, and how 28 worlds are each (50 forms, 244 roles cast to their types, keys and acts).
+# k.kinds/shards/structures: the structures of worlds, for alignment: 8 structures with their roles (direction, cardinality, required) and 6 constraints, and how 29 worlds are each (51 forms, 246 roles cast to their types, keys and acts).
 # sources: hand-core 1 (hand-written in this repository: tools/structures-core.mjs)
 # license: CC0-1.0
 # script: tools/structures-core.mjs
@@ -147,6 +147,9 @@
 @k.kinds.cast.w.list.sequence.position.w_list_item_n k.kinds.cast world=w.list structure=sequence role=position filler=w.list.item.n as=key core.source="hand-core 1"
 @k.kinds.cast.w.list.sequence.sequence.w_list_list k.kinds.cast world=w.list structure=sequence role=sequence filler=w.list.list as=type core.source="hand-core 1"
 @k.kinds.cast.w.list.sequence.element_of.w_list_item_list k.kinds.cast world=w.list structure=sequence role=element_of filler=w.list.item.list as=key core.source="hand-core 1"
+@k.kinds.form.w.preferences.sequence k.kinds.form world=w.preferences structure=sequence about="standing preferences in the order they were stated (the latest statement of a field is the one in force)" core.source="hand-core 1"
+@k.kinds.cast.w.preferences.sequence.element.w_preferences_preference k.kinds.cast world=w.preferences structure=sequence role=element filler=w.preferences.preference as=type core.source="hand-core 1"
+@k.kinds.cast.w.preferences.sequence.position.w_preferences_preference_at k.kinds.cast world=w.preferences structure=sequence role=position filler=w.preferences.preference.at as=key core.source="hand-core 1"
 @k.kinds.form.w.tasks.sequence k.kinds.form world=w.tasks structure=sequence about="tasks in order on a to-do list (a list of w.list)" core.source="hand-core 1"
 @k.kinds.cast.w.tasks.sequence.element.w_tasks_task k.kinds.cast world=w.tasks structure=sequence role=element filler=w.tasks.task as=type core.source="hand-core 1"
 @k.kinds.cast.w.tasks.sequence.position.w_tasks_task_n k.kinds.cast world=w.tasks structure=sequence role=position filler=w.tasks.task.n as=key core.source="hand-core 1"

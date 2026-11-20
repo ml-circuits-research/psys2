@@ -102,6 +102,13 @@
 @k.faces.plain.hat.antenna.rod.p1 k.faces.point part=$k.faces.plain.hat.antenna.rod n=1 x=50 y=15 core.source="hand-core 1"
 @k.faces.plain.hat.antenna.rod.p2 k.faces.point part=$k.faces.plain.hat.antenna.rod n=2 x=50 y=5 core.source="hand-core 1"
 
+# hat: light antenna
+@k.faces.plain.hat.light_antenna k.faces.variant slot=hat name="light antenna" style=plain kind=antenna core.source="hand-core 1"
+@k.faces.plain.hat.light_antenna.rod k.faces.part slot=hat of="light antenna" name=rod shape=line x=50 y=6 w=0 h=10 z=1 colour=grey rgb="#B9C7D4" core.source="hand-core 1"
+@k.faces.plain.hat.light_antenna.ball k.faces.part slot=hat of="light antenna" name=ball kind=light shape=circle x=45.5 y=0 w=9 h=9 z=2 colour=blue rgb="#7FC4F2" core.source="hand-core 1"
+@k.faces.plain.hat.light_antenna.rod.p1 k.faces.point part=$k.faces.plain.hat.light_antenna.rod n=1 x=50 y=16 core.source="hand-core 1"
+@k.faces.plain.hat.light_antenna.rod.p2 k.faces.point part=$k.faces.plain.hat.light_antenna.rod n=2 x=50 y=6 core.source="hand-core 1"
+
 # hat: sun hat
 @k.faces.plain.hat.sun_hat k.faces.variant slot=hat name="sun hat" style=plain feel=wide kind="sun hat" core.source="hand-core 1"
 @k.faces.plain.hat.sun_hat.brim k.faces.part slot=hat of="sun hat" name=brim shape=oval x=4 y=15 w=92 h=16 z=1 colour=yellow rgb="#E9D08A" core.source="hand-core 1"

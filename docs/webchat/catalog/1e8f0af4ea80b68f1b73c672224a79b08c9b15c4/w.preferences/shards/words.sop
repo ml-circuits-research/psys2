@@ -1,0 +1,27 @@
+# w.preferences/shards/words: the owned English vocabulary, separate from the schema.
+# sources: hand-core 1 (hand-written declarations and deterministic key vocabulary)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@w.preferences.word.world core.word text=preferences text=settings text="standing preferences" text=defaults means=w.preferences of=std.schema.world.name core.source="hand-core 1"
+@w.preferences.word.preference core.word text=preference text=preferences text=setting text=settings text=default text=defaults means=w.preferences.preference core.source="hand-core 1"
+@w.preferences.word.key core.word text=key text=what text=setting means=w.preferences.preference.key core.source="hand-core 1"
+@w.preferences.word.value core.word text=value text=choice means=w.preferences.preference.value core.source="hand-core 1"
+@w.preferences.word.scope core.word text=scope text=everywhere text=always text=here means=w.preferences.preference.scope core.source="hand-core 1"
+@w.preferences.word.source core.word text=source text=stated text=learned text=default means=w.preferences.preference.source core.source="hand-core 1"
+@w.preferences.word.at core.word text=when text=since means=w.preferences.preference.at core.source="hand-core 1"
+@w.preferences.word.field core.word text=field text=part text=aspect means=w.preferences.preference.field core.source="hand-core 1"
+@w.preferences.word.about core.word text=about text=said text=words means=w.preferences.preference.about core.source="hand-core 1"
+@w.preferences.word.of core.word text=of text=for means=w.preferences.preference.of core.source="hand-core 1"
+@w.preferences.word.default.type core.word text="default value" text="declared default" means=w.preferences.default core.source="hand-core 1"
+@w.preferences.word.default.key core.word text=key text=setting means=w.preferences.default.key core.source="hand-core 1"
+@w.preferences.word.default.field core.word text=field text=part means=w.preferences.default.field core.source="hand-core 1"
+@w.preferences.word.default.value core.word text=value text=default means=w.preferences.default.value core.source="hand-core 1"
+@w.preferences.word.default.about core.word text=about text=meaning means=w.preferences.default.about core.source="hand-core 1"
+@w.preferences.word.default.scope core.word text=scope text=where means=w.preferences.default.scope core.source="hand-core 1"
+@w.preferences.word.default.of core.word text=of text=for means=w.preferences.default.of core.source="hand-core 1"
+@w.preferences.word.field.type core.word text="preference field" means=w.preferences.field core.source="hand-core 1"
+@w.preferences.word.field.key core.word text=key text=setting means=w.preferences.field.key core.source="hand-core 1"
+@w.preferences.word.field.field core.word text=field text=part means=w.preferences.field.field core.source="hand-core 1"
+@w.preferences.word.field.many core.word text=many text=several means=w.preferences.field.many core.source="hand-core 1"
+@w.preferences.word.field.clears core.word text=clears text=replaces text=resets means=w.preferences.field.clears core.source="hand-core 1"

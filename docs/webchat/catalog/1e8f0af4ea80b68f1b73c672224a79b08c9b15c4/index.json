@@ -1,5 +1,5 @@
 {
- "version": "41f61db54257",
+ "version": "515727e7f221",
  "sopworld": "747b51e",
  "worlds": [
   {
@@ -15287,8 +15287,8 @@
     {
      "id": "k.faces/shards/colours",
      "path": "k.faces/shards/colours.sop",
-     "wires": 45,
-     "bytes": 6273,
+     "wires": 47,
+     "bytes": 6569,
      "keys": [
       "amber",
       "auburn",
@@ -15304,6 +15304,7 @@
       "hair",
       "hazel",
       "light",
+      "light blue",
       "metal grey",
       "olive",
       "orange",
@@ -15311,6 +15312,7 @@
       "pink",
       "purple",
       "red",
+      "robot white",
       "skin",
       "tan",
       "white",
@@ -16665,10 +16667,11 @@
     {
      "id": "k.faces/shards/plain-ears",
      "path": "k.faces/shards/plain-ears.sop",
-     "wires": 22,
-     "bytes": 3607,
+     "wires": 25,
+     "bytes": 4079,
      "keys": [
       "bolt",
+      "dial",
       "ear",
       "ears",
       "fold",
@@ -16712,12 +16715,13 @@
     {
      "id": "k.faces/shards/plain-eyes",
      "path": "k.faces/shards/plain-eyes.sop",
-     "wires": 77,
-     "bytes": 12685,
+     "wires": 81,
+     "bytes": 13428,
      "keys": [
       "closed",
       "dot",
       "downcast",
+      "eye",
       "eyes",
       "glint",
       "happy",
@@ -16738,7 +16742,9 @@
       "pupil",
       "round",
       "sleepy",
+      "small_glint",
       "socket",
+      "soft round",
       "square",
       "surprised",
       "white"
@@ -16865,8 +16871,8 @@
     {
      "id": "k.faces/shards/plain-hat",
      "path": "k.faces/shards/plain-hat.sop",
-     "wires": 386,
-     "bytes": 56411,
+     "wires": 391,
+     "bytes": 57194,
      "keys": [
       "antenna",
       "badge",
@@ -16911,6 +16917,7 @@
       "left_jewel",
       "left_loop",
       "left_puff",
+      "light antenna",
       "middle_jewel",
       "middle_puff",
       "military helmet",
@@ -16958,16 +16965,18 @@
     {
      "id": "k.faces/shards/plain-head",
      "path": "k.faces/shards/plain-head.sop",
-     "wires": 42,
-     "bytes": 6080,
+     "wires": 62,
+     "bytes": 8679,
      "keys": [
       "box",
+      "dome",
       "face",
       "head",
       "heart",
       "left_bolt",
       "long",
       "oval",
+      "plate",
       "right_bolt",
       "round",
       "square",
@@ -17004,8 +17013,8 @@
     {
      "id": "k.faces/shards/plain-mouth",
      "path": "k.faces/shards/plain-mouth.sop",
-     "wires": 131,
-     "bytes": 19810,
+     "wires": 133,
+     "bytes": 20179,
      "keys": [
       "big smile",
       "bite",
@@ -17019,6 +17028,7 @@
       "gritted",
       "half open",
       "inside",
+      "light smile",
       "lip bite",
       "lips",
       "lower_lip",
@@ -17052,8 +17062,8 @@
     {
      "id": "k.faces/shards/plain-neck",
      "path": "k.faces/shards/plain-neck.sop",
-     "wires": 24,
-     "bytes": 3924,
+     "wires": 27,
+     "bytes": 4399,
      "keys": [
       "chain",
       "lower_ring",
@@ -17062,6 +17072,7 @@
       "necklace",
       "pendant",
       "pipe",
+      "ring",
       "tapered",
       "thick",
       "thin",
@@ -17100,8 +17111,8 @@
     {
      "id": "k.faces/shards/plain-shoulders",
      "path": "k.faces/shards/plain-shoulders.sop",
-     "wires": 455,
-     "bytes": 71667,
+     "wires": 468,
+     "bytes": 73837,
      "keys": [
       "apron",
       "badge",
@@ -17127,6 +17138,7 @@
       "front_trim",
       "fur coat",
       "fur_collar",
+      "heart",
       "hood",
       "hoodie",
       "jacket",
@@ -17137,6 +17149,7 @@
       "left_button",
       "left_cape",
       "left_collar",
+      "left_dot",
       "left_epaulette",
       "left_front",
       "left_lapel",
@@ -17163,6 +17176,7 @@
       "right_button",
       "right_cape",
       "right_collar",
+      "right_dot",
       "right_epaulette",
       "right_front",
       "right_lapel",
@@ -17172,6 +17186,7 @@
       "right_stripe",
       "right_wing",
       "robe",
+      "round plate",
       "safety vest",
       "sailor collar",
       "scrubs",
@@ -17199,8 +17214,8 @@
     {
      "id": "k.faces/shards/presets",
      "path": "k.faces/shards/presets.sop",
-     "wires": 39,
-     "bytes": 8437,
+     "wires": 40,
+     "bytes": 8776,
      "keys": [
       "alien",
       "angry",
@@ -17219,6 +17234,7 @@
       "old woman",
       "queen",
       "robot",
+      "robot-classic",
       "sad",
       "scared",
       "shocked",
@@ -34570,7 +34586,7 @@
      "id": "k.kinds/shards/relations-attributes",
      "path": "k.kinds/shards/relations-attributes.sop",
      "wires": 80,
-     "bytes": 15058,
+     "bytes": 15068,
      "keys": [
       "about",
       "age",
@@ -34926,7 +34942,7 @@
      "id": "k.kinds/shards/relations-faces",
      "path": "k.kinds/shards/relations-faces.sop",
      "wires": 124,
-     "bytes": 22009,
+     "bytes": 22013,
      "keys": [
       "about",
       "age",
@@ -35522,7 +35538,7 @@
      "id": "k.kinds/shards/relations-people",
      "path": "k.kinds/shards/relations-people.sop",
      "wires": 31,
-     "bytes": 6786,
+     "bytes": 6796,
      "keys": [
       "age",
       "band",
@@ -36224,8 +36240,8 @@
     {
      "id": "k.kinds/shards/structures",
      "path": "k.kinds/shards/structures.sop",
-     "wires": 355,
-     "bytes": 65641,
+     "wires": 358,
+     "bytes": 66278,
      "keys": [
       "assigned",
       "assignment",
@@ -36447,6 +36463,9 @@
       "w.picture.part.object",
       "w.picture.part.picture",
       "w.picture.picture",
+      "w.preferences",
+      "w.preferences.preference",
+      "w.preferences.preference.at",
       "w.request",
       "w.request.constraint",
       "w.request.constraint.on",
@@ -65789,14 +65808,17 @@
     {
      "id": "k.values/shards/scales",
      "path": "k.values/shards/scales.sop",
-     "wires": 190,
-     "bytes": 24697,
+     "wires": 203,
+     "bytes": 26212,
      "keys": [
       "a bit",
       "a lot",
+      "adult",
+      "age",
       "all",
       "amount",
       "apart",
+      "baby",
       "bigger",
       "biggest",
       "bolder",
@@ -65807,6 +65829,7 @@
       "cheap",
       "cheaper",
       "cheapest",
+      "child",
       "closer",
       "closest",
       "cold",
@@ -65882,6 +65905,9 @@
       "nearer",
       "nearest",
       "none",
+      "old",
+      "older",
+      "oldest",
       "paler",
       "palest",
       "price",
@@ -65930,7 +65956,9 @@
       "wide",
       "wider",
       "widest",
-      "width"
+      "width",
+      "younger",
+      "youngest"
      ],
      "sources": [
       "hand-core-1"
@@ -99515,6 +99543,57 @@
    ],
    "wires": 12,
    "bytes": 1853,
+   "sources": [
+    "hand-core-1"
+   ],
+   "license": "CC0-1.0",
+   "warnings": []
+  },
+  {
+   "id": "w.preferences",
+   "version": "1",
+   "schema": "w.preferences/schema.sop",
+   "vocabulary": "w.preferences/shards/words.sop",
+   "depends": [],
+   "about": "standing preferences: a key, its value or the fields of a described value, a scope, a source and when it was stated",
+   "names": [
+    "preferences",
+    "settings",
+    "standing preferences",
+    "defaults"
+   ],
+   "kinds": [
+    {
+     "type": "w.preferences.preference",
+     "acts": [
+      "make",
+      "remove",
+      "change",
+      "pick",
+      "ask"
+     ],
+     "attributes": [
+      "key",
+      "field",
+      "value",
+      "about",
+      "scope",
+      "of",
+      "source",
+      "at"
+     ],
+     "words": [
+      "preference",
+      "preferences",
+      "setting",
+      "settings",
+      "default",
+      "defaults"
+     ]
+    }
+   ],
+   "wires": 25,
+   "bytes": 5836,
    "sources": [
     "hand-core-1"
    ],

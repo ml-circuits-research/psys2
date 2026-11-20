@@ -2076,6 +2076,7 @@
   "w.lang.en/shards/closed-classes",
   "w.lang.en/shards/prepositions",
   "w.list/schema.sop",
+  "w.preferences/schema.sop",
   "w.request/schema.sop",
   "w.timeline/schema.sop"
  ],
@@ -3075,6 +3076,7 @@
  "adult": [
   "k.kinds/shards/wordnet-1",
   "k.kinds/shards/wordnet-2",
+  "k.values/shards/scales",
   "k.words/shards/ad",
   "k.words/shards/frequency-a"
  ],
@@ -3557,6 +3559,7 @@
   "k.kinds/shards/relations-faces",
   "k.kinds/shards/relations-people",
   "k.people/schema.sop",
+  "k.values/shards/scales",
   "k.words/shards/ag",
   "k.words/shards/frequency-a",
   "w.lang.en/shards/hand-grammar",
@@ -3574,6 +3577,7 @@
   "k.units/shards/measures"
  ],
  "aged": [
+  "k.values/shards/scales",
   "k.words/shards/ag",
   "k.words/shards/frequency-a"
  ],
@@ -4970,7 +4974,8 @@
   "k.words/shards/al",
   "k.words/shards/frequency-a",
   "w.lang.en/shards/clauses",
-  "w.lang.en/shards/closed-classes"
+  "w.lang.en/shards/closed-classes",
+  "w.preferences/schema.sop"
  ],
  "alwin": [
   "k.people/shards/given-names-a"
@@ -6070,6 +6075,7 @@
   "k.faces/shards/plain-earrings",
   "k.faces/shards/plain-ears",
   "k.faces/shards/plain-eyes",
+  "k.faces/shards/plain-head",
   "k.faces/shards/plain-mouth",
   "k.faces/shards/plain-neck",
   "k.faces/shards/plain-nose",
@@ -6083,6 +6089,7 @@
   "k.faces/shards/plain-earrings",
   "k.faces/shards/plain-ears",
   "k.faces/shards/plain-eyes",
+  "k.faces/shards/plain-head",
   "k.faces/shards/plain-mouth",
   "k.faces/shards/plain-neck",
   "k.faces/shards/plain-nose",
@@ -8936,7 +8943,8 @@
   "k.attributes/shards/narration",
   "k.kinds/shards/relations-attributes",
   "k.words/shards/as",
-  "k.words/shards/frequency-a"
+  "k.words/shards/frequency-a",
+  "w.preferences/schema.sop"
  ],
  "aspects": [
   "k.attributes/schema.sop"
@@ -11433,6 +11441,7 @@
   "k.people/shards/kinds",
   "k.scenes/shards/scenes-indoors",
   "k.scenes/shards/things-b",
+  "k.values/shards/scales",
   "k.words/shards/ba",
   "k.words/shards/frequency-b",
   "k.objects/shards/noto-animal-bird-01",
@@ -28772,6 +28781,7 @@
   "k.scenes/shards/scenes-other",
   "k.scenes/shards/scenes-town",
   "k.scenes/shards/things-c",
+  "k.values/shards/scales",
   "k.words/shards/ch",
   "k.words/shards/frequency-c",
   "w.lang.en/shards/core-plurals",
@@ -29249,7 +29259,8 @@
  "choice": [
   "k.words/shards/ch",
   "k.words/shards/frequency-c",
-  "w.dialogue/schema.sop"
+  "w.dialogue/schema.sop",
+  "w.preferences/schema.sop"
  ],
  "choices": [
   "w.dialogue/schema.sop"
@@ -30419,6 +30430,9 @@
  "clearly": [
   "k.words/shards/cl",
   "k.words/shards/frequency-c"
+ ],
+ "clears": [
+  "w.preferences/schema.sop"
  ],
  "cleaver": [
   "k.attributes/shards/numbers-a-f",
@@ -40546,6 +40560,9 @@
   "k.words/shards/de",
   "k.words/shards/frequency-d"
  ],
+ "declared default": [
+  "w.preferences/schema.sop"
+ ],
  "decline": [
   "k.words/shards/de",
   "k.words/shards/frequency-d"
@@ -40716,6 +40733,7 @@
   "k.units/shards/measures",
   "k.words/shards/de",
   "k.words/shards/frequency-d",
+  "w.preferences/schema.sop",
   "w.request/schema.sop"
  ],
  "default key": [
@@ -40723,6 +40741,9 @@
  ],
  "default type": [
   "k.attributes/schema.sop"
+ ],
+ "default value": [
+  "w.preferences/schema.sop"
  ],
  "default_key": [
   "k.attributes/shards/narration",
@@ -40733,7 +40754,8 @@
   "k.kinds/shards/relations-attributes"
  ],
  "defaults": [
-  "k.expect/schema.sop"
+  "k.expect/schema.sop",
+  "w.preferences/schema.sop"
  ],
  "defeat": [
   "k.words/shards/de",
@@ -41838,6 +41860,7 @@
   "w.diagram/schema.sop"
  ],
  "dial": [
+  "k.faces/shards/plain-ears",
   "k.kinds/shards/part_of",
   "k.kinds/shards/part_of-wordnet-2",
   "k.objects/shards/mulberry-food-kitchen-items-05",
@@ -43615,6 +43638,7 @@
   "k.geo/shards/psys2-cities-asia"
  ],
  "dome": [
+  "k.faces/shards/plain-head",
   "k.objects/shards/places",
   "k.objects/shards/places-3",
   "k.objects/shards/structures",
@@ -44874,6 +44898,7 @@
   "k.faces/shards/plain-earrings",
   "k.faces/shards/plain-ears",
   "k.faces/shards/plain-eyes",
+  "k.faces/shards/plain-head",
   "k.faces/shards/plain-mouth",
   "k.faces/shards/plain-neck",
   "k.faces/shards/plain-nose",
@@ -48263,6 +48288,7 @@
   "k.words/shards/frequency-e"
  ],
  "elderly": [
+  "k.values/shards/scales",
   "k.words/shards/el",
   "k.words/shards/frequency-e"
  ],
@@ -50537,7 +50563,8 @@
  ],
  "everywhere": [
   "k.words/shards/ev",
-  "k.words/shards/frequency-e"
+  "k.words/shards/frequency-e",
+  "w.preferences/schema.sop"
  ],
  "evgenia": [
   "k.people/shards/given-names-e"
@@ -51132,6 +51159,7 @@
   "k.faces/shards/miniavs-slots",
   "k.faces/shards/personas-slots",
   "k.faces/shards/pixel-art-slots",
+  "k.faces/shards/plain-eyes",
   "k.faces/shards/slots",
   "k.faces/shards/toon-head-slots",
   "k.kinds/shards/kind",
@@ -54113,6 +54141,7 @@
   "k.scenes/shards/things-f",
   "k.words/shards/fi",
   "k.words/shards/frequency-f",
+  "w.preferences/schema.sop",
   "k.objects/shards/noto-sport-02"
  ],
  "field animal": [
@@ -56765,6 +56794,7 @@
   "w.lang.en/shards/closed-classes",
   "w.lang.en/shards/prepositions",
   "w.list/schema.sop",
+  "w.preferences/schema.sop",
   "w.tasks/schema.sop"
  ],
  "for me": [
@@ -65114,6 +65144,9 @@
   "k.words/shards/frequency-g",
   "k.words/shards/gr"
  ],
+ "grown-up": [
+  "k.values/shards/scales"
+ ],
  "grows": [
   "k.food/schema.sop"
  ],
@@ -68572,6 +68605,7 @@
   "k.attributes/shards/things-objects",
   "k.body/shards/core",
   "k.faces/shards/plain-head",
+  "k.faces/shards/plain-shoulders",
   "k.kinds/shards/kind",
   "k.kinds/shards/wordnet-2",
   "k.layouts/shards/outlines-cc0-1-0",
@@ -69311,7 +69345,8 @@
   "k.words/shards/frequency-h",
   "k.words/shards/he",
   "w.lang.en/shards/closed-classes",
-  "w.lang.en/shards/grammar"
+  "w.lang.en/shards/grammar",
+  "w.preferences/schema.sop"
  ],
  "here and there": [
   "k.layouts/shards/layouts"
@@ -73978,6 +74013,7 @@
  ],
  "infant": [
   "k.people/shards/kinds",
+  "k.values/shards/scales",
   "k.words/shards/frequency-i",
   "k.words/shards/in",
   "k.objects/shards/noto-drink-01"
@@ -80122,6 +80158,7 @@
   "k.words/shards/ke",
   "w.diagram/schema.sop",
   "w.dialogue/schema.sop",
+  "w.preferences/schema.sop",
   "k.objects/shards/noto-food-fruit-01"
  ],
  "key largo": [
@@ -80765,6 +80802,7 @@
  ],
  "kid": [
   "k.people/shards/kinds",
+  "k.values/shards/scales",
   "k.words/shards/frequency-k",
   "k.words/shards/ki",
   "w.person/schema.sop"
@@ -84428,7 +84466,8 @@
  ],
  "learned": [
   "k.words/shards/frequency-l",
-  "k.words/shards/le"
+  "k.words/shards/le",
+  "w.preferences/schema.sop"
  ],
  "learned placement preference": [
   "k.spatial2d/schema.sop"
@@ -84834,6 +84873,9 @@
   "k.objects/shards/noto-transport-ground-02",
   "k.objects/shards/places",
   "k.objects/shards/things-2"
+ ],
+ "left_dot": [
+  "k.faces/shards/plain-shoulders"
  ],
  "left_drop": [
   "k.objects/shards/mulberry-clothes-jewellery-01"
@@ -86526,9 +86568,13 @@
   "k.objects/shards/noto-transport-ground-01",
   "k.objects/shards/noto-transport-ground-06"
  ],
+ "light antenna": [
+  "k.faces/shards/plain-hat"
+ ],
  "light blue": [
   "k.colours/shards/colours",
-  "k.colours/shards/colours-css"
+  "k.colours/shards/colours-css",
+  "k.faces/shards/colours"
  ],
  "light brown": [
   "k.colours/shards/colours",
@@ -86604,6 +86650,9 @@
  ],
  "light slate grey": [
   "k.colours/shards/colours-css"
+ ],
+ "light smile": [
+  "k.faces/shards/plain-mouth"
  ],
  "light steel blue": [
   "k.colours/shards/colours-css"
@@ -89416,6 +89465,7 @@
   "k.faces/shards/plain-earrings",
   "k.faces/shards/plain-ears",
   "k.faces/shards/plain-eyes",
+  "k.faces/shards/plain-head",
   "k.faces/shards/plain-mouth",
   "k.faces/shards/plain-neck",
   "k.faces/shards/plain-nose",
@@ -90967,6 +91017,7 @@
   "k.words/shards/ma",
   "w.lang.en/shards/closed-classes",
   "w.lang.en/shards/determiners",
+  "w.preferences/schema.sop",
   "w.request/schema.sop"
  ],
  "many-sided shape": [
@@ -92656,7 +92707,8 @@
   "k.words/schema.sop",
   "k.words/shards/frequency-m",
   "k.words/shards/me",
-  "w.dialogue/schema.sop"
+  "w.dialogue/schema.sop",
+  "w.preferences/schema.sop"
  ],
  "meanings": [
   "k.words/schema.sop"
@@ -94101,6 +94153,9 @@
   "k.kinds/shards/kind",
   "k.kinds/shards/part_of",
   "k.words/shards/mi"
+ ],
+ "middle-aged": [
+  "k.values/shards/scales"
  ],
  "middle-sized": [
   "k.values/shards/scales"
@@ -100416,6 +100471,7 @@
  ],
  "newborn": [
   "k.people/shards/kinds",
+  "k.values/shards/scales",
   "k.words/shards/frequency-n",
   "k.words/shards/ne",
   "k.objects/shards/noto-animal-bird-01",
@@ -102991,6 +103047,7 @@
   "w.lang.en/shards/grammar",
   "w.lang.en/shards/prepositions",
   "w.person/schema.sop",
+  "w.preferences/schema.sop",
   "w.request/schema.sop"
  ],
  "of course": [
@@ -103294,6 +103351,7 @@
  "old": [
   "k.people/schema.sop",
   "k.space/schema.sop",
+  "k.values/shards/scales",
   "k.words/shards/frequency-o",
   "k.words/shards/ol",
   "w.person/schema.sop",
@@ -103336,8 +103394,12 @@
   "k.kinds/shards/wordnet-2"
  ],
  "older": [
+  "k.values/shards/scales",
   "k.words/shards/frequency-o",
   "k.words/shards/ol"
+ ],
+ "oldest": [
+  "k.values/shards/scales"
  ],
  "oldlace": [
   "k.colours/shards/colours-css"
@@ -107003,7 +107065,8 @@
   "k.words/shards/pa",
   "w.document/schema.sop",
   "w.drawing/schema.sop",
-  "w.face/schema.sop"
+  "w.face/schema.sop",
+  "w.preferences/schema.sop"
  ],
  "part name": [
   "k.parts/schema.sop"
@@ -111608,6 +111671,7 @@
   "k.attributes/shards/things-objects",
   "k.attributes/shards/things-visual-genome",
   "k.expect/shards/scenes",
+  "k.faces/shards/plain-head",
   "k.faces/shards/plain-mouth",
   "k.faces/shards/plain-shoulders",
   "k.kinds/shards/group-mulberry",
@@ -113945,10 +114009,15 @@
  "preference": [
   "k.units/shards/measures",
   "k.words/shards/frequency-p",
-  "k.words/shards/pr"
+  "k.words/shards/pr",
+  "w.preferences/schema.sop"
+ ],
+ "preference field": [
+  "w.preferences/schema.sop"
  ],
  "preferences": [
-  "w.person/schema.sop"
+  "w.person/schema.sop",
+  "w.preferences/schema.sop"
  ],
  "preferred_policy": [
   "k.units/shards/measures"
@@ -119212,7 +119281,8 @@
   "k.words/shards/re"
  ],
  "replaces": [
-  "w.dialogue/schema.sop"
+  "w.dialogue/schema.sop",
+  "w.preferences/schema.sop"
  ],
  "replaces the last result": [
   "w.dialogue/schema.sop"
@@ -119747,6 +119817,9 @@
   "k.actions/shards/verbs-change",
   "k.words/shards/frequency-r",
   "k.words/shards/re"
+ ],
+ "resets": [
+  "w.preferences/schema.sop"
  ],
  "reside": [
   "k.words/shards/frequency-r",
@@ -120880,6 +120953,9 @@
   "k.objects/shards/noto-transport-ground-02",
   "k.objects/shards/things-2"
  ],
+ "right_dot": [
+  "k.faces/shards/plain-shoulders"
+ ],
  "right_drop": [
   "k.objects/shards/mulberry-clothes-jewellery-01"
  ],
@@ -121593,6 +121669,7 @@
   "k.attributes/shards/things-worn",
   "k.colours/shards/colours",
   "k.expect/shards/scenes",
+  "k.faces/shards/plain-neck",
   "k.kinds/shards/group-noto",
   "k.kinds/shards/kind",
   "k.kinds/shards/material",
@@ -122213,6 +122290,7 @@
   "k.faces/shards/plain-earrings",
   "k.faces/shards/plain-ears",
   "k.faces/shards/plain-eyes",
+  "k.faces/shards/plain-head",
   "k.faces/shards/plain-mouth",
   "k.faces/shards/plain-neck",
   "k.faces/shards/plain-nose",
@@ -122229,10 +122307,17 @@
   "k.words/shards/frequency-r",
   "k.words/shards/ro"
  ],
+ "robot white": [
+  "k.faces/shards/colours"
+ ],
+ "robot-classic": [
+  "k.faces/shards/presets"
+ ],
  "robots": [
   "k.faces/shards/plain-earrings",
   "k.faces/shards/plain-ears",
   "k.faces/shards/plain-eyes",
+  "k.faces/shards/plain-head",
   "k.faces/shards/plain-mouth",
   "k.faces/shards/plain-neck",
   "k.faces/shards/plain-nose",
@@ -123207,6 +123292,9 @@
  ],
  "round mountain": [
   "k.geo/shards/oceania"
+ ],
+ "round plate": [
+  "k.faces/shards/plain-shoulders"
  ],
  "round pushpin": [
   "k.attributes/shards/drawn-noto",
@@ -124237,6 +124325,7 @@
   "k.words/shards/frequency-s",
   "k.words/shards/sa",
   "w.dialogue/schema.sop",
+  "w.preferences/schema.sop",
   "w.request/schema.sop"
  ],
  "said by": [
@@ -127432,7 +127521,8 @@
   "k.objects/shards/things-2",
   "k.spatial2d/schema.sop",
   "k.words/shards/frequency-s",
-  "k.words/shards/sc"
+  "k.words/shards/sc",
+  "w.preferences/schema.sop"
  ],
  "scorch": [
   "k.actions/shards/actions-make-change"
@@ -128780,6 +128870,7 @@
   "k.geo/shards/psys2-countries"
  ],
  "senior": [
+  "k.values/shards/scales",
   "k.words/shards/frequency-s",
   "k.words/shards/se"
  ],
@@ -129244,13 +129335,17 @@
   "k.scenes/schema.sop",
   "k.story/shards/structure",
   "k.words/shards/frequency-s",
-  "k.words/shards/se"
+  "k.words/shards/se",
+  "w.preferences/schema.sop"
  ],
  "setting has the obstacle": [
   "k.story/shards/structure"
  ],
  "setting the table": [
   "k.procedures/shards/everyday"
+ ],
+ "settings": [
+  "w.preferences/schema.sop"
  ],
  "settle": [
   "k.actions/shards/actions-body-social-nature",
@@ -129387,6 +129482,7 @@
   "k.words/shards/se",
   "w.lang.en/shards/closed-classes",
   "w.lang.en/shards/determiners",
+  "w.preferences/schema.sop",
   "w.request/schema.sop"
  ],
  "several of them": [
@@ -131989,7 +132085,8 @@
  "since": [
   "w.lang.en/shards/closed-classes",
   "w.lang.en/shards/hand-joins",
-  "w.lang.en/shards/prepositions"
+  "w.lang.en/shards/prepositions",
+  "w.preferences/schema.sop"
  ],
  "sincerity": [
   "k.words/shards/frequency-s",
@@ -133487,6 +133584,9 @@
  "small round": [
   "k.faces/shards/plain-glasses"
  ],
+ "small_glint": [
+  "k.faces/shards/plain-eyes"
+ ],
  "small_lobe": [
   "k.objects/shards/openmoji-healthcare-02"
  ],
@@ -134260,6 +134360,9 @@
  "soft pedal": [
   "k.kinds/shards/part_of-wordnet-3"
  ],
+ "soft round": [
+  "k.faces/shards/plain-eyes"
+ ],
  "soft-finned fish": [
   "k.kinds/shards/wordnet-1",
   "k.kinds/shards/wordnet-2"
@@ -134817,7 +134920,8 @@
   "k.units/shards/measures",
   "k.words/shards/frequency-s",
   "k.words/shards/so",
-  "w.document/schema.sop"
+  "w.document/schema.sop",
+  "w.preferences/schema.sop"
  ],
  "source identifier": [
   "w.text/schema.sop"
@@ -136983,6 +137087,9 @@
   "k.words/shards/frequency-s",
   "k.words/shards/st"
  ],
+ "standing preferences": [
+  "w.preferences/schema.sop"
+ ],
  "standing room": [
   "k.kinds/shards/part_of-wordnet-3"
  ],
@@ -137353,6 +137460,9 @@
  "state thesis": [
   "k.genres/shards/essay",
   "k.genres/shards/moves"
+ ],
+ "stated": [
+  "w.preferences/schema.sop"
  ],
  "statehouse": [
   "k.objects/shards/places-3"
@@ -153525,6 +153635,7 @@
   "w.chart/schema.sop",
   "w.diagram/schema.sop",
   "w.lang.en/schema.sop",
+  "w.preferences/schema.sop",
   "w.request/schema.sop"
  ],
  "value axis side": [
@@ -155951,6 +156062,15 @@
  "w.picture.picture": [
   "k.kinds/shards/structures"
  ],
+ "w.preferences": [
+  "k.kinds/shards/structures"
+ ],
+ "w.preferences.preference": [
+  "k.kinds/shards/structures"
+ ],
+ "w.preferences.preference.at": [
+  "k.kinds/shards/structures"
+ ],
  "w.reader.en": [
   "k.units/shards/measures"
  ],
@@ -158054,6 +158174,7 @@
   "w.lang.en/shards/closed-classes",
   "w.lang.en/shards/ellipsis",
   "w.person/schema.sop",
+  "w.preferences/schema.sop",
   "w.request/schema.sop",
   "w.tasks/schema.sop",
   "w.timeline/schema.sop"
@@ -158324,6 +158445,7 @@
   "w.lang.en/shards/clauses",
   "w.lang.en/shards/closed-classes",
   "w.lang.en/shards/ellipsis",
+  "w.preferences/schema.sop",
   "w.tasks/schema.sop",
   "w.timeline/schema.sop"
  ],
@@ -158349,6 +158471,7 @@
   "w.lang.en/shards/ellipsis",
   "w.map/schema.sop",
   "w.meetings/schema.sop",
+  "w.preferences/schema.sop",
   "w.request/schema.sop",
   "w.seating/schema.sop",
   "k.objects/shards/noto-place-building-02",
@@ -160195,6 +160318,7 @@
   "k.words/shards/wo",
   "w.document/schema.sop",
   "w.drawing/schema.sop",
+  "w.preferences/schema.sop",
   "w.request/schema.sop"
  ],
  "words left": [
@@ -161556,6 +161680,7 @@
  "young": [
   "k.animals/schema.sop",
   "k.kinds/shards/wordnet-2",
+  "k.values/shards/scales",
   "k.words/shards/frequency-y",
   "k.words/shards/yo",
   "k.objects/shards/noto-plant-other-01"
@@ -161571,8 +161696,12 @@
   "k.kinds/shards/wordnet-2"
  ],
  "younger": [
+  "k.values/shards/scales",
   "k.words/shards/frequency-y",
   "k.words/shards/yo"
+ ],
+ "youngest": [
+  "k.values/shards/scales"
  ],
  "youngster": [
   "k.words/shards/frequency-y",

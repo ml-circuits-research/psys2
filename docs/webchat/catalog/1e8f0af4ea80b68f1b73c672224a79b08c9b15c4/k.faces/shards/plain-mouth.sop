@@ -126,6 +126,10 @@
 @k.faces.plain.mouth.grille.slot_4.p1 k.faces.point part=$k.faces.plain.mouth.grille.slot_4 n=1 x=56 y=63.5 core.source="hand-core 1"
 @k.faces.plain.mouth.grille.slot_4.p2 k.faces.point part=$k.faces.plain.mouth.grille.slot_4 n=2 x=56 y=69.5 core.source="hand-core 1"
 
+# mouth: light smile
+@k.faces.plain.mouth.light_smile k.faces.variant slot=mouth name="light smile" style=plain feel=smiling feel=closed kind=robot core.source="hand-core 1"
+@k.faces.plain.mouth.light_smile.lips k.faces.part slot=mouth of="light smile" name=lips kind=light shape=arc x=40 y=62 w=20 h=7 z=1 colour=blue rgb="#3D8FD6" opens=up core.source="hand-core 1"
+
 # mouth: gritted
 @k.faces.plain.mouth.gritted k.faces.variant slot=mouth name=gritted style=plain feel=open feel=wide kind="gritted teeth" core.source="hand-core 1"
 @k.faces.plain.mouth.gritted.teeth k.faces.part slot=mouth of=gritted name=teeth shape=rectangle x=40 y=63 w=20 h=7 z=1 colour=white rgb="#FFFFFF" core.source="hand-core 1"

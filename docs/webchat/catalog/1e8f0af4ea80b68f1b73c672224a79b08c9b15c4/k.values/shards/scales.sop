@@ -1,4 +1,4 @@
-# k.values/shards/scales: 14 ordered scales (size, length, width, height, thickness, amount, degree, brightness, speed, weight, temperature, distance, loudness, price): the steps of each from the least to the most, other words for a step, and the comparatives and superlatives that move along a scale (bigger, smallest).
+# k.values/shards/scales: 15 ordered scales (size, length, width, height, thickness, amount, degree, brightness, speed, weight, temperature, distance, loudness, price, age): the steps of each from the least to the most, other words for a step, and the comparatives and superlatives that move along a scale (bigger, smallest).
 # sources: hand-core 1 (hand-written in this repository: tools/values-core.mjs)
 # license: CC0-1.0
 # script: tools/values-core.mjs
@@ -64,6 +64,11 @@
 @k.values.step.price.cheap k.values.step scale=price name=cheap rank=1 core.source="hand-core 1"
 @k.values.step.price.medium k.values.step scale=price name=medium rank=2 core.source="hand-core 1"
 @k.values.step.price.expensive k.values.step scale=price name=expensive rank=3 core.source="hand-core 1"
+@k.values.scale.age k.values.scale name=age about="how old a person or an animal is" steps=4 core.source="hand-core 1"
+@k.values.step.age.baby k.values.step scale=age name=baby rank=1 core.source="hand-core 1"
+@k.values.step.age.child k.values.step scale=age name=child rank=2 core.source="hand-core 1"
+@k.values.step.age.adult k.values.step scale=age name=adult rank=3 core.source="hand-core 1"
+@k.values.step.age.old k.values.step scale=age name=old rank=4 core.source="hand-core 1"
 
 # Words: other words for a step.
 @k.values.word.step.size.tiny core.word text="very small" text=minute text=miniature text=mini text=teeny text=wee means=tiny of=k.values.step.name core.source="hand-core 1"
@@ -101,6 +106,10 @@
 @k.values.word.step.price.cheap core.word text=inexpensive text=low-priced means=cheap of=k.values.step.name core.source="hand-core 1"
 @k.values.word.step.price.medium core.word text="moderately priced" means=medium of=k.values.step.name core.source="hand-core 1"
 @k.values.word.step.price.expensive core.word text=dear text=costly text=pricey means=expensive of=k.values.step.name core.source="hand-core 1"
+@k.values.word.step.age.baby core.word text=infant text=newborn means=baby of=k.values.step.name core.source="hand-core 1"
+@k.values.word.step.age.child core.word text=kid text=young means=child of=k.values.step.name core.source="hand-core 1"
+@k.values.word.step.age.adult core.word text=grown-up text=middle-aged means=adult of=k.values.step.name core.source="hand-core 1"
+@k.values.word.step.age.old core.word text=elderly text=aged text=senior means=old of=k.values.step.name core.source="hand-core 1"
 
 # Comparatives and superlatives.
 @k.values.comparative.size.bigger k.values.comparative text=bigger scale=size way=up degree=comparative core.source="hand-core 1"
@@ -173,6 +182,10 @@
 @k.values.comparative.temperature.cooler k.values.comparative text=cooler scale=temperature way=down degree=comparative core.source="hand-core 1"
 @k.values.comparative.temperature.coldest k.values.comparative text=coldest scale=temperature way=down degree=superlative core.source="hand-core 1"
 @k.values.comparative.temperature.coolest k.values.comparative text=coolest scale=temperature way=down degree=superlative core.source="hand-core 1"
+@k.values.comparative.age.older k.values.comparative text=older scale=age way=up degree=comparative core.source="hand-core 1"
+@k.values.comparative.age.oldest k.values.comparative text=oldest scale=age way=up degree=superlative core.source="hand-core 1"
+@k.values.comparative.age.younger k.values.comparative text=younger scale=age way=down degree=comparative core.source="hand-core 1"
+@k.values.comparative.age.youngest k.values.comparative text=youngest scale=age way=down degree=superlative core.source="hand-core 1"
 @k.values.comparative.distance.farther k.values.comparative text=farther scale=distance way=up degree=comparative core.source="hand-core 1"
 @k.values.comparative.distance.further k.values.comparative text=further scale=distance way=up degree=comparative core.source="hand-core 1"
 @k.values.comparative.distance.apart k.values.comparative text=apart scale=distance way=up degree=comparative core.source="hand-core 1"

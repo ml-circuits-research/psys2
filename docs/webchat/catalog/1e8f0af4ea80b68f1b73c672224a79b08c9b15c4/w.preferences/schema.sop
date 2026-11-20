@@ -1,0 +1,55 @@
+# w.preferences: a reusable world: standing preferences a person states once and an application keeps applying (I'd
+# prefer a man as my avatar, always use dashed lines, keep the IDs on, I prefer pastel colours): each a key with a value
+# (or a described value split into fields: an old man with glasses is the age, the sex and a trait of one key), a scope
+# (the whole application, one tab, or one kind of object), where the value came from (a declared default, stated by the
+# person, learned) and when it was stated. Declared as data in the library's std.schema format; the acts of std.acts
+# drive it (make, remove, change, pick, ask). An application declares the keys it offers, their fields and their
+# default values with the two declaration types below; its own rules merge statements (later statements refine, a field
+# not mentioned keeps its value, a reset returns to the declared default).
+# sources: hand-core 1 (hand-written in this repository; own)
+# license: CC0-1.0
+# script: none (hand-written)
+# needs: sopworld with std.schema and std.acts (tools/sopworld/VERSION, 0.30.0 or later)
+
+@w.preferences core.module name=w.preferences version=1 exports=preference exports=default exports=field core.source="hand-core 1"
+@w.preferences.world std.schema.world name=w.preferences doc="standing preferences: a key, its value or the fields of a described value, a scope, a source and when it was stated" core.source="hand-core 1"
+
+# A standing preference. `key` names what it is about, as the application declares it (avatar.figure, link.style,
+# palette); `field` the part of a described value it sets (age, sex, trait), `value` when the key has one value;
+# `value` the value (an atom or a name: dashed, pastel, old, spectacled); `about` the words the person said, kept as
+# said ("an old man with glasses"). `scope`: app (everywhere), tab (one tab: `of` names it) or kind (one kind of object:
+# `of` names it, a link, a node). `source`: default (the application's declared default), stated (the person said it)
+# or learned (inferred from what the person keeps doing). `at`: when it was stated, as the order of statements (0 for a
+# default; a later statement has a larger number), so the latest statement of a field is the one in force.
+@w.preferences.preference core.type of=w.preferences.preference extends=std.schema.thing closed=true core.source="hand-core 1"
+@w.preferences.preference.key core.slot of=w.preferences.preference key=key required=true kind=atom kind=string core.source="hand-core 1"
+@w.preferences.preference.field core.slot of=w.preferences.preference key=field kind=atom kind=string default=value core.source="hand-core 1"
+@w.preferences.preference.value core.slot of=w.preferences.preference key=value required=true kind=atom kind=string core.source="hand-core 1"
+@w.preferences.preference.about core.slot of=w.preferences.preference key=about kind=string core.source="hand-core 1"
+@w.preferences.preference.scope core.slot of=w.preferences.preference key=scope enum=app enum=tab enum=kind default=app core.source="hand-core 1"
+@w.preferences.preference.of core.slot of=w.preferences.preference key=of kind=atom kind=string core.source="hand-core 1"
+@w.preferences.preference.source core.slot of=w.preferences.preference key=source enum=default enum=stated enum=learned default=stated core.source="hand-core 1"
+@w.preferences.preference.at core.slot of=w.preferences.preference key=at kind=integer min=0 step=1 core.source="hand-core 1"
+
+# The kind and the acts that apply to it. At most 1,000 preferences.
+@w.preferences.kind.preference std.schema.kind of=w.preferences.preference world=w.preferences acts=make acts=remove acts=change acts=pick acts=ask core.source="hand-core 1"
+@w.preferences.limit.preference std.schema.limit of=w.preferences.preference max=1000 core.source="hand-core 1"
+
+# What an application offers (declared data it loads with its rules, not instance facts). A default: the value a key
+# (or one field of it) has until the person states another, with its scope; a reset returns to it.
+@w.preferences.default core.type of=w.preferences.default shared=true closed=true core.source="hand-core 1"
+@w.preferences.default.key core.slot of=w.preferences.default key=key id=true required=true kind=atom kind=string core.source="hand-core 1"
+@w.preferences.default.field core.slot of=w.preferences.default key=field id=true kind=atom kind=string default=value core.source="hand-core 1"
+@w.preferences.default.value core.slot of=w.preferences.default key=value required=true kind=atom kind=string core.source="hand-core 1"
+@w.preferences.default.about core.slot of=w.preferences.default key=about kind=string core.source="hand-core 1"
+@w.preferences.default.scope core.slot of=w.preferences.default key=scope enum=app enum=tab enum=kind default=app core.source="hand-core 1"
+@w.preferences.default.of core.slot of=w.preferences.default key=of kind=atom kind=string core.source="hand-core 1"
+
+# A field of a described value: whether it holds several values at once (traits: glasses and a beard), and which other
+# fields of the same key a statement of it clears (choosing a named figure clears the age, the sex and the traits
+# stated for the one before).
+@w.preferences.field core.type of=w.preferences.field shared=true closed=true core.source="hand-core 1"
+@w.preferences.field.key core.slot of=w.preferences.field key=key id=true required=true kind=atom kind=string core.source="hand-core 1"
+@w.preferences.field.field core.slot of=w.preferences.field key=field id=true required=true kind=atom kind=string core.source="hand-core 1"
+@w.preferences.field.many core.slot of=w.preferences.field key=many kind=boolean default=false core.source="hand-core 1"
+@w.preferences.field.clears core.slot of=w.preferences.field key=clears many=true kind=atom kind=string core.source="hand-core 1"

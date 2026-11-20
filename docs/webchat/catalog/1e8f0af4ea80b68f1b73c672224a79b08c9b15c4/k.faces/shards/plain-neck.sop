@@ -38,3 +38,8 @@
 @k.faces.plain.neck.pipe.upper_ring.p2 k.faces.point part=$k.faces.plain.neck.pipe.upper_ring n=2 x=55 y=80 core.source="hand-core 1"
 @k.faces.plain.neck.pipe.lower_ring.p1 k.faces.point part=$k.faces.plain.neck.pipe.lower_ring n=1 x=45 y=85 core.source="hand-core 1"
 @k.faces.plain.neck.pipe.lower_ring.p2 k.faces.point part=$k.faces.plain.neck.pipe.lower_ring n=2 x=55 y=85 core.source="hand-core 1"
+
+# neck: ring
+@k.faces.plain.neck.ring k.faces.variant slot=neck name=ring style=plain kind=robot core.source="hand-core 1"
+@k.faces.plain.neck.ring.neck k.faces.part slot=neck of=ring name=neck shape=rectangle x=43 y=70 w=14 h=18 z=1 colour=white colour=blue tint=skin_shade core.source="hand-core 1"
+@k.faces.plain.neck.ring.ring k.faces.part slot=neck of=ring name=ring kind=light shape=rectangle x=41 y=79 w=18 h=4 z=2 colour=blue rgb="#7FC4F2" core.source="hand-core 1"

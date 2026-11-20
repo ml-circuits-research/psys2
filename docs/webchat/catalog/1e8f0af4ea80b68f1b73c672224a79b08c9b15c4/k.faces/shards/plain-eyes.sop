@@ -82,6 +82,12 @@
 @k.faces.plain.eyes.square.socket k.faces.part slot=eyes of=square name=socket shape=square x=31.5 y=36.5 w=11 h=11 z=1 colour=black rgb="#3A3A3A" core.source="hand-core 1"
 @k.faces.plain.eyes.square.light k.faces.part slot=eyes of=square name=light shape=square x=33.5 y=38.5 w=7 h=7 z=2 colour=yellow colour=blue tint=eyes core.source="hand-core 1"
 
+# eyes: soft round
+@k.faces.plain.eyes.soft_round k.faces.variant slot=eyes name="soft round" style=plain shape=round size=large feel=open kind=robot core.source="hand-core 1"
+@k.faces.plain.eyes.soft_round.eye k.faces.part slot=eyes of="soft round" name=eye shape=circle x=31 y=35.5 w=12 h=12 z=1 colour=black colour=blue tint=eyes core.source="hand-core 1"
+@k.faces.plain.eyes.soft_round.glint k.faces.part slot=eyes of="soft round" name=glint shape=circle x=36 y=37.5 w=3.6 h=3.6 z=2 colour=white rgb="#FFFFFF" core.source="hand-core 1"
+@k.faces.plain.eyes.soft_round.small_glint k.faces.part slot=eyes of="soft round" name=small_glint kind=glint shape=circle x=33 y=42 w=1.8 h=1.8 z=3 colour=white rgb="#FFFFFF" core.source="hand-core 1"
+
 # eyes: downcast
 @k.faces.plain.eyes.downcast k.faces.variant slot=eyes name=downcast style=plain feel=open kind="looking down" core.source="hand-core 1"
 @k.faces.plain.eyes.downcast.white k.faces.part slot=eyes of=downcast name=white shape=oval x=30 y=38 w=14 h=8 z=1 colour=white rgb="#FFFFFF" core.source="hand-core 1"

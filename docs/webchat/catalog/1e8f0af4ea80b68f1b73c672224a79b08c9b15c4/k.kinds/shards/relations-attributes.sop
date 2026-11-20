@@ -80,6 +80,6 @@
 @k.kinds.relation.k.attributes.usage.season k.kinds.relation type=k.attributes.usage key=season subject=thing object=time object_type=k.time.season object_sense=time found=declared object_by=name core.source="hand-core 1"
 @k.kinds.relation.k.attributes.usage.time k.kinds.relation type=k.attributes.usage key=time subject=thing object=time object_type=k.time.part_of_day object_sense=time found=declared object_by=name core.source="hand-core 1"
 @k.kinds.relation.k.attributes.usage.weather k.kinds.relation type=k.attributes.usage key=weather subject=thing object=value found=schema core.source="hand-core 1"
-@k.kinds.relation.k.attributes.usage.age k.kinds.relation type=k.attributes.usage key=age subject=thing object=value object_type=k.attributes.thing object_type=k.faces.preset object_type=k.people.kind object_sense=person found=value core.source="hand-core 1"
+@k.kinds.relation.k.attributes.usage.age k.kinds.relation type=k.attributes.usage key=age subject=thing object=value object_type=k.attributes.thing object_type=k.faces.preset object_type=k.people.kind object_sense=person scale=age found=value core.source="hand-core 1"
 @k.kinds.relation.k.attributes.usage.used_by k.kinds.relation type=k.attributes.usage key=used_by subject=thing object=person object_type=k.people.role object_sense=person found=declared object_by=name core.source="hand-core 1"
 @k.kinds.relation.k.attributes.usage.named k.kinds.relation type=k.attributes.usage key=named subject=thing object=value found=schema core.source="hand-core 1"
