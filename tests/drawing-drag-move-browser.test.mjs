@@ -109,7 +109,7 @@ test('Diagram: add node, drag a node, its resize handle and a colour apply as dr
   // the ids the diagram draws (a node's shape and label carry its id); no connection is made here
   const nodes=()=>ev(`[...new Set([...document.querySelectorAll('.dg-svg [data-select]')].map(e=>e.getAttribute('data-select')))]`);
   const rectOf=id=>ev(`[...document.querySelectorAll('.dg-svg [data-select="${id}"]')].map(e=>e.getBoundingClientRect()).reduce((a,r)=>({x0:Math.min(a.x0,r.left),y0:Math.min(a.y0,r.top),x1:Math.max(a.x1,r.right),y1:Math.max(a.y1,r.bottom)}),{x0:1e9,y0:1e9,x1:-1e9,y1:-1e9})`);
-  const s=await svgRect(),place=async(fx,fy)=>{await button('','Add node');const kind=await ev(`document.querySelector('.dg-node-chooser .dg-tools button').textContent.trim()`);await button('.dg-node-chooser',kind);await click({x:s.x+s.w*fx,y:s.y+s.h*fy});};
+  const s=await svgRect(),place=async(fx,fy)=>{await button('','Add node');const kind=await ev(`new Promise((resolve,reject)=>{const end=Date.now()+30000,t=setInterval(()=>{const e=document.querySelector('.dg-node-chooser .dg-tools button');if(e){clearInterval(t);resolve(e.textContent.trim());}else if(Date.now()>end){clearInterval(t);reject(Error('the node chooser did not open'));}},50);})`);await button('.dg-node-chooser',kind);await click({x:s.x+s.w*fx,y:s.y+s.h*fy});};
   let before=await nodes();
   await gesture('Add node',()=>place(0.3,0.35),async()=>{const now=await nodes();assert.equal(now.length,before.length+1,JSON.stringify(now));before=now;});
   await gesture('Add a second node',()=>place(0.65,0.6),async()=>{const now=await nodes();assert.equal(now.length,before.length+1);before=now;});
