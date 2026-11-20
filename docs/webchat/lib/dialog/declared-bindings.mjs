@@ -27,10 +27,10 @@
 //     the declared kind the binding gives it, else the native value itself, drawn by that operation with that value.
 import {parse,str} from '../vendor/sopworld/sopworld.mjs?v=4cf6e60057';
 import {interpretationPolicy} from './interpretation-policy.mjs?v=95c5ac8e35';
-import {executionPolicyWorld} from './execution-policy.mjs?v=f1ae82cb42';
-import {declaredValueRows} from './declared-value-readings.mjs?v=e2a609f951';
+import {executionPolicyWorld} from './execution-policy.mjs?v=fc7a8e4440';
+import {declaredValueRows} from './declared-value-readings.mjs?v=205fb4987d';
 import {numberWords,numberInfo} from '../knowledge/values.mjs?v=2a29aaa4d2';
-import EXECUTION_POLICY from '../../worlds/app.project/execution-policy-source.mjs?v=4b6b78a2bd';
+import EXECUTION_POLICY from '../../worlds/app.project/execution-policy-source.mjs?v=84cd6c1b73';
 import DRAW from '../../worlds/art.draw/native-interface-source.mjs?v=afabeecb4f';
 import DIAGRAM from '../../worlds/diagram.sketch/native-interface-source.mjs?v=595d3de650';
 import CHARTS from '../../worlds/data.charts/native-interface-source.mjs?v=6c0dc1d746';

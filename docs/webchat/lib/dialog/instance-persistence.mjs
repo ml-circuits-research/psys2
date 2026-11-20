@@ -1,6 +1,6 @@
 // Versioned SOP instances; native projections are admitted only after their declared view agrees.
 import{serializeInstanceState,readInstanceState,instanceStateWorld,serialize}from'../vendor/sopworld/sopworld.mjs?v=4cf6e60057';
-import{NATIVE_AREAS,createAreaHost}from'./app-reader-context.mjs?v=b3122fd944';
+import{NATIVE_AREAS,createAreaHost}from'./app-reader-context.mjs?v=da248134c0';
 import{nativeObservationObjects,compareInstanceObjects}from'./instance-facts.mjs?v=6bdf287d2c';
 import{instanceIdFor}from'./instance-identity.mjs?v=024ef1ca83';
 import{copyHostData}from'../../worlds/native-tool-host.mjs?v=f5de6de16f';

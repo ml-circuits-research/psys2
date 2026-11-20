@@ -1,14 +1,14 @@
 import { historyHeads } from './history-journal.mjs?v=a4ae88133a';
-import {nativeKindCandidates} from './native-binding-candidates.mjs?v=346e926f76';
+import {nativeKindCandidates} from './native-binding-candidates.mjs?v=8423e98bc7';
 // Bind model-declared context references to actual native objects; never inspect source words.
 import {quote,str} from '../vendor/sopworld/sopworld.mjs?v=4cf6e60057';
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=b3122fd944';
-import {executionPolicyWorld} from './execution-policy.mjs?v=f1ae82cb42';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=da248134c0';
+import {executionPolicyWorld} from './execution-policy.mjs?v=fc7a8e4440';
 import {readReferenceTurn,resolveObservedReference} from './reference-policy.mjs?v=1dde2d0d9c';
 import {observeGroundedProjection,projectGroundedRequest} from './grounded-projection.mjs?v=0185c6d256';
 import {flatRequestProjection} from './request-projection.mjs?v=e4dcb8aca9';
 import {bridgeRawStructure} from './raw-structural-bridge.mjs?v=c9d33055fd';
-import {comparativeSteps} from './comparative-projection.mjs?v=7d7285ee2d';
+import {comparativeSteps} from './comparative-projection.mjs?v=5f817bce08';
 import {referenceProjection} from './reference-projection.mjs?v=a417645182';
 import {interpretationPolicy} from './interpretation-policy.mjs?v=95c5ac8e35';
 function containerOwned(r,bindings,area){

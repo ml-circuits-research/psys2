@@ -1034,6 +1034,11 @@
 @a.og.member ui.diagram.inside group=?id node=?v
 @a.og.member.o app.observe.input id=?id key=members value=?v
 @observe.group.members core.rule when=$a.og.member then=$a.og.member.o
+# A chart group is observed with the values of its members ("what values does Revenue show?").
+@a.og.vn w.diagram.node code=?mv value=?vv
+@a.og.vm ui.diagram.inside group=?id node=?mv
+@a.og.vo app.observe.input id=?id key=values value=?vv
+@observe.group.values core.rule when=$a.og.vm when=$a.og.vn then=$a.og.vo
 
 @a.sp.n ui.diagram.nbox node=?id x0=?x0 y0=?y0 x1=?x1 y1=?y1
 @a.sp.free ui.diagram.unitof node=?id unit=?id

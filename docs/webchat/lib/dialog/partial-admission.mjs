@@ -7,10 +7,10 @@
 // word, a sentence, a tool or a world.
 import {bridgeRawStructure,pruneLabel} from './raw-structural-bridge.mjs?v=c9d33055fd';
 import {decodeModelGraphs} from './model-graph-decoder.mjs?v=cb093fa75d';
-import {comparativeSteps} from './comparative-projection.mjs?v=7d7285ee2d';
+import {comparativeSteps} from './comparative-projection.mjs?v=5f817bce08';
 import {referenceProjection} from './reference-projection.mjs?v=a417645182';
 import {interpretationPolicy} from './interpretation-policy.mjs?v=95c5ac8e35';
-import {executionPolicyWorld} from './execution-policy.mjs?v=f1ae82cb42';
+import {executionPolicyWorld} from './execution-policy.mjs?v=fc7a8e4440';
 import {en} from '../lang/en.mjs?v=2cc06b9b27';
 import {referenceProjection as declaredReferences} from './reference-projection.mjs?v=a417645182';
 import {budget} from './budget.mjs?v=00bce6e369';

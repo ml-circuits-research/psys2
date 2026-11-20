@@ -7,6 +7,11 @@ import { nearestColourName } from '../knowledge/values.mjs';
 const value=(row,key)=>str(row?.attrs[key]?.[0]);
 const memberName=row=>value(row,'name')??value(row,'kind')+' '+value(row,'id');
 
+// RGB codes are said as their nearest k.colours names, once each; other values as they are, in order.
+function sayValues(tokens){
+ const said=tokens.map(token=>token.startsWith('$')?{text:'see the SOP value'}:(name=>name?{text:name,colour:true}:{text:str(token)})(nearestColourName(str(token))));
+ return said.filter((v,i)=>!v.colour||said.findIndex(w=>w.colour&&w.text===v.text)===i).map(v=>v.text).join(', ');
+}
 function describeAnswer(row,byId){
  if(value(row,'status')!=='answered')return 'I could not answer '+value(row,'operation')+' ('+value(row,'reason')+').';
  const members=(row.attrs.member??[]).map(ref=>byId.get(ref.slice(1)));
@@ -16,7 +21,7 @@ function describeAnswer(row,byId){
  case 'members':return members.length?'Matching objects: '+members.map(memberName).join(', ')+'.':'No objects match.';
  case 'values':return members.length?members.map(member=>memberName(member)+': '+
   // An RGB code is said as its nearest k.colours name (several codes that name one colour are said once).
-  [...new Set(member.attrs.value.map(token=>token.startsWith('$')?'see the SOP value':nearestColourName(str(token))??str(token)))].join(', ')).join('; ')+'.':'No matching values.';
+  sayValues(member.attrs.value)).join('; ')+'.':'No matching values.';
  }
 }
 

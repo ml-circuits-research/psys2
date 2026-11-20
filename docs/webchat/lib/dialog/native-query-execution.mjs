@@ -1,12 +1,17 @@
 import { parse,str } from '../vendor/sopworld/sopworld.mjs?v=4cf6e60057';
-import { compileNativeQuery } from './capability-plan-adapter.mjs?v=1d8aaf2bfe';
-import { createAreaHost,NATIVE_AREAS } from './app-reader-context.mjs?v=b3122fd944';
+import { compileNativeQuery } from './capability-plan-adapter.mjs?v=f025714aa6';
+import { createAreaHost,NATIVE_AREAS } from './app-reader-context.mjs?v=da248134c0';
 import { instanceIdFor } from './instance-identity.mjs?v=024ef1ca83';
 import { nearestColourName } from '../knowledge/values.mjs?v=2a29aaa4d2';
 
 const value=(row,key)=>str(row?.attrs[key]?.[0]);
 const memberName=row=>value(row,'name')??value(row,'kind')+' '+value(row,'id');
 
+// RGB codes are said as their nearest k.colours names, once each; other values as they are, in order.
+function sayValues(tokens){
+ const said=tokens.map(token=>token.startsWith('$')?{text:'see the SOP value'}:(name=>name?{text:name,colour:true}:{text:str(token)})(nearestColourName(str(token))));
+ return said.filter((v,i)=>!v.colour||said.findIndex(w=>w.colour&&w.text===v.text)===i).map(v=>v.text).join(', ');
+}
 function describeAnswer(row,byId){
  if(value(row,'status')!=='answered')return 'I could not answer '+value(row,'operation')+' ('+value(row,'reason')+').';
  const members=(row.attrs.member??[]).map(ref=>byId.get(ref.slice(1)));
@@ -16,7 +21,7 @@ function describeAnswer(row,byId){
  case 'members':return members.length?'Matching objects: '+members.map(memberName).join(', ')+'.':'No objects match.';
  case 'values':return members.length?members.map(member=>memberName(member)+': '+
   // An RGB code is said as its nearest k.colours name (several codes that name one colour are said once).
-  [...new Set(member.attrs.value.map(token=>token.startsWith('$')?'see the SOP value':nearestColourName(str(token))??str(token)))].join(', ')).join('; ')+'.':'No matching values.';
+  sayValues(member.attrs.value)).join('; ')+'.':'No matching values.';
  }
 }
 
