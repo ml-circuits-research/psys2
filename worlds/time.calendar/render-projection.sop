@@ -1,0 +1,46 @@
+# time.calendar render projection (authored): an agenda of the meetings in order of their start, derived from
+# the w.meetings instance. A row per meeting (core.rank by start); the date, the clock time and the length are
+# computed from `start` and `duration`; a meeting takes its calendar's colour. A renderer draws these facts.
+@cal.draw.type core.type of=ui.calendar.draw
+@cal.fill.type core.type of=ui.calendar.fill
+@cal.colour.type core.type of=ui.calendar.colour
+@cal.point.type core.type of=ui.calendar.point
+@cal.orient.type core.type of=ui.calendar.orient
+
+@row.m w.meetings.meeting code=?id title=?t start=?s duration=?d
+@row.rank core.rank of=$row.m by=start out=?r
+@row.r0 core.calc out=?r0 fn=sub args=?r args=1
+@row.ry core.calc out=?ry fn=mul args=?r0 args=48
+@row.y core.calc out=?y fn=add args=?ry args=8
+@row.ty core.calc out=?ty fn=add args=?y args=26
+@row.msd core.calc out=?msd fn=mod args=?s args=86400000
+@row.h core.calc out=?h fn=idiv args=?msd args=3600000
+@row.msh core.calc out=?msh fn=mod args=?s args=3600000
+@row.mi core.calc out=?mi fn=idiv args=?msh args=60000
+@row.mt core.calc out=?mt fn=idiv args=?mi args=10
+@row.mu core.calc out=?mu fn=mod args=?mi args=10
+@row.days core.calc out=?days fn=idiv args=?s args=86400000
+@row.span core.calc out=?span fn=concat args=?days args=d
+@row.date core.calc out=?date fn=time_add args=1970-01-01 args=?span
+@row.len core.calc out=?mins fn=idiv args=?d args=60000
+@row.label core.calc out=?label fn=concat args=?date args=" " args=?h args=":" args=?mt args=?mu args="  " args=?t args="  (" args=?mins args=" min, UTC)"
+@row.box ui.calendar.draw part=?id source=?id slot=?id order=?r z=1 shape=rectangle x=8 y=?y w=584 h=40 cx=0 cy=0 tx=0 ty=0 scale=1 side=left
+@row.text ui.calendar.draw part=?id source=?label slot=?id order=?r z=2 shape=text text=?label x=18 y=?ty w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left
+@agenda.box core.rule when=$row.m with=$row.rank with=$row.r0 with=$row.ry with=$row.y then=$row.box
+@agenda.text core.rule when=$row.m with=$row.rank with=$row.r0 with=$row.ry with=$row.y with=$row.ty with=$row.msd with=$row.h with=$row.msh with=$row.mi with=$row.mt with=$row.mu with=$row.days with=$row.span with=$row.date with=$row.len with=$row.label then=$row.text
+
+# Colours: a meeting's box takes its calendar's colour, else a light default; the text is dark.
+@fill.m w.meetings.meeting code=?id calendar=$fill.cal
+@fill.cal w.meetings.calendar colour=?c
+@fill.colour ui.calendar.colour source=?id part=?id fill=?c
+@fill.calendar core.rule when=$fill.m when=$fill.cal then=$fill.colour
+@fill.box ui.calendar.draw source=?id part=?id shape=rectangle
+@fill.has ui.calendar.colour source=?id part=?id
+@fill.default.o ui.calendar.fill source=?id part=?id fill="#dbe7ff"
+@fill.default core.rule when=$fill.box not=$fill.has then=$fill.default.o
+@fill.chosen.c ui.calendar.colour source=?id part=?id fill=?c
+@fill.chosen.o ui.calendar.fill source=?id part=?id fill=?c
+@fill.chosen core.rule when=$fill.chosen.c then=$fill.chosen.o
+@fill.text ui.calendar.draw source=?src part=?id shape=text
+@fill.text.o ui.calendar.fill source=?src part=?id fill="#1f2a44"
+@fill.texts core.rule when=$fill.text then=$fill.text.o

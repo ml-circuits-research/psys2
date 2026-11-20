@@ -145,16 +145,23 @@
         }
       ],
       "nativeInitializer": {
-        "module": "worlds/time.calendar/declared-host.mjs",
-        "export": "initialCalendarState"
+        "module": "worlds/time.calendar/sop-calendar.mjs",
+        "export": "emptyCalendarArea"
       },
       "nativeHost": {
-        "module": "worlds/time.calendar/declared-host.mjs",
-        "factory": "createCalendarHost"
+        "module": "worlds/time.calendar/sop-calendar.mjs",
+        "factory": "createCalendarArea"
       },
       "sourceFiles": [
         "instance-schema.sop",
         "scheduling-policy.sop"
+      ],
+      "runtimeModules": [
+        "worlds/sop-area.mjs",
+        "worlds/sop-world-host.mjs",
+        "worlds/catalog-world.mjs",
+        "worlds/sop-primitives.mjs",
+        "worlds/time.calendar/area-sources.mjs"
       ]
     },
     "docs.editor": {

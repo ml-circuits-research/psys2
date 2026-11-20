@@ -7,12 +7,14 @@
 @area.choice.type core.type of=app.area.choice
 @area.constant.type core.type of=app.area.constant
 @area.draw.type core.type of=app.area.draw
+@area.offline.type core.type of=app.area.offline
 
 @avatar.area app.area world=ui.avatar instance=w.face knowledge=k.faces scope="ui.avatar" frame.w=100 frame.h=100
 @avatar.rules.1 app.area.rules area=$avatar.area file="render-projection.sop" n=1
 @avatar.rules.2 app.area.rules area=$avatar.area file="act-rules.sop" n=2
 @avatar.make app.area.make area=$avatar.area kind=w.face.face name="Avatar" style=plain
 @avatar.start app.area.command area=$avatar.area sop="@start avatar.face.preset preset=\"girl\""
+@avatar.offline app.area.offline area=$avatar.area prefix="plain-"
 @avatar.draw app.area.draw area=$avatar.area draw=ui.avatar.draw fill=ui.avatar.fill point=ui.avatar.point orient=ui.avatar.orient select=slot
 
 # The interface's open choices, read from the same world.

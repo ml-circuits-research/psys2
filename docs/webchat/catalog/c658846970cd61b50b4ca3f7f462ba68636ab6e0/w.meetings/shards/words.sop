@@ -1,0 +1,26 @@
+# w.meetings/shards/words: the owned English vocabulary, separate from the schema.
+# sources: hand-core 1 (hand-written declarations)
+# license: CC0-1.0
+# script: none (hand-written)
+@w.meetings.word.world core.word text=meetings text=calendar text=schedule text=agenda means=w.meetings of=std.schema.world.name core.source="hand-core 1"
+@w.meetings.word.calendar core.word text=calendar text=calendars means=w.meetings.calendar core.source="hand-core 1"
+@w.meetings.word.person core.word text=person text=people text=participant text=attendee means=w.meetings.person core.source="hand-core 1"
+@w.meetings.word.room core.word text=room text=rooms text="meeting room" means=w.meetings.room core.source="hand-core 1"
+@w.meetings.word.meeting core.word text=meeting text=meetings text=event text=events text=appointment means=w.meetings.meeting core.source="hand-core 1"
+@w.meetings.word.code core.word text=code text=id text=identifier means=w.meetings.meeting.code core.source="hand-core 1"
+@w.meetings.word.title core.word text=title text=name means=w.meetings.meeting.title core.source="hand-core 1"
+@w.meetings.word.start core.word text=start text=starts text=begins text=at means=w.meetings.meeting.start core.source="hand-core 1"
+@w.meetings.word.duration core.word text=duration text=length text=long text=lasting means=w.meetings.meeting.duration core.source="hand-core 1"
+@w.meetings.word.participant core.word text=with text=participants text=attendees means=w.meetings.meeting.participant core.source="hand-core 1"
+@w.meetings.word.notes core.word text=notes text=note text=description means=w.meetings.meeting.notes core.source="hand-core 1"
+@w.meetings.word.label core.word text=label text=name means=w.meetings.person.label core.source="hand-core 1"
+@w.meetings.word.capacity core.word text=capacity text=seats means=w.meetings.room.capacity core.source="hand-core 1"
+@w.meetings.word.location core.word text=location text=where means=w.meetings.room.location core.source="hand-core 1"
+@w.meetings.word.colour core.word text=colour text=color means=w.meetings.calendar.colour core.source="hand-core 1"
+@w.meetings.word.calendar.code core.word text=code means=w.meetings.calendar.code core.source="hand-core 1"
+@w.meetings.word.calendar.label core.word text=label text=name means=w.meetings.calendar.label core.source="hand-core 1"
+@w.meetings.word.person.code core.word text=code means=w.meetings.person.code core.source="hand-core 1"
+@w.meetings.word.room.code core.word text=code means=w.meetings.room.code core.source="hand-core 1"
+@w.meetings.word.room.label core.word text=label text=name means=w.meetings.room.label core.source="hand-core 1"
+@w.meetings.word.meeting.room core.word text=room text=in means=w.meetings.meeting.room core.source="hand-core 1"
+@w.meetings.word.meeting.calendar core.word text=calendar text=on means=w.meetings.meeting.calendar core.source="hand-core 1"

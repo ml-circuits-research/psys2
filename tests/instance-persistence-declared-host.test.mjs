@@ -10,8 +10,7 @@ import {NATIVE_AREAS,createAreaHost} from '../src/dialog/app-reader-context.mjs'
 import {nativeObservationObjects} from '../src/dialog/instance-facts.mjs';
 import {initialDrawingState} from '../worlds/art.draw/declared-host.mjs';
 import {createDiagramHost,initialDiagramState} from '../worlds/diagram.sketch/declared-host.mjs';
-import {initialCalendarState,toNativeCalendarState} from '../worlds/time.calendar/declared-host.mjs';
-import {calendarStateWorld} from '../worlds/time.calendar/canonical-state.mjs';
+import {emptyCalendarArea as initialCalendarState,calendarAreaStateWorld} from '../worlds/time.calendar/sop-calendar.mjs';
 import {initialCanonicalDocumentState} from '../worlds/docs.editor/declared-host.mjs';
 import {emptyAvatarState as initialAvatarState} from '../worlds/ui.avatar/sop-avatar.mjs';
 const session=()=>({isession:{state:{}},engine:{loader:{readFile:(world,file)=>readFile(new URL(`../worlds/${world}/${file}`,import.meta.url),'utf8')}}});
@@ -23,7 +22,7 @@ async function populated(){
  const hosts={};for(const [key,area] of Object.entries(NATIVE_AREAS))hosts[key]=await createAreaHost(area,{state:s.isession.state[area.world],instanceId:s.nativeInstanceIds[area.world],loader:s.engine.loader});
  invoke(hosts.draw,'drawing.object.make',{kind:'triangle',name:'Peak',x:123,y:200,color:'#112233'});
  const made=invoke(hosts.diagram,'diagram.node.make',{kind:'circle',n:2});const ids=made.after.objects.map(o=>o.id);invoke(hosts.diagram,'diagram.link.make',{from:ids[0],to:ids[1]});
- for(const kind of ['person','room','calendar'])invoke(hosts.calendar,`calendar.${kind}.add`,{id:kind,label:kind});
+ for(const kind of ['person','room'])invoke(hosts.calendar,`calendar.${kind}.add`,{id:kind,label:kind});   // the calendar "calendar" is declared by the area
  invoke(hosts.calendar,'calendar.meeting.add',{id:'event',title:'Planning',start:1000,duration:100,participants:['person'],room:'room',calendar:'calendar',notes:'Exact notes'});
  invoke(hosts.editor,'document.write',{title:'Notes',blocks:[{kind:'heading',text:'Heading',level:2},{kind:'paragraph',text:'Body'}]});
  invoke(hosts.avatar,'avatar.face.expression',{expression:'happy'});
@@ -38,7 +37,7 @@ test('five actual native hosts restore exact projections, stable identities and 
  const diagram=diagramStateWorld(target.isession.state['diagram.sketch']),edge=diagram.ofType('diagram.sketch.state.edge')[0];
  const nodes=diagram.ofType('diagram.sketch.state.node').map(node=>str(node.attrs.id[0]));
  assert.ok(nodes.includes(str(edge.attrs.from[0]))&&nodes.includes(str(edge.attrs.to[0])));
- const calendar=calendarStateWorld({sop:records.find(r=>r.world==='time.calendar').wires}),meeting=calendar.ofType('time.calendar.meeting').find(o=>str(o.attrs.id[0])==='event'),identity=reference=>str(calendar.get(reference.slice(1)).attrs.id[0]);assert.deepEqual(meeting.attrs.participants.map(identity),['person']);assert.deepEqual(meeting.attrs.room.map(identity),['room']);assert.deepEqual(meeting.attrs.calendar.map(identity),['calendar']);
+ const calendar=calendarAreaStateWorld({sop:records.find(r=>r.world==='time.calendar').wires}),meeting=calendar.ofType('w.meetings.meeting').find(o=>o.attrs.code[0]==='event'),identity=reference=>calendar.get(reference.slice(1)).attrs.code[0];assert.deepEqual(meeting.attrs.participant.map(identity),['person']);assert.deepEqual(meeting.attrs.room.map(identity),['room']);assert.deepEqual(meeting.attrs.calendar.map(identity),['calendar']);
  const repeated=await snapshotNativeInstances(target);for(const record of repeated){const original=records.find(r=>r.world===record.world);if(Object.values(NATIVE_AREAS).find(a=>a.world===record.world).stateWorld)assert.deepEqual(record,original);else assert.deepEqual(readInstanceState(record.wires),readInstanceState(original.wires));}
  invoke(hosts.draw,'drawing.object.make',{kind:'circle',name:'Moon',x:25,y:30,color:'#223344'});
  const edited=await snapshotNativeInstances(s);assert.equal(edited.find(r=>r.world==='art.draw').revision,1);assert.equal(edited.find(r=>r.world==='art.draw').instanceId,'stable.art.draw');for(const r of edited.filter(r=>r.world!=='art.draw'))assert.equal(r.revision,0);
@@ -66,7 +65,7 @@ for(const corruption of ['malformed','semantic mismatch','projection mismatch','
 });
 test('invalid canonical Calendar references refuse a mixed batch before any adoption',async()=>{
  const {s}=await populated(),records=await snapshotNativeInstances(s),calendar=records.find(record=>record.world==='time.calendar'),valid=calendar.wires;
- const broken=valid.replace(/participants=\$[^\s]+/,'participants=$missing.person');assert.notEqual(broken,valid);
+ const broken=valid.replace(/participant=\$[^\s]+/,'participant=$missing.person');assert.notEqual(broken,valid);
  const target=session(),sentinel={keep:true};target.isession.state={sentinel};target.nativeInstanceIds={sentinel:'original'};target.nativeInstanceRevisions={sentinel:7};target.nativeInstanceSnapshots={sentinel:'unchanged'};target.instanceWorlds={sentinel};
  const prior={state:structuredClone(target.isession.state),ids:structuredClone(target.nativeInstanceIds),revisions:structuredClone(target.nativeInstanceRevisions),snapshots:structuredClone(target.nativeInstanceSnapshots)};
  await assert.rejects(restoreNativeInstances(target,[...records.filter(record=>record!==calendar),{...calendar,wires:broken}]));

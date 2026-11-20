@@ -1,0 +1,167 @@
+# time.calendar act rules (authored). Each native calendar command compiles to ordered std.acts calls on the
+# w.meetings instance; worlds/sop-world-host.mjs only runs them. Things are addressed by their code.
+@calendar.default.type core.type of=ui.calendar.default
+@calendar.default ui.calendar.default calendar=calendar
+
+# calendar: add, change, remove.
+@calendar.add.req app.act.request operation="calendar.calendar.add" id=?id label=?v
+@calendar.add.call app.act.call act=make kind=w.meetings.calendar code=?id label=?v order=1 label=new.calendar
+@calendar.add core.rule when=$calendar.add.req then=$calendar.add.call
+@calendar.thing w.meetings.calendar code=?id
+@calendar.remove.req app.act.request operation="calendar.calendar.remove" id=?id
+@calendar.remove.call app.act.call act=remove thing=$calendar.thing order=1
+@calendar.remove core.rule when=$calendar.remove.req when=$calendar.thing then=$calendar.remove.call
+@calendar.change.label.req app.act.request operation="calendar.calendar.change" id=?id label=?v
+@calendar.change.label.call app.act.call act=change thing=$calendar.thing attr=label value=?v order=1
+@calendar.change.label core.rule when=$calendar.change.label.req when=$calendar.thing then=$calendar.change.label.call
+@calendar.add.colour.req app.act.request operation="calendar.calendar.add" colour=?v
+@calendar.add.colour.arg app.act.arg call=new.calendar attr=colour value=?v
+@calendar.add.colour core.rule when=$calendar.add.colour.req then=$calendar.add.colour.arg
+@calendar.change.colour.req app.act.request operation="calendar.calendar.change" id=?id colour=?v
+@calendar.change.colour.call app.act.call act=change thing=$calendar.thing attr=colour value=?v order=1
+@calendar.change.colour core.rule when=$calendar.change.colour.req when=$calendar.thing then=$calendar.change.colour.call
+
+# person: add, change, remove.
+@person.add.req app.act.request operation="calendar.person.add" id=?id label=?v
+@person.add.call app.act.call act=make kind=w.meetings.person code=?id label=?v order=1 label=new.person
+@person.add core.rule when=$person.add.req then=$person.add.call
+@person.thing w.meetings.person code=?id
+@person.remove.req app.act.request operation="calendar.person.remove" id=?id
+@person.remove.call app.act.call act=remove thing=$person.thing order=1
+@person.remove core.rule when=$person.remove.req when=$person.thing then=$person.remove.call
+@person.change.label.req app.act.request operation="calendar.person.change" id=?id label=?v
+@person.change.label.call app.act.call act=change thing=$person.thing attr=label value=?v order=1
+@person.change.label core.rule when=$person.change.label.req when=$person.thing then=$person.change.label.call
+
+# room: add, change, remove.
+@room.add.req app.act.request operation="calendar.room.add" id=?id label=?v
+@room.add.call app.act.call act=make kind=w.meetings.room code=?id label=?v order=1 label=new.room
+@room.add core.rule when=$room.add.req then=$room.add.call
+@room.thing w.meetings.room code=?id
+@room.remove.req app.act.request operation="calendar.room.remove" id=?id
+@room.remove.call app.act.call act=remove thing=$room.thing order=1
+@room.remove core.rule when=$room.remove.req when=$room.thing then=$room.remove.call
+@room.change.label.req app.act.request operation="calendar.room.change" id=?id label=?v
+@room.change.label.call app.act.call act=change thing=$room.thing attr=label value=?v order=1
+@room.change.label core.rule when=$room.change.label.req when=$room.thing then=$room.change.label.call
+@room.add.capacity.req app.act.request operation="calendar.room.add" capacity=?v
+@room.add.capacity.arg app.act.arg call=new.room attr=capacity value=?v
+@room.add.capacity core.rule when=$room.add.capacity.req then=$room.add.capacity.arg
+@room.change.capacity.req app.act.request operation="calendar.room.change" id=?id capacity=?v
+@room.change.capacity.call app.act.call act=change thing=$room.thing attr=capacity value=?v order=1
+@room.change.capacity core.rule when=$room.change.capacity.req when=$room.thing then=$room.change.capacity.call
+@room.add.location.req app.act.request operation="calendar.room.add" location=?v
+@room.add.location.arg app.act.arg call=new.room attr=location value=?v
+@room.add.location core.rule when=$room.add.location.req then=$room.add.location.arg
+@room.change.location.req app.act.request operation="calendar.room.change" id=?id location=?v
+@room.change.location.call app.act.call act=change thing=$room.thing attr=location value=?v order=1
+@room.change.location core.rule when=$room.change.location.req when=$room.thing then=$room.change.location.call
+
+# Meetings. A simple event belongs to the default calendar; a meeting names its people, room and calendar.
+@meeting.thing w.meetings.meeting code=?id
+@event.add.req app.act.request operation="calendar.event.add" id=?id title=?t start=?s duration=?d
+@event.cal.default ui.calendar.default calendar=?c
+@event.cal w.meetings.calendar code=?c
+@event.add.call app.act.call act=make kind=w.meetings.meeting code=?id title=?t start=?s duration=?d calendar=$event.cal order=1 label=new.meeting
+@event.add core.rule when=$event.add.req when=$event.cal.default when=$event.cal then=$event.add.call
+@meeting.add.req app.act.request operation="calendar.meeting.add" id=?id title=?t start=?s duration=?d
+@meeting.add.call app.act.call act=make kind=w.meetings.meeting code=?id title=?t start=?s duration=?d order=1 label=new.meeting
+@meeting.add core.rule when=$meeting.add.req then=$meeting.add.call
+@notes.add.req app.act.request notes=?n
+@notes.add.arg app.act.arg call=new.meeting attr=notes value=?n
+@notes.add core.rule when=$notes.add.req then=$notes.add.arg
+@people.item app.act.item param="participants" value=?p
+@people.person w.meetings.person code=?p
+@people.add.req app.act.request operation="calendar.meeting.add"
+@people.add.arg app.act.arg call=new.meeting attr=participant value=$people.person
+@people.add core.rule when=$people.add.req when=$people.item when=$people.person then=$people.add.arg
+@meeting.room.req app.act.request operation="calendar.meeting.add" room=?r
+@meeting.room.thing w.meetings.room code=?r
+@meeting.room.arg app.act.arg call=new.meeting attr=room value=$meeting.room.thing
+@meeting.room core.rule when=$meeting.room.req when=$meeting.room.thing then=$meeting.room.arg
+@cal.add.req app.act.request operation="calendar.meeting.add" calendar=?c
+@cal.add.thing w.meetings.calendar code=?c
+@cal.add.arg app.act.arg call=new.meeting attr=calendar value=$cal.add.thing
+@cal.add core.rule when=$cal.add.req when=$cal.add.thing then=$cal.add.arg
+@meeting.change.title.req app.act.request operation="calendar.meeting.change" id=?id title=?v
+@meeting.change.title.call app.act.call act=change thing=$meeting.thing attr=title value=?v order=1
+@meeting.change.title core.rule when=$meeting.change.title.req when=$meeting.thing then=$meeting.change.title.call
+@meeting.change.start.req app.act.request operation="calendar.meeting.change" id=?id start=?v
+@meeting.change.start.call app.act.call act=change thing=$meeting.thing attr=start value=?v order=1
+@meeting.change.start core.rule when=$meeting.change.start.req when=$meeting.thing then=$meeting.change.start.call
+@meeting.change.duration.req app.act.request operation="calendar.meeting.change" id=?id duration=?v
+@meeting.change.duration.call app.act.call act=change thing=$meeting.thing attr=duration value=?v order=1
+@meeting.change.duration core.rule when=$meeting.change.duration.req when=$meeting.thing then=$meeting.change.duration.call
+@meeting.change.notes.req app.act.request operation="calendar.meeting.change" id=?id notes=?v
+@meeting.change.notes.call app.act.call act=change thing=$meeting.thing attr=notes value=?v order=1
+@meeting.change.notes core.rule when=$meeting.change.notes.req when=$meeting.thing then=$meeting.change.notes.call
+@meeting.change.room.req app.act.request operation="calendar.meeting.change" id=?id room=?r
+@meeting.change.room.call app.act.call act=change thing=$meeting.thing attr=room value=$meeting.room.thing order=1
+@meeting.change.room core.rule when=$meeting.change.room.req when=$meeting.thing when=$meeting.room.thing then=$meeting.change.room.call
+@meeting.change.cal.req app.act.request operation="calendar.meeting.change" id=?id calendar=?c
+@meeting.change.cal.call app.act.call act=change thing=$meeting.thing attr=calendar value=$cal.add.thing order=1
+@meeting.change.cal core.rule when=$meeting.change.cal.req when=$meeting.thing when=$cal.add.thing then=$meeting.change.cal.call
+@meeting.change.people.req app.act.request operation="calendar.meeting.change" id=?id
+@meeting.change.people.call app.act.call act=change thing=$meeting.thing attr=participant order=1 label=change.people
+@meeting.change.people core.rule when=$meeting.change.people.req when=$meeting.thing when=$people.item then=$meeting.change.people.call
+@meeting.change.people.arg app.act.arg call=change.people attr=value value=$people.person
+@meeting.change.people.value core.rule when=$meeting.change.people.req when=$people.item when=$people.person then=$meeting.change.people.arg
+@move.req app.act.request operation="calendar.meeting.move" id=?id start=?s
+@move.call app.act.call act=change thing=$meeting.thing attr=start value=?s order=1
+@move core.rule when=$move.req when=$meeting.thing then=$move.call
+@meeting.remove.req app.act.request operation="calendar.meeting.remove" id=?id
+@meeting.remove.call app.act.call act=remove thing=$meeting.thing order=1
+@meeting.remove core.rule when=$meeting.remove.req when=$meeting.thing then=$meeting.remove.call
+@events.item app.act.item param="ids" value=?id
+@events.remove.req app.act.request operation="calendar.events.remove"
+@events.remove core.rule when=$events.remove.req when=$events.item when=$meeting.thing then=$meeting.remove.call
+
+# The selected event is a view key.
+@select.req app.act.request operation="calendar.event.select" id=?id
+@select.view app.act.view key=selected value=?id
+@select core.rule when=$select.req then=$select.view
+
+# What a reader observes: each thing by its code, with its keys.
+@ob.calendar w.meetings.calendar code=?id label=?v
+@ob.calendar.o app.observe.object id=?id kind=calendar sourceType=time.calendar.calendar binding=calendar.calendar label=?v
+@observe.calendar core.rule when=$ob.calendar then=$ob.calendar.o
+@ob.calendar.colour w.meetings.calendar code=?id colour=?v
+@ob.calendar.colour.o app.observe.input id=?id key=colour value=?v
+@observe.calendar.colour core.rule when=$ob.calendar.colour then=$ob.calendar.colour.o
+@ob.person w.meetings.person code=?id label=?v
+@ob.person.o app.observe.object id=?id kind=person sourceType=time.calendar.person binding=calendar.person label=?v
+@observe.person core.rule when=$ob.person then=$ob.person.o
+@ob.room w.meetings.room code=?id label=?v
+@ob.room.o app.observe.object id=?id kind=room sourceType=time.calendar.room binding=calendar.room label=?v
+@observe.room core.rule when=$ob.room then=$ob.room.o
+@ob.room.capacity w.meetings.room code=?id capacity=?v
+@ob.room.capacity.o app.observe.input id=?id key=capacity value=?v
+@observe.room.capacity core.rule when=$ob.room.capacity then=$ob.room.capacity.o
+@ob.room.location w.meetings.room code=?id location=?v
+@ob.room.location.o app.observe.input id=?id key=location value=?v
+@observe.room.location core.rule when=$ob.room.location then=$ob.room.location.o
+@ob.meeting w.meetings.meeting code=?id title=?t start=?s duration=?d
+@ob.meeting.sel app.area.view key=selected value=?id
+@ob.meeting.o app.observe.object id=?id kind=meeting sourceType=time.calendar.meeting binding=calendar.meeting title=?t start=?s duration=?d selected=false
+@ob.meeting.sel.o app.observe.object id=?id kind=meeting sourceType=time.calendar.meeting binding=calendar.meeting title=?t start=?s duration=?d selected=true
+@observe.meeting core.rule when=$ob.meeting not=$ob.meeting.sel then=$ob.meeting.o
+@observe.meeting.selected core.rule when=$ob.meeting when=$ob.meeting.sel then=$ob.meeting.sel.o
+@ob.meeting.notes w.meetings.meeting code=?id notes=?n
+@ob.meeting.notes.o app.observe.input id=?id key=notes value=?n
+@observe.meeting.notes core.rule when=$ob.meeting.notes then=$ob.meeting.notes.o
+@ob.meeting.cal w.meetings.meeting code=?id calendar=$ob.cal.thing
+@ob.cal.thing w.meetings.calendar code=?c
+@ob.meeting.cal.o app.observe.input id=?id key=calendar value=?c
+@observe.meeting.calendar core.rule when=$ob.meeting.cal when=$ob.cal.thing then=$ob.meeting.cal.o
+@ob.meeting.room w.meetings.meeting code=?id room=$ob.room.thing
+@ob.room.thing w.meetings.room code=?r
+@ob.meeting.room.o app.observe.input id=?id key=room value=?r
+@observe.meeting.room core.rule when=$ob.meeting.room when=$ob.room.thing then=$ob.meeting.room.o
+@ob.meeting.person w.meetings.meeting code=?id participant=$ob.person.thing
+@ob.person.thing w.meetings.person code=?p
+@ob.meeting.person.o app.observe.input id=?id key=participants value=?p
+@observe.meeting.participants core.rule when=$ob.meeting.person when=$ob.person.thing then=$ob.meeting.person.o
+# Options a view offers: the meetings to select.
+@op.meeting w.meetings.meeting code=?id
+@op.meeting.o app.observe.option id=object value=?id
+@option.meeting core.rule when=$op.meeting then=$op.meeting.o

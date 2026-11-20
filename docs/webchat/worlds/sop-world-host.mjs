@@ -5,8 +5,8 @@
 //  3. this interpreter runs the calls through the library's generic acts (World.act) and keeps the resulting
 //     instance facts and the view keys as the tool state. Undo and redo belong to the application's journal.
 // The objects a reader observes come from app.observe.object facts the same rules derive.
-import {parse, quote, serialize, str} from '../lib/vendor/sopworld/sopworld.mjs?v=851c80bc87';
-import {createNativeToolHost, nativeToken} from './native-tool-host.mjs?v=de7f9df967';
+import {parse, quote, serialize, str} from '../lib/vendor/sopworld/sopworld.mjs?v=dde6e85489';
+import {createNativeToolHost, nativeToken} from './native-tool-host.mjs?v=f9a751a339';
 
 const CALLS = 512;
 const atom = /^[A-Za-z_][A-Za-z0-9_.-]*$/;
@@ -53,8 +53,16 @@ function compile(base, state, operation, args) {
   }
   const told = world.tell(serialize([request, ...items]), { factsOnly: true });
   if (!told.ok) return { world, calls: [], views: [], refusal: 'invalid-request' };
-  const calls = world.ofType('app.act.call').map((fact) => ({ fact, order: Number(read(fact, 'order') ?? 0) }))
-    .sort((a, b) => a.order - b.order || a.fact.id.localeCompare(b.fact.id)).map(({ fact }) => fact);
+  // An optional argument arrives as app.act.arg call=<label> attr=<key> value=<v> and joins the call with that label.
+  const extra = new Map();
+  for (const arg of world.ofType('app.act.arg')) (extra.get(read(arg, 'call')) ?? extra.set(read(arg, 'call'), []).get(read(arg, 'call'))).push(arg);
+  const calls = world.ofType('app.act.call').map((fact) => {
+    const args = extra.get(read(fact, 'label')) ?? [];
+    const attrs = { ...fact.attrs }, seen = new Set();
+    for (const arg of args) { const key = read(arg, 'attr'); attrs[key] = [...(seen.has(key) ? attrs[key] : []), ...arg.attrs.value]; seen.add(key); }
+    const merged = args.length ? { ...fact, attrs } : fact;
+    return { fact: merged, order: Number(read(fact, 'order') ?? 0) };
+  }).sort((a, b) => a.order - b.order || (a.fact.id < b.fact.id ? -1 : a.fact.id > b.fact.id ? 1 : 0)).map(({ fact }) => fact);
   const refusals = world.ofType('app.act.refuse').map((fact) => read(fact, 'reason'));
   return { calls, views: world.ofType('app.act.view'), refusal: refusals[0] };
 }
@@ -67,16 +75,18 @@ function run(base, state, kinds, calls) {
     const act = read(call, 'act'), args = {};
     for (const [key, values] of Object.entries(call.attrs)) {
       if (['act', 'order', 'label'].includes(key)) continue;
-      const raw = values[0];
-      args[key] = raw.startsWith('$') ? (made.get(ref(raw)) ?? ref(raw)) : ['kind', 'attr'].includes(key) ? read(call, key) : raw;
+      const one = (raw) => raw.startsWith('$') ? (made.get(ref(raw)) ?? ref(raw)) : ['kind', 'attr'].includes(key) ? (raw.startsWith('"') ? str(raw) : raw) : raw;
+      args[key] = values.length > 1 ? values.map(one) : one(values[0]);
     }
     if (act === 'make' && args.thing === undefined) {
       const before = new Set(world.ofType(args.kind).map((fact) => fact.id));
-      const result = world.act({ action: 'make', args: Object.fromEntries(Object.entries(args).map(([k, v]) => [k, k !== 'kind' && world.has(String(v)) ? '$' + v : v])) });
+      const result = world.act({ action: 'make', args: Object.fromEntries(Object.entries(args).map(([k, v]) => [k, k === 'kind' ? v : Array.isArray(v) ? v.map((x) => world.has(String(x)) ? '$' + x : x) : world.has(String(v)) ? '$' + v : v])) });
       if (!result.ok) return { refusal: result.violations?.[0]?.why ?? 'refused' };
       const created = world.ofType(args.kind).find((fact) => !before.has(fact.id));
       if (created && call.attrs.label) made.set(read(call, 'label'), created.id);
     } else {
+      // A value naming a thing of the world is a reference, as in make.
+      if (args.value !== undefined) args.value = Array.isArray(args.value) ? args.value.map((x) => world.has(String(x)) ? '$' + x : x) : world.has(String(args.value)) ? '$' + args.value : args.value;
       const result = world.act({ action: act, args });
       if (!result.ok) return { refusal: result.violations?.[0]?.why ?? 'refused' };
     }
@@ -107,9 +117,13 @@ export function createSopWorldHost({ base, kinds, state, instanceId, scope, tool
     for (const fact of world.ofType('app.observe.input')) (extra.get(read(fact, 'id')) ?? extra.set(read(fact, 'id'), []).get(read(fact, 'id'))).push(fact);
     return world.ofType('app.observe.object').map((fact) => {
       const binding = read(fact, 'binding'), input = (key, raw) => ({ binding: binding + '.' + key, key, values: [nativeToken(typed(raw))] });
-      return { id: read(fact, 'id'), kind: read(fact, 'kind'), sourceType: read(fact, 'sourceType'),
-        inputs: [...Object.keys(fact.attrs).filter((key) => !['id', 'kind', 'sourceType', 'binding'].includes(key)).map((key) => input(key, fact.attrs[key][0])),
-          ...(extra.get(read(fact, 'id')) ?? []).map((row) => input(read(row, 'key'), row.attrs.value[0]))] };
+      const inputs = Object.keys(fact.attrs).filter((key) => !['id', 'kind', 'sourceType', 'binding'].includes(key)).map((key) => input(key, fact.attrs[key][0]));
+      // Several app.observe.input facts with one key are one input with several values.
+      for (const row of extra.get(read(fact, 'id')) ?? []) {
+        const key = read(row, 'key'), same = inputs.find((entry) => entry.key === key);
+        if (same) same.values.push(nativeToken(typed(row.attrs.value[0]))); else inputs.push(input(key, row.attrs.value[0]));
+      }
+      return { id: read(fact, 'id'), kind: read(fact, 'kind'), sourceType: read(fact, 'sourceType'), inputs };
     });
   };
   return createNativeToolHost({ state, instanceId, scope, toolInterface, operations, handlers, view, ...limits });

@@ -11,7 +11,9 @@ import { createDrawingHost, initialDrawingState } from '../worlds/art.draw/decla
 import { initialDiagramState } from '../worlds/diagram.sketch/declared-host.mjs';
 import { initialCanonicalDocumentState } from '../worlds/docs.editor/declared-host.mjs';
 import { toNativeDocumentState } from '../worlds/docs.editor/canonical-state.mjs';
-import { initialCalendarState, toNativeCalendarState } from '../worlds/time.calendar/declared-host.mjs';
+import {emptyCalendarArea,calendarAreaStateWorld} from '../worlds/time.calendar/sop-calendar.mjs';
+import {str as sopText} from '../src/vendor/sopworld/sopworld.mjs';
+const calendarThings=(state,kind)=>calendarAreaStateWorld(state).ofType('w.meetings.'+kind).map(fact=>Object.fromEntries(Object.entries(fact.attrs).map(([key,values])=>[key,values.length===1?(values[0].startsWith('"')?sopText(values[0]):values[0]):values])));
 import { emptyAvatarState } from '../worlds/ui.avatar/sop-avatar.mjs';
 import { avatarAreaStateWorld } from '../worlds/ui.avatar/sop-avatar.mjs';
 
@@ -20,7 +22,7 @@ test('the shared native control route executes recorded SOP in all editor areas'
     'art.draw': initialDrawingState(),
     'diagram.sketch': initialDiagramState(),
     'docs.editor': initialCanonicalDocumentState(),
-    'time.calendar': initialCalendarState(),
+    'time.calendar': emptyCalendarArea(),
     'ui.avatar': emptyAvatarState(),
   };
   await assert.rejects(invokeNativeControl({isession:{state}}, {view:'draw',operation:'drawing.object.make',args:{kind:'house'}}), /invalid-control-intent/);
@@ -38,7 +40,7 @@ test('the shared native control route executes recorded SOP in all editor areas'
     ['editor', 'document.write', { title: 'Report', blocks: [{ kind: 'paragraph', text: 'Measured' }] },
       () => toNativeDocumentState(state['docs.editor']).blocks[0]?.text, 'Measured'],
     ['calendar', 'calendar.event.add', { id: 'visit', title: 'Visit', start: 2000, duration: 100 },
-      () => toNativeCalendarState(state['time.calendar']).meetings[0]?.title, 'Visit'],
+      () => calendarThings(state['time.calendar'],'meeting')[0]?.title, 'Visit'],
     ['avatar', 'avatar.face.expression', { expression: 'happy' },
       () => avatarAreaStateWorld(state['ui.avatar']).ofType('w.face.face')[0]?.attrs.expression?.[0], 'happy'],
   ];

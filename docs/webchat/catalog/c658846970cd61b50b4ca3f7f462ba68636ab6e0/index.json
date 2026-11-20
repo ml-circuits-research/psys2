@@ -1,6 +1,6 @@
 {
- "version": "d1a621fa1045",
- "sopworld": "94cffa2",
+ "version": "d27ddc9ef781",
+ "sopworld": "747b51e",
  "worlds": [
   {
    "id": "k.actions",
@@ -35585,8 +35585,8 @@
     {
      "id": "k.kinds/shards/structures",
      "path": "k.kinds/shards/structures.sop",
-     "wires": 333,
-     "bytes": 61355,
+     "wires": 338,
+     "bytes": 62310,
      "keys": [
       "assigned",
       "assignment",
@@ -35776,6 +35776,11 @@
       "w.map.place",
       "w.map.view",
       "w.map.view.layer",
+      "w.meetings",
+      "w.meetings.calendar",
+      "w.meetings.meeting",
+      "w.meetings.meeting.calendar",
+      "w.meetings.meeting.start",
       "w.person",
       "w.person.person",
       "w.person.relative",
@@ -97544,6 +97549,117 @@
    ],
    "wires": 24,
    "bytes": 5027,
+   "sources": [
+    "hand-core-1"
+   ],
+   "license": "CC0-1.0",
+   "warnings": []
+  },
+  {
+   "id": "w.meetings",
+   "version": "1",
+   "schema": "w.meetings/schema.sop",
+   "vocabulary": "w.meetings/shards/words.sop",
+   "depends": [],
+   "about": "meetings at exact times, with the people, rooms and calendars they use",
+   "names": [
+    "meetings",
+    "calendar",
+    "schedule",
+    "agenda"
+   ],
+   "kinds": [
+    {
+     "type": "w.meetings.calendar",
+     "acts": [
+      "make",
+      "remove",
+      "change",
+      "pick",
+      "ask"
+     ],
+     "attributes": [
+      "code",
+      "label",
+      "colour"
+     ],
+     "words": [
+      "calendar",
+      "calendars"
+     ]
+    },
+    {
+     "type": "w.meetings.person",
+     "acts": [
+      "make",
+      "remove",
+      "change",
+      "pick",
+      "ask"
+     ],
+     "attributes": [
+      "code",
+      "label"
+     ],
+     "words": [
+      "person",
+      "people",
+      "participant",
+      "attendee"
+     ]
+    },
+    {
+     "type": "w.meetings.room",
+     "acts": [
+      "make",
+      "remove",
+      "change",
+      "pick",
+      "ask"
+     ],
+     "attributes": [
+      "code",
+      "label",
+      "capacity",
+      "location"
+     ],
+     "words": [
+      "room",
+      "rooms",
+      "meeting room"
+     ]
+    },
+    {
+     "type": "w.meetings.meeting",
+     "acts": [
+      "make",
+      "remove",
+      "change",
+      "place",
+      "pick",
+      "ask"
+     ],
+     "attributes": [
+      "code",
+      "title",
+      "start",
+      "duration",
+      "participant",
+      "room",
+      "calendar",
+      "notes"
+     ],
+     "words": [
+      "meeting",
+      "meetings",
+      "event",
+      "events",
+      "appointment"
+     ]
+    }
+   ],
+   "wires": 48,
+   "bytes": 6750,
    "sources": [
     "hand-core-1"
    ],

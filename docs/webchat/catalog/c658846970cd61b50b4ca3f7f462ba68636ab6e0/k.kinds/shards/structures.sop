@@ -1,4 +1,4 @@
-# k.kinds/shards/structures: the structures of worlds, for alignment: 8 structures with their roles (direction, cardinality, required) and 6 constraints, and how 26 worlds are each (48 forms, 224 roles cast to their types, keys and acts).
+# k.kinds/shards/structures: the structures of worlds, for alignment: 8 structures with their roles (direction, cardinality, required) and 6 constraints, and how 27 worlds are each (49 forms, 228 roles cast to their types, keys and acts).
 # sources: hand-core 1 (hand-written in this repository: tools/structures-core.mjs)
 # license: CC0-1.0
 # script: tools/structures-core.mjs
@@ -75,6 +75,11 @@
 @k.kinds.cast.w.text.sequence.end.w_text_span_end k.kinds.cast world=w.text structure=sequence role=end filler=w.text.span.end as=key core.source="hand-core 1"
 @k.kinds.cast.w.text.sequence.sequence.w_text_source k.kinds.cast world=w.text structure=sequence role=sequence filler=w.text.source as=type core.source="hand-core 1"
 @k.kinds.cast.w.text.sequence.element_of.w_text_span_source k.kinds.cast world=w.text structure=sequence role=element_of filler=w.text.span.source as=key core.source="hand-core 1"
+@k.kinds.form.w.meetings.sequence k.kinds.form world=w.meetings structure=sequence about="meetings in order of their start times, on calendars and in rooms" core.source="hand-core 1"
+@k.kinds.cast.w.meetings.sequence.element.w_meetings_meeting k.kinds.cast world=w.meetings structure=sequence role=element filler=w.meetings.meeting as=type core.source="hand-core 1"
+@k.kinds.cast.w.meetings.sequence.position.w_meetings_meeting_start k.kinds.cast world=w.meetings structure=sequence role=position filler=w.meetings.meeting.start as=key core.source="hand-core 1"
+@k.kinds.cast.w.meetings.sequence.sequence.w_meetings_calendar k.kinds.cast world=w.meetings structure=sequence role=sequence filler=w.meetings.calendar as=type core.source="hand-core 1"
+@k.kinds.cast.w.meetings.sequence.element_of.w_meetings_meeting_calendar k.kinds.cast world=w.meetings structure=sequence role=element_of filler=w.meetings.meeting.calendar as=key core.source="hand-core 1"
 @k.kinds.form.w.room.capacity k.kinds.form world=w.room structure=capacity about="a room with a stated seating capacity, not an occupancy assertion" core.source="hand-core 1"
 @k.kinds.cast.w.room.capacity.container.w_room_room k.kinds.cast world=w.room structure=capacity role=container filler=w.room.room as=type core.source="hand-core 1"
 @k.kinds.cast.w.room.capacity.capacity.w_room_room_seats k.kinds.cast world=w.room structure=capacity role=capacity filler=w.room.room.seats as=key core.source="hand-core 1"

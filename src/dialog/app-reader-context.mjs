@@ -6,8 +6,7 @@ import {DRAWING_STATE_INTERFACE} from '../../worlds/art.draw/canonical-state.mjs
 import {createCanonicalDiagramHost,DIAGRAM_STATE_INTERFACE} from '../../worlds/diagram.sketch/declared-host.mjs';
 import {createDocumentHost,DOCUMENT_STATE_INTERFACE} from '../../worlds/docs.editor/declared-host.mjs';
 import {createAvatarArea,canonicalAvatarArea,projectAvatarArea,avatarAreaStateWorld} from '../../worlds/ui.avatar/sop-avatar.mjs';
-import {createCalendarHost,canonicalCalendarState,toNativeCalendarState} from '../../worlds/time.calendar/declared-host.mjs';
-import {calendarStateWorld,CALENDAR_STATE_SCHEMA} from '../../worlds/time.calendar/canonical-state.mjs';
+import {createCalendarArea,canonicalCalendarArea,projectCalendarArea,calendarAreaStateWorld} from '../../worlds/time.calendar/sop-calendar.mjs';
 export const NATIVE_AREAS={
  avatar:{area:'drawing',world:'ui.avatar',create:createAvatarArea,prepare:createAvatarArea,canonicalizeState:canonicalAvatarArea,projectState:projectAvatarArea,
   stateWorld:avatarAreaStateWorld,separateRuntime:true,historySelection:[['runtime','view','selected']],historyView:[['runtime','view','ids']]},
@@ -15,8 +14,8 @@ export const NATIVE_AREAS={
   historySelection:[['selected'],['selectedIds'],['selectedPart']],historyView:[['idDisplay']]},
  diagram:{area:'diagram',world:'diagram.sketch',create:createCanonicalDiagramHost,...DIAGRAM_STATE_INTERFACE,historySelection:[['selected'],['chartTools','active']],historyView:[['idDisplay']]},
  editor:{area:'document',world:'docs.editor',create:createDocumentHost,...DOCUMENT_STATE_INTERFACE,historySelection:[['selection']]},
- calendar:{area:'calendar',world:'time.calendar',create:createCalendarHost,canonicalizeState:canonicalCalendarState,projectState:toNativeCalendarState,
-  stateWorld:calendarStateWorld,stateSchema:CALENDAR_STATE_SCHEMA,policyFile:'scheduling-policy.sop',historySelection:[['selectedEvent']]},
+ calendar:{area:'calendar',world:'time.calendar',create:createCalendarArea,prepare:createCalendarArea,canonicalizeState:canonicalCalendarArea,projectState:projectCalendarArea,
+  stateWorld:calendarAreaStateWorld,separateRuntime:true,historySelection:[['runtime','view','selected']]},
 };
 /** Application composition: the same declared policy guards controls and spoken requests. */
 export async function createAreaHost(area,{loader,knowledge,prepareKnowledge=true,...options}={}){

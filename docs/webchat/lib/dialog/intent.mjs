@@ -14,7 +14,7 @@
  * a calm reply and what the open tab can do, without any change. It runs only after a weak first reading and never keeps a candidate that reads worse than the clause.
  */
 import { budget } from './budget.mjs?v=00bce6e369';
-import { LANG_EN_FACTS } from '../lang/en.facts.generated.mjs?v=788ba1b623';
+import { LANG_EN_FACTS } from '../lang/en.facts.generated.mjs?v=bb96eafcdb';
 
 // The criteria of the choice are the library's (std.decide kind `intent`, sopworld 0.148: reads, covers, slots, present, previous, cost); `chooseRewrite` measures and chooses.
 

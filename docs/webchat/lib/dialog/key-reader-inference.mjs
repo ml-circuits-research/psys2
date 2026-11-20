@@ -1,9 +1,9 @@
 // Actual two-stage neural computation. Artifact loading and empirical admission are separate.
 import {validateKeyReaderLayout} from './key-reader-layout.mjs?v=13da6b9284';
-import {copyHostData} from '../../worlds/native-tool-host.mjs?v=de7f9df967';
-import {canonicalLiteralProof,positiveCardinalProof,positiveIntegerLiteralProof} from './key-reader-value-proof.mjs?v=baab15c324';
+import {copyHostData} from '../../worlds/native-tool-host.mjs?v=f9a751a339';
+import {canonicalLiteralProof,positiveCardinalProof,positiveIntegerLiteralProof} from './key-reader-value-proof.mjs?v=9b68bbe997';
 import {selectedProbability,binaryDecisionProbability} from './model-selection-score.mjs?v=ac3ac10191';
-import {createKeyReaderPacketAdapter} from './key-reader-packet.mjs?v=51281d3eb0';
+import {createKeyReaderPacketAdapter} from './key-reader-packet.mjs?v=8aa63f5d77';
 const hash=x=>typeof x==='string'&&/^[a-f0-9]{64}$/.test(x);
 const object=x=>x!==null&&typeof x==='object'&&!Array.isArray(x);
 const digest=async x=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(x))),b=>b.toString(16).padStart(2,'0')).join('');

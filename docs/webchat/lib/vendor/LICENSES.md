@@ -1,10 +1,10 @@
 # Licences of vendored code in src/
 
-## sopworld 0.225.1 (one file, unmodified)
+## sopworld 0.225.2 (one file, unmodified)
 
 - Source: https://github.com/ml-circuits-research/soplang-words-lib (same owner as this repository)
-- Pinned commit: `747b51e34b30072968bf2284842c27d14dd48652` (published release 0.225.1, build `8a63e3e83fef`). See `sopworld/provenance.json` for the exact source and hash.
-- Vendored file: `src/vendor/sopworld/sopworld.mjs`, the library's built single file `docs/sopworld.mjs` (1702332 bytes, sha256 `c369901d9a44a0a128fbe9900a340bd59b9a43be67d0ede31fd4e3a41af718e8`), copied byte for byte. Record defects in the library repository.
+- Pinned commit: `ac33216693eaf36e1e95dbbc4d38078a8e4746d2` (published release 0.225.2, build `0edcca627270`). See `sopworld/provenance.json` for the exact source and hash.
+- Vendored file: `src/vendor/sopworld/sopworld.mjs`, the library's built single file `docs/sopworld.mjs` (1703167 bytes, sha256 `d8d7d7b96a067ad6d5fffea4dfc7694d70a53b32b2f59ee92676e49dab398ef1`), copied byte for byte. Record defects in the library repository.
 - `src/vendor/sopworld/tools/scan-loops.mjs`: the library's own loop scanner (`tools/scan-loops.mjs`), copied byte for byte; `tests/reasoner.test.mjs` runs it on the vendored file.
 - `src/vendor/sopworld/instance-fact-codec.mjs`: the private `src/internal/instance-fact-codec.mjs` from library commit `df62fdeeab443a593cff9079e5bd444c5d834e99`, copied byte for byte (sha256 `77c335b6d1fb8056c2240d9c9c1d491629c9b3075191a2728a0d013d6dac96e5`). The editor passes parser services from the existing bundled runtime.
 - The tool adapter uses the private `src/internal/capability-call.mjs` from the same release as the bundle, copied byte for byte to `src/vendor/sopworld/capability-call.mjs`.

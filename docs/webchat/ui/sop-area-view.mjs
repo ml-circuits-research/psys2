@@ -9,6 +9,7 @@ const css = `
 .p2-area-stage [data-selected="true"]{outline:none;filter:drop-shadow(0 0 1.2px #1d6fe8) drop-shadow(0 0 1.2px #1d6fe8)}
 .p2-area-inspector{width:260px;flex:none;overflow:auto;display:flex;flex-direction:column;gap:10px;font:14px system-ui,sans-serif}
 .p2-area-inspector label{display:flex;flex-direction:column;gap:4px}
+.p2-area-form{display:flex;flex-direction:column;gap:6px;padding:8px;border:1px solid #d6dce6;border-radius:10px}
 .p2-area-inspector .p2-area-buttons{display:flex;flex-wrap:wrap;gap:6px}
 .p2-area-inspector button{padding:4px 10px;border-radius:8px;border:1px solid #c8d0dc;background:#fff;cursor:pointer}
 .p2-area-status{color:#555;min-height:1.2em;margin:0}
@@ -39,6 +40,29 @@ export function createSopAreaView(container, host = null, { world, view, editor 
     if (item.target === 'selected' && state?.selected) args[item.list ?? 'id'] = item.list === 'ids' ? [state.selected] : state.selected;
     return args;
   };
+  // A control with fields is a form: each field asks for one argument in the way its input declares.
+  function formFor(item) {
+    const form = el('form', 'p2-area-form', { 'aria-label': item.label }), title = el('div', ''); title.textContent = item.label; form.append(title);
+    const inputs = item.fields.map((field) => {
+      const wrap = el('label', ''), input = el('input', '', { 'aria-label': field.label, required: 'true',
+        type: field.input === 'datetime' ? 'datetime-local' : field.input === 'minutes' ? 'number' : 'text' });
+      if (field.input === 'minutes') input.setAttribute('min', '1');
+      wrap.append(document.createTextNode(field.label), input); form.append(wrap);
+      return [field, input];
+    });
+    const submit = el('button', '', { type: 'submit' }); submit.textContent = item.label; form.append(submit);
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const args = argsOf(item, item.param === 'id' && item.target === null ? 'item-' + Date.now().toString(36) : undefined);
+      for (const [field, input] of inputs) {
+        const raw = input.value;
+        args[field.param] = field.input === 'datetime' ? Date.parse(raw + 'Z') : field.input === 'minutes' ? Math.round(Number(raw) * field.scale) : raw;
+      }
+      if (item.param && args[item.param] === undefined) delete args[item.param];
+      control(item.operation, args);
+    });
+    return form;
+  }
   function inspectorRows() {
     const signature = JSON.stringify([state?.controls, state?.selected]);
     if (signature === shown) return;
@@ -46,6 +70,7 @@ export function createSopAreaView(container, host = null, { world, view, editor 
     inspector.replaceChildren();
     for (const item of state?.controls ?? []) {
       if (!item.available) continue;
+      if (item.fields?.length) { inspector.append(formFor(item)); continue; }
       if (!item.param) { const button = el('button', '', { type: 'button' }); button.textContent = item.label; button.addEventListener('click', () => control(item.operation, argsOf(item))); inspector.append(button); continue; }
       if (item.options.length && item.options.length <= 6) {
         const wrap = el('div', ''), title = el('div', ''); title.textContent = item.label;

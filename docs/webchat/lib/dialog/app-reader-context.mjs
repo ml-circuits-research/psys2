@@ -1,13 +1,12 @@
 // Actual application state only. No request annotations or invented semantic types.
-import {observedReaderContext} from './native-reader-context.mjs?v=2a5811cb21';
-import {isAuthoredRequest} from './authored-request-tool.mjs?v=0ea11ee275';
-import {createCanonicalDrawingHost} from '../../worlds/art.draw/declared-host.mjs?v=98bbe9598e';
-import {DRAWING_STATE_INTERFACE} from '../../worlds/art.draw/canonical-state.mjs?v=3a482fe4a1';
-import {createCanonicalDiagramHost,DIAGRAM_STATE_INTERFACE} from '../../worlds/diagram.sketch/declared-host.mjs?v=31e9d95c65';
-import {createDocumentHost,DOCUMENT_STATE_INTERFACE} from '../../worlds/docs.editor/declared-host.mjs?v=62d2e3de84';
-import {createAvatarArea,canonicalAvatarArea,projectAvatarArea,avatarAreaStateWorld} from '../../worlds/ui.avatar/sop-avatar.mjs?v=51fc2db2db';
-import {createCalendarHost,canonicalCalendarState,toNativeCalendarState} from '../../worlds/time.calendar/declared-host.mjs?v=fb6822da26';
-import {calendarStateWorld,CALENDAR_STATE_SCHEMA} from '../../worlds/time.calendar/canonical-state.mjs?v=9bd7badef7';
+import {observedReaderContext} from './native-reader-context.mjs?v=fb54066d8f';
+import {isAuthoredRequest} from './authored-request-tool.mjs?v=f7cd19a44d';
+import {createCanonicalDrawingHost} from '../../worlds/art.draw/declared-host.mjs?v=656d1978c7';
+import {DRAWING_STATE_INTERFACE} from '../../worlds/art.draw/canonical-state.mjs?v=aa0b88ca1b';
+import {createCanonicalDiagramHost,DIAGRAM_STATE_INTERFACE} from '../../worlds/diagram.sketch/declared-host.mjs?v=7c12e2daaf';
+import {createDocumentHost,DOCUMENT_STATE_INTERFACE} from '../../worlds/docs.editor/declared-host.mjs?v=fb02bf733b';
+import {createAvatarArea,canonicalAvatarArea,projectAvatarArea,avatarAreaStateWorld} from '../../worlds/ui.avatar/sop-avatar.mjs?v=af7f43a571';
+import {createCalendarArea,canonicalCalendarArea,projectCalendarArea,calendarAreaStateWorld} from '../../worlds/time.calendar/sop-calendar.mjs?v=0f2c7e21a0';
 export const NATIVE_AREAS={
  avatar:{area:'drawing',world:'ui.avatar',create:createAvatarArea,prepare:createAvatarArea,canonicalizeState:canonicalAvatarArea,projectState:projectAvatarArea,
   stateWorld:avatarAreaStateWorld,separateRuntime:true,historySelection:[['runtime','view','selected']],historyView:[['runtime','view','ids']]},
@@ -15,8 +14,8 @@ export const NATIVE_AREAS={
   historySelection:[['selected'],['selectedIds'],['selectedPart']],historyView:[['idDisplay']]},
  diagram:{area:'diagram',world:'diagram.sketch',create:createCanonicalDiagramHost,...DIAGRAM_STATE_INTERFACE,historySelection:[['selected'],['chartTools','active']],historyView:[['idDisplay']]},
  editor:{area:'document',world:'docs.editor',create:createDocumentHost,...DOCUMENT_STATE_INTERFACE,historySelection:[['selection']]},
- calendar:{area:'calendar',world:'time.calendar',create:createCalendarHost,canonicalizeState:canonicalCalendarState,projectState:toNativeCalendarState,
-  stateWorld:calendarStateWorld,stateSchema:CALENDAR_STATE_SCHEMA,policyFile:'scheduling-policy.sop',historySelection:[['selectedEvent']]},
+ calendar:{area:'calendar',world:'time.calendar',create:createCalendarArea,prepare:createCalendarArea,canonicalizeState:canonicalCalendarArea,projectState:projectCalendarArea,
+  stateWorld:calendarAreaStateWorld,separateRuntime:true,historySelection:[['runtime','view','selected']]},
 };
 /** Application composition: the same declared policy guards controls and spoken requests. */
 export async function createAreaHost(area,{loader,knowledge,prepareKnowledge=true,...options}={}){

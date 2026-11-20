@@ -21,7 +21,7 @@ const arc = ({ x, y, w, h }, opens = 'up') => ({
   left: `M${f1(x)} ${f1(y)} A${f1(w)} ${f1(h / 2)} 0 0 1 ${f1(x)} ${f1(y + h)}`, right: `M${f1(x + w)} ${f1(y)} A${f1(w)} ${f1(h / 2)} 0 0 0 ${f1(x + w)} ${f1(y + h)}`,
 }[opens]);
 
-function shapeSvg(box, shape, fill, points, orient) {
+function shapeSvg(box, shape, fill, points, orient, text) {
   const solid = `fill="${fill}"`;
   const stroke = `fill="none" stroke="${fill}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"`;
   switch (shape) {
@@ -31,6 +31,7 @@ function shapeSvg(box, shape, fill, points, orient) {
     case 'polygon': return points.length ? `<polygon points="${pts(points)}" ${solid}/>` : '';
     case 'line': return points.length ? `<polyline points="${pts(points)}" ${stroke}/>` : '';
     case 'arc': return `<path d="${arc(box, orient.opens)}" ${stroke}/>`;
+    case 'text': return `<text x="${f1(box.x)}" y="${f1(box.y)}" font-size="14" font-family="system-ui,sans-serif" fill="${fill}">${String(text ?? '').replace(/[<>&]/g, (c) => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' })[c])}</text>`;
     default: return '';
   }
 }
@@ -66,7 +67,7 @@ export function renderPrimitives(world, types, frame = { w: 100, h: 100 }, opts 
     const move = `translate(${f1(num(fact, 'tx'))} ${f1(num(fact, 'ty'))}) scale(${f1(num(fact, 'scale'))}) translate(${f1(-num(fact, 'cx'))} ${f1(-num(fact, 'cy'))})`;
     const flip = side === 'right' ? `matrix(-1 0 0 1 ${frame.w} 0) ` : '';
     const tag = opts.select && fact.attrs[opts.select] ? ` data-select="${String(val(fact, opts.select)).replace(/[<>&"]/g, '')}"` : '';
-    return `<g transform="${flip}${move}"${tag}>${shapeSvg(box, shape, fill, line, orients.get(source) ?? {})}</g>`;
+    return `<g transform="${flip}${move}"${tag}>${shapeSvg(box, shape, fill, line, orients.get(source) ?? {}, val(fact, 'text'))}</g>`;
   });
   const size = opts.size ? ` width="${opts.size}" height="${f1((opts.size * frame.h) / frame.w)}"` : '';
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${frame.w} ${frame.h}"${size}>${out.join('')}</svg>`;

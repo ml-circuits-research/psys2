@@ -11,7 +11,9 @@ import { routeNewEngine } from '../src/dialog/reader-routing.mjs';
 import { createDrawingHost, initialDrawingState } from '../worlds/art.draw/declared-host.mjs';
 import { createDiagramHost, initialDiagramState } from '../worlds/diagram.sketch/declared-host.mjs';
 import { initialDocumentState } from '../worlds/docs.editor/declared-host.mjs';
-import { initialCalendarState, toNativeCalendarState } from '../worlds/time.calendar/declared-host.mjs';
+import {emptyCalendarArea,calendarAreaStateWorld} from '../worlds/time.calendar/sop-calendar.mjs';
+import {str as sopText} from '../src/vendor/sopworld/sopworld.mjs';
+const calendarThings=(state,kind)=>calendarAreaStateWorld(state).ofType('w.meetings.'+kind).map(fact=>Object.fromEntries(Object.entries(fact.attrs).map(([key,values])=>[key,values.length===1?(values[0].startsWith('"')?sopText(values[0]):values[0]):values])));
 
 const literal = (value) => typeof value === 'string' ? JSON.stringify(value) : String(value);
 function graph({ act, mode, kind, name, conditions = {} }) {
@@ -103,7 +105,7 @@ test('Document overwrite and Calendar coverage policies read declared SOP guards
   assert.deepEqual(document, before);
   assert.equal(editorActivity.filter((event) => event.operation === 'document.write' && event.phase === 'start').length, 1);
 
-  const { value: calendar, activity: calendarActivity } = session('time.calendar', initialCalendarState());
+  const { value: calendar, activity: calendarActivity } = session('time.calendar', emptyCalendarArea());
   assert.equal((await performGesture(calendar, { view: 'calendar', operation: 'calendar.calendar.add',
     args: { id: 'office', label: 'Office' } })).ok, true);
   const calendarBindings = binding('calendar', 'canonical.meeting', 'meeting', 'calendar.meeting.add', 'time.calendar.meeting',
@@ -116,7 +118,7 @@ test('Document overwrite and Calendar coverage policies read declared SOP guards
   const added = await executeDeclaredRequest(calendar, meeting, '', { view: 'calendar', bindings: calendarBindings });
   assert.equal(added.statuses[0], 'supported', JSON.stringify(added.trace));
   assert.match(added.trace.compiledSop, /name="duration" value=1800000/);
-  const [event] = toNativeCalendarState(calendar.isession.state['time.calendar']).meetings;
+  const [event] = calendarThings(calendar.isession.state['time.calendar'], 'meeting').map(m=>({...m,duration:Number(m.duration)}));
   assert.equal(event.title, 'First event');
   assert.equal(event.duration, 1800000);
   assert.doesNotMatch(added.text, /starting now/);
@@ -128,7 +130,7 @@ test('Document overwrite and Calendar coverage policies read declared SOP guards
   assert.equal(now.statuses[0], 'supported', JSON.stringify(now.trace));
   assert.match(now.text, /starting now/);
   assert.doesNotMatch(now.text, /30-minute duration/);
-  const created = toNativeCalendarState(calendar.isession.state['time.calendar']).meetings.find((item) => item.title === 'Observed time');
+  const created = calendarThings(calendar.isession.state['time.calendar'], 'meeting').map(m=>({...m,start:Number(m.start),duration:Number(m.duration)})).find((item) => item.title === 'Observed time');
   assert.equal(created.duration, 300000);
   assert.ok(created.start >= started && created.start <= Date.now());
 });

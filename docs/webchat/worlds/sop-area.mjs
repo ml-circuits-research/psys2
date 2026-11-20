@@ -2,12 +2,12 @@
 // A tab defined by its area.sop: which catalog modules form its instance and knowledge, which rule files
 // compile its commands and project its drawing, the things it starts with and the open choices of its native
 // interface. This module only reads that declaration; it holds no knowledge of any tab.
-import {World, str} from '../lib/vendor/sopworld/sopworld.mjs?v=851c80bc87';
-import {catalogWorld} from './catalog-world.mjs?v=78bd10d27c';
-import {readNativeToolInterface} from './native-tool-interface.mjs?v=14a5164517';
-import {toolInvocationContext} from './native-tool-host.mjs?v=de7f9df967';
-import {createSopWorldHost, initialSopWorldState, worldOf} from './sop-world-host.mjs?v=b16e10bee3';
-import {renderPrimitives} from './sop-primitives.mjs?v=48eff69e39';
+import {World, str} from '../lib/vendor/sopworld/sopworld.mjs?v=dde6e85489';
+import {catalogWorld} from './catalog-world.mjs?v=9c1ce5f096';
+import {readNativeToolInterface} from './native-tool-interface.mjs?v=f24fe0f51c';
+import {toolInvocationContext} from './native-tool-host.mjs?v=f9a751a339';
+import {createSopWorldHost, initialSopWorldState, worldOf} from './sop-world-host.mjs?v=d8a959c837';
+import {renderPrimitives} from './sop-primitives.mjs?v=4afdb7412e';
 
 const read = (fact, key) => { const raw = fact?.attrs[key]?.[0]; return raw === undefined ? undefined : raw.startsWith('"') ? str(raw) : raw; };
 const all = (fact, key) => (fact?.attrs[key] ?? []).map((raw) => raw.startsWith('"') ? str(raw) : raw);
@@ -19,7 +19,7 @@ function declaration(text) {
   const [area] = world.ofType('app.area');
   if (!area) throw Error('missing-area');
   const owned = (type) => world.ofType(type).filter((fact) => fact.attrs.area?.[0] === '$' + area.id);
-  return { area, owned };
+  return { area, owned, declarations: world };
 }
 
 /** The shared base World of an area: catalog modules, the area's rule files and its own declaration. */
@@ -28,7 +28,7 @@ export async function areaBase({ world, loader, readCatalog }) {
   const promise = (async () => {
     const text = await loader.readFile(world, 'area.sop');
     if (!text) throw Error('area-declaration-unavailable');
-    const { area, owned } = declaration(text);
+    const { area, owned, declarations } = declaration(text);
     const instance = read(area, 'instance'), knowledge = all(area, 'knowledge');
     const base = await catalogWorld(readCatalog, { modules: [instance, ...knowledge], use: ['std.acts', instance, ...knowledge],
       shardsOf: (entry) => knowledge.includes(entry?.id) ? (entry.shards ?? []).map((shard) => typeof shard === 'string' ? shard : shard.path) : [] });
@@ -39,7 +39,7 @@ export async function areaBase({ world, loader, readCatalog }) {
       if (!source || !base.load(source).ok) throw Error('area-rules-refused:' + read(rules, 'file'));
     }
     const kinds = base.ofType('std.schema.kind').map((kind) => read(kind, 'of')).filter((kind) => kind.startsWith(instance + '.'));
-    return { base, area, owned, kinds, instance };
+    return { base, area, owned, declarations, kinds, instance };
   })();
   cache.set(world, promise);
   try { const value = await promise; resolved.set(world, value); return value; } catch (error) { cache.delete(world); throw error; }
@@ -106,6 +106,9 @@ export function projectSopArea(world, state, opts = {}) {
     return { label: read(control, 'label'), operation: read(control, 'operation'), param: read(control, 'param') ?? null,
       options: key === undefined ? [] : key === 'selected' ? options[selected] ?? [] : options[key] ?? [],
       target: read(control, 'target') ?? null, list: read(control, 'list') ?? null,
+      fields: declared.declarations.ofType('app.area.field').filter((field) => field.attrs.control?.[0] === '$' + control.id)
+        .sort((a, b) => Number(read(a, 'n')) - Number(read(b, 'n')))
+        .map((field) => ({ param: read(field, 'param'), label: read(field, 'label'), input: read(field, 'input'), scale: Number(read(field, 'scale') ?? 1) })),
       available: read(control, 'target') !== 'selected' || (selected !== null && selected !== 'face' && (when === undefined || (when === 'present') === present)) };
   });
   // The state itself travels with what is derived from it, so a projection canonicalizes back to its state.

@@ -3531,7 +3531,8 @@
   "k.genres/shards/presentation",
   "k.words/shards/ag",
   "k.words/shards/frequency-a",
-  "w.calendar/schema.sop"
+  "w.calendar/schema.sop",
+  "w.meetings/schema.sop"
  ],
  "agent": [
   "k.kinds/shards/wordnet-1",
@@ -7241,7 +7242,8 @@
  "appointment": [
   "k.words/shards/ap",
   "k.words/shards/frequency-a",
-  "w.calendar/schema.sop"
+  "w.calendar/schema.sop",
+  "w.meetings/schema.sop"
  ],
  "appointments": [
   "w.calendar/schema.sop"
@@ -9069,6 +9071,7 @@
   "w.lang.en/shards/closed-classes",
   "w.lang.en/shards/prepositions",
   "w.map/schema.sop",
+  "w.meetings/schema.sop",
   "w.seating/schema.sop",
   "w.timeline/schema.sop",
   "k.objects/shards/noto-place-other-01",
@@ -9353,6 +9356,12 @@
   "k.kinds/shards/wordnet-1",
   "k.words/shards/at",
   "k.words/shards/frequency-a"
+ ],
+ "attendee": [
+  "w.meetings/schema.sop"
+ ],
+ "attendees": [
+  "w.meetings/schema.sop"
  ],
  "attending": [
   "k.words/shards/at",
@@ -14846,6 +14855,7 @@
   "k.words/shards/frequency-b"
  ],
  "begins": [
+  "w.meetings/schema.sop",
   "w.timeline/schema.sop"
  ],
  "begoña": [
@@ -23917,10 +23927,12 @@
   "k.scenes/shards/things-c",
   "k.words/shards/ca",
   "k.words/shards/frequency-c",
-  "w.calendar/schema.sop"
+  "w.calendar/schema.sop",
+  "w.meetings/schema.sop"
  ],
  "calendars": [
-  "w.calendar/schema.sop"
+  "w.calendar/schema.sop",
+  "w.meetings/schema.sop"
  ],
  "calf": [
   "k.attributes/shards/drawn-hand",
@@ -24800,7 +24812,8 @@
  "capacity": [
   "k.kinds/shards/structures",
   "k.words/shards/ca",
-  "k.words/shards/frequency-c"
+  "k.words/shards/frequency-c",
+  "w.meetings/schema.sop"
  ],
  "cape": [
   "k.attributes/shards/same-c",
@@ -31176,6 +31189,7 @@
   "k.kinds/shards/relations-geo",
   "k.words/shards/co-1",
   "k.words/shards/frequency-c",
+  "w.meetings/schema.sop",
   "w.text/schema.sop"
  ],
  "code2": [
@@ -31574,6 +31588,7 @@
   "w.face/schema.sop",
   "w.lang.en/shards/hand-grammar",
   "w.map/schema.sop",
+  "w.meetings/schema.sop",
   "w.seating/schema.sop"
  ],
  "color in": [
@@ -31658,6 +31673,7 @@
   "w.face/schema.sop",
   "w.lang.en/shards/hand-grammar",
   "w.map/schema.sop",
+  "w.meetings/schema.sop",
   "w.seating/schema.sop"
  ],
  "colour hue": [
@@ -40827,7 +40843,8 @@
   "k.expect/schema.sop",
   "k.kinds/shards/wordnet-2",
   "k.words/shards/de",
-  "k.words/shards/frequency-d"
+  "k.words/shards/frequency-d",
+  "w.meetings/schema.sop"
  ],
  "dese": [
   "k.geo/shards/africa"
@@ -44869,7 +44886,8 @@
   "k.time/schema.sop",
   "k.units/shards/measures",
   "k.words/shards/du",
-  "k.words/shards/frequency-d"
+  "k.words/shards/frequency-d",
+  "w.meetings/schema.sop"
  ],
  "durban": [
   "k.geo/shards/africa"
@@ -49831,11 +49849,13 @@
   "k.words/shards/ev",
   "k.words/shards/frequency-e",
   "w.calendar/schema.sop",
+  "w.meetings/schema.sop",
   "w.timeline/schema.sop"
  ],
  "events": [
   "k.motion/schema.sop",
   "w.calendar/schema.sop",
+  "w.meetings/schema.sop",
   "w.timeline/schema.sop"
  ],
  "eventually": [
@@ -71876,6 +71896,7 @@
   "k.words/shards/frequency-i",
   "k.words/shards/id",
   "w.dialogue/schema.sop",
+  "w.meetings/schema.sop",
   "k.objects/shards/noto-other-object-02"
  ],
  "id like": [
@@ -71919,6 +71940,9 @@
   "k.kinds/shards/head",
   "k.objects/shards/noto-other-object-02",
   "k.scenes/shards/things-i"
+ ],
+ "identifier": [
+  "w.meetings/schema.sop"
  ],
  "identify": [
   "k.actions/shards/verbs-ask",
@@ -72471,6 +72495,7 @@
   "w.lang.en/shards/hand-joins",
   "w.lang.en/shards/prepositions",
   "w.list/schema.sop",
+  "w.meetings/schema.sop",
   "w.timeline/schema.sop"
  ],
  "in a circle": [
@@ -81433,6 +81458,7 @@
   "w.chart/schema.sop",
   "w.diagram/schema.sop",
   "w.map/schema.sop",
+  "w.meetings/schema.sop",
   "w.picture/schema.sop"
  ],
  "label_band": [
@@ -82603,6 +82629,9 @@
  ],
  "lasted": [
   "w.timeline/schema.sop"
+ ],
+ "lasting": [
+  "w.meetings/schema.sop"
  ],
  "lasts": [
   "k.attributes/shards/narration",
@@ -84494,7 +84523,8 @@
   "k.words/shards/frequency-l",
   "k.words/shards/le",
   "w.document/schema.sop",
-  "w.lang.en/shards/hand-grammar"
+  "w.lang.en/shards/hand-grammar",
+  "w.meetings/schema.sop"
  ],
  "length unit": [
   "k.expect/schema.sop"
@@ -86543,6 +86573,7 @@
   "k.kinds/shards/wordnet-2",
   "k.words/shards/frequency-l",
   "k.words/shards/lo",
+  "w.meetings/schema.sop",
   "k.objects/shards/noto-office-02",
   "k.objects/shards/openmoji-technology-01"
  ],
@@ -86862,6 +86893,7 @@
   "k.values/shards/scales",
   "k.words/shards/frequency-l",
   "k.words/shards/lo",
+  "w.meetings/schema.sop",
   "w.seating/schema.sop",
   "k.objects/shards/noto-musical-instrument-02"
  ],
@@ -91755,10 +91787,15 @@
  "meeting": [
   "k.words/shards/frequency-m",
   "k.words/shards/me",
-  "w.calendar/schema.sop"
+  "w.calendar/schema.sop",
+  "w.meetings/schema.sop"
+ ],
+ "meeting room": [
+  "w.meetings/schema.sop"
  ],
  "meetings": [
-  "w.calendar/schema.sop"
+  "w.calendar/schema.sop",
+  "w.meetings/schema.sop"
  ],
  "meg": [
   "k.people/shards/given-names-m",
@@ -97689,6 +97726,7 @@
   "w.lang.en/shards/hand-grammar",
   "w.list/schema.sop",
   "w.map/schema.sop",
+  "w.meetings/schema.sop",
   "w.person/schema.sop",
   "w.picture/schema.sop",
   "w.room/schema.sop",
@@ -100159,6 +100197,7 @@
   "w.document/schema.sop",
   "w.list/schema.sop",
   "w.map/schema.sop",
+  "w.meetings/schema.sop",
   "w.person/schema.sop",
   "w.request/schema.sop",
   "w.seating/schema.sop",
@@ -100218,6 +100257,7 @@
   "k.music/schema.sop",
   "w.document/schema.sop",
   "w.list/schema.sop",
+  "w.meetings/schema.sop",
   "w.person/schema.sop",
   "w.seating/schema.sop",
   "w.tasks/schema.sop",
@@ -102118,6 +102158,7 @@
   "w.lang.en/shards/prepositions",
   "w.list/schema.sop",
   "w.map/schema.sop",
+  "w.meetings/schema.sop",
   "w.request/schema.sop",
   "w.tasks/schema.sop",
   "w.timeline/schema.sop"
@@ -105508,6 +105549,12 @@
   "k.words/shards/frequency-p",
   "k.words/shards/pa"
  ],
+ "participant": [
+  "w.meetings/schema.sop"
+ ],
+ "participants": [
+  "w.meetings/schema.sop"
+ ],
  "participate": [
   "k.words/shards/frequency-p",
   "k.words/shards/pa"
@@ -106942,6 +106989,7 @@
   "k.procedures/shards/tasks",
   "k.words/shards/frequency-p",
   "k.words/shards/pe",
+  "w.meetings/schema.sop",
   "w.person/schema.sop",
   "w.seating/schema.sop",
   "k.objects/shards/openmoji-travel-places-01"
@@ -107316,6 +107364,7 @@
   "k.words/shards/frequency-p",
   "k.words/shards/pe",
   "w.lang.en/shards/hand-morphology",
+  "w.meetings/schema.sop",
   "w.person/schema.sop",
   "w.seating/schema.sop",
   "k.objects/shards/openmoji-travel-places-01"
@@ -121028,6 +121077,7 @@
   "k.scenes/shards/scenes-indoors",
   "k.words/shards/frequency-r",
   "k.words/shards/ro",
+  "w.meetings/schema.sop",
   "w.room/schema.sop"
  ],
  "room light": [
@@ -121041,6 +121091,7 @@
   "k.layouts/shards/layouts",
   "k.words/shards/frequency-r",
   "k.words/shards/ro",
+  "w.meetings/schema.sop",
   "w.room/schema.sop"
  ],
  "roosevelt": [
@@ -125282,6 +125333,7 @@
  "schedule": [
   "k.words/shards/frequency-s",
   "k.words/shards/sc",
+  "w.meetings/schema.sop",
   "w.timeline/schema.sop"
  ],
  "schelde": [
@@ -126329,6 +126381,7 @@
   "k.procedures/shards/tasks",
   "k.words/shards/frequency-s",
   "k.words/shards/se",
+  "w.meetings/schema.sop",
   "w.seating/schema.sop"
  ],
  "seattle": [
@@ -135097,6 +135150,7 @@
   "k.words/shards/st",
   "w.calendar/schema.sop",
   "w.diagram/schema.sop",
+  "w.meetings/schema.sop",
   "w.timeline/schema.sop"
  ],
  "start at": [
@@ -135129,6 +135183,7 @@
  "starts": [
   "k.time/schema.sop",
   "w.calendar/schema.sop",
+  "w.meetings/schema.sop",
   "w.timeline/schema.sop"
  ],
  "starts_about": [
@@ -145293,6 +145348,7 @@
   "w.diagram/schema.sop",
   "w.document/schema.sop",
   "w.list/schema.sop",
+  "w.meetings/schema.sop",
   "w.timeline/schema.sop"
  ],
  "tito": [
@@ -153431,6 +153487,21 @@
  "w.map.view.layer": [
   "k.kinds/shards/structures"
  ],
+ "w.meetings": [
+  "k.kinds/shards/structures"
+ ],
+ "w.meetings.calendar": [
+  "k.kinds/shards/structures"
+ ],
+ "w.meetings.meeting": [
+  "k.kinds/shards/structures"
+ ],
+ "w.meetings.meeting.calendar": [
+  "k.kinds/shards/structures"
+ ],
+ "w.meetings.meeting.start": [
+  "k.kinds/shards/structures"
+ ],
  "w.person": [
   "k.kinds/shards/structures"
  ],
@@ -155825,6 +155896,7 @@
   "w.lang.en/shards/closed-classes",
   "w.lang.en/shards/ellipsis",
   "w.map/schema.sop",
+  "w.meetings/schema.sop",
   "w.request/schema.sop",
   "w.seating/schema.sop",
   "k.objects/shards/noto-place-building-02",
@@ -157180,6 +157252,7 @@
   "k.units/shards/measures",
   "w.lang.en/shards/closed-classes",
   "w.lang.en/shards/prepositions",
+  "w.meetings/schema.sop",
   "w.seating/schema.sop"
  ],
  "with dots": [

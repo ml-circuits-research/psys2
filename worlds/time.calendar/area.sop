@@ -1,0 +1,32 @@
+# The Calendar tab as a SOP area (read by worlds/sop-area.mjs). The instance is a w.meetings world; the act rules
+# compile every native calendar command and the projection derives the agenda that is drawn and observed.
+@area.types core.type of=app.area
+@area.rules.type core.type of=app.area.rules
+@area.make.type core.type of=app.area.make
+@area.command.type core.type of=app.area.command
+@area.choice.type core.type of=app.area.choice
+@area.constant.type core.type of=app.area.constant
+@area.draw.type core.type of=app.area.draw
+@area.offline.type core.type of=app.area.offline
+@area.control.type core.type of=app.area.control
+@area.field.type core.type of=app.area.field
+
+@calendar.area app.area world=time.calendar instance=w.meetings scope="time.calendar" frame.w=600 frame.h=480
+@calendar.rules.1 app.area.rules area=$calendar.area file="render-projection.sop" n=1
+@calendar.rules.2 app.area.rules area=$calendar.area file="act-rules.sop" n=2
+@calendar.make app.area.make area=$calendar.area kind=w.meetings.calendar code=calendar label="Calendar"
+@calendar.draw app.area.draw area=$calendar.area draw=ui.calendar.draw fill=ui.calendar.fill point=ui.calendar.point orient=ui.calendar.orient select=slot
+
+# Inspector controls: a form adds an event; the selected event can be moved, renamed or deleted.
+# A field's `input` says how a view asks for it: text, datetime (milliseconds since the Unix epoch, UTC) or
+# minutes (multiplied by `scale` into milliseconds).
+@calendar.control.add app.area.control area=$calendar.area n=1 label="Add event" operation="calendar.event.add" param=id options=none
+@calendar.field.add.title app.area.field control=$calendar.control.add n=1 param=title label="Title" input=text
+@calendar.field.add.start app.area.field control=$calendar.control.add n=2 param=start label="Start (UTC)" input=datetime
+@calendar.field.add.duration app.area.field control=$calendar.control.add n=3 param=duration label="Minutes" input=minutes scale=60000
+@calendar.control.select app.area.control area=$calendar.area n=2 label="Selection" operation="calendar.event.select" param=id options=object
+@calendar.control.rename app.area.control area=$calendar.area n=3 label="Rename" operation="calendar.meeting.change" target=selected list=id when=present options=none
+@calendar.field.rename.title app.area.field control=$calendar.control.rename n=1 param=title label="Title" input=text
+@calendar.control.move app.area.control area=$calendar.area n=4 label="Move" operation="calendar.meeting.move" target=selected list=id when=present options=none
+@calendar.field.move.start app.area.field control=$calendar.control.move n=1 param=start label="Start (UTC)" input=datetime
+@calendar.control.remove app.area.control area=$calendar.area n=5 label="Delete" operation="calendar.meeting.remove" target=selected list=id when=present

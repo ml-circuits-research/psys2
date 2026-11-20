@@ -19,7 +19,7 @@ function declaration(text) {
   const [area] = world.ofType('app.area');
   if (!area) throw Error('missing-area');
   const owned = (type) => world.ofType(type).filter((fact) => fact.attrs.area?.[0] === '$' + area.id);
-  return { area, owned };
+  return { area, owned, declarations: world };
 }
 
 /** The shared base World of an area: catalog modules, the area's rule files and its own declaration. */
@@ -28,7 +28,7 @@ export async function areaBase({ world, loader, readCatalog }) {
   const promise = (async () => {
     const text = await loader.readFile(world, 'area.sop');
     if (!text) throw Error('area-declaration-unavailable');
-    const { area, owned } = declaration(text);
+    const { area, owned, declarations } = declaration(text);
     const instance = read(area, 'instance'), knowledge = all(area, 'knowledge');
     const base = await catalogWorld(readCatalog, { modules: [instance, ...knowledge], use: ['std.acts', instance, ...knowledge],
       shardsOf: (entry) => knowledge.includes(entry?.id) ? (entry.shards ?? []).map((shard) => typeof shard === 'string' ? shard : shard.path) : [] });
@@ -39,7 +39,7 @@ export async function areaBase({ world, loader, readCatalog }) {
       if (!source || !base.load(source).ok) throw Error('area-rules-refused:' + read(rules, 'file'));
     }
     const kinds = base.ofType('std.schema.kind').map((kind) => read(kind, 'of')).filter((kind) => kind.startsWith(instance + '.'));
-    return { base, area, owned, kinds, instance };
+    return { base, area, owned, declarations, kinds, instance };
   })();
   cache.set(world, promise);
   try { const value = await promise; resolved.set(world, value); return value; } catch (error) { cache.delete(world); throw error; }
@@ -106,6 +106,9 @@ export function projectSopArea(world, state, opts = {}) {
     return { label: read(control, 'label'), operation: read(control, 'operation'), param: read(control, 'param') ?? null,
       options: key === undefined ? [] : key === 'selected' ? options[selected] ?? [] : options[key] ?? [],
       target: read(control, 'target') ?? null, list: read(control, 'list') ?? null,
+      fields: declared.declarations.ofType('app.area.field').filter((field) => field.attrs.control?.[0] === '$' + control.id)
+        .sort((a, b) => Number(read(a, 'n')) - Number(read(b, 'n')))
+        .map((field) => ({ param: read(field, 'param'), label: read(field, 'label'), input: read(field, 'input'), scale: Number(read(field, 'scale') ?? 1) })),
       available: read(control, 'target') !== 'selected' || (selected !== null && selected !== 'face' && (when === undefined || (when === 'present') === present)) };
   });
   // The state itself travels with what is derived from it, so a projection canonicalizes back to its state.

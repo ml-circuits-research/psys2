@@ -1,0 +1,66 @@
+# w.meetings: meetings at exact times, with the people, rooms and calendars they use
+# sources: hand-core 1 (own project declarations; sources/hand-core/SOURCE.md)
+# license: CC0-1.0
+# script: none (hand-written)
+# needs: pinned sopworld std.schema/std.acts; no new runtime capability
+
+@w.meetings core.module name=w.meetings version=1 exports=calendar exports=person exports=room exports=meeting core.source="hand-core 1"
+@w.meetings.world std.schema.world name=w.meetings doc="meetings at exact times, with the people, rooms and calendars they use" core.source="hand-core 1"
+
+# Every thing has a `code`: the short identifier a tool and a person use for it ("review", "room-a").
+@w.meetings.calendar core.type of=w.meetings.calendar extends=std.schema.thing closed=true core.source="hand-core 1"
+@w.meetings.calendar.code core.slot of=w.meetings.calendar key=code required=true kind=atom kind=string core.source="hand-core 1"
+@w.meetings.calendar.label core.slot of=w.meetings.calendar key=label required=true kind=atom kind=string core.source="hand-core 1"
+@w.meetings.calendar.colour core.slot of=w.meetings.calendar key=colour kind=atom kind=string core.source="hand-core 1"
+@w.meetings.person core.type of=w.meetings.person extends=std.schema.thing closed=true core.source="hand-core 1"
+@w.meetings.person.code core.slot of=w.meetings.person key=code required=true kind=atom kind=string core.source="hand-core 1"
+@w.meetings.person.label core.slot of=w.meetings.person key=label required=true kind=atom kind=string core.source="hand-core 1"
+@w.meetings.room core.type of=w.meetings.room extends=std.schema.thing closed=true core.source="hand-core 1"
+@w.meetings.room.code core.slot of=w.meetings.room key=code required=true kind=atom kind=string core.source="hand-core 1"
+@w.meetings.room.label core.slot of=w.meetings.room key=label required=true kind=atom kind=string core.source="hand-core 1"
+@w.meetings.room.capacity core.slot of=w.meetings.room key=capacity kind=integer min=1 core.source="hand-core 1"
+@w.meetings.room.location core.slot of=w.meetings.room key=location kind=atom kind=string core.source="hand-core 1"
+
+# A meeting: `start` in milliseconds since 1970-01-01T00:00Z, `duration` in milliseconds. `participant` names
+# people, `room` and `calendar` the room and the calendar it belongs to.
+@w.meetings.meeting core.type of=w.meetings.meeting extends=std.schema.thing closed=true core.source="hand-core 1"
+@w.meetings.meeting.code core.slot of=w.meetings.meeting key=code required=true kind=atom kind=string core.source="hand-core 1"
+@w.meetings.meeting.title core.slot of=w.meetings.meeting key=title required=true kind=atom kind=string core.source="hand-core 1"
+@w.meetings.meeting.start core.slot of=w.meetings.meeting key=start required=true kind=integer core.source="hand-core 1"
+@w.meetings.meeting.duration core.slot of=w.meetings.meeting key=duration required=true kind=integer min=1 core.source="hand-core 1"
+@w.meetings.meeting.participant core.slot of=w.meetings.meeting key=participant type=w.meetings.person many=true core.source="hand-core 1"
+@w.meetings.meeting.room core.slot of=w.meetings.meeting key=room type=w.meetings.room core.source="hand-core 1"
+@w.meetings.meeting.calendar core.slot of=w.meetings.meeting key=calendar type=w.meetings.calendar core.source="hand-core 1"
+@w.meetings.meeting.notes core.slot of=w.meetings.meeting key=notes kind=string core.source="hand-core 1"
+
+# One thing of each kind per code.
+@w.meetings.code.first std.schema.thing kind=?kind code=?code
+@w.meetings.code.second std.schema.thing kind=?kind code=?code
+@w.meetings.code.other core.check fn=neq args=$w.meetings.code.first args=$w.meetings.code.second
+@w.meetings.code.unique core.deny when=$w.meetings.code.first when=$w.meetings.code.second if=$w.meetings.code.other why="The code ?code is already used by another ?kind." core.source="hand-core 1"
+
+# Two meetings that share a room do not overlap (half-open intervals: one may start when the other ends).
+@w.meetings.overlap.room.a w.meetings.meeting room=?r start=?as duration=?ad
+@w.meetings.overlap.room.b w.meetings.meeting room=?r start=?bs duration=?bd
+@w.meetings.overlap.room.ae core.calc out=?ae fn=add args=?as args=?ad
+@w.meetings.overlap.room.be core.calc out=?be fn=add args=?bs args=?bd
+@w.meetings.overlap.room.distinct core.check fn=neq args=$w.meetings.overlap.room.a args=$w.meetings.overlap.room.b
+@w.meetings.overlap.room.first core.check fn=lt args=?as args=?be
+@w.meetings.overlap.room.second core.check fn=lt args=?bs args=?ae
+@w.meetings.overlap.room core.deny when=$w.meetings.overlap.room.a when=$w.meetings.overlap.room.b with=$w.meetings.overlap.room.ae with=$w.meetings.overlap.room.be if=$w.meetings.overlap.room.distinct if=$w.meetings.overlap.room.first if=$w.meetings.overlap.room.second why="Two meetings that share a room overlap." core.source="hand-core 1"
+
+# Two meetings that share a person do not overlap (half-open intervals: one may start when the other ends).
+@w.meetings.overlap.participant.a w.meetings.meeting participant=?r start=?as duration=?ad
+@w.meetings.overlap.participant.b w.meetings.meeting participant=?r start=?bs duration=?bd
+@w.meetings.overlap.participant.ae core.calc out=?ae fn=add args=?as args=?ad
+@w.meetings.overlap.participant.be core.calc out=?be fn=add args=?bs args=?bd
+@w.meetings.overlap.participant.distinct core.check fn=neq args=$w.meetings.overlap.participant.a args=$w.meetings.overlap.participant.b
+@w.meetings.overlap.participant.first core.check fn=lt args=?as args=?be
+@w.meetings.overlap.participant.second core.check fn=lt args=?bs args=?ae
+@w.meetings.overlap.participant core.deny when=$w.meetings.overlap.participant.a when=$w.meetings.overlap.participant.b with=$w.meetings.overlap.participant.ae with=$w.meetings.overlap.participant.be if=$w.meetings.overlap.participant.distinct if=$w.meetings.overlap.participant.first if=$w.meetings.overlap.participant.second why="Two meetings that share a person overlap." core.source="hand-core 1"
+
+@w.meetings.kind.calendar std.schema.kind of=w.meetings.calendar world=w.meetings acts=make acts=remove acts=change acts=pick acts=ask core.source="hand-core 1"
+@w.meetings.kind.person std.schema.kind of=w.meetings.person world=w.meetings acts=make acts=remove acts=change acts=pick acts=ask core.source="hand-core 1"
+@w.meetings.kind.room std.schema.kind of=w.meetings.room world=w.meetings acts=make acts=remove acts=change acts=pick acts=ask core.source="hand-core 1"
+@w.meetings.kind.meeting std.schema.kind of=w.meetings.meeting world=w.meetings acts=make acts=remove acts=change acts=place acts=pick acts=ask core.source="hand-core 1"
+@w.meetings.limit.meeting std.schema.limit of=w.meetings.meeting max=2000 core.source="hand-core 1"

@@ -8,14 +8,13 @@ import {restoreNativeInstances} from '../src/dialog/instance-persistence.mjs';
 import {readInstanceState} from '../src/vendor/sopworld/sopworld.mjs';
 import {NATIVE_AREAS,createAreaHost} from '../src/dialog/app-reader-context.mjs';
 import {CATALOG_PIN} from '../src/knowledge/catalog-pin.mjs';
-import {toNativeCalendarState,createCalendarHost} from '../worlds/time.calendar/declared-host.mjs';
 import {nativeObservationObjects} from '../src/dialog/instance-facts.mjs';
 
 const fixture=JSON.parse(await readFile(new URL('./fixtures/instance-3ce-saved-worlds.json',import.meta.url),'utf8'));
 const records=await Promise.all(fixture.records.map(async({world,instanceId,revision,wires,wiresFile})=>({world,instanceId,revision,wires:wires??await readFile(new URL('./fixtures/'+wiresFile,import.meta.url),'utf8')})));
 const archives=new Map(records.map(record=>[record.world,readInstanceState(record.wires)]));
 const semantic=objects=>objects.map(object=>{const copy=structuredClone(object);if(copy.metadata){delete copy.metadata.inputs;if(!Object.keys(copy.metadata).length)delete copy.metadata;}return copy;});
-const projection=(world,state)=>world==='art.draw'?toNativeDrawingState(state):world==='time.calendar'?toNativeCalendarState(state):state;
+const projection=(world,state)=>world==='art.draw'?toNativeDrawingState(state):state;
 const session=()=>({isession:{state:{}},engine:{loader:{readFile:(world,file)=>readFile(new URL(`../worlds/${world}/${file}`,import.meta.url),'utf8')}}});
 function difference(actual,expected,at='$'){
  if(isDeepStrictEqual(actual,expected))return null;
@@ -43,14 +42,14 @@ test('the historical fixture contains populated, unmodified published instances 
 });
 
 // The Avatar now keeps a w.face SOP instance; an archive of the retired native face is refused, never adopted.
-test('a published archive of the retired native avatar face is refused and stays readable',async()=>{
- const record=records.find(row=>row.world==='ui.avatar'),original=JSON.stringify(record),target=session();
+for(const world of ['ui.avatar','time.calendar'])test(`a published archive of the retired native ${world} state is refused and stays readable`,async()=>{
+ const record=records.find(row=>row.world===world),original=JSON.stringify(record),target=session();
  await assert.rejects(restoreNativeInstances(target,[record]));
  assert.deepEqual(target.isession.state,{});
- exact(readInstanceState(record.wires),archives.get('ui.avatar'),'the original wire archive remains losslessly readable');
+ exact(readInstanceState(record.wires),archives.get(world),'the original wire archive remains losslessly readable');
  assert.equal(JSON.stringify(record),original);
 });
-for(const record of records.filter(row=>row.world!=='ui.avatar'))test(`published ${record.world} archive remains lossless while its old knowledge pin is not silently adopted`,async()=>{
+for(const record of records.filter(row=>!['ui.avatar','time.calendar'].includes(row.world)))test(`published ${record.world} archive remains lossless while its old knowledge pin is not silently adopted`,async()=>{
  const archive=archives.get(record.world),original=JSON.stringify(record),target=session();
  assert.notEqual(archive.metadata.knowledge.version,CATALOG_PIN.commit);
  // Verify the historical facts against a fresh adapter without presenting the old archive as a current work file.

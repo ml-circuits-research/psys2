@@ -5,6 +5,7 @@
 @act.request core.type of=app.act.request
 @act.item core.type of=app.act.item
 @act.call core.type of=app.act.call
+@act.arg core.type of=app.act.arg
 @act.view core.type of=app.act.view
 @act.history core.type of=app.act.history
 @act.refuse core.type of=app.act.refuse
