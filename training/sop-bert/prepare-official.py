@@ -2,7 +2,7 @@
 
 Reads official-dataset/{train.jsonl.gz,dev.jsonl,test.jsonl,inventory.json} and writes, into a new directory,
 the files train-key-reader.py and evaluate-demo-reader.py consume:
-  train.jsonl        weighted training request cuts (UI corpora repeated --ui-weight times)
+  train.jsonl        weighted training request cuts (ui-natural/ui-human repeated --ui-weight times)
   calibration.jsonl  the dev split (model selection)
   test.jsonl         the held-out test split (reporting only)
   authored.jsonl     the official rows in the authored shape the evaluator rejoins for full utterances
@@ -18,7 +18,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 OFFICIAL = ROOT.parents[1] / 'official-dataset'
-UI_SOURCES = {'ui-natural-v1', 'ui-human-v1', 'ui-relations-v1'}
+UI_SOURCES = {'ui-natural-v1', 'ui-human-v1'}  # executed UI recipes and their paraphrases; generated relations are already numerous
 
 
 def sha(path):

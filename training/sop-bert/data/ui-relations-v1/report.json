@@ -1,19 +1,19 @@
 {
- "examples": 890,
+ "examples": 5374,
  "byRelation": {
-  "near": 178,
-  "left": 258,
-  "right": 258,
-  "on": 65,
-  "above": 84,
-  "below": 19,
-  "in": 28
+  "near": 686,
+  "left": 687,
+  "right": 685,
+  "above": 594,
+  "below": 1513,
+  "in": 985,
+  "on": 224
  },
  "byAct": {
-  "make": 800,
-  "place": 90
+  "make": 5108,
+  "place": 266
  },
- "subjects": 22,
+ "subjects": 687,
  "anchors": [
   "lake",
   "tree",

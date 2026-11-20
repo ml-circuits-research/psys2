@@ -102,7 +102,7 @@ Selector constraints become the target's `selector`; result constraints the requ
 
 ## Balancing
 
-The old corpus and all UI corpora are kept whole (after validation). The main synthetic set is capped: per seed family 40 human-written / 6 mechanical rows (8 / 3 for edits of named objects), and 2,500 rows per operation; human-written variants and hard questions are taken first. In training, UI-corpus rows are repeated three times (`prepare-official.py --ui-weight`).
+The old corpus and all UI corpora are kept whole (after validation). The main synthetic set is capped: per seed family 40 human-written / 6 mechanical rows (8 / 3 for edits of named objects), and 2,500 rows per operation; human-written variants and hard questions are taken first. In training, ui-natural and ui-human rows are repeated three times (`prepare-official.py --ui-weight`).
 
 ## What was fixed and what was dropped
 

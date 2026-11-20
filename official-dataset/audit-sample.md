@@ -431,13 +431,13 @@
 84. [drawing · main-synthetic · train · drawing.catalog.make] “I'd like a salmon”  — context: House, Box, Circle
   - span “I'd like a salmon”: **make**/do (no trigger); target drawn new indefinite kind=salmon kind_span=“salmon”
 
-85. [drawing · main-synthetic · test · drawing.object.make] “I could use a masts here”  — context: House, Box, Circle
+85. [drawing · main-synthetic · dev · drawing.object.make] “I could use a masts here”  — context: House, Box, Circle
   - span “I could use a masts here”: **make**/do trigger=“use”; target drawn new indefinite kind=masts kind_span=“masts”
 
-86. [drawing · main-synthetic · train · drawing.object.make] “rounding this off with a cradle”  — context: House, Box, Circle
+86. [drawing · main-synthetic · test · drawing.object.make] “rounding this off with a cradle”  — context: House, Box, Circle
   - span “rounding this off with a cradle”: **make**/do (no trigger); target drawn new indefinite kind=cradle kind_span=“cradle”
 
-87. [drawing · main-synthetic · test · drawing.object.make] “my current project needs a hen”  — context: House, Box, Circle
+87. [drawing · main-synthetic · dev · drawing.object.make] “my current project needs a hen”  — context: House, Box, Circle
   - span “my current project needs a hen”: **make**/do trigger=“needs”; target drawn new indefinite kind=hen kind_span=“hen”
 
 88. [drawing · main-synthetic · train · drawing.object.make] “the next thing on my list is a tequila”  — context: House, Box, Circle
@@ -485,22 +485,23 @@
     - drawn.size = "80" from “80” [eq, result]
     - drawn.label = "Home" from “Home” [eq, result]
 
-97. [drawing · ui-relations-v1 · train · drawing.object.make] “can you add a lake next to that house”  — context: Lake, Tree, House, Mountain, Road, Hill
-  - span “can you add a lake next to that house”: **make**/do trigger=“add”; target drawn new indefinite kind=lake kind_span=“lake”
-    - drawn.relation = "near" from “next to” [relation, result]
-    - drawn.anchor = "that house" from “that house” [relation, selector]
-
-98. [drawing · ui-relations-v1 · train · drawing.object.make] “could you draw a flower by the lake”  — context: Lake, Tree, House, Mountain, Road, Hill
-  - span “could you draw a flower by the lake”: **make**/do trigger=“draw”; target drawn new indefinite kind=flower kind_span=“flower”
-    - drawn.relation = "near" from “by” [relation, result]
-    - drawn.anchor = "the lake" from “the lake” [relation, selector]
-
-99. [drawing · ui-relations-v1 · train · drawing.object.make] “put a mountain on the right of the tree”  — context: Lake, Tree, House, Mountain, Road, Hill
-  - span “put a mountain on the right of the tree”: **make**/do trigger=“put”; target drawn new indefinite kind=mountain kind_span=“mountain”
-    - drawn.relation = "right_of" from “on the right of” [relation, result]
+97. [drawing · ui-relations-v1 · train · drawing.object.make] “Please put a large mount fuji beside the tree.”  — context: Lake, Tree, House, Mountain, Road, Hill
+  - span “Please put a large mount fuji beside the tree.”: **make**/do trigger=“put”; target drawn new indefinite kind=mount fuji kind_span=“mount fuji”
+    - drawn.size = "big" from “large” [degree, result]
+    - drawn.relation = "near" from “beside” [relation, result]
     - drawn.anchor = "the tree" from “the tree” [relation, selector]
 
-100. [drawing · ui-relations-v1 · train · drawing.object.make] “draw a rocket over the mountain there”  — context: Lake, Tree, House, Mountain, Road, Hill
-  - span “draw a rocket over the mountain there”: **make**/do trigger=“draw”; target drawn new indefinite kind=rocket kind_span=“rocket”
-    - drawn.relation = "above" from “over” [relation, result]
-    - drawn.anchor = "the mountain there" from “the mountain there” [relation, selector]
+98. [drawing · ui-relations-v1 · test · drawing.object.make] “give me a stump under that tree”  — context: Lake, Tree, House, Mountain, Road, Hill
+  - span “give me a stump under that tree”: **make**/do trigger=“me”; target drawn new indefinite kind=stump kind_span=“stump”
+    - drawn.relation = "below" from “under” [relation, result]
+    - drawn.anchor = "that tree" from “that tree” [relation, selector]
+
+99. [drawing · ui-relations-v1 · test · drawing.object.make] “please put an angelfish inside the lake, please”  — context: Lake, Tree, House, Mountain, Road, Hill
+  - span “please put an angelfish inside the lake, please”: **make**/do trigger=“put”; target drawn new indefinite kind=angelfish kind_span=“angelfish”
+    - drawn.relation = "in" from “inside” [relation, result]
+    - drawn.anchor = "the lake" from “the lake” [relation, selector]
+
+100. [drawing · ui-relations-v1 · test · drawing.object.make] “please put a freighter in the lake there”  — context: Lake, Tree, House, Mountain, Road, Hill
+  - span “please put a freighter in the lake there”: **make**/do trigger=“put”; target drawn new indefinite kind=freighter kind_span=“freighter”
+    - drawn.relation = "in" from “in” [relation, result]
+    - drawn.anchor = "the lake there" from “the lake there” [relation, selector]

@@ -1,12 +1,12 @@
 # Statistics
 
-41,534 messages; train 33,714, dev 3,997, test 3,823.
+47,162 messages; train 38,208, dev 4,545, test 4,409.
 
 ## Tab (world) × split
 
 | world | train | dev | test | total |
 | --- | ---: | ---: | ---: | ---: |
-| drawing | 13,010 | 1,572 | 1,560 | 16,142 |
+| drawing | 17,504 | 2,120 | 2,146 | 21,770 |
 | diagram | 8,802 | 1,110 | 1,003 | 10,915 |
 | document | 6,851 | 822 | 790 | 8,463 |
 | calendar | 3,176 | 306 | 273 | 3,755 |
@@ -17,16 +17,16 @@
 | source | rows |
 | --- | ---: |
 | demo-tool-profile | 27,525 |
+| ui-relations-v1 | 6,743 |
 | main-synthetic | 6,142 |
 | ui-human-v1 | 4,964 |
 | ui-natural-v1 | 1,788 |
-| ui-relations-v1 | 1,115 |
 
 ## Requests per message
 
 | requests | rows |
 | --- | ---: |
-| 1 | 35,274 |
+| 1 | 40,902 |
 | 2 | 4,971 |
 | 0 | 657 |
 | 3 | 583 |
@@ -39,9 +39,9 @@
 
 | act | rows |
 | --- | ---: |
-| make | 23,598 |
+| make | 29,013 |
 | change | 11,492 |
-| place | 4,160 |
+| place | 4,373 |
 | answer | 2,920 |
 | connect | 2,378 |
 | remove | 1,098 |
@@ -56,7 +56,7 @@
 
 | world.type | rows |
 | --- | ---: |
-| drawing.drawn | 16,888 |
+| drawing.drawn | 22,516 |
 | diagram.node | 7,215 |
 | document.section | 6,448 |
 | calendar.meeting | 3,405 |
@@ -83,8 +83,8 @@
 
 | operation | rows |
 | --- | ---: |
+| drawing.object.make | 11,678 |
 | none | 10,465 |
-| drawing.object.make | 6,263 |
 | drawing.object.change | 3,304 |
 | document.block.change | 2,514 |
 | compound | 2,286 |
@@ -100,6 +100,7 @@
 | drawn.observe | 433 |
 | world-informed-completion | 417 |
 | avatar.part.add | 414 |
+| drawing.object.place | 379 |
 | document.block.make | 334 |
 | chart.change | 302 |
 | avatar.face.preset | 279 |
@@ -107,7 +108,6 @@
 | document.section.remove | 256 |
 | node.observe | 214 |
 | drawing.part.change | 206 |
-| drawing.object.place | 166 |
 | avatar.face.compose | 133 |
 | avatar.part.move | 133 |
 | document.section.change | 121 |
@@ -149,36 +149,36 @@
 
 | relation | rows |
 | --- | ---: |
-| below | 1,431 |
-| left_of | 1,097 |
-| right_of | 325 |
-| near | 229 |
-| above | 106 |
-| on | 82 |
+| below | 3,333 |
+| left_of | 1,652 |
+| in | 1,225 |
+| right_of | 852 |
+| near | 848 |
+| above | 736 |
+| on | 284 |
 | next_to | 37 |
-| in | 32 |
 
 ## Constraint keys (top 60)
 
 | key | rows |
 | --- | ---: |
+| drawing.drawn.relation | 8,956 |
+| drawing.drawn.anchor | 8,956 |
 | document.section.content | 5,296 |
 | drawing.drawn.colour | 4,797 |
 | diagram.node.colour | 4,173 |
 | diagram.node.label | 4,101 |
 | drawing.drawn.name | 3,492 |
-| drawing.drawn.relation | 3,328 |
-| drawing.drawn.anchor | 3,328 |
 | calendar.meeting.day | 3,053 |
 | calendar.meeting.time | 2,831 |
 | diagram.link.from | 2,542 |
 | diagram.link.to | 2,542 |
 | calendar.meeting.title | 2,249 |
 | calendar.meeting.length | 2,052 |
+| drawing.drawn.size | 1,575 |
 | calendar.meeting.calendar | 1,305 |
 | document.text.about | 1,026 |
 | document.text.words | 1,026 |
-| drawing.drawn.size | 979 |
 | document.text.title | 979 |
 | document.text.content | 949 |
 | calendar.meeting.room | 947 |
@@ -187,10 +187,10 @@
 | calendar.calendar.name | 904 |
 | diagram.chart.values | 866 |
 | avatar.part.variant | 797 |
+| drawing.drawn.ids | 742 |
 | avatar.part.ids | 735 |
 | avatar.face.id | 566 |
 | drawing.drawn.width | 543 |
-| drawing.drawn.ids | 529 |
 | diagram.node.ids | 438 |
 | document.section.order | 437 |
 | drawing.drawn.y | 418 |
@@ -230,13 +230,13 @@
 | --- | ---: |
 | haiku-v2 | 14,688 |
 | haiku-v1 | 11,758 |
+| relation-natural | 6,743 |
 | human-equivalent | 2,337 |
 | human-simplified | 1,825 |
 | direct | 1,770 |
 | mechanical-trigger | 1,538 |
 | mechanical | 1,241 |
 | human-complex | 1,181 |
-| relation-natural | 1,115 |
 | demo-tool-profile | 1,079 |
 | mechanical-orphan | 1,079 |
 | mechanical-typo | 764 |
@@ -260,5 +260,5 @@
 
 | measure | min | median | p90 | max |
 | --- | ---: | ---: | ---: | ---: |
-| characters | 2 | 52 | 101 | 268 |
-| words | 1 | 10 | 18 | 46 |
+| characters | 2 | 48 | 98 | 268 |
+| words | 1 | 9 | 17 | 46 |

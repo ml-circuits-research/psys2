@@ -588,14 +588,14 @@
       "path": "training/sop-bert/data/ui-relations-v1/examples.jsonl",
       "description": "relative-position placement requests (generate.py)",
       "gitCommit": "56c9f6b6bd528673ed117cfb8145555fda00b1f0",
-      "sha256": "49ee752e50536130d818e6b1aca6e3b84a7a57832bd38200c547c63164e7d024",
-      "rowsIn": 890,
-      "rowsKept": 890,
+      "sha256": "5273ddb0a5f7953cde45d55041382ff5d970f8208bdddf7869d73a3e0092f136",
+      "rowsIn": 5374,
+      "rowsKept": 5374,
       "rowsDropped": 0,
       "dropReasons": {},
       "fixes": {
-        "anchor-span-as-anchor-mention": 890,
-        "relation-value-renamed-to-bank": 516
+        "anchor-span-as-anchor-mention": 5374,
+        "relation-value-renamed-to-bank": 1372
       }
     },
     {
@@ -777,11 +777,11 @@
     }
   ],
   "splits": {
-    "train": 33714,
-    "dev": 3997,
-    "test": 3823
+    "train": 38208,
+    "dev": 4545,
+    "test": 4409
   },
-  "families": 21335,
+  "families": 22258,
   "leakedFamilies": 0,
   "labelConflictsResolvedByPriority": {
     "ui-natural-v1<-demo-tool-profile": 5,
@@ -791,7 +791,7 @@
   "previousMessageAugmentation": {
     "ui-natural-v1": 314,
     "ui-human-v1": 715,
-    "ui-relations-v1": 225,
+    "ui-relations-v1": 1369,
     "main-synthetic": 1214
   },
   "kindVocabulary": {
@@ -812,20 +812,20 @@
       "bytes": 45187
     },
     "dev.jsonl": {
-      "sha256": "f1d67d24f5e27170ae8ddbe8ddd73289dd73839a24957f176399ee8fcba74976",
-      "bytes": 4110045
+      "sha256": "c4771ebbe3656e3acb11941eaf542f1af7b98b7f8b4e1912cd1ce02acad77b9e",
+      "bytes": 4790235
     },
     "inventory.json": {
       "sha256": "e3c7fbe6eef59087f70e0797b5f959ff5ce42951ed9f5ecb6813b6842c4e11da",
       "bytes": 50976
     },
     "test.jsonl": {
-      "sha256": "00e18b02d61bfde4c67058fab5822334eda8aa3758bbd88d7e49c5d8785843cb",
-      "bytes": 4046478
+      "sha256": "a90895f572b23a918042d0824e2236b33bdbbc288cdecb5d07cc4e1cffc08958",
+      "bytes": 4756911
     },
     "train.jsonl.gz": {
-      "sha256": "06e3a5672f2f9314c99f3c73dabdb775b05081ca816536f904ec682a133697c2",
-      "bytes": 1761710
+      "sha256": "c676d6d544e569667ccd1894cc999641709f58733d0b72f42edf9f07cc286ccb",
+      "bytes": 1952048
     }
   },
   "policy": {

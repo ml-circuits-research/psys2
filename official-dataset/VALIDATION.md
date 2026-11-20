@@ -36,11 +36,12 @@ Issue counts on the untouched source rows (per request or constraint where the i
 | measure_span-not-in-span | 20 |
 | anchor_span-not-in-span | 15 |
 
-### ui-relations-v1 (890 rows)
+### ui-relations-v1 (5,374 rows)
 
 | issue | rows |
 | --- | ---: |
-| class-value-outside-bank-unlabelled | 516 |
+| class-value-outside-bank-unlabelled | 1,372 |
+| warning:value-span-ambiguous | 2 |
 
 ### demo-tool-profile (36,999 rows)
 
@@ -114,14 +115,20 @@ Kept with a warning (not an error; see README):
 | value-span-ambiguous | 303 |
 | target-name_span-ambiguous | 131 |
 
-### ui-relations-v1: 890 in, 890 kept
+### ui-relations-v1: 5,374 in, 5,374 kept
 
 Fixed or converted:
 
 | fix | rows |
 | --- | ---: |
-| anchor-span-as-anchor-mention | 890 |
-| relation-value-renamed-to-bank | 516 |
+| anchor-span-as-anchor-mention | 5,374 |
+| relation-value-renamed-to-bank | 1,372 |
+
+Kept with a warning (not an error; see README):
+
+| warning | rows |
+| --- | ---: |
+| value-span-ambiguous | 2 |
 
 ### demo-tool-profile: 36,999 in, 27,525 kept
 
