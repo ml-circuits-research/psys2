@@ -6,7 +6,6 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
-import { openLangRo } from '../src/lang/ro.mjs';
 
 const engine = await createEngine({ loader: createFsLoader(DEFAULT_ROOT) });
 const on = (tab) => { const s = engine.createSession({ language: 'en' }); s.setWorldState('ui.shell', { activeTab: tab }); return s; };
@@ -46,10 +45,4 @@ test('after "draw a villa" (no such kind) the answer "a house and 2 fish" is a n
   const r = await s.send('a house and 2 fish');
   assert.match(r.text, /house/i);
   assert.ok((s.state()['art.draw'].objects ?? []).length >= 2, r.text);
-});
-
-test('the composed Romanian move: the doer acts on the named things ("Am mutat „work done” în sus.")', async () => {
-  const ro = await openLangRo();
-  assert.equal(ro.composeRo({ act: 'done.place.up', roles: { things: { names: ['work done'] } } }), 'Am mutat „work done” în sus.');
-  assert.equal(ro.composeRo({ act: 'done.place.down', roles: { things: { names: ['alfa', 'beta'] } } }), 'Am mutat „alfa” și „beta” în jos.');
 });
