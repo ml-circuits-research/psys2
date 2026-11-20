@@ -32,19 +32,19 @@
 @extent.height core.rule when=$ext.o not=$ext.w when=$ext.h then=$ext.sh.o
 @extent.size core.rule when=$ext.o not=$ext.w not=$ext.h then=$ext.ss.o
 
-# Facing. An object faces left or right: the facing it was given (art.draw.facing, a key of this application's own
-# namespace on the shared w.drawing object), else the facing its drawing has (ui.draw.natural of its drawing, else the
-# default below: a drawing whose orientation is not declared is taken to face right). An object whose facing differs
-# from its drawing's is drawn mirrored about its own vertical middle: every part of it, its looks (a person's face and
-# figure) and its side faces, through the signed horizontal scale (ui.draw.boxscale sx < 0); its label and its ground
-# shadow stay as they are.
+# Facing. An object faces left or right: the side its drawing faces (ui.draw.natural of its drawing, else the default
+# below: a drawing whose orientation is not declared is taken to face right), the other side when it is mirrored
+# horizontally (w.drawing.object mirror horizontal or both; style-projection.sop draws the mirror, about its centre).
+# Facing is not stored apart from the mirror: asking for a side sets the mirror (act-rules.sop).
 @d.natural.type core.type of=ui.draw.natural
 @d.drawnfacing.type core.type of=ui.draw.drawnfacing
 @d.facing.type core.type of=ui.draw.facing
+@d.hmirror.type core.type of=ui.draw.hmirror
+@d.hflipped.type core.type of=ui.draw.hflipped
+@d.side.type core.type of=ui.draw.side
 @d.xsign.type core.type of=ui.draw.xsign
 @d.boxscale.type core.type of=ui.draw.boxscale
-@art.draw.keys core.namespace prefix=art.draw. open=true
-@art.draw.object.facing core.slot of=w.drawing.object key=art.draw.facing kind=atom enum=left enum=right
+@d.pagescale.type core.type of=ui.draw.pagescale
 @natural.default ui.draw.natural default=true facing=right
 # The drawings of the hand-made catalog that look to one side (the others look at the viewer or have no front).
 @natural.cat ui.draw.natural drawing=cat facing=left
@@ -53,6 +53,10 @@
 @natural.bird ui.draw.natural drawing=bird facing=right
 @natural.car ui.draw.natural drawing=car facing=right
 @natural.arrow ui.draw.natural drawing=arrow facing=right
+@side.left ui.draw.side side=left other=right
+@side.right ui.draw.side side=right other=left
+@hmirror.horizontal ui.draw.hmirror mirror=horizontal
+@hmirror.both ui.draw.hmirror mirror=both
 @nf.o w.drawing.object code=?id drawing=?k
 @nf.decl ui.draw.natural drawing=?k facing=?n
 @nf.decl.any ui.draw.natural drawing=?k facing=?anyn
@@ -60,30 +64,34 @@
 @nf.out ui.draw.drawnfacing object=?id facing=?n
 @facing.drawn.declared core.rule when=$nf.o when=$nf.decl then=$nf.out
 @facing.drawn.default core.rule when=$nf.o not=$nf.decl.any when=$nf.def then=$nf.out
-@ef.own w.drawing.object code=?id art.draw.facing=?f
-@ef.own.o ui.draw.facing object=?id facing=?f
-@facing.given core.rule when=$ef.own then=$ef.own.o
-@ef.o w.drawing.object code=?id
-@ef.any w.drawing.object code=?id art.draw.facing=?any
-@ef.nat ui.draw.drawnfacing object=?id facing=?n
-@ef.nat.o ui.draw.facing object=?id facing=?n
-@facing.natural core.rule when=$ef.o not=$ef.any when=$ef.nat then=$ef.nat.o
-@xs.f ui.draw.facing object=?id facing=?f
-@xs.n ui.draw.drawnfacing object=?id facing=?n
-@xs.diff core.check fn=neq args=?f args=?n
-@xs.same core.check fn=eq args=?f args=?n
+@hf.o w.drawing.object code=?id mirror=?m
+@hf.h ui.draw.hmirror mirror=?m
+@hf.out ui.draw.hflipped object=?id
+@facing.hflipped core.rule when=$hf.o when=$hf.h then=$hf.out
+@ef.n ui.draw.drawnfacing object=?id facing=?n
+@ef.flip ui.draw.hflipped object=?id
+@ef.other ui.draw.side side=?n other=?g
+@ef.kept.o ui.draw.facing object=?id facing=?n
+@ef.turned.o ui.draw.facing object=?id facing=?g
+@facing.kept core.rule when=$ef.n not=$ef.flip then=$ef.kept.o
+@facing.turned core.rule when=$ef.n when=$ef.flip when=$ef.other then=$ef.turned.o
+@xs.o w.drawing.object code=?id
+@xs.flip ui.draw.hflipped object=?id
 @xs.m ui.draw.xsign object=?id k=-1
 @xs.p ui.draw.xsign object=?id k=1
-@facing.mirrored core.rule when=$xs.f when=$xs.n if=$xs.diff then=$xs.m
-@facing.kept core.rule when=$xs.f when=$xs.n if=$xs.same then=$xs.p
-# The scale of the 0..100 frame onto the object's box, negative across when the object is mirrored.
+@facing.sign.mirrored core.rule when=$xs.o when=$xs.flip then=$xs.m
+@facing.sign.kept core.rule when=$xs.o not=$xs.flip then=$xs.p
+# The scale of the 0..100 frame onto the object's box; the page scale is negative across when the object is mirrored
+# horizontally (where a part of it is on the page: act-rules.sop).
 @sc.e ui.draw.extent object=?id w=?ow h=?oh
 @sc.k ui.draw.xsign object=?id k=?k
-@sc.a core.calc out=?a fn=div args=?ow args=100
-@sc.sx core.calc out=?sx fn=mul args=?a args=?k
+@sc.sx core.calc out=?sx fn=div args=?ow args=100
 @sc.sy core.calc out=?sy fn=div args=?oh args=100
+@sc.px core.calc out=?px fn=mul args=?sx args=?k
 @sc.out ui.draw.boxscale object=?id sx=?sx sy=?sy
-@project.scale core.rule when=$sc.e when=$sc.k with=$sc.a with=$sc.sx with=$sc.sy then=$sc.out
+@sc.page.out ui.draw.pagescale object=?id sx=?px sy=?sy
+@project.scale core.rule when=$sc.e with=$sc.sx with=$sc.sy then=$sc.out
+@project.pagescale core.rule when=$sc.e when=$sc.k with=$sc.sx with=$sc.sy with=$sc.px then=$sc.page.out
 
 # Basic shapes: one primitive filling the object's box.
 @shape.circle ui.draw.shape drawing=circle shape=circle

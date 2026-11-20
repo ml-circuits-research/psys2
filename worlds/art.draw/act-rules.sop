@@ -501,14 +501,32 @@
 @make.colour.arg app.act.arg call=new.object attr=colour value=?v
 @make.colour core.rule when=$make.colour.req then=$make.colour.arg
 # Facing (render-projection.sop): a made object (a drawn kind or a catalog drawing) faces the side the command gives
-# (facing: left or right), or the side an object on the page is on (toward: its code), from where the new object goes.
-@make.facing.req app.act.request operation="drawing.object.make" facing=?v
-@make.facing.cat app.act.request operation="drawing.catalog.make" facing=?v
-@make.facing.arg app.act.arg call=new.object attr=art.draw.facing value=?v
-@make.facing core.rule when=$make.facing.req then=$make.facing.arg
-@make.facing.catalog core.rule when=$make.facing.cat then=$make.facing.arg
+# (facing: left or right), or the side an object on the page is on (toward: its code), from where the new object goes:
+# it is made mirrored horizontally when that side is not the side its drawing faces.
 @draw.newx.type core.type of=ui.draw.newx
 @draw.towardnew.type core.type of=ui.draw.towardnew
+@draw.newside.type core.type of=ui.draw.newside
+@draw.newnatural.type core.type of=ui.draw.newnatural
+@make.facing.req app.act.request operation="drawing.object.make" facing=?v
+@make.facing.cat app.act.request operation="drawing.catalog.make" facing=?v
+@make.facing.out ui.draw.newside side=?v
+@make.facing core.rule when=$make.facing.req then=$make.facing.out
+@make.facing.catalog core.rule when=$make.facing.cat then=$make.facing.out
+@mnn.mk app.act.request operation="drawing.object.make" kind=?k
+@mnn.ct app.act.request operation="drawing.catalog.make" name=?k
+@mnn.decl ui.draw.natural drawing=?k facing=?n
+@mnn.any ui.draw.natural drawing=?k facing=?anyn
+@mnn.def ui.draw.natural default=true facing=?n
+@mnn.out ui.draw.newnatural facing=?n
+@make.natural.declared core.rule when=$mnn.mk when=$mnn.decl then=$mnn.out
+@make.natural.default core.rule when=$mnn.mk not=$mnn.any when=$mnn.def then=$mnn.out
+@make.natural.catalog.declared core.rule when=$mnn.ct when=$mnn.decl then=$mnn.out
+@make.natural.catalog.default core.rule when=$mnn.ct not=$mnn.any when=$mnn.def then=$mnn.out
+@mfs.s ui.draw.newside side=?s
+@mfs.n ui.draw.newnatural facing=?n
+@mfs.diff core.check fn=neq args=?s args=?n
+@mfs.arg app.act.arg call=new.object attr=mirror value=horizontal
+@make.facing.mirror core.rule when=$mfs.s when=$mfs.n if=$mfs.diff then=$mfs.arg
 @fnx.req app.act.request x=?x
 @fnx.any app.act.request x=?anyx
 @fnx.t ui.draw.target x=?x
@@ -526,8 +544,8 @@
 @fmn.o w.drawing.object code=?tid x=?ox
 @fmn.right core.check fn=gt args=?ox args=?x
 @fmn.left core.check fn=lt args=?ox args=?x
-@fmn.r.arg app.act.arg call=new.object attr=art.draw.facing value=right
-@fmn.l.arg app.act.arg call=new.object attr=art.draw.facing value=left
+@fmn.r.arg ui.draw.newside side=right
+@fmn.l.arg ui.draw.newside side=left
 @make.toward.right core.rule when=$fmn.t not=$fmn.given when=$fmn.x when=$fmn.o if=$fmn.right then=$fmn.r.arg
 @make.toward.left core.rule when=$fmn.t not=$fmn.given when=$fmn.x when=$fmn.o if=$fmn.left then=$fmn.l.arg
 @fmn.none app.act.refuse reason=facing-target-not-on-page
@@ -562,31 +580,36 @@
 @chg.colour.call app.act.call act=change thing=$obj.thing attr=colour value=?v order=1
 @change.colour core.rule when=$chg.colour.req when=$obj.item when=$obj.thing then=$chg.colour.call
 # Facing: a change turns the listed objects to the side it gives, or to the side an object on the page is on (toward:
-# its code; an object right above or below it keeps its facing); flipping one turns it to the other side.
+# its code; an object right above or below it keeps its facing), by mirroring each one that faces the other way
+# horizontally (the mirror steps of style-rules.sop: a vertical mirror is kept). Flipping is mirror=horizontal.
+@draw.wantside.type core.type of=ui.draw.wantside
 @chg.facing.req app.act.request operation="drawing.object.change" facing=?v
-@chg.facing.call app.act.call act=change thing=$obj.thing attr=art.draw.facing value=?v order=1
-@change.facing core.rule when=$chg.facing.req when=$obj.item when=$obj.thing then=$chg.facing.call
+@chg.facing.out ui.draw.wantside object=?id side=?v
+@change.facing core.rule when=$chg.facing.req when=$obj.item then=$chg.facing.out
 @fct.req app.act.request operation="drawing.object.change" toward=?tid
 @fct.given app.act.request operation="drawing.object.change" facing=?anyf
 @fct.self w.drawing.object code=?id x=?x
 @fct.o w.drawing.object code=?tid x=?ox
 @fct.right core.check fn=gt args=?ox args=?x
 @fct.left core.check fn=lt args=?ox args=?x
-@fct.r.call app.act.call act=change thing=$obj.thing attr=art.draw.facing value=right order=1
-@fct.l.call app.act.call act=change thing=$obj.thing attr=art.draw.facing value=left order=1
-@change.toward.right core.rule when=$fct.req not=$fct.given when=$obj.item when=$obj.thing when=$fct.self when=$fct.o if=$fct.right then=$fct.r.call
-@change.toward.left core.rule when=$fct.req not=$fct.given when=$obj.item when=$obj.thing when=$fct.self when=$fct.o if=$fct.left then=$fct.l.call
+@fct.r.out ui.draw.wantside object=?id side=right
+@fct.l.out ui.draw.wantside object=?id side=left
+@change.toward.right core.rule when=$fct.req not=$fct.given when=$obj.item when=$fct.self when=$fct.o if=$fct.right then=$fct.r.out
+@change.toward.left core.rule when=$fct.req not=$fct.given when=$obj.item when=$fct.self when=$fct.o if=$fct.left then=$fct.l.out
 @fct.code w.drawing.object code=?tid
 @fct.none app.act.refuse reason=facing-target-not-on-page
 @change.toward.unknown core.rule when=$fct.req not=$fct.code then=$fct.none
-@flp.req app.act.request operation="drawing.object.flip"
-@flp.f ui.draw.facing object=?id facing=?f
-@flp.other ui.draw.opposite side=?f other=?g
-@flp.call app.act.call act=change thing=$obj.thing attr=art.draw.facing value=?g order=1
-@flip core.rule when=$flp.req when=$obj.item when=$obj.thing when=$flp.f when=$flp.other then=$flp.call
-@flp.opposite.type core.type of=ui.draw.opposite
-@flp.opposite.left ui.draw.opposite side=left other=right
-@flp.opposite.right ui.draw.opposite side=right other=left
+@fts.w ui.draw.wantside object=?id side=?s
+@fts.f ui.draw.facing object=?id facing=?f
+@fts.diff core.check fn=neq args=?s args=?f
+@fts.thing w.drawing.object code=?id
+@fts.has w.drawing.object code=?id mirror=?from
+@fts.step ui.draw.mirrorstep from=?from by=horizontal to=?to
+@fts.call app.act.call act=change thing=$fts.thing attr=mirror value=?to order=1
+@facing.turn core.rule when=$fts.w when=$fts.f if=$fts.diff when=$fts.thing when=$fts.has when=$fts.step then=$fts.call
+@fts.no w.drawing.object code=?id mirror=?any
+@fts.first ui.draw.mirrorstep from=none by=horizontal to=?to
+@facing.turn.first core.rule when=$fts.w when=$fts.f if=$fts.diff when=$fts.thing not=$fts.no when=$fts.first then=$fts.call
 @place.req app.act.request operation="drawing.object.place" x=?x y=?y
 @place.x app.act.call act=change thing=$obj.thing attr=x value=?x order=1
 @place.y app.act.call act=change thing=$obj.thing attr=y value=?y order=2
@@ -657,7 +680,7 @@
 @pgt.sy core.calc out=?sy fn=div args=?oh args=100
 @pgt.x app.act.request operation="drawing.part.place" x=?nx
 @pgt.ux core.calc out=?ux fn=sub args=?nx args=?ox
-@pgt.sc ui.draw.boxscale object=?id sx=?ssx
+@pgt.sc ui.draw.pagescale object=?id sx=?ssx
 @pgt.fx core.calc out=?fx fn=div args=?ux args=?ssx
 @pgt.gx core.calc out=?gx fn=add args=?fx args=50
 @pgt.dx core.calc out=?dx fn=sub args=?gx args=?cx
@@ -718,7 +741,7 @@
 @px.sy core.calc out=?sy fn=div args=?oh args=100
 @px.ux core.calc out=?ux fn=sub args=?ex args=50
 @px.uy core.calc out=?uy fn=sub args=?ey args=50
-@px.sc ui.draw.boxscale object=?id sx=?ssx
+@px.sc ui.draw.pagescale object=?id sx=?ssx
 @px.vx core.calc out=?vx fn=mul args=?ux args=?ssx
 @px.vy core.calc out=?vy fn=mul args=?uy args=?sy
 @px.nx core.calc out=?nx fn=add args=?ox args=?vx
@@ -850,7 +873,7 @@
 @ob.in.height.o app.observe.input id=?id key=height value=?h
 @draw.observe.width core.rule when=$ob.in.extent then=$ob.in.width.o
 @draw.observe.height core.rule when=$ob.in.extent then=$ob.in.height.o
-# Facing is observed for every object: the side it faces now (its own facing, else its drawing's; render-projection.sop).
+# Facing is observed for every object: the side it faces now (its drawing's, the other when mirrored; render-projection.sop).
 @ob.in.facing ui.draw.facing object=?id facing=?f
 @ob.in.facing.o app.observe.input id=?id key=facing value=?f
 @draw.observe.facing core.rule when=$ob.in.facing then=$ob.in.facing.o
@@ -934,7 +957,7 @@
 @opg.sy core.calc out=?sy fn=div args=?oh args=100
 @opg.ux core.calc out=?ux fn=sub args=?ex args=50
 @opg.uy core.calc out=?uy fn=sub args=?ey args=50
-@opg.sc ui.draw.boxscale object=?id sx=?ssx
+@opg.sc ui.draw.pagescale object=?id sx=?ssx
 @opg.vx core.calc out=?vx fn=mul args=?ux args=?ssx
 @opg.vy core.calc out=?vy fn=mul args=?uy args=?sy
 @opg.px core.calc out=?px fn=add args=?x args=?vx
@@ -1290,7 +1313,7 @@
 @og.uy core.calc out=?uy fn=sub args=?dy args=50
 @og.osx core.calc out=?osx fn=div args=?ow args=100
 @og.osy core.calc out=?osy fn=div args=?oh args=100
-@og.sc ui.draw.boxscale object=?id sx=?ssx
+@og.sc ui.draw.pagescale object=?id sx=?ssx
 @og.vx core.calc out=?vx fn=mul args=?ux args=?ssx
 @og.vy core.calc out=?vy fn=mul args=?uy args=?osy
 @og.px core.calc out=?px fn=add args=?vx args=?X

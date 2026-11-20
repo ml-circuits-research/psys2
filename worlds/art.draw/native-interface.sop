@@ -17,7 +17,8 @@
 @native.art.draw.op.drawing.object.make.param.age std.capability.parameter operation=$native.art.draw.op.drawing.object.make name="age" kind=string
 @native.art.draw.op.drawing.object.make.param.sex std.capability.parameter operation=$native.art.draw.op.drawing.object.make name="sex" kind=string
 # Facing (worlds/art.draw/render-projection.sop): the side a drawn thing looks to, left or right; toward names an object on
-# the page whose side it looks to (the side its x is on). A thing whose facing differs from its drawing's is mirrored.
+# the page whose side it looks to (the side its x is on). Facing sets the horizontal mirror: a thing faces the other
+# way from its drawing when mirrored; flipping it is mirror=horizontal.
 @native.art.draw.op.drawing.object.make.param.facing std.capability.parameter operation=$native.art.draw.op.drawing.object.make name="facing" kind=string enum="left" enum="right" enumClosed=true
 @native.art.draw.op.drawing.object.make.param.toward std.capability.parameter operation=$native.art.draw.op.drawing.object.make name="toward" kind=string
 @native.art.draw.op.drawing.object.make.param.at std.capability.parameter operation=$native.art.draw.op.drawing.object.make name="at" kind=string enum="top" enum="bottom" enum="left" enum="right" enum="center" enum="middle" enum="top_left" enum="top_right" enum="bottom_left" enum="bottom_right" enum="corner" enum="background" enum="foreground" enumClosed=true
@@ -316,9 +317,6 @@
 @native.art.draw.op.drawing.person.expression.param.id std.capability.parameter operation=$native.art.draw.op.drawing.person.expression name="id" kind=string required=true
 @native.art.draw.op.drawing.person.expression.param.expression std.capability.parameter operation=$native.art.draw.op.drawing.person.expression name="expression" kind=string required=true
 @native.art.draw.op.drawing.person.expression.metadata app.native.metadata operation=$native.art.draw.op.drawing.person.expression field=$native.art.draw.part.effect
-# Flipping a drawn thing turns it to look the other way (worlds/art.draw/act-rules.sop: its facing becomes the opposite side).
-@native.art.draw.op.drawing.object.flip std.capability.operation scope=$native.art.draw.scope name="drawing.object.flip" act=change on="art.draw.object" order=24 eligible=true
-@native.art.draw.op.drawing.object.flip.param.ids std.capability.parameter operation=$native.art.draw.op.drawing.object.flip name="ids" kind=array required=true
 # Poses, styles and writing (worlds/art.draw/style-rules.sop; the named looks are k.styles facts): a turn to an angle
 # (rotation, degrees clockwise) or by one (turn: degrees or a k.styles turn: upside_down, rotate_right, tilt), a mirror
 # (horizontal or vertical: mirrored again it is back; none: as drawn), a lean (skew), an opacity, an effect, a fill, an
