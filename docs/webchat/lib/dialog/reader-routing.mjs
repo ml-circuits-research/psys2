@@ -10,11 +10,11 @@ import {isAuthoredRequest,readAuthoredRequest} from './authored-request-tool.mjs
 import {requestCompositionPolicy,scheduleFollowingCut}from './request-composition-policy.mjs?v=87c927f666';
 import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=43f411cfe9';
 import {projectQueryAction,recoverQueryProjection} from './project-query-action.mjs?v=4718f50993';
-import {projectContextAction} from './project-context-action.mjs?v=07995cd60c';
+import {projectContextAction} from './project-context-action.mjs?v=2316f22e93';
 import {projectCodeReference} from './project-code-reference.mjs?v=50862f0105';
 import {projectCreateAction} from './project-create-action.mjs?v=bd8d6ca6d3';
 import {assessReaderProposal,assessPartialProposal} from './reader-admission.mjs?v=c0aedd1e05';
-import {bestPartialReading,fallbackLadder,partialNote} from './partial-admission.mjs?v=8b4cd931c2';
+import {bestPartialReading,fallbackLadder,partialNote} from './partial-admission.mjs?v=1ce8288e5c';
 import {completeBindings} from './declared-bindings.mjs?v=3c26f474de';
 import {projectQuantities,amountsOf,quantityNote} from './quantity-projection.mjs?v=a519f4ee97';
 import {routeCoordination} from './coordination-routing.mjs?v=cfe74ce6a2';

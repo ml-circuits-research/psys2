@@ -90,7 +90,9 @@ function containerProperty(raw,bindings){
   const [sourceType]=hosts;
   const member=(bindings.families??[]).find(f=>f.area===raw.area&&f.nativeFamilyBinding?.sourceType===sourceType&&
    (bindings.containment??[]).some(c=>c.area===raw.area&&c.type===f.type&&c.containerType===container));
-  if(!member||member.type===container)continue;
+  // The container's own representative (the diagram page: the same class as the diagram) is the container itself.
+  const own=(bindings.families??[]).find(f=>f.area===raw.area&&f.type===container);
+  if(!member||member.type===container||own&&member.canonical===own.canonical)continue;
   if(target.type===member.type&&target.fill!=='context'&&!target.kind_span===false)continue;   // a said member kind keeps its reading
   const out=changed??=structuredClone(raw);
   out.requests[index].target={type:member.type,mode:'existing',determiner:'definite',fill:'all'};

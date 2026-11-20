@@ -5,7 +5,7 @@ import {bridgeRawStructure,RAW_STRUCTURAL_FORMAT,BINDING_NODES} from './raw-stru
 import {comparativeSteps} from './comparative-projection.mjs?v=6a19b75a59';
 import {referenceProjection} from './reference-projection.mjs?v=2efddea902';
 import {completeBindings} from './declared-bindings.mjs?v=3c26f474de';
-import {declaredRawReadings} from './partial-admission.mjs?v=8b4cd931c2';
+import {declaredRawReadings} from './partial-admission.mjs?v=1ce8288e5c';
 const hash=x=>typeof x==='string'&&/^[a-f0-9]{64}$/.test(x);
 const digest=async x=>Array.from(new Uint8Array(await globalThis.crypto.subtle.digest('SHA-256',new TextEncoder().encode(x))),b=>b.toString(16).padStart(2,'0')).join('');
 const same=(a,b)=>JSON.stringify(a)===JSON.stringify(b);

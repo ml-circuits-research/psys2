@@ -16,6 +16,10 @@ function containerOwned(r,bindings,area){
  const types=new Set(keys.map(k=>k.split('.')[0]));
  if(types.size!==1)return false;
  const [container]=types;
+ const host=(bindings.properties??[]).find(p=>p.area===area&&p.key===keys[0])?.hostBinding?.sourceType;
+ const member=(bindings.families??[]).find(f=>f.area===area&&f.nativeFamilyBinding?.sourceType===host);
+ const own=(bindings.families??[]).find(f=>f.area===area&&f.type===container);
+ if(!member||own&&member.canonical===own.canonical)return false;   // a property of the container's own object (the page)
  return (bindings.containment??[]).some(c=>c.area===area&&c.containerType===container&&(c.type===r.target?.type||container===r.target?.type));
 }
 export async function projectContextAction(proposal,session,{bindings,registry,view}={}) {
