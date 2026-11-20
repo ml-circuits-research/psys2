@@ -38,7 +38,7 @@ test('pose, trait, wear, expression and hold a person through the Drawing tab co
   assert.deepEqual(people.map(o=>o.pose),['sitting','waving','kicking'],'a waving person keeps its pose and holds the balloon in the raised hand');
   assert.deepEqual(people.map(o=>o.expression??''),['happy','','shocked']);
   const held=await objects();assert.ok(held.some(o=>o.kind==='balloon'),'the balloon is drawn in the hand: '+JSON.stringify(held.map(o=>o.kind))+JSON.stringify(await ev(`editors.calls.map(c=>[c.operation,c.result.ok,c.result.reason??c.result.message])`)));
-  assert.ok((await ev(`editors.projected().svg`)).match(/rotate\(-80\)/),'the sitting thighs are turned');
+  assert.ok((await ev(`editors.projected().svg`)).match(/rotate\(-84\)/),'the sitting thighs are turned');
   await shot('person-model-1-poses-traits-garments');
   const records=await ev(`editors.calls.map(c=>({operation:c.operation,ok:c.result.ok,verification:c.result.intentRecord?.verification?.status,reason:c.result.reason??c.result.message}))`);
   const failed=records.filter(r=>!r.ok);assert.deepEqual(failed,[],'every control command ran');

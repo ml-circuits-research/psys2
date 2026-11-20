@@ -53,10 +53,14 @@
 # --- Behind another thing -------------------------------------------------------------------------------------------
 # A thing partly hidden behind another (behind=: the code of the one in front; "half hidden behind the tree", "peeking
 # out from behind the house"): hidden= the share of it covered (0.5 when not given), side= where it peeks out (right,
-# left or top; right when not given). It is drawn under the one in front (it takes that one's layer and the one in front
-# goes to the top layer), beside it so that the hidden share overlaps it: on the ground with it (their bottoms on one
-# line) at a side, above it at the top. The thing in front covers what overlaps.
+# left or top; right when not given). What covers it is a drawn part of the one in front, not its box: at a side, the
+# widest of its parts that reach its foot (a tree's trunk, a house's walls), the thing standing on the same ground; at
+# the top, its topmost part (a tree's crown), the thing rising above it. The thing overlaps that part by the hidden
+# share of its size and is drawn under the one in front (it takes that one's layer and the one in front goes to the top
+# layer; on change their layers swap): the part covers what overlaps. No other object changes.
 @ocb.type core.type of=ui.draw.behindcut
+@ocb.cand.type core.type of=ui.draw.coverpart
+@ocb.cover.type core.type of=ui.draw.cover
 @ocb.req app.act.request behind=?oc
 @ocb.h.req app.act.request hidden=?h
 @ocb.h.any app.act.request hidden=?anyh
@@ -70,38 +74,76 @@
 @behind.hidden core.rule when=$ocb.req when=$ocb.h.req not=$ocb.s.any then=$ocb.o3
 @ocb.o4 ui.draw.behindcut front=?oc hidden=0.5 side=right
 @behind.default core.rule when=$ocb.req not=$ocb.h.any not=$ocb.s.any then=$ocb.o4
-@ocb.bc ui.draw.behindcut front=?oc hidden=?h side=?sd
+# The parts that may cover: those reaching the foot of the drawing (their bottom in its lowest quarter), and the widest
+# of them; the topmost part.
+@ocb.fd w.drawing.object code=?oc drawing=?od
+@ocb.kp k.objects.part of=?od y=?py h=?ph w=?pw
+@ocb.bot core.calc out=?pb fn=add args=?py args=?ph
+@ocb.low core.check fn=gt args=?pb args=75
+@ocb.cand.o ui.draw.coverpart object=?oc side=ground source=$ocb.kp w=?pw
+@cover.ground.candidate core.rule when=$ocb.req when=$ocb.fd when=$ocb.kp with=$ocb.bot if=$ocb.low then=$ocb.cand.o
+@ocb.cand ui.draw.coverpart object=?oc side=ground source=?src w=?pw
+@ocb.widest core.aggregate over=$ocb.cand by=?oc argmax=?best args=?pw pick=?src ties=first then=$ocb.wide.o
+@ocb.wide.o ui.draw.cover object=?oc side=ground source=?best
+@ocb.tkp k.objects.part of=?od y=?ty0
+@ocb.tcand.o ui.draw.coverpart object=?oc side=top source=$ocb.tkp y=?ty0
+@cover.top.candidate core.rule when=$ocb.req when=$ocb.fd when=$ocb.tkp then=$ocb.tcand.o
+@ocb.tcand ui.draw.coverpart object=?oc side=top source=?src y=?ty0
+@ocb.topmost core.aggregate over=$ocb.tcand by=?oc argmin=?best args=?ty0 pick=?src ties=first then=$ocb.top.o
+@ocb.top.o ui.draw.cover object=?oc side=top source=?best
+# The covering part on the page: its left, right, top and bottom.
 @ocb.f w.drawing.object code=?oc x=?fx y=?fy z=?fz
-@ocb.fe ui.draw.extent object=?oc w=?fw h=?fh
-@ocb.fw2 core.calc out=?fw2 fn=div args=?fw args=2
-@ocb.fh2 core.calc out=?fh2 fn=div args=?fh args=2
-@ocb.s2 core.calc out=?s2 fn=div args=?s args=2
-@ocb.hs core.calc out=?hs fn=mul args=?h args=?s
-@ocb.r0 core.calc out=?r0 fn=add args=?fx args=?fw2
-@ocb.r1 core.calc out=?r1 fn=add args=?r0 args=?s2
-@ocb.rx core.calc out=?rx fn=sub args=?r1 args=?hs
-@ocb.l0 core.calc out=?l0 fn=sub args=?fx args=?fw2
-@ocb.l1 core.calc out=?l1 fn=sub args=?l0 args=?s2
-@ocb.lx core.calc out=?lx fn=add args=?l1 args=?hs
-@ocb.b0 core.calc out=?b0 fn=add args=?fy args=?fh2
-@ocb.by core.calc out=?by fn=sub args=?b0 args=?s2
-@ocb.t0 core.calc out=?t0 fn=sub args=?fy args=?fh2
-@ocb.t1 core.calc out=?t1 fn=sub args=?t0 args=?s2
-@ocb.ty core.calc out=?ty fn=add args=?t1 args=?hs
+@ocb.fe ui.draw.boxscale object=?oc sx=?fsx sy=?fsy
+@ocb.cp k.objects.part x=?cx y=?cy w=?cw h=?ch
+@ocb.cg ui.draw.cover object=?oc side=ground source=$ocb.cp
+@ocb.ct ui.draw.cover object=?oc side=top source=$ocb.cp
+@ocb.l0 core.calc out=?l0 fn=sub args=?cx args=50
+@ocb.l1 core.calc out=?l1 fn=mul args=?l0 args=?fsx
+@ocb.pl core.calc out=?pl fn=add args=?fx args=?l1
+@ocb.r0 core.calc out=?r0 fn=add args=?cx args=?cw
+@ocb.r1 core.calc out=?r1 fn=sub args=?r0 args=50
+@ocb.r2 core.calc out=?r2 fn=mul args=?r1 args=?fsx
+@ocb.pr core.calc out=?pr fn=add args=?fx args=?r2
+@ocb.t0 core.calc out=?t0 fn=sub args=?cy args=50
+@ocb.t1 core.calc out=?t1 fn=mul args=?t0 args=?fsy
+@ocb.pt core.calc out=?pt fn=add args=?fy args=?t1
+@ocb.b0 core.calc out=?b0 fn=add args=?cy args=?ch
+@ocb.b1 core.calc out=?b1 fn=sub args=?b0 args=50
+@ocb.b2 core.calc out=?b2 fn=mul args=?b1 args=?fsy
+@ocb.pbt core.calc out=?pbt fn=add args=?fy args=?b2
+@ocb.pm0 core.calc out=?pm0 fn=add args=?pl args=?pr
+@ocb.pm core.calc out=?pm fn=div args=?pm0 args=2
+@ocb.area.type core.type of=ui.draw.coverbox
+@ocb.area.o ui.draw.coverbox object=?oc side=ground left=?pl right=?pr top=?pt bottom=?pbt middle=?pm
+@cover.ground.box core.rule when=$ocb.f when=$ocb.fe when=$ocb.cp when=$ocb.cg with=$ocb.l0 with=$ocb.l1 with=$ocb.pl with=$ocb.r0 with=$ocb.r1 with=$ocb.r2 with=$ocb.pr with=$ocb.t0 with=$ocb.t1 with=$ocb.pt with=$ocb.b0 with=$ocb.b1 with=$ocb.b2 with=$ocb.pbt with=$ocb.pm0 with=$ocb.pm then=$ocb.area.o
+@ocb.tarea.o ui.draw.coverbox object=?oc side=top left=?pl right=?pr top=?pt bottom=?pbt middle=?pm
+@cover.top.box core.rule when=$ocb.f when=$ocb.fe when=$ocb.cp when=$ocb.ct with=$ocb.l0 with=$ocb.l1 with=$ocb.pl with=$ocb.r0 with=$ocb.r1 with=$ocb.r2 with=$ocb.pr with=$ocb.t0 with=$ocb.t1 with=$ocb.pt with=$ocb.b0 with=$ocb.b1 with=$ocb.b2 with=$ocb.pbt with=$ocb.pm0 with=$ocb.pm then=$ocb.tarea.o
+# Where the thing goes (size s): at a side, overlapping the covering part by the hidden share and standing on its foot;
+# at the top, centred over it and overlapping its top by the hidden share.
+@ocb.gb ui.draw.coverbox object=?oc side=ground left=?pl right=?pr bottom=?pbt
+@ocb.tb ui.draw.coverbox object=?oc side=top top=?pt middle=?pm
 @ocb.right ui.draw.behindcut front=?oc hidden=?h side=right
 @ocb.left ui.draw.behindcut front=?oc hidden=?h side=left
 @ocb.top ui.draw.behindcut front=?oc hidden=?h side=top
+@ocb.bc ui.draw.behindcut front=?oc hidden=?h side=?sd
+@ocb.s2 core.calc out=?s2 fn=div args=?s args=2
+@ocb.hs core.calc out=?hs fn=mul args=?h args=?s
+@ocb.rx0 core.calc out=?rx0 fn=add args=?pr args=?s2
+@ocb.rx core.calc out=?rx fn=sub args=?rx0 args=?hs
+@ocb.lx0 core.calc out=?lx0 fn=sub args=?pl args=?s2
+@ocb.lx core.calc out=?lx fn=add args=?lx0 args=?hs
+@ocb.by core.calc out=?by fn=sub args=?pbt args=?s2
+@ocb.ty0 core.calc out=?ty0 fn=sub args=?pt args=?s2
+@ocb.ty core.calc out=?ty fn=add args=?ty0 args=?hs
 @ocb.next ui.draw.next top=?top
 @ocb.nz core.calc out=?nz fn=add args=?top args=1
-@ocb.nz2 core.calc out=?nz2 fn=add args=?top args=2
-# On make: the new thing's place and layer; the one in front above it.
 @ocb.mk.x.r app.act.arg call=new.object attr=x value=?rx
 @ocb.mk.x.l app.act.arg call=new.object attr=x value=?lx
-@ocb.mk.x.t app.act.arg call=new.object attr=x value=?fx
+@ocb.mk.x.t app.act.arg call=new.object attr=x value=?pm
 @ocb.mk.y.g app.act.arg call=new.object attr=y value=?by
 @ocb.mk.y.t app.act.arg call=new.object attr=y value=?ty
 @ocb.mk.z app.act.arg call=new.object attr=z value=?fz
-@ocb.mk.front app.act.call act=change thing=$ocb.f attr=z value=?nz2 order=3
+@ocb.mk.front app.act.call act=change thing=$ocb.f attr=z value=?nz order=3
 @ocb.mk ui.draw.target size=?s
 @ocb.anymake app.act.request operation="drawing.object.make"
 @ocb.anycat app.act.request operation="drawing.catalog.make"
@@ -109,29 +151,28 @@
 @ocb.making ui.draw.makingbehind
 @make.behind.flag core.rule when=$ocb.anymake when=$ocb.req then=$ocb.making
 @make.behind.flag.catalog core.rule when=$ocb.anycat when=$ocb.req then=$ocb.making
-@make.behind.right.x core.rule when=$ocb.making when=$ocb.right when=$ocb.f when=$ocb.fe when=$ocb.mk with=$ocb.fw2 with=$ocb.s2 with=$ocb.hs with=$ocb.r0 with=$ocb.r1 with=$ocb.rx then=$ocb.mk.x.r
-@make.behind.left.x core.rule when=$ocb.making when=$ocb.left when=$ocb.f when=$ocb.fe when=$ocb.mk with=$ocb.fw2 with=$ocb.s2 with=$ocb.hs with=$ocb.l0 with=$ocb.l1 with=$ocb.lx then=$ocb.mk.x.l
-@make.behind.top.x core.rule when=$ocb.making when=$ocb.top when=$ocb.f then=$ocb.mk.x.t
-@make.behind.right.y core.rule when=$ocb.making when=$ocb.right when=$ocb.f when=$ocb.fe when=$ocb.mk with=$ocb.fh2 with=$ocb.s2 with=$ocb.b0 with=$ocb.by then=$ocb.mk.y.g
-@make.behind.left.y core.rule when=$ocb.making when=$ocb.left when=$ocb.f when=$ocb.fe when=$ocb.mk with=$ocb.fh2 with=$ocb.s2 with=$ocb.b0 with=$ocb.by then=$ocb.mk.y.g
-@make.behind.top.y core.rule when=$ocb.making when=$ocb.top when=$ocb.f when=$ocb.fe when=$ocb.mk with=$ocb.fh2 with=$ocb.s2 with=$ocb.hs with=$ocb.t0 with=$ocb.t1 with=$ocb.ty then=$ocb.mk.y.t
+@make.behind.right.x core.rule when=$ocb.making when=$ocb.right when=$ocb.gb when=$ocb.mk with=$ocb.s2 with=$ocb.hs with=$ocb.rx0 with=$ocb.rx then=$ocb.mk.x.r
+@make.behind.left.x core.rule when=$ocb.making when=$ocb.left when=$ocb.gb when=$ocb.mk with=$ocb.s2 with=$ocb.hs with=$ocb.lx0 with=$ocb.lx then=$ocb.mk.x.l
+@make.behind.right.y core.rule when=$ocb.making when=$ocb.right when=$ocb.gb when=$ocb.mk with=$ocb.s2 with=$ocb.by then=$ocb.mk.y.g
+@make.behind.left.y core.rule when=$ocb.making when=$ocb.left when=$ocb.gb when=$ocb.mk with=$ocb.s2 with=$ocb.by then=$ocb.mk.y.g
+@make.behind.top.x core.rule when=$ocb.making when=$ocb.top when=$ocb.tb then=$ocb.mk.x.t
+@make.behind.top.y core.rule when=$ocb.making when=$ocb.top when=$ocb.tb when=$ocb.mk with=$ocb.s2 with=$ocb.hs with=$ocb.ty0 with=$ocb.ty then=$ocb.mk.y.t
 @make.behind.layer core.rule when=$ocb.making when=$ocb.bc when=$ocb.f then=$ocb.mk.z
-@make.behind.front core.rule when=$ocb.making when=$ocb.bc when=$ocb.f when=$ocb.next with=$ocb.nz2 then=$ocb.mk.front
-# On change: each listed thing moves there and goes under the one in front (their layers swap when it was above).
+@make.behind.front core.rule when=$ocb.making when=$ocb.bc when=$ocb.f when=$ocb.next with=$ocb.nz then=$ocb.mk.front
 @ocb.chg app.act.request operation="drawing.object.change"
 @ocb.item app.act.item param="ids" value=?id
 @ocb.t w.drawing.object code=?id size=?s z=?tz
 @ocb.c.x.r app.act.call act=change thing=$ocb.t attr=x value=?rx order=1
 @ocb.c.x.l app.act.call act=change thing=$ocb.t attr=x value=?lx order=1
-@ocb.c.x.t app.act.call act=change thing=$ocb.t attr=x value=?fx order=1
+@ocb.c.x.t app.act.call act=change thing=$ocb.t attr=x value=?pm order=1
 @ocb.c.y.g app.act.call act=change thing=$ocb.t attr=y value=?by order=2
 @ocb.c.y.t app.act.call act=change thing=$ocb.t attr=y value=?ty order=2
-@change.behind.right.x core.rule when=$ocb.chg when=$ocb.item when=$ocb.t when=$ocb.right when=$ocb.f when=$ocb.fe with=$ocb.fw2 with=$ocb.s2 with=$ocb.hs with=$ocb.r0 with=$ocb.r1 with=$ocb.rx then=$ocb.c.x.r
-@change.behind.left.x core.rule when=$ocb.chg when=$ocb.item when=$ocb.t when=$ocb.left when=$ocb.f when=$ocb.fe with=$ocb.fw2 with=$ocb.s2 with=$ocb.hs with=$ocb.l0 with=$ocb.l1 with=$ocb.lx then=$ocb.c.x.l
-@change.behind.top.x core.rule when=$ocb.chg when=$ocb.item when=$ocb.t when=$ocb.top when=$ocb.f then=$ocb.c.x.t
-@change.behind.right.y core.rule when=$ocb.chg when=$ocb.item when=$ocb.t when=$ocb.right when=$ocb.f when=$ocb.fe with=$ocb.fh2 with=$ocb.s2 with=$ocb.b0 with=$ocb.by then=$ocb.c.y.g
-@change.behind.left.y core.rule when=$ocb.chg when=$ocb.item when=$ocb.t when=$ocb.left when=$ocb.f when=$ocb.fe with=$ocb.fh2 with=$ocb.s2 with=$ocb.b0 with=$ocb.by then=$ocb.c.y.g
-@change.behind.top.y core.rule when=$ocb.chg when=$ocb.item when=$ocb.t when=$ocb.top when=$ocb.f when=$ocb.fe with=$ocb.fh2 with=$ocb.s2 with=$ocb.hs with=$ocb.t0 with=$ocb.t1 with=$ocb.ty then=$ocb.c.y.t
+@change.behind.right.x core.rule when=$ocb.chg when=$ocb.item when=$ocb.t when=$ocb.right when=$ocb.gb with=$ocb.s2 with=$ocb.hs with=$ocb.rx0 with=$ocb.rx then=$ocb.c.x.r
+@change.behind.left.x core.rule when=$ocb.chg when=$ocb.item when=$ocb.t when=$ocb.left when=$ocb.gb with=$ocb.s2 with=$ocb.hs with=$ocb.lx0 with=$ocb.lx then=$ocb.c.x.l
+@change.behind.right.y core.rule when=$ocb.chg when=$ocb.item when=$ocb.t when=$ocb.right when=$ocb.gb with=$ocb.s2 with=$ocb.by then=$ocb.c.y.g
+@change.behind.left.y core.rule when=$ocb.chg when=$ocb.item when=$ocb.t when=$ocb.left when=$ocb.gb with=$ocb.s2 with=$ocb.by then=$ocb.c.y.g
+@change.behind.top.x core.rule when=$ocb.chg when=$ocb.item when=$ocb.t when=$ocb.top when=$ocb.tb then=$ocb.c.x.t
+@change.behind.top.y core.rule when=$ocb.chg when=$ocb.item when=$ocb.t when=$ocb.top when=$ocb.tb with=$ocb.s2 with=$ocb.hs with=$ocb.ty0 with=$ocb.ty then=$ocb.c.y.t
 @ocb.above core.check fn=gt args=?tz args=?fz
 @ocb.c.z.t app.act.call act=change thing=$ocb.t attr=z value=?fz order=3
 @ocb.c.z.f app.act.call act=change thing=$ocb.f attr=z value=?tz order=4
@@ -140,6 +181,9 @@
 @ocb.none app.act.refuse reason=occluder-not-on-page
 @ocb.anyf w.drawing.object code=?oc
 @behind.unknown core.rule when=$ocb.req not=$ocb.anyf then=$ocb.none
+@ocb.noparts app.act.refuse reason=occluder-has-no-covering-part
+@ocb.anycover ui.draw.coverbox object=?oc
+@behind.nocover core.rule when=$ocb.req when=$ocb.anyf not=$ocb.anycover then=$ocb.noparts
 
 # --- Measured offsets -----------------------------------------------------------------------------------------------
 # A distance a command measures (offset= a number, unit= a k.units length or one of its words: "two hand-widths",

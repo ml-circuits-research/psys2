@@ -82,7 +82,18 @@
 @pv.stand ui.draw.placeof object=?id place=?p
 @pv.stand.ground core.check fn=matches args=?p args="^(ground|water)$"
 @pv.stand.o ui.draw.layer slot=?id order=?base
-@pv.layer.stand core.rule when=$pv.o not=$pv.terrain when=$pv.stand if=$pv.stand.ground when=$pv.ext with=$pv.half with=$pv.base then=$pv.stand.o
+@pv.onany w.drawing.object code=?id on=?anyon
+@pv.layer.stand core.rule when=$pv.o not=$pv.terrain when=$pv.stand if=$pv.stand.ground when=$pv.ext not=$pv.onany with=$pv.half with=$pv.base then=$pv.stand.o
+# A thing that rests on another (w.drawing.object on: a person on a bench) is drawn just in front of it.
+@pv.on w.drawing.object code=?id on=?sid
+@pv.on.s w.drawing.object code=?sid y=?sy
+@pv.on.ext ui.draw.extent object=?sid h=?sh
+@pv.on.half core.calc out=?shh fn=div args=?sh args=2
+@pv.on.base core.calc out=?sbase fn=add args=?sy args=?shh
+@pv.on.n core.calc out=?n fn=add args=?sbase args=0.5
+@pv.on.o ui.draw.layer slot=?id order=?n
+@pv.layer.on core.rule when=$pv.on when=$pv.on.s when=$pv.on.ext with=$pv.on.half with=$pv.on.base with=$pv.on.n then=$pv.on.o
+@pv.layer.on.mark core.rule when=$pv.on when=$pv.on.s then=$pv.mark
 @pv.layer.stand.mark core.rule when=$pv.o not=$pv.terrain when=$pv.stand if=$pv.stand.ground then=$pv.mark
 @pv.rest.n core.calc out=?n fn=add args=10000 args=?z
 @pv.rest.o ui.draw.layer slot=?id order=?n

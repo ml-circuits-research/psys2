@@ -41,6 +41,7 @@
 @native.art.draw.op.drawing.object.make.param.near std.capability.parameter operation=$native.art.draw.op.drawing.object.make name="near" kind=string
 @native.art.draw.op.drawing.object.make.param.material std.capability.parameter operation=$native.art.draw.op.drawing.object.make name="material" kind=string
 @native.art.draw.op.drawing.object.make.param.cause std.capability.parameter operation=$native.art.draw.op.drawing.object.make name="cause" kind=string
+@native.art.draw.op.drawing.object.make.param.seat std.capability.parameter operation=$native.art.draw.op.drawing.object.make name="seat" kind=string
 @native.art.draw.op.drawing.object.make.param.holds std.capability.parameter operation=$native.art.draw.op.drawing.object.make name="holds" kind=string
 @native.art.draw.op.drawing.object.make.param.at std.capability.parameter operation=$native.art.draw.op.drawing.object.make name="at" kind=string enum="top" enum="bottom" enum="left" enum="right" enum="center" enum="middle" enum="top_left" enum="top_right" enum="bottom_left" enum="bottom_right" enum="corner" enum="background" enum="foreground" enumClosed=true
 @native.art.draw.value.13 std.capability.arg name="enum" value=true
@@ -108,6 +109,7 @@
 @native.art.draw.op.drawing.catalog.make.param.near std.capability.parameter operation=$native.art.draw.op.drawing.catalog.make name="near" kind=string
 @native.art.draw.op.drawing.catalog.make.param.material std.capability.parameter operation=$native.art.draw.op.drawing.catalog.make name="material" kind=string
 @native.art.draw.op.drawing.catalog.make.param.cause std.capability.parameter operation=$native.art.draw.op.drawing.catalog.make name="cause" kind=string
+@native.art.draw.op.drawing.catalog.make.param.seat std.capability.parameter operation=$native.art.draw.op.drawing.catalog.make name="seat" kind=string
 @native.art.draw.op.drawing.catalog.make.param.holds std.capability.parameter operation=$native.art.draw.op.drawing.catalog.make name="holds" kind=string
 @native.art.draw.value.57 std.capability.arg name="argument" value="name"
 @native.art.draw.value.58 std.capability.arg name="load" value="thing"
@@ -394,6 +396,7 @@
 @native.art.draw.op.drawing.object.change.param.near std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="near" kind=string
 @native.art.draw.op.drawing.object.change.param.material std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="material" kind=string
 @native.art.draw.op.drawing.object.change.param.cause std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="cause" kind=string
+@native.art.draw.op.drawing.object.change.param.seat std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="seat" kind=string
 @native.art.draw.op.drawing.object.change.param.variant std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="variant" kind=string
 @native.art.draw.op.drawing.object.change.param.outline std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="outline" kind=string
 @native.art.draw.op.drawing.object.change.param.stroke std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="stroke" kind=number min=0 max=40

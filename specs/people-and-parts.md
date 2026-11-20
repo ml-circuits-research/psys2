@@ -72,10 +72,23 @@ a group of editable parts. The Avatar is a particular case of a drawn person: on
 - `cause=<code>` with an expression keeps the cause on the face (`w.face.face cause`, observed `cause`) and turns the
   person to look at it.
 
+## Round 3 (2026-11-20, catalog ca892dba)
+- Behind uses drawn parts: at a side the widest part of the front thing that reaches its foot (a tree's trunk, a house's
+  walls), at the top its topmost part (a tree's crown); the thing overlaps that part by the hidden share and takes the
+  front thing's layer while the front thing takes the next layer (no object's code changes; on change layers swap).
+- Sitting is on the ground (legs forward, lowered 22.9); `seated` sits on a seat and is used only with `seat=<code>`:
+  the hips (k.faces.pose seat_x, seat_y) rest on the seat's k.layouts anchor (else a tenth above the box middle), the
+  person rests on it (w.drawing.object on) and is drawn just in front of it (perspective-rules.sop).
+- Variant drawings with their own parts (k.objects variants.sop: storm cloud with lightning and rain, rain cloud, sports
+  car, oak tree, cherry tree; variant_of places them as their kind).
+- A material is kept on the object (w.drawing.object material) and shown on its largest part (colour, fill pattern,
+  gradient); windows and doors keep their colours; a see-through material makes the whole thing see-through.
+- A held thing keeps its holder (w.drawing.object holder): placing or moving the holder moves it by as much; a new pose
+  moves it to the pose's hand.
+
 ## Not yet
-- Behind is measured on the boxes: a thing behind a tree's box may stand beside its narrow trunk, not behind it (the
-  drawn silhouette of the front thing is not used). A material colours every part of a thing (a brick house's windows
-  too); a part material needs an edited part.
+- A held thing does not follow a mirror, a resize or a fit of its holder; it is not removed with the holder.
+- A material part edit needs an edited part.
 - Holding is placed, not attached (moving the person leaves the thing). A feeling without an expression of k.faces
   (shy, worried) is refused rather than drawn from its own variants.
 - The reader's labels for part length, part shape, part variant and a person's age or sex as constraints (no key in

@@ -86,11 +86,20 @@
 @fgn.p.req app.act.request pose=?w
 @fgn.p.own k.faces.pose name=?w style=figure
 @fgn.p.own.o ui.draw.posename word=?w pose=?w
-@name.pose.own core.rule when=$fgn.p.req when=$fgn.p.own then=$fgn.p.own.o
+# A pose that sits on a seat (k.faces.pose seat_y: seated) with no seat named (seat=) is drawn sitting on the ground.
+@fgn.p.seatpose k.faces.pose name=?w style=figure seat_y=?anysy
+@fgn.p.seated k.faces.pose name=?p style=figure seat_y=?anysy2
+@fgn.p.seatreq app.act.request seat=?anyseat
+@fgn.p.ground.o ui.draw.posename word=?w pose=sitting
+@name.pose.own core.rule when=$fgn.p.req when=$fgn.p.own not=$fgn.p.seatpose then=$fgn.p.own.o
+@name.pose.own.seat core.rule when=$fgn.p.req when=$fgn.p.own when=$fgn.p.seatpose when=$fgn.p.seatreq then=$fgn.p.own.o
+@name.pose.own.ground core.rule when=$fgn.p.req when=$fgn.p.own when=$fgn.p.seatpose not=$fgn.p.seatreq then=$fgn.p.ground.o
 @fgn.p.word core.word text=?w means=?p of=k.faces.pose.name
 @fgn.p.word.k k.faces.pose name=?p style=figure
 @fgn.p.word.o ui.draw.posename word=?w pose=?p
-@name.pose.word core.rule when=$fgn.p.req not=$fgn.p.own when=$fgn.p.word when=$fgn.p.word.k then=$fgn.p.word.o
+@name.pose.word core.rule when=$fgn.p.req not=$fgn.p.own when=$fgn.p.word when=$fgn.p.word.k not=$fgn.p.seated then=$fgn.p.word.o
+@name.pose.word.seat core.rule when=$fgn.p.req not=$fgn.p.own when=$fgn.p.word when=$fgn.p.word.k when=$fgn.p.seated when=$fgn.p.seatreq then=$fgn.p.word.o
+@name.pose.word.ground core.rule when=$fgn.p.req not=$fgn.p.own when=$fgn.p.word when=$fgn.p.word.k when=$fgn.p.seated not=$fgn.p.seatreq then=$fgn.p.ground.o
 @fgn.e.req app.act.request expression=?w
 @fgn.e.own k.faces.expression name=?w style=plain
 @fgn.e.own.o ui.draw.expressionname word=?w expression=?w
@@ -295,7 +304,7 @@
 @fgh.next ui.draw.next top=?top
 @fgh.nz core.calc out=?nz fn=add args=?top args=1
 @fgh.code core.calc out=?code fn=concat args=o args=?nz
-@fgh.make app.act.call act=make kind=w.drawing.object code=?code drawing=?kind x=?px y=?py size=?hs z=?nz order=2 ref=new.object
+@fgh.make app.act.call act=make kind=w.drawing.object code=?code drawing=?kind x=?px y=?py size=?hs z=?nz holder=?id order=2 ref=new.object
 @hold.make core.rule when=$fgh.req when=$fgh.kind when=$fgh.known when=$fgh.at when=$fgh.next with=$fgh.nz with=$fgh.code then=$fgh.make
 @fgh.unknown app.act.refuse reason=drawing-not-in-catalog
 @hold.make.unknown core.rule when=$fgh.req when=$fgh.kind not=$fgh.known then=$fgh.unknown
@@ -307,6 +316,8 @@
 @fgh.tzc app.act.call act=change thing=$fgh.thing attr=z value=?tz order=4
 @hold.thing.x core.rule when=$fgh.req when=$fgh.thing.req when=$fgh.thing when=$fgh.at then=$fgh.tx
 @hold.thing.y core.rule when=$fgh.req when=$fgh.thing.req when=$fgh.thing when=$fgh.at then=$fgh.ty
+@fgh.th app.act.call act=change thing=$fgh.thing attr=holder value=?id order=5
+@hold.thing.holder core.rule when=$fgh.req when=$fgh.thing.req when=$fgh.thing when=$fgh.at then=$fgh.th
 @hold.thing.z core.rule when=$fgh.req when=$fgh.thing.req when=$fgh.thing when=$fgh.at when=$fgh.next with=$fgh.tz then=$fgh.tzc
 @fgh.nobody.o w.drawing.object code=?id
 @fgh.nobody.has ui.draw.haslook object=?id style=?hs
@@ -381,8 +392,10 @@
 @fgk.hs core.calc out=?hs fn=mul args=?s args=0.34
 @fgk.z core.calc out=?hz fn=add args=?top args=2
 @fgk.code core.calc out=?hcode fn=concat args=o args=?hz
-@fgk.make app.act.call act=make kind=w.drawing.object code=?hcode drawing=?kind x=?px y=?py size=?hs z=?hz order=2 ref=new.held
-@make.person.holds core.rule when=$fgk.req when=$fgk.fg when=$fgk.known when=$fgk.hp when=$fgk.hk when=$fgk.t when=$fgk.ax when=$fgk.ay when=$fgk.next when=$fgk.sign with=$fgk.sf with=$fgk.ux with=$fgk.uy with=$fgk.vx0 with=$fgk.vx with=$fgk.vy with=$fgk.px with=$fgk.py with=$fgk.hs with=$fgk.z with=$fgk.code then=$fgk.make
+@fgk.pcode core.calc out=?pcode fn=concat args=o args=?pz
+@fgk.pz core.calc out=?pz fn=add args=?top args=1
+@fgk.make app.act.call act=make kind=w.drawing.object code=?hcode drawing=?kind x=?px y=?py size=?hs z=?hz holder=?pcode order=2 ref=new.held
+@make.person.holds core.rule when=$fgk.req when=$fgk.fg when=$fgk.known when=$fgk.hp when=$fgk.hk when=$fgk.t when=$fgk.ax when=$fgk.ay when=$fgk.next when=$fgk.sign with=$fgk.sf with=$fgk.ux with=$fgk.uy with=$fgk.vx0 with=$fgk.vx with=$fgk.vy with=$fgk.px with=$fgk.py with=$fgk.hs with=$fgk.z with=$fgk.code with=$fgk.pz with=$fgk.pcode then=$fgk.make
 @fgk.unknown app.act.refuse reason=drawing-not-in-catalog
 @make.person.holds.unknown core.rule when=$fgk.req not=$fgk.known then=$fgk.unknown
 @fgk.nobody app.act.refuse reason=hold-needs-a-person
@@ -428,3 +441,124 @@
 @fgc2.ob.o w.drawing.object code=?id look=$fgc2.ob.face
 @fgc2.ob.out app.observe.input id=?id key=cause value=?cid
 @figure.observe.cause core.rule when=$fgc2.ob.face when=$fgc2.ob.head when=$fgc2.ob.o then=$fgc2.ob.out
+
+# --- What a person holds moves with it --------------------------------------------------------------------------------
+# A thing held (w.drawing.object holder) is attached to its holder's hand: when the holder is placed or moved it moves by
+# as much; when the holder takes another pose it goes to the hand of that pose (the pose's hold point on the page).
+@fga.held w.drawing.object code=?hid holder=?id x=?hx y=?hy
+@fga.p w.drawing.object code=?id x=?ox y=?oy
+@fga.item app.act.item param="ids" value=?id
+@fga.place app.act.request operation="drawing.object.place" x=?nx y=?ny
+@fga.dx core.calc out=?dx fn=sub args=?nx args=?ox
+@fga.dy core.calc out=?dy fn=sub args=?ny args=?oy
+@fga.hx core.calc out=?nhx fn=add args=?hx args=?dx
+@fga.hy core.calc out=?nhy fn=add args=?hy args=?dy
+@fga.cx app.act.call act=change thing=$fga.held attr=x value=?nhx order=6
+@fga.cy app.act.call act=change thing=$fga.held attr=y value=?nhy order=7
+@held.moves.x core.rule when=$fga.place when=$fga.item when=$fga.p when=$fga.held with=$fga.dx with=$fga.hx then=$fga.cx
+@held.moves.y core.rule when=$fga.place when=$fga.item when=$fga.p when=$fga.held with=$fga.dy with=$fga.hy then=$fga.cy
+@fga.chx app.act.request operation="drawing.object.change" x=?nx
+@fga.chy app.act.request operation="drawing.object.change" y=?ny
+@held.moves.change.x core.rule when=$fga.chx when=$fga.item when=$fga.p when=$fga.held with=$fga.dx with=$fga.hx then=$fga.cx
+@held.moves.change.y core.rule when=$fga.chy when=$fga.item when=$fga.p when=$fga.held with=$fga.dy with=$fga.hy then=$fga.cy
+@fga.pose ui.draw.posename pose=?np
+@fga.pchg app.act.request operation="drawing.object.change"
+@fga.pop app.act.request operation="drawing.person.pose" id=?id
+@fga.face w.face.face style=?bs
+@fga.frame k.faces.frame style=?bs
+@fga.po w.drawing.object code=?id look=$fga.face x=?ox y=?oy
+@fga.k k.faces.pose name=?np style=?bs hold_x=?px hold_y=?py
+@fga.m ui.draw.mount object=?id face=$fga.face x=?mx y=?my size=?ms
+@fga.ext ui.draw.boxscale object=?id sx=?osx sy=?osy
+@fga.f core.calc out=?f fn=div args=?ms args=100
+@fga.pxf core.calc out=?pxf fn=mul args=?px args=?f
+@fga.pyf core.calc out=?pyf fn=mul args=?py args=?f
+@fga.ux0 core.calc out=?ux0 fn=add args=?mx args=?pxf
+@fga.uy0 core.calc out=?uy0 fn=add args=?my args=?pyf
+@fga.ux core.calc out=?ux fn=sub args=?ux0 args=50
+@fga.uy core.calc out=?uy fn=sub args=?uy0 args=50
+@fga.vx core.calc out=?vx fn=mul args=?ux args=?osx
+@fga.vy core.calc out=?vy fn=mul args=?uy args=?osy
+@fga.nhx core.calc out=?phx fn=add args=?vx args=?ox
+@fga.nhy core.calc out=?phy fn=add args=?vy args=?oy
+@fga.pcx app.act.call act=change thing=$fga.held attr=x value=?phx order=6
+@fga.pcy app.act.call act=change thing=$fga.held attr=y value=?phy order=7
+@held.follows.pose.x core.rule when=$fga.pop when=$fga.pose when=$fga.held when=$fga.face when=$fga.frame when=$fga.po when=$fga.k when=$fga.m when=$fga.ext with=$fga.f with=$fga.pxf with=$fga.ux0 with=$fga.ux with=$fga.vx with=$fga.nhx then=$fga.pcx
+@held.follows.pose.y core.rule when=$fga.pop when=$fga.pose when=$fga.held when=$fga.face when=$fga.frame when=$fga.po when=$fga.k when=$fga.m when=$fga.ext with=$fga.f with=$fga.pyf with=$fga.uy0 with=$fga.uy with=$fga.vy with=$fga.nhy then=$fga.pcy
+@held.follows.change.x core.rule when=$fga.pchg when=$fga.item when=$fga.pose when=$fga.held when=$fga.face when=$fga.frame when=$fga.po when=$fga.k when=$fga.m when=$fga.ext with=$fga.f with=$fga.pxf with=$fga.ux0 with=$fga.ux with=$fga.vx with=$fga.nhx then=$fga.pcx
+@held.follows.change.y core.rule when=$fga.pchg when=$fga.item when=$fga.pose when=$fga.held when=$fga.face when=$fga.frame when=$fga.po when=$fga.k when=$fga.m when=$fga.ext with=$fga.f with=$fga.pyf with=$fga.uy0 with=$fga.uy with=$fga.vy with=$fga.nhy then=$fga.pcy
+@fga.ob.out app.observe.input id=?hid key=holder value=?id
+@fga.ob.h w.drawing.object code=?hid holder=?id
+@figure.observe.holder core.rule when=$fga.ob.h then=$fga.ob.out
+
+# --- Sitting on a seat ----------------------------------------------------------------------------------------------
+# A person made or changed sitting on a thing (seat=: the code of a bench, a chair) takes the pose that sits on a seat
+# (seated, unless a pose is asked) and rests its seat point (k.faces.pose seat_x, seat_y) on the seat of that thing: the
+# k.layouts anchor of kind seat of its drawing, else a tenth above the middle of its box; it rests on it (w.drawing
+# object on) and is drawn in front of it (perspective-rules.sop).
+@fgs.req app.act.request seat=?sc
+@fgs.seat w.drawing.object code=?sc drawing=?sd x=?sx y=?sy
+@fgs.ext ui.draw.extent object=?sc w=?sw h=?sh
+@fgs.anc k.layouts.anchor of=?sd kind=seat x=?ax y=?ay w=?aw
+@fgs.anyanc k.layouts.anchor of=?sd kind=seat
+@fgs.at.type core.type of=ui.draw.seatat
+@fgs.a1 core.calc out=?aw2 fn=div args=?aw args=2
+@fgs.a2 core.calc out=?acx fn=add args=?ax args=?aw2
+@fgs.a3 core.calc out=?acx0 fn=sub args=?acx args=50
+@fgs.a4 core.calc out=?swf fn=div args=?sw args=100
+@fgs.a5 core.calc out=?dxs fn=mul args=?acx0 args=?swf
+@fgs.a6 core.calc out=?seatx fn=add args=?sx args=?dxs
+@fgs.a7 core.calc out=?ay0 fn=sub args=?ay args=50
+@fgs.a8 core.calc out=?shf fn=div args=?sh args=100
+@fgs.a9 core.calc out=?dys fn=mul args=?ay0 args=?shf
+@fgs.a10 core.calc out=?seaty fn=add args=?sy args=?dys
+@fgs.at.o ui.draw.seatat seat=?sc x=?seatx y=?seaty
+@seat.anchor core.rule when=$fgs.req when=$fgs.seat when=$fgs.ext when=$fgs.anc with=$fgs.a1 with=$fgs.a2 with=$fgs.a3 with=$fgs.a4 with=$fgs.a5 with=$fgs.a6 with=$fgs.a7 with=$fgs.a8 with=$fgs.a9 with=$fgs.a10 then=$fgs.at.o
+@fgs.b1 core.calc out=?h10 fn=div args=?sh args=10
+@fgs.b2 core.calc out=?off fn=mul args=?h10 args=-1
+@fgs.b3 core.calc out=?seaty2 fn=add args=?sy args=?off
+@fgs.at2.o ui.draw.seatat seat=?sc x=?sx y=?seaty2
+@seat.box core.rule when=$fgs.req when=$fgs.seat when=$fgs.ext not=$fgs.anyanc with=$fgs.b1 with=$fgs.b2 with=$fgs.b3 then=$fgs.at2.o
+@fgs.at ui.draw.seatat seat=?sc x=?tx y=?ty
+@fgs.seatpose.type core.type of=ui.draw.seatpose
+@fgs.sp.asked ui.draw.seatpose pose=?p
+@fgs.named ui.draw.posename pose=?p
+@seat.pose.asked core.rule when=$fgs.req when=$fgs.named then=$fgs.sp.asked
+@fgs.anynamed ui.draw.posename pose=?anyp
+@fgs.sp.default ui.draw.seatpose pose=seated
+@seat.pose.default core.rule when=$fgs.req not=$fgs.anynamed then=$fgs.sp.default
+@fgs.sp ui.draw.seatpose pose=?sp
+@fgs.spk k.faces.pose name=?sp style=?bs seat_x=?px seat_y=?py
+@fgs.px0 core.calc out=?px0 fn=sub args=?px args=50
+@fgs.py0 core.calc out=?py0 fn=sub args=?py args=50
+@fgs.sf core.calc out=?sf fn=div args=?s args=100
+@fgs.vx core.calc out=?vx fn=mul args=?px0 args=?sf
+@fgs.vy core.calc out=?vy fn=mul args=?py0 args=?sf
+@fgs.nx core.calc out=?nx fn=sub args=?tx args=?vx
+@fgs.ny core.calc out=?ny fn=sub args=?ty args=?vy
+@fgs.mk.fg ui.draw.figured kind=?k body=?bs
+@fgs.mk.t ui.draw.target size=?s
+@fgs.mk.pose app.act.call act=change thing=new.body attr=pose value=seated order=0.5
+@make.seat.pose core.rule when=$fgs.req when=$fgs.mk.fg not=$fgs.anynamed then=$fgs.mk.pose
+@fgs.mk.x app.act.arg call=new.object attr=x value=?nx
+@fgs.mk.y app.act.arg call=new.object attr=y value=?ny
+@fgs.mk.on app.act.arg call=new.object attr=on value=?sc
+@make.seat.on core.rule when=$fgs.req when=$fgs.mk.fg when=$fgs.seat then=$fgs.mk.on
+@make.seat.x core.rule when=$fgs.req when=$fgs.mk.fg when=$fgs.at when=$fgs.sp when=$fgs.spk when=$fgs.mk.t with=$fgs.px0 with=$fgs.sf with=$fgs.vx with=$fgs.nx then=$fgs.mk.x
+@make.seat.y core.rule when=$fgs.req when=$fgs.mk.fg when=$fgs.at when=$fgs.sp when=$fgs.spk when=$fgs.mk.t with=$fgs.py0 with=$fgs.sf with=$fgs.vy with=$fgs.ny then=$fgs.mk.y
+@fgs.ch app.act.request operation="drawing.object.change"
+@fgs.item app.act.item param="ids" value=?id
+@fgs.face w.face.face style=?bs
+@fgs.frame k.faces.frame style=?bs
+@fgs.o w.drawing.object code=?id look=$fgs.face size=?s z=?z
+@fgs.ch.pose app.act.call act=change thing=$fgs.face attr=pose value=?sp order=1
+@fgs.ch.x app.act.call act=change thing=$fgs.o attr=x value=?nx order=2
+@fgs.ch.y app.act.call act=change thing=$fgs.o attr=y value=?ny order=3
+@change.seat.pose core.rule when=$fgs.ch when=$fgs.req when=$fgs.item when=$fgs.face when=$fgs.frame when=$fgs.o when=$fgs.sp not=$fgs.anynamed then=$fgs.ch.pose
+@fgs.ch.on app.act.call act=change thing=$fgs.o attr=on value=?sc order=4
+@change.seat.on core.rule when=$fgs.ch when=$fgs.req when=$fgs.item when=$fgs.face when=$fgs.frame when=$fgs.o when=$fgs.seat then=$fgs.ch.on
+@change.seat.x core.rule when=$fgs.ch when=$fgs.req when=$fgs.item when=$fgs.face when=$fgs.frame when=$fgs.o when=$fgs.at when=$fgs.sp when=$fgs.spk with=$fgs.px0 with=$fgs.sf with=$fgs.vx with=$fgs.nx then=$fgs.ch.x
+@change.seat.y core.rule when=$fgs.ch when=$fgs.req when=$fgs.item when=$fgs.face when=$fgs.frame when=$fgs.o when=$fgs.at when=$fgs.sp when=$fgs.spk with=$fgs.py0 with=$fgs.sf with=$fgs.vy with=$fgs.ny then=$fgs.ch.y
+@fgs.none app.act.refuse reason=seat-not-on-page
+@fgs.anyseat w.drawing.object code=?sc
+@seat.unknown core.rule when=$fgs.req not=$fgs.anyseat then=$fgs.none

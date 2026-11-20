@@ -173,6 +173,11 @@
      "head": "candidate",
      "concept": "kind variant",
      "src": "art.draw variant (object.change {variant}): a k.objects stand-in variant (a sports car) or another kind the thing becomes"
+    },
+    "seat": {
+     "head": "fill+span",
+     "concept": "seat",
+     "src": "art.draw seat (drawing.object.make / catalog.make / object.change {seat}): the thing a person sits on (a bench, a chair); without one, sitting is on the ground"
     }
    }
   }

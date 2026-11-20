@@ -86,20 +86,43 @@
 @vm.o w.drawing.object code=?id
 @vm.chg.o ui.draw.materialof target=$vm.o material=?m
 @material.change core.rule when=$vm.chg when=$vm.item when=$vm.o when=$vm.named then=$vm.chg.o
-# A material on a thing: its colour, its fill, its opacity and the colour its gradient ends in.
+# A material on a thing is kept on it (w.drawing.object material) and shown on the part that carries it: the largest
+# part of its drawing (its walls, its body), which takes the material's colour, fill and gradient; its windows, doors
+# and other parts keep their own. A see-through material (glass, ice) makes the whole thing see-through.
 @vm.of ui.draw.materialof target=?t material=?m
 @vm.k.c k.styles.material name=?m colour=?c
-@vm.k.f k.styles.material name=?m fill=?f
 @vm.k.o k.styles.material name=?m opacity=?op
-@vm.k.g k.styles.material name=?m gradient=?g
-@vm.c.call app.act.call act=change thing=?t attr=colour value=?c order=5
-@vm.f.call app.act.call act=change thing=?t attr=fill value=?f order=6
+@vm.m.call app.act.call act=change thing=?t attr=material value=?m order=5
+@vm.c.call app.act.call act=change thing=?t attr=colour value=?c order=6
 @vm.o.call app.act.call act=change thing=?t attr=opacity value=?op order=7
-@vm.g.call app.act.call act=change thing=?t attr=gradient value=?g order=8
+@material.keep core.rule when=$vm.of then=$vm.m.call
 @material.colour core.rule when=$vm.of when=$vm.k.c then=$vm.c.call
-@material.fill core.rule when=$vm.of when=$vm.k.f then=$vm.f.call
 @material.opacity core.rule when=$vm.of when=$vm.k.o then=$vm.o.call
-@material.gradient core.rule when=$vm.of when=$vm.k.g then=$vm.g.call
+@vmc.o w.drawing.object code=?id material=?m
+@vmc.f ui.draw.form object=?id form=?k
+@vmc.main ui.draw.main form=?k source=?src
+@vmc.draw ui.draw.draw part=?id source=?src
+@vmc.k k.styles.material name=?m fill=?fl
+@vmc.fk k.styles.fill name=?fl pattern=?p
+@vmc.out ui.draw.style source=?src part=?id pattern=?p
+@material.carrier.pattern core.rule when=$vmc.o when=$vmc.f when=$vmc.main when=$vmc.draw when=$vmc.k when=$vmc.fk then=$vmc.out
+@vmc.gap k.styles.fill name=?fl gap=?g
+@vmc.gap.out ui.draw.style source=?src part=?id gap=?g
+@material.carrier.gap core.rule when=$vmc.o when=$vmc.f when=$vmc.main when=$vmc.draw when=$vmc.k when=$vmc.gap then=$vmc.gap.out
+@vmc.ang k.styles.fill name=?fl angle=?a
+@vmc.ang.out ui.draw.style source=?src part=?id angle=?a
+@material.carrier.angle core.rule when=$vmc.o when=$vmc.f when=$vmc.main when=$vmc.draw when=$vmc.k when=$vmc.ang then=$vmc.ang.out
+@vmc.gr k.styles.material name=?m gradient=?gc
+@vmc.grgb ui.draw.rgb colour=?gc rgb=?rgb
+@vmc.gr.out ui.draw.style source=?src part=?id gradient=?rgb
+@material.carrier.gradient core.rule when=$vmc.o when=$vmc.f when=$vmc.main when=$vmc.draw when=$vmc.gr when=$vmc.grgb then=$vmc.gr.out
+@vmc.ob.out app.observe.input id=?id key=material value=?m
+@material.observe core.rule when=$vmc.o then=$vmc.ob.out
+# A variant drawing (k.objects.object variant_of: a storm cloud, a sports car) stands for its kind in placement and size.
+@vvo.sub ui.draw.subject kind=?v
+@vvo.k k.objects.object name=?v variant_of=?b
+@vvo.o ui.draw.as kind=?v as=?b
+@variant.drawing.as core.rule when=$vvo.sub when=$vvo.k then=$vvo.o
 # A material on one part of a thing (the roof thatched, the walls brick): the part's colour and opacity (a part takes no
 # fill of its own: its colour is the material's).
 @vp.req app.act.request operation="drawing.part.change" id=?id index=?i
