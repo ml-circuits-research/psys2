@@ -191,13 +191,12 @@
 @lengthUnit.to core.slot of=app.execution.lengthUnit key=to kind=string present=true
 @lengthUnit.factor core.slot of=app.execution.lengthUnit key=factor kind=number present=true
 
-# "after" / "before" in a flow ("add a step after Review"): the relation the page's flow direction gives them (the
-# observed direction of the object of sourceType that lays the flow out), resolved before placement.
+# The flow a container lays its members out in ("add a step after Review"): the observed field of the object of
+# sourceType that holds it; placement takes it as std.placement.context flow=, and the flow= predicates of
+# spatial-placement.sop say which side "after" and "before" are in it.
 @flow.type core.type of=app.execution.flow closed=true
 @flow.on core.slot of=app.execution.flow key=sourceType kind=string present=true
-@flow.direction core.slot of=app.execution.flow key=direction kind=string present=true
-@flow.next core.slot of=app.execution.flow key=next kind=atom present=true
-@flow.previous core.slot of=app.execution.flow key=previous kind=atom present=true
+@flow.field core.slot of=app.execution.flow key=field kind=string present=true
 # A value answered in a fixed-width channel code (an RGB code) is said as the nearest declared name of a value space
 # (values=colour: the k.colours names that name a colour by themselves).
 @codeName.type core.type of=app.execution.codeName closed=true

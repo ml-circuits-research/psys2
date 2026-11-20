@@ -58,36 +58,16 @@ function identitySelectorsAsNames(wires,identity){
  }
  return drop.size?serialize(rows.filter(row=>!drop.has(row.id))):wires;
 }
-// "after"/"before" in a flow (relation next/previous): the side the observed flow direction gives (app.execution.flow).
-// "between A and B" (relation between, said for each anchor): a side of each, from where the anchors are: across the
-// larger of their horizontal and vertical separations, right of the first and left of the second (or below and above).
-function betweenRelations(wires,spatial,kindRows=[]){
- const rows=parse(wires),between=rows.filter(w=>w.type==='std.request.constraint'&&read(w,'relation')==='between');
- if(!between.length)return wires;
- if(between.length!==2)return wires;
- const target=id=>rows.find(w=>w.id===id);
- // An anchor is the one observed object of its name (label, name or code), else of its kind (the kind's lemmas).
- const boxOf=t=>{const name=read(t,'name'),kind=read(t,'kind'),lemmas=new Set(kindRows.filter(m=>m.canonical===kind&&!m.familyIdentity).map(m=>m.lemma));
-  const ids=spatial.observation.objects.filter(o=>name!==undefined?(o.inputs?.some(i=>['label','name'].includes(i.key)&&str(i.values?.[0]??'')===name)||o.id===name):lemmas.has(o.kind)).map(o=>o.id);
-  const boxes=spatial.boxes.filter(b=>ids.includes(b.entity));return boxes.length===1?boxes[0]:null;};
- const [a,b]=between.map(c=>boxOf(target(ref(c,'goal'))));
- if(!a||!b)return wires;
- const dx=(b.min_x+b.max_x)/2-(a.min_x+a.max_x)/2,dy=(b.min_y+b.max_y)/2-(a.min_y+a.max_y)/2;
- const [toA,toB]=Math.abs(dx)>=Math.abs(dy)?(dx>=0?['right','left']:['left','right']):(dy>=0?['below','above']:['above','below']);
- between[0].attrs.relation=[toA];between[1].attrs.relation=[toB];
- return serialize(rows);
-}
-function flowRelations(wires,observation){
- const rows=parse(wires),flows=executionPolicyWorld().ofType('app.execution.flow');
- const relations=rows.filter(w=>w.type==='std.request.constraint'&&['next','previous'].includes(read(w,'relation')));
- if(!relations.length||!flows.length)return wires;
- for(const c of relations){
-  const flow=flows.find(f=>{const page=observation.objects.find(o=>o.sourceType===read(f,'sourceType'));
-   const dir=page?.inputs?.find(i=>i.key==='direction')?.values?.[0];return dir!==undefined&&str(dir)===read(f,'direction');});
-  if(!flow)return wires;
-  c.attrs.relation=[read(flow,read(c,'relation'))];
+// The flow the container lays its members out in (app.execution.flow: the observed field of the object of a source type),
+// given to placement as std.placement.context flow=; the flow= predicates of spatial-placement.sop say what "after"
+// and "before" are in it.
+function observedFlow(observation){
+ for(const f of executionPolicyWorld().ofType('app.execution.flow')){
+  const holder=observation.objects.find(o=>o.sourceType===read(f,'sourceType'));
+  const value=holder?.inputs?.find(i=>i.key===read(f,'field'))?.values?.[0];
+  if(value!==undefined)return str(value);
  }
- return serialize(rows);
+ return undefined;
 }
 export async function executeSpatialPlacement(session,candidate,options={}) {
  budget.tick('spatial-placement.anchor-hypothesis');   // recursion: once, for the anchor hypothesis (options.anchorMade)
@@ -107,7 +87,6 @@ export async function executeSpatialPlacement(session,candidate,options={}) {
   if(!host.observeSpatial)return fail('spatial-observation-unavailable');
   const areaId=bindings.readerAreaByView?.[view]??area.area;
   {const named=identitySelectorsAsNames(candidate.wires,identityConcepts(bindings,areaId));if(named!==candidate.wires)candidate={...candidate,wires:named};}
-  {const flowed=flowRelations(candidate.wires,host.observe());if(flowed!==candidate.wires)candidate={...candidate,wires:flowed};}
   const concepts=new Set(parse(candidate.wires).filter(wire=>wire.type==='std.request.target').map(wire=>read(wire,'kind')).filter(Boolean));
   const constructors=nativeCreationCandidates(bindings,host.bindings(),areaId).filter(pair=>pair.mapping.area===areaId&&concepts.has(pair.mapping.canonical));
   // A constructor that reads declared knowledge for its kind argument (a catalog drawing by name) gets it loaded for
@@ -130,11 +109,10 @@ export async function executeSpatialPlacement(session,candidate,options={}) {
   if(!context)return fail('spatial-world-unavailable');
   const mappings=nativeKindCandidates(bindings).filter(mapping=>mapping.area===areaId&&mapping.nativeFamilyBinding);
   lemmasOf=kind=>[kind,...mappings.filter(mapping=>mapping.canonical===kind&&typeof mapping.lemma==='string').map(mapping=>mapping.lemma)];
-  {const placedBetween=betweenRelations(candidate.wires,host.observeSpatial(),nativeKindCandidates(bindings).filter(m=>m.area===areaId));if(placedBetween!==candidate.wires)candidate={...candidate,wires:placedBetween};}
   // The declared default of a kind argument (std.capability.seed source=value phase=missing on a family's class).
   const defaults=executionPolicyWorld().ofType('std.capability.seed').filter(w=>read(w,'source')==='value'&&read(w,'phase')==='missing'&&read(w,'kind')&&read(w,'operation'))
    .map(w=>({canonical:read(w,'kind'),operation:read(w,'operation'),parameter:read(w,'parameter'),value:read(w,'value')}));
-  const native=placementInterfaceSop(host,spatial,mappings,candidate.request,{constructors,concepts,defaults});
+  const native=placementInterfaceSop(host,spatial,mappings,candidate.request,{constructors,concepts,defaults,flow:observedFlow(host.observe())});
   const profile=readPlacementProfile(session,spatial);
   const admitted=context.tell(native.configuration+'\n'+profile,{factsOnly:true});
   if(!admitted.ok)return fail('spatial-context-rejected',{diagnostics:admitted.violations});
@@ -184,7 +162,7 @@ export async function executeSpatialPlacement(session,candidate,options={}) {
    if(drawn?.statuses?.[0]==='supported'){
     const placed=await executeSpatialPlacement(session,candidate,{bindings,view,readKnowledge:options.readKnowledge,anchorMade:true});
     if(placed?.statuses?.[0]==='supported'){
-     const note=' There was no '+made.kind+' on the page, so I drew one first ('+anchorRule.name+').';
+     const note=' '+placementDisclosure('anchor',{anchor:made.kind,rule:anchorRule.name});
      placed.text=drawn.text.replace(/\s*You can undo this( change)?\.\s*$/,'')+' '+placed.text+note;placed.parts=[{text:placed.text,translate:false}];
      placed.trace={...placed.trace,anchorHypothesis:{rule:anchorRule.id,made:made.kind}};
      return placed;

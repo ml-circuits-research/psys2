@@ -119,13 +119,13 @@ function nativeCapabilityWires(host,operations,mappings,frame,{constructors=[],c
 
 // constructors: the policy's constructor pairs ({mapping, operation}); concepts: the kinds the request names, the
 // only ones whose extents are measured (a catalog tool admits thousands of names).
-export function placementInterfaceSop(host,spatial,mappings,requestId,{constructors,concepts,defaults}={}) {
+export function placementInterfaceSop(host,spatial,mappings,requestId,{constructors,concepts,defaults,flow}={}) {
  const {observation,revision,frame,scope,container}=spatial,operations=host.bindings();
  const {wires,bounds}=nativeGeometryWires(spatial,mappings,operations);
  const configuration=[...wires,...nativeCapabilityWires(host,operations,mappings,frame,{constructors,concepts,defaults})].join('\n');
  const context=row('native.spatial.context','std.placement.context',{
   request:'$'+requestId,instance:quote(observation.instanceId),revision:quote(revision),
-  frame:quote(frame),scope:quote(scope),container:quote(container),bounds:bounds?'$'+bounds:undefined,
+  frame:quote(frame),scope:quote(scope),container:quote(container),bounds:bounds?'$'+bounds:undefined,flow:flow!==undefined?quote(flow):undefined,
  });
  return {configuration,context};
 }

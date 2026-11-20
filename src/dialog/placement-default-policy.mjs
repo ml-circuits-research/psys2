@@ -41,12 +41,12 @@ export function chooseRegion(candidates){
 /** The declared alternative readings of a failed relation placement, by rank. */
 export const placementHypotheses=()=>policy().hypotheses;
 
-/** The declared reply text of a placement method fallback, its {relation}, {anchor} and {direction} filled in; '' when none is declared. */
-export function placementDisclosure(stage,{relation,anchor,direction}={}){
+/** The declared reply text of a placement stage (a method fallback, an anchor drawn first), its {relation}, {anchor}, {direction} and {rule} filled in; '' when none is declared. */
+export function placementDisclosure(stage,{relation,anchor,direction,rule}={}){
  const {disclosures,relationWords}=policy(),text=disclosures[stage];
  if(!text)return '';
- const values={relation:relationWords[relation]??relation??'',anchor:anchor??'',direction:direction??''};
- return text.replace(/\{(relation|anchor|direction)\}/g,(_,key)=>values[key]);
+ const values={relation:relationWords[relation]??relation??'',anchor:anchor??'',direction:direction??'',rule:rule??''};
+ return text.replace(/\{(relation|anchor|direction|rule)\}/g,(_,key)=>values[key]);
 }
 
 export const inspectPlacementDefaultPolicy=()=>({source:'worlds/app.project/placement-default-policy.sop',wires:POLICY,schema:SCHEMA,loaded:!!loaded});

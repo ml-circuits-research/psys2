@@ -36,6 +36,17 @@
 # thing with a surface region (a cup on the table) it rests on the surface; on water it floats in it. A subject
 # larger than 0.6 of that place is drawn smaller to fit (where the tool can say a size).
 @layout.predicate.near std.placement.predicate method=$layout.method relation=near predicate=near gap=40
+# "between A and B" (said for each anchor): the facing side of each anchor, across their larger separation (sopworld pair=sides).
+@layout.predicate.between std.placement.predicate method=$layout.method relation=between predicate=apart pair=sides
+# "after" / "before" (next / previous) in the container's observed flow (std.placement.context flow=: app.execution.flow).
+@layout.predicate.next.down std.placement.predicate method=$layout.method relation=next predicate=below flow="down" gap=80 clearance=12 pull=0.5 align=x edge=0.5 alignWeight=0.2
+@layout.predicate.previous.down std.placement.predicate method=$layout.method relation=previous predicate=above flow="down" gap=80 clearance=12 pull=0.5 align=x edge=0.5 alignWeight=0.2
+@layout.predicate.next.up std.placement.predicate method=$layout.method relation=next predicate=above flow="up" gap=80 clearance=12 pull=0.5 align=x edge=0.5 alignWeight=0.2
+@layout.predicate.previous.up std.placement.predicate method=$layout.method relation=previous predicate=below flow="up" gap=80 clearance=12 pull=0.5 align=x edge=0.5 alignWeight=0.2
+@layout.predicate.next.right std.placement.predicate method=$layout.method relation=next predicate=right flow="right" gap=80 clearance=12 pull=0.5 align=y edge=1 alignWeight=0.2
+@layout.predicate.previous.right std.placement.predicate method=$layout.method relation=previous predicate=left flow="right" gap=80 clearance=12 pull=0.5 align=y edge=1 alignWeight=0.2
+@layout.predicate.next.left std.placement.predicate method=$layout.method relation=next predicate=left flow="left" gap=80 clearance=12 pull=0.5 align=y edge=1 alignWeight=0.2
+@layout.predicate.previous.left std.placement.predicate method=$layout.method relation=previous predicate=right flow="left" gap=80 clearance=12 pull=0.5 align=y edge=1 alignWeight=0.2
 @layout.predicate.left std.placement.predicate method=$layout.method relation=left predicate=left gap=80 clearance=12 pull=0.5 align=y edge=1 alignWeight=0.2
 @layout.predicate.right std.placement.predicate method=$layout.method relation=right predicate=right gap=80 clearance=12 pull=0.5 align=y edge=1 alignWeight=0.2
 @layout.predicate.above std.placement.predicate method=$layout.method relation=above predicate=above gap=80 clearance=12 pull=0.5 align=x edge=0.5 alignWeight=0.2

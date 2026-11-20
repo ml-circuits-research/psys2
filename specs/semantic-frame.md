@@ -106,6 +106,10 @@ only tells the facts and applies the conclusions); kind words, spelled numbers, 
 anchors and colour names of codes are read by sopworld 0.245.0 span reading (`readLexicalPhrase` with the declared
 `app.interpret.spelling` tolerance, `readNumberSpan` with `app.interpret.numberJoiner`, `unitConversion`, `stripPhrase`,
 `splitPhrase`, `nearestName` with `app.execution.codeName`).)
+(Placement, same day: "between A and B" is `std.placement.predicate relation=between pair=sides` (sopworld 0.246.0) and
+"after"/"before" are `flow=` predicates of `spatial-placement.sop` with the container's observed flow as
+`std.placement.context flow=` (sopworld 0.247.0; `app.execution.flow` names the observed field); the reply of an anchor
+drawn first is `app.placement.disclosure stage=anchor`.)
 
 | Was refusal-first | Now | Declared in |
 | --- | --- | --- |
