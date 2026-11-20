@@ -617,9 +617,9 @@
       "path": "training/sop-bert/data/ui-diagram-v2/examples.jsonl",
       "description": "voice/chat control of the Diagram editor: every operation x parameter x reference form, robustness variants, compounds, questions (generate.py)",
       "gitCommit": "e48220e9ebd808498b25e4a8c5d3c7a6ec093b13",
-      "sha256": "cd38d754c93f13ee5d9e68e76ea859ddec8c58aa6e465f572edada661450f19c",
-      "rowsIn": 6676,
-      "rowsKept": 6676,
+      "sha256": "1716410ebad04f7e5e7b42f10d2e9b285724ae8d86ac2e4e2d489c212b0cf93a",
+      "rowsIn": 6668,
+      "rowsKept": 6668,
       "rowsDropped": 0,
       "dropReasons": {},
       "fixes": {}
@@ -629,7 +629,7 @@
       "path": "training/sop-bert/data/ui-diagram-v2/heldout-voice.jsonl",
       "description": "the Diagram voice set with the owner's session sentences (heldout.py); trained on per the owner's decision that benchmark contamination is irrelevant",
       "gitCommit": "bdb078a7b4cd468a4719094033fcd6d61ead7826",
-      "sha256": "d5983bbc4cfdb2472652aba48469f5c44b58ee3628401ac3edbba2dbe685fd14",
+      "sha256": "3a6ead9ccf4b20487f309f0086381b4c4eb8a79cf799b380a8e96b7de4e5d73a",
       "rowsIn": 93,
       "rowsKept": 92,
       "rowsDropped": 1,
@@ -671,15 +671,15 @@
       "name": "data-drop-v1",
       "path": "training/sop-bert/data/data-drop-v1/accepted.jsonl",
       "description": "Diagram/Drawing rows of the data-request drops, validated and normalised by data-drop-v1/import.py",
-      "gitCommit": "f7877e4a3d2ac629dfd9bb0a585acc6c6333652c",
-      "sha256": "775357a9fe96c943c09066696eb427c1933373b1cf7ee0a634858f240ddf97a6",
-      "rowsIn": 4786,
-      "rowsKept": 4786,
+      "gitCommit": "18e7823258c51ac43a8213451dac867769ee2476",
+      "sha256": "10c95cd29d68fa37fc9c21d10f58fe1e6a2d00afc69226c2fa64494949d9ea8d",
+      "rowsIn": 5576,
+      "rowsKept": 5576,
       "rowsDropped": 0,
       "dropReasons": {},
       "fixes": {
-        "anchor-span-as-anchor-mention": 317,
-        "comparative-as-delta-step": 38,
+        "anchor-span-as-anchor-mention": 542,
+        "comparative-as-delta-step": 58,
         "diagram-new-node-count-as-node.n": 24,
         "trigger-not-in-span-removed": 15
       }
@@ -875,12 +875,12 @@
     }
   ],
   "splits": {
-    "train": 87887,
-    "dev": 3777,
-    "test": 1874
+    "train": 88780,
+    "dev": 3818,
+    "test": 1892
   },
-  "families": 25918,
-  "leakedFamilies": 2509,
+  "families": 25955,
+  "leakedFamilies": 2535,
   "labelConflictsResolvedByPriority": {
     "main-synthetic<-main-synthetic": 4
   },
@@ -892,20 +892,20 @@
     "ui-relations-v1": 1370,
     "ui-comparatives-v1": 154,
     "ui-features-v1": 66,
-    "ui-diagram-v2": 1197,
+    "ui-diagram-v2": 1207,
     "ui-diagram-v2-voice": 14,
     "ui-quantities-v1": 42,
     "human-adapted-v1-drawing": 112,
-    "data-drop-v1": 1029,
+    "data-drop-v1": 1190,
     "human-adapted-v1-diagram": 72,
-    "main-synthetic": 5108
+    "main-synthetic": 5107
   },
   "nonReaderLabelFieldsRemoved": {
-    "raw_value": 108,
+    "raw_value": 128,
     "anchor_fill": 8151,
     "anchor_span": 437,
-    "qualitative": 470,
-    "mention": 157,
+    "qualitative": 499,
+    "mention": 158,
     "anchor_kind": 5374
   },
   "kindVocabulary": {
@@ -914,32 +914,32 @@
   },
   "files": {
     "STATS.md": {
-      "sha256": "152eb0e86d0d8d1884db72df7af4bae6ae27efa79a7fd74967ad9c71d322427b",
-      "bytes": 7597
+      "sha256": "ed2972f7819cc1d7bf2fee3626b64362a99d3f80c79c81cc774ce9913ddb9166",
+      "bytes": 7890
     },
     "VALIDATION.md": {
-      "sha256": "3bfd9680767fa38da1440d8be9cc5ea4d6748d4466f7df3bc7f593a44ddf0d51",
-      "bytes": 12756
+      "sha256": "1873c269121c49191f87573f4b4b787c8c546d30b56fa6e79463280e95fc7cc0",
+      "bytes": 12852
     },
     "audit-sample.md": {
-      "sha256": "c24b0547bb870e17a59af68b251a08ab1c0d968eb9638551ad57f10e3a73ea03",
-      "bytes": 44364
+      "sha256": "0c0aab96d10429aeb3567a57ec48bbf41486be393291b66038ce9cc7cad94052",
+      "bytes": 44232
     },
     "dev.jsonl": {
-      "sha256": "e2090427943d03a8b4d86b658129269cf64d762d15851c3489555cad3c6e1480",
-      "bytes": 4163333
+      "sha256": "e27233886bfd0bf4c2e3079118d023194330000cce9a0aa9a3b231af77656355",
+      "bytes": 4160428
     },
     "inventory.json": {
       "sha256": "daa582e2cab47bf73b374b7c5a3d702b51da90429e3e42fc08f6fe3e9a4a5293",
       "bytes": 56402
     },
     "test.jsonl": {
-      "sha256": "8b3750da60b709ea17e251866a23bf6ccc7fcd5c0dc86d222328497a231a2191",
-      "bytes": 2067791
+      "sha256": "bca8f70860c093ceeca58368b64063f5e1eabc3fd5289d2ea27d79beb38d79b5",
+      "bytes": 2069343
     },
     "train.jsonl.gz": {
-      "sha256": "5589ae3209266fe71a4401894742b177fccc812e60cb45a03fb668b7101245c4",
-      "bytes": 4486346
+      "sha256": "680b1fcb5b946b147cb7ef12a9bbe252117dea5a3f97a35b04dab0397f882420",
+      "bytes": 4380388
     }
   },
   "policy": {

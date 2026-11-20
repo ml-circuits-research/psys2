@@ -186,7 +186,7 @@ def check(row, seen, official_seen):
             errs.append('request-span-not-verbatim'); continue
         t = q.get('target') or {}
         for f in ('kind_span', 'name_span', 'description_span', 'count_span'):
-            if f in t and (not isinstance(t[f], str) or not official.find_all(span, t[f])):
+            if f in t and (not isinstance(t[f], str) or not (official.find_all(span, t[f]) or re.search(r'(?<!\w)' + re.escape(t[f]) + r"'s\b", span))):
                 errs.append(f'target-{f}-not-verbatim-in-span')
         if t.get('mode') == 'existing' and t.get('fill') in ('written', 'description') and not existing:
             errs.append('reference-with-empty-context')

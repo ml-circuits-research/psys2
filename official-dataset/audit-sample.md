@@ -229,26 +229,27 @@
     - group.id = "Approval steps" from “Approval steps” [eq, selector]
     - group.layout = "column" from “column” [eq, result]
 
-45. [diagram · ui-diagram-v2 · train · diagram.node.remove] “we dropped that step, so get rid of the round node”  — context: Marketing, Stock, Checkout, Marketing to Stock
-  - span “we dropped that step, so get rid of the round node”: **remove**/do trigger=“get rid of”; target node existing definite fill=description kind=circle kind_span=“round node”
+45. [diagram · ui-diagram-v2 · train · diagram.node.remove] “the Build step away”  — context: Database, Payment, Build, e1
+  - span “the Build step away”: **remove**/do trigger=“away”; target node existing definite fill=written name_span=“Build”
+    - node.ids = "Build" from “Build” [eq, selector]
 
-46. [diagram · ui-diagram-v2 · train · diagram.link.make] “you know join um to the bubble”  — context: Queue, n2, Onboarding, Start, Backend, Supplier
-  - span “you know join um to the bubble”: **connect**/do trigger=“join”; target link new indefinite
-    - link.to = "the bubble" from “the bubble” [eq, result]
+46. [diagram · ui-diagram-v2 · train · diagram.link.make] “with this onep icked, I need you to connect it to CEO”  — context: n1, Retry, n3, Draft, CEO, e1
+  - span “with this onep icked, I need you to connect it to CEO”: **connect**/do trigger=“connect”; target link new indefinite
+    - link.to = "CEO" from “CEO” [eq, result]
 
-47. [diagram · ui-diagram-v2 · train · diagram.ids.show] “now let me see the IDs briefly”  — context: n1, n2, Planning, n1 to n2
-  - span “now let me see the IDs briefly”: **change**/do trigger=“let me see”; target page existing definite fill=context
-    - page.mode = "temporary" from “briefly” [eq, result]
+47. [diagram · ui-diagram-v2 · train · diagram.ids.show] “hide IDs”  — context: Sales, Customer, Settings, e1, e2, Backend services
+  - span “hide IDs”: **change**/do trigger=“hide”; target page existing definite fill=context
 
-48. [diagram · ui-diagram-v2 · train · diagram.series.make] “serie Actual: 5, 61”  — context: Survey results, 2022, 2023, 2024, 2024, Revenue
-  - span “serie Actual: 5, 61”: **make**/do (no trigger); target series new indefinite
-    - series.label = "Actual" from “Actual” [eq, result]
-    - series.values = "5" from “5” [eq, result]
-    - series.values = "61" from “61” [eq, result]
+48. [diagram · ui-diagram-v2 · train · diagram.series.make] “could you draw Costs as a second series: 8, 15, 120”  — context: Onboarding, Research, Deploy, Valid?, Quarterly revenue, 2022
+  - span “could you draw Costs as a second series: 8, 15, 120”: **make**/do trigger=“draw”; target series new indefinite
+    - series.label = "Costs" from “Costs” [eq, result]
+    - series.values = "8" from “8” [eq, result]
+    - series.values = "15" from “15” [eq, result]
+    - series.values = "120" from “120” [eq, result]
 
-49. [diagram · ui-diagram-v2 · train · diagram.chart.make] “I want to make a scatter plot of the budget by department”  — context: (empty)
-  - span “I want to make a scatter plot of the budget by department”: **make**/do trigger=“make”; target chart new indefinite
-    - chart.type = "scatter" from “scatter plot” [eq, result]
+49. [diagram · ui-diagram-v2 · train · diagram.chart.make] “just draw a polar area chart of sales by month”  — context: Settings, Done, Marketing, Draft, e1, e2
+  - span “just draw a polar area chart of sales by month”: **make**/do trigger=“draw”; target chart new indefinite
+    - chart.type = "polarArea" from “polar area chart” [eq, result]
 
 50. [diagram · ui-diagram-v2-voice · train · diagram.style.apply] “make it black and white for printing”  — context: Start, Login, Valid?, Dashboard, End, n6
   - span “make it black and white for printing”: **change**/do trigger=“make”; target diagram existing definite fill=context

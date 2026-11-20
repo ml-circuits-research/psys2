@@ -1,16 +1,15 @@
 {
- "rows": 6676,
+ "rows": 6668,
  "heldoutRows": 93,
  "cases": 114,
  "errors": {},
  "errorExamples": {},
  "notes": {
-  "official-warning:numeric-value-not-in-surface": 37,
-  "official-warning:value-span-ambiguous": 85,
-  "official-warning:selector-not-in-context": 206,
+  "official-warning:numeric-value-not-in-surface": 28,
+  "official-warning:selector-not-in-context": 217,
   "official-warning:target-kind_span-ambiguous": 10,
-  "official-warning:target-description_span-ambiguous": 2,
-  "official-warning:target-name_span-ambiguous": 2
+  "official-warning:value-span-ambiguous": 78,
+  "official-warning:target-name_span-ambiguous": 3
  },
  "casesBelow20": {}
 }

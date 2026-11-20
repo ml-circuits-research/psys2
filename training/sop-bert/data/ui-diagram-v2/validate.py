@@ -49,7 +49,7 @@ def ref_ok(surface, existing):
     m = CODE.match(surface)
     if m:
         code = m.group(1).lower() + WORDNUM.get(m.group(2).lower(), m.group(2))
-        return any(e.get('id') == code for e in existing)
+        return any(code in (e.get('id'), e.get('name')) for e in existing)
     low = surface.lower().strip('"')
     low = re.sub(r'^(the|a|an|this|that)\s+', '', low)
     if SYN.get(low) and any(e.get('kind') == SYN[low] for e in existing):

@@ -158,7 +158,7 @@ class Scene:
     """An observed Diagram: nodes n1.. (kind, optional label), links e1.. (from, to), groups g1.. (label, members)."""
 
     def __init__(self, rng, size=None, labelled=0.75, links=True, groups=True, kinds=None):
-        n = size if size is not None else rng.randint(3, 8)
+        n = size if size is not None else rng.randint(3, 6)
         labels = rng.sample(LABELS, n)
         kinds = kinds or NODE_KINDS
         self.nodes = [{'code': f'n{i + 1}', 'kind': rng.choice(kinds), 'label': labels[i] if rng.random() < labelled else None} for i in range(n)]
@@ -187,16 +187,17 @@ class Scene:
         return x['label'] or code
 
     def existing(self):
-        """context.existing as the reader receives it: kind, visible name (label, else the visible code) and the code."""
+        """context.existing as the reader receives it, compact: kind and visible name (the label, else the visible code);
+        a labelled object also carries its code as id. Links and groups are named by their codes."""
         rows = []
         for x in self.nodes:
-            rows.append({'kind': x['kind'], 'name': x['label'] or x['code'], 'id': x['code']})
+            rows.append({'kind': x['kind'], 'name': x['label'], 'id': x['code']} if x['label'] else {'kind': x['kind'], 'name': x['code']})
         for e in self.links:
-            rows.append({'kind': 'link', 'name': f'{self.name(e["from"])} to {self.name(e["to"])}', 'id': e['code']})
+            rows.append({'kind': 'link', 'name': e['code']})
         for g in self.groups:
             rows.append({'kind': 'group', 'name': g['label'], 'id': g['code']})
         for c in getattr(self, 'charts', []):
-            rows.append({'kind': 'chart', 'name': c['name'], 'id': c['code']})
+            rows.append({'kind': 'chart', 'name': c['name']})
             rows += [{'kind': 'point', 'name': x} for x in c['categories']] + [{'kind': 'series', 'name': x} for x in c['series']]
         return rows
 

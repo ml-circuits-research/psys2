@@ -98,7 +98,7 @@ def article(word):
 
 def scene_with(rng, min_nodes=3, need_links=False, need_group=False, need_unique_kind=False, need_plural_kind=False, labelled=0.75):
     for _ in range(50):
-        s = Scene(rng, size=rng.randint(max(min_nodes, 3), 8), labelled=labelled)
+        s = Scene(rng, size=rng.randint(max(min_nodes, 3), 6), labelled=labelled)
         if need_links and not s.links:
             continue
         if need_group and not s.groups:
