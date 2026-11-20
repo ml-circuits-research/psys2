@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // One authored SOP interface supplies both native parameter admission and compiler facts.
-import { World, parse, quote, str } from '../lib/vendor/sopworld/sopworld.mjs?v=a37e1846b3';
+import { World, parse, quote, str } from '../lib/vendor/sopworld/sopworld.mjs?v=89bc36f54c';
 import { budget } from '../lib/dialog/budget.mjs?v=00bce6e369';
 
 const NS = 'std.capability.';

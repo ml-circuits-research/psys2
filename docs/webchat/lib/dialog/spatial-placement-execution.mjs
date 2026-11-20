@@ -1,17 +1,17 @@
 // Assemble trusted native observations and dispatch the compiler's SOP call.
-import {World,parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=a37e1846b3';
-import SOURCE from './new-engine-source.mjs?v=686e0f0f94';
-import {readPlacementProfile,rememberPlacement} from '../../worlds/app.project/spatial-profile.mjs?v=c124def9ba';
-import {placementInterfaceSop} from '../../worlds/native-spatial-interface.mjs?v=dbb28ea06f';
-import {NATIVE_AREAS,createAreaHost} from './app-reader-context.mjs?v=282e1d2c12';
+import {World,parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=89bc36f54c';
+import SOURCE from './new-engine-source.mjs?v=ab5fab2957';
+import {readPlacementProfile,rememberPlacement} from '../../worlds/app.project/spatial-profile.mjs?v=79e82cce4b';
+import {placementInterfaceSop} from '../../worlds/native-spatial-interface.mjs?v=f6a9481540';
+import {NATIVE_AREAS,createAreaHost} from './app-reader-context.mjs?v=2203f6e9a4';
 import {identityRegistryFor,instanceIdFor} from './instance-identity.mjs?v=024ef1ca83';
-import {nativeKindCandidates,nativeCreationCandidates} from './native-binding-candidates.mjs?v=0fb3ccec6b';
-import {invokeObservedNativeTool} from './native-tool-activity.mjs?v=50362a2706';
-import {describeNativeControl,verifyNativeControlEffect} from './native-control-intent.mjs?v=e251e8e929';
+import {nativeKindCandidates,nativeCreationCandidates} from './native-binding-candidates.mjs?v=45e9aa397b';
+import {invokeObservedNativeTool} from './native-tool-activity.mjs?v=6dc953485d';
+import {describeNativeControl,verifyNativeControlEffect} from './native-control-intent.mjs?v=408c51044a';
 import {placementSearchProvider,z3Status} from './placement-search-provider.mjs?v=0675893eb5';
 import {en} from '../lang/en.mjs?v=0d85b0a1f8';
-import {placementHypotheses} from './placement-default-policy.mjs?v=29650df32d';
-import {identityConcepts} from './capability-plan-adapter.mjs?v=73b05a911f';
+import {placementHypotheses} from './placement-default-policy.mjs?v=dc4c36138d';
+import {identityConcepts} from './capability-plan-adapter.mjs?v=d9a1ad2be6';
 
 const read = (row,key) => row?.attrs[key]?.length===1 ? str(row.attrs[key][0]) : undefined;
 const ref = (row,key) => {

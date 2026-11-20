@@ -1,7 +1,7 @@
 // Predicted raw structure -> declared canonical structure. No reader or gold input.
-import {copyHostData,snapshotHostData} from '../../worlds/native-tool-host.mjs?v=d7b8bd54d9';
+import {copyHostData,snapshotHostData} from '../../worlds/native-tool-host.mjs?v=f4cf384e76';
 import {positiveCardinalProof,spelledNumberProof} from './key-reader-value-proof.mjs?v=2c6e07ddb9';
-import {decodeModelGraphs} from './model-graph-decoder.mjs?v=04ce2e25e8';
+import {decodeModelGraphs} from './model-graph-decoder.mjs?v=4bd37879a0';
 export const RAW_STRUCTURAL_FORMAT='psys2.raw-structural-predictions/1';
 // The node budget of a binding table (every kind of the pinned catalog's drawable providers, with their provenance).
 export const BINDING_NODES=250000;

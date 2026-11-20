@@ -1,16 +1,16 @@
-import { readSceneDefaults } from './scene-placement-defaults.mjs?v=881cf3bcf0';
-import { solveDefaultPlacement, solveGroupPlacement } from './default-placement.mjs?v=3010947edb';
+import { readSceneDefaults } from './scene-placement-defaults.mjs?v=93c18c1cf7';
+import { solveDefaultPlacement, solveGroupPlacement } from './default-placement.mjs?v=f00220a00e';
 import { en } from '../lang/en.mjs?v=0d85b0a1f8';
-import { quote } from '../vendor/sopworld/sopworld.mjs?v=a37e1846b3';
+import { quote } from '../vendor/sopworld/sopworld.mjs?v=89bc36f54c';
 // SPDX-License-Identifier: AGPL-3.0-only
-import { compileNativeCapability } from './capability-plan-adapter.mjs?v=73b05a911f';
-import { readDegreeBases } from './degree-bases.mjs?v=96e65008ac';
-import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=282e1d2c12';
+import { compileNativeCapability } from './capability-plan-adapter.mjs?v=d9a1ad2be6';
+import { readDegreeBases } from './degree-bases.mjs?v=9542d910b9';
+import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=2203f6e9a4';
 import { instanceIdFor } from './instance-identity.mjs?v=024ef1ca83';
-import { prepareNativeControlHost } from './native-control-preparation.mjs?v=ff1f3cfd9c';
-import { invokeObservedNativeTool } from './native-tool-activity.mjs?v=50362a2706';
-import { retainPropertyEffect } from './property-effect-evidence.mjs?v=a4a355824d';
-import { describeNativeControl, verifyNativeControlEffect } from './native-control-intent.mjs?v=e251e8e929';
+import { prepareNativeControlHost } from './native-control-preparation.mjs?v=d6a6f1d1e9';
+import { invokeObservedNativeTool } from './native-tool-activity.mjs?v=6dc953485d';
+import { retainPropertyEffect } from './property-effect-evidence.mjs?v=6ebc82a99c';
+import { describeNativeControl, verifyNativeControlEffect } from './native-control-intent.mjs?v=408c51044a';
 
 function reply(text, supported, trace = {}) {
   return { text, parts: [{ text, translate: false }], statuses: [supported ? 'supported' : 'unsupported'],

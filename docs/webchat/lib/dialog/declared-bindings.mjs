@@ -16,9 +16,9 @@
 //     the tool as its declared parameter value (valueMap, a lookup the request compiler resolves);
 //  6. a kind named by the modifier of its compound lemmas ("a pie" for "pie chart", "pie graph": the compound's last
 //     word a lemma of its family's own class) is that kind, when every such compound names the same kind.
-import {parse,str} from '../vendor/sopworld/sopworld.mjs?v=a37e1846b3';
-import {interpretationPolicy} from './interpretation-policy.mjs?v=9f28a38d01';
-import {executionPolicyWorld} from './execution-policy.mjs?v=8a365cbdf0';
+import {parse,str} from '../vendor/sopworld/sopworld.mjs?v=89bc36f54c';
+import {interpretationPolicy} from './interpretation-policy.mjs?v=85c9c86a48';
+import {executionPolicyWorld} from './execution-policy.mjs?v=b54a652c72';
 import DRAW from '../../worlds/art.draw/native-interface-source.mjs?v=e3ecef4ac1';
 import DIAGRAM from '../../worlds/diagram.sketch/native-interface-source.mjs?v=ab0e8095aa';
 import CHARTS from '../../worlds/data.charts/native-interface-source.mjs?v=6c0dc1d746';

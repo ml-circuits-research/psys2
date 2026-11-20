@@ -5,11 +5,11 @@
 // defaults, admitted act classes, reply wording and the run-time fallback ladder (interpretation-policy.sop), the
 // admission decision (reader-admission-policy.sop) and every binding (the deployed binding table). Nothing here names a
 // word, a sentence, a tool or a world.
-import {bridgeRawStructure,pruneLabel} from './raw-structural-bridge.mjs?v=10983f6757';
-import {decodeModelGraphs} from './model-graph-decoder.mjs?v=04ce2e25e8';
-import {comparativeSteps} from './comparative-projection.mjs?v=66f42b600e';
-import {referenceProjection} from './reference-projection.mjs?v=84cbfcae30';
-import {interpretationPolicy} from './interpretation-policy.mjs?v=9f28a38d01';
+import {bridgeRawStructure,pruneLabel} from './raw-structural-bridge.mjs?v=b53327a3cc';
+import {decodeModelGraphs} from './model-graph-decoder.mjs?v=4bd37879a0';
+import {comparativeSteps} from './comparative-projection.mjs?v=5075a6e401';
+import {referenceProjection} from './reference-projection.mjs?v=594b9ab71a';
+import {interpretationPolicy} from './interpretation-policy.mjs?v=85c9c86a48';
 
 const scalarsOf=text=>Array.from(text);
 // Adjacent mentions of one target-kind head that only whitespace or a hyphen separates and that together spell a

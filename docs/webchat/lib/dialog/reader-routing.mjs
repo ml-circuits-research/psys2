@@ -1,25 +1,25 @@
-import {isScopedRemoval} from './capability-plan-execution.mjs?v=363ce90fd2';
-import {projectRemovalAction} from './project-removal-action.mjs?v=9e466ec669';
-import { captureHistory, recordHistory, restoreHistory } from './history-journal.mjs?v=99bcb89726';
-import {projectReaderHeadAlternative} from './reader-head-alternative.mjs?v=a67b591905';
-import {parse} from '../vendor/sopworld/sopworld.mjs?v=a37e1846b3';
-import {writeReaderSource} from './reader-source.mjs?v=dd456294b1';
-import {isAuthoredRequest,readAuthoredRequest} from './authored-request-tool.mjs?v=451ae12d70';
+import {isScopedRemoval} from './capability-plan-execution.mjs?v=4350a014bb';
+import {projectRemovalAction} from './project-removal-action.mjs?v=5a485d1d49';
+import { captureHistory, recordHistory, restoreHistory } from './history-journal.mjs?v=30b388914e';
+import {projectReaderHeadAlternative} from './reader-head-alternative.mjs?v=d42e927bb5';
+import {parse} from '../vendor/sopworld/sopworld.mjs?v=89bc36f54c';
+import {writeReaderSource} from './reader-source.mjs?v=0f83fb98b0';
+import {isAuthoredRequest,readAuthoredRequest} from './authored-request-tool.mjs?v=5915ff61dc';
 // Model-first proposal routing. Calibration authority belongs to host configuration,
 // never to a model output, evaluation annotation or grammar proposal.
-import {requestCompositionPolicy,scheduleFollowingCut}from './request-composition-policy.mjs?v=35215a85aa';
-import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=54bcb34a3d';
-import {projectQueryAction,recoverQueryProjection} from './project-query-action.mjs?v=648b171dac';
-import {projectContextAction} from './project-context-action.mjs?v=31299e58c3';
-import {projectCodeReference} from './project-code-reference.mjs?v=0d2c842a22';
-import {projectCreateAction} from './project-create-action.mjs?v=8dbbf80962';
-import {assessReaderProposal,assessPartialProposal} from './reader-admission.mjs?v=670b29ba79';
-import {bestPartialReading,fallbackLadder,partialNote} from './partial-admission.mjs?v=3863e37d9c';
-import {completeBindings} from './declared-bindings.mjs?v=00a49d9e5c';
-import {projectQuantities,amountsOf,quantityNote} from './quantity-projection.mjs?v=bbf9fa71f0';
-import {routeCoordination} from './coordination-routing.mjs?v=f38de1224d';
-import {declaredKnowledge} from './declared-execution.mjs?v=54bcb34a3d';
-import {interpretationPolicy,coordinationEligible,comparisonBounds,retryNote} from './interpretation-policy.mjs?v=9f28a38d01';
+import {requestCompositionPolicy,scheduleFollowingCut}from './request-composition-policy.mjs?v=d71fa1f7ed';
+import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=9a8cda305b';
+import {projectQueryAction,recoverQueryProjection} from './project-query-action.mjs?v=76ab9f81f7';
+import {projectContextAction} from './project-context-action.mjs?v=0b94aee235';
+import {projectCodeReference} from './project-code-reference.mjs?v=155ad69fb4';
+import {projectCreateAction} from './project-create-action.mjs?v=c292fdf687';
+import {assessReaderProposal,assessPartialProposal} from './reader-admission.mjs?v=cad5a35570';
+import {bestPartialReading,fallbackLadder,partialNote} from './partial-admission.mjs?v=c5574f14d3';
+import {completeBindings} from './declared-bindings.mjs?v=7ce50ca0ee';
+import {projectQuantities,amountsOf,quantityNote} from './quantity-projection.mjs?v=9830a98474';
+import {routeCoordination} from './coordination-routing.mjs?v=4368310dd8';
+import {declaredKnowledge} from './declared-execution.mjs?v=9a8cda305b';
+import {interpretationPolicy,coordinationEligible,comparisonBounds,retryNote} from './interpretation-policy.mjs?v=85c9c86a48';
 let amounts;
 // The named amounts of the execution knowledge (k.expect.amount), read once.
 const knownAmounts=()=>amounts??=amountsOf(declaredKnowledge('k.expect.amount'));
