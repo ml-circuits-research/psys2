@@ -86,6 +86,22 @@
      "head": "candidate",
      "concept": "garment",
      "src": "art.draw wear (drawing.object.make / catalog.make {wear}): a k.wearables thing worn by the person made"
+    },
+    "edge": {
+     "head": "class",
+     "concept": "edge",
+     "values": [
+      "left",
+      "right",
+      "top",
+      "bottom"
+     ],
+     "src": "art.draw edge (drawing.object.make / catalog.make / object.change {edge}): the side of the page a thing touches or is cut off by (occlusion-rules.sop)"
+    },
+    "cut": {
+     "head": "number",
+     "concept": "cut",
+     "src": "art.draw cut (drawing.object.make / catalog.make / object.change {cut}): the share of the thing beyond the page edge (0 touching, 0.5 half cut off)"
     }
    }
   }

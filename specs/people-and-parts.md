@@ -51,7 +51,12 @@ a group of editable parts. The Avatar is a particular case of a drawn person: on
 - Avatar (shared view): `ui.avatar/view-projection.sop` turns the figure's limbs in the face frame
   (`ui.avatar.viewpose`); `avatar.face.pose {pose}`; the inspector's "Pose" control.
 
+- `worlds/art.draw/occlusion-rules.sop`: make, catalog make and change take `edge` (left, right, top, bottom) and `cut`
+  (the share beyond the page, 0 touching): the centre is put size x (0.5 - cut) from that edge; the page clips the rest.
+
 ## Not yet
+- Occlusion behind another thing ("half hidden behind the tree": a partial overlap with the layer below) and measured
+  offsets ("two hand-widths from the left edge") are not implemented.
 - A seated or kicking figure keeps its box: its feet rise rather than its body dropping to the seat (no root shift in a
   pose); a long coat or a dress does not follow the thighs. Holding at make time ("a girl holding a kite") needs a
   `holds` parameter on make; a held thing is placed, not attached (moving the person leaves it).

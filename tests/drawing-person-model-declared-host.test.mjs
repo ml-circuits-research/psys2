@@ -83,3 +83,15 @@ test('the Avatar is a view of the same model: it takes a pose by word and draws 
  assert.ok(turns(svg).some(r=>Math.abs(r-135)<0.01)&&turns(svg).some(r=>Math.abs(r+135)<0.01),'both upper arms raised in the view');
  assert.equal((await t.run('avatar.face.pose',{pose:'levitating'})).reason,'pose-not-known');
 });
+
+test('occlusion by the page edge: a thing touching an edge or partly cut off by it, on make and on change',{skip},async()=>{
+ const t=await peopleArea('art.draw');
+ const at=id=>{const o=t.objects().find(o=>o.id===id);return [t.input(o,'x'),t.input(o,'y')];};
+ changed(await t.run('drawing.object.make',{kind:'cat',edge:'left',cut:0.5,size:100}));
+ assert.equal(at('o1')[0],0,'half the cat is beyond the left edge');
+ changed(await t.run('drawing.object.make',{kind:'house',edge:'right',size:200}));
+ assert.equal(at('o2')[0],900,'the house touches the right edge');
+ changed(await t.run('drawing.object.change',{ids:'o1',edge:'top'}));
+ assert.equal(at('o1')[1],50,'the cat moved up to touch the top edge');
+ assert.equal((await t.run('drawing.object.make',{kind:'cat',edge:'middle'})).status,'refused','edge is a closed list');
+});

@@ -31,6 +31,8 @@
 # The person as a controllable model: poses on the page, and the commands that pose, dress, give traits and expressions
 # and put things in a hand (figure-rules.sop; knowledge in k.faces, k.feelings and k.wearables).
 @drawing.rules.figure app.area.rules area=$drawing.area file="figure-rules.sop" n=11
+# A thing touching an edge of the page or partly cut off by it (occlusion-rules.sop).
+@drawing.rules.occlusion app.area.rules area=$drawing.area file="occlusion-rules.sop" n=12
 # Poses, styles, writing and the filter of the whole picture (k.styles: effects, fills, typefaces, frames, filters, turns).
 @drawing.rules.styles app.area.rules area=$drawing.area file="style-projection.sop" n=9
 @drawing.rules.styleacts app.area.rules area=$drawing.area file="style-rules.sop" n=10

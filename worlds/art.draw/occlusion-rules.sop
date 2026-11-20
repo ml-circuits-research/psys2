@@ -1,0 +1,49 @@
+# Occlusion by the page's edge (authored): a thing drawn touching an edge of the page or partly off it ("touching the
+# right edge", "half cut off by the edge", "two paws off the left edge"). edge= names the side (left, right, top,
+# bottom); cut= the share of the thing beyond it (0: it touches the edge; 0.5: half of it is cut off), 0 when not
+# given. The thing keeps its size; its centre is put that far from the edge (its size times one half less the cut), on
+# make (overriding the place chosen) and on change. The page clips what lies beyond it.
+@ocx.req.type core.type of=ui.draw.edgecut
+@ocx.cut.given app.act.request cut=?c
+@ocx.cut.any app.act.request cut=?anyc
+@ocx.edge app.act.request edge=?e
+@ocx.cut.o ui.draw.edgecut edge=?e cut=?c
+@edge.cut.given core.rule when=$ocx.edge when=$ocx.cut.given then=$ocx.cut.o
+@ocx.cut.zero ui.draw.edgecut edge=?e cut=0
+@edge.cut.none core.rule when=$ocx.edge not=$ocx.cut.any then=$ocx.cut.zero
+@ocx.page ui.draw.page w=?pw h=?ph
+@ocx.half core.calc out=?k fn=sub args=0.5 args=?c
+@ocx.make app.act.request operation="drawing.object.make"
+@ocx.cat app.act.request operation="drawing.catalog.make"
+@ocx.t ui.draw.target size=?s
+@ocx.d core.calc out=?d fn=mul args=?s args=?k
+@ocx.far.x core.calc out=?fx fn=sub args=?pw args=?d
+@ocx.far.y core.calc out=?fy fn=sub args=?ph args=?d
+@ocx.left ui.draw.edgecut edge=left cut=?c
+@ocx.right ui.draw.edgecut edge=right cut=?c
+@ocx.top ui.draw.edgecut edge=top cut=?c
+@ocx.bottom ui.draw.edgecut edge=bottom cut=?c
+@ocx.ax.near app.act.arg call=new.object attr=x value=?d
+@ocx.ax.far app.act.arg call=new.object attr=x value=?fx
+@ocx.ay.near app.act.arg call=new.object attr=y value=?d
+@ocx.ay.far app.act.arg call=new.object attr=y value=?fy
+@make.edge.left core.rule when=$ocx.make when=$ocx.left when=$ocx.t with=$ocx.half with=$ocx.d then=$ocx.ax.near
+@make.edge.right core.rule when=$ocx.make when=$ocx.right when=$ocx.t when=$ocx.page with=$ocx.half with=$ocx.d with=$ocx.far.x then=$ocx.ax.far
+@make.edge.top core.rule when=$ocx.make when=$ocx.top when=$ocx.t with=$ocx.half with=$ocx.d then=$ocx.ay.near
+@make.edge.bottom core.rule when=$ocx.make when=$ocx.bottom when=$ocx.t when=$ocx.page with=$ocx.half with=$ocx.d with=$ocx.far.y then=$ocx.ay.far
+@make.catalog.edge.left core.rule when=$ocx.cat when=$ocx.left when=$ocx.t with=$ocx.half with=$ocx.d then=$ocx.ax.near
+@make.catalog.edge.right core.rule when=$ocx.cat when=$ocx.right when=$ocx.t when=$ocx.page with=$ocx.half with=$ocx.d with=$ocx.far.x then=$ocx.ax.far
+@make.catalog.edge.top core.rule when=$ocx.cat when=$ocx.top when=$ocx.t with=$ocx.half with=$ocx.d then=$ocx.ay.near
+@make.catalog.edge.bottom core.rule when=$ocx.cat when=$ocx.bottom when=$ocx.t when=$ocx.page with=$ocx.half with=$ocx.d with=$ocx.far.y then=$ocx.ay.far
+# A change moves each listed thing to the edge, keeping its size.
+@ocx.chg app.act.request operation="drawing.object.change"
+@ocx.item app.act.item param="ids" value=?id
+@ocx.o w.drawing.object code=?id size=?s
+@ocx.cx.near app.act.call act=change thing=$ocx.o attr=x value=?d order=1
+@ocx.cx.far app.act.call act=change thing=$ocx.o attr=x value=?fx order=1
+@ocx.cy.near app.act.call act=change thing=$ocx.o attr=y value=?d order=2
+@ocx.cy.far app.act.call act=change thing=$ocx.o attr=y value=?fy order=2
+@change.edge.left core.rule when=$ocx.chg when=$ocx.item when=$ocx.o when=$ocx.left with=$ocx.half with=$ocx.d then=$ocx.cx.near
+@change.edge.right core.rule when=$ocx.chg when=$ocx.item when=$ocx.o when=$ocx.right when=$ocx.page with=$ocx.half with=$ocx.d with=$ocx.far.x then=$ocx.cx.far
+@change.edge.top core.rule when=$ocx.chg when=$ocx.item when=$ocx.o when=$ocx.top with=$ocx.half with=$ocx.d then=$ocx.cy.near
+@change.edge.bottom core.rule when=$ocx.chg when=$ocx.item when=$ocx.o when=$ocx.bottom when=$ocx.page with=$ocx.half with=$ocx.d with=$ocx.far.y then=$ocx.cy.far
