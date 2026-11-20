@@ -85,11 +85,13 @@ export function renderPrimitives(world, types, frame = { w: 100, h: 100 }, opts 
   // dx, dy, colour and strength, pattern with gap and angle, gradient, outline, stroke, face and generic) restyle it.
   const keyed = (type) => { const out = new Map(); if (!type) return out; for (const fact of world.ofType(type)) { const key = fact.attrs.slot ? 'slot|' + fact.attrs.slot[0] : fact.attrs.source ? fact.attrs.source[0] + '|' + (fact.attrs.part?.[0] ?? '') : null; if (key) (out.get(key) ?? out.set(key, []).get(key)).push(fact); } return out; };
   const poses = keyed(types.pose), styles = keyed(types.style);
-  const poseOf = (facts = []) => facts.map((fact) => ({ n: fact.attrs.n ? num(fact, 'n') : 5, x: num(fact, 'x'), y: num(fact, 'y'), rotate: fact.attrs.rotate ? num(fact, 'rotate') : 0, skew: fact.attrs.skew ? num(fact, 'skew') : 0, mirror: val(fact, 'mirror') }))
+  const poseOf = (facts = []) => facts.map((fact) => ({ n: fact.attrs.n ? num(fact, 'n') : 5, x: num(fact, 'x'), y: num(fact, 'y'), rotate: fact.attrs.rotate ? num(fact, 'rotate') : 0, skew: fact.attrs.skew ? num(fact, 'skew') : 0, mirror: val(fact, 'mirror'), dx: fact.attrs.dx ? num(fact, 'dx') : 0, dy: fact.attrs.dy ? num(fact, 'dy') : 0 }))
     .filter((p) => Number.isFinite(p.x) && Number.isFinite(p.y)).sort((a, b) => a.n - b.n).map((p) => {
       const sx = p.mirror === 'horizontal' || p.mirror === 'both' ? -1 : 1, sy = p.mirror === 'vertical' || p.mirror === 'both' ? -1 : 1;
-      if (!p.rotate && !p.skew && sx === 1 && sy === 1) return '';
-      return `translate(${f1(p.x)} ${f1(p.y)})${p.rotate ? ` rotate(${f1(p.rotate)})` : ''}${p.skew ? ` skewX(${f1(p.skew)})` : ''}${sx !== 1 || sy !== 1 ? ` scale(${sx} ${sy})` : ''} translate(${f1(-p.x)} ${f1(-p.y)}) `;
+      // dx, dy: a shift in frame units, outside the turn (a posed person lowered onto the ground line).
+      const shift = (p.dx || p.dy) && Number.isFinite(p.dx) && Number.isFinite(p.dy) ? `translate(${f1(p.dx)} ${f1(p.dy)}) ` : '';
+      if (!p.rotate && !p.skew && sx === 1 && sy === 1) return shift;
+      return `${shift}translate(${f1(p.x)} ${f1(p.y)})${p.rotate ? ` rotate(${f1(p.rotate)})` : ''}${p.skew ? ` skewX(${f1(p.skew)})` : ''}${sx !== 1 || sy !== 1 ? ` scale(${sx} ${sy})` : ''} translate(${f1(-p.x)} ${f1(-p.y)}) `;
     }).join('');
   const styleOf = (facts = []) => { const out = {}; for (const fact of facts) for (const key of Object.keys(fact.attrs)) if (!['slot', 'source', 'part'].includes(key)) out[key] = val(fact, key); return out; };
   const defs = new Map();
@@ -98,6 +100,8 @@ export function renderPrimitives(world, types, frame = { w: 100, h: 100 }, opts 
   const paintOf = (look, fill) => {
     const colour = isColour(fill) ? fill : '#9aa5b1';
     if (look.pattern === 'gradient') { const to = isColour(look.gradient) ? look.gradient : '#ffffff', id = `g${colour.slice(1)}${to.slice(1)}`; defs.set(id, `<linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${colour}"/><stop offset="1" stop-color="${to}"/></linearGradient>`); return `url(#${id})`; }
+    // Bricks: courses of the colour with light mortar, each course shifted by half a brick.
+    if (look.pattern === 'bricks') { const g = Number(look.gap) > 0 ? Number(look.gap) : 12, id = `b${colour.slice(1)}${Math.round(g)}`; defs.set(id, `<pattern id="${id}" width="${f1(2 * g)}" height="${f1(g)}" patternUnits="userSpaceOnUse"><rect width="${f1(2 * g)}" height="${f1(g)}" fill="${colour}"/><path d="M0 0.5H${f1(2 * g)}M0.5 0V${f1(g / 2)}M${f1(g + 0.5)} ${f1(g / 2)}V${f1(g)}M0 ${f1(g / 2)}H${f1(2 * g)}" stroke="#e8e2d8" stroke-width="1.2"/></pattern>`); return `url(#${id})`; }
     if (!['hachure', 'dots', 'cross-hatch', 'zigzag', 'dashed'].includes(look.pattern)) return undefined;
     const gap = Number(look.gap) > 0 ? Number(look.gap) : 10, angle = Number.isFinite(Number(look.angle)) ? Number(look.angle) : -45, id = `p${look.pattern.replace(/\W/g, '')}${colour.slice(1)}${Math.round(gap)}${Math.round(angle + 180)}`;
     const mark = look.pattern === 'dots' ? `<circle cx="${f1(gap / 2)}" cy="${f1(gap / 2)}" r="${f1(gap / 4)}" fill="${colour}"/>` : look.pattern === 'cross-hatch' ? `<path d="M0 ${f1(gap / 2)}H${f1(gap)}M${f1(gap / 2)} 0V${f1(gap)}" stroke="${colour}" stroke-width="${f1(gap / 4)}"/>` : look.pattern === 'zigzag' ? `<path d="M0 ${f1(gap)}L${f1(gap / 2)} 0L${f1(gap)} ${f1(gap)}" fill="none" stroke="${colour}" stroke-width="${f1(gap / 5)}"/>` : look.pattern === 'dashed' ? `<path d="M0 ${f1(gap / 2)}H${f1(gap / 2)}" stroke="${colour}" stroke-width="${f1(gap / 4)}"/>` : `<path d="M0 ${f1(gap / 2)}H${f1(gap)}" stroke="${colour}" stroke-width="${f1(gap / 3)}"/>`;

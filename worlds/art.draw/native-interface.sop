@@ -30,6 +30,18 @@
 # A thing touching an edge of the page (edge) or partly cut off by it (cut: the share beyond it; occlusion-rules.sop).
 @native.art.draw.op.drawing.object.make.param.edge std.capability.parameter operation=$native.art.draw.op.drawing.object.make name="edge" kind=string enum="left" enum="right" enum="top" enum="bottom" enumClosed=true
 @native.art.draw.op.drawing.object.make.param.cut std.capability.parameter operation=$native.art.draw.op.drawing.object.make name="cut" kind=number min=0 max=0.9
+# Behind another thing (behind, hidden, side), a measured gap from an edge or a thing (offset with unit, or grade; near and
+# side), a material, the cause of an expression, a thing held from the start (occlusion-, variant- and figure-rules.sop).
+@native.art.draw.op.drawing.object.make.param.behind std.capability.parameter operation=$native.art.draw.op.drawing.object.make name="behind" kind=string
+@native.art.draw.op.drawing.object.make.param.hidden std.capability.parameter operation=$native.art.draw.op.drawing.object.make name="hidden" kind=number min=0 max=1
+@native.art.draw.op.drawing.object.make.param.side std.capability.parameter operation=$native.art.draw.op.drawing.object.make name="side" kind=string enum="left" enum="right" enum="top" enum="above" enum="below" enumClosed=true
+@native.art.draw.op.drawing.object.make.param.offset std.capability.parameter operation=$native.art.draw.op.drawing.object.make name="offset" kind=number
+@native.art.draw.op.drawing.object.make.param.unit std.capability.parameter operation=$native.art.draw.op.drawing.object.make name="unit" kind=string
+@native.art.draw.op.drawing.object.make.param.grade std.capability.parameter operation=$native.art.draw.op.drawing.object.make name="grade" kind=string
+@native.art.draw.op.drawing.object.make.param.near std.capability.parameter operation=$native.art.draw.op.drawing.object.make name="near" kind=string
+@native.art.draw.op.drawing.object.make.param.material std.capability.parameter operation=$native.art.draw.op.drawing.object.make name="material" kind=string
+@native.art.draw.op.drawing.object.make.param.cause std.capability.parameter operation=$native.art.draw.op.drawing.object.make name="cause" kind=string
+@native.art.draw.op.drawing.object.make.param.holds std.capability.parameter operation=$native.art.draw.op.drawing.object.make name="holds" kind=string
 @native.art.draw.op.drawing.object.make.param.at std.capability.parameter operation=$native.art.draw.op.drawing.object.make name="at" kind=string enum="top" enum="bottom" enum="left" enum="right" enum="center" enum="middle" enum="top_left" enum="top_right" enum="bottom_left" enum="bottom_right" enum="corner" enum="background" enum="foreground" enumClosed=true
 @native.art.draw.value.13 std.capability.arg name="enum" value=true
 @native.art.draw.value.14 std.capability.record entry=$native.art.draw.value.13
@@ -87,6 +99,16 @@
 @native.art.draw.op.drawing.catalog.make.param.wear std.capability.parameter operation=$native.art.draw.op.drawing.catalog.make name="wear" kind=string
 @native.art.draw.op.drawing.catalog.make.param.edge std.capability.parameter operation=$native.art.draw.op.drawing.catalog.make name="edge" kind=string enum="left" enum="right" enum="top" enum="bottom" enumClosed=true
 @native.art.draw.op.drawing.catalog.make.param.cut std.capability.parameter operation=$native.art.draw.op.drawing.catalog.make name="cut" kind=number min=0 max=0.9
+@native.art.draw.op.drawing.catalog.make.param.behind std.capability.parameter operation=$native.art.draw.op.drawing.catalog.make name="behind" kind=string
+@native.art.draw.op.drawing.catalog.make.param.hidden std.capability.parameter operation=$native.art.draw.op.drawing.catalog.make name="hidden" kind=number min=0 max=1
+@native.art.draw.op.drawing.catalog.make.param.side std.capability.parameter operation=$native.art.draw.op.drawing.catalog.make name="side" kind=string enum="left" enum="right" enum="top" enum="above" enum="below" enumClosed=true
+@native.art.draw.op.drawing.catalog.make.param.offset std.capability.parameter operation=$native.art.draw.op.drawing.catalog.make name="offset" kind=number
+@native.art.draw.op.drawing.catalog.make.param.unit std.capability.parameter operation=$native.art.draw.op.drawing.catalog.make name="unit" kind=string
+@native.art.draw.op.drawing.catalog.make.param.grade std.capability.parameter operation=$native.art.draw.op.drawing.catalog.make name="grade" kind=string
+@native.art.draw.op.drawing.catalog.make.param.near std.capability.parameter operation=$native.art.draw.op.drawing.catalog.make name="near" kind=string
+@native.art.draw.op.drawing.catalog.make.param.material std.capability.parameter operation=$native.art.draw.op.drawing.catalog.make name="material" kind=string
+@native.art.draw.op.drawing.catalog.make.param.cause std.capability.parameter operation=$native.art.draw.op.drawing.catalog.make name="cause" kind=string
+@native.art.draw.op.drawing.catalog.make.param.holds std.capability.parameter operation=$native.art.draw.op.drawing.catalog.make name="holds" kind=string
 @native.art.draw.value.57 std.capability.arg name="argument" value="name"
 @native.art.draw.value.58 std.capability.arg name="load" value="thing"
 @native.art.draw.value.59 std.capability.record entry=$native.art.draw.value.57 entry=$native.art.draw.value.58
@@ -236,6 +258,7 @@
 @native.art.draw.op.drawing.part.change.param.variant std.capability.parameter operation=$native.art.draw.op.drawing.part.change name="variant" kind=string
 @native.art.draw.op.drawing.part.change.param.length std.capability.parameter operation=$native.art.draw.op.drawing.part.change name="length" kind=string
 @native.art.draw.op.drawing.part.change.param.shape std.capability.parameter operation=$native.art.draw.op.drawing.part.change name="shape" kind=string
+@native.art.draw.op.drawing.part.change.param.material std.capability.parameter operation=$native.art.draw.op.drawing.part.change name="material" kind=string
 @native.art.draw.op.drawing.part.place std.capability.operation scope=$native.art.draw.scope name="drawing.part.place" act=place on="art.draw.part" order=16 eligible=true
 @native.art.draw.op.drawing.part.place.param.id std.capability.parameter operation=$native.art.draw.op.drawing.part.place name="id" kind=string required=true
 @native.art.draw.op.drawing.part.place.param.index std.capability.parameter operation=$native.art.draw.op.drawing.part.place name="index" kind=integer required=true min=0
@@ -331,6 +354,7 @@
 @native.art.draw.op.drawing.person.expression std.capability.operation scope=$native.art.draw.scope name="drawing.person.expression" act=change on="art.draw.object" order=23 eligible=true
 @native.art.draw.op.drawing.person.expression.param.id std.capability.parameter operation=$native.art.draw.op.drawing.person.expression name="id" kind=string required=true
 @native.art.draw.op.drawing.person.expression.param.expression std.capability.parameter operation=$native.art.draw.op.drawing.person.expression name="expression" kind=string required=true
+@native.art.draw.op.drawing.person.expression.param.cause std.capability.parameter operation=$native.art.draw.op.drawing.person.expression name="cause" kind=string
 @native.art.draw.op.drawing.person.expression.metadata app.native.metadata operation=$native.art.draw.op.drawing.person.expression field=$native.art.draw.part.effect
 # A person takes a pose (k.faces.pose: sitting, waving, arms up), or holds a thing in its hand: a new thing of a kind, or a
 # thing on the page moved into the hand (worlds/art.draw/figure-rules.sop).
@@ -361,6 +385,16 @@
 @native.art.draw.op.drawing.object.change.param.trait std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="trait" kind=string
 @native.art.draw.op.drawing.object.change.param.edge std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="edge" kind=string enum="left" enum="right" enum="top" enum="bottom" enumClosed=true
 @native.art.draw.op.drawing.object.change.param.cut std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="cut" kind=number min=0 max=0.9
+@native.art.draw.op.drawing.object.change.param.behind std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="behind" kind=string
+@native.art.draw.op.drawing.object.change.param.hidden std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="hidden" kind=number min=0 max=1
+@native.art.draw.op.drawing.object.change.param.side std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="side" kind=string enum="left" enum="right" enum="top" enum="above" enum="below" enumClosed=true
+@native.art.draw.op.drawing.object.change.param.offset std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="offset" kind=number
+@native.art.draw.op.drawing.object.change.param.unit std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="unit" kind=string
+@native.art.draw.op.drawing.object.change.param.grade std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="grade" kind=string
+@native.art.draw.op.drawing.object.change.param.near std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="near" kind=string
+@native.art.draw.op.drawing.object.change.param.material std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="material" kind=string
+@native.art.draw.op.drawing.object.change.param.cause std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="cause" kind=string
+@native.art.draw.op.drawing.object.change.param.variant std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="variant" kind=string
 @native.art.draw.op.drawing.object.change.param.outline std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="outline" kind=string
 @native.art.draw.op.drawing.object.change.param.stroke std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="stroke" kind=number min=0 max=40
 @native.art.draw.op.drawing.object.change.param.text std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="text" kind=string

@@ -16,7 +16,15 @@
 @fp.ov.mouth.part w.face.mouth face=$fp.ov.face
 @fp.ov.mouth.k k.faces.expression name=?e style=?style mouth=?v
 @fp.ov.mouth.o ui.avatar.override part=$fp.ov.mouth.part variant=?v
-@fp.ov.mouth core.rule when=$fp.ov.face when=$fp.ov.mouth.part when=$fp.ov.mouth.k then=$fp.ov.mouth.o
+# A face of a preset that is no human's (a robot, an alien) keeps its own mouth: an expression moves its eyes and brows.
+@fp.ownmouth.type core.type of=ui.avatar.ownmouth
+@fp.om.face w.face.face preset=?pr
+@fp.om.k k.faces.preset name=?pr kind=?pk
+@fp.om.human core.check fn=neq args=?pk args=human
+@fp.om.o ui.avatar.ownmouth face=$fp.om.face
+@fp.own.mouth core.rule when=$fp.om.face when=$fp.om.k if=$fp.om.human then=$fp.om.o
+@fp.ov.own ui.avatar.ownmouth face=$fp.ov.face
+@fp.ov.mouth core.rule when=$fp.ov.face when=$fp.ov.mouth.part when=$fp.ov.mouth.k not=$fp.ov.own then=$fp.ov.mouth.o
 @fp.ov.brows.part w.face.eyebrows face=$fp.ov.face
 @fp.ov.brows.k k.faces.expression name=?e style=?style eyebrows=?v
 @fp.ov.brows.o ui.avatar.override part=$fp.ov.brows.part variant=?v

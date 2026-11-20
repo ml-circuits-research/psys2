@@ -95,3 +95,44 @@ test('occlusion by the page edge: a thing touching an edge or partly cut off by 
  assert.equal(at('o1')[1],50,'the cat moved up to touch the top edge');
  assert.equal((await t.run('drawing.object.make',{kind:'cat',edge:'middle'})).status,'refused','edge is a closed list');
 });
+
+test('a seated or cross-legged person is lowered onto the ground line; a long coat follows the thighs',{skip},async()=>{
+ const t=await peopleArea('art.draw');
+ changed(await t.run('drawing.catalog.make',{name:'man',x:300,y:350,size:200,pose:'sitting',wear:'coat'}));
+ const svg=await t.render();
+ assert.match(svg,/translate\(0 23\.2\)/,'sitting drops the person 11.6 of its 100 frame (200 page units tall): 23.2');
+ assert.ok(turns(svg).filter(r=>Math.abs(r+80)<0.01).length>=4,'the thighs and the coat tails turn forward');
+});
+
+test('the robot keeps its own mouth when it laughs; a person laughs with a white band of teeth',{skip},async()=>{
+ const t=await peopleArea('ui.avatar');
+ await t.run('avatar.face.preset',{preset:'robot'});
+ changed(await t.run('avatar.face.expression',{expression:'laughing'}));
+ const svg=await t.render();
+ assert.doesNotMatch(svg,/#6E1F24/i,'no open mouth on the robot: its grille stays');
+ changed(await t.run('avatar.face.preset',{preset:'girl'}));
+ assert.match(await t.render(),/#6E1F24/i,'the girl (still laughing) laughs with an open mouth');
+});
+
+test('a person made holding a thing; a thing behind another; measured gaps; variants; materials; a cause',{skip},async()=>{
+ const t=await peopleArea('art.draw');
+ const o=id=>t.objects().find(x=>x.id===id),at=id=>[t.input(o(id),'x'),t.input(o(id),'y')];
+ changed(await t.run('drawing.catalog.make',{name:'girl',holds:'kite',x:300,y:400,size:200}));
+ assert.equal(t.input(o('o1'),'pose'),'holding');
+ const [kx,ky]=at('o2');assert.ok(kx>330&&kx<400&&ky<400,`the kite in her right hand (${kx}, ${ky})`);
+ changed(await t.run('drawing.object.make',{kind:'house',x:700,y:450,size:200}));
+ changed(await t.run('drawing.object.make',{kind:'cat',size:100,behind:'o3',hidden:0.5}));
+ const cat=at('o4');assert.equal(cat[0],700+100+50-50,'half the cat behind the house, on its right');
+ const z=code=>Number(t.facts('w.drawing.object').find(f=>f.includes(' code='+code+' ')).match(/ z=(\d+)/)[1]);
+ assert.ok(z('o4')<z('o3'),'the cat is drawn under the house');
+ changed(await t.run('drawing.object.make',{kind:'tree',size:100,edge:'left',offset:2,unit:'hand-widths'}));
+ const tree=t.objects().find(x=>x.kind==='tree'&&!x.in);
+ assert.equal(Math.round(t.input(tree,'x')),Math.round(2*0.1016*1575+50),'two hand-widths from the left edge');
+ changed(await t.run('drawing.catalog.make',{name:'storm cloud'}));
+ const cloud=t.objects().find(x=>t.input(x,'name')==='storm cloud');
+ assert.ok(cloud,'a storm cloud is a cloud named after its variant');
+ changed(await t.run('drawing.object.change',{ids:'o3',material:'brick'}));
+ assert.equal(t.input(o('o3'),'pattern'),'bricks');
+ changed(await t.run('drawing.object.change',{ids:'o1',expression:'happy',cause:'o3'}));
+ assert.equal(t.input(o('o1'),'cause'),'o3','happy because of the house');
+});

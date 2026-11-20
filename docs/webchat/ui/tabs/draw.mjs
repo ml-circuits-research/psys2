@@ -261,6 +261,8 @@ function make(holder, host) {
   const holdName = control('Hold'), holdButton = el('button', 'dr-act', 'Hold'); holdButton.type = 'button'; editor.append(holdButton);
   const hold = () => { const o = focus(), word = holdName.value.trim(); if (o && word) { tool('drawing.person.hold', { id: o.id, kind: word }); holdName.value = ''; } };
   holdButton.addEventListener('click', hold); holdName.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); hold(); } });
+  // A material for the selected things (k.styles.material: wooden, glass, brick; variant-rules.sop).
+  const materialChoice = control('Material', 'select'); materialChoice.addEventListener('change', () => { const ids = selectedIds(); if (ids.length && materialChoice.value) tool('drawing.object.change', { ids, material: materialChoice.value }); });
   const traits = el('p', 'dr-traits', ''); editor.append(traits);
   const groupName = control('Group label'); groupName.value = '';
   const groupButton = el('button', 'dr-act', 'Group objects'); groupButton.type = 'button'; groupButton.addEventListener('click', () => { const ids = selectedIds(); if (ids.length > 1) tool('drawing.object.group', { ids, name: groupName.value.trim() || 'Group', ...(groupName.value.trim() ? { label: groupName.value.trim() } : {}) }); }); editor.append(groupButton);
@@ -303,6 +305,7 @@ function make(holder, host) {
     visible(poseChoice, !!object && !multi && posed !== undefined && posed !== null); fill(poseChoice, 'pose', 'Pose…', posed);
     for (const [select, key, label] of [[traitChoice, 'trait', 'Trait…'], [wearChoice, 'garment', 'Wear…']]) { visible(select, person && !multi); fill(select, key, label); }
     for (const inputEl of [holdName, holdButton]) visible(inputEl, person && !multi);
+    visible(materialChoice, !!ids.length && !person); fill(materialChoice, 'material', 'Material…');
     const age = object ? input(object.id, 'age') : null, sex = object ? input(object.id, 'sex') : null, mood = object ? input(object.id, 'expression') : null;
     traits.textContent = object && (age || sex || posed || mood) ? 'Traits: ' + [age, sex, posed, mood].filter(Boolean).join(', ') : ''; visible(traits, !!traits.textContent);
     partChoice.textContent = ''; partChoice.append(option('', 'Whole object'));

@@ -312,3 +312,119 @@
 @fgh.nobody.has ui.draw.haslook object=?id style=?hs
 @fgh.nobody.refuse app.act.refuse reason=hold-needs-a-person
 @hold.nobody core.rule when=$fgh.req when=$fgh.nobody.o not=$fgh.nobody.has then=$fgh.nobody.refuse
+
+# --- A posed person on the ground line --------------------------------------------------------------------------------
+# A pose whose lowest point is above the standing figure's feet (k.faces.pose drop: sitting, cross-legged) lowers the
+# whole person, face and figure, by that much (in the frame of its figure, onto the page), so it sits or stands on
+# the ground line where its feet were; its ground shadow stays.
+@fgd.face w.face.face pose=?p style=?st
+@fgd.o w.drawing.object code=?id look=$fgd.face
+@fgd.k k.faces.pose name=?p style=?st drop=?d
+@fgd.m ui.draw.mount object=?id face=$fgd.face size=?ms
+@fgd.ext ui.draw.boxscale object=?id sy=?osy
+@fgd.f core.calc out=?f fn=div args=?ms args=100
+@fgd.df core.calc out=?df fn=mul args=?d args=?f
+@fgd.dy core.calc out=?dy fn=mul args=?df args=?osy
+@fgd.out ui.draw.pose slot=?id x=0 y=0 dy=?dy n=5
+@figure.pose.drop core.rule when=$fgd.face when=$fgd.o when=$fgd.k when=$fgd.m when=$fgd.ext with=$fgd.f with=$fgd.df with=$fgd.dy then=$fgd.out
+
+# --- Holding a thing from the start ---------------------------------------------------------------------------------
+# A person made holding a thing (holds=: "a girl holding a kite", "a man with an umbrella") is made with the thing in
+# the hand of its pose (the pose asked for, else holding): a second new object of that kind, a third of the person's
+# size, over it; mirrored with the person when it is made facing the other way.
+@fgk.req app.act.request holds=?kind
+@fgk.fg ui.draw.figured kind=?k body=?bs
+@fgk.known k.objects.object name=?kind
+@fgk.anypose ui.draw.posename pose=?anyp
+@fgk.pose.call app.act.call act=change thing=new.body attr=pose value=holding order=0.5
+@make.person.holds.pose core.rule when=$fgk.req when=$fgk.fg not=$fgk.anypose then=$fgk.pose.call
+@fgk.hp.type core.type of=ui.draw.makeholdpose
+@fgk.hp.asked ui.draw.makeholdpose pose=?p
+@fgk.named ui.draw.posename pose=?p
+@make.person.holds.asked core.rule when=$fgk.req when=$fgk.named then=$fgk.hp.asked
+@fgk.hp.default ui.draw.makeholdpose pose=holding
+@make.person.holds.default core.rule when=$fgk.req not=$fgk.anypose then=$fgk.hp.default
+@fgk.hp ui.draw.makeholdpose pose=?hp
+@fgk.hk k.faces.pose name=?hp style=?bs hold_x=?hx hold_y=?hy
+@fgk.t ui.draw.target size=?s
+@fgk.at.type core.type of=ui.draw.makeat
+@fgk.tx ui.draw.target x=?x
+@fgk.ty ui.draw.target y=?y
+@fgk.rx app.act.request x=?x
+@fgk.ry app.act.request y=?y
+@fgk.anyx app.act.request x=?anyx
+@fgk.anyy app.act.request y=?anyy
+@fgk.atx.o ui.draw.makeat x=?x
+@fgk.aty.o ui.draw.makeat y=?y
+@make.at.x.given core.rule when=$fgk.req when=$fgk.rx then=$fgk.atx.o
+@make.at.x.chosen core.rule when=$fgk.req not=$fgk.anyx when=$fgk.tx then=$fgk.atx.o
+@make.at.y.given core.rule when=$fgk.req when=$fgk.ry then=$fgk.aty.o
+@make.at.y.chosen core.rule when=$fgk.req not=$fgk.anyy when=$fgk.ty then=$fgk.aty.o
+@fgk.ax ui.draw.makeat x=?x
+@fgk.ay ui.draw.makeat y=?y
+@fgk.next ui.draw.next top=?top
+@fgk.mirrored app.act.arg call=new.object attr=mirror value=horizontal
+@fgk.sign.type core.type of=ui.draw.makesign
+@fgk.sign.m ui.draw.makesign k=-1
+@make.person.holds.mirrored core.rule when=$fgk.req when=$fgk.mirrored then=$fgk.sign.m
+@fgk.sign.p ui.draw.makesign k=1
+@make.person.holds.unmirrored core.rule when=$fgk.req not=$fgk.mirrored then=$fgk.sign.p
+@fgk.sign ui.draw.makesign k=?sg
+@fgk.sf core.calc out=?sf fn=div args=?s args=100
+@fgk.ux core.calc out=?ux fn=sub args=?hx args=50
+@fgk.uy core.calc out=?uy fn=sub args=?hy args=50
+@fgk.vx0 core.calc out=?vx0 fn=mul args=?ux args=?sf
+@fgk.vx core.calc out=?vx fn=mul args=?vx0 args=?sg
+@fgk.vy core.calc out=?vy fn=mul args=?uy args=?sf
+@fgk.px core.calc out=?px fn=add args=?x args=?vx
+@fgk.py core.calc out=?py fn=add args=?y args=?vy
+@fgk.hs core.calc out=?hs fn=mul args=?s args=0.34
+@fgk.z core.calc out=?hz fn=add args=?top args=2
+@fgk.code core.calc out=?hcode fn=concat args=o args=?hz
+@fgk.make app.act.call act=make kind=w.drawing.object code=?hcode drawing=?kind x=?px y=?py size=?hs z=?hz order=2 ref=new.held
+@make.person.holds core.rule when=$fgk.req when=$fgk.fg when=$fgk.known when=$fgk.hp when=$fgk.hk when=$fgk.t when=$fgk.ax when=$fgk.ay when=$fgk.next when=$fgk.sign with=$fgk.sf with=$fgk.ux with=$fgk.uy with=$fgk.vx0 with=$fgk.vx with=$fgk.vy with=$fgk.px with=$fgk.py with=$fgk.hs with=$fgk.z with=$fgk.code then=$fgk.make
+@fgk.unknown app.act.refuse reason=drawing-not-in-catalog
+@make.person.holds.unknown core.rule when=$fgk.req not=$fgk.known then=$fgk.unknown
+@fgk.nobody app.act.refuse reason=hold-needs-a-person
+@fgk.subject ui.draw.subject kind=?k
+@make.person.holds.nobody core.rule when=$fgk.req when=$fgk.subject not=$fgk.fg then=$fgk.nobody
+
+# --- The cause of an expression ---------------------------------------------------------------------------------------
+# An expression with its cause (cause=: the code of a thing on the page: "happy because the dog is there") is kept on
+# the face (w.face.face cause) and shown: the person turns to look at it (mirrored when the thing is on the side its
+# drawing does not face). Observed as cause.
+@fgc2.req app.act.request cause=?cid
+@fgc2.thing w.drawing.object code=?cid x=?cx
+@fgc2.chg app.act.request operation="drawing.object.change"
+@fgc2.pex app.act.request operation="drawing.person.expression" id=?id
+@fgc2.item app.act.item param="ids" value=?id
+@fgc2.face w.face.face style=plain
+@fgc2.head ui.look.head face=$fgc2.face
+@fgc2.o w.drawing.object code=?id look=$fgc2.face x=?ox
+@fgc2.call app.act.call act=change thing=$fgc2.face attr=cause value=?cid order=1
+@change.expression.cause core.rule when=$fgc2.chg when=$fgc2.req when=$fgc2.item when=$fgc2.thing when=$fgc2.face when=$fgc2.head when=$fgc2.o then=$fgc2.call
+@person.expression.cause core.rule when=$fgc2.pex when=$fgc2.req when=$fgc2.thing when=$fgc2.face when=$fgc2.head when=$fgc2.o then=$fgc2.call
+@fgc2.obj w.drawing.object code=?id
+@fgc2.nat ui.draw.drawnfacing object=?id facing=right
+@fgc2.natl ui.draw.drawnfacing object=?id facing=left
+@fgc2.right core.check fn=gt args=?cx args=?ox
+@fgc2.left core.check fn=lt args=?cx args=?ox
+@fgc2.none app.act.call act=change thing=$fgc2.obj attr=mirror value=none order=2
+@fgc2.flip app.act.call act=change thing=$fgc2.obj attr=mirror value=horizontal order=2
+@change.cause.look.right core.rule when=$fgc2.chg when=$fgc2.req when=$fgc2.item when=$fgc2.thing when=$fgc2.face when=$fgc2.head when=$fgc2.o when=$fgc2.obj when=$fgc2.nat if=$fgc2.right then=$fgc2.none
+@change.cause.look.left core.rule when=$fgc2.chg when=$fgc2.req when=$fgc2.item when=$fgc2.thing when=$fgc2.face when=$fgc2.head when=$fgc2.o when=$fgc2.obj when=$fgc2.nat if=$fgc2.left then=$fgc2.flip
+@change.cause.look.right.l core.rule when=$fgc2.chg when=$fgc2.req when=$fgc2.item when=$fgc2.thing when=$fgc2.face when=$fgc2.head when=$fgc2.o when=$fgc2.obj when=$fgc2.natl if=$fgc2.right then=$fgc2.flip
+@change.cause.look.left.l core.rule when=$fgc2.chg when=$fgc2.req when=$fgc2.item when=$fgc2.thing when=$fgc2.face when=$fgc2.head when=$fgc2.o when=$fgc2.obj when=$fgc2.natl if=$fgc2.left then=$fgc2.none
+@person.cause.look.right core.rule when=$fgc2.pex when=$fgc2.req when=$fgc2.thing when=$fgc2.face when=$fgc2.head when=$fgc2.o when=$fgc2.obj when=$fgc2.nat if=$fgc2.right then=$fgc2.none
+@person.cause.look.left core.rule when=$fgc2.pex when=$fgc2.req when=$fgc2.thing when=$fgc2.face when=$fgc2.head when=$fgc2.o when=$fgc2.obj when=$fgc2.nat if=$fgc2.left then=$fgc2.flip
+@fgc2.nothing app.act.refuse reason=cause-not-on-page
+@fgc2.anything w.drawing.object code=?cid
+@expression.cause.unknown core.rule when=$fgc2.req not=$fgc2.anything then=$fgc2.nothing
+@fgc2.mk.call app.act.call act=change thing=new.face attr=cause value=?cid order=0.5
+@make.person.expression.cause core.rule when=$fgm.make when=$fgm.fg when=$fgc2.req when=$fgc2.thing then=$fgc2.mk.call
+@make.person.expression.cause.catalog core.rule when=$fgm.cat when=$fgm.fg when=$fgc2.req when=$fgc2.thing then=$fgc2.mk.call
+@fgc2.ob.face w.face.face cause=?cid
+@fgc2.ob.head ui.look.head face=$fgc2.ob.face
+@fgc2.ob.o w.drawing.object code=?id look=$fgc2.ob.face
+@fgc2.ob.out app.observe.input id=?id key=cause value=?cid
+@figure.observe.cause core.rule when=$fgc2.ob.face when=$fgc2.ob.head when=$fgc2.ob.o then=$fgc2.ob.out

@@ -8,9 +8,11 @@
 @ocx.cut.any app.act.request cut=?anyc
 @ocx.edge app.act.request edge=?e
 @ocx.cut.o ui.draw.edgecut edge=?e cut=?c
-@edge.cut.given core.rule when=$ocx.edge when=$ocx.cut.given then=$ocx.cut.o
+@ocx.off app.act.request offset=?anyoff
+@ocx.grade app.act.request grade=?anygr
+@edge.cut.given core.rule when=$ocx.edge when=$ocx.cut.given not=$ocx.off not=$ocx.grade then=$ocx.cut.o
 @ocx.cut.zero ui.draw.edgecut edge=?e cut=0
-@edge.cut.none core.rule when=$ocx.edge not=$ocx.cut.any then=$ocx.cut.zero
+@edge.cut.none core.rule when=$ocx.edge not=$ocx.cut.any not=$ocx.off not=$ocx.grade then=$ocx.cut.zero
 @ocx.page ui.draw.page w=?pw h=?ph
 @ocx.half core.calc out=?k fn=sub args=0.5 args=?c
 @ocx.make app.act.request operation="drawing.object.make"
@@ -47,3 +49,226 @@
 @change.edge.right core.rule when=$ocx.chg when=$ocx.item when=$ocx.o when=$ocx.right when=$ocx.page with=$ocx.half with=$ocx.d with=$ocx.far.x then=$ocx.cx.far
 @change.edge.top core.rule when=$ocx.chg when=$ocx.item when=$ocx.o when=$ocx.top with=$ocx.half with=$ocx.d then=$ocx.cy.near
 @change.edge.bottom core.rule when=$ocx.chg when=$ocx.item when=$ocx.o when=$ocx.bottom when=$ocx.page with=$ocx.half with=$ocx.d with=$ocx.far.y then=$ocx.cy.far
+
+# --- Behind another thing -------------------------------------------------------------------------------------------
+# A thing partly hidden behind another (behind=: the code of the one in front; "half hidden behind the tree", "peeking
+# out from behind the house"): hidden= the share of it covered (0.5 when not given), side= where it peeks out (right,
+# left or top; right when not given). It is drawn under the one in front (it takes that one's layer and the one in front
+# goes to the top layer), beside it so that the hidden share overlaps it: on the ground with it (their bottoms on one
+# line) at a side, above it at the top. The thing in front covers what overlaps.
+@ocb.type core.type of=ui.draw.behindcut
+@ocb.req app.act.request behind=?oc
+@ocb.h.req app.act.request hidden=?h
+@ocb.h.any app.act.request hidden=?anyh
+@ocb.s.req app.act.request side=?sd
+@ocb.s.any app.act.request side=?anysd
+@ocb.o1 ui.draw.behindcut front=?oc hidden=?h side=?sd
+@behind.given core.rule when=$ocb.req when=$ocb.h.req when=$ocb.s.req then=$ocb.o1
+@ocb.o2 ui.draw.behindcut front=?oc hidden=0.5 side=?sd
+@behind.side core.rule when=$ocb.req not=$ocb.h.any when=$ocb.s.req then=$ocb.o2
+@ocb.o3 ui.draw.behindcut front=?oc hidden=?h side=right
+@behind.hidden core.rule when=$ocb.req when=$ocb.h.req not=$ocb.s.any then=$ocb.o3
+@ocb.o4 ui.draw.behindcut front=?oc hidden=0.5 side=right
+@behind.default core.rule when=$ocb.req not=$ocb.h.any not=$ocb.s.any then=$ocb.o4
+@ocb.bc ui.draw.behindcut front=?oc hidden=?h side=?sd
+@ocb.f w.drawing.object code=?oc x=?fx y=?fy z=?fz
+@ocb.fe ui.draw.extent object=?oc w=?fw h=?fh
+@ocb.fw2 core.calc out=?fw2 fn=div args=?fw args=2
+@ocb.fh2 core.calc out=?fh2 fn=div args=?fh args=2
+@ocb.s2 core.calc out=?s2 fn=div args=?s args=2
+@ocb.hs core.calc out=?hs fn=mul args=?h args=?s
+@ocb.r0 core.calc out=?r0 fn=add args=?fx args=?fw2
+@ocb.r1 core.calc out=?r1 fn=add args=?r0 args=?s2
+@ocb.rx core.calc out=?rx fn=sub args=?r1 args=?hs
+@ocb.l0 core.calc out=?l0 fn=sub args=?fx args=?fw2
+@ocb.l1 core.calc out=?l1 fn=sub args=?l0 args=?s2
+@ocb.lx core.calc out=?lx fn=add args=?l1 args=?hs
+@ocb.b0 core.calc out=?b0 fn=add args=?fy args=?fh2
+@ocb.by core.calc out=?by fn=sub args=?b0 args=?s2
+@ocb.t0 core.calc out=?t0 fn=sub args=?fy args=?fh2
+@ocb.t1 core.calc out=?t1 fn=sub args=?t0 args=?s2
+@ocb.ty core.calc out=?ty fn=add args=?t1 args=?hs
+@ocb.right ui.draw.behindcut front=?oc hidden=?h side=right
+@ocb.left ui.draw.behindcut front=?oc hidden=?h side=left
+@ocb.top ui.draw.behindcut front=?oc hidden=?h side=top
+@ocb.next ui.draw.next top=?top
+@ocb.nz core.calc out=?nz fn=add args=?top args=1
+@ocb.nz2 core.calc out=?nz2 fn=add args=?top args=2
+# On make: the new thing's place and layer; the one in front above it.
+@ocb.mk.x.r app.act.arg call=new.object attr=x value=?rx
+@ocb.mk.x.l app.act.arg call=new.object attr=x value=?lx
+@ocb.mk.x.t app.act.arg call=new.object attr=x value=?fx
+@ocb.mk.y.g app.act.arg call=new.object attr=y value=?by
+@ocb.mk.y.t app.act.arg call=new.object attr=y value=?ty
+@ocb.mk.z app.act.arg call=new.object attr=z value=?fz
+@ocb.mk.front app.act.call act=change thing=$ocb.f attr=z value=?nz2 order=3
+@ocb.mk ui.draw.target size=?s
+@ocb.anymake app.act.request operation="drawing.object.make"
+@ocb.anycat app.act.request operation="drawing.catalog.make"
+@ocb.making.type core.type of=ui.draw.makingbehind
+@ocb.making ui.draw.makingbehind
+@make.behind.flag core.rule when=$ocb.anymake when=$ocb.req then=$ocb.making
+@make.behind.flag.catalog core.rule when=$ocb.anycat when=$ocb.req then=$ocb.making
+@make.behind.right.x core.rule when=$ocb.making when=$ocb.right when=$ocb.f when=$ocb.fe when=$ocb.mk with=$ocb.fw2 with=$ocb.s2 with=$ocb.hs with=$ocb.r0 with=$ocb.r1 with=$ocb.rx then=$ocb.mk.x.r
+@make.behind.left.x core.rule when=$ocb.making when=$ocb.left when=$ocb.f when=$ocb.fe when=$ocb.mk with=$ocb.fw2 with=$ocb.s2 with=$ocb.hs with=$ocb.l0 with=$ocb.l1 with=$ocb.lx then=$ocb.mk.x.l
+@make.behind.top.x core.rule when=$ocb.making when=$ocb.top when=$ocb.f then=$ocb.mk.x.t
+@make.behind.right.y core.rule when=$ocb.making when=$ocb.right when=$ocb.f when=$ocb.fe when=$ocb.mk with=$ocb.fh2 with=$ocb.s2 with=$ocb.b0 with=$ocb.by then=$ocb.mk.y.g
+@make.behind.left.y core.rule when=$ocb.making when=$ocb.left when=$ocb.f when=$ocb.fe when=$ocb.mk with=$ocb.fh2 with=$ocb.s2 with=$ocb.b0 with=$ocb.by then=$ocb.mk.y.g
+@make.behind.top.y core.rule when=$ocb.making when=$ocb.top when=$ocb.f when=$ocb.fe when=$ocb.mk with=$ocb.fh2 with=$ocb.s2 with=$ocb.hs with=$ocb.t0 with=$ocb.t1 with=$ocb.ty then=$ocb.mk.y.t
+@make.behind.layer core.rule when=$ocb.making when=$ocb.bc when=$ocb.f then=$ocb.mk.z
+@make.behind.front core.rule when=$ocb.making when=$ocb.bc when=$ocb.f when=$ocb.next with=$ocb.nz2 then=$ocb.mk.front
+# On change: each listed thing moves there and goes under the one in front (their layers swap when it was above).
+@ocb.chg app.act.request operation="drawing.object.change"
+@ocb.item app.act.item param="ids" value=?id
+@ocb.t w.drawing.object code=?id size=?s z=?tz
+@ocb.c.x.r app.act.call act=change thing=$ocb.t attr=x value=?rx order=1
+@ocb.c.x.l app.act.call act=change thing=$ocb.t attr=x value=?lx order=1
+@ocb.c.x.t app.act.call act=change thing=$ocb.t attr=x value=?fx order=1
+@ocb.c.y.g app.act.call act=change thing=$ocb.t attr=y value=?by order=2
+@ocb.c.y.t app.act.call act=change thing=$ocb.t attr=y value=?ty order=2
+@change.behind.right.x core.rule when=$ocb.chg when=$ocb.item when=$ocb.t when=$ocb.right when=$ocb.f when=$ocb.fe with=$ocb.fw2 with=$ocb.s2 with=$ocb.hs with=$ocb.r0 with=$ocb.r1 with=$ocb.rx then=$ocb.c.x.r
+@change.behind.left.x core.rule when=$ocb.chg when=$ocb.item when=$ocb.t when=$ocb.left when=$ocb.f when=$ocb.fe with=$ocb.fw2 with=$ocb.s2 with=$ocb.hs with=$ocb.l0 with=$ocb.l1 with=$ocb.lx then=$ocb.c.x.l
+@change.behind.top.x core.rule when=$ocb.chg when=$ocb.item when=$ocb.t when=$ocb.top when=$ocb.f then=$ocb.c.x.t
+@change.behind.right.y core.rule when=$ocb.chg when=$ocb.item when=$ocb.t when=$ocb.right when=$ocb.f when=$ocb.fe with=$ocb.fh2 with=$ocb.s2 with=$ocb.b0 with=$ocb.by then=$ocb.c.y.g
+@change.behind.left.y core.rule when=$ocb.chg when=$ocb.item when=$ocb.t when=$ocb.left when=$ocb.f when=$ocb.fe with=$ocb.fh2 with=$ocb.s2 with=$ocb.b0 with=$ocb.by then=$ocb.c.y.g
+@change.behind.top.y core.rule when=$ocb.chg when=$ocb.item when=$ocb.t when=$ocb.top when=$ocb.f when=$ocb.fe with=$ocb.fh2 with=$ocb.s2 with=$ocb.hs with=$ocb.t0 with=$ocb.t1 with=$ocb.ty then=$ocb.c.y.t
+@ocb.above core.check fn=gt args=?tz args=?fz
+@ocb.c.z.t app.act.call act=change thing=$ocb.t attr=z value=?fz order=3
+@ocb.c.z.f app.act.call act=change thing=$ocb.f attr=z value=?tz order=4
+@change.behind.layer core.rule when=$ocb.chg when=$ocb.item when=$ocb.t when=$ocb.bc when=$ocb.f if=$ocb.above then=$ocb.c.z.t
+@change.behind.layer.front core.rule when=$ocb.chg when=$ocb.item when=$ocb.t when=$ocb.bc when=$ocb.f if=$ocb.above then=$ocb.c.z.f
+@ocb.none app.act.refuse reason=occluder-not-on-page
+@ocb.anyf w.drawing.object code=?oc
+@behind.unknown core.rule when=$ocb.req not=$ocb.anyf then=$ocb.none
+
+# --- Measured offsets -----------------------------------------------------------------------------------------------
+# A distance a command measures (offset= a number, unit= a k.units length or one of its words: "two hand-widths",
+# "an inch", "a finger-width"; a grade word with no number: "a bit", "a little", "far") in page units: the picture
+# scale below (the page is about 25 inches wide, as a picture on a screen) times the unit's length in metres; a grade is
+# a declared share of the page width. With edge= it is the gap between the thing and that edge of the page ("two
+# hand-widths from the left edge"); with near= (the code of a thing on the page) and side= (left, right, above, below)
+# the gap between the two ("2 inches above the house", "a bit to the left of the tree").
+@ocm.scale.type core.type of=ui.draw.scale
+@ocm.grade.type core.type of=ui.draw.distancegrade
+@ocm.gap.type core.type of=ui.draw.measuredgap
+@ocm.scale ui.draw.scale metre=1575
+@ocm.g.bit ui.draw.distancegrade grade="a bit" share=0.03
+@ocm.g.little ui.draw.distancegrade grade="a little" share=0.03
+@ocm.g.slightly ui.draw.distancegrade grade=slightly share=0.03
+@ocm.g.close ui.draw.distancegrade grade=close share=0.01
+@ocm.g.some ui.draw.distancegrade grade="some way" share=0.1
+@ocm.g.far ui.draw.distancegrade grade=far share=0.25
+@ocm.g.veryfar ui.draw.distancegrade grade="far away" share=0.35
+@ocm.n.req app.act.request offset=?n
+@ocm.u.req app.act.request unit=?u
+@ocm.u.any app.act.request unit=?anyu
+@ocm.sc ui.draw.scale metre=?pm
+@ocm.u.own k.units.unit name=?u quantity=length factor=?f
+@ocm.u.word core.word text=?u means=?un of=k.units.unit.name
+@ocm.u.wk k.units.unit name=?un quantity=length factor=?f
+@ocm.d1 core.calc out=?d1 fn=mul args=?n args=?f
+@ocm.d core.calc out=?d fn=mul args=?d1 args=?pm
+@ocm.gap.o ui.draw.measuredgap d=?d
+@offset.unit.own core.rule when=$ocm.n.req when=$ocm.u.req when=$ocm.u.own when=$ocm.sc with=$ocm.d1 with=$ocm.d then=$ocm.gap.o
+@offset.unit.word core.rule when=$ocm.n.req when=$ocm.u.req not=$ocm.u.own when=$ocm.u.word when=$ocm.u.wk when=$ocm.sc with=$ocm.d1 with=$ocm.d then=$ocm.gap.o
+@ocm.pg.o ui.draw.measuredgap d=?n
+@offset.page.units core.rule when=$ocm.n.req not=$ocm.u.any then=$ocm.pg.o
+@ocm.gr.req app.act.request grade=?g
+@ocm.gr.k ui.draw.distancegrade grade=?g share=?sh
+@ocm.page ui.draw.page w=?pw
+@ocm.gd core.calc out=?gd fn=mul args=?pw args=?sh
+@ocm.gr.o ui.draw.measuredgap d=?gd
+@offset.grade core.rule when=$ocm.gr.req when=$ocm.gr.k when=$ocm.page with=$ocm.gd then=$ocm.gr.o
+@ocm.u.none app.act.refuse reason=unit-not-known
+@ocm.u.anyown k.units.unit name=?u quantity=length
+@ocm.u.anyword core.word text=?u of=k.units.unit.name
+@offset.unit.unknown core.rule when=$ocm.u.req not=$ocm.u.anyown not=$ocm.u.anyword then=$ocm.u.none
+@ocm.gr.none app.act.refuse reason=distance-grade-not-known
+@ocm.gr.anyk ui.draw.distancegrade grade=?g
+@offset.grade.unknown core.rule when=$ocm.gr.req not=$ocm.gr.anyk then=$ocm.gr.none
+# From an edge of the page: the thing's centre is half its size more than the gap from that edge (inside the page).
+@ocm.gap ui.draw.measuredgap d=?d
+@ocm.s2 core.calc out=?s2 fn=div args=?s args=2
+@ocm.near.e core.calc out=?ne fn=add args=?d args=?s2
+@ocm.pgh ui.draw.page w=?pw h=?ph
+@ocm.fx core.calc out=?fe fn=sub args=?pw args=?ne
+@ocm.fy core.calc out=?fe2 fn=sub args=?ph args=?ne
+@ocm.el app.act.request edge=left
+@ocm.er app.act.request edge=right
+@ocm.et app.act.request edge=top
+@ocm.eb app.act.request edge=bottom
+@ocm.mk.xn app.act.arg call=new.object attr=x value=?ne
+@ocm.mk.xf app.act.arg call=new.object attr=x value=?fe
+@ocm.mk.yn app.act.arg call=new.object attr=y value=?ne
+@ocm.mk.yf app.act.arg call=new.object attr=y value=?fe2
+@ocm.t ui.draw.target size=?s
+@ocm.making.type core.type of=ui.draw.makingmeasured
+@ocm.making ui.draw.makingmeasured
+@ocm.anymake app.act.request operation="drawing.object.make"
+@ocm.anycat app.act.request operation="drawing.catalog.make"
+@make.measured.flag core.rule when=$ocm.anymake when=$ocm.gap then=$ocm.making
+@make.measured.flag.catalog core.rule when=$ocm.anycat when=$ocm.gap then=$ocm.making
+@make.offset.edge.left core.rule when=$ocm.making when=$ocm.gap when=$ocm.el when=$ocm.t with=$ocm.s2 with=$ocm.near.e then=$ocm.mk.xn
+@make.offset.edge.right core.rule when=$ocm.making when=$ocm.gap when=$ocm.er when=$ocm.t when=$ocm.pgh with=$ocm.s2 with=$ocm.near.e with=$ocm.fx then=$ocm.mk.xf
+@make.offset.edge.top core.rule when=$ocm.making when=$ocm.gap when=$ocm.et when=$ocm.t with=$ocm.s2 with=$ocm.near.e then=$ocm.mk.yn
+@make.offset.edge.bottom core.rule when=$ocm.making when=$ocm.gap when=$ocm.eb when=$ocm.t when=$ocm.pgh with=$ocm.s2 with=$ocm.near.e with=$ocm.fy then=$ocm.mk.yf
+# From a thing on the page: beside it on the side asked, the gap between their boxes.
+@ocm.near app.act.request near=?nc
+@ocm.nf w.drawing.object code=?nc x=?nx y=?ny
+@ocm.ne ui.draw.extent object=?nc w=?nw h=?nh
+@ocm.nw2 core.calc out=?nw2 fn=div args=?nw args=2
+@ocm.nh2 core.calc out=?nh2 fn=div args=?nh args=2
+@ocm.dl0 core.calc out=?dl0 fn=add args=?nw2 args=?d
+@ocm.dl core.calc out=?dl fn=add args=?dl0 args=?s2
+@ocm.dv0 core.calc out=?dv0 fn=add args=?nh2 args=?d
+@ocm.dv core.calc out=?dv fn=add args=?dv0 args=?s2
+@ocm.xl core.calc out=?xl fn=sub args=?nx args=?dl
+@ocm.xr core.calc out=?xr fn=add args=?nx args=?dl
+@ocm.ya core.calc out=?ya fn=sub args=?ny args=?dv
+@ocm.yb core.calc out=?yb fn=add args=?ny args=?dv
+@ocm.sl app.act.request side=left
+@ocm.sr app.act.request side=right
+@ocm.sa app.act.request side=above
+@ocm.sb app.act.request side=below
+@ocm.a.xl app.act.arg call=new.object attr=x value=?xl
+@ocm.a.xr app.act.arg call=new.object attr=x value=?xr
+@ocm.a.xn app.act.arg call=new.object attr=x value=?nx
+@ocm.a.ya app.act.arg call=new.object attr=y value=?ya
+@ocm.a.yb app.act.arg call=new.object attr=y value=?yb
+@ocm.a.yn app.act.arg call=new.object attr=y value=?ny
+@make.offset.left.x core.rule when=$ocm.making when=$ocm.gap when=$ocm.near when=$ocm.sl when=$ocm.nf when=$ocm.ne when=$ocm.t with=$ocm.nw2 with=$ocm.s2 with=$ocm.dl0 with=$ocm.dl with=$ocm.xl then=$ocm.a.xl
+@make.offset.left.y core.rule when=$ocm.making when=$ocm.gap when=$ocm.near when=$ocm.sl when=$ocm.nf then=$ocm.a.yn
+@make.offset.right.x core.rule when=$ocm.making when=$ocm.gap when=$ocm.near when=$ocm.sr when=$ocm.nf when=$ocm.ne when=$ocm.t with=$ocm.nw2 with=$ocm.s2 with=$ocm.dl0 with=$ocm.dl with=$ocm.xr then=$ocm.a.xr
+@make.offset.right.y core.rule when=$ocm.making when=$ocm.gap when=$ocm.near when=$ocm.sr when=$ocm.nf then=$ocm.a.yn
+@make.offset.above.y core.rule when=$ocm.making when=$ocm.gap when=$ocm.near when=$ocm.sa when=$ocm.nf when=$ocm.ne when=$ocm.t with=$ocm.nh2 with=$ocm.s2 with=$ocm.dv0 with=$ocm.dv with=$ocm.ya then=$ocm.a.ya
+@make.offset.above.x core.rule when=$ocm.making when=$ocm.gap when=$ocm.near when=$ocm.sa when=$ocm.nf then=$ocm.a.xn
+@make.offset.below.y core.rule when=$ocm.making when=$ocm.gap when=$ocm.near when=$ocm.sb when=$ocm.nf when=$ocm.ne when=$ocm.t with=$ocm.nh2 with=$ocm.s2 with=$ocm.dv0 with=$ocm.dv with=$ocm.yb then=$ocm.a.yb
+@make.offset.below.x core.rule when=$ocm.making when=$ocm.gap when=$ocm.near when=$ocm.sb when=$ocm.nf then=$ocm.a.xn
+@ocm.chg app.act.request operation="drawing.object.change"
+@ocm.item app.act.item param="ids" value=?id
+@ocm.o w.drawing.object code=?id size=?s
+@ocm.c.xn app.act.call act=change thing=$ocm.o attr=x value=?ne order=1
+@ocm.c.xf app.act.call act=change thing=$ocm.o attr=x value=?fe order=1
+@ocm.c.yn app.act.call act=change thing=$ocm.o attr=y value=?ne order=2
+@ocm.c.yf app.act.call act=change thing=$ocm.o attr=y value=?fe2 order=2
+@change.offset.edge.left core.rule when=$ocm.chg when=$ocm.item when=$ocm.o when=$ocm.gap when=$ocm.el with=$ocm.s2 with=$ocm.near.e then=$ocm.c.xn
+@change.offset.edge.right core.rule when=$ocm.chg when=$ocm.item when=$ocm.o when=$ocm.gap when=$ocm.er when=$ocm.pgh with=$ocm.s2 with=$ocm.near.e with=$ocm.fx then=$ocm.c.xf
+@change.offset.edge.top core.rule when=$ocm.chg when=$ocm.item when=$ocm.o when=$ocm.gap when=$ocm.et with=$ocm.s2 with=$ocm.near.e then=$ocm.c.yn
+@change.offset.edge.bottom core.rule when=$ocm.chg when=$ocm.item when=$ocm.o when=$ocm.gap when=$ocm.eb when=$ocm.pgh with=$ocm.s2 with=$ocm.near.e with=$ocm.fy then=$ocm.c.yf
+@ocm.c.xl app.act.call act=change thing=$ocm.o attr=x value=?xl order=1
+@ocm.c.xr app.act.call act=change thing=$ocm.o attr=x value=?xr order=1
+@ocm.c.xnn app.act.call act=change thing=$ocm.o attr=x value=?nx order=1
+@ocm.c.ya app.act.call act=change thing=$ocm.o attr=y value=?ya order=2
+@ocm.c.yb app.act.call act=change thing=$ocm.o attr=y value=?yb order=2
+@ocm.c.ynn app.act.call act=change thing=$ocm.o attr=y value=?ny order=2
+@change.offset.left.x core.rule when=$ocm.chg when=$ocm.item when=$ocm.o when=$ocm.gap when=$ocm.near when=$ocm.sl when=$ocm.nf when=$ocm.ne with=$ocm.nw2 with=$ocm.s2 with=$ocm.dl0 with=$ocm.dl with=$ocm.xl then=$ocm.c.xl
+@change.offset.left.y core.rule when=$ocm.chg when=$ocm.item when=$ocm.o when=$ocm.gap when=$ocm.near when=$ocm.sl when=$ocm.nf then=$ocm.c.ynn
+@change.offset.right.x core.rule when=$ocm.chg when=$ocm.item when=$ocm.o when=$ocm.gap when=$ocm.near when=$ocm.sr when=$ocm.nf when=$ocm.ne with=$ocm.nw2 with=$ocm.s2 with=$ocm.dl0 with=$ocm.dl with=$ocm.xr then=$ocm.c.xr
+@change.offset.right.y core.rule when=$ocm.chg when=$ocm.item when=$ocm.o when=$ocm.gap when=$ocm.near when=$ocm.sr when=$ocm.nf then=$ocm.c.ynn
+@change.offset.above.y core.rule when=$ocm.chg when=$ocm.item when=$ocm.o when=$ocm.gap when=$ocm.near when=$ocm.sa when=$ocm.nf when=$ocm.ne with=$ocm.nh2 with=$ocm.s2 with=$ocm.dv0 with=$ocm.dv with=$ocm.ya then=$ocm.c.ya
+@change.offset.above.x core.rule when=$ocm.chg when=$ocm.item when=$ocm.o when=$ocm.gap when=$ocm.near when=$ocm.sa when=$ocm.nf then=$ocm.c.xnn
+@change.offset.below.y core.rule when=$ocm.chg when=$ocm.item when=$ocm.o when=$ocm.gap when=$ocm.near when=$ocm.sb when=$ocm.nf when=$ocm.ne with=$ocm.nh2 with=$ocm.s2 with=$ocm.dv0 with=$ocm.dv with=$ocm.yb then=$ocm.c.yb
+@change.offset.below.x core.rule when=$ocm.chg when=$ocm.item when=$ocm.o when=$ocm.gap when=$ocm.near when=$ocm.sb when=$ocm.nf then=$ocm.c.xnn
+@ocm.nn app.act.refuse reason=offset-target-not-on-page
+@ocm.anyn w.drawing.object code=?nc
+@offset.near.unknown core.rule when=$ocm.near not=$ocm.anyn then=$ocm.nn

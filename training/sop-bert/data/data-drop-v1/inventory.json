@@ -102,6 +102,77 @@
      "head": "number",
      "concept": "cut",
      "src": "art.draw cut (drawing.object.make / catalog.make / object.change {cut}): the share of the thing beyond the page edge (0 touching, 0.5 half cut off)"
+    },
+    "holds": {
+     "head": "candidate",
+     "concept": "held thing",
+     "src": "art.draw holds (drawing.object.make / catalog.make {holds}): a k.objects kind the person made holds in the hand of its pose"
+    },
+    "behind": {
+     "head": "fill+span",
+     "concept": "occluder",
+     "src": "art.draw behind (make / catalog.make / object.change {behind}): the thing in front that partly hides this one (occlusion-rules.sop)"
+    },
+    "hidden": {
+     "head": "number",
+     "concept": "hidden share",
+     "src": "art.draw hidden (make / catalog.make / object.change {hidden}): the share hidden behind the thing in front (0.5 half)"
+    },
+    "side": {
+     "head": "class",
+     "concept": "side",
+     "values": [
+      "left",
+      "right",
+      "top",
+      "above",
+      "below"
+     ],
+     "src": "art.draw side (make / catalog.make / object.change {side}): where a thing peeks out from behind (left, right, top) or lies from a thing it is measured from (left, right, above, below)"
+    },
+    "offset": {
+     "head": "number",
+     "concept": "measured distance",
+     "src": "art.draw offset (make / catalog.make / object.change {offset}): a measured gap from an edge (edge) or a thing (near, side), in unit"
+    },
+    "unit": {
+     "head": "candidate",
+     "concept": "length unit",
+     "src": "art.draw unit (make / catalog.make / object.change {unit}): a k.units length or one of its words (inch, hand-width, finger-width); page units when absent"
+    },
+    "grade": {
+     "head": "class",
+     "concept": "distance grade",
+     "values": [
+      "a bit",
+      "a little",
+      "slightly",
+      "close",
+      "some way",
+      "far",
+      "far away"
+     ],
+     "src": "art.draw grade (make / catalog.make / object.change {grade}): a distance named without a number"
+    },
+    "near": {
+     "head": "fill+span",
+     "concept": "reference",
+     "src": "art.draw near (make / catalog.make / object.change {near}): the thing a measured gap is taken from"
+    },
+    "material": {
+     "head": "candidate",
+     "concept": "material",
+     "src": "art.draw material (make / catalog.make / object.change / part.change {material}): a k.styles material or one of its words (wooden, glass, brick)"
+    },
+    "cause": {
+     "head": "fill+span",
+     "concept": "cause",
+     "src": "art.draw cause (make / catalog.make / object.change / person.expression {cause}): the thing an expression is about (happy because ...)"
+    },
+    "variant": {
+     "head": "candidate",
+     "concept": "kind variant",
+     "src": "art.draw variant (object.change {variant}): a k.objects stand-in variant (a sports car) or another kind the thing becomes"
     }
    }
   }

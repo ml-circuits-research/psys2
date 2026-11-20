@@ -54,14 +54,30 @@ a group of editable parts. The Avatar is a particular case of a drawn person: on
 - `worlds/art.draw/occlusion-rules.sop`: make, catalog make and change take `edge` (left, right, top, bottom) and `cut`
   (the share beyond the page, 0 touching): the centre is put size x (0.5 - cut) from that edge; the page clips the rest.
 
+## Round 2 (2026-11-20, catalog 08b1f49a)
+- Posed people on the ground: `k.faces.pose drop` (sitting 11.6, cross legged 12, running 3.2) lowers the whole person
+  (`ui.draw.pose slot=<code> dy=`, renderer `dx`/`dy` shift); long coat tails move with the thighs.
+- The grin is an open mouth with a white band of teeth; a face whose preset is not human (robot, alien) keeps its own
+  mouth under an expression (`ui.avatar.ownmouth`).
+- `holds=` on make/catalog make: the thing is made in the hand of the pose asked for, else `holding` (mirrored with the
+  person).
+- `occlusion-rules.sop`: `behind=<code>` with `hidden` (0.5) and `side` (right, left, top): the thing goes under the one
+  in front (it takes that layer, the front one goes to the top) and overlaps it by the hidden share of its size;
+  measured gaps: `offset` with `unit` (k.units length or word; page units without one) or `grade` (a declared share of
+  the page), from an `edge` or from `near=<code>` on a `side` (left, right, above, below); picture scale
+  `ui.draw.scale metre=1575` (40 page units an inch).
+- `variant-rules.sop`: a catalog make by a variant name (k.objects.stand_in, with colour, scale, material) draws its kind
+  named after it; `drawing.object.change variant=` turns a thing into a variant or another kind; `material=` on make,
+  change and part change sets the k.styles material's colour, fill, opacity and gradient; Drawing inspector "Material".
+- `cause=<code>` with an expression keeps the cause on the face (`w.face.face cause`, observed `cause`) and turns the
+  person to look at it.
+
 ## Not yet
-- Occlusion behind another thing ("half hidden behind the tree": a partial overlap with the layer below) and measured
-  offsets ("two hand-widths from the left edge") are not implemented.
-- A seated or kicking figure keeps its box: its feet rise rather than its body dropping to the seat (no root shift in a
-  pose); a long coat or a dress does not follow the thighs. Holding at make time ("a girl holding a kite") needs a
-  `holds` parameter on make; a held thing is placed, not attached (moving the person leaves it).
-- Expression causes ("happy because ...") are not kept; a feeling without an expression of k.faces (shy, worried) is
-  refused rather than drawn from its own variants.
+- Behind is measured on the boxes: a thing behind a tree's box may stand beside its narrow trunk, not behind it (the
+  drawn silhouette of the front thing is not used). A material colours every part of a thing (a brick house's windows
+  too); a part material needs an edited part.
+- Holding is placed, not attached (moving the person leaves the thing). A feeling without an expression of k.faces
+  (shy, worried) is refused rather than drawn from its own variants.
 - The reader's labels for part length, part shape, part variant and a person's age or sex as constraints (no key in
   the official inventory); `ui-people-parts-v1` labels what the inventory has. The bindings with `k.parts.name` and
   `drawing.part.add` are generated (training/sop-bert/export-structural-bindings.mjs) but not deployed.

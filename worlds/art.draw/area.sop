@@ -19,9 +19,10 @@
 @area.field.type core.type of=app.area.field
 @area.lookup.type core.type of=app.area.lookup
 
-@drawing.area app.area world=art.draw instance=w.drawing instance=w.face knowledge=k.colours knowledge=k.faces knowledge=k.wearables knowledge=k.parts knowledge=k.styles knowledge=k.feelings scope="drawing.object-lifecycle" frame.w=1000 frame.h=700 spatial=true calls=instance
+@drawing.area app.area world=art.draw instance=w.drawing instance=w.face knowledge=k.colours knowledge=k.faces knowledge=k.wearables knowledge=k.parts knowledge=k.styles knowledge=k.feelings knowledge=k.units scope="drawing.object-lifecycle" frame.w=1000 frame.h=700 spatial=true calls=instance
 @area.subset.type core.type of=app.area.subset
 @drawing.subset.faces app.area.subset area=$drawing.area world=k.faces prefix="plain-" prefix="figure-"
+@drawing.subset.units app.area.subset area=$drawing.area world=k.units prefix="core" strict=true
 @drawing.subset.parts app.area.subset area=$drawing.area world=k.parts prefix="names" prefix="psys2" strict=true
 @drawing.rules.looks app.area.rules area=$drawing.area file="look-projection.sop" n=0
 @drawing.rules.1 app.area.rules area=$drawing.area file="render-projection.sop" n=1
@@ -33,6 +34,8 @@
 @drawing.rules.figure app.area.rules area=$drawing.area file="figure-rules.sop" n=11
 # A thing touching an edge of the page or partly cut off by it (occlusion-rules.sop).
 @drawing.rules.occlusion app.area.rules area=$drawing.area file="occlusion-rules.sop" n=12
+# Variants of kinds (k.objects stand-ins with a colour, a scale and a material) and materials (k.styles.material).
+@drawing.rules.variants app.area.rules area=$drawing.area file="variant-rules.sop" n=13
 # Poses, styles, writing and the filter of the whole picture (k.styles: effects, fills, typefaces, frames, filters, turns).
 @drawing.rules.styles app.area.rules area=$drawing.area file="style-projection.sop" n=9
 @drawing.rules.styleacts app.area.rules area=$drawing.area file="style-rules.sop" n=10
@@ -40,7 +43,7 @@
 # of the page: occlusion by depth, ground shadows, side faces and perspective (perspective-rules.sop).
 @drawing.rules.5 app.area.rules area=$drawing.area file="landscape-rules.sop" n=5
 @drawing.rules.6 app.area.rules area=$drawing.area file="perspective-rules.sop" n=6
-@drawing.lookup.objects app.area.lookup area=$drawing.area world=k.objects from=w.drawing.object key=drawing arg=kind arg=name
+@drawing.lookup.objects app.area.lookup area=$drawing.area world=k.objects from=w.drawing.object key=drawing arg=kind arg=name arg=holds arg=variant
 @drawing.lookup.scenes app.area.lookup area=$drawing.area world=k.scenes from=w.drawing.object key=drawing arg=kind arg=name
 @drawing.lookup.layouts app.area.lookup area=$drawing.area world=k.layouts from=w.drawing.object key=drawing arg=kind arg=name value=landscape
 @drawing.lookup.people app.area.lookup area=$drawing.area world=k.people from=w.drawing.object key=drawing arg=kind arg=name

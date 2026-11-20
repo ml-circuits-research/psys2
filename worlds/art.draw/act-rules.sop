@@ -475,7 +475,8 @@
 @make.catalog.name core.rule when=$cat.req when=$cat.known then=$cat.name.arg
 @cat.unknown app.act.refuse reason=drawing-not-in-catalog
 @cat.unknown.people k.people.kind name=?kind
-@make.catalog.unknown core.rule when=$cat.req not=$cat.known not=$cat.unknown.people then=$cat.unknown
+@cat.unknown.variant k.objects.stand_in name=?kind
+@make.catalog.unknown core.rule when=$cat.req not=$cat.known not=$cat.unknown.people not=$cat.unknown.variant then=$cat.unknown
 @make.x.req app.act.request x=?v
 @make.x.arg app.act.arg call=new.object attr=x value=?v
 @make.x core.rule when=$make.x.req then=$make.x.arg
