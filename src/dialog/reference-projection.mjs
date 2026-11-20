@@ -19,6 +19,8 @@ export function referenceProjection(){
  const indefinite=parse(LANG_EN_FACTS.determiners).filter(wire=>str(wire.attrs.definite?.[0])==='no').map(wire=>str(wire.attrs.text?.[0])).filter(Boolean);
  // The coordinators of a list of things ("Start and Bake", "the tree and plane"): one anchor phrase naming several.
  const coordinators=[...en.words('coord.sep','things')].filter(word=>typeof word==='string'&&word.trim());
- table=Object.freeze({definite:Object.freeze([...new Set(definite)]),indefinite:Object.freeze([...new Set(indefinite)]),coordinators:Object.freeze(coordinators),queries:Object.freeze(queries)});
+ // The place deictics (w.lang.en.pron deictic=place: "there", "here"): "the tree there" is the tree.
+ const deictics=parse(LANG_EN_FACTS.pronouns??'').filter(wire=>str(wire.attrs.deictic?.[0])==='place').map(wire=>str(wire.attrs.text?.[0])).filter(Boolean);
+ table=Object.freeze({definite:Object.freeze([...new Set(definite)]),indefinite:Object.freeze([...new Set(indefinite)]),coordinators:Object.freeze(coordinators),deictics:Object.freeze([...new Set(deictics)]),queries:Object.freeze(queries)});
  return table;
 }

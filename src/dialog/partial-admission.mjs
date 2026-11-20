@@ -11,6 +11,9 @@ import {comparativeSteps} from './comparative-projection.mjs';
 import {referenceProjection} from './reference-projection.mjs';
 import {interpretationPolicy} from './interpretation-policy.mjs';
 import {executionPolicyWorld} from './execution-policy.mjs';
+import {en} from '../lang/en.mjs';
+import {referenceProjection as declaredReferences} from './reference-projection.mjs';
+import {budget} from './budget.mjs';
 import {str} from '../vendor/sopworld/sopworld.mjs';
 
 const scalarsOf=text=>Array.from(text);
@@ -105,10 +108,50 @@ function containerProperty(raw,bindings){
  }
  return changed??raw;
 }
+// A kind said in a form the binding table does not list ("a boat", "the trees", "star shape", "sqaure") is read as
+// the declared kind of the target's family it names: after its determiners, by each word's singular (w.lang.en), as
+// the first declared kind among its words (a kind before the family's own class word: "star shape" is a star), else
+// as the one declared kind within one edit (two for longer words) of the said word. Nothing else is guessed.
+function editWithin(a,b,max){
+ if(Math.abs(a.length-b.length)>max)return false;
+ let prev=Array.from({length:b.length+1},(_,j)=>j);
+ for(let i=1;i<=a.length;i++){budget.tick('kind-reading.edit');const cur=[i];let best=i;
+  for(let j=1;j<=b.length;j++){const c=Math.min(prev[j]+1,cur[j-1]+1,prev[j-1]+(a[i-1]===b[j-1]?0:1),
+   i>1&&j>1&&a[i-1]===b[j-2]&&a[i-2]===b[j-1]?(prev[j-2]??Infinity)+1:Infinity);cur.push(c);if(c<best)best=c;}
+  if(best>max)return false;prev=cur;}
+ return prev[b.length]<=max;
+}
+function kindReadings(raw,bindings){
+ let changed=null;
+ const refs=declaredReferences(),dets=new Set([...(refs.definite??[]),...(refs.indefinite??[])].map(d=>d.toLowerCase()));
+ for(const [index,request] of raw.requests.entries()){
+  const target=request?.target;
+  if(!target||typeof target.kind!=='string'||!target.type||target.mode==='bound')continue;
+  const rows=(bindings.kinds??[]).filter(k=>k.area===raw.area&&k.type===target.type);
+  if(!rows.length||rows.some(k=>k.lemma===target.kind))continue;
+  const lemmas=new Map(rows.map(k=>[String(k.lemma).toLowerCase(),k]));
+  const family=(bindings.families??[]).find(f=>f.area===raw.area&&f.type===target.type)?.canonical;
+  let words=target.kind.toLowerCase().split(/\s+/).filter(Boolean);
+  while(words.length>1&&dets.has(words[0])){budget.tick('kind-reading.determiner');words.shift();}
+  if(dets.has(words[0])&&words.length===1)continue;
+  const forms=words.map(w=>[w,en.singular(w,'lemma')]);
+  let found=null;
+  const phrase=forms.map(([,s])=>s).join(' ');
+  if(lemmas.has(phrase))found=phrase;
+  if(!found)for(const [w,sg] of forms){const hit=[w,sg].find(x=>lemmas.has(x)&&lemmas.get(x).canonical!==family);if(hit){found=hit;break;}}
+  if(!found)for(const [w,sg] of forms){const hit=[w,sg].find(x=>lemmas.has(x));if(hit){found=hit;break;}}
+  if(!found&&forms.length===1){const [w]=forms[0],max=w.length>6?2:1;
+   const near=[...lemmas.keys()].filter(l=>!l.includes(' ')&&Math.abs(l.length-w.length)<=max&&editWithin(w,l,max));
+   const kinds=new Set(near.map(l=>lemmas.get(l).canonical));if(w.length>=4&&kinds.size===1)found=near[0];}
+  if(!found||found===target.kind)continue;
+  (changed??=structuredClone(raw)).requests[index].target.kind=lemmas.get(found).lemma;
+ }
+ return changed??raw;
+}
 /** The declared raw readings (a population joined by lines, a container's property) applied to a raw reading. */
 export function declaredRawReadings(raw,bindings){
  if(!raw||!bindings||!Array.isArray(raw.requests))return raw;
- return containerProperty(populationTheme(raw,bindings),bindings);
+ return containerProperty(populationTheme(kindReadings(raw,bindings),bindings),bindings);
 }
 export function partialReading(proposal,{bindings,bindingSha256}){
  const raw=proposal?.raw;

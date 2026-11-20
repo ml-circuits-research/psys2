@@ -2,6 +2,7 @@ import { parse,str } from '../vendor/sopworld/sopworld.mjs';
 import { compileNativeQuery } from './capability-plan-adapter.mjs';
 import { createAreaHost,NATIVE_AREAS } from './app-reader-context.mjs';
 import { instanceIdFor } from './instance-identity.mjs';
+import { nearestColourName } from '../knowledge/values.mjs';
 
 const value=(row,key)=>str(row?.attrs[key]?.[0]);
 const memberName=row=>value(row,'name')??value(row,'kind')+' '+value(row,'id');
@@ -14,7 +15,8 @@ function describeAnswer(row,byId){
  case 'exists':return value(row,'value')==='true'?'Yes, at least one matches.':'No objects match.';
  case 'members':return members.length?'Matching objects: '+members.map(memberName).join(', ')+'.':'No objects match.';
  case 'values':return members.length?members.map(member=>memberName(member)+': '+
-  member.attrs.value.map(token=>token.startsWith('$')?'see the SOP value':str(token)).join(', ')).join('; ')+'.':'No matching values.';
+  // An RGB code is said as its nearest k.colours name (several codes that name one colour are said once).
+  [...new Set(member.attrs.value.map(token=>token.startsWith('$')?'see the SOP value':nearestColourName(str(token))??str(token)))].join(', ')).join('; ')+'.':'No matching values.';
  }
 }
 

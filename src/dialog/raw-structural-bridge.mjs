@@ -178,7 +178,11 @@ export function bridgeRawStructure(prediction,{bindings,bindingSha256,comparativ
      const bounds=span?locate(original.span,rc.value_span,span[0],[...rawPath,'constraints',String(ri),'value_span'],span):null;if(bounds)c.source=bounds;
      // The anchor phrase names an observed object: a kind lemma of the family, alone or after a determiner.
      const aprop=lookup('properties',{area:raw.area,key:ac.key}),phrase=typeof ac.value_span==='string'?ac.value_span:'',determiner=definite.find(d=>phrase.toLowerCase().startsWith(d.toLowerCase()+' '))??indefinite.find(d=>phrase.toLowerCase().startsWith(d.toLowerCase()+' '));
-     const lemma=determiner?phrase.slice(determiner.length+1):phrase,akind=lemma?lookup('kinds',{area:raw.area,type:target.type,lemma}):null;
+     // A place deictic after the noun ("the tree there") points at it: it is not part of the kind or the name.
+     const deictics=(references?.deictics??[]).map(d=>String(d).toLowerCase());
+     let lemma=determiner?phrase.slice(determiner.length+1):phrase;
+     {const parts=lemma.split(/\s+/);if(parts.length>1&&deictics.includes(parts.at(-1).toLowerCase()))lemma=parts.slice(0,-1).join(' ');}
+     const akind=lemma?lookup('kinds',{area:raw.area,type:target.type,lemma}):null;
      const a={id:aid,mode:'existing'};label.targets.push(a);if(determiner)a.determiner=definite.includes(determiner)?'definite':'indefinite';
      const outer=span?locate(original.span,phrase,span[0],anchorOf.has(ac)?[...rawPath,'constraints',String(anchorOf.get(ac)),splitParts.has(ac)?'part':'anchor_span']:[...rawPath,'constraints',String(ai),'value_span'],span):null;if(!anchorOf.has(ac))consume(ai,'value',ac.value);
      const afamily=!akind&&lemma&&typeof target.type==='string'?lookup('families',{area:raw.area,type:target.type}):null;
