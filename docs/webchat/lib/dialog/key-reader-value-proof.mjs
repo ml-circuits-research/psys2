@@ -1,5 +1,7 @@
 // Exact declared-value proofs; no language rules or domain vocabulary.
 import {numberValue} from '../knowledge/values.mjs?v=c550bb86e1';
+import {parseNumberRun} from '../formalizer/rules/numbers.mjs?v=65bafe325a';
+import {budget} from './budget.mjs?v=00bce6e369';
 import {selectedProbability} from './model-selection-score.mjs?v=ac3ac10191';
 export function classifierAlternative(bank,logits){
  if(!Array.isArray(bank)||!Array.isArray(logits)||logits.length!==bank.length||!logits.length||logits.some(v=>typeof v!=='number'||!Number.isFinite(v)))return {index:null,state:'invalid',probability:null};
@@ -25,4 +27,23 @@ export function positiveCardinalProof(literal){
  if(typeof literal!=='string'||!literal)return null;
  const value=numberValue(literal,'cardinal');
  return Number.isSafeInteger(value)&&value>0?{kind:'declared-cardinal-number',value,literal,world:'k.values'}:null;
+}
+
+/**
+ * The one number a value span spells for a numeric property ("size 45" -> 45, "two hundred sixty" -> 260, "-3.5"):
+ * digits or a run of declared number words (k.values), the other words being no number and no unit (isUnit: the
+ * binding table's unit lemmas; a measure with a unit needs its own projection). Null otherwise.
+ */
+export function spelledNumberProof(literal,isUnit=()=>false){
+ if(typeof literal!=='string'||!literal.trim())return null;
+ const words=literal.toLowerCase().replace(/[,;:!?]+/g,' ').split(/\s+/).filter(Boolean),found=[];
+ for(let i=0;i<words.length;i++){
+  budget.tick('value-proof.spelled');
+  const w=words[i];
+  if(/^[-+]?\d+(\.\d+)?$/.test(w)){found.push(Number(w));continue;}
+  const run=parseNumberRun(words,i);
+  if(run){found.push(run.value);i+=run.length-1;continue;}
+  if(/\d/.test(w)||isUnit(w))return null;
+ }
+ return found.length===1&&Number.isFinite(found[0])?{kind:'spelled-number',value:found[0],literal}:null;
 }

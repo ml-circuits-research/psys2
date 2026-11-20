@@ -1,7 +1,7 @@
 // Predicted raw structure -> declared canonical structure. No reader or gold input.
-import {copyHostData,snapshotHostData} from '../../worlds/native-tool-host.mjs?v=48825109bb';
-import {positiveCardinalProof} from './key-reader-value-proof.mjs?v=e7bcfe99f2';
-import {decodeModelGraphs} from './model-graph-decoder.mjs?v=46eaca7d28';
+import {copyHostData,snapshotHostData} from '../../worlds/native-tool-host.mjs?v=bbba707302';
+import {positiveCardinalProof,spelledNumberProof} from './key-reader-value-proof.mjs?v=c4f61d7783';
+import {decodeModelGraphs} from './model-graph-decoder.mjs?v=e5883e04cb';
 export const RAW_STRUCTURAL_FORMAT='psys2.raw-structural-predictions/1';
 // The node budget of a binding table (every kind of the pinned catalog's drawable providers, with their provenance).
 export const BINDING_NODES=250000;
@@ -184,9 +184,18 @@ export function bridgeRawStructure(prediction,{bindings,bindingSha256,comparativ
        // Explicit model copy pointers may be narrower than the original evidence span.
        const outer=span?(supplied?locate(original.span,literal,span[0],[...rawPath,'constraints',String(ci),'value_span'],span):span):null;
        const copy=outer?locate(original.span,condition.value,span[0],valuePath,outer):null;
-       if(copy){c.value={kind:['degree','region'].includes(condition.operator)?'literal':prop.valueKind,value:condition.value};evidence.push({path:[...path,'value'],ranges:[copy],origin:'text'});}
+       // A numeric property takes the one number its copied words spell ("size 45" -> 45; see below).
+       const spelledCopy=copy&&prop.numeric===true&&!/^[-+]?\d+(\.\d+)?$/.test(condition.value.trim())&&!['degree','region'].includes(condition.operator)?spelledNumberProof(condition.value,word=>!!lookup('units',{lemma:word})):null;
+       if(copy){c.value={kind:['degree','region'].includes(condition.operator)?'literal':prop.valueKind,value:spelledCopy?String(spelledCopy.value):condition.value};evidence.push({path:[...path,'value'],ranges:[copy],origin:'text'});}
        else unresolved('invalid-source-copy-range',[...path,'value']);
       }else{
+       // A numeric property (its native parameter is a number, declared-bindings.mjs) takes the one number its span
+       // spells when the span is not that number itself ("size 45", "two hundred sixty"): the declared number words.
+       const plain=typeof literal==='string'&&/^[-+]?\d+(\.\d+)?$/.test(literal.trim());
+       const spelled=prop.numeric===true&&!plain&&!['degree','region'].includes(condition.operator)?spelledNumberProof(literal,word=>!!lookup('units',{lemma:word})):null;
+       if(spelled&&(condition.value===literal||spelledNumberProof(String(condition.value))?.value===spelled.value)){
+        c.value={kind:prop.valueKind,value:String(spelled.value)};anchor([...path,'value'],literal,null,false,['constraints',String(ci),supplied?'value_span':'value']);
+       }else{
        const identity=typeof literal==='string'&&literal.length>0&&literal===condition.value;
        const normalization=identity?null:lookup('valueNormalizations',{area:raw.area,key:condition.key,canonical:prop.canonical,source:literal,value:condition.value,valueKind:prop.valueKind});
        // A property whose native parameter declares a closed value list (classValues, declared-bindings.mjs) takes the
@@ -196,6 +205,7 @@ export function bridgeRawStructure(prediction,{bindings,bindingSha256,comparativ
        const kind=['degree','region'].includes(condition.operator)?'literal':prop.valueKind;
        if(identity||normalization||declaredClass){c.value={kind,value:condition.value};anchor([...path,'value'],literal,normalization?.sourceWire??(declaredClass?prop.sourceWire:null),false,['constraints',String(ci),supplied?'value_span':'value']);}
        else unresolved('unresolved-source-value-normalization',[...path,'value']);
+       }
       }
      }else unresolved('unresolved-value-representation',[...path,'value']);
     }

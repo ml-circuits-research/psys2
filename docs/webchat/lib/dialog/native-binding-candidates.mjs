@@ -1,5 +1,5 @@
-import { World, quote, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=ebb9691a80';
-import { executionPolicyWorld } from './execution-policy.mjs?v=fe7b7dec4a';
+import { World, quote, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=adaae660f3';
+import { executionPolicyWorld } from './execution-policy.mjs?v=14c31ede61';
 import CONSTRUCTORS from '../../worlds/app.project/constructor-policy-source.mjs?v=91bc3b4d74';
 import SCHEMA from '../../worlds/app.project/constructor-schema-source.mjs?v=97be28057e';
 import { budget } from './budget.mjs?v=00bce6e369';

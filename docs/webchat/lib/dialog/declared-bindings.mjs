@@ -10,9 +10,9 @@
 //     app.interpret.family), with the provenance of that class's own kind row.
 //  4. a family without a native family binding takes the one its own kind rows share, own or declared (a target named
 //     without a kind word).
-import {parse,str} from '../vendor/sopworld/sopworld.mjs?v=ebb9691a80';
-import {interpretationPolicy} from './interpretation-policy.mjs?v=41e7ad7c89';
-import {executionPolicyWorld} from './execution-policy.mjs?v=fe7b7dec4a';
+import {parse,str} from '../vendor/sopworld/sopworld.mjs?v=adaae660f3';
+import {interpretationPolicy} from './interpretation-policy.mjs?v=88b13cdd80';
+import {executionPolicyWorld} from './execution-policy.mjs?v=14c31ede61';
 import DRAW from '../../worlds/art.draw/native-interface-source.mjs?v=fb1a68639c';
 import DIAGRAM from '../../worlds/diagram.sketch/native-interface-source.mjs?v=c1b0403664';
 import CHARTS from '../../worlds/data.charts/native-interface-source.mjs?v=6c0dc1d746';
@@ -35,7 +35,7 @@ async function nativeParameters(){
    if(w.type!=='std.capability.parameter')continue;
    const op=ops.get(String(w.attrs.operation?.[0]??'').slice(1));if(!op)continue;
    const values=(w.attrs.enum??[]).map(str);
-   rows.push({world,sourceSha256:sha,wire:w.id,operation:op.name,sourceType:op.on,parameter:one(w,'name'),enum:one(w,'enumClosed')==='true'&&values.length?values:null});
+   rows.push({world,sourceSha256:sha,wire:w.id,operation:op.name,sourceType:op.on,parameter:one(w,'name'),kind:one(w,'kind'),enum:one(w,'enumClosed')==='true'&&values.length?values:null});
   }
  }
  return parameters=rows;
@@ -51,9 +51,13 @@ export async function completeBindings(bindings){
  if(completed.has(bindings))return completed.get(bindings);
  const params=await nativeParameters();
  const enumOf=(sourceType,parameter)=>params.find(p=>p.sourceType===sourceType&&p.parameter===parameter&&p.enum)?.enum??null;
+ // 2b. A property whose native parameter is a number on its source type (kind=number|integer) is numeric: the bridge
+ // reads the one number its value span spells ("size 45", "two hundred sixty"; specs/semantic-frame.md §5).
+ const numericOf=(sourceType,parameter)=>params.some(p=>p.sourceType===sourceType&&p.parameter===parameter&&['number','integer'].includes(p.kind));
  const properties=(bindings.properties??[]).map(row=>{
   const values=row.hostBinding&&!row.classValues?enumOf(row.hostBinding.sourceType,row.hostBinding.parameter):null;
-  return values?{...row,classValues:values}:row;
+  const numeric=row.hostBinding&&!values&&!row.classValues&&row.numeric===undefined&&numericOf(row.hostBinding.sourceType,row.hostBinding.parameter);
+  return values||numeric?{...row,...(values?{classValues:values}:{}),...(numeric?{numeric:true}:{})}:row;
  });
  // 1. Unbound keys whose family's source type now declares a parameter of the key's own name.
  for(const gap of bindings.coverage??[]){
@@ -66,7 +70,7 @@ export async function completeBindings(bindings){
   if(!found.length)continue;
   const p=found[0];
   properties.push({area:gap.area,key:gap.key,valueKind:'string',canonical:sourceType+'.'+parameter,sourceWire:p.wire,sourceSnapshotSHA:p.sourceSha256,sourceWorld:p.world,moduleVersion:'1',
-   hostBinding:{id:p.operation,sourceType,key:parameter,operation:p.operation,parameter},...(p.enum?{classValues:p.enum}:{}),
+   hostBinding:{id:p.operation,sourceType,key:parameter,operation:p.operation,parameter},...(p.enum?{classValues:p.enum}:{}),...(!p.enum&&numericOf(sourceType,parameter)?{numeric:true}:{}),
    alignment:{kind:'native-parameter-by-name',authority:'declared-bindings.mjs: the export rule over the live native interface'}});
  }
  // 3. Declared family readings.
