@@ -1,0 +1,4481 @@
+{
+ "meta": {
+  "date": "2026-11-20",
+  "commit": "85347ce60",
+  "mode": "stratified (rate 0.01, min 20 per tab x usage class, >=3 per operation, >=5 per key family)",
+  "seed": "498660",
+  "levels": [
+   "oracle",
+   "e2e"
+  ],
+  "workers": 16,
+  "rowsLoaded": 96167,
+  "sources": {
+   "official": 93538,
+   "data-drop:dg-batch-02": 1765,
+   "data-drop:dw-batch-01:duplicate": 1799,
+   "data-drop:dw-batch-01": 7,
+   "human-benchmark-v1": 857,
+   "human-benchmark-v1:session-skipped": 508
+  },
+  "dropBatches": [
+   "dg-batch-02",
+   "dw-batch-01"
+  ],
+  "selected": 3002,
+  "evaluated": 3002,
+  "seconds": 355.718,
+  "evalSeconds": 354.405,
+  "rowsPerSecond": 8.470535122247147,
+  "reader": {
+   "manifest": "sop-bert"
+  },
+  "plan": {
+   "avatar|comparative": {
+    "N": 328,
+    "n": 23
+   },
+   "avatar|create": {
+    "N": 7,
+    "n": 7
+   },
+   "avatar|create-relation": {
+    "N": 6,
+    "n": 6
+   },
+   "avatar|create-with-attributes": {
+    "N": 1740,
+    "n": 35
+   },
+   "avatar|edit": {
+    "N": 6669,
+    "n": 150
+   },
+   "avatar|edit-context": {
+    "N": 243,
+    "n": 25
+   },
+   "avatar|history": {
+    "N": 65,
+    "n": 22
+   },
+   "avatar|multi-request": {
+    "N": 74,
+    "n": 41
+   },
+   "avatar|place": {
+    "N": 152,
+    "n": 22
+   },
+   "avatar|question": {
+    "N": 61,
+    "n": 20
+   },
+   "avatar|remove": {
+    "N": 156,
+    "n": 27
+   },
+   "avatar|select": {
+    "N": 121,
+    "n": 20
+   },
+   "calendar|comparative": {
+    "N": 103,
+    "n": 20
+   },
+   "calendar|create": {
+    "N": 9,
+    "n": 9
+   },
+   "calendar|create-with-attributes": {
+    "N": 2808,
+    "n": 92
+   },
+   "calendar|edit": {
+    "N": 739,
+    "n": 51
+   },
+   "calendar|edit-context": {
+    "N": 48,
+    "n": 20
+   },
+   "calendar|multi-request": {
+    "N": 1115,
+    "n": 35
+   },
+   "calendar|no-request": {
+    "N": 171,
+    "n": 26
+   },
+   "calendar|place": {
+    "N": 1216,
+    "n": 31
+   },
+   "calendar|question": {
+    "N": 1414,
+    "n": 55
+   },
+   "calendar|remove": {
+    "N": 608,
+    "n": 57
+   },
+   "calendar|select": {
+    "N": 90,
+    "n": 20
+   },
+   "calendar|structure": {
+    "N": 87,
+    "n": 20
+   },
+   "diagram|comparative": {
+    "N": 691,
+    "n": 25
+   },
+   "diagram|connect": {
+    "N": 1256,
+    "n": 28
+   },
+   "diagram|create": {
+    "N": 487,
+    "n": 28
+   },
+   "diagram|create-relation": {
+    "N": 204,
+    "n": 27
+   },
+   "diagram|create-with-attributes": {
+    "N": 5458,
+    "n": 116
+   },
+   "diagram|edit": {
+    "N": 5946,
+    "n": 119
+   },
+   "diagram|edit-context": {
+    "N": 1913,
+    "n": 83
+   },
+   "diagram|edit-population": {
+    "N": 432,
+    "n": 34
+   },
+   "diagram|history": {
+    "N": 340,
+    "n": 27
+   },
+   "diagram|multi-request": {
+    "N": 2662,
+    "n": 82
+   },
+   "diagram|needs": {
+    "N": 1124,
+    "n": 28
+   },
+   "diagram|no-request": {
+    "N": 162,
+    "n": 21
+   },
+   "diagram|place": {
+    "N": 440,
+    "n": 21
+   },
+   "diagram|place-relation": {
+    "N": 127,
+    "n": 20
+   },
+   "diagram|question": {
+    "N": 2372,
+    "n": 35
+   },
+   "diagram|remove": {
+    "N": 1063,
+    "n": 31
+   },
+   "diagram|select": {
+    "N": 887,
+    "n": 23
+   },
+   "diagram|structure": {
+    "N": 2949,
+    "n": 92
+   },
+   "document|comparative": {
+    "N": 35,
+    "n": 20
+   },
+   "document|create": {
+    "N": 39,
+    "n": 20
+   },
+   "document|create-relation": {
+    "N": 6,
+    "n": 6
+   },
+   "document|create-with-attributes": {
+    "N": 2911,
+    "n": 106
+   },
+   "document|edit": {
+    "N": 4541,
+    "n": 146
+   },
+   "document|edit-context": {
+    "N": 336,
+    "n": 34
+   },
+   "document|history": {
+    "N": 77,
+    "n": 20
+   },
+   "document|multi-request": {
+    "N": 1346,
+    "n": 64
+   },
+   "document|no-request": {
+    "N": 170,
+    "n": 20
+   },
+   "document|place": {
+    "N": 171,
+    "n": 23
+   },
+   "document|place-relation": {
+    "N": 445,
+    "n": 23
+   },
+   "document|question": {
+    "N": 1088,
+    "n": 27
+   },
+   "document|remove": {
+    "N": 454,
+    "n": 27
+   },
+   "document|select": {
+    "N": 362,
+    "n": 26
+   },
+   "document|structure": {
+    "N": 515,
+    "n": 22
+   },
+   "drawing|comparative": {
+    "N": 603,
+    "n": 20
+   },
+   "drawing|create": {
+    "N": 10476,
+    "n": 112
+   },
+   "drawing|create-quantity": {
+    "N": 241,
+    "n": 20
+   },
+   "drawing|create-relation": {
+    "N": 6865,
+    "n": 115
+   },
+   "drawing|create-with-attributes": {
+    "N": 4913,
+    "n": 99
+   },
+   "drawing|edit": {
+    "N": 4743,
+    "n": 70
+   },
+   "drawing|edit-context": {
+    "N": 278,
+    "n": 20
+   },
+   "drawing|edit-population": {
+    "N": 98,
+    "n": 20
+   },
+   "drawing|history": {
+    "N": 102,
+    "n": 23
+   },
+   "drawing|multi-request": {
+    "N": 1897,
+    "n": 39
+   },
+   "drawing|needs": {
+    "N": 1753,
+    "n": 26
+   },
+   "drawing|no-request": {
+    "N": 167,
+    "n": 23
+   },
+   "drawing|place": {
+    "N": 334,
+    "n": 26
+   },
+   "drawing|place-relation": {
+    "N": 1227,
+    "n": 40
+   },
+   "drawing|question": {
+    "N": 1796,
+    "n": 25
+   },
+   "drawing|remove": {
+    "N": 835,
+    "n": 22
+   },
+   "drawing|select": {
+    "N": 296,
+    "n": 20
+   },
+   "drawing|structure": {
+    "N": 504,
+    "n": 24
+   }
+  },
+  "populationByTab": {
+   "drawing": 37128,
+   "diagram": 28513,
+   "document": 12496,
+   "calendar": 8408,
+   "avatar": 9622
+  },
+  "populationByClass": {
+   "drawing|create": 10476,
+   "drawing|create-with-attributes": 4913,
+   "drawing|edit": 4743,
+   "drawing|select": 296,
+   "drawing|place": 334,
+   "drawing|remove": 835,
+   "drawing|edit-context": 278,
+   "drawing|question": 1796,
+   "drawing|history": 102,
+   "drawing|structure": 504,
+   "diagram|create-with-attributes": 5458,
+   "diagram|edit": 5946,
+   "diagram|select": 887,
+   "diagram|remove": 1063,
+   "diagram|place": 440,
+   "diagram|structure": 2949,
+   "diagram|connect": 1256,
+   "diagram|edit-context": 1913,
+   "diagram|question": 2372,
+   "diagram|history": 340,
+   "diagram|comparative": 691,
+   "diagram|create": 487,
+   "calendar|select": 90,
+   "calendar|create-with-attributes": 2808,
+   "calendar|edit": 739,
+   "calendar|place": 1216,
+   "calendar|remove": 608,
+   "calendar|question": 1414,
+   "document|create-with-attributes": 2911,
+   "document|edit": 4541,
+   "document|select": 362,
+   "document|edit-context": 336,
+   "document|place": 171,
+   "document|remove": 454,
+   "document|question": 1088,
+   "document|history": 77,
+   "avatar|edit": 6669,
+   "avatar|edit-context": 243,
+   "avatar|select": 121,
+   "avatar|comparative": 328,
+   "avatar|create-with-attributes": 1740,
+   "avatar|place": 152,
+   "avatar|remove": 156,
+   "avatar|question": 61,
+   "avatar|history": 65,
+   "drawing|multi-request": 1897,
+   "diagram|multi-request": 2662,
+   "calendar|multi-request": 1115,
+   "avatar|multi-request": 74,
+   "drawing|create-relation": 6865,
+   "diagram|place-relation": 127,
+   "calendar|comparative": 103,
+   "calendar|edit-context": 48,
+   "document|place-relation": 445,
+   "document|create": 39,
+   "drawing|comparative": 603,
+   "document|multi-request": 1346,
+   "drawing|create-quantity": 241,
+   "calendar|create": 9,
+   "document|comparative": 35,
+   "drawing|place-relation": 1227,
+   "diagram|create-relation": 204,
+   "diagram|edit-population": 432,
+   "drawing|no-request": 167,
+   "drawing|edit-population": 98,
+   "diagram|needs": 1124,
+   "drawing|needs": 1753,
+   "calendar|no-request": 171,
+   "diagram|no-request": 162,
+   "document|no-request": 170,
+   "calendar|structure": 87,
+   "document|structure": 515,
+   "document|create-relation": 6,
+   "avatar|create-relation": 6,
+   "avatar|create": 7
+  }
+ },
+ "tabs": {
+  "drawing": {
+   "oracle": {
+    "n": 566,
+    "p": 0.44835161083619174,
+    "lo": 0.40187939001680406,
+    "hi": 0.4957436552789297,
+    "neff": 427.5725250015516
+   },
+   "e2e": {
+    "n": 721,
+    "p": 0.3561117596134481,
+    "lo": 0.317849381000172,
+    "hi": 0.3963042169014396,
+    "neff": 568.9444439165536
+   }
+  },
+  "diagram": {
+   "oracle": {
+    "n": 707,
+    "p": 0.13679128235510563,
+    "lo": 0.11142380763998397,
+    "hi": 0.166849638850571,
+    "neff": 591.0583250210834
+   },
+   "e2e": {
+    "n": 809,
+    "p": 0.1515770956212783,
+    "lo": 0.1266150851541561,
+    "hi": 0.180443597227415,
+    "neff": 681.779845563921
+   }
+  },
+  "document": {
+   "oracle": {
+    "n": 386,
+    "p": 0.02952621714378362,
+    "lo": 0.015496716042700216,
+    "hi": 0.055540385476015364,
+    "neff": 297.7724622616629
+   },
+   "e2e": {
+    "n": 564,
+    "p": 0.01590001321772632,
+    "lo": 0.007859571348751667,
+    "hi": 0.03190144654066938,
+    "neff": 463.36616425296836
+   }
+  },
+  "calendar": {
+   "oracle": {
+    "n": 273,
+    "p": 0.0660087526676195,
+    "lo": 0.037962863077249505,
+    "hi": 0.1123543628181923,
+    "neff": 178.371103223223
+   },
+   "e2e": {
+    "n": 436,
+    "p": 0.030591333873556857,
+    "lo": 0.016503111257100786,
+    "hi": 0.05602120349256727,
+    "neff": 314.1510745004871
+   }
+  },
+  "avatar": {
+   "oracle": {
+    "n": 244,
+    "p": 0.014027807074796304,
+    "lo": 0.0039471477208320865,
+    "hi": 0.04859745723675628,
+    "neff": 148.6277925510322
+   },
+   "e2e": {
+    "n": 375,
+    "p": 0.008564134968665964,
+    "lo": 0.002344525094992656,
+    "hi": 0.030774313607424397,
+    "neff": 232.285087779429
+   }
+  },
+  "all": {
+   "oracle": {
+    "n": 2176,
+    "p": 0.2357505963328746,
+    "lo": 0.21469717484403258,
+    "hi": 0.2581897702654049,
+    "neff": 1461.2693059938247
+   },
+   "e2e": {
+    "n": 2905,
+    "p": 0.18829068916641523,
+    "lo": 0.1718330411876039,
+    "hi": 0.20593264584044257,
+    "neff": 2018.371853866112
+   }
+  }
+ },
+ "classes": {
+  "diagram|edit-context": {
+   "oracle": {
+    "n": 83,
+    "p": 0.01204819277108433,
+    "lo": 0.0021299225877048217,
+    "hi": 0.06513737787658869,
+    "neff": 83.00000000000017
+   },
+   "e2e": {
+    "n": 83,
+    "p": 0.04819277108433732,
+    "lo": 0.018898309674071523,
+    "hi": 0.11746030186694095,
+    "neff": 83.00000000000017
+   }
+  },
+  "diagram|history": {
+   "oracle": {
+    "n": 0,
+    "p": null,
+    "lo": null,
+    "hi": null
+   },
+   "e2e": {
+    "n": 0,
+    "p": null,
+    "lo": null,
+    "hi": null
+   }
+  },
+  "diagram|comparative": {
+   "oracle": {
+    "n": 25,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.13319649395317884,
+    "neff": 24.99999999999998
+   },
+   "e2e": {
+    "n": 25,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.13319649395317884,
+    "neff": 24.99999999999998
+   }
+  },
+  "diagram|edit": {
+   "oracle": {
+    "n": 116,
+    "p": 0.060344827586206996,
+    "lo": 0.029535177394390134,
+    "hi": 0.11934133960805332,
+    "neff": 115.99999999999982
+   },
+   "e2e": {
+    "n": 119,
+    "p": 0.033613445378151315,
+    "lo": 0.013147540181404169,
+    "hi": 0.0832497714784897,
+    "neff": 118.99999999999976
+   }
+  },
+  "diagram|remove": {
+   "oracle": {
+    "n": 31,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.11025900073475389,
+    "neff": 30.999999999999982
+   },
+   "e2e": {
+    "n": 31,
+    "p": 0.032258064516129045,
+    "lo": 0.005717074086944454,
+    "hi": 0.1619445717616963,
+    "neff": 30.999999999999982
+   }
+  },
+  "diagram|needs": {
+   "oracle": {
+    "n": 28,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.12064720365810767,
+    "neff": 27.99999999999999
+   },
+   "e2e": {
+    "n": 28,
+    "p": 0.21428571428571433,
+    "lo": 0.1021232170118942,
+    "hi": 0.39538947079273884,
+    "neff": 27.99999999999999
+   }
+  },
+  "diagram|structure": {
+   "oracle": {
+    "n": 91,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.04050543221539909,
+    "neff": 91.00000000000013
+   },
+   "e2e": {
+    "n": 92,
+    "p": 0.021739130434782587,
+    "lo": 0.005981915837670909,
+    "hi": 0.0758364177460755,
+    "neff": 92.00000000000014
+   }
+  },
+  "diagram|create-relation": {
+   "oracle": {
+    "n": 22,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.14865952572596125,
+    "neff": 21.999999999999996
+   },
+   "e2e": {
+    "n": 27,
+    "p": 0.2592592592592594,
+    "lo": 0.13170208422866791,
+    "hi": 0.44678930402615713,
+    "neff": 26.999999999999986
+   }
+  },
+  "diagram|connect": {
+   "oracle": {
+    "n": 26,
+    "p": 0.34615384615384603,
+    "lo": 0.1941201497285212,
+    "hi": 0.5377977099036699,
+    "neff": 26.000000000000007
+   },
+   "e2e": {
+    "n": 28,
+    "p": 0.3214285714285713,
+    "lo": 0.1793304754342073,
+    "hi": 0.506614954443688,
+    "neff": 28.000000000000004
+   }
+  },
+  "diagram|select": {
+   "oracle": {
+    "n": 23,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.14312112541726274,
+    "neff": 23.000000000000004
+   },
+   "e2e": {
+    "n": 23,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.14312112541726274,
+    "neff": 23.000000000000004
+   }
+  },
+  "diagram|edit-population": {
+   "oracle": {
+    "n": 30,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.11351709139047797,
+    "neff": 30.000000000000004
+   },
+   "e2e": {
+    "n": 34,
+    "p": 0.02941176470588236,
+    "lo": 0.005210771925596658,
+    "hi": 0.14915902216344823,
+    "neff": 33.99999999999999
+   }
+  },
+  "diagram|create-with-attributes": {
+   "oracle": {
+    "n": 72,
+    "p": 0.4166666666666663,
+    "lo": 0.3098503822249641,
+    "hi": 0.5319251077436011,
+    "neff": 72.00000000000007
+   },
+   "e2e": {
+    "n": 116,
+    "p": 0.3362068965517234,
+    "lo": 0.2567137493803343,
+    "hi": 0.4262010314637118,
+    "neff": 116.00000000000006
+   }
+  },
+  "diagram|question": {
+   "oracle": {
+    "n": 34,
+    "p": 0.05882352941176472,
+    "lo": 0.016282313063842438,
+    "hi": 0.19093936889463714,
+    "neff": 33.999999999999986
+   },
+   "e2e": {
+    "n": 35,
+    "p": 0.08571428571428573,
+    "lo": 0.029581831005296877,
+    "hi": 0.2237959907116252,
+    "neff": 34.99999999999999
+   }
+  },
+  "diagram|multi-request": {
+   "oracle": {
+    "n": 44,
+    "p": 0.4545454545454543,
+    "lo": 0.317050077868536,
+    "hi": 0.5993406782934648,
+    "neff": 44.00000000000006
+   },
+   "e2e": {
+    "n": 78,
+    "p": 0.26923076923076905,
+    "lo": 0.18335480551618455,
+    "hi": 0.3767710962257166,
+    "neff": 78.00000000000001
+   }
+  },
+  "drawing|edit-population": {
+   "oracle": {
+    "n": 20,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.1611301254949331,
+    "neff": 20.000000000000014
+   },
+   "e2e": {
+    "n": 20,
+    "p": 0.4499999999999998,
+    "lo": 0.2581950208570929,
+    "hi": 0.6579179916924002,
+    "neff": 20.000000000000014
+   }
+  },
+  "drawing|remove": {
+   "oracle": {
+    "n": 22,
+    "p": 0.04545454545454544,
+    "lo": 0.008069219301147859,
+    "hi": 0.21798489499518042,
+    "neff": 22.00000000000002
+   },
+   "e2e": {
+    "n": 22,
+    "p": 0.09090909090909088,
+    "lo": 0.025294896282837764,
+    "hi": 0.2781538065838577,
+    "neff": 22.00000000000002
+   }
+  },
+  "drawing|needs": {
+   "oracle": {
+    "n": 26,
+    "p": 0.038461538461538464,
+    "lo": 0.0068218089769898765,
+    "hi": 0.18893176991958405,
+    "neff": 26
+   },
+   "e2e": {
+    "n": 26,
+    "p": 0.07692307692307693,
+    "lo": 0.02135463918337556,
+    "hi": 0.24141947480515052,
+    "neff": 26
+   }
+  },
+  "drawing|create-relation": {
+   "oracle": {
+    "n": 67,
+    "p": 0.22388059701492546,
+    "lo": 0.1406360851472927,
+    "hi": 0.33707192822338244,
+    "neff": 66.99999999999984
+   },
+   "e2e": {
+    "n": 115,
+    "p": 0.18260869565217394,
+    "lo": 0.12265283002248897,
+    "hi": 0.26308415096733295,
+    "neff": 114.99999999999963
+   }
+  },
+  "drawing|comparative": {
+   "oracle": {
+    "n": 20,
+    "p": 0.3000000000000001,
+    "lo": 0.14547527396899396,
+    "hi": 0.5189767762289795,
+    "neff": 19.999999999999996
+   },
+   "e2e": {
+    "n": 20,
+    "p": 0.2500000000000001,
+    "lo": 0.11186005278940309,
+    "hi": 0.4687050099580637,
+    "neff": 19.999999999999996
+   }
+  },
+  "drawing|create-with-attributes": {
+   "oracle": {
+    "n": 53,
+    "p": 0.8113207547169805,
+    "lo": 0.6864128355267491,
+    "hi": 0.8941478805685039,
+    "neff": 53.000000000000085
+   },
+   "e2e": {
+    "n": 99,
+    "p": 0.3535353535353532,
+    "lo": 0.2664470798753754,
+    "hi": 0.45156586430285517,
+    "neff": 99.00000000000021
+   }
+  },
+  "drawing|select": {
+   "oracle": {
+    "n": 20,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.1611301254949331,
+    "neff": 20.000000000000014
+   },
+   "e2e": {
+    "n": 20,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.1611301254949331,
+    "neff": 20.000000000000014
+   }
+  },
+  "drawing|history": {
+   "oracle": {
+    "n": 0,
+    "p": null,
+    "lo": null,
+    "hi": null
+   },
+   "e2e": {
+    "n": 0,
+    "p": null,
+    "lo": null,
+    "hi": null
+   }
+  },
+  "drawing|edit-context": {
+   "oracle": {
+    "n": 20,
+    "p": 0.14999999999999997,
+    "lo": 0.05236779195949584,
+    "hi": 0.3604232958869573,
+    "neff": 20.000000000000007
+   },
+   "e2e": {
+    "n": 20,
+    "p": 0.04999999999999999,
+    "lo": 0.008881219432873122,
+    "hi": 0.23613589351256672,
+    "neff": 20.000000000000007
+   }
+  },
+  "drawing|question": {
+   "oracle": {
+    "n": 25,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.13319649395317884,
+    "neff": 24.999999999999982
+   },
+   "e2e": {
+    "n": 25,
+    "p": 0.040000000000000015,
+    "lo": 0.007096050386699179,
+    "hi": 0.1954447240502254,
+    "neff": 24.999999999999982
+   }
+  },
+  "drawing|multi-request": {
+   "oracle": {
+    "n": 21,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.15464382326420195,
+    "neff": 21
+   },
+   "e2e": {
+    "n": 39,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.08966985360023902,
+    "neff": 39
+   }
+  },
+  "drawing|edit": {
+   "oracle": {
+    "n": 56,
+    "p": 0.017857142857142873,
+    "lo": 0.003159128964463971,
+    "hi": 0.09445858179193303,
+    "neff": 55.99999999999989
+   },
+   "e2e": {
+    "n": 70,
+    "p": 0.028571428571428602,
+    "lo": 0.007870446893806282,
+    "hi": 0.09832443512391831,
+    "neff": 69.99999999999984
+   }
+  },
+  "diagram|create": {
+   "oracle": {
+    "n": 21,
+    "p": 0.42857142857142844,
+    "lo": 0.24469699486521043,
+    "hi": 0.6345378370296754,
+    "neff": 21.000000000000007
+   },
+   "e2e": {
+    "n": 28,
+    "p": 0.46428571428571397,
+    "lo": 0.29531303739659565,
+    "hi": 0.641876048578983,
+    "neff": 28.00000000000002
+   }
+  },
+  "document|create-with-attributes": {
+   "oracle": {
+    "n": 51,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.07004901388726806,
+    "neff": 50.99999999999999
+   },
+   "e2e": {
+    "n": 106,
+    "p": 0.009433962264150924,
+    "lo": 0.001667228784491357,
+    "hi": 0.0515148078937797,
+    "neff": 106.00000000000051
+   }
+  },
+  "document|edit": {
+   "oracle": {
+    "n": 85,
+    "p": 0.023529411764705882,
+    "lo": 0.0064763754542195365,
+    "hi": 0.08178858150288162,
+    "neff": 85.00000000000003
+   },
+   "e2e": {
+    "n": 146,
+    "p": 0,
+    "lo": 1.734723475976807e-18,
+    "hi": 0.025637740120233683,
+    "neff": 145.9999999999997
+   }
+  },
+  "avatar|edit": {
+   "oracle": {
+    "n": 86,
+    "p": 0.011627906976744179,
+    "lo": 0.0020555157424055545,
+    "hi": 0.06296558806696553,
+    "neff": 86.00000000000011
+   },
+   "e2e": {
+    "n": 150,
+    "p": 0.006666666666666662,
+    "lo": 0.001177771023133451,
+    "hi": 0.03679375293397562,
+    "neff": 150.00000000000026
+   }
+  },
+  "avatar|place": {
+   "oracle": {
+    "n": 19,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.16818436536845052,
+    "neff": 19.000000000000004
+   },
+   "e2e": {
+    "n": 22,
+    "p": 0,
+    "lo": 1.3877787807814457e-17,
+    "hi": 0.14865952572596125,
+    "neff": 22
+   }
+  },
+  "avatar|create-with-attributes": {
+   "oracle": {
+    "n": 20,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.1611301254949334,
+    "neff": 19.99999999999997
+   },
+   "e2e": {
+    "n": 35,
+    "p": 0,
+    "lo": 6.938893903907228e-18,
+    "hi": 0.09890426758938864,
+    "neff": 35.00000000000002
+   }
+  },
+  "calendar|remove": {
+   "oracle": {
+    "n": 28,
+    "p": 0.4642857142857143,
+    "lo": 0.29531303739659576,
+    "hi": 0.6418760485789834,
+    "neff": 27.999999999999982
+   },
+   "e2e": {
+    "n": 57,
+    "p": 0.05263157894736842,
+    "lo": 0.01805996809628102,
+    "hi": 0.14369777660471297,
+    "neff": 57.000000000000064
+   }
+  },
+  "calendar|question": {
+   "oracle": {
+    "n": 22,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.14865952572596125,
+    "neff": 21.999999999999996
+   },
+   "e2e": {
+    "n": 55,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.06528714378942782,
+    "neff": 55.00000000000005
+   }
+  },
+  "calendar|place": {
+   "oracle": {
+    "n": 19,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.16818436536845052,
+    "neff": 19.000000000000004
+   },
+   "e2e": {
+    "n": 31,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.11025900073475381,
+    "neff": 31.000000000000018
+   }
+  },
+  "calendar|no-request": {
+   "oracle": {
+    "n": 20,
+    "p": 1,
+    "lo": 0.8388698745050669,
+    "hi": 1,
+    "neff": 20.000000000000018
+   },
+   "e2e": {
+    "n": 26,
+    "p": 1,
+    "lo": 0.8712669561953784,
+    "hi": 1,
+    "neff": 25.999999999999996
+   }
+  },
+  "calendar|create-with-attributes": {
+   "oracle": {
+    "n": 42,
+    "p": 0.02380952380952383,
+    "lo": 0.004215295499100297,
+    "hi": 0.12321481165248269,
+    "neff": 41.999999999999936
+   },
+   "e2e": {
+    "n": 92,
+    "p": 0.010869565217391292,
+    "lo": 0.0019212795763616473,
+    "hi": 0.059029288861560864,
+    "neff": 92.00000000000007
+   }
+  },
+  "calendar|multi-request": {
+   "oracle": {
+    "n": 30,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.1135170913904779,
+    "neff": 30.00000000000003
+   },
+   "e2e": {
+    "n": 35,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.09890426758938858,
+    "neff": 35.00000000000004
+   }
+  },
+  "drawing|structure": {
+   "oracle": {
+    "n": 24,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.13798057582897535,
+    "neff": 24
+   },
+   "e2e": {
+    "n": 24,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.13798057582897535,
+    "neff": 24
+   }
+  },
+  "drawing|place": {
+   "oracle": {
+    "n": 26,
+    "p": 0.07692307692307691,
+    "lo": 0.021354639183375518,
+    "hi": 0.24141947480515044,
+    "neff": 26.000000000000014
+   },
+   "e2e": {
+    "n": 26,
+    "p": 0.07692307692307691,
+    "lo": 0.021354639183375518,
+    "hi": 0.24141947480515044,
+    "neff": 26.000000000000014
+   }
+  },
+  "diagram|no-request": {
+   "oracle": {
+    "n": 20,
+    "p": 1,
+    "lo": 0.8388698745050668,
+    "hi": 1,
+    "neff": 19.99999999999999
+   },
+   "e2e": {
+    "n": 21,
+    "p": 1,
+    "lo": 0.8453561767357981,
+    "hi": 1,
+    "neff": 20.999999999999993
+   }
+  },
+  "document|no-request": {
+   "oracle": {
+    "n": 20,
+    "p": 1,
+    "lo": 0.8388698745050667,
+    "hi": 1,
+    "neff": 20
+   },
+   "e2e": {
+    "n": 20,
+    "p": 1,
+    "lo": 0.8388698745050667,
+    "hi": 1,
+    "neff": 20
+   }
+  },
+  "document|place-relation": {
+   "oracle": {
+    "n": 20,
+    "p": 0,
+    "lo": 1.3877787807814457e-17,
+    "hi": 0.16113012549493333,
+    "neff": 19.999999999999982
+   },
+   "e2e": {
+    "n": 23,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.14312112541726282,
+    "neff": 22.999999999999982
+   }
+  },
+  "document|question": {
+   "oracle": {
+    "n": 25,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.13319649395317873,
+    "neff": 25
+   },
+   "e2e": {
+    "n": 27,
+    "p": 0,
+    "lo": 6.938893903907228e-18,
+    "hi": 0.12455903714463581,
+    "neff": 27
+   }
+  },
+  "document|remove": {
+   "oracle": {
+    "n": 20,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.1611301254949332,
+    "neff": 20.000000000000007
+   },
+   "e2e": {
+    "n": 27,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.12455903714463572,
+    "neff": 27.00000000000002
+   }
+  },
+  "drawing|no-request": {
+   "oracle": {
+    "n": 20,
+    "p": 1,
+    "lo": 0.8388698745050669,
+    "hi": 1,
+    "neff": 20.000000000000018
+   },
+   "e2e": {
+    "n": 23,
+    "p": 1,
+    "lo": 0.8568788745827374,
+    "hi": 1,
+    "neff": 23.000000000000036
+   }
+  },
+  "document|multi-request": {
+   "oracle": {
+    "n": 23,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.14312112541726274,
+    "neff": 23
+   },
+   "e2e": {
+    "n": 64,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.056626022971156334,
+    "neff": 64
+   }
+  },
+  "drawing|place-relation": {
+   "oracle": {
+    "n": 21,
+    "p": 0,
+    "lo": 1.3877787807814457e-17,
+    "hi": 0.154643823264202,
+    "neff": 20.999999999999993
+   },
+   "e2e": {
+    "n": 40,
+    "p": 0.05000000000000004,
+    "lo": 0.013820377146101112,
+    "hi": 0.16504170817925218,
+    "neff": 39.99999999999994
+   }
+  },
+  "drawing|create-quantity": {
+   "oracle": {
+    "n": 20,
+    "p": 1,
+    "lo": 0.8388698745050669,
+    "hi": 1,
+    "neff": 20.000000000000014
+   },
+   "e2e": {
+    "n": 20,
+    "p": 1,
+    "lo": 0.8388698745050669,
+    "hi": 1,
+    "neff": 20.000000000000014
+   }
+  },
+  "diagram|place-relation": {
+   "oracle": {
+    "n": 20,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.1611301254949333,
+    "neff": 19.99999999999999
+   },
+   "e2e": {
+    "n": 20,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.1611301254949333,
+    "neff": 19.99999999999999
+   }
+  },
+  "diagram|place": {
+   "oracle": {
+    "n": 21,
+    "p": 0.09523809523809522,
+    "lo": 0.026518208796947274,
+    "hi": 0.2891458386074067,
+    "neff": 21.000000000000004
+   },
+   "e2e": {
+    "n": 21,
+    "p": 0.09523809523809522,
+    "lo": 0.026518208796947274,
+    "hi": 0.2891458386074067,
+    "neff": 21.000000000000004
+   }
+  },
+  "avatar|create": {
+   "oracle": {
+    "n": 0,
+    "p": null,
+    "lo": null,
+    "hi": null
+   },
+   "e2e": {
+    "n": 7,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.35433884297520657,
+    "neff": 7
+   }
+  },
+  "avatar|multi-request": {
+   "oracle": {
+    "n": 12,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.2425007574992425,
+    "neff": 12.000000000000002
+   },
+   "e2e": {
+    "n": 40,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.08762453925039218,
+    "neff": 40.000000000000064
+   }
+  },
+  "avatar|remove": {
+   "oracle": {
+    "n": 19,
+    "p": 0.21052631578947378,
+    "lo": 0.08507538491591579,
+    "hi": 0.43334714240266103,
+    "neff": 18.999999999999986
+   },
+   "e2e": {
+    "n": 27,
+    "p": 0.14814814814814822,
+    "lo": 0.05915831859644896,
+    "hi": 0.32479063346829495,
+    "neff": 26.999999999999982
+   }
+  },
+  "avatar|create-relation": {
+   "oracle": {
+    "n": 0,
+    "p": null,
+    "lo": null,
+    "hi": null
+   },
+   "e2e": {
+    "n": 6,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.3903430336530645,
+    "neff": 6
+   }
+  },
+  "drawing|create": {
+   "oracle": {
+    "n": 105,
+    "p": 0.9238095238095243,
+    "lo": 0.8568122391570516,
+    "hi": 0.96088981593953,
+    "neff": 104.99999999999994
+   },
+   "e2e": {
+    "n": 112,
+    "p": 0.8660714285714294,
+    "lo": 0.790733837980532,
+    "hi": 0.917129313080919,
+    "neff": 111.99999999999984
+   }
+  },
+  "calendar|edit": {
+   "oracle": {
+    "n": 28,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.12064720365810752,
+    "neff": 28.000000000000025
+   },
+   "e2e": {
+    "n": 51,
+    "p": 0.01960784313725489,
+    "lo": 0.003469603253442248,
+    "hi": 0.10304807675589361,
+    "neff": 51.000000000000085
+   }
+  },
+  "calendar|create": {
+   "oracle": {
+    "n": 4,
+    "p": 0.25,
+    "lo": 0.045586062644636216,
+    "hi": 0.6993639475573634,
+    "neff": 4
+   },
+   "e2e": {
+    "n": 9,
+    "p": 0.2222222222222222,
+    "lo": 0.06322376231222723,
+    "hi": 0.5474166563271946,
+    "neff": 9
+   }
+  },
+  "document|place": {
+   "oracle": {
+    "n": 20,
+    "p": 0,
+    "lo": 1.3877787807814457e-17,
+    "hi": 0.16113012549493316,
+    "neff": 20.00000000000001
+   },
+   "e2e": {
+    "n": 23,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.1431211254172627,
+    "neff": 23.000000000000007
+   }
+  },
+  "document|create-relation": {
+   "oracle": {
+    "n": 0,
+    "p": null,
+    "lo": null,
+    "hi": null
+   },
+   "e2e": {
+    "n": 6,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.3903430336530645,
+    "neff": 6
+   }
+  },
+  "calendar|select": {
+   "oracle": {
+    "n": 20,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.16113012549493322,
+    "neff": 20
+   },
+   "e2e": {
+    "n": 20,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.16113012549493322,
+    "neff": 20
+   }
+  },
+  "calendar|structure": {
+   "oracle": {
+    "n": 20,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.16113012549493327,
+    "neff": 19.999999999999993
+   },
+   "e2e": {
+    "n": 20,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.16113012549493327,
+    "neff": 19.999999999999993
+   }
+  },
+  "document|select": {
+   "oracle": {
+    "n": 26,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.12873304380462175,
+    "neff": 25.999999999999993
+   },
+   "e2e": {
+    "n": 26,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.12873304380462175,
+    "neff": 25.999999999999993
+   }
+  },
+  "document|structure": {
+   "oracle": {
+    "n": 22,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.1486595257259612,
+    "neff": 22.00000000000001
+   },
+   "e2e": {
+    "n": 22,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.1486595257259612,
+    "neff": 22.00000000000001
+   }
+  },
+  "document|history": {
+   "oracle": {
+    "n": 0,
+    "p": null,
+    "lo": null,
+    "hi": null
+   },
+   "e2e": {
+    "n": 0,
+    "p": null,
+    "lo": null,
+    "hi": null
+   }
+  },
+  "calendar|comparative": {
+   "oracle": {
+    "n": 20,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.16113012549493308,
+    "neff": 20.000000000000018
+   },
+   "e2e": {
+    "n": 20,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.16113012549493308,
+    "neff": 20.000000000000018
+   }
+  },
+  "avatar|comparative": {
+   "oracle": {
+    "n": 23,
+    "p": 0.043478260869565244,
+    "lo": 0.007716466962126758,
+    "hi": 0.20991586494059167,
+    "neff": 22.999999999999964
+   },
+   "e2e": {
+    "n": 23,
+    "p": 0.043478260869565244,
+    "lo": 0.007716466962126758,
+    "hi": 0.20991586494059167,
+    "neff": 22.999999999999964
+   }
+  },
+  "avatar|edit-context": {
+   "oracle": {
+    "n": 25,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.1331964939531787,
+    "neff": 25.000000000000004
+   },
+   "e2e": {
+    "n": 25,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.1331964939531787,
+    "neff": 25.000000000000004
+   }
+  },
+  "avatar|select": {
+   "oracle": {
+    "n": 20,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.1611301254949333,
+    "neff": 19.99999999999999
+   },
+   "e2e": {
+    "n": 20,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.1611301254949333,
+    "neff": 19.99999999999999
+   }
+  },
+  "avatar|question": {
+   "oracle": {
+    "n": 20,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.16113012549493333,
+    "neff": 19.999999999999986
+   },
+   "e2e": {
+    "n": 20,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.16113012549493333,
+    "neff": 19.999999999999986
+   }
+  },
+  "avatar|history": {
+   "oracle": {
+    "n": 0,
+    "p": null,
+    "lo": null,
+    "hi": null
+   },
+   "e2e": {
+    "n": 0,
+    "p": null,
+    "lo": null,
+    "hi": null
+   }
+  },
+  "calendar|edit-context": {
+   "oracle": {
+    "n": 20,
+    "p": 0.20000000000000004,
+    "lo": 0.08065635327120002,
+    "hi": 0.41602172202576004,
+    "neff": 19.999999999999982
+   },
+   "e2e": {
+    "n": 20,
+    "p": 0.15000000000000002,
+    "lo": 0.05236779195949584,
+    "hi": 0.36042329588695754,
+    "neff": 19.999999999999982
+   }
+  },
+  "document|comparative": {
+   "oracle": {
+    "n": 20,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.16113012549493322,
+    "neff": 20
+   },
+   "e2e": {
+    "n": 20,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.16113012549493322,
+    "neff": 20
+   }
+  },
+  "document|edit-context": {
+   "oracle": {
+    "n": 34,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.10151790621961031,
+    "neff": 33.99999999999994
+   },
+   "e2e": {
+    "n": 34,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.10151790621961031,
+    "neff": 33.99999999999994
+   }
+  },
+  "document|create": {
+   "oracle": {
+    "n": 20,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.16113012549493322,
+    "neff": 20
+   },
+   "e2e": {
+    "n": 20,
+    "p": 0,
+    "lo": 0,
+    "hi": 0.16113012549493322,
+    "neff": 20
+   }
+  }
+ },
+ "topCauses": {
+  "oracle": [
+   {
+    "cause": "binding missing: diagram.node target without a kind word (fill=written)",
+    "layer": "bindings",
+    "rows": 59,
+    "estimate": 2519,
+    "tabs": {
+     "diagram": 59
+    },
+    "examples": [
+     {
+      "id": "data-drop-v1:dg-batch-02-diagram-01167",
+      "text": "bump the Plan label up to 18 point"
+     },
+     {
+      "id": "data-drop-v1:dg-batch-02-diagram-01458",
+      "text": "list everything the Review step connects to"
+     },
+     {
+      "id": "data-drop-v1:dg-batch-02-diagram-01665",
+      "text": "orange Start and dashed Collect"
+     }
+    ]
+   },
+   {
+    "cause": "no operation for change drawing.drawn [drawn.colour]",
+    "layer": "no-operation",
+    "rows": 31,
+    "estimate": 2100,
+    "tabs": {
+     "drawing": 31
+    },
+    "examples": [
+     {
+      "id": "demo-tool-profile:data/haiku-v1/drawing/b01a.jsonl:drawing-b01-0018",
+      "text": "make flower green."
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v1/drawing/b05a.jsonl:drawing-b05-0015",
+      "text": "I need you to make avatar orange. I appreciate it."
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v1/drawing/b12b.jsonl:drawing-b12-0173",
+      "text": "Hey, make swing red. That would help."
+     }
+    ]
+   },
+   {
+    "cause": "binding missing: relation anchor reference in drawing",
+    "layer": "bindings",
+    "rows": 34,
+    "estimate": 1629,
+    "tabs": {
+     "drawing": 34
+    },
+    "examples": [
+     {
+      "id": "data-drop-v1:pilot-drawing-00023",
+      "text": "please a lake, a little boat on it, a house beside the lake"
+     },
+     {
+      "id": "data-drop-v1:pilot-drawing-00032",
+      "text": "lake, boat on it, house nearby, if you can"
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v1/drawing/b07a.jsonl:drawing-b07-0017",
+      "text": "Hey, put heart to the left of Reference. That would help."
+     }
+    ]
+   },
+   {
+    "cause": "target not resolved for change diagram.chart (fill=context)",
+    "layer": "execution",
+    "rows": 46,
+    "estimate": 1088,
+    "tabs": {
+     "diagram": 46
+    },
+    "examples": [
+     {
+      "id": "data-drop-v1:dg-batch-02-diagram-00177",
+      "text": "we keep arguing where 50 lands, turn the grid on"
+     },
+     {
+      "id": "data-drop-v1:dg-batch-02-diagram-00195",
+      "text": "please take the gridlines off the chart"
+     },
+     {
+      "id": "data-drop-v1:dg-batch-02-diagram-00200",
+      "text": "with only three categories the guides are noise, drop them"
+     }
+    ]
+   },
+   {
+    "cause": "rule missing: query projection ask=what for drawing.drawn",
+    "layer": "rule",
+    "rows": 15,
+    "estimate": 1078,
+    "tabs": {
+     "drawing": 15
+    },
+    "examples": [
+     {
+      "id": "demo-tool-profile:data/haiku-v1/drawing/b01a.jsonl:drawing-b01-0114",
+      "text": "Could you what colour is cat?. I appreciate it."
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v1/drawing/b05a.jsonl:drawing-b05-0079",
+      "text": "what colour is face a?."
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v1/drawing/b13a.jsonl:drawing-b13-0006",
+      "text": "I need you to what colour is castle?. I appreciate it."
+     }
+    ]
+   },
+   {
+    "cause": "host refused drawing.drawn.relation (make drawing.drawn)",
+    "layer": "execution",
+    "rows": 18,
+    "estimate": 1075,
+    "tabs": {
+     "drawing": 18
+    },
+    "examples": [
+     {
+      "id": "ui-coverage-v2:ui-coverage-v2-drawing-00086",
+      "text": "draw a tree next to the house"
+     },
+     {
+      "id": "ui-relations-v1:ui-relations-00879",
+      "text": "draw a leafless tree on the left side of the tree"
+     },
+     {
+      "id": "ui-relations-v1:ui-relations-01748",
+      "text": "give me a tractor just right of that tree"
+     }
+    ]
+   },
+   {
+    "cause": "binding missing for avatar.part.id",
+    "layer": "bindings",
+    "rows": 19,
+    "estimate": 945,
+    "tabs": {
+     "avatar": 19
+    },
+    "examples": [
+     {
+      "id": "main-synthetic:syn-enriched-mech-3629:with-previous",
+      "text": "a tapered for me, glasses"
+     },
+     {
+      "id": "main-synthetic:syn-enriched-mech-3682",
+      "text": "cheeks — add a heart, please"
+     },
+     {
+      "id": "main-synthetic:syn-enriched-mech-3735",
+      "text": "a mole for me, earrings"
+     }
+    ]
+   },
+   {
+    "cause": "knowledge: kind words of drawing.drawn not bound",
+    "layer": "knowledge",
+    "rows": 14,
+    "estimate": 813,
+    "tabs": {
+     "drawing": 14
+    },
+    "examples": [
+     {
+      "id": "data-drop-v1:dw-batch-01-drawing-01307",
+      "text": "stick a second boat by the first one"
+     },
+     {
+      "id": "data-drop-v1:pilot-drawing-00277",
+      "text": "the same for the trees, thanks"
+     },
+     {
+      "id": "data-drop-v1:pilot-drawing-00275",
+      "text": "please the same for the trees"
+     }
+    ]
+   },
+   {
+    "cause": "binding missing for calendar.meeting.calendar",
+    "layer": "bindings",
+    "rows": 29,
+    "estimate": 808,
+    "tabs": {
+     "calendar": 29
+    },
+    "examples": [
+     {
+      "id": "demo-tool-profile:data/haiku-v1/calendar/b02a.jsonl:calendar-b02-0084",
+      "text": "which events are on Work 3 on 2026-12-15?."
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v1/calendar/b01a.jsonl:calendar-b01-0122",
+      "text": "Please, which events are on Work 8 on 2026-12-16?. Thanks!"
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v1/calendar/b05b.jsonl:calendar-b05-0219",
+      "text": "Hey, which events are on Work 2 on 2026-12-06?. That would help."
+     }
+    ]
+   },
+   {
+    "cause": "binding missing for document.section.content",
+    "layer": "bindings",
+    "rows": 26,
+    "estimate": 791,
+    "tabs": {
+     "document": 26
+    },
+    "examples": [
+     {
+      "id": "demo-tool-profile:data/haiku-v1/document/b02a.jsonl:document-b02-0101",
+      "text": "I need you to replace Draft 2 with \"Bring the revised notes to the meeting.\". I appreciate it."
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v1/document/b02b.jsonl:document-b02-0144",
+      "text": "Let us replace Essay draft with \"Everyone can read the new summary.\". That would help."
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v1/document/b02b.jsonl:document-b02-0145",
+      "text": "Could you add a heading called Dinosaur report. I appreciate it."
+     }
+    ]
+   },
+   {
+    "cause": "rule missing: context reference (fill=context) for document.text",
+    "layer": "rule",
+    "rows": 20,
+    "estimate": 789,
+    "tabs": {
+     "document": 20
+    },
+    "examples": [
+     {
+      "id": "demo-tool-profile:data/haiku-v1/document/b03b.jsonl:document-b03-0198",
+      "text": "Please, how many words are in the document?. Thanks!"
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v1/document/b09b.jsonl:document-b09-0166",
+      "text": "Hey, how many words are in the document?."
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v1/document/b09b.jsonl:document-b09-0194",
+      "text": "Hey, how many words are in the document?."
+     }
+    ]
+   },
+   {
+    "cause": "binding missing: diagram.node target without a kind word (fill=context)",
+    "layer": "bindings",
+    "rows": 23,
+    "estimate": 774,
+    "tabs": {
+     "diagram": 23
+    },
+    "examples": [
+     {
+      "id": "data-drop-v1:dg-batch-02-diagram-00994",
+      "text": "link them al in a loop"
+     },
+     {
+      "id": "data-drop-v1:dg-batch-02-diagram-01372",
+      "text": "not the first, the second"
+     },
+     {
+      "id": "data-drop-v1:pilot-diagram-00147",
+      "text": "space the steps out evenly, thanks"
+     }
+    ]
+   },
+   {
+    "cause": "target not resolved for change diagram.chart (fill=written)",
+    "layer": "execution",
+    "rows": 16,
+    "estimate": 747,
+    "tabs": {
+     "diagram": 16
+    },
+    "examples": [
+     {
+      "id": "data-drop-v1:dg-batch-02-diagram-00352",
+      "text": "the marketing deck needs warm colours on the Expenses by department chart"
+     },
+     {
+      "id": "data-drop-v1:dg-batch-02-diagram-00045",
+      "text": "hide the legende on the Revenue chart"
+     },
+     {
+      "id": "data-drop-v1:dg-batch-02-diagram-00412:with-previous",
+      "text": "drop the shadow from the Sales by month chart"
+     }
+    ]
+   },
+   {
+    "cause": "binding missing for calendar.meeting.day",
+    "layer": "bindings",
+    "rows": 19,
+    "estimate": 728,
+    "tabs": {
+     "calendar": 19
+    },
+    "examples": [
+     {
+      "id": "demo-tool-profile:data/haiku-v1/calendar/b02b.jsonl:calendar-b02-0168",
+      "text": "Hey, place Review to 2026-12-12 at 16:00 UTC."
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v1/calendar/b09b.jsonl:calendar-b09-0132",
+      "text": "put Review to 2026-12-16 at 12:00 UTC."
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v1/calendar/b06b.jsonl:calendar-b06-0137",
+      "text": "Please, place Review to 2026-12-19 at 11:00 UTC. Thanks!"
+     }
+    ]
+   },
+   {
+    "cause": "binding missing for calendar.calendar.name",
+    "layer": "bindings",
+    "rows": 23,
+    "estimate": 701,
+    "tabs": {
+     "calendar": 23
+    },
+    "examples": [
+     {
+      "id": "demo-tool-profile:data/haiku-v1/calendar/b05a.jsonl:calendar-b05-0106",
+      "text": "I need you to create a calendar called Work 1; then book Review on Work 1 on 2026-12-09 at 09:00 UTC for 15 minutes. I appreciate it."
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v1/calendar/b11a.jsonl:calendar-b11-0031",
+      "text": "add a calendar called Work 8; then schedule Review on Work 8 on 2026-12-04 at 16:00 UTC for 60 minutes."
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v2/calendar/v2b03b.jsonl:calendar-v2b03-0179",
+      "text": "Please, add a calendar called Work 3; then schedule Review on Work 3 on 2026-12-19 at 11:00 UTC for 45 minutes. Thanks!"
+     }
+    ]
+   },
+   {
+    "cause": "rule missing: query projection ask=list for diagram.chart",
+    "layer": "rule",
+    "rows": 10,
+    "estimate": 678,
+    "tabs": {
+     "diagram": 10
+    },
+    "examples": [
+     {
+      "id": "demo-tool-profile:data/haiku-v1/diagram/b05a.jsonl:diagram-b05-0020",
+      "text": "Hey, what values does Core router show?."
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v1/diagram/b01a.jsonl:diagram-b01-0110",
+      "text": "I need you to what values does Gateway show?. I appreciate it."
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v1/diagram/b06b.jsonl:diagram-b06-0177",
+      "text": "Let us what values does Photosynthesis show?. That would help."
+     }
+    ]
+   },
+   {
+    "cause": "binding missing for diagram.series.label",
+    "layer": "bindings",
+    "rows": 15,
+    "estimate": 675,
+    "tabs": {
+     "diagram": 15
+    },
+    "examples": [
+     {
+      "id": "data-drop-v1:dg-batch-02-diagram-00676",
+      "text": "remove Series 2"
+     },
+     {
+      "id": "data-drop:dg-batch-02:diagram:668",
+      "text": "Series 1 carries outdated figures — fill it with 24, 26, 28"
+     },
+     {
+      "id": "ui-diagram-v2:ui-diagram-v2-05934",
+      "text": "retitle the series Target to Online"
+     }
+    ]
+   },
+   {
+    "cause": "binding missing for document.block.id",
+    "layer": "bindings",
+    "rows": 26,
+    "estimate": 620,
+    "tabs": {
+     "document": 26
+    },
+    "examples": [
+     {
+      "id": "main-synthetic:syn-document-2-1845",
+      "text": "That unit Intro, 2 and 3 — picked"
+     },
+     {
+      "id": "main-synthetic:syn-document-2-1753:with-previous",
+      "text": "If it's not too much trouble, blocks Intro, 2 and 3 want the underline, enabled Main."
+     },
+     {
+      "id": "main-synthetic:syn-document-2069",
+      "text": "mark the block Intro 2 3 with an underline, Main enabled"
+     }
+    ]
+   },
+   {
+    "cause": "binding missing: diagram.point target without a kind word (fill=-)",
+    "layer": "bindings",
+    "rows": 16,
+    "estimate": 590,
+    "tabs": {
+     "diagram": 16
+    },
+    "examples": [
+     {
+      "id": "data-drop-v1:dg-batch-02-diagram-00549",
+      "text": "redcue April by 3"
+     },
+     {
+      "id": "data-drop-v1:dg-batch-02-diagram-00708",
+      "text": "bump January to 12 and drop February to 5"
+     },
+     {
+      "id": "data-drop-v1:dg-batch-02-diagram-00503",
+      "text": "raise the May value by 6"
+     }
+    ]
+   },
+   {
+    "cause": "placement refused (tool-binding) for make drawing.drawn [drawn.anchor (selector), drawn.relation]",
+    "layer": "execution",
+    "rows": 9,
+    "estimate": 537,
+    "tabs": {
+     "drawing": 9
+    },
+    "examples": [
+     {
+      "id": "ui-relations-v1:ui-relations-00921",
+      "text": "draw a mite left of the mountain"
+     },
+     {
+      "id": "ui-relations-v1:ui-relations-01144",
+      "text": "put a tree frog on the left side of that mountain"
+     },
+     {
+      "id": "ui-relations-v1:ui-relations-03964",
+      "text": "Make a barracuda into that lake."
+     }
+    ]
+   },
+   {
+    "cause": "knowledge: kind words of diagram.node not bound",
+    "layer": "knowledge",
+    "rows": 12,
+    "estimate": 511,
+    "tabs": {
+     "diagram": 12
+    },
+    "examples": [
+     {
+      "id": "data-drop-v1:dg-batch-02-diagram-00869",
+      "text": "add a rounded box called Wrap and give it a green outline"
+     },
+     {
+      "id": "data-drop:dg-batch-02:diagram:1606",
+      "text": "add one more of those decision nodes, please"
+     },
+     {
+      "id": "human-adapted-v1-diagram:human-adapted-diagram-0386:with-previous",
+      "text": "Set the font size of the content to 20 and the font color to green"
+     }
+    ]
+   },
+   {
+    "cause": "binding missing for document.section.id",
+    "layer": "bindings",
+    "rows": 22,
+    "estimate": 505,
+    "tabs": {
+     "document": 22
+    },
+    "examples": [
+     {
+      "id": "main-synthetic:syn-document-2-1879",
+      "text": "Given a choice, heading Intro suits name Main, level 2, justify."
+     },
+     {
+      "id": "main-synthetic:syn-document-2048",
+      "text": "slap the underline on sections Intro 2 3, Main enabled, attrs too"
+     },
+     {
+      "id": "main-synthetic:syn-document-2-1758",
+      "text": "division Intro, 2 and 3 wants the underline, enabled Main"
+     }
+    ]
+   },
+   {
+    "cause": "binding missing for avatar.part.ids",
+    "layer": "bindings",
+    "rows": 29,
+    "estimate": 470,
+    "tabs": {
+     "avatar": 29
+    },
+    "examples": [
+     {
+      "id": "demo-tool-profile:data/demo-tool-profile/avatar-authored.jsonl:avatar-demo-48aa9d8d8f91666ad1",
+      "text": "make the hair front huge size"
+     },
+     {
+      "id": "demo-tool-profile:data/demo-tool-profile/avatar-authored.jsonl:avatar-demo-4b0eccd4d79f035980",
+      "text": "please shift the cheeks right"
+     },
+     {
+      "id": "demo-tool-profile:data/demo-tool-profile/avatar-authored.jsonl:avatar-demo-4ff1e5da0f1a016836",
+      "text": "move the shoulders up"
+     }
+    ]
+   },
+   {
+    "cause": "binding missing: diagram.node target without a kind word (fill=all)",
+    "layer": "bindings",
+    "rows": 17,
+    "estimate": 465,
+    "tabs": {
+     "diagram": 17
+    },
+    "examples": [
+     {
+      "id": "data-drop-v1:dg-batch-02-diagram-00988",
+      "text": "connect all elements in sequence, arrows pointing left to right"
+     },
+     {
+      "id": "data-drop-v1:dg-batch-02-diagram-00990",
+      "text": "connect everything in order"
+     },
+     {
+      "id": "data-drop-v1:dg-batch-02-diagram-01100",
+      "text": "all elements get a shadow"
+     }
+    ]
+   },
+   {
+    "cause": "needs (meaning without a key): drawn.becomes",
+    "layer": "needs",
+    "rows": 7,
+    "estimate": 453,
+    "tabs": {
+     "drawing": 7
+    },
+    "examples": [
+     {
+      "id": "data-drop-v1:dw-batch-01-drawing-00027",
+      "text": "and change the fish into a shark"
+     },
+     {
+      "id": "data-drop-v1:pilot-drawing-00065:with-previous",
+      "text": "please change the grass to water"
+     },
+     {
+      "id": "data-drop-v1:dw-batch-01-drawing-00322",
+      "text": "one of the fish should be a shark now"
+     }
+    ]
+   },
+   {
+    "cause": "refused: drawing-not-in-catalog for make drawing.drawn",
+    "layer": "execution",
+    "rows": 7,
+    "estimate": 452,
+    "tabs": {
+     "drawing": 7
+    },
+    "examples": [
+     {
+      "id": "main-synthetic:syn-orphans-mech-19088",
+      "text": "add an elk"
+     },
+     {
+      "id": "ui-relations-v1:ui-relations-01537",
+      "text": "Give me a lynx to the right of the tree there."
+     },
+     {
+      "id": "ui-relations-v1:ui-relations-01898",
+      "text": "sketch a cardinal over the hill there"
+     }
+    ]
+   },
+   {
+    "cause": "tool argument binding missing for change avatar.part [part.colour,part.size,part.variant]",
+    "layer": "bindings",
+    "rows": 10,
+    "estimate": 445,
+    "tabs": {
+     "avatar": 10
+    },
+    "examples": [
+     {
+      "id": "main-synthetic:syn-enriched-mech-4745",
+      "text": "a small for me, ear light huge"
+     },
+     {
+      "id": "main-synthetic:syn-enriched-mech-5276",
+      "text": "change a taered neck hazel default"
+     },
+     {
+      "id": "main-synthetic:syn-enriched-mech-5324",
+      "text": "change a pie neck grey tiny"
+     }
+    ]
+   },
+   {
+    "cause": "tool argument binding missing for change avatar.part [part.size,part.variant]",
+    "layer": "bindings",
+    "rows": 10,
+    "estimate": 445,
+    "tabs": {
+     "avatar": 10
+    },
+    "examples": [
+     {
+      "id": "main-synthetic:syn-enriched-mech-5283",
+      "text": "change a tappered neck default"
+     },
+     {
+      "id": "main-synthetic:syn-enriched-mech-7270",
+      "text": "earring default — change a drop, please"
+     },
+     {
+      "id": "main-synthetic:syn-enriched-mech-6289:with-previous",
+      "text": "change a tognue tip mouth huge"
+     }
+    ]
+   },
+   {
+    "cause": "tool argument binding missing for change avatar.part [part.variant]",
+    "layer": "bindings",
+    "rows": 10,
+    "estimate": 445,
+    "tabs": {
+     "avatar": 10
+    },
+    "examples": [
+     {
+      "id": "main-synthetic:syn-enriched-mech-5288",
+      "text": "change a neklace neck"
+     },
+     {
+      "id": "main-synthetic:syn-enriched-mech-6056",
+      "text": "mouth — change a full lips, please"
+     },
+     {
+      "id": "main-synthetic:syn-enriched-mech-6105",
+      "text": "change a tonngue out mouth"
+     }
+    ]
+   },
+   {
+    "cause": "tool argument binding missing for change avatar.part [part.colour,part.variant]",
+    "layer": "bindings",
+    "rows": 10,
+    "estimate": 445,
+    "tabs": {
+     "avatar": 10
+    },
+    "examples": [
+     {
+      "id": "main-synthetic:syn-enriched-mech-5315",
+      "text": "a pipe for me, neck blond"
+     },
+     {
+      "id": "main-synthetic:syn-enriched-mech-5990",
+      "text": "mouth tan — change an open, please"
+     },
+     {
+      "id": "main-synthetic:syn-enriched-mech-5994",
+      "text": "change an opn mouth tan"
+     }
+    ]
+   },
+   {
+    "cause": "refused: overwrite-needs-stricter-admission for make document.text",
+    "layer": "execution",
+    "rows": 16,
+    "estimate": 414,
+    "tabs": {
+     "document": 16
+    },
+    "examples": [
+     {
+      "id": "demo-tool-profile:data/haiku-v1/document/b04a.jsonl:document-b04-0069",
+      "text": "Could you write a report about The Fox Who Lost His Tail in approximately 21 words. Thanks!"
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v1/document/b15b.jsonl:document-b15-0141",
+      "text": "Hey, write a report about Lab safety note in approximately 27 words. That would help."
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v2/document/v2b07a.jsonl:document-v2b07-0056",
+      "text": "Hey, compose a report about Newsletter in approximately 43 words. That would help."
+     }
+    ]
+   },
+   {
+    "cause": "binding missing for document.text.content",
+    "layer": "bindings",
+    "rows": 15,
+    "estimate": 412,
+    "tabs": {
+     "document": 15
+    },
+    "examples": [
+     {
+      "id": "demo-tool-profile:data/haiku-v1/document/b08a.jsonl:document-b08-0068",
+      "text": "Please, create a document titled Design job application containing \"The next stage begins on Friday.\". Thanks!"
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v1/document/b01b.jsonl:document-b01-0219",
+      "text": "Hey, create a document titled Q3 report containing \"Everyone can read the new summary.\"."
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v1/document/b06a.jsonl:document-b06-0009",
+      "text": "Could you create a document titled Wedding invite containing \"Please confirm these updated details.\". I appreciate it."
+     }
+    ]
+   },
+   {
+    "cause": "bridge: requires-measure-projection (drawing.drawn.size)",
+    "layer": "rule",
+    "rows": 6,
+    "estimate": 407,
+    "tabs": {
+     "drawing": 6
+    },
+    "examples": [
+     {
+      "id": "demo-tool-profile:data/haiku-v2/drawing/v2b05b.jsonl:drawing-v2b05-0171",
+      "text": "Let us make Sun 67 pixels wide. That would help."
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v2/drawing/v2b10b.jsonl:drawing-v2b10-0113",
+      "text": "I need you to make axis 61 pixels wide. I appreciate it."
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v2/drawing/v2b28a.jsonl:drawing-v2b28-0034",
+      "text": "Could you make robot 53 pixels wide. Thanks!"
+     }
+    ]
+   },
+   {
+    "cause": "needs (meaning without a key): part.owner",
+    "layer": "needs",
+    "rows": 6,
+    "estimate": 405,
+    "tabs": {
+     "drawing": 6
+    },
+    "examples": [
+     {
+      "id": "data-drop-v1:dw-batch-01-drawing-00463:with-previous",
+      "text": "put a pair of eyes on the sun"
+     },
+     {
+      "id": "data-drop-v1:dw-batch-01-drawing-00708:with-previous",
+      "text": "turn the boy's shirt red, please"
+     },
+     {
+      "id": "data-drop-v1:dw-batch-01-drawing-00712:with-previous",
+      "text": "can you turn the girl's shirt red?"
+     }
+    ]
+   },
+   {
+    "cause": "tool argument binding missing for make document.section [section.content]",
+    "layer": "bindings",
+    "rows": 19,
+    "estimate": 400,
+    "tabs": {
+     "document": 19
+    },
+    "examples": [
+     {
+      "id": "demo-tool-profile:data/haiku-v1/document/b12b.jsonl:document-b12-0204",
+      "text": "make a heading called Love note Sam; then make a paragraph saying \"Bring the revised notes to the meeting.\"."
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v1/document/b16b.jsonl:document-b16-0187",
+      "text": "Please, make a heading called Lost pets; then make a paragraph saying \"Please confirm these updated details.\". Thanks!"
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v1/document/b11a.jsonl:document-b11-0017",
+      "text": "Please, make a heading called Victoria sponge; then add a paragraph saying \"Everyone can read the new summary.\". Thanks!"
+     }
+    ]
+   },
+   {
+    "cause": "reading refused without diagnostics",
+    "layer": "rule",
+    "rows": 11,
+    "estimate": 399,
+    "tabs": {
+     "drawing": 6,
+     "diagram": 5
+    },
+    "examples": [
+     {
+      "id": "demo-tool-profile:data/haiku-v1/drawing/b06b.jsonl:drawing-b06-0225",
+      "text": "delete barn, but leave fence alone."
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v1/drawing/b03a.jsonl:drawing-b03-0037",
+      "text": "Hey, remove tower block, but leave crane alone."
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v1/drawing/b15b.jsonl:drawing-b15-0246",
+      "text": "I need you to delete Luna, but leave Ada alone. I appreciate it."
+     }
+    ]
+   },
+   {
+    "cause": "binding missing for calendar.meeting.room",
+    "layer": "bindings",
+    "rows": 13,
+    "estimate": 397,
+    "tabs": {
+     "calendar": 13
+    },
+    "examples": [
+     {
+      "id": "demo-tool-profile:data/haiku-v1/calendar/b01a.jsonl:calendar-b01-0085",
+      "text": "I need you to book War room for Planning on 2026-12-08 from 16:00 UTC for 60 minutes. I appreciate it."
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v1/calendar/b04a.jsonl:calendar-b04-0057",
+      "text": "Could you book Room 2 for Planning on 2026-12-19 from 15:00 UTC for 45 minutes. I appreciate it."
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v1/calendar/b14b.jsonl:calendar-b14-0163",
+      "text": "book Studio for Planning on 2026-12-11 from 11:00 UTC for 45 minutes."
+     }
+    ]
+   },
+   {
+    "cause": "binding missing for document.section.order",
+    "layer": "bindings",
+    "rows": 21,
+    "estimate": 394,
+    "tabs": {
+     "document": 21
+    },
+    "examples": [
+     {
+      "id": "demo-tool-profile:data/haiku-v1/document/b03a.jsonl:document-b03-0079",
+      "text": "I need you to place Refund paragraph after Summary. I appreciate it."
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v1/document/b08a.jsonl:document-b08-0027",
+      "text": "I need you to put Agenda after Decisions. I appreciate it."
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v1/document/b02b.jsonl:document-b02-0212",
+      "text": "place Essay draft after Quote bank."
+     }
+    ]
+   },
+   {
+    "cause": "rule missing: context reference (fill=context) for drawing.drawn",
+    "layer": "rule",
+    "rows": 9,
+    "estimate": 384,
+    "tabs": {
+     "drawing": 9
+    },
+    "examples": [
+     {
+      "id": "main-synthetic:syn-enriched-mech-13204",
+      "text": "ask an obejct"
+     },
+     {
+      "id": "ui-coverage-v2:ui-coverage-v2-drawing-00474",
+      "text": "describe the drawing"
+     },
+     {
+      "id": "ui-coverage-v2:ui-coverage-v2-drawing-00479",
+      "text": "before I add more, give me a quick summary of the scene"
+     }
+    ]
+   },
+   {
+    "cause": "binding missing: diagram.sketch target without a kind word (fill=context)",
+    "layer": "bindings",
+    "rows": 10,
+    "estimate": 376,
+    "tabs": {
+     "diagram": 10
+    },
+    "examples": [
+     {
+      "id": "ui-coverage-v2:ui-coverage-v2-diagram-00422",
+      "text": "this flowchart is beyond saving, let's clear everything and start again"
+     },
+     {
+      "id": "ui-coverage-v2:ui-coverage-v2-diagram-00425",
+      "text": "clear all of it"
+     },
+     {
+      "id": "ui-diagram-v2:ui-diagram-v2-02624",
+      "text": "Payment and the link into Payment away"
+     }
+    ]
+   },
+   {
+    "cause": "binding missing for document.block.parent",
+    "layer": "bindings",
+    "rows": 16,
+    "estimate": 375,
+    "tabs": {
+     "document": 16
+    },
+    "examples": [
+     {
+      "id": "main-synthetic:syn-document-2-1908",
+      "text": "para under Intro, level 3, with text Second"
+     },
+     {
+      "id": "main-synthetic:syn-document-2153",
+      "text": "put a heading after Intro in block form, carrying the text Main at level 3 and the parent's name"
+     },
+     {
+      "id": "main-synthetic:syn-document-2173",
+      "text": "at some point today, would you drop a quote block inside Intro with text Main and level 3, named after the parent?"
+     }
+    ]
+   },
+   {
+    "cause": "needs (meaning without a key): chart.dimension",
+    "layer": "needs",
+    "rows": 9,
+    "estimate": 361,
+    "tabs": {
+     "diagram": 9
+    },
+    "examples": [
+     {
+      "id": "data-drop-v1:dg-batch-01-diagram-00408",
+      "text": "hey — make a bar chart of the customers by payment"
+     },
+     {
+      "id": "data-drop-v1:dg-batch-01-diagram-00430",
+      "text": "please visualise the sections counts for each year as a line chart"
+     },
+     {
+      "id": "data-drop-v1:dg-batch-01-diagram-00454",
+      "text": "a pie chart of employees per role, thanks"
+     }
+    ]
+   },
+   {
+    "cause": "bridge: act without trigger words (change fragments)",
+    "layer": "rule",
+    "rows": 6,
+    "estimate": 353,
+    "tabs": {
+     "diagram": 3,
+     "drawing": 3
+    },
+    "examples": [
+     {
+      "id": "main-synthetic:syn-diagram-1313",
+      "text": "could you restyle the group Intro as Main, yellow, large?"
+     },
+     {
+      "id": "main-synthetic:syn-diagram-1371",
+      "text": "we're relabeling the flowchart to match the deck, which means the group Intro should read Second now, in orange"
+     },
+     {
+      "id": "main-synthetic:syn-drawing-2753",
+      "text": "so: part Intro 2, Second, 400 wide"
+     }
+    ]
+   },
+   {
+    "cause": "rule missing: context reference (fill=context) for drawing.page",
+    "layer": "rule",
+    "rows": 20,
+    "estimate": 350,
+    "tabs": {
+     "drawing": 20
+    },
+    "examples": [
+     {
+      "id": "main-synthetic:syn-drawing-3136",
+      "text": "audit runs long, so mount the ids on the page always — duration 1 keeps them fresh"
+     },
+     {
+      "id": "main-synthetic:syn-drawing-3138",
+      "text": "duration 1: run the ids always on the page while we tidy up"
+     },
+     {
+      "id": "main-synthetic:syn-drawing-3144",
+      "text": "switch the page ids off, duration 1"
+     }
+    ]
+   },
+   {
+    "cause": "wrong effect: changed for arrange diagram.diagram",
+    "layer": "wrong-effect",
+    "rows": 10,
+    "estimate": 321,
+    "tabs": {
+     "diagram": 10
+    },
+    "examples": [
+     {
+      "id": "data-drop:dg-batch-02:diagram:1261",
+      "text": "clean the layout up a bit"
+     },
+     {
+      "id": "data-drop:dg-batch-02:diagram:1270",
+      "text": "a general clean-up will do"
+     },
+     {
+      "id": "data-drop:dg-batch-02:diagram:1272",
+      "text": "when you have a moment, make this flowchart easier on the eye"
+     }
+    ]
+   },
+   {
+    "cause": "needs (meaning without a key): drawn.region",
+    "layer": "needs",
+    "rows": 5,
+    "estimate": 318,
+    "tabs": {
+     "drawing": 5
+    },
+    "examples": [
+     {
+      "id": "data-drop-v1:dw-batch-01-drawing-01128",
+      "text": "leave the top quarter of the page for the sun"
+     },
+     {
+      "id": "data-drop-v1:pilot-drawing-00298",
+      "text": "a few cllouds in the sky please"
+     },
+     {
+      "id": "data-drop-v1:dw-batch-01-drawing-01036",
+      "text": "put a few birds in the background"
+     }
+    ]
+   },
+   {
+    "cause": "target not resolved for change diagram.node (fill=description)",
+    "layer": "execution",
+    "rows": 9,
+    "estimate": 316,
+    "tabs": {
+     "diagram": 9
+    },
+    "examples": [
+     {
+      "id": "data-drop-v1:pilot-diagram-00116:with-previous",
+      "text": "the first two boxes should be half as wide — go on"
+     },
+     {
+      "id": "data-drop:dg-batch-02:diagram:1027",
+      "text": "rotate the first box by 30 degrees"
+     },
+     {
+      "id": "ui-comparatives-v1:ui-comparatives-00493",
+      "text": "make the shape slightly smaller, please"
+     }
+    ]
+   },
+   {
+    "cause": "binding missing for document.inline.format",
+    "layer": "bindings",
+    "rows": 10,
+    "estimate": 311,
+    "tabs": {
+     "document": 10
+    },
+    "examples": [
+     {
+      "id": "demo-tool-profile:data/demo-tool-profile/documents-authored.jsonl:documents-tools-3ee584c0da66acb740",
+      "text": "turn italic off for characters 0 to 5 of Body"
+     },
+     {
+      "id": "demo-tool-profile:data/demo-tool-profile/documents-authored.jsonl:documents-tools-4dc4b5bd60fc4ab518",
+      "text": "turn highlight on for characters 0 to 5 of Body using yellow"
+     },
+     {
+      "id": "demo-tool-profile:data/demo-tool-profile/documents-authored.jsonl:documents-tools-4f97d5e9ef27e177a9",
+      "text": "turn link on for characters 0 to 5 of Body with target https://example.org/notes"
+     }
+    ]
+   },
+   {
+    "cause": "binding missing for calendar.meeting.id",
+    "layer": "bindings",
+    "rows": 30,
+    "estimate": 293,
+    "tabs": {
+     "calendar": 30
+    },
+    "examples": [
+     {
+      "id": "main-synthetic:syn-calendar-2-588",
+      "text": "On top of that, retitle the Intro meeting to Second and pull its length to 2"
+     },
+     {
+      "id": "main-synthetic:syn-calendar-2-623:with-previous",
+      "text": "which one gets selected? the Intro meeting"
+     },
+     {
+      "id": "main-synthetic:syn-calendar-2-637",
+      "text": "cancel the Intro appointment by removing it"
+     }
+    ]
+   },
+   {
+    "cause": "bridge: requires-declared-ordinal-projection",
+    "layer": "rule",
+    "rows": 12,
+    "estimate": 288,
+    "tabs": {
+     "diagram": 4,
+     "drawing": 8
+    },
+    "examples": [
+     {
+      "id": "data-drop:dg-batch-02:diagram:1001",
+      "text": "reverse the middle link"
+     },
+     {
+      "id": "ui-diagram-v2:ui-diagram-v2-01329",
+      "text": "can you pick the third bubble together with its links thx"
+     },
+     {
+      "id": "ui-diagram-v2:ui-diagram-v2-04217:with-previous",
+      "text": "on a dark fill you need light text, so may da text of the smallest circle teal"
+     }
+    ]
+   },
+   {
+    "cause": "binding missing for drawing.part.owner",
+    "layer": "bindings",
+    "rows": 5,
+    "estimate": 284,
+    "tabs": {
+     "drawing": 5
+    },
+    "examples": [
+     {
+      "id": "demo-tool-profile:data/demo-tool-profile/drawing-authored.jsonl:drawing-tools-9ce8678a9d464f9463",
+      "text": "make part 4 of House A 50 pixels tall"
+     },
+     {
+      "id": "demo-tool-profile:data/demo-tool-profile/drawing-authored.jsonl:drawing-tools-5ffa414d77526b49be",
+      "text": "make part 0 of House A 50 pixels tall"
+     },
+     {
+      "id": "demo-tool-profile:data/demo-tool-profile/drawing-authored.jsonl:drawing-tools-6a9f5aeafae73175d3",
+      "text": "place part 9 of House A at x 310 and y 280"
+     }
+    ]
+   },
+   {
+    "cause": "binding missing for avatar.face.preset",
+    "layer": "bindings",
+    "rows": 10,
+    "estimate": 271,
+    "tabs": {
+     "avatar": 10
+    },
+    "examples": [
+     {
+      "id": "main-synthetic:syn-avatar-2-098",
+      "text": "swap in an infant face"
+     },
+     {
+      "id": "main-synthetic:syn-enriched-mech-3223",
+      "text": "face — change a girl, please"
+     },
+     {
+      "id": "main-synthetic:syn-mech-variants-full-13430:with-previous",
+      "text": "make one queen face"
+     }
+    ]
+   },
+   {
+    "cause": "target not resolved for change avatar.part (fill=description)",
+    "layer": "execution",
+    "rows": 6,
+    "estimate": 267,
+    "tabs": {
+     "avatar": 6
+    },
+    "examples": [
+     {
+      "id": "main-synthetic:syn-enriched-mech-5750:with-previous",
+      "text": "change a ful beard default"
+     },
+     {
+      "id": "main-synthetic:syn-enriched-mech-6823",
+      "text": "change a smlal round glasses"
+     },
+     {
+      "id": "main-synthetic:syn-enriched-mech-6840",
+      "text": "can you change a small round glasses tiny?"
+     }
+    ]
+   },
+   {
+    "cause": "rule missing: context reference (fill=context) for diagram.diagram",
+    "layer": "rule",
+    "rows": 8,
+    "estimate": 256,
+    "tabs": {
+     "diagram": 8
+    },
+    "examples": [
+     {
+      "id": "ui-diagram-v2:ui-diagram-v2-04347",
+      "text": "use curvy lines"
+     },
+     {
+      "id": "ui-diagram-v2:ui-diagram-v2-04351",
+      "text": "the slide is wide, make it flow leftwards"
+     },
+     {
+      "id": "ui-diagram-v2:ui-diagram-v2-04397",
+      "text": "it is a hierarchy, so lay out the diagram stacked for me"
+     }
+    ]
+   },
+   {
+    "cause": "binding missing for diagram.series.index",
+    "layer": "bindings",
+    "rows": 5,
+    "estimate": 250,
+    "tabs": {
+     "diagram": 5
+    },
+    "examples": [
+     {
+      "id": "data-drop-v1:dg-batch-02-diagram-00615",
+      "text": "one more thing: call the second series Budget"
+     },
+     {
+      "id": "data-drop-v1:dg-batch-02-diagram-00631",
+      "text": "change the colour of the first series to teal"
+     },
+     {
+      "id": "data-drop:dg-batch-02:diagram:622",
+      "text": "second series: Forecast"
+     }
+    ]
+   },
+   {
+    "cause": "binding missing for diagram.node.position",
+    "layer": "bindings",
+    "rows": 35,
+    "estimate": 249,
+    "tabs": {
+     "diagram": 35
+    },
+    "examples": [
+     {
+      "id": "data-drop-v1:dg-batch-02-diagram-00913",
+      "text": "insert a green box between Start and Bake"
+     },
+     {
+      "id": "data-drop-v1:dg-batch-02-diagram-00907",
+      "text": "slip a box in between Order and Ship, would you"
+     },
+     {
+      "id": "data-drop:dg-batch-02:diagram:888",
+      "text": "add three steps between Start and Bake"
+     }
+    ]
+   },
+   {
+    "cause": "rule missing: population/description reference (fill=all) for drawing.drawn",
+    "layer": "rule",
+    "rows": 11,
+    "estimate": 244,
+    "tabs": {
+     "drawing": 11
+    },
+    "examples": [
+     {
+      "id": "data-drop-v1:dw-batch-01-drawing-01612",
+      "text": "the flowers should be blue"
+     },
+     {
+      "id": "data-drop-v1:dw-batch-01-drawing-01612:with-previous",
+      "text": "the flowers should be blue"
+     },
+     {
+      "id": "data-drop-v1:dw-batch-01-drawing-01614",
+      "text": "let the flowers turn blue"
+     }
+    ]
+   },
+   {
+    "cause": "placement refused (tool-binding) for make drawing.drawn [drawn.name]",
+    "layer": "execution",
+    "rows": 5,
+    "estimate": 243,
+    "tabs": {
+     "drawing": 5
+    },
+    "examples": [
+     {
+      "id": "demo-tool-profile:data/haiku-v1/drawing/b01b.jsonl:drawing-b01-0179",
+      "text": "I need you to create a square called cow; then put cow below pig. I appreciate it."
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v1/drawing/b03b.jsonl:drawing-b03-0224",
+      "text": "I need you to create a square called sky; then put sky below kite. I appreciate it."
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v1/drawing/b11b.jsonl:drawing-b11-0235",
+      "text": "sketch a car called octopus; then put octopus below submarine."
+     }
+    ]
+   },
+   {
+    "cause": "rule missing: context reference (fill=context) for diagram.group",
+    "layer": "rule",
+    "rows": 8,
+    "estimate": 236,
+    "tabs": {
+     "diagram": 8
+    },
+    "examples": [
+     {
+      "id": "main-synthetic:syn-diagram-1395",
+      "text": "bar chart it is: Intro as the name, Main the labels, Second the values"
+     },
+     {
+      "id": "main-synthetic:syn-diagram-1409",
+      "text": "trends matter more than the totals this quarter, so a line chart called Intro, labels Main and values Second, would tell it better"
+     },
+     {
+      "id": "main-synthetic:syn-diagram-2-1117",
+      "text": "Back us up with a line chart: Intro name, Main labels, Second values"
+     }
+    ]
+   },
+   {
+    "cause": "rule missing: query projection ask=exists for diagram.link",
+    "layer": "rule",
+    "rows": 4,
+    "estimate": 236,
+    "tabs": {
+     "diagram": 4
+    },
+    "examples": [
+     {
+      "id": "ui-diagram-v2:ui-diagram-v2-03915:with-previous",
+      "text": "before I add it again, is Client already connected to n4? pls"
+     },
+     {
+      "id": "ui-diagram-v2:ui-diagram-v2-03927",
+      "text": "before I add it again, is Build already cnonected to the oval?"
+     },
+     {
+      "id": "ui-diagram-v2:ui-diagram-v2-03928",
+      "text": "n1 lnked to n2?"
+     }
+    ]
+   }
+  ],
+  "e2e": [
+   {
+    "cause": "binding missing: diagram.node target without a kind word (fill=written)",
+    "layer": "bindings",
+    "rows": 125,
+    "estimate": 4707,
+    "tabs": {
+     "diagram": 125
+    },
+    "examples": [
+     {
+      "id": "data-drop-v1:dg-batch-02-diagram-00549",
+      "text": "redcue April by 3"
+     },
+     {
+      "id": "data-drop-v1:dg-batch-02-diagram-00676",
+      "text": "remove Series 2"
+     },
+     {
+      "id": "data-drop-v1:dg-batch-02-diagram-01167",
+      "text": "bump the Plan label up to 18 point"
+     }
+    ]
+   },
+   {
+    "cause": "binding missing for calendar.meeting.day",
+    "layer": "bindings",
+    "rows": 74,
+    "estimate": 2198,
+    "tabs": {
+     "calendar": 74
+    },
+    "examples": [
+     {
+      "id": "demo-tool-profile:data/haiku-v1/calendar/b02b.jsonl:calendar-b02-0168",
+      "text": "Hey, place Review to 2026-12-12 at 16:00 UTC."
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v1/calendar/b01a.jsonl:calendar-b01-0085",
+      "text": "I need you to book War room for Planning on 2026-12-08 from 16:00 UTC for 60 minutes. I appreciate it."
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v1/calendar/b09b.jsonl:calendar-b09-0132",
+      "text": "put Review to 2026-12-16 at 12:00 UTC."
+     }
+    ]
+   },
+   {
+    "cause": "no operation for change drawing.drawn [drawn.colour]",
+    "layer": "no-operation",
+    "rows": 34,
+    "estimate": 2115,
+    "tabs": {
+     "drawing": 34
+    },
+    "examples": [
+     {
+      "id": "data-drop-v1:dw-batch-01-drawing-01664:with-previous",
+      "text": "hey, make all the dogs brown"
+     },
+     {
+      "id": "data-drop-v1:dw-batch-01-drawing-01610",
+      "text": "turn all the flowers blue"
+     },
+     {
+      "id": "data-drop-v1:dw-batch-01-drawing-01673:with-previous",
+      "text": "make all teh dogs brown"
+     }
+    ]
+   },
+   {
+    "cause": "binding missing for document.block.text",
+    "layer": "bindings",
+    "rows": 74,
+    "estimate": 1992,
+    "tabs": {
+     "document": 74
+    },
+    "examples": [
+     {
+      "id": "demo-tool-profile:data/haiku-v1/document/b02a.jsonl:document-b02-0101",
+      "text": "I need you to replace Draft 2 with \"Bring the revised notes to the meeting.\". I appreciate it."
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v1/document/b02b.jsonl:document-b02-0144",
+      "text": "Let us replace Essay draft with \"Everyone can read the new summary.\". That would help."
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v1/document/b08a.jsonl:document-b08-0068",
+      "text": "Please, create a document titled Design job application containing \"The next stage begins on Friday.\". Thanks!"
+     }
+    ]
+   },
+   {
+    "cause": "binding missing: relation anchor reference in drawing",
+    "layer": "bindings",
+    "rows": 38,
+    "estimate": 1745,
+    "tabs": {
+     "drawing": 38
+    },
+    "examples": [
+     {
+      "id": "data-drop-v1:dw-batch-01-drawing-01307",
+      "text": "stick a second boat by the first one"
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v1/drawing/b07a.jsonl:drawing-b07-0017",
+      "text": "Hey, put heart to the left of Reference. That would help."
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v1/drawing/b05a.jsonl:drawing-b05-0103",
+      "text": "place hat to the left of Reference."
+     }
+    ]
+   },
+   {
+    "cause": "knowledge: kind words of diagram.node not bound",
+    "layer": "knowledge",
+    "rows": 46,
+    "estimate": 1500,
+    "tabs": {
+     "diagram": 46
+    },
+    "examples": [
+     {
+      "id": "data-drop-v1:dg-batch-02-diagram-00631",
+      "text": "change the colour of the first series to teal"
+     },
+     {
+      "id": "data-drop-v1:dg-batch-02-diagram-01100",
+      "text": "all elements get a shadow"
+     },
+     {
+      "id": "data-drop-v1:dg-batch-02-diagram-00368",
+      "text": "can you give the bars a dark green colour"
+     }
+    ]
+   },
+   {
+    "cause": "binding missing for avatar.part.id",
+    "layer": "bindings",
+    "rows": 34,
+    "estimate": 1435,
+    "tabs": {
+     "avatar": 34
+    },
+    "examples": [
+     {
+      "id": "human-benchmark-v1:avatar-magicbrush-74",
+      "text": "let her have a beard and a moustache"
+     },
+     {
+      "id": "human-benchmark-v1:avatar-realedit-20",
+      "text": "Update her face to include the full beard from God of War 2018"
+     },
+     {
+      "id": "human-benchmark-v1:avatar-realedit-29",
+      "text": "Add a top hat and monocle to her please?"
+     }
+    ]
+   },
+   {
+    "cause": "binding missing for drawing.drawn.direction",
+    "layer": "bindings",
+    "rows": 35,
+    "estimate": 1429,
+    "tabs": {
+     "drawing": 35
+    },
+    "examples": [
+     {
+      "id": "human-adapted-v1-drawing:human-adapted-drawing-0037",
+      "text": "then the person in a purple hat moves one space to the right"
+     },
+     {
+      "id": "human-benchmark-v1:drawing-blocks-003",
+      "text": "block 11's right side should touch block 13's left side"
+     },
+     {
+      "id": "human-benchmark-v1:drawing-blocks-004",
+      "text": "Pick up the 20 box and sit it down below and even with the 19 box."
+     }
+    ]
+   },
+   {
+    "cause": "binding missing: diagram.node target without a kind word (fill=context)",
+    "layer": "bindings",
+    "rows": 43,
+    "estimate": 1269,
+    "tabs": {
+     "diagram": 43
+    },
+    "examples": [
+     {
+      "id": "data-drop-v1:dg-batch-02-diagram-00195",
+      "text": "please take the gridlines off the chart"
+     },
+     {
+      "id": "data-drop-v1:dg-batch-02-diagram-00200",
+      "text": "with only three categories the guides are noise, drop them"
+     },
+     {
+      "id": "data-drop-v1:dg-batch-02-diagram-00207",
+      "text": "cap the y axis at 200"
+     }
+    ]
+   },
+   {
+    "cause": "binding missing: diagram.node target without a kind word (fill=-)",
+    "layer": "bindings",
+    "rows": 36,
+    "estimate": 1221,
+    "tabs": {
+     "diagram": 36
+    },
+    "examples": [
+     {
+      "id": "data-drop-v1:dg-batch-02-diagram-00869",
+      "text": "add a rounded box called Wrap and give it a green outline"
+     },
+     {
+      "id": "data-drop-v1:dg-batch-02-diagram-00522",
+      "text": "March: 4 more"
+     },
+     {
+      "id": "data-drop:dg-batch-02:diagram:1270",
+      "text": "a general clean-up will do"
+     }
+    ]
+   },
+   {
+    "cause": "binding missing for avatar.part.colour",
+    "layer": "bindings",
+    "rows": 42,
+    "estimate": 1172,
+    "tabs": {
+     "avatar": 42
+    },
+    "examples": [
+     {
+      "id": "human-benchmark-v1:avatar-emuedit-18",
+      "text": "Make the girl's shirt blue instead of the red color it is now."
+     },
+     {
+      "id": "human-benchmark-v1:avatar-magicbrush-3",
+      "text": "change the shirt to red shirt"
+     },
+     {
+      "id": "human-benchmark-v1:avatar-emuedit-31",
+      "text": "Change her to a young, white male in his 20s- and add a blond crew cut."
+     }
+    ]
+   },
+   {
+    "cause": "knowledge: kind words of drawing.drawn not bound",
+    "layer": "knowledge",
+    "rows": 20,
+    "estimate": 1160,
+    "tabs": {
+     "drawing": 20
+    },
+    "examples": [
+     {
+      "id": "human-adapted-v1-drawing:human-adapted-drawing-0465",
+      "text": "change the stuffed toys into rubber duckies"
+     },
+     {
+      "id": "human-benchmark-v1:drawing-codraw-008",
+      "text": "large round tree to the left of the picture. we can not see the top of it"
+     },
+     {
+      "id": "human-benchmark-v1:drawing-codraw-042",
+      "text": "next to her legs small balloons sitting there."
+     }
+    ]
+   },
+   {
+    "cause": "rule missing: query projection ask=what for drawing.drawn",
+    "layer": "rule",
+    "rows": 15,
+    "estimate": 1078,
+    "tabs": {
+     "drawing": 15
+    },
+    "examples": [
+     {
+      "id": "demo-tool-profile:data/haiku-v1/drawing/b01a.jsonl:drawing-b01-0114",
+      "text": "Could you what colour is cat?. I appreciate it."
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v1/drawing/b05a.jsonl:drawing-b05-0079",
+      "text": "what colour is face a?."
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v1/drawing/b13a.jsonl:drawing-b13-0006",
+      "text": "I need you to what colour is castle?. I appreciate it."
+     }
+    ]
+   },
+   {
+    "cause": "host refused drawing.drawn.relation (make drawing.drawn)",
+    "layer": "execution",
+    "rows": 16,
+    "estimate": 955,
+    "tabs": {
+     "drawing": 16
+    },
+    "examples": [
+     {
+      "id": "ui-coverage-v2:ui-coverage-v2-drawing-00086",
+      "text": "draw a tree next to the house"
+     },
+     {
+      "id": "ui-relations-v1:ui-relations-00879",
+      "text": "draw a leafless tree on the left side of the tree"
+     },
+     {
+      "id": "ui-relations-v1:ui-relations-01748",
+      "text": "give me a tractor just right of that tree"
+     }
+    ]
+   },
+   {
+    "cause": "knowledge: kind words of document.text not bound",
+    "layer": "knowledge",
+    "rows": 23,
+    "estimate": 879,
+    "tabs": {
+     "document": 23
+    },
+    "examples": [
+     {
+      "id": "demo-tool-profile:data/haiku-v1/document/b03b.jsonl:document-b03-0198",
+      "text": "Please, how many words are in the document?. Thanks!"
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v1/document/b09b.jsonl:document-b09-0166",
+      "text": "Hey, how many words are in the document?."
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v1/document/b09b.jsonl:document-b09-0194",
+      "text": "Hey, how many words are in the document?."
+     }
+    ]
+   },
+   {
+    "cause": "binding missing for calendar.meeting.calendar",
+    "layer": "bindings",
+    "rows": 30,
+    "estimate": 839,
+    "tabs": {
+     "calendar": 30
+    },
+    "examples": [
+     {
+      "id": "demo-tool-profile:data/haiku-v1/calendar/b02a.jsonl:calendar-b02-0084",
+      "text": "which events are on Work 3 on 2026-12-15?."
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v1/calendar/b01a.jsonl:calendar-b01-0122",
+      "text": "Please, which events are on Work 8 on 2026-12-16?. Thanks!"
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v1/calendar/b05b.jsonl:calendar-b05-0219",
+      "text": "Hey, which events are on Work 2 on 2026-12-06?. That would help."
+     }
+    ]
+   },
+   {
+    "cause": "knowledge: kind words of diagram.chart not bound",
+    "layer": "knowledge",
+    "rows": 20,
+    "estimate": 818,
+    "tabs": {
+     "diagram": 20
+    },
+    "examples": [
+     {
+      "id": "demo-tool-profile:data/haiku-v2/diagram/v2b02a.jsonl:diagram-v2b02-0019",
+      "text": "Hey, make a pie chart called Visits with values 15, 20 for Notes and Sample."
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v2/diagram/v2b10b.jsonl:diagram-v2b10-0135",
+      "text": "Hey, make a pie chart called Customers with values 13, 8 for Q2 and Sample."
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v2/diagram/v2b10b.jsonl:diagram-v2b10-0155",
+      "text": "Please, make a bar chart called Fuel use with values 9, 8 for Car 1 and Sample. Thanks!"
+     }
+    ]
+   },
+   {
+    "cause": "refused: overwrite-needs-stricter-admission for make document.section",
+    "layer": "execution",
+    "rows": 29,
+    "estimate": 784,
+    "tabs": {
+     "document": 29
+    },
+    "examples": [
+     {
+      "id": "human-benchmark-v1:document-dolly-010",
+      "text": "Write an e-mail to the office asking employees to clean their coffee mugs rather than leave them in the sink. It should be polite, but express some annoyance."
+     },
+     {
+      "id": "human-benchmark-v1:document-dolly-011",
+      "text": "Please write a haiku"
+     },
+     {
+      "id": "human-benchmark-v1:document-dolly-012",
+      "text": "Write a letter to my mum and dad detailing the reasons why they should buy me a pet tortoise"
+     }
+    ]
+   },
+   {
+    "cause": "binding missing for diagram.node.at",
+    "layer": "bindings",
+    "rows": 23,
+    "estimate": 719,
+    "tabs": {
+     "diagram": 23
+    },
+    "examples": [
+     {
+      "id": "data-drop-v1:pilot-diagram-00231",
+      "text": "one more thing: please recolour Check yellow and then shove it a bit to the right"
+     },
+     {
+      "id": "data-drop:dg-batch-02:diagram:66",
+      "text": "legend up top"
+     },
+     {
+      "id": "data-drop:dg-batch-02:diagram:883",
+      "text": "the missing part is five steps at the bottom"
+     }
+    ]
+   },
+   {
+    "cause": "binding missing: drawing.? target without a kind word (fill=-)",
+    "layer": "bindings",
+    "rows": 16,
+    "estimate": 707,
+    "tabs": {
+     "drawing": 16
+    },
+    "examples": [
+     {
+      "id": "data-drop-v1:pilot-drawing-00225",
+      "text": "the other one, please, thanks"
+     },
+     {
+      "id": "data-drop-v1:pilot-drawing-00277",
+      "text": "the same for the trees, thanks"
+     },
+     {
+      "id": "human-benchmark-v1:drawing-codraw-019",
+      "text": "big bear on left, right arm is not visible, and hip at horizon."
+     }
+    ]
+   },
+   {
+    "cause": "binding missing for calendar.calendar.name",
+    "layer": "bindings",
+    "rows": 23,
+    "estimate": 701,
+    "tabs": {
+     "calendar": 23
+    },
+    "examples": [
+     {
+      "id": "demo-tool-profile:data/haiku-v1/calendar/b05a.jsonl:calendar-b05-0106",
+      "text": "I need you to create a calendar called Work 1; then book Review on Work 1 on 2026-12-09 at 09:00 UTC for 15 minutes. I appreciate it."
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v1/calendar/b11a.jsonl:calendar-b11-0031",
+      "text": "add a calendar called Work 8; then schedule Review on Work 8 on 2026-12-04 at 16:00 UTC for 60 minutes."
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v2/calendar/v2b03b.jsonl:calendar-v2b03-0179",
+      "text": "Please, add a calendar called Work 3; then schedule Review on Work 3 on 2026-12-19 at 11:00 UTC for 45 minutes. Thanks!"
+     }
+    ]
+   },
+   {
+    "cause": "knowledge: kind words of document.block not bound",
+    "layer": "knowledge",
+    "rows": 34,
+    "estimate": 692,
+    "tabs": {
+     "document": 34
+    },
+    "examples": [
+     {
+      "id": "human-benchmark-v1:document-docedit-003",
+      "text": "Added alphabetical pointers to the headings of the page."
+     },
+     {
+      "id": "human-benchmark-v1:document-docedit-041",
+      "text": "Right bottom corner text move to the right top corner"
+     },
+     {
+      "id": "human-benchmark-v1:document-docedit-037",
+      "text": "Paragraph \"Since rolling out a largely\" following line\"These difficulties have been well-chronicled \" is replaced with \"These vulnerabilities have been well-\".documented in a number of market player complaints and related documents submitted by the NYISO to the Commission.\""
+     }
+    ]
+   },
+   {
+    "cause": "binding missing for avatar.part.ids",
+    "layer": "bindings",
+    "rows": 28,
+    "estimate": 647,
+    "tabs": {
+     "avatar": 28
+    },
+    "examples": [
+     {
+      "id": "demo-tool-profile:data/demo-tool-profile/avatar-authored.jsonl:avatar-demo-48aa9d8d8f91666ad1",
+      "text": "make the hair front huge size"
+     },
+     {
+      "id": "demo-tool-profile:data/demo-tool-profile/avatar-authored.jsonl:avatar-demo-564207710432029b17",
+      "text": "set the \"nose\" part to the wide variant"
+     },
+     {
+      "id": "demo-tool-profile:data/demo-tool-profile/avatar-authored.jsonl:avatar-demo-7932aa5bad646fe5b4",
+      "text": "set the \"nose\" part to the long variant"
+     }
+    ]
+   },
+   {
+    "cause": "tool argument binding missing for change avatar.part [part.colour]",
+    "layer": "bindings",
+    "rows": 16,
+    "estimate": 626,
+    "tabs": {
+     "avatar": 16
+    },
+    "examples": [
+     {
+      "id": "human-benchmark-v1:avatar-emuedit-41",
+      "text": "Change her hair to be all blue"
+     },
+     {
+      "id": "human-benchmark-v1:avatar-emuedit-42",
+      "text": "Change the color of the child's hair to black."
+     },
+     {
+      "id": "human-benchmark-v1:avatar-magicbrush-41",
+      "text": "Let her eyes turn blue."
+     }
+    ]
+   },
+   {
+    "cause": "binding missing: diagram.sketch target without a kind word (fill=context)",
+    "layer": "bindings",
+    "rows": 18,
+    "estimate": 620,
+    "tabs": {
+     "diagram": 18
+    },
+    "examples": [
+     {
+      "id": "data-drop-v1:dg-batch-02-diagram-01372",
+      "text": "not the first, the second"
+     },
+     {
+      "id": "data-drop-v1:dg-batch-02-diagram-01458",
+      "text": "list everything the Review step connects to"
+     },
+     {
+      "id": "data-drop:dg-batch-02:diagram:1717",
+      "text": "make it look better, this layout is a mess"
+     }
+    ]
+   },
+   {
+    "cause": "knowledge: kind words of drawing.? not bound",
+    "layer": "knowledge",
+    "rows": 9,
+    "estimate": 519,
+    "tabs": {
+     "drawing": 9
+    },
+    "examples": [
+     {
+      "id": "data-drop-v1:dw-batch-01-drawing-01561",
+      "text": "leave a single house standing, clear the rest"
+     },
+     {
+      "id": "data-drop-v1:dw-batch-01-drawing-01451",
+      "text": "the hill should be bare"
+     },
+     {
+      "id": "data-drop-v1:pilot-drawing-00032",
+      "text": "lake, boat on it, house nearby, if you can"
+     }
+    ]
+   },
+   {
+    "cause": "refused: drawing-not-in-catalog for make drawing.drawn",
+    "layer": "execution",
+    "rows": 8,
+    "estimate": 511,
+    "tabs": {
+     "drawing": 8
+    },
+    "examples": [
+     {
+      "id": "main-synthetic:syn-orphans-mech-19088",
+      "text": "add an elk"
+     },
+     {
+      "id": "ui-relations-v1:ui-relations-01537",
+      "text": "Give me a lynx to the right of the tree there."
+     },
+     {
+      "id": "ui-relations-v1:ui-relations-01898",
+      "text": "sketch a cardinal over the hill there"
+     }
+    ]
+   },
+   {
+    "cause": "placement refused (tool-binding) for make drawing.drawn [drawn.anchor (selector), drawn.relation]",
+    "layer": "execution",
+    "rows": 8,
+    "estimate": 478,
+    "tabs": {
+     "drawing": 8
+    },
+    "examples": [
+     {
+      "id": "ui-relations-v1:ui-relations-00921",
+      "text": "draw a mite left of the mountain"
+     },
+     {
+      "id": "ui-relations-v1:ui-relations-01144",
+      "text": "put a tree frog on the left side of that mountain"
+     },
+     {
+      "id": "ui-relations-v1:ui-relations-03964",
+      "text": "Make a barracuda into that lake."
+     }
+    ]
+   },
+   {
+    "cause": "binding missing for avatar.part.variant",
+    "layer": "bindings",
+    "rows": 16,
+    "estimate": 478,
+    "tabs": {
+     "avatar": 16
+    },
+    "examples": [
+     {
+      "id": "human-benchmark-v1:avatar-emuedit-13",
+      "text": "change her shirt into a boston red sox t shirt"
+     },
+     {
+      "id": "human-benchmark-v1:avatar-magicbrush-27",
+      "text": "let her be bald"
+     },
+     {
+      "id": "human-benchmark-v1:avatar-realedit-1",
+      "text": "Could someone please remove the double chin and slim her face?"
+     }
+    ]
+   },
+   {
+    "cause": "binding missing for document.section.id",
+    "layer": "bindings",
+    "rows": 24,
+    "estimate": 474,
+    "tabs": {
+     "document": 24
+    },
+    "examples": [
+     {
+      "id": "human-benchmark-v1:document-pptc-035",
+      "text": "change the font color of the title to red"
+     },
+     {
+      "id": "human-benchmark-v1:document-pptc-039",
+      "text": "change the font color of the title to orange. then create a new section and name it \"Data Preprocessing\""
+     },
+     {
+      "id": "main-synthetic:syn-document-2-1845",
+      "text": "That unit Intro, 2 and 3 — picked"
+     }
+    ]
+   },
+   {
+    "cause": "binding missing for avatar.face.preset",
+    "layer": "bindings",
+    "rows": 18,
+    "estimate": 464,
+    "tabs": {
+     "avatar": 18
+    },
+    "examples": [
+     {
+      "id": "human-benchmark-v1:avatar-emuedit-39",
+      "text": "Change the girl's long hair into strands of neon lights."
+     },
+     {
+      "id": "human-benchmark-v1:avatar-magicbrush-49",
+      "text": "Have the girl have big, green eyes"
+     },
+     {
+      "id": "human-benchmark-v1:avatar-magicbrush-28",
+      "text": "what if the girl has glasses?"
+     }
+    ]
+   },
+   {
+    "cause": "needs (meaning without a key): drawn.becomes",
+    "layer": "needs",
+    "rows": 7,
+    "estimate": 453,
+    "tabs": {
+     "drawing": 7
+    },
+    "examples": [
+     {
+      "id": "data-drop-v1:dw-batch-01-drawing-00027",
+      "text": "and change the fish into a shark"
+     },
+     {
+      "id": "data-drop-v1:pilot-drawing-00065:with-previous",
+      "text": "please change the grass to water"
+     },
+     {
+      "id": "data-drop-v1:dw-batch-01-drawing-00322",
+      "text": "one of the fish should be a shark now"
+     }
+    ]
+   },
+   {
+    "cause": "refused: overwrite-needs-stricter-admission for make document.text",
+    "layer": "execution",
+    "rows": 17,
+    "estimate": 437,
+    "tabs": {
+     "document": 17
+    },
+    "examples": [
+     {
+      "id": "demo-tool-profile:data/haiku-v1/document/b04a.jsonl:document-b04-0069",
+      "text": "Could you write a report about The Fox Who Lost His Tail in approximately 21 words. Thanks!"
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v1/document/b15b.jsonl:document-b15-0141",
+      "text": "Hey, write a report about Lab safety note in approximately 27 words. That would help."
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v2/document/v2b07a.jsonl:document-v2b07-0056",
+      "text": "Hey, compose a report about Newsletter in approximately 43 words. That would help."
+     }
+    ]
+   },
+   {
+    "cause": "binding missing for document.section.order",
+    "layer": "bindings",
+    "rows": 23,
+    "estimate": 433,
+    "tabs": {
+     "document": 23
+    },
+    "examples": [
+     {
+      "id": "demo-tool-profile:data/haiku-v1/document/b03a.jsonl:document-b03-0079",
+      "text": "I need you to place Refund paragraph after Summary. I appreciate it."
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v1/document/b08a.jsonl:document-b08-0027",
+      "text": "I need you to put Agenda after Decisions. I appreciate it."
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v1/document/b02b.jsonl:document-b02-0212",
+      "text": "place Essay draft after Quote bank."
+     }
+    ]
+   },
+   {
+    "cause": "binding missing for avatar.face.base",
+    "layer": "bindings",
+    "rows": 11,
+    "estimate": 420,
+    "tabs": {
+     "avatar": 11
+    },
+    "examples": [
+     {
+      "id": "human-benchmark-v1:avatar-magicbrush-44",
+      "text": "change the girl into a man"
+     },
+     {
+      "id": "human-benchmark-v1:avatar-magicbrush-69",
+      "text": "turn the girl in a woman"
+     },
+     {
+      "id": "human-benchmark-v1:avatar-emuedit-36",
+      "text": "Change her into a space astronaut."
+     }
+    ]
+   },
+   {
+    "cause": "binding missing for document.block.align",
+    "layer": "bindings",
+    "rows": 18,
+    "estimate": 418,
+    "tabs": {
+     "document": 18
+    },
+    "examples": [
+     {
+      "id": "demo-tool-profile:data/demo-tool-profile/documents-authored.jsonl:documents-tools-a27ddf940a38dc05d2",
+      "text": "align Body left"
+     },
+     {
+      "id": "demo-tool-profile:data/demo-tool-profile/documents-authored.jsonl:documents-tools-7f0ce5093428c7f868",
+      "text": "align Body center"
+     },
+     {
+      "id": "demo-tool-profile:data/demo-tool-profile/documents-authored.jsonl:documents-tools-c2d22ab967f012c54b",
+      "text": "align Body justify"
+     }
+    ]
+   },
+   {
+    "cause": "binding missing: document.block target without a kind word (fill=context)",
+    "layer": "bindings",
+    "rows": 19,
+    "estimate": 415,
+    "tabs": {
+     "document": 19
+    },
+    "examples": [
+     {
+      "id": "human-benchmark-v1:document-docedit-017",
+      "text": "Changed the placement of text by placing it in the third column."
+     },
+     {
+      "id": "human-benchmark-v1:document-docedit-012",
+      "text": "Delete the footnote \"19 As far as the statute is concerned,)"
+     },
+     {
+      "id": "human-benchmark-v1:document-docedit-014",
+      "text": "Removed \"(on-line publication)\" from start of the page"
+     }
+    ]
+   },
+   {
+    "cause": "binding missing: diagram.sketch target without a kind word (fill=written)",
+    "layer": "bindings",
+    "rows": 7,
+    "estimate": 412,
+    "tabs": {
+     "diagram": 7
+    },
+    "examples": [
+     {
+      "id": "ui-coverage-v2:ui-coverage-v2-diagram-00544:with-previous",
+      "text": "Do the charts include a Survey results group, or was that removed?"
+     },
+     {
+      "id": "ui-coverage-v2:ui-coverage-v2-diagram-00551",
+      "text": "does South exist"
+     },
+     {
+      "id": "ui-diagram-v2:ui-diagram-v2-02617:with-previous",
+      "text": "clear awayy Idea-n2 connector"
+     }
+    ]
+   },
+   {
+    "cause": "rule missing: query projection ask=list for diagram.chart",
+    "layer": "rule",
+    "rows": 6,
+    "estimate": 407,
+    "tabs": {
+     "diagram": 6
+    },
+    "examples": [
+     {
+      "id": "demo-tool-profile:data/haiku-v1/diagram/b05a.jsonl:diagram-b05-0020",
+      "text": "Hey, what values does Core router show?."
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v1/diagram/b06b.jsonl:diagram-b06-0177",
+      "text": "Let us what values does Photosynthesis show?. That would help."
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v1/diagram/b04b.jsonl:diagram-b04-0189",
+      "text": "Could you what values does Hannah Cole show?. I appreciate it."
+     }
+    ]
+   },
+   {
+    "cause": "needs (meaning without a key): part.owner",
+    "layer": "needs",
+    "rows": 6,
+    "estimate": 405,
+    "tabs": {
+     "drawing": 6
+    },
+    "examples": [
+     {
+      "id": "data-drop-v1:dw-batch-01-drawing-00463:with-previous",
+      "text": "put a pair of eyes on the sun"
+     },
+     {
+      "id": "data-drop-v1:dw-batch-01-drawing-00708:with-previous",
+      "text": "turn the boy's shirt red, please"
+     },
+     {
+      "id": "data-drop-v1:dw-batch-01-drawing-00712:with-previous",
+      "text": "can you turn the girl's shirt red?"
+     }
+    ]
+   },
+   {
+    "cause": "tool argument binding missing for make document.section [section.content]",
+    "layer": "bindings",
+    "rows": 19,
+    "estimate": 400,
+    "tabs": {
+     "document": 19
+    },
+    "examples": [
+     {
+      "id": "demo-tool-profile:data/haiku-v1/document/b12b.jsonl:document-b12-0204",
+      "text": "make a heading called Love note Sam; then make a paragraph saying \"Bring the revised notes to the meeting.\"."
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v1/document/b16b.jsonl:document-b16-0187",
+      "text": "Please, make a heading called Lost pets; then make a paragraph saying \"Please confirm these updated details.\". Thanks!"
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v1/document/b11a.jsonl:document-b11-0017",
+      "text": "Please, make a heading called Victoria sponge; then add a paragraph saying \"Everyone can read the new summary.\". Thanks!"
+     }
+    ]
+   },
+   {
+    "cause": "reading refused without diagnostics",
+    "layer": "rule",
+    "rows": 12,
+    "estimate": 396,
+    "tabs": {
+     "diagram": 4,
+     "drawing": 7,
+     "calendar": 1
+    },
+    "examples": [
+     {
+      "id": "data-drop-v1:dg-batch-02-diagram-01643",
+      "text": "the same for the rest, thanks"
+     },
+     {
+      "id": "data-drop-v1:dw-batch-01-drawing-01554",
+      "text": "hey, take down every house except the blue one"
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v1/drawing/b03a.jsonl:drawing-b03-0037",
+      "text": "Hey, remove tower block, but leave crane alone."
+     }
+    ]
+   },
+   {
+    "cause": "binding missing for document.block.at",
+    "layer": "bindings",
+    "rows": 16,
+    "estimate": 395,
+    "tabs": {
+     "document": 16
+    },
+    "examples": [
+     {
+      "id": "demo-tool-profile:data/demo-tool-profile/documents-authored.jsonl:documents-tools-3ee584c0da66acb740",
+      "text": "turn italic off for characters 0 to 5 of Body"
+     },
+     {
+      "id": "demo-tool-profile:data/demo-tool-profile/documents-authored.jsonl:documents-tools-4dc4b5bd60fc4ab518",
+      "text": "turn highlight on for characters 0 to 5 of Body using yellow"
+     },
+     {
+      "id": "demo-tool-profile:data/demo-tool-profile/documents-authored.jsonl:documents-tools-4f97d5e9ef27e177a9",
+      "text": "turn link on for characters 0 to 5 of Body with target https://example.org/notes"
+     }
+    ]
+   },
+   {
+    "cause": "reader: missing-or-ambiguous-act-anchor request.request.act",
+    "layer": "reader",
+    "rows": 10,
+    "estimate": 384,
+    "tabs": {
+     "diagram": 4,
+     "drawing": 6
+    },
+    "examples": [
+     {
+      "id": "human-benchmark-v1:diagram-nlv-22",
+      "text": "Split Ship Mode by category and segement and Avg(Profit) render barchart"
+     },
+     {
+      "id": "human-benchmark-v1:drawing-blocks-023",
+      "text": "take block 3 and place it by block 4 such that its bottom touches the top of block 4, such that the sides are flush"
+     },
+     {
+      "id": "human-benchmark-v1:drawing-codraw-021",
+      "text": "on your left hand side is a boy the green and blue line are his chest he is turn right has a smile on his face hand on hip"
+     }
+    ]
+   },
+   {
+    "cause": "binding missing for avatar.face.id",
+    "layer": "bindings",
+    "rows": 17,
+    "estimate": 379,
+    "tabs": {
+     "avatar": 17
+    },
+    "examples": [
+     {
+      "id": "demo-tool-profile:data/demo-tool-profile/avatar-authored.jsonl:avatar-demo-1fd0e0bedfc678bf81",
+      "text": "call Avatar Ada"
+     },
+     {
+      "id": "demo-tool-profile:data/demo-tool-profile/avatar-authored.jsonl:avatar-demo-27efb9e612f3fac585",
+      "text": "call Avatar Nova"
+     },
+     {
+      "id": "human-benchmark-v1:avatar-realedit-4",
+      "text": "Could someone turn her into Thanos? (making face purple, adding lines to chin)? Thank you."
+     }
+    ]
+   },
+   {
+    "cause": "binding missing for diagram.chart.source",
+    "layer": "bindings",
+    "rows": 8,
+    "estimate": 376,
+    "tabs": {
+     "diagram": 8
+    },
+    "examples": [
+     {
+      "id": "human-benchmark-v1:diagram-nlv-24",
+      "text": "Give me a scatter chart of budget vs earnings for each age rating"
+     },
+     {
+      "id": "human-benchmark-v1:diagram-nlv-18",
+      "text": "Chart scatter plot of budget by worldwide growth coded by genre"
+     },
+     {
+      "id": "human-benchmark-v1:diagram-nlv-2",
+      "text": "Show me a bar chart of total profit by region, and stack the bars by ship status"
+     }
+    ]
+   },
+   {
+    "cause": "no operation for change drawing.drawn [drawn.size]",
+    "layer": "no-operation",
+    "rows": 6,
+    "estimate": 369,
+    "tabs": {
+     "drawing": 6
+    },
+    "examples": [
+     {
+      "id": "data-drop-v1:dw-batch-01-drawing-01680",
+      "text": "grow the houses"
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v2/drawing/v2b05b.jsonl:drawing-v2b05-0171",
+      "text": "Let us make Sun 67 pixels wide. That would help."
+     },
+     {
+      "id": "demo-tool-profile:data/haiku-v2/drawing/v2b28a.jsonl:drawing-v2b28-0034",
+      "text": "Could you make robot 53 pixels wide. Thanks!"
+     }
+    ]
+   },
+   {
+    "cause": "wrong effect: value:drawn.size for make drawing.drawn",
+    "layer": "wrong-effect",
+    "rows": 7,
+    "estimate": 368,
+    "tabs": {
+     "drawing": 7
+    },
+    "examples": [
+     {
+      "id": "human-benchmark-v1:drawing-codraw-020",
+      "text": "large sun on right third seen in corner"
+     },
+     {
+      "id": "human-benchmark-v1:drawing-codraw-023",
+      "text": "large fireplace under the thunder cloud or immediately to the right of the boy."
+     },
+     {
+      "id": "human-benchmark-v1:drawing-codraw-062",
+      "text": "a large tree is on the right, 3/4 is hide on right and top."
+     }
+    ]
+   },
+   {
+    "cause": "knowledge: kind words of diagram.? not bound",
+    "layer": "knowledge",
+    "rows": 9,
+    "estimate": 363,
+    "tabs": {
+     "diagram": 9
+    },
+    "examples": [
+     {
+      "id": "data-drop-v1:pilot-diagram-00249",
+      "text": "same for the arrows, if you can"
+     },
+     {
+      "id": "human-benchmark-v1:diagram-texse-2",
+      "text": "Simple flowchart"
+     },
+     {
+      "id": "human-benchmark-v1:diagram-wc-11",
+      "text": "You are a programmer and an expert on stock trading. Make an algorithm and a block diagram of a trading robot"
+     }
+    ]
+   },
+   {
+    "cause": "binding missing: diagram.? target without a kind word (fill=-)",
+    "layer": "bindings",
+    "rows": 9,
+    "estimate": 344,
+    "tabs": {
+     "diagram": 9
+    },
+    "examples": [
+     {
+      "id": "human-benchmark-v1:diagram-supp-31",
+      "text": "Drawing complex diagrams using gradients"
+     },
+     {
+      "id": "human-benchmark-v1:diagram-wc-44",
+      "text": "I want to create mind map on Medical surgical nursing subject Give me some mind map ideas"
+     },
+     {
+      "id": "human-benchmark-v1:diagram-wc-35",
+      "text": "make ER Diagram fot Students, department and college"
+     }
+    ]
+   },
+   {
+    "cause": "binding missing: calendar.calendar target without a kind word (fill=context)",
+    "layer": "bindings",
+    "rows": 14,
+    "estimate": 340,
+    "tabs": {
+     "calendar": 14
+    },
+    "examples": [
+     {
+      "id": "human-benchmark-v1:calendar-massive-14",
+      "text": "save this afternoon for my date"
+     },
+     {
+      "id": "human-benchmark-v1:calendar-massive-44",
+      "text": "show future events"
+     },
+     {
+      "id": "human-benchmark-v1:calendar-massive-33",
+      "text": "i need this event on a repeating cycle on my calendar"
+     }
+    ]
+   },
+   {
+    "cause": "binding missing: diagram.node target without a kind word (fill=all)",
+    "layer": "bindings",
+    "rows": 12,
+    "estimate": 338,
+    "tabs": {
+     "diagram": 12
+    },
+    "examples": [
+     {
+      "id": "data-drop-v1:dg-batch-02-diagram-00971",
+      "text": "connect all the boxes in order"
+     },
+     {
+      "id": "data-drop-v1:dg-batch-02-diagram-01009:with-previous",
+      "text": "reverse all three arrows"
+     },
+     {
+      "id": "data-drop:dg-batch-02:diagram:1213",
+      "text": "line all the boxes up in a column"
+     }
+    ]
+   },
+   {
+    "cause": "refused: unapplied-scheduling-details for make calendar.meeting",
+    "layer": "execution",
+    "rows": 11,
+    "estimate": 337,
+    "tabs": {
+     "calendar": 11
+    },
+    "examples": [
+     {
+      "id": "human-benchmark-v1:calendar-clinc150-17",
+      "text": "i need to put my appointment for tomorrow on my calendar"
+     },
+     {
+      "id": "human-benchmark-v1:calendar-clinc150-6",
+      "text": "would you schedule a meeting with carrie and lisa please"
+     },
+     {
+      "id": "human-benchmark-v1:calendar-massive-13",
+      "text": "add event for this evening meeting with jake"
+     }
+    ]
+   },
+   {
+    "cause": "wrong effect: value:node.x for make diagram.node",
+    "layer": "wrong-effect",
+    "rows": 7,
+    "estimate": 329,
+    "tabs": {
+     "diagram": 7
+    },
+    "examples": [
+     {
+      "id": "human-benchmark-v1:diagram-nlv-10",
+      "text": "line chart of AVG budget of each release year"
+     },
+     {
+      "id": "human-benchmark-v1:diagram-nlv-15",
+      "text": "For each data element, draw a circle at (its sales, profit) with the proper color by the region"
+     },
+     {
+      "id": "human-benchmark-v1:diagram-nlv-28",
+      "text": "bar chart of number of movies in each creative category"
+     }
+    ]
+   },
+   {
+    "cause": "tool argument binding missing for make drawing.drawn",
+    "layer": "bindings",
+    "rows": 4,
+    "estimate": 329,
+    "tabs": {
+     "drawing": 4
+    },
+    "examples": [
+     {
+      "id": "data-drop-v1:pilot-drawing-00023",
+      "text": "please a lake, a little boat on it, a house beside the lake"
+     },
+     {
+      "id": "main-synthetic:syn-trigger-batch-20307",
+      "text": "my current project needs a silver"
+     },
+     {
+      "id": "main-synthetic:syn-trigger-batch-22436:with-previous",
+      "text": "put a jaguar in, please"
+     }
+    ]
+   },
+   {
+    "cause": "target not resolved for change diagram.node (fill=description)",
+    "layer": "execution",
+    "rows": 9,
+    "estimate": 316,
+    "tabs": {
+     "diagram": 9
+    },
+    "examples": [
+     {
+      "id": "data-drop-v1:pilot-diagram-00116:with-previous",
+      "text": "the first two boxes should be half as wide — go on"
+     },
+     {
+      "id": "data-drop:dg-batch-02:diagram:1027",
+      "text": "rotate the first box by 30 degrees"
+     },
+     {
+      "id": "ui-comparatives-v1:ui-comparatives-00493",
+      "text": "make the shape slightly smaller, please"
+     }
+    ]
+   },
+   {
+    "cause": "tool argument binding missing for change avatar.part [part.variant]",
+    "layer": "bindings",
+    "rows": 8,
+    "estimate": 313,
+    "tabs": {
+     "avatar": 8
+    },
+    "examples": [
+     {
+      "id": "human-benchmark-v1:avatar-emuedit-12",
+      "text": "Make her eyes open."
+     },
+     {
+      "id": "human-benchmark-v1:avatar-emuedit-43",
+      "text": "Change the hair into a pink mohawk."
+     },
+     {
+      "id": "human-benchmark-v1:avatar-realedit-51",
+      "text": "Can someone make her eyes glow, like in ''I'm growing stronger'' meme?"
+     }
+    ]
+   },
+   {
+    "cause": "wrong effect: kind for make drawing.drawn",
+    "layer": "wrong-effect",
+    "rows": 4,
+    "estimate": 296,
+    "tabs": {
+     "drawing": 4
+    },
+    "examples": [
+     {
+      "id": "human-adapted-v1-drawing:human-adapted-drawing-0260",
+      "text": "big box center grass"
+     },
+     {
+      "id": "human-benchmark-v1:drawing-magicbrush-001",
+      "text": "Give the car a pig logo."
+     },
+     {
+      "id": "main-synthetic:syn-enriched-mech-12907",
+      "text": "add a trp"
+     }
+    ]
+   },
+   {
+    "cause": "rule missing: context reference (fill=context) for drawing.drawn",
+    "layer": "rule",
+    "rows": 8,
+    "estimate": 295,
+    "tabs": {
+     "drawing": 8
+    },
+    "examples": [
+     {
+      "id": "data-drop-v1:dw-batch-01-drawing-01652",
+      "text": "let the sheep turn whtie"
+     },
+     {
+      "id": "human-benchmark-v1:drawing-magicbrush-056",
+      "text": "Change the stop sign to say \"GO\""
+     },
+     {
+      "id": "main-synthetic:syn-drawing-3136",
+      "text": "audit runs long, so mount the ids on the page always — duration 1 keeps them fresh"
+     }
+    ]
+   },
+   {
+    "cause": "wrong effect: kind for make diagram.node",
+    "layer": "wrong-effect",
+    "rows": 12,
+    "estimate": 294,
+    "tabs": {
+     "diagram": 12
+    },
+    "examples": [
+     {
+      "id": "data-drop:dg-batch-02:diagram:901",
+      "text": "put a step in between n3 and n4"
+     },
+     {
+      "id": "data-drop:dg-batch-02:diagram:909",
+      "text": "one more stage between Order and Ship, make it so"
+     },
+     {
+      "id": "human-adapted-v1-diagram:human-adapted-diagram-0178",
+      "text": "node with data storage flowchart symbol"
+     }
+    ]
+   }
+  ]
+ }
+}

@@ -103,7 +103,7 @@ export function writeReports(out,allResults,meta,{withFailures=true}={}){
   for(const [f,v]of Object.entries(agg))w(`| ${f} | ${pct(v.ok/v.n)} | ${v.n} |`);
   w('');
   const ri=causeTable(results,'e2e',{filter:(r,l)=>l.layer==='reader'}).slice(0,15);
-  w('Top reader-induced failures (oracle executes, end-to-end does not):');w('');
+  w('Reader-layer failures (the reader own diagnostics, or the oracle executes and end-to-end does not; reader-induced in the tab table counts only the latter):');w('');
   w('| rows | estimate | first reading difference | example |');w('|---:|---:|---|---|');
   for(const c of ri)w(`| ${c.rows} | ${Math.round(c.estimate)} | ${c.cause.replace(/\|/g,'/')} | ${JSON.stringify(c.examples[0].text).slice(0,90).replace(/\|/g,'/')} |`);
   w('');
