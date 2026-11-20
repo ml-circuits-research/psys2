@@ -8,7 +8,7 @@ import {isAuthoredRequest,readAuthoredRequest} from './authored-request-tool.mjs
 // Model-first proposal routing. Calibration authority belongs to host configuration,
 // never to a model output, evaluation annotation or grammar proposal.
 import {requestCompositionPolicy,scheduleFollowingCut}from './request-composition-policy.mjs?v=c1f6955f80';
-import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=5889513050';
+import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=30a4b382ee';
 import {projectQueryAction,recoverQueryProjection} from './project-query-action.mjs?v=6d6c8bfa81';
 import {projectContextAction} from './project-context-action.mjs?v=f785169792';
 import {projectCodeReference} from './project-code-reference.mjs?v=57273ee180';
@@ -17,8 +17,8 @@ import {assessReaderProposal,assessPartialProposal} from './reader-admission.mjs
 import {bestPartialReading,fallbackLadder,partialNote} from './partial-admission.mjs?v=358f41aa9b';
 import {completeBindings} from './declared-bindings.mjs?v=46160628b2';
 import {projectQuantities,amountsOf,quantityNote} from './quantity-projection.mjs?v=a8e3bf4009';
-import {routeCoordination} from './coordination-routing.mjs?v=038d728518';
-import {declaredKnowledge} from './declared-execution.mjs?v=5889513050';
+import {routeCoordination} from './coordination-routing.mjs?v=d36a1634fa';
+import {declaredKnowledge} from './declared-execution.mjs?v=30a4b382ee';
 import {interpretationPolicy,coordinationEligible,comparisonBounds,retryNote} from './interpretation-policy.mjs?v=95c5ac8e35';
 let amounts;
 // The named amounts of the execution knowledge (k.expect.amount), read once.

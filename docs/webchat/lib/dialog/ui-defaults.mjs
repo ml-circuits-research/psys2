@@ -4,7 +4,7 @@
 // the tab holds no such number of its own. Browser-safe: no `node:*`.
 import {World,str} from '../vendor/sopworld/sopworld.mjs?v=4cf6e60057';
 import SCHEMA from '../../worlds/app.project/ui-defaults-schema-source.mjs?v=e3824eb9c4';
-import VALUES from '../../worlds/app.project/ui-defaults-source.mjs?v=e6c1e2d45a';
+import VALUES from '../../worlds/app.project/ui-defaults-source.mjs?v=f6c4b29bad';
 
 let values=null;
 const one=(row,key)=>row.attrs[key]?.length===1?row.attrs[key][0]:undefined;
