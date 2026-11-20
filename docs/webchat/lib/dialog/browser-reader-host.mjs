@@ -1,5 +1,5 @@
 // Browser host only. Deployment identity is trusted by the application, not inferred from model bytes.
-import {createVerifiedReaderProvider} from './verified-reader-provider.mjs?v=114460014e';
+import {createVerifiedReaderProvider} from './verified-reader-provider.mjs?v=63a2829b96';
 export function bertRuntimeConfiguration(profile,config){
  const roles={pad_token:'[PAD]',unk_token:'[UNK]',cls_token:'[CLS]',sep_token:'[SEP]',mask_token:'[MASK]'};
  const ids=new Set();

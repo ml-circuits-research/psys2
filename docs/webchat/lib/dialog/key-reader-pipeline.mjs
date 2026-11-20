@@ -4,7 +4,7 @@ import {copyHostData,freezeHostData} from '../../worlds/native-tool-host.mjs?v=d
 import {bridgeRawStructure,RAW_STRUCTURAL_FORMAT,BINDING_NODES} from './raw-structural-bridge.mjs?v=aaa7e35757';
 import {comparativeSteps} from './comparative-projection.mjs?v=4bc933529a';
 import {referenceProjection} from './reference-projection.mjs?v=7b9600ecc5';
-import {completeBindings} from './declared-bindings.mjs?v=73bc0dd484';
+import {completeBindings} from './declared-bindings.mjs?v=6a0f85eab4';
 const hash=x=>typeof x==='string'&&/^[a-f0-9]{64}$/.test(x);
 const digest=async x=>Array.from(new Uint8Array(await globalThis.crypto.subtle.digest('SHA-256',new TextEncoder().encode(x))),b=>b.toString(16).padStart(2,'0')).join('');
 const same=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
