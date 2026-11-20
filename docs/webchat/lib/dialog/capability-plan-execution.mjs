@@ -3,12 +3,12 @@ import { solveDefaultPlacement, solveGroupPlacement } from './default-placement.
 import { en } from '../lang/en.mjs?v=0d85b0a1f8';
 import { quote } from '../vendor/sopworld/sopworld.mjs?v=b95dcf7c63';
 // SPDX-License-Identifier: AGPL-3.0-only
-import { compileNativeCapability } from './capability-plan-adapter.mjs?v=bd4098c011';
-import { linkPopulationCandidates } from './link-population.mjs?v=6ce884ef39';
+import { compileNativeCapability } from './capability-plan-adapter.mjs?v=0d20eede5c';
+import { linkPopulationCandidates } from './link-population.mjs?v=300915bb9c';
 import { readDegreeBases } from './degree-bases.mjs?v=4485535b81';
-import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=37b76d21b1';
+import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=8b9ca79b2a';
 import { instanceIdFor } from './instance-identity.mjs?v=024ef1ca83';
-import { prepareNativeControlHost } from './native-control-preparation.mjs?v=3157608274';
+import { prepareNativeControlHost } from './native-control-preparation.mjs?v=9be6854b11';
 import { invokeObservedNativeTool } from './native-tool-activity.mjs?v=7e5446cded';
 import { retainPropertyEffect } from './property-effect-evidence.mjs?v=2e55448ffa';
 import { describeNativeControl, verifyNativeControlEffect } from './native-control-intent.mjs?v=deca7f43ef';

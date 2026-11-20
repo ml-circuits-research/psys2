@@ -7,10 +7,10 @@
 // word, a sentence, a tool or a world.
 import {bridgeRawStructure,pruneLabel} from './raw-structural-bridge.mjs?v=e5de801d01';
 import {decodeModelGraphs} from './model-graph-decoder.mjs?v=b5d3954020';
-import {comparativeSteps} from './comparative-projection.mjs?v=6c49f07130';
+import {comparativeSteps} from './comparative-projection.mjs?v=bb7102b772';
 import {referenceProjection} from './reference-projection.mjs?v=5f75fd080e';
 import {interpretationPolicy} from './interpretation-policy.mjs?v=79e47ac3e4';
-import {executionPolicyWorld} from './execution-policy.mjs?v=48c965e897';
+import {executionPolicyWorld} from './execution-policy.mjs?v=0660424711';
 import {str} from '../vendor/sopworld/sopworld.mjs?v=b95dcf7c63';
 
 const scalarsOf=text=>Array.from(text);

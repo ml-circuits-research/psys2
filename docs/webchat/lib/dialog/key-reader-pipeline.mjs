@@ -2,10 +2,10 @@
 import {readReaderSource} from './reader-source.mjs?v=3b2ee005a0';
 import {copyHostData,freezeHostData} from '../../worlds/native-tool-host.mjs?v=ee2bec37f5';
 import {bridgeRawStructure,RAW_STRUCTURAL_FORMAT,BINDING_NODES} from './raw-structural-bridge.mjs?v=e5de801d01';
-import {comparativeSteps} from './comparative-projection.mjs?v=6c49f07130';
+import {comparativeSteps} from './comparative-projection.mjs?v=bb7102b772';
 import {referenceProjection} from './reference-projection.mjs?v=5f75fd080e';
-import {completeBindings} from './declared-bindings.mjs?v=f42a350db5';
-import {declaredRawReadings} from './partial-admission.mjs?v=d2e2e1a7ec';
+import {completeBindings} from './declared-bindings.mjs?v=11801447e7';
+import {declaredRawReadings} from './partial-admission.mjs?v=4447f3e670';
 const hash=x=>typeof x==='string'&&/^[a-f0-9]{64}$/.test(x);
 const digest=async x=>Array.from(new Uint8Array(await globalThis.crypto.subtle.digest('SHA-256',new TextEncoder().encode(x))),b=>b.toString(16).padStart(2,'0')).join('');
 const same=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
