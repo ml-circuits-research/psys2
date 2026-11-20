@@ -13,7 +13,7 @@
  * Query side: `queryWords(text)` is the normalized message (each word, its lemma, the pairs and triples of lemmas joined with `_`: the same atoms the router and the cards use,
  * `messageWords` of src/dialog/meta-worlds.mjs) and the spelling candidates of words nobody knows (`spellingCandidates`).
  */
-import { messageWords, lemma } from '../dialog/meta-worlds.mjs?v=b2ea3be1f5';
+import { messageWords, lemma } from '../dialog/meta-worlds.mjs?v=4dbc24849f';
 
 export { messageWords, lemma };
 

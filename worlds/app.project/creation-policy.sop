@@ -2,10 +2,19 @@
 @choice.schema core.use world=std.choice
 @choice.criteria core.use world=std.decide
 @ground.use core.use world=std.ground
-@creation.ground std.ground.policy name=app.creation measure=distance maxSpelling=2 stepCost=0.5 maxSteps=2 follow=kind_of follow=is_a
+# A stated word grounds by exact identity, its vocabulary lemma, spelling repair up to 2, or kind
+# parents at 0.5 per step. Only the kind dimension of a catalog parent is kind evidence ("is_a.kind"):
+# a part ("eyes" is_a cat, dimension part_of), a use or a material never makes a kind. A word the
+# catalog vocabulary knows is grounded by the companion policy app.creation.word, without spelling
+# repair ("ground" is a word and is never read as "round").
+@creation.ground std.ground.policy name=app.creation measure=distance maxSpelling=2 stepCost=0.5 maxSteps=2 follow=lemma follow=kind_of follow=is_a follow=is_a.kind
+@creation.ground.word std.ground.policy name=app.creation.word measure=distance maxSpelling=0 stepCost=0.5 maxSteps=2 follow=lemma follow=kind_of follow=is_a follow=is_a.kind
 @creation.edit std.decide.criterion of=app.creation n=1 name=lexical.distance measure=distance dir=min
 @creation.type std.decide.criterion of=app.creation n=2 name=reader.type measure=otherType dir=min
 @creation.family std.decide.criterion of=app.creation n=3 name=family.default measure=otherFamily dir=min
+@creation.word.edit std.decide.criterion of=app.creation.word n=1 name=lexical.distance measure=distance dir=min
+@creation.word.type std.decide.criterion of=app.creation.word n=2 name=reader.type measure=otherType dir=min
+@creation.word.family std.decide.criterion of=app.creation.word n=3 name=family.default measure=otherFamily dir=min
 
 @kind app.creation.role concept=kind role=kind
 @shape app.creation.role concept=shape role=kind

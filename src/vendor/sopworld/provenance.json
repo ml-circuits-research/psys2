@@ -1,19 +1,19 @@
 {
   "repository": "https://github.com/ml-circuits-research/soplang-words-lib",
-  "commit": "4912adcbcaf4c170992873cdd9931e249c271f1d",
-  "release": "0.232.0",
+  "commit": "c6f4a7d07c9e26f38adf10f895837d69c341d478",
+  "release": "0.234.0",
   "sourcePath": "docs/sopworld.mjs",
-  "sha256": "544fc11497eb12216a10025e3a2f7b092cece86236edb8f1a6c743426d36c7c3",
-  "bytes": 1746894,
-  "build": "16ddb2074bf1",
+  "sha256": "adaf4c0dff1c1777e46a93eeb4bee17a53318486d112c2b7af1a840a97a86b8a",
+  "bytes": 1755557,
+  "build": "27c381a4c5c8",
   "browserZ3": {
     "sourcePaths": [
       "docs/smt-z3.mjs",
       "docs/z3-translate.mjs"
     ],
     "sha256": {
-      "smt-z3.mjs": "18368aa55c228cb3e63c313a8d1f1a38a426b593f06252408ea0a9a3a15cbd05",
-      "z3-translate.mjs": "3ace8b71eb468366f258a50a6045f336b28b637b3018d59b621ae0571f2f4620"
+      "smt-z3.mjs": "3364af486039fffb2c5a47c6f7e514f4a30d79bc31083004efe9d65ec37e6448",
+      "z3-translate.mjs": "6701b709cdc48abff3333d19af819646f651de017aff6c6da48bf18bf4ec27a7"
     },
     "z3Files": "https://ml-circuits-research.github.io/soplang-words-lib/vendor/z3-solver-5.4.1/ (loaded at run time on first use, not vendored here)"
   }

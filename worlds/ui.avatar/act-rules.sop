@@ -90,8 +90,17 @@
 @ps.chosen ui.avatar.chosen preset=?p
 @choose.preset core.rule when=$ps.req then=$ps.chosen
 @choose.base core.rule when=$ps.base.req then=$ps.chosen
-@ps.bykind k.faces.preset kind=?k style=?style name=?p
-@choose.kind core.rule when=$ps.kind.req when=$ps.face when=$ps.bykind then=$ps.chosen
+# By character kind, one preset: the face keeps its base when that base is of the kind (nothing changes); otherwise
+# the first preset of the kind in the catalog's sequence, in the face's style. A named base wins over the kind.
+@ps.kept.type core.type of=ui.avatar.keptKind
+@ps.kept.face w.face.face style=?style preset=?cp
+@ps.kept.k k.faces.preset name=?cp style=?style kind=?k
+@ps.kept.o ui.avatar.keptKind kind=?k
+@kind.kept core.rule when=$ps.kept.face when=$ps.kept.k then=$ps.kept.o
+@ps.kind.kept ui.avatar.keptKind kind=?k
+@ps.kind.base app.act.request operation="avatar.face.compose" base=?anyBase
+@ps.bykind k.faces.preset kind=?k style=?style name=?p core.select=first
+@choose.kind core.rule when=$ps.kind.req not=$ps.kind.base when=$ps.face not=$ps.kind.kept when=$ps.bykind then=$ps.chosen
 @ps.pick ui.avatar.chosen preset=?p
 @ps.old w.face.part
 @ps.clear app.act.call act=remove thing=$ps.old order=1
@@ -173,9 +182,46 @@
 @fr.req app.act.request operation="avatar.face.resize" scale=?s
 @fr.view app.act.view key=scale value=?s
 @face.resize core.rule when=$fr.req then=$fr.view
-@feat.req app.act.request operation="avatar.part.feature"
-@feat.o app.act.refuse reason=feature-lookup-not-declared
-@feature core.rule when=$feat.req then=$feat.o
+
+# The plain-word features of the variants (k.faces.variant: shape, size, length, feel, age, kind), one fact per value,
+# so a feature is read by its name: what a part offers, what it shows and what `avatar.part.feature` asks for.
+@feature.type core.type of=ui.avatar.feature
+@ft.shape.v k.faces.variant slot=?slot style=?style name=?v shape=?x
+@ft.shape.o ui.avatar.feature slot=?slot style=?style variant=?v property=shape value=?x
+@feature.shape core.rule when=$ft.shape.v then=$ft.shape.o
+@ft.size.v k.faces.variant slot=?slot style=?style name=?v size=?x
+@ft.size.o ui.avatar.feature slot=?slot style=?style variant=?v property=size value=?x
+@feature.size core.rule when=$ft.size.v then=$ft.size.o
+@ft.length.v k.faces.variant slot=?slot style=?style name=?v length=?x
+@ft.length.o ui.avatar.feature slot=?slot style=?style variant=?v property=length value=?x
+@feature.length core.rule when=$ft.length.v then=$ft.length.o
+@ft.feel.v k.faces.variant slot=?slot style=?style name=?v feel=?x
+@ft.feel.o ui.avatar.feature slot=?slot style=?style variant=?v property=feel value=?x
+@feature.feel core.rule when=$ft.feel.v then=$ft.feel.o
+@ft.age.v k.faces.variant slot=?slot style=?style name=?v age=?x
+@ft.age.o ui.avatar.feature slot=?slot style=?style variant=?v property=age value=?x
+@feature.age core.rule when=$ft.age.v then=$ft.age.o
+@ft.kind.v k.faces.variant slot=?slot style=?style name=?v kind=?x
+@ft.kind.o ui.avatar.feature slot=?slot style=?style variant=?v property=kind value=?x
+@feature.kind core.rule when=$ft.kind.v then=$ft.kind.o
+
+# A feature for a part: a part that already shows the feature keeps its variant (nothing changes); otherwise it takes
+# the first variant of its slot and style with the feature, in the catalog's sequence; an absent part is added with
+# it. No such variant: refused.
+@fe.req app.act.request operation="avatar.part.feature" id=?slot property=?prop value=?x
+@fe.face w.face.face style=?style
+@fe.slot w.face.slot slot=?slot part=?kind
+@fe.part w.face.part kind=?kind variant=?now
+@fe.anyPart w.face.part kind=?kind
+@fe.held ui.avatar.feature slot=?slot style=?style variant=?now property=?prop value=?x
+@fe.cand ui.avatar.feature slot=?slot style=?style property=?prop value=?x variant=?c core.select=first
+@fe.anyCand ui.avatar.feature slot=?slot style=?style property=?prop value=?x
+@fe.change app.act.call act=change thing=$fe.part attr=variant value=?c order=1
+@feature.change core.rule when=$fe.req when=$fe.face when=$fe.slot when=$fe.part not=$fe.held when=$fe.cand then=$fe.change
+@fe.make app.act.call act=make kind=?kind variant=?c face=$fe.face order=1
+@feature.add core.rule when=$fe.req when=$fe.face when=$fe.slot not=$fe.anyPart when=$fe.cand then=$fe.make
+@fe.none app.act.refuse reason=unavailable-feature-combination
+@feature.refuse core.rule when=$fe.req when=$fe.face not=$fe.anyCand then=$fe.none
 
 # What a reader observes: the face and each part, by its slot.
 @ob.face w.face.face name=?n
@@ -238,3 +284,197 @@
 @ob.in.ids app.area.view key=ids value=?m
 @ob.in.ids.o app.observe.input id=face key=ids value=?m
 @observe.ids core.rule when=$ob.in.ids then=$ob.in.ids.o
+
+# What an editor shows next to the controls, read from the catalog for the face's style.
+# The kind of each preset (id=preset, key=<preset>, value=<kind>): the bases a character kind offers.
+@ob.pk.face w.face.face style=?style
+@ob.pk.k k.faces.preset style=?style name=?p kind=?k
+@ob.pk.o app.observe.input id=preset key=?p value=?k
+@observe.preset.kind core.rule when=$ob.pk.face when=$ob.pk.k then=$ob.pk.o
+# Features: the values each slot's variants offer (features.<property>) and those its shown variant has
+# (feature.<property>).
+@ob.fs.f ui.avatar.feature slot=?slot style=?style property=?prop value=?x
+@ob.fs.key core.calc out=?key fn=concat args="features." args=?prop
+@ob.fs.o app.observe.input id=?slot key=?key value=?x
+@observe.features core.rule when=$ob.pk.face when=$ob.fs.f with=$ob.fs.key then=$ob.fs.o
+@ob.fc.shown ui.avatar.shown slot=?slot style=?style variant=?v
+@ob.fc.f ui.avatar.feature slot=?slot style=?style variant=?v property=?prop value=?x
+@ob.fc.key core.calc out=?key fn=concat args="feature." args=?prop
+@ob.fc.o app.observe.input id=?slot key=?key value=?x
+@observe.feature core.rule when=$ob.fc.shown when=$ob.fc.f with=$ob.fc.key then=$ob.fc.o
+# Colour: which face colour a shape takes, by its tint (a shade is the darker tone of the same colour). A colour
+# chosen for a tinted part sets the face colour its tint names (change.colour.tint), so it affects every shown part
+# with a shape of that colour (colourScope); the colours that fit are the catalog's colours of that tint (colours,
+# colourRole). An untinted part takes its own colour: it affects only itself, and the colours its shapes offer fit.
+@avatar.tables.tone core.type of=ui.avatar.tone
+@tone.skin ui.avatar.tone tint=skin attr=skin
+@tone.skin_shade ui.avatar.tone tint=skin_shade attr=skin
+@tone.hair ui.avatar.tone tint=hair attr=hair_colour
+@tone.hair_shade ui.avatar.tone tint=hair_shade attr=hair_colour
+@tone.eyes ui.avatar.tone tint=eyes attr=eye_colour
+@tone.clothes ui.avatar.tone tint=clothes attr=clothes
+@tone.clothes_shade ui.avatar.tone tint=clothes_shade attr=clothes
+@tinted.type core.type of=ui.avatar.tinted
+@tn.shown ui.avatar.shown slot=?slot variant=?v
+@tn.kp k.faces.part slot=?slot of=?v tint=?tint
+@tn.tone ui.avatar.tone tint=?tint attr=?attr
+@tn.o ui.avatar.tinted slot=?slot attr=?attr
+@tinted core.rule when=$tn.shown when=$tn.kp when=$tn.tone then=$tn.o
+@cs.table ui.avatar.tint tint=?tint attr=?attr
+@cs.other ui.avatar.tinted slot=?other attr=?attr
+@cs.scope.o app.observe.input id=?slot key=colourScope value=?other
+@observe.colour.scope core.rule when=$tn.shown when=$tn.kp when=$cs.table when=$cs.other then=$cs.scope.o
+@cs.colour k.faces.colour of=?tint name=?c
+@cs.colours.o app.observe.input id=?slot key=colours value=?c
+@observe.colour.fit core.rule when=$tn.shown when=$tn.kp when=$cs.table when=$cs.colour then=$cs.colours.o
+@cs.role.o app.observe.input id=?slot key=colourRole value=?tint
+@observe.colour.role core.rule when=$tn.shown when=$tn.kp when=$cs.table then=$cs.role.o
+@cs.anyTint k.faces.part slot=?slot of=?v tint=?anyTint
+@cs.self.o app.observe.input id=?slot key=colourScope value=?slot
+@observe.colour.scope.own core.rule when=$tn.shown not=$cs.anyTint then=$cs.self.o
+@cs.own.kp k.faces.part slot=?slot of=?v colour=?c
+@observe.colour.fit.own core.rule when=$tn.shown not=$cs.anyTint when=$cs.own.kp then=$cs.colours.o
+# Words a person says for each slot (the catalog's core.word facts that mean the slot name).
+@ob.wd.slot w.face.slot slot=?slot
+@ob.wd.w core.word text=?t means=?slot of=k.faces.slot.name
+@ob.wd.o app.observe.input id=?slot key=word value=?t
+@observe.word core.rule when=$ob.wd.slot when=$ob.wd.w then=$ob.wd.o
+# A slot the face may leave empty (k.faces.slot optional=true).
+@ob.op.slot k.faces.slot style=?style name=?slot optional=true
+@ob.op.o app.observe.input id=?slot key=optional value=true
+@observe.optional core.rule when=$ob.pk.face when=$ob.op.slot then=$ob.op.o
+
+# The length of listed parts, along the catalog's declared scale (k.faces.feature key=length: the k.values scale
+# whose ranks order short < medium < long). A part of a group (w.face.slot group: her hair is the back and the front
+# hair) changes with its group: the group's length is that of its longest part. `length` names a step ("long") or
+# moves one step from the group's length (more, less: the relative steps below). Going down, every part longer than
+# the goal takes a variant of the goal's step in its slot and style, or leaves the face when its slot is optional and
+# has none; going up, the longest part takes a variant of the goal's step, or an empty slot of the group gets one.
+# A variant with the part's own feel is preferred. Past either end of the scale the request is refused.
+@avatar.tables.shift core.type of=ui.avatar.shift
+@shift.more ui.avatar.shift step=more offset=1
+@shift.less ui.avatar.shift step=less offset=-1
+@len.choice.type core.type of=ui.avatar.lengthChoice
+@len.ch.feature k.faces.feature key=length scale=?scale
+@len.ch.step k.values.step scale=?scale name=?n
+@len.ch.out ui.avatar.lengthChoice value=?n
+@length.choice.step core.rule when=$len.ch.feature when=$len.ch.step then=$len.ch.out
+@len.ch.shift ui.avatar.shift step=?s
+@len.ch.shift.out ui.avatar.lengthChoice value=?s
+@length.choice.shift core.rule when=$len.ch.shift then=$len.ch.shift.out
+@len.member.type core.type of=ui.avatar.member
+@len.rank.type core.type of=ui.avatar.rank
+@len.outranked.type core.type of=ui.avatar.outranked
+@len.goal.type core.type of=ui.avatar.goal
+@len.cand.type core.type of=ui.avatar.candidate
+@len.fit.type core.type of=ui.avatar.fit
+
+# The members of a listed part: itself, and every slot of its group.
+@len.req app.act.request operation="avatar.part.change" length=?want
+@len.item app.act.item param="ids" value=?slot
+@len.self ui.avatar.member slot=?slot
+@length.self core.rule when=$len.req when=$len.item then=$len.self
+@len.g.of w.face.slot slot=?slot group=?group
+@len.g.other w.face.slot slot=?other group=?group
+@len.g.member ui.avatar.member slot=?other
+@length.group core.rule when=$len.req when=$len.item when=$len.g.of when=$len.g.other then=$len.g.member
+
+# The rank of each member the face has, on the declared scale of length.
+@len.face w.face.face style=?style
+@len.feature k.faces.feature key=length scale=?scale
+@len.r.member ui.avatar.member slot=?m
+@len.r.slot w.face.slot slot=?m part=?kind
+@len.r.part w.face.part kind=?kind variant=?v
+@len.r.variant k.faces.variant slot=?m style=?style name=?v length=?l
+@len.r.step k.values.step scale=?scale name=?l rank=?r
+@len.r.out ui.avatar.rank slot=?m rank=?r variant=?v
+@length.rank core.rule when=$len.req when=$len.face when=$len.feature when=$len.r.member when=$len.r.slot when=$len.r.part when=$len.r.variant when=$len.r.step then=$len.r.out
+@len.o.a ui.avatar.rank slot=?a rank=?ra
+@len.o.b ui.avatar.rank slot=?b rank=?rb
+@len.o.longer core.check fn=gt args=?rb args=?ra
+@len.o.out ui.avatar.outranked slot=?a
+@length.outranked core.rule when=$len.o.a when=$len.o.b if=$len.o.longer then=$len.o.out
+
+# The goal: the named step, or one step from the group's length (its longest member).
+@len.top ui.avatar.rank slot=?m rank=?r
+@len.top.not ui.avatar.outranked slot=?m
+@len.shift ui.avatar.shift step=?want offset=?offset
+@len.next core.calc fn=add args=?r args=?offset out=?t
+@len.next.step k.values.step scale=?scale rank=?t name=?n
+@len.goal ui.avatar.goal rank=?t name=?n
+@length.goal.relative core.rule when=$len.req when=$len.feature when=$len.top not=$len.top.not when=$len.shift with=$len.next when=$len.next.step then=$len.goal
+@len.named k.values.step scale=?scale name=?want rank=?t
+@len.named.goal ui.avatar.goal rank=?t name=?want
+@length.goal.named core.rule when=$len.req when=$len.feature when=$len.named then=$len.named.goal
+
+# Variants of the goal's step for a member slot, and those with the feel of the part the slot has now.
+@len.c.goal ui.avatar.goal name=?n
+@len.c.member ui.avatar.member slot=?m
+@len.c.variant k.faces.variant slot=?m style=?style name=?c length=?n
+@len.c.out ui.avatar.candidate slot=?m variant=?c
+@length.candidate core.rule when=$len.req when=$len.face when=$len.c.goal when=$len.c.member when=$len.c.variant then=$len.c.out
+@len.f.cand ui.avatar.candidate slot=?m variant=?c
+@len.f.rank ui.avatar.rank slot=?m variant=?v
+@len.f.now k.faces.variant slot=?m style=?style name=?v feel=?feel
+@len.f.same k.faces.variant slot=?m style=?style name=?c feel=?feel
+@len.f.out ui.avatar.fit slot=?m variant=?c
+@length.fit core.rule when=$len.face when=$len.f.cand when=$len.f.rank when=$len.f.now when=$len.f.same then=$len.f.out
+# An empty slot of the group takes the feel of the group's longest part.
+@len.fe.cand ui.avatar.candidate slot=?m variant=?c
+@len.fe.has ui.avatar.rank slot=?m
+@len.fe.top ui.avatar.rank slot=?t variant=?v
+@len.fe.top.not ui.avatar.outranked slot=?t
+@len.fe.now k.faces.variant slot=?t style=?style name=?v feel=?feel
+@len.fe.same k.faces.variant slot=?m style=?style name=?c feel=?feel
+@len.fe.out ui.avatar.fit slot=?m variant=?c
+@length.fit.empty core.rule when=$len.face when=$len.fe.cand not=$len.fe.has when=$len.fe.top not=$len.fe.top.not when=$len.fe.now when=$len.fe.same then=$len.fe.out
+
+# Down: a member longer than the goal takes a variant of the goal's step (one with its feel when there is one), or
+# leaves the face when its slot is optional and has none.
+@len.d.goal ui.avatar.goal rank=?t
+@len.d.rank ui.avatar.rank slot=?m rank=?r
+@len.d.longer core.check fn=gt args=?r args=?t
+@len.d.slot w.face.slot slot=?m part=?kind
+@len.d.part w.face.part kind=?kind
+@len.d.fit ui.avatar.fit slot=?m variant=?c
+@len.d.anyfit ui.avatar.fit slot=?m
+@len.d.cand ui.avatar.candidate slot=?m variant=?c
+@len.d.anycand ui.avatar.candidate slot=?m
+@len.d.call app.act.call act=change thing=$len.d.part attr=variant value=?c order=1
+@length.down.fit core.rule when=$len.req when=$len.d.goal when=$len.d.rank if=$len.d.longer when=$len.d.slot when=$len.d.part when=$len.d.fit then=$len.d.call
+@length.down.any core.rule when=$len.req when=$len.d.goal when=$len.d.rank if=$len.d.longer when=$len.d.slot when=$len.d.part not=$len.d.anyfit when=$len.d.cand then=$len.d.call
+@len.d.optional k.faces.slot style=?style name=?m optional=true
+@len.d.remove app.act.call act=remove thing=$len.d.part order=1
+@length.down.remove core.rule when=$len.req when=$len.face when=$len.d.goal when=$len.d.rank if=$len.d.longer when=$len.d.slot when=$len.d.part not=$len.d.anycand when=$len.d.optional then=$len.d.remove
+
+# Up: when the group is shorter than the goal, its longest member takes a variant of the goal's step; when that slot
+# has none, an empty slot of the group gets one.
+@len.u.goal ui.avatar.goal rank=?t
+@len.u.top ui.avatar.rank slot=?m rank=?r
+@len.u.top.not ui.avatar.outranked slot=?m
+@len.u.shorter core.check fn=lt args=?r args=?t
+@len.u.slot w.face.slot slot=?m part=?kind
+@len.u.part w.face.part kind=?kind
+@len.u.fit ui.avatar.fit slot=?m variant=?c
+@len.u.anyfit ui.avatar.fit slot=?m
+@len.u.cand ui.avatar.candidate slot=?m variant=?c
+@len.u.anycand ui.avatar.candidate slot=?m
+@len.u.call app.act.call act=change thing=$len.u.part attr=variant value=?c order=1
+@length.up.fit core.rule when=$len.req when=$len.u.goal when=$len.u.top not=$len.u.top.not if=$len.u.shorter when=$len.u.slot when=$len.u.part when=$len.u.fit then=$len.u.call
+@length.up.any core.rule when=$len.req when=$len.u.goal when=$len.u.top not=$len.u.top.not if=$len.u.shorter when=$len.u.slot when=$len.u.part not=$len.u.anyfit when=$len.u.cand then=$len.u.call
+@len.e.member ui.avatar.member slot=?e
+@len.e.has ui.avatar.rank slot=?e
+@len.e.slot w.face.slot slot=?e part=?ekind
+@len.e.part w.face.part kind=?ekind
+@len.e.fit ui.avatar.fit slot=?e variant=?c
+@len.e.anyfit ui.avatar.fit slot=?e
+@len.e.cand ui.avatar.candidate slot=?e variant=?c
+@len.e.face w.face.face
+@len.e.make app.act.call act=make kind=?ekind variant=?c face=$len.e.face order=2
+@length.up.add.fit core.rule when=$len.req when=$len.u.goal when=$len.u.top not=$len.u.top.not if=$len.u.shorter not=$len.u.anycand when=$len.e.member not=$len.e.has when=$len.e.slot not=$len.e.part when=$len.e.fit when=$len.e.face then=$len.e.make
+@length.up.add.any core.rule when=$len.req when=$len.u.goal when=$len.u.top not=$len.u.top.not if=$len.u.shorter not=$len.u.anycand when=$len.e.member not=$len.e.has when=$len.e.slot not=$len.e.part not=$len.e.anyfit when=$len.e.cand when=$len.e.face then=$len.e.make
+
+# Refused: no step there (past the end of the scale, or a name the scale does not have), or no part with a length.
+@len.no.goal ui.avatar.goal
+@len.no.goal.o app.act.refuse reason=feature-scale-end
+@length.refuse.end core.rule when=$len.req when=$len.feature not=$len.no.goal then=$len.no.goal.o

@@ -19,6 +19,32 @@ const noDeclaredAction = () => {
  return {text,parts:[{text,translate:false}],statuses:['unsupported'],answers:[],segments:[],state:{},effects:[],
   trace:{legacy:false,engine:'new',reason:'no-declared-action'}};
 };
+// The source ranges a reading anchored: every span it emitted, and the several mentions it saw for
+// one key it could not hold ("draw a cat and 2 dogs": "cat" and "dogs" for the one target kind).
+function readMentions(read){
+ const out=[];
+ for(const {path,range} of read?.raw?.ranges??[])if(path?.at(-1)!=='span'&&Array.isArray(range)&&range.length===2&&range.every(Number.isSafeInteger))out.push({range,trigger:path?.at(-1)==='trigger'});
+ for(const range of severalMentions(read))out.push({range,trigger:false});
+ return out;
+}
+function severalMentions(read){
+ return (read?.failures??[]).flatMap(failure=>failure.detail?.reason==='ambiguous-global-mention'&&Array.isArray(failure.detail.head?.ranges)?
+  failure.detail.head.ranges.filter(range=>Array.isArray(range)&&range.length===2&&range.every(Number.isSafeInteger)):[]);
+}
+const overlaps=(a,b)=>a[0]<b[1]&&b[0]<a[1];
+// What other readings of the same text saw that the used reading leaves out: those mentions were
+// read and not applied, and the reply says so instead of dropping them silently.
+function droppedMentions(text,used,others){
+ const kept=readMentions(used).map(mention=>mention.range),scalars=Array.from(text),out=new Map();
+ for(const read of others)for(const {range,trigger} of readMentions(read)){
+  if(trigger||kept.some(own=>overlaps(own,range))||[...out.values()].some(seen=>overlaps(seen.range,range)))continue;
+  const mention=scalars.slice(...range).join('').trim();
+  if(mention)out.set(range.join(':'),{range,text:mention});
+ }
+ return [...out.values()].sort((a,b)=>a.range[0]-b.range[0]).map(mention=>mention.text);
+}
+const quoted=list=>list.map(item=>JSON.stringify(item)).join(list.length===2?' and ':', ');
+const asksQuestion=read=>(read?.raw?.requests??[]).some(request=>request.mood==='ask'||request.act==='answer');
 async function dispatchRequest(session,candidate,text,options,bindings,contextProjection,interpretation,alternatives=[],compiledPlan) {
  let result;
  const area=options.view??session.isession.state['ui.shell']?.activeTab;
@@ -67,16 +93,24 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
  // conditioned on them stays unusable, the same text read without the previous message, then
  // also without the observed objects, are the next hypotheses; the first usable one is routed
  // and every attempted reading stays in the trace.
- const retries=[['independent','proposeIndependent'],['literal','proposeLiteral']];
+ const retries=[['independent','proposeIndependent'],['literal','proposeLiteral']],readings=[];
  for(const [profile,method] of retries){
   if(projected.proposal.coverage?.complete||typeof provider?.[method]!=='function')break;
   let alternate=null;
   try{alternate=await provider[method](writeReaderSource(text));}catch{/* No such reading is available. */}
   if(!alternate)continue;
-  const retried=await project(alternate),used=!!retried.proposal.coverage?.complete;
-  (contextRetry??={attempts:[]}).attempts.push({profile,used,rawReading:alternate.raw?.requests??null,failures:alternate.failures??[]});
+  const retried=await project(alternate),complete=!!retried.proposal.coverage?.complete;
+  // A question read without part of what the first reading saw ("who is eyes a cat?" read as "how
+  // many cats") is a different question: it is not answered. A request keeps its applied part and
+  // the reply names what it left out.
+  const dropped=complete?droppedMentions(text,alternate,[proposal,...readings]):[];
+  const used=complete&&!(dropped.length&&asksQuestion(alternate));
+  readings.push(alternate);
+  (contextRetry??={attempts:[]}).attempts.push({profile,used,rawReading:alternate.raw?.requests??null,failures:alternate.failures??[],...(dropped.length?{dropped}:{})});
+  if(complete&&!used)(contextRetry.unanswered??=[]).push(...dropped.filter(mention=>!contextRetry.unanswered.includes(mention)));
   if(used){
    contextRetry.used=profile;contextRetry.primary={rawReading:proposal?.raw?.requests??null,failures:proposal?.failures??[]};
+   if(dropped.length)contextRetry.dropped=dropped;
    proposal=alternate;projected=retried;
    try{session.engine?.onWorldActivity?.({nodeIds:['component:reader'],phase:'stage',operation:'app.reader.retry',
     label:profile==='literal'?'Read the request without the previous message or the observed objects':'Read the request without the previous message',text});}catch{/* Observation cannot change the reading. */}
@@ -144,8 +178,14 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
  // No grammar fallback exists in the application. Unavailable or unapproved
  // structural models yield an explicit no-effect answer.
  const limitations=proposal?.interpretation?.limitation??[];
+ const scalars=Array.from(typeof text==='string'?text:''),unreadQuestion=[...new Set(readMentions(proposal).filter(mention=>!mention.trigger).map(({range})=>scalars.slice(...range).join('').trim()).filter(Boolean))],unknownKind=(proposal?.raw?.requests?.length===1&&proposal.raw.requests[0].act==='make'&&proposal.raw.requests[0].target?.mode==='new'&&
+  proposal.failures?.some(failure=>failure.reason==='unresolved-canonical-kind-binding'))?proposal.raw.requests[0].target.kind_span:undefined,several=[...new Set(severalMentions(proposal).map(range=>scalars.slice(...range).join('').trim()).filter(Boolean))];
  const message=limitations.includes('filter-span-missing')?'I could not ground a filter in the question. I have no complete answer.':
   limitations.includes('target-span-missing')?'I could not ground the kind of object the question refers to. I have no complete answer.':
+  contextRetry?.unanswered?.length?'I did not understand '+quoted(contextRetry.unanswered)+' in this question, so I have no answer.':
+  asksQuestion(proposal)&&unreadQuestion.length?'I did not understand '+quoted(unreadQuestion)+' in this question, so I have no answer.':
+  unknownKind?'I could not find a kind of object to make for '+JSON.stringify(unknownKind)+'. Nothing changed.':
+  several.length>1?'I read '+quoted(several)+' as separate things in one request and cannot apply them together yet, so nothing changed. You can ask for them one at a time.':
   'I could not identify an action to apply. Nothing changed.';
  let result;
  if(eligible){
@@ -176,6 +216,7 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
   }
  }
  if(result&&contextRetry?.used&&result.statuses?.includes('supported')){
+  if(contextRetry.dropped?.length)result.text+=' I did not apply '+quoted(contextRetry.dropped)+'.';
   result.text+=contextRetry.used!=='literal'?' I read this message on its own, without the previous one.':contextRetry.attempts.some(attempt=>attempt.profile==='independent')?' I read this message on its own, without the previous one or the objects on the page.':' I read this message on its own, without the objects on the page.';result.parts=[{text:result.text,translate:false}];
  }
  result??={text:message,parts:[{text:message,translate:false}],statuses:['unsupported'],answers:[],segments:[],state:{},effects:[],newEngine:true,trace:{legacy:false,engine:'new',reason:options.language&&options.language!=='en'?'language':'reading'}};

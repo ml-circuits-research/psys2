@@ -3,14 +3,15 @@
 // (worlds/app.project/comparative-projection.sop) from the execution policy's value sources and the catalog's scale
 // in the execution knowledge context. The raw-structure bridge reads the table; nothing here names a word, a
 // concept or a tool.
-import { World, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=5221d62911';
-import RULES from '../../worlds/app.project/comparative-projection-source.mjs?v=89a6c6106f';
-import SOURCE from './new-engine-source.mjs?v=ff3610e673';
-import { executionPolicyWorld } from './execution-policy.mjs?v=99cfae12cb';
+import { World, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=4a094fcca4';
+import RULES from '../../worlds/app.project/comparative-projection-source.mjs?v=918ab2d391';
+import SOURCE from './new-engine-source.mjs?v=493adf1652';
+import { executionPolicyWorld } from './execution-policy.mjs?v=e0fcf658a6';
 
 let table;
 
-/** [{concept, step, factor, declaration}] — frozen; empty when the knowledge has no scale for any concept. */
+/** [{concept, step, factor, declaration}] and, for an ordinal concept (its values are the steps of an ordered scale),
+ * [{concept, step, ordinal: true, declaration}] — frozen; empty when no concept has a scale. */
 export function comparativeSteps({ knowledge } = {}) {
   if (!knowledge && table) return table;
   const world = executionPolicyWorld().fork();
@@ -26,6 +27,10 @@ export function comparativeSteps({ knowledge } = {}) {
     concept: str(row.attrs.concept[0]), step: row.attrs.step[0], factor: Number(row.attrs.factor[0]),
     declaration: steps.get(row.attrs.step[0]),
   })).filter((row) => Number.isFinite(row.factor) && row.factor > 0 && row.declaration);
+  for (const row of world.ofType('app.execution.comparativeStep')) {
+    const step = row.attrs.step[0], declaration = steps.get(step);
+    if (declaration) result.push(Object.freeze({ concept: str(row.attrs.concept[0]), step, ordinal: true, declaration }));
+  }
   Object.freeze(result);
   if (!knowledge) table = result;
   return result;

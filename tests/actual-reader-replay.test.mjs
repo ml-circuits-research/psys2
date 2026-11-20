@@ -6,9 +6,9 @@ import {mkdtemp,writeFile,rm,mkdir,symlink} from 'node:fs/promises';
 import {join} from 'node:path';
 import {observedReaderContext} from '../scripts/lib/reader-context-profile.mjs';
 import {runtimeTreeIdentity,loadActualReplayReader} from '../scripts/lib/actual-reader-provider.mjs';
-import {createDrawingHost,initialDrawingState} from '../worlds/art.draw/declared-host.mjs';
-test('reader context is actual native observation with declared display labels and sent history',()=>{
- const host=createDrawingHost({state:initialDrawingState(),instanceId:'context-fixture'});
+import {createDrawingArea,emptyDrawingState} from '../worlds/art.draw/sop-drawing.mjs';
+test('reader context is actual native observation with declared display labels and sent history',async()=>{
+ const host=await createDrawingArea({state:emptyDrawingState(),instanceId:'context-fixture'});
  const before=observedReaderContext('drawing',host.observe());assert.deepEqual(before.context.existing,[]);
  const kind=host.bindings()[0].params.kind.enum[0];
  const made=invokeToolCommand(host,{invocation:'make',expectedVersion:host.observe().version,operation:'drawing.object.make',args:{kind,name:'Named shape'}});
@@ -44,8 +44,8 @@ test('measurement host supplies observed context, captures proposal and removes/
   await writeFile(join(artifacts,'manifest.json'),'{}');const tc=JSON.stringify({tokenizer_class:'BertTokenizer'});await writeFile(join(artifacts,'tokenizer_config.json'),tc);
   const tree=await runtimeTreeIdentity(runtime),backendIdentity={format:'psys2.node-reader-backend/1',runtimeTreeSha256:tree.sha256,node:process.version,platform:process.platform,arch:process.arch,ortModule:'ort.mjs',transformersModule:'tokenizer.mjs',options:{executionProviders:['cpu'],intraOpNumThreads:1,interOpNumThreads:1}};
   let seen,admissionDuring;
-  const admission={untrusted:'must not execute'},session={engine:{requestReaderAdmission:admission},isession:{state:{'art.draw':initialDrawingState(),'ui.shell':{activeTab:'draw'}}},newEngineJournal:[]};
-  const host=createDrawingHost({state:session.isession.state['art.draw'],instanceId:'actual-context-fixture'});
+  const admission={untrusted:'must not execute'},session={engine:{requestReaderAdmission:admission},isession:{state:{'art.draw':emptyDrawingState(),'ui.shell':{activeTab:'draw'}}},newEngineJournal:[]};
+  const host=await createDrawingArea({state:session.isession.state['art.draw'],instanceId:'actual-context-fixture'});
   const reader=await loadActualReplayReader({format:'psys2.actual-reader-replay/1',artifactRoot:artifacts,manifestSha256:digest('{}'),runtimeRoot:runtime,runtimeTreeSha256:tree.sha256,ortModule:'ort.mjs',transformersModule:'tokenizer.mjs',runtimeIdentity:{backendSha256:digest(JSON.stringify(backendIdentity))},tokenizerConfig:{path:'tokenizer_config.json',sha256:digest(tc)}},{factory:async({getContext})=>({verified:{fixture:true},provider:{async propose(sourceSop){const text=readReaderSource(sourceSop);seen={text,...getContext()};admissionDuring=session.engine.requestReaderAdmission;return {coverage:{complete:false},candidates:[],failures:[{reason:'fixture-no-model'}]};}}})});
   const result=await reader.run(session,'A source message',{area:'drawing',host,previous:'Actual history'});
   assert.deepEqual(seen,{text:'A source message',area:'drawing',context:{existing:[],previous:'Actual history'}});

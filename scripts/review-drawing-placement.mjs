@@ -5,16 +5,20 @@
 // things in the sky, ground things on the ground, everything on the page, no overlaps except a declared containment
 // (a k.layouts anchor of the container that holds the kind: a boat on the lake's water), no object centred on
 // another, sizes ordered as k.scenes size classes say. It writes one SVG (and, with chromium, one PNG) per scene.
-//   node scripts/review-drawing-placement.mjs [--out <dir>] [--png] [--catalog <docs/worlds dir>] [--scene <name>]
+//   node scripts/review-drawing-placement.mjs [--out <dir>] [--png] [--catalog <docs/worlds dir>] [--scene <name>] [--rules] [--z3 <z3-solver build/node.js>]
+// By default each object is placed as the application places it (the area's declared placement problem, std.problem);
+// --rules runs the bare command instead (the area's grid of spots).
 // Exit 1 when a check fails. The expectations below are the reviewer's, not the area's: the area must meet them
 // from its own rules and knowledge.
 import {mkdirSync, writeFileSync, readFileSync, existsSync} from 'node:fs';
 import {join, resolve} from 'node:path';
 import {spawnSync} from 'node:child_process';
+import {createRequire} from 'node:module';
 import {parse, str} from '../src/vendor/sopworld/sopworld.mjs';
 import {createDrawingArea, projectDrawingArea} from '../worlds/art.draw/sop-drawing.mjs';
 import {toolInvocationContext} from '../worlds/native-tool-host.mjs';
 import {BUNDLED_AREAS} from '../src/knowledge/bundled-areas.mjs';
+import {solveDefaultPlacement} from '../src/dialog/default-placement.mjs';
 
 const W = 1000, H = 700, HORIZON = H / 2;
 // Where a person expects each kind (the landscape of a child's picture: sky above the horizon, ground below).
@@ -112,7 +116,7 @@ export function review(objects, k) {
   return {failures: [...new Set(failures)], notes};
 }
 
-export async function buildScene(kinds, {catalog} = {}) {
+export async function buildScene(kinds, {catalog, rules = false, solveMs = [], provider} = {}) {
   const state = {sop: '', runtime: {view: {}}}, reader = knowledgeReader(catalog);
   let n = 0;
   const statuses = [];
@@ -121,8 +125,16 @@ export async function buildScene(kinds, {catalog} = {}) {
     const host = await createDrawingArea({state, knowledge: reader ?? undefined, args: {kind}});
     const invoke = (sop) => host.invoke(sop, toolInvocationContext('review-' + (n++), host.observe().version));
     // A kind the tab does not offer by name is drawn from the catalog (drawing.catalog.make), as the reader does.
-    let result = invoke(`@c drawing.object.make kind="${kind}"`);
-    if (result.reason === 'invalid-argument-value') result = invoke(`@c drawing.catalog.make name="${kind}"`);
+    // As the application does: the placement problem the area declares, solved as std.problem (the internal search in
+    // Node), gives the command its place and size; --rules runs the command bare (the area's own grid of spots).
+    const place = async (intent) => {
+      if (rules) return invoke(intent);
+      const t0 = performance.now(), solved = await solveDefaultPlacement(host, {intent, provider});
+      solveMs.push(performance.now() - t0);
+      return solved?.solved ? invoke(`${intent} x=${solved.x} y=${solved.y} size=${solved.size}`) : invoke(intent);
+    };
+    let result = await place(`@c drawing.object.make kind="${kind}"`);
+    if (result.reason === 'invalid-argument-value') result = await place(`@c drawing.catalog.make name="${kind}"`);
     statuses.push([kind, result.status, result.reason ?? '']);
   }
   const objects = parse(state.sop).filter((w) => w.type === 'w.drawing.object').map((w) => ({id: val(w, 'code'), kind: val(w, 'drawing'),
@@ -135,14 +147,23 @@ async function main() {
   const catalog = arg('--catalog') ? resolve(arg('--catalog')) : undefined;
   mkdirSync(out, {recursive: true});
   const k = knowledge(catalog);
+  // --z3 <z3-solver build/node.js>: solve with Z3 (the library's Node provider), as the isolated page does.
+  const z3Module = arg('--z3');
+  let provider;
+  if (z3Module) {
+    const {solveWithZ3} = await import('../src/vendor/sopworld/z3-translate.mjs'), {Context} = await createRequire(import.meta.url)(resolve(z3Module)).init(), z = new Context('sopworld');
+    provider = (model) => solveWithZ3(z, model);
+  }
   let failed = 0;
   const only = arg('--scene');
   for (const [name, kinds] of Object.entries(SCENES).filter(([name]) => !only || name === only)) {
-    const {state, objects, statuses} = await buildScene(kinds, {catalog});
+    const solveMs = [], t0 = performance.now();
+    const {state, objects, statuses} = await buildScene(kinds, {catalog, rules: process.argv.includes('--rules'), solveMs, provider});
+    const sceneMs = performance.now() - t0;
     const refused = statuses.filter(([, s]) => s !== 'changed');
     const {failures, notes} = review(objects, k);
     failed += failures.length + refused.length;
-    console.log(`\n== ${name}: ${objects.length} objects, ${failures.length} failed checks${refused.length ? ', refused: ' + refused.map((r) => r.join(' ')).join('; ') : ''}`);
+    console.log(`\n== ${name}: ${objects.length} objects, ${failures.length} failed checks${refused.length ? ', refused: ' + refused.map((r) => r.join(' ')).join('; ') : ''}; ${Math.round(sceneMs)} ms${solveMs.length ? ', placement solve ' + Math.round(solveMs.reduce((a, b) => a + b, 0) / solveMs.length) + ' ms mean, ' + Math.round(Math.max(...solveMs)) + ' ms max' : ''}`);
     for (const o of objects) console.log(`   ${o.id.padEnd(4)} ${o.kind.padEnd(8)} x=${o.x} y=${o.y} size=${o.size}`);
     for (const f of failures) console.log('   FAIL ' + f);
     for (const note of notes) console.log('   note ' + note);
@@ -159,6 +180,7 @@ async function main() {
   }
   console.log(`\n${failed ? failed + ' failed checks' : 'all checks passed'}`);
   process.exitCode = failed ? 1 : 0;
+  if (provider) process.exit(process.exitCode);   // Z3's threads keep Node alive
 }
 
 if (import.meta.url === 'file://' + process.argv[1]) await main();

@@ -17,6 +17,7 @@
 @d.shape.type core.type of=ui.draw.shape
 @d.kind.type core.type of=ui.draw.kind
 @d.extent.type core.type of=ui.draw.extent
+@d.partgeo.type core.type of=ui.draw.partgeo
 
 # The box an object fills: its width and height where it has them, else its size on that side (a square box).
 @ext.o w.drawing.object code=?id size=?s
@@ -69,12 +70,69 @@
 @pr.kp k.objects.part of=?k shape=?shape x=?px y=?py w=?pw h=?ph z=?pz
 @pr.ix ui.draw.index object=?id source=$pr.kp index=?i
 @pr.removed w.drawing.part object=$pr.o index=?i removed=true
+@pr.moved w.drawing.part object=$pr.o index=?i dx=?mdx
 @pr.k core.calc out=?scale fn=div args=?s args=100
 @pr.ext ui.draw.extent object=?id w=?ow h=?oh
 @pr.sx core.calc out=?sx fn=div args=?ow args=100
 @pr.sy core.calc out=?sy fn=div args=?oh args=100
 @pr.out ui.draw.draw part=?id source=$pr.kp slot=?id order=?layer z=?pz shape=?shape x=?px y=?py w=?pw h=?ph cx=50 cy=50 tx=?x ty=?y scale=?scale sx=?sx sy=?sy side=left
-@project.parts core.rule when=$pr.o when=$pr.f when=$pr.kp when=$pr.ix not=$pr.removed when=$pr.ext with=$pr.k with=$pr.sx with=$pr.sy then=$pr.out
+@project.parts core.rule when=$pr.o when=$pr.f when=$pr.kp when=$pr.ix not=$pr.removed not=$pr.moved when=$pr.ext with=$pr.k with=$pr.sx with=$pr.sy then=$pr.out
+
+# The geometry of each part in the drawing's 0..100 frame: its own centre (cx, cy) and size (pw, ph), and where it is
+# drawn: its centre moved by its edit (ex, ey) and its size as edited (fw, fh). A geometry edit stores dx, dy, width
+# and height together (drawing.part.place, drawing.part.change width/height), so the part keeps its place on the
+# object when the object moves or is resized.
+@pg.o w.drawing.object code=?id
+@pg.f ui.draw.form object=?id form=?k
+@pg.kp k.objects.part of=?k x=?px y=?py w=?pw h=?ph
+@pg.ix ui.draw.index object=?id source=$pg.kp index=?i
+@pg.hw core.calc out=?hw fn=div args=?pw args=2
+@pg.hh core.calc out=?hh fn=div args=?ph args=2
+@pg.cx core.calc out=?cx fn=add args=?px args=?hw
+@pg.cy core.calc out=?cy fn=add args=?py args=?hh
+@pg.edit w.drawing.part object=$pg.o index=?i dx=?dx dy=?dy width=?fw height=?fh
+@pg.ex core.calc out=?ex fn=add args=?cx args=?dx
+@pg.ey core.calc out=?ey fn=add args=?cy args=?dy
+@pg.plain.o ui.draw.partgeo object=?id source=$pg.kp index=?i cx=?cx cy=?cy pw=?pw ph=?ph ex=?cx ey=?cy fw=?pw fh=?ph
+@pg.edit.o ui.draw.partgeo object=?id source=$pg.kp index=?i cx=?cx cy=?cy pw=?pw ph=?ph ex=?ex ey=?ey fw=?fw fh=?fh
+@partgeo.plain core.rule when=$pg.o when=$pg.f when=$pg.kp when=$pg.ix not=$pg.edit with=$pg.hw with=$pg.hh with=$pg.cx with=$pg.cy then=$pg.plain.o
+@partgeo.edited core.rule when=$pg.o when=$pg.f when=$pg.kp when=$pg.ix when=$pg.edit with=$pg.hw with=$pg.hh with=$pg.cx with=$pg.cy with=$pg.ex with=$pg.ey then=$pg.edit.o
+
+# A part with a geometry edit: a shape drawn in its box takes the edited box; a shape drawn through its points (a
+# polygon, a line) is moved and scaled about its own centre.
+@pe.o w.drawing.object code=?id x=?x y=?y size=?s z=?layer
+@pe.kp k.objects.part shape=?shape x=?px y=?py w=?pw h=?ph z=?pz
+@pe.g ui.draw.partgeo object=?id source=$pe.kp index=?i cx=?cx cy=?cy ex=?ex ey=?ey fw=?fw fh=?fh
+@pe.edit w.drawing.part object=$pe.o index=?i dx=?dx
+@pe.removed w.drawing.part object=$pe.o index=?i removed=true
+@pe.pt k.objects.point part=$pe.kp
+@pe.ext ui.draw.extent object=?id w=?ow h=?oh
+@pe.k core.calc out=?scale fn=div args=?s args=100
+@pe.sx core.calc out=?sx fn=div args=?ow args=100
+@pe.sy core.calc out=?sy fn=div args=?oh args=100
+@pe.hw core.calc out=?hw fn=div args=?fw args=2
+@pe.hh core.calc out=?hh fn=div args=?fh args=2
+@pe.bx core.calc out=?bx fn=sub args=?ex args=?hw
+@pe.by core.calc out=?by fn=sub args=?ey args=?hh
+@pe.box.out ui.draw.draw part=?id source=$pe.kp slot=?id order=?layer z=?pz shape=?shape x=?bx y=?by w=?fw h=?fh cx=50 cy=50 tx=?x ty=?y scale=?scale sx=?sx sy=?sy side=left
+@project.parts.edited.box core.rule when=$pe.o when=$pe.kp when=$pe.g when=$pe.edit not=$pe.removed not=$pe.pt when=$pe.ext with=$pe.k with=$pe.sx with=$pe.sy with=$pe.hw with=$pe.hh with=$pe.bx with=$pe.by then=$pe.box.out
+@pe.fwm core.calc out=?fwm fn=max args=?fw args=0.01
+@pe.fhm core.calc out=?fhm fn=max args=?fh args=0.01
+@pe.pwm core.calc out=?pwm fn=max args=?pw args=0.01
+@pe.phm core.calc out=?phm fn=max args=?ph args=0.01
+@pe.kx core.calc out=?kx fn=div args=?fwm args=?pwm
+@pe.ky core.calc out=?ky fn=div args=?fhm args=?phm
+@pe.sx2 core.calc out=?sx2 fn=mul args=?sx args=?kx
+@pe.sy2 core.calc out=?sy2 fn=mul args=?sy args=?ky
+@pe.ux core.calc out=?ux fn=sub args=?ex args=50
+@pe.uy core.calc out=?uy fn=sub args=?ey args=50
+@pe.vx core.calc out=?vx fn=mul args=?ux args=?sx
+@pe.vy core.calc out=?vy fn=mul args=?uy args=?sy
+@pe.tx core.calc out=?tx fn=add args=?x args=?vx
+@pe.ty core.calc out=?ty fn=add args=?y args=?vy
+@pe.pts.out ui.draw.draw part=?id source=$pe.kp slot=?id order=?layer z=?pz shape=?shape x=?px y=?py w=?pw h=?ph cx=?cx cy=?cy tx=?tx ty=?ty scale=?scale sx=?sx2 sy=?sy2 side=left
+@project.parts.edited.points core.rule when=$pe.o when=$pe.kp when=$pe.g when=$pe.edit not=$pe.removed when=$pe.pt when=$pe.ext with=$pe.k with=$pe.sx with=$pe.sy with=$pe.fwm with=$pe.fhm with=$pe.pwm with=$pe.phm with=$pe.kx with=$pe.ky with=$pe.sx2 with=$pe.sy2 with=$pe.ux with=$pe.uy with=$pe.vx with=$pe.vy with=$pe.tx with=$pe.ty then=$pe.pts.out
+
 @pp.draw ui.draw.draw source=?src
 @pp.k k.objects.point part=?src n=?n x=?x y=?y
 @pp.o ui.draw.point source=?src n=?n x=?x y=?y
@@ -155,12 +213,12 @@
 @f.default.o ui.draw.fill source=?src part=?id fill="#9aa5b1"
 @fill.default core.rule when=$f.default.draw not=$f.default.has not=$f.default.chosen not=$f.default.edited then=$f.default.o
 
-# Labels under the object.
+# Labels under the object, centred on it.
 @l.o w.drawing.object code=?id label=?text x=?x y=?y size=?s z=?layer
 @l.h core.calc out=?h fn=div args=?s args=2
 @l.y core.calc out=?ly fn=add args=?y args=?h
 @l.y2 core.calc out=?ty fn=add args=?ly args=18
-@l.out ui.draw.draw part=?id source=?text slot=?id order=?layer z=99 shape=text text=?text x=?x y=?ty w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left
+@l.out ui.draw.draw part=?id source=?text slot=?id order=?layer z=99 shape=text text=?text x=?x y=?ty w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left anchor=middle
 @label core.rule when=$l.o with=$l.h with=$l.y with=$l.y2 then=$l.out
 @l.ink ui.draw.chosen source=?text part=?id fill="#1f2933"
 @label.ink core.rule when=$l.o then=$l.ink

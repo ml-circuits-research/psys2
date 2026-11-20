@@ -112,6 +112,9 @@
 @native.ui.avatar.op.avatar.part.change.param.size std.capability.parameter operation=$native.ui.avatar.op.avatar.part.change name="size" kind=string
 @native.ui.avatar.input.avatar.sizes app.native.input name="avatar.sizes" required=true
 @native.ui.avatar.op.avatar.part.change.param.size.source.enum app.native.parameter parameter=$native.ui.avatar.op.avatar.part.change.param.size field=enum input=$native.ui.avatar.input.avatar.sizes
+@native.ui.avatar.op.avatar.part.change.param.length std.capability.parameter operation=$native.ui.avatar.op.avatar.part.change name="length" kind=string
+@native.ui.avatar.input.avatar.lengths app.native.input name="avatar.lengths" required=true
+@native.ui.avatar.op.avatar.part.change.param.length.source.enum app.native.parameter parameter=$native.ui.avatar.op.avatar.part.change.param.length field=enum input=$native.ui.avatar.input.avatar.lengths
 @native.ui.avatar.input.avatar.sizeRelated app.native.input name="avatar.sizeRelated" required=true
 @native.ui.avatar.value.114 std.capability.arg name="related" value=$native.ui.avatar.input.avatar.sizeRelated
 @native.ui.avatar.value.115 std.capability.record entry=$native.ui.avatar.value.114

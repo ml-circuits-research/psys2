@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-import {parse, str} from '../lib/vendor/sopworld/sopworld.mjs?v=5221d62911';
-import {readNativeIntent} from '../lib/dialog/native-intent-reader.mjs?v=fe85b87be0';
+import {parse, str} from '../lib/vendor/sopworld/sopworld.mjs?v=4a094fcca4';
+import {readNativeIntent} from '../lib/dialog/native-intent-reader.mjs?v=ae973be84a';
 import {copyHostData, validateNativeArguments, validHostId as text, checkOperation} from './native-tool-arguments.mjs?v=ed48209b92';
 export {copyHostData, freezeHostData, snapshotHostData, validateNativeArguments, nativeToken} from './native-tool-arguments.mjs?v=ed48209b92';
 
@@ -24,7 +24,7 @@ export function readToolInvocation(context) {
  });
 }
 
-export function createNativeToolHost({state,instanceId,scope,operations,toolInterface,handlers,view,spatial=null,measure=null,identityRegistry=new Map(),validate=null,maxObjects=10000,maxBytes=4000000}={}) {
+export function createNativeToolHost({state,instanceId,scope,operations,toolInterface,handlers,view,spatial=null,measure=null,placement=null,identityRegistry=new Map(),validate=null,maxObjects=10000,maxBytes=4000000}={}) {
  if(measure!==null&&typeof measure!=='function')throw new TypeError('invalid-spatial-measurement');
  if(spatial!==null&&typeof spatial!=='function')throw new TypeError('invalid-spatial-observer');
  if(validate!==null&&typeof validate!=='function')throw new TypeError('invalid-policy-validator');
@@ -102,6 +102,12 @@ export function createNativeToolHost({state,instanceId,scope,operations,toolInte
   ...(measure?{measureSpatial(sop){
    const {operation,args}=readNativeIntent(sop,{operations:declared});
    return measure(operation,args);
+  }}:{}),
+  ...(placement?{placementProblem(sop){
+   try{
+    const {operation,args}=readNativeIntent(sop,{operations:declared});
+    const problem=placement(copy(state),operation,args);return problem?copy(problem):null;
+   }catch(error){if(error?.name==='BudgetExceeded'||error?.name==='TurnAborted')throw error;return null;}
   }}:{}),
   ...(spatial?{observeSpatial,spatialRevision:()=>readSpatialRevision(snapshot())}:{})});
 }

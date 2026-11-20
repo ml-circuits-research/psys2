@@ -2,10 +2,10 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 /**
  * NX5: one system (rules | A-only | Aplus-only | A-first | Aplus-first | A-hybrid | Aplus-hybrid, see scripts/lib/nx-runtime.mjs) over every evaluation
- * set, through the real dialog engine (same sessions, interpreter and checks as eval-operational / eval-dialogues / eval-diagram). One row per item is
+ * set, through the real dialog engine (same sessions, interpreter and checks as eval-operational / eval-dialogues). One row per item is
  * written to training/results/nx5/<system>.json; scripts/nx5-report.mjs merges the systems into the tables.
  *
- *   node scripts/eval-nx.mjs --system A-only --ort <onnxruntime-node entry> [--sets operational,dialogues,gold,nxtest,real,mobile,diagram] [--jobs N] [--limit N]
+ *   node scripts/eval-nx.mjs --system A-only --ort <onnxruntime-node entry> [--sets operational,dialogues,gold,nxtest,real,mobile] [--jobs N] [--limit N]
  *
  * Sets and what "correct" means:
  *   operational, operational-long   the expectation of the case holds (state / answer / effects), outcome right | partly | wrong | not_understood
@@ -17,8 +17,6 @@
  *                                   expectation lines are prose); phrases whose expectation names no world only count answered / abstained
  *   mobile                          the mobile export (108 Romanian voice fragments, English translation as logged): answered / abstained, and agreement of the
  *                                   world with the logged rules reading when that one was supported
- *   diagram                         the diagram bench (imports/diagram-vss-demo/data/bench) with the source scorer (bench-canon.js): right act and right args
- *                                   (the args come from the diagram world's reader, as in scripts/eval-diagram.mjs, so the model's part is the act)
  * correct / wrong / abstain: abstain = no segment was understood (nothing executed), wrong = a reading that differs from the gold / a failed expectation,
  * correct = the gold holds.
  */
@@ -32,7 +30,6 @@ import { buildSystem } from './lib/nx-runtime.mjs';
 import { evaluateCase, classify } from './lib/operational-check.mjs';
 import { wireToRec } from './lib/nx-read.mjs';
 import { groupOf } from './lib/world-groups.mjs';
-import { score, canon, canonWant } from '../imports/diagram-vss-demo/reference/bench-canon.js';
 import { visibleState } from './lib/visible-state.mjs';
 
 const SELF = fileURLToPath(import.meta.url);
@@ -101,14 +98,6 @@ function buildItems(sets, limit) {
   if (want('mobile')) {
     const d = JSON.parse(readFileSync(MAIN + 'training/eval/real-phrases-2026-11-09f-mobile.json', 'utf8'));
     d.records.forEach((r, i) => push({ kind: 'mobile', set: 'mobile', id: `mob${i}`, tab: r.tab, text: r.english, loggedStatus: r.status, loggedWorld: r.worlds?.[0] ?? null }));
-  }
-  if (want('diagram')) {
-    const DATA = join(REPO, 'imports/diagram-vss-demo/data');
-    for (const id of ['hand', 'blind', 'broad', 'seen', 'new_identities', 'heldout_formulations']) {
-      for (const [i, r] of JSON.parse(readFileSync(join(DATA, 'bench', `${id}.json`), 'utf8')).entries()) {
-        push({ kind: 'diag', set: `diagram/${id}`, row: r.wires ? { set: `bench/${id}`, id: `${id}#${i}`, text: r.text, names: r.names ?? [], groups: {}, wires: r.wires.filter((w) => w.args ?? w.gold).map((w) => ({ ...w, args: w.args ?? w.gold })) } : { set: `bench/${id}`, id: `${id}#${i}`, text: r.text, names: r.names ?? [], groups: {}, type: r.type, gold: r.gold } });
-      }
-    }
   }
   return limit ? items.filter((it, i) => items.filter((x) => x.set === it.set).indexOf(it) < limit) : items;
 }
@@ -201,40 +190,7 @@ async function runMobile(env, it) {
   return { id: it.id, outcome: segs.length ? 'answered' : 'abstain', worlds, loggedStatus: it.loggedStatus, loggedWorld: it.loggedWorld, agrees: it.loggedStatus === 'supported' ? worlds.includes(it.loggedWorld) : null, error };
 }
 
-const actOfWire = (w0) => { const w = { type: w0.type, args: w0.args ?? w0.gold }; return (w.type === 'question' ? `diagram.ask.${w.args.ask}` : w.type === 'fact' ? 'diagram.fact' : w.type === 'rule' ? 'diagram.rule' : `diagram.${w.args.action}`).toLowerCase(); };
-const stateOf = (row) => ({
-  shapes: (row.names ?? []).map((name, i) => ({ name, shape: 'circle', x: 80 + 100 * (i % 6), y: 80 + 100 * Math.floor(i / 6), size: 62, color: 'white', order: i + 1 })),
-  groups: Object.entries(row.groups ?? {}).map(([name, members]) => ({ name, members })), seq: {}, edgeSeq: 0, order: (row.names ?? []).length,
-});
-let diagOps = null;
-async function runDiag(env, it) {
-  const row = it.row;
-  diagOps ??= await import('../worlds/diagram.sketch/engine.mjs');
-  const allActs = (env.allActs ??= new Map(env.engine.set.list().flatMap((w) => w.patterns.map((p) => [p.id, /action=([\w.]+)/.exec(p.emit ?? '')?.[1] ?? null]))));
-  const nodes = diagOps.read(row.text, stateOf(row))?.nodes ?? [];
-  const goldRow = row.wires ? { wires: row.wires, text: row.text } : { type: row.type, gold: row.gold };
-  const s0 = score(nodes, goldRow);
-  const sess = env.engine.createSession(sessionOptions(env.settings, { language: 'en' }));
-  env.wrap?.(sess);
-  sess.setWorldState('ui.shell', { activeTab: 'diagram' });
-  sess.setWorldState('diagram.sketch', stateOf(row));
-  let r; try { r = await sess.send(row.text, { language: 'en' }); } catch (e) { return { id: row.id, outcome: 'wrong', error: String(e?.message ?? e) }; }
-  const segs = (r.segments ?? []).filter((x) => x.match);
-  const acts = (x) => (allActs.get(x.match.patternId) ?? '').toLowerCase() || null;
-  const golds = row.wires ? row.wires.map(actOfWire) : [actOfWire({ type: row.type, gold: row.gold })];
-  if (!segs.length) return { id: row.id, outcome: 'abstain', argsOk: s0.ok };
-  if (!row.wires) {
-    const mine = segs.find((x) => x.match.worldId === 'diagram.sketch' && acts(x) === golds[0]) ?? segs[0];
-    const actRight = mine.match.worldId === 'diagram.sketch' && acts(mine) === golds[0];
-    return { id: row.id, outcome: actRight ? (s0.ok ? 'correct' : 'act-right-args-wrong') : 'wrong', actRight, argsOk: s0.ok, gold: golds[0], got: acts(mine) };
-  }
-  // messages in the bench (broad multi-clause rows): every gold act must be covered by a segment of diagram.sketch
-  const have = segs.filter((x) => x.match.worldId === 'diagram.sketch').map(acts);
-  const all = golds.every((g) => have.includes(g));
-  return { id: row.id, outcome: all ? (s0.ok ? 'correct' : 'act-right-args-wrong') : 'wrong', actRight: all, argsOk: s0.ok };
-}
-
-const RUN = { op: (e, it) => runOp(e, it.c), dlg: (e, it) => runDialogue(e, it.d), rec: runRec, real: runReal, mobile: runMobile, diag: runDiag };
+const RUN = { op: (e, it) => runOp(e, it.c), dlg: (e, it) => runDialogue(e, it.d), rec: runRec, real: runReal, mobile: runMobile };
 
 if (!isMainThread) {
   serveShard(async (wd) => {
@@ -249,7 +205,7 @@ if (!isMainThread) {
 } else if (process.argv[1] && resolve(process.argv[1]) === SELF) {
   const system = arg('system');
   if (!system) throw new Error('--system is required');
-  const sets = (arg('sets', 'operational,dialogues,gold,nxtest,real,mobile,diagram')).split(',');
+  const sets = (arg('sets', 'operational,dialogues,gold,nxtest,real,mobile')).split(',');
   const items = buildItems(sets, arg('limit') ? Number(arg('limit')) : 0);
   const jobs = Math.max(1, Math.min(parseJobs(), items.length));
   const t0 = Date.now();

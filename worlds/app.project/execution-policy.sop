@@ -14,6 +14,14 @@
 @width app.execution.values concept=w.drawing.object.width valueType="k.expect.scale" nameKey="step" valueKey="size_factor" codec=degree
 @drawing.width app.execution.observedMeasure concept=w.drawing.object.width sourceType="art.draw.object" parameter="width" binding="drawing.object.width" order=2
 @height app.execution.values concept=w.drawing.object.height valueType="k.expect.scale" nameKey="step" valueKey="size_factor" codec=degree
+# A part's length on the Avatar tab (k.faces.variant.length) is a step of the catalog's scale of length (short <
+# medium < long): "long hair" names the step, "shorter" moves one step down from the part's own length; the tab
+# chooses the variant (worlds/ui.avatar/act-rules.sop).
+@length app.execution.values concept=k.faces.variant.length valueType="k.values.step" nameKey="name" valueKey="name" codec=lookup
+@length.scale app.execution.ordinal concept=k.faces.variant.length scale=length
+# One step up or down an ordered scale (comparative-projection.sop: "bigger" as a factor of size, "longer" as a step).
+@step.more app.execution.comparative step=more offset=1
+@step.less app.execution.comparative step=less offset=-1
 @drawing.height app.execution.observedMeasure concept=w.drawing.object.height sourceType="art.draw.object" parameter="height" binding="drawing.object.height" order=3
 # A meeting's start is an instant (milliseconds since the Unix epoch) and the calendar keeps its clock in UTC
 # (its frame is unix, its views say UTC). A clock time said for it ("3pm", "15:00", "noon", "half past 3 pm")

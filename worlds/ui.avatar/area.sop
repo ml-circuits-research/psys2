@@ -9,7 +9,7 @@
 @area.draw.type core.type of=app.area.draw
 @area.offline.type core.type of=app.area.offline
 
-@avatar.area app.area world=ui.avatar instance=w.face knowledge=k.faces scope="ui.avatar" frame.w=100 frame.h=100
+@avatar.area app.area world=ui.avatar instance=w.face knowledge=k.faces knowledge=k.values scope="ui.avatar" frame.w=100 frame.h=100
 @avatar.rules.1 app.area.rules area=$avatar.area file="render-projection.sop" n=1
 @avatar.rules.2 app.area.rules area=$avatar.area file="act-rules.sop" n=2
 @avatar.make app.area.make area=$avatar.area kind=w.face.face name="Avatar" style=plain
@@ -25,9 +25,13 @@
 @avatar.choice.variants app.area.choice area=$avatar.area input="avatar.variants" type=k.faces.variant key=name style=plain
 @avatar.choice.colours app.area.choice area=$avatar.area input="avatar.colours" type=k.faces.colour key=name
 @avatar.choice.sizes app.area.choice area=$avatar.area input="avatar.sizes" type=ui.avatar.size key=grade
+# A part's length: the steps of the scale the catalog declares for it (k.faces.feature) and the relative steps of
+# act-rules.sop (one step longer or shorter).
+@avatar.choice.lengths app.area.choice area=$avatar.area input="avatar.lengths" type=ui.avatar.lengthChoice key=value
 @avatar.choice.directions app.area.choice area=$avatar.area input="avatar.directions" type=ui.avatar.step key=place
-@avatar.choice.features app.area.choice area=$avatar.area input="avatar.features" type=ui.avatar.size key=none
-@avatar.choice.featureValues app.area.choice area=$avatar.area input="avatar.featureValues" type=ui.avatar.size key=none
+# The features a part can be given (act-rules.sop: ui.avatar.feature, from the plain-word features of the variants).
+@avatar.choice.features app.area.choice area=$avatar.area input="avatar.features" type=ui.avatar.feature key=property style=plain
+@avatar.choice.featureValues app.area.choice area=$avatar.area input="avatar.featureValues" type=ui.avatar.feature key=value style=plain
 @avatar.choice.resizeRelated app.area.choice area=$avatar.area input="avatar.resizeRelated" type=ui.avatar.size key=none
 @avatar.choice.sizeRelated app.area.choice area=$avatar.area input="avatar.sizeRelated" type=ui.avatar.size key=none
 @avatar.min app.area.constant area=$avatar.area input="avatar.minScale" value=0.6

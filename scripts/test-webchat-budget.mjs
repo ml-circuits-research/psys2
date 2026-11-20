@@ -326,8 +326,8 @@ export const SCENARIOS = {
       check('evidence: a main-thread task over 200 ms is recorded with its stage', lt.some((t) => t.ms >= 200 && typeof t.stage === 'string') || !wired, JSON.stringify(lt.slice(-2)) + (wired ? '' : ' (page not visible: no entries delivered)'));
       await c.say(FAULTS.op, { timeout: 15000 });
       await c.pg.waitForFunction(() => window.psys2.engineClient.stats.kills.length > 0, { timeout: 5000, polling: 20 });
-      const exp = await c.pg.evaluate(async () => { const m = await import('./ui/phrase-log.mjs'); const app = window.psys2; return JSON.parse(m.toJSON(JSON.parse(localStorage.getItem('psys2.webchat.phrases') ?? '[]'), { diagnostics: { longTasks: app.longTasks, engine: { ...app.engineClient.stats } } })); });
-      check('evidence: the phrase-log export carries diagnostics (long tasks, engine kills)', Array.isArray(exp.diagnostics?.longTasks) && exp.diagnostics.engine.kills.length === 1 && exp.records.some((r) => r.outcome === 'timeout' && r.stage), JSON.stringify(exp.diagnostics?.engine?.kills?.[0] ?? null));
+      const exp = await c.pg.evaluate(async () => { const m = await import('./ui/phrase-log.mjs'); const app = window.psys2; return JSON.parse(m.toJSON(JSON.parse(localStorage.getItem('psys2.webchat.phrases') ?? '[]'), { diagnostics: { longTasks: app.longTasks, engine: { ...app.engineClient.stats } }, includeDiagnostics: true })); });
+      check('evidence: the phrase-log export carries diagnostics (long tasks, engine kills)', Array.isArray(exp.diagnostics?.app?.longTasks) && exp.diagnostics.app.engine.kills.length === 1 && exp.entries.some((e) => e.happened.outcome === 'timeout' && e.happened.stage), JSON.stringify(exp.diagnostics?.app?.engine?.kills?.[0] ?? null));
     } finally { await c.close(); }
   },
 };

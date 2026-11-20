@@ -12,6 +12,7 @@ export const GENERATION_KEY = 'psys2.cacheGeneration';
 /** localStorage keys that only hold cached knowledge about assets or the last start (not user data): cleared by a release reset. */
 export const ASSET_STORAGE_KEYS = ['psys2.webchat.progress', 'psys2.ortlog'];
 const RELOAD_GUARD = 'psys2.reloadedFor';
+const ISOLATION_GUARD = 'psys2.reloadedForIsolation';
 
 let current = null;   // the manifest of this start
 export const manifest = () => current;
@@ -65,7 +66,7 @@ export async function registerWorker({ base, manifest: m, serviceWorker = global
       ch.port1.onmessage = (e) => res(e.data);
       sw.postMessage({ type: 'manifest', manifest: { version: m.version, assets: m.assets } }, [ch.port2]);
     }), timeoutMs);
-    return { controlled: !!serviceWorker.controller, acked: !!ack?.ok, removed: ack?.removed ?? 0 };
+    return { controlled: !!serviceWorker.controller, acked: !!ack?.ok, removed: ack?.removed ?? 0, isolate: ack?.isolate === true };
   } catch (e) { return { controlled: false, acked: false, reason: String(e?.message ?? e) }; }
 }
 
@@ -93,5 +94,16 @@ export async function startAssets({ base, win = globalThis.window ?? globalThis,
     return { manifest: m, reloading: false, mismatch: m, reset, worker: null };   // reloaded once already and still different: no loop, the caller shows a banner
   }
   const worker = useWorker ? await registerWorker({ base, manifest: m, serviceWorker }) : null;
+  // Cross-origin isolation from the first visit: the worker adds COOP/COEP to what it serves, but this document came before it. Reload once
+  // (guarded per tab session) so Z3 can place things now; when the reloaded page is still not isolated (a browser without it), no loop.
+  if (worker?.acked && worker.isolate && win.crossOriginIsolated === false) {
+    let guarded = null;
+    try { guarded = session?.getItem(ISOLATION_GUARD) ?? null; } catch { guarded = null; }
+    if (guarded == null) {
+      let kept = false;
+      try { session?.setItem(ISOLATION_GUARD, '1'); kept = session?.getItem(ISOLATION_GUARD) === '1'; } catch { kept = false; }   // no session storage: no reload, no loop
+      if (kept) { reload(); return { manifest: m, reloading: true, mismatch: null, reset, worker }; }
+    }
+  }
   return { manifest: m, reloading: false, mismatch: null, reset, worker };
 }

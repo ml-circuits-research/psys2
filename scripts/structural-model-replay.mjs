@@ -3,10 +3,10 @@ import {readFileSync,writeFileSync} from 'node:fs';import {execFileSync} from 'n
 import {bridgeRawStructure} from '../src/dialog/raw-structural-bridge.mjs';
 import {readReaderSource} from '../src/dialog/reader-source.mjs';
 import {routeNewEngine} from '../src/dialog/reader-routing.mjs';
-import {initialDrawingState,createDrawingHost} from '../worlds/art.draw/declared-host.mjs';
-import {initialDiagramState,createDiagramHost} from '../worlds/diagram.sketch/declared-host.mjs';
-import {initialDocumentState,createDocumentHost} from '../worlds/docs.editor/declared-host.mjs';
-import {createCalendarHost} from '../worlds/time.calendar/declared-host.mjs';
+import {createDrawingArea,emptyDrawingState as drawing} from '../worlds/art.draw/sop-drawing.mjs';
+import {createDiagramArea,emptyDiagramState as diagram} from '../worlds/diagram.sketch/sop-diagram.mjs';
+import {createDocumentArea,emptyDocumentArea as document} from '../worlds/docs.editor/sop-document.mjs';
+import {createCalendarArea,emptyCalendarArea as calendar} from '../worlds/time.calendar/sop-calendar.mjs';
 import {seedFunctionalContext} from './functional-context-seeding.mjs';
 import {prepareFunctionalFixture} from './lib/functional-fixture-policy.mjs';
 import {FUNCTIONAL_NATIVE_BINDINGS} from './lib/functional-native-bindings.mjs';
@@ -27,11 +27,11 @@ else{
   const bridge=bridgeRawStructure(model.prediction,{bindings,bindingSha256:args['bindings-sha256']});
   const proposal=bridge.decoded??{candidates:[],coverage:{complete:false,executable:false,graphProposal:false}};
   proposal.coverage={...proposal.coverage,executable:false};
-  const state={'art.draw':initialDrawingState(),'diagram.sketch':initialDiagramState(),'docs.editor':initialDocumentState(),'time.calendar':{people:[],rooms:[],meetings:[]},'ui.shell':{activeTab:row.input.area}};
+  const state={'art.draw':drawing(),'diagram.sketch':diagram(),'docs.editor':document(),'time.calendar':calendar(),'ui.shell':{activeTab:row.input.area}};
   let setup={ok:false,reason:'owner-native-history-not-reconstructed'};
   if(row.suite==='matrix'){
    const area=row.input.area,instanceId='replay-'+sha(row.input.id).slice(0,20),fixture=prepareFunctionalFixture(area,row.input.context);
-   const host=area==='drawing'?createDrawingHost({state:state['art.draw'],instanceId}):area==='diagram'?await createDiagramHost({state:state['diagram.sketch'],instanceId}):area==='document'?createDocumentHost({state:state['docs.editor'],instanceId}):area==='calendar'?createCalendarHost({state:state['time.calendar'],instanceId}):null;
+   const host=area==='drawing'?await createDrawingArea({state:state['art.draw'],instanceId}):area==='diagram'?await createDiagramArea({state:state['diagram.sketch'],instanceId}):area==='document'?await createDocumentArea({state:state['docs.editor'],instanceId}):area==='calendar'?await createCalendarArea({state:state['time.calendar'],instanceId}):null;
    const seeded=await seedFunctionalContext({context:fixture.context,host,kindMappings:FUNCTIONAL_NATIVE_BINDINGS[area]??[],invocationPrefix:instanceId});setup={ok:seeded.ok,semanticallyLimited:fixture.semanticallyLimited,counters:seeded.counters};
   }
   const before=JSON.stringify(state),provider={provenance:()=>({modelSha256:model.prediction.model.sha256,decoderVersion:model.prediction.model.decoderVersion,source:'frozen structural inference'}),propose:async sourceSop=>{if(readReaderSource(sourceSop)!==row.input.text)throw Error('unexpected provider source');return proposal;}};

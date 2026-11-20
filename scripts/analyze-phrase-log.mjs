@@ -12,6 +12,7 @@
 // Messages answered by ui.shell / ui.help / session worlds are not wrong-world cases (they are available in every tab); `--all` keeps them.
 import { readFileSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
+import { exportRecords } from '../docs/webchat/ui/phrase-log.mjs';
 
 /** Tab id -> the world of that tab (docs/webchat/ui/tabs/*.mjs and TABS in app.mjs); a record that carries `routing.activeWorld` wins. */
 export const TAB_WORLDS = Object.freeze({
@@ -46,9 +47,8 @@ export function parseExport(text, { events = false } = {}) {
   if (!t) return [];
   try {
     const j = JSON.parse(t);
-    if (events) return Array.isArray(j?.events) ? j.events : [];   // format 3 only; older exports have no events
-    if (Array.isArray(j)) return j;
-    if (Array.isArray(j?.records)) return j.records;
+    if (events) return Array.isArray(j?.events) ? j.events : Array.isArray(j?.diagnostics?.events) ? j.diagnostics.events : [];   // format 3, or format 4 with diagnostics; older exports have no events
+    if (Array.isArray(j) || Array.isArray(j?.records) || Array.isArray(j?.entries)) return exportRecords(j);
     if (j && typeof j === 'object') return [j];
   } catch { /* JSON lines */ }
   if (events) return [];

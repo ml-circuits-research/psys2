@@ -11,7 +11,7 @@
  * No code here is per world: what a world can do is what its request.sop declares, and it carries out a plan with its own operation `planRequest(ctx, goal)`.
  */
 import { budget } from './budget.mjs?v=00bce6e369';
-import { BUNDLED_REQUEST } from '../knowledge/bundled-request.mjs?v=587d62bd65';
+import { BUNDLED_REQUEST } from '../knowledge/bundled-request.mjs?v=d1a4814fc8';
 import { REQUEST_LOCAL } from '../lang/en.request.local.mjs?v=b14cf0644e';
 
 const STOP = new Set('a an the of to in on at for with and or but is are was were be been being it its this that these those there here i you he she we they me my your our his her their them us do does did please just also so then very some any can could would should will shall may might must have has had am get got let lets want like one'.split(' '));

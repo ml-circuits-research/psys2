@@ -397,8 +397,8 @@ async function feedbackFor(name, viewport, o) {
     check(`${tag}: "Copy as text" is gone, "Export JSON" is there`, !labels.includes('Copy as text') && labels.includes('Export JSON'), labels.join('|'));
     await pg.evaluate(() => [...document.querySelectorAll('.p2-plog-actions button')].find((b) => b.textContent === 'Export JSON').click());
     const body = JSON.parse(await pg.evaluate(() => window.__blobs.at(-1).text()));
-    const downs = body.records.filter((x) => x.feedback?.vote === 'down');
-    check(`${tag}: the export is complete (feedback, correction, detail, segments, id, time)`, body.count === body.records.length && downs.length >= 1 && !!downs[0].feedback.correction && !!downs[0].detail?.readings && Array.isArray(downs[0].segments) && !!downs[0].time && !!downs[0].id, JSON.stringify(downs[0]?.feedback));
+    const downs = body.entries.filter((x) => x.feedback?.vote === 'down');
+    check(`${tag}: the export is complete (one entry per turn: asked, read, compiled, happened, feedback with correction)`, body.format === 'psys2-phrase-log/4' && body.turns === body.entries.length && downs.length >= 1 && !!downs[0].feedback.correction && !!downs[0].read && !!downs[0].compiled && !!downs[0].happened && !!downs[0].asked.time && !!downs[0].id, JSON.stringify(downs[0]?.feedback));
     check(`${tag}: no horizontal overflow`, await pg.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
     check(`${tag}: 0 console errors`, c.consoleErrors.length === 0 && c.errors.length === 0, [...c.consoleErrors, ...c.errors][0] ?? '');
   } finally { await c.close(); }

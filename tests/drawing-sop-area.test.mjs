@@ -50,9 +50,49 @@ test('change, part edits, groups and removal update the instance in place',async
 
 test('what is not declared is refused, not simulated',async()=>{
  const {run}=await area();
- run('@c drawing.object.make kind="house"');
- assert.equal(run('@c drawing.part.change id="o1" index=1 width=4').reason,'part-size-not-declared');
+ run('@c drawing.object.make kind="star" x=200 y=200 size=100');
+ assert.equal(run('@c drawing.part.extract id="o1" index=0').reason,'part-extract-shape-not-declared','a polygon part has no basic shape to become');
  assert.equal(run('@c drawing.catalog.make name="no such drawing"').reason,'drawing-not-in-catalog');
+});
+
+test('a part moves and resizes about its centre in page units and keeps its place on the object',async()=>{
+ const {state,run,view}=await area();
+ run('@c drawing.object.make kind="house" x=500 y=400 size=200');
+ assert.equal(run('@c drawing.part.place id="o1" index=2 x=520 y=300').status,'changed');
+ assert.equal(run('@c drawing.part.change id="o1" index=2 width=100 color="#00ff00"').status,'changed');
+ assert.equal((state.sop.match(/^@\S+ w\.drawing\.part /gm)??[]).length,1,'one edit holds the move, the size and the colour');
+ let roof=view().inputs['o1.2'];
+ assert.deepEqual([roof.x,roof.y,roof.width,roof.color],[520,300,100,'#00ff00']);
+ assert.match(view().svg,/<polygon points="[^"]+" fill="#00ff00"\/>/);
+ run('@c drawing.object.place ids="o1" x=300 y=400');
+ roof=view().inputs['o1.2'];
+ assert.deepEqual([roof.x,roof.y],[320,300],'the part moves with its object');
+ run('@c drawing.object.make kind="star" x=800 y=200 size=100');
+ assert.equal(run('@c drawing.part.place id="o2" index=0 x=850 y=200').status,'changed','a part drawn through its points moves too');
+ assert.equal(view().inputs['o2.0'].x,850);assert.match(view().svg,/translate\(850 /);
+});
+
+test('a box-shaped part is extracted as an object of its basic shape, where and as it was drawn',async()=>{
+ const {state,run,view}=await area();
+ run('@c drawing.object.make kind="house" x=600 y=400 size=200');
+ const body=view().inputs['o1.1'];
+ assert.equal(run('@c drawing.part.extract id="o1" index=1').status,'changed');
+ const made=view().objects.find(o=>o.id==='o2');
+ assert.deepEqual([made.kind,Number(made.x),Number(made.y)],['rectangle',body.x,body.y]);
+ assert.deepEqual([view().inputs.o2.width,view().inputs.o2.height,view().inputs.o2.fill],[body.width,body.height,body.color]);
+ assert.ok(!view().objects.some(o=>o.id==='o1.1'),'the part left its object');
+ assert.equal(state.runtime.view.selected,'o2');
+});
+
+test('objects fit into a box together; a move with the same box size changes only their places',async()=>{
+ const {state,run,view}=await area();
+ run('@c drawing.object.make kind="circle" x=200 y=200 size=100');
+ run('@c drawing.object.make kind="square" x=400 y=200 size=100');
+ assert.equal(run('@c drawing.objects.transform ids="o1" ids="o2" x=160 y=200 width=300 height=100').status,'changed');
+ assert.deepEqual(view().boxes,{o1:{x0:160,y0:200,x1:260,y1:300},o2:{x0:360,y0:200,x1:460,y1:300}});
+ assert.doesNotMatch(state.sop,/width=/,'a move writes no sides');
+ assert.equal(run('@c drawing.objects.transform ids="o1" ids="o2" x=100 y=100 width=600 height=50').status,'changed');
+ assert.deepEqual(view().boxes,{o1:{x0:100,y0:100,x1:300,y1:150},o2:{x0:500,y0:100,x1:700,y1:150}});
 });
 
 test('the area declares the geometry placement reads: the page frame and a box per object',async()=>{

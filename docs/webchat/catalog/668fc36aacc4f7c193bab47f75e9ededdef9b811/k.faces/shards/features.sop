@@ -1,0 +1,7 @@
+# k.faces/shards/features: the features of the variants whose values are the steps of an ordered scale of k.values.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@k.faces.feature.length k.faces.feature key=length scale=length core.source="hand-core 1"
+@k.faces.feature.size k.faces.feature key=size scale=size core.source="hand-core 1"

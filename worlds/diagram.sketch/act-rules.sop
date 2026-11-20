@@ -116,7 +116,8 @@
 @a.it.i app.act.item param="ids" value=?id
 @a.it.n w.diagram.node code=?id
 
-# Change colour, size, label or value; a change that names none of them is refused.
+# Change colour, size, label, value or shape (the command's `kind`, as the node was made); a change that names none of
+# them is refused.
 @a.cn.colour.r app.act.request operation="diagram.node.change" colour=?v
 @a.cn.colour.c app.act.call act=change thing=$a.it.n attr=colour value=?v order=1
 @change.node.colour core.rule when=$a.cn.colour.r when=$a.it.i when=$a.it.n then=$a.cn.colour.c
@@ -129,13 +130,17 @@
 @a.cn.value.r app.act.request operation="diagram.node.change" value=?v
 @a.cn.value.c app.act.call act=change thing=$a.it.n attr=value value=?v order=1
 @change.node.value core.rule when=$a.cn.value.r when=$a.it.i when=$a.it.n then=$a.cn.value.c
+@a.cn.kind.r app.act.request operation="diagram.node.change" kind=?v
+@a.cn.kind.c app.act.call act=change thing=$a.it.n attr=shape value=?v order=1
+@change.node.kind core.rule when=$a.cn.kind.r when=$a.it.i when=$a.it.n then=$a.cn.kind.c
 @a.cn.none.r app.act.request operation="diagram.node.change"
 @a.cn.none.c app.act.request colour=?a1
 @a.cn.none.s app.act.request size=?a2
 @a.cn.none.l app.act.request label=?a3
 @a.cn.none.v app.act.request value=?a4
+@a.cn.none.k app.act.request kind=?a5
 @a.cn.none.out app.act.refuse reason=missing-property
-@change.node.none core.rule when=$a.cn.none.r not=$a.cn.none.c not=$a.cn.none.s not=$a.cn.none.l not=$a.cn.none.v then=$a.cn.none.out
+@change.node.none core.rule when=$a.cn.none.r not=$a.cn.none.c not=$a.cn.none.s not=$a.cn.none.l not=$a.cn.none.v not=$a.cn.none.k then=$a.cn.none.out
 
 # Select nodes (and edges): the view's selection.
 @a.sel.n.r app.act.request operation="diagram.node.select"
@@ -146,6 +151,59 @@
 @select.nodes.edges core.rule when=$a.sel.n.r when=$a.sel.e.i when=$a.sel.e.e then=$a.sel.n.v
 @a.sel.e.miss app.act.refuse reason=missing-target
 @select.nodes.edges.missing core.rule when=$a.sel.n.r when=$a.sel.e.i not=$a.sel.e.e then=$a.sel.e.miss
+# Selecting no node and no edge clears the selection.
+@a.sel.none.i app.act.item param="ids" value=?anyid
+@a.sel.none.e app.act.item param="edges" value=?anye
+@a.sel.none.v app.act.view key=selected
+@select.none core.rule when=$a.sel.n.r not=$a.sel.none.i not=$a.sel.none.e then=$a.sel.none.v
+
+# Several things selected at once: the view's `selected` key holds one of them, and each selected node or edge also
+# has its own view key selected.<code>=true. A select command sets the keys of what it names and clears the others
+# (a group selection or an empty selection clears them all); removing a node or an edge clears its key.
+@dga.pickop.type core.type of=ui.diagram.pickop
+@dga.picked.type core.type of=ui.diagram.picked
+@dga.thing.type core.type of=ui.diagram.thing
+@pickop.nodes ui.diagram.pickop operation="diagram.node.select"
+@pickop.links ui.diagram.pickop operation="diagram.link.select"
+@pickop.group ui.diagram.pickop operation="diagram.group.select"
+@a.th.n w.diagram.node code=?c
+@a.th.o ui.diagram.thing code=?c
+@thing.node core.rule when=$a.th.n then=$a.th.o
+@a.th.e w.diagram.edge code=?c
+@thing.edge core.rule when=$a.th.e then=$a.th.o
+@a.pk.item app.act.item value=?c
+@a.pk.th ui.diagram.thing code=?c
+@a.pk.k core.calc out=?k fn=concat args="selected." args=?c
+@a.pk.set app.act.view key=?k value=true
+@select.many.set core.rule when=$a.unp.r when=$a.unp.op when=$a.pk.item when=$a.pk.th with=$a.pk.k then=$a.pk.set
+@a.unp.r app.act.request operation=?op
+@a.unp.op ui.diagram.pickop operation=?op
+@a.unp.v app.area.view key=?k value=true
+@a.unp.th ui.diagram.thing code=?c
+@a.unp.k core.calc out=?k2 fn=concat args="selected." args=?c
+@a.unp.eq core.check fn=eq args=?k args=?k2
+@a.unp.item app.act.item value=?c
+@a.unp.out app.act.view key=?k
+@select.many.clear core.rule when=$a.unp.r when=$a.unp.op when=$a.unp.v when=$a.unp.th not=$a.unp.item with=$a.unp.k if=$a.unp.eq then=$a.unp.out
+@a.rmk.n w.diagram.node code=?c
+@a.rmk.e w.diagram.edge code=?c
+@a.rmk.cn app.act.call act=remove thing=$a.rmk.n
+@a.rmk.ce app.act.call act=remove thing=$a.rmk.e
+@select.many.removed.node core.rule when=$a.rmk.n when=$a.rmk.cn when=$a.unp.v with=$a.unp.k if=$a.unp.eq then=$a.unp.out
+@select.many.removed.edge core.rule when=$a.rmk.e when=$a.rmk.ce when=$a.unp.v with=$a.unp.k if=$a.unp.eq then=$a.unp.out
+@a.rmk.one app.area.view key=selected value=?c
+@a.rmk.clear app.act.view key=selected
+@select.removed.node core.rule when=$a.rmk.n when=$a.rmk.cn when=$a.rmk.one then=$a.rmk.clear
+@select.removed.edge core.rule when=$a.rmk.e when=$a.rmk.ce when=$a.rmk.one then=$a.rmk.clear
+# A thing is picked when the view's selected key names it or its own key is set.
+@a.pk.one app.area.view key=selected value=?id
+@a.pk.o ui.diagram.picked id=?id
+@picked.one core.rule when=$a.pk.one then=$a.pk.o
+@a.pk.mv app.area.view key=?k value=true
+@a.pk.mt ui.diagram.thing code=?id
+@a.pk.mk core.calc out=?k2 fn=concat args="selected." args=?id
+@a.pk.meq core.check fn=eq args=?k args=?k2
+@picked.many core.rule when=$a.pk.mv when=$a.pk.mt with=$a.pk.mk if=$a.pk.meq then=$a.pk.o
 
 # Remove nodes.
 @a.rm.n.r app.act.request operation="diagram.node.remove"
@@ -479,7 +537,7 @@
 # ---- What a reader observes, and the geometry placement reads ----
 @a.ob.n w.diagram.node code=?id shape=?k
 @a.ob.b ui.diagram.nbox node=?id cx=?x cy=?y w=?w h=?h
-@a.ob.sel app.area.view key=selected value=?id
+@a.ob.sel ui.diagram.picked id=?id
 @a.ob.out app.observe.object id=?id kind=?k sourceType=diagram.sketch.node binding=diagram.node x=?x y=?y width=?w height=?h selected=false
 @a.ob.out.sel app.observe.object id=?id kind=?k sourceType=diagram.sketch.node binding=diagram.node x=?x y=?y width=?w height=?h selected=true
 @observe.node core.rule when=$a.ob.n when=$a.ob.b not=$a.ob.sel then=$a.ob.out
@@ -502,7 +560,7 @@
 @a.oe.e w.diagram.edge code=?id from=$a.oe.a to=$a.oe.b
 @a.oe.a w.diagram.node code=?a
 @a.oe.b w.diagram.node code=?b
-@a.oe.sel app.area.view key=selected value=?id
+@a.oe.sel ui.diagram.picked id=?id
 @a.oe.out app.observe.object id=?id kind=link sourceType=diagram.sketch.link binding=diagram.link from=?a to=?b selected=false
 @a.oe.out.sel app.observe.object id=?id kind=link sourceType=diagram.sketch.link binding=diagram.link from=?a to=?b selected=true
 @observe.link core.rule when=$a.oe.e when=$a.oe.a when=$a.oe.b not=$a.oe.sel then=$a.oe.out
@@ -532,6 +590,9 @@
 @a.og.layout w.diagram.group code=?id layout=?v
 @a.og.layout.o app.observe.input id=?id key=layout value=?v
 @observe.group.layout core.rule when=$a.og.layout then=$a.og.layout.o
+@a.og.scale w.diagram.group code=?id scale=?v
+@a.og.scale.o app.observe.input id=?id key=scale value=?v
+@observe.group.scale core.rule when=$a.og.scale then=$a.og.scale.o
 @a.og.member ui.diagram.inside group=?id node=?v
 @a.og.member.o app.observe.input id=?id key=members value=?v
 @observe.group.members core.rule when=$a.og.member then=$a.og.member.o

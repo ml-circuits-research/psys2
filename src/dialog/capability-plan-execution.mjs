@@ -1,4 +1,6 @@
 import { readSceneDefaults } from './scene-placement-defaults.mjs';
+import { solveDefaultPlacement } from './default-placement.mjs';
+import { quote } from '../vendor/sopworld/sopworld.mjs';
 // SPDX-License-Identifier: AGPL-3.0-only
 import { compileNativeCapability } from './capability-plan-adapter.mjs';
 import { readDegreeBases } from './degree-bases.mjs';
@@ -90,13 +92,23 @@ export async function executeNativeCapability(session, candidate, { bindings, vi
   } catch {
     // Inspection does not affect dispatch.
   }
-  const intent = describeNativeControl({ operation, args: plan.args, before: observed });
+  // A new object with no place asked for: the placement problem the area declares, solved as std.problem (Z3 where
+  // the page can run it, the internal search otherwise), gives it its place and size.
+  const placed = await placeByProblem(prepared, operation, plan);
+  if (placed?.solved) {
+    try {
+      session.engine?.onWorldActivity?.({ nodeIds: ['execution:placement-geometry','instance:' + area.world], world: area.world, operation: 'std.placement', phase: 'end',
+        label: 'Solved default placement', status: 'compiled', provider: placed.provider, candidates: placed.candidates, durationMs: placed.ms, region: placed.region, solves: placed.solves, search: placed.z3 });
+    } catch { /* Inspection does not affect dispatch. */ }
+  }
+  const callArgs = placed?.solved ? placed.args : plan.args, toolInput = placed?.solved ? placed.toolInput : plan.toolInput;
+  const intent = describeNativeControl({ operation, args: callArgs, before: observed });
   const scopedRemoval = isScopedRemoval(plan);
   const original = plan.selector || scopedRemoval ? structuredClone(nativeState) : undefined;
   const receipt = await invokeObservedNativeTool(session, { area, host: prepared, invocation,
-    expectedVersion: observed.version, sop: plan.toolInput });
+    expectedVersion: observed.version, sop: toolInput });
   if (receipt.status === 'refused') return reply('I could not apply that action. Nothing changed.', false,
-    { reason: receipt.reason, receipt, compiledSop: plan.sop, controlIntent: plan.toolInput });
+    { reason: receipt.reason, receipt, compiledSop: plan.sop, controlIntent: toolInput });
 
   const after = prepared.observe();
   const effect = verifyNativeControlEffect({ intent, before: observed, after, receipt });
@@ -104,12 +116,13 @@ export async function executeNativeCapability(session, candidate, { bindings, vi
   if (original && verification.status !== 'verified') {
     session.isession.state[area.world] = original;
     return reply('I could not confirm the requested change. I restored the previous state.', false, {
-      reason: scopedRemoval ? 'unverified-removal-effect' : 'unverified-selector-effect', compiledSop: plan.sop, controlIntent: plan.toolInput, receipt, effectVerification: verification,
+      reason: scopedRemoval ? 'unverified-removal-effect' : 'unverified-selector-effect', compiledSop: plan.sop, controlIntent: toolInput, receipt, effectVerification: verification,
     });
   }
   const old = new Set(before.objects.map((object) => object.id));
-  const added = after.objects.filter(value => !old.has(value.id));
-  const object = added[0] ?? before.objects.find((value) => String(value.id) === plan.id);
+  // A made object is reported by itself, not by its first part: parts are observed under their object (in/role).
+  const added = after.objects.filter(value => !old.has(value.id)), made = added.filter(value => (value.in ?? value.parent) === undefined);
+  const object = made[0] ?? added[0] ?? before.objects.find((value) => String(value.id) === plan.id);
   const previousFocus = session.newEngineFocus?.[view];
   const nextFocus = plan.act === 'remove' ? after.objects.find((item) => item.id === previousFocus)?.id : object?.id;
   session.newEngineFocus = { ...session.newEngineFocus, [view]: nextFocus ?? null };
@@ -119,16 +132,33 @@ export async function executeNativeCapability(session, candidate, { bindings, vi
     ? 'More than one matched. I used ' + kind + ' ' + plan.id + '. You can undo this.'
     : 'I used the most recent matching ' + plan.kind + '.');
   if (plan.skipped.length) notes.push('I could not apply ' + plan.skipped.join(', ') + '.');
-  const addedOfKind = operation.spatial?.countKey && added.filter(value => value.sourceType === operation.on && value.kind === kind).length;
+  const addedOfKind = operation.spatial?.countKey && made.filter(value => value.sourceType === operation.on && value.kind === kind).length;
   const created = addedOfKind>1 ? `Created ${addedOfKind} objects of kind ${kind}.` : `Created a ${kind}.`;
   const said = plan.act === 'make' ? created : plan.act === 'remove' ? `Removed the ${kind}.` : `Updated the ${kind}.`;
   const measured = retainPropertyEffect(session, { candidate, text, view, plan, before: observed, after, receipt, verification, message: notes.join(' ') });
   const message = measured?.text ?? [said, ...notes].join(' ');
   return {
     ...reply(message, true, { assessment: measured?.assessment ?? receipt.status, journal: measured?.journal, receipt, reading: candidate, compiledSop: plan.sop,
-      controlIntent: plan.toolInput, effectVerification: verification, binding: { operation: plan.operation, alternatives: plan.alternatives.filter((choice) => choice.reason) },
+      ...(placed ? { solver: { provider: placed.solved ? placed.provider : null, compileMs: placed.ms, region: placed.region, solves: placed.solves, z3: placed.z3 } } : {}),
+      controlIntent: toolInput, effectVerification: verification, binding: { operation: plan.operation, alternatives: plan.alternatives.filter((choice) => choice.reason) },
       uncertainty: notes, alternatives: plan.alternatives.filter((choice) => !choice.reason).map((choice) => choice.operation), partial: plan.skipped.length > 0 }),
     state: { [area.world]: structuredClone(session.isession.state[area.world]) },
     effects: receipt.status === 'changed' ? [{ operation: plan.operation }] : [],
   };
+}
+
+/** The declared default placement of a make without coordinates: the solved place and the call that carries it (the plan stays as compiled). */
+async function placeByProblem(host, operation, plan) {
+  const port = operation?.spatial, args = plan.args;
+  if (plan.act !== 'make' || !port?.xKey || !port?.yKey || args[port.xKey] !== undefined || args[port.yKey] !== undefined) return null;
+  if (port.countKey && args[port.countKey] !== undefined && args[port.countKey] !== 1) return null;
+  const scalar = value => typeof value === 'number' && Number.isFinite(value) || typeof value === 'boolean' || typeof value === 'string';
+  if (!Object.values(args).every(scalar)) return null;
+  const token = value => typeof value === 'string' ? quote(value) : String(value);
+  const call = values => '@placement.call ' + operation.id + Object.entries(values).map(([key, value]) => ' ' + key + '=' + token(value)).join('');
+  const placed = await solveDefaultPlacement(host, { intent: call(args) });
+  if (!placed?.solved) return placed;
+  placed.args = { ...args, [port.xKey]: placed.x, [port.yKey]: placed.y, ...(port.sizeKey && args[port.sizeKey] === undefined ? { [port.sizeKey]: placed.size } : {}) };
+  placed.toolInput = call(placed.args);
+  return placed;
 }

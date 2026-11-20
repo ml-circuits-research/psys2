@@ -120,6 +120,11 @@
 @select.req app.act.request operation="calendar.event.select" id=?id
 @select.view app.act.view key=selected value=?id
 @select core.rule when=$select.req then=$select.view
+# Selecting no event (id=null: a null argument is not told) clears the view key.
+@deselect.req app.act.request operation="calendar.event.select"
+@deselect.has app.act.request id=?any
+@deselect.view app.act.view key=selected
+@deselect core.rule when=$deselect.req not=$deselect.has then=$deselect.view
 
 # What a reader observes: each thing by its code, with its keys.
 @ob.calendar w.meetings.calendar code=?id label=?v

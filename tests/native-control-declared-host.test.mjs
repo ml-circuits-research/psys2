@@ -5,7 +5,6 @@ import {performGesture} from './fixtures/editor-gesture.mjs';
 import {emptyCalendarArea,calendarAreaStateWorld} from '../worlds/time.calendar/sop-calendar.mjs';
 import {str as sopText} from '../src/vendor/sopworld/sopworld.mjs';
 const calendarThings=(state,kind)=>calendarAreaStateWorld(state).ofType('w.meetings.'+kind).map(fact=>Object.fromEntries(Object.entries(fact.attrs).map(([key,values])=>[key,values.length===1?(values[0].startsWith('"')?sopText(values[0]):values[0]):values])));
-import {migrateDemoState} from '../src/dialog/demo-state-migration.mjs';
 const policy=await readFile(new URL('../worlds/time.calendar/scheduling-policy.sop',import.meta.url),'utf8');
 const makeSession=()=>({engine:{loader:{readFile:async()=>policy}},isession:{state:{'ui.shell':{activeTab:'calendar'},'time.calendar':emptyCalendarArea()}}});
 test('UI controls share the declared meeting constraints, observation and journal undo',async()=>{
@@ -21,11 +20,4 @@ test('UI controls share the declared meeting constraints, observation and journa
  assert.equal((await run('undo',{})).ok,true);assert.equal(calendarThings(s.isession.state['time.calendar'],'meeting').length,0);
  assert.equal(calendarThings(s.isession.state['time.calendar'],'room').length,1);
  await assert.rejects(run('undeclared.operation',{}),/undeclared/);
-});
-test('old chart tab state migrates to valid diagram instance without losing values',()=>{
- const old={charts:[{id:'c1',title:'Counts',type:'bar',labels:['A'],datasets:[{label:'Series',data:[3]}]}],active:'c1',history:[],future:[]};
- const state={'ui.shell':{activeTab:'charts'},'data.charts':old};
- migrateDemoState(state);assert.equal(state['ui.shell'].activeTab,'diagram');assert.equal(state['data.charts'],undefined);
- assert.equal(state['diagram.sketch'].shapes.length,0);assert.equal(state['diagram.sketch'].chartTools.charts[0].title,'Counts');
- const snapshot=structuredClone(state);migrateDemoState(state);assert.deepEqual(state,snapshot);
 });

@@ -1,5 +1,5 @@
 // Schedule actual independent cuts after observing the result of the previous step.
-import {World,parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=5221d62911';
+import {World,parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=4a094fcca4';
 import SOURCE from '../../worlds/app.project/request-composition-policy-source.mjs?v=21f4be0430';
 import SCHEMA from '../../worlds/app.project/request-composition-policy-schema-source.mjs?v=c1db2074cc';
 export const REQUEST_COMPOSITION_POLICY_SOURCE=SOURCE;

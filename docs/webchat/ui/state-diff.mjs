@@ -117,3 +117,48 @@ export function describeChanges(before, after) {
 
 /** The same, as one plain sentence list: "geo.map: centre 15.44, 30.22 (was 25, 10); zoom 5 (was 2) | art.draw: +2 elephants". */
 export const changesText = (changes) => (changes ?? []).map((c) => `${c.world}: ${c.changes.join('; ')}`).join(' | ');
+
+// ---- the compact SOP diff of the instance worlds (phrase log format 4, "happened") ----
+const WIRE = /^@(\S+)\s+(\S+)(.*)$/;
+const ATTR = /([^\s=]+)=("(?:[^"\\]|\\.)*"|\S+)/g;
+/** One wire line as { type, attrs: [[key, value]] }; null for a line that is not a wire. */
+function wireOf(line) {
+  const m = WIRE.exec(line.trim());
+  if (!m) return null;
+  return { type: m[2], attrs: [...m[3].matchAll(ATTR)].map((x) => [x[1], x[2]]) };
+}
+/** The wire without its id and without attributes that only repeat its type (kind=<type>, world=<a dotted prefix of the type>). */
+const compactWire = (w, attrs = w.attrs) => [w.type, ...attrs.filter(([k, v]) => !(v === w.type || w.type.startsWith(`${v}.`))).map(([k, v]) => `${k}=${v}`)].join(' ');
+const sopOf = (text) => { if (text == null) return ''; try { const v = JSON.parse(text); return typeof v?.sop === 'string' ? v.sop : null; } catch { return null; } };
+const wiresOf = (sop) => new Map(String(sop).split('\n').map((l) => [WIRE.exec(l.trim())?.[1], l]).filter(([id]) => id));
+
+/**
+ * What a turn changed in the instance worlds, as SOP lines (one generic diff of each world's `sop` text, wire by wire, no code per world):
+ * `+ <wire>` added, `- <wire>` removed, `~ <wire after> (was k=old …)` changed. A world without SOP text is described in words (`~ <world>: …`).
+ * `before`/`after` are snapshots ({ worldId: JSON text }); lines are prefixed with the world when the turn changed more than one world.
+ */
+export function sopChanges(before, after, { max = 60 } = {}) {
+  const perWorld = [];
+  for (const world of new Set([...Object.keys(before ?? {}), ...Object.keys(after ?? {})])) {
+    const a = before?.[world], b = after?.[world];
+    if (a === b) continue;
+    const sa = sopOf(a), sb = sopOf(b), lines = [];
+    if (sa === null && sb === null || (a?.length ?? 0) > MAX_WORLD_BYTES * 10 || (b?.length ?? 0) > MAX_WORLD_BYTES * 10) {
+      for (const c of describeChanges({ [world]: a }, { [world]: b })) for (const x of c.changes) lines.push(`~ ${x}`);
+    } else {
+      const wa = wiresOf(sa ?? ''), wb = wiresOf(sb ?? '');
+      for (const [id, line] of wb) {
+        const nw = wireOf(line);
+        if (!wa.has(id)) { lines.push(`+ ${compactWire(nw)}`); continue; }
+        if (wa.get(id).trim() === line.trim()) continue;
+        const ow = wireOf(wa.get(id)), old = new Map(ow.attrs), now = new Map(nw.attrs);
+        const was = [...new Set([...old.keys(), ...now.keys()])].filter((k) => old.get(k) !== now.get(k)).map((k) => `${k}=${old.get(k) ?? '∅'}`);
+        lines.push(`~ ${compactWire(nw)}${ow.type !== nw.type ? ` (was ${ow.type})` : was.length ? ` (was ${was.join(' ')})` : ''}`);
+      }
+      for (const [id, line] of wa) if (!wb.has(id)) lines.push(`- ${compactWire(wireOf(line))}`);
+    }
+    if (lines.length) perWorld.push([world, lines]);
+  }
+  const all = perWorld.flatMap(([world, lines]) => (perWorld.length > 1 ? lines.map((l) => `${l[0]} ${world}: ${l.slice(2)}`) : lines));
+  return all.length > max ? [...all.slice(0, max), `… ${all.length - max} more`] : all;
+}

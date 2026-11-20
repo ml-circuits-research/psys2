@@ -31,9 +31,12 @@ function reading(text,target,constraints){
   raw:{source:{text,unit:'unicode-scalar'},requestCount:1,coverage:{complete:false,truncated:false},
    requests:[{span:text,act:'make',trigger,mood:'do',target:{determiner:'indefinite',mode:'new',...target},constraints}],ranges}};
 }
-function drawingSession(reader){
+// A coextensive part key (concept part_kind) is declared by the creation policy; the deployed reader's registry has
+// none at present, so the fixture declares one in the reader-registry shape to exercise that declared path.
+const partKey={'drawing.part.part':{concept:'part_kind',head:'candidate',src:'fixture: a coextensive part word',area:'drawing',type:'part',key:'part',role:'domain'}};
+function drawingSession(reader,extra={}){
  const state={'art.draw':emptyDrawingState(),'ui.shell':{activeTab:'draw'}};
- return {isession:{state},engine:{onWorldActivity:()=>{},requestReader:{provenance:()=>provenance,bindings:()=>bindings,registry:()=>registry,...reader}}};
+ return {isession:{state},engine:{onWorldActivity:()=>{},requestReader:{provenance:()=>provenance,bindings:()=>bindings,registry:()=>({...registry,...extra}),...reader}}};
 }
 
 test('grounding a mention over more candidates than one library request holds ranks the same admitted set',async()=>{
@@ -51,12 +54,12 @@ test('grounding a mention over more candidates than one library request holds ra
  }
 });
 
-for(const [label,text,target,constraints,kind] of [
- ['a scene value for the noun, no kind','draw a lake',{type:'page'},[requirement('page.scene','lake')],'lake'],
+for(const [label,text,target,constraints,kind,extra] of [
+ ['a kind value as a constraint of the page, no target kind','draw a lake',{type:'page'},[requirement('drawn.kind','lake')],'lake'],
  ['a kind under the wrong target type','draw a fish',{type:'page',kind:'fish',kind_span:'fish'},[],'fish'],
- ['a part word as the only noun','draw a cloud',{type:'page'},[requirement('part.part','cloud')],'cloud'],
+ ['a part word as the only noun','draw a cloud',{type:'page'},[requirement('part.part','cloud')],'cloud',partKey],
 ])test('an incomplete creation reading ('+label+') creates the exactly named catalogue kind, with alternatives and undo',async()=>{
- const session=drawingSession({propose:async()=>reading(text,target,constraints)});
+ const session=drawingSession({propose:async()=>reading(text,target,constraints)},extra);
  const reply=await routeNewEngine(session,text,{view:'draw'});
  assert.equal(reply.statuses[0],'supported',reply.text+' '+JSON.stringify(reply.trace.readerRouting?.unresolved));
  assert.deepEqual(drawingObjects(session.isession.state['art.draw']).map(object=>object.kind),[kind]);
@@ -101,7 +104,7 @@ test('a failed turn changes nothing and does not affect the next turn',async()=>
  assert.deepEqual(session.isession.state,state);
  assert.deepEqual(session.newEngineUndo,undo);
  assert.deepEqual(session.newEngineLastAction,last);
- next=reading('draw a lake',{type:'page'},[requirement('page.scene','lake')]);
+ next=reading('draw a lake',{type:'page'},[requirement('drawn.kind','lake')]);
  const after=await routeNewEngine(session,'draw a lake',{view:'draw'});
  assert.equal(after.statuses[0],'supported',after.text);
  assert.deepEqual(drawingObjects(session.isession.state['art.draw']).map(object=>object.kind),['fish','lake']);

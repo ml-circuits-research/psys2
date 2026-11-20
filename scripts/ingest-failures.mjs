@@ -28,6 +28,7 @@ import { spawnSync } from 'node:child_process';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { DIR as HELDOUT, freeze, hashOf, norm } from './freeze-heldout.mjs';
+import { exportRecords } from '../docs/webchat/ui/phrase-log.mjs';
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 export const SOURCE = 'user-feedback';
@@ -45,7 +46,7 @@ export function readBatch(raw) {
     let doc = null;
     try { doc = JSON.parse(t); } catch { doc = null; }
     if (doc?.format === 'psys2-failures/1') list = (doc.failures ?? []).map((f) => ({ ...f, _src: 'batch' }));
-    else if (doc && String(doc.format ?? '').startsWith('psys2-phrase-log/')) list = (doc.records ?? []).filter((r) => r.failure && !r.context).map((r) => ({ _src: 'export', id: r.id, text: r.text, english: r.english, lang: r.lang, tab: r.tab, time: r.time, reasons: r.failure.reasons ?? [], expected: r.feedback?.wanted ?? null, reply: r.detail?.answer ?? r.happened?.shown?.[0]?.text ?? '', status: r.status, why: r.feedback?.reasons ?? [] }));
+    else if (doc && String(doc.format ?? '').startsWith('psys2-phrase-log/')) list = exportRecords(doc).filter((r) => r.failure && !r.context).map((r) => ({ _src: 'export', id: r.id, text: r.text, english: r.english, lang: r.lang, tab: r.tab, time: r.time, reasons: r.failure.reasons ?? [], expected: r.feedback?.wanted ?? null, reply: r.detail?.answer ?? r.happened?.shown?.[0]?.text ?? '', status: r.status, why: r.feedback?.reasons ?? [] }));
     else if (doc?.text) list = [doc];
   } else list = t.split('\n').filter((l) => l.trim()).map((l) => { try { return JSON.parse(l); } catch { return null; } }).filter(Boolean);
   return list.filter((f) => typeof f?.text === 'string' && f.text.trim() && !f.context).map((f) => {

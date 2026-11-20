@@ -1,8 +1,13 @@
 # The editor applies the catalog's shared geometric policies.
 # Rank AABB overlap before clearance shortfall and declared direction order.
+# search=problem: every placement is a placement problem (std.problem), solved by Z3 where the page can run it and
+# by the library's internal search otherwise. A single relation with declared directions keeps the method's ranked
+# directions, the spacing profile's clearance and the objective below; each direction's place is solved as its own
+# problem, moving along the anchor's side to keep the peers' clearance (library 0.234.0). A request with several
+# relations or subjects, a region, a fit or an ambiguous anchor is one problem over all of them.
 # relax=gap: when no place keeps every declared distance (next to a lake and left of a tree far from it), each relation
 # keeps its direction and separation and its distance becomes a soft term; the reply names the relations kept loosely.
-@layout.method std.placement.method relax=gap directionType=k.spatial2d.direction boxType=k.spatial2d.box relationType=k.spatial2d.relation policyType=k.spatial2d.policy effectiveType=k.spatial2d.effective_policy measurementType=k.spatial2d.measurement peerRelation=independent_peer containRelation=member_of containEvidence=containment gapMetric=near_distance objective=$layout.objective
+@layout.method std.placement.method search=problem relax=gap directionType=k.spatial2d.direction boxType=k.spatial2d.box relationType=k.spatial2d.relation policyType=k.spatial2d.policy effectiveType=k.spatial2d.effective_policy measurementType=k.spatial2d.measurement peerRelation=independent_peer containRelation=member_of containEvidence=containment gapMetric=near_distance objective=$layout.objective
 @layout.objective std.objective direction=minimise order=lexicographic term=$layout.overlap.term term=$layout.clearance.term term=$layout.order.term
 @layout.overlap std.objective.evaluator normalisation=canvas.pixel.area version=1
 @layout.clearance std.objective.evaluator normalisation=canvas.pixel.length version=1
@@ -16,15 +21,16 @@
 
 # What each relation means as one constraint of a placement problem (std.problem), for requests with several
 # relations or subjects: the library solves every relation, the observed peers and the page together.
-# Beside a thing a new one keeps its ground line (bottoms aligned), above or below it its centre line (soft terms).
+# Beside a thing a new one keeps its ground line (bottoms aligned), above or below it its centre line (soft terms);
+# it keeps the profile's 12 units from the thing and is pulled to that distance (pull: a soft cost per unit beyond it).
 # In a thing with a water region that holds the kind (a boat in the lake), the subject goes into the water; on a
 # thing with a surface region (a cup on the table) it rests on the surface; on water it floats in it. A subject
 # larger than 0.6 of that place is drawn smaller to fit (where the tool can say a size).
 @layout.predicate.near std.placement.predicate method=$layout.method relation=near predicate=near gap=40
-@layout.predicate.left std.placement.predicate method=$layout.method relation=left predicate=left gap=80 align=y edge=1 alignWeight=0.2
-@layout.predicate.right std.placement.predicate method=$layout.method relation=right predicate=right gap=80 align=y edge=1 alignWeight=0.2
-@layout.predicate.above std.placement.predicate method=$layout.method relation=above predicate=above gap=80 align=x edge=0.5 alignWeight=0.2
-@layout.predicate.below std.placement.predicate method=$layout.method relation=below predicate=below gap=80 align=x edge=0.5 alignWeight=0.2
+@layout.predicate.left std.placement.predicate method=$layout.method relation=left predicate=left gap=80 clearance=12 pull=0.5 align=y edge=1 alignWeight=0.2
+@layout.predicate.right std.placement.predicate method=$layout.method relation=right predicate=right gap=80 clearance=12 pull=0.5 align=y edge=1 alignWeight=0.2
+@layout.predicate.above std.placement.predicate method=$layout.method relation=above predicate=above gap=80 clearance=12 pull=0.5 align=x edge=0.5 alignWeight=0.2
+@layout.predicate.below std.placement.predicate method=$layout.method relation=below predicate=below gap=80 clearance=12 pull=0.5 align=x edge=0.5 alignWeight=0.2
 @layout.predicate.peer std.placement.predicate method=$layout.method relation=independent_peer predicate=apart gap=12 strength=soft weight=100
 @layout.predicate.page std.placement.predicate method=$layout.method relation=member_of predicate=inside
 @layout.predicate.in.water std.placement.predicate method=$layout.method relation=in predicate=inside region=water held=true fit=0.6 align=x alignWeight=0.2

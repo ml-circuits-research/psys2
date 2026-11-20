@@ -3,8 +3,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { routeNewEngine as runNewEngine } from '../src/dialog/reader-routing.mjs';
-import { initialState } from '../worlds/art.draw/board.mjs';
-import {createDrawingHost} from '../worlds/art.draw/declared-host.mjs';
+import {createDrawingArea,emptyDrawingState as initialState} from '../worlds/art.draw/sop-drawing.mjs';
 import {loadActualReplayReader} from './lib/actual-reader-provider.mjs';
 import {summarizeReaderStages,rankLeafReasons} from './lib/reader-stage-counts.mjs';
 const args=process.argv.slice(2),specIndex=args.indexOf('--reader-spec'),outIndex=args.indexOf('--output-prefix'),browserMode=args.includes('--browser-route');
@@ -26,7 +25,7 @@ for (const row of input) {
   const tab = row.context.tab;
   session.isession.state['ui.shell'].activeTab = tab;
   const before = JSON.stringify(session.isession.state);
-  if(actual&&!hosts.has(key))hosts.set(key,createDrawingHost({state:session.isession.state['art.draw'],instanceId:'owner-'+createHash('sha256').update(key).digest('hex')}));
+  if(actual&&!hosts.has(key))hosts.set(key,await createDrawingArea({state:session.isession.state['art.draw'],instanceId:'owner-'+createHash('sha256').update(key).digest('hex')}));
   const measured=browser?await browser.send({text:row.text,state:session.isession.state,meta:{readerPrevious:histories.get(key)??null}}):actual?await actual.run(session,row.text,{area:tab==='draw'?'drawing':tab,host:tab==='draw'?hosts.get(key):null,previous:histories.get(key)??null}):null;
   if(browser&&measured.state)session.isession.state=measured.state;
   const reply=measured?measured.reply:await runNewEngine(session,row.text,{language:'en'});histories.set(key,row.text);

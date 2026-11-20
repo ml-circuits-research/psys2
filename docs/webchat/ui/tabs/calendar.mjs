@@ -1,10 +1,77 @@
-// The Calendar tab: the generic SOP area view over the time.calendar projection (worlds/time.calendar/area.sop).
-import {createSopAreaView} from '../sop-area-view.mjs';
-function make(holder, host) {
- Object.assign(holder.style, {padding:'0', height:'100%', minHeight:'0', maxWidth:'none', overflow:'hidden', boxSizing:'border-box'});
- const root = document.createElement('div'); root.style.height = '100%'; root.style.minHeight = '0'; holder.append(root);
- const ui = createSopAreaView(root, host, {world:'time.calendar', view:'calendar', editor:true});
- ui.update(host.state?.('time.calendar')); ui.setVisible(!holder.hidden);
- return {...ui, update(state){ ui.update(state); }, destroy(){ ui.destroy(); root.remove(); }};
+import {mountInspectorSplitter} from '../pane-splitter.mjs';
+// The Calendar tab: a week planner with an agenda and an event form over the time.calendar SOP area projection
+// (worlds/time.calendar/area.sop). Events are read from the projection's observed objects (title, start, duration)
+// and inputs (notes); every action (add, change, move, remove, select, clear, undo, redo) sends the declared
+// calendar command through host.tool, the same route as chat. Dates are shown in the viewer's time zone.
+const WORLD='time.calendar',VIEW='calendar',pad=n=>String(n).padStart(2,'0');
+const dateInput=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`,clock=d=>`${pad(d.getHours())}:${pad(d.getMinutes())}`;
+const element=(tag,props={},text)=>{const e=document.createElement(tag);for(const [key,value]of Object.entries(props)){if(key==='class')e.className=value;else if(key==='onClick')e.addEventListener('click',value);else if(key in e)e[key]=value;else e.setAttribute(key,value);}if(text!==undefined)e.textContent=text;return e;};
+const button=(text,onClick,className='')=>element('button',{type:'button',class:'cal-button '+className,onClick},text);
+const CSS=`.cal-root{font:14px system-ui;color:var(--ink,#253048);height:100%;min-height:0;display:flex;flex-direction:column;overflow:hidden}.cal-top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:8px 10px;border-bottom:1px solid #8797ad33}.cal-top h2{font-size:20px;margin:0}.cal-actions{display:flex;gap:6px;align-items:center;flex-wrap:wrap}.cal-button{font:inherit;color:inherit;background:var(--surface,#fff);border:1px solid #8797ad55;border-radius:5px;padding:6px 9px;cursor:pointer}.cal-button.primary{background:#5966d9;border-color:#5966d9;color:white}.cal-button.danger{color:#b33446}.cal-button:disabled{opacity:.5}.cal-layout{display:grid;grid-template-columns:minmax(0,1fr) 280px;flex:1;min-height:0}.cal-main{min-width:0;overflow:auto;padding:10px}.cal-inspector{overflow:auto;min-width:0;padding:12px;border-left:1px solid #8797ad33}.cal-inspector h3{margin:0 0 12px;font-size:16px}.cal-muted,.cal-status{font-size:12px;line-height:1.5;color:var(--muted,#667085)}.cal-status{min-height:18px;padding:4px 10px;margin:0;border-top:1px solid #8797ad22}.cal-status.error,.cal-form-error{color:#b33446}.cal-nav{display:flex;gap:8px;justify-content:space-between;flex-wrap:wrap;margin-bottom:10px}.cal-nav input{font:inherit;color:inherit;background:var(--surface,#fff);border:1px solid #8797ad55;border-radius:5px;padding:5px}.cal-week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}.cal-day{min-width:0;min-height:260px;border:1px solid #8797ad33;border-radius:5px;padding:5px}.cal-day.selected{border-color:#7986e5;background:#7986e50b}.cal-day.drop{border-color:#5966d9;border-style:dashed;background:#5966d914}.cal-day-head{display:block;width:100%;background:none;border:0;text-align:left;color:inherit;cursor:pointer;font:inherit;margin-bottom:10px}.cal-day-head strong{display:block;font-size:20px}.cal-event{width:100%;max-width:100%;display:block;border:0;border-left:3px solid #6976d7;border-radius:4px;background:#6976d71a;color:inherit;text-align:left;font:12px system-ui;padding:6px;margin:5px 0;overflow-wrap:anywhere;cursor:grab;touch-action:none;user-select:none}.cal-event strong{display:block;margin-top:3px}.cal-event.selected{outline:2px solid #6976d7}.cal-event.dragging{opacity:.55;cursor:grabbing}.cal-agenda{margin-top:18px}.cal-agenda h3{font-size:16px}.cal-agenda-row{display:grid;grid-template-columns:95px minmax(0,1fr) auto;gap:10px;padding:10px 0;border-bottom:1px solid #8797ad22;align-items:center}.cal-fields{display:flex;flex-direction:column;gap:10px}.cal-field{display:flex;flex-direction:column;gap:5px;font-size:12px}.cal-field input,.cal-field textarea{width:100%;min-width:0;box-sizing:border-box;min-height:36px;border:1px solid #8797ad66;border-radius:5px;padding:7px;background:var(--surface,#fff);color:inherit;font:14px system-ui}.cal-field textarea{min-height:90px;resize:vertical}.cal-inspector .cal-actions{margin-top:12px}.cal-form-error{font-size:12px;min-height:16px;margin-top:10px}.cal-empty{padding:20px 0;color:var(--muted,#667085)}@media(max-width:700px){.cal-layout{grid-template-columns:minmax(0,1fr) 220px}.cal-week{grid-template-columns:repeat(7,minmax(70px,1fr));min-width:520px}.cal-main{padding:6px}.cal-inspector{padding:8px}}@media(max-width:480px){.cal-layout{display:flex;flex-direction:column;overflow:auto}.cal-main{overflow:visible}.cal-inspector{overflow:visible;border-left:0;border-top:1px solid #8797ad33}.cal-agenda-row{grid-template-columns:70px minmax(0,1fr) auto}}`;
+// The events a projection observes: every object with a numeric start and duration, with its notes input.
+function eventsOf(projection){
+ const inputs=projection?.inputs??{};
+ return (projection?.objects??[]).filter(o=>Number.isFinite(Number(o.start))&&o.start!==undefined&&Number.isFinite(Number(o.duration))&&o.duration!==undefined)
+  .map(o=>({id:o.id,title:o.title??o.label??o.id,start:Number(o.start),duration:Number(o.duration),notes:typeof inputs[o.id]?.notes==='string'?inputs[o.id].notes:''}))
+  .sort((a,b)=>a.start-b.start||a.id.localeCompare(b.id));
 }
-export default {id:'calendar', label:'Calendar', world:'time.calendar', order:70, make};
+function make(holder,host){
+ if(!document.getElementById('p2-calendar-css'))document.head.append(element('style',{id:'p2-calendar-css'},CSS));
+ Object.assign(holder.style,{padding:'0',height:'100%',minHeight:'0',maxWidth:'none',overflow:'hidden',boxSizing:'border-box'});
+ let state=host.state?.(WORLD)??{},day=new Date(),pending=false,selected=null,destroyed=false,drag=null,suppressClick=false;
+ const root=element('section',{class:'cal-root','aria-label':'Calendar planner'}),top=element('div',{class:'cal-top'}),layout=element('div',{class:'cal-layout'}),main=element('main',{class:'cal-main'}),inspector=element('aside',{class:'cal-inspector','aria-label':'Event properties'}),status=element('p',{class:'cal-status',role:'status','aria-live':'polite'});
+ holder.append(root);root.append(top,layout,status);layout.append(main,inspector);const closeInspectorSplitter=mountInspectorSplitter(layout,inspector,{id:'calendar',persist:host.persistent!==false});
+ const events=()=>eventsOf(state);
+ const find=id=>events().find(e=>e.id===id),viewSelected=()=>state?.selected??state?.runtime?.view?.selected??null;
+ const onDay=d=>{const start=+new Date(d.getFullYear(),d.getMonth(),d.getDate()),end=+new Date(d.getFullYear(),d.getMonth(),d.getDate()+1);return events().filter(e=>e.start<end&&e.start+e.duration>start);};
+ const scheduleRender=()=>queueMicrotask(render);
+ async function perform(operation,args){if(pending||host.isBusy?.())return {ok:false,message:'Please wait for the current action.'};pending=true;root.setAttribute('aria-busy','true');try{const r=await host.tool(operation,args,{view:VIEW});status.textContent=r?.message??'';status.classList.toggle('error',!r?.ok);return r??{ok:false};}catch(error){status.textContent=error.message;status.classList.add('error');return {ok:false,message:error.message};}finally{pending=false;root.removeAttribute('aria-busy');}}
+ async function selectEvent(record){const r=await perform('calendar.event.select',{id:record?.id??null});if(r.ok){if(record)eventForm(find(record.id)??record);else{clearInspector();scheduleRender();}}}
+ function clearInspector(){selected=null;inspector.removeAttribute('data-calendar-form');inspector.replaceChildren(element('h3',{},'Event properties'),element('p',{class:'cal-muted'},'Select an event to edit it, or add a new event. Drag an event to another day to move it; arrow keys move the focused event.'));}
+ function field(form,label,type,value){const wrap=element('label',{class:'cal-field'},label),input=element(type==='textarea'?'textarea':'input',type==='textarea'?{}:{type});input.value=value;input.required=type!=='textarea';input.setAttribute('aria-label',label);wrap.append(input);form.append(wrap);return input;}
+ function eventForm(record=null){
+  const id=record?.id??crypto.randomUUID(),startDate=record?new Date(record.start):new Date(day.getFullYear(),day.getMonth(),day.getDate(),9),endDate=record?new Date(record.start+record.duration):new Date(+startDate+3600000);
+  selected=record?.id??null;inspector.setAttribute('data-calendar-form','');inspector.replaceChildren(element('h3',{},record?'Edit event':'New event'));
+  const form=element('form'),fields=element('div',{class:'cal-fields'}),error=element('div',{class:'cal-form-error',role:'alert'}),actions=element('div',{class:'cal-actions'}),save=element('button',{type:'submit',class:'cal-button primary'},'Save');form.append(fields,error,actions);inspector.append(form);
+  const title=field(fields,'Title','text',record?.title??''),date=field(fields,'Date','date',dateInput(startDate)),endDay=field(fields,'End date','date',dateInput(endDate)),start=field(fields,'Start time','time',clock(startDate)),end=field(fields,'End time','time',clock(endDate)),notes=field(fields,'Notes (optional)','textarea',record?.notes??'');
+  if(record)actions.append(button('Delete',async()=>{const r=await perform('calendar.meeting.remove',{id});if(r.ok){clearInspector();scheduleRender();}else error.textContent=r.message??'';},'danger'));
+  actions.append(button('Cancel',()=>selected?selectEvent(null):(clearInspector(),scheduleRender())),save);
+  form.addEventListener('submit',async e=>{e.preventDefault();if(!form.reportValidity()||pending)return;const from=+new Date(date.value+'T'+start.value),to=+new Date(endDay.value+'T'+end.value);if(!Number.isFinite(from)||!Number.isFinite(to)||to<=from){error.textContent='The end must be after the start.';return;}save.disabled=true;const r=await perform(record?'calendar.meeting.change':'calendar.event.add',{id,title:title.value.trim(),start:from,duration:to-from,notes:notes.value.trim()});save.disabled=false;if(r.ok){selected=id;day=new Date(from);const current=find(id);if(current)eventForm(current);scheduleRender();}else error.textContent=r.message??'';});
+  title.focus();scheduleRender();
+ }
+ async function move(event,start){const r=await perform('calendar.meeting.move',{id:event.id,start});if(r.ok){day=new Date(start);scheduleRender();if(selected===event.id){const current=find(event.id);if(current)eventForm(current);}}}
+ // Dragging an event (mouse, pen or touch) to another day keeps its clock time; a press without movement is a click.
+ function startDrag(e,event,chip){if(e.button!==0||pending)return;drag={event,chip,id:e.pointerId,x:e.clientX,y:e.clientY,moving:false,over:null};}
+ function dayAt(x,y){return document.elementFromPoint(x,y)?.closest?.('.cal-day[data-day]')??null;}
+ function onPointerMove(e){if(!drag||e.pointerId!==drag.id)return;if(!drag.moving&&Math.hypot(e.clientX-drag.x,e.clientY-drag.y)<6)return;if(!drag.moving){drag.moving=true;drag.chip.classList.add('dragging');try{drag.chip.setPointerCapture(e.pointerId);}catch{}}e.preventDefault();const over=dayAt(e.clientX,e.clientY);if(over!==drag.over){drag.over?.classList.remove('drop');drag.over=over;over?.classList.add('drop');}}
+ function onPointerEnd(e){if(!drag||e.pointerId!==drag.id)return;const {event,chip,moving,over}=drag;drag=null;chip.classList.remove('dragging');over?.classList.remove('drop');if(!moving)return;suppressClick=true;setTimeout(()=>{suppressClick=false;},0);if(e.type!=='pointerup'||!over)return;const [y,m,d]=over.dataset.day.split('-').map(Number),old=new Date(event.start),start=+new Date(y,m-1,d,old.getHours(),old.getMinutes());if(start!==event.start)move(event,start);}
+ for(const [type,listener]of [['pointermove',onPointerMove],['pointerup',onPointerEnd],['pointercancel',onPointerEnd]])window.addEventListener(type,listener,true);
+ function render(){
+  if(destroyed)return;
+  inspector.dataset.selectedNativeIds=JSON.stringify(viewSelected()?[viewSelected()]:[]);
+  top.replaceChildren();main.replaceChildren();const actions=element('div',{class:'cal-actions'});
+  actions.append(button('Clear events',async()=>{const r=await perform('calendar.events.remove',{ids:events().map(e=>e.id)});if(r.ok){clearInspector();scheduleRender();}}),button('Undo',()=>perform('undo',{})),button('Redo',()=>perform('redo',{})),button('+ New event',async()=>{if(viewSelected()){const r=await perform('calendar.event.select',{id:null});if(!r.ok)return;}eventForm();},'primary'));top.append(element('h2',{},'Calendar'),actions);
+  const nav=element('div',{class:'cal-nav'}),navigation=element('div',{class:'cal-actions'}),picker=element('input',{type:'date',value:dateInput(day),'aria-label':'Selected date'});picker.addEventListener('change',()=>{if(picker.value){day=new Date(picker.value+'T12:00');scheduleRender();}});const shift=n=>{day=new Date(day.getFullYear(),day.getMonth(),day.getDate()+n);scheduleRender();};
+  const prev=button('‹',()=>shift(-7)),next=button('›',()=>shift(7));prev.setAttribute('aria-label','Previous week');next.setAttribute('aria-label','Next week');navigation.append(prev,button('Today',()=>{day=new Date();scheduleRender();}),next,picker);nav.append(navigation,element('span',{class:'cal-muted'},Intl.DateTimeFormat().resolvedOptions().timeZone));main.append(nav);
+  const week=element('div',{class:'cal-week'}),monday=new Date(day.getFullYear(),day.getMonth(),day.getDate()-((day.getDay()+6)%7));
+  for(let i=0;i<7;i++){
+   const d=new Date(monday.getFullYear(),monday.getMonth(),monday.getDate()+i),column=element('div',{class:'cal-day'+(dateInput(d)===dateInput(day)?' selected':''),'data-day':dateInput(d)}),head=button(d.toLocaleDateString('en',{weekday:'short'}),()=>{day=d;scheduleRender();});head.className='cal-day-head';head.append(element('strong',{},String(d.getDate())));column.append(head);
+   for(const event of onDay(d)){
+    const chip=button('',()=>{if(!suppressClick)selectEvent(event);});chip.className='cal-event'+(selected===event.id||viewSelected()===event.id?' selected':'');chip.dataset.event=event.id;chip.title='Drag to another day to move';
+    chip.addEventListener('pointerdown',e=>startDrag(e,event,chip));
+    chip.addEventListener('keydown',e=>{if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key))return;e.preventDefault();const next=new Date(event.start);if(e.key==='ArrowLeft'||e.key==='ArrowRight')next.setDate(next.getDate()+(e.key==='ArrowLeft'?-1:1));else next.setMinutes(next.getMinutes()+(e.key==='ArrowUp'?-1:1)*(e.shiftKey?15:30));move(event,+next);});
+    chip.append(element('span',{},clock(new Date(event.start))+'–'+clock(new Date(event.start+event.duration))),element('strong',{},event.title));column.append(chip);
+   }
+   week.append(column);
+  }
+  main.append(week);const agenda=element('section',{class:'cal-agenda'});agenda.append(element('h3',{},day.toLocaleDateString('en',{weekday:'long',month:'long',day:'numeric'})));const daily=onDay(day);if(!daily.length)agenda.append(element('p',{class:'cal-empty'},'No events on this day.'));
+  for(const event of daily){const row=element('div',{class:'cal-agenda-row'}),info=element('div');info.append(element('strong',{},event.title));if(event.notes)info.append(element('div',{class:'cal-muted'},event.notes));row.append(element('div',{class:'cal-muted'},clock(new Date(event.start))+'–'+clock(new Date(event.start+event.duration))),info,button('Edit',()=>selectEvent(event)));agenda.append(row);}main.append(agenda);
+ }
+ clearInspector();const restored=find(viewSelected());if(restored){day=new Date(restored.start);eventForm(restored);}scheduleRender();
+ return {
+  update(next){const previous=viewSelected();state=next??state;const now=viewSelected();if(now!==previous){const record=find(now);if(record)eventForm(record);else if(selected)clearInspector();}scheduleRender();},
+  show(){scheduleRender();},hide(){},setVisible(){scheduleRender();},
+  destroy(){destroyed=true;for(const [type,listener]of [['pointermove',onPointerMove],['pointerup',onPointerEnd],['pointercancel',onPointerEnd]])window.removeEventListener(type,listener,true);closeInspectorSplitter();root.remove();},
+ };
+}
+export default {id:'calendar',label:'Calendar',world:WORLD,order:70,make};

@@ -60,3 +60,26 @@ test('source evidence keeps declared documentation and language wires distinct f
  const evidence=inspectSchemaSource(source);assert.equal(evidence.legends[0].documentation,'Actual legend description');assert.equal(evidence.types[0].documentation,'Actual type meaning');assert.equal(evidence.language[0].attributes.text[0],'"scarlet"');assert.match(evidence.languageStatus,/does not prove/);
  assert.equal(inspectSchemaSource('@broken').status,'source parse failed');
 });
+test('interpreters that run are on the map: SOP area interpreter, SOP world host, std.problem compiler and its providers with real status',async()=>{
+ const {describePlacementSearch}=await import('../src/dialog/placement-search-inspection.mjs');
+ const index={worlds:{novel:{runtimeModules:['worlds/sop-area.mjs','worlds/sop-world-host.mjs'],nativeHost:{module:'worlds/novel/sop-novel.mjs',factory:'createNovelArea'}}}};
+ const hosts=[{world:'novel',view:'editor',operations:[{id:'novel.add',spatial:{kindKey:'kind'}}],observation:{objects:[]}}];
+ const ready=describePlacementSearch({status:{supported:true,isolated:true,state:'ready',version:'5.4.1',base:'https://example.test/z3/',loadMs:1234,load:{status:'loaded',ms:1234,base:'https://example.test/z3/'}},activity:[{operation:'std.placement',phase:'start'},{operation:'std.placement',phase:'end',provider:'z3',time:7}]});
+ const graph=inspectWorldsRuntime({index,loaded:['novel'],hosts,placementSearch:ready});
+ const node=id=>graph.nodes.find(entry=>entry.id===id),edge=(from,to)=>graph.edges.some(entry=>entry.from===from&&entry.to===to);
+ for(const id of ['component:sop-area','component:sop-world-host','component:problem-compiler','provider:internal-search','provider:z3'])assert.equal(node(id)?.kind,'interpreter',id);
+ assert.equal(node('provider:internal-search').status,'always available');
+ assert.equal(node('provider:z3').status,'ready');assert.match(node('provider:z3').description,/Ready: loaded from https:\/\/example\.test\/z3\/ \(z3-solver 5\.4\.1, 1234 ms\)/);
+ assert.equal(node('component:problem-compiler').details.lastSolvedBy,'z3');
+ assert.equal(node('interpreter:novel').details.source,'worlds/novel/sop-novel.mjs');
+ assert.ok(edge('component:sop-area','interpreter:novel')&&edge('interpreter:novel','component:sop-world-host'));
+ assert.ok(edge('component:problem-compiler','provider:internal-search')&&edge('component:problem-compiler','provider:z3')&&edge('component:problem-compiler','interpreter:novel'));
+ assert.ok(!edge('provider:z3','runtime:activity-bus'),'providers do not claim to publish activity');
+ const states=[[{supported:false,isolated:false,state:'not-loaded'},'unavailable',/not cross-origin isolated/],[{supported:true,isolated:true,state:'not-loaded'},'not loaded',/Not loaded/],
+  [{supported:true,isolated:true,state:'warming',warmedBy:'idle'},'warming',/idle warm-up/],[{supported:true,isolated:true,state:'unavailable',error:'z3-fetch: z3-built.js 404'},'unavailable',/load failed \(z3-fetch/],
+  [{supported:true,base:'b/',load:{status:'loaded',ms:9,base:'b/'}},'ready',/9 ms/],
+  [{supported:true,isolated:true,state:'warming',warmedBy:'startup'},'warming',/started by the start-up/],
+  [{supported:true,isolated:true,state:'ready',warmedBy:'startup',base:'b/',load:{status:'loaded',ms:9,base:'b/'}},'ready',/9 ms, started by the start-up/]];
+ for(const [status,state,summary]of states){const {z3}=describePlacementSearch({status});assert.equal(z3.state,state);assert.match(z3.summary,summary);}
+ assert.equal(node('runtime:registry').label,'World loader');
+});

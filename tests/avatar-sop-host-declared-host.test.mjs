@@ -34,7 +34,7 @@ function realize(world){
   'avatar.minScale':0.6,'avatar.maxScale':1.5,'avatar.variants':all('k.faces.variant','name',plain),
   'avatar.colours':all('k.faces.colour','name'),'avatar.features':['length'],'avatar.featureValues':['long'],
   'avatar.sizes':all('ui.avatar.size','grade'),'avatar.directions':all('ui.avatar.step','place'),
-  'avatar.resizeRelated':[],'avatar.sizeRelated':[],
+  'avatar.resizeRelated':[],'avatar.sizeRelated':[],'avatar.lengths':all('ui.avatar.shift','step'),
  });
 }
 function session(){

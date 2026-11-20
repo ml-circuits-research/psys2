@@ -35,13 +35,13 @@ import { turnRecord, summarize, outcomeOf, executedActs } from './lib/dialog/con
 import { personView } from './lib/dialog/person-view.mjs';
 import { LIMITS, TIME_LIMIT_SPECS, TIME_LIMIT_DEFAULTS, applyTimeLimits, clampLimit } from './lib/dialog/time-limits.mjs';
 import { CREDITS, ABOUT_SECTIONS, ACCURACY, TAGLINE, GREETING } from './ui/about.mjs';
-import { buildRecord, completeRecord, completeStopped, createStore, filterRecords, toJSON, exportFilename, localDay, nextExportNumber, summaryStatus, summaryWorlds, hashState, buildDetail, nextFeedback, voteOf, exportRecord } from './ui/phrase-log.mjs';
+import { buildRecord, completeRecord, completeStopped, createStore, filterRecords, toJSON, exportFilename, localDay, nextExportNumber, summaryStatus, summaryWorlds, hashState, buildDetail, nextFeedback, voteOf, exportRecord, turnOf, exportEntry } from './ui/phrase-log.mjs';
 import { createFeedback } from './ui/feedback.mjs';
 import { failureReasons, filterFailures, toFailuresJSON, failuresFilename, createFailureSender, validEndpoint, FAILURE_REASON_TEXT } from './ui/failures.mjs';
 import { createProgress } from './ui/progress.mjs';
 import { startAssets, assetUrl, manifest as assetManifest } from './ui/assets.mjs';
 import { createEventLog, describeTarget, tapKind } from './ui/action-log.mjs';
-import { snapshotState, describeChanges, turnBaseline, turnAfter } from './ui/state-diff.mjs';
+import { snapshotState, describeChanges, turnBaseline, turnAfter, sopChanges } from './ui/state-diff.mjs';
 
 const HERE = new URL('.', import.meta.url);
 
@@ -1076,7 +1076,9 @@ export async function mountPsys2(element, options = {}) {
     const detail = recId && settings.logPhrases ? buildDetail(reply, { serialize: serializeWires, tab: view, state: { before: tn.stateBefore ?? null, after: stateAfter } }) : null;
     let happened = null;
     if (recId && settings.logPhrases) { try { happened = buildHappened(tn, reply, botMsg, effects); } catch (e) { console.warn('what-happened failed', e); } }
-    recordPhrase(text, mode, reply, recId, detail, happened);
+    let turnEntry = null;   // PHRASE LOG 4: what was read, compiled and changed (SOP), captured from the reply
+    if (recId && settings.logPhrases) { try { const base = turnBaseline(tn.snapBefore, session.loadedBefore?.()); turnEntry = turnOf(reply, { changes: sopChanges(base, turnAfter(snapshotState(session.state?.()), base, session.turnWorlds?.())) }); } catch (e) { console.warn('turn log failed', e); } }
+    recordPhrase(text, mode, reply, recId, detail, happened, turnEntry);
     if (reply.budgetExceeded && !reply.knownBad) runawayNotice('budgetExceeded', { text, stage: reply.budgetExceeded.stage ?? null, site: reply.budgetExceeded.site, ticks: reply.budgetExceeded.ticks, bySite: reply.budgetExceeded.bySite ?? null, ms: Math.round(performance.now() - tStart), recId, tStart });
     if (dbg) { try { dbg.record({ text, mode, tab: view, reply, usage, detection, effects, recId, stateBefore: tn.stateBefore ?? null, stateAfter, endType: voiceEnd(recId) }); } catch (e) { console.warn('debug record failed', e); } }
     // FB: the next accepted phrasing after a thumbs-down is its correction; a spoken complaint rates the previous answer
@@ -1244,11 +1246,11 @@ export async function mountPsys2(element, options = {}) {
     for (const e of effects ?? []) viewEffects.push({ kind: 'effect', name: e.name, ok: e.ok });
     return { tabAfter: view, shown, changes, viewEffects };
   }
-  function recordPhrase(text, mode, reply, recId = null, detail = null, happened = null) {
+  function recordPhrase(text, mode, reply, recId = null, detail = null, happened = null, turnEntry = null) {
     if (!settings.logPhrases) return;
     try {
       const tabWorld = tabDefs.find((t) => t.id === view)?.world ?? null;   // item 7: the world of the open tab, for the wrong-world analysis
-      if (recId) phrases.update(recId, (r) => ({ ...completeRecord(r, reply, { language: language.get() }), replyOutcome: outcomeOf(reply), turnKind: reply?.trace?.discourse?.meta?.dialogue ?? reply?.trace?.discourse?.resolved?.dialogue ?? null, ...(tabWorld ? { tabWorld } : {}), ...(detail ? { detail } : {}), ...(happened ? { happened } : {}) }));
+      if (recId) phrases.update(recId, (r) => ({ ...completeRecord(r, reply, { language: language.get() }), replyOutcome: outcomeOf(reply), turnKind: reply?.trace?.discourse?.meta?.dialogue ?? reply?.trace?.discourse?.resolved?.dialogue ?? null, ...(tabWorld ? { tabWorld } : {}), ...(detail ? { detail } : {}), ...(happened ? { happened } : {}), ...(turnEntry ? { turn: turnEntry } : {}) }));
       else phrases.add({ ...buildRecord({ text, mode, language: language.get(), recLang: mode === 'voice' ? speech?.recLang?.() ?? null : null, tab: view, reply }), ...(tabWorld ? { tabWorld } : {}) });
     } catch (e) { console.warn('phrase log failed', e); }
     if (!settingsEl.hidden) renderPhraseLog();
@@ -2030,8 +2032,8 @@ export async function mountPsys2(element, options = {}) {
   const MODE_NAME = { typed: 'typed', voice: 'spoken', chip: 'button', form: 'form' };
   /** One click: the share sheet where the browser offers one for files (phones), else a download. Returns the number of records. */
   function exportPhrases() {
-    const body = toJSON(phrases.all(), { diagnostics: diagnostics(), events: events.all(), app: globalThis.__psys2Build ?? null });
-    const n = JSON.parse(body).count;
+    const body = toJSON(phrases.all(), { diagnostics: diagnostics(), events: events.all(), app: globalThis.__psys2Build ?? null, includeDiagnostics: exportDiagnostics });
+    const n = JSON.parse(body).turns;
     if (!n) { toast('No phrases to export yet'); return 0; }
     // the n-th export of the local day: psys2-15Nov.json, psys2-15Nov-2.json, ... (the counter is a per-viewer convenience: without storage every export is the first)
     const now = new Date();
@@ -2041,6 +2043,7 @@ export async function mountPsys2(element, options = {}) {
     saveFile(name, body).then((r) => { lastExport = r; if (!settingsEl.hidden) renderPhraseLog(); }, () => {});
     return n;
   }
+  let exportDiagnostics = false;   // PHRASE LOG 4: "include diagnostics" (budget, perf, engine stats, long tasks, events): off by default, not remembered
   let lastExport = null;   // { name, where } of the last history export: shown under the list (the owner could not find the file on the phone)
   /** "Download failures only": export format 3 with only the failure turns, two turns before and after each, and the events that belong to them. */
   function exportFailures() {
@@ -2061,14 +2064,36 @@ export async function mountPsys2(element, options = {}) {
       return h('li', { class: `p2-plog-item is-${status}${vote ? ` has-vote-${vote}` : ''}${why.length ? ' is-failure' : ''}` },
         h('span', { class: 'p2-plog-mode', title: MODE_NAME[r.mode], role: 'img', 'aria-label': MODE_NAME[r.mode] }, MODE_ICON[r.mode]),
         h('span', { class: 'p2-plog-body' }, h('span', { class: 'p2-plog-text' }, r.text),
-          h('small', {}, vote ? h('b', { class: `p2-plog-vote v-${vote}`, title: vote === 'up' ? 'Good answer' : 'Not what I wanted', 'aria-label': vote === 'up' ? 'Good answer' : 'Not what I wanted' }, vote === 'up' ? '▲ ' : '▼ ') : null, `${worlds || 'no world'} · `, h('b', { class: `p2-plog-status s-${status}` }, status), r.lang && r.lang !== 'en' ? ` · ${r.lang}` : '', vote === 'down' && r.feedback.wanted ? ` · expected: ${r.feedback.wanted}` : '', why.length ? [' · ', h('b', { class: 'p2-plog-fail' }, `failure: ${why.map((x) => FAILURE_REASON_TEXT[x] ?? x).join(', ')}`)] : null)),
+          h('small', {}, vote ? h('b', { class: `p2-plog-vote v-${vote}`, title: vote === 'up' ? 'Good answer' : 'Not what I wanted', 'aria-label': vote === 'up' ? 'Good answer' : 'Not what I wanted' }, vote === 'up' ? '▲ ' : '▼ ') : null, `${worlds || 'no world'} · `, h('b', { class: `p2-plog-status s-${status}` }, status), r.lang && r.lang !== 'en' ? ` · ${r.lang}` : '', vote === 'down' && r.feedback.wanted ? ` · expected: ${r.feedback.wanted}` : '', why.length ? [' · ', h('b', { class: 'p2-plog-fail' }, `failure: ${why.map((x) => FAILURE_REASON_TEXT[x] ?? x).join(', ')}`)] : null), turnView(r)),
         settings.devMode === true ? h('button', { class: 'p2-linkbtn p2-plog-dump', type: 'button', 'aria-label': `Debug dump: ${r.text}`, title: 'Download a debug dump of this message', onclick: () => saveFile(`psys2-debug-dump-${r.id}.json`, `${JSON.stringify({ record: exportRecord(r), turn: dbg?.turnFor?.(r.id) ?? null }, null, 1)}\n`) }, 'debug dump') : null,
         h('button', { class: 'p2-linkbtn', type: 'button', 'aria-label': `Delete: ${r.text}`, title: `Delete: ${r.text}`, onclick: () => { phrases.remove(r.id); renderPhraseLog(); } }, 'Delete'));
     }));
     const btn = (label, fn, cls = 'p2-btn-text') => h('button', { class: cls, type: 'button', onclick: fn }, label);
     plogActions.replaceChildren(...(confirmClear
       ? [h('span', { class: 'p2-plog-confirm', role: 'alert' }, `Delete all ${all.length} entries?`), btn('Yes, clear', () => { phrases.clear(); events.clear(); confirmClear = false; renderPhraseLog(); }, 'p2-btn-text is-danger'), btn('Keep them', () => { confirmClear = false; renderPhraseLog(); })]
-      : [btn('Export JSON', exportPhrases), btn('Download failures only', exportFailures), btn('Clear', () => { if (all.length) { confirmClear = true; renderPhraseLog(); } })]));
+      : [btn('Export JSON', exportPhrases), diagCheck(), btn('Download failures only', exportFailures), btn('Clear', () => { if (all.length) { confirmClear = true; renderPhraseLog(); } })]));
+  }
+  function diagCheck() {
+    const c = h('input', { type: 'checkbox', class: 'p2-plog-diag' }); c.checked = exportDiagnostics;
+    c.addEventListener('change', () => { exportDiagnostics = c.checked; });
+    return h('label', { class: 'p2-check', title: 'Add budget, timings, engine statistics, long tasks and UI events to the export' }, c, ' include diagnostics');
+  }
+  /** PHRASE LOG 4: the four parts of a turn (asked, read, compiled, happened) and the feedback, built when the entry is opened. */
+  function turnView(r) {
+    const d = h('details', { class: 'p2-plog-turn' }, h('summary', {}, 'What happened'));
+    d.addEventListener('toggle', () => {
+      if (!d.open || d.dataset.built) return; d.dataset.built = '1';
+      const e = exportEntry(r), part = (label, ...body) => h('div', { class: 'p2-plog-part' }, h('b', {}, label), ...body.filter(Boolean));
+      const pre = (text) => (text ? h('pre', { class: 'p2-plog-sop' }, text) : null), lines = (list) => (list?.length ? pre(list.join('\n')) : null);
+      const c = e.compiled, x = e.happened;
+      d.append(
+        part('asked', ` ${e.asked.text} (${[e.asked.tab, e.asked.mode, e.asked.time].filter(Boolean).join(', ')})`),
+        part('read', !e.read.cut && !e.read.sop ? ' no reading' : null, pre(e.read.cut), pre(e.read.sop), lines(e.read.via)),
+        part('compiled', c.refused ? ` refused at ${c.refused.stage}: ${c.refused.reason}${c.refused.detail ? ` (${c.refused.detail})` : ''}` : !c.sop ? ' nothing compiled' : null, pre(c.sop)),
+        part('happened', ` ${x.outcome ? `${x.outcome}${x.stage ? ` at ${x.stage}` : ''}` : x.reply ?? ''}${x.solver ? ` · solver ${x.solver}` : ''}`, lines(x.changes)),
+        e.feedback ? part('feedback', ` ${[e.feedback.vote, ...(e.feedback.reasons ?? []), e.feedback.wanted ? `expected: ${e.feedback.wanted}` : '', e.feedback.complaint ? 'complaint' : ''].filter(Boolean).join(', ')}`) : null);
+    });
+    return d;
   }
   function phraseLogSection() {
     const fsel = select([['all', 'All'], ['misses', 'Not understood only'], ['voice', 'Voice only'], ['down', 'Not what I wanted'], ['up', 'Good answers'], ['failures', 'Failures']], logFilter, (v) => { logFilter = v; renderPhraseLog(); });

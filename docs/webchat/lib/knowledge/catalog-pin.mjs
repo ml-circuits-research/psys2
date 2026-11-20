@@ -9,7 +9,7 @@
  */
 export const CATALOG_PIN = Object.freeze({
   repo: 'https://github.com/ml-circuits-research/sop-knowledge-worlds',
-  commit: 'a04fb0d8eca57ca5ecbb0242fa9cd28bb82a9322',   // w.document for an editor: blocks in order, list items, table cells, marks.
+  commit: '668fc36aacc4f7c193bab47f75e9ededdef9b811',   // ordered face features (length, size on k.values scales) and the hair group of w.face.
   path: 'docs/worlds',
 });
 

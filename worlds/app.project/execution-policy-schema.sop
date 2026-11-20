@@ -1,4 +1,4 @@
-@policy.module core.module name=app.execution version=2 imports=std.capability exports=app.execution.values exports=app.execution.observedProperty exports=app.execution.observedMeasure exports=app.execution.observedField exports=app.execution.preview exports=app.execution.comparative exports=app.execution.comparativeFactor exports=app.execution.knowledge exports=app.execution.instant exports=app.execution.requestValue exports=app.execution.clockTime exports=app.execution.instantBase exports=app.execution.instantFocus
+@policy.module core.module name=app.execution version=2 imports=std.capability exports=app.execution.values exports=app.execution.observedProperty exports=app.execution.observedMeasure exports=app.execution.observedField exports=app.execution.preview exports=app.execution.comparative exports=app.execution.comparativeFactor exports=app.execution.comparativeStep exports=app.execution.ordinal exports=app.execution.knowledge exports=app.execution.instant exports=app.execution.requestValue exports=app.execution.clockTime exports=app.execution.instantBase exports=app.execution.instantFocus
 @values.type core.type of=app.execution.values closed=true
 @values.concept core.slot of=app.execution.values key=concept kind=atom present=true
 @values.type.slot core.slot of=app.execution.values key=valueType kind=string present=true
@@ -38,6 +38,15 @@
 @comparativeFactor.concept core.slot of=app.execution.comparativeFactor key=concept kind=atom present=true
 @comparativeFactor.step core.slot of=app.execution.comparativeFactor key=step kind=atom present=true
 @comparativeFactor.value core.slot of=app.execution.comparativeFactor key=factor kind=number present=true
+# A concept whose values are the steps of an ordered scale of the catalog (k.values.step of `scale`): each step is a
+# value of its own name, and a comparative step (app.execution.comparative: more, less) is a relative value the tool
+# moves the target by along the same scale (comparative-projection.sop).
+@ordinal.type core.type of=app.execution.ordinal closed=true
+@ordinal.concept core.slot of=app.execution.ordinal key=concept kind=atom present=true
+@ordinal.scale core.slot of=app.execution.ordinal key=scale kind=atom present=true
+@comparativeOrdinal.type core.type of=app.execution.comparativeStep closed=true
+@comparativeOrdinal.concept core.slot of=app.execution.comparativeStep key=concept kind=atom present=true
+@comparativeOrdinal.step core.slot of=app.execution.comparativeStep key=step kind=atom present=true
 # Further knowledge a concept's values are resolved with (beside its app.execution.values type).
 @knowledge.type core.type of=app.execution.knowledge closed=true
 @knowledge.concept core.slot of=app.execution.knowledge key=concept kind=atom present=true

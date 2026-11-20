@@ -9,6 +9,7 @@ import {FUNCTIONAL_NATIVE_BINDINGS} from './lib/functional-native-bindings.mjs';
 import {prepareFunctionalFixture} from './lib/functional-fixture-policy.mjs';
 import {summarizeReaderStages} from './lib/reader-stage-counts.mjs';
 import {NATIVE_AREAS} from '../src/dialog/app-reader-context.mjs';
+import {emptyAreaState} from '../worlds/sop-area-adapter.mjs';
 const [specPath,corpusPath,encodedPath,output,seed]=process.argv.slice(2);
 if(!output||seed!==undefined&&!/^\d+$/.test(seed))throw Error('usage: diagnose-training-pipeline.mjs READER_SPEC SOURCE_TRAIN ENCODED_TRAIN_GZ OUTPUT_PREFIX [SEED]');
 const sha=x=>createHash('sha256').update(x).digest('hex'),tabs={drawing:'draw',diagram:'diagram',document:'editor',calendar:'calendar'};
@@ -39,8 +40,8 @@ const sink=createWriteStream(output+'.rows.jsonl',{flags:'wx'});
 const group=(reason,row,detail)=>{let g=groups.get(reason);if(!g){g={cause:reason,rows:0,examples:[]};groups.set(reason,g);}g.rows++;if(g.examples.length<3)g.examples.push({id:row.id,text:row.source.text,detail});};
 try{for(const [index,row]of selected.entries()){
  const t=performance.now(),tab=tabs[row.world],area=NATIVE_AREAS[tab],state={};
- // Each native host supplies its own defaults. Its public snapshot carries the actual native state.
- const defaults=row.world==='drawing'?(await import('../worlds/art.draw/declared-host.mjs')).initialDrawingState():row.world==='diagram'?(await import('../worlds/diagram.sketch/declared-host.mjs')).initialDiagramState():row.world==='document'?(await import('../worlds/docs.editor/declared-host.mjs')).initialDocumentState():{people:[],rooms:[],meetings:[]};
+ // Each SOP area starts from its empty carrier; the area fills its declared initial state on creation.
+ const defaults=emptyAreaState();
  state[area.world]=defaults;state['ui.shell']={activeTab:tab};
  const host=await area.create({state:state[area.world],instanceId:'diagnostic-'+index}),fixture=prepareFunctionalFixture(row.world,row.context??{}),setup=await seedFunctionalContext({context:fixture.context,host,kindMappings:FUNCTIONAL_NATIVE_BINDINGS[row.world],invocationPrefix:'training-'+index});
  const before=JSON.stringify(state),beforeObjects=host.observe().objects,session={isession:{state},newEngineJournal:[]};

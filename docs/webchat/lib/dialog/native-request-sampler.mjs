@@ -1,10 +1,10 @@
-import { captureHistory, restoreHistory } from './history-journal.mjs?v=f8f136a1bb';
+import { captureHistory, restoreHistory } from './history-journal.mjs?v=632292883d';
 // Native capability/state adapter for the existing std.sample and language-world realiser.
-import * as lib from '../vendor/sopworld/sopworld.mjs?v=5221d62911';
-import {createSampler} from './sampler.mjs?v=b815ad1433';
-import {nativeKindCandidates} from './native-binding-candidates.mjs?v=a1e925e0c7';
-import {declaredPropertyValues} from './declared-execution.mjs?v=e20d6bd1de';
-import {routeNewEngine} from './reader-routing.mjs?v=2ee73dec0e';
+import * as lib from '../vendor/sopworld/sopworld.mjs?v=4a094fcca4';
+import {createSampler} from './sampler.mjs?v=405f7ab35e';
+import {nativeKindCandidates} from './native-binding-candidates.mjs?v=90e22dfa4c';
+import {declaredPropertyValues} from './declared-execution.mjs?v=a0fd73ae03';
+import {routeNewEngine} from './reader-routing.mjs?v=3cc05994ea';
 const word = x => typeof x==='string' && /^[a-z]+$/.test(x);
 
 export function samplingSchema({area,operations,observation,bindings}) {

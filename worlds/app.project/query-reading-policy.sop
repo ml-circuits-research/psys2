@@ -33,10 +33,15 @@
 @out.selector app.query.read.selector concept=?concept value=?value
 @query.scope core.rule when=$condition when=$question.phase when=$question.scope then=$out.selector
 
-# A mention grounds by exact identity, spelling repair up to 2, or declared kind relations at 0.5 per step.
-@query.ground std.ground.policy name=app.query.kind measure=distance maxSpelling=2 stepCost=0.5 maxSteps=2 follow=kind_of follow=is_a
+# A mention grounds by exact identity, its vocabulary lemma, spelling repair up to 2, or kind parents at
+# 0.5 per step. Only the kind dimension of a catalog parent is kind evidence; a known word is never
+# spelling-repaired into another word (the companion policy app.query.kind.word).
+@query.ground std.ground.policy name=app.query.kind measure=distance maxSpelling=2 stepCost=0.5 maxSteps=2 follow=lemma follow=kind_of follow=is_a follow=is_a.kind
+@query.ground.word std.ground.policy name=app.query.kind.word measure=distance maxSpelling=0 stepCost=0.5 maxSteps=2 follow=lemma follow=kind_of follow=is_a follow=is_a.kind
 @query.lexical std.decide.criterion of=app.query.kind n=1 name=distance measure=distance dir=min
 @query.reader.type std.decide.criterion of=app.query.kind n=2 name=reader.type measure=otherType dir=min
+@query.word.lexical std.decide.criterion of=app.query.kind.word n=1 name=distance measure=distance dir=min
+@query.word.reader.type std.decide.criterion of=app.query.kind.word n=2 name=reader.type measure=otherType dir=min
 
 # A positive model head with no source span cannot supply a query target or filter.
 @p.filter.missing app.query.read.headObservation role=filter reason=presence-span-inconsistent present=true ranges=0

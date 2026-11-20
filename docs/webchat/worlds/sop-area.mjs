@@ -2,12 +2,12 @@
 // A tab defined by its area.sop: which catalog modules form its instance and knowledge, which rule files
 // compile its commands and project its drawing, the things it starts with and the open choices of its native
 // interface. This module only reads that declaration; it holds no knowledge of any tab.
-import {World, parse, str} from '../lib/vendor/sopworld/sopworld.mjs?v=5221d62911';
+import {World, parse, str} from '../lib/vendor/sopworld/sopworld.mjs?v=4a094fcca4';
 import {budget} from '../lib/dialog/budget.mjs?v=00bce6e369';
-import {catalogWorld} from './catalog-world.mjs?v=560a5b20a0';
-import {readNativeToolInterface} from './native-tool-interface.mjs?v=9997b3bd33';
-import {toolInvocationContext} from './native-tool-host.mjs?v=fc9d28ffde';
-import {createSopWorldHost, forgetDerived, initialSopWorldState, worldOf} from './sop-world-host.mjs?v=97c93721e1';
+import {catalogWorld} from './catalog-world.mjs?v=40b9d1c678';
+import {readNativeToolInterface} from './native-tool-interface.mjs?v=91a5dd6e55';
+import {toolInvocationContext} from './native-tool-host.mjs?v=f2c2d48456';
+import {createSopWorldHost, forgetDerived, initialSopWorldState, worldOf} from './sop-world-host.mjs?v=250290c6bb';
 import {renderPrimitives} from './sop-primitives.mjs?v=4d2cb4b2fc';
 
 const read = (fact, key) => { const raw = fact?.attrs[key]?.[0]; return raw === undefined ? undefined : raw.startsWith('"') ? str(raw) : raw; };
@@ -212,6 +212,18 @@ export function projectSopArea(world, state, opts = {}) {
         .map((arg) => Object.fromEntries(['param', 'key', 'value', 'option', 'options', 'view', 'list', 'kind'].filter((k) => arg.attrs[k]).map((k) => [k, k === 'value' ? typedValue(arg.attrs.value[0]) : read(arg, k)]))),
       available: read(control, 'target') !== 'selected' || (selected !== null && !all(control, 'except').includes(selected) && (when === undefined || (when === 'present') === present)) };
   });
+  // What a tab's editor shows of each observed object: its observed inputs (app.observe.input: key -> value, a list
+  // when the key repeats, as the label, colour or members of a group) and the box it occupies on the page
+  // (app.observe.box, in frame units). Numbers stay numbers.
+  const inputs = {}, boxes = {};
+  for (const fact of live.ofType('app.observe.input')) {
+    const id = read(fact, 'id'), key = read(fact, 'key'), raw = fact.attrs.value?.[0];
+    if (id === undefined || key === undefined || raw === undefined) continue;
+    const value = typedValue(raw), entry = (inputs[id] ??= {});
+    entry[key] = Object.hasOwn(entry, key) ? [].concat(entry[key], value) : value;
+  }
+  for (const fact of live.ofType('app.observe.box')) boxes[read(fact, 'id')] = Object.fromEntries(['x0', 'y0', 'x1', 'y1'].map((k) => [k, Number(read(fact, k))]));
+  const page = frameOf(live, frame);
   // The state itself travels with what is derived from it, so a projection canonicalizes back to its state.
-  return { sop: state.sop, runtime: state.runtime ?? { view: {} }, svg: renderPrimitives(live, types, frameOf(live, frame), { ...opts, select }), objects, options, controls, selected };
+  return { sop: state.sop, runtime: state.runtime ?? { view: {} }, svg: renderPrimitives(live, types, page, { ...opts, select }), frame: page, objects, inputs, boxes, options, controls, selected };
 }

@@ -82,6 +82,25 @@ test('startAssets: the manifest is fetched once with no cache; a stale page relo
   assert.equal(await loadManifest({ base: 'http://x/', fetchFn: async () => { throw new Error('offline'); } }), null, 'offline: no manifest, no throw');
 });
 
+test('startAssets: a page the service worker isolates reloads once on the first visit, and never loops', async () => {
+  const man = { version: 'bbb', assets: { 'a.mjs': '1' } };
+  const fetchFn = async () => ({ ok: true, json: async () => man });
+  // A worker that answers the manifest with isolate=true (docs/webchat/sw.js with ISOLATE on).
+  const sw = { postMessage: (data, [port]) => { port.postMessage({ type: 'manifest-ack', ok: true, removed: 0, isolate: true }); setTimeout(() => port.close(), 10); } };
+  const serviceWorker = { register: async () => ({ active: sw }), getRegistration: async () => null, ready: Promise.resolve({ active: sw }), controller: sw };
+  const common = { base: 'http://x/', fetchFn, storage: fakeStorage(), cacheStorage: fakeCaches([]), idb: null, serviceWorker, win: { __psys2Build: { version: 'bbb' }, crossOriginIsolated: false } };
+  let reloads = 0; const session = fakeStorage();
+  const first = await startAssets({ ...common, session, reload: () => { reloads++; } });
+  assert.equal(first.reloading, true); assert.equal(reloads, 1);
+  const again = await startAssets({ ...common, session, reload: () => { reloads++; } });
+  assert.equal(again.reloading, false); assert.equal(reloads, 1, 'still not isolated after the reload: no loop');
+  const isolated = await startAssets({ ...common, win: { ...common.win, crossOriginIsolated: true }, session: fakeStorage(), reload: () => { reloads++; } });
+  assert.equal(isolated.reloading, false); assert.equal(reloads, 1);
+  const broken = { getItem: () => null, setItem: () => { throw Error('denied'); } };
+  assert.equal((await startAssets({ ...common, session: broken, reload: () => { reloads++; } })).reloading, false, 'no session storage: no reload');
+  assert.equal(reloads, 1);
+});
+
 test('progress: the popup names the current step only (latest running step, never a queued one), quiet steps are not shown, a finished step leaves nothing', () => {
   let t = 0;
   const pg = createProgress({ storage: fakeStorage(), document: null, now: () => t });

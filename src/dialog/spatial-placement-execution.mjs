@@ -8,7 +8,7 @@ import {identityRegistryFor,instanceIdFor} from './instance-identity.mjs';
 import {nativeKindCandidates,nativeCreationCandidates} from './native-binding-candidates.mjs';
 import {invokeObservedNativeTool} from './native-tool-activity.mjs';
 import {describeNativeControl,verifyNativeControlEffect} from './native-control-intent.mjs';
-import {placementSearchProvider,placementSearchStatus} from './placement-search-provider.mjs';
+import {placementSearchProvider,z3Status} from './placement-search-provider.mjs';
 
 const read = (row,key) => row?.attrs[key]?.length===1 ? str(row.attrs[key][0]) : undefined;
 const ref = (row,key) => {
@@ -45,7 +45,7 @@ export async function executeSpatialPlacement(session,candidate,{bindings,view}=
   :'I could not apply the requested placement. Nothing changed.',false,{reason,reading:candidate,...details});
  if(!state||!bindings)return fail('spatial-instance-unavailable');
  const started=performance.now();
- let host,spatial,sop,proposal,hypotheses=null;
+ let host,spatial,sop,proposal,hypotheses=null,solver=null;
  try{
   const hostOptions={state,instanceId:instanceIdFor(session,area.world),identityRegistry:identityRegistryFor(session,area.world),loader:session.engine?.loader,knowledge:session.engine?.knowledge};
   host=await createAreaHost(area,hostOptions);
@@ -81,7 +81,12 @@ export async function executeSpatialPlacement(session,candidate,{bindings,view}=
   // stays synchronous with the library's internal search.
   const provider=placementSearchProvider();
   const compile=async wires=>{
+   const t0=performance.now();
    const out=provider?await context.compileRequest(wires+'\n'+native.context,{provider}):context.compileRequest(wires+'\n'+native.context);
+   // Which search placed it: z3 or internal for a placement problem (std.problem), the declared method's ranked
+   // directions otherwise; with the solver's status, so a fallback from Z3 is disclosed in the trace.
+   const result=parse(out).find(wire=>['std.placement.result','std.compile.result'].includes(wire.type));
+   solver={provider:read(result,'provider')??(read(result,'status')==='compiled'?'declared-method':null),compileMs:Math.round(performance.now()-t0),z3:z3Status()};
    return {sop:out,proposal:parse(out).find(wire=>['std.placement.result','std.compile.result'].includes(wire.type))};
   };
   ({sop,proposal}=await compile(candidate.wires));
@@ -95,12 +100,12 @@ export async function executeSpatialPlacement(session,candidate,{bindings,view}=
    if(read(second.proposal,'status')==='compiled'){({sop,proposal}=second);candidate=creating;hypotheses.used='creating';}
   }
   activity(session,area,{phase:'end',label:'Compiled placement from observed geometry',durationMs:performance.now()-started,status:read(proposal,'status'),
-   provider:read(proposal,'provider'),search:provider?placementSearchStatus():undefined,sop});
+   provider:solver?.provider,search:solver?.z3,sop});
  }catch(error){
   if(error?.name==='BudgetExceeded'||error?.name==='TurnAborted')throw error;
-  return fail('spatial-compilation-error',{error:String(error?.message??error)});
+  return fail('spatial-compilation-error',{error:String(error?.message??error),solver});
  }
- if(read(proposal,'status')!=='compiled')return fail(read(proposal,'reason')??'spatial-compiler-unavailable',{placement:sop});
+ if(read(proposal,'status')!=='compiled')return fail(read(proposal,'reason')??'spatial-compiler-unavailable',{placement:sop,solver});
  if(session.isession.state[area.world]!==state)return fail('stale-observation',{placement:sop});
  let result;
  try{result=await invokeSpatialPlacementSop(session,{area,host,sop});}
@@ -118,7 +123,7 @@ export async function executeSpatialPlacement(session,candidate,{bindings,view}=
   Number.isFinite(wanted)&&Math.abs(wanted-bounds[key])<=1e-9*Math.max(1,Math.abs(wanted)));
  activity(session,area,{phase:'end',label:'Observe placement effect',status:geometryVerified?'verified':'mismatch',
   sop,receipt:{operation:receipt.operation,beforeVersion:receipt.beforeVersion,afterVersion:receipt.afterVersion},bounds,geometryVerified,verification});
- const trace={assessment:receipt.status,receipt,reading:candidate,placement:sop,effectVerification:verification,observedBounds:bounds,geometryVerified,controlIntent:result.sop,
+ const trace={assessment:receipt.status,receipt,reading:candidate,placement:sop,solver,effectVerification:verification,observedBounds:bounds,geometryVerified,controlIntent:result.sop,
   ...(hypotheses?{hypotheses,uncertainty:hypotheses.used?['created-absent-target']:[]}:{})};
  const changed=receipt.status==='changed',worldState={[area.world]:structuredClone(state)},effects=changed?[{operation:operation.id}]:[];
  const observedLocation=bounds?' at ('+((bounds.min_x+bounds.max_x)/2)+', '+((bounds.min_y+bounds.max_y)/2)+')':'';

@@ -177,3 +177,11 @@
 @native.docs.editor.op.document.observe std.capability.operation scope=$native.docs.editor.scope name="document.observe" act=ask on="docs.editor.document" order=24 eligible=true
 @native.docs.editor.op.document.undo std.capability.operation scope=$native.docs.editor.scope name="document.undo" act=undo on="docs.editor.document" order=25 eligible=true
 @native.docs.editor.op.document.redo std.capability.operation scope=$native.docs.editor.scope name="document.redo" act=redo on="docs.editor.document" order=26 eligible=true
+# Selecting a block or a section changes only the declared selection key of the blocks it selects and deselects.
+@native.docs.editor.selection.key std.capability.arg name="key" value="selected"
+@native.docs.editor.selection.record std.capability.record entry=$native.docs.editor.selection.key
+@native.docs.editor.selection.arg std.capability.arg name="selection" value=$native.docs.editor.selection.record
+@native.docs.editor.selection.scope std.capability.record entry=$native.docs.editor.selection.arg
+@native.docs.editor.selection.effect std.capability.arg name="effectScope" value=$native.docs.editor.selection.scope
+@native.docs.editor.op.document.block.select.metadata app.native.metadata operation=$native.docs.editor.op.document.block.select field=$native.docs.editor.selection.effect
+@native.docs.editor.op.document.section.select.metadata app.native.metadata operation=$native.docs.editor.op.document.section.select field=$native.docs.editor.selection.effect

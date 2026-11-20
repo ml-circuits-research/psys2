@@ -1,6 +1,9 @@
 // Evaluation setup bindings, not a language reader or per-row fixture bank.
-import {DIAGRAM_TOOL_BINDINGS} from '../../worlds/diagram.sketch/declared-host.mjs';
-import {DRAWING_TOOL_BINDINGS} from '../../worlds/art.draw/declared-host.mjs';
+// The native kind families come from the SOP areas' realized interfaces (their declared choices).
+import {createDiagramArea} from '../../worlds/diagram.sketch/sop-diagram.mjs';
+import {createDrawingArea} from '../../worlds/art.draw/sop-drawing.mjs';
+const DRAWING_TOOL_BINDINGS=(await createDrawingArea({instanceId:'functional.bindings.drawing'})).bindings();
+const DIAGRAM_TOOL_BINDINGS=(await createDiagramArea({instanceId:'functional.bindings.diagram'})).bindings();
 const name={from:'name'},field=key=>({from:'field',key});
 export const FUNCTIONAL_NATIVE_BINDINGS={
  drawing:DRAWING_TOOL_BINDINGS.find(op=>op.id==='drawing.object.make').params.kind.enum.map(kind=>({id:`setup.drawing.${kind}`,kind,nativeKind:kind,operation:'drawing.object.make',arguments:{kind:{from:'kind'},name}})),

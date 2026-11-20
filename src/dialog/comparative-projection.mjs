@@ -10,7 +10,8 @@ import { executionPolicyWorld } from './execution-policy.mjs';
 
 let table;
 
-/** [{concept, step, factor, declaration}] — frozen; empty when the knowledge has no scale for any concept. */
+/** [{concept, step, factor, declaration}] and, for an ordinal concept (its values are the steps of an ordered scale),
+ * [{concept, step, ordinal: true, declaration}] — frozen; empty when no concept has a scale. */
 export function comparativeSteps({ knowledge } = {}) {
   if (!knowledge && table) return table;
   const world = executionPolicyWorld().fork();
@@ -26,6 +27,10 @@ export function comparativeSteps({ knowledge } = {}) {
     concept: str(row.attrs.concept[0]), step: row.attrs.step[0], factor: Number(row.attrs.factor[0]),
     declaration: steps.get(row.attrs.step[0]),
   })).filter((row) => Number.isFinite(row.factor) && row.factor > 0 && row.declaration);
+  for (const row of world.ofType('app.execution.comparativeStep')) {
+    const step = row.attrs.step[0], declaration = steps.get(step);
+    if (declaration) result.push(Object.freeze({ concept: str(row.attrs.concept[0]), step, ordinal: true, declaration }));
+  }
   Object.freeze(result);
   if (!knowledge) table = result;
   return result;

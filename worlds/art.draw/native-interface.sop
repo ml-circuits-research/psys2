@@ -212,7 +212,13 @@
 @native.art.draw.value.200 std.capability.arg name="frame" value="drawing.canvas"
 @native.art.draw.value.201 std.capability.record entry=$native.art.draw.value.198 entry=$native.art.draw.value.199 entry=$native.art.draw.value.200
 @native.art.draw.value.202 std.capability.arg name="coordinates" value=$native.art.draw.value.201
-@native.art.draw.op.drawing.part.place.metadata app.native.metadata operation=$native.art.draw.op.drawing.part.place field=$native.art.draw.value.202
+# A part is addressed by its object and its index; what a reader observes of it is a separate object (<object>.<index>),
+# so the effect of a part edit is verified through an independent projection, not by the command's own id.
+@native.art.draw.part.effect.projection std.capability.arg name="projection" value="composite"
+@native.art.draw.part.effect.record std.capability.record entry=$native.art.draw.part.effect.projection
+@native.art.draw.part.effect std.capability.arg name="effectScope" value=$native.art.draw.part.effect.record
+@native.art.draw.op.drawing.part.place.metadata app.native.metadata operation=$native.art.draw.op.drawing.part.place field=$native.art.draw.value.202 field=$native.art.draw.part.effect
+@native.art.draw.op.drawing.part.change.metadata app.native.metadata operation=$native.art.draw.op.drawing.part.change field=$native.art.draw.part.effect
 @native.art.draw.op.drawing.part.remove std.capability.operation scope=$native.art.draw.scope name="drawing.part.remove" act=remove on="art.draw.part" order=17 eligible=true
 @native.art.draw.op.drawing.part.remove.param.id std.capability.parameter operation=$native.art.draw.op.drawing.part.remove name="id" kind=string required=true
 @native.art.draw.op.drawing.part.remove.param.index std.capability.parameter operation=$native.art.draw.op.drawing.part.remove name="index" kind=integer required=true min=0
@@ -271,4 +277,9 @@
 @native.art.draw.selection.scope std.capability.record entry=$native.art.draw.selection.arg
 @native.art.draw.selection.effect std.capability.arg name="effectScope" value=$native.art.draw.selection.scope
 @native.art.draw.op.drawing.object.select.metadata app.native.metadata operation=$native.art.draw.op.drawing.object.select field=$native.art.draw.selection.effect
-@native.art.draw.op.drawing.objects.select.metadata app.native.metadata operation=$native.art.draw.op.drawing.objects.select field=$native.art.draw.selection.effect
+# Selecting several objects keeps them together in the editor; the view's selection key holds one of them, so which
+# objects are selected is not observable per object and the effect needs an independent projection.
+@native.art.draw.selection.many.projection std.capability.arg name="projection" value="composite"
+@native.art.draw.selection.many.record std.capability.record entry=$native.art.draw.selection.many.projection
+@native.art.draw.selection.many.effect std.capability.arg name="effectScope" value=$native.art.draw.selection.many.record
+@native.art.draw.op.drawing.objects.select.metadata app.native.metadata operation=$native.art.draw.op.drawing.objects.select field=$native.art.draw.selection.many.effect

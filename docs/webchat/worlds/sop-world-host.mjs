@@ -5,8 +5,8 @@
 //  3. this interpreter runs the calls through the library's generic acts (World.act) and keeps the resulting
 //     instance facts and the view keys as the tool state. Undo and redo belong to the application's journal.
 // The objects a reader observes come from app.observe.object facts the same rules derive.
-import {parse, quote, serialize, str} from '../lib/vendor/sopworld/sopworld.mjs?v=5221d62911';
-import {createNativeToolHost, nativeToken} from './native-tool-host.mjs?v=fc9d28ffde';
+import {parse, quote, serialize, str} from '../lib/vendor/sopworld/sopworld.mjs?v=4a094fcca4';
+import {createNativeToolHost, nativeToken} from './native-tool-host.mjs?v=f2c2d48456';
 
 const CALLS = 512;
 const atom = /^[A-Za-z_][A-Za-z0-9_.-]*$/;
@@ -98,7 +98,7 @@ function compile(base, state, operation, args) {
     return { fact: merged, order: Number(read(fact, 'order') ?? 0) };
   }).sort((a, b) => a.order - b.order || (a.fact.id < b.fact.id ? -1 : a.fact.id > b.fact.id ? 1 : 0)).map(({ fact }) => fact);
   const refusals = world.ofType('app.act.refuse').map((fact) => read(fact, 'reason'));
-  return { calls, views: world.ofType('app.act.view'), refusal: refusals[0] };
+  return { world, calls, views: world.ofType('app.act.view'), refusal: refusals[0] };
 }
 
 function run(base, state, kinds, calls) {
@@ -198,5 +198,20 @@ export function createSopWorldHost({ base, callBase = null, kinds, state, instan
     const width = Number(read(made, 'x1')) - Number(read(made, 'x0')), height = Number(read(made, 'y1')) - Number(read(made, 'y0'));
     return Number.isFinite(width) && Number.isFinite(height) ? { width, height } : null;
   };
-  return createNativeToolHost({ state, instanceId, scope, toolInterface, operations, handlers, view, ...(spatialObservation ? { spatial, measure } : {}), ...limits });
+  // Where a command would place a new object, as the rules declare it for a placement problem: the candidate regions
+  // (app.place.region, in the order the rules rank them, with the size the object has there) and the objective
+  // (app.place.objective). The application solves that problem (std.problem) and gives the command its place.
+  const num = (fact, key) => Number(read(fact, key));
+  const placement = (data, operation, args) => {
+    const compiled = compile(base, data, operation, args);
+    if (compiled.refusal) return null;
+    const regions = compiled.world.ofType('app.place.region').map((fact) => ({ key: read(fact, 'key'), tier: num(fact, 'tier'), order: num(fact, 'order'),
+      host: read(fact, 'host') ?? null, size: num(fact, 'size'), fy: fact.attrs.fy ? num(fact, 'fy') : undefined, min_x: num(fact, 'x0'), min_y: num(fact, 'y0'), max_x: num(fact, 'x1'), max_y: num(fact, 'y1') }))
+      .filter((r) => [r.tier, r.order, r.size, r.min_x, r.min_y, r.max_x, r.max_y].every(Number.isFinite))
+      .sort((a, b) => a.tier - b.tier || a.order - b.order || (a.key < b.key ? -1 : a.key > b.key ? 1 : 0));
+    const [objective] = compiled.world.ofType('app.place.objective');
+    if (!regions.length || !objective) return null;
+    return { regions, objective: Object.fromEntries(Object.keys(objective.attrs).map((key) => [key, typed(objective.attrs[key][0])])) };
+  };
+  return createNativeToolHost({ state, instanceId, scope, toolInterface, operations, handlers, view, ...(spatialObservation ? { spatial, measure, placement } : {}), ...limits });
 }

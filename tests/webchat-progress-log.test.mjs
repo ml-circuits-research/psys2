@@ -68,21 +68,26 @@ test('event log: ordered events with tab before and after, kinds from names, rea
   assert.equal(reactionOf({ ...rec, time: new Date(Date.now() + 5e5).toISOString() }, ev), null);
 });
 
-test('export format 3 carries events and reactions; format 2 still loads; the analyzer flags another tab', () => {
+test('export format 4: one compact entry per turn; events and reactions only in the optional diagnostics; formats 2/3 still load; the analyzer flags another tab', () => {
   const rec = { ...buildRecord({ text: 'make a chart', tab: 'draw', now: Date.now() - 1000 }), id: 'p1', tabWorld: 'art.draw', happened: { tabAfter: 'charts', shown: [{ text: 'Done.', world: 'data.charts' }], changes: [{ world: 'data.charts', changes: ['charts: +1 chart'] }] },
     segments: [{ text: 'make a chart', status: 'supported', world: 'data.charts', pattern: 'pat.x', unparsed: false }] };
   const events = [buildEvent({ kind: 'tab', target: 'draw', tab: 'robot', tabAfter: 'draw', via: 'tap', now: Date.now() - 2000 }), buildEvent({ kind: 'undo', target: 'Undo', tab: 'charts', now: Date.now() })];
-  const v3 = JSON.parse(toJSON([rec], { events }));
-  assert.equal(v3.format, 'psys2-phrase-log/3');
-  assert.equal(v3.events.length, 2);
-  assert.equal(v3.records[0].reaction.kind, 'undo');
-  const v2 = JSON.parse(toJSON([rec]));
-  assert.equal(v2.format, 'psys2-phrase-log/2');
-  const recs = parseExport(JSON.stringify(v3)), evs = parseExport(JSON.stringify(v3), { events: true });
+  const v4 = JSON.parse(toJSON([rec], { events }));
+  assert.equal(v4.format, 'psys2-phrase-log/4');
+  assert.equal(v4.diagnostics, undefined, 'diagnostics are off by default');
+  assert.equal(v4.events, undefined);
+  assert.deepEqual(Object.keys(v4.entries[0]), ['n', 'id', 'asked', 'read', 'compiled', 'happened', 'legacy']);
+  assert.deepEqual(v4.entries[0].happened.changes, ['~ data.charts: charts: +1 chart'], 'an entry logged before format 4 keeps what its record says');
+  const full = JSON.parse(toJSON([rec], { events, includeDiagnostics: true }));
+  assert.equal(full.diagnostics.events.length, 2);
+  assert.equal(full.diagnostics.records[0].reaction.kind, 'undo');
+  const recs = parseExport(JSON.stringify(full)), evs = parseExport(JSON.stringify(full), { events: true });
   assert.equal(recs.length, 1); assert.equal(evs.length, 2);
-  assert.equal(parseExport(JSON.stringify(v2), { events: true }).length, 0);
+  assert.equal(parseExport(JSON.stringify(v4), { events: true }).length, 0);
   const tl = timeline(recs, evs);
   assert.deepEqual(tl.map((x) => x.type), ['event', 'turn', 'event']);
   assert.equal(tl[1].otherTab, true, 'the reading used the chart world, the tab on screen was draw');
   assert.equal(normalizeRecord(recs[0]).tabWorld, 'art.draw');
+  const v3 = { format: 'psys2-phrase-log/3', records: [{ ...rec, routing: null }], events };
+  assert.equal(parseExport(JSON.stringify(v3)).length, 1); assert.equal(parseExport(JSON.stringify(v3), { events: true }).length, 2);
 });

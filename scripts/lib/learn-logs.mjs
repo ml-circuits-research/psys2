@@ -15,6 +15,7 @@
 import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { createHash } from 'node:crypto';
+import { exportRecords } from '../../docs/webchat/ui/phrase-log.mjs';
 
 export const SELF_LABEL_RULES = Object.freeze({
   minWorldScore: 0.8,    // every piece: the dispatcher's probability of the chosen world
@@ -31,7 +32,7 @@ const readJsonl = (f) => readFileSync(f, 'utf8').split('\n').filter((l) => l.tri
 function readRecords(f) {
   if (!f.endsWith('.json')) return readJsonl(f);
   const v = JSON.parse(readFileSync(f, 'utf8'));
-  return Array.isArray(v) ? v : Array.isArray(v?.records) ? v.records : [];
+  return exportRecords(v);   // format 4 entries, formats 2/3 records, or a bare array
 }
 
 /** A message that is itself a complaint ("that is wrong"): the old flag `feedback: 'negative'` or `feedback.spoken` (FB). */

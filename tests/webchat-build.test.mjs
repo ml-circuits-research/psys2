@@ -30,12 +30,13 @@ test('webchat build produces a bundle the browser loader can run', async () => {
 
     // load the COPIED library, as the browser does
     const url = (p) => pathToFileURL(path.join(out, p)).href;
-    for (const [world, factory, initialize] of [
-      ['diagram.sketch', 'createDiagramHost', 'initialDiagramState'],
-      ['data.charts', 'createChartHost', 'initialChartState'],
+    // The built Drawing and Diagram areas (the Diagram interface composes the data.charts operations) load with their shared dependencies.
+    for (const [module, factory, initialize] of [
+      ['art.draw/sop-drawing.mjs', 'createDrawingArea', 'emptyDrawingState'],
+      ['diagram.sketch/sop-diagram.mjs', 'createDiagramArea', 'emptyDiagramState'],
     ]) {
-      const adapter = await import(url(`worlds/${world}/declared-host.mjs`));
-      const host = await adapter[factory]({ state: adapter[initialize](), instanceId: 'built:' + world });
+      const adapter = await import(url(`worlds/${module}`));
+      const host = await adapter[factory]({ state: adapter[initialize](), instanceId: 'built:' + module });
       assert.equal(host.observe().complete, true);
       assert.ok(host.bindings().length > 0, 'built native capabilities load with shared dependencies');
     }

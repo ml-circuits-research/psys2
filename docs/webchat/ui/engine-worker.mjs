@@ -98,7 +98,16 @@ const areaForWorld=world=>Object.values(mods?.NATIVE_AREAS??{}).find(area=>area.
 function canonicalStates(state){
  return Object.fromEntries(Object.entries(state??{}).map(([world,value])=>{const area=areaForWorld(world);return [world,value&&area?.canonicalizeState?area.canonicalizeState(value):value];}));
 }
-function canonicalizeSessionStates(){Object.assign(session.isession.state,canonicalStates(session.isession.state));}
+// In place: a turn that awaits (a Z3 placement) holds the area state object it writes to, and a page call answered meanwhile
+// (observe, inspection) canonicalizes; replacing the object would leave the turn's write on an orphan copy.
+function canonicalizeSessionStates(){
+ for(const [world,canonical] of Object.entries(canonicalStates(session.isession.state))){
+  const value=session.isession.state[world];
+  if(canonical===value||!value||typeof value!=='object'){session.isession.state[world]=canonical;continue;}
+  for(const key of Object.keys(value))if(!Object.hasOwn(canonical,key))delete value[key];
+  Object.assign(value,canonical);
+ }
+}
 const coreStateOf=()=>{canonicalizeSessionStates();return session.state();};
 // Projection is a transport boundary. The session and all undo snapshots keep canonical carriers.
 const stateOf=()=>Object.fromEntries(Object.entries(coreStateOf()).map(([world,value])=>{const area=areaForWorld(world);return [world,value&&area?.projectState?area.projectState(value):value];}));
@@ -128,6 +137,12 @@ async function init(m) {
   testHooks = m.testHooks === true;
   settings = { ...(m.settings ?? {}) };
   const imp = (rel) => import(vurl(rel));
+  // Every placement is a placement problem: Z3 (cross-origin isolated pages only) starts loading now, in parallel with the rest of the
+  // start-up and never awaited by it; a placement that comes first shares the same load. z3Status() reports its state.
+  if (globalThis.crossOriginIsolated) imp('lib/dialog/placement-search-provider.mjs').then((x) => {
+    const status = x.warmPlacementSearch({ by: 'startup' });
+    worldActivity(['execution:placement-geometry'], 'stage', 'Load the placement solver', { operation: 'z3.preload', state: status.state, isolated: status.isolated });
+  }).catch(() => {});
   globalThis.__psys2LazyRoEn = true; // prevent eager loading of retired language tables
   const [dialog, loadersMod, soplang, rc, g, tl, lang, wlMod, areaMod] = await Promise.all([
     imp('lib/dialog/index.mjs'), imp('lib/loaders/bundle-loader.mjs'), imp('lib/soplang/index.mjs'),
@@ -181,7 +196,8 @@ async function init(m) {
   evt('boot-step', { id: 'worlds', op: 'end', bytes: bundleBytes, count: startIds.length });
   evt('boot-step', { id: 'reasoner', op: 'start' });
   engine = await dialog.createEngine({ loader: loadersMod.createBundleLoader(bundle), translator, options: { reasoner: 'matrix', applicationAreas: worldLoader.index.retiredAreas ?? [] } });   // the product reasoner (spec 15): the page never selects ops, the test oracle
-  engine.onWorldActivity=({nodeIds,phase,label,...extra})=>worldActivity(nodeIds,phase,label,extra);
+  // A placement event also names the std.problem compiler and, once solved, the provider its result names.
+  engine.onWorldActivity=({nodeIds,phase,label,...extra})=>worldActivity(extra.operation==='std.placement'?[...(nodeIds??[]),'component:problem-compiler',...({internal:['provider:internal-search'],z3:['provider:z3']}[extra.provider]??[])]:nodeIds,phase,label,extra);
   evt('boot-step', { id: 'reasoner', op: 'end' });
   // The knowledge catalog (spec 17): the sop-knowledge-worlds copy on GitHub Pages, read lazily (nothing is fetched until a message needs a thing the board or the
   // lexicons do not have), each file bounded by KNOWLEDGE_FETCH_MS (a slow or offline read counts as unreachable and is asked again after a backoff, see facts.mjs).
@@ -429,7 +445,7 @@ const handlers = {
     progress.stage('Read catalog index for inspection');
     if(!knowledgeReadFiles.has('index.json'))await knowledgeInspectionSource?.text('index.json',{purpose:'inspection',requestId:m.id});
     progress.stage('Load inspection modules');canonicalizeSessionStates();
-    const [{NATIVE_AREAS},{observeNativeInstanceWorlds},{inspectWorldsRuntime}]=await Promise.all([import(vurl('lib/dialog/app-reader-context.mjs')),import(vurl('lib/dialog/instance-persistence.mjs')),import(vurl('lib/dialog/worlds-inspection.mjs'))]);
+    const [{NATIVE_AREAS},{observeNativeInstanceWorlds},{inspectWorldsRuntime},{describePlacementSearch}]=await Promise.all([import(vurl('lib/dialog/app-reader-context.mjs')),import(vurl('lib/dialog/instance-persistence.mjs')),import(vurl('lib/dialog/worlds-inspection.mjs')),import(vurl('lib/dialog/placement-search-inspection.mjs'))]);
     const available=Object.entries(NATIVE_AREAS).filter(([,area])=>loadedIds.has(area.world)&&session.isession.state[area.world]);
     progress.stage('Observe live instance facts');
     const instances=await observeNativeInstanceWorlds(session,{worlds:available.map(([,area])=>area.world),includeHostInterface:true,prepareKnowledge:false});
@@ -438,7 +454,7 @@ const handlers = {
     const {serialize,version,build,SCHEMA_TYPES,STAGES,TURN_STAGES}=await import(vurl('lib/vendor/sopworld/sopworld.mjs'));
     const instanceCaches=Object.entries(session.instanceWorlds??{}).map(([world,cache])=>({world,wireCount:cache.wires?.size??0,wires:serialize([...(cache.wires?.values?.()??[])])}));
     progress.stage('Describe runtime packages');
-    const baseGraph=inspectWorldsRuntime({nativePackages:Object.entries(worldLoader.composition?.profiles??{}).filter(([,profile])=>profile.nativeHost||profile.nativeInitializer).map(([id])=>id),index:worldLoader.index,bundle:worldLoader.bundleOf([...loadedIds],absModule),loaded:[...loadedIds],instances,hosts,knowledgeFiles:[...knowledgeReadFiles].map(([path,text])=>({path,text,purposes:[...(knowledgeReadPurposes.get(path)??[])]})),reader:readerStatus,nativeStates:session.isession.state,instanceCaches,sessionMeta:metaOf(),libraryInfo:{version,build,schemaTypes:[...SCHEMA_TYPES],stages:STAGES,turnStages:TURN_STAGES}});
+    const baseGraph=inspectWorldsRuntime({nativePackages:Object.entries(worldLoader.composition?.profiles??{}).filter(([,profile])=>profile.nativeHost||profile.nativeInitializer).map(([id])=>id),index:worldLoader.index,bundle:worldLoader.bundleOf([...loadedIds],absModule),loaded:[...loadedIds],instances,hosts,knowledgeFiles:[...knowledgeReadFiles].map(([path,text])=>({path,text,purposes:[...(knowledgeReadPurposes.get(path)??[])]})),reader:readerStatus,nativeStates:session.isession.state,instanceCaches,sessionMeta:metaOf(),libraryInfo:{version,build,schemaTypes:[...SCHEMA_TYPES],stages:STAGES,turnStages:TURN_STAGES},placementSearch:describePlacementSearch({activity:activityLog})});
     const {describeWorldsNodes}=await import(vurl('lib/dialog/worlds-node-metadata.mjs'));
     const {inspectExecutionWorlds}=await import(vurl('lib/dialog/execution-world-inspection.mjs'));
     progress.stage('Read execution knowledge and episodes');
@@ -450,7 +466,13 @@ const handlers = {
     const catalogDependencies=executionGraph.nodes.flatMap(node=>(node.details?.catalogModules??[])
       .map(module=>'knowledge-world:'+module).filter(id=>availableNodes.has(id))
       .map(to=>({from:node.id,to,label:'queries declared catalog module'})));
-    return {...baseGraph,centralNodeId:'project:application',areas:projectAreas,nodes:describeWorldsNodes([...baseGraph.nodes,...executionGraph.nodes,...browserGraph.nodes,...projectGraph.nodes]),edges:[...baseGraph.edges,...executionGraph.edges,...browserGraph.edges,...projectGraph.edges,...catalogDependencies,...['new-engine','declared-execution'].map(name=>({from:'component:reasoner',to:'execution:module:'+name,label:'dispatches to'}))],activity:activityLog.slice(),timings:progress.finish()};
+    // Links between the base map and the execution records that show the same content or call the same mechanism.
+    const graphNodes=new Set([...availableNodes,...executionGraph.nodes.map(node=>node.id)]);
+    const crossLinks=[['runtime:session-memory','instance:app.history','history.sop holds the same journal as'],['runtime:session-memory','execution:journal','newEngineJournal is shown as'],
+     ['execution:module:declared-execution','component:problem-compiler','compiles relation placement with'],['component:problem-compiler','execution:placement-policy','reads the placement objective'],
+     ['component:problem-compiler','execution:placement-geometry','reads spatial policies'],['component:problem-compiler','knowledge-world:k.spatial2d','reads relations and geometry of']]
+     .filter(([from,to])=>graphNodes.has(from)&&graphNodes.has(to)).map(([from,to,label])=>({from,to,label}));
+    return {...baseGraph,centralNodeId:'project:application',areas:projectAreas,nodes:describeWorldsNodes([...baseGraph.nodes,...executionGraph.nodes,...browserGraph.nodes,...projectGraph.nodes]),edges:[...baseGraph.edges,...executionGraph.edges,...browserGraph.edges,...projectGraph.edges,...catalogDependencies,...crossLinks,...['new-engine','declared-execution'].map(name=>({from:'component:reasoner',to:'execution:module:'+name,label:'dispatches to'}))],activity:activityLog.slice(),timings:progress.finish()};
     }catch(error){progress.finish(error);throw error;}
   },
   async instanceInspection(m) {
@@ -538,6 +560,16 @@ const handlers = {
     return null;
   },
   async prepare() { await waitForSopReader();return {available:readerStatus.state==='ready',reader:readerStatus}; },
+  // Idle warm-up of the placement solver (Z3, cross-origin isolated pages only): started when no turn runs, answered at once; the load
+  // continues in the background and a placement turn shares it. z3Status() (lib/dialog/placement-search-provider.mjs) reports its state.
+  async warmPlacementSearch() {
+    await turnIdle();
+    const {warmPlacementSearch}=await import(vurl('lib/dialog/placement-search-provider.mjs'));
+    const status=warmPlacementSearch();
+    worldActivity(['execution:placement-geometry'],'stage','Warm up the placement solver',{operation:'z3.preload',state:status.state,isolated:status.isolated});
+    return status;
+  },
+  async placementSearchStatus() { const {z3Status}=await import(vurl('lib/dialog/placement-search-provider.mjs'));return z3Status(); },
   async sample(m) {
     if (samplerRun || foregroundWaiting || turnRunning() || warming) return { items: [], available: true, reason: 'busy' };
     sampleActivityId = m.id;

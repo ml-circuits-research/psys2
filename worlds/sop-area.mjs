@@ -212,6 +212,18 @@ export function projectSopArea(world, state, opts = {}) {
         .map((arg) => Object.fromEntries(['param', 'key', 'value', 'option', 'options', 'view', 'list', 'kind'].filter((k) => arg.attrs[k]).map((k) => [k, k === 'value' ? typedValue(arg.attrs.value[0]) : read(arg, k)]))),
       available: read(control, 'target') !== 'selected' || (selected !== null && !all(control, 'except').includes(selected) && (when === undefined || (when === 'present') === present)) };
   });
+  // What a tab's editor shows of each observed object: its observed inputs (app.observe.input: key -> value, a list
+  // when the key repeats, as the label, colour or members of a group) and the box it occupies on the page
+  // (app.observe.box, in frame units). Numbers stay numbers.
+  const inputs = {}, boxes = {};
+  for (const fact of live.ofType('app.observe.input')) {
+    const id = read(fact, 'id'), key = read(fact, 'key'), raw = fact.attrs.value?.[0];
+    if (id === undefined || key === undefined || raw === undefined) continue;
+    const value = typedValue(raw), entry = (inputs[id] ??= {});
+    entry[key] = Object.hasOwn(entry, key) ? [].concat(entry[key], value) : value;
+  }
+  for (const fact of live.ofType('app.observe.box')) boxes[read(fact, 'id')] = Object.fromEntries(['x0', 'y0', 'x1', 'y1'].map((k) => [k, Number(read(fact, k))]));
+  const page = frameOf(live, frame);
   // The state itself travels with what is derived from it, so a projection canonicalizes back to its state.
-  return { sop: state.sop, runtime: state.runtime ?? { view: {} }, svg: renderPrimitives(live, types, frameOf(live, frame), { ...opts, select }), objects, options, controls, selected };
+  return { sop: state.sop, runtime: state.runtime ?? { view: {} }, svg: renderPrimitives(live, types, page, { ...opts, select }), frame: page, objects, inputs, boxes, options, controls, selected };
 }

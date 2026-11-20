@@ -31,7 +31,8 @@ const parseResult=reply=>{
 const observedBox=(host,id)=>host.observeSpatial().boxes.find(box=>box.entity===id);
 // The object a creation receipt added, read from the receipt's own before/after observations (the SOP area's
 // receipt.changed names the acts it ran, e.g. 'make', not the entities).
-const createdBy=receipt=>receipt.after.objects.map(o=>o.id).find(id=>!receipt.before.objects.some(o=>o.id===id));
+// The object a make created (its drawn parts are observed under it and are not what it made).
+const createdBy=receipt=>receipt.after.objects.filter(o=>!String(o.sourceType).endsWith('.part')).map(o=>o.id).find(id=>!receipt.before.objects.some(o=>o.id===id));
 const makeCall=(host,operation,args)=>invokeToolCommand(host,{operation,args,invocation:crypto.randomUUID(),expectedVersion:host.observe().version});
 
 function sessionFor(view,world,state,read) {

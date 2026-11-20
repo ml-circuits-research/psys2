@@ -8,7 +8,7 @@ import { performGesture } from './fixtures/editor-gesture.mjs';
 import { identityRegistryFor, instanceIdFor } from '../src/dialog/instance-identity.mjs';
 import { createNativeToolHost } from '../worlds/native-tool-host.mjs';
 import { createDrawingArea, emptyDrawingState } from '../worlds/art.draw/sop-drawing.mjs';
-import { createDiagramHost, initialDiagramState } from '../worlds/diagram.sketch/declared-host.mjs';
+import { createDiagramArea, emptyDiagramState } from '../worlds/diagram.sketch/sop-diagram.mjs';
 import { observePlacementCorrection, placementProfileSop, placementProfileSnapshot, readPlacementProfile, rememberPlacement, restorePlacementProfile, withdrawPlacementCorrection } from '../worlds/app.project/spatial-profile.mjs';
 
 const root = new URL('../docs/webchat/', import.meta.url);
@@ -46,7 +46,8 @@ function setup() {
 
 // The object a creation receipt added, read from the receipt's own before/after observations (the SOP area's
 // receipt.changed names the acts it ran, e.g. 'make', not the entities).
-const createdBy = receipt => receipt.after.objects.map(o=>o.id).find(id=>!receipt.before.objects.some(o=>o.id===id));
+// The object a make created (its drawn parts are observed under it and are not what it made).
+const createdBy = receipt => receipt.after.objects.filter(o=>!String(o.sourceType).endsWith('.part')).map(o=>o.id).find(id=>!receipt.before.objects.some(o=>o.id===id));
 
 const command = (act,clearance) =>
   '@spacing app.spatial-profile.'+act+' relation=near metric=near_distance'+(clearance===undefined?'':' clearance='+clearance);
@@ -66,7 +67,7 @@ test('exact SOP preference changes actual compiled placement and undo is scoped 
   assert.equal((await set(command('set',34)+'\n@bad core.type of=unknown')).ok,false);
   assert.equal((await set(command('set',34))).clearance,34);
 
-  const diagram = await createDiagramHost({state:initialDiagramState(),instanceId:instanceIdFor(session,'diagram.sketch')});
+  const diagram = await createDiagramArea({state:emptyDiagramState(),instanceId:instanceIdFor(session,'diagram.sketch')});
   assert.equal(placementProfileSop(session,diagram.observeSpatial(),command('inspect')).clearance,null);
   assert.equal(placementProfileSop(session,diagram.observeSpatial(),command('set',27)).clearance,27);
   const fish = await run();

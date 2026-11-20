@@ -24,7 +24,7 @@ export function readToolInvocation(context) {
  });
 }
 
-export function createNativeToolHost({state,instanceId,scope,operations,toolInterface,handlers,view,spatial=null,measure=null,identityRegistry=new Map(),validate=null,maxObjects=10000,maxBytes=4000000}={}) {
+export function createNativeToolHost({state,instanceId,scope,operations,toolInterface,handlers,view,spatial=null,measure=null,placement=null,identityRegistry=new Map(),validate=null,maxObjects=10000,maxBytes=4000000}={}) {
  if(measure!==null&&typeof measure!=='function')throw new TypeError('invalid-spatial-measurement');
  if(spatial!==null&&typeof spatial!=='function')throw new TypeError('invalid-spatial-observer');
  if(validate!==null&&typeof validate!=='function')throw new TypeError('invalid-policy-validator');
@@ -102,6 +102,12 @@ export function createNativeToolHost({state,instanceId,scope,operations,toolInte
   ...(measure?{measureSpatial(sop){
    const {operation,args}=readNativeIntent(sop,{operations:declared});
    return measure(operation,args);
+  }}:{}),
+  ...(placement?{placementProblem(sop){
+   try{
+    const {operation,args}=readNativeIntent(sop,{operations:declared});
+    const problem=placement(copy(state),operation,args);return problem?copy(problem):null;
+   }catch(error){if(error?.name==='BudgetExceeded'||error?.name==='TurnAborted')throw error;return null;}
   }}:{}),
   ...(spatial?{observeSpatial,spatialRevision:()=>readSpatialRevision(snapshot())}:{})});
 }

@@ -2,16 +2,28 @@
 // std.ground policy. This module only gathers evidence: the knowledge relations the
 // policy says to follow (read from catalog facts that name each term) and the
 // candidates' own measurements. Admission, costs and ranking belong to the policy.
-import {parse,quote,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=5221d62911';
+import {parse,quote,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=4a094fcca4';
 import {budget} from './budget.mjs?v=00bce6e369';
+import {lemmaCandidates} from '../knowledge/facts.mjs?v=2787597521';
 
 const LOOKUPS=48,EDGES=2048;
 const atom=/^[A-Za-z_][A-Za-z0-9_.-]*$/;
 
+const policyRow=(world,name)=>world.ofType('std.ground.policy').find(fact=>str(fact.attrs.name?.[0])===name);
+// A followed relation is named as the catalog states it. A wire that qualifies its relation by a
+// declared dimension (k.kinds.parent: kind, part_of, use, material…) states it as relation.dimension,
+// so a policy admits exactly the dimensions it names: "is_a.kind" follows kind parents and never a
+// part ("eyes" is_a cat, dimension part_of) or a use as kind evidence. An unqualified name follows
+// only wires that state no dimension. "lemma" is the step from an inflected word to a lemma the
+// catalog vocabulary knows ("dogs" to "dog").
 function policyOf(world,name){
- const [row]=world.ofType('std.ground.policy').filter(fact=>str(fact.attrs.name?.[0])===name);
+ const row=policyRow(world,name);
  if(!row)throw Error('missing-ground-policy');
- return {follow:new Set((row.attrs.follow??[]).map(str)),maxSteps:Number(str(row.attrs.maxSteps?.[0]??'0'))};
+ const follow=new Set((row.attrs.follow??[]).map(str));
+ return {follow,maxSteps:Number(str(row.attrs.maxSteps?.[0]??'0')),relations:[...follow].map(relation=>{
+  const cut=relation.indexOf('.');
+  return cut<0?{relation,base:relation,dimension:null}:{relation,base:relation.slice(0,cut),dimension:relation.slice(cut+1)};
+ })};
 }
 
 // Relations named by the policy, starting from the mention, bounded by its step limit.
@@ -27,13 +39,22 @@ async function knowledgeEdges(knowledge,mention,policy){
    budget.tick('grounding.knowledge');
    let thing=null;
    try{thing=await knowledge.thing(term);}catch{/* An unreadable term contributes no relation. */}
+   const add=(relation,value)=>{
+    const to=String(value).toLowerCase();
+    if(!to||to===term||to.length>64||edges.size>=EDGES)return;
+    edges.set(term+'\u0000'+relation+'\u0000'+to,{from:term,to,relation});
+    if(!seen.has(to)){seen.add(to);next.push(to);}
+   };
+   if(policy.follow.has('lemma')&&typeof knowledge.knowsWord==='function')
+    for(const lemma of lemmaCandidates(term).slice(1))if(knowledge.knowsWord(lemma)===true)add('lemma',lemma);
    for(const wire of thing?.wires??[]){
     if(!(wire.f?.name??[]).some(name=>String(name).toLowerCase()===term))continue;
-    for(const relation of policy.follow)for(const value of wire.f[relation]??[]){
-     const to=String(value).toLowerCase();
-     if(!to||to.length>64||edges.size>=EDGES)continue;
-     edges.set(term+'\u0000'+relation+'\u0000'+to,{from:term,to,relation});
-     if(!seen.has(to)){seen.add(to);next.push(to);}
+    const dimensions=wire.f.dimension??[];
+    if(dimensions.length>1)continue;
+    const dimension=dimensions.length?String(dimensions[0]):null;
+    for(const {relation,base,dimension:admitted} of policy.relations){
+     if(base==='lemma'||admitted!==dimension)continue;
+     for(const value of wire.f[base]??[])add(relation,value);
     }
    }
   }
@@ -66,10 +87,15 @@ function groundBatch(world,policy,term,candidates,indices,edgeRows){
  return {input,sop,output:parse(sop)};
 }
 
-export async function groundMention(world,policy,mention,candidates,knowledge){
- if(typeof policy!=='string'||!atom.test(policy))throw Error('invalid-ground-policy');
+// Spelling repair is evidence only for a mention the catalog vocabulary does not know: a known
+// word ("ground", "eyes") is never repaired into another word ("round"). A policy P states this
+// by declaring its companion P.word (the same policy without spelling) for known mentions.
+export async function groundMention(world,requested,mention,candidates,knowledge){
+ if(typeof requested!=='string'||!atom.test(requested))throw Error('invalid-ground-policy');
  const term=String(mention??'').normalize('NFC').toLowerCase();
- const edges=await knowledgeEdges(knowledge,term,policyOf(world,policy));
+ const edges=await knowledgeEdges(knowledge,term,policyOf(world,requested));
+ const known=typeof knowledge?.knowsWord==='function'&&knowledge.knowsWord(term)===true;
+ const policy=known&&policyRow(world,requested+'.word')?requested+'.word':requested;
  const edgeRows=edges.map((edge,index)=>({id:'ground.in.edge.'+index,type:'std.ground.edge',
   attrs:{from:[quote(edge.from)],to:[quote(edge.to)],relation:[edge.relation]}}));
  const index=token=>Number(String(token).split('.').pop());
@@ -92,5 +118,5 @@ export async function groundMention(world,policy,mention,candidates,knowledge){
  }while(next<candidates.length);
  const complete=!!result&&next>=candidates.length;
  const listed=key=>complete?(result.attrs[key]??[]).map(index):[];
- return {input:batch?.input??'',sop:batch?.sop??'',edges,selected:listed('selected')[0],alternatives:listed('alternative'),ties:listed('tie'),evidence};
+ return {input:batch?.input??'',sop:batch?.sop??'',edges,policy,known,selected:listed('selected')[0],alternatives:listed('alternative'),ties:listed('tie'),evidence};
 }

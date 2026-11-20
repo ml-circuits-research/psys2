@@ -48,6 +48,14 @@
 @draw.beside.type core.type of=ui.draw.beside
 @draw.homed.type core.type of=ui.draw.homed
 @draw.far.type core.type of=ui.draw.far
+@draw.partedit.type core.type of=ui.draw.partedit
+@draw.partdx.type core.type of=ui.draw.partdx
+@draw.partdy.type core.type of=ui.draw.partdy
+@draw.partfw.type core.type of=ui.draw.partfw
+@draw.partfh.type core.type of=ui.draw.partfh
+@draw.fitpick.type core.type of=ui.draw.fitpick
+@draw.fitbox.type core.type of=ui.draw.fitbox
+@draw.fitscaled.type core.type of=ui.draw.fitscaled
 
 # The page is laid out as a k.layouts landscape of its own size; objects keep a gap of 10; a contained object takes
 # at most 0.6 of its container's place and goes there only at no less than half its own size; when its own regions
@@ -212,8 +220,16 @@
 @rs.s3 core.calc out=?s4 fn=round args=?s3
 @rs.s4 core.calc out=?s2 fn=mul args=?s4 args=2
 @rs.key core.calc out=?key fn=concat args=smaller- args=?st args=- args=?rk
-@rs.out ui.draw.region key=?key tier=?nt order=?t host=?host x0=?x0 y0=?y0 x1=?x1 y1=?fy1 size=?s2
-@region.smaller core.rule when=$rs.r when=$rs.page if=$rs.low with=$rs.tier with=$rs.s with=$rs.s2 with=$rs.s3 with=$rs.s4 with=$rs.dh with=$rs.fh with=$rs.y1 with=$rs.key then=$rs.out
+@rs.out ui.draw.region key=?key tier=?nt order=?t host=?host x0=?x0 y0=?y0 x1=?x1 y1=?fy1 size=?s2 far=1
+@region.smaller core.rule when=$rs.r when=$rs.page if=$rs.low if=$rs.free with=$rs.tier with=$rs.s with=$rs.s2 with=$rs.s3 with=$rs.s4 with=$rs.dh with=$rs.fh with=$rs.y1 with=$rs.key then=$rs.out
+# A thing a container holds stays in it, drawn smaller (farther away), before it goes to a band of the page: the
+# smaller variants of a container's region come right after that region.
+@rs.free core.check fn=gt args=?t args=1
+@rs.held core.check fn=eq args=?t args=1
+@rs.tenth core.calc out=?tn fn=div args=?st args=10
+@rs.tier.held core.calc out=?ht fn=add args=1 args=?tn
+@rs.out.held ui.draw.region key=?key tier=?ht order=?t host=?host x0=?x0 y0=?y0 x1=?x1 y1=?fy1 size=?s2 far=1
+@region.smaller.held core.rule when=$rs.r when=$rs.page if=$rs.held with=$rs.tenth with=$rs.tier.held with=$rs.s with=$rs.s2 with=$rs.s3 with=$rs.s4 with=$rs.dh with=$rs.fh with=$rs.y1 with=$rs.key then=$rs.out.held
 # A kind with a region of its own stays there (overlapping the fewest objects when it is full); the page is for the
 # kinds with none.
 @hm.out ui.draw.homed kind=?k
@@ -223,6 +239,25 @@
 @rw.page ui.draw.page w=?pw h=?ph
 @rw.out ui.draw.region key=page tier=7 order=0 host=none x0=0 y0=0 x1=?pw y1=?ph size=?s
 @region.page core.rule when=$rh.auto not=$rw.homed when=$rw.page when=$rh.s then=$rw.out
+
+# The placement problem (std.problem) the application solves, with Z3 where the page can run it and the library's
+# internal search otherwise: the regions of step 2 are its candidates, in their order (tier, then order), each with
+# the size the object has there. In a region the object's centre stays inside it when the object fits there (else at
+# its middle) and the object stays on the page; it keeps the gap from every object except its container (soft, at
+# peerWeight each, more than any distance to the centre costs: an overlap only when no region has room) and is as near the centre of the region as it can be
+# (soft, centreWeight per unit of distance on each axis; vertically at fy, 0 the top and 100 the bottom) with its centre not within stackDistance of an object's centre
+# (soft, stackWeight); the first region with no overlap wins, else the one with
+# the fewest. Steps 3 and 4 below are the same choice by a grid of spots, for a command run without the application.
+@draw.place.region.type core.type of=app.place.region
+@draw.place.objective.type core.type of=app.place.objective
+@draw.place.objective app.place.objective gap=10 peerWeight=10000 centreWeight=1 stackDistance=20 stackWeight=2000 grid=10
+@plr.r ui.draw.region key=?rk tier=?t order=?o host=?host x0=?x0 y0=?y0 x1=?x1 y1=?y1 size=?s
+@plr.far ui.draw.region key=?rk far=1
+@plr.out app.place.region key=?rk tier=?t order=?o host=?host x0=?x0 y0=?y0 x1=?x1 y1=?y1 size=?s fy=50
+@place.region core.rule when=$plr.r not=$plr.far then=$plr.out
+# A smaller (farther) object is pulled to the top of its region rather than its middle: farther is higher.
+@plr.out.far app.place.region key=?rk tier=?t order=?o host=?host x0=?x0 y0=?y0 x1=?x1 y1=?y1 size=?s fy=0
+@place.region.far core.rule when=$plr.r when=$plr.far then=$plr.out.far
 
 # 3. The spots of each region: inside it when the object fits there, on the page always.
 @cd.r ui.draw.region key=?rk tier=?t order=?o host=?host x0=?x0 y0=?y0 x1=?x1 y1=?y1 size=?s
@@ -375,6 +410,13 @@
 @make core.rule when=$make.req when=$make.t when=$next.n with=$next.z with=$next.code then=$make.call
 @cat.known k.objects.object name=?kind
 @make.catalog core.rule when=$cat.req when=$cat.known when=$make.t when=$next.n with=$next.z with=$next.code then=$make.call
+# The object just made is the selected one (an editor shows it; "it" can name it).
+@made.select.view app.act.view key=selected value=?code
+@made.unpart.view app.act.view key=part
+@make.select core.rule when=$make.req when=$make.t when=$next.n with=$next.z with=$next.code then=$made.select.view
+@make.catalog.select core.rule when=$cat.req when=$cat.known when=$make.t when=$next.n with=$next.z with=$next.code then=$made.select.view
+@make.unpart core.rule when=$make.req then=$made.unpart.view
+@make.catalog.unpart core.rule when=$cat.req when=$cat.known then=$made.unpart.view
 # A drawing made from the catalog is named after it, the name the command asked for.
 @cat.name.arg app.act.arg call=new.object attr=name value=?kind
 @make.catalog.name core.rule when=$cat.req when=$cat.known then=$cat.name.arg
@@ -449,6 +491,8 @@
 @group.req app.act.request operation="drawing.object.group"
 @group.call app.act.call act=make kind=w.drawing.group code=?code order=1 ref=new.group
 @group core.rule when=$group.req when=$next.n with=$next.z with=$group.code then=$group.call
+@group.sel app.act.view key=selected value=?code
+@group.select core.rule when=$group.req when=$next.n with=$next.z with=$group.code then=$group.sel
 @group.code core.calc out=?code fn=concat args=g args=?nz
 @group.member app.act.arg call=new.group attr=member value=$obj.thing
 @group.members core.rule when=$group.req when=$obj.item when=$obj.thing then=$group.member
@@ -459,6 +503,8 @@
 @ungroup.thing w.drawing.group code=?id
 @ungroup.call app.act.call act=remove thing=$ungroup.thing order=1
 @ungroup core.rule when=$ungroup.req when=$ungroup.thing then=$ungroup.call
+@ungroup.unselect.view app.act.view key=selected
+@ungroup.unselect core.rule when=$ungroup.req when=$ungroup.thing then=$ungroup.unselect.view
 
 # Edits of one part: recolour or resize (a new edit, or a change of the existing one), remove.
 @part.obj w.drawing.object code=?id
@@ -467,28 +513,174 @@
 @part.colour.req app.act.request operation="drawing.part.change" id=?id index=?i color=?v
 @part.colour.new app.act.call act=make kind=w.drawing.part object=$part.obj index=?i colour=?v order=1
 @part.colour.chg app.act.call act=change thing=$part.edit attr=colour value=?v order=1
-@part.colour.make core.rule when=$part.colour.req when=$part.obj not=$part.any then=$part.colour.new
+@part.colour.geo ui.draw.partedit object=?id index=?i
+@part.colour.make core.rule when=$part.colour.req when=$part.obj not=$part.any not=$part.colour.geo then=$part.colour.new
+@part.colour.arg app.act.arg call=new.part attr=colour value=?v
+@part.colour.with.geometry core.rule when=$part.colour.req when=$part.obj not=$part.any when=$part.colour.geo then=$part.colour.arg
 @part.colour.change core.rule when=$part.colour.req when=$part.obj when=$part.edit then=$part.colour.chg
-@part.size.req app.act.request operation="drawing.part.change" width=?w
-@part.size.no app.act.refuse reason=part-size-not-declared
-@part.size core.rule when=$part.size.req then=$part.size.no
-@part.height.req app.act.request operation="drawing.part.change" height=?h
-@part.height.no app.act.refuse reason=part-size-not-declared
-@part.height core.rule when=$part.height.req then=$part.height.no
 @part.rm.req app.act.request operation="drawing.part.remove" id=?id index=?i
 @part.rm.new app.act.call act=make kind=w.drawing.part object=$part.obj index=?i removed=true order=1
 @part.rm.chg app.act.call act=change thing=$part.edit attr=removed value=true order=1
 @part.remove.make core.rule when=$part.rm.req when=$part.obj not=$part.any then=$part.rm.new
 @part.remove.change core.rule when=$part.rm.req when=$part.obj when=$part.edit then=$part.rm.chg
-@part.place.req app.act.request operation="drawing.part.place"
-@part.place.no app.act.refuse reason=part-move-not-declared
-@part.place core.rule when=$part.place.req then=$part.place.no
-@part.extract.req app.act.request operation="drawing.part.extract"
-@part.extract.no app.act.refuse reason=part-extract-not-declared
-@part.extract core.rule when=$part.extract.req then=$part.extract.no
-@fit.req app.act.request operation="drawing.objects.transform"
-@fit.no app.act.refuse reason=fit-box-not-declared
-@fit core.rule when=$fit.req then=$fit.no
+
+# Geometry edits of one part (render-projection.sop, ui.draw.partgeo): drawing.part.place moves its centre to x, y and
+# drawing.part.change resizes it to width, height, both in page units, about its centre. The edit keeps the move (dx,
+# dy) and the size (width, height) in the drawing's 0..100 frame; what the command does not give stays as it is.
+@pgr.place app.act.request operation="drawing.part.place" id=?id index=?i
+@pgr.width app.act.request operation="drawing.part.change" id=?id index=?i width=?w
+@pgr.height app.act.request operation="drawing.part.change" id=?id index=?i height=?h
+@pgr.edit.o ui.draw.partedit object=?id index=?i
+@part.geometry.place core.rule when=$pgr.place then=$pgr.edit.o
+@part.geometry.width core.rule when=$pgr.width then=$pgr.edit.o
+@part.geometry.height core.rule when=$pgr.height then=$pgr.edit.o
+@pgt.e ui.draw.partedit object=?id index=?i
+@pgt.g ui.draw.partgeo object=?id index=?i cx=?cx cy=?cy ex=?ex ey=?ey fw=?fw fh=?fh
+@pgt.o w.drawing.object code=?id x=?ox y=?oy
+@pgt.ext ui.draw.extent object=?id w=?ow h=?oh
+@pgt.sx core.calc out=?sx fn=div args=?ow args=100
+@pgt.sy core.calc out=?sy fn=div args=?oh args=100
+@pgt.x app.act.request operation="drawing.part.place" x=?nx
+@pgt.ux core.calc out=?ux fn=sub args=?nx args=?ox
+@pgt.fx core.calc out=?fx fn=div args=?ux args=?sx
+@pgt.gx core.calc out=?gx fn=add args=?fx args=50
+@pgt.dx core.calc out=?dx fn=sub args=?gx args=?cx
+@pgt.kdx core.calc out=?dx fn=sub args=?ex args=?cx
+@pgt.dx.o ui.draw.partdx object=?id index=?i dx=?dx
+@part.dx.given core.rule when=$pgt.e when=$pgt.g when=$pgt.o when=$pgt.ext when=$pgt.x with=$pgt.sx with=$pgt.ux with=$pgt.fx with=$pgt.gx with=$pgt.dx then=$pgt.dx.o
+@part.dx.kept core.rule when=$pgt.e when=$pgt.g not=$pgt.x with=$pgt.kdx then=$pgt.dx.o
+@pgt.y app.act.request operation="drawing.part.place" y=?ny
+@pgt.uy core.calc out=?uy fn=sub args=?ny args=?oy
+@pgt.fy core.calc out=?fy fn=div args=?uy args=?sy
+@pgt.gy core.calc out=?gy fn=add args=?fy args=50
+@pgt.dy core.calc out=?dy fn=sub args=?gy args=?cy
+@pgt.kdy core.calc out=?dy fn=sub args=?ey args=?cy
+@pgt.dy.o ui.draw.partdy object=?id index=?i dy=?dy
+@part.dy.given core.rule when=$pgt.e when=$pgt.g when=$pgt.o when=$pgt.ext when=$pgt.y with=$pgt.sy with=$pgt.uy with=$pgt.fy with=$pgt.gy with=$pgt.dy then=$pgt.dy.o
+@part.dy.kept core.rule when=$pgt.e when=$pgt.g not=$pgt.y with=$pgt.kdy then=$pgt.dy.o
+@pgt.w app.act.request operation="drawing.part.change" width=?nw
+@pgt.fw core.calc out=?tw fn=div args=?nw args=?sx
+@pgt.fw.o ui.draw.partfw object=?id index=?i fw=?tw
+@pgt.kfw.o ui.draw.partfw object=?id index=?i fw=?fw
+@part.width.given core.rule when=$pgt.e when=$pgt.g when=$pgt.o when=$pgt.ext when=$pgt.w with=$pgt.sx with=$pgt.fw then=$pgt.fw.o
+@part.width.kept core.rule when=$pgt.e when=$pgt.g not=$pgt.w then=$pgt.kfw.o
+@pgt.h app.act.request operation="drawing.part.change" height=?nh
+@pgt.fh core.calc out=?th fn=div args=?nh args=?sy
+@pgt.fh.o ui.draw.partfh object=?id index=?i fh=?th
+@pgt.kfh.o ui.draw.partfh object=?id index=?i fh=?fh
+@part.height.given core.rule when=$pgt.e when=$pgt.g when=$pgt.o when=$pgt.ext when=$pgt.h with=$pgt.sy with=$pgt.fh then=$pgt.fh.o
+@part.height.kept core.rule when=$pgt.e when=$pgt.g not=$pgt.h then=$pgt.kfh.o
+@pgs.dx ui.draw.partdx object=?id index=?i dx=?dx
+@pgs.dy ui.draw.partdy object=?id index=?i dy=?dy
+@pgs.fw ui.draw.partfw object=?id index=?i fw=?fw
+@pgs.fh ui.draw.partfh object=?id index=?i fh=?fh
+@pgs.obj w.drawing.object code=?id
+@pgs.edit w.drawing.part object=$pgs.obj index=?i
+@pgs.make app.act.call act=make kind=w.drawing.part object=$pgs.obj index=?i dx=?dx dy=?dy width=?fw height=?fh order=1 ref=new.part
+@part.geometry.make core.rule when=$pgs.dx when=$pgs.dy when=$pgs.fw when=$pgs.fh when=$pgs.obj not=$pgs.edit then=$pgs.make
+@pgs.cdx app.act.call act=change thing=$pgs.edit attr=dx value=?dx order=1
+@pgs.cdy app.act.call act=change thing=$pgs.edit attr=dy value=?dy order=2
+@pgs.cfw app.act.call act=change thing=$pgs.edit attr=width value=?fw order=3
+@pgs.cfh app.act.call act=change thing=$pgs.edit attr=height value=?fh order=4
+@part.geometry.dx core.rule when=$pgs.dx when=$pgs.obj when=$pgs.edit then=$pgs.cdx
+@part.geometry.dy core.rule when=$pgs.dy when=$pgs.obj when=$pgs.edit then=$pgs.cdy
+@part.geometry.fw core.rule when=$pgs.fw when=$pgs.obj when=$pgs.edit then=$pgs.cfw
+@part.geometry.fh core.rule when=$pgs.fh when=$pgs.obj when=$pgs.edit then=$pgs.cfh
+
+# Extract a part: a new object of the basic shape the part is drawn as (a box shape: rectangle, square, circle, oval,
+# triangle), where the part is drawn, as big and in the colour it is drawn; the part leaves its object. A part drawn
+# through points (a polygon, a line) has no basic shape to become and is refused.
+@px.req app.act.request operation="drawing.part.extract" id=?id index=?i
+@px.o w.drawing.object code=?id x=?ox y=?oy
+@px.kp k.objects.part shape=?shape
+@px.g ui.draw.partgeo object=?id source=$px.kp index=?i ex=?ex ey=?ey fw=?fw fh=?fh
+@px.basic ui.draw.shape drawing=?shape shape=?shape
+@px.pt k.objects.point part=$px.kp
+@px.ext ui.draw.extent object=?id w=?ow h=?oh
+@px.fill ui.draw.fill source=$px.kp part=?id fill=?rgb
+@px.sx core.calc out=?sx fn=div args=?ow args=100
+@px.sy core.calc out=?sy fn=div args=?oh args=100
+@px.ux core.calc out=?ux fn=sub args=?ex args=50
+@px.uy core.calc out=?uy fn=sub args=?ey args=50
+@px.vx core.calc out=?vx fn=mul args=?ux args=?sx
+@px.vy core.calc out=?vy fn=mul args=?uy args=?sy
+@px.nx core.calc out=?nx fn=add args=?ox args=?vx
+@px.ny core.calc out=?ny fn=add args=?oy args=?vy
+@px.nw core.calc out=?nw fn=mul args=?fw args=?sx
+@px.nh core.calc out=?nh fn=mul args=?fh args=?sy
+@px.ns core.calc out=?ns fn=max args=?nw args=?nh
+@px.make app.act.call act=make kind=w.drawing.object code=?code drawing=?shape x=?nx y=?ny size=?ns width=?nw height=?nh colour=?rgb z=?nz order=1 ref=new.object
+@part.extract core.rule when=$px.req when=$px.o when=$px.kp when=$px.g when=$px.basic not=$px.pt when=$px.ext when=$px.fill when=$next.n with=$px.sx with=$px.sy with=$px.ux with=$px.uy with=$px.vx with=$px.vy with=$px.nx with=$px.ny with=$px.nw with=$px.nh with=$px.ns with=$next.z with=$next.code then=$px.make
+@px.edit w.drawing.part object=$px.o index=?i
+@px.rm.new app.act.call act=make kind=w.drawing.part object=$px.o index=?i removed=true order=2
+@px.rm.chg app.act.call act=change thing=$px.edit attr=removed value=true order=2
+@part.extract.leave.make core.rule when=$px.req when=$px.o when=$px.kp when=$px.g when=$px.basic not=$px.pt not=$px.edit then=$px.rm.new
+@part.extract.leave.change core.rule when=$px.req when=$px.o when=$px.kp when=$px.g when=$px.basic not=$px.pt when=$px.edit then=$px.rm.chg
+@px.sel app.act.view key=selected value=?code
+@px.unpart app.act.view key=part
+@part.extract.select core.rule when=$px.req when=$px.o when=$px.kp when=$px.g when=$px.basic not=$px.pt when=$next.n with=$next.z with=$next.code then=$px.sel
+@part.extract.unselect.part core.rule when=$px.req when=$px.o when=$px.kp when=$px.g when=$px.basic not=$px.pt then=$px.unpart
+@px.points.no app.act.refuse reason=part-extract-shape-not-declared
+@part.extract.points core.rule when=$px.req when=$px.o when=$px.kp when=$px.g when=$px.pt then=$px.points.no
+@px.shape.no app.act.refuse reason=part-extract-shape-not-declared
+@part.extract.shape core.rule when=$px.req when=$px.o when=$px.kp when=$px.g not=$px.basic then=$px.shape.no
+
+# Fit the listed objects into a box (x, y: its top left corner; width, height): their joint box (app.observe.box)
+# maps onto it, each object's centre and sides scale with it. A move (the same width and height) changes only x and y.
+@tf.req app.act.request operation="drawing.objects.transform" x=?tx y=?ty width=?tw height=?th
+@tf.item app.act.item param="ids" value=?id
+@tf.box app.observe.box id=?id x0=?x0 y0=?y0 x1=?x1 y1=?y1
+@tf.pick.o ui.draw.fitpick id=?id x0=?x0 y0=?y0 x1=?x1 y1=?y1
+@fit.pick core.rule when=$tf.req when=$tf.item when=$tf.box then=$tf.pick.o
+@tf.p.x0 ui.draw.fitpick x0=?a
+@tf.p.y0 ui.draw.fitpick y0=?a
+@tf.p.x1 ui.draw.fitpick x1=?a
+@tf.p.y1 ui.draw.fitpick y1=?a
+@tf.ux0.o ui.draw.fitbox side=x0 v=?v
+@tf.uy0.o ui.draw.fitbox side=y0 v=?v
+@tf.ux1.o ui.draw.fitbox side=x1 v=?v
+@tf.uy1.o ui.draw.fitbox side=y1 v=?v
+@fit.x0 core.aggregate over=$tf.p.x0 min=?v args=?a then=$tf.ux0.o
+@fit.y0 core.aggregate over=$tf.p.y0 min=?v args=?a then=$tf.uy0.o
+@fit.x1 core.aggregate over=$tf.p.x1 max=?v args=?a then=$tf.ux1.o
+@fit.y1 core.aggregate over=$tf.p.y1 max=?v args=?a then=$tf.uy1.o
+@tf.bx0 ui.draw.fitbox side=x0 v=?ux0
+@tf.by0 ui.draw.fitbox side=y0 v=?uy0
+@tf.bx1 ui.draw.fitbox side=x1 v=?ux1
+@tf.by1 ui.draw.fitbox side=y1 v=?uy1
+@tf.pk ui.draw.fitpick id=?id
+@tf.o w.drawing.object code=?id x=?ox y=?oy
+@tf.ext ui.draw.extent object=?id w=?ow h=?oh
+@tf.uw core.calc out=?uw fn=sub args=?ux1 args=?ux0
+@tf.uh core.calc out=?uh fn=sub args=?uy1 args=?uy0
+@tf.kx core.calc out=?kx fn=div args=?tw args=?uw
+@tf.ky core.calc out=?ky fn=div args=?th args=?uh
+@tf.rx core.calc out=?rx fn=sub args=?ox args=?ux0
+@tf.ry core.calc out=?ry fn=sub args=?oy args=?uy0
+@tf.sx core.calc out=?sx fn=mul args=?rx args=?kx
+@tf.sy core.calc out=?sy fn=mul args=?ry args=?ky
+@tf.nx core.calc out=?nx fn=add args=?tx args=?sx
+@tf.ny core.calc out=?ny fn=add args=?ty args=?sy
+@tf.nw core.calc out=?nw fn=mul args=?ow args=?kx
+@tf.nh core.calc out=?nh fn=mul args=?oh args=?ky
+@tf.ns core.calc out=?ns fn=max args=?nw args=?nh
+@tf.thing w.drawing.object code=?id
+@tf.cx app.act.call act=change thing=$tf.thing attr=x value=?nx order=1
+@tf.cy app.act.call act=change thing=$tf.thing attr=y value=?ny order=2
+@fit.move.x core.rule when=$tf.req when=$tf.bx0 when=$tf.by0 when=$tf.bx1 when=$tf.by1 when=$tf.pk when=$tf.o when=$tf.thing with=$tf.uw with=$tf.kx with=$tf.rx with=$tf.sx with=$tf.nx then=$tf.cx
+@fit.move.y core.rule when=$tf.req when=$tf.bx0 when=$tf.by0 when=$tf.bx1 when=$tf.by1 when=$tf.pk when=$tf.o when=$tf.thing with=$tf.uh with=$tf.ky with=$tf.ry with=$tf.sy with=$tf.ny then=$tf.cy
+@tf.wide core.check fn=neq args=?tw args=?uw
+@tf.tall core.check fn=neq args=?th args=?uh
+@tf.scaled.o ui.draw.fitscaled request=yes
+@fit.scaled.w core.rule when=$tf.req when=$tf.bx0 when=$tf.bx1 with=$tf.uw if=$tf.wide then=$tf.scaled.o
+@fit.scaled.h core.rule when=$tf.req when=$tf.by0 when=$tf.by1 with=$tf.uh if=$tf.tall then=$tf.scaled.o
+@tf.scaled ui.draw.fitscaled request=yes
+@tf.cw app.act.call act=change thing=$tf.thing attr=width value=?nw order=3
+@tf.ch app.act.call act=change thing=$tf.thing attr=height value=?nh order=4
+@tf.cs app.act.call act=change thing=$tf.thing attr=size value=?ns order=5
+@fit.width core.rule when=$tf.req when=$tf.scaled when=$tf.bx0 when=$tf.by0 when=$tf.bx1 when=$tf.by1 when=$tf.pk when=$tf.o when=$tf.ext when=$tf.thing with=$tf.uw with=$tf.kx with=$tf.nw then=$tf.cw
+@fit.height core.rule when=$tf.req when=$tf.scaled when=$tf.bx0 when=$tf.by0 when=$tf.bx1 when=$tf.by1 when=$tf.pk when=$tf.o when=$tf.ext when=$tf.thing with=$tf.uh with=$tf.ky with=$tf.nh then=$tf.ch
+@fit.size core.rule when=$tf.req when=$tf.scaled when=$tf.bx0 when=$tf.by0 when=$tf.bx1 when=$tf.by1 when=$tf.pk when=$tf.o when=$tf.ext when=$tf.thing with=$tf.uw with=$tf.uh with=$tf.kx with=$tf.ky with=$tf.nw with=$tf.nh with=$tf.ns then=$tf.cs
 
 # View keys.
 @sel.req app.act.request operation="drawing.object.select" id=?id
@@ -503,6 +695,11 @@
 @psel.req app.act.request operation="drawing.part.select" id=?id index=?i
 @psel.view app.act.view key=part value=?i
 @part.select core.rule when=$psel.req then=$psel.view
+@psel.object app.act.view key=selected value=?id
+@part.select.object core.rule when=$psel.req then=$psel.object
+@unpart.view app.act.view key=part
+@sel.unpart core.rule when=$sel.none.req then=$unpart.view
+@sels.unpart core.rule when=$sels.req then=$unpart.view
 
 # What a reader observes, and the geometry placement needs.
 @ob.o w.drawing.object code=?id drawing=?k x=?x y=?y size=?s
@@ -602,3 +799,36 @@
 @obc.pid core.calc out=?pid fn=concat args=?id args="." args=?i
 @obc.out app.observe.input id=?pid key=color value=?f
 @draw.observe.part.colour core.rule when=$obc.kp when=$obc.ix when=$obc.fill with=$obc.pid then=$obc.out
+
+# Where each drawn part is on the page (its centre, width and height in page units), and the colour an object's
+# colour value paints (its RGB), for an editor; the colour names k.colours knows are the colour options.
+@opg.o w.drawing.object code=?id x=?x y=?y
+@opg.g ui.draw.partgeo object=?id index=?i ex=?ex ey=?ey fw=?fw fh=?fh
+@opg.removed w.drawing.part object=$opg.o index=?i removed=true
+@opg.ext ui.draw.extent object=?id w=?ow h=?oh
+@opg.sx core.calc out=?sx fn=div args=?ow args=100
+@opg.sy core.calc out=?sy fn=div args=?oh args=100
+@opg.ux core.calc out=?ux fn=sub args=?ex args=50
+@opg.uy core.calc out=?uy fn=sub args=?ey args=50
+@opg.vx core.calc out=?vx fn=mul args=?ux args=?sx
+@opg.vy core.calc out=?vy fn=mul args=?uy args=?sy
+@opg.px core.calc out=?px fn=add args=?x args=?vx
+@opg.py core.calc out=?py fn=add args=?y args=?vy
+@opg.pw core.calc out=?pw fn=mul args=?fw args=?sx
+@opg.ph core.calc out=?ph fn=mul args=?fh args=?sy
+@opg.pid core.calc out=?pid fn=concat args=?id args="." args=?i
+@opg.x.o app.observe.input id=?pid key=x value=?px
+@opg.y.o app.observe.input id=?pid key=y value=?py
+@opg.w.o app.observe.input id=?pid key=width value=?pw
+@opg.h.o app.observe.input id=?pid key=height value=?ph
+@draw.observe.part.x core.rule when=$opg.o when=$opg.g not=$opg.removed when=$opg.ext with=$opg.sx with=$opg.ux with=$opg.vx with=$opg.px with=$opg.pid then=$opg.x.o
+@draw.observe.part.y core.rule when=$opg.o when=$opg.g not=$opg.removed when=$opg.ext with=$opg.sy with=$opg.uy with=$opg.vy with=$opg.py with=$opg.pid then=$opg.y.o
+@draw.observe.part.width core.rule when=$opg.o when=$opg.g not=$opg.removed when=$opg.ext with=$opg.sx with=$opg.pw with=$opg.pid then=$opg.w.o
+@draw.observe.part.height core.rule when=$opg.o when=$opg.g not=$opg.removed when=$opg.ext with=$opg.sy with=$opg.ph with=$opg.pid then=$opg.h.o
+@obf.o w.drawing.object code=?id colour=?c
+@obf.rgb ui.draw.rgb colour=?c rgb=?rgb
+@obf.out app.observe.input id=?id key=fill value=?rgb
+@draw.observe.fill core.rule when=$obf.o when=$obf.rgb then=$obf.out
+@op.colour k.colours.colour name=?c rgb=?rgb
+@op.colour.o app.observe.option id=colour value=?c
+@draw.option.colour core.rule when=$op.colour then=$op.colour.o

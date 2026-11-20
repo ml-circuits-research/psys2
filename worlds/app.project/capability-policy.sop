@@ -61,6 +61,18 @@
 @colour.value std.capability.value concept=?concept label=?label value=?value
 @colour.install core.rule when=$colour.source when=$colour.row with=$colour.label with=$colour.normal then=$colour.value
 
+# An ordinal concept: each step of its catalog scale (k.values.step) is a value of its own name, and each
+# comparative step (more, less) a relative value the tool resolves against the target's own step.
+@ordinal.source app.execution.ordinal concept=?concept scale=?scale
+@ordinal.row k.values.step scale=?scale name=?name
+@ordinal.label core.calc fn=matches args=?name args="^[\\s\\S]*$" out=?label
+@ordinal.value std.capability.value concept=?concept label=?label value=?label
+@ordinal.install core.rule when=$ordinal.source when=$ordinal.row with=$ordinal.label then=$ordinal.value
+@ordinal.step app.execution.comparative step=?step
+@ordinal.step.label core.calc fn=matches args=?step args="^[\\s\\S]*$" out=?label
+@ordinal.step.value std.capability.value concept=?concept label=?label value=?label
+@ordinal.step.install core.rule when=$ordinal.source when=$ordinal.step with=$ordinal.step.label then=$ordinal.step.value
+
 @observed.rgb app.execution.observedProperty binding=?binding format=rgb
 @observed.raw app.execution.observedField object=?object binding=?binding key=?key value=?raw
 @observed.hex core.calc fn=matches args=?raw args="^#[0-9a-fA-F]{6}$" out=?hex

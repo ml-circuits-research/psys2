@@ -1,14 +1,14 @@
-import {World,parse,quote,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=5221d62911';
-import {groundMention} from './lexical-grounding.mjs?v=19b4df96ee';
-import POLICY from '../../worlds/app.project/creation-policy-source.mjs?v=055ab92c2d';
+import {World,parse,quote,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=4a094fcca4';
+import {groundMention} from './lexical-grounding.mjs?v=54dda8a64b';
+import POLICY from '../../worlds/app.project/creation-policy-source.mjs?v=3e93d5fe4f';
 import SCHEMA from '../../worlds/app.project/creation-schema-source.mjs?v=70feb54316';
-import {executionPolicyWorld} from './execution-policy.mjs?v=99cfae12cb';
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=c12a1b8eb7';
-import {nativeCreationCandidates} from './native-binding-candidates.mjs?v=a1e925e0c7';
+import {executionPolicyWorld} from './execution-policy.mjs?v=e0fcf658a6';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=5fafad74f7';
+import {nativeCreationCandidates} from './native-binding-candidates.mjs?v=90e22dfa4c';
 import {budget} from './budget.mjs?v=00bce6e369';
-import {observeGroundedProjection,projectGroundedRequest} from './grounded-projection.mjs?v=d72b5b2594';
-import {positiveCardinalProof} from './key-reader-value-proof.mjs?v=392a10456c';
-import {compileObservedChoice} from './observed-choice.mjs?v=f384b209af';
+import {observeGroundedProjection,projectGroundedRequest} from './grounded-projection.mjs?v=903308e9c9';
+import {positiveCardinalProof} from './key-reader-value-proof.mjs?v=a031638a2f';
+import {compileObservedChoice} from './observed-choice.mjs?v=d7587c7617';
 
 const field=(fact,key)=>str(fact.attrs[key]?.[0]);
 let loaded;
@@ -53,7 +53,7 @@ async function groundConstructors({world},choices,lexical,readType,knowledge){
   const choice=candidates[index],canonical=choice.mapping.canonical,evidence=decision.evidence.get(index);
   if(used.has(canonical))continue;
   used.add(canonical);
-  const ranked={...choice,distance:evidence.cost,why:evidence.route+(evidence.path.length?' '+evidence.path.join(' '):'')+' '+evidence.cost};
+  const ranked={...choice,distance:evidence.cost,route:evidence.route,path:evidence.path,why:evidence.route+(evidence.path.length?' '+evidence.path.join(' '):'')+' '+evidence.cost};
   options.push(ranked);
   if(ties.has(index))equivalent.push(ranked);
   if(options.length===retainedLimit)break;
@@ -61,14 +61,19 @@ async function groundConstructors({world},choices,lexical,readType,knowledge){
  return {options,equivalent,trace:{input:decision.input,sop:decision.sop}};
 }
 
+// Without a kind word only the reader family's own constructor can be created ("add a node" in a
+// diagram). A family whose kinds all differ from it (a drawing of any catalog kind) has no default:
+// ranking every kind by criteria that cannot tell two kinds apart would pick the first in catalog
+// order, so nothing is created and the request stays honestly unresolved.
 function rankConstructors({world},choices,readType,family){
  const candidates=[];
  for(const choice of choices){
   budget.tick('creation.rank');
   const mapping=choice.mapping;
-  if(mapping.type!==readType)continue;
-  candidates.push({...choice,distance:0,otherType:false,otherFamily:mapping.canonical!==family});
+  if(mapping.type!==readType||!family||mapping.canonical!==family)continue;
+  candidates.push({...choice,distance:0,otherType:false,otherFamily:false});
  }
+ if(!candidates.length)return {options:[]};
  let options=[],equivalent=[],trace;
  for(let offset=0;offset<candidates.length;offset+=choiceBatchLimit-retainedLimit){
   budget.tick('creation.rank.batch');
@@ -93,6 +98,17 @@ function rankConstructors({world},choices,readType,family){
   }
  }
  return {options,equivalent,trace};
+}
+// The evidence of a non-exact grounding, stated in the reply: the declared relation path the policy
+// followed or the spelling repair it admitted. An inflection step alone needs no explanation.
+const stepPhrase={lemma:'a form of',is_a:'a kind of',kind_of:'a kind of'};
+function groundingReason(mention,choice){
+ if(choice.route==='spelling')return ' (a close spelling)';
+ if(choice.route!=='knowledge'||!choice.path?.length)return '';
+ const steps=choice.path.map(step=>{const cut=step.indexOf(':');return {relation:step.slice(0,cut),to:step.slice(cut+1)};});
+ if(steps.every(step=>step.relation==='lemma'))return null;
+ let from=mention;
+ return ': '+steps.map(({relation,to})=>{const phrase=`${JSON.stringify(from)} is ${stepPhrase[relation.split('.')[0]]??relation} ${JSON.stringify(to)}`;from=to;return phrase;}).join(', ');
 }
 const textToken=value=>typeof value==='string'?quote(value):undefined;
 const spanTokens=range=>range?{start:String(range[0]),end:String(range[1])}:{};
@@ -186,7 +202,14 @@ export async function projectCreateAction(proposal,session,{bindings,registry,vi
  const {name,values,unapplied}=settled;
  const groundedValues=countRange?[...values,{concept:'count',token:String(cardinal.value),range:countRange,witness:'request.target.count'}]:values;
 
- const noteFor=choice=>choice.distance>0?`I took ${JSON.stringify(lexical)} as ${choice.mapping.lemma}.`:!lexical?`I used ${choice.mapping.lemma} as the kind.`:'';
+ const noteFor=choice=>{
+  const others=[...new Set(equivalent.map(other=>other.mapping.lemma))].filter(lemma=>lemma!==choice.mapping.lemma);
+  const ambiguity=others.length?` It could equally be ${others.join(' or ')}; you can correct it or undo.`:'';
+  if(!lexical)return others.length?`I used ${choice.mapping.lemma} as the kind.${ambiguity}`:'';
+  const reason=choice.distance>0?groundingReason(lexical,choice):null;
+  if(reason===null)return ambiguity.trim();
+  return `I took ${JSON.stringify(lexical)} as ${choice.mapping.lemma}${reason}.${ambiguity}`;
+ };
  const candidates=equivalent.flatMap(choice=>{
   if(choice!==options[0]){
    const alternative=resolveRoles(config.world,target,kindRange,conditions,properties,choice.operation);
@@ -199,6 +222,10 @@ export async function projectCreateAction(proposal,session,{bindings,registry,vi
  });
  if(!candidates.length)return null;
  if(!countRange&&(target.count!==undefined&&target.count!==1||target.count_span))unapplied.push('the requested object count');
+ // Every other target mention the reader anchored and the creation did not use is disclosed
+ // ("draw a lake over that background": "background" read as a name with no name to give).
+ for(const [key,value] of Object.entries(r.target))if(key.endsWith('_span')&&!['kind_span','count_span'].includes(key)&&
+  !(key==='name_span'&&r.target.name!==undefined)&&evidence(['target',key],value))unapplied.push(JSON.stringify(value));
  const note=candidates[0].creationNote;
  return {...proposal,candidates,coverage:{complete:true,graphProposal:true,executable:false},failures:[],
   interpretation:{profile:'declared-creation/1',note,projections:candidates.map(candidate=>candidate.projection),unapplied,...(name?{requestedName:name}:{}),alternatives:options.map(choice=>({

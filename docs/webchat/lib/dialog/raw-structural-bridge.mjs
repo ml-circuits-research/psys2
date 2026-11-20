@@ -1,7 +1,7 @@
 // Predicted raw structure -> declared canonical structure. No reader or gold input.
-import {copyHostData,snapshotHostData} from '../../worlds/native-tool-host.mjs?v=fc9d28ffde';
-import {positiveCardinalProof} from './key-reader-value-proof.mjs?v=392a10456c';
-import {decodeModelGraphs} from './model-graph-decoder.mjs?v=bd687c2d33';
+import {copyHostData,snapshotHostData} from '../../worlds/native-tool-host.mjs?v=f2c2d48456';
+import {positiveCardinalProof} from './key-reader-value-proof.mjs?v=a031638a2f';
+import {decodeModelGraphs} from './model-graph-decoder.mjs?v=f3d6603a42';
 export const RAW_STRUCTURAL_FORMAT='psys2.raw-structural-predictions/1';
 // The node budget of a binding table (every kind of the pinned catalog's drawable providers, with their provenance).
 export const BINDING_NODES=250000;
@@ -30,7 +30,7 @@ export function bridgeRawStructure(prediction,{bindings,bindingSha256,comparativ
   shape(raw.source,['text','unit'],['source']);shape(raw.coverage,['complete','truncated'],['coverage']);
   if(raw.format!==RAW_STRUCTURAL_FORMAT||raw.source?.unit!=='unicode-scalar'||typeof raw.source.text!=='string'||typeof raw.area!=='string')fail('invalid-raw-envelope');
   if(table.format!=='sop.structural-bindings/1'||!hash(bindingSha256))fail('invalid-binding-snapshot');
-  if(!Array.isArray(comparatives)||comparatives.length>256||comparatives.some(r=>!r||!['concept','step','declaration'].every(k=>typeof r[k]==='string'&&r[k])||!(Number.isFinite(r.factor)&&r.factor>0)))fail('invalid-comparative-projection');
+  if(!Array.isArray(comparatives)||comparatives.length>256||comparatives.some(r=>!r||!['concept','step','declaration'].every(k=>typeof r[k]==='string'&&r[k])||!(r.ordinal===true?r.factor===undefined:Number.isFinite(r.factor)&&r.factor>0)))fail('invalid-comparative-projection');
   const definite=references?.definite??[];if(!Array.isArray(definite)||definite.length>64||definite.some(d=>typeof d!=='string'||!d||/\s/.test(d)))fail('invalid-reference-projection');
   if(contextTarget!==null&&!(contextTarget&&['kind','declaration'].every(k=>typeof contextTarget[k]==='string'&&contextTarget[k])))fail('invalid-context-target');
   if(table.families!==undefined&&(!Array.isArray(table.families)||table.families.length>256))fail('invalid-family-binding-table');
@@ -132,7 +132,13 @@ export function bridgeRawStructure(prediction,{bindings,bindingSha256,comparativ
     const steps=prop&&condition.operator==='delta'&&typeof condition.step==='string'&&!['measure','measure_span','unit'].some(k=>has(condition,k))
      ?comparatives.filter(r=>{tick();return r.concept===prop.canonical&&r.step===condition.step;}):[];
     const comparative=steps.length===1?steps[0]:null;
-    if(comparative){
+    if(comparative?.ordinal){
+     // On an ordinal concept (an ordered scale of steps) the step itself is the degree value: the tool moves the
+     // target one step along the scale from its own step.
+     Object.assign(c,{operator:'degree',value:{kind:'literal',value:comparative.step}});
+     anchor([...path,'value'],condition.value_span,comparative.declaration,true,['constraints',String(ci),'value_span']);
+     consume(ci,'value',condition.value);
+    }else if(comparative){
      Object.assign(c,{operator:'factor',baseline:'before',anchor:prop.canonical,value:{kind:'literal',value:String(comparative.factor)}});
      for(const key of ['value','anchor'])anchor([...path,key],condition.value_span,comparative.declaration,true,['constraints',String(ci),'value_span']);
      // The model's copy of the comparative word is evidence of the step, not a value: it is checked and consumed.

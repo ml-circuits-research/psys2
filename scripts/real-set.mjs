@@ -42,6 +42,7 @@ import { resolve, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
 import { causeOf } from './lib/failure-cause.mjs';
+import { exportRecords } from '../docs/webchat/ui/phrase-log.mjs';
 import { isRealRow, realDialogueIds } from './lib/real-source.mjs';
 import { buildInfo, freshness } from './lib/measure-build.mjs';
 import { profileSites, formatProfile } from './lib/tick-profile.mjs';
@@ -99,11 +100,11 @@ export function build() {
     have.add(norm(text));
     add({ set: 'real-ro.tsv', session: `real-ro.tsv:${src}`, i: rows.length, tab: tab || 'robot', lang: 'ro', text, class: null, logged: {}, judge: 'outcome', source: src });
   }
-  // owner phrase-log exports (training/eval/owner-exports/*.json, format psys2-phrase-log/3): the typed and spoken turns, appended after everything else so the ids above stay
+  // owner phrase-log exports (training/eval/owner-exports/*.json, format psys2-phrase-log/3 or /4): the typed and spoken turns, appended after everything else so the ids above stay
   const exDir = join(REPO, 'training/eval/owner-exports');
   for (const f of existsSync(exDir) ? readdirSync(exDir).filter((x) => x.endsWith('.json')).sort() : []) {
     const name = `owner-exports/${f.replace(/\.json$/, '')}`;
-    (JSON.parse(readFileSync(join(exDir, f), 'utf8')).records ?? []).filter((r) => r.source !== 'dry-run' && r.text).forEach((r, i) => add({ set: name, session: `${name}@${day(r.time)}`, i, tab: r.tab ?? r.routing?.activeTab ?? 'talk', lang: r.lang ?? 'en', mode: r.mode === 'voice' ? 'voice' : undefined, text: r.text, class: null, logged: { status: r.status ?? null, answer: String(r.detail?.answer ?? r.answer ?? '').slice(0, 200), outcome: loggedClass(r.status) }, time: r.time, judge: 'outcome', source: 'owner-export' }));
+    exportRecords(JSON.parse(readFileSync(join(exDir, f), 'utf8'))).filter((r) => r.source !== 'dry-run' && r.text).forEach((r, i) => add({ set: name, session: `${name}@${day(r.time)}`, i, tab: r.tab ?? r.routing?.activeTab ?? 'talk', lang: r.lang ?? 'en', mode: r.mode === 'voice' ? 'voice' : undefined, text: r.text, class: null, logged: { status: r.status ?? null, answer: String(r.detail?.answer ?? r.answer ?? '').slice(0, 200), outcome: loggedClass(r.status) }, time: r.time, judge: 'outcome', source: 'owner-export' }));
   }
   for (const r of rows) forbidThieves(r);
   writeFileSync(SET, `${rows.map((r) => JSON.stringify(r)).join('\n')}\n`);

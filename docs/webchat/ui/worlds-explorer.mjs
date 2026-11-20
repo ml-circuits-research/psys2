@@ -106,11 +106,20 @@ export function createWorldsExplorer({load,subscribe,copy,loadSources}={}){
  const getNode=id=>actualNode(id);
  const related=node=>data.edges.filter(edge=>edge.from===node.id||edge.to===node.id);
  const matches=node=>!query||[node.id,node.label,node.displayName,node.help?.title,node.kind,node.description,node.implementation].some(value=>String(value??'').toLowerCase().includes(query));
- const isSharedHub=id=>id===data.centralNodeId||['component:library','component:reader','runtime:registry'].includes(id);
+ // Shared hubs are labelled on the map: the library, the reader, the loader and the interpreters every tab uses.
+ const isSharedHub=id=>id===data.centralNodeId||['component:library','component:reader','runtime:registry','component:sop-area','component:sop-world-host','component:problem-compiler','provider:internal-search','provider:z3'].includes(id);
 
+ // What the Session runtime layer holds, from the actual records: native state appears only for worlds without an authoritative SOP state.
+ function sessionRuntimeDescription(){
+  const native=data.nodes.filter(node=>node.id.startsWith('native:')).map(node=>displayName(node)),areas=new Set(declaredAreas().map(area=>area.world));
+  const authoritative=data.nodes.filter(node=>node.kind==='instance'&&areas.has(node.details?.world)&&String(node.implementation??'').startsWith('Authoritative')).map(node=>actualNode('world:'+node.details.world)?.details?.tab?.title??node.details.world);
+  return 'JavaScript records of this session, not SOP Worlds: the world loader registry (which packages are loaded); session memory (conversational references, the global undo/redo journal, retained execution evidence, reader and placement settings); the retained execution journal; the page\'s UI training pairs and chat/event history; native state only for worlds without an authoritative SOP state: '
+   +(native.length?native.join(', '):'none')+'.'+(authoritative.length?' Editor tabs whose state is an authoritative SOP World: '+authoritative.join(', ')+'.':'')+' Records that carry SOP content link to the World that shows it.';
+ }
  function organize(){
   layoutGroups=new Map();memberships=new Map();
   const layerOf=node=>{
+   if(node.id==='runtime:registry')return 'runtime';
    if(isSharedHub(node.id))return 'tools';
    if(['instance','project'].includes(node.kind))return 'instances';
    if(node.kind==='schema')return 'schemas';
@@ -119,10 +128,10 @@ export function createWorldsExplorer({load,subscribe,copy,loadSources}={}){
    return 'tools';
   };
   const definitions=[
-   ['tools','Tools/Interpreters','Tool packages and the runtime components that read, validate or execute their commands'],
+   ['tools','Tools/Interpreters','Tool packages and the components that read, validate or execute their commands: the SOP area interpreter and SOP world host of every tab, the tab tool adapters, the std.problem compiler with its search providers (internal search, Z3), the SOP-BERT reader, request admission and the SOP tool command reader'],
    ['instances','World instances','Operational SOP state and separately identified observations'],
-   ['runtime','Runtime data','Native editor state, properties, history and retained evidence'],
-   ['knowledge','Catalog definitions and sources','Catalog roles follow the source declarations'],
+   ['runtime','Session runtime (JavaScript)',sessionRuntimeDescription()],
+   ['knowledge','Knowledge Worlds','Published knowledge worlds of the catalog, their declared source files and the operational policy worlds; each record says whether its sources were read'],
    ['schemas','Schemas and legends','Types, slots, rules and source declarations'],
   ];
   for(const [id,label,description]of definitions)layoutGroups.set(id,{id,label,description,members:[]});
@@ -159,11 +168,14 @@ export function createWorldsExplorer({load,subscribe,copy,loadSources}={}){
    const central=layer.members.filter(isSharedHub),cells=columns.map(column=>({...column,members:layer.members.filter(id=>!central.includes(id)&&(owners.get(id)??null)===column.world),count:Math.max(1,Math.floor((column.width-26)/gap))}));
    const rows=Math.max(1,...cells.map(cell=>Math.ceil(cell.members.length/cell.count))),top=central.length?58:0,height=Math.max(100,rows*gap+42+top),background=svg('g',{'data-layout-group':layer.id,style:'--world-color:#8eaecf'});
    background.append(svg('rect',{x:0,y,width,height,rx:10,fill:layer.id==='instances'?'#1b2c35':'#1c2838','fill-opacity':'.72',stroke:'#6c86a23f'}));
-   const words=layer.label.split(' '),lines=[''];for(const word of words){if((lines.at(-1)+' '+word).trim().length>20)lines.push(word);else lines[lines.length-1]=(lines.at(-1)+' '+word).trim();}lines.forEach((line,index)=>background.append(svg('text',{x:15,y:y+25+index*19,fill:'#c4d7ef','font-size':15,'font-weight':600},line)));background.append(svg('text',{x:15,y:y+height-15,fill:'#8fa5c0','font-size':11},`${layer.members.length} actual records`),svg('title',{},layer.description+' — UI layout only, not an additional runtime world.'));
+   const words=layer.label.split(' '),lines=[''];for(const word of words){if((lines.at(-1)+' '+word).trim().length>20)lines.push(word);else lines[lines.length-1]=(lines.at(-1)+' '+word).trim();}lines.forEach((line,index)=>background.append(svg('text',{x:15,y:y+25+index*19,fill:'#c4d7ef','font-size':15,'font-weight':600},line)));
+   const about=svg('text',{x:15,y:y+25+lines.length*19+2,fill:'#9fc3ff','font-size':12,'text-decoration':'underline',class:'p2-worlds-layer-about',tabindex:0,role:'button','data-layer-about':layer.id,style:'cursor:pointer'},'What is in this layer?');
+   const openLayer=()=>openDetails({id:'ui:layer:'+layer.id,label:layer.label,kind:'component',implementation:'UI layout group',why:layer.description,description:layer.description,details:{records:layer.members.map(id=>displayName(actualNode(id)))}});
+   about.addEventListener('click',event=>{event.stopPropagation();openLayer();});about.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();openLayer();}});background.append(about);background.append(svg('text',{x:15,y:y+height-15,fill:'#8fa5c0','font-size':11},`${layer.members.length} actual records`),svg('title',{},layer.description+' — UI layout only, not an additional runtime world.'));
    graph.append(background);groupElements.set(layer.id,background);
    for(const cell of cells){graph.append(svg('path',{d:`M ${cell.x} ${y+top+8} V ${y+height-8}`,stroke:'#91a9c61a'}));cell.members.forEach((id,index)=>positions.set(id,{x:cell.x+18+(index%cell.count)*gap,y:y+top+23+Math.floor(index/cell.count)*gap}));}
    central.forEach((id,index)=>{
-    const x=width/2+(index-(central.length-1)/2)*Math.min(142,width/(central.length+1)),hubY=y+20;
+    const span=width-labelWidth,x=labelWidth+span/2+(index-(central.length-1)/2)*Math.min(142,span/(central.length+1)),hubY=y+20;
     positions.set(id,{x,y:hubY});
     graph.append(svg('text',{'data-hub-label':id,x,y:hubY+24,'text-anchor':'middle',fill:'#c3d4e9','font-size':12},displayName(actualNode(id))));
    });
@@ -413,7 +425,7 @@ export function createWorldsExplorer({load,subscribe,copy,loadSources}={}){
  }
  async function refresh(){if(disposed)return false;const token=++generation;setStatus('Reading runtime…');try{const result=await load();if(disposed||token!==generation)return false;if(!result||!Array.isArray(result.nodes)||!Array.isArray(result.edges))throw Error('Runtime graph must provide nodes and edges.');const ids=new Set();for(const node of result.nodes){if(typeof node.id!=='string'||ids.has(node.id))throw Error('Runtime graph has a missing or duplicate node ID.');ids.add(node.id);}data=result;ingestHistory(result.activity??[]);draw();return true;}catch(error){if(!disposed&&token===generation)setStatus('Could not load Worlds: '+error.message,true);return false;}}
  search.addEventListener('input',()=>{query=search.value.toLowerCase().trim();updateSearch();});search.addEventListener('keydown',event=>{if(event.key==='Enter'){const first=data.nodes.find(matches);if(first)openDetails(first);}});
- let drag=null;graph.addEventListener('pointerdown',event=>{if(event.target.closest('[data-world-node]')||event.button!==0)return;viewAdjusted=true;drag={x:event.clientX,y:event.clientY,view:{...graphView}};graph.setPointerCapture(event.pointerId);});graph.addEventListener('pointermove',event=>{if(!drag)return;const rect=graph.getBoundingClientRect(),scale=Math.max(drag.view.w/Math.max(1,rect.width),drag.view.h/Math.max(1,rect.height));graphView.x=drag.view.x-(event.clientX-drag.x)*scale;graphView.y=drag.view.y-(event.clientY-drag.y)*scale;applyView();});for(const type of ['pointerup','pointercancel'])graph.addEventListener(type,()=>{drag=null;});graph.addEventListener('wheel',event=>{event.preventDefault();if(event.shiftKey||Math.abs(event.deltaX)>Math.abs(event.deltaY)){if(graphView){viewAdjusted=true;graphView.x+=(event.deltaX||event.deltaY)*graphView.w/Math.max(1,graphPane.clientWidth);applyView();}}else zoom(event.deltaY>0?1.12:1/1.12);},{passive:false});
+ let drag=null;graph.addEventListener('pointerdown',event=>{if(event.target.closest('[data-world-node],[data-layer-about]')||event.button!==0)return;viewAdjusted=true;drag={x:event.clientX,y:event.clientY,view:{...graphView}};graph.setPointerCapture(event.pointerId);});graph.addEventListener('pointermove',event=>{if(!drag)return;const rect=graph.getBoundingClientRect(),scale=Math.max(drag.view.w/Math.max(1,rect.width),drag.view.h/Math.max(1,rect.height));graphView.x=drag.view.x-(event.clientX-drag.x)*scale;graphView.y=drag.view.y-(event.clientY-drag.y)*scale;applyView();});for(const type of ['pointerup','pointercancel'])graph.addEventListener(type,()=>{drag=null;});graph.addEventListener('wheel',event=>{event.preventDefault();if(event.shiftKey||Math.abs(event.deltaX)>Math.abs(event.deltaY)){if(graphView){viewAdjusted=true;graphView.x+=(event.deltaX||event.deltaY)*graphView.w/Math.max(1,graphPane.clientWidth);applyView();}}else zoom(event.deltaY>0?1.12:1/1.12);},{passive:false});
  window.addEventListener('focus',syncPlaybackVisibility);window.addEventListener('blur',syncPlaybackVisibility);document.addEventListener('visibilitychange',syncPlaybackVisibility);
  const unsubscribe=typeof subscribe==='function'?subscribe(receive):null;renderEvents();renderPageBreadcrumbs();updatePlaybackStatus();void refresh();
  return {element,refresh,replayEvents,setVisible,destroy(){if(disposed)return;disposed=true;generation++;clearTimeout(playbackTimer);if(logFrame!==null)clearTimeout(logFrame);if(typeof unsubscribe==='function')unsubscribe();window.removeEventListener('focus',syncPlaybackVisibility);window.removeEventListener('blur',syncPlaybackVisibility);document.removeEventListener('visibilitychange',syncPlaybackVisibility);element.remove();}};

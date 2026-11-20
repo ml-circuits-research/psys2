@@ -1,235 +1,169 @@
-// Drawing tab renderer (spec 07 section 3, art.draw). Pure drawing: turns the scene graph of the art.draw world into
-// hand-drawn pictures with rough.js (canvas for the screen and PNG, SVG for the vector download). No DOM beyond the
-// canvas / SVG element it is given, no stored state. The geometry (kinds, parts, colors) comes from the world's
-// scene.mjs, so the tab and the language layer always agree.
+// Drawing tab renderer (spec 07 section 3, art.draw). Pure drawing: turns the primitives of the art.draw SOP projection
+// (the SVG worlds/sop-primitives.mjs writes from the area's ui.draw.* facts, one <g data-select> per drawn part) into
+// hand-drawn pictures with rough.js (canvas for the screen and PNG, SVG for the vector download). It decides nothing
+// about what is drawn: shapes, boxes, transforms, fills and labels are taken as the projection states them; this
+// module only chooses the crayon look (outline, soft base, hachure strokes, seeds).
 
 const hash = (s) => { let h = 2166136261; for (const c of String(s)) { h ^= c.charCodeAt(0); h = Math.imul(h, 16777619) >>> 0; } return h >>> 0; };
 const clamp = (x, a, b) => Math.min(b, Math.max(a, x));
 const OUTLINE = '#3a3040';
 export const PAPER = '#ffffff';
 
-export function createRenderer(rough, scene, partTools = null) {
-  const labelledObjects=o=>[o,...(o.shape?.members&&partTools?partTools.restoreMembers(o).flatMap(labelledObjects):[])];
+// ---- colour shading (presentation only) ------------------------------------------------------------------------
+function hexToHsl(hex) {
+  const m = /^#?([0-9a-f]{6})$/i.exec(String(hex ?? '')); if (!m) return [0, 0, 0.6];
+  const n = parseInt(m[1], 16), r = (n >> 16 & 255) / 255, g = (n >> 8 & 255) / 255, b = (n & 255) / 255;
+  const max = Math.max(r, g, b), min = Math.min(r, g, b), l = (max + min) / 2;
+  if (max === min) return [0, 0, l];
+  const d = max - min, s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+  const h = max === r ? (g - b) / d + (g < b ? 6 : 0) : max === g ? (b - r) / d + 2 : (r - g) / d + 4;
+  return [h / 6, s, l];
+}
+function hslToHex(h, s, l) {
+  const f = (p, q, t) => { t = (t + 1) % 1; return t < 1 / 6 ? p + (q - p) * 6 * t : t < 1 / 2 ? q : t < 2 / 3 ? p + (q - p) * (2 / 3 - t) * 6 : p; };
+  const q = l < 0.5 ? l * (1 + s) : l + s - l * s, p = 2 * l - q;
+  const [r, g, b] = s === 0 ? [l, l, l] : [f(p, q, h + 1 / 3), f(p, q, h), f(p, q, h - 1 / 3)];
+  return '#' + [r, g, b].map((v) => Math.round(clamp(v, 0, 1) * 255).toString(16).padStart(2, '0')).join('');
+}
+export function shadeHex(hex, dl = 0, ds = 0) { const [h, s, l] = hexToHsl(hex); return hslToHex(h, clamp(s + ds, 0, 1), clamp(l + dl, 0.04, 0.97)); }
+const cssHex = (c) => { const v = String(c ?? '').trim(); if (/^#[0-9a-f]{6}$/i.test(v)) return v.toLowerCase(); if (/^#[0-9a-f]{3}$/i.test(v)) return '#' + [...v.slice(1)].map((x) => x + x).join('').toLowerCase(); return '#9aa5b1'; };
+
+// ---- reading the projection's SVG -------------------------------------------------------------------------------
+/** The affine [a b c d e f] of an SVG transform list (translate, scale, matrix). */
+function affineOf(text) {
+  let m = [1, 0, 0, 1, 0, 0];
+  const mul = ([a, b, c, d, e, f], [A, B, C, D, E, F]) => [a * A + c * B, b * A + d * B, a * C + c * D, b * C + d * D, a * E + c * F + e, b * E + d * F + f];
+  for (const [, op, args] of String(text ?? '').matchAll(/(translate|scale|matrix)\(([^)]*)\)/g)) {
+    const n = args.trim().split(/[\s,]+/).map(Number);
+    if (op === 'translate') m = mul(m, [1, 0, 0, 1, n[0] || 0, n[1] || 0]);
+    else if (op === 'scale') m = mul(m, [n[0], 0, 0, n.length > 1 ? n[1] : n[0], 0, 0]);
+    else if (n.length === 6) m = mul(m, n);
+  }
+  return m;
+}
+const at = (m, x, y) => [m[0] * x + m[2] * y + m[4], m[1] * x + m[3] * y + m[5]];
+const numbers = (s) => String(s ?? '').trim().split(/[\s,]+/).filter(Boolean).map(Number);
+
+/**
+ * The drawn items of a projection SVG in page units: [{id, n, shape: rect|ellipse|polygon|line|path|text, fill, ...}]
+ * in drawing order, with the frame from the viewBox. `parser` is a DOMParser instance.
+ */
+export function readProjection(svgText, parser) {
+  const items = [], frame = { w: 1000, h: 700 };
+  if (!svgText) return { items, frame };
+  const doc = parser.parseFromString(svgText, 'image/svg+xml'), svg = doc.documentElement;
+  const box = numbers(svg?.getAttribute?.('viewBox'));
+  if (box.length === 4 && box[2] > 0 && box[3] > 0) { frame.w = box[2]; frame.h = box[3]; }
+  const count = new Map();
+  for (const g of svg?.children ?? []) {
+    const id = g.getAttribute('data-select') ?? '', m = affineOf(g.getAttribute('transform')), el = g.firstElementChild;
+    if (!el) continue;
+    const n = count.get(id) ?? 0; count.set(id, n + 1);
+    const sx = Math.hypot(m[0], m[1]), sy = Math.hypot(m[2], m[3]), fill = el.getAttribute('fill'), stroke = el.getAttribute('stroke');
+    const base = { id, n, fill: cssHex(fill && fill !== 'none' ? fill : stroke) };
+    const tag = el.tagName.toLowerCase(), num = (k) => Number(el.getAttribute(k) ?? 0);
+    if (tag === 'rect') {
+      const [x0, y0] = at(m, num('x'), num('y')), [x1, y1] = at(m, num('x') + num('width'), num('y') + num('height'));
+      items.push({ ...base, shape: 'rect', x: Math.min(x0, x1), y: Math.min(y0, y1), w: Math.abs(x1 - x0), h: Math.abs(y1 - y0) });
+    } else if (tag === 'ellipse' || tag === 'circle') {
+      const [cx, cy] = at(m, num('cx'), num('cy')), rx = tag === 'circle' ? num('r') : num('rx'), ry = tag === 'circle' ? num('r') : num('ry');
+      items.push({ ...base, shape: 'ellipse', cx, cy, w: 2 * rx * sx, h: 2 * ry * sy });
+    } else if (tag === 'polygon' || tag === 'polyline') {
+      const raw = numbers(el.getAttribute('points')), pts = [];
+      for (let i = 0; i + 1 < raw.length; i += 2) pts.push(at(m, raw[i], raw[i + 1]));
+      if (pts.length) items.push({ ...base, shape: tag === 'polygon' ? 'polygon' : 'line', pts, stroke: Number(el.getAttribute('stroke-width') ?? 2) * (sx + sy) / 2 });
+    } else if (tag === 'path') {
+      // An arc as the projection writes it: M x y A rx ry 0 large sweep x y.
+      const d = String(el.getAttribute('d') ?? ''), mv = /M\s*([-\d.]+)[\s,]+([-\d.]+)/.exec(d), ar = /A\s*([-\d.]+)[\s,]+([-\d.]+)[\s,]+([-\d.]+)[\s,]+([01])[\s,]+([01])[\s,]+([-\d.]+)[\s,]+([-\d.]+)/.exec(d);
+      if (!mv || !ar) continue;
+      const [x0, y0] = at(m, Number(mv[1]), Number(mv[2])), [x1, y1] = at(m, Number(ar[6]), Number(ar[7])), flip = m[0] * m[3] - m[1] * m[2] < 0;
+      const sweep = flip ? 1 - Number(ar[5]) : Number(ar[5]);
+      items.push({ ...base, shape: 'path', d: `M${x0} ${y0} A${Number(ar[1]) * sx} ${Number(ar[2]) * sy} ${ar[3]} ${ar[4]} ${sweep} ${x1} ${y1}`, stroke: Number(el.getAttribute('stroke-width') ?? 2) * (sx + sy) / 2 });
+    } else if (tag === 'text') {
+      const [x, y] = at(m, num('x'), num('y'));
+      items.push({ ...base, shape: 'text', x, y, text: el.textContent ?? '', size: Number(el.getAttribute('font-size') ?? 14) * sy, anchor: el.getAttribute('text-anchor') ?? 'start', weight: el.getAttribute('font-weight') ?? '500' });
+    }
+  }
+  return { items, frame };
+}
+
+/** The box [x0, y0, x1, y1] an item covers. */
+export function itemBox(it) {
+  if (it.shape === 'rect') return [it.x, it.y, it.x + it.w, it.y + it.h];
+  if (it.shape === 'ellipse') return [it.cx - it.w / 2, it.cy - it.h / 2, it.cx + it.w / 2, it.cy + it.h / 2];
+  if (it.pts) { const xs = it.pts.map((p) => p[0]), ys = it.pts.map((p) => p[1]); return [Math.min(...xs), Math.min(...ys), Math.max(...xs), Math.max(...ys)]; }
+  if (it.shape === 'path') { const n = numbers(it.d.replace(/[MA]/g, ' ')); return [Math.min(n[0], n[7]) , Math.min(n[1], n[8]) - n[3], Math.max(n[0], n[7]), Math.max(n[1], n[8]) + n[3]]; }
+  return [it.x, it.y - (it.size ?? 14), it.x, it.y];
+}
+
+// ---- rough drawing -------------------------------------------------------------------------------------------
+export function createRenderer(rough) {
   const gen = rough.generator();
-  const cache = new Map();   // object signature -> [{ drawable, alpha, tx, ty, rot }]
+  const cache = new Map();   // item signature -> [{ drawable, alpha }]
 
-  const keyOf = (o) => `${o.kind}|${o.thing ?? ''}|${Math.round(o.size)}|${o.color}|${o.fill}|${JSON.stringify(o.parts ?? {})}|${JSON.stringify(o.hide ?? [])}|${JSON.stringify(o.extra ?? {})}|${o.id}|${JSON.stringify(o.shape??null)}`;
-
-  /** Rough drawables of one object, in local pixel space (origin = object center). Cached per signature. */
-  function drawablesOf(obj) {
-    const key = keyOf(obj);
-    let hit = cache.get(key);
-    if (hit) return hit;
-    const S = obj.size, out = [];
-    const rough1 = clamp(S / 230, 0.45, 1.35);
+  /** Rough drawables of one item, in page units. `scale` is the size of its object (crayon strength and line widths). */
+  function drawablesOf(it, scale) {
+    const key = JSON.stringify(it) + '|' + Math.round(scale);
+    const hit = cache.get(key); if (hit) return hit;
+    const S = scale, out = [], seed = (hash(`${it.id}:${it.n}`) % 2147483000) + 1;
+    const common = { seed, roughness: clamp(S / 230, 0.45, 1.35), bowing: 1.1, preserveVertices: false };
     const baseW = clamp(S * 0.013, 1.5, 4.2);
-    const fillMode = obj.fill === 'solid' || obj.fill === 'outline' ? obj.fill : 'crayon';
-    const parts = scene.partsOf(obj);
-    // parts of a merged group (cloud puffs, tree crown) share one silhouette: all outlines first, then the fills on top
-    parts.forEach((p, i) => { if (p.mg && fillMode !== 'outline') drawPart(p, i, 'outline-pass'); });
-    parts.forEach((p, i) => drawPart(p, i, p.mg ? 'fill-pass' : 'normal'));
-    function drawPart(p, i, phase) {
-      const seed = (hash(`${obj.id}:${p.n}:${i}`) % 2147483000) + 1;
-      const common = { seed, roughness: rough1, bowing: 1.1, preserveVertices: false };
-      const px = (v) => v * S;
-      const shapeArgs = (o) => {
-        switch (p.s) {
-          case 'rect': return gen.rectangle(px(p.x - p.w / 2), px(p.y - p.h / 2), px(p.w), px(p.h), o);
-          case 'ellipse': return gen.ellipse(px(p.x), px(p.y), px(p.w), px(p.h), o);
-          case 'poly': return gen.polygon(p.pts.map(([x, y]) => [px(x), px(y)]), o);
-          case 'line': return gen.linearPath(p.pts.map(([x, y]) => [px(x), px(y)]), o);
-          case 'curve': return gen.curve(p.pts.map(([x, y]) => [px(x), px(y)]), o);
-          case 'arc': return gen.arc(px(p.x), px(p.y), px(p.w), px(p.h), p.a0, p.a1, false, o);
-          default: return null;
-        }
-      };
-      const tx = p.s === 'ellipse' || p.s === 'rect' ? px(p.x) : 0, ty = p.s === 'ellipse' || p.s === 'rect' ? px(p.y) : 0;
-      const rot = ((p.r ?? 0) * Math.PI) / 180;
-      // a rotated ellipse/rect is generated around its own center (0,0) and moved by the transform
-      const local = rot ? { ...p, x: 0, y: 0 } : null;
-      const make = (o) => {
-        if (!local) return shapeArgs(o);
-        const q = p; // generate at origin
-        const px0 = (v) => v * S;
-        if (q.s === 'ellipse') return gen.ellipse(0, 0, px0(q.w), px0(q.h), o);
-        if (q.s === 'rect') return gen.rectangle(px0(-q.w / 2), px0(-q.h / 2), px0(q.w), px0(q.h), o);
-        return shapeArgs(o);
-      };
-      const place = rot ? { tx, ty, rot } : { tx: 0, ty: 0, rot: 0 };
-      const push = (drawable, alpha = 1) => { if (drawable) out.push({ drawable, alpha, ...place, matrix:p.matrix }); };
-      if (p.s === 'line' || p.s === 'curve' || p.s === 'arc') {
-        const w = Math.max(p.t ? p.t * S : baseW, 2);
-        push(make({ ...common, stroke: p.hex, strokeWidth: w, fill: undefined }));
-        if (p.s === 'arc' && p.full) { /* thick colored band: second pass fattens it */ push(make({ ...common, seed: seed + 3, stroke: p.hex, strokeWidth: w * 0.8, roughness: rough1 * 0.6 })); }
-        return;
+    const make = (o) => {
+      switch (it.shape) {
+        case 'rect': return gen.rectangle(it.x, it.y, it.w, it.h, o);
+        case 'ellipse': return gen.ellipse(it.cx, it.cy, it.w, it.h, o);
+        case 'polygon': return gen.polygon(it.pts, o);
+        case 'line': return gen.linearPath(it.pts, o);
+        case 'path': return gen.path(it.d, o);
+        default: return null;
       }
-      const tiny = Math.min(p.w ? px(p.w) : S, p.h ? px(p.h) : S) < 26;
-      const mode = p.f === 'solid' ? 'solid' : p.f === 'none' ? 'outline' : fillMode;
-      const outline = { stroke: p.noOutline ? 'none' : OUTLINE, strokeWidth: baseW };
-      if (phase === 'outline-pass') { push(make({ ...common, stroke: OUTLINE, strokeWidth: baseW * 1.15, fill: undefined })); return; }
-      const merged = phase === 'fill-pass';
-      const edge = merged ? { stroke: 'none' } : outline;
-      if (mode === 'outline') { if (!merged) push(make({ ...common, ...outline, fill: undefined })); return; }
-      if (mode === 'solid' || tiny) { push(make({ ...common, ...edge, fill: p.hex, fillStyle: 'solid' })); return; }
-      // crayon: a soft tinted base, then scribbled strokes of the color, then the outline
-      push(make({ ...common, stroke: 'none', fill: scene.shadeHex(p.hex, 0.12, -0.05), fillStyle: 'solid' }), merged ? 1 : 0.9);
-      push(make({ ...common, ...edge, fill: p.hex, fillStyle: 'hachure', fillWeight: clamp(S * 0.012, 1.1, 3.2), hachureGap: clamp(S * 0.03, 3.2, 8), hachureAngle: -38 + (seed % 25) }));
+    };
+    const push = (drawable, alpha = 1) => { if (drawable) out.push({ drawable, alpha }); };
+    if (it.shape === 'line' || it.shape === 'path') push(make({ ...common, stroke: it.fill, strokeWidth: Math.max(baseW, Math.min(it.stroke ?? 2, 8), 2), fill: undefined }));
+    else if (it.shape !== 'text') {
+      const [x0, y0, x1, y1] = itemBox(it), tiny = Math.min(x1 - x0, y1 - y0) < 26;
+      if (tiny) push(make({ ...common, stroke: OUTLINE, strokeWidth: baseW, fill: it.fill, fillStyle: 'solid' }));
+      else {
+        // crayon: a soft tinted base, then scribbled strokes of the colour, then the outline
+        push(make({ ...common, stroke: 'none', fill: shadeHex(it.fill, 0.12, -0.05), fillStyle: 'solid' }), 0.9);
+        push(make({ ...common, stroke: OUTLINE, strokeWidth: baseW, fill: it.fill, fillStyle: 'hachure', fillWeight: clamp(S * 0.012, 1.1, 3.2), hachureGap: clamp(S * 0.03, 3.2, 8), hachureAngle: -38 + (seed % 25) }));
+      }
     }
     cache.set(key, out);
-    if (cache.size > 400) cache.delete(cache.keys().next().value);
+    if (cache.size > 1500) cache.delete(cache.keys().next().value);
     return out;
   }
 
-  // ---- sky, ground, paper --------------------------------------------------------------------------------------
-  const backCache = new Map();
-  function bandDrawables(key, make) {
-    if (!backCache.has(key)) backCache.set(key, make());
-    if (backCache.size > 40) backCache.delete(backCache.keys().next().value);
-    return backCache.get(key);
-  }
-  function skyDrawables(color) {
-    const hex = scene.colorHex(color);
-    return bandDrawables(`sky|${color}`, () => [
-      { d: gen.rectangle(-6, -6, scene.W + 12, scene.HORIZON + 6, { stroke: 'none', fill: scene.shadeHex(hex, 0.06), fillStyle: 'solid', seed: 11 }), a: 1 },
-      { d: gen.rectangle(-6, -6, scene.W + 12, scene.HORIZON + 6, { stroke: 'none', fill: hex, fillStyle: 'hachure', hachureGap: 11, fillWeight: 6, hachureAngle: -35, roughness: 1.4, seed: 12 }), a: 0.55 },
-    ]);
-  }
-  function groundDrawables(kind, color) {
-    const hex = scene.colorHex(color), top = scene.HORIZON;
-    return bandDrawables(`ground|${kind}|${color}`, () => {
-      const list = [
-        { d: gen.rectangle(-6, top, scene.W + 12, scene.H - top + 6, { stroke: 'none', fill: scene.shadeHex(hex, 0.08), fillStyle: 'solid', seed: 21 }), a: 1 },
-        { d: gen.rectangle(-6, top, scene.W + 12, scene.H - top + 6, { stroke: 'none', fill: hex, fillStyle: 'hachure', hachureGap: 10, fillWeight: 5, hachureAngle: kind === 'sea' ? -5 : 52, roughness: 1.6, seed: 22 }), a: 0.6 },
-      ];
-      const dark = scene.shadeHex(hex, -0.2);
-      let t = 99;
-      const rnd = () => { t = (Math.imul(t, 1664525) + 1013904223) >>> 0; return t / 4294967296; };
-      if (kind === 'grass') {
-        for (let x = -10; x < scene.W + 10; x += 15) {
-          const y = top + rnd() * 6, h = 14 + rnd() * 16, lean = (rnd() - 0.5) * 14;
-          list.push({ d: gen.curve([[x, y + 6], [x + lean * 0.5, y - h * 0.5], [x + lean, y - h]], { stroke: dark, strokeWidth: 2.6, roughness: 1, seed: 30 + x }), a: 1 });
-          if (rnd() < 0.5) list.push({ d: gen.curve([[x + 6, y + 8], [x + 6 - lean * 0.4, y - h * 0.4], [x + 6 - lean, y - h * 0.8]], { stroke: scene.shadeHex(hex, -0.1), strokeWidth: 2.2, roughness: 1, seed: 90 + x }), a: 1 });
-        }
-        for (let i = 0; i < 10; i++) {
-          const x = 30 + rnd() * (scene.W - 60), y = top + 90 + rnd() * (scene.H - top - 130);
-          list.push({ d: gen.curve([[x - 8, y + 6], [x - 3, y - 8], [x, y + 3]], { stroke: dark, strokeWidth: 2, roughness: 0.8, seed: 300 + i }), a: 0.7 });
-        }
-      } else if (kind === 'sand') {
-        for (let i = 0; i < 60; i++) list.push({ d: gen.circle(20 + rnd() * (scene.W - 40), top + 20 + rnd() * (scene.H - top - 40), 2 + rnd() * 2, { stroke: 'none', fill: dark, fillStyle: 'solid', seed: 400 + i }), a: 0.5 });
-        list.push({ d: gen.curve(Array.from({ length: 9 }, (_, i) => [i * 125, top + 4 + (i % 2 ? 8 : -4)]), { stroke: dark, strokeWidth: 3, roughness: 1.2, seed: 500 }), a: 0.8 });
-      } else if (kind === 'snow') {
-        for (let i = 0; i < 8; i++) list.push({ d: gen.arc(i * 135 + 20, top + 6, 200, 40, Math.PI, Math.PI * 2, false, { stroke: scene.shadeHex(hex, -0.12), strokeWidth: 2.4, roughness: 1.2, seed: 520 + i }), a: 0.9 });
-        for (let i = 0; i < 40; i++) list.push({ d: gen.circle(20 + rnd() * (scene.W - 40), top + 20 + rnd() * (scene.H - top - 40), 3 + rnd() * 3, { stroke: 'none', fill: '#ffffff', fillStyle: 'solid', seed: 600 + i }), a: 0.9 });
-      } else { // sea: rows of waves
-        for (let row = 0; row < 5; row++) for (let x = -30 + (row % 2) * 40; x < scene.W; x += 80) {
-          const y = top + 12 + row * 48 + (rnd() * 6);
-          list.push({ d: gen.curve([[x, y], [x + 20, y - 12], [x + 40, y], [x + 60, y - 12], [x + 80, y]], { stroke: scene.shadeHex(hex, row % 2 ? 0.25 : -0.18), strokeWidth: 3, roughness: 1, seed: 700 + row * 40 + x }), a: 0.9 });
-        }
-      }
-      return list;
-    });
+  const textFont = (it) => `${it.weight === '600' ? 600 : 500} ${Math.max(12, Math.round((it.size ?? 14) * 1.25))}px system-ui`;
+
+  /** One item on a canvas 2d context (already in page units). */
+  function drawItem(ctx, rc, it, scale, alpha = 1) {
+    if (it.shape === 'text') {
+      ctx.save(); ctx.globalAlpha = alpha; ctx.font = textFont(it); ctx.fillStyle = '#263646';
+      ctx.textAlign = it.anchor === 'middle' ? 'center' : it.anchor === 'end' ? 'right' : 'left'; ctx.fillText(it.text, it.x, it.y); ctx.restore();
+      return;
+    }
+    for (const { drawable, alpha: a } of drawablesOf(it, scale)) { ctx.save(); ctx.globalAlpha = alpha * a; rc.draw(drawable); ctx.restore(); }
   }
 
-  // ---- drawing -------------------------------------------------------------------------------------------------
-  /** Draw sky and ground. */
-  function drawBackground(ctx, rc, scn) {
-    ctx.save();
-    ctx.fillStyle = !scn.background || scn.background === 'white' ? PAPER : scene.colorHex(scn.background);
-    ctx.fillRect(0, 0, scene.W, scene.H);
-    if (scn.sky) for (const { d, a } of skyDrawables(scn.sky)) { ctx.globalAlpha = a; rc.draw(d); }
-    if (scn.ground) {
-      const color = scn.groundColor ?? { grass: 'green', sand: 'yellow', snow: 'white', sea: 'blue' }[scn.ground] ?? 'green';
-      for (const { d, a } of groundDrawables(scn.ground, color)) { ctx.globalAlpha = a; rc.draw(d); }
-    }
-    ctx.restore();
-  }
-
-  /** Draw one object with its animated pose { x, y, size, rotation, flipX (-1..1), scale, alpha }. */
-  function drawObject(ctx, rc, obj, pose = {}) {
-    const k = scene.KINDS[scene.kindKey(obj)];   // a thing of the catalog is kind 'composite' with its name in `thing`
-    if (!k) return;
-    const size = pose.size ?? obj.size, sc = pose.scale ?? 1;
-    // drawables are built at the target size; scaling the canvas gives the size animation for free
-    const shown = { ...obj, size: obj.size };
-    const list = drawablesOf(shown);
-    ctx.save();
-    ctx.translate(pose.x ?? obj.x, pose.y ?? obj.y);
-    const m=scene.objectMatrix({...obj,rotation:pose.rotation??obj.rotation});ctx.transform(m[0],m[1],m[2],m[3],0,0);ctx.scale((size/obj.size)*sc,(size/obj.size)*sc);
-    const baseAlpha = pose.alpha ?? 1;
-    for (const item of list) {
-      ctx.save();
-      ctx.globalAlpha = baseAlpha * item.alpha;
-      if(item.matrix){const m=item.matrix;ctx.transform(m[0],m[1],m[2],m[3],m[4]*obj.size,m[5]*obj.size);}
-      if (item.tx || item.ty) ctx.translate(item.tx, item.ty);
-      if (item.rot) ctx.rotate(item.rot);
-      rc.draw(item.drawable);
-      ctx.restore();
-    }
-    ctx.restore();
-  }
-
-  /** Dashed pink frame (with a name tag) around the selected object. */
-  function drawSelection(ctx, rc, obj, pose = {}, label = '') {
-    const b = scene.bbox({ ...obj, x: pose.x ?? obj.x, y: pose.y ?? obj.y, size: pose.size ?? obj.size });
-    const pad = 14;
-    const d = gen.rectangle(b.x0 - pad, b.y0 - pad, b.w + pad * 2, b.h + pad * 2, { stroke: '#356ac3', strokeWidth: 3, roughness: 1.1, seed: 5, strokeLineDash: [10, 8], fill: undefined });
-    ctx.save();
-    ctx.globalAlpha = 0.95;
-    rc.draw(d);
-    for (const [x, y] of [[b.x0 - pad, b.y0 - pad], [b.x1 + pad, b.y0 - pad], [b.x0 - pad, b.y1 + pad], [b.x1 + pad, b.y1 + pad]]) {
-      rc.draw(gen.circle(x, y, 9, { stroke: '#356ac3', strokeWidth: 2, fill: '#fff', fillStyle: 'solid', roughness: 0.6, seed: 8 }));
-    }
-    if (label) {
-      ctx.font = '600 22px "Comic Sans MS", "Chalkboard SE", "Bradley Hand", "Segoe Print", cursive';
-      const w = ctx.measureText(label).width + 22, x = clamp(b.x0 - pad, 6, scene.W - w - 6), y = Math.max(4, b.y0 - pad - 34);
-      ctx.fillStyle = '#356ac3';
-      ctx.beginPath(); ctx.roundRect?.(x, y, w, 30, 10); if (!ctx.roundRect) ctx.rect(x, y, w, 30); ctx.fill();
-      ctx.fillStyle = '#fff'; ctx.textBaseline = 'middle'; ctx.fillText(label, x + 11, y + 16);
-    }
-    ctx.restore();
-  }
-
-  /** Whole scene on a canvas 2d context at 1000x700 logical units (the context is expected to be scaled already). */
-  function drawScene(ctx, rc, scn, { selected = null, poses = null, labelOf = null } = {}) {
-    drawBackground(ctx, rc, scn);
-    const objs = [...(scn.objects ?? [])].sort((a, b) => (a.z ?? 0) - (b.z ?? 0));
-    for(const o of objs){drawObject(ctx,rc,o,poses?.get(o.id));for(const object of labelledObjects(o)){const text=object.label??object.name;if(text){const pose=poses?.get(object.id),b=scene.bbox({...object,x:pose?.x??object.x,y:pose?.y??object.y,size:pose?.size??object.size});ctx.save();ctx.font='500 18px system-ui';ctx.fillStyle='#263646';ctx.textAlign='center';ctx.fillText(text,(b.x0+b.x1)/2,b.y1+24);ctx.restore();}}}
-    if (selected) {
-      const o = (scn.objects ?? []).find((x) => x.id === selected);
-      if (o) drawSelection(ctx, rc, o, poses?.get(o.id), labelOf?.(o) ?? '');
-    }
-  }
-
-  // ---- SVG export ----------------------------------------------------------------------------------------------
-  /** Standalone SVG text of the scene (no selection frame). `doc` is the DOM document (the browser's). */
-  function toSVG(scn, doc = document) {
-    const NS = 'http://www.w3.org/2000/svg';
-    const svg = doc.createElementNS(NS, 'svg');
-    svg.setAttribute('xmlns', NS);
-    svg.setAttribute('viewBox', `0 0 ${scene.W} ${scene.H}`);
-    svg.setAttribute('width', scene.W); svg.setAttribute('height', scene.H);
-    const rs = rough.svg(svg);
-    const add = (node, attrs = {}) => { for (const [k, v] of Object.entries(attrs)) node.setAttribute(k, v); svg.append(node); };
-    const paper = doc.createElementNS(NS, 'rect');
-    add(paper, { x: 0, y: 0, width: scene.W, height: scene.H, fill: scn.background === 'white' ? PAPER : scene.colorHex(scn.background) });
-    const layer = (list) => { const g = doc.createElementNS(NS, 'g'); for (const { d, a } of list) { const n = rs.draw(d); n.setAttribute('opacity', a); g.append(n); } svg.append(g); };
-    if (scn.sky) layer(skyDrawables(scn.sky));
-    if (scn.ground) layer(groundDrawables(scn.ground, scn.groundColor ?? { grass: 'green', sand: 'yellow', snow: 'white', sea: 'blue' }[scn.ground] ?? 'green'));
-    for (const o of [...(scn.objects ?? [])].sort((a, b) => (a.z ?? 0) - (b.z ?? 0))) {
-      const g = doc.createElementNS(NS, 'g');
-      const m=scene.objectMatrix(o);g.setAttribute('transform',`matrix(${m[0]} ${m[1]} ${m[2]} ${m[3]} ${o.x} ${o.y})`);
-      g.setAttribute('data-id', o.id); g.setAttribute('data-kind', o.thing ?? o.kind);
-      for (const item of drawablesOf(o)) {
-        const n = rs.draw(item.drawable);
-        const wrap = doc.createElementNS(NS, 'g');
-        const pm=item.matrix,affine=pm?`matrix(${pm[0]} ${pm[1]} ${pm[2]} ${pm[3]} ${pm[4]*o.size} ${pm[5]*o.size}) `:'';wrap.setAttribute('transform', `${affine}translate(${item.tx} ${item.ty}) rotate(${(item.rot * 180) / Math.PI})`);
-        wrap.setAttribute('opacity', item.alpha);
-        wrap.append(n); g.append(wrap);
-      }
-      svg.append(g);for(const object of labelledObjects(o)){const label=object.label??object.name;if(label){const text=doc.createElementNS(NS,'text');text.textContent=label;add(text,{x:object.x,y:scene.bbox(object).y1+24,'text-anchor':'middle','font-family':'system-ui','font-size':18,fill:'#263646'});}}
+  /** Standalone SVG text of the items (no selection frame). `doc` is the DOM document. */
+  function toSVG(items, frame, scaleOf, doc = document) {
+    const NS = 'http://www.w3.org/2000/svg', svg = doc.createElementNS(NS, 'svg');
+    svg.setAttribute('xmlns', NS); svg.setAttribute('viewBox', `0 0 ${frame.w} ${frame.h}`); svg.setAttribute('width', frame.w); svg.setAttribute('height', frame.h);
+    const rs = rough.svg(svg), paper = doc.createElementNS(NS, 'rect');
+    for (const [k, v] of Object.entries({ x: 0, y: 0, width: frame.w, height: frame.h, fill: PAPER })) paper.setAttribute(k, v);
+    svg.append(paper);
+    for (const it of items) {
+      const g = doc.createElementNS(NS, 'g'); g.setAttribute('data-id', it.id);
+      if (it.shape === 'text') {
+        const t = doc.createElementNS(NS, 'text'); t.textContent = it.text;
+        for (const [k, v] of Object.entries({ x: it.x, y: it.y, 'text-anchor': it.anchor, 'font-family': 'system-ui', 'font-size': Math.max(12, Math.round((it.size ?? 14) * 1.25)), fill: '#263646' })) t.setAttribute(k, v);
+        g.append(t);
+      } else for (const { drawable, alpha } of drawablesOf(it, scaleOf(it.id))) { const n = rs.draw(drawable); n.setAttribute('opacity', alpha); g.append(n); }
+      svg.append(g);
     }
     return new (doc.defaultView?.XMLSerializer ?? XMLSerializer)().serializeToString(svg);
   }
 
-  return { drawScene, drawBackground, drawObject, drawSelection, toSVG, drawablesOf, gen };
+  return { drawItem, drawablesOf, toSVG, gen };
 }

@@ -44,6 +44,7 @@
 @native.diagram.sketch.op.diagram.node.change.param.size std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.change name="size" kind=string enum="tiny" enum="small" enum="medium" enum="large" enum="huge" enumClosed=true
 @native.diagram.sketch.op.diagram.node.change.param.label std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.change name="label" kind=string
 @native.diagram.sketch.op.diagram.node.change.param.value std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.change name="value" kind=number
+@native.diagram.sketch.op.diagram.node.change.param.kind std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.change name="kind" kind=string enum="circle" enum="rectangle" enum="square" enum="diamond" enum="ellipse" enum="triangle" enum="hexagon" enum="star" enum="text" enumClosed=true
 @native.diagram.sketch.value.44 std.capability.arg name="on" value="diagram.sketch.node"
 @native.diagram.sketch.value.45 std.capability.arg name="many" value=true
 @native.diagram.sketch.value.46 std.capability.record entry=$native.diagram.sketch.value.44 entry=$native.diagram.sketch.value.45
@@ -256,3 +257,11 @@
 @native.diagram.sketch.value.253 std.capability.arg name="intent" value=$native.diagram.sketch.value.252
 @native.diagram.sketch.op.diagram.group.chart.metadata app.native.metadata operation=$native.diagram.sketch.op.diagram.group.chart field=$native.diagram.sketch.value.241 field=$native.diagram.sketch.value.244 field=$native.diagram.sketch.value.253
 @native.diagram.sketch.chart-composition app.native.compose module=data.charts state="chartTools" exclude="chart.undo" exclude="chart.redo" omit="sample"
+# Selecting nodes or connections changes only the declared selection key of what it selects and deselects.
+@native.diagram.sketch.selection.key std.capability.arg name="key" value="selected"
+@native.diagram.sketch.selection.record std.capability.record entry=$native.diagram.sketch.selection.key
+@native.diagram.sketch.selection.arg std.capability.arg name="selection" value=$native.diagram.sketch.selection.record
+@native.diagram.sketch.selection.scope std.capability.record entry=$native.diagram.sketch.selection.arg
+@native.diagram.sketch.selection.effect std.capability.arg name="effectScope" value=$native.diagram.sketch.selection.scope
+@native.diagram.sketch.op.diagram.node.select.metadata app.native.metadata operation=$native.diagram.sketch.op.diagram.node.select field=$native.diagram.sketch.selection.effect
+@native.diagram.sketch.op.diagram.link.select.metadata app.native.metadata operation=$native.diagram.sketch.op.diagram.link.select field=$native.diagram.sketch.selection.effect

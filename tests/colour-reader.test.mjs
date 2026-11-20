@@ -8,7 +8,6 @@ import { createFacts } from '../src/knowledge/facts.mjs';
 import { createKnowledgeSource } from '../src/loaders/knowledge-source.mjs';
 import { createLayeredSource } from '../src/knowledge/bundled-source.mjs';
 import { build } from '../scripts/build-colour-lexicon.mjs';
-import * as scene from '../worlds/art.draw/scene.mjs';
 
 const CAT = path.join(import.meta.dirname, 'fixtures/catalog');
 
@@ -47,11 +46,4 @@ test('the catalog replaces the bundled subset when it is reachable; an unreachab
 
 test('the shared colour lexicon is generated from the reader and not stale', () => {
   for (const [file, text] of build()) assert.equal(readFileSync(file, 'utf8'), text, `${file} is stale: run node scripts/build-colour-lexicon.mjs`);
-});
-
-test('the drawing board takes its colours from the reader: a catalog colour draws, shades work on any colour', () => {
-  assert.equal(scene.canonColor(['dark', 'turquoise']), 'dark turquoise');
-  assert.equal(scene.colorHex('teal').toLowerCase(), '#008080');
-  assert.notEqual(scene.colorHex('dark turquoise'), scene.colorHex('turquoise'));
-  assert.equal(scene.canonColor(['blorp']), null);
 });

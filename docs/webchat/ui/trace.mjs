@@ -114,7 +114,20 @@ export function renderTrace(reply, extra = {}) {
     h('thead', {}, h('tr', {}, h('th', {}, 'Operation'), h('th', {}, 'Status'), h('th', {}, 'ms'), h('th', {}, 'Arguments'))),
     h('tbody', {}, ops.map((o) => h('tr', {}, h('td', {}, o.op), h('td', {}, o.status), h('td', {}, o.ms != null ? String(Math.round(o.ms * 10) / 10) : ''), h('td', {}, o.args ? json(o.args) : ''))))) : h('p', { class: 'p2-muted' }, 'No operations called.')));
 
-  root.append(section('Statuses', (reply.statuses ?? t.statuses ?? []).length
+  // Placement search: which provider placed it (z3, internal search, or the declared method), and why Z3 did not when it did not.
+  const sv = t.solver;
+  if (sv) {
+    const z = sv.z3 ?? {};
+    const why = z.state === 'unavailable' ? (z.error ? `load failed: ${z.error}` : z.isolated === false ? 'the page is not cross-origin isolated' : 'cannot run here') : undefined;
+    root.append(section('Placement search', kv([
+      ['Solved by', sv.provider === 'z3' ? 'Z3 (std.problem)' : sv.provider === 'internal' ? 'internal search (std.problem)' : sv.provider === 'declared-method' ? 'declared placement method' : 'not placed'],
+      ['Compile', sv.compileMs != null ? `${sv.compileMs} ms` : undefined],
+      ['Z3', `${z.state ?? 'unknown'}${z.loadMs != null ? `, loaded in ${z.loadMs} ms` : ''}${z.warmedBy ? ` (started by ${({ startup: 'the start-up', idle: 'the idle warm-up', turn: 'a placement' })[z.warmedBy] ?? z.warmedBy})` : ''}${why ? `: ${why}` : ''}`],
+      ['Last Z3 solve', z.lastSolve ? `${z.lastSolve.status}${z.lastSolve.ms != null ? `, ${z.lastSolve.ms} ms` : ''}${z.lastSolve.error ? ` (${z.lastSolve.error})` : ''}` : undefined],
+    ])));
+  }
+
+  root.append(section('Statuses',(reply.statuses ?? t.statuses ?? []).length
     ? h('p', {}, (reply.statuses ?? t.statuses).map((s) => h('span', { class: `p2-tag is-${s}` }, s))) : h('p', { class: 'p2-muted' }, 'None.')));
 
   const fx = extra.effects ?? [];

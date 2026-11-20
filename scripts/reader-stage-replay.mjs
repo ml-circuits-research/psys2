@@ -1,11 +1,11 @@
 // Development-only functional matrix through the sole application reader/coordinator.
 import {readFileSync,writeFileSync,openSync,writeSync,closeSync,statfsSync} from 'node:fs';
 import {createHash} from 'node:crypto';
-import {createDrawingHost,initialDrawingState as drawing} from '../worlds/art.draw/declared-host.mjs';
-import {createDiagramHost,initialDiagramState as diagram} from '../worlds/diagram.sketch/declared-host.mjs';
-import {createDocumentHost,initialDocumentState as document} from '../worlds/docs.editor/declared-host.mjs';
+import {createDrawingArea,emptyDrawingState as drawing} from '../worlds/art.draw/sop-drawing.mjs';
+import {createDiagramArea,emptyDiagramState as diagram} from '../worlds/diagram.sketch/sop-diagram.mjs';
+import {createDocumentArea,emptyDocumentArea as document} from '../worlds/docs.editor/sop-document.mjs';
+import {createCalendarArea,emptyCalendarArea as calendar} from '../worlds/time.calendar/sop-calendar.mjs';
 import {initialChartState as charts} from '../worlds/data.charts/declared-host.mjs';
-import {createCalendarHost} from '../worlds/time.calendar/declared-host.mjs';
 import {seedFunctionalContext} from './functional-context-seeding.mjs';
 import {FUNCTIONAL_NATIVE_BINDINGS} from './lib/functional-native-bindings.mjs';
 import {prepareFunctionalFixture} from './lib/functional-fixture-policy.mjs';
@@ -18,9 +18,9 @@ if(sha(source)!==baseline.source.sha256)throw Error('matrix-source-changed');
 const input=source.toString('utf8').trim().split('\n').map(JSON.parse),expected=baseline.rows.filter(r=>r.readerInvoked).map(r=>r.id),prepared=[],tabs={drawing:'draw',diagram:'diagram',document:'editor',calendar:'calendar'};
 if(expected.length!==301||new Set(expected).size!==301)throw Error('invalid-frozen-cohort');
 for(const row of input){
- const state={'art.draw':drawing(),'diagram.sketch':diagram(),'docs.editor':document(),'data.charts':charts(),'time.calendar':{people:[],rooms:[],meetings:[]},'ui.shell':{activeTab:tabs[row.world]}};
+ const state={'art.draw':drawing(),'diagram.sketch':diagram(),'docs.editor':document(),'data.charts':charts(),'time.calendar':calendar(),'ui.shell':{activeTab:tabs[row.world]}};
  const instanceId=`functional-setup-${createHash('sha256').update(row.id).digest('hex').slice(0,24)}`;
- const host=row.world==='drawing'?createDrawingHost({state:state['art.draw'],instanceId}):row.world==='diagram'?await createDiagramHost({state:state['diagram.sketch'],instanceId}):row.world==='document'?createDocumentHost({state:state['docs.editor'],instanceId}):row.world==='calendar'?createCalendarHost({state:state['time.calendar'],instanceId}):null;
+ const host=row.world==='drawing'?await createDrawingArea({state:state['art.draw'],instanceId}):row.world==='diagram'?await createDiagramArea({state:state['diagram.sketch'],instanceId}):row.world==='document'?await createDocumentArea({state:state['docs.editor'],instanceId}):row.world==='calendar'?await createCalendarArea({state:state['time.calendar'],instanceId}):null;
  const fixture=prepareFunctionalFixture(row.world,row.context??{});
  const setup=await seedFunctionalContext({context:fixture.context,host,kindMappings:FUNCTIONAL_NATIVE_BINDINGS[row.world]??[],invocationPrefix:instanceId});
 

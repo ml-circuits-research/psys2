@@ -4,11 +4,11 @@ import {createHash} from 'node:crypto';
 import {resolve,dirname} from 'node:path';
 import {pathToFileURL} from 'node:url';
 import {loadActualReplayReader} from './lib/actual-reader-provider.mjs';
-import {createDrawingHost,initialDrawingState as drawing} from '../worlds/art.draw/declared-host.mjs';
-import {createDiagramHost,initialDiagramState as diagram} from '../worlds/diagram.sketch/declared-host.mjs';
-import {createDocumentHost,initialDocumentState as document} from '../worlds/docs.editor/declared-host.mjs';
+import {createDrawingArea,emptyDrawingState as drawing} from '../worlds/art.draw/sop-drawing.mjs';
+import {createDiagramArea,emptyDiagramState as diagram} from '../worlds/diagram.sketch/sop-diagram.mjs';
+import {createDocumentArea,emptyDocumentArea as document} from '../worlds/docs.editor/sop-document.mjs';
+import {createCalendarArea,emptyCalendarArea as calendar} from '../worlds/time.calendar/sop-calendar.mjs';
 import {initialChartState as charts} from '../worlds/data.charts/declared-host.mjs';
-import {createCalendarHost} from '../worlds/time.calendar/declared-host.mjs';
 import {seedFunctionalContext} from './functional-context-seeding.mjs';
 import {FUNCTIONAL_NATIVE_BINDINGS} from './lib/functional-native-bindings.mjs';
 import {prepareFunctionalFixture} from './lib/functional-fixture-policy.mjs';
@@ -35,8 +35,8 @@ if(input.some(r=>r.split!=='calibration'||seen.has(r.id)||!seen.add(r.id))) thro
 const fd=openSync(output+'.rows.jsonl','wx'),started=Date.now();let provenance=null;
 try {for(const row of input) {
   const text=row.source.text,area=row.world,instanceId='cal-'+sha(row.id).slice(0,24);
-  const state={'art.draw':drawing(),'diagram.sketch':diagram(),'docs.editor':document(),'data.charts':charts(),'time.calendar':{people:[],rooms:[],meetings:[]},'ui.shell':{activeTab:tabs[area]}};
-  const host=area==='drawing'?createDrawingHost({state:state['art.draw'],instanceId}):area==='diagram'?await createDiagramHost({state:state['diagram.sketch'],instanceId}):area==='document'?createDocumentHost({state:state['docs.editor'],instanceId}):area==='calendar'?createCalendarHost({state:state['time.calendar'],instanceId}):null;
+  const state={'art.draw':drawing(),'diagram.sketch':diagram(),'docs.editor':document(),'data.charts':charts(),'time.calendar':calendar(),'ui.shell':{activeTab:tabs[area]}};
+  const host=area==='drawing'?await createDrawingArea({state:state['art.draw'],instanceId}):area==='diagram'?await createDiagramArea({state:state['diagram.sketch'],instanceId}):area==='document'?await createDocumentArea({state:state['docs.editor'],instanceId}):area==='calendar'?await createCalendarArea({state:state['time.calendar'],instanceId}):null;
   const fixture=prepareFunctionalFixture(area,row.context??{});
   const setup=await seedFunctionalContext({context:fixture.context,host,kindMappings:FUNCTIONAL_NATIVE_BINDINGS[area]??[],invocationPrefix:instanceId});
   const source=sha(JSON.stringify([text,row.context??null])),partition=parseInt(source.slice(0,8),16)%2?'evaluation':'fit';

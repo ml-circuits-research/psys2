@@ -237,6 +237,10 @@
 .p2-plog-body { flex: 1; min-width: 0; display: flex; flex-direction: column; }
 .p2-plog-text { overflow-wrap: anywhere; }
 .p2-plog-body small { color: var(--muted); font-size: 12px; }
+.p2-plog-turn { font-size: 12px; margin-top: 2px; }
+.p2-plog-turn summary { cursor: pointer; color: var(--muted); }
+.p2-plog-part { margin-top: 4px; overflow-wrap: anywhere; }
+.p2-plog-sop { margin: 2px 0 0; padding: 4px 6px; max-height: 14em; overflow: auto; white-space: pre-wrap; word-break: break-all; font-size: 11px; background: var(--code-bg, rgba(127,127,127,.08)); border-radius: 4px; }
 .p2-plog-status { font-weight: 600; color: var(--ok); }
 .p2-plog-status.s-missing, .p2-plog-status.s-unsupported, .p2-plog-status.s-unparsed { color: var(--bad); }
 .p2-plog-empty { padding: 10px; color: var(--muted); font-size: 13px; }

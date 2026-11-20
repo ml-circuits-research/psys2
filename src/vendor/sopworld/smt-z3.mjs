@@ -68,9 +68,10 @@ async function inflate(buffer) {
  * A std.problem provider backed by Z3, for `solveProblem` and `compileRequest(..., { provider })`. Nothing is
  * fetched until the first problem; the context is then kept for every later one. When Z3 cannot run here the
  * provider answers null, so the internal search answers instead (its result says provider=internal); pass
- * `strict: true` to get the load error instead. `onLoad(info)` is told how the load went, once.
+ * `strict: true` to get the load error instead. `onLoad(info)` is told how the load went, once; `onSolve(info)`
+ * is told how each problem went ({ status, ms }, or status=declined with the reason and error).
  */
-export function z3Provider({ base = z3Base, strict = false, onLoad } = {}) {
+export function z3Provider({ base = z3Base, strict = false, onLoad, onSolve } = {}) {
   let context;
   const ready = () => {
     if (!context) {
@@ -83,8 +84,11 @@ export function z3Provider({ base = z3Base, strict = false, onLoad } = {}) {
   };
   const provider = async (model) => {
     let z;
-    try { z = await ready(); } catch (error) { if (strict) throw error; return null; }
-    return solveWithZ3(z, model);
+    try { z = await ready(); } catch (error) { if (strict) throw error; onSolve?.({ status: 'declined', reason: 'load', ms: 0 }); return null; }
+    // A translation or solver error declines the model too (the internal search answers), and is reported.
+    const started = Date.now();
+    try { const answer = await solveWithZ3(z, model); onSolve?.({ status: answer.status, ms: Date.now() - started }); return answer; }
+    catch (error) { if (strict) throw error; onSolve?.({ status: 'declined', reason: 'error', ms: Date.now() - started, error: String(error?.message ?? error) }); return null; }
   };
   provider.supported = z3Supported;
   /** Start loading now (for example when the user opens a view that will place things); resolves to true when Z3 is ready. */

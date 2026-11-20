@@ -6,6 +6,7 @@
  * and the exit code is unchanged (--jobs 1 runs in-process).
  */
 import { readFile, writeFile } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
 import readline from 'node:readline/promises';
 import { createFsLoader, DEFAULT_ROOT } from './loaders/fs-loader.mjs';
 import { createEngine, runWorldTests } from './dialog/index.mjs';
@@ -57,8 +58,15 @@ async function makeEngine(roots) {
 
 const SELF = fileURLToPath(import.meta.url);
 
-async function testOne(eng, id) {
+// A world that runs on a SOP area (it ships area.sop: worlds/sop-area.mjs reads it) keeps its old generated
+// operations.sop / tests.sop only as a retired format: its commands are its area's act rules, the JavaScript those
+// operations named is deleted, and its acceptance is the SOP-area suites of `npm test` (tests/*-sop-area*.test.mjs,
+// tests/*-declared-host.test.mjs). test-world lists such a world as retired instead of running the old rows.
+const sopAreaWorld = (roots, id) => roots.some((root) => existsSync(path.join(root, id, 'area.sop')));
+
+async function testOne(eng, id, roots = [DEFAULT_ROOT]) {
   if (!eng.set.get(id)) return { lines: [`${id}: unknown world`], bad: 1 };
+  if (sopAreaWorld(roots, id)) return { lines: [`${id}: retired format (runs on its SOP area; acceptance: npm test)`], bad: 0, first: 0 };
   // a world that needs catalog models (its `needs` hook: the avatar's faces) is tested against the local fixture of the catalog (tests/fixtures/catalog), never the network
   const needsCatalog = (needsOf(eng.set.get(id)).length > 0 || eng.set.get(id).lexicons.some((l) => l.open)) && !eng.knowledge;   // or a lexicon open to the catalog (open=knowledge)
   if (needsCatalog) eng.setKnowledge(createFacts({ source: createKnowledgeSource(path.join(DEFAULT_ROOT, '../tests/fixtures/catalog')) }));
@@ -73,12 +81,14 @@ async function cmdTestWorld(roots, target) {
   const ids = !target || target === 'all' ? engine.set.list().map((w) => w.id) : [target];
   let bad = 0;
   const problems = engine.problems();
-  const relevant = target && target !== 'all' ? problems.filter((p) => p.startsWith(target + ':') || p.startsWith('legend:')) : problems;
+  // The retired operations of a SOP-area world (their functions are deleted with the old tab code) are not problems.
+  const retired = (p) => / ops\.mjs has no function /.test(p) && sopAreaWorld(roots, p.split(':')[0]);
+  const relevant = (target && target !== 'all' ? problems.filter((p) => p.startsWith(target + ':') || p.startsWith('legend:')) : problems).filter((p) => !retired(p));
   for (const p of relevant) { console.log(`  problem: ${p}`); bad++; }
   const jobs = Math.min(parseJobs(), ids.length);
   const results = jobs > 1
     ? await runSharded({ file: SELF, items: ids, jobs, chunk: 1, workerData: { roots } })
-    : await (async () => { const out = []; for (const id of ids) out.push(await testOne(engine, id)); return out; })();
+    : await (async () => { const out = []; for (const id of ids) out.push(await testOne(engine, id, roots)); return out; })();
   let first = 0;
   for (const r of results) { for (const l of r.lines) console.log(l); bad += r.bad; first += r.first ?? r.bad; }
   console.log(`failing rows: ${bad}; first failures per session: ${first} (a session's later failing rows are followers)`);
@@ -157,6 +167,6 @@ function usage() {
 if (!isMainThread) {
   serveShard(async (wd) => {
     const eng = await makeEngine(wd.roots);
-    return (id) => testOne(eng, id);
+    return (id) => testOne(eng, id, wd.roots);
   });
 } else process.exitCode = await main();

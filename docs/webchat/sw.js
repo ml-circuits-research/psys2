@@ -13,11 +13,13 @@
 // GENERATION: bump it in the same commit as a release that must start every browser from clean caches; ui/assets.mjs (CACHE_GENERATION) clears the rest once.
 const GENERATION = 1;
 // CROSS-ORIGIN ISOLATION: every same-origin response this worker serves carries COOP/COEP, so the page and its workers are cross-origin isolated (SharedArrayBuffer), which
-// the library's Z3 provider for placement needs (src/dialog/placement-search-provider.mjs). The first visit, before this worker controls the page, is not isolated: placement then
-// uses the internal search; the next start is. COEP `credentialless` keeps cross-origin no-cors subresources working without CORP headers (browsers without it, e.g. Safari,
-// stay non-isolated and use the internal search). Set ISOLATE = false to turn it off; nothing else depends on it.
+// the library's Z3 provider for placement needs (src/dialog/placement-search-provider.mjs). The first visit, before this worker controls the page, is not isolated: the page
+// reloads itself once when this worker answers the manifest with isolate=true (ui/assets.mjs), so Z3 runs from the first visit. COEP `require-corp` (supported by Chromium,
+// Firefox and Safari, unlike `credentialless`) admits every cross-origin load the app makes, because all of them are CORS requests (the knowledge catalog on jsDelivr and
+// raw.githubusercontent, Z3 on the library's GitHub Pages: all send Access-Control-Allow-Origin); a no-cors cross-origin image or font would need a CORP header.
+// Set ISOLATE = false to turn it off; nothing else depends on it.
 const ISOLATE = true;
-const ISOLATION_HEADERS = { 'Cross-Origin-Opener-Policy': 'same-origin', 'Cross-Origin-Embedder-Policy': 'credentialless', 'Cross-Origin-Resource-Policy': 'same-origin' };
+const ISOLATION_HEADERS = { 'Cross-Origin-Opener-Policy': 'same-origin', 'Cross-Origin-Embedder-Policy': 'require-corp', 'Cross-Origin-Resource-Policy': 'same-origin' };
 const isolated = (res) => {
   if (!ISOLATE || !res || res.status < 200 || res.type === 'opaque' || res.type === 'opaqueredirect' || res.headers.get('cross-origin-embedder-policy')) return res;
   const headers = new Headers(res.headers);
@@ -59,7 +61,7 @@ async function setManifest(m) {
   try { await (await caches.open(META)).put(MANIFEST_KEY, new Response(JSON.stringify({ version: m.version, assets: m.assets }), { headers: { 'content-type': 'application/json' } })); } catch { /* not persisted */ }
   const removed = await prune(m);
   note('manifest', m.version, { removed: removed.length });
-  return { ok: true, removed: removed.length };
+  return { ok: true, removed: removed.length, isolate: ISOLATE };
 }
 
 async function fromNetworkAndStore(request, path, key, hashed) {
