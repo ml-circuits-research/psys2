@@ -244,7 +244,7 @@ export class DialogSession {
         }
       }
     }
-    const reply = await (await import('./reader-routing.mjs?v=3d39289df3')).routeNewEngine(this, english, { ...opts, language: 'en' });
+    const reply = await (await import('./reader-routing.mjs?v=b563247a35')).routeNewEngine(this, english, { ...opts, language: 'en' });
     reply.trace = { ...reply.trace, english, ...(translation ? { translation } : {}), ...(detection ? { languageDetection: detection } : {}) };
     if (language !== 'en') {
       try {
@@ -258,8 +258,6 @@ export class DialogSession {
   }
 
 }
-
-export { runWorldTests } from './test-runner.mjs?v=635e001b3e';
 
 /** Create the dialog engine: loads and checks the worlds of the application composition. */
 export async function createEngine({ loader, translator = null, options = {} }) {
