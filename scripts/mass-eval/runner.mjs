@@ -38,8 +38,10 @@ async function deployedReader(runtimeRoot,getContext){
  const spec={format:'psys2.actual-reader-replay/1',artifactRoot:BUNDLE,manifestSha256:sha(manifestBytes),runtimeRoot,runtimeTreeSha256:tree.sha256,ortModule,transformersModule,
   runtimeIdentity:{...DEPLOYMENT.runtimeIdentity,bindingsSha256:manifest.bindingsSha256,backendSha256:sha(JSON.stringify(backend))},
   tokenizerArtifact:file('tokenizer.json'),bindingsArtifact:file('bindings.json'),tokenizerConfig:file('tokenizer_config.json')};
+ // The replay loader keeps per-probe diagnostics under a 16 MB budget reset by probe()/run(); this harness calls the
+ // provider directly for thousands of rows, so the diagnostics (unused here) are not retained.
  let assembled=null;
- await loadActualReplayReader(spec,{factory:async options=>{assembled=await createVerifiedReaderProvider({...options,getContext});return assembled;}});
+ await loadActualReplayReader(spec,{factory:async options=>{assembled=await createVerifiedReaderProvider({...options,getContext,recordDiagnostics:async()=>{}});return assembled;}});
  return assembled.provider;
 }
 
