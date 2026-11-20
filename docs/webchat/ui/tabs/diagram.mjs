@@ -225,7 +225,7 @@ function make(holder, host) {
     if (sel.links.length) return toolCall('diagram.link.select', { ids: sel.links });
     return toolCall('diagram.node.select', { ids: [] });
   };
-  const baseInspector = makeInspector(inspector, { tool: toolCall, model: () => m, selection: () => sel, select, html, btn, focusBoard: () => svg.focus(), lineDefaults });
+  const baseInspector = makeInspector(inspector, { tool: toolCall, model: () => m, selection: () => sel, select, html, btn, focusBoard: () => svg.focus(), lineDefaults, ui: U });
   const panels = html('div'); inspector.append(panels);
   const stylePanels = makeStylePanels(panels, { tool: toolCall, model: () => m, selection: () => sel, html, btn });
   const pageBar = makePageBar(pagebar, { tool: toolCall, model: () => m, html, btn });

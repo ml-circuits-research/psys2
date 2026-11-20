@@ -6,7 +6,7 @@ const values = (ops, operation, param) => ops.find((op) => op.id === operation)?
 const mean = (items, key) => items.reduce((sum, item) => sum + item[key] / items.length, 0);
 const nameOf = (item) => (item?.label ? item.label + ' · ' : '') + (item?.id ?? '');
 
-export function makeInspector(inspector, { tool, model, selection, select, html, btn, focusBoard, lineDefaults = () => ({}) }) {
+export function makeInspector(inspector, { tool, model, selection, select, html, btn, focusBoard, lineDefaults = () => ({}), ui }) {
   let ops = [], chartDraft = false;
   const fill = (input, list, { blank = null } = {}) => {
     const keep = input.value; input.replaceChildren();
@@ -78,7 +78,7 @@ export function makeInspector(inspector, { tool, model, selection, select, html,
   // The new group is selected once it is made, so its properties and Ungroup are at hand.
   const makeGroup = btn('Group selected', 'Group the selected nodes', async () => {
     const ids = selection().nodes, name = nextGroupName(); if (!name || ids.length < 2) return;
-    const reply = await tool('diagram.group.make', { name, label: groupLabel.value.trim() || 'Group', ids: [...ids] });
+    const reply = await tool('diagram.group.make', { name, label: groupLabel.value.trim() || ui.defaultGroupLabel, ids: [...ids] });
     if (reply?.ok) { groupLabel.dataset.typed = ''; select({ group: name }); }
   });
   const ungroup = btn('Ungroup', 'Ungroup: the members stay', () => { const group = currentGroup(); if (group) tool('diagram.group.ungroup', { id: group.id }); });
@@ -137,7 +137,7 @@ export function makeInspector(inspector, { tool, model, selection, select, html,
     }
     chartStatus.textContent = '';
     const bins = Number(chartBins.value);
-    const reply = await tool('diagram.group.chart.make', { label: chartTitle.value.trim() || 'Data group', labels, values: numbers, layout: chartLayout.value,
+    const reply = await tool('diagram.group.chart.make', { label: chartTitle.value.trim() || ui.defaultChartLabel, labels, values: numbers, layout: chartLayout.value,
       ...(chartAggregate.value ? { aggregate: chartAggregate.value } : {}), ...(bins >= 2 ? { bins } : {}), ...(errors.length === numbers.length ? { errors } : {}) });
     if (reply?.ok) { chartDraft = false; sync(); }
   }), btn('Cancel', 'Cancel numeric group creation', () => { chartDraft = false; sync(); }), chartStatus);

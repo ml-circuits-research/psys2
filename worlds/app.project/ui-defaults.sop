@@ -22,3 +22,6 @@
 @ui.diagram.minNodeSize app.ui.value view=diagram name=minNodeSize number=8
 @ui.diagram.frameWidth app.ui.value view=diagram name=frameWidth number=1000
 @ui.diagram.frameHeight app.ui.value view=diagram name=frameHeight number=700
+# A group or a chart group made from the inspector without a label is labelled "Group" / "Data group".
+@ui.diagram.groupLabel app.ui.value view=diagram name=defaultGroupLabel text="Group"
+@ui.diagram.chartLabel app.ui.value view=diagram name=defaultChartLabel text="Data group"
