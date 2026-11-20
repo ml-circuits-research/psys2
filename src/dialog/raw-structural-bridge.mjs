@@ -8,6 +8,7 @@ export const BINDING_NODES=250000;
 const has=(o,k)=>Object.hasOwn(o,k),hash=v=>typeof v==='string'&&/^[a-f0-9]{64}$/.test(v);
 const keys={request:['span','trigger','mood','act','target','constraints','question','turn'],target:['type','mode','fill','determiner','kind','kind_span','name_span','description_span','ordinal','count','count_span','quantifier'],constraint:['key','value','value_span','operator','phase','polarity','character','step','measure','measure_span','unit','anchor_span','anchor_fill','variety','scope','group']};
 // comparatives: the declared factors of comparative steps (comparative-projection.mjs), [{concept,step,factor,declaration}].
+// references.queries: the declared question heads [{head,operation,property,declaration}] (query-reading-policy.sop).
 // references.definite: the language world's definite determiners ("the", "that"); a relation anchor phrase is a kind
 // lemma, alone or after one of them. contextTarget: {kind,declaration} — the canonical kind an earlier, observed
 // reference resolution chose for a model-declared context target (fill=context); never derived here.
@@ -37,6 +38,7 @@ export function bridgeRawStructure(prediction,{bindings,bindingSha256,comparativ
   if(table.format!=='sop.structural-bindings/1'||!hash(bindingSha256))fail('invalid-binding-snapshot');
   if(!Array.isArray(comparatives)||comparatives.length>256||comparatives.some(r=>!r||!['concept','step','declaration'].every(k=>typeof r[k]==='string'&&r[k])||!(r.ordinal===true?r.factor===undefined:Number.isFinite(r.factor)&&r.factor>0)))fail('invalid-comparative-projection');
   const definite=references?.definite??[];if(!Array.isArray(definite)||definite.length>64||definite.some(d=>typeof d!=='string'||!d||/\s/.test(d)))fail('invalid-reference-projection');
+  const questionHeads=references?.queries??[];if(!Array.isArray(questionHeads)||questionHeads.length>64||questionHeads.some(q=>!q||!['head','operation','declaration'].every(k=>typeof q[k]==='string'&&q[k])||typeof q.property!=='boolean'))fail('invalid-reference-projection');
   if(contextTarget!==null&&!(contextTarget&&['kind','declaration'].every(k=>typeof contextTarget[k]==='string'&&contextTarget[k])))fail('invalid-context-target');
   if(table.families!==undefined&&(!Array.isArray(table.families)||table.families.length>256))fail('invalid-family-binding-table');
   for(const row of table.families??[]){tick();if(!row||!['area','type','canonical','sourceWire','sourceWorld','moduleVersion'].every(k=>typeof row[k]==='string'&&row[k])||!hash(row.sourceSnapshotSHA)||row.alignment?.kind!=='explicit-raw-family-identity')fail('invalid-family-binding-record');}
@@ -213,7 +215,17 @@ export function bridgeRawStructure(prediction,{bindings,bindingSha256,comparativ
     if(and&&selectors.every(([,c])=>!has(c,'group'))){const id=`g${index}_selector`;(label.groups??=[]).push({id,operator:'and',members:selectors.map(([id])=>id)});t.selector=id;}else unresolved('selector-logical-closure-not-projected',['targets',tid,'selector']);
    }
    if(phase.result.length===1)label.root=phase.result[0][0];
-   if(has(original,'question'))unresolved('requires-declared-query-projection',['queries']);
+   // An annotated question projects through its declared head (references.queries): the asked property, when the head
+   // asks one, binds like a constraint key; the query asks it of the request's target.
+   if(has(original,'question')){
+    const q=original.question,askedKey=q&&typeof q==='object'?q.asked_key:undefined,heads=questionHeads.filter(h=>h.head===q?.ask&&h.property===(askedKey!==undefined));
+    const qprop=askedKey!==undefined?lookup('properties',{area:raw.area,key:askedKey}):null;
+    // A query projection asks (std.request: queries require ask mood); a yes/no check stays unprojected.
+    if(label.mood!=='ask'||heads.length!==1||askedKey!==undefined&&!qprop)unresolved('requires-declared-query-projection',['queries']);
+    else{const qid=`q${index}`,query={id:qid,target:tid,operation:heads[0].operation};
+     if(qprop){query.concept=qprop.canonical;anchor(['queries',qid,'concept'],q.asked_key_span,qprop.sourceWire,true,['question','asked_key_span']);}
+     label.queries=[query];}
+   }
    if(has(original,'turn')){label.turn=original.turn;unresolved('turn-contract-not-projected',['turn']);}
    const quant=target.quantifier;
    if(t.mode==='bound'&&['all','any','each','none'].includes(quant)&&!selectors.length&&phase.result.length&&phase.result.every(([,c])=>(c.scope===undefined||c.scope==='each')&&!has(c,'group')&&!has(c,'variety'))){
