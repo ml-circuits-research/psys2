@@ -23,7 +23,7 @@ import { createLanguage, hintText, LANG_TAGS, langName, langTag, tagOf, normaliz
 import { classifyVoice } from './ui/voice-noise.mjs';
 import { setLexicon, buildLexicon, addressWordsText } from './ui/voice-words.mjs';
 import { GROUPS, OPTIONS, EXPERIMENTS, optionById, optionsOf } from './ui/settings-catalog.mjs';
-import { createSwitchTranslator, createBrowserBackend, browserTranslatorKind, browserTranslatorAvailability, browserDetectorKind, browserDetectorAvailability } from './ui/translation.mjs';
+import { createBrowserBackend, browserTranslatorKind, browserTranslatorAvailability, browserDetectorKind, browserDetectorAvailability } from './ui/translation.mjs';
 import { renderTrace } from './ui/trace.mjs';
 import { findDispatcherModel, versionLabel } from './ui/dispatcher-host.mjs';
 import { findNormalizerModel } from './ui/normalizer-host.mjs';

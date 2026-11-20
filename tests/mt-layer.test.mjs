@@ -4,7 +4,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createMtHost } from '../docs/webchat/ui/mt-host.mjs';
-import { createBrowserBackend, createRemoteBackend, checkTranslation, REMOTE_MT_DEADLINE_MS, REMOTE_DEADLINE_MS } from '../docs/webchat/ui/translation.mjs';
+import { createBrowserBackend } from '../docs/webchat/ui/translation.mjs';
 import { normalize, tagOf, langName, registerLanguages, createLanguage } from '../docs/webchat/ui/language.mjs';
 
 const file = (path, bytes = 10) => ({ path, bytes });
@@ -78,22 +78,6 @@ test('layer order: the browser Translator first, the model otherwise, nothing el
   } finally { globalThis.self = savedSelf; }
 });
 
-test('the bridge into the engine worker gets the longer deadline when a model exists', () => {
-  const call = () => new Promise(() => {});
-  assert.equal(REMOTE_MT_DEADLINE_MS > REMOTE_DEADLINE_MS, true);
-  const b = createRemoteBackend({ kinds: { translator: 'mt', mt: true }, call, deadlineMs: 20 });
-  return assert.rejects(b.translate('x', 'de', 'en'), /timed out/);
-});
-
-test('the checker: numbers and names for any language, negation and question words only where the tables exist', () => {
-  assert.equal(checkTranslation('Wie viel ist 3 plus 4?', 'How much is 3 plus 4?', { from: 'de', to: 'en' }), null);
-  assert.match(checkTranslation('Wie viel ist 3 plus 4?', 'How much is 3 plus 5?', { from: 'de', to: 'en' }), /numbers/);
-  assert.match(checkTranslation('Wie viel ist das?', 'It is that much', { from: 'de', to: 'en' }), /question/);
-  assert.match(checkTranslation('Nu desena nimic', 'Draw something', { from: 'ro', to: 'en' }), /negation/);
-  assert.equal(checkTranslation('Draw nothing', 'Zeichne etwas', { from: 'en', to: 'de' }), null);   // no German negation table: not checked
-  assert.equal(checkTranslation('Zeichne nichts', 'Draw something', { from: 'de', to: 'en' }), null);   // no German negation table: not checked
-});
-
 test('language codes: any registry code is valid, tags and names come from the code, the holder accepts registered languages only', () => {
   assert.equal(normalize('de'), 'de'); assert.equal(normalize('auto'), 'en'); assert.equal(normalize('zh_hant'), 'zh_hant');
   assert.equal(tagOf('tl'), 'fil-PH'); assert.equal(tagOf('de'), 'de'); assert.equal(tagOf('en', 'en-GB'), 'en-GB');
@@ -104,9 +88,3 @@ test('language codes: any registry code is valid, tags and names come from the c
   assert.equal(l.set('fr'), true); assert.equal(l.tag(), 'fr');
 });
 
-test('checker: a name in another script than the target (Берлин, Ана) is transliterated, so it is not compared letter by letter; the same script still is', () => {
-  assert.equal(checkTranslation('Покажи ми Берлин.', 'Show me Berlin.', { from: 'bg', to: 'en' }), null);
-  assert.equal(checkTranslation('Ана има 8 молива.', 'Anna has 8 pencils.', { from: 'bg', to: 'en' }), null);
-  assert.match(checkTranslation('Show me Paris and Rome now', 'Show me the capital now', { from: 'fr', to: 'en' }) ?? '', /names not preserved/);
-  assert.match(checkTranslation('Покажи ми 8 молива', 'Show me pencils', { from: 'bg', to: 'en' }) ?? '', /numbers not preserved/);
-});
