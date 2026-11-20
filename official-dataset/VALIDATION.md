@@ -236,6 +236,7 @@ Fixed or converted:
 | absolute-degree-word-as-degree | 50 |
 | key-drawn.color-as-drawn.colour | 40 |
 | anchor-span-as-anchor-mention | 26 |
+| chart.type-span-as-whole-kind-phrase | 23 |
 | key-part.color-as-part.colour | 9 |
 | avatar-length-value-as-part.length | 1 |
 
@@ -255,6 +256,7 @@ Fixed or converted:
 
 | fix | rows |
 | --- | ---: |
+| chart.type-span-as-whole-kind-phrase | 2 |
 | comparative-as-delta-step | 2 |
 
 Kept with a warning (not an error; see README):
@@ -283,6 +285,12 @@ Kept with a warning (not an error; see README):
 ### ui-features-v1: 249 in, 249 kept
 
 ### ui-diagram-v2: 6,668 in, 6,668 kept
+
+Fixed or converted:
+
+| fix | rows |
+| --- | ---: |
+| chart.type-span-as-whole-kind-phrase | 43 |
 
 Kept with a warning (not an error; see README):
 

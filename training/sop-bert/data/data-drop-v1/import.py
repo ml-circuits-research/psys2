@@ -18,13 +18,14 @@ import gzip
 import hashlib
 import importlib.util
 import json
+import os
 import re
 import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[3]
-DROP = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else REPO.parent / 'management' / 'data-drop'
+DROP = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else Path(os.environ.get('DATA_DROP') or REPO.parent / 'management' / 'data-drop')  # DATA_DROP: the shared folder when run from another checkout
 sys.path.insert(0, str(REPO / 'training' / 'sop-bert' / 'data' / 'ui-diagram-v2'))
 from engine import merged_inventory  # noqa: E402  (official inventory + the Diagram keys of ui-diagram-v2)
 
@@ -353,6 +354,37 @@ def residual_marker(batch):
     return 'residual' in (batch / 'DONE').read_text().lower()
 
 
+POPULATION_WORDS = re.compile(r'^(all|every|each|both)\b|\b(everything|all of them)\b', re.I)
+
+
+def official_contract(row, stats):
+    """The official label contract on every imported row (frozen batches included): an existing target always states how it is
+    given (written name or code, kind description, population, the context, a journal step), as the rest of the official data
+    does; a chart type spans the whole kind phrase ("bar chart")."""
+    for q in row.get('requests') or []:
+        t = q.get('target') or {}
+        if t.get('mode') == 'existing' and not t.get('fill'):
+            if q.get('act') in ('undo', 'redo'):
+                fill = 'journal_step'
+            elif t.get('name_span'):
+                fill = 'written'
+            elif t.get('quantifier') or POPULATION_WORDS.search(str(t.get('description_span') or '')):
+                fill = 'all'
+            elif t.get('kind_span') or t.get('description_span'):
+                fill = 'description'
+            else:
+                fill = 'context'
+            t['fill'] = fill
+            stats[f'existing target without fill -> {fill}'] += 1
+        span = q.get('span') or ''
+        for c in q.get('constraints') or []:
+            if c.get('key') == 'chart.type' and isinstance(c.get('value_span'), str):
+                m = re.search(re.escape(c['value_span']) + r'(\s+(?:chart|graph|plot|diagram))\b', span)
+                if m and not c['value_span'].endswith(('chart', 'graph', 'plot', 'diagram')):
+                    c['value_span'] += m.group(1); stats['chart.type span extended to the whole kind phrase'] += 1
+    return row
+
+
 def main():
     frozen = {p.stem: [json.loads(l) for l in p.read_text().splitlines() if l.strip()] for p in sorted(FROZEN.glob('*.jsonl'))
               if not p.name.endswith(('.needs.jsonl', '.residual.jsonl'))}
@@ -497,6 +529,9 @@ def main():
     residuals = [json.loads(l) for p in sorted(FROZEN.glob('*.residual.jsonl')) if p.name[:-len('.residual.jsonl')] not in imported
                  for l in p.read_text().splitlines() if l.strip()]
     accepted = [r for rows in keep_frozen.values() for r in rows] + residuals + accepted
+    contract = collections.Counter()
+    accepted = [official_contract(r, contract) for r in accepted]
+    summary['officialContract'] = dict(contract)
     summary.update({name: {'frozen': len(rows)} for name, rows in keep_frozen.items() if name not in summary})
     for name, mode in resigned.items():
         summary.setdefault(name, {})['resigned'] = mode

@@ -404,6 +404,13 @@ def harmonise(row, stats):
                     c['key'] = 'part.length'; c['operator'] = 'degree'
                 q['constraints'] = [c for c in cs if c not in prop]
                 stats['avatar-length-value-as-part.length'] += len(values)
+    # A chart type spans the whole kind phrase ("bar chart", "pie chart"), in every source.
+    for q in row['requests']:
+        for c in q.get('constraints') or []:
+            if c.get('key') == 'chart.type' and isinstance(c.get('value_span'), str) and not c['value_span'].endswith(('chart', 'graph', 'plot')):
+                m = re.search(re.escape(c['value_span']) + r'(\s+(?:chart|graph|plot))\b', q.get('span') or '')
+                if m:
+                    c['value_span'] += m.group(1); stats['chart.type-span-as-whole-kind-phrase'] += 1
     # The count of new diagram nodes is the native parameter n (node.n), as in the executed and coverage corpora.
     if row['world'] == 'diagram':
         for q in row['requests']:

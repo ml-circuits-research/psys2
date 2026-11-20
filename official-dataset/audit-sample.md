@@ -151,7 +151,7 @@
     - chart.type = "bar" from “bar chart” [eq, result]
 
 31. [diagram · data-drop-v1 · train · None] “quick one: give the online series the name Direct orders”  — context: Monthly profit, Online
-  - span “give the online series the name Direct orders”: **change**/do trigger=“give”; target series existing definite
+  - span “give the online series the name Direct orders”: **change**/do trigger=“give”; target series existing definite fill=context
     - series.label = "Direct orders" from “Direct orders” [eq, result]
 
 32. [diagram · demo-tool-profile · train · diagram.node.change] “Could you make Pie A purple. I appreciate it.”  — context: Pie A, Slice 1
@@ -294,7 +294,7 @@
 57. [diagram · ui-tiers-v1 · train · diagram.group.chart] “We're presenting the survey tomorrow and the slide needs a heading, so could you turn Survey results into a doughnut chart called "How customers rated us"?”  — context: Sales by region, Monthly visitors, Quarterly revenue, Survey results, North, South
   - span “We're presenting the survey tomorrow and the slide needs a heading, so could you turn Survey results into a doughnut chart called "How customers rated us"?”: **make**/do trigger=“turn”; target chart new indefinite kind=chart kind_span=“chart”
     - chart.source = "(unlabelled)" from “Survey results” [eq, result]
-    - chart.type = "doughnut" from “doughnut” [eq, result]
+    - chart.type = "doughnut" from “doughnut chart” [eq, result]
     - chart.title = "How customers rated us" from “How customers rated us” [eq, result]
 
 58. [diagram · ui-tiers-v1 · train · diagram.group.resize] “Survey results: a little smaller”  — context: Sales by region, Monthly visitors, Quarterly revenue, Survey results, North, South

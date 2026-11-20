@@ -479,7 +479,7 @@
     }
   ],
   "builder": "official-dataset/build.py",
-  "builderSha256": "0bd84b37befbc8cb5bb8dde74551a595bf25cd04a011de6c424b35089dc7582e",
+  "builderSha256": "b5986c3705b9dc62385dc268b724f991862a12e403b352af9205da3f9a6d754a",
   "sources": [
     {
       "name": "ui-natural-v1",
@@ -553,6 +553,7 @@
         "absolute-degree-word-as-degree": 50,
         "anchor-span-as-anchor-mention": 26,
         "avatar-length-value-as-part.length": 1,
+        "chart.type-span-as-whole-kind-phrase": 23,
         "comparative-as-delta-step": 55,
         "definite-description-name-to-kind": 118,
         "key-drawn.color-as-drawn.colour": 40,
@@ -570,6 +571,7 @@
       "rowsDropped": 0,
       "dropReasons": {},
       "fixes": {
+        "chart.type-span-as-whole-kind-phrase": 2,
         "comparative-as-delta-step": 2
       }
     },
@@ -622,7 +624,9 @@
       "rowsKept": 6668,
       "rowsDropped": 0,
       "dropReasons": {},
-      "fixes": {}
+      "fixes": {
+        "chart.type-span-as-whole-kind-phrase": 43
+      }
     },
     {
       "name": "ui-diagram-v2-voice",
@@ -642,7 +646,7 @@
       "name": "ui-drawing-style-v1",
       "path": "training/sop-bert/data/ui-drawing-style-v1/examples.jsonl",
       "description": "Drawing turns, mirrors, facing, leans, opacity, effects, fills, outlines, writing and filters (generate.py)",
-      "gitCommit": null,
+      "gitCommit": "2518d14f100c8af2b78c85c2c5681573a198b2d5",
       "sha256": "2a394b1d5c51f168968f45e49e001eb93ff66b4f3269d0edd2519da27d51db20",
       "rowsIn": 1931,
       "rowsKept": 1931,
@@ -684,7 +688,7 @@
       "path": "training/sop-bert/data/data-drop-v1/accepted.jsonl",
       "description": "Diagram/Drawing rows of the data-request drops, validated and normalised by data-drop-v1/import.py",
       "gitCommit": "7326d3a06dd30fc9b3255e2bcbb6ed5ea8e3ea03",
-      "sha256": "babd6333378bdab4cde60aa5c2ba03a5d2090c1d238271950f43a0df14cf23d4",
+      "sha256": "39a62018903de5fa828eb6a5819a915d80cce232e19495398db53a1876db170c",
       "rowsIn": 16934,
       "rowsKept": 16934,
       "rowsDropped": 0,
@@ -887,9 +891,9 @@
     }
   ],
   "splits": {
-    "train": 103883,
-    "dev": 4458,
-    "test": 2235
+    "train": 103030,
+    "dev": 4424,
+    "test": 2214
   },
   "families": 26315,
   "leakedFamilies": 2795,
@@ -909,7 +913,7 @@
     "ui-drawing-style-v1": 307,
     "ui-quantities-v1": 42,
     "human-adapted-v1-drawing": 112,
-    "data-drop-v1": 3679,
+    "data-drop-v1": 2771,
     "human-adapted-v1-diagram": 72,
     "main-synthetic": 5108
   },
@@ -927,32 +931,32 @@
   },
   "files": {
     "STATS.md": {
-      "sha256": "4356e10f6045360bc1430d0fe3e8d5efebbc046178a26ccd61712ccc8bb883d4",
-      "bytes": 8098
+      "sha256": "65d2c85cd2ee146c674ba3a1473b7e112e4d1cbc34956a7d2efe50bd558f48d0",
+      "bytes": 8139
     },
     "VALIDATION.md": {
-      "sha256": "343dce0bf1baf6dff84f292c72f77cf0ef0dd3131f99291160c5b24102ec8aaf",
-      "bytes": 13019
+      "sha256": "f6e1f3100396c33336f0d68eb0754acc570425c92328deed5ff4e9b55800f274",
+      "bytes": 13529
     },
     "audit-sample.md": {
-      "sha256": "5e8de0d63bff8de8c838e3beb172529c2706f8cdff76801304d88888713655d7",
-      "bytes": 44259
+      "sha256": "c23152eef27dc8560d682630fc83da0b05e26044a1f1d2594ebfd141ae834ac0",
+      "bytes": 44394
     },
     "dev.jsonl": {
-      "sha256": "6440fc8da3147057e2805ff87b5044cce949d81bf7ebe6ee04bb3e1491b09029",
-      "bytes": 4863715
+      "sha256": "541ad1e99f0ef5ec3386285b2a782557ae4501224dac7aa545dca3a2a3dc7d4c",
+      "bytes": 4835788
     },
     "inventory.json": {
       "sha256": "94c30e30ab39b3eca35ae13eed67e859cbb10c5e855b2dc9efcf913f718ab34a",
       "bytes": 61409
     },
     "test.jsonl": {
-      "sha256": "c314f8dd7c786ee0a1021bcf30cdbebce2166301cc74f20f5451a0a52d8a2bd7",
-      "bytes": 2431098
+      "sha256": "b6354fc45dd58482405c274fb7ffe5787d57645e610b1a3a396467fcd9aa92bf",
+      "bytes": 2413172
     },
     "train.jsonl.gz": {
-      "sha256": "e662ba273eafce2bfd658d340f30ee2166ff5bfdfd863801c3c3d6e2db083bd6",
-      "bytes": 5121173
+      "sha256": "90be8ec157a0c37006a540968c53725c2df7220f881b51c838dfa5bafa860a83",
+      "bytes": 5062622
     }
   },
   "policy": {
