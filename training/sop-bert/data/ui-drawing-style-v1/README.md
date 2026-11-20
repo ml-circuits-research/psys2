@@ -1,5 +1,10 @@
 # ui-drawing-style-v1: Drawing transforms, writing, effects, fills and filters
 
+**Placeholder (owner rule, 2026-11-20).** Expression styles for new features come from the data worker's corpus mining,
+not from invented case corpora. This corpus exists only because nothing else covered these keys when reader v9 needed
+them. When the worker's corpus-grounded batches for transforms, text, effects and filters arrive, down-weight it in
+`prepare-official.py` (`SOURCE_WEIGHTS`) and then replace it; do not extend it.
+
 Reader rows for the Drawing controls of catalog b89b4541 (art.draw native interface): named turns and degrees
 (`drawn.turn`, `drawn.rotation`), mirrors, facing, leans (`drawn.skew`), opacity, effects, fills, gradients, outlines and
 stroke width, writing (`drawn.text`, `drawn.font`, `drawn.weight`, `drawn.slant`, `drawn.align`, `drawn.frame`), the same
