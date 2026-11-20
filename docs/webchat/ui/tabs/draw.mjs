@@ -66,7 +66,7 @@ function make(holder, host) {
   caption.setAttribute('aria-live', 'polite');
 
   let renderer = null, rough = null, rc = null, ctx = null, parser = null, operations = [];
-  let drag = null, marquee = null, chooserPoint = null, multiSelect = false, longPress = 0, idsUntil = 0, idsTimer = 0, idsDuration = 4000;
+  let drag = null, settling = null, marquee = null, chooserPoint = null, multiSelect = false, longPress = 0, idsUntil = 0, idsTimer = 0, idsDuration = 4000;
   const activePointers = new Set(); let multiTouch = false;
   let state = { objects: [], inputs: {}, boxes: {}, options: {}, runtime: { view: {} }, frame: { w: 1000, h: 700 } };
   let items = [], frame = { w: 1000, h: 700 }, lastIds = undefined, destroyed = false, raf = 0, last = 0;
@@ -354,7 +354,7 @@ function make(holder, host) {
   // ---- animation -----------------------------------------------------------------------------------------------
   // New objects pop in, moved or resized ones glide to their new box, removed ones shrink away.
   function sync() {
-    const now = performance.now(), present = new Set(); let batch = 0;
+    const now = performance.now(), present = new Set(), landed = new Set(); let batch = 0;
     const itemsOf = new Map(); for (const it of items) (itemsOf.get(it.id) ?? itemsOf.set(it.id, []).get(it.id)).push(it);
     for (const [id, own] of itemsOf) {
       const box = boxOf(id); if (!box) continue;
@@ -362,11 +362,15 @@ function make(holder, host) {
       const s = shown.get(id);
       if (!s || s.dying) shown.set(id, { box, cur: { dx: 0, dy: 0, kx: 1, ky: 1 }, born: now + batch++ * 140, dying: 0, items: own });
       else {
-        const was = displayed(s), w = Math.max(1, box.x1 - box.x0), h = Math.max(1, box.y1 - box.y0);
-        s.cur = { dx: (was.x0 + was.x1 - box.x0 - box.x1) / 2, dy: (was.y0 + was.y1 - box.y0 - box.y1) / 2, kx: (was.x1 - was.x0) / w, ky: (was.y1 - was.y0) / h };
-        s.box = box; s.items = own;
+        // a settling drop whose object got a new box: it glides on from where it was dropped
+        const p = previewOf(id), moved = p && ['x0', 'y0', 'x1', 'y1'].some((k) => Math.abs(box[k] - s.box[k]) > 0.01);
+        if (p && !moved) { s.items = own; continue; }
+        const was = p ? previewBox(s.box, p) : displayed(s);
+        s.box = box; s.items = own; glideFrom(s, was);
+        if (p) landed.add(id);
       }
     }
+    if (settling && settling.ids.some((id) => landed.has(id))) settling.applied = true;
     for (const [id, s] of shown) if (!present.has(id) && !s.dying) s.dying = now;
   }
   const displayed = ({ box, cur }) => { const cx = (box.x0 + box.x1) / 2 + cur.dx, cy = (box.y0 + box.y1) / 2 + cur.dy, w = (box.x1 - box.x0) * cur.kx, h = (box.y1 - box.y0) * cur.ky; return { x0: cx - w / 2, y0: cy - h / 2, x1: cx + w / 2, y1: cy + h / 2 }; };
@@ -402,10 +406,21 @@ function make(holder, host) {
   }
   function schedule() { if (!raf && renderer && !destroyed) raf = requestAnimationFrame(frameStep); }
   // A drag shows where it will put the objects: the same mapping of their joint box the command will send.
+  // A dropped drag keeps showing where it put the objects (settling) until the world's new boxes arrive: the objects
+  // stay where they were dropped instead of jumping back while the command is saved.
   function previewOf(id) {
-    if (!drag?.moved || drag.kind === 'part' || !drag.ids.includes(id)) return null;
-    const a = transformArgs(drag), b = drag.bounds;
+    const d = drag?.moved && drag.kind !== 'part' ? drag : settling && !settling.applied ? settling : null;
+    if (!d || !d.ids.includes(id)) return null;
+    const a = transformArgs(d), b = d.bounds;
     return { x0: b.x0, y0: b.y0, kx: a.width / b.w, ky: a.height / b.h, x: a.x, y: a.y };
+  }
+  const previewBox = (box, p) => ({ x0: p.x + (box.x0 - p.x0) * p.kx, y0: p.y + (box.y0 - p.y0) * p.ky, x1: p.x + (box.x1 - p.x0) * p.kx, y1: p.y + (box.y1 - p.y0) * p.ky });
+  const glideFrom = (s, was) => { const w = Math.max(1, s.box.x1 - s.box.x0), h = Math.max(1, s.box.y1 - s.box.y0); s.cur = { dx: (was.x0 + was.x1 - s.box.x0 - s.box.x1) / 2, dy: (was.y0 + was.y1 - s.box.y0 - s.box.y1) / 2, kx: (was.x1 - was.x0) / w, ky: (was.y1 - was.y0) / h }; };
+  // The command ended: a refused or unchanged drop glides back from where it was dropped.
+  function endSettling(d) {
+    if (settling !== d) return;
+    if (!d.applied) for (const id of d.ids) { const s = shown.get(id), p = previewOf(id); if (s && p) glideFrom(s, previewBox(s.box, p)); }
+    settling = null; schedule();
   }
   function paintFrame() {
     ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -431,7 +446,8 @@ function make(holder, host) {
     renderer.endFrame(ctx, frame);
     const part = currentPart();
     let b = selectionBounds();
-    if (b && drag?.moved && drag.kind !== 'part') { const a = transformArgs(drag); b = { x0: a.x, y0: a.y, x1: a.x + a.width, y1: a.y + a.height, w: a.width, h: a.height }; }
+    const shownDrag = drag?.moved && drag.kind !== 'part' ? drag : settling && !settling.applied ? settling : null;
+    if (b && shownDrag) { const a = transformArgs(shownDrag); b = { x0: a.x, y0: a.y, x1: a.x + a.width, y1: a.y + a.height, w: a.width, h: a.height }; }
     if (b && !part) { ctx.save(); ctx.strokeStyle = '#356ac3'; ctx.lineWidth = 2; ctx.strokeRect(b.x0, b.y0, b.w, b.h); for (const h of handlesOf(b)) { ctx.fillStyle = '#fff'; ctx.fillRect(h.x - 5, h.y - 5, 10, 10); ctx.strokeRect(h.x - 5, h.y - 5, 10, 10); } ctx.restore(); }
     const ids = view().ids;
     if (ids === 'always' || (ids === 'temporary' && Date.now() < idsUntil)) {
@@ -510,8 +526,10 @@ function make(holder, host) {
     if (current && current.pointer === e.pointerId && !current.done) {
       if (current.moved) {
         if (current.kind === 'part') canvasTool('drawing.part.place', { id: current.part.object, index: current.part.index, x: current.x, y: current.y });
-        else if (current.kind === 'resize' || current.ids.length > 1) canvasTool('drawing.objects.transform', transformArgs(current));
-        else { const [operation, args] = moveArgs(current.ids, current.x - current.x0, current.y - current.y0); canvasTool(operation, args); }
+        else {
+          const [operation, args] = current.kind === 'resize' || current.ids.length > 1 ? ['drawing.objects.transform', transformArgs(current)] : moveArgs(current.ids, current.x - current.x0, current.y - current.y0);
+          settling = current; canvasTool(operation, args).finally(() => endSettling(current));
+        }
       } else if (current.kind !== 'resize') {
         if (current.shift) toggle(current.unit);
         else if (current.kind === 'part') canvasTool('drawing.part.select', { id: current.part.object, index: current.part.index });

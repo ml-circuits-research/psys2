@@ -50,7 +50,7 @@ function make(holder,host){
  const prefix=b=>b?.section?'document.section':'document.block';
  const blockById=id=>state.blocks.find(b=>b.id===id);
  const textOf=(b,at)=>b?.kind==='list'?b.items?.[Number(at)]:b?.kind==='table'?b.rows?.[Number(String(at).split(':')[0])]?.[Number(String(at).split(':')[1])]:b?.text;
- async function tool(operation,args){if(pending||host.isBusy?.())return {ok:false,message:'Please wait for the current action.'};pending=true;root.setAttribute('aria-busy','true');try{const r=await host.tool(operation,args,{view:VIEW});status.textContent=r?.message??(r?.ok?'Saved.':'Could not save.');return r??{ok:false};}catch(error){status.textContent=error.message;return {ok:false,message:error.message};}finally{pending=false;root.removeAttribute('aria-busy');}}
+ async function tool(operation,args){pending=true;root.setAttribute('aria-busy','true');try{const r=await host.tool(operation,args,{view:VIEW});status.textContent=r?.message??(r?.ok?'Saved.':'Could not save.');return r??{ok:false};}catch(error){status.textContent=error.message;return {ok:false,message:error.message};}finally{pending=false;root.removeAttribute('aria-busy');}}
  async function ensureDocument(){if(state.textId)return true;return (await tool('document.write',{title:'Untitled document',blocks:[]})).ok;}
  async function saveEditing(){if(saving)return saving;if(!editing)return true;const current=editing,text=current.input.value;editing=null;const b=blockById(current.id),cid=b?.containers?.[current.at];if(text===textOf(b,current.at)||!cid)return true;saving=tool('document.container.change',{id:cid,text}).then(r=>r.ok);try{return await saving;}finally{saving=null;}}
  // The block a command made: the one the projection observes now and did not before.

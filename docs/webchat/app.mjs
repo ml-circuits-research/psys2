@@ -199,7 +199,9 @@ export async function mountPsys2(element, options = {}) {
     }
     if (!tabMade.has(t.id)) tabMade.set(t.id, (async () => {
       const timing=beginTabLoad(t);
-      effectsPending++; updateBusy();   // the tab's UI is part of the turn that opened it: the host is busy (and a test or a voice turn waits) until it is there
+      // the tab's UI is part of the turn that opened it: the host is busy (and a test or a voice turn waits) until it is
+      // there; a tab made out of sight (its world changed) loads without veiling the one in use
+      const veils = view === t.id || !!turn; if (veils) { effectsPending++; updateBusy(); }
       try {
       timing.timeline.stage('Load editor module');await tabPaint();
       if (t.file && !t.make) { const m = (await import(new URL(`ui/tabs/${t.file}`, base).href)).default; Object.assign(t, m); }   // the tab's module loads now (with its world modules); vendor assets load when it makes its UI
@@ -211,7 +213,7 @@ export async function mountPsys2(element, options = {}) {
       timing.timeline.stage('Render instance state');panelUI[t.id].ui.update?.(states[t.world]);
       if (view === t.id) panelUI[t.id].ui.show?.();
       await finishTabLoad(timing);return panelUI[t.id].ui;
-      }catch(error){timing.timeline.finish(error);tabMade.delete(t.id);throw error;} finally { effectsPending = Math.max(0, effectsPending - 1); updateBusy(); }
+      }catch(error){timing.timeline.finish(error);tabMade.delete(t.id);throw error;} finally { if (veils) { effectsPending = Math.max(0, effectsPending - 1); updateBusy(); } }
     })());
     const p = tabMade.get(t.id);
     if (!panelUI[t.id]) { makingTabs.add(p); p.finally(() => makingTabs.delete(p)).catch(() => {}); }
@@ -243,6 +245,9 @@ export async function mountPsys2(element, options = {}) {
   // BUSY: one source of truth. The host is busy while a turn runs (`turn`; the queue of MIC2 only holds waiting messages), while its host effects run (`effectsPending`) and while the answer is spoken (`mic.speaking`).
   // A speech that never ends must not hold the tabs forever: the veil is lifted after a cap that grows with the text (the speech itself goes on).
   let effectsPending = 0, speakCapped = false, speakCapTimer = 0, lastAnswerLen = 0, veiled = false;
+  // UI gestures (host.tool) run one after another in the order made, never refused for being busy; they keep the host
+  // busy for turns (`gesturesPending`) but do not veil the tabs, so the next drag or click is taken while one is saved.
+  let gesturesPending = 0, gestureChain = Promise.resolve();
   const busyListeners = new Set();
   let lastNU = null;   // the last not-understood voice reply { at, n, el, badge }
   let busy = 0, turn = null, flash = null, flashTimer = null, interim = '', mic = { listening: false, speaking: false, mode: null };
@@ -558,7 +563,7 @@ export async function mountPsys2(element, options = {}) {
     if (!settingsEl.hidden) renderSettings();
   }
   /** The Send button is the Stop button while a turn runs (type 'button' then, so that Enter, which submits the form, never presses Stop). */
-  const isBusy = () => !!turn || effectsPending > 0 || (!!mic.speaking && !speakCapped);
+  const isBusy = () => !!turn || effectsPending > 0 || gesturesPending > 0 || (!!mic.speaking && !speakCapped);
   /** Veils every tab while the host is busy (grey layer, aria-busy, inert, spinner in the header); notifies subscribers on a change. */
   function updateBusy() {
     speech?.setWorking(isBusy());   // MOBILE-VOICE: the microphone pauses from the send until the turn, its effects and the spoken answer have finished
@@ -653,9 +658,14 @@ export async function mountPsys2(element, options = {}) {
   const renderFailures=new Set();
   function applyState(snapshot, projection = snapshot) {
     if (!snapshot || typeof snapshot !== 'object') return;
-    const changed = [];
-    for (const [id, st] of Object.entries(snapshot)) { states[id] = Object.hasOwn(projection, id) ? projection[id] : st; changed.push(id); }
-    for (const t of tabDefs) if (changed.includes(t.world)) { try{if (panelUI[t.id]) panelUI[t.id].ui.update(states[t.world]); else if (tabKnown.has(t.id) && tabsLive) makeTab(t);renderFailures.delete(t.id);}catch(error){console.warn('Editor refresh failed',t.id,error);if(!renderFailures.has(t.id))note(`${t.label} could not refresh. World data is preserved.`);renderFailures.add(t.id);} }
+    const changed = [], altered = new Set();
+    for (const [id, st] of Object.entries(snapshot)) {
+      const before = states[id], next = Object.hasOwn(projection, id) ? projection[id] : st;
+      // a world whose state really changed (not one that merely loaded, nor the same state sent again) makes its tab
+      if (before !== undefined && before !== next && JSON.stringify(before) !== JSON.stringify(next)) altered.add(id);
+      states[id] = next; changed.push(id);
+    }
+    for (const t of tabDefs) if (changed.includes(t.world)) { try{if (panelUI[t.id]) panelUI[t.id].ui.update(states[t.world]); else if (tabKnown.has(t.id) && tabsLive && altered.has(t.world)) makeTab(t);renderFailures.delete(t.id);}catch(error){console.warn('Editor refresh failed',t.id,error);if(!renderFailures.has(t.id))note(`${t.label} could not refresh. World data is preserved.`);renderFailures.add(t.id);} }
     if (changed.includes('ui.avatar')) avatarUI?.update(states['ui.avatar']);
     if (changed.includes(SHELL)) applyShell(states[SHELL]);
     if (changed.includes('docs.editor')) syncDictation();
@@ -749,15 +759,12 @@ export async function mountPsys2(element, options = {}) {
     editorDeclarations.set(selected,result.operations);
     return result;
   }
-  const hostApi = {
-    persistent: options.persist !== false,
-    /** RANDOM (spec 25): texts the sampler gives for the tab (mode 'few' | 'actions' | 'one'); a tab shows them in its empty state instead of a list of its own. */
-    sample: (mode, extra) => sampleItems(mode, extra).then((items) => items.map((i) => i.text)),
-    tools: editorTools,
-    tool: async (operation,args={},options={}) => {
-      if(isBusy())return {ok:false,message:'Please wait for the current action.'};
-      const focusBeforeTool=document.activeElement;effectsPending++;updateBusy();
-      try {
+  /** One UI gesture: its declared native command through the worker (app.act.request -> rules -> tool), its sentence and
+   * SOP in the chat log and the training pairs. It waits for a running turn (and the effects of one) instead of refusing. */
+  async function runGesture(operation,args={},options={}) {
+    while(turn||effectsPending>0)await sleep(30);
+    const focusBeforeTool=document.activeElement;
+    try {
         const selected = options.view ?? activeEditor();
         const {editorGestureSop} = await import('./lib/dialog/native-control-intent.mjs');
         const sop = await editorGestureSop(operation,quantizeGeometryArguments(args),async () =>
@@ -776,8 +783,19 @@ export async function mountPsys2(element, options = {}) {
         }
         if (r.ok && r.changed) events.add('control',operation);
         return r;
-      }
-      finally{effectsPending=Math.max(0,effectsPending-1);updateBusy();if(focusBeforeTool?.isConnected&&document.activeElement===document.body)focusBeforeTool.focus({preventScroll:true});}
+    }
+    finally{if(focusBeforeTool?.isConnected&&document.activeElement===document.body)focusBeforeTool.focus({preventScroll:true});}
+  }
+  const hostApi = {
+    persistent: options.persist !== false,
+    /** RANDOM (spec 25): texts the sampler gives for the tab (mode 'few' | 'actions' | 'one'); a tab shows them in its empty state instead of a list of its own. */
+    sample: (mode, extra) => sampleItems(mode, extra).then((items) => items.map((i) => i.text)),
+    tools: editorTools,
+    tool: (operation,args={},options={}) => {
+      gesturesPending++;updateBusy();
+      const run=gestureChain.then(()=>runGesture(operation,args,options)).finally(()=>{gesturesPending=Math.max(0,gesturesPending-1);updateBusy();});
+      gestureChain=run.catch(()=>{});
+      return run;
     },
     send: (text) => send(String(text), 'form'),   // a tab's form or control (logged as mode 'form'); ignored (with a hint) while a turn runs
     /** A card or control that moves the person to another tab (a transferred card): logged as a tab opened by a card. */
