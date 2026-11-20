@@ -393,6 +393,8 @@ def constraint(key, surface, value, opts, phase='result'):
             c['polarity'] = 'negative'
         elif o == 'pref':
             c['character'] = 'preference'
+        elif o in ('op<', 'op>'):
+            c['operator'] = 'less.equal' if o == 'op<' else 'greater.equal'
         elif o.startswith('scope:'):
             c['scope'] = o.split(':')[1]
         else:

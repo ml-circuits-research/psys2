@@ -885,3 +885,26 @@ for t in ('equivalent', 'complex', 'simplified'):  # a plural kind after "connec
     for f in CASES['diagram.links.connect:population'][t]:
         if '[k:cirles|circle]' in f.template:
             f.attrs = (op('diagram.links.connect', fill='all'),)
+
+case('chart.format:highlight', 'conditional colours: categories below/above a value take a colour (diagram.chart.highlight)',
+     fr(['{pol}[t:make] the bars [c:point.value|below|{val}|sel] {val} {ccolour}'.replace('[c:point.value|below|{val}|sel] {val}', 'below [c:point.value|{val}|{val}|sel]'),
+         '{pol}[t:colour] every bar over [c:point.value|{val}|{val}|sel] {ccolour}', '{pol}[t:highlight] the values above [c:point.value|{val}|{val}|sel] in {ccolour}',
+         '{pol}[t:make] the categories under [c:point.value|{val}|{val}|sel] {ccolour}', '{pol}[t:show] anything below [c:point.value|{val}|{val}|sel] in {ccolour}',
+         '{pol}[t:paint] the slices bigger than [c:point.value|{val}|{val}|sel] {ccolour}'], CC),
+     fr(['the losing months should stand out, so [t:make] the bars below [c:point.value|{val}|{val}|sel] {ccolour}'], CC),
+     fr(['below [c:point.value|{val}|{val}|sel] in {ccolour}', 'over [c:point.value|{val}|{val}|sel] {ccolour}', '[t:highlight] above [c:point.value|{val}|{val}|sel]'],
+        op('diagram.chart.change', fill='context')), scene=CHART, n=30)
+for t in ('equivalent', 'complex', 'simplified'):
+    for f in CASES['chart.format:highlight'][t]:
+        low = f.template
+        opr = 'less.equal' if any(w in low for w in ('below', 'under')) else 'greater.equal'
+        f.template = f.template.replace('|{val}|sel]', '|{val}|sel,op' + ('<' if opr == 'less.equal' else '>') + ']')
+
+case('chart.make:dimension', 'make a chart named by its measure and category dimension, no values ("a bar chart of sales by month")',
+     fr(['{pol}{add} {actype} of sales by month', '{pol}[t:make] {actype} of the budget by department', '{pol}[t:create] {actype} showing visitors per day',
+         '{pol}{add} {actype} of revenue by quarter', '{pol}[t:make] {actype} of the votes', '{pol}[t:show] the staff by rank as {actype}', '{pol}[t:draw] {actype} of tickets per week',
+         '{pol}[t:make] {actype} for the survey results by age group', '{pol}{add} {actype} of costs per region', "{pol}I'd [t:like] {actype} of sales per product",
+         '{pol}{add} {actype} comparing the teams', '{pol}[t:chart] sales by month as {actype}'], CM),
+     fr(['for the monthly report, {add} {actype} of sales by month', 'the board wants to see the split, so [t:make] {actype} of the budget by department'], CM),
+     fr(['{actype} of sales by month', '{actype} of the budget', '{actype} please', '{actype} by region', '[t:ad] a [c:chart.type|bar chrat|bar] of sales by month'],
+        CM), scene=EMPTY, n=34)

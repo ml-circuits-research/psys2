@@ -625,7 +625,7 @@
         "anchor-span-as-anchor-mention": 26,
         "avatar-length-value-as-part.length": 1,
         "comparative-as-delta-step": 55,
-        "definite-description-name-to-kind": 121,
+        "definite-description-name-to-kind": 118,
         "key-drawn.color-as-drawn.colour": 40,
         "key-part.color-as-part.colour": 9
       }
@@ -690,10 +690,10 @@
       "name": "ui-diagram-v2",
       "path": "training/sop-bert/data/ui-diagram-v2/examples.jsonl",
       "description": "voice/chat control of the Diagram editor: every operation x parameter x reference form, robustness variants, compounds, questions (generate.py)",
-      "gitCommit": "ff5843c5ffeece434999e5f294e16da8e116ed2d",
-      "sha256": "47c4cc2d94b96b3388ef7b12a6a786f440d231f84d61a470c23d93a758ec2568",
-      "rowsIn": 6536,
-      "rowsKept": 6528,
+      "gitCommit": "bdb078a7b4cd468a4719094033fcd6d61ead7826",
+      "sha256": "aab5a096d75bd5a9059bd27408f73bf7df5ad61698dab0ac4999170f3cbdbb04",
+      "rowsIn": 6647,
+      "rowsKept": 6639,
       "rowsDropped": 8,
       "dropReasons": {
         "dropped:conflicting-label-for-identical-text": 1,
@@ -719,25 +719,45 @@
       "name": "human-adapted-v1-drawing",
       "path": "training/sop-bert/data/human-adapted-v1/drawing/examples.jsonl",
       "description": "real human utterances adapted to the Drawing tab (specs/human-utterance-benchmark.md)",
-      "gitCommit": null,
-      "sha256": "1fa3fd5f34da8ddac2031d2898a7f3d67cb5f92151d8c34b092e0adac52ff112",
-      "rowsIn": 205,
-      "rowsKept": 205,
+      "gitCommit": "bdf6cb0680ad2a09edcb736b875cf3124c721f8f",
+      "sha256": "76f5aa46706fe90725e20dadcc2b2cd6df7a5fcec1a431262f23824bd466e9c5",
+      "rowsIn": 558,
+      "rowsKept": 558,
       "rowsDropped": 0,
       "dropReasons": {},
-      "fixes": {}
+      "fixes": {
+        "comparative-as-delta-step": 1,
+        "definite-description-name-to-kind": 1
+      }
     },
     {
       "name": "data-drop-v1",
       "path": "training/sop-bert/data/data-drop-v1/accepted.jsonl",
       "description": "Diagram/Drawing rows of the data-request drops, validated and normalised by data-drop-v1/import.py",
-      "gitCommit": null,
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "rowsIn": 0,
-      "rowsKept": 0,
+      "gitCommit": "f10f5622fabdf44761ba7fddc52771859e05356a",
+      "sha256": "fa10f1e7637a3c11353cc264883ce35ecdf7ddca4c2e87a13db1bd57e744f4af",
+      "rowsIn": 1228,
+      "rowsKept": 1228,
       "rowsDropped": 0,
       "dropReasons": {},
-      "fixes": {}
+      "fixes": {
+        "anchor-span-as-anchor-mention": 57,
+        "class-value-outside-bank-unlabelled": 58
+      }
+    },
+    {
+      "name": "human-adapted-v1-diagram",
+      "path": "training/sop-bert/data/human-adapted-v1/diagram/examples.jsonl",
+      "description": "real human utterances adapted to the Diagram tab (specs/human-utterance-benchmark.md)",
+      "gitCommit": "02e23aefe1286e61df1fdb8a043b97f23a944970",
+      "sha256": "714deb8e9dd2836f8d313b3216f728116706c5fa6b609601f750c83ab5854771",
+      "rowsIn": 538,
+      "rowsKept": 538,
+      "rowsDropped": 0,
+      "dropReasons": {},
+      "fixes": {
+        "comparative-as-delta-step": 2
+      }
     },
     {
       "name": "demo-tool-profile",
@@ -921,11 +941,11 @@
     }
   ],
   "splits": {
-    "train": 48619,
-    "dev": 5939,
-    "test": 5815
+    "train": 50773,
+    "dev": 6193,
+    "test": 6072
   },
-  "families": 23893,
+  "families": 24788,
   "leakedFamilies": 0,
   "labelConflictsResolvedByPriority": {
     "ui-human-v1<-ui-features-v1": 1,
@@ -937,19 +957,21 @@
   },
   "previousMessageAugmentation": {
     "ui-natural-v1": 314,
-    "ui-human-v1": 715,
+    "ui-human-v1": 716,
     "ui-coverage-v2": 595,
     "ui-tiers-v1": 3,
-    "ui-relations-v1": 1368,
+    "ui-relations-v1": 1370,
     "ui-comparatives-v1": 154,
     "ui-features-v1": 66,
-    "ui-diagram-v2": 1158,
+    "ui-diagram-v2": 1172,
     "ui-quantities-v1": 42,
-    "human-adapted-v1-drawing": 53,
+    "human-adapted-v1-drawing": 112,
+    "data-drop-v1": 287,
+    "human-adapted-v1-diagram": 72,
     "main-synthetic": 1214
   },
   "nonReaderLabelFieldsRemoved": {
-    "raw_value": 250,
+    "raw_value": 308,
     "anchor_fill": 8125,
     "anchor_span": 437,
     "qualitative": 430,
@@ -957,37 +979,37 @@
     "anchor_kind": 5374
   },
   "kindVocabulary": {
-    "path": "docs/webchat/models/sop-bert/afa61472a2b06f94b85e35787cb702dfaac7008dcdf0aecb5bececddfe44d945/bindings.json",
-    "sha256": "219e21dd1082871008f4dde11d0ebc0930b07f402a735f23e764219bd9852a9f"
+    "path": "docs/webchat/models/sop-bert/2794fa0577a4aee72ae1cc4ea5bcc29983743e2746b3c48aa8782c617c98361f/bindings.json",
+    "sha256": "ba26132ebb8aace1f19a9a563b98d6459a7a9f43cd52c96b5fb100c0593ddbad"
   },
   "files": {
     "STATS.md": {
-      "sha256": "1b452c4a787d7b8ded396cdcb5e7a9b026fc39b6f614ddb9c7da5a2e4341158a",
-      "bytes": 7416
+      "sha256": "28c96d9f0aabcc5b0e7fb6fe3717b351ad49539cd0e958e30b971b5176387a54",
+      "bytes": 7417
     },
     "VALIDATION.md": {
-      "sha256": "1fd0831d9c64ab4952a2b7638b8335ef20cd8d1b68fc080815abfea0a42c5c25",
-      "bytes": 11215
+      "sha256": "b9b91881afe9c5b8c78a03c674dc120da6c5d611ad1c96805f968747d024b7d0",
+      "bytes": 11373
     },
     "audit-sample.md": {
-      "sha256": "6a7b364cd53c066071be6d47aded0dee8d5b1caae66d0f98f484e754388b28cf",
-      "bytes": 44800
+      "sha256": "0346d758088c1f0a6c26eecf60c29d1290f1aa76c26d3f4608e7c5799c15cddd",
+      "bytes": 44730
     },
     "dev.jsonl": {
-      "sha256": "548ccf2b025593fafdf888496017846d618514a3eee72ab733a2f292c0b6b2cb",
-      "bytes": 6531684
+      "sha256": "6f256a8c2d8fa3d4c32e261774d312088f9498681c1707f6221b290253354fd6",
+      "bytes": 6781777
     },
     "inventory.json": {
       "sha256": "302df46d4c7848cb7bc2c9a7f2da9228edc47200730f69bc88cd324710e5e806",
       "bytes": 55990
     },
     "test.jsonl": {
-      "sha256": "9f23a675e1fcae5f39a17aff936eec414529601728c47d89a6df0893b48c5744",
-      "bytes": 6507757
+      "sha256": "c29fbe4056ef2e204f288197ef7887f1d33eb1318f35b80294e0bb543931a82d",
+      "bytes": 6778388
     },
     "train.jsonl.gz": {
-      "sha256": "f84059f973b1763a0d3c344f098d227f02bad51a2638c21edefb8af8a353dc85",
-      "bytes": 2733418
+      "sha256": "630e7b3d8bf5e9806b5eab4d294a5cccb193abd0132e780599caba2bdc8127cf",
+      "bytes": 2850621
     }
   },
   "policy": {
@@ -1003,6 +1025,7 @@
       "ui-quantities-v1",
       "human-adapted-v1-drawing",
       "data-drop-v1",
+      "human-adapted-v1-diagram",
       "demo-tool-profile",
       "main-synthetic"
     ],

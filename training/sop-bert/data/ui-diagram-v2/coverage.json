@@ -1,19 +1,19 @@
 {
  "summary": {
-  "rows": 6536,
-  "cases": 112,
+  "rows": 6647,
+  "cases": 114,
   "byTier": {
-   "equivalent": 2470,
-   "complex": 2081,
-   "simplified": 1985
+   "equivalent": 2508,
+   "complex": 2122,
+   "simplified": 2017
   },
   "byVariant": {
-   "base": 3541,
-   "typo": 867,
-   "nospace": 398,
-   "asr": 777,
-   "filler": 455,
-   "polite": 498
+   "base": 3605,
+   "typo": 884,
+   "nospace": 406,
+   "asr": 787,
+   "filler": 461,
+   "polite": 504
   },
   "compoundRows": 215,
   "questionRows": 685,
@@ -1804,6 +1804,38 @@
     "nospace": 3
    },
    "what": "effects on nodes or the whole diagram"
+  },
+  "chart.format:highlight": {
+   "base": {
+    "equivalent": 10,
+    "complex": 10,
+    "simplified": 10
+   },
+   "rows": 48,
+   "robustness": {
+    "asr": 5,
+    "polite": 5,
+    "typo": 4,
+    "filler": 2,
+    "nospace": 2
+   },
+   "what": "conditional colours: categories below/above a value take a colour (diagram.chart.highlight)"
+  },
+  "chart.make:dimension": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 63,
+   "robustness": {
+    "asr": 5,
+    "typo": 13,
+    "filler": 4,
+    "nospace": 6,
+    "polite": 1
+   },
+   "what": "make a chart named by its measure and category dimension, no values (\"a bar chart of sales by month\")"
   }
  }
 }

@@ -67,11 +67,11 @@ No issue found.
 
 No issue found.
 
-### ui-diagram-v2 (6,536 rows)
+### ui-diagram-v2 (6,647 rows)
 
 | issue | rows |
 | --- | ---: |
-| warning:selector-not-in-context | 172 |
+| warning:selector-not-in-context | 215 |
 | warning:value-span-ambiguous | 64 |
 | warning:numeric-value-not-in-surface | 50 |
 | warning:target-name_span-ambiguous | 5 |
@@ -83,17 +83,33 @@ No issue found.
 | --- | ---: |
 | warning:selector-not-in-context | 1 |
 
-### human-adapted-v1-drawing (205 rows)
+### human-adapted-v1-drawing (558 rows)
 
 | issue | rows |
 | --- | ---: |
+| warning:selector-not-in-context | 42 |
+| warning:target-kind_span-ambiguous | 16 |
+| warning:selector-with-empty-context | 4 |
+| warning:value-span-ambiguous | 2 |
+| warning:target-description_span-ambiguous | 1 |
+
+### data-drop-v1 (1,228 rows)
+
+| issue | rows |
+| --- | ---: |
+| class-value-outside-bank-unlabelled | 58 |
+| warning:selector-not-in-context | 23 |
+| warning:numeric-value-not-in-surface | 6 |
+| warning:target-kind_span-ambiguous | 5 |
+
+### human-adapted-v1-diagram (538 rows)
+
+| issue | rows |
+| --- | ---: |
+| warning:value-span-ambiguous | 28 |
 | warning:selector-not-in-context | 13 |
+| warning:target-kind_span-ambiguous | 5 |
 | warning:selector-with-empty-context | 2 |
-| warning:value-span-ambiguous | 1 |
-
-### data-drop-v1 (0 rows)
-
-No issue found.
 
 ### demo-tool-profile (36,999 rows)
 
@@ -197,7 +213,7 @@ Fixed or converted:
 
 | fix | rows |
 | --- | ---: |
-| definite-description-name-to-kind | 121 |
+| definite-description-name-to-kind | 118 |
 | comparative-as-delta-step | 55 |
 | absolute-degree-word-as-degree | 50 |
 | key-drawn.color-as-drawn.colour | 40 |
@@ -209,7 +225,7 @@ Kept with a warning (not an error; see README):
 
 | warning | rows |
 | --- | ---: |
-| selector-not-in-context | 89 |
+| selector-not-in-context | 92 |
 | value-span-ambiguous | 57 |
 | target-name_span-ambiguous | 28 |
 | target-kind_span-ambiguous | 11 |
@@ -255,7 +271,7 @@ Dropped:
 | dropped:duplicate-text | 1 |
 | dropped:conflicting-label-for-identical-text | 1 |
 
-### ui-diagram-v2: 6,536 in, 6,528 kept
+### ui-diagram-v2: 6,647 in, 6,639 kept
 
 Dropped:
 
@@ -268,7 +284,7 @@ Kept with a warning (not an error; see README):
 
 | warning | rows |
 | --- | ---: |
-| selector-not-in-context | 172 |
+| selector-not-in-context | 215 |
 | value-span-ambiguous | 64 |
 | numeric-value-not-in-surface | 50 |
 | target-name_span-ambiguous | 5 |
@@ -288,17 +304,60 @@ Kept with a warning (not an error; see README):
 | --- | ---: |
 | selector-not-in-context | 1 |
 
-### human-adapted-v1-drawing: 205 in, 205 kept
+### human-adapted-v1-drawing: 558 in, 558 kept
+
+Fixed or converted:
+
+| fix | rows |
+| --- | ---: |
+| definite-description-name-to-kind | 1 |
+| comparative-as-delta-step | 1 |
 
 Kept with a warning (not an error; see README):
 
 | warning | rows |
 | --- | ---: |
-| selector-not-in-context | 13 |
-| selector-with-empty-context | 2 |
-| value-span-ambiguous | 1 |
+| selector-not-in-context | 42 |
+| target-kind_span-ambiguous | 16 |
+| selector-with-empty-context | 4 |
+| value-span-ambiguous | 2 |
+| target-description_span-ambiguous | 1 |
 
-### data-drop-v1: 0 in, 0 kept
+### data-drop-v1: 1,228 in, 1,228 kept
+
+Fixed or converted:
+
+| fix | rows |
+| --- | ---: |
+| class-value-outside-bank-unlabelled | 58 |
+| anchor-span-as-anchor-mention | 57 |
+
+Kept with a warning (not an error; see README):
+
+| warning | rows |
+| --- | ---: |
+| selector-with-empty-context | 31 |
+| selector-not-in-context | 23 |
+| value-span-ambiguous | 12 |
+| numeric-value-not-in-surface | 6 |
+| target-kind_span-ambiguous | 5 |
+
+### human-adapted-v1-diagram: 538 in, 538 kept
+
+Fixed or converted:
+
+| fix | rows |
+| --- | ---: |
+| comparative-as-delta-step | 2 |
+
+Kept with a warning (not an error; see README):
+
+| warning | rows |
+| --- | ---: |
+| value-span-ambiguous | 28 |
+| selector-not-in-context | 13 |
+| target-kind_span-ambiguous | 5 |
+| selector-with-empty-context | 2 |
 
 ### demo-tool-profile: 36,999 in, 27,524 kept
 

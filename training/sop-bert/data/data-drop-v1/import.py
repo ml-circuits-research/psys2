@@ -92,6 +92,10 @@ def normalise(row, stats):
                 if not q.get('trigger') and isinstance(c.get('value_span'), str):
                     q['trigger'] = c['value_span']
                 stats['question.ask written as a constraint moved to question.ask'] += 1
+            elif isinstance(c, dict) and c.get('key') in ('chart.labels', 'group.labels') and isinstance(c.get('value_span'), str) and \
+                    re.search(r'\b(by|per|for each|across)\s+(the\s+)?' + re.escape(c['value_span']) + r'\b', q.get('span') or '', re.I):
+                moved.append({'frame': 'chart.dimension', 'value': c.get('value'), 'span': c['value_span']})
+                stats['category dimension ("by month") labelled as chart.labels moved to needs chart.dimension'] += 1
             elif isinstance(c, dict) and c.get('character') == 'discard':
                 stats['constraint with character discard (an old value) removed'] += 1
             else:
@@ -112,6 +116,11 @@ def normalise(row, stats):
                 if str(c.get('value', '')).lower() in QUAL or not re.search(r'\d', str(c.get('value', ''))):
                     if c.get('value') is not None and not str(c['value']).isdigit():
                         c.pop('value', None); c['qualitative'] = True; stats['vague quantity kept as a mention without value'] += 1
+            if c.get('key') == 'chart.type' and isinstance(c.get('value_span'), str):
+                m = re.search(re.escape(c['value_span']) + r'(\s+(?:chart|graph|plot|diagram))\b', q.get('span') or '')
+                if m:
+                    c['value_span'] = c['value_span'] + m.group(1)
+                    stats['chart.type span extended to the whole kind phrase ("bar" -> "bar chart")'] += 1
             for f in ('anchor_fill', 'anchor_kind', 'typo_of', 'alias_of'):
                 c.pop(f, None)
         needs = q.pop('needs', None)
@@ -257,6 +266,8 @@ def main():
                   '- Target types are `chart`, `node`, ... exactly: typo variants belong in the text, never in label fields (`chhart`).',
                   '- A relation anchor must name an object of `context.existing` (or a new object of the same message: put the anchor on the '
                   'request that creates it only after the creating request, and keep it in the text verbatim).',
+                  '- `chart.type` spans the whole kind phrase ("bar chart", "pie chart", "line graph"), as the Diagram corpus does (extended on '
+                  'import this time). A list of categories is one `chart.labels` mention per category ("year 1", "year 2"), not one mention for the list.',
                   '- Category dimensions ("a pie chart of the staff by rank") are not category labels: `chart.labels` holds the category '
                   'words themselves ("Q1", "North"); a dimension stays unlabelled or in `needs` (`chart.dimension`).', '']
         lines += ['## Notes for the next batch', '',
