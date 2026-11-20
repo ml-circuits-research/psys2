@@ -37,6 +37,8 @@ const STYLE = `
 .p2-avatar-stage.fx-spin { animation: p2-av-spin 1s ease-in-out 1; }
 .p2-avatar-stage.fx-jump, .p2-avatar-stage.fx-bounce { animation: p2-av-jump .5s ease-out 3; }
 .p2-avatar-stage.fx-wiggle { animation: p2-av-wiggle .35s ease-in-out 4; }
+.p2-avatar-layer [data-select="eyes"] > * { transform-box: fill-box; transform-origin: center; animation: p2-av-blink 5.2s ease-in-out infinite; }
+.p2-avatar-stage.is-speaking .p2-avatar-layer [data-select="mouth"] > * { transform-box: fill-box; transform-origin: center; animation: p2-av-talk .32s ease-in-out infinite alternate; }
 .p2-avatar-caption { text-align: center; max-width: 460px; }
 .p2-avatar-name { margin: 0; font-weight: 600; font-size: 18px; }
 .p2-avatar-parts { margin: 2px 0 0; font-size: 13px; opacity: .72; }
@@ -65,7 +67,10 @@ const STYLE = `
 @keyframes p2-av-spin { to { transform: rotate(360deg); } }
 @keyframes p2-av-jump { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-26px); } }
 @keyframes p2-av-wiggle { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.06); } }
-@media (prefers-reduced-motion: reduce) { .p2-avatar-stage, .p2-avatar-layer { animation: none !important; transition: none; } }
+/* The eyes blink now and then; while the answer is spoken the mouth opens and closes (any face, any style). */
+@keyframes p2-av-blink { 0%, 93%, 100% { transform: scaleY(1); } 96% { transform: scaleY(.12); } }
+@keyframes p2-av-talk { from { transform: scaleY(1); } to { transform: scaleY(1.7); } }
+@media (prefers-reduced-motion: reduce) { .p2-avatar-stage, .p2-avatar-layer, .p2-avatar-layer [data-select] > * { animation: none !important; transition: none; } }
 `;
 function ensureCss() {
   if (document.getElementById('p2-avatar-css')) return;
@@ -421,9 +426,10 @@ export function createAvatar(container, host = null, { editor = false } = {}) {
   const setVisible = (on) => { visible = !!on; if (visible) { shown = ''; lastSvg = ''; } draw_(); };
   return {
     update(next) { state = next ?? state; draw_(); },
-    /** Host events (reply, thinking, typing). The motion rules of the earlier face are not part of the area yet: nothing moves. */
+    /** Host events (reply, thinking, typing): no motion of their own (the eyes blink and the mouth moves while speaking, by CSS). */
     emit() {},
-    setSpeaking() {},
+    /** While the answer is spoken the mouth moves (CSS on the drawn mouth's shapes). */
+    setSpeaking(on) { stage.classList.toggle('is-speaking', !!on); },
     setVisible, show: () => setVisible(true), hide: () => setVisible(false),
     /** Keeps a small copy of the face in `target` (the icon in the input bar). */
     mirror(target, px = 36) { mirrors.push({ el: target, px, svg: '' }); draw_(); },

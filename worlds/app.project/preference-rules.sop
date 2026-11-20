@@ -1,0 +1,134 @@
+# Standing preferences (authored), shared by every area that keeps them: the area holds a w.preferences instance next to
+# its own (area.sop: instance=w.preferences), loads these rules and its declared keys (w.preferences.default,
+# w.preferences.field) and names which of its commands state, reset or apply a preference (app.pref.operation). Nothing
+# here names a tab, a key or a value.
+#
+# A statement (app.pref.statement: a key, a field, a value; from the generic command below or from an area's own
+# command that states several fields at once) becomes ordered calls on the instance:
+#  - order 1: the value stated before for that field goes (one value per field), or the same value goes when the field
+#    holds several (stated again, it takes the new time); the stated values of the fields it clears go too;
+#  - order 2: the new preference is made, source stated, at = one more than the latest time in the instance, in the
+#    scope its key declares (or the scope the command names).
+# A reset removes the stated and learned values of the key (or of one field), and makes the instance hold the declared
+# defaults (source default, at 0) it lacks. After a statement or a reset of a key, the command the area names to apply
+# that key runs next (app.act.next), on the resulting state.
+#
+# What is in force (app.pref.current): the stated (or learned) value of a field; for a field with none, its declared
+# default, unless a stated field that clears it says otherwise (a named figure clears the age the default implies).
+# app.pref.stated holds only what the person said (a projection that should not override the area's own defaults
+# reads it).
+@pref.statement.type core.type of=app.pref.statement
+@pref.current.type core.type of=app.pref.current
+@pref.stated.type core.type of=app.pref.stated
+@pref.cleared.type core.type of=app.pref.cleared
+@pref.top.type core.type of=app.pref.top
+@pref.operation.type core.type of=app.pref.operation
+
+# The generic command (role=state): key, value and an optional field (value when absent).
+@pf.s.req app.act.request operation=?op key=?k value=?v
+@pf.s.role app.pref.operation role=state operation=?op
+@pf.s.f app.act.request operation=?op field=?f
+@pf.s.anyf app.act.request operation=?op field=?anyField
+@pf.s.st app.pref.statement key=?k field=value value=?v
+@pf.s.st.f app.pref.statement key=?k field=?f value=?v
+@pref.state core.rule when=$pf.s.req when=$pf.s.role not=$pf.s.anyf then=$pf.s.st
+@pref.state.field core.rule when=$pf.s.req when=$pf.s.role when=$pf.s.f then=$pf.s.st.f
+# The words of the command (about=), on every preference it states.
+@pf.s.about app.act.request about=?t
+@pf.s.about.st app.pref.statement key=?k field=?f value=?v
+@pf.s.about.ref core.calc out=?ref fn=concat args="pref." args=?k args="." args=?f args="." args=?v
+@pf.s.about.a app.act.arg call=?ref attr=about value=?t
+@pref.state.about core.rule when=$pf.s.about when=$pf.s.about.st with=$pf.s.about.ref then=$pf.s.about.a
+
+# The latest time in the instance (0 when it holds none).
+@pf.t.all w.preferences.preference at=?a
+@pf.t.max core.aggregate over=$pf.t.all max=?m args=?a default=0 then=$pf.t.top
+@pf.t.top app.pref.top at=?m
+
+# Order 2: the new preference, in the scope its key declares; `of` when the declaration names one.
+@pf.m.st app.pref.statement key=?k field=?f value=?v
+@pf.m.top app.pref.top at=?m
+@pf.m.n core.calc out=?n fn=add args=?m args=1
+@pf.m.ref core.calc out=?ref fn=concat args="pref." args=?k args="." args=?f args="." args=?v
+@pf.m.d w.preferences.default key=?k scope=?s
+@pf.m.make app.act.call act=make kind=w.preferences.preference key=?k field=?f value=?v scope=?s source=stated at=?n order=2 ref=?ref
+@pref.make core.rule when=$pf.m.st when=$pf.m.top when=$pf.m.d with=$pf.m.n with=$pf.m.ref then=$pf.m.make
+@pf.m.do w.preferences.default key=?k of=?o
+@pf.m.of app.act.arg call=?ref attr=of value=?o
+@pref.make.of core.rule when=$pf.m.st when=$pf.m.do with=$pf.m.ref then=$pf.m.of
+# A key no default declares has no preference: the statement is refused.
+@pf.m.anyd w.preferences.default key=?k
+@pf.m.undeclared app.act.refuse reason=undeclared-preference
+@pref.undeclared core.rule when=$pf.m.st not=$pf.m.anyd then=$pf.m.undeclared
+
+# Order 1: what the statement replaces. A field holds one value unless declared many=true.
+@pf.r.st app.pref.statement key=?k field=?f value=?v
+@pf.r.many w.preferences.field key=?k field=?f many=true
+@pf.r.old w.preferences.preference key=?k field=?f source=?src
+@pf.r.same w.preferences.preference key=?k field=?f value=?v source=?src
+@pf.r.nd core.check fn=neq args=?src args=default
+@pf.r.drop app.act.call act=remove thing=$pf.r.old order=1
+@pf.r.drop.same app.act.call act=remove thing=$pf.r.same order=1
+@pref.replace core.rule when=$pf.r.st not=$pf.r.many when=$pf.r.old if=$pf.r.nd then=$pf.r.drop
+@pref.restate core.rule when=$pf.r.st when=$pf.r.many when=$pf.r.same if=$pf.r.nd then=$pf.r.drop.same
+@pf.c.st app.pref.statement key=?k field=?f
+@pf.c.f w.preferences.field key=?k field=?f clears=?g
+@pf.c.old w.preferences.preference key=?k field=?g source=?src
+@pf.c.drop app.act.call act=remove thing=$pf.c.old order=1
+@pref.clear core.rule when=$pf.c.st when=$pf.c.f when=$pf.c.old if=$pf.r.nd then=$pf.c.drop
+
+# A reset (role=reset): the key the command names (key=), or the key its declaration names; a field when named.
+@pf.x.req app.act.request operation=?op key=?k
+@pf.x.role app.pref.operation role=reset operation=?op
+@pf.x.roleKey app.pref.operation role=reset operation=?op key=?k
+@pf.x.anyKey app.pref.operation role=reset operation=?op key=?anyKey
+@pf.x.req.any app.act.request operation=?op
+@pf.x.f app.act.request operation=?op field=?f
+@pf.x.anyf app.act.request operation=?op field=?anyField
+@pf.x.old w.preferences.preference key=?k source=?src
+@pf.x.old.f w.preferences.preference key=?k field=?f source=?src
+@pf.x.drop app.act.call act=remove thing=$pf.x.old order=1
+@pf.x.drop.f app.act.call act=remove thing=$pf.x.old.f order=1
+@pref.reset core.rule when=$pf.x.req when=$pf.x.role not=$pf.x.anyKey not=$pf.x.anyf when=$pf.x.old if=$pf.r.nd then=$pf.x.drop
+@pref.reset.field core.rule when=$pf.x.req when=$pf.x.role not=$pf.x.anyKey when=$pf.x.f when=$pf.x.old.f if=$pf.r.nd then=$pf.x.drop.f
+@pref.reset.declared core.rule when=$pf.x.req.any when=$pf.x.roleKey when=$pf.x.old if=$pf.r.nd then=$pf.x.drop
+# The key reset (named or declared), for the defaults and the command that applies it.
+@pf.x.key.type core.type of=app.pref.reset
+@pf.x.key app.pref.reset key=?k
+@pref.reset.key core.rule when=$pf.x.req when=$pf.x.role not=$pf.x.anyKey then=$pf.x.key
+@pref.reset.key.declared core.rule when=$pf.x.req.any when=$pf.x.roleKey then=$pf.x.key
+# The declared defaults of the key the instance does not hold yet.
+@pf.d.reset app.pref.reset key=?k
+@pf.d.decl w.preferences.default key=?k field=?f value=?v scope=?s
+@pf.d.has w.preferences.preference key=?k field=?f source=default
+@pf.d.ref core.calc out=?ref fn=concat args="pref.default." args=?k args="." args=?f
+@pf.d.make app.act.call act=make kind=w.preferences.preference key=?k field=?f value=?v scope=?s source=default at=0 order=2 ref=?ref
+@pref.default.make core.rule when=$pf.d.reset when=$pf.d.decl not=$pf.d.has with=$pf.d.ref then=$pf.d.make
+@pf.d.of w.preferences.default key=?k field=?f of=?o
+@pf.d.of.a app.act.arg call=?ref attr=of value=?o
+@pref.default.of core.rule when=$pf.d.reset when=$pf.d.of not=$pf.d.has with=$pf.d.ref then=$pf.d.of.a
+
+# After a statement or a reset of a key: the command that applies it, when the area names one (role=apply key=...).
+@pf.n.st app.pref.statement key=?k
+@pf.n.reset app.pref.reset key=?k
+@pf.n.apply app.pref.operation role=apply key=?k operation=?a
+@pf.n.next app.act.next operation=?a
+@pref.apply.stated core.rule when=$pf.n.st when=$pf.n.apply then=$pf.n.next
+@pref.apply.reset core.rule when=$pf.n.reset when=$pf.n.apply then=$pf.n.next
+
+# In force: what was said (stated or learned) ...
+@pf.v.p w.preferences.preference key=?k field=?f value=?v source=?src at=?a
+@pf.v.stated app.pref.stated key=?k field=?f value=?v at=?a
+@pf.v.cur app.pref.current key=?k field=?f value=?v source=?src
+@pref.stated core.rule when=$pf.v.p if=$pf.r.nd then=$pf.v.stated
+@pref.current.stated core.rule when=$pf.v.p if=$pf.r.nd then=$pf.v.cur
+# ... and for a field nothing was said of, its declared default, unless a stated field clears it.
+@pf.v.clr w.preferences.field key=?k field=?g clears=?f
+@pf.v.clr.st app.pref.stated key=?k field=?g
+@pf.v.cleared app.pref.cleared key=?k field=?f
+@pref.cleared core.rule when=$pf.v.clr when=$pf.v.clr.st then=$pf.v.cleared
+@pf.v.def w.preferences.default key=?k field=?f value=?v
+@pf.v.any app.pref.stated key=?k field=?f
+@pf.v.isclr app.pref.cleared key=?k field=?f
+@pf.v.def.cur app.pref.current key=?k field=?f value=?v source=default
+@pref.current.default core.rule when=$pf.v.def not=$pf.v.any not=$pf.v.isclr then=$pf.v.def.cur

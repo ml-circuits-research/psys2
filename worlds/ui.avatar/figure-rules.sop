@@ -1,0 +1,238 @@
+# The avatar figure as a standing preference (authored): what a command says of the figure becomes statements of the
+# key avatar.figure (merged by worlds/app.project/preference-rules.sop, declared in preferences.sop), and the figure in
+# force is composed through the people's model the Drawing tab shares (art.draw/person-rules.sop, the preset rules of
+# act-rules.sop) and the traits of the people's knowledge (k.faces.trait, k.faces.trait.part). Nothing here names a
+# preset, a trait or a colour: each comes from the command and is looked up in the catalog.
+@fg.kindcount.type core.type of=ui.avatar.sexes
+@fg.typical.type core.type of=ui.avatar.typical
+
+# ---- What a command says (avatar.figure.describe) ---------------------------------------------------------------
+@fd.preset.req app.act.request operation="avatar.figure.describe" preset=?p
+@fd.preset.k k.faces.preset name=?p style=plain
+@fd.preset.st app.pref.statement key=avatar.figure field=preset value=?p
+@figure.say.preset core.rule when=$fd.preset.req when=$fd.preset.k then=$fd.preset.st
+@fd.preset.none app.act.refuse reason=unknown-figure
+@fd.preset.anyk k.faces.preset name=?p
+@figure.say.preset.unknown core.rule when=$fd.preset.req not=$fd.preset.anyk then=$fd.preset.none
+# A named figure brings its kind, its age and its sex (when it suits one sex only), so a later "younger" or "a man
+# instead" refines it.
+@fd.pk.kind k.faces.preset name=?p style=plain kind=?k
+@fd.pk.kind.st app.pref.statement key=avatar.figure field=kind value=?k
+@figure.say.preset.kind core.rule when=$fd.preset.req when=$fd.pk.kind then=$fd.pk.kind.st
+@fd.pk.age k.faces.preset name=?p style=plain age=?a
+@fd.pk.age.st app.pref.statement key=avatar.figure field=age value=?a
+@figure.say.preset.age core.rule when=$fd.preset.req when=$fd.pk.age then=$fd.pk.age.st
+@fd.pk.sexes k.faces.preset name=?p style=plain sex=?x
+@fd.pk.count core.aggregate over=$fd.pk.sexes by=?p count=?n then=$fd.pk.count.o
+@fd.pk.count.o ui.avatar.sexes preset=?p n=1
+@fd.pk.one ui.avatar.sexes preset=?p n=1
+@fd.pk.sex.st app.pref.statement key=avatar.figure field=sex value=?x
+@figure.say.preset.sex core.rule when=$fd.preset.req when=$fd.pk.one when=$fd.pk.sexes then=$fd.pk.sex.st
+
+@fd.kind.req app.act.request operation="avatar.figure.describe" kind=?k
+@fd.kind.st app.pref.statement key=avatar.figure field=kind value=?k
+@figure.say.kind core.rule when=$fd.kind.req then=$fd.kind.st
+
+# A kind of person (k.people.kind: a man, a woman, a girl) says its age and its sex; an age or a sex said as well wins.
+@fd.person.req app.act.request operation="avatar.figure.describe" person=?n
+@fd.person.age k.people.kind name=?n age=?a
+@fd.age.any app.act.request operation="avatar.figure.describe" age=?anyAge
+@fd.person.age.st app.pref.statement key=avatar.figure field=age value=?a
+@figure.say.person.age core.rule when=$fd.person.req when=$fd.person.age not=$fd.age.any then=$fd.person.age.st
+@fd.person.sex k.people.kind name=?n sex=?x
+@fd.sex.any app.act.request operation="avatar.figure.describe" sex=?anySex
+@fd.person.sex.st app.pref.statement key=avatar.figure field=sex value=?x
+@figure.say.person.sex core.rule when=$fd.person.req when=$fd.person.sex not=$fd.sex.any then=$fd.person.sex.st
+@fd.person.none app.act.refuse reason=unknown-person
+@fd.person.anyk k.people.kind name=?n
+@figure.say.person.unknown core.rule when=$fd.person.req not=$fd.person.anyk then=$fd.person.none
+
+# An age: a step of the k.values scale of age (old, child), or one step from the age in force (younger, older).
+@fd.age.req app.act.request operation="avatar.figure.describe" age=?a
+@fd.age.step k.values.step scale=age name=?a
+@fd.age.st app.pref.statement key=avatar.figure field=age value=?a
+@figure.say.age core.rule when=$fd.age.req when=$fd.age.step then=$fd.age.st
+@fd.rel.cmp k.values.comparative text=?a scale=age way=?way degree=comparative
+@fd.rel.way ui.avatar.way way=?way offset=?o
+@fd.rel.now app.pref.current key=avatar.figure field=age value=?now
+@fd.rel.rank k.values.step scale=age name=?now rank=?r
+@fd.rel.to core.calc out=?t fn=add args=?r args=?o
+@fd.rel.next k.values.step scale=age rank=?t name=?next
+@fd.rel.st app.pref.statement key=avatar.figure field=age value=?next
+@figure.say.age.relative core.rule when=$fd.age.req when=$fd.rel.cmp when=$fd.rel.way when=$fd.rel.now when=$fd.rel.rank with=$fd.rel.to when=$fd.rel.next then=$fd.rel.st
+@fd.rel.anynext.type core.type of=ui.avatar.agestep
+@fd.rel.anynext.o ui.avatar.agestep
+@figure.age.step core.rule when=$fd.age.req when=$fd.rel.cmp when=$fd.rel.way when=$fd.rel.now when=$fd.rel.rank with=$fd.rel.to when=$fd.rel.next then=$fd.rel.anynext.o
+@fd.rel.anynext ui.avatar.agestep
+@fd.rel.end app.act.refuse reason=feature-scale-end
+@figure.say.age.end core.rule when=$fd.age.req when=$fd.rel.cmp not=$fd.rel.anynext then=$fd.rel.end
+@fd.age.anystep k.values.step scale=age name=?a
+@fd.age.anycmp k.values.comparative text=?a scale=age
+@fd.age.none app.act.refuse reason=unknown-age
+@figure.say.age.unknown core.rule when=$fd.age.req not=$fd.age.anystep not=$fd.age.anycmp then=$fd.age.none
+
+@fd.sex.req app.act.request operation="avatar.figure.describe" sex=?x
+@fd.sex.st app.pref.statement key=avatar.figure field=sex value=?x
+@figure.say.sex core.rule when=$fd.sex.req then=$fd.sex.st
+
+# An age, a sex or a kind of person describes a person: the kind becomes human when it is not already.
+@fd.h.req app.act.request operation="avatar.figure.describe"
+@fd.h.said app.pref.statement key=avatar.figure field=?f
+@fd.h.person core.check fn=matches args=?f args="^(age|sex)$"
+@fd.h.kind.said app.act.request operation="avatar.figure.describe" kind=?anyKind
+@fd.h.preset.said app.act.request operation="avatar.figure.describe" preset=?anyPreset
+@fd.h.now app.pref.current key=avatar.figure field=kind value=human
+@fd.h.st app.pref.statement key=avatar.figure field=kind value=human
+@figure.say.human core.rule when=$fd.h.req when=$fd.h.said if=$fd.h.person not=$fd.h.kind.said not=$fd.h.preset.said not=$fd.h.now then=$fd.h.st
+
+# Traits (k.faces.trait names) and slots left empty. A trait that fills a slot takes back an earlier "without" of that
+# slot; leaving a slot empty takes back the stated traits that fill it.
+@fd.tr.req app.act.request operation="avatar.figure.describe"
+@fd.tr.item app.act.item param="traits" value=?t
+@fd.tr.k k.faces.trait name=?t style=plain
+@fd.tr.st app.pref.statement key=avatar.figure field=trait value=?t
+@figure.say.trait core.rule when=$fd.tr.req when=$fd.tr.item when=$fd.tr.k then=$fd.tr.st
+@fd.tr.none app.act.refuse reason=unknown-trait
+@figure.say.trait.unknown core.rule when=$fd.tr.req when=$fd.tr.item not=$fd.tr.k then=$fd.tr.none
+@fd.tr.fills k.faces.trait.part trait=?t style=plain slot=?slot variant=?v
+@fd.tr.without w.preferences.preference key=avatar.figure field=without value=?slot
+@fd.tr.unwithout app.act.call act=remove thing=$fd.tr.without order=1
+@figure.trait.unwithout core.rule when=$fd.tr.req when=$fd.tr.item when=$fd.tr.fills when=$fd.tr.without then=$fd.tr.unwithout
+@fd.wo.item app.act.item param="without" value=?slot
+@fd.wo.slot k.faces.slot name=?slot style=plain
+@fd.wo.st app.pref.statement key=avatar.figure field=without value=?slot
+@figure.say.without core.rule when=$fd.tr.req when=$fd.wo.item when=$fd.wo.slot then=$fd.wo.st
+@fd.wo.none app.act.refuse reason=unknown-slot
+@figure.say.without.unknown core.rule when=$fd.tr.req when=$fd.wo.item not=$fd.wo.slot then=$fd.wo.none
+@fd.wo.fills k.faces.trait.part trait=?t style=plain slot=?slot variant=?v
+@fd.wo.trait w.preferences.preference key=avatar.figure field=trait value=?t source=stated
+@fd.wo.untrait app.act.call act=remove thing=$fd.wo.trait order=1
+@figure.without.untrait core.rule when=$fd.tr.req when=$fd.wo.item when=$fd.wo.fills when=$fd.wo.trait then=$fd.wo.untrait
+
+@fd.co.req app.act.request operation="avatar.figure.describe" colour=?c
+@fd.co.st app.pref.statement key=avatar.figure field=colour value=?c
+@figure.say.colour core.rule when=$fd.co.req then=$fd.co.st
+
+# The Composition control and the compose command state the figure too: a named figure (preset, base), or a kind of
+# character whose figure the face does not already show.
+@fd.ui.preset app.act.request operation="avatar.face.preset" preset=?p
+@fd.ui.base app.act.request operation="avatar.face.compose" base=?p
+@figure.say.ui.preset core.rule when=$fd.ui.preset when=$fd.preset.k then=$fd.preset.st
+@figure.say.ui.base core.rule when=$fd.ui.base when=$fd.preset.k then=$fd.preset.st
+@figure.say.ui.preset.kind core.rule when=$fd.ui.preset when=$fd.pk.kind then=$fd.pk.kind.st
+@figure.say.ui.base.kind core.rule when=$fd.ui.base when=$fd.pk.kind then=$fd.pk.kind.st
+@figure.say.ui.preset.age core.rule when=$fd.ui.preset when=$fd.pk.age then=$fd.pk.age.st
+@figure.say.ui.base.age core.rule when=$fd.ui.base when=$fd.pk.age then=$fd.pk.age.st
+@figure.say.ui.preset.sex core.rule when=$fd.ui.preset when=$fd.pk.one when=$fd.pk.sexes then=$fd.pk.sex.st
+@figure.say.ui.base.sex core.rule when=$fd.ui.base when=$fd.pk.one when=$fd.pk.sexes then=$fd.pk.sex.st
+@fd.ui.kind app.act.request operation="avatar.face.compose" characterKind=?k
+@fd.ui.kind.base app.act.request operation="avatar.face.compose" base=?anyBase
+@fd.ui.kept ui.avatar.keptKind kind=?k
+@figure.say.ui.kind core.rule when=$fd.ui.kind not=$fd.ui.kind.base not=$fd.ui.kept then=$fd.kind.st
+
+# ---- The figure in force, composed (avatar.figure.apply) ---------------------------------------------------------
+# Which named figure: the one in force; else, for a robot or an alien, the first of its kind in the face's style; else,
+# for a person, the face of the kind of person (k.people.kind) of that age and sex (of that age when no sex is in
+# force; the first person of the style when neither is), and otherwise one the people's model picks for the age and the sex in force (art.draw/person-rules.sop).
+@fa.req app.act.request operation="avatar.figure.apply"
+@fa.face w.face.face style=?style
+@fa.head ui.look.head face=$fa.face
+@fa.chosen ui.avatar.chosen preset=?p
+@fa.p app.pref.current key=avatar.figure field=preset value=?p
+@fa.kp k.faces.preset name=?p style=?style
+@figure.preset core.rule when=$fa.req when=$fa.p when=$fa.face when=$fa.head when=$fa.kp then=$fa.chosen
+@fa.anyp app.pref.current key=avatar.figure field=preset
+@fa.k app.pref.current key=avatar.figure field=kind value=?k
+@fa.nh core.check fn=neq args=?k args=human
+@fa.kind.p k.faces.preset kind=?k style=?style name=?p core.select=first
+@figure.kind core.rule when=$fa.req not=$fa.anyp when=$fa.k if=$fa.nh when=$fa.face when=$fa.head when=$fa.kind.p then=$fa.chosen
+@fa.hk app.pref.current key=avatar.figure field=kind value=human
+@fa.a app.pref.current key=avatar.figure field=age value=?a
+@fa.s app.pref.current key=avatar.figure field=sex value=?x
+@fa.anys app.pref.current key=avatar.figure field=sex
+@fa.typ.as k.people.kind age=?a sex=?x face=?p core.select=first
+@fa.typ.o ui.avatar.typical preset=?p
+@figure.typical.both core.rule when=$fa.req not=$fa.anyp when=$fa.hk when=$fa.a when=$fa.s when=$fa.typ.as then=$fa.typ.o
+@fa.typ.a k.people.kind name=?n age=?a face=?p
+@fa.typ.a.sex k.people.kind name=?n sex=?anyKindSex
+@figure.typical.age core.rule when=$fa.req not=$fa.anyp when=$fa.hk when=$fa.a not=$fa.anys when=$fa.typ.a not=$fa.typ.a.sex then=$fa.typ.o
+# A person of no age and no sex: the first person of the face's style, as composing by kind does.
+@fa.anya0 app.pref.current key=avatar.figure field=age
+@fa.first k.faces.preset kind=human style=?style name=?p core.select=first
+@figure.typical.first core.rule when=$fa.req not=$fa.anyp when=$fa.hk not=$fa.anya0 not=$fa.anys when=$fa.face when=$fa.head when=$fa.first then=$fa.typ.o
+@fa.typ ui.avatar.typical preset=?p
+@figure.person.typical core.rule when=$fa.req when=$fa.typ when=$fa.face when=$fa.head when=$fa.kp then=$fa.chosen
+# The people's model picks for the age and the sex in force (any when none is), when no typical face fits.
+@fa.anytyp ui.avatar.typical
+@fa.want ui.person.want key=avatar.figure style=?style seed=0
+@figure.person.want core.rule when=$fa.req not=$fa.anyp when=$fa.hk not=$fa.anytyp when=$fa.face when=$fa.head then=$fa.want
+@fa.anya app.pref.current key=avatar.figure field=age
+@fa.want.a ui.person.want key=avatar.figure age=?a
+@fa.want.anya ui.person.want key=avatar.figure age=any
+@fa.want.s ui.person.want key=avatar.figure sex=?x
+@fa.want.anys ui.person.want key=avatar.figure sex=any
+@figure.person.want.age core.rule when=$fa.req not=$fa.anyp when=$fa.hk not=$fa.anytyp when=$fa.a then=$fa.want.a
+@figure.person.want.anyage core.rule when=$fa.req not=$fa.anyp when=$fa.hk not=$fa.anytyp not=$fa.anya then=$fa.want.anya
+@figure.person.want.sex core.rule when=$fa.req not=$fa.anyp when=$fa.hk not=$fa.anytyp when=$fa.s then=$fa.want.s
+@figure.person.want.anysex core.rule when=$fa.req not=$fa.anyp when=$fa.hk not=$fa.anytyp not=$fa.anys then=$fa.want.anys
+@fa.pick ui.person.pick key=avatar.figure preset=?p
+@figure.person.pick core.rule when=$fa.req when=$fa.pick when=$fa.face when=$fa.head when=$fa.kp then=$fa.chosen
+# Then its traits, its empty slots and its colour, on the composed face.
+@fa.next app.act.next operation="avatar.figure.traits"
+@figure.then.traits core.rule when=$fa.req then=$fa.next
+
+# ---- Traits, empty slots and colour (avatar.figure.traits) -------------------------------------------------------
+@ft.req app.act.request operation="avatar.figure.traits"
+@ft.face w.face.face style=?style
+@ft.head ui.look.head face=$ft.face
+@ft.t app.pref.current key=avatar.figure field=trait value=?t
+# The face colours a trait sets (and a skin colour on the body too).
+@ft.hair k.faces.trait name=?t style=?style hair_colour=?c
+@ft.hair.c app.act.call act=change thing=$ft.face attr=hair_colour value=?c order=1
+@figure.trait.hair core.rule when=$ft.req when=$ft.t when=$ft.face when=$ft.head when=$ft.hair then=$ft.hair.c
+@ft.eyes k.faces.trait name=?t style=?style eye_colour=?c
+@ft.eyes.c app.act.call act=change thing=$ft.face attr=eye_colour value=?c order=1
+@figure.trait.eyes core.rule when=$ft.req when=$ft.t when=$ft.face when=$ft.head when=$ft.eyes then=$ft.eyes.c
+@ft.skin k.faces.trait name=?t style=?style skin=?c
+@ft.skin.c app.act.call act=change thing=$ft.face attr=skin value=?c order=1
+@figure.trait.skin core.rule when=$ft.req when=$ft.t when=$ft.face when=$ft.head when=$ft.skin then=$ft.skin.c
+@ft.body w.face.face
+@ft.body.is ui.look.body face=$ft.body
+@ft.body.skin app.act.call act=change thing=$ft.body attr=skin value=?c order=1
+@figure.trait.skin.body core.rule when=$ft.req when=$ft.t when=$ft.face when=$ft.head when=$ft.skin when=$ft.body when=$ft.body.is then=$ft.body.skin
+# The parts a trait fills: the part of that slot takes the trait's variant, or is made with it; a part a trait takes
+# away (remove=true) goes.
+@ft.tp k.faces.trait.part trait=?t style=?style slot=?slot variant=?v
+@ft.slot w.face.slot slot=?slot part=?kind
+@ft.part w.face.part kind=?kind face=$ft.face
+@ft.anypart w.face.part kind=?kind face=$ft.face
+@ft.part.c app.act.call act=change thing=$ft.part attr=variant value=?v order=2
+@figure.trait.part.change core.rule when=$ft.req when=$ft.t when=$ft.face when=$ft.head when=$ft.tp when=$ft.slot when=$ft.part then=$ft.part.c
+@ft.part.m app.act.call act=make kind=?kind variant=?v face=$ft.face order=2
+@figure.trait.part.make core.rule when=$ft.req when=$ft.t when=$ft.face when=$ft.head when=$ft.tp when=$ft.slot not=$ft.anypart then=$ft.part.m
+@ft.tr k.faces.trait.part trait=?t style=?style slot=?slot remove=true
+@ft.part.r app.act.call act=remove thing=$ft.part order=1
+@figure.trait.part.remove core.rule when=$ft.req when=$ft.t when=$ft.face when=$ft.head when=$ft.tr when=$ft.slot when=$ft.part then=$ft.part.r
+# Slots left empty.
+@ft.wo app.pref.current key=avatar.figure field=without value=?slot
+@figure.without core.rule when=$ft.req when=$ft.wo when=$ft.face when=$ft.head when=$ft.slot when=$ft.part then=$ft.part.r
+# The figure's own colour: the face colour its kind names (a robot's skin, a person's clothes), on the face and on a body.
+@ft.co app.pref.current key=avatar.figure field=colour value=?c
+@ft.kind app.pref.current key=avatar.figure field=kind value=?k
+@ft.co.of ui.avatar.colourOf kind=?k attr=?attr
+@ft.co.c app.act.call act=change thing=$ft.face attr=?attr value=?c order=3
+@figure.colour core.rule when=$ft.req when=$ft.co when=$ft.kind when=$ft.co.of when=$ft.face when=$ft.head then=$ft.co.c
+@ft.co.body app.act.call act=change thing=$ft.body attr=?attr value=?c order=3
+@figure.colour.body core.rule when=$ft.req when=$ft.co when=$ft.kind when=$ft.co.of when=$ft.body when=$ft.body.is then=$ft.co.body
+
+# ---- What a reader and the editor see of the figure --------------------------------------------------------------
+# Each field in force, as an input of the face (figure.<field>: the value; several for traits), and object IDs shown
+# when the person asked for them to stay on and the view says nothing.
+@fo.cur app.pref.current key=avatar.figure field=?f value=?v
+@fo.key core.calc out=?key fn=concat args="figure." args=?f
+@fo.o app.observe.input id=face key=?key value=?v
+@observe.figure core.rule when=$fo.cur with=$fo.key then=$fo.o
+@fo.ids app.pref.stated key=ids field=value value=?m
+@fo.view app.area.view key=ids value=?anyMode
+@fo.ids.o app.observe.input id=face key=ids value=?m
+@observe.ids.preference core.rule when=$fo.ids not=$fo.view then=$fo.ids.o

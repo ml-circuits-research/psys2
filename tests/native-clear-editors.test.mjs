@@ -29,13 +29,14 @@ test('Documents clear retains document identity/title and is undoable; section d
 });
 test('Avatar concrete deletion permits required parts, clear is empty/undoable and a preset recomposes',async()=>{
  const s=session('ui.avatar',emptyAvatarState()),state=()=>s.isession.state['ui.avatar'];
- // The parts of the person the Avatar shows (its face and its body are faces; the rest are parts).
- const parts=()=>[...avatarAreaStateWorld(state()).wires.values()].filter(w=>w.type!=='w.face.face').length;
+ // The parts of the person the Avatar shows (its face and its body are faces; the rest are parts; its standing
+ // preferences are not parts).
+ const parts=()=>[...avatarAreaStateWorld(state()).wires.values()].filter(w=>w.type.startsWith('w.face.')&&w.type!=='w.face.face').length;
  assert.equal((await run(s,'avatar','avatar.face.select')).ok,true);
  const before=state().sop;assert.ok(parts()>5);
  assert.equal((await run(s,'avatar','avatar.parts.remove',{ids:['head']})).ok,true);assert.ok(!/ w\.face\.head /.test(state().sop));
  {const u=await run(s,'avatar','avatar.undo');assert.equal(u.ok,true,JSON.stringify(u).slice(0,600));}assert.equal(state().sop,before);
- const ids=[...avatarAreaStateWorld(state()).wires.values()].filter(w=>w.type!=='w.face.face').map(w=>w.type.slice('w.face.'.length));
+ const ids=[...avatarAreaStateWorld(state()).wires.values()].filter(w=>w.type.startsWith('w.face.')&&w.type!=='w.face.face').map(w=>w.type.slice('w.face.'.length));
  assert.equal((await run(s,'avatar','avatar.clear',{ids})).ok,true);assert.equal(parts(),0);
  assert.equal((await run(s,'avatar','avatar.clear',{ids:[]})).changed,false);assert.equal((await run(s,'avatar','undo')).ok,true);assert.equal(state().sop,before);
  await run(s,'avatar','avatar.clear',{ids});assert.equal((await run(s,'avatar','avatar.face.preset',{preset:'robot'})).ok,true);assert.ok(parts()>3);

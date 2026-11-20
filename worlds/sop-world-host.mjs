@@ -7,6 +7,7 @@
 // The objects a reader observes come from app.observe.object facts the same rules derive.
 import {parse, quote, serialize, str} from '../src/vendor/sopworld/sopworld.mjs';
 import {createNativeToolHost, nativeToken} from './native-tool-host.mjs';
+import {budget} from '../src/dialog/budget.mjs';
 
 const CALLS = 512;
 const atom = /^[A-Za-z_][A-Za-z0-9_.-]*$/;
@@ -98,7 +99,9 @@ function compile(base, state, operation, args) {
     return { fact: merged, order: Number(read(fact, 'order') ?? 0) };
   }).sort((a, b) => a.order - b.order || (a.fact.id < b.fact.id ? -1 : a.fact.id > b.fact.id ? 1 : 0)).map(({ fact }) => fact);
   const refusals = world.ofType('app.act.refuse').map((fact) => read(fact, 'reason'));
-  return { world, calls, views: world.ofType('app.act.view'), refusal: refusals[0] };
+  // Commands the rules ask to run next, on the state the calls leave (app.act.next operation=...).
+  const next = [...new Set(world.ofType('app.act.next').map((fact) => read(fact, 'operation')).filter(Boolean))].sort();
+  return { world, calls, views: world.ofType('app.act.view'), refusal: refusals[0], next };
 }
 
 function run(base, state, kinds, calls) {
@@ -137,19 +140,39 @@ export function createSopWorldHost({ base, callBase = null, kinds, state, instan
   // callBase: where compiled calls run when the area declares one (its instance schema without the area's rules).
   const callWorld = callBase ?? base;
   const declared = toolInterface?.bindings ?? operations;
+  // A command, then the commands its rules ask to run next (app.act.next), each on the state the one before left, a
+  // few levels deep at most; a refusal anywhere refuses the whole command and leaves the state as it was.
+  const NEXT = 4;
   const handler = (operation) => (ctx, args) => {
-    const s = ctx.state, r = (s.runtime ??= { view: {} }), compiled = compile(base, s, operation, args);
-    if (compiled.refusal) return { status: 'missing', code: compiled.refusal };
-    for (const view of compiled.views) r.view = { ...r.view, [read(view, 'key')]: read(view, 'value') ?? null };
-    if (!compiled.calls.length) return { status: 'supported', changed: compiled.views.length ? ['view'] : [] };
-    const result = run(callWorld, s, kinds, compiled.calls);
-    if (result.refusal) return { status: 'missing', code: result.refusal };
+    const s = ctx.state, r = (s.runtime ??= { view: {} });
+    const start = { sop: s.sop, view: r.view }, acts = [];
+    let views = 0, sop = s.sop, pending = [[operation, args]];
+    for (let depth = 0; pending.length; depth++) {
+      budget.tick('sop-world-host.next');
+      if (depth > NEXT) { s.sop = start.sop; r.view = start.view; return { status: 'missing', code: 'next-budget' }; }
+      const following = [];
+      for (const [op, opArgs] of pending) {
+        const compiled = compile(base, { sop, runtime: r }, op, opArgs);
+        if (compiled.refusal) { s.sop = start.sop; r.view = start.view; return { status: 'missing', code: compiled.refusal }; }
+        for (const fact of compiled.views) r.view = { ...r.view, [read(fact, 'key')]: read(fact, 'value') ?? null };
+        views += compiled.views.length;
+        if (compiled.calls.length) {
+          const result = run(callWorld, { sop, runtime: r }, kinds, compiled.calls);
+          if (result.refusal) { s.sop = start.sop; r.view = start.view; return { status: 'missing', code: result.refusal }; }
+          sop = result.sop;
+          acts.push(...compiled.calls.map((call) => read(call, 'act')));
+        }
+        for (const name of compiled.next) following.push([name, {}]);
+      }
+      pending = following;
+    }
+    if (!acts.length) return { status: 'supported', changed: views ? ['view'] : [] };
     // What changed: the observed objects that appeared, went or differ (their ids, as tools and focus use them).
-    const before = new Map(view(s).map((object) => [object.id, JSON.stringify(object)]));
-    s.sop = result.sop;
+    const before = new Map(view({ sop: start.sop, runtime: r }).map((object) => [object.id, JSON.stringify(object)]));
+    s.sop = sop;
     const after = new Map(view(s).map((object) => [object.id, JSON.stringify(object)]));
     const changed = [...new Set([...before.keys(), ...after.keys()])].filter((id) => before.get(id) !== after.get(id));
-    return { status: 'supported', changed: changed.length ? changed : compiled.calls.map((call) => read(call, 'act')) };
+    return { status: 'supported', changed: changed.length ? changed : acts };
   };
   const handlers = Object.fromEntries(declared.map((op) => [op.id, handler(op.id)]));
   // Observed objects: each app.observe.object, with the optional app.observe.input facts of the same id merged in.

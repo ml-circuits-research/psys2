@@ -7,7 +7,7 @@ import {BUNDLED_AREAS} from '../../src/knowledge/bundled-areas.mjs';
 import {chartToolInterface} from '../data.charts/declared-host.mjs';
 import {sopAreaAdapter} from '../sop-area-adapter.mjs';
 
-const area = sopAreaAdapter({ world: 'diagram.sketch', instance: 'w.diagram', interfaceSource: NATIVE_INTERFACE, interfaceImports: { 'data.charts': chartToolInterface },
+const area = sopAreaAdapter({ world: 'diagram.sketch', instance: ['w.diagram', 'w.preferences'], interfaceSource: NATIVE_INTERFACE, interfaceImports: { 'data.charts': chartToolInterface },
   sources: AREA_SOURCES, offline: BUNDLED_AREAS['diagram.sketch'] });
 export const emptyDiagramState = area.empty, canonicalDiagramArea = area.canonical, createDiagramArea = area.create,
   projectDiagramArea = area.project, diagramAreaStateWorld = area.stateWorld;

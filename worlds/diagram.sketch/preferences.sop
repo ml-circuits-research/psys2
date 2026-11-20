@@ -1,0 +1,41 @@
+# The standing preferences the Diagram tab keeps (declared data and their effect; merged by
+# worlds/app.project/preference-rules.sop). A preference fills in what a diagram does not say: a link with no line
+# style of its own is drawn in the preferred one ("always use dashed lines"), a page with no theme of its own takes the
+# preferred palette ("I prefer pastel colours": a k.styles theme), and object IDs stay shown while the view says nothing
+# ("keep IDs on"). What a diagram states itself always wins. A default here is what the page does anyway, so only what
+# the person said (app.pref.stated) changes the picture.
+@pref.diagram.link.style w.preferences.default key=link.style field=value value=solid scope=kind of=link about="solid lines"
+@pref.diagram.palette w.preferences.default key=palette field=value value=classic scope=app about="the editor's own colours"
+@pref.diagram.ids w.preferences.default key=ids field=value value=off scope=app about="object IDs off"
+# Declared only (no effect yet): where new things go when a command does not say ("always put new things on the right").
+@pref.diagram.placement w.preferences.default key=placement.side field=value value=auto scope=app about="wherever there is room"
+@pref.diagram.op.state app.pref.operation role=state operation="diagram.preference.state"
+@pref.diagram.op.reset app.pref.operation role=reset operation="diagram.preference.reset"
+
+# A link with no style of its own, in the preferred style (dashed, dotted: ui.diagram.dash of render-projection.sop).
+@dp.ls.e w.diagram.edge code=?e
+@dp.ls.own w.diagram.edge code=?e style=?anyStyle
+@dp.ls.r ui.diagram.route edge=?e
+@dp.ls.w ui.diagram.ewidth edge=?e w=?sw
+@dp.ls.p app.pref.stated key=link.style field=value value=?style
+@dp.ls.d ui.diagram.dash style=?style dash=?dash
+@dp.ls.out ui.diagram.draw part=?e source=?e slot=?e order=2 z=0 shape=line x=0 y=0 w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left stroke=?sw dash=?dash
+@dp.ls.styled ui.diagram.prefstyled edge=?e
+@diagram.pref.link.style core.rule when=$dp.ls.e not=$dp.ls.own when=$dp.ls.r when=$dp.ls.w when=$dp.ls.p when=$dp.ls.d then=$dp.ls.out
+@diagram.pref.link.styled core.rule when=$dp.ls.e not=$dp.ls.own when=$dp.ls.p when=$dp.ls.d then=$dp.ls.styled
+
+# A page with no theme of its own, in the preferred palette (a theme the knowledge has).
+@dp.pa.own w.diagram.diagram theme=?anyTheme
+@dp.pa.p app.pref.stated key=palette field=value value=?t
+@dp.pa.k k.styles.theme name=?t
+@dp.pa.out ui.diagram.ptheme name=?t
+@diagram.pref.palette core.rule when=$dp.pa.p when=$dp.pa.k not=$dp.pa.own then=$dp.pa.out
+
+# Object IDs: shown while the person asked for them to stay on and the view says nothing.
+@dp.id.p app.pref.stated key=ids field=value value=?m
+@dp.id.view app.area.view key=ids value=?anyMode
+@dp.id.out ui.diagram.idsmode value=?m
+@diagram.pref.ids core.rule when=$dp.id.p not=$dp.id.view then=$dp.id.out
+@dp.id.o app.observe.input id=page key=ids value=?m
+@dp.id.mode ui.diagram.idsmode value=?m
+@diagram.observe.ids core.rule when=$dp.id.mode then=$dp.id.o

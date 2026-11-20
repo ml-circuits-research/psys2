@@ -425,3 +425,21 @@
 @native.diagram.sketch.op.diagram.node.select.metadata app.native.metadata operation=$native.diagram.sketch.op.diagram.node.select field=$native.diagram.sketch.selection.effect
 @native.diagram.sketch.op.diagram.link.select.metadata app.native.metadata operation=$native.diagram.sketch.op.diagram.link.select field=$native.diagram.sketch.selection.effect
 @native.diagram.sketch.op.diagram.node.scale.metadata app.native.metadata operation=$native.diagram.sketch.op.diagram.node.scale field=$native.diagram.sketch.reflow.effect
+# Standing preferences of the Diagram tab (preferences.sop): stated or reset by key.
+@native.diagram.sketch.op.diagram.preference.state std.capability.operation scope=$native.diagram.sketch.scope name="diagram.preference.state" act=change on="diagram.sketch.page" order=52 eligible=true
+@native.diagram.sketch.op.diagram.preference.state.param.key std.capability.parameter operation=$native.diagram.sketch.op.diagram.preference.state name="key" kind=string required=true enum="link.style" enum="palette" enum="ids" enum="placement.side" enumClosed=true
+@native.diagram.sketch.op.diagram.preference.state.param.value std.capability.parameter operation=$native.diagram.sketch.op.diagram.preference.state name="value" kind=string required=true
+@native.diagram.sketch.op.diagram.preference.state.param.about std.capability.parameter operation=$native.diagram.sketch.op.diagram.preference.state name="about" kind=string
+@native.diagram.sketch.value.pref.1 std.capability.arg name="subject" value="standing preference"
+@native.diagram.sketch.value.pref.2 std.capability.arg name="determiner" value="a"
+@native.diagram.sketch.value.pref.3 std.capability.arg name="hidden" value=true
+@native.diagram.sketch.value.pref.4 std.capability.record entry=$native.diagram.sketch.value.pref.3
+@native.diagram.sketch.value.pref.5 std.capability.arg name="about" value=$native.diagram.sketch.value.pref.4
+@native.diagram.sketch.value.pref.6 std.capability.record entry=$native.diagram.sketch.value.pref.5
+@native.diagram.sketch.value.pref.7 std.capability.arg name="parameters" value=$native.diagram.sketch.value.pref.6
+@native.diagram.sketch.value.pref.8 std.capability.record entry=$native.diagram.sketch.value.pref.1 entry=$native.diagram.sketch.value.pref.2 entry=$native.diagram.sketch.value.pref.7
+@native.diagram.sketch.value.pref.9 std.capability.arg name="intent" value=$native.diagram.sketch.value.pref.8
+@native.diagram.sketch.op.diagram.preference.state.metadata app.native.metadata operation=$native.diagram.sketch.op.diagram.preference.state field=$native.diagram.sketch.value.pref.9
+@native.diagram.sketch.op.diagram.preference.reset std.capability.operation scope=$native.diagram.sketch.scope name="diagram.preference.reset" act=change on="diagram.sketch.page" order=53 eligible=true
+@native.diagram.sketch.op.diagram.preference.reset.param.key std.capability.parameter operation=$native.diagram.sketch.op.diagram.preference.reset name="key" kind=string required=true enum="link.style" enum="palette" enum="ids" enum="placement.side" enumClosed=true
+@native.diagram.sketch.op.diagram.preference.reset.metadata app.native.metadata operation=$native.diagram.sketch.op.diagram.preference.reset field=$native.diagram.sketch.value.pref.9

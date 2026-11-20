@@ -172,3 +172,58 @@
 @native.ui.avatar.op.avatar.undo std.capability.operation scope=$native.ui.avatar.scope name="avatar.undo" act=undo on="ui.avatar.face" order=17 eligible=true
 @native.ui.avatar.op.avatar.redo std.capability.operation scope=$native.ui.avatar.scope name="avatar.redo" act=redo on="ui.avatar.face" order=18 eligible=true
 @native.ui.avatar.op.avatar.figure.default std.capability.operation scope=$native.ui.avatar.scope name="avatar.figure.default" act=change on="ui.avatar.face" order=19 eligible=true
+# The avatar figure as a standing preference (figure-rules.sop): what a person says of the figure, merged with what was
+# said before (a named figure, a kind, a kind of person, an age or a step younger or older, a sex, traits, slots left
+# empty, its colour; the words as said).
+@native.ui.avatar.op.avatar.figure.describe std.capability.operation scope=$native.ui.avatar.scope name="avatar.figure.describe" act=change on="ui.avatar.face" order=20 eligible=true
+@native.ui.avatar.op.avatar.figure.describe.param.preset std.capability.parameter operation=$native.ui.avatar.op.avatar.figure.describe name="preset" kind=string
+@native.ui.avatar.op.avatar.figure.describe.param.preset.source.enum app.native.parameter parameter=$native.ui.avatar.op.avatar.figure.describe.param.preset field=enum input=$native.ui.avatar.input.avatar.presets
+@native.ui.avatar.op.avatar.figure.describe.param.kind std.capability.parameter operation=$native.ui.avatar.op.avatar.figure.describe name="kind" kind=string
+@native.ui.avatar.op.avatar.figure.describe.param.kind.source.enum app.native.parameter parameter=$native.ui.avatar.op.avatar.figure.describe.param.kind field=enum input=$native.ui.avatar.input.avatar.characterKinds
+@native.ui.avatar.op.avatar.figure.describe.param.person std.capability.parameter operation=$native.ui.avatar.op.avatar.figure.describe name="person" kind=string
+@native.ui.avatar.op.avatar.figure.describe.param.age std.capability.parameter operation=$native.ui.avatar.op.avatar.figure.describe name="age" kind=string
+@native.ui.avatar.op.avatar.figure.describe.param.sex std.capability.parameter operation=$native.ui.avatar.op.avatar.figure.describe name="sex" kind=string enum="female" enum="male" enumClosed=true
+@native.ui.avatar.op.avatar.figure.describe.param.traits std.capability.parameter operation=$native.ui.avatar.op.avatar.figure.describe name="traits" kind=array
+@native.ui.avatar.op.avatar.figure.describe.param.without std.capability.parameter operation=$native.ui.avatar.op.avatar.figure.describe name="without" kind=array
+@native.ui.avatar.op.avatar.figure.describe.param.colour std.capability.parameter operation=$native.ui.avatar.op.avatar.figure.describe name="colour" kind=string
+@native.ui.avatar.op.avatar.figure.describe.param.about std.capability.parameter operation=$native.ui.avatar.op.avatar.figure.describe name="about" kind=string
+@native.ui.avatar.value.200 std.capability.arg name="subject" value="avatar figure"
+@native.ui.avatar.value.201 std.capability.arg name="determiner" value="the"
+@native.ui.avatar.value.202 std.capability.arg name="label" value="as"
+@native.ui.avatar.value.203 std.capability.record entry=$native.ui.avatar.value.202
+@native.ui.avatar.value.204 std.capability.arg name="preset" value=$native.ui.avatar.value.203
+@native.ui.avatar.value.205 std.capability.arg name="label" value="aged"
+@native.ui.avatar.value.206 std.capability.record entry=$native.ui.avatar.value.205
+@native.ui.avatar.value.207 std.capability.arg name="age" value=$native.ui.avatar.value.206
+@native.ui.avatar.value.208 std.capability.arg name="label" value="with"
+@native.ui.avatar.value.209 std.capability.record entry=$native.ui.avatar.value.208
+@native.ui.avatar.value.210 std.capability.arg name="traits" value=$native.ui.avatar.value.209
+@native.ui.avatar.value.211 std.capability.arg name="label" value="without"
+@native.ui.avatar.value.212 std.capability.record entry=$native.ui.avatar.value.211
+@native.ui.avatar.value.213 std.capability.arg name="without" value=$native.ui.avatar.value.212
+@native.ui.avatar.value.214 std.capability.arg name="label" value="as a"
+@native.ui.avatar.value.215 std.capability.record entry=$native.ui.avatar.value.214
+@native.ui.avatar.value.216 std.capability.arg name="person" value=$native.ui.avatar.value.215
+@native.ui.avatar.value.217 std.capability.arg name="hidden" value=true
+@native.ui.avatar.value.218 std.capability.record entry=$native.ui.avatar.value.217
+@native.ui.avatar.value.219 std.capability.arg name="about" value=$native.ui.avatar.value.218
+@native.ui.avatar.value.220 std.capability.record entry=$native.ui.avatar.value.204 entry=$native.ui.avatar.value.207 entry=$native.ui.avatar.value.210 entry=$native.ui.avatar.value.213 entry=$native.ui.avatar.value.216 entry=$native.ui.avatar.value.219
+@native.ui.avatar.value.221 std.capability.arg name="parameters" value=$native.ui.avatar.value.220
+@native.ui.avatar.value.222 std.capability.record entry=$native.ui.avatar.value.200 entry=$native.ui.avatar.value.201 entry=$native.ui.avatar.value.221
+@native.ui.avatar.value.223 std.capability.arg name="intent" value=$native.ui.avatar.value.222
+@native.ui.avatar.op.avatar.figure.describe.metadata app.native.metadata operation=$native.ui.avatar.op.avatar.figure.describe field=$native.ui.avatar.value.223
+# Any standing preference this tab keeps (preferences.sop: ids), stated or reset by its key.
+@native.ui.avatar.op.avatar.preference.state std.capability.operation scope=$native.ui.avatar.scope name="avatar.preference.state" act=change on="ui.avatar.face" order=21 eligible=true
+@native.ui.avatar.op.avatar.preference.state.param.key std.capability.parameter operation=$native.ui.avatar.op.avatar.preference.state name="key" kind=string required=true enum="ids" enumClosed=true
+@native.ui.avatar.op.avatar.preference.state.param.field std.capability.parameter operation=$native.ui.avatar.op.avatar.preference.state name="field" kind=string
+@native.ui.avatar.op.avatar.preference.state.param.value std.capability.parameter operation=$native.ui.avatar.op.avatar.preference.state name="value" kind=string required=true
+@native.ui.avatar.op.avatar.preference.state.param.about std.capability.parameter operation=$native.ui.avatar.op.avatar.preference.state name="about" kind=string
+@native.ui.avatar.value.230 std.capability.arg name="subject" value="standing preference"
+@native.ui.avatar.value.231 std.capability.arg name="determiner" value="a"
+@native.ui.avatar.value.232 std.capability.record entry=$native.ui.avatar.value.230 entry=$native.ui.avatar.value.231
+@native.ui.avatar.value.233 std.capability.arg name="intent" value=$native.ui.avatar.value.232
+@native.ui.avatar.op.avatar.preference.state.metadata app.native.metadata operation=$native.ui.avatar.op.avatar.preference.state field=$native.ui.avatar.value.233
+@native.ui.avatar.op.avatar.preference.reset std.capability.operation scope=$native.ui.avatar.scope name="avatar.preference.reset" act=change on="ui.avatar.face" order=22 eligible=true
+@native.ui.avatar.op.avatar.preference.reset.param.key std.capability.parameter operation=$native.ui.avatar.op.avatar.preference.reset name="key" kind=string required=true enum="ids" enum="avatar.figure" enumClosed=true
+@native.ui.avatar.op.avatar.preference.reset.param.field std.capability.parameter operation=$native.ui.avatar.op.avatar.preference.reset name="field" kind=string
+@native.ui.avatar.op.avatar.preference.reset.metadata app.native.metadata operation=$native.ui.avatar.op.avatar.preference.reset field=$native.ui.avatar.value.233

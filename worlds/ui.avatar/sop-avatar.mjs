@@ -5,6 +5,6 @@ import AREA_SOURCES from './area-sources.mjs';
 import {BUNDLED_AREAS} from '../../src/knowledge/bundled-areas.mjs';
 import {sopAreaAdapter} from '../sop-area-adapter.mjs';
 
-const area = sopAreaAdapter({ world: 'ui.avatar', instance: 'w.face', interfaceSource: NATIVE_INTERFACE, sources: AREA_SOURCES, offline: BUNDLED_AREAS['ui.avatar'] });
+const area = sopAreaAdapter({ world: 'ui.avatar', instance: ['w.face', 'w.preferences'], interfaceSource: NATIVE_INTERFACE, sources: AREA_SOURCES, offline: BUNDLED_AREAS['ui.avatar'] });
 export const emptyAvatarState = area.empty, canonicalAvatarArea = area.canonical, createAvatarArea = area.create,
   projectAvatarArea = area.project, avatarAreaStateWorld = area.stateWorld;

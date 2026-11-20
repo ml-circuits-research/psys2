@@ -1,0 +1,38 @@
+# The standing preferences the Avatar tab keeps (declared data, read by worlds/app.project/preference-rules.sop and
+# figure-rules.sop): the keys, their fields, their declared defaults and which commands state, reset and apply them.
+#
+# avatar.figure: what the avatar looks like, a described value. Fields: preset (a named figure of k.faces: robot, girl,
+# old man), kind (human, robot, alien), age (baby, child, adult, old), sex (female, male), trait (k.faces.trait names,
+# several at once: spectacled, bearded, short-haired), without (slots left empty: beard, glasses, hat; several at once)
+# and colour (the robot's or alien's own colour, a person's clothes). The declared default is the friendly robot.
+@pref.avatar.figure.preset w.preferences.default key=avatar.figure field=preset value=robot scope=tab of=avatar about="the friendly robot"
+@pref.avatar.figure.kind w.preferences.default key=avatar.figure field=kind value=robot scope=tab of=avatar about="a robot"
+# A named figure replaces the whole description; a kind starts a new one; an age or a sex describes a person of one's
+# own (the named figure no longer holds); traits, slots left empty and the colour refine whatever is in force.
+@pref.avatar.figure.f.preset w.preferences.field key=avatar.figure field=preset clears=kind clears=age clears=sex clears=trait clears=without clears=colour
+@pref.avatar.figure.f.kind w.preferences.field key=avatar.figure field=kind clears=preset clears=age clears=sex clears=trait clears=without clears=colour
+@pref.avatar.figure.f.age w.preferences.field key=avatar.figure field=age clears=preset
+@pref.avatar.figure.f.sex w.preferences.field key=avatar.figure field=sex clears=preset
+@pref.avatar.figure.f.trait w.preferences.field key=avatar.figure field=trait many=true
+@pref.avatar.figure.f.without w.preferences.field key=avatar.figure field=without many=true
+@pref.avatar.figure.f.colour w.preferences.field key=avatar.figure field=colour
+
+# ids: whether object IDs show (always, temporary, off), for the whole application; off until said otherwise.
+@pref.avatar.ids w.preferences.default key=ids field=value value=off scope=app about="object IDs off"
+
+# The commands: the generic statement and reset of any key, the figure's own description and its reset (the tab's
+# start), and the command that applies the figure after a statement or a reset of it.
+@pref.avatar.op.state app.pref.operation role=state operation="avatar.preference.state"
+@pref.avatar.op.reset app.pref.operation role=reset operation="avatar.preference.reset"
+@pref.avatar.op.default app.pref.operation role=reset operation="avatar.figure.default" key=avatar.figure
+@pref.avatar.op.apply app.pref.operation role=apply key=avatar.figure operation="avatar.figure.apply"
+
+# Relative ages ("actually younger", "older"): one step along the k.values scale of age, the way its comparative goes.
+@avatar.tables.way core.type of=ui.avatar.way
+@way.up ui.avatar.way way=up offset=1
+@way.down ui.avatar.way way=down offset=-1
+# Which face colour a figure's own colour sets: a robot's or an alien's skin, a person's clothes.
+@avatar.tables.colourOf core.type of=ui.avatar.colourOf
+@colourOf.robot ui.avatar.colourOf kind=robot attr=skin
+@colourOf.alien ui.avatar.colourOf kind=alien attr=skin
+@colourOf.human ui.avatar.colourOf kind=human attr=clothes

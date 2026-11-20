@@ -18,7 +18,7 @@
 @area.lookup.type core.type of=app.area.lookup
 @area.subset.type core.type of=app.area.subset
 
-@diagram.area app.area world=diagram.sketch instance=w.diagram knowledge=k.colours knowledge=k.styles knowledge=k.charts knowledge=k.values scope="diagram.nodes-links-and-charts" frame.w=1000 frame.h=700 spatial=true depth=64
+@diagram.area app.area world=diagram.sketch instance=w.diagram instance=w.preferences knowledge=k.colours knowledge=k.styles knowledge=k.charts knowledge=k.values scope="diagram.nodes-links-and-charts" frame.w=1000 frame.h=700 spatial=true depth=64
 @diagram.rules.1 app.area.rules area=$diagram.area file="render-projection.sop" n=1
 @diagram.rules.2 app.area.rules area=$diagram.area file="layout-modes.sop" n=2
 @diagram.rules.3 app.area.rules area=$diagram.area file="style-projection.sop" n=3
@@ -30,6 +30,10 @@
 # ("bigger", "thinner") a chart's numeric formatting moves along.
 @diagram.subset.charts app.area.subset area=$diagram.area world=k.charts prefix="categories" strict=true
 @diagram.subset.values app.area.subset area=$diagram.area world=k.values prefix="scales" strict=true
+# Standing preferences (a w.preferences instance beside the diagram): the shared merge rules and this tab's declared keys
+# and their effect (preferences.sop: the line style of links, the palette of the page, object IDs).
+@diagram.rules.8 app.area.rules area=$diagram.area world=app.project file="preference-rules.sop" n=8
+@diagram.rules.9 app.area.rules area=$diagram.area file="preferences.sop" n=9
 @diagram.lookup.shapes app.area.lookup area=$diagram.area world=k.diagrams value=flowchart
 @diagram.choice.themes app.area.choice area=$diagram.area input="diagram.themes" type=k.styles.theme key=name
 @diagram.choice.colours app.area.choice area=$diagram.area input="diagram.colours" type=ui.diagram.colour key=name

@@ -9,21 +9,29 @@
 @area.draw.type core.type of=app.area.draw
 @area.offline.type core.type of=app.area.offline
 
-@avatar.area app.area world=ui.avatar instance=w.face knowledge=k.faces knowledge=k.values knowledge=k.parts scope="ui.avatar" frame.w=100 frame.h=100
+# Its standing preferences (the figure, the IDs) are a w.preferences instance beside the face (preferences.sop declares
+# the keys and defaults; app.project/preference-rules.sop merges what is said); k.people says the age and sex of a kind
+# of person ("a man") and the face that kind has.
+@avatar.area app.area world=ui.avatar instance=w.face instance=w.preferences knowledge=k.faces knowledge=k.values knowledge=k.parts knowledge=k.people scope="ui.avatar" frame.w=100 frame.h=100
 # The Avatar is a view of one person of the Drawing tab's model: the look projection, the look edit rules and the
 # person composition are the Drawing tab's (art.draw), so every garment, face part or trait the people's knowledge and
 # rules gain reaches this tab too; view-projection.sop frames that person on the face.
 @area.subset.type core.type of=app.area.subset
 @area.lookup.type core.type of=app.area.lookup
 @avatar.subset.parts app.area.subset area=$avatar.area world=k.parts prefix="names" prefix="psys2" strict=true
+@avatar.subset.people app.area.subset area=$avatar.area world=k.people prefix="kinds" strict=true
 @avatar.lookup.person app.area.lookup area=$avatar.area world=k.objects value=person
 @avatar.rules.1 app.area.rules area=$avatar.area world=art.draw file="look-projection.sop" n=1
 @avatar.rules.2 app.area.rules area=$avatar.area file="view-projection.sop" n=2
 @avatar.rules.3 app.area.rules area=$avatar.area world=art.draw file="look-rules.sop" n=3
 @avatar.rules.4 app.area.rules area=$avatar.area world=art.draw file="person-rules.sop" n=4
 @avatar.rules.5 app.area.rules area=$avatar.area file="act-rules.sop" n=5
+@avatar.rules.6 app.area.rules area=$avatar.area world=app.project file="preference-rules.sop" n=6
+@avatar.rules.7 app.area.rules area=$avatar.area file="preferences.sop" n=7
+@avatar.rules.8 app.area.rules area=$avatar.area file="figure-rules.sop" n=8
 @avatar.make app.area.make area=$avatar.area kind=w.face.face name="Avatar" style=plain
-# The avatar figure is a standing preference whose declared default is the robot (act-rules.sop: avatar.figure.default); the start applies it.
+# The avatar figure is a standing preference whose declared default is the friendly robot (preferences.sop); the start
+# resets it to that default, which the instance then holds, and applies it (figure-rules.sop).
 @avatar.start app.area.command area=$avatar.area sop="@start avatar.figure.default"
 @avatar.offline app.area.offline area=$avatar.area prefix="plain-" prefix="figure-"
 @avatar.draw app.area.draw area=$avatar.area draw=ui.avatar.view fill=ui.avatar.fill point=ui.avatar.point orient=ui.avatar.orient select=slot pose=ui.avatar.viewpose
