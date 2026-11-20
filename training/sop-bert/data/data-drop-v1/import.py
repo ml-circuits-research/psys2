@@ -181,9 +181,21 @@ def check(row, seen, official_seen):
     return ['official:' + (x if x.startswith(('unregistered-key', 'act-not', 'target-type', 'question-ask', 'operator', 'character', 'phase')) else x.split(':')[0]) for x in e]
 
 
+QUESTIONS = REPO.parent / 'management' / 'questions.md'
+FROZEN = HERE / 'frozen'  # batches already consumed (imported once; their folders are never re-read): pilot, dg-batch-01 phase A
+
+
+def done_batches():
+    """A batch is imported only after the worker's DONE-<batch> entry in management/questions.md (management/staging/ is never read)."""
+    text = QUESTIONS.read_text() if QUESTIONS.exists() else ''
+    return set(re.findall(r'DONE-([A-Za-z0-9_.-]+)', text))
+
+
 def main():
-    batches = sorted(p for p in DROP.iterdir() if p.is_dir()) if DROP.exists() else []
-    official_seen = official_texts()
+    frozen = {p.stem: [json.loads(l) for l in p.read_text().splitlines() if l.strip()] for p in sorted(FROZEN.glob('*.jsonl')) if not p.name.endswith('.needs.jsonl')}
+    done = done_batches()
+    batches = sorted(p for p in DROP.iterdir() if p.is_dir() and p.name not in frozen and (p.name in done or len(sys.argv) > 1)) if DROP.exists() else []
+    official_seen = set()  # owner decision 2026-11-20: rows are never rejected for being in the official dataset or a benchmark; the build keeps one copy of identical texts
     seen, accepted, needs_all, needs_count = set(), [], collections.defaultdict(list), collections.Counter()
     summary = {}
     for batch in batches:
@@ -191,6 +203,7 @@ def main():
         rejected, reasons, examples, stats = 0, collections.Counter(), collections.defaultdict(list), collections.Counter()
         kept, total, per_world, per_class = 0, 0, collections.Counter(), collections.Counter()
         batch_needs = collections.Counter()
+        batch_needs_rows = []
         for path in files:
             for i, line in enumerate(path.read_text().splitlines(), 1):
                 if not line.strip():
@@ -205,6 +218,8 @@ def main():
                 errs = check(row, seen, official_seen)
                 for n in needs:
                     frame = str((n or {}).get('frame', 'unspecified')) if isinstance(n, dict) else str(n)
+                    batch_needs_rows.append({'batch': batch.name, 'text': row.get('text'), 'frame': frame,
+                                             **({k: n.get(k) for k in ('value', 'span')} if isinstance(n, dict) else {'need': n})})
                     batch_needs[frame] += 1
                     needs_count[frame] += 1
                     if len(needs_all[frame]) < 8:
@@ -276,15 +291,23 @@ def main():
                   '- Diagram conventions: psys2/training/sop-bert/data/ui-diagram-v2/README.md (populations, connect patterns, charts, '
                   'improvement intent, container words).', '']
         (batch / 'FEEDBACK.md').write_text('\n'.join(lines))
+        if len(sys.argv) == 1:
+            (FROZEN / f'{batch.name}.needs.jsonl').write_text(''.join(json.dumps(r, ensure_ascii=False) + '\n' for r in batch_needs_rows))
     if len(sys.argv) > 1:
         print(json.dumps({'batches': summary, 'accepted': len(accepted), 'dryRun': True}, indent=1))
         return
+    accepted = [r for rows in frozen.values() for r in rows] + accepted
+    summary.update({name: {'frozen': len(rows)} for name, rows in frozen.items()})
     (HERE / 'accepted.jsonl').write_text(''.join(json.dumps(r, ensure_ascii=False) + '\n' for r in accepted))
-    if batches:
-        out = ['# Meanings without a key (data drops)', '', 'Collected from `needs` of every batch by the importer; frame -> count and examples.', '']
-        for frame, n in needs_count.most_common():
-            out.append(f'## {frame} ({n} requests)')
-            out += [f'- {e.get("batch")}: {e.get("text")!r} value={e.get("value")!r} span={e.get("span")!r}' for e in needs_all[frame]]
+    every = [json.loads(l) for p in sorted(FROZEN.glob('*.needs.jsonl')) for l in p.read_text().splitlines() if l.strip()]
+    if every:
+        by = collections.defaultdict(list)
+        for r in every:
+            by[r['frame']].append(r)
+        out = ['# Meanings without a key (data drops)', '', 'Collected from `needs` of every imported batch by the importer; frame -> requests and examples.', '']
+        for frame, rs in sorted(by.items(), key=lambda x: -len(x[1])):
+            out.append(f'## {frame} ({len(rs)} requests; batches {sorted({r["batch"] for r in rs})})')
+            out += [f'- {r["batch"]}: {r["text"]!r} value={r.get("value")!r} span={r.get("span")!r}' for r in rs[:8]]
             out.append('')
         (DROP / 'NEEDS-SUMMARY.md').write_text('\n'.join(out))
     print(json.dumps({'batches': summary, 'accepted': len(accepted)}, indent=1))

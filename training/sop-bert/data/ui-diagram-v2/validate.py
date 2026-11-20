@@ -9,7 +9,7 @@ Errors:
 - references: a written name, a selector or an anchor matches an object of context.existing (label, visible code or link name);
   existing targets referenced by name or kind have a non-empty context;
 - no tool slot ids (o1, r2, chart:1, snake_case slots) in the text; visible codes n1/e1/g1 are allowed;
-- no duplicate texts; no text of the held-out voice set in the corpus or in the official dataset.
+- no duplicate texts. (Owner decision 2026-11-20: benchmark and voice-set texts are never excluded from training.)
 Reported: rows per case, cases below 20 rows, official warnings."""
 import collections
 import copy
@@ -75,11 +75,6 @@ def check_rows(rows, errors, examples, notes, official_texts=None):
         if k in seen:
             err('duplicate-text', r, 'same as ' + seen[k])
         seen[k] = r['id']
-        if official_texts is not None and ('diagram', ' '.join(text.lower().split())) in official_texts:
-            if r.get('style', '').startswith('heldout-owner'):
-                notes['owner-sentence-also-in-official-dataset'] += 1  # verbatim owner requests are kept even when another source has them
-            else:
-                err('text-already-in-official-dataset', r)
         for q in r['requests']:
             span = q['span']
             if span not in text:
@@ -140,11 +135,6 @@ def main():
     heldout = [json.loads(l) for l in held.read_text().splitlines() if l.strip()] if held.exists() else []
     if heldout:
         check_rows(heldout, errors, examples, notes, official_texts)
-        corpus = {norm(r['text']) for r in rows}
-        for r in heldout:
-            if norm(r['text']) in corpus:
-                errors['heldout-text-in-corpus'] += 1
-                examples['heldout-text-in-corpus'].append(r['text'])
     per_case = collections.Counter(r['cohort']['case'] for r in rows)
     report = {'rows': len(rows), 'heldoutRows': len(heldout), 'cases': len(per_case), 'errors': dict(errors), 'errorExamples': dict(examples),
               'notes': dict(notes), 'casesBelow20': {c: n for c, n in per_case.items() if n < 20}}

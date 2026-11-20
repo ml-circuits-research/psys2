@@ -1,22 +1,22 @@
 {
  "summary": {
-  "rows": 6647,
+  "rows": 6676,
   "cases": 114,
   "byTier": {
-   "equivalent": 2508,
-   "complex": 2122,
-   "simplified": 2017
+   "equivalent": 2532,
+   "complex": 2111,
+   "simplified": 2033
   },
   "byVariant": {
-   "base": 3605,
-   "typo": 884,
-   "nospace": 406,
-   "asr": 787,
-   "filler": 461,
-   "polite": 504
+   "base": 3606,
+   "typo": 907,
+   "nospace": 426,
+   "asr": 724,
+   "filler": 510,
+   "polite": 503
   },
-  "compoundRows": 215,
-  "questionRows": 685,
+  "compoundRows": 217,
+  "questionRows": 679,
   "casesBelow20": []
  },
  "cases": {
@@ -42,13 +42,13 @@
     "complex": 11,
     "simplified": 11
    },
-   "rows": 62,
+   "rows": 63,
    "robustness": {
-    "asr": 6,
-    "polite": 7,
+    "polite": 2,
+    "asr": 8,
     "nospace": 5,
-    "typo": 7,
-    "filler": 3
+    "typo": 8,
+    "filler": 6
    },
    "what": "vague aesthetic/layout improvement of the whole diagram (declared improvement intent)"
   },
@@ -60,11 +60,11 @@
    },
    "rows": 62,
    "robustness": {
-    "nospace": 5,
-    "typo": 9,
+    "typo": 14,
     "polite": 6,
     "asr": 5,
-    "filler": 3
+    "filler": 1,
+    "nospace": 2
    },
    "what": "add one node of a kind (all native kinds and synonyms)"
   },
@@ -74,13 +74,13 @@
     "complex": 11,
     "simplified": 11
    },
-   "rows": 59,
+   "rows": 64,
    "robustness": {
-    "asr": 10,
-    "typo": 5,
-    "polite": 7,
-    "filler": 2,
-    "nospace": 1
+    "filler": 8,
+    "typo": 12,
+    "nospace": 3,
+    "polite": 4,
+    "asr": 3
    },
    "what": "add a node named only by a generic word (node, shape, element, step)"
   },
@@ -90,13 +90,13 @@
     "complex": 11,
     "simplified": 11
    },
-   "rows": 62,
+   "rows": 65,
    "robustness": {
-    "asr": 7,
-    "polite": 3,
-    "nospace": 7,
-    "typo": 7,
-    "filler": 4
+    "typo": 11,
+    "filler": 4,
+    "polite": 7,
+    "asr": 4,
+    "nospace": 5
    },
    "what": "add a labelled node"
   },
@@ -106,13 +106,13 @@
     "complex": 11,
     "simplified": 11
    },
-   "rows": 58,
+   "rows": 60,
    "robustness": {
-    "typo": 8,
-    "polite": 7,
-    "asr": 7,
-    "nospace": 1,
-    "filler": 1
+    "typo": 5,
+    "polite": 5,
+    "asr": 4,
+    "filler": 10,
+    "nospace": 2
    },
    "what": "add several nodes (node.n)"
   },
@@ -122,13 +122,13 @@
     "complex": 11,
     "simplified": 11
    },
-   "rows": 66,
+   "rows": 60,
    "robustness": {
-    "asr": 9,
     "filler": 5,
-    "typo": 10,
-    "nospace": 3,
-    "polite": 5
+    "typo": 7,
+    "asr": 7,
+    "polite": 6,
+    "nospace": 1
    },
    "what": "add a coloured node"
   },
@@ -138,13 +138,13 @@
     "complex": 11,
     "simplified": 11
    },
-   "rows": 63,
+   "rows": 60,
    "robustness": {
-    "typo": 6,
-    "asr": 10,
-    "polite": 5,
-    "filler": 5,
-    "nospace": 3
+    "typo": 5,
+    "polite": 8,
+    "asr": 4,
+    "filler": 4,
+    "nospace": 5
    },
    "what": "add a node of a size"
   },
@@ -154,13 +154,13 @@
     "complex": 11,
     "simplified": 11
    },
-   "rows": 64,
+   "rows": 62,
    "robustness": {
-    "filler": 5,
-    "nospace": 4,
-    "typo": 10,
-    "asr": 8,
-    "polite": 3
+    "polite": 5,
+    "typo": 8,
+    "asr": 4,
+    "filler": 6,
+    "nospace": 5
    },
    "what": "add several nodes in a layout"
   },
@@ -170,13 +170,13 @@
     "complex": 11,
     "simplified": 11
    },
-   "rows": 62,
+   "rows": 61,
    "robustness": {
+    "nospace": 3,
+    "polite": 5,
+    "typo": 6,
     "asr": 9,
-    "typo": 7,
-    "polite": 8,
-    "filler": 2,
-    "nospace": 2
+    "filler": 4
    },
    "what": "add a node at coordinates, a page region or relative to another node"
   },
@@ -186,13 +186,13 @@
     "complex": 11,
     "simplified": 11
    },
-   "rows": 62,
+   "rows": 63,
    "robustness": {
-    "polite": 4,
-    "filler": 6,
     "asr": 5,
-    "typo": 6,
-    "nospace": 7
+    "filler": 4,
+    "nospace": 5,
+    "typo": 9,
+    "polite": 6
    },
    "what": "add a node with several properties"
   },
@@ -202,13 +202,13 @@
     "complex": 11,
     "simplified": 11
    },
-   "rows": 65,
+   "rows": 67,
    "robustness": {
-    "filler": 3,
+    "filler": 10,
+    "asr": 12,
     "typo": 8,
-    "polite": 5,
-    "asr": 11,
-    "nospace": 4
+    "nospace": 1,
+    "polite": 2
    },
    "what": "recolour one node (all reference forms)"
   },
@@ -218,13 +218,13 @@
     "complex": 11,
     "simplified": 11
    },
-   "rows": 68,
+   "rows": 66,
    "robustness": {
+    "typo": 9,
+    "polite": 7,
     "nospace": 5,
-    "asr": 10,
-    "typo": 10,
-    "polite": 6,
-    "filler": 3
+    "filler": 4,
+    "asr": 7
    },
    "what": "recolour a population (the circles, all elements, every box)"
   },
@@ -234,13 +234,13 @@
     "complex": 11,
     "simplified": 11
    },
-   "rows": 66,
+   "rows": 65,
    "robustness": {
-    "asr": 7,
-    "polite": 5,
-    "nospace": 5,
+    "filler": 5,
     "typo": 11,
-    "filler": 4
+    "asr": 7,
+    "polite": 2,
+    "nospace": 6
    },
    "what": "change the shape of a node"
   },
@@ -252,11 +252,11 @@
    },
    "rows": 66,
    "robustness": {
-    "asr": 6,
-    "nospace": 5,
-    "typo": 8,
+    "typo": 10,
+    "nospace": 3,
+    "asr": 9,
     "filler": 5,
-    "polite": 8
+    "polite": 5
    },
    "what": "set the size of a node"
   },
@@ -266,13 +266,13 @@
     "complex": 11,
     "simplified": 11
    },
-   "rows": 63,
+   "rows": 65,
    "robustness": {
-    "polite": 2,
+    "typo": 8,
     "asr": 11,
-    "typo": 9,
-    "filler": 2,
-    "nospace": 5
+    "filler": 4,
+    "nospace": 4,
+    "polite": 4
    },
    "what": "make a node or population bigger/smaller (comparative)"
   },
@@ -284,11 +284,11 @@
    },
    "rows": 66,
    "robustness": {
-    "typo": 7,
-    "polite": 9,
-    "asr": 11,
-    "nospace": 3,
-    "filler": 2
+    "asr": 9,
+    "filler": 5,
+    "polite": 8,
+    "nospace": 1,
+    "typo": 9
    },
    "what": "rename a node"
   },
@@ -300,11 +300,11 @@
    },
    "rows": 63,
    "robustness": {
-    "asr": 11,
-    "filler": 3,
-    "polite": 4,
-    "typo": 10,
-    "nospace": 1
+    "typo": 6,
+    "nospace": 4,
+    "polite": 6,
+    "filler": 4,
+    "asr": 9
    },
    "what": "set the value of a node (charts as shapes)"
   },
@@ -314,13 +314,13 @@
     "complex": 11,
     "simplified": 11
    },
-   "rows": 62,
+   "rows": 64,
    "robustness": {
-    "typo": 11,
-    "asr": 4,
-    "polite": 4,
-    "nospace": 4,
-    "filler": 5
+    "asr": 7,
+    "typo": 10,
+    "polite": 6,
+    "nospace": 5,
+    "filler": 2
    },
    "what": "change the selected node (UI: Label field, Colour options, Size options)"
   },
@@ -330,13 +330,13 @@
     "complex": 11,
     "simplified": 11
    },
-   "rows": 65,
+   "rows": 66,
    "robustness": {
-    "polite": 10,
-    "typo": 4,
-    "nospace": 3,
-    "asr": 10,
-    "filler": 4
+    "nospace": 4,
+    "typo": 9,
+    "asr": 8,
+    "polite": 6,
+    "filler": 5
    },
    "what": "select one or several nodes (UI: Selection)"
   },
@@ -346,13 +346,13 @@
     "complex": 11,
     "simplified": 11
    },
-   "rows": 65,
+   "rows": 61,
    "robustness": {
-    "typo": 13,
-    "polite": 5,
-    "nospace": 4,
-    "asr": 4,
-    "filler": 5
+    "nospace": 1,
+    "filler": 6,
+    "asr": 6,
+    "typo": 12,
+    "polite": 2
    },
    "what": "select a node with its links"
   },
@@ -362,13 +362,13 @@
     "complex": 11,
     "simplified": 11
    },
-   "rows": 65,
+   "rows": 64,
    "robustness": {
-    "typo": 7,
-    "polite": 6,
-    "asr": 13,
-    "nospace": 1,
-    "filler": 4
+    "asr": 12,
+    "nospace": 2,
+    "filler": 6,
+    "polite": 7,
+    "typo": 3
    },
    "what": "delete nodes (all reference forms, populations)"
   },
@@ -378,13 +378,13 @@
     "complex": 11,
     "simplified": 11
    },
-   "rows": 59,
+   "rows": 61,
    "robustness": {
-    "typo": 12,
-    "asr": 4,
+    "nospace": 5,
+    "typo": 9,
+    "asr": 6,
     "polite": 3,
-    "filler": 2,
-    "nospace": 4
+    "filler": 4
    },
    "what": "delete the selection (UI: Delete)"
   },
@@ -394,13 +394,13 @@
     "complex": 11,
     "simplified": 11
    },
-   "rows": 64,
+   "rows": 67,
    "robustness": {
-    "asr": 12,
+    "polite": 7,
     "typo": 6,
-    "polite": 8,
-    "nospace": 2,
-    "filler": 2
+    "asr": 9,
+    "nospace": 4,
+    "filler": 7
    },
    "what": "move a node to coordinates"
   },
@@ -412,11 +412,11 @@
    },
    "rows": 67,
    "robustness": {
-    "typo": 11,
-    "polite": 5,
-    "filler": 4,
-    "asr": 8,
-    "nospace": 5
+    "typo": 9,
+    "nospace": 4,
+    "polite": 4,
+    "asr": 13,
+    "filler": 3
    },
    "what": "move a node to a page region"
   },
@@ -426,13 +426,13 @@
     "complex": 11,
     "simplified": 11
    },
-   "rows": 63,
+   "rows": 67,
    "robustness": {
-    "asr": 7,
-    "typo": 8,
-    "nospace": 4,
+    "typo": 12,
+    "nospace": 3,
     "polite": 4,
-    "filler": 6
+    "asr": 9,
+    "filler": 5
    },
    "what": "move a node relative to another node"
   },
@@ -442,13 +442,13 @@
     "complex": 11,
     "simplified": 11
    },
-   "rows": 66,
+   "rows": 63,
    "robustness": {
-    "nospace": 4,
-    "asr": 8,
-    "filler": 4,
-    "typo": 11,
-    "polite": 5
+    "nospace": 5,
+    "asr": 5,
+    "typo": 10,
+    "filler": 6,
+    "polite": 3
    },
    "what": "set width/height of a node"
   },
@@ -458,13 +458,13 @@
     "complex": 11,
     "simplified": 11
    },
-   "rows": 65,
+   "rows": 61,
    "robustness": {
-    "asr": 11,
     "typo": 7,
-    "nospace": 5,
-    "filler": 6,
-    "polite": 2
+    "filler": 5,
+    "nospace": 7,
+    "asr": 5,
+    "polite": 3
    },
    "what": "arrange nodes or populations in a layout"
   },
@@ -474,13 +474,13 @@
     "complex": 11,
     "simplified": 11
    },
-   "rows": 61,
+   "rows": 60,
    "robustness": {
-    "typo": 8,
-    "polite": 7,
-    "filler": 3,
+    "polite": 4,
+    "nospace": 3,
+    "typo": 6,
     "asr": 6,
-    "nospace": 3
+    "filler": 7
    },
    "what": "connect two nodes (link.from/link.to spans; label, code, kind endpoints)"
   },
@@ -490,13 +490,13 @@
     "complex": 11,
     "simplified": 11
    },
-   "rows": 60,
+   "rows": 62,
    "robustness": {
-    "asr": 9,
-    "nospace": 5,
+    "filler": 9,
+    "polite": 3,
     "typo": 7,
-    "filler": 1,
-    "polite": 4
+    "nospace": 5,
+    "asr": 4
    },
    "what": "connect the selected node to another (UI: Connect to)"
   },
@@ -506,13 +506,13 @@
     "complex": 11,
     "simplified": 11
    },
-   "rows": 64,
+   "rows": 66,
    "robustness": {
-    "asr": 10,
     "nospace": 4,
-    "typo": 8,
-    "filler": 5,
-    "polite": 3
+    "asr": 9,
+    "typo": 10,
+    "polite": 7,
+    "filler": 2
    },
    "what": "connect two nodes with a labelled/styled link"
   },
@@ -524,11 +524,11 @@
    },
    "rows": 64,
    "robustness": {
-    "filler": 5,
+    "typo": 10,
     "asr": 10,
-    "nospace": 5,
-    "typo": 7,
-    "polite": 3
+    "filler": 4,
+    "polite": 3,
+    "nospace": 3
    },
    "what": "connect a population (all elements, the circles, them in order)"
   },
@@ -538,13 +538,13 @@
     "complex": 11,
     "simplified": 11
    },
-   "rows": 66,
+   "rows": 67,
    "robustness": {
-    "polite": 6,
-    "filler": 4,
-    "asr": 7,
-    "typo": 12,
-    "nospace": 3
+    "typo": 11,
+    "asr": 8,
+    "filler": 6,
+    "nospace": 5,
+    "polite": 3
    },
    "what": "connect one node to a population (Start to all the boxes)"
   },
@@ -556,11 +556,11 @@
    },
    "rows": 66,
    "robustness": {
-    "asr": 10,
-    "nospace": 6,
-    "typo": 11,
-    "polite": 3,
-    "filler": 2
+    "typo": 7,
+    "polite": 9,
+    "filler": 5,
+    "asr": 5,
+    "nospace": 6
    },
    "what": "select a link (code, endpoints, context, ordinal)"
   },
@@ -570,13 +570,13 @@
     "complex": 11,
     "simplified": 11
    },
-   "rows": 65,
+   "rows": 64,
    "robustness": {
-    "typo": 9,
-    "asr": 8,
-    "polite": 7,
+    "asr": 7,
     "filler": 5,
-    "nospace": 2
+    "polite": 5,
+    "typo": 5,
+    "nospace": 8
    },
    "what": "label a link"
   },
@@ -586,13 +586,13 @@
     "complex": 11,
     "simplified": 11
    },
-   "rows": 67,
+   "rows": 63,
    "robustness": {
-    "filler": 6,
-    "asr": 13,
-    "typo": 7,
+    "typo": 8,
+    "asr": 9,
     "nospace": 5,
-    "polite": 2
+    "polite": 5,
+    "filler": 2
    },
    "what": "recolour a link (incl. populations)"
   },
@@ -602,13 +602,13 @@
     "complex": 11,
     "simplified": 11
    },
-   "rows": 67,
+   "rows": 61,
    "robustness": {
-    "nospace": 7,
-    "typo": 10,
-    "asr": 6,
-    "polite": 3,
-    "filler": 7
+    "typo": 11,
+    "filler": 7,
+    "nospace": 4,
+    "asr": 4,
+    "polite": 1
    },
    "what": "dash/dot a link"
   },
@@ -618,13 +618,13 @@
     "complex": 11,
     "simplified": 11
    },
-   "rows": 66,
+   "rows": 67,
    "robustness": {
+    "filler": 5,
+    "asr": 10,
+    "polite": 5,
     "nospace": 3,
-    "typo": 9,
-    "asr": 8,
-    "filler": 11,
-    "polite": 1
+    "typo": 10
    },
    "what": "arrowheads of a link"
   },
@@ -634,13 +634,13 @@
     "complex": 11,
     "simplified": 11
    },
-   "rows": 65,
+   "rows": 66,
    "robustness": {
+    "nospace": 6,
+    "asr": 9,
     "polite": 6,
-    "typo": 12,
-    "filler": 2,
-    "nospace": 5,
-    "asr": 6
+    "typo": 10,
+    "filler": 1
    },
    "what": "line width of a link (number or comparative)"
   },
@@ -652,11 +652,11 @@
    },
    "rows": 66,
    "robustness": {
-    "typo": 9,
     "asr": 12,
-    "nospace": 3,
-    "polite": 4,
-    "filler": 4
+    "polite": 5,
+    "typo": 8,
+    "filler": 4,
+    "nospace": 3
    },
    "what": "reconnect a link to another node"
   },
@@ -666,13 +666,13 @@
     "complex": 11,
     "simplified": 11
    },
-   "rows": 64,
+   "rows": 63,
    "robustness": {
-    "typo": 7,
-    "asr": 10,
-    "polite": 4,
-    "nospace": 4,
-    "filler": 5
+    "typo": 8,
+    "polite": 3,
+    "filler": 7,
+    "asr": 5,
+    "nospace": 6
    },
    "what": "delete links (code \"line e1\", endpoints, populations)"
   },
@@ -682,13 +682,13 @@
     "complex": 11,
     "simplified": 11
    },
-   "rows": 57,
+   "rows": 55,
    "robustness": {
+    "typo": 7,
     "nospace": 6,
-    "typo": 10,
-    "polite": 3,
-    "filler": 3,
-    "asr": 1
+    "polite": 4,
+    "asr": 2,
+    "filler": 2
    },
    "what": "delete nodes and links together"
   },
@@ -698,13 +698,13 @@
     "complex": 11,
     "simplified": 11
    },
-   "rows": 64,
+   "rows": 60,
    "robustness": {
-    "polite": 6,
-    "nospace": 4,
-    "typo": 6,
-    "asr": 9,
-    "filler": 5
+    "typo": 11,
+    "filler": 5,
+    "nospace": 2,
+    "asr": 6,
+    "polite": 2
    },
    "what": "clear the whole diagram (UI: Clear diagram)"
   },
@@ -714,13 +714,12 @@
     "complex": 2,
     "simplified": 16
    },
-   "rows": 62,
+   "rows": 63,
    "robustness": {
-    "filler": 4,
-    "asr": 6,
-    "nospace": 3,
-    "typo": 14,
-    "polite": 1
+    "typo": 11,
+    "asr": 7,
+    "filler": 6,
+    "polite": 5
    },
    "what": "show/hide the visible codes (n1, e1)"
   },
@@ -732,11 +731,11 @@
    },
    "rows": 58,
    "robustness": {
+    "polite": 8,
+    "asr": 1,
     "filler": 4,
-    "typo": 8,
-    "asr": 5,
-    "polite": 5,
-    "nospace": 2
+    "nospace": 5,
+    "typo": 6
    },
    "what": "undo"
   },
@@ -746,13 +745,13 @@
     "complex": 11,
     "simplified": 11
    },
-   "rows": 62,
+   "rows": 58,
    "robustness": {
-    "typo": 15,
-    "nospace": 5,
-    "polite": 2,
-    "asr": 3,
-    "filler": 3
+    "polite": 7,
+    "nospace": 4,
+    "typo": 7,
+    "filler": 5,
+    "asr": 1
    },
    "what": "redo"
   },
@@ -762,13 +761,13 @@
     "complex": 11,
     "simplified": 11
    },
-   "rows": 59,
+   "rows": 61,
    "robustness": {
-    "asr": 8,
     "polite": 3,
-    "typo": 6,
-    "filler": 5,
-    "nospace": 3
+    "typo": 4,
+    "filler": 8,
+    "nospace": 4,
+    "asr": 8
    },
    "what": "group nodes (optionally named/captioned)"
   },
@@ -778,13 +777,13 @@
     "complex": 11,
     "simplified": 11
    },
-   "rows": 61,
+   "rows": 60,
    "robustness": {
-    "nospace": 8,
-    "polite": 5,
+    "polite": 7,
+    "nospace": 4,
     "filler": 4,
-    "typo": 6,
-    "asr": 4
+    "asr": 6,
+    "typo": 5
    },
    "what": "group the selection or a population"
   },
@@ -794,12 +793,13 @@
     "complex": 11,
     "simplified": 11
    },
-   "rows": 65,
+   "rows": 63,
    "robustness": {
-    "typo": 8,
-    "filler": 7,
-    "polite": 6,
-    "asr": 10
+    "typo": 10,
+    "asr": 8,
+    "filler": 4,
+    "nospace": 4,
+    "polite": 3
    },
    "what": "recolour/resize/re-caption a group"
   },
@@ -811,11 +811,11 @@
    },
    "rows": 42,
    "robustness": {
-    "asr": 8,
-    "filler": 3,
-    "typo": 5,
-    "polite": 2,
-    "nospace": 2
+    "filler": 4,
+    "typo": 3,
+    "asr": 7,
+    "polite": 3,
+    "nospace": 3
    },
    "what": "select a group"
   },
@@ -825,12 +825,13 @@
     "complex": 7,
     "simplified": 7
    },
-   "rows": 38,
+   "rows": 43,
    "robustness": {
     "asr": 4,
-    "filler": 1,
-    "typo": 5,
-    "nospace": 6
+    "nospace": 3,
+    "typo": 6,
+    "polite": 7,
+    "filler": 1
    },
    "what": "lay out a group"
   },
@@ -840,13 +841,13 @@
     "complex": 7,
     "simplified": 7
    },
-   "rows": 41,
+   "rows": 42,
    "robustness": {
-    "polite": 3,
-    "asr": 5,
-    "nospace": 2,
-    "typo": 4,
-    "filler": 5
+    "asr": 6,
+    "typo": 7,
+    "filler": 3,
+    "nospace": 3,
+    "polite": 1
    },
    "what": "scale a group"
   },
@@ -858,11 +859,11 @@
    },
    "rows": 43,
    "robustness": {
-    "typo": 6,
-    "polite": 7,
+    "typo": 9,
     "filler": 3,
-    "nospace": 3,
-    "asr": 2
+    "asr": 7,
+    "nospace": 1,
+    "polite": 1
    },
    "what": "move a group"
   },
@@ -872,12 +873,13 @@
     "complex": 7,
     "simplified": 7
    },
-   "rows": 40,
+   "rows": 43,
    "robustness": {
-    "typo": 7,
-    "filler": 4,
-    "nospace": 2,
-    "asr": 5
+    "typo": 9,
+    "asr": 5,
+    "filler": 2,
+    "nospace": 3,
+    "polite": 2
    },
    "what": "delete a group"
   },
@@ -889,11 +891,11 @@
    },
    "rows": 40,
    "robustness": {
-    "typo": 6,
-    "filler": 2,
-    "nospace": 3,
-    "asr": 4,
-    "polite": 3
+    "polite": 3,
+    "typo": 8,
+    "nospace": 2,
+    "filler": 4,
+    "asr": 1
    },
    "what": "ungroup"
   },
@@ -903,29 +905,28 @@
     "complex": 7,
     "simplified": 7
    },
-   "rows": 40,
+   "rows": 39,
    "robustness": {
-    "nospace": 2,
-    "polite": 3,
-    "typo": 5,
-    "filler": 5,
-    "asr": 3
+    "nospace": 5,
+    "filler": 6,
+    "typo": 2,
+    "asr": 4
    },
    "what": "turn a chart into editable shapes"
   },
   "diagram.observe:describe": {
    "base": {
-    "equivalent": 9,
+    "equivalent": 10,
     "complex": 3,
     "simplified": 13
    },
-   "rows": 43,
+   "rows": 44,
    "robustness": {
-    "typo": 5,
-    "asr": 3,
-    "nospace": 4,
-    "polite": 4,
-    "filler": 2
+    "asr": 8,
+    "filler": 2,
+    "typo": 3,
+    "polite": 2,
+    "nospace": 3
    },
    "what": "describe the whole diagram"
   },
@@ -935,12 +936,13 @@
     "complex": 8,
     "simplified": 8
    },
-   "rows": 41,
+   "rows": 43,
    "robustness": {
-    "asr": 4,
     "typo": 7,
-    "filler": 4,
-    "nospace": 2
+    "nospace": 2,
+    "filler": 2,
+    "polite": 3,
+    "asr": 5
    },
    "what": "count nodes of a kind / all nodes"
   },
@@ -950,13 +952,13 @@
     "complex": 6,
     "simplified": 9
    },
-   "rows": 47,
+   "rows": 43,
    "robustness": {
-    "filler": 4,
-    "polite": 6,
-    "typo": 5,
-    "nospace": 6,
-    "asr": 2
+    "typo": 7,
+    "filler": 2,
+    "asr": 5,
+    "polite": 4,
+    "nospace": 1
    },
    "what": "count links"
   },
@@ -966,13 +968,13 @@
     "complex": 8,
     "simplified": 8
    },
-   "rows": 46,
+   "rows": 44,
    "robustness": {
-    "polite": 6,
-    "asr": 3,
-    "filler": 3,
-    "typo": 8,
-    "nospace": 2
+    "typo": 13,
+    "nospace": 2,
+    "polite": 2,
+    "asr": 2,
+    "filler": 1
    },
    "what": "is there a node of a kind"
   },
@@ -982,13 +984,13 @@
     "complex": 8,
     "simplified": 8
    },
-   "rows": 47,
+   "rows": 48,
    "robustness": {
-    "nospace": 5,
-    "filler": 3,
-    "polite": 5,
-    "typo": 6,
-    "asr": 4
+    "polite": 9,
+    "typo": 9,
+    "filler": 1,
+    "nospace": 2,
+    "asr": 3
    },
    "what": "list nodes of a kind / all nodes"
   },
@@ -998,13 +1000,13 @@
     "complex": 8,
     "simplified": 8
    },
-   "rows": 43,
+   "rows": 46,
    "robustness": {
-    "typo": 5,
-    "asr": 6,
-    "nospace": 2,
-    "polite": 5,
-    "filler": 1
+    "asr": 5,
+    "typo": 9,
+    "nospace": 3,
+    "filler": 3,
+    "polite": 2
    },
    "what": "what colour is a node"
   },
@@ -1014,13 +1016,13 @@
     "complex": 8,
     "simplified": 8
    },
-   "rows": 45,
+   "rows": 48,
    "robustness": {
-    "typo": 8,
     "asr": 6,
-    "polite": 4,
-    "nospace": 2,
-    "filler": 1
+    "typo": 8,
+    "filler": 6,
+    "polite": 3,
+    "nospace": 1
    },
    "what": "what does a node say"
   },
@@ -1030,13 +1032,13 @@
     "complex": 8,
     "simplified": 8
    },
-   "rows": 48,
+   "rows": 46,
    "robustness": {
     "filler": 6,
+    "polite": 3,
+    "nospace": 3,
     "typo": 3,
-    "nospace": 7,
-    "polite": 4,
-    "asr": 4
+    "asr": 7
    },
    "what": "how big is a node"
   },
@@ -1046,13 +1048,13 @@
     "complex": 8,
     "simplified": 8
    },
-   "rows": 42,
+   "rows": 46,
    "robustness": {
-    "typo": 5,
-    "asr": 8,
-    "polite": 3,
-    "filler": 1,
-    "nospace": 1
+    "filler": 3,
+    "nospace": 2,
+    "typo": 9,
+    "asr": 7,
+    "polite": 1
    },
    "what": "where is a node"
   },
@@ -1062,12 +1064,13 @@
     "complex": 8,
     "simplified": 8
    },
-   "rows": 46,
+   "rows": 47,
    "robustness": {
-    "typo": 9,
+    "polite": 7,
     "filler": 4,
-    "asr": 7,
-    "nospace": 2
+    "asr": 5,
+    "nospace": 3,
+    "typo": 4
    },
    "what": "what is a node connected to"
   },
@@ -1077,13 +1080,13 @@
     "complex": 8,
     "simplified": 8
    },
-   "rows": 47,
+   "rows": 46,
    "robustness": {
-    "asr": 8,
-    "filler": 1,
-    "typo": 4,
-    "nospace": 8,
-    "polite": 2
+    "typo": 7,
+    "filler": 3,
+    "asr": 6,
+    "polite": 2,
+    "nospace": 4
    },
    "what": "what does a link connect"
   },
@@ -1093,13 +1096,12 @@
     "complex": 8,
     "simplified": 8
    },
-   "rows": 44,
+   "rows": 39,
    "robustness": {
+    "asr": 7,
     "polite": 3,
-    "asr": 3,
-    "typo": 6,
-    "filler": 4,
-    "nospace": 4
+    "typo": 4,
+    "filler": 1
    },
    "what": "are two nodes connected"
   },
@@ -1109,13 +1111,13 @@
     "complex": 8,
     "simplified": 8
    },
-   "rows": 46,
+   "rows": 47,
    "robustness": {
-    "typo": 5,
-    "asr": 10,
-    "filler": 1,
-    "polite": 3,
-    "nospace": 3
+    "typo": 6,
+    "asr": 5,
+    "polite": 7,
+    "nospace": 2,
+    "filler": 3
    },
    "what": "does a node have a colour"
   },
@@ -1125,13 +1127,13 @@
     "complex": 11,
     "simplified": 11
    },
-   "rows": 64,
+   "rows": 58,
    "robustness": {
-    "filler": 7,
-    "typo": 10,
-    "polite": 7,
-    "asr": 4,
-    "nospace": 2
+    "typo": 8,
+    "asr": 6,
+    "polite": 4,
+    "filler": 3,
+    "nospace": 3
    },
    "what": "apply a theme to the whole diagram (vague colour-style requests with a theme word)"
   },
@@ -1141,13 +1143,13 @@
     "complex": 11,
     "simplified": 11
    },
-   "rows": 66,
+   "rows": 63,
    "robustness": {
-    "typo": 10,
-    "nospace": 2,
-    "filler": 8,
-    "asr": 9,
-    "polite": 3
+    "nospace": 6,
+    "asr": 5,
+    "typo": 7,
+    "polite": 5,
+    "filler": 6
    },
    "what": "a theme or highlight on some nodes (a role, a shape, named nodes)"
   },
@@ -1159,11 +1161,11 @@
    },
    "rows": 61,
    "robustness": {
-    "asr": 5,
-    "filler": 8,
     "typo": 7,
-    "polite": 4,
-    "nospace": 3
+    "nospace": 7,
+    "asr": 7,
+    "polite": 3,
+    "filler": 3
    },
    "what": "colour nodes by level, shape, role or group"
   },
@@ -1173,13 +1175,13 @@
     "complex": 11,
     "simplified": 11
    },
-   "rows": 64,
+   "rows": 65,
    "robustness": {
-    "typo": 6,
-    "polite": 5,
-    "asr": 10,
+    "typo": 5,
     "nospace": 3,
-    "filler": 6
+    "filler": 8,
+    "asr": 11,
+    "polite": 4
    },
    "what": "outline colour, text colour, font size and weight of nodes"
   },
@@ -1189,13 +1191,13 @@
     "complex": 11,
     "simplified": 11
    },
-   "rows": 66,
+   "rows": 65,
    "robustness": {
-    "typo": 11,
-    "asr": 3,
+    "asr": 8,
+    "nospace": 6,
+    "typo": 10,
     "filler": 4,
-    "nospace": 7,
-    "polite": 7
+    "polite": 3
    },
    "what": "mark a node with a flowchart role or a new shape"
   },
@@ -1205,13 +1207,13 @@
     "complex": 11,
     "simplified": 11
    },
-   "rows": 60,
+   "rows": 59,
    "robustness": {
     "filler": 8,
-    "nospace": 3,
-    "asr": 6,
-    "typo": 4,
-    "polite": 5
+    "nospace": 4,
+    "asr": 2,
+    "typo": 9,
+    "polite": 2
    },
    "what": "add a node by its flowchart role or a new shape"
   },
@@ -1221,13 +1223,13 @@
     "complex": 11,
     "simplified": 11
    },
-   "rows": 63,
+   "rows": 64,
    "robustness": {
-    "typo": 10,
-    "asr": 10,
-    "polite": 4,
-    "filler": 2,
-    "nospace": 3
+    "nospace": 4,
+    "asr": 5,
+    "polite": 7,
+    "filler": 8,
+    "typo": 6
    },
    "what": "lay out the whole diagram (layout, direction, spacing, routes)"
   },
@@ -1239,27 +1241,27 @@
    },
    "rows": 62,
    "robustness": {
-    "asr": 6,
     "typo": 8,
+    "polite": 6,
     "filler": 5,
-    "nospace": 4,
-    "polite": 5
+    "asr": 6,
+    "nospace": 3
    },
    "what": "align nodes"
   },
   "diagram.nodes.distribute:axis": {
    "base": {
-    "equivalent": 13,
+    "equivalent": 14,
     "complex": 13,
-    "simplified": 8
+    "simplified": 7
    },
-   "rows": 63,
+   "rows": 65,
    "robustness": {
-    "asr": 8,
-    "polite": 8,
-    "typo": 8,
     "filler": 4,
-    "nospace": 1
+    "typo": 10,
+    "asr": 7,
+    "polite": 6,
+    "nospace": 4
    },
    "what": "space nodes evenly"
   },
@@ -1269,13 +1271,13 @@
     "complex": 1,
     "simplified": 14
    },
-   "rows": 59,
+   "rows": 63,
    "robustness": {
-    "filler": 5,
-    "asr": 6,
-    "polite": 3,
-    "typo": 8,
-    "nospace": 3
+    "polite": 6,
+    "typo": 11,
+    "filler": 3,
+    "nospace": 6,
+    "asr": 3
    },
    "what": "number the steps / hide the numbers"
   },
@@ -1285,13 +1287,13 @@
     "complex": 11,
     "simplified": 11
    },
-   "rows": 66,
+   "rows": 65,
    "robustness": {
-    "asr": 9,
-    "typo": 9,
     "polite": 5,
+    "nospace": 4,
+    "typo": 5,
     "filler": 6,
-    "nospace": 3
+    "asr": 11
    },
    "what": "duplicate nodes"
   },
@@ -1301,13 +1303,13 @@
     "complex": 11,
     "simplified": 11
    },
-   "rows": 58,
+   "rows": 61,
    "robustness": {
-    "typo": 8,
-    "asr": 1,
-    "filler": 9,
-    "nospace": 2,
-    "polite": 4
+    "typo": 11,
+    "polite": 5,
+    "asr": 4,
+    "nospace": 3,
+    "filler": 4
    },
    "what": "insert a node into a link"
   },
@@ -1317,13 +1319,13 @@
     "complex": 11,
     "simplified": 11
    },
-   "rows": 66,
+   "rows": 68,
    "robustness": {
-    "asr": 6,
-    "typo": 16,
-    "filler": 2,
-    "polite": 7,
-    "nospace": 1
+    "nospace": 3,
+    "typo": 13,
+    "asr": 8,
+    "polite": 4,
+    "filler": 6
    },
    "what": "merge nodes"
   },
@@ -1333,13 +1335,13 @@
     "complex": 11,
     "simplified": 11
    },
-   "rows": 65,
+   "rows": 62,
    "robustness": {
-    "typo": 8,
-    "asr": 12,
-    "filler": 4,
+    "asr": 8,
     "polite": 5,
-    "nospace": 2
+    "nospace": 6,
+    "typo": 4,
+    "filler": 5
    },
    "what": "split a node in two"
   },
@@ -1349,13 +1351,13 @@
     "complex": 11,
     "simplified": 11
    },
-   "rows": 67,
+   "rows": 65,
    "robustness": {
-    "nospace": 7,
     "asr": 10,
-    "typo": 10,
-    "polite": 4,
-    "filler": 2
+    "polite": 6,
+    "nospace": 2,
+    "typo": 9,
+    "filler": 4
    },
    "what": "reverse a link"
   },
@@ -1367,11 +1369,11 @@
    },
    "rows": 67,
    "robustness": {
-    "filler": 7,
-    "typo": 9,
-    "polite": 5,
-    "asr": 9,
-    "nospace": 3
+    "nospace": 6,
+    "typo": 8,
+    "polite": 7,
+    "asr": 7,
+    "filler": 5
    },
    "what": "route of links (curved, straight, orthogonal)"
   },
@@ -1383,11 +1385,11 @@
    },
    "rows": 64,
    "robustness": {
+    "nospace": 1,
+    "filler": 6,
+    "asr": 9,
     "typo": 10,
-    "polite": 7,
-    "nospace": 5,
-    "filler": 3,
-    "asr": 5
+    "polite": 4
    },
    "what": "connect many nodes at once (in order, in a loop, all to all, to a hub)"
   },
@@ -1397,12 +1399,11 @@
     "complex": 10,
     "simplified": 10
    },
-   "rows": 57,
+   "rows": 58,
    "robustness": {
-    "typo": 7,
-    "polite": 6,
-    "asr": 6,
-    "filler": 4,
+    "asr": 8,
+    "typo": 12,
+    "polite": 4,
     "nospace": 4
    },
    "what": "add nodes and connect them (owner: \"add three boxes and connect them in order\", \"two circles with an arrow\")"
@@ -1413,13 +1414,13 @@
     "complex": 10,
     "simplified": 10
    },
-   "rows": 57,
+   "rows": 58,
    "robustness": {
-    "nospace": 4,
+    "asr": 8,
     "polite": 5,
-    "asr": 9,
-    "typo": 4,
-    "filler": 5
+    "typo": 7,
+    "filler": 4,
+    "nospace": 4
    },
    "what": "two changes in one message"
   },
@@ -1429,12 +1430,13 @@
     "complex": 8,
     "simplified": 8
    },
-   "rows": 46,
+   "rows": 45,
    "robustness": {
-    "asr": 11,
-    "filler": 3,
-    "polite": 4,
-    "typo": 4
+    "typo": 6,
+    "asr": 6,
+    "filler": 5,
+    "nospace": 1,
+    "polite": 3
    },
    "what": "a question followed by a command"
   },
@@ -1444,13 +1446,13 @@
     "complex": 10,
     "simplified": 10
    },
-   "rows": 55,
+   "rows": 56,
    "robustness": {
-    "nospace": 4,
-    "filler": 5,
-    "polite": 5,
-    "asr": 7,
-    "typo": 4
+    "nospace": 7,
+    "typo": 8,
+    "asr": 5,
+    "filler": 3,
+    "polite": 3
    },
    "what": "add nodes then style or lay out the diagram"
   },
@@ -1460,13 +1462,13 @@
     "complex": 11,
     "simplified": 11
    },
-   "rows": 64,
+   "rows": 66,
    "robustness": {
-    "typo": 8,
-    "polite": 2,
-    "filler": 8,
-    "asr": 11,
-    "nospace": 1
+    "polite": 3,
+    "nospace": 5,
+    "asr": 10,
+    "filler": 4,
+    "typo": 10
    },
    "what": "vague improvement of one object or population (\"make the line e1 look better\")"
   },
@@ -1476,13 +1478,13 @@
     "complex": 1,
     "simplified": 16
    },
-   "rows": 65,
+   "rows": 62,
    "robustness": {
-    "asr": 9,
-    "typo": 7,
-    "filler": 4,
-    "nospace": 7,
-    "polite": 4
+    "typo": 5,
+    "asr": 8,
+    "nospace": 6,
+    "polite": 5,
+    "filler": 4
    },
    "what": "vague improvement of nodes (\"make the boxes look nicer\")"
   },
@@ -1492,13 +1494,13 @@
     "complex": 13,
     "simplified": 13
    },
-   "rows": 66,
+   "rows": 71,
    "robustness": {
-    "polite": 12,
-    "nospace": 1,
-    "filler": 6,
-    "typo": 6,
-    "asr": 1
+    "nospace": 6,
+    "typo": 12,
+    "polite": 4,
+    "filler": 5,
+    "asr": 4
    },
    "what": "make a chart from typed values (natural forms)"
   },
@@ -1508,13 +1510,13 @@
     "complex": 11,
     "simplified": 11
    },
-   "rows": 54,
+   "rows": 62,
    "robustness": {
-    "polite": 2,
-    "asr": 6,
-    "nospace": 3,
-    "filler": 5,
-    "typo": 4
+    "nospace": 5,
+    "typo": 8,
+    "filler": 6,
+    "polite": 5,
+    "asr": 4
    },
    "what": "make a chart from an existing chart or group"
   },
@@ -1524,13 +1526,13 @@
     "complex": 12,
     "simplified": 12
    },
-   "rows": 66,
+   "rows": 70,
    "robustness": {
-    "polite": 5,
-    "typo": 11,
-    "filler": 7,
-    "asr": 3,
-    "nospace": 4
+    "asr": 8,
+    "typo": 9,
+    "nospace": 8,
+    "filler": 3,
+    "polite": 6
    },
    "what": "change the chart type"
   },
@@ -1542,11 +1544,11 @@
    },
    "rows": 68,
    "robustness": {
-    "polite": 6,
-    "typo": 8,
+    "asr": 6,
+    "typo": 10,
     "filler": 6,
-    "nospace": 3,
-    "asr": 5
+    "polite": 4,
+    "nospace": 2
    },
    "what": "set the value of one category (series optional)"
   },
@@ -1556,13 +1558,12 @@
     "complex": 10,
     "simplified": 10
    },
-   "rows": 46,
+   "rows": 49,
    "robustness": {
-    "asr": 2,
-    "typo": 6,
-    "polite": 1,
-    "filler": 5,
-    "nospace": 2
+    "polite": 5,
+    "typo": 7,
+    "filler": 6,
+    "asr": 1
    },
    "what": "raise or lower a value by an amount or a degree"
   },
@@ -1572,13 +1573,13 @@
     "complex": 12,
     "simplified": 12
    },
-   "rows": 62,
+   "rows": 61,
    "robustness": {
-    "nospace": 2,
-    "filler": 3,
-    "typo": 15,
-    "polite": 3,
-    "asr": 3
+    "nospace": 5,
+    "filler": 5,
+    "polite": 5,
+    "typo": 6,
+    "asr": 4
    },
    "what": "add a category (with a value) to a chart"
   },
@@ -1588,12 +1589,13 @@
     "complex": 10,
     "simplified": 10
    },
-   "rows": 45,
+   "rows": 49,
    "robustness": {
-    "polite": 4,
-    "filler": 6,
-    "typo": 4,
-    "asr": 1
+    "filler": 1,
+    "nospace": 4,
+    "asr": 2,
+    "typo": 8,
+    "polite": 4
    },
    "what": "remove a category from a chart"
   },
@@ -1603,13 +1605,13 @@
     "complex": 9,
     "simplified": 8
    },
-   "rows": 43,
+   "rows": 48,
    "robustness": {
-    "typo": 6,
-    "polite": 3,
-    "nospace": 2,
-    "filler": 3,
-    "asr": 3
+    "asr": 7,
+    "typo": 9,
+    "polite": 2,
+    "nospace": 1,
+    "filler": 3
    },
    "what": "rename a category"
   },
@@ -1619,13 +1621,13 @@
     "complex": 10,
     "simplified": 10
    },
-   "rows": 49,
+   "rows": 52,
    "robustness": {
-    "typo": 6,
-    "asr": 4,
-    "polite": 3,
-    "nospace": 4,
-    "filler": 2
+    "polite": 5,
+    "typo": 4,
+    "nospace": 3,
+    "asr": 5,
+    "filler": 5
    },
    "what": "add a data series"
   },
@@ -1635,13 +1637,13 @@
     "complex": 9,
     "simplified": 8
    },
-   "rows": 48,
+   "rows": 49,
    "robustness": {
     "nospace": 5,
-    "asr": 6,
-    "filler": 6,
-    "polite": 2,
-    "typo": 3
+    "polite": 8,
+    "typo": 2,
+    "filler": 3,
+    "asr": 5
    },
    "what": "recolour, rename or remove a series"
   },
@@ -1651,13 +1653,13 @@
     "complex": 7,
     "simplified": 7
    },
-   "rows": 39,
+   "rows": 41,
    "robustness": {
+    "asr": 6,
     "typo": 4,
-    "nospace": 2,
-    "asr": 9,
-    "filler": 1,
-    "polite": 1
+    "filler": 4,
+    "polite": 4,
+    "nospace": 1
    },
    "what": "remove a series"
   },
@@ -1669,11 +1671,11 @@
    },
    "rows": 61,
    "robustness": {
-    "polite": 8,
-    "typo": 9,
-    "filler": 3,
-    "nospace": 4,
-    "asr": 3
+    "asr": 3,
+    "filler": 6,
+    "nospace": 5,
+    "polite": 7,
+    "typo": 6
    },
    "what": "chart title"
   },
@@ -1683,13 +1685,13 @@
     "complex": 1,
     "simplified": 4
    },
-   "rows": 65,
+   "rows": 62,
    "robustness": {
-    "typo": 12,
-    "asr": 8,
-    "nospace": 4,
-    "filler": 2,
-    "polite": 5
+    "asr": 10,
+    "polite": 5,
+    "filler": 3,
+    "nospace": 2,
+    "typo": 8
    },
    "what": "legend show/hide/position"
   },
@@ -1701,11 +1703,11 @@
    },
    "rows": 63,
    "robustness": {
-    "asr": 15,
-    "typo": 6,
-    "filler": 3,
-    "nospace": 2,
-    "polite": 3
+    "nospace": 5,
+    "typo": 11,
+    "polite": 3,
+    "filler": 6,
+    "asr": 4
    },
    "what": "value labels on/off"
   },
@@ -1715,13 +1717,13 @@
     "complex": 1,
     "simplified": 16
    },
-   "rows": 61,
+   "rows": 60,
    "robustness": {
-    "nospace": 3,
-    "typo": 7,
     "polite": 8,
-    "asr": 7,
-    "filler": 2
+    "typo": 9,
+    "nospace": 3,
+    "asr": 2,
+    "filler": 4
    },
    "what": "axis titles, gridlines, range"
   },
@@ -1731,13 +1733,13 @@
     "complex": 1,
     "simplified": 4
    },
-   "rows": 63,
+   "rows": 66,
    "robustness": {
-    "nospace": 4,
-    "asr": 11,
-    "filler": 3,
-    "typo": 10,
-    "polite": 1
+    "typo": 6,
+    "asr": 10,
+    "filler": 9,
+    "polite": 4,
+    "nospace": 3
    },
    "what": "stacked / horizontal / sorted"
   },
@@ -1747,13 +1749,13 @@
     "complex": 11,
     "simplified": 11
    },
-   "rows": 60,
+   "rows": 61,
    "robustness": {
-    "asr": 9,
-    "typo": 5,
-    "polite": 4,
-    "nospace": 4,
-    "filler": 4
+    "asr": 10,
+    "typo": 9,
+    "filler": 6,
+    "polite": 1,
+    "nospace": 1
    },
    "what": "chart colours and palettes"
   },
@@ -1765,11 +1767,11 @@
    },
    "rows": 62,
    "robustness": {
+    "typo": 10,
     "asr": 7,
-    "nospace": 7,
-    "filler": 6,
     "polite": 5,
-    "typo": 3
+    "nospace": 2,
+    "filler": 4
    },
    "what": "chart effects"
   },
@@ -1779,13 +1781,13 @@
     "complex": 10,
     "simplified": 10
    },
-   "rows": 54,
+   "rows": 47,
    "robustness": {
-    "typo": 8,
-    "asr": 5,
-    "filler": 4,
     "nospace": 2,
-    "polite": 5
+    "typo": 4,
+    "asr": 4,
+    "polite": 5,
+    "filler": 2
    },
    "what": "questions about a chart"
   },
@@ -1795,13 +1797,13 @@
     "complex": 10,
     "simplified": 10
    },
-   "rows": 56,
+   "rows": 57,
    "robustness": {
-    "polite": 8,
-    "asr": 8,
-    "typo": 5,
-    "filler": 2,
-    "nospace": 3
+    "filler": 5,
+    "asr": 7,
+    "nospace": 5,
+    "typo": 6,
+    "polite": 4
    },
    "what": "effects on nodes or the whole diagram"
   },
@@ -1811,13 +1813,13 @@
     "complex": 10,
     "simplified": 10
    },
-   "rows": 48,
+   "rows": 56,
    "robustness": {
-    "asr": 5,
+    "typo": 8,
+    "nospace": 6,
+    "filler": 4,
     "polite": 5,
-    "typo": 4,
-    "filler": 2,
-    "nospace": 2
+    "asr": 3
    },
    "what": "conditional colours: categories below/above a value take a colour (diagram.chart.highlight)"
   },
@@ -1827,12 +1829,12 @@
     "complex": 11,
     "simplified": 11
    },
-   "rows": 63,
+   "rows": 64,
    "robustness": {
-    "asr": 5,
-    "typo": 13,
-    "filler": 4,
-    "nospace": 6,
+    "nospace": 9,
+    "typo": 12,
+    "asr": 6,
+    "filler": 2,
     "polite": 1
    },
    "what": "make a chart named by its measure and category dimension, no values (\"a bar chart of sales by month\")"

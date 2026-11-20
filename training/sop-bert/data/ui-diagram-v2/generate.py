@@ -50,9 +50,6 @@ def row(case_id, tier, style, text, reqs, scene, base_id=None, rid=None):
 def main():
     rng = random.Random(SEED)
     out, seen, coverage, errors = [], set(), collections.OrderedDict(), []
-    held = HERE / 'heldout-voice.jsonl'
-    if held.exists():  # the held-out voice set is never generated into training
-        seen |= {norm(json.loads(l)['text']) for l in held.read_text().splitlines() if l.strip()}
     counter = 0
     for case_id, spec in frames.CASES.items():
         made = collections.Counter()
