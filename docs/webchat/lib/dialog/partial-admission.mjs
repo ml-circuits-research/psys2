@@ -7,7 +7,7 @@
 // word, a sentence, a tool or a world.
 import {bridgeRawStructure,pruneLabel} from './raw-structural-bridge.mjs?v=1a37877b02';
 import {decodeModelGraphs} from './model-graph-decoder.mjs?v=04ce2e25e8';
-import {comparativeSteps} from './comparative-projection.mjs?v=7f194e56fb';
+import {comparativeSteps} from './comparative-projection.mjs?v=e99f00fb51';
 import {referenceProjection} from './reference-projection.mjs?v=9430fd808a';
 import {interpretationPolicy} from './interpretation-policy.mjs?v=9f28a38d01';
 

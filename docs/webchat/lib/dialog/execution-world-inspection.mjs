@@ -5,14 +5,14 @@ import{CATALOG_PIN}from'../knowledge/catalog-pin.mjs?v=78a1624283';
 import{inspectRequestRoutingPolicy}from'./request-routing-policy.mjs?v=162ba0e305';
 import{inspectHistoryPolicy}from'./history-policy.mjs?v=e3ae635861';
 import{inspectHistoryJournal}from'./history-journal.mjs?v=99bcb89726';
-import{inspectExecutionPolicyWorld}from'./execution-policy.mjs?v=0dd078cd76';
+import{inspectExecutionPolicyWorld}from'./execution-policy.mjs?v=8a365cbdf0';
 import{sceneDefaultInspection}from'./scene-placement-defaults.mjs?v=881cf3bcf0';
-import{inspectCapabilityPolicy}from'./capability-plan-adapter.mjs?v=06daba0018';
-import{inspectQueryPolicy}from'./project-query-action.mjs?v=912fd4e1c6';
-import{inspectCreationPolicy}from'./project-create-action.mjs?v=383bee3f54';
-import{inspectConstructorPolicy}from'./native-binding-candidates.mjs?v=d58e992e52';
+import{inspectCapabilityPolicy}from'./capability-plan-adapter.mjs?v=88b6dbbc71';
+import{inspectQueryPolicy}from'./project-query-action.mjs?v=f779ab0fea';
+import{inspectCreationPolicy}from'./project-create-action.mjs?v=9618151f33';
+import{inspectConstructorPolicy}from'./native-binding-candidates.mjs?v=0fb3ccec6b';
 import{inspectGroundedProjection}from'./grounded-projection.mjs?v=b0c1a3961b';
-import{inspectReaderHeadPolicy}from'./reader-head-alternative.mjs?v=fb3d54d81a';
+import{inspectReaderHeadPolicy}from'./reader-head-alternative.mjs?v=75e842f78f';
 import{inspectReferencePolicy}from'./reference-policy.mjs?v=d1b881e1d6';
 import{inspectSchemaSource}from'./worlds-inspection.mjs?v=9ffaf05c29';
 import{inspectRequestCompositionPolicy}from'./request-composition-policy.mjs?v=35215a85aa';
@@ -28,7 +28,7 @@ function snapshotText(snapshot){return (snapshot?.log??[]).map((entry,index)=>'#
 /** Projects actual cache accessors and retained journal JSON; performs no reading or reasoning. */
 export async function inspectExecutionWorlds(session){
  const [{inspectDeclaredExecutionSourceWorld},{inspectSpatialPlacementWorld}]=await Promise.all([
-  import('./declared-execution.mjs?v=3fb7e18db2'),import('./spatial-placement-execution.mjs?v=e4948cf272'),
+  import('./declared-execution.mjs?v=f978daae2c'),import('./spatial-placement-execution.mjs?v=adbd129733'),
  ]);
  const journal=session?.newEngineJournal??[],moduleNames=[...new Set(journal.flatMap(record=>importsOf(record.evidence)))],sources=[['declared-execution','src/dialog/declared-execution.mjs',inspectDeclaredExecutionSourceWorld({moduleNames})]],nodes=[],edges=[];
  const link=(from,to,label)=>edges.push({from,to,label});
