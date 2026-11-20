@@ -1,0 +1,11 @@
+{
+ "rows": 1931,
+ "errors": {},
+ "examples": {},
+ "notes": {
+  "numeric-value-not-in-surface": 153,
+  "target-kind_span-ambiguous": 4,
+  "target-name_span-ambiguous": 4,
+  "value-span-ambiguous": 5
+ }
+}

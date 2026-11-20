@@ -83,6 +83,15 @@ No issue found.
 | --- | ---: |
 | warning:selector-not-in-context | 3 |
 
+### ui-drawing-style-v1 (1,931 rows)
+
+| issue | rows |
+| --- | ---: |
+| warning:numeric-value-not-in-surface | 153 |
+| warning:value-span-ambiguous | 5 |
+| warning:target-kind_span-ambiguous | 4 |
+| warning:target-name_span-ambiguous | 4 |
+
 ### ui-quantities-v1 (174 rows)
 
 | issue | rows |
@@ -299,6 +308,17 @@ Kept with a warning (not an error; see README):
 | --- | ---: |
 | selector-not-in-context | 3 |
 
+### ui-drawing-style-v1: 1,931 in, 1,931 kept
+
+Kept with a warning (not an error; see README):
+
+| warning | rows |
+| --- | ---: |
+| numeric-value-not-in-surface | 153 |
+| value-span-ambiguous | 5 |
+| target-kind_span-ambiguous | 4 |
+| target-name_span-ambiguous | 4 |
+
 ### ui-quantities-v1: 174 in, 174 kept
 
 Fixed or converted:
@@ -466,5 +486,5 @@ Kept with a warning (not an error; see README):
 ## Final check of the written splits
 
 - unresolved errors: **0**
-- families present in more than one split: **2723**
+- families present in more than one split: **2795**
 - label conflicts between identical texts, resolved by source priority: {'main-synthetic<-main-synthetic': 4}

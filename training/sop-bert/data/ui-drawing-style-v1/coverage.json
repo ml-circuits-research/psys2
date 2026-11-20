@@ -1,0 +1,253 @@
+{
+ "rows": 1931,
+ "cases": {
+  "turn:named": {
+   "base": {
+    "equivalent": 14,
+    "complex": 13,
+    "simplified": 13
+   },
+   "rows": 74
+  },
+  "turn:degrees": {
+   "base": {
+    "equivalent": 14,
+    "complex": 13,
+    "simplified": 13
+   },
+   "rows": 70
+  },
+  "mirror": {
+   "base": {
+    "equivalent": 14,
+    "complex": 13,
+    "simplified": 13
+   },
+   "rows": 72
+  },
+  "facing": {
+   "base": {
+    "equivalent": 14,
+    "complex": 13,
+    "simplified": 13
+   },
+   "rows": 78
+  },
+  "skew": {
+   "base": {
+    "equivalent": 14,
+    "complex": 13,
+    "simplified": 13
+   },
+   "rows": 74
+  },
+  "opacity": {
+   "base": {
+    "equivalent": 14,
+    "complex": 13,
+    "simplified": 13
+   },
+   "rows": 70
+  },
+  "effect": {
+   "base": {
+    "equivalent": 14,
+    "complex": 13,
+    "simplified": 13
+   },
+   "rows": 75
+  },
+  "fill": {
+   "base": {
+    "equivalent": 14,
+    "complex": 13,
+    "simplified": 13
+   },
+   "rows": 72
+  },
+  "gradient": {
+   "base": {
+    "equivalent": 14,
+    "complex": 13,
+    "simplified": 13
+   },
+   "rows": 78
+  },
+  "outline": {
+   "base": {
+    "equivalent": 14,
+    "complex": 13,
+    "simplified": 13
+   },
+   "rows": 74
+  },
+  "text:write": {
+   "base": {
+    "equivalent": 14,
+    "complex": 13,
+    "simplified": 13
+   },
+   "rows": 70
+  },
+  "text:change": {
+   "base": {
+    "equivalent": 14,
+    "complex": 13,
+    "simplified": 13
+   },
+   "rows": 78
+  },
+  "text:font": {
+   "base": {
+    "equivalent": 14,
+    "complex": 13,
+    "simplified": 13
+   },
+   "rows": 77
+  },
+  "text:style": {
+   "base": {
+    "equivalent": 14,
+    "complex": 13,
+    "simplified": 13
+   },
+   "rows": 76
+  },
+  "text:frame": {
+   "base": {
+    "equivalent": 14,
+    "complex": 13,
+    "simplified": 13
+   },
+   "rows": 74
+  },
+  "part:turn": {
+   "base": {
+    "equivalent": 10,
+    "complex": 10,
+    "simplified": 10
+   },
+   "rows": 59
+  },
+  "part:rotation": {
+   "base": {
+    "equivalent": 10,
+    "complex": 10,
+    "simplified": 10
+   },
+   "rows": 59
+  },
+  "part:mirror": {
+   "base": {
+    "equivalent": 10,
+    "complex": 10,
+    "simplified": 10
+   },
+   "rows": 60
+  },
+  "part:opacity": {
+   "base": {
+    "equivalent": 10,
+    "complex": 10,
+    "simplified": 10
+   },
+   "rows": 59
+  },
+  "part:effect": {
+   "base": {
+    "equivalent": 10,
+    "complex": 10,
+    "simplified": 10
+   },
+   "rows": 60
+  },
+  "group:turn": {
+   "base": {
+    "equivalent": 9,
+    "complex": 9,
+    "simplified": 8
+   },
+   "rows": 50
+  },
+  "group:effect": {
+   "base": {
+    "equivalent": 9,
+    "complex": 9,
+    "simplified": 8
+   },
+   "rows": 50
+  },
+  "group:opacity": {
+   "base": {
+    "equivalent": 9,
+    "complex": 9,
+    "simplified": 8
+   },
+   "rows": 48
+  },
+  "group:mirror": {
+   "base": {
+    "equivalent": 9,
+    "complex": 9,
+    "simplified": 8
+   },
+   "rows": 50
+  },
+  "page:filter": {
+   "base": {
+    "equivalent": 14,
+    "complex": 13,
+    "simplified": 13
+   },
+   "rows": 74
+  },
+  "make:styled": {
+   "base": {
+    "equivalent": 14,
+    "complex": 13,
+    "simplified": 13
+   },
+   "rows": 74
+  },
+  "followup:turn": {
+   "base": {
+    "equivalent": 9,
+    "complex": 6,
+    "simplified": 9
+   },
+   "rows": 40
+  },
+  "followup:unturn": {
+   "base": {
+    "equivalent": 12,
+    "complex": 6,
+    "simplified": 6
+   },
+   "rows": 41
+  },
+  "followup:uneffect": {
+   "base": {
+    "equivalent": 12,
+    "complex": 6,
+    "simplified": 3
+   },
+   "rows": 38
+  },
+  "followup:unfilter": {
+   "base": {
+    "equivalent": 12,
+    "complex": 6,
+    "simplified": 3
+   },
+   "rows": 37
+  },
+  "followup:unmirror": {
+   "base": {
+    "equivalent": 9,
+    "complex": 2,
+    "simplified": 1
+   },
+   "rows": 20
+  }
+ }
+}

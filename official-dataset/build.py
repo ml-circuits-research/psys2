@@ -39,6 +39,7 @@ SOURCES = [
     ('ui-features-v1', DATA / 'ui-features-v1' / 'examples.jsonl', 'avatar part features: length (absolute and comparative) and feel (generate.py)'),
     ('ui-diagram-v2', DATA / 'ui-diagram-v2' / 'examples.jsonl', 'voice/chat control of the Diagram editor: every operation x parameter x reference form, robustness variants, compounds, questions (generate.py)'),
     ('ui-diagram-v2-voice', DATA / 'ui-diagram-v2' / 'heldout-voice.jsonl', "the Diagram voice set with the owner's session sentences (heldout.py); trained on per the owner's decision that benchmark contamination is irrelevant"),
+    ('ui-drawing-style-v1', DATA / 'ui-drawing-style-v1' / 'examples.jsonl', 'Drawing turns, mirrors, facing, leans, opacity, effects, fills, outlines, writing and filters (generate.py)'),
     ('ui-quantities-v1', DATA / 'ui-quantities-v1' / 'examples.jsonl', 'coordination of make requests and quantities (generate.py)'),
     ('human-adapted-v1-drawing', DATA / 'human-adapted-v1' / 'drawing' / 'examples.jsonl', 'real human utterances adapted to the Drawing tab (specs/human-utterance-benchmark.md)'),
     ('data-drop-v1', DATA / 'data-drop-v1' / 'accepted.jsonl', 'Diagram/Drawing rows of the data-request drops, validated and normalised by data-drop-v1/import.py'),
@@ -104,6 +105,8 @@ def build_inventory():
     inventory = union.merge_inventory(inventory, json.loads((DATA / 'ui-diagram-v2' / 'inventory.json').read_text()))
     # Keys the data drops use that no other source declares yet (drawn.facing).
     inventory = union.merge_inventory(inventory, json.loads((DATA / 'data-drop-v1' / 'inventory.json').read_text()))
+    # Drawing transforms, writing, effects, fills and filters (catalog b89b4541).
+    inventory = union.merge_inventory(inventory, json.loads((DATA / 'ui-drawing-style-v1' / 'inventory.json').read_text()))
     shared = union.load_preparer()
     families = shared.target_families(inventory)
     inventory['request']['target']['keys']['type']['values'] = sorted({t for types in families.values() for t in types})
