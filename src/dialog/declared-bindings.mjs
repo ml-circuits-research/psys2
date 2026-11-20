@@ -8,9 +8,11 @@
 //     the mention being its evidence (classValues, read by the bridge);
 //  3. a family the table leaves unresolved reads as the class declared for it (interpretation-policy.sop
 //     app.interpret.family), with the provenance of that class's own kind row.
-//  4. a family without a native family binding takes the one its own kind rows share (a target named without a kind word).
+//  4. a family without a native family binding takes the one its own kind rows share, own or declared (a target named
+//     without a kind word).
 import {parse,str} from '../vendor/sopworld/sopworld.mjs';
 import {interpretationPolicy} from './interpretation-policy.mjs';
+import {executionPolicyWorld} from './execution-policy.mjs';
 import DRAW from '../../worlds/art.draw/native-interface-source.mjs';
 import DIAGRAM from '../../worlds/diagram.sketch/native-interface-source.mjs';
 import CHARTS from '../../worlds/data.charts/native-interface-source.mjs';
@@ -38,6 +40,9 @@ async function nativeParameters(){
  }
  return parameters=rows;
 }
+
+let kindOperations;
+const declaredKindOperations=()=>kindOperations??=executionPolicyWorld().ofType('app.execution.kindBinding').map(row=>({area:one(row,'area'),kind:one(row,'kind'),operation:one(row,'operation'),parameter:one(row,'parameter'),value:one(row,'value')}));
 
 const completed=new WeakMap();
 /** The binding table completed from the live declarations; the same object when nothing is added. Memoized per table. */
@@ -79,12 +84,25 @@ export async function completeBindings(bindings){
  for(const [index,f] of families.entries()){
   if(f.nativeFamilyBinding)continue;
   const shared=new Map();
-  for(const k of bindings.kinds??[])if(k.area===f.area&&k.type===f.type&&k.nativeFamilyBinding?.operation&&k.nativeFamilyBinding.sourceType&&!k.nativeFamilyBinding.arguments)
-   shared.set(k.nativeFamilyBinding.sourceType+'\0'+k.nativeFamilyBinding.operation,k.nativeFamilyBinding);
+  for(const k of bindings.kinds??[]){
+   if(k.area!==f.area||k.type!==f.type)continue;
+   // A kind's own binding, or the operation a declared kind binding gives it (execution-policy.sop app.execution.kindBinding),
+   // without the arguments that tell its kinds apart: the family takes the operation and its source type only.
+   const own=k.nativeFamilyBinding?.operation&&k.nativeFamilyBinding.sourceType?k.nativeFamilyBinding:null;
+   const declared=own?null:declaredKindOperations().filter(d=>d.area===k.area&&d.kind===k.canonical);
+   const operation=own?.operation??(declared?.length===1?declared[0].operation:undefined);
+   const sourceType=own?.sourceType??params.find(p=>p.operation===operation)?.sourceType;
+   if(!operation||!sourceType)continue;
+   // The family's own class as a kind ("a chart": w.chart.chart, drawn as a bar chart) keeps that kind's arguments.
+   const args=k.canonical===f.canonical?(own?.arguments??(declared?.length===1?{[declared[0].parameter]:declared[0].value}:undefined)):undefined;
+   if(args){shared.clear();shared.set('own',{...(own??{operation,sourceType,sourcePath:'worlds/app.project/execution-policy.sop'}),arguments:args});break;}
+   shared.set(sourceType+'\0'+operation,own??{operation,sourceType,sourcePath:'worlds/app.project/execution-policy.sop'});
+  }
   if(shared.size!==1)continue;
   const [b]=shared.values();
-  families[index]={...f,nativeFamilyBinding:{operation:b.operation,sourceType:b.sourceType,exportName:b.exportName,sourcePath:b.sourcePath,sourceSha256:b.sourceSha256,
-   boundary:'Family eligibility only (declared-bindings.mjs: the binding its kind rows share).'}};
+  const binding={operation:b.operation,sourceType:b.sourceType,exportName:b.exportName,sourcePath:b.sourcePath,sourceSha256:b.sourceSha256,arguments:b.arguments,
+   boundary:'Family eligibility only (declared-bindings.mjs: the binding its kind rows share).'};
+  families[index]={...f,nativeFamilyBinding:Object.fromEntries(Object.entries(binding).filter(([,value])=>value!==undefined))};
  }
  const table=Object.freeze({...bindings,properties,families});
  completed.set(bindings,table);
