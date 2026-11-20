@@ -158,9 +158,9 @@
   - span “put up a bar chart with one bar per name”: **make**/do trigger=“put up”; target chart new indefinite
     - chart.type = "bar" from “bar chart” [eq, result]
 
-33. [diagram · data-drop-v1 · dev · None] “for the review, a scatter plot comparing grades would really help”  — context: (empty)
-  - span “a scatter plot comparing grades”: **make**/do trigger=“None”; target chart new indefinite
-    - chart.type = "scatter" from “scatter plot” [eq, result]
+33. [diagram · data-drop-v1 · train · None] “the Shelve label could stand a resize”  — context: Sort, Shelve, n3, n4, On loan?, Lend
+  - span “the Shelve label could stand a resize”: **change**/do trigger=“could”; target node existing definite fill=written name_span=“Shelve”
+    - node.ids = "Shelve" from “Shelve” [eq, selector]
 
 34. [diagram · demo-tool-profile · train · diagram.node.change] “Could you make Pie A purple. I appreciate it.”  — context: Pie A, Slice 1
   - span “make Pie A purple”: **change**/do trigger=“make”; target node existing definite fill=written name_span=“Pie A”

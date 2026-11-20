@@ -99,20 +99,21 @@ No issue found.
 | warning:value-span-ambiguous | 2 |
 | warning:target-description_span-ambiguous | 1 |
 
-### data-drop-v1 (5,579 rows)
+### data-drop-v1 (8,446 rows)
 
 | issue | rows |
 | --- | ---: |
-| warning:selector-not-in-context | 573 |
-| warning:bank-extension-needed | 424 |
+| warning:bank-extension-needed | 712 |
+| warning:selector-not-in-context | 583 |
 | warning:determiner-kept-open | 251 |
-| warning:target-kind_span-ambiguous | 81 |
-| warning:target-kind-without-source-span | 21 |
-| warning:value-span-ambiguous | 17 |
-| trigger-not-in-span-removed | 15 |
+| warning:target-kind_span-ambiguous | 85 |
+| trigger-not-in-span-removed | 60 |
+| warning:target-kind-without-source-span | 25 |
+| warning:value-span-ambiguous | 22 |
 | warning:numeric-value-not-in-surface | 13 |
 | warning:target-name_span-ambiguous | 2 |
 | warning:target-count_span-ambiguous | 2 |
+| warning:target-description_span-ambiguous | 1 |
 
 ### human-adapted-v1-diagram (538 rows)
 
@@ -330,30 +331,31 @@ Kept with a warning (not an error; see README):
 | value-span-ambiguous | 2 |
 | target-description_span-ambiguous | 1 |
 
-### data-drop-v1: 5,579 in, 5,579 kept
+### data-drop-v1: 8,446 in, 8,446 kept
 
 Fixed or converted:
 
 | fix | rows |
 | --- | ---: |
-| anchor-span-as-anchor-mention | 542 |
-| comparative-as-delta-step | 58 |
-| trigger-not-in-span-removed | 15 |
+| anchor-span-as-anchor-mention | 682 |
+| comparative-as-delta-step | 68 |
+| trigger-not-in-span-removed | 60 |
 
 Kept with a warning (not an error; see README):
 
 | warning | rows |
 | --- | ---: |
-| selector-not-in-context | 617 |
-| bank-extension-needed | 424 |
+| bank-extension-needed | 705 |
+| selector-not-in-context | 627 |
 | determiner-kept-open | 251 |
-| target-kind_span-ambiguous | 81 |
+| target-kind_span-ambiguous | 85 |
+| value-span-ambiguous | 34 |
 | selector-with-empty-context | 31 |
-| value-span-ambiguous | 29 |
-| target-kind-without-source-span | 21 |
+| target-kind-without-source-span | 25 |
 | numeric-value-not-in-surface | 13 |
 | target-name_span-ambiguous | 2 |
 | target-count_span-ambiguous | 2 |
+| target-description_span-ambiguous | 1 |
 
 ### human-adapted-v1-diagram: 538 in, 538 kept
 
@@ -462,5 +464,5 @@ Kept with a warning (not an error; see README):
 ## Final check of the written splits
 
 - unresolved errors: **0**
-- families present in more than one split: **2535**
+- families present in more than one split: **2609**
 - label conflicts between identical texts, resolved by source priority: {'main-synthetic<-main-synthetic': 4}

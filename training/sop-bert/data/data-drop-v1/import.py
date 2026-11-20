@@ -188,6 +188,20 @@ def normalise(row, stats):
         if moved:
             q['needs'] = (q.get('needs') if isinstance(q.get('needs'), list) else [q['needs']] if q.get('needs') else []) + moved
         t = q.get('target') or {}
+        if t.get('fill') == 'pronoun':
+            t['fill'] = 'context'; stats['target fill pronoun -> context'] += 1
+        if t.get('fill') == 'ordinal':
+            t['fill'] = 'description'; stats['target fill ordinal -> description (ordinal kept)'] += 1
+        span = q.get('span') if isinstance(q.get('span'), str) else ''
+        if span:
+            for f in ('kind_span', 'name_span', 'description_span', 'count_span'):
+                if isinstance(t.get(f), str) and not (official.find_all(span, t[f]) or t[f] in span):
+                    del t[f]; stats[f'target {f} not in the request text removed (row kept)'] += 1
+            before = len(q.get('constraints') or [])
+            q['constraints'] = [c for c in q.get('constraints') or [] if not (isinstance(c, dict) and isinstance(c.get('value_span'), str)
+                                                                             and not (official.find_all(span, c['value_span']) or c['value_span'] in span))]
+            if len(q['constraints']) < before:
+                stats['constraint whose words are not in the request text removed (row kept)'] += before - len(q['constraints'])
         # determiners are stored as said (demonstrative, possessive, quantified); prepare-official maps them for the current trainer
         for c in q.get('constraints') or []:
             if c.get('operator') == 'count':
@@ -243,7 +257,7 @@ def check(row, seen, official_seen):
             errs.append('request-span-not-verbatim'); continue
         t = q.get('target') or {}
         for f in ('kind_span', 'name_span', 'description_span', 'count_span'):
-            if f in t and (not isinstance(t[f], str) or not (official.find_all(span, t[f]) or re.search(r'(?<!\w)' + re.escape(t[f]) + r"'s\b", span))):
+            if f in t and (not isinstance(t[f], str) or t[f] not in span):
                 errs.append(f'target-{f}-not-verbatim-in-span')
         if t.get('mode') == 'existing' and t.get('fill') in ('written', 'description') and not existing:
             errs.append('reference-with-empty-context')
@@ -251,7 +265,7 @@ def check(row, seen, official_seen):
             errs.append('name-not-in-context')
         for c in q.get('constraints') or []:
             vs = c.get('value_span')
-            if isinstance(vs, str) and not official.find_all(span, vs):
+            if isinstance(vs, str) and vs not in span:
                 errs.append('value-span-not-verbatim-in-span')
             if isinstance(c.get('anchor_span'), str) and not official.find_all(span, c['anchor_span']):
                 errs.append('anchor-span-not-verbatim-in-span')
