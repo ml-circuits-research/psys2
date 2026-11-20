@@ -15,10 +15,12 @@ function nativeGeometryWires(spatial,mappings,operations) {
  const {boxes,points,relations,observation,container,occupants}=spatial,rows=[];
  const byEntity = new Map(observation.objects.map(object=>[object.id,object]));
  const parent = new Map(relations.filter(edge=>edge.kind==='member_of').map(edge=>[edge.subject,edge.object]));
- const peer = new Set(occupants),aliases = new Map();
+ const peer = new Set(occupants),aliases = new Map(),families = new Map();
  for(const mapping of mappings){
   const tool=operations.find(operation=>operation.id===mapping.nativeFamilyBinding.operation);
-  if(!tool||!atom.test(mapping.canonical)||typeof mapping.lemma!=='string'||mapping.familyIdentity)continue;
+  if(!tool||!atom.test(mapping.canonical)||typeof mapping.lemma!=='string')continue;
+  // A family identity (a family named without a kind word) denotes every object of its tool's source type.
+  if(mapping.familyIdentity){(families.get(tool.on)??families.set(tool.on,new Set()).get(tool.on)).add(mapping.canonical);continue;}
   const key=JSON.stringify([tool.on,mapping.lemma]);
   if(!aliases.has(key))aliases.set(key,new Set());
   aliases.get(key).add(mapping.canonical);
@@ -29,7 +31,7 @@ function nativeGeometryWires(spatial,mappings,operations) {
   names.set(box.entity,id);
   rows.push(row(id,'k.spatial2d.box',{...observationFields(box),'core.source':object?quote(object.source):undefined}));
   if(!object)continue;
-  const concepts=[...(aliases.get(JSON.stringify([object.sourceType,object.kind]))??[])];
+  const concepts=[...(aliases.get(JSON.stringify([object.sourceType,object.kind]))??[]),...(families.get(object.sourceType)??[])];
   if(!concepts.length&&!peer.has(box.entity))continue;
   const name=labelOf(object);
   rows.push(row('native.spatial.identity.'+index,'std.placement.identity',{
@@ -71,7 +73,17 @@ function nativeCapabilityWires(host,operations,mappings,frame,{constructors=[],c
   rows.push(row(tool,'std.placement.tool',{act:operation.act,operation:operation.id,kindKey,xKey,yKey,idsKey,sizeKey,originX:.5,originY:.5}));
   for(const mapping of mappings){
    if(concepts&&!concepts.has(mapping.canonical)||placed.has(operation.act+' '+mapping.canonical))continue;
-   if(mapping.familyIdentity||!atom.test(mapping.canonical)||!atom.test(mapping.lemma))continue;
+   if(!atom.test(mapping.canonical))continue;
+   // An existing member of a family named without a kind word moves with its own observed extent (the compiler
+   // takes a moving subject's size from its geometry), so the kind row carries a unit extent, never measured or used.
+   if(mapping.familyIdentity){
+    const family=operations.find(op=>op.id===mapping.nativeFamilyBinding.operation);
+    if(operation.act==='make'||!idsKey||family?.on!==operation.on||!atom.test(mapping.lemma))continue;
+    rows.push(row('native.spatial.kind.'+rows.length,'std.placement.kind',{binding:'$'+tool,concept:mapping.canonical,native:mapping.lemma,width:1,height:1}));
+    placed.add(operation.act+' '+mapping.canonical);
+    continue;
+   }
+   if(!atom.test(mapping.lemma))continue;
    for(const {constructor,args:own} of constructorsOf(mapping)){
     if(!constructor.spatial||constructor.on!==operation.on||operation.act==='make'&&constructor.id!==operation.id)continue;
     const args={...own},nativeKey=constructor.spatial.kindKey;

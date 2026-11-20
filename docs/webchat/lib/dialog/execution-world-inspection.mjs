@@ -7,12 +7,12 @@ import{inspectHistoryPolicy}from'./history-policy.mjs?v=8d5ddb184d';
 import{inspectHistoryJournal}from'./history-journal.mjs?v=368943b3c7';
 import{inspectExecutionPolicyWorld}from'./execution-policy.mjs?v=fe7b7dec4a';
 import{sceneDefaultInspection}from'./scene-placement-defaults.mjs?v=3b5a1afb73';
-import{inspectCapabilityPolicy}from'./capability-plan-adapter.mjs?v=c18b3ce31a';
+import{inspectCapabilityPolicy}from'./capability-plan-adapter.mjs?v=38ae676a8b';
 import{inspectQueryPolicy}from'./project-query-action.mjs?v=f6025a3585';
 import{inspectCreationPolicy}from'./project-create-action.mjs?v=4ca4942a8a';
 import{inspectConstructorPolicy}from'./native-binding-candidates.mjs?v=ac13984c43';
 import{inspectGroundedProjection}from'./grounded-projection.mjs?v=aea5c5fcb9';
-import{inspectReaderHeadPolicy}from'./reader-head-alternative.mjs?v=12e24772f9';
+import{inspectReaderHeadPolicy}from'./reader-head-alternative.mjs?v=fbdfe0be1c';
 import{inspectReferencePolicy}from'./reference-policy.mjs?v=9c43b5d028';
 import{inspectSchemaSource}from'./worlds-inspection.mjs?v=16cf8dc225';
 import{inspectRequestCompositionPolicy}from'./request-composition-policy.mjs?v=ebe0b420ab';
@@ -28,7 +28,7 @@ function snapshotText(snapshot){return (snapshot?.log??[]).map((entry,index)=>'#
 /** Projects actual cache accessors and retained journal JSON; performs no reading or reasoning. */
 export async function inspectExecutionWorlds(session){
  const [{inspectDeclaredExecutionSourceWorld},{inspectSpatialPlacementWorld}]=await Promise.all([
-  import('./declared-execution.mjs?v=077be3e2bf'),import('./spatial-placement-execution.mjs?v=f765e24dba'),
+  import('./declared-execution.mjs?v=cddc32232c'),import('./spatial-placement-execution.mjs?v=455216bbe5'),
  ]);
  const journal=session?.newEngineJournal??[],moduleNames=[...new Set(journal.flatMap(record=>importsOf(record.evidence)))],sources=[['declared-execution','src/dialog/declared-execution.mjs',inspectDeclaredExecutionSourceWorld({moduleNames})]],nodes=[],edges=[];
  const link=(from,to,label)=>edges.push({from,to,label});

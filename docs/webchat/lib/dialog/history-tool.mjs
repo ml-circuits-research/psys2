@@ -3,7 +3,7 @@ import {parse, quote, serialize, str} from '../vendor/sopworld/sopworld.mjs?v=eb
 import {NATIVE_AREAS} from './app-reader-context.mjs?v=ce8695be6e';
 import {historyHeads,stageHistoryMove} from './history-journal.mjs?v=368943b3c7';
 import {readToolInvocation} from '../../worlds/native-tool-host.mjs?v=48825109bb';
-import {discardPlacementLinks,withdrawPlacementCorrection} from '../../worlds/app.project/spatial-profile.mjs?v=3e0d29f7be';
+import {discardPlacementLinks,withdrawPlacementCorrection} from '../../worlds/app.project/spatial-profile.mjs?v=5088d25298';
 
 const areaForWorld=world=>Object.values(NATIVE_AREAS).find(area=>area.world===world);
 const directions=['undo','redo'];

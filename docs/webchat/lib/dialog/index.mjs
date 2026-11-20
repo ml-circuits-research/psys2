@@ -331,7 +331,7 @@ export class DialogSession {
         }
       }
     }
-    const reply = await (await import('./reader-routing.mjs?v=e52cb9f995')).routeNewEngine(this, english, { ...opts, language: 'en' });
+    const reply = await (await import('./reader-routing.mjs?v=ae1d1dbbe7')).routeNewEngine(this, english, { ...opts, language: 'en' });
     reply.trace = { ...reply.trace, english, ...(translation ? { translation } : {}), ...(detection ? { languageDetection: detection } : {}) };
     if (language !== 'en') {
       try {

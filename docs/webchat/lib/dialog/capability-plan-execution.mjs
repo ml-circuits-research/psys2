@@ -3,7 +3,7 @@ import { solveDefaultPlacement, solveGroupPlacement } from './default-placement.
 import { en } from '../lang/en.mjs?v=fcc7af993a';
 import { quote } from '../vendor/sopworld/sopworld.mjs?v=ebb9691a80';
 // SPDX-License-Identifier: AGPL-3.0-only
-import { compileNativeCapability } from './capability-plan-adapter.mjs?v=c18b3ce31a';
+import { compileNativeCapability } from './capability-plan-adapter.mjs?v=38ae676a8b';
 import { readDegreeBases } from './degree-bases.mjs?v=3c62959cfd';
 import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=ce8695be6e';
 import { instanceIdFor } from './instance-identity.mjs?v=024ef1ca83';

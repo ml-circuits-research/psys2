@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 import { parse, quote, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=ebb9691a80';
 import { decodeCapabilityCall } from '../vendor/sopworld/capability-call.mjs?v=ed3b773c65';
-import POLICY from '../../worlds/app.project/capability-policy.mjs?v=b9d9f9e495';
+import POLICY from '../../worlds/app.project/capability-policy.mjs?v=5b78666e16';
 import CLOCK from '../../worlds/app.project/clock-projection-source.mjs?v=7d09f121c5';
 import { executionPolicyWorld } from './execution-policy.mjs?v=fe7b7dec4a';
 import { projectionModule } from './composition-knowledge.mjs?v=7f0164dae7';
