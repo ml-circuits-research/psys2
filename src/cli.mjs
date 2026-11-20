@@ -14,12 +14,14 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { DEFAULT_ROOT } from './loaders/fs-loader.mjs';
 import { parse } from './soplang/index.mjs';
+import { budget } from './dialog/budget.mjs';
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 function parseArgs(argv) {
   const roots = [], rest = [];
   for (let i = 0; i < argv.length; i++) {
+    budget.tick('cli.parseArgs');
     if (argv[i] === '--root') roots.push(argv[++i]);
     else rest.push(argv[i]);
   }
