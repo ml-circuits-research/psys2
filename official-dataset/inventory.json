@@ -939,6 +939,28 @@
   "diagram": {
    "doc": "a diagram as a whole",
    "keys": {
+    "by": {
+     "concept": "colour.by",
+     "head": "class",
+     "src": "diagram.colour.by {by}",
+     "values": [
+      "level",
+      "shape",
+      "role",
+      "group"
+     ]
+    },
+    "direction": {
+     "concept": "direction",
+     "head": "class",
+     "src": "diagram.layout {direction}",
+     "values": [
+      "down",
+      "right",
+      "up",
+      "left"
+     ]
+    },
     "kind": {
      "concept": "diagram_kind",
      "head": "candidate",
@@ -966,7 +988,7 @@
     "layout": {
      "concept": "layout",
      "head": "class",
-     "src": "arrangeShapes / startDiagram layout",
+     "src": "diagram.layout {layout} (specs/diagram-capabilities.md)",
      "values": [
       "tree",
       "grid",
@@ -974,7 +996,56 @@
       "column",
       "circle",
       "radial",
-      "layers"
+      "layers",
+      "layered",
+      "free"
+     ]
+    },
+    "route": {
+     "concept": "route",
+     "head": "class",
+     "src": "diagram.layout {route}",
+     "values": [
+      "orthogonal",
+      "straight",
+      "curved"
+     ]
+    },
+    "spacing": {
+     "concept": "spacing",
+     "head": "class",
+     "src": "diagram.layout {spacing}",
+     "values": [
+      "compact",
+      "normal",
+      "loose"
+     ]
+    },
+    "steps": {
+     "concept": "step.numbers",
+     "head": "class",
+     "src": "diagram.steps.number {mode}",
+     "values": [
+      "on",
+      "off"
+     ]
+    },
+    "theme": {
+     "concept": "theme",
+     "head": "class",
+     "src": "diagram.style.apply {theme} (k.styles.theme)",
+     "values": [
+      "pastel",
+      "dark",
+      "blueprint",
+      "monochrome",
+      "highlight",
+      "vivid",
+      "ocean",
+      "forest",
+      "sunset",
+      "print",
+      "flowchart"
      ]
     }
    }
@@ -1091,11 +1162,12 @@
     "arrow": {
      "concept": "arrow",
      "head": "candidate",
-     "src": "Native parameter: diagram.link.change.arrow",
+     "src": "diagram.link.change {arrow} back",
      "values": [
       "forward",
       "both",
-      "none"
+      "none",
+      "back"
      ]
     },
     "colour": {
@@ -1142,6 +1214,27 @@
      "concept": "nodes",
      "head": "candidate",
      "src": "Native parameter: diagram.link.select.nodes"
+    },
+    "pattern": {
+     "concept": "connect.pattern",
+     "head": "class",
+     "src": "diagram.links.connect {pattern}",
+     "values": [
+      "chain",
+      "cycle",
+      "star",
+      "all"
+     ]
+    },
+    "route": {
+     "concept": "route",
+     "head": "class",
+     "src": "diagram.link.change {route}",
+     "values": [
+      "orthogonal",
+      "straight",
+      "curved"
+     ]
     },
     "style": {
      "concept": "style",
@@ -1193,15 +1286,51 @@
       "foreground"
      ]
     },
+    "axis": {
+     "concept": "distribute.axis",
+     "head": "class",
+     "src": "diagram.nodes.distribute {axis}",
+     "values": [
+      "horizontal",
+      "vertical"
+     ]
+    },
     "colour": {
      "concept": "colour",
      "head": "candidate+step",
      "src": "s.node.colour"
     },
+    "edge": {
+     "concept": "align.edge",
+     "head": "class",
+     "src": "diagram.nodes.align {edge}",
+     "values": [
+      "left",
+      "centre",
+      "right",
+      "top",
+      "middle",
+      "bottom"
+     ]
+    },
     "edges": {
      "concept": "edges",
      "head": "candidate",
      "src": "Native parameter: diagram.node.select.edges"
+    },
+    "fontSize": {
+     "concept": "font.size",
+     "head": "number",
+     "src": "diagram.node.change {fontSize} 8-48"
+    },
+    "fontWeight": {
+     "concept": "font.weight",
+     "head": "class",
+     "src": "diagram.node.change {fontWeight}",
+     "values": [
+      "normal",
+      "bold"
+     ]
     },
     "height": {
      "concept": "height",
@@ -1253,6 +1382,11 @@
      "head": "number",
      "src": "Native parameter: diagram.node.make.n"
     },
+    "outline": {
+     "concept": "outline",
+     "head": "candidate",
+     "src": "diagram.node.change/make {outline} (k.colours names)"
+    },
     "position": {
      "concept": "spatial_relation",
      "head": "class",
@@ -1281,10 +1415,27 @@
      "head": "candidate",
      "src": "Authored semantic intent; requires world-informed completion"
     },
+    "role": {
+     "concept": "role",
+     "head": "class",
+     "src": "diagram.node.make/change {role} (k.diagrams.shape flowchart roles)",
+     "values": [
+      "start",
+      "end",
+      "decision",
+      "process",
+      "data",
+      "document",
+      "subprocess",
+      "database",
+      "input",
+      "output"
+     ]
+    },
     "shape": {
      "concept": "shape",
      "head": "class+step",
-     "src": "s.node.shape space=shape (step rounder)",
+     "src": "diagram.node.change {kind} shapes of specs/diagram-capabilities.md",
      "values": [
       "box",
       "rounded_box",
@@ -1299,7 +1450,15 @@
       "cloud",
       "note",
       "square",
-      "rectangle"
+      "rectangle",
+      "rounded_rectangle",
+      "oval",
+      "chevron",
+      "double_rectangle",
+      "document",
+      "actor",
+      "dot",
+      "text"
      ]
     },
     "size": {
@@ -1313,6 +1472,11 @@
       "big",
       "huge"
      ]
+    },
+    "textColour": {
+     "concept": "text.colour",
+     "head": "candidate",
+     "src": "diagram.node.change/make {textColour} (k.colours names)"
     },
     "value": {
      "concept": "value",
@@ -2362,7 +2526,7 @@
     "act": {
      "concept": "act",
      "head": "candidate",
-     "src": "std.request.act (open atom; candidates from w.legend.act)",
+     "src": "diagram.node.merge / node.split / link.reverse",
      "values": [
       "make",
       "place",
@@ -2383,7 +2547,10 @@
       "repeat",
       "answer",
       "object",
-      "compute"
+      "compute",
+      "merge",
+      "split",
+      "reverse"
      ]
     },
     "mood": {

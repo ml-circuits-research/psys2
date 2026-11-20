@@ -18,7 +18,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 OFFICIAL = ROOT.parents[1] / 'official-dataset'
-UI_SOURCES = {'ui-natural-v1', 'ui-human-v1', 'ui-features-v1'}  # executed UI recipes and their paraphrases, and the small avatar feature corpus; generated relations are already numerous
+UI_SOURCES = {'ui-natural-v1', 'ui-human-v1', 'ui-features-v1', 'ui-quantities-v1'}  # executed UI recipes and their paraphrases, and the small avatar feature and quantity corpora; generated relations are already numerous
+SOURCE_WEIGHTS = {'ui-diagram-v2': 2}  # the Diagram voice corpus is large already: repeated twice, not ui_weight times
 
 
 def sha(path):
@@ -64,7 +65,7 @@ def prepare(out, ui_weight=3, max_length=256):
                     record.update({'id': raw['id'] + ':' + str(index), 'source_id': raw['id'], 'source_path': 'official-dataset', 'split': split,
                                    'requestIndex': index, 'origin': raw['source'], 'splitGroup': raw['family'], 'operation': raw['operation']})
                     diagnostics.update(d['reason'] for d in record['diagnostics'])
-                    repeats = ui_weight if split == 'train' and raw['source'] in UI_SOURCES else 1
+                    repeats = (ui_weight if raw['source'] in UI_SOURCES else SOURCE_WEIGHTS.get(raw['source'], 1)) if split == 'train' else 1
                     for r in range(repeats):
                         handles[split].write(json.dumps({**record, 'id': record['id'] + (f':w{r}' if repeats > 1 else '')}, ensure_ascii=False) + '\n')
                         counts[split + ':samples'] += 1

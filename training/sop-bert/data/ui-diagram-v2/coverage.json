@@ -1,0 +1,1488 @@
+{
+ "summary": {
+  "rows": 5377,
+  "cases": 92,
+  "byTier": {
+   "equivalent": 1948,
+   "complex": 1759,
+   "simplified": 1670
+  },
+  "byVariant": {
+   "base": 2893,
+   "filler": 420,
+   "polite": 347,
+   "typo": 748,
+   "nospace": 346,
+   "asr": 623
+  },
+  "compoundRows": 220,
+  "questionRows": 630,
+  "casesBelow20": []
+ },
+ "cases": {
+  "diagram.make:new": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 61,
+   "robustness": {
+    "filler": 6,
+    "polite": 3,
+    "typo": 8,
+    "nospace": 5,
+    "asr": 5
+   },
+   "what": "start a diagram (container word as the kind of a new member; members with count)"
+  },
+  "diagram.improve:layout": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 65,
+   "robustness": {
+    "nospace": 8,
+    "typo": 13,
+    "polite": 2,
+    "asr": 5,
+    "filler": 3
+   },
+   "what": "vague aesthetic/layout improvement of the whole diagram (declared improvement intent)"
+  },
+  "diagram.node.make:kind": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 62,
+   "robustness": {
+    "polite": 6,
+    "filler": 4,
+    "typo": 4,
+    "asr": 8,
+    "nospace": 6
+   },
+   "what": "add one node of a kind (all native kinds and synonyms)"
+  },
+  "diagram.node.make:generic": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 58,
+   "robustness": {
+    "filler": 3,
+    "typo": 8,
+    "polite": 6,
+    "asr": 4,
+    "nospace": 3
+   },
+   "what": "add a node named only by a generic word (node, shape, element, step)"
+  },
+  "diagram.node.make:label": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 63,
+   "robustness": {
+    "typo": 9,
+    "nospace": 3,
+    "asr": 5,
+    "polite": 5,
+    "filler": 7
+   },
+   "what": "add a labelled node"
+  },
+  "diagram.node.make:count": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 61,
+   "robustness": {
+    "typo": 12,
+    "polite": 5,
+    "filler": 6,
+    "nospace": 1,
+    "asr": 3
+   },
+   "what": "add several nodes (node.n)"
+  },
+  "diagram.node.make:colour": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 62,
+   "robustness": {
+    "typo": 7,
+    "polite": 7,
+    "filler": 4,
+    "asr": 7,
+    "nospace": 3
+   },
+   "what": "add a coloured node"
+  },
+  "diagram.node.make:size": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 61,
+   "robustness": {
+    "asr": 9,
+    "nospace": 5,
+    "polite": 2,
+    "filler": 4,
+    "typo": 7
+   },
+   "what": "add a node of a size"
+  },
+  "diagram.node.make:layout": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 63,
+   "robustness": {
+    "polite": 8,
+    "typo": 7,
+    "nospace": 4,
+    "filler": 5,
+    "asr": 5
+   },
+   "what": "add several nodes in a layout"
+  },
+  "diagram.node.make:position": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 61,
+   "robustness": {
+    "asr": 9,
+    "filler": 4,
+    "polite": 5,
+    "typo": 6,
+    "nospace": 3
+   },
+   "what": "add a node at coordinates, a page region or relative to another node"
+  },
+  "diagram.node.make:multi": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 62,
+   "robustness": {
+    "asr": 9,
+    "typo": 14,
+    "nospace": 2,
+    "polite": 2,
+    "filler": 1
+   },
+   "what": "add a node with several properties"
+  },
+  "diagram.node.change:colour": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 68,
+   "robustness": {
+    "polite": 5,
+    "typo": 10,
+    "nospace": 8,
+    "filler": 4,
+    "asr": 7
+   },
+   "what": "recolour one node (all reference forms)"
+  },
+  "diagram.node.change:colour-population": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 63,
+   "robustness": {
+    "asr": 12,
+    "filler": 3,
+    "nospace": 2,
+    "polite": 5,
+    "typo": 7
+   },
+   "what": "recolour a population (the circles, all elements, every box)"
+  },
+  "diagram.node.change:shape": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 64,
+   "robustness": {
+    "asr": 4,
+    "typo": 12,
+    "polite": 3,
+    "nospace": 5,
+    "filler": 6
+   },
+   "what": "change the shape of a node"
+  },
+  "diagram.node.change:size": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 62,
+   "robustness": {
+    "filler": 5,
+    "typo": 8,
+    "polite": 3,
+    "asr": 7,
+    "nospace": 5
+   },
+   "what": "set the size of a node"
+  },
+  "diagram.node.change:size-relative": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 66,
+   "robustness": {
+    "filler": 6,
+    "nospace": 3,
+    "typo": 9,
+    "asr": 9,
+    "polite": 5
+   },
+   "what": "make a node or population bigger/smaller (comparative)"
+  },
+  "diagram.node.change:label": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 67,
+   "robustness": {
+    "polite": 2,
+    "filler": 5,
+    "typo": 14,
+    "asr": 10,
+    "nospace": 2
+   },
+   "what": "rename a node"
+  },
+  "diagram.node.change:value": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 65,
+   "robustness": {
+    "typo": 11,
+    "filler": 5,
+    "asr": 7,
+    "polite": 6,
+    "nospace": 2
+   },
+   "what": "set the value of a node (charts as shapes)"
+  },
+  "diagram.node.change:selected": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 64,
+   "robustness": {
+    "filler": 3,
+    "typo": 7,
+    "nospace": 6,
+    "polite": 7,
+    "asr": 7
+   },
+   "what": "change the selected node (UI: Label field, Colour options, Size options)"
+  },
+  "diagram.node.select:core": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 63,
+   "robustness": {
+    "filler": 4,
+    "asr": 6,
+    "polite": 6,
+    "typo": 9,
+    "nospace": 4
+   },
+   "what": "select one or several nodes (UI: Selection)"
+  },
+  "diagram.node.select:with-links": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 68,
+   "robustness": {
+    "polite": 6,
+    "nospace": 5,
+    "filler": 8,
+    "asr": 7,
+    "typo": 8
+   },
+   "what": "select a node with its links"
+  },
+  "diagram.node.remove:core": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 64,
+   "robustness": {
+    "asr": 8,
+    "filler": 4,
+    "polite": 5,
+    "typo": 10,
+    "nospace": 3
+   },
+   "what": "delete nodes (all reference forms, populations)"
+  },
+  "diagram.node.remove:selected": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 63,
+   "robustness": {
+    "typo": 9,
+    "filler": 6,
+    "nospace": 4,
+    "polite": 5,
+    "asr": 5
+   },
+   "what": "delete the selection (UI: Delete)"
+  },
+  "diagram.node.place:position": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 67,
+   "robustness": {
+    "filler": 3,
+    "typo": 5,
+    "asr": 15,
+    "polite": 5,
+    "nospace": 5
+   },
+   "what": "move a node to coordinates"
+  },
+  "diagram.node.place:region": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 64,
+   "robustness": {
+    "nospace": 9,
+    "filler": 2,
+    "typo": 12,
+    "asr": 5,
+    "polite": 2
+   },
+   "what": "move a node to a page region"
+  },
+  "diagram.node.place:relation": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 63,
+   "robustness": {
+    "nospace": 4,
+    "filler": 4,
+    "asr": 7,
+    "typo": 11,
+    "polite": 3
+   },
+   "what": "move a node relative to another node"
+  },
+  "diagram.node.resize:dimensions": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 67,
+   "robustness": {
+    "typo": 10,
+    "asr": 11,
+    "filler": 4,
+    "polite": 3,
+    "nospace": 5
+   },
+   "what": "set width/height of a node"
+  },
+  "diagram.node.layout:layout": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 64,
+   "robustness": {
+    "nospace": 4,
+    "filler": 6,
+    "asr": 7,
+    "typo": 8,
+    "polite": 5
+   },
+   "what": "arrange nodes or populations in a layout"
+  },
+  "diagram.link.make:core": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 58,
+   "robustness": {
+    "nospace": 3,
+    "typo": 8,
+    "polite": 5,
+    "asr": 7,
+    "filler": 1
+   },
+   "what": "connect two nodes (link.from/link.to spans; label, code, kind endpoints)"
+  },
+  "diagram.link.make:from-selection": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 62,
+   "robustness": {
+    "filler": 7,
+    "asr": 9,
+    "typo": 6,
+    "nospace": 4,
+    "polite": 2
+   },
+   "what": "connect the selected node to another (UI: Connect to)"
+  },
+  "diagram.link.make:labelled": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 67,
+   "robustness": {
+    "filler": 8,
+    "typo": 10,
+    "asr": 10,
+    "polite": 3,
+    "nospace": 2
+   },
+   "what": "connect two nodes with a labelled/styled link"
+  },
+  "diagram.link.make:population": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 60,
+   "robustness": {
+    "polite": 4,
+    "filler": 10,
+    "typo": 7,
+    "nospace": 3,
+    "asr": 2
+   },
+   "what": "connect a population (all elements, the circles, them in order)"
+  },
+  "diagram.link.make:to-all": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 58,
+   "robustness": {
+    "polite": 7,
+    "asr": 9,
+    "typo": 5,
+    "filler": 2,
+    "nospace": 1
+   },
+   "what": "connect one node to a population (Start to all the boxes)"
+  },
+  "diagram.link.select:core": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 65,
+   "robustness": {
+    "typo": 8,
+    "asr": 9,
+    "polite": 4,
+    "nospace": 6,
+    "filler": 4
+   },
+   "what": "select a link (code, endpoints, context, ordinal)"
+  },
+  "diagram.link.change:label": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 67,
+   "robustness": {
+    "typo": 12,
+    "asr": 13,
+    "filler": 6,
+    "polite": 2
+   },
+   "what": "label a link"
+  },
+  "diagram.link.change:colour": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 65,
+   "robustness": {
+    "filler": 5,
+    "nospace": 6,
+    "polite": 6,
+    "typo": 8,
+    "asr": 6
+   },
+   "what": "recolour a link (incl. populations)"
+  },
+  "diagram.link.change:style": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 67,
+   "robustness": {
+    "typo": 12,
+    "asr": 10,
+    "polite": 3,
+    "nospace": 2,
+    "filler": 6
+   },
+   "what": "dash/dot a link"
+  },
+  "diagram.link.change:arrow": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 65,
+   "robustness": {
+    "asr": 6,
+    "nospace": 7,
+    "typo": 9,
+    "filler": 6,
+    "polite": 3
+   },
+   "what": "arrowheads of a link"
+  },
+  "diagram.link.change:width": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 66,
+   "robustness": {
+    "asr": 8,
+    "nospace": 2,
+    "filler": 9,
+    "typo": 9,
+    "polite": 4
+   },
+   "what": "line width of a link (number or comparative)"
+  },
+  "diagram.link.change:reconnect": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 63,
+   "robustness": {
+    "asr": 11,
+    "nospace": 7,
+    "filler": 6,
+    "typo": 4,
+    "polite": 1
+   },
+   "what": "reconnect a link to another node"
+  },
+  "diagram.link.remove:core": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 64,
+   "robustness": {
+    "asr": 13,
+    "filler": 5,
+    "polite": 4,
+    "typo": 5,
+    "nospace": 3
+   },
+   "what": "delete links (code \"line e1\", endpoints, populations)"
+  },
+  "diagram.selection.remove:core": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 57,
+   "robustness": {
+    "nospace": 3,
+    "typo": 12,
+    "polite": 4,
+    "filler": 4
+   },
+   "what": "delete nodes and links together"
+  },
+  "diagram.page.clear:core": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 63,
+   "robustness": {
+    "typo": 9,
+    "filler": 5,
+    "polite": 5,
+    "asr": 9,
+    "nospace": 1
+   },
+   "what": "clear the whole diagram (UI: Clear diagram)"
+  },
+  "diagram.ids.show:modes": {
+   "base": {
+    "equivalent": 16,
+    "complex": 2,
+    "simplified": 16
+   },
+   "rows": 63,
+   "robustness": {
+    "asr": 12,
+    "typo": 8,
+    "polite": 4,
+    "nospace": 4,
+    "filler": 1
+   },
+   "what": "show/hide the visible codes (n1, e1)"
+  },
+  "diagram.undo:core": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 61,
+   "robustness": {
+    "nospace": 3,
+    "filler": 5,
+    "typo": 11,
+    "polite": 5,
+    "asr": 3
+   },
+   "what": "undo"
+  },
+  "diagram.redo:core": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 60,
+   "robustness": {
+    "polite": 6,
+    "typo": 10,
+    "asr": 4,
+    "filler": 4,
+    "nospace": 2
+   },
+   "what": "redo"
+  },
+  "diagram.group.make:core": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 63,
+   "robustness": {
+    "nospace": 8,
+    "typo": 9,
+    "polite": 4,
+    "asr": 6,
+    "filler": 2
+   },
+   "what": "group nodes (optionally named/captioned)"
+  },
+  "diagram.group.make:selection": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 59,
+   "robustness": {
+    "typo": 11,
+    "polite": 4,
+    "nospace": 3,
+    "filler": 7
+   },
+   "what": "group the selection or a population"
+  },
+  "diagram.group.change:props": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 65,
+   "robustness": {
+    "typo": 8,
+    "polite": 5,
+    "asr": 8,
+    "filler": 8,
+    "nospace": 2
+   },
+   "what": "recolour/resize/re-caption a group"
+  },
+  "diagram.group.select:core": {
+   "base": {
+    "equivalent": 8,
+    "complex": 7,
+    "simplified": 7
+   },
+   "rows": 40,
+   "robustness": {
+    "asr": 7,
+    "typo": 3,
+    "nospace": 5,
+    "polite": 2,
+    "filler": 1
+   },
+   "what": "select a group"
+  },
+  "diagram.group.layout:core": {
+   "base": {
+    "equivalent": 8,
+    "complex": 7,
+    "simplified": 7
+   },
+   "rows": 43,
+   "robustness": {
+    "nospace": 3,
+    "filler": 3,
+    "polite": 2,
+    "asr": 7,
+    "typo": 6
+   },
+   "what": "lay out a group"
+  },
+  "diagram.group.resize:core": {
+   "base": {
+    "equivalent": 8,
+    "complex": 7,
+    "simplified": 7
+   },
+   "rows": 42,
+   "robustness": {
+    "typo": 6,
+    "nospace": 4,
+    "polite": 4,
+    "asr": 2,
+    "filler": 4
+   },
+   "what": "scale a group"
+  },
+  "diagram.group.place:core": {
+   "base": {
+    "equivalent": 8,
+    "complex": 7,
+    "simplified": 7
+   },
+   "rows": 42,
+   "robustness": {
+    "nospace": 4,
+    "asr": 4,
+    "typo": 6,
+    "filler": 3,
+    "polite": 3
+   },
+   "what": "move a group"
+  },
+  "diagram.group.remove:core": {
+   "base": {
+    "equivalent": 8,
+    "complex": 7,
+    "simplified": 7
+   },
+   "rows": 42,
+   "robustness": {
+    "asr": 5,
+    "filler": 5,
+    "typo": 5,
+    "polite": 4,
+    "nospace": 1
+   },
+   "what": "delete a group"
+  },
+  "diagram.group.ungroup:core": {
+   "base": {
+    "equivalent": 8,
+    "complex": 7,
+    "simplified": 7
+   },
+   "rows": 42,
+   "robustness": {
+    "asr": 6,
+    "filler": 3,
+    "polite": 3,
+    "typo": 8
+   },
+   "what": "ungroup"
+  },
+  "diagram.group.chart.adopt:core": {
+   "base": {
+    "equivalent": 8,
+    "complex": 7,
+    "simplified": 7
+   },
+   "rows": 36,
+   "robustness": {
+    "polite": 1,
+    "asr": 3,
+    "typo": 6,
+    "nospace": 4
+   },
+   "what": "turn a chart into editable shapes"
+  },
+  "diagram.group.chart.make:core": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 59,
+   "robustness": {
+    "filler": 6,
+    "asr": 9,
+    "nospace": 3,
+    "typo": 7
+   },
+   "what": "make a chart from typed values"
+  },
+  "diagram.group.chart:from-group": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 60,
+   "robustness": {
+    "typo": 5,
+    "asr": 6,
+    "filler": 7,
+    "polite": 5,
+    "nospace": 3
+   },
+   "what": "make a chart of an existing group/chart"
+  },
+  "diagram.observe:describe": {
+   "base": {
+    "equivalent": 9,
+    "complex": 3,
+    "simplified": 13
+   },
+   "rows": 45,
+   "robustness": {
+    "filler": 4,
+    "asr": 5,
+    "nospace": 2,
+    "typo": 6,
+    "polite": 3
+   },
+   "what": "describe the whole diagram"
+  },
+  "diagram.observe:count-kind": {
+   "base": {
+    "equivalent": 8,
+    "complex": 8,
+    "simplified": 8
+   },
+   "rows": 45,
+   "robustness": {
+    "typo": 9,
+    "filler": 3,
+    "polite": 2,
+    "nospace": 5,
+    "asr": 2
+   },
+   "what": "count nodes of a kind / all nodes"
+  },
+  "diagram.observe:count-links": {
+   "base": {
+    "equivalent": 9,
+    "complex": 6,
+    "simplified": 9
+   },
+   "rows": 41,
+   "robustness": {
+    "polite": 2,
+    "asr": 3,
+    "typo": 6,
+    "filler": 5,
+    "nospace": 1
+   },
+   "what": "count links"
+  },
+  "diagram.observe:exists-kind": {
+   "base": {
+    "equivalent": 8,
+    "complex": 8,
+    "simplified": 8
+   },
+   "rows": 44,
+   "robustness": {
+    "typo": 6,
+    "polite": 4,
+    "nospace": 4,
+    "asr": 4,
+    "filler": 2
+   },
+   "what": "is there a node of a kind"
+  },
+  "diagram.observe:list-kind": {
+   "base": {
+    "equivalent": 8,
+    "complex": 8,
+    "simplified": 8
+   },
+   "rows": 43,
+   "robustness": {
+    "nospace": 4,
+    "polite": 4,
+    "typo": 3,
+    "asr": 4,
+    "filler": 4
+   },
+   "what": "list nodes of a kind / all nodes"
+  },
+  "diagram.observe:colour-of": {
+   "base": {
+    "equivalent": 8,
+    "complex": 8,
+    "simplified": 8
+   },
+   "rows": 47,
+   "robustness": {
+    "polite": 6,
+    "asr": 8,
+    "typo": 8,
+    "nospace": 1
+   },
+   "what": "what colour is a node"
+  },
+  "diagram.observe:label-of": {
+   "base": {
+    "equivalent": 8,
+    "complex": 8,
+    "simplified": 8
+   },
+   "rows": 47,
+   "robustness": {
+    "typo": 7,
+    "asr": 8,
+    "nospace": 3,
+    "polite": 4,
+    "filler": 1
+   },
+   "what": "what does a node say"
+  },
+  "diagram.observe:size-of": {
+   "base": {
+    "equivalent": 8,
+    "complex": 8,
+    "simplified": 8
+   },
+   "rows": 46,
+   "robustness": {
+    "filler": 7,
+    "asr": 3,
+    "typo": 9,
+    "nospace": 2,
+    "polite": 1
+   },
+   "what": "how big is a node"
+  },
+  "diagram.observe:where": {
+   "base": {
+    "equivalent": 8,
+    "complex": 8,
+    "simplified": 8
+   },
+   "rows": 47,
+   "robustness": {
+    "asr": 8,
+    "filler": 5,
+    "typo": 5,
+    "nospace": 2,
+    "polite": 3
+   },
+   "what": "where is a node"
+  },
+  "diagram.observe:neighbours": {
+   "base": {
+    "equivalent": 8,
+    "complex": 8,
+    "simplified": 8
+   },
+   "rows": 46,
+   "robustness": {
+    "nospace": 2,
+    "asr": 8,
+    "typo": 8,
+    "polite": 2,
+    "filler": 2
+   },
+   "what": "what is a node connected to"
+  },
+  "diagram.observe:link-ends": {
+   "base": {
+    "equivalent": 8,
+    "complex": 8,
+    "simplified": 8
+   },
+   "rows": 46,
+   "robustness": {
+    "typo": 7,
+    "nospace": 4,
+    "asr": 9,
+    "polite": 1,
+    "filler": 1
+   },
+   "what": "what does a link connect"
+  },
+  "diagram.observe:is-connected": {
+   "base": {
+    "equivalent": 8,
+    "complex": 8,
+    "simplified": 8
+   },
+   "rows": 42,
+   "robustness": {
+    "nospace": 2,
+    "filler": 3,
+    "typo": 5,
+    "asr": 6,
+    "polite": 2
+   },
+   "what": "are two nodes connected"
+  },
+  "diagram.observe:is-colour": {
+   "base": {
+    "equivalent": 8,
+    "complex": 8,
+    "simplified": 8
+   },
+   "rows": 45,
+   "robustness": {
+    "asr": 6,
+    "typo": 4,
+    "filler": 5,
+    "polite": 3,
+    "nospace": 3
+   },
+   "what": "does a node have a colour"
+  },
+  "diagram.style.apply:theme": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 61,
+   "robustness": {
+    "filler": 3,
+    "typo": 8,
+    "polite": 8,
+    "asr": 3,
+    "nospace": 5
+   },
+   "what": "apply a theme to the whole diagram (vague colour-style requests with a theme word)"
+  },
+  "diagram.style.nodes:highlight": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 66,
+   "robustness": {
+    "typo": 13,
+    "filler": 7,
+    "asr": 8,
+    "nospace": 4
+   },
+   "what": "a theme or highlight on some nodes (a role, a shape, named nodes)"
+  },
+  "diagram.colour.by:by": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 60,
+   "robustness": {
+    "typo": 9,
+    "asr": 9,
+    "nospace": 1,
+    "polite": 2,
+    "filler": 5
+   },
+   "what": "colour nodes by level, shape, role or group"
+  },
+  "diagram.node.change:outline-text": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 65,
+   "robustness": {
+    "typo": 11,
+    "polite": 5,
+    "asr": 8,
+    "nospace": 3,
+    "filler": 4
+   },
+   "what": "outline colour, text colour, font size and weight of nodes"
+  },
+  "diagram.node.change:role-shape": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 65,
+   "robustness": {
+    "filler": 4,
+    "typo": 9,
+    "asr": 8,
+    "polite": 4,
+    "nospace": 6
+   },
+   "what": "mark a node with a flowchart role or a new shape"
+  },
+  "diagram.node.make:role": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 60,
+   "robustness": {
+    "typo": 11,
+    "polite": 5,
+    "nospace": 3,
+    "asr": 3,
+    "filler": 4
+   },
+   "what": "add a node by its flowchart role or a new shape"
+  },
+  "diagram.layout:layout": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 63,
+   "robustness": {
+    "filler": 10,
+    "nospace": 3,
+    "polite": 4,
+    "typo": 6,
+    "asr": 6
+   },
+   "what": "lay out the whole diagram (layout, direction, spacing, routes)"
+  },
+  "diagram.nodes.align:edge": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 63,
+   "robustness": {
+    "filler": 5,
+    "asr": 7,
+    "polite": 3,
+    "nospace": 6,
+    "typo": 8
+   },
+   "what": "align nodes"
+  },
+  "diagram.nodes.distribute:axis": {
+   "base": {
+    "equivalent": 13,
+    "complex": 13,
+    "simplified": 8
+   },
+   "rows": 62,
+   "robustness": {
+    "nospace": 3,
+    "asr": 8,
+    "filler": 7,
+    "polite": 1,
+    "typo": 9
+   },
+   "what": "space nodes evenly"
+  },
+  "diagram.steps.number:mode": {
+   "base": {
+    "equivalent": 19,
+    "complex": 1,
+    "simplified": 14
+   },
+   "rows": 62,
+   "robustness": {
+    "typo": 11,
+    "asr": 5,
+    "nospace": 6,
+    "filler": 3,
+    "polite": 3
+   },
+   "what": "number the steps / hide the numbers"
+  },
+  "diagram.node.duplicate:core": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 64,
+   "robustness": {
+    "asr": 11,
+    "nospace": 4,
+    "typo": 9,
+    "polite": 2,
+    "filler": 4
+   },
+   "what": "duplicate nodes"
+  },
+  "diagram.node.insert:link": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 58,
+   "robustness": {
+    "typo": 10,
+    "nospace": 2,
+    "asr": 2,
+    "filler": 5,
+    "polite": 5
+   },
+   "what": "insert a node into a link"
+  },
+  "diagram.node.merge:core": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 63,
+   "robustness": {
+    "filler": 7,
+    "typo": 7,
+    "asr": 9,
+    "nospace": 5,
+    "polite": 1
+   },
+   "what": "merge nodes"
+  },
+  "diagram.node.split:core": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 65,
+   "robustness": {
+    "asr": 6,
+    "typo": 11,
+    "polite": 4,
+    "filler": 7,
+    "nospace": 3
+   },
+   "what": "split a node in two"
+  },
+  "diagram.link.reverse:core": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 63,
+   "robustness": {
+    "nospace": 6,
+    "asr": 10,
+    "typo": 6,
+    "filler": 5,
+    "polite": 2
+   },
+   "what": "reverse a link"
+  },
+  "diagram.link.change:route": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 64,
+   "robustness": {
+    "polite": 5,
+    "nospace": 8,
+    "asr": 9,
+    "filler": 2,
+    "typo": 6
+   },
+   "what": "route of links (curved, straight, orthogonal)"
+  },
+  "diagram.links.connect:pattern": {
+   "base": {
+    "equivalent": 12,
+    "complex": 11,
+    "simplified": 11
+   },
+   "rows": 64,
+   "robustness": {
+    "filler": 8,
+    "nospace": 4,
+    "typo": 7,
+    "asr": 6,
+    "polite": 5
+   },
+   "what": "connect many nodes at once (in order, in a loop, all to all, to a hub)"
+  },
+  "compound:make-connect": {
+   "base": {
+    "equivalent": 10,
+    "complex": 10,
+    "simplified": 10
+   },
+   "rows": 59,
+   "robustness": {
+    "asr": 6,
+    "polite": 6,
+    "nospace": 5,
+    "filler": 5,
+    "typo": 7
+   },
+   "what": "add nodes and connect them (owner: \"add three boxes and connect them in order\", \"two circles with an arrow\")"
+  },
+  "compound:change-change": {
+   "base": {
+    "equivalent": 10,
+    "complex": 10,
+    "simplified": 10
+   },
+   "rows": 58,
+   "robustness": {
+    "filler": 8,
+    "asr": 9,
+    "typo": 5,
+    "polite": 2,
+    "nospace": 4
+   },
+   "what": "two changes in one message"
+  },
+  "compound:question-command": {
+   "base": {
+    "equivalent": 8,
+    "complex": 8,
+    "simplified": 8
+   },
+   "rows": 46,
+   "robustness": {
+    "filler": 3,
+    "polite": 4,
+    "typo": 7,
+    "nospace": 4,
+    "asr": 4
+   },
+   "what": "a question followed by a command"
+  },
+  "compound:make-style": {
+   "base": {
+    "equivalent": 10,
+    "complex": 10,
+    "simplified": 10
+   },
+   "rows": 57,
+   "robustness": {
+    "nospace": 8,
+    "typo": 7,
+    "filler": 4,
+    "polite": 3,
+    "asr": 5
+   },
+   "what": "add nodes then style or lay out the diagram"
+  }
+ }
+}

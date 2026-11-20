@@ -544,7 +544,7 @@
     }
   ],
   "builder": "official-dataset/build.py",
-  "builderSha256": "6ba178d513b3ee8de582252ceee11463272dca073f482e4e90490f2350c367ba",
+  "builderSha256": "1968421790f40de3a3c164b3ddb3a8665166532702918722e06b59b375e0f4ba",
   "sources": [
     {
       "name": "ui-natural-v1",
@@ -631,7 +631,7 @@
       "name": "ui-tiers-v1",
       "path": "training/sop-bert/data/ui-tiers-v1/examples.jsonl",
       "description": "tier and near-miss supplements of ui-coverage-v2 cases (build.py)",
-      "gitCommit": null,
+      "gitCommit": "2fc5ad59eaa3a0440e1443dc8b6f9d7415817423",
       "sha256": "e21a7e63df4b075d2faf78d7c558360d3034c715fdbd302568c5a035ef3cb17f",
       "rowsIn": 23,
       "rowsKept": 23,
@@ -672,7 +672,7 @@
       "name": "ui-features-v1",
       "path": "training/sop-bert/data/ui-features-v1/examples.jsonl",
       "description": "avatar part features: length (absolute and comparative) and feel (generate.py)",
-      "gitCommit": null,
+      "gitCommit": "2fc5ad59eaa3a0440e1443dc8b6f9d7415817423",
       "sha256": "1a9ff4f740f9471565967189550ae3205dacd5bd9c74054fdf3d9ec7d7e42635",
       "rowsIn": 249,
       "rowsKept": 247,
@@ -682,6 +682,35 @@
         "dropped:duplicate-text": 1
       },
       "fixes": {}
+    },
+    {
+      "name": "ui-diagram-v2",
+      "path": "training/sop-bert/data/ui-diagram-v2/examples.jsonl",
+      "description": "voice/chat control of the Diagram editor: every operation x parameter x reference form, robustness variants, compounds, questions (generate.py)",
+      "gitCommit": null,
+      "sha256": "37f3b0917bd6c490a5a91605d6c4497a8ed183c1c489f7f51bcd206c9493750d",
+      "rowsIn": 5377,
+      "rowsKept": 5371,
+      "rowsDropped": 6,
+      "dropReasons": {
+        "dropped:conflicting-label-for-identical-text": 2,
+        "dropped:duplicate-text": 4
+      },
+      "fixes": {}
+    },
+    {
+      "name": "ui-quantities-v1",
+      "path": "training/sop-bert/data/ui-quantities-v1/examples.jsonl",
+      "description": "coordination of make requests and quantities (generate.py)",
+      "gitCommit": "dede8b3bd984037122e00ed7538455304d5d5027",
+      "sha256": "d56def70fceef6afabd1eb71a3f117fce667e574bfaf9d594369685f195b3894",
+      "rowsIn": 174,
+      "rowsKept": 174,
+      "rowsDropped": 0,
+      "dropReasons": {},
+      "fixes": {
+        "diagram-new-node-count-as-node.n": 25
+      }
     },
     {
       "name": "demo-tool-profile",
@@ -766,7 +795,7 @@
     {
       "path": "sop-knowledge-worlds/docs/worlds/w.face/shards/words.sop",
       "gitCommit": null,
-      "sha256": "4bcf05e8776b34416a59e553ac79ebef26bf66da73ce6f294aa7c52fd42ca973"
+      "sha256": "057366ec132e13cf155de2178ed2df293ee8617cc92b7554aefb8b6d6bc077e1"
     },
     {
       "path": "sop-knowledge-worlds/docs/worlds/k.actions/shards/verbs-ask.sop",
@@ -865,26 +894,29 @@
     }
   ],
   "splits": {
-    "train": 42115,
-    "dev": 5102,
-    "test": 5001
+    "train": 47284,
+    "dev": 5753,
+    "test": 5759
   },
-  "families": 23340,
+  "families": 23605,
   "leakedFamilies": 0,
   "labelConflictsResolvedByPriority": {
     "ui-human-v1<-ui-features-v1": 1,
+    "ui-coverage-v2<-ui-diagram-v2": 2,
     "ui-natural-v1<-demo-tool-profile": 5,
     "ui-human-v1<-demo-tool-profile": 1,
     "demo-tool-profile<-demo-tool-profile": 103
   },
   "previousMessageAugmentation": {
     "ui-natural-v1": 314,
-    "ui-human-v1": 716,
+    "ui-human-v1": 715,
     "ui-coverage-v2": 595,
     "ui-tiers-v1": 3,
     "ui-relations-v1": 1370,
     "ui-comparatives-v1": 154,
     "ui-features-v1": 66,
+    "ui-diagram-v2": 992,
+    "ui-quantities-v1": 42,
     "main-synthetic": 1214
   },
   "nonReaderLabelFieldsRemoved": {
@@ -892,41 +924,41 @@
     "anchor_fill": 8125,
     "anchor_span": 437,
     "qualitative": 430,
-    "mention": 32,
+    "mention": 160,
     "anchor_kind": 5374
   },
   "kindVocabulary": {
-    "path": "docs/webchat/models/sop-bert/b8b1a4dd32a13c44555225fe894e8357766d95071a86f9a5e32a93fc39fda28a/bindings.json",
-    "sha256": "13f0fe92e4ca33a12bada238ba32614fae941682734f2d96d001cfb207dde995"
+    "path": "docs/webchat/models/sop-bert/291f851b51198c45f456447a000c9a85512f1132086bfc50fc9dd7abf5a79163/bindings.json",
+    "sha256": "6836dd20cb797222b0ffd3bc0029ec1651481102fbbd54b04b82aea663f723ff"
   },
   "files": {
     "STATS.md": {
-      "sha256": "df342d92423020dad62a217f1bbe184585933008ceba440c6fb9d78c470cb57d",
-      "bytes": 6759
+      "sha256": "a1473c5a79b8a12542571473d0fd24d834854cd782eda48297f1149fa26aeb32",
+      "bytes": 7315
     },
     "VALIDATION.md": {
-      "sha256": "6d23507dba629ab9d1bd40099b8b22e47768fe83e9bc80d1fe15f6a2cd603fcd",
-      "bytes": 9403
+      "sha256": "03709457a3e7f658d36c636138ca0e615e2af8342a1b205bf3aad67a33b877d2",
+      "bytes": 10666
     },
     "audit-sample.md": {
-      "sha256": "5f6ed925023780ab651d118be77f7c1a9c5cd1422d412c7367eaa7cadb022984",
-      "bytes": 43712
+      "sha256": "1b0750db0d594e7ea4aaf532bf472c09d167d9dc4b20cdbdd8a5056c065e3a50",
+      "bytes": 45058
     },
     "dev.jsonl": {
-      "sha256": "a67cb95772fa7437452d92565e6322b7f21208e6aec68cc8209cdc7c5f091ec7",
-      "bytes": 5459906
+      "sha256": "e536f01d7712c331741849c9ee12e1dca0edd518dcaadc67351ddd69cb1f836f",
+      "bytes": 6255412
     },
     "inventory.json": {
-      "sha256": "da8966e3e1b1da1e64241a67659a2b7847afaf29291a494c9ae0b08946b66f7e",
-      "bytes": 51192
+      "sha256": "146af623b6a6987e647c727d61441c30405c20045ab8481edeacad790bf1b5a0",
+      "bytes": 54464
     },
     "test.jsonl": {
-      "sha256": "bf0dd0637ff1da2aa288bbb30d46caac9f3c1d601f2d1878b88cbc19f7c7cc20",
-      "bytes": 5450287
+      "sha256": "9a6180e45d24e905afa5a669f6ff78ff00258db3687a281d843de72fdd13b821",
+      "bytes": 6506679
     },
     "train.jsonl.gz": {
-      "sha256": "6bfde700618c54bc00e0edd61c8596167475c3aff66a2f83e613e939b9feb87a",
-      "bytes": 2187024
+      "sha256": "cbc7efaf82a995d340fba71358ba8b3992b6990ba8c4f6b3b0f54e9e1053c65b",
+      "bytes": 2641368
     }
   },
   "policy": {
@@ -938,6 +970,8 @@
       "ui-relations-v1",
       "ui-comparatives-v1",
       "ui-features-v1",
+      "ui-diagram-v2",
+      "ui-quantities-v1",
       "demo-tool-profile",
       "main-synthetic"
     ],

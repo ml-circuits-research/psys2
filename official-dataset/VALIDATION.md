@@ -67,6 +67,22 @@ No issue found.
 
 No issue found.
 
+### ui-diagram-v2 (5,377 rows)
+
+| issue | rows |
+| --- | ---: |
+| warning:selector-not-in-context | 155 |
+| warning:value-span-ambiguous | 35 |
+| warning:numeric-value-not-in-surface | 30 |
+| warning:target-name_span-ambiguous | 2 |
+| warning:target-kind_span-ambiguous | 2 |
+
+### ui-quantities-v1 (174 rows)
+
+| issue | rows |
+| --- | ---: |
+| warning:selector-not-in-context | 1 |
+
 ### demo-tool-profile (36,999 rows)
 
 | issue | rows |
@@ -227,6 +243,39 @@ Dropped:
 | dropped:duplicate-text | 1 |
 | dropped:conflicting-label-for-identical-text | 1 |
 
+### ui-diagram-v2: 5,377 in, 5,371 kept
+
+Dropped:
+
+| reason | rows |
+| --- | ---: |
+| dropped:duplicate-text | 4 |
+| dropped:conflicting-label-for-identical-text | 2 |
+
+Kept with a warning (not an error; see README):
+
+| warning | rows |
+| --- | ---: |
+| selector-not-in-context | 155 |
+| value-span-ambiguous | 35 |
+| numeric-value-not-in-surface | 30 |
+| target-name_span-ambiguous | 2 |
+| target-kind_span-ambiguous | 2 |
+
+### ui-quantities-v1: 174 in, 174 kept
+
+Fixed or converted:
+
+| fix | rows |
+| --- | ---: |
+| diagram-new-node-count-as-node.n | 25 |
+
+Kept with a warning (not an error; see README):
+
+| warning | rows |
+| --- | ---: |
+| selector-not-in-context | 1 |
+
 ### demo-tool-profile: 36,999 in, 27,525 kept
 
 Fixed or converted:
@@ -321,4 +370,4 @@ Kept with a warning (not an error; see README):
 
 - unresolved errors: **0**
 - families present in more than one split: **0**
-- label conflicts between identical texts, resolved by source priority: {'ui-human-v1<-ui-features-v1': 1, 'ui-natural-v1<-demo-tool-profile': 5, 'ui-human-v1<-demo-tool-profile': 1, 'demo-tool-profile<-demo-tool-profile': 103}
+- label conflicts between identical texts, resolved by source priority: {'ui-human-v1<-ui-features-v1': 1, 'ui-coverage-v2<-ui-diagram-v2': 2, 'ui-natural-v1<-demo-tool-profile': 5, 'ui-human-v1<-demo-tool-profile': 1, 'demo-tool-profile<-demo-tool-profile': 103}

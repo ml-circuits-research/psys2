@@ -37,6 +37,8 @@ SOURCES = [
     ('ui-relations-v1', DATA / 'ui-relations-v1' / 'examples.jsonl', 'relative-position placement requests (generate.py)'),
     ('ui-comparatives-v1', DATA / 'ui-comparatives-v1' / 'examples.jsonl', 'comparative changes of existing objects (generate.py)'),
     ('ui-features-v1', DATA / 'ui-features-v1' / 'examples.jsonl', 'avatar part features: length (absolute and comparative) and feel (generate.py)'),
+    ('ui-diagram-v2', DATA / 'ui-diagram-v2' / 'examples.jsonl', 'voice/chat control of the Diagram editor: every operation x parameter x reference form, robustness variants, compounds, questions (generate.py)'),
+    ('ui-quantities-v1', DATA / 'ui-quantities-v1' / 'examples.jsonl', 'coordination of make requests and quantities (generate.py)'),
     ('demo-tool-profile', DATA / 'demo-tool-profile' / 'active.jsonl.gz', 'the corpus of the deployed reader: haiku-v1/v2 authored data plus demo tool supplements'),
     ('main-synthetic', REPO / 'main-synthetic-dataset' / 'examples.jsonl', 'owner synthetic set (generate-reader-datasets skill); converted, mostly dropped'),
 ]
@@ -91,6 +93,8 @@ def build_inventory():
     inventory = union.merge_inventory(old, new)
     # Declared avatar part features with their own key (part.length, values read from the catalog by generate.py).
     inventory = union.merge_inventory(inventory, json.loads((DATA / 'ui-features-v1' / 'inventory.json').read_text()))
+    # Diagram styles, layout, alignment, connection patterns and the new node/link acts (specs/diagram-capabilities.md).
+    inventory = union.merge_inventory(inventory, json.loads((DATA / 'ui-diagram-v2' / 'inventory.json').read_text()))
     shared = union.load_preparer()
     families = shared.target_families(inventory)
     inventory['request']['target']['keys']['type']['values'] = sorted({t for types in families.values() for t in types})
@@ -388,6 +392,16 @@ def harmonise(row, stats):
                     c['key'] = 'part.length'; c['operator'] = 'degree'
                 q['constraints'] = [c for c in cs if c not in prop]
                 stats['avatar-length-value-as-part.length'] += len(values)
+    # The count of new diagram nodes is the native parameter n (node.n), as in the executed and coverage corpora.
+    if row['world'] == 'diagram':
+        for q in row['requests']:
+            t = q.get('target') or {}
+            if t.get('type') == 'node' and t.get('mode') == 'new' and t.get('count_span') and not any(c['key'] == 'node.n' for c in q.get('constraints') or []):
+                c = {'key': 'node.n', 'value_span': t.pop('count_span'), 'operator': 'eq', 'phase': 'result', 'polarity': 'positive', 'character': 'requirement'}
+                if t.get('count'):
+                    c['value'] = t.pop('count')
+                q['constraints'] = (q.get('constraints') or []) + [c]
+                stats['diagram-new-node-count-as-node.n'] += 1
     if len(row['requests']) != 1:
         return row
     q = row['requests'][0]
