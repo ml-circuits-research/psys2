@@ -91,10 +91,12 @@ Fixed or converted:
 | fix | rows |
 | --- | ---: |
 | definite-description-name-to-kind | 224 |
+| key-drawn.color-as-drawn.colour | 137 |
 | absolute-degree-word-as-degree | 95 |
 | class-value-outside-bank-unlabelled | 88 |
-| key-meeting.length-for-duration | 18 |
+| key-meeting.duration-as-meeting.length | 18 |
 | act-arrange-for-diagram.group.layout | 17 |
+| key-part.color-as-part.colour | 9 |
 | act-group-for-diagram.group.make | 7 |
 | act-connect-for-diagram.link.make | 6 |
 | text-target-for-document.write | 6 |
@@ -122,12 +124,14 @@ Fixed or converted:
 | class-value-outside-bank-unlabelled | 330 |
 | qualitative-value-unlabelled | 329 |
 | absolute-degree-word-as-degree | 110 |
+| key-drawn.color-as-drawn.colour | 95 |
 | comparative-as-delta-step | 61 |
 | anchor-span-as-anchor-mention | 60 |
 | act-arrange-for-diagram.node.layout | 46 |
 | act-connect-for-diagram.link.make | 46 |
 | act-remove-for-diagram.selection.remove | 45 |
-| key-meeting.length-for-duration | 40 |
+| key-part.color-as-part.colour | 41 |
+| key-meeting.duration-as-meeting.length | 40 |
 | act-group-for-diagram.group.make | 23 |
 | act-arrange-for-diagram.group.layout | 23 |
 | act-ungroup-for-diagram.group.ungroup | 23 |
@@ -158,7 +162,9 @@ Fixed or converted:
 | definite-description-name-to-kind | 66 |
 | comparative-as-delta-step | 55 |
 | absolute-degree-word-as-degree | 50 |
+| key-drawn.color-as-drawn.colour | 40 |
 | anchor-span-as-anchor-mention | 26 |
+| key-part.color-as-part.colour | 9 |
 
 Kept with a warning (not an error; see README):
 
@@ -232,6 +238,7 @@ Fixed or converted:
 | converted:meeting | 86 |
 | converted:compound | 32 |
 | converted:document | 22 |
+| key-drawn.color-as-drawn.colour | 7 |
 
 Dropped:
 

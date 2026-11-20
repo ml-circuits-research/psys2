@@ -544,7 +544,7 @@
     }
   ],
   "builder": "official-dataset/build.py",
-  "builderSha256": "fc331a63c011bd36665f4395d43036c8f41d9a6be838e2e19eb2336a78fb6a29",
+  "builderSha256": "82b35a164ef9cd85b8a9443b3c75e065720b52a649f2e7674f902b673d4642cb",
   "sources": [
     {
       "name": "ui-natural-v1",
@@ -568,7 +568,9 @@
         "class-value-outside-bank-unlabelled": 88,
         "comparative-as-delta-step": 3,
         "definite-description-name-to-kind": 224,
-        "key-meeting.length-for-duration": 18,
+        "key-drawn.color-as-drawn.colour": 137,
+        "key-meeting.duration-as-meeting.length": 18,
+        "key-part.color-as-part.colour": 9,
         "text-target-for-document.write": 6
       }
     },
@@ -598,7 +600,9 @@
         "class-value-outside-bank-unlabelled": 330,
         "comparative-as-delta-step": 61,
         "definite-description-name-to-kind": 504,
-        "key-meeting.length-for-duration": 40,
+        "key-drawn.color-as-drawn.colour": 95,
+        "key-meeting.duration-as-meeting.length": 40,
+        "key-part.color-as-part.colour": 41,
         "qualitative-value-unlabelled": 329,
         "text-target-for-document.write": 23
       }
@@ -617,7 +621,9 @@
         "absolute-degree-word-as-degree": 50,
         "anchor-span-as-anchor-mention": 26,
         "comparative-as-delta-step": 55,
-        "definite-description-name-to-kind": 66
+        "definite-description-name-to-kind": 66,
+        "key-drawn.color-as-drawn.colour": 40,
+        "key-part.color-as-part.colour": 9
       }
     },
     {
@@ -720,6 +726,7 @@
         "converted:meeting": 86,
         "converted:node": 206,
         "definite-description-name-to-kind": 99,
+        "key-drawn.color-as-drawn.colour": 7,
         "trigger-removed-no-verb-in-text": 3828,
         "trigger-replaced-by-verb-span": 7364
       }
@@ -847,38 +854,46 @@
     "ui-comparatives-v1": 154,
     "main-synthetic": 1213
   },
+  "nonReaderLabelFieldsRemoved": {
+    "raw_value": 485,
+    "anchor_fill": 8125,
+    "anchor_span": 437,
+    "qualitative": 426,
+    "mention": 29,
+    "anchor_kind": 5374
+  },
   "kindVocabulary": {
     "path": "docs/webchat/models/sop-bert/1139b40bff92d2b19a034164774580a15e28a7063f83c8bee35c19f02add9e6e/bindings.json",
     "sha256": "589a96e458038e9987f3c0c47c2245e7a4ea73d1ab91d9fe05d7e5d1452ba14b"
   },
   "files": {
     "STATS.md": {
-      "sha256": "07cf8dcd0557287deaf1a4677a9aea57ed6f4a0331a3326740ca696e0e048587",
+      "sha256": "6c30bc586ee5dbc36e60ddb8321bcb020a0de0248d69c3fa39f07b253df8b5b7",
       "bytes": 6737
     },
     "VALIDATION.md": {
-      "sha256": "6d7db347f7cc531960807feacadb4898dc641b74373048d459124353f7ec1742",
-      "bytes": 8817
+      "sha256": "87d342c92a38557267de01ba13e5a89a18f732670325a77820da0cd9902c700c",
+      "bytes": 9110
     },
     "audit-sample.md": {
-      "sha256": "675753491a31f986c0cbd6dce8b6ef0973d556ffddfa46c6a77688aadc68a2bc",
-      "bytes": 44203
+      "sha256": "09fac5f70a63007076527e1d02f641fab652e7cab65cabf386b15c2ff5b4ba19",
+      "bytes": 44206
     },
     "dev.jsonl": {
-      "sha256": "64dde3106184a7a358a3e245608ccd61f63966e273c7a4e8b7732558c7daf948",
-      "bytes": 5580145
+      "sha256": "52799e25acfa090bde9c90eaa30abd7efbe79a9d1256ff70e20fd260c9acabf5",
+      "bytes": 5530908
     },
     "inventory.json": {
       "sha256": "e3c7fbe6eef59087f70e0797b5f959ff5ce42951ed9f5ecb6813b6842c4e11da",
       "bytes": 50976
     },
     "test.jsonl": {
-      "sha256": "f4c20aad67c5380b2ece846bd50c5e5c57febf8be4a20e77986c76a291d6c1be",
-      "bytes": 5316443
+      "sha256": "fd4475261b1195293fbb58ce6dd05ca9aa89608955abfa0396aa3d4f8bf664f9",
+      "bytes": 5267500
     },
     "train.jsonl.gz": {
-      "sha256": "f38544751e31e08af90c60d322b216b9e28d402ca14d0b71593a4a7f6e1722a9",
-      "bytes": 2183001
+      "sha256": "a87c381ff03466416a045eb1d56ea95f2b23c161c6759ed6014c9b14d615c3f5",
+      "bytes": 2175408
     }
   },
   "policy": {

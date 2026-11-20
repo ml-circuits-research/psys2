@@ -175,7 +175,7 @@
 | drawing.drawn.relation | 8,993 |
 | drawing.drawn.anchor | 8,993 |
 | document.section.content | 5,296 |
-| drawing.drawn.colour | 4,797 |
+| drawing.drawn.colour | 5,152 |
 | diagram.node.colour | 4,208 |
 | diagram.node.label | 4,149 |
 | drawing.drawn.name | 3,550 |
@@ -213,7 +213,6 @@
 | drawing.drawn.label | 446 |
 | drawing.part.index | 411 |
 | drawing.part.id | 359 |
-| drawing.drawn.color | 355 |
 | document.block.id | 326 |
 | avatar.part.size | 321 |
 | avatar.face.preset | 299 |
@@ -232,7 +231,8 @@
 | diagram.group.label | 201 |
 | diagram.group.labels | 187 |
 | diagram.group.values | 187 |
-| … 115 more | 8,342 |
+| diagram.node.layout | 178 |
+| … 113 more | 8,164 |
 
 ## Style (top 40)
 

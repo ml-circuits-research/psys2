@@ -354,14 +354,14 @@ def degree_fix(row, stats):
 # One label per intent across corpora (majority of the old corpus and the coverage corpus).
 ACT_BY_OPERATION = {'diagram.link.make': ('link', 'connect'), 'diagram.node.layout': ('node', 'arrange'), 'diagram.group.layout': ('group', 'arrange'),
                     'diagram.selection.remove': ('sketch', 'remove'), 'diagram.group.make': ('group', 'group'), 'diagram.group.ungroup': ('group', 'ungroup')}
-KEY_RENAMES = {('calendar', 'meeting.duration'): 'meeting.length'}
+KEY_RENAMES = {('calendar', 'meeting.duration'): 'meeting.length', ('drawing', 'drawn.color'): 'drawn.colour', ('drawing', 'part.color'): 'part.colour'}
 
 
 def harmonise(row, stats):
     for c in (c for q in row['requests'] for c in q.get('constraints') or []):
         new = KEY_RENAMES.get((row['world'], c['key']))
         if new:
-            c['key'] = new; stats[f'key-{new}-for-duration'] += 1
+            stats[f'key-{c["key"]}-as-{new}'] += 1; c['key'] = new
     if len(row['requests']) != 1:
         return row
     q = row['requests'][0]
@@ -1037,6 +1037,18 @@ def main():
             record['rewrite'] = row['rewrite']
         outputs[record['split']].append(record)
 
+    # Labels hold only what the reader predicts; author metadata (typo_of, anchor_kind, raw_value, …) stays in the sources.
+    reader_fields = {'key', 'value', 'value_span', 'operator', 'phase', 'polarity', 'character', 'scope', 'step', 'measure', 'measure_span', 'unit', 'variety', 'group'}
+    stripped = collections.Counter()
+    for split_rows in outputs.values():
+        for r in split_rows:
+            for q in r['requests']:
+                for c in q.get('constraints') or []:
+                    for f in [f for f in c if f not in reader_fields]:
+                        del c[f]; stripped[f] += 1
+                for f in [f for f in q.get('target', {}) if f in ('typo_of', 'alias_of', 'alias_unverified')]:
+                    del q['target'][f]; stripped['target.' + f] += 1
+
     # Previous-message invariance: a quarter of the single-turn rows also appear with an unrelated previous message of
     # the same tab and split; the labels come from the text only, so they are unchanged.
     augmented = collections.Counter()
@@ -1094,7 +1106,7 @@ def main():
     manifest = {'format': 'psys2.official-reader-dataset/1', 'mainSyntheticFiles': ms_files, 'builder': 'official-dataset/build.py', 'builderSha256': sha(Path(__file__).read_bytes()),
                 'sources': manifest_sources, 'vocabularyInputs': vocab,
                 'splits': {s: len(outputs[s]) for s, _ in SPLIT_SHARES}, 'families': len(groups), 'leakedFamilies': leaked,
-                'labelConflictsResolvedByPriority': dict(conflicts), 'previousMessageAugmentation': dict(augmented),
+                'labelConflictsResolvedByPriority': dict(conflicts), 'previousMessageAugmentation': dict(augmented), 'nonReaderLabelFieldsRemoved': dict(stripped),
                 'kindVocabulary': {'path': str(kind_path.relative_to(REPO)), 'sha256': sha(kind_path.read_bytes())}, 'files': files,
                 'policy': {'priority': [s[0] for s in SOURCES], 'splitShares': dict(SPLIT_SHARES), 'mainSyntheticCapPerOperation': MS_CAP_PER_OPERATION,
                            'mainSyntheticCapPerFamily': MS_CAP_PER_FAMILY, 'mainSyntheticEditCapPerFamily': MS_EDIT_CAP_PER_FAMILY,

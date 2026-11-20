@@ -429,7 +429,7 @@
 
 88. [drawing · ui-coverage-v2 · train · drawing.object.make] “white cloud, size 50”  — context: House, Old oak, Lake, Sun, Red car, Cloud
   - span “white cloud, size 50”: **make**/do (no trigger); target drawn new indefinite kind=cloud kind_span=“cloud”
-    - drawn.color = "white" from “white” [eq, result]
+    - drawn.colour = "white" from “white” [eq, result]
     - drawn.size = "50" from “size 50” [eq, result]
 
 89. [drawing · ui-coverage-v2 · train · drawing.object.change] “rename it something fun”  — context: House, Old oak, Lake, Sun, Red car, Cloud
@@ -454,7 +454,7 @@
   - span “ok, that piece should stand out, so make part 0 of o1 red, 90 wide and 45 high”: **change**/do trigger=“make”; target part existing definite fill=written name_span=“o1”
     - part.id = "o1" from “o1” [eq, selector]
     - part.index = "0" from “part 0” [eq, result]
-    - part.color = "red" from “red” [eq, result]
+    - part.colour = "red" from “red” [eq, result]
     - part.width = "90" from “90” [eq, result]
     - part.height = "45" from “45” [eq, result]
 
@@ -469,7 +469,7 @@
 96. [drawing · ui-natural-v1 · train · drawing.part.change] “give the first house component a red colour and dimensions of 90 by 45”  — context: House, Box, Circle
   - span “give the first house component a red colour and dimensions of 90 by 45”: **change**/do trigger=“give”; target part existing definite fill=written name_span=“house” ordinal=first
     - part.id = "house" from “house” [eq, selector]
-    - part.color = "red" from “red” [eq, result]
+    - part.colour = "red" from “red” [eq, result]
     - part.width = "90" from “90” [eq, result]
     - part.height = "45" from “45” [eq, result]
 
