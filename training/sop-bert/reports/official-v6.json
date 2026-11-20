@@ -1,0 +1,1015 @@
+{
+ "format": "psys2.official-reader-report/1",
+ "dataset": "official-dataset/ (commit 3aa05743)",
+ "keyRun": {
+  "checkpointSha256": "5c2211cb0b5a0ed26eb724294ac1e34b2bef2cb48554083209e53726146947eb",
+  "epochs": 4,
+  "selectedEpoch": 3,
+  "devPositiveBioGlobalExact": 0.8534,
+  "devDecodedMentionF1": 0.9583,
+  "warmStart": "deployed checkpoint 20198a41",
+  "trainSamples": 59453
+ },
+ "cutterRun": {
+  "checkpoint": "official-cutter-run-v3 best epoch 2",
+  "testSegmentationExact": 0.9939
+ },
+ "bundle": {
+  "manifestSha256": "a591d703572268a0e33dce2afc1a546b2cc10604ff497b13b0dec7e40c4b4c43",
+  "format": "sop.key-reader-runtime/1 q8",
+  "verifyReaderBundle": "passed",
+  "installed": false
+ },
+ "test": {
+  "v6Conditional": {
+   "rows": 5250,
+   "intentExact": 0.6175,
+   "globalFieldsExact": 0.9061,
+   "sourceSpansExact": 0.5876,
+   "completeReaderMeaningExact": 0.4149,
+   "perAreaIntentExact": {
+    "drawing": 0.7145,
+    "diagram": 0.6786,
+    "calendar": 0.2191,
+    "document": 0.4697,
+    "avatar": 0.5261
+   }
+  },
+  "v6WithCutter": {
+   "rows": 5250,
+   "intentExact": 0.5543,
+   "globalFieldsExact": 0.8349,
+   "sourceSpansExact": 0.5288,
+   "completeReaderMeaningExact": 0.3366,
+   "segmentationExact": 0.9933,
+   "perAreaIntentExact": {
+    "drawing": 0.6653,
+    "diagram": 0.5179,
+    "calendar": 0.2141,
+    "document": 0.4686,
+    "avatar": 0.5261
+   }
+  },
+  "deployedConditional": {
+   "rows": 5250,
+   "intentExact": 0.1836,
+   "globalFieldsExact": 0.4423,
+   "sourceSpansExact": 0.1834,
+   "completeReaderMeaningExact": 0.1029,
+   "perAreaIntentExact": {
+    "drawing": 0.1817,
+    "diagram": 0.2879,
+    "calendar": 0.1385,
+    "document": 0.1065,
+    "avatar": 0.0
+   }
+  },
+  "deployedWithCutter": {
+   "rows": 5250,
+   "intentExact": 0.1116,
+   "globalFieldsExact": 0.3552,
+   "sourceSpansExact": 0.1055,
+   "completeReaderMeaningExact": 0.0522,
+   "segmentationExact": 0.6196,
+   "perAreaIntentExact": {
+    "drawing": 0.1271,
+    "diagram": 0.1447,
+    "calendar": 0.136,
+    "document": 0.0415,
+    "avatar": 0.0
+   }
+  }
+ },
+ "appRouteProbes": {
+  "supported": {
+   "deployed": 6,
+   "v6": 6,
+   "of": 22
+  },
+  "rows": [
+   {
+    "text": "add a tree",
+    "area": "drawing",
+    "previous": null,
+    "deployedStatus": "supported",
+    "v6Status": "supported",
+    "v6Requests": [
+     {
+      "span": "add a tree",
+      "target": {
+       "determiner": "indefinite",
+       "kind": "tree",
+       "kind_span": "tree",
+       "mode": "new",
+       "type": "drawn"
+      },
+      "constraints": [],
+      "act": "make",
+      "trigger": "add",
+      "mood": "do"
+     }
+    ],
+    "v6Wires": [
+     "@__model_source std.request.source text=\"add a tree\"\n@r0 std.request act=make mood=do source=$__model_source\n@t0 std.request.target determiner=indefinite kind=k.objects.tree mode=new request=$r0"
+    ],
+    "v6Failures": []
+   },
+   {
+    "text": "make the house blue",
+    "area": "drawing",
+    "previous": null,
+    "deployedStatus": "unsupported",
+    "v6Status": "supported",
+    "v6Requests": [
+     {
+      "span": "make the house blue",
+      "target": {
+       "determiner": "definite",
+       "fill": "description",
+       "kind": "house",
+       "kind_span": "house",
+       "mode": "existing",
+       "type": "drawn"
+      },
+      "constraints": [
+       {
+        "key": "drawn.colour",
+        "value_span": "blue",
+        "value": "blue",
+        "character": "requirement",
+        "operator": "eq",
+        "phase": "result",
+        "polarity": "positive"
+       },
+       {
+        "key": "drawn.ids",
+        "value_span": "the house",
+        "value": "the house",
+        "character": "requirement",
+        "operator": "eq",
+        "phase": "selector",
+        "polarity": "positive"
+       }
+      ],
+      "act": "change",
+      "trigger": "make",
+      "mood": "do"
+     }
+    ],
+    "v6Wires": [
+     "@__model_source std.request.source text=\"make the house blue\"\n@r0 std.request act=change mood=do root=$c0_0 source=$__model_source\n@t0 std.request.target determiner=definite kind=k.objects.house mode=existing request=$r0\n@c0_0 std.request.constraint character=requirement concept=colour operator=eq polarity=positive request=$r0 source=$__model_source source.end=19 source.start=15 target=$t0 value=\"blue\""
+    ],
+    "v6Failures": []
+   },
+   {
+    "text": "draw a boat in the lake",
+    "area": "drawing",
+    "previous": null,
+    "deployedStatus": "unsupported",
+    "v6Status": "unsupported",
+    "v6Requests": [
+     {
+      "span": "draw a boat in the lake",
+      "target": {
+       "determiner": "indefinite",
+       "kind": "boat",
+       "kind_span": "boat",
+       "mode": "new",
+       "type": "drawn"
+      },
+      "constraints": [
+       {
+        "key": "drawn.anchor",
+        "value_span": "the lake",
+        "value": "the lake",
+        "character": "requirement",
+        "operator": "relation",
+        "phase": "selector",
+        "polarity": "positive"
+       },
+       {
+        "key": "drawn.relation",
+        "value_span": "in",
+        "value": "in",
+        "character": "requirement",
+        "operator": "relation",
+        "phase": "result",
+        "polarity": "positive"
+       }
+      ],
+      "act": "make",
+      "trigger": "draw",
+      "mood": "do"
+     }
+    ],
+    "v6Wires": [],
+    "v6Failures": [
+     "unresolved-canonical-property-binding:requests.0.constraints.c0_0.concept",
+     "unresolved-value-representation:requests.0.constraints.c0_0.value",
+     "requires-operator-reference-projection:requests.0.constraints.c0_0",
+     "unresolved-canonical-property-binding:requests.0.constraints.c0_1.concept"
+    ]
+   },
+   {
+    "text": "put the sun above the house",
+    "area": "drawing",
+    "previous": null,
+    "deployedStatus": "unsupported",
+    "v6Status": "unsupported",
+    "v6Requests": [
+     {
+      "span": "put the sun above the house",
+      "target": {
+       "determiner": "definite",
+       "fill": "description",
+       "kind": "sun",
+       "kind_span": "sun",
+       "mode": "existing",
+       "type": "drawn"
+      },
+      "constraints": [
+       {
+        "key": "drawn.anchor",
+        "value_span": "the house",
+        "value": "the house",
+        "character": "requirement",
+        "operator": "relation",
+        "phase": "selector",
+        "polarity": "positive"
+       },
+       {
+        "key": "drawn.ids",
+        "value_span": "the sun",
+        "value": "the sun",
+        "character": "requirement",
+        "operator": "eq",
+        "phase": "selector",
+        "polarity": "positive"
+       },
+       {
+        "key": "drawn.relation",
+        "value_span": "above",
+        "value": "above",
+        "character": "requirement",
+        "operator": "relation",
+        "phase": "result",
+        "polarity": "positive"
+       }
+      ],
+      "act": "place",
+      "trigger": "put",
+      "mood": "do"
+     }
+    ],
+    "v6Wires": [],
+    "v6Failures": [
+     "unresolved-canonical-property-binding:requests.0.constraints.c0_0.concept",
+     "unresolved-value-representation:requests.0.constraints.c0_0.value",
+     "requires-operator-reference-projection:requests.0.constraints.c0_0",
+     "unresolved-canonical-property-binding:requests.0.constraints.c0_1.concept"
+    ]
+   },
+   {
+    "text": "add a house next to the lake and left of the tree",
+    "area": "drawing",
+    "previous": null,
+    "deployedStatus": "unsupported",
+    "v6Status": "unsupported",
+    "v6Requests": [
+     {
+      "span": "add a house next to the lake and left of the tree",
+      "target": {
+       "determiner": "indefinite",
+       "kind": "house",
+       "kind_span": "house",
+       "mode": "new",
+       "type": "drawn"
+      },
+      "constraints": [
+       {
+        "key": "drawn.anchor",
+        "value_span": "the lake",
+        "value": "the lake",
+        "character": "requirement",
+        "operator": "relation",
+        "phase": "selector",
+        "polarity": "positive"
+       },
+       {
+        "key": "drawn.anchor",
+        "value_span": "the tree",
+        "value": "the tree",
+        "character": "requirement",
+        "operator": "relation",
+        "phase": "selector",
+        "polarity": "positive"
+       }
+      ],
+      "act": "make",
+      "trigger": "add",
+      "mood": "do"
+     }
+    ],
+    "v6Wires": [],
+    "v6Failures": [
+     "incomplete-provider-coverage:requests.0",
+     "provider-unresolved:requests.0",
+     "provider-unresolved:requests.0",
+     "incomplete-model-coverage:coverage"
+    ]
+   },
+   {
+    "text": "draw a big yellow sun",
+    "area": "drawing",
+    "previous": null,
+    "deployedStatus": "unsupported",
+    "v6Status": "unsupported",
+    "v6Requests": [
+     {
+      "span": "draw a big yellow sun",
+      "target": {
+       "determiner": "indefinite",
+       "kind": "sun",
+       "kind_span": "sun",
+       "mode": "new",
+       "type": "drawn"
+      },
+      "constraints": [
+       {
+        "key": "drawn.colour",
+        "value_span": "yellow",
+        "value": "yellow",
+        "character": "requirement",
+        "operator": "eq",
+        "phase": "result",
+        "polarity": "positive"
+       },
+       {
+        "key": "drawn.size",
+        "value_span": "big",
+        "value": "big",
+        "character": "requirement",
+        "operator": "degree",
+        "phase": "result",
+        "polarity": "positive"
+       }
+      ],
+      "act": "make",
+      "trigger": "draw",
+      "mood": "do"
+     }
+    ],
+    "v6Wires": [],
+    "v6Failures": [
+     "invalid-request-graph:requests.0"
+    ]
+   },
+   {
+    "text": "draw a lake",
+    "area": "drawing",
+    "previous": null,
+    "deployedStatus": "supported",
+    "v6Status": "supported",
+    "v6Requests": [
+     {
+      "span": "draw a lake",
+      "target": {
+       "determiner": "indefinite",
+       "kind": "lake",
+       "kind_span": "lake",
+       "mode": "new",
+       "type": "drawn"
+      },
+      "constraints": [],
+      "act": "make",
+      "trigger": "draw",
+      "mood": "do"
+     }
+    ],
+    "v6Wires": [
+     "@__model_source std.request.source text=\"draw a lake\"\n@r0 std.request act=make mood=do source=$__model_source\n@t0 std.request.target determiner=indefinite kind=k.objects.lake mode=new request=$r0"
+    ],
+    "v6Failures": []
+   },
+   {
+    "text": "draw a cloud",
+    "area": "drawing",
+    "previous": null,
+    "deployedStatus": "supported",
+    "v6Status": "supported",
+    "v6Requests": [
+     {
+      "span": "draw a cloud",
+      "target": {
+       "determiner": "indefinite",
+       "kind": "cloud",
+       "kind_span": "cloud",
+       "mode": "new",
+       "type": "drawn"
+      },
+      "constraints": [],
+      "act": "make",
+      "trigger": "draw",
+      "mood": "do"
+     }
+    ],
+    "v6Wires": [
+     "@__model_source std.request.source text=\"draw a cloud\"\n@r0 std.request act=make mood=do source=$__model_source\n@t0 std.request.target determiner=indefinite kind=k.objects.cloud mode=new request=$r0"
+    ],
+    "v6Failures": []
+   },
+   {
+    "text": "put a tree to the left of the house",
+    "area": "drawing",
+    "previous": null,
+    "deployedStatus": "supported",
+    "v6Status": "unsupported",
+    "v6Requests": [
+     {
+      "span": "put a tree to the left of the house",
+      "target": {
+       "determiner": "indefinite",
+       "kind": "tree",
+       "kind_span": "tree",
+       "mode": "new",
+       "type": "drawn"
+      },
+      "constraints": [
+       {
+        "key": "drawn.anchor",
+        "value_span": "the house",
+        "value": "the house",
+        "character": "requirement",
+        "operator": "relation",
+        "phase": "selector",
+        "polarity": "positive"
+       },
+       {
+        "key": "drawn.relation",
+        "value_span": "to the left of",
+        "value": "left_of",
+        "character": "requirement",
+        "operator": "relation",
+        "phase": "result",
+        "polarity": "positive"
+       }
+      ],
+      "act": "make",
+      "trigger": "put",
+      "mood": "do"
+     }
+    ],
+    "v6Wires": [],
+    "v6Failures": [
+     "incomplete-provider-coverage:requests.0",
+     "provider-unresolved:requests.0",
+     "incomplete-model-coverage:coverage",
+     "unresolved-model-output:unresolved"
+    ]
+   },
+   {
+    "text": "draw a sun above the house",
+    "area": "drawing",
+    "previous": null,
+    "deployedStatus": "unsupported",
+    "v6Status": "unsupported",
+    "v6Requests": [
+     {
+      "span": "draw a sun above the house",
+      "target": {
+       "determiner": "indefinite",
+       "kind": "sun",
+       "kind_span": "sun",
+       "mode": "new",
+       "type": "drawn"
+      },
+      "constraints": [
+       {
+        "key": "drawn.anchor",
+        "value_span": "the house",
+        "value": "the house",
+        "character": "requirement",
+        "operator": "relation",
+        "phase": "selector",
+        "polarity": "positive"
+       },
+       {
+        "key": "drawn.relation",
+        "value_span": "above",
+        "value": "above",
+        "character": "requirement",
+        "operator": "relation",
+        "phase": "result",
+        "polarity": "positive"
+       }
+      ],
+      "act": "make",
+      "trigger": "draw",
+      "mood": "do"
+     }
+    ],
+    "v6Wires": [],
+    "v6Failures": [
+     "unresolved-canonical-property-binding:requests.0.constraints.c0_0.concept",
+     "unresolved-value-representation:requests.0.constraints.c0_0.value",
+     "requires-operator-reference-projection:requests.0.constraints.c0_0",
+     "unresolved-canonical-property-binding:requests.0.constraints.c0_1.concept"
+    ]
+   },
+   {
+    "text": "add a duck in the lake",
+    "area": "drawing",
+    "previous": null,
+    "deployedStatus": "unsupported",
+    "v6Status": "unsupported",
+    "v6Requests": [
+     {
+      "span": "add a duck in the lake",
+      "target": {
+       "determiner": "indefinite",
+       "kind": "duck",
+       "kind_span": "duck",
+       "mode": "new",
+       "type": "drawn"
+      },
+      "constraints": [
+       {
+        "key": "drawn.anchor",
+        "value_span": "the lake",
+        "value": "the lake",
+        "character": "requirement",
+        "operator": "relation",
+        "phase": "selector",
+        "polarity": "positive"
+       },
+       {
+        "key": "drawn.relation",
+        "value_span": "in",
+        "value": "in",
+        "character": "requirement",
+        "operator": "relation",
+        "phase": "result",
+        "polarity": "positive"
+       }
+      ],
+      "act": "make",
+      "trigger": "add",
+      "mood": "do"
+     }
+    ],
+    "v6Wires": [],
+    "v6Failures": [
+     "unresolved-canonical-kind-binding:requests.0.targets.t0.kind",
+     "unresolved-canonical-property-binding:requests.0.constraints.c0_0.concept",
+     "unresolved-value-representation:requests.0.constraints.c0_0.value",
+     "requires-operator-reference-projection:requests.0.constraints.c0_0"
+    ]
+   },
+   {
+    "text": "Draw a fish in the lake.",
+    "area": "drawing",
+    "previous": null,
+    "deployedStatus": "unsupported",
+    "v6Status": "unsupported",
+    "v6Requests": [
+     {
+      "span": "Draw a fish in the lake.",
+      "target": {
+       "determiner": "indefinite",
+       "kind": "fish",
+       "kind_span": "fish",
+       "mode": "new",
+       "type": "drawn"
+      },
+      "constraints": [
+       {
+        "key": "drawn.anchor",
+        "value_span": "the lake",
+        "value": "the lake",
+        "character": "requirement",
+        "operator": "relation",
+        "phase": "selector",
+        "polarity": "positive"
+       },
+       {
+        "key": "drawn.relation",
+        "value_span": "in",
+        "value": "in",
+        "character": "requirement",
+        "operator": "relation",
+        "phase": "result",
+        "polarity": "positive"
+       }
+      ],
+      "act": "make",
+      "trigger": "Draw",
+      "mood": "do"
+     }
+    ],
+    "v6Wires": [],
+    "v6Failures": [
+     "unresolved-canonical-property-binding:requests.0.constraints.c0_0.concept",
+     "unresolved-value-representation:requests.0.constraints.c0_0.value",
+     "requires-operator-reference-projection:requests.0.constraints.c0_0",
+     "unresolved-canonical-property-binding:requests.0.constraints.c0_1.concept"
+    ]
+   },
+   {
+    "text": "Draw a tree to the left of the house.",
+    "area": "drawing",
+    "previous": null,
+    "deployedStatus": "supported",
+    "v6Status": "unsupported",
+    "v6Requests": [
+     {
+      "span": "Draw a tree to the left of the house.",
+      "target": {
+       "determiner": "indefinite",
+       "kind": "tree",
+       "kind_span": "tree",
+       "mode": "new",
+       "type": "drawn"
+      },
+      "constraints": [
+       {
+        "key": "drawn.anchor",
+        "value_span": "the house",
+        "value": "the house",
+        "character": "requirement",
+        "operator": "relation",
+        "phase": "selector",
+        "polarity": "positive"
+       },
+       {
+        "key": "drawn.relation",
+        "value_span": "to the left of",
+        "value": "left_of",
+        "character": "requirement",
+        "operator": "relation",
+        "phase": "result",
+        "polarity": "positive"
+       }
+      ],
+      "act": "make",
+      "trigger": "Draw",
+      "mood": "do"
+     }
+    ],
+    "v6Wires": [],
+    "v6Failures": [
+     "incomplete-provider-coverage:requests.0",
+     "provider-unresolved:requests.0",
+     "incomplete-model-coverage:coverage",
+     "unresolved-model-output:unresolved"
+    ]
+   },
+   {
+    "text": "draw a boat",
+    "area": "drawing",
+    "previous": "make the house blue",
+    "deployedStatus": "supported",
+    "v6Status": "supported",
+    "v6Requests": [
+     {
+      "span": "draw a boat",
+      "target": {
+       "determiner": "indefinite",
+       "kind": "boat",
+       "kind_span": "boat",
+       "mode": "new",
+       "type": "drawn"
+      },
+      "constraints": [],
+      "act": "make",
+      "trigger": "draw",
+      "mood": "do"
+     }
+    ],
+    "v6Wires": [
+     "@__model_source std.request.source text=\"draw a boat\"\n@r0 std.request act=make mood=do source=$__model_source\n@t0 std.request.target determiner=indefinite kind=k.objects.boat mode=new request=$r0"
+    ],
+    "v6Failures": []
+   },
+   {
+    "text": "make the house blue",
+    "area": "drawing",
+    "previous": "add a duck in the lake",
+    "deployedStatus": "unsupported",
+    "v6Status": "supported",
+    "v6Requests": [
+     {
+      "span": "make the house blue",
+      "target": {
+       "determiner": "definite",
+       "fill": "description",
+       "kind": "house",
+       "kind_span": "house",
+       "mode": "existing",
+       "type": "drawn"
+      },
+      "constraints": [
+       {
+        "key": "drawn.colour",
+        "value_span": "blue",
+        "value": "blue",
+        "character": "requirement",
+        "operator": "eq",
+        "phase": "result",
+        "polarity": "positive"
+       },
+       {
+        "key": "drawn.ids",
+        "value_span": "the house",
+        "value": "the house",
+        "character": "requirement",
+        "operator": "eq",
+        "phase": "selector",
+        "polarity": "positive"
+       }
+      ],
+      "act": "change",
+      "trigger": "make",
+      "mood": "do"
+     }
+    ],
+    "v6Wires": [
+     "@__model_source std.request.source text=\"make the house blue\"\n@r0 std.request act=change mood=do root=$c0_0 source=$__model_source\n@t0 std.request.target determiner=definite kind=k.objects.house mode=existing request=$r0\n@c0_0 std.request.constraint character=requirement concept=colour operator=eq polarity=positive request=$r0 source=$__model_source source.end=19 source.start=15 target=$t0 value=\"blue\""
+    ],
+    "v6Failures": []
+   },
+   {
+    "text": "move the meeting to 3pm",
+    "area": "calendar",
+    "previous": null,
+    "deployedStatus": "unsupported",
+    "v6Status": "unsupported",
+    "v6Requests": [
+     {
+      "span": "move the meeting to 3pm",
+      "target": {
+       "determiner": "definite",
+       "fill": "description",
+       "kind": "meeting",
+       "kind_span": "meeting",
+       "mode": "existing",
+       "type": "meeting"
+      },
+      "constraints": [
+       {
+        "key": "meeting.time",
+        "value_span": "3pm",
+        "value": "3pm",
+        "character": "requirement",
+        "operator": "eq",
+        "phase": "result",
+        "polarity": "positive"
+       }
+      ],
+      "act": "place",
+      "trigger": "move",
+      "mood": "do"
+     }
+    ],
+    "v6Wires": [],
+    "v6Failures": [
+     "incomplete-provider-coverage:requests.0",
+     "provider-unresolved:requests.0",
+     "incomplete-model-coverage:coverage",
+     "unresolved-model-output:unresolved"
+    ]
+   },
+   {
+    "text": "make her hair shorter",
+    "area": "avatar",
+    "previous": null,
+    "deployedStatus": "unsupported",
+    "v6Status": "unsupported",
+    "v6Requests": [
+     {
+      "span": "make her hair shorter",
+      "target": {
+       "determiner": "definite",
+       "fill": "written",
+       "mode": "existing",
+       "name_span": "her hair",
+       "type": "face"
+      },
+      "constraints": [
+       {
+        "key": "part.ids",
+        "value_span": "her hair",
+        "value": "her hair",
+        "character": "requirement",
+        "operator": "eq",
+        "phase": "selector",
+        "polarity": "positive"
+       }
+      ],
+      "act": "change",
+      "trigger": "make",
+      "mood": "do"
+     }
+    ],
+    "v6Wires": [],
+    "v6Failures": [
+     "incomplete-provider-coverage:requests.0",
+     "provider-unresolved:requests.0",
+     "provider-unresolved:requests.0",
+     "incomplete-model-coverage:coverage"
+    ]
+   },
+   {
+    "text": "make her hair shorter",
+    "area": "drawing",
+    "previous": null,
+    "deployedStatus": "unsupported",
+    "v6Status": "unsupported",
+    "v6Requests": [
+     {
+      "span": "make her hair shorter",
+      "target": {
+       "determiner": "definite",
+       "fill": "written",
+       "mode": "existing",
+       "name_span": "her hair"
+      },
+      "constraints": [],
+      "act": "change",
+      "trigger": "make",
+      "mood": "do"
+     }
+    ],
+    "v6Wires": [],
+    "v6Failures": [
+     "incomplete-provider-coverage:requests.0",
+     "provider-unresolved:requests.0",
+     "provider-unresolved:requests.0",
+     "provider-unresolved:requests.0"
+    ]
+   },
+   {
+    "text": "make the house bigger",
+    "area": "drawing",
+    "previous": null,
+    "deployedStatus": "unsupported",
+    "v6Status": "unsupported",
+    "v6Requests": [
+     {
+      "span": "make the house bigger",
+      "target": {
+       "determiner": "definite",
+       "fill": "description",
+       "kind": "house",
+       "kind_span": "house",
+       "mode": "existing",
+       "type": "drawn"
+      },
+      "constraints": [
+       {
+        "key": "drawn.size",
+        "value_span": "bigger",
+        "value": "bigger",
+        "character": "requirement",
+        "operator": "delta",
+        "phase": "result",
+        "polarity": "positive",
+        "step": "more"
+       }
+      ],
+      "act": "change",
+      "trigger": "make",
+      "mood": "do"
+     }
+    ],
+    "v6Wires": [],
+    "v6Failures": [
+     "unconsumed-predicted-range:requests.0.constraints.0.value",
+     "incomplete-structural-coverage:coverage"
+    ]
+   },
+   {
+    "text": "make it smaller",
+    "area": "drawing",
+    "previous": null,
+    "deployedStatus": "unsupported",
+    "v6Status": "unsupported",
+    "v6Requests": [
+     {
+      "span": "make it smaller",
+      "target": {
+       "determiner": "definite",
+       "fill": "context",
+       "mode": "existing",
+       "type": "drawn"
+      },
+      "constraints": [
+       {
+        "key": "drawn.size",
+        "value_span": "smaller",
+        "value": "smaller",
+        "character": "requirement",
+        "operator": "delta",
+        "phase": "result",
+        "polarity": "positive",
+        "step": "less"
+       }
+      ],
+      "act": "change",
+      "trigger": "make",
+      "mood": "do"
+     }
+    ],
+    "v6Wires": [],
+    "v6Failures": [
+     "unresolved-canonical-kind-binding:requests.0.targets.t0.kind",
+     "context-reference-not-bound:requests.0.targets.t0",
+     "unconsumed-predicted-range:requests.0.constraints.0.value",
+     "incomplete-structural-coverage:coverage"
+    ]
+   },
+   {
+    "text": "make the sun a bit smaller",
+    "area": "drawing",
+    "previous": null,
+    "deployedStatus": "unsupported",
+    "v6Status": "unsupported",
+    "v6Requests": [
+     {
+      "span": "make the sun a bit smaller",
+      "target": {
+       "determiner": "definite",
+       "fill": "description",
+       "kind": "sun",
+       "kind_span": "sun",
+       "mode": "existing",
+       "type": "drawn"
+      },
+      "constraints": [
+       {
+        "key": "drawn.size",
+        "value_span": "smaller",
+        "value": "smaller",
+        "character": "requirement",
+        "operator": "delta",
+        "phase": "result",
+        "polarity": "positive",
+        "step": "less"
+       }
+      ],
+      "act": "change",
+      "trigger": "make",
+      "mood": "do"
+     }
+    ],
+    "v6Wires": [],
+    "v6Failures": [
+     "unconsumed-predicted-range:requests.0.constraints.0.value",
+     "incomplete-structural-coverage:coverage"
+    ]
+   },
+   {
+    "text": "make the box wider",
+    "area": "drawing",
+    "previous": null,
+    "deployedStatus": "unsupported",
+    "v6Status": "unsupported",
+    "v6Requests": [
+     {
+      "span": "make the box wider",
+      "target": {
+       "determiner": "definite",
+       "fill": "description",
+       "kind": "box",
+       "kind_span": "box",
+       "mode": "existing",
+       "type": "drawn"
+      },
+      "constraints": [
+       {
+        "key": "drawn.width",
+        "value_span": "wider",
+        "value": "wider",
+        "character": "requirement",
+        "operator": "delta",
+        "phase": "result",
+        "polarity": "positive",
+        "step": "more"
+       }
+      ],
+      "act": "change",
+      "trigger": "make",
+      "mood": "do"
+     }
+    ],
+    "v6Wires": [],
+    "v6Failures": [
+     "unresolved-canonical-property-binding:requests.0.constraints.c0_0.concept",
+     "unresolved-value-representation:requests.0.constraints.c0_0.value",
+     "requires-operator-reference-projection:requests.0.constraints.c0_0",
+     "requires-declared-step-projection:requests.0.constraints.c0_0.step"
+    ]
+   }
+  ]
+ },
+ "scope": "Reader metrics: evaluate-demo-reader.py on official-dataset test (5,250 request cuts). App-route probes: probe-bundle.mjs --run against seeded editor hosts with the unchanged src runtime and deployed bindings."
+}

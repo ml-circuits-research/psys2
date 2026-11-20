@@ -56,5 +56,5 @@ for(const line of readFileSync(probes,'utf8').split('\n').filter(Boolean)){
  const {proposal}=await reader.probe(p.text,{area:p.area,context:p.context??{existing:[],previous:null}});
  const raw=proposal.raw;
  process.stdout.write(JSON.stringify({text:p.text,area:p.area,cuts:proposal.sourceCut?.spans,requests:raw?.requests??null,cutUnresolved:proposal.sourceCut?.unresolved??null,
-  wires:(proposal.candidates??[]).flatMap(c=>c.batch?.entries?.map(e=>e.wires)??[]),failures:(proposal.failures??[]).map(f=>f.reason+(f.path?.length?':'+f.path.join('.'):''))})+'\n');
+  wires:(proposal.candidates??[]).flatMap(c=>c.batch?.entries?.map(e=>e.wires)??[]),failures:(proposal.failures??[]).map(f=>f.reason+(f.path?.length?":"+f.path.join("."):"")+(f.detail?" "+JSON.stringify(f.detail):""))})+'\n');
 }
