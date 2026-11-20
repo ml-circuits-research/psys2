@@ -1,4 +1,4 @@
-@policy.module core.module name=app.execution version=2 imports=std.capability exports=app.execution.values exports=app.execution.observedProperty exports=app.execution.observedMeasure exports=app.execution.observedField exports=app.execution.preview exports=app.execution.comparative exports=app.execution.comparativeFactor exports=app.execution.comparativeStep exports=app.execution.ordinal exports=app.execution.knowledge exports=app.execution.instant exports=app.execution.requestValue exports=app.execution.clockTime exports=app.execution.instantBase exports=app.execution.instantFocus exports=app.execution.actForm exports=app.execution.linkPattern exports=app.execution.canvasUnit exports=app.execution.lengthUnit exports=app.execution.reference exports=app.execution.actOperation exports=app.execution.kindBinding exports=app.execution.keyBinding exports=app.execution.keyValue
+@policy.module core.module name=app.execution version=2 imports=std.capability exports=app.execution.values exports=app.execution.observedProperty exports=app.execution.observedMeasure exports=app.execution.observedField exports=app.execution.preview exports=app.execution.comparative exports=app.execution.comparativeFactor exports=app.execution.comparativeStep exports=app.execution.ordinal exports=app.execution.knowledge exports=app.execution.instant exports=app.execution.requestValue exports=app.execution.clockTime exports=app.execution.instantBase exports=app.execution.instantFocus exports=app.execution.actForm exports=app.execution.linkPattern exports=app.execution.flow exports=app.execution.canvasUnit exports=app.execution.lengthUnit exports=app.execution.reference exports=app.execution.actOperation exports=app.execution.kindBinding exports=app.execution.keyBinding exports=app.execution.keyValue
 @values.type core.type of=app.execution.values closed=true
 @values.concept core.slot of=app.execution.values key=concept kind=atom present=true
 @values.type.slot core.slot of=app.execution.values key=valueType kind=string present=true
@@ -142,3 +142,11 @@
 @lengthUnit.unit core.slot of=app.execution.lengthUnit key=unit kind=atom present=true
 @lengthUnit.to core.slot of=app.execution.lengthUnit key=to kind=string present=true
 @lengthUnit.factor core.slot of=app.execution.lengthUnit key=factor kind=number present=true
+
+# "after" / "before" in a flow ("add a step after Review"): the relation the page's flow direction gives them (the
+# observed direction of the object of sourceType that lays the flow out), resolved before placement.
+@flow.type core.type of=app.execution.flow closed=true
+@flow.on core.slot of=app.execution.flow key=sourceType kind=string present=true
+@flow.direction core.slot of=app.execution.flow key=direction kind=string present=true
+@flow.next core.slot of=app.execution.flow key=next kind=atom present=true
+@flow.previous core.slot of=app.execution.flow key=previous kind=atom present=true

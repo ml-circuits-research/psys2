@@ -77,3 +77,5 @@
 @interpret.relation.diagram.node.right app.interpret.relationValue of=$interpret.relation.diagram.node value="right" relation=right
 @interpret.relation.diagram.node.nextto app.interpret.relationValue of=$interpret.relation.diagram.node value="next_to" relation=near
 @interpret.relation.diagram.node.near app.interpret.relationValue of=$interpret.relation.diagram.node value="near" relation=near
+@interpret.relation.diagram.node.after app.interpret.relationValue of=$interpret.relation.diagram.node value="after" relation=next
+@interpret.relation.diagram.node.before app.interpret.relationValue of=$interpret.relation.diagram.node value="before" relation=previous

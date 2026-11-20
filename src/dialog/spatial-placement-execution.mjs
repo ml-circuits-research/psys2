@@ -1,5 +1,5 @@
 // Assemble trusted native observations and dispatch the compiler's SOP call.
-import {World,parse,serialize,str} from '../vendor/sopworld/sopworld.mjs';
+import {World,parse,serialize,str,quote} from '../vendor/sopworld/sopworld.mjs';
 import SOURCE from './new-engine-source.mjs';
 import {readPlacementProfile,rememberPlacement} from '../../worlds/app.project/spatial-profile.mjs';
 import {placementInterfaceSop} from '../../worlds/native-spatial-interface.mjs';
@@ -14,6 +14,7 @@ import {placementHypotheses} from './placement-default-policy.mjs';
 import {identityConcepts} from './capability-plan-adapter.mjs';
 import {executeNativeCapability} from './capability-plan-execution.mjs';
 import {budget} from './budget.mjs';
+import {executionPolicyWorld} from './execution-policy.mjs';
 
 const read = (row,key) => row?.attrs[key]?.length===1 ? str(row.attrs[key][0]) : undefined;
 const ref = (row,key) => {
@@ -57,6 +58,19 @@ function identitySelectorsAsNames(wires,identity){
  }
  return drop.size?serialize(rows.filter(row=>!drop.has(row.id))):wires;
 }
+// "after"/"before" in a flow (relation next/previous): the side the observed flow direction gives (app.execution.flow).
+function flowRelations(wires,observation){
+ const rows=parse(wires),flows=executionPolicyWorld().ofType('app.execution.flow');
+ const relations=rows.filter(w=>w.type==='std.request.constraint'&&['next','previous'].includes(read(w,'relation')));
+ if(!relations.length||!flows.length)return wires;
+ for(const c of relations){
+  const flow=flows.find(f=>{const page=observation.objects.find(o=>o.sourceType===read(f,'sourceType'));
+   const dir=page?.inputs?.find(i=>i.key==='direction')?.values?.[0];return dir!==undefined&&str(dir)===read(f,'direction');});
+  if(!flow)return wires;
+  c.attrs.relation=[read(flow,read(c,'relation'))];
+ }
+ return serialize(rows);
+}
 export async function executeSpatialPlacement(session,candidate,options={}) {
  budget.tick('spatial-placement.anchor-hypothesis');   // recursion: once, for the anchor hypothesis (options.anchorMade)
  const {bindings,view}=options;let anchorRule=null;
@@ -73,6 +87,7 @@ export async function executeSpatialPlacement(session,candidate,options={}) {
   if(!host.observeSpatial)return fail('spatial-observation-unavailable');
   const areaId=bindings.readerAreaByView?.[view]??area.area;
   {const named=identitySelectorsAsNames(candidate.wires,identityConcepts(bindings,areaId));if(named!==candidate.wires)candidate={...candidate,wires:named};}
+  {const flowed=flowRelations(candidate.wires,host.observe());if(flowed!==candidate.wires)candidate={...candidate,wires:flowed};}
   const concepts=new Set(parse(candidate.wires).filter(wire=>wire.type==='std.request.target').map(wire=>read(wire,'kind')).filter(Boolean));
   const constructors=nativeCreationCandidates(bindings,host.bindings(),areaId).filter(pair=>pair.mapping.area===areaId&&concepts.has(pair.mapping.canonical));
   // A constructor that reads declared knowledge for its kind argument (a catalog drawing by name) gets it loaded for
@@ -162,6 +177,20 @@ export async function executeSpatialPlacement(session,candidate,options={}) {
  catch(error){return fail('invalid-compiled-placement',{placement:sop,error:String(error?.message??error)});}
  const {receipt,operation,args,before}=result;
  if(receipt.status==='refused')return fail(receipt.reason,{receipt,placement:sop,controlIntent:result.sop});
+ // An area that lays itself out again after the call (effectScope reflow) may move the anchor away from the relation:
+ // the anchor is put back where it was (the area's own place operation, which pins it), so the relation holds.
+ let pinned=null;
+ if(receipt.status==='changed'&&operation.effectScope?.reflow){
+  const option=parse(sop).find(wire=>wire.type==='std.placement.option'&&wire.id===ref(proposal,'choice')),anchorId=read(option,'anchor');
+  const was=spatial.boxes.find(box=>box.entity===anchorId),now=host.observeSpatial().boxes.find(box=>box.entity===anchorId);
+  const place=host.bindings().find(op=>op.act==='place'&&op.on===operation.on&&op.spatial?.idsKey&&op.spatial?.xKey&&op.spatial?.yKey);
+  if(was&&now&&place&&(Math.abs(was.min_x-now.min_x)>1e-6||Math.abs(was.min_y-now.min_y)>1e-6)){
+   const cx=(was.min_x+was.max_x)/2,cy=(was.min_y+was.max_y)/2,current=host.observe();
+   const call=`@pin.call ${place.id} ${place.spatial.idsKey}=${quote(anchorId)} ${place.spatial.xKey}=${cx} ${place.spatial.yKey}=${cy}`;
+   try{pinned=await invokeObservedNativeTool(session,{area,host,invocation:globalThis.crypto.randomUUID(),expectedVersion:current.version,sop:call,includeCall:true});}
+   catch(error){pinned={status:'refused',reason:String(error?.message??error)};}
+  }
+ }
  const observed=host.observeSpatial(),after=observed.observation;
  const intent=describeNativeControl({operation,args,before}),verification=verifyNativeControlEffect({intent,before,after,receipt});
  const targets=operation.act==='make'?after.objects.filter(object=>object.sourceType===operation.on&&!before.objects.some(prior=>prior.id===object.id)):
