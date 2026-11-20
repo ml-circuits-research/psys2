@@ -15,22 +15,29 @@ const scalarsOf=text=>Array.from(text);
 // Adjacent mentions of one target-kind head that only whitespace or a hyphen separates and that together spell a
 // declared kind lemma of the target's family ("bar" + "chart" when "bar chart" is a declared kind) are one mention.
 function joinKindMentions(raw,failures,bindings,cuts){
- let changed=null;
+ let changed=null,skipped=null;
  for(const failure of failures??[]){
   const detail=failure?.detail;
   if(detail?.reason!=='ambiguous-global-mention'||detail.head?.path!=='target.kind'||!Array.isArray(detail.head.ranges)||detail.head.ranges.length<2)continue;
   const index=failure.path?.[1];if(!Number.isSafeInteger(index))continue;
   const request=(changed??raw).requests?.[index];if(!request||request.target?.kind)continue;
   const offset=cuts?.[index]?.[0]??0,text=scalarsOf(raw.source.text),ranges=[...detail.head.ranges].sort((a,b)=>a[0]-b[0]).map(([a,b])=>[a+offset,b+offset]);
-  if(ranges.some((r,i)=>i>0&&!/^[\s-]+$/.test(text.slice(ranges[i-1][1],r[0]).join(''))))continue;
-  const span=[ranges[0][0],ranges.at(-1)[1]],lemma=text.slice(...span).join('');
-  const type=request.target?.type,area=raw.area;
-  if(!(bindings.kinds??[]).some(k=>k.area===area&&k.type===type&&k.lemma===lemma))continue;
+  const type=request.target?.type,area=raw.area,declared=lemma=>(bindings.kinds??[]).some(k=>k.area===area&&k.type===type&&k.lemma===lemma);
+  const adjacent=!ranges.some((r,i)=>i>0&&!/^[\s-]+$/.test(text.slice(ranges[i-1][1],r[0]).join('')));
+  let span=adjacent?[ranges[0][0],ranges.at(-1)[1]]:null,lemma=span?text.slice(...span).join(''):null;
+  // Otherwise the mentions are several things in one request: the first that names a declared kind is made and the
+  // others are disclosed (ranked by source order; the coordination reader had its turn before partial admission).
+  if(!span||!declared(lemma)){
+   span=ranges.find(r=>declared(text.slice(...r).join('')))??null;lemma=span?text.slice(...span).join(''):null;
+   if(!span)continue;
+   for(const r of ranges)if(r!==span)(skipped??=[]).push({request:index,reason:'several-kind-mentions',role:'theme',text:text.slice(...r).join('')});
+  }
   changed??=structuredClone(raw);
   const target=changed.requests[index].target;target.kind=lemma;target.kind_span=lemma;
   changed.ranges=[...(changed.ranges??[]).filter(r=>JSON.stringify(r.path)!==JSON.stringify(['requests',String(index),'target','kind_span'])),{path:['requests',String(index),'target','kind_span'],range:span}];
  }
- return changed??raw;
+ const result=changed??raw;
+ return skipped?{raw:result,skipped}:{raw:result,skipped:[]};
 }
 
 /** The partial reading of one proposal; {refused} with the remaining diagnostics when no request keeps its action and theme. */
@@ -38,15 +45,16 @@ export function partialReading(proposal,{bindings,bindingSha256}){
  const raw=proposal?.raw;
  if(!raw||!bindings||!bindingSha256||!Array.isArray(raw.requests)||!raw.requests.length)return null;
  const policy=interpretationPolicy().partial;
- const repaired=joinKindMentions(raw,proposal.failures,bindings,proposal.sourceCut?.spans);
+ const {raw:repaired,skipped}=joinKindMentions(raw,proposal.failures,bindings,proposal.sourceCut?.spans);
  const bridge=bridgeRawStructure(repaired,{bindings,bindingSha256,comparatives:comparativeSteps(),references:referenceProjection(),partial:{defaults:policy.defaults}});
  const candidates=bridge.decoded?.candidates??[];
  if(bridge.diagnostics.length||!candidates.length||bridge.decoded?.issues?.length)return {refused:[...bridge.diagnostics,...(bridge.decoded?.issues??[])].map(d=>d.reason+(d.path?.length?':'+d.path.join('.'):''))};
  // Heads the reader itself could not decode consistently are disclosed by key; their spans did not reach the request.
  const readerIssues=(proposal.failures??[]).filter(f=>f.reason==='provider-unresolved').map(f=>({reason:f.detail?.reason,key:f.detail?.key})).filter(f=>f.reason);
+ const disclosed=[...skipped,...bridge.disclosed];
  return {proposal:{...proposal,raw:repaired,candidates,coverage:{complete:false,partial:true,graphProposal:true,executable:false},failures:[],
-  interpretation:{profile:'partial-admission/1',disclosed:bridge.disclosed,defaulted:bridge.defaulted,readerIssues,unresolved:proposal.failures??[]}},
-  packet:bridge.packet,disclosed:bridge.disclosed,defaulted:bridge.defaulted,joined:repaired!==raw};
+  interpretation:{profile:'partial-admission/1',disclosed,defaulted:bridge.defaulted,readerIssues,unresolved:proposal.failures??[]}},
+  packet:bridge.packet,disclosed,defaulted:bridge.defaulted,joined:repaired!==raw};
 }
 
 /** Of several readings of the same text, the partial one that drops the least (ties keep the earlier reading). */
@@ -105,7 +113,7 @@ export function fallbackLadder(packet){
 }
 
 /** The reply sentence naming what a partial reading left out and why. */
-export function partialNote(disclosed){
+export function partialNote(disclosed,applied=true){
  const {drops}=interpretationPolicy().partial,named=new Map();let unnamed=0;
  for(const d of disclosed??[]){
   if(!d.text){unnamed++;continue;}
@@ -114,5 +122,5 @@ export function partialNote(disclosed){
  }
  const parts=[...named].map(([text,why])=>JSON.stringify(text)+' ('+why+')');
  if(!parts.length&&!unnamed)return '';
- return (parts.length?'I did not apply '+parts.join(', ')+'.':'I left out part of the request that I could not read.')+' You can undo this.';
+ return (parts.length?'I did not apply '+parts.join(', ')+'.':'I left out part of the request that I could not read.')+(applied?' You can undo this.':'');
 }

@@ -58,10 +58,12 @@ function checkOffsets(authority,text,tokenIds,mask,manifest,tick){
  for(let i=0;i<n;i++){tick();const seq=a.sequenceIds[i],range=a.offsets[i],special=a.specialTokensMask[i];if(![null,0,1].includes(seq)||![0,1].includes(special)||mask[i]===0&&(seq!==null||range!==null))throw Error('invalid-offset-authority');if(seq===1)context=true;if(seq!==0||special||mask[i]===0){if(range!==null)throw Error('nonsource-offset');continue;}if(context||!Array.isArray(range)||range.length!==2||!range.every(Number.isSafeInteger)||range[0]<last||range[0]>=range[1]||range[1]>chars.length)throw Error('invalid-source-offset');last=range[1];}
  if(a.specialTokensMask[0]!==1||a.sequenceIds[0]!==null)throw Error('missing-cls-authority');return a;
 }
+// An inside tag after an outside tag is read as the beginning of a span (the usual BIO repair) and still reported, so
+// the reading stays incomplete for the strict path while partial admission keeps the mention (specs/semantic-frame.md §5).
 function spansFor(values,keyIndex,length,authority,mask,tick){
- const spans=[];let active=null;
- for(let i=0;i<length;i++){tick();if(authority.sequenceIds[i]!==0||authority.specialTokensMask[i]||mask[i]===0){if(active){spans.push(active);active=null;}continue;}const base=(keyIndex*length+i)*3,tag=choice(values.slice(base,base+3));if(tag===null)return {spans:[],reason:'ambiguous-BIO-label'};if(tag===2&&!active)return {spans:[],reason:'illegal-I-after-O'};if(tag!==2&&active){spans.push(active);active=null;}if(tag===1)active={tokens:[i,i+1],range:[...authority.offsets[i]]};else if(tag===2){active.tokens[1]=i+1;active.range[1]=authority.offsets[i][1];}}
- if(active)spans.push(active);return {spans,reason:null};
+ const spans=[];let active=null,reason=null;
+ for(let i=0;i<length;i++){tick();if(authority.sequenceIds[i]!==0||authority.specialTokensMask[i]||mask[i]===0){if(active){spans.push(active);active=null;}continue;}const base=(keyIndex*length+i)*3;let tag=choice(values.slice(base,base+3));if(tag===null)return {spans:[],reason:'ambiguous-BIO-label'};if(tag===2&&!active){reason='illegal-I-after-O';tag=1;}if(tag!==2&&active){spans.push(active);active=null;}if(tag===1)active={tokens:[i,i+1],range:[...authority.offsets[i]]};else if(tag===2){active.tokens[1]=i+1;active.range[1]=authority.offsets[i][1];}}
+ if(active)spans.push(active);return {spans,reason};
 }
 /** Host supplies verified loaded ONNX sessions/tensor constructor and exact offset
  * authority. No file/model I/O or inference runs occur during construction. */

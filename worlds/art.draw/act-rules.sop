@@ -155,6 +155,58 @@
 @pa.y1 core.calc out=?y1 fn=mul args=?yh args=?ky
 @pa.out ui.draw.area name=?r x0=?x0 y0=?y0 x1=?x1 y1=?y1
 @page.area core.rule when=$pa.page when=$pa.slot with=$pa.kx with=$pa.ky with=$pa.x0 with=$pa.y0 with=$pa.xw with=$pa.yh with=$pa.x1 with=$pa.y1 then=$pa.out
+# (0) The region the command names (at=, before every other region): a box of the page in hundredths of its size (a
+# side, a corner, the middle; "corner" is each of the four), or a band of the ground between the horizon and the foot
+# of the page in hundredths of that room (the background: the far band, where a thing is drawn smaller and pulled up;
+# the foreground: the near band). The horizon is the view's or the layout's (landscape-rules.sop ui.draw.horizon).
+@draw.pagebox.type core.type of=ui.draw.pagebox
+@draw.band.type core.type of=ui.draw.band
+@pb.top ui.draw.pagebox name=top order=0 x=0 y=0 w=100 h=33
+@pb.bottom ui.draw.pagebox name=bottom order=0 x=0 y=67 w=100 h=33
+@pb.left ui.draw.pagebox name=left order=0 x=0 y=0 w=33 h=100
+@pb.right ui.draw.pagebox name=right order=0 x=67 y=0 w=33 h=100
+@pb.center ui.draw.pagebox name=center order=0 x=30 y=30 w=40 h=40
+@pb.middle ui.draw.pagebox name=middle order=0 x=30 y=30 w=40 h=40
+@pb.top_left ui.draw.pagebox name=top_left order=0 x=0 y=0 w=33 h=33
+@pb.top_right ui.draw.pagebox name=top_right order=0 x=67 y=0 w=33 h=33
+@pb.bottom_left ui.draw.pagebox name=bottom_left order=0 x=0 y=67 w=33 h=33
+@pb.bottom_right ui.draw.pagebox name=bottom_right order=0 x=67 y=67 w=33 h=33
+@pb.corner.1 ui.draw.pagebox name=corner order=1 x=0 y=0 w=25 h=25
+@pb.corner.2 ui.draw.pagebox name=corner order=2 x=75 y=0 w=25 h=25
+@pb.corner.3 ui.draw.pagebox name=corner order=3 x=0 y=75 w=25 h=25
+@pb.corner.4 ui.draw.pagebox name=corner order=4 x=75 y=75 w=25 h=25
+@bd.background ui.draw.band name=background from=0 to=30 scale=0.6 far=1
+@bd.foreground ui.draw.band name=foreground from=60 to=100 scale=1 far=0
+@ra.auto ui.draw.auto kind=?k
+@ra.req app.act.request operation="drawing.object.make" at=?r
+@ra.box ui.draw.pagebox name=?r order=?o x=?x y=?y w=?w h=?h
+@ra.page ui.draw.page w=?pw h=?ph
+@ra.s ui.draw.size size=?s
+@ra.kx core.calc out=?kx fn=div args=?pw args=100
+@ra.ky core.calc out=?ky fn=div args=?ph args=100
+@ra.x0 core.calc out=?x0 fn=mul args=?x args=?kx
+@ra.y0 core.calc out=?y0 fn=mul args=?y args=?ky
+@ra.xw core.calc out=?xw fn=add args=?x args=?w
+@ra.yh core.calc out=?yh fn=add args=?y args=?h
+@ra.x1 core.calc out=?x1 fn=mul args=?xw args=?kx
+@ra.y1 core.calc out=?y1 fn=mul args=?yh args=?ky
+@ra.key core.calc out=?key fn=concat args=at- args=?r args=- args=?o
+@ra.out ui.draw.region key=?key tier=0 order=?o host=none x0=?x0 y0=?y0 x1=?x1 y1=?y1 size=?s
+@region.asked core.rule when=$ra.auto when=$ra.req when=$ra.box when=$ra.page when=$ra.s with=$ra.kx with=$ra.ky with=$ra.x0 with=$ra.y0 with=$ra.xw with=$ra.yh with=$ra.x1 with=$ra.y1 with=$ra.key then=$ra.out
+@rbd.band ui.draw.band name=?r from=?fr to=?to scale=?sc far=?far
+@rbd.hz ui.draw.horizon y=?hy
+@rbd.room core.calc out=?room fn=sub args=?ph args=?hy
+@rbd.a core.calc out=?a fn=mul args=?room args=?fr args=0.01
+@rbd.b core.calc out=?b fn=mul args=?room args=?to args=0.01
+@rbd.y0 core.calc out=?y0 fn=add args=?hy args=?a
+@rbd.y1 core.calc out=?y1 fn=add args=?hy args=?b
+@rbd.s0 core.calc out=?s0 fn=mul args=?s args=?sc
+@rbd.s1 core.calc out=?s1 fn=div args=?s0 args=2
+@rbd.s2 core.calc out=?s2 fn=round args=?s1
+@rbd.s3 core.calc out=?s3 fn=mul args=?s2 args=2
+@rbd.key core.calc out=?key fn=concat args=at- args=?r
+@rbd.out ui.draw.region key=?key tier=0 order=0 host=none x0=0 y0=?y0 x1=?pw y1=?y1 size=?s3 far=?far
+@region.asked.band core.rule when=$ra.auto when=$ra.req when=$rbd.band when=$rbd.hz when=$ra.page when=$ra.s with=$rbd.room with=$rbd.a with=$rbd.b with=$rbd.y0 with=$rbd.y1 with=$rbd.s0 with=$rbd.s1 with=$rbd.s2 with=$rbd.s3 with=$rbd.key then=$rbd.out
 # (1) Into an object on the page whose anchor holds the kind.
 @ct.auto ui.draw.auto kind=?k
 @ct.into ui.draw.into anchor=?ak

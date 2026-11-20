@@ -49,9 +49,15 @@
 @interpret.drop.ordinal app.interpret.drop reason=requires-declared-ordinal-projection text="I could not use the position in the list"
 @interpret.drop.count app.interpret.drop reason=requires-declared-count-projection text="I could not read the number"
 @interpret.drop.host app.interpret.drop reason=refused-by-host text="the editor could not apply it together with the rest"
+@interpret.drop.several app.interpret.drop reason=several-kind-mentions text="I made only the first thing named; ask for the others one at a time"
 
 # When the editor refuses an admitted partial reading: make the thing with its placement, then change its other
 # properties; then without the placement; then the thing alone.
 @interpret.fallback.split app.interpret.fallback step=split order=1 text="I placed it first and then changed it."
 @interpret.fallback.placement app.interpret.fallback step=without-placement order=2 text="I could not apply the placement."
 @interpret.fallback.theme app.interpret.fallback step=theme-only order=3 text="I applied only the thing itself."
+
+# A diagram node read without a kind word ("remove shape 2", "move it up") is a graph node (w.diagram.node): the
+# focused or most recent one when it exists, a new step otherwise. Bars and slices are chart points of a chart group,
+# which the reader names by the chart family.
+@interpret.family.diagram.node app.interpret.family area=diagram family=node kind=w.diagram.node

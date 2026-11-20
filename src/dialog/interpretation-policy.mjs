@@ -39,7 +39,8 @@ export function interpretationPolicy(source=POLICY){
  const drops=Object.fromEntries(world.ofType(MODULE+'.drop').map(row=>[one(row,'reason'),one(row,'text')]));
  const fallbacks=world.ofType(MODULE+'.fallback').map(row=>({step:one(row,'step'),order:Number(one(row,'order')),text:one(row,'text')})).sort((a,b)=>a.order-b.order);
  if(new Set(fallbacks.map(f=>f.order)).size!==fallbacks.length)throw Error('invalid-interpretation-policy: fallback orders must be distinct');
- const result=Object.freeze({retries,notes,compare,coordination,language:{id:detect[0].id,minConfidence:Number(one(detect[0],'min.confidence'))},partial:{defaults,drops,fallbacks}});
+ const families=world.ofType(MODULE+'.family').map(row=>({area:one(row,'area'),type:one(row,'family'),kind:one(row,'kind')}));
+ const result=Object.freeze({retries,notes,compare,coordination,language:{id:detect[0].id,minConfidence:Number(one(detect[0],'min.confidence'))},partial:{defaults,drops,fallbacks,families}});
  if(source===POLICY)policy=result;
  return result;
 }

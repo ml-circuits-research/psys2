@@ -15,6 +15,7 @@ import {projectCodeReference} from './project-code-reference.mjs';
 import {projectCreateAction} from './project-create-action.mjs';
 import {assessReaderProposal,assessPartialProposal} from './reader-admission.mjs';
 import {bestPartialReading,fallbackLadder,partialNote} from './partial-admission.mjs';
+import {completeBindings} from './declared-bindings.mjs';
 import {projectQuantities,amountsOf,quantityNote} from './quantity-projection.mjs';
 import {routeCoordination} from './coordination-routing.mjs';
 import {declaredKnowledge} from './declared-execution.mjs';
@@ -127,6 +128,7 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
  const context={area:options.view??session.isession.state['ui.shell']?.activeTab};
  let contextProjection=null,bindings=null,registry=null;
  try{bindings=provider?.bindings?.();registry=provider?.registry?.();}catch{/* Missing bindings leave the model observations unprojected. */}
+ try{bindings=await completeBindings(bindings);}catch{/* The deployed table stays in force when the live declarations cannot complete it. */}
  const projectionOptions={bindings,registry,view:context.area},projectionErrors=[];
  const project=async(read)=>{
   try{
@@ -324,7 +326,7 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
     const ran=await dispatchPartial(session,{reading,decision:decided},text,options,bindings);
     partialTrace=ran.trace;
     if(ran.trace.applied){result=ran.result;candidate=ran.candidate;}
-    else if(ran.result?.text&&ran.result.trace?.reason!=='no-declared-action'){result=ran.result;const note=partialNote(ran.trace.disclosed);if(note){result.text+=' '+note;result.parts=[{text:result.text,translate:false}];}}
+    else if(ran.result?.text&&ran.result.trace?.reason!=='no-declared-action'){result=ran.result;const note=partialNote(ran.trace.disclosed,false);if(note){result.text+=' '+note;result.parts=[{text:result.text,translate:false}];}}
    }
   }catch(error){partialTrace={error:String(error?.message??error)};}
  }

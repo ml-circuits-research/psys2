@@ -16,6 +16,7 @@
 @native.art.draw.op.drawing.object.make.param.color std.capability.parameter operation=$native.art.draw.op.drawing.object.make name="color" kind=string nullable=true
 @native.art.draw.op.drawing.object.make.param.age std.capability.parameter operation=$native.art.draw.op.drawing.object.make name="age" kind=string
 @native.art.draw.op.drawing.object.make.param.sex std.capability.parameter operation=$native.art.draw.op.drawing.object.make name="sex" kind=string
+@native.art.draw.op.drawing.object.make.param.at std.capability.parameter operation=$native.art.draw.op.drawing.object.make name="at" kind=string enum="top" enum="bottom" enum="left" enum="right" enum="center" enum="middle" enum="top_left" enum="top_right" enum="bottom_left" enum="bottom_right" enum="corner" enum="background" enum="foreground" enumClosed=true
 @native.art.draw.value.13 std.capability.arg name="enum" value=true
 @native.art.draw.value.14 std.capability.record entry=$native.art.draw.value.13
 @native.art.draw.value.15 std.capability.arg name="kind" value=$native.art.draw.value.14

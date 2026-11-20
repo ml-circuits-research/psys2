@@ -151,6 +151,8 @@ export function bridgeRawStructure(prediction,{bindings,bindingSha256,comparativ
     if(phase[c.phase])phase[c.phase].push([cid,condition]);
     const prop=lookup('properties',{area:raw.area,key:condition.key});
     if(prop){c.concept=prop.canonical;anchor([...path,'concept'],condition.value_span,prop.sourceWire,true,['constraints',String(ci),'value_span']);}else unresolved('unresolved-canonical-property-binding',[...path,'concept']);
+    // A region named by a parameter that takes region names (its declared closed list holds the value) is that parameter's value.
+    if(prop&&Array.isArray(prop.classValues)&&prop.classValues.includes(condition.value)&&c.operator==='region')c.operator='eq';
     // A comparative without a number (operator=delta step=more|less) becomes the declared factor of its step on the
     // value the target has now; the raw value word is only evidence of the step.
     const steps=prop&&condition.operator==='delta'&&typeof condition.step==='string'&&!['measure','measure_span','unit'].some(k=>has(condition,k))
@@ -180,9 +182,12 @@ export function bridgeRawStructure(prediction,{bindings,bindingSha256,comparativ
       }else{
        const identity=typeof literal==='string'&&literal.length>0&&literal===condition.value;
        const normalization=identity?null:lookup('valueNormalizations',{area:raw.area,key:condition.key,canonical:prop.canonical,source:literal,value:condition.value,valueKind:prop.valueKind});
+       // A property whose native parameter declares a closed value list (classValues, declared-bindings.mjs) takes the
+       // reader's class value from that list; the mention is its evidence and the parameter's declaration its proof.
+       const declaredClass=!identity&&!normalization&&Array.isArray(prop.classValues)&&prop.classValues.includes(condition.value)&&typeof literal==='string'&&literal.length>0;
        // The request graph takes a degree or region value as an unquoted vocabulary name (std.request).
        const kind=['degree','region'].includes(condition.operator)?'literal':prop.valueKind;
-       if(identity||normalization){c.value={kind,value:condition.value};anchor([...path,'value'],literal,normalization?.sourceWire??null,false,['constraints',String(ci),supplied?'value_span':'value']);}
+       if(identity||normalization||declaredClass){c.value={kind,value:condition.value};anchor([...path,'value'],literal,normalization?.sourceWire??(declaredClass?prop.sourceWire:null),false,['constraints',String(ci),supplied?'value_span':'value']);}
        else unresolved('unresolved-source-value-normalization',[...path,'value']);
       }
      }else unresolved('unresolved-value-representation',[...path,'value']);

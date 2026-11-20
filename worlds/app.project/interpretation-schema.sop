@@ -1,4 +1,4 @@
-@interpret.module core.module name=app.interpret version=1 exports=app.interpret.retry exports=app.interpret.compare exports=app.interpret.coordination exports=app.interpret.language exports=app.interpret.note exports=app.interpret.default exports=app.interpret.drop exports=app.interpret.fallback
+@interpret.module core.module name=app.interpret version=1 exports=app.interpret.retry exports=app.interpret.compare exports=app.interpret.coordination exports=app.interpret.language exports=app.interpret.note exports=app.interpret.default exports=app.interpret.drop exports=app.interpret.fallback exports=app.interpret.family
 
 # A re-reading of the same text under a reduced context, tried in order while the reading stays incomplete.
 @interpret.retry.type core.type of=app.interpret.retry closed=true
@@ -47,3 +47,11 @@
 @interpret.fallback.step core.slot of=app.interpret.fallback key=step kind=atom id=true enum=split enum=without-placement enum=theme-only present=true
 @interpret.fallback.order core.slot of=app.interpret.fallback key=order kind=integer min=1 present=true
 @interpret.fallback.text core.slot of=app.interpret.fallback key=text kind=string present=true
+
+# A reader family whose targets the binding table leaves unbound when no kind word is read (the table keeps it
+# unresolved because the family's raw meaning spans several declared classes), read in partial admission as its
+# most common class: the canonical kind named here, with the provenance of that kind's own table row.
+@interpret.family.type core.type of=app.interpret.family closed=true
+@interpret.family.area core.slot of=app.interpret.family key=area kind=atom present=true
+@interpret.family.family core.slot of=app.interpret.family key=family kind=atom present=true
+@interpret.family.kind core.slot of=app.interpret.family key=kind kind=atom present=true

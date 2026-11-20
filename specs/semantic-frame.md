@@ -1,7 +1,7 @@
 # Semantic frame: a domain-general reader representation with partial execution
 
-Status: proposed, prototyped 2026-11-20. The frame, its compiler and the oracle study exist; the reader does not emit
-frames yet and the app route is unchanged. Contract in the library: `docs/semantic-frame.md` (sopworld 0.237.0,
+Status: prototyped 2026-11-20; §5 partial admission is delivered on the key route (see §5). The frame, its compiler
+and the oracle study exist; the reader does not emit frames yet. Contract in the library: `docs/semantic-frame.md` (sopworld 0.237.0, vendored,
 `src/semantic-frame.mjs`). This spec implements the proposal of `specs/human-utterance-benchmark.md` §6.
 
 ## 1. Why
@@ -91,17 +91,31 @@ The reading is admitted in parts, not as a whole:
 4. **Reply.** The reply states what was done and what was not applied and why; undo covers the whole message (one
    history group); the binding keeps ranked alternatives (ambiguous kinds keep all candidates).
 
-### Remaining refusal-first thresholds in the current route (to become ranked best-effort decisions)
+### Partial admission on the key route (delivered 2026-11-20)
 
-| Where | Today | Proposed |
+The §5 rules run on the current key route; no retrain. Code: `src/dialog/partial-admission.mjs`,
+`src/dialog/declared-bindings.mjs`, the `partial` mode of `raw-structural-bridge.mjs`, `assessPartialProposal` in
+`reader-admission.mjs`, `dispatchPartial` in `reader-routing.mjs`. Every decision is declared:
+
+| Was refusal-first | Now | Declared in |
 | --- | --- | --- |
-| `reader-admission.mjs` `scoreReaderProposal` | refuses unless `coverage.complete` and `graphProposal`, zero `failures`, zero `unresolved` | admit the consistent part: per-request (and per-role) eligibility; failures become disclosures |
-| `raw-structural-bridge.mjs` (29 `unresolved(...)` reasons) | any one (unbound property key, undeclared relation value, unpaired relation, ambiguous span, >1 request without annotated dependencies, unprojected population/ordinal/query, …) fails the request | drop the offending role, keep the request, disclose; default dependencies to source order |
-| key-reader decoding (presence/span/BIO/act-anchor consistency) | an inconsistent head makes coverage incomplete → whole reading refused | decode per head; an inconsistent head drops that role only (the frame's ~25 heads make this simpler) |
-| `reader-admission-policy.sop` | `uncalibrated-best-effort` admits only when calibration is unconfigured; a configured but unmet calibration closes the gate | ranked: admit with uncertainty note and alternatives below the threshold, refuse only for destructive acts |
-| `capability-policy.sop` guards (`incomplete.coverage` for calendar) | a meeting with an unapplied detail changes nothing | create with the applied details, disclose the rest |
-| placement method `request-shape` | relation + any other constraint refuses the request | split (make placed, then change), as in §5.3 |
-| capability modes `requireResult`, `selectorUnique`, `targetUnique` | refuse when no result applies or the selection is not unique | most recent / focused match with the alternatives retained (already the default for existing targets), disclosed |
+| `scoreReaderProposal` needs complete coverage, zero failures | a reading the strict path refuses is bridged again in partial mode and admitted for reversible act classes; destructive acts stay all-or-nothing | `reader-admission-policy.sop` `reader.permit.partial` |
+| the bridge's `unresolved(...)` reasons fail the request | an unbound constraint, relation (with its anchor), count, ordinal, name, reference detail, turn, quantifier or question detail is dropped from its request and disclosed; only a missing action, theme kind or source stays fatal | `raw-structural-bridge.mjs` `dropUnbound` |
+| a field the reader left out fails the request | defaults: mood `do`; a request without an act whose theme is new is made (a scene description); a new theme of `make`, else existing; phase result, operator eq, character requirement, polarity positive | `interpretation-policy.sop` `app.interpret.default` |
+| one inconsistent head refuses the reading | the reading stays incomplete for the strict path; partial admission keeps the consistent heads. An inside tag after an outside tag starts a span (BIO repair, still reported). Adjacent kind mentions that spell a declared kind lemma are one mention ("bar" + "chart"); otherwise the first mention that names a declared kind is made and the others disclosed | `key-reader-inference.mjs`, `partial-admission.mjs` |
+| calibration configured but unmet closes the gate | reversible acts are applied best-effort with an uncertainty note (also when met only under a looser error limit than the act class allows) | `reader-admission-policy.sop` `reader.permit.unmet`, `reader.permit.over` |
+| placement `request-shape` (relation + other constraint) refuses | when the editor refuses a reading (partial or complete) the ladder runs: split (make placed, then change the made thing), without placement, theme only; a refused step is rolled back, the steps that ran are one undo group | `interpretation-policy.sop` `app.interpret.fallback` |
+| a family the binding table leaves unresolved (diagram `node`) fails without a kind word | read as its declared class (`w.diagram.node`) | `interpretation-policy.sop` `app.interpret.family` |
+| a key whose parameter appeared after the table was exported stays unbound; a class value needs a listed normalization | the deployed table is completed from the live native interfaces by the export's own rule (a parameter of the key's name on the family's source type); a parameter with a closed list takes the reader's class value | `declared-bindings.mjs` |
+
+The reply names each dropped role and why (`app.interpret.drop` wording) and offers undo; the trace carries
+`partialAdmission` (disclosed roles, defaults, fallback step, or the remaining fatal diagnostics). Not done: the
+`requireResult`/`selectorUnique` capability modes and the calendar `incomplete.coverage` guard are unchanged.
+
+Declarations added with it: chart kinds of the catalog drawn by `diagram.group.chart.make` with their layout and
+sample data when none is given (`execution-policy.sop` `app.execution.kindBinding`, seeds); drawing regions of the
+page (`drawing.object.make at=`: sides, corners, middle, and the background/foreground bands of the ground between the
+horizon and the foot of the page, `art.draw/act-rules.sop` region step 0).
 
 ## 6. Mechanical label conversion
 
