@@ -21,6 +21,12 @@
 # way from its drawing when mirrored; flipping it is mirror=horizontal.
 @native.art.draw.op.drawing.object.make.param.facing std.capability.parameter operation=$native.art.draw.op.drawing.object.make name="facing" kind=string enum="left" enum="right" enumClosed=true
 @native.art.draw.op.drawing.object.make.param.toward std.capability.parameter operation=$native.art.draw.op.drawing.object.make name="toward" kind=string
+# A person made posed, with an expression, traits and things worn (worlds/art.draw/figure-rules.sop): a pose, an
+# expression (or a feeling) or a trait by its name or one of its words in k.faces / k.feelings; wear: a k.wearables thing.
+@native.art.draw.op.drawing.object.make.param.pose std.capability.parameter operation=$native.art.draw.op.drawing.object.make name="pose" kind=string
+@native.art.draw.op.drawing.object.make.param.expression std.capability.parameter operation=$native.art.draw.op.drawing.object.make name="expression" kind=string
+@native.art.draw.op.drawing.object.make.param.trait std.capability.parameter operation=$native.art.draw.op.drawing.object.make name="trait" kind=string
+@native.art.draw.op.drawing.object.make.param.wear std.capability.parameter operation=$native.art.draw.op.drawing.object.make name="wear" kind=string
 @native.art.draw.op.drawing.object.make.param.at std.capability.parameter operation=$native.art.draw.op.drawing.object.make name="at" kind=string enum="top" enum="bottom" enum="left" enum="right" enum="center" enum="middle" enum="top_left" enum="top_right" enum="bottom_left" enum="bottom_right" enum="corner" enum="background" enum="foreground" enumClosed=true
 @native.art.draw.value.13 std.capability.arg name="enum" value=true
 @native.art.draw.value.14 std.capability.record entry=$native.art.draw.value.13
@@ -72,6 +78,10 @@
 @native.art.draw.op.drawing.catalog.make.param.sex std.capability.parameter operation=$native.art.draw.op.drawing.catalog.make name="sex" kind=string
 @native.art.draw.op.drawing.catalog.make.param.facing std.capability.parameter operation=$native.art.draw.op.drawing.catalog.make name="facing" kind=string enum="left" enum="right" enumClosed=true
 @native.art.draw.op.drawing.catalog.make.param.toward std.capability.parameter operation=$native.art.draw.op.drawing.catalog.make name="toward" kind=string
+@native.art.draw.op.drawing.catalog.make.param.pose std.capability.parameter operation=$native.art.draw.op.drawing.catalog.make name="pose" kind=string
+@native.art.draw.op.drawing.catalog.make.param.expression std.capability.parameter operation=$native.art.draw.op.drawing.catalog.make name="expression" kind=string
+@native.art.draw.op.drawing.catalog.make.param.trait std.capability.parameter operation=$native.art.draw.op.drawing.catalog.make name="trait" kind=string
+@native.art.draw.op.drawing.catalog.make.param.wear std.capability.parameter operation=$native.art.draw.op.drawing.catalog.make name="wear" kind=string
 @native.art.draw.value.57 std.capability.arg name="argument" value="name"
 @native.art.draw.value.58 std.capability.arg name="load" value="thing"
 @native.art.draw.value.59 std.capability.record entry=$native.art.draw.value.57 entry=$native.art.draw.value.58
@@ -317,6 +327,17 @@
 @native.art.draw.op.drawing.person.expression.param.id std.capability.parameter operation=$native.art.draw.op.drawing.person.expression name="id" kind=string required=true
 @native.art.draw.op.drawing.person.expression.param.expression std.capability.parameter operation=$native.art.draw.op.drawing.person.expression name="expression" kind=string required=true
 @native.art.draw.op.drawing.person.expression.metadata app.native.metadata operation=$native.art.draw.op.drawing.person.expression field=$native.art.draw.part.effect
+# A person takes a pose (k.faces.pose: sitting, waving, arms up), or holds a thing in its hand: a new thing of a kind, or a
+# thing on the page moved into the hand (worlds/art.draw/figure-rules.sop).
+@native.art.draw.op.drawing.person.pose std.capability.operation scope=$native.art.draw.scope name="drawing.person.pose" act=change on="art.draw.object" order=26 eligible=true
+@native.art.draw.op.drawing.person.pose.param.id std.capability.parameter operation=$native.art.draw.op.drawing.person.pose name="id" kind=string required=true
+@native.art.draw.op.drawing.person.pose.param.pose std.capability.parameter operation=$native.art.draw.op.drawing.person.pose name="pose" kind=string required=true
+@native.art.draw.op.drawing.person.pose.metadata app.native.metadata operation=$native.art.draw.op.drawing.person.pose field=$native.art.draw.part.effect
+@native.art.draw.op.drawing.person.hold std.capability.operation scope=$native.art.draw.scope name="drawing.person.hold" act=change on="art.draw.object" order=27 eligible=true
+@native.art.draw.op.drawing.person.hold.param.id std.capability.parameter operation=$native.art.draw.op.drawing.person.hold name="id" kind=string required=true
+@native.art.draw.op.drawing.person.hold.param.kind std.capability.parameter operation=$native.art.draw.op.drawing.person.hold name="kind" kind=string
+@native.art.draw.op.drawing.person.hold.param.thing std.capability.parameter operation=$native.art.draw.op.drawing.person.hold name="thing" kind=string
+@native.art.draw.op.drawing.person.hold.metadata app.native.metadata operation=$native.art.draw.op.drawing.person.hold field=$native.art.draw.part.effect
 # Poses, styles and writing (worlds/art.draw/style-rules.sop; the named looks are k.styles facts): a turn to an angle
 # (rotation, degrees clockwise) or by one (turn: degrees or a k.styles turn: upside_down, rotate_right, tilt), a mirror
 # (horizontal or vertical: mirrored again it is back; none: as drawn), a lean (skew), an opacity, an effect, a fill, an
@@ -329,6 +350,10 @@
 @native.art.draw.op.drawing.object.change.param.effect std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="effect" kind=string
 @native.art.draw.op.drawing.object.change.param.fill std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="fill" kind=string
 @native.art.draw.op.drawing.object.change.param.gradient std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="gradient" kind=string
+# A person's pose, expression and traits (worlds/art.draw/figure-rules.sop).
+@native.art.draw.op.drawing.object.change.param.pose std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="pose" kind=string
+@native.art.draw.op.drawing.object.change.param.expression std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="expression" kind=string
+@native.art.draw.op.drawing.object.change.param.trait std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="trait" kind=string
 @native.art.draw.op.drawing.object.change.param.outline std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="outline" kind=string
 @native.art.draw.op.drawing.object.change.param.stroke std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="stroke" kind=number min=0 max=40
 @native.art.draw.op.drawing.object.change.param.text std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="text" kind=string

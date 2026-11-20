@@ -46,6 +46,24 @@
 @ex.face.head ui.look.head face=$ex.face
 @ex.call app.act.call act=change thing=$ex.face attr=expression value=?e order=1
 @expression core.rule when=$ex.req when=$ex.face when=$ex.face.head then=$ex.call
+# The pose of the person's figure (a face drawn in the frame of a drawing), by the pose's name or one of its words.
+@avpose.req app.act.request operation="avatar.face.pose" pose=?w
+@avpose.face w.face.face style=?st
+@avpose.body ui.look.body face=$avpose.face
+@avpose.own k.faces.pose name=?w style=?st
+@avpose.call app.act.call act=change thing=$avpose.face attr=pose value=?w order=1
+@pose.own core.rule when=$avpose.req when=$avpose.face when=$avpose.body when=$avpose.own then=$avpose.call
+@avpose.word core.word text=?w means=?p of=k.faces.pose.name
+@avpose.wk k.faces.pose name=?p style=?st
+@avpose.wcall app.act.call act=change thing=$avpose.face attr=pose value=?p order=1
+@pose.word core.rule when=$avpose.req when=$avpose.face when=$avpose.body not=$avpose.own when=$avpose.word when=$avpose.wk then=$avpose.wcall
+@avpose.anyown k.faces.pose name=?w
+@avpose.anyword core.word text=?w of=k.faces.pose.name
+@avpose.no app.act.refuse reason=pose-not-known
+@pose.unknown core.rule when=$avpose.req not=$avpose.anyown not=$avpose.anyword then=$avpose.no
+@avpose.opt.k k.faces.pose name=?p style=figure
+@avpose.opt.o app.observe.option id=pose value=?p
+@avatar.option.pose core.rule when=$avpose.opt.k then=$avpose.opt.o
 @nm.req app.act.request operation="avatar.face.name" name=?n
 @nm.call app.act.call act=change thing=$ex.face attr=name value=?n order=1
 @name core.rule when=$nm.req when=$ex.face when=$ex.face.head then=$nm.call

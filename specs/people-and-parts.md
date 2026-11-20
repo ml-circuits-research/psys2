@@ -31,9 +31,32 @@ a group of editable parts. The Avatar is a particular case of a drawn person: on
   k.layouts outline; refused otherwise); `drawing.person.vary` (next seed: preset, outfit recomposed);
   `drawing.person.expression` (the face's expression; a face made for a thing); removing an object removes its looks.
 
+## The person as a controllable vector model (2026-11-20)
+- Knowledge (catalog 8c33bcf8, 87d8c1e4): k.faces skeleton of the figure (`k.faces.bone`: joint, parent, level;
+  `k.faces.part bone`: the bone a part moves with: limbs, sleeves, trouser legs, shoes, gloves split at the joints),
+  poses (`k.faces.pose` with the holding hand `hold_x`, `hold_y`; `k.faces.turn`: degrees per bone; words of
+  `k.faces.pose.name`), expressions smiling, laughing, crying (a tear: `k.faces.expression cheeks`), shocked, scared,
+  frowning with words, traits (`k.faces.trait` colours, `k.faces.trait.part` slots filled or emptied: ginger, blond,
+  bald, bearded, freckled, spectacled, skin tones ...), figure slots back (cape, cloak), neckwear (scarf, tie, bow tie),
+  hands (gloves, mittens), suit jacket, sandals; `w.face.face pose` (a mode, like `expression`).
+- `worlds/art.draw/figure-rules.sop`: a posed figure draws each part with a bone turned about its joint and its parent's
+  joint (`ui.draw.pose source part x y rotate n`, mirrored with the object's facing); names by name or word (an
+  expression also by a k.feelings feeling); make/catalog make with `pose`, `expression`, `trait`, `wear` (a thing worn or
+  a trait part replaces the preset's part of its slot: `ui.person.omit`); `drawing.object.change` with `pose`,
+  `expression`, `trait`; `drawing.person.pose {id, pose}`; `drawing.person.hold {id, kind | thing}` (a new thing of the
+  kind, a third of the person's size, at the hand of its pose; a standing person takes `holding`); refusals
+  pose-not-known, pose-needs-a-body, expression-not-known, expression-needs-a-face, trait-not-known,
+  trait-needs-a-person, garment-not-drawable, hold-needs-a-person. Observed: `pose` (standing when none), `expression`;
+  options `pose`, `trait`, `garment`.
+- Avatar (shared view): `ui.avatar/view-projection.sop` turns the figure's limbs in the face frame
+  (`ui.avatar.viewpose`); `avatar.face.pose {pose}`; the inspector's "Pose" control.
+
 ## Not yet
-- Poses (sitting, waving, holding): the figure's arms and legs are fixed in its variants; poses need joint positions
-  the garments follow (a skeleton in k.faces style figure), not separate drawings.
+- A seated or kicking figure keeps its box: its feet rise rather than its body dropping to the seat (no root shift in a
+  pose); a long coat or a dress does not follow the thighs. Holding at make time ("a girl holding a kite") needs a
+  `holds` parameter on make; a held thing is placed, not attached (moving the person leaves it).
+- Expression causes ("happy because ...") are not kept; a feeling without an expression of k.faces (shy, worried) is
+  refused rather than drawn from its own variants.
 - The reader's labels for part length, part shape, part variant and a person's age or sex as constraints (no key in
   the official inventory); `ui-people-parts-v1` labels what the inventory has. The bindings with `k.parts.name` and
   `drawing.part.add` are generated (training/sop-bert/export-structural-bindings.mjs) but not deployed.

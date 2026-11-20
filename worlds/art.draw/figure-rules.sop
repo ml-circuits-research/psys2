@@ -1,0 +1,314 @@
+# The drawn person as a controllable vector model (authored): poses, expressions, traits, garments and held things of
+# a person on the Drawing tab, the same model the Avatar tab shows (one person framed on the face). A person is two
+# looks (person-rules.sop): a face (style plain) and a figure (style figure: the body and clothes in the frame of the
+# drawing person). The knowledge says everything that varies: the skeleton of the figure and its poses (k.faces.bone,
+# k.faces.pose, k.faces.turn: how far each bone turns), the expressions and their words (k.faces.expression, core.word
+# of k.faces.expression.name), the feelings a face shows (k.feelings.feeling expression), the traits (k.faces.trait:
+# the colours a trait sets and the parts it adds or takes away) and what is worn where (k.wearables face_slot,
+# figure_slot). These rules only join a command to that knowledge and to the instance; no word, pose or garment is
+# named here.
+
+# --- Poses on the page -----------------------------------------------------------------------------------------------
+# A figure that holds a pose (w.face.face pose) draws each part with a bone turned about the joints of its bone and of
+# the bone it hangs from (a forearm with its upper arm): one ui.draw.pose per turn, the joint mapped onto the page as
+# the part itself is (the look's mount, the object's box, mirrored with the object), the outer joint first (n).
+@fgp.face w.face.face pose=?p style=?st
+@fgp.wp w.face.part face=$fgp.face
+@fgp.kp k.faces.part bone=?b
+@fgp.draw ui.draw.draw part=$fgp.wp source=$fgp.kp
+@fgp.m ui.draw.mount object=?id face=$fgp.face x=?mx y=?my size=?ms
+@fgp.o w.drawing.object code=?id x=?X y=?Y
+@fgp.ext ui.draw.boxscale object=?id sx=?osx sy=?osy
+@fgp.k ui.draw.xsign object=?id k=?k
+@fgp.turn k.faces.turn pose=?p style=?st bone=?b angle=?a
+@fgp.bone k.faces.bone style=?st name=?b x=?bx y=?by level=?l
+@fgp.f core.calc out=?f fn=div args=?ms args=100
+@fgp.bxf core.calc out=?bxf fn=mul args=?bx args=?f
+@fgp.byf core.calc out=?byf fn=mul args=?by args=?f
+@fgp.dx core.calc out=?dx fn=add args=?mx args=?bxf
+@fgp.dy core.calc out=?dy fn=add args=?my args=?byf
+@fgp.ux core.calc out=?ux fn=sub args=?dx args=50
+@fgp.uy core.calc out=?uy fn=sub args=?dy args=50
+@fgp.vx core.calc out=?vx fn=mul args=?ux args=?osx
+@fgp.vy core.calc out=?vy fn=mul args=?uy args=?osy
+@fgp.px core.calc out=?px fn=add args=?vx args=?X
+@fgp.py core.calc out=?py fn=add args=?vy args=?Y
+@fgp.r core.calc out=?r fn=mul args=?a args=?k
+@fgp.n1 core.calc out=?n1 fn=mul args=?l args=0.1
+@fgp.n core.calc out=?n fn=add args=?n1 args=8
+@fgp.out ui.draw.pose source=$fgp.kp part=$fgp.wp x=?px y=?py rotate=?r n=?n
+@figure.pose.own core.rule when=$fgp.face when=$fgp.wp when=$fgp.kp when=$fgp.draw when=$fgp.turn when=$fgp.bone when=$fgp.m when=$fgp.o when=$fgp.ext when=$fgp.k with=$fgp.f with=$fgp.bxf with=$fgp.byf with=$fgp.dx with=$fgp.dy with=$fgp.ux with=$fgp.uy with=$fgp.vx with=$fgp.vy with=$fgp.px with=$fgp.py with=$fgp.r with=$fgp.n1 with=$fgp.n then=$fgp.out
+# The turn of the bone a part's bone hangs from, about that bone's joint.
+@fgq.child k.faces.bone style=?st name=?cb parent=?b
+@fgq.kp k.faces.part bone=?cb
+@fgq.draw ui.draw.draw part=$fgp.wp source=$fgq.kp
+@fgq.out ui.draw.pose source=$fgq.kp part=$fgp.wp x=?px y=?py rotate=?r n=?n
+@figure.pose.parent core.rule when=$fgp.face when=$fgp.wp when=$fgq.kp when=$fgq.draw when=$fgq.child when=$fgp.turn when=$fgp.bone when=$fgp.m when=$fgp.o when=$fgp.ext when=$fgp.k with=$fgp.f with=$fgp.bxf with=$fgp.byf with=$fgp.dx with=$fgp.dy with=$fgp.ux with=$fgp.uy with=$fgp.vx with=$fgp.vy with=$fgp.px with=$fgp.py with=$fgp.r with=$fgp.n1 with=$fgp.n then=$fgq.out
+# Every object with a figure is observed with its pose (standing when it holds none), for a reader and an editor.
+@fgo.face w.face.face style=?st
+@fgo.frame k.faces.frame style=?st
+@fgo.o w.drawing.object code=?id look=$fgo.face
+@fgo.pface w.face.face style=?st pose=?p
+@fgo.po w.drawing.object code=?id look=$fgo.pface
+@fgo.posed.type core.type of=ui.draw.posed
+@fgo.posed.o ui.draw.posed object=?id pose=?p
+@figure.posed core.rule when=$fgo.pface when=$fgo.frame when=$fgo.po then=$fgo.posed.o
+@fgo.posed ui.draw.posed object=?id pose=?p
+@fgo.out app.observe.input id=?id key=pose value=?p
+@figure.observe.pose core.rule when=$fgo.posed then=$fgo.out
+@fgo.anyposed ui.draw.posed object=?id
+@fgo.stand app.observe.input id=?id key=pose value=standing
+@figure.observe.standing core.rule when=$fgo.face when=$fgo.frame when=$fgo.o not=$fgo.anyposed then=$fgo.stand
+@fgx.face w.face.face expression=?e
+@fgx.head ui.look.head face=$fgx.face
+@fgx.o w.drawing.object code=?id look=$fgx.face
+@fgx.out app.observe.input id=?id key=expression value=?e
+@figure.observe.expression core.rule when=$fgx.face when=$fgx.head when=$fgx.o then=$fgx.out
+# What an editor offers: the poses of the figure style.
+@fgu.p.k k.faces.pose name=?p style=figure
+@fgu.p.o app.observe.option id=pose value=?p
+@draw.option.pose core.rule when=$fgu.p.k then=$fgu.p.o
+@fgu.t.k k.faces.trait name=?t style=plain
+@fgu.t.o app.observe.option id=trait value=?t
+@draw.option.trait core.rule when=$fgu.t.k then=$fgu.t.o
+@fgu.w.k k.wearables.wearable name=?w figure_slot=?anys
+@fgu.w.o app.observe.option id=garment value=?w
+@draw.option.garment.figure core.rule when=$fgu.w.k then=$fgu.w.o
+@fgu.wf.k k.wearables.wearable name=?w face_slot=?anys
+@draw.option.garment.face core.rule when=$fgu.wf.k then=$fgu.w.o
+
+# --- The names a command gives --------------------------------------------------------------------------------------
+# A pose, an expression or a trait is named by its own name or by one of its words (core.word ... of=<the name key>);
+# an expression also by a feeling of k.feelings (its name or its words), which a face shows with its expression.
+@fgn.pose.type core.type of=ui.draw.posename
+@fgn.expr.type core.type of=ui.draw.expressionname
+@fgn.trait.type core.type of=ui.draw.traitname
+@fgn.p.req app.act.request pose=?w
+@fgn.p.own k.faces.pose name=?w style=figure
+@fgn.p.own.o ui.draw.posename word=?w pose=?w
+@name.pose.own core.rule when=$fgn.p.req when=$fgn.p.own then=$fgn.p.own.o
+@fgn.p.word core.word text=?w means=?p of=k.faces.pose.name
+@fgn.p.word.k k.faces.pose name=?p style=figure
+@fgn.p.word.o ui.draw.posename word=?w pose=?p
+@name.pose.word core.rule when=$fgn.p.req not=$fgn.p.own when=$fgn.p.word when=$fgn.p.word.k then=$fgn.p.word.o
+@fgn.e.req app.act.request expression=?w
+@fgn.e.own k.faces.expression name=?w style=plain
+@fgn.e.own.o ui.draw.expressionname word=?w expression=?w
+@name.expression.own core.rule when=$fgn.e.req when=$fgn.e.own then=$fgn.e.own.o
+@fgn.e.word core.word text=?w means=?e of=k.faces.expression.name
+@fgn.e.word.k k.faces.expression name=?e style=plain
+@fgn.e.word.o ui.draw.expressionname word=?w expression=?e
+@name.expression.word core.rule when=$fgn.e.req not=$fgn.e.own when=$fgn.e.word when=$fgn.e.word.k then=$fgn.e.word.o
+@fgn.e.feel k.feelings.feeling name=?w expression=?e
+@name.expression.feeling core.rule when=$fgn.e.req not=$fgn.e.own not=$fgn.e.word when=$fgn.e.feel when=$fgn.e.word.k then=$fgn.e.word.o
+@fgn.e.fword core.word text=?w means=?fe of=k.feelings.feeling.name
+@fgn.e.fword.k k.feelings.feeling name=?fe expression=?e
+@name.expression.feeling.word core.rule when=$fgn.e.req not=$fgn.e.own not=$fgn.e.word not=$fgn.e.feel when=$fgn.e.fword when=$fgn.e.fword.k when=$fgn.e.word.k then=$fgn.e.word.o
+@fgn.t.req app.act.request trait=?w
+@fgn.t.own k.faces.trait name=?w
+@fgn.t.own.o ui.draw.traitname word=?w trait=?w
+@name.trait.own core.rule when=$fgn.t.req when=$fgn.t.own then=$fgn.t.own.o
+@fgn.t.word core.word text=?w means=?t of=k.faces.trait.name
+@fgn.t.word.o ui.draw.traitname word=?w trait=?t
+@name.trait.word core.rule when=$fgn.t.req not=$fgn.t.own when=$fgn.t.word then=$fgn.t.word.o
+@fgn.p.none ui.draw.posename word=?w
+@fgn.p.refuse app.act.refuse reason=pose-not-known
+@pose.unknown core.rule when=$fgn.p.req not=$fgn.p.none then=$fgn.p.refuse
+@fgn.e.none ui.draw.expressionname word=?w
+@fgn.e.refuse app.act.refuse reason=expression-not-known
+@expression.name.unknown core.rule when=$fgn.e.req not=$fgn.e.none then=$fgn.e.refuse
+@fgn.t.none ui.draw.traitname word=?w
+@fgn.t.refuse app.act.refuse reason=trait-not-known
+@trait.unknown core.rule when=$fgn.t.req not=$fgn.t.none then=$fgn.t.refuse
+
+# --- Making a person with them ----------------------------------------------------------------------------------------
+# A person made with a pose, an expression, traits or things worn ("a boy sitting", "a smiling girl", "a bald man", "a
+# girl in a jacket") takes them on the look made in the same command (new.face, new.body), after the colours its seed
+# chose (person-rules.sop). A thing worn or a trait part replaces the preset's part of that slot (ui.person.omit).
+@fgm.fg ui.draw.figured kind=?k body=?bs
+@fgm.make app.act.request operation="drawing.object.make"
+@fgm.cat app.act.request operation="drawing.catalog.make"
+@fgm.pose ui.draw.posename pose=?p
+@fgm.pose.call app.act.call act=change thing=new.body attr=pose value=?p order=0.5
+@make.person.pose core.rule when=$fgm.make when=$fgm.fg when=$fgm.pose then=$fgm.pose.call
+@make.person.pose.catalog core.rule when=$fgm.cat when=$fgm.fg when=$fgm.pose then=$fgm.pose.call
+@fgm.expr ui.draw.expressionname expression=?e
+@fgm.expr.call app.act.call act=change thing=new.face attr=expression value=?e order=0.5
+@make.person.expression core.rule when=$fgm.make when=$fgm.fg when=$fgm.expr then=$fgm.expr.call
+@make.person.expression.catalog core.rule when=$fgm.cat when=$fgm.fg when=$fgm.expr then=$fgm.expr.call
+@fgm.tr ui.draw.traitname trait=?t
+@fgm.tr.hair k.faces.trait name=?t style=plain hair_colour=?c
+@fgm.tr.hair.call app.act.call act=change thing=new.face attr=hair_colour value=?c order=0.5
+@make.person.trait.hair core.rule when=$fgm.make when=$fgm.fg when=$fgm.tr when=$fgm.tr.hair then=$fgm.tr.hair.call
+@make.person.trait.hair.catalog core.rule when=$fgm.cat when=$fgm.fg when=$fgm.tr when=$fgm.tr.hair then=$fgm.tr.hair.call
+@fgm.tr.skin k.faces.trait name=?t style=plain skin=?c
+@fgm.tr.skin.call app.act.call act=change thing=new.face attr=skin value=?c order=0.5
+@make.person.trait.skin core.rule when=$fgm.make when=$fgm.fg when=$fgm.tr when=$fgm.tr.skin then=$fgm.tr.skin.call
+@fgm.tr.part k.faces.trait.part trait=?t style=plain slot=?s
+@fgm.tr.omit ui.person.omit face=new.face slot=?s
+@make.person.trait.omit core.rule when=$fgm.make when=$fgm.fg when=$fgm.tr when=$fgm.tr.part then=$fgm.tr.omit
+@make.person.trait.omit.catalog core.rule when=$fgm.cat when=$fgm.fg when=$fgm.tr when=$fgm.tr.part then=$fgm.tr.omit
+@fgm.tr.add k.faces.trait.part trait=?t style=plain slot=?s variant=?v
+@fgm.tr.kind w.face.slot slot=?s part=?kind
+@fgm.tr.add.call app.act.call act=make kind=?kind variant=?v face=new.face order=0.5
+@make.person.trait.part core.rule when=$fgm.make when=$fgm.fg when=$fgm.tr when=$fgm.tr.add when=$fgm.tr.kind then=$fgm.tr.add.call
+@make.person.trait.part.catalog core.rule when=$fgm.cat when=$fgm.fg when=$fgm.tr when=$fgm.tr.add when=$fgm.tr.kind then=$fgm.tr.add.call
+# Things worn: on the face (a hat, glasses) or on the figure (a jacket, a scarf), by k.wearables.
+@fgm.wear.req app.act.request wear=?w
+@fgm.wear.f k.wearables.wearable name=?w face_slot=?s face=?v
+@fgm.wear.fk w.face.slot slot=?s part=?kind
+@fgm.wear.f.omit ui.person.omit face=new.face slot=?s
+@fgm.wear.f.call app.act.call act=make kind=?kind variant=?v face=new.face order=0.5
+@make.person.wear.face.omit core.rule when=$fgm.wear.req when=$fgm.fg when=$fgm.wear.f then=$fgm.wear.f.omit
+@make.person.wear.face core.rule when=$fgm.wear.req when=$fgm.fg when=$fgm.wear.f when=$fgm.wear.fk then=$fgm.wear.f.call
+@fgm.wear.b k.wearables.wearable name=?w figure_slot=?s figure=?v
+@fgm.wear.b.omit ui.person.omit face=new.body slot=?s
+@fgm.wear.b.call app.act.call act=make kind=?kind variant=?v face=new.body order=0.5
+@make.person.wear.body.omit core.rule when=$fgm.wear.req when=$fgm.fg when=$fgm.wear.b then=$fgm.wear.b.omit
+@make.person.wear.body core.rule when=$fgm.wear.req when=$fgm.fg when=$fgm.wear.b when=$fgm.wear.fk then=$fgm.wear.b.call
+@fgm.wear.any.f k.wearables.wearable name=?w face_slot=?anyf
+@fgm.wear.any.b k.wearables.wearable name=?w figure_slot=?anyb
+@fgm.wear.refuse app.act.refuse reason=garment-not-drawable
+@make.person.wear.unknown core.rule when=$fgm.wear.req not=$fgm.wear.any.f not=$fgm.wear.any.b then=$fgm.wear.refuse
+@fgm.nofig.refuse app.act.refuse reason=garment-needs-a-person
+@fgm.wear.subject ui.draw.subject kind=?k
+@make.person.wear.nobody core.rule when=$fgm.wear.req when=$fgm.wear.subject not=$fgm.fg then=$fgm.nofig.refuse
+
+# --- Changing a person ----------------------------------------------------------------------------------------------
+# drawing.object.change with pose, expression or trait: each listed object takes it on its look of the style the
+# knowledge names (the figure for a pose; the face for an expression and a trait). drawing.person.pose and
+# drawing.person.hold address one person by its code.
+@fgc.item app.act.item param="ids" value=?id
+@fgc.chg app.act.request operation="drawing.object.change"
+@fgc.pose.op app.act.request operation="drawing.person.pose" id=?id
+@fgc.body.face w.face.face style=?bs
+@fgc.body.frame k.faces.frame style=?bs
+@fgc.body.o w.drawing.object code=?id look=$fgc.body.face
+@fgc.pose ui.draw.posename pose=?p
+@fgc.pose.k k.faces.pose name=?p style=?bs
+@fgc.pose.call app.act.call act=change thing=$fgc.body.face attr=pose value=?p order=1
+@change.person.pose core.rule when=$fgc.chg when=$fgc.item when=$fgc.body.face when=$fgc.body.frame when=$fgc.body.o when=$fgc.pose when=$fgc.pose.k then=$fgc.pose.call
+@person.pose core.rule when=$fgc.pose.op when=$fgc.body.face when=$fgc.body.frame when=$fgc.body.o when=$fgc.pose when=$fgc.pose.k then=$fgc.pose.call
+@fgc.nobody.o w.drawing.object code=?id
+@fgc.nobody.has ui.draw.haslook object=?id style=?hs
+@fgc.nobody.refuse app.act.refuse reason=pose-needs-a-body
+@fgc.pose.req app.act.request pose=?anyp
+@change.pose.nobody core.rule when=$fgc.chg when=$fgc.pose.req when=$fgc.item when=$fgc.nobody.o not=$fgc.nobody.has then=$fgc.nobody.refuse
+@person.pose.nobody core.rule when=$fgc.pose.op when=$fgc.nobody.o not=$fgc.nobody.has then=$fgc.nobody.refuse
+@fgc.head.face w.face.face style=plain
+@fgc.head.h ui.look.head face=$fgc.head.face
+@fgc.head.o w.drawing.object code=?id look=$fgc.head.face
+@fgc.expr ui.draw.expressionname expression=?e
+@fgc.expr.call app.act.call act=change thing=$fgc.head.face attr=expression value=?e order=1
+@change.person.expression core.rule when=$fgc.chg when=$fgc.item when=$fgc.head.face when=$fgc.head.h when=$fgc.head.o when=$fgc.expr then=$fgc.expr.call
+# A listed thing with no face yet that has a part bearing one (the sun) is given a face with the expression's parts.
+@fgc.nf.o w.drawing.object code=?id
+@fgc.nf.f ui.draw.form object=?id form=?k
+@fgc.nf.called k.parts.called of=?k also=face
+@fgc.nf.has ui.draw.haslook object=?id style=plain
+@fgc.nf.face app.act.call act=make kind=w.face.face style=plain expression=?e order=0.5 ref=new.face
+@fgc.nf.mouth.k k.faces.expression name=?e style=plain mouth=?mv
+@fgc.nf.mouth app.act.call act=make kind=w.face.mouth variant=?mv face=new.face order=0.6
+@fgc.nf.eyes.k k.faces.expression name=?e style=plain eyes=?ev
+@fgc.nf.eyes app.act.call act=make kind=w.face.eyes variant=?ev face=new.face order=0.6
+@fgc.nf.anyeyes k.faces.expression name=?e style=plain eyes=?anyEyes
+@fgc.nf.first k.faces.variant slot=eyes style=plain name=?fv core.select=first
+@fgc.nf.eyes.first app.act.call act=make kind=w.face.eyes variant=?fv face=new.face order=0.6
+@fgc.nf.look app.act.call act=change thing=$fgc.nf.o attr=look value=new.face order=0.7
+@change.thing.expression.face core.rule when=$fgc.chg when=$fgc.item when=$fgc.nf.o when=$fgc.nf.f when=$fgc.nf.called not=$fgc.nf.has when=$fgc.expr then=$fgc.nf.face
+@change.thing.expression.mouth core.rule when=$fgc.chg when=$fgc.item when=$fgc.nf.o when=$fgc.nf.f when=$fgc.nf.called not=$fgc.nf.has when=$fgc.expr when=$fgc.nf.mouth.k then=$fgc.nf.mouth
+@change.thing.expression.eyes core.rule when=$fgc.chg when=$fgc.item when=$fgc.nf.o when=$fgc.nf.f when=$fgc.nf.called not=$fgc.nf.has when=$fgc.expr when=$fgc.nf.eyes.k then=$fgc.nf.eyes
+@change.thing.expression.eyes.first core.rule when=$fgc.chg when=$fgc.item when=$fgc.nf.o when=$fgc.nf.f when=$fgc.nf.called not=$fgc.nf.has when=$fgc.expr not=$fgc.nf.anyeyes when=$fgc.nf.first then=$fgc.nf.eyes.first
+@change.thing.expression.look core.rule when=$fgc.chg when=$fgc.item when=$fgc.nf.o when=$fgc.nf.f when=$fgc.nf.called not=$fgc.nf.has when=$fgc.expr then=$fgc.nf.look
+@fgc.noface.refuse app.act.refuse reason=expression-needs-a-face
+@fgc.expr.req app.act.request expression=?anye
+@change.expression.noface core.rule when=$fgc.chg when=$fgc.expr.req when=$fgc.item when=$fgc.nf.o when=$fgc.nf.f not=$fgc.nf.has not=$fgc.nf.called then=$fgc.noface.refuse
+# Traits: the colours a trait sets on the face and the parts it adds (a part of the slot already there takes the
+# trait's variant) or takes away.
+@fgc.tr ui.draw.traitname trait=?t
+@fgc.tr.hair k.faces.trait name=?t style=plain hair_colour=?c
+@fgc.tr.hair.call app.act.call act=change thing=$fgc.head.face attr=hair_colour value=?c order=1
+@change.person.trait.hair core.rule when=$fgc.chg when=$fgc.item when=$fgc.head.face when=$fgc.head.h when=$fgc.head.o when=$fgc.tr when=$fgc.tr.hair then=$fgc.tr.hair.call
+@fgc.tr.skin k.faces.trait name=?t style=plain skin=?c
+@fgc.tr.skin.call app.act.call act=change thing=$fgc.head.face attr=skin value=?c order=1
+@change.person.trait.skin core.rule when=$fgc.chg when=$fgc.item when=$fgc.head.face when=$fgc.head.h when=$fgc.head.o when=$fgc.tr when=$fgc.tr.skin then=$fgc.tr.skin.call
+@fgc.tr.add k.faces.trait.part trait=?t style=plain slot=?s variant=?v
+@fgc.tr.add.o ui.face.add face=$fgc.head.face slot=?s variant=?v
+@change.person.trait.add core.rule when=$fgc.chg when=$fgc.item when=$fgc.head.face when=$fgc.head.h when=$fgc.head.o when=$fgc.tr when=$fgc.tr.add then=$fgc.tr.add.o
+@fgc.tr.rm k.faces.trait.part trait=?t style=plain slot=?s remove=true
+@fgc.tr.rm.o ui.face.edit face=$fgc.head.face slot=?s remove=true
+@change.person.trait.remove core.rule when=$fgc.chg when=$fgc.item when=$fgc.head.face when=$fgc.head.h when=$fgc.head.o when=$fgc.tr when=$fgc.tr.rm then=$fgc.tr.rm.o
+@fgc.tr.req app.act.request trait=?anyt
+@fgc.nohead.has ui.draw.haslook object=?id style=plain
+@fgc.nohead.refuse app.act.refuse reason=trait-needs-a-person
+@change.trait.noperson core.rule when=$fgc.chg when=$fgc.tr.req when=$fgc.item when=$fgc.nf.o not=$fgc.nohead.has then=$fgc.nohead.refuse
+
+# --- Holding a thing ------------------------------------------------------------------------------------------------
+# drawing.person.hold (id: the person; kind: what it holds): a new thing of that kind is made in the person's hand
+# (the hand of its pose, k.faces.pose holds, hold_x, hold_y, mapped onto the page as its figure is), a third of the
+# person's size, over it; a person standing (or holding no pose) takes the pose that holds (holding). A thing already
+# on the page (thing: its code) is moved into the hand instead.
+@fgh.req app.act.request operation="drawing.person.hold" id=?id
+@fgh.face w.face.face style=?bs
+@fgh.frame k.faces.frame style=?bs
+@fgh.o w.drawing.object code=?id look=$fgh.face x=?X y=?Y size=?S
+@fgh.pface w.face.face style=?bs pose=?cur
+@fgh.po w.drawing.object code=?id look=$fgh.pface
+@fgh.turned k.faces.turn pose=?cur style=?bs
+@fgh.keep.type core.type of=ui.draw.holdkept
+@fgh.pose.type core.type of=ui.draw.holdpose
+@fgh.keep.o ui.draw.holdkept object=?id pose=?cur
+@hold.pose.kept core.rule when=$fgh.req when=$fgh.pface when=$fgh.frame when=$fgh.po when=$fgh.turned then=$fgh.keep.o
+@fgh.kept ui.draw.holdkept object=?id pose=?cur
+@fgh.kept.o ui.draw.holdpose object=?id pose=?cur
+@hold.pose.keep core.rule when=$fgh.kept then=$fgh.kept.o
+@fgh.default.type core.type of=ui.draw.holddefault
+@fgh.default ui.draw.holddefault pose=holding
+@fgh.dk ui.draw.holddefault pose=?hp
+@fgh.new.o ui.draw.holdpose object=?id pose=?hp
+@fgh.anykept ui.draw.holdkept object=?id
+@hold.pose.default core.rule when=$fgh.req when=$fgh.face when=$fgh.frame when=$fgh.o when=$fgh.dk not=$fgh.anykept then=$fgh.new.o
+@fgh.hp ui.draw.holdpose object=?id pose=?hp
+@fgh.hpcall app.act.call act=change thing=$fgh.face attr=pose value=?hp order=1
+@hold.pose.set core.rule when=$fgh.req when=$fgh.face when=$fgh.frame when=$fgh.o when=$fgh.hp then=$fgh.hpcall
+@fgh.hk k.faces.pose name=?hp style=?bs hold_x=?hx hold_y=?hy
+@fgh.m ui.draw.mount object=?id face=$fgh.face x=?mx y=?my size=?ms
+@fgh.ext ui.draw.boxscale object=?id sx=?osx sy=?osy
+@fgh.f core.calc out=?f fn=div args=?ms args=100
+@fgh.hxf core.calc out=?hxf fn=mul args=?hx args=?f
+@fgh.hyf core.calc out=?hyf fn=mul args=?hy args=?f
+@fgh.dx core.calc out=?dx fn=add args=?mx args=?hxf
+@fgh.dy core.calc out=?dy fn=add args=?my args=?hyf
+@fgh.ux core.calc out=?ux fn=sub args=?dx args=50
+@fgh.uy core.calc out=?uy fn=sub args=?dy args=50
+@fgh.vx core.calc out=?vx fn=mul args=?ux args=?osx
+@fgh.vy core.calc out=?vy fn=mul args=?uy args=?osy
+@fgh.px core.calc out=?px fn=add args=?vx args=?X
+@fgh.py core.calc out=?py fn=add args=?vy args=?Y
+@fgh.s core.calc out=?hs fn=mul args=?S args=0.34
+@fgh.at.type core.type of=ui.draw.holdat
+@fgh.at.o ui.draw.holdat object=?id x=?px y=?py size=?hs
+@hold.at core.rule when=$fgh.req when=$fgh.face when=$fgh.frame when=$fgh.o when=$fgh.hp when=$fgh.hk when=$fgh.m when=$fgh.ext with=$fgh.f with=$fgh.hxf with=$fgh.hyf with=$fgh.dx with=$fgh.dy with=$fgh.ux with=$fgh.uy with=$fgh.vx with=$fgh.vy with=$fgh.px with=$fgh.py with=$fgh.s then=$fgh.at.o
+@fgh.kind app.act.request operation="drawing.person.hold" kind=?kind
+@fgh.known k.objects.object name=?kind
+@fgh.at ui.draw.holdat object=?id x=?px y=?py size=?hs
+@fgh.next ui.draw.next top=?top
+@fgh.nz core.calc out=?nz fn=add args=?top args=1
+@fgh.code core.calc out=?code fn=concat args=o args=?nz
+@fgh.make app.act.call act=make kind=w.drawing.object code=?code drawing=?kind x=?px y=?py size=?hs z=?nz order=2 ref=new.object
+@hold.make core.rule when=$fgh.req when=$fgh.kind when=$fgh.known when=$fgh.at when=$fgh.next with=$fgh.nz with=$fgh.code then=$fgh.make
+@fgh.unknown app.act.refuse reason=drawing-not-in-catalog
+@hold.make.unknown core.rule when=$fgh.req when=$fgh.kind not=$fgh.known then=$fgh.unknown
+@fgh.thing.req app.act.request operation="drawing.person.hold" thing=?tid
+@fgh.thing w.drawing.object code=?tid
+@fgh.tx app.act.call act=change thing=$fgh.thing attr=x value=?px order=2
+@fgh.ty app.act.call act=change thing=$fgh.thing attr=y value=?py order=3
+@fgh.tz core.calc out=?tz fn=add args=?top args=1
+@fgh.tzc app.act.call act=change thing=$fgh.thing attr=z value=?tz order=4
+@hold.thing.x core.rule when=$fgh.req when=$fgh.thing.req when=$fgh.thing when=$fgh.at then=$fgh.tx
+@hold.thing.y core.rule when=$fgh.req when=$fgh.thing.req when=$fgh.thing when=$fgh.at then=$fgh.ty
+@hold.thing.z core.rule when=$fgh.req when=$fgh.thing.req when=$fgh.thing when=$fgh.at when=$fgh.next with=$fgh.tz then=$fgh.tzc
+@fgh.nobody.o w.drawing.object code=?id
+@fgh.nobody.has ui.draw.haslook object=?id style=?hs
+@fgh.nobody.refuse app.act.refuse reason=hold-needs-a-person
+@hold.nobody core.rule when=$fgh.req when=$fgh.nobody.o not=$fgh.nobody.has then=$fgh.nobody.refuse

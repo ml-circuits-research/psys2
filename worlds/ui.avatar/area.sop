@@ -26,7 +26,7 @@
 # The avatar figure is a standing preference whose declared default is the robot (act-rules.sop: avatar.figure.default); the start applies it.
 @avatar.start app.area.command area=$avatar.area sop="@start avatar.figure.default"
 @avatar.offline app.area.offline area=$avatar.area prefix="plain-" prefix="figure-"
-@avatar.draw app.area.draw area=$avatar.area draw=ui.avatar.view fill=ui.avatar.fill point=ui.avatar.point orient=ui.avatar.orient select=slot
+@avatar.draw app.area.draw area=$avatar.area draw=ui.avatar.view fill=ui.avatar.fill point=ui.avatar.point orient=ui.avatar.orient select=slot pose=ui.avatar.viewpose
 
 # The interface's open choices, read from the same world.
 @avatar.choice.kinds app.area.choice area=$avatar.area input="avatar.characterKinds" type=k.faces.preset key=kind style=plain
@@ -59,3 +59,4 @@
 @avatar.control.colour app.area.control area=$avatar.area n=8 label="Colour" operation="avatar.part.change" param=colour options=colour target=selected except=face list=ids when=present
 @avatar.control.move app.area.control area=$avatar.area n=9 label="Move" operation="avatar.part.move" param=place options=place target=selected except=face list=ids when=present
 @avatar.control.remove app.area.control area=$avatar.area n=10 label="Delete" operation="avatar.parts.remove" target=selected except=face list=ids when=present
+@avatar.control.pose app.area.control area=$avatar.area n=11 label="Pose" operation="avatar.face.pose" param=pose options=pose

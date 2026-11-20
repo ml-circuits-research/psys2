@@ -47,3 +47,31 @@
 @vb.o2 core.calc out=?o2 fn=sub args=?o args=10
 @vb.out ui.avatar.view part=$vb.wp source=?src slot=?slot order=?o2 z=?z shape=?shape x=?x y=?y w=?w h=?h cx=?cx cy=?cy tx=?tx2 ty=?ty2 scale=?k2 side=?side
 @view.body core.rule when=$vb.face when=$vb.body when=$vb.frame when=$vb.hf when=$vb.hfh when=$vb.called when=$vb.kp when=$vb.hs when=$vb.wp when=$vb.d with=$vb.sx with=$vb.sy with=$vb.s with=$vb.hw2 with=$vb.hh2 with=$vb.hcx with=$vb.hcy with=$vb.pw2 with=$vb.ph2 with=$vb.pcx with=$vb.pcy with=$vb.ux with=$vb.uy with=$vb.mx with=$vb.my with=$vb.k2 with=$vb.tx1 with=$vb.ty1 with=$vb.tx2 with=$vb.ty2 with=$vb.o2 then=$vb.out
+
+# A posed figure (w.face.face pose, the Drawing tab's person model): each part with a bone (k.faces.part bone) is turned
+# about the joint of its bone and of the bone it hangs from (k.faces.turn of the pose), the joints mapped into the view
+# as the body is (ui.avatar.bodymap: the body frame placed under the face).
+@vb.map.type core.type of=ui.avatar.bodymap
+@vb.viewpose.type core.type of=ui.avatar.viewpose
+@vb.map.o ui.avatar.bodymap face=$vb.face mx=?mx my=?my s=?s
+@view.bodymap core.rule when=$vb.face when=$vb.body when=$vb.frame when=$vb.hf when=$vb.hfh when=$vb.called when=$vb.kp when=$vb.hs with=$vb.sx with=$vb.sy with=$vb.s with=$vb.hw2 with=$vb.hh2 with=$vb.hcx with=$vb.hcy with=$vb.pw2 with=$vb.ph2 with=$vb.pcx with=$vb.pcy with=$vb.ux with=$vb.uy with=$vb.mx with=$vb.my then=$vb.map.o
+@vpz.face w.face.face pose=?p style=?st
+@vpz.map ui.avatar.bodymap face=$vpz.face mx=?mx my=?my s=?s
+@vpz.wp w.face.part face=$vpz.face
+@vpz.kp k.faces.part bone=?b
+@vpz.v ui.avatar.view part=$vpz.wp source=$vpz.kp
+@vpz.turn k.faces.turn pose=?p style=?st bone=?b angle=?a
+@vpz.bone k.faces.bone style=?st name=?b x=?bx y=?by level=?l
+@vpz.dx core.calc out=?dx fn=sub args=?bx args=?mx
+@vpz.dy core.calc out=?dy fn=sub args=?by args=?my
+@vpz.px core.calc out=?px fn=div args=?dx args=?s
+@vpz.py core.calc out=?py fn=div args=?dy args=?s
+@vpz.n1 core.calc out=?n1 fn=mul args=?l args=0.1
+@vpz.n core.calc out=?n fn=add args=?n1 args=8
+@vpz.out ui.avatar.viewpose source=$vpz.kp part=$vpz.wp x=?px y=?py rotate=?a n=?n
+@view.pose.own core.rule when=$vpz.face when=$vpz.map when=$vpz.wp when=$vpz.kp when=$vpz.v when=$vpz.turn when=$vpz.bone with=$vpz.dx with=$vpz.dy with=$vpz.px with=$vpz.py with=$vpz.n1 with=$vpz.n then=$vpz.out
+@vpz.child k.faces.bone style=?st name=?cb parent=?b
+@vpz.ckp k.faces.part bone=?cb
+@vpz.cv ui.avatar.view part=$vpz.wp source=$vpz.ckp
+@vpz.cout ui.avatar.viewpose source=$vpz.ckp part=$vpz.wp x=?px y=?py rotate=?a n=?n
+@view.pose.parent core.rule when=$vpz.face when=$vpz.map when=$vpz.wp when=$vpz.ckp when=$vpz.cv when=$vpz.child when=$vpz.turn when=$vpz.bone with=$vpz.dx with=$vpz.dy with=$vpz.px with=$vpz.py with=$vpz.n1 with=$vpz.n then=$vpz.cout

@@ -47,111 +47,114 @@
 @pz.pp.part.req ui.person.parts face=?fr preset=?p part=?po
 @pz.pp.body ui.person.parts face=?fr preset=?p withBody=true
 @pz.pp.rep ui.person.replaced slot=?slot
+# A slot the command fills itself on that face (a thing worn, a trait: figure-rules.sop) is left to it.
+@pz.person.omit.type core.type of=ui.person.omit
+@pz.pp.omit ui.person.omit face=?fr slot=?slot
 @pz.pp.hair_back.k k.faces.preset name=?p hair_back=?v
 @pz.pp.hair_back.slot w.face.slot part=w.face.hair_back slot=?slot
 @pz.pp.hair_back.call app.act.call act=make kind=w.face.hair_back variant=?v face=?fr order=?po
-@pz.person.part.hair_back core.rule when=$pz.pp.part.req when=$pz.pp.hair_back.k when=$pz.pp.hair_back.slot not=$pz.pp.body then=$pz.pp.hair_back.call
-@pz.person.part.hair_back.body core.rule when=$pz.pp.part.req when=$pz.pp.body when=$pz.pp.hair_back.k when=$pz.pp.hair_back.slot not=$pz.pp.rep then=$pz.pp.hair_back.call
+@pz.person.part.hair_back core.rule when=$pz.pp.part.req when=$pz.pp.hair_back.k when=$pz.pp.hair_back.slot not=$pz.pp.body not=$pz.pp.omit then=$pz.pp.hair_back.call
+@pz.person.part.hair_back.body core.rule when=$pz.pp.part.req when=$pz.pp.body when=$pz.pp.hair_back.k when=$pz.pp.hair_back.slot not=$pz.pp.rep not=$pz.pp.omit then=$pz.pp.hair_back.call
 @pz.pp.shoulders.k k.faces.preset name=?p shoulders=?v
 @pz.pp.shoulders.slot w.face.slot part=w.face.shoulders slot=?slot
 @pz.pp.shoulders.call app.act.call act=make kind=w.face.shoulders variant=?v face=?fr order=?po
-@pz.person.part.shoulders core.rule when=$pz.pp.part.req when=$pz.pp.shoulders.k when=$pz.pp.shoulders.slot not=$pz.pp.body then=$pz.pp.shoulders.call
-@pz.person.part.shoulders.body core.rule when=$pz.pp.part.req when=$pz.pp.body when=$pz.pp.shoulders.k when=$pz.pp.shoulders.slot not=$pz.pp.rep then=$pz.pp.shoulders.call
+@pz.person.part.shoulders core.rule when=$pz.pp.part.req when=$pz.pp.shoulders.k when=$pz.pp.shoulders.slot not=$pz.pp.body not=$pz.pp.omit then=$pz.pp.shoulders.call
+@pz.person.part.shoulders.body core.rule when=$pz.pp.part.req when=$pz.pp.body when=$pz.pp.shoulders.k when=$pz.pp.shoulders.slot not=$pz.pp.rep not=$pz.pp.omit then=$pz.pp.shoulders.call
 @pz.pp.neck.k k.faces.preset name=?p neck=?v
 @pz.pp.neck.slot w.face.slot part=w.face.neck slot=?slot
 @pz.pp.neck.call app.act.call act=make kind=w.face.neck variant=?v face=?fr order=?po
-@pz.person.part.neck core.rule when=$pz.pp.part.req when=$pz.pp.neck.k when=$pz.pp.neck.slot not=$pz.pp.body then=$pz.pp.neck.call
-@pz.person.part.neck.body core.rule when=$pz.pp.part.req when=$pz.pp.body when=$pz.pp.neck.k when=$pz.pp.neck.slot not=$pz.pp.rep then=$pz.pp.neck.call
+@pz.person.part.neck core.rule when=$pz.pp.part.req when=$pz.pp.neck.k when=$pz.pp.neck.slot not=$pz.pp.body not=$pz.pp.omit then=$pz.pp.neck.call
+@pz.person.part.neck.body core.rule when=$pz.pp.part.req when=$pz.pp.body when=$pz.pp.neck.k when=$pz.pp.neck.slot not=$pz.pp.rep not=$pz.pp.omit then=$pz.pp.neck.call
 @pz.pp.ears.k k.faces.preset name=?p ears=?v
 @pz.pp.ears.slot w.face.slot part=w.face.ears slot=?slot
 @pz.pp.ears.call app.act.call act=make kind=w.face.ears variant=?v face=?fr order=?po
-@pz.person.part.ears core.rule when=$pz.pp.part.req when=$pz.pp.ears.k when=$pz.pp.ears.slot not=$pz.pp.body then=$pz.pp.ears.call
-@pz.person.part.ears.body core.rule when=$pz.pp.part.req when=$pz.pp.body when=$pz.pp.ears.k when=$pz.pp.ears.slot not=$pz.pp.rep then=$pz.pp.ears.call
+@pz.person.part.ears core.rule when=$pz.pp.part.req when=$pz.pp.ears.k when=$pz.pp.ears.slot not=$pz.pp.body not=$pz.pp.omit then=$pz.pp.ears.call
+@pz.person.part.ears.body core.rule when=$pz.pp.part.req when=$pz.pp.body when=$pz.pp.ears.k when=$pz.pp.ears.slot not=$pz.pp.rep not=$pz.pp.omit then=$pz.pp.ears.call
 @pz.pp.head.k k.faces.preset name=?p head=?v
 @pz.pp.head.slot w.face.slot part=w.face.head slot=?slot
 @pz.pp.head.call app.act.call act=make kind=w.face.head variant=?v face=?fr order=?po
-@pz.person.part.head core.rule when=$pz.pp.part.req when=$pz.pp.head.k when=$pz.pp.head.slot not=$pz.pp.body then=$pz.pp.head.call
-@pz.person.part.head.body core.rule when=$pz.pp.part.req when=$pz.pp.body when=$pz.pp.head.k when=$pz.pp.head.slot not=$pz.pp.rep then=$pz.pp.head.call
+@pz.person.part.head core.rule when=$pz.pp.part.req when=$pz.pp.head.k when=$pz.pp.head.slot not=$pz.pp.body not=$pz.pp.omit then=$pz.pp.head.call
+@pz.person.part.head.body core.rule when=$pz.pp.part.req when=$pz.pp.body when=$pz.pp.head.k when=$pz.pp.head.slot not=$pz.pp.rep not=$pz.pp.omit then=$pz.pp.head.call
 @pz.pp.cheeks.k k.faces.preset name=?p cheeks=?v
 @pz.pp.cheeks.slot w.face.slot part=w.face.cheeks slot=?slot
 @pz.pp.cheeks.call app.act.call act=make kind=w.face.cheeks variant=?v face=?fr order=?po
-@pz.person.part.cheeks core.rule when=$pz.pp.part.req when=$pz.pp.cheeks.k when=$pz.pp.cheeks.slot not=$pz.pp.body then=$pz.pp.cheeks.call
-@pz.person.part.cheeks.body core.rule when=$pz.pp.part.req when=$pz.pp.body when=$pz.pp.cheeks.k when=$pz.pp.cheeks.slot not=$pz.pp.rep then=$pz.pp.cheeks.call
+@pz.person.part.cheeks core.rule when=$pz.pp.part.req when=$pz.pp.cheeks.k when=$pz.pp.cheeks.slot not=$pz.pp.body not=$pz.pp.omit then=$pz.pp.cheeks.call
+@pz.person.part.cheeks.body core.rule when=$pz.pp.part.req when=$pz.pp.body when=$pz.pp.cheeks.k when=$pz.pp.cheeks.slot not=$pz.pp.rep not=$pz.pp.omit then=$pz.pp.cheeks.call
 @pz.pp.beard.k k.faces.preset name=?p beard=?v
 @pz.pp.beard.slot w.face.slot part=w.face.beard slot=?slot
 @pz.pp.beard.call app.act.call act=make kind=w.face.beard variant=?v face=?fr order=?po
-@pz.person.part.beard core.rule when=$pz.pp.part.req when=$pz.pp.beard.k when=$pz.pp.beard.slot not=$pz.pp.body then=$pz.pp.beard.call
-@pz.person.part.beard.body core.rule when=$pz.pp.part.req when=$pz.pp.body when=$pz.pp.beard.k when=$pz.pp.beard.slot not=$pz.pp.rep then=$pz.pp.beard.call
+@pz.person.part.beard core.rule when=$pz.pp.part.req when=$pz.pp.beard.k when=$pz.pp.beard.slot not=$pz.pp.body not=$pz.pp.omit then=$pz.pp.beard.call
+@pz.person.part.beard.body core.rule when=$pz.pp.part.req when=$pz.pp.body when=$pz.pp.beard.k when=$pz.pp.beard.slot not=$pz.pp.rep not=$pz.pp.omit then=$pz.pp.beard.call
 @pz.pp.mouth.k k.faces.preset name=?p mouth=?v
 @pz.pp.mouth.slot w.face.slot part=w.face.mouth slot=?slot
 @pz.pp.mouth.call app.act.call act=make kind=w.face.mouth variant=?v face=?fr order=?po
-@pz.person.part.mouth core.rule when=$pz.pp.part.req when=$pz.pp.mouth.k when=$pz.pp.mouth.slot not=$pz.pp.body then=$pz.pp.mouth.call
-@pz.person.part.mouth.body core.rule when=$pz.pp.part.req when=$pz.pp.body when=$pz.pp.mouth.k when=$pz.pp.mouth.slot not=$pz.pp.rep then=$pz.pp.mouth.call
+@pz.person.part.mouth core.rule when=$pz.pp.part.req when=$pz.pp.mouth.k when=$pz.pp.mouth.slot not=$pz.pp.body not=$pz.pp.omit then=$pz.pp.mouth.call
+@pz.person.part.mouth.body core.rule when=$pz.pp.part.req when=$pz.pp.body when=$pz.pp.mouth.k when=$pz.pp.mouth.slot not=$pz.pp.rep not=$pz.pp.omit then=$pz.pp.mouth.call
 @pz.pp.moustache.k k.faces.preset name=?p moustache=?v
 @pz.pp.moustache.slot w.face.slot part=w.face.moustache slot=?slot
 @pz.pp.moustache.call app.act.call act=make kind=w.face.moustache variant=?v face=?fr order=?po
-@pz.person.part.moustache core.rule when=$pz.pp.part.req when=$pz.pp.moustache.k when=$pz.pp.moustache.slot not=$pz.pp.body then=$pz.pp.moustache.call
-@pz.person.part.moustache.body core.rule when=$pz.pp.part.req when=$pz.pp.body when=$pz.pp.moustache.k when=$pz.pp.moustache.slot not=$pz.pp.rep then=$pz.pp.moustache.call
+@pz.person.part.moustache core.rule when=$pz.pp.part.req when=$pz.pp.moustache.k when=$pz.pp.moustache.slot not=$pz.pp.body not=$pz.pp.omit then=$pz.pp.moustache.call
+@pz.person.part.moustache.body core.rule when=$pz.pp.part.req when=$pz.pp.body when=$pz.pp.moustache.k when=$pz.pp.moustache.slot not=$pz.pp.rep not=$pz.pp.omit then=$pz.pp.moustache.call
 @pz.pp.nose.k k.faces.preset name=?p nose=?v
 @pz.pp.nose.slot w.face.slot part=w.face.nose slot=?slot
 @pz.pp.nose.call app.act.call act=make kind=w.face.nose variant=?v face=?fr order=?po
-@pz.person.part.nose core.rule when=$pz.pp.part.req when=$pz.pp.nose.k when=$pz.pp.nose.slot not=$pz.pp.body then=$pz.pp.nose.call
-@pz.person.part.nose.body core.rule when=$pz.pp.part.req when=$pz.pp.body when=$pz.pp.nose.k when=$pz.pp.nose.slot not=$pz.pp.rep then=$pz.pp.nose.call
+@pz.person.part.nose core.rule when=$pz.pp.part.req when=$pz.pp.nose.k when=$pz.pp.nose.slot not=$pz.pp.body not=$pz.pp.omit then=$pz.pp.nose.call
+@pz.person.part.nose.body core.rule when=$pz.pp.part.req when=$pz.pp.body when=$pz.pp.nose.k when=$pz.pp.nose.slot not=$pz.pp.rep not=$pz.pp.omit then=$pz.pp.nose.call
 @pz.pp.eyes.k k.faces.preset name=?p eyes=?v
 @pz.pp.eyes.slot w.face.slot part=w.face.eyes slot=?slot
 @pz.pp.eyes.call app.act.call act=make kind=w.face.eyes variant=?v face=?fr order=?po
-@pz.person.part.eyes core.rule when=$pz.pp.part.req when=$pz.pp.eyes.k when=$pz.pp.eyes.slot not=$pz.pp.body then=$pz.pp.eyes.call
-@pz.person.part.eyes.body core.rule when=$pz.pp.part.req when=$pz.pp.body when=$pz.pp.eyes.k when=$pz.pp.eyes.slot not=$pz.pp.rep then=$pz.pp.eyes.call
+@pz.person.part.eyes core.rule when=$pz.pp.part.req when=$pz.pp.eyes.k when=$pz.pp.eyes.slot not=$pz.pp.body not=$pz.pp.omit then=$pz.pp.eyes.call
+@pz.person.part.eyes.body core.rule when=$pz.pp.part.req when=$pz.pp.body when=$pz.pp.eyes.k when=$pz.pp.eyes.slot not=$pz.pp.rep not=$pz.pp.omit then=$pz.pp.eyes.call
 @pz.pp.eyebrows.k k.faces.preset name=?p eyebrows=?v
 @pz.pp.eyebrows.slot w.face.slot part=w.face.eyebrows slot=?slot
 @pz.pp.eyebrows.call app.act.call act=make kind=w.face.eyebrows variant=?v face=?fr order=?po
-@pz.person.part.eyebrows core.rule when=$pz.pp.part.req when=$pz.pp.eyebrows.k when=$pz.pp.eyebrows.slot not=$pz.pp.body then=$pz.pp.eyebrows.call
-@pz.person.part.eyebrows.body core.rule when=$pz.pp.part.req when=$pz.pp.body when=$pz.pp.eyebrows.k when=$pz.pp.eyebrows.slot not=$pz.pp.rep then=$pz.pp.eyebrows.call
+@pz.person.part.eyebrows core.rule when=$pz.pp.part.req when=$pz.pp.eyebrows.k when=$pz.pp.eyebrows.slot not=$pz.pp.body not=$pz.pp.omit then=$pz.pp.eyebrows.call
+@pz.person.part.eyebrows.body core.rule when=$pz.pp.part.req when=$pz.pp.body when=$pz.pp.eyebrows.k when=$pz.pp.eyebrows.slot not=$pz.pp.rep not=$pz.pp.omit then=$pz.pp.eyebrows.call
 @pz.pp.glasses.k k.faces.preset name=?p glasses=?v
 @pz.pp.glasses.slot w.face.slot part=w.face.glasses slot=?slot
 @pz.pp.glasses.call app.act.call act=make kind=w.face.glasses variant=?v face=?fr order=?po
-@pz.person.part.glasses core.rule when=$pz.pp.part.req when=$pz.pp.glasses.k when=$pz.pp.glasses.slot not=$pz.pp.body then=$pz.pp.glasses.call
-@pz.person.part.glasses.body core.rule when=$pz.pp.part.req when=$pz.pp.body when=$pz.pp.glasses.k when=$pz.pp.glasses.slot not=$pz.pp.rep then=$pz.pp.glasses.call
+@pz.person.part.glasses core.rule when=$pz.pp.part.req when=$pz.pp.glasses.k when=$pz.pp.glasses.slot not=$pz.pp.body not=$pz.pp.omit then=$pz.pp.glasses.call
+@pz.person.part.glasses.body core.rule when=$pz.pp.part.req when=$pz.pp.body when=$pz.pp.glasses.k when=$pz.pp.glasses.slot not=$pz.pp.rep not=$pz.pp.omit then=$pz.pp.glasses.call
 @pz.pp.hair_front.k k.faces.preset name=?p hair_front=?v
 @pz.pp.hair_front.slot w.face.slot part=w.face.hair_front slot=?slot
 @pz.pp.hair_front.call app.act.call act=make kind=w.face.hair_front variant=?v face=?fr order=?po
-@pz.person.part.hair_front core.rule when=$pz.pp.part.req when=$pz.pp.hair_front.k when=$pz.pp.hair_front.slot not=$pz.pp.body then=$pz.pp.hair_front.call
-@pz.person.part.hair_front.body core.rule when=$pz.pp.part.req when=$pz.pp.body when=$pz.pp.hair_front.k when=$pz.pp.hair_front.slot not=$pz.pp.rep then=$pz.pp.hair_front.call
+@pz.person.part.hair_front core.rule when=$pz.pp.part.req when=$pz.pp.hair_front.k when=$pz.pp.hair_front.slot not=$pz.pp.body not=$pz.pp.omit then=$pz.pp.hair_front.call
+@pz.person.part.hair_front.body core.rule when=$pz.pp.part.req when=$pz.pp.body when=$pz.pp.hair_front.k when=$pz.pp.hair_front.slot not=$pz.pp.rep not=$pz.pp.omit then=$pz.pp.hair_front.call
 @pz.pp.earrings.k k.faces.preset name=?p earrings=?v
 @pz.pp.earrings.slot w.face.slot part=w.face.earrings slot=?slot
 @pz.pp.earrings.call app.act.call act=make kind=w.face.earrings variant=?v face=?fr order=?po
-@pz.person.part.earrings core.rule when=$pz.pp.part.req when=$pz.pp.earrings.k when=$pz.pp.earrings.slot not=$pz.pp.body then=$pz.pp.earrings.call
-@pz.person.part.earrings.body core.rule when=$pz.pp.part.req when=$pz.pp.body when=$pz.pp.earrings.k when=$pz.pp.earrings.slot not=$pz.pp.rep then=$pz.pp.earrings.call
+@pz.person.part.earrings core.rule when=$pz.pp.part.req when=$pz.pp.earrings.k when=$pz.pp.earrings.slot not=$pz.pp.body not=$pz.pp.omit then=$pz.pp.earrings.call
+@pz.person.part.earrings.body core.rule when=$pz.pp.part.req when=$pz.pp.body when=$pz.pp.earrings.k when=$pz.pp.earrings.slot not=$pz.pp.rep not=$pz.pp.omit then=$pz.pp.earrings.call
 @pz.pp.hat.k k.faces.preset name=?p hat=?v
 @pz.pp.hat.slot w.face.slot part=w.face.hat slot=?slot
 @pz.pp.hat.call app.act.call act=make kind=w.face.hat variant=?v face=?fr order=?po
-@pz.person.part.hat core.rule when=$pz.pp.part.req when=$pz.pp.hat.k when=$pz.pp.hat.slot not=$pz.pp.body then=$pz.pp.hat.call
-@pz.person.part.hat.body core.rule when=$pz.pp.part.req when=$pz.pp.body when=$pz.pp.hat.k when=$pz.pp.hat.slot not=$pz.pp.rep then=$pz.pp.hat.call
+@pz.person.part.hat core.rule when=$pz.pp.part.req when=$pz.pp.hat.k when=$pz.pp.hat.slot not=$pz.pp.body not=$pz.pp.omit then=$pz.pp.hat.call
+@pz.person.part.hat.body core.rule when=$pz.pp.part.req when=$pz.pp.body when=$pz.pp.hat.k when=$pz.pp.hat.slot not=$pz.pp.rep not=$pz.pp.omit then=$pz.pp.hat.call
 @pz.pp.body.k k.faces.preset name=?p body=?v
 @pz.pp.body.slot w.face.slot part=w.face.body slot=?slot
 @pz.pp.body.call app.act.call act=make kind=w.face.body variant=?v face=?fr order=?po
-@pz.person.part.body core.rule when=$pz.pp.part.req when=$pz.pp.body.k when=$pz.pp.body.slot not=$pz.pp.body then=$pz.pp.body.call
-@pz.person.part.body.body core.rule when=$pz.pp.part.req when=$pz.pp.body when=$pz.pp.body.k when=$pz.pp.body.slot not=$pz.pp.rep then=$pz.pp.body.call
+@pz.person.part.body core.rule when=$pz.pp.part.req when=$pz.pp.body.k when=$pz.pp.body.slot not=$pz.pp.body not=$pz.pp.omit then=$pz.pp.body.call
+@pz.person.part.body.body core.rule when=$pz.pp.part.req when=$pz.pp.body when=$pz.pp.body.k when=$pz.pp.body.slot not=$pz.pp.rep not=$pz.pp.omit then=$pz.pp.body.call
 @pz.pp.bottom.k k.faces.preset name=?p bottom=?v
 @pz.pp.bottom.slot w.face.slot part=w.face.bottom slot=?slot
 @pz.pp.bottom.call app.act.call act=make kind=w.face.bottom variant=?v face=?fr order=?po
-@pz.person.part.bottom core.rule when=$pz.pp.part.req when=$pz.pp.bottom.k when=$pz.pp.bottom.slot not=$pz.pp.body then=$pz.pp.bottom.call
-@pz.person.part.bottom.body core.rule when=$pz.pp.part.req when=$pz.pp.body when=$pz.pp.bottom.k when=$pz.pp.bottom.slot not=$pz.pp.rep then=$pz.pp.bottom.call
+@pz.person.part.bottom core.rule when=$pz.pp.part.req when=$pz.pp.bottom.k when=$pz.pp.bottom.slot not=$pz.pp.body not=$pz.pp.omit then=$pz.pp.bottom.call
+@pz.person.part.bottom.body core.rule when=$pz.pp.part.req when=$pz.pp.body when=$pz.pp.bottom.k when=$pz.pp.bottom.slot not=$pz.pp.rep not=$pz.pp.omit then=$pz.pp.bottom.call
 @pz.pp.shoes.k k.faces.preset name=?p shoes=?v
 @pz.pp.shoes.slot w.face.slot part=w.face.shoes slot=?slot
 @pz.pp.shoes.call app.act.call act=make kind=w.face.shoes variant=?v face=?fr order=?po
-@pz.person.part.shoes core.rule when=$pz.pp.part.req when=$pz.pp.shoes.k when=$pz.pp.shoes.slot not=$pz.pp.body then=$pz.pp.shoes.call
-@pz.person.part.shoes.body core.rule when=$pz.pp.part.req when=$pz.pp.body when=$pz.pp.shoes.k when=$pz.pp.shoes.slot not=$pz.pp.rep then=$pz.pp.shoes.call
+@pz.person.part.shoes core.rule when=$pz.pp.part.req when=$pz.pp.shoes.k when=$pz.pp.shoes.slot not=$pz.pp.body not=$pz.pp.omit then=$pz.pp.shoes.call
+@pz.person.part.shoes.body core.rule when=$pz.pp.part.req when=$pz.pp.body when=$pz.pp.shoes.k when=$pz.pp.shoes.slot not=$pz.pp.rep not=$pz.pp.omit then=$pz.pp.shoes.call
 @pz.pp.top.k k.faces.preset name=?p top=?v
 @pz.pp.top.slot w.face.slot part=w.face.top slot=?slot
 @pz.pp.top.call app.act.call act=make kind=w.face.top variant=?v face=?fr order=?po
-@pz.person.part.top core.rule when=$pz.pp.part.req when=$pz.pp.top.k when=$pz.pp.top.slot not=$pz.pp.body then=$pz.pp.top.call
-@pz.person.part.top.body core.rule when=$pz.pp.part.req when=$pz.pp.body when=$pz.pp.top.k when=$pz.pp.top.slot not=$pz.pp.rep then=$pz.pp.top.call
+@pz.person.part.top core.rule when=$pz.pp.part.req when=$pz.pp.top.k when=$pz.pp.top.slot not=$pz.pp.body not=$pz.pp.omit then=$pz.pp.top.call
+@pz.person.part.top.body core.rule when=$pz.pp.part.req when=$pz.pp.body when=$pz.pp.top.k when=$pz.pp.top.slot not=$pz.pp.rep not=$pz.pp.omit then=$pz.pp.top.call
 @pz.pp.coat.k k.faces.preset name=?p coat=?v
 @pz.pp.coat.slot w.face.slot part=w.face.coat slot=?slot
 @pz.pp.coat.call app.act.call act=make kind=w.face.coat variant=?v face=?fr order=?po
-@pz.person.part.coat core.rule when=$pz.pp.part.req when=$pz.pp.coat.k when=$pz.pp.coat.slot not=$pz.pp.body then=$pz.pp.coat.call
-@pz.person.part.coat.body core.rule when=$pz.pp.part.req when=$pz.pp.body when=$pz.pp.coat.k when=$pz.pp.coat.slot not=$pz.pp.rep then=$pz.pp.coat.call
+@pz.person.part.coat core.rule when=$pz.pp.part.req when=$pz.pp.coat.k when=$pz.pp.coat.slot not=$pz.pp.body not=$pz.pp.omit then=$pz.pp.coat.call
+@pz.person.part.coat.body core.rule when=$pz.pp.part.req when=$pz.pp.body when=$pz.pp.coat.k when=$pz.pp.coat.slot not=$pz.pp.rep not=$pz.pp.omit then=$pz.pp.coat.call
 
 # Which preset: those of the style that suit the person's age and sex (a tab states each trait, or `any` when the
 # person has none: a person of no stated age takes a preset of any age), counted, and the one at the person's seed

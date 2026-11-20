@@ -1393,13 +1393,14 @@
 # expression of k.faces on the object's face (its mouth, eyebrows and eyes drawn as the expression's while it is set; the
 # look projection draws the override). A thing with no face yet that bears one is given a face with the expression's
 # mouth and eyes.
-@ex2.req app.act.request operation="drawing.person.expression" id=?id expression=?e
+@ex2.req app.act.request operation="drawing.person.expression" id=?id
+@ex2.name ui.draw.expressionname expression=?e
 @ex2.face w.face.face style=?st
 @ex2.head ui.look.head face=$ex2.face
 @ex2.o w.drawing.object code=?id look=$ex2.face
 @ex2.k k.faces.expression name=?e style=?st
 @ex2.call app.act.call act=change thing=$ex2.face attr=expression value=?e order=1
-@person.expression core.rule when=$ex2.req when=$ex2.face when=$ex2.head when=$ex2.o when=$ex2.k then=$ex2.call
+@person.expression core.rule when=$ex2.req when=$ex2.name when=$ex2.face when=$ex2.head when=$ex2.o when=$ex2.k then=$ex2.call
 @ex2.n.o w.drawing.object code=?id
 @ex2.n.f ui.draw.form object=?id form=?k
 @ex2.n.called k.parts.called of=?k also=face
@@ -1416,14 +1417,12 @@
 @ex2.n.first k.faces.variant slot=eyes style=?hs name=?fv core.select=first
 @ex2.n.eyes.first app.act.call act=make kind=w.face.eyes variant=?fv face=new.face order=0.6
 @ex2.n.look app.act.call act=change thing=$ex2.n.o attr=look value=new.face order=0.7
-@thing.expression.face core.rule when=$ex2.req when=$ex2.n.o when=$ex2.n.f when=$ex2.n.called when=$ex2.n.head not=$ex2.n.noframe not=$ex2.n.has when=$ex2.n.k then=$ex2.n.face
-@thing.expression.mouth core.rule when=$ex2.req when=$ex2.n.o when=$ex2.n.f when=$ex2.n.called when=$ex2.n.head not=$ex2.n.noframe not=$ex2.n.has when=$ex2.n.mouth.k then=$ex2.n.mouth
-@thing.expression.eyes core.rule when=$ex2.req when=$ex2.n.o when=$ex2.n.f when=$ex2.n.called when=$ex2.n.head not=$ex2.n.noframe not=$ex2.n.has when=$ex2.n.eyes.k then=$ex2.n.eyes
-@thing.expression.eyes.first core.rule when=$ex2.req when=$ex2.n.o when=$ex2.n.f when=$ex2.n.called when=$ex2.n.head not=$ex2.n.noframe not=$ex2.n.has when=$ex2.n.k not=$ex2.n.anyeyes when=$ex2.n.first then=$ex2.n.eyes.first
-@thing.expression.look core.rule when=$ex2.req when=$ex2.n.o when=$ex2.n.f when=$ex2.n.called when=$ex2.n.head not=$ex2.n.noframe not=$ex2.n.has when=$ex2.n.k then=$ex2.n.look
-@ex2.unknown k.faces.expression name=?e
-@ex2.no app.act.refuse reason=expression-not-known
-@expression.unknown core.rule when=$ex2.req not=$ex2.unknown then=$ex2.no
+@thing.expression.face core.rule when=$ex2.req when=$ex2.name when=$ex2.n.o when=$ex2.n.f when=$ex2.n.called when=$ex2.n.head not=$ex2.n.noframe not=$ex2.n.has when=$ex2.n.k then=$ex2.n.face
+@thing.expression.mouth core.rule when=$ex2.req when=$ex2.name when=$ex2.n.o when=$ex2.n.f when=$ex2.n.called when=$ex2.n.head not=$ex2.n.noframe not=$ex2.n.has when=$ex2.n.mouth.k then=$ex2.n.mouth
+@thing.expression.eyes core.rule when=$ex2.req when=$ex2.name when=$ex2.n.o when=$ex2.n.f when=$ex2.n.called when=$ex2.n.head not=$ex2.n.noframe not=$ex2.n.has when=$ex2.n.eyes.k then=$ex2.n.eyes
+@thing.expression.eyes.first core.rule when=$ex2.req when=$ex2.name when=$ex2.n.o when=$ex2.n.f when=$ex2.n.called when=$ex2.n.head not=$ex2.n.noframe not=$ex2.n.has when=$ex2.n.k not=$ex2.n.anyeyes when=$ex2.n.first then=$ex2.n.eyes.first
+@thing.expression.look core.rule when=$ex2.req when=$ex2.name when=$ex2.n.o when=$ex2.n.f when=$ex2.n.called when=$ex2.n.head not=$ex2.n.noframe not=$ex2.n.has when=$ex2.n.k then=$ex2.n.look
+# An expression no word, expression or feeling names is refused (figure-rules.sop: expression-not-known).
 @opx.k k.faces.expression name=?e style=plain
 @opx.o app.observe.option id=expression value=?e
 @draw.option.expression core.rule when=$opx.k then=$opx.o

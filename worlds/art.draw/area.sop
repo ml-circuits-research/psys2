@@ -19,7 +19,7 @@
 @area.field.type core.type of=app.area.field
 @area.lookup.type core.type of=app.area.lookup
 
-@drawing.area app.area world=art.draw instance=w.drawing instance=w.face knowledge=k.colours knowledge=k.faces knowledge=k.wearables knowledge=k.parts knowledge=k.styles scope="drawing.object-lifecycle" frame.w=1000 frame.h=700 spatial=true
+@drawing.area app.area world=art.draw instance=w.drawing instance=w.face knowledge=k.colours knowledge=k.faces knowledge=k.wearables knowledge=k.parts knowledge=k.styles knowledge=k.feelings scope="drawing.object-lifecycle" frame.w=1000 frame.h=700 spatial=true
 @area.subset.type core.type of=app.area.subset
 @drawing.subset.faces app.area.subset area=$drawing.area world=k.faces prefix="plain-" prefix="figure-"
 @drawing.subset.parts app.area.subset area=$drawing.area world=k.parts prefix="names" prefix="psys2" strict=true
@@ -28,6 +28,9 @@
 @drawing.rules.2 app.area.rules area=$drawing.area file="act-rules.sop" n=2
 @drawing.rules.lookedits app.area.rules area=$drawing.area file="look-rules.sop" n=7
 @drawing.rules.people app.area.rules area=$drawing.area file="person-rules.sop" n=8
+# The person as a controllable model: poses on the page, and the commands that pose, dress, give traits and expressions
+# and put things in a hand (figure-rules.sop; knowledge in k.faces, k.feelings and k.wearables).
+@drawing.rules.figure app.area.rules area=$drawing.area file="figure-rules.sop" n=11
 # Poses, styles, writing and the filter of the whole picture (k.styles: effects, fills, typefaces, frames, filters, turns).
 @drawing.rules.styles app.area.rules area=$drawing.area file="style-projection.sop" n=9
 @drawing.rules.styleacts app.area.rules area=$drawing.area file="style-rules.sop" n=10
@@ -52,3 +55,8 @@
 @drawing.field.move.y app.area.field control=$drawing.control.move n=2 param=y label="y" input=number
 @drawing.control.remove app.area.control area=$drawing.area n=3 label="Delete" operation="drawing.object.remove" target=selected list=ids when=present
 @drawing.control.clear app.area.control area=$drawing.area n=4 label="Clear drawing" operation="drawing.page.clear"
+# A selected person: its pose, expression, a trait, a thing to wear (figure-rules.sop; the options are the knowledge's).
+@drawing.control.pose app.area.control area=$drawing.area n=5 label="Pose" operation="drawing.person.pose" param=pose options=pose target=selected list=id when=present
+@drawing.control.expression app.area.control area=$drawing.area n=6 label="Expression" operation="drawing.object.change" param=expression options=expression target=selected list=ids when=present
+@drawing.control.trait app.area.control area=$drawing.area n=7 label="Trait" operation="drawing.object.change" param=trait options=trait target=selected list=ids when=present
+@drawing.control.garment app.area.control area=$drawing.area n=8 label="Wear" operation="drawing.part.add" param=kind options=garment target=selected list=id when=present

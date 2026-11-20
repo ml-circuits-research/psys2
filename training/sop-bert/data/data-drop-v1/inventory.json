@@ -2,8 +2,91 @@
  "drawing": {
   "drawn": {
    "keys": {
-    "facing": {"head": "class", "concept": "facing", "values": ["left", "right"],
-               "src": "art.draw facing (drawing.object.make / catalog.make / object.change {facing}): the side a drawn thing faces"}
+    "facing": {
+     "head": "class",
+     "concept": "facing",
+     "values": [
+      "left",
+      "right"
+     ],
+     "src": "art.draw facing (drawing.object.make / catalog.make / object.change {facing}): the side a drawn thing faces"
+    },
+    "expression": {
+     "head": "class",
+     "concept": "expression",
+     "values": [
+      "angry",
+      "crying",
+      "frowning",
+      "happy",
+      "laughing",
+      "sad",
+      "scared",
+      "shocked",
+      "sleepy",
+      "smiling",
+      "surprised",
+      "talking",
+      "wink"
+     ],
+     "src": "art.draw expression (drawing.object.make / catalog.make / object.change {expression}, drawing.person.expression): a k.faces expression, or a word or k.feelings feeling that names one (figure-rules.sop)"
+    },
+    "pose": {
+     "head": "class",
+     "concept": "pose",
+     "values": [
+      "arms up",
+      "clapping",
+      "cross legged",
+      "dancing",
+      "hands on hips",
+      "holding",
+      "jumping",
+      "kicking",
+      "pointing",
+      "reaching up",
+      "running",
+      "sitting",
+      "standing",
+      "walking",
+      "waving"
+     ],
+     "src": "art.draw pose (drawing.object.make / catalog.make / object.change {pose}, drawing.person.pose): a k.faces pose of the figure (figure-rules.sop)"
+    },
+    "trait": {
+     "head": "class",
+     "concept": "trait",
+     "values": [
+      "bald",
+      "beard and moustache",
+      "bearded",
+      "blond",
+      "brown-haired",
+      "brown-skinned",
+      "curly-haired",
+      "dark-haired",
+      "dark-skinned",
+      "freckled",
+      "ginger",
+      "grey-haired",
+      "light-skinned",
+      "long-haired",
+      "mohawk",
+      "moustached",
+      "olive-skinned",
+      "pale-skinned",
+      "ponytail",
+      "short-haired",
+      "spectacled",
+      "tanned"
+     ],
+     "src": "art.draw trait (drawing.object.make / catalog.make / object.change {trait}): a k.faces trait (colours set, parts added or taken away)"
+    },
+    "wear": {
+     "head": "candidate",
+     "concept": "garment",
+     "src": "art.draw wear (drawing.object.make / catalog.make {wear}): a k.wearables thing worn by the person made"
+    }
    }
   }
  }

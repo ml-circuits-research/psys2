@@ -56,6 +56,10 @@
 @native.ui.avatar.value.54 std.capability.record entry=$native.ui.avatar.value.48 entry=$native.ui.avatar.value.53
 @native.ui.avatar.value.55 std.capability.arg name="intent" value=$native.ui.avatar.value.54
 @native.ui.avatar.op.avatar.face.expression.metadata app.native.metadata operation=$native.ui.avatar.op.avatar.face.expression field=$native.ui.avatar.value.47 field=$native.ui.avatar.value.55
+# The person's pose (k.faces.pose of the figure: arms up, waving, hands on hips), the Drawing tab's person model
+# (worlds/ui.avatar/act-rules.sop; the view turns the figure's limbs, view-projection.sop).
+@native.ui.avatar.op.avatar.face.pose std.capability.operation scope=$native.ui.avatar.scope name="avatar.face.pose" act=change on="ui.avatar.face" order=19 eligible=true
+@native.ui.avatar.op.avatar.face.pose.param.pose std.capability.parameter operation=$native.ui.avatar.op.avatar.face.pose name="pose" kind=string required=true
 @native.ui.avatar.op.avatar.face.name std.capability.operation scope=$native.ui.avatar.scope name="avatar.face.name" act=change on="ui.avatar.face" order=3 eligible=true
 @native.ui.avatar.op.avatar.face.name.param.id std.capability.parameter operation=$native.ui.avatar.op.avatar.face.name name="id" kind=string enum="face" enumClosed=true default="face"
 @native.ui.avatar.op.avatar.face.name.param.name std.capability.parameter operation=$native.ui.avatar.op.avatar.face.name name="name" kind=string required=true

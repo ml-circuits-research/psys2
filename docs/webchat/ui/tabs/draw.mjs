@@ -253,6 +253,14 @@ function make(holder, host) {
   const varyButton = el('button', 'dr-act', 'Different look'); varyButton.type = 'button'; editor.append(varyButton);
   varyButton.addEventListener('click', () => { const o = focus(); if (o) tool('drawing.person.vary', { id: o.id }); });
   const emotion = control('Emotion', 'select'); emotion.addEventListener('change', () => { const o = focus(); if (o && emotion.value) tool('drawing.person.expression', { id: o.id, expression: emotion.value }); });
+  // The person model (worlds/art.draw/figure-rules.sop): a pose, a trait, a thing to wear, a thing to hold; the options
+  // are the knowledge's (k.faces poses and traits, k.wearables), observed as options.pose, .trait and .garment.
+  const poseChoice = control('Pose', 'select'); poseChoice.addEventListener('change', () => { const o = focus(); if (o && poseChoice.value) tool('drawing.person.pose', { id: o.id, pose: poseChoice.value }); });
+  const traitChoice = control('Trait', 'select'); traitChoice.addEventListener('change', () => { const o = focus(); if (o && traitChoice.value) tool('drawing.object.change', { ids: [o.id], trait: traitChoice.value }); });
+  const wearChoice = control('Wear', 'select'); wearChoice.addEventListener('change', () => { const o = focus(); if (o && wearChoice.value) tool('drawing.part.add', { id: o.id, kind: wearChoice.value }); });
+  const holdName = control('Hold'), holdButton = el('button', 'dr-act', 'Hold'); holdButton.type = 'button'; editor.append(holdButton);
+  const hold = () => { const o = focus(), word = holdName.value.trim(); if (o && word) { tool('drawing.person.hold', { id: o.id, kind: word }); holdName.value = ''; } };
+  holdButton.addEventListener('click', hold); holdName.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); hold(); } });
   const traits = el('p', 'dr-traits', ''); editor.append(traits);
   const groupName = control('Group label'); groupName.value = '';
   const groupButton = el('button', 'dr-act', 'Group objects'); groupButton.type = 'button'; groupButton.addEventListener('click', () => { const ids = selectedIds(); if (ids.length > 1) tool('drawing.object.group', { ids, name: groupName.value.trim() || 'Group', ...(groupName.value.trim() ? { label: groupName.value.trim() } : {}) }); }); editor.append(groupButton);
@@ -290,8 +298,13 @@ function make(holder, host) {
     for (const inputEl of [addPartName, addPartButton]) visible(inputEl, !!object && !multi);
     visible(varyButton, person && !multi);
     visible(emotion, !!object && !multi && (person || input(object.id, 'faceable') === true)); emotion.textContent = ''; emotion.append(option('', 'Emotion…')); for (const v of [...(state.options?.expression ?? [])].map(String).sort()) emotion.append(option(v, v));
-    const age = object ? input(object.id, 'age') : null, sex = object ? input(object.id, 'sex') : null;
-    traits.textContent = object && (age || sex) ? 'Traits: ' + [age, sex].filter(Boolean).join(', ') : ''; visible(traits, !!traits.textContent);
+    const fill = (select, key, label, now) => { select.textContent = ''; select.append(option('', label)); for (const v of [...(state.options?.[key] ?? [])].map(String).sort()) select.append(option(v, v)); select.value = now ?? ''; };
+    const posed = object ? input(object.id, 'pose') : null;
+    visible(poseChoice, !!object && !multi && posed !== undefined && posed !== null); fill(poseChoice, 'pose', 'Pose…', posed);
+    for (const [select, key, label] of [[traitChoice, 'trait', 'Trait…'], [wearChoice, 'garment', 'Wear…']]) { visible(select, person && !multi); fill(select, key, label); }
+    for (const inputEl of [holdName, holdButton]) visible(inputEl, person && !multi);
+    const age = object ? input(object.id, 'age') : null, sex = object ? input(object.id, 'sex') : null, mood = object ? input(object.id, 'expression') : null;
+    traits.textContent = object && (age || sex || posed || mood) ? 'Traits: ' + [age, sex, posed, mood].filter(Boolean).join(', ') : ''; visible(traits, !!traits.textContent);
     partChoice.textContent = ''; partChoice.append(option('', 'Whole object'));
     for (const p of object ? partsOf(object.id) : []) partChoice.append(option(String(p.index), `${num(p.index) + 1}. ${String(p.name ?? p.kind).replace(/_/g, ' ')}`));
     partChoice.value = part ? String(part.index) : '';
