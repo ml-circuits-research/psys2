@@ -24,7 +24,7 @@ export function diffObservations(before,after,world){
  return {created,removed,changed,selection,touched:created.length+removed.length+changed.length};
 }
 
-const mentions=(o)=>{const m=inputMap(o);return [o.kind,o.id,...['name','label','title','drawing','kind','variant','text'].flatMap(k=>m[k]??[])].map(lc).filter(Boolean);};
+const mentions=(o)=>{const m=inputMap(o);return [o.kind,o.id,...['name','label','title','drawing','kind','variant','text','layout'].flatMap(k=>m[k]??[])].map(lc).filter(Boolean);};
 // Canonical kinds of the deployed binding table (lemma -> canonical per area): a label kind and an object kind
 // agree when they are the same words or bind to the same canonical kind ("gurney" and "stretcher").
 let KINDS=null;
@@ -150,7 +150,8 @@ function judgeRequest(req,ctx){
  const changedObjs=[...diff.changed.map(d=>d.object),...(creates?diff.created:madeTargets)];
  add('changed',creates?diff.touched>0:diff.changed.length+diff.removed.length+madeTargets.length>0);
  if(diff.changed.length&&candidates.length&&candidates.length<(before?.objects?.length??0)&&t.fill!=='all'&&t.fill!=='context')
-  add('target',diff.changed.some(d=>candidates.some(c=>c.id===d.object.id))||creates&&diff.created.length>0,true);
+  // A member of the target changed (a chart's categories reordered or recoloured) is a change of the target.
+  add('target',diff.changed.some(d=>candidates.some(c=>c.id===d.object.id||(inputMap(d.object).group??[]).includes(String(c.id))))||creates&&diff.created.length>0,true);
  const onTarget=candidates.length?changedObjs.filter(o=>candidates.some(c=>c.id===o.id)):changedObjs;
  valueChecks(onTarget.length?onTarget:changedObjs);relationCheck(onTarget.length?onTarget:changedObjs);
  return {checks};

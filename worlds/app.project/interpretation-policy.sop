@@ -61,6 +61,9 @@
 # focused or most recent one when it exists, a new step otherwise. Bars and slices are chart points of a chart group,
 # which the reader names by the chart family.
 @interpret.family.diagram.node app.interpret.family area=diagram family=node kind=w.diagram.node
+# A chart point ("set March to 40", "in Revenue, set March to 40") is a category of a chart group: a member node
+# named by its label (chart.labels), in the chart named (point.chart), its value the node's value.
+@interpret.family.diagram.point app.interpret.family area=diagram family=point kind=w.diagram.node
 
 # Diagram nodes placed relative to another node ("put Review below Draft", "a box called Deliver under Bake"): the
 # node.position / node.anchor pair reads as the drawing's relation pair does (like= names the area key whose canonical

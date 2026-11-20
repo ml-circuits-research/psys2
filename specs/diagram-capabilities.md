@@ -133,6 +133,12 @@ The reader's chart keys reach these operations through declared key alignments (
 right, bottom), `chart.max` → `yMax`, `chart.sort` → `diagram.chart.sort order` (desc, asc, alpha), `chart.type` →
 `layout`, `chart.palette` → `palette` (pastel, monochrome, sunset, dark, forest, ocean, classic, vivid; warm → sunset,
 cool → ocean, rainbow and default → vivid), `chart.id` and `point.chart` → the group's `id` (the chart named).
+`chart.title` → the group's `label` (the label a new chart is made with; `diagram.chart.format` takes `label` too),
+`chart.values` → `values` read as numbers; a list said with coordinators ("Q2 and Sample") is split into its items.
+A chart made with values only numbers its categories ("1", "2"); one made without values starts from the sample values
+3, 5, 2, which the reply names. (Sample categories named "A", "B", "C" made the reader read the article of a later
+"add a pie chart" as the node named A.) A chart point ("set March to 40") is read as the member node of that label:
+the change compiles, but the selector-effect check restores it because the other bars re-lay out.
 `chart.min`, `chart.horizontal`, `chart.stacked`, `chart.width`/`height` and `chart.effect` stay unbound and are
 disclosed: the catalog's `w.diagram.group` (closed, hand-core) has no slot for a value axis minimum, a bar
 orientation, stacking or a chart size, so no rule can keep them (needs catalog slots in sop-knowledge-worlds).

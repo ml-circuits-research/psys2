@@ -16,7 +16,7 @@ const runtimeRoot=process.env.MASS_EVAL_RUNTIME_ROOT||undefined;
 console.log=()=>{};console.warn=()=>{};console.info=()=>{};
 let runner;
 try{runner=await createRunner({levels,runtimeRoot});}catch(e){process.send({type:'fatal',error:String(e?.stack??e).slice(0,2000)});process.exit(1);}
-setKindTable(runner.bindings);setPropertyTable(await completeBindings(runner.bindings));
+{const live=await completeBindings(runner.bindings);setKindTable(live);setPropertyTable(live);}
 const inventory=JSON.parse(readFileSync(path.join(path.dirname(new URL(import.meta.url).pathname),'../../official-dataset/inventory.json'),'utf8'));
 const ok=v=>v==='success'||v==='plausible';
 const short=s=>typeof s==='string'?s.slice(0,240):s;

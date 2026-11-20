@@ -354,6 +354,7 @@
 @native.diagram.sketch.op.diagram.chart.format std.capability.operation scope=$native.diagram.sketch.scope name="diagram.chart.format" act=change on="diagram.sketch.group" order=45 eligible=true
 @native.diagram.sketch.op.diagram.chart.format.param.id std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="id" kind=string required=true
 @native.diagram.sketch.op.diagram.chart.format.param.title std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="title" kind=string
+@native.diagram.sketch.op.diagram.chart.format.param.label std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="label" kind=string
 @native.diagram.sketch.op.diagram.chart.format.param.xLabel std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="xLabel" kind=string
 @native.diagram.sketch.op.diagram.chart.format.param.yLabel std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="yLabel" kind=string
 @native.diagram.sketch.op.diagram.chart.format.param.valueLabels std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="valueLabels" kind=boolean

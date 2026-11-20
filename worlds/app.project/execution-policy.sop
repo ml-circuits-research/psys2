@@ -104,17 +104,25 @@
 @chart.key.palette.cool app.execution.keyValue area=diagram key="chart.palette" said="cool" value="ocean"
 @chart.key.palette.rainbow app.execution.keyValue area=diagram key="chart.palette" said="rainbow" value="vivid"
 @chart.key.palette.default app.execution.keyValue area=diagram key="chart.palette" said="default" value="vivid"
+# A chart's values are numbers: a said list of them ("27, 32") is read as numbers.
+@chart.key.numbers app.execution.keyBinding area=diagram key="chart.values" operation="diagram.group.chart.make" parameter="values" codec="number-list"
+@group.key.numbers app.execution.keyBinding area=diagram key="group.values" operation="diagram.group.chart.make" parameter="values" codec="number-list"
+# A chart's title is its group's label: the label a new chart is made with, the label a format or a change sets.
+@chart.key.title app.execution.keyBinding area=diagram key="chart.title" operation="diagram.group.chart.make" parameter="label"
 @chart.key.id app.execution.keyBinding area=diagram key="chart.id" operation="diagram.chart.format" parameter="id"
+# A chart point is a member node of its chart: its value is the node's value; the category named (chart.labels) is
+# observed on each node as its label, and the chart named (point.chart) as the node's group, by the group's name.
+@chart.key.point.value app.execution.keyBinding area=diagram key="point.value" operation="diagram.node.change" parameter="value"
+@chart.point.label app.execution.observedMeasure concept=diagram.sketch.group.labels sourceType="diagram.sketch.node" parameter="label" binding="diagram.node.label" order=4
 @chart.key.point app.execution.keyBinding area=diagram key="point.chart" operation="diagram.chart.value" parameter="id"
-# A chart asked for without data starts from three sample categories, which the reply names; the data can then be
-# edited ("set A to 5") or the chart undone.
-@chart.sample.a std.capability.item index=0 value="A"
-@chart.sample.b std.capability.item index=1 value="B"
-@chart.sample.c std.capability.item index=2 value="C"
-@chart.sample.labels std.capability.list member=$chart.sample.a member=$chart.sample.b member=$chart.sample.c
+@chart.point.group app.execution.observedProperty concept=diagram.sketch.group.id sourceType="diagram.sketch.node" parameter="group" binding="diagram.node.group" codec=lookup order=5
+@chart.point.group.ref app.execution.reference concept=diagram.sketch.group.id sourceType="diagram.sketch.group"
+# A chart asked for without values starts from three sample values, which the reply names; the data can then be
+# edited ("set 1 to 5") or the chart undone. Categories not given are numbered after the values (given or sample),
+# so values said alone ("a bar chart with values 4, 9") keep their own count.
 @chart.sample.1 std.capability.item index=0 value=3
 @chart.sample.2 std.capability.item index=1 value=5
 @chart.sample.3 std.capability.item index=2 value=2
 @chart.sample.values std.capability.list member=$chart.sample.1 member=$chart.sample.2 member=$chart.sample.3
-@chart.labels std.capability.seed operation="diagram.group.chart.make" parameter="labels" source=value value=$chart.sample.labels phase=missing order=126 notice="I used sample data; you can change it or undo."
-@chart.values std.capability.seed operation="diagram.group.chart.make" parameter="values" source=value value=$chart.sample.values phase=missing order=127
+@chart.values std.capability.seed operation="diagram.group.chart.make" parameter="values" source=value value=$chart.sample.values phase=missing order=126 notice="I used sample values; you can change them or undo."
+@chart.labels std.capability.seed operation="diagram.group.chart.make" parameter="labels" source=ordinal.list from="values" phase=missing order=127 notice="I numbered the categories because no labels were supplied."

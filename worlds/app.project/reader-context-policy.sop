@@ -5,6 +5,8 @@
 # These are the exact native observation bindings read by both runtime and replay.
 @context.display.drawing app.readerContext.display on="art.draw.object" binding="drawing.object.name"
 @context.display.diagram app.readerContext.display on="diagram.sketch.node" binding="diagram.node.label"
+# A diagram group (a chart, a container) is named by its label: "sort Grocery spend", "on Revenue, ..." name the chart.
+@context.display.group app.readerContext.display on="diagram.sketch.group" binding="diagram.group.label"
 @context.display.document app.readerContext.display on="docs.editor.document" binding="document.title"
 @context.display.block app.readerContext.display on="docs.editor.block" binding="document.block.name"
 @context.display.section app.readerContext.display on="docs.editor.section" binding="document.block.name"

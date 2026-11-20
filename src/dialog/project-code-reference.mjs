@@ -30,7 +30,9 @@ export async function projectCodeReference(proposal,session,{bindings,view}={}){
  if(!object)return null;
  // The object's own family: the reader types whose kinds the object's tool family makes; the exact kind name first.
  const mappings=nativeKindCandidates(bindings).filter(m=>m.area===readerArea&&m.nativeFamilyBinding?.sourceType===object.sourceType);
- const types=[...new Set(mappings.map(m=>m.type))];
+ // Kind rows name the family that makes the object; a family identity read as another class (a chart point read as
+ // a diagram node, app.interpret.family) only counts when no kind row does.
+ const own=mappings.filter(m=>!m.familyIdentity),types=[...new Set((own.length?own:mappings).map(m=>m.type))];
  if(types.length!==1)return null;
  const [type]=types,exact=mappings.filter(m=>m.lemma===object.kind),family=bindings.families?.find(f=>f.area===readerArea&&f.type===type);
  const canonical=[...new Set(exact.map(m=>m.canonical))].length===1?exact[0].canonical:family?.canonical;

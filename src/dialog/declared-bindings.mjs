@@ -13,7 +13,9 @@
 //  5. a key declared aligned with a native parameter of another name (execution-policy.sop app.execution.keyBinding:
 //     the reader's chart.grid is the chart group's gridlines) binds to that parameter of the operation's source type,
 //     replacing the table's row; its declared said values (app.execution.keyValue) are its class values, each given to
-//     the tool as its declared parameter value (valueMap, a lookup the request compiler resolves).
+//     the tool as its declared parameter value (valueMap, a lookup the request compiler resolves);
+//  6. a kind named by the modifier of its compound lemmas ("a pie" for "pie chart", "pie graph": the compound's last
+//     word a lemma of its family's own class) is that kind, when every such compound names the same kind.
 import {parse,str} from '../vendor/sopworld/sopworld.mjs';
 import {interpretationPolicy} from './interpretation-policy.mjs';
 import {executionPolicyWorld} from './execution-policy.mjs';
@@ -51,7 +53,7 @@ const declaredKindOperations=()=>kindOperations??=executionPolicyWorld().ofType(
 let keyAlignments;
 const declaredKeyAlignments=()=>keyAlignments??=(()=>{
  const world=executionPolicyWorld(),values=world.ofType('app.execution.keyValue').map(row=>({area:one(row,'area'),key:one(row,'key'),said:one(row,'said'),value:one(row,'value')}));
- return world.ofType('app.execution.keyBinding').map(row=>({area:one(row,'area'),key:one(row,'key'),operation:one(row,'operation'),parameter:one(row,'parameter')}))
+ return world.ofType('app.execution.keyBinding').map(row=>({area:one(row,'area'),key:one(row,'key'),operation:one(row,'operation'),parameter:one(row,'parameter'),codec:one(row,'codec')}))
   .map(d=>({...d,values:values.filter(v=>v.area===d.area&&v.key===d.key)}));
 })();
 // A declared parameter value typed as the parameter takes it (a boolean, a number, else the string itself).
@@ -92,7 +94,7 @@ export async function completeBindings(bindings){
   if(!p)continue;
   const sourceType=p.sourceType,valueMap=d.values.length?d.values.map(v=>({said:v.said,value:typed(p.kind,v.value)})):null;
   const row={area:d.area,key:d.key,valueKind:'string',canonical:sourceType+'.'+d.parameter,sourceWire:p.wire,sourceSnapshotSHA:p.sourceSha256,sourceWorld:p.world,moduleVersion:'1',
-   hostBinding:{id:p.operation,sourceType,key:d.parameter,operation:p.operation,parameter:d.parameter},
+   hostBinding:{id:p.operation,sourceType,key:d.parameter,operation:p.operation,parameter:d.parameter,...(d.codec?{codec:d.codec}:{})},
    ...(valueMap?{classValues:valueMap.map(v=>v.said),valueMap}:p.enum?{classValues:p.enum}:numericOf(sourceType,d.parameter)?{numeric:true}:{}),
    alignment:{kind:'declared-key-parameter',authority:'execution-policy.sop app.execution.keyBinding'}};
   const at=properties.findIndex(r=>r.area===d.area&&r.key===d.key);
@@ -141,13 +143,39 @@ export async function completeBindings(bindings){
    if(args){shared.clear();shared.set('own',{...(own??{operation,sourceType,sourcePath:'worlds/app.project/execution-policy.sop'}),arguments:args});break;}
    shared.set(sourceType+'\0'+operation,own??{operation,sourceType,sourcePath:'worlds/app.project/execution-policy.sop'});
   }
+  // A declared family with no kind rows of its own (a chart point, read as a diagram node) takes the binding the kind
+  // rows of its class share.
+  if(!shared.size&&!(bindings.kinds??[]).some(k=>k.area===f.area&&k.type===f.type))
+   for(const k of bindings.kinds??[])if(k.area===f.area&&k.canonical===f.canonical&&k.nativeFamilyBinding?.operation&&k.nativeFamilyBinding.sourceType)
+    shared.set(k.nativeFamilyBinding.sourceType+'\0'+k.nativeFamilyBinding.operation,k.nativeFamilyBinding);
   if(shared.size!==1)continue;
   const [b]=shared.values();
   const binding={operation:b.operation,sourceType:b.sourceType,exportName:b.exportName,sourcePath:b.sourcePath,sourceSha256:b.sourceSha256,arguments:b.arguments,
    boundary:'Family eligibility only (declared-bindings.mjs: the binding its kind rows share).'};
   families[index]={...f,nativeFamilyBinding:Object.fromEntries(Object.entries(binding).filter(([,value])=>value!==undefined))};
  }
- const table=Object.freeze({...bindings,properties,families});
+ // 6. Kind modifiers of compound lemmas ("pie" of "pie chart" where "chart" names the family's own class).
+ let kinds=bindings.kinds??[];
+ const modifiers=new Map();
+ for(const f of families){
+  const heads=new Set(kinds.filter(k=>k.area===f.area&&k.type===f.type&&k.canonical===f.canonical).map(k=>k.lemma));
+  if(!heads.size)continue;
+  for(const k of kinds){
+   if(k.area!==f.area||k.type!==f.type||k.canonical===f.canonical||typeof k.lemma!=='string')continue;
+   const words=k.lemma.split(' ');if(words.length<2||!heads.has(words.at(-1)))continue;
+   const lemma=words.slice(0,-1).join(' '),key=f.area+'\0'+f.type+'\0'+lemma;
+   if(!modifiers.has(key))modifiers.set(key,{lemma,rows:[]});
+   modifiers.get(key).rows.push(k);
+  }
+ }
+ const added=[];
+ for(const [key,{lemma,rows}] of modifiers){
+  const [area,type]=key.split('\0');
+  if(new Set(rows.map(r=>r.canonical)).size!==1||kinds.some(k=>k.area===area&&k.type===type&&k.lemma===lemma))continue;
+  added.push({...rows[0],lemma,alignment:{kind:'compound-lemma-modifier',authority:'declared-bindings.mjs completion 6',compound:rows[0].lemma}});
+ }
+ if(added.length)kinds=[...kinds,...added];
+ const table=Object.freeze({...bindings,properties,families,kinds});
  completed.set(bindings,table);
  return table;
 }

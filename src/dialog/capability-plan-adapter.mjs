@@ -9,6 +9,7 @@ import { sceneDefaultModule, writeSceneDefaults } from './scene-placement-defaul
 import { nativeKindCandidates } from './native-binding-candidates.mjs';
 import { observedReaderContext } from './native-reader-context.mjs';
 import { budget } from './budget.mjs';
+import { en } from '../lang/en.mjs';
 
 const NS = 'std.capability.';
 const take = (wire, key) => str(wire?.attrs[key]?.[0]);
@@ -264,8 +265,27 @@ function identityNamesToSelectors(nodes, bindings) {
     return { ...wire, attrs };
   });
 }
+// A list said with the language's coordinators ("Q2 and Sample", "Jan, Feb and Mar") for a property whose parameter
+// takes a list (string-list, number-list) is the list of its conjuncts (w.lang.en coord.sep): the compiler's list
+// codec reads comma-separated items.
+let separators;
+function saidLists(nodes,bindings){
+  const listed=new Set((bindings?.properties??[]).filter(row=>['string-list','number-list'].includes(row.hostBinding?.codec)).map(row=>row.canonical));
+  if(!listed.size)return nodes;
+  separators??=[...en.words('coord.sep','things')].map(word=>/^[\p{L}\p{N}]+$/u.test(word)?'\\s+'+word.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\s+':'\\s*'+word.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\s*');
+  const split=new RegExp('(?:'+separators.join('|')+')+','iu');
+  return nodes.map(wire=>{
+    if(wire.type!=='std.request.constraint'||!listed.has(take(wire,'concept')))return wire;
+    const said=take(wire,'value');
+    if(typeof said!=='string'||/^\s*\[/.test(said))return wire;
+    const items=said.split(split).map(item=>item.trim());
+    if(items.length<2||items.some(item=>!item))return wire;
+    const joined=items.join(', ');
+    return joined===said?wire:{...wire,attrs:{...wire.attrs,value:[quote(joined)]}};
+  });
+}
 export function compileNativeCapability(candidate, context) {
-  const nodes=identityNamesToSelectors(declaredActForm(parse(candidate.wires)),context?.bindings), {world,scope}=compilerWorld(context,nodes);
+  const nodes=saidLists(identityNamesToSelectors(declaredActForm(parse(candidate.wires)),context?.bindings),context?.bindings), {world,scope}=compilerWorld(context,nodes);
   if(!nodes.some(w=>w.type==='std.request'&&w.id===candidate.request))return readPlan(world,'@compile.result std.compile.result status=not-applicable reason=request-root');
   return readPlan(world,world.compileRequest(serialize([...nodes,contextWire('capability.context',candidate.request,scope)])));
 }
@@ -279,7 +299,7 @@ export function compileNativeQuery(sop,context){
 
 /** Keep each proposal's private identifiers distinct while preserving its actual request wires. */
 export function compareNativeReadings(candidates, context) {
-  const graphs=candidates.map(candidate=>parse(candidate.wires));
+  const graphs=candidates.map(candidate=>saidLists(parse(candidate.wires),context.bindings));
   const {world,scope}=compilerWorld(context,graphs.flat());
   const packet=[],requests=new Map(),originals=[],options=[];
   for(const [index,nodes] of graphs.entries()){

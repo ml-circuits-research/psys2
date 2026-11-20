@@ -115,6 +115,8 @@
 @keyBinding.key core.slot of=app.execution.keyBinding key=key kind=string present=true
 @keyBinding.operation core.slot of=app.execution.keyBinding key=operation kind=string present=true
 @keyBinding.parameter core.slot of=app.execution.keyBinding key=parameter kind=string present=true
+# `codec` how a said list is read for a list parameter: its items as numbers or as strings.
+@keyBinding.codec core.slot of=app.execution.keyBinding key=codec kind=string enum="number-list" enum="string-list"
 @keyValue.type core.type of=app.execution.keyValue closed=true
 @keyValue.area core.slot of=app.execution.keyValue key=area kind=atom present=true
 @keyValue.key core.slot of=app.execution.keyValue key=key kind=string present=true

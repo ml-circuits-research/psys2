@@ -697,6 +697,10 @@
 @t.cf.t app.act.request operation="diagram.chart.format" title=?v
 @t.cf.tc app.act.call act=change thing=$t.cf.g attr=label value=?v order=1
 @tool.chart.format.title core.rule when=$t.cf.r when=$t.cf.g when=$t.cf.t then=$t.cf.tc
+# The title said as the chart group's label (the reader's chart.title on a new or existing chart).
+@t.cf.lb app.act.request operation="diagram.chart.format" label=?v
+@t.cf.lbc app.act.call act=change thing=$t.cf.g attr=label value=?v order=1
+@tool.chart.format.label core.rule when=$t.cf.r when=$t.cf.g when=$t.cf.lb then=$t.cf.lbc
 @t.cf.x app.act.request operation="diagram.chart.format" xLabel=?v
 @t.cf.xc app.act.call act=change thing=$t.cf.g attr=x_label value=?v order=1
 @tool.chart.format.x core.rule when=$t.cf.r when=$t.cf.g when=$t.cf.x then=$t.cf.xc
@@ -721,8 +725,9 @@
 @t.cf.none app.act.refuse reason=missing-property
 @t.cf.n7 app.act.request yMax=?f7
 @t.cf.n8 app.act.request layout=?f8
+@t.cf.n10 app.act.request label=?f10
 @t.cf.n9 app.act.request palette=?f9
-@tool.chart.format.none core.rule when=$t.cf.r not=$t.cf.n1 not=$t.cf.n2 not=$t.cf.n3 not=$t.cf.n4 not=$t.cf.n5 not=$t.cf.n6 not=$t.cf.n7 not=$t.cf.n8 not=$t.cf.n9 then=$t.cf.none
+@tool.chart.format.none core.rule when=$t.cf.r not=$t.cf.n1 not=$t.cf.n2 not=$t.cf.n3 not=$t.cf.n4 not=$t.cf.n5 not=$t.cf.n6 not=$t.cf.n7 not=$t.cf.n8 not=$t.cf.n9 not=$t.cf.n10 then=$t.cf.none
 @t.cg.f w.diagram.group code=?id x_label=?v
 @t.cg.fo app.observe.input id=?id key=xLabel value=?v
 @observe.chart.x core.rule when=$t.cg.f then=$t.cg.fo
