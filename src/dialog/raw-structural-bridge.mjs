@@ -116,7 +116,8 @@ export function bridgeRawStructure(prediction,{bindings,bindingSha256,comparativ
    else if(['context','previous_reply','journal_step'].includes(target.fill))unresolved('context-reference-not-bound',['targets',tid]);
    // A population reference ("all the boxes", "every node"): every matching member of an existing target (std.request
    // target reference=population, sopworld 0.241.0); a quantifier over it without a bound variable says the same.
-   else if((target.fill==='all'||target.quantifier==='all'&&target.mode==='existing')&&target.mode==='existing')t.reference='population';
+   // (A make names what it makes: an existing population is not its theme, so the reading stays as it was.)
+   else if((target.fill==='all'||target.quantifier==='all')&&target.mode==='existing'&&original.act!=='make')t.reference='population';
    else if(target.fill==='all'&&target.mode!=='bound')unresolved('unprojected-population-reference',['targets',tid]);
    else if(target.fill!==undefined&&!['written','description','all'].includes(target.fill))unresolved('unknown-target-fill',['targets',tid]);
    const phase={selector:[],result:[]},anchorOf=new Map();let conditions=original.constraints??[];if(!Array.isArray(conditions)||conditions.length>256)fail('constraint-budget',basePath);
