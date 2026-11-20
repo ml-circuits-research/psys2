@@ -616,7 +616,7 @@
       "name": "ui-diagram-v2",
       "path": "training/sop-bert/data/ui-diagram-v2/examples.jsonl",
       "description": "voice/chat control of the Diagram editor: every operation x parameter x reference form, robustness variants, compounds, questions (generate.py)",
-      "gitCommit": "e48220e9ebd808498b25e4a8c5d3c7a6ec093b13",
+      "gitCommit": "9a75d6b198e732b1dc33234fd3da21e851e0c41c",
       "sha256": "1716410ebad04f7e5e7b42f10d2e9b285724ae8d86ac2e4e2d489c212b0cf93a",
       "rowsIn": 6668,
       "rowsKept": 6668,
@@ -628,7 +628,7 @@
       "name": "ui-diagram-v2-voice",
       "path": "training/sop-bert/data/ui-diagram-v2/heldout-voice.jsonl",
       "description": "the Diagram voice set with the owner's session sentences (heldout.py); trained on per the owner's decision that benchmark contamination is irrelevant",
-      "gitCommit": "bdb078a7b4cd468a4719094033fcd6d61ead7826",
+      "gitCommit": "9a75d6b198e732b1dc33234fd3da21e851e0c41c",
       "sha256": "3a6ead9ccf4b20487f309f0086381b4c4eb8a79cf799b380a8e96b7de4e5d73a",
       "rowsIn": 93,
       "rowsKept": 92,
@@ -671,16 +671,15 @@
       "name": "data-drop-v1",
       "path": "training/sop-bert/data/data-drop-v1/accepted.jsonl",
       "description": "Diagram/Drawing rows of the data-request drops, validated and normalised by data-drop-v1/import.py",
-      "gitCommit": "18e7823258c51ac43a8213451dac867769ee2476",
-      "sha256": "10c95cd29d68fa37fc9c21d10f58fe1e6a2d00afc69226c2fa64494949d9ea8d",
-      "rowsIn": 5576,
-      "rowsKept": 5576,
+      "gitCommit": "9a75d6b198e732b1dc33234fd3da21e851e0c41c",
+      "sha256": "cb541691adb6ddf208a5cfb240554c5b801a28f11427bac2a3baa173551dc0e2",
+      "rowsIn": 5579,
+      "rowsKept": 5579,
       "rowsDropped": 0,
       "dropReasons": {},
       "fixes": {
         "anchor-span-as-anchor-mention": 542,
         "comparative-as-delta-step": 58,
-        "diagram-new-node-count-as-node.n": 24,
         "trigger-not-in-span-removed": 15
       }
     },
@@ -875,8 +874,8 @@
     }
   ],
   "splits": {
-    "train": 88780,
-    "dev": 3818,
+    "train": 88782,
+    "dev": 3819,
     "test": 1892
   },
   "families": 25955,
@@ -896,15 +895,15 @@
     "ui-diagram-v2-voice": 14,
     "ui-quantities-v1": 42,
     "human-adapted-v1-drawing": 112,
-    "data-drop-v1": 1190,
+    "data-drop-v1": 1191,
     "human-adapted-v1-diagram": 72,
-    "main-synthetic": 5107
+    "main-synthetic": 5106
   },
   "nonReaderLabelFieldsRemoved": {
     "raw_value": 128,
     "anchor_fill": 8151,
     "anchor_span": 437,
-    "qualitative": 499,
+    "qualitative": 527,
     "mention": 158,
     "anchor_kind": 5374
   },
@@ -914,32 +913,32 @@
   },
   "files": {
     "STATS.md": {
-      "sha256": "ed2972f7819cc1d7bf2fee3626b64362a99d3f80c79c81cc774ce9913ddb9166",
-      "bytes": 7890
+      "sha256": "7b40d04388887c90ef331a6b0ca32ce22b771f49887a3b58b5f982b89f42a8d0",
+      "bytes": 7921
     },
     "VALIDATION.md": {
-      "sha256": "1873c269121c49191f87573f4b4b787c8c546d30b56fa6e79463280e95fc7cc0",
-      "bytes": 12852
+      "sha256": "63633c3ffb119bdb3aef1f3b8d4f5c8b26636fde03a3bc453e1841e6141dfbb7",
+      "bytes": 12842
     },
     "audit-sample.md": {
-      "sha256": "0c0aab96d10429aeb3567a57ec48bbf41486be393291b66038ce9cc7cad94052",
-      "bytes": 44232
+      "sha256": "908cce647902792ad1d362b86be823462dd72b055951a86432d5e799bbc7065d",
+      "bytes": 44267
     },
     "dev.jsonl": {
-      "sha256": "e27233886bfd0bf4c2e3079118d023194330000cce9a0aa9a3b231af77656355",
-      "bytes": 4160428
+      "sha256": "ef34ea1ea6d531132c8893df5c6a5598744239308c098c135201ede5e715485c",
+      "bytes": 4166645
     },
     "inventory.json": {
       "sha256": "daa582e2cab47bf73b374b7c5a3d702b51da90429e3e42fc08f6fe3e9a4a5293",
       "bytes": 56402
     },
     "test.jsonl": {
-      "sha256": "bca8f70860c093ceeca58368b64063f5e1eabc3fd5289d2ea27d79beb38d79b5",
-      "bytes": 2069343
+      "sha256": "244da6f37822dd9d98de670210789e75d253e94ee7bfa4fee6121f25278fc545",
+      "bytes": 2071432
     },
     "train.jsonl.gz": {
-      "sha256": "680b1fcb5b946b147cb7ef12a9bbe252117dea5a3f97a35b04dab0397f882420",
-      "bytes": 4380388
+      "sha256": "cd76a4ccc1bbc3f75651940810d4e1972da7aa27f6557169a91a1a470a053b03",
+      "bytes": 4382672
     }
   },
   "policy": {

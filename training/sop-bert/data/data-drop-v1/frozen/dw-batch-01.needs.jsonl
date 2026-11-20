@@ -1,171 +1,5 @@
-{"batch": "dw-batch-01", "text": "turn the car into a van", "frame": "drawn.becomes", "value": "van", "span": "a van"}
-{"batch": "dw-batch-01", "text": "turn the sun into a moon", "frame": "drawn.becomes", "value": "moon", "span": "a moon"}
-{"batch": "dw-batch-01", "text": "turn the house into a tower", "frame": "drawn.becomes", "value": "tower", "span": "a tower"}
-{"batch": "dw-batch-01", "text": "turn the dog into a wolf", "frame": "drawn.becomes", "value": "wolf", "span": "a wolf"}
-{"batch": "dw-batch-01", "text": "turn the cloud into a balloon", "frame": "drawn.becomes", "value": "balloon", "span": "a balloon"}
-{"batch": "dw-batch-01", "text": "turn the tree into a scarecrow", "frame": "drawn.becomes", "value": "scarecrow", "span": "a scarecrow"}
-{"batch": "dw-batch-01", "text": "can you turn the cat into a tiger?", "frame": "drawn.becomes", "value": "tiger", "span": "a tiger"}
-{"batch": "dw-batch-01", "text": "turn the little house into a tower", "frame": "drawn.becomes", "value": "tower", "span": "a tower"}
-{"batch": "dw-batch-01", "text": "and turn the boat into a ferry, that'd look better", "frame": "drawn.becomes", "value": "ferry", "span": "a ferry"}
-{"batch": "dw-batch-01", "text": "turn the tall tree into a lamppost", "frame": "drawn.becomes", "value": "lamppost", "span": "a lamppost"}
-{"batch": "dw-batch-01", "text": "time to turn the cat into a lion", "frame": "drawn.becomes", "value": "lion", "span": "a lion"}
-{"batch": "dw-batch-01", "text": "please turn the sun into a moon", "frame": "drawn.becomes", "value": "moon", "span": "a moon"}
-{"batch": "dw-batch-01", "text": "hey, turn the cat into a tiger", "frame": "drawn.becomes", "value": "tiger", "span": "a tiger"}
-{"batch": "dw-batch-01", "text": "turn the car next to the tree into a school bus", "frame": "drawn.becomes", "value": "school bus", "span": "a school bus"}
-{"batch": "dw-batch-01", "text": "turn the bird sitting on the house into a woodpecker", "frame": "drawn.becomes", "value": "woodpecker", "span": "a woodpecker"}
-{"batch": "dw-batch-01", "text": "turn the cat on the boat into a big fluffy tiger", "frame": "drawn.becomes", "value": "tiger", "span": "a big fluffy tiger"}
-{"batch": "dw-batch-01", "text": "turn the shaggy dog near the cat into a wolf", "frame": "drawn.becomes", "value": "wolf", "span": "a wolf"}
-{"batch": "dw-batch-01", "text": "turn the dog into some other pet", "frame": "drawn.becomes", "value": "some other pet", "span": "some other pet"}
-{"batch": "dw-batch-01", "text": "turn the house into some other building, you pick", "frame": "drawn.becomes", "value": "some other building", "span": "some other building"}
-{"batch": "dw-batch-01", "text": "trun the sun into a monn", "frame": "drawn.becomes", "value": "moon", "span": "a monn"}
-{"batch": "dw-batch-01", "text": "turn the hosue into a tower", "frame": "drawn.becomes", "value": "tower", "span": "a tower"}
-{"batch": "dw-batch-01", "text": "change the bird into a butterfly", "frame": "drawn.becomes", "value": "butterfly", "span": "a butterfly"}
-{"batch": "dw-batch-01", "text": "change the fish into a whale", "frame": "drawn.becomes", "value": "whale", "span": "a whale"}
-{"batch": "dw-batch-01", "text": "change the boat into a submarine", "frame": "drawn.becomes", "value": "submarine", "span": "a submarine"}
-{"batch": "dw-batch-01", "text": "change the cat into a rabbit", "frame": "drawn.becomes", "value": "rabbit", "span": "a rabbit"}
-{"batch": "dw-batch-01", "text": "change the boat into a canoe", "frame": "drawn.becomes", "value": "canoe", "span": "a canoe"}
-{"batch": "dw-batch-01", "text": "and change the fish into a shark", "frame": "drawn.becomes", "value": "shark", "span": "a shark"}
-{"batch": "dw-batch-01", "text": "could you change the cat into a lion?", "frame": "drawn.becomes", "value": "lion", "span": "a lion"}
-{"batch": "dw-batch-01", "text": "okay change the bird into a seagull", "frame": "drawn.becomes", "value": "seagull", "span": "a seagull"}
-{"batch": "dw-batch-01", "text": "change the kite into a drone", "frame": "drawn.becomes", "value": "drone", "span": "a drone"}
-{"batch": "dw-batch-01", "text": "change the fish into a mermaid", "frame": "drawn.becomes", "value": "mermaid", "span": "a mermaid"}
-{"batch": "dw-batch-01", "text": "change the tree into a holly bush", "frame": "drawn.becomes", "value": "holly bush", "span": "a holly bush"}
-{"batch": "dw-batch-01", "text": "change the sun into a bonfire", "frame": "drawn.becomes", "value": "bonfire", "span": "a bonfire"}
-{"batch": "dw-batch-01", "text": "change the bired into a seagull", "frame": "drawn.becomes", "value": "seagull", "span": "a seagull"}
-{"batch": "dw-batch-01", "text": "hey, change the fish into a shark", "frame": "drawn.becomes", "value": "shark", "span": "a shark"}
-{"batch": "dw-batch-01", "text": "change the boat floating on the lake into a ferry", "frame": "drawn.becomes", "value": "ferry", "span": "a ferry"}
-{"batch": "dw-batch-01", "text": "change the tall tree by the lake into a streetlight", "frame": "drawn.becomes", "value": "streetlight", "span": "a streetlight"}
-{"batch": "dw-batch-01", "text": "change the small fish under the cloud into a crab", "frame": "drawn.becomes", "value": "crab", "span": "a crab"}
-{"batch": "dw-batch-01", "text": "change the girl's cat into a fox", "frame": "drawn.becomes", "value": "fox", "span": "a fox"}
-{"batch": "dw-batch-01", "text": "change the fish into some bigger sea creature", "frame": "drawn.becomes", "value": "some bigger sea creature", "span": "some bigger sea creature"}
-{"batch": "dw-batch-01", "text": "change the cat into a different pet", "frame": "drawn.becomes", "value": "a different pet", "span": "a different pet"}
-{"batch": "dw-batch-01", "text": "change the fisgh into a whale", "frame": "drawn.becomes", "value": "whale", "span": "a whale"}
-{"batch": "dw-batch-01", "text": "change the car to a coach", "frame": "drawn.becomes", "value": "coach", "span": "a coach"}
-{"batch": "dw-batch-01", "text": "change the dog to a fox", "frame": "drawn.becomes", "value": "fox", "span": "a fox"}
-{"batch": "dw-batch-01", "text": "change the sun to a star", "frame": "drawn.becomes", "value": "star", "span": "a star"}
-{"batch": "dw-batch-01", "text": "change the cloud to a rainbow", "frame": "drawn.becomes", "value": "rainbow", "span": "a rainbow"}
-{"batch": "dw-batch-01", "text": "change the kite to an aeroplane", "frame": "drawn.becomes", "value": "aeroplane", "span": "an aeroplane"}
-{"batch": "dw-batch-01", "text": "change the bird to a bat", "frame": "drawn.becomes", "value": "bat", "span": "a bat"}
-{"batch": "dw-batch-01", "text": "could you change the cat to a tiger?", "frame": "drawn.becomes", "value": "tiger", "span": "a tiger"}
-{"batch": "dw-batch-01", "text": "just change the fish to a turtle", "frame": "drawn.becomes", "value": "turtle", "span": "a turtle"}
-{"batch": "dw-batch-01", "text": "change the sun to a light bulb, it's too bright out", "frame": "drawn.becomes", "value": "light bulb", "span": "a light bulb"}
-{"batch": "dw-batch-01", "text": "change the cloud to a hot air balloon", "frame": "drawn.becomes", "value": "hot air balloon", "span": "a hot air balloon"}
-{"batch": "dw-batch-01", "text": "I'd rather you changed the car to a tractor", "frame": "drawn.becomes", "value": "tractor", "span": "a tractor"}
-{"batch": "dw-batch-01", "text": "hey, change the cloud to a rainbow", "frame": "drawn.becomes", "value": "rainbow", "span": "a rainbow"}
-{"batch": "dw-batch-01", "text": "change the dog under the tree to a beaver", "frame": "drawn.becomes", "value": "beaver", "span": "a beaver"}
-{"batch": "dw-batch-01", "text": "change the boat near the girl to a ferry", "frame": "drawn.becomes", "value": "ferry", "span": "a ferry"}
-{"batch": "dw-batch-01", "text": "change the cat in front of the house to a lion", "frame": "drawn.becomes", "value": "lion", "span": "a lion"}
-{"batch": "dw-batch-01", "text": "change the tree behind the house to a streetlight", "frame": "drawn.becomes", "value": "streetlight", "span": "a streetlight"}
-{"batch": "dw-batch-01", "text": "change the dog to some other pet", "frame": "drawn.becomes", "value": "some other pet", "span": "some other pet"}
-{"batch": "dw-batch-01", "text": "change the fish to a different creature", "frame": "drawn.becomes", "value": "a different creature", "span": "a different creature"}
-{"batch": "dw-batch-01", "text": "change the car to something with more seats", "frame": "drawn.becomes", "value": "something with more seats", "span": "something with more seats"}
-{"batch": "dw-batch-01", "text": "chnage the cat to a tiger", "frame": "drawn.becomes", "value": "tiger", "span": "a tiger"}
-{"batch": "dw-batch-01", "text": "changge the sun to a strat", "frame": "drawn.becomes", "value": "star", "span": "a strat"}
-{"batch": "dw-batch-01", "text": "let the cat turn into a tiger", "frame": "drawn.becomes", "value": "tiger", "span": "a tiger"}
-{"batch": "dw-batch-01", "text": "let the fish turn into a dolphin", "frame": "drawn.becomes", "value": "dolphin", "span": "a dolphin"}
-{"batch": "dw-batch-01", "text": "let the sun turn into a moon", "frame": "drawn.becomes", "value": "moon", "span": "a moon"}
-{"batch": "dw-batch-01", "text": "let the house turn into a castle", "frame": "drawn.becomes", "value": "castle", "span": "a castle"}
-{"batch": "dw-batch-01", "text": "let the tree turn into a cactus", "frame": "drawn.becomes", "value": "cactus", "span": "a cactus"}
-{"batch": "dw-batch-01", "text": "let the boat turn into an iceberg", "frame": "drawn.becomes", "value": "iceberg", "span": "an iceberg"}
-{"batch": "dw-batch-01", "text": "let the boy's kite turn into an aeroplane", "frame": "drawn.becomes", "value": "aeroplane", "span": "an aeroplane"}
-{"batch": "dw-batch-01", "text": "let the cat turn into a panther instead", "frame": "drawn.becomes", "value": "panther", "span": "a panther"}
-{"batch": "dw-batch-01", "text": "let the fish turn into a crocodile", "frame": "drawn.becomes", "value": "crocodile", "span": "a crocodile"}
-{"batch": "dw-batch-01", "text": "now let the cat turn into a leopard", "frame": "drawn.becomes", "value": "leopard", "span": "a leopard"}
-{"batch": "dw-batch-01", "text": "and let the dog turn into a bear", "frame": "drawn.becomes", "value": "bear", "span": "a bear"}
-{"batch": "dw-batch-01", "text": "hey, let the sun turn into a moon", "frame": "drawn.becomes", "value": "moon", "span": "a moon"}
-{"batch": "dw-batch-01", "text": "let the small fish in the lake turn into a shark", "frame": "drawn.becomes", "value": "shark", "span": "a shark"}
-{"batch": "dw-batch-01", "text": "let the tall tree next to the house turn into a giant beanstalk", "frame": "drawn.becomes", "value": "beanstalk", "span": "a giant beanstalk"}
-{"batch": "dw-batch-01", "text": "let the fat cat on the grass turn into a tiger", "frame": "drawn.becomes", "value": "tiger", "span": "a tiger"}
-{"batch": "dw-batch-01", "text": "let the boy's small cat turn into a jaguar", "frame": "drawn.becomes", "value": "jaguar", "span": "a jaguar"}
-{"batch": "dw-batch-01", "text": "let the cat turn into some tame pet", "frame": "drawn.becomes", "value": "some tame pet", "span": "some tame pet"}
-{"batch": "dw-batch-01", "text": "let the tree turn into a different plant", "frame": "drawn.becomes", "value": "a different plant", "span": "a different plant"}
-{"batch": "dw-batch-01", "text": "let the fish turn into whatever fits a pond", "frame": "drawn.becomes", "value": "whatever fits a pond", "span": "whatever fits a pond"}
-{"batch": "dw-batch-01", "text": "let the cat tunr into a tiger", "frame": "drawn.becomes", "value": "tiger", "span": "a tiger"}
-{"batch": "dw-batch-01", "text": "let the fihs turn into a dolphin", "frame": "drawn.becomes", "value": "dolphin", "span": "a dolphin"}
-{"batch": "dw-batch-01", "text": "swap the dog for a cat", "frame": "drawn.becomes", "value": "cat", "span": "a cat"}
-{"batch": "dw-batch-01", "text": "swap the fish for an octopus", "frame": "drawn.becomes", "value": "octopus", "span": "an octopus"}
-{"batch": "dw-batch-01", "text": "swap the sun for a moon", "frame": "drawn.becomes", "value": "moon", "span": "a moon"}
-{"batch": "dw-batch-01", "text": "swap the kite for a balloon", "frame": "drawn.becomes", "value": "balloon", "span": "a balloon"}
-{"batch": "dw-batch-01", "text": "swap the house for a windmill", "frame": "drawn.becomes", "value": "windmill", "span": "a windmill"}
-{"batch": "dw-batch-01", "text": "swap the car for a motorbike", "frame": "drawn.becomes", "value": "motorbike", "span": "a motorbike"}
-{"batch": "dw-batch-01", "text": "can you swap the cloud for a rainbow?", "frame": "drawn.becomes", "value": "rainbow", "span": "a rainbow"}
-{"batch": "dw-batch-01", "text": "swap the fish for a crab", "frame": "drawn.becomes", "value": "crab", "span": "a crab"}
-{"batch": "dw-batch-01", "text": "then swap the dog for a goat", "frame": "drawn.becomes", "value": "goat", "span": "a goat"}
-{"batch": "dw-batch-01", "text": "swap the bird for a dragonfly", "frame": "drawn.becomes", "value": "dragonfly", "span": "a dragonfly"}
-{"batch": "dw-batch-01", "text": "go on, swap the cat for a rabbit", "frame": "drawn.becomes", "value": "rabbit", "span": "a rabbit"}
-{"batch": "dw-batch-01", "text": "hey, swap the dog for a cat", "frame": "drawn.becomes", "value": "cat", "span": "a cat"}
-{"batch": "dw-batch-01", "text": "swap the fish for an octopus, please", "frame": "drawn.becomes", "value": "octopus", "span": "an octopus"}
-{"batch": "dw-batch-01", "text": "swap the boat on the lake for a barge", "frame": "drawn.becomes", "value": "barge", "span": "a barge"}
-{"batch": "dw-batch-01", "text": "swap the tree beside the house for a fountain", "frame": "drawn.becomes", "value": "fountain", "span": "a fountain"}
-{"batch": "dw-batch-01", "text": "swap the red kite for an eagle", "frame": "drawn.becomes", "value": "eagle", "span": "an eagle"}
-{"batch": "dw-batch-01", "text": "swap the tiny cat for a lynx", "frame": "drawn.becomes", "value": "lynx", "span": "a lynx"}
-{"batch": "dw-batch-01", "text": "swap the bird for something that swims", "frame": "drawn.becomes", "value": "something that swims", "span": "something that swims"}
-{"batch": "dw-batch-01", "text": "swap the dog for a friendlier animal", "frame": "drawn.becomes", "value": "a friendlier animal", "span": "a friendlier animal"}
-{"batch": "dw-batch-01", "text": "swpa the sun for a moon", "frame": "drawn.becomes", "value": "moon", "span": "a moon"}
-{"batch": "dw-batch-01", "text": "swap the dogg for a cta", "frame": "drawn.becomes", "value": "cat", "span": "a cta"}
-{"batch": "dw-batch-01", "text": "let there be a bus instead of the car", "frame": "drawn.becomes", "value": "bus", "span": "a bus"}
-{"batch": "dw-batch-01", "text": "a wolf instead of the dog", "frame": "drawn.becomes", "value": "wolf", "span": "a wolf"}
-{"batch": "dw-batch-01", "text": "a schooner instead of the boat", "frame": "drawn.becomes", "value": "schooner", "span": "a schooner"}
-{"batch": "dw-batch-01", "text": "a proper fountain instead of the tree", "frame": "drawn.becomes", "value": "fountain", "span": "a proper fountain"}
-{"batch": "dw-batch-01", "text": "I'd rather have a biplane instead of the kite", "frame": "drawn.becomes", "value": "biplane", "span": "a biplane"}
-{"batch": "dw-batch-01", "text": "give me a tower instead of the house", "frame": "drawn.becomes", "value": "tower", "span": "a tower"}
-{"batch": "dw-batch-01", "text": "a fierce dragon instead of the bird", "frame": "drawn.becomes", "value": "dragon", "span": "a fierce dragon"}
-{"batch": "dw-batch-01", "text": "a whale instead of the fish, it's more exciting", "frame": "drawn.becomes", "value": "whale", "span": "a whale"}
-{"batch": "dw-batch-01", "text": "a big fluffy sheepdog instead of the car", "frame": "drawn.becomes", "value": "sheepdog", "span": "a big fluffy sheepdog"}
-{"batch": "dw-batch-01", "text": "maybe a submarine instead of the boat, it's more fun", "frame": "drawn.becomes", "value": "submarine", "span": "a submarine"}
-{"batch": "dw-batch-01", "text": "what about a coach instead of the car?", "frame": "drawn.becomes", "value": "coach", "span": "a coach"}
-{"batch": "dw-batch-01", "text": "hey, let there be a wolf instead of the dog", "frame": "drawn.becomes", "value": "wolf", "span": "a wolf"}
-{"batch": "dw-batch-01", "text": "one more thing: a schooner instead of the boat", "frame": "drawn.becomes", "value": "schooner", "span": "a schooner"}
-{"batch": "dw-batch-01", "text": "a fire engine instead of the little car", "frame": "drawn.becomes", "value": "fire engine", "span": "a fire engine"}
-{"batch": "dw-batch-01", "text": "a fountain instead of the tree by the lake", "frame": "drawn.becomes", "value": "fountain", "span": "a fountain"}
-{"batch": "dw-batch-01", "text": "a moon instead of the sun behind the cloud", "frame": "drawn.becomes", "value": "moon", "span": "a moon"}
-{"batch": "dw-batch-01", "text": "a statue instead of the boy on the grass", "frame": "drawn.becomes", "value": "statue", "span": "a statue"}
-{"batch": "dw-batch-01", "text": "something nicer instead of the cloud", "frame": "drawn.becomes", "value": "something nicer", "span": "something nicer"}
-{"batch": "dw-batch-01", "text": "a different animal instead of the cat", "frame": "drawn.becomes", "value": "a different animal", "span": "a different animal"}
-{"batch": "dw-batch-01", "text": "a wolf instead of teh dog", "frame": "drawn.becomes", "value": "wolf", "span": "a wolf"}
-{"batch": "dw-batch-01", "text": "let there be a bus instad of the car", "frame": "drawn.becomes", "value": "bus", "span": "a bus"}
-{"batch": "dw-batch-01", "text": "the car is now a van", "frame": "drawn.becomes", "value": "van", "span": "a van"}
-{"batch": "dw-batch-01", "text": "the dog is a cat now", "frame": "drawn.becomes", "value": "cat", "span": "a cat"}
-{"batch": "dw-batch-01", "text": "the sun is now a moon", "frame": "drawn.becomes", "value": "moon", "span": "a moon"}
-{"batch": "dw-batch-01", "text": "the house is a castle now", "frame": "drawn.becomes", "value": "castle", "span": "a castle"}
-{"batch": "dw-batch-01", "text": "the boat should be a ferry", "frame": "drawn.becomes", "value": "ferry", "span": "a ferry"}
-{"batch": "dw-batch-01", "text": "the cloud is a rainbow now", "frame": "drawn.becomes", "value": "rainbow", "span": "a rainbow"}
-{"batch": "dw-batch-01", "text": "the kite wants to be an eagle", "frame": "drawn.becomes", "value": "eagle", "span": "an eagle"}
-{"batch": "dw-batch-01", "text": "the fish is now a mermaid", "frame": "drawn.becomes", "value": "mermaid", "span": "a mermaid"}
-{"batch": "dw-batch-01", "text": "the car should be a proper coach", "frame": "drawn.becomes", "value": "coach", "span": "a proper coach"}
-{"batch": "dw-batch-01", "text": "I think the sun should be a star", "frame": "drawn.becomes", "value": "star", "span": "a star"}
-{"batch": "dw-batch-01", "text": "hey, the dog is a cat now", "frame": "drawn.becomes", "value": "cat", "span": "a cat"}
-{"batch": "dw-batch-01", "text": "the cat on the grass should be a fox", "frame": "drawn.becomes", "value": "fox", "span": "a fox"}
-{"batch": "dw-batch-01", "text": "the red car is now a fire engine", "frame": "drawn.becomes", "value": "fire engine", "span": "a fire engine"}
-{"batch": "dw-batch-01", "text": "the house by the lake is a windmill now", "frame": "drawn.becomes", "value": "windmill", "span": "a windmill"}
-{"batch": "dw-batch-01", "text": "the cloud over the sun should be a rocket", "frame": "drawn.becomes", "value": "rocket", "span": "a rocket"}
 {"batch": "dw-batch-01", "text": "the dog should be something tamer", "frame": "drawn.variant", "value": "something tamer", "span": "something tamer"}
-{"batch": "dw-batch-01", "text": "the car is now some sort of van", "frame": "drawn.becomes", "value": "van", "span": "some sort of van"}
-{"batch": "dw-batch-01", "text": "the tree is some other plant now", "frame": "drawn.becomes", "value": "some other plant", "span": "some other plant"}
-{"batch": "dw-batch-01", "text": "the sun is a monn now", "frame": "drawn.becomes", "value": "moon", "span": "a monn"}
-{"batch": "dw-batch-01", "text": "the dog is a cta now", "frame": "drawn.becomes", "value": "cat", "span": "a cta"}
-{"batch": "dw-batch-01", "text": "and the dog one too — a fox", "frame": "drawn.becomes", "value": "fox", "span": "a fox"}
-{"batch": "dw-batch-01", "text": "what if the car was a bus?", "frame": "drawn.becomes", "value": "bus", "span": "a bus"}
-{"batch": "dw-batch-01", "text": "what if the sun was a moon?", "frame": "drawn.becomes", "value": "moon", "span": "a moon"}
-{"batch": "dw-batch-01", "text": "what if the dog was a wolf?", "frame": "drawn.becomes", "value": "wolf", "span": "a wolf"}
-{"batch": "dw-batch-01", "text": "what if the house was a giant mushroom?", "frame": "drawn.becomes", "value": "giant mushroom", "span": "a giant mushroom"}
-{"batch": "dw-batch-01", "text": "what if the kite was an aeroplane?", "frame": "drawn.becomes", "value": "aeroplane", "span": "an aeroplane"}
-{"batch": "dw-batch-01", "text": "what if the fish was a treasure chest?", "frame": "drawn.becomes", "value": "treasure chest", "span": "a treasure chest"}
-{"batch": "dw-batch-01", "text": "what if the boat was a pirate ship?", "frame": "drawn.becomes", "value": "pirate ship", "span": "a pirate ship"}
-{"batch": "dw-batch-01", "text": "what if the bird was a dragon?", "frame": "drawn.becomes", "value": "dragon", "span": "a dragon"}
-{"batch": "dw-batch-01", "text": "what if the cat was a lion?", "frame": "drawn.becomes", "value": "lion", "span": "a lion"}
-{"batch": "dw-batch-01", "text": "what if the boat was a sea monster?", "frame": "drawn.becomes", "value": "sea monster", "span": "a sea monster"}
-{"batch": "dw-batch-01", "text": "what if the tree was a toadstool?", "frame": "drawn.becomes", "value": "toadstool", "span": "a toadstool"}
-{"batch": "dw-batch-01", "text": "hey, what if the sun was a moon?", "frame": "drawn.becomes", "value": "moon", "span": "a moon"}
-{"batch": "dw-batch-01", "text": "quick one — what if the cat was a lion?", "frame": "drawn.becomes", "value": "lion", "span": "a lion"}
-{"batch": "dw-batch-01", "text": "what if the boat on the lake was a galleon?", "frame": "drawn.becomes", "value": "galleon", "span": "a galleon"}
-{"batch": "dw-batch-01", "text": "what if the cat by the girl was a puma?", "frame": "drawn.becomes", "value": "puma", "span": "a puma"}
-{"batch": "dw-batch-01", "text": "what if the bird in the tree was a rocket?", "frame": "drawn.becomes", "value": "rocket", "span": "a rocket"}
-{"batch": "dw-batch-01", "text": "what if the two cats were lions?", "frame": "drawn.becomes", "value": "lions", "span": "lions"}
-{"batch": "dw-batch-01", "text": "what if the dog was some other pet?", "frame": "drawn.becomes", "value": "some other pet", "span": "some other pet"}
 {"batch": "dw-batch-01", "text": "what if the house was something grander?", "frame": "drawn.variant", "value": "something grander", "span": "something grander"}
-{"batch": "dw-batch-01", "text": "waht if the sun was a monn?", "frame": "drawn.becomes", "value": "moon", "span": "a monn"}
-{"batch": "dw-batch-01", "text": "what if the cta was a lion?", "frame": "drawn.becomes", "value": "lion", "span": "a lion"}
 {"batch": "dw-batch-01", "text": "go on then, let the car be a sports car", "frame": "drawn.variant", "value": "sports car", "span": "a sports car"}
 {"batch": "dw-batch-01", "text": "let the boat be a sailing boat", "frame": "drawn.variant", "value": "sailing boat", "span": "a sailing boat"}
 {"batch": "dw-batch-01", "text": "let the tree be a pine tree", "frame": "drawn.variant", "value": "pine tree", "span": "a pine tree"}
@@ -250,48 +84,7 @@
 {"batch": "dw-batch-01", "text": "turn the old car into a new eletric car", "frame": "drawn.variant", "value": "electric car", "span": "a new eletric car"}
 {"batch": "dw-batch-01", "text": "let the wooden baot be a motorboat", "frame": "drawn.variant", "value": "motorboat", "span": "a motorboat"}
 {"batch": "dw-batch-01", "text": "the kite next — a proper stunt one", "frame": "drawn.variant", "value": "stunt", "span": "a proper stunt one"}
-{"batch": "dw-batch-01", "text": "let the cloud be a sheep", "frame": "drawn.becomes", "value": "sheep", "span": "a sheep"}
-{"batch": "dw-batch-01", "text": "let the dog be a wolf", "frame": "drawn.becomes", "value": "wolf", "span": "a wolf"}
-{"batch": "dw-batch-01", "text": "let the car be a rocket", "frame": "drawn.becomes", "value": "rocket", "span": "a rocket"}
-{"batch": "dw-batch-01", "text": "let the sun be a lantern", "frame": "drawn.becomes", "value": "lantern", "span": "a lantern"}
-{"batch": "dw-batch-01", "text": "let the fish be a flying carp", "frame": "drawn.becomes", "value": "flying carp", "span": "a flying carp"}
-{"batch": "dw-batch-01", "text": "let the house be a castle", "frame": "drawn.becomes", "value": "castle", "span": "a castle"}
-{"batch": "dw-batch-01", "text": "let the bird be an owl", "frame": "drawn.becomes", "value": "owl", "span": "an owl"}
-{"batch": "dw-batch-01", "text": "let the kite be a hawk", "frame": "drawn.becomes", "value": "hawk", "span": "a hawk"}
-{"batch": "dw-batch-01", "text": "go on, let the cat be a tiger", "frame": "drawn.becomes", "value": "tiger", "span": "a tiger"}
-{"batch": "dw-batch-01", "text": "let the car be a camper van", "frame": "drawn.becomes", "value": "campervan", "span": "a camper van"}
-{"batch": "dw-batch-01", "text": "hey, let the dog be a wolf", "frame": "drawn.becomes", "value": "wolf", "span": "a wolf"}
-{"batch": "dw-batch-01", "text": "let the fish be a flying carp, please", "frame": "drawn.becomes", "value": "flying carp", "span": "a flying carp"}
-{"batch": "dw-batch-01", "text": "let the fat cat on the grass be a lynx", "frame": "drawn.becomes", "value": "lynx", "span": "a lynx"}
-{"batch": "dw-batch-01", "text": "let the small dog be a friendly wolf", "frame": "drawn.becomes", "value": "wolf", "span": "a friendly wolf"}
-{"batch": "dw-batch-01", "text": "let the old boat on the lake be a galleon", "frame": "drawn.becomes", "value": "galleon", "span": "a galleon"}
-{"batch": "dw-batch-01", "text": "let the fish under the cloud be a crab", "frame": "drawn.becomes", "value": "crab", "span": "a crab"}
-{"batch": "dw-batch-01", "text": "let the cat be some other pet", "frame": "drawn.becomes", "value": "some other pet", "span": "some other pet"}
 {"batch": "dw-batch-01", "text": "let the sun be something less harsh", "frame": "drawn.variant", "value": "less harsh", "span": "something less harsh"}
-{"batch": "dw-batch-01", "text": "let the house be some other building", "frame": "drawn.becomes", "value": "some other building", "span": "some other building"}
-{"batch": "dw-batch-01", "text": "let the dgo be a wolf", "frame": "drawn.becomes", "value": "wolf", "span": "a wolf"}
-{"batch": "dw-batch-01", "text": "let the cluod be a sheep", "frame": "drawn.becomes", "value": "sheep", "span": "a sheep"}
-{"batch": "dw-batch-01", "text": "change the cats into rabbits", "frame": "drawn.becomes", "value": "rabbits", "span": "rabbits"}
-{"batch": "dw-batch-01", "text": "turn the birds into bats", "frame": "drawn.becomes", "value": "bats", "span": "bats"}
-{"batch": "dw-batch-01", "text": "make both trees into lamp posts", "frame": "drawn.becomes", "value": "lamp posts", "span": "lamp posts"}
-{"batch": "dw-batch-01", "text": "turn all the clouds into flying pigs", "frame": "drawn.becomes", "value": "flying pigs", "span": "flying pigs"}
-{"batch": "dw-batch-01", "text": "change the fish into sharks", "frame": "drawn.becomes", "value": "sharks", "span": "sharks"}
-{"batch": "dw-batch-01", "text": "can you change the two cats into tigers?", "frame": "drawn.becomes", "value": "tigers", "span": "tigers"}
-{"batch": "dw-batch-01", "text": "swap all the cats for dogs", "frame": "drawn.becomes", "value": "dogs", "span": "dogs"}
-{"batch": "dw-batch-01", "text": "the birds should be dragonflies now", "frame": "drawn.becomes", "value": "dragonflies", "span": "dragonflies"}
-{"batch": "dw-batch-01", "text": "go on, turn the cats into lions", "frame": "drawn.becomes", "value": "lions", "span": "lions"}
-{"batch": "dw-batch-01", "text": "change the dogs into foxes", "frame": "drawn.becomes", "value": "foxes", "span": "foxes"}
-{"batch": "dw-batch-01", "text": "let the birds become kingfishers", "frame": "drawn.becomes", "value": "kingfishers", "span": "kingfishers"}
-{"batch": "dw-batch-01", "text": "hey, change the cats into rabbits", "frame": "drawn.becomes", "value": "rabbits", "span": "rabbits"}
-{"batch": "dw-batch-01", "text": "turn all the clouds into flying pigs, please", "frame": "drawn.becomes", "value": "flying pigs", "span": "flying pigs"}
-{"batch": "dw-batch-01", "text": "the cats by the house should be tigers", "frame": "drawn.becomes", "value": "tigers", "span": "tigers"}
-{"batch": "dw-batch-01", "text": "turn the birds over the lake into seagulls", "frame": "drawn.becomes", "value": "seagulls", "span": "seagulls"}
-{"batch": "dw-batch-01", "text": "change the cats sitting on the grass into otters", "frame": "drawn.becomes", "value": "otters", "span": "otters"}
-{"batch": "dw-batch-01", "text": "swap the two big dogs for wolves", "frame": "drawn.becomes", "value": "wolves", "span": "wolves"}
-{"batch": "dw-batch-01", "text": "change the cats into some other animals", "frame": "drawn.becomes", "value": "some other animals", "span": "some other animals"}
-{"batch": "dw-batch-01", "text": "turn the birds into some friendlier creatures", "frame": "drawn.becomes", "value": "some friendlier creatures", "span": "some friendlier creatures"}
-{"batch": "dw-batch-01", "text": "change the cts into rabbits", "frame": "drawn.becomes", "value": "rabbits", "span": "rabbits"}
-{"batch": "dw-batch-01", "text": "trun the biirds into bats", "frame": "drawn.becomes", "value": "bats", "span": "bats"}
 {"batch": "dw-batch-01", "text": "change the trees into oak trees", "frame": "drawn.variant", "value": "oak trees", "span": "oak trees"}
 {"batch": "dw-batch-01", "text": "turn both clouds into storm clouds", "frame": "drawn.variant", "value": "storm clouds", "span": "storm clouds"}
 {"batch": "dw-batch-01", "text": "make both cars into sports cars", "frame": "drawn.variant", "value": "sports cars", "span": "sports cars"}
@@ -303,7 +96,6 @@
 {"batch": "dw-batch-01", "text": "the cars want to be electric cars", "frame": "drawn.variant", "value": "electric cars", "span": "electric cars"}
 {"batch": "dw-batch-01", "text": "turn the boats into speedboats", "frame": "drawn.variant", "value": "speedboats", "span": "speedboats"}
 {"batch": "dw-batch-01", "text": "hey, make both cars into sports cars", "frame": "drawn.variant", "value": "sports cars", "span": "sports cars"}
-{"batch": "dw-batch-01", "text": "the trees beside the lake should all be willow trees", "frame": "drawn.becomes", "value": "willow trees", "span": "willow trees"}
 {"batch": "dw-batch-01", "text": "turn the clouds over the lake into heavy rain clouds", "frame": "drawn.variant", "value": "heavy rain clouds", "span": "heavy rain clouds"}
 {"batch": "dw-batch-01", "text": "make the cars in front of the house into vintage cars", "frame": "drawn.variant", "value": "vintage cars", "span": "vintage cars"}
 {"batch": "dw-batch-01", "text": "turn both boats on the lake into smart sailing boats", "frame": "drawn.variant", "value": "sailing boats", "span": "smart sailing boats"}
@@ -313,48 +105,14 @@
 {"batch": "dw-batch-01", "text": "turn both cluods into storm clouds", "frame": "drawn.variant", "value": "storm clouds", "span": "storm clouds"}
 {"batch": "dw-batch-01", "text": "chnage the trees into oak trees", "frame": "drawn.variant", "value": "oak trees", "span": "oak trees"}
 {"batch": "dw-batch-01", "text": "the same for the clouds — make them storm clouds", "frame": "drawn.variant", "value": "storm clouds", "span": "storm clouds"}
-{"batch": "dw-batch-01", "text": "turn one of the birds into a dragonfly", "frame": "drawn.becomes", "value": "dragonfly", "span": "a dragonfly"}
-{"batch": "dw-batch-01", "text": "change one of the fish into a pike", "frame": "drawn.becomes", "value": "pike", "span": "a pike"}
-{"batch": "dw-batch-01", "text": "swap one of the fish for a crab", "frame": "drawn.becomes", "value": "crab", "span": "a crab"}
-{"batch": "dw-batch-01", "text": "let one of the birds be a parrot", "frame": "drawn.becomes", "value": "parrot", "span": "a parrot"}
-{"batch": "dw-batch-01", "text": "make one of the fish a mermaid", "frame": "drawn.becomes", "value": "mermaid", "span": "a mermaid"}
-{"batch": "dw-batch-01", "text": "can you turn one of the birds into a kite?", "frame": "drawn.becomes", "value": "kite", "span": "a kite"}
-{"batch": "dw-batch-01", "text": "one of the fish should be a shark now", "frame": "drawn.becomes", "value": "shark", "span": "a shark"}
-{"batch": "dw-batch-01", "text": "why not turn one of the birds into a bat?", "frame": "drawn.becomes", "value": "bat", "span": "a bat"}
-{"batch": "dw-batch-01", "text": "go on, change one of the fish into an octopus", "frame": "drawn.becomes", "value": "octopus", "span": "an octopus"}
-{"batch": "dw-batch-01", "text": "one of the birds instead — a peacock", "frame": "drawn.becomes", "value": "peacock", "span": "a peacock"}
-{"batch": "dw-batch-01", "text": "just one of the birds will do — make it a swan", "frame": "drawn.becomes", "value": "swan", "span": "a swan"}
-{"batch": "dw-batch-01", "text": "hey, turn one of the birds into a dragonfly", "frame": "drawn.becomes", "value": "dragonfly", "span": "a dragonfly"}
-{"batch": "dw-batch-01", "text": "make one of the fish a mermaid, please", "frame": "drawn.becomes", "value": "mermaid", "span": "a mermaid"}
-{"batch": "dw-batch-01", "text": "turn one of the birds over the lake into an eagle", "frame": "drawn.becomes", "value": "eagle", "span": "an eagle"}
-{"batch": "dw-batch-01", "text": "change one of the plump fish into a barracuda", "frame": "drawn.becomes", "value": "barracuda", "span": "a barracuda"}
-{"batch": "dw-batch-01", "text": "let one of the birds sitting on the house be a raven", "frame": "drawn.becomes", "value": "raven", "span": "a raven"}
-{"batch": "dw-batch-01", "text": "one of the fish under the cloud should be a stingray", "frame": "drawn.becomes", "value": "stingray", "span": "a stingray"}
 {"batch": "dw-batch-01", "text": "turn one of the birds into something friendlier", "frame": "drawn.variant", "value": "something friendlier", "span": "something friendlier"}
 {"batch": "dw-batch-01", "text": "make one of the fish a faster one", "frame": "drawn.variant", "value": "faster", "span": "a faster one"}
-{"batch": "dw-batch-01", "text": "turn one of the biirds into a dragonfly", "frame": "drawn.becomes", "value": "dragonfly", "span": "a dragonfly"}
-{"batch": "dw-batch-01", "text": "change one of the fsih into a crab", "frame": "drawn.becomes", "value": "crab", "span": "a crab"}
-{"batch": "dw-batch-01", "text": "let the fish change into birds", "frame": "drawn.becomes", "value": "birds", "span": "birds"}
-{"batch": "dw-batch-01", "text": "let the clouds change into whales", "frame": "drawn.becomes", "value": "whales", "span": "whales"}
-{"batch": "dw-batch-01", "text": "let the fish turn into crabs", "frame": "drawn.becomes", "value": "crabs", "span": "crabs"}
-{"batch": "dw-batch-01", "text": "let the trees change into topiary dinosaurs", "frame": "drawn.becomes", "value": "topiary dinosaurs", "span": "topiary dinosaurs"}
-{"batch": "dw-batch-01", "text": "let the two clouds become geese", "frame": "drawn.becomes", "value": "geese", "span": "geese"}
-{"batch": "dw-batch-01", "text": "let the fish change into frogs as well", "frame": "drawn.becomes", "value": "frogs", "span": "frogs"}
-{"batch": "dw-batch-01", "text": "let the birds become flamingos", "frame": "drawn.becomes", "value": "flamingos", "span": "flamingos"}
 {"batch": "dw-batch-01", "text": "just let the fish be jellyfish", "frame": "drawn.variant", "value": "jellyfish", "span": "jellyfish"}
 {"batch": "dw-batch-01", "text": "let the clouds grow into thunderheads", "frame": "drawn.variant", "value": "thunderheads", "span": "thunderheads"}
-{"batch": "dw-batch-01", "text": "I say we let the fish change into sharks", "frame": "drawn.becomes", "value": "sharks", "span": "sharks"}
 {"batch": "dw-batch-01", "text": "and let the birds change into robins", "frame": "drawn.variant", "value": "robins", "span": "robins"}
-{"batch": "dw-batch-01", "text": "hey, let the fish change into birds", "frame": "drawn.becomes", "value": "birds", "span": "birds"}
-{"batch": "dw-batch-01", "text": "one more thing: let the birds become flamingos", "frame": "drawn.becomes", "value": "flamingos", "span": "flamingos"}
-{"batch": "dw-batch-01", "text": "let the fish below the boat change into eels", "frame": "drawn.becomes", "value": "eels", "span": "eels"}
-{"batch": "dw-batch-01", "text": "let the clouds above the house become fireworks", "frame": "drawn.becomes", "value": "fireworks", "span": "fireworks"}
 {"batch": "dw-batch-01", "text": "let the trees round the house change into weeping willows", "frame": "drawn.variant", "value": "weeping willows", "span": "weeping willows"}
-{"batch": "dw-batch-01", "text": "let the fish near the girl change into seahorses", "frame": "drawn.becomes", "value": "seahorses", "span": "seahorses"}
 {"batch": "dw-batch-01", "text": "let the fish change into something less dull", "frame": "drawn.variant", "value": "something less dull", "span": "something less dull"}
 {"batch": "dw-batch-01", "text": "let the clouds become fluffier ones", "frame": "drawn.variant", "value": "fluffier ones", "span": "fluffier ones"}
-{"batch": "dw-batch-01", "text": "let the fsih change into birds", "frame": "drawn.becomes", "value": "birds", "span": "birds"}
-{"batch": "dw-batch-01", "text": "let the cluods change into whales", "frame": "drawn.becomes", "value": "whales", "span": "whales"}
 {"batch": "dw-batch-01", "text": "the sun is now a square", "frame": "drawn.shape", "value": "square", "span": "a square"}
 {"batch": "dw-batch-01", "text": "the lake is now round", "frame": "drawn.shape", "value": "round", "span": "round"}
 {"batch": "dw-batch-01", "text": "the cloud is a heart now", "frame": "drawn.shape", "value": "heart", "span": "a heart"}
@@ -400,415 +158,188 @@
 {"batch": "dw-batch-01", "text": "maek the sun a square", "frame": "drawn.shape", "value": "square", "span": "a square"}
 {"batch": "dw-batch-01", "text": "turn the lkae into a circle", "frame": "drawn.shape", "value": "circle", "span": "a circle"}
 {"batch": "dw-batch-01", "text": "turn the boat into a motorboat and keep it on the lake", "frame": "drawn.variant", "value": "motorboat", "span": "a motorboat"}
-{"batch": "dw-batch-01", "text": "change the car into a truck but leave it next to the house", "frame": "drawn.becomes", "value": "truck", "span": "a truck"}
-{"batch": "dw-batch-01", "text": "swap the old bird for an owl, keeping its spot on the tree", "frame": "drawn.becomes", "value": "owl", "span": "an owl"}
-{"batch": "dw-batch-01", "text": "make the boat a ferry; it stays on the lake", "frame": "drawn.becomes", "value": "ferry", "span": "a ferry"}
-{"batch": "dw-batch-01", "text": "turn the house into a tower and keep it on the grass", "frame": "drawn.becomes", "value": "tower", "span": "a tower"}
-{"batch": "dw-batch-01", "text": "swap the cat for a badger, but she stays on the grass", "frame": "drawn.becomes", "value": "badger", "span": "a badger"}
 {"batch": "dw-batch-01", "text": "turn the kite into a proper stunt kite and keep it up by the cloud", "frame": "drawn.variant", "value": "stunt kite", "span": "a proper stunt kite"}
-{"batch": "dw-batch-01", "text": "turn the tree into a fountain and keep it right by the lake", "frame": "drawn.becomes", "value": "fountain", "span": "a fountain"}
-{"batch": "dw-batch-01", "text": "replace the bird with a parrot, keeping it up in the tree", "frame": "drawn.becomes", "value": "parrot", "span": "a parrot"}
 {"batch": "dw-batch-01", "text": "hey, turn the boat into a motorboat and keep it on the lake", "frame": "drawn.variant", "value": "motorboat", "span": "a motorboat"}
-{"batch": "dw-batch-01", "text": "make the boat a ferry; it stays on the lake, please", "frame": "drawn.becomes", "value": "ferry", "span": "a ferry"}
-{"batch": "dw-batch-01", "text": "turn the car parked next to the tree into a school bus and keep it next to the tree", "frame": "drawn.becomes", "value": "school bus", "span": "a school bus"}
-{"batch": "dw-batch-01", "text": "swap the fat fish in the lake for a pike and keep it in the lake", "frame": "drawn.becomes", "value": "pike", "span": "a pike"}
-{"batch": "dw-batch-01", "text": "turn both boats on the lake into speedboats and keep them on the lake", "frame": "drawn.becomes", "value": "speedboats", "span": "speedboats"}
-{"batch": "dw-batch-01", "text": "turn the birds above the tree into kites and keep them above the tree", "frame": "drawn.becomes", "value": "kites", "span": "kites"}
-{"batch": "dw-batch-01", "text": "turn the cat on the grass into a rabbit and keep it on the grass", "frame": "drawn.becomes", "value": "rabbit", "span": "a rabbit"}
-{"batch": "dw-batch-01", "text": "swap the cloud for a rainbow and leave it behind the house", "frame": "drawn.becomes", "value": "rainbow", "span": "a rainbow"}
 {"batch": "dw-batch-01", "text": "turn the boat into something sportier and keep it on the lake", "frame": "drawn.variant", "value": "something sportier", "span": "something sportier"}
 {"batch": "dw-batch-01", "text": "make the car a posher one, same spot by the house", "frame": "drawn.variant", "value": "posher", "span": "a posher one"}
 {"batch": "dw-batch-01", "text": "turn the boat into a motorbaot and keep it on the lake", "frame": "drawn.variant", "value": "motorboat", "span": "a motorbaot"}
-{"batch": "dw-batch-01", "text": "make teh car a truck; it stays by the house", "frame": "drawn.becomes", "value": "truck", "span": "a truck"}
-{"batch": "dw-batch-01", "text": "turn the car into a truck and the dog into a wolf", "frame": "drawn.becomes", "value": "truck", "span": "a truck"}
-{"batch": "dw-batch-01", "text": "turn the car into a truck and the dog into a wolf", "frame": "drawn.becomes", "value": "wolf", "span": "a wolf"}
-{"batch": "dw-batch-01", "text": "change the cat into a tiger and the fish into a crab", "frame": "drawn.becomes", "value": "tiger", "span": "a tiger"}
-{"batch": "dw-batch-01", "text": "change the cat into a tiger and the fish into a crab", "frame": "drawn.becomes", "value": "crab", "span": "a crab"}
-{"batch": "dw-batch-01", "text": "make the house a tower and the boat a barge", "frame": "drawn.becomes", "value": "tower", "span": "a tower"}
-{"batch": "dw-batch-01", "text": "make the house a tower and the boat a barge", "frame": "drawn.becomes", "value": "barge", "span": "a barge"}
-{"batch": "dw-batch-01", "text": "swap the kite for a bat and the cloud for a rainbow", "frame": "drawn.becomes", "value": "bat", "span": "a bat"}
-{"batch": "dw-batch-01", "text": "swap the kite for a bat and the cloud for a rainbow", "frame": "drawn.becomes", "value": "rainbow", "span": "a rainbow"}
-{"batch": "dw-batch-01", "text": "the sun should be a moon and the tree a toadstool", "frame": "drawn.becomes", "value": "moon", "span": "a moon"}
-{"batch": "dw-batch-01", "text": "the sun should be a moon and the tree a toadstool", "frame": "drawn.becomes", "value": "toadstool", "span": "a toadstool"}
-{"batch": "dw-batch-01", "text": "turn the dog into a cat and the cat into a dog", "frame": "drawn.becomes", "value": "cat", "span": "a cat"}
-{"batch": "dw-batch-01", "text": "turn the dog into a cat and the cat into a dog", "frame": "drawn.becomes", "value": "dog", "span": "a dog"}
-{"batch": "dw-batch-01", "text": "let the fish become a shark and the boat a ghost ship", "frame": "drawn.becomes", "value": "shark", "span": "a shark"}
-{"batch": "dw-batch-01", "text": "let the fish become a shark and the boat a ghost ship", "frame": "drawn.becomes", "value": "ghost ship", "span": "a ghost ship"}
-{"batch": "dw-batch-01", "text": "turn the car into a campervan and the cloud into a rain cloud", "frame": "drawn.becomes", "value": "campervan", "span": "a campervan"}
 {"batch": "dw-batch-01", "text": "turn the car into a campervan and the cloud into a rain cloud", "frame": "drawn.variant", "value": "rain cloud", "span": "a rain cloud"}
-{"batch": "dw-batch-01", "text": "I want the bird to be a swift and the fish to be a whale", "frame": "drawn.becomes", "value": "swift", "span": "a swift"}
-{"batch": "dw-batch-01", "text": "I want the bird to be a swift and the fish to be a whale", "frame": "drawn.becomes", "value": "whale", "span": "a whale"}
 {"batch": "dw-batch-01", "text": "make the tree a cherry tree and the clouds silver balloons", "frame": "drawn.variant", "value": "cherry tree", "span": "a cherry tree"}
-{"batch": "dw-batch-01", "text": "make the tree a cherry tree and the clouds silver balloons", "frame": "drawn.becomes", "value": "silver balloons", "span": "silver balloons"}
-{"batch": "dw-batch-01", "text": "hey, turn the car into a truck and the dog into a wolf", "frame": "drawn.becomes", "value": "truck", "span": "a truck"}
-{"batch": "dw-batch-01", "text": "hey, turn the car into a truck and the dog into a wolf", "frame": "drawn.becomes", "value": "wolf", "span": "a wolf"}
-{"batch": "dw-batch-01", "text": "turn the car next to the house into a fire truck and the tree behind the house into a lamp post", "frame": "drawn.becomes", "value": "fire truck", "span": "a fire truck"}
-{"batch": "dw-batch-01", "text": "turn the car next to the house into a fire truck and the tree behind the house into a lamp post", "frame": "drawn.becomes", "value": "lamp post", "span": "a lamp post"}
-{"batch": "dw-batch-01", "text": "turn the boat on the lake into a ferry and the fish in the lake into a shark", "frame": "drawn.becomes", "value": "ferry", "span": "a ferry"}
-{"batch": "dw-batch-01", "text": "turn the boat on the lake into a ferry and the fish in the lake into a shark", "frame": "drawn.becomes", "value": "shark", "span": "a shark"}
-{"batch": "dw-batch-01", "text": "turn the striped fish into a dolphin and the fat fish into a crab", "frame": "drawn.becomes", "value": "dolphin", "span": "a dolphin"}
-{"batch": "dw-batch-01", "text": "turn the striped fish into a dolphin and the fat fish into a crab", "frame": "drawn.becomes", "value": "crab", "span": "a crab"}
-{"batch": "dw-batch-01", "text": "swap the black cat for a panther and the white cat for a snow leopard", "frame": "drawn.becomes", "value": "panther", "span": "a panther"}
-{"batch": "dw-batch-01", "text": "swap the black cat for a panther and the white cat for a snow leopard", "frame": "drawn.becomes", "value": "snow leopard", "span": "a snow leopard"}
 {"batch": "dw-batch-01", "text": "make the window of the house round and the roof a proper triangle", "frame": "drawn.shape", "value": "round", "span": "round"}
 {"batch": "dw-batch-01", "text": "make the window of the house round and the roof a proper triangle", "frame": "drawn.shape", "value": "triangle", "span": "a proper triangle"}
-{"batch": "dw-batch-01", "text": "turn the old dog on the grass into a bear and the two cats into lions", "frame": "drawn.becomes", "value": "bear", "span": "a bear"}
-{"batch": "dw-batch-01", "text": "turn the old dog on the grass into a bear and the two cats into lions", "frame": "drawn.becomes", "value": "lions", "span": "lions"}
-{"batch": "dw-batch-01", "text": "turn the car into a truck and the dog into something friendlier", "frame": "drawn.becomes", "value": "truck", "span": "a truck"}
 {"batch": "dw-batch-01", "text": "turn the car into a truck and the dog into something friendlier", "frame": "drawn.variant", "value": "something friendlier", "span": "something friendlier"}
 {"batch": "dw-batch-01", "text": "make the tree a pretty one and the house a grander one", "frame": "drawn.variant", "value": "pretty", "span": "a pretty one"}
 {"batch": "dw-batch-01", "text": "make the tree a pretty one and the house a grander one", "frame": "drawn.variant", "value": "grander", "span": "a grander one"}
-{"batch": "dw-batch-01", "text": "turn the car into a truck and teh dog into a wolf", "frame": "drawn.becomes", "value": "truck", "span": "a truck"}
-{"batch": "dw-batch-01", "text": "turn the car into a truck and teh dog into a wolf", "frame": "drawn.becomes", "value": "wolf", "span": "a wolf"}
-{"batch": "dw-batch-01", "text": "change the cta into a tiger and the fish into a crab", "frame": "drawn.becomes", "value": "tiger", "span": "a tiger"}
-{"batch": "dw-batch-01", "text": "change the cta into a tiger and the fish into a crab", "frame": "drawn.becomes", "value": "crab", "span": "a crab"}
-{"batch": "dw-batch-01", "text": "turn the fish into a golden whale", "frame": "drawn.becomes", "value": "whale", "span": "a golden whale"}
-{"batch": "dw-batch-01", "text": "change the cat into a huge tiger", "frame": "drawn.becomes", "value": "tiger", "span": "a huge tiger"}
-{"batch": "dw-batch-01", "text": "make the boat a long white ferry", "frame": "drawn.becomes", "value": "ferry", "span": "a long white ferry"}
 {"batch": "dw-batch-01", "text": "swap the cloud for a little grey rain cloud", "frame": "drawn.variant", "value": "rain cloud", "span": "a little grey rain cloud"}
 {"batch": "dw-batch-01", "text": "turn the little tree into a big Christmas tree", "frame": "drawn.variant", "value": "Christmas tree", "span": "a big Christmas tree"}
-{"batch": "dw-batch-01", "text": "let the bird become a bright red phoenix", "frame": "drawn.becomes", "value": "phoenix", "span": "a bright red phoenix"}
-{"batch": "dw-batch-01", "text": "turn the car into a red fire truck", "frame": "drawn.becomes", "value": "fire truck", "span": "a red fire truck"}
-{"batch": "dw-batch-01", "text": "the cat should be a small black panther", "frame": "drawn.becomes", "value": "panther", "span": "a small black panther"}
-{"batch": "dw-batch-01", "text": "turn the kite into a scaly emerald dragon", "frame": "drawn.becomes", "value": "dragon", "span": "a scaly emerald dragon"}
-{"batch": "dw-batch-01", "text": "can you change the fish into a rosy snapper?", "frame": "drawn.becomes", "value": "snapper", "span": "a rosy snapper"}
-{"batch": "dw-batch-01", "text": "hey, turn the fish into a golden whale", "frame": "drawn.becomes", "value": "whale", "span": "a golden whale"}
-{"batch": "dw-batch-01", "text": "make the boat a long white ferry, please", "frame": "drawn.becomes", "value": "ferry", "span": "a long white ferry"}
-{"batch": "dw-batch-01", "text": "turn the fish in the lake into a golden shark and make it bigger", "frame": "drawn.becomes", "value": "shark", "span": "a golden shark"}
-{"batch": "dw-batch-01", "text": "turn the two birds into white doves", "frame": "drawn.becomes", "value": "doves", "span": "white doves"}
 {"batch": "dw-batch-01", "text": "change the tree by the house into a tall green oak tree", "frame": "drawn.variant", "value": "oak tree", "span": "a tall green oak tree"}
-{"batch": "dw-batch-01", "text": "turn the bird on the house into a big brown owl", "frame": "drawn.becomes", "value": "owl", "span": "a big brown owl"}
 {"batch": "dw-batch-01", "text": "make the boat a showier one", "frame": "drawn.variant", "value": "showier", "span": "a showier one"}
 {"batch": "dw-batch-01", "text": "swap the cat for something sleeker", "frame": "drawn.variant", "value": "something sleeker", "span": "something sleeker"}
-{"batch": "dw-batch-01", "text": "turn the fisgh into a golden whale", "frame": "drawn.becomes", "value": "whale", "span": "a golden whale"}
-{"batch": "dw-batch-01", "text": "make teh boat a long white ferry", "frame": "drawn.becomes", "value": "ferry", "span": "a long white ferry"}
-{"batch": "dw-batch-01", "text": "same for the bird — a bright red phoenix", "frame": "drawn.becomes", "value": "phoenix", "span": "a bright red phoenix"}
-{"batch": "dw-batch-01", "text": "put a pair of eyes on the sun", "frame": "part.owner", "value": "sun", "span": "the sun"}
-{"batch": "dw-batch-01", "text": "hey, put a pair of eyes on the sun", "frame": "part.owner", "value": "sun", "span": "the sun"}
-{"batch": "dw-batch-01", "text": "give the sun some eyes", "frame": "part.owner", "value": "sun", "span": "the sun"}
-{"batch": "dw-batch-01", "text": "add eyes to the sun", "frame": "part.owner", "value": "sun", "span": "the sun"}
-{"batch": "dw-batch-01", "text": "let the sun have eyes", "frame": "part.owner", "value": "sun", "span": "the sun"}
-{"batch": "dw-batch-01", "text": "let the sun have eyes, please", "frame": "part.owner", "value": "sun", "span": "the sun"}
-{"batch": "dw-batch-01", "text": "the sun is missing eyes", "frame": "part.owner", "value": "sun", "span": "the sun"}
-{"batch": "dw-batch-01", "text": "can you draw eyes on the sun?", "frame": "part.owner", "value": "sun", "span": "the sun"}
-{"batch": "dw-batch-01", "text": "I'd like to see eyes on the sun", "frame": "part.owner", "value": "sun", "span": "the sun"}
-{"batch": "dw-batch-01", "text": "how about eyes for the sun?", "frame": "part.owner", "value": "sun", "span": "the sun"}
-{"batch": "dw-batch-01", "text": "the sun should get a pair of eyes", "frame": "part.owner", "value": "sun", "span": "the sun"}
-{"batch": "dw-batch-01", "text": "eyes on the snowman too", "frame": "part.owner", "value": "snowman", "span": "the snowman"}
-{"batch": "dw-batch-01", "text": "draw the sun with eyes", "frame": "part.owner", "value": "sun", "span": "the sun"}
-{"batch": "dw-batch-01", "text": "put a pair of big happy eyes on the sun", "frame": "part.owner", "value": "sun", "span": "the sun"}
-{"batch": "dw-batch-01", "text": "give the sun eyes and a cheeky smile", "frame": "part.owner", "value": "sun", "span": "the sun"}
-{"batch": "dw-batch-01", "text": "give the sun eyes and a cheeky smile", "frame": "part.owner", "value": "sun", "span": "the sun"}
-{"batch": "dw-batch-01", "text": "I'm picturing the sun with cartoon eyes", "frame": "part.owner", "value": "sun", "span": "the sun"}
-{"batch": "dw-batch-01", "text": "the sun looks blind — could it get a pair of eyes?", "frame": "part.owner", "value": "sun", "span": "it"}
-{"batch": "dw-batch-01", "text": "a pair of eyes on the sun", "frame": "part.owner", "value": "sun", "span": "the sun"}
-{"batch": "dw-batch-01", "text": "some eyes for the sun", "frame": "part.owner", "value": "sun", "span": "the sun"}
-{"batch": "dw-batch-01", "text": "sun could use a pair of eyes", "frame": "part.owner", "value": "sun", "span": "sun"}
-{"batch": "dw-batch-01", "text": "put a pair of eyes on the sunn", "frame": "part.owner", "value": "sun", "span": "the sunn"}
-{"batch": "dw-batch-01", "text": "ad eyes to the snowman", "frame": "part.owner", "value": "snowman", "span": "the snowman"}
-{"batch": "dw-batch-01", "text": "put a chimney on the house", "frame": "part.owner", "value": "house", "span": "the house"}
-{"batch": "dw-batch-01", "text": "hey, put a chimney on the house", "frame": "part.owner", "value": "house", "span": "the house"}
-{"batch": "dw-batch-01", "text": "give the house a little chimney", "frame": "part.owner", "value": "house", "span": "the house"}
-{"batch": "dw-batch-01", "text": "add a chimney to the house", "frame": "part.owner", "value": "house", "span": "the house"}
-{"batch": "dw-batch-01", "text": "add a chimney to the house, please", "frame": "part.owner", "value": "house", "span": "the house"}
-{"batch": "dw-batch-01", "text": "the house needs a chimney", "frame": "part.owner", "value": "house", "span": "the house"}
-{"batch": "dw-batch-01", "text": "let the house have a chimney", "frame": "part.owner", "value": "house", "span": "the house"}
-{"batch": "dw-batch-01", "text": "draw a chimney on the house", "frame": "part.owner", "value": "house", "span": "the house"}
-{"batch": "dw-batch-01", "text": "can you give the house a chimney?", "frame": "part.owner", "value": "house", "span": "the house"}
-{"batch": "dw-batch-01", "text": "how about a chimney on the house?", "frame": "part.owner", "value": "house", "span": "the house"}
-{"batch": "dw-batch-01", "text": "the house should get a chimney", "frame": "part.owner", "value": "house", "span": "the house"}
-{"batch": "dw-batch-01", "text": "a chimney would finish the house off nicely", "frame": "part.owner", "value": "house", "span": "the house"}
-{"batch": "dw-batch-01", "text": "I'd like a chimney on the roof", "frame": "part.owner", "value": "house", "span": "the roof"}
-{"batch": "dw-batch-01", "text": "put a tall chimney on the roof of the house", "frame": "part.owner", "value": "house", "span": "the house"}
-{"batch": "dw-batch-01", "text": "the roof looks bare — add a chimney there", "frame": "part.owner", "value": "house", "span": "the roof"}
-{"batch": "dw-batch-01", "text": "give the house a chimney with smoke curling out", "frame": "part.owner", "value": "house", "span": "the house"}
-{"batch": "dw-batch-01", "text": "add a chimney and a letterbox to the house", "frame": "part.owner", "value": "house", "span": "the house"}
-{"batch": "dw-batch-01", "text": "add a chimney and a letterbox to the house", "frame": "part.owner", "value": "house", "span": "the house"}
-{"batch": "dw-batch-01", "text": "chimney on the house", "frame": "part.owner", "value": "house", "span": "the house"}
-{"batch": "dw-batch-01", "text": "a chimney for the house", "frame": "part.owner", "value": "house", "span": "the house"}
-{"batch": "dw-batch-01", "text": "house could use a chimney", "frame": "part.owner", "value": "house", "span": "house"}
-{"batch": "dw-batch-01", "text": "put a chimney on the huose", "frame": "part.owner", "value": "house", "span": "the huose"}
-{"batch": "dw-batch-01", "text": "ad a chimney to the house", "frame": "part.owner", "value": "house", "span": "the house"}
-{"batch": "dw-batch-01", "text": "put a carrot nose on the snowman", "frame": "part.owner", "value": "snowman", "span": "the snowman"}
-{"batch": "dw-batch-01", "text": "hey, put a carrot nose on the snowman", "frame": "part.owner", "value": "snowman", "span": "the snowman"}
-{"batch": "dw-batch-01", "text": "give the snowman a carrot nose", "frame": "part.owner", "value": "snowman", "span": "the snowman"}
-{"batch": "dw-batch-01", "text": "give the snowman a carrot nose, please", "frame": "part.owner", "value": "snowman", "span": "the snowman"}
-{"batch": "dw-batch-01", "text": "add a carrot nose to the snowman", "frame": "part.owner", "value": "snowman", "span": "the snowman"}
-{"batch": "dw-batch-01", "text": "the snowman needs a nose", "frame": "part.owner", "value": "snowman", "span": "the snowman"}
-{"batch": "dw-batch-01", "text": "let the snowman have a proper nose", "frame": "part.owner", "value": "snowman", "span": "the snowman"}
-{"batch": "dw-batch-01", "text": "draw a carrot nose on the snowman", "frame": "part.owner", "value": "snowman", "span": "the snowman"}
-{"batch": "dw-batch-01", "text": "can you add a nose to the snowman?", "frame": "part.owner", "value": "snowman", "span": "the snowman"}
-{"batch": "dw-batch-01", "text": "how about a carrot for a nose on the snowman?", "frame": "part.owner", "value": "snowman", "span": "the snowman"}
-{"batch": "dw-batch-01", "text": "the snowman is missing a nose", "frame": "part.owner", "value": "snowman", "span": "the snowman"}
-{"batch": "dw-batch-01", "text": "I'd like the snowman with a carrot nose", "frame": "part.owner", "value": "snowman", "span": "the snowman"}
-{"batch": "dw-batch-01", "text": "give it a carrot nose", "frame": "part.owner", "value": "snowman", "span": "it"}
-{"batch": "dw-batch-01", "text": "put a long orange carrot nose on the snowman", "frame": "part.owner", "value": "snowman", "span": "the snowman"}
-{"batch": "dw-batch-01", "text": "the snowman has no face — a carrot for a nose would fix that", "frame": "part.owner", "value": "snowman", "span": "the snowman"}
-{"batch": "dw-batch-01", "text": "give the snowman a carrot nose and stick eyes on it", "frame": "part.owner", "value": "snowman", "span": "the snowman"}
-{"batch": "dw-batch-01", "text": "give the snowman a carrot nose and stick eyes on it", "frame": "part.owner", "value": "snowman", "span": "it"}
-{"batch": "dw-batch-01", "text": "put a carrot nose on the snowman and a scarf on the boy", "frame": "part.owner", "value": "snowman", "span": "the snowman"}
-{"batch": "dw-batch-01", "text": "put a carrot nose on the snowman and a scarf on the boy", "frame": "part.garment+part.owner", "value": "on; boy", "span": "the boy"}
-{"batch": "dw-batch-01", "text": "carrot nose on the snowman", "frame": "part.owner", "value": "snowman", "span": "the snowman"}
-{"batch": "dw-batch-01", "text": "a nose for the snowman", "frame": "part.owner", "value": "snowman", "span": "the snowman"}
-{"batch": "dw-batch-01", "text": "snowman could use a nose", "frame": "part.owner", "value": "snowman", "span": "snowman"}
-{"batch": "dw-batch-01", "text": "put a carrat nose on the snowman", "frame": "part.owner", "value": "snowman", "span": "the snowman"}
-{"batch": "dw-batch-01", "text": "give the snowman a noes", "frame": "part.owner", "value": "snowman", "span": "the snowman"}
-{"batch": "dw-batch-01", "text": "let the sun have a smiley face", "frame": "part.owner", "value": "sun", "span": "the sun"}
-{"batch": "dw-batch-01", "text": "hey, let the sun have a smiley face", "frame": "part.owner", "value": "sun", "span": "the sun"}
-{"batch": "dw-batch-01", "text": "put a smile on the sun", "frame": "part.owner", "value": "sun", "span": "the sun"}
-{"batch": "dw-batch-01", "text": "give the sun a big grin", "frame": "part.owner", "value": "sun", "span": "the sun"}
-{"batch": "dw-batch-01", "text": "add a smile to the sun", "frame": "part.owner", "value": "sun", "span": "the sun"}
-{"batch": "dw-batch-01", "text": "draw a smile on the sun", "frame": "part.owner", "value": "sun", "span": "the sun"}
-{"batch": "dw-batch-01", "text": "draw a smile on the sun, please", "frame": "part.owner", "value": "sun", "span": "the sun"}
-{"batch": "dw-batch-01", "text": "can you give the sun a smile?", "frame": "part.owner", "value": "sun", "span": "the sun"}
-{"batch": "dw-batch-01", "text": "how about a smile on the sun?", "frame": "part.owner", "value": "sun", "span": "the sun"}
-{"batch": "dw-batch-01", "text": "the sun looks unhappy — a smile would help", "frame": "part.owner", "value": "sun", "span": "the sun"}
-{"batch": "dw-batch-01", "text": "let the snowman have a smiley face", "frame": "part.owner", "value": "snowman", "span": "the snowman"}
-{"batch": "dw-batch-01", "text": "give the snowman a smile", "frame": "part.owner", "value": "snowman", "span": "the snowman"}
-{"batch": "dw-batch-01", "text": "I'd love to see the sun smile", "frame": "part.owner", "value": "sun", "span": "the sun"}
-{"batch": "dw-batch-01", "text": "put a big toothy grin on the sun", "frame": "part.owner", "value": "sun", "span": "the sun"}
-{"batch": "dw-batch-01", "text": "give the sun a smiley face, cheeks and all", "frame": "part.owner", "value": "sun", "span": "the sun"}
-{"batch": "dw-batch-01", "text": "the sun and the snowman could both use a smile", "frame": "part.owner", "value": "sun", "span": "the sun"}
-{"batch": "dw-batch-01", "text": "the sun and the snowman could both use a smile", "frame": "part.owner", "value": "snowman", "span": "the snowman"}
-{"batch": "dw-batch-01", "text": "it's a gloomy drawing — how about a smile on the sun?", "frame": "part.owner", "value": "sun", "span": "the sun"}
-{"batch": "dw-batch-01", "text": "smile on the sun", "frame": "part.owner", "value": "sun", "span": "the sun"}
-{"batch": "dw-batch-01", "text": "a smile for the sun", "frame": "part.owner", "value": "sun", "span": "the sun"}
-{"batch": "dw-batch-01", "text": "snowman needs a smile", "frame": "part.owner", "value": "snowman", "span": "snowman"}
-{"batch": "dw-batch-01", "text": "put a smiel on the sun", "frame": "part.owner", "value": "sun", "span": "the sun"}
-{"batch": "dw-batch-01", "text": "give the snowman a smiley faec", "frame": "part.owner", "value": "snowman", "span": "the snowman"}
-{"batch": "dw-batch-01", "text": "let the girl wear a jacket", "frame": "part.garment+part.owner", "value": "on; girl", "span": "the girl"}
-{"batch": "dw-batch-01", "text": "put a jacket on the boy", "frame": "part.garment+part.owner", "value": "on; boy", "span": "the boy"}
-{"batch": "dw-batch-01", "text": "hey, put a jacket on the boy", "frame": "part.garment+part.owner", "value": "on; boy", "span": "the boy"}
-{"batch": "dw-batch-01", "text": "give the boy a jacket", "frame": "part.garment+part.owner", "value": "on; boy", "span": "the boy"}
-{"batch": "dw-batch-01", "text": "dress the girl in a denim jacket", "frame": "part.garment+part.owner", "value": "on; girl", "span": "the girl"}
-{"batch": "dw-batch-01", "text": "the boy needs a jacket", "frame": "part.garment+part.owner", "value": "on; boy", "span": "the boy"}
-{"batch": "dw-batch-01", "text": "can the girl get a jacket on?", "frame": "part.garment+part.owner", "value": "on; girl", "span": "the girl"}
-{"batch": "dw-batch-01", "text": "can the girl get a jacket on?, please", "frame": "part.garment+part.owner", "value": "on; girl", "span": "the girl"}
-{"batch": "dw-batch-01", "text": "how about a jacket for the boy?", "frame": "part.garment+part.owner", "value": "on; boy", "span": "the boy"}
-{"batch": "dw-batch-01", "text": "a warm jacket for the girl", "frame": "part.garment+part.owner", "value": "on; girl", "span": "the girl"}
-{"batch": "dw-batch-01", "text": "I'd like the boy in a jacket", "frame": "part.garment+part.owner", "value": "on; boy", "span": "the boy"}
-{"batch": "dw-batch-01", "text": "the girl should be wearing a jacket", "frame": "part.garment+part.owner", "value": "on; girl", "span": "the girl"}
-{"batch": "dw-batch-01", "text": "get a jacket on the boy", "frame": "part.garment+part.owner", "value": "on; boy", "span": "the boy"}
-{"batch": "dw-batch-01", "text": "it's freezing in this picture — the boy could really use a jacket", "frame": "part.garment+part.owner", "value": "on; boy", "span": "the boy"}
-{"batch": "dw-batch-01", "text": "give the girl a jacket and a scarf", "frame": "part.garment+part.owner", "value": "on; girl", "span": "the girl"}
-{"batch": "dw-batch-01", "text": "give the girl a jacket and a scarf", "frame": "part.garment+part.owner", "value": "on; girl", "span": "the girl"}
-{"batch": "dw-batch-01", "text": "put a nice warm jacket on the boy", "frame": "part.garment+part.owner", "value": "on; boy", "span": "the boy"}
-{"batch": "dw-batch-01", "text": "the girl shivers — let her wear a jacket", "frame": "part.garment+part.owner", "value": "on; girl", "span": "her"}
-{"batch": "dw-batch-01", "text": "jacket on the boy", "frame": "part.garment+part.owner", "value": "on; boy", "span": "the boy"}
-{"batch": "dw-batch-01", "text": "a jacket for the girl", "frame": "part.garment+part.owner", "value": "on; girl", "span": "the girl"}
-{"batch": "dw-batch-01", "text": "boy could use a jacket", "frame": "part.garment+part.owner", "value": "on; boy", "span": "boy"}
-{"batch": "dw-batch-01", "text": "let the boy wearr a jacket", "frame": "part.garment+part.owner", "value": "on; boy", "span": "the boy"}
-{"batch": "dw-batch-01", "text": "put a jocket on the girl", "frame": "part.garment+part.owner", "value": "on; girl", "span": "the girl"}
-{"batch": "dw-batch-01", "text": "put a cowboy hat on the man", "frame": "part.garment+part.owner", "value": "on; man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "hey, put a cowboy hat on the man", "frame": "part.garment+part.owner", "value": "on; man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "let the man wear a cowboy hat", "frame": "part.garment+part.owner", "value": "on; man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "give the man a cowboy hat", "frame": "part.garment+part.owner", "value": "on; man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "give the man a cowboy hat, please", "frame": "part.garment+part.owner", "value": "on; man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "the man needs a cowboy hat", "frame": "part.garment+part.owner", "value": "on; man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "how about a cowboy hat for the man?", "frame": "part.garment+part.owner", "value": "on; man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "a cowboy hat would suit the man", "frame": "part.garment+part.owner", "value": "on; man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "can you put a cowboy hat on the man?", "frame": "part.garment+part.owner", "value": "on; man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "I'd like the man in a cowboy hat", "frame": "part.garment+part.owner", "value": "on; man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "get a cowboy hat on the man", "frame": "part.garment+part.owner", "value": "on; man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "the man should be wearing a cowboy hat", "frame": "part.garment+part.owner", "value": "on; man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "put a cowboy hat on the woman too", "frame": "part.garment+part.owner", "value": "on; woman", "span": "the woman"}
-{"batch": "dw-batch-01", "text": "give the man a proper cowboy hat with a wide brim", "frame": "part.garment+part.owner", "value": "on; man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "the sun is harsh — put a cowboy hat on the man", "frame": "part.garment+part.owner", "value": "on; man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "put a cowboy hat on the man and a bonnet on the woman", "frame": "part.garment+part.owner", "value": "on; man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "put a cowboy hat on the man and a bonnet on the woman", "frame": "part.garment+part.owner", "value": "on; woman", "span": "the woman"}
-{"batch": "dw-batch-01", "text": "the man looks plain — dress him in a cowboy hat", "frame": "part.garment+part.owner", "value": "on; man", "span": "him"}
-{"batch": "dw-batch-01", "text": "cowboy hat on the man", "frame": "part.garment+part.owner", "value": "on; man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "a cowboy hat for the woman", "frame": "part.garment+part.owner", "value": "on; woman", "span": "the woman"}
-{"batch": "dw-batch-01", "text": "man could use a hat", "frame": "part.garment+part.owner", "value": "on; man", "span": "man"}
-{"batch": "dw-batch-01", "text": "put a cowboy hat on the mann", "frame": "part.garment+part.owner", "value": "on; man", "span": "the mann"}
-{"batch": "dw-batch-01", "text": "let the man waer a cowboy hat", "frame": "part.garment+part.owner", "value": "on; man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "let the girl wear a baseball cap", "frame": "part.garment+part.owner", "value": "on; girl", "span": "the girl"}
-{"batch": "dw-batch-01", "text": "put a baseball cap on the girl", "frame": "part.garment+part.owner", "value": "on; girl", "span": "the girl"}
-{"batch": "dw-batch-01", "text": "hey, put a baseball cap on the girl", "frame": "part.garment+part.owner", "value": "on; girl", "span": "the girl"}
-{"batch": "dw-batch-01", "text": "give the girl a baseball cap", "frame": "part.garment+part.owner", "value": "on; girl", "span": "the girl"}
-{"batch": "dw-batch-01", "text": "the girl needs a baseball cap", "frame": "part.garment+part.owner", "value": "on; girl", "span": "the girl"}
-{"batch": "dw-batch-01", "text": "have the girl wearing a baseball cap", "frame": "part.garment+part.owner", "value": "on; girl", "span": "the girl"}
-{"batch": "dw-batch-01", "text": "have the girl wearing a baseball cap, please", "frame": "part.garment+part.owner", "value": "on; girl", "span": "the girl"}
-{"batch": "dw-batch-01", "text": "dress the girl in a baseball cap", "frame": "part.garment+part.owner", "value": "on; girl", "span": "the girl"}
-{"batch": "dw-batch-01", "text": "can the girl get a baseball cap?", "frame": "part.garment+part.owner", "value": "on; girl", "span": "the girl"}
-{"batch": "dw-batch-01", "text": "I'd like to see the girl in a baseball cap", "frame": "part.garment+part.owner", "value": "on; girl", "span": "the girl"}
-{"batch": "dw-batch-01", "text": "the girl should get a baseball cap on", "frame": "part.garment+part.owner", "value": "on; girl", "span": "the girl"}
-{"batch": "dw-batch-01", "text": "get that baseball cap on the girl", "frame": "part.garment+part.owner", "value": "on; girl", "span": "the girl"}
-{"batch": "dw-batch-01", "text": "a baseball cap on the boy as well", "frame": "part.garment+part.owner", "value": "on; boy", "span": "the boy"}
-{"batch": "dw-batch-01", "text": "the girl is catching sun — put a baseball cap on her", "frame": "part.garment+part.owner", "value": "on; girl", "span": "her"}
-{"batch": "dw-batch-01", "text": "give the girl a red baseball cap", "frame": "part.garment+part.owner", "value": "on; girl", "span": "the girl"}
-{"batch": "dw-batch-01", "text": "put a baseball cap on the girl and a pair of sunglasses on the boy", "frame": "part.garment+part.owner", "value": "on; girl", "span": "the girl"}
-{"batch": "dw-batch-01", "text": "put a baseball cap on the girl and a pair of sunglasses on the boy", "frame": "part.garment+part.owner", "value": "on; boy", "span": "the boy"}
-{"batch": "dw-batch-01", "text": "have the girl wearing a backwards baseball cap", "frame": "part.garment+part.owner", "value": "on; girl", "span": "the girl"}
-{"batch": "dw-batch-01", "text": "baseball cap on the girl", "frame": "part.garment+part.owner", "value": "on; girl", "span": "the girl"}
-{"batch": "dw-batch-01", "text": "a baseball cap for the girl", "frame": "part.garment+part.owner", "value": "on; girl", "span": "the girl"}
-{"batch": "dw-batch-01", "text": "girl wants a baseball cap", "frame": "part.garment+part.owner", "value": "on; girl", "span": "girl"}
-{"batch": "dw-batch-01", "text": "put a baseball cap on the gril", "frame": "part.garment+part.owner", "value": "on; girl", "span": "the gril"}
-{"batch": "dw-batch-01", "text": "let the girl waer a baseball cap", "frame": "part.garment+part.owner", "value": "on; girl", "span": "the girl"}
-{"batch": "dw-batch-01", "text": "let the girl wear a dress", "frame": "part.garment+part.owner", "value": "on; girl", "span": "the girl"}
-{"batch": "dw-batch-01", "text": "hey, let the girl wear a dress", "frame": "part.garment+part.owner", "value": "on; girl", "span": "the girl"}
-{"batch": "dw-batch-01", "text": "put a dress on the girl", "frame": "part.garment+part.owner", "value": "on; girl", "span": "the girl"}
-{"batch": "dw-batch-01", "text": "put a dress on the girl, please", "frame": "part.garment+part.owner", "value": "on; girl", "span": "the girl"}
-{"batch": "dw-batch-01", "text": "give the girl a dress", "frame": "part.garment+part.owner", "value": "on; girl", "span": "the girl"}
-{"batch": "dw-batch-01", "text": "dress the girl in a summer dress", "frame": "part.garment+part.owner", "value": "on; girl", "span": "the girl"}
-{"batch": "dw-batch-01", "text": "the girl needs a dress", "frame": "part.garment+part.owner", "value": "on; girl", "span": "the girl"}
-{"batch": "dw-batch-01", "text": "how about a dress for the girl?", "frame": "part.garment+part.owner", "value": "on; girl", "span": "the girl"}
-{"batch": "dw-batch-01", "text": "a nice dress for the girl", "frame": "part.garment+part.owner", "value": "on; girl", "span": "the girl"}
-{"batch": "dw-batch-01", "text": "can the girl have a dress on?", "frame": "part.garment+part.owner", "value": "on; girl", "span": "the girl"}
-{"batch": "dw-batch-01", "text": "I'd like the girl in a dress", "frame": "part.garment+part.owner", "value": "on; girl", "span": "the girl"}
-{"batch": "dw-batch-01", "text": "the girl should be wearing a dress", "frame": "part.garment+part.owner", "value": "on; girl", "span": "the girl"}
-{"batch": "dw-batch-01", "text": "put a dress on the woman too", "frame": "part.garment+part.owner", "value": "on; woman", "span": "the woman"}
-{"batch": "dw-batch-01", "text": "it's a party scene — dress the girl in a frilly dress", "frame": "part.garment+part.owner", "value": "on; girl", "span": "the girl"}
-{"batch": "dw-batch-01", "text": "give the girl a sunny yellow dress", "frame": "part.garment+part.owner", "value": "on; girl", "span": "the girl"}
-{"batch": "dw-batch-01", "text": "the girl wants a long dress with sleeves", "frame": "part.garment+part.owner", "value": "on; girl", "span": "the girl"}
-{"batch": "dw-batch-01", "text": "put a dress on the girl and give the woman a shawl", "frame": "part.garment+part.owner", "value": "on; girl", "span": "the girl"}
-{"batch": "dw-batch-01", "text": "put a dress on the girl and give the woman a shawl", "frame": "part.garment+part.owner", "value": "on; woman", "span": "the woman"}
-{"batch": "dw-batch-01", "text": "dress on the girl", "frame": "part.garment+part.owner", "value": "on; girl", "span": "the girl"}
-{"batch": "dw-batch-01", "text": "a dress for the woman", "frame": "part.garment+part.owner", "value": "on; woman", "span": "the woman"}
-{"batch": "dw-batch-01", "text": "dress for the girl", "frame": "part.garment+part.owner", "value": "on; girl", "span": "the girl"}
-{"batch": "dw-batch-01", "text": "put a dres on the girl", "frame": "part.garment+part.owner", "value": "on; girl", "span": "the girl"}
-{"batch": "dw-batch-01", "text": "let the girl wear adress", "frame": "part.garment+part.owner", "value": "on; girl", "span": "the girl"}
-{"batch": "dw-batch-01", "text": "put a suit on the man", "frame": "part.garment+part.owner", "value": "on; man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "hey, put a suit on the man", "frame": "part.garment+part.owner", "value": "on; man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "let the man wear a suit", "frame": "part.garment+part.owner", "value": "on; man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "dress the man in a suit", "frame": "part.garment+part.owner", "value": "on; man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "the man needs a suit", "frame": "part.garment+part.owner", "value": "on; man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "the man needs a suit, please", "frame": "part.garment+part.owner", "value": "on; man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "how about a suit for the man?", "frame": "part.garment+part.owner", "value": "on; man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "a suit and tie for the man", "frame": "part.garment+part.owner", "value": "on; man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "a suit and tie for the man", "frame": "part.garment+part.owner", "value": "on; man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "can the man get a suit on?", "frame": "part.garment+part.owner", "value": "on; man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "I'd like the man in a suit", "frame": "part.garment+part.owner", "value": "on; man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "the man should be wearing a suit", "frame": "part.garment+part.owner", "value": "on; man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "get the man into a suit", "frame": "part.garment+part.owner", "value": "on; man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "give the boy a smart little suit", "frame": "part.garment+part.owner", "value": "on; boy", "span": "the boy"}
-{"batch": "dw-batch-01", "text": "the man looks scruffy — put a smart suit on him", "frame": "part.garment+part.owner", "value": "on; man", "span": "him"}
-{"batch": "dw-batch-01", "text": "give the man a smart suit and a bow tie", "frame": "part.garment+part.owner", "value": "on; man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "give the man a smart suit and a bow tie", "frame": "part.garment+part.owner", "value": "on; man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "dress the man in a suit and give the boy a bow tie too", "frame": "part.garment+part.owner", "value": "on; man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "dress the man in a suit and give the boy a bow tie too", "frame": "part.garment+part.owner", "value": "on; boy", "span": "the boy"}
-{"batch": "dw-batch-01", "text": "the man has an interview in this scene — let him wear a suit", "frame": "part.garment+part.owner", "value": "on; man", "span": "him"}
-{"batch": "dw-batch-01", "text": "suit on the man", "frame": "part.garment+part.owner", "value": "on; man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "a suit for the man", "frame": "part.garment+part.owner", "value": "on; man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "man needs a suit", "frame": "part.garment+part.owner", "value": "on; man", "span": "man"}
-{"batch": "dw-batch-01", "text": "let the man wear a siut", "frame": "part.garment+part.owner", "value": "on; man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "put a sut on the man", "frame": "part.garment+part.owner", "value": "on; man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "give the man a cape", "frame": "part.garment+part.owner", "value": "on; man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "hey, give the man a cape", "frame": "part.garment+part.owner", "value": "on; man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "let the man have a cape", "frame": "part.garment+part.owner", "value": "on; man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "put a cape on the man", "frame": "part.garment+part.owner", "value": "on; man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "put a cape on the man, please", "frame": "part.garment+part.owner", "value": "on; man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "the man needs a cape", "frame": "part.garment+part.owner", "value": "on; man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "how about a cape for the boy?", "frame": "part.garment+part.owner", "value": "on; boy", "span": "the boy"}
-{"batch": "dw-batch-01", "text": "a cape on the man would look heroic", "frame": "part.garment+part.owner", "value": "on; man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "can you give the boy a cape?", "frame": "part.garment+part.owner", "value": "on; boy", "span": "the boy"}
-{"batch": "dw-batch-01", "text": "I'd like the boy with a cape", "frame": "part.garment+part.owner", "value": "on; boy", "span": "the boy"}
-{"batch": "dw-batch-01", "text": "the boy should get a cape", "frame": "part.garment+part.owner", "value": "on; boy", "span": "the boy"}
-{"batch": "dw-batch-01", "text": "dress the man in a cape", "frame": "part.garment+part.owner", "value": "on; man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "get a cape onto the man", "frame": "part.garment+part.owner", "value": "on; man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "the boy is a little superhero — give him a cape", "frame": "part.garment+part.owner", "value": "on; boy", "span": "him"}
-{"batch": "dw-batch-01", "text": "give the man a cape and the boy a mask", "frame": "part.garment+part.owner", "value": "on; man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "give the man a cape and the boy a mask", "frame": "part.garment+part.owner", "value": "on; boy", "span": "the boy"}
-{"batch": "dw-batch-01", "text": "put a long red cape on the man", "frame": "part.garment+part.owner", "value": "on; man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "how about a cape for the man — something billowing and dramatic", "frame": "part.garment+part.owner", "value": "on; man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "cape on the boy", "frame": "part.garment+part.owner", "value": "on; boy", "span": "the boy"}
-{"batch": "dw-batch-01", "text": "a cape for the man", "frame": "part.garment+part.owner", "value": "on; man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "boy could use a cape", "frame": "part.garment+part.owner", "value": "on; boy", "span": "boy"}
-{"batch": "dw-batch-01", "text": "give the man a caep", "frame": "part.garment+part.owner", "value": "on; man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "put a cape on the bpy", "frame": "part.garment+part.owner", "value": "on; boy", "span": "the bpy"}
-{"batch": "dw-batch-01", "text": "put a sword in the boy's hand", "frame": "part.garment+part.owner", "value": "hold; boy", "span": "the boy's hand"}
-{"batch": "dw-batch-01", "text": "give the boy a sword", "frame": "part.garment+part.owner", "value": "hold; boy", "span": "the boy"}
-{"batch": "dw-batch-01", "text": "hey, give the boy a sword", "frame": "part.garment+part.owner", "value": "hold; boy", "span": "the boy"}
-{"batch": "dw-batch-01", "text": "let the boy hold a sword", "frame": "part.garment+part.owner", "value": "hold; boy", "span": "the boy"}
-{"batch": "dw-batch-01", "text": "the boy needs a sword", "frame": "part.garment+part.owner", "value": "hold; boy", "span": "the boy"}
-{"batch": "dw-batch-01", "text": "how about a sword for the boy?", "frame": "part.garment+part.owner", "value": "hold; boy", "span": "the boy"}
-{"batch": "dw-batch-01", "text": "arm the boy with a sword", "frame": "part.garment+part.owner", "value": "hold; boy", "span": "the boy"}
-{"batch": "dw-batch-01", "text": "a sword in the boy's hand", "frame": "part.garment+part.owner", "value": "hold; boy", "span": "the boy's hand"}
-{"batch": "dw-batch-01", "text": "a sword in the boy's hand, please", "frame": "part.garment+part.owner", "value": "hold; boy", "span": "the boy's hand"}
-{"batch": "dw-batch-01", "text": "can the boy get a sword?", "frame": "part.garment+part.owner", "value": "hold; boy", "span": "the boy"}
-{"batch": "dw-batch-01", "text": "I'd like to see the boy with a sword", "frame": "part.garment+part.owner", "value": "hold; boy", "span": "the boy"}
-{"batch": "dw-batch-01", "text": "the boy should have a sword", "frame": "part.garment+part.owner", "value": "hold; boy", "span": "the boy"}
-{"batch": "dw-batch-01", "text": "give the man a sword too", "frame": "part.garment+part.owner", "value": "hold; man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "the boy is off to battle — he needs a sword", "frame": "part.garment+part.owner", "value": "hold; boy", "span": "he"}
-{"batch": "dw-batch-01", "text": "put a wooden practice sword in the boy's hand", "frame": "part.garment+part.owner", "value": "hold; boy", "span": "the boy's hand"}
-{"batch": "dw-batch-01", "text": "give the boy a sword and a shield", "frame": "part.garment+part.owner", "value": "hold; boy", "span": "the boy"}
-{"batch": "dw-batch-01", "text": "give the boy a sword and a shield", "frame": "part.garment+part.owner", "value": "hold; boy", "span": "the boy"}
-{"batch": "dw-batch-01", "text": "the man plays the knight — hand him a sword", "frame": "part.garment+part.owner", "value": "hold; man", "span": "him"}
-{"batch": "dw-batch-01", "text": "sword in the boy's hand", "frame": "part.garment+part.owner", "value": "hold; boy", "span": "the boy's hand"}
-{"batch": "dw-batch-01", "text": "a sword for the man", "frame": "part.garment+part.owner", "value": "hold; man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "boy wants a sword", "frame": "part.garment+part.owner", "value": "hold; boy", "span": "boy"}
-{"batch": "dw-batch-01", "text": "give the boya sword", "frame": "part.garment+part.owner", "value": "hold; boy", "span": "the boy"}
-{"batch": "dw-batch-01", "text": "put a sord in the boy's hand", "frame": "part.garment+part.owner", "value": "hold; boy", "span": "the boy's hand"}
-{"batch": "dw-batch-01", "text": "make the girl's shirt red", "frame": "part.owner", "value": "girl", "span": "the girl's"}
-{"batch": "dw-batch-01", "text": "hey, make the girl's shirt red", "frame": "part.owner", "value": "girl", "span": "the girl's"}
-{"batch": "dw-batch-01", "text": "turn the boy's shirt red", "frame": "part.owner", "value": "boy", "span": "the boy's"}
-{"batch": "dw-batch-01", "text": "turn the boy's shirt red, please", "frame": "part.owner", "value": "boy", "span": "the boy's"}
-{"batch": "dw-batch-01", "text": "the girl's shirt should be red", "frame": "part.owner", "value": "girl", "span": "the girl's"}
-{"batch": "dw-batch-01", "text": "recolor the girl's shirt red", "frame": "part.owner", "value": "girl", "span": "the girl's"}
-{"batch": "dw-batch-01", "text": "dye the boy's shirt red", "frame": "part.owner", "value": "boy", "span": "the boy's"}
-{"batch": "dw-batch-01", "text": "can you turn the girl's shirt red?", "frame": "part.owner", "value": "girl", "span": "the girl's"}
-{"batch": "dw-batch-01", "text": "I'd like the girl's shirt red", "frame": "part.owner", "value": "girl", "span": "the girl's"}
-{"batch": "dw-batch-01", "text": "let the girl's shirt be red", "frame": "part.owner", "value": "girl", "span": "the girl's"}
-{"batch": "dw-batch-01", "text": "the boy's shirt wants to be red", "frame": "part.owner", "value": "boy", "span": "the boy's"}
-{"batch": "dw-batch-01", "text": "how about the girl's shirt in red?", "frame": "part.owner", "value": "girl", "span": "the girl's"}
-{"batch": "dw-batch-01", "text": "red for the boy's shirt", "frame": "part.owner", "value": "boy", "span": "the boy's"}
-{"batch": "dw-batch-01", "text": "make the girl's shirt a bright cherry red", "frame": "part.owner", "value": "girl", "span": "the girl's"}
-{"batch": "dw-batch-01", "text": "the girl's shirt is dull — go for red instead", "frame": "part.owner", "value": "girl", "span": "the girl's"}
-{"batch": "dw-batch-01", "text": "make the girl's shirt deep red, almost wine-dark", "frame": "part.owner", "value": "girl", "span": "the girl's"}
-{"batch": "dw-batch-01", "text": "make the boy's shirt red and draw a star on it", "frame": "part.owner", "value": "boy", "span": "the boy's"}
-{"batch": "dw-batch-01", "text": "make the boy's shirt red and draw a star on it", "frame": "part.owner", "value": "boy", "span": "it"}
-{"batch": "dw-batch-01", "text": "girl's shirt red", "frame": "part.owner", "value": "girl", "span": "girl's"}
-{"batch": "dw-batch-01", "text": "shirt on the boy — red", "frame": "part.owner", "value": "boy", "span": "the boy"}
-{"batch": "dw-batch-01", "text": "make her shirt red", "frame": "part.owner", "value": "girl", "span": "her"}
-{"batch": "dw-batch-01", "text": "make the girl's shrit red", "frame": "part.owner", "value": "girl", "span": "the girl's"}
-{"batch": "dw-batch-01", "text": "turn the boys shirt red", "frame": "part.owner", "value": "boy", "span": "the boys"}
-{"batch": "dw-batch-01", "text": "make the man's tie black", "frame": "part.owner", "value": "man", "span": "the man's"}
-{"batch": "dw-batch-01", "text": "hey, make the man's tie black", "frame": "part.owner", "value": "man", "span": "the man's"}
-{"batch": "dw-batch-01", "text": "turn the man's tie black", "frame": "part.owner", "value": "man", "span": "the man's"}
-{"batch": "dw-batch-01", "text": "turn the man's tie black, please", "frame": "part.owner", "value": "man", "span": "the man's"}
-{"batch": "dw-batch-01", "text": "the tie on the man should be black", "frame": "part.owner", "value": "man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "black for the man's tie", "frame": "part.owner", "value": "man", "span": "the man's"}
-{"batch": "dw-batch-01", "text": "make the woman's hat black", "frame": "part.owner", "value": "woman", "span": "the woman's"}
-{"batch": "dw-batch-01", "text": "the man's tie could be black", "frame": "part.owner", "value": "man", "span": "the man's"}
-{"batch": "dw-batch-01", "text": "can you make the man's tie black?", "frame": "part.owner", "value": "man", "span": "the man's"}
-{"batch": "dw-batch-01", "text": "I'd like the man's tie black", "frame": "part.owner", "value": "man", "span": "the man's"}
-{"batch": "dw-batch-01", "text": "how about a black tie on the man?", "frame": "part.owner", "value": "man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "let the man's tie be black", "frame": "part.owner", "value": "man", "span": "the man's"}
-{"batch": "dw-batch-01", "text": "the woman should get a black hat", "frame": "part.owner", "value": "woman", "span": "the woman"}
-{"batch": "dw-batch-01", "text": "the man's tie is brown — make it jet black", "frame": "part.owner", "value": "man", "span": "the man's"}
-{"batch": "dw-batch-01", "text": "make the man's tie black to match his suit", "frame": "part.owner", "value": "man", "span": "the man's"}
-{"batch": "dw-batch-01", "text": "make the man's tie black and the woman's hat grey", "frame": "part.owner", "value": "man", "span": "the man's"}
-{"batch": "dw-batch-01", "text": "make the man's tie black and the woman's hat grey", "frame": "part.owner", "value": "woman", "span": "the woman's"}
-{"batch": "dw-batch-01", "text": "a black tie would suit the man better", "frame": "part.owner", "value": "man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "man's tie black", "frame": "part.owner", "value": "man", "span": "man's"}
-{"batch": "dw-batch-01", "text": "black tie for the man", "frame": "part.owner", "value": "man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "make her hat black", "frame": "part.owner", "value": "woman", "span": "her"}
-{"batch": "dw-batch-01", "text": "make the man's ti black", "frame": "part.owner", "value": "man", "span": "the man's"}
-{"batch": "dw-batch-01", "text": "turn the mans tie black", "frame": "part.owner", "value": "man", "span": "the mans"}
-{"batch": "dw-batch-01", "text": "make the woman's sunglasses yellow", "frame": "part.owner", "value": "woman", "span": "the woman's"}
-{"batch": "dw-batch-01", "text": "hey, make the woman's sunglasses yellow", "frame": "part.owner", "value": "woman", "span": "the woman's"}
-{"batch": "dw-batch-01", "text": "turn the man's glasses yellow", "frame": "part.owner", "value": "man", "span": "the man's"}
-{"batch": "dw-batch-01", "text": "the woman's sunglasses should be yellow", "frame": "part.owner", "value": "woman", "span": "the woman's"}
-{"batch": "dw-batch-01", "text": "the woman's sunglasses should be yellow, please", "frame": "part.owner", "value": "woman", "span": "the woman's"}
-{"batch": "dw-batch-01", "text": "yellow for the woman's sunglasses", "frame": "part.owner", "value": "woman", "span": "the woman's"}
-{"batch": "dw-batch-01", "text": "can you make the man's glasses yellow?", "frame": "part.owner", "value": "man", "span": "the man's"}
-{"batch": "dw-batch-01", "text": "I'd like the woman's sunglasses yellow", "frame": "part.owner", "value": "woman", "span": "the woman's"}
-{"batch": "dw-batch-01", "text": "let the woman's sunglasses be yellow", "frame": "part.owner", "value": "woman", "span": "the woman's"}
-{"batch": "dw-batch-01", "text": "the man could do with yellow glasses", "frame": "part.owner", "value": "man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "make the man's sunglasses yellow", "frame": "part.owner", "value": "man", "span": "the man's"}
-{"batch": "dw-batch-01", "text": "give the woman's sunglasses a yellow tint", "frame": "part.owner", "value": "woman", "span": "the woman's"}
-{"batch": "dw-batch-01", "text": "how about a yellow tint on the man's glasses?", "frame": "part.owner", "value": "man", "span": "the man's"}
-{"batch": "dw-batch-01", "text": "the woman's sunglasses are plain — make them a nice yellow", "frame": "part.owner", "value": "woman", "span": "the woman's"}
-{"batch": "dw-batch-01", "text": "make the woman's sunglasses yellow to match the sun", "frame": "part.owner", "value": "woman", "span": "the woman's"}
-{"batch": "dw-batch-01", "text": "make the man's and the woman's glasses yellow", "frame": "part.owner", "value": "man", "span": "the man's"}
-{"batch": "dw-batch-01", "text": "make the man's and the woman's glasses yellow", "frame": "part.owner", "value": "woman", "span": "the woman's"}
-{"batch": "dw-batch-01", "text": "tint the man's glasses yellow and give the woman a sunhat", "frame": "part.owner", "value": "man", "span": "the man's"}
-{"batch": "dw-batch-01", "text": "tint the man's glasses yellow and give the woman a sunhat", "frame": "part.garment+part.owner", "value": "on; woman", "span": "the woman"}
-{"batch": "dw-batch-01", "text": "woman's sunglasses yellow", "frame": "part.owner", "value": "woman", "span": "woman's"}
-{"batch": "dw-batch-01", "text": "yellow glasses for the man", "frame": "part.owner", "value": "man", "span": "the man"}
-{"batch": "dw-batch-01", "text": "make her sunglasses yellow", "frame": "part.owner", "value": "woman", "span": "her"}
-{"batch": "dw-batch-01", "text": "make the woman's sunglassses yellow", "frame": "part.owner", "value": "woman", "span": "the woman's"}
-{"batch": "dw-batch-01", "text": "turne the man's glasses yellow", "frame": "part.owner", "value": "man", "span": "the man's"}
+{"batch": "dw-batch-01", "text": "put a carrot nose on the snowman and a scarf on the boy", "frame": "part.garment", "value": "on", "span": "on"}
+{"batch": "dw-batch-01", "text": "let the girl wear a jacket", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "put a jacket on the boy", "frame": "part.garment", "value": "on", "span": "on"}
+{"batch": "dw-batch-01", "text": "hey, put a jacket on the boy", "frame": "part.garment", "value": "on", "span": "on"}
+{"batch": "dw-batch-01", "text": "give the boy a jacket", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "dress the girl in a denim jacket", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "the boy needs a jacket", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "can the girl get a jacket on?", "frame": "part.garment", "value": "on", "span": "on"}
+{"batch": "dw-batch-01", "text": "can the girl get a jacket on?, please", "frame": "part.garment", "value": "on", "span": "on"}
+{"batch": "dw-batch-01", "text": "how about a jacket for the boy?", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "a warm jacket for the girl", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "I'd like the boy in a jacket", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "the girl should be wearing a jacket", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "get a jacket on the boy", "frame": "part.garment", "value": "on", "span": "on"}
+{"batch": "dw-batch-01", "text": "it's freezing in this picture — the boy could really use a jacket", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "give the girl a jacket and a scarf", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "give the girl a jacket and a scarf", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "put a nice warm jacket on the boy", "frame": "part.garment", "value": "on", "span": "on"}
+{"batch": "dw-batch-01", "text": "the girl shivers — let her wear a jacket", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "jacket on the boy", "frame": "part.garment", "value": "on", "span": "on"}
+{"batch": "dw-batch-01", "text": "a jacket for the girl", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "boy could use a jacket", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "let the boy wearr a jacket", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "put a jocket on the girl", "frame": "part.garment", "value": "on", "span": "on"}
+{"batch": "dw-batch-01", "text": "put a cowboy hat on the man", "frame": "part.garment", "value": "on", "span": "on"}
+{"batch": "dw-batch-01", "text": "hey, put a cowboy hat on the man", "frame": "part.garment", "value": "on", "span": "on"}
+{"batch": "dw-batch-01", "text": "let the man wear a cowboy hat", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "give the man a cowboy hat", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "give the man a cowboy hat, please", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "the man needs a cowboy hat", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "how about a cowboy hat for the man?", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "a cowboy hat would suit the man", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "can you put a cowboy hat on the man?", "frame": "part.garment", "value": "on", "span": "on"}
+{"batch": "dw-batch-01", "text": "I'd like the man in a cowboy hat", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "get a cowboy hat on the man", "frame": "part.garment", "value": "on", "span": "on"}
+{"batch": "dw-batch-01", "text": "the man should be wearing a cowboy hat", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "put a cowboy hat on the woman too", "frame": "part.garment", "value": "on", "span": "on"}
+{"batch": "dw-batch-01", "text": "give the man a proper cowboy hat with a wide brim", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "the sun is harsh — put a cowboy hat on the man", "frame": "part.garment", "value": "on", "span": "on"}
+{"batch": "dw-batch-01", "text": "put a cowboy hat on the man and a bonnet on the woman", "frame": "part.garment", "value": "on", "span": "on"}
+{"batch": "dw-batch-01", "text": "put a cowboy hat on the man and a bonnet on the woman", "frame": "part.garment", "value": "on", "span": "on"}
+{"batch": "dw-batch-01", "text": "the man looks plain — dress him in a cowboy hat", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "cowboy hat on the man", "frame": "part.garment", "value": "on", "span": "on"}
+{"batch": "dw-batch-01", "text": "a cowboy hat for the woman", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "man could use a hat", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "put a cowboy hat on the mann", "frame": "part.garment", "value": "on", "span": "on"}
+{"batch": "dw-batch-01", "text": "let the man waer a cowboy hat", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "let the girl wear a baseball cap", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "put a baseball cap on the girl", "frame": "part.garment", "value": "on", "span": "on"}
+{"batch": "dw-batch-01", "text": "hey, put a baseball cap on the girl", "frame": "part.garment", "value": "on", "span": "on"}
+{"batch": "dw-batch-01", "text": "give the girl a baseball cap", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "the girl needs a baseball cap", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "have the girl wearing a baseball cap", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "have the girl wearing a baseball cap, please", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "dress the girl in a baseball cap", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "can the girl get a baseball cap?", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "I'd like to see the girl in a baseball cap", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "the girl should get a baseball cap on", "frame": "part.garment", "value": "on", "span": "on"}
+{"batch": "dw-batch-01", "text": "get that baseball cap on the girl", "frame": "part.garment", "value": "on", "span": "on"}
+{"batch": "dw-batch-01", "text": "a baseball cap on the boy as well", "frame": "part.garment", "value": "on", "span": "on"}
+{"batch": "dw-batch-01", "text": "the girl is catching sun — put a baseball cap on her", "frame": "part.garment", "value": "on", "span": "on"}
+{"batch": "dw-batch-01", "text": "give the girl a red baseball cap", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "put a baseball cap on the girl and a pair of sunglasses on the boy", "frame": "part.garment", "value": "on", "span": "on"}
+{"batch": "dw-batch-01", "text": "put a baseball cap on the girl and a pair of sunglasses on the boy", "frame": "part.garment", "value": "on", "span": "on"}
+{"batch": "dw-batch-01", "text": "have the girl wearing a backwards baseball cap", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "baseball cap on the girl", "frame": "part.garment", "value": "on", "span": "on"}
+{"batch": "dw-batch-01", "text": "a baseball cap for the girl", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "girl wants a baseball cap", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "put a baseball cap on the gril", "frame": "part.garment", "value": "on", "span": "on"}
+{"batch": "dw-batch-01", "text": "let the girl waer a baseball cap", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "let the girl wear a dress", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "hey, let the girl wear a dress", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "put a dress on the girl", "frame": "part.garment", "value": "on", "span": "on"}
+{"batch": "dw-batch-01", "text": "put a dress on the girl, please", "frame": "part.garment", "value": "on", "span": "on"}
+{"batch": "dw-batch-01", "text": "give the girl a dress", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "dress the girl in a summer dress", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "the girl needs a dress", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "how about a dress for the girl?", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "a nice dress for the girl", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "can the girl have a dress on?", "frame": "part.garment", "value": "on", "span": "on"}
+{"batch": "dw-batch-01", "text": "I'd like the girl in a dress", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "the girl should be wearing a dress", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "put a dress on the woman too", "frame": "part.garment", "value": "on", "span": "on"}
+{"batch": "dw-batch-01", "text": "it's a party scene — dress the girl in a frilly dress", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "give the girl a sunny yellow dress", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "the girl wants a long dress with sleeves", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "put a dress on the girl and give the woman a shawl", "frame": "part.garment", "value": "on", "span": "on"}
+{"batch": "dw-batch-01", "text": "put a dress on the girl and give the woman a shawl", "frame": "part.garment", "value": "on", "span": "on"}
+{"batch": "dw-batch-01", "text": "dress on the girl", "frame": "part.garment", "value": "on", "span": "on"}
+{"batch": "dw-batch-01", "text": "a dress for the woman", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "dress for the girl", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "put a dres on the girl", "frame": "part.garment", "value": "on", "span": "on"}
+{"batch": "dw-batch-01", "text": "let the girl wear adress", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "put a suit on the man", "frame": "part.garment", "value": "on", "span": "on"}
+{"batch": "dw-batch-01", "text": "hey, put a suit on the man", "frame": "part.garment", "value": "on", "span": "on"}
+{"batch": "dw-batch-01", "text": "let the man wear a suit", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "dress the man in a suit", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "the man needs a suit", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "the man needs a suit, please", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "how about a suit for the man?", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "a suit and tie for the man", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "a suit and tie for the man", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "can the man get a suit on?", "frame": "part.garment", "value": "on", "span": "on"}
+{"batch": "dw-batch-01", "text": "I'd like the man in a suit", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "the man should be wearing a suit", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "get the man into a suit", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "give the boy a smart little suit", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "the man looks scruffy — put a smart suit on him", "frame": "part.garment", "value": "on", "span": "on"}
+{"batch": "dw-batch-01", "text": "give the man a smart suit and a bow tie", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "give the man a smart suit and a bow tie", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "dress the man in a suit and give the boy a bow tie too", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "dress the man in a suit and give the boy a bow tie too", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "the man has an interview in this scene — let him wear a suit", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "suit on the man", "frame": "part.garment", "value": "on", "span": "on"}
+{"batch": "dw-batch-01", "text": "a suit for the man", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "man needs a suit", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "let the man wear a siut", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "put a sut on the man", "frame": "part.garment", "value": "on", "span": "on"}
+{"batch": "dw-batch-01", "text": "give the man a cape", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "hey, give the man a cape", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "let the man have a cape", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "put a cape on the man", "frame": "part.garment", "value": "on", "span": "on"}
+{"batch": "dw-batch-01", "text": "put a cape on the man, please", "frame": "part.garment", "value": "on", "span": "on"}
+{"batch": "dw-batch-01", "text": "the man needs a cape", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "how about a cape for the boy?", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "a cape on the man would look heroic", "frame": "part.garment", "value": "on", "span": "on"}
+{"batch": "dw-batch-01", "text": "can you give the boy a cape?", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "I'd like the boy with a cape", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "the boy should get a cape", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "dress the man in a cape", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "get a cape onto the man", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "the boy is a little superhero — give him a cape", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "give the man a cape and the boy a mask", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "give the man a cape and the boy a mask", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "put a long red cape on the man", "frame": "part.garment", "value": "on", "span": "on"}
+{"batch": "dw-batch-01", "text": "how about a cape for the man — something billowing and dramatic", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "cape on the boy", "frame": "part.garment", "value": "on", "span": "on"}
+{"batch": "dw-batch-01", "text": "a cape for the man", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "boy could use a cape", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "give the man a caep", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "put a cape on the bpy", "frame": "part.garment", "value": "on", "span": "on"}
+{"batch": "dw-batch-01", "text": "put a sword in the boy's hand", "frame": "part.garment", "value": "hold", "span": null}
+{"batch": "dw-batch-01", "text": "give the boy a sword", "frame": "part.garment", "value": "hold", "span": null}
+{"batch": "dw-batch-01", "text": "hey, give the boy a sword", "frame": "part.garment", "value": "hold", "span": null}
+{"batch": "dw-batch-01", "text": "let the boy hold a sword", "frame": "part.garment", "value": "hold", "span": "hold"}
+{"batch": "dw-batch-01", "text": "the boy needs a sword", "frame": "part.garment", "value": "hold", "span": null}
+{"batch": "dw-batch-01", "text": "how about a sword for the boy?", "frame": "part.garment", "value": "hold", "span": null}
+{"batch": "dw-batch-01", "text": "arm the boy with a sword", "frame": "part.garment", "value": "hold", "span": null}
+{"batch": "dw-batch-01", "text": "a sword in the boy's hand", "frame": "part.garment", "value": "hold", "span": null}
+{"batch": "dw-batch-01", "text": "a sword in the boy's hand, please", "frame": "part.garment", "value": "hold", "span": null}
+{"batch": "dw-batch-01", "text": "can the boy get a sword?", "frame": "part.garment", "value": "hold", "span": null}
+{"batch": "dw-batch-01", "text": "I'd like to see the boy with a sword", "frame": "part.garment", "value": "hold", "span": null}
+{"batch": "dw-batch-01", "text": "the boy should have a sword", "frame": "part.garment", "value": "hold", "span": null}
+{"batch": "dw-batch-01", "text": "give the man a sword too", "frame": "part.garment", "value": "hold", "span": null}
+{"batch": "dw-batch-01", "text": "the boy is off to battle — he needs a sword", "frame": "part.garment", "value": "hold", "span": null}
+{"batch": "dw-batch-01", "text": "put a wooden practice sword in the boy's hand", "frame": "part.garment", "value": "hold", "span": null}
+{"batch": "dw-batch-01", "text": "give the boy a sword and a shield", "frame": "part.garment", "value": "hold", "span": null}
+{"batch": "dw-batch-01", "text": "give the boy a sword and a shield", "frame": "part.garment", "value": "hold", "span": null}
+{"batch": "dw-batch-01", "text": "the man plays the knight — hand him a sword", "frame": "part.garment", "value": "hold", "span": null}
+{"batch": "dw-batch-01", "text": "sword in the boy's hand", "frame": "part.garment", "value": "hold", "span": null}
+{"batch": "dw-batch-01", "text": "a sword for the man", "frame": "part.garment", "value": "hold", "span": null}
+{"batch": "dw-batch-01", "text": "boy wants a sword", "frame": "part.garment", "value": "hold", "span": null}
+{"batch": "dw-batch-01", "text": "give the boya sword", "frame": "part.garment", "value": "hold", "span": null}
+{"batch": "dw-batch-01", "text": "put a sord in the boy's hand", "frame": "part.garment", "value": "hold", "span": null}
+{"batch": "dw-batch-01", "text": "tint the man's glasses yellow and give the woman a sunhat", "frame": "part.garment", "value": "on", "span": null}
 {"batch": "dw-batch-01", "text": "take off the man's glasses", "frame": "part.garment", "value": "off", "span": "the man's glasses"}
 {"batch": "dw-batch-01", "text": "hey, take off the man's glasses", "frame": "part.garment", "value": "off", "span": "the man's glasses"}
 {"batch": "dw-batch-01", "text": "take the glasses off the man", "frame": "part.garment", "value": "off", "span": "the glasses off the man"}
@@ -824,7 +355,7 @@
 {"batch": "dw-batch-01", "text": "the boy needs no glasses", "frame": "part.garment", "value": "off", "span": "no glasses"}
 {"batch": "dw-batch-01", "text": "the man is indoors now — take his glasses off", "frame": "part.garment", "value": "off", "span": "his glasses"}
 {"batch": "dw-batch-01", "text": "remove the glasses and give the man a hat instead", "frame": "part.garment", "value": "off", "span": "the glasses"}
-{"batch": "dw-batch-01", "text": "remove the glasses and give the man a hat instead", "frame": "part.garment+part.owner", "value": "on; man", "span": "the man"}
+{"batch": "dw-batch-01", "text": "remove the glasses and give the man a hat instead", "frame": "part.garment", "value": "on", "span": null}
 {"batch": "dw-batch-01", "text": "take the glasses off the boy and his cap off too", "frame": "part.garment", "value": "off", "span": "the glasses off the boy"}
 {"batch": "dw-batch-01", "text": "take the glasses off the boy and his cap off too", "frame": "part.garment", "value": "off", "span": "his cap"}
 {"batch": "dw-batch-01", "text": "the man squints in the dark — off with his glasses", "frame": "part.garment", "value": "off", "span": "his glasses"}
@@ -871,7 +402,7 @@
 {"batch": "dw-batch-01", "text": "take the girl's shoes off too", "frame": "part.garment", "value": "off", "span": "the girl's shoes"}
 {"batch": "dw-batch-01", "text": "the boy is on the grass — his shoes can come off", "frame": "part.garment", "value": "off", "span": "his shoes"}
 {"batch": "dw-batch-01", "text": "remove the boy's shoes and give him flip-flops", "frame": "part.garment", "value": "off", "span": "the boy's shoes"}
-{"batch": "dw-batch-01", "text": "remove the boy's shoes and give him flip-flops", "frame": "part.garment+part.owner", "value": "on; boy", "span": "him"}
+{"batch": "dw-batch-01", "text": "remove the boy's shoes and give him flip-flops", "frame": "part.garment", "value": "on", "span": null}
 {"batch": "dw-batch-01", "text": "take the shoes off both kids", "frame": "part.garment", "value": "off", "span": "the shoes"}
 {"batch": "dw-batch-01", "text": "take the shoes off both kids", "frame": "part.garment", "value": "off", "span": "the shoes"}
 {"batch": "dw-batch-01", "text": "the girl has been running — take her shoes off", "frame": "part.garment", "value": "off", "span": "her shoes"}
@@ -971,249 +502,13 @@
 {"batch": "dw-batch-01", "text": "man goes bald", "frame": "drawn.trait", "value": "bald", "span": "bald"}
 {"batch": "dw-batch-01", "text": "make the man blad", "frame": "drawn.trait", "value": "bald", "span": "blad"}
 {"batch": "dw-batch-01", "text": "shave the man's haed", "frame": "drawn.trait", "value": "bald", "span": "the man's haed"}
-{"batch": "dw-batch-01", "text": "take the tail off the dog", "frame": "part.owner", "value": "dog", "span": "the dog"}
-{"batch": "dw-batch-01", "text": "hey, take the tail off the dog", "frame": "part.owner", "value": "dog", "span": "the dog"}
-{"batch": "dw-batch-01", "text": "remove the dog's tail", "frame": "part.owner", "value": "dog", "span": "the dog's"}
-{"batch": "dw-batch-01", "text": "remove the dog's tail, please", "frame": "part.owner", "value": "dog", "span": "the dog's"}
-{"batch": "dw-batch-01", "text": "take away the snowman's hat", "frame": "part.owner", "value": "snowman", "span": "the snowman's"}
-{"batch": "dw-batch-01", "text": "the dog should lose its tail", "frame": "part.owner", "value": "dog", "span": "its"}
-{"batch": "dw-batch-01", "text": "get rid of the chimney on the house", "frame": "part.owner", "value": "house", "span": "the house"}
-{"batch": "dw-batch-01", "text": "take the chimney off the house", "frame": "part.owner", "value": "house", "span": "the house"}
-{"batch": "dw-batch-01", "text": "can you remove the dog's tail?", "frame": "part.owner", "value": "dog", "span": "the dog's"}
-{"batch": "dw-batch-01", "text": "the house doesn't need a chimney", "frame": "part.owner", "value": "house", "span": "the house"}
-{"batch": "dw-batch-01", "text": "I'd like the hat off the snowman", "frame": "part.owner", "value": "snowman", "span": "the snowman"}
-{"batch": "dw-batch-01", "text": "no tail on the dog", "frame": "part.owner", "value": "dog", "span": "the dog"}
-{"batch": "dw-batch-01", "text": "how about losing the dog's tail?", "frame": "part.owner", "value": "dog", "span": "the dog's"}
-{"batch": "dw-batch-01", "text": "make the dog tailless", "frame": "part.owner", "value": "dog", "span": "the dog"}
-{"batch": "dw-batch-01", "text": "the dog wags its tail through the paint — remove it", "frame": "part.owner", "value": "dog", "span": "its tail"}
-{"batch": "dw-batch-01", "text": "take the dog's tail off and remove its collar too", "frame": "part.owner", "value": "dog", "span": "the dog's"}
-{"batch": "dw-batch-01", "text": "take the dog's tail off and remove its collar too", "frame": "part.owner", "value": "dog", "span": "its"}
-{"batch": "dw-batch-01", "text": "the snowman is melting — take his hat and nose off", "frame": "part.owner", "value": "snowman", "span": "the snowman"}
-{"batch": "dw-batch-01", "text": "the snowman is melting — take his hat and nose off", "frame": "part.owner", "value": "snowman", "span": "the snowman"}
-{"batch": "dw-batch-01", "text": "dog's tail off", "frame": "part.owner", "value": "dog", "span": "dog's"}
-{"batch": "dw-batch-01", "text": "chimney off the house", "frame": "part.owner", "value": "house", "span": "the house"}
-{"batch": "dw-batch-01", "text": "hat off the snowman", "frame": "part.owner", "value": "snowman", "span": "the snowman"}
-{"batch": "dw-batch-01", "text": "take the taail off the dog", "frame": "part.owner", "value": "dog", "span": "the dog"}
-{"batch": "dw-batch-01", "text": "get rid of the chimeny on the house", "frame": "part.owner", "value": "house", "span": "the house"}
-{"batch": "dw-batch-01", "text": "make the roof red", "frame": "part.owner", "value": "house", "span": "the roof"}
-{"batch": "dw-batch-01", "text": "hey, make the roof red", "frame": "part.owner", "value": "house", "span": "the roof"}
-{"batch": "dw-batch-01", "text": "paint the roof red", "frame": "part.owner", "value": "house", "span": "the roof"}
-{"batch": "dw-batch-01", "text": "the roof should be red", "frame": "part.owner", "value": "house", "span": "the roof"}
-{"batch": "dw-batch-01", "text": "repaint the roof red", "frame": "part.owner", "value": "house", "span": "the roof"}
-{"batch": "dw-batch-01", "text": "turn the roof red", "frame": "part.owner", "value": "house", "span": "the roof"}
-{"batch": "dw-batch-01", "text": "turn the roof red, please", "frame": "part.owner", "value": "house", "span": "the roof"}
-{"batch": "dw-batch-01", "text": "how about a red roof?", "frame": "part.owner", "value": "house", "span": "a red roof"}
-{"batch": "dw-batch-01", "text": "can you make the roof red?", "frame": "part.owner", "value": "house", "span": "the roof"}
-{"batch": "dw-batch-01", "text": "I'd like the roof red", "frame": "part.owner", "value": "house", "span": "the roof"}
-{"batch": "dw-batch-01", "text": "let the roof be red", "frame": "part.owner", "value": "house", "span": "the roof"}
-{"batch": "dw-batch-01", "text": "red for the roof", "frame": "part.owner", "value": "house", "span": "the roof"}
-{"batch": "dw-batch-01", "text": "give the roof a fresh coat of red", "frame": "part.owner", "value": "house", "span": "the roof"}
-{"batch": "dw-batch-01", "text": "make the roof a warm brick red", "frame": "part.owner", "value": "house", "span": "the roof"}
-{"batch": "dw-batch-01", "text": "the roof blends into the walls — brighten it with red", "frame": "part.owner", "value": "house", "span": "the roof"}
-{"batch": "dw-batch-01", "text": "make the roof red and paint the door blue", "frame": "part.owner", "value": "house", "span": "the roof"}
-{"batch": "dw-batch-01", "text": "make the roof red and paint the door blue", "frame": "part.owner", "value": "house", "span": "the door"}
-{"batch": "dw-batch-01", "text": "a cherry red roof would finish the house off", "frame": "part.owner", "value": "house", "span": "cherry red roof"}
-{"batch": "dw-batch-01", "text": "roof red", "frame": "part.owner", "value": "house", "span": "roof"}
-{"batch": "dw-batch-01", "text": "the roof, red", "frame": "part.owner", "value": "house", "span": "the roof"}
-{"batch": "dw-batch-01", "text": "roof — red", "frame": "part.owner", "value": "house", "span": "roof"}
-{"batch": "dw-batch-01", "text": "make the roofo red", "frame": "part.owner", "value": "house", "span": "the roofo"}
-{"batch": "dw-batch-01", "text": "paint the roof rde", "frame": "part.owner", "value": "house", "span": "the roof"}
-{"batch": "dw-batch-01", "text": "the background should be proper mountains", "frame": "drawn.region", "value": "background", "span": "the background"}
-{"batch": "dw-batch-01", "text": "make the background a range of mountains", "frame": "drawn.region", "value": "background", "span": "the background"}
-{"batch": "dw-batch-01", "text": "I want mountains as the background of the scene", "frame": "drawn.region", "value": "background", "span": "the background"}
-{"batch": "dw-batch-01", "text": "let the backdrop be mountains", "frame": "drawn.region", "value": "background", "span": "the backdrop"}
-{"batch": "dw-batch-01", "text": "put mountains behind the whole scene", "frame": "drawn.region", "value": "background", "span": "behind the whole scene"}
-{"batch": "dw-batch-01", "text": "could we have mountains in the background?", "frame": "drawn.region", "value": "background", "span": "the background"}
-{"batch": "dw-batch-01", "text": "how about a mountain landscape at the back?", "frame": "drawn.region", "value": "background", "span": "at the back"}
-{"batch": "dw-batch-01", "text": "the scene needs a mountain backdrop", "frame": "drawn.region", "value": "background", "span": "a mountain backdrop"}
-{"batch": "dw-batch-01", "text": "swap the empty background for mountains", "frame": "drawn.region", "value": "background", "span": "the empty background"}
-{"batch": "dw-batch-01", "text": "the area behind the hills should be proper mountains", "frame": "drawn.region", "value": "background", "span": "behind the hills"}
-{"batch": "dw-batch-01", "text": "right, the background: mountains", "frame": "drawn.region", "value": "background", "span": "the background"}
-{"batch": "dw-batch-01", "text": "hey, make the background a range of mountains", "frame": "drawn.region", "value": "background", "span": "the background"}
-{"batch": "dw-batch-01", "text": "one more thing — the background should be mountains", "frame": "drawn.region", "value": "background", "span": "the background"}
-{"batch": "dw-batch-01", "text": "the background should be mountains, far away and pale blue", "frame": "drawn.region", "value": "background", "span": "the background"}
 {"batch": "dw-batch-01", "text": "the background should be mountains, far away and pale blue", "frame": "drawn.perspective", "value": "far", "span": "far away"}
-{"batch": "dw-batch-01", "text": "instead of that plain sky, let the background be mountains", "frame": "drawn.region", "value": "background", "span": "the background"}
-{"batch": "dw-batch-01", "text": "make the background mountains and make them much smaller than the house", "frame": "drawn.region", "value": "background", "span": "the background"}
-{"batch": "dw-batch-01", "text": "I'm picturing mountains in the background with a few clouds in front of them", "frame": "drawn.region", "value": "background", "span": "in the background"}
-{"batch": "dw-batch-01", "text": "I'm picturing mountains in the background with a few clouds in front of them", "frame": "drawn.region", "value": "foreground", "span": "in front of them"}
-{"batch": "dw-batch-01", "text": "put a mountain range across the back, small at the horizon", "frame": "drawn.region+drawn.perspective", "value": "background; far", "span": "across the back, small at the horizon"}
-{"batch": "dw-batch-01", "text": "the background could use some shape", "frame": "drawn.region", "value": "background", "span": "the background"}
-{"batch": "dw-batch-01", "text": "the background should be more of a landscape", "frame": "drawn.region", "value": "background", "span": "the background"}
-{"batch": "dw-batch-01", "text": "make the backgrond mountains", "frame": "drawn.region", "value": "background", "span": "the backgrond"}
-{"batch": "dw-batch-01", "text": "the backgrounnd should be mountians", "frame": "drawn.region", "value": "background", "span": "the backgrounnd"}
-{"batch": "dw-batch-01", "text": "change the whole background to a forest", "frame": "drawn.region", "value": "background", "span": "the whole background"}
-{"batch": "dw-batch-01", "text": "the background should be a forest", "frame": "drawn.region", "value": "background", "span": "the background"}
-{"batch": "dw-batch-01", "text": "let the background be a forest", "frame": "drawn.region", "value": "background", "span": "the background"}
-{"batch": "dw-batch-01", "text": "turn the background into a forest", "frame": "drawn.region", "value": "background", "span": "the background"}
-{"batch": "dw-batch-01", "text": "put a forest in the background", "frame": "drawn.region", "value": "background", "span": "the background"}
-{"batch": "dw-batch-01", "text": "could the background be a forest instead of that plain grass?", "frame": "drawn.region", "value": "background", "span": "the background"}
-{"batch": "dw-batch-01", "text": "I'd like forest behind everything", "frame": "drawn.region", "value": "background", "span": "behind everything"}
-{"batch": "dw-batch-01", "text": "have the backdrop be a wood", "frame": "drawn.region", "value": "background", "span": "the backdrop"}
-{"batch": "dw-batch-01", "text": "the back of the scene should be a forest", "frame": "drawn.region", "value": "background", "span": "the back of the scene"}
-{"batch": "dw-batch-01", "text": "fill the background with a forest", "frame": "drawn.region", "value": "background", "span": "the background"}
-{"batch": "dw-batch-01", "text": "the empty background wants trees — a proper forest behind all this", "frame": "drawn.region", "value": "background", "span": "the empty background"}
-{"batch": "dw-batch-01", "text": "hey, change the background to a forest", "frame": "drawn.region", "value": "background", "span": "the background"}
-{"batch": "dw-batch-01", "text": "quick one — the background should be a forest", "frame": "drawn.region", "value": "background", "span": "the background"}
-{"batch": "dw-batch-01", "text": "make the background a forest, with a line of trees by the house", "frame": "drawn.region", "value": "background", "span": "the background"}
-{"batch": "dw-batch-01", "text": "let the whole background be a forest, apart from the sky", "frame": "drawn.region", "value": "background", "span": "the whole background"}
-{"batch": "dw-batch-01", "text": "turn the background into a forest and add a lake in front of it", "frame": "drawn.region", "value": "background", "span": "the background"}
-{"batch": "dw-batch-01", "text": "turn the background into a forest and add a lake in front of it", "frame": "drawn.region", "value": "foreground", "span": "in front of it"}
-{"batch": "dw-batch-01", "text": "a dense pine forest in the background, with the little house at its edge", "frame": "drawn.region", "value": "background", "span": "the background"}
-{"batch": "dw-batch-01", "text": "the background could use some trees", "frame": "drawn.region", "value": "background", "span": "the background"}
-{"batch": "dw-batch-01", "text": "forest in the back, that's all I ask", "frame": "drawn.region", "value": "background", "span": "in the back"}
-{"batch": "dw-batch-01", "text": "the background should be scenery, thick and green", "frame": "drawn.region", "value": "background", "span": "the background"}
-{"batch": "dw-batch-01", "text": "change the backgroud to a forest", "frame": "drawn.region", "value": "background", "span": "the backgroud"}
-{"batch": "dw-batch-01", "text": "put a forset in the background", "frame": "drawn.region", "value": "background", "span": "the background"}
-{"batch": "dw-batch-01", "text": "let there be a whole ocean in the background", "frame": "drawn.region", "value": "background", "span": "the background"}
-{"batch": "dw-batch-01", "text": "the background should be the sea", "frame": "drawn.region", "value": "background", "span": "the background"}
-{"batch": "dw-batch-01", "text": "make the background a wide ocean view", "frame": "drawn.region", "value": "background", "span": "the background"}
-{"batch": "dw-batch-01", "text": "I'd like the sea behind everything", "frame": "drawn.region", "value": "background", "span": "behind everything"}
-{"batch": "dw-batch-01", "text": "put the sea in the background", "frame": "drawn.region", "value": "background", "span": "the background"}
-{"batch": "dw-batch-01", "text": "can the background be water all the way back?", "frame": "drawn.region", "value": "background", "span": "the background"}
-{"batch": "dw-batch-01", "text": "have the horizon end in the sea", "frame": "drawn.region", "value": "horizon", "span": "the horizon"}
-{"batch": "dw-batch-01", "text": "swap the background for the open sea", "frame": "drawn.region", "value": "background", "span": "the background"}
-{"batch": "dw-batch-01", "text": "the back of the picture should be a proper ocean", "frame": "drawn.region", "value": "background", "span": "the back of the picture"}
-{"batch": "dw-batch-01", "text": "let the sea take up the whole background", "frame": "drawn.region", "value": "background", "span": "the whole background"}
-{"batch": "dw-batch-01", "text": "an ocean at the horizon, that's what this scene needs", "frame": "drawn.region", "value": "horizon", "span": "at the horizon"}
-{"batch": "dw-batch-01", "text": "hey, put the sea in the background", "frame": "drawn.region", "value": "background", "span": "the background"}
-{"batch": "dw-batch-01", "text": "one more thing: the background should be the sea", "frame": "drawn.region", "value": "background", "span": "the background"}
-{"batch": "dw-batch-01", "text": "let there be an ocean in the background, with the boat floating on it", "frame": "drawn.region", "value": "background", "span": "the background"}
-{"batch": "dw-batch-01", "text": "the background should be the sea and the shore in front of it", "frame": "drawn.region", "value": "background", "span": "the background"}
-{"batch": "dw-batch-01", "text": "the background should be the sea and the shore in front of it", "frame": "drawn.region", "value": "foreground", "span": "in front of it"}
-{"batch": "dw-batch-01", "text": "make the background an ocean, far and wide", "frame": "drawn.region+drawn.perspective", "value": "background; far", "span": "the background"}
+{"batch": "dw-batch-01", "text": "put a mountain range across the back, small at the horizon", "frame": "drawn.region", "value": "background", "span": null}
+{"batch": "dw-batch-01", "text": "put a mountain range across the back, small at the horizon", "frame": "drawn.perspective", "value": "far", "span": null}
+{"batch": "dw-batch-01", "text": "make the background an ocean, far and wide", "frame": "drawn.perspective", "value": "far", "span": "far"}
 {"batch": "dw-batch-01", "text": "the sea should come right up to the bottom of the hills", "frame": "drawn.region", "value": "background", "span": null}
-{"batch": "dw-batch-01", "text": "the background could just be water", "frame": "drawn.region", "value": "background", "span": "the background"}
-{"batch": "dw-batch-01", "text": "some sea at the back would be perfect", "frame": "drawn.region", "value": "background", "span": "at the back"}
-{"batch": "dw-batch-01", "text": "the horizon wants water", "frame": "drawn.region", "value": "horizon", "span": "the horizon"}
-{"batch": "dw-batch-01", "text": "let there be an ocena in the background", "frame": "drawn.region", "value": "background", "span": "the background"}
-{"batch": "dw-batch-01", "text": "put the sae in the background", "frame": "drawn.region", "value": "background", "span": "the background"}
-{"batch": "dw-batch-01", "text": "add some hills in the background", "frame": "drawn.region", "value": "background", "span": "the background"}
-{"batch": "dw-batch-01", "text": "put a few birds in the background", "frame": "drawn.region", "value": "background", "span": "the background"}
-{"batch": "dw-batch-01", "text": "have some trees further back, behind the house", "frame": "drawn.region", "value": "background", "span": "further back, behind the house"}
-{"batch": "dw-batch-01", "text": "stick a couple of clouds in the background", "frame": "drawn.region", "value": "background", "span": "the background"}
-{"batch": "dw-batch-01", "text": "let there be a hill at the horizon", "frame": "drawn.region", "value": "horizon", "span": "the horizon"}
-{"batch": "dw-batch-01", "text": "a couple of hills behind everything, that would settle it", "frame": "drawn.region", "value": "background", "span": "behind everything"}
-{"batch": "dw-batch-01", "text": "throw in some birds behind the house", "frame": "drawn.region", "value": "background", "span": "behind the house"}
-{"batch": "dw-batch-01", "text": "could we get a hill in the distance?", "frame": "drawn.region", "value": "background", "span": "in the distance"}
-{"batch": "dw-batch-01", "text": "the horizon looks empty — add a hill there", "frame": "drawn.region", "value": "horizon", "span": "the horizon"}
-{"batch": "dw-batch-01", "text": "draw a few little hills at the back", "frame": "drawn.region", "value": "background", "span": "at the back"}
-{"batch": "dw-batch-01", "text": "in the background, a small hill and nothing else", "frame": "drawn.region", "value": "background", "span": "the background"}
-{"batch": "dw-batch-01", "text": "hey, add some hills in the background", "frame": "drawn.region", "value": "background", "span": "the background"}
-{"batch": "dw-batch-01", "text": "one more thing — put a few birds in the background", "frame": "drawn.region", "value": "background", "span": "the background"}
-{"batch": "dw-batch-01", "text": "add a hill or two in the background, smaller the further back they sit", "frame": "drawn.region", "value": "background", "span": "the background"}
 {"batch": "dw-batch-01", "text": "add a hill or two in the background, smaller the further back they sit", "frame": "drawn.perspective", "value": "far", "span": "smaller the further back they sit"}
-{"batch": "dw-batch-01", "text": "add a row of trees in the background and a single bird above them", "frame": "drawn.region", "value": "background", "span": "the background"}
-{"batch": "dw-batch-01", "text": "add a row of trees in the background and a single bird above them", "frame": "drawn.region", "value": "above", "span": "above them"}
-{"batch": "dw-batch-01", "text": "there's nothing behind the house — fix that with a hill or two", "frame": "drawn.region", "value": "background", "span": "behind the house"}
-{"batch": "dw-batch-01", "text": "the background needs something", "frame": "drawn.region", "value": "background", "span": "the background"}
-{"batch": "dw-batch-01", "text": "a bit of depth behind the house would help", "frame": "drawn.region", "value": "background", "span": "behind the house"}
-{"batch": "dw-batch-01", "text": "hills at the back", "frame": "drawn.region", "value": "background", "span": "at the back"}
-{"batch": "dw-batch-01", "text": "drop a hill or two into the distance, past the trees", "frame": "drawn.region", "value": "background", "span": "into the distance"}
-{"batch": "dw-batch-01", "text": "add some hils in the background", "frame": "drawn.region", "value": "background", "span": "the background"}
-{"batch": "dw-batch-01", "text": "put a few cloudss in the background", "frame": "drawn.region", "value": "background", "span": "the background"}
-{"batch": "dw-batch-01", "text": "put the hills behind the house", "frame": "drawn.region", "value": "behind", "span": "behind the house"}
-{"batch": "dw-batch-01", "text": "the lake should go behind everything", "frame": "drawn.region", "value": "behind", "span": "behind everything"}
-{"batch": "dw-batch-01", "text": "let the trees stand behind the house", "frame": "drawn.region", "value": "behind", "span": "behind the house"}
-{"batch": "dw-batch-01", "text": "move the hills to the back of the scene", "frame": "drawn.region", "value": "background", "span": "to the back of the scene"}
-{"batch": "dw-batch-01", "text": "have the cloud set behind the sun", "frame": "drawn.region", "value": "behind", "span": "behind the sun"}
-{"batch": "dw-batch-01", "text": "the hills would look better behind the house", "frame": "drawn.region", "value": "behind", "span": "behind the house"}
-{"batch": "dw-batch-01", "text": "shift the trees behind the house", "frame": "drawn.region", "value": "behind", "span": "behind the house"}
-{"batch": "dw-batch-01", "text": "put the hills behind the house and the boat", "frame": "drawn.region", "value": "behind", "span": "behind the house and the boat"}
-{"batch": "dw-batch-01", "text": "send the hills to the very back of the scene", "frame": "drawn.region", "value": "background", "span": "to the very back of the scene"}
-{"batch": "dw-batch-01", "text": "it's the hills that should sit behind everything", "frame": "drawn.region", "value": "behind", "span": "behind everything"}
-{"batch": "dw-batch-01", "text": "behind the house, that's where the hills belong", "frame": "drawn.region", "value": "behind", "span": "behind the house"}
-{"batch": "dw-batch-01", "text": "hey, put the hills behind the house", "frame": "drawn.region", "value": "behind", "span": "behind the house"}
-{"batch": "dw-batch-01", "text": "quick one — the lake should go behind everything", "frame": "drawn.region", "value": "behind", "span": "behind everything"}
-{"batch": "dw-batch-01", "text": "put the hills behind the house and move the tree in front of them", "frame": "drawn.region", "value": "behind", "span": "behind the house"}
-{"batch": "dw-batch-01", "text": "put the hills behind the house and move the tree in front of them", "frame": "drawn.region", "value": "foreground", "span": "in front of them"}
-{"batch": "dw-batch-01", "text": "push the hills behind everything and make them a bit taller", "frame": "drawn.region", "value": "behind", "span": "behind everything"}
-{"batch": "dw-batch-01", "text": "make the scene read properly — hills behind, house in front", "frame": "drawn.region", "value": "behind", "span": "behind"}
-{"batch": "dw-batch-01", "text": "make the scene read properly — hills behind, house in front", "frame": "drawn.region", "value": "foreground", "span": "in front"}
-{"batch": "dw-batch-01", "text": "put the hills behind the house and the trees even further back", "frame": "drawn.region", "value": "behind", "span": "behind the house"}
-{"batch": "dw-batch-01", "text": "put the hills behind the house and the trees even further back", "frame": "drawn.region", "value": "background", "span": "even further back"}
-{"batch": "dw-batch-01", "text": "the lake should be behind", "frame": "drawn.region", "value": "behind", "span": "behind"}
-{"batch": "dw-batch-01", "text": "hills further back, ok?", "frame": "drawn.region", "value": "background", "span": "further back"}
-{"batch": "dw-batch-01", "text": "the trees could go back behind the hills for depth", "frame": "drawn.region", "value": "behind", "span": "behind the hills"}
-{"batch": "dw-batch-01", "text": "put the hlils behind the house", "frame": "drawn.region", "value": "behind", "span": "behind the house"}
-{"batch": "dw-batch-01", "text": "shift the trees behidn everything", "frame": "drawn.region", "value": "behind", "span": "behidn everything"}
-{"batch": "dw-batch-01", "text": "put the boat in front", "frame": "drawn.region", "value": "foreground", "span": "in front"}
-{"batch": "dw-batch-01", "text": "the house should stand in the foreground", "frame": "drawn.region", "value": "foreground", "span": "in the foreground"}
-{"batch": "dw-batch-01", "text": "bring the tree to the front of the scene", "frame": "drawn.region", "value": "foreground", "span": "to the front of the scene"}
-{"batch": "dw-batch-01", "text": "let the boat sit right in front, close to us", "frame": "drawn.region", "value": "foreground", "span": "right in front"}
-{"batch": "dw-batch-01", "text": "have the hills in the foreground for once", "frame": "drawn.region", "value": "foreground", "span": "in the foreground"}
-{"batch": "dw-batch-01", "text": "the house belongs in the foreground", "frame": "drawn.region", "value": "foreground", "span": "in the foreground"}
-{"batch": "dw-batch-01", "text": "draw the boat in front of the hills", "frame": "drawn.region", "value": "foreground", "span": "in front of the hills"}
-{"batch": "dw-batch-01", "text": "move the house to the foreground", "frame": "drawn.region", "value": "foreground", "span": "to the foreground"}
-{"batch": "dw-batch-01", "text": "I want the tree right at the front of the scene", "frame": "drawn.region", "value": "foreground", "span": "right at the front of the scene"}
-{"batch": "dw-batch-01", "text": "boat in front, that's the way", "frame": "drawn.region", "value": "foreground", "span": "in front"}
-{"batch": "dw-batch-01", "text": "keep the sun back and pull the cloud forward", "frame": "drawn.region", "value": "background", "span": "back"}
-{"batch": "dw-batch-01", "text": "keep the sun back and pull the cloud forward", "frame": "drawn.region", "value": "foreground", "span": "forward"}
-{"batch": "dw-batch-01", "text": "hey, put the boat in front", "frame": "drawn.region", "value": "foreground", "span": "in front"}
-{"batch": "dw-batch-01", "text": "one more thing — the house should stand in the foreground", "frame": "drawn.region", "value": "foreground", "span": "in the foreground"}
-{"batch": "dw-batch-01", "text": "put the boat in front and leave the house behind it", "frame": "drawn.region", "value": "foreground", "span": "in front"}
-{"batch": "dw-batch-01", "text": "put the boat in front and leave the house behind it", "frame": "drawn.region", "value": "background", "span": "behind it"}
-{"batch": "dw-batch-01", "text": "the foreground needs the trees, the background the hills", "frame": "drawn.region", "value": "foreground", "span": "the foreground"}
-{"batch": "dw-batch-01", "text": "the foreground needs the trees, the background the hills", "frame": "drawn.region", "value": "background", "span": "the background"}
 {"batch": "dw-batch-01", "text": "bring the boat closer and keep it in front of everything", "frame": "drawn.depth", "value": "near", "span": "closer"}
-{"batch": "dw-batch-01", "text": "bring the boat closer and keep it in front of everything", "frame": "drawn.region", "value": "foreground", "span": "in front of everything"}
-{"batch": "dw-batch-01", "text": "the trees go in front of the house, with the sun well behind them", "frame": "drawn.region", "value": "foreground", "span": "in front of the house"}
-{"batch": "dw-batch-01", "text": "the trees go in front of the house, with the sun well behind them", "frame": "drawn.region", "value": "background", "span": "well behind them"}
-{"batch": "dw-batch-01", "text": "the boat comes forward", "frame": "drawn.region", "value": "foreground", "span": "forward"}
-{"batch": "dw-batch-01", "text": "trees in front", "frame": "drawn.region", "value": "foreground", "span": "in front"}
-{"batch": "dw-batch-01", "text": "house at the front", "frame": "drawn.region", "value": "foreground", "span": "at the front"}
-{"batch": "dw-batch-01", "text": "move the house to the forgeround", "frame": "drawn.region", "value": "foreground", "span": "the forgeround"}
-{"batch": "dw-batch-01", "text": "put the bota in front", "frame": "drawn.region", "value": "foreground", "span": "in front"}
-{"batch": "dw-batch-01", "text": "leave the words on the top half of the page", "frame": "drawn.region", "value": "top half", "span": "the top half of the page"}
-{"batch": "dw-batch-01", "text": "the trees stay on the left half of the page", "frame": "drawn.region", "value": "left half", "span": "the left half of the page"}
-{"batch": "dw-batch-01", "text": "keep the words on the right half of the page", "frame": "drawn.region", "value": "right half", "span": "the right half of the page"}
-{"batch": "dw-batch-01", "text": "below the halfway line it's hills only", "frame": "drawn.region", "value": "bottom half", "span": "below the halfway line"}
-{"batch": "dw-batch-01", "text": "trees on the left half of the page and nowhere else", "frame": "drawn.region", "value": "left half", "span": "the left half of the page"}
-{"batch": "dw-batch-01", "text": "the lake takes up the bottom half of the page", "frame": "drawn.region", "value": "bottom half", "span": "the bottom half of the page"}
-{"batch": "dw-batch-01", "text": "confine the hills to the top half of the page", "frame": "drawn.region", "value": "top half", "span": "the top half of the page"}
-{"batch": "dw-batch-01", "text": "the sun goes in the top half of the page", "frame": "drawn.region", "value": "top half", "span": "the top half of the page"}
-{"batch": "dw-batch-01", "text": "only on the right half should there be hills", "frame": "drawn.region", "value": "right half", "span": "the right half"}
-{"batch": "dw-batch-01", "text": "the words belong along the bottom half, under the scene", "frame": "drawn.region", "value": "bottom half", "span": "along the bottom half"}
-{"batch": "dw-batch-01", "text": "split the page: hills on the left half, sky on the right", "frame": "drawn.region", "value": "left half", "span": "the left half"}
-{"batch": "dw-batch-01", "text": "split the page: hills on the left half, sky on the right", "frame": "drawn.region", "value": "right half", "span": "the right"}
-{"batch": "dw-batch-01", "text": "hey, leave the words on the top half of the page", "frame": "drawn.region", "value": "top half", "span": "the top half of the page"}
-{"batch": "dw-batch-01", "text": "quick one — the trees stay on the left half of the page", "frame": "drawn.region", "value": "left half", "span": "the left half of the page"}
-{"batch": "dw-batch-01", "text": "keep the words on the bottom half of the page and spread the trees along the top", "frame": "drawn.region", "value": "bottom half", "span": "the bottom half of the page"}
-{"batch": "dw-batch-01", "text": "keep the words on the bottom half of the page and spread the trees along the top", "frame": "drawn.region", "value": "top half", "span": "along the top"}
-{"batch": "dw-batch-01", "text": "the left half of the page is for the house, keep the hills off it", "frame": "drawn.region", "value": "left half", "span": "the left half of the page"}
-{"batch": "dw-batch-01", "text": "the left half of the page is for the house, keep the hills off it", "frame": "drawn.region", "value": "right half", "span": "off it"}
-{"batch": "dw-batch-01", "text": "keep the sun in the top half of the page, the lake in the bottom half", "frame": "drawn.region", "value": "top half", "span": "the top half of the page"}
-{"batch": "dw-batch-01", "text": "keep the sun in the top half of the page, the lake in the bottom half", "frame": "drawn.region", "value": "bottom half", "span": "the bottom half"}
-{"batch": "dw-batch-01", "text": "words on the left half of the page, house on the right, nothing in between", "frame": "drawn.region", "value": "left half", "span": "the left half of the page"}
-{"batch": "dw-batch-01", "text": "words on the left half of the page, house on the right, nothing in between", "frame": "drawn.region", "value": "right half", "span": "the right"}
-{"batch": "dw-batch-01", "text": "words on half the page, that's all", "frame": "drawn.region", "value": "half", "span": "half the page"}
-{"batch": "dw-batch-01", "text": "the trees can have the right side", "frame": "drawn.region", "value": "right half", "span": "the right side"}
-{"batch": "dw-batch-01", "text": "keep the words up top", "frame": "drawn.region", "value": "top half", "span": "up top"}
-{"batch": "dw-batch-01", "text": "keep the words on the lfet half of the page", "frame": "drawn.region", "value": "left half", "span": "the lfet half of the page"}
-{"batch": "dw-batch-01", "text": "the lake takes up the botom half of the page", "frame": "drawn.region", "value": "bottom half", "span": "the botom half of the page"}
-{"batch": "dw-batch-01", "text": "put the shore a third of the way up the page", "frame": "drawn.region", "value": "a third of the way up", "span": "a third of the way up the page"}
-{"batch": "dw-batch-01", "text": "have the hills sit in the top third of the page", "frame": "drawn.region", "value": "top third", "span": "the top third of the page"}
-{"batch": "dw-batch-01", "text": "the lake should cover the bottom third of the page", "frame": "drawn.region", "value": "bottom third", "span": "the bottom third of the page"}
-{"batch": "dw-batch-01", "text": "keep the hills to the top 30% of the page", "frame": "drawn.region", "value": "top 30%", "span": "the top 30% of the page"}
-{"batch": "dw-batch-01", "text": "draw the shore about halfway up", "frame": "drawn.region", "value": "halfway up", "span": "about halfway up"}
-{"batch": "dw-batch-01", "text": "leave the top quarter of the page for the sun", "frame": "drawn.region", "value": "top quarter", "span": "the top quarter of the page"}
-{"batch": "dw-batch-01", "text": "the hills should start 30% from the bottom", "frame": "drawn.region", "value": "30% from the bottom", "span": "30% from the bottom"}
-{"batch": "dw-batch-01", "text": "a third from the top, that's where the hills go", "frame": "drawn.region", "value": "a third from the top", "span": "a third from the top"}
-{"batch": "dw-batch-01", "text": "keep the boat in the bottom third of the page", "frame": "drawn.region", "value": "bottom third", "span": "the bottom third of the page"}
-{"batch": "dw-batch-01", "text": "the shore sits about 30% from the bottom of the page", "frame": "drawn.region", "value": "30% from the bottom", "span": "about 30% from the bottom of the page"}
-{"batch": "dw-batch-01", "text": "land only in the bottom third of the page", "frame": "drawn.region", "value": "bottom third", "span": "the bottom third of the page"}
-{"batch": "dw-batch-01", "text": "hey, put the shore a third of the way up the page", "frame": "drawn.region", "value": "a third of the way up", "span": "a third of the way up the page"}
-{"batch": "dw-batch-01", "text": "one more thing: keep the hills to the top 30% of the page", "frame": "drawn.region", "value": "top 30%", "span": "the top 30% of the page"}
-{"batch": "dw-batch-01", "text": "the shore a third of the way up, the house just above it", "frame": "drawn.region", "value": "a third of the way up", "span": "a third of the way up"}
-{"batch": "dw-batch-01", "text": "put the hills in the top third of the page, smaller than the house", "frame": "drawn.region", "value": "top third", "span": "the top third of the page"}
-{"batch": "dw-batch-01", "text": "leave the top two thirds of the page for the sun and clouds", "frame": "drawn.region", "value": "top two thirds", "span": "the top two thirds of the page"}
-{"batch": "dw-batch-01", "text": "leave the top two thirds of the page for the sun and clouds", "frame": "drawn.region", "value": "top two thirds", "span": "the top two thirds of the page"}
-{"batch": "dw-batch-01", "text": "the words can sit in the bottom quarter of the page, right under the lake", "frame": "drawn.region", "value": "bottom quarter", "span": "the bottom quarter of the page, right under the lake"}
-{"batch": "dw-batch-01", "text": "the hills sit in the upper part of the page", "frame": "drawn.region", "value": "upper part", "span": "the upper part of the page"}
-{"batch": "dw-batch-01", "text": "keep everything in the bottom part of the page", "frame": "drawn.region", "value": "bottom part", "span": "the bottom part of the page"}
-{"batch": "dw-batch-01", "text": "words at the bottom of the page", "frame": "drawn.region", "value": "bottom part", "span": "the bottom of the page"}
-{"batch": "dw-batch-01", "text": "the shore sits about 30% from teh bottom", "frame": "drawn.region", "value": "30% from the bottom", "span": "about 30% from teh bottom"}
-{"batch": "dw-batch-01", "text": "keep the hlils to the top 30% of the page", "frame": "drawn.region", "value": "top 30%", "span": "the top 30% of the page"}
 {"batch": "dw-batch-01", "text": "turn the grass into water", "frame": "drawn.material", "value": "water", "span": "water"}
 {"batch": "dw-batch-01", "text": "change all that grass to water", "frame": "drawn.material", "value": "water", "span": "water"}
 {"batch": "dw-batch-01", "text": "make the grass a stretch of water", "frame": "drawn.material", "value": "water", "span": "a stretch of water"}
@@ -1228,9 +523,7 @@
 {"batch": "dw-batch-01", "text": "hey, turn the grass into water", "frame": "drawn.material", "value": "water", "span": "water"}
 {"batch": "dw-batch-01", "text": "one more thing — change all that grass to water", "frame": "drawn.material", "value": "water", "span": "water"}
 {"batch": "dw-batch-01", "text": "change the grass to water, with reeds along the edge", "frame": "drawn.material", "value": "water", "span": "water"}
-{"batch": "dw-batch-01", "text": "change the grass to water, with reeds along the edge", "frame": "drawn.region", "value": "edge", "span": "along the edge"}
 {"batch": "dw-batch-01", "text": "turn the grass into water and moor a little boat on the new water", "frame": "drawn.material", "value": "water", "span": "water"}
-{"batch": "dw-batch-01", "text": "turn the grass into water and moor a little boat on the new water", "frame": "drawn.region", "value": "on the water", "span": "on the new water"}
 {"batch": "dw-batch-01", "text": "swap the grass for water so the house gets a lake view", "frame": "drawn.material", "value": "water", "span": "water"}
 {"batch": "dw-batch-01", "text": "make the meadow into shallow water and let the sun glitter on it", "frame": "drawn.material", "value": "water (shallow)", "span": "shallow water"}
 {"batch": "dw-batch-01", "text": "make the meadow into shallow water and let the sun glitter on it", "frame": "drawn.shadow", "value": "on (glitter)", "span": "glitter on it"}
@@ -1256,7 +549,6 @@
 {"batch": "dw-batch-01", "text": "re-do the roof in thatch and let it overhang the walls a bit", "frame": "part.width", "value": "wider", "span": "overhang the walls a bit"}
 {"batch": "dw-batch-01", "text": "give the house a thatched roof, warm straw colour", "frame": "drawn.material", "value": "thatch", "span": "thatched"}
 {"batch": "dw-batch-01", "text": "the roof of the house should be wooden, with the beams showing", "frame": "drawn.material", "value": "wood", "span": "wooden"}
-{"batch": "dw-batch-01", "text": "the roof of the house should be wooden, with the beams showing", "frame": "drawn.region", "value": "showing", "span": "showing"}
 {"batch": "dw-batch-01", "text": "the roof could be more rustic", "frame": "drawn.material", "value": "rustic", "span": "rustic"}
 {"batch": "dw-batch-01", "text": "a thatched feel for the roof", "frame": "drawn.material", "value": "thatch", "span": "thatched"}
 {"batch": "dw-batch-01", "text": "roof: wood", "frame": "drawn.material", "value": "wood", "span": "wood"}
@@ -1287,61 +579,42 @@
 {"batch": "dw-batch-01", "text": "let the house front be stone", "frame": "drawn.material", "value": "stone", "span": "stone"}
 {"batch": "dw-batch-01", "text": "let the hosue be made of brick", "frame": "drawn.material", "value": "brick", "span": "brick"}
 {"batch": "dw-batch-01", "text": "build the walls out of stnoe", "frame": "drawn.material", "value": "stone", "span": "stnoe"}
-{"batch": "dw-batch-01", "text": "add a river with banks in the background", "frame": "drawn.region", "value": "background", "span": "in the background"}
-{"batch": "dw-batch-01", "text": "let there be a river running behind the house", "frame": "drawn.region", "value": "background", "span": "behind the house"}
-{"batch": "dw-batch-01", "text": "put a river across the scene, with banks on both sides", "frame": "drawn.region", "value": "across", "span": "across the scene"}
 {"batch": "dw-batch-01", "text": "the scene needs a river with grassy banks", "frame": "drawn.region", "value": "background", "span": null}
 {"batch": "dw-batch-01", "text": "the scene needs a river with grassy banks", "frame": "drawn.material", "value": "grass", "span": "grassy"}
 {"batch": "dw-batch-01", "text": "a river would tie the scene together — add one, with banks", "frame": "drawn.region", "value": "background", "span": null}
-{"batch": "dw-batch-01", "text": "put a river in front of the hills", "frame": "drawn.region", "value": "foreground", "span": "in front of the hills"}
-{"batch": "dw-batch-01", "text": "bring a little river across the middle of the page", "frame": "drawn.region", "value": "across", "span": "across the middle of the page"}
-{"batch": "dw-batch-01", "text": "the river should reach from one side of the page to the other", "frame": "drawn.region", "value": "across", "span": "from one side of the page to the other"}
 {"batch": "dw-batch-01", "text": "add a stream with pebbly banks", "frame": "drawn.material", "value": "pebbles", "span": "pebbly"}
-{"batch": "dw-batch-01", "text": "hey, add a river with banks in the background", "frame": "drawn.region", "value": "background", "span": "in the background"}
-{"batch": "dw-batch-01", "text": "one more thing — let there be a river running behind the house", "frame": "drawn.region", "value": "background", "span": "behind the house"}
-{"batch": "dw-batch-01", "text": "draw a river in the background, narrower towards the horizon", "frame": "drawn.region", "value": "background", "span": "in the background"}
 {"batch": "dw-batch-01", "text": "draw a river in the background, narrower towards the horizon", "frame": "drawn.perspective", "value": "narrowing into the distance", "span": "narrower towards the horizon"}
 {"batch": "dw-batch-01", "text": "add a river with banks and a small boat on the water", "frame": "drawn.region", "value": "background", "span": null}
-{"batch": "dw-batch-01", "text": "add a river with banks and a small boat on the water", "frame": "drawn.region", "value": "on the water", "span": "on the water"}
-{"batch": "dw-batch-01", "text": "let the river run behind the house and the trees, deep in the picture", "frame": "drawn.region", "value": "behind", "span": "behind the house and the trees"}
 {"batch": "dw-batch-01", "text": "let the river run behind the house and the trees, deep in the picture", "frame": "drawn.depth", "value": "far", "span": "deep in the picture"}
-{"batch": "dw-batch-01", "text": "let a river run right behind the house", "frame": "drawn.region", "value": "background", "span": "behind the house"}
 {"batch": "dw-batch-01", "text": "the scene could do with a stream", "frame": "drawn.region", "value": "background", "span": null}
 {"batch": "dw-batch-01", "text": "a river, why not", "frame": "drawn.region", "value": "background", "span": null}
 {"batch": "dw-batch-01", "text": "more water in the landscape", "frame": "drawn.region", "value": "background", "span": null}
-{"batch": "dw-batch-01", "text": "add a river with bnaks in the background", "frame": "drawn.region", "value": "background", "span": "in the background"}
-{"batch": "dw-batch-01", "text": "let there be a rivre running behind the house", "frame": "drawn.region", "value": "background", "span": "behind the house"}
-{"batch": "dw-batch-01", "text": "push the hills further back, so they read as far away", "frame": "drawn.region+drawn.perspective", "value": "background; far", "span": "further back"}
+{"batch": "dw-batch-01", "text": "push the hills further back, so they read as far away", "frame": "drawn.region", "value": "background", "span": null}
+{"batch": "dw-batch-01", "text": "push the hills further back, so they read as far away", "frame": "drawn.perspective", "value": "far", "span": "far"}
 {"batch": "dw-batch-01", "text": "make the hills look far away", "frame": "drawn.perspective", "value": "far", "span": "far away"}
 {"batch": "dw-batch-01", "text": "the hills should be smaller, the way distant things are", "frame": "drawn.perspective", "value": "far, smaller", "span": "smaller"}
-{"batch": "dw-batch-01", "text": "move the hills away from the front", "frame": "drawn.region", "value": "background", "span": "away from the front"}
 {"batch": "dw-batch-01", "text": "let the hills recede into the distance", "frame": "drawn.perspective", "value": "far", "span": "recede into the distance"}
 {"batch": "dw-batch-01", "text": "bring the boat closer", "frame": "drawn.depth", "value": "near", "span": "closer"}
-{"batch": "dw-batch-01", "text": "the hills belong at the horizon, higher up", "frame": "drawn.region+drawn.perspective", "value": "horizon; higher", "span": "at the horizon, higher up"}
+{"batch": "dw-batch-01", "text": "the hills belong at the horizon, higher up", "frame": "drawn.perspective", "value": "higher", "span": "at the horizon, higher up"}
 {"batch": "dw-batch-01", "text": "make the hills a little smaller — they're too close", "frame": "drawn.perspective", "value": "far", "span": "too close"}
 {"batch": "dw-batch-01", "text": "far hills, pale and small", "frame": "drawn.perspective", "value": "far, smaller", "span": "far hills, pale and small"}
-{"batch": "dw-batch-01", "text": "send the whole mountain line into the background", "frame": "drawn.region", "value": "background", "span": "into the background"}
-{"batch": "dw-batch-01", "text": "the far plane of the picture should hold the hills and nothing else", "frame": "drawn.region", "value": "background", "span": "the far plane of the picture"}
 {"batch": "dw-batch-01", "text": "hey, make the hills look far away", "frame": "drawn.perspective", "value": "far", "span": "far away"}
-{"batch": "dw-batch-01", "text": "quick one — the hills belong at the horizon, higher up", "frame": "drawn.region+drawn.perspective", "value": "horizon; higher", "span": "at the horizon, higher up"}
-{"batch": "dw-batch-01", "text": "push the hills into the background and make them much smaller", "frame": "drawn.region", "value": "background", "span": "into the background"}
-{"batch": "dw-batch-01", "text": "hills far away, smaller, like you see in real landscapes", "frame": "drawn.region+drawn.perspective", "value": "background; far, smaller", "span": "hills far away, smaller"}
+{"batch": "dw-batch-01", "text": "quick one — the hills belong at the horizon, higher up", "frame": "drawn.perspective", "value": "higher", "span": "at the horizon, higher up"}
+{"batch": "dw-batch-01", "text": "hills far away, smaller, like you see in real landscapes", "frame": "drawn.region", "value": "background", "span": null}
+{"batch": "dw-batch-01", "text": "hills far away, smaller, like you see in real landscapes", "frame": "drawn.perspective", "value": "far, smaller", "span": null}
 {"batch": "dw-batch-01", "text": "bring the shoreline closer to the house", "frame": "drawn.depth", "value": "near", "span": "closer to the house"}
 {"batch": "dw-batch-01", "text": "add a second row of hills, taller but further back", "frame": "drawn.perspective", "value": "far", "span": "further back"}
 {"batch": "dw-batch-01", "text": "the hills should fall away, ridge behind ridge, smaller each time", "frame": "drawn.perspective", "value": "far, in ridges", "span": "ridge behind ridge, smaller each time"}
 {"batch": "dw-batch-01", "text": "the hills should feel far away", "frame": "drawn.perspective", "value": "far", "span": "far away"}
 {"batch": "dw-batch-01", "text": "hills, but smaller", "frame": "drawn.perspective", "value": "far, smaller", "span": "smaller"}
-{"batch": "dw-batch-01", "text": "push the hlils into the background", "frame": "drawn.region", "value": "background", "span": "into the background"}
 {"batch": "dw-batch-01", "text": "make the hills look far awya", "frame": "drawn.perspective", "value": "far", "span": "far awya"}
 {"batch": "dw-batch-01", "text": "the tree should be over on the left, and a step closer as well", "frame": "drawn.depth", "value": "near", "span": "a step closer"}
-{"batch": "dw-batch-01", "text": "a couple of trees left of the house, spread out a bit", "frame": "drawn.region", "value": "spread out", "span": "spread out a bit"}
 {"batch": "dw-batch-01", "text": "a rowing boat out on the lake, with a wake behind it", "frame": "drawn.shadow", "value": "wake", "span": "a wake behind it"}
 {"batch": "dw-batch-01", "text": "make it look like a sunset", "frame": "page.theme", "value": "sunset", "span": "a sunset"}
 {"batch": "dw-batch-01", "text": "turn the scene into a glowing evening", "frame": "page.theme", "value": "evening", "span": "a glowing evening"}
 {"batch": "dw-batch-01", "text": "let it be dusk, with the sky going orange", "frame": "page.theme", "value": "dusk", "span": "dusk"}
 {"batch": "dw-batch-01", "text": "let it be dusk, with the sky going orange", "frame": "page.theme", "value": "orange sky", "span": "the sky going orange"}
 {"batch": "dw-batch-01", "text": "let night fall and hang a moon in the sky", "frame": "page.theme", "value": "night", "span": "night"}
-{"batch": "dw-batch-01", "text": "let night fall and hang a moon in the sky", "frame": "drawn.region", "value": "sky", "span": "in the sky"}
 {"batch": "dw-batch-01", "text": "sunrise colours would lift the whole page", "frame": "page.theme", "value": "sunrise", "span": "sunrise colours"}
 {"batch": "dw-batch-01", "text": "the scene wants a golden hour feel", "frame": "page.theme", "value": "golden hour", "span": "a golden hour feel"}
 {"batch": "dw-batch-01", "text": "go for a soft evening light", "frame": "page.theme", "value": "evening", "span": "a soft evening light"}
@@ -1356,7 +629,6 @@
 {"batch": "dw-batch-01", "text": "a pink sunset sky reflected in the lake", "frame": "page.theme", "value": "pink sunset", "span": "a pink sunset sky"}
 {"batch": "dw-batch-01", "text": "a pink sunset sky reflected in the lake", "frame": "drawn.effect", "value": "mirror the sky", "span": "reflected in the lake"}
 {"batch": "dw-batch-01", "text": "switch the scene to dusk, keep the sun but make it sit on the horizon", "frame": "page.theme", "value": "dusk", "span": "dusk"}
-{"batch": "dw-batch-01", "text": "switch the scene to dusk, keep the sun but make it sit on the horizon", "frame": "drawn.region", "value": "horizon", "span": "on the horizon"}
 {"batch": "dw-batch-01", "text": "make it evening, and stretch the shadows before the light goes", "frame": "page.theme", "value": "evening", "span": "evening"}
 {"batch": "dw-batch-01", "text": "make it evening, and stretch the shadows before the light goes", "frame": "drawn.shadow", "value": "long", "span": "stretch the shadows before the light goes"}
 {"batch": "dw-batch-01", "text": "make it feel like the end of the day", "frame": "page.theme", "value": "sunset", "span": "the end of the day"}
@@ -1427,14 +699,12 @@
 {"batch": "dw-batch-01", "text": "the house from the street, with the door facing us", "frame": "drawn.perspective", "value": "front", "span": "facing us"}
 {"batch": "dw-batch-01", "text": "seen from above, the boat should show its whole deck", "frame": "drawn.perspective", "value": "above", "span": "seen from above"}
 {"batch": "dw-batch-01", "text": "view the house from the lake so the trees frame it", "frame": "drawn.perspective", "value": "from the lake", "span": "from the lake"}
-{"batch": "dw-batch-01", "text": "view the house from the lake so the trees frame it", "frame": "drawn.region", "value": "framing", "span": "the trees frame it"}
 {"batch": "dw-batch-01", "text": "the hills should be a ridge in three-quarter view, not a flat line", "frame": "drawn.perspective", "value": "three-quarter", "span": "three-quarter view"}
 {"batch": "dw-batch-01", "text": "give the house some perspective", "frame": "drawn.perspective", "value": "unspecified", "span": "some perspective"}
 {"batch": "dw-batch-01", "text": "a corner of the house, not just the front", "frame": "drawn.perspective", "value": "corner", "span": "a corner of the house"}
 {"batch": "dw-batch-01", "text": "draw the boat less flat", "frame": "drawn.perspective", "value": "unspecified", "span": "less flat"}
 {"batch": "dw-batch-01", "text": "show the hosue from the street", "frame": "drawn.perspective", "value": "front", "span": "from the street"}
 {"batch": "dw-batch-01", "text": "let the baot be seen from the side", "frame": "drawn.perspective", "value": "side", "span": "from the side"}
-{"batch": "dw-batch-01", "text": "the sky is far too busy — every single cloud needs to go", "frame": "drawn.region", "value": "sky", "span": "the sky"}
 {"batch": "dw-batch-01", "text": "line the trees up", "frame": "drawn.arrangement", "value": "in a line", "span": "up"}
 {"batch": "dw-batch-01", "text": "put all the trees in a row", "frame": "drawn.arrangement", "value": "in a row", "span": "in a row"}
 {"batch": "dw-batch-01", "text": "arrange the trees in a neat line", "frame": "drawn.arrangement", "value": "in a line", "span": "in a neat line"}
@@ -1482,4 +752,3 @@
 {"batch": "dw-batch-01", "text": "space the clouds out evnely", "frame": "drawn.arrangement", "value": "evenly apart", "span": "evnely"}
 {"batch": "dw-batch-01", "text": "add three houses near the lake and line them up in a row", "frame": "drawn.arrangement", "value": "in a row", "span": "in a row"}
 {"batch": "dw-batch-01", "text": "put six sheep in the field, spread out nicely", "frame": "drawn.arrangement", "value": "evenly apart", "span": "spread out nicely"}
-{"batch": "dw-batch-01", "text": "a few sheep, somewhere green", "frame": "drawn.region", "value": "unlabelled green area", "span": "somewhere green"}

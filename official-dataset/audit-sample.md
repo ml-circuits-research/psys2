@@ -386,6 +386,7 @@
 
 75. [drawing · data-drop-v1 · train · None] “hey, make the background a range of mountains”  — context: House, Tree, Sun, Cloud
   - span “make the background a range of mountains”: **make**/do trigger=“make”; target drawn new indefinite kind=mountains kind_span=“mountains”
+    - drawn.at = "background" from “the background” [region, result]
 
 76. [drawing · data-drop-v1 · train · None] “let the house front be stone”  — context: House, Tree, Sun, Cloud
   - span “let the house front be stone”: **change**/do trigger=“let”; target part existing definite fill=description kind=front kind_span=“house front”
@@ -396,6 +397,7 @@
   - span “two cows”: **make**/do trigger=“None”; target drawn new indefinite kind=cow kind_span=“cows”
     - drawn.count = "2" from “two” [eq, result]
   - span “a pond in front”: **make**/do trigger=“None”; target drawn new indefinite kind=pond kind_span=“pond”
+    - drawn.at = "foreground" from “in front” [region, result]
 
 78. [drawing · demo-tool-profile · train · None] “place duck pond to the left of barn.”  — context: duck pond, barn
   - span “place duck pond to the left of barn”: **place**/do trigger=“place”; target drawn existing definite fill=written name_span=“duck pond”

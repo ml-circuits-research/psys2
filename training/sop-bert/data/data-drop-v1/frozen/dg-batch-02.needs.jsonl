@@ -25,29 +25,6 @@
 {"batch": "dg-batch-02", "text": "add May right after April with 34", "frame": "point.position", "value": "after April", "span": "right after April"}
 {"batch": "dg-batch-02", "text": "add June at the very end, value 60, so the chart covers the half year", "frame": "point.position", "value": "end", "span": "at the very end"}
 {"batch": "dg-batch-02", "text": "add an April category with 55 and make sure it lands after March", "frame": "point.position", "value": "after March", "span": "after March"}
-{"batch": "dg-batch-02", "text": "add three more steps", "frame": "node.n (operator=count, character=requirement)", "value": "three", "span": "three"}
-{"batch": "dg-batch-02", "text": "I need three boxes for the process", "frame": "node.n (operator=count, character=requirement)", "value": "three", "span": "three"}
-{"batch": "dg-batch-02", "text": "put in a couple of extra steps", "frame": "node.n (operator=count, character=requirement)", "value": "a couple", "span": "a couple"}
-{"batch": "dg-batch-02", "text": "give me four new boxes", "frame": "node.n (operator=count, character=requirement)", "value": "four", "span": "four"}
-{"batch": "dg-batch-02", "text": "hey, give me four new boxes", "frame": "node.n (operator=count, character=requirement)", "value": "four", "span": "four"}
-{"batch": "dg-batch-02", "text": "two more steps at the end of the flow", "frame": "node.n (operator=count, character=requirement)", "value": "two", "span": "two"}
-{"batch": "dg-batch-02", "text": "insert five boxes for the tiers of the org chart", "frame": "node.n (operator=count, character=requirement)", "value": "five", "span": "five"}
-{"batch": "dg-batch-02", "text": "expand the chain with three more nodes", "frame": "node.n (operator=count, character=requirement)", "value": "three", "span": "three"}
-{"batch": "dg-batch-02", "text": "can you do three more steps for me?", "frame": "node.n (operator=count, character=requirement)", "value": "three", "span": "three"}
-{"batch": "dg-batch-02", "text": "the missing part is five steps at the bottom", "frame": "node.n (operator=count, character=requirement)", "value": "five", "span": "five"}
-{"batch": "dg-batch-02", "text": "queue up three more steps, will you", "frame": "node.n (operator=count, character=requirement)", "value": "three", "span": "three"}
-{"batch": "dg-batch-02", "text": "queue up three more steps, will you, please", "frame": "node.n (operator=count, character=requirement)", "value": "three", "span": "three"}
-{"batch": "dg-batch-02", "text": "four boxes across the top is what I want", "frame": "node.n (operator=count, character=requirement)", "value": "four", "span": "four"}
-{"batch": "dg-batch-02", "text": "let's have three extra stages then", "frame": "node.n (operator=count, character=requirement)", "value": "three", "span": "extra"}
-{"batch": "dg-batch-02", "text": "add three steps between Start and Bake", "frame": "node.n (operator=count, character=requirement)", "value": "three", "span": "three"}
-{"batch": "dg-batch-02", "text": "add four diamond steps after Order, one for each check", "frame": "node.n (operator=count, character=requirement)", "value": "four", "span": "four"}
-{"batch": "dg-batch-02", "text": "I want three numbered steps under Bake", "frame": "node.n (operator=count, character=requirement)", "value": "three", "span": "three"}
-{"batch": "dg-batch-02", "text": "the same three boxes before Order as well", "frame": "node.n (operator=count, character=requirement)", "value": "three", "span": "three"}
-{"batch": "dg-batch-02", "text": "five steps in a column, turquoise ones", "frame": "node.n (operator=count, character=requirement)", "value": "five", "span": "five"}
-{"batch": "dg-batch-02", "text": "add some more steps", "frame": "node.n (operator=count, character=requirement)", "value": "some", "span": "some"}
-{"batch": "dg-batch-02", "text": "throw a few more steps at the end", "frame": "node.n (operator=count, character=requirement)", "value": "a few", "span": "a few"}
-{"batch": "dg-batch-02", "text": "ad tree more steps", "frame": "node.n (operator=count, character=requirement)", "value": "three", "span": "tree"}
-{"batch": "dg-batch-02", "text": "add three more stpes at the end", "frame": "node.n (operator=count, character=requirement)", "value": "three", "span": "three"}
 {"batch": "dg-batch-02", "text": "give the diamond a nudge clockwise", "frame": "node.rotate", "value": "clockwise", "span": "clockwise"}
 {"batch": "dg-batch-02", "text": "make Order a square one", "frame": "node.size", "value": "square", "span": "square"}
 {"batch": "dg-batch-02", "text": "standard size for the new step", "frame": "node.size", "value": "standard", "span": "standard size"}
@@ -78,11 +55,7 @@
 {"batch": "dg-batch-02", "text": "give the diagram a gren background", "frame": "diagram.background", "value": "green", "span": "gren background"}
 {"batch": "dg-batch-02", "text": "apply the pastel theme with a white background as well", "frame": "diagram.background", "value": "white", "span": "white background"}
 {"batch": "dg-batch-02", "text": "pastel theme throughout, with a calm blue as the anchor colour", "frame": "diagram.colour", "value": "calm blue", "span": "calm blue"}
-{"batch": "dg-batch-02", "text": "drop in three boxes and connect them in order", "frame": "node.n (operator=count, character=requirement)", "value": "three", "span": "three"}
 {"batch": "dg-batch-02", "text": "set the background to white and add a pastel theme", "frame": "diagram.background", "value": "white", "span": "white"}
-{"batch": "dg-batch-02", "text": "add two steps and rotate the first one 45 degrees", "frame": "node.n (operator=count, character=requirement)", "value": "two", "span": "two"}
-{"batch": "dg-batch-02", "text": "add three decision boxes, colour them amber, and link them left to right", "frame": "node.n (operator=count, character=requirement)", "value": "three", "span": "three"}
-{"batch": "dg-batch-02", "text": "add a couple of boxes and chain them", "frame": "node.n (operator=count, character=requirement)", "value": "a couple", "span": "a couple"}
 {"batch": "dg-batch-02", "text": "where is the Review step?", "frame": "node.position", "value": "where", "span": "where"}
 {"batch": "dg-batch-02", "text": "where did you put the Collect box?", "frame": "node.position", "value": "where", "span": "where"}
 {"batch": "dg-batch-02", "text": "where on the page is Check?", "frame": "node.position", "value": "where", "span": "where"}
@@ -107,30 +80,6 @@
 {"batch": "dg-batch-02", "text": "where in the flow does the Review box sit, roughly?", "frame": "node.position", "value": "where", "span": "where"}
 {"batch": "dg-batch-02", "text": "where si the Review step?", "frame": "node.position", "value": "where", "span": "where"}
 {"batch": "dg-batch-02", "text": "wher did you put the Collect box?", "frame": "node.position", "value": "wher", "span": "wher"}
-{"batch": "dg-batch-02", "text": "add three more boxes below Review — no, undo that", "frame": "node.n (operator=count, character=requirement)", "value": 3, "span": "three"}
-{"batch": "dg-batch-02", "text": "can you make two extra ovals? no wait, undo that", "frame": "node.n (operator=count, character=requirement)", "value": 2, "span": "two"}
-{"batch": "dg-batch-02", "text": "throw in four more steps, please — hmm, scrap that", "frame": "node.n (operator=count, character=requirement)", "value": 4, "span": "four"}
-{"batch": "dg-batch-02", "text": "I'd like half a dozen extra boxes across the bottom — no, take it back", "frame": "node.n (operator=count, character=requirement)", "value": 6, "span": "half a dozen"}
-{"batch": "dg-batch-02", "text": "make a couple of extra rectangles after Collect — actually never mind", "frame": "node.n (operator=count, character=requirement)", "value": 2, "span": "a couple"}
-{"batch": "dg-batch-02", "text": "five more boxes after Collect — actually, no, undo that", "frame": "node.n (operator=count, character=requirement)", "value": 5, "span": "five"}
-{"batch": "dg-batch-02", "text": "three extra decision diamonds then — no, take that back", "frame": "node.n (operator=count, character=requirement)", "value": 3, "span": "three"}
-{"batch": "dg-batch-02", "text": "put in a few more steps — no, undo that, I want to see what we have first", "frame": "node.n (operator=count, character=requirement)", "value": "few", "span": "a few"}
-{"batch": "dg-batch-02", "text": "add four empty boxes under the flow — scrap that, undo", "frame": "node.n (operator=count, character=requirement)", "value": 4, "span": "four"}
-{"batch": "dg-batch-02", "text": "another two boxes after Collect please — wait no, undo it", "frame": "node.n (operator=count, character=requirement)", "value": 2, "span": "another two"}
-{"batch": "dg-batch-02", "text": "eight more steps along the bottom — no, stop, undo everything you'd have done", "frame": "node.n (operator=count, character=requirement)", "value": 8, "span": "eight"}
-{"batch": "dg-batch-02", "text": "give me seven boxes in a grid — no wait, undo, the diagram's crowded already", "frame": "node.n (operator=count, character=requirement)", "value": 7, "span": "seven"}
-{"batch": "dg-batch-02", "text": "for the error handling I'd like three more boxes in a row after Review — hmm, actually undo that, let me think", "frame": "node.n (operator=count, character=requirement)", "value": 3, "span": "three"}
-{"batch": "dg-batch-02", "text": "quick thing: make two extra ovals like the Start node — no, undo it, my manager vetoed the change", "frame": "node.n (operator=count, character=requirement)", "value": 2, "span": "two"}
-{"batch": "dg-batch-02", "text": "give me six boxes stacked on the right — wait no, put it back the way it was before I confuse myself", "frame": "node.n (operator=count, character=requirement)", "value": 6, "span": "six"}
-{"batch": "dg-batch-02", "text": "I need nine more boxes to cover the exception paths — scrap that for now, undo, we're out of room on the canvas", "frame": "node.n (operator=count, character=requirement)", "value": 9, "span": "nine"}
-{"batch": "dg-batch-02", "text": "another five boxes — no, undo", "frame": "node.n (operator=count, character=requirement)", "value": 5, "span": "another five"}
-{"batch": "dg-batch-02", "text": "two ovals — no wait, undo", "frame": "node.n (operator=count, character=requirement)", "value": 2, "span": "two"}
-{"batch": "dg-batch-02", "text": "more boxes, four of them... undo that", "frame": "node.n (operator=count, character=requirement)", "value": 4, "span": "four"}
-{"batch": "dg-batch-02", "text": "hey — add three more boxes below Review — no, undo that", "frame": "node.n (operator=count, character=requirement)", "value": 3, "span": "three"}
-{"batch": "dg-batch-02", "text": "can you make two extra ovals? no wait, undo that, thanks", "frame": "node.n (operator=count, character=requirement)", "value": 2, "span": "two"}
-{"batch": "dg-batch-02", "text": "make another four boxes next to Review — hold on, scrap that", "frame": "node.n (operator=count, character=requirement)", "value": 4, "span": "another four"}
-{"batch": "dg-batch-02", "text": "add three more boxse below Review — no, undo that", "frame": "node.n (operator=count, character=requirement)", "value": 3, "span": "three"}
-{"batch": "dg-batch-02", "text": "five more boxes after Collect — actually, no, undo taht", "frame": "node.n (operator=count, character=requirement)", "value": 5, "span": "five"}
 {"batch": "dg-batch-02", "text": "I always want the arrows dashed, so set the existing ones now", "frame": "standing-preference", "value": "always", "span": "always"}
 {"batch": "dg-batch-02", "text": "from now on, every arrow should be dashed — do the current ones too", "frame": "standing-preference", "value": "from now on", "span": "from now on"}
 {"batch": "dg-batch-02", "text": "make every arrow dashed, and keep that style whenever you draw new links", "frame": "standing-preference", "value": "whenever you draw new links", "span": "whenever you draw new links"}

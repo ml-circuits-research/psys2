@@ -99,18 +99,18 @@ No issue found.
 | warning:value-span-ambiguous | 2 |
 | warning:target-description_span-ambiguous | 1 |
 
-### data-drop-v1 (5,576 rows)
+### data-drop-v1 (5,579 rows)
 
 | issue | rows |
 | --- | ---: |
-| warning:selector-not-in-context | 516 |
-| warning:bank-extension-needed | 321 |
+| warning:selector-not-in-context | 573 |
+| warning:bank-extension-needed | 424 |
 | warning:determiner-kept-open | 251 |
 | warning:target-kind_span-ambiguous | 81 |
 | warning:target-kind-without-source-span | 21 |
 | warning:value-span-ambiguous | 17 |
 | trigger-not-in-span-removed | 15 |
-| warning:numeric-value-not-in-surface | 11 |
+| warning:numeric-value-not-in-surface | 13 |
 | warning:target-name_span-ambiguous | 2 |
 | warning:target-count_span-ambiguous | 2 |
 
@@ -330,7 +330,7 @@ Kept with a warning (not an error; see README):
 | value-span-ambiguous | 2 |
 | target-description_span-ambiguous | 1 |
 
-### data-drop-v1: 5,576 in, 5,576 kept
+### data-drop-v1: 5,579 in, 5,579 kept
 
 Fixed or converted:
 
@@ -338,21 +338,20 @@ Fixed or converted:
 | --- | ---: |
 | anchor-span-as-anchor-mention | 542 |
 | comparative-as-delta-step | 58 |
-| diagram-new-node-count-as-node.n | 24 |
 | trigger-not-in-span-removed | 15 |
 
 Kept with a warning (not an error; see README):
 
 | warning | rows |
 | --- | ---: |
-| selector-not-in-context | 560 |
-| bank-extension-needed | 321 |
+| selector-not-in-context | 617 |
+| bank-extension-needed | 424 |
 | determiner-kept-open | 251 |
 | target-kind_span-ambiguous | 81 |
 | selector-with-empty-context | 31 |
 | value-span-ambiguous | 29 |
 | target-kind-without-source-span | 21 |
-| numeric-value-not-in-surface | 11 |
+| numeric-value-not-in-surface | 13 |
 | target-name_span-ambiguous | 2 |
 | target-count_span-ambiguous | 2 |
 

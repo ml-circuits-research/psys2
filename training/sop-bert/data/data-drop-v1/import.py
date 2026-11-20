@@ -37,8 +37,8 @@ _, LEMMAS = official.kind_vocabulary()
 WORLDS = {'diagram', 'drawing'}
 DETERMINERS = {'definite': 'definite', 'indefinite': 'indefinite', 'demonstrative': 'definite', 'possessive': 'definite', 'quantified': 'definite'}
 SLOT_ID = re.compile(r'\b(?:[a-z]+_[a-z_]+|chart:\d+|seg-\d+)\b')
-REF_KEYS = {'node.ids', 'link.ids', 'group.id', 'group.ids', 'drawn.ids', 'drawn.id', 'drawn.anchor', 'node.anchor', 'part.owner', 'chart.id'}
-POPULATION = re.compile(r'\b(all|every|each|everything|them|these|those|it|its|this|that|selected|selection|one|ones|both|other|others|rest)\b', re.I)
+REF_KEYS = {'node.ids', 'link.ids', 'group.id', 'group.ids', 'drawn.ids', 'drawn.id', 'drawn.anchor', 'node.anchor', 'chart.id'}  # part.owner may name a part of an object ("the roof")
+POPULATION = re.compile(r'\b(all|every|each|everything|them|these|those|it|its|this|that|selected|selection|one|ones|both|other|others|rest|her|him|his|she|he|they|their)\b', re.I)
 WRAP = re.compile(r"^(hey|please|quick one|hmm|one more thing|ok|okay|so|um|uh|can you|could you|would you)[,:—\- ]+|[,— ]+(please|thanks|thank you|go on|if you can|cheers|pls)[.!?]*$", re.I)
 QUAL = {'some', 'a few', 'few', 'several', 'many', 'lots', 'a lot of', 'a couple of', 'more', 'a handful of'}
 
@@ -85,8 +85,62 @@ def ref_in_context(surface, existing):
     return False
 
 
+def split_merged(needs, text, stats):
+    """'drawn.action+part.owner' with value 'hold; girl' and one span -> one entry per frame."""
+    out = []
+    for n in needs:
+        if isinstance(n, dict) and '+' in str(n.get('frame', '')):
+            frames = str(n['frame']).split('+')
+            values = [v.strip() for v in str(n.get('value', '')).split(';')]
+            stats['merged needs frame split ("a+b" -> a, b)'] += 1
+            for i, f in enumerate(frames):
+                v = values[i] if i < len(values) else None
+                span = n.get('span') if (v and n.get('span') and v.lower() in str(n['span']).lower()) or f.endswith('owner') else \
+                    (v if v and re.search(r'(?<!\w)' + re.escape(v) + r'(?!\w)', text, re.I) else None)
+                out.append({'frame': f, 'value': v, 'span': span})
+        else:
+            out.append(n)
+    return out
+
+
+def needs_to_keys(world, q, needs, stats):
+    """Needs whose meaning has a declared key become that constraint (the worker's recurring frames); the rest stay needs."""
+    span = q.get('span') or ''
+    keep = []
+    for n in split_merged(needs, span, stats):
+        if not isinstance(n, dict):
+            keep.append(n); continue
+        frame, value, nspan = n.get('frame'), n.get('value'), n.get('span')
+        if frame == 'drawn.emotion':
+            frame = n['frame'] = 'drawn.expression'; stats['needs drawn.emotion folded into drawn.expression'] += 1
+            if n.get('cause'):
+                keep.append({'frame': 'drawn.expression.cause', 'value': n.pop('cause'), 'span': None})
+        def place(surface):
+            return isinstance(surface, str) and surface and bool(official.find_all(span, surface) or surface in span)
+        c = None
+        if world == 'drawing' and frame == 'drawn.becomes' and value:
+            surface = value if place(value) else nspan
+            if place(surface):
+                c = {'key': 'drawn.kind', 'value': value, 'value_span': surface, 'operator': 'eq', 'phase': 'result'}
+        elif world == 'drawing' and frame == 'part.owner' and place(nspan):
+            c = {'key': 'part.owner', 'value': nspan, 'value_span': nspan, 'operator': 'eq', 'phase': 'selector'}
+        elif world == 'drawing' and frame == 'drawn.region' and place(nspan):
+            c = {'key': 'drawn.at', 'value': value, 'value_span': nspan, 'operator': 'region', 'phase': 'result'}
+        if c:
+            c.update({'polarity': 'positive', 'character': 'requirement'})
+            q.setdefault('constraints', []).append(c)
+            stats[f'needs {frame} -> constraint {c["key"]}'] += 1
+        else:
+            keep.append(n)
+    return keep
+
+
 def normalise(row, stats):
     world = row['world']
+    if row.get('tier') in ('robustness', 'fragment'):
+        row[row['tier']] = True
+        stats[f'tier {row["tier"]} -> flag {row["tier"]}, real tier kept'] += 1
+        row['tier'] = row.get('_family_tier') or 'equivalent'
     for q in row.get('requests') or []:
         if q.get('act') == 'ask':
             q['act'] = 'answer'; stats['act ask -> answer'] += 1
@@ -153,8 +207,11 @@ def normalise(row, stats):
                 c.pop(f, None)
         needs = q.get('needs')  # kept in the stored labels (request field) for the semantic-frame migration; also summarised
         if needs:
-            q['needs'] = needs if isinstance(needs, list) else [needs]
-            yield q['needs']
+            q['needs'] = needs_to_keys(world, q, needs if isinstance(needs, list) else [needs], stats)
+            if not q['needs']:
+                del q['needs']
+            else:
+                yield q['needs']
 
 
 def check(row, seen, official_seen):
@@ -234,6 +291,15 @@ def main():
         kept, total, per_world, per_class = 0, 0, collections.Counter(), collections.Counter()
         batch_needs = collections.Counter()
         batch_needs_rows = []
+        fam_tiers = collections.defaultdict(collections.Counter)
+        for path in files:
+            for line in path.read_text().splitlines():
+                try:
+                    r0 = json.loads(line)
+                except json.JSONDecodeError:
+                    continue
+                if r0.get('tier') not in ('robustness', 'fragment', None):
+                    fam_tiers[r0.get('family')][r0['tier']] += 1
         for path in files:
             for i, line in enumerate(path.read_text().splitlines(), 1):
                 if not line.strip():
@@ -244,6 +310,8 @@ def main():
                 except json.JSONDecodeError:
                     rejected += 1; reasons['invalid-json'] += 1; continue
                 row = copy.deepcopy(row)
+                if isinstance(row, dict) and fam_tiers.get(row.get('family')):
+                    row['_family_tier'] = fam_tiers[row['family']].most_common(1)[0][0]
                 needs = [n for group in normalise(row, stats) for n in group] if isinstance(row.get('requests'), list) else []
                 errs = check(row, seen, official_seen)
                 for n in needs:
@@ -269,7 +337,8 @@ def main():
                 fam = str(row.get('family') or hashlib.sha256(row['text'].encode()).hexdigest()[:12])
                 accepted.append({'id': f'{batch.name}-{path.stem}-{i:05d}', 'world': row['world'], 'text': row['text'],
                                  'context': row.get('context') or {'existing': [], 'previous': None}, 'requests': row['requests'],
-                                 'style': 'drop-' + str(row.get('tier') or 'equivalent'), 'tier': row.get('tier'), 'phase': 'direct',
+                                 'style': 'drop-' + str(row.get('tier') or 'equivalent') + ''.join('-' + f for f in ('robustness', 'fragment') if row.get(f)),
+                                 'tier': row.get('tier'), **{f: True for f in ('robustness', 'fragment') if row.get(f)}, 'phase': 'direct',
                                  'cohort': {'recipeFamily': f'drop:{batch.name}:{fam}', 'classes': row.get('classes') or []}})
         cores = collections.defaultdict(set)
         for path in files:
