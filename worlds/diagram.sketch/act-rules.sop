@@ -441,7 +441,8 @@
 @a.lc.none.6 app.act.request arrow=?b6
 @a.lc.none.7 app.act.request width=?b7
 @a.lc.none.out app.act.refuse reason=missing-property
-@change.link.none core.rule when=$a.lc.none.r not=$a.lc.none.1 not=$a.lc.none.2 not=$a.lc.none.3 not=$a.lc.none.4 not=$a.lc.none.5 not=$a.lc.none.6 not=$a.lc.none.7 not=$a.lc.none.8 then=$a.lc.none.out
+@a.lc.none.9 ui.diagram.lcgiven value=yes
+@change.link.none core.rule when=$a.lc.none.r not=$a.lc.none.9 not=$a.lc.none.1 not=$a.lc.none.2 not=$a.lc.none.3 not=$a.lc.none.4 not=$a.lc.none.5 not=$a.lc.none.6 not=$a.lc.none.7 not=$a.lc.none.8 then=$a.lc.none.out
 
 @a.lr.r app.act.request operation="diagram.link.remove"
 @a.lr.c app.act.call act=remove thing=$a.ie.e order=1
@@ -826,8 +827,11 @@
 @spatial.endpoint.to core.rule when=$a.ep.e when=$a.ep.a when=$a.ep.b when=$a.ep.h with=$a.ep.st then=$a.ep.pt
 @a.ep.rf app.observe.relation subject=?e object=?a kind=endpoint_of
 @a.ep.rt app.observe.relation subject=?e object=?b kind=endpoint_of
-@spatial.endpoint.of.from core.rule when=$a.ep.e when=$a.ep.a when=$a.ep.b then=$a.ep.rf
-@spatial.endpoint.of.to core.rule when=$a.ep.e when=$a.ep.a when=$a.ep.b then=$a.ep.rt
+# A free end (link-geometry.sop) is not an endpoint of the node it was last attached to.
+@a.ep.ff w.diagram.edge code=?e diagram.sketch.from_free=true
+@a.ep.tf w.diagram.edge code=?e diagram.sketch.to_free=true
+@spatial.endpoint.of.from core.rule when=$a.ep.e when=$a.ep.a when=$a.ep.b not=$a.ep.ff then=$a.ep.rf
+@spatial.endpoint.of.to core.rule when=$a.ep.e when=$a.ep.a when=$a.ep.b not=$a.ep.tf then=$a.ep.rt
 
 @a.op.n w.diagram.node code=?id
 @a.op.n.o app.observe.option id=node value=?id

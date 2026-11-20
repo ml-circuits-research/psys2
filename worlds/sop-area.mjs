@@ -60,7 +60,10 @@ export async function areaBase({ world, loader, readCatalog }) {
       ruleSources = await Promise.all(ruleFiles.map((rules) => loader.readFile(read(rules, 'world') ?? world, read(rules, 'file'))));
     ruleFiles.forEach((rules, n) => { if (!ruleSources[n]) throw Error('area-rules-refused:' + read(rules, 'file')); });
     if (ruleFiles.length && !base.load(ruleSources.join('\n')).ok) throw Error('area-rules-refused:' + ruleFiles.map((rules) => read(rules, 'file')).join(','));
-    const kinds = base.ofType('std.schema.kind').map((kind) => read(kind, 'of')).filter((kind) => instances.some((id) => kind.startsWith(id + '.')));
+    // The key namespaces the area's own rule files declare (core.namespace prefix=...): an area may keep kinds of its own
+    // under them in its state (diagram.sketch's bends of a link), besides the instance modules' kinds.
+    const owns = ruleFiles.flatMap((rules, n) => read(rules, 'world') ? [] : [...ruleSources[n].matchAll(/^@\S+ core\.namespace prefix=(\S+)/gm)].map((match) => match[1]));
+    const kinds = base.ofType('std.schema.kind').map((kind) => read(kind, 'of')).filter((kind) => instances.some((id) => kind.startsWith(id + '.')) || owns.some((prefix) => kind.startsWith(prefix)));
     return { base, callBase, area, owned, declarations, kinds, instance, lookups, loadedShards: new Set(), readCatalog };
   })();
   cache.set(world, promise);

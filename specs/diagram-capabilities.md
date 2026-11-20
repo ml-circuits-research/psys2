@@ -65,8 +65,14 @@ decision -> diamond; input/output, data -> parallelogram; database, db, store ->
 | `diagram.link.make` | `from`, `to`, `label`, `colour`, `style`, `arrow` | connect two nodes [link-exists, missing-endpoint] | "connect Api to Db", "draw an arrow from A to B labelled yes", "a dashed line from A to B" |
 | `diagram.links.connect` | `ids` (in order), `pattern` (chain, cycle, star, all), `hub`, `confirm` | many links at once; already linked pairs are kept; all-to-all over 10 links needs `confirm=true` [confirm-many-links] | "connect them in order", "chain these steps", "connect them in a loop", "connect everything to the hub / to Api", "connect every node to every other" |
 | `diagram.link.change` | `ids`, `from`, `to`, `label`, `colour`, `style` (solid, dashed, dotted), `arrow` (forward, back, both, none), `width` (0.5-12), `route` (orthogonal, straight, curved) | change the link | "make that arrow red", "dashed line", "arrows at both ends", "no arrowheads", "point the arrow back", "thicker line / width 4", "curve this link", "label it yes" |
+| `diagram.link.change` (geometry) | `ids`, `fromSide`, `toSide` (auto, top, right, bottom, left, centre), `head`, `tail` (arrow, open, diamond, circle, none), `labelAt` (start, middle, end), `labelPosition` (0-1), `fromX`/`fromY`, `toX`/`toY` (a free end) | where each end is attached, the mark at each end (a kind shows that end: the direction gains it; none takes it away), where the label sits along the line, a free end at a point | "make e2 go from the left side of A", "into the top of Check", "make the arrow double-headed", "a diamond at the end", "no arrow at the start", "move the label of e3 to the middle" |
+| `diagram.link.attach` | `ids`, `node`, `end` (from, start, source, tail / to, end, target, head / left, right, top, bottom: the end drawn there), `at` (the node the end is at now), `side` | attach that end (the target when neither is said) to the node, at the side (auto when none); a free end becomes fixed [missing-endpoint] | "connect the arrow to Review instead of Test", "move the end of e1 to the top of Check", "attach the right end to the database" |
+| `diagram.link.detach` | `ids`, `end`, `at`, `x`, `y` | the end is free at the point (no point: 40 beyond where it was drawn); it keeps its node as the node it was last attached to (w.diagram requires both ends), but is no endpoint of it for a reader | "detach e1 from Start", "free the end of that arrow" |
+| `diagram.link.bend.add` | `ids`, `x`, `y`, `after` (0: before the first bend; none: after the last) | a bend the link passes through | "add a bend to e1 at 300, 200", "route e1 through 300, 200" |
+| `diagram.link.bend.move` | `ids`, `bend` (1 = the first along the link), `x`, `y` | move that bend [missing-target] | "move the first bend of e1 to 320, 180" |
+| `diagram.link.bend.remove` | `ids`, `bend` | remove that bend, or every bend | "straighten e1", "remove the bends of that arrow" |
 | `diagram.link.improve` | `ids` | the declared tidy look of a link: orthogonal route (through the gaps of a top-down flow, an elbow otherwise), solid, 2 wide; the reply says what was changed | "make the line e1 look better", "tidy this arrow", "clean up that connector" |
-| `diagram.link.reverse` | `ids` | swap the ends | "reverse the arrow", "flip the direction of e2" |
+| `diagram.link.reverse` | `ids` | swap the ends, with their sides, marks and free points; the bends are passed the other way | "reverse the arrow", "flip the direction of e2" |
 | `diagram.link.select` | `ids`, `nodes` | the view's selection | "select the arrow from A to B" |
 | `diagram.link.remove` | `ids` | remove links | "delete that connection" |
 
@@ -200,8 +206,22 @@ are shared; each is a UI case in `training/sop-bert/data/ui-coverage-v2/cases.py
 | Chart data table: category, value, remove, add | `diagram.chart.category.rename`, `diagram.chart.value`, `diagram.chart.category.remove`, `diagram.chart.category.add` |
 | Chart formatting: axis titles, values, gridlines, legend; chart type | `diagram.chart.format {...}`, `diagram.group.layout {id, layout}` |
 | Reverse link, insert node in link | `diagram.link.reverse {ids}`, `diagram.node.insert {link}` |
+| Toolbar "Line" (route, arrowheads, dash): the look of new connections; with connections selected, also theirs | new: the arguments of `diagram.link.make`; selected: `diagram.link.change {ids, route|style|arrow|head}` |
+| Hover a node: its ports (the middle of each side); drag from a port and release on a node (snapping to a port within 16 px) | `diagram.link.make {from, to, fromSide, toSide?, ...line type}`; released over empty space: nothing is made |
+| Selected connection: drag an end handle onto a node or port | `diagram.link.attach {ids, end, node, side?}`; released over empty space: `diagram.link.detach {ids, end, x, y}` (the end stays free there) |
+| Selected connection: drag a middle handle (or the line), a bend handle; double-click a bend | `diagram.link.bend.add {ids, x, y, after}`, `diagram.link.bend.move {ids, bend, x, y}`, `diagram.link.bend.remove {ids, bend}` |
+| Selected connection: drag its label | `diagram.link.change {ids, labelPosition}` (the fraction of the line nearest the drop) |
+| Inspector: Start side, End side, End mark, Start mark, Label position; Remove bends, Detach start, Detach end | `diagram.link.change {ids, fromSide|toSide|head|tail|labelPosition}`, `diagram.link.bend.remove {ids}`, `diagram.link.detach {ids, end}` |
 
 ## Status (2026-11-20)
+
+Link geometry (`worlds/diagram.sketch/link-schema.sop`, `link-geometry.sop`; `tests/diagram-link-geometry-declared-host.test.mjs`,
+6 tests; browser `tests/diagram-link-edit-browser.test.mjs`): a link with a side, a free end or a bend is drawn by hand
+(straight through its bends; orthogonal with a 16 px stub out of each attached side, an auto end at the side facing
+its next point, one turn or two halfway; curved as quadratic pieces controlled by the bends), not by the page's gap
+routing; it does not avoid nodes (no obstacle router: std.problem routing is not used). Named ports of a node (parts)
+are not modelled: the ports are the four sides. The keys are this area's own (`diagram.sketch.*` on `w.diagram.edge`,
+the kind `diagram.sketch.bend`), queued for `w.diagram` at a later knowledge pin.
 
 Delivered and tested (`tests/diagram-capabilities-declared-host.test.mjs`, 10 tests): every operation above except the
 items listed as not yet. Layouts are checked by geometry (no overlaps, a ring of equal radii, outer rings for deeper

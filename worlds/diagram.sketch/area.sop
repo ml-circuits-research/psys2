@@ -2,7 +2,8 @@
 # groups and memberships); render-projection.sop lays it out and draws it, act-rules.sop compiles every native
 # Diagram command into std.acts calls (or an explicit refusal) and derives what a reader observes; layout-modes.sop
 # and style-projection.sop add the page's layouts, routes, themes and shapes, act-tools.sop the editing tools (styles,
-# alignment, many links at once, insert, merge, split). k.colours turns colour names into RGB and says which colours
+# alignment, many links at once, insert, merge, split), link-schema.sop and link-geometry.sop where each end of a link
+# is attached, its bends, end marks and label place (and the commands that change them). k.colours turns colour names into RGB and says which colours
 # are dark; k.styles holds the themes and palettes; k.charts the typical categories of a chart's dimension; k.values the comparatives; k.diagrams (looked up for flowcharts) the usual shape of a role. The layout derives deeply (levels by graph depth, then
 # rows, then routes), so the area asks for a derivation depth of 64.
 @area.types core.type of=app.area
@@ -19,6 +20,7 @@
 @area.subset.type core.type of=app.area.subset
 
 @diagram.area app.area world=diagram.sketch instance=w.diagram instance=w.preferences knowledge=k.colours knowledge=k.styles knowledge=k.charts knowledge=k.values scope="diagram.nodes-links-and-charts" frame.w=1000 frame.h=700 spatial=true depth=64
+@diagram.rules.0 app.area.rules area=$diagram.area file="link-schema.sop" n=0
 @diagram.rules.1 app.area.rules area=$diagram.area file="render-projection.sop" n=1
 @diagram.rules.2 app.area.rules area=$diagram.area file="layout-modes.sop" n=2
 @diagram.rules.3 app.area.rules area=$diagram.area file="style-projection.sop" n=3
@@ -26,6 +28,7 @@
 @diagram.rules.5 app.area.rules area=$diagram.area file="act-rules.sop" n=5
 @diagram.rules.6 app.area.rules area=$diagram.area file="act-tools.sop" n=6
 @diagram.rules.7 app.area.rules area=$diagram.area file="chart-format.sop" n=7
+@diagram.rules.10 app.area.rules area=$diagram.area file="link-geometry.sop" n=10
 # k.charts: the typical categories of a dimension (a chart asked for by its dimension alone); k.values: the comparatives
 # ("bigger", "thinner") a chart's numeric formatting moves along.
 @diagram.subset.charts app.area.subset area=$diagram.area world=k.charts prefix="categories" strict=true

@@ -1,0 +1,27 @@
+# diagram.sketch link schema (authored): the keys this area adds to a w.diagram edge and the bend kind it keeps of its
+# own (link-geometry.sop says what they mean, the commands that change them and how such a link is drawn). Read before
+# the other rule files, which name these keys. The keys are this area's (namespace diagram.sketch.): w.diagram owns the
+# edge and the area adds to it, as art.draw adds facing to w.drawing objects; an area may keep kinds of its own
+# namespace in its state (worlds/sop-area.mjs). Queued for w.diagram itself at a later knowledge pin.
+@lk.dgl.keys core.namespace prefix=diagram.sketch. open=true
+@lk.dgl.edge.from_side core.slot of=w.diagram.edge key=diagram.sketch.from_side kind=atom enum=auto enum=top enum=right enum=bottom enum=left enum=centre
+@lk.dgl.edge.to_side core.slot of=w.diagram.edge key=diagram.sketch.to_side kind=atom enum=auto enum=top enum=right enum=bottom enum=left enum=centre
+@lk.dgl.edge.head core.slot of=w.diagram.edge key=diagram.sketch.head kind=atom enum=arrow enum=open enum=diamond enum=circle enum=none
+@lk.dgl.edge.tail core.slot of=w.diagram.edge key=diagram.sketch.tail kind=atom enum=arrow enum=open enum=diamond enum=circle enum=none
+@lk.dgl.edge.label_at core.slot of=w.diagram.edge key=diagram.sketch.label_at kind=number min=0 max=1
+@lk.dgl.edge.from_free core.slot of=w.diagram.edge key=diagram.sketch.from_free kind=boolean
+@lk.dgl.edge.from_x core.slot of=w.diagram.edge key=diagram.sketch.from_x kind=number
+@lk.dgl.edge.from_y core.slot of=w.diagram.edge key=diagram.sketch.from_y kind=number
+@lk.dgl.edge.to_free core.slot of=w.diagram.edge key=diagram.sketch.to_free kind=boolean
+@lk.dgl.edge.to_x core.slot of=w.diagram.edge key=diagram.sketch.to_x kind=number
+@lk.dgl.edge.to_y core.slot of=w.diagram.edge key=diagram.sketch.to_y kind=number
+# A bend of a link: the link, its place along it (seq: any number; the bends are passed in increasing seq) and its point.
+# Removing the link removes its bends (they refer to it).
+@lk.dgl.bend core.type of=diagram.sketch.bend extends=std.schema.thing closed=true
+@lk.dgl.bend.edge core.slot of=diagram.sketch.bend key=edge required=true type=w.diagram.edge
+@lk.dgl.bend.seq core.slot of=diagram.sketch.bend key=seq kind=number
+@lk.dgl.bend.x core.slot of=diagram.sketch.bend key=x kind=number
+@lk.dgl.bend.y core.slot of=diagram.sketch.bend key=y kind=number
+@lk.dgl.kind.bend std.schema.kind of=diagram.sketch.bend world=w.diagram acts=make acts=remove acts=change
+@lk.dgl.limit.bend std.schema.limit of=diagram.sketch.bend max=2000
+

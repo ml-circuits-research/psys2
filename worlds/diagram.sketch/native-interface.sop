@@ -443,3 +443,196 @@
 @native.diagram.sketch.op.diagram.preference.reset std.capability.operation scope=$native.diagram.sketch.scope name="diagram.preference.reset" act=change on="diagram.sketch.page" order=53 eligible=true
 @native.diagram.sketch.op.diagram.preference.reset.param.key std.capability.parameter operation=$native.diagram.sketch.op.diagram.preference.reset name="key" kind=string required=true enum="link.style" enum="palette" enum="ids" enum="placement.side" enumClosed=true
 @native.diagram.sketch.op.diagram.preference.reset.metadata app.native.metadata operation=$native.diagram.sketch.op.diagram.preference.reset field=$native.diagram.sketch.value.pref.9
+# Link geometry (link-schema.sop, link-geometry.sop): the side each end is attached at, a free end at a point, the
+# mark at each end, where the label sits, attaching and detaching an end, and the bends a link passes through.
+@native.diagram.sketch.op.diagram.link.change.param.fromSide std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.change name="fromSide" kind=string enum="auto" enum="top" enum="right" enum="bottom" enum="left" enum="centre" enumClosed=true
+@native.diagram.sketch.op.diagram.link.change.param.toSide std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.change name="toSide" kind=string enum="auto" enum="top" enum="right" enum="bottom" enum="left" enum="centre" enumClosed=true
+@native.diagram.sketch.op.diagram.link.change.param.head std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.change name="head" kind=string enum="arrow" enum="open" enum="diamond" enum="circle" enum="none" enumClosed=true
+@native.diagram.sketch.op.diagram.link.change.param.tail std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.change name="tail" kind=string enum="arrow" enum="open" enum="diamond" enum="circle" enum="none" enumClosed=true
+@native.diagram.sketch.op.diagram.link.make.param.fromSide std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.make name="fromSide" kind=string enum="auto" enum="top" enum="right" enum="bottom" enum="left" enum="centre" enumClosed=true
+@native.diagram.sketch.op.diagram.link.make.param.toSide std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.make name="toSide" kind=string enum="auto" enum="top" enum="right" enum="bottom" enum="left" enum="centre" enumClosed=true
+@native.diagram.sketch.op.diagram.link.make.param.head std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.make name="head" kind=string enum="arrow" enum="open" enum="diamond" enum="circle" enum="none" enumClosed=true
+@native.diagram.sketch.op.diagram.link.make.param.tail std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.make name="tail" kind=string enum="arrow" enum="open" enum="diamond" enum="circle" enum="none" enumClosed=true
+@native.diagram.sketch.op.diagram.link.make.param.route std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.make name="route" kind=string enum="orthogonal" enum="straight" enum="curved" enumClosed=true
+@native.diagram.sketch.op.diagram.link.change.param.labelAt std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.change name="labelAt" kind=string enum="start" enum="middle" enum="end" enumClosed=true
+@native.diagram.sketch.op.diagram.link.change.param.labelPosition std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.change name="labelPosition" kind=number min=0 max=1
+@native.diagram.sketch.op.diagram.link.change.param.fromX std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.change name="fromX" kind=number
+@native.diagram.sketch.op.diagram.link.change.param.fromY std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.change name="fromY" kind=number
+@native.diagram.sketch.op.diagram.link.change.param.toX std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.change name="toX" kind=number
+@native.diagram.sketch.op.diagram.link.change.param.toY std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.change name="toY" kind=number
+@native.diagram.sketch.op.diagram.link.attach std.capability.operation scope=$native.diagram.sketch.scope name="diagram.link.attach" act=change on="diagram.sketch.link" order=61 eligible=true
+@native.diagram.sketch.op.diagram.link.attach.param.ids std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.attach name="ids" kind=array required=true
+@native.diagram.sketch.op.diagram.link.attach.param.node std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.attach name="node" kind=string required=true
+@native.diagram.sketch.op.diagram.link.attach.param.end std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.attach name="end" kind=string enum="from" enum="to" enum="start" enum="end" enum="source" enum="target" enum="tail" enum="head" enum="left" enum="right" enum="top" enum="bottom" enum="upper" enum="lower" enumClosed=true
+@native.diagram.sketch.op.diagram.link.attach.param.at std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.attach name="at" kind=string
+@native.diagram.sketch.op.diagram.link.attach.param.side std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.attach name="side" kind=string enum="auto" enum="top" enum="right" enum="bottom" enum="left" enum="centre" enumClosed=true
+@native.diagram.sketch.op.diagram.link.detach std.capability.operation scope=$native.diagram.sketch.scope name="diagram.link.detach" act=change on="diagram.sketch.link" order=62 eligible=true
+@native.diagram.sketch.op.diagram.link.detach.param.ids std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.detach name="ids" kind=array required=true
+@native.diagram.sketch.op.diagram.link.detach.param.end std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.detach name="end" kind=string enum="from" enum="to" enum="start" enum="end" enum="source" enum="target" enum="tail" enum="head" enum="left" enum="right" enum="top" enum="bottom" enum="upper" enum="lower" enumClosed=true
+@native.diagram.sketch.op.diagram.link.detach.param.at std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.detach name="at" kind=string
+@native.diagram.sketch.op.diagram.link.detach.param.x std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.detach name="x" kind=number
+@native.diagram.sketch.op.diagram.link.detach.param.y std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.detach name="y" kind=number
+@native.diagram.sketch.op.diagram.link.bend.add std.capability.operation scope=$native.diagram.sketch.scope name="diagram.link.bend.add" act=change on="diagram.sketch.link" order=63 eligible=true
+@native.diagram.sketch.op.diagram.link.bend.add.param.ids std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.bend.add name="ids" kind=array required=true
+@native.diagram.sketch.op.diagram.link.bend.add.param.x std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.bend.add name="x" kind=number required=true
+@native.diagram.sketch.op.diagram.link.bend.add.param.y std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.bend.add name="y" kind=number required=true
+@native.diagram.sketch.op.diagram.link.bend.add.param.after std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.bend.add name="after" kind=integer min=0 max=100
+@native.diagram.sketch.op.diagram.link.bend.move std.capability.operation scope=$native.diagram.sketch.scope name="diagram.link.bend.move" act=change on="diagram.sketch.link" order=64 eligible=true
+@native.diagram.sketch.op.diagram.link.bend.move.param.ids std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.bend.move name="ids" kind=array required=true
+@native.diagram.sketch.op.diagram.link.bend.move.param.bend std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.bend.move name="bend" kind=integer required=true min=1 max=100
+@native.diagram.sketch.op.diagram.link.bend.move.param.x std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.bend.move name="x" kind=number required=true
+@native.diagram.sketch.op.diagram.link.bend.move.param.y std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.bend.move name="y" kind=number required=true
+@native.diagram.sketch.op.diagram.link.bend.remove std.capability.operation scope=$native.diagram.sketch.scope name="diagram.link.bend.remove" act=change on="diagram.sketch.link" order=65 eligible=true
+@native.diagram.sketch.op.diagram.link.bend.remove.param.ids std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.bend.remove name="ids" kind=array required=true
+@native.diagram.sketch.op.diagram.link.bend.remove.param.bend std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.bend.remove name="bend" kind=integer min=1 max=100
+# How the link commands read back as a sentence (the chat line of a gesture): verb, subject and parameter labels.
+@native.diagram.sketch.linkintent.1 std.capability.arg name="label" value="from the side"
+@native.diagram.sketch.linkintent.2 std.capability.record entry=$native.diagram.sketch.linkintent.1
+@native.diagram.sketch.linkintent.3 std.capability.arg name="fromSide" value=$native.diagram.sketch.linkintent.2
+@native.diagram.sketch.linkintent.4 std.capability.arg name="label" value="to the side"
+@native.diagram.sketch.linkintent.5 std.capability.record entry=$native.diagram.sketch.linkintent.4
+@native.diagram.sketch.linkintent.6 std.capability.arg name="toSide" value=$native.diagram.sketch.linkintent.5
+@native.diagram.sketch.linkintent.7 std.capability.arg name="label" value="with the head"
+@native.diagram.sketch.linkintent.8 std.capability.record entry=$native.diagram.sketch.linkintent.7
+@native.diagram.sketch.linkintent.9 std.capability.arg name="head" value=$native.diagram.sketch.linkintent.8
+@native.diagram.sketch.linkintent.10 std.capability.arg name="label" value="with the tail"
+@native.diagram.sketch.linkintent.11 std.capability.record entry=$native.diagram.sketch.linkintent.10
+@native.diagram.sketch.linkintent.12 std.capability.arg name="tail" value=$native.diagram.sketch.linkintent.11
+@native.diagram.sketch.linkintent.13 std.capability.arg name="label" value="from"
+@native.diagram.sketch.linkintent.14 std.capability.arg name="reference" value=true
+@native.diagram.sketch.linkintent.15 std.capability.record entry=$native.diagram.sketch.linkintent.13 entry=$native.diagram.sketch.linkintent.14
+@native.diagram.sketch.linkintent.16 std.capability.arg name="from" value=$native.diagram.sketch.linkintent.15
+@native.diagram.sketch.linkintent.17 std.capability.arg name="label" value="to"
+@native.diagram.sketch.linkintent.18 std.capability.arg name="reference" value=true
+@native.diagram.sketch.linkintent.19 std.capability.record entry=$native.diagram.sketch.linkintent.17 entry=$native.diagram.sketch.linkintent.18
+@native.diagram.sketch.linkintent.20 std.capability.arg name="to" value=$native.diagram.sketch.linkintent.19
+@native.diagram.sketch.linkintent.21 std.capability.arg name="label" value="with the label at the"
+@native.diagram.sketch.linkintent.22 std.capability.record entry=$native.diagram.sketch.linkintent.21
+@native.diagram.sketch.linkintent.23 std.capability.arg name="labelAt" value=$native.diagram.sketch.linkintent.22
+@native.diagram.sketch.linkintent.24 std.capability.arg name="label" value="with the label at"
+@native.diagram.sketch.linkintent.25 std.capability.record entry=$native.diagram.sketch.linkintent.24
+@native.diagram.sketch.linkintent.26 std.capability.arg name="labelPosition" value=$native.diagram.sketch.linkintent.25
+@native.diagram.sketch.linkintent.27 std.capability.arg name="label" value="with the start free at x"
+@native.diagram.sketch.linkintent.28 std.capability.record entry=$native.diagram.sketch.linkintent.27
+@native.diagram.sketch.linkintent.29 std.capability.arg name="fromX" value=$native.diagram.sketch.linkintent.28
+@native.diagram.sketch.linkintent.30 std.capability.arg name="label" value="y"
+@native.diagram.sketch.linkintent.31 std.capability.record entry=$native.diagram.sketch.linkintent.30
+@native.diagram.sketch.linkintent.32 std.capability.arg name="fromY" value=$native.diagram.sketch.linkintent.31
+@native.diagram.sketch.linkintent.33 std.capability.arg name="label" value="with the end free at x"
+@native.diagram.sketch.linkintent.34 std.capability.record entry=$native.diagram.sketch.linkintent.33
+@native.diagram.sketch.linkintent.35 std.capability.arg name="toX" value=$native.diagram.sketch.linkintent.34
+@native.diagram.sketch.linkintent.36 std.capability.arg name="label" value="y"
+@native.diagram.sketch.linkintent.37 std.capability.record entry=$native.diagram.sketch.linkintent.36
+@native.diagram.sketch.linkintent.38 std.capability.arg name="toY" value=$native.diagram.sketch.linkintent.37
+@native.diagram.sketch.linkintent.39 std.capability.record entry=$native.diagram.sketch.linkintent.3 entry=$native.diagram.sketch.linkintent.6 entry=$native.diagram.sketch.linkintent.9 entry=$native.diagram.sketch.linkintent.12 entry=$native.diagram.sketch.linkintent.16 entry=$native.diagram.sketch.linkintent.20 entry=$native.diagram.sketch.linkintent.23 entry=$native.diagram.sketch.linkintent.26 entry=$native.diagram.sketch.linkintent.29 entry=$native.diagram.sketch.linkintent.32 entry=$native.diagram.sketch.linkintent.35 entry=$native.diagram.sketch.linkintent.38
+@native.diagram.sketch.linkintent.40 std.capability.arg name="parameters" value=$native.diagram.sketch.linkintent.39
+@native.diagram.sketch.linkintent.41 std.capability.record entry=$native.diagram.sketch.linkintent.40
+@native.diagram.sketch.linkintent.42 std.capability.arg name="intent" value=$native.diagram.sketch.linkintent.41
+@native.diagram.sketch.op.diagram.link.change.metadata app.native.metadata operation=$native.diagram.sketch.op.diagram.link.change field=$native.diagram.sketch.linkintent.42
+@native.diagram.sketch.linkintent.43 std.capability.arg name="verb" value="Draw"
+@native.diagram.sketch.linkintent.44 std.capability.arg name="label" value="from the side"
+@native.diagram.sketch.linkintent.45 std.capability.record entry=$native.diagram.sketch.linkintent.44
+@native.diagram.sketch.linkintent.46 std.capability.arg name="fromSide" value=$native.diagram.sketch.linkintent.45
+@native.diagram.sketch.linkintent.47 std.capability.arg name="label" value="to the side"
+@native.diagram.sketch.linkintent.48 std.capability.record entry=$native.diagram.sketch.linkintent.47
+@native.diagram.sketch.linkintent.49 std.capability.arg name="toSide" value=$native.diagram.sketch.linkintent.48
+@native.diagram.sketch.linkintent.50 std.capability.arg name="label" value="with the head"
+@native.diagram.sketch.linkintent.51 std.capability.record entry=$native.diagram.sketch.linkintent.50
+@native.diagram.sketch.linkintent.52 std.capability.arg name="head" value=$native.diagram.sketch.linkintent.51
+@native.diagram.sketch.linkintent.53 std.capability.arg name="label" value="with the tail"
+@native.diagram.sketch.linkintent.54 std.capability.record entry=$native.diagram.sketch.linkintent.53
+@native.diagram.sketch.linkintent.55 std.capability.arg name="tail" value=$native.diagram.sketch.linkintent.54
+@native.diagram.sketch.linkintent.56 std.capability.arg name="label" value="from"
+@native.diagram.sketch.linkintent.57 std.capability.arg name="reference" value=true
+@native.diagram.sketch.linkintent.58 std.capability.record entry=$native.diagram.sketch.linkintent.56 entry=$native.diagram.sketch.linkintent.57
+@native.diagram.sketch.linkintent.59 std.capability.arg name="from" value=$native.diagram.sketch.linkintent.58
+@native.diagram.sketch.linkintent.60 std.capability.arg name="label" value="to"
+@native.diagram.sketch.linkintent.61 std.capability.arg name="reference" value=true
+@native.diagram.sketch.linkintent.62 std.capability.record entry=$native.diagram.sketch.linkintent.60 entry=$native.diagram.sketch.linkintent.61
+@native.diagram.sketch.linkintent.63 std.capability.arg name="to" value=$native.diagram.sketch.linkintent.62
+@native.diagram.sketch.linkintent.64 std.capability.arg name="label" value="drawn"
+@native.diagram.sketch.linkintent.65 std.capability.record entry=$native.diagram.sketch.linkintent.64
+@native.diagram.sketch.linkintent.66 std.capability.arg name="route" value=$native.diagram.sketch.linkintent.65
+@native.diagram.sketch.linkintent.67 std.capability.record entry=$native.diagram.sketch.linkintent.46 entry=$native.diagram.sketch.linkintent.49 entry=$native.diagram.sketch.linkintent.52 entry=$native.diagram.sketch.linkintent.55 entry=$native.diagram.sketch.linkintent.59 entry=$native.diagram.sketch.linkintent.63 entry=$native.diagram.sketch.linkintent.66
+@native.diagram.sketch.linkintent.68 std.capability.arg name="parameters" value=$native.diagram.sketch.linkintent.67
+@native.diagram.sketch.linkintent.69 std.capability.record entry=$native.diagram.sketch.linkintent.43 entry=$native.diagram.sketch.linkintent.68
+@native.diagram.sketch.linkintent.70 std.capability.arg name="intent" value=$native.diagram.sketch.linkintent.69
+@native.diagram.sketch.op.diagram.link.make.metadata app.native.metadata operation=$native.diagram.sketch.op.diagram.link.make field=$native.diagram.sketch.linkintent.70
+@native.diagram.sketch.linkintent.71 std.capability.arg name="verb" value="Attach"
+@native.diagram.sketch.linkintent.72 std.capability.arg name="label" value="the end"
+@native.diagram.sketch.linkintent.73 std.capability.record entry=$native.diagram.sketch.linkintent.72
+@native.diagram.sketch.linkintent.74 std.capability.arg name="end" value=$native.diagram.sketch.linkintent.73
+@native.diagram.sketch.linkintent.75 std.capability.arg name="label" value="the end at"
+@native.diagram.sketch.linkintent.76 std.capability.arg name="reference" value=true
+@native.diagram.sketch.linkintent.77 std.capability.record entry=$native.diagram.sketch.linkintent.75 entry=$native.diagram.sketch.linkintent.76
+@native.diagram.sketch.linkintent.78 std.capability.arg name="at" value=$native.diagram.sketch.linkintent.77
+@native.diagram.sketch.linkintent.79 std.capability.arg name="label" value="to"
+@native.diagram.sketch.linkintent.80 std.capability.arg name="reference" value=true
+@native.diagram.sketch.linkintent.81 std.capability.record entry=$native.diagram.sketch.linkintent.79 entry=$native.diagram.sketch.linkintent.80
+@native.diagram.sketch.linkintent.82 std.capability.arg name="node" value=$native.diagram.sketch.linkintent.81
+@native.diagram.sketch.linkintent.83 std.capability.arg name="label" value="at the side"
+@native.diagram.sketch.linkintent.84 std.capability.record entry=$native.diagram.sketch.linkintent.83
+@native.diagram.sketch.linkintent.85 std.capability.arg name="side" value=$native.diagram.sketch.linkintent.84
+@native.diagram.sketch.linkintent.86 std.capability.record entry=$native.diagram.sketch.linkintent.74 entry=$native.diagram.sketch.linkintent.78 entry=$native.diagram.sketch.linkintent.82 entry=$native.diagram.sketch.linkintent.85
+@native.diagram.sketch.linkintent.87 std.capability.arg name="parameters" value=$native.diagram.sketch.linkintent.86
+@native.diagram.sketch.linkintent.88 std.capability.record entry=$native.diagram.sketch.linkintent.71 entry=$native.diagram.sketch.linkintent.87
+@native.diagram.sketch.linkintent.89 std.capability.arg name="intent" value=$native.diagram.sketch.linkintent.88
+@native.diagram.sketch.op.diagram.link.attach.metadata app.native.metadata operation=$native.diagram.sketch.op.diagram.link.attach field=$native.diagram.sketch.linkintent.89
+@native.diagram.sketch.linkintent.90 std.capability.arg name="verb" value="Detach"
+@native.diagram.sketch.linkintent.91 std.capability.arg name="label" value="the end"
+@native.diagram.sketch.linkintent.92 std.capability.record entry=$native.diagram.sketch.linkintent.91
+@native.diagram.sketch.linkintent.93 std.capability.arg name="end" value=$native.diagram.sketch.linkintent.92
+@native.diagram.sketch.linkintent.94 std.capability.arg name="label" value="the end at"
+@native.diagram.sketch.linkintent.95 std.capability.arg name="reference" value=true
+@native.diagram.sketch.linkintent.96 std.capability.record entry=$native.diagram.sketch.linkintent.94 entry=$native.diagram.sketch.linkintent.95
+@native.diagram.sketch.linkintent.97 std.capability.arg name="at" value=$native.diagram.sketch.linkintent.96
+@native.diagram.sketch.linkintent.98 std.capability.arg name="label" value="leaving it at x"
+@native.diagram.sketch.linkintent.99 std.capability.record entry=$native.diagram.sketch.linkintent.98
+@native.diagram.sketch.linkintent.100 std.capability.arg name="x" value=$native.diagram.sketch.linkintent.99
+@native.diagram.sketch.linkintent.101 std.capability.arg name="label" value="y"
+@native.diagram.sketch.linkintent.102 std.capability.record entry=$native.diagram.sketch.linkintent.101
+@native.diagram.sketch.linkintent.103 std.capability.arg name="y" value=$native.diagram.sketch.linkintent.102
+@native.diagram.sketch.linkintent.104 std.capability.record entry=$native.diagram.sketch.linkintent.93 entry=$native.diagram.sketch.linkintent.97 entry=$native.diagram.sketch.linkintent.100 entry=$native.diagram.sketch.linkintent.103
+@native.diagram.sketch.linkintent.105 std.capability.arg name="parameters" value=$native.diagram.sketch.linkintent.104
+@native.diagram.sketch.linkintent.106 std.capability.record entry=$native.diagram.sketch.linkintent.90 entry=$native.diagram.sketch.linkintent.105
+@native.diagram.sketch.linkintent.107 std.capability.arg name="intent" value=$native.diagram.sketch.linkintent.106
+@native.diagram.sketch.op.diagram.link.detach.metadata app.native.metadata operation=$native.diagram.sketch.op.diagram.link.detach field=$native.diagram.sketch.linkintent.107
+@native.diagram.sketch.linkintent.108 std.capability.arg name="verb" value="Bend"
+@native.diagram.sketch.linkintent.109 std.capability.arg name="label" value="through x"
+@native.diagram.sketch.linkintent.110 std.capability.record entry=$native.diagram.sketch.linkintent.109
+@native.diagram.sketch.linkintent.111 std.capability.arg name="x" value=$native.diagram.sketch.linkintent.110
+@native.diagram.sketch.linkintent.112 std.capability.arg name="label" value="y"
+@native.diagram.sketch.linkintent.113 std.capability.record entry=$native.diagram.sketch.linkintent.112
+@native.diagram.sketch.linkintent.114 std.capability.arg name="y" value=$native.diagram.sketch.linkintent.113
+@native.diagram.sketch.linkintent.115 std.capability.arg name="label" value="after bend"
+@native.diagram.sketch.linkintent.116 std.capability.record entry=$native.diagram.sketch.linkintent.115
+@native.diagram.sketch.linkintent.117 std.capability.arg name="after" value=$native.diagram.sketch.linkintent.116
+@native.diagram.sketch.linkintent.118 std.capability.record entry=$native.diagram.sketch.linkintent.111 entry=$native.diagram.sketch.linkintent.114 entry=$native.diagram.sketch.linkintent.117
+@native.diagram.sketch.linkintent.119 std.capability.arg name="parameters" value=$native.diagram.sketch.linkintent.118
+@native.diagram.sketch.linkintent.120 std.capability.record entry=$native.diagram.sketch.linkintent.108 entry=$native.diagram.sketch.linkintent.119
+@native.diagram.sketch.linkintent.121 std.capability.arg name="intent" value=$native.diagram.sketch.linkintent.120
+@native.diagram.sketch.op.diagram.link.bend.add.metadata app.native.metadata operation=$native.diagram.sketch.op.diagram.link.bend.add field=$native.diagram.sketch.linkintent.121
+@native.diagram.sketch.linkintent.122 std.capability.arg name="verb" value="Move a bend of"
+@native.diagram.sketch.linkintent.123 std.capability.arg name="label" value="number"
+@native.diagram.sketch.linkintent.124 std.capability.record entry=$native.diagram.sketch.linkintent.123
+@native.diagram.sketch.linkintent.125 std.capability.arg name="bend" value=$native.diagram.sketch.linkintent.124
+@native.diagram.sketch.linkintent.126 std.capability.arg name="label" value="to x"
+@native.diagram.sketch.linkintent.127 std.capability.record entry=$native.diagram.sketch.linkintent.126
+@native.diagram.sketch.linkintent.128 std.capability.arg name="x" value=$native.diagram.sketch.linkintent.127
+@native.diagram.sketch.linkintent.129 std.capability.arg name="label" value="y"
+@native.diagram.sketch.linkintent.130 std.capability.record entry=$native.diagram.sketch.linkintent.129
+@native.diagram.sketch.linkintent.131 std.capability.arg name="y" value=$native.diagram.sketch.linkintent.130
+@native.diagram.sketch.linkintent.132 std.capability.record entry=$native.diagram.sketch.linkintent.125 entry=$native.diagram.sketch.linkintent.128 entry=$native.diagram.sketch.linkintent.131
+@native.diagram.sketch.linkintent.133 std.capability.arg name="parameters" value=$native.diagram.sketch.linkintent.132
+@native.diagram.sketch.linkintent.134 std.capability.record entry=$native.diagram.sketch.linkintent.122 entry=$native.diagram.sketch.linkintent.133
+@native.diagram.sketch.linkintent.135 std.capability.arg name="intent" value=$native.diagram.sketch.linkintent.134
+@native.diagram.sketch.op.diagram.link.bend.move.metadata app.native.metadata operation=$native.diagram.sketch.op.diagram.link.bend.move field=$native.diagram.sketch.linkintent.135
+@native.diagram.sketch.linkintent.136 std.capability.arg name="verb" value="Straighten"
+@native.diagram.sketch.linkintent.137 std.capability.arg name="label" value="removing bend"
+@native.diagram.sketch.linkintent.138 std.capability.record entry=$native.diagram.sketch.linkintent.137
+@native.diagram.sketch.linkintent.139 std.capability.arg name="bend" value=$native.diagram.sketch.linkintent.138
+@native.diagram.sketch.linkintent.140 std.capability.record entry=$native.diagram.sketch.linkintent.139
+@native.diagram.sketch.linkintent.141 std.capability.arg name="parameters" value=$native.diagram.sketch.linkintent.140
+@native.diagram.sketch.linkintent.142 std.capability.record entry=$native.diagram.sketch.linkintent.136 entry=$native.diagram.sketch.linkintent.141
+@native.diagram.sketch.linkintent.143 std.capability.arg name="intent" value=$native.diagram.sketch.linkintent.142
+@native.diagram.sketch.op.diagram.link.bend.remove.metadata app.native.metadata operation=$native.diagram.sketch.op.diagram.link.bend.remove field=$native.diagram.sketch.linkintent.143

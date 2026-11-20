@@ -6,7 +6,7 @@ const values = (ops, operation, param) => ops.find((op) => op.id === operation)?
 const mean = (items, key) => items.reduce((sum, item) => sum + item[key] / items.length, 0);
 const nameOf = (item) => (item?.label ? item.label + ' · ' : '') + (item?.id ?? '');
 
-export function makeInspector(inspector, { tool, model, selection, select, html, btn, focusBoard }) {
+export function makeInspector(inspector, { tool, model, selection, select, html, btn, focusBoard, lineDefaults = () => ({}) }) {
   let ops = [], chartDraft = false;
   const fill = (input, list, { blank = null } = {}) => {
     const keep = input.value; input.replaceChildren();
@@ -97,14 +97,25 @@ export function makeInspector(inspector, { tool, model, selection, select, html,
   const linkLabel = field(linkForm, 'Connection label'), linkColour = field(linkForm, 'Connection colour', 'select');
   const linkStyle = field(linkForm, 'Line style', 'select'), linkArrow = field(linkForm, 'Arrowheads', 'select');
   const linkWidth = field(linkForm, 'Line width', 'input', 'number'); linkWidth.step = '0.5';
+  // Where each end is attached, the mark at each end and where the label sits (link-geometry.sop).
+  const linkFromSide = field(linkForm, 'Start side', 'select'), linkToSide = field(linkForm, 'End side', 'select');
+  const linkHead = field(linkForm, 'End mark', 'select'), linkTail = field(linkForm, 'Start mark', 'select');
+  const linkLabelAt = field(linkForm, 'Label position', 'input', 'range'); linkLabelAt.min = '0'; linkLabelAt.max = '1'; linkLabelAt.step = '0.05';
+  const linkBends = html('p', 'dg-empty-selection');
   const changeLinks = (patch) => { const ids = selection().links; if (ids.length) tool('diagram.link.change', { ids: [...ids], ...patch }); };
-  for (const [input, key] of [[linkFrom, 'from'], [linkTo, 'to'], [linkLabel, 'label'], [linkColour, 'colour'], [linkStyle, 'style'], [linkArrow, 'arrow'], [linkWidth, 'width']]) input.addEventListener('change', () => {
+  const numeric = new Set(['width', 'labelPosition']);
+  for (const [input, key] of [[linkFrom, 'from'], [linkTo, 'to'], [linkLabel, 'label'], [linkColour, 'colour'], [linkStyle, 'style'], [linkArrow, 'arrow'], [linkWidth, 'width'],
+    [linkFromSide, 'fromSide'], [linkToSide, 'toSide'], [linkHead, 'head'], [linkTail, 'tail'], [linkLabelAt, 'labelPosition']]) input.addEventListener('change', () => {
     if (!selection().links.length || (key !== 'label' && input.value === '')) return;
-    if (key === 'width' && !Number.isFinite(Number(input.value))) return;
-    changeLinks({ [key]: key === 'width' ? Number(input.value) : input.value });
+    if (numeric.has(key) && !Number.isFinite(Number(input.value))) return;
+    changeLinks({ [key]: numeric.has(key) ? Number(input.value) : input.value });
   });
-  const connect = btn('Connect nodes', 'Connect the chosen nodes', () => tool('diagram.link.make', { from: linkFrom.value, to: linkTo.value }));
-  linkForm.append(connect);
+  const connect = btn('Connect nodes', 'Connect the chosen nodes', () => tool('diagram.link.make', { from: linkFrom.value, to: linkTo.value, ...lineDefaults() }));
+  const linkOne = (operation, args = {}) => { const ids = selection().links; if (ids.length) tool(operation, { ids: [...ids], ...args }); };
+  const straighten = btn('Remove bends', 'Remove every bend of the selected connections', () => linkOne('diagram.link.bend.remove'));
+  const detachStart = btn('Detach start', 'Free the start of the selected connections from its node', () => linkOne('diagram.link.detach', { end: 'start' }));
+  const detachEnd = btn('Detach end', 'Free the end of the selected connections from its node', () => linkOne('diagram.link.detach', { end: 'end' }));
+  linkForm.append(linkBends, connect, straighten, detachStart, detachEnd);
 
   // ---- a numeric group drawn as a chart: one node per label with its value ----
   const chartPanel = html('section', 'dg-chart-tools'), chartForm = html('div', 'dg-chart-form');
@@ -154,6 +165,8 @@ export function makeInspector(inspector, { tool, model, selection, select, html,
     fill(linkStyle, values(ops, 'diagram.link.change', 'style').enum ?? []);
     fill(linkArrow, values(ops, 'diagram.link.change', 'arrow').enum ?? []);
     const width = values(ops, 'diagram.link.change', 'width'); if (width.min !== undefined) linkWidth.min = width.min; if (width.max !== undefined) linkWidth.max = width.max;
+    fill(linkFromSide, values(ops, 'diagram.link.change', 'fromSide').enum ?? []); fill(linkToSide, values(ops, 'diagram.link.change', 'toSide').enum ?? []);
+    fill(linkHead, values(ops, 'diagram.link.change', 'head').enum ?? []); fill(linkTail, values(ops, 'diagram.link.change', 'tail').enum ?? []);
     fill(chartLayout, values(ops, 'diagram.group.chart.make', 'layout').enum ?? []);
     sync();
   }
@@ -200,7 +213,15 @@ export function makeInspector(inspector, { tool, model, selection, select, html,
       put(input, target ?? ''); input.disabled = links.length > 1;
     }
     put(linkLabel, link?.label ?? ''); put(linkColour, link?.colour ?? ''); put(linkStyle, link?.style ?? 'solid'); put(linkArrow, link?.arrow ?? 'forward'); put(linkWidth, link?.width ?? 2);
-    for (const input of [linkId, linkLabel, linkColour, linkStyle, linkArrow, linkWidth]) hide(input, !links.length);
+    // A free end shows as free; a mark not shown by the direction as none.
+    const arrow = link?.arrow ?? 'forward';
+    put(linkFromSide, link?.fromFree ? '' : link?.fromSide ?? 'auto'); put(linkToSide, link?.toFree ? '' : link?.toSide ?? 'auto');
+    put(linkHead, ['forward', 'both'].includes(arrow) ? link?.head ?? 'arrow' : 'none'); put(linkTail, ['back', 'both'].includes(arrow) ? link?.tail ?? 'arrow' : 'none');
+    put(linkLabelAt, link?.labelPosition ?? 0.5);
+    linkBends.textContent = link ? [link.fromFree ? 'Start: free' : '', link.toFree ? 'End: free' : '', link.bends.length ? link.bends.length + ' bend' + (link.bends.length === 1 ? '' : 's') + ' (drag a bend to move it, double-click it to remove it)' : 'Drag the middle handle of the line to add a bend.'].filter(Boolean).join(' · ') : '';
+    for (const input of [linkId, linkLabel, linkColour, linkStyle, linkArrow, linkWidth, linkFromSide, linkToSide, linkHead, linkTail, linkLabelAt]) hide(input, !links.length);
+    for (const button of [straighten, detachStart, detachEnd, linkBends]) button.hidden = !links.length;
+    straighten.disabled = !links.some((item) => item.bends.length);
     connect.hidden = !!links.length; connect.disabled = !linkFrom.value || !linkTo.value || linkFrom.value === linkTo.value;
   }
   function sync() {

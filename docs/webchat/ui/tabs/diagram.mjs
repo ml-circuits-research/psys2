@@ -6,6 +6,11 @@
 // verification). The tab adds only presentation: toolbar, inspector, selection halos and handles, pan and zoom
 // (buttons, ctrl + wheel, pinch, + - 0 keys), drag previews, the empty-state hint and the SVG/PNG export.
 // Multi-selection lives here (the area's view keeps one selected id); it is sent with the declared select commands.
+// Connections: hovering a node shows its ports (the middle of each side); dragging from a port draws a line that snaps
+// to the node and port under the pointer and is made on release (released over empty space: nothing is made). A
+// selected connection shows a handle at each end (drag it to another node or side; released over empty space the end
+// stays free there), its bends (drag to move, double-click to remove) and a handle in the middle of each piece (drag to
+// add a bend); its label drags along it. The line type chosen in the toolbar is the look of new connections.
 import { mountInspectorSplitter } from '../pane-splitter.mjs';
 import { makeInspector } from './diagram/inspector.mjs';
 import { makePageBar, makeStylePanels, TOOLS_STYLE } from './diagram/tools.mjs';
@@ -36,6 +41,22 @@ const STYLE = `
 .dg-svg .dg-connect { fill:#fff;stroke:var(--dg-accent);stroke-width:2;cursor:crosshair;pointer-events:all; }
 .dg-svg .dg-wire { stroke:var(--dg-accent);stroke-width:2;stroke-dasharray:6 4;fill:none;pointer-events:none; }
 .dg-marquee { fill:rgba(53,106,195,.08);stroke:#356ac3;stroke-width:1;pointer-events:none; }
+.dg-svg .dg-port { fill:#fff;stroke:var(--dg-accent);stroke-width:1.5;cursor:crosshair;pointer-events:all; }
+.dg-svg .dg-port.snap { fill:var(--dg-accent); }
+.dg-svg .dg-target { fill:none;stroke:#2f9e44;stroke-width:3;opacity:.8;pointer-events:none; }
+.dg-svg .dg-end { fill:#fff;stroke:var(--dg-accent);stroke-width:2;cursor:move;pointer-events:all; }
+.dg-svg .dg-end.free { fill:#ffd166; }
+.dg-svg .dg-bend { fill:var(--dg-accent);stroke:#fff;stroke-width:1;cursor:move;pointer-events:all; }
+.dg-svg .dg-mid { fill:var(--dg-accent);fill-opacity:.4;stroke:var(--dg-accent);stroke-width:1;cursor:copy;pointer-events:all; }
+.dg-svg .dg-ports, .dg-svg .dg-wire, .dg-svg .dg-preview { pointer-events:none; }
+.dg-svg .dg-ports .dg-port { pointer-events:all; }
+.dg-svg .dg-preview { fill:none;stroke:var(--dg-accent);stroke-width:2;stroke-dasharray:6 4; }
+.dg-line { position:relative; }
+.dg-line > summary { list-style:none; }
+.dg-line > summary::-webkit-details-marker { display:none; }
+.dg-line-form { position:absolute;z-index:31;top:38px;left:0;display:grid;gap:8px;min-width:210px;padding:10px;background:var(--dg-card);border:1px solid var(--dg-line);border-radius:8px;box-shadow:0 8px 24px #0003; }
+.dg-line-form label { display:grid;gap:3px;font:12px system-ui;color:var(--dg-faint); }
+.dg-line-form select { border:1px solid var(--dg-line);border-radius:6px;padding:5px;background:var(--dg-bg);color:var(--dg-ink);font:13px system-ui; }
 .dg-tools { display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px; }
 .dg-btn { all:unset;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;min-width:34px;height:32px;padding:0 10px;box-sizing:border-box;border-radius:8px;background:var(--dg-card);color:var(--dg-ink);font:600 13px system-ui,sans-serif;box-shadow:inset 0 0 0 1px var(--dg-line); }
 .dg-btn:hover,.dg-btn:focus-visible { box-shadow:inset 0 0 0 2px var(--dg-accent); }
@@ -72,7 +93,10 @@ function modelOf(state) {
   for (const object of state?.objects ?? []) {
     const input = inputs[object.id] ?? {}, id = object.id, selected = object.selected === 'true' || object.selected === true;
     if (object.binding === 'diagram.node') node.set(id, { id, kind: object.kind, x: Number(object.x), y: Number(object.y), w: Number(object.width), h: Number(object.height), box: boxes[id] ?? null, label: input.label, colour: input.colour, size: input.size, value: input.value, group: input.group, outline: input.outline, textColour: input.textColour, fontSize: input.fontSize, fontWeight: input.fontWeight, effect: input.effect, opacity: input.opacity, corner: input.corner, rotation: input.rotation, role: input.role, selected });
-    else if (object.binding === 'diagram.link') link.set(id, { id, from: object.from, to: object.to, label: input.label, colour: input.colour, style: input.style, arrow: input.arrow, width: input.width, route: input.route, way: input.way, selected });
+    else if (object.binding === 'diagram.link') link.set(id, { id, from: object.from, to: object.to, label: input.label, colour: input.colour, style: input.style, arrow: input.arrow, width: input.width, route: input.route, way: input.way,
+      fromSide: input.fromSide, toSide: input.toSide, head: input.head, tail: input.tail, labelPosition: input.labelPosition, fromFree: input.fromFree === true, toFree: input.toFree === true,
+      // Each bend is observed as "k x y" (k: its place along the link from 1).
+      bends: [].concat(input.bends ?? []).map((bend) => String(bend).split(' ').map(Number)).filter((bend) => bend.length === 3 && bend.every(Number.isFinite)).sort((a, b) => a[0] - b[0]).map(([k, x, y]) => ({ k, x, y })), selected });
     else if (object.binding === 'diagram.group') group.set(id, { id, label: object.label ?? input.label, layout: input.layout, scale: input.scale, members: [].concat(input.members ?? []), box: boxes[id] ?? null, xLabel: input.xLabel, yLabel: input.yLabel, valueLabels: input.valueLabels, gridlines: input.gridlines, legend: input.legend, yMax: input.yMax, inputs: input, selected });
   }
   return { node, link, group, inputs, options: state?.options ?? {}, view: state?.runtime?.view ?? {}, frame: state?.frame ?? { w: 1000, h: 700 }, pending: !!state?.pending };
@@ -96,7 +120,7 @@ function make(holder, host) {
   // ---- layout: toolbar, board (svg + hint), inspector, caption ----
   const board = html('div', 'dg-board'), hint = html('div', 'dg-hint');
   const svg = sv('svg', { class: 'dg-svg', role: 'img', tabindex: '0', preserveAspectRatio: 'xMidYMid meet' });
-  const layer = sv('g', { class: 'dg-layer' }, svg), overlay = sv('g', { class: 'dg-overlay' }, svg);
+  const layer = sv('g', { class: 'dg-layer' }, svg), overlay = sv('g', { class: 'dg-overlay' }, svg), portLayer = sv('g', { class: 'dg-ports' }, svg);
   board.append(svg, hint);
   const pagebar = html('div', 'dg-pagebar'); pagebar.setAttribute('aria-label', 'Page layout and style');
   const tools = html('div', 'dg-tools'), caption = html('p', 'dg-caption'); caption.setAttribute('aria-live', 'polite');
@@ -133,13 +157,46 @@ function make(holder, host) {
   const addMode = btn('Add node', 'Choose a node to place', () => { chooserPoint = null; nodeChooser.hidden = !nodeChooser.hidden; });
   const multiButton = btn('Select multiple', 'Select multiple objects by tapping', () => { multiSelect = !multiSelect; multiButton.setAttribute('aria-pressed', String(multiSelect)); });
   multiButton.setAttribute('aria-pressed', 'false');
+  // The line type of new connections (and, when connections are selected, theirs): route, arrowheads and dash, each
+  // from the declared choices of diagram.link.make. Remembered in this browser.
+  const LINE_KEY = 'psys2.diagram.line';
+  let lineType = (() => { try { return JSON.parse(localStorage.getItem(LINE_KEY) ?? '{}') ?? {}; } catch { return {}; } })();
+  const lineBox = html('details', 'dg-line'), lineSummary = html('summary', 'dg-btn', 'Line ▾'), lineForm = html('div', 'dg-line-form');
+  lineSummary.title = 'Line type for new connections and the selected ones'; lineSummary.setAttribute('aria-label', 'Line type');
+  lineBox.append(lineSummary, lineForm);
+  const lineSelect = (label, key) => {
+    const wrap = html('label', '', label), input = html('select'); input.setAttribute('aria-label', label); wrap.append(input); lineForm.append(wrap);
+    input.addEventListener('change', () => {
+      lineType = { ...lineType, [key]: input.value }; try { localStorage.setItem(LINE_KEY, JSON.stringify(lineType)); } catch { /* not kept */ }
+      const ids = sel.links.filter((id) => m.link.has(id)); if (!ids.length || !input.value) return;
+      if (key === 'route') toolCall('diagram.link.change', { ids, route: input.value });
+      else if (key === 'style') toolCall('diagram.link.change', { ids, style: input.value });
+      else toolCall('diagram.link.change', { ids, ...MARK_CHANGE[input.value] });
+    });
+    return input;
+  };
+  // Arrowheads: none, at the end, at both ends, at the start, or another mark at the end.
+  const MARKS = { none: 'No arrowheads', end: 'Arrow at the end', both: 'Arrows at both ends', start: 'Arrow at the start', open: 'Open arrow', diamond: 'Diamond', circle: 'Circle' };
+  const MARK_MAKE = { none: { arrow: 'none' }, end: { arrow: 'forward' }, both: { arrow: 'both' }, start: { arrow: 'back' }, open: { head: 'open' }, diamond: { head: 'diamond' }, circle: { head: 'circle' } };
+  const MARK_CHANGE = { none: { arrow: 'none' }, end: { arrow: 'forward', head: 'arrow' }, both: { arrow: 'both' }, start: { arrow: 'back' }, open: { head: 'open' }, diamond: { head: 'diamond' }, circle: { head: 'circle' } };
+  const lineRoute = lineSelect('Line route', 'route'), lineMarks = lineSelect('Line arrowheads', 'marks'), lineDash = lineSelect('Line dash', 'style');
+  const lineDefaults = () => ({ ...(lineType.route ? { route: lineType.route } : {}), ...(lineType.style ? { style: lineType.style } : {}), ...(MARK_MAKE[lineType.marks] ?? {}) });
+  function declareLine(ops) {
+    const make = ops.find((op) => op.id === 'diagram.link.make')?.params ?? {};
+    const fillLine = (input, list, labels = {}) => { input.replaceChildren(); const blank = html('option', '', 'as the page'); blank.value = ''; input.append(blank);
+      for (const value of list) { const option = html('option', '', labels[value] ?? value); option.value = value; input.append(option); } input.value = lineType[input === lineRoute ? 'route' : input === lineDash ? 'style' : 'marks'] ?? ''; };
+    fillLine(lineRoute, make.route?.enum ?? []); fillLine(lineDash, make.style?.enum ?? []);
+    const kinds = new Set(make.head?.enum ?? []), arrows = new Set(make.arrow?.enum ?? []);
+    fillLine(lineMarks, Object.keys(MARKS).filter((mark) => (MARK_MAKE[mark].head ? kinds.has(MARK_MAKE[mark].head) : arrows.has(MARK_MAKE[mark].arrow))), MARKS);
+    lineMarks.firstChild.textContent = 'Arrow at the end';
+  }
   const connectMode = btn('Connect', 'Tap two nodes to connect', () => { setMode(mode === 'connect' ? 'select' : 'connect'); caption.textContent = mode === 'connect' ? 'Tap the source node, then the destination node.' : ''; });
   const zoomOut = btn('−', 'Zoom out', () => zoomBy(1 / ZSTEP)), zoomIn = btn('+', 'Zoom in', () => zoomBy(ZSTEP)), pct = html('span', 'dg-pct', '100%');
   pct.title = 'Fit the diagram'; pct.addEventListener('click', () => zoomFit());
   const zoomBox = html('span', 'dg-zoom'); zoomBox.append(zoomOut, pct, zoomIn);
   const idsShown = () => !!m.view.ids && m.view.ids !== 'off';
   const idsBtn = btn('Object ID', 'Show or hide object IDs', () => toolCall('diagram.ids.show', { mode: idsShown() ? 'off' : 'always' }));
-  tools.append(addMode, nodeChooser, multiButton, connectMode,
+  tools.append(addMode, nodeChooser, multiButton, connectMode, lineBox,
     btn('Clear diagram', 'Clear diagram', () => toolCall('diagram.page.clear', {})),
     btn('Chart', 'Create a chart', () => inspectorUi.openChart()),
     zoomBox, idsBtn, html('span', 'dg-spacer'),
@@ -163,7 +220,7 @@ function make(holder, host) {
     if (sel.links.length) return toolCall('diagram.link.select', { ids: sel.links });
     return toolCall('diagram.node.select', { ids: [] });
   };
-  const baseInspector = makeInspector(inspector, { tool: toolCall, model: () => m, selection: () => sel, select, html, btn, focusBoard: () => svg.focus() });
+  const baseInspector = makeInspector(inspector, { tool: toolCall, model: () => m, selection: () => sel, select, html, btn, focusBoard: () => svg.focus(), lineDefaults });
   const panels = html('div'); inspector.append(panels);
   const stylePanels = makeStylePanels(panels, { tool: toolCall, model: () => m, selection: () => sel, html, btn });
   const pageBar = makePageBar(pagebar, { tool: toolCall, model: () => m, html, btn });
@@ -229,14 +286,67 @@ function make(holder, host) {
     const halo = (box, pad) => sv('rect', { class: 'halo', x: box.x0 - pad, y: box.y0 - pad, width: box.x1 - box.x0 + 2 * pad, height: box.y1 - box.y0 + 2 * pad, rx: 10 }, overlay);
     if (sel.group && m.group.get(sel.group)?.box) halo(m.group.get(sel.group).box, 4);
     for (const id of sel.nodes) { const node = m.node.get(id); if (node?.box) halo(node.box, 7); }
-    // Handles of the selected nodes: resize (bottom right) and connect (right middle), sized in screen pixels.
+    // Handles of the selected nodes: resize (bottom right) and connect (right middle), sized in screen pixels; the
+    // ports of a single selected node (touch has no hover).
     if (sel.group) return;
     const side = 14 * upp, radius = 8 * upp;
     for (const id of sel.nodes) {
       const node = m.node.get(id); if (!node?.box) continue;
       sv('rect', { class: 'dg-resize', 'data-resize-node': id, x: node.box.x1 - side / 2, y: node.box.y1 - side / 2, width: side, height: side, 'aria-label': 'Resize ' + id }, overlay);
       sv('circle', { class: 'dg-connect', 'data-connect-node': id, cx: node.box.x1 + radius * 1.5, cy: node.y, r: radius, 'aria-label': 'Connect ' + id }, overlay);
+      if (sel.nodes.length === 1 && !sel.links.length) for (const [portSide, x, y] of portsOf(node)) sv('circle', { class: 'dg-port', 'data-port-node': id, 'data-port-side': portSide, cx: x, cy: y, r: 5.5 * upp, 'aria-label': 'Connect from the ' + portSide + ' of ' + id }, overlay);
     }
+    // Handles of one selected connection: its ends, its bends and the middle of each piece.
+    if (sel.links.length === 1 && !sel.nodes.length) linkHandles(sel.links[0], upp);
+  }
+  // A connection's drawn line (the projection's polyline, source end first) and its control points: the two ends and
+  // its bends in order.
+  const routeOf = (id) => { const line = layer.querySelector(`[data-select="${CSS.escape(id)}"] polyline:not(.dg-hit)`); return line ? line.getAttribute('points').trim().split(/\s+/).map((pair) => pair.split(',').map(Number)) : []; };
+  const controlsOf = (id) => { const points = routeOf(id), link = m.link.get(id); return points.length < 2 || !link ? [] : [points[0], ...link.bends.map((bend) => [bend.x, bend.y]), points.at(-1)]; };
+  function linkHandles(id, upp) {
+    const link = m.link.get(id), ctrl = controlsOf(id); if (!link || ctrl.length < 2) return;
+    const r = 7 * upp;
+    for (let i = 0; i + 1 < ctrl.length; i++) sv('circle', { class: 'dg-mid', 'data-mid-link': id, 'data-after': i, cx: (ctrl[i][0] + ctrl[i + 1][0]) / 2, cy: (ctrl[i][1] + ctrl[i + 1][1]) / 2, r: r * 0.75, 'aria-label': 'Add a bend to ' + id }, overlay);
+    for (const bend of link.bends) sv('rect', { class: 'dg-bend', 'data-bend-link': id, 'data-bend': bend.k, x: bend.x - r * 0.8, y: bend.y - r * 0.8, width: r * 1.6, height: r * 1.6, 'aria-label': 'Bend ' + bend.k + ' of ' + id }, overlay);
+    for (const [end, point, free] of [['from', ctrl[0], link.fromFree], ['to', ctrl.at(-1), link.toFree]])
+      sv('circle', { class: 'dg-end' + (free ? ' free' : ''), 'data-end-link': id, 'data-end': end, cx: point[0], cy: point[1], r, 'aria-label': (end === 'from' ? 'Start' : 'End') + ' of ' + id }, overlay);
+  }
+  // Ports: the middle of each side of a node's box (the sides link-geometry.sop attaches to).
+  const portsOf = (node) => { const b = node?.box; return b ? [['top', (b.x0 + b.x1) / 2, b.y0], ['right', b.x1, (b.y0 + b.y1) / 2], ['bottom', (b.x0 + b.x1) / 2, b.y1], ['left', b.x0, (b.y0 + b.y1) / 2]] : []; };
+  let hovered = null;
+  function showPorts(id, snap = null) {
+    portLayer.replaceChildren(); hovered = id;
+    const node = m.node.get(id); if (!node?.box) return;
+    const upp = unitsPerPixel();
+    if (snap !== null) sv('rect', { class: 'dg-target', x: node.box.x0 - 5, y: node.box.y0 - 5, width: node.box.x1 - node.box.x0 + 10, height: node.box.y1 - node.box.y0 + 10, rx: 8 }, portLayer);
+    for (const [portSide, x, y] of portsOf(node)) sv('circle', { class: 'dg-port' + (snap === portSide ? ' snap' : ''), 'data-port-node': id, 'data-port-side': portSide, cx: x, cy: y, r: (snap === portSide ? 7.5 : 5.5) * upp, 'aria-label': 'Connect from the ' + portSide + ' of ' + id }, portLayer);
+  }
+  const hidePorts = () => { if (hovered !== null || portLayer.firstChild) { portLayer.replaceChildren(); hovered = null; } };
+  // What is under the pointer while a line is drawn or an end is moved: a node and, near one of its ports, that side.
+  function snapAt(event) {
+    const element = document.elementFromPoint(event.clientX, event.clientY), port = element?.closest?.('[data-port-node]');
+    const id = port ? port.getAttribute('data-port-node') : idAt(element); if (!m.node.has(id)) return null;
+    const node = m.node.get(id), point = svgPt(event), tolerance = 16 * unitsPerPixel();
+    let best = null;
+    for (const [portSide, x, y] of portsOf(node)) { const d = Math.hypot(point.x - x, point.y - y); if (d <= tolerance && (!best || d < best.d)) best = { side: portSide, x, y, d }; }
+    return { node: id, side: best?.side ?? null, x: best?.x ?? node.x, y: best?.y ?? node.y };
+  }
+  // The control piece nearest a point (to add a bend there) and the fraction of the drawn line's length at a point.
+  function nearestPiece(ctrl, p) {
+    let best = 0, bestD = Infinity;
+    for (let i = 0; i + 1 < ctrl.length; i++) { const d = segmentDistance(p, ctrl[i], ctrl[i + 1]).d; if (d < bestD) { bestD = d; best = i; } }
+    return best;
+  }
+  function segmentDistance(p, a, b) {
+    const dx = b[0] - a[0], dy = b[1] - a[1], len2 = dx * dx + dy * dy, t = len2 ? Math.max(0, Math.min(1, ((p.x - a[0]) * dx + (p.y - a[1]) * dy) / len2)) : 0;
+    return { t, d: Math.hypot(p.x - (a[0] + t * dx), p.y - (a[1] + t * dy)) };
+  }
+  function fractionAt(points, p) {
+    const lengths = points.slice(1).map((q, i) => Math.hypot(q[0] - points[i][0], q[1] - points[i][1])), total = lengths.reduce((a, b) => a + b, 0);
+    if (!total) return 0.5;
+    let best = null, before = 0;
+    for (let i = 0; i < lengths.length; i++) { const { t, d } = segmentDistance(p, points[i], points[i + 1]); if (!best || d < best.d) best = { d, at: before + t * lengths[i] }; before += lengths[i]; }
+    return Math.round(Math.max(0, Math.min(1, best.at / total)) * 100) / 100;
   }
   function fitBase() {
     let box = null;
@@ -261,7 +371,7 @@ function make(holder, host) {
       const empty = !m.node.size;
       vbBase = fitBase(); if (empty) { zv.k = 1; zv.dx = 0; zv.dy = 0; }
     }
-    applyZoom(); paintOverlay();
+    applyZoom(); paintOverlay(); if (changed) hidePorts();
     idsBtn.setAttribute('aria-pressed', String(idsShown()));
   }
 
@@ -288,7 +398,7 @@ function make(holder, host) {
 
   // ---- gestures: tap to select, drag to move, handles to resize and connect, a rectangle to select several ----
   const ptrs = new Map(); let pan = null, pinch = null;
-  const cancelDrag = () => { pan?.preview?.remove(); pan?.marquee?.remove(); pan?.wire?.remove(); if (pan?.moved) { shownSvg = null; redraw(); } pan = null; svg.classList.remove('panning'); };
+  const cancelDrag = () => { pan?.preview?.remove(); pan?.marquee?.remove(); pan?.wire?.remove(); hidePorts(); if (pan?.moved) { shownSvg = null; redraw(); } pan = null; svg.classList.remove('panning'); };
   svg.addEventListener('pointerdown', (event) => {
     ptrs.set(event.pointerId, { x: event.clientX, y: event.clientY });
     if (ptrs.size === 1) suppressClick = false;   // a new gesture: the click a drag or pinch left behind is gone
@@ -296,8 +406,19 @@ function make(holder, host) {
     if (event.button !== 0 && event.pointerType === 'mouse') return;
     if (mode !== 'select') return;
     const resize = event.target.closest?.('[data-resize-node]'), wire = event.target.closest?.('[data-connect-node]'), id = idAt(event.target);
+    const port = event.target.closest?.('[data-port-node]'), endHandle = event.target.closest?.('[data-end-link]'), bendHandle = event.target.closest?.('[data-bend-link]'), midHandle = event.target.closest?.('[data-mid-link]');
+    const lineSelected = id && m.link.has(id) && sel.links.length === 1 && sel.links[0] === id;
     let object = null;
-    if (resize) { const node = m.node.get(resize.getAttribute('data-resize-node')); if (node) object = { kind: 'resize', id: node.id, x: node.x, y: node.y, width: node.w, height: node.h, square: node.w === node.h }; }
+    if (port) { const node = port.getAttribute('data-port-node'); object = { kind: 'draw', from: node, side: port.getAttribute('data-port-side'), x: Number(port.getAttribute('cx')), y: Number(port.getAttribute('cy')) }; }
+    else if (endHandle) {
+      const link = endHandle.getAttribute('data-end-link'), end = endHandle.getAttribute('data-end'), ctrl = controlsOf(link);
+      const other = end === 'from' ? ctrl[1] : ctrl.at(-2);   // the line rubber-bands from the next control point
+      if (other) object = { kind: 'end', id: link, end, x: other[0], y: other[1] };
+    } else if (bendHandle) { const link = bendHandle.getAttribute('data-bend-link'), k = Number(bendHandle.getAttribute('data-bend')), ctrl = controlsOf(link); object = { kind: 'bend', id: link, bend: k, a: ctrl[k - 1], b: ctrl[k + 1] }; }
+    else if (midHandle) { const link = midHandle.getAttribute('data-mid-link'), after = Number(midHandle.getAttribute('data-after')), ctrl = controlsOf(link); object = { kind: 'addbend', id: link, after, a: ctrl[after], b: ctrl[after + 1] }; }
+    else if (lineSelected && event.target.closest?.('text')) object = { kind: 'label', id, text: event.target.closest('text') };
+    else if (lineSelected) { const ctrl = controlsOf(id), after = nearestPiece(ctrl, svgPt(event)); object = { kind: 'addbend', id, after, a: ctrl[after], b: ctrl[after + 1] }; }
+    else if (resize) { const node = m.node.get(resize.getAttribute('data-resize-node')); if (node) object = { kind: 'resize', id: node.id, x: node.x, y: node.y, width: node.w, height: node.h, square: node.w === node.h }; }
     else if (wire) { const node = m.node.get(wire.getAttribute('data-connect-node')); if (node) object = { kind: 'connect', id: node.id, x: node.x, y: node.y }; }
     else if (id && (m.group.has(id) || m.node.get(id)?.group)) {
       // A group moves as one, also when it is taken by one of its members (the rules place a member with its group).
@@ -308,10 +429,17 @@ function make(holder, host) {
       object = { kind: 'node', id, ids, x: nodes.reduce((s, n) => s + n.x / nodes.length, 0), y: nodes.reduce((s, n) => s + n.y / nodes.length, 0), move: ids };
     }
     if (id && m.link.has(id) && !object) return;   // a connection is selected by the click
+    if (object) hidePorts();
     pan = { id: event.pointerId, x0: event.clientX, y0: event.clientY, upp: unitsPerPixel(), moved: false, start: svgPt(event), extend: extendSelection(event), object };
   });
   svg.addEventListener('pointermove', (event) => {
-    if (!ptrs.has(event.pointerId)) return;
+    if (!ptrs.has(event.pointerId)) {
+      // Hover: the ports of the node under the pointer (kept while the pointer is on one of them).
+      if (mode !== 'select' || pan) return;
+      const port = event.target.closest?.('[data-port-node]'), id = port ? port.getAttribute('data-port-node') : idAt(event.target);
+      if (m.node.has(id) && !m.node.get(id).group) { if (hovered !== id) showPorts(id); } else hidePorts();
+      return;
+    }
     ptrs.set(event.pointerId, { x: event.clientX, y: event.clientY });
     if (pinch && ptrs.size >= 2) { const [a, b] = [...ptrs.values()], distance = Math.hypot(a.x - b.x, a.y - b.y); zoomBy(pinch.k0 * distance / pinch.d0 / zv.k, svgPt({ clientX: (a.x + b.x) / 2, clientY: (a.y + b.y) / 2 })); return; }
     if (pan?.id !== event.pointerId) return;
@@ -327,6 +455,18 @@ function make(holder, host) {
       for (const [key, value] of Object.entries({ x: object.x - width / 2, y: object.y - height / 2, width, height })) pan.preview.setAttribute(key, value);
       return;
     }
+    if (object?.kind === 'draw' || object?.kind === 'end') {
+      const target = snapAt(event), point = target?.side ? target : svgPt(event);
+      if (target) showPorts(target.node, target.side ?? ''); else hidePorts();
+      pan.wire ??= sv('line', { class: 'dg-wire', x1: object.x, y1: object.y }, svg);
+      pan.wire.setAttribute('x2', point.x); pan.wire.setAttribute('y2', point.y); object.target = target; object.point = svgPt(event); return;
+    }
+    if (object?.kind === 'bend' || object?.kind === 'addbend') {
+      const point = svgPt(event); object.point = point;
+      pan.preview ??= sv('polyline', { class: 'dg-preview' }, svg);
+      pan.preview.setAttribute('points', [object.a, [point.x, point.y], object.b].filter(Boolean).map((p) => p.join(',')).join(' ')); return;
+    }
+    if (object?.kind === 'label') { object.point = svgPt(event); object.text.setAttribute('transform', `translate(${dx} ${dy})`); return; }
     if (object?.kind === 'connect') {
       const point = svgPt(event); pan.wire ??= sv('line', { class: 'dg-wire', x1: object.x, y1: object.y }, svg);
       pan.wire.setAttribute('x2', point.x); pan.wire.setAttribute('y2', point.y); return;
@@ -357,7 +497,25 @@ function make(holder, host) {
       return;
     }
     if (object.kind === 'resize') { if (object.next) toolCall('diagram.node.resize', { ids: [object.id], ...object.next }); return; }
-    if (object.kind === 'connect') { const to = nodeAt(event); if (to && to !== object.id) toolCall('diagram.link.make', { from: object.id, to }); return; }
+    const round = (point) => ({ x: Math.round(point.x), y: Math.round(point.y) });
+    hidePorts();
+    if (object.kind === 'draw') {
+      const target = snapAt(event);
+      if (!target) { caption.textContent = 'Released over empty space: no connection was made.'; return; }
+      if (target.node === object.from && (!target.side || target.side === object.side)) return;
+      toolCall('diagram.link.make', { from: object.from, to: target.node, fromSide: object.side, ...(target.side ? { toSide: target.side } : {}), ...lineDefaults() });
+      return;
+    }
+    if (object.kind === 'end') {
+      const target = snapAt(event);
+      if (target) toolCall('diagram.link.attach', { ids: [object.id], end: object.end, node: target.node, ...(target.side ? { side: target.side } : {}) });
+      else toolCall('diagram.link.detach', { ids: [object.id], end: object.end, ...round(svgPt(event)) });
+      return;
+    }
+    if (object.kind === 'bend') { toolCall('diagram.link.bend.move', { ids: [object.id], bend: object.bend, ...round(svgPt(event)) }); return; }
+    if (object.kind === 'addbend') { toolCall('diagram.link.bend.add', { ids: [object.id], ...round(svgPt(event)), after: object.after }); return; }
+    if (object.kind === 'label') { object.text.removeAttribute('transform'); toolCall('diagram.link.change', { ids: [object.id], labelPosition: fractionAt(routeOf(object.id), svgPt(event)) }); return; }
+    if (object.kind === 'connect') { const to = nodeAt(event); if (to && to !== object.id) toolCall('diagram.link.make', { from: object.id, to, ...lineDefaults() }); return; }
     const x = Math.round(object.x + (event.clientX - drag.x0) * drag.upp), y = Math.round(object.y + (event.clientY - drag.y0) * drag.upp);
     shownSvg = null;   // the previews go; the new state redraws
     if (object.kind === 'group') toolCall('diagram.group.place', { id: object.id, x, y }).then(() => redraw());
@@ -370,12 +528,14 @@ function make(holder, host) {
     if (mode === 'connect') {
       const id = idAt(event.target); if (!m.node.has(id)) return;
       if (!connectionFrom) { connectionFrom = id; select({ nodes: [id] }); caption.textContent = 'Now tap the destination node.'; }
-      else if (id !== connectionFrom) { const from = connectionFrom; setMode('select'); toolCall('diagram.link.make', { from, to: id }); }
+      else if (id !== connectionFrom) { const from = connectionFrom; setMode('select'); toolCall('diagram.link.make', { from, to: id, ...lineDefaults() }); }
       return;
     }
     selectTarget(event);
   });
   svg.addEventListener('dblclick', (event) => {
+    const bend = event.target.closest?.('[data-bend-link]');
+    if (bend) { toolCall('diagram.link.bend.remove', { ids: [bend.getAttribute('data-bend-link')], bend: Number(bend.getAttribute('data-bend')) }); return; }
     const id = idAt(event.target);
     if (!id) { chooserPoint = svgPt(event); nodeChooser.hidden = false; nodeText.focus(); return; }
     if (m.node.has(id)) { if (!(sel.nodes.length === 1 && sel.nodes[0] === id)) select({ nodes: [id] }); inspectorUi.focusLabel(); }
@@ -403,7 +563,7 @@ function make(holder, host) {
     if (destroyed) return;
     const ops = Array.isArray(declared) ? declared : declared?.operations ?? [];
     chooserShapes(ops.find((op) => op.id === 'diagram.node.make')?.params?.kind?.enum ?? []);
-    inspectorUi.declare(ops);
+    inspectorUi.declare(ops); declareLine(ops);
   })().catch((error) => { caption.textContent = 'The editing tools could not be read: ' + (error?.message ?? error); });
 
   // ---- export: the projection's picture, cropped to the drawing, on white ----
@@ -425,7 +585,7 @@ function make(holder, host) {
       redraw(); inspectorUi.sync();
     },
     show() { visible = true; redraw({ refit: true }); },
-    hide() { visible = false; ptrs.clear(); pan = null; pinch = null; },
+    hide() { visible = false; ptrs.clear(); pan = null; pinch = null; hidePorts(); },
     setVisible(on) { if (on) api.show(); else api.hide(); },
     /** Download the diagram as SVG or PNG; returns { ok, detail }. */
     async download({ format = 'svg', filename = 'my-diagram' } = {}) {

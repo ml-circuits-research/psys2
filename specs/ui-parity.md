@@ -150,7 +150,12 @@ New: a Length select (`avatar.part.change {ids, length}`) from the change comman
 | Select "Line style" (solid, dashed, dotted) | 1+ connection | `diagram.link.change {ids, style}` | `diagram.link.change {style}` | restored |
 | Select "Arrowheads" (forward, both, none) | 1+ connection | `diagram.link.change {ids, arrow}` | `diagram.link.change {arrow}` | restored |
 | Number "Line width" (0.5 to 12) | 1+ connection | `diagram.link.change {ids, width}` | `diagram.link.change {width}` | restored |
-| Button "Connect nodes" | 2+ nodes, no connection selected; enabled when from differs from to | `diagram.link.make {from, to}` | `diagram.link.make` | restored |
+| Button "Connect nodes" | 2+ nodes, no connection selected; enabled when from differs from to | `diagram.link.make {from, to}` | `diagram.link.make` | restored (with the toolbar line type) |
+| Toolbar "Line" (route, arrowheads, dash) | always | none (new) | the arguments of `diagram.link.make` for new connections; `diagram.link.change` on the selected ones | new |
+| Hover a node: ports; drag from a port to a node or port | select mode | none (new) | `diagram.link.make {from, to, fromSide, toSide?}`; empty space: nothing made | new |
+| Drag a selected connection's end handle | one connection selected | none (new) | `diagram.link.attach {ids, end, node, side?}`; empty space: `diagram.link.detach {ids, end, x, y}` | new |
+| Drag a middle handle or the line; drag a bend; double-click a bend; drag the label | one connection selected | none (new) | `diagram.link.bend.add`, `diagram.link.bend.move`, `diagram.link.bend.remove`, `diagram.link.change {labelPosition}` | new |
+| Selects "Start side", "End side", "End mark", "Start mark"; range "Label position"; buttons "Remove bends", "Detach start", "Detach end" | 1+ connection | none (new) | `diagram.link.change {fromSide|toSide|head|tail|labelPosition}`, `diagram.link.bend.remove`, `diagram.link.detach {end}` | new |
 | Draft: "Numeric group label", select "Chart layout" (bar, line, pie, doughnut), textarea "Chart data" (label, number per line), "Create numeric group" | after "Chart" | `diagram.group.chart.make {label, labels, values, layout}`; Cancel local | `diagram.group.chart.make {label,labels,values,layout}` | restored (bar, line, area, pie, doughnut) |
 | Button "Convert to editable group" | a saved (legacy) chart active | `diagram.group.chart.adopt {id}` | none | dropped: no legacy charts in the area; the rules refuse `chart.adopt` |
 | "Group Object ID" readout (group id, or next free `g<n>`) | group selected or 2+ nodes | local only | from the projection | restored |

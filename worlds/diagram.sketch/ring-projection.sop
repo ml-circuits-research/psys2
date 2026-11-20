@@ -102,7 +102,8 @@
 @ye.pb ui.diagram.rpos node=?b group=?g
 @ye.ne core.check fn=neq args=?a args=?b
 @ye.out ui.diagram.route edge=?e way=straight a=?a b=?b la=0 lb=0
-@ring.route core.rule when=$ye.e when=$ye.a when=$ye.b when=$ye.pa when=$ye.pb if=$ye.ne then=$ye.out
+@ye.man ui.diagram.manual edge=?e
+@ring.route core.rule when=$ye.e when=$ye.a when=$ye.b when=$ye.pa when=$ye.pb if=$ye.ne not=$ye.man then=$ye.out
 
 # ---- Pie and doughnut groups ----
 @yq.g w.diagram.group code=?g layout=?l

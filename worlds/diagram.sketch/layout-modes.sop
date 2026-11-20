@@ -43,6 +43,7 @@
 @lay.gapflow.type core.type of=ui.diagram.gapflow
 @lay.pway.type core.type of=ui.diagram.pway
 @lay.eway.type core.type of=ui.diagram.eway
+@lay.manual.type core.type of=ui.diagram.manual
 @lay.nkind.type core.type of=ui.diagram.nkind
 @lay.seg.type core.type of=ui.diagram.seg
 @lay.cut.type core.type of=ui.diagram.cut
@@ -356,15 +357,17 @@
 @xw.e w.diagram.edge code=?e
 @xw.eo w.diagram.edge code=?e route=orthogonal
 @xw.e.o ui.diagram.eway edge=?e way=?ov
-@lay.eway.orthogonal core.rule when=$xw.eo when=$xw.ov then=$xw.e.o
+# A link drawn by hand (link-geometry.sop: a side, a free end or a bend) has no way of the page's.
+@xw.man ui.diagram.manual edge=?e
+@lay.eway.orthogonal core.rule when=$xw.eo when=$xw.ov not=$xw.man then=$xw.e.o
 @xw.es w.diagram.edge code=?e route=?er
 @xw.esc core.check fn=matches args=?er args="^(straight|curved)$"
 @xw.e.s ui.diagram.eway edge=?e way=?er
-@lay.eway.drawn core.rule when=$xw.es if=$xw.esc then=$xw.e.s
+@lay.eway.drawn core.rule when=$xw.es if=$xw.esc not=$xw.man then=$xw.e.s
 @xw.eany w.diagram.edge code=?e route=?anyer
 @xw.pw ui.diagram.pway value=?pw
 @xw.e.p ui.diagram.eway edge=?e way=?pw
-@lay.eway.page core.rule when=$xw.e when=$xw.pw not=$xw.eany then=$xw.e.p
+@lay.eway.page core.rule when=$xw.e when=$xw.pw not=$xw.eany not=$xw.man then=$xw.e.p
 
 # ---- Elbow, straight and curved links ----
 # How a node's outline cuts a line from its centre: a box, a round shape, or a diamond.
@@ -646,10 +649,12 @@
 @xh.hd w.diagram.edge code=?e
 @xh.nohdir w.diagram.edge code=?e direction=none
 @xh.nobk w.diagram.edge code=?e direction=back
-@lay.arrow.shown.head.plain core.rule when=$xh.a when=$xh.hd if=$xh.head not=$xh.nohdir not=$xh.nobk then=$xh.show
+# An end marked otherwise than by an arrow (link-geometry.sop) is not drawn as one.
+@xh.alt ui.diagram.altmark edge=?e at=?at
+@lay.arrow.shown.head.plain core.rule when=$xh.a when=$xh.hd if=$xh.head not=$xh.nohdir not=$xh.nobk not=$xh.alt then=$xh.show
 @xh.tb w.diagram.edge code=?e direction=both
-@lay.arrow.shown.tail.both core.rule when=$xh.a when=$xh.tb if=$xh.tail then=$xh.show
-@lay.arrow.shown.tail.back core.rule when=$xh.a when=$xh.nobk if=$xh.tail then=$xh.show
+@lay.arrow.shown.tail.both core.rule when=$xh.a when=$xh.tb if=$xh.tail not=$xh.alt then=$xh.show
+@lay.arrow.shown.tail.back core.rule when=$xh.a when=$xh.nobk if=$xh.tail not=$xh.alt then=$xh.show
 @xh.s ui.diagram.arrowshown edge=?e at=?at
 @lay.arrow.p1 core.rule when=$xh.a when=$xh.s with=$xh.src then=$xh.p1
 @lay.arrow.p2 core.rule when=$xh.a when=$xh.s with=$xh.bx1 with=$xh.by1 with=$xh.bx with=$xh.by with=$xh.nx with=$xh.ny with=$xh.lx with=$xh.ly with=$xh.src then=$xh.p2

@@ -1,0 +1,1214 @@
+# diagram.sketch link geometry (authored): where each end of a link is attached, the bends it passes through, the mark
+# at each end and where its label sits; the commands that change them and how such a link is drawn.
+#
+# The link model. Each end of a link is attached to its node (w.diagram.edge from / to) at a side (top, right, bottom,
+# left; auto and centre: where the line from the node's centre leaves its outline), or is free: it ends at a point of
+# the page (x, y) and keeps the node it was attached to as the node it was last attached to (std.acts cannot take a
+# reference away, and w.diagram.edge requires both ends). A link may pass through bends (diagram.sketch.bend, ordered
+# along it). The mark at the target (head) and at the source (tail) is an arrow, an open arrow, a diamond or a circle;
+# which ends have a mark stays the link's direction (forward: the head; back: the tail; both; none). The label sits at a
+# fraction of the line's length (0 the source, 1 the target; the middle when not said).
+#
+# The keys are this area's (namespace diagram.sketch.): w.diagram owns the edge and the area adds to it, as art.draw
+# adds facing to w.drawing objects. A bend is a kind of this area's own (an area may keep kinds of its own namespace in
+# its state, worlds/sop-area.mjs).
+#
+# Drawing. A link with a side, a free end or a bend is drawn by hand (ui.diagram.manual), not by the page's routing:
+# its ends are the attached sides, the free points or, for an auto end, where the line towards the next point leaves
+# the node's outline; between them the bends in order. Straight: the points joined. Orthogonal: each piece turns at
+# right angles, leaving and entering a side across it (top and bottom vertically, left and right sideways); one turn,
+# or two halfway when both ends of a piece face the same way. Curved: quadratic pieces whose control points are the
+# bends (a single curve bowed to the left when there is no bend). Marks point along the last piece.
+# The keys and the bend kind are declared in link-schema.sop (read before the other rule files, which name them).
+
+@lk.dgl.t.port core.type of=ui.diagram.port
+@lk.dgl.t.endside core.type of=ui.diagram.endside
+@lk.dgl.t.mnode core.type of=ui.diagram.mnode
+@lk.dgl.t.anchor core.type of=ui.diagram.anchor
+@lk.dgl.t.bendat core.type of=ui.diagram.bendat
+@lk.dgl.t.bend core.type of=ui.diagram.bend
+@lk.dgl.t.bends core.type of=ui.diagram.bends
+@lk.dgl.t.bendlo core.type of=ui.diagram.bendlo
+@lk.dgl.t.bendhi core.type of=ui.diagram.bendhi
+@lk.dgl.t.aim core.type of=ui.diagram.aim
+@lk.dgl.t.mcut core.type of=ui.diagram.mcut
+@lk.dgl.t.mend core.type of=ui.diagram.mend
+@lk.dgl.t.mway core.type of=ui.diagram.mway
+@lk.dgl.t.mv core.type of=ui.diagram.mv
+@lk.dgl.t.mvn core.type of=ui.diagram.mvn
+@lk.dgl.t.mlast core.type of=ui.diagram.mlast
+@lk.dgl.t.sideo core.type of=ui.diagram.sideo
+@lk.dgl.t.oseg core.type of=ui.diagram.oseg
+@lk.dgl.t.oeff core.type of=ui.diagram.oeff
+@lk.dgl.t.opiece core.type of=ui.diagram.opiece
+@lk.dgl.t.sided core.type of=ui.diagram.sided
+@lk.dgl.t.stub core.type of=ui.diagram.stub
+@lk.dgl.t.snorm core.type of=ui.diagram.snorm
+@lk.dgl.t.oface core.type of=ui.diagram.oface
+@lk.dgl.t.oend core.type of=ui.diagram.oend
+@lk.dgl.t.opat core.type of=ui.diagram.opat
+@lk.dgl.t.ofit core.type of=ui.diagram.ofit
+@lk.dgl.t.ctl core.type of=ui.diagram.ctl
+@lk.dgl.t.ctln core.type of=ui.diagram.ctln
+@lk.dgl.t.ctlp core.type of=ui.diagram.ctlp
+@lk.dgl.t.ctlcount core.type of=ui.diagram.ctlcount
+@lk.dgl.t.piece core.type of=ui.diagram.piece
+@lk.dgl.t.leg core.type of=ui.diagram.leg
+@lk.dgl.t.lt core.type of=ui.diagram.lt
+@lk.dgl.t.lp core.type of=ui.diagram.lp
+@lk.dgl.t.lpn core.type of=ui.diagram.lpn
+@lk.dgl.t.ls core.type of=ui.diagram.ls
+@lk.dgl.t.lspair core.type of=ui.diagram.lspair
+@lk.dgl.t.lcum core.type of=ui.diagram.lcum
+@lk.dgl.t.ltotal core.type of=ui.diagram.ltotal
+@lk.dgl.t.lpos core.type of=ui.diagram.lpos
+@lk.dgl.t.altmark core.type of=ui.diagram.altmark
+@lk.dgl.t.markshow core.type of=ui.diagram.markshow
+@lk.dgl.t.udir core.type of=ui.diagram.udir
+@lk.dgl.t.pvec core.type of=ui.diagram.pvec
+@lk.dgl.t.pick core.type of=ui.diagram.pick
+@lk.dgl.t.endop core.type of=ui.diagram.endop
+@lk.dgl.t.lcgiven core.type of=ui.diagram.lcgiven
+@lk.dgl.t.ldir core.type of=ui.diagram.ldir
+
+# ---- Ports: the middle of each side of a node's box ----
+@lk.gs.b ui.diagram.nbox node=?a x0=?x0 y0=?y0 x1=?x1 y1=?y1 cx=?cx cy=?cy
+@lk.gs.t ui.diagram.port node=?a side=top x=?cx y=?y0
+@lk.gs.r ui.diagram.port node=?a side=right x=?x1 y=?cy
+@lk.gs.bo ui.diagram.port node=?a side=bottom x=?cx y=?y1
+@lk.gs.l ui.diagram.port node=?a side=left x=?x0 y=?cy
+@lk.lg.port.top core.rule when=$lk.gs.b then=$lk.gs.t
+@lk.lg.port.right core.rule when=$lk.gs.b then=$lk.gs.r
+@lk.lg.port.bottom core.rule when=$lk.gs.b then=$lk.gs.bo
+@lk.lg.port.left core.rule when=$lk.gs.b then=$lk.gs.l
+
+# ---- Which links are drawn by hand ----
+@lk.gm.sides core.check fn=matches args=?s args="^(top|right|bottom|left)$"
+@lk.gm.fs w.diagram.edge code=?e diagram.sketch.from_side=?s
+@lk.gm.fs.o ui.diagram.endside edge=?e at=a side=?s
+@lk.lg.endside.from core.rule when=$lk.gm.fs if=$lk.gm.sides then=$lk.gm.fs.o
+@lk.gm.ts w.diagram.edge code=?e diagram.sketch.to_side=?s
+@lk.gm.ts.o ui.diagram.endside edge=?e at=b side=?s
+@lk.lg.endside.to core.rule when=$lk.gm.ts if=$lk.gm.sides then=$lk.gm.ts.o
+@lk.gm.es ui.diagram.endside edge=?e
+@lk.gm.out ui.diagram.manual edge=?e
+@lk.lg.manual.side core.rule when=$lk.gm.es then=$lk.gm.out
+@lk.gm.ff w.diagram.edge code=?e diagram.sketch.from_free=true
+@lk.lg.manual.from.free core.rule when=$lk.gm.ff then=$lk.gm.out
+@lk.gm.tf w.diagram.edge code=?e diagram.sketch.to_free=true
+@lk.lg.manual.to.free core.rule when=$lk.gm.tf then=$lk.gm.out
+@lk.gm.b diagram.sketch.bend edge=$lk.gm.be
+@lk.gm.be w.diagram.edge code=?e
+@lk.lg.manual.bend core.rule when=$lk.gm.b when=$lk.gm.be then=$lk.gm.out
+
+# The way a hand-drawn link goes: its own route, else the page's (gap routing and elbows are orthogonal).
+@lk.gw.m ui.diagram.manual edge=?e
+@lk.gw.r w.diagram.edge code=?e route=?r
+@lk.gw.out ui.diagram.mway edge=?e way=?r
+@lk.lg.mway.own core.rule when=$lk.gw.m when=$lk.gw.r then=$lk.gw.out
+@lk.gw.any w.diagram.edge code=?e route=?anyr
+@lk.gw.p ui.diagram.pway value=?pw
+@lk.gw.ortho core.check fn=matches args=?pw args="^(gap|elbow)$"
+@lk.gw.o ui.diagram.mway edge=?e way=orthogonal
+@lk.lg.mway.page.ortho core.rule when=$lk.gw.m when=$lk.gw.p not=$lk.gw.any if=$lk.gw.ortho then=$lk.gw.o
+@lk.gw.drawn core.check fn=matches args=?pw args="^(straight|curved)$"
+@lk.gw.d ui.diagram.mway edge=?e way=?pw
+@lk.lg.mway.page.drawn core.rule when=$lk.gw.m when=$lk.gw.p not=$lk.gw.any if=$lk.gw.drawn then=$lk.gw.d
+# A hand-drawn link is a route of its own way (so its line, colour and dash are drawn as any other's).
+@lk.gw.e w.diagram.edge code=?e from=$lk.gw.na to=$lk.gw.nb
+@lk.gw.na w.diagram.node code=?a
+@lk.gw.nb w.diagram.node code=?b
+@lk.gw.route ui.diagram.route edge=?e way=manual a=?a b=?b la=0 lb=0
+@lk.lg.route.manual core.rule when=$lk.gw.m when=$lk.gw.e when=$lk.gw.na when=$lk.gw.nb then=$lk.gw.route
+@lk.gw.mn.a ui.diagram.mnode edge=?e at=a node=?a
+@lk.gw.mn.b ui.diagram.mnode edge=?e at=b node=?b
+@lk.lg.mnode.a core.rule when=$lk.gw.m when=$lk.gw.e when=$lk.gw.na when=$lk.gw.nb then=$lk.gw.mn.a
+@lk.lg.mnode.b core.rule when=$lk.gw.m when=$lk.gw.e when=$lk.gw.na when=$lk.gw.nb then=$lk.gw.mn.b
+
+# ---- The anchor of each end: its free point, its side's port, or (auto) its node's centre ----
+@lk.ga.m ui.diagram.manual edge=?e
+@lk.ga.free.a w.diagram.edge code=?e diagram.sketch.from_free=true diagram.sketch.from_x=?x diagram.sketch.from_y=?y
+@lk.ga.free.ao ui.diagram.anchor edge=?e at=a x=?x y=?y side=free
+@lk.lg.anchor.a.free core.rule when=$lk.ga.m when=$lk.ga.free.a then=$lk.ga.free.ao
+@lk.ga.free.b w.diagram.edge code=?e diagram.sketch.to_free=true diagram.sketch.to_x=?x diagram.sketch.to_y=?y
+@lk.ga.free.bo ui.diagram.anchor edge=?e at=b x=?x y=?y side=free
+@lk.lg.anchor.b.free core.rule when=$lk.ga.m when=$lk.ga.free.b then=$lk.ga.free.bo
+@lk.ga.isfree.a w.diagram.edge code=?e diagram.sketch.from_free=true
+@lk.ga.isfree.b w.diagram.edge code=?e diagram.sketch.to_free=true
+@lk.ga.mn ui.diagram.mnode edge=?e at=?at node=?n
+@lk.ga.side ui.diagram.endside edge=?e at=?at side=?s
+@lk.ga.port ui.diagram.port node=?n side=?s x=?x y=?y
+@lk.ga.isa core.check fn=eq args=?at args=a
+@lk.ga.isb core.check fn=eq args=?at args=b
+@lk.ga.side.o ui.diagram.anchor edge=?e at=?at x=?x y=?y side=?s
+@lk.lg.anchor.a.side core.rule when=$lk.ga.mn when=$lk.ga.side when=$lk.ga.port not=$lk.ga.isfree.a if=$lk.ga.isa then=$lk.ga.side.o
+@lk.lg.anchor.b.side core.rule when=$lk.ga.mn when=$lk.ga.side when=$lk.ga.port not=$lk.ga.isfree.b if=$lk.ga.isb then=$lk.ga.side.o
+@lk.ga.noside ui.diagram.endside edge=?e at=?at
+@lk.ga.box ui.diagram.nbox node=?n cx=?x cy=?y
+@lk.ga.auto.o ui.diagram.anchor edge=?e at=?at x=?x y=?y side=auto
+@lk.lg.anchor.a.auto core.rule when=$lk.ga.mn when=$lk.ga.box not=$lk.ga.noside not=$lk.ga.isfree.a if=$lk.ga.isa then=$lk.ga.auto.o
+@lk.lg.anchor.b.auto core.rule when=$lk.ga.mn when=$lk.ga.box not=$lk.ga.noside not=$lk.ga.isfree.b if=$lk.ga.isb then=$lk.ga.auto.o
+
+# ---- Bends in order (k from 1), how many, the lowest and highest order ----
+@lk.gb.b diagram.sketch.bend edge=$lk.gb.e seq=?o x=?x y=?y
+@lk.gb.e w.diagram.edge code=?e
+@lk.gb.flat ui.diagram.bendat edge=?e order=?o x=?x y=?y
+@lk.lg.bendat core.rule when=$lk.gb.b when=$lk.gb.e then=$lk.gb.flat
+@lk.gr.f ui.diagram.bendat edge=?e order=?o x=?x y=?y
+@lk.gr.k core.rank of=$lk.gr.f by=order within=?e out=?k
+@lk.gr.o ui.diagram.bend edge=?e k=?k order=?o x=?x y=?y
+@lk.lg.bendrank core.rule when=$lk.gr.f with=$lk.gr.k then=$lk.gr.o
+@lk.gc.f ui.diagram.bendat edge=?e order=?o
+@lk.gc.o ui.diagram.bends edge=?e count=?n
+@lk.lg.bendcount core.aggregate over=$lk.gc.f by=?e count=?n then=$lk.gc.o
+@lk.gc.lo ui.diagram.bendlo edge=?e order=?m
+@lk.lg.bendlo core.aggregate over=$lk.gc.f by=?e min=?m args=?o then=$lk.gc.lo
+@lk.gc.hi ui.diagram.bendhi edge=?e order=?m
+@lk.lg.bendhi core.aggregate over=$lk.gc.f by=?e max=?m args=?o then=$lk.gc.hi
+@lk.gc.m ui.diagram.manual edge=?e
+@lk.gc.any ui.diagram.bendat edge=?e
+@lk.gc.zero ui.diagram.bends edge=?e count=0
+@lk.lg.bendcount.zero core.rule when=$lk.gc.m not=$lk.gc.any then=$lk.gc.zero
+
+# ---- Where an auto end leaves its node: towards the first (last) bend, else the other end's anchor ----
+@lk.gi.b1 ui.diagram.bend edge=?e k=1 x=?x y=?y
+@lk.gi.ao ui.diagram.aim edge=?e at=a x=?x y=?y
+@lk.lg.aim.a.bend core.rule when=$lk.gi.b1 then=$lk.gi.ao
+@lk.gi.any ui.diagram.bendat edge=?e
+@lk.gi.anb ui.diagram.anchor edge=?e at=b x=?x y=?y
+@lk.lg.aim.a.anchor core.rule when=$lk.gi.anb not=$lk.gi.any then=$lk.gi.ao
+@lk.gi.cnt ui.diagram.bends edge=?e count=?n
+@lk.gi.bl ui.diagram.bend edge=?e k=?k x=?x y=?y
+@lk.gi.last core.check fn=eq args=?k args=?n
+@lk.gi.bo ui.diagram.aim edge=?e at=b x=?x y=?y
+@lk.lg.aim.b.bend core.rule when=$lk.gi.cnt when=$lk.gi.bl if=$lk.gi.last then=$lk.gi.bo
+@lk.gi.ana ui.diagram.anchor edge=?e at=a x=?x y=?y
+@lk.lg.aim.b.anchor core.rule when=$lk.gi.ana not=$lk.gi.any then=$lk.gi.bo
+# The fraction t of the line from the centre to the aim inside the node's outline (as for straight links).
+@lk.gq.an ui.diagram.anchor edge=?e at=?at side=auto
+@lk.gq.ai ui.diagram.aim edge=?e at=?at x=?ax y=?ay
+@lk.gq.mn ui.diagram.mnode edge=?e at=?at node=?n
+@lk.gq.b ui.diagram.nbox node=?n cx=?cx cy=?cy w=?w h=?h
+@lk.gq.k ui.diagram.nkind node=?n kind=?kind
+@lk.gq.dx core.calc out=?dx fn=sub args=?ax args=?cx
+@lk.gq.dy core.calc out=?dy fn=sub args=?ay args=?cy
+@lk.gq.adx0 core.calc out=?adx0 fn=abs args=?dx
+@lk.gq.ady0 core.calc out=?ady0 fn=abs args=?dy
+@lk.gq.adx core.calc out=?adx fn=max args=?adx0 args=0.001
+@lk.gq.ady core.calc out=?ady fn=max args=?ady0 args=0.001
+@lk.gq.hw core.calc out=?hw fn=div args=?w args=2
+@lk.gq.hh core.calc out=?hh fn=div args=?h args=2
+@lk.gq.u core.calc out=?u fn=div args=?adx args=?hw
+@lk.gq.v core.calc out=?v fn=div args=?ady args=?hh
+@lk.gq.mx core.calc out=?mx fn=max args=?u args=?v
+@lk.gq.mn2 core.calc out=?mn fn=min args=?u args=?v
+@lk.gq.isbox core.check fn=eq args=?kind args=box
+@lk.gq.isdia core.check fn=eq args=?kind args=diamond
+@lk.gq.isrnd core.check fn=eq args=?kind args=round
+@lk.gq.tb core.calc out=?t fn=div args=1 args=?mx
+@lk.gq.uv core.calc out=?uv fn=add args=?u args=?v
+@lk.gq.td core.calc out=?t fn=div args=1 args=?uv
+@lk.gq.l1 core.calc out=?l1 fn=mul args=?mx args=0.96043
+@lk.gq.l2 core.calc out=?l2 fn=mul args=?mn args=0.39782
+@lk.gq.l core.calc out=?ln fn=add args=?l1 args=?l2
+@lk.gq.tr core.calc out=?t fn=div args=1 args=?ln
+@lk.gq.out ui.diagram.mcut edge=?e at=?at t=?t cx=?cx cy=?cy dx=?dx dy=?dy
+@lk.lg.mcut.box core.rule when=$lk.gq.an when=$lk.gq.ai when=$lk.gq.mn when=$lk.gq.b when=$lk.gq.k if=$lk.gq.isbox with=$lk.gq.dx with=$lk.gq.dy with=$lk.gq.adx0 with=$lk.gq.ady0 with=$lk.gq.adx with=$lk.gq.ady with=$lk.gq.hw with=$lk.gq.hh with=$lk.gq.u with=$lk.gq.v with=$lk.gq.mx with=$lk.gq.tb then=$lk.gq.out
+@lk.lg.mcut.diamond core.rule when=$lk.gq.an when=$lk.gq.ai when=$lk.gq.mn when=$lk.gq.b when=$lk.gq.k if=$lk.gq.isdia with=$lk.gq.dx with=$lk.gq.dy with=$lk.gq.adx0 with=$lk.gq.ady0 with=$lk.gq.adx with=$lk.gq.ady with=$lk.gq.hw with=$lk.gq.hh with=$lk.gq.u with=$lk.gq.v with=$lk.gq.uv with=$lk.gq.td then=$lk.gq.out
+@lk.lg.mcut.round core.rule when=$lk.gq.an when=$lk.gq.ai when=$lk.gq.mn when=$lk.gq.b when=$lk.gq.k if=$lk.gq.isrnd with=$lk.gq.dx with=$lk.gq.dy with=$lk.gq.adx0 with=$lk.gq.ady0 with=$lk.gq.adx with=$lk.gq.ady with=$lk.gq.hw with=$lk.gq.hh with=$lk.gq.u with=$lk.gq.v with=$lk.gq.mx with=$lk.gq.mn2 with=$lk.gq.l1 with=$lk.gq.l2 with=$lk.gq.l with=$lk.gq.tr then=$lk.gq.out
+# The two ends: an attached side or a free point as it is; an auto end on the outline (at most the aim itself).
+@lk.gp.an ui.diagram.anchor edge=?e at=?at x=?x y=?y side=?s
+@lk.gp.fixed core.check fn=neq args=?s args=auto
+@lk.gp.o ui.diagram.mend edge=?e at=?at x=?x y=?y
+@lk.lg.mend.fixed core.rule when=$lk.gp.an if=$lk.gp.fixed then=$lk.gp.o
+@lk.gp.c ui.diagram.mcut edge=?e at=?at t=?t0 cx=?cx cy=?cy dx=?dx dy=?dy
+@lk.gp.t core.calc out=?t fn=min args=?t0 args=1
+@lk.gp.ox core.calc out=?ox fn=mul args=?dx args=?t
+@lk.gp.oy core.calc out=?oy fn=mul args=?dy args=?t
+@lk.gp.x core.calc out=?x fn=add args=?cx args=?ox
+@lk.gp.y core.calc out=?y fn=add args=?cy args=?oy
+@lk.gp.ortho ui.diagram.mway edge=?e way=orthogonal
+@lk.lg.mend.auto core.rule when=$lk.gp.c not=$lk.gp.ortho with=$lk.gp.t with=$lk.gp.ox with=$lk.gp.oy with=$lk.gp.x with=$lk.gp.y then=$lk.gp.o
+
+# ---- The vertices: the source end (i = 0), the bends (1..m) and the target end (m + 1) ----
+@lk.gv.a ui.diagram.mend edge=?e at=a x=?x y=?y
+@lk.gv.ao ui.diagram.mv edge=?e i=0 x=?x y=?y
+@lk.lg.mv.a core.rule when=$lk.gv.a then=$lk.gv.ao
+@lk.gv.bd ui.diagram.bend edge=?e k=?k x=?x y=?y
+@lk.gv.m ui.diagram.manual edge=?e
+@lk.gv.bdo ui.diagram.mv edge=?e i=?k x=?x y=?y
+@lk.lg.mv.bend core.rule when=$lk.gv.m when=$lk.gv.bd then=$lk.gv.bdo
+@lk.gv.b ui.diagram.mend edge=?e at=b x=?x y=?y
+@lk.gv.n ui.diagram.bends edge=?e count=?n
+@lk.gv.i core.calc out=?i fn=add args=?n args=1
+@lk.gv.bo ui.diagram.mv edge=?e i=?i x=?x y=?y
+@lk.gv.last ui.diagram.mlast edge=?e i=?i
+@lk.lg.mv.b core.rule when=$lk.gv.b when=$lk.gv.n with=$lk.gv.i then=$lk.gv.bo
+@lk.lg.mlast core.rule when=$lk.gv.b when=$lk.gv.n with=$lk.gv.i then=$lk.gv.last
+# Each vertex also under the number of the one before it, to join a vertex to the next.
+@lk.gv.v ui.diagram.mv edge=?e i=?i x=?x y=?y
+@lk.gv.p core.calc out=?p fn=sub args=?i args=1
+@lk.gv.vn ui.diagram.mvn edge=?e prev=?p x=?x y=?y
+@lk.lg.mvn core.rule when=$lk.gv.v with=$lk.gv.p then=$lk.gv.vn
+
+# ---- Straight: the vertices joined ----
+@lk.gt.w ui.diagram.mway edge=?e way=straight
+@lk.gt.v ui.diagram.mv edge=?e i=?i x=?x y=?y
+@lk.gt.n core.calc out=?n fn=mul args=?i args=100
+@lk.gt.p ui.diagram.point source=?e n=?n x=?x y=?y
+@lk.lg.straight.points core.rule when=$lk.gt.w when=$lk.gt.v with=$lk.gt.n then=$lk.gt.p
+# A piece's leg at each end: the target's from the vertex before it; the source's from the vertex after it.
+@lk.gt.last ui.diagram.mlast edge=?e i=?l
+@lk.gt.q ui.diagram.mv edge=?e i=?l x=?qx y=?qy
+@lk.gt.bf ui.diagram.mv edge=?e i=?pp x=?px y=?py
+@lk.gt.pl core.calc out=?pl fn=sub args=?l args=1
+@lk.gt.hdx core.calc out=?hdx fn=sub args=?qx args=?px
+@lk.gt.hdy core.calc out=?hdy fn=sub args=?qy args=?py
+@lk.gt.ho ui.diagram.leg edge=?e at=head x=?qx y=?qy dx=?hdx dy=?hdy
+@lk.lg.straight.leg.head core.rule when=$lk.gt.w when=$lk.gt.last when=$lk.gt.q when=$lk.gt.bf with=$lk.gt.pl if=$lk.gt.isl.b with=$lk.gt.hdx with=$lk.gt.hdy then=$lk.gt.ho
+@lk.gt.isl.b core.check fn=eq args=?pp args=?pl
+@lk.gt.s ui.diagram.mv edge=?e i=0 x=?sx y=?sy
+@lk.gt.s1 ui.diagram.mv edge=?e i=1 x=?nx y=?ny
+@lk.gt.tdx core.calc out=?tdx fn=sub args=?sx args=?nx
+@lk.gt.tdy core.calc out=?tdy fn=sub args=?sy args=?ny
+@lk.gt.to ui.diagram.leg edge=?e at=tail x=?sx y=?sy dx=?tdx dy=?tdy
+@lk.lg.straight.leg.tail core.rule when=$lk.gt.w when=$lk.gt.s when=$lk.gt.s1 with=$lk.gt.tdx with=$lk.gt.tdy then=$lk.gt.to
+
+# ---- Orthogonal: each piece from vertex i to i + 1 turns at right angles ----
+# The ends: an attached side's port or a free point as they are; an auto end at the port of the side that faces where
+# the line goes (sideways when that is further across than down).
+@lk.go.w ui.diagram.mway edge=?e way=orthogonal
+@lk.go.an ui.diagram.anchor edge=?e at=?at x=?x y=?y side=?s
+@lk.go.fixed core.check fn=neq args=?s args=auto
+@lk.go.oe ui.diagram.oend edge=?e at=?at side=?s x=?x y=?y
+@lk.lg.oend.fixed core.rule when=$lk.go.w when=$lk.go.an if=$lk.go.fixed then=$lk.go.oe
+@lk.go.au ui.diagram.anchor edge=?e at=?at side=auto x=?cx y=?cy
+@lk.go.ai ui.diagram.aim edge=?e at=?at x=?ax y=?ay
+@lk.go.dx core.calc out=?dx fn=sub args=?ax args=?cx
+@lk.go.dy core.calc out=?dy fn=sub args=?ay args=?cy
+@lk.go.adx core.calc out=?adx fn=abs args=?dx
+@lk.go.ady core.calc out=?ady fn=abs args=?dy
+@lk.go.across core.check fn=gte args=?adx args=?ady
+@lk.go.down core.check fn=lt args=?adx args=?ady
+@lk.go.px core.check fn=gte args=?dx args=0
+@lk.go.nx core.check fn=lt args=?dx args=0
+@lk.go.py core.check fn=gte args=?dy args=0
+@lk.go.ny core.check fn=lt args=?dy args=0
+@lk.go.fr ui.diagram.oface edge=?e at=?at side=right
+@lk.go.fl ui.diagram.oface edge=?e at=?at side=left
+@lk.go.fb ui.diagram.oface edge=?e at=?at side=bottom
+@lk.go.ft ui.diagram.oface edge=?e at=?at side=top
+@lk.lg.oface.right core.rule when=$lk.go.w when=$lk.go.au when=$lk.go.ai with=$lk.go.dx with=$lk.go.dy with=$lk.go.adx with=$lk.go.ady if=$lk.go.across if=$lk.go.px then=$lk.go.fr
+@lk.lg.oface.left core.rule when=$lk.go.w when=$lk.go.au when=$lk.go.ai with=$lk.go.dx with=$lk.go.dy with=$lk.go.adx with=$lk.go.ady if=$lk.go.across if=$lk.go.nx then=$lk.go.fl
+@lk.lg.oface.bottom core.rule when=$lk.go.w when=$lk.go.au when=$lk.go.ai with=$lk.go.dx with=$lk.go.dy with=$lk.go.adx with=$lk.go.ady if=$lk.go.down if=$lk.go.py then=$lk.go.fb
+@lk.lg.oface.top core.rule when=$lk.go.w when=$lk.go.au when=$lk.go.ai with=$lk.go.dx with=$lk.go.dy with=$lk.go.adx with=$lk.go.ady if=$lk.go.down if=$lk.go.ny then=$lk.go.ft
+@lk.go.f ui.diagram.oface edge=?e at=?at side=?s
+@lk.go.mn ui.diagram.mnode edge=?e at=?at node=?n
+@lk.go.p ui.diagram.port node=?n side=?s x=?x y=?y
+@lk.lg.oend.auto core.rule when=$lk.go.f when=$lk.go.mn when=$lk.go.p then=$lk.go.oe
+@lk.go.oa ui.diagram.anchor edge=?e at=?at side=auto
+@lk.go.ox ui.diagram.oend edge=?e at=?at x=?x y=?y
+@lk.go.me ui.diagram.mend edge=?e at=?at x=?x y=?y
+@lk.lg.mend.ortho.auto core.rule when=$lk.go.oa when=$lk.go.ox then=$lk.go.me
+# A stub 16 out of each attached side (a free end is its own stub), and the way it faces.
+@lk.go.n1 ui.diagram.snorm side=top nx=0 ny=-1 o=v
+@lk.go.n2 ui.diagram.snorm side=bottom nx=0 ny=1 o=v
+@lk.go.n3 ui.diagram.snorm side=left nx=-1 ny=0 o=h
+@lk.go.n4 ui.diagram.snorm side=right nx=1 ny=0 o=h
+@lk.go.n5 ui.diagram.snorm side=free nx=0 ny=0 o=free
+@lk.go.se ui.diagram.oend edge=?e at=?at side=?s x=?x y=?y
+@lk.go.sn ui.diagram.snorm side=?s nx=?nx ny=?ny o=?o
+@lk.go.sx1 core.calc out=?sx1 fn=mul args=?nx args=16
+@lk.go.sy1 core.calc out=?sy1 fn=mul args=?ny args=16
+@lk.go.sx core.calc out=?sx fn=add args=?x args=?sx1
+@lk.go.sy core.calc out=?sy fn=add args=?y args=?sy1
+@lk.go.so ui.diagram.stub edge=?e at=?at x=?sx y=?sy nx=?nx ny=?ny o=?o
+@lk.lg.stub core.rule when=$lk.go.se when=$lk.go.sn with=$lk.go.sx1 with=$lk.go.sy1 with=$lk.go.sx with=$lk.go.sy then=$lk.go.so
+@lk.go.sd ui.diagram.stub edge=?e at=?at o=?o
+@lk.go.sided core.check fn=neq args=?o args=free
+@lk.go.sdo ui.diagram.sided edge=?e at=?at
+@lk.lg.sided core.rule when=$lk.go.sd if=$lk.go.sided then=$lk.go.sdo
+# The pieces: the first starts at the source's stub, the last ends at the target's; between bends they are free.
+@lk.gs2.v ui.diagram.mv edge=?e i=?i x=?ax y=?ay
+@lk.gs2.vn ui.diagram.mvn edge=?e prev=?i x=?bx y=?by
+@lk.gs2.last ui.diagram.mlast edge=?e i=?l
+@lk.gs2.sa ui.diagram.stub edge=?e at=a x=?sax y=?say nx=?anx ny=?any o=?oa
+@lk.gs2.sb ui.diagram.stub edge=?e at=b x=?sbx y=?sby nx=?bnx ny=?bny o=?ob
+@lk.gs2.first core.check fn=eq args=?i args=0
+@lk.gs2.notfirst core.check fn=neq args=?i args=0
+@lk.gs2.i1 core.calc out=?i1 fn=add args=?i args=1
+@lk.gs2.islast core.check fn=eq args=?i1 args=?l
+@lk.gs2.notlast core.check fn=neq args=?i1 args=?l
+@lk.gs2.o1 ui.diagram.opiece edge=?e i=?i ax=?sax ay=?say oa=?oa anx=?anx any=?any bx=?sbx by=?sby ob=?ob bnx=?bnx bny=?bny
+@lk.gs2.o2 ui.diagram.opiece edge=?e i=?i ax=?sax ay=?say oa=?oa anx=?anx any=?any bx=?bx by=?by ob=free bnx=0 bny=0
+@lk.gs2.o3 ui.diagram.opiece edge=?e i=?i ax=?ax ay=?ay oa=free anx=0 any=0 bx=?sbx by=?sby ob=?ob bnx=?bnx bny=?bny
+@lk.gs2.o4 ui.diagram.opiece edge=?e i=?i ax=?ax ay=?ay oa=free anx=0 any=0 bx=?bx by=?by ob=free bnx=0 bny=0
+@lk.lg.opiece.only core.rule when=$lk.go.w when=$lk.gs2.v when=$lk.gs2.vn when=$lk.gs2.last when=$lk.gs2.sa when=$lk.gs2.sb if=$lk.gs2.first with=$lk.gs2.i1 if=$lk.gs2.islast then=$lk.gs2.o1
+@lk.lg.opiece.first core.rule when=$lk.go.w when=$lk.gs2.v when=$lk.gs2.vn when=$lk.gs2.last when=$lk.gs2.sa if=$lk.gs2.first with=$lk.gs2.i1 if=$lk.gs2.notlast then=$lk.gs2.o2
+@lk.lg.opiece.last core.rule when=$lk.go.w when=$lk.gs2.v when=$lk.gs2.vn when=$lk.gs2.last when=$lk.gs2.sb if=$lk.gs2.notfirst with=$lk.gs2.i1 if=$lk.gs2.islast then=$lk.gs2.o3
+@lk.lg.opiece.middle core.rule when=$lk.go.w when=$lk.gs2.v when=$lk.gs2.vn when=$lk.gs2.last if=$lk.gs2.notfirst with=$lk.gs2.i1 if=$lk.gs2.notlast then=$lk.gs2.o4
+# A stub that faces away from where the piece goes turns: the piece leaves it (enters it) the other way.
+@lk.ge2.p ui.diagram.opiece edge=?e i=?i ax=?ax ay=?ay oa=?oa anx=?anx any=?any bx=?bx by=?by ob=?ob bnx=?bnx bny=?bny
+@lk.ge2.dx core.calc out=?dx fn=sub args=?bx args=?ax
+@lk.ge2.dy core.calc out=?dy fn=sub args=?by args=?ay
+@lk.ge2.fa1 core.calc out=?fa fn=mul args=?dx args=?anx
+@lk.ge2.fa2 core.calc out=?fa fn=mul args=?dy args=?any
+@lk.ge2.fb1 core.calc out=?fb fn=mul args=?dx args=?bnx
+@lk.ge2.fb2 core.calc out=?fb fn=mul args=?dy args=?bny
+@lk.ge2.back core.check fn=lt args=?f args=0
+@lk.ge2.ahead core.check fn=gte args=?f args=0
+@lk.ge2.isah core.check fn=eq args=?oa args=h
+@lk.ge2.isav core.check fn=eq args=?oa args=v
+@lk.ge2.isaf core.check fn=eq args=?oa args=free
+@lk.ge2.isbh core.check fn=eq args=?ob args=h
+@lk.ge2.isbv core.check fn=eq args=?ob args=v
+@lk.ge2.isbf core.check fn=eq args=?ob args=free
+@lk.ge2.fab core.check fn=lt args=?fa args=0
+@lk.ge2.faa core.check fn=gte args=?fa args=0
+@lk.ge2.fbb core.check fn=gt args=?fb args=0
+@lk.ge2.fba core.check fn=lte args=?fb args=0
+@lk.ge2.ah ui.diagram.oeff edge=?e i=?i at=a o=h
+@lk.ge2.av ui.diagram.oeff edge=?e i=?i at=a o=v
+@lk.ge2.af ui.diagram.oeff edge=?e i=?i at=a o=free
+@lk.ge2.bh ui.diagram.oeff edge=?e i=?i at=b o=h
+@lk.ge2.bv ui.diagram.oeff edge=?e i=?i at=b o=v
+@lk.ge2.bf ui.diagram.oeff edge=?e i=?i at=b o=free
+@lk.lg.oeff.a.h core.rule when=$lk.ge2.p if=$lk.ge2.isah with=$lk.ge2.dx with=$lk.ge2.fa1 if=$lk.ge2.faa then=$lk.ge2.ah
+@lk.lg.oeff.a.h.turn core.rule when=$lk.ge2.p if=$lk.ge2.isah with=$lk.ge2.dx with=$lk.ge2.fa1 if=$lk.ge2.fab then=$lk.ge2.av
+@lk.lg.oeff.a.v core.rule when=$lk.ge2.p if=$lk.ge2.isav with=$lk.ge2.dy with=$lk.ge2.fa2 if=$lk.ge2.faa then=$lk.ge2.av
+@lk.lg.oeff.a.v.turn core.rule when=$lk.ge2.p if=$lk.ge2.isav with=$lk.ge2.dy with=$lk.ge2.fa2 if=$lk.ge2.fab then=$lk.ge2.ah
+@lk.lg.oeff.a.free core.rule when=$lk.ge2.p if=$lk.ge2.isaf then=$lk.ge2.af
+@lk.lg.oeff.b.h core.rule when=$lk.ge2.p if=$lk.ge2.isbh with=$lk.ge2.dx with=$lk.ge2.fb1 if=$lk.ge2.fba then=$lk.ge2.bh
+@lk.lg.oeff.b.h.turn core.rule when=$lk.ge2.p if=$lk.ge2.isbh with=$lk.ge2.dx with=$lk.ge2.fb1 if=$lk.ge2.fbb then=$lk.ge2.bv
+@lk.lg.oeff.b.v core.rule when=$lk.ge2.p if=$lk.ge2.isbv with=$lk.ge2.dy with=$lk.ge2.fb2 if=$lk.ge2.fba then=$lk.ge2.bv
+@lk.lg.oeff.b.v.turn core.rule when=$lk.ge2.p if=$lk.ge2.isbv with=$lk.ge2.dy with=$lk.ge2.fb2 if=$lk.ge2.fbb then=$lk.ge2.bh
+@lk.lg.oeff.b.free core.rule when=$lk.ge2.p if=$lk.ge2.isbf then=$lk.ge2.bf
+@lk.ge2.q ui.diagram.opiece edge=?e i=?i ax=?ax ay=?ay bx=?bx by=?by
+@lk.ge2.ea ui.diagram.oeff edge=?e i=?i at=a o=?oa
+@lk.ge2.eb ui.diagram.oeff edge=?e i=?i at=b o=?ob
+@lk.ge2.out ui.diagram.oseg edge=?e i=?i ax=?ax ay=?ay bx=?bx by=?by a=?oa b=?ob
+@lk.lg.oseg core.rule when=$lk.ge2.q when=$lk.ge2.ea when=$lk.ge2.eb then=$lk.ge2.out
+# How each piece's two ends face, and the turns it takes: one (hv: sideways then across; vh: across then sideways) or
+# two halfway (hvh, vhv).
+@lk.go.p1 ui.diagram.opat a=h b=free pat=hv
+@lk.go.p2 ui.diagram.opat a=v b=free pat=vh
+@lk.go.p3 ui.diagram.opat a=free b=v pat=hv
+@lk.go.p4 ui.diagram.opat a=free b=h pat=vh
+@lk.go.p5 ui.diagram.opat a=h b=h pat=hvh
+@lk.go.p6 ui.diagram.opat a=v b=v pat=vhv
+@lk.go.p7 ui.diagram.opat a=h b=v pat=hv
+@lk.go.p8 ui.diagram.opat a=v b=h pat=vh
+@lk.gf.s ui.diagram.oseg edge=?e i=?i ax=?ax ay=?ay bx=?bx by=?by a=?oa b=?ob
+@lk.gf.t ui.diagram.opat a=?oa b=?ob pat=?pat
+@lk.gf.o ui.diagram.ofit edge=?e i=?i ax=?ax ay=?ay bx=?bx by=?by pat=?pat
+@lk.lg.ofit.table core.rule when=$lk.gf.s when=$lk.gf.t then=$lk.gf.o
+@lk.gf.ff ui.diagram.oseg edge=?e i=?i ax=?ax ay=?ay bx=?bx by=?by a=free b=free
+@lk.gf.dx core.calc out=?dx fn=sub args=?bx args=?ax
+@lk.gf.dy core.calc out=?dy fn=sub args=?by args=?ay
+@lk.gf.adx core.calc out=?adx fn=abs args=?dx
+@lk.gf.ady core.calc out=?ady fn=abs args=?dy
+@lk.gf.wide core.check fn=gte args=?adx args=?ady
+@lk.gf.tall core.check fn=lt args=?adx args=?ady
+@lk.gf.hv ui.diagram.ofit edge=?e i=?i ax=?ax ay=?ay bx=?bx by=?by pat=hv
+@lk.gf.vh ui.diagram.ofit edge=?e i=?i ax=?ax ay=?ay bx=?bx by=?by pat=vh
+@lk.lg.ofit.wide core.rule when=$lk.gf.ff with=$lk.gf.dx with=$lk.gf.dy with=$lk.gf.adx with=$lk.gf.ady if=$lk.gf.wide then=$lk.gf.hv
+@lk.lg.ofit.tall core.rule when=$lk.gf.ff with=$lk.gf.dx with=$lk.gf.dy with=$lk.gf.adx with=$lk.gf.ady if=$lk.gf.tall then=$lk.gf.vh
+# The points: each vertex (100 i), the stubs (100 i + 10, 100 i + 90) and the turns between (100 i + 30, + 60).
+@lk.gx.v ui.diagram.mv edge=?e i=?i x=?x y=?y
+@lk.gx.n core.calc out=?n fn=mul args=?i args=100
+@lk.gx.p ui.diagram.point source=?e n=?n x=?x y=?y
+@lk.lg.ortho.vertex core.rule when=$lk.go.w when=$lk.gx.v with=$lk.gx.n then=$lk.gx.p
+@lk.gx.sa ui.diagram.stub edge=?e at=a x=?x y=?y
+@lk.gx.sap ui.diagram.point source=?e n=10 x=?x y=?y
+@lk.gx.sda ui.diagram.sided edge=?e at=a
+@lk.lg.ortho.stub.a core.rule when=$lk.go.w when=$lk.gx.sa when=$lk.gx.sda then=$lk.gx.sap
+@lk.gx.sb ui.diagram.stub edge=?e at=b x=?x y=?y
+@lk.gx.sdb ui.diagram.sided edge=?e at=b
+@lk.gx.last ui.diagram.mlast edge=?e i=?l
+@lk.gx.nl1 core.calc out=?nl1 fn=mul args=?l args=100
+@lk.gx.nl core.calc out=?nl fn=sub args=?nl1 args=10
+@lk.gx.sbp ui.diagram.point source=?e n=?nl x=?x y=?y
+@lk.lg.ortho.stub.b core.rule when=$lk.go.w when=$lk.gx.sb when=$lk.gx.sdb when=$lk.gx.last with=$lk.gx.nl1 with=$lk.gx.nl then=$lk.gx.sbp
+@lk.gx.f ui.diagram.ofit edge=?e i=?i ax=?ax ay=?ay bx=?bx by=?by pat=?pat
+@lk.gx.n1 core.calc out=?n1 fn=mul args=?i args=100
+@lk.gx.n30 core.calc out=?n30 fn=add args=?n1 args=30
+@lk.gx.n60 core.calc out=?n60 fn=add args=?n1 args=60
+@lk.gx.mx1 core.calc out=?mx1 fn=add args=?ax args=?bx
+@lk.gx.mx core.calc out=?mx fn=div args=?mx1 args=2
+@lk.gx.my1 core.calc out=?my1 fn=add args=?ay args=?by
+@lk.gx.my core.calc out=?my fn=div args=?my1 args=2
+@lk.gx.ishv core.check fn=eq args=?pat args=hv
+@lk.gx.isvh core.check fn=eq args=?pat args=vh
+@lk.gx.ishvh core.check fn=eq args=?pat args=hvh
+@lk.gx.isvhv core.check fn=eq args=?pat args=vhv
+@lk.gx.hv ui.diagram.point source=?e n=?n30 x=?bx y=?ay
+@lk.gx.vh ui.diagram.point source=?e n=?n30 x=?ax y=?by
+@lk.gx.hvh1 ui.diagram.point source=?e n=?n30 x=?mx y=?ay
+@lk.gx.hvh2 ui.diagram.point source=?e n=?n60 x=?mx y=?by
+@lk.gx.vhv1 ui.diagram.point source=?e n=?n30 x=?ax y=?my
+@lk.gx.vhv2 ui.diagram.point source=?e n=?n60 x=?bx y=?my
+@lk.lg.ortho.hv core.rule when=$lk.gx.f if=$lk.gx.ishv with=$lk.gx.n1 with=$lk.gx.n30 then=$lk.gx.hv
+@lk.lg.ortho.vh core.rule when=$lk.gx.f if=$lk.gx.isvh with=$lk.gx.n1 with=$lk.gx.n30 then=$lk.gx.vh
+@lk.lg.ortho.hvh.1 core.rule when=$lk.gx.f if=$lk.gx.ishvh with=$lk.gx.n1 with=$lk.gx.n30 with=$lk.gx.mx1 with=$lk.gx.mx then=$lk.gx.hvh1
+@lk.lg.ortho.hvh.2 core.rule when=$lk.gx.f if=$lk.gx.ishvh with=$lk.gx.n1 with=$lk.gx.n60 with=$lk.gx.mx1 with=$lk.gx.mx then=$lk.gx.hvh2
+@lk.lg.ortho.vhv.1 core.rule when=$lk.gx.f if=$lk.gx.isvhv with=$lk.gx.n1 with=$lk.gx.n30 with=$lk.gx.my1 with=$lk.gx.my then=$lk.gx.vhv1
+@lk.lg.ortho.vhv.2 core.rule when=$lk.gx.f if=$lk.gx.isvhv with=$lk.gx.n1 with=$lk.gx.n60 with=$lk.gx.my1 with=$lk.gx.my then=$lk.gx.vhv2
+# The legs at the ends: into an attached side straight out of its stub; at a free end along the piece's last (first)
+# run: across for hv and vhv, sideways for vh and hvh (a tiny share of the piece is added, for a run of no length).
+@lk.gy.sm ui.diagram.mend edge=?e at=?at x=?x y=?y
+@lk.gy.st ui.diagram.stub edge=?e at=?at nx=?nx ny=?ny o=?o
+@lk.gy.side core.check fn=neq args=?o args=free
+@lk.gy.ux core.calc out=?ux fn=mul args=?nx args=-1
+@lk.gy.uy core.calc out=?uy fn=mul args=?ny args=-1
+@lk.gy.isb core.check fn=eq args=?at args=b
+@lk.gy.isa core.check fn=eq args=?at args=a
+@lk.gy.so ui.diagram.leg edge=?e at=head x=?x y=?y dx=?ux dy=?uy
+@lk.gy.to ui.diagram.leg edge=?e at=tail x=?x y=?y dx=?ux dy=?uy
+@lk.lg.ortho.leg.head.side core.rule when=$lk.go.w when=$lk.gy.sm when=$lk.gy.st if=$lk.gy.side if=$lk.gy.isb with=$lk.gy.ux with=$lk.gy.uy then=$lk.gy.so
+@lk.lg.ortho.leg.tail.side core.rule when=$lk.go.w when=$lk.gy.sm when=$lk.gy.st if=$lk.gy.side if=$lk.gy.isa with=$lk.gy.ux with=$lk.gy.uy then=$lk.gy.to
+@lk.gy.f ui.diagram.ofit edge=?e i=?i ax=?ax ay=?ay bx=?bx by=?by pat=?pat
+@lk.gy.last ui.diagram.mlast edge=?e i=?l
+@lk.gy.sdb ui.diagram.sided edge=?e at=b
+@lk.gy.sda ui.diagram.sided edge=?e at=a
+@lk.gy.i1 core.calc out=?i1 fn=add args=?i args=1
+@lk.gy.islast core.check fn=eq args=?i1 args=?l
+@lk.gy.first core.check fn=eq args=?i args=0
+@lk.gy.dx core.calc out=?dx fn=sub args=?bx args=?ax
+@lk.gy.dy core.calc out=?dy fn=sub args=?by args=?ay
+@lk.gy.ex core.calc out=?ex fn=mul args=?dx args=0.001
+@lk.gy.ey core.calc out=?ey fn=mul args=?dy args=0.001
+@lk.gy.across core.check fn=matches args=?pat args="^(hv|vhv)$"
+@lk.gy.sideways core.check fn=matches args=?pat args="^(vh|hvh)$"
+@lk.gy.ha core.calc out=?hy fn=add args=?dy args=?ey
+@lk.gy.ha.o ui.diagram.leg edge=?e at=head x=?bx y=?by dx=?ex dy=?hy
+@lk.lg.ortho.leg.head.across core.rule when=$lk.gy.f when=$lk.gy.last not=$lk.gy.sdb with=$lk.gy.i1 if=$lk.gy.islast with=$lk.gy.dx with=$lk.gy.dy with=$lk.gy.ex with=$lk.gy.ey if=$lk.gy.across with=$lk.gy.ha then=$lk.gy.ha.o
+@lk.gy.hs core.calc out=?hx fn=add args=?dx args=?ex
+@lk.gy.hs.o ui.diagram.leg edge=?e at=head x=?bx y=?by dx=?hx dy=?ey
+@lk.lg.ortho.leg.head.sideways core.rule when=$lk.gy.f when=$lk.gy.last not=$lk.gy.sdb with=$lk.gy.i1 if=$lk.gy.islast with=$lk.gy.dx with=$lk.gy.dy with=$lk.gy.ex with=$lk.gy.ey if=$lk.gy.sideways with=$lk.gy.hs then=$lk.gy.hs.o
+@lk.gy.lside core.check fn=matches args=?pat args="^(hv|hvh)$"
+@lk.gy.lacross core.check fn=matches args=?pat args="^(vh|vhv)$"
+@lk.gy.ts1 core.calc out=?tsx0 fn=add args=?dx args=?ex
+@lk.gy.ts2 core.calc out=?tsx fn=mul args=?tsx0 args=-1
+@lk.gy.ts3 core.calc out=?tsy fn=mul args=?ey args=-1
+@lk.gy.ts.o ui.diagram.leg edge=?e at=tail x=?ax y=?ay dx=?tsx dy=?tsy
+@lk.lg.ortho.leg.tail.sideways core.rule when=$lk.gy.f not=$lk.gy.sda if=$lk.gy.first with=$lk.gy.dx with=$lk.gy.dy with=$lk.gy.ex with=$lk.gy.ey if=$lk.gy.lside with=$lk.gy.ts1 with=$lk.gy.ts2 with=$lk.gy.ts3 then=$lk.gy.ts.o
+@lk.gy.ta1 core.calc out=?tay0 fn=add args=?dy args=?ey
+@lk.gy.ta2 core.calc out=?tay fn=mul args=?tay0 args=-1
+@lk.gy.ta3 core.calc out=?tax fn=mul args=?ex args=-1
+@lk.gy.ta.o ui.diagram.leg edge=?e at=tail x=?ax y=?ay dx=?tax dy=?tay
+@lk.lg.ortho.leg.tail.across core.rule when=$lk.gy.f not=$lk.gy.sda if=$lk.gy.first with=$lk.gy.dx with=$lk.gy.dy with=$lk.gy.ex with=$lk.gy.ey if=$lk.gy.lacross with=$lk.gy.ta1 with=$lk.gy.ta2 with=$lk.gy.ta3 then=$lk.gy.ta.o
+
+# ---- Curved: quadratic pieces, one per control point ----
+# The control points: the bends; with none, one left of the middle of the two ends (a fifth of their distance out).
+@lk.gk.m ui.diagram.mway edge=?e way=curved
+@lk.gk.bd ui.diagram.bend edge=?e k=?k x=?x y=?y
+@lk.gk.co ui.diagram.ctl edge=?e j=?k x=?x y=?y
+@lk.lg.ctl.bend core.rule when=$lk.gk.m when=$lk.gk.bd then=$lk.gk.co
+@lk.gk.any ui.diagram.bendat edge=?e
+@lk.gk.a ui.diagram.mend edge=?e at=a x=?px y=?py
+@lk.gk.b ui.diagram.mend edge=?e at=b x=?qx y=?qy
+@lk.gk.dx core.calc out=?dx fn=sub args=?qx args=?px
+@lk.gk.dy core.calc out=?dy fn=sub args=?qy args=?py
+@lk.gk.mx1 core.calc out=?mx1 fn=add args=?px args=?qx
+@lk.gk.my1 core.calc out=?my1 fn=add args=?py args=?qy
+@lk.gk.mx core.calc out=?mx fn=div args=?mx1 args=2
+@lk.gk.my core.calc out=?my fn=div args=?my1 args=2
+@lk.gk.ox core.calc out=?ox fn=mul args=?dy args=0.2
+@lk.gk.oy core.calc out=?oy fn=mul args=?dx args=-0.2
+@lk.gk.cx core.calc out=?cx fn=add args=?mx args=?ox
+@lk.gk.cy core.calc out=?cy fn=add args=?my args=?oy
+@lk.gk.c1 ui.diagram.ctl edge=?e j=1 x=?cx y=?cy
+@lk.lg.ctl.bow core.rule when=$lk.gk.m when=$lk.gk.a when=$lk.gk.b not=$lk.gk.any with=$lk.gk.dx with=$lk.gk.dy with=$lk.gk.mx1 with=$lk.gk.my1 with=$lk.gk.mx with=$lk.gk.my with=$lk.gk.ox with=$lk.gk.oy with=$lk.gk.cx with=$lk.gk.cy then=$lk.gk.c1
+@lk.gk.cf ui.diagram.ctl edge=?e j=?j
+@lk.gk.cn ui.diagram.ctlcount edge=?e count=?n
+@lk.lg.ctlcount core.aggregate over=$lk.gk.cf by=?e count=?n then=$lk.gk.cn
+@lk.gk.cv ui.diagram.ctl edge=?e j=?j x=?x y=?y
+@lk.gk.cp core.calc out=?p fn=sub args=?j args=1
+@lk.gk.cvn ui.diagram.ctln edge=?e prev=?p x=?x y=?y
+@lk.lg.ctln core.rule when=$lk.gk.cv with=$lk.gk.cp then=$lk.gk.cvn
+@lk.gk.cnx core.calc out=?nx fn=add args=?j args=1
+@lk.gk.cvp ui.diagram.ctlp edge=?e next=?nx x=?x y=?y
+@lk.lg.ctlp core.rule when=$lk.gk.cv with=$lk.gk.cnx then=$lk.gk.cvp
+# Piece j runs from the source end (j = 1) or the middle between control j - 1 and j, to the target end (j = the last)
+# or the middle between control j and j + 1, bowed by control j.
+@lk.gz.c ui.diagram.ctl edge=?e j=?j x=?kx y=?ky
+@lk.gz.n ui.diagram.ctlcount edge=?e count=?n
+@lk.gz.a ui.diagram.mend edge=?e at=a x=?px y=?py
+@lk.gz.b ui.diagram.mend edge=?e at=b x=?qx y=?qy
+@lk.gz.prev ui.diagram.ctln edge=?e prev=?j x=?nx y=?ny
+@lk.gz.before ui.diagram.ctlp edge=?e next=?j x=?ox y=?oy
+@lk.gz.first core.check fn=eq args=?j args=1
+@lk.gz.notfirst core.check fn=gt args=?j args=1
+@lk.gz.last core.check fn=eq args=?j args=?n
+@lk.gz.notlast core.check fn=lt args=?j args=?n
+@lk.gz.sx1 core.calc out=?sx1 fn=add args=?ox args=?kx
+@lk.gz.sy1 core.calc out=?sy1 fn=add args=?oy args=?ky
+@lk.gz.sx core.calc out=?sx fn=div args=?sx1 args=2
+@lk.gz.sy core.calc out=?sy fn=div args=?sy1 args=2
+@lk.gz.ex1 core.calc out=?ex1 fn=add args=?kx args=?nx
+@lk.gz.ey1 core.calc out=?ey1 fn=add args=?ky args=?ny
+@lk.gz.ex core.calc out=?ex fn=div args=?ex1 args=2
+@lk.gz.ey core.calc out=?ey fn=div args=?ey1 args=2
+@lk.gz.o1 ui.diagram.piece edge=?e j=?j ax=?px ay=?py kx=?kx ky=?ky bx=?qx by=?qy
+@lk.lg.piece.only core.rule when=$lk.gz.c when=$lk.gz.n when=$lk.gz.a when=$lk.gz.b if=$lk.gz.first if=$lk.gz.last then=$lk.gz.o1
+@lk.gz.o2 ui.diagram.piece edge=?e j=?j ax=?px ay=?py kx=?kx ky=?ky bx=?ex by=?ey
+@lk.lg.piece.first core.rule when=$lk.gz.c when=$lk.gz.n when=$lk.gz.a when=$lk.gz.prev if=$lk.gz.first if=$lk.gz.notlast with=$lk.gz.ex1 with=$lk.gz.ey1 with=$lk.gz.ex with=$lk.gz.ey then=$lk.gz.o2
+@lk.gz.o3 ui.diagram.piece edge=?e j=?j ax=?sx ay=?sy kx=?kx ky=?ky bx=?qx by=?qy
+@lk.lg.piece.last core.rule when=$lk.gz.c when=$lk.gz.n when=$lk.gz.b when=$lk.gz.before if=$lk.gz.notfirst if=$lk.gz.last with=$lk.gz.sx1 with=$lk.gz.sy1 with=$lk.gz.sx with=$lk.gz.sy then=$lk.gz.o3
+@lk.gz.o4 ui.diagram.piece edge=?e j=?j ax=?sx ay=?sy kx=?kx ky=?ky bx=?ex by=?ey
+@lk.lg.piece.middle core.rule when=$lk.gz.c when=$lk.gz.n when=$lk.gz.prev when=$lk.gz.before if=$lk.gz.notfirst if=$lk.gz.notlast with=$lk.gz.sx1 with=$lk.gz.sy1 with=$lk.gz.sx with=$lk.gz.sy with=$lk.gz.ex1 with=$lk.gz.ey1 with=$lk.gz.ex with=$lk.gz.ey then=$lk.gz.o4
+# Eight points along each piece (t = 0, 1/8 ... 7/8) and the target end.
+@lk.gu.p ui.diagram.piece edge=?e j=?j ax=?ax ay=?ay kx=?kx ky=?ky bx=?bx by=?by
+@lk.gu.b ui.diagram.bez k=?k a=?a b=?b c=?c
+@lk.gu.x1 core.calc out=?x1 fn=mul args=?ax args=?a
+@lk.gu.x2 core.calc out=?x2 fn=mul args=?kx args=?b
+@lk.gu.x3 core.calc out=?x3 fn=mul args=?bx args=?c
+@lk.gu.x core.calc out=?x fn=add args=?x1 args=?x2 args=?x3
+@lk.gu.y1 core.calc out=?y1 fn=mul args=?ay args=?a
+@lk.gu.y2 core.calc out=?y2 fn=mul args=?ky args=?b
+@lk.gu.y3 core.calc out=?y3 fn=mul args=?by args=?c
+@lk.gu.y core.calc out=?y fn=add args=?y1 args=?y2 args=?y3
+@lk.gu.j core.calc out=?jn fn=mul args=?j args=100
+@lk.gu.n core.calc out=?n fn=add args=?jn args=?k
+@lk.gu.pt ui.diagram.point source=?e n=?n x=?x y=?y
+@lk.lg.curve.samples core.rule when=$lk.gu.p when=$lk.gu.b with=$lk.gu.x1 with=$lk.gu.x2 with=$lk.gu.x3 with=$lk.gu.x with=$lk.gu.y1 with=$lk.gu.y2 with=$lk.gu.y3 with=$lk.gu.y with=$lk.gu.j with=$lk.gu.n then=$lk.gu.pt
+@lk.gu.p0 ui.diagram.point source=?e n=?jn x=?ax y=?ay
+@lk.lg.curve.start core.rule when=$lk.gu.p with=$lk.gu.j then=$lk.gu.p0
+@lk.gu.cn ui.diagram.ctlcount edge=?e count=?cn
+@lk.gu.last core.check fn=eq args=?j args=?cn
+@lk.gu.j1 core.calc out=?j1 fn=add args=?j args=1
+@lk.gu.jq core.calc out=?jq fn=mul args=?j1 args=100
+@lk.gu.pq ui.diagram.point source=?e n=?jq x=?bx y=?by
+@lk.lg.curve.end core.rule when=$lk.gu.p when=$lk.gu.cn if=$lk.gu.last with=$lk.gu.j1 with=$lk.gu.jq then=$lk.gu.pq
+# Legs: from the last control point to the target end, from the first to the source end.
+@lk.gu.hl core.calc out=?hdx fn=sub args=?bx args=?kx
+@lk.gu.hm core.calc out=?hdy fn=sub args=?by args=?ky
+@lk.gu.ho ui.diagram.leg edge=?e at=head x=?bx y=?by dx=?hdx dy=?hdy
+@lk.lg.curve.leg.head core.rule when=$lk.gu.p when=$lk.gu.cn if=$lk.gu.last with=$lk.gu.hl with=$lk.gu.hm then=$lk.gu.ho
+@lk.gu.first core.check fn=eq args=?j args=1
+@lk.gu.tl core.calc out=?tdx fn=sub args=?ax args=?kx
+@lk.gu.tm core.calc out=?tdy fn=sub args=?ay args=?ky
+@lk.gu.to ui.diagram.leg edge=?e at=tail x=?ax y=?ay dx=?tdx dy=?tdy
+@lk.lg.curve.leg.tail core.rule when=$lk.gu.p if=$lk.gu.first with=$lk.gu.tl with=$lk.gu.tm then=$lk.gu.to
+
+# ---- The legs as arrowheads (unit vectors; layout-modes.sop draws them and observes the tips) ----
+@lk.gh.l ui.diagram.leg edge=?e at=?at x=?x y=?y dx=?dx dy=?dy
+@lk.gh.ax core.calc out=?ax fn=abs args=?dx
+@lk.gh.ay core.calc out=?ay fn=abs args=?dy
+@lk.gh.bg core.calc out=?bg fn=max args=?ax args=?ay
+@lk.gh.sm core.calc out=?sm fn=min args=?ax args=?ay
+@lk.gh.l1 core.calc out=?l1 fn=mul args=?bg args=0.96043
+@lk.gh.l2 core.calc out=?l2 fn=mul args=?sm args=0.39782
+@lk.gh.l3 core.calc out=?l3 fn=add args=?l1 args=?l2
+@lk.gh.ln core.calc out=?ln fn=max args=?l3 args=0.001
+@lk.gh.ux core.calc out=?ux fn=div args=?dx args=?ln
+@lk.gh.uy core.calc out=?uy fn=div args=?dy args=?ln
+@lk.gh.o ui.diagram.arrow edge=?e at=?at x=?x y=?y ux=?ux uy=?uy
+@lk.lg.leg.arrow core.rule when=$lk.gh.l with=$lk.gh.ax with=$lk.gh.ay with=$lk.gh.bg with=$lk.gh.sm with=$lk.gh.l1 with=$lk.gh.l2 with=$lk.gh.l3 with=$lk.gh.ln with=$lk.gh.ux with=$lk.gh.uy then=$lk.gh.o
+
+# ---- Where the label sits: at a fraction of the line's length ----
+# The fraction: the link's own; a hand-drawn link without one, the middle. Only these links are measured.
+@lk.gl.at w.diagram.edge code=?e diagram.sketch.label_at=?t
+@lk.gl.ato ui.diagram.lt edge=?e t=?t
+@lk.lg.lt.own core.rule when=$lk.gl.at then=$lk.gl.ato
+@lk.gl.m ui.diagram.manual edge=?e
+@lk.gl.any w.diagram.edge code=?e diagram.sketch.label_at=?anyt
+@lk.gl.half ui.diagram.lt edge=?e t=0.5
+@lk.lg.lt.manual core.rule when=$lk.gl.m not=$lk.gl.any then=$lk.gl.half
+# The points of the line in order (k from 1), each also under the number of the one before it.
+@lk.gl.lt ui.diagram.lt edge=?e
+@lk.gl.p ui.diagram.point source=?e n=?n x=?x y=?y
+@lk.gl.k core.rank of=$lk.gl.p by=n within=?e out=?k
+@lk.gl.po ui.diagram.lp edge=?e k=?k x=?x y=?y
+@lk.lg.lp core.rule when=$lk.gl.lt when=$lk.gl.p with=$lk.gl.k then=$lk.gl.po
+@lk.gl.v ui.diagram.lp edge=?e k=?k x=?x y=?y
+@lk.gl.vp core.calc out=?p fn=sub args=?k args=1
+@lk.gl.vno ui.diagram.lpn edge=?e prev=?p x=?x y=?y
+@lk.lg.lpn core.rule when=$lk.gl.v with=$lk.gl.vp then=$lk.gl.vno
+# Each segment (from point k to k + 1) and its length (the "alpha max plus beta min" estimate).
+@lk.gl.s0 ui.diagram.lp edge=?e k=?k x=?x0 y=?y0
+@lk.gl.s1 ui.diagram.lpn edge=?e prev=?k x=?x1 y=?y1
+@lk.gl.dx core.calc out=?dx fn=sub args=?x1 args=?x0
+@lk.gl.dy core.calc out=?dy fn=sub args=?y1 args=?y0
+@lk.gl.ax core.calc out=?ax fn=abs args=?dx
+@lk.gl.ay core.calc out=?ay fn=abs args=?dy
+@lk.gl.bg core.calc out=?bg fn=max args=?ax args=?ay
+@lk.gl.sm core.calc out=?sm fn=min args=?ax args=?ay
+@lk.gl.l1 core.calc out=?l1 fn=mul args=?bg args=0.96043
+@lk.gl.l2 core.calc out=?l2 fn=mul args=?sm args=0.39782
+@lk.gl.len core.calc out=?len fn=add args=?l1 args=?l2
+@lk.gl.so ui.diagram.ls edge=?e k=?k len=?len x0=?x0 y0=?y0 dx=?dx dy=?dy
+@lk.lg.ls core.rule when=$lk.gl.s0 when=$lk.gl.s1 with=$lk.gl.dx with=$lk.gl.dy with=$lk.gl.ax with=$lk.gl.ay with=$lk.gl.bg with=$lk.gl.sm with=$lk.gl.l1 with=$lk.gl.l2 with=$lk.gl.len then=$lk.gl.so
+# The length before each segment and the whole length.
+@lk.gl.pa ui.diagram.ls edge=?e k=?k
+@lk.gl.pb ui.diagram.ls edge=?e k=?j len=?len
+@lk.gl.before core.check fn=lt args=?j args=?k
+@lk.gl.pair ui.diagram.lspair edge=?e k=?k j=?j len=?len
+@lk.lg.lspair core.rule when=$lk.gl.pa when=$lk.gl.pb if=$lk.gl.before then=$lk.gl.pair
+@lk.gl.pr ui.diagram.lspair edge=?e k=?k len=?len
+@lk.gl.cum ui.diagram.lcum edge=?e k=?k before=?c
+@lk.lg.lcum core.aggregate over=$lk.gl.pr by=?e by=?k sum=?c args=?len then=$lk.gl.cum
+@lk.gl.first ui.diagram.ls edge=?e k=1
+@lk.gl.cum0 ui.diagram.lcum edge=?e k=1 before=0
+@lk.lg.lcum.first core.rule when=$lk.gl.first then=$lk.gl.cum0
+@lk.gl.all ui.diagram.ls edge=?e len=?len
+@lk.gl.tot ui.diagram.ltotal edge=?e len=?l
+@lk.lg.ltotal core.aggregate over=$lk.gl.all by=?e sum=?l args=?len then=$lk.gl.tot
+# The point at the fraction: inside the segment that holds that length.
+@lk.gl.f ui.diagram.lt edge=?e t=?t0
+@lk.gl.tl ui.diagram.ltotal edge=?e len=?tot
+@lk.gl.sg ui.diagram.ls edge=?e k=?k len=?len x0=?x0 y0=?y0 dx=?dx dy=?dy
+@lk.gl.c ui.diagram.lcum edge=?e k=?k before=?c
+@lk.gl.t1 core.calc out=?t1 fn=max args=?t0 args=0.001
+@lk.gl.t core.calc out=?t fn=min args=?t1 args=0.999
+@lk.gl.d core.calc out=?d fn=mul args=?t args=?tot
+@lk.gl.ce core.calc out=?ce fn=add args=?c args=?len
+@lk.gl.in1 core.check fn=lte args=?c args=?d
+@lk.gl.in2 core.check fn=lt args=?d args=?ce
+@lk.gl.r1 core.calc out=?r1 fn=sub args=?d args=?c
+@lk.gl.r core.calc out=?r fn=div args=?r1 args=?len
+@lk.gl.ox core.calc out=?ox fn=mul args=?dx args=?r
+@lk.gl.oy core.calc out=?oy fn=mul args=?dy args=?r
+@lk.gl.x core.calc out=?x fn=add args=?x0 args=?ox
+@lk.gl.y core.calc out=?y fn=add args=?y0 args=?oy
+@lk.gl.out ui.diagram.lpos edge=?e x=?x y=?y
+@lk.lg.lpos core.rule when=$lk.gl.f when=$lk.gl.tl when=$lk.gl.sg when=$lk.gl.c with=$lk.gl.t1 with=$lk.gl.t with=$lk.gl.d with=$lk.gl.ce if=$lk.gl.in1 if=$lk.gl.in2 with=$lk.gl.r1 with=$lk.gl.r with=$lk.gl.ox with=$lk.gl.oy with=$lk.gl.x with=$lk.gl.y then=$lk.gl.out
+# A hand-drawn link's middle (its code and, without a fraction of its own, its label) is that point.
+@lk.gl.mm ui.diagram.manual edge=?e
+@lk.gl.mp ui.diagram.lpos edge=?e x=?x y=?y
+@lk.gl.mo ui.diagram.mid edge=?e x=?x y=?y
+@lk.lg.mid.manual core.rule when=$lk.gl.mm when=$lk.gl.mp then=$lk.gl.mo
+# A label placed by its fraction (render-projection.sop draws the others at the middle).
+@lk.gd.e w.diagram.edge code=?e label=?text diagram.sketch.label_at=?t
+@lk.gd.p ui.diagram.lpos edge=?e x=?x y=?y
+@lk.gd.s core.calc out=?src fn=concat args=?e args=".label"
+@lk.gd.x core.calc out=?lx fn=add args=?x args=6
+@lk.gd.y core.calc out=?ly fn=add args=?y args=14
+@lk.gd.out ui.diagram.draw part=?e source=?src slot=?e order=4 z=1 shape=text text=?text x=?lx y=?ly w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left font=12
+@lk.gd.ink ui.diagram.pagecol key=label rgb=?lc
+@lk.gd.fill ui.diagram.fill source=?src part=?e fill=?lc
+@lk.lg.draw.label.at core.rule when=$lk.gd.e when=$lk.gd.p with=$lk.gd.s with=$lk.gd.x with=$lk.gd.y then=$lk.gd.out
+@lk.lg.fill.label.at core.rule when=$lk.gd.e when=$lk.gd.p when=$lk.gd.ink with=$lk.gd.s with=$lk.gd.x with=$lk.gd.y then=$lk.gd.fill
+
+# ---- Marks: an open arrow, a diamond or a circle instead of an arrow ----
+# An end whose kind is not an arrow is not drawn as one (render-projection.sop and layout-modes.sop leave it out).
+@lk.gn.h w.diagram.edge code=?e diagram.sketch.head=?k
+@lk.gn.t w.diagram.edge code=?e diagram.sketch.tail=?k
+@lk.gn.notarrow core.check fn=neq args=?k args=arrow
+@lk.gn.ho ui.diagram.altmark edge=?e at=head
+@lk.gn.to ui.diagram.altmark edge=?e at=tail
+@lk.lg.altmark.head core.rule when=$lk.gn.h if=$lk.gn.notarrow then=$lk.gn.ho
+@lk.lg.altmark.tail core.rule when=$lk.gn.t if=$lk.gn.notarrow then=$lk.gn.to
+# Which ends show their mark: the head unless the direction is none or back; the tail when it is both or back.
+@lk.gn.none w.diagram.edge code=?e direction=none
+@lk.gn.back w.diagram.edge code=?e direction=back
+@lk.gn.both w.diagram.edge code=?e direction=both
+@lk.gn.hs ui.diagram.markshow edge=?e at=head kind=?k
+@lk.gn.ts ui.diagram.markshow edge=?e at=tail kind=?k
+@lk.lg.markshow.head core.rule when=$lk.gn.h not=$lk.gn.none not=$lk.gn.back then=$lk.gn.hs
+@lk.lg.markshow.tail.both core.rule when=$lk.gn.t when=$lk.gn.both then=$lk.gn.ts
+@lk.lg.markshow.tail.back core.rule when=$lk.gn.t when=$lk.gn.back then=$lk.gn.ts
+# The direction at each end: an arrow's own, or a gap route's tip turned to a unit vector.
+@lk.gn.pd ui.diagram.pvec pointing=down ux=0 uy=1
+@lk.gn.pu ui.diagram.pvec pointing=up ux=0 uy=-1
+@lk.gn.pl ui.diagram.pvec pointing=left ux=-1 uy=0
+@lk.gn.pr ui.diagram.pvec pointing=right ux=1 uy=0
+@lk.gn.ar ui.diagram.arrow edge=?e at=?at x=?x y=?y ux=?ux uy=?uy
+@lk.gn.ud ui.diagram.udir edge=?e at=?at x=?x y=?y ux=?ux uy=?uy
+@lk.lg.udir.arrow core.rule when=$lk.gn.ar then=$lk.gn.ud
+@lk.gn.tp ui.diagram.tip edge=?e at=?at x=?x y=?y pointing=?pt
+@lk.gn.pv ui.diagram.pvec pointing=?pt ux=?ux uy=?uy
+@lk.lg.udir.tip core.rule when=$lk.gn.tp when=$lk.gn.pv then=$lk.gn.ud
+# The shapes, tip on the end and turned along the line: an open arrow (two strokes), a diamond 16 long and 10 wide,
+# a circle 10 across.
+@lk.gj.s ui.diagram.markshow edge=?e at=?at kind=?k
+@lk.gj.u ui.diagram.udir edge=?e at=?at x=?x y=?y ux=?ux uy=?uy
+@lk.gj.c ui.diagram.ecolour edge=?e fill=?f
+@lk.gj.w ui.diagram.ewidth edge=?e w=?sw
+@lk.gj.src core.calc out=?src fn=concat args=?e args="." args=?at
+@lk.gj.isopen core.check fn=eq args=?k args=open
+@lk.gj.isdia core.check fn=eq args=?k args=diamond
+@lk.gj.iscirc core.check fn=eq args=?k args=circle
+@lk.gj.bx1 core.calc out=?bx1 fn=mul args=?ux args=11
+@lk.gj.by1 core.calc out=?by1 fn=mul args=?uy args=11
+@lk.gj.bx core.calc out=?bx fn=sub args=?x args=?bx1
+@lk.gj.by core.calc out=?by fn=sub args=?y args=?by1
+@lk.gj.nx core.calc out=?nx fn=mul args=?uy args=-6
+@lk.gj.ny core.calc out=?ny fn=mul args=?ux args=6
+@lk.gj.lx core.calc out=?lx fn=add args=?bx args=?nx
+@lk.gj.ly core.calc out=?ly fn=add args=?by args=?ny
+@lk.gj.rx core.calc out=?rx fn=sub args=?bx args=?nx
+@lk.gj.ry core.calc out=?ry fn=sub args=?by args=?ny
+@lk.gj.o1 ui.diagram.point source=?src n=1 x=?lx y=?ly
+@lk.gj.o2 ui.diagram.point source=?src n=2 x=?x y=?y
+@lk.gj.o3 ui.diagram.point source=?src n=3 x=?rx y=?ry
+@lk.gj.odraw ui.diagram.draw part=?e source=?src slot=?e order=2 z=1 shape=line x=0 y=0 w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left stroke=?sw
+@lk.gj.ofill ui.diagram.fill source=?src part=?e fill=?f
+@lk.lg.mark.open.1 core.rule when=$lk.gj.s when=$lk.gj.u if=$lk.gj.isopen with=$lk.gj.src with=$lk.gj.bx1 with=$lk.gj.by1 with=$lk.gj.bx with=$lk.gj.by with=$lk.gj.nx with=$lk.gj.ny with=$lk.gj.lx with=$lk.gj.ly then=$lk.gj.o1
+@lk.lg.mark.open.2 core.rule when=$lk.gj.s when=$lk.gj.u if=$lk.gj.isopen with=$lk.gj.src then=$lk.gj.o2
+@lk.lg.mark.open.3 core.rule when=$lk.gj.s when=$lk.gj.u if=$lk.gj.isopen with=$lk.gj.src with=$lk.gj.bx1 with=$lk.gj.by1 with=$lk.gj.bx with=$lk.gj.by with=$lk.gj.nx with=$lk.gj.ny with=$lk.gj.rx with=$lk.gj.ry then=$lk.gj.o3
+@lk.lg.mark.open.draw core.rule when=$lk.gj.s when=$lk.gj.u when=$lk.gj.w if=$lk.gj.isopen with=$lk.gj.src then=$lk.gj.odraw
+@lk.lg.mark.open.fill core.rule when=$lk.gj.s when=$lk.gj.u when=$lk.gj.c if=$lk.gj.isopen with=$lk.gj.src then=$lk.gj.ofill
+@lk.gj.mx1 core.calc out=?mx1 fn=mul args=?ux args=8
+@lk.gj.my1 core.calc out=?my1 fn=mul args=?uy args=8
+@lk.gj.mx core.calc out=?mx fn=sub args=?x args=?mx1
+@lk.gj.my core.calc out=?my fn=sub args=?y args=?my1
+@lk.gj.fx1 core.calc out=?fx1 fn=mul args=?ux args=16
+@lk.gj.fy1 core.calc out=?fy1 fn=mul args=?uy args=16
+@lk.gj.fx core.calc out=?fx fn=sub args=?x args=?fx1
+@lk.gj.fy core.calc out=?fy fn=sub args=?y args=?fy1
+@lk.gj.wx core.calc out=?wx fn=mul args=?uy args=-5
+@lk.gj.wy core.calc out=?wy fn=mul args=?ux args=5
+@lk.gj.dlx core.calc out=?dlx fn=add args=?mx args=?wx
+@lk.gj.dly core.calc out=?dly fn=add args=?my args=?wy
+@lk.gj.drx core.calc out=?drx fn=sub args=?mx args=?wx
+@lk.gj.dry core.calc out=?dry fn=sub args=?my args=?wy
+@lk.gj.d1 ui.diagram.point source=?src n=1 x=?x y=?y
+@lk.gj.d2 ui.diagram.point source=?src n=2 x=?dlx y=?dly
+@lk.gj.d3 ui.diagram.point source=?src n=3 x=?fx y=?fy
+@lk.gj.d4 ui.diagram.point source=?src n=4 x=?drx y=?dry
+@lk.gj.ddraw ui.diagram.draw part=?e source=?src slot=?e order=2 z=1 shape=polygon x=0 y=0 w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left
+@lk.lg.mark.diamond.1 core.rule when=$lk.gj.s when=$lk.gj.u if=$lk.gj.isdia with=$lk.gj.src then=$lk.gj.d1
+@lk.lg.mark.diamond.2 core.rule when=$lk.gj.s when=$lk.gj.u if=$lk.gj.isdia with=$lk.gj.src with=$lk.gj.mx1 with=$lk.gj.my1 with=$lk.gj.mx with=$lk.gj.my with=$lk.gj.wx with=$lk.gj.wy with=$lk.gj.dlx with=$lk.gj.dly then=$lk.gj.d2
+@lk.lg.mark.diamond.3 core.rule when=$lk.gj.s when=$lk.gj.u if=$lk.gj.isdia with=$lk.gj.src with=$lk.gj.fx1 with=$lk.gj.fy1 with=$lk.gj.fx with=$lk.gj.fy then=$lk.gj.d3
+@lk.lg.mark.diamond.4 core.rule when=$lk.gj.s when=$lk.gj.u if=$lk.gj.isdia with=$lk.gj.src with=$lk.gj.mx1 with=$lk.gj.my1 with=$lk.gj.mx with=$lk.gj.my with=$lk.gj.wx with=$lk.gj.wy with=$lk.gj.drx with=$lk.gj.dry then=$lk.gj.d4
+@lk.lg.mark.diamond.draw core.rule when=$lk.gj.s when=$lk.gj.u if=$lk.gj.isdia with=$lk.gj.src then=$lk.gj.ddraw
+@lk.lg.mark.diamond.fill core.rule when=$lk.gj.s when=$lk.gj.u when=$lk.gj.c if=$lk.gj.isdia with=$lk.gj.src then=$lk.gj.ofill
+@lk.gj.ccx1 core.calc out=?ccx1 fn=mul args=?ux args=5
+@lk.gj.ccy1 core.calc out=?ccy1 fn=mul args=?uy args=5
+@lk.gj.ccx core.calc out=?ccx fn=sub args=?x args=?ccx1
+@lk.gj.ccy core.calc out=?ccy fn=sub args=?y args=?ccy1
+@lk.gj.cbx core.calc out=?cbx fn=sub args=?ccx args=5
+@lk.gj.cby core.calc out=?cby fn=sub args=?ccy args=5
+@lk.gj.cdraw ui.diagram.draw part=?e source=?src slot=?e order=2 z=1 shape=circle x=?cbx y=?cby w=10 h=10 cx=0 cy=0 tx=0 ty=0 scale=1 side=left
+@lk.lg.mark.circle.draw core.rule when=$lk.gj.s when=$lk.gj.u if=$lk.gj.iscirc with=$lk.gj.src with=$lk.gj.ccx1 with=$lk.gj.ccy1 with=$lk.gj.ccx with=$lk.gj.ccy with=$lk.gj.cbx with=$lk.gj.cby then=$lk.gj.cdraw
+@lk.lg.mark.circle.fill core.rule when=$lk.gj.s when=$lk.gj.u when=$lk.gj.c if=$lk.gj.iscirc with=$lk.gj.src then=$lk.gj.ofill
+
+# ---- Commands ----
+# The link commands that name links by `ids` (a missing one is refused, act-rules.sop).
+@lk.edgeop.attach ui.diagram.edgeop operation="diagram.link.attach"
+@lk.edgeop.detach ui.diagram.edgeop operation="diagram.link.detach"
+@lk.edgeop.bend.add ui.diagram.edgeop operation="diagram.link.bend.add"
+@lk.edgeop.bend.move ui.diagram.edgeop operation="diagram.link.bend.move"
+@lk.edgeop.bend.remove ui.diagram.edgeop operation="diagram.link.bend.remove"
+@lk.c.it app.act.item param="ids" value=?id
+@lk.c.ed w.diagram.edge code=?id
+
+# A change names one of the link's properties (act-rules.sop refuses one that names none).
+@lk.c.g1 app.act.request operation="diagram.link.change" fromSide=?v
+@lk.c.g2 app.act.request operation="diagram.link.change" toSide=?v
+@lk.c.g3 app.act.request operation="diagram.link.change" head=?v
+@lk.c.g4 app.act.request operation="diagram.link.change" tail=?v
+@lk.c.g5 app.act.request operation="diagram.link.change" labelAt=?v
+@lk.c.g6 app.act.request operation="diagram.link.change" labelPosition=?v
+@lk.c.g7 app.act.request operation="diagram.link.change" fromX=?v
+@lk.c.g8 app.act.request operation="diagram.link.change" fromY=?v
+@lk.c.g9 app.act.request operation="diagram.link.change" toX=?v
+@lk.c.g10 app.act.request operation="diagram.link.change" toY=?v
+@lk.c.go ui.diagram.lcgiven value=yes
+@lk.lg.given.1 core.rule when=$lk.c.g1 then=$lk.c.go
+@lk.lg.given.2 core.rule when=$lk.c.g2 then=$lk.c.go
+@lk.lg.given.3 core.rule when=$lk.c.g3 then=$lk.c.go
+@lk.lg.given.4 core.rule when=$lk.c.g4 then=$lk.c.go
+@lk.lg.given.5 core.rule when=$lk.c.g5 then=$lk.c.go
+@lk.lg.given.6 core.rule when=$lk.c.g6 then=$lk.c.go
+@lk.lg.given.7 core.rule when=$lk.c.g7 then=$lk.c.go
+@lk.lg.given.8 core.rule when=$lk.c.g8 then=$lk.c.go
+@lk.lg.given.9 core.rule when=$lk.c.g9 then=$lk.c.go
+@lk.lg.given.10 core.rule when=$lk.c.g10 then=$lk.c.go
+
+# The sides an end is attached at.
+@lk.c.fs.r app.act.request operation="diagram.link.change" fromSide=?v
+@lk.c.fs.c app.act.call act=change thing=$lk.c.ed attr=diagram.sketch.from_side value=?v order=4
+@lk.lg.change.from.side core.rule when=$lk.c.fs.r when=$lk.c.it when=$lk.c.ed then=$lk.c.fs.c
+@lk.c.ts.r app.act.request operation="diagram.link.change" toSide=?v
+@lk.c.ts.c app.act.call act=change thing=$lk.c.ed attr=diagram.sketch.to_side value=?v order=4
+@lk.lg.change.to.side core.rule when=$lk.c.ts.r when=$lk.c.it when=$lk.c.ed then=$lk.c.ts.c
+# Attaching an end to a node (from, to) makes it fixed again when it was free.
+@lk.c.af.r app.act.request operation="diagram.link.change" from=?n
+@lk.c.af.e w.diagram.edge code=?id diagram.sketch.from_free=true
+@lk.c.af.n w.diagram.node code=?n
+@lk.c.af.c app.act.call act=change thing=$lk.c.af.e attr=diagram.sketch.from_free value=false order=4
+@lk.lg.change.from.fixed core.rule when=$lk.c.af.r when=$lk.c.it when=$lk.c.af.e when=$lk.c.af.n then=$lk.c.af.c
+@lk.c.at.r app.act.request operation="diagram.link.change" to=?n
+@lk.c.at.e w.diagram.edge code=?id diagram.sketch.to_free=true
+@lk.c.at.c app.act.call act=change thing=$lk.c.at.e attr=diagram.sketch.to_free value=false order=4
+@lk.lg.change.to.fixed core.rule when=$lk.c.at.r when=$lk.c.it when=$lk.c.at.e when=$lk.c.af.n then=$lk.c.at.c
+# A free end at a point.
+@lk.c.fx.r app.act.request operation="diagram.link.change" fromX=?v
+@lk.c.fx.c app.act.call act=change thing=$lk.c.ed attr=diagram.sketch.from_x value=?v order=4
+@lk.c.free.f app.act.call act=change thing=$lk.c.ed attr=diagram.sketch.from_free value=true order=5
+@lk.lg.change.from.x core.rule when=$lk.c.fx.r when=$lk.c.it when=$lk.c.ed then=$lk.c.fx.c
+@lk.lg.change.from.x.free core.rule when=$lk.c.fx.r when=$lk.c.it when=$lk.c.ed then=$lk.c.free.f
+@lk.c.fy.r app.act.request operation="diagram.link.change" fromY=?v
+@lk.c.fy.c app.act.call act=change thing=$lk.c.ed attr=diagram.sketch.from_y value=?v order=4
+@lk.lg.change.from.y core.rule when=$lk.c.fy.r when=$lk.c.it when=$lk.c.ed then=$lk.c.fy.c
+@lk.lg.change.from.y.free core.rule when=$lk.c.fy.r when=$lk.c.it when=$lk.c.ed then=$lk.c.free.f
+@lk.c.tx.r app.act.request operation="diagram.link.change" toX=?v
+@lk.c.tx.c app.act.call act=change thing=$lk.c.ed attr=diagram.sketch.to_x value=?v order=4
+@lk.c.free.t app.act.call act=change thing=$lk.c.ed attr=diagram.sketch.to_free value=true order=5
+@lk.lg.change.to.x core.rule when=$lk.c.tx.r when=$lk.c.it when=$lk.c.ed then=$lk.c.tx.c
+@lk.lg.change.to.x.free core.rule when=$lk.c.tx.r when=$lk.c.it when=$lk.c.ed then=$lk.c.free.t
+@lk.c.ty.r app.act.request operation="diagram.link.change" toY=?v
+@lk.c.ty.c app.act.call act=change thing=$lk.c.ed attr=diagram.sketch.to_y value=?v order=4
+@lk.lg.change.to.y core.rule when=$lk.c.ty.r when=$lk.c.it when=$lk.c.ed then=$lk.c.ty.c
+@lk.lg.change.to.y.free core.rule when=$lk.c.ty.r when=$lk.c.it when=$lk.c.ed then=$lk.c.free.t
+# Where the label sits: start, middle or end, or a fraction of the length.
+@lk.c.la.r app.act.request operation="diagram.link.change" labelAt=?w
+@lk.c.la.t ui.diagram.ldir name=?w t=?t
+@lk.c.la.c app.act.call act=change thing=$lk.c.ed attr=diagram.sketch.label_at value=?t order=4
+@lk.lg.change.label.at core.rule when=$lk.c.la.r when=$lk.c.la.t when=$lk.c.it when=$lk.c.ed then=$lk.c.la.c
+@lk.c.ld.start ui.diagram.ldir name=start t=0.2
+@lk.c.ld.middle ui.diagram.ldir name=middle t=0.5
+@lk.c.ld.end ui.diagram.ldir name=end t=0.8
+@lk.c.lp.r app.act.request operation="diagram.link.change" labelPosition=?t
+@lk.c.lp.c app.act.call act=change thing=$lk.c.ed attr=diagram.sketch.label_at value=?t order=4
+@lk.lg.change.label.position core.rule when=$lk.c.lp.r when=$lk.c.it when=$lk.c.ed then=$lk.c.lp.c
+
+# The mark at each end. A kind shows that end's mark (the direction gains the end); none takes the mark away (the
+# direction loses it); the kind of a shown end is kept.
+@lk.c.hd.r app.act.request operation="diagram.link.change" head=?k
+@lk.c.hd.kind core.check fn=neq args=?k args=none
+@lk.c.hd.nokind core.check fn=eq args=?k args=none
+@lk.c.hd.c app.act.call act=change thing=$lk.c.ed attr=diagram.sketch.head value=?k order=4
+@lk.lg.change.head core.rule when=$lk.c.hd.r when=$lk.c.it when=$lk.c.ed if=$lk.c.hd.kind then=$lk.c.hd.c
+@lk.c.dir.none w.diagram.edge code=?id direction=none
+@lk.c.dir.back w.diagram.edge code=?id direction=back
+@lk.c.dir.fwd w.diagram.edge code=?id direction=forward
+@lk.c.dir.both w.diagram.edge code=?id direction=both
+@lk.c.to.fwd.n app.act.call act=change thing=$lk.c.dir.none attr=direction value=forward order=5
+@lk.c.to.both.b app.act.call act=change thing=$lk.c.dir.back attr=direction value=both order=5
+@lk.lg.change.head.shows.none core.rule when=$lk.c.hd.r when=$lk.c.it when=$lk.c.dir.none if=$lk.c.hd.kind then=$lk.c.to.fwd.n
+@lk.lg.change.head.shows.back core.rule when=$lk.c.hd.r when=$lk.c.it when=$lk.c.dir.back if=$lk.c.hd.kind then=$lk.c.to.both.b
+@lk.c.to.none.f app.act.call act=change thing=$lk.c.dir.fwd attr=direction value=none order=5
+@lk.c.to.back.b app.act.call act=change thing=$lk.c.dir.both attr=direction value=back order=5
+@lk.lg.change.head.off.forward core.rule when=$lk.c.hd.r when=$lk.c.it when=$lk.c.dir.fwd if=$lk.c.hd.nokind then=$lk.c.to.none.f
+@lk.lg.change.head.off.both core.rule when=$lk.c.hd.r when=$lk.c.it when=$lk.c.dir.both if=$lk.c.hd.nokind then=$lk.c.to.back.b
+@lk.c.tl.r app.act.request operation="diagram.link.change" tail=?k
+@lk.c.tl.c app.act.call act=change thing=$lk.c.ed attr=diagram.sketch.tail value=?k order=4
+@lk.lg.change.tail core.rule when=$lk.c.tl.r when=$lk.c.it when=$lk.c.ed if=$lk.c.hd.kind then=$lk.c.tl.c
+@lk.c.to.both.f app.act.call act=change thing=$lk.c.dir.fwd attr=direction value=both order=5
+@lk.c.to.back.n app.act.call act=change thing=$lk.c.dir.none attr=direction value=back order=5
+@lk.lg.change.tail.shows.forward core.rule when=$lk.c.tl.r when=$lk.c.it when=$lk.c.dir.fwd if=$lk.c.hd.kind then=$lk.c.to.both.f
+@lk.lg.change.tail.shows.none core.rule when=$lk.c.tl.r when=$lk.c.it when=$lk.c.dir.none if=$lk.c.hd.kind then=$lk.c.to.back.n
+@lk.c.to.fwd.b app.act.call act=change thing=$lk.c.dir.both attr=direction value=forward order=5
+@lk.c.to.none.b app.act.call act=change thing=$lk.c.dir.back attr=direction value=none order=5
+@lk.lg.change.tail.off.both core.rule when=$lk.c.tl.r when=$lk.c.it when=$lk.c.dir.both if=$lk.c.hd.nokind then=$lk.c.to.fwd.b
+@lk.lg.change.tail.off.back core.rule when=$lk.c.tl.r when=$lk.c.it when=$lk.c.dir.back if=$lk.c.hd.nokind then=$lk.c.to.none.b
+# An arrow direction that shows an end whose kind was none shows it as an arrow again.
+@lk.c.ar.r app.act.request operation="diagram.link.change" arrow=?a
+@lk.c.ar.head core.check fn=matches args=?a args="^(forward|both)$"
+@lk.c.ar.tail core.check fn=matches args=?a args="^(back|both)$"
+@lk.c.hn.e w.diagram.edge code=?id diagram.sketch.head=none
+@lk.c.tn.e w.diagram.edge code=?id diagram.sketch.tail=none
+@lk.c.hn.c app.act.call act=change thing=$lk.c.hn.e attr=diagram.sketch.head value=arrow order=5
+@lk.c.tn.c app.act.call act=change thing=$lk.c.tn.e attr=diagram.sketch.tail value=arrow order=5
+@lk.lg.arrow.head.back core.rule when=$lk.c.ar.r when=$lk.c.it when=$lk.c.hn.e if=$lk.c.ar.head then=$lk.c.hn.c
+@lk.lg.arrow.tail.back core.rule when=$lk.c.ar.r when=$lk.c.it when=$lk.c.tn.e if=$lk.c.ar.tail then=$lk.c.tn.c
+
+# A new link with its sides, marks and route.
+@lk.c.mk.made app.act.call act=make kind=w.diagram.edge
+@lk.c.mk.fs app.act.request operation="diagram.link.make" fromSide=?v
+@lk.c.mk.fs.a app.act.arg call=new.edge attr=diagram.sketch.from_side value=?v
+@lk.lg.make.from.side core.rule when=$lk.c.mk.fs when=$lk.c.mk.made then=$lk.c.mk.fs.a
+@lk.c.mk.ts app.act.request operation="diagram.link.make" toSide=?v
+@lk.c.mk.ts.a app.act.arg call=new.edge attr=diagram.sketch.to_side value=?v
+@lk.lg.make.to.side core.rule when=$lk.c.mk.ts when=$lk.c.mk.made then=$lk.c.mk.ts.a
+@lk.c.mk.rt app.act.request operation="diagram.link.make" route=?v
+@lk.c.mk.rt.a app.act.arg call=new.edge attr=route value=?v
+@lk.lg.make.route core.rule when=$lk.c.mk.rt when=$lk.c.mk.made then=$lk.c.mk.rt.a
+@lk.c.mk.hd app.act.request operation="diagram.link.make" head=?k
+@lk.c.mk.hd.a app.act.arg call=new.edge attr=diagram.sketch.head value=?k
+@lk.lg.make.head core.rule when=$lk.c.mk.hd when=$lk.c.mk.made if=$lk.c.hd.kind then=$lk.c.mk.hd.a
+@lk.c.mk.tl app.act.request operation="diagram.link.make" tail=?k
+@lk.c.mk.tl.a app.act.arg call=new.edge attr=diagram.sketch.tail value=?k
+@lk.lg.make.tail core.rule when=$lk.c.mk.tl when=$lk.c.mk.made if=$lk.c.hd.kind then=$lk.c.mk.tl.a
+# Without an arrow said: a tail kind shows the tail too (both; back when the head is none); a head of none alone, no mark.
+@lk.c.mk.anyarrow app.act.request operation="diagram.link.make" arrow=?anya
+@lk.c.mk.hnone app.act.request operation="diagram.link.make" head=none
+@lk.c.mk.both app.act.arg call=new.edge attr=direction value=both
+@lk.c.mk.back app.act.arg call=new.edge attr=direction value=back
+@lk.c.mk.none app.act.arg call=new.edge attr=direction value=none
+@lk.lg.make.tail.both core.rule when=$lk.c.mk.tl when=$lk.c.mk.made if=$lk.c.hd.kind not=$lk.c.mk.anyarrow not=$lk.c.mk.hnone then=$lk.c.mk.both
+@lk.lg.make.tail.back core.rule when=$lk.c.mk.tl when=$lk.c.mk.made when=$lk.c.mk.hnone if=$lk.c.hd.kind not=$lk.c.mk.anyarrow then=$lk.c.mk.back
+@lk.c.mk.anytail app.act.request operation="diagram.link.make" tail=?anyt
+@lk.lg.make.head.none core.rule when=$lk.c.mk.hnone when=$lk.c.mk.made not=$lk.c.mk.anyarrow not=$lk.c.mk.anytail then=$lk.c.mk.none
+
+# ---- Which end of each named link a command means ----
+@lk.endop.attach ui.diagram.endop operation="diagram.link.attach"
+@lk.endop.detach ui.diagram.endop operation="diagram.link.detach"
+@lk.p.r app.act.request operation=?op
+@lk.p.op ui.diagram.endop operation=?op
+@lk.p.e w.diagram.edge code=?id from=$lk.p.na to=$lk.p.nb
+@lk.p.na w.diagram.node code=?a
+@lk.p.nb w.diagram.node code=?b
+@lk.p.from ui.diagram.pick edge=?id end=from
+@lk.p.to ui.diagram.pick edge=?id end=to
+# The end said by its role: from, start, source or tail; to, end, target or head.
+@lk.p.re app.act.request end=?end
+@lk.p.isfrom core.check fn=matches args=?end args="^(from|start|source|tail)$"
+@lk.p.isto core.check fn=matches args=?end args="^(to|end|target|head)$"
+@lk.lg.pick.role.from core.rule when=$lk.p.r when=$lk.p.op when=$lk.c.it when=$lk.p.e when=$lk.p.na when=$lk.p.nb when=$lk.p.re if=$lk.p.isfrom then=$lk.p.from
+@lk.lg.pick.role.to core.rule when=$lk.p.r when=$lk.p.op when=$lk.c.it when=$lk.p.e when=$lk.p.na when=$lk.p.nb when=$lk.p.re if=$lk.p.isto then=$lk.p.to
+# The end said by the node it is at now (the target when both ends are at that node).
+@lk.p.ra app.act.request at=?n
+@lk.p.atfrom core.check fn=eq args=?n args=?a
+@lk.p.atto core.check fn=eq args=?n args=?b
+@lk.p.notto core.check fn=neq args=?n args=?b
+@lk.lg.pick.at.from core.rule when=$lk.p.r when=$lk.p.op when=$lk.c.it when=$lk.p.e when=$lk.p.na when=$lk.p.nb when=$lk.p.ra if=$lk.p.atfrom if=$lk.p.notto then=$lk.p.from
+@lk.lg.pick.at.to core.rule when=$lk.p.r when=$lk.p.op when=$lk.c.it when=$lk.p.e when=$lk.p.na when=$lk.p.nb when=$lk.p.ra if=$lk.p.atto then=$lk.p.to
+# The end said by where it is drawn: the left, right, upper or lower one (the target on a tie).
+@lk.p.th ui.diagram.tip edge=?id at=head x=?hx y=?hy
+@lk.p.tt ui.diagram.tip edge=?id at=tail x=?tx y=?ty
+@lk.p.isright core.check fn=eq args=?end args=right
+@lk.p.isleft core.check fn=eq args=?end args=left
+@lk.p.isup core.check fn=matches args=?end args="^(top|upper)$"
+@lk.p.isdown core.check fn=matches args=?end args="^(bottom|lower)$"
+@lk.p.tgt core.check fn=gt args=?tx args=?hx
+@lk.p.tle core.check fn=lte args=?tx args=?hx
+@lk.p.tlt core.check fn=lt args=?tx args=?hx
+@lk.p.tge core.check fn=gte args=?tx args=?hx
+@lk.p.ylt core.check fn=lt args=?ty args=?hy
+@lk.p.yge core.check fn=gte args=?ty args=?hy
+@lk.p.ygt core.check fn=gt args=?ty args=?hy
+@lk.p.yle core.check fn=lte args=?ty args=?hy
+@lk.lg.pick.right.from core.rule when=$lk.p.r when=$lk.p.op when=$lk.c.it when=$lk.p.e when=$lk.p.na when=$lk.p.nb when=$lk.p.re when=$lk.p.th when=$lk.p.tt if=$lk.p.isright if=$lk.p.tgt then=$lk.p.from
+@lk.lg.pick.right.to core.rule when=$lk.p.r when=$lk.p.op when=$lk.c.it when=$lk.p.e when=$lk.p.na when=$lk.p.nb when=$lk.p.re when=$lk.p.th when=$lk.p.tt if=$lk.p.isright if=$lk.p.tle then=$lk.p.to
+@lk.lg.pick.left.from core.rule when=$lk.p.r when=$lk.p.op when=$lk.c.it when=$lk.p.e when=$lk.p.na when=$lk.p.nb when=$lk.p.re when=$lk.p.th when=$lk.p.tt if=$lk.p.isleft if=$lk.p.tlt then=$lk.p.from
+@lk.lg.pick.left.to core.rule when=$lk.p.r when=$lk.p.op when=$lk.c.it when=$lk.p.e when=$lk.p.na when=$lk.p.nb when=$lk.p.re when=$lk.p.th when=$lk.p.tt if=$lk.p.isleft if=$lk.p.tge then=$lk.p.to
+@lk.lg.pick.up.from core.rule when=$lk.p.r when=$lk.p.op when=$lk.c.it when=$lk.p.e when=$lk.p.na when=$lk.p.nb when=$lk.p.re when=$lk.p.th when=$lk.p.tt if=$lk.p.isup if=$lk.p.ylt then=$lk.p.from
+@lk.lg.pick.up.to core.rule when=$lk.p.r when=$lk.p.op when=$lk.c.it when=$lk.p.e when=$lk.p.na when=$lk.p.nb when=$lk.p.re when=$lk.p.th when=$lk.p.tt if=$lk.p.isup if=$lk.p.yge then=$lk.p.to
+@lk.lg.pick.down.from core.rule when=$lk.p.r when=$lk.p.op when=$lk.c.it when=$lk.p.e when=$lk.p.na when=$lk.p.nb when=$lk.p.re when=$lk.p.th when=$lk.p.tt if=$lk.p.isdown if=$lk.p.ygt then=$lk.p.from
+@lk.lg.pick.down.to core.rule when=$lk.p.r when=$lk.p.op when=$lk.c.it when=$lk.p.e when=$lk.p.na when=$lk.p.nb when=$lk.p.re when=$lk.p.th when=$lk.p.tt if=$lk.p.isdown if=$lk.p.yle then=$lk.p.to
+# Neither said: the target end.
+@lk.p.anyend app.act.request end=?anyend
+@lk.p.anyat app.act.request at=?anyat
+@lk.lg.pick.default core.rule when=$lk.p.r when=$lk.p.op when=$lk.c.it when=$lk.p.e when=$lk.p.na when=$lk.p.nb not=$lk.p.anyend not=$lk.p.anyat then=$lk.p.to
+# An end that is not one of these, or a node that is at neither end: refused.
+@lk.p.picked ui.diagram.pick edge=?id
+@lk.p.miss app.act.refuse reason=missing-endpoint
+@lk.lg.pick.none core.rule when=$lk.p.r when=$lk.p.op when=$lk.c.it when=$lk.c.ed not=$lk.p.picked then=$lk.p.miss
+
+# ---- Attach an end of each named link to a node, at a side (auto when none is said) ----
+@lk.at.r app.act.request operation="diagram.link.attach" node=?n
+@lk.at.n w.diagram.node code=?n
+@lk.at.from ui.diagram.pick edge=?id end=from
+@lk.at.to ui.diagram.pick edge=?id end=to
+@lk.at.cf app.act.call act=change thing=$lk.c.ed attr=from value=$lk.at.n order=1
+@lk.at.ct app.act.call act=change thing=$lk.c.ed attr=to value=$lk.at.n order=1
+@lk.lg.attach.from core.rule when=$lk.at.r when=$lk.at.n when=$lk.c.it when=$lk.c.ed when=$lk.at.from then=$lk.at.cf
+@lk.lg.attach.to core.rule when=$lk.at.r when=$lk.at.n when=$lk.c.it when=$lk.c.ed when=$lk.at.to then=$lk.at.ct
+@lk.at.ff w.diagram.edge code=?id diagram.sketch.from_free=true
+@lk.at.tf w.diagram.edge code=?id diagram.sketch.to_free=true
+@lk.at.cff app.act.call act=change thing=$lk.at.ff attr=diagram.sketch.from_free value=false order=2
+@lk.at.ctf app.act.call act=change thing=$lk.at.tf attr=diagram.sketch.to_free value=false order=2
+@lk.lg.attach.from.fixed core.rule when=$lk.at.r when=$lk.at.n when=$lk.c.it when=$lk.at.ff when=$lk.at.from then=$lk.at.cff
+@lk.lg.attach.to.fixed core.rule when=$lk.at.r when=$lk.at.n when=$lk.c.it when=$lk.at.tf when=$lk.at.to then=$lk.at.ctf
+@lk.at.rs app.act.request operation="diagram.link.attach" side=?s
+@lk.at.sf app.act.call act=change thing=$lk.c.ed attr=diagram.sketch.from_side value=?s order=3
+@lk.at.st app.act.call act=change thing=$lk.c.ed attr=diagram.sketch.to_side value=?s order=3
+@lk.lg.attach.from.side core.rule when=$lk.at.r when=$lk.at.n when=$lk.at.rs when=$lk.c.it when=$lk.c.ed when=$lk.at.from then=$lk.at.sf
+@lk.lg.attach.to.side core.rule when=$lk.at.r when=$lk.at.n when=$lk.at.rs when=$lk.c.it when=$lk.c.ed when=$lk.at.to then=$lk.at.st
+@lk.at.anys app.act.request side=?anys
+@lk.at.ofs w.diagram.edge code=?id diagram.sketch.from_side=?old
+@lk.at.ots w.diagram.edge code=?id diagram.sketch.to_side=?old
+@lk.at.af app.act.call act=change thing=$lk.at.ofs attr=diagram.sketch.from_side value=auto order=3
+@lk.at.att app.act.call act=change thing=$lk.at.ots attr=diagram.sketch.to_side value=auto order=3
+@lk.lg.attach.from.auto core.rule when=$lk.at.r when=$lk.at.n when=$lk.c.it when=$lk.at.ofs when=$lk.at.from not=$lk.at.anys then=$lk.at.af
+@lk.lg.attach.to.auto core.rule when=$lk.at.r when=$lk.at.n when=$lk.c.it when=$lk.at.ots when=$lk.at.to not=$lk.at.anys then=$lk.at.att
+@lk.at.rn app.act.request operation="diagram.link.attach" node=?n
+@lk.at.nn w.diagram.node code=?n
+@lk.lg.attach.no.node core.rule when=$lk.at.rn not=$lk.at.nn then=$lk.p.miss
+
+# ---- Detach an end of each named link: it stays where it is drawn, 40 further out, or goes to the point said ----
+@lk.dt.r app.act.request operation="diagram.link.detach"
+@lk.dt.from ui.diagram.pick edge=?id end=from
+@lk.dt.to ui.diagram.pick edge=?id end=to
+@lk.dt.xy app.act.request operation="diagram.link.detach" x=?x y=?y
+@lk.dt.ff app.act.call act=change thing=$lk.c.ed attr=diagram.sketch.from_free value=true order=3
+@lk.dt.fx app.act.call act=change thing=$lk.c.ed attr=diagram.sketch.from_x value=?x order=1
+@lk.dt.fy app.act.call act=change thing=$lk.c.ed attr=diagram.sketch.from_y value=?y order=2
+@lk.dt.tf app.act.call act=change thing=$lk.c.ed attr=diagram.sketch.to_free value=true order=3
+@lk.dt.tx app.act.call act=change thing=$lk.c.ed attr=diagram.sketch.to_x value=?x order=1
+@lk.dt.ty app.act.call act=change thing=$lk.c.ed attr=diagram.sketch.to_y value=?y order=2
+@lk.lg.detach.from.free core.rule when=$lk.dt.r when=$lk.c.it when=$lk.c.ed when=$lk.dt.from then=$lk.dt.ff
+@lk.lg.detach.to.free core.rule when=$lk.dt.r when=$lk.c.it when=$lk.c.ed when=$lk.dt.to then=$lk.dt.tf
+@lk.lg.detach.from.x core.rule when=$lk.dt.xy when=$lk.c.it when=$lk.c.ed when=$lk.dt.from then=$lk.dt.fx
+@lk.lg.detach.from.y core.rule when=$lk.dt.xy when=$lk.c.it when=$lk.c.ed when=$lk.dt.from then=$lk.dt.fy
+@lk.lg.detach.to.x core.rule when=$lk.dt.xy when=$lk.c.it when=$lk.c.ed when=$lk.dt.to then=$lk.dt.tx
+@lk.lg.detach.to.y core.rule when=$lk.dt.xy when=$lk.c.it when=$lk.c.ed when=$lk.dt.to then=$lk.dt.ty
+# No point said: the end's tip moved 40 away from its node's centre (an end that is free already stays).
+@lk.dt.anyx app.act.request operation="diagram.link.detach" x=?anyx
+@lk.dt.e w.diagram.edge code=?id from=$lk.dt.na to=$lk.dt.nb
+@lk.dt.na w.diagram.node code=?a
+@lk.dt.nb w.diagram.node code=?b
+@lk.dt.isfree.f w.diagram.edge code=?id diagram.sketch.from_free=true
+@lk.dt.isfree.t w.diagram.edge code=?id diagram.sketch.to_free=true
+@lk.dt.tipf ui.diagram.tip edge=?id at=tail x=?tx y=?ty
+@lk.dt.tipt ui.diagram.tip edge=?id at=head x=?tx y=?ty
+@lk.dt.bf ui.diagram.nbox node=?a cx=?cx cy=?cy
+@lk.dt.bt ui.diagram.nbox node=?b cx=?cx cy=?cy
+@lk.dt.dx core.calc out=?dx fn=sub args=?tx args=?cx
+@lk.dt.dy core.calc out=?dy fn=sub args=?ty args=?cy
+@lk.dt.ax core.calc out=?ax fn=abs args=?dx
+@lk.dt.ay core.calc out=?ay fn=abs args=?dy
+@lk.dt.bg core.calc out=?bg fn=max args=?ax args=?ay
+@lk.dt.sm core.calc out=?sm fn=min args=?ax args=?ay
+@lk.dt.l1 core.calc out=?l1 fn=mul args=?bg args=0.96043
+@lk.dt.l2 core.calc out=?l2 fn=mul args=?sm args=0.39782
+@lk.dt.l3 core.calc out=?l3 fn=add args=?l1 args=?l2
+@lk.dt.ln core.calc out=?ln fn=max args=?l3 args=0.001
+@lk.dt.k core.calc out=?k fn=div args=40 args=?ln
+@lk.dt.ox core.calc out=?ox fn=mul args=?dx args=?k
+@lk.dt.oy core.calc out=?oy fn=mul args=?dy args=?k
+@lk.dt.x1 core.calc out=?x1 fn=add args=?tx args=?ox
+@lk.dt.y1 core.calc out=?y1 fn=add args=?ty args=?oy
+@lk.dt.x core.calc out=?x fn=round args=?x1
+@lk.dt.y core.calc out=?y fn=round args=?y1
+@lk.dt.ofx app.act.call act=change thing=$lk.c.ed attr=diagram.sketch.from_x value=?x order=1
+@lk.dt.ofy app.act.call act=change thing=$lk.c.ed attr=diagram.sketch.from_y value=?y order=2
+@lk.dt.otx app.act.call act=change thing=$lk.c.ed attr=diagram.sketch.to_x value=?x order=1
+@lk.dt.oty app.act.call act=change thing=$lk.c.ed attr=diagram.sketch.to_y value=?y order=2
+@lk.lg.detach.from.out.x core.rule when=$lk.dt.r when=$lk.c.it when=$lk.c.ed when=$lk.dt.e when=$lk.dt.na when=$lk.dt.nb when=$lk.dt.from when=$lk.dt.tipf when=$lk.dt.bf not=$lk.dt.anyx not=$lk.dt.isfree.f with=$lk.dt.dx with=$lk.dt.dy with=$lk.dt.ax with=$lk.dt.ay with=$lk.dt.bg with=$lk.dt.sm with=$lk.dt.l1 with=$lk.dt.l2 with=$lk.dt.l3 with=$lk.dt.ln with=$lk.dt.k with=$lk.dt.ox with=$lk.dt.oy with=$lk.dt.x1 with=$lk.dt.y1 with=$lk.dt.x with=$lk.dt.y then=$lk.dt.ofx
+@lk.lg.detach.from.out.y core.rule when=$lk.dt.r when=$lk.c.it when=$lk.c.ed when=$lk.dt.e when=$lk.dt.na when=$lk.dt.nb when=$lk.dt.from when=$lk.dt.tipf when=$lk.dt.bf not=$lk.dt.anyx not=$lk.dt.isfree.f with=$lk.dt.dx with=$lk.dt.dy with=$lk.dt.ax with=$lk.dt.ay with=$lk.dt.bg with=$lk.dt.sm with=$lk.dt.l1 with=$lk.dt.l2 with=$lk.dt.l3 with=$lk.dt.ln with=$lk.dt.k with=$lk.dt.ox with=$lk.dt.oy with=$lk.dt.x1 with=$lk.dt.y1 with=$lk.dt.x with=$lk.dt.y then=$lk.dt.ofy
+@lk.lg.detach.to.out.x core.rule when=$lk.dt.r when=$lk.c.it when=$lk.c.ed when=$lk.dt.e when=$lk.dt.na when=$lk.dt.nb when=$lk.dt.to when=$lk.dt.tipt when=$lk.dt.bt not=$lk.dt.anyx not=$lk.dt.isfree.t with=$lk.dt.dx with=$lk.dt.dy with=$lk.dt.ax with=$lk.dt.ay with=$lk.dt.bg with=$lk.dt.sm with=$lk.dt.l1 with=$lk.dt.l2 with=$lk.dt.l3 with=$lk.dt.ln with=$lk.dt.k with=$lk.dt.ox with=$lk.dt.oy with=$lk.dt.x1 with=$lk.dt.y1 with=$lk.dt.x with=$lk.dt.y then=$lk.dt.otx
+@lk.lg.detach.to.out.y core.rule when=$lk.dt.r when=$lk.c.it when=$lk.c.ed when=$lk.dt.e when=$lk.dt.na when=$lk.dt.nb when=$lk.dt.to when=$lk.dt.tipt when=$lk.dt.bt not=$lk.dt.anyx not=$lk.dt.isfree.t with=$lk.dt.dx with=$lk.dt.dy with=$lk.dt.ax with=$lk.dt.ay with=$lk.dt.bg with=$lk.dt.sm with=$lk.dt.l1 with=$lk.dt.l2 with=$lk.dt.l3 with=$lk.dt.ln with=$lk.dt.k with=$lk.dt.ox with=$lk.dt.oy with=$lk.dt.x1 with=$lk.dt.y1 with=$lk.dt.x with=$lk.dt.y then=$lk.dt.oty
+
+# ---- Bends: add one (after the bend said, 0 = before the first; at the end otherwise), move one, remove one or all ----
+@lk.b.r app.act.request operation="diagram.link.bend.add" x=?x y=?y
+@lk.b.mk app.act.call act=make kind=diagram.sketch.bend edge=$lk.c.ed seq=?o x=?x y=?y order=1
+@lk.b.any ui.diagram.bendat edge=?id
+@lk.b.one core.calc out=?o fn=add args=0 args=1
+@lk.lg.bend.add.first core.rule when=$lk.b.r when=$lk.c.it when=$lk.c.ed not=$lk.b.any with=$lk.b.one then=$lk.b.mk
+@lk.b.after app.act.request after=?af
+@lk.b.cnt ui.diagram.bends edge=?id count=?n
+@lk.b.hi ui.diagram.bendhi edge=?id order=?hi
+@lk.b.appendable core.check fn=gte args=?af args=?n
+@lk.b.next core.calc out=?o fn=add args=?hi args=1
+@lk.lg.bend.add.end core.rule when=$lk.b.r when=$lk.c.it when=$lk.c.ed when=$lk.b.hi not=$lk.b.after with=$lk.b.next then=$lk.b.mk
+@lk.lg.bend.add.after.last core.rule when=$lk.b.r when=$lk.c.it when=$lk.c.ed when=$lk.b.hi when=$lk.b.after when=$lk.b.cnt if=$lk.b.appendable with=$lk.b.next then=$lk.b.mk
+@lk.b.lo ui.diagram.bendlo edge=?id order=?lo
+@lk.b.isfront core.check fn=lte args=?af args=0
+@lk.b.front core.calc out=?o fn=sub args=?lo args=1
+@lk.lg.bend.add.front core.rule when=$lk.b.r when=$lk.c.it when=$lk.c.ed when=$lk.b.lo when=$lk.b.after if=$lk.b.isfront with=$lk.b.front then=$lk.b.mk
+@lk.b.ka ui.diagram.bend edge=?id k=?af order=?oa
+@lk.b.kb ui.diagram.bend edge=?id k=?kb order=?ob
+@lk.b.isnext core.calc out=?k1 fn=add args=?af args=1
+@lk.b.nexteq core.check fn=eq args=?kb args=?k1
+@lk.b.mid1 core.calc out=?o1 fn=add args=?oa args=?ob
+@lk.b.mid core.calc out=?o fn=div args=?o1 args=2
+@lk.lg.bend.add.between core.rule when=$lk.b.r when=$lk.c.it when=$lk.c.ed when=$lk.b.after when=$lk.b.ka when=$lk.b.kb with=$lk.b.isnext if=$lk.b.nexteq with=$lk.b.mid1 with=$lk.b.mid then=$lk.b.mk
+@lk.bm.r app.act.request operation="diagram.link.bend.move" bend=?k x=?x y=?y
+@lk.bm.k ui.diagram.bend edge=?id k=?k order=?o
+@lk.bm.b diagram.sketch.bend edge=$lk.c.ed seq=?o
+@lk.bm.cx app.act.call act=change thing=$lk.bm.b attr=x value=?x order=1
+@lk.bm.cy app.act.call act=change thing=$lk.bm.b attr=y value=?y order=2
+@lk.lg.bend.move.x core.rule when=$lk.bm.r when=$lk.c.it when=$lk.c.ed when=$lk.bm.k when=$lk.bm.b then=$lk.bm.cx
+@lk.lg.bend.move.y core.rule when=$lk.bm.r when=$lk.c.it when=$lk.c.ed when=$lk.bm.k when=$lk.bm.b then=$lk.bm.cy
+@lk.bm.miss app.act.refuse reason=missing-target
+@lk.bm.r2 app.act.request operation="diagram.link.bend.move" bend=?k
+@lk.bm.k2 ui.diagram.bend edge=?id k=?k
+@lk.lg.bend.move.missing core.rule when=$lk.bm.r2 when=$lk.c.it when=$lk.c.ed not=$lk.bm.k2 then=$lk.bm.miss
+@lk.br.r app.act.request operation="diagram.link.bend.remove" bend=?k
+@lk.br.rm app.act.call act=remove thing=$lk.bm.b order=1
+@lk.lg.bend.remove.one core.rule when=$lk.br.r when=$lk.c.it when=$lk.c.ed when=$lk.bm.k when=$lk.bm.b then=$lk.br.rm
+@lk.lg.bend.remove.missing core.rule when=$lk.br.r when=$lk.c.it when=$lk.c.ed not=$lk.bm.k2 then=$lk.bm.miss
+@lk.br.all app.act.request operation="diagram.link.bend.remove"
+@lk.br.anyk app.act.request bend=?anyk
+@lk.br.each diagram.sketch.bend edge=$lk.c.ed
+@lk.br.rme app.act.call act=remove thing=$lk.br.each order=1
+@lk.lg.bend.remove.all core.rule when=$lk.br.all when=$lk.c.it when=$lk.c.ed when=$lk.br.each not=$lk.br.anyk then=$lk.br.rme
+
+# ---- Reversing a link also swaps its sides, marks and free ends, and passes its bends the other way ----
+@lk.rv.r app.act.request operation="diagram.link.reverse"
+@lk.rv.side.a.has w.diagram.edge code=?id diagram.sketch.from_side=?v
+@lk.rv.side.a.lack w.diagram.edge code=?id diagram.sketch.to_side=?anyv
+@lk.rv.side.a.copy app.act.call act=change thing=$lk.c.ed attr=diagram.sketch.to_side value=?v order=3
+@lk.rv.side.a.reset app.act.call act=change thing=$lk.c.ed attr=diagram.sketch.from_side value=auto order=3
+@lk.lg.reverse.side.a core.rule when=$lk.rv.r when=$lk.c.it when=$lk.c.ed when=$lk.rv.side.a.has then=$lk.rv.side.a.copy
+@lk.lg.reverse.side.a.alone core.rule when=$lk.rv.r when=$lk.c.it when=$lk.c.ed when=$lk.rv.side.a.has not=$lk.rv.side.a.lack then=$lk.rv.side.a.reset
+@lk.rv.side.b.has w.diagram.edge code=?id diagram.sketch.to_side=?v
+@lk.rv.side.b.lack w.diagram.edge code=?id diagram.sketch.from_side=?anyv
+@lk.rv.side.b.copy app.act.call act=change thing=$lk.c.ed attr=diagram.sketch.from_side value=?v order=3
+@lk.rv.side.b.reset app.act.call act=change thing=$lk.c.ed attr=diagram.sketch.to_side value=auto order=3
+@lk.lg.reverse.side.b core.rule when=$lk.rv.r when=$lk.c.it when=$lk.c.ed when=$lk.rv.side.b.has then=$lk.rv.side.b.copy
+@lk.lg.reverse.side.b.alone core.rule when=$lk.rv.r when=$lk.c.it when=$lk.c.ed when=$lk.rv.side.b.has not=$lk.rv.side.b.lack then=$lk.rv.side.b.reset
+@lk.rv.mark.a.has w.diagram.edge code=?id diagram.sketch.head=?v
+@lk.rv.mark.a.lack w.diagram.edge code=?id diagram.sketch.tail=?anyv
+@lk.rv.mark.a.copy app.act.call act=change thing=$lk.c.ed attr=diagram.sketch.tail value=?v order=3
+@lk.rv.mark.a.reset app.act.call act=change thing=$lk.c.ed attr=diagram.sketch.head value=arrow order=3
+@lk.lg.reverse.mark.a core.rule when=$lk.rv.r when=$lk.c.it when=$lk.c.ed when=$lk.rv.mark.a.has then=$lk.rv.mark.a.copy
+@lk.lg.reverse.mark.a.alone core.rule when=$lk.rv.r when=$lk.c.it when=$lk.c.ed when=$lk.rv.mark.a.has not=$lk.rv.mark.a.lack then=$lk.rv.mark.a.reset
+@lk.rv.mark.b.has w.diagram.edge code=?id diagram.sketch.tail=?v
+@lk.rv.mark.b.lack w.diagram.edge code=?id diagram.sketch.head=?anyv
+@lk.rv.mark.b.copy app.act.call act=change thing=$lk.c.ed attr=diagram.sketch.head value=?v order=3
+@lk.rv.mark.b.reset app.act.call act=change thing=$lk.c.ed attr=diagram.sketch.tail value=arrow order=3
+@lk.lg.reverse.mark.b core.rule when=$lk.rv.r when=$lk.c.it when=$lk.c.ed when=$lk.rv.mark.b.has then=$lk.rv.mark.b.copy
+@lk.lg.reverse.mark.b.alone core.rule when=$lk.rv.r when=$lk.c.it when=$lk.c.ed when=$lk.rv.mark.b.has not=$lk.rv.mark.b.lack then=$lk.rv.mark.b.reset
+@lk.rv.free.a.has w.diagram.edge code=?id diagram.sketch.from_free=?v
+@lk.rv.free.a.lack w.diagram.edge code=?id diagram.sketch.to_free=?anyv
+@lk.rv.free.a.copy app.act.call act=change thing=$lk.c.ed attr=diagram.sketch.to_free value=?v order=3
+@lk.rv.free.a.reset app.act.call act=change thing=$lk.c.ed attr=diagram.sketch.from_free value=false order=3
+@lk.lg.reverse.free.a core.rule when=$lk.rv.r when=$lk.c.it when=$lk.c.ed when=$lk.rv.free.a.has then=$lk.rv.free.a.copy
+@lk.lg.reverse.free.a.alone core.rule when=$lk.rv.r when=$lk.c.it when=$lk.c.ed when=$lk.rv.free.a.has not=$lk.rv.free.a.lack then=$lk.rv.free.a.reset
+@lk.rv.free.b.has w.diagram.edge code=?id diagram.sketch.to_free=?v
+@lk.rv.free.b.lack w.diagram.edge code=?id diagram.sketch.from_free=?anyv
+@lk.rv.free.b.copy app.act.call act=change thing=$lk.c.ed attr=diagram.sketch.from_free value=?v order=3
+@lk.rv.free.b.reset app.act.call act=change thing=$lk.c.ed attr=diagram.sketch.to_free value=false order=3
+@lk.lg.reverse.free.b core.rule when=$lk.rv.r when=$lk.c.it when=$lk.c.ed when=$lk.rv.free.b.has then=$lk.rv.free.b.copy
+@lk.lg.reverse.free.b.alone core.rule when=$lk.rv.r when=$lk.c.it when=$lk.c.ed when=$lk.rv.free.b.has not=$lk.rv.free.b.lack then=$lk.rv.free.b.reset
+@lk.rv.from_x.has w.diagram.edge code=?id diagram.sketch.from_x=?v
+@lk.rv.from_x.copy app.act.call act=change thing=$lk.c.ed attr=diagram.sketch.to_x value=?v order=3
+@lk.lg.reverse.from_x core.rule when=$lk.rv.r when=$lk.c.it when=$lk.c.ed when=$lk.rv.from_x.has then=$lk.rv.from_x.copy
+@lk.rv.to_x.has w.diagram.edge code=?id diagram.sketch.to_x=?v
+@lk.rv.to_x.copy app.act.call act=change thing=$lk.c.ed attr=diagram.sketch.from_x value=?v order=3
+@lk.lg.reverse.to_x core.rule when=$lk.rv.r when=$lk.c.it when=$lk.c.ed when=$lk.rv.to_x.has then=$lk.rv.to_x.copy
+@lk.rv.from_y.has w.diagram.edge code=?id diagram.sketch.from_y=?v
+@lk.rv.from_y.copy app.act.call act=change thing=$lk.c.ed attr=diagram.sketch.to_y value=?v order=3
+@lk.lg.reverse.from_y core.rule when=$lk.rv.r when=$lk.c.it when=$lk.c.ed when=$lk.rv.from_y.has then=$lk.rv.from_y.copy
+@lk.rv.to_y.has w.diagram.edge code=?id diagram.sketch.to_y=?v
+@lk.rv.to_y.copy app.act.call act=change thing=$lk.c.ed attr=diagram.sketch.from_y value=?v order=3
+@lk.lg.reverse.to_y core.rule when=$lk.rv.r when=$lk.c.it when=$lk.c.ed when=$lk.rv.to_y.has then=$lk.rv.to_y.copy
+@lk.rv.bend diagram.sketch.bend edge=$lk.c.ed seq=?o
+@lk.rv.neg core.calc out=?no fn=sub args=0 args=?o
+@lk.rv.bc app.act.call act=change thing=$lk.rv.bend attr=seq value=?no order=3
+@lk.lg.reverse.bends core.rule when=$lk.rv.r when=$lk.c.it when=$lk.c.ed when=$lk.rv.bend with=$lk.rv.neg then=$lk.rv.bc
+
+# ---- What a reader observes of a link's geometry ----
+@lk.o.fs w.diagram.edge code=?id diagram.sketch.from_side=?v
+@lk.o.fs.o app.observe.input id=?id key=fromSide value=?v
+@lk.observe.link.from.side core.rule when=$lk.o.fs then=$lk.o.fs.o
+@lk.o.ts w.diagram.edge code=?id diagram.sketch.to_side=?v
+@lk.o.ts.o app.observe.input id=?id key=toSide value=?v
+@lk.observe.link.to.side core.rule when=$lk.o.ts then=$lk.o.ts.o
+@lk.o.hd w.diagram.edge code=?id diagram.sketch.head=?v
+@lk.o.hd.o app.observe.input id=?id key=head value=?v
+@lk.observe.link.head core.rule when=$lk.o.hd then=$lk.o.hd.o
+@lk.o.tl w.diagram.edge code=?id diagram.sketch.tail=?v
+@lk.o.tl.o app.observe.input id=?id key=tail value=?v
+@lk.observe.link.tail core.rule when=$lk.o.tl then=$lk.o.tl.o
+@lk.o.la w.diagram.edge code=?id diagram.sketch.label_at=?v
+@lk.o.la.o app.observe.input id=?id key=labelPosition value=?v
+@lk.observe.link.label.position core.rule when=$lk.o.la then=$lk.o.la.o
+@lk.o.ff w.diagram.edge code=?id diagram.sketch.from_free=true diagram.sketch.from_x=?x diagram.sketch.from_y=?y
+@lk.o.ff.o app.observe.input id=?id key=fromFree value=true
+@lk.o.ffx app.observe.input id=?id key=fromX value=?x
+@lk.o.ffy app.observe.input id=?id key=fromY value=?y
+@lk.observe.link.from.free core.rule when=$lk.o.ff then=$lk.o.ff.o
+@lk.observe.link.from.x core.rule when=$lk.o.ff then=$lk.o.ffx
+@lk.observe.link.from.y core.rule when=$lk.o.ff then=$lk.o.ffy
+@lk.o.tf w.diagram.edge code=?id diagram.sketch.to_free=true diagram.sketch.to_x=?x diagram.sketch.to_y=?y
+@lk.o.tf.o app.observe.input id=?id key=toFree value=true
+@lk.o.tfx app.observe.input id=?id key=toX value=?x
+@lk.o.tfy app.observe.input id=?id key=toY value=?y
+@lk.observe.link.to.free core.rule when=$lk.o.tf then=$lk.o.tf.o
+@lk.observe.link.to.x core.rule when=$lk.o.tf then=$lk.o.tfx
+@lk.observe.link.to.y core.rule when=$lk.o.tf then=$lk.o.tfy
+# Each bend as "k x y" (k from 1, in order along the link).
+@lk.o.bd ui.diagram.bend edge=?id k=?k x=?x y=?y
+@lk.o.bd.v core.calc out=?v fn=concat args=?k args=" " args=?x args=" " args=?y
+@lk.o.bd.o app.observe.input id=?id key=bends value=?v
+@lk.observe.link.bends core.rule when=$lk.o.bd with=$lk.o.bd.v then=$lk.o.bd.o
+@lk.o.mw ui.diagram.mway edge=?id way=?v
+@lk.o.mw.o app.observe.input id=?id key=way value=?v
+@lk.observe.link.manual.way core.rule when=$lk.o.mw then=$lk.o.mw.o

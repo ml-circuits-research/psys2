@@ -746,11 +746,12 @@
 @rt.eq core.check fn=eq args=?ua args=?ub
 @rt.ga ui.diagram.mpos node=?a group=?ua
 @rt.out.inside ui.diagram.route edge=?e way=inside a=?a b=?b la=0 lb=0
-@dg.route.inside core.rule when=$rt.e when=$rt.a when=$rt.b when=$rt.ua when=$rt.ub when=$rt.ga if=$rt.eq then=$rt.out.inside
+@rt.man ui.diagram.manual edge=?e
+@dg.route.inside core.rule when=$rt.e when=$rt.a when=$rt.b when=$rt.ua when=$rt.ub when=$rt.ga if=$rt.eq not=$rt.man then=$rt.out.inside
 @rt.self core.check fn=eq args=?a args=?b
 @rt.fr ui.diagram.unitof node=?a unit=?a
 @rt.out.self ui.diagram.route edge=?e way=self a=?a b=?b la=0 lb=0
-@dg.route.self core.rule when=$rt.e when=$rt.a when=$rt.b when=$rt.fr if=$rt.self then=$rt.out.self
+@dg.route.self core.rule when=$rt.e when=$rt.a when=$rt.b when=$rt.fr if=$rt.self not=$rt.man then=$rt.out.self
 @rt.pa ui.diagram.flow unit=?ua
 @rt.pb ui.diagram.flow unit=?ub
 @rt.out.direct ui.diagram.route edge=?e way=direct a=?a b=?b la=0 lb=0 ua=?ua ub=?ub
@@ -1182,12 +1183,14 @@
 @dt.s core.calc out=?src fn=concat args=?e args=".head"
 @dt.x core.calc out=?bx fn=add args=?x args=?dx
 @dt.y core.calc out=?by fn=add args=?y args=?dy
+@dt.alt ui.diagram.altmark edge=?e at=head
+@dtt.alt ui.diagram.altmark edge=?e at=tail
 @dt.out ui.diagram.draw part=?e source=?src slot=?e order=2 z=1 shape=triangle x=?bx y=?by w=?w h=?h cx=0 cy=0 tx=0 ty=0 scale=1 side=left
 @dt.o ui.diagram.orient source=?src pointing=?pt
 @dt.f ui.diagram.fill source=?src part=?e fill=?f
-@dg.draw.head core.rule when=$dt.t when=$dt.b when=$dt.c not=$dt.none not=$dt.back with=$dt.s with=$dt.x with=$dt.y then=$dt.out
-@dg.orient.head core.rule when=$dt.t when=$dt.b when=$dt.c not=$dt.none not=$dt.back with=$dt.s with=$dt.x with=$dt.y then=$dt.o
-@dg.fill.head core.rule when=$dt.t when=$dt.b when=$dt.c not=$dt.none not=$dt.back with=$dt.s with=$dt.x with=$dt.y then=$dt.f
+@dg.draw.head core.rule when=$dt.t when=$dt.b when=$dt.c not=$dt.none not=$dt.back not=$dt.alt with=$dt.s with=$dt.x with=$dt.y then=$dt.out
+@dg.orient.head core.rule when=$dt.t when=$dt.b when=$dt.c not=$dt.none not=$dt.back not=$dt.alt with=$dt.s with=$dt.x with=$dt.y then=$dt.o
+@dg.fill.head core.rule when=$dt.t when=$dt.b when=$dt.c not=$dt.none not=$dt.back not=$dt.alt with=$dt.s with=$dt.x with=$dt.y then=$dt.f
 @dtt.t ui.diagram.tip edge=?e at=tail x=?x y=?y pointing=?pt
 @dtt.both w.diagram.edge code=?e direction=both
 @dtt.back w.diagram.edge code=?e direction=back
@@ -1195,12 +1198,12 @@
 @dtt.out ui.diagram.draw part=?e source=?src slot=?e order=2 z=1 shape=triangle x=?bx y=?by w=?w h=?h cx=0 cy=0 tx=0 ty=0 scale=1 side=left
 @dtt.o ui.diagram.orient source=?src pointing=?pt
 @dtt.f ui.diagram.fill source=?src part=?e fill=?f
-@dg.draw.tail core.rule when=$dtt.t when=$dtt.both when=$dt.b when=$dt.c with=$dtt.s with=$dt.x with=$dt.y then=$dtt.out
-@dg.draw.tail.back core.rule when=$dtt.t when=$dtt.back when=$dt.b when=$dt.c with=$dtt.s with=$dt.x with=$dt.y then=$dtt.out
-@dg.orient.tail core.rule when=$dtt.t when=$dtt.both when=$dt.b when=$dt.c with=$dtt.s with=$dt.x with=$dt.y then=$dtt.o
-@dg.orient.tail.back core.rule when=$dtt.t when=$dtt.back when=$dt.b when=$dt.c with=$dtt.s with=$dt.x with=$dt.y then=$dtt.o
-@dg.fill.tail core.rule when=$dtt.t when=$dtt.both when=$dt.b when=$dt.c with=$dtt.s with=$dt.x with=$dt.y then=$dtt.f
-@dg.fill.tail.back core.rule when=$dtt.t when=$dtt.back when=$dt.b when=$dt.c with=$dtt.s with=$dt.x with=$dt.y then=$dtt.f
+@dg.draw.tail core.rule when=$dtt.t when=$dtt.both when=$dt.b when=$dt.c not=$dtt.alt with=$dtt.s with=$dt.x with=$dt.y then=$dtt.out
+@dg.draw.tail.back core.rule when=$dtt.t when=$dtt.back when=$dt.b when=$dt.c not=$dtt.alt with=$dtt.s with=$dt.x with=$dt.y then=$dtt.out
+@dg.orient.tail core.rule when=$dtt.t when=$dtt.both when=$dt.b when=$dt.c not=$dtt.alt with=$dtt.s with=$dt.x with=$dt.y then=$dtt.o
+@dg.orient.tail.back core.rule when=$dtt.t when=$dtt.back when=$dt.b when=$dt.c not=$dtt.alt with=$dtt.s with=$dt.x with=$dt.y then=$dtt.o
+@dg.fill.tail core.rule when=$dtt.t when=$dtt.both when=$dt.b when=$dt.c not=$dtt.alt with=$dtt.s with=$dt.x with=$dt.y then=$dtt.f
+@dg.fill.tail.back core.rule when=$dtt.t when=$dtt.back when=$dt.b when=$dt.c not=$dtt.alt with=$dtt.s with=$dt.x with=$dt.y then=$dtt.f
 
 # An edge's label beside the line where it turns towards its target (point 11).
 @del.e w.diagram.edge code=?e label=?t
@@ -1211,8 +1214,10 @@
 @del.out ui.diagram.draw part=?e source=?src slot=?e order=4 z=1 shape=text text=?t x=?lx y=?ly w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left font=12
 @del.ink ui.diagram.pagecol key=label rgb=?lc
 @del.fill ui.diagram.fill source=?src part=?e fill=?lc
-@dg.draw.edge.label core.rule when=$del.e when=$del.p with=$del.s with=$del.x with=$del.y then=$del.out
-@dg.fill.edge.label core.rule when=$del.e when=$del.p when=$del.ink with=$del.s with=$del.x with=$del.y then=$del.fill
+# A label placed at a fraction of its line is drawn by link-geometry.sop.
+@del.at w.diagram.edge code=?e diagram.sketch.label_at=?anyt
+@dg.draw.edge.label core.rule when=$del.e when=$del.p not=$del.at with=$del.s with=$del.x with=$del.y then=$del.out
+@dg.fill.edge.label core.rule when=$del.e when=$del.p when=$del.ink not=$del.at with=$del.s with=$del.x with=$del.y then=$del.fill
 
 # Codes, while the view shows them (or a standing preference keeps them on: preferences.sop): over the top left of
 # each node and group, and by each edge's label place.
