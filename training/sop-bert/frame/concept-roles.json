@@ -1,0 +1,478 @@
+{
+ "format": "psys2.frame-concept-roles/1",
+ "doc": "How an official inventory concept (the `concept` field of a key in official-dataset/inventory.json, never the key name) becomes a role of the domain-general semantic frame (specs/semantic-frame.md). `attribute` keeps the concept as a frame attribute concept (renamed by `as`). `tool` marks concepts that name a tool parameter rather than a meaning: rows using them are converted with the role listed as unconverted.",
+ "roles": {
+  "spatial_relation": {
+   "role": "spatial.relation"
+  },
+  "relation": {
+   "role": "spatial.relation"
+  },
+  "region": {
+   "role": "spatial.region"
+  },
+  "reference": {
+   "role": "reference",
+   "byKey": {
+    "anchor": "spatial.landmark",
+    "relation_anchor": "time.landmark",
+    "order_anchor": "spatial.landmark",
+    "owner": "possessor",
+    "from": "attribute",
+    "to": "attribute",
+    "members": "attribute",
+    "calendar": "attribute",
+    "room": "attribute",
+    "ids": "theme.code"
+   }
+  },
+  "time_relation": {
+   "role": "time.relation"
+  },
+  "order_relation": {
+   "role": "spatial.relation"
+  },
+  "direction": {
+   "role": "motion.direction",
+   "attributeWhenNotMotion": true
+  },
+  "distanceGrade": {
+   "role": "spatial.distance"
+  },
+  "measure": {
+   "role": "spatial.distance",
+   "byKey": {
+    "words": "attribute"
+   },
+   "as": "length"
+  },
+  "count": {
+   "role": "theme.quantity"
+  },
+  "n": {
+   "role": "theme.quantity"
+  },
+  "id": {
+   "role": "theme.code"
+  },
+  "ids": {
+   "role": "theme.code"
+  },
+  "ordinal": {
+   "role": "theme.ordinal"
+  },
+  "day": {
+   "role": "time.day"
+  },
+  "time": {
+   "role": "time.start",
+   "byKey": {
+    "end": "time.end"
+   }
+  },
+  "start": {
+   "role": "time.start"
+  },
+  "duration": {
+   "role": "time.duration",
+   "byType": {
+    "page": "attribute",
+    "face": "attribute"
+   }
+  },
+  "delta": {
+   "role": "time.shift"
+  },
+  "free_search": {
+   "role": "time.start"
+  },
+  "person": {
+   "role": "attribute",
+   "as": "participant"
+  },
+  "participants": {
+   "role": "attribute",
+   "as": "participant"
+  },
+  "color": {
+   "role": "attribute",
+   "as": "colour"
+  },
+  "colour": {
+   "role": "attribute",
+   "as": "colour"
+  },
+  "text.colour": {
+   "role": "attribute",
+   "as": "text_colour"
+  },
+  "colour.by": {
+   "role": "attribute",
+   "as": "colour_by"
+  },
+  "name": {
+   "role": "attribute",
+   "as": "name"
+  },
+  "label": {
+   "role": "attribute",
+   "as": "label"
+  },
+  "title": {
+   "role": "attribute",
+   "as": "name"
+  },
+  "kind": {
+   "role": "attribute",
+   "as": "kind"
+  },
+  "shape": {
+   "role": "attribute",
+   "as": "shape"
+  },
+  "diagram_kind": {
+   "role": "attribute",
+   "as": "kind"
+  },
+  "type": {
+   "role": "attribute",
+   "as": "kind"
+  },
+  "genre": {
+   "role": "attribute",
+   "as": "kind"
+  },
+  "part_kind": {
+   "role": "attribute",
+   "as": "kind"
+  },
+  "size": {
+   "role": "attribute"
+  },
+  "width": {
+   "role": "attribute"
+  },
+  "height": {
+   "role": "attribute"
+  },
+  "scale": {
+   "role": "attribute",
+   "as": "size"
+  },
+  "length": {
+   "role": "attribute"
+  },
+  "x": {
+   "role": "attribute",
+   "as": "x"
+  },
+  "y": {
+   "role": "attribute",
+   "as": "y"
+  },
+  "layout": {
+   "role": "attribute"
+  },
+  "route": {
+   "role": "attribute"
+  },
+  "spacing": {
+   "role": "attribute"
+  },
+  "theme": {
+   "role": "attribute",
+   "as": "style"
+  },
+  "style": {
+   "role": "attribute"
+  },
+  "arrow": {
+   "role": "attribute"
+  },
+  "connect.pattern": {
+   "role": "attribute",
+   "as": "pattern"
+  },
+  "effect": {
+   "role": "attribute"
+  },
+  "outline": {
+   "role": "attribute"
+  },
+  "role": {
+   "role": "attribute"
+  },
+  "value": {
+   "role": "attribute"
+  },
+  "font.size": {
+   "role": "attribute",
+   "as": "font_size"
+  },
+  "font.weight": {
+   "role": "attribute",
+   "as": "font_weight"
+  },
+  "align": {
+   "role": "attribute"
+  },
+  "align.edge": {
+   "role": "goal",
+   "as": "align"
+  },
+  "distribute.axis": {
+   "role": "goal",
+   "as": "distribute"
+  },
+  "legend": {
+   "role": "attribute"
+  },
+  "gridlines": {
+   "role": "attribute"
+  },
+  "toggle": {
+   "role": "attribute",
+   "as": "toggle",
+   "keyQualifies": true
+  },
+  "sort": {
+   "role": "attribute"
+  },
+  "axis.max": {
+   "role": "attribute"
+  },
+  "axis.min": {
+   "role": "attribute"
+  },
+  "axis.x.title": {
+   "role": "attribute"
+  },
+  "axis.y.title": {
+   "role": "attribute"
+  },
+  "data_source": {
+   "role": "attribute",
+   "as": "data"
+  },
+  "literal_data": {
+   "role": "attribute",
+   "as": "data"
+  },
+  "quantity": {
+   "role": "attribute",
+   "as": "values",
+   "byType": {
+    "room": "attribute"
+   }
+  },
+  "values": {
+   "role": "attribute"
+  },
+  "labels": {
+   "role": "attribute"
+  },
+  "step.numbers": {
+   "role": "attribute",
+   "as": "numbering"
+  },
+  "expression": {
+   "role": "attribute"
+  },
+  "preset": {
+   "role": "goal",
+   "as": "look"
+  },
+  "base": {
+   "role": "goal",
+   "as": "look"
+  },
+  "characterKind": {
+   "role": "attribute",
+   "as": "kind"
+  },
+  "variant": {
+   "role": "attribute"
+  },
+  "place": {
+   "role": "spatial.region",
+   "byType": {
+    "room": "attribute"
+   }
+  },
+  "property": {
+   "role": "attribute"
+  },
+  "literal_text": {
+   "role": "attribute",
+   "as": "content"
+  },
+  "literal_list": {
+   "role": "attribute",
+   "as": "content"
+  },
+  "literal_table": {
+   "role": "attribute",
+   "as": "content"
+  },
+  "text": {
+   "role": "attribute",
+   "as": "content"
+  },
+  "topic": {
+   "role": "attribute",
+   "as": "topic"
+  },
+  "notes": {
+   "role": "attribute",
+   "as": "content"
+  },
+  "tone": {
+   "role": "manner"
+  },
+  "format": {
+   "role": "attribute"
+  },
+  "list_kind": {
+   "role": "attribute",
+   "as": "kind"
+  },
+  "heading_level": {
+   "role": "attribute",
+   "as": "level"
+  },
+  "level": {
+   "role": "attribute"
+  },
+  "words": {
+   "role": "attribute",
+   "as": "length"
+  },
+  "chapters": {
+   "role": "theme.quantity"
+  },
+  "capacity": {
+   "role": "attribute"
+  },
+  "timezone": {
+   "role": "attribute"
+  },
+  "after": {
+   "role": "spatial.relation"
+  },
+  "mode": {
+   "tool": true
+  },
+  "attrs": {
+   "tool": true
+  },
+  "enabled": {
+   "tool": true
+  },
+  "checked": {
+   "tool": true
+  },
+  "items": {
+   "tool": true
+  },
+  "header": {
+   "tool": true
+  },
+  "rows": {
+   "tool": true
+  },
+  "blocks": {
+   "tool": true
+  },
+  "mark": {
+   "tool": true
+  },
+  "parent": {
+   "tool": true
+  },
+  "at": {
+   "tool": true
+  },
+  "from": {
+   "tool": true
+  },
+  "to": {
+   "tool": true
+  },
+  "index": {
+   "tool": true
+  },
+  "chart": {
+   "tool": true
+  },
+  "series": {
+   "tool": true
+  },
+  "edges": {
+   "tool": true
+  },
+  "nodes": {
+   "tool": true
+  },
+  "links": {
+   "tool": true
+  },
+  "showLegend": {
+   "tool": true
+  },
+  "showValues": {
+   "tool": true
+  }
+ },
+ "acts": {
+  "make": "make",
+  "change": "change",
+  "place": "place",
+  "remove": "remove",
+  "select": "select",
+  "group": "group",
+  "ungroup": "ungroup",
+  "connect": "connect",
+  "arrange": "arrange",
+  "answer": "answer",
+  "undo": "undo",
+  "redo": "redo",
+  "copy": "copy",
+  "swap": "swap",
+  "show": "show",
+  "merge": "merge",
+  "split": "split",
+  "reverse": "reverse"
+ },
+ "fills": {
+  "written": "name",
+  "context": "anaphora",
+  "description": "description",
+  "all": "population",
+  "previous_reply": "anaphora",
+  "journal_step": "anaphora"
+ },
+ "motionValues": [
+  "up",
+  "down",
+  "left",
+  "right",
+  "closer",
+  "apart",
+  "forward",
+  "backward"
+ ],
+ "vagueCounts": [
+  "some",
+  "few",
+  "a few",
+  "several",
+  "many",
+  "couple",
+  "a couple",
+  "lots",
+  "handful",
+  "a handful",
+  "dozen",
+  "a dozen"
+ ]
+}

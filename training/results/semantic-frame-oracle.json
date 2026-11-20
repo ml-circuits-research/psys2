@@ -1,0 +1,146 @@
+{
+ "drawing": {
+  "keys": {
+   "n": 329,
+   "pass": 102,
+   "partial": 11,
+   "fail": 216
+  },
+  "strict": {
+   "n": 329,
+   "pass": 91,
+   "partial": 6,
+   "fail": 232
+  },
+  "frame": {
+   "n": 329,
+   "pass": 145,
+   "partial": 67,
+   "fail": 117
+  },
+  "frameOverStrict": 54,
+  "strictOverFrame": 0,
+  "frameOverKeys": 43,
+  "keysOverFrame": 0,
+  "frameSteps": {
+   "placement": 12,
+   "full": 290,
+   "split": 12
+  },
+  "framePassUsing": {
+   "split": 9,
+   "placement": 4
+  },
+  "passWithDisclosure": 53,
+  "keysRefusedItems": 96,
+  "disclosedTop": [
+   [
+    "attribute:no-declared-property",
+    95
+   ],
+   [
+    "region:no-declared-region",
+    58
+   ],
+   [
+    "theme:kind-not-declared",
+    53
+   ],
+   [
+    "goal:no-declared-property",
+    24
+   ],
+   [
+    "spatial:undeclared-relation",
+    17
+   ],
+   [
+    "motion:no-declared-property",
+    13
+   ],
+   [
+    "spatial:kind-not-declared",
+    7
+   ],
+   [
+    "clause:discourse-only",
+    5
+   ],
+   [
+    "theme:no-operation-for-act",
+    2
+   ],
+   [
+    "manner:no-declared-objective",
+    2
+   ]
+  ]
+ },
+ "diagram": {
+  "keys": {
+   "n": 333,
+   "pass": 56,
+   "partial": 43,
+   "fail": 234
+  },
+  "strict": {
+   "n": 333,
+   "pass": 47,
+   "partial": 32,
+   "fail": 254
+  },
+  "frame": {
+   "n": 333,
+   "pass": 67,
+   "partial": 44,
+   "fail": 222
+  },
+  "frameOverStrict": 21,
+  "strictOverFrame": 1,
+  "frameOverKeys": 11,
+  "keysOverFrame": 0,
+  "frameSteps": {
+   "full": 195,
+   "kind": 41
+  },
+  "framePassUsing": {
+   "kind": 1
+  },
+  "passWithDisclosure": 30,
+  "keysRefusedItems": 29,
+  "disclosedTop": [
+   [
+    "theme:kind-not-declared",
+    213
+   ],
+   [
+    "attribute:no-declared-property",
+    39
+   ],
+   [
+    "spatial:no-placement-method",
+    10
+   ],
+   [
+    "manner:no-declared-objective",
+    10
+   ],
+   [
+    "region:no-declared-region",
+    9
+   ],
+   [
+    "theme:no-operation-for-act",
+    9
+   ],
+   [
+    "motion:no-declared-property",
+    8
+   ],
+   [
+    "clause:discourse-only",
+    7
+   ]
+  ]
+ }
+}

@@ -17,6 +17,7 @@ def val(v):
     except Exception: return v
 
 def lem(w):
+    if isinstance(w, list): w = ' '.join(map(str, w))  # a landmark given as several objects
     w = (w or '').lower().strip()
     w = re.sub(r'^(the|a|an)\s+', '', w)
     for suf, rep in (('ies', 'y'), ('ses', 's'), ('es', 'e'), ('s', '')):
