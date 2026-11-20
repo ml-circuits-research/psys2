@@ -52,9 +52,9 @@ const GRAPH_INTERFACE={
 export async function createVerifiedReaderProvider({
  manifestJSON,manifestSha256,tokenizerArtifact,bindingsArtifact,readArtifact,backend,
  createTokenizer,getContext,recordDiagnostics,runtimeIdentity,verifyHostRuntime,
- maxTotalBytes=268435456,maxJSONBytes=4000000
+ maxTotalBytes=268435456,maxJSONBytes=8000000
 }={}){
- if(!scalar(manifestJSON)||!hash(manifestSha256)||![readArtifact,createTokenizer,getContext,recordDiagnostics,verifyHostRuntime].every(f=>typeof f==='function')||!object(backend)||typeof backend.createSession!=='function'||typeof backend.makeTensor!=='function'||!object(runtimeIdentity)||!Object.keys(runtimeIdentity).length||![maxTotalBytes,maxJSONBytes].every(n=>Number.isSafeInteger(n)&&n>0)||maxTotalBytes>1073741824||maxJSONBytes>4000000)throw Error('invalid-verified-provider-options');
+ if(!scalar(manifestJSON)||!hash(manifestSha256)||![readArtifact,createTokenizer,getContext,recordDiagnostics,verifyHostRuntime].every(f=>typeof f==='function')||!object(backend)||typeof backend.createSession!=='function'||typeof backend.makeTensor!=='function'||!object(runtimeIdentity)||!Object.keys(runtimeIdentity).length||![maxTotalBytes,maxJSONBytes].every(n=>Number.isSafeInteger(n)&&n>0)||maxTotalBytes>1073741824||maxJSONBytes>8000000)throw Error('invalid-verified-provider-options');
  const manifestBytes=utf8(manifestJSON);
  if(manifestBytes.byteLength>maxJSONBytes||await digest(manifestBytes)!==manifestSha256)throw Error('manifest-hash-mismatch');
  const m=copyHostData(JSON.parse(manifestJSON),{maxBytes:maxJSONBytes});

@@ -9,7 +9,7 @@ import { executeHistoryRequest } from './history-execution.mjs?v=ce374dd459';
 import { executeNativeQuery } from './native-query-execution.mjs?v=951e826d03';
 import { executeNativeCapability } from './capability-plan-execution.mjs?v=d2f358a59e';
 import { executionValueSource } from './execution-policy.mjs?v=c5b63898f5';
-import { inspectCachedExecutionSource } from './execution-world-inspection.mjs?v=147a3d1166';
+import { inspectCachedExecutionSource } from './execution-world-inspection.mjs?v=01b6de8856';
 import { World, str } from '../vendor/sopworld/sopworld.mjs?v=b665fdbe3d';
 import SOURCE from './new-engine-source.mjs?v=6f84387b01';
 let knowledge;

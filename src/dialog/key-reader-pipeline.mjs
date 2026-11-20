@@ -13,7 +13,7 @@ const same=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
 const modelFields=['sha256','tokenizerSha256','codecSha256','decoderVersion'];
 const modelIdentity=x=>{if(!x||Object.keys(x).some(k=>!modelFields.includes(k))||!modelFields.slice(0,3).every(k=>hash(x[k]))||!Number.isSafeInteger(x.decoderVersion)||x.decoderVersion<1)throw Error('invalid-model-provenance');return Object.fromEntries(modelFields.map(k=>[k,x[k]]));};
 export async function createKeyReaderPipeline({cutter,reader,getContext,cutterModel,readerModel,bindingsJSON,bindingsSha256,maxText=16384,maxRequests=32,maxBytes=4000000,budget=200000,decoderBudget=200000}={}){
- if(typeof getContext!=='function'||typeof bindingsJSON!=='string'||bindingsJSON.length>4000000||!hash(bindingsSha256)||![maxText,maxRequests,maxBytes,budget,decoderBudget].every(n=>Number.isSafeInteger(n)&&n>0)||maxRequests>32||maxBytes>4000000)throw Error('invalid-pipeline-options');
+ if(typeof getContext!=='function'||typeof bindingsJSON!=='string'||bindingsJSON.length>8000000||!hash(bindingsSha256)||![maxText,maxRequests,maxBytes,budget,decoderBudget].every(n=>Number.isSafeInteger(n)&&n>0)||maxRequests>32||maxBytes>4000000)throw Error('invalid-pipeline-options');
  const identities={cutter:modelIdentity(cutterModel),reader:modelIdentity(readerModel)};
  if(await digest(bindingsJSON)!==bindingsSha256)throw Error('binding-hash-mismatch');
  const bindings=freezeHostData(JSON.parse(bindingsJSON),{maxBytes,maxNodes:BINDING_NODES});

@@ -1,11 +1,11 @@
 // Source-only two-model proposals. No parser fallback or execution admission.
 import {readReaderSource} from './reader-source.mjs?v=83e0720174';
 import {copyHostData,freezeHostData} from '../../worlds/native-tool-host.mjs?v=2e1dddf8c7';
-import {bridgeRawStructure,RAW_STRUCTURAL_FORMAT,BINDING_NODES} from './raw-structural-bridge.mjs?v=e8580d1694';
+import {bridgeRawStructure,RAW_STRUCTURAL_FORMAT,BINDING_NODES} from './raw-structural-bridge.mjs?v=0a041fae4e';
 import {comparativeSteps} from './comparative-projection.mjs?v=674cebc5f1';
 import {referenceProjection} from './reference-projection.mjs?v=8730d4822b';
 import {completeBindings} from './declared-bindings.mjs?v=caf4b64f1c';
-import {declaredRawReadings} from './partial-admission.mjs?v=24cf520120';
+import {declaredRawReadings} from './partial-admission.mjs?v=10524850bd';
 import {declaredValueReadings} from './declared-value-readings.mjs?v=3d006a381b';
 const hash=x=>typeof x==='string'&&/^[a-f0-9]{64}$/.test(x);
 const digest=async x=>Array.from(new Uint8Array(await globalThis.crypto.subtle.digest('SHA-256',new TextEncoder().encode(x))),b=>b.toString(16).padStart(2,'0')).join('');
@@ -13,7 +13,7 @@ const same=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
 const modelFields=['sha256','tokenizerSha256','codecSha256','decoderVersion'];
 const modelIdentity=x=>{if(!x||Object.keys(x).some(k=>!modelFields.includes(k))||!modelFields.slice(0,3).every(k=>hash(x[k]))||!Number.isSafeInteger(x.decoderVersion)||x.decoderVersion<1)throw Error('invalid-model-provenance');return Object.fromEntries(modelFields.map(k=>[k,x[k]]));};
 export async function createKeyReaderPipeline({cutter,reader,getContext,cutterModel,readerModel,bindingsJSON,bindingsSha256,maxText=16384,maxRequests=32,maxBytes=4000000,budget=200000,decoderBudget=200000}={}){
- if(typeof getContext!=='function'||typeof bindingsJSON!=='string'||bindingsJSON.length>4000000||!hash(bindingsSha256)||![maxText,maxRequests,maxBytes,budget,decoderBudget].every(n=>Number.isSafeInteger(n)&&n>0)||maxRequests>32||maxBytes>4000000)throw Error('invalid-pipeline-options');
+ if(typeof getContext!=='function'||typeof bindingsJSON!=='string'||bindingsJSON.length>8000000||!hash(bindingsSha256)||![maxText,maxRequests,maxBytes,budget,decoderBudget].every(n=>Number.isSafeInteger(n)&&n>0)||maxRequests>32||maxBytes>4000000)throw Error('invalid-pipeline-options');
  const identities={cutter:modelIdentity(cutterModel),reader:modelIdentity(readerModel)};
  if(await digest(bindingsJSON)!==bindingsSha256)throw Error('binding-hash-mismatch');
  const bindings=freezeHostData(JSON.parse(bindingsJSON),{maxBytes,maxNodes:BINDING_NODES});

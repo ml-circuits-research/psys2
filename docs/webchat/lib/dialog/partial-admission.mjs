@@ -5,7 +5,7 @@
 // defaults, admitted act classes, reply wording and the run-time fallback ladder (interpretation-policy.sop), the
 // admission decision (reader-admission-policy.sop) and every binding (the deployed binding table). Nothing here names a
 // word, a sentence, a tool or a world.
-import {bridgeRawStructure,pruneLabel} from './raw-structural-bridge.mjs?v=e8580d1694';
+import {bridgeRawStructure,pruneLabel} from './raw-structural-bridge.mjs?v=0a041fae4e';
 import {decodeModelGraphs} from './model-graph-decoder.mjs?v=8f5eac6b37';
 import {comparativeSteps} from './comparative-projection.mjs?v=674cebc5f1';
 import {referenceProjection} from './reference-projection.mjs?v=8730d4822b';

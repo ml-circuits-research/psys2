@@ -82,7 +82,8 @@ def pad_batch(rows,device):
     L=max(r['input_ids'].shape[0]for r in rows);B=len(rows);K=rows[0]['bio'].shape[0]
     ids=torch.zeros((B,L),dtype=torch.long);mask=torch.zeros((B,L),dtype=torch.long);bio=torch.full((B,K,L),-100,dtype=torch.long);source=torch.zeros((B,L),dtype=torch.bool)
     for i,r in enumerate(rows):
-        n=r['input_ids'].shape[0];ids[i,:n]=r['input_ids'];mask[i,:n]=r['attention_mask'];bio[i,:,:n]=r['bio'];source[i,:n]=r['source_mask']
+        n=r['input_ids'].shape[0];ids[i,:n]=r['input_ids'];mask[i,:n]=r['attention_mask'];bio[i,:,:r['bio'].shape[1]]=r['bio']
+        if 'source_mask' in r:source[i,:r['source_mask'].shape[0]]=r['source_mask']
     return ids.to(device,non_blocking=True),mask.to(device,non_blocking=True),bio.to(device,non_blocking=True),source.to(device,non_blocking=True)
 
 def batches(rows,size,bucket,rng):
