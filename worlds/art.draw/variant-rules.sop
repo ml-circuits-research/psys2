@@ -11,8 +11,10 @@
 @vr.si k.objects.stand_in name=?v drawing=?d
 @vr.known k.objects.object name=?d
 @vr.own k.objects.object name=?v
+# A person kind with a stand-in (a baby drawn as a person) is made by the person rules, with its look (person-rules.sop).
+@vr.person k.people.kind name=?v
 @vr.as.o ui.draw.as kind=?v as=?d
-@variant.as core.rule when=$vr.req when=$vr.si not=$vr.own then=$vr.as.o
+@variant.as core.rule when=$vr.req when=$vr.si not=$vr.own not=$vr.person then=$vr.as.o
 @vr.t ui.draw.target x=?x y=?y size=?s
 @vr.next ui.draw.next top=?top
 @vr.nz core.calc out=?nz fn=add args=?top args=1
@@ -22,17 +24,17 @@
 @vr.ss core.calc out=?ss fn=mul args=?s args=?k
 @vr.make app.act.call act=make kind=w.drawing.object code=?code drawing=?d x=?x y=?y size=?s z=?nz name=?v order=1 ref=new.object
 @vr.make.s app.act.call act=make kind=w.drawing.object code=?code drawing=?d x=?x y=?y size=?ss z=?nz name=?v order=1 ref=new.object
-@variant.make core.rule when=$vr.req when=$vr.si not=$vr.own when=$vr.known not=$vr.anyscale when=$vr.t when=$vr.next with=$vr.nz with=$vr.code then=$vr.make
-@variant.make.scaled core.rule when=$vr.req when=$vr.si not=$vr.own when=$vr.known when=$vr.scaled when=$vr.t when=$vr.next with=$vr.nz with=$vr.code with=$vr.ss then=$vr.make.s
+@variant.make core.rule when=$vr.req when=$vr.si not=$vr.own not=$vr.person when=$vr.known not=$vr.anyscale when=$vr.t when=$vr.next with=$vr.nz with=$vr.code then=$vr.make
+@variant.make.scaled core.rule when=$vr.req when=$vr.si not=$vr.own not=$vr.person when=$vr.known when=$vr.scaled when=$vr.t when=$vr.next with=$vr.nz with=$vr.code with=$vr.ss then=$vr.make.s
 @vr.sel app.act.view key=selected value=?code
-@variant.select core.rule when=$vr.req when=$vr.si not=$vr.own when=$vr.known when=$vr.t when=$vr.next with=$vr.nz with=$vr.code then=$vr.sel
+@variant.select core.rule when=$vr.req when=$vr.si not=$vr.own not=$vr.person when=$vr.known when=$vr.t when=$vr.next with=$vr.nz with=$vr.code then=$vr.sel
 @vr.c k.objects.stand_in name=?v colour=?c
 @vr.asked.c app.act.request color=?anyc
 @vr.c.arg app.act.arg call=new.object attr=colour value=?c
-@variant.colour core.rule when=$vr.req when=$vr.si not=$vr.own when=$vr.c not=$vr.asked.c then=$vr.c.arg
+@variant.colour core.rule when=$vr.req when=$vr.si not=$vr.own not=$vr.person when=$vr.c not=$vr.asked.c then=$vr.c.arg
 @vr.mat k.objects.stand_in name=?v material=?m
 @vr.mat.o ui.draw.materialof target=new.object material=?m
-@variant.material core.rule when=$vr.req when=$vr.si not=$vr.own when=$vr.mat then=$vr.mat.o
+@variant.material core.rule when=$vr.req when=$vr.si not=$vr.own not=$vr.person when=$vr.mat then=$vr.mat.o
 # A thing on the page becomes another variant of its kind, or another kind (drawing.object.change variant=: "let the
 # car be a sports car"): it is drawn as the variant's kind, named after it, in its colour, at its scale.
 @vc.req app.act.request operation="drawing.object.change" variant=?v

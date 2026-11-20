@@ -164,8 +164,10 @@ async function runNativePlan(session, candidate, { area, nativeState, host, befo
   const previousFocus = session.newEngineFocus?.[view];
   const nextFocus = plan.act === 'remove' ? after.objects.find((item) => item.id === previousFocus)?.id : object?.id;
   session.newEngineFocus = { ...session.newEngineFocus, [view]: nextFocus ?? null };
-  const kind = object?.kind ?? plan.kind;
+  const substituted = plan.act === 'make' ? drawnAs(object, plan.kind) : null;
+  const kind = substituted?.kind ?? object?.kind ?? plan.kind;
   const notes = [...plan.notes];
+  if (substituted) notes.unshift(substituted.note);
   // A population target (reference=population) seeds every match into the target list: all of them were changed.
   const listed = Object.values(plan.args ?? {}).find((value) => Array.isArray(value) && value.length > 1 && value.every((id) => plan.targets.includes(id)));
   if (listed) notes.unshift('I applied it to all ' + listed.length + ' matching objects (' + listed.join(', ') + ').');
@@ -174,7 +176,7 @@ async function runNativePlan(session, candidate, { area, nativeState, host, befo
     : 'I used the most recent matching ' + plan.kind + '.');
   if (plan.skipped.length) notes.push('I could not apply ' + plan.skipped.join(', ') + '.');
   const addedOfKind = operation.spatial?.countKey && made.filter(value => value.sourceType === operation.on && value.kind === kind).length;
-  const created = addedOfKind>1 ? `Created ${addedOfKind} objects of kind ${kind}.` : `Created a ${kind}.`;
+  const created = addedOfKind>1 ? `Created ${addedOfKind} objects of kind ${kind}.` : `Created ${withArticle(kind)}.`;
   const said = plan.act === 'make' ? created : plan.act === 'remove' ? `Removed the ${kind}.` : `Updated the ${kind}.`;
   const measured = retainPropertyEffect(session, { candidate, text, view, plan, before: observed, after, receipt, verification, message: notes.join(' ') });
   const message = measured?.text ?? [said, ...notes].join(' ');
@@ -186,6 +188,20 @@ async function runNativePlan(session, candidate, { area, nativeState, host, befo
     state: { [area.world]: structuredClone(session.isession.state[area.world]) },
     effects: receipt.status === 'changed' ? [{ operation: plan.operation }] : [],
   };
+}
+
+const withArticle = (noun) => (/^[aeiou]/i.test(noun) ? 'an ' : 'a ') + noun;
+/**
+ * A made object drawn as another kind than the one asked for (a stand-in or the closest drawable relative the area's
+ * knowledge gives): it is named after the kind asked for and observed as the kind drawn. The reply keeps the asked kind
+ * and says what was drawn; null when the object is drawn as itself.
+ */
+export function drawnAs(object, requested) {
+  const raw = object?.inputs?.find((input) => input.key === 'name' && input.values?.length === 1)?.values[0];
+  if (!raw || !requested || !object.kind) return null;
+  const name = String(raw).replace(/^"|"$/g, ''), same = (a, b) => String(a).toLowerCase().replace(/_/g, ' ') === String(b).toLowerCase().replace(/_/g, ' ');
+  if (!same(name, requested) || same(object.kind, name)) return null;
+  return { kind: name, drawn: object.kind, note: 'There is no drawing of ' + withArticle(name) + ', so I drew ' + withArticle(object.kind) + '.' };
 }
 
 /** The declared default placement of a make without coordinates: the solved place and the call that carries it (the plan stays as compiled). */
@@ -260,7 +276,8 @@ export async function executeNativeGroup(session, members, { view, invocation = 
     receipts.push(receipt);
     const old = new Set(observed.objects.map((object) => object.id));
     const object = after.objects.find((value) => !old.has(value.id) && (value.in ?? value.parent) === undefined);
-    made.push({ subject, object, kind: object?.kind ?? subject.plan.kind });
+    const substituted = drawnAs(object, subject.plan.kind);
+    made.push({ subject, object, kind: substituted?.kind ?? object?.kind ?? subject.plan.kind, substituted });
   }
   const refusedList = [...new Set(refused.map((r) => r.kind))];
   if (!made.length) return restore('I could not make ' + refusedList.map((k) => 'a ' + k).join(' or ') + '. Nothing changed.', refused[0]?.reason ?? 'group-refused', { refused });
@@ -270,7 +287,7 @@ export async function executeNativeGroup(session, members, { view, invocation = 
   for (const { kind } of made) counts.set(kind, (counts.get(kind) ?? 0) + 1);
   const phrase = ([kind, count]) => count === 1 ? 'a ' + kind : count + ' ' + en.plural(kind);
   const list = [...counts].map(phrase), joined = list.length > 1 ? list.slice(0, -1).join(', ') + ' and ' + list.at(-1) : list[0];
-  const notes = [...new Set(members.flatMap(({ plan }) => plan.notes))];
+  const notes = [...new Set([...made.map(({ substituted }) => substituted?.note).filter(Boolean), ...members.flatMap(({ plan }) => plan.notes)])];
   const crowded = made.filter(({ subject }) => subject.overlaps);
   if (crowded.length) notes.push(crowded.length === made.length ? 'There was no free room, so they overlap other objects.' : crowded.length + ' of them overlap other objects: there was no free room for them.');
   if (refusedList.length) notes.push('I could not make ' + refusedList.map((k) => 'a ' + k).join(' or ') + ' here.');

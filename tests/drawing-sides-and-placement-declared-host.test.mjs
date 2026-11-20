@@ -80,6 +80,20 @@ test('"make the house wider" scales the width the house has now by one comparati
  assert.equal(box.max_y-box.min_y,size);
 });
 
+test('a kind with no drawing ("draw a stingray in the lake") is drawn as its closest drawable relative, named after it',async()=>{
+ const t=session();
+ await t.draw({kind:'lake'});
+ const reply=await t.sop('draw a stingray in the lake',['@r0 std.request act=make mood=do root=$c0',
+  '@t0 std.request.target determiner=indefinite kind=k.animals.animal.stingray mode=new request=$r0',
+  '@t1 std.request.target determiner=definite kind=k.objects.lake mode=existing request=$r0',
+  '@c0 std.request.constraint character=requirement concept=k.spatial2d.relation.kind goal=$t1 operator=relation polarity=positive relation=in request=$r0 source=$src source.start=15 source.end=17 target=$t0']);
+ supported(reply);
+ const ray=t.objects().find(o=>/stingray/.test(o.attrs.name?.[0]??''));
+ assert.ok(ray,'the made object keeps the asked kind as its name');
+ assert.equal(JSON.parse(ray.attrs.drawing[0].startsWith('"')?ray.attrs.drawing[0]:JSON.stringify(ray.attrs.drawing[0])),'fish','a stingray is a fish (a drawable k.kinds parent)');
+ assert.match(reply.text,/There is no drawing of a stingray, so I drew a fish\./);
+});
+
 test('a catalog kind ("add a duck in the lake") is placed by a relation through the catalog tool',async()=>{
  const t=session();
  await t.draw({kind:'lake'});

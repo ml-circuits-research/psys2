@@ -2,7 +2,7 @@
 // A tab defined by its area.sop: which catalog modules form its instance and knowledge, which rule files
 // compile its commands and project its drawing, the things it starts with and the open choices of its native
 // interface. This module only reads that declaration; it holds no knowledge of any tab.
-import {World, parse, serialize, str} from '../src/vendor/sopworld/sopworld.mjs';
+import {World, parse, quote, serialize, str} from '../src/vendor/sopworld/sopworld.mjs';
 import {budget} from '../src/dialog/budget.mjs';
 import {catalogWorld} from './catalog-world.mjs';
 import {readNativeToolInterface} from './native-tool-interface.mjs';
@@ -92,6 +92,100 @@ export function definesAny(text, indexedFields, values) {
   return false;
 }
 
+// The values of one field of the rows of a type in a shard's text (quoted values unquoted).
+const fieldValues = (rest, field) => [...rest.matchAll(new RegExp('(?:^| )' + field.replace(/\./g, '\\.') + '=("[^"]*"|\\S+)', 'g'))].map((m) => m[1].replace(/^"|"$/g, ''));
+const rowsOf = (text, type) => {
+  const rows = [], marker = ' ' + type + ' ';
+  for (const line of text.split('\n')) { const at = line.indexOf(marker); if (line.charCodeAt(0) === 64 && at > 0 && line.indexOf(' ') === at) rows.push(line.slice(at + marker.length)); }
+  return rows;
+};
+
+/**
+ * The closest drawable relative of a kind that has no drawing of its own (app.area.relative): the area declares the
+ * taxonomy type (type=, its row key=, its parent field parent= and its dimension field dimension=), the type of
+ * what can be drawn (drawable=), the types that already define a name (known=: nothing is derived for them) and the
+ * fact it tells (tell=, with the kind under its key `name` and the relative under to=). The ranking is declared:
+ * first a drawable parent along the near= dimension (the kind is one), the most specific first; else the drawable kind
+ * sharing the most parents, each shared parent counting its dimension's weight (weight.<dimension>=, absent 0) times
+ * its specificity, ln(names seen / names under that parent); ties by name. Nothing is told when nothing is found.
+ */
+async function ensureRelatives(declared, entries, args, read) {
+  const relatives = declared.owned('app.area.relative');
+  const extra = new Set();
+  if (!relatives.length) return extra;
+  declared.relatives ??= new Map();
+  const shardsWith = (worldOf, value) => (entries.get(worldOf)?.shards ?? []).filter((shard) => typeof shard !== 'string' && (shard.keys ?? []).includes(value));
+  const exportsOf = (type) => [...entries.values()].find((entry) => entry.exports?.includes(type))?.id;
+  // The row of a type naming a value (its rest of line), else null.
+  const defines = async (type, value) => {
+    const owner = exportsOf(type);
+    if (!owner) return null;
+    for (const shard of shardsWith(owner, value)) { const row = rowsOf(await read(shard.path), type).find((rest) => fieldValues(rest, 'name')[0] === value); if (row) return row; }
+    return null;
+  };
+  for (const relative of relatives) {
+    const taxonomy = all(relative, 'world')[0], type = all(relative, 'type')[0], parentKey = all(relative, 'parent')[0] ?? 'is_a', dimKey = all(relative, 'dimension')[0] ?? 'dimension';
+    const near = new Set(all(relative, 'near')), drawable = all(relative, 'drawable')[0], tell = all(relative, 'tell')[0], to = all(relative, 'to')[0] ?? 'drawing';
+    const weight = (dimension) => Number(all(relative, 'weight.' + dimension)[0] ?? 0), qualifiers = all(relative, 'qualifier');
+    if (!entries.has(taxonomy) || !type || !drawable || !tell) continue;
+    for (const name of all(relative, 'arg')) for (const value of [].concat(args[name] ?? [])) {
+      if (typeof value !== 'string' || !value) continue;
+      const memo = relative.id + '|' + value;
+      if (!declared.relatives.has(memo)) declared.relatives.set(memo, (async () => {
+        // A name already defined is not derived; a stand-in of the told type brings its own drawing to look up.
+        for (const known of all(relative, 'known')) { const row = await defines(known, value); if (row) return known === tell ? { drawing: fieldValues(row, to)[0], told: true } : null; }
+        // The kind's own parents, then every row under one of them: the parents' members and their counts.
+        // A parent is told apart by its qualifier fields (qualifier=: "animal with legs" of value 4 is not that of value 2).
+        const identity = (rest, parent) => [parent, ...qualifiers.flatMap((q) => fieldValues(rest, q))].join('\u0000');
+        const own = new Map();
+        for (const shard of shardsWith(taxonomy, value)) for (const rest of rowsOf(await read(shard.path), type))
+          if (fieldValues(rest, 'name')[0] === value) for (const parent of fieldValues(rest, parentKey)) if (parent !== value) own.set(identity(rest, parent), { parent, dimension: fieldValues(rest, dimKey)[0] });
+        if (!own.size) return null;
+        const members = new Map([...own.keys()].map((parent) => [parent, new Set()])), seen = new Set(), paths = new Set();
+        for (const { parent } of own.values()) for (const shard of shardsWith(taxonomy, parent)) paths.add(shard.path);
+        for (const path of paths) for (const rest of rowsOf(await read(path), type)) {
+          const member = fieldValues(rest, 'name')[0];
+          seen.add(member);
+          for (const parent of fieldValues(rest, parentKey)) { const key = identity(rest, parent); if (members.has(key) && member !== value) members.get(key).add(member); }
+        }
+        const specificity = (parent) => Math.log(Math.max(seen.size, 2) / Math.max(members.get(parent).size, 1));
+        const byName = (a, b) => (a < b ? -1 : a > b ? 1 : 0);
+        // A drawable parent along the near dimension, the most specific first.
+        const parents = [...own].filter(([, { dimension }]) => near.has(dimension)).sort((a, b) => specificity(b[0]) - specificity(a[0]) || byName(a[1].parent, b[1].parent));
+        for (const [, { parent }] of parents) if (await defines(drawable, parent)) return { drawing: parent };
+        // Else the kind sharing the most weighted parents.
+        const score = new Map();
+        for (const [key, set] of members) { const w = weight(own.get(key).dimension) * specificity(key); if (w > 0) for (const member of set) score.set(member, (score.get(member) ?? 0) + w); }
+        const ranked = [...score].sort((a, b) => b[1] - a[1] || byName(a[0], b[0]));
+        let checked = 0;
+        for (const [member] of ranked) { if (++checked > 64) break; if (await defines(drawable, member)) return { drawing: member }; }
+        return null;
+      })());
+      const result = await declared.relatives.get(memo);
+      if (!result?.drawing) continue;
+      const found = result.drawing;
+      extra.add(found);
+      if (result.told) continue;
+      if (!declared.toldRelatives?.has(memo)) {
+        // Its declared looks (look.<field>=<type>: the colour k.attributes.thing gives a flamingo), when the knowledge
+        // gives the kind exactly one value of that field.
+        const looks = [];
+        for (const key of Object.keys(relative.attrs).filter((k) => k.startsWith('look.'))) {
+          const field = key.slice(5), owner = exportsOf(all(relative, key)[0]), values = new Set();
+          if (owner) for (const shard of shardsWith(owner, value)) for (const rest of rowsOf(await read(shard.path), all(relative, key)[0]))
+            if (fieldValues(rest, 'name')[0] === value) for (const v of fieldValues(rest, field)) values.add(v);
+          if (values.size === 1) looks.push(' ' + field + '=' + quote([...values][0]));
+        }
+        const told = '@relative.' + declared.relatives.size + '.' + value.replace(/[^A-Za-z0-9_]/g, '_') + ' ' + tell + ' name=' + quote(value) + ' ' + to + '=' + quote(found) + looks.join('') + ' core.source="relative ' + type + '"';
+        (declared.toldRelatives ??= new Set()).add(memo);
+        if (!declared.base.tell(told, { factsOnly: true }).ok) throw Error('relative-refused:' + value);
+        forgetDerived(declared.base);
+      }
+    }
+  }
+  return extra;
+}
+
 /**
  * Knowledge by lookup: for each declared app.area.lookup, the values of an instance key, of named command
  * arguments, its fixed values and the area's declared choices select the catalog shards whose index keys contain them; each shard is told once into the base.
@@ -100,6 +194,12 @@ async function ensureLookups(declared, state, args = {}) {
   if (!declared.lookups.length) return;
   declared.index ??= JSON.parse(await declared.readCatalog('index.json'));
   const entries = new Map([...(declared.index.worlds ?? []), ...(declared.index.schemas ?? [])].map((entry) => [entry.id, entry]));
+  declared.shardTexts ??= new Map();
+  const readShard = async (path) => { if (!declared.shardTexts.has(path)) declared.shardTexts.set(path, await declared.readCatalog(path).catch(() => '')); return declared.shardTexts.get(path) ?? ''; };
+  // A kind with no drawing of its own is drawn as its closest drawable relative (app.area.relative); that relative's
+  // knowledge is looked up with the kind's.
+  const relatives = await ensureRelatives(declared, entries, args, readShard);
+  if (relatives.size) { args = { ...args }; for (const name of new Set(declared.owned('app.area.relative').flatMap((r) => all(r, 'arg')))) args[name] = [...[].concat(args[name] ?? []), ...relatives]; }
   const live = state?.sop ? worldOf(declared.base, state) : null;
   // The values each lookup selects by: an instance key, named command arguments, fixed values and the declared choices.
   const valuesOf = (lookup) => {

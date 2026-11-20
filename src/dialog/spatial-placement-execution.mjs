@@ -12,7 +12,7 @@ import {placementSearchProvider,z3Status} from './placement-search-provider.mjs'
 import {en} from '../lang/en.mjs';
 import {placementHypotheses} from './placement-default-policy.mjs';
 import {identityConcepts} from './capability-plan-adapter.mjs';
-import {executeNativeCapability} from './capability-plan-execution.mjs';
+import {executeNativeCapability,drawnAs} from './capability-plan-execution.mjs';
 import {budget} from './budget.mjs';
 import {executionPolicyWorld} from './execution-policy.mjs';
 
@@ -99,6 +99,8 @@ export async function executeSpatialPlacement(session,candidate,options={}) {
  if(!state||!bindings)return fail('spatial-instance-unavailable');
  const started=performance.now();
  let host,spatial,sop,proposal,hypotheses=null,solver=null;
+ // The words a canonical kind is read from (its lemmas), for the reply about a kind drawn as another.
+ let lemmasOf=kind=>[kind];
  try{
   const hostOptions={state,instanceId:instanceIdFor(session,area.world),identityRegistry:identityRegistryFor(session,area.world),loader:session.engine?.loader,knowledge:session.engine?.knowledge};
   host=await createAreaHost(area,hostOptions);
@@ -127,6 +129,7 @@ export async function executeSpatialPlacement(session,candidate,options={}) {
   const context=baseWorld()?.fork();
   if(!context)return fail('spatial-world-unavailable');
   const mappings=nativeKindCandidates(bindings).filter(mapping=>mapping.area===areaId&&mapping.nativeFamilyBinding);
+  lemmasOf=kind=>[kind,...mappings.filter(mapping=>mapping.canonical===kind&&typeof mapping.lemma==='string').map(mapping=>mapping.lemma)];
   {const placedBetween=betweenRelations(candidate.wires,host.observeSpatial(),nativeKindCandidates(bindings).filter(m=>m.area===areaId));if(placedBetween!==candidate.wires)candidate={...candidate,wires:placedBetween};}
   // The declared default of a kind argument (std.capability.seed source=value phase=missing on a family's class).
   const defaults=executionPolicyWorld().ofType('std.capability.seed').filter(w=>read(w,'source')==='value'&&read(w,'phase')==='missing'&&read(w,'kind')&&read(w,'operation'))
@@ -193,7 +196,7 @@ export async function executeSpatialPlacement(session,candidate,options={}) {
  if(read(proposal,'status')!=='compiled')return fail(read(proposal,'reason')??'spatial-compiler-unavailable',{placement:sop,solver});
  if(session.isession.state[area.world]!==state)return fail('stale-observation',{placement:sop});
  // Several subjects solved in the one problem (a count: "three houses near the lake"): one call each.
- if((proposal.attrs.call?.length??0)>1)return executeSpatialGroup(session,{area,host,sop,proposal,candidate,view,solver,state,fail});
+ if((proposal.attrs.call?.length??0)>1)return executeSpatialGroup(session,{area,host,sop,proposal,candidate,view,solver,state,fail,lemmasOf});
  let result;
  try{result=await invokeSpatialPlacementSop(session,{area,host,sop});}
  catch(error){return fail('invalid-compiled-placement',{placement:sop,error:String(error?.message??error)});}
@@ -228,7 +231,10 @@ export async function executeSpatialPlacement(session,candidate,options={}) {
   ...(hypotheses?{hypotheses,uncertainty:hypotheses.used?['created-absent-target']:[]}:{})};
  const changed=receipt.status==='changed',worldState={[area.world]:structuredClone(state)},effects=changed?[{operation:operation.id}]:[];
  const observedLocation=bounds?' at ('+((bounds.min_x+bounds.max_x)/2)+', '+((bounds.min_y+bounds.max_y)/2)+')':'';
- const effect=target?(operation.act==='make'?'Created ':'Moved ')+target.kind+' '+target.id+observedLocation+'. ':'';
+ // A kind drawn as another (a stand-in or its closest drawable relative): the reply keeps the kind asked for.
+ const asked=read(parse(candidate.wires).find(wire=>wire.type==='std.request.target'&&read(wire,'mode')==='new'),'kind');
+ const substituted=operation.act==='make'?lemmasOf(asked).map(kind=>drawnAs(target,kind)).find(Boolean):null;
+ const effect=target?(operation.act==='make'?'Created ':'Moved ')+(substituted?.kind??target.kind)+' '+target.id+observedLocation+'. '+(substituted?substituted.note+' ':''):'';
  if(!target||!geometryVerified||verification.status==='mismatch'){
   const message=effect+'The observed geometry differs from the compiled placement.'+(changed?' You can undo this change.':'');
   return reply(message,false,trace,worldState,effects);
@@ -251,7 +257,7 @@ export async function executeSpatialPlacement(session,candidate,options={}) {
  * as one call; each new object is checked against the geometry the problem gave it. The reply says how many were
  * made and whether some relation could not be kept close (relaxed).
  */
-async function executeSpatialGroup(session,{area,host,sop,proposal,candidate,view,solver,state,fail}){
+async function executeSpatialGroup(session,{area,host,sop,proposal,candidate,view,solver,state,fail,lemmasOf=kind=>[kind]}){
  const nodes=parse(sop),byId=new Map(nodes.map(wire=>[wire.id,wire])),calls=proposal.attrs.call.map(token=>byId.get(token.slice(1)));
  const options=nodes.filter(wire=>wire.type==='std.placement.option'&&!wire.id.includes('.alternative.'));
  const first=host.observe();
@@ -269,14 +275,17 @@ async function executeSpatialGroup(session,{area,host,sop,proposal,candidate,vie
   const verified=!!bounds&&planned.every(([key,wanted])=>Number.isFinite(wanted)&&Math.abs(wanted-bounds[key])<=1e-9*Math.max(1,Math.abs(wanted)));
   made.push({target,bounds,verified});
  }
- const kinds=new Map();for(const {target} of made)kinds.set(target?.kind,(kinds.get(target?.kind)??0)+1);
+ // A kind drawn as another keeps the kind asked for in the reply, and says what was drawn.
+ const asked=parse(candidate.wires).filter(wire=>wire.type==='std.request.target'&&read(wire,'mode')==='new').map(wire=>read(wire,'kind')).filter(Boolean);
+ const drawnNotes=new Set(),kindOf=target=>{const substituted=asked.flatMap(lemmasOf).map(kind=>drawnAs(target,kind)).find(Boolean);if(substituted)drawnNotes.add(substituted.note);return substituted?.kind??target?.kind;};
+ const kinds=new Map();for(const {target} of made){const kind=kindOf(target);kinds.set(kind,(kinds.get(kind)??0)+1);}
  const said=[...kinds].map(([kind,count])=>count===1?'a '+kind:count+' '+en.plural(kind)).join(' and ');
  const anchor=read(options[0],'anchor'),loose=(proposal.attrs?.relaxed??[]).map(str);
  const trace={assessment:'changed',receipts,reading:candidate,placement:sop,solver,group:{made:made.map(({target,bounds,verified})=>({id:target?.id??null,kind:target?.kind,bounds,verified}))}};
  const state2={[area.world]:structuredClone(session.isession.state[area.world])},effects=receipts.map(receipt=>({operation:receipt.operation}));
  if(made.some(m=>!m.verified))return reply('Created '+said+'. The observed geometry differs from the compiled placement. You can undo this change.',false,trace,state2,effects);
  session.newEngineFocus={...session.newEngineFocus,[view]:made.at(-1).target.id};
- const note=(anchor?' I used '+anchor+' as the anchor.':'')+(loose.length?' No place keeps them all close for every relation, so I placed them as close as the scene allows ('+loose.join(', ')+').':'');
+ const note=[...drawnNotes].map(n=>' '+n).join('')+(anchor?' I used '+anchor+' as the anchor.':'')+(loose.length?' No place keeps them all close for every relation, so I placed them as close as the scene allows ('+loose.join(', ')+').':'');
  return reply('Created '+said+'.'+note+' You can undo this change.',true,trace,state2,effects);
 }
 

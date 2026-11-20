@@ -47,6 +47,14 @@
 @drawing.lookup.scenes app.area.lookup area=$drawing.area world=k.scenes from=w.drawing.object key=drawing arg=kind arg=name
 @drawing.lookup.layouts app.area.lookup area=$drawing.area world=k.layouts from=w.drawing.object key=drawing arg=kind arg=name value=landscape
 @drawing.lookup.people app.area.lookup area=$drawing.area world=k.people from=w.drawing.object key=drawing arg=kind arg=name
+# A kind the knowledge knows but no drawing, stand-in or person kind draws (an impala, an elk, a stingray) is drawn as
+# its closest drawable relative in the k.kinds taxonomy (worlds/sop-area.mjs ensureRelatives): a drawable parent
+# along the kind dimension first (an elk is a deer), else the drawable kind sharing the most parents, a shared parent
+# (told apart by its value: four legs are not two) counting its dimension's weight times its specificity; ties by
+# name. The relative is told as a stand-in, so the variant rules draw it named after the kind asked for, in the one
+# colour k.attributes.thing gives the kind (a flamingo is pink), if any.
+@area.relative.type core.type of=app.area.relative
+@drawing.relative.objects app.area.relative area=$drawing.area world=k.kinds type=k.kinds.parent parent=is_a qualifier=value dimension=dimension near=kind drawable=k.objects.object known=k.objects.object known=k.objects.stand_in known=k.people.kind tell=k.objects.stand_in to=drawing arg=kind arg=name weight.kind=4 weight.feature=2 weight.place=1 weight.diet=1 weight.use=1 weight.material=1 weight.origin=1 look.colour=k.attributes.thing
 # What every thing of a place stands on and keeps out of (k.scenes.support of the places ground, water and sky).
 @drawing.lookup.support app.area.lookup area=$drawing.area world=k.scenes value=ground value=water value=sky
 # The outline a part is drawn with (w.drawing.part shape: irregular, star) is looked up in k.layouts by its name.
