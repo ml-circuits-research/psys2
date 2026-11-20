@@ -22,6 +22,20 @@ const run = (cmd, args, opts = {}) => {
   return r.stdout;
 };
 
+/** Path of the local clone of the catalog repository that contains `commit` (cloned once, fetched when the commit is missing); safe under concurrent callers. */
+export function catalogRepo({ pin = CATALOG_PIN, commit = pin.commit, cache = process.env.PSYS2_CATALOG_CACHE || join(REPO, '.cache') } = {}) {
+  const clone = join(cache, 'catalog-repo');
+  if (!existsSync(join(clone, '.git'))) {
+    mkdirSync(cache, { recursive: true });
+    const tmpClone = `${clone}.tmp-${process.pid}-${Date.now()}`;
+    run('git', ['clone', '-q', '--no-checkout', pin.repo, tmpClone]);
+    try { renameSync(tmpClone, clone); } catch { rmSync(tmpClone, { recursive: true, force: true }); }
+  }
+  const has = spawnSync('git', ['-C', clone, 'cat-file', '-e', `${commit}^{commit}`]).status === 0;
+  if (!has) run('git', ['-C', clone, 'fetch', '-q', 'origin']);
+  return clone;
+}
+
 /** { dir, commit, url, short }: the catalog folder at the pin, made on first use (needs git and the network once). */
 export function pinnedCatalog({ pin = CATALOG_PIN, cache = process.env.PSYS2_CATALOG_CACHE || join(REPO, '.cache') } = {}) {
   const root = join(cache, 'catalog', pin.commit), dir = join(root, pin.path), done = join(root, '.complete');
@@ -29,15 +43,7 @@ export function pinnedCatalog({ pin = CATALOG_PIN, cache = process.env.PSYS2_CAT
     // Concurrent test processes may all find the folder missing: each clones and extracts into its own temporary folder and renames it into place,
     // so no process ever reads or deletes another one's half-written extraction; the loser of a rename race discards its copy.
     const tag = `.tmp-${process.pid}-${Date.now()}`;
-    const clone = join(cache, 'catalog-repo');
-    if (!existsSync(join(clone, '.git'))) {
-      mkdirSync(cache, { recursive: true });
-      const tmpClone = `${clone}${tag}`;
-      run('git', ['clone', '-q', '--no-checkout', pin.repo, tmpClone]);
-      try { renameSync(tmpClone, clone); } catch { rmSync(tmpClone, { recursive: true, force: true }); }
-    }
-    const has = spawnSync('git', ['-C', clone, 'cat-file', '-e', `${pin.commit}^{commit}`]).status === 0;
-    if (!has) run('git', ['-C', clone, 'fetch', '-q', 'origin']);
+    const clone = catalogRepo({ pin, cache });
     const tmpRoot = `${root}${tag}`;
     mkdirSync(tmpRoot, { recursive: true });
     try {
