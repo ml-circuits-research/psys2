@@ -17,6 +17,7 @@ UNIQUE = S(need_unique_kind=True)
 MK = op('diagram.node.make')
 CH = op('diagram.node.change')
 LK = op('diagram.link.make')
+CNP = op('diagram.links.connect')
 
 CASES = {}
 
@@ -36,7 +37,7 @@ def case(cid, what, equivalent, complex_, simplified, scene=None, n=None):
 case('diagram.make:new', 'start a diagram (container word as the kind of a new member; members with count)',
      fr(['{pol}{add} {adkind}{post}', '{pol}{add} a new [k:diagram|diagram]', '[t:start] {adkind}', "let's {add} {adkind}", 'I [t:want] {adkind}',
          '{pol}{add} {adkind} here', 'new [k:diagram|diagram] please', '[t:begin] {adkind}', '[t:set up] {adkind}',
-         '{pol}{add} a diagram with {n} {kinds}', '{pol}{add} a flowchart with {n} {gkinds}', '{pol}{add} a diagram of {n} {kinds}',
+         '{pol}{add} a diagram with {n} {kinds}', '{pol}{add} a [k:flowchart|flowchart] with {n} steps', '{pol}{add} a [k:diagram|diagram] with {n} nodes', '[t:ad] a [k:diagrm|diagram] with {n} nodes', '{pol}{add} a [k:diagram|diagram] with {n} elements', '{pol}{add} a diagram of {n} {kinds}',
          '{pol}[t:start] a diagram with {n} {kinds} {layout}'], MK),
      fr(['I need to explain our process to the team, so {add} {adkind} for me', 'for the onboarding doc {add} {adkind} {why}',
          'we are planning the release, could you {add} {adkind} to start with', 'ok so first thing, {add} {adkind} and we will fill it in later',
@@ -257,20 +258,20 @@ case('diagram.link.make:labelled', 'connect two nodes with a labelled/styled lin
      fr(['if the check passes it goes on, so {connect} {from} to {to} with the label {llabel}'], LK),
      fr(['{from} to {to} labelled {llabel}', '{style} {plainlnoun} {from} to {to}'], LK), scene=S(min_nodes=3))
 
-case('diagram.link.make:population', 'connect a population (all elements, the circles, them in order)',
-     fr(['{pol}{connect} {lpopfrom}{post}', '{pol}{connect} {lpopfrom} in order', '{pol}{connect} {lpopfrom} to each other', '{pol}{connect} {lpopfrom} one after another',
-         '{pol}link up {lpopfrom}'.replace('link up', '[t:link up]'), '{pol}chain {lpopfrom} together'.replace('chain', '[t:chain]'),
-         '{pol}draw arrows between {lpopfrom}'.replace('draw', '[t:draw]'), '{pol}{connect} each node to the next one'.replace('each node', '[c:link.from|each node]')], LK),
-     fr(['they are all steps of one process, so {connect} {lpopfrom} in order', 'everything should be linked, {pol}{connect} {lpopfrom}'], LK),
-     fr(['{connect} {lpopfrom}', 'conect {lpopfrom}'.replace('conect', '[t:conect]'), '{connect} everything'.replace('everything', '[c:link.from|everything]'),
-         'connect alle lements'.replace('connect', '[t:connect]').replace('alle lements', '[c:link.from|alle lements]'), '{connect} all'.replace('all', '[c:link.from|all]')], LK),
+case('diagram.links.connect:population', 'connect a population (all elements, the circles, them in order)',
+     fr(['{pol}{connect} {cpop}{post}', '{pol}{connect} {npop} with {alnoun}'.replace('{alnoun}', 'a {plainlnoun}'), '{pol}{connect} {npop}', '{pol}{connect} {cpop} [c:link.pattern|in order|chain]', '{pol}{connect} {cpop} [c:link.pattern|to each other|all]', '{pol}{connect} {cpop} [c:link.pattern|one after another|chain]',
+         '{pol}link up {cpop}'.replace('link up', '[t:link up]'), '{pol}chain {cpop} together'.replace('chain', '[t:chain]'),
+         '{pol}draw arrows between {cpop}'.replace('draw', '[t:draw]'), '{pol}{connect} each [k:node|node] to the next one'.replace('the next one', '[c:link.pattern|the next one|chain]')], CNP),
+     fr(['they are all steps of one process, so {connect} {cpop} [c:link.pattern|in order|chain]', 'everything should be linked, {pol}{connect} {cpop}'], CNP),
+     fr(['{connect} {cpop}', 'conect {cpop}'.replace('conect', '[t:conect]'), '{connect} [d:everything]',
+         '[t:conect] [d:all elemnts]', '{connect} {cpop} with {plainlnoun}s', '{connect} {npop} with {plainlnoun}s', '[t:conect] the [k:cirles|circle] with arows', '{connect} [d:al the nodes]', '{connect} [d:all]'], CNP),
      scene=PLURAL)
 
-case('diagram.link.make:to-all', 'connect one node to a population (Start to all the boxes)',
-     fr(['{pol}{connect} {from} to {lpopto}', '{pol}draw arrows from {from} to {lpopto}'.replace('draw', '[t:draw]'), '{pol}{connect} {from} with {lpopto}',
-         '{pol}{connect} {lpopfrom} to {to}'], LK),
-     fr(['{from} feeds all of them, so {connect} it to {lpopto}'.replace('{from} feeds', 'that one feeds').replace('it to', '{from} to'), 'the hub talks to everyone: {connect} {from} to {lpopto}'], LK),
-     fr(['{from} to {lpopto}', '{lpopfrom} to {to}'], LK), scene=PLURAL)
+case('diagram.links.connect:to-all', 'connect one node to a population (Start to all the boxes)',
+     fr(['{pol}{connect} {from} to {npop}', '{pol}draw arrows from {from} to {npop}'.replace('draw', '[t:draw]', 1), '{pol}{connect} {from} with {npop}',
+         '{pol}{connect} {npop} to {to}'], CNP),
+     fr(['{from} feeds all of them, so {connect} it to {npop}'.replace('{from} feeds', 'that one feeds').replace('it to', '{from} to'), 'the hub talks to everyone: {connect} {from} to {npop}'], CNP),
+     fr(['{from} to {npop}', '{npop} to {to}'], CNP), scene=PLURAL)
 
 # ============================================================ link.select / change / remove
 LS, LC, LR = op('diagram.link.select'), op('diagram.link.change'), op('diagram.link.remove')
@@ -405,13 +406,6 @@ case('diagram.group.chart.adopt:core', 'turn a chart into editable shapes',
      fr(['[t:explode] {gid}', '{gid} as shapes'], G('chart.adopt')), scene=EMPTY, n=22)
 
 # ============================================================ charts
-case('diagram.group.chart.make:core', 'make a chart from typed values',
-     fr(['{pol}make a [c:group.layout|bar|bar] chart of {chartdata}'.replace('make', '[t:make]'), '{pol}make a [c:group.layout|pie|pie] chart with {chartdata}'
-         .replace('make', '[t:make]'), '{pol}make a [c:group.layout|bar|bar] chart titled {charttitle} with {chartdata}'.replace('make', '[t:make]'),
-         '{pol}{add} a [c:group.layout|line|line] chart showing {chartdata}'], G('chart.make')),
-     fr(['for the report I need a [c:group.layout|bar|bar] chart, {chartdata}'.replace('I need', 'I [t:need]')], G('chart.make')),
-     fr(['[c:group.layout|bar|bar] chart {chartdata}', '[c:group.layout|pie|pie] chart: {chartdata}'], G('chart.make')), scene=EMPTY)
-
 case('diagram.group.chart:from-group', 'make a chart of an existing group/chart',
      fr(['{pol}make a {charttype} chart from {chartsrc}'.replace('make', '[t:make]'), '{pol}turn {chartsrc} into a {charttype} chart'.replace('turn', '[t:turn]'),
          '{pol}show {chartsrc} as a {charttype} chart'.replace('show', '[t:show]')], op('diagram.group.chart', nosel=True)),
@@ -419,6 +413,25 @@ case('diagram.group.chart:from-group', 'make a chart of an existing group/chart'
      fr(['{charttype} chart of {chartsrc}', '{chartsrc} as {charttype}'], op('diagram.group.chart', nosel=True)), scene=EMPTY)
 
 # ============================================================ questions about the diagram
+import re as _re
+QTRIG = ['how many', 'what colour', 'what color', 'which colour', 'what size', 'how big', 'how large', 'is there', 'are there any', 'are there',
+         'do we have', 'does', 'what', "what's", 'which', 'where', 'count', 'list', 'name', 'describe', 'summarise', 'tell me', 'give me', 'walk me through',
+         'explain', 'show me', 'is', 'are', 'any', 'got any']
+
+
+def qtrig(cases_from):
+    for cid in cases_from:
+        for t in ('equivalent', 'complex', 'simplified'):
+            for f in CASES[cid][t]:
+                if '[t:' in f.template:
+                    continue
+                for w in sorted(QTRIG, key=len, reverse=True):
+                    m = _re.search(r'(?<![\w{])' + _re.escape(w) + r'(?![\w}])', f.template, _re.I)
+                    if m:
+                        f.template = f.template[:m.start()] + '[t:' + m.group(0) + ']' + f.template[m.end():]
+                        break
+
+
 ON, OL, CN, CL, OS = op('diagram.observe.node'), op('diagram.observe.link'), op('diagram.check.node'), op('diagram.check.link'), op('diagram.observe')
 case('diagram.observe:describe', 'describe the whole diagram',
      fr(["what's in the diagram?", 'what is on the canvas right now?', 'describe the diagram', 'can you describe this diagram for me?', 'tell me what the diagram shows',
@@ -467,6 +480,7 @@ for cid, what, eq, cx, sm, attrs in [
      ['did the change work, is {nref} {colour_sel} now?'], ['{nref} {colour_sel}?'], op('diagram.check.node', q='exists')),
 ]:
     case(f'diagram.observe:{cid}', what, fr(eq, attrs), fr(cx, attrs), fr(sm, attrs), scene=S(need_links=True, need_plural_kind=True), n=24)
+qtrig([c for c in CASES if c.startswith('diagram.observe:')])
 
 # ============================================================ styles, themes, colour-by (specs/diagram-capabilities.md)
 case('diagram.style.apply:theme', 'apply a theme to the whole diagram (vague colour-style requests with a theme word)',
@@ -521,10 +535,10 @@ case('diagram.node.change:role-shape', 'mark a node with a flowchart role or a n
      fr(['{nref} {newshape}', '{nref} is the {role}', '{nref} as {role}'], CH))
 
 case('diagram.node.make:role', 'add a node by its flowchart role or a new shape',
-     fr(['{pol}{add} a {role} node', '{pol}{add} a {role} node called {label}', '{pol}{add} a {newshape} called {label}', '{pol}{add} a {newshape}',
-         '{pol}{add} a {role} step', '{pol}{add} a {newshape} labelled {label}'], MK),
-     fr(['every flow needs an entry, so {add} a {role} node', 'the data lives somewhere, {pol}{add} a {newshape} called {label}'], MK),
-     fr(['{role} node', '{newshape} {label}', '{add} {role}', 'a {newshape}'], MK))
+     fr(['{pol}{add} a {role} node', '{pol}{add} a {role} node called {label}', '{pol}{add} a {newkind} called {label}', '{pol}{add} a {newkind}',
+         '{pol}{add} a {role} step', '{pol}{add} a {newkind} labelled {label}'], MK),
+     fr(['every flow needs an entry, so {add} a {role} node', 'the data lives somewhere, {pol}{add} a {newkind} called {label}'], MK),
+     fr(['{role} node', '{newkind} {label}', '{add} {role}', 'a {newkind}'], MK))
 
 # ============================================================ whole-diagram layout
 case('diagram.layout:layout', 'lay out the whole diagram (layout, direction, spacing, routes)',
@@ -599,16 +613,16 @@ case('diagram.link.change:route', 'route of links (curved, straight, orthogonal)
      fr(['{lref} {lroute}', '{lroute} {lpop}'], LC), scene=LINKS)
 
 case('diagram.links.connect:pattern', 'connect many nodes at once (in order, in a loop, all to all, to a hub)',
-     fr(['{pol}{connect} {lpopfrom} {pattern}', '{pol}{connect} {nsomefrom} {pattern}', '{pol}[t:chain] {lpopfrom} together', '{pol}{connect} {lpopfrom} to {to}',
-         '{pol}{connect} every node to every other'.replace('every node', '[c:link.from|every node]').replace('to every other', '[c:link.pattern|to every other|all]'),
-         '{pol}{connect} {lpopfrom}'], op('diagram.links.connect')),
-     fr(['they are steps of one process, so {connect} {lpopfrom} {pattern}', 'it is a cycle, {pol}{connect} {lpopfrom} {pattern}'], op('diagram.links.connect')),
-     fr(['{connect} {lpopfrom} {pattern}', '{connect} them {pattern}'.replace('them', '[c:link.from|them]'), '{lpopfrom} {pattern}',
-         '[t:connect] alle lements'.replace('alle lements', '[c:link.from|alle lements]'), '{connect} all'.replace(' all', ' [c:link.from|all]')],
+     fr(['{pol}{connect} {cpop} {pattern}', '{pol}{connect} {nmany} {pattern}', '{pol}[t:chain] {cpop} together', '{pol}{connect} {cpop} to {to}',
+         '{pol}{connect} every [k:node|node] [c:link.pattern|to every other|all]',
+         '{pol}{connect} {cpop}'], op('diagram.links.connect')),
+     fr(['they are steps of one process, so {connect} {cpop} {pattern}', 'it is a cycle, {pol}{connect} {cpop} {pattern}'], op('diagram.links.connect')),
+     fr(['{connect} {cpop} {pattern}', '{connect} them {pattern}', '{cpop} {pattern}',
+         '[t:conect] [d:evry element] {pattern}', '{connect} [d:all] {pattern}'],
         op('diagram.links.connect')), scene=PLURAL)
 
 # ============================================================ compound requests (several requests in one message)
-CN_ = op('diagram.links.connect')
+CN_ = op('diagram.links.connect', fill='context')
 IMP = op('diagram.improve')
 
 
@@ -617,22 +631,22 @@ def C(template, *attrs):
 
 
 case('compound:make-connect', 'add nodes and connect them (owner: "add three boxes and connect them in order", "two circles with an arrow")',
-     [C('<<{pol}{add} {n} {kinds}>> and <<{connect} [c:link.from|them] {pattern}>>', MK, CN_),
-      C('<<{pol}{add} {n} {kinds}>> and <<{connect} [c:link.from|them]>>', MK, CN_),
-      C('<<{pol}{add} {n} {kinds}>>, then <<{connect} [c:link.from|them] {pattern}>>', MK, CN_),
-      C('<<{pol}{add} [c:node.n|two|2] {kinds}>> <<with {alnoun} between [c:link.from|them]>>', MK, CN_),
-      C('<<{pol}{add} [c:node.n|two|2] {kinds}>> and <<{connect} [c:link.from|them] with {alnoun}>>', MK, CN_),
+     [C('<<{pol}{add} {n} {kinds}>> and <<{connect} them {pattern}>>', MK, CN_),
+      C('<<{pol}{add} {n} {kinds}>> and <<{connect} them>>', MK, CN_),
+      C('<<{pol}{add} {n} {kinds}>>, then <<{connect} them {pattern}>>', MK, CN_),
+      C('<<{pol}{add} [c:node.n|two|2] {kinds}>> <<with a {plainlnoun} between them>>', MK, CN_),
+      C('<<{pol}{add} [c:node.n|two|2] {kinds}>> and <<{connect} them with a {plainlnoun}>>', MK, CN_),
       C('<<{pol}{add} {akind} called {label}>> and <<{connect} [c:link.from|it] to {to@1}>>', MK, LK),
       C('<<{pol}{add} {akind}>> and <<{connect} {from@1} to [c:link.to|it]>>', MK, LK),
-      C('<<{pol}{add} {akind} labelled {label}>> and <<{add2} {akind2} labelled {label2}>>, then <<{connect} [c:link.from|them]>>', MK, MK, CN_)],
-     [C('we need a pipeline: <<{add} {n} {kinds} {layout}>> and <<{connect} [c:link.from|them] {pattern}>>', MK, CN_),
-      C('<<{pol}{add} {n} {colour} {kinds}>> and then <<{connect} [c:link.from|each one to the next]>>', MK, CN_),
+      C('<<{pol}{add} {akind} labelled {label}>> and <<{add2} {akind2} labelled {label2}>>, then <<{connect} them>>', MK, MK, CN_)],
+     [C('we need a pipeline: <<{add} {n} {kinds} {layout}>> and <<{connect} them {pattern}>>', MK, CN_),
+      C('<<{pol}{add} {n} {colour} {kinds}>> and then <<{connect} [c:link.pattern|each one to the next|chain]>>', MK, CN_),
       C('first <<{add} {akind} called {label}>>, after that <<{connect} [c:link.from|it] to {to@1}>> {why}', MK, LK)],
      [C('<<{n} {kinds}>> <<{pattern}>>'.replace('<<{pattern}>>', '<<[t:connected] {pattern}>>'), MK, CN_),
-      C('<<[c:node.n|two|2] {kinds}>> <<with {alnoun}>>', MK, CN_),
+      C('<<[c:node.n|two|2] {kinds}>> <<with a {plainlnoun}>>', MK, CN_),
       C('<<{add} {n} {kinds}>> + <<{connect}>>', MK, CN_),
       C('<<[c:node.n|two|2] cirles>> <<with an arraw>>'.replace('cirles', '[k:cirles|circle]').replace('an arraw', 'an [k:arraw|arrow]'), MK, CN_),
-      C('<<ad [c:node.n|three|3] [k:boxs|box]>> and <<[t:conect] [c:link.from|them] [c:link.pattern|in order|chain]>>'.replace('ad ', '[t:ad] '), MK, CN_)],
+      C('<<ad [c:node.n|three|3] [k:boxs|box]>> and <<[t:conect] them [c:link.pattern|in order|chain]>>'.replace('ad ', '[t:ad] '), MK, CN_)],
      scene=EMPTY, n=30)
 
 case('compound:change-change', 'two changes in one message',
@@ -659,7 +673,7 @@ case('compound:question-command', 'a question followed by a command',
      scene=S(need_links=True, need_plural_kind=True), n=24)
 
 case('compound:make-style', 'add nodes then style or lay out the diagram',
-     [C('<<{pol}{add} {n} {kinds}>> and <<[t:make] [c:link.from|them]>>'.replace('<<[t:make] [c:link.from|them]>>', '<<{connect} [c:link.from|them] {pattern}>>'), MK, CN_),
+     [C('<<{pol}{add} {n} {kinds}>> and <<[t:make] them>>'.replace('<<[t:make] them>>', '<<{connect} them {pattern}>>'), MK, CN_),
       C('<<{pol}{add} {akind} called {label}>> and <<[t:make] it {colour}>>', MK, op('diagram.node.change', fill='context')),
       C('<<{pol}{add} {n} {kinds}>> and <<[t:arrange] [c:node.layout|them|-]>>'.replace('<<[t:arrange] [c:node.layout|them|-]>>', '<<[t:arrange] them {layout}>>'),
         MK, op('diagram.node.layout', fill='context')),
@@ -668,8 +682,206 @@ case('compound:make-style', 'add nodes then style or lay out the diagram',
       C('<<{pol}{connect} {from} to {to}>> and <<[t:make] that {plainlnoun} {style}>>'.replace('that {plainlnoun}', 'that [k:arrow|arrow]'), LK, op('diagram.link.change', fill='context')),
       C('<<{pol}{delete} {nref}>> and <<[t:tidy up] the rest>>', op('diagram.node.remove'), IMP),
       C('<<{pol}{add} {akind}>> <<{rel} {anchor}>>'.replace('<<{rel} {anchor}>>', 'and <<[t:connect] {from@1} to [c:link.to|it]>>'), MK, LK)],
-     [C('first <<{add} {n} {kinds} {layout}>>, then <<{connect} [c:link.from|them] {pattern}>>, and finally <<[t:make] it {theme}>>', MK, CN_, op('diagram.style.apply')),
+     [C('first <<{add} {n} {kinds} {layout}>>, then <<{connect} them {pattern}>>, and finally <<[t:make] it {theme}>>', MK, CN_, op('diagram.style.apply')),
       C('for the slides <<{add} {akind} called {label}>> and <<[t:make] the whole thing {theme}>>', MK, op('diagram.style.apply'))],
      [C('<<{n} {kinds}>>, <<{pattern}>>'.replace('<<{pattern}>>', '<<[t:linked] {pattern}>>'), MK, CN_),
       C('<<{add} {akind}>> <<and {akind2}>>', MK, MK)],
      scene=S(min_nodes=3, need_links=True), n=30)
+
+qtrig(['compound:question-command'])
+
+case('diagram.improve:object', 'vague improvement of one object or population ("make the line e1 look better")',
+     fr(['{pol}[t:make] {lref} look better', '{pol}[t:make] {lref} look nicer', '{pol}[t:improve] {lref}', '{pol}[t:make] {lref} to look better', '{pol}[t:tidy up] {lref}',
+         '{pol}[t:clean up] {lpop}', '{pol}[t:make] {lpop} look neater', '{pol}[t:fix] {lref}', '{pol}[t:make] {lref} prettier', '{pol}[t:straighten] {lref}'],
+        op('diagram.improve.link')),
+     fr(['{lref} looks ugly, [t:make] it look better'.replace('{lref} looks', 'that looks').replace('it look better', '{lref} look better'), 'the arrows are a mess, [t:tidy up] {lpop}'],
+        op('diagram.improve.link')),
+     fr(['{lref} nicer'.replace('nicer', '[t:nicer]'), '[t:improve] {lref}', '[t:make] the line {lcode} to look beter', '[t:fix] {lpop}'], op('diagram.improve.link')), scene=LINKS)
+case('diagram.improve:nodes', 'vague improvement of nodes ("make the boxes look nicer")',
+     fr(['{pol}[t:make] {npop} look better', '{pol}[t:make] {nref} look nicer', '{pol}[t:improve] {npop}', '{pol}[t:tidy up] {npop}', '{pol}[t:make] {nref} prettier',
+         '{pol}[t:make] {npop} look more professional'], op('diagram.improve.node')),
+     fr(['{npop} look boring, [t:make] them look better'.replace('{npop} look boring', 'these look boring')], op('diagram.improve.node', fill='context')),
+     fr(['{npop} nicer'.replace('nicer', '[t:nicer]'), '[t:improve] {nref}', '[t:prettier] {npop}'], op('diagram.improve.node')), scene=PLURAL)
+
+
+# ============================================================ charts (owner priority 2026-11-20): creation, dataset edits, formatting, effects
+from vocab import CATEGORY_SETS, CHART_NAMES, SERIES_NAMES  # noqa: E402
+
+
+def chart_scene(rng):
+    s = Scene(rng, size=rng.randint(2, 4), links=False, groups=False) if rng.random() < 0.4 else Scene.empty()
+    names = rng.sample(CHART_NAMES, rng.randint(1, 2))
+    s.charts = [{'code': f'c{i + 1}', 'name': nm, 'categories': rng.choice(CATEGORY_SETS), 'series': rng.sample(SERIES_NAMES, 2)} for i, nm in enumerate(names)]
+    return s
+
+
+CHART = chart_scene
+CM, CC, CS, CQ = op('diagram.chart.make'), op('diagram.chart.change'), op('diagram.chart.sort'), op('diagram.chart.ask')
+PM, PC, PR = op('diagram.point.make'), op('diagram.point.change'), op('diagram.point.remove')
+SM, SC, SR = op('diagram.series.make'), op('diagram.series.change'), op('diagram.series.remove')
+
+case('chart.make:data', 'make a chart from typed values (natural forms)',
+     fr(['{pol}[t:make] {actype} of {cdata}', '{pol}[t:make] {actype} with {cdata}', '{pol}{add} {actype} showing {cdata}', '{pol}[t:create] {actype} titled {ctitle}: {cdata}',
+         '{pol}[t:chart] these numbers: {cdata}', '{pol}[t:show] {cdata} as {actype}', '{pol}[t:draw] {actype} for {cdata}', '{pol}[t:plot] {cdata}',
+         '{pol}[t:make] {actype} called {ctitle} with {cdata}', '{pol}[t:visualise] {cdata} in {actype}', "{pol}I [t:need] {actype}: {cdata}"], CM),
+     fr(['for the board meeting [t:make] {actype} of the results, {cdata}', 'our sales were {cdata}, [t:put] that in {actype}', 'the survey gave {cdata}; [t:show] it as {actype}'],
+        CM),
+     fr(['{actype} {cdata}', '{ctype}: {cdata}', '[t:chart] {cdata}', '{actype} pls, {cdata}', '{actype} of {cdata}'], CM), scene=EMPTY, n=40)
+case('chart.make:source', 'make a chart from an existing chart or group', [F(t.template, CM) for t in CASES['diagram.group.chart:from-group']['equivalent']],
+     [F(t.template, CM) for t in CASES['diagram.group.chart:from-group']['complex']], [F(t.template, CM) for t in CASES['diagram.group.chart:from-group']['simplified']], scene=EMPTY)
+del CASES['diagram.group.chart:from-group']
+
+case('chart.type:change', 'change the chart type',
+     fr(['{pol}[t:make] {cref} {actype}', '{pol}[t:turn] {cref} into {actype}', '{pol}[t:change] {cref} to {actype}', '{pol}[t:switch] {cref} to {actype}',
+         '{pol}[t:show] {cref} as {actype}', '{pol}[t:use] {actype} for {cref}', '{pol}[t:convert] {cref} to {actype}'], CC),
+     fr(['shares read better as slices, so [t:turn] {cref} into {actype}', 'the trend is what matters, [t:make] {cref} {actype}'], CC),
+     fr(['{cref} as {actype}', '{actype} instead', '[t:make] it {actype}', '{actype} please'], op('diagram.chart.change', fill='context')), scene=CHART, n=36)
+for c in ['chart.type:change']:
+    for f in CASES[c]['simplified'][:1]:
+        f.attrs = (CC,)
+
+case('chart.data:set-value', 'set the value of one category (series optional)',
+     fr(['{pol}[t:set] [n:{cat}|{cat}] to [c:point.value|{val}]{inchart}', '{pol}[t:change] [n:{cat}|{cat}] to [c:point.value|{val}]{inchart}',
+         '{pol}[t:make] [n:{cat}|{cat}] [c:point.value|{val}]{inchart}', '{pol}[t:update] the value for [n:{cat}|{cat}] to [c:point.value|{val}]{inchart}',
+         '{pol}[t:put] [c:point.value|{val}] for [n:{cat}|{cat}]{inchart}', '{pol}[t:change] the [n:{cat}|{cat}] bar to [c:point.value|{val}]',
+         '{pol}[t:set] [n:{cat}|{cat}] in [c:series.label|{ser}|{ser}|sel] to [c:point.value|{val}]', '{pol}[t:increase] [n:{cat}|{cat}] to [c:point.value|{val}]{inchart}',
+         '{pol}[t:lower] [n:{cat}|{cat}] to [c:point.value|{val}]'], PC),
+     fr(['the final numbers came in, so [t:set] [n:{cat}|{cat}] to [c:point.value|{val}]{inchart}', 'oops, [n:{cat}|{cat}] should be [c:point.value|{val}], [t:fix] that'
+         .replace(', [t:fix] that', '').replace('should be', '[t:should be]')], PC),
+     fr(['[n:{cat}|{cat}] [c:point.value|{val}]', '[n:{cat}|{cat}] = [c:point.value|{val}]', '[n:{cat}|{cat}] to [c:point.value|{val}]', '[n:{cat}|{cat}] is [c:point.value|{val}] now'],
+        PC), scene=CHART, n=40)
+
+case('chart.data:relative', 'raise or lower a value by an amount or a degree',
+     fr(['{pol}[t:increase] [n:{cat}|{cat}] by [c:point.value|{val}||delta:more]', '{pol}[t:add] [c:point.value|{val}||delta:more] to [n:{cat}|{cat}]{inchart}',
+         '{pol}[t:reduce] [n:{cat}|{cat}] by [c:point.value|{val}||delta:less]', '{pol}[t:make] [n:{cat}|{cat}] [c:point.value|bigger||delta:more]{inchart}',
+         '{pol}[t:make] the [n:{cat}|{cat}] bar [c:point.value|smaller||delta:less]', '{pol}[t:double] [n:{cat}|{cat}]'.replace('[t:double]', '[t:double] [c:point.value|_|2|factor]').replace(' [c:point.value|_|2|factor]', '')],
+        PC),
+     fr(['we sold a bit more, [t:bump] [n:{cat}|{cat}] up by [c:point.value|{val}||delta:more]'], PC),
+     fr(['[n:{cat}|{cat}] +[c:point.value|{val}||delta:more]', '[n:{cat}|{cat}] [c:point.value|higher||delta:more]', '[n:{cat}|{cat}] [c:point.value|lower||delta:less]'], PC), scene=CHART, n=30)
+for f in CASES['chart.data:relative']['equivalent']:
+    if '[t:double]' in f.template:
+        f.template = f.template.replace('[t:double] [n:{cat}|{cat}]', '[c:point.value|double|2|factor] [n:{cat}|{cat}]')
+
+case('chart.data:add-category', 'add a category (with a value) to a chart',
+     fr(['{pol}{add} [c:chart.labels|{newcat}] with [c:point.value|{val}]{inchart}', '{pol}{add} a bar for [c:chart.labels|{newcat}] at [c:point.value|{val}]{inchart}',
+         '{pol}{add} [c:chart.labels|{newcat}] [c:point.value|{val}]{inchart}', '{pol}{add} a new category [c:chart.labels|{newcat}] with value [c:point.value|{val}]{inchart}',
+         '{pol}{add} a slice [c:chart.labels|{newcat}] of [c:point.value|{val}]{inchart}', '{pol}[t:include] [c:chart.labels|{newcat}] = [c:point.value|{val}]{inchart}',
+         '{pol}{add} a column for [c:chart.labels|{newcat}]{inchart}'], PM),
+     fr(['we opened a new office, so {add} [c:chart.labels|{newcat}] with [c:point.value|{val}]{inchart}', 'one value is missing: {add} [c:chart.labels|{newcat}] [c:point.value|{val}]'], PM),
+     fr(['+ [c:chart.labels|{newcat}] [c:point.value|{val}]', '[c:chart.labels|{newcat}] [c:point.value|{val}] too', '{add} [c:chart.labels|{newcat}] [c:point.value|{val}]', 'also [c:chart.labels|{newcat}] [c:point.value|{val}]'],
+        PM), scene=CHART, n=36)
+
+case('chart.data:remove-category', 'remove a category from a chart',
+     fr(['{pol}{delete} [n:{cat}|{cat}]{inchart}', '{pol}{delete} the [n:{cat}|{cat}] bar', '{pol}{delete} the [n:{cat}|{cat}] slice', '{pol}{delete} [n:{cat}|{cat}] from the chart',
+         '{pol}[t:drop] the [n:{cat}|{cat}] category{inchart}', '{pol}[t:leave out] [n:{cat}|{cat}]'], PR),
+     fr(['we closed that store, so {delete} [n:{cat}|{cat}]{inchart}'], PR),
+     fr(['no [n:{cat}|{cat}]'.replace('no ', '[t:no] '), '{delete} [n:{cat}|{cat}]', 'without [n:{cat}|{cat}]'.replace('without', '[t:without]')], PR), scene=CHART, n=30)
+
+case('chart.data:rename-category', 'rename a category',
+     fr(['{pol}{rename} [n:{cat}|{cat}] to [c:chart.labels|{newcat}]{inchart}', '{pol}[t:change] the label [n:{cat}|{cat}] to [c:chart.labels|{newcat}]',
+         '{pol}[t:call] [n:{cat}|{cat}] [c:chart.labels|{newcat}] instead'], PC),
+     fr(['it is called differently now, {rename} [n:{cat}|{cat}] to [c:chart.labels|{newcat}]'], PC),
+     fr(['[n:{cat}|{cat}] -> [c:chart.labels|{newcat}]', '{rename} [n:{cat}|{cat}] [c:chart.labels|{newcat}]'], PC), scene=CHART, n=26)
+
+case('chart.series:add', 'add a data series',
+     fr(['{pol}{add} a series [c:series.label|{newser}] with [c:series.values|{val}], [c:series.values|{val2}] and [c:series.values|{val3}]{inchart}',
+         '{pol}{add} [c:series.label|{newser}] as a second series: [c:series.values|{val}], [c:series.values|{val2}], [c:series.values|{val3}]',
+         '{pol}{add} a [c:series.label|{newser}] line with [c:series.values|{val}] [c:series.values|{val2}] [c:series.values|{val3}]',
+         '{pol}{add} another dataset called [c:series.label|{newser}]{inchart}', '{pol}[t:compare] with [c:series.label|{newser}]: [c:series.values|{val}], [c:series.values|{val2}]'], SM),
+     fr(['to compare with last year, {add} a series [c:series.label|{newser}] with [c:series.values|{val}], [c:series.values|{val2}] and [c:series.values|{val3}]'], SM),
+     fr(['series [c:series.label|{newser}]: [c:series.values|{val}], [c:series.values|{val2}]', '+ [c:series.label|{newser}] [c:series.values|{val}] [c:series.values|{val2}]'], SM),
+     scene=CHART, n=30)
+for c in ['chart.series:add']:
+    for t in ('equivalent', 'complex', 'simplified'):
+        for f in CASES[c][t]:
+            f.template = f.template.replace('{inchart}', '{inchart}'.replace('inchart', 'inchart')).replace('[c:point.chart', '[c:series.chart')
+
+case('chart.series:change-remove', 'recolour, rename or remove a series',
+     fr(['{pol}[t:make] the [n:{ser}|{ser}] series {scolour}', '{pol}{paint} [n:{ser}|{ser}] {scolour}', '{pol}{rename} the series [n:{ser}|{ser}] to [c:series.label|{newser}]'], SC),
+     fr(['so the two lines differ, [t:make] [n:{ser}|{ser}] {scolour}'], SC),
+     fr(['[n:{ser}|{ser}] {scolour}', '[n:{ser}|{ser}] in {scolour}'], SC), scene=CHART, n=26)
+case('chart.series:remove', 'remove a series',
+     fr(['{pol}{delete} the [n:{ser}|{ser}] series', '{pol}{delete} [n:{ser}|{ser}] from the chart', '{pol}[t:hide] the [n:{ser}|{ser}] line'], SR),
+     fr(['the forecast is outdated, {delete} the [n:{ser}|{ser}] series'], SR), fr(['{delete} [n:{ser}|{ser}]', 'no [n:{ser}|{ser}] series'.replace('no ', '[t:no] ')], SR),
+     scene=CHART, n=22)
+
+FMT = [
+    ('title', 'chart title', ['{pol}[t:title] {cref} {ctitle}', '{pol}[t:give] {cref} the title {ctitle}', '{pol}[t:call] {cref} {ctitle}', '{pol}[t:set] the title of {cref} to {ctitle}',
+                              '{pol}[t:rename] {cref} to {ctitle}', '{pol}[t:add] a title {ctitle} to {cref}', '{pol}[t:change] the heading of {cref} to {ctitle}'],
+     ['{cref} needs a heading: {ctitle}'.replace('needs', '[t:needs]')], ['title {ctitle}'.replace('title', '[t:title]', 1), '{cref} titled {ctitle}', 'heading {ctitle}']),
+    ('legend', 'legend show/hide/position',
+     ['{pol}[t:show] the [c:chart.legend|legend|show]', '{pol}[t:hide] the legend on {cref}'.replace('the legend', 'the [c:chart.legend|legend|hide]'),
+      '{pol}[t:move] the legend to the [c:chart.legend|bottom|bottom]', '{pol}[t:put] the legend on the [c:chart.legend|right|right]', '{pol}[t:turn] the legend [c:chart.legend|off|hide]',
+      '{pol}[t:add] a [c:chart.legend|legend|show] to {cref}', '{pol}[t:remove] the [c:chart.legend|legend|hide]'],
+     ['nobody knows which colour is which, [t:add] a [c:chart.legend|legend|show]'], ['legend [c:chart.legend|off|hide]', 'legend [c:chart.legend|on|show]', '[c:chart.legend|no legend|hide]', 'legend at the [c:chart.legend|top|top]']),
+    ('values', 'value labels on/off',
+     ['{pol}[t:show] the [c:chart.show_values|values|show] on {cref}', '{pol}[t:add] [c:chart.show_values|value labels|show]', '{pol}[t:hide] the [c:chart.show_values|numbers|hide]',
+      '{pol}[t:put] the [c:chart.show_values|numbers|show] on the bars', '{pol}[t:label] each bar with its [c:chart.show_values|value|show]', '{pol}[t:turn] [c:chart.show_values|value labels|show] on'],
+     ['people want exact figures, so [t:show] the [c:chart.show_values|values|show]'], ['[c:chart.show_values|values|show] on', '[c:chart.show_values|numbers|show] please', '[c:chart.show_values|no numbers|hide]']),
+    ('axes', 'axis titles, gridlines, range',
+     ['{pol}[t:label] the x axis [c:chart.xLabel|{axisword}]', '{pol}[t:call] the y axis [c:chart.yLabel|{axisword}]', '{pol}[t:set] the y axis title to [c:chart.yLabel|{axisword}]',
+      '{pol}[t:hide] the [c:chart.grid|gridlines|hide]', '{pol}[t:show] [c:chart.grid|grid lines|show]', '{pol}[t:start] the y axis at [c:chart.min|0]', '{pol}[t:set] the maximum to [c:chart.max|{val}]',
+      '{pol}[t:make] the axis go up to [c:chart.max|{val}]', '{pol}[t:add] an x axis title [c:chart.xLabel|{axisword}]'],
+     ['the scale is misleading, [t:start] the y axis at [c:chart.min|0]'], ['x axis [c:chart.xLabel|{axisword}]', 'y axis: [c:chart.yLabel|{axisword}]', '[c:chart.grid|no gridlines|hide]', 'max [c:chart.max|{val}]']),
+    ('stack', 'stacked / horizontal / sorted',
+     ['{pol}[t:stack] the bars'.replace('[t:stack]', '[t:stack] [c:chart.stacked|_|on]').replace(' [c:chart.stacked|_|on]', ''), '{pol}[t:make] {cref} [c:chart.stacked|stacked|on]', '{pol}[t:make] the bars [c:chart.horizontal|horizontal|on]',
+      '{pol}[t:sort] {cref} [c:chart.sort|from largest to smallest|desc]', '{pol}[t:sort] the bars [c:chart.sort|alphabetically|alpha]', '{pol}[t:order] the slices [c:chart.sort|biggest first|desc]',
+      '{pol}[t:unstack] the bars'.replace('[t:unstack]', '[t:unstack]'), '{pol}[t:flip] the chart [c:chart.horizontal|sideways|on]'],
+     ['it is easier to compare, so [t:sort] the bars [c:chart.sort|from smallest to largest|asc]'], ['[c:chart.stacked|stacked|on]', '[c:chart.horizontal|horizontal|on]', '[t:sort] [c:chart.sort|descending|desc]', '[c:chart.sort|biggest first|desc]']),
+    ('colours', 'chart colours and palettes',
+     ['{pol}[t:make] the bars {ccolour}', '{pol}[t:use] the {palette} palette for {cref}', '{pol}[t:colour] {cref} in {palette} colours', '{pol}[t:make] [n:{cat}|{cat}] {ccolour}'
+      .replace('[n:{cat}|{cat}]', 'the [c:chart.labels|{cat}||sel] slice'), '{pol}[t:give] each slice its own colour'.replace('its own colour', 'its own [c:chart.palette|colour|-]'),
+      '{pol}[t:make] {cref} {ccolour}', '{pol}[t:paint] the columns {ccolour}'],
+     ['to match our brand, [t:make] the bars {ccolour}'], ['{palette} colours', 'bars {ccolour}', '{ccolour} bars', '{palette} palette']),
+    ('effects', 'chart effects',
+     ['{pol}[t:add] {ceffect} to {cref}', '{pol}[t:give] the bars {ceffect}', '{pol}[t:make] {cref} look fancier with {ceffect}', '{pol}[t:remove] the shadow'
+      .replace('the shadow', 'the [c:chart.effect|shadow|shadow|neg]'), '{pol}[t:apply] {ceffect} to the slices', '{pol}[t:use] {ceffect} on the bars'],
+     ['it looks flat, [t:add] {ceffect} to {cref}'], ['{ceffect}', 'with {ceffect}', '[t:add] {ceffect}', 'no shadow'.replace('no shadow', '[c:chart.effect|no shadow|shadow|neg]')]),
+]
+for cid, what, eq, cx, sm in FMT:
+    case(f'chart.format:{cid}', what, fr(eq, CC), fr(cx, CC), fr(sm, CC), scene=CHART, n=34)
+for cid, what, eq, cx, sm in FMT:
+    if cid == 'stack':
+        for t in ('equivalent',):
+            for f in CASES['chart.format:stack'][t]:
+                if f.template.endswith('[t:stack] the bars'):
+                    f.template = f.template.replace('[t:stack] the bars', '[t:stack] the bars [c:chart.stacked|on top of each other|on]')
+                if '[t:unstack]' in f.template:
+                    f.template = f.template.replace('[t:unstack] the bars', '[t:unstack] the bars'.replace('[t:unstack]', '[c:chart.stacked|unstack|off]'))
+for c in CASES:
+    if c.startswith('chart.format:'):
+        for t in ('equivalent', 'complex', 'simplified'):
+            for f in CASES[c][t]:
+                if '{cref}' not in f.template and not f.template.startswith('{pol}') and t == 'simplified':
+                    f.attrs = (op('diagram.chart.change', fill='context'),)
+                elif '{cref}' not in f.template:
+                    f.attrs = (op('diagram.chart.change', fill='context'),)
+
+case('chart.ask:data', 'questions about a chart',
+     fr(['[t:what values] does {cref} show?', '[t:what] is the value of [n:{cat}|{cat}]?'.replace('[n:{cat}|{cat}]', '[c:chart.labels|{cat}||sel]'), '[t:which] category is the biggest in {cref}?',
+         '[t:what] is the total of {cref}?', '[t:how much] is [c:chart.labels|{cat}||sel]?', '[t:what] is the average in {cref}?', '[t:describe] {cref}'], CQ),
+     fr(['before I present it, [t:what] does {cref} say?'], CQ), fr(['[c:chart.labels|{cat}||sel]?', '[t:total]?', '[t:biggest] one?'], CQ), scene=CHART, n=30)
+QMAP = {'what values': ('list', 'chart.values'), 'which category is the biggest': ('max', None), 'total': ('total', None), 'how much': ('how_much', None),
+        'average': ('average', None), 'describe': ('describe', None), 'biggest': ('max', None), 'what does': ('describe', None), 'value of': ('what', 'chart.values')}
+for t in ('equivalent', 'complex', 'simplified'):
+    for f in CASES['chart.ask:data'][t]:
+        low = f.template.lower()
+        ask = next((v for k, v in QMAP.items() if k in low), ('what', None))
+        ctx = '{cref}' not in f.template
+        f.attrs = (op('diagram.chart.ask', q=ask[0], **({'asked_key': ask[1]} if ask[1] else {}), **({'fill': 'context'} if ctx else {})),)
+
+case('diagram.effects:nodes', 'effects on nodes or the whole diagram',
+     fr(['{pol}[t:add] {neffect} to {npop}', '{pol}[t:give] {nany} {neffect}', '{pol}[t:make] {npop} {neffect}'.replace('{neffect}', '[c:node.effect|glow|glow]'),
+         '{pol}[t:add] {deffect} to everything', '{pol}[t:give] the whole diagram {deffect}', '{pol}[t:remove] the shadows'.replace('the shadows', 'the [c:diagram.effect|shadows|shadow|neg]')],
+        op('diagram.style.nodes')),
+     fr(['it looks flat, [t:add] {neffect} to {npop}'], op('diagram.style.nodes')),
+     fr(['{neffect} on {npop}', '[t:add] {deffect}', '{deffect} please'], op('diagram.style.nodes')), scene=PLURAL, n=30)
+for t in ('equivalent', 'complex', 'simplified'):
+    for f in CASES['diagram.effects:nodes'][t]:
+        if 'diagram.effect' in f.template or '{deffect}' in f.template:
+            f.attrs = (op('diagram.style.apply'),)
+
+for t in ('equivalent', 'complex', 'simplified'):  # a plural kind after "connect" is the population joined
+    for f in CASES['diagram.links.connect:population'][t]:
+        if '[k:cirles|circle]' in f.template:
+            f.attrs = (op('diagram.links.connect', fill='all'),)

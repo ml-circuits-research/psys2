@@ -244,15 +244,16 @@
       "rowsIn": 438,
       "alreadyInExamples": 438,
       "assembledHere": 0,
-      "kept": 125,
-      "dropped": 313,
+      "kept": 124,
+      "dropped": 314,
       "dropReasons": {
         "balance-cap-per-family": 114,
         "operation-without-written-selector-template": 113,
         "value-not-in-class-bank": 66,
         "placeholder-value-for-nodes": 9,
         "placeholder-value-for-edges": 9,
-        "numeric-value-not-in-surface": 2
+        "numeric-value-not-in-surface": 2,
+        "duplicate-text": 1
       }
     },
     {
@@ -459,8 +460,9 @@
       "kept": 452,
       "dropped": 220,
       "dropReasons": {
-        "balance-cap-per-family": 184,
-        "avatar-question-about-face-or-preset-not-parts": 36
+        "balance-cap-per-family": 182,
+        "avatar-question-about-face-or-preset-not-parts": 36,
+        "duplicate-text": 2
       }
     },
     {
@@ -473,8 +475,9 @@
       "kept": 452,
       "dropped": 220,
       "dropReasons": {
-        "balance-cap-per-family": 184,
-        "avatar-question-about-face-or-preset-not-parts": 36
+        "balance-cap-per-family": 182,
+        "avatar-question-about-face-or-preset-not-parts": 36,
+        "duplicate-text": 2
       }
     },
     {
@@ -544,7 +547,7 @@
     }
   ],
   "builder": "official-dataset/build.py",
-  "builderSha256": "1968421790f40de3a3c164b3ddb3a8665166532702918722e06b59b375e0f4ba",
+  "builderSha256": "ff56caa1148b2edb9a7ee5db7df2a636d6cad0f001007ef16caec7b770e46466",
   "sources": [
     {
       "name": "ui-natural-v1",
@@ -687,14 +690,14 @@
       "name": "ui-diagram-v2",
       "path": "training/sop-bert/data/ui-diagram-v2/examples.jsonl",
       "description": "voice/chat control of the Diagram editor: every operation x parameter x reference form, robustness variants, compounds, questions (generate.py)",
-      "gitCommit": null,
-      "sha256": "37f3b0917bd6c490a5a91605d6c4497a8ed183c1c489f7f51bcd206c9493750d",
-      "rowsIn": 5377,
-      "rowsKept": 5371,
-      "rowsDropped": 6,
+      "gitCommit": "ff5843c5ffeece434999e5f294e16da8e116ed2d",
+      "sha256": "47c4cc2d94b96b3388ef7b12a6a786f440d231f84d61a470c23d93a758ec2568",
+      "rowsIn": 6536,
+      "rowsKept": 6528,
+      "rowsDropped": 8,
       "dropReasons": {
-        "dropped:conflicting-label-for-identical-text": 2,
-        "dropped:duplicate-text": 4
+        "dropped:conflicting-label-for-identical-text": 1,
+        "dropped:duplicate-text": 7
       },
       "fixes": {}
     },
@@ -713,16 +716,40 @@
       }
     },
     {
+      "name": "human-adapted-v1-drawing",
+      "path": "training/sop-bert/data/human-adapted-v1/drawing/examples.jsonl",
+      "description": "real human utterances adapted to the Drawing tab (specs/human-utterance-benchmark.md)",
+      "gitCommit": null,
+      "sha256": "1fa3fd5f34da8ddac2031d2898a7f3d67cb5f92151d8c34b092e0adac52ff112",
+      "rowsIn": 205,
+      "rowsKept": 205,
+      "rowsDropped": 0,
+      "dropReasons": {},
+      "fixes": {}
+    },
+    {
+      "name": "data-drop-v1",
+      "path": "training/sop-bert/data/data-drop-v1/accepted.jsonl",
+      "description": "Diagram/Drawing rows of the data-request drops, validated and normalised by data-drop-v1/import.py",
+      "gitCommit": null,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "rowsIn": 0,
+      "rowsKept": 0,
+      "rowsDropped": 0,
+      "dropReasons": {},
+      "fixes": {}
+    },
+    {
       "name": "demo-tool-profile",
       "path": "training/sop-bert/data/demo-tool-profile/active.jsonl.gz",
       "description": "the corpus of the deployed reader: haiku-v1/v2 authored data plus demo tool supplements",
       "gitCommit": "3ce766837cefb972b3f70ca224de3f2712f2b9ba",
       "sha256": "ad5777dc5c8d6fb61714f4ccb6798ebba570f12ea7452c9a0bce3cde92b7a0fd",
       "rowsIn": 36999,
-      "rowsKept": 27525,
-      "rowsDropped": 9474,
+      "rowsKept": 27524,
+      "rowsDropped": 9475,
       "dropReasons": {
-        "dropped:conflicting-label-for-identical-text": 109,
+        "dropped:conflicting-label-for-identical-text": 110,
         "dropped:duplicate-text": 9365
       },
       "fixes": {
@@ -738,8 +765,8 @@
       "gitCommit": "5fb569407b51da4d5507472d288a2e148810441e",
       "sha256": "79ae0d15ca848d57c6d51796cce40cbb038cfc0c88fed29a2fbf92cd72fd077b",
       "rowsIn": 26670,
-      "rowsKept": 4928,
-      "rowsDropped": 21742,
+      "rowsKept": 4927,
+      "rowsDropped": 21743,
       "dropReasons": {
         "dropped:avatar-label-or-text-nonsense": 8717,
         "dropped:avatar-part-shape": 136,
@@ -747,7 +774,7 @@
         "dropped:avatar-question-about-face-or-preset-not-parts": 72,
         "dropped:avatar-selector-not-face": 4,
         "dropped:avatar-variant-not-attested-for-slot": 1007,
-        "dropped:balance-cap-per-family": 3616,
+        "dropped:balance-cap-per-family": 3615,
         "dropped:balance-cap-per-operation": 2628,
         "dropped:calendar-placeholder-values-not-text-evidence": 551,
         "dropped:compound-part-avatar-label-or-text-nonsense": 7,
@@ -760,7 +787,7 @@
         "dropped:compound-part-placeholder-value-for-color": 2,
         "dropped:compound-part-placeholder-value-for-edges": 1,
         "dropped:compound-part-value-not-in-class-bank": 1,
-        "dropped:duplicate-text": 6,
+        "dropped:duplicate-text": 8,
         "dropped:make-generic-object-with-placeholder-name": 142,
         "dropped:make-without-single-kind": 47,
         "dropped:mechanical-keyword-text-for-existing-object": 2644,
@@ -894,17 +921,18 @@
     }
   ],
   "splits": {
-    "train": 47284,
-    "dev": 5753,
-    "test": 5759
+    "train": 48619,
+    "dev": 5939,
+    "test": 5815
   },
-  "families": 23605,
+  "families": 23893,
   "leakedFamilies": 0,
   "labelConflictsResolvedByPriority": {
     "ui-human-v1<-ui-features-v1": 1,
-    "ui-coverage-v2<-ui-diagram-v2": 2,
+    "ui-coverage-v2<-ui-diagram-v2": 1,
     "ui-natural-v1<-demo-tool-profile": 5,
     "ui-human-v1<-demo-tool-profile": 1,
+    "ui-diagram-v2<-demo-tool-profile": 1,
     "demo-tool-profile<-demo-tool-profile": 103
   },
   "previousMessageAugmentation": {
@@ -912,11 +940,12 @@
     "ui-human-v1": 715,
     "ui-coverage-v2": 595,
     "ui-tiers-v1": 3,
-    "ui-relations-v1": 1370,
+    "ui-relations-v1": 1368,
     "ui-comparatives-v1": 154,
     "ui-features-v1": 66,
-    "ui-diagram-v2": 992,
+    "ui-diagram-v2": 1158,
     "ui-quantities-v1": 42,
+    "human-adapted-v1-drawing": 53,
     "main-synthetic": 1214
   },
   "nonReaderLabelFieldsRemoved": {
@@ -924,41 +953,41 @@
     "anchor_fill": 8125,
     "anchor_span": 437,
     "qualitative": 430,
-    "mention": 160,
+    "mention": 155,
     "anchor_kind": 5374
   },
   "kindVocabulary": {
-    "path": "docs/webchat/models/sop-bert/291f851b51198c45f456447a000c9a85512f1132086bfc50fc9dd7abf5a79163/bindings.json",
-    "sha256": "6836dd20cb797222b0ffd3bc0029ec1651481102fbbd54b04b82aea663f723ff"
+    "path": "docs/webchat/models/sop-bert/afa61472a2b06f94b85e35787cb702dfaac7008dcdf0aecb5bececddfe44d945/bindings.json",
+    "sha256": "219e21dd1082871008f4dde11d0ebc0930b07f402a735f23e764219bd9852a9f"
   },
   "files": {
     "STATS.md": {
-      "sha256": "a1473c5a79b8a12542571473d0fd24d834854cd782eda48297f1149fa26aeb32",
-      "bytes": 7315
+      "sha256": "1b452c4a787d7b8ded396cdcb5e7a9b026fc39b6f614ddb9c7da5a2e4341158a",
+      "bytes": 7416
     },
     "VALIDATION.md": {
-      "sha256": "03709457a3e7f658d36c636138ca0e615e2af8342a1b205bf3aad67a33b877d2",
-      "bytes": 10666
+      "sha256": "1fd0831d9c64ab4952a2b7638b8335ef20cd8d1b68fc080815abfea0a42c5c25",
+      "bytes": 11215
     },
     "audit-sample.md": {
-      "sha256": "1b0750db0d594e7ea4aaf532bf472c09d167d9dc4b20cdbdd8a5056c065e3a50",
-      "bytes": 45058
+      "sha256": "6a7b364cd53c066071be6d47aded0dee8d5b1caae66d0f98f484e754388b28cf",
+      "bytes": 44800
     },
     "dev.jsonl": {
-      "sha256": "e536f01d7712c331741849c9ee12e1dca0edd518dcaadc67351ddd69cb1f836f",
-      "bytes": 6255412
+      "sha256": "548ccf2b025593fafdf888496017846d618514a3eee72ab733a2f292c0b6b2cb",
+      "bytes": 6531684
     },
     "inventory.json": {
-      "sha256": "146af623b6a6987e647c727d61441c30405c20045ab8481edeacad790bf1b5a0",
-      "bytes": 54464
+      "sha256": "302df46d4c7848cb7bc2c9a7f2da9228edc47200730f69bc88cd324710e5e806",
+      "bytes": 55990
     },
     "test.jsonl": {
-      "sha256": "9a6180e45d24e905afa5a669f6ff78ff00258db3687a281d843de72fdd13b821",
-      "bytes": 6506679
+      "sha256": "9f23a675e1fcae5f39a17aff936eec414529601728c47d89a6df0893b48c5744",
+      "bytes": 6507757
     },
     "train.jsonl.gz": {
-      "sha256": "cbc7efaf82a995d340fba71358ba8b3992b6990ba8c4f6b3b0f54e9e1053c65b",
-      "bytes": 2641368
+      "sha256": "f84059f973b1763a0d3c344f098d227f02bad51a2638c21edefb8af8a353dc85",
+      "bytes": 2733418
     }
   },
   "policy": {
@@ -972,6 +1001,8 @@
       "ui-features-v1",
       "ui-diagram-v2",
       "ui-quantities-v1",
+      "human-adapted-v1-drawing",
+      "data-drop-v1",
       "demo-tool-profile",
       "main-synthetic"
     ],

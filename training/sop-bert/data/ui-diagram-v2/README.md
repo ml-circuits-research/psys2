@@ -11,7 +11,7 @@ requests and questions. Deterministic generator, no network: `python3 heldout.py
 | --- | --- |
 | `engine.py` | span markup (`[t:]` trigger, `[k:]` kind, `[n:]` written reference, `[d:]` population description, `[q:]` count, `[c:key\|words\|value\|opts]` constraint, `<<...>>` request spans), observed scenes, noise, row assembly |
 | `vocab.py`, `frames.py` | surface vocabularies and the slot machinery (`{nref}`, `{npop}`, `{lref}`, `{from}`, `{colour}`, ...) |
-| `cases.py` | the case catalogue: 92 cases, each with authored frames per tier |
+| `cases.py` | the case catalogue: 112 cases, each with authored frames per tier |
 | `inventory.json` | the reader keys this corpus adds (merged into `official-dataset/inventory.json` by its build) |
 | `examples.jsonl` | the corpus (row shape of `ui-coverage-v2`; source `ui-diagram-v2` of the official dataset) |
 | `heldout.py`, `heldout-voice.jsonl` | the held-out voice set: hand-written, never in the corpus or the official dataset (checked) |
@@ -28,14 +28,24 @@ requests and questions. Deterministic generator, no network: `python3 heldout.py
 - Populations: `fill: all`; a kind word gives `kind`/`kind_span` ("all the circles", "the circles", "every box"), a generic phrase
   gives `description_span` ("all elements", "everything", "all the nodes"); explicit all/every/each/both give `quantifier`.
   The selection and pronouns ("it", "these", "these two", "the selected ones"): `fill: context` (`count_span` for "these two").
-- New links: endpoints are `link.from`/`link.to` spans of what the text says, also pronouns and populations ("connect them",
-  "connect all elements", "connect Start to all the boxes"); `link.pattern` (chain, cycle, star, all) for "in order", "in a
-  loop", "to each other". Existing links: code, endpoint selectors (`link.from`/`link.to`, phase selector, `kind` = the link
+- New links between two nodes: endpoints are `link.from`/`link.to` spans of what the text says ("connect Start to n3",
+  "connect it to Done"). Many links at once (specs/diagram-reading-analysis.md): the joined nodes are the request's target
+  (`act: connect`, target `node`, `mode: existing`): a population (`fill: all`, "connect all elements", "connect cirles
+  with an arraw"), the selection ("connect them", "connect these two") or names (`node.ids`); `link.pattern` (chain, cycle,
+  star, all) for "in order", "in a loop", "to each other"; a hub is `link.from`/`link.to` ("connect Start to all the boxes"). Existing links: code, endpoint selectors (`link.from`/`link.to`, phase selector, `kind` = the link
   noun), context or ordinal.
 - Container words: "add a diagram" is a new member named by its container's kind (target `node`, `kind: diagram`); "a diagram
   with five boxes" labels the member kind and `node.n`; "to the diagram", "on the canvas" carry no label.
+- Charts: target `chart` (`chart.id` selector; creation with `chart.type`, `chart.title`, `chart.labels`/`chart.values`, the
+  official majority form), formatting on the chart (`chart.title`, `chart.legend` show/hide/top/bottom/left/right,
+  `chart.show_values`, `chart.xLabel`/`chart.yLabel`, `chart.grid`, `chart.min`/`chart.max`, `chart.stacked`,
+  `chart.horizontal`, `chart.sort`, `chart.palette`, `chart.colour`, `chart.effect`), dataset items as `point` (a category:
+  `chart.labels` selector or new label, `point.value`, `delta` for "increase by 5", `point.chart` for "in Sales") and `series`
+  (`series.label`, `series.values`, `series.colour`). Effects on nodes/the diagram: `node.effect`, `diagram.effect`
+  (shadow, gradient, glow, rounded, animation, transparent, 3d, outline; `polarity: negative` for "remove the shadow").
 - Vague aesthetic requests ("improve layout", "make it look better", "tidy up", "fix the layout"): `act: arrange` on target
-  `diagram` (`fill: context`) with no constraint: the declared improvement (`diagram.layout.improve`). Theme words are
+  `diagram` (`fill: context`) with no constraint: the declared improvement (`diagram.layout.improve`); on one object or a
+  population the same reading with that target ("make the line e1 to look better": `link`, `link.ids` e1). Theme words are
   `diagram.theme` ("make it pastel", "black and white" -> monochrome, "highlight Api" -> highlight on the nodes).
 - Counts of new nodes are `node.n` (the native parameter; the official build also converts `target.count` of new diagram
   nodes to `node.n`). Comparatives follow the official build (`delta` with `step`, the comparative word as value span).

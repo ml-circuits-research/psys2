@@ -48,6 +48,8 @@ NUMBER_WORDS.update({'a pair of': 2, 'a couple of': 2, 'couple of': 2, 'a few': 
 OPS = {
     'diagram.make': ('make', 'do', 'diagram', 'new', None, None),
     'diagram.improve': ('arrange', 'do', 'diagram', 'existing', None, 'context'),
+    'diagram.improve.link': ('arrange', 'do', 'link', 'existing', 'link.ids', 'context'),
+    'diagram.improve.node': ('arrange', 'do', 'node', 'existing', 'node.ids', 'context'),
     'diagram.node.make': ('make', 'do', 'node', 'new', None, None),
     'diagram.node.change': ('change', 'do', 'node', 'existing', 'node.ids', 'context'),
     'diagram.node.select': ('select', 'do', 'node', 'existing', 'node.ids', 'context'),
@@ -81,6 +83,16 @@ OPS = {
     'diagram.group.chart.make': ('make', 'do', 'group', 'new', None, None),
     'diagram.group.chart.adopt': ('make', 'do', 'group', 'new', None, None),
     'diagram.group.chart': ('make', 'do', 'chart', 'new', None, None),
+    'diagram.chart.make': ('make', 'do', 'chart', 'new', None, None),
+    'diagram.chart.change': ('change', 'do', 'chart', 'existing', 'chart.id', 'context'),
+    'diagram.chart.sort': ('arrange', 'do', 'chart', 'existing', 'chart.id', 'context'),
+    'diagram.chart.ask': ('answer', 'ask', 'chart', 'existing', 'chart.id', 'context'),
+    'diagram.point.make': ('make', 'do', 'point', 'new', None, None),
+    'diagram.point.change': ('change', 'do', 'point', 'existing', 'chart.labels', 'context'),
+    'diagram.point.remove': ('remove', 'do', 'point', 'existing', 'chart.labels', 'context'),
+    'diagram.series.make': ('make', 'do', 'series', 'new', None, None),
+    'diagram.series.change': ('change', 'do', 'series', 'existing', 'series.label', 'context'),
+    'diagram.series.remove': ('remove', 'do', 'series', 'existing', 'series.label', 'context'),
     'diagram.style.apply': ('change', 'do', 'diagram', 'existing', None, 'context'),
     'diagram.style.nodes': ('change', 'do', 'node', 'existing', 'node.ids', 'context'),
     'diagram.colour.by': ('change', 'do', 'diagram', 'existing', None, 'context'),
@@ -88,7 +100,7 @@ OPS = {
     'diagram.nodes.align': ('arrange', 'do', 'node', 'existing', 'node.ids', 'context'),
     'diagram.nodes.distribute': ('arrange', 'do', 'node', 'existing', 'node.ids', 'context'),
     'diagram.steps.number': ('change', 'do', 'diagram', 'existing', None, 'context'),
-    'diagram.links.connect': ('connect', 'do', 'link', 'new', None, None),
+    'diagram.links.connect': ('connect', 'do', 'node', 'existing', 'node.ids', 'context'),  # a population of existing nodes joined (specs/diagram-reading-analysis.md)
     'diagram.link.reverse': ('reverse', 'do', 'link', 'existing', 'link.ids', 'context'),
     'diagram.node.duplicate': ('copy', 'do', 'node', 'existing', 'node.ids', 'context'),
     'diagram.node.insert': ('make', 'do', 'node', 'new', None, None),
@@ -183,6 +195,9 @@ class Scene:
             rows.append({'kind': 'link', 'name': f'{self.name(e["from"])} to {self.name(e["to"])}', 'id': e['code']})
         for g in self.groups:
             rows.append({'kind': 'group', 'name': g['label'], 'id': g['code']})
+        for c in getattr(self, 'charts', []):
+            rows.append({'kind': 'chart', 'name': c['name'], 'id': c['code']})
+            rows += [{'kind': 'point', 'name': x} for x in c['categories']] + [{'kind': 'series', 'name': x} for x in c['series']]
         return rows
 
     def kinds_unique(self):
@@ -348,7 +363,8 @@ POLITE_POST = [' please', ', thanks', ', thank you', ' pls', ' thx', ' for me', 
 def politeness(rng, segs, single):
     segs = list(segs)
     edge = 0 if single else None
-    if rng.random() < 0.6:
+    first = next((sg for sg in segs if sg[0].strip()), None)
+    if rng.random() < 0.6 and first is not None and first[1] == 't':
         segs.insert(0, (rng.choice(POLITE_PRE), None, None, edge))
     else:
         segs.append((rng.choice(POLITE_POST), None, None, edge if single else None))

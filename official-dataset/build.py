@@ -39,9 +39,14 @@ SOURCES = [
     ('ui-features-v1', DATA / 'ui-features-v1' / 'examples.jsonl', 'avatar part features: length (absolute and comparative) and feel (generate.py)'),
     ('ui-diagram-v2', DATA / 'ui-diagram-v2' / 'examples.jsonl', 'voice/chat control of the Diagram editor: every operation x parameter x reference form, robustness variants, compounds, questions (generate.py)'),
     ('ui-quantities-v1', DATA / 'ui-quantities-v1' / 'examples.jsonl', 'coordination of make requests and quantities (generate.py)'),
+    ('human-adapted-v1-drawing', DATA / 'human-adapted-v1' / 'drawing' / 'examples.jsonl', 'real human utterances adapted to the Drawing tab (specs/human-utterance-benchmark.md)'),
+    ('data-drop-v1', DATA / 'data-drop-v1' / 'accepted.jsonl', 'Diagram/Drawing rows of the data-request drops, validated and normalised by data-drop-v1/import.py'),
+    ('human-adapted-v1-diagram', DATA / 'human-adapted-v1' / 'diagram' / 'examples.jsonl', 'real human utterances adapted to the Diagram tab (specs/human-utterance-benchmark.md)'),
     ('demo-tool-profile', DATA / 'demo-tool-profile' / 'active.jsonl.gz', 'the corpus of the deployed reader: haiku-v1/v2 authored data plus demo tool supplements'),
     ('main-synthetic', REPO / 'main-synthetic-dataset' / 'examples.jsonl', 'owner synthetic set (generate-reader-datasets skill); converted, mostly dropped'),
 ]
+# Sources still being authored by other workstreams are included once their file exists.
+SOURCES = [src for src in SOURCES if src[1].exists() or not src[0].startswith(('human-adapted', 'data-drop'))]
 SPLIT_SHARES = [('train', 80), ('dev', 10), ('test', 10)]
 # Balance caps on (source, operation) and per family for the main synthetic set.
 MS_CAP_PER_OPERATION = 2500

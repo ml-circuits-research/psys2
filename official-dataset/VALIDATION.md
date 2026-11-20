@@ -67,21 +67,33 @@ No issue found.
 
 No issue found.
 
-### ui-diagram-v2 (5,377 rows)
+### ui-diagram-v2 (6,536 rows)
 
 | issue | rows |
 | --- | ---: |
-| warning:selector-not-in-context | 155 |
-| warning:value-span-ambiguous | 35 |
-| warning:numeric-value-not-in-surface | 30 |
-| warning:target-name_span-ambiguous | 2 |
-| warning:target-kind_span-ambiguous | 2 |
+| warning:selector-not-in-context | 172 |
+| warning:value-span-ambiguous | 64 |
+| warning:numeric-value-not-in-surface | 50 |
+| warning:target-name_span-ambiguous | 5 |
+| warning:target-kind_span-ambiguous | 4 |
 
 ### ui-quantities-v1 (174 rows)
 
 | issue | rows |
 | --- | ---: |
 | warning:selector-not-in-context | 1 |
+
+### human-adapted-v1-drawing (205 rows)
+
+| issue | rows |
+| --- | ---: |
+| warning:selector-not-in-context | 13 |
+| warning:selector-with-empty-context | 2 |
+| warning:value-span-ambiguous | 1 |
+
+### data-drop-v1 (0 rows)
+
+No issue found.
 
 ### demo-tool-profile (36,999 rows)
 
@@ -243,24 +255,24 @@ Dropped:
 | dropped:duplicate-text | 1 |
 | dropped:conflicting-label-for-identical-text | 1 |
 
-### ui-diagram-v2: 5,377 in, 5,371 kept
+### ui-diagram-v2: 6,536 in, 6,528 kept
 
 Dropped:
 
 | reason | rows |
 | --- | ---: |
-| dropped:duplicate-text | 4 |
-| dropped:conflicting-label-for-identical-text | 2 |
+| dropped:duplicate-text | 7 |
+| dropped:conflicting-label-for-identical-text | 1 |
 
 Kept with a warning (not an error; see README):
 
 | warning | rows |
 | --- | ---: |
-| selector-not-in-context | 155 |
-| value-span-ambiguous | 35 |
-| numeric-value-not-in-surface | 30 |
-| target-name_span-ambiguous | 2 |
-| target-kind_span-ambiguous | 2 |
+| selector-not-in-context | 172 |
+| value-span-ambiguous | 64 |
+| numeric-value-not-in-surface | 50 |
+| target-name_span-ambiguous | 5 |
+| target-kind_span-ambiguous | 4 |
 
 ### ui-quantities-v1: 174 in, 174 kept
 
@@ -276,7 +288,19 @@ Kept with a warning (not an error; see README):
 | --- | ---: |
 | selector-not-in-context | 1 |
 
-### demo-tool-profile: 36,999 in, 27,525 kept
+### human-adapted-v1-drawing: 205 in, 205 kept
+
+Kept with a warning (not an error; see README):
+
+| warning | rows |
+| --- | ---: |
+| selector-not-in-context | 13 |
+| selector-with-empty-context | 2 |
+| value-span-ambiguous | 1 |
+
+### data-drop-v1: 0 in, 0 kept
+
+### demo-tool-profile: 36,999 in, 27,524 kept
 
 Fixed or converted:
 
@@ -291,7 +315,7 @@ Dropped:
 | reason | rows |
 | --- | ---: |
 | dropped:duplicate-text | 9,365 |
-| dropped:conflicting-label-for-identical-text | 109 |
+| dropped:conflicting-label-for-identical-text | 110 |
 
 Kept with a warning (not an error; see README):
 
@@ -302,7 +326,7 @@ Kept with a warning (not an error; see README):
 | value-span-ambiguous | 14 |
 | target-name_span-ambiguous | 6 |
 
-### main-synthetic: 26,670 in, 4,928 kept
+### main-synthetic: 26,670 in, 4,927 kept
 
 Fixed or converted:
 
@@ -328,7 +352,7 @@ Dropped:
 | reason | rows |
 | --- | ---: |
 | dropped:avatar-label-or-text-nonsense | 8,717 |
-| dropped:balance-cap-per-family | 3,616 |
+| dropped:balance-cap-per-family | 3,615 |
 | dropped:mechanical-keyword-text-for-existing-object | 2,644 |
 | dropped:balance-cap-per-operation | 2,628 |
 | dropped:avatar-variant-not-attested-for-slot | 1,007 |
@@ -348,8 +372,8 @@ Dropped:
 | dropped:target-type-not-in-area | 14 |
 | dropped:compound-part-operation-without-written-selector-template | 9 |
 | dropped:compound-part-calendar-placeholder-values-not-text-evidence | 8 |
+| dropped:duplicate-text | 8 |
 | dropped:compound-part-avatar-label-or-text-nonsense | 7 |
-| dropped:duplicate-text | 6 |
 | dropped:compound-part-avatar-question-about-face-or-preset-not-parts | 5 |
 | dropped:avatar-selector-not-face | 4 |
 | dropped:compound-part-make-generic-object-with-placeholder-name | 3 |
@@ -370,4 +394,4 @@ Kept with a warning (not an error; see README):
 
 - unresolved errors: **0**
 - families present in more than one split: **0**
-- label conflicts between identical texts, resolved by source priority: {'ui-human-v1<-ui-features-v1': 1, 'ui-coverage-v2<-ui-diagram-v2': 2, 'ui-natural-v1<-demo-tool-profile': 5, 'ui-human-v1<-demo-tool-profile': 1, 'demo-tool-profile<-demo-tool-profile': 103}
+- label conflicts between identical texts, resolved by source priority: {'ui-human-v1<-ui-features-v1': 1, 'ui-coverage-v2<-ui-diagram-v2': 1, 'ui-natural-v1<-demo-tool-profile': 5, 'ui-human-v1<-demo-tool-profile': 1, 'ui-diagram-v2<-demo-tool-profile': 1, 'demo-tool-profile<-demo-tool-profile': 103}

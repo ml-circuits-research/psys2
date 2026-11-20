@@ -29,18 +29,25 @@ MK, CH, LK, CN = O('diagram.node.make'), O('diagram.node.change'), O('diagram.li
 
 # (markup, attrs per request, scene, phenomenon)
 ITEMS = [
-    # ---- owner's example requests (verbatim)
-    ('[t:ad] a [k:diagram|diagram]', [MK], EMPTY, 'owner'),
-    ('[t:connect] [c:link.from|alle lements]', [CN], SHAPES, 'owner'),
-    ('<<[c:node.n|two|2] [k:cirles|circle]>> <<with an [k:arraw|arrow]>>', [MK, CN], EMPTY, 'owner'),
+    # ---- the owner's Diagram session (specs/diagram-reading-analysis.md), verbatim
+    ('[t:ad] a [k:diagram|diagram] with [c:node.n|5|5] nodes', [MK], EMPTY, 'owner'),
+    ('[t:add] another [k:box|box]', [MK], FLOW, 'owner'),
+    ('[t:add] a [k:box|box]', [MK], FLOW, 'owner'),
+    ('[t:add] a [k:circle|circle]', [MK], FLOW, 'owner'),
+    ('[t:add] another [k:circle|circle]', [MK], FLOW, 'owner'),
+    ('[t:connect] [d:alle lements]', [O('diagram.links.connect', fill='all')], SHAPES, 'owner'),
+    ('[t:connect] [d:all elements]', [O('diagram.links.connect', fill='all', quantifier='all')], SHAPES, 'owner'),
+    ('[t:connect] [k:cirles|circle] with an arraw', [O('diagram.links.connect', fill='all')], SHAPES, 'owner'),
     ('[t:improve] layout', [O('diagram.improve')], FLOW, 'owner'),
-    ('[t:make] it look better', [O('diagram.improve')], FLOW, 'owner'),
-    ('[t:make] [k:the circles|circle] [c:node.colour|red|red]'.replace('[k:the circles|circle]', 'the [k:circles|circle]'), [O('diagram.node.change', fill='all')], SHAPES, 'owner'),
-    ('[t:delete] [n:e1]', [O('diagram.link.remove')], FLOW, 'owner'),
-    ('[t:make] line [n:e1] [c:link.style|dashed|dashed]', [O('diagram.link.change')], FLOW, 'owner'),
-    ('[t:remove] the last one', [O('diagram.node.remove', fill='context', ordinal='last')], FLOW, 'owner'),
-    ('[t:connect] [c:link.from|these two]', [CN], SHAPES, 'owner'),
-    ('<<[t:add] [c:node.n|three|3] [k:boxes|box]>> and <<[t:connect] [c:link.from|them] [c:link.pattern|in order|chain]>>', [MK, CN], EMPTY, 'owner'),
+    ('[t:make] the line [n:e1] to look better', [O('diagram.improve.link')], FLOW, 'owner'),
+    # ---- the owner's further examples (task of 2026-11-20)
+    ('[t:make] it look better', [O('diagram.improve')], FLOW, 'owner-example'),
+    ('[t:make] the [k:circles|circle] [c:node.colour|red|red]', [O('diagram.node.change', fill='all')], SHAPES, 'owner-example'),
+    ('[t:make] line [n:e1] [c:link.style|dashed|dashed]', [O('diagram.link.change')], FLOW, 'owner-example'),
+    ('[t:remove] the last one', [O('diagram.node.remove', fill='context', ordinal='last')], FLOW, 'owner-example'),
+    ('[t:connect] these [q:two]', [O('diagram.links.connect', fill='context')], SHAPES, 'owner-example'),
+    ('<<[t:add] [c:node.n|three|3] [k:boxes|box]>> and <<[t:connect] them [c:link.pattern|in order|chain]>>', [MK, O('diagram.links.connect', fill='context')], EMPTY, 'owner-example'),
+    ('<<[c:node.n|two|2] [k:cirles|circle]>> <<with an arraw>>', [MK, O('diagram.links.connect', fill='context')], EMPTY, 'owner-example'),
     # ---- typos and missing spaces
     ('[t:ad] a [k:cirlce|circle] [c:node.label|Payment]', [MK], FLOW, 'typo'),
     ('[t:delet] [n:Dashboard]', [O('diagram.node.remove')], FLOW, 'typo'),
@@ -96,7 +103,7 @@ ITEMS = [
     ('<<[t:delete] [n:Dashboard]>> and <<[t:connect] [c:link.from|Valid?] to [c:link.to|End]>>', [O('diagram.node.remove'), LK], FLOW, 'compound'),
     ('<<[t:make] [d:all the nodes] [c:node.colour|blue|blue]>> and <<[t:make] the arrows [c:link.style|dashed|dashed]>>'.replace('the arrows', 'the [k:arrows|arrow]'),
      [O('diagram.node.change', fill='all', quantifier='all'), O('diagram.link.change', fill='all')], FLOW, 'compound'),
-    ('<<[t:add] [c:node.n|four|4] [k:circles|circle] [c:node.layout|in a circle|circle]>> and <<[t:link] [c:link.from|them] [c:link.pattern|in a loop|cycle]>>', [MK, CN], EMPTY, 'compound'),
+    ('<<[t:add] [c:node.n|four|4] [k:circles|circle] [c:node.layout|in a circle|circle]>> and <<[t:link] them [c:link.pattern|in a loop|cycle]>>', [MK, O('diagram.links.connect', fill='context')], EMPTY, 'compound'),
     ('<<[t:rename] [n:n6] to [c:node.label|Profile]>>, then <<[t:connect] [c:link.from|Dashboard] to [c:link.to|it]>>', [CH, LK], FLOW, 'compound'),
     ('<<[t:undo] that>> and <<[t:make] it [c:node.colour|grey|gray] instead>>', [O('diagram.undo'), O('diagram.node.change', fill='context')], FLOW, 'compound'),
     ('<<[t:add] a [k:diamond|diamond] [c:node.label|Paid?]>> <<[t:improve] the layout>>', [MK, O('diagram.improve')], FLOW, 'compound'),

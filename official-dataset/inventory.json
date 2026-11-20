@@ -792,6 +792,30 @@
      "head": "span",
      "src": "chart.make datasets"
     },
+    "effect": {
+     "concept": "effect",
+     "head": "class",
+     "src": "visual effects on a chart",
+     "values": [
+      "shadow",
+      "gradient",
+      "glow",
+      "rounded",
+      "animation",
+      "transparent",
+      "3d",
+      "outline"
+     ]
+    },
+    "grid": {
+     "concept": "gridlines",
+     "head": "class",
+     "src": "chart gridlines",
+     "values": [
+      "show",
+      "hide"
+     ]
+    },
     "height": {
      "concept": "height",
      "head": "number",
@@ -823,13 +847,27 @@
      "src": "bar/slice/point labels"
     },
     "legend": {
-     "concept": "toggle",
+     "concept": "legend",
      "head": "class",
-     "src": "chart options legend",
+     "src": "legend position (show/hide existing)",
      "values": [
       "show",
-      "hide"
+      "hide",
+      "top",
+      "bottom",
+      "left",
+      "right"
      ]
+    },
+    "max": {
+     "concept": "axis.max",
+     "head": "number",
+     "src": "value axis maximum"
+    },
+    "min": {
+     "concept": "axis.min",
+     "head": "number",
+     "src": "value axis minimum"
     },
     "palette": {
      "concept": "colour",
@@ -929,10 +967,20 @@
      "head": "number",
      "src": "Native parameter: chart.place.x"
     },
+    "xLabel": {
+     "concept": "axis.x.title",
+     "head": "span",
+     "src": "chart x-axis title (charts in the Diagram tab; owner priorities 2026-11-20)"
+    },
     "y": {
      "concept": "y",
      "head": "number",
      "src": "Native parameter: chart.place.y"
+    },
+    "yLabel": {
+     "concept": "axis.y.title",
+     "head": "span",
+     "src": "chart y-axis title"
     }
    }
   },
@@ -959,6 +1007,21 @@
       "right",
       "up",
       "left"
+     ]
+    },
+    "effect": {
+     "concept": "effect",
+     "head": "class",
+     "src": "visual effects on the whole diagram",
+     "values": [
+      "shadow",
+      "gradient",
+      "glow",
+      "rounded",
+      "animation",
+      "transparent",
+      "3d",
+      "outline"
      ]
     },
     "kind": {
@@ -1317,6 +1380,21 @@
      "concept": "edges",
      "head": "candidate",
      "src": "Native parameter: diagram.node.select.edges"
+    },
+    "effect": {
+     "concept": "effect",
+     "head": "class",
+     "src": "visual effects on nodes",
+     "values": [
+      "shadow",
+      "gradient",
+      "glow",
+      "rounded",
+      "animation",
+      "transparent",
+      "3d",
+      "outline"
+     ]
     },
     "fontSize": {
      "concept": "font.size",

@@ -3,7 +3,7 @@ produce span markup (engine.py) and request attributes. '{slot@1}' sends the slo
 import re
 
 from engine import Scene
-from vocab import (AXES, BY, DIRECTIONS, EDGES, FONT_SIZES, NEW_SHAPES, PATTERNS, ROLES, ROUTES, SPACINGS, THEMES, ARROWS, CHART_NAMES, CHART_ROWS, CHART_TYPES, COLOURS, DIAGRAM_KINDS, GENERIC, GROUP_LAYOUTS, GROUP_SIZES, KINDS, LAYOUTS,
+from vocab import (CATEGORY_SETS, CHART_TYPE_WORDS, EFFECTS, PALETTES, SERIES_NAMES, AXES, BY, DIRECTIONS, EDGES, FONT_SIZES, NEW_SHAPES, PATTERNS, ROLES, ROUTES, SPACINGS, THEMES, ARROWS, CHART_NAMES, CHART_ROWS, CHART_TYPES, COLOURS, DIAGRAM_KINDS, GENERIC, GROUP_LAYOUTS, GROUP_SIZES, KINDS, LAYOUTS,
                    LEMMA, LINK_LABELS, LINK_LEMMA, LINK_NOUNS, NEW_LABELS, NUMS, REGIONS, RELATIONS, SHAPES, SIZES, STYLES, V, article,
                    scene_with)
 
@@ -520,6 +520,20 @@ class Slots(dict):
     def s_gsel(self, a, n):
         return f'[c:group.ids|{self.pick(["these", "them", "these two", "the selected nodes", "the selection", "those three", "both of them", "all the circles", "all the boxes", "everything"])}]'
 
+    def s_cpop(self, a, n):
+        """The nodes a many-link connect joins: a population, the selection, or named nodes (the request's target)."""
+        r = self.rng.random()
+        if r < 0.5:
+            return self.ref(a, 'pop')
+        if r < 0.75:
+            return self.ref(a, 'many')
+        a['fill'] = 'context'
+        choice = self.pick(['them', 'these', 'these two', 'those three', 'the selected nodes', 'the selection', 'both of them', 'all of these', 'the two'])
+        for w in ('two', 'three'):
+            if choice.endswith(w) or (' ' + w + ' ') in choice:
+                return choice.replace(w, f'[q:{w}]')
+        return choice
+
     def s_lpopto(self, a, n):
         return self.endpop('link.to')
 
@@ -582,6 +596,10 @@ class Slots(dict):
     def s_edge(self, a, n): return self.bank('node.edge', EDGES)
     def s_axis(self, a, n): return self.bank('node.axis', AXES)
     def s_pattern(self, a, n): return self.bank('link.pattern', PATTERNS)
+    def s_newkind(self, a, n):
+        s, v = self.pick(NEW_SHAPES)
+        return f'[k:{s}|{v}]'
+
     def s_newshape(self, a, n): return self.bank('node.shape', NEW_SHAPES + SHAPES[:6])
 
     def s_outline(self, a, n):
@@ -619,6 +637,99 @@ class Slots(dict):
         if choice == 'these nodes':
             return 'these [k:nodes|node]'
         return choice
+
+
+    # ---------------------------------------------------------------- charts
+    def chart(self):
+        cs = getattr(self.scene, 'charts', [])
+        if not cs:
+            raise Skip()
+        return self.scene.charts[0] if len(cs) == 1 else self.pick(cs)
+
+    def s_cref(self, a, n):
+        c = self.chart()
+        form = self.pick(['name', 'name', 'name', 'ctx', 'kind'])
+        if form == 'ctx':
+            a['fill'] = 'context'
+            return self.pick(['it', 'the chart', 'this chart', 'the selected chart', 'that graph', 'this graph'])
+        if form == 'kind' and len(self.scene.charts) == 1:
+            w = self.pick(['chart', 'graph', 'bar chart', 'pie chart', 'plot'])
+            return 'the ' + f'[k:{w}|chart]'
+        return self.pick(['{c}', 'the {c} chart', 'the chart {c}', '{c}', 'the {c} graph']).replace('{c}', f'[n:{c["name"]}]')
+
+    def s_inchart(self, a, n):
+        """An optional chart reference on a point/series request ('in Sales')."""
+        c = self.chart()
+        r = self.rng.random()
+        if r < 0.45:
+            return ''
+        if r < 0.8:
+            return self.pick([' in [c:point.chart|{c}||sel]', ' of [c:point.chart|{c}||sel]', ' in the [c:point.chart|{c}||sel] chart', ' on [c:point.chart|{c}||sel]']).replace('{c}', c['name'])
+        return self.pick([' in the chart', ' on the chart', ' in the graph'])
+
+    def s_cat(self, a, n):
+        c = self.chart()
+        return self.pick(c['categories'])
+
+    def s_newcat(self, a, n):
+        c = self.chart()
+        pool = [x for s in CATEGORY_SETS for x in s if x not in c['categories']]
+        return self.pick(pool)
+
+    def s_ser(self, a, n):
+        return self.pick(self.chart()['series'])
+
+    def s_newser(self, a, n):
+        return self.pick([x for x in SERIES_NAMES if x not in self.chart()['series']])
+
+    def s_val(self, a, n):
+        return str(self.pick([3, 5, 7, 8, 12, 15, 20, 25, 33, 40, 48, 55, 61, 70, 85, 90, 120, 250]))
+
+    def s_ctype(self, a, n):
+        s, v = self.pick(CHART_TYPE_WORDS)
+        return f'[c:chart.type|{s}|{v}]'
+
+    def s_actype(self, a, n):
+        s, v = self.pick(CHART_TYPE_WORDS)
+        return f'{article(s)} [c:chart.type|{s}|{v}]'
+
+    def s_cdata(self, a, n):
+        pool = self.pick(CATEGORY_SETS)
+        cats = self.rng.sample(pool, self.rng.randint(2, len(pool)))
+        vals = [self.s_val(a, n) for _ in cats]
+        form = self.pick(['{l} {v}', '{l} {v}', '{l}: {v}', '{l} = {v}', '{v} for {l}', '{l} at {v}'])
+        parts = [form.replace('{l}', f'[c:chart.labels|{l}]').replace('{v}', f'[c:chart.values|{v}]') for l, v in zip(cats, vals)]
+        return self.pick([', ', ', ', ' and ', '; ']).join(parts[:-1]) + self.pick([' and ', ', ']) + parts[-1]
+
+    def s_ctitle(self, a, n):
+        return f'[c:chart.title|{self.pick(["Sales 2025", "Visitors per day", "Budget split", "Votes", "Revenue by quarter", "Team sizes", "Fruit stock", "Weekly tickets"])}]'
+
+    def s_ceffect(self, a, n):
+        s, v = self.pick(EFFECTS)
+        return f'[c:chart.effect|{s}|{v}]'
+
+    def s_neffect(self, a, n):
+        s, v = self.pick(EFFECTS)
+        return f'[c:node.effect|{s}|{v}]'
+
+    def s_deffect(self, a, n):
+        s, v = self.pick(EFFECTS)
+        return f'[c:diagram.effect|{s}|{v}]'
+
+    def s_palette(self, a, n):
+        p = self.pick(PALETTES)
+        return f'[c:chart.palette|{p}]'
+
+    def s_ccolour(self, a, n):
+        s, v = self.pick(COLOURS)
+        return f'[c:chart.colour|{s}|{v}]'
+
+    def s_scolour(self, a, n):
+        s, v = self.pick(COLOURS)
+        return f'[c:series.colour|{s}|{v}]'
+
+    def s_axisword(self, a, n):
+        return self.pick(['Month', 'Sales', 'Revenue (EUR)', 'Count', 'Day', 'Region', 'Year', 'Tickets'])
 
 
 class F:

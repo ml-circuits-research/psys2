@@ -136,3 +136,14 @@ NEW_SHAPES = [('rounded rectangle', 'rounded_rectangle'), ('pill', 'oval'), ('st
               ('cylinder', 'cylinder'), ('database', 'cylinder'), ('document', 'document'), ('cloud', 'cloud'), ('person', 'actor'), ('stick figure', 'actor'),
               ('actor', 'actor'), ('sticky note', 'note'), ('note', 'note'), ('chevron', 'chevron'), ('double rectangle', 'double_rectangle'), ('dot', 'dot')]
 FONT_SIZES = ['10', '12', '14', '16', '18', '20', '24', '28', '32']
+
+CATEGORY_SETS = [['Q1', 'Q2', 'Q3', 'Q4'], ['North', 'South', 'East', 'West'], ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'], ['Jan', 'Feb', 'Mar', 'Apr'],
+                 ['Apples', 'Pears', 'Plums', 'Cherries'], ['Email', 'Phone', 'Chat'], ['Red team', 'Blue team', 'Green team'], ['2022', '2023', '2024']]
+SERIES_NAMES = ['2024', '2025', 'Revenue', 'Costs', 'Target', 'Actual', 'Online', 'In store', 'Plan', 'Forecast']
+CHART_TYPE_WORDS = [('bar chart', 'bar'), ('bars', 'bar'), ('pie chart', 'pie'), ('pie', 'pie'), ('line chart', 'line'), ('line graph', 'line'),
+                    ('doughnut chart', 'doughnut'), ('donut', 'doughnut'), ('radar chart', 'radar'), ('scatter plot', 'scatter'), ('column chart', 'bar'),
+                    ('polar area chart', 'polarArea')]
+EFFECTS = [('a shadow', 'shadow'), ('drop shadows', 'shadow'), ('a gradient', 'gradient'), ('gradients', 'gradient'), ('a glow', 'glow'),
+           ('rounded corners', 'rounded'), ('an animation', 'animation'), ('animated', 'animation'), ('some transparency', 'transparent'),
+           ('see-through', 'transparent'), ('a 3D look', '3d'), ('3D', '3d'), ('an outline', 'outline'), ('a soft shadow', 'shadow')]
+PALETTES = ['pastel', 'vivid', 'ocean', 'forest', 'sunset', 'monochrome', 'dark', 'warm', 'cool', 'rainbow']

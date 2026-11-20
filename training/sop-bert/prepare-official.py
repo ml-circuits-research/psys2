@@ -18,7 +18,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 OFFICIAL = ROOT.parents[1] / 'official-dataset'
-UI_SOURCES = {'ui-natural-v1', 'ui-human-v1', 'ui-features-v1', 'ui-quantities-v1'}  # executed UI recipes and their paraphrases, and the small avatar feature and quantity corpora; generated relations are already numerous
+UI_SOURCES = {'ui-natural-v1', 'ui-human-v1', 'ui-features-v1', 'ui-quantities-v1', 'human-adapted-v1-drawing', 'human-adapted-v1-diagram'}  # executed UI recipes and their paraphrases, and the small avatar feature and quantity corpora; generated relations are already numerous
 SOURCE_WEIGHTS = {'ui-diagram-v2': 2}  # the Diagram voice corpus is large already: repeated twice, not ui_weight times
 
 

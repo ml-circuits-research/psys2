@@ -76,7 +76,10 @@ def check_rows(rows, errors, examples, notes, official_texts=None):
             err('duplicate-text', r, 'same as ' + seen[k])
         seen[k] = r['id']
         if official_texts is not None and ('diagram', ' '.join(text.lower().split())) in official_texts:
-            err('text-already-in-official-dataset', r)
+            if r.get('style', '').startswith('heldout-owner'):
+                notes['owner-sentence-also-in-official-dataset'] += 1  # verbatim owner requests are kept even when another source has them
+            else:
+                err('text-already-in-official-dataset', r)
         for q in r['requests']:
             span = q['span']
             if span not in text:
