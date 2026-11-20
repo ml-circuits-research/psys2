@@ -1,5 +1,5 @@
 {
-  "version": "6e37fc042f",
+  "version": "3d4f8ef88b",
   "worlds": [
     "core",
     "ui.shell",
@@ -268,8 +268,8 @@
     "worlds/ui.shell/bundle.json": "cd254bfac04c9c0d",
     "worlds/ui.shell/ops.mjs": "12898fb719c270c1"
   },
-  "builtAt": "2026-11-20T23:44:30.181Z",
-  "commit": "4a0f7bdc3",
+  "builtAt": "2026-11-20T23:45:48.600Z",
+  "commit": "e8b662648",
   "catalog": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
   "assets": {
     "app.mjs": "dda989c018",
@@ -622,7 +622,7 @@
     "models-mt/ro/toEn/lex.50.50.roen.s2t.bin.gz": "3b3fdee9bb",
     "models-mt/ro/toEn/model.roen.intgemm.alphas.bin.gz": "217b5a3bf0",
     "models-mt/ro/toEn/vocab.roen.spm.gz": "0f7ce73533",
-    "style.css": "58be16b734",
+    "style.css": "9dc4a1b2f7",
     "ui/about.mjs": "a51ea76c7a",
     "ui/action-log.mjs": "19b13d599b",
     "ui/assets.mjs": "1787538064",
@@ -644,7 +644,7 @@
     "ui/normalizer-host.mjs": "0dfa3990e3",
     "ui/ort-host.mjs": "b908575cff",
     "ui/ort-worker.mjs": "c4c604f6ba",
-    "ui/pane-splitter.mjs": "dce32e78dd",
+    "ui/pane-splitter.mjs": "65d7240052",
     "ui/phrase-log.mjs": "64d29c053f",
     "ui/progress.mjs": "7ce7f85680",
     "ui/settings-catalog.mjs": "85b09bd65e",
@@ -655,9 +655,9 @@
     "ui/tabs/calendar.mjs": "60a17e6cc2",
     "ui/tabs/diagram/inspector.mjs": "9d1cfbea01",
     "ui/tabs/diagram/tools.mjs": "97bcf252ee",
-    "ui/tabs/diagram.mjs": "6892655afa",
+    "ui/tabs/diagram.mjs": "0e135094c2",
     "ui/tabs/draw/render.mjs": "ef3350e282",
-    "ui/tabs/draw.mjs": "d3e98261e3",
+    "ui/tabs/draw.mjs": "9f097c6d02",
     "ui/tabs/editor/editor.css": "0b5664bc1e",
     "ui/tabs/editor.mjs": "88b9515a20",
     "ui/tabs/index.json": "21fc5a182f",
