@@ -21,15 +21,21 @@
 //     position key, bound to the observed place of its source type, with the ordinal words of k.values as its values;
 //  6. a kind named by the modifier of its compound lemmas ("a pie" for "pie chart", "pie graph": the compound's last
 //     word a lemma of its family's own class) is that kind, when every such compound names the same kind.
+//  8. a value of the closed discriminator of a family's make operation (the constructor policy's `kind`, or the parameter
+//     a declared kind binding sets: a chart's `layout`) that no kind row names is a kind of that family: named by the
+//     value itself and by the catalog words of the catalog value it is (core.word means=<value> of=<a slot listing it>),
+//     the declared kind the binding gives it, else the native value itself, drawn by that operation with that value.
 import {parse,str} from '../vendor/sopworld/sopworld.mjs?v=4cf6e60057';
 import {interpretationPolicy} from './interpretation-policy.mjs?v=95c5ac8e35';
-import {executionPolicyWorld} from './execution-policy.mjs?v=abb458111b';
-import {declaredValueRows} from './declared-value-readings.mjs?v=c756d84cd2';
-import {numberWords,numberInfo} from '../knowledge/values.mjs?v=fedba1c1bc';
-import EXECUTION_POLICY from '../../worlds/app.project/execution-policy-source.mjs?v=b5a27440da';
+import {executionPolicyWorld} from './execution-policy.mjs?v=f1ae82cb42';
+import {declaredValueRows} from './declared-value-readings.mjs?v=e2a609f951';
+import {numberWords,numberInfo} from '../knowledge/values.mjs?v=2a29aaa4d2';
+import EXECUTION_POLICY from '../../worlds/app.project/execution-policy-source.mjs?v=4b6b78a2bd';
 import DRAW from '../../worlds/art.draw/native-interface-source.mjs?v=afabeecb4f';
-import DIAGRAM from '../../worlds/diagram.sketch/native-interface-source.mjs?v=2d66a430be';
+import DIAGRAM from '../../worlds/diagram.sketch/native-interface-source.mjs?v=595d3de650';
 import CHARTS from '../../worlds/data.charts/native-interface-source.mjs?v=6c0dc1d746';
+import CONSTRUCTORS from '../../worlds/app.project/constructor-policy-source.mjs?v=91bc3b4d74';
+import {BUNDLED_DIAGRAMS} from '../knowledge/bundled-diagrams.mjs?v=9d762feed9';
 import DOCUMENT from '../../worlds/docs.editor/native-interface-source.mjs?v=e247358200';
 import CALENDAR from '../../worlds/time.calendar/native-interface-source.mjs?v=3945d7d8fa';
 import AVATAR from '../../worlds/ui.avatar/native-interface-source.mjs?v=488ad9f49d';
@@ -77,6 +83,59 @@ const declaredKeyAlignments=()=>keyAlignments??=(()=>{
 })();
 // A declared parameter value typed as the parameter takes it (a boolean, a number, else the string itself).
 const typed=(kind,value)=>kind==='boolean'?value==='true':['number','integer'].includes(kind)&&Number.isFinite(Number(value))?Number(value):value;
+
+// The constructor policy's discriminator of a make operation's kinds (constructor-policy.sop: discriminator="kind").
+let discriminator;
+const constructorDiscriminator=()=>discriminator??=(()=>{const row=parse(CONSTRUCTORS).find(w=>w.type==='app.constructor.policy'&&w.attrs.discriminator?.length&&!String(w.attrs.discriminator[0]).startsWith('?'));return row?one(row,'discriminator'):undefined;})();
+// The catalog's words of its values (bundled vocabularies: core.word text=... means=<value> of=<slot>), for a value of a
+// slot whose declaration lists it (core.slot enum=<value>): value -> words.
+let valueWords;
+const catalogValueWords=()=>valueWords??=(()=>{
+ const slots=new Map(),words=new Map();
+ for(const text of Object.values(BUNDLED_DIAGRAMS.schemas??{}))for(const w of parse(text))if(w.type==='core.slot'&&w.attrs.enum?.length)slots.set(w.id,new Set(w.attrs.enum.map(str)));
+ for(const text of Object.values(BUNDLED_DIAGRAMS.vocabularies??{}))for(const w of parse(text)){
+  if(w.type!=='core.word'||!w.attrs.of?.length||!w.attrs.means?.length)continue;
+  const value=one(w,'means'),slot=one(w,'of');
+  if(!slots.get(slot)?.has(value))continue;
+  if(!words.has(value))words.set(value,new Set());
+  for(const t of (w.attrs.text??[]).map(str))words.get(value).add(t.toLowerCase());
+ }
+ return words;
+})();
+function nativeValueKinds(kinds,params){
+ const own=constructorDiscriminator(),declared=declaredKindOperations(),out=[];
+ // Each family's make operations and their discriminators: its rows' own bindings (the constructor's discriminator) and
+ // the declared kind bindings of its rows (their parameter).
+ const families=new Map();
+ for(const k of kinds){
+  const key=k.area+'\0'+k.type;if(!families.has(key))families.set(key,{area:k.area,type:k.type,lemmas:new Set(),canonicals:new Set(),ops:new Map()});
+  const f=families.get(key);f.lemmas.add(String(k.lemma).toLowerCase());f.canonicals.add(k.canonical);
+  if(k.nativeFamilyBinding?.operation&&own)f.ops.set(k.nativeFamilyBinding.operation+'\0'+own,{operation:k.nativeFamilyBinding.operation,parameter:own});
+  for(const d of declared)if(d.area===k.area&&d.kind===k.canonical&&d.parameter)f.ops.set(d.operation+'\0'+d.parameter,{operation:d.operation,parameter:d.parameter});
+ }
+ const words=catalogValueWords();
+ for(const f of families.values())for(const {operation,parameter} of f.ops.values()){
+  const p=params.find(x=>x.operation===operation&&x.parameter===parameter&&x.enum);
+  if(!p)continue;
+  for(const value of p.enum){
+   const spaced=value.replace(/_/g,' ');
+   if(f.lemmas.has(value)||f.lemmas.has(spaced))continue;
+   const d=declared.find(x=>x.area===f.area&&x.operation===operation&&x.parameter===parameter&&x.value===value);
+   // A value whose declared kind the family already names ("line chart") is that kind's (a modifier is completion 6's).
+   if(declared.some(x=>x.area===f.area&&x.operation===operation&&x.parameter===parameter&&x.value===value&&f.canonicals.has(x.kind)))continue;
+   const canonical=d?d.kind:p.sourceType+'.'+parameter+'.'+value;
+   const base={area:f.area,type:f.type,canonical,sourceWire:d?d.id:p.wire,sourceSnapshotSHA:p.sourceSha256,sourceWorld:d?'app.project':p.world,moduleVersion:'1',
+    alignment:{kind:'native-enum-value',authority:'declared-bindings.mjs completion 8',operation,parameter,value},
+    ...(d?{}:{nativeFamilyBinding:{operation,sourceType:p.sourceType,arguments:{[parameter]:value},boundary:'Declared native value: the kind is drawn by this operation with this value.'}})};
+   for(const lemma of new Set([value,spaced,...(words.get(value)??[])])){
+    if(f.lemmas.has(lemma))continue;
+    f.lemmas.add(lemma);
+    out.push({...base,lemma,rawDescriptor:{area:f.area,type:f.type,kind:lemma}});
+   }
+  }
+ }
+ return out;
+}
 
 const completed=new WeakMap();
 /** The binding table completed from the live declarations; the same object when nothing is added. Memoized per table. */
@@ -236,6 +295,9 @@ export async function completeBindings(bindings){
   added.push({...rows[0],lemma,alignment:{kind:'compound-lemma-modifier',authority:'declared-bindings.mjs completion 6',compound:rows[0].lemma}});
  }
  if(added.length)kinds=[...kinds,...added];
+ // 8. Kinds for the closed native values of a family's make operation that no kind row names.
+ const enumKinds=nativeValueKinds(kinds,params);
+ if(enumKinds.length)kinds=[...kinds,...enumKinds];
  // Declared length units (execution-policy.sop app.execution.canvasUnit / lengthUnit) for values said with a unit.
  const pol=executionPolicyWorld(),all=(r,k)=>(r.attrs[k]??[]).map(str);
  const lengthUnits=[...pol.ofType('app.execution.canvasUnit').map(r=>({unit:one(r,'unit'),words:all(r,'word'),factor:1})),

@@ -25302,6 +25302,7 @@
   "k.layouts/shards/joins",
   "k.styles/schema.sop",
   "k.styles/shards/drawing",
+  "w.diagram/schema.sop",
   "w.drawing/schema.sop"
  ],
  "caption box": [
@@ -26934,6 +26935,7 @@
   "k.kinds/shards/wordnet-1",
   "k.words/shards/ce",
   "k.words/shards/frequency-c",
+  "w.diagram/schema.sop",
   "w.document/schema.sop",
   "k.objects/shards/noto-phone-01",
   "k.objects/shards/openmoji-technology-02"
@@ -26981,6 +26983,7 @@
   "k.words/shards/frequency-c"
  ],
  "cells": [
+  "w.diagram/schema.sop",
   "w.document/schema.sop"
  ],
  "celsius": [
@@ -32223,6 +32226,9 @@
  "colours by role": [
   "k.styles/schema.sop"
  ],
+ "cols": [
+  "w.diagram/schema.sop"
+ ],
  "colt": [
   "k.attributes/shards/numbers-a-f",
   "k.attributes/shards/same-c",
@@ -32295,7 +32301,8 @@
   "k.objects/shards/places-3"
  ],
  "columns": [
-  "k.layouts/shards/layouts"
+  "k.layouts/shards/layouts",
+  "w.diagram/schema.sop"
  ],
  "colville": [
   "k.geo/shards/north-america"
@@ -33840,7 +33847,8 @@
  ],
  "content": [
   "k.words/shards/co-2",
-  "k.words/shards/frequency-c"
+  "k.words/shards/frequency-c",
+  "w.diagram/schema.sop"
  ],
  "contents": [
   "k.words/shards/co-2",
@@ -39917,6 +39925,9 @@
  ],
  "data set": [
   "w.chart/schema.sop",
+  "w.diagram/schema.sop"
+ ],
+ "data table": [
   "w.diagram/schema.sop"
  ],
  "database": [
@@ -54475,6 +54486,7 @@
   "k.scenes/shards/things-f",
   "k.words/shards/fi",
   "k.words/shards/frequency-f",
+  "w.diagram/schema.sop",
   "k.objects/shards/noto-office-01",
   "k.objects/shards/noto-office-03"
  ],
@@ -73443,6 +73455,9 @@
   "k.words/shards/frequency-i",
   "k.words/shards/il"
  ],
+ "illustration": [
+  "w.diagram/schema.sop"
+ ],
  "ilmari": [
   "k.people/shards/given-names-i"
  ],
@@ -73473,7 +73488,14 @@
  ],
  "image": [
   "k.words/shards/frequency-i",
-  "k.words/shards/im"
+  "k.words/shards/im",
+  "w.diagram/schema.sop"
+ ],
+ "image placeholder": [
+  "w.diagram/schema.sop"
+ ],
+ "image source": [
+  "w.diagram/schema.sop"
  ],
  "image stanza": [
   "k.genres/shards/poem"
@@ -73481,6 +73503,9 @@
  "imagery": [
   "k.words/shards/frequency-i",
   "k.words/shards/im"
+ ],
+ "images": [
+  "w.diagram/schema.sop"
  ],
  "imaginary": [
   "k.words/shards/frequency-i",
@@ -102546,8 +102571,14 @@
  "number format": [
   "w.diagram/schema.sop"
  ],
+ "number of columns": [
+  "w.diagram/schema.sop"
+ ],
  "number of legs": [
   "k.attributes/shards/attributes"
+ ],
+ "number of rows": [
+  "w.diagram/schema.sop"
  ],
  "number of sides": [
   "k.attributes/shards/attributes"
@@ -109847,6 +109878,7 @@
   "k.objects/shards/words-wordnet",
   "k.words/shards/frequency-p",
   "k.words/shards/ph",
+  "w.diagram/schema.sop",
   "k.objects/shards/noto-light-video-01",
   "k.objects/shards/openmoji-objects-01"
  ],
@@ -109878,7 +109910,8 @@
   "k.kinds/shards/wordnet-2",
   "k.parts/shards/usual",
   "k.words/shards/frequency-p",
-  "k.words/shards/ph"
+  "k.words/shards/ph",
+  "w.diagram/schema.sop"
  ],
  "photographer": [
   "k.attributes/shards/same-p",
@@ -109909,6 +109942,9 @@
  "photography": [
   "k.words/shards/frequency-p",
   "k.words/shards/ph"
+ ],
+ "photos": [
+  "w.diagram/schema.sop"
  ],
  "photosphere": [
   "k.kinds/shards/part_of-wordnet-1"
@@ -110239,6 +110275,7 @@
   "k.scenes/shards/things-p",
   "k.words/shards/frequency-p",
   "k.words/shards/pi",
+  "w.diagram/schema.sop",
   "w.drawing/schema.sop",
   "w.picture/schema.sop",
   "k.objects/shards/noto-arts-crafts-01"
@@ -110250,6 +110287,9 @@
   "k.objects/shards/mulberry-building-furniture-04",
   "k.scenes/shards/things-p",
   "k.shapes/shards/shapes"
+ ],
+ "pictures": [
+  "w.diagram/schema.sop"
  ],
  "picturing": [
   "k.words/shards/frequency-p",
@@ -123731,7 +123771,8 @@
   "k.layouts/shards/layouts",
   "k.objects/shards/structures",
   "k.parts/shards/names",
-  "k.parts/shards/psys2"
+  "k.parts/shards/psys2",
+  "w.diagram/schema.sop"
  ],
  "rows and columns": [
   "k.layouts/shards/layouts"
@@ -130980,6 +131021,9 @@
  "shlomo": [
   "k.people/shards/given-names-s"
  ],
+ "shneiderman1992": [
+  "k.charts/shards/charts"
+ ],
  "shock": [
   "k.faces/shards/traits",
   "k.words/shards/frequency-s",
@@ -135294,6 +135338,7 @@
   "k.units/shards/measures",
   "k.words/shards/frequency-s",
   "k.words/shards/so",
+  "w.diagram/schema.sop",
   "w.document/schema.sop",
   "w.preferences/schema.sop"
  ],
@@ -139784,7 +139829,8 @@
  ],
  "subtitle": [
   "k.words/shards/frequency-s",
-  "k.words/shards/su"
+  "k.words/shards/su",
+  "w.diagram/schema.sop"
  ],
  "subtract": [
   "w.lang.en/shards/arithmetic"
@@ -141957,9 +142003,13 @@
   "k.scenes/shards/things-t",
   "k.words/shards/frequency-t",
   "k.words/shards/ta",
+  "w.diagram/schema.sop",
   "w.document/schema.sop",
   "w.seating/schema.sop",
   "k.objects/shards/noto-sport-02"
+ ],
+ "table cell": [
+  "w.diagram/schema.sop"
  ],
  "table cloth": [
   "k.attributes/shards/drawn-mulberry",
@@ -142000,6 +142050,7 @@
  ],
  "tables": [
   "k.objects/shards/household",
+  "w.diagram/schema.sop",
   "w.seating/schema.sop"
  ],
  "tablespoon": [
@@ -150634,6 +150685,10 @@
  "tree frogs": [
   "k.animals/shards/reptiles-and-amphibians"
  ],
+ "tree map": [
+  "k.charts/shards/charts",
+  "w.diagram/schema.sop"
+ ],
  "tree ornament chocolate": [
   "k.attributes/shards/drawn-mulberry",
   "k.attributes/shards/same-t",
@@ -150656,6 +150711,20 @@
   "k.kinds/shards/material",
   "k.objects/shards/mulberry-plants-and-trees-04",
   "k.scenes/shards/things-t"
+ ],
+ "tree-map": [
+  "k.charts/shards/charts",
+  "w.diagram/schema.sop"
+ ],
+ "treemap": [
+  "k.charts/shards/charts",
+  "w.diagram/schema.sop"
+ ],
+ "treemap chart": [
+  "k.charts/shards/charts"
+ ],
+ "treemaps": [
+  "w.diagram/schema.sop"
  ],
  "trees": [
   "k.commonsense/shards/core",
@@ -153600,6 +153669,7 @@
   "k.geo/shards/north-america"
  ],
  "url": [
+  "w.diagram/schema.sop",
   "w.document/schema.sop"
  ],
  "urmas": [

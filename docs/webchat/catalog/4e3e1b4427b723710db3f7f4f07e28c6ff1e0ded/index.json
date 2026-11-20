@@ -1,5 +1,5 @@
 {
- "version": "981ee7f3db77",
+ "version": "8d8879c1d9c4",
  "sopworld": "747b51e",
  "worlds": [
   {
@@ -4712,7 +4712,7 @@
      "id": "k.attributes/shards/narration",
      "path": "k.attributes/shards/narration.sop",
      "wires": 1497,
-     "bytes": 290303,
+     "bytes": 290304,
      "keys": [
       "a",
       "about",
@@ -12990,8 +12990,8 @@
     {
      "id": "k.charts/shards/charts",
      "path": "k.charts/shards/charts.sop",
-     "wires": 95,
-     "bytes": 17186,
+     "wires": 97,
+     "bytes": 17769,
      "keys": [
       "angle",
       "area",
@@ -13025,10 +13025,12 @@
       "ranking",
       "scatter plot",
       "shape",
+      "shneiderman1992",
       "slope",
       "stacked bar chart",
       "texture",
       "time series",
+      "treemap",
       "volume",
       "zelazny1985"
      ],
@@ -13041,8 +13043,8 @@
     {
      "id": "k.charts/shards/words",
      "path": "k.charts/shards/words.sop",
-     "wires": 42,
-     "bytes": 6105,
+     "wires": 43,
+     "bytes": 6258,
      "keys": [],
      "sources": [
       "hand-core-1"
@@ -97256,8 +97258,8 @@
     {
      "id": "w.lang.ro/shards/words-w.diagram",
      "path": "w.lang.ro/shards/words-w.diagram.sop",
-     "wires": 8,
-     "bytes": 1322,
+     "wires": 9,
+     "bytes": 1421,
      "keys": [],
      "sources": [
       "hand-core-1"
@@ -97271,7 +97273,8 @@
       "unknown-word w.lang.ro.word.w.diagram.group: w.lang.ro.word.w.diagram.group: means=w.diagram.group names no action, type, key or value of the matrix",
       "unknown-word w.lang.ro.word.w.diagram.member: w.lang.ro.word.w.diagram.member: means=w.diagram.member names no action, type, key or value of the matrix",
       "unknown-word w.lang.ro.word.w.diagram.series: w.lang.ro.word.w.diagram.series: means=w.diagram.series names no action, type, key or value of the matrix",
-      "unknown-word w.lang.ro.word.w.diagram.datum: w.lang.ro.word.w.diagram.datum: means=w.diagram.datum names no action, type, key or value of the matrix"
+      "unknown-word w.lang.ro.word.w.diagram.datum: w.lang.ro.word.w.diagram.datum: means=w.diagram.datum names no action, type, key or value of the matrix",
+      "unknown-word w.lang.ro.word.w.diagram.cell: w.lang.ro.word.w.diagram.cell: means=w.diagram.cell names no action, type, key or value of the matrix"
      ]
     },
     {
@@ -97806,7 +97809,7 @@
     }
    ],
    "wires": 24,
-   "bytes": 4003,
+   "bytes": 4025,
    "sources": [
     "hand-core-1"
    ],
@@ -97907,6 +97910,10 @@
       "opacity",
       "corner",
       "rotation",
+      "source",
+      "caption",
+      "rows",
+      "columns",
       "x_value"
      ],
      "words": [
@@ -98100,10 +98107,32 @@
       "datum",
       "series value"
      ]
+    },
+    {
+     "type": "w.diagram.cell",
+     "acts": [
+      "make",
+      "remove",
+      "change",
+      "pick",
+      "ask"
+     ],
+     "attributes": [
+      "node",
+      "row",
+      "column",
+      "text",
+      "code"
+     ],
+     "words": [
+      "cell",
+      "cells",
+      "table cell"
+     ]
     }
    ],
-   "wires": 147,
-   "bytes": 26916,
+   "wires": 163,
+   "bytes": 29456,
    "sources": [
     "hand-core-1"
    ],

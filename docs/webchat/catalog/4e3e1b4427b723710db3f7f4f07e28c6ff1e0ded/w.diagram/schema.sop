@@ -45,7 +45,7 @@
 @w.diagram.node.label core.slot of=w.diagram.node key=label required=true kind=atom kind=string core.source="hand-core 1"
 @w.diagram.node.diagram core.slot of=w.diagram.node key=diagram type=w.diagram.diagram core.source="hand-core 1"
 @w.diagram.node.role core.slot of=w.diagram.node key=role enum=start enum=end enum=process enum=decision enum=data enum=document enum=subprocess enum=connector enum=root enum=item enum=stage enum=event enum=centre enum=branch enum=post enum=node enum=row enum=column enum=cell enum=database enum=actor enum=note enum=external core.source="hand-core 1"
-@w.diagram.node.shape core.slot of=w.diagram.node key=shape enum=oval enum=rectangle enum=rounded_rectangle enum=diamond enum=parallelogram enum=document enum=double_rectangle enum=circle enum=ellipse enum=dot enum=chevron enum=square enum=triangle enum=hexagon enum=star enum=text enum=cylinder enum=cloud enum=actor enum=note core.source="hand-core 1"
+@w.diagram.node.shape core.slot of=w.diagram.node key=shape enum=oval enum=rectangle enum=rounded_rectangle enum=diamond enum=parallelogram enum=document enum=double_rectangle enum=circle enum=ellipse enum=dot enum=chevron enum=square enum=triangle enum=hexagon enum=star enum=text enum=cylinder enum=cloud enum=actor enum=note enum=picture enum=table core.source="hand-core 1"
 @w.diagram.node.parent core.slot of=w.diagram.node key=parent type=w.diagram.node core.source="hand-core 1"
 @w.diagram.node.group core.slot of=w.diagram.node key=group many=true type=w.diagram.group core.source="hand-core 1"
 @w.diagram.node.n core.slot of=w.diagram.node key=n kind=integer min=1 step=1 core.source="hand-core 1"
@@ -79,6 +79,13 @@
 @w.diagram.node.corner core.slot of=w.diagram.node key=corner kind=number min=0 max=40 core.source="hand-core 1"
 # `rotation` the turn of a node about its centre, in degrees clockwise.
 @w.diagram.node.rotation core.slot of=w.diagram.node key=rotation kind=number min=-360 max=360 core.source="hand-core 1"
+# Pictures and tables on a page: a node whose shape is `picture` is an image frame (a placeholder picture until it has
+# a `source`, the address or name of its image) with an optional `caption` under it; a node whose shape is `table` is a
+# grid of `rows` and `columns` (3 by 3 unless given), each `cell` a w.diagram.cell.
+@w.diagram.node.source core.slot of=w.diagram.node key=source kind=atom kind=string core.source="hand-core 1"
+@w.diagram.node.caption core.slot of=w.diagram.node key=caption kind=atom kind=string core.source="hand-core 1"
+@w.diagram.node.rows core.slot of=w.diagram.node key=rows kind=integer min=1 max=40 step=1 core.source="hand-core 1"
+@w.diagram.node.columns core.slot of=w.diagram.node key=columns kind=integer min=1 max=20 step=1 core.source="hand-core 1"
 
 # An edge from one node to another (`from`, `to`; an end without a node is free, below): `label` what the link says (yes, no, then, eats), `direction` forward (an arrow from
 # `from` to `to`; the default), both, or none (a line: a tree's branch, a network's link); `diagram` its diagram.
@@ -115,13 +122,14 @@
 @w.diagram.group.parent core.slot of=w.diagram.group key=parent type=w.diagram.group core.source="hand-core 1"
 # For an editor: `code` ("g1" or the name it was given), `n` its place in order, `colour`; `layout` how its members
 # are set out inside it (row, column, grid; bar and line: the members' values as the bars or points of a chart);
-# circle: its members on a ring; pie and doughnut: the members' values as slices; `framed` false for an arrangement
+# circle: its members on a ring; pie and doughnut: the members' values as slices; treemap: the members' values as
+# rectangles that fill the chart, each as large as its share of the whole; `framed` false for an arrangement
 # drawn without its outline; `scale` the size of its members (1 as made); `x`, `y`
 # its centre, kept by the layout when `pinned` is true.
 @w.diagram.group.code core.slot of=w.diagram.group key=code kind=atom kind=string core.source="hand-core 1"
 @w.diagram.group.n core.slot of=w.diagram.group key=n kind=integer min=1 step=1 core.source="hand-core 1"
 @w.diagram.group.colour core.slot of=w.diagram.group key=colour kind=atom kind=string core.source="hand-core 1"
-@w.diagram.group.layout core.slot of=w.diagram.group key=layout enum=row enum=column enum=grid enum=circle enum=bar enum=line enum=area enum=pie enum=doughnut enum=scatter enum=radar core.source="hand-core 1"
+@w.diagram.group.layout core.slot of=w.diagram.group key=layout enum=row enum=column enum=grid enum=circle enum=bar enum=line enum=area enum=pie enum=doughnut enum=scatter enum=radar enum=treemap core.source="hand-core 1"
 @w.diagram.group.framed core.slot of=w.diagram.group key=framed kind=boolean core.source="hand-core 1"
 @w.diagram.group.scale core.slot of=w.diagram.group key=scale kind=number min=0.05 max=20 core.source="hand-core 1"
 @w.diagram.group.x core.slot of=w.diagram.group key=x kind=number core.source="hand-core 1"
@@ -206,6 +214,15 @@
 @w.diagram.datum.value core.slot of=w.diagram.datum key=value required=true kind=number core.source="hand-core 1"
 @w.diagram.datum.code core.slot of=w.diagram.datum key=code kind=atom kind=string core.source="hand-core 1"
 
+# The text of one cell of a table node (a node whose shape is table): `node` the table, `row` and `column` from 1, `text`.
+# Removing the table removes its cells; one text per table, row and column.
+@w.diagram.cell core.type of=w.diagram.cell extends=std.schema.thing closed=true core.source="hand-core 1"
+@w.diagram.cell.node core.slot of=w.diagram.cell key=node required=true type=w.diagram.node core.source="hand-core 1"
+@w.diagram.cell.row core.slot of=w.diagram.cell key=row required=true kind=integer min=1 max=40 step=1 core.source="hand-core 1"
+@w.diagram.cell.column core.slot of=w.diagram.cell key=column required=true kind=integer min=1 max=20 step=1 core.source="hand-core 1"
+@w.diagram.cell.text core.slot of=w.diagram.cell key=text required=true kind=atom kind=string core.source="hand-core 1"
+@w.diagram.cell.code core.slot of=w.diagram.cell key=code kind=atom kind=string core.source="hand-core 1"
+
 # A node's membership in a group as a thing of its own, for an editor: std.acts cannot take a reference away, and
 # removing a group removes the things that refer to it, so a membership that comes and goes is made and removed.
 # Removing the group or the node removes it. (`w.diagram.node group=` stays the plain way to say it in data.)
@@ -213,7 +230,8 @@
 @w.diagram.member.group core.slot of=w.diagram.member key=group required=true type=w.diagram.group core.source="hand-core 1"
 @w.diagram.member.node core.slot of=w.diagram.member key=node required=true type=w.diagram.node core.source="hand-core 1"
 
-# One thing of each kind per code; one membership per node and group; one value per series and category.
+# One thing of each kind per code; one membership per node and group; one value per series and category; one text per
+# table cell.
 @w.diagram.code.first std.schema.thing kind=?kind code=?code
 @w.diagram.code.second std.schema.thing kind=?kind code=?code
 @w.diagram.code.other core.check fn=neq args=$w.diagram.code.first args=$w.diagram.code.second
@@ -226,9 +244,13 @@
 @w.diagram.datum.second w.diagram.datum series=?s node=?n
 @w.diagram.datum.other core.check fn=neq args=$w.diagram.datum.first args=$w.diagram.datum.second
 @w.diagram.datum.unique core.deny when=$w.diagram.datum.first when=$w.diagram.datum.second if=$w.diagram.datum.other why="That series already has a value for that category." core.source="hand-core 1"
+@w.diagram.cell.first w.diagram.cell node=?n row=?r column=?c
+@w.diagram.cell.second w.diagram.cell node=?n row=?r column=?c
+@w.diagram.cell.other core.check fn=neq args=$w.diagram.cell.first args=$w.diagram.cell.second
+@w.diagram.cell.unique core.deny when=$w.diagram.cell.first when=$w.diagram.cell.second if=$w.diagram.cell.other why="That cell of the table already has a text." core.source="hand-core 1"
 
 # The kinds and the acts that apply to them. At most 20 diagrams, 500 nodes, 1,000 edges, 100 groups, 1,000 memberships,
-# 200 series and 5,000 series values.
+# 200 series, 5,000 series values and 5,000 table cells.
 @w.diagram.kind.diagram std.schema.kind of=w.diagram.diagram world=w.diagram acts=make acts=remove acts=change acts=pick acts=ask acts=copy core.source="hand-core 1"
 @w.diagram.kind.node std.schema.kind of=w.diagram.node world=w.diagram acts=make acts=remove acts=change acts=place acts=connect acts=group acts=pick acts=ask acts=copy core.source="hand-core 1"
 @w.diagram.kind.edge std.schema.kind of=w.diagram.edge world=w.diagram acts=make acts=remove acts=change acts=pick acts=ask core.source="hand-core 1"
@@ -236,6 +258,7 @@
 @w.diagram.kind.member std.schema.kind of=w.diagram.member world=w.diagram acts=make acts=remove acts=pick acts=ask core.source="hand-core 1"
 @w.diagram.kind.series std.schema.kind of=w.diagram.series world=w.diagram acts=make acts=remove acts=change acts=pick acts=ask acts=copy core.source="hand-core 1"
 @w.diagram.kind.datum std.schema.kind of=w.diagram.datum world=w.diagram acts=make acts=remove acts=change acts=pick acts=ask core.source="hand-core 1"
+@w.diagram.kind.cell std.schema.kind of=w.diagram.cell world=w.diagram acts=make acts=remove acts=change acts=pick acts=ask core.source="hand-core 1"
 @w.diagram.limit.diagram std.schema.limit of=w.diagram.diagram max=20 core.source="hand-core 1"
 @w.diagram.limit.node std.schema.limit of=w.diagram.node max=500 core.source="hand-core 1"
 @w.diagram.limit.edge std.schema.limit of=w.diagram.edge max=1000 core.source="hand-core 1"
@@ -243,5 +266,6 @@
 @w.diagram.limit.member std.schema.limit of=w.diagram.member max=1000 core.source="hand-core 1"
 @w.diagram.limit.series std.schema.limit of=w.diagram.series max=200 core.source="hand-core 1"
 @w.diagram.limit.datum std.schema.limit of=w.diagram.datum max=5000 core.source="hand-core 1"
+@w.diagram.limit.cell std.schema.limit of=w.diagram.cell max=5000 core.source="hand-core 1"
 
 # Words: for the world (how a host finds it by name), its kinds and its keys.

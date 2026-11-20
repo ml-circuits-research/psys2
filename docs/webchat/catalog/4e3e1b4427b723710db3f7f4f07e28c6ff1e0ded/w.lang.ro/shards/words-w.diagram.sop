@@ -13,3 +13,4 @@
 @w.lang.ro.word.w.diagram.member core.word text="parte" means=w.diagram.member core.source="hand-core 1"
 @w.lang.ro.word.w.diagram.series core.word text="serie" means=w.diagram.series core.source="hand-core 1"
 @w.lang.ro.word.w.diagram.datum core.word text="punct" means=w.diagram.datum core.source="hand-core 1"
+@w.lang.ro.word.w.diagram.cell core.word text="loc" means=w.diagram.cell core.source="hand-core 1"

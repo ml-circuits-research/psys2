@@ -4,9 +4,9 @@
 // the request is expanded into one request per line of the declared pattern: a chain in reading order when the other
 // end is not said, a star from the other end when it names one object. Nothing here names a word or a kind.
 import {parse,serialize,str,quote} from '../vendor/sopworld/sopworld.mjs?v=4cf6e60057';
-import {LANG_EN_FACTS} from '../lang/en.facts.generated.mjs?v=c3f375bc20';
-import {en} from '../lang/en.mjs?v=06e31cd85c';
-import {executionPolicyWorld} from './execution-policy.mjs?v=abb458111b';
+import {LANG_EN_FACTS} from '../lang/en.facts.generated.mjs?v=b2f1950656';
+import {en} from '../lang/en.mjs?v=2cc06b9b27';
+import {executionPolicyWorld} from './execution-policy.mjs?v=f1ae82cb42';
 import {budget} from './budget.mjs?v=00bce6e369';
 
 const one=(row,key)=>row?.attrs[key]?.length?str(row.attrs[key][0]):undefined;

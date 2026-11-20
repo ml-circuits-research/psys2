@@ -1,2 +1,2 @@
 // Native initial state only; no legacy grammar executor.
-export{emptyDiagramState as initialState}from"./sop-diagram.mjs?v=6792755c7d";
+export{emptyDiagramState as initialState}from"./sop-diagram.mjs?v=720294ea72";

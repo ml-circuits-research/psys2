@@ -1,20 +1,20 @@
 // Assemble trusted native observations and dispatch the compiler's SOP call.
 import {World,parse,serialize,str,quote} from '../vendor/sopworld/sopworld.mjs?v=4cf6e60057';
-import SOURCE from './new-engine-source.mjs?v=6af687905b';
-import {readPlacementProfile,rememberPlacement} from '../../worlds/app.project/spatial-profile.mjs?v=f60a97175d';
+import SOURCE from './new-engine-source.mjs?v=03fd524c69';
+import {readPlacementProfile,rememberPlacement} from '../../worlds/app.project/spatial-profile.mjs?v=491c30f956';
 import {placementInterfaceSop} from '../../worlds/native-spatial-interface.mjs?v=f1f08b66d7';
-import {NATIVE_AREAS,createAreaHost} from './app-reader-context.mjs?v=6d09553e34';
+import {NATIVE_AREAS,createAreaHost} from './app-reader-context.mjs?v=b3122fd944';
 import {identityRegistryFor,instanceIdFor} from './instance-identity.mjs?v=024ef1ca83';
-import {nativeKindCandidates,nativeCreationCandidates} from './native-binding-candidates.mjs?v=23ab5f219d';
+import {nativeKindCandidates,nativeCreationCandidates} from './native-binding-candidates.mjs?v=346e926f76';
 import {invokeObservedNativeTool} from './native-tool-activity.mjs?v=9e7d8073a0';
 import {describeNativeControl,verifyNativeControlEffect} from './native-control-intent.mjs?v=999c87cd52';
 import {placementSearchProvider,z3Status} from './placement-search-provider.mjs?v=0675893eb5';
-import {en} from '../lang/en.mjs?v=06e31cd85c';
+import {en} from '../lang/en.mjs?v=2cc06b9b27';
 import {placementHypotheses} from './placement-default-policy.mjs?v=75fb3f0237';
-import {identityConcepts} from './capability-plan-adapter.mjs?v=d2b0a98bc9';
-import {executeNativeCapability,drawnAs} from './capability-plan-execution.mjs?v=153439859c';
+import {identityConcepts} from './capability-plan-adapter.mjs?v=1d8aaf2bfe';
+import {executeNativeCapability,drawnAs} from './capability-plan-execution.mjs?v=d0d3961a22';
 import {budget} from './budget.mjs?v=00bce6e369';
-import {executionPolicyWorld} from './execution-policy.mjs?v=abb458111b';
+import {executionPolicyWorld} from './execution-policy.mjs?v=f1ae82cb42';
 
 const read = (row,key) => row?.attrs[key]?.length===1 ? str(row.attrs[key][0]) : undefined;
 const ref = (row,key) => {

@@ -19,6 +19,7 @@
 @k.charts.word.name.stacked_bar_chart core.word text="stacked bar graph" text="stacked column chart" means="stacked bar chart" of=k.charts.kind.name core.source="hand-core 1"
 @k.charts.word.name.grouped_bar_chart core.word text="clustered bar chart" text="side-by-side bar chart" means="grouped bar chart" of=k.charts.kind.name core.source="hand-core 1"
 @k.charts.word.name.area_chart core.word text="area graph" text="stacked area chart" means="area chart" of=k.charts.kind.name core.source="hand-core 1"
+@k.charts.word.name.treemap core.word text="tree map" text="tree-map" text="treemap chart" means=treemap of=k.charts.kind.name core.source="hand-core 1"
 @k.charts.word.rel.time_series core.word text="trend over time" text="change over time" text="over time" means="time series" of=k.charts.relationship.name core.source="hand-core 1"
 @k.charts.word.rel.part_to_whole core.word text="share of a whole" means="part-to-whole" of=k.charts.relationship.name core.source="hand-core 1"
 @k.charts.word.rel.ranking core.word text="from largest to smallest" text="top ten" means=ranking of=k.charts.relationship.name core.source="hand-core 1"

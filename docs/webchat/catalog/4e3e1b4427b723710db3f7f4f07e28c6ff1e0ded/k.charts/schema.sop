@@ -18,14 +18,14 @@
 @k.charts.source.cite core.slot of=k.charts.source key=cite required=true kind=string core.source="hand-core 1"
 @k.charts.source.year core.slot of=k.charts.source key=year required=true kind=integer core.source="hand-core 1"
 
-# A kind of chart. `name`; `form` the form of w.chart that draws it (bar, line, pie, scatter, area); `mark` what stands
+# A kind of chart. `name`; `form` the form of w.chart that draws it (bar, line, pie, scatter, area, treemap); `mark` what stands
 # for one value (bar, line, point, slice, area); `encoding` the visual channel that carries the values (an encoding
 # below); `x` (many) the data types the categories or the horizontal axis may have; `y` (many) those of the values;
 # `whole=true`: the values must be the parts of one whole (they add up to it); `about` in words; `source`.
 @k.charts.kind core.type of=k.charts.kind shared=true closed=true core.source="hand-core 1"
 @k.charts.kind.name core.slot of=k.charts.kind key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
-@k.charts.kind.form core.slot of=k.charts.kind key=form required=true enum=bar enum=line enum=pie enum=scatter enum=area core.source="hand-core 1"
-@k.charts.kind.mark core.slot of=k.charts.kind key=mark required=true enum=bar enum=line enum=point enum=slice enum=area core.source="hand-core 1"
+@k.charts.kind.form core.slot of=k.charts.kind key=form required=true enum=bar enum=line enum=pie enum=scatter enum=area enum=treemap core.source="hand-core 1"
+@k.charts.kind.mark core.slot of=k.charts.kind key=mark required=true enum=bar enum=line enum=point enum=slice enum=area enum=rectangle core.source="hand-core 1"
 @k.charts.kind.encoding core.slot of=k.charts.kind key=encoding required=true kind=atom type=k.charts.encoding by=name core.source="hand-core 1"
 @k.charts.kind.x core.slot of=k.charts.kind key=x many=true required=true enum=nominal enum=ordinal enum=quantitative enum=time core.source="hand-core 1"
 @k.charts.kind.y core.slot of=k.charts.kind key=y many=true required=true enum=nominal enum=ordinal enum=quantitative enum=time core.source="hand-core 1"

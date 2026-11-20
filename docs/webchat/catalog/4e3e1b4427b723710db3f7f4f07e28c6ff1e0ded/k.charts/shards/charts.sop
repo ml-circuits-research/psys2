@@ -1,4 +1,4 @@
-# k.charts/shards/charts: which chart fits which data: 9 kinds of chart, 14 encodings ranked in 4 rankings, 7 relationships of data, 15 selection rules, and the 5 works they rest on.
+# k.charts/shards/charts: which chart fits which data: 10 kinds of chart, 14 encodings ranked in 4 rankings, 7 relationships of data, 15 selection rules, and the 6 works they rest on.
 # sources: hand-core 1 (hand-written in this repository: tools/charts-core.mjs; the works cited are the k.charts.source facts)
 # license: CC0-1.0
 # script: tools/charts-core.mjs
@@ -7,6 +7,7 @@
 @k.charts.source.cleveland1984 k.charts.source name=cleveland1984 cite="Cleveland, W. S., and McGill, R. (1984). Graphical perception: theory, experimentation, and application to the development of graphical methods. Journal of the American Statistical Association, 79(387), 531-554." year=1984 core.source="hand-core 1"
 @k.charts.source.few2012 k.charts.source name=few2012 cite="Few, S. (2012). Show Me the Numbers: Designing Tables and Graphs to Enlighten (2nd ed.). Analytics Press." year=2012 core.source="hand-core 1"
 @k.charts.source.few2007 k.charts.source name=few2007 cite="Few, S. (2007). Save the pies for dessert. Visual Business Intelligence Newsletter, August 2007." year=2007 core.source="hand-core 1"
+@k.charts.source.shneiderman1992 k.charts.source name=shneiderman1992 cite="Shneiderman, B. (1992). Tree visualization with tree-maps: 2-d space-filling approach. ACM Transactions on Graphics, 11(1), 92-99." year=1992 core.source="hand-core 1"
 @k.charts.source.zelazny1985 k.charts.source name=zelazny1985 cite="Zelazny, G. (1985). Say It with Charts: The Executive's Guide to Visual Communication. Dow Jones-Irwin." year=1985 core.source="hand-core 1"
 @k.charts.encoding.position k.charts.encoding name=position about="where a mark stands along an axis" core.source="hand-core 1"
 @k.charts.encoding.position_unaligned k.charts.encoding name="position unaligned" about="where a mark stands along one of several scales that are not aligned" core.source="hand-core 1"
@@ -75,6 +76,7 @@
 @k.charts.kind.pie_chart k.charts.kind name="pie chart" form=pie mark=slice encoding=angle x=nominal y=quantitative whole=true about="one slice per part of one whole, its angle the share" source=few2007 source=cleveland1984 core.source="hand-core 1"
 @k.charts.kind.scatter_plot k.charts.kind name="scatter plot" form=scatter mark=point encoding=position x=quantitative y=quantitative about="one point per item at its two values; shows whether two quantities vary together" source=few2012 source=cleveland1984 core.source="hand-core 1"
 @k.charts.kind.dot_plot k.charts.kind name="dot plot" form=scatter mark=point encoding=position x=nominal x=ordinal y=quantitative about="one dot per category at its value on a common scale" source=cleveland1984 source=few2012 core.source="hand-core 1"
+@k.charts.kind.treemap k.charts.kind name=treemap form=treemap mark=rectangle encoding=area x=nominal y=quantitative whole=true about="one rectangle per part, its area its share of the whole, the rectangles filling one frame; shows the parts of a whole when there are many" source=shneiderman1992 source=few2012 core.source="hand-core 1"
 @k.charts.kind.histogram k.charts.kind name=histogram form=bar mark=bar encoding=length x=quantitative y=quantitative about="bars over ranges of a quantity, their length how many values fall in each" source=few2012 source=zelazny1985 core.source="hand-core 1"
 @k.charts.relationship.time_series k.charts.relationship name="time series" about="how values change over time" source=few2012 source=zelazny1985 core.source="hand-core 1"
 @k.charts.relationship.ranking k.charts.relationship name=ranking about="values in order of size" source=few2012 core.source="hand-core 1"

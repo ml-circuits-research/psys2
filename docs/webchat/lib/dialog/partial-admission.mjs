@@ -5,14 +5,14 @@
 // defaults, admitted act classes, reply wording and the run-time fallback ladder (interpretation-policy.sop), the
 // admission decision (reader-admission-policy.sop) and every binding (the deployed binding table). Nothing here names a
 // word, a sentence, a tool or a world.
-import {bridgeRawStructure,pruneLabel} from './raw-structural-bridge.mjs?v=78467599aa';
+import {bridgeRawStructure,pruneLabel} from './raw-structural-bridge.mjs?v=c9d33055fd';
 import {decodeModelGraphs} from './model-graph-decoder.mjs?v=cb093fa75d';
-import {comparativeSteps} from './comparative-projection.mjs?v=2367e21e55';
-import {referenceProjection} from './reference-projection.mjs?v=9cde0c881d';
+import {comparativeSteps} from './comparative-projection.mjs?v=7d7285ee2d';
+import {referenceProjection} from './reference-projection.mjs?v=a417645182';
 import {interpretationPolicy} from './interpretation-policy.mjs?v=95c5ac8e35';
-import {executionPolicyWorld} from './execution-policy.mjs?v=abb458111b';
-import {en} from '../lang/en.mjs?v=06e31cd85c';
-import {referenceProjection as declaredReferences} from './reference-projection.mjs?v=9cde0c881d';
+import {executionPolicyWorld} from './execution-policy.mjs?v=f1ae82cb42';
+import {en} from '../lang/en.mjs?v=2cc06b9b27';
+import {referenceProjection as declaredReferences} from './reference-projection.mjs?v=a417645182';
 import {budget} from './budget.mjs?v=00bce6e369';
 import {str} from '../vendor/sopworld/sopworld.mjs?v=4cf6e60057';
 

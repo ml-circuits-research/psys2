@@ -9,12 +9,12 @@
 @w.chart core.module name=w.chart version=1 exports=chart exports=series exports=point core.source="hand-core 1"
 @w.chart.world std.schema.world name=w.chart doc="charts of numbers: series of values by category" core.source="hand-core 1"
 
-# A chart. `title` is what it shows; `form` how (bar, line, pie, scatter, area; not `kind`, which the act `make` reads as
+# A chart. `title` is what it shows; `form` how (bar, line, pie, scatter, area, treemap; not `kind`, which the act `make` reads as
 # the kind of thing to make); `x_label` and `y_label` name the axes;
 # `unit` is the unit of the values (k.units names units).
 @w.chart.chart core.type of=w.chart.chart extends=std.schema.thing closed=true core.source="hand-core 1"
 @w.chart.chart.title core.slot of=w.chart.chart key=title kind=atom kind=string core.source="hand-core 1"
-@w.chart.chart.form core.slot of=w.chart.chart key=form enum=bar enum=line enum=pie enum=scatter enum=area default=bar core.source="hand-core 1"
+@w.chart.chart.form core.slot of=w.chart.chart key=form enum=bar enum=line enum=pie enum=scatter enum=area enum=treemap default=bar core.source="hand-core 1"
 @w.chart.chart.x_label core.slot of=w.chart.chart key=x_label kind=atom kind=string core.source="hand-core 1"
 @w.chart.chart.y_label core.slot of=w.chart.chart key=y_label kind=atom kind=string core.source="hand-core 1"
 @w.chart.chart.unit core.slot of=w.chart.chart key=unit kind=atom kind=string core.source="hand-core 1"

@@ -178,7 +178,7 @@
 @k.attributes.narration.k.charts.kind.encoding k.attributes.narration type=k.charts.kind key=encoding narrate=yes salience=0.3 form=relation basis=measured core.source="hand-core 1"
 @k.attributes.narration.k.charts.kind.x k.attributes.narration type=k.charts.kind key=x narrate=no salience=0 why="a coordinate" core.source="hand-core 1"
 @k.attributes.narration.k.charts.kind.y k.attributes.narration type=k.charts.kind key=y narrate=no salience=0 why="a coordinate" core.source="hand-core 1"
-@k.attributes.narration.k.charts.kind.whole k.attributes.narration type=k.charts.kind key=whole narrate=yes salience=0.1 form=state basis=measured core.source="hand-core 1"
+@k.attributes.narration.k.charts.kind.whole k.attributes.narration type=k.charts.kind key=whole narrate=yes salience=0.12 form=state basis=measured core.source="hand-core 1"
 @k.attributes.narration.k.charts.kind.about k.attributes.narration type=k.charts.kind key=about narrate=yes salience=0.3 form=text basis=measured core.source="hand-core 1"
 @k.attributes.narration.k.charts.kind.source k.attributes.narration type=k.charts.kind key=source narrate=no salience=0 why="metadata: where a fact comes from or how sure it is" core.source="hand-core 1"
 @k.attributes.narration.k.charts.encoding.name k.attributes.narration type=k.charts.encoding key=name narrate=no salience=0 why="the name of the thing: the subject, not an attribute" core.source="hand-core 1"

@@ -2,12 +2,12 @@ import {World,parse,quote,serialize,str} from '../vendor/sopworld/sopworld.mjs?v
 import {groundMention} from './lexical-grounding.mjs?v=b00e8bc2b1';
 import POLICY from '../../worlds/app.project/creation-policy-source.mjs?v=07639399d8';
 import SCHEMA from '../../worlds/app.project/creation-schema-source.mjs?v=11101d9d84';
-import {executionPolicyWorld} from './execution-policy.mjs?v=abb458111b';
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=6d09553e34';
-import {nativeCreationCandidates} from './native-binding-candidates.mjs?v=23ab5f219d';
+import {executionPolicyWorld} from './execution-policy.mjs?v=f1ae82cb42';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=b3122fd944';
+import {nativeCreationCandidates} from './native-binding-candidates.mjs?v=346e926f76';
 import {budget} from './budget.mjs?v=00bce6e369';
 import {observeGroundedProjection,projectGroundedRequest} from './grounded-projection.mjs?v=0185c6d256';
-import {positiveCardinalProof} from './key-reader-value-proof.mjs?v=70fbae6189';
+import {positiveCardinalProof} from './key-reader-value-proof.mjs?v=03a1cd7b4e';
 import {compileObservedChoice} from './observed-choice.mjs?v=331cc85b90';
 
 const field=(fact,key)=>str(fact.attrs[key]?.[0]);
