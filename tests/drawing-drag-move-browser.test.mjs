@@ -108,15 +108,17 @@ test('Diagram: add node, drag a node, its resize handle and a colour apply as dr
   let before=await nodes();
   await gesture('Add node',()=>place(0.3,0.35),async()=>{const now=await nodes();assert.equal(now.length,before.length+1,JSON.stringify(now));before=now;});
   await gesture('Add a second node',()=>place(0.65,0.6),async()=>{const now=await nodes();assert.equal(now.length,before.length+1);before=now;});
-  // The view refits to its content after a change, so a node's place is read from the instance world (its x and y),
-  // and the drop is converted to diagram units with the view as it was when the drag began.
-  const id=before[0],c0=centre(await rectOf(id));
+  // A node's place is read from the instance world (its x and y), the drop converted to diagram units with the view
+  // as it was when the drag began; the view itself stays where it was (the other node does not move on screen) and
+  // the dragged node is where it was dropped.
+  const id=before[0],other=before[1],c0=centre(await rectOf(id)),o0=centre(await rectOf(other));
   const placeOf=async()=>{const line=(await ev(`window.__calls.filter(c=>c.states?.['diagram.sketch']!==undefined).at(-1).states['diagram.sketch']`)).split('\n').find(l=>l.includes(`code=${id} `))??'';return ['x','y'].map(k=>Number(line.match(new RegExp(' '+k+'=(-?[0-9.]+)'))?.[1]));};
   const units=(p)=>ev(`(()=>{const e=document.querySelector('.dg-svg [data-select="${id}"]').parentNode,q=document.querySelector('.dg-svg').createSVGPoint();q.x=${p.x};q.y=${p.y};const u=q.matrixTransform(e.getScreenCTM().inverse());return [u.x,u.y];})()`);
   const xy0=await placeOf(),grab={x:c0[0],y:c0[1]},drop={x:c0[0]-100,y:c0[1]-60},[g0,d0]=[await units(grab),await units(drop)],want=[xy0[0]+d0[0]-g0[0],xy0[1]+d0[1]-g0[1]];
-  await gesture('Drag a node',async()=>{await drag(grab,drop);},async()=>{const xy=await placeOf();assert.ok(near(xy,want,3),`from ${xy0} dropped at ${want}, now ${xy}`);});
-  // A size is compared with the other node's, which the refit scales alike.
-  const other=before[1],ratio=async()=>{const [a,o]=[await rectOf(id),await rectOf(other)];return (a.x1-a.x0)/(o.x1-o.x0);};
+  await gesture('Drag a node',async()=>{await drag(grab,drop);},async()=>{const xy=await placeOf();assert.ok(near(xy,want,3),`from ${xy0} dropped at ${want}, now ${xy}`);
+   const o1=centre(await rectOf(other)),c1=centre(await rectOf(id));assert.ok(near(o1,o0,2),`the view moved: the other node went from ${o0} to ${o1}`);assert.ok(near(c1,[drop.x,drop.y],6),`dropped at ${[drop.x,drop.y]}, shown at ${c1}`);});
+  // A size is compared with the other node's, which any zoom scales alike.
+  const ratio=async()=>{const [a,o]=[await rectOf(id),await rectOf(other)];return (a.x1-a.x0)/(o.x1-o.x0);};
   await gesture('Select the node',async()=>{const c=centre(await rectOf(id));await click({x:c[0],y:c[1]});},async()=>{});
   const k1=await ratio(),handle=await ev(`(()=>{const r=document.querySelector('[data-resize-node="${id}"]').getBoundingClientRect();return {x:(r.left+r.right)/2,y:(r.top+r.bottom)/2};})()`);
   await gesture('Resize a node',async()=>{await drag(handle,{x:handle.x+50,y:handle.y+30});},async()=>{const k2=await ratio();assert.ok(k2>k1*1.15,JSON.stringify({k1,k2}));});

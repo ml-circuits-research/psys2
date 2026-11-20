@@ -115,7 +115,7 @@ function make(holder, host) {
   let sel = { nodes: [], links: [], group: null };
   let mode = 'select', multiSelect = false, connectionFrom = null, chooserPoint = null, suppressClick = false;
   const zv = { k: 1, dx: 0, dy: 0 };
-  let vbBase = { x: 0, y: 0, w: 1000, h: 700 }, vbNow = vbBase;
+  let vbBase = { x: 0, y: 0, w: 1000, h: 700 }, vbNow = vbBase, fitted = false, fittedEmpty = true, fittedNodes = new Set();
 
   // ---- layout: toolbar, board (svg + hint), inspector, caption ----
   const board = html('div', 'dg-board'), hint = html('div', 'dg-hint');
@@ -349,6 +349,15 @@ function make(holder, host) {
     return Math.round(Math.max(0, Math.min(1, best.at / total)) * 100) / 100;
   }
   function fitBase() {
+    const box = contentBox();
+    if (!box) return { x: 0, y: 0, w: m.frame.w, h: m.frame.h };
+    let { x1, y1, x2, y2 } = box; x1 -= FIT_PAD; y1 -= FIT_PAD; x2 += FIT_PAD; y2 += FIT_PAD;
+    if (x2 - x1 < FIT_MIN.w) { const c = (x1 + x2) / 2; x1 = c - FIT_MIN.w / 2; x2 = c + FIT_MIN.w / 2; }
+    if (y2 - y1 < FIT_MIN.h) { const c = (y1 + y2) / 2; y1 = c - FIT_MIN.h / 2; y2 = c + FIT_MIN.h / 2; }
+    return { x: x1, y: y1, w: x2 - x1, h: y2 - y1 };
+  }
+  /** The drawn objects' extent ({ x1, y1, x2, y2 }), or null before anything is drawn. */
+  function contentBox() {
     let box = null;
     try {
       // The objects' extent (a themed page's background rectangle is not an object).
@@ -356,20 +365,21 @@ function make(holder, host) {
         box = box ? { x1: Math.min(box.x1, b.x), y1: Math.min(box.y1, b.y), x2: Math.max(box.x2, b.x + b.width), y2: Math.max(box.y2, b.y + b.height) } : { x1: b.x, y1: b.y, x2: b.x + b.width, y2: b.y + b.height }; }
       if (!box) { const b = layer.getBBox(); if (b.width > 0 && b.height > 0) box = { x1: b.x, y1: b.y, x2: b.x + b.width, y2: b.y + b.height }; }
     } catch { /* not rendered */ }
-    if (!box) return { x: 0, y: 0, w: m.frame.w, h: m.frame.h };
-    let { x1, y1, x2, y2 } = box; x1 -= FIT_PAD; y1 -= FIT_PAD; x2 += FIT_PAD; y2 += FIT_PAD;
-    if (x2 - x1 < FIT_MIN.w) { const c = (x1 + x2) / 2; x1 = c - FIT_MIN.w / 2; x2 = c + FIT_MIN.w / 2; }
-    if (y2 - y1 < FIT_MIN.h) { const c = (y1 + y2) / 2; y1 = c - FIT_MIN.h / 2; y2 = c + FIT_MIN.h / 2; }
-    return { x: x1, y: y1, w: x2 - x1, h: y2 - y1 };
+    return box;
   }
   function redraw({ refit = false } = {}) {
     if (destroyed) return;
     showHint();
     svg.setAttribute('aria-label', 'Diagram: ' + describe());
     const changed = paintLayer();
+    // The view stays where the person left it while they edit: it fits the content on the first showing, on Fit (the
+    // percentage, the 0 key), when the page was empty or becomes empty, and when no content is left in view at all.
     if ((changed || refit) && visible) {
-      const empty = !m.node.size;
-      vbBase = fitBase(); if (empty) { zv.k = 1; zv.dx = 0; zv.dy = 0; }
+      // A node that appeared outside the view (a chat request, a paste) also brings the whole diagram into view.
+      const empty = !m.node.size, box = fitBase(), seen = box.x < vbNow.x + vbNow.w && box.x + box.w > vbNow.x && box.y < vbNow.y + vbNow.h && box.y + box.h > vbNow.y;
+      const added = [...m.node.keys()].some((id) => !fittedNodes.has(id)), inside = contentBox() ? (({ x1, y1, x2, y2 }) => x1 >= vbNow.x && y1 >= vbNow.y && x2 <= vbNow.x + vbNow.w && y2 <= vbNow.y + vbNow.h)(contentBox()) : true;
+      if (refit || !fitted || empty || fittedEmpty || !seen || (added && !inside)) { vbBase = box; fitted = true; fittedEmpty = empty; zv.k = 1; zv.dx = 0; zv.dy = 0; }
+      fittedNodes = new Set(m.node.keys());
     }
     applyZoom(); paintOverlay(); if (changed) hidePorts();
     idsBtn.setAttribute('aria-pressed', String(idsShown()));
@@ -584,7 +594,7 @@ function make(holder, host) {
       caption.textContent = describe();
       redraw(); inspectorUi.sync();
     },
-    show() { visible = true; redraw({ refit: true }); },
+    show() { visible = true; redraw({ refit: !fitted }); },
     hide() { visible = false; ptrs.clear(); pan = null; pinch = null; hidePorts(); },
     setVisible(on) { if (on) api.show(); else api.hide(); },
     /** Download the diagram as SVG or PNG; returns { ok, detail }. */

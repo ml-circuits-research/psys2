@@ -1,5 +1,5 @@
 {
-  "version": "71debca4aa",
+  "version": "62068f769e",
   "worlds": [
     "core",
     "ui.shell",
@@ -368,8 +368,8 @@
     "worlds/words/ed.json": "6b969840b04e8c56",
     "worlds/words.bloom.json": "0710f3899a6043f6"
   },
-  "builtAt": "2026-11-20T15:44:25.736Z",
-  "commit": "3597beb06",
+  "builtAt": "2026-11-20T15:46:21.366Z",
+  "commit": "01f7791ae-dirty",
   "catalog": "1e8f0af4ea80b68f1b73c672224a79b08c9b15c4",
   "assets": {
     "app.mjs": "45f9d984f1",
@@ -828,7 +828,7 @@
     "ui/tabs/calendar.mjs": "3e27182e36",
     "ui/tabs/diagram/inspector.mjs": "cb9746d6bd",
     "ui/tabs/diagram/tools.mjs": "af25fcd536",
-    "ui/tabs/diagram.mjs": "0b7f45f9e7",
+    "ui/tabs/diagram.mjs": "f7ee933a63",
     "ui/tabs/draw/render.mjs": "ef3350e282",
     "ui/tabs/draw.mjs": "ae23b8f311",
     "ui/tabs/editor/editor.css": "0b5664bc1e",
