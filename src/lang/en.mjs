@@ -167,7 +167,7 @@ export function createLangEn(source = LANG_EN_FACTS, local = LANG_EN_LOCAL) {
 
   /** The plural of a lowercase noun: an irregular one of the facts, else the first `inflect op=plural` rule that fits (suffix, after=consonant). */
   const pluralRules = () => cached('pl', () => of('inflect').filter((w) => one(w, 'op') === 'plural').sort((a, b) => Number(one(a, 'order')) - Number(one(b, 'order'))));
-  const irregularPlural = () => cached('irr-pl', () => new Map(of('irregular').map((w) => [one(w, 'singular'), one(w, 'plural')])));
+  const irregularPlural = () => cached('irr-pl', () => new Map(of('irregular').filter((w) => one(w, 'read-only') !== 'yes').map((w) => [one(w, 'singular'), one(w, 'plural')])));
   function plural(word) {
     const w = String(word);
     if (irregularPlural().has(w)) return irregularPlural().get(w);

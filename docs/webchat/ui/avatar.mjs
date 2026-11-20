@@ -115,7 +115,7 @@ export function createAvatar(container, host = null, { editor = false } = {}) {
   // ---- what the projection says ---------------------------------------------------------------------------------
   const params = (operation) => tools?.find((op) => op.id === operation)?.params ?? {};
   const enumOf = (operation, name) => list(params(operation)[name]?.enum).filter((v) => v !== null);
-  const faceId = () => params('avatar.face.select').id?.default ?? enumOf('avatar.face.select', 'id')[0] ?? 'face';
+  const faceId = () => params('avatar.face.select').id?.default ?? enumOf('avatar.face.select', 'id')[0];
   const objects = () => state?.objects ?? [];
   const faceObject = () => objects().find((o) => o.id === faceId()) ?? null;
   const parts = () => objects().filter((o) => o.id !== faceId() && o.variant !== undefined);
@@ -123,7 +123,7 @@ export function createAvatar(container, host = null, { editor = false } = {}) {
   const inputs = (id) => state?.inputs?.[id] ?? {};
   const options = (key) => state?.options?.[key] ?? [];
   const selected = () => state?.selected ?? state?.runtime?.view?.selected ?? null;
-  const scaleLimits = () => { const p = params('avatar.part.resize').scale ?? params('avatar.face.resize').scale ?? {}; return { min: Number(p.min ?? 0.1), max: Number(p.max ?? 10) }; };
+  const scaleLimits = () => { const p = params('avatar.part.resize').scale ?? params('avatar.face.resize').scale; return { min: Number(p.min), max: Number(p.max) }; };   // declared (host.tools); the view is drawn only once they are read
   const clampScale = (value) => { const { min, max } = scaleLimits(); return Math.max(min, Math.min(max, value)); };
   const currentScale = (id) => { const value = Number(id === faceId() ? state?.runtime?.view?.scale ?? 1 : part(id)?.size ?? 1); return Number.isFinite(value) ? value : 1; };
   /** The slots a person can pick: the observed slot list, those that have variants in this face's style. */
@@ -384,7 +384,7 @@ export function createAvatar(container, host = null, { editor = false } = {}) {
     optsEl.hidden = false;
   }
   function showIdsFor() {
-    const duration = Number(params('avatar.ids.show').duration?.default ?? 4000);
+    const duration = Number(params('avatar.ids.show').duration.default);
     idsUntil = Date.now() + duration; clearTimeout(identifyTimer); identifyTimer = setTimeout(scheduleGeometry, duration + 1); scheduleGeometry();
   }
 
@@ -403,6 +403,8 @@ export function createAvatar(container, host = null, { editor = false } = {}) {
   function draw_() {
     if (destroyed) return;
     loadTools();
+    // The face, its parts, limits and durations come from the declared tools: until they are read only the small copies are drawn.
+    if (!tools) { if (state?.svg) { const small = state.svg.replace(/ width="[\d.]+" height="[\d.]+"/, ''); for (const m of mirrors) if (small !== m.svg) { m.svg = small; m.el.innerHTML = small; } } partsEl.textContent = 'Drawing my face…'; return; }
     // The id display follows the observed mode; a temporary display lasts the command's declared duration.
     const mode = inputs(faceId()).ids ?? state?.runtime?.view?.ids ?? null;
     if (mode !== idsMode) { idsMode = mode; if (mode === 'temporary') showIdsFor(); }

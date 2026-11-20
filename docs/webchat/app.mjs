@@ -110,6 +110,9 @@ export async function mountPsys2(element, options = {}) {
   // The declared values of the tabs' own controls (worlds/app.project/ui-defaults.sop): loaded before the first tab is made, read through host.ui(view).
   let uiDefaults = null;
   const uiDefaultsReady = import('./lib/dialog/ui-defaults.mjs').then((m) => (uiDefaults = m.uiDefaults()));
+  // The language world's generator (w.lang.en plurals and articles from the bundled catalog subset) for the words a tab writes itself (the drawing's caption).
+  let english = null;
+  const englishReady = Promise.all([import('./lib/lang/en-generate.mjs'), import('./lib/dialog/compose-world.mjs'), import('./lib/vendor/sopworld/sopworld.mjs')]).then(([g, w, lib]) => (english = g.englishOf(lib, w.languageWorld(lib))));
   const tEntry = performance.now();   // PROGRESS: everything before this was the page code (HTML, scripts, modules)
   const base = new URL(options.baseUrl ?? HERE, document.baseURI);
   if (!document.querySelector('link[data-psys2-css]')) {
@@ -218,7 +221,7 @@ export async function mountPsys2(element, options = {}) {
       try {
       timing.timeline.stage('Load editor module');await tabPaint();
       if (t.file && !t.make) { const m = (await import(new URL(`ui/tabs/${t.file}`, base).href)).default; Object.assign(t, m); }   // the tab's module loads now (with its world modules); vendor assets load when it makes its UI
-      await uiDefaultsReady;
+      await Promise.all([uiDefaultsReady, englishReady]);
       if (destroyed) return null;
       if (kept) { await tabPaint(); createEditor(kept); }
       if (!options.renderAllTabs && engineClient) { try {
@@ -822,6 +825,8 @@ export async function mountPsys2(element, options = {}) {
     tools: editorTools,
     /** The declared values of a tab's own controls (new item values, keyboard steps, minimum sizes): worlds/app.project/ui-defaults.sop. */
     ui: (view) => uiDefaults?.[view] ?? {},
+    /** The language world's plurals and articles ({ plural(noun), article(noun) }), for words a tab writes itself. */
+    english: () => english,
     tool: (operation,args={},options={}) => {
       gesturesPending++;updateBusy();
       const run=gestureChain.then(()=>runGesture(operation,args,options)).finally(()=>{gesturesPending=Math.max(0,gesturesPending-1);updateBusy();});

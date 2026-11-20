@@ -35,20 +35,19 @@ const ICON = {
   save: '<svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M4 20h16"/></svg>',
 };
 
-const plural = (kind, n) => (n === 1 ? kind : kind === 'person' ? 'people' : kind === 'fish' ? 'fish' : /s$/.test(kind) ? `${kind}es` : `${kind}s`);
 const easeOutBack = (t) => { const c1 = 1.9, c3 = c1 + 1; return 1 + c3 * (t - 1) ** 3 + c1 * (t - 1) ** 2; };
 const clamp01 = (x) => Math.min(1, Math.max(0, x));
 const first = (v) => (Array.isArray(v) ? v[0] : v);
 const num = (v) => Number(first(v));
 const isHex = (c) => /^#[0-9a-f]{6}$/i.test(String(c ?? ''));
 
-/** "2 trees, a house and a sun" for the caption: the observed objects of the page (not their parts or groups). */
-export function captionOf(state) {
+/** "2 trees, a house and a sun" for the caption: the observed objects of the page (not their parts or groups); plurals and articles from the language world (`english`). */
+export function captionOf(state, english) {
   const objs = (state?.objects ?? []).filter((o) => o.binding === 'drawing.object');
   if (!objs.length) return 'An empty page. Say what to draw!';
   const counts = new Map();
   for (const o of objs) { const name = first(state.inputs?.[o.id]?.name) ?? o.kind; counts.set(name, (counts.get(name) ?? 0) + 1); }
-  const bits = [...counts].map(([k, n]) => (n === 1 ? `a ${k}` : `${n} ${plural(k, n)}`));
+  const bits = [...counts].map(([k, n]) => (n === 1 ? `${english.article(k)} ${k}` : `${n} ${english.plural(k)}`));
   return bits.length > 1 ? `${bits.slice(0, -1).join(', ')} and ${bits.at(-1)}` : bits[0];
 }
 
@@ -603,8 +602,8 @@ function make(holder, host) {
       sel = sel.filter((id) => byId(id));
       const ids = view().ids; if (ids === 'temporary' && lastIds !== undefined && lastIds !== 'temporary') showIdsFor(idsDuration); lastIds = ids ?? null;
       if (!operations.length && kindsOf().length && !shapeChoices.childElementCount) fillChooser();
-      caption.textContent = captionOf(state);
-      canvas.setAttribute('aria-label', `Drawing: ${captionOf(state)}`);
+      caption.textContent = captionOf(state, host.english());
+      canvas.setAttribute('aria-label', `Drawing: ${captionOf(state, host.english())}`);
       showHint(); syncControls();
       if (renderer) { sync(); schedule(); }
     },
