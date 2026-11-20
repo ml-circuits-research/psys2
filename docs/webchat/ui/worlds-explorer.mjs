@@ -9,22 +9,18 @@ const KINDS={
  component:'Implementation component',runtime:'Runtime record',structure:'Runtime structure',storage:'Storage adapter',
  adapter:'Adapter',method:'Method',episode:'Episode',project:'Project'
 };
-// Map encoding: COLOUR is the primary cue. Each kind of record has its own clearly different colour; related kinds share a
-// family of shades (JavaScript oranges, trained reader purples, SOP rules greens, live state blues, knowledge teals, schema
-// greys). The shape is a secondary cue for the same kind. Hollow = not used in this session.
-const FAMILIES={
- code:'Code that runs: JavaScript and the trained reader',rules:'SOP rules and declarations',state:'Live state',knowledge:'Knowledge',schema:'Schemas',
-};
+// Map encoding: COLOUR is the primary cue. Everything that is JavaScript is ONE kind in the Native Layer (one colour; the only
+// marker is badge D for domain logic in JavaScript); the trained reader has its own colour there. SOP Lang Worlds are told
+// apart rigorously: rules and policies (greens), instances (blues), knowledge (teals), schemas (greys), each kind with its own
+// shade. The shape repeats the family as a secondary cue. Hollow = not used in this session.
+const FAMILIES={native:'Native Layer',rules:'Rules and policies (SOP)',state:'Instances',knowledge:'Knowledge',schema:'Schemas'};
 const ENTRIES={
- 'js-tool':{family:'code',label:'JavaScript tool or interpreter',color:'#f07f2e',shape:'hexagon',meaning:'JavaScript that reads, checks or runs commands: the turn coordinator, tool hosts, the SOP area interpreter and world host, the placement compiler, the loader.'},
- 'js-component':{family:'code',label:'JavaScript component (audited)',color:'#f6b23f',shape:'hexagon',meaning:'A group of runtime JavaScript modules from the component registry, with its generality audit.'},
- 'js-ui':{family:'code',label:'JavaScript UI helper',color:'#ffe08a',shape:'hexagon',meaning:'JavaScript of the page and the tabs: rendering, gestures, speech, storage.'},
- 'js-session':{family:'code',label:'Session data kept as JavaScript',color:'#d9573b',shape:'triangle',meaning:'State that is still JavaScript data, not an SOP World: the shell state, session memory, journals, records of the page.'},
- model:{family:'code',label:'Trained reader (SOP-BERT)',color:'#b48cff',shape:'hexagon',meaning:'The trained model that reads your words into proposed requests.'},
- 'model-data':{family:'code',label:'Reader binding bundle',color:'#d6b8ff',shape:'diamond',meaning:'The data the reader uses to bind its words to kinds, properties and tool parameters, with its key coverage.'},
- 'tab-declarations':{family:'rules',label:'Tab SOP files (what a tab declares)',color:'#9bdc4a',shape:'hexagon',meaning:'The SOP files one tab ships: its area rules, its native tool interface and its instance schema. Not the live state.'},
- policy:{family:'rules',label:'Operational SOP policy',color:'#2fa84f',shape:'diamond',meaning:'SOP rules that decide: how requests are read, admitted, routed, created, placed and undone.'},
- instance:{family:'state',label:'Live state (SOP instance World)',color:'#4a9dff',shape:'circle',meaning:'The current facts of one tab or of the session, held as an SOP World.'},
+ native:{family:'native',label:'JavaScript',color:'#f08a3c',shape:'hexagon',meaning:'Native code and its data: tool hosts, interpreters, the turn coordinator, loaders, UI helpers, model runtime hosts and session data still kept as JavaScript. Badge D: it makes domain decisions that belong in SOP rules or knowledge.'},
+ model:{family:'native',label:'Trained reader (SOP-BERT and its binding bundle)',color:'#b48cff',shape:'hexagon',meaning:'The trained model that reads your words into proposed requests, with the data that binds its words to kinds, properties and tool parameters. Not an SOP World.'},
+ 'tab-rules':{family:'rules',label:'Tab rules (SOP files a tab ships)',color:'#9bdc4a',shape:'diamond',meaning:'The SOP files one tab ships: its area declaration and act rules, its native tool interface and its instance schema.'},
+ policy:{family:'rules',label:'Operational policy World',color:'#2fa84f',shape:'diamond',meaning:'SOP rules that decide how requests are read, admitted, routed, created, placed and undone.'},
+ registry:{family:'rules',label:'Area registry World',color:'#c8e86a',shape:'diamond',meaning:'The SOP World that links each tab to its domain, schema and instance; the application reads it to resolve the active area.'},
+ instance:{family:'state',label:'Instance World (live state)',color:'#4a9dff',shape:'circle',meaning:'The current facts of one tab or of the session, held as an SOP World.'},
  evidence:{family:'state',label:'Execution evidence (SOP)',color:'#9fcbff',shape:'circle',meaning:'SOP facts retained from one executed operation.'},
  'knowledge-world':{family:'knowledge',label:'Knowledge World (catalog)',color:'#19b5a5',shape:'diamond',meaning:'Reusable knowledge published in the shared catalog, read by reference.'},
  'knowledge-file':{family:'knowledge',label:'Knowledge source or catalog file',color:'#7fe3d8',shape:'diamond',meaning:'An exact file of the catalog: an SOP source or the catalog index (JSON).'},
@@ -36,15 +32,14 @@ const entryOf=node=>{
  if(Object.hasOwn(ENTRIES,node.entry))return node.entry;
  if(node.representation==='model')return 'model';
  if(node.kind==='schema')return node.details?.role==='native-tool-interface'?'tool-interface':'schema';
- if(['instance','project'].includes(node.kind))return 'instance';
+ // An operational SOP World of instance kind (the area registry) holds rules the application reads, not editor state.
+ if(node.kind==='project'||node.kind==='instance'&&/operational/i.test(String(node.implementation??'')))return 'registry';
+ if(node.kind==='instance')return 'instance';
  if(node.kind==='episode')return 'evidence';
- if(node.kind==='world')return 'tab-declarations';
+ if(node.kind==='world')return 'tab-rules';
  if(node.kind==='knowledge'){if(/operational|policy/i.test(String(node.implementation??''))||/^(?:execution:|knowledge:reader-)/.test(node.id))return 'policy';return node.id.startsWith('knowledge-file:')||node.representation==='catalog'?'knowledge-file':'knowledge-world';}
  if(node.representation==='catalog')return 'knowledge-file';
- if(['runtime','structure','storage'].includes(node.kind))return 'js-session';
- if(node.audit?.uiHelper)return 'js-ui';
- if(node.layer==='code')return 'js-component';
- return 'js-tool';
+ return 'native';
 };
 const familyOf=node=>ENTRIES[entryOf(node)].family;
 const displayName=node=>node.displayName??node.help?.title??node.label??node.id;
@@ -77,10 +72,9 @@ function worldGlyph(node,usage){
 // Audit marks of a JavaScript component: D (domain logic in JS) or G (generic), and a dashed ring when it has no activity hook.
 const BADGES={'domain-logic':['D','#ff8a7a','Domain logic in JavaScript: it decides with words, kinds, areas, thresholds, orderings or fallbacks that belong in SOP rules or knowledge.'],generic:['G','#8fd8ae','Generic JavaScript: parsing, transport, rendering primitives, solver plumbing or storage, with no domain decision.']};
 function auditMarks(node){
- if(!node.audit)return [];const [letter,color]=BADGES[node.audit.badge]??BADGES.generic,marks=[];
- if(!node.audit.activityHook)marks.push(svg('circle',{r:12,class:'p2-worlds-silent-ring','data-silent-ring':''}));
- const badge=svg('g',{class:'p2-worlds-badge',transform:'translate(7,-8)','data-badge':node.audit.badge});badge.append(svg('circle',{r:4.6,fill:color}),svg('text',{x:0,y:2.4,'text-anchor':'middle','font-size':6.5},letter));marks.push(badge);
- return marks;
+ if(node.audit?.badge!=='domain-logic')return [];const [letter,color]=BADGES['domain-logic'];
+ const badge=svg('g',{class:'p2-worlds-badge',transform:'translate(7,-8)','data-badge':'domain-logic'});badge.append(svg('circle',{r:4.8,fill:color}),svg('text',{x:0,y:2.4,'text-anchor':'middle','font-size':6.5},letter));
+ return [badge];
 }
 // Wraps a caption into at most two lines of the given character budget, ellipsizing the rest.
 function captionLines(text,budget){
@@ -123,7 +117,7 @@ export function createWorldsExplorer({load,subscribe,copy,loadSources}={}){
  const element=h('section',{id:'worlds-view-'+(++explorerSequence),class:'p2-worlds','aria-label':'Worlds architecture'}),status=h('span',{class:'p2-worlds-status',role:'status'}),search=h('input',{class:'p2-worlds-search',type:'search',placeholder:'Find a world, object or component…','aria-label':'Find a world or component'});
  const graph=svg('svg',{class:'p2-worlds-graph','aria-label':'Runtime architecture graph',role:'group'}),graphPane=h('div',{class:'p2-worlds-graph-pane'},graph),legend=h('aside',{class:'p2-worlds-legend','aria-label':'World kinds legend'}),eventList=h('div',{class:'p2-worlds-event-list',role:'log','aria-label':'Runtime activation events'}),eventCount=h('span',{class:'p2-worlds-event-count'});
  const detailBreadcrumbs=h('nav',{class:'p2-worlds-detail-breadcrumbs','aria-label':'Worlds location'});
- const toolbar=h('header',{class:'p2-worlds-toolbar'},h('h2',{text:'Worlds'}),search,button('Activity log',showActivityLog,{'aria-label':'Open activity log'}),button('Refresh',()=>void refresh()),button('−',()=>zoom(1.2),{'aria-label':'Zoom out'}),button('+',()=>zoom(1/1.2),{'aria-label':'Zoom in'}),button('Fit',fit),button('All links',event=>{const on=graph.classList.toggle('show-links');event.currentTarget.setAttribute('aria-pressed',String(on));},{'aria-pressed':'false','data-worlds-links':''}),button('About this view',()=>openDetails({id:'ui:architecture-notes',label:'About the architecture view',kind:'component',implementation:'Read-only JavaScript projection',why:'One map of the records this session actually has, read as a snapshot between actions: the worker waits for a running turn before it reads, so during a long action the map shows the previous state until Refresh. Rows follow a request from top to bottom: your words reach the code that runs (JavaScript, oranges, and the trained reader, purples), SOP rules and declarations decide (greens), the live state changes (blues), and knowledge (teals) and schemas (greys) are read by reference. Each kind of record has its own colour; the shape repeats the kind. JavaScript components carry badge D (domain logic in JavaScript) or G (generic) and a dashed ring when they have no activity hook. A tab\'s SOP files are what it ships and declares (area rules, tool interface, instance schema; formerly called the tool package). Columns are the tabs (Diagram, Drawing, Calendar, Documents, Avatar) plus Shared for what all tabs use. Shape says what a record is, colour how it is implemented (SOP Lang, JavaScript, trained model, catalog data); the legend lists only the symbols on this map.',description:'There is no separate session layer. Every tab keeps its state as an SOP instance World, and so do the tab registry and the undo/redo journal: they are the live state. The few records still kept as JavaScript (application shell state, session memory, chat history, UI training pairs) are code-side data, so they sit in the code layer as red-orange triangles. The world loader is a tool, so it sits with the tools; session memory is part of the Session (turn coordinator) and is listed inside it. Source files and schemas that belong to one World are listed inside that World. Layers and columns only arrange the map; they are not additional SOP Worlds. Activity retention: the worker and this page each keep the last 300 activity events; Copy retained log copies the page\'s 300.',details:{limitations:data.limitations??[],runtimeAudit:data.runtimeAudit??null,actualNodes:data.nodes.length,actualLinks:data.edges.length}})),status);
+ const toolbar=h('header',{class:'p2-worlds-toolbar'},h('h2',{text:'Worlds'}),search,button('Activity log',showActivityLog,{'aria-label':'Open activity log'}),button('Refresh',()=>void refresh()),button('−',()=>zoom(1.2),{'aria-label':'Zoom out'}),button('+',()=>zoom(1/1.2),{'aria-label':'Zoom in'}),button('Fit',fit),button('All links',event=>{const on=graph.classList.toggle('show-links');event.currentTarget.setAttribute('aria-pressed',String(on));},{'aria-pressed':'false','data-worlds-links':''}),button('About this view',()=>openDetails({id:'ui:architecture-notes',label:'About the architecture view',kind:'component',implementation:'Read-only JavaScript projection',why:'One map of the records this session actually has, read as a snapshot between actions: the worker waits for a running turn before it reads, so during a long action the map shows the previous state until Refresh. Rows from top to bottom: the Native Layer (all JavaScript as one orange kind, badge D where it makes domain decisions; the trained reader in purple), the SOP Worlds that hold rules and policies (greens: tab rules, operational policies, the area registry), the instance Worlds that hold the live state (blues), knowledge (teals) and schemas (greys). SOP Worlds are told apart by kind; JavaScript is not, because we are reducing it. A tab\'s SOP files are the rules and declarations it ships (formerly called the tool package). No preferences World exists yet; w.preferences is planned. Columns are the tabs (Diagram, Drawing, Calendar, Documents, Avatar) plus Shared for what all tabs use. Colour says what kind of record it is (the shape repeats its family); the legend lists only the kinds on this map.',description:'There is no separate session layer. Every tab keeps its state as an SOP instance World, and so does the undo/redo journal: they are the instances. The area registry is an SOP World of rules, shown with the rules. The few records still kept as JavaScript (application shell state, session memory, chat history, UI training pairs) are native data, so they sit in the Native Layer. The world loader is JavaScript, so it sits in the Native Layer; session memory is part of the Session (turn coordinator) and is listed inside it. Source files and schemas that belong to one World are listed inside that World. Layers and columns only arrange the map; they are not additional SOP Worlds. Activity retention: the worker and this page each keep the last 300 activity events; Copy retained log copies the page\'s 300.',details:{limitations:data.limitations??[],runtimeAudit:data.runtimeAudit??null,actualNodes:data.nodes.length,actualLinks:data.edges.length}})),status);
  const tooltip=h('div',{class:'p2-worlds-tooltip',role:'tooltip',hidden:true});graphPane.append(tooltip,h('div',{class:'p2-worlds-graph-hint',text:'Snapshot read between actions (Refresh reads it again) · point at a record to see its links · click for details · drag to pan · scroll to zoom'}));
  const playbackStatus=h('span',{class:'p2-worlds-playback-status',role:'status','aria-live':'off'}),pauseButton=button('Pause',togglePause),logFilter=h('input',{type:'search',placeholder:'Filter log…','aria-label':'Filter activity log'}),logPanel=h('section',{class:'p2-worlds-events',role:'region','aria-label':'Activity log',hidden:true});
  const playbackBar=h('div',{class:'p2-worlds-playback-bar'},h('span',{class:'p2-worlds-live',text:'Recorded activity playback'}),playbackStatus,pauseButton,button('Stage details',showPlaybackStage),button('Clear playback',stopPlayback));
@@ -173,20 +167,20 @@ export function createWorldsExplorer({load,subscribe,copy,loadSources}={}){
  // What the instances layer holds, from the actual records.
  function stateDescription(){
   const names=data.nodes.filter(node=>!folds.has(node.id)&&familyOf(node)==='state').map(displayName);
-  return 'Blue: the current facts, held as SOP Worlds: '+(names.length?names.join(', '):'none')+'. Session data still kept as JavaScript is drawn as red-orange triangles in the code layer, because it is JavaScript, not an SOP World.';
+  return 'Blues: the current facts, held as SOP instance Worlds: '+(names.length?names.join(', '):'none')+'. Session data still kept as JavaScript is in the Native Layer, because it is JavaScript, not an SOP World.';
  }
  function organize(){
   layoutGroups=new Map();memberships=new Map();
   // Rows follow a request from top to bottom: your words reach the code and the reader, SOP rules decide, the live state
   // changes; knowledge and schemas are read by reference.
   const definitions=[
-   ['code',FAMILIES.code,'Oranges: every JavaScript component a chat turn or a UI action runs (from the declared component registry), tool hosts and interpreters, UI helpers, and session data still kept as JavaScript (red-orange triangles). Purples: the SOP-BERT reader and its binding bundle. Badge D: JavaScript that makes domain decisions (words, kinds, areas, thresholds, orderings, fallbacks) that belong in SOP rules or knowledge; badge G: generic JavaScript. Dashed ring: no activity hook, so it can act without lighting up.'],
-   ['rules',FAMILIES.rules,'Greens: SOP Lang that decides. The operational policies (reading, admission, routing, creation, placement, history) and, per tab, the declarations it ships (its area rules and its native tool interface; formerly called the tool package).'],
+   ['native',FAMILIES.native,'Orange: everything that is JavaScript, as one kind: tool hosts, interpreters, audited components (from the declared component registry), UI helpers, model runtime hosts and session data still kept as JavaScript. We are reducing and unifying these pieces, so they are not told apart; badge D marks JavaScript that makes domain decisions (words, kinds, areas, thresholds, orderings, fallbacks) that belong in SOP rules or knowledge. Purple: the trained reader (SOP-BERT and its binding bundle), which is not an SOP World.'],
+   ['rules',FAMILIES.rules,'Greens: SOP Worlds that hold rules and policies. Tab rules: the SOP files each tab ships (area declaration and act rules, tool interface, instance schema). Operational policies: interpretation, reader context and admission, routing, composition, creation, placement and scene defaults, history. The area registry World links each tab to its domain, schema and instance. No preferences World exists yet (planned: w.preferences).'],
    ['state',FAMILIES.state,stateDescription()],
    ['knowledge',FAMILIES.knowledge,'Teals: published catalog Worlds and their files, read by reference. A hollow symbol means none of its sources were read in this session.'],
    ['schemas',FAMILIES.schema,'Greys: types, slots and constraints that validate the other Worlds, and the tool interface declarations. A schema used by exactly one World is listed inside that World.'],
   ];
-  const layerOf={code:'code',rules:'rules',state:'state',knowledge:'knowledge',schema:'schemas'};
+  const layerOf={native:'native',rules:'rules',state:'state',knowledge:'knowledge',schema:'schemas'};
   for(const [id,label,description]of definitions)layoutGroups.set(id,{id,label,description,members:[]});
   for(const node of data.nodes){const shown=actualNode(visibleOf(node.id))??node,id=layerOf[familyOf(shown)];if(!folds.has(node.id))layoutGroups.get(id).members.push(node.id);memberships.set(node.id,id);}
  }
@@ -307,10 +301,9 @@ export function createWorldsExplorer({load,subscribe,copy,loadSources}={}){
     sample,h('div',{},h('strong',{text:`${meta.label}${hollow?' · not used in this session':''} (${count})`}),h('p',{text:hollow?'Present in the catalog; none of its sources were read in this session.':meta.meaning}))));
   }
   const audited=data.nodes.filter(node=>node.audit&&!folds.has(node.id)),badgeRows=[];
-  for(const [badge,[letter,color,meaning]]of Object.entries(BADGES)){const count=audited.filter(node=>node.audit.badge===badge).length;if(!count)continue;const sample=svg('svg',{viewBox:'-10 -10 20 20','aria-hidden':true});const g=svg('g');g.append(svg('circle',{r:6,fill:color}),svg('text',{x:0,y:3,'text-anchor':'middle','font-size':8,'font-weight':700,fill:'#141b25'},letter));sample.append(g);badgeRows.push(h('div',{class:'p2-worlds-legend-badge','data-legend-badge':badge},sample,h('span',{text:`Badge ${letter} (${count}): ${meaning}`})));}
-  const silent=audited.filter(node=>!node.audit.activityHook).length;if(silent){const sample=svg('svg',{viewBox:'-12 -12 24 24','aria-hidden':true});sample.append(svg('circle',{r:10.5,class:'p2-worlds-silent-ring'}));badgeRows.push(h('div',{class:'p2-worlds-legend-badge','data-legend-badge':'silent'},sample,h('span',{text:`Dashed ring (${silent}): no activity hook; this JavaScript can change a result without lighting up the map or appearing in the activity log.`})));}
+  for(const [badge,[letter,color,meaning]]of Object.entries(BADGES).filter(([badge])=>badge==='domain-logic')){const count=audited.filter(node=>node.audit.badge===badge).length;if(!count)continue;const sample=svg('svg',{viewBox:'-10 -10 20 20','aria-hidden':true});const g=svg('g');g.append(svg('circle',{r:6,fill:color}),svg('text',{x:0,y:3,'text-anchor':'middle','font-size':8,'font-weight':700,fill:'#141b25'},letter));sample.append(g);badgeRows.push(h('div',{class:'p2-worlds-legend-badge','data-legend-badge':badge},sample,h('span',{text:`Badge ${letter} (${count}): ${meaning}`})));}
   details.append(h('summary',{},h('strong',{text:'Legend'}),h('span',{text:groups.size+' kinds on this map'})),list,...badgeRows,
-   h('p',{class:'p2-worlds-legend-note',text:'Colour: what kind of thing the record is (one colour per kind; shades of one family are related kinds). Shape repeats the kind. Rows follow a request from top to bottom: code and reader, SOP rules, live state, knowledge, schemas. Columns: the tab that owns it, or Shared. Point at a record to see its links; records with source files or schemas list them in their details. About this view: the map is a snapshot the worker reads between actions (it waits for a running turn), so during a long action it shows the previous state; Refresh reads it again. The worker and this page each retain the last 300 activity events; Copy retained log copies the page\'s.'}));
+   h('p',{class:'p2-worlds-legend-note',text:'Colour: what kind of thing the record is. All JavaScript is one kind (orange, badge D for domain logic); SOP Worlds have one colour per kind, in shades of their family. Rows: Native Layer, rules and policies (SOP), instances, knowledge, schemas. Columns: the tab that owns it, or Shared. Point at a record to see its links; records with source files or schemas list them in their details. About this view: the map is a snapshot the worker reads between actions (it waits for a running turn), so during a long action it shows the previous state; Refresh reads it again. The worker and this page each retain the last 300 activity events; Copy retained log copies the page\'s.'}));
   details.addEventListener('toggle',()=>{legendOpen=details.open;legend.classList.toggle('is-open',legendOpen);});
   legend.classList.toggle('is-open',legendOpen);legend.replaceChildren(details);
  }

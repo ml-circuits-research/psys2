@@ -52,7 +52,7 @@ function addReaderAndBoundaryRecords(nodes,edges,{readerBindings,readerDiagnosti
  // null: the worker has no bundle yet (reader loading or unavailable); the record is still shown so the map keeps one shape.
  if(readerBindings!==undefined){
   const coverage=readerBindings?Object.entries(readerBindings.coverage).map(([area,row])=>area+' '+row.bound+'/'+row.total).join(', '):'';
-  add({id:'component:reader-bindings',label:'Reader binding bundle',kind:'component',representation:'catalog',entry:'model-data',implementation:'Binding bundle (JSON, hash checked)',status:readerBindings?'keys bound: '+(coverage||'no coverage rows'):'not loaded: the reader has not supplied its bundle yet',
+  add({id:'component:reader-bindings',label:'Reader binding bundle',kind:'component',representation:'catalog',entry:'model',implementation:'Binding bundle (JSON, hash checked)',status:readerBindings?'keys bound: '+(coverage||'no coverage rows'):'not loaded: the reader has not supplied its bundle yet',
    why:'Binds the lemmas and keys the reader proposes to canonical kinds, properties, units and native tool parameters. Coverage lists, per area the bundle covers, which inventory keys are bound and why the others are not; an area without coverage rows has no key bindings in this bundle. Built from the knowledge catalog at pin '+(readerBindings?.knowledgePin??'unknown')+'.',
    description:'Deployed SOP-BERT binding bundle: identity, catalog pin, sizes and key coverage per area.',details:readerBindings??{loaded:false}});
   link('component:reader','component:reader-bindings','binds proposals with');
@@ -72,12 +72,12 @@ function addReaderAndBoundaryRecords(nodes,edges,{readerBindings,readerDiagnosti
   link('runtime:turn-limits','component:reasoner','bounds each turn of');
  }
  if(translation){
-  add({id:'runtime:translation-boundary',label:'Translation boundary',kind:'runtime',implementation:'Browser translation APIs via the page (worker relay)',status:translation.lastFailure?'last failure: '+translation.lastFailure.error:translation.calls?translation.calls+' calls, no failure':'not used in this session',
+  add({id:'runtime:translation-boundary',label:'Translation calls and failures',kind:'runtime',implementation:'Browser translation APIs via the page (worker relay)',status:translation.lastFailure?'last failure: '+translation.lastFailure.error:translation.calls?translation.calls+' calls, no failure':'not used in this session',
    why:'Translates non-English input to English and replies back at the system boundary, through the page\'s browser translator and language detector. It records each call and the last failure reason.',description:'Language detection and machine translation calls and their last failure.',details:translation});
   link('runtime:translation-boundary','component:reasoner','translates input and replies for');
  }
  if(sampler){
-  add({id:'runtime:suggestion-sampler',label:'Suggestion sampler',kind:'runtime',implementation:'JavaScript (declared-tool sampler)',status:sampler.last?'last sample: '+(sampler.last.view??'?')+' · '+(sampler.last.items??0)+' items':'no sample yet',
+  add({id:'runtime:suggestion-sampler',label:'Last suggestion sample',kind:'runtime',implementation:'JavaScript (declared-tool sampler)',status:sampler.last?'last sample: '+(sampler.last.view??'?')+' · '+(sampler.last.items??0)+' items':'no sample yet',
    why:'Samples example requests and control suggestions from the declared tools of a tab ("dice"). Its probe runs are marked as suggestion probes in the activity log and never change the editors.',description:'Suggestion sampler scope and its last run.',details:sampler});
   link('runtime:suggestion-sampler','component:reader','probes the reader with');
  }
