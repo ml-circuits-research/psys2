@@ -1,18 +1,18 @@
-import {isScopedRemoval} from './capability-plan-execution.mjs?v=1ccb819e5b';
-import {projectRemovalAction} from './project-removal-action.mjs?v=b50c981942';
-import { captureHistory, recordHistory, restoreHistory } from './history-journal.mjs?v=9dc30df167';
-import {projectReaderHeadAlternative} from './reader-head-alternative.mjs?v=3dae2e28eb';
-import {parse} from '../vendor/sopworld/sopworld.mjs?v=dde6e85489';
-import {writeReaderSource} from './reader-source.mjs?v=83f9dd3ba7';
-import {isAuthoredRequest,readAuthoredRequest} from './authored-request-tool.mjs?v=f7cd19a44d';
+import {isScopedRemoval} from './capability-plan-execution.mjs?v=ee57964b20';
+import {projectRemovalAction} from './project-removal-action.mjs?v=f8caf9611d';
+import { captureHistory, recordHistory, restoreHistory } from './history-journal.mjs?v=fe5fd5739d';
+import {projectReaderHeadAlternative} from './reader-head-alternative.mjs?v=cde8cab910';
+import {parse} from '../vendor/sopworld/sopworld.mjs?v=f63db0e6f1';
+import {writeReaderSource} from './reader-source.mjs?v=bac1aac158';
+import {isAuthoredRequest,readAuthoredRequest} from './authored-request-tool.mjs?v=7f1102f4eb';
 // Model-first proposal routing. Calibration authority belongs to host configuration,
 // never to a model output, evaluation annotation or grammar proposal.
-import {requestCompositionPolicy,scheduleFollowingCut}from './request-composition-policy.mjs?v=0469e8214f';
-import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=5d3f30cba1';
-import {projectQueryAction,recoverQueryProjection} from './project-query-action.mjs?v=10c3754176';
-import {projectContextAction} from './project-context-action.mjs?v=02c433d129';
-import {projectCreateAction} from './project-create-action.mjs?v=ed6e0539cc';
-import {assessReaderProposal} from './reader-admission.mjs?v=447a1ad9bf';
+import {requestCompositionPolicy,scheduleFollowingCut}from './request-composition-policy.mjs?v=a5ff086e08';
+import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=4cd286bce1';
+import {projectQueryAction,recoverQueryProjection} from './project-query-action.mjs?v=5bc94e46ac';
+import {projectContextAction} from './project-context-action.mjs?v=85b28a68f6';
+import {projectCreateAction} from './project-create-action.mjs?v=fb546cf374';
+import {assessReaderProposal} from './reader-admission.mjs?v=a449aee611';
 const unavailable=reason=>({candidates:[],coverage:{complete:false,executable:false,graphProposal:false},failures:[{reason}]});
 const noDeclaredAction = () => {
  const text='I could not identify an action to apply. Nothing changed.';

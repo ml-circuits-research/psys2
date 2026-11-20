@@ -1,12 +1,12 @@
-import { readSceneDefaults } from './scene-placement-defaults.mjs?v=a723a6f875';
+import { readSceneDefaults } from './scene-placement-defaults.mjs?v=2e0930df9e';
 // SPDX-License-Identifier: AGPL-3.0-only
-import { compileNativeCapability } from './capability-plan-adapter.mjs?v=5ac18e3045';
-import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=79061a1d1e';
+import { compileNativeCapability } from './capability-plan-adapter.mjs?v=bdc9cca70f';
+import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=986e3b26ec';
 import { instanceIdFor } from './instance-identity.mjs?v=024ef1ca83';
-import { prepareNativeControlHost } from './native-control-preparation.mjs?v=c69b6e801e';
-import { invokeObservedNativeTool } from './native-tool-activity.mjs?v=39ee882d4a';
-import { retainPropertyEffect } from './property-effect-evidence.mjs?v=838286d884';
-import { describeNativeControl, verifyNativeControlEffect } from './native-control-intent.mjs?v=da7d84ddc9';
+import { prepareNativeControlHost } from './native-control-preparation.mjs?v=f1153a7ae4';
+import { invokeObservedNativeTool } from './native-tool-activity.mjs?v=60dbd287dd';
+import { retainPropertyEffect } from './property-effect-evidence.mjs?v=a138f2d15b';
+import { describeNativeControl, verifyNativeControlEffect } from './native-control-intent.mjs?v=2b545b087f';
 
 function reply(text, supported, trace = {}) {
   return { text, parts: [{ text, translate: false }], statuses: [supported ? 'supported' : 'unsupported'],

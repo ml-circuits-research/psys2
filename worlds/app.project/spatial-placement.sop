@@ -11,3 +11,13 @@
 @layout.overlap.cost std.placement.cost evaluator=$layout.overlap metric=overlap_area
 @layout.clearance.cost std.placement.cost evaluator=$layout.clearance metric=clearance_deficit
 @layout.order.cost std.placement.cost evaluator=$layout.order metric=rank
+
+# What each relation means as one constraint of a placement problem (std.problem), for requests with several
+# relations or subjects: the library solves every relation, the observed peers and the page together.
+@layout.predicate.near std.placement.predicate method=$layout.method relation=near predicate=near gap=40
+@layout.predicate.left std.placement.predicate method=$layout.method relation=left predicate=left gap=80
+@layout.predicate.right std.placement.predicate method=$layout.method relation=right predicate=right gap=80
+@layout.predicate.above std.placement.predicate method=$layout.method relation=above predicate=above gap=80
+@layout.predicate.below std.placement.predicate method=$layout.method relation=below predicate=below gap=80
+@layout.predicate.peer std.placement.predicate method=$layout.method relation=independent_peer predicate=apart gap=12 strength=soft weight=100
+@layout.predicate.page std.placement.predicate method=$layout.method relation=member_of predicate=inside

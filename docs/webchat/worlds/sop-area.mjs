@@ -2,11 +2,11 @@
 // A tab defined by its area.sop: which catalog modules form its instance and knowledge, which rule files
 // compile its commands and project its drawing, the things it starts with and the open choices of its native
 // interface. This module only reads that declaration; it holds no knowledge of any tab.
-import {World, str} from '../lib/vendor/sopworld/sopworld.mjs?v=dde6e85489';
-import {catalogWorld} from './catalog-world.mjs?v=9c1ce5f096';
-import {readNativeToolInterface} from './native-tool-interface.mjs?v=f24fe0f51c';
-import {toolInvocationContext} from './native-tool-host.mjs?v=f9a751a339';
-import {createSopWorldHost, initialSopWorldState, worldOf} from './sop-world-host.mjs?v=d8a959c837';
+import {World, str} from '../lib/vendor/sopworld/sopworld.mjs?v=f63db0e6f1';
+import {catalogWorld} from './catalog-world.mjs?v=3a10369a51';
+import {readNativeToolInterface} from './native-tool-interface.mjs?v=e95afa438f';
+import {toolInvocationContext} from './native-tool-host.mjs?v=7ebbcaef36';
+import {createSopWorldHost, initialSopWorldState, worldOf} from './sop-world-host.mjs?v=0cefc0e314';
 import {renderPrimitives} from './sop-primitives.mjs?v=4afdb7412e';
 
 const read = (fact, key) => { const raw = fact?.attrs[key]?.[0]; return raw === undefined ? undefined : raw.startsWith('"') ? str(raw) : raw; };

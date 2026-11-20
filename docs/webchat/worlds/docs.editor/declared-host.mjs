@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-import { readNativeToolInterface } from '../native-tool-interface.mjs?v=f24fe0f51c';
+import { readNativeToolInterface } from '../native-tool-interface.mjs?v=e95afa438f';
 import NATIVE_INTERFACE from './native-interface-source.mjs?v=0111c52683';
-import {createNativeToolHost,copyHostData,nativeToken} from '../native-tool-host.mjs?v=f9a751a339';
+import {createNativeToolHost,copyHostData,nativeToken} from '../native-tool-host.mjs?v=7ebbcaef36';
 import {createDoc,writeText,commit,sync,undoStep,redoStep,addBlock} from './document.mjs?v=bb449fec98';
 import {documentEditingHandlers,changeDocumentBlock,documentTextId} from './native-editing.mjs?v=d10b89aec3';
-import {canonicalDocumentState,documentStateWorld,toNativeDocumentState,DOCUMENT_STATE_SCHEMA} from './canonical-state.mjs?v=a9e70dd15f';
+import {canonicalDocumentState,documentStateWorld,toNativeDocumentState,DOCUMENT_STATE_SCHEMA} from './canonical-state.mjs?v=e68316f586';
 import {blockText,containers} from './model.mjs?v=7dfba6bc28';
 const toolInterface = readNativeToolInterface(NATIVE_INTERFACE).realize();
 export const DOCUMENT_TOOL_BINDINGS = toolInterface.bindings;

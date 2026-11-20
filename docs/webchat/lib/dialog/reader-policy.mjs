@@ -1,5 +1,5 @@
 // Send runtime evidence through the authored SOP decision rules.
-import { World, parse, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=dde6e85489';
+import { World, parse, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=f63db0e6f1';
 import SOURCE from '../../worlds/app.project/reader-admission-policy-source.mjs?v=7ea6aa9e7f';
 
 import SCHEMA from '../../worlds/app.project/reader-admission-schema-source.mjs?v=28019636d0';
