@@ -135,8 +135,11 @@ function judgeRequest(req,ctx){
  // change, place, arrange, group, ungroup, merge, split, copy, reverse, ...: some object of the target changed as asked
  // change/place/arrange act on existing objects: a new object does not satisfy them (structure acts may create).
  const creates=['copy','split','group','merge','repeat'].includes(act);
- const changedObjs=[...diff.changed.map(d=>d.object),...(creates?diff.created:[])];
- add('changed',creates?diff.touched>0:diff.changed.length+diff.removed.length>0);
+ // A target made earlier in the same message ("add a star called Mia; then put Mia below Sun") is not in the
+ // before-observation: the made objects it names stand for it, and the values and relation are checked on them.
+ const madeTargets=!candidates.length&&t.name_span?diff.created.filter(o=>matchesName(o,t.name_span)):[];
+ const changedObjs=[...diff.changed.map(d=>d.object),...(creates?diff.created:madeTargets)];
+ add('changed',creates?diff.touched>0:diff.changed.length+diff.removed.length+madeTargets.length>0);
  if(diff.changed.length&&candidates.length&&candidates.length<(before?.objects?.length??0)&&t.fill!=='all'&&t.fill!=='context')
   add('target',diff.changed.some(d=>candidates.some(c=>c.id===d.object.id))||creates&&diff.created.length>0,true);
  const onTarget=candidates.length?changedObjs.filter(o=>candidates.some(c=>c.id===o.id)):changedObjs;

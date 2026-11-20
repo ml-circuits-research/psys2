@@ -140,7 +140,12 @@ export function bridgeRawStructure(prediction,{bindings,bindingSha256,comparativ
      const lemma=determiner?phrase.slice(determiner.length+1):phrase,akind=lemma?lookup('kinds',{area:raw.area,type:target.type,lemma}):null;
      const a={id:aid,mode:'existing'};label.targets.push(a);if(determiner)a.determiner='definite';
      const outer=span?locate(original.span,phrase,span[0],[...rawPath,'constraints',String(ai),'value_span'],span):null;consume(ai,'value',ac.value);
+     const afamily=!akind&&lemma&&typeof target.type==='string'?lookup('families',{area:raw.area,type:target.type}):null;
      if(akind&&outer){a.kind=akind.canonical;const at=outer[0]+Array.from(phrase).length-Array.from(lemma).length;evidence.push({path:['targets',aid,'kind'],ranges:[[at,outer[1]]],origin:'declaration',declaration:akind.sourceWire});}
+     // Otherwise the phrase is the name of an observed member of the family ("to the left of House"), as a target
+     // named without a kind word is: the family's class, matched by that name.
+     else if(afamily&&aprop&&outer){const at=outer[0]+Array.from(phrase).length-Array.from(lemma).length;a.kind=afamily.canonical;a.name={kind:'string',value:lemma};
+      evidence.push({path:['targets',aid,'kind'],ranges:[[at,outer[1]]],origin:'declaration',declaration:afamily.sourceWire},{path:['targets',aid,'name'],ranges:[[at,outer[1]]],origin:'text'});}
      else unresolved(aprop?'unresolved-anchor-reference':'unresolved-canonical-property-binding',['targets',aid,'kind']);
     }
    }
