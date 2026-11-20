@@ -3,7 +3,7 @@ import {parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=4cf6e60057'
 import {inspectReaderAdmissionPolicy} from './reader-policy.mjs?v=9daedbfaab';
 import {inspectReaderContextPolicy} from './reader-context-policy.mjs?v=811e5362fc';
 import {describeWorldsNodes} from './worlds-node-metadata.mjs?v=c606798b5f';
-import {CATALOG_WORLD_PURPOSES} from './catalog-world-purpose.mjs?v=c58476005c';
+import {CATALOG_WORLD_PURPOSES} from './catalog-world-purpose.mjs?v=4746aba3e8';
 import {describePlacementSearch} from './placement-search-inspection.mjs?v=fe18d841ef';
 import {RUNTIME_COMPONENTS,componentAudit,auditRuntimeComponents} from './runtime-component-registry.mjs?v=b227ac3e1a';
 

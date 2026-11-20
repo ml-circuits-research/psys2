@@ -13,7 +13,7 @@ import { interpretationPolicy } from './interpretation-policy.mjs?v=95c5ac8e35';
  * Without it all input is treated as English.
  */
 
-import { loadWorlds } from '../worlds/index.mjs?v=ed25787d01';
+import { loadWorlds } from '../worlds/index.mjs?v=c396068848';
 import { validateWorldSet } from '../worlds/validate.mjs?v=af0869a8e0';
 
 
@@ -21,7 +21,7 @@ import { perf } from './stage-perf.mjs?v=8b73796daa';
 import { guard, TurnAborted } from './turn-guard.mjs?v=34ed257fec';
 import { createBudget, installBudget, releaseBudget, isBudgetExceeded, budget } from './budget.mjs?v=00bce6e369';
 
-import { attachValues } from '../knowledge/values.mjs?v=65d279aba6';
+import { attachValues } from '../knowledge/values.mjs?v=fedba1c1bc';
 import { attachArrangement } from '../knowledge/arrangement.mjs?v=e5227bc44c';
 
 /**
@@ -244,7 +244,7 @@ export class DialogSession {
         }
       }
     }
-    const reply = await (await import('./reader-routing.mjs?v=c1a1d50ca8')).routeNewEngine(this, english, { ...opts, language: 'en' });
+    const reply = await (await import('./reader-routing.mjs?v=001f565df4')).routeNewEngine(this, english, { ...opts, language: 'en' });
     reply.trace = { ...reply.trace, english, ...(translation ? { translation } : {}), ...(detection ? { languageDetection: detection } : {}) };
     if (language !== 'en') {
       try {

@@ -16,7 +16,7 @@
  *   numberWordOf(n, kind)   12 -> "twelve", 3 -> "third" (ordinal)
  */
 import { parseLine } from './catalog.mjs?v=339ac7a09d';
-import { BUNDLED_VALUES } from './bundled-values.mjs?v=b9e848bbbd';
+import { BUNDLED_VALUES } from './bundled-values.mjs?v=c146297ed4';
 
 const lc = (s) => String(s ?? '').toLowerCase().replace(/[_-]+/g, ' ').replace(/\s+/g, ' ').trim();   // glue-lint: tool-data (colour name)
 const state = { colours: new Map(), numbers: new Map(), misspelt: new Map(), from: 'none', loading: null };
@@ -35,11 +35,12 @@ function absorb(wires) {
     if (w.type === 'k.colours.colour' && w.f.name?.[0]) {
       // several wires can name one colour (the CSS shard, the common names, the hand-written colours): merged by name; `basic` here is the basic colour (k.colours `family`)
       const name = lc(w.f.name[0]), old = colours.get(name);
-      const c = old ?? { name, rgb: null, exact: false, basic: null, thing: false, core: false };
+      const c = old ?? { name, rgb: null, exact: false, basic: null, thing: false, core: false, first: false };
       if (!c.rgb || (!c.exact && w.f.rgb)) { const rgb = w.f.rgb?.[0] ?? w.f.rgb_about?.[0]; if (rgb) { c.rgb = rgb; c.exact = !!w.f.rgb; } }
       c.basic ??= w.f.family?.[0] ?? null;
       c.thing ||= w.f.thing?.[0] === 'true';
-      c.core ||= w.f.core?.[0] === 'true' || w.f.first?.[0] === 'true' || !!(w.f.tone || w.f.temperature || w.f.kind) || w.f.basic?.[0] === 'true';
+      c.first ||= w.f.first?.[0] === 'true';
+      c.core ||= w.f.core?.[0] === 'true' || !!(w.f.tone || w.f.temperature || w.f.kind) || w.f.basic?.[0] === 'true';
       if (!old) colours.set(name, c);
     } else if (w.type === 'k.values.number' && w.f.text?.[0]) { const t = lc(w.f.text[0]), into = w.f.misspelled?.[0] === 'true' ? misspelt : numbers; (into.get(t) ?? into.set(t, []).get(t)).push({ value: Number(w.f.value?.[0] ?? w.f.value_about?.[0]), kind: w.f.kind?.[0] ?? 'cardinal' }); }   // one text can be two kinds (third: ordinal and fraction)
   }
@@ -71,7 +72,7 @@ export function loadValues(facts) {
       const wires = [...await facts.wires('k.colours.colour'), ...await facts.wires('k.values.number'), ...(await facts.wires('core.word', { world: 'k.colours' }).catch(() => [])).filter((w) => (w.f.of ?? []).includes('k.colours.colour.name'))];
       if (wires.length) {
         const got = absorb(wires);
-        if (got.colours.size) { for (const [n, c] of got.colours) { const old = state.colours.get(n); if (old) { c.thing = old.thing; c.core = old.core; } } state.colours = got.colours; }   // thing and core are derived once, at build time: the catalog's own colour wires do not carry them
+        if (got.colours.size) { for (const [n, c] of got.colours) { const old = state.colours.get(n); if (old) { c.thing = old.thing; c.core = old.core; c.first = old.first; } } state.colours = got.colours; }   // thing and core are derived once, at build time: the catalog's own colour wires do not carry them
         if (got.numbers.size) { state.numbers = got.numbers; state.misspelt = got.misspelt; }
         if (Object.keys(got.spelling).length) SPELLING = { ...got.spelling };
         state.from = 'catalog';
@@ -97,12 +98,28 @@ export function colourName(words) {
   return t && state.colours.has(t) ? t : null;
 }
 export const colourHex = (name) => state.colours.get(colourName(name))?.rgb ?? null;
+/** The k.colours name nearest an RGB code ("#ffa500" -> "orange"): an exact code's name, else the nearest core or basic colour by RGB distance; null for anything else. */
+export function nearestColourName(code) {
+  wake();
+  const hex = /^#?([0-9a-f]{6})$/i.exec(String(code ?? '').trim()); if (!hex) return null;
+  const toRgb = (h) => [0, 2, 4].map((i) => parseInt(h.slice(i, i + 2), 16));
+  const want = toRgb(hex[1].toLowerCase());
+  let best = null;
+  for (const c of state.colours.values()) {
+    const m = /^#?([0-9a-f]{6})$/i.exec(String(c.rgb ?? '')); if (!m) continue;
+    if (m[1].toLowerCase() === hex[1].toLowerCase() && (c.core || c.basic === c.name)) return c.name;
+    if (!(c.core || c.basic === c.name)) continue;
+    const got = toRgb(m[1].toLowerCase()), d = got.reduce((sum, v, i) => sum + (v - want[i]) ** 2, 0);
+    if (!best || d < best.d) best = { name: c.name, d };
+  }
+  return best?.name ?? null;
+}
 export const basicColour = (name) => state.colours.get(colourName(name))?.basic ?? null;
 export const colourNames = () => [...state.colours.keys()];
 /** The colour words a formalizer lexicon may hold: every phrase of the reader except a name that is also a drawable thing and that no basic colour, k.colours entry or colour-first rule vouches for (tomato, plum, salmon, wheat). */
-export const colourLexiconWords = () => colourPhrases().filter((p) => { const c = state.colours.get(p); return !c || !c.thing || c.core || c.basic === c.name; });
+export const colourLexiconWords = () => colourPhrases().filter((p) => { const c = state.colours.get(p); return !c || !c.thing || c.core || c.first || c.basic === c.name; });
 /** Is `word` one of the colours people mean first: a basic or core colour of the catalog or a colour-first name (red, orange, violet)? A colour name that is only a shade of a basic colour ("peru" is brown) stays free for a name of the catalog's geography. */
-export function isCoreColour(word) { const p = colourName(word); if (!p) return false; const c = state.colours.get(p); return !c || !!c.core || c.basic === c.name; }
+export function isCoreColour(word) { const p = colourName(word); if (!p) return false; const c = state.colours.get(p); return !c || !!c.core || c.first || c.basic === c.name; }
 /** Every phrase that reads as a colour: the names and the spellings (for building a recogniser), longest first. */
 export const colourPhrases = () => [...state.colours.keys(), ...Object.keys(SPELLING).filter((k) => !compound(k))].sort((a, b) => b.length - a.length || a.localeCompare(b));
 /** The basic colours (the catalog's `basic` values: a name that is its own basic colour), in the catalog's order. */

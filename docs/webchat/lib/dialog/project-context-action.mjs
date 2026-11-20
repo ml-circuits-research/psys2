@@ -7,9 +7,9 @@ import {executionPolicyWorld} from './execution-policy.mjs?v=abb458111b';
 import {readReferenceTurn,resolveObservedReference} from './reference-policy.mjs?v=38f7ce71a7';
 import {observeGroundedProjection,projectGroundedRequest} from './grounded-projection.mjs?v=0185c6d256';
 import {flatRequestProjection} from './request-projection.mjs?v=e4dcb8aca9';
-import {bridgeRawStructure} from './raw-structural-bridge.mjs?v=62b3ab6365';
+import {bridgeRawStructure} from './raw-structural-bridge.mjs?v=78467599aa';
 import {comparativeSteps} from './comparative-projection.mjs?v=2367e21e55';
-import {referenceProjection} from './reference-projection.mjs?v=19edce89a9';
+import {referenceProjection} from './reference-projection.mjs?v=a287835d53';
 import {interpretationPolicy} from './interpretation-policy.mjs?v=95c5ac8e35';
 function containerOwned(r,bindings,area){
  const keys=(r.constraints??[]).map(c=>c?.key);

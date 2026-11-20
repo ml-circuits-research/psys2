@@ -9,7 +9,7 @@ import {writeReaderSource} from './reader-source.mjs?v=f45ef03d74';
 import {coordinationParts} from './coordination-split.mjs?v=5a3afd7863';
 import {resolveRequestRoute} from './request-routing-policy.mjs?v=dcc7f61e81';
 import {compileNativePlan,executeNativeGroup} from './capability-plan-execution.mjs?v=11ad56d308';
-import {executionKnowledge} from './declared-execution.mjs?v=f82face2dc';
+import {executionKnowledge} from './declared-execution.mjs?v=24e711cb9f';
 import {recordHistory} from './history-journal.mjs?v=a4ae88133a';
 import {quantityNote} from './quantity-projection.mjs?v=a8e3bf4009';
 

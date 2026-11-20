@@ -7,7 +7,7 @@ import {NATIVE_AREAS} from './app-reader-context.mjs?v=fd5e58c701';
 import {nativeCreationCandidates} from './native-binding-candidates.mjs?v=23ab5f219d';
 import {budget} from './budget.mjs?v=00bce6e369';
 import {observeGroundedProjection,projectGroundedRequest} from './grounded-projection.mjs?v=0185c6d256';
-import {positiveCardinalProof} from './key-reader-value-proof.mjs?v=915033d30c';
+import {positiveCardinalProof} from './key-reader-value-proof.mjs?v=70fbae6189';
 import {compileObservedChoice} from './observed-choice.mjs?v=331cc85b90';
 
 const field=(fact,key)=>str(fact.attrs[key]?.[0]);

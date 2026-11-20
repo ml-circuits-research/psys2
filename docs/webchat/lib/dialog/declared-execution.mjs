@@ -6,10 +6,10 @@ import { NATIVE_AREAS,createAreaHost } from './app-reader-context.mjs?v=fd5e58c7
 import { instanceIdFor } from './instance-identity.mjs?v=024ef1ca83';
 import { describeRouteComparison,resolveRequestRoute } from './request-routing-policy.mjs?v=dcc7f61e81';
 import { executeHistoryRequest } from './history-execution.mjs?v=ff3694c80b';
-import { executeNativeQuery } from './native-query-execution.mjs?v=7b039a651c';
+import { executeNativeQuery } from './native-query-execution.mjs?v=17d6a3b18c';
 import { executeNativeCapability } from './capability-plan-execution.mjs?v=11ad56d308';
 import { executionValueSource } from './execution-policy.mjs?v=abb458111b';
-import { inspectCachedExecutionSource } from './execution-world-inspection.mjs?v=f82face2dc';
+import { inspectCachedExecutionSource } from './execution-world-inspection.mjs?v=24e711cb9f';
 import { World, str } from '../vendor/sopworld/sopworld.mjs?v=4cf6e60057';
 import SOURCE from './new-engine-source.mjs?v=6af687905b';
 let knowledge;

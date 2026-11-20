@@ -6,9 +6,9 @@
 // code was taken. Nothing here inspects words: only the reader's name span and the observed codes.
 import {NATIVE_AREAS} from './app-reader-context.mjs?v=fd5e58c701';
 import {nativeKindCandidates} from './native-binding-candidates.mjs?v=23ab5f219d';
-import {bridgeRawStructure} from './raw-structural-bridge.mjs?v=62b3ab6365';
+import {bridgeRawStructure} from './raw-structural-bridge.mjs?v=78467599aa';
 import {comparativeSteps} from './comparative-projection.mjs?v=2367e21e55';
-import {referenceProjection} from './reference-projection.mjs?v=19edce89a9';
+import {referenceProjection} from './reference-projection.mjs?v=a287835d53';
 
 // Reader diagnostics that only concern the identity heads the code replaces, or a constraint the reader could not
 // form (its metadata without a key); every other unresolved head keeps the reading incomplete.
