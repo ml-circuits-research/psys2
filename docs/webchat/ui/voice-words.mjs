@@ -1,27 +1,26 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Voice words for every language (SETTINGS-COHERENT item 3). The voice layer (end-of-turn, stop-microphone, cancel, address words, the cheap noise check)
-// works on a few short word lists (end-of-turn and microphone commands only; no list decides whether a message reaches the engine, ui/voice-noise.mjs). The lists exist in English only (SOURCE below, declared in worlds/app.project/voice-words.sop); for another selected language each entry is translated ONCE by the
+// works on a few short word lists (end-of-turn and microphone commands only; no list decides whether a message reaches the engine, ui/voice-noise.mjs). The lists exist in English only (SOURCE below); for another selected language each entry is translated ONCE by the
 // translation layer (browser Translator, else the on-device model) and cached in the browser, so no language, Romanian included, has a hand-written list.
 // Pure: no DOM, no node:*; the translator and the storage are passed in.
-import { parse } from '../lib/soplang/index.mjs';
-import VOICE_WORDS from '../worlds/app.project/voice-words-source.mjs';
 
 /** Words that name the app itself. They are never translated. */
 export const APP_NAMES = Object.freeze(['psys2', 'psys']);
 
-/** The English source lists (worlds/app.project/voice-words.sop, app.voice.word rows in list order): the English matchers and the text that is translated for another language. */
-export const SOURCE = (() => {
-  const lists = {}, { wires, errors } = parse(VOICE_WORDS, { source: 'voice-words.sop' });
-  if (errors?.length) throw Error('invalid-voice-words: ' + errors[0].message);
-  for (const w of wires) {
-    if (w.type !== 'app.voice.word') continue;
-    const value = (k) => w.entries.find((e) => e.key === k || e.key.endsWith('.' + k))?.value?.v;
-    const list = value('list'), text = value('text');
-    if (typeof list !== 'string' || typeof text !== 'string') throw Error('invalid-voice-words: ' + w.id);
-    (lists[list] ??= []).push(text);
-  }
-  return Object.freeze(Object.fromEntries(Object.entries(lists).map(([k, v]) => [k, Object.freeze(v)])));
-})();
+/** The English source lists: they are the English matchers and the text that is translated for another language. */
+export const SOURCE = Object.freeze({
+  address: ['robot', 'assistant', 'computer'],
+  stopPhrases: ['stop microphone', 'stop listening', 'mute the microphone', 'microphone off', 'pause listening', 'that is all'],
+  stopVerbs: ['stop', 'pause', 'close', 'end', 'quit', 'disable', 'mute', 'kill', 'shut'],
+  micNouns: ['mic', 'microphone', 'listening', 'recording'],
+  cancel: ['stop', 'cancel'],
+  openEndings: ['and', 'then', 'to', 'with', 'or', 'but', 'a', 'an', 'the', 'of', 'in', 'on', 'at', 'for', 'from', 'by', 'next', 'also', 'plus', 'into', 'onto', 'near', 'behind', 'under', 'over', 'between', 'than', 'that', 'which', 'if', 'because', 'while', 'so'],
+  openVerbs: ['play', 'draw', 'add', 'make', 'open', 'show', 'create', 'set', 'delete', 'remove', 'put', 'move', 'change', 'write', 'start', 'give', 'tell', 'find', 'search', 'call', 'name', 'rename', 'select', 'insert', 'append', 'turn', 'switch', 'go', 'take', 'bring', 'place', 'paint', 'color', 'colour', 'fill', 'rotate', 'resize', 'increase', 'decrease', 'sing'],
+  determiners: ['this', 'these', 'those', 'some', 'my', 'your', 'his', 'her', 'its', 'our', 'their', 'another', 'every', 'each', 'any'],
+  numbers: ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'twenty', 'thirty', 'forty', 'fifty', 'hundred'],
+  fragments: ['a', 'an', 'the', 'this', 'that', 'these', 'those', 'it', 'he', 'she', 'we', 'they', 'you', 'i', 'me', 'my', 'is', 'are', 'was', 'be', 'do', 'does', 'did', 'to', 'of', 'in', 'on', 'at', 'for', 'and', 'or', 'but', 'so', 'if', 'where', 'which', 'there', 'here', 'well', 'yes', 'no', 'ok', 'sure'],
+  knownOneWord: ['undo', 'redo', 'help', 'next', 'back', 'again', 'reset', 'clear', 'pause', 'resume'],
+});
 /** The lists whose translated entries are matched on a word stem (inflected languages), not only exactly. */
 const STEMMED = new Set(['openVerbs']);
 /** Lists of phrases: translated as a whole; every other list is single words. */

@@ -668,9 +668,10 @@ export async function mountPsys2(element, options = {}) {
   function note(text) { const m = addMessage('bot', text, { className: 'is-note' }); return m; }
 
   // ---------- state -> UI ----------
+  const DEMO_WORLDS=['art.draw','diagram.sketch','docs.editor','time.calendar','ui.avatar'];
   const instanceStore=createInstanceStore({persistent:false});
   async function flushInstances(){
-    const {records}=await engineClient.call('snapshotInstances',{worlds:[...new Set(tabDefs.map((t)=>t.world).filter(Boolean))].filter(id=>Object.hasOwn(states,id))});
+    const {records}=await engineClient.call('snapshotInstances',{worlds:DEMO_WORLDS.filter(id=>Object.hasOwn(states,id))});
     await instanceStore.saveMany(records);return records;
   }
   const failInstances=error=>{note('Could not save or open work: '+String(error?.message??error));console.warn('Explicit work file operation failed',error);};
