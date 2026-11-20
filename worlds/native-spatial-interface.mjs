@@ -9,6 +9,8 @@ const row=spatialWire;
 const observationFields = record => Object.fromEntries(Object.entries(record).map(([key,value])=>
  [key,typeof value==='string'&&!['kind','evidence'].includes(key)?quote(value):value]));
 const scalar = value => typeof value==='string'?quote(value):JSON.stringify(value);
+// A native kind of one word is an atom; one of several words ("shooting star") a string (library 0.238.0).
+const nativeKind = lemma => atom.test(lemma)?lemma:quote(lemma);
 
 const labelOf=record=>['label','name'].map(key=>record.inputs.find(input=>input.key===key&&input.values?.length===1)).find(input=>input&&str(input.values[0]).trim());
 function nativeGeometryWires(spatial,mappings,operations) {
@@ -78,12 +80,12 @@ function nativeCapabilityWires(host,operations,mappings,frame,{constructors=[],c
    // takes a moving subject's size from its geometry), so the kind row carries a unit extent, never measured or used.
    if(mapping.familyIdentity){
     const family=operations.find(op=>op.id===mapping.nativeFamilyBinding.operation);
-    if(operation.act==='make'||!idsKey||family?.on!==operation.on||!atom.test(mapping.lemma))continue;
-    rows.push(row('native.spatial.kind.'+rows.length,'std.placement.kind',{binding:'$'+tool,concept:mapping.canonical,native:mapping.lemma,width:1,height:1}));
+    if(operation.act==='make'||!idsKey||family?.on!==operation.on||typeof mapping.lemma!=='string'||!mapping.lemma)continue;
+    rows.push(row('native.spatial.kind.'+rows.length,'std.placement.kind',{binding:'$'+tool,concept:mapping.canonical,native:nativeKind(mapping.lemma),width:1,height:1}));
     placed.add(operation.act+' '+mapping.canonical);
     continue;
    }
-   if(!atom.test(mapping.lemma))continue;
+   if(typeof mapping.lemma!=='string'||!mapping.lemma)continue;
    for(const {constructor,args:own} of constructorsOf(mapping)){
     if(!constructor.spatial||constructor.on!==operation.on||operation.act==='make'&&constructor.id!==operation.id)continue;
     const args={...own},nativeKey=constructor.spatial.kindKey;
@@ -101,7 +103,7 @@ function nativeCapabilityWires(host,operations,mappings,frame,{constructors=[],c
     const kind='native.spatial.kind.'+rows.length;
     const {width,height,originX,originY,avoids=[]}=extent;
     // avoids: the kinds of observed regions the kind keeps out of (the water of a river for a house: k.scenes.support).
-    rows.push(row(kind,'std.placement.kind',{binding:'$'+tool,concept:mapping.canonical,native:mapping.lemma,width,height,originX,originY,avoids:avoids.filter(a=>atom.test(a))}));
+    rows.push(row(kind,'std.placement.kind',{binding:'$'+tool,concept:mapping.canonical,native:nativeKind(mapping.lemma),width,height,originX,originY,avoids:avoids.filter(a=>atom.test(a))}));
     for(const [key,value] of Object.entries(args))if(operation.act==='make'&&key!==kindKey)rows.push(row('native.spatial.argument.'+rows.length,'std.placement.argument',{binding:'$'+kind,key,value:scalar(value)}));
     placed.add(operation.act+' '+mapping.canonical);
     break;

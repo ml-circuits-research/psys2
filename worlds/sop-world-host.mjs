@@ -196,8 +196,10 @@ export function createSopWorldHost({ base, callBase = null, kinds, state, instan
     const [made] = worldOf(base, { sop: result.sop, runtime: empty.runtime }).ofType('app.observe.box');
     if (!made) return null;
     const width = Number(read(made, 'x1')) - Number(read(made, 'x0')), height = Number(read(made, 'y1')) - Number(read(made, 'y0'));
-    // The surfaces what it makes keeps out of (app.place.avoid), for the relation placement (std.placement.kind avoids).
-    const avoids = [...new Set(compiled.world.ofType('app.place.avoid').map((fact) => read(fact, 'surface')).filter(Boolean))];
+    // The surfaces what it makes keeps out of (app.place.avoid), for the relation placement (std.placement.kind avoids,
+    // a hard keep-out). A soft avoid (strength=soft: the columns above and below standing things) is a preference for a
+    // default place only; a relation the user states ("a ball under the tree") puts the thing where it says.
+    const avoids = [...new Set(compiled.world.ofType('app.place.avoid').filter((fact) => read(fact, 'strength') !== 'soft').map((fact) => read(fact, 'surface')).filter(Boolean))];
     return Number.isFinite(width) && Number.isFinite(height) ? { width, height, ...(avoids.length ? { avoids } : {}) } : null;
   };
   // Where a command would place a new object, as the rules declare it for a placement problem: the candidate regions
