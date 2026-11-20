@@ -1,0 +1,182 @@
+{
+ "format": "psys2.official-reader-report/1",
+ "dataset": "official-dataset cb7a7e992 (109,668 rows)",
+ "keyRun": "f5fe633a0fee2ee3e3284e71f9312761e46e875ba0c9f6c6e68ee8bbf0b2fe83",
+ "cutterRun": "official-cutter-run-v5",
+ "bundle": "21c90ff0f0f2092db49182b055d54420d7ce85a53f28f9d41478201f373928c1 (bindings v12, catalog b89b4541)",
+ "officialTest": {
+  "test-v8-cond": {
+   "rows": 2422,
+   "intentExact": 0.507,
+   "completeReaderMeaningExact": 0.3291,
+   "perArea": {
+    "drawing": {
+     "intentExact": 0.6203,
+     "completeReaderMeaningExact": 0.4941
+    },
+    "diagram": {
+     "intentExact": 0.4356,
+     "completeReaderMeaningExact": 0.2852
+    },
+    "document": {
+     "intentExact": 0.6413,
+     "completeReaderMeaningExact": 0.1703
+    },
+    "avatar": {
+     "intentExact": 0.2474,
+     "completeReaderMeaningExact": 0.0105
+    },
+    "calendar": {
+     "intentExact": 0.3224,
+     "completeReaderMeaningExact": 0.2568
+    }
+   }
+  },
+  "test-v9-cond": {
+   "rows": 2422,
+   "intentExact": 0.5929,
+   "completeReaderMeaningExact": 0.3844,
+   "perArea": {
+    "drawing": {
+     "intentExact": 0.6898,
+     "completeReaderMeaningExact": 0.5305
+    },
+    "diagram": {
+     "intentExact": 0.494,
+     "completeReaderMeaningExact": 0.3103
+    },
+    "document": {
+     "intentExact": 0.6232,
+     "completeReaderMeaningExact": 0.4384
+    },
+    "avatar": {
+     "intentExact": 0.7737,
+     "completeReaderMeaningExact": 0.0368
+    },
+    "calendar": {
+     "intentExact": 0.3169,
+     "completeReaderMeaningExact": 0.2568
+    }
+   }
+  },
+  "test-v8-cutter": {
+   "rows": 2422,
+   "intentExact": 0.4513,
+   "completeReaderMeaningExact": 0.2547,
+   "segmentationExact": 0.922,
+   "perArea": {
+    "drawing": {
+     "intentExact": 0.5807,
+     "completeReaderMeaningExact": 0.4246
+    },
+    "diagram": {
+     "intentExact": 0.3616,
+     "completeReaderMeaningExact": 0.179
+    },
+    "document": {
+     "intentExact": 0.5181,
+     "completeReaderMeaningExact": 0.1486
+    },
+    "avatar": {
+     "intentExact": 0.2474,
+     "completeReaderMeaningExact": 0.0105
+    },
+    "calendar": {
+     "intentExact": 0.3115,
+     "completeReaderMeaningExact": 0.1475
+    }
+   }
+  },
+  "test-v9-cutter": {
+   "rows": 2422,
+   "intentExact": 0.5334,
+   "completeReaderMeaningExact": 0.2841,
+   "segmentationExact": 0.9781,
+   "perArea": {
+    "drawing": {
+     "intentExact": 0.6503,
+     "completeReaderMeaningExact": 0.4588
+    },
+    "diagram": {
+     "intentExact": 0.4105,
+     "completeReaderMeaningExact": 0.1957
+    },
+    "document": {
+     "intentExact": 0.4928,
+     "completeReaderMeaningExact": 0.221
+    },
+    "avatar": {
+     "intentExact": 0.7737,
+     "completeReaderMeaningExact": 0.0368
+    },
+    "calendar": {
+     "intentExact": 0.3115,
+     "completeReaderMeaningExact": 0.1475
+    }
+   }
+  }
+ },
+ "workerReading": {
+  "v8": {
+   "intentCond": 0.062,
+   "completeCond": 0.02,
+   "spansCond": 0.134,
+   "segmentation": 0.583,
+   "drawingIntent": 0.091,
+   "diagramIntent": 0.049
+  },
+  "v9": {
+   "intentCond": 0.133,
+   "completeCond": 0.049,
+   "spansCond": 0.407,
+   "segmentation": 0.892,
+   "drawingIntent": 0.208,
+   "diagramIntent": 0.102
+  },
+  "summaries": "management/benchmark/2026-11-20-worker-reading-v8|v9/summary.md"
+ },
+ "humanBenchmark": {
+  "v8": {
+   "drawing": "99/329 pass, 38 partial",
+   "diagram": "86/333 pass, 32 partial"
+  },
+  "v9": {
+   "drawing": "99/329 pass, 49 partial",
+   "diagram": "98/333 pass, 31 partial"
+  },
+  "runtime": "cb7a7e992, same for both"
+ },
+ "massEvalE2E": {
+  "v8": {
+   "drawing": 0.424,
+   "diagram": 0.29,
+   "all": 0.267
+  },
+  "v9": {
+   "drawing": 0.441,
+   "diagram": 0.303,
+   "all": 0.279
+  },
+  "sample": "3,195 stratified rows, seed v9cmp, runtime cb7a7e992; most rows are in the v9 training split"
+ },
+ "trainingSpeed": {
+  "comparison": "20,000 training rows, 1 epoch, warm start v8, same dev",
+  "old": {
+   "batch": 16,
+   "trainingSeconds": 949,
+   "devMentionF1": 0.871,
+   "devPositiveExact": "3268/4725"
+  },
+  "new": {
+   "batch": 64,
+   "bucket": true,
+   "warmup": 50,
+   "lr": 6e-05,
+   "trainingSeconds": 581,
+   "devMentionF1": 0.876,
+   "devPositiveExact": "3272/4725"
+  },
+  "speedup": 1.63,
+  "note": "measured while the human benchmark and mass-eval used the CPU; the per-row class-head loop in objective() remains the bottleneck"
+ }
+}
