@@ -268,8 +268,8 @@
     "worlds/ui.shell/bundle.json": "cd254bfac04c9c0d",
     "worlds/ui.shell/ops.mjs": "12898fb719c270c1"
   },
-  "builtAt": "2026-11-20T23:40:49.482Z",
-  "commit": "85bccf3af-dirty",
+  "builtAt": "2026-11-20T23:44:30.181Z",
+  "commit": "4a0f7bdc3",
   "catalog": "7e59972137cd1b6d752d5a5f77f0ba5303113988",
   "assets": {
     "app.mjs": "dda989c018",
