@@ -189,6 +189,10 @@ def normalise(row, stats):
         if moved:
             q['needs'] = (q.get('needs') if isinstance(q.get('needs'), list) else [q['needs']] if q.get('needs') else []) + moved
         t = q.get('target') or {}
+        for f in [f for f, v in t.items() if v is None]:
+            del t[f]; stats[f'target {f}: null removed'] += 1
+        if q.get('trigger') is None and 'trigger' in q:
+            del q['trigger']
         if t.get('fill') == 'pronoun':
             t['fill'] = 'context'; stats['target fill pronoun -> context'] += 1
         if t.get('fill') == 'ordinal':
@@ -268,7 +272,7 @@ def check(row, seen, official_seen):
             vs = c.get('value_span')
             if isinstance(vs, str) and vs not in span:
                 errs.append('value-span-not-verbatim-in-span')
-            if isinstance(c.get('anchor_span'), str) and not official.find_all(span, c['anchor_span']):
+            if isinstance(c.get('anchor_span'), str) and c['anchor_span'] not in span:
                 errs.append('anchor-span-not-verbatim-in-span')
             if c.get('key') in REF_KEYS and c.get('phase') == 'selector' and isinstance(vs, str) and not ref_in_context(vs, existing):
                 errs.append('selector-not-in-context')
@@ -299,6 +303,10 @@ def signed(batch):
     present = {p.name for p in batch.glob('*.jsonl')}
     if set(listed) != present:
         return False, f'DONE lists {sorted(listed)} but the folder holds {sorted(present)}'
+    total = sum(sum(1 for line in (batch / name).read_text().splitlines() if line.strip()) for name in listed)
+    m = re.search(r'^rows:\s*(\d[\d,]*)', text, re.M)
+    if m and int(m.group(1).replace(',', '')) != total:
+        return False, f'DONE says rows {m.group(1)}, the files hold {total}'
     for name in listed:
         rows = sum(1 for line in (batch / name).read_text().splitlines() if line.strip())
         m = re.search(re.escape(name) + r'\D{0,40}?(\d[\d,]*)', text)
@@ -307,9 +315,34 @@ def signed(batch):
     return True, 'signed'
 
 
+def marker_stamp(batch):
+    marker = batch / 'DONE'
+    if not marker.is_file():
+        return None
+    m = re.search(r'^timestamp:\s*(\S+)', marker.read_text(), re.M)
+    return m.group(1) if m else marker.read_text()
+
+
+def residual_marker(batch):
+    """A marker for the residual rows of a batch whose bulk was consumed earlier (the bulk stays imported)."""
+    return 'residual' in (batch / 'DONE').read_text().lower()
+
+
 def main():
-    frozen = {p.stem: [json.loads(l) for l in p.read_text().splitlines() if l.strip()] for p in sorted(FROZEN.glob('*.jsonl')) if not p.name.endswith('.needs.jsonl')}
-    candidates = sorted(p for p in DROP.iterdir() if p.is_dir() and not p.name.startswith(('_', '.')) and p.name not in frozen) if DROP.exists() else []
+    frozen = {p.stem: [json.loads(l) for l in p.read_text().splitlines() if l.strip()] for p in sorted(FROZEN.glob('*.jsonl'))
+              if not p.name.endswith(('.needs.jsonl', '.residual.jsonl'))}
+    metas = {p.name[:-len('.meta.json')]: json.loads(p.read_text()) for p in FROZEN.glob('*.meta.json')}
+    # A frozen batch is not re-read unless the worker re-signed it (a DONE marker newer than the import): then its rows are
+    # replaced by the re-signed files, or, for a residual marker, the residual rows are added beside the consumed bulk.
+    resigned = {}
+    for name in list(frozen):
+        batch = DROP / name
+        stamp = marker_stamp(batch) if batch.is_dir() else None
+        if stamp and stamp != metas.get(name, {}).get('marker') and signed(batch)[0]:
+            resigned[name] = 'residual' if residual_marker(batch) else 'replace'
+            if resigned[name] == 'replace':
+                del frozen[name]
+    candidates = sorted(p for p in DROP.iterdir() if p.is_dir() and not p.name.startswith(('_', '.')) and (p.name not in frozen or resigned.get(p.name) == 'residual')) if DROP.exists() else []
     batches, waiting = [], {}
     for p in candidates:
         ok, why = signed(p) if len(sys.argv) == 1 else (True, 'dry run')
@@ -426,12 +459,22 @@ def main():
                   'improvement intent, container words).', '']
         (batch / 'FEEDBACK.md').write_text('\n'.join(lines))
         if len(sys.argv) == 1:
-            (FROZEN / f'{batch.name}.needs.jsonl').write_text(''.join(json.dumps(r, ensure_ascii=False) + '\n' for r in batch_needs_rows))
+            mine = [r for r in accepted if r['cohort']['recipeFamily'].split(':')[1] == batch.name]
+            suffix = '.residual' if resigned.get(batch.name) == 'residual' else ''
+            (FROZEN / f'{batch.name}{suffix}.jsonl').write_text(''.join(json.dumps(r, ensure_ascii=False) + '\n' for r in mine))
+            (FROZEN / f'{batch.name}{suffix}.needs.jsonl').write_text(''.join(json.dumps(r, ensure_ascii=False) + '\n' for r in batch_needs_rows))
+            (FROZEN / f'{batch.name}.meta.json').write_text(json.dumps({'marker': marker_stamp(batch), 'rows': len(mine), 'mode': resigned.get(batch.name, 'new')}) + '\n')
     if len(sys.argv) > 1:
         print(json.dumps({'batches': summary, 'accepted': len(accepted), 'dryRun': True}, indent=1))
         return
-    accepted = [r for rows in frozen.values() for r in rows] + accepted
-    summary.update({name: {'frozen': len(rows)} for name, rows in frozen.items()})
+    imported = {r['cohort']['recipeFamily'].split(':')[1] for r in accepted}
+    keep_frozen = {n: rows for n, rows in frozen.items() if not (n in imported and resigned.get(n) != 'residual')}
+    residuals = [json.loads(l) for p in sorted(FROZEN.glob('*.residual.jsonl')) if p.name[:-len('.residual.jsonl')] not in imported
+                 for l in p.read_text().splitlines() if l.strip()]
+    accepted = [r for rows in keep_frozen.values() for r in rows] + residuals + accepted
+    summary.update({name: {'frozen': len(rows)} for name, rows in keep_frozen.items() if name not in summary})
+    for name, mode in resigned.items():
+        summary.setdefault(name, {})['resigned'] = mode
     summary.update({name: {'waiting': why} for name, why in waiting.items()})
     (HERE / 'accepted.jsonl').write_text(''.join(json.dumps(r, ensure_ascii=False) + '\n' for r in accepted))
     every = [json.loads(l) for p in sorted(FROZEN.glob('*.needs.jsonl')) for l in p.read_text().splitlines() if l.strip()]

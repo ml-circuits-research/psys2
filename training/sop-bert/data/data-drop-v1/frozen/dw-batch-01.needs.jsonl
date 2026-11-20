@@ -175,171 +175,176 @@
 {"batch": "dw-batch-01", "text": "change the tree by the house into a tall green oak tree", "frame": "drawn.variant", "value": "oak tree", "span": "a tall green oak tree"}
 {"batch": "dw-batch-01", "text": "make the boat a showier one", "frame": "drawn.variant", "value": "showier", "span": "a showier one"}
 {"batch": "dw-batch-01", "text": "swap the cat for something sleeker", "frame": "drawn.variant", "value": "something sleeker", "span": "something sleeker"}
-{"batch": "dw-batch-01", "text": "put a carrot nose on the snowman and a scarf on the boy", "frame": "part.garment", "value": "on", "span": "on"}
-{"batch": "dw-batch-01", "text": "let the girl wear a jacket", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "put a jacket on the boy", "frame": "part.garment", "value": "on", "span": "on"}
-{"batch": "dw-batch-01", "text": "hey, put a jacket on the boy", "frame": "part.garment", "value": "on", "span": "on"}
-{"batch": "dw-batch-01", "text": "give the boy a jacket", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "dress the girl in a denim jacket", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "the boy needs a jacket", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "can the girl get a jacket on?", "frame": "part.garment", "value": "on", "span": "on"}
-{"batch": "dw-batch-01", "text": "can the girl get a jacket on?, please", "frame": "part.garment", "value": "on", "span": "on"}
-{"batch": "dw-batch-01", "text": "how about a jacket for the boy?", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "a warm jacket for the girl", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "I'd like the boy in a jacket", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "the girl should be wearing a jacket", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "get a jacket on the boy", "frame": "part.garment", "value": "on", "span": "on"}
-{"batch": "dw-batch-01", "text": "it's freezing in this picture — the boy could really use a jacket", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "give the girl a jacket and a scarf", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "give the girl a jacket and a scarf", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "put a nice warm jacket on the boy", "frame": "part.garment", "value": "on", "span": "on"}
-{"batch": "dw-batch-01", "text": "the girl shivers — let her wear a jacket", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "jacket on the boy", "frame": "part.garment", "value": "on", "span": "on"}
-{"batch": "dw-batch-01", "text": "a jacket for the girl", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "boy could use a jacket", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "let the boy wearr a jacket", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "put a jocket on the girl", "frame": "part.garment", "value": "on", "span": "on"}
-{"batch": "dw-batch-01", "text": "put a cowboy hat on the man", "frame": "part.garment", "value": "on", "span": "on"}
-{"batch": "dw-batch-01", "text": "hey, put a cowboy hat on the man", "frame": "part.garment", "value": "on", "span": "on"}
-{"batch": "dw-batch-01", "text": "let the man wear a cowboy hat", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "give the man a cowboy hat", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "give the man a cowboy hat, please", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "the man needs a cowboy hat", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "how about a cowboy hat for the man?", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "a cowboy hat would suit the man", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "can you put a cowboy hat on the man?", "frame": "part.garment", "value": "on", "span": "on"}
-{"batch": "dw-batch-01", "text": "I'd like the man in a cowboy hat", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "get a cowboy hat on the man", "frame": "part.garment", "value": "on", "span": "on"}
-{"batch": "dw-batch-01", "text": "the man should be wearing a cowboy hat", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "put a cowboy hat on the woman too", "frame": "part.garment", "value": "on", "span": "on"}
-{"batch": "dw-batch-01", "text": "give the man a proper cowboy hat with a wide brim", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "the sun is harsh — put a cowboy hat on the man", "frame": "part.garment", "value": "on", "span": "on"}
-{"batch": "dw-batch-01", "text": "put a cowboy hat on the man and a bonnet on the woman", "frame": "part.garment", "value": "on", "span": "on"}
-{"batch": "dw-batch-01", "text": "put a cowboy hat on the man and a bonnet on the woman", "frame": "part.garment", "value": "on", "span": "on"}
-{"batch": "dw-batch-01", "text": "the man looks plain — dress him in a cowboy hat", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "cowboy hat on the man", "frame": "part.garment", "value": "on", "span": "on"}
-{"batch": "dw-batch-01", "text": "a cowboy hat for the woman", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "man could use a hat", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "put a cowboy hat on the mann", "frame": "part.garment", "value": "on", "span": "on"}
-{"batch": "dw-batch-01", "text": "let the man waer a cowboy hat", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "let the girl wear a baseball cap", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "put a baseball cap on the girl", "frame": "part.garment", "value": "on", "span": "on"}
-{"batch": "dw-batch-01", "text": "hey, put a baseball cap on the girl", "frame": "part.garment", "value": "on", "span": "on"}
-{"batch": "dw-batch-01", "text": "give the girl a baseball cap", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "the girl needs a baseball cap", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "have the girl wearing a baseball cap", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "have the girl wearing a baseball cap, please", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "dress the girl in a baseball cap", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "can the girl get a baseball cap?", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "I'd like to see the girl in a baseball cap", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "the girl should get a baseball cap on", "frame": "part.garment", "value": "on", "span": "on"}
-{"batch": "dw-batch-01", "text": "get that baseball cap on the girl", "frame": "part.garment", "value": "on", "span": "on"}
-{"batch": "dw-batch-01", "text": "a baseball cap on the boy as well", "frame": "part.garment", "value": "on", "span": "on"}
-{"batch": "dw-batch-01", "text": "the girl is catching sun — put a baseball cap on her", "frame": "part.garment", "value": "on", "span": "on"}
-{"batch": "dw-batch-01", "text": "give the girl a red baseball cap", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "put a baseball cap on the girl and a pair of sunglasses on the boy", "frame": "part.garment", "value": "on", "span": "on"}
-{"batch": "dw-batch-01", "text": "put a baseball cap on the girl and a pair of sunglasses on the boy", "frame": "part.garment", "value": "on", "span": "on"}
-{"batch": "dw-batch-01", "text": "have the girl wearing a backwards baseball cap", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "baseball cap on the girl", "frame": "part.garment", "value": "on", "span": "on"}
-{"batch": "dw-batch-01", "text": "a baseball cap for the girl", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "girl wants a baseball cap", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "put a baseball cap on the gril", "frame": "part.garment", "value": "on", "span": "on"}
-{"batch": "dw-batch-01", "text": "let the girl waer a baseball cap", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "let the girl wear a dress", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "hey, let the girl wear a dress", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "put a dress on the girl", "frame": "part.garment", "value": "on", "span": "on"}
-{"batch": "dw-batch-01", "text": "put a dress on the girl, please", "frame": "part.garment", "value": "on", "span": "on"}
-{"batch": "dw-batch-01", "text": "give the girl a dress", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "dress the girl in a summer dress", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "the girl needs a dress", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "how about a dress for the girl?", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "a nice dress for the girl", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "can the girl have a dress on?", "frame": "part.garment", "value": "on", "span": "on"}
-{"batch": "dw-batch-01", "text": "I'd like the girl in a dress", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "the girl should be wearing a dress", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "put a dress on the woman too", "frame": "part.garment", "value": "on", "span": "on"}
-{"batch": "dw-batch-01", "text": "it's a party scene — dress the girl in a frilly dress", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "give the girl a sunny yellow dress", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "the girl wants a long dress with sleeves", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "put a dress on the girl and give the woman a shawl", "frame": "part.garment", "value": "on", "span": "on"}
-{"batch": "dw-batch-01", "text": "put a dress on the girl and give the woman a shawl", "frame": "part.garment", "value": "on", "span": "on"}
-{"batch": "dw-batch-01", "text": "dress on the girl", "frame": "part.garment", "value": "on", "span": "on"}
-{"batch": "dw-batch-01", "text": "a dress for the woman", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "dress for the girl", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "put a dres on the girl", "frame": "part.garment", "value": "on", "span": "on"}
-{"batch": "dw-batch-01", "text": "let the girl wear adress", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "put a suit on the man", "frame": "part.garment", "value": "on", "span": "on"}
-{"batch": "dw-batch-01", "text": "hey, put a suit on the man", "frame": "part.garment", "value": "on", "span": "on"}
-{"batch": "dw-batch-01", "text": "let the man wear a suit", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "dress the man in a suit", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "the man needs a suit", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "the man needs a suit, please", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "how about a suit for the man?", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "a suit and tie for the man", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "a suit and tie for the man", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "can the man get a suit on?", "frame": "part.garment", "value": "on", "span": "on"}
-{"batch": "dw-batch-01", "text": "I'd like the man in a suit", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "the man should be wearing a suit", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "get the man into a suit", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "give the boy a smart little suit", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "the man looks scruffy — put a smart suit on him", "frame": "part.garment", "value": "on", "span": "on"}
-{"batch": "dw-batch-01", "text": "give the man a smart suit and a bow tie", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "give the man a smart suit and a bow tie", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "dress the man in a suit and give the boy a bow tie too", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "dress the man in a suit and give the boy a bow tie too", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "the man has an interview in this scene — let him wear a suit", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "suit on the man", "frame": "part.garment", "value": "on", "span": "on"}
-{"batch": "dw-batch-01", "text": "a suit for the man", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "man needs a suit", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "let the man wear a siut", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "put a sut on the man", "frame": "part.garment", "value": "on", "span": "on"}
-{"batch": "dw-batch-01", "text": "give the man a cape", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "hey, give the man a cape", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "let the man have a cape", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "put a cape on the man", "frame": "part.garment", "value": "on", "span": "on"}
-{"batch": "dw-batch-01", "text": "put a cape on the man, please", "frame": "part.garment", "value": "on", "span": "on"}
-{"batch": "dw-batch-01", "text": "the man needs a cape", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "how about a cape for the boy?", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "a cape on the man would look heroic", "frame": "part.garment", "value": "on", "span": "on"}
-{"batch": "dw-batch-01", "text": "can you give the boy a cape?", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "I'd like the boy with a cape", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "the boy should get a cape", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "dress the man in a cape", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "get a cape onto the man", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "the boy is a little superhero — give him a cape", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "give the man a cape and the boy a mask", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "give the man a cape and the boy a mask", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "put a long red cape on the man", "frame": "part.garment", "value": "on", "span": "on"}
-{"batch": "dw-batch-01", "text": "how about a cape for the man — something billowing and dramatic", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "cape on the boy", "frame": "part.garment", "value": "on", "span": "on"}
-{"batch": "dw-batch-01", "text": "a cape for the man", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "boy could use a cape", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "give the man a caep", "frame": "part.garment", "value": "on", "span": null}
-{"batch": "dw-batch-01", "text": "put a cape on the bpy", "frame": "part.garment", "value": "on", "span": "on"}
-{"batch": "dw-batch-01", "text": "put a sword in the boy's hand", "frame": "part.garment", "value": "hold", "span": null}
-{"batch": "dw-batch-01", "text": "give the boy a sword", "frame": "part.garment", "value": "hold", "span": null}
-{"batch": "dw-batch-01", "text": "hey, give the boy a sword", "frame": "part.garment", "value": "hold", "span": null}
-{"batch": "dw-batch-01", "text": "let the boy hold a sword", "frame": "part.garment", "value": "hold", "span": "hold"}
-{"batch": "dw-batch-01", "text": "the boy needs a sword", "frame": "part.garment", "value": "hold", "span": null}
-{"batch": "dw-batch-01", "text": "how about a sword for the boy?", "frame": "part.garment", "value": "hold", "span": null}
-{"batch": "dw-batch-01", "text": "arm the boy with a sword", "frame": "part.garment", "value": "hold", "span": null}
-{"batch": "dw-batch-01", "text": "a sword in the boy's hand", "frame": "part.garment", "value": "hold", "span": null}
-{"batch": "dw-batch-01", "text": "a sword in the boy's hand, please", "frame": "part.garment", "value": "hold", "span": null}
-{"batch": "dw-batch-01", "text": "can the boy get a sword?", "frame": "part.garment", "value": "hold", "span": null}
-{"batch": "dw-batch-01", "text": "I'd like to see the boy with a sword", "frame": "part.garment", "value": "hold", "span": null}
-{"batch": "dw-batch-01", "text": "the boy should have a sword", "frame": "part.garment", "value": "hold", "span": null}
-{"batch": "dw-batch-01", "text": "give the man a sword too", "frame": "part.garment", "value": "hold", "span": null}
-{"batch": "dw-batch-01", "text": "the boy is off to battle — he needs a sword", "frame": "part.garment", "value": "hold", "span": null}
-{"batch": "dw-batch-01", "text": "put a wooden practice sword in the boy's hand", "frame": "part.garment", "value": "hold", "span": null}
-{"batch": "dw-batch-01", "text": "give the boy a sword and a shield", "frame": "part.garment", "value": "hold", "span": null}
-{"batch": "dw-batch-01", "text": "give the boy a sword and a shield", "frame": "part.garment", "value": "hold", "span": null}
-{"batch": "dw-batch-01", "text": "the man plays the knight — hand him a sword", "frame": "part.garment", "value": "hold", "span": null}
-{"batch": "dw-batch-01", "text": "sword in the boy's hand", "frame": "part.garment", "value": "hold", "span": null}
-{"batch": "dw-batch-01", "text": "a sword for the man", "frame": "part.garment", "value": "hold", "span": null}
-{"batch": "dw-batch-01", "text": "boy wants a sword", "frame": "part.garment", "value": "hold", "span": null}
-{"batch": "dw-batch-01", "text": "give the boya sword", "frame": "part.garment", "value": "hold", "span": null}
-{"batch": "dw-batch-01", "text": "put a sord in the boy's hand", "frame": "part.garment", "value": "hold", "span": null}
-{"batch": "dw-batch-01", "text": "tint the man's glasses yellow and give the woman a sunhat", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "put a pair of big happy eyes on the sun", "frame": "part.size", "value": "big", "span": "big happy eyes"}
+{"batch": "dw-batch-01", "text": "give the house a little chimney", "frame": "part.size", "value": "little", "span": "little chimney"}
+{"batch": "dw-batch-01", "text": "put a tall chimney on the roof of the house", "frame": "part.size", "value": "tall", "span": "tall chimney"}
+{"batch": "dw-batch-01", "text": "put a carrot nose on the snowman and a scarf on the boy", "frame": "part.garment", "value": "on", "span": "put a carrot nose on the snowman and a scarf on the boy"}
+{"batch": "dw-batch-01", "text": "give the sun a big grin", "frame": "part.size", "value": "big", "span": "big grin"}
+{"batch": "dw-batch-01", "text": "put a big toothy grin on the sun", "frame": "part.size", "value": "big", "span": "big toothy grin"}
+{"batch": "dw-batch-01", "text": "let the girl wear a jacket", "frame": "part.garment", "value": "on", "span": "let the girl wear a jacket"}
+{"batch": "dw-batch-01", "text": "put a jacket on the boy", "frame": "part.garment", "value": "on", "span": "put a jacket on the boy"}
+{"batch": "dw-batch-01", "text": "hey, put a jacket on the boy", "frame": "part.garment", "value": "on", "span": "put a jacket on the boy"}
+{"batch": "dw-batch-01", "text": "give the boy a jacket", "frame": "part.garment", "value": "on", "span": "give the boy a jacket"}
+{"batch": "dw-batch-01", "text": "dress the girl in a denim jacket", "frame": "part.garment", "value": "on", "span": "dress the girl in a denim jacket"}
+{"batch": "dw-batch-01", "text": "the boy needs a jacket", "frame": "part.garment", "value": "on", "span": "the boy needs a jacket"}
+{"batch": "dw-batch-01", "text": "can the girl get a jacket on?", "frame": "part.garment", "value": "on", "span": "can the girl get a jacket on?"}
+{"batch": "dw-batch-01", "text": "can the girl get a jacket on?, please", "frame": "part.garment", "value": "on", "span": "can the girl get a jacket on?"}
+{"batch": "dw-batch-01", "text": "how about a jacket for the boy?", "frame": "part.garment", "value": "on", "span": "how about a jacket for the boy?"}
+{"batch": "dw-batch-01", "text": "a warm jacket for the girl", "frame": "part.garment", "value": "on", "span": "a warm jacket for the girl"}
+{"batch": "dw-batch-01", "text": "I'd like the boy in a jacket", "frame": "part.garment", "value": "on", "span": "I'd like the boy in a jacket"}
+{"batch": "dw-batch-01", "text": "the girl should be wearing a jacket", "frame": "part.garment", "value": "on", "span": "the girl should be wearing a jacket"}
+{"batch": "dw-batch-01", "text": "get a jacket on the boy", "frame": "part.garment", "value": "on", "span": "get a jacket on the boy"}
+{"batch": "dw-batch-01", "text": "it's freezing in this picture — the boy could really use a jacket", "frame": "part.garment", "value": "on", "span": "it's freezing in this picture — the boy could really use a jacket"}
+{"batch": "dw-batch-01", "text": "give the girl a jacket and a scarf", "frame": "part.garment", "value": "on", "span": "give the girl a jacket and a scarf"}
+{"batch": "dw-batch-01", "text": "give the girl a jacket and a scarf", "frame": "part.garment", "value": "on", "span": "give the girl a jacket and a scarf"}
+{"batch": "dw-batch-01", "text": "put a nice warm jacket on the boy", "frame": "part.garment", "value": "on", "span": "put a nice warm jacket on the boy"}
+{"batch": "dw-batch-01", "text": "the girl shivers — let her wear a jacket", "frame": "part.garment", "value": "on", "span": "the girl shivers — let her wear a jacket"}
+{"batch": "dw-batch-01", "text": "jacket on the boy", "frame": "part.garment", "value": "on", "span": "jacket on the boy"}
+{"batch": "dw-batch-01", "text": "a jacket for the girl", "frame": "part.garment", "value": "on", "span": "a jacket for the girl"}
+{"batch": "dw-batch-01", "text": "boy could use a jacket", "frame": "part.garment", "value": "on", "span": "boy could use a jacket"}
+{"batch": "dw-batch-01", "text": "let the boy wearr a jacket", "frame": "part.garment", "value": "on", "span": "let the boy wearr a jacket"}
+{"batch": "dw-batch-01", "text": "put a jocket on the girl", "frame": "part.garment", "value": "on", "span": "put a jocket on the girl"}
+{"batch": "dw-batch-01", "text": "put a cowboy hat on the man", "frame": "part.garment", "value": "on", "span": "put a cowboy hat on the man"}
+{"batch": "dw-batch-01", "text": "hey, put a cowboy hat on the man", "frame": "part.garment", "value": "on", "span": "put a cowboy hat on the man"}
+{"batch": "dw-batch-01", "text": "let the man wear a cowboy hat", "frame": "part.garment", "value": "on", "span": "let the man wear a cowboy hat"}
+{"batch": "dw-batch-01", "text": "give the man a cowboy hat", "frame": "part.garment", "value": "on", "span": "give the man a cowboy hat"}
+{"batch": "dw-batch-01", "text": "give the man a cowboy hat, please", "frame": "part.garment", "value": "on", "span": "give the man a cowboy hat"}
+{"batch": "dw-batch-01", "text": "the man needs a cowboy hat", "frame": "part.garment", "value": "on", "span": "the man needs a cowboy hat"}
+{"batch": "dw-batch-01", "text": "how about a cowboy hat for the man?", "frame": "part.garment", "value": "on", "span": "how about a cowboy hat for the man?"}
+{"batch": "dw-batch-01", "text": "a cowboy hat would suit the man", "frame": "part.garment", "value": "on", "span": "a cowboy hat would suit the man"}
+{"batch": "dw-batch-01", "text": "can you put a cowboy hat on the man?", "frame": "part.garment", "value": "on", "span": "can you put a cowboy hat on the man?"}
+{"batch": "dw-batch-01", "text": "I'd like the man in a cowboy hat", "frame": "part.garment", "value": "on", "span": "I'd like the man in a cowboy hat"}
+{"batch": "dw-batch-01", "text": "get a cowboy hat on the man", "frame": "part.garment", "value": "on", "span": "get a cowboy hat on the man"}
+{"batch": "dw-batch-01", "text": "the man should be wearing a cowboy hat", "frame": "part.garment", "value": "on", "span": "the man should be wearing a cowboy hat"}
+{"batch": "dw-batch-01", "text": "put a cowboy hat on the woman too", "frame": "part.garment", "value": "on", "span": "put a cowboy hat on the woman too"}
+{"batch": "dw-batch-01", "text": "give the man a proper cowboy hat with a wide brim", "frame": "part.garment", "value": "on", "span": "give the man a proper cowboy hat with a wide brim"}
+{"batch": "dw-batch-01", "text": "the sun is harsh — put a cowboy hat on the man", "frame": "part.garment", "value": "on", "span": "the sun is harsh — put a cowboy hat on the man"}
+{"batch": "dw-batch-01", "text": "put a cowboy hat on the man and a bonnet on the woman", "frame": "part.garment", "value": "on", "span": "put a cowboy hat on the man and a bonnet on the woman"}
+{"batch": "dw-batch-01", "text": "put a cowboy hat on the man and a bonnet on the woman", "frame": "part.garment", "value": "on", "span": "put a cowboy hat on the man and a bonnet on the woman"}
+{"batch": "dw-batch-01", "text": "the man looks plain — dress him in a cowboy hat", "frame": "part.garment", "value": "on", "span": "the man looks plain — dress him in a cowboy hat"}
+{"batch": "dw-batch-01", "text": "cowboy hat on the man", "frame": "part.garment", "value": "on", "span": "cowboy hat on the man"}
+{"batch": "dw-batch-01", "text": "a cowboy hat for the woman", "frame": "part.garment", "value": "on", "span": "a cowboy hat for the woman"}
+{"batch": "dw-batch-01", "text": "man could use a hat", "frame": "part.garment", "value": "on", "span": "man could use a hat"}
+{"batch": "dw-batch-01", "text": "put a cowboy hat on the mann", "frame": "part.garment", "value": "on", "span": "the mann"}
+{"batch": "dw-batch-01", "text": "let the man waer a cowboy hat", "frame": "part.garment", "value": "on", "span": "let the man waer a cowboy hat"}
+{"batch": "dw-batch-01", "text": "let the girl wear a baseball cap", "frame": "part.garment", "value": "on", "span": "let the girl wear a baseball cap"}
+{"batch": "dw-batch-01", "text": "put a baseball cap on the girl", "frame": "part.garment", "value": "on", "span": "put a baseball cap on the girl"}
+{"batch": "dw-batch-01", "text": "hey, put a baseball cap on the girl", "frame": "part.garment", "value": "on", "span": "put a baseball cap on the girl"}
+{"batch": "dw-batch-01", "text": "give the girl a baseball cap", "frame": "part.garment", "value": "on", "span": "give the girl a baseball cap"}
+{"batch": "dw-batch-01", "text": "the girl needs a baseball cap", "frame": "part.garment", "value": "on", "span": "the girl needs a baseball cap"}
+{"batch": "dw-batch-01", "text": "have the girl wearing a baseball cap", "frame": "part.garment", "value": "on", "span": "have the girl wearing a baseball cap"}
+{"batch": "dw-batch-01", "text": "have the girl wearing a baseball cap, please", "frame": "part.garment", "value": "on", "span": "have the girl wearing a baseball cap"}
+{"batch": "dw-batch-01", "text": "dress the girl in a baseball cap", "frame": "part.garment", "value": "on", "span": "dress the girl in a baseball cap"}
+{"batch": "dw-batch-01", "text": "can the girl get a baseball cap?", "frame": "part.garment", "value": "on", "span": "can the girl get a baseball cap?"}
+{"batch": "dw-batch-01", "text": "I'd like to see the girl in a baseball cap", "frame": "part.garment", "value": "on", "span": "I'd like to see the girl in a baseball cap"}
+{"batch": "dw-batch-01", "text": "the girl should get a baseball cap on", "frame": "part.garment", "value": "on", "span": "the girl should get a baseball cap on"}
+{"batch": "dw-batch-01", "text": "get that baseball cap on the girl", "frame": "part.garment", "value": "on", "span": "get that baseball cap on the girl"}
+{"batch": "dw-batch-01", "text": "a baseball cap on the boy as well", "frame": "part.garment", "value": "on", "span": "a baseball cap on the boy as well"}
+{"batch": "dw-batch-01", "text": "the girl is catching sun — put a baseball cap on her", "frame": "part.garment", "value": "on", "span": "the girl is catching sun — put a baseball cap on her"}
+{"batch": "dw-batch-01", "text": "give the girl a red baseball cap", "frame": "part.garment", "value": "on", "span": "give the girl a red baseball cap"}
+{"batch": "dw-batch-01", "text": "put a baseball cap on the girl and a pair of sunglasses on the boy", "frame": "part.garment", "value": "on", "span": "put a baseball cap on the girl and a pair of sunglasses on the boy"}
+{"batch": "dw-batch-01", "text": "put a baseball cap on the girl and a pair of sunglasses on the boy", "frame": "part.garment", "value": "on", "span": "put a baseball cap on the girl and a pair of sunglasses on the boy"}
+{"batch": "dw-batch-01", "text": "have the girl wearing a backwards baseball cap", "frame": "part.garment", "value": "on", "span": "have the girl wearing a backwards baseball cap"}
+{"batch": "dw-batch-01", "text": "baseball cap on the girl", "frame": "part.garment", "value": "on", "span": "baseball cap on the girl"}
+{"batch": "dw-batch-01", "text": "a baseball cap for the girl", "frame": "part.garment", "value": "on", "span": "a baseball cap for the girl"}
+{"batch": "dw-batch-01", "text": "girl wants a baseball cap", "frame": "part.garment", "value": "on", "span": "girl wants a baseball cap"}
+{"batch": "dw-batch-01", "text": "put a baseball cap on the gril", "frame": "part.garment", "value": "on", "span": "the gril"}
+{"batch": "dw-batch-01", "text": "let the girl waer a baseball cap", "frame": "part.garment", "value": "on", "span": "let the girl waer a baseball cap"}
+{"batch": "dw-batch-01", "text": "let the girl wear a dress", "frame": "part.garment", "value": "on", "span": "let the girl wear a dress"}
+{"batch": "dw-batch-01", "text": "hey, let the girl wear a dress", "frame": "part.garment", "value": "on", "span": "let the girl wear a dress"}
+{"batch": "dw-batch-01", "text": "put a dress on the girl", "frame": "part.garment", "value": "on", "span": "put a dress on the girl"}
+{"batch": "dw-batch-01", "text": "put a dress on the girl, please", "frame": "part.garment", "value": "on", "span": "put a dress on the girl"}
+{"batch": "dw-batch-01", "text": "give the girl a dress", "frame": "part.garment", "value": "on", "span": "give the girl a dress"}
+{"batch": "dw-batch-01", "text": "dress the girl in a summer dress", "frame": "part.garment", "value": "on", "span": "dress the girl in a summer dress"}
+{"batch": "dw-batch-01", "text": "the girl needs a dress", "frame": "part.garment", "value": "on", "span": "the girl needs a dress"}
+{"batch": "dw-batch-01", "text": "how about a dress for the girl?", "frame": "part.garment", "value": "on", "span": "how about a dress for the girl?"}
+{"batch": "dw-batch-01", "text": "a nice dress for the girl", "frame": "part.garment", "value": "on", "span": "a nice dress for the girl"}
+{"batch": "dw-batch-01", "text": "can the girl have a dress on?", "frame": "part.garment", "value": "on", "span": "can the girl have a dress on?"}
+{"batch": "dw-batch-01", "text": "I'd like the girl in a dress", "frame": "part.garment", "value": "on", "span": "I'd like the girl in a dress"}
+{"batch": "dw-batch-01", "text": "the girl should be wearing a dress", "frame": "part.garment", "value": "on", "span": "the girl should be wearing a dress"}
+{"batch": "dw-batch-01", "text": "put a dress on the woman too", "frame": "part.garment", "value": "on", "span": "put a dress on the woman too"}
+{"batch": "dw-batch-01", "text": "it's a party scene — dress the girl in a frilly dress", "frame": "part.garment", "value": "on", "span": "it's a party scene — dress the girl in a frilly dress"}
+{"batch": "dw-batch-01", "text": "give the girl a sunny yellow dress", "frame": "part.garment", "value": "on", "span": "give the girl a sunny yellow dress"}
+{"batch": "dw-batch-01", "text": "the girl wants a long dress with sleeves", "frame": "part.garment", "value": "on", "span": "the girl wants a long dress with sleeves"}
+{"batch": "dw-batch-01", "text": "put a dress on the girl and give the woman a shawl", "frame": "part.garment", "value": "on", "span": "put a dress on the girl and give the woman a shawl"}
+{"batch": "dw-batch-01", "text": "put a dress on the girl and give the woman a shawl", "frame": "part.garment", "value": "on", "span": "put a dress on the girl and give the woman a shawl"}
+{"batch": "dw-batch-01", "text": "dress on the girl", "frame": "part.garment", "value": "on", "span": "dress on the girl"}
+{"batch": "dw-batch-01", "text": "a dress for the woman", "frame": "part.garment", "value": "on", "span": "a dress for the woman"}
+{"batch": "dw-batch-01", "text": "dress for the girl", "frame": "part.garment", "value": "on", "span": "dress for the girl"}
+{"batch": "dw-batch-01", "text": "put a dres on the girl", "frame": "part.garment", "value": "on", "span": "put a dres on the girl"}
+{"batch": "dw-batch-01", "text": "let the girl wear adress", "frame": "part.garment", "value": "on", "span": "let the girl wear adress"}
+{"batch": "dw-batch-01", "text": "put a suit on the man", "frame": "part.garment", "value": "on", "span": "put a suit on the man"}
+{"batch": "dw-batch-01", "text": "hey, put a suit on the man", "frame": "part.garment", "value": "on", "span": "put a suit on the man"}
+{"batch": "dw-batch-01", "text": "let the man wear a suit", "frame": "part.garment", "value": "on", "span": "let the man wear a suit"}
+{"batch": "dw-batch-01", "text": "dress the man in a suit", "frame": "part.garment", "value": "on", "span": "dress the man in a suit"}
+{"batch": "dw-batch-01", "text": "the man needs a suit", "frame": "part.garment", "value": "on", "span": "the man needs a suit"}
+{"batch": "dw-batch-01", "text": "the man needs a suit, please", "frame": "part.garment", "value": "on", "span": "the man needs a suit"}
+{"batch": "dw-batch-01", "text": "how about a suit for the man?", "frame": "part.garment", "value": "on", "span": "how about a suit for the man?"}
+{"batch": "dw-batch-01", "text": "a suit and tie for the man", "frame": "part.garment", "value": "on", "span": "a suit and tie for the man"}
+{"batch": "dw-batch-01", "text": "a suit and tie for the man", "frame": "part.garment", "value": "on", "span": "a suit and tie for the man"}
+{"batch": "dw-batch-01", "text": "can the man get a suit on?", "frame": "part.garment", "value": "on", "span": "can the man get a suit on?"}
+{"batch": "dw-batch-01", "text": "I'd like the man in a suit", "frame": "part.garment", "value": "on", "span": "I'd like the man in a suit"}
+{"batch": "dw-batch-01", "text": "the man should be wearing a suit", "frame": "part.garment", "value": "on", "span": "the man should be wearing a suit"}
+{"batch": "dw-batch-01", "text": "get the man into a suit", "frame": "part.garment", "value": "on", "span": "get the man into a suit"}
+{"batch": "dw-batch-01", "text": "give the boy a smart little suit", "frame": "part.garment", "value": "on", "span": "give the boy a smart little suit"}
+{"batch": "dw-batch-01", "text": "the man looks scruffy — put a smart suit on him", "frame": "part.garment", "value": "on", "span": "the man looks scruffy — put a smart suit on him"}
+{"batch": "dw-batch-01", "text": "give the man a smart suit and a bow tie", "frame": "part.garment", "value": "on", "span": "give the man a smart suit and a bow tie"}
+{"batch": "dw-batch-01", "text": "give the man a smart suit and a bow tie", "frame": "part.garment", "value": "on", "span": "give the man a smart suit and a bow tie"}
+{"batch": "dw-batch-01", "text": "dress the man in a suit and give the boy a bow tie too", "frame": "part.garment", "value": "on", "span": "dress the man in a suit and give the boy a bow tie too"}
+{"batch": "dw-batch-01", "text": "dress the man in a suit and give the boy a bow tie too", "frame": "part.garment", "value": "on", "span": "dress the man in a suit and give the boy a bow tie too"}
+{"batch": "dw-batch-01", "text": "the man has an interview in this scene — let him wear a suit", "frame": "part.garment", "value": "on", "span": "the man has an interview in this scene — let him wear a suit"}
+{"batch": "dw-batch-01", "text": "suit on the man", "frame": "part.garment", "value": "on", "span": "suit on the man"}
+{"batch": "dw-batch-01", "text": "a suit for the man", "frame": "part.garment", "value": "on", "span": "a suit for the man"}
+{"batch": "dw-batch-01", "text": "man needs a suit", "frame": "part.garment", "value": "on", "span": "man needs a suit"}
+{"batch": "dw-batch-01", "text": "let the man wear a siut", "frame": "part.garment", "value": "on", "span": "let the man wear a siut"}
+{"batch": "dw-batch-01", "text": "put a sut on the man", "frame": "part.garment", "value": "on", "span": "put a sut on the man"}
+{"batch": "dw-batch-01", "text": "give the man a cape", "frame": "part.garment", "value": "on", "span": "give the man a cape"}
+{"batch": "dw-batch-01", "text": "hey, give the man a cape", "frame": "part.garment", "value": "on", "span": "give the man a cape"}
+{"batch": "dw-batch-01", "text": "let the man have a cape", "frame": "part.garment", "value": "on", "span": "let the man have a cape"}
+{"batch": "dw-batch-01", "text": "put a cape on the man", "frame": "part.garment", "value": "on", "span": "put a cape on the man"}
+{"batch": "dw-batch-01", "text": "put a cape on the man, please", "frame": "part.garment", "value": "on", "span": "put a cape on the man"}
+{"batch": "dw-batch-01", "text": "the man needs a cape", "frame": "part.garment", "value": "on", "span": "the man needs a cape"}
+{"batch": "dw-batch-01", "text": "how about a cape for the boy?", "frame": "part.garment", "value": "on", "span": "how about a cape for the boy?"}
+{"batch": "dw-batch-01", "text": "a cape on the man would look heroic", "frame": "part.garment", "value": "on", "span": "a cape on the man would look heroic"}
+{"batch": "dw-batch-01", "text": "can you give the boy a cape?", "frame": "part.garment", "value": "on", "span": "can you give the boy a cape?"}
+{"batch": "dw-batch-01", "text": "I'd like the boy with a cape", "frame": "part.garment", "value": "on", "span": "I'd like the boy with a cape"}
+{"batch": "dw-batch-01", "text": "the boy should get a cape", "frame": "part.garment", "value": "on", "span": "the boy should get a cape"}
+{"batch": "dw-batch-01", "text": "dress the man in a cape", "frame": "part.garment", "value": "on", "span": "dress the man in a cape"}
+{"batch": "dw-batch-01", "text": "get a cape onto the man", "frame": "part.garment", "value": "on", "span": "get a cape onto the man"}
+{"batch": "dw-batch-01", "text": "the boy is a little superhero — give him a cape", "frame": "part.garment", "value": "on", "span": "the boy is a little superhero — give him a cape"}
+{"batch": "dw-batch-01", "text": "give the man a cape and the boy a mask", "frame": "part.garment", "value": "on", "span": "give the man a cape and the boy a mask"}
+{"batch": "dw-batch-01", "text": "give the man a cape and the boy a mask", "frame": "part.garment", "value": "on", "span": "give the man a cape and the boy a mask"}
+{"batch": "dw-batch-01", "text": "put a long red cape on the man", "frame": "part.garment", "value": "on", "span": "put a long red cape on the man"}
+{"batch": "dw-batch-01", "text": "how about a cape for the man — something billowing and dramatic", "frame": "part.garment", "value": "on", "span": "how about a cape for the man — something billowing and dramatic"}
+{"batch": "dw-batch-01", "text": "cape on the boy", "frame": "part.garment", "value": "on", "span": "cape on the boy"}
+{"batch": "dw-batch-01", "text": "a cape for the man", "frame": "part.garment", "value": "on", "span": "a cape for the man"}
+{"batch": "dw-batch-01", "text": "boy could use a cape", "frame": "part.garment", "value": "on", "span": "boy could use a cape"}
+{"batch": "dw-batch-01", "text": "give the man a caep", "frame": "part.garment", "value": "on", "span": "give the man a caep"}
+{"batch": "dw-batch-01", "text": "put a cape on the bpy", "frame": "part.garment", "value": "on", "span": "the bpy"}
+{"batch": "dw-batch-01", "text": "put a sword in the boy's hand", "frame": "part.garment", "value": "hold", "span": "put a sword in the boy's hand"}
+{"batch": "dw-batch-01", "text": "give the boy a sword", "frame": "part.garment", "value": "hold", "span": "give the boy a sword"}
+{"batch": "dw-batch-01", "text": "hey, give the boy a sword", "frame": "part.garment", "value": "hold", "span": "give the boy a sword"}
+{"batch": "dw-batch-01", "text": "let the boy hold a sword", "frame": "part.garment", "value": "hold", "span": "let the boy hold a sword"}
+{"batch": "dw-batch-01", "text": "the boy needs a sword", "frame": "part.garment", "value": "hold", "span": "the boy needs a sword"}
+{"batch": "dw-batch-01", "text": "how about a sword for the boy?", "frame": "part.garment", "value": "hold", "span": "how about a sword for the boy?"}
+{"batch": "dw-batch-01", "text": "arm the boy with a sword", "frame": "part.garment", "value": "hold", "span": "arm the boy with a sword"}
+{"batch": "dw-batch-01", "text": "a sword in the boy's hand", "frame": "part.garment", "value": "hold", "span": "a sword in the boy's hand"}
+{"batch": "dw-batch-01", "text": "a sword in the boy's hand, please", "frame": "part.garment", "value": "hold", "span": "a sword in the boy's hand"}
+{"batch": "dw-batch-01", "text": "can the boy get a sword?", "frame": "part.garment", "value": "hold", "span": "can the boy get a sword?"}
+{"batch": "dw-batch-01", "text": "I'd like to see the boy with a sword", "frame": "part.garment", "value": "hold", "span": "I'd like to see the boy with a sword"}
+{"batch": "dw-batch-01", "text": "the boy should have a sword", "frame": "part.garment", "value": "hold", "span": "the boy should have a sword"}
+{"batch": "dw-batch-01", "text": "give the man a sword too", "frame": "part.garment", "value": "hold", "span": "give the man a sword too"}
+{"batch": "dw-batch-01", "text": "the boy is off to battle — he needs a sword", "frame": "part.garment", "value": "hold", "span": "the boy is off to battle — he needs a sword"}
+{"batch": "dw-batch-01", "text": "put a wooden practice sword in the boy's hand", "frame": "part.garment", "value": "hold", "span": "put a wooden practice sword in the boy's hand"}
+{"batch": "dw-batch-01", "text": "give the boy a sword and a shield", "frame": "part.garment", "value": "hold", "span": "give the boy a sword and a shield"}
+{"batch": "dw-batch-01", "text": "give the boy a sword and a shield", "frame": "part.garment", "value": "hold", "span": "give the boy a sword and a shield"}
+{"batch": "dw-batch-01", "text": "the man plays the knight — hand him a sword", "frame": "part.garment", "value": "hold", "span": "the man plays the knight — hand him a sword"}
+{"batch": "dw-batch-01", "text": "sword in the boy's hand", "frame": "part.garment", "value": "hold", "span": "sword in the boy's hand"}
+{"batch": "dw-batch-01", "text": "a sword for the man", "frame": "part.garment", "value": "hold", "span": "a sword for the man"}
+{"batch": "dw-batch-01", "text": "boy wants a sword", "frame": "part.garment", "value": "hold", "span": "boy wants a sword"}
+{"batch": "dw-batch-01", "text": "give the boya sword", "frame": "part.garment", "value": "hold", "span": "give the boya sword"}
+{"batch": "dw-batch-01", "text": "put a sord in the boy's hand", "frame": "part.garment", "value": "hold", "span": "put a sord in the boy's hand"}
+{"batch": "dw-batch-01", "text": "tint the man's glasses yellow and give the woman a sunhat", "frame": "part.garment", "value": "on", "span": "tint the man's glasses yellow and give the woman a sunhat"}
 {"batch": "dw-batch-01", "text": "take off the man's glasses", "frame": "part.garment", "value": "off", "span": "the man's glasses"}
 {"batch": "dw-batch-01", "text": "hey, take off the man's glasses", "frame": "part.garment", "value": "off", "span": "the man's glasses"}
 {"batch": "dw-batch-01", "text": "take the glasses off the man", "frame": "part.garment", "value": "off", "span": "the glasses off the man"}
@@ -355,7 +360,7 @@
 {"batch": "dw-batch-01", "text": "the boy needs no glasses", "frame": "part.garment", "value": "off", "span": "no glasses"}
 {"batch": "dw-batch-01", "text": "the man is indoors now — take his glasses off", "frame": "part.garment", "value": "off", "span": "his glasses"}
 {"batch": "dw-batch-01", "text": "remove the glasses and give the man a hat instead", "frame": "part.garment", "value": "off", "span": "the glasses"}
-{"batch": "dw-batch-01", "text": "remove the glasses and give the man a hat instead", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "remove the glasses and give the man a hat instead", "frame": "part.garment", "value": "on", "span": "remove the glasses and give the man a hat instead"}
 {"batch": "dw-batch-01", "text": "take the glasses off the boy and his cap off too", "frame": "part.garment", "value": "off", "span": "the glasses off the boy"}
 {"batch": "dw-batch-01", "text": "take the glasses off the boy and his cap off too", "frame": "part.garment", "value": "off", "span": "his cap"}
 {"batch": "dw-batch-01", "text": "the man squints in the dark — off with his glasses", "frame": "part.garment", "value": "off", "span": "his glasses"}
@@ -402,7 +407,7 @@
 {"batch": "dw-batch-01", "text": "take the girl's shoes off too", "frame": "part.garment", "value": "off", "span": "the girl's shoes"}
 {"batch": "dw-batch-01", "text": "the boy is on the grass — his shoes can come off", "frame": "part.garment", "value": "off", "span": "his shoes"}
 {"batch": "dw-batch-01", "text": "remove the boy's shoes and give him flip-flops", "frame": "part.garment", "value": "off", "span": "the boy's shoes"}
-{"batch": "dw-batch-01", "text": "remove the boy's shoes and give him flip-flops", "frame": "part.garment", "value": "on", "span": null}
+{"batch": "dw-batch-01", "text": "remove the boy's shoes and give him flip-flops", "frame": "part.garment", "value": "on", "span": "remove the boy's shoes and give him flip-flops"}
 {"batch": "dw-batch-01", "text": "take the shoes off both kids", "frame": "part.garment", "value": "off", "span": "the shoes"}
 {"batch": "dw-batch-01", "text": "take the shoes off both kids", "frame": "part.garment", "value": "off", "span": "the shoes"}
 {"batch": "dw-batch-01", "text": "the girl has been running — take her shoes off", "frame": "part.garment", "value": "off", "span": "her shoes"}
@@ -503,10 +508,8 @@
 {"batch": "dw-batch-01", "text": "make the man blad", "frame": "drawn.trait", "value": "bald", "span": "blad"}
 {"batch": "dw-batch-01", "text": "shave the man's haed", "frame": "drawn.trait", "value": "bald", "span": "the man's haed"}
 {"batch": "dw-batch-01", "text": "the background should be mountains, far away and pale blue", "frame": "drawn.perspective", "value": "far", "span": "far away"}
-{"batch": "dw-batch-01", "text": "put a mountain range across the back, small at the horizon", "frame": "drawn.region", "value": "background", "span": null}
-{"batch": "dw-batch-01", "text": "put a mountain range across the back, small at the horizon", "frame": "drawn.perspective", "value": "far", "span": null}
-{"batch": "dw-batch-01", "text": "make the background an ocean, far and wide", "frame": "drawn.perspective", "value": "far", "span": "far"}
-{"batch": "dw-batch-01", "text": "the sea should come right up to the bottom of the hills", "frame": "drawn.region", "value": "background", "span": null}
+{"batch": "dw-batch-01", "text": "put a mountain range across the back, small at the horizon", "frame": "drawn.perspective", "value": "far", "span": "small at the horizon"}
+{"batch": "dw-batch-01", "text": "make the background an ocean, far and wide", "frame": "drawn.perspective", "value": "far", "span": "far and wide"}
 {"batch": "dw-batch-01", "text": "add a hill or two in the background, smaller the further back they sit", "frame": "drawn.perspective", "value": "far", "span": "smaller the further back they sit"}
 {"batch": "dw-batch-01", "text": "bring the boat closer and keep it in front of everything", "frame": "drawn.depth", "value": "near", "span": "closer"}
 {"batch": "dw-batch-01", "text": "turn the grass into water", "frame": "drawn.material", "value": "water", "span": "water"}
@@ -579,29 +582,21 @@
 {"batch": "dw-batch-01", "text": "let the house front be stone", "frame": "drawn.material", "value": "stone", "span": "stone"}
 {"batch": "dw-batch-01", "text": "let the hosue be made of brick", "frame": "drawn.material", "value": "brick", "span": "brick"}
 {"batch": "dw-batch-01", "text": "build the walls out of stnoe", "frame": "drawn.material", "value": "stone", "span": "stnoe"}
-{"batch": "dw-batch-01", "text": "the scene needs a river with grassy banks", "frame": "drawn.region", "value": "background", "span": null}
 {"batch": "dw-batch-01", "text": "the scene needs a river with grassy banks", "frame": "drawn.material", "value": "grass", "span": "grassy"}
-{"batch": "dw-batch-01", "text": "a river would tie the scene together — add one, with banks", "frame": "drawn.region", "value": "background", "span": null}
 {"batch": "dw-batch-01", "text": "add a stream with pebbly banks", "frame": "drawn.material", "value": "pebbles", "span": "pebbly"}
 {"batch": "dw-batch-01", "text": "draw a river in the background, narrower towards the horizon", "frame": "drawn.perspective", "value": "narrowing into the distance", "span": "narrower towards the horizon"}
-{"batch": "dw-batch-01", "text": "add a river with banks and a small boat on the water", "frame": "drawn.region", "value": "background", "span": null}
 {"batch": "dw-batch-01", "text": "let the river run behind the house and the trees, deep in the picture", "frame": "drawn.depth", "value": "far", "span": "deep in the picture"}
-{"batch": "dw-batch-01", "text": "the scene could do with a stream", "frame": "drawn.region", "value": "background", "span": null}
-{"batch": "dw-batch-01", "text": "a river, why not", "frame": "drawn.region", "value": "background", "span": null}
-{"batch": "dw-batch-01", "text": "more water in the landscape", "frame": "drawn.region", "value": "background", "span": null}
-{"batch": "dw-batch-01", "text": "push the hills further back, so they read as far away", "frame": "drawn.region", "value": "background", "span": null}
-{"batch": "dw-batch-01", "text": "push the hills further back, so they read as far away", "frame": "drawn.perspective", "value": "far", "span": "far"}
+{"batch": "dw-batch-01", "text": "push the hills further back, so they read as far away", "frame": "drawn.perspective", "value": "far", "span": "far away"}
 {"batch": "dw-batch-01", "text": "make the hills look far away", "frame": "drawn.perspective", "value": "far", "span": "far away"}
 {"batch": "dw-batch-01", "text": "the hills should be smaller, the way distant things are", "frame": "drawn.perspective", "value": "far, smaller", "span": "smaller"}
 {"batch": "dw-batch-01", "text": "let the hills recede into the distance", "frame": "drawn.perspective", "value": "far", "span": "recede into the distance"}
 {"batch": "dw-batch-01", "text": "bring the boat closer", "frame": "drawn.depth", "value": "near", "span": "closer"}
-{"batch": "dw-batch-01", "text": "the hills belong at the horizon, higher up", "frame": "drawn.perspective", "value": "higher", "span": "at the horizon, higher up"}
+{"batch": "dw-batch-01", "text": "the hills belong at the horizon, higher up", "frame": "drawn.perspective", "value": "higher", "span": "higher up"}
 {"batch": "dw-batch-01", "text": "make the hills a little smaller — they're too close", "frame": "drawn.perspective", "value": "far", "span": "too close"}
 {"batch": "dw-batch-01", "text": "far hills, pale and small", "frame": "drawn.perspective", "value": "far, smaller", "span": "far hills, pale and small"}
 {"batch": "dw-batch-01", "text": "hey, make the hills look far away", "frame": "drawn.perspective", "value": "far", "span": "far away"}
-{"batch": "dw-batch-01", "text": "quick one — the hills belong at the horizon, higher up", "frame": "drawn.perspective", "value": "higher", "span": "at the horizon, higher up"}
-{"batch": "dw-batch-01", "text": "hills far away, smaller, like you see in real landscapes", "frame": "drawn.region", "value": "background", "span": null}
-{"batch": "dw-batch-01", "text": "hills far away, smaller, like you see in real landscapes", "frame": "drawn.perspective", "value": "far, smaller", "span": null}
+{"batch": "dw-batch-01", "text": "quick one — the hills belong at the horizon, higher up", "frame": "drawn.perspective", "value": "higher", "span": "higher up"}
+{"batch": "dw-batch-01", "text": "hills far away, smaller, like you see in real landscapes", "frame": "drawn.perspective", "value": "far, smaller", "span": "far away, smaller"}
 {"batch": "dw-batch-01", "text": "bring the shoreline closer to the house", "frame": "drawn.depth", "value": "near", "span": "closer to the house"}
 {"batch": "dw-batch-01", "text": "add a second row of hills, taller but further back", "frame": "drawn.perspective", "value": "far", "span": "further back"}
 {"batch": "dw-batch-01", "text": "the hills should fall away, ridge behind ridge, smaller each time", "frame": "drawn.perspective", "value": "far, in ridges", "span": "ridge behind ridge, smaller each time"}
