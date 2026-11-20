@@ -62,13 +62,23 @@ function readingFacts(raw,bindings){
  return facts;
 }
 
+// The first retarget the rules conclude for each request of a raw reading.
+function concludedRetargets(raw,bindings){
+ const world=policyWorld().fork(),retargets=new Map();
+ if(!world.tell(serialize(readingFacts(raw,bindings)),{factsOnly:true}).ok)return {world,retargets};
+ for(const row of world.ofType('app.reading.retarget')){const r=num(row,'request');if(!retargets.has(r))retargets.set(r,row);}
+ return {world,retargets};
+}
+/** Which declared re-reading (population | container) the rules conclude for one request of a raw reading, or null. */
+export function retargetRule(raw,bindings,index=0){
+ if(!raw||!bindings||!Array.isArray(raw.requests)||!raw.requests[index])return null;
+ const row=concludedRetargets(raw,bindings).retargets.get(index);
+ return row?one(row,'rule'):null;
+}
 /** The declared re-readings (a population joined by lines, a container's property) applied to a raw reading. */
 export function declaredRetargets(raw,bindings){
  if(!raw||!bindings||!Array.isArray(raw.requests)||!raw.requests.length)return raw;
- const world=policyWorld().fork();
- if(!world.tell(serialize(readingFacts(raw,bindings)),{factsOnly:true}).ok)return raw;
- const retargets=new Map();
- for(const row of world.ofType('app.reading.retarget')){const r=num(row,'request');if(!retargets.has(r))retargets.set(r,row);}
+ const {world,retargets}=concludedRetargets(raw,bindings);
  if(!retargets.size)return raw;
  const ends=world.ofType('app.reading.addEnd');
  const out=structuredClone(raw);
