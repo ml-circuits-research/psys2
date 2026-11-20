@@ -14,9 +14,6 @@ import { resolve, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createFsLoader, DEFAULT_ROOT } from '../src/loaders/fs-loader.mjs';
 import { createEngine } from '../src/dialog/index.mjs';
-import { settingsForMode, sessionOptions } from '../src/dialog/runtime-config.mjs';
-import { createTranslator } from '../src/translate/index.mjs';
-import { createSwitchTranslator } from '../docs/webchat/ui/translation.mjs';
 import { visibleState } from './lib/visible-state.mjs';
 import { evaluateCase } from './lib/operational-check.mjs';
 import { createFacts } from '../src/knowledge/facts.mjs';
@@ -31,9 +28,8 @@ export async function replay({ log = join(REPO, 'training/eval/owner-log-2026-11
   const rows = readFileSync(log, 'utf8').split('\n').filter(Boolean).map((l) => JSON.parse(l));
   let chk = {};
   try { chk = JSON.parse(readFileSync(checks, 'utf8')); } catch { /* no checks yet */ }
-  // The translator of the phone / no-browser-Translator path of the webchat: rules first, a fixed Romanian line for a reply they cannot write (so the Romanian reply is checkable)
-  const rules = createTranslator();
-  const translator = createSwitchTranslator({ rules, getStrategy: () => 'auto', backend: { translatorKind: () => null, detectorKind: () => null, translate: async () => { throw new Error('none'); }, detect: async () => { throw new Error('none'); }, prepare: async () => {}, state: () => 'none' } });
+  // No rules translator any more (English only behind the boundary): a Romanian row is answered that translation is not ready.
+  const translator = null;
   const engine = await createEngine({ loader: createFsLoader(DEFAULT_ROOT), translator });
   // The knowledge catalog of the owner's browser, from the repository copy (knowledge/k.objects) plus a crocodile fixture (the online catalog had one).
   const kdir = join(REPO, 'knowledge'), fx = join(REPO, 'training/eval/owner-log-knowledge');
@@ -44,11 +40,10 @@ export async function replay({ log = join(REPO, 'training/eval/owner-log-2026-11
   } };
   engine.setKnowledge(createFacts({ source }));
   onEngine?.(engine);
-  const settings = settingsForMode('rules');
   let s = null, prevDay = null;
   const out = [];
   for (const [i, r] of rows.entries()) {
-    if (!s || r.time.slice(0, 10) !== prevDay) s = engine.createSession(sessionOptions(settings, { language: 'en' }));
+    if (!s || r.time.slice(0, 10) !== prevDay) s = engine.createSession({ language: 'en' });
     prevDay = r.time.slice(0, 10);
     s.setWorldState('ui.shell', { activeTab: r.tab });
     if (r.activeWorld && !r.tab) s.setWorldState('ui.shell', { activeTab: 'robot' });
@@ -63,7 +58,7 @@ export async function replay({ log = join(REPO, 'training/eval/owner-log-2026-11
       const english = reply.trace?.replyEnglish ?? reply.text;
       Object.assign(rec, { replyUser: reply.text.slice(0, 200), english: reply.trace?.english ?? null, reply: english.slice(0, 200), worlds: [...new Set(reply.segments.map((x) => x.world).filter(Boolean))], statuses: reply.statuses, steps: (reply.budget ?? reply.trace?.budget)?.ticks ?? null, top: (reply.budget ?? reply.trace?.budget)?.top ?? null });
       // P6: the reply is as natural as the request (no internal word, no dangling article, a complete sentence; in the user's language no English left)
-      rec.replyFlags = [...replyFlags(english), ...(r.lang === 'ro' && reply.text !== english ? replyFlags(reply.text, { lang: 'ro', leftovers: translator.leftovers }).map((f) => `ro:${f}`) : [])];
+      rec.replyFlags = [...replyFlags(english), ...(r.lang === 'ro' && reply.text !== english ? replyFlags(reply.text, { lang: 'ro', leftovers: null }).map((f) => `ro:${f}`) : [])];
       const c = chk[i];
       if (c) {
         const items = evaluateCase({ world: c.world ?? 'art.draw', expect: c }, { before, after, replyText: english, effects: reply.effects, statuses: reply.statuses, unparsedAll: reply.segments.length === 0 || reply.segments.every((x) => x.unparsed), values: reply.answers.map((a) => a.value) });

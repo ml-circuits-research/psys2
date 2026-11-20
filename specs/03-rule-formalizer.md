@@ -1,5 +1,7 @@
 # 03 — The rule-based formalizer (`formalization=rules`)
 
+**Retired 2026-11-20 (JS reduction, Goal 2).** The rule formalizer (`src/formalizer/`) and the historical grammar-world path are removed: no application route read through it since the sole SOP-BERT route (spec 35), and `node src/cli.mjs test-world` now runs the SOP-area suites of the area worlds and lists the grammar worlds as retired. The number-word reader moved to `src/knowledge/number-run.mjs`. This spec is kept as history.
+
 A light formalization strategy built from patterns and heuristics, declared per world. It runs on any CPU and in the browser, needs no model, and is used to bootstrap worlds quickly, to generate and check training data for the encoder strategy (vision §5–6), for tests, and wherever speed matters more than full coverage of natural language. See ADR-001. Input is English (other languages are translated first, spec 05).
 
 Implementation: `src/formalizer/rules/` (browser-safe). Interface:

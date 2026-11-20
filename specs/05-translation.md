@@ -1,5 +1,7 @@
 # 05 — Translation at the boundary
 
+**Retired 2026-11-20 (JS reduction, Goal 2).** The rules translator and its Romanian tables (`src/translate/`) are removed. Following the owner's principle (English behind the boundary, other languages only in the interface), a non-English input is translated by the browser's translation API (`docs/webchat/ui/translation.mjs`); without it the session answers that translation is not ready. This spec is kept as history.
+
 Everything stored by PSys2 is English (AGENTS.md). Input in another language is translated to English before formalization; answers can be translated back for display. The goal is **meaning preservation for formalization**, not literary quality: an English sentence that the rule patterns (and later the encoder) read correctly, with every meaning-bearing element kept and traceable to the source.
 
 Implementation: `src/translate/` (browser-safe), first language pair Romanian ⇄ English.

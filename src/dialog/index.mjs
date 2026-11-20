@@ -259,8 +259,6 @@ export class DialogSession {
 
 }
 
-export { runWorldTests } from './test-runner.mjs';
-
 /** Create the dialog engine: loads and checks the worlds of the application composition. */
 export async function createEngine({ loader, translator = null, options = {} }) {
   // `set` is replaced by `engine.reload(loader)` (LAZY LOADING: the worlds a message needs are added to a running engine).

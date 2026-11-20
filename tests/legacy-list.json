@@ -77,28 +77,8 @@
    "reason": "needs undo / redo as acts of the request door (the reasoner timeline as a declared act)"
   },
   {
-   "file": "astra-session.test.mjs",
-   "name": "two drawings: new discussion, back to the first, state follows, other world untouched",
-   "reason": "pins a route or a reader of the old patterns; the door reads by the declared capabilities only"
-  },
-  {
-   "file": "bounded-captures.test.mjs",
-   "name": "spelling: a content word of another world is not corrected into this world (boat / coat)",
-   "reason": "pins a route or a reader of the old patterns; the door reads by the declared capabilities only"
-  },
-  {
-   "file": "bounded-captures.test.mjs",
-   "name": "tab protection: a word of the open tab is never changed, a typo still is",
-   "reason": "pins a route or a reader of the old patterns; the door reads by the declared capabilities only"
-  },
-  {
    "file": "canonical-examples.test.mjs",
    "name": "help and \"Did you mean\" quote canonical examples only",
-   "reason": "pins a route or a reader of the old patterns; the door reads by the declared capabilities only"
-  },
-  {
-   "file": "clauses-in-sequence.test.mjs",
-   "name": "diagram.sketch: \"it\" is the shape the first clause made (the reader gets the last shapes as names), in one turn and across turns",
    "reason": "pins a route or a reader of the old patterns; the door reads by the declared capabilities only"
   },
   {
@@ -109,21 +89,6 @@
   {
    "file": "commonsense.test.mjs",
    "name": "where things go when nobody says: from the facts, and no warning for the default",
-   "reason": "pins a reader of a declared tab (owner 17:55: no fallback); needs the act declared with an executor"
-  },
-  {
-   "file": "completeness.test.mjs",
-   "name": "catch-all patterns: every world pattern whose captured arguments are only raw text (pre / post / rest) is listed, and a half-read catch-all is asked, not executed",
-   "reason": "pins a route or a reader of the old patterns; the door reads by the declared capabilities only"
-  },
-  {
-   "file": "completeness.test.mjs",
-   "name": "no catch-all pattern of any world executes when its raw arguments hold words the world does not read",
-   "reason": "pins a route or a reader of the old patterns; the door reads by the declared capabilities only"
-  },
-  {
-   "file": "composed-reply.test.mjs",
-   "name": "a Romanian session: the owner's two turns are answered in composed Romanian, in both reasoners",
    "reason": "pins a reader of a declared tab (owner 17:55: no fallback); needs the act declared with an executor"
   },
   {
@@ -147,59 +112,9 @@
    "reason": "pins a reader of a declared tab (owner 17:55: no fallback); needs the act declared with an executor"
   },
   {
-   "file": "dialog.test.mjs",
-   "name": "CLI: test-world all passes; parse reports errors; formalize prints wires",
-   "reason": "pins a route or a reader of the old patterns; the door reads by the declared capabilities only"
-  },
-  {
-   "file": "discourse-gaps.test.mjs",
-   "name": "\"wait, I meant blue\" after a drawing is a repair of the last command",
-   "reason": "needs the dialogue world's repair and meta acts (w.dialogue) on the door"
-  },
-  {
    "file": "discourse-memory.test.mjs",
    "name": "after a restart a pending question is answered and undo still works in both reasoners (ops: the board keeps its history in the state; matrix: the timeline travels in the memory record, spec 15)",
    "reason": "needs undo / redo as acts of the request door (the reasoner timeline as a declared act)"
-  },
-  {
-   "file": "editor-ed.test.mjs",
-   "name": "dictation: new line, new paragraph, new chapter, page break act as commands with a short confirmation",
-   "reason": "needs the Documents editing acts (format, select, delete, move, dictate) declared with an executor"
-  },
-  {
-   "file": "editor-ed.test.mjs",
-   "name": "editing and reading: marks, delete, move, rename, read the document, a chapter, the last paragraph",
-   "reason": "needs the Documents editing acts (format, select, delete, move, dictate) declared with an executor"
-  },
-  {
-   "file": "editor-ed.test.mjs",
-   "name": "lists: one bullet or numbered item at a time, and \"a bullet list of ...\" is still a list",
-   "reason": "needs the Documents editing acts (format, select, delete, move, dictate) declared with an executor"
-  },
-  {
-   "file": "editor-ed.test.mjs",
-   "name": "positions: under, after and before the title, a chapter or the second paragraph",
-   "reason": "needs the Documents editing acts (format, select, delete, move, dictate) declared with an executor"
-  },
-  {
-   "file": "editor-ed.test.mjs",
-   "name": "Romanian dictation: \"rând nou\" and \"paragraf nou\" are commands",
-   "reason": "needs the Documents editing acts (format, select, delete, move, dictate) declared with an executor"
-  },
-  {
-   "file": "editor-ed.test.mjs",
-   "name": "writing: write, type, add the text, continue with; long text and quotes stay whole",
-   "reason": "needs the Documents editing acts (format, select, delete, move, dictate) declared with an executor"
-  },
-  {
-   "file": "knowledge-lookup.test.mjs",
-   "name": "delete / move / connect with a catalog hit: the plain refusal, never a gloss",
-   "reason": "needs the Documents editing acts (format, select, delete, move, dictate) declared with an executor"
-  },
-  {
-   "file": "knowledge-lookup.test.mjs",
-   "name": "drawing: a thing of the catalog is drawn from its parts; no hit is the plain refusal",
-   "reason": "needs change / move / arrange acts of things of the open world declared with an executor (a thing named with \"the\" is not a new request)"
   },
   {
    "file": "knowledge-mirrors.test.mjs",
@@ -210,26 +125,6 @@
    "file": "knowledge-mirrors.test.mjs",
    "name": "the first mirror failing: the reading and the reply are those of a good catalog",
    "reason": "pins a route or a reader of the old patterns; the door reads by the declared capabilities only"
-  },
-  {
-   "file": "lang-holes.test.mjs",
-   "name": "lang-holes cases: every closed hole and every control is right; the open hole (never) is only reported",
-   "reason": "needs change / move / arrange acts of things of the open world declared with an executor (a thing named with \"the\" is not a new request)"
-  },
-  {
-   "file": "learned-mem-budget.test.mjs",
-   "name": "a long draw session: a turn reads the catalog overlay with a learned.mem budget linear in the memory, not in lookups x memory",
-   "reason": "pins a route or a reader of the old patterns; the door reads by the declared capabilities only"
-  },
-  {
-   "file": "long-messages.test.mjs",
-   "name": "draw: \"resize it bigger\" makes the last thing bigger",
-   "reason": "needs change / move / arrange acts of things of the open world declared with an executor (a thing named with \"the\" is not a new request)"
-  },
-  {
-   "file": "long-messages.test.mjs",
-   "name": "editor: the same kind of command stays one text (\"salt and a pinch of pepper\")",
-   "reason": "pins a reader of a declared tab (owner 17:55: no fallback); needs the act declared with an executor"
   },
   {
    "file": "one-story.test.mjs",
@@ -247,84 +142,9 @@
    "reason": "needs the dialogue world's repair and meta acts (w.dialogue) on the door"
   },
   {
-   "file": "overlay-memo-budget.test.mjs",
-   "name": "a long draw session: the same turn costs about the same at 12 and at 48 objects (learned.mem, things.aspects, commonsense.habitat do not grow with the picture)",
-   "reason": "pins a reader of a declared tab (owner 17:55: no fallback); needs the act declared with an executor"
-  },
-  {
-   "file": "reading-variants.test.mjs",
-   "name": "variants are read by the engine: round-trip English frames",
-   "reason": "pins a reader of a declared tab (owner 17:55: no fallback); needs the act declared with an executor"
-  },
-  {
-   "file": "reasoner-namespaces.test.mjs",
-   "name": "draw objects made in different turns with the same name are two things; the diagram refuses a second shape of the same name",
-   "reason": "needs change / move / arrange acts of things of the open world declared with an executor (a thing named with \"the\" is not a new request)"
-  },
-  {
    "file": "reasoner-restore.test.mjs",
    "name": "restore rebuilds the instances and undo walks the same timeline with the same replies and states",
    "reason": "needs undo / redo as acts of the request door (the reasoner timeline as a declared act)"
-  },
-  {
-   "file": "reasoner-ui.test.mjs",
-   "name": "ui.shell: a tab another world brings forward is not a step of that world's turn: its \"undo\" does not switch the tab back",
-   "reason": "needs undo / redo as acts of the request door (the reasoner timeline as a declared act)"
-  },
-  {
-   "file": "reasoner.test.mjs",
-   "name": "parity gate (switch on): kids.shop 168, kids.tasks 241, kids.arith 243 (kids.shapes and kids.animals left for session.things, 2026-11-14; kids.time for time.calendar, 2026-11-15; the ops tests of the coherence fixes run in both modes; the matrix-only tests are counted)",
-   "reason": "needs questions answered from factsOf of the live world (no question act on the door yet)"
-  },
-  {
-   "file": "relative-moves.test.mjs",
-   "name": "\"make the houses different\": a change of the things, said when they already differ",
-   "reason": "needs change / move / arrange acts of things of the open world declared with an executor (a thing named with \"the\" is not a new request)"
-  },
-  {
-   "file": "relative-moves.test.mjs",
-   "name": "a correction of the thing: \"not the first house, the one in the middle\" takes the last move back and moves the middle house",
-   "reason": "needs change / move / arrange acts of things of the open world declared with an executor (a thing named with \"the\" is not a new request)"
-  },
-  {
-   "file": "relative-moves.test.mjs",
-   "name": "relative continuations through the library: \"even further to the left\" and \"move even further to the left\" move the things just moved again",
-   "reason": "needs change / move / arrange acts of things of the open world declared with an executor (a thing named with \"the\" is not a new request)"
-  },
-  {
-   "file": "ro-rp5.test.mjs",
-   "name": "drawing: sound-alike \"sare\" is the sun, dash, undrawable animal, coordinated adjectives, diminutives",
-   "reason": "pins a reader of a declared tab (owner 17:55: no fallback); needs the act declared with an executor"
-  },
-  {
-   "file": "ro-sessions.test.mjs",
-   "name": "RD9: \"more X\" with a plural adds two or three and says how many",
-   "reason": "needs questions answered from factsOf of the live world (no question act on the door yet)"
-  },
-  {
-   "file": "role-pairs.test.mjs",
-   "name": "role pairs: every side parses by its atomic steps and the two sides mean different things",
-   "reason": "needs change / move / arrange acts of things of the open world declared with an executor (a thing named with \"the\" is not a new request)"
-  },
-  {
-   "file": "routing.test.mjs",
-   "name": "\"Make it bigger\" is a drawing command on the drawing tab, not a map zoom",
-   "reason": "needs change / move / arrange acts of things of the open world declared with an executor (a thing named with \"the\" is not a new request)"
-  },
-  {
-   "file": "routing.test.mjs",
-   "name": "DIAG: \"draw a rectangle called Api\" goes to the Diagram on the Drawing tab (signal), \"draw a rectangle\" stays with the Drawing board",
-   "reason": "pins a route or a reader of the old patterns; the door reads by the declared capabilities only"
-  },
-  {
-   "file": "routing.test.mjs",
-   "name": "DIAG: an arrow between names and a flowchart word are diagram signals on any tab",
-   "reason": "pins a route or a reader of the old patterns; the door reads by the declared capabilities only"
-  },
-  {
-   "file": "routing.test.mjs",
-   "name": "the session context reports tab world, recent and last answered world",
-   "reason": "pins a route or a reader of the old patterns; the door reads by the declared capabilities only"
   },
   {
    "file": "sampler.test.mjs",
@@ -340,11 +160,6 @@
    "file": "several-clauses.test.mjs",
    "name": "the same act of two things is one sentence",
    "reason": "pins a reader of a declared tab (owner 17:55: no fallback); needs the act declared with an executor"
-  },
-  {
-   "file": "space2-pieces.test.mjs",
-   "name": "art.draw keeps relations as facts: what is on a thing travels with it, \"apart\" is remembered, a thing is not pushed into what it stands on, layouts as destinations",
-   "reason": "needs change / move / arrange acts of things of the open world declared with an executor (a thing named with \"the\" is not a new request)"
   },
   {
    "file": "textgen.test.mjs",
@@ -367,114 +182,14 @@
    "reason": "pins a reader of a declared tab (owner 17:55: no fallback); needs the act declared with an executor"
   },
   {
-   "file": "things.test.mjs",
-   "name": "matrix: a chart and a document of \"what I drew\" / \"the discussion\" are selections of session things into views (one request each); a document is made with its text in one request",
-   "reason": "needs the Documents editing acts (format, select, delete, move, dictate) declared with an executor"
-  },
-  {
-   "file": "things.test.mjs",
-   "name": "matrix: a house drawn in the drawing is shown in Talk and a thing of Talk in the drawing, by the one operation; what a view cannot take is said plainly",
-   "reason": "pins a reader of a declared tab (owner 17:55: no fallback); needs the act declared with an executor"
-  },
-  {
-   "file": "things.test.mjs",
-   "name": "ops: a chart and a document of \"what I drew\" / \"the discussion\" are selections of session things into views (one request each); a document is made with its text in one request",
-   "reason": "needs the Documents editing acts (format, select, delete, move, dictate) declared with an executor"
-  },
-  {
-   "file": "things.test.mjs",
-   "name": "ops: a house drawn in the drawing is shown in Talk and a thing of Talk in the drawing, by the one operation; what a view cannot take is said plainly",
-   "reason": "pins a reader of a declared tab (owner 17:55: no fallback); needs the act declared with an executor"
-  },
-  {
-   "file": "tools.test.mjs",
-   "name": "document history keeps at most 50 snapshots",
-   "reason": "needs undo / redo as acts of the request door (the reasoner timeline as a declared act)"
-  },
-  {
-   "file": "tools.test.mjs",
-   "name": "test runner: expectState (own world and world:path) and expectEffect",
-   "reason": "pins a route or a reader of the old patterns; the door reads by the declared capabilities only"
-  },
-  {
-   "file": "transfer-views.test.mjs",
-   "name": "matrix: the map is a view of the session things (pins for what has a place, plain words for what has none); a send that names the chart is a send; Talk has no per-pair branch to the map",
-   "reason": "needs change / move / arrange acts of things of the open world declared with an executor (a thing named with \"the\" is not a new request)"
-  },
-  {
-   "file": "transfer-views.test.mjs",
-   "name": "ops: the map is a view of the session things (pins for what has a place, plain words for what has none); a send that names the chart is a send; Talk has no per-pair branch to the map",
-   "reason": "needs change / move / arrange acts of things of the open world declared with an executor (a thing named with \"the\" is not a new request)"
-  },
-  {
    "file": "where-were-we.test.mjs",
    "name": "the return is sticky only until the next digression",
    "reason": "pins a reader of a declared tab (owner 17:55: no fallback); needs the act declared with an executor"
   },
   {
-   "file": "world-aware.test.mjs",
-   "name": "diagram.sketch: a missing name is not another shape (delete / move / rename), plain E2 reply, nothing changes",
-   "reason": "needs the Documents editing acts (format, select, delete, move, dictate) declared with an executor"
-  },
-  {
-   "file": "world-aware.test.mjs",
-   "name": "no-referent wording in diagram.sketch: plain reply without an offer, one question with an offer",
-   "reason": "needs questions answered from factsOf of the live world (no question act on the door yet)"
-  },
-  {
-   "file": "world-aware.test.mjs",
-   "name": "nothing is half done: a vetoed clause holds back the readable ones of the same message",
-   "reason": "pins a route or a reader of the old patterns; the door reads by the declared capabilities only"
-  },
-  {
-   "file": "world-aware.test.mjs",
-   "name": "observe: records the judgement and the choice, changes the reply of nothing",
-   "reason": "pins a reader of a declared tab (owner 17:55: no fallback); needs the act declared with an executor"
-  },
-  {
-   "file": "world-aware.test.mjs",
-   "name": "off: the shipped reply, nothing recorded on the segments",
-   "reason": "pins a reader of a declared tab (owner 17:55: no fallback); needs the act declared with an executor"
-  },
-  {
-   "file": "world-aware.test.mjs",
-   "name": "veto: \"connect Start to End\" with no End offers to add it, and \"yes\" does",
-   "reason": "pins a route or a reader of the old patterns; the door reads by the declared capabilities only"
-  },
-  {
-   "file": "world-aware.test.mjs",
-   "name": "veto: \"delete the dragon\" says what the picture holds, changes nothing",
-   "reason": "needs the Documents editing acts (format, select, delete, move, dictate) declared with an executor"
-  },
-  {
    "file": "commonsense.test.mjs",
    "name": "a fish in the sky: done, and one friendly warning, never a refusal",
    "reason": "needs the planner's soft facts (deduceState: \"a fish is usually at water\") said as reply facts of a run through the binding [LIB]; the warning sentence was the board's glue"
-  },
-  {
-   "file": "ro-rp5.test.mjs",
-   "name": "drawing: move into the water, ask where when the place is missing, delete all the fish",
-   "reason": "needs \"all the fish\" (an irregular plural with \"all\") as every fish of the view in the reference step [LIB], and a place said by a kind made with the things (\"three fish in water\": the water made) [LIB]"
-  },
-  {
-   "file": "ro-rp5.test.mjs",
-   "name": "a translator that returns the Romanian text unchanged is retried through the rules translator",
-   "reason": "the retry works (\"Delete all the fish\" is read); needs \"all the fish\" (an irregular plural with \"all\") as every fish of the view in the reference step [LIB]"
-  },
-  {
-   "file": "ro-rp5.test.mjs",
-   "name": "RP5b: moving a thing into the water says \"în apă\" and adds the water when there is none",
-   "reason": "needs a move into a region said with its relation (\"into the water\": done.change with the relation) and the ground band as a thing of the view (the water added said by the diff) [LIB]"
-  },
-  {
-   "file": "completeness.test.mjs",
-   "name": "arbitration on typed worlds: \"put the boxes in a circle\" on the diagram tab is the diagram's (arrangement), not the avatar's; with PSYS2_COMPLETE=off the avatar still takes it",
-   "reason": "pins the old router with PSYS2_COMPLETE=off: the Diagram is a declared tab on the binding now, so the door reads the turn (and says it cannot take a layout for a place: needs \"put X in a circle\" read as arrange, questions.md Q46 [LIB])"
-  },
-  {
-   "file": "completeness.test.mjs",
-   "name": "completeness end to end: an incomplete destructive reading is not executed (hold), and a clarifying ask replaces a half-read one (ask)",
-   "reason": "avatar on the binding (slice A1): pins the old readers' hold / ask on the avatar tab (\"remove the boxes from the face\"); the door never executes a half-read turn and says what it did not read"
   },
   {
    "file": "pilot-avatar.test.mjs",
@@ -485,11 +200,6 @@
    "file": "pilot-avatar.test.mjs",
    "name": "matrix: the acts cover the phrases the chat lost: eyes closer together, bare eyeglasses, do you have glasses, add and remove eyeglasses",
    "reason": "avatar on the binding (slice A1): needs mirrored-pair moves (closer together), a bare kind as an act, yes / no questions of the state, and w.face words for the slots (Q96 LIB 2, 6; KNOW)"
-  },
-  {
-   "file": "rd10-names-capability.test.mjs",
-   "name": "RD1b: \"red house big\" draws a big red house (no \"redo\")",
-   "reason": "avatar on the binding (slice A1): no fallback on a declared tab: a drawing request from the avatar tab is said honestly; needs routing to the world a turn names before the door"
   }
  ]
 }

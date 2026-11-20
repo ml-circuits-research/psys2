@@ -1,5 +1,7 @@
 # 13 - Discussions and state management (ASTRA)
 
+**Retired 2026-11-20 (JS reduction, Goal 2).** ASTRA discussions (`src/astra/`) are removed from the page session; nothing in the new-engine turn read them. This spec is kept as history.
+
 Decision: ADR-008. Library: `src/astra/` (browser-safe, no `node:*`, no model). Integration: `src/dialog/index.mjs` (`session.astra`) and one hook in `src/dialog/discourse.mjs`. Task list: worker-tasks.md section 2 "ASTRA" (A1-A11, "per tab and per world").
 
 Goal: one core library owns discussions, world instances, the information state, expectations, focus, history and (later) plans, so that no world re-implements dialogue or state handling. SOP Lang stays the language of facts, events and plans (they are wires); ASTRA stores them, it does not parse them.

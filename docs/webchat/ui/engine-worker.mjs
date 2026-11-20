@@ -176,7 +176,7 @@ async function init(m) {
   // LAZY LOADING: the small routing index (worlds/index.json) now; a world's files when the world is needed. A start loads the always-loaded worlds (the shell and what reading needs), the open
   // tab's world, and the worlds a restored session has state or memory in. Everything else loads when a tab opens, when the words of a message say so, or when the user names it.
   const fetchJson = async (rel, hash) => { const r = await fetch(abs(rel) + (hash ? `?v=${hash}` : ''), { cache: 'default' }); if (!r.ok) throw new Error(`${rel}: HTTP ${r.status}`); return r.json(); };
-  worldLoader = wlMod.createWorldLoader({ indexHash: ver['worlds/index.json'], fetchJson, bag: () => new Set() });
+  worldLoader = wlMod.createWorldLoader({ indexHash: ver['worlds/index.json'], fetchJson });
   await worldLoader.init();
   mark('world index');
   const browserState = await imp('lib/dialog/browser-state-input.mjs');

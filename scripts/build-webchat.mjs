@@ -263,19 +263,17 @@ async function writeTabMeta({ outDir, tabFiles }) {
 }
 
 /** The vendor assets a world's tab needs (loaded with the world, never at boot): `vendor/<dir>/` directories of docs/webchat/vendor. */
-const LABELS = { 'kids.arith': 'arithmetic', 'kids.shop': 'shopping', 'calc.arith': 'arithmetic', 'calc.story': 'word problems', 'plan.list': 'lists', 'kids.tasks': 'tasks', 'time.calendar': 'time', 'docs.editor': 'documents', 'ui.avatar': 'avatar', talk: 'talk', 'diagram.sketch': 'diagram', 'data.charts': 'charts', 'media.music': 'music', 'games.chess': 'chess', 'geo.map': 'map', 'art.draw': 'drawing', space: 'space' };
+const LABELS = { 'time.calendar': 'time', 'docs.editor': 'documents', 'ui.avatar': 'avatar', 'diagram.sketch': 'diagram', 'art.draw': 'drawing' };
 export const VENDOR_OF = { 'geo.map': ['map'], 'docs.editor': ['editor'], 'data.charts': ['charts'], 'art.draw': ['draw'], 'media.music': ['music'] };
 
 /**
- * LAZY LOADING (specs/06 "Lazy loading"): `worlds/index.json` is the small routing index, not the worlds: for every world its bundle path, imports, tab and vendor assets, the worlds a start always loads, and
- * where the word index is. The word index is written in BOTH designs (A: `worlds/words.bloom.json`, a Bloom filter per world; B: `worlds/words/<xx>.json`, exact buckets by the first two letters, with
- * `worlds/words/index.json`); the runtime uses the one `words.design` says. Built from the engine's own view of the worlds (src/worlds/word-index.mjs, scripts/lib/world-index-build.mjs).
+ * `worlds/index.json` is the small index of the application's worlds: for every world its bundle path and hash, imports, tab and vendor assets, and the worlds a start loads
+ * (all of them: the composition's `always`). The word index of the retired lazy loading by message words is not written.
  */
 async function writeWorldIndex({ root, outDir, loader, bundle, ids, log }) {
-  const [{ createEngine }, { buildWorldIndex }] = await Promise.all([import('../src/dialog/index.mjs'), import('./lib/world-index-build.mjs')]);
+  const { createEngine } = await import('../src/dialog/index.mjs');
   const engine = await createEngine({ loader });
   const ALWAYS=loader.always??[];
-  const ix = buildWorldIndex(engine.set, { mode: 'vocab' });
   const worlds = {};
   for (const id of ids) {
     const w = engine.set.get(id);
@@ -283,17 +281,8 @@ async function writeWorldIndex({ root, outDir, loader, bundle, ids, log }) {
     const hash = sha(await readFile(path.join(outDir, 'worlds', id, 'bundle.json'))).slice(0, 10);   // the same string assetHashes gives the file: the worker fetches it as `bundle.json?v=<hash>`
     worlds[id] = { ...loader.composition?.profiles?.[id], bundle: `worlds/${id}/bundle.json`, hash, label: LABELS[id] ?? id.split('.').at(-1), bytes, imports: w?.imports ?? [], deps: engine.set.available(id), reads: w?.reads ?? [], compose: w?.compose ?? [], tab: w?.tab ? { id: w.tab.id, title: w.tab.title, aliases: w.tab.aliases } : null, title: w?.title ?? id, summary: w?.summaryPhrase ?? null, vendor: (VENDOR_OF[id] ?? []).map((d) => `vendor/${d}/`) };
   }
-  // the actions of the worlds that are not always loaded -> their world: a turn that asked for one nobody loaded (talk asks `draw.add`) loads the world and is read again
-  const actions = {};
-  for (const w of engine.set.list()) if (!ALWAYS.includes(w.id)) for (const o of w.operations ?? []) if (o.semantics === 'action' && o.action) actions[o.action] = w.id;
-  const T = 4;   // a word of more than T worlds never loads one by itself (scripts/eval-word-index.mjs)
-  await mkdir(path.join(outDir, 'worlds/words'), { recursive: true });
-  const buckets = {};
-  for (const [bk, entries] of Object.entries(ix.buckets)) { const txt = JSON.stringify(entries); await writeFile(path.join(outDir, 'worlds/words', `${bk}.json`), txt); buckets[bk] = sha(Buffer.from(txt)).slice(0, 10); }   // bucket -> hash: the worker fetches `words/<bk>.json?v=<hash>`
-  const bloomTxt = JSON.stringify(ix.bloom);
-  await writeFile(path.join(outDir, 'worlds/words.bloom.json'), bloomTxt);
-  await writeFile(path.join(outDir, 'worlds/index.json'), JSON.stringify({ version: 2, retiredAreas: loader.retiredAreas ?? [], always: ALWAYS, T, actions, words: { design: 'B', ids: ix.ids, buckets, bloom: { path: 'worlds/words.bloom.json', hash: sha(Buffer.from(bloomTxt)).slice(0, 10) } }, worlds }) + '\n');
-  log?.(`webchat: world index ${ids.length} worlds, ${ix.inv.size} words, ${Object.keys(ix.buckets).length} buckets`);
+  await writeFile(path.join(outDir, 'worlds/index.json'), JSON.stringify({ version: 3, retiredAreas: loader.retiredAreas ?? [], always: ALWAYS, worlds }) + '\n');
+  log?.(`webchat: world index ${ids.length} worlds`);
 }
 
 export async function buildWebchat({ root = REPO, outDir = path.join(root, 'docs/webchat'), models = null, metaOnly = false, log = () => {} } = {}) {

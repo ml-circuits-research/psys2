@@ -11,7 +11,7 @@
 //    the key its normalizations).
 import {str} from '../vendor/sopworld/sopworld.mjs';
 import {executionPolicyWorld} from './execution-policy.mjs';
-import {parseNumberRun} from '../formalizer/rules/numbers.mjs';
+import {parseNumberRun} from '../knowledge/number-run.mjs';
 import {numberInfo} from '../knowledge/values.mjs';
 import {budget} from './budget.mjs';
 

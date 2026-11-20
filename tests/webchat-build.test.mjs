@@ -64,8 +64,8 @@ test('webchat build produces a bundle the browser loader can run', async () => {
     }
     assert.deepEqual(new Set(index.always),new Set(Object.keys(index.worlds)),'all seven tiny contracts initialize before the architecture is inspected');
     for(const [id,world]of Object.entries(bundle.worlds)){assert.ok(!world.files['patterns.sop']);assert.ok(!world.files['lexicon.sop']);assert.ok(!world.files['kb.sop']);assert.doesNotMatch(world.files['world.sop'],/imports=world\.kids\./);}
-    assert.equal(Object.values(index.actions).some((id) => ['geo.map', 'media.music'].includes(id)), false);
-    assert.equal(index.words.ids.some((id) => ['geo.map', 'media.music'].includes(id)), false);
+    assert.equal(index.words, undefined, 'no word index of the retired lazy loading by message words');
+    assert.equal(Object.keys(index.worlds).some((id) => ['geo.map', 'media.music'].includes(id)), false);
     const engine = await createEngine({ loader: createBundleLoader(bundle), options: { applicationAreas: index.retiredAreas } });
     const unavailable = await engine.createSession().send('surprise me', { view: 'music' });
     assert.equal(unavailable.trace.reason, 'reading', 'unread input remains explicit even in an unsupported area');

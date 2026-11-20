@@ -1,5 +1,7 @@
 # 15 — The reasoner host layer (sopworld), stage 1
 
+**Retired 2026-11-20 (JS reduction, Goal 2).** The matrix/ops reasoner host (`src/reasoner/`) is removed; the application worlds run on their SOP areas. This spec is kept as history.
+
 Implementation: `src/reasoner/`, the vendored library `src/vendor/sopworld/` (0.9.0, see `src/vendor/LICENSES.md`), per-world `matrix.sop` + `fns.mjs`. Browser-safe. Tasks: SOPWORLD-1 and SOPWORLD-1b (worker-tasks). The numbers are in `worker-log.md`.
 
 ## Purpose

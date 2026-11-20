@@ -12,14 +12,6 @@ import { createEngine } from '../dialog/index.mjs';
 export const VERSION = '0.1.0';
 const CORS = { 'access-control-allow-origin': '*', 'access-control-allow-headers': 'content-type', 'access-control-allow-methods': 'GET,POST,OPTIONS' };
 
-async function loadTranslator() {
-  try {
-    const mod = await import('../translate/index.mjs');
-    const t = typeof mod.createTranslator === 'function' ? mod.createTranslator() : (mod.default ?? mod);
-    return typeof t.translate === 'function' && typeof t.detectLanguage === 'function' ? t : null;
-  } catch { return null; }
-}
-
 /**
  * Create (but do not start) the HTTP server.
  * @returns {{ server: http.Server, sessions: Map, close(): void }}
@@ -83,7 +75,7 @@ export function createServer({ engine, idleMs = 30 * 60 * 1000 } = {}) {
           if (typeof body.text !== 'string') return send(res, 400, { error: 'body must be { "text": string }' });
           return send(res, 200, await entry.session.send(body.text, body.mode === 'voice' ? { mode: 'voice' } : undefined));
         }
-        if (req.method === 'GET' && c === 'memory') return send(res, 200, entry.session.memory(), 'text/plain');
+        if (req.method === 'GET' && c === 'memory') return send(res, 200, entry.session.memoryJSON());
       }
       return send(res, 404, { error: 'not found' });
     } catch (e) {
@@ -103,7 +95,7 @@ async function main() {
   const arg = (name) => { const i = argv.indexOf(name); return i >= 0 ? argv[i + 1] : undefined; };
   const port = Number(arg('--port') ?? process.env.PORT ?? 8080);
   const root = arg('--root');
-  const engine = await createEngine({ loader: createFsLoader({ roots: root ? [root, DEFAULT_ROOT] : [DEFAULT_ROOT] }), translator: await loadTranslator() });
+  const engine = await createEngine({ loader: createFsLoader({ roots: root ? [root, DEFAULT_ROOT] : [DEFAULT_ROOT] }), translator: null });   // English only behind the boundary; the browser translates at the interface
   const { server } = createServer({ engine });
   server.listen(port, () => console.log(`PSys2 server on http://localhost:${port} (${engine.worlds().length} worlds)`));
 }

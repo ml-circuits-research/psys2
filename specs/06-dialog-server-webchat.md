@@ -276,6 +276,8 @@ The wording is fixed in one place per surface and checked by `scripts/test-webch
 - Settings > About and Developer show "This page: <commit> · <time>"; the first line of the debug panel shows "Build <commit> · <time>". The user can always tell which build runs.
 
 ## Lazy loading (LAZY-LOAD, owner 2026-11-14: "load the minimum at boot, the rest when it is needed")
+
+**2026-11-20:** the composition loads all its worlds at start (`always`); the word index (`worlds/words/`, `words.bloom.json`), `plan(text)` and the action index of lazy loading by message words are removed with the rule reader they served. Loading per tab module and vendor assets is unchanged.
 **What a start loads, and why each piece is needed** (nothing else blocks the first input):
 - the page shell and its 30 modules (the chat, tabs list, settings, progress) and `ui/tabs/meta.json` (id, label, world, order and effect names of the tabs: no tab module is loaded to list the tabs);
 - the engine worker and the reading engine (`lib/dialog`, `lib/formalizer`, `lib/reasoner`, the vendored sopworld library): reading cannot start without them;

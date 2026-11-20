@@ -1,20 +1,14 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // LAZY LOADING of worlds (specs/06 "Lazy loading"), run by the engine worker. Imports nothing relative (a worker has no import map).
 //
-//   const wl = createWorldLoader({ indexHash, fetchJson, bag, on })
-//   await wl.init()                    reads worlds/index.json (the small routing index: cards, imports, vendor assets, hashes of the bundles and of the word buckets)
+//   const wl = createWorldLoader({ indexHash, fetchJson, on })
+//   await wl.init()                    reads worlds/index.json (the small routing index: imports, vendor assets, hashes of the bundles)
 //   wl.startIds({ tabWorld, state })   what a start loads: the always-loaded worlds, the open tab's world, and the worlds a restored session has state or memory in
-//   await wl.plan(text)                the worlds a message needs by its words: exact index cut by the first two letters (design B), a bucket is fetched once and kept
 //   await wl.bundles(ids)              the files of the worlds (and what they import), fetched in parallel, each once; returns the new ids
-//
-// The index decides what to LOAD, never how to READ: the engine reads with whatever worlds are loaded; `plan` only says which ones to add first. A reading that is not complete (nothing understood,
-// an unsupported request, a spelling correction, words left out) is read again with every world (the worker does that; scripts/eval-word-index.mjs measures it).
-export function createWorldLoader({ indexHash, fetchJson, bag, on = () => {} }) {
+export function createWorldLoader({ indexHash, fetchJson, on = () => {} }) {
   let index = null;
   const store = new Map();       // world id -> bundle entry { files, opsUrl, fnsUrl }
-  const buckets = new Map();     // bucket -> Promise<{ word: [world index] }>
-  const stats = { bundleFetches: 0, bundleBytes: 0, bucketFetches: 0, bucketBytes: 0, plans: 0 };
-  const T = () => index?.T ?? 2;
+  const stats = { bundleFetches: 0, bundleBytes: 0 };
 
   const need = () => { if (!index) throw new Error('world index not loaded'); return index; };
   const closure = (ids) => {   // the worlds and what they import, and the worlds they read the facts of (a queue, no recursion)
@@ -28,14 +22,6 @@ export function createWorldLoader({ indexHash, fetchJson, bag, on = () => {} }) 
     }
     return out;
   };
-  const bucketOf = (w) => { const c = String(w).replace(/[^a-z0-9]/g, ''); return (c.slice(0, 2) || '_').padEnd(2, '_'); };
-  const loadBucket = (bk) => {
-    const h = need().words.buckets[bk];
-    if (!h) return Promise.resolve({});
-    if (!buckets.has(bk)) buckets.set(bk, fetchJson(`worlds/words/${bk}.json`, h).then((j) => { stats.bucketFetches++; return j ?? {}; }, () => ({})));
-    return buckets.get(bk);
-  };
-
   return {
     stats,
     get index() { return index; },
@@ -48,25 +34,6 @@ export function createWorldLoader({ indexHash, fetchJson, bag, on = () => {} }) 
       if (!index?.worlds) throw new Error('worlds/index.json: not a world index');
       return index;
     },
-    /** A message's words are looked up in the buckets of their first two letters (fetched on demand). A world is needed when the message has a word that at most T worlds have. */
-    // `have` (optional, a Set of the loaded world ids): a word a loaded world already knows loads no other world first ("draw a house" with the drawing open does not load the map and the
-    // diagram, which also know "house"); a reading that is not complete still loads the rest (the caller's fallback), so nothing is lost, only fetched later when needed
-    async plan(text, have = null) {
-      stats.plans++;
-      const words = [...bag(text)].filter((w) => w.length >= 2 && !/^\d+$/.test(w));
-      const wanted = [...new Set(words.map(bucketOf))];
-      const loaded = await Promise.all(wanted.map(loadBucket));
-      const by = new Map(wanted.map((b, i) => [b, loaded[i]]));
-      const ids = need().words.ids, out = new Set();
-      for (const w of words) {
-        const b = by.get(bucketOf(w)), hit = b?.[w], strong = b?.[`!${w}`];
-        if (strong) for (const i of strong) out.add(ids[i]);   // the name of a world's tab: it loads the world
-        if (hit && hit.length <= T() && !(have && hit.some((i) => have.has(ids[i])))) for (const i of hit) out.add(ids[i]);
-      }
-      return { ids: out, buckets: wanted.length };
-    },
-    /** The worlds that have the actions a turn asked for and nobody had loaded (`DialogSession.takeMissed`). */
-    ofActions: (names) => (names ?? []).includes('*worlds') ? Object.keys(need().worlds) : [...new Set((names ?? []).map((a) => need().actions?.[a]).filter(Boolean))],   // '*worlds': the turn listed the worlds (what can you do?), the answer depends on every one
     /** The worlds a start loads. `state`: world id -> state (a restart restores them: a world that has state or memory is loaded again). */
     startIds({ tabWorld = null, state = null, recent = [] } = {}) {
       const ids = new Set(need().always);

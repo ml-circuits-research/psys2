@@ -1,5 +1,7 @@
 # 04 — Main interpreter, operations and rendering (rules profile)
 
+**Retired 2026-11-20 (JS reduction, Goal 2).** The page session no longer builds the legacy interpreter (`src/interpreter/`, removed): a `SessionState` in `src/dialog/index.mjs` holds the world states the turn route and the native controls use. This spec is kept as history.
+
 Implementation: `src/interpreter/` (browser-safe). This is the JavaScript execution strategy of vision §8, restricted to what the first worlds need. Lean and solver backends plug in later behind the same envelope.
 
 ## Working memory
