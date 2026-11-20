@@ -94,6 +94,6 @@ test('records say what they are and which World shows them, so the map needs no 
  assert.equal(node('knowledge-file:k.sample/data.sop').partOf,'knowledge-world:k.sample','a read source file is part of its catalog World');
  assert.equal(node('knowledge-file:index.json').partOf,'knowledge:catalog','the catalog index is part of the catalog');
  assert.equal(node('knowledge-file:k.sample/schema.sop').partOf,'knowledge-world:k.sample','an unread declared schema is part of its catalog World');
- assert.equal(node('instance:novel').displayName,'Novel instance World');assert.equal(node('interpreter:novel').displayName,'Novel tool host');assert.equal(node('world:novel').displayName,'Novel tool package');
+ assert.equal(node('instance:novel').displayName,'Novel instance World');assert.equal(node('interpreter:novel').displayName,'Novel tool host');assert.equal(node('world:novel').displayName,'Novel SOP files');
  assert.match(node('provider:z3').displayName,/^Z3 solver \(/);
 });

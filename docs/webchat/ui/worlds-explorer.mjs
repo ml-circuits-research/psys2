@@ -5,30 +5,54 @@ import {h} from './util.mjs';
 const NS='http://www.w3.org/2000/svg';
 // Role names of the actual record kinds (detail subtitles and accessible names).
 const KINDS={
- world:'Tool package',schema:'Schema / declarations',knowledge:'Knowledge',instance:'World instance',interpreter:'Interpreter',
+ world:'Tab SOP files (declarations)',schema:'Schema / declarations',knowledge:'Knowledge',instance:'World instance',interpreter:'Interpreter',
  component:'Implementation component',runtime:'Runtime record',structure:'Runtime structure',storage:'Storage adapter',
  adapter:'Adapter',method:'Method',episode:'Episode',project:'Project'
 };
-// Map encoding: shape = role, colour = implementation, hollow = catalog entry not read in this session.
-const ROLES={
- tool:{label:'Interpreter or tool',meaning:'Reads, checks or runs commands, or is an application package that declares them.',shape:'hexagon'},
- instance:{label:'Instance World',meaning:'Current facts of one tab or of the session, held as an SOP World.',shape:'circle'},
- runtime:{label:'Session record',meaning:'Session state kept as JavaScript data, not as an SOP World.',shape:'triangle'},
- knowledge:{label:'Knowledge World',meaning:'Reusable knowledge or an operational policy, linked by reference.',shape:'diamond'},
- schema:{label:'Schema',meaning:'Types, slots and rules that validate Worlds.',shape:'square'},
+// Map encoding: COLOUR is the primary cue. Each kind of record has its own clearly different colour; related kinds share a
+// family of shades (JavaScript oranges, trained reader purples, SOP rules greens, live state blues, knowledge teals, schema
+// greys). The shape is a secondary cue for the same kind. Hollow = not used in this session.
+const FAMILIES={
+ code:'Code that runs: JavaScript and the trained reader',rules:'SOP rules and declarations',state:'Live state',knowledge:'Knowledge',schema:'Schemas',
 };
-const ROLE_ORDER=Object.keys(ROLES);
-const roleKindOf=node=>({instance:'instance',project:'instance',knowledge:'knowledge',schema:'schema',runtime:'runtime',structure:'runtime',episode:'runtime'})[node.kind]??'tool';
+const ENTRIES={
+ 'js-tool':{family:'code',label:'JavaScript tool or interpreter',color:'#f07f2e',shape:'hexagon',meaning:'JavaScript that reads, checks or runs commands: the turn coordinator, tool hosts, the SOP area interpreter and world host, the placement compiler, the loader.'},
+ 'js-component':{family:'code',label:'JavaScript component (audited)',color:'#f6b23f',shape:'hexagon',meaning:'A group of runtime JavaScript modules from the component registry, with its generality audit.'},
+ 'js-ui':{family:'code',label:'JavaScript UI helper',color:'#ffe08a',shape:'hexagon',meaning:'JavaScript of the page and the tabs: rendering, gestures, speech, storage.'},
+ 'js-session':{family:'code',label:'Session data kept as JavaScript',color:'#d9573b',shape:'triangle',meaning:'State that is still JavaScript data, not an SOP World: the shell state, session memory, journals, records of the page.'},
+ model:{family:'code',label:'Trained reader (SOP-BERT)',color:'#b48cff',shape:'hexagon',meaning:'The trained model that reads your words into proposed requests.'},
+ 'model-data':{family:'code',label:'Reader binding bundle',color:'#d6b8ff',shape:'diamond',meaning:'The data the reader uses to bind its words to kinds, properties and tool parameters, with its key coverage.'},
+ 'tab-declarations':{family:'rules',label:'Tab SOP files (what a tab declares)',color:'#9bdc4a',shape:'hexagon',meaning:'The SOP files one tab ships: its area rules, its native tool interface and its instance schema. Not the live state.'},
+ policy:{family:'rules',label:'Operational SOP policy',color:'#2fa84f',shape:'diamond',meaning:'SOP rules that decide: how requests are read, admitted, routed, created, placed and undone.'},
+ instance:{family:'state',label:'Live state (SOP instance World)',color:'#4a9dff',shape:'circle',meaning:'The current facts of one tab or of the session, held as an SOP World.'},
+ evidence:{family:'state',label:'Execution evidence (SOP)',color:'#9fcbff',shape:'circle',meaning:'SOP facts retained from one executed operation.'},
+ 'knowledge-world':{family:'knowledge',label:'Knowledge World (catalog)',color:'#19b5a5',shape:'diamond',meaning:'Reusable knowledge published in the shared catalog, read by reference.'},
+ 'knowledge-file':{family:'knowledge',label:'Knowledge source or catalog file',color:'#7fe3d8',shape:'diamond',meaning:'An exact file of the catalog: an SOP source or the catalog index (JSON).'},
+ schema:{family:'schema',label:'Schema',color:'#a3afbf',shape:'square',meaning:'Types, slots and constraints that validate Worlds.'},
+ 'tool-interface':{family:'schema',label:'Tool interface declaration',color:'#d5dbe3',shape:'square',meaning:'The operations and parameters of a tab\'s tools, used to validate commands. Not a complete state schema.'},
+};
+const ENTRY_ORDER=Object.keys(ENTRIES),FAMILY_ORDER=Object.keys(FAMILIES);
+const entryOf=node=>{
+ if(Object.hasOwn(ENTRIES,node.entry))return node.entry;
+ if(node.representation==='model')return 'model';
+ if(node.kind==='schema')return node.details?.role==='native-tool-interface'?'tool-interface':'schema';
+ if(['instance','project'].includes(node.kind))return 'instance';
+ if(node.kind==='episode')return 'evidence';
+ if(node.kind==='world')return 'tab-declarations';
+ if(node.kind==='knowledge'){if(/operational|policy/i.test(String(node.implementation??''))||/^(?:execution:|knowledge:reader-)/.test(node.id))return 'policy';return node.id.startsWith('knowledge-file:')||node.representation==='catalog'?'knowledge-file':'knowledge-world';}
+ if(node.representation==='catalog')return 'knowledge-file';
+ if(['runtime','structure','storage'].includes(node.kind))return 'js-session';
+ if(node.audit?.uiHelper)return 'js-ui';
+ if(node.layer==='code')return 'js-component';
+ return 'js-tool';
+};
+const familyOf=node=>ENTRIES[entryOf(node)].family;
 const displayName=node=>node.displayName??node.help?.title??node.label??node.id;
 const kindOf=node=>Object.hasOwn(KINDS,node.kind)?node.kind:'component';
 const hasTools=node=>Array.isArray(node.tools)?node.tools.length>0:node.tools&&typeof node.tools==='object'?Object.keys(node.tools).length>0:node.tools!==undefined&&node.tools!==null;
 const isSopRecord=node=>node.representation==='sop';
 const representationOf=node=>node.representation??'javascript';
-const REPRESENTATIONS={
- javascript:['JavaScript','#efa66e'],sop:['SOP Lang','#65d7b4'],
- model:['Trained model','#72a8ff'],catalog:['Catalog data (JSON)','#b2a7d9'],
-};
-const representationMeta=node=>REPRESENTATIONS[representationOf(node)]??REPRESENTATIONS.javascript;
+const entryMeta=node=>ENTRIES[entryOf(node)];
 const roleOf=node=>node.role??KINDS[kindOf(node)];
 const USAGE={available:['A','Catalog only','Catalog entry; runtime use has not been recorded.'], 'inspection-only':['I','Inspected only','Read for inspection only; this does not demonstrate runtime reasoning.'], 'runtime-read':['R','Source read','The runtime read this source. Access alone does not prove reasoning participation.']};
 let explorerSequence=0;
@@ -36,25 +60,25 @@ const textOf=value=>value===null?'null':value===undefined?'undefined':typeof val
 const valueType=value=>value===null?'null':Array.isArray(value)?'array':typeof value;
 const entriesOf=value=>value!==null&&typeof value==='object'?Object.entries(value):[];
 function svg(tag,attrs={},text){const node=document.createElementNS(NS,tag);for(const [key,value] of Object.entries(attrs))node.setAttribute(key,String(value));if(attrs['font-size'])node.style.fontSize=`calc(${attrs['font-size']}px * var(--worlds-font-scale,1))`;if(text!==undefined)node.textContent=text;return node;}
-const SHAPES={hexagon:'0,-8 7,-4 7,4 0,8 -7,4 -7,-4',diamond:'0,-8.5 8.5,0 0,8.5 -8.5,0',triangle:'0,-8 8,6.5 -8,6.5'};
+const SHAPES={hexagon:'0,-9 8,-4.5 8,4.5 0,9 -8,4.5 -8,-4.5',diamond:'0,-9.5 9.5,0 0,9.5 -9.5,0',triangle:'0,-9 9,7.5 -9,7.5'};
 function shapeElement(shape,attrs){
- if(shape==='circle')return svg('circle',{r:7,...attrs});
- if(shape==='square')return svg('rect',{x:-6.5,y:-6.5,width:13,height:13,rx:2,...attrs});
+ if(shape==='circle')return svg('circle',{r:8,...attrs});
+ if(shape==='square')return svg('rect',{x:-7.5,y:-7.5,width:15,height:15,rx:2,...attrs});
  return svg('polygon',{points:SHAPES[shape],...attrs});
 }
 // One renderer for map nodes and legend samples: the legend shows exactly the glyphs on the map.
-function glyphKey(node,usage){return [roleKindOf(node),representationOf(node),usage==='available'?'hollow':'filled'].join('|');}
+function glyphKey(node,usage){return [entryOf(node),usage==='available'?'hollow':'filled'].join('|');}
 function worldGlyph(node,usage){
- const role=roleKindOf(node),[,color]=representationMeta(node),hollow=usage==='available';
- const glyph=svg('g',{class:'p2-worlds-glyph','data-glyph-role':role,'data-representation':representationOf(node),'data-fill':hollow?'hollow':'filled',style:'--world-color:'+color});
- glyph.append(shapeElement(ROLES[role].shape,{class:'p2-worlds-shape',fill:hollow?'none':color,'fill-opacity':hollow?1:.3,stroke:color,'stroke-width':1.6}));
+ const entry=entryOf(node),{color,shape}=ENTRIES[entry],hollow=usage==='available';
+ const glyph=svg('g',{class:'p2-worlds-glyph','data-glyph-entry':entry,'data-glyph-family':ENTRIES[entry].family,'data-representation':representationOf(node),'data-fill':hollow?'hollow':'filled',style:'--world-color:'+color});
+ glyph.append(shapeElement(shape,{class:'p2-worlds-shape',fill:hollow?'none':color,'fill-opacity':hollow?1:.85,stroke:color,'stroke-width':1.8}));
  return glyph;
 }
 // Audit marks of a JavaScript component: D (domain logic in JS) or G (generic), and a dashed ring when it has no activity hook.
 const BADGES={'domain-logic':['D','#ff8a7a','Domain logic in JavaScript: it decides with words, kinds, areas, thresholds, orderings or fallbacks that belong in SOP rules or knowledge.'],generic:['G','#8fd8ae','Generic JavaScript: parsing, transport, rendering primitives, solver plumbing or storage, with no domain decision.']};
 function auditMarks(node){
  if(!node.audit)return [];const [letter,color]=BADGES[node.audit.badge]??BADGES.generic,marks=[];
- if(!node.audit.activityHook)marks.push(svg('circle',{r:10.5,class:'p2-worlds-silent-ring','data-silent-ring':''}));
+ if(!node.audit.activityHook)marks.push(svg('circle',{r:12,class:'p2-worlds-silent-ring','data-silent-ring':''}));
  const badge=svg('g',{class:'p2-worlds-badge',transform:'translate(7,-8)','data-badge':node.audit.badge});badge.append(svg('circle',{r:4.6,fill:color}),svg('text',{x:0,y:2.4,'text-anchor':'middle','font-size':6.5},letter));marks.push(badge);
  return marks;
 }
@@ -79,7 +103,7 @@ function styles(){
 .p2-worlds-playback-bar[hidden]{display:none}.p2-worlds-events{flex:1;min-height:0;max-height:none;border-top:0}.p2-worlds-map-shell{flex:1;min-height:0;min-width:0;display:flex;overflow:hidden}.p2-worlds-legend{flex:0 0 126px;width:126px;max-height:none;overflow:auto;padding:12px;border-right:1px solid #98acc02b}.p2-worlds-legend.is-open{position:absolute;inset:8px auto 8px 8px;z-index:4;width:min(320px,calc(100% - 16px));max-height:calc(100% - 16px);border:1px solid #98acc044;border-radius:8px;background:#182231f5;box-shadow:0 10px 40px #0009}.p2-worlds-legend summary{display:flex;flex-direction:column;align-items:flex-start;gap:4px;cursor:pointer;font-size:calc(15px * var(--worlds-font-scale,1))}.p2-worlds-legend summary:before{content:'▸';font-size:14px}.p2-worlds-legend details[open]>summary:before{content:'▾'}.p2-worlds-legend-grid{display:flex;flex-direction:column;gap:2px;margin:10px 0}.p2-worlds-legend-item{display:grid;grid-template-columns:26px minmax(0,1fr);gap:8px;padding:7px 0;border:0;border-bottom:1px solid #91a9c62b;border-radius:0}.p2-worlds-legend-item strong{font-size:calc(13px * var(--worlds-font-scale,1))}.p2-worlds-legend-item p,.p2-worlds-legend-note{font-size:calc(12px * var(--worlds-font-scale,1));line-height:1.45;margin:2px 0 0}.p2-worlds-playback-bar{display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:9px 16px;border-bottom:1px solid #98acc02b;flex:0 0 auto}.p2-worlds-playback-bar button{font-size:calc(12px * var(--worlds-font-scale,1));padding:5px 8px}.p2-worlds-playback-bar[hidden]{display:none}.p2-worlds-events{flex:1;min-height:0;border:0;overflow:hidden}.p2-worlds-events header{padding:14px 20px;flex:0 0 auto}.p2-worlds-events h3{font-size:calc(19px * var(--worlds-font-scale,1));margin:0}.p2-worlds-events .p2-worlds-event{font-size:calc(14px * var(--worlds-font-scale,1))!important;padding:9px 8px!important}.p2-worlds-events time{font-size:calc(12px * var(--worlds-font-scale,1))}.p2-worlds-detail-body{font-size:calc(15px * var(--worlds-font-scale,1));line-height:1.65}.p2-worlds-detail-body p{font-size:calc(16px * var(--worlds-font-scale,1))}.p2-worlds-detail-body h3{font-size:calc(19px * var(--worlds-font-scale,1));margin:12px 0 16px}.p2-worlds-detail-body dl,.p2-worlds-property-table{font-size:calc(15px * var(--worlds-font-scale,1))}.p2-worlds-detail-body pre{font-size:calc(14px * var(--worlds-font-scale,1))}.p2-worlds-dialog button,.p2-worlds-detail-tabs button,.p2-worlds-detail-breadcrumbs button{font-size:calc(14px * var(--worlds-font-scale,1))}.p2-worlds-detail-breadcrumbs{font-size:calc(14px * var(--worlds-font-scale,1));padding:9px 16px}.p2-worlds-detail-breadcrumbs strong{font-size:inherit}.p2-worlds-help-card p,.p2-worlds-detail-summary{font-size:calc(14px * var(--worlds-font-scale,1))!important}.p2-worlds-toolbar button,.p2-worlds-toolbar input{font-size:calc(14px * var(--worlds-font-scale,1))}
 .p2-worlds-map-shell{position:relative}.p2-worlds-legend:not(.is-open){position:absolute;z-index:4;top:8px;left:8px;width:auto;max-width:calc(100% - 16px);padding:7px 10px;border:1px solid #98acc044;border-radius:8px;background:#182231ed;max-height:48px;overflow:hidden}.p2-worlds-legend:not(.is-open) summary{flex-direction:row;align-items:center;gap:7px}.p2-worlds-legend:not(.is-open) summary span{font-size:12px;color:#a4b5ca}.p2-worlds-legend.is-open{min-width:0}.p2-worlds-toolbar,.p2-worlds-playback-bar{flex-shrink:0}.p2-worlds-search{min-width:0}.p2-worlds-help-grid,.p2-worlds-tool-list{grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr))}
 .p2-worlds-source-files{display:flex;flex-wrap:wrap;gap:7px 16px;max-height:160px;overflow:auto;line-height:1.5;margin:14px 0}.p2-worlds-source-files a[aria-current=page]{color:#e3f0ff;font-weight:600}.p2-worlds-selected-source{font-size:14px;overflow-wrap:anywhere}.p2-worlds-usage{font-size:14px!important;color:#b5c8dd}.p2-worlds a.p2-worlds-link{color:#a8cdf4;text-decoration:underline;text-underline-offset:3px;border:0!important;background:none!important;border-radius:0!important;padding:0!important;cursor:pointer;overflow-wrap:anywhere}.p2-worlds a.p2-worlds-link:hover{color:#e2efff}.p2-worlds-detail-breadcrumbs a{font-size:inherit}.p2-worlds-detail-body .p2-worlds-why{font-size:calc(17px * var(--worlds-font-scale,1));max-width:940px;margin:0 0 14px}.p2-worlds-detail-body .p2-worlds-help-card,.p2-worlds-tool-card{border:0;border-bottom:1px solid #98acc02b;border-radius:0;padding:12px 0;margin:0}.p2-worlds-detail-body .p2-worlds-note{border:0;background:none;padding:0}.p2-worlds-detail-tabs button{border:0!important;border-radius:0!important;background:none!important}.p2-worlds-detail-tabs button[aria-selected=true]{box-shadow:inset 0 -2px #81baff}
-.p2-worlds-badge{pointer-events:none}.p2-worlds-badge text{font-weight:700;fill:#141b25}.p2-worlds-silent-ring{fill:none;stroke:#ffd27a;stroke-width:1;stroke-dasharray:2 2;opacity:.85}.p2-worlds-audit-table{width:100%;border-collapse:collapse;font-size:12px;margin:8px 0 14px}.p2-worlds-audit-table th,.p2-worlds-audit-table td{border-bottom:1px solid #96abc02a;padding:5px 7px;text-align:left;vertical-align:top;overflow-wrap:anywhere;white-space:pre-line}.p2-worlds-audit-table td.is-domain{color:#ffb2a6;font-weight:600}.p2-worlds-audit-table td.is-generic{color:#9fe0b8}.p2-worlds-audit-secret{color:#ffd27a}.p2-worlds-legend-badge{display:flex;align-items:center;gap:8px;margin:4px 0}.p2-worlds-legend-badge svg{width:20px;height:20px;flex:0 0 20px}
+.p2-worlds-badge{pointer-events:none}.p2-worlds-badge text{font-weight:700;fill:#141b25}.p2-worlds-silent-ring{fill:none;stroke:#e8eef6;stroke-width:1;stroke-dasharray:2 2;opacity:.85}.p2-worlds-audit-table{width:100%;border-collapse:collapse;font-size:12px;margin:8px 0 14px}.p2-worlds-audit-table th,.p2-worlds-audit-table td{border-bottom:1px solid #96abc02a;padding:5px 7px;text-align:left;vertical-align:top;overflow-wrap:anywhere;white-space:pre-line}.p2-worlds-audit-table td.is-domain{color:#ffb2a6;font-weight:600}.p2-worlds-audit-table td.is-generic{color:#9fe0b8}.p2-worlds-audit-secret{color:#ffd27a}.p2-worlds-legend-badge{display:flex;align-items:center;gap:8px;margin:4px 0}.p2-worlds-legend-badge svg{width:20px;height:20px;flex:0 0 20px}
 @media(max-width:700px){.p2-worlds{min-height:0}.p2-worlds-toolbar h2{display:none}.p2-worlds-toolbar input{flex-basis:100%;max-width:none;width:100%}.p2-worlds-toolbar button{padding:7px 9px}.p2-worlds-toolbar{gap:5px}.p2-worlds-status{font-size:11px}.p2-worlds-playback-bar{gap:5px;padding:7px 10px}.p2-worlds-playback-bar .p2-worlds-live{font-size:12px}.p2-worlds-playback-status{flex-basis:100%;overflow-wrap:anywhere}.p2-worlds-playback-bar button{padding:5px 7px;font-size:12px}.p2-worlds-graph-pane{min-height:180px}.p2-worlds-legend.is-open{position:absolute;inset:8px auto 8px 8px;z-index:4;width:min(285px,calc(100% - 16px));max-height:calc(100% - 16px);border:1px solid #98acc044;border-radius:8px;background:#182231f5}.p2-worlds-detail-breadcrumbs{padding:7px 10px;max-height:90px}.p2-worlds-detail-body{padding:12px}.p2-worlds-detail-body dl{grid-template-columns:minmax(80px,30%) minmax(0,1fr);gap:8px}.p2-worlds-connection{grid-template-columns:20px minmax(65px,30%) minmax(0,1fr);gap:6px}.p2-worlds-events .p2-worlds-event{flex-wrap:wrap;gap:5px 9px}.p2-worlds-event-label{flex-basis:100%;text-align:left}.p2-worlds-event-world{white-space:normal;overflow-wrap:anywhere}.p2-worlds-log-tools{flex-wrap:wrap;padding:4px 10px}.p2-worlds-log-tools input{flex-basis:100%}}
 @media(max-width:700px){.p2-worlds-toolbar{padding:8px 10px;gap:6px;flex-wrap:nowrap;overflow-x:auto;flex:0 0 auto}.p2-worlds-toolbar>*{flex-shrink:0}.p2-worlds-toolbar .p2-worlds-search{flex:0 0 140px;min-width:140px}.p2-worlds-playback-bar{flex-wrap:nowrap;overflow-x:auto;padding:7px 10px}.p2-worlds-playback-bar>*{flex-shrink:0}.p2-worlds-playback-status{max-width:190px;white-space:normal}.p2-worlds-toolbar h2{font-size:15px}.p2-worlds-status{width:auto;margin-left:0;white-space:nowrap}.p2-worlds-dialog{inset:auto;width:100%;height:100%;border-radius:0}.p2-worlds-dialog-header{padding:12px;gap:6px}.p2-worlds-dialog-header h2{font-size:17px}.p2-worlds-detail-tabs{padding:8px}.p2-worlds-detail-body{padding:16px}.p2-worlds-property-table th:first-child{width:25%}.p2-worlds-property-table th:nth-child(2){width:18%}.p2-worlds-events{flex-basis:110px}}
 ` }));
@@ -99,7 +123,7 @@ export function createWorldsExplorer({load,subscribe,copy,loadSources}={}){
  const element=h('section',{id:'worlds-view-'+(++explorerSequence),class:'p2-worlds','aria-label':'Worlds architecture'}),status=h('span',{class:'p2-worlds-status',role:'status'}),search=h('input',{class:'p2-worlds-search',type:'search',placeholder:'Find a world, object or component…','aria-label':'Find a world or component'});
  const graph=svg('svg',{class:'p2-worlds-graph','aria-label':'Runtime architecture graph',role:'group'}),graphPane=h('div',{class:'p2-worlds-graph-pane'},graph),legend=h('aside',{class:'p2-worlds-legend','aria-label':'World kinds legend'}),eventList=h('div',{class:'p2-worlds-event-list',role:'log','aria-label':'Runtime activation events'}),eventCount=h('span',{class:'p2-worlds-event-count'});
  const detailBreadcrumbs=h('nav',{class:'p2-worlds-detail-breadcrumbs','aria-label':'Worlds location'});
- const toolbar=h('header',{class:'p2-worlds-toolbar'},h('h2',{text:'Worlds'}),search,button('Activity log',showActivityLog,{'aria-label':'Open activity log'}),button('Refresh',()=>void refresh()),button('−',()=>zoom(1.2),{'aria-label':'Zoom out'}),button('+',()=>zoom(1/1.2),{'aria-label':'Zoom in'}),button('Fit',fit),button('All links',event=>{const on=graph.classList.toggle('show-links');event.currentTarget.setAttribute('aria-pressed',String(on));},{'aria-pressed':'false','data-worlds-links':''}),button('About this view',()=>openDetails({id:'ui:architecture-notes',label:'About the architecture view',kind:'component',implementation:'Read-only JavaScript projection',why:'One map of the records this session actually has, read as a snapshot between actions: the worker waits for a running turn before it reads, so during a long action the map shows the previous state until Refresh. Rows are layers: tools and interpreters; JavaScript on the runtime path (every runtime JavaScript component with its generality badge, D for domain logic in JavaScript, G for generic, and a dashed ring when it has no activity hook); instances and session state; knowledge Worlds; schemas. Columns are the tabs (Diagram, Drawing, Calendar, Documents, Avatar) plus Shared for what all tabs use. Shape says what a record is, colour how it is implemented (SOP Lang, JavaScript, trained model, catalog data); the legend lists only the symbols on this map.',description:'There is no separate Session runtime layer any more. Every tab keeps its state as an SOP instance World, and so do the tab registry and the undo/redo journal, so they sit in the instances layer. The few records still kept as JavaScript (such as the application shell state, chat history and UI training pairs) sit next to them as session records, drawn as triangles so they are not mistaken for SOP Worlds. The world loader is a tool, so it sits with the tools; session memory is part of the Session (turn coordinator) and is listed inside it. Source files and schemas that belong to one World are listed inside that World. Layers and columns only arrange the map; they are not additional SOP Worlds. Activity retention: the worker and this page each keep the last 300 activity events; Copy retained log copies the page\'s 300.',details:{limitations:data.limitations??[],runtimeAudit:data.runtimeAudit??null,actualNodes:data.nodes.length,actualLinks:data.edges.length}})),status);
+ const toolbar=h('header',{class:'p2-worlds-toolbar'},h('h2',{text:'Worlds'}),search,button('Activity log',showActivityLog,{'aria-label':'Open activity log'}),button('Refresh',()=>void refresh()),button('−',()=>zoom(1.2),{'aria-label':'Zoom out'}),button('+',()=>zoom(1/1.2),{'aria-label':'Zoom in'}),button('Fit',fit),button('All links',event=>{const on=graph.classList.toggle('show-links');event.currentTarget.setAttribute('aria-pressed',String(on));},{'aria-pressed':'false','data-worlds-links':''}),button('About this view',()=>openDetails({id:'ui:architecture-notes',label:'About the architecture view',kind:'component',implementation:'Read-only JavaScript projection',why:'One map of the records this session actually has, read as a snapshot between actions: the worker waits for a running turn before it reads, so during a long action the map shows the previous state until Refresh. Rows follow a request from top to bottom: your words reach the code that runs (JavaScript, oranges, and the trained reader, purples), SOP rules and declarations decide (greens), the live state changes (blues), and knowledge (teals) and schemas (greys) are read by reference. Each kind of record has its own colour; the shape repeats the kind. JavaScript components carry badge D (domain logic in JavaScript) or G (generic) and a dashed ring when they have no activity hook. A tab\'s SOP files are what it ships and declares (area rules, tool interface, instance schema; formerly called the tool package). Columns are the tabs (Diagram, Drawing, Calendar, Documents, Avatar) plus Shared for what all tabs use. Shape says what a record is, colour how it is implemented (SOP Lang, JavaScript, trained model, catalog data); the legend lists only the symbols on this map.',description:'There is no separate session layer. Every tab keeps its state as an SOP instance World, and so do the tab registry and the undo/redo journal: they are the live state. The few records still kept as JavaScript (application shell state, session memory, chat history, UI training pairs) are code-side data, so they sit in the code layer as red-orange triangles. The world loader is a tool, so it sits with the tools; session memory is part of the Session (turn coordinator) and is listed inside it. Source files and schemas that belong to one World are listed inside that World. Layers and columns only arrange the map; they are not additional SOP Worlds. Activity retention: the worker and this page each keep the last 300 activity events; Copy retained log copies the page\'s 300.',details:{limitations:data.limitations??[],runtimeAudit:data.runtimeAudit??null,actualNodes:data.nodes.length,actualLinks:data.edges.length}})),status);
  const tooltip=h('div',{class:'p2-worlds-tooltip',role:'tooltip',hidden:true});graphPane.append(tooltip,h('div',{class:'p2-worlds-graph-hint',text:'Snapshot read between actions (Refresh reads it again) · point at a record to see its links · click for details · drag to pan · scroll to zoom'}));
  const playbackStatus=h('span',{class:'p2-worlds-playback-status',role:'status','aria-live':'off'}),pauseButton=button('Pause',togglePause),logFilter=h('input',{type:'search',placeholder:'Filter log…','aria-label':'Filter activity log'}),logPanel=h('section',{class:'p2-worlds-events',role:'region','aria-label':'Activity log',hidden:true});
  const playbackBar=h('div',{class:'p2-worlds-playback-bar'},h('span',{class:'p2-worlds-live',text:'Recorded activity playback'}),playbackStatus,pauseButton,button('Stage details',showPlaybackStage),button('Clear playback',stopPlayback));
@@ -147,24 +171,24 @@ export function createWorldsExplorer({load,subscribe,copy,loadSources}={}){
   }
  }
  // What the instances layer holds, from the actual records.
- function instancesDescription(){
-  const visible=data.nodes.filter(node=>!folds.has(node.id)),names=role=>visible.filter(node=>roleKindOf(node)===role).map(displayName);
-  const folded=data.nodes.filter(node=>folds.has(node.id)&&roleKindOf(node)==='runtime').map(node=>displayName(node)+' is part of '+displayName(actualNode(folds.get(node.id))));
-  const worlds=names('instance'),records=names('runtime');
-  return 'Current state. Instance Worlds (circles) hold SOP facts: '+(worlds.length?worlds.join(', '):'none')+'. Session records (triangles) are still kept as JavaScript data, not as SOP Worlds: '+(records.length?records.join(', '):'none')+'.'+(folded.length?' '+folded.join('; ')+'.':'');
+ function stateDescription(){
+  const names=data.nodes.filter(node=>!folds.has(node.id)&&familyOf(node)==='state').map(displayName);
+  return 'Blue: the current facts, held as SOP Worlds: '+(names.length?names.join(', '):'none')+'. Session data still kept as JavaScript is drawn as red-orange triangles in the code layer, because it is JavaScript, not an SOP World.';
  }
  function organize(){
   layoutGroups=new Map();memberships=new Map();
+  // Rows follow a request from top to bottom: your words reach the code and the reader, SOP rules decide, the live state
+  // changes; knowledge and schemas are read by reference.
   const definitions=[
-   ['tools','Tools and interpreters','What reads, checks or runs commands: each tab\'s tool package and tool host, the SOP area interpreter and SOP world host, the placement compiler with its solvers (internal search, Z3), the SOP-BERT reader, request admission, the session (turn coordinator), the world loader and the activity bus.'],
-   ['code','JavaScript on the runtime path','Every JavaScript component a chat turn or a UI action runs, from the declared component registry. Badge D: it makes domain decisions (words, kinds, areas, thresholds, orderings, fallbacks) that belong in SOP rules or knowledge; badge G: generic infrastructure. A dashed ring: no activity hook, so it can act without lighting up. Components already shown in another band carry the same badge there.'],
-   ['instances','Instances and session state',instancesDescription()],
-   ['knowledge','Knowledge Worlds','Published catalog Worlds and the operational policy Worlds. A catalog World lists its source files in its details; a hollow symbol means none of its sources were read in this session.'],
-   ['schemas','Schemas and legends','Types, slots and rules that validate the tab Worlds. A schema used by exactly one knowledge or policy World is listed inside that World.'],
+   ['code',FAMILIES.code,'Oranges: every JavaScript component a chat turn or a UI action runs (from the declared component registry), tool hosts and interpreters, UI helpers, and session data still kept as JavaScript (red-orange triangles). Purples: the SOP-BERT reader and its binding bundle. Badge D: JavaScript that makes domain decisions (words, kinds, areas, thresholds, orderings, fallbacks) that belong in SOP rules or knowledge; badge G: generic JavaScript. Dashed ring: no activity hook, so it can act without lighting up.'],
+   ['rules',FAMILIES.rules,'Greens: SOP Lang that decides. The operational policies (reading, admission, routing, creation, placement, history) and, per tab, the declarations it ships (its area rules and its native tool interface; formerly called the tool package).'],
+   ['state',FAMILIES.state,stateDescription()],
+   ['knowledge',FAMILIES.knowledge,'Teals: published catalog Worlds and their files, read by reference. A hollow symbol means none of its sources were read in this session.'],
+   ['schemas',FAMILIES.schema,'Greys: types, slots and constraints that validate the other Worlds, and the tool interface declarations. A schema used by exactly one World is listed inside that World.'],
   ];
-  const layerOf={tool:'tools',instance:'instances',runtime:'instances',knowledge:'knowledge',schema:'schemas'};
+  const layerOf={code:'code',rules:'rules',state:'state',knowledge:'knowledge',schema:'schemas'};
   for(const [id,label,description]of definitions)layoutGroups.set(id,{id,label,description,members:[]});
-  for(const node of data.nodes){const shown=actualNode(visibleOf(node.id))??node,id=shown.layer==='code'?'code':layerOf[roleKindOf(shown)];if(!folds.has(node.id))layoutGroups.get(id).members.push(node.id);memberships.set(node.id,id);}
+  for(const node of data.nodes){const shown=actualNode(visibleOf(node.id))??node,id=layerOf[familyOf(shown)];if(!folds.has(node.id))layoutGroups.get(id).members.push(node.id);memberships.set(node.id,id);}
  }
  function declaredAreas(){
   const supplied=Array.isArray(data.areas)?data.areas:[],unique=new Map();
@@ -189,7 +213,7 @@ export function createWorldsExplorer({load,subscribe,copy,loadSources}={}){
  function measuredSize(){const w=graphPane.clientWidth,height=graphPane.clientHeight;return w>=50&&height>=50?{w,h:height}:null;}
  // The map is laid out in the pane's own pixels: columns and rows fill the available width and height.
  function plan(size,areas,owners){
-  const visible=data.nodes.filter(node=>!folds.has(node.id)),order=(a,b)=>sharedRank(a.id)-sharedRank(b.id)||ROLE_ORDER.indexOf(roleKindOf(a))-ROLE_ORDER.indexOf(roleKindOf(b))||a.id.split(':')[0].localeCompare(b.id.split(':')[0])||displayName(a).localeCompare(displayName(b));
+  const visible=data.nodes.filter(node=>!folds.has(node.id)),order=(a,b)=>sharedRank(a.id)-sharedRank(b.id)||ENTRY_ORDER.indexOf(entryOf(a))-ENTRY_ORDER.indexOf(entryOf(b))||a.id.split(':')[0].localeCompare(b.id.split(':')[0])||displayName(a).localeCompare(displayName(b));
   const columns=[{world:null,label:'Shared by all tabs'},...areas];
   const bands=[...layoutGroups.values()].filter(layer=>layer.members.length).map(layer=>{const cells=columns.map(column=>({column,members:visible.filter(node=>memberships.get(node.id)===layer.id&&(owners.get(node.id)??null)===column.world).sort(order)}));return {layer,cells,span:!areas.length||cells.slice(1).every(cell=>!cell.members.length)};});
   const pad=10,headerH=(areas.length?24:4)+34,bandHead=24,bandPad=6,bandGap=8,W=size.w-2*pad;
@@ -253,7 +277,7 @@ export function createWorldsExplorer({load,subscribe,copy,loadSources}={}){
   }
   for(const node of data.nodes){
    const position=positions.get(node.id);if(!position)continue;
-   const type=roleOf(node),usage=effectiveUsage(node),[,color]=representationMeta(node),inside=parts.get(node.id)?.length??0;
+   const type=roleOf(node),usage=effectiveUsage(node),{color}=entryMeta(node),inside=parts.get(node.id)?.length??0;
    const group=svg('g',{transform:'translate('+position.x+','+position.y+')',class:'p2-worlds-node',tabindex:0,role:'button',
     'aria-label':displayName(node)+', '+type+', '+(node.implementation??''),'data-world-node':node.id,'data-world-role':type,
     'data-layer':memberships.get(node.id),...(node.audit?{'data-audit-badge':node.audit.badge,'data-activity-hook':node.audit.activityHook?'declared':'none'}:{}),'data-representation':representationOf(node),'data-usage':usage??'unknown',style:'--world-color:'+color});
@@ -274,19 +298,19 @@ export function createWorldsExplorer({load,subscribe,copy,loadSources}={}){
    if(folds.has(node.id))continue;const usage=effectiveUsage(node),key=glyphKey(node,usage),row=groups.get(key);
    if(row)row.count++;else groups.set(key,{node,usage,count:1});
   }
-  const rows=[...groups.values()].sort((a,b)=>ROLE_ORDER.indexOf(roleKindOf(a.node))-ROLE_ORDER.indexOf(roleKindOf(b.node))||representationOf(a.node).localeCompare(representationOf(b.node))||(a.usage==='available')-(b.usage==='available'));
-  const explained=new Set();
+  // One row per kind of record on the map, in its own colour; a hollow row for a kind with records not used in this session.
+  const rows=[...groups.values()].sort((a,b)=>ENTRY_ORDER.indexOf(entryOf(a.node))-ENTRY_ORDER.indexOf(entryOf(b.node))||(a.usage==='available')-(b.usage==='available'));
   for(const {node,usage,count} of rows){
-   const role=roleKindOf(node),[representation]=representationMeta(node),hollow=usage==='available',meaning=hollow?'In the catalog; none of its sources were read in this session.':explained.has(role)?'Same role, implemented in '+representation+'.':ROLES[role].meaning;explained.add(role);
-   const sample=svg('svg',{class:'p2-worlds-legend-symbol',viewBox:'-10 -10 20 20','aria-hidden':true});sample.append(worldGlyph(node,usage));
-   list.append(h('article',{class:'p2-worlds-legend-item','data-legend-role':role,'data-legend-representation':representationOf(node),'data-legend-fill':hollow?'hollow':'filled'},
-    sample,h('div',{},h('strong',{text:`${ROLES[role].label} · ${representation}${hollow?' · not read yet':''} (${count})`}),h('p',{text:meaning}))));
+   const entry=entryOf(node),meta=ENTRIES[entry],hollow=usage==='available';
+   const sample=svg('svg',{class:'p2-worlds-legend-symbol',viewBox:'-11 -11 22 22','aria-hidden':true});sample.append(worldGlyph(node,usage));
+   list.append(h('article',{class:'p2-worlds-legend-item','data-legend-entry':entry,'data-legend-family':meta.family,'data-legend-fill':hollow?'hollow':'filled'},
+    sample,h('div',{},h('strong',{text:`${meta.label}${hollow?' · not used in this session':''} (${count})`}),h('p',{text:hollow?'Present in the catalog; none of its sources were read in this session.':meta.meaning}))));
   }
   const audited=data.nodes.filter(node=>node.audit&&!folds.has(node.id)),badgeRows=[];
   for(const [badge,[letter,color,meaning]]of Object.entries(BADGES)){const count=audited.filter(node=>node.audit.badge===badge).length;if(!count)continue;const sample=svg('svg',{viewBox:'-10 -10 20 20','aria-hidden':true});const g=svg('g');g.append(svg('circle',{r:6,fill:color}),svg('text',{x:0,y:3,'text-anchor':'middle','font-size':8,'font-weight':700,fill:'#141b25'},letter));sample.append(g);badgeRows.push(h('div',{class:'p2-worlds-legend-badge','data-legend-badge':badge},sample,h('span',{text:`Badge ${letter} (${count}): ${meaning}`})));}
   const silent=audited.filter(node=>!node.audit.activityHook).length;if(silent){const sample=svg('svg',{viewBox:'-12 -12 24 24','aria-hidden':true});sample.append(svg('circle',{r:10.5,class:'p2-worlds-silent-ring'}));badgeRows.push(h('div',{class:'p2-worlds-legend-badge','data-legend-badge':'silent'},sample,h('span',{text:`Dashed ring (${silent}): no activity hook; this JavaScript can change a result without lighting up the map or appearing in the activity log.`})));}
-  details.append(h('summary',{},h('strong',{text:'Legend'}),h('span',{text:groups.size+' symbols on this map'})),list,...badgeRows,
-   h('p',{class:'p2-worlds-legend-note',text:'Shape: what the record is. Colour: how it is implemented. Columns: the tab that owns it, or Shared. Point at a record to see its links; records with source files or schemas list them in their details. About this view: the map is a snapshot the worker reads between actions (it waits for a running turn), so during a long action it shows the previous state; Refresh reads it again. The worker and this page each retain the last 300 activity events; Copy retained log copies the page\'s.'}));
+  details.append(h('summary',{},h('strong',{text:'Legend'}),h('span',{text:groups.size+' kinds on this map'})),list,...badgeRows,
+   h('p',{class:'p2-worlds-legend-note',text:'Colour: what kind of thing the record is (one colour per kind; shades of one family are related kinds). Shape repeats the kind. Rows follow a request from top to bottom: code and reader, SOP rules, live state, knowledge, schemas. Columns: the tab that owns it, or Shared. Point at a record to see its links; records with source files or schemas list them in their details. About this view: the map is a snapshot the worker reads between actions (it waits for a running turn), so during a long action it shows the previous state; Refresh reads it again. The worker and this page each retain the last 300 activity events; Copy retained log copies the page\'s.'}));
   details.addEventListener('toggle',()=>{legendOpen=details.open;legend.classList.toggle('is-open',legendOpen);});
   legend.classList.toggle('is-open',legendOpen);legend.replaceChildren(details);
  }

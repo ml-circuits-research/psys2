@@ -4,7 +4,7 @@ import {inspectReaderAdmissionPolicy} from './reader-policy.mjs?v=9c39709e7d';
 import {inspectReaderContextPolicy} from './reader-context-policy.mjs?v=319a6b63e9';
 import {describeWorldsNodes} from './worlds-node-metadata.mjs?v=c606798b5f';
 import {CATALOG_WORLD_PURPOSES} from './catalog-world-purpose.mjs?v=3df107aae0';
-import {describePlacementSearch} from './placement-search-inspection.mjs?v=0b0e9caa08';
+import {describePlacementSearch} from './placement-search-inspection.mjs?v=5d7501b2d3';
 import {RUNTIME_COMPONENTS,componentAudit,auditRuntimeComponents} from './runtime-component-registry.mjs?v=229e281339';
 
 export function inspectSchemaSource(source){
@@ -52,7 +52,7 @@ function addReaderAndBoundaryRecords(nodes,edges,{readerBindings,readerDiagnosti
  // null: the worker has no bundle yet (reader loading or unavailable); the record is still shown so the map keeps one shape.
  if(readerBindings!==undefined){
   const coverage=readerBindings?Object.entries(readerBindings.coverage).map(([area,row])=>area+' '+row.bound+'/'+row.total).join(', '):'';
-  add({id:'component:reader-bindings',label:'Reader binding bundle',kind:'component',representation:'catalog',implementation:'Binding bundle (JSON, hash checked)',status:readerBindings?'keys bound: '+(coverage||'no coverage rows'):'not loaded: the reader has not supplied its bundle yet',
+  add({id:'component:reader-bindings',label:'Reader binding bundle',kind:'component',representation:'catalog',entry:'model-data',implementation:'Binding bundle (JSON, hash checked)',status:readerBindings?'keys bound: '+(coverage||'no coverage rows'):'not loaded: the reader has not supplied its bundle yet',
    why:'Binds the lemmas and keys the reader proposes to canonical kinds, properties, units and native tool parameters. Coverage lists, per area the bundle covers, which inventory keys are bound and why the others are not; an area without coverage rows has no key bindings in this bundle. Built from the knowledge catalog at pin '+(readerBindings?.knowledgePin??'unknown')+'.',
    description:'Deployed SOP-BERT binding bundle: identity, catalog pin, sizes and key coverage per area.',details:readerBindings??{loaded:false}});
   link('component:reader','component:reader-bindings','binds proposals with');
@@ -235,7 +235,7 @@ export function inspectWorldsRuntime({index={},bundle={worlds:{}},loaded=[],inst
  const titleOf=world=>index.worlds?.[world]?.tab?.title??index.worlds?.[world]?.title??world;
  for(const node of nodes){
   const world=node.details?.world;
-  if(node.id.startsWith('world:')){const title=titleOf(node.id.slice(6));node.displayName=title+(index.worlds?.[node.id.slice(6)]?.tab?' tool package':' package');node.help={purpose:'Declare the domain tools, source files and application bindings for '+title+'.',inputs:['Application composition declarations'],outputs:['Tool interface and schema references','Available domain source files'],limits:['This node is an application package, not a second copy of the editor state. Its linked instance contains the current facts.']};}
+  if(node.id.startsWith('world:')){const title=titleOf(node.id.slice(6));node.displayName=title+(index.worlds?.[node.id.slice(6)]?.tab?' SOP files':' package');node.why='The SOP files the '+title+' tab ships: its area declaration and rules (area.sop, act rules, render projection), its native tool interface and its instance schema. They declare what the tab can do; the live objects are in its instance World.';node.help={purpose:'The SOP files the '+title+' tab ships: area declaration and rules, native tool interface, instance schema.',inputs:['Application composition declarations'],outputs:['Tool interface and schema references','Available domain source files'],limits:['This node is an application package, not a second copy of the editor state. Its linked instance contains the current facts.']};}
   else if(node.kind==='instance'){node.displayName=titleOf(world)+(authoritative.has(world)?' instance World':' observed instance World');node.role=authoritative.has(world)?'Operational World instance':'Observed World instance';node.help={purpose:'Expose the current concrete objects and relationships for '+titleOf(world)+'.',inputs:[node.description],outputs:['Exact domain SOP facts','References to the declared schema'],limits:[authoritative.has(world)?'The tool adapter still executes mechanical operations in JavaScript.':'Native editor state remains authoritative; this SOP World observes its declared facts. Additional native properties are inspectable separately.']};}
   else if(node.id.startsWith('native:'))node.displayName=titleOf(node.id.slice(7))+' state (JavaScript)';
   else if(node.id.startsWith('interpreter:')){node.displayName=titleOf(node.id.slice(12))+((index.worlds?.[node.id.slice(12)]?.runtimeModules??[]).includes(SOP_WORLD_HOST_MODULE)?' tool host':' native adapter');node.help={purpose:'Execute the declared tools against the actual editor state and expose observations.',inputs:['Concrete validated operation and parameters'],outputs:['Updated editor state','Object observations and effect status'],limits:['Native JavaScript code still contains domain semantics; listing its tool schema does not migrate those semantics into reasoning.']};}
