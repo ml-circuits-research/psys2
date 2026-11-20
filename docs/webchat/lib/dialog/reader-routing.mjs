@@ -1,25 +1,25 @@
-import {isScopedRemoval} from './capability-plan-execution.mjs?v=d2f358a59e';
+import {isScopedRemoval} from './capability-plan-execution.mjs?v=2b238b15f8';
 import {projectRemovalAction} from './project-removal-action.mjs?v=95708890ba';
 import { captureHistory, recordHistory, restoreHistory } from './history-journal.mjs?v=aadefe2e4d';
-import {projectReaderHeadAlternative} from './reader-head-alternative.mjs?v=a423778b2a';
+import {projectReaderHeadAlternative} from './reader-head-alternative.mjs?v=e01b547c00';
 import {parse} from '../vendor/sopworld/sopworld.mjs?v=b665fdbe3d';
 import {writeReaderSource} from './reader-source.mjs?v=83e0720174';
 import {isAuthoredRequest,readAuthoredRequest} from './authored-request-tool.mjs?v=c38bda5155';
 // Model-first proposal routing. Calibration authority belongs to host configuration,
 // never to a model output, evaluation annotation or grammar proposal.
 import {requestCompositionPolicy,scheduleFollowingCut}from './request-composition-policy.mjs?v=6ac953cb12';
-import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=01b6de8856';
+import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=bc14c149ab';
 import {projectQueryAction,recoverQueryProjection} from './project-query-action.mjs?v=5b3d0ccb76';
-import {projectContextAction} from './project-context-action.mjs?v=55cab7f7e3';
-import {projectCodeReference} from './project-code-reference.mjs?v=2d951e4d4b';
-import {projectCreateAction} from './project-create-action.mjs?v=be06c00ba1';
+import {projectContextAction} from './project-context-action.mjs?v=c61cd43ebf';
+import {projectCodeReference} from './project-code-reference.mjs?v=5b316d1ca4';
+import {projectCreateAction} from './project-create-action.mjs?v=1d870d40f4';
 import {assessReaderProposal,assessPartialProposal} from './reader-admission.mjs?v=5b1aeaf4f4';
-import {bestPartialReading,fallbackLadder,partialNote} from './partial-admission.mjs?v=10524850bd';
-import {completeBindings} from './declared-bindings.mjs?v=caf4b64f1c';
-import {projectQuantities,amountsOf,quantityNote} from './quantity-projection.mjs?v=217e06eaa0';
-import {routeCoordination} from './coordination-routing.mjs?v=43ed821542';
-import {declaredKnowledge} from './declared-execution.mjs?v=01b6de8856';
-import {interpretationPolicy,coordinationEligible,comparisonBounds,retryNote} from './interpretation-policy.mjs?v=67a99d054f';
+import {bestPartialReading,fallbackLadder,partialNote} from './partial-admission.mjs?v=b0fd6a3131';
+import {completeBindings} from './declared-bindings.mjs?v=87587534a1';
+import {projectQuantities,amountsOf,quantityNote} from './quantity-projection.mjs?v=4b587e0ca1';
+import {routeCoordination} from './coordination-routing.mjs?v=b583145c0a';
+import {declaredKnowledge} from './declared-execution.mjs?v=bc14c149ab';
+import {interpretationPolicy,coordinationEligible,comparisonBounds,retryNote} from './interpretation-policy.mjs?v=eb3a627b22';
 let amounts;
 // The named amounts of the execution knowledge (k.expect.amount), read once.
 const knownAmounts=()=>amounts??=amountsOf(declaredKnowledge('k.expect.amount'));
@@ -349,7 +349,43 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
 }
 
 /** Apply the declared source-order schedule to actual model cuts, never source words. */
+// AREA RE-READING (interpretation-policy.sop app.interpret.areaRetry): the active editor is a prior over the live
+// editors, not a clamp. A request no tool of the active editor can take, for a declared reason, is read again in each
+// other live editor (declared area registry order); the first reading that editor applies fully is kept and the shell
+// shows that editor. A rejected attempt leaves no trace in the worlds or the history; every attempt is in the trace.
+const unboundReasons=reply=>[...(reply?.trace?.readerRouting?.unresolved??[]).map(item=>item?.reason),...(reply?.trace?.partialAdmission?.refused??[]).map(item=>String(item).split(':')[0])];
+const fullyApplied=reply=>Array.isArray(reply?.statuses)&&reply.statuses.length>0&&reply.statuses.every(status=>status==='supported');
 export async function routeNewEngine(session,text,options={}){
+ const first=await routeInView(session,text,options);
+ const rule=interpretationPolicy().areaRetry,shell=session.isession?.state?.['ui.shell'];
+ if(!rule||options.view||isAuthoredRequest(text)||!shell?.activeTab||first?.statuses?.includes('supported'))return first;
+ const reasons=new Set(unboundReasons(first).filter(reason=>rule.reasons.includes(reason)));
+ if(!reasons.size)return first;
+ const {NATIVE_AREAS}=await import('./app-reader-context.mjs?v=85d3e9cbb5');
+ // The knowledge prior: only an editor whose bindings bind a kind word the reading saw is a hypothesis (declared area order among them);
+ // a word no other editor binds is not re-read there (each re-reading costs the reader passes of a whole turn).
+ const said=new Set(),collect=(value,depth=0)=>{if(depth>8||!value||typeof value!=='object')return;for(const [key,item] of Object.entries(value)){if((key==='kind'||key==='kind_span')&&typeof item==='string')said.add(item.toLowerCase());else collect(item,depth+1);}};
+ collect(first?.trace?.readerRouting?.rawReading);collect(first?.trace?.readerRouting?.contextRetry);
+ let kinds=[];try{kinds=session.engine?.requestReader?.bindings?.()?.kinds??[];}catch{/* no bindings: the declared order alone */}
+ const binds=area=>kinds.some(row=>row.area===area&&said.has(String(row.lemma).toLowerCase()));
+ const active=shell.activeTab,views=Object.entries(NATIVE_AREAS).filter(([view,area])=>view!==active&&session.isession.state[area.world]&&typeof session.isession.state[area.world]==='object')
+  .filter(([,area])=>binds(area.area)).map(([view])=>view);
+ const attempts=[];
+ for(const view of views){
+  const before=structuredClone(session.isession.state),journal=captureHistory(session,false);
+  const back=()=>{session.isession.state=before;restoreHistory(session,journal,{},false);};
+  session.isession.state['ui.shell']={...shell,activeTab:view};
+  let reply;
+  try{reply=await routeInView(session,text,{...options,view});}catch(error){back();throw error;}
+  const used=fullyApplied(reply);
+  attempts.push({view,used,statuses:reply?.statuses??[],reason:reply?.trace?.reason??null});
+  observe(session,{nodeIds:['component:reader'],phase:'stage',operation:'app.reader.area',label:rule.label,text,from:active,view,used});
+  if(used)return {...reply,state:structuredClone(session.isession.state),trace:{...reply.trace,areaRetry:{rule:rule.id,from:active,reasons:[...reasons],used:view,attempts}}};
+  back();
+ }
+ return {...first,trace:{...first.trace,areaRetry:{rule:rule.id,from:active,reasons:[...reasons],used:null,attempts}}};
+}
+async function routeInView(session,text,options={}){
  if(isAuthoredRequest(text)){
   const input=readAuthoredRequest(text);
   if(!input.candidate){const message='The SOP request could not be read ('+input.reason+').';return {text:message,parts:[{text:message,translate:false}],statuses:['unsupported'],answers:[],segments:[],state:{},effects:[],trace:{authored:true,reason:input.reason}};}

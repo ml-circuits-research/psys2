@@ -4,7 +4,7 @@ import {inspectReaderAdmissionPolicy} from './reader-policy.mjs?v=f4b9a1a94b';
 import {inspectReaderContextPolicy} from './reader-context-policy.mjs?v=87b2db00ca';
 import {describeWorldsNodes} from './worlds-node-metadata.mjs?v=c606798b5f';
 import {CATALOG_WORLD_PURPOSES} from './catalog-world-purpose.mjs?v=e4df1d48b9';
-import {describePlacementSearch} from './placement-search-inspection.mjs?v=fe18d841ef';
+import {describePlacementSearch} from './placement-search-inspection.mjs?v=8b45aa3bc4';
 import {RUNTIME_COMPONENTS,componentAudit,auditRuntimeComponents} from './runtime-component-registry.mjs?v=f2ef810fa3';
 
 export function inspectSchemaSource(source){

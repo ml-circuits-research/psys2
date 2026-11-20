@@ -276,7 +276,7 @@ export async function executeNativeGroup(session, members, { view, invocation = 
         label: 'Solved group placement', status: 'compiled', provider: placed.provider, durationMs: placed.ms, subjects: free.length, solves: placed.solves, search: placed.z3, defaulted: placed.defaulted, wires: placed.choice?.input + '\n' + placed.choice?.sop });
     } catch { /* Inspection does not affect dispatch. */ }
   }
-  const made = [], receipts = [], verifications = [], refused = [];
+  const made = [], receipts = [], verifications = [], refused = [], executed = [];   // executed: the tool inputs actually invoked (the reply's executable circuit)
   for (const subject of subjects) {
     const args = subject.args ?? subject.plan.args, observed = host.observe(), toolInput = call(subject.operation, args);
     const intent = describeNativeControl({ operation: subject.operation, args, before: observed });
@@ -285,7 +285,7 @@ export async function executeNativeGroup(session, members, { view, invocation = 
     if (receipt.status === 'refused') { refused.push({ kind: subject.plan.kind, reason: receipt.reason }); continue; }
     const after = host.observe();
     verifications.push(verifyNativeControlEffect({ intent, before: observed, after, receipt }));
-    receipts.push(receipt);
+    receipts.push(receipt); executed.push(toolInput);
     const old = new Set(observed.objects.map((object) => object.id));
     const object = after.objects.find((value) => !old.has(value.id) && (value.in ?? value.parent) === undefined);
     const substituted = drawnAs(object, subject.plan.kind);
@@ -309,7 +309,7 @@ export async function executeNativeGroup(session, members, { view, invocation = 
   const message = ['Created ' + joined + '.', ...notes].join(' ');
   return {
     ...reply(message, true, { assessment: receipts.every((r) => r.status === 'changed') ? 'changed' : receipts.at(-1)?.status, receipts, reading: members[0].candidate,
-      readings: members.map(({ candidate }) => candidate), compiledSop: members.map(({ plan }) => plan.sop).join('\n'),
+      readings: members.map(({ candidate }) => candidate), compiledSop: members.map(({ plan }) => plan.sop).join('\n'), controlIntent: executed.join('\n'),
       group: { made: made.map(({ object, kind, subject }) => ({ id: object?.id ?? null, kind, overlaps: !!subject.overlaps })), requested: subjects.length, refused },
       ...(placed ? { solver: { provider: placed.solved ? placed.provider : null, compileMs: placed.ms, solves: placed.solves, z3: placed.z3 } } : {}),
       effectVerification: verifications.find((v) => v.status !== 'verified') ?? verifications[0], uncertainty: notes, partial: skipped.length > 0 || dropped.length > 0 || refused.length > 0 }),

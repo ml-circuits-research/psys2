@@ -7,11 +7,11 @@ import {executionPolicyWorld} from './execution-policy.mjs?v=c5b63898f5';
 import {readReferenceTurn,resolveObservedReference,referencePolicyWorld} from './reference-policy.mjs?v=6d04766720';
 import {observeGroundedProjection,projectGroundedRequest} from './grounded-projection.mjs?v=e9471201da';
 import {flatRequestProjection} from './request-projection.mjs?v=e41fe1fe81';
-import {bridgeRawStructure} from './raw-structural-bridge.mjs?v=0a041fae4e';
+import {bridgeRawStructure} from './raw-structural-bridge.mjs?v=f6fe8e3a38';
 import {retargetRule} from './raw-reading-policy.mjs?v=e1715d36d4';
 import {comparativeSteps} from './comparative-projection.mjs?v=674cebc5f1';
 import {referenceProjection} from './reference-projection.mjs?v=8730d4822b';
-import {interpretationPolicy} from './interpretation-policy.mjs?v=67a99d054f';
+import {interpretationPolicy} from './interpretation-policy.mjs?v=eb3a627b22';
 // What an act on the referent that says nothing more does (reference-policy.sop app.reference.bare: none | grounded).
 const bareUse=act=>{const row=referencePolicyWorld().ofType('app.reference.bare').find(r=>str(r.attrs.act?.[0])===act);return row?str(row.attrs.use[0]):undefined;};
 export async function projectContextAction(proposal,session,{bindings,registry,view}={}) {

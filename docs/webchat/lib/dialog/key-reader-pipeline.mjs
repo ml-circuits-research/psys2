@@ -1,11 +1,11 @@
 // Source-only two-model proposals. No parser fallback or execution admission.
 import {readReaderSource} from './reader-source.mjs?v=83e0720174';
 import {copyHostData,freezeHostData} from '../../worlds/native-tool-host.mjs?v=2e1dddf8c7';
-import {bridgeRawStructure,RAW_STRUCTURAL_FORMAT,BINDING_NODES} from './raw-structural-bridge.mjs?v=0a041fae4e';
+import {bridgeRawStructure,RAW_STRUCTURAL_FORMAT,BINDING_NODES} from './raw-structural-bridge.mjs?v=f6fe8e3a38';
 import {comparativeSteps} from './comparative-projection.mjs?v=674cebc5f1';
 import {referenceProjection} from './reference-projection.mjs?v=8730d4822b';
-import {completeBindings} from './declared-bindings.mjs?v=caf4b64f1c';
-import {declaredRawReadings} from './partial-admission.mjs?v=10524850bd';
+import {completeBindings} from './declared-bindings.mjs?v=87587534a1';
+import {declaredRawReadings} from './partial-admission.mjs?v=b0fd6a3131';
 import {declaredValueReadings} from './declared-value-readings.mjs?v=3d006a381b';
 const hash=x=>typeof x==='string'&&/^[a-f0-9]{64}$/.test(x);
 const digest=async x=>Array.from(new Uint8Array(await globalThis.crypto.subtle.digest('SHA-256',new TextEncoder().encode(x))),b=>b.toString(16).padStart(2,'0')).join('');

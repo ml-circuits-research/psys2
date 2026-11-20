@@ -5,7 +5,9 @@
 //    says how it read it;
 //  - a counted kind is read by its singular (w.lang.en morphology, bundled from the catalog): "three houses" binds
 //    the kind the reader binds for "house", not a thing whose own name is the plural (the emoji "houses"); the
-//    plural's own binding stays as an alternative in the trace.
+//    plural's own binding stays as an alternative in the trace;
+//  - a plural noun under the indefinite (singular) article ("draw a women") is one thing by its determiner: it is read
+//    by its singular too, like a counted kind, so it binds what its singular binds.
 import {parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=b665fdbe3d';
 import {en} from '../lang/en.mjs?v=40d8d7165d';
 import {NATIVE_AREAS} from './app-reader-context.mjs?v=85d3e9cbb5';
@@ -39,6 +41,8 @@ export function projectQuantities(read,{amounts=[],bindings,view}={}){
  const from=trigger&&trigger[1]<=kindRange[0]?trigger[1]:span?.[0]??0,before=words(Array.from(text).slice(from,kindRange[0]).join(''));
  const amount=plural?amounts.find(a=>before.includes(a.name)):undefined;
  const area=bindings?.readerAreaByView?.[view]??NATIVE_AREAS[view]?.area;
+ // The singular article counts one: a plural noun under it names the kind of its singular (no vague amount was said).
+ const single=plural&&!amount&&request.target?.determiner==='indefinite';
  const singularKind=plural&&area?bindings?.kinds?.find(row=>row.area===area&&row.lemma===singular)?.canonical:undefined;
  let changed=false;
  const projected=candidates.map(candidate=>{
@@ -46,7 +50,7 @@ export function projectQuantities(read,{amounts=[],bindings,view}={}){
   const target=nodes.find(w=>w.type==='std.request.target'&&w.attrs.request?.[0]==='$'+root?.id&&attr(w,'mode')==='new');
   if(!target)return candidate;
   const counted=nodes.some(w=>w.type==='std.request.constraint'&&attr(w,'concept')==='count'&&w.attrs.target?.[0]==='$'+target.id);
-  if(!counted&&!amount)return candidate;
+  if(!counted&&!amount&&!single)return candidate;
   const quantities={};
   if(singularKind&&singularKind!==attr(target,'kind')){
    quantities.kind={said:noun,as:singularKind,instead:attr(target,'kind')};

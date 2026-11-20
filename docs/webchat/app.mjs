@@ -142,6 +142,10 @@ export async function mountPsys2(element, options = {}) {
    * The tab's UI, made on first use: the tab opens, a message makes its world act, or an effect of the tab arrives. Making it loads the tab's world (the engine adds it) and its vendor assets
    * (map shapes, the editor, the chart library): none of them is fetched at boot except the open tab's.
    */
+  // STARTUP (owner, 2026-11-21: "load everything needed at start, even if start-up takes longer"): the reading model, the placement solver, every
+  // editor area (Diagram, Drawing, Documents, Calendar, Avatar: world and editor, not only the visible tab) and the catalog index are prepared at
+  // start under one progress plan. A message sent before they are ready waits in its turn (process) off the turn clock, then runs.
+  let startupDone;const startup={ready:false,parts:{},promise:new Promise(resolve=>{startupDone=resolve;})};
   const tabLoads=new Map();let tabLoadTicker=null;
   function paintTabLoad(){
     const record=tabLoads.get(view);tabLoadRow.hidden=!record;if(!record)return;
@@ -278,7 +282,7 @@ export async function mountPsys2(element, options = {}) {
   // PROGRESS: one service and one panel for every wait; the start-up steps in their real order, weighted by the last start's measured times
   const progress = createProgress({ storage: options.persist !== false ? globalThis.localStorage : null, localize: (t) => localized(t), details: () => settings.devMode === true,
     onStep: (r) => events.add('step', r.label, { stepId: r.id, ms: r.ms, bytes: r.bytes, ok: r.ok, ...(r.error ? { error: r.error } : {}), tab: null, tabAfter: null }) });
-  progress.plan('startup', [{ id: 'page', label: 'Loading the page code' }, { id: 'worlds', label: 'Loading the worlds' }, { id: 'reasoner', label: 'Starting the reasoner' }, { id: 'model', label: 'Loading the reading model' },
+  progress.plan('startup', [{ id: 'page', label: 'Loading the page code' }, { id: 'worlds', label: 'Loading the worlds' }, { id: 'reasoner', label: 'Starting the reasoner' }, { id: 'model', label: 'Loading the reading model' }, { id: 'areas', label: 'Preparing the editors' }, { id: 'solver', label: 'Loading the placement solver' },
     { id: 'translator', label: 'Loading the translator' }, { id: 'catalog', label: 'Knowledge catalog' }, { id: 'voices', label: 'Finding voices' }]);
   progress.start('page', 'Loading the page code');
   progress.end('page', { ms: Math.round(tEntry), bytes: (() => { try { return performance.getEntriesByType('resource').filter((r) => /\.m?js(\?|$)/.test(r.name)).reduce((a, r) => a + (r.transferSize || r.encodedBodySize || 0), 0); } catch { return null; } })() });
@@ -542,7 +546,11 @@ export async function mountPsys2(element, options = {}) {
         if (!proposals.size) question.append(h('p', {class:'p2-reader-proposal-status'}, 'No SOP query recorded' + suffix));
       }
 
+      // The circuit actually executed: the step's tool input(s) (a group make records each call); a step that changed the world without a recorded
+      // tool input names the native operations its receipts executed, never "nothing was sent".
+      const changedOps = (step.receipts ?? (step.receipt ? [step.receipt] : [])).filter((r) => r?.status === 'changed' && r.operation).map((r) => r.operation);
       if (step.controlIntent) appendIntent(answer, step.controlIntent, 'Executable circuit' + suffix);
+      else if (changedOps.length) answer.append(h('p', {class:'p2-reader-proposal-status'}, 'Executed ' + changedOps.join(', ') + suffix));
       else if (step.readOnly && step.compiledSop) appendIntent(answer, step.compiledSop, 'Query result' + suffix);
       else answer.append(h('p', {class:'p2-reader-proposal-status'}, 'No executable circuit was sent' + suffix));
     }
@@ -955,6 +963,17 @@ export async function mountPsys2(element, options = {}) {
       const stopped = new Promise((_, rej) => ctl.signal.addEventListener('abort', () => rej(new TurnAborted(tn.reason ?? 'stopped', 'restart')), { once: true }));
       stopped.catch(() => {});
       try { await Promise.race([engineClient.settled(), stopped]); } catch (e) { if (e instanceof TurnAborted) throw e; throw Object.assign(new Error(e?.message ?? 'the engine is down'), { name: 'EngineDown', reason: e?.reason ?? 'down' }); }
+      hostStage('thinking', recId);
+      tPress = performance.now(); tn.t0 = tPress; tStart = tPress;
+    }
+    if (!startup.ready) {   // STARTUP: the message waits until everything a turn needs is prepared (visible, stoppable); the turn clock starts after
+      hostStage('starting', recId);
+      const label = () => { const v = progress.view(), pct = v.fraction == null ? '' : ` ${Math.round(v.fraction * 100)}%`; thinkingLabel.textContent = `waiting for start-up: ${String(v.label || 'preparing').replace(/…$/, '')}${pct}…`; };
+      label();
+      const poll = setInterval(label, 250);
+      const stopped = new Promise((_, rej) => ctl.signal.addEventListener('abort', () => rej(new TurnAborted(tn.reason ?? 'stopped', 'startup')), { once: true }));
+      stopped.catch(() => {});
+      try { await Promise.race([startup.promise, stopped]); } finally { clearInterval(poll); }
       hostStage('thinking', recId);
       tPress = performance.now(); tn.t0 = tPress; tStart = tPress;
     }
@@ -2368,6 +2387,8 @@ export async function mountPsys2(element, options = {}) {
     applyState(state);
   }
   const handle = {
+    /** STARTUP: { ready, parts, whenReady() } — everything a turn needs is prepared once at start. */
+    startup: { get ready() { return startup.ready; }, get parts() { return { ...startup.parts }; }, whenReady: () => startup.promise },
     engine, session, settings, trainingPairs, instanceStore, flushInstances, workFiles, send, stop: stopTurn, engineClient, longTasks, refreshState, showTab: (id, via = 'card') => userTab(id, via), get busy() { return !!turn; }, get debug() { return dbg; }, tabLoading:{list:()=>[...tabLoads.values()].map(record=>({id:record.id,...record.timeline.snapshot(),worker:record.worker})),current:()=>tabLoads.get(view)?.timeline.snapshot()??null},worldActivity:{list:()=>worldActivity.slice(),subscribe:fn=>{worldActivityListeners.add(fn);return()=>worldActivityListeners.delete(fn);}}, isBusy, get veiled() { return veiled; },
     /** The queue of waiting messages (MIC2) and the turn state flags, in one place for other features (BUSY veil): `turnState()` says what is running and what waits. */
     queue: { list: () => queue.map((q) => ({ id: q.id, text: q.text, mode: q.mode })), drop: dropQueued, clear: clearQueue, get length() { return queue.length; } },
@@ -2384,7 +2405,6 @@ export async function mountPsys2(element, options = {}) {
   const slowLink = () => false; // compatibility for retired settings while the UI is cleaned
   startModels = () => null;
   const warm = async () => {
-    progress.end('model', { ms: 0, label: 'Declared request reader' });
     if (destroyed) return;
     // PROGRESS: the knowledge catalog's index (cached by version; the vocabulary is read by buckets, per message): the last start-up step, and the place where an unreachable catalog is said once
     // an unreachable catalog is asked again (4 s, 12 s, 30 s, then every minute) until it answers; the notice is said once and goes away when it does
@@ -2398,6 +2418,29 @@ export async function mountPsys2(element, options = {}) {
       (async () => { for (let i = 0; !destroyed; i++) { await sleep(CATALOG_PAUSES[Math.min(i, CATALOG_PAUSES.length - 1)] * (i >= CATALOG_PAUSES.length ? 2 : 1)); if (destroyed) return; const r = await askCatalog(true); if (r) { progress.resolve('catalog'); return; } } })();
     }
   };
-  setTimeout(() => { if (!destroyed) warm(); }, 100);
+  (async () => {
+    const editors = tabDefs.filter((t) => tabKnown.has(t.id) && t.world);
+    const part = (id, p) => Promise.resolve(p).then((v) => { startup.parts[id] = 'ready'; return v; }, (e) => { startup.parts[id] = `failed: ${e?.message ?? e}`; console.warn('start-up step failed', id, e); });
+    progress.start('areas', `Preparing the editors (0 of ${editors.length})`, { total: editors.length });
+    const areas = (async () => {   // one at a time: the engine loads one world at a time anyway, and the visible tab comes first
+      let done = 0;
+      for (const t of [...editors.filter((t) => t.id === view), ...editors.filter((t) => t.id !== view)]) {
+        if (destroyed) return;
+        await makeTab(t).catch((e) => console.warn('could not prepare the editor', t.id, e));
+        done++; progress.step('areas', `Preparing the editors (${done} of ${editors.length})`, done, editors.length);
+      }
+      progress.end('areas', { label: `${editors.length} editors ready` });
+    })();
+    const reader = engineClient.call('prepare');   // resolves when SOP-BERT (model, tokenizer, bindings, cutter) is ready or known unavailable
+    progress.start('solver', 'Loading the placement solver');
+    const solver = engineClient.call('placementSearchReady').then((st) => {
+      if (st?.state === 'ready') progress.end('solver', { label: 'Placement solver ready' });
+      else if (!st?.isolated) progress.end('solver', { label: 'Placement by the internal search (page not cross-origin isolated)' });
+      else progress.fail('solver', 'The placement solver could not load', 'placement uses the internal search');
+      return st;
+    });
+    await Promise.all([part('areas', areas), part('reader', reader), part('solver', solver), part('catalog', warm())]);
+    startup.ready = true; mark('startup-ready'); startupDone(startup.parts);
+  })();
   return handle;
 }

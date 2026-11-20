@@ -17,6 +17,7 @@ test('built Worlds RPC and explicit SOP inspection preserve state across catalog
     await pause(50);
   }
   assert.equal(await b.evaluate(`performance.timeOrigin!==Number(sessionStorage.getItem('worlds-reload-check'))`),true);
+  await b.evaluate('window.psys2.startup.whenReady()');   // start-up prepares every editor area; the graph and the inspection are read from a prepared page
   await wait(`document.querySelector('#p2-tab-worlds')?.getAttribute('aria-selected')==='true' && document.querySelectorAll('[data-world-node]').length>0`);
 
   if(await b.evaluate(`document.querySelector('.p2').classList.contains('p2-on-chat')`))await b.evaluate(`document.querySelector('.p2-burger').click();document.querySelector('.p2-menu-item[data-page=worlds]').click();true`);

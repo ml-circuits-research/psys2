@@ -188,7 +188,10 @@ async function init(m) {
   // partial world set can mistake for understood: a session that starts in Romanian must read like the full set, from its first message)
   // BOOT COST (owner export 2026-11-14 22:43: "Starting the reasoner" took 6.3 s on a phone in a Romanian session): a saved language other than English no longer builds the engine on every world at
   // start. It starts on the lazy set like English and the rest loads in the background once the reasoner is up; a Romanian message still waits for every world before it is read (send).
-  const startIds = [...worldLoader.startIds({ tabWorld: m.tabWorld ?? null, state: m.restoreState, recent: m.restoreMeta?.memory?.recent ?? [] })].filter((id) => allowed(id));
+  // STARTUP (owner, 2026-11-21): every editor area's world is loaded at start, not when its tab first opens: a message read in one area may
+  // belong to another (reader-routing.mjs area re-reading), and a turn never waits for a world that start-up could have loaded.
+  const startIds = [...new Set([...worldLoader.startIds({ tabWorld: m.tabWorld ?? null, state: m.restoreState, recent: m.restoreMeta?.memory?.recent ?? [] }),
+    ...Object.values(tabWorlds).filter((world) => worldLoader.info(world))])].filter((id) => allowed(id));
   await worldLoader.bundles(startIds);
   mark('start worlds');
   for (const id of startIds) loadedIds.add(id);
@@ -588,6 +591,8 @@ const handlers = {
     worldActivity(['execution:placement-geometry'],'stage','Warm up the placement solver',{operation:'z3.preload',state:status.state,isolated:status.isolated});
     return status;
   },
+  /** Start-up: resolves when the placement solver is loaded (or known unavailable); the page's start-up waits for it once. */
+  async placementSearchReady() { const {placementSearchReady}=await import(vurl('lib/dialog/placement-search-provider.mjs'));return placementSearchReady(); },
   async placementSearchStatus() { const {z3Status}=await import(vurl('lib/dialog/placement-search-provider.mjs'));return z3Status(); },
   async sample(m) {
     if (samplerRun || foregroundWaiting || turnRunning() || warming) return { items: [], available: true, reason: 'busy' };

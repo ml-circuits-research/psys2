@@ -1,5 +1,5 @@
 import { readSceneDefaults } from './scene-placement-defaults.mjs?v=bba55caf94';
-import { solveDefaultPlacement, solveGroupPlacement } from './default-placement.mjs?v=e9188a5635';
+import { solveDefaultPlacement, solveGroupPlacement } from './default-placement.mjs?v=430e45ad2f';
 import { en } from '../lang/en.mjs?v=40d8d7165d';
 import { quote, str } from '../vendor/sopworld/sopworld.mjs?v=b665fdbe3d';
 import { executionPolicyWorld } from './execution-policy.mjs?v=c5b63898f5';
@@ -12,7 +12,7 @@ import { instanceIdFor } from './instance-identity.mjs?v=024ef1ca83';
 import { prepareNativeControlHost } from './native-control-preparation.mjs?v=9320614605';
 import { invokeObservedNativeTool } from './native-tool-activity.mjs?v=a227d7593e';
 import { retainPropertyEffect } from './property-effect-evidence.mjs?v=07094ccfdf';
-import { describeNativeControl, verifyNativeControlEffect } from './native-control-intent.mjs?v=5540dd7a6d';
+import { describeNativeControl, verifyNativeControlEffect } from './native-control-intent.mjs?v=a68dcd8935';
 
 function reply(text, supported, trace = {}) {
   return { text, parts: [{ text, translate: false }], statuses: [supported ? 'supported' : 'unsupported'],
@@ -276,7 +276,7 @@ export async function executeNativeGroup(session, members, { view, invocation = 
         label: 'Solved group placement', status: 'compiled', provider: placed.provider, durationMs: placed.ms, subjects: free.length, solves: placed.solves, search: placed.z3, defaulted: placed.defaulted, wires: placed.choice?.input + '\n' + placed.choice?.sop });
     } catch { /* Inspection does not affect dispatch. */ }
   }
-  const made = [], receipts = [], verifications = [], refused = [];
+  const made = [], receipts = [], verifications = [], refused = [], executed = [];   // executed: the tool inputs actually invoked (the reply's executable circuit)
   for (const subject of subjects) {
     const args = subject.args ?? subject.plan.args, observed = host.observe(), toolInput = call(subject.operation, args);
     const intent = describeNativeControl({ operation: subject.operation, args, before: observed });
@@ -285,7 +285,7 @@ export async function executeNativeGroup(session, members, { view, invocation = 
     if (receipt.status === 'refused') { refused.push({ kind: subject.plan.kind, reason: receipt.reason }); continue; }
     const after = host.observe();
     verifications.push(verifyNativeControlEffect({ intent, before: observed, after, receipt }));
-    receipts.push(receipt);
+    receipts.push(receipt); executed.push(toolInput);
     const old = new Set(observed.objects.map((object) => object.id));
     const object = after.objects.find((value) => !old.has(value.id) && (value.in ?? value.parent) === undefined);
     const substituted = drawnAs(object, subject.plan.kind);
@@ -309,7 +309,7 @@ export async function executeNativeGroup(session, members, { view, invocation = 
   const message = ['Created ' + joined + '.', ...notes].join(' ');
   return {
     ...reply(message, true, { assessment: receipts.every((r) => r.status === 'changed') ? 'changed' : receipts.at(-1)?.status, receipts, reading: members[0].candidate,
-      readings: members.map(({ candidate }) => candidate), compiledSop: members.map(({ plan }) => plan.sop).join('\n'),
+      readings: members.map(({ candidate }) => candidate), compiledSop: members.map(({ plan }) => plan.sop).join('\n'), controlIntent: executed.join('\n'),
       group: { made: made.map(({ object, kind, subject }) => ({ id: object?.id ?? null, kind, overlaps: !!subject.overlaps })), requested: subjects.length, refused },
       ...(placed ? { solver: { provider: placed.solved ? placed.provider : null, compileMs: placed.ms, solves: placed.solves, z3: placed.z3 } } : {}),
       effectVerification: verifications.find((v) => v.status !== 'verified') ?? verifications[0], uncertainty: notes, partial: skipped.length > 0 || dropped.length > 0 || refused.length > 0 }),

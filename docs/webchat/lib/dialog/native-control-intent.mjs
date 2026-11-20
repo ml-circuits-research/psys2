@@ -4,7 +4,7 @@ import {copyHostData,validateNativeArguments,toolInvocationContext} from '../../
 import {compactNativeIntent} from './native-intent-reader.mjs?v=e63fc5f908';
 
 import {historyControlQuery} from './history-control-query.mjs?v=227273ef37';
-import {interpretationPolicy} from './interpretation-policy.mjs?v=67a99d054f';
+import {interpretationPolicy} from './interpretation-policy.mjs?v=eb3a627b22';
 
 // The page calls this with its gesture and the active editor's declared interface.
 export async function editorGestureSop(operation,args,loadDeclarations){

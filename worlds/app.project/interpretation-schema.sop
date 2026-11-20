@@ -1,4 +1,4 @@
-@interpret.module core.module name=app.interpret version=1 exports=app.interpret.retry exports=app.interpret.compare exports=app.interpret.coordination exports=app.interpret.language exports=app.interpret.note exports=app.interpret.default exports=app.interpret.drop exports=app.interpret.fallback exports=app.interpret.family exports=app.interpret.familyOperation exports=app.interpret.parameterAct exports=app.interpret.spelling exports=app.interpret.spellingStep exports=app.interpret.numberJoiner exports=app.interpret.relation exports=app.interpret.relationValue exports=app.interpret.controlVerb exports=app.interpret.controlModifier
+@interpret.module core.module name=app.interpret version=1 exports=app.interpret.retry exports=app.interpret.compare exports=app.interpret.coordination exports=app.interpret.areaRetry exports=app.interpret.language exports=app.interpret.note exports=app.interpret.default exports=app.interpret.drop exports=app.interpret.fallback exports=app.interpret.family exports=app.interpret.familyOperation exports=app.interpret.parameterAct exports=app.interpret.spelling exports=app.interpret.spellingStep exports=app.interpret.numberJoiner exports=app.interpret.relation exports=app.interpret.relationValue exports=app.interpret.controlVerb exports=app.interpret.controlModifier
 
 # A re-reading of the same text under a reduced context, tried in order while the reading stays incomplete.
 @interpret.retry.type core.type of=app.interpret.retry closed=true
@@ -20,6 +20,13 @@
 @interpret.compare.mode core.slot of=app.interpret.compare key=mode kind=atom id=true present=true
 @interpret.compare.min core.slot of=app.interpret.compare key=min kind=integer min=2 present=true
 @interpret.compare.max core.slot of=app.interpret.compare key=max kind=integer min=2 present=true
+
+# A request read in the active editor that no tool there can take, for one of these reasons, is read again in each other
+# live editor whose reader bindings bind a kind word the reading saw (declared area registry order); the first reading an editor fully applies
+# is used and that editor is shown.
+@interpret.areaRetry.type core.type of=app.interpret.areaRetry closed=true
+@interpret.areaRetry.reason core.slot of=app.interpret.areaRetry key=reason kind=atom many=true present=true
+@interpret.areaRetry.label core.slot of=app.interpret.areaRetry key=label kind=string present=true
 
 # Which readings are first tried as a coordination of noun phrases.
 @interpret.coordination.type core.type of=app.interpret.coordination closed=true

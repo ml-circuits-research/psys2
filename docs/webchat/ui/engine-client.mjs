@@ -356,7 +356,7 @@ export function createEngineClient({ base, versions = {}, getSettings, getLangua
       if (op === 'init' || op === 'restore') throw new Error('This worker operation is internal.');
       await ready();
       const result = await rawCall(op, payload).promise;
-      if (op === 'restoreInstances' || op === 'placementProfile') applyStateInfo(result);
+      if (op === 'restoreInstances' || op === 'placementProfile' || op === 'ensure') applyStateInfo(result);   // ensure: a prepared area's state is engine state (start-up prepares every area)
       return result;
     },
     warm: (payload) => ready().then(() => rawCall('warm', payload).promise),

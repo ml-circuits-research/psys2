@@ -148,7 +148,8 @@ export function createProgress({ storage = globalThis.localStorage, localize = n
     const idle = !v.busy;
     const dev = !!details();
     txt(el.querySelector('.p2-pg-label'), idle ? (v.failures.length ? 'Something did not load' : '') : `${v.label.replace(/…$/, '')}…`);
-    el.querySelector('.p2-pg-count').hidden = true;   // no "3/7": only the current step
+    const countEl = el.querySelector('.p2-pg-count');   // no "3/7": the share of the open plan (start-up) that is done
+    countEl.hidden = idle || v.fraction == null; countEl.textContent = countEl.hidden ? '' : ` ${Math.round(v.fraction * 100)}%`;
     el.querySelector('.p2-pg-details').hidden = !dev;
     const barEl = el.querySelector('.p2-pg-bar'), pct = idle ? 100 : v.fraction == null ? null : Math.round(v.fraction * 100);
     barEl.hidden = idle;

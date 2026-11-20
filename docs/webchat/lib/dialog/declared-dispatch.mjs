@@ -1,4 +1,4 @@
-import {invokeToolCommand} from './native-control-intent.mjs?v=5540dd7a6d';
+import {invokeToolCommand} from './native-control-intent.mjs?v=a68dcd8935';
 // Host orchestration only: semantic projections belong to area declarations.
 import { prepareRequestBatch, requestBatchFrontier, parse } from '../vendor/sopworld/sopworld.mjs?v=b665fdbe3d';
 

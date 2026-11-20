@@ -15,6 +15,12 @@
 # for a bounded number of proposals; outside the bounds the admitted top reading is routed (trace: readingComparison absent).
 @interpret.compare.best-effort app.interpret.compare mode=uncalibrated-best-effort min=2 max=16
 
+# Knowledge of the active editor is a prior over the live editors, not a clamp (owner, Review29): a request whose kind or
+# property no tool of the active editor takes ("draw a lake" while the Diagram is shown) is read again in each live editor
+# whose reader bindings bind a kind word of the reading; the first one that applies it fully is used, and that editor is shown.
+# Every attempt is traced.
+@interpret.areaRetry.unbound app.interpret.areaRetry reason=unresolved-canonical-kind-binding reason=unresolved-canonical-property-binding label="Read the request in the other editors"
+
 # A single make request is first offered to the coordination reader (noun phrases joined by and/commas).
 @interpret.coordination.make app.interpret.coordination act=make requests=1
 

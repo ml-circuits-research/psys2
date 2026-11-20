@@ -9,12 +9,12 @@ import{inspectExecutionPolicyWorld}from'./execution-policy.mjs?v=c5b63898f5';
 import{sceneDefaultInspection}from'./scene-placement-defaults.mjs?v=bba55caf94';
 import{inspectCapabilityPolicy}from'./capability-plan-adapter.mjs?v=9921237814';
 import{inspectQueryPolicy}from'./project-query-action.mjs?v=5b3d0ccb76';
-import{inspectCreationPolicy}from'./project-create-action.mjs?v=be06c00ba1';
+import{inspectCreationPolicy}from'./project-create-action.mjs?v=1d870d40f4';
 import{inspectConstructorPolicy}from'./native-binding-candidates.mjs?v=a7b8646a23';
 import{inspectGroundedProjection}from'./grounded-projection.mjs?v=e9471201da';
-import{inspectReaderHeadPolicy}from'./reader-head-alternative.mjs?v=a423778b2a';
+import{inspectReaderHeadPolicy}from'./reader-head-alternative.mjs?v=e01b547c00';
 import{inspectReferencePolicy}from'./reference-policy.mjs?v=6d04766720';
-import{inspectSchemaSource}from'./worlds-inspection.mjs?v=757db4aac6';
+import{inspectSchemaSource}from'./worlds-inspection.mjs?v=8aad9686b5';
 import{inspectRequestCompositionPolicy}from'./request-composition-policy.mjs?v=6ac953cb12';
 const clone=value=>structuredClone(value);
 const loggedWires=snapshot=>(snapshot?.log??[]).flatMap(entry=>entry.wires??[]);
@@ -28,7 +28,7 @@ function snapshotText(snapshot){return (snapshot?.log??[]).map((entry,index)=>'#
 /** Projects actual cache accessors and retained journal JSON; performs no reading or reasoning. */
 export async function inspectExecutionWorlds(session){
  const [{inspectDeclaredExecutionSourceWorld},{inspectSpatialPlacementWorld}]=await Promise.all([
-  import('./declared-execution.mjs?v=01b6de8856'),import('./spatial-placement-execution.mjs?v=5221f2c02b'),
+  import('./declared-execution.mjs?v=bc14c149ab'),import('./spatial-placement-execution.mjs?v=10a9003fd8'),
  ]);
  const journal=session?.newEngineJournal??[],moduleNames=[...new Set(journal.flatMap(record=>importsOf(record.evidence)))],sources=[['declared-execution','src/dialog/declared-execution.mjs',inspectDeclaredExecutionSourceWorld({moduleNames})]],nodes=[],edges=[];
  const link=(from,to,label)=>edges.push({from,to,label});

@@ -9,7 +9,7 @@ const fixed = [
   'world-code-panel.test.mjs',
   'worlds-explorer.test.mjs',
   'knowledge-source-inspection.test.mjs',
-  'worlds-source-browser.test.mjs', 'catalog-wait-declared-host.test.mjs', 'placement-search-provider.test.mjs', 'placement-z3-browser.test.mjs', 'phrase-log-turns-browser.test.mjs', 'drawing-drag-move-browser.test.mjs',
+  'worlds-source-browser.test.mjs', 'catalog-wait-declared-host.test.mjs', 'placement-search-provider.test.mjs', 'placement-z3-browser.test.mjs', 'startup-all-areas-browser.test.mjs', 'phrase-log-turns-browser.test.mjs', 'drawing-drag-move-browser.test.mjs',
   'work-files.test.mjs',
   'calendar-avatar-selection.test.mjs',
   'native-clear-editors.test.mjs', 'native-control-sampler.test.mjs', 'native-sop-dispatch.test.mjs', 'instance-store.test.mjs',

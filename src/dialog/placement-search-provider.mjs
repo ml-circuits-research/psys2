@@ -51,5 +51,12 @@ export function z3Status() {
   error:lastLoad?.error??null,load:lastLoad,lastSolve};
 }
 
+/** Resolves with z3Status() once the solver's load (started by warmPlacementSearch) has finished, loaded or not; at once where Z3 cannot run. */
+export async function placementSearchReady({supported=z3Supported}={}) {
+ const p=placementSearchProvider({supported});
+ if(p){begin('startup');try{await p.preload();}catch{/* z3Status() says why */}}
+ return z3Status();
+}
+
 /** Compatibility name of z3Status(). */
 export const placementSearchStatus=z3Status;

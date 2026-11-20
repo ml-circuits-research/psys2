@@ -12,7 +12,7 @@
 //  - execution-policy.sop: app.execution.kindBinding, keyBinding/keyValue, position, canvasUnit, lengthUnit;
 //  - the constructor policy's discriminator, the catalog words of catalog values, the ordinal words of k.values.
 import {parse,str,completeStructuralBindings} from '../vendor/sopworld/sopworld.mjs?v=b665fdbe3d';
-import {interpretationPolicy} from './interpretation-policy.mjs?v=67a99d054f';
+import {interpretationPolicy} from './interpretation-policy.mjs?v=eb3a627b22';
 import {executionPolicyWorld} from './execution-policy.mjs?v=c5b63898f5';
 import {declaredValueRows} from './declared-value-readings.mjs?v=3d006a381b';
 import {numberWords,numberInfo} from '../knowledge/values.mjs?v=1a6f2f3174';

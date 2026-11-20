@@ -2,7 +2,7 @@
 import {numberValue} from '../knowledge/values.mjs?v=1a6f2f3174';
 import {cardinalValue} from '../knowledge/number-run.mjs?v=3d945e049a';
 import {readNumberSpan} from '../vendor/sopworld/sopworld.mjs?v=b665fdbe3d';
-import {interpretationPolicy} from './interpretation-policy.mjs?v=67a99d054f';
+import {interpretationPolicy} from './interpretation-policy.mjs?v=eb3a627b22';
 import {budget} from './budget.mjs?v=00bce6e369';
 import {selectedProbability} from './model-selection-score.mjs?v=ac3ac10191';
 export function classifierAlternative(bank,logits){

@@ -17,6 +17,8 @@ const sha=async bytes=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA
 const decode=bytes=>new TextDecoder('utf-8',{fatal:true}).decode(bytes);
 const hash=x=>typeof x==='string'&&/^[a-f0-9]{64}$/.test(x);
 const relativePath=x=>typeof x==='string'&&x.length>0&&!x.includes('\\')&&!x.startsWith('/')&&!/^[a-z][a-z0-9+.-]*:/i.test(x)&&!x.split('/').some(p=>!p||p==='.'||p==='..');
+/** WASM threads for the reader: 1 unless the page is cross-origin isolated, then up to 4 (one core is left to the page). */
+export const readerThreads=(scope=globalThis)=>scope.crossOriginIsolated===true?Math.max(1,Math.min(4,(scope.navigator?.hardwareConcurrency??2)-1)):1;
 export const READER_ARTIFACT_CACHE='psys2-reader-artifacts-v1';
 const cacheKey=(url,digest)=>new URL('/.psys2-reader-artifacts/sha256/'+digest,url).href;
 async function responseBytes(response,maxBytes){
@@ -67,11 +69,13 @@ export async function createBrowserReaderHost({manifestURL,manifestSha256,tokeni
  if(config.tokenizer_class!==undefined&&!['BertTokenizer','DistilBertTokenizer'].includes(config.tokenizer_class))throw Error('unsupported-tokenizer-class');
  const [ort,tokenizers]=await Promise.all([importModule(resolveURL('vendor/onnxruntime/ort.wasm.bundle.min.mjs')),importModule(resolveURL('vendor/sop-tokenizer/bert-tokenizer.mjs'))]);
  if(!ort.env?.wasm||typeof ort.InferenceSession?.create!=='function'||typeof ort.Tensor!=='function'||typeof tokenizers.BertTokenizer!=='function')throw Error('invalid-browser-runtime');
- ort.env.wasm.wasmPaths=resolveURL('vendor/onnxruntime/');ort.env.wasm.numThreads=1;ort.env.wasm.proxy=false;
- const backend={createSession:bytes=>ort.InferenceSession.create(bytes,{executionProviders:['wasm'],intraOpNumThreads:1,interOpNumThreads:1}),makeTensor:(type,data,dims)=>new ort.Tensor(type,data,dims)};
+ // Threads: a cross-origin isolated page (SharedArrayBuffer, sw.js) runs the encoder on up to 4 WASM threads (the threaded SIMD build is vendored); elsewhere one.
+ const numThreads=readerThreads();
+ ort.env.wasm.wasmPaths=resolveURL('vendor/onnxruntime/');ort.env.wasm.numThreads=numThreads;ort.env.wasm.proxy=false;
+ const backend={createSession:bytes=>ort.InferenceSession.create(bytes,{executionProviders:['wasm'],intraOpNumThreads:numThreads,interOpNumThreads:1}),makeTensor:(type,data,dims)=>new ort.Tensor(type,data,dims)};
  const assembled=await assemble({manifestJSON:decode(manifestBytes),manifestSha256,tokenizerArtifact,bindingsArtifact,readArtifact:read,backend,
   createTokenizer:async({tokenizerJSON})=>{const profile=JSON.parse(tokenizerJSON);return new tokenizers.BertTokenizer(profile,bertRuntimeConfiguration(profile,config));},getContext,recordDiagnostics,runtimeIdentity,
   verifyHostRuntime:async()=>({verified:true,identity:runtimeIdentity,authority:'psys2.browser-reader-host/1: application-trusted module deployment; not callback cryptographic proof'})});
  await pruneReaderCache(cacheStorage,manifestLocation.href,[...activeHashes],type=>report({type}));
- return {...assembled,browserHost:{format:'psys2.browser-reader-host/1',manifestURL:manifestLocation.href,manifestSha256,tokenizerConfigSha256:tokenizerConfigArtifact.sha256,executionProvider:'wasm',numThreads:1,proxy:false,calibration:null,cache:{name:READER_ARTIFACT_CACHE,key:'sha256',policy:'Verified bytes on every read; current successful deployment retained.',stats:{...cacheStats,hostLoadMs:performance.now()-started}}}};
+ return {...assembled,browserHost:{format:'psys2.browser-reader-host/1',manifestURL:manifestLocation.href,manifestSha256,tokenizerConfigSha256:tokenizerConfigArtifact.sha256,executionProvider:'wasm',numThreads,proxy:false,calibration:null,cache:{name:READER_ARTIFACT_CACHE,key:'sha256',policy:'Verified bytes on every read; current successful deployment retained.',stats:{...cacheStats,hostLoadMs:performance.now()-started}}}};
 }

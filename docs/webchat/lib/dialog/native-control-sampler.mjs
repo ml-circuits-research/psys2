@@ -1,4 +1,4 @@
-import {invokeToolCommand} from './native-control-intent.mjs?v=5540dd7a6d';
+import {invokeToolCommand} from './native-control-intent.mjs?v=a68dcd8935';
 // A dice gesture samples declared UI fields. It is not a language-reader prediction.
 import {copyHostData,validateNativeArguments} from '../../worlds/native-tool-host.mjs?v=2e1dddf8c7';
 const pick=(items,random)=>items.length?items[Math.min(items.length-1,Math.floor(Math.max(0,Math.min(.999999999,Number(random())||0))*items.length))]:undefined;

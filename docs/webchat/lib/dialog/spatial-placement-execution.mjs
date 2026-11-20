@@ -7,12 +7,12 @@ import {NATIVE_AREAS,createAreaHost} from './app-reader-context.mjs?v=85d3e9cbb5
 import {identityRegistryFor,instanceIdFor} from './instance-identity.mjs?v=024ef1ca83';
 import {nativeKindCandidates,nativeCreationCandidates} from './native-binding-candidates.mjs?v=a7b8646a23';
 import {invokeObservedNativeTool} from './native-tool-activity.mjs?v=a227d7593e';
-import {describeNativeControl,verifyNativeControlEffect} from './native-control-intent.mjs?v=5540dd7a6d';
-import {placementSearchProvider,z3Status} from './placement-search-provider.mjs?v=0675893eb5';
+import {describeNativeControl,verifyNativeControlEffect} from './native-control-intent.mjs?v=a68dcd8935';
+import {placementSearchProvider,z3Status} from './placement-search-provider.mjs?v=ebe12db63b';
 import {en} from '../lang/en.mjs?v=40d8d7165d';
 import {placementHypotheses,placementDisclosure} from './placement-default-policy.mjs?v=33cea8d7b8';
 import {identityConcepts} from './capability-plan-adapter.mjs?v=9921237814';
-import {executeNativeCapability,drawnAs} from './capability-plan-execution.mjs?v=d2f358a59e';
+import {executeNativeCapability,drawnAs} from './capability-plan-execution.mjs?v=2b238b15f8';
 import {budget} from './budget.mjs?v=00bce6e369';
 import {executionPolicyWorld} from './execution-policy.mjs?v=c5b63898f5';
 

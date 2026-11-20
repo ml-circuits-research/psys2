@@ -40,9 +40,9 @@ export async function refreshBrowserReaderDeployment(outDir){
  };
  const sourceInventory={};
  for(const [key,files]of Object.entries(groups))sourceInventory[key]=await Promise.all(files.map(async name=>({path:name,sha256:sha(await readFile(path.join(outDir,name)))})));
- deployment.runtimeIdentity=Object.fromEntries(Object.entries(sourceInventory).map(([key,files])=>[key,sha(JSON.stringify(key==='backendSha256'?{files,executionProvider:'wasm',numThreads:1,proxy:false}:files))]));
+ deployment.runtimeIdentity=Object.fromEntries(Object.entries(sourceInventory).map(([key,files])=>[key,sha(JSON.stringify(key==='backendSha256'?{files,executionProvider:'wasm',numThreads:'isolated-up-to-4',proxy:false}:files))]));
  deployment.runtimeIdentity.bindingsSha256=deployment.bindingsArtifact.sha256;
- deployment.implementation={format:'psys2.browser-reader-implementation/1',sourceInventory,backend:{executionProvider:'wasm',numThreads:1,proxy:false},trust:'application deployment; browser-specific empirical report still required'};
+ deployment.implementation={format:'psys2.browser-reader-implementation/1',sourceInventory,backend:{executionProvider:'wasm',numThreads:'isolated-up-to-4',proxy:false},trust:'application deployment; browser-specific empirical report still required'};
  deployment.admission=null;
  await writeFile(file,JSON.stringify(deployment,null,2)+'\n');return deployment;
 }

@@ -31,6 +31,7 @@ export function interpretationPolicy(source=POLICY){
  if(new Set(retries.map(retry=>retry.order)).size!==retries.length)throw Error('invalid-interpretation-policy: retry orders must be distinct');
  const compare=Object.fromEntries(world.ofType(MODULE+'.compare').map(row=>[one(row,'mode'),{id:row.id,min:Number(one(row,'min')),max:Number(one(row,'max'))}]));
  for(const [mode,bounds] of Object.entries(compare))if(bounds.min>bounds.max)throw Error('invalid-interpretation-policy: compare '+mode+' min > max');
+ const areaRetry=world.ofType(MODULE+'.areaRetry').map(row=>({id:row.id,reasons:all(row,'reason'),label:one(row,'label')}))[0]??null;
  const coordination=world.ofType(MODULE+'.coordination').map(row=>({id:row.id,act:one(row,'act'),requests:Number(one(row,'requests'))}));
  const detect=world.ofType(MODULE+'.language').filter(row=>one(row,'role')==='detect');
  if(detect.length!==1)throw Error('invalid-interpretation-policy: exactly one language detection rule');
@@ -52,7 +53,7 @@ export function interpretationPolicy(source=POLICY){
   values:Object.fromEntries(world.ofType(MODULE+'.relationValue').filter(v=>v.attrs.of?.[0]==='$'+row.id).map(v=>[one(v,'value'),one(v,'relation')]))}));
  const control={verbs:Object.fromEntries(world.ofType(MODULE+'.controlVerb').map(row=>[one(row,'act'),one(row,'text')])),modifiers:Object.fromEntries(world.ofType(MODULE+'.controlModifier').map(row=>[one(row,'parameter'),one(row,'text')]))};
  if(!control.verbs.other)throw Error('invalid-interpretation-policy: a control verb for act other');
- const result=Object.freeze({retries,notes,compare,coordination,control,language:{id:detect[0].id,minConfidence:Number(one(detect[0],'min.confidence'))},partial:{defaults,drops,fallbacks,families,relations,familyOperations,parameterActs,spelling,numberJoiners}});
+ const result=Object.freeze({retries,notes,compare,coordination,areaRetry,control,language:{id:detect[0].id,minConfidence:Number(one(detect[0],'min.confidence'))},partial:{defaults,drops,fallbacks,families,relations,familyOperations,parameterActs,spelling,numberJoiners}});
  if(source===POLICY)policy=result;
  return result;
 }
