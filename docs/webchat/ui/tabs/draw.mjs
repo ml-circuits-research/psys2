@@ -1,4 +1,4 @@
-import {mountInspectorSplitter} from '../pane-splitter.mjs';
+import {mountInspectorSplitter, mountInspectorSheet} from '../pane-splitter.mjs';
 // Drawing tab (world art.draw, spec 07 sections 6-7): a children's drawing board. What it shows is the SOP area
 // projection of the w.drawing instance (worlds/art.draw/area.sop: host.state / update give projectSopArea): the drawn
 // primitives (state.svg), the observed objects, their inputs and boxes, the options and the view keys. This module
@@ -13,10 +13,11 @@ const VIEW = 'draw';
 const CSS = `
 .dr-root{position:relative;display:flex;flex-direction:column;width:100%;height:100%;min-height:380px;gap:6px;color:#263646;font:13px system-ui;container-type:inline-size}
 .dr-add-chooser{position:absolute;max-width:calc(100% - 16px);z-index:20;width:280px;max-height:65%;overflow:auto;padding:12px;box-sizing:border-box;background:#fff;border:1px solid #bbc7d5;border-radius:7px;box-shadow:0 7px 24px #24344733;display:grid;gap:8px}.dr-add-chooser label{display:grid;gap:5px}.dr-shape-choices{display:flex;gap:5px;flex-wrap:wrap}.dr-toolbar,.dr-actions{display:flex;gap:6px;align-items:center;flex-wrap:wrap}.dr-toolbar{padding:4px 0}.dr-toolbar label{display:flex;align-items:center;gap:6px}
-.dr-workspace{display:grid;grid-template-columns:minmax(0,1fr) 264px;gap:8px;flex:1;min-height:0}.dr-board{position:relative;width:100%;height:100%;min-width:0;border:1px solid #d5dae0;background:#f7f8fa;border-radius:6px;box-sizing:border-box;overflow:hidden}.dr-paper{position:relative;width:100%;height:100%;min-height:320px;touch-action:none}.dr-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;outline:none}.dr-canvas:focus-visible{box-shadow:inset 0 0 0 2px #356ac3}.dr-inspector{overflow:auto;min-width:0;background:#fff;border:1px solid #d5dae0;border-radius:6px;padding:12px;box-sizing:border-box;display:flex;flex-direction:column;gap:12px}.dr-inspector h3{font-size:13px;margin:0 0 8px}.dr-editor{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.dr-editor label{display:grid;gap:4px;min-width:0;font-size:12px;color:#536171}.dr-editor label:has(select[multiple]),.dr-editor label:has(input[type=search]),.dr-editor label:has(input[aria-label="Label"]){grid-column:1/-1}
+.dr-workspace{display:grid;grid-template-columns:minmax(0,1fr) 264px;gap:8px;flex:1;min-height:0}.dr-board{position:relative;width:100%;height:100%;min-width:0;border:1px solid #d5dae0;background:#f7f8fa;border-radius:6px;box-sizing:border-box;overflow:hidden}.dr-paper{position:relative;width:100%;height:100%;min-height:320px;touch-action:pan-y;overflow:hidden}.dr-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;outline:none;transform-origin:0 0}.dr-zoom-reset{position:absolute;right:6px;top:6px;z-index:5}.dr-canvas:focus-visible{box-shadow:inset 0 0 0 2px #356ac3}.dr-inspector{overflow:auto;min-width:0;background:#fff;border:1px solid #d5dae0;border-radius:6px;padding:12px;box-sizing:border-box;display:flex;flex-direction:column;gap:12px}.dr-inspector h3{font-size:13px;margin:0 0 8px}.dr-editor{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.dr-editor label{display:grid;gap:4px;min-width:0;font-size:12px;color:#536171}.dr-editor label:has(select[multiple]),.dr-editor label:has(input[type=search]),.dr-editor label:has(input[aria-label="Label"]){grid-column:1/-1}
 .dr-root input,.dr-root select{font:13px system-ui;border:1px solid #d5dae0;background:#fff;color:#263646;border-radius:5px;padding:7px;min-width:0;max-width:100%;box-sizing:border-box}.dr-editor input,.dr-editor select{width:100%}.dr-act{font:600 12px system-ui;border:1px solid #d5dae0;border-radius:5px;background:#fff;color:#263646;min-height:32px;padding:6px 10px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:5px}.dr-act:hover{background:#f0f4fa}.dr-act[aria-pressed=true]{background:#e9f0fd;border-color:#356ac3;color:#2359a9}.dr-act:disabled{opacity:.45;cursor:default}.dr-act svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2}
 .dr-pose,.dr-textbar{grid-column:1/-1}.dr-pose .dr-act,.dr-textbar .dr-act{min-height:28px;padding:4px 8px}.dr-hint{position:absolute;inset:0;display:grid;place-content:center;pointer-events:none;text-align:center;padding:30px;color:#788491;font:14px system-ui}.dr-hint b{font-size:19px;font-weight:500;display:block;margin-bottom:8px}.dr-caption{margin:0;font-size:12px;color:#66717e;min-height:18px}.dr-root [hidden]{display:none!important}.dr-empty-selection{color:#788491;line-height:1.6}.dr-selection-heading{grid-column:1/-1;margin:0;font-size:13px}
 @media(max-width:700px){.dr-root{height:auto;min-height:0}.dr-workspace{display:flex;flex-direction:column;flex:none}.dr-board{height:360px;min-height:280px}.dr-paper{min-height:280px}.dr-inspector{overflow:visible}.dr-act{min-height:44px}.dr-root input,.dr-root select{font-size:16px}.dr-add-chooser{max-height:min(65dvh,420px)}}
+@media(max-width:700px),(max-height:500px){.dr-toolbar,.dr-actions{flex-wrap:nowrap}.dr-toolbar{overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin;padding-bottom:6px}.dr-toolbar>*,.dr-actions>*{flex:none}.dr-toolbar label{white-space:nowrap}}
 @container(max-width:640px){.dr-workspace{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(320px,55vh) auto}.dr-inspector{overflow:visible}.dr-editor{grid-template-columns:repeat(auto-fit,minmax(130px,1fr))}}
 `;
 
@@ -70,7 +71,8 @@ function make(holder, host) {
   const activePointers = new Set(); let multiTouch = false;
   let state = { objects: [], inputs: {}, boxes: {}, options: {}, runtime: { view: {} }, frame: { w: 1000, h: 700 } };
   let items = [], frame = { w: 1000, h: 700 }, lastIds = undefined, destroyed = false, raf = 0, last = 0;
-  let sel = [], lastViewSelected, pendingSel = null;
+  let sel = [], lastViewSelected, pendingSel = null, sheetWanted = false;
+  let zoom = { k: 1, x: 0, y: 0 }, pinch = null;   // the canvas view on a touch screen: two-finger pinch and pan
   const shown = new Map();   // object id -> { box, cur: {dx, dy, kx, ky}, born, dying, items }
 
   // ---- reading the projection ----------------------------------------------------------------------------------
@@ -120,7 +122,7 @@ function make(holder, host) {
     units = [...new Set(units)];
     pendingSel = units;
     const result = await canvasTool(units.length > 1 ? 'drawing.objects.select' : 'drawing.object.select', units.length > 1 ? { ids: units } : { id: units[0] ?? null });
-    if (result?.ok !== false) sel = units.filter((id) => byId(id));
+    if (result?.ok !== false) { sel = units.filter((id) => byId(id)); sheetWanted = sel.length > 0 && !multiSelect; }
     pendingSel = null; syncControls(); schedule();
     return result;
   }
@@ -218,7 +220,7 @@ function make(holder, host) {
   addButton.addEventListener('click', () => (chooser.hidden ? openChooser() : closeChooser()));
   chooser.addEventListener('keydown', (e) => { if (e.key === 'Escape') { e.preventDefault(); closeChooser(); canvas.focus(); } });
   const multiButton = el('button', 'dr-act', 'Select multiple'); multiButton.type = 'button'; multiButton.setAttribute('aria-pressed', 'false');
-  multiButton.addEventListener('click', () => { multiSelect = !multiSelect; multiButton.setAttribute('aria-pressed', String(multiSelect)); caption.textContent = multiSelect ? 'Tap objects to add or remove them from the selection.' : 'Tap an object to select or move it.'; });
+  multiButton.addEventListener('click', () => { multiSelect = !multiSelect; multiButton.setAttribute('aria-pressed', String(multiSelect)); caption.textContent = multiSelect ? 'Tap objects to add or remove them from the selection.' : 'Tap an object to select or move it.'; sheetWanted = !multiSelect && sel.length > 0; sheet.sync(); });
   // Writing on the page (a text object) and the filter the whole picture is shown through (k.styles.filter).
   const addTextButton = el('button', 'dr-act', 'Add text'); addTextButton.type = 'button';
   addTextButton.addEventListener('click', async () => { const r = await tool('drawing.object.make', { kind: 'text', text: 'Text' }); if (r?.ok !== false) setTimeout(() => { textInput.focus(); textInput.select(); }, 60); });
@@ -267,10 +269,12 @@ function make(holder, host) {
   const groupName = control('Group label'); groupName.value = '';
   const groupButton = el('button', 'dr-act', 'Group objects'); groupButton.type = 'button'; groupButton.addEventListener('click', () => { const ids = selectedIds(); if (ids.length > 1) tool('drawing.object.group', { ids, name: groupName.value.trim() || 'Group', ...(groupName.value.trim() ? { label: groupName.value.trim() } : {}) }); }); editor.append(groupButton);
   const ungroup = el('button', 'dr-act', 'Ungroup'); ungroup.type = 'button'; ungroup.addEventListener('click', () => { const o = focus(), group = o?.binding === 'drawing.group' ? o.id : o?.in; if (group) tool('drawing.object.ungroup', { id: group }); }); editor.append(ungroup);
-  const selectionHeading = el('h3', 'dr-selection-heading', 'Selection'), emptySelection = el('p', 'dr-empty-selection', 'Click an object to edit it. Ctrl or Command-click adds to selection. Drag empty space to select several.'); selectionHeading.setAttribute('data-selected-native-id', ''); editor.prepend(selectionHeading);
+  const selectionHeading = el('h3', 'dr-selection-heading', 'Selection'), emptySelection = el('p', 'dr-empty-selection', 'Click or tap an object to edit it. Ctrl or Command-click, a long press or Select multiple adds to the selection. Drag empty space sideways to select several; on a touch screen an up or down swipe there scrolls the page and two fingers zoom.'); selectionHeading.setAttribute('data-selected-native-id', ''); editor.prepend(selectionHeading);
   const workspace = el('div', 'dr-workspace'), inspector = el('aside', 'dr-inspector'); workspace.append(board, inspector); inspector.append(emptySelection, editor);
   holder.replaceChildren(toolbar, chooser, workspace, caption);
   const closeInspectorSplitter = mountInspectorSplitter(workspace, inspector, { id: 'draw', width: 264, persist: host.persistent !== false });
+  // A selection made on the canvas opens its properties as a bottom sheet on a phone; closing it clears the selection.
+  const sheet = mountInspectorSheet(workspace, inspector, { label: 'Properties', isOpen: () => sheetWanted && sel.length > 0, reveal: board, close: () => { sheetWanted = false; if (sel.length) select([]); } });
 
   const option = (value, text, disabled = false) => { const o = el('option'); o.value = value; o.textContent = text; o.disabled = disabled; return o; };
   let colourNames = '';
@@ -281,7 +285,7 @@ function make(holder, host) {
     inspector.dataset.selectedNativeIds = JSON.stringify(part ? [part.id] : sel);
     selectionHeading.textContent = multi ? `${ids.length} objects` : group ? 'Group ' + o.id : object ? 'Object ' + object.id : 'Selection';
     selectionHeading.dataset.selectedNativeId = o?.id ?? '';
-    emptySelection.hidden = !!sel.length; editor.hidden = !sel.length;
+    emptySelection.hidden = !!sel.length; editor.hidden = !sel.length; if (!sel.length) sheetWanted = false; sheet.sync();
     const visible = (inputEl, show) => { (inputEl.closest('label') ?? inputEl).hidden = !show; };
     // a group shows its members; a member can go back to its group
     const members = group ? membersOf(o.id) : [], parent = object?.role === 'member' ? object.in : null;
@@ -543,6 +547,26 @@ function make(holder, host) {
   });
   // A cancelled touch (the browser took it over, a pinch began) changes nothing.
   canvas.addEventListener('pointercancel', (e) => { activePointers.delete(e.pointerId); clearTimeout(longPress); if (!activePointers.size) multiTouch = false; drag = null; marquee = null; schedule(); });
+  // Touch: a finger on an object or a handle drags it; a finger on empty paper scrolls the page (touch-action pan-y;
+  // the browser then cancels the pointer); two fingers pinch and pan the canvas view (a CSS transform of the canvas,
+  // which toLogical reads back through getBoundingClientRect). The reset button puts the whole page back in view.
+  const zoomReset = el('button', 'dr-act dr-zoom-reset', 'Reset zoom'); zoomReset.type = 'button'; zoomReset.hidden = true; paper.append(zoomReset);
+  const applyZoom = () => { const w = paper.clientWidth, h = paper.clientHeight; zoom.k = Math.max(1, Math.min(4, zoom.k)); zoom.x = Math.min(0, Math.max(w * (1 - zoom.k), zoom.x)); zoom.y = Math.min(0, Math.max(h * (1 - zoom.k), zoom.y)); canvas.style.transform = zoom.k === 1 ? '' : `translate(${zoom.x}px, ${zoom.y}px) scale(${zoom.k})`; zoomReset.hidden = zoom.k === 1; };
+  zoomReset.addEventListener('click', () => { zoom = { k: 1, x: 0, y: 0 }; applyZoom(); });
+  const spread = (t) => Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY) || 1;
+  const middle = (t) => { const r = paper.getBoundingClientRect(); return [(t[0].clientX + t[1].clientX) / 2 - r.left, (t[0].clientY + t[1].clientY) / 2 - r.top]; };
+  canvas.addEventListener('touchstart', (e) => {
+    if (e.touches.length > 1) { e.preventDefault(); const [mx, my] = middle(e.touches); pinch = { d0: spread(e.touches), k0: zoom.k, px: (mx - zoom.x) / zoom.k, py: (my - zoom.y) / zoom.k }; return; }
+    const [x, y] = toLogical(e.touches[0]);
+    if (handleAt(x, y) || objectAt(x, y)) e.preventDefault();
+  }, { passive: false });
+  canvas.addEventListener('touchmove', (e) => {
+    if (!pinch || e.touches.length < 2) return;
+    e.preventDefault(); const [mx, my] = middle(e.touches);
+    zoom.k = Math.max(1, Math.min(4, pinch.k0 * spread(e.touches) / pinch.d0)); zoom.x = mx - pinch.px * zoom.k; zoom.y = my - pinch.py * zoom.k; applyZoom();
+  }, { passive: false });
+  const endPinch = (e) => { if (pinch && e.touches.length < 2) pinch = null; };
+  canvas.addEventListener('touchend', endPinch); canvas.addEventListener('touchcancel', endPinch);
   canvas.addEventListener('dblclick', (e) => { const [x, y] = toLogical(e), o = objectAt(x, y); if (o) select([unitOf(o.id)]).then(() => { nameInput.focus(); nameInput.select(); }); else openChooser({ x: Math.round(x), y: Math.round(y) }, e); });
   canvas.addEventListener('keydown', (e) => {
     const ids = selectedIds(), part = currentPart(), moves = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }, move = moves[e.key];
@@ -626,7 +650,7 @@ function make(holder, host) {
       setTimeout(() => URL.revokeObjectURL(url), 5000);
       return { ok: true, detail: name };
     },
-    destroy() { destroyed = true; clearTimeout(idsTimer); clearTimeout(longPress); resizeObserver?.disconnect(); closeInspectorSplitter(); if (raf) cancelAnimationFrame(raf); },
+    destroy() { destroyed = true; clearTimeout(idsTimer); clearTimeout(longPress); resizeObserver?.disconnect(); closeInspectorSplitter(); sheet.destroy(); if (raf) cancelAnimationFrame(raf); },
   };
   api.update(host.state?.('art.draw'));
   return api;

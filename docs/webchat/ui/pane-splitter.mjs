@@ -53,3 +53,27 @@ export function mountInspectorSplitter(layout,inspector,{id,persist=true,width=2
  const observer=new ResizeObserver(sync);observer.observe(layout);sync();
  return ()=>{observer.disconnect();for(const [type,fn]of local)grip.removeEventListener(type,fn);for(const [type,fn]of global)window.removeEventListener(type,fn,true);layout.classList.remove('p2-inspector-layout','p2-inspector-stacked','is-resizing-inspector');delete layout.dataset.inspector;layout.style.gridTemplateColumns=originalColumns;layout.style.gridTemplateRows=originalRows;grip.remove();};
 }
+
+// On a narrow (stacked) layout the properties of a selection open as a bottom sheet over the editor: sized to the
+// viewport, scrollable inside, with a close button (close() usually clears the selection). Wide layouts keep the
+// inspector in its column; the sheet head is hidden there. On opening, the nearest scrolling ancestor brings `reveal`
+// (the canvas) to its top, so the selected thing stays visible above the sheet; overflow:hidden ancestors never move.
+export function mountInspectorSheet(layout,inspector,{label='Properties',isOpen,close,reveal=null}){
+ if(!document.getElementById('p2-inspector-sheet-css')){
+  const style=document.createElement('style');style.id='p2-inspector-sheet-css';style.textContent=`.p2-sheet-head{display:none}.p2-inspector-sheet{position:fixed!important;left:var(--p2-sheet-left,0px)!important;right:var(--p2-sheet-right,0px)!important;bottom:0!important;top:auto!important;z-index:1100;width:auto!important;max-width:none!important;height:auto!important;max-height:min(48dvh,560px)!important;overflow:auto!important;overscroll-behavior:contain;margin:0!important;border-radius:14px 14px 0 0!important;box-shadow:0 -8px 28px #0005;padding-top:0!important;padding-bottom:max(16px,env(safe-area-inset-bottom))!important}@media (max-height:500px){.p2-inspector-sheet{max-height:60dvh!important}}.p2-inspector-sheet>.p2-sheet-head{display:flex;position:sticky;top:0;z-index:3;align-items:center;justify-content:space-between;gap:8px;margin:0 -12px 10px;padding:4px 6px 4px 14px;background:inherit;border-bottom:1px solid #8192aa55;font:600 14px system-ui}.p2-sheet-head::before{content:'';position:absolute;left:calc(50% - 20px);top:4px;width:40px;height:4px;border-radius:4px;background:#8192aa88}.p2-sheet-close{font:600 14px system-ui;min-width:44px;min-height:44px;padding:0 12px;border:1px solid #8192aa66;border-radius:8px;background:transparent;color:inherit;cursor:pointer}.p2-inspector-layout.p2-sheet-open{padding-bottom:min(48dvh,560px)}`;document.head.append(style);
+ }
+ const head=document.createElement('div'),title=document.createElement('span'),button=document.createElement('button');
+ head.className='p2-sheet-head';title.textContent=label;button.type='button';button.className='p2-sheet-close';button.textContent='Close ✕';button.setAttribute('aria-label','Close properties');
+ button.addEventListener('click',()=>{inspector.classList.remove('p2-inspector-sheet');layout.classList.remove('p2-sheet-open');close?.();});
+ head.append(title,button);inspector.prepend(head);
+ let wasOpen=false;
+ function sync(){
+  const open=layout.classList.contains('p2-inspector-stacked')&&!!isOpen();
+  inspector.classList.toggle('p2-inspector-sheet',open);layout.classList.toggle('p2-sheet-open',open);
+  if(open){const r=layout.getBoundingClientRect();inspector.style.setProperty('--p2-sheet-left',Math.max(0,r.left)+'px');inspector.style.setProperty('--p2-sheet-right',Math.max(0,innerWidth-r.right)+'px');}
+  if(open&&!wasOpen){inspector.scrollTop=0;if(reveal){let s=layout.parentElement;while(s&&!/auto|scroll/.test(getComputedStyle(s).overflowY))s=s.parentElement;if(s)s.scrollTop+=reveal.getBoundingClientRect().top-s.getBoundingClientRect().top;}}
+  wasOpen=open;
+ }
+ const observer=new ResizeObserver(()=>sync());observer.observe(layout);sync();
+ return {sync,destroy(){observer.disconnect();head.remove();inspector.classList.remove('p2-inspector-sheet');layout.classList.remove('p2-sheet-open');}};
+}

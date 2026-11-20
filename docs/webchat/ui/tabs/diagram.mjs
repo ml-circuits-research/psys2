@@ -11,7 +11,7 @@
 // selected connection shows a handle at each end (drag it to another node or side; released over empty space the end
 // stays free there), its bends (drag to move, double-click to remove) and a handle in the middle of each piece (drag to
 // add a bend); its label drags along it. The line type chosen in the toolbar is the look of new connections.
-import { mountInspectorSplitter } from '../pane-splitter.mjs';
+import { mountInspectorSplitter, mountInspectorSheet } from '../pane-splitter.mjs';
 import { makeInspector } from './diagram/inspector.mjs';
 import { makePageBar, makeStylePanels, TOOLS_STYLE } from './diagram/tools.mjs';
 
@@ -27,7 +27,8 @@ const STYLE = `
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .dg-root { --dg-bg:#111b21;--dg-ink:#e6ebef;--dg-faint:#98a4ae;--dg-accent:#5b8ad7;--dg-card:#1c2830;--dg-line:#33424d; } }
 :root[data-theme="dark"] .dg-root { --dg-bg:#111b21;--dg-ink:#e6ebef;--dg-faint:#98a4ae;--dg-accent:#5b8ad7;--dg-card:#1c2830;--dg-line:#33424d; }
 .dg-workspace { display:grid;grid-template-columns:minmax(0,1fr) minmax(240px,300px);gap:8px;flex:1;min-height:350px; }
-.dg-board { position:relative;border:1px solid var(--dg-line);border-radius:8px;background:var(--dg-bg);overflow:hidden;width:100%;min-height:350px;height:100%;touch-action:none; }
+.dg-board { position:relative;border:1px solid var(--dg-line);border-radius:8px;background:var(--dg-bg);overflow:hidden;width:100%;box-sizing:border-box;min-height:350px;height:100%;touch-action:pan-y; }
+.dg-svg [data-select], .dg-svg [data-resize-node], .dg-svg [data-connect-node], .dg-svg [data-port-node], .dg-svg [data-end-link], .dg-svg [data-bend-link], .dg-svg [data-mid-link], .dg-board.dg-placing { touch-action:none; }
 .dg-svg { position:absolute;inset:0;width:100%;height:100%;display:block;cursor:default;outline:none;user-select:none;-webkit-user-select:none; }
 .dg-svg.panning { cursor:grabbing; }
 .dg-svg:focus-visible { box-shadow:inset 0 0 0 2px var(--dg-accent); }
@@ -82,6 +83,7 @@ const STYLE = `
 .dg-group-members { display:flex;flex-wrap:wrap;gap:6px; }
 .dg-empty-selection { font-size:13px;line-height:1.6;color:var(--dg-faint); }
 @media(max-width:700px){.dg-root{height:auto;min-height:0}.dg-workspace{display:flex;flex-direction:column;flex:none;min-height:0}.dg-board{height:340px;min-height:260px}.dg-inspector{overflow:visible}.dg-btn{min-height:44px;height:auto;padding:10px}.dg-root input,.dg-root select,.dg-root textarea{font-size:16px}}
+@media(max-width:700px),(max-height:500px){.dg-tools,.dg-pagebar{flex-wrap:nowrap;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin;padding-bottom:6px}.dg-tools>*,.dg-pagebar>*{flex:none}.dg-pagebar label{white-space:nowrap}.dg-spacer{display:none}.dg-line-form{position:fixed;left:8px;right:8px;top:auto;bottom:max(12px,env(safe-area-inset-bottom));z-index:1150}.dg-node-chooser{position:fixed;top:auto;bottom:12px;left:8px;width:auto;right:8px;max-width:none;max-height:60dvh;z-index:1150}}
 @container (max-width:700px) { .dg-workspace { grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(350px,55vh) auto; } .dg-inspector { max-height:none;overflow:visible; } }
 `;
 function ensureCss() {
@@ -143,6 +145,7 @@ function make(holder, host) {
     mode = next; addMode.setAttribute('aria-pressed', String(mode === 'add')); connectMode.setAttribute('aria-pressed', String(mode === 'connect'));
     if (mode !== 'connect') connectionFrom = null;
     svg.style.cursor = mode === 'add' ? 'crosshair' : '';
+    board.classList.toggle('dg-placing', mode !== 'select');   // placing or connecting: a touch is a tap, not a scroll
   };
   // Add node: a chooser of the shapes diagram.node.make declares, an optional label, then a tap on the canvas.
   let newKind = null;
@@ -160,7 +163,7 @@ function make(holder, host) {
     }));
   }
   const addMode = btn('Add node', 'Choose a node to place', () => { chooserPoint = null; nodeChooser.hidden = !nodeChooser.hidden; });
-  const multiButton = btn('Select multiple', 'Select multiple objects by tapping', () => { multiSelect = !multiSelect; multiButton.setAttribute('aria-pressed', String(multiSelect)); });
+  const multiButton = btn('Select multiple', 'Select multiple objects by tapping', () => { multiSelect = !multiSelect; multiButton.setAttribute('aria-pressed', String(multiSelect)); sheetWanted = !multiSelect && hasSelection(); sheet.sync(); });
   multiButton.setAttribute('aria-pressed', 'false');
   // The line type of new connections (and, when connections are selected, theirs): route, arrowheads and dash, each
   // from the declared choices of diagram.link.make. Remembered in this browser.
@@ -215,10 +218,16 @@ function make(holder, host) {
   workspace.append(board, inspector);
   holder.replaceChildren(tools, pagebar, workspace, caption);
   const closeInspectorSplitter = mountInspectorSplitter(workspace, inspector, { id: 'diagram', width: 300, persist: host?.persistent !== false });
+  // A selection made on the board (or a chart being made) opens the inspector as a bottom sheet on a phone.
+  let sheetWanted = false, chartOpen = false;
+  const hasSelection = () => !!(sel.nodes.length || sel.links.length || sel.group);
+  const sheet = mountInspectorSheet(workspace, inspector, { label: 'Inspector', isOpen: () => sheetWanted && (chartOpen || hasSelection()), reveal: board, close: () => { sheetWanted = false; chartOpen = false; if (hasSelection()) select({}); } });
 
   // ---- selection: kept here, sent with the declared select commands ----
   const select = (next) => {
     sel = { nodes: [...new Set(next.nodes ?? [])], links: [...new Set(next.links ?? [])], group: next.group ?? null };
+    // picking several (Select multiple, Connect) keeps the inspector in the page; ending Select multiple opens it
+    sheetWanted = hasSelection() && !multiSelect && mode === 'select'; if (!hasSelection()) chartOpen = false;
     paintOverlay(); inspectorUi.sync();
     if (sel.group) return toolCall('diagram.group.select', { id: sel.group });
     if (sel.nodes.length) return toolCall('diagram.node.select', { ids: sel.nodes, ...(sel.links.length ? { edges: sel.links } : {}) });
@@ -229,7 +238,7 @@ function make(holder, host) {
   const panels = html('div'); inspector.append(panels);
   const stylePanels = makeStylePanels(panels, { tool: toolCall, model: () => m, selection: () => sel, html, btn });
   const pageBar = makePageBar(pagebar, { tool: toolCall, model: () => m, html, btn });
-  const inspectorUi = { ...baseInspector, sync() { baseInspector.sync(); stylePanels.sync(); pageBar.sync(() => [...sel.nodes]); }, declare(ops) { baseInspector.declare(ops); stylePanels.declare(ops); pageBar.declare(ops); } };
+  const inspectorUi = { ...baseInspector, sync() { baseInspector.sync(); stylePanels.sync(); pageBar.sync(() => [...sel.nodes]); sheet.sync(); }, openChart() { sheetWanted = chartOpen = true; baseInspector.openChart(); sheet.sync(); }, declare(ops) { baseInspector.declare(ops); stylePanels.declare(ops); pageBar.declare(ops); } };
   // The projection is the authority: what it observes as selected (the area keeps a key per selected node and
   // connection) is the selection, also when it changes elsewhere (chat, undo). The order of picking is kept.
   function reconcile() {
@@ -577,6 +586,8 @@ function make(holder, host) {
     if (!id) { chooserPoint = svgPt(event); nodeChooser.hidden = false; nodeText.focus(); return; }
     if (m.node.has(id)) { if (!(sel.nodes.length === 1 && sel.nodes[0] === id)) select({ nodes: [id] }); inspectorUi.focusLabel(); }
   });
+  // Two fingers pinch the board, never the page (one finger on empty space scrolls the page: touch-action pan-y).
+  svg.addEventListener('touchstart', (event) => { if (event.touches.length > 1) event.preventDefault(); }, { passive: false });
   svg.addEventListener('wheel', (ev) => { if (!ev.ctrlKey && !ev.metaKey) return; ev.preventDefault(); zoomBy(Math.exp(-ev.deltaY * 0.0025), svgPt(ev)); }, { passive: false });
   svg.addEventListener('keydown', (ev) => {
     if (['Enter', ' '].includes(ev.key) && idAt(ev.target)) { ev.preventDefault(); selectTarget(ev); return; }
@@ -641,7 +652,7 @@ function make(holder, host) {
         return { ok: true, detail: `${name}.png` };
       } catch (error) { return { ok: false, detail: String(error?.message ?? error) }; } finally { URL.revokeObjectURL(url); }
     },
-    destroy() { destroyed = true; clearInterval(hintTimer); closeInspectorSplitter(); inspectorUi.destroy(); holder.replaceChildren(); holder.classList.remove('dg-root'); },
+    destroy() { destroyed = true; clearInterval(hintTimer); closeInspectorSplitter(); sheet.destroy(); inspectorUi.destroy(); holder.replaceChildren(); holder.classList.remove('dg-root'); },
   };
   api.update(host?.state?.(WORLD));
   return api;

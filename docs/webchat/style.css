@@ -146,6 +146,8 @@
 /* BUSY: while a turn, its host effects or the spoken answer run, the tab content is veiled and does nothing (the tab switcher, Stop and Settings stay usable) */
 .p2-panel.is-busy::after { content: ''; position: absolute; inset: 0; z-index: 50; background: rgba(120, 128, 138, .28); cursor: progress; pointer-events: auto; }
 .p2-panel.is-busy[aria-busy] { user-select: none; }
+/* a phone's properties sheet (ui/pane-splitter.mjs mountInspectorSheet) is fixed over the panel: it is veiled with it */
+.p2-panel.is-busy .p2-inspector-sheet { pointer-events: none; opacity: .75; }
 .p2-panel.is-busy:is(#p2-panel-map, #p2-panel-diagram, #p2-panel-charts)::after { pointer-events: none; }   /* view-only tabs keep pan, zoom and scroll */
 .p2-panel.is-busy:is(#p2-panel-map, #p2-panel-diagram, #p2-panel-charts) :is(button, input, select, textarea, a, [contenteditable]) { pointer-events: none; }
 @keyframes p2-spin { to { transform: rotate(360deg); } }
