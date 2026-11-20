@@ -1,0 +1,60 @@
+// Probe an exported browser reader bundle through the real runtime provider (cutter, key reader, bridge) in Node.
+// usage: node training/sop-bert/probe-bundle.mjs BUNDLE_DIR NODE_MODULES_ROOT PROBES.jsonl > out.jsonl
+// PROBES lines: {"text":…, "area":…, "context":{…}}. Uses scripts/lib/actual-reader-provider.mjs; no execution.
+import {readFileSync} from 'node:fs';
+import {createHash} from 'node:crypto';
+import path from 'node:path';
+import {loadActualReplayReader,runtimeTreeIdentity} from '../../scripts/lib/actual-reader-provider.mjs';
+const [bundle,runtimeRoot,probes]=process.argv.slice(2);
+const sha=b=>createHash('sha256').update(b).digest('hex');
+const manifestBytes=readFileSync(path.join(bundle,'manifest.json')),manifest=JSON.parse(manifestBytes);
+const deployment=JSON.parse(readFileSync(new URL('../../docs/webchat/models/sop-bert/deployment.json',import.meta.url)));
+const tree=await runtimeTreeIdentity(runtimeRoot);
+const ortModule='onnxruntime-node/dist/index.js',transformersModule='@huggingface/transformers/dist/transformers.node.mjs';
+const backend={format:'psys2.node-reader-backend/1',runtimeTreeSha256:tree.sha256,node:process.version,platform:process.platform,arch:process.arch,ortModule,transformersModule,options:{executionProviders:['cpu'],intraOpNumThreads:1,interOpNumThreads:1}};
+const file=name=>{const b=readFileSync(path.join(bundle,name));return {path:name,sha256:sha(b),bytes:b.length};};
+const spec={format:'psys2.actual-reader-replay/1',artifactRoot:bundle,manifestSha256:sha(manifestBytes),runtimeRoot,runtimeTreeSha256:tree.sha256,ortModule,transformersModule,
+ runtimeIdentity:{...deployment.runtimeIdentity,bindingsSha256:manifest.bindingsSha256,backendSha256:sha(JSON.stringify(backend))},
+ tokenizerArtifact:file('tokenizer.json'),bindingsArtifact:file('bindings.json'),tokenizerConfig:file('tokenizer_config.json')};
+// The replay loader verifies the bundle; a factory keeps the verified provider so the probe can drive the app route
+// itself with its own context (the loader's run() loses the proposal when routing uses proposeRequests).
+const {createVerifiedReaderProvider}=await import('../../src/dialog/verified-reader-provider.mjs');
+const {observedReaderContext}=await import('../../src/dialog/native-reader-context.mjs');
+const {routeNewEngine}=await import('../../src/dialog/reader-routing.mjs');
+let assembled=null,appContext=null;
+const reader=await loadActualReplayReader(spec,{factory:async options=>{const inner=options.getContext;assembled=await createVerifiedReaderProvider({...options,getContext:(...a)=>appContext??inner(...a)});return assembled;}});
+const runMode=process.argv.includes('--run');
+// --run: the whole app route (routeNewEngine) against a real editor host seeded with the probe's context objects.
+async function appRun(p){
+ const {NATIVE_AREAS}=await import('../../src/dialog/app-reader-context.mjs');
+ const {seedFunctionalContext}=await import('../../scripts/functional-context-seeding.mjs');
+ const {FUNCTIONAL_NATIVE_BINDINGS}=await import('../../scripts/lib/functional-native-bindings.mjs');
+ const tab={drawing:'draw',diagram:'diagram',document:'editor',calendar:'calendar',avatar:'avatar'}[p.tab??p.area],area=NATIVE_AREAS[tab],state={};
+ const empties={draw:async()=>(await import('../../worlds/art.draw/sop-drawing.mjs')).emptyDrawingState(),avatar:async()=>(await import('../../worlds/ui.avatar/sop-avatar.mjs')).emptyAvatarState(),
+  diagram:async()=>(await import('../../worlds/diagram.sketch/sop-diagram.mjs')).emptyDiagramState(),calendar:async()=>{const m=await import('../../worlds/time.calendar/sop-calendar.mjs');return m.emptyCalendarArea();}};
+ const defaults=empties[tab]?await empties[tab]():undefined;
+ if(defaults)state[area.world]=defaults;state['ui.shell']={activeTab:tab};
+ const host=await area.create({state:state[area.world],instanceId:'probe-'+Math.random().toString(16).slice(2)});
+ const setup=await seedFunctionalContext({context:{existing:p.context?.existing??[]},host,kindMappings:FUNCTIONAL_NATIVE_BINDINGS[p.area]??[],invocationPrefix:'probe'});
+ const session={isession:{state},newEngineJournal:[]};
+ const before=host.observe().objects.length;
+ const proposals=[];
+ session.engine={requestReader:{...assembled.provider,async propose(sop){const r=await assembled.provider.propose(sop);proposals.push(r);return r;},
+  async *proposeRequests(sop){for await(const r of assembled.provider.proposeRequests(sop)){proposals.push(r);yield r;}}}};
+ appContext=observedReaderContext(p.area,host.observe(),p.context?.previous??null,{compact:true,text:p.text});
+ let reply;try{reply=await routeNewEngine(session,p.text,{language:'en'});}finally{appContext=null;}
+ const after=host.observe().objects;
+ return {seeded:setup.ok,statuses:reply?.statuses,answer:reply?.text??reply?.reply??null,objectsBefore:before,objectsAfter:after.length,placement:reply?.trace?.placement??null,
+  proposal:{candidates:proposals.flatMap(r=>r.candidates??[]),failures:proposals.flatMap(r=>r.failures??[])}};
+}
+for(const line of readFileSync(probes,'utf8').split('\n').filter(Boolean)){
+ const p=JSON.parse(line);
+ if(runMode){let out;try{const r=await appRun(p);out={text:p.text,area:p.area,previous:p.context?.previous??null,seeded:r.seeded,statuses:r.statuses,answer:r.answer,objectsBefore:r.objectsBefore,objectsAfter:r.objectsAfter,placement:r.placement?String(r.placement).slice(0,600):null,
+   wires:(r.proposal?.candidates??[]).flatMap(c=>c.wires?[c.wires]:c.batch?.entries?.map(e=>e.wires)??[]),failures:(r.proposal?.failures??[]).map(f=>f.reason+(f.path?.length?':'+f.path.join('.'):''))};}
+  catch(e){out={text:p.text,area:p.area,error:String(e.message),stack:String(e.stack).split("\n").slice(0,6).join(" / ")};}
+  process.stdout.write(JSON.stringify(out)+'\n');continue;}
+ const {proposal}=await reader.probe(p.text,{area:p.area,context:p.context??{existing:[],previous:null}});
+ const raw=proposal.raw;
+ process.stdout.write(JSON.stringify({text:p.text,area:p.area,cuts:proposal.sourceCut?.spans,requests:raw?.requests??null,cutUnresolved:proposal.sourceCut?.unresolved??null,
+  wires:(proposal.candidates??[]).flatMap(c=>c.batch?.entries?.map(e=>e.wires)??[]),failures:(proposal.failures??[]).map(f=>f.reason+(f.path?.length?':'+f.path.join('.'):''))})+'\n');
+}
