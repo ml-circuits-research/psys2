@@ -1,6 +1,6 @@
 // Predicted raw structure -> declared canonical structure. No reader or gold input.
 import {copyHostData,snapshotHostData} from '../../worlds/native-tool-host.mjs?v=ee2bec37f5';
-import {positiveCardinalProof,spelledNumberProof} from './key-reader-value-proof.mjs?v=224098c7d3';
+import {positiveCardinalProof,spelledNumberProof} from './key-reader-value-proof.mjs?v=9198c024cc';
 import {decodeModelGraphs} from './model-graph-decoder.mjs?v=b5d3954020';
 export const RAW_STRUCTURAL_FORMAT='psys2.raw-structural-predictions/1';
 // The node budget of a binding table (every kind of the pinned catalog's drawable providers, with their provenance).
@@ -38,6 +38,7 @@ export function bridgeRawStructure(prediction,{bindings,bindingSha256,comparativ
   if(table.format!=='sop.structural-bindings/1'||!hash(bindingSha256))fail('invalid-binding-snapshot');
   if(!Array.isArray(comparatives)||comparatives.length>256||comparatives.some(r=>!r||!['concept','step','declaration'].every(k=>typeof r[k]==='string'&&r[k])||!(r.ordinal===true?r.factor===undefined:Number.isFinite(r.factor)&&r.factor>0)))fail('invalid-comparative-projection');
   const definite=references?.definite??[];if(!Array.isArray(definite)||definite.length>64||definite.some(d=>typeof d!=='string'||!d||/\s/.test(d)))fail('invalid-reference-projection');
+  const indefinite=references?.indefinite??[];if(!Array.isArray(indefinite)||indefinite.length>64||indefinite.some(d=>typeof d!=='string'||!d||/\s/.test(d)))fail('invalid-reference-projection');
   const questionHeads=references?.queries??[];if(!Array.isArray(questionHeads)||questionHeads.length>64||questionHeads.some(q=>!q||!['head','operation','declaration'].every(k=>typeof q[k]==='string'&&q[k])||typeof q.property!=='boolean'))fail('invalid-reference-projection');
   if(contextTarget!==null&&!(contextTarget&&['kind','declaration'].every(k=>typeof contextTarget[k]==='string'&&contextTarget[k])))fail('invalid-context-target');
   if(table.families!==undefined&&(!Array.isArray(table.families)||table.families.length>256))fail('invalid-family-binding-table');
@@ -53,6 +54,15 @@ export function bridgeRawStructure(prediction,{bindings,bindingSha256,comparativ
   const locate=(segment,literal,base,path,within)=>{
    const key=JSON.stringify(path),range=ranges.get(key);if(!range)return unique(segment,literal,base);usedRanges.add(key);tick(range[1]-range[0]);
    if(typeof literal!=='string'||sourceChars.slice(...range).join('')!==literal||within&&(range[0]<within[0]||range[1]>within[1])){issue('incompatible-predicted-range',path);return null;}return [...range];
+  };
+  // A unit word of a value said for a numeric property: the property's own unit (its declared words: factor 1), a unit
+  // of the binding table with a declared conversion to it ({factor}), else true (a unit not converted).
+  const unitWord=prop=>word=>{
+   const units=Array.isArray(table.lengthUnits)?table.lengthUnits:[];
+   if(prop.unit&&units.some(u=>u.unit===prop.unit&&u.words?.includes(word)))return {factor:1};
+   const u=lookup('units',{lemma:word});if(!u)return null;
+   const conversion=prop.unit&&units.find(c=>c.canonical===u.canonical&&c.unit===prop.unit&&Number.isFinite(c.factor));
+   return conversion?{factor:conversion.factor}:true;
   };
   const lookup=(family,criteria)=>{
    if(!Array.isArray(table[family]??[]))fail('invalid-binding-family',[family]);const found=[];
@@ -151,10 +161,10 @@ export function bridgeRawStructure(prediction,{bindings,bindingSha256,comparativ
      if(relation){c.relation=relation;anchor([...path,'relation'],rc.value_span,prop.sourceWire,false,['constraints',String(ri),'value_span']);}else unresolved('undeclared-relation-value',[...path,'relation']);
      consume(ri,'value',rc.value);
      const bounds=span?locate(original.span,rc.value_span,span[0],[...rawPath,'constraints',String(ri),'value_span'],span):null;if(bounds)c.source=bounds;
-     // The anchor phrase names an observed object: a kind lemma of the family, alone or after a definite determiner.
-     const aprop=lookup('properties',{area:raw.area,key:ac.key}),phrase=typeof ac.value_span==='string'?ac.value_span:'',determiner=definite.find(d=>phrase.toLowerCase().startsWith(d.toLowerCase()+' '));
+     // The anchor phrase names an observed object: a kind lemma of the family, alone or after a determiner.
+     const aprop=lookup('properties',{area:raw.area,key:ac.key}),phrase=typeof ac.value_span==='string'?ac.value_span:'',determiner=definite.find(d=>phrase.toLowerCase().startsWith(d.toLowerCase()+' '))??indefinite.find(d=>phrase.toLowerCase().startsWith(d.toLowerCase()+' '));
      const lemma=determiner?phrase.slice(determiner.length+1):phrase,akind=lemma?lookup('kinds',{area:raw.area,type:target.type,lemma}):null;
-     const a={id:aid,mode:'existing'};label.targets.push(a);if(determiner)a.determiner='definite';
+     const a={id:aid,mode:'existing'};label.targets.push(a);if(determiner)a.determiner=definite.includes(determiner)?'definite':'indefinite';
      const outer=span?locate(original.span,phrase,span[0],anchorOf.has(ac)?[...rawPath,'constraints',String(anchorOf.get(ac)),'anchor_span']:[...rawPath,'constraints',String(ai),'value_span'],span):null;if(!anchorOf.has(ac))consume(ai,'value',ac.value);
      const afamily=!akind&&lemma&&typeof target.type==='string'?lookup('families',{area:raw.area,type:target.type}):null;
      if(akind&&outer){a.kind=akind.canonical;const at=outer[0]+Array.from(phrase).length-Array.from(lemma).length;evidence.push({path:['targets',aid,'kind'],ranges:[[at,outer[1]]],origin:'declaration',declaration:akind.sourceWire});}
@@ -199,14 +209,14 @@ export function bridgeRawStructure(prediction,{bindings,bindingSha256,comparativ
        const outer=span?(supplied?locate(original.span,literal,span[0],[...rawPath,'constraints',String(ci),'value_span'],span):span):null;
        const copy=outer?locate(original.span,condition.value,span[0],valuePath,outer):null;
        // A numeric property takes the one number its copied words spell ("size 45" -> 45; see below).
-       const spelledCopy=copy&&prop.numeric===true&&!/^[-+]?\d+(\.\d+)?$/.test(condition.value.trim())&&!['degree','region'].includes(condition.operator)?spelledNumberProof(condition.value,word=>!!lookup('units',{lemma:word})):null;
+       const spelledCopy=copy&&prop.numeric===true&&!/^[-+]?\d+(\.\d+)?$/.test(condition.value.trim())&&!['degree','region'].includes(condition.operator)?spelledNumberProof(condition.value,unitWord(prop)):null;
        if(copy){c.value={kind:['degree','region'].includes(condition.operator)?'literal':prop.valueKind,value:spelledCopy?String(spelledCopy.value):condition.value};evidence.push({path:[...path,'value'],ranges:[copy],origin:'text'});}
        else unresolved('invalid-source-copy-range',[...path,'value']);
       }else{
        // A numeric property (its native parameter is a number, declared-bindings.mjs) takes the one number its span
        // spells when the span is not that number itself ("size 45", "two hundred sixty"): the declared number words.
        const plain=typeof literal==='string'&&/^[-+]?\d+(\.\d+)?$/.test(literal.trim());
-       const spelled=prop.numeric===true&&!plain&&!['degree','region'].includes(condition.operator)?spelledNumberProof(literal,word=>!!lookup('units',{lemma:word})):null;
+       const spelled=prop.numeric===true&&!plain&&!['degree','region'].includes(condition.operator)?spelledNumberProof(literal,unitWord(prop)):null;
        if(spelled&&(condition.value===literal||spelledNumberProof(String(condition.value))?.value===spelled.value)){
         c.value={kind:prop.valueKind,value:String(spelled.value)};anchor([...path,'value'],literal,null,false,['constraints',String(ci),supplied?'value_span':'value']);
        }else{

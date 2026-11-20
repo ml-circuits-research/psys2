@@ -1,15 +1,15 @@
 import { readSceneDefaults } from './scene-placement-defaults.mjs?v=cb0a7e6152';
-import { executeSpatialPlacement } from './spatial-placement-execution.mjs?v=38acdcdebd';
-import { compareNativeReadings, compileNativeCapability } from './capability-plan-adapter.mjs?v=f1c8d623aa';
+import { executeSpatialPlacement } from './spatial-placement-execution.mjs?v=e25529cf33';
+import { compareNativeReadings, compileNativeCapability } from './capability-plan-adapter.mjs?v=9d8040ce86';
 import { readDegreeBases } from './degree-bases.mjs?v=4485535b81';
-import { NATIVE_AREAS,createAreaHost } from './app-reader-context.mjs?v=49b3fe3d75';
+import { NATIVE_AREAS,createAreaHost } from './app-reader-context.mjs?v=dfc794489a';
 import { instanceIdFor } from './instance-identity.mjs?v=024ef1ca83';
 import { describeRouteComparison,resolveRequestRoute } from './request-routing-policy.mjs?v=64361eb288';
-import { executeHistoryRequest } from './history-execution.mjs?v=a61b3020f6';
-import { executeNativeQuery } from './native-query-execution.mjs?v=3405557f50';
-import { executeNativeCapability } from './capability-plan-execution.mjs?v=2b6b7a816d';
-import { executionValueSource } from './execution-policy.mjs?v=0660424711';
-import { inspectCachedExecutionSource } from './execution-world-inspection.mjs?v=1587e88ac2';
+import { executeHistoryRequest } from './history-execution.mjs?v=68e2f198fa';
+import { executeNativeQuery } from './native-query-execution.mjs?v=9f04750f08';
+import { executeNativeCapability } from './capability-plan-execution.mjs?v=223ea9edb8';
+import { executionValueSource } from './execution-policy.mjs?v=1e15657c3e';
+import { inspectCachedExecutionSource } from './execution-world-inspection.mjs?v=d82ed0239b';
 import { World, str } from '../vendor/sopworld/sopworld.mjs?v=b95dcf7c63';
 import SOURCE from './new-engine-source.mjs?v=0a99636697';
 let knowledge;
@@ -29,7 +29,7 @@ const unavailable=(text,reason)=>({text,parts:[{text,translate:false}],statuses:
 const interpreters=new Map([
   ['query',{run:({session,candidate,options})=>executeNativeQuery(session,candidate.wires,{...options,readKnowledge:source})}],
   ['history',{run:({session,candidate,options})=>executeHistoryRequest(session,candidate,options.view)}],
-  ['spatial',{run:({session,candidate,options})=>executeSpatialPlacement(session,candidate,options)}],
+  ['spatial',{run:({session,candidate,options})=>executeSpatialPlacement(session,candidate,{...options,readKnowledge:source})}],
   ['capability',{run:({session,candidate,options})=>executeNativeCapability(session,candidate,{...options,readKnowledge:source}),compare:compareNativeReadings}],
   ['reject',{run:({route})=>unavailable('I could not apply the requested placement. Nothing changed.',route.reason)}],
 ]);

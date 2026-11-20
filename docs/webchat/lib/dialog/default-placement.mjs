@@ -15,7 +15,7 @@
 // the same way: hard first, then soft at peerWeight.
 import {solveProblem,parse,str} from '../vendor/sopworld/sopworld.mjs?v=b95dcf7c63';
 import {placementSearchProvider,z3Status} from './placement-search-provider.mjs?v=0675893eb5';
-import {resolveObjective,chooseRegion,stopAtNoOverlap} from './placement-default-policy.mjs?v=b48107f6ef';
+import {resolveObjective,chooseRegion,stopAtNoOverlap} from './placement-default-policy.mjs?v=c3a4ae5a0e';
 // Every weight, budget, grid division and centre share an area leaves out comes from the declared application defaults
 // (worlds/app.project/placement-default-policy.sop app.placement.default); the keys taken from there are reported
 // (defaulted), and the candidate region is chosen by its declared criteria (std.decide of=app.place.region).

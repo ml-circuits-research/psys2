@@ -5,12 +5,12 @@
 // defaults, admitted act classes, reply wording and the run-time fallback ladder (interpretation-policy.sop), the
 // admission decision (reader-admission-policy.sop) and every binding (the deployed binding table). Nothing here names a
 // word, a sentence, a tool or a world.
-import {bridgeRawStructure,pruneLabel} from './raw-structural-bridge.mjs?v=41d7ae8f20';
+import {bridgeRawStructure,pruneLabel} from './raw-structural-bridge.mjs?v=064356ad67';
 import {decodeModelGraphs} from './model-graph-decoder.mjs?v=b5d3954020';
-import {comparativeSteps} from './comparative-projection.mjs?v=fbfa11895c';
-import {referenceProjection} from './reference-projection.mjs?v=7934d2e1ca';
+import {comparativeSteps} from './comparative-projection.mjs?v=e32f98d4f2';
+import {referenceProjection} from './reference-projection.mjs?v=98e0f2e3c4';
 import {interpretationPolicy} from './interpretation-policy.mjs?v=79e47ac3e4';
-import {executionPolicyWorld} from './execution-policy.mjs?v=0660424711';
+import {executionPolicyWorld} from './execution-policy.mjs?v=1e15657c3e';
 import {str} from '../vendor/sopworld/sopworld.mjs?v=b95dcf7c63';
 
 const scalarsOf=text=>Array.from(text);
