@@ -6,8 +6,9 @@ import http from 'node:http';
 import { readFileSync, mkdirSync, copyFileSync, existsSync, writeFileSync, statSync } from 'node:fs';
 import { join, resolve, dirname, extname } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { loadPuppeteer, findChrome } from '../../../scripts/test-webchat-turns.mjs';
-import { createWordPieceTokenizer } from '../../../src/formalizer/wordpiece.mjs';
+// RETIRED 2026-11-20: the NX heads and the rule formalizer's WordPiece tokenizer it measured were removed from the application
+// (src/formalizer, scripts/test-webchat-turns.mjs); this experiment is kept as the record of its results and no longer runs.
+console.error('retired experiment: the NX dispatcher path it measured was removed (2026-11-20)'); process.exit(2);
 const here = dirname(fileURLToPath(import.meta.url));
 const arg = (k, d) => { const i = process.argv.indexOf('--' + k); return i > 0 ? process.argv[i + 1] : d; };
 const nxDir = resolve(arg('nx')), disp = resolve(arg('disp')), ortDir = resolve(arg('ort')), ortNode = resolve(arg('ortnode'));
