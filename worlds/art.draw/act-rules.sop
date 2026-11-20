@@ -616,6 +616,25 @@
 @place.y app.act.call act=change thing=$obj.thing attr=y value=?y order=2
 @place.cx core.rule when=$place.req when=$obj.item when=$obj.thing then=$place.x
 @place.cy core.rule when=$place.req when=$obj.item when=$obj.thing then=$place.y
+# A move by a direction is the place of the point one step that way (up is towards the top of the page: smaller y).
+@mv.item app.act.item param="ids" value=?id
+@mv.o w.drawing.object code=?id x=?ox y=?oy
+@mv.left.req app.act.request operation="drawing.object.move" direction="left" distance=?d
+@mv.left.n core.calc out=?n fn=sub args=?ox args=?d
+@mv.left.place app.act.request operation="drawing.object.place" x=?n y=?oy
+@move.left core.rule when=$mv.left.req when=$mv.item when=$mv.o with=$mv.left.n then=$mv.left.place
+@mv.right.req app.act.request operation="drawing.object.move" direction="right" distance=?d
+@mv.right.n core.calc out=?n fn=add args=?ox args=?d
+@mv.right.place app.act.request operation="drawing.object.place" x=?n y=?oy
+@move.right core.rule when=$mv.right.req when=$mv.item when=$mv.o with=$mv.right.n then=$mv.right.place
+@mv.up.req app.act.request operation="drawing.object.move" direction="up" distance=?d
+@mv.up.n core.calc out=?n fn=sub args=?oy args=?d
+@mv.up.place app.act.request operation="drawing.object.place" y=?n x=?ox
+@move.up core.rule when=$mv.up.req when=$mv.item when=$mv.o with=$mv.up.n then=$mv.up.place
+@mv.down.req app.act.request operation="drawing.object.move" direction="down" distance=?d
+@mv.down.n core.calc out=?n fn=add args=?oy args=?d
+@mv.down.place app.act.request operation="drawing.object.place" y=?n x=?ox
+@move.down core.rule when=$mv.down.req when=$mv.item when=$mv.o with=$mv.down.n then=$mv.down.place
 @remove.req app.act.request operation="drawing.object.remove"
 @remove.call app.act.call act=remove thing=$obj.thing order=1
 @remove core.rule when=$remove.req when=$obj.item when=$obj.thing then=$remove.call

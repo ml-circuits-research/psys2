@@ -1,3 +1,4 @@
+import {en} from '../lang/en.mjs';
 import {isScopedRemoval} from './capability-plan-execution.mjs';
 import {projectRemovalAction} from './project-removal-action.mjs';
 import { captureHistory, recordHistory, restoreHistory } from './history-journal.mjs';
@@ -355,12 +356,45 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
 // shows that editor. A rejected attempt leaves no trace in the worlds or the history; every attempt is in the trace.
 const unboundReasons=reply=>[...(reply?.trace?.readerRouting?.unresolved??[]).map(item=>item?.reason),...(reply?.trace?.partialAdmission?.refused??[]).map(item=>String(item).split(':')[0])];
 const fullyApplied=reply=>Array.isArray(reply?.statuses)&&reply.statuses.length>0&&reply.statuses.every(status=>status==='supported');
+// An attempt in another live editor: the shell shows it while it is read; a rejected attempt is undone.
+async function attemptInView(session,text,options,view,shell){
+ const before=structuredClone(session.isession.state),journal=captureHistory(session,false);
+ const back=()=>{session.isession.state=before;restoreHistory(session,journal,{},false);};
+ session.isession.state['ui.shell']={...shell,activeTab:view};
+ let reply;
+ try{reply=await routeInView(session,text,{...options,view});}catch(error){back();throw error;}
+ const used=fullyApplied(reply);
+ if(!used)back();
+ return {reply,used};
+}
+const liveViews=(session,NATIVE_AREAS)=>Object.entries(NATIVE_AREAS).filter(([,area])=>session.isession.state[area.world]&&typeof session.isession.state[area.world]==='object');
+// EDITOR MENTION (area-registry.sop app.area.word): a request that names a live editor other than the active one
+// ("add a box to the diagram", "in the drawing") is read in that editor first; when it does not apply fully there it is
+// read as usual. The words are the registry's; the request's words are compared by their singular (w.lang.en).
+async function mentionedView(session,text,active){
+ const {NATIVE_AREAS}=await import('./app-reader-context.mjs');
+ const said=new Set([...String(text).toLowerCase().matchAll(/[\p{L}\p{N}]+/gu)].flatMap(m=>[m[0],en.singular(m[0],'lemma')]));
+ const named=liveViews(session,NATIVE_AREAS).filter(([view,area])=>view!==active&&(area.words??[]).some(word=>word.split(/\s+/).every(part=>said.has(part.toLowerCase())))).map(([view])=>view);
+ return named.length===1?named[0]:null;
+}
 export async function routeNewEngine(session,text,options={}){
+ const shell=session.isession?.state?.['ui.shell'];
+ let mention=null;
+ if(!options.view&&!isAuthoredRequest(text)&&shell?.activeTab){
+  const view=await mentionedView(session,text,shell.activeTab);
+  if(view){
+   const {reply,used}=await attemptInView(session,text,options,view,shell);
+   observe(session,{nodeIds:['component:reader'],phase:'stage',operation:'app.reader.area',label:'Read the request in the editor it names',text,from:shell.activeTab,view,used});
+   mention={view,used,statuses:reply?.statuses??[]};
+   if(used)return {...reply,state:structuredClone(session.isession.state),trace:{...reply.trace,editorMention:mention}};
+  }
+ }
  const first=await routeInView(session,text,options);
- const rule=interpretationPolicy().areaRetry,shell=session.isession?.state?.['ui.shell'];
- if(!rule||options.view||isAuthoredRequest(text)||!shell?.activeTab||first?.statuses?.includes('supported'))return first;
+ const withMention=reply=>mention?{...reply,trace:{...reply.trace,editorMention:mention}}:reply;
+ const rule=interpretationPolicy().areaRetry;
+ if(!rule||options.view||isAuthoredRequest(text)||!shell?.activeTab||first?.statuses?.includes('supported'))return withMention(first);
  const reasons=new Set(unboundReasons(first).filter(reason=>rule.reasons.includes(reason)));
- if(!reasons.size)return first;
+ if(!reasons.size)return withMention(first);
  const {NATIVE_AREAS}=await import('./app-reader-context.mjs');
  // The knowledge prior: only an editor whose bindings bind a kind word the reading saw is a hypothesis (declared area order among them);
  // a word no other editor binds is not re-read there (each re-reading costs the reader passes of a whole turn).
@@ -368,22 +402,15 @@ export async function routeNewEngine(session,text,options={}){
  collect(first?.trace?.readerRouting?.rawReading);collect(first?.trace?.readerRouting?.contextRetry);
  let kinds=[];try{kinds=session.engine?.requestReader?.bindings?.()?.kinds??[];}catch{/* no bindings: the declared order alone */}
  const binds=area=>kinds.some(row=>row.area===area&&said.has(String(row.lemma).toLowerCase()));
- const active=shell.activeTab,views=Object.entries(NATIVE_AREAS).filter(([view,area])=>view!==active&&session.isession.state[area.world]&&typeof session.isession.state[area.world]==='object')
-  .filter(([,area])=>binds(area.area)).map(([view])=>view);
+ const active=shell.activeTab,views=liveViews(session,NATIVE_AREAS).filter(([view,area])=>view!==active&&view!==mention?.view&&binds(area.area)).map(([view])=>view);
  const attempts=[];
  for(const view of views){
-  const before=structuredClone(session.isession.state),journal=captureHistory(session,false);
-  const back=()=>{session.isession.state=before;restoreHistory(session,journal,{},false);};
-  session.isession.state['ui.shell']={...shell,activeTab:view};
-  let reply;
-  try{reply=await routeInView(session,text,{...options,view});}catch(error){back();throw error;}
-  const used=fullyApplied(reply);
+  const {reply,used}=await attemptInView(session,text,options,view,shell);
   attempts.push({view,used,statuses:reply?.statuses??[],reason:reply?.trace?.reason??null});
   observe(session,{nodeIds:['component:reader'],phase:'stage',operation:'app.reader.area',label:rule.label,text,from:active,view,used});
-  if(used)return {...reply,state:structuredClone(session.isession.state),trace:{...reply.trace,areaRetry:{rule:rule.id,from:active,reasons:[...reasons],used:view,attempts}}};
-  back();
+  if(used)return withMention({...reply,state:structuredClone(session.isession.state),trace:{...reply.trace,areaRetry:{rule:rule.id,from:active,reasons:[...reasons],used:view,attempts}}});
  }
- return {...first,trace:{...first.trace,areaRetry:{rule:rule.id,from:active,reasons:[...reasons],used:null,attempts}}};
+ return withMention({...first,trace:{...first.trace,areaRetry:{rule:rule.id,from:active,reasons:[...reasons],used:null,attempts}}});
 }
 async function routeInView(session,text,options={}){
  if(isAuthoredRequest(text)){

@@ -10,6 +10,26 @@
 @el.out app.reading.eligible request=?r
 @rule.eligible core.rule when=$el.target not=$el.bound not=$el.named then=$el.out
 
+# ---- Number agreement (2026-11-21) ---------------------------------------------------------------------------------
+# The indefinite (singular) article counts one: a plural kind phrase under it ("draw a women") names the kind of its
+# singular, so the request binds what its singular binds (quantity-projection.mjs applies it, as for a counted kind).
+@sg.t app.reading.target request=?r determiner="indefinite" kindSpan=?s
+@sg.f app.reading.form text=?s singular=?g
+@sg.d core.check fn=neq args=?s args=?g
+@sg.out app.reading.bySingular request=?r
+@rule.singular.indefinite core.rule when=$sg.t when=$sg.f if=$sg.d then=$sg.out
+
+# ---- One value, one role (2026-11-21) -------------------------------------------------------------------------------
+# A said value fills one key. When the reader gives the same value span to two keys ("that moon skewed 20 degrees":
+# rotation and skew) and the request says the concept word of one of them only, the other reading of the span is dropped.
+@sr.a app.reading.span request=?r index=?i key=?k start=?s end=?e
+@sr.b app.reading.span request=?r index=?j key=?k2 start=?s end=?e
+@sr.diff core.check fn=neq args=?k args=?k2
+@sr.ev app.reading.evidence request=?r key=?k
+@sr.ev2 app.reading.evidence request=?r key=?k2
+@sr.out app.reading.drop request=?r index=?j
+@rule.span.one.role core.rule when=$sr.a when=$sr.b if=$sr.diff when=$sr.ev not=$sr.ev2 then=$sr.out
+
 # ---- A joined population (cdf4aed4d, 954017902) ----------------------------------------------------------------------
 # A joining act read with the joined population as its theme ("connect all the circles", "connect C to all circles")
 # is the joining line made between them: the act's declared form (actForm as=make of=<line kind>) names the line's

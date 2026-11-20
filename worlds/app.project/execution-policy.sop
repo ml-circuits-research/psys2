@@ -74,6 +74,12 @@
 # said by any of its words (the mention is the evidence; the tool also takes the words themselves, figure-rules.sop).
 # The list repeats those names so the binding completion can read it (keep it equal to k.faces/shards/figure-poses.sop,
 # presets.sop and traits.sop).
+# A direction said for a move ("move the house left") is the move operation's direction.
+@drawing.key.direction app.execution.keyBinding area=drawing key="drawn.direction" operation="drawing.object.move" parameter="direction"
+@drawing.key.direction.left app.execution.keyValue area=drawing key="drawn.direction" said="left" value="left"
+@drawing.key.direction.right app.execution.keyValue area=drawing key="drawn.direction" said="right" value="right"
+@drawing.key.direction.up app.execution.keyValue area=drawing key="drawn.direction" said="up" value="up"
+@drawing.key.direction.down app.execution.keyValue area=drawing key="drawn.direction" said="down" value="down"
 @drawing.key.pose app.execution.keyBinding area=drawing key="drawn.pose" operation="drawing.object.change" parameter="pose"
 @drawing.key.pose.standing app.execution.keyValue area=drawing key="drawn.pose" said="standing" value="standing"
 @drawing.key.pose.arms_up app.execution.keyValue area=drawing key="drawn.pose" said="arms up" value="arms up"

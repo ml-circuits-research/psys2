@@ -4,9 +4,10 @@
 // conclude (a target re-read as a joining line's or a container's members, the end a population phrase fills, a
 // population reference) is applied here field by field. Nothing here decides: no act, key, kind or word is named.
 import {World,serialize,quote,str} from '../vendor/sopworld/sopworld.mjs?v=b665fdbe3d';
-import SCHEMA from '../../worlds/app.project/raw-reading-schema-source.mjs?v=23651ba431';
-import POLICY from '../../worlds/app.project/raw-reading-policy-source.mjs?v=e852e7357a';
-import {executionPolicyWorld} from './execution-policy.mjs?v=839e38c58f';
+import SCHEMA from '../../worlds/app.project/raw-reading-schema-source.mjs?v=070cbfcd33';
+import POLICY from '../../worlds/app.project/raw-reading-policy-source.mjs?v=a7e9e47fc7';
+import {executionPolicyWorld} from './execution-policy.mjs?v=a69d3aac5f';
+import {en} from '../lang/en.mjs?v=40d8d7165d';
 
 let base=null;
 function policyWorld(){
@@ -31,7 +32,9 @@ function requestFacts(index,request){
  const facts=[record(`r${index}`,'request',{request:index,act:request?.act})];
  const t=request?.target;
  if(t&&typeof t==='object')facts.push(record(`t${index}`,'target',{request:index,type:t.type,mode:t.mode,fill:t.fill,quantifier:t.quantifier,kind:t.kind,
-  kindSpan:t.kind_span,descriptionSpan:t.description_span,nameSpan:t.name_span?String(t.name_span):undefined}));
+  kindSpan:t.kind_span,descriptionSpan:t.description_span,nameSpan:t.name_span?String(t.name_span):undefined,determiner:t.determiner}));
+ // The kind phrase's singular (w.lang.en morphology of its last word), for the number-agreement rules.
+ if(text(t?.kind_span)){const words=t.kind_span.split(/\s+/),head=words.at(-1).toLowerCase(),singular=en.singular(head,'lemma');if(text(singular))facts.push(record(`form${index}`,'form',{text:t.kind_span,singular:[...words.slice(0,-1),singular].join(' ')}));}
  return facts;
 }
 
@@ -93,6 +96,49 @@ export function declaredRetargets(raw,bindings){
    if(span)for(const field of ['value','value_span'])out.ranges.push({path:['requests',at,'constraints',String(ci),field],range:[...span.range]});
   }else out.ranges=(out.ranges??[]).filter(x=>!(x.path[0]==='requests'&&x.path[1]===at&&x.path[2]==='target'));
   r.target={type:one(row,'type'),mode:one(row,'mode'),determiner:one(row,'determiner'),...(one(row,'fill')?{fill:one(row,'fill')}:{})};
+ }
+ return out;
+}
+
+/** Whether the rules read request `index`'s kind by the singular of its kind phrase (app.reading.bySingular). */
+export function readsBySingular(raw,index=0){
+ const request=raw?.requests?.[index];
+ if(!request)return false;
+ const world=policyWorld().fork();
+ return world.tell(serialize(requestFacts(0,request)),{factsOnly:true}).ok&&world.ofType('app.reading.bySingular').length>0;
+}
+
+/** The declared one-value-one-role rule (app.reading.drop) applied to a raw reading: the constraints it drops are removed. */
+export function declaredSpanRoles(raw,bindings){
+ if(!raw||!bindings||!Array.isArray(raw.requests)||!raw.requests.length)return raw;
+ const source=String(raw.source?.text??''),scalars=Array.from(source).join('').toLowerCase();
+ const words=new Set([...scalars.matchAll(/[\p{L}]+/gu)].map(m=>m[0]));
+ const said=word=>[word,en.plural(word),...en.verbForms(word)].some(form=>words.has(String(form).toLowerCase()));
+ const concept=key=>(bindings.properties??[]).find(p=>p.area===raw.area&&p.key===key)?.rawDescriptor?.concept;
+ const facts=[];
+ for(const [index,request] of raw.requests.entries())for(const [ci,c] of (request?.constraints??[]).entries()){
+  const range=(raw.ranges??[]).find(x=>x.path?.join('.')===['requests',index,'constraints',ci,'value_span'].join('.'))?.range;
+  if(!text(c?.key)||!Array.isArray(range))continue;
+  facts.push(record(`s${index}_${ci}`,'span',{request:index,index:ci,key:c.key,start:range[0],end:range[1]}));
+  const word=concept(c.key);
+  if(text(word)&&String(word).split(/[._\s]+/).filter(Boolean).every(said))facts.push(record(`e${index}_${ci}`,'evidence',{request:index,key:c.key}));
+ }
+ if(facts.length<2)return raw;
+ const world=policyWorld().fork();
+ if(!world.tell(serialize(facts),{factsOnly:true}).ok)return raw;
+ const drops=world.ofType('app.reading.drop').map(row=>[num(row,'request'),num(row,'index')]);
+ if(!drops.length)return raw;
+ const out=structuredClone(raw);
+ for(const [index,request] of out.requests.entries()){
+  const gone=new Set(drops.filter(([r])=>r===index).map(([,ci])=>ci));
+  if(!gone.size)continue;
+  const keep=(request.constraints??[]).map((c,ci)=>[c,ci]).filter(([,ci])=>!gone.has(ci)),renumber=new Map(keep.map(([,ci],n)=>[ci,n]));
+  request.constraints=keep.map(([c])=>c);
+  out.ranges=(out.ranges??[]).flatMap(x=>{
+   if(String(x.path?.[0])!=='requests'||Number(x.path[1])!==index||x.path[2]!=='constraints')return [x];
+   const ci=Number(x.path[3]);if(gone.has(ci))return [];
+   const path=[...x.path];path[3]=typeof x.path[3]==='string'?String(renumber.get(ci)):renumber.get(ci);return [{...x,path}];
+  });
  }
  return out;
 }

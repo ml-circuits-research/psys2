@@ -10,7 +10,7 @@ import {decodeModelGraphs} from './model-graph-decoder.mjs';
 import {comparativeSteps} from './comparative-projection.mjs';
 import {referenceProjection} from './reference-projection.mjs';
 import {interpretationPolicy} from './interpretation-policy.mjs';
-import {declaredRetargets} from './raw-reading-policy.mjs';
+import {declaredRetargets,declaredSpanRoles} from './raw-reading-policy.mjs';
 import {en} from '../lang/en.mjs';
 import {budget} from './budget.mjs';
 import {readLexicalPhrase} from '../vendor/sopworld/sopworld.mjs';
@@ -68,7 +68,7 @@ function kindReadings(raw,bindings){
 /** The declared raw readings (kind words; a population joined by lines, a container's property: raw-reading-policy.sop) applied to a raw reading. */
 export function declaredRawReadings(raw,bindings){
  if(!raw||!bindings||!Array.isArray(raw.requests))return raw;
- return declaredRetargets(kindReadings(raw,bindings),bindings);
+ return declaredRetargets(declaredSpanRoles(kindReadings(raw,bindings),bindings),bindings);
 }
 export function partialReading(proposal,{bindings,bindingSha256}){
  const raw=proposal?.raw;

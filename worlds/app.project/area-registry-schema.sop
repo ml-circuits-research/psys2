@@ -1,4 +1,4 @@
-@area.registry.module core.module name=app.area version=1 exports=app.area.view exports=app.area.path
+@area.registry.module core.module name=app.area version=1 exports=app.area.view exports=app.area.path exports=app.area.word
 
 # One editor view of the application: the tab id the page shows, the reader's area name and the world whose state it edits.
 @area.view.type core.type of=app.area.view closed=true
@@ -14,3 +14,8 @@
 @area.path.role core.slot of=app.area.path key=role kind=atom enum=focus enum=history.view present=true
 @area.path.order core.slot of=app.area.path key=order kind=integer min=0 present=true
 @area.path.key core.slot of=app.area.path key=key kind=string many=true present=true
+
+# A word a request uses to name the editor ("add a box to the diagram"): the request is read in that editor first.
+@area.word.type core.type of=app.area.word closed=true
+@area.word.view core.slot of=app.area.word key=view kind=atom present=true
+@area.word.text core.slot of=app.area.word key=text kind=string present=true

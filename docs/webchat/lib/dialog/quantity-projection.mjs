@@ -6,11 +6,12 @@
 //  - a counted kind is read by its singular (w.lang.en morphology, bundled from the catalog): "three houses" binds
 //    the kind the reader binds for "house", not a thing whose own name is the plural (the emoji "houses"); the
 //    plural's own binding stays as an alternative in the trace;
-//  - a plural noun under the indefinite (singular) article ("draw a women") is one thing by its determiner: it is read
-//    by its singular too, like a counted kind, so it binds what its singular binds.
+//  - a kind the declared number-agreement rules read by its singular (raw-reading-policy.sop app.reading.bySingular:
+//    "draw a women") binds what its singular binds, like a counted kind.
 import {parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=b665fdbe3d';
 import {en} from '../lang/en.mjs?v=40d8d7165d';
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=aa61a3dfdf';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=88f1ec4c07';
+import {readsBySingular} from './raw-reading-policy.mjs?v=ca60ede675';
 
 const attr=(wire,key)=>{const raw=wire?.attrs[key]?.[0];return raw===undefined?undefined:raw.startsWith('"')?str(raw):raw;};
 const words=text=>[...String(text).matchAll(/[\p{L}\p{N}]+/gu)].map(m=>m[0].toLowerCase());
@@ -41,8 +42,8 @@ export function projectQuantities(read,{amounts=[],bindings,view}={}){
  const from=trigger&&trigger[1]<=kindRange[0]?trigger[1]:span?.[0]??0,before=words(Array.from(text).slice(from,kindRange[0]).join(''));
  const amount=plural?amounts.find(a=>before.includes(a.name)):undefined;
  const area=bindings?.readerAreaByView?.[view]??NATIVE_AREAS[view]?.area;
- // The singular article counts one: a plural noun under it names the kind of its singular (no vague amount was said).
- const single=plural&&!amount&&request.target?.determiner==='indefinite';
+ // A kind the declared reading rules read by its singular (no vague amount was said).
+ const single=plural&&!amount&&readsBySingular(raw,0);
  const singularKind=plural&&area?bindings?.kinds?.find(row=>row.area===area&&row.lemma===singular)?.canonical:undefined;
  let changed=false;
  const projected=candidates.map(candidate=>{

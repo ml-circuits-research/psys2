@@ -8,6 +8,13 @@
 @area.editor app.area.view view=editor area=document world=docs.editor separate.runtime=true
 @area.calendar app.area.view view=calendar area=calendar world=time.calendar separate.runtime=true
 
+# The words that name each editor in a request (compared by their singular): "to the diagram", "in the drawing".
+@area.avatar.word.avatar app.area.word view=avatar text="avatar"
+@area.draw.word.drawing app.area.word view=draw text="drawing"
+@area.diagram.word.diagram app.area.word view=diagram text="diagram"
+@area.editor.word.document app.area.word view=editor text="document"
+@area.calendar.word.calendar app.area.word view=calendar text="calendar"
+
 # Reader focus: the selection paths of each view's projected state.
 @area.avatar.focus.selected app.area.path view=avatar role=focus order=0 key=runtime key=view key=selected
 @area.draw.focus.selected app.area.path view=draw role=focus order=0 key=runtime key=view key=selected

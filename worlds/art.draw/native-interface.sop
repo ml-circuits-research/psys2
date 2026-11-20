@@ -206,6 +206,13 @@
 @native.art.draw.value.139 std.capability.record entry=$native.art.draw.value.135 entry=$native.art.draw.value.136 entry=$native.art.draw.value.137 entry=$native.art.draw.value.138
 @native.art.draw.value.140 std.capability.arg name="spatial" value=$native.art.draw.value.139
 @native.art.draw.op.drawing.object.place.metadata app.native.metadata operation=$native.art.draw.op.drawing.object.place field=$native.art.draw.value.129 field=$native.art.draw.value.134 field=$native.art.draw.value.140
+# A move by a direction ("move the house left"): the object goes one step (distance, canvas pixels) that way from where it is;
+# the act rules turn it into the place of the new point, so perspective and held things follow as for any place.
+@native.art.draw.op.drawing.object.move std.capability.operation scope=$native.art.draw.scope name="drawing.object.move" act=place on="art.draw.object" order=5 eligible=true
+@native.art.draw.op.drawing.object.move.param.ids std.capability.parameter operation=$native.art.draw.op.drawing.object.move name="ids" kind=array required=true
+@native.art.draw.op.drawing.object.move.param.direction std.capability.parameter operation=$native.art.draw.op.drawing.object.move name="direction" kind=string required=true enum="left" enum="right" enum="up" enum="down" enumClosed=true
+@native.art.draw.op.drawing.object.move.param.distance std.capability.parameter operation=$native.art.draw.op.drawing.object.move name="distance" kind=number default=80 min=1
+@native.art.draw.op.drawing.object.move.metadata app.native.metadata operation=$native.art.draw.op.drawing.object.move field=$native.art.draw.value.129 field=$native.art.draw.value.134
 @native.art.draw.op.drawing.objects.transform std.capability.operation scope=$native.art.draw.scope name="drawing.objects.transform" act=change on="art.draw.object" order=6 eligible=true
 @native.art.draw.op.drawing.objects.transform.param.ids std.capability.parameter operation=$native.art.draw.op.drawing.objects.transform name="ids" kind=array required=true
 @native.art.draw.op.drawing.objects.transform.param.x std.capability.parameter operation=$native.art.draw.op.drawing.objects.transform name="x" kind=number required=true

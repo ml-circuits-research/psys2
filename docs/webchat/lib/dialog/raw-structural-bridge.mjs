@@ -4,7 +4,7 @@ import {positiveCardinalProof,spelledNumberProof} from './key-reader-value-proof
 import {decodeModelGraphs} from './model-graph-decoder.mjs?v=8f5eac6b37';
 import {unitConversion,stripPhrase,splitPhrase} from '../vendor/sopworld/sopworld.mjs?v=b665fdbe3d';
 import {en} from '../lang/en.mjs?v=40d8d7165d';
-import {populationReference} from './raw-reading-policy.mjs?v=f46d7b038d';
+import {populationReference} from './raw-reading-policy.mjs?v=ca60ede675';
 export const RAW_STRUCTURAL_FORMAT='psys2.raw-structural-predictions/1';
 // The node budget of a binding table (every kind of the pinned catalog's drawable providers, with their provenance).
 export const BINDING_NODES=250000;
