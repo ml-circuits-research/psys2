@@ -1,0 +1,141 @@
+@reading.types core.use world=app.reading prefix=false
+
+# Declared re-readings of a raw reader proposal before it is bridged (specs/semantic-frame.md §5). The feeder
+# (src/dialog/raw-reading-policy.mjs) tells the reading's facts and applies what these rules conclude; it decides nothing.
+
+# A request whose target is neither bound nor named.
+@el.target app.reading.target request=?r
+@el.bound app.reading.target request=?r mode="bound"
+@el.named app.reading.target request=?r nameSpan=?n
+@el.out app.reading.eligible request=?r
+@rule.eligible core.rule when=$el.target not=$el.bound not=$el.named then=$el.out
+
+# ---- A joined population (cdf4aed4d, 954017902) ----------------------------------------------------------------------
+# A joining act read with the joined population as its theme ("connect all the circles", "connect C to all circles")
+# is the joining line made between them: the act's declared form (actForm as=make of=<line kind>) names the line's
+# family; the line pattern (linkPattern) its two ends, by the keys of their concepts.
+@j.req app.reading.request request=?r act=?act
+@j.target app.reading.target request=?r type=?tt
+@j.form app.reading.actForm act=?act as="make" of=?line
+@j.line app.reading.family canonical=?line type=?lt
+@j.pat app.reading.linkPattern pattern=?pid from=?fc to=?tc
+@j.fk app.reading.property canonical=?fc key=?fk
+@j.tk app.reading.property canonical=?tc key=?tk
+@j.other core.check fn=neq args=?lt args=?tt
+@j.out app.reading.joining request=?r line=?lt pattern=?pid from=?fk to=?tk
+@rule.joining core.rule when=$j.req when=$j.target when=$j.form when=$j.line when=$j.pat when=$j.fk when=$j.tk if=$j.other then=$j.out
+# (a target without a family: the line is another family as well)
+@j.untyped app.reading.target request=?r
+@j.typed app.reading.target request=?r type=?any
+@rule.joining.untyped core.rule when=$j.req when=$j.untyped not=$j.typed when=$j.form when=$j.line when=$j.pat when=$j.fk when=$j.tk then=$j.out
+
+# The keys a joining request may say: the two ends and the pattern's own concept.
+@a.j app.reading.joining request=?r pattern=?pid from=?fk to=?tk
+@a.from app.reading.allowed request=?r pattern=?pid key=?fk
+@a.to app.reading.allowed request=?r pattern=?pid key=?tk
+@rule.allowed.ends core.rule when=$a.j then=$a.from then=$a.to
+@a.pc app.reading.linkPattern pattern=?pid patternConcept=?pc
+@a.pk app.reading.property canonical=?pc key=?pk
+@a.pkey app.reading.allowed request=?r pattern=?pid key=?pk
+@rule.allowed.pattern core.rule when=$a.j when=$a.pc when=$a.pk then=$a.pkey
+@f.c app.reading.constraint request=?r key=?k
+@f.allowed app.reading.allowed request=?r pattern=?pid key=?k
+@f.out app.reading.foreign request=?r pattern=?pid
+@rule.foreign core.rule when=$a.j when=$f.c not=$f.allowed then=$f.out
+
+# The first end the request leaves unsaid, and whether it says an end.
+@fe.saidFrom app.reading.constraint request=?r key=?fk
+@fe.saidTo app.reading.constraint request=?r key=?tk
+@fe.outFrom app.reading.freeEnd request=?r pattern=?pid key=?fk
+@fe.outTo app.reading.freeEnd request=?r pattern=?pid key=?tk
+@rule.free.from core.rule when=$a.j not=$fe.saidFrom then=$fe.outFrom
+@rule.free.to core.rule when=$a.j when=$fe.saidFrom not=$fe.saidTo then=$fe.outTo
+@se.out app.reading.saidEnd request=?r pattern=?pid
+@rule.said.from core.rule when=$a.j when=$fe.saidFrom then=$se.out
+@rule.said.to core.rule when=$a.j when=$fe.saidTo then=$se.out
+
+# A population said: every member ("all", a quantifier over all), or a kind said in another form than its kind
+# (the plural "circles" read as the kind circle).
+@po.fill app.reading.target request=?r fill="all"
+@po.quant app.reading.target request=?r quantifier="all"
+@po.all app.reading.populous request=?r how=all
+@rule.populous.fill core.rule when=$po.fill then=$po.all
+@rule.populous.quant core.rule when=$po.quant then=$po.all
+@po.spanKind app.reading.target request=?r kind=?k kindSpan=?s
+@po.differs core.check fn=neq args=?k args=?s
+@po.plural app.reading.populous request=?r how=plural
+@rule.populous.plural core.rule when=$po.spanKind if=$po.differs then=$po.plural
+@po.span app.reading.target request=?r kindSpan=?s
+@po.kind app.reading.target request=?r kind=?k
+@rule.populous.unkinded core.rule when=$po.span not=$po.kind then=$po.plural
+
+# The population phrase: the kind said, or (no kind said) the description of every member ("all elements").
+@ph.populous app.reading.populous request=?r
+@ph.kind app.reading.phrase request=?r field="kind_span"
+@rule.phrase.kind core.rule when=$po.span when=$ph.populous then=$ph.kind
+@ph.desc app.reading.target request=?r descriptionSpan=?d
+@ph.description app.reading.phrase request=?r field="description_span"
+@rule.phrase.description core.rule when=$ph.desc not=$po.span when=$po.all then=$ph.description
+
+# The phrase becomes the first unsaid end and the target the line made; with no phrase, a said end is enough
+# ("connect the circles" read with the circles as the line's end). A kind said without a population keeps its reading.
+@pt.j app.reading.joining request=?r line=?lt pattern=?pid
+@pt.phrase app.reading.phrase request=?r field=?field
+@pt.free app.reading.freeEnd request=?r pattern=?pid key=?free
+@pt.foreign app.reading.foreign request=?r pattern=?pid
+@pt.retarget app.reading.retarget request=?r rule=population type=?lt mode="new" determiner="indefinite"
+@pt.addEnd app.reading.addEnd request=?r key=?free from=?field operator="eq" phase="result" polarity="positive" character="requirement"
+@pt.joined app.reading.joined request=?r
+@rule.population.phrase core.rule when=$el.out when=$pt.j when=$pt.phrase when=$pt.free not=$pt.foreign then=$pt.retarget then=$pt.addEnd then=$pt.joined
+@pt.said app.reading.saidEnd request=?r pattern=?pid
+@pt.anyPhrase app.reading.phrase request=?r
+@rule.population.ends core.rule when=$el.out when=$pt.j when=$pt.said not=$po.span not=$pt.anyPhrase not=$pt.foreign then=$pt.retarget then=$pt.joined
+
+# ---- A container's property (cdf4aed4d, 9fdd8a858) -------------------------------------------------------------------
+# A property of a container ("make it pastel": diagram.theme) that its binding applies through an operation on the
+# container's members (the property's native source type is the member family's) is said of every member, whatever
+# reference the reader gave ("it", "the diagram", a node). The containment is the binding table's declared slot.
+@ck.c app.reading.constraint request=?r key=?k keyType=?ct
+@ck.p app.reading.property key=?k host=?s
+@ck.out app.reading.containerKey request=?r container=?ct host=?s
+@rule.container.key core.rule when=$ck.c when=$ck.p then=$ck.out
+# All keys of one container type and one host, every key bound to a host.
+@mx.a app.reading.containerKey request=?r container=?c1 host=?s1
+@mx.b app.reading.containerKey request=?r container=?c2 host=?s2
+@mx.c core.check fn=neq args=?c1 args=?c2
+@mx.s core.check fn=neq args=?s1 args=?s2
+@mx.out app.reading.mixed request=?r
+@rule.mixed.container core.rule when=$mx.a when=$mx.b if=$mx.c then=$mx.out
+@rule.mixed.host core.rule when=$mx.a when=$mx.b if=$mx.s then=$mx.out
+@mx.key app.reading.constraint request=?r key=?k
+@mx.hosted app.reading.property key=?k host=?any
+@rule.mixed.unhosted core.rule when=$mx.key not=$mx.hosted then=$mx.out
+@mx.keyless app.reading.constraint request=?r
+@mx.keyed app.reading.constraint request=?r key=?k
+@rule.mixed.keyless core.rule when=$mx.keyless not=$mx.keyed then=$mx.out
+# The member family: of the host's source type, contained in the container, not the container itself nor its own
+# representative (the diagram page is the same class as the diagram).
+@mb.f app.reading.family type=?mt canonical=?mc sourceType=?s
+@mb.in app.reading.containment type=?mt container=?ct
+@mb.notSelf core.check fn=neq args=?mt args=?ct
+@mb.own app.reading.family type=?ct canonical=?mc
+@mb.out app.reading.member request=?r type=?mt
+@rule.member core.rule when=$ck.out when=$mb.f when=$mb.in if=$mb.notSelf not=$mb.own then=$mb.out
+# A member kind said keeps its reading.
+@km.m app.reading.member request=?r type=?mt
+@km.t app.reading.target request=?r type=?mt kindSpan=?s
+@km.ctx app.reading.target request=?r fill="context"
+@km.out app.reading.keepsMember request=?r
+@rule.keeps core.rule when=$km.m when=$km.t not=$km.ctx then=$km.out
+@cp.new app.reading.target request=?r mode="new"
+@cp.pop app.reading.joined request=?r
+@cp.out app.reading.retarget request=?r rule=container type=?mt mode="existing" determiner="definite" fill="all"
+@rule.container core.rule when=$el.out when=$km.m not=$cp.new not=$mx.out not=$km.out not=$cp.pop then=$cp.out
+
+# ---- A population reference (cdf4aed4d, 6037d01cc) -------------------------------------------------------------------
+# "all the boxes", "every node": every matching member of an existing target (std.request reference=population); a
+# make names what it makes, so an existing population is not its theme.
+@pr.existing app.reading.target request=?r mode="existing"
+@pr.make app.reading.request request=?r act="make"
+@pr.out app.reading.population request=?r
+@rule.population.reference core.rule when=$pr.existing when=$po.all not=$pr.make then=$pr.out

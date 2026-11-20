@@ -14,6 +14,8 @@ const cardinal = (w) => {
   if (m && misspelt(m[1]) >= 20 && misspelt(m[1]) % 10 === 0) { const u = numberInfo(m[2], 'cardinal'); if (u && Number.isInteger(u.value) && u.value > 0 && u.value < 10) return misspelt(m[1]) + u.value; }
   return null;
 };
+/** The value of a declared cardinal number word (k.values, its declared misspellings), else null. */
+export const cardinalValue = (w) => cardinal(w);
 /** What a cardinal is in the grammar of a number run: unit (0-9), teen (10-19), tens (20, 30 ... 90), tensunit (21-99), hundred, scale (thousand, million, billion). */
 const classOf = (v) => (v < 10 ? 'unit' : v < 20 ? 'teen' : v < 100 ? (v % 10 ? 'tensunit' : 'tens') : v === 100 ? 'hundred' : 'scale');
 

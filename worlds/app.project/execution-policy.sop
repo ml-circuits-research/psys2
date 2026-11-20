@@ -297,3 +297,5 @@
 @flow.up app.execution.flow sourceType="diagram.sketch.page" direction="up" next=above previous=below
 @flow.right app.execution.flow sourceType="diagram.sketch.page" direction="right" next=right previous=left
 @flow.left app.execution.flow sourceType="diagram.sketch.page" direction="left" next=left previous=right
+# "what colour is the house?": its fill #ffa500 is said as orange.
+@answer.rgbName app.execution.codeName prefix="#" channels=3 width=2 radix=16 values=colour

@@ -1,4 +1,4 @@
-@policy.module core.module name=app.execution version=2 imports=std.capability exports=app.execution.values exports=app.execution.observedProperty exports=app.execution.observedMeasure exports=app.execution.observedField exports=app.execution.preview exports=app.execution.comparative exports=app.execution.comparativeFactor exports=app.execution.comparativeStep exports=app.execution.ordinal exports=app.execution.knowledge exports=app.execution.instant exports=app.execution.requestValue exports=app.execution.clockTime exports=app.execution.instantBase exports=app.execution.instantFocus exports=app.execution.actForm exports=app.execution.linkPattern exports=app.execution.linkPatternNote exports=app.execution.populationNote exports=app.execution.standInNote exports=app.execution.flow exports=app.execution.canvasUnit exports=app.execution.lengthUnit exports=app.execution.reference exports=app.execution.actOperation exports=app.execution.kindBinding exports=app.execution.keyBinding exports=app.execution.keyValue exports=app.execution.amount exports=app.execution.range exports=app.execution.position
+@policy.module core.module name=app.execution version=2 imports=std.capability exports=app.execution.codeName exports=app.execution.values exports=app.execution.observedProperty exports=app.execution.observedMeasure exports=app.execution.observedField exports=app.execution.preview exports=app.execution.comparative exports=app.execution.comparativeFactor exports=app.execution.comparativeStep exports=app.execution.ordinal exports=app.execution.knowledge exports=app.execution.instant exports=app.execution.requestValue exports=app.execution.clockTime exports=app.execution.instantBase exports=app.execution.instantFocus exports=app.execution.actForm exports=app.execution.linkPattern exports=app.execution.linkPatternNote exports=app.execution.populationNote exports=app.execution.standInNote exports=app.execution.flow exports=app.execution.canvasUnit exports=app.execution.lengthUnit exports=app.execution.reference exports=app.execution.actOperation exports=app.execution.kindBinding exports=app.execution.keyBinding exports=app.execution.keyValue exports=app.execution.amount exports=app.execution.range exports=app.execution.position
 @values.type core.type of=app.execution.values closed=true
 @values.concept core.slot of=app.execution.values key=concept kind=atom present=true
 @values.type.slot core.slot of=app.execution.values key=valueType kind=string present=true
@@ -198,3 +198,11 @@
 @flow.direction core.slot of=app.execution.flow key=direction kind=string present=true
 @flow.next core.slot of=app.execution.flow key=next kind=atom present=true
 @flow.previous core.slot of=app.execution.flow key=previous kind=atom present=true
+# A value answered in a fixed-width channel code (an RGB code) is said as the nearest declared name of a value space
+# (values=colour: the k.colours names that name a colour by themselves).
+@codeName.type core.type of=app.execution.codeName closed=true
+@codeName.prefix core.slot of=app.execution.codeName key=prefix kind=string
+@codeName.channels core.slot of=app.execution.codeName key=channels kind=integer present=true
+@codeName.width core.slot of=app.execution.codeName key=width kind=integer present=true
+@codeName.radix core.slot of=app.execution.codeName key=radix kind=integer present=true
+@codeName.values core.slot of=app.execution.codeName key=values kind=atom enum=colour present=true

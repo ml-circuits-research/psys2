@@ -1,15 +1,26 @@
-import { parse,str } from '../vendor/sopworld/sopworld.mjs';
+import { parse,str,nearestName } from '../vendor/sopworld/sopworld.mjs';
 import { compileNativeQuery } from './capability-plan-adapter.mjs';
 import { createAreaHost,NATIVE_AREAS } from './app-reader-context.mjs';
 import { instanceIdFor } from './instance-identity.mjs';
-import { nearestColourName } from '../knowledge/values.mjs';
+import { namedColourCodes } from '../knowledge/values.mjs';
+import { executionPolicyWorld } from './execution-policy.mjs';
 
 const value=(row,key)=>str(row?.attrs[key]?.[0]);
 const memberName=row=>value(row,'name')??value(row,'kind')+' '+value(row,'id');
 
-// RGB codes are said as their nearest k.colours names, once each; other values as they are, in order.
+// A value in a declared code layout (app.execution.codeName: an RGB code) is said as the nearest declared name of its
+// value space (sopworld nearestName over the k.colours names), once each; other values as they are, in order.
+const NAMED_CODES={colour:namedColourCodes};
+function codeName(token){
+ for(const row of executionPolicyWorld().ofType('app.execution.codeName')){
+  const n=k=>Number(value(row,k)),names=NAMED_CODES[value(row,'values')]?.()??[];
+  const name=nearestName(token,names,{prefix:value(row,'prefix')??'',channels:n('channels'),width:n('width'),radix:n('radix')});
+  if(name)return name;
+ }
+ return null;
+}
 function sayValues(tokens){
- const said=tokens.map(token=>token.startsWith('$')?{text:'see the SOP value'}:(name=>name?{text:name,colour:true}:{text:str(token)})(nearestColourName(str(token))));
+ const said=tokens.map(token=>token.startsWith('$')?{text:'see the SOP value'}:(name=>name?{text:name,colour:true}:{text:str(token)})(codeName(str(token))));
  return said.filter((v,i)=>!v.colour||said.findIndex(w=>w.colour&&w.text===v.text)===i).map(v=>v.text).join(', ');
 }
 function describeAnswer(row,byId){

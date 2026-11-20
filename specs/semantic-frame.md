@@ -100,6 +100,12 @@ The §5 rules run on the current key route; no retrain. Code: `src/dialog/partia
 closest drawable relative are sopworld library mechanisms (`completeStructuralBindings`, `populationPairs`/`readingOrder`,
 `nearestRelative`, 0.244.0); PSys2 only passes its declared rows: `app.interpret.parameterAct`, `app.execution.linkPattern`
 `named=`/`hubName=`, `populationNote`, `linkPatternNote`, `standInNote`, `app.reference.bare`.)
+(Reading, same day: the re-readings of a raw proposal — a population joined by lines, a container's property over its
+members, a population reference — are SOP rules (`worlds/app.project/raw-reading-policy.sop`; `raw-reading-policy.mjs`
+only tells the facts and applies the conclusions); kind words, spelled numbers, unit words, anchor edge words, listed
+anchors and colour names of codes are read by sopworld 0.245.0 span reading (`readLexicalPhrase` with the declared
+`app.interpret.spelling` tolerance, `readNumberSpan` with `app.interpret.numberJoiner`, `unitConversion`, `stripPhrase`,
+`splitPhrase`, `nearestName` with `app.execution.codeName`).)
 
 | Was refusal-first | Now | Declared in |
 | --- | --- | --- |

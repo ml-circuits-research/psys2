@@ -43,11 +43,16 @@ export function interpretationPolicy(source=POLICY){
  const familyOperations=world.ofType(MODULE+'.familyOperation').map(row=>({id:row.id,area:one(row,'area'),type:one(row,'family'),operation:one(row,'operation')}));
  // The acts whose operation a key bound by its parameter name takes first (app.interpret.parameterAct).
  const parameterActs=world.ofType(MODULE+'.parameterAct').flatMap(row=>all(row,'act'));
+ // The spelling tolerance of a said kind word (app.interpret.spelling, spellingStep): sopworld readLexicalPhrase's.
+ const numberJoiners=world.ofType(MODULE+'.numberJoiner').map(row=>one(row,'text'));
+ const spell=world.ofType(MODULE+'.spelling')[0];
+ const spelling=spell?{minLength:Number(one(spell,'minLength')),doubled:one(spell,'doubled')==='true',swapped:one(spell,'swapped')==='true',
+  steps:world.ofType(MODULE+'.spellingStep').map(row=>({above:Number(one(row,'above')),edits:Number(one(row,'edits'))})).sort((a,b)=>a.above-b.above)}:null;
  const relations=world.ofType(MODULE+'.relation').map(row=>({id:row.id,area:one(row,'area'),key:one(row,'key'),anchor:one(row,'anchor'),like:one(row,'like'),
   values:Object.fromEntries(world.ofType(MODULE+'.relationValue').filter(v=>v.attrs.of?.[0]==='$'+row.id).map(v=>[one(v,'value'),one(v,'relation')]))}));
  const control={verbs:Object.fromEntries(world.ofType(MODULE+'.controlVerb').map(row=>[one(row,'act'),one(row,'text')])),modifiers:Object.fromEntries(world.ofType(MODULE+'.controlModifier').map(row=>[one(row,'parameter'),one(row,'text')]))};
  if(!control.verbs.other)throw Error('invalid-interpretation-policy: a control verb for act other');
- const result=Object.freeze({retries,notes,compare,coordination,control,language:{id:detect[0].id,minConfidence:Number(one(detect[0],'min.confidence'))},partial:{defaults,drops,fallbacks,families,relations,familyOperations,parameterActs}});
+ const result=Object.freeze({retries,notes,compare,coordination,control,language:{id:detect[0].id,minConfidence:Number(one(detect[0],'min.confidence'))},partial:{defaults,drops,fallbacks,families,relations,familyOperations,parameterActs,spelling,numberJoiners}});
  if(source===POLICY)policy=result;
  return result;
 }

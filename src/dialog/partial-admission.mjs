@@ -10,11 +10,10 @@ import {decodeModelGraphs} from './model-graph-decoder.mjs';
 import {comparativeSteps} from './comparative-projection.mjs';
 import {referenceProjection} from './reference-projection.mjs';
 import {interpretationPolicy} from './interpretation-policy.mjs';
-import {executionPolicyWorld} from './execution-policy.mjs';
+import {declaredRetargets} from './raw-reading-policy.mjs';
 import {en} from '../lang/en.mjs';
-import {referenceProjection as declaredReferences} from './reference-projection.mjs';
 import {budget} from './budget.mjs';
-import {str} from '../vendor/sopworld/sopworld.mjs';
+import {readLexicalPhrase} from '../vendor/sopworld/sopworld.mjs';
 
 const scalarsOf=text=>Array.from(text);
 // Adjacent mentions of one target-kind head that only whitespace or a hyphen separates and that together spell a
@@ -46,117 +45,30 @@ function joinKindMentions(raw,failures,bindings,cuts){
 }
 
 /** The partial reading of one proposal; {refused} with the remaining diagnostics when no request keeps its action and theme. */
-// A joining act read with the joined population as its theme ("connect all the circles", "connect C to all circles":
-// a node target of a plural kind or a population) is the joining line made between them: the act's declared form
-// (app.execution.actForm of=<line kind>) names the line's family, the line pattern (app.execution.linkPattern) its two
-// ends; the population phrase becomes the first unsaid end (link-population.mjs expands it into the pattern's lines).
-function populationTheme(raw,bindings){
- const pol=executionPolicyWorld(),one=(r,k)=>r.attrs[k]?.length?str(r.attrs[k][0]):undefined;
- const patterns=pol.ofType('app.execution.linkPattern');if(!patterns.length)return raw;
- let changed=null;
- for(const [index,request] of raw.requests.entries()){
-  const target=request?.target;
-  // The population phrase: the kind said ("circles"), or the description of a population ("all elements").
-  const phraseOf=target&&(typeof target.kind_span==='string'?'kind_span':(target.fill==='all'||target.quantifier==='all')&&typeof target.description_span==='string'?'description_span':null);
-  // Or no phrase at all when an end of the line is said ("connect the circles" read with the circles as the line's end).
-  const endSaid=(request.constraints??[]).length>0;
-  if(!target||target.mode==='bound'||target.name_span||(!phraseOf&&!endSaid)||phraseOf&&!(target.fill==='all'||target.quantifier==='all'||target.kind_span!==target.kind))continue;
-  const form=pol.ofType('app.execution.actForm').find(r=>one(r,'act')===request.act&&one(r,'as')==='make'&&r.attrs.of);if(!form)continue;
-  const lineKind=one(form,'of'),line=(bindings.families??[]).find(f=>f.area===raw.area&&f.canonical===lineKind);
-  if(!line||line.type===target.type)continue;
-  const keyOf=concept=>(bindings.properties??[]).find(p=>p.area===raw.area&&p.canonical===concept)?.key;
-  for(const pattern of patterns){
-   const ends=[keyOf(one(pattern,'from')),keyOf(one(pattern,'to'))];if(ends.some(k=>!k))continue;
-   const said=(request.constraints??[]).map(c=>c?.key),patternKey=keyOf(one(pattern,'patternConcept'));
-   if(said.some(k=>k&&!ends.includes(k)&&k!==patternKey))continue;
-   const free=ends.find(k=>!said.includes(k));if(phraseOf&&!free)continue;
-   if(!phraseOf&&!said.some(k=>ends.includes(k)))continue;
-   const out=changed??=structuredClone(raw),r=out.requests[index],ci=r.constraints?.length??0;
-   if(phraseOf)r.constraints=[...(r.constraints??[]),{key:free,value:target[phraseOf],value_span:target[phraseOf],operator:'eq',phase:'result',polarity:'positive',character:'requirement'}];
-   r.target={type:line.type,mode:'new',determiner:'indefinite'};
-   const span=(out.ranges??[]).find(x=>JSON.stringify(x.path)===JSON.stringify(['requests',String(index),'target',phraseOf]));
-   out.ranges=(out.ranges??[]).filter(x=>!(x.path[0]==='requests'&&x.path[1]===String(index)&&x.path[2]==='target'));
-   if(span&&phraseOf)for(const field of ['value','value_span'])out.ranges.push({path:['requests',String(index),'constraints',String(ci),field],range:[...span.range]});
-   break;
-  }
- }
- return changed??raw;
-}
-// A property of a container ("make it pastel": diagram.theme; "colour each level differently": diagram.by) that its
-// binding applies through an operation on the container's members (the property's native source type is the member
-// family's) is said of the whole container: the target is every member (a population of the member family), whatever
-// reference the reader gave ("it", "the diagram", a node). The containment is the binding table's declared slot.
-function containerProperty(raw,bindings){
- let changed=null;
- for(const [index,request] of raw.requests.entries()){
-  const target=request?.target,keys=(request?.constraints??[]).map(c=>c?.key);
-  if(!target||target.mode==='new'||target.mode==='bound'||target.name_span||!keys.length||keys.some(k=>typeof k!=='string'))continue;
-  const types=new Set(keys.map(k=>k.split('.')[0]));if(types.size!==1)continue;
-  const [container]=types;
-  const hosts=new Set(keys.map(k=>(bindings.properties??[]).find(p=>p.area===raw.area&&p.key===k)?.hostBinding?.sourceType));
-  if(hosts.size!==1||hosts.has(undefined))continue;
-  const [sourceType]=hosts;
-  const member=(bindings.families??[]).find(f=>f.area===raw.area&&f.nativeFamilyBinding?.sourceType===sourceType&&
-   (bindings.containment??[]).some(c=>c.area===raw.area&&c.type===f.type&&c.containerType===container));
-  // The container's own representative (the diagram page: the same class as the diagram) is the container itself.
-  const own=(bindings.families??[]).find(f=>f.area===raw.area&&f.type===container);
-  if(!member||member.type===container||own&&member.canonical===own.canonical)continue;
-  if(target.type===member.type&&target.fill!=='context'&&!target.kind_span===false)continue;   // a said member kind keeps its reading
-  const out=changed??=structuredClone(raw);
-  out.requests[index].target={type:member.type,mode:'existing',determiner:'definite',fill:'all'};
-  out.ranges=(out.ranges??[]).filter(x=>!(x.path[0]==='requests'&&x.path[1]===String(index)&&x.path[2]==='target'));
- }
- return changed??raw;
-}
 // A kind said in a form the binding table does not list ("a boat", "the trees", "star shape", "sqaure") is read as
-// the declared kind of the target's family it names: after its determiners, by each word's singular (w.lang.en), as
-// the first declared kind among its words (a kind before the family's own class word: "star shape" is a star), else
-// as the one declared kind within one edit (two for longer words) of the said word. Nothing else is guessed.
-function editWithin(a,b,max){
- if(Math.abs(a.length-b.length)>max)return false;
- let prev=Array.from({length:b.length+1},(_,j)=>j);
- for(let i=1;i<=a.length;i++){budget.tick('kind-reading.edit');const cur=[i];let best=i;
-  for(let j=1;j<=b.length;j++){const c=Math.min(prev[j]+1,cur[j-1]+1,prev[j-1]+(a[i-1]===b[j-1]?0:1),
-   i>1&&j>1&&a[i-1]===b[j-2]&&a[i-2]===b[j-1]?(prev[j-2]??Infinity)+1:Infinity);cur.push(c);if(c<best)best=c;}
-  if(best>max)return false;prev=cur;}
- return prev[b.length]<=max;
-}
+// the declared kind of the target's family it names (sopworld readLexicalPhrase): after the declared determiners, by
+// each word's singular (w.lang.en), a kind before the family's own class word, within the declared spelling tolerance
+// (interpretation-policy.sop app.interpret.spelling). Nothing else is guessed.
 function kindReadings(raw,bindings){
  let changed=null;
- const refs=declaredReferences(),dets=new Set([...(refs.definite??[]),...(refs.indefinite??[])].map(d=>d.toLowerCase()));
+ const refs=referenceProjection(),leading=[...(refs.definite??[]),...(refs.indefinite??[])];
+ const tolerance=interpretationPolicy().partial.spelling,forms=w=>[w,en.singular(w,'lemma')],tick=site=>budget.tick('kind-reading.'+site);
  for(const [index,request] of raw.requests.entries()){
   const target=request?.target;
   if(!target||typeof target.kind!=='string'||!target.type||target.mode==='bound')continue;
   const rows=(bindings.kinds??[]).filter(k=>k.area===raw.area&&k.type===target.type);
   if(!rows.length||rows.some(k=>k.lemma===target.kind))continue;
-  const lemmas=new Map(rows.map(k=>[String(k.lemma).toLowerCase(),k]));
   const family=(bindings.families??[]).find(f=>f.area===raw.area&&f.type===target.type)?.canonical;
-  let words=target.kind.toLowerCase().split(/\s+/).filter(Boolean);
-  while(words.length>1&&dets.has(words[0])){budget.tick('kind-reading.determiner');words.shift();}
-  if(dets.has(words[0])&&words.length===1)continue;
-  const forms=words.map(w=>[w,en.singular(w,'lemma')]);
-  let found=null;
-  const phrase=forms.map(([,s])=>s).join(' ');
-  if(lemmas.has(phrase))found=phrase;
-  if(!found)for(const [w,sg] of forms){const hit=[w,sg].find(x=>lemmas.has(x)&&lemmas.get(x).canonical!==family);if(hit){found=hit;break;}}
-  if(!found)for(const [w,sg] of forms){const hit=[w,sg].find(x=>lemmas.has(x));if(hit){found=hit;break;}}
-  // A letter typed twice ("carr", "catt") is the word with it once, when that is a declared kind.
-  if(!found&&forms.length===1){const [w]=forms[0];for(let i=1;i<w.length&&!found;i++){budget.tick('kind-reading.double');if(w[i]===w[i-1]){const once=w.slice(0,i)+w.slice(i+1);if(lemmas.has(once))found=once;}}}
-  // Two neighbouring letters swapped ("pesron", "cluod") before any other single edit.
-  if(!found&&forms.length===1){const [w]=forms[0];const swaps=[];for(let i=1;i<w.length;i++){budget.tick('kind-reading.swap');const t=w.slice(0,i-1)+w[i]+w[i-1]+w.slice(i+1);if(t!==w&&lemmas.has(t))swaps.push(t);}
-   if(new Set(swaps.map(t=>lemmas.get(t).canonical)).size===1)found=swaps[0];}
-  if(!found&&forms.length===1){const [w]=forms[0],max=w.length>6?2:1;
-   const near=[...lemmas.keys()].filter(l=>!l.includes(' ')&&Math.abs(l.length-w.length)<=max&&editWithin(w,l,max));
-   const kinds=new Set(near.map(l=>lemmas.get(l).canonical));if(w.length>=4&&kinds.size===1)found=near[0];}
-  if(!found||found===target.kind)continue;
-  (changed??=structuredClone(raw)).requests[index].target.kind=lemmas.get(found).lemma;
+  const found=readLexicalPhrase(target.kind,{entries:rows.map(k=>[String(k.lemma),k.canonical]),leading,forms,avoid:family,tolerance,tick});
+  if(!found||found.text===target.kind)continue;
+  (changed??=structuredClone(raw)).requests[index].target.kind=found.text;
  }
  return changed??raw;
 }
-/** The declared raw readings (a population joined by lines, a container's property) applied to a raw reading. */
+/** The declared raw readings (kind words; a population joined by lines, a container's property: raw-reading-policy.sop) applied to a raw reading. */
 export function declaredRawReadings(raw,bindings){
  if(!raw||!bindings||!Array.isArray(raw.requests))return raw;
- return containerProperty(populationTheme(kindReadings(raw,bindings),bindings),bindings);
+ return declaredRetargets(kindReadings(raw,bindings),bindings);
 }
 export function partialReading(proposal,{bindings,bindingSha256}){
  const raw=proposal?.raw;

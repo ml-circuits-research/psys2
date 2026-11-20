@@ -117,3 +117,9 @@
 # A key said of an existing family ("the flower's pose") binds to the parameter of the operation that changes it,
 # before the one that makes it.
 @interpret.parameterAct.change app.interpret.parameterAct act=change
+
+# A kind word said with a slip ("sqaure", "carr", "pesron", "elephnat"): one edit from four letters, two above six.
+@interpret.spelling.kinds app.interpret.spelling minLength=4 doubled=true swapped=true
+@interpret.spellingStep.short app.interpret.spellingStep above=0 edits=1
+@interpret.spellingStep.long app.interpret.spellingStep above=6 edits=2
+@interpret.numberJoiner.and app.interpret.numberJoiner text="and"

@@ -1,0 +1,104 @@
+@reading.module core.module name=app.reading version=1 exports=app.reading.request exports=app.reading.target exports=app.reading.constraint exports=app.reading.property exports=app.reading.family exports=app.reading.containment exports=app.reading.actForm exports=app.reading.linkPattern exports=app.reading.joining exports=app.reading.allowed exports=app.reading.foreign exports=app.reading.freeEnd exports=app.reading.saidEnd exports=app.reading.populous exports=app.reading.phrase exports=app.reading.eligible exports=app.reading.containerKey exports=app.reading.mixed exports=app.reading.member exports=app.reading.keepsMember exports=app.reading.retarget exports=app.reading.addEnd exports=app.reading.population exports=app.reading.joined
+
+# The facts a raw reading gives (src/dialog/raw-reading-policy.mjs feeds them; nothing is decided there): one request
+# of the reading, its target's fields as the reader wrote them, each constraint's key and the type its key belongs to.
+@reading.request.type core.type of=app.reading.request closed=true
+@reading.request.request core.slot of=app.reading.request key=request kind=integer id=true present=true
+@reading.request.act core.slot of=app.reading.request key=act kind=string
+@reading.target.type core.type of=app.reading.target closed=true
+@reading.target.request core.slot of=app.reading.target key=request kind=integer id=true present=true
+@reading.target.family core.slot of=app.reading.target key=type kind=string
+@reading.target.mode core.slot of=app.reading.target key=mode kind=string
+@reading.target.fill core.slot of=app.reading.target key=fill kind=string
+@reading.target.quantifier core.slot of=app.reading.target key=quantifier kind=string
+@reading.target.kind core.slot of=app.reading.target key=kind kind=string
+@reading.target.kindSpan core.slot of=app.reading.target key=kindSpan kind=string
+@reading.target.descriptionSpan core.slot of=app.reading.target key=descriptionSpan kind=string
+@reading.target.nameSpan core.slot of=app.reading.target key=nameSpan kind=string
+@reading.constraint.type core.type of=app.reading.constraint closed=true
+@reading.constraint.request core.slot of=app.reading.constraint key=request kind=integer present=true
+@reading.constraint.index core.slot of=app.reading.constraint key=index kind=integer present=true
+@reading.constraint.key core.slot of=app.reading.constraint key=key kind=string
+@reading.constraint.keyType core.slot of=app.reading.constraint key=keyType kind=string
+
+# The deployed binding table's rows the rules read (area-scoped by the feeder): a property key, its canonical concept
+# and the native source type its host binding operates on; a family's type, canonical class and native source type;
+# a declared containment slot. And the execution policy's act forms and line patterns (execution-policy.sop).
+@reading.property.type core.type of=app.reading.property closed=true
+@reading.property.key core.slot of=app.reading.property key=key kind=string present=true
+@reading.property.canonical core.slot of=app.reading.property key=canonical kind=string
+@reading.property.host core.slot of=app.reading.property key=host kind=string
+@reading.family.type core.type of=app.reading.family closed=true
+@reading.family.family core.slot of=app.reading.family key=type kind=string present=true
+@reading.family.canonical core.slot of=app.reading.family key=canonical kind=string present=true
+@reading.family.source core.slot of=app.reading.family key=sourceType kind=string
+@reading.containment.type core.type of=app.reading.containment closed=true
+@reading.containment.member core.slot of=app.reading.containment key=type kind=string present=true
+@reading.containment.container core.slot of=app.reading.containment key=container kind=string present=true
+@reading.actForm.type core.type of=app.reading.actForm closed=true
+@reading.actForm.act core.slot of=app.reading.actForm key=act kind=string present=true
+@reading.actForm.as core.slot of=app.reading.actForm key=as kind=string present=true
+@reading.actForm.of core.slot of=app.reading.actForm key=of kind=string
+@reading.linkPattern.type core.type of=app.reading.linkPattern closed=true
+@reading.linkPattern.pattern core.slot of=app.reading.linkPattern key=pattern kind=string id=true present=true
+@reading.linkPattern.from core.slot of=app.reading.linkPattern key=from kind=string present=true
+@reading.linkPattern.to core.slot of=app.reading.linkPattern key=to kind=string present=true
+@reading.linkPattern.concept core.slot of=app.reading.linkPattern key=patternConcept kind=string
+
+# What the rules conclude (raw-reading-policy.sop) and their intermediate facts.
+@reading.joining.type core.type of=app.reading.joining closed=true
+@reading.joining.request core.slot of=app.reading.joining key=request kind=integer present=true
+@reading.joining.line core.slot of=app.reading.joining key=line kind=string present=true
+@reading.joining.pattern core.slot of=app.reading.joining key=pattern kind=string present=true
+@reading.joining.from core.slot of=app.reading.joining key=from kind=string present=true
+@reading.joining.to core.slot of=app.reading.joining key=to kind=string present=true
+@reading.allowed.type core.type of=app.reading.allowed closed=true
+@reading.allowed.request core.slot of=app.reading.allowed key=request kind=integer present=true
+@reading.allowed.pattern core.slot of=app.reading.allowed key=pattern kind=string present=true
+@reading.allowed.key core.slot of=app.reading.allowed key=key kind=string present=true
+@reading.foreign.type core.type of=app.reading.foreign closed=true
+@reading.foreign.request core.slot of=app.reading.foreign key=request kind=integer present=true
+@reading.foreign.pattern core.slot of=app.reading.foreign key=pattern kind=string present=true
+@reading.freeEnd.type core.type of=app.reading.freeEnd closed=true
+@reading.freeEnd.request core.slot of=app.reading.freeEnd key=request kind=integer present=true
+@reading.freeEnd.pattern core.slot of=app.reading.freeEnd key=pattern kind=string present=true
+@reading.freeEnd.key core.slot of=app.reading.freeEnd key=key kind=string present=true
+@reading.saidEnd.type core.type of=app.reading.saidEnd closed=true
+@reading.saidEnd.request core.slot of=app.reading.saidEnd key=request kind=integer present=true
+@reading.saidEnd.pattern core.slot of=app.reading.saidEnd key=pattern kind=string present=true
+@reading.populous.type core.type of=app.reading.populous closed=true
+@reading.populous.request core.slot of=app.reading.populous key=request kind=integer present=true
+@reading.populous.how core.slot of=app.reading.populous key=how kind=atom enum=all enum=plural present=true
+@reading.phrase.type core.type of=app.reading.phrase closed=true
+@reading.phrase.request core.slot of=app.reading.phrase key=request kind=integer present=true
+@reading.phrase.field core.slot of=app.reading.phrase key=field kind=string present=true
+@reading.eligible.type core.type of=app.reading.eligible closed=true
+@reading.eligible.request core.slot of=app.reading.eligible key=request kind=integer present=true
+@reading.containerKey.type core.type of=app.reading.containerKey closed=true
+@reading.containerKey.request core.slot of=app.reading.containerKey key=request kind=integer present=true
+@reading.containerKey.container core.slot of=app.reading.containerKey key=container kind=string present=true
+@reading.containerKey.host core.slot of=app.reading.containerKey key=host kind=string present=true
+@reading.mixed.type core.type of=app.reading.mixed closed=true
+@reading.mixed.request core.slot of=app.reading.mixed key=request kind=integer present=true
+@reading.member.type core.type of=app.reading.member closed=true
+@reading.member.request core.slot of=app.reading.member key=request kind=integer present=true
+@reading.member.family core.slot of=app.reading.member key=type kind=string present=true
+@reading.keepsMember.type core.type of=app.reading.keepsMember closed=true
+@reading.keepsMember.request core.slot of=app.reading.keepsMember key=request kind=integer present=true
+@reading.retarget.type core.type of=app.reading.retarget closed=true
+@reading.retarget.request core.slot of=app.reading.retarget key=request kind=integer present=true
+@reading.retarget.rule core.slot of=app.reading.retarget key=rule kind=atom enum=population enum=container present=true
+@reading.retarget.family core.slot of=app.reading.retarget key=type kind=string present=true
+@reading.retarget.mode core.slot of=app.reading.retarget key=mode kind=string present=true
+@reading.retarget.determiner core.slot of=app.reading.retarget key=determiner kind=string present=true
+@reading.retarget.fill core.slot of=app.reading.retarget key=fill kind=string
+@reading.addEnd.type core.type of=app.reading.addEnd closed=true
+@reading.addEnd.request core.slot of=app.reading.addEnd key=request kind=integer present=true
+@reading.addEnd.key core.slot of=app.reading.addEnd key=key kind=string present=true
+@reading.addEnd.from core.slot of=app.reading.addEnd key=from kind=string present=true
+@reading.addEnd.operator core.slot of=app.reading.addEnd key=operator kind=string present=true
+@reading.addEnd.phase core.slot of=app.reading.addEnd key=phase kind=string present=true
+@reading.addEnd.polarity core.slot of=app.reading.addEnd key=polarity kind=string present=true
+@reading.addEnd.character core.slot of=app.reading.addEnd key=character kind=string present=true
+@reading.population.type core.type of=app.reading.population closed=true
+@reading.population.request core.slot of=app.reading.population key=request kind=integer present=true
