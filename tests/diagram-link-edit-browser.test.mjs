@@ -8,10 +8,10 @@ import {openBrowserReaderRoute} from '../scripts/lib/browser-reader-route.mjs';
 const root=fileURLToPath(new URL('../',import.meta.url)),chrome=process.env.CHROME??'/usr/bin/chromium',shots=process.env.DIAGRAM_SHOTS??'';
 let available=true;try{await access(chrome);}catch{available=false;}
 const page=`<!doctype html><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;font:14px system-ui;height:100vh}#dg{width:100%;height:860px}</style><div id="dg"></div><script type="module">
-import diagram from'/docs/webchat/ui/tabs/diagram.mjs';import{emptyDiagramState,projectDiagramArea,createDiagramArea}from'/worlds/diagram.sketch/sop-diagram.mjs';import{performGesture}from'/tests/fixtures/editor-gesture.mjs';
+import diagram from'/docs/webchat/ui/tabs/diagram.mjs';import{uiValues}from'/src/dialog/ui-defaults.mjs';import{emptyDiagramState,projectDiagramArea,createDiagramArea}from'/worlds/diagram.sketch/sop-diagram.mjs';import{performGesture}from'/tests/fixtures/editor-gesture.mjs';
 const session={isession:{state:{'diagram.sketch':emptyDiagramState()}},engine:{}},calls=[];let ui;
 const projected=()=>projectDiagramArea(session.isession.state['diagram.sketch']);
-const host={persistent:false,asset:p=>'/'+p,state:()=>projected(),isBusy:()=>false,tools:async()=>({operations:(await createDiagramArea({instanceId:'tools'})).bindings()}),
+const host={persistent:false,ui:uiValues,asset:p=>'/'+p,state:()=>projected(),isBusy:()=>false,tools:async()=>({operations:(await createDiagramArea({instanceId:'tools'})).bindings()}),
  tool:async(operation,args)=>{const result=await performGesture(session,{view:'diagram',operation,args});calls.push({operation,args,text:result.intentRecord?.text,ok:result.ok});ui.update(projected());return result;},download:()=>{},send:()=>{throw Error('UI gestures must use declared tools');}};
 ui=diagram.make(document.querySelector('#dg'),host);ui.update(projected());ui.show?.();
 window.dg={session,calls,ui,projected,host};window.psys2={engineClient:{ready:async()=>true,info:{}}};

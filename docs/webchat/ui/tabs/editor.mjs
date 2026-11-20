@@ -35,6 +35,7 @@ function inline(parent,text,marks=[],at='0'){
  for(let i=1;i<cuts.length;i++){const from=cuts[i-1],to=cuts[i];let node=document.createTextNode(text.slice(from,to));for(const mark of relevant.filter(m=>m.from<=from&&m.to>=to)){const tag={bold:'strong',italic:'em',underline:'u',strike:'s',code:'code',highlight:'mark',link:'a'}[mark.type];if(!tag)continue;const wrap=el(tag);if(tag==='mark'&&/^#[a-f0-9]{6}$/i.test(mark.attrs?.color??''))wrap.style.background=mark.attrs.color;if(tag==='a'&&/^(https?:|mailto:|#)/i.test(mark.attrs?.href??'')){wrap.href=mark.attrs.href;wrap.rel='noopener';wrap.target='_blank';}wrap.append(node);node=wrap;}parent.append(node);}
 }
 function make(holder,host){
+ const U=host.ui(VIEW);   // declared control values (worlds/app.project/ui-defaults.sop)
  if(!document.getElementById('native-document-css'))document.head.append(el('style',{id:'native-document-css'},CSS));
  Object.assign(holder.style,{padding:'0',height:'100%',minHeight:'0',maxWidth:'none',overflow:'hidden',boxSizing:'border-box'});
  const root=el('section',{class:'nd-editor','aria-label':'Document editor'}),bar=el('div',{class:'nd-toolbar',role:'toolbar','aria-label':'Document tools'}),body=el('div',{class:'nd-body'}),page=el('div',{class:'nd-page'}),inspector=el('aside',{class:'nd-inspector','aria-label':'Block inspector'}),status=el('div',{class:'nd-status',role:'status','aria-live':'polite'}),dock=el('section',{class:'nd-content-form'});holder.append(root);root.append(bar,body,status);body.append(page,inspector);const closeInspectorSplitter=mountInspectorSplitter(body,inspector,{id:'editor',width:245,persist:host.persistent!==false});
@@ -51,7 +52,7 @@ function make(holder,host){
  const blockById=id=>state.blocks.find(b=>b.id===id);
  const textOf=(b,at)=>b?.kind==='list'?b.items?.[Number(at)]:b?.kind==='table'?b.rows?.[Number(String(at).split(':')[0])]?.[Number(String(at).split(':')[1])]:b?.text;
  async function tool(operation,args){pending=true;root.setAttribute('aria-busy','true');try{const r=await host.tool(operation,args,{view:VIEW});status.textContent=r?.message??(r?.ok?'Saved.':'Could not save.');return r??{ok:false};}catch(error){status.textContent=error.message;return {ok:false,message:error.message};}finally{pending=false;root.removeAttribute('aria-busy');}}
- async function ensureDocument(){if(state.textId)return true;return (await tool('document.write',{title:'Untitled document',blocks:[]})).ok;}
+ async function ensureDocument(){if(state.textId)return true;return (await tool('document.write',{title:U.newDocumentTitle,blocks:[]})).ok;}
  async function saveEditing(){if(saving)return saving;if(!editing)return true;const current=editing,text=current.input.value;editing=null;const b=blockById(current.id),cid=b?.containers?.[current.at];if(text===textOf(b,current.at)||!cid)return true;saving=tool('document.container.change',{id:cid,text}).then(r=>r.ok);try{return await saving;}finally{saving=null;}}
  // The block a command made: the one the projection observes now and did not before.
  const madeSince=before=>state.blocks.find(b=>!before.has(b.id))?.id??null;
@@ -108,7 +109,7 @@ function make(holder,host){
  const listeners=[['pointermove',onPointerMove],['pointerup',onPointerEnd],['pointercancel',onPointerEnd]];for(const [type,listener]of listeners)window.addEventListener(type,listener,true);
  function toolbar(){
   bar.replaceChildren();const sectionLevels=levels('document.section.make');
-  bar.append(button('New document',async()=>{if(await saveEditing()){const r=await tool('document.write',{title:'Untitled document',blocks:[]});if(r.ok){selected=null;render();}}},{title:'Start a new, empty document'}));
+  bar.append(button('New document',async()=>{if(await saveEditing()){const r=await tool('document.write',{title:U.newDocumentTitle,blocks:[]});if(r.ok){selected=null;render();}}},{title:'Start a new, empty document'}));
   bar.append(button('+ Chapter',()=>addSection(sectionLevels[0]??1)),button('+ Subchapter',()=>addSection(sectionLevels[1]??sectionLevels[0]??2)),button('+ Paragraph',()=>add('paragraph')),button('+ Heading',()=>add('heading')),button('+ Quote',()=>add('quote')),button('+ List',()=>add('list')),button('+ Table',()=>add('table')),el('span',{class:'nd-sep','aria-hidden':'true'}));
   const marks=choices('document.block.mark','mark');
   for(const mark of marks){if(mark==='link'){bar.append(button(MARK_FACE.link,formatLink,{title:'Link the selected words','aria-label':'Apply link'}));continue;}bar.append(button(MARK_FACE[mark]??mark,()=>format(mark,true,mark==='highlight'?{color:highlight}:undefined),{title:'Apply '+mark,'aria-label':'Apply '+mark}));if(mark==='highlight'){const colour=el('input',{type:'color',value:highlight,'aria-label':'Highlight colour',title:'Highlight colour'});colour.addEventListener('input',()=>{highlight=colour.value;});colour.addEventListener('mousedown',e=>e.stopPropagation());bar.append(colour);}}
@@ -119,7 +120,7 @@ function make(holder,host){
  function render(){
   if(destroyed)return;inspector.dataset.selectedNativeIds=JSON.stringify(selected?[selected]:[]);page.replaceChildren();toolbar();
   if(state.pending){page.append(el('p',{class:'nd-empty'},'Loading the document…'));inspector.replaceChildren();return;}
-  const title=el('input',{class:'nd-title',value:state.title??'',placeholder:'Untitled document','aria-label':'Document title'});title.addEventListener('change',async()=>{if(state.textId)await tool('document.title.change',{id:state.textId,title:title.value});else await tool('document.write',{title:title.value,blocks:[]});});page.append(title);
+  const title=el('input',{class:'nd-title',value:state.title??'',placeholder:U.newDocumentTitle,'aria-label':'Document title'});title.addEventListener('change',async()=>{if(state.textId)await tool('document.title.change',{id:state.textId,title:title.value});else await tool('document.write',{title:title.value,blocks:[]});});page.append(title);
   if(!state.blocks.length)page.append(el('p',{class:'nd-empty'},'Start with a paragraph, heading, list or table. Type your own content; every saved edit is recorded as a command.'));
   for(const b of state.blocks){
    const row=el('section',{class:'nd-block'+(b.id===selected?' selected':''),tabIndex:0,'data-block':b.id,'aria-label':(b.name||b.kind)+' block'}),head=el('div',{class:'nd-block-header'}),handle=button('⋮⋮ '+(b.name||b.kind),()=>{if(!suppressClick)choose(b.id);},{class:'nd-handle',title:'Drag to reorder'});head.append(handle,el('span',{},b.name?b.kind:b.section?'section':''));row.append(head);

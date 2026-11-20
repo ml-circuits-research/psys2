@@ -1,6 +1,6 @@
 import {World,serialize,quote,str} from '../vendor/sopworld/sopworld.mjs?v=4cf6e60057';
-import SCHEMA from '../../worlds/app.project/reference-schema-source.mjs?v=2286fb5492';
-import POLICY from '../../worlds/app.project/reference-policy-source.mjs?v=7dc2d9a3fb';
+import SCHEMA from '../../worlds/app.project/reference-schema-source.mjs?v=75a4bedaf6';
+import POLICY from '../../worlds/app.project/reference-policy-source.mjs?v=1d30c81d7b';
 import {compileObservedChoice} from './observed-choice.mjs?v=331cc85b90';
 
 let base;

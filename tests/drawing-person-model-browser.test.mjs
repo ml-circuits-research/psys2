@@ -6,10 +6,10 @@ import {openBrowserReaderRoute} from '../scripts/lib/browser-reader-route.mjs';
 const root=fileURLToPath(new URL('../',import.meta.url)),chrome=process.env.CHROME??'/usr/bin/chromium',shots=process.env.DRAWING_SHOTS??'';
 let available=true;try{await access(chrome);}catch{available=false;}
 const page=`<!doctype html><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;font:14px system-ui;height:100vh}#draw{width:100%;height:860px}</style><div id="draw"></div><script type="module">
-import draw from'/docs/webchat/ui/tabs/draw.mjs';import{emptyDrawingState,projectDrawingArea,createDrawingArea}from'/worlds/art.draw/sop-drawing.mjs';import{performGesture}from'/tests/fixtures/editor-gesture.mjs';
+import draw from'/docs/webchat/ui/tabs/draw.mjs';import{uiValues}from'/src/dialog/ui-defaults.mjs';import{emptyDrawingState,projectDrawingArea,createDrawingArea}from'/worlds/art.draw/sop-drawing.mjs';import{performGesture}from'/tests/fixtures/editor-gesture.mjs';
 const session={isession:{state:{'art.draw':emptyDrawingState()}},engine:{}},calls=[];let ui;
 const projected=()=>projectDrawingArea(session.isession.state['art.draw']);
-const host={persistent:false,asset:p=>p.startsWith('lib/')?'/src/'+p.slice(4):'/'+p,sample:async()=>[],state:()=>projected(),isBusy:()=>false,tools:async()=>({operations:(await createDrawingArea({instanceId:'tools'})).bindings()}),
+const host={persistent:false,ui:uiValues,asset:p=>p.startsWith('lib/')?'/src/'+p.slice(4):'/'+p,sample:async()=>[],state:()=>projected(),isBusy:()=>false,tools:async()=>({operations:(await createDrawingArea({instanceId:'tools'})).bindings()}),
  tool:async(operation,args)=>{const result=await performGesture(session,{view:'draw',operation,args});calls.push({operation,args,result});ui.update(projected());return result;},download:()=>{},send:()=>{throw Error('UI gestures must use declared tools');}};
 ui=draw.make(document.querySelector('#draw'),host);ui.update(projected());ui.show?.();
 window.editors={session,calls,ui,projected};window.psys2={engineClient:{ready:async()=>true,info:{}}};

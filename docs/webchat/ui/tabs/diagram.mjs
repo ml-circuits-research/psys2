@@ -90,7 +90,7 @@ function ensureCss() {
 }
 
 /** The tab's model of a projection: nodes, links and groups by id with their observed geometry and inputs. */
-function modelOf(state) {
+function modelOf(state, frame) {
   const node = new Map(), link = new Map(), group = new Map(), inputs = state?.inputs ?? {}, boxes = state?.boxes ?? {};
   for (const object of state?.objects ?? []) {
     const input = inputs[object.id] ?? {}, id = object.id, selected = object.selected === 'true' || object.selected === true;
@@ -103,11 +103,12 @@ function modelOf(state) {
       bends: [].concat(input.bends ?? []).map((bend) => String(bend).split(' ').map(Number)).filter((bend) => bend.length === 3 && bend.every(Number.isFinite)).sort((a, b) => a[0] - b[0]).map(([k, x, y]) => ({ k, x, y })), selected });
     else if (object.binding === 'diagram.group') group.set(id, { id, label: object.label ?? input.label, layout: input.layout, scale: input.scale, members: [].concat(input.members ?? []), box: boxes[id] ?? null, xLabel: input.xLabel, yLabel: input.yLabel, valueLabels: input.valueLabels, gridlines: input.gridlines, legend: input.legend, yMax: input.yMax, inputs: input, selected });
   }
-  return { node, link, group, inputs, options: state?.options ?? {}, view: state?.runtime?.view ?? {}, frame: state?.frame ?? { w: 1000, h: 700 }, pending: !!state?.pending };
+  return { node, link, group, inputs, options: state?.options ?? {}, view: state?.runtime?.view ?? {}, frame: state?.frame ?? frame, pending: !!state?.pending };
 }
 const innerOf = (svg) => String(svg ?? '').replace(/^\s*<svg[^>]*>/, '').replace(/<\/svg>\s*$/, '');
 
 function make(holder, host) {
+  const U = host.ui(VIEW), defaultFrame = { w: U.frameWidth, h: U.frameHeight };   // declared control values (worlds/app.project/ui-defaults.sop)
   ensureCss();
   holder.style.maxWidth = 'none'; holder.style.height = '100%';
   holder.classList.add('dg-root');
@@ -115,11 +116,11 @@ function make(holder, host) {
   const btn = (label, title, onclick, cls = '') => { const b = html('button', 'dg-btn' + (cls ? ' ' + cls : ''), label); b.type = 'button'; b.title = title; b.setAttribute('aria-label', title); b.addEventListener('click', onclick); return b; };
   const sv = (tag, attrs = {}, parent = null) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.append(e); return e; };
 
-  let state = null, m = modelOf(null), destroyed = false, hintIndex = 0, visible = !holder.hidden, shownSvg = null;
+  let state = null, m = modelOf(null, defaultFrame), destroyed = false, hintIndex = 0, visible = !holder.hidden, shownSvg = null;
   let sel = { nodes: [], links: [], group: null };
   let mode = 'select', multiSelect = false, connectionFrom = null, chooserPoint = null, suppressClick = false;
   const zv = { k: 1, dx: 0, dy: 0 };
-  let vbBase = { x: 0, y: 0, w: 1000, h: 700 }, vbNow = vbBase, fitted = false, fittedEmpty = true, fittedNodes = new Set();
+  let vbBase = { x: 0, y: 0, ...defaultFrame }, vbNow = vbBase, fitted = false, fittedEmpty = true, fittedNodes = new Set();
 
   // ---- layout: toolbar, board (svg + hint), inspector, caption ----
   const board = html('div', 'dg-board'), hint = html('div', 'dg-hint');
@@ -474,7 +475,7 @@ function make(holder, host) {
     if (!pan.moved) { pan.moved = true; try { svg.setPointerCapture(event.pointerId); } catch { /* synthetic pointer */ } svg.classList.add('panning'); }
     const object = pan.object;
     if (object?.kind === 'resize') {
-      let width = Math.max(8, object.width + 2 * dx), height = Math.max(8, object.height + 2 * dy);
+      let width = Math.max(U.minNodeSize, object.width + 2 * dx), height = Math.max(U.minNodeSize, object.height + 2 * dy);
       if (object.square || event.shiftKey) { const k = Math.max(width / object.width, height / object.height); width = object.width * k; height = object.height * k; }
       object.next = { width: Math.round(width), height: Math.round(height) };
       pan.preview ??= sv('rect', { class: 'dg-marquee' }, svg);
@@ -584,7 +585,7 @@ function make(holder, host) {
     const d = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }[ev.key];
     if (d) {
       ev.preventDefault();
-      const amount = ev.shiftKey ? 1 : 10, group = m.group.get(sel.group), nodes = sel.nodes.map((id) => m.node.get(id)).filter((n) => n && !n.group);
+      const amount = ev.shiftKey ? U.keyFineStep : U.keyStep, group = m.group.get(sel.group), nodes = sel.nodes.map((id) => m.node.get(id)).filter((n) => n && !n.group);
       if (group?.box) toolCall('diagram.group.place', { id: group.id, x: Math.round((group.box.x0 + group.box.x1) / 2 + d[0] * amount), y: Math.round((group.box.y0 + group.box.y1) / 2 + d[1] * amount) });
       else if (nodes.length) toolCall('diagram.node.place', { ids: nodes.map((n) => n.id), x: Math.round(nodes.reduce((s, n) => s + n.x / nodes.length, 0) + d[0] * amount), y: Math.round(nodes.reduce((s, n) => s + n.y / nodes.length, 0) + d[1] * amount) });
       else { zv.dx += d[0] * 0.1 * vbNow.w; zv.dy += d[1] * 0.1 * vbNow.h; applyZoom(); paintOverlay(); }
@@ -615,7 +616,7 @@ function make(holder, host) {
 
   const api = {
     update(next) {
-      state = next && typeof next === 'object' ? next : null; m = modelOf(state);
+      state = next && typeof next === 'object' ? next : null; m = modelOf(state, defaultFrame);
       reconcile();
       caption.textContent = describe();
       redraw(); inspectorUi.sync();

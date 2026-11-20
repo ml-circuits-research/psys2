@@ -16,6 +16,7 @@ function eventsOf(projection){
   .sort((a,b)=>a.start-b.start||a.id.localeCompare(b.id));
 }
 function make(holder,host){
+ const U=host.ui(VIEW);   // declared control values (worlds/app.project/ui-defaults.sop)
  if(!document.getElementById('p2-calendar-css'))document.head.append(element('style',{id:'p2-calendar-css'},CSS));
  Object.assign(holder.style,{padding:'0',height:'100%',minHeight:'0',maxWidth:'none',overflow:'hidden',boxSizing:'border-box'});
  let state=host.state?.(WORLD)??{},day=new Date(),pending=false,selected=null,destroyed=false,drag=null,suppressClick=false;
@@ -30,7 +31,7 @@ function make(holder,host){
  function clearInspector(){selected=null;inspector.removeAttribute('data-calendar-form');inspector.replaceChildren(element('h3',{},'Event properties'),element('p',{class:'cal-muted'},'Select an event to edit it, or add a new event. Drag an event to another day to move it; arrow keys move the focused event.'));}
  function field(form,label,type,value){const wrap=element('label',{class:'cal-field'},label),input=element(type==='textarea'?'textarea':'input',type==='textarea'?{}:{type});input.value=value;input.required=type!=='textarea';input.setAttribute('aria-label',label);wrap.append(input);form.append(wrap);return input;}
  function eventForm(record=null){
-  const id=record?.id??crypto.randomUUID(),startDate=record?new Date(record.start):new Date(day.getFullYear(),day.getMonth(),day.getDate(),9),endDate=record?new Date(record.start+record.duration):new Date(+startDate+3600000);
+  const id=record?.id??crypto.randomUUID(),startDate=record?new Date(record.start):new Date(day.getFullYear(),day.getMonth(),day.getDate(),U.newEventHour),endDate=record?new Date(record.start+record.duration):new Date(+startDate+U.newEventDurationMs);
   selected=record?.id??null;inspector.setAttribute('data-calendar-form','');inspector.replaceChildren(element('h3',{},record?'Edit event':'New event'));
   const form=element('form'),fields=element('div',{class:'cal-fields'}),error=element('div',{class:'cal-form-error',role:'alert'}),actions=element('div',{class:'cal-actions'}),save=element('button',{type:'submit',class:'cal-button primary'},'Save');form.append(fields,error,actions);inspector.append(form);
   const title=field(fields,'Title','text',record?.title??''),date=field(fields,'Date','date',dateInput(startDate)),endDay=field(fields,'End date','date',dateInput(endDate)),start=field(fields,'Start time','time',clock(startDate)),end=field(fields,'End time','time',clock(endDate)),notes=field(fields,'Notes (optional)','textarea',record?.notes??'');
@@ -59,7 +60,7 @@ function make(holder,host){
    for(const event of onDay(d)){
     const chip=button('',()=>{if(!suppressClick)selectEvent(event);});chip.className='cal-event'+(selected===event.id||viewSelected()===event.id?' selected':'');chip.dataset.event=event.id;chip.title='Drag to another day to move';
     chip.addEventListener('pointerdown',e=>startDrag(e,event,chip));
-    chip.addEventListener('keydown',e=>{if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key))return;e.preventDefault();const next=new Date(event.start);if(e.key==='ArrowLeft'||e.key==='ArrowRight')next.setDate(next.getDate()+(e.key==='ArrowLeft'?-1:1));else next.setMinutes(next.getMinutes()+(e.key==='ArrowUp'?-1:1)*(e.shiftKey?15:30));move(event,+next);});
+    chip.addEventListener('keydown',e=>{if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key))return;e.preventDefault();const next=new Date(event.start);if(e.key==='ArrowLeft'||e.key==='ArrowRight')next.setDate(next.getDate()+(e.key==='ArrowLeft'?-1:1));else next.setMinutes(next.getMinutes()+(e.key==='ArrowUp'?-1:1)*(e.shiftKey?U.keyFineStepMinutes:U.keyStepMinutes));move(event,+next);});
     chip.append(element('span',{},clock(new Date(event.start))+'–'+clock(new Date(event.start+event.duration))),element('strong',{},event.title));column.append(chip);
    }
    week.append(column);

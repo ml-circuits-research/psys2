@@ -53,6 +53,7 @@ export function captionOf(state) {
 }
 
 function make(holder, host) {
+  const U = host.ui(VIEW);   // declared control values (worlds/app.project/ui-defaults.sop)
   let api;
   ensureCss();
   holder.style.maxWidth = 'none'; holder.style.height = '100%';
@@ -101,7 +102,7 @@ function make(holder, host) {
   }
   // the layer order of the page: the order the projection draws the objects in (the last drawn is on top)
   const drawOrder = () => { const seen = []; for (const it of items) if (!seen.includes(it.id)) seen.push(it.id); for (const o of objs()) if (o.binding === 'drawing.object' && !seen.includes(o.id)) seen.push(o.id); return seen; };
-  const scaleOf = (id) => { const b = boxOf(id) ?? shown.get(id)?.box; return b ? Math.max(b.x1 - b.x0, b.y1 - b.y0) : 120; };
+  const scaleOf = (id) => { const b = boxOf(id) ?? shown.get(id)?.box; return b ? Math.max(b.x1 - b.x0, b.y1 - b.y0) : U.defaultScale; };
 
   // ---- commands ------------------------------------------------------------------------------------------------
   // Every gesture is a declared native command; what it changed comes back through update().
@@ -547,7 +548,7 @@ function make(holder, host) {
   canvas.addEventListener('keydown', (e) => {
     const ids = selectedIds(), part = currentPart(), moves = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }, move = moves[e.key];
     if (move && ids.length) {
-      e.preventDefault(); const step = e.shiftKey ? 20 : 2;
+      e.preventDefault(); const step = e.shiftKey ? U.keyLargeStep : U.keyStep;
       if (part) canvasTool('drawing.part.place', { id: part.object, index: part.index, x: part.x + move[0] * step, y: part.y + move[1] * step });
       else { const [operation, args] = moveArgs(ids, move[0] * step, move[1] * step); canvasTool(operation, args); }
     } else if ((e.key === 'Delete' || e.key === 'Backspace') && ids.length) { e.preventDefault(); canvasTool(part ? 'drawing.part.remove' : 'drawing.object.remove', part ? { id: part.object, index: part.index } : { ids }); }

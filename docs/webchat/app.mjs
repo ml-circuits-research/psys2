@@ -107,6 +107,9 @@ const mark = (name) => { try { performance.mark(`psys2:${name}`); } catch { /* n
  * Returns { engine, session, send(text), refreshState(), settings, destroy() }.
  */
 export async function mountPsys2(element, options = {}) {
+  // The declared values of the tabs' own controls (worlds/app.project/ui-defaults.sop): loaded before the first tab is made, read through host.ui(view).
+  let uiDefaults = null;
+  const uiDefaultsReady = import('./lib/dialog/ui-defaults.mjs').then((m) => (uiDefaults = m.uiDefaults()));
   const tEntry = performance.now();   // PROGRESS: everything before this was the page code (HTML, scripts, modules)
   const base = new URL(options.baseUrl ?? HERE, document.baseURI);
   if (!document.querySelector('link[data-psys2-css]')) {
@@ -215,6 +218,7 @@ export async function mountPsys2(element, options = {}) {
       try {
       timing.timeline.stage('Load editor module');await tabPaint();
       if (t.file && !t.make) { const m = (await import(new URL(`ui/tabs/${t.file}`, base).href)).default; Object.assign(t, m); }   // the tab's module loads now (with its world modules); vendor assets load when it makes its UI
+      await uiDefaultsReady;
       if (destroyed) return null;
       if (kept) { await tabPaint(); createEditor(kept); }
       if (!options.renderAllTabs && engineClient) { try {
@@ -816,6 +820,8 @@ export async function mountPsys2(element, options = {}) {
     /** RANDOM (spec 25): texts the sampler gives for the tab (mode 'few' | 'actions' | 'one'); a tab shows them in its empty state instead of a list of its own. */
     sample: (mode, extra) => sampleItems(mode, extra).then((items) => items.map((i) => i.text)),
     tools: editorTools,
+    /** The declared values of a tab's own controls (new item values, keyboard steps, minimum sizes): worlds/app.project/ui-defaults.sop. */
+    ui: (view) => uiDefaults?.[view] ?? {},
     tool: (operation,args={},options={}) => {
       gesturesPending++;updateBusy();
       const run=gestureChain.then(()=>runGesture(operation,args,options)).finally(()=>{gesturesPending=Math.max(0,gesturesPending-1);updateBusy();});

@@ -208,7 +208,8 @@ export function fallbackLadder(packet){
    if(label.act!=='make'||!label.constraints.some(placement)||!other.length)continue;
    const placed=decodeVariant(packet,[reduced(c=>placement(c)||count(c))]);
    const target=label.targets[0];
-   const follow=reduced(c=>other.includes(c));
+   // (reduced works on a copy of the label: its constraints are kept by id.)
+   const otherIds=new Set(other.map(c=>c.id)),follow=reduced(c=>otherIds.has(c.id));
    follow.act='change';follow.targets=follow.targets.map(t=>t.id===target.id?{id:t.id,mode:'existing',...(t.kind?{kind:t.kind}:{}),determiner:'definite'}:t);
    follow.evidence=follow.evidence.filter(e=>!(e.path[0]==='targets'&&e.path[1]===target.id&&e.path[2]==='name'));
    delete follow.targets.find(t=>t.id===target.id)?.name;

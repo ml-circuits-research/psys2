@@ -33,6 +33,8 @@ for (const [source, module] of [
   ['area-registry.sop', 'area-registry-source.mjs'],
   ['placement-default-schema.sop', 'placement-default-schema-source.mjs'],
   ['placement-default-policy.sop', 'placement-default-policy-source.mjs'],
+  ['ui-defaults-schema.sop', 'ui-defaults-schema-source.mjs'],
+  ['ui-defaults.sop', 'ui-defaults-source.mjs'],
 ]) {
   const text = readFileSync(new URL(source, folder), 'utf8');
   emit(fileURLToPath(new URL(module, folder)), '// Generated from ' + source + '.\nexport default ' + JSON.stringify(text) + ';\n');
