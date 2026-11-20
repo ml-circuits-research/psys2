@@ -33,6 +33,7 @@ SOURCES = [
     ('ui-natural-v1', DATA / 'ui-natural-v1' / 'authored.jsonl', 'C1 commands executed through the editors (natural, synonym, elliptical, omission)'),
     ('ui-human-v1', DATA / 'ui-human-v1' / 'examples.jsonl', 'human paraphrases (equivalent/complex/simplified) of executed ui-natural seeds'),
     ('ui-relations-v1', DATA / 'ui-relations-v1' / 'examples.jsonl', 'relative-position placement requests (generate.py)'),
+    ('ui-comparatives-v1', DATA / 'ui-comparatives-v1' / 'examples.jsonl', 'comparative changes of existing objects (generate.py)'),
     ('demo-tool-profile', DATA / 'demo-tool-profile' / 'active.jsonl.gz', 'the corpus of the deployed reader: haiku-v1/v2 authored data plus demo tool supplements'),
     ('main-synthetic', REPO / 'main-synthetic-dataset' / 'examples.jsonl', 'owner synthetic set (generate-reader-datasets skill); converted, mostly dropped'),
 ]
@@ -313,6 +314,39 @@ def definite_description_fix(row, stats, lemmas):
         del t['name_span']
         t.update({'kind': noun, 'kind_span': noun, 'fill': 'description', 'determiner': 'definite'})
         stats['definite-description-name-to-kind'] += 1
+    return row
+
+
+COMPARATIVES = {'bigger': 'more', 'larger': 'more', 'wider': 'more', 'taller': 'more', 'longer': 'more', 'higher': 'more', 'thicker': 'more', 'huger': 'more',
+                'smaller': 'less', 'tinier': 'less', 'narrower': 'less', 'shorter': 'less', 'lower': 'less', 'thinner': 'less'}
+ABSOLUTE_DEGREES = {'big', 'small', 'large', 'tiny', 'huge', 'little', 'medium', 'giant', 'smallish', 'biggish'}
+DEGREE_KEY = re.compile(r'\.(size|width|height|scale|length)$')
+
+
+def degree_fix(row, stats):
+    """Comparatives are changes relative to the current value: operator delta, step more/less (much_ when intensified),
+    the comparative word as value_span and no value. Bare absolute degree words (big, small) are degree conditions."""
+    for q in row['requests']:
+        for c in q.get('constraints') or []:
+            vs = c.get('value_span') or ''
+            if not DEGREE_KEY.search(c['key']):
+                continue
+            words = re.findall(r"[a-z]+", vs.lower())
+            comps = [w for w in words if w in COMPARATIVES]
+            if len(comps) == 1 and not re.search(r'\d', vs) and c.get('operator') != 'factor' or (len(comps) == 1 and c.get('operator') == 'factor' and not c.get('measure')):
+                word = re.search(r'\b' + comps[0] + r'\b', vs, re.I).group(0)
+                if q['span'].count(word) != 1:
+                    continue
+                before = re.findall(r"[a-z]+", q['span'][:q['span'].index(word)].lower())[-2:]
+                intensified = any(w in ('much', 'lot', 'way', 'far', 'considerably') for w in words + before)
+                step = ('much_' if intensified else '') + COMPARATIVES[comps[0]]
+                if (c.get('operator'), c.get('step'), c.get('value_span'), 'value' in c) != ('delta', step, word, False):
+                    if 'value' in c:
+                        c['raw_value'] = c.pop('value')
+                    c.update({'operator': 'delta', 'step': step, 'value_span': word})
+                    stats['comparative-as-delta-step'] += 1
+            elif vs.lower() in ABSOLUTE_DEGREES and c.get('operator') == 'eq':
+                c['operator'] = 'degree'; stats['absolute-degree-word-as-degree'] += 1
     return row
 
 
@@ -898,7 +932,7 @@ def main():
                 row = anchors_fix(ui_row(name, r, i), fixes[name], inv)
                 if name == 'ui-human-v1':
                     row = qualitative_fix(row, fixes[name])
-            row = definite_description_fix(row, fixes[name], kind_lemmas)
+            row = degree_fix(definite_description_fix(row, fixes[name], kind_lemmas), fixes[name])
             e, w, f = validator.check(row)
             for x in f:
                 fixes[name][x] += 1

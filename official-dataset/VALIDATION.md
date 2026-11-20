@@ -43,6 +43,10 @@ Issue counts on the untouched source rows (per request or constraint where the i
 | class-value-outside-bank-unlabelled | 1,372 |
 | warning:value-span-ambiguous | 2 |
 
+### ui-comparatives-v1 (786 rows)
+
+No issue found.
+
 ### demo-tool-profile (36,999 rows)
 
 | issue | rows |
@@ -77,7 +81,9 @@ Fixed or converted:
 | fix | rows |
 | --- | ---: |
 | definite-description-name-to-kind | 224 |
+| absolute-degree-word-as-degree | 95 |
 | class-value-outside-bank-unlabelled | 88 |
+| comparative-as-delta-step | 3 |
 | anchor-span-as-anchor-mention | 3 |
 
 Kept with a warning (not an error; see README):
@@ -97,6 +103,8 @@ Fixed or converted:
 | definite-description-name-to-kind | 504 |
 | class-value-outside-bank-unlabelled | 330 |
 | qualitative-value-unlabelled | 329 |
+| absolute-degree-word-as-degree | 110 |
+| comparative-as-delta-step | 61 |
 | anchor-span-as-anchor-mention | 60 |
 
 Dropped:
@@ -130,6 +138,8 @@ Kept with a warning (not an error; see README):
 | --- | ---: |
 | value-span-ambiguous | 2 |
 
+### ui-comparatives-v1: 786 in, 786 kept
+
 ### demo-tool-profile: 36,999 in, 27,525 kept
 
 Fixed or converted:
@@ -137,6 +147,7 @@ Fixed or converted:
 | fix | rows |
 | --- | ---: |
 | anchor-span-as-anchor-mention | 2,274 |
+| absolute-degree-word-as-degree | 48 |
 | definite-description-name-to-kind | 2 |
 
 Dropped:
@@ -168,6 +179,7 @@ Fixed or converted:
 | converted:drawn | 414 |
 | converted:avatar | 266 |
 | converted:node | 206 |
+| absolute-degree-word-as-degree | 171 |
 | definite-description-name-to-kind | 99 |
 | converted:block | 98 |
 | converted:meeting | 86 |

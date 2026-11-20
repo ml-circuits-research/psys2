@@ -544,7 +544,7 @@
     }
   ],
   "builder": "official-dataset/build.py",
-  "builderSha256": "d980be807e32612ad6e2b0d91d74c349f5e10531d999873a1fcd7f6aa69321de",
+  "builderSha256": "924734ac8954ca46111ba25cf47e53bafce40d4e2bbbf031c63ab81d5c672bda",
   "sources": [
     {
       "name": "ui-natural-v1",
@@ -557,8 +557,10 @@
       "rowsDropped": 0,
       "dropReasons": {},
       "fixes": {
+        "absolute-degree-word-as-degree": 95,
         "anchor-span-as-anchor-mention": 3,
         "class-value-outside-bank-unlabelled": 88,
+        "comparative-as-delta-step": 3,
         "definite-description-name-to-kind": 224
       }
     },
@@ -577,8 +579,10 @@
         "dropped:value-span-not-in-span": 10
       },
       "fixes": {
+        "absolute-degree-word-as-degree": 110,
         "anchor-span-as-anchor-mention": 60,
         "class-value-outside-bank-unlabelled": 330,
+        "comparative-as-delta-step": 61,
         "definite-description-name-to-kind": 504,
         "qualitative-value-unlabelled": 329
       }
@@ -587,7 +591,7 @@
       "name": "ui-relations-v1",
       "path": "training/sop-bert/data/ui-relations-v1/examples.jsonl",
       "description": "relative-position placement requests (generate.py)",
-      "gitCommit": "56c9f6b6bd528673ed117cfb8145555fda00b1f0",
+      "gitCommit": "2c11f4261f40f61d065e53de96d7731ace97e939",
       "sha256": "5273ddb0a5f7953cde45d55041382ff5d970f8208bdddf7869d73a3e0092f136",
       "rowsIn": 5374,
       "rowsKept": 5374,
@@ -597,6 +601,18 @@
         "anchor-span-as-anchor-mention": 5374,
         "relation-value-renamed-to-bank": 1372
       }
+    },
+    {
+      "name": "ui-comparatives-v1",
+      "path": "training/sop-bert/data/ui-comparatives-v1/examples.jsonl",
+      "description": "comparative changes of existing objects (generate.py)",
+      "gitCommit": null,
+      "sha256": "2187f35ba9dd758f60b312cde9792fbf464bdb1b4803db1ef8d50f956f032fdf",
+      "rowsIn": 786,
+      "rowsKept": 786,
+      "rowsDropped": 0,
+      "dropReasons": {},
+      "fixes": {}
     },
     {
       "name": "demo-tool-profile",
@@ -612,6 +628,7 @@
         "dropped:duplicate-text": 9365
       },
       "fixes": {
+        "absolute-degree-word-as-degree": 48,
         "anchor-span-as-anchor-mention": 2274,
         "definite-description-name-to-kind": 2
       }
@@ -659,6 +676,7 @@
         "dropped:value-not-in-class-bank": 169
       },
       "fixes": {
+        "absolute-degree-word-as-degree": 171,
         "converted:avatar": 266,
         "converted:block": 98,
         "converted:compound": 32,
@@ -777,11 +795,11 @@
     }
   ],
   "splits": {
-    "train": 38208,
-    "dev": 4545,
-    "test": 4409
+    "train": 38941,
+    "dev": 4637,
+    "test": 4524
   },
-  "families": 22258,
+  "families": 22404,
   "leakedFamilies": 0,
   "labelConflictsResolvedByPriority": {
     "ui-natural-v1<-demo-tool-profile": 5,
@@ -790,8 +808,9 @@
   },
   "previousMessageAugmentation": {
     "ui-natural-v1": 314,
-    "ui-human-v1": 715,
-    "ui-relations-v1": 1369,
+    "ui-human-v1": 714,
+    "ui-relations-v1": 1370,
+    "ui-comparatives-v1": 154,
     "main-synthetic": 1214
   },
   "kindVocabulary": {
@@ -800,32 +819,32 @@
   },
   "files": {
     "STATS.md": {
-      "sha256": "c503c0d4f791c48366ddb5ab122df3ab894987467630f82ad54ed7f7ef9eac8b",
-      "bytes": 6376
+      "sha256": "fc6e59547985e6d4e9b31ebed9182ab36453d109edfec01cec85c1f1e63efc7f",
+      "bytes": 6474
     },
     "VALIDATION.md": {
-      "sha256": "d85b6fa300aa50befa085122b0f42ad0235e682a9cf8eebeb391a3550282b792",
-      "bytes": 6845
+      "sha256": "cf9380b73824cc0f541b921efdeca314e3bfd9d769a3e0d241ba6f70a11b141e",
+      "bytes": 7332
     },
     "audit-sample.md": {
-      "sha256": "00426f12f1cd71b17112f459ac7e43c2434ebab56ea2f29ba9523d5b22b55486",
-      "bytes": 45187
+      "sha256": "a02e3bcbdb177e1412bf24dce2b0ae9a4c39315c2bc176f6f64121b3aef65368",
+      "bytes": 44486
     },
     "dev.jsonl": {
-      "sha256": "c4771ebbe3656e3acb11941eaf542f1af7b98b7f8b4e1912cd1ce02acad77b9e",
-      "bytes": 4790235
+      "sha256": "b1f1d813c9f708f72a9738db6ff1ae51f7348a076445b65d6117977363d1e253",
+      "bytes": 4884013
     },
     "inventory.json": {
       "sha256": "e3c7fbe6eef59087f70e0797b5f959ff5ce42951ed9f5ecb6813b6842c4e11da",
       "bytes": 50976
     },
     "test.jsonl": {
-      "sha256": "a90895f572b23a918042d0824e2236b33bdbbc288cdecb5d07cc4e1cffc08958",
-      "bytes": 4756911
+      "sha256": "3382028bf83c356ee977a74a63e9d25d9edc0e2974e65bfdb02835977a1a8dc7",
+      "bytes": 4856861
     },
     "train.jsonl.gz": {
-      "sha256": "c676d6d544e569667ccd1894cc999641709f58733d0b72f42edf9f07cc286ccb",
-      "bytes": 1952048
+      "sha256": "08c604bd0c8a03d5e5253a31941911ba13fa66576c99e76c90d0656e11359bb4",
+      "bytes": 1978992
     }
   },
   "policy": {
@@ -833,6 +852,7 @@
       "ui-natural-v1",
       "ui-human-v1",
       "ui-relations-v1",
+      "ui-comparatives-v1",
       "demo-tool-profile",
       "main-synthetic"
     ],
