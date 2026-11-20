@@ -39,7 +39,7 @@ for _area, _types in json.loads((HERE / 'inventory.json').read_text()).items(): 
 INV = official.Inventory(INVENTORY)
 VALIDATOR = official.Validator(INV)
 _, LEMMAS = official.kind_vocabulary()
-WORLDS = {'diagram', 'drawing'}
+WORLDS = {'diagram', 'drawing', 'avatar'}
 DETERMINERS = {'definite': 'definite', 'indefinite': 'indefinite', 'demonstrative': 'definite', 'possessive': 'definite', 'quantified': 'definite'}
 SLOT_ID = re.compile(r'\b(?:[a-z]+_[a-z_]+|chart:\d+|seg-\d+)\b')
 REF_KEYS = {'node.ids', 'link.ids', 'group.id', 'group.ids', 'drawn.ids', 'drawn.id', 'drawn.anchor', 'node.anchor', 'chart.id'}  # part.owner may name a part of an object ("the roof")
@@ -345,7 +345,41 @@ def needs_to_keys(world, q, needs, stats):
     return keep
 
 
+PREF_DIAGRAM = re.compile(r'^(link|node|chart|palette|diagram|group|series)', re.I)
+PREF_DRAWING = re.compile(r'^(placement|drawn|drawing|part|scene|page)', re.I)
+DIAGRAM_KINDS = {'node', 'link', 'box', 'circle', 'rectangle', 'diamond', 'arrow', 'chart', 'group', 'ellipse', 'text'}
+
+
+def preference_world(row, stats):
+    """w.preferences rows (the worker's preference tab) belong to the tab whose preference or figure they set: the avatar
+    figure (face.figure.*) is the avatar's figure family; a standing preference goes to the area its key names (link.style,
+    palette -> diagram; placement.side -> drawing), else to the area its context shows."""
+    reqs = row.get('requests') or []
+    keys = [str(c.get('key', '')) for q in reqs for c in q.get('constraints') or []]
+    pref_keys = [str(c.get('value', '')) for q in reqs for c in q.get('constraints') or [] if c.get('key') == 'preference.key']
+    if any(k.startswith('face.figure.') for k in keys) or any((q.get('target') or {}).get('type') == 'avatar' for q in reqs) or any(v.startswith('avatar') for v in pref_keys):
+        world = 'avatar'
+    elif any(PREF_DIAGRAM.match(v) for v in pref_keys):
+        world = 'diagram'
+    elif any(PREF_DRAWING.match(v) for v in pref_keys):
+        world = 'drawing'
+    else:
+        kinds = {str(e.get('kind', '')).lower() for e in (row.get('context') or {}).get('existing') or []}
+        world = 'diagram' if kinds & DIAGRAM_KINDS else 'drawing'
+    for q in reqs:
+        t = q.get('target') or {}
+        if t.get('type') == 'avatar':
+            t['type'] = 'figure'
+        for c in q.get('constraints') or []:
+            if str(c.get('key', '')).startswith('face.figure.'):
+                c['key'] = 'figure.' + c['key'].split('.', 2)[2]
+    stats[f'w.preferences row -> {world} tab'] += 1
+    row['world'] = world
+
+
 def normalise(row, stats):
+    if row.get('world') == 'w.preferences':
+        preference_world(row, stats)
     world = row['world']
     if row.get('tier') in ('robustness', 'fragment'):
         row[row['tier']] = True

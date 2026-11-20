@@ -180,6 +180,36 @@
      "src": "art.draw seat (drawing.object.make / catalog.make / object.change {seat}): the thing a person sits on (a bench, a chair); without one, sitting is on the ground"
     }
    }
+  },
+  "preference": {
+   "keys": {
+    "key": {
+     "head": "span",
+     "concept": "key",
+     "src": "drawing.preference.state/reset {key} (standing preferences)"
+    },
+    "value": {
+     "head": "span",
+     "concept": "value",
+     "src": "drawing.preference.state/reset {value} (standing preferences)"
+    },
+    "field": {
+     "head": "span",
+     "concept": "field",
+     "src": "drawing.preference.state/reset {field} (standing preferences)"
+    },
+    "scope": {
+     "head": "span",
+     "concept": "scope",
+     "src": "drawing.preference.state/reset {scope} (standing preferences)"
+    },
+    "about": {
+     "head": "span",
+     "concept": "about",
+     "src": "drawing.preference.state/reset {about} (standing preferences)"
+    }
+   },
+   "doc": "native drawing preference (declared operations)"
   }
  },
  "diagram": {
@@ -737,6 +767,16 @@
      "head": "span",
      "concept": "about",
      "src": "native parameter diagram.preference.state.about (worlds/diagram.sketch/native-interface.sop)"
+    },
+    "field": {
+     "head": "span",
+     "concept": "field",
+     "src": "diagram.preference.state/reset {field} (standing preferences)"
+    },
+    "scope": {
+     "head": "span",
+     "concept": "scope",
+     "src": "diagram.preference.state/reset {scope} (standing preferences)"
     }
    },
    "doc": "native diagram preference (declared operations)"
@@ -821,9 +861,30 @@
      "head": "span",
      "concept": "about",
      "src": "native parameter avatar.preference.state.about (worlds/ui.avatar/native-interface.sop)"
+    },
+    "scope": {
+     "head": "span",
+     "concept": "scope",
+     "src": "avatar.preference.state/reset {scope} (standing preferences)"
     }
    },
    "doc": "native avatar preference (declared operations)"
+  }
+ },
+ "request": {
+  "request": {
+   "keys": {
+    "act": {
+     "head": "candidate",
+     "concept": "act",
+     "values": [
+      "describe",
+      "reset",
+      "set"
+     ],
+     "src": "avatar.figure.describe/default, <area>.preference.state/reset"
+    }
+   }
   }
  }
 }
