@@ -2,7 +2,7 @@
 @mode.change std.capability.mode act=change target=existing requireResult=true selector=true selectorUnique=true
 @mode.place std.capability.mode act=place target=existing requireResult=true selector=true selectorUnique=true
 @mode.remove std.capability.mode act=remove target=existing selector=true
-@mode.arrange std.capability.mode act=arrange target=existing
+@mode.arrange std.capability.mode act=arrange target=existing selector=true selectorUnique=true
 
 # The kind a target names fills a tool's kind parameter when one of its words is a declared value of it. A family
 # word ("box", "node") names no value: a declared default for that family may fill it (execution-policy.sop), and an

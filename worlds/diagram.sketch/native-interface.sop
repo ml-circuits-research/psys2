@@ -359,7 +359,9 @@
 @native.diagram.sketch.op.diagram.chart.format.param.valueLabels std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="valueLabels" kind=boolean
 @native.diagram.sketch.op.diagram.chart.format.param.gridlines std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="gridlines" kind=boolean
 @native.diagram.sketch.op.diagram.chart.format.param.legend std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="legend" kind=string enum="none" enum="right" enum="bottom" enumClosed=true
-@native.diagram.sketch.op.diagram.link.improve std.capability.operation scope=$native.diagram.sketch.scope name="diagram.link.improve" act=change on="diagram.sketch.link" order=46 eligible=true
+# Improving one line ("make the line e1 look better", "tidy that arrow") arranges it: the declared look of a line
+# (orthogonal route, solid, 2 wide; act-tools.sop), disclosed as that look and undoable.
+@native.diagram.sketch.op.diagram.link.improve std.capability.operation scope=$native.diagram.sketch.scope name="diagram.link.improve" act=arrange on="diagram.sketch.link" order=46 eligible=true
 @native.diagram.sketch.op.diagram.link.improve.param.ids std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.improve name="ids" kind=array required=true
 @native.diagram.sketch.op.diagram.nodes.swap std.capability.operation scope=$native.diagram.sketch.scope name="diagram.nodes.swap" act=place on="diagram.sketch.node" order=47 eligible=true
 @native.diagram.sketch.op.diagram.nodes.swap.param.ids std.capability.parameter operation=$native.diagram.sketch.op.diagram.nodes.swap name="ids" kind=array required=true

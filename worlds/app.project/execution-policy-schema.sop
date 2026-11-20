@@ -83,6 +83,9 @@
 @actForm.mode core.slot of=app.execution.actForm key=mode kind=atom enum=new enum=existing present=true
 @actForm.as core.slot of=app.execution.actForm key=as kind=atom present=true
 @actForm.results core.slot of=app.execution.actForm key=results kind=atom enum=some enum=none
+# `of`: the canonical kinds the act's new theme can be (the joining line); a new target of another kind ("connect
+# circles" read with the circles as a new node) is not compiled as making it.
+@actForm.of core.slot of=app.execution.actForm key=of kind=atom many=true
 # A concept whose values name observed objects of `sourceType` (a line's ends): an object is named by its code, by
 # its name (its label) or by its kind, and the value given to the tool is its code. A name or kind that several
 # objects share names none of them (the lookup stays ambiguous and the value is not applied).

@@ -247,12 +247,25 @@ function declaredActForm(nodes) {
   // `results`: whether the request says what to change (a constraint that is not the target's selector).
   const selectors=new Set(nodes.filter(wire=>wire.type==='std.request.target').flatMap(wire=>values(wire,'selector')));
   const results=nodes.some(wire=>wire.type==='std.request.constraint'&&!selectors.has('$'+wire.id))?'some':'none';
-  const form=executionPolicyWorld().ofType('app.execution.actForm').find(row=>take(row,'act')===act&&take(row,'mode')===take(target,'mode')&&(!row.attrs.results||take(row,'results')===results));
+  const form=executionPolicyWorld().ofType('app.execution.actForm').find(row=>take(row,'act')===act&&take(row,'mode')===take(target,'mode')&&(!row.attrs.results||take(row,'results')===results)&&(!row.attrs.of||values(row,'of').includes(take(target,'kind'))));
   if(!form)return nodes;
   return nodes.map(wire=>wire===request?{...wire,attrs:{...wire.attrs,act:[take(form,'as')]}}:wire);
 }
+// A target named by the same words as its identity selector ("the line e1": name e1, link.ids = e1) is picked by the
+// selector, which matches a code, a name or a kind; the name alone would require an observed name (a line has none).
+function identityNamesToSelectors(nodes, bindings) {
+  const identity = new Set((bindings?.properties || []).filter((row) => identityParameters().has(row.hostBinding?.parameter)).map((row) => row.canonical));
+  const byId = new Map(nodes.map((wire) => [wire.id, wire]));
+  return nodes.map((wire) => {
+    if (wire.type !== 'std.request.target' || take(wire, 'name') === undefined) return wire;
+    const c = byId.get(String(wire.attrs.selector?.[0] ?? '').slice(1));
+    if (!c || c.type !== 'std.request.constraint' || take(c, 'operator') !== 'eq' || take(c, 'polarity') !== 'positive' || !identity.has(take(c, 'concept')) || take(c, 'value') !== take(wire, 'name')) return wire;
+    const { name, ...attrs } = wire.attrs;
+    return { ...wire, attrs };
+  });
+}
 export function compileNativeCapability(candidate, context) {
-  const nodes=declaredActForm(parse(candidate.wires)), {world,scope}=compilerWorld(context,nodes);
+  const nodes=identityNamesToSelectors(declaredActForm(parse(candidate.wires)),context?.bindings), {world,scope}=compilerWorld(context,nodes);
   if(!nodes.some(w=>w.type==='std.request'&&w.id===candidate.request))return readPlan(world,'@compile.result std.compile.result status=not-applicable reason=request-root');
   return readPlan(world,world.compileRequest(serialize([...nodes,contextWire('capability.context',candidate.request,scope)])));
 }

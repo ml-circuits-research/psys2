@@ -35,7 +35,7 @@
 @start.phrases app.execution.knowledge concept=w.calendar.event.start valueType="k.time.clock_phrase"
 @start.instant app.execution.instant concept=w.calendar.event.start sourceType="time.calendar.meeting" binding="calendar.meeting.start" zoneOffset=0
 # "connect" with a new target makes the joining line; the ends of a diagram line name observed diagram nodes.
-@act.connect app.execution.actForm act=connect mode=new as=make
+@act.connect app.execution.actForm act=connect mode=new as=make of=w.diagram.edge
 @edge.from app.execution.reference concept=w.diagram.edge.from sourceType="diagram.sketch.node"
 @edge.to app.execution.reference concept=w.diagram.edge.to sourceType="diagram.sketch.node"
 # "arrange" with what to arrange it as ("lay it out as a tree") changes the layout; with nothing more said ("improve the
