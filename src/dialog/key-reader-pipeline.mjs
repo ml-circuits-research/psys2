@@ -6,6 +6,7 @@ import {comparativeSteps} from './comparative-projection.mjs';
 import {referenceProjection} from './reference-projection.mjs';
 import {completeBindings} from './declared-bindings.mjs';
 import {declaredRawReadings} from './partial-admission.mjs';
+import {declaredValueReadings} from './declared-value-readings.mjs';
 const hash=x=>typeof x==='string'&&/^[a-f0-9]{64}$/.test(x);
 const digest=async x=>Array.from(new Uint8Array(await globalThis.crypto.subtle.digest('SHA-256',new TextEncoder().encode(x))),b=>b.toString(16).padStart(2,'0')).join('');
 const same=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
@@ -74,7 +75,8 @@ export async function createKeyReaderPipeline({cutter,reader,getContext,cutterMo
    if(!recordedContext&&cut.spans.length===1&&(context.context?.previous!=null||context.context?.existing?.length>0))independentInput={sourceSop,cut,context,profiles:new Set()};
    // The declared raw readings (partial-admission.mjs: a container's property, a population joined by lines) hold for a
    // complete reading too.
-   raw=declaredRawReadings(raw,live);
+   // The declared readings of said values (declared-value-readings.mjs: amounts, ranges, positions) likewise.
+   raw=declaredValueReadings(declaredRawReadings(raw,live));
    const bridge=bridgeRawStructure(raw,{bindings:live,bindingSha256:bindingsSha256,comparatives:comparativeSteps(),references:referenceProjection(),budget,decoderBudget,maxBytes});
    failures.push(...bridge.diagnostics.map(issue=>({reason:issue.reason,path:issue.path})));const decoded=bridge.decoded;failures.push(...(decoded?.issues??[]));
    return {candidates:failures.length?[]:(decoded?.candidates??[]),coverage:{complete:failures.length===0&&decoded?.coverage?.complete===true,graphProposal:decoded?.coverage?.graphProposal===true,executable:false},failures,raw,provenance:copy(provenance),graphConfidence:null,sourceCut,steps,...(observation?{sourceObservation:copy(observation)}:{})};

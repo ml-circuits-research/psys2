@@ -10,6 +10,7 @@ import {flatRequestProjection} from './request-projection.mjs';
 import {bridgeRawStructure} from './raw-structural-bridge.mjs';
 import {comparativeSteps} from './comparative-projection.mjs';
 import {referenceProjection} from './reference-projection.mjs';
+import {interpretationPolicy} from './interpretation-policy.mjs';
 function containerOwned(r,bindings,area){
  const keys=(r.constraints??[]).map(c=>c?.key);
  if(!keys.length||keys.some(k=>typeof k!=='string'))return false;
@@ -48,12 +49,18 @@ export async function projectContextAction(proposal,session,{bindings,registry,v
  }else if(!Array.isArray(r.constraints)||!r.constraints.length&&r.act!=='arrange')return null;   // an arrangement may say nothing more ("improve the layout")
  const canonical=selected.canonical,values=[];
  // A reading beyond plain stated values (a comparative step, several results, a class value its span only evidences:
- // legend "hide" said as "get rid of the legend") is projected by the same bridge as any other reading, with the
- // context target bound to the kind the observed reference resolution chose.
- if(!other&&r.constraints.some(c=>c.operator!=='eq'||typeof c.value==='string'&&typeof c.value_span==='string'&&c.value!==c.value_span)){
+ // legend "hide" said as "get rid of the legend"; a selector that picks among the family: "the May value", "the third
+ // bar") is projected by the same bridge as any other reading, with the context target bound to the kind the observed
+ // reference resolution chose.
+ if(!other&&r.constraints.some(c=>c.operator!=='eq'||c.phase==='selector'||typeof c.value==='string'&&typeof c.value_span==='string'&&c.value!==c.value_span)){
   const bindingSha256=proposal.provenance?.bindingsSha256;
-  const bridged=bindingSha256?bridgeRawStructure(raw,{bindings,bindingSha256,comparatives:comparativeSteps(),references:referenceProjection(),contextTarget:{kind:canonical,declaration:selected.object.source}}):null;
-  if(!bridged||bridged.diagnostics.length||bridged.decoded?.candidates?.length!==1||bridged.decoded.issues?.length)return null;
+  const bridgeOptions={bindings,bindingSha256,comparatives:comparativeSteps(),references:referenceProjection(),contextTarget:{kind:canonical,declaration:selected.object.source}};
+  const usable=b=>b&&!b.diagnostics.length&&b.decoded?.candidates?.length===1&&!b.decoded.issues?.length;
+  let bridged=bindingSha256?bridgeRawStructure(raw,bridgeOptions):null;
+  // A reading the strict bridge refuses only for what the declared partial defaults supply (an act without its own
+  // trigger words is anchored on the request: "bars narrower") is bridged with those defaults, when nothing is dropped.
+  if(bindingSha256&&!usable(bridged)){const lenient=bridgeRawStructure(raw,{...bridgeOptions,partial:{defaults:interpretationPolicy().partial.defaults}});if(usable(lenient)&&!lenient.disclosed?.length)bridged=lenient;}
+  if(!usable(bridged))return null;
   const note='I took the reference as the '+selected.object.kind+'.';
   return {proposal:{...proposal,candidates:bridged.decoded.candidates,coverage:{complete:true,graphProposal:true,executable:false},failures:[],
    interpretation:{profile:'native-context/1',note,chosen:{id:selected.object.id,kind:selected.object.kind,canonical},alternatives:options.map(o=>({id:o.object.id,kind:o.object.kind,canonical:o.canonical})),unresolved:proposal.failures}},focus:selected.object.id,rewind:null};

@@ -106,3 +106,18 @@ test('scatter and radar layouts: points at their x values and values; spokes, ri
  assert.equal((view().svg.match(/opacity="0.35"/g)??[]).length,2,'a shape per series');
  assert.ok(host.observe().objects.filter(o=>o.sourceType==='diagram.sketch.point').length>=6,'the categories of both charts are points');
 });
+
+test('a point value changed by an amount, places observed, series drawn on lying and round charts',async()=>{
+ const {ok,host,view}=await area();
+ ok(MAKE);ok('diagram.chart.point.change ids="n1" add=4');ok('diagram.chart.point.change ids="n2" subtract=1');
+ const obs=()=>host.observe().objects,input=(o,k)=>o.inputs.find(i=>i.key===k)?.values[0];
+ assert.equal(String(input(obs().find(o=>o.id==='n1'),'value')),'7');assert.equal(String(input(obs().find(o=>o.id==='n2'),'value')),'4');
+ assert.equal(String(input(obs().find(o=>o.id==='n3'),'index')),'3','a point is observed at its place among the categories');
+ ok('diagram.chart.series.add chart="g1" label="B" values=1 values=2 values=3');
+ assert.equal(String(input(obs().find(o=>o.id==='s1'),'index')),'2','the members are the first series');
+ ok('diagram.chart.format id="g1" orientation="horizontal"');
+ let svg=view().svg;const lying=[...svg.matchAll(/<rect x="([\d.]+)" y="([\d.]+)" width="([\d.]+)" height="18" rx="2"/g)];
+ assert.equal(lying.length,3,'a lying chart draws its series bars');assert.ok(/>B</.test(svg),'with a legend of the series');
+ ok('diagram.group.layout id="g1" layout="pie"');
+ svg=view().svg;assert.equal((svg.match(/<polygon/g)||[]).length,6,'a pie with a series draws it as a ring');
+});

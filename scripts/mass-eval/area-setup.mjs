@@ -62,14 +62,19 @@ export async function seedContext(world,existing,{knowledge,bindings}={}){
   const nativeNodes=()=>host.observe().objects.filter(o=>o.sourceType==='diagram.sketch.node').map(o=>o.id);
   for(const item of links){const n=nativeNodes();if(n.length<2){failures.push({index:item.index,kind:item.kind,reason:'link-needs-two-nodes'});continue;}
    const i=links.indexOf(item)%(n.length-1);note(item,await call('diagram.link.make',{from:n[i],to:n[i+1],...(item.name&&!/^e\d+$/.test(item.name)?{label:item.name}:{})}));}
-  const labels=points.length?points.map(p=>p.name):['A','B','C'],values=labels.map((_,i)=>i+1);
-  for(const item of charts){const first=String(item.kind).split(' ')[0],layout=chartLayouts.includes(first)?first:'bar';const r=note(item,await call('diagram.group.chart.make',{label:item.name||'Chart',labels,values,layout}));
-   if(r.ok)for(const p of points)ids.set(p.name,r.created?.[0]?.id);}
+  // Points and series listed after a chart are that chart's (before any chart: the first chart's).
+  const owner=new Map();{let current=charts[0]??null;for(const item of items){if(charts.includes(item))current=item;else if(points.includes(item)||series.includes(item))owner.set(item,current);}}
+  const labelsOf=chart=>{const own=points.filter(p=>owner.get(p)===chart);return own.length?own.map(p=>p.name):['A','B','C'];};
+  const chartIds=new Map();
+  for(const item of charts){const first=String(item.kind).split(' ')[0],layout=chartLayouts.includes(first)?first:'bar',labels=labelsOf(item);const r=note(item,await call('diagram.group.chart.make',{label:item.name||'Chart',labels,values:labels.map((_,i)=>i+1),layout}));
+   if(r.ok){chartIds.set(item,r.created?.[0]?.id??ids.get(item.name));for(const p of points)if(owner.get(p)===item)ids.set(p.name,r.created?.[0]?.id);}}
   for(const item of points)if(!charts.length)failures.push({index:item.index,kind:item.kind,reason:'chart-member-without-chart'});else seeded++;
-  // A series of the chart (the chart's own values are its first): made by the chart's series command on the first chart.
-  const chartId=charts.map(c=>ids.get(c.name)).find(Boolean)??host.observe().objects.find(o=>o.sourceType==='diagram.sketch.group')?.id;
+  // A series of the chart (the chart's own values are its first): made by the chart's series command.
+  const fallback=host.observe().objects.find(o=>o.sourceType==='diagram.sketch.group')?.id;
   for(const [i,item] of series.entries()){
+   const chart=owner.get(item),chartId=chartIds.get(chart)??fallback;
    if(!chartId){failures.push({index:item.index,kind:item.kind,reason:'chart-member-without-chart'});continue;}
+   const labels=labelsOf(chart);
    note(item,await call('diagram.chart.series.add',{chart:chartId,label:item.name||'Series '+(i+2),values:labels.map((_,k)=>k+2+i)}));
   }
   for(const item of groups){const n=nativeNodes();if(!n.length){failures.push({index:item.index,kind:item.kind,reason:'group-needs-nodes'});continue;}note(item,await call('diagram.group.make',{name:item.name||'Group',ids:n.slice(0,2)}));}

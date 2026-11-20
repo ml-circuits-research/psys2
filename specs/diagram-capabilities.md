@@ -157,9 +157,14 @@ last; `label`; `value`), `diagram.chart.point.change` (`ids`; `value`, `label`, 
 verifies. The reader's point family reads as `w.diagram.datum` (a value of a chart at a category; the members' values
 are the first series), `point.value` → the point's value, `point.chart` → the chart (observed on each point as its
 chart's title, so "in Revenue, set December to 44" picks the point), `chart.labels` as a point's category label.
-Not yet: a point picked by its position ("the sixth month", target ordinals), a value changed by an amount ("bump Thu
-up by 70": an additive delta), a category renamed by the same key as its selector ("relabel Pears to Thu"), points of
-a series beyond the first (`point.series`).
+A point is picked by its place ("the first month", "the third bar": a target ordinal read as a selector on
+`point.index`, the point's place among its chart's categories observed as `index`; execution-policy.sop
+`app.execution.position`, the ordinal words of k.values), its value changed by an amount ("bump Thu up by 70",
+"March should drop by 4": the reader's operator delta with a step and a number reads as `point.add`/`point.subtract`,
+`app.execution.amount`; `diagram.chart.point.change` `add`, `subtract` move the value it has, verified as the observed
+value moved by the amount, effectScope `amounts`), and renamed by the same key as its selector ("rename Tue to Email":
+`chart.labels` selects by the observed label and sets the point's label). Not yet: "the last month" (k.values has no
+position word counted from the end), points of a series beyond the first (`point.series`).
 The data drops' chart frames (management/data-drop dg-batch-01..05 `needs`) are declared as reader keys for v9 and
 bound the same way: `chart.fontSize`, `chart.lineWidth`, `chart.markerSize`, `chart.markerEdge`, `chart.barWidth`,
 `chart.barHeight` (→ `barWidth`), `chart.barGap` (words), with comparatives labelled as steps (operator delta) for the number keys, `chart.pieRadius`, `chart.precision`, `chart.titleWeight`,
@@ -176,7 +181,7 @@ line, area and pie charts keep their form), `stacking` (none, stacked, percent: 
 one takes its width as the length of its bars; observed as drawn, so "wider", "taller" step the scale of size from the
 drawn size) and `effect` (none, shadow, glow on the chart's frame). The chart geometry (a category's room, the plot's
 length, the baseline, label and title lines) is one derived fact (`ui.diagram.cgeo`) that the bars, lines, areas,
-labels, gridlines and axis numbers read. Reader keys: `chart.min` → `yMin`, `chart.horizontal` → `orientation` (on,
+labels, gridlines and axis numbers read. Reader keys: `chart.min` → `yMin` (a span that spells two numbers, "run the y axis from 0 to 10", said for `chart.min` or `chart.max` gives the first to the floor and the second to the top: `app.execution.range`), `chart.horizontal` → `orientation` (on,
 true → horizontal; off, false → vertical), `chart.stacked` → `stacking` (stacked, on → stacked; off, grouped → none;
 percent, 100% → percent), `chart.width`/`chart.height` → `width`/`height`, `chart.effect` → `effect` (shadow, glow,
 none, off). Not applied and disclosed: effects the chart has no drawing for (gradient, 3d), sizes said in inches or
@@ -196,8 +201,13 @@ category labels names the series (the first by the chart's measure, else "Series
 input would lose repeated values and order). The reader's series family reads as `w.diagram.series` (interpretation
 policy, completed by declared-bindings.mjs 3b/4b/4c: a class published after the table's export is read through its
 declared kind binding, and its keys bind to the parameters of their names), `series.values` as numbers, `series.chart`
-as the chart. Not yet: lying charts and pies draw only the first series; a series picked by its position ("the second
-series": `series.index`), series reorder and merge, a second value axis.
+as the chart. A series is observed at its place (`index`: the members are the first series, so the series made
+first is the second) and picked by it ("the second series": `series.index`, `app.execution.position`). A lying bar
+chart draws its series side by side in each category's row (the members' bars in the first slot) with a legend right
+of the values (its cells grow by 110); a pie or doughnut with series draws each series as a ring inside the members'
+slices (the rings share the room from the edge to a hole of 0.3 of the radius, 0.55 for a doughnut), each value its
+share of its series' total, in its category's colour. Not yet: "the first series" as an object (the members are not
+observed as a series), a legend of a round chart's series, series reorder and merge, a second value axis.
 
 Scatter and radar (chart-shape.sop; catalog layouts `scatter`, `radar` of `w.diagram.group`): `diagram.group.chart.make`,
 `diagram.chart.format` and `diagram.group.layout` take them. A scatter chart shares the value axis, floor, gridlines,
@@ -208,7 +218,9 @@ spoke per member (the first straight up, then clockwise), each value's distance 
 filled lightly, a shape per series in its colour, rings at each quarter, the labels beyond the spokes' ends (anchored by
 side); its radius is the chart's `pieRadius` (90). Kind bindings: `k.charts.kind.scatter_plot` and `dot_plot` draw a
 scatter chart; the reader's `chart.type` takes scatter and radar (the catalog's chart kinds have no radar kind, so "a
-radar chart" as a kind word stays unbound until the binding table is exported again). Not yet: x-axis numbers of a
+radar chart" as a kind word stays unbound: a kind added to k.charts reaches the reader only through the binding table,
+which is exported with the reader (training), so it needs a k.charts kind and a re-export, or a live completion of
+kind rows from the pinned catalog). Not yet: x-axis numbers of a
 scatter chart (its x values are written by its category labels), a radar legend and its value axis numbers.
 
 Not yet (each needs a rule set or a mechanism, listed honestly; from the owner's request and

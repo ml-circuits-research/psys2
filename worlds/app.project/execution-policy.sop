@@ -204,6 +204,9 @@
 # shares); the chart's width and height size its plot in pixels; a shadow or a glow round its frame. An effect the
 # chart has no drawing for (a gradient, 3d) has no declared counterpart and is reported as not applied.
 @chart.key.chart_min app.execution.keyBinding area=diagram key="chart.min" operation="diagram.chart.format" parameter="yMin"
+# The floor and the top of the value axis bound one range: "run the y axis from 0 to 10" gives 0 to the floor and 10 to
+# the top, said for either key.
+@chart.range.axis app.execution.range area=diagram low="chart.min" high="chart.max"
 @chart.key.chart_horizontal app.execution.keyBinding area=diagram key="chart.horizontal" operation="diagram.chart.format" parameter="orientation"
 @chart.key.chart_horizontal.on app.execution.keyValue area=diagram key="chart.horizontal" said="on" value="horizontal"
 @chart.key.chart_horizontal.true app.execution.keyValue area=diagram key="chart.horizontal" said="true" value="horizontal"
@@ -245,9 +248,20 @@
 # category it is (chart.labels) is the label it is observed with, so "in Revenue, set March to 40" picks the point.
 @point.kind app.execution.kindBinding area=diagram kind=w.diagram.datum operation="diagram.chart.point.add"
 @point.key.value app.execution.keyBinding area=diagram key="point.value" operation="diagram.chart.point.change" parameter="value"
+# A point's value changed by an amount ("bump Thu up by 70", "March should drop by 4") is the point operation's amount
+# for that direction (add, subtract), from the value the point has.
+@point.amount.more app.execution.amount area=diagram key="point.value" step=more as="point.add"
+@point.amount.less app.execution.amount area=diagram key="point.value" step=less as="point.subtract"
+@point.key.add app.execution.keyBinding area=diagram key="point.add" operation="diagram.chart.point.change" parameter="add"
+@point.key.subtract app.execution.keyBinding area=diagram key="point.subtract" operation="diagram.chart.point.change" parameter="subtract"
 @chart.key.point app.execution.keyBinding area=diagram key="point.chart" operation="diagram.chart.point.add" parameter="chart"
 @point.chart.observed app.execution.observedMeasure concept=diagram.sketch.point.chart sourceType="diagram.sketch.point" parameter="chart" binding="diagram.point.chart" order=19
 @point.label.observed app.execution.observedMeasure concept=diagram.sketch.group.labels sourceType="diagram.sketch.point" parameter="label" binding="diagram.point.label" order=20
+# A chart's categories and its series are in order: "the third bar", "the first month" pick a point by its place among
+# its chart's categories; "the second series" a series by its place among its chart's series (the members are the
+# first). The place is observed on each as its index.
+@point.position app.execution.position area=diagram type="point" key="point.index" sourceType="diagram.sketch.point" binding="diagram.point.index"
+@series.position app.execution.position area=diagram type="series" key="series.index" sourceType="diagram.sketch.series" binding="diagram.series.index"
 @chart.key.diagram_background app.execution.keyBinding area=diagram key="diagram.background" operation="diagram.page.change" parameter="background"
 @chart.key.page_background app.execution.keyBinding area=diagram key="page.background" operation="diagram.page.change" parameter="background"
 @chart.key.page_title app.execution.keyBinding area=diagram key="page.title" operation="diagram.page.change" parameter="title"

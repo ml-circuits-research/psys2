@@ -158,6 +158,18 @@ export function verifyNativeControlEffect({intent,before,after,receipt}={}){
   if(op.act==='remove'){add(parameter,'unknown',{reason:'unprojected-removal-argument'});continue;}
   if(!targets.length){add(parameter,'unknown',{reason:'no-observed-target'});continue;}
   const binding=expected.parameterBindings.find(b=>b.parameter===parameter);
+  // An amount parameter (effectScope amounts: add, subtract) moves an observed number: after = before + sign x amount.
+  const amount=op.effectScope?.amounts?.[parameter];
+  if(amount&&typeof amount.key==='string'&&Number.isFinite(Number(amount.sign))&&typeof wanted==='number'){
+   for(const target of targets){
+    const value=o=>{const f=(o?.inputs??[]).filter(i=>i.key===amount.key);if(f.length!==1||f[0].values.length!==1)return null;const v=observationValue(f[0].values[0]);return v.ok&&typeof v.value==='number'?v.value:null;};
+    const a=value(old.get(target.id)),b=value(target);
+    if(a===null||b===null){add(parameter,'unknown',{target:target.id,reason:'amount-base-not-observed'});continue;}
+    const want=a+Number(amount.sign)*wanted;
+    add(parameter,Math.abs(b-want)<=1e-9*Math.max(1,Math.abs(want))?'met':'failed',{target:target.id,key:amount.key,expected:want,actual:b});
+   }
+   continue;
+  }
   for(const target of targets){
    if(parameter==='kind'&&!binding){add(parameter,target.kind===wanted?'met':'failed',{target:target.id,expected:wanted,actual:target.kind});continue;}
    const inputs=(target.inputs??[]).filter(i=>binding?.binding?i.binding===binding.binding:i.key===(binding?.key??parameter));

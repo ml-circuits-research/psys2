@@ -169,6 +169,7 @@
 @ys.gb ui.diagram.ubox unit=?g x0=?gx y0=?gy
 @ys.pd ui.diagram.pdim group=?g w=?gw
 @ys.gp ui.diagram.gpad group=?g top=?top
+@ys.ser ui.diagram.sers group=?g
 @ys.a1 core.calc out=?a1 fn=mul args=?cv args=360
 @ys.a2 core.calc out=?a2 fn=div args=?a1 args=?s
 @ys.a0 core.calc out=?a0 fn=add args=?a2 args=270
@@ -184,8 +185,77 @@
 @ys.ri core.calc out=?ri fn=mul args=?r args=0.55
 @ys.outd ui.diagram.slice node=?c group=?g a0=?a0 sweep=?sw cx=?cx cy=?cy r=?r ri=?ri
 @ys.outp ui.diagram.slice node=?c group=?g a0=?a0 sweep=?sw cx=?cx cy=?cy r=?r ri=0
-@pie.slice.doughnut core.rule when=$ys.m when=$ys.v when=$ys.cum when=$ys.t when=$ys.p when=$ys.gb when=$ys.pd when=$ys.gp if=$ys.isd with=$ys.a1 with=$ys.a2 with=$ys.a0 with=$ys.w1 with=$ys.sw with=$ys.hw with=$ys.cx with=$ys.cy1 with=$ys.cy2 with=$ys.cy with=$ys.ri then=$ys.outd
-@pie.slice.pie core.rule when=$ys.m when=$ys.v when=$ys.cum when=$ys.t when=$ys.p when=$ys.gb when=$ys.pd when=$ys.gp if=$ys.isp with=$ys.a1 with=$ys.a2 with=$ys.a0 with=$ys.w1 with=$ys.sw with=$ys.hw with=$ys.cx with=$ys.cy1 with=$ys.cy2 with=$ys.cy then=$ys.outp
+@pie.slice.doughnut core.rule when=$ys.m when=$ys.v when=$ys.cum when=$ys.t when=$ys.p when=$ys.gb when=$ys.pd when=$ys.gp not=$ys.ser if=$ys.isd with=$ys.a1 with=$ys.a2 with=$ys.a0 with=$ys.w1 with=$ys.sw with=$ys.hw with=$ys.cx with=$ys.cy1 with=$ys.cy2 with=$ys.cy with=$ys.ri then=$ys.outd
+@pie.slice.pie core.rule when=$ys.m when=$ys.v when=$ys.cum when=$ys.t when=$ys.p when=$ys.gb when=$ys.pd when=$ys.gp not=$ys.ser if=$ys.isp with=$ys.a1 with=$ys.a2 with=$ys.a0 with=$ys.w1 with=$ys.sw with=$ys.hw with=$ys.cx with=$ys.cy1 with=$ys.cy2 with=$ys.cy then=$ys.outp
+# A pie or doughnut with series beyond its members draws each series as a ring: the members' own slices the outer ring,
+# each further series a ring inside it in its order, the rings sharing the room from the edge to the hole (a pie's
+# hole 0.3 of its radius, a doughnut's 0.55). A series' slices are its values' shares of its own total, in the order of
+# the categories, each in its category's colour.
+@rg.pring.type core.type of=ui.diagram.pring
+@rg.stotal.type core.type of=ui.diagram.stotal
+@rg.dbefore.type core.type of=ui.diagram.dbefore
+@rg.dcump.type core.type of=ui.diagram.dcump
+@yn.p ui.diagram.pie group=?g form=?f r=?r
+@yn.n ui.diagram.sers group=?g count=?k
+@yn.isd core.check fn=eq args=?f args=doughnut
+@yn.isp core.check fn=eq args=?f args=pie
+@yn.k1 core.calc out=?k1 fn=add args=?k args=1
+@yn.bd core.calc out=?bd fn=div args=0.45 args=?k1
+@yn.bp core.calc out=?bp fn=div args=0.7 args=?k1
+@yn.od ui.diagram.pring group=?g band=?bd
+@yn.op ui.diagram.pring group=?g band=?bp
+@pie.rings.doughnut core.rule when=$yn.p when=$yn.n if=$yn.isd with=$yn.k1 with=$yn.bd then=$yn.od
+@pie.rings.pie core.rule when=$yn.p when=$yn.n if=$yn.isp with=$yn.k1 with=$yn.bp then=$yn.op
+@ys.rb ui.diagram.pring group=?g band=?bnd
+@ys.rw core.calc out=?rw fn=mul args=?r args=?bnd
+@ys.rr core.calc out=?rri fn=sub args=?r args=?rw
+@ys.outr ui.diagram.slice node=?c group=?g a0=?a0 sweep=?sw cx=?cx cy=?cy r=?r ri=?rri
+@pie.slice.ring core.rule when=$ys.m when=$ys.v when=$ys.cum when=$ys.t when=$ys.p when=$ys.gb when=$ys.pd when=$ys.gp when=$ys.rb with=$ys.a1 with=$ys.a2 with=$ys.a0 with=$ys.w1 with=$ys.sw with=$ys.hw with=$ys.cx with=$ys.cy1 with=$ys.cy2 with=$ys.cy with=$ys.rw with=$ys.rr then=$ys.outr
+@yu.d ui.diagram.dpos datum=?d series=?s group=?g v=?v
+@yu.p ui.diagram.pie group=?g
+@yu.t ui.diagram.stotal series=?s value=?t
+@pie.series.total core.aggregate over=$yu.d over=$yu.p by=?s sum=?t args=?v then=$yu.t
+@yu.a ui.diagram.dpos datum=?a series=?s group=?g pos=?pa v=?va
+@yu.b ui.diagram.dpos datum=?b series=?s pos=?pb
+@yu.lt core.check fn=lt args=?pa args=?pb
+@yu.bf ui.diagram.dbefore datum=?b v=?va
+@pie.series.before core.rule when=$yu.a when=$yu.p when=$yu.b if=$yu.lt then=$yu.bf
+@yu.bb ui.diagram.dbefore datum=?b v=?va
+@yu.cum ui.diagram.dcump datum=?b value=?cv
+@pie.series.cum core.aggregate over=$yu.bb by=?b sum=?cv args=?va then=$yu.cum
+@yu.nb ui.diagram.dbefore datum=?d
+@yu.zero ui.diagram.dcump datum=?d value=0
+@pie.series.cum.first core.rule when=$yu.d when=$yu.p not=$yu.nb then=$yu.zero
+@yv.d ui.diagram.dpos datum=?d series=?s group=?g r=?sr v=?v
+@yv.cum ui.diagram.dcump datum=?d value=?cv
+@yv.t ui.diagram.stotal series=?s value=?t
+@yv.tp core.check fn=gt args=?t args=0
+@yv.p ui.diagram.pie group=?g r=?r
+@yv.rb ui.diagram.pring group=?g band=?bnd
+@yv.gb ui.diagram.ubox unit=?g x0=?gx y0=?gy
+@yv.pd ui.diagram.pdim group=?g w=?gw
+@yv.gp ui.diagram.gpad group=?g top=?top
+@yv.a1 core.calc out=?a1 fn=mul args=?cv args=360
+@yv.a2 core.calc out=?a2 fn=div args=?a1 args=?t
+@yv.a0 core.calc out=?a0 fn=add args=?a2 args=270
+@yv.w1 core.calc out=?w1 fn=mul args=?v args=360
+@yv.sw core.calc out=?sw fn=div args=?w1 args=?t
+@yv.hw core.calc out=?hgw fn=div args=?gw args=2
+@yv.cx core.calc out=?cx fn=add args=?gx args=?hgw
+@yv.cy1 core.calc out=?cy1 fn=add args=?gy args=?top
+@yv.cy2 core.calc out=?cy2 fn=add args=?cy1 args=20
+@yv.cy core.calc out=?cy fn=add args=?cy2 args=?r
+@yv.rw core.calc out=?rw fn=mul args=?r args=?bnd
+@yv.o1 core.calc out=?o1 fn=mul args=?rw args=?sr
+@yv.ro core.calc out=?ro fn=sub args=?r args=?o1
+@yv.ri core.calc out=?ri fn=sub args=?ro args=?rw
+@yv.out ui.diagram.slice node=?d group=?g a0=?a0 sweep=?sw cx=?cx cy=?cy r=?ro ri=?ri
+@pie.series.slice core.rule when=$yv.d when=$yv.cum when=$yv.t if=$yv.tp when=$yv.p when=$yv.rb when=$yv.gb when=$yv.pd when=$yv.gp with=$yv.a1 with=$yv.a2 with=$yv.a0 with=$yv.w1 with=$yv.sw with=$yv.hw with=$yv.cx with=$yv.cy1 with=$yv.cy2 with=$yv.cy with=$yv.rw with=$yv.o1 with=$yv.ro with=$yv.ri then=$yv.out
+@yv.cd ui.diagram.dpos datum=?d node=?c group=?g
+@yv.cp ui.diagram.pie group=?g
+@yv.cf ui.diagram.fill source=?c part=?c fill=?rgb
+@yv.df ui.diagram.fill source=?d part=?d fill=?rgb
+@pie.series.fill core.rule when=$yv.cd when=$yv.cp when=$yv.cf then=$yv.df
 # The arc: 13 points from the start to the end of the sweep (and back along the inner edge of a doughnut).
 @yk.s ui.diagram.slice node=?c a0=?a0 sweep=?sw cx=?cx cy=?cy r=?r ri=?ri
 @yk.k ui.diagram.arcstep k=?k

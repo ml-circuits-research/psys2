@@ -12,6 +12,7 @@
 @shp.calong.type core.type of=ui.diagram.calong
 @shp.cfloor.type core.type of=ui.diagram.cfloor
 @shp.cfoot.type core.type of=ui.diagram.cfoot
+@shp.clegw.type core.type of=ui.diagram.clegw
 
 # ---- The plot's room ----
 # A bar chart whose orientation is horizontal lays its bars on their side: the categories down the side, the values
@@ -83,9 +84,11 @@
 @shp.lc.g ui.diagram.cgeo group=?g cw=?cw ph=?ph
 @shp.lc.h ui.diagram.chor group=?g
 @shp.lc.n ui.diagram.gstat group=?g key=count value=?n
-@shp.lc.w core.calc out=?w fn=add args=?ph args=130
+@shp.lc.lw ui.diagram.clegw group=?g w=?lw
+@shp.lc.w1 core.calc out=?w1 fn=add args=?ph args=130
+@shp.lc.w core.calc out=?w fn=add args=?w1 args=?lw
 @shp.lc.out ui.diagram.gcell group=?g cols=1 rows=?n cw=?w ch=?cw
-@chart.cell.lying core.rule when=$shp.lc.g when=$shp.lc.h when=$shp.lc.n with=$shp.lc.w then=$shp.lc.out
+@chart.cell.lying core.rule when=$shp.lc.g when=$shp.lc.h when=$shp.lc.n when=$shp.lc.lw with=$shp.lc.w1 with=$shp.lc.w then=$shp.lc.out
 
 # ---- The value axis floor: y_min, else 0 ----
 @shp.fl.c ui.diagram.chart group=?g
@@ -98,14 +101,15 @@
 
 # ---- Bars on their side ----
 # Each bar starts at the baseline right of the labels (80 in from the frame's padding) and is as long as its share of
-# the value axis (at least 4); it is centred on its category's row, as thick as a standing bar is wide.
+# the value axis (at least 4); it is centred on its category's row (in its slot when the chart has series side by
+# side), as thick as a standing bar is wide.
 @shp.hb.p ui.diagram.mpos node=?c group=?g row=?row
 @shp.hb.h ui.diagram.chor group=?g
 @shp.hb.gb ui.diagram.ubox unit=?g x0=?gx y0=?gy
 @shp.hb.pad ui.diagram.gpad group=?g pad=?pad top=?top
 @shp.hb.geo ui.diagram.cgeo group=?g cw=?cw hw=?hw ph=?ph
 @shp.hb.fr ui.diagram.cfrac node=?c f=?f
-@shp.hb.bh ui.diagram.bhalf group=?g h=?bh
+@shp.hb.bh ui.diagram.bslot group=?g h=?bh off=?off
 @shp.hb.x1 core.calc out=?xa fn=add args=?gx args=?pad
 @shp.hb.x0 core.calc out=?x0 fn=add args=?xa args=80
 @shp.hb.l1 core.calc out=?l1 fn=mul args=?f args=?ph
@@ -115,26 +119,28 @@
 @shp.hb.r core.calc out=?r fn=mul args=?row args=?cw
 @shp.hb.t core.calc out=?t fn=add args=?gy args=?top
 @shp.hb.cy1 core.calc out=?cy1 fn=add args=?t args=?r
-@shp.hb.cy core.calc out=?cy fn=add args=?cy1 args=?hw
+@shp.hb.cym core.calc out=?cym fn=add args=?cy1 args=?hw
+@shp.hb.cy core.calc out=?cy fn=add args=?cym args=?off
 @shp.hb.y0 core.calc out=?y0 fn=sub args=?cy args=?bh
 @shp.hb.y1 core.calc out=?y1 fn=add args=?cy args=?bh
 @shp.hb.hl core.calc out=?hl fn=div args=?l args=2
 @shp.hb.cx core.calc out=?cx fn=add args=?x0 args=?hl
 @shp.hb.th core.calc out=?th fn=mul args=?bh args=2
 @shp.hb.out ui.diagram.nbox node=?c x0=?x0 y0=?y0 x1=?xe y1=?y1 cx=?cx cy=?cy w=?l h=?th
-@chart.bar.lying core.rule when=$shp.hb.p when=$shp.hb.h when=$shp.hb.gb when=$shp.hb.pad when=$shp.hb.geo when=$shp.hb.fr when=$shp.hb.bh with=$shp.hb.x1 with=$shp.hb.x0 with=$shp.hb.l1 with=$shp.hb.l2 with=$shp.hb.l with=$shp.hb.xe with=$shp.hb.r with=$shp.hb.t with=$shp.hb.cy1 with=$shp.hb.cy with=$shp.hb.y0 with=$shp.hb.y1 with=$shp.hb.hl with=$shp.hb.cx with=$shp.hb.th then=$shp.hb.out
+@chart.bar.lying core.rule when=$shp.hb.p when=$shp.hb.h when=$shp.hb.gb when=$shp.hb.pad when=$shp.hb.geo when=$shp.hb.fr when=$shp.hb.bh with=$shp.hb.x1 with=$shp.hb.x0 with=$shp.hb.l1 with=$shp.hb.l2 with=$shp.hb.l with=$shp.hb.xe with=$shp.hb.r with=$shp.hb.t with=$shp.hb.cy1 with=$shp.hb.cym with=$shp.hb.cy with=$shp.hb.y0 with=$shp.hb.y1 with=$shp.hb.hl with=$shp.hb.cx with=$shp.hb.th then=$shp.hb.out
 # Its label left of the baseline (right-aligned), its value right of the bar's end.
 @shp.hl.m ui.diagram.chartmember node=?c group=?g
 @shp.hl.h ui.diagram.chor group=?g
 @shp.hl.n w.diagram.node code=?c label=?t
-@shp.hl.b ui.diagram.nbox node=?c x0=?x0 x1=?xe cy=?cy
+@shp.hl.b ui.diagram.nbox node=?c x0=?x0 x1=?xe
+@shp.hl.cc ui.diagram.catx node=?c x=?cy
 @shp.hl.fs ui.diagram.cfmt group=?g slot=font_size v=?fs
 @shp.hl.s core.calc out=?src fn=concat args=?c args=".label"
 @shp.hl.x core.calc out=?lx fn=sub args=?x0 args=6
 @shp.hl.y core.calc out=?ly fn=add args=?cy args=4
 @shp.hl.out ui.diagram.draw part=?c source=?src slot=?c order=4 z=0 shape=text text=?t x=?lx y=?ly w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left anchor=end font=?fs
 @shp.hl.fill ui.diagram.fill source=?src part=?c fill="#1f2933"
-@chart.label.lying core.rule when=$shp.hl.m when=$shp.hl.h when=$shp.hl.n when=$shp.hl.b when=$shp.hl.fs with=$shp.hl.s with=$shp.hl.x with=$shp.hl.y then=$shp.hl.out
+@chart.label.lying core.rule when=$shp.hl.m when=$shp.hl.h when=$shp.hl.n when=$shp.hl.b when=$shp.hl.cc when=$shp.hl.fs with=$shp.hl.s with=$shp.hl.x with=$shp.hl.y then=$shp.hl.out
 @chart.label.lying.fill core.rule when=$shp.hl.m when=$shp.hl.h when=$shp.hl.n when=$shp.hl.b with=$shp.hl.s then=$shp.hl.fill
 @shp.hv.m ui.diagram.chartmember node=?c group=?g
 @shp.hv.h ui.diagram.chor group=?g
@@ -398,6 +404,11 @@
 @shp.ob.c w.diagram.series code=?id colour=?col
 @shp.ob.cc app.observe.input id=?id key=colour value=?col
 @observe.series.colour core.rule when=$shp.ob.c then=$shp.ob.cc
+# Its place among its chart's series: the members are the first series, so the series ranked first is the second.
+@shp.ob.rk ui.diagram.srank series=?id group=?g r=?r
+@shp.ob.ix core.calc out=?ix fn=add args=?r args=1
+@shp.ob.ixo app.observe.input id=?id key=index value=?ix
+@observe.series.index core.rule when=$shp.ob.rk with=$shp.ob.ix then=$shp.ob.ixo
 
 # ---- Drawing the series ----
 # Each series' place among its chart's series (by n), each value's category position, how the series are set out.
@@ -592,6 +603,89 @@
 @shp.db.fill ui.diagram.fill source=?d part=?d fill=?rgb
 @series.bar.draw core.rule when=$shp.db.s when=$shp.db.c not=$shp.db.hz when=$shp.db.gb when=$shp.db.pad when=$shp.db.geo when=$shp.db.mx when=$shp.db.lo with=$shp.db.rg with=$shp.db.fa1 with=$shp.db.fa2 with=$shp.db.fa with=$shp.db.fb1 with=$shp.db.fb2 with=$shp.db.fb with=$shp.db.base1 with=$shp.db.base with=$shp.db.ya1 with=$shp.db.ya with=$shp.db.yb1 with=$shp.db.yb with=$shp.db.hh1 with=$shp.db.hh with=$shp.db.x0 with=$shp.db.w with=$shp.db.y0 then=$shp.db.out
 @series.bar.fill core.rule when=$shp.db.s when=$shp.db.c not=$shp.db.hz when=$shp.db.p when=$shp.db.col then=$shp.db.fill
+# A category's centre on a lying chart (down the side: its row's middle), so its series' segments take their slots.
+@shp.cy.p ui.diagram.mpos node=?c group=?g row=?row
+@shp.cy.h ui.diagram.chor group=?g
+@shp.cy.gb ui.diagram.ubox unit=?g y0=?gy
+@shp.cy.pad ui.diagram.gpad group=?g top=?top
+@shp.cy.geo ui.diagram.cgeo group=?g cw=?cw hw=?hw
+@shp.cy.r core.calc out=?r fn=mul args=?row args=?cw
+@shp.cy.t core.calc out=?t fn=add args=?gy args=?top
+@shp.cy.y1 core.calc out=?y1 fn=add args=?t args=?r
+@shp.cy.y core.calc out=?y fn=add args=?y1 args=?hw
+@shp.cy.out ui.diagram.catx node=?c x=?y
+@chart.category.centre.lying core.rule when=$shp.cy.p when=$shp.cy.h when=$shp.cy.gb when=$shp.cy.pad when=$shp.cy.geo with=$shp.cy.r with=$shp.cy.t with=$shp.cy.y1 with=$shp.cy.y then=$shp.cy.out
+# A value's bar on a lying bar chart: from the baseline right of the labels, between its segment's ends along the
+# plot (at least 2 long), centred on its slot down the side.
+@shp.dh.s ui.diagram.dseg datum=?d group=?g a=?a b=?b x=?yc h=?h
+@shp.dh.c ui.diagram.chart group=?g form=bar
+@shp.dh.hz ui.diagram.chor group=?g
+@shp.dh.gb ui.diagram.ubox unit=?g x0=?gx
+@shp.dh.pad ui.diagram.gpad group=?g pad=?pad
+@shp.dh.geo ui.diagram.cgeo group=?g ph=?ph
+@shp.dh.mx ui.diagram.cscale group=?g value=?mx
+@shp.dh.lo ui.diagram.cfloor group=?g value=?lo
+@shp.dh.rg core.calc out=?rg fn=sub args=?mx args=?lo
+@shp.dh.fa1 core.calc out=?fa1 fn=sub args=?a args=?lo
+@shp.dh.fa2 core.calc out=?fa2 fn=div args=?fa1 args=?rg
+@shp.dh.fa core.calc out=?fa fn=clamp args=?fa2 args=0 args=1
+@shp.dh.fb1 core.calc out=?fb1 fn=sub args=?b args=?lo
+@shp.dh.fb2 core.calc out=?fb2 fn=div args=?fb1 args=?rg
+@shp.dh.fb core.calc out=?fb fn=clamp args=?fb2 args=0 args=1
+@shp.dh.x1 core.calc out=?xa fn=add args=?gx args=?pad
+@shp.dh.x0 core.calc out=?x0 fn=add args=?xa args=80
+@shp.dh.xa1 core.calc out=?xs1 fn=mul args=?fa args=?ph
+@shp.dh.xs core.calc out=?xs fn=add args=?x0 args=?xs1
+@shp.dh.xb1 core.calc out=?xe1 fn=mul args=?fb args=?ph
+@shp.dh.ll1 core.calc out=?ll1 fn=sub args=?xe1 args=?xs1
+@shp.dh.ll core.calc out=?ll fn=max args=?ll1 args=2
+@shp.dh.y0 core.calc out=?y0 fn=sub args=?yc args=?h
+@shp.dh.th core.calc out=?th fn=mul args=?h args=2
+@shp.dh.out ui.diagram.draw part=?d source=?d slot=?g order=3 z=0 shape=rectangle x=?xs y=?y0 w=?ll h=?th cx=0 cy=0 tx=0 ty=0 scale=1 side=left outline="#3e5068" round=2
+@series.bar.lying.draw core.rule when=$shp.dh.s when=$shp.dh.c when=$shp.dh.hz when=$shp.dh.gb when=$shp.dh.pad when=$shp.dh.geo when=$shp.dh.mx when=$shp.dh.lo with=$shp.dh.rg with=$shp.dh.fa1 with=$shp.dh.fa2 with=$shp.dh.fa with=$shp.dh.fb1 with=$shp.dh.fb2 with=$shp.dh.fb with=$shp.dh.x1 with=$shp.dh.x0 with=$shp.dh.xa1 with=$shp.dh.xs with=$shp.dh.xb1 with=$shp.dh.ll1 with=$shp.dh.ll with=$shp.dh.y0 with=$shp.dh.th then=$shp.dh.out
+@series.bar.lying.fill core.rule when=$shp.db.s when=$shp.db.c when=$shp.db.hz when=$shp.db.p when=$shp.db.col then=$shp.db.fill
+# A lying chart's legend of series stands right of its values (the members' own first), one to a line; the chart's
+# cells grow by its room (110), none without series.
+@shp.lw.c ui.diagram.chart group=?g
+@shp.lw.n ui.diagram.sers group=?g count=?k
+@shp.lw.any ui.diagram.sers group=?g count=?anyk
+@shp.lw.o ui.diagram.clegw group=?g w=110
+@shp.lw.o0 ui.diagram.clegw group=?g w=0
+@chart.legend.lying.room core.rule when=$shp.lw.c when=$shp.lw.n then=$shp.lw.o
+@chart.legend.lying.none core.rule when=$shp.lw.c not=$shp.lw.any then=$shp.lw.o0
+@shp.ly.r ui.diagram.srank series=?s group=?g r=?r
+@shp.ly.l w.diagram.series code=?s label=?t
+@shp.ly.col ui.diagram.scol series=?s rgb=?rgb
+@shp.ly.h ui.diagram.chor group=?g
+@shp.ly.gb ui.diagram.ubox unit=?g x0=?gx y0=?gy
+@shp.ly.pad ui.diagram.gpad group=?g pad=?pad top=?top
+@shp.ly.geo ui.diagram.cgeo group=?g ph=?ph
+@shp.ly.x1 core.calc out=?x1 fn=add args=?gx args=?pad
+@shp.ly.x2 core.calc out=?x2 fn=add args=?x1 args=?ph
+@shp.ly.x core.calc out=?x fn=add args=?x2 args=130
+@shp.ly.dy core.calc out=?dy fn=mul args=?r args=18
+@shp.ly.y1 core.calc out=?y1 fn=add args=?gy args=?top
+@shp.ly.y core.calc out=?y fn=add args=?y1 args=?dy
+@shp.ly.out ui.diagram.legend node=?s x=?x y=?y text=?t fill=?rgb
+@chart.legend.series.lying core.rule when=$shp.ly.r when=$shp.ly.l when=$shp.ly.col when=$shp.ly.h when=$shp.ly.gb when=$shp.ly.pad when=$shp.ly.geo with=$shp.ly.x1 with=$shp.ly.x2 with=$shp.ly.x with=$shp.ly.dy with=$shp.ly.y1 with=$shp.ly.y then=$shp.ly.out
+@shp.lyf.n ui.diagram.sers group=?g
+@shp.lyf.m ui.diagram.mpos node=?c group=?g pos=1
+@shp.lyf.st ui.diagram.nst node=?c key=fill v=?rgb
+@shp.lyf.h ui.diagram.chor group=?g
+@shp.lyf.gb ui.diagram.ubox unit=?g x0=?gx y0=?gy
+@shp.lyf.pad ui.diagram.gpad group=?g pad=?pad top=?top
+@shp.lyf.geo ui.diagram.cgeo group=?g ph=?ph
+@shp.lyf.ms w.diagram.group code=?g measure=?t
+@shp.lyf.anyms w.diagram.group code=?g measure=?anyt
+@shp.lyf.x1 core.calc out=?x1 fn=add args=?gx args=?pad
+@shp.lyf.x2 core.calc out=?x2 fn=add args=?x1 args=?ph
+@shp.lyf.x core.calc out=?x fn=add args=?x2 args=130
+@shp.lyf.y core.calc out=?y fn=add args=?gy args=?top
+@shp.lyf.key core.calc out=?key fn=concat args=?g args=".series"
+@shp.lyf.out ui.diagram.legend node=?key x=?x y=?y text=?t fill=?rgb
+@shp.lyf.out1 ui.diagram.legend node=?key x=?x y=?y text="Series 1" fill=?rgb
+@chart.legend.first.lying core.rule when=$shp.lyf.n when=$shp.lyf.m when=$shp.lyf.st when=$shp.lyf.h when=$shp.lyf.gb when=$shp.lyf.pad when=$shp.lyf.geo when=$shp.lyf.ms with=$shp.lyf.x1 with=$shp.lyf.x2 with=$shp.lyf.x with=$shp.lyf.y with=$shp.lyf.key then=$shp.lyf.out
+@chart.legend.first.lying.unnamed core.rule when=$shp.lyf.n when=$shp.lyf.m when=$shp.lyf.st when=$shp.lyf.h when=$shp.lyf.gb when=$shp.lyf.pad when=$shp.lyf.geo not=$shp.lyf.anyms with=$shp.lyf.x1 with=$shp.lyf.x2 with=$shp.lyf.x with=$shp.lyf.y with=$shp.lyf.key then=$shp.lyf.out1
 # A series of a line or area chart: a line through its values at the categories' centres.
 @shp.dl.s ui.diagram.dseg datum=?d group=?g b=?b x=?xc
 @shp.dl.c ui.diagram.chart group=?g form=line
@@ -686,6 +780,10 @@
 @observe.point core.rule when=$shp.op.p when=$shp.op.n when=$shp.op.b then=$shp.op.out
 @shp.op.co app.observe.input id=?id key=chart value=?gl
 @observe.point.chart core.rule when=$shp.op.p when=$shp.op.gl then=$shp.op.co
+# Its place among its chart's categories, from 1 ("the third bar", "the first month").
+@shp.op.ix ui.diagram.cpos node=?id group=?g pos=?p
+@shp.op.ixo app.observe.input id=?id key=index value=?p
+@observe.point.index core.rule when=$shp.op.p when=$shp.op.ix then=$shp.op.ixo
 @shp.pa.r app.act.request operation="diagram.chart.point.add" label=?l value=?v
 @shp.pa.c ui.diagram.schart group=?g
 @shp.pa.g w.diagram.group code=?g
@@ -709,6 +807,16 @@
 @shp.pc2.v app.act.request operation="diagram.chart.point.change" value=?v
 @shp.pc2.vc app.act.call act=change thing=$shp.pc2.n attr=value value=?v order=1
 @chart.point.value core.rule when=$shp.pc2.v when=$shp.pc2.i when=$shp.pc2.n when=$shp.pc2.p then=$shp.pc2.vc
+# A value changed by an amount ("bump Thu up by 70", "March should drop by 4"): added to or taken from the value the
+# point has.
+@shp.pc2.av0 w.diagram.node code=?id value=?v0
+@shp.pc2.ad app.act.request operation="diagram.chart.point.change" add=?d
+@shp.pc2.adv core.calc out=?v fn=add args=?v0 args=?d
+@shp.pc2.adc app.act.call act=change thing=$shp.pc2.n attr=value value=?v order=1
+@chart.point.add.amount core.rule when=$shp.pc2.ad when=$shp.pc2.i when=$shp.pc2.n when=$shp.pc2.p when=$shp.pc2.av0 with=$shp.pc2.adv then=$shp.pc2.adc
+@shp.pc2.sb app.act.request operation="diagram.chart.point.change" subtract=?d
+@shp.pc2.sbv core.calc out=?v fn=sub args=?v0 args=?d
+@chart.point.subtract.amount core.rule when=$shp.pc2.sb when=$shp.pc2.i when=$shp.pc2.n when=$shp.pc2.p when=$shp.pc2.av0 with=$shp.pc2.sbv then=$shp.pc2.adc
 @shp.pc2.l app.act.request operation="diagram.chart.point.change" label=?l
 @shp.pc2.lc app.act.call act=change thing=$shp.pc2.n attr=label value=?l order=1
 @chart.point.label core.rule when=$shp.pc2.l when=$shp.pc2.i when=$shp.pc2.n when=$shp.pc2.p then=$shp.pc2.lc
@@ -720,7 +828,9 @@
 @shp.pc2.n2 app.act.request label=?n2
 @shp.pc2.n3 app.act.request colour=?n3
 @shp.pc2.none app.act.refuse reason=missing-property
-@chart.point.change.none core.rule when=$shp.pc2.cr not=$shp.pc2.n1 not=$shp.pc2.n2 not=$shp.pc2.n3 then=$shp.pc2.none
+@shp.pc2.n4 app.act.request add=?n4
+@shp.pc2.n5 app.act.request subtract=?n5
+@chart.point.change.none core.rule when=$shp.pc2.cr not=$shp.pc2.n1 not=$shp.pc2.n2 not=$shp.pc2.n3 not=$shp.pc2.n4 not=$shp.pc2.n5 then=$shp.pc2.none
 @shp.pc2.rr app.act.request operation="diagram.chart.point.remove"
 @shp.pc2.rc app.act.call act=remove thing=$shp.pc2.n order=1
 @chart.point.remove core.rule when=$shp.pc2.rr when=$shp.pc2.i when=$shp.pc2.n when=$shp.pc2.p then=$shp.pc2.rc

@@ -1,4 +1,4 @@
-@policy.module core.module name=app.execution version=2 imports=std.capability exports=app.execution.values exports=app.execution.observedProperty exports=app.execution.observedMeasure exports=app.execution.observedField exports=app.execution.preview exports=app.execution.comparative exports=app.execution.comparativeFactor exports=app.execution.comparativeStep exports=app.execution.ordinal exports=app.execution.knowledge exports=app.execution.instant exports=app.execution.requestValue exports=app.execution.clockTime exports=app.execution.instantBase exports=app.execution.instantFocus exports=app.execution.actForm exports=app.execution.linkPattern exports=app.execution.flow exports=app.execution.canvasUnit exports=app.execution.lengthUnit exports=app.execution.reference exports=app.execution.actOperation exports=app.execution.kindBinding exports=app.execution.keyBinding exports=app.execution.keyValue
+@policy.module core.module name=app.execution version=2 imports=std.capability exports=app.execution.values exports=app.execution.observedProperty exports=app.execution.observedMeasure exports=app.execution.observedField exports=app.execution.preview exports=app.execution.comparative exports=app.execution.comparativeFactor exports=app.execution.comparativeStep exports=app.execution.ordinal exports=app.execution.knowledge exports=app.execution.instant exports=app.execution.requestValue exports=app.execution.clockTime exports=app.execution.instantBase exports=app.execution.instantFocus exports=app.execution.actForm exports=app.execution.linkPattern exports=app.execution.flow exports=app.execution.canvasUnit exports=app.execution.lengthUnit exports=app.execution.reference exports=app.execution.actOperation exports=app.execution.kindBinding exports=app.execution.keyBinding exports=app.execution.keyValue exports=app.execution.amount exports=app.execution.range exports=app.execution.position
 @values.type core.type of=app.execution.values closed=true
 @values.concept core.slot of=app.execution.values key=concept kind=atom present=true
 @values.type.slot core.slot of=app.execution.values key=valueType kind=string present=true
@@ -135,6 +135,32 @@
 @keyValue.key core.slot of=app.execution.keyValue key=key kind=string present=true
 @keyValue.said core.slot of=app.execution.keyValue key=said kind=string present=true
 @keyValue.value core.slot of=app.execution.keyValue key=value kind=string present=true
+# An additive change of a numeric property said with its amount ("bump Thu up by 70", "March should drop by 4": the
+# reader's operator delta with a step and a number) is the operation's amount parameter for that direction: the key
+# said with the step reads as the key `as`, bound like any key (app.execution.keyBinding), its value the amount
+# (declared-value-readings.mjs).
+@amount.type core.type of=app.execution.amount closed=true
+@amount.area core.slot of=app.execution.amount key=area kind=atom present=true
+@amount.key core.slot of=app.execution.amount key=key kind=string present=true
+@amount.step core.slot of=app.execution.amount key=step kind=atom enum=more enum=less present=true
+@amount.as core.slot of=app.execution.amount key=as kind=string present=true
+# A pair of keys that bound one range ("run the y axis from 0 to 10": the floor and the top of the value axis): a span
+# that spells two numbers said for either key gives the first to `low` and the second to `high`
+# (declared-value-readings.mjs), each with its own words as evidence.
+@range.type core.type of=app.execution.range closed=true
+@range.area core.slot of=app.execution.range key=area kind=atom present=true
+@range.low core.slot of=app.execution.range key=low kind=string present=true
+@range.high core.slot of=app.execution.range key=high kind=string present=true
+# A family whose members have an order (a chart's categories, its series) is picked by its place in that order ("the
+# third bar", "the second series"): a target ordinal reads as a selector on `key` (declared-value-readings.mjs), the
+# key the members' observed place (`binding` on `sourceType`, counted from 1), its values the ordinal numbers of
+# k.values (declared-bindings.mjs).
+@position.type core.type of=app.execution.position closed=true
+@position.area core.slot of=app.execution.position key=area kind=atom present=true
+@position.type_ core.slot of=app.execution.position key=type kind=string present=true
+@position.key core.slot of=app.execution.position key=key kind=string present=true
+@position.on core.slot of=app.execution.position key=sourceType kind=string present=true
+@position.binding core.slot of=app.execution.position key=binding kind=string present=true
 
 # Lengths said with a unit ("150 pixels wide", "2 cm"): the canvas's own unit (canvas.pixel, the unit the native
 # interfaces declare for coordinates) with its words, and the length units of k.units it converts from (pixels per

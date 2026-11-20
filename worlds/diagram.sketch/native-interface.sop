@@ -444,6 +444,8 @@
 @native.diagram.sketch.op.diagram.chart.point.change std.capability.operation scope=$native.diagram.sketch.scope name="diagram.chart.point.change" act=change on="diagram.sketch.point" order=56 eligible=true
 @native.diagram.sketch.op.diagram.chart.point.change.param.ids std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.point.change name="ids" kind=array required=true
 @native.diagram.sketch.op.diagram.chart.point.change.param.value std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.point.change name="value" kind=number
+@native.diagram.sketch.op.diagram.chart.point.change.param.add std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.point.change name="add" kind=number
+@native.diagram.sketch.op.diagram.chart.point.change.param.subtract std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.point.change name="subtract" kind=number
 @native.diagram.sketch.op.diagram.chart.point.change.param.label std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.point.change name="label" kind=string
 @native.diagram.sketch.op.diagram.chart.point.change.param.colour std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.point.change name="colour" kind=string
 @native.diagram.sketch.op.diagram.chart.point.change.param.colour.source.enum app.native.parameter parameter=$native.diagram.sketch.op.diagram.chart.point.change.param.colour field=enum input=$native.diagram.sketch.input.diagram.colours
@@ -460,7 +462,19 @@
 @native.diagram.sketch.preflow.scope std.capability.record entry=$native.diagram.sketch.preflow.arg
 @native.diagram.sketch.preflow.effect std.capability.arg name="effectScope" value=$native.diagram.sketch.preflow.scope
 @native.diagram.sketch.op.diagram.chart.point.add.metadata app.native.metadata operation=$native.diagram.sketch.op.diagram.chart.point.add field=$native.diagram.sketch.preflow.effect
-@native.diagram.sketch.op.diagram.chart.point.change.metadata app.native.metadata operation=$native.diagram.sketch.op.diagram.chart.point.change field=$native.diagram.sketch.preflow.effect
+# A value changed by an amount (add, subtract) is verified as the observed value it moves: after = before + sign x amount.
+@native.diagram.sketch.pamount.add.key std.capability.arg name="key" value="value"
+@native.diagram.sketch.pamount.add.sign std.capability.arg name="sign" value=1
+@native.diagram.sketch.pamount.add.record std.capability.record entry=$native.diagram.sketch.pamount.add.key entry=$native.diagram.sketch.pamount.add.sign
+@native.diagram.sketch.pamount.add std.capability.arg name="add" value=$native.diagram.sketch.pamount.add.record
+@native.diagram.sketch.pamount.sub.sign std.capability.arg name="sign" value=-1
+@native.diagram.sketch.pamount.sub.record std.capability.record entry=$native.diagram.sketch.pamount.add.key entry=$native.diagram.sketch.pamount.sub.sign
+@native.diagram.sketch.pamount.sub std.capability.arg name="subtract" value=$native.diagram.sketch.pamount.sub.record
+@native.diagram.sketch.pamount.record std.capability.record entry=$native.diagram.sketch.pamount.add entry=$native.diagram.sketch.pamount.sub
+@native.diagram.sketch.pamount.arg std.capability.arg name="amounts" value=$native.diagram.sketch.pamount.record
+@native.diagram.sketch.ppoint.scope std.capability.record entry=$native.diagram.sketch.preflow.arg entry=$native.diagram.sketch.pamount.arg
+@native.diagram.sketch.ppoint.effect std.capability.arg name="effectScope" value=$native.diagram.sketch.ppoint.scope
+@native.diagram.sketch.op.diagram.chart.point.change.metadata app.native.metadata operation=$native.diagram.sketch.op.diagram.chart.point.change field=$native.diagram.sketch.ppoint.effect
 @native.diagram.sketch.op.diagram.chart.point.remove.metadata app.native.metadata operation=$native.diagram.sketch.op.diagram.chart.point.remove field=$native.diagram.sketch.preflow.effect
 # A chart asked for by its dimension and measure (act-rules.sop): the categories' dimension, what the values measure, how
 # they are aggregated; only the largest `top` categories, or those above or below a value.
