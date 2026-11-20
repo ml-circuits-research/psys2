@@ -1,3 +1,26 @@
+{"batch": "dg-batch-02", "text": "make the title bold", "frame": "chart.titleStyle", "value": "bold", "span": "bold"}
+{"batch": "dg-batch-02", "text": "bold the title", "frame": "chart.titleStyle", "value": "bold", "span": "bold"}
+{"batch": "dg-batch-02", "text": "the title should be bold", "frame": "chart.titleStyle", "value": "bold", "span": "bold"}
+{"batch": "dg-batch-02", "text": "put the title in bold", "frame": "chart.titleStyle", "value": "bold", "span": "bold"}
+{"batch": "dg-batch-02", "text": "colour the title dark blue", "frame": "chart.titleStyle", "value": "dark blue", "span": "dark blue"}
+{"batch": "dg-batch-02", "text": "make the title teal", "frame": "chart.titleStyle", "value": "teal", "span": "teal"}
+{"batch": "dg-batch-02", "text": "can you bold the title on the Revenue chart", "frame": "chart.titleStyle", "value": "bold", "span": "bold"}
+{"batch": "dg-batch-02", "text": "I'd like the title in red", "frame": "chart.titleStyle", "value": "red", "span": "red"}
+{"batch": "dg-batch-02", "text": "switch the title to bold", "frame": "chart.titleStyle", "value": "bold", "span": "bold"}
+{"batch": "dg-batch-02", "text": "give the title a dark blue colour", "frame": "chart.titleStyle", "value": "dark blue", "span": "dark blue"}
+{"batch": "dg-batch-02", "text": "set the title to bold", "frame": "chart.titleStyle", "value": "bold", "span": "bold"}
+{"batch": "dg-batch-02", "text": "please make the title bold", "frame": "chart.titleStyle", "value": "bold", "span": "bold"}
+{"batch": "dg-batch-02", "text": "colour the title of the Expenses by department chart dark orange", "frame": "chart.titleStyle", "value": "dark orange", "span": "dark orange"}
+{"batch": "dg-batch-02", "text": "everything else on the slide is bold, so make the title bold too", "frame": "chart.titleStyle", "value": "bold", "span": "bold"}
+{"batch": "dg-batch-02", "text": "bold the title and colour it dark blue", "frame": "chart.titleStyle", "value": "bold", "span": "bold"}
+{"batch": "dg-batch-02", "text": "bold the title and colour it dark blue", "frame": "chart.titleStyle", "value": "dark blue", "span": "dark blue"}
+{"batch": "dg-batch-02", "text": "for the boardroom the title has to pop, make it bold", "frame": "chart.titleStyle", "value": "bold", "span": "bold"}
+{"batch": "dg-batch-02", "text": "brand rules say teal titles, colour this one teal", "frame": "chart.titleStyle", "value": "teal", "span": "teal"}
+{"batch": "dg-batch-02", "text": "title in bold", "frame": "chart.titleStyle", "value": "bold", "span": "bold"}
+{"batch": "dg-batch-02", "text": "dark blue title", "frame": "chart.titleStyle", "value": "dark blue", "span": "dark blue"}
+{"batch": "dg-batch-02", "text": "bold, the title", "frame": "chart.titleStyle", "value": "bold", "span": "bold"}
+{"batch": "dg-batch-02", "text": "make the tile bold", "frame": "chart.titleStyle", "value": "bold", "span": "bold"}
+{"batch": "dg-batch-02", "text": "colour the titel dark blue", "frame": "chart.titleStyle", "value": "dark blue", "span": "dark blue"}
 {"batch": "dg-batch-02", "text": "stick August on the end with 41", "frame": "point.position", "value": "end", "span": "on the end"}
 {"batch": "dg-batch-02", "text": "add May right after April with 34", "frame": "point.position", "value": "after April", "span": "right after April"}
 {"batch": "dg-batch-02", "text": "add June at the very end, value 60, so the chart covers the half year", "frame": "point.position", "value": "end", "span": "at the very end"}
@@ -6,18 +29,33 @@
 {"batch": "dg-batch-02", "text": "make Order a square one", "frame": "node.size", "value": "square", "span": "square"}
 {"batch": "dg-batch-02", "text": "standard size for the new step", "frame": "node.size", "value": "standard", "span": "standard size"}
 {"batch": "dg-batch-02", "text": "fix the Start font size, it's tiny", "frame": "node.fontSize", "value": "readable", "span": "fix"}
+{"batch": "dg-batch-02", "text": "give the diagram a green background", "frame": "diagram.background", "value": "green", "span": "green background"}
+{"batch": "dg-batch-02", "text": "hey, give the diagram a green background", "frame": "diagram.background", "value": "green", "span": "green background"}
+{"batch": "dg-batch-02", "text": "set the canvas background to ivory", "frame": "diagram.background", "value": "ivory", "span": "ivory"}
 {"batch": "dg-batch-02", "text": "change the background colour to soft blue", "frame": "diagram.background", "value": "soft blue", "span": "soft blue"}
+{"batch": "dg-batch-02", "text": "the background should be white", "frame": "diagram.background", "value": "white", "span": "white"}
+{"batch": "dg-batch-02", "text": "the background should be white, please", "frame": "diagram.background", "value": "white", "span": "white"}
 {"batch": "dg-batch-02", "text": "put a pale grey background behind the flow", "frame": "diagram.background", "value": "pale grey", "span": "pale grey"}
 {"batch": "dg-batch-02", "text": "wash the background in light beige", "frame": "diagram.background", "value": "light beige", "span": "light beige"}
 {"batch": "dg-batch-02", "text": "I'd like the background a warm cream", "frame": "diagram.background", "value": "warm cream", "span": "warm cream"}
+{"batch": "dg-batch-02", "text": "swap the current background for white", "frame": "diagram.background", "value": "white", "span": "white"}
+{"batch": "dg-batch-02", "text": "clear the background to plain white", "frame": "diagram.background", "value": "white", "span": "plain white"}
+{"batch": "dg-batch-02", "text": "a fresh background colour: mint", "frame": "diagram.background", "value": "mint", "span": "mint"}
+{"batch": "dg-batch-02", "text": "throw some colour behind everything, sky blue", "frame": "diagram.background", "value": "sky blue", "span": "sky blue"}
 {"batch": "dg-batch-02", "text": "shade the backdrop pale yellow", "frame": "diagram.background", "value": "pale yellow", "span": "pale yellow"}
 {"batch": "dg-batch-02", "text": "set the background to a deep charcoal with a subtle gradient", "frame": "diagram.background", "value": "deep charcoal", "span": "deep charcoal"}
+{"batch": "dg-batch-02", "text": "the background should be midnight blue with a glow around the edges", "frame": "diagram.background", "value": "midnight blue", "span": "midnight blue"}
 {"batch": "dg-batch-02", "text": "background: deep green, shadows under the boxes too", "frame": "diagram.background", "value": "deep green", "span": "deep green"}
 {"batch": "dg-batch-02", "text": "give the whole canvas a parchment white with soft shadow", "frame": "diagram.background", "value": "parchment white", "span": "parchment white"}
+{"batch": "dg-batch-02", "text": "make the background flat green and take off any animation", "frame": "diagram.background", "value": "green", "span": "green"}
 {"batch": "dg-batch-02", "text": "change the background", "frame": "diagram.background", "value": "default", "span": "background"}
 {"batch": "dg-batch-02", "text": "pick a nice background for me", "frame": "diagram.background", "value": "nice", "span": "background"}
 {"batch": "dg-batch-02", "text": "make the backdrop less dark", "frame": "diagram.background", "value": "lighter", "span": "less dark"}
+{"batch": "dg-batch-02", "text": "set the bakcground to white", "frame": "diagram.background", "value": "white", "span": "white"}
+{"batch": "dg-batch-02", "text": "give the diagram a gren background", "frame": "diagram.background", "value": "green", "span": "gren background"}
+{"batch": "dg-batch-02", "text": "apply the pastel theme with a white background as well", "frame": "diagram.background", "value": "white", "span": "white background"}
 {"batch": "dg-batch-02", "text": "pastel theme throughout, with a calm blue as the anchor colour", "frame": "diagram.colour", "value": "calm blue", "span": "calm blue"}
+{"batch": "dg-batch-02", "text": "set the background to white and add a pastel theme", "frame": "diagram.background", "value": "white", "span": "white"}
 {"batch": "dg-batch-02", "text": "where is the Review step?", "frame": "node.position", "value": "where", "span": "where"}
 {"batch": "dg-batch-02", "text": "where did you put the Collect box?", "frame": "node.position", "value": "where", "span": "where"}
 {"batch": "dg-batch-02", "text": "where on the page is Check?", "frame": "node.position", "value": "where", "span": "where"}
@@ -89,3 +127,4 @@
 {"batch": "dg-batch-02", "text": "keep everything pastel please, that's my preference for diagrams", "frame": "preference", "value": "my preference", "span": "my preference"}
 {"batch": "dg-batch-02", "text": "keep it pastel like all my other diagrams, please", "frame": "preference", "value": "all my other diagrams", "span": "all my other diagrams"}
 {"batch": "dg-batch-02", "text": "keep everything pasel, that's my preference for diagrams", "frame": "preference", "value": "my preference", "span": "my preference"}
+{"batch": "dg-batch-02", "text": "i prefer pastel tones, apply that here too", "frame": "preference", "value": "i prefer", "span": "i prefer"}

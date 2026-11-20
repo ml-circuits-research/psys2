@@ -1,3 +1,37 @@
+{"batch": "pilot", "text": "make a pie chart of the staff by rank", "frame": "chart.dimension", "value": "rank", "span": "rank"}
+{"batch": "pilot", "text": "please make a pie chart of the staff by rank", "frame": "chart.dimension", "value": "rank", "span": "rank"}
+{"batch": "pilot", "text": "make a pie chart of the staff by rank please", "frame": "chart.dimension", "value": "rank", "span": "rank"}
+{"batch": "pilot", "text": "make a pie chart of the staff by rank, thanks", "frame": "chart.dimension", "value": "rank", "span": "rank"}
+{"batch": "pilot", "text": "make a pie chart of the staff by rank — go on", "frame": "chart.dimension", "value": "rank", "span": "rank"}
+{"batch": "pilot", "text": "show the staff split by rank as a pie chart", "frame": "chart.dimension", "value": "rank", "span": "rank"}
+{"batch": "pilot", "text": "please show the staff split by rank as a pie chart", "frame": "chart.dimension", "value": "rank", "span": "rank"}
+{"batch": "pilot", "text": "show the staff split by rank as a pie chart please", "frame": "chart.dimension", "value": "rank", "span": "rank"}
+{"batch": "pilot", "text": "show the staff split by rank as a pie chart, thanks", "frame": "chart.dimension", "value": "rank", "span": "rank"}
+{"batch": "pilot", "text": "show the staff split by rank as a pie chart — go on", "frame": "chart.dimension", "value": "rank", "span": "rank"}
+{"batch": "pilot", "text": "hey, I'd like a pie chart of how the staff are distributed across ranks", "frame": "chart.dimension", "value": "rank", "span": "ranks"}
+{"batch": "pilot", "text": "quick one — I'd like a pie chart of how the staff are distributed across ranks", "frame": "chart.dimension", "value": "rank", "span": "ranks"}
+{"batch": "pilot", "text": "hmm, I'd like a pie chart of how the staff are distributed across ranks", "frame": "chart.dimension", "value": "rank", "span": "ranks"}
+{"batch": "pilot", "text": "one more thing: I'd like a pie chart of how the staff are distributed across ranks", "frame": "chart.dimension", "value": "rank", "span": "ranks"}
+{"batch": "pilot", "text": "pie chart, staff by rank", "frame": "chart.dimension", "value": "rank", "span": "rank"}
+{"batch": "pilot", "text": "pie chart, staff by rank, if you can", "frame": "chart.dimension", "value": "rank", "span": "rank"}
+{"batch": "pilot", "text": "make a bar chart of the students per advisor", "frame": "chart.dimension", "value": "advisor", "span": "advisor"}
+{"batch": "pilot", "text": "please make a bar chart of the students per advisor", "frame": "chart.dimension", "value": "advisor", "span": "advisor"}
+{"batch": "pilot", "text": "make a bar chart of the students per advisor please", "frame": "chart.dimension", "value": "advisor", "span": "advisor"}
+{"batch": "pilot", "text": "make a bar chart of the students per advisor, thanks", "frame": "chart.dimension", "value": "advisor", "span": "advisor"}
+{"batch": "pilot", "text": "make a bar chart of the students per advisor — go on", "frame": "chart.dimension", "value": "advisor", "span": "advisor"}
+{"batch": "pilot", "text": "bar chart students per advisor", "frame": "chart.dimension", "value": "advisor", "span": "advisor"}
+{"batch": "pilot", "text": "bar chart students per advisor, if you can", "frame": "chart.dimension", "value": "advisor", "span": "advisor"}
+{"batch": "pilot", "text": "make a bar chart of the budget by department", "frame": "chart.dimension", "value": "department", "span": "department"}
+{"batch": "pilot", "text": "please make a bar chart of the budget by department", "frame": "chart.dimension", "value": "department", "span": "department"}
+{"batch": "pilot", "text": "make a bar chart of the budget by department please", "frame": "chart.dimension", "value": "department", "span": "department"}
+{"batch": "pilot", "text": "make a bar chart of the budget by department, thanks", "frame": "chart.dimension", "value": "department", "span": "department"}
+{"batch": "pilot", "text": "make a bar chart of the budget by department — go on", "frame": "chart.dimension", "value": "department", "span": "department"}
+{"batch": "pilot", "text": "hey, please chart the budget for each department, bars are fine", "frame": "chart.dimension", "value": "department", "span": "department"}
+{"batch": "pilot", "text": "quick one — please chart the budget for each department, bars are fine", "frame": "chart.dimension", "value": "department", "span": "department"}
+{"batch": "pilot", "text": "hmm, please chart the budget for each department, bars are fine", "frame": "chart.dimension", "value": "department", "span": "department"}
+{"batch": "pilot", "text": "one more thing: please chart the budget for each department, bars are fine", "frame": "chart.dimension", "value": "department", "span": "department"}
+{"batch": "pilot", "text": "budget by department", "frame": "chart.dimension", "value": "department", "span": "department"}
+{"batch": "pilot", "text": "budget by department, if you can", "frame": "chart.dimension", "value": "department", "span": "department"}
 {"batch": "pilot", "text": "change the value for March from 30 to 40", "frame": "point.value (operator=eq, character=discard)", "value": "30", "span": "30"}
 {"batch": "pilot", "text": "please change the value for March from 30 to 40", "frame": "point.value (operator=eq, character=discard)", "value": "30", "span": "30"}
 {"batch": "pilot", "text": "change the value for March from 30 to 40 please", "frame": "point.value (operator=eq, character=discard)", "value": "30", "span": "30"}
@@ -10,6 +44,11 @@
 {"batch": "pilot", "text": "March should be 40, not 30 — go on", "frame": "point.value (operator=eq, character=discard)", "value": "30", "span": "30"}
 {"batch": "pilot", "text": "March 40 instead of 30", "frame": "point.value (operator=eq, character=discard)", "value": "30", "span": "30"}
 {"batch": "pilot", "text": "March 40 instead of 30, if you can", "frame": "point.value (operator=eq, character=discard)", "value": "30", "span": "30"}
+{"batch": "pilot", "text": "make the chart title bold black", "frame": "chart.titleStyle", "value": "bold black", "span": "bold black"}
+{"batch": "pilot", "text": "please make the chart title bold black", "frame": "chart.titleStyle", "value": "bold black", "span": "bold black"}
+{"batch": "pilot", "text": "make the chart title bold black please", "frame": "chart.titleStyle", "value": "bold black", "span": "bold black"}
+{"batch": "pilot", "text": "make the chart title bold black, thanks", "frame": "chart.titleStyle", "value": "bold black", "span": "bold black"}
+{"batch": "pilot", "text": "make the chart title bold black — go on", "frame": "chart.titleStyle", "value": "bold black", "span": "bold black"}
 {"batch": "pilot", "text": "rotate the first box about 15 degrees", "frame": "node.rotate", "value": "15 degrees", "span": "15 degrees"}
 {"batch": "pilot", "text": "please rotate the first box about 15 degrees", "frame": "node.rotate", "value": "15 degrees", "span": "15 degrees"}
 {"batch": "pilot", "text": "rotate the first box about 15 degrees please", "frame": "node.rotate", "value": "15 degrees", "span": "15 degrees"}
@@ -51,6 +90,11 @@
 {"batch": "pilot", "text": "one more thing: any month that lost money should stand out, red for example", "frame": "chart.condition", "value": "negative → red", "span": "lost money should stand out"}
 {"batch": "pilot", "text": "colour the losers red", "frame": "chart.condition", "value": "negative → red", "span": "losers red"}
 {"batch": "pilot", "text": "colour the losers red, if you can", "frame": "chart.condition", "value": "negative → red", "span": "losers red"}
+{"batch": "pilot", "text": "show the sttaff split by rank as a pie chart", "frame": "chart.dimension", "value": "rank", "span": "rank"}
+{"batch": "pilot", "text": "pie chhart, staff by rank", "frame": "chart.dimension", "value": "rank", "span": "rank"}
+{"batch": "pilot", "text": "make a bar chhart of the students per advisor", "frame": "chart.dimension", "value": "advisor", "span": "advisor"}
+{"batch": "pilot", "text": "make a bar chhart of the budget by department please", "frame": "chart.dimension", "value": "department", "span": "department"}
+{"batch": "pilot", "text": "hmm, pllease chart the budget for each department, bars are fine", "frame": "chart.dimension", "value": "department", "span": "department"}
 {"batch": "pilot", "text": "change the vaalue for March from 30 to 40 please", "frame": "point.value (operator=eq, character=discard)", "value": "30", "span": "30"}
 {"batch": "pilot", "text": "rotate the first box abbout 15 degrees, thanks", "frame": "node.rotate", "value": "15 degrees", "span": "15 degrees"}
 {"batch": "pilot", "text": "please tuurn the Start box slightly to the right", "frame": "node.rotate", "value": "right", "span": "slightly to the right"}

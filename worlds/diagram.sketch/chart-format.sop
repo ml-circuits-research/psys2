@@ -5,7 +5,8 @@
 # of k.values ("bigger", "thinner", "wider") moves the chart's current value one step up or down (an inverse property,
 # the gap between bars, moves the other way); a word for the usual value ("medium", "normal") sets the table's value;
 # a word for none ("off", "none") sets the lower limit (the upper one of an inverse property); a named value is set as
-# said. What the chart has is observed as an input of the group (the parameter's name). The value axis (its side, its
+# said. (The declared parameters take numbers for the number properties: a reader's comparative reaches them as the
+# execution policy's step from the observed value; the words here serve the gap between bars, a word-valued parameter.) What the chart has is observed as an input of the group (the parameter's name). The value axis (its side, its
 # scale, its numbers) and the page's title are drawn here; render-projection.sop, ring-projection.sop and
 # style-projection.sop read the resolved values (ui.diagram.cfmt) for fonts, bars, lines, markers, pies and gridlines.
 @cfx.cprop.type core.type of=ui.diagram.cprop
@@ -119,11 +120,16 @@
 @cfx.f.any ui.diagram.cown group=?g slot=?s v=?anyv
 @cfx.f.bo ui.diagram.cfmt group=?g slot=?s v=?b
 @chart.cfmt.base core.rule when=$cfx.f.g when=$cfx.f.p not=$cfx.f.any then=$cfx.f.bo
-# Observed: each property the chart has, under its parameter's name.
+# Observed under its parameter's name: a number property as it is drawn (its own value or the usual one: the measure a
+# comparative steps from), a named property when the chart has one.
 @cfx.ob.o ui.diagram.cown group=?g slot=?s v=?v
-@cfx.ob.p ui.diagram.cprop slot=?s param=?p primary=true
+@cfx.ob.p ui.diagram.cprop slot=?s param=?p kind=enum primary=true
 @cfx.ob.out app.observe.input id=?g key=?p value=?v
 @observe.chart.format core.rule when=$cfx.ob.o when=$cfx.ob.p then=$cfx.ob.out
+@cfx.ob.f ui.diagram.cfmt group=?g slot=?s v=?v
+@cfx.ob.n ui.diagram.cprop slot=?s param=?p kind=number primary=true
+@cfx.ob.u ui.diagram.unit unit=?g kind=group
+@observe.chart.format.number core.rule when=$cfx.ob.f when=$cfx.ob.n when=$cfx.ob.u then=$cfx.ob.out
 # The title colour is looked up (render-projection.sop: ui.diagram.rgb).
 @cfx.tc.u w.diagram.group title_colour=?c
 @cfx.tc.out ui.diagram.usecol c=?c

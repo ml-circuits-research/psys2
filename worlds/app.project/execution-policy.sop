@@ -115,6 +115,20 @@
 # the chart group's own parameters (worlds/diagram.sketch/chart-format.sop, act-rules.sop): a number property takes the
 # said number or the word that moves it (bigger, thinner, medium); named properties their closed values, with the said
 # forms the drops write declared as those values. The page's background and title are the page's.
+# A comparative of a chart's number property ("bigger font", "thinner line") is one step of the scale of size from the
+# value the chart group is observed with (its own or the usual one), as for a drawn object's size.
+@chart.fontSize.values app.execution.values concept=diagram.sketch.group.fontSize valueType="k.expect.scale" nameKey="step" valueKey="size_factor" codec=degree
+@chart.fontSize.measure app.execution.observedMeasure concept=diagram.sketch.group.fontSize sourceType="diagram.sketch.group" parameter="fontSize" binding="diagram.group.fontSize" order=10
+@chart.lineWidth.values app.execution.values concept=diagram.sketch.group.lineWidth valueType="k.expect.scale" nameKey="step" valueKey="size_factor" codec=degree
+@chart.lineWidth.measure app.execution.observedMeasure concept=diagram.sketch.group.lineWidth sourceType="diagram.sketch.group" parameter="lineWidth" binding="diagram.group.lineWidth" order=11
+@chart.markerSize.values app.execution.values concept=diagram.sketch.group.markerSize valueType="k.expect.scale" nameKey="step" valueKey="size_factor" codec=degree
+@chart.markerSize.measure app.execution.observedMeasure concept=diagram.sketch.group.markerSize sourceType="diagram.sketch.group" parameter="markerSize" binding="diagram.group.markerSize" order=12
+@chart.markerEdge.values app.execution.values concept=diagram.sketch.group.markerEdge valueType="k.expect.scale" nameKey="step" valueKey="size_factor" codec=degree
+@chart.markerEdge.measure app.execution.observedMeasure concept=diagram.sketch.group.markerEdge sourceType="diagram.sketch.group" parameter="markerEdge" binding="diagram.group.markerEdge" order=13
+@chart.barWidth.values app.execution.values concept=diagram.sketch.group.barWidth valueType="k.expect.scale" nameKey="step" valueKey="size_factor" codec=degree
+@chart.barWidth.measure app.execution.observedMeasure concept=diagram.sketch.group.barWidth sourceType="diagram.sketch.group" parameter="barWidth" binding="diagram.group.barWidth" order=14
+@chart.pieRadius.values app.execution.values concept=diagram.sketch.group.pieRadius valueType="k.expect.scale" nameKey="step" valueKey="size_factor" codec=degree
+@chart.pieRadius.measure app.execution.observedMeasure concept=diagram.sketch.group.pieRadius sourceType="diagram.sketch.group" parameter="pieRadius" binding="diagram.group.pieRadius" order=15
 @chart.key.chart_fontSize app.execution.keyBinding area=diagram key="chart.fontSize" operation="diagram.chart.format" parameter="fontSize"
 @chart.key.chart_lineWidth app.execution.keyBinding area=diagram key="chart.lineWidth" operation="diagram.chart.format" parameter="lineWidth"
 @chart.key.chart_markerSize app.execution.keyBinding area=diagram key="chart.markerSize" operation="diagram.chart.format" parameter="markerSize"

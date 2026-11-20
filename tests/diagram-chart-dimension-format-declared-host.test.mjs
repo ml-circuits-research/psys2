@@ -63,20 +63,18 @@ test('only the largest categories, those above or below a value; said labels wit
  assert.equal(run('diagram.group.chart.make label="Bad" layout="bar" labels="a" labels="b" values=1').reason,'invalid-chart-data','labels and values said both must pair up');
 });
 
-test('number properties: a number within limits, a comparative one step from the current value, the usual value, none; other words refused',async()=>{
+test('number properties within their limits; the gap between bars by words (inverse of the bar width); other words refused',async()=>{
  const {ok,run,view}=await area();
  ok('diagram.group.chart.make label="Sales" layout="bar" labels="Jan" labels="Feb" values=10 values=20');
- assert.equal(text(view().svg,'Jan').size,12,'the usual font');
- ok('diagram.chart.format id="g1" fontSize="bigger"');assert.equal(view().inputs.g1.fontSize,15);
- assert.equal(text(view().svg,'Jan').size,15);assert.equal(text(view().svg,'Sales').size,16,'the title one size above');
- ok('diagram.chart.format id="g1" fontSize="smaller"');assert.equal(view().inputs.g1.fontSize,12);
- ok('diagram.chart.format id="g1" fontSize="99"');assert.equal(view().inputs.g1.fontSize,40,'within the limits');
- ok('diagram.chart.format id="g1" fontSize="medium"');assert.equal(view().inputs.g1.fontSize,12);
- assert.equal(run('diagram.chart.format id="g1" fontSize="purple"').reason,'unknown-degree');
- // The gap between bars is the bar width the other way round: no gap fills the category's room.
+ assert.equal(text(view().svg,'Jan').size,12,'the usual font');assert.equal(view().inputs.g1.fontSize,12,'observed as drawn: the measure a comparative steps from');
+ ok('diagram.chart.format id="g1" fontSize=16');assert.equal(view().inputs.g1.fontSize,16);
+ assert.equal(text(view().svg,'Jan').size,16);assert.equal(text(view().svg,'Sales').size,17,'the title one size above');
+ assert.notEqual(run('diagram.chart.format id="g1" fontSize=99').status,'changed','outside the declared limits');
  const before=rect(view().svg,'n1');assert.equal(before.w,36);
- ok('diagram.chart.format id="g1" barWidth="wider"');assert.ok(rect(view().svg,'n1').w>36);
+ ok('diagram.chart.format id="g1" barWidth=0.8');assert.ok(Math.abs(rect(view().svg,'n1').w-44.8)<0.01);
+ ok('diagram.chart.format id="g1" barGap="wider"');assert.ok(view().inputs.g1.barWidth<0.8,'a wider gap: narrower bars');
  ok('diagram.chart.format id="g1" barGap="none"');assert.equal(view().inputs.g1.barWidth,1);assert.equal(rect(view().svg,'n1').w,56);
+ assert.equal(run('diagram.chart.format id="g1" barGap="purple"').reason,'unknown-degree');
  ok('diagram.chart.format id="g1" precision=0');assert.equal(view().inputs.g1.precision,0);
 });
 
@@ -101,7 +99,7 @@ test('axes: the value axis on the right with its numbers, inverted axes, a log s
 test('lines, markers, gridlines, pies and the title: what is drawn follows the chart group',async()=>{
  const {ok,view}=await area();
  ok('diagram.group.chart.make label="Trend" layout="line" labels="Q1" labels="Q2" labels="Q3" values=3 values=5 values=4');
- ok('diagram.chart.format id="g1" lineStyle="dashed" lineWidth="thicker" markerEdge="off" markerSize="20" gridlines=true gridStyle="solid"');
+ ok('diagram.chart.format id="g1" lineStyle="dashed" lineWidth=2.5 markerEdge=0 markerSize=20 gridlines=true gridStyle="solid"');
  const svg=view().svg;
  assert.match(svg,/<polyline points="[^"]+" fill="none" stroke="#1d6fe8" stroke-width="2.5"[^>]*stroke-dasharray="8 5"/,'a thicker dashed line');
  assert.match(svg,/data-select="n1"><ellipse[^>]*rx="10"[^>]*fill="[^"]+"\/>/,'markers 20 wide, without an outline');
@@ -109,8 +107,8 @@ test('lines, markers, gridlines, pies and the title: what is drawn follows the c
  ok('diagram.chart.format id="g1" titleWeight="normal" titleColour="navy" titlePosition="top"');
  const title=text(view().svg,'Trend');assert.doesNotMatch(title.attrs,/font-weight/);assert.match(title.attrs,/fill="#000080"/);assert.match(title.attrs,/text-anchor="middle"/);
  ok('diagram.group.chart.make label="Share" layout="pie" labels="x" labels="y" values=1 values=3');
- const r0=view().inputs.g2.pieRadius;assert.equal(r0,undefined);
- ok('diagram.chart.format id="g2" pieRadius="larger"');assert.equal(view().inputs.g2.pieRadius,112.5);
+ assert.equal(view().inputs.g2.pieRadius,90,'the usual radius');
+ ok('diagram.chart.format id="g2" pieRadius=120');assert.equal(view().inputs.g2.pieRadius,120);
 });
 
 test('the page: its background colour and its title',async()=>{
@@ -135,14 +133,14 @@ test('the data drops\' chart keys bind to the chart group, the chart make and th
  assert.equal(row('chart.precision').numeric,true);
 });
 
-test('a reading of "make the font bigger" on a chart compiles to the chart format tool with the said word',async()=>{
+test('a reading of "put the y axis on the right" compiles to the chart format tool with the declared value',async()=>{
  const bindings=await completeBindings(table());
- const group={id:'g1',kind:'group',source:'diagram',sourceType:'diagram.sketch.group',version:'1',inputs:[{key:'fontSize',binding:'diagram.group.fontSize',values:['12'],source:'diagram',sourceType:'diagram.sketch.group',version:'1'}]};
- const candidate={request:'r',wires:`@s std.request.source text="make the font bigger"
+ const group={id:'g1',kind:'group',source:'diagram',sourceType:'diagram.sketch.group',version:'1',inputs:[{key:'axisSide',binding:'diagram.group.axisSide',values:['"left"'],source:'diagram',sourceType:'diagram.sketch.group',version:'1'}]};
+ const candidate={request:'r',wires:`@s std.request.source text="put the y axis on the right"
 @r std.request act=change mood=do source=$s
 @t std.request.target request=$r mode=existing kind=w.chart.chart
-@v std.request.constraint request=$r target=$t concept=diagram.sketch.group.fontSize operator=eq polarity=positive character=requirement value="bigger"`};
+@v std.request.constraint request=$r target=$t concept=diagram.sketch.group.axisSide operator=eq polarity=positive character=requirement value="right"`};
  const plan=compileNativeCapability(candidate,{area:{area:'diagram'},view:'diagram',bindings:{...bindings,kinds:[{area:'diagram',lemma:'group',canonical:'w.chart.chart',nativeFamilyBinding:{operation:'diagram.chart.format',sourceType:'diagram.sketch.group'}}]},
   host:readNativeToolInterface(DIAGRAM,{imports:{'data.charts':chartToolInterface}}).realize({'diagram.themes':['pastel'],'diagram.colours':['red']}),observation:{instanceId:'fixture',version:'1',scope:'diagram',complete:true,objects:[group]},focus:'g1',unapplied:[]});
- assert.equal(plan.status,'compiled',JSON.stringify(plan).slice(0,600));assert.equal(plan.operation,'diagram.chart.format');assert.equal(plan.args.fontSize,'bigger');
+ assert.equal(plan.status,'compiled',JSON.stringify(plan).slice(0,600));assert.equal(plan.operation,'diagram.chart.format');assert.equal(plan.args.axisSide,'right');
 });

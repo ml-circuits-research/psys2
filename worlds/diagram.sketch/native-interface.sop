@@ -383,15 +383,16 @@
 @native.diagram.sketch.op.diagram.chart.format.param.layout std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="layout" kind=string enum="bar" enum="line" enum="area" enum="pie" enum="doughnut" enumClosed=true
 @native.diagram.sketch.op.diagram.chart.format.param.palette std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="palette" kind=string
 @native.diagram.sketch.op.diagram.chart.format.param.palette.source.enum app.native.parameter parameter=$native.diagram.sketch.op.diagram.chart.format.param.palette field=enum input=$native.diagram.sketch.input.diagram.themes
-# A chart group's formatting (chart-format.sop): a number property takes a number or a word that moves it (bigger,
-# thinner, medium, off); a named one one of its values; the title colour one of the page's colours.
-@native.diagram.sketch.op.diagram.chart.format.param.fontSize std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="fontSize" kind=string
-@native.diagram.sketch.op.diagram.chart.format.param.lineWidth std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="lineWidth" kind=string
-@native.diagram.sketch.op.diagram.chart.format.param.markerSize std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="markerSize" kind=string
-@native.diagram.sketch.op.diagram.chart.format.param.markerEdge std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="markerEdge" kind=string
-@native.diagram.sketch.op.diagram.chart.format.param.barWidth std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="barWidth" kind=string
+# A chart group's formatting (chart-format.sop): a number property takes a number within its limits (a comparative,
+# "bigger", is the execution policy's step from the observed value); the gap between bars a word (none, wider,
+# narrower) or a number; a named property one of its values; the title colour a colour name.
+@native.diagram.sketch.op.diagram.chart.format.param.fontSize std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="fontSize" kind=number min=6 max=40
+@native.diagram.sketch.op.diagram.chart.format.param.lineWidth std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="lineWidth" kind=number min=0.5 max=12
+@native.diagram.sketch.op.diagram.chart.format.param.markerSize std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="markerSize" kind=number min=2 max=40
+@native.diagram.sketch.op.diagram.chart.format.param.markerEdge std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="markerEdge" kind=number min=0 max=8
+@native.diagram.sketch.op.diagram.chart.format.param.barWidth std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="barWidth" kind=number min=0.1 max=1
 @native.diagram.sketch.op.diagram.chart.format.param.barGap std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="barGap" kind=string
-@native.diagram.sketch.op.diagram.chart.format.param.pieRadius std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="pieRadius" kind=string
+@native.diagram.sketch.op.diagram.chart.format.param.pieRadius std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="pieRadius" kind=number min=30 max=300
 @native.diagram.sketch.op.diagram.chart.format.param.precision std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="precision" kind=integer min=0 max=4
 @native.diagram.sketch.op.diagram.chart.format.param.titleWeight std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="titleWeight" kind=string enum="normal" enum="bold" enumClosed=true
 @native.diagram.sketch.op.diagram.chart.format.param.titleColour std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="titleColour" kind=string

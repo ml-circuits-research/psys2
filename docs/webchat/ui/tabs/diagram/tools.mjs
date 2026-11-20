@@ -165,13 +165,16 @@ export function makeStylePanels(host, { tool, model, selection, html, btn }) {
     input.addEventListener('change', () => { if (input.value) format({ [param]: input.value }); }); return input; };
   const amount = (label, param, step, text = true) => { const wrap = html('label', '', label), input = html('input'); input.type = 'number'; input.step = step; input.setAttribute('aria-label', label); input.dataset.param = param; wrap.append(input); styleRow.append(wrap);
     input.addEventListener('change', () => { if (input.value !== '') format({ [param]: text ? String(input.value) : Number(input.value) }); }); return input; };
-  const fontSizeInput = amount('Chart font size', 'fontSize', '1'), titleWeight = choose('Title weight', 'titleWeight'), titleColour = choose('Title colour', 'titleColour'), titlePosition = choose('Title position', 'titlePosition');
+  const fontSizeInput = amount('Chart font size', 'fontSize', '1', false), titleWeight = choose('Title weight', 'titleWeight'), titleColour = choose('Title colour', 'titleColour'), titlePosition = choose('Title position', 'titlePosition');
   const axisSide = choose('Value axis', 'axisSide'), invert = choose('Invert axis', 'invert'), axisScale = choose('Axis scale', 'axisScale'), tickFormat = choose('Number format', 'tickFormat');
-  const precision = amount('Decimals', 'precision', '1', false), lineStyle = choose('Chart line style', 'lineStyle'), lineWidthInput = amount('Chart line width', 'lineWidth', '0.5');
-  const markerSize = amount('Marker size', 'markerSize', '1'), markerEdge = amount('Marker edge', 'markerEdge', '0.5'), barWidthInput = amount('Bar width (share)', 'barWidth', '0.05');
-  const pieRadius = amount('Pie radius', 'pieRadius', '5'), gridStyle = choose('Grid style', 'gridStyle');
+  const precision = amount('Decimals', 'precision', '1', false), lineStyle = choose('Chart line style', 'lineStyle'), lineWidthInput = amount('Chart line width', 'lineWidth', '0.5', false);
+  const markerSize = amount('Marker size', 'markerSize', '1', false), markerEdge = amount('Marker edge', 'markerEdge', '0.5', false), barWidthInput = amount('Bar width (share)', 'barWidth', '0.05', false);
+  const pieRadius = amount('Pie radius', 'pieRadius', '5', false), gridStyle = choose('Grid style', 'gridStyle');
   const chartFontRow = html('div', 'dg-row');
-  chartFontRow.append(btn('A−', 'Smaller chart text', () => format({ fontSize: 'smaller' })), btn('A+', 'Bigger chart text', () => format({ fontSize: 'bigger' })));
+  // A− and A+: one point down or up from the size the chart is observed with, within the declared limits.
+  const stepFont = (by) => { const g = currentGroup(), limit = values(ops, 'diagram.chart.format', 'fontSize'), now = Number(g?.inputs?.fontSize);
+    if (!g || !Number.isFinite(now)) return; format({ fontSize: Math.min(limit.max ?? now + by, Math.max(limit.min ?? now + by, now + by)) }); };
+  chartFontRow.append(btn('A−', 'Smaller chart text', () => stepFont(-1)), btn('A+', 'Bigger chart text', () => stepFont(1)));
   const formatInputs = [fontSizeInput, titleWeight, titleColour, titlePosition, axisSide, invert, axisScale, tickFormat, precision, lineStyle, lineWidthInput, markerSize, markerEdge, barWidthInput, pieRadius, gridStyle];
   chart.append(condRow);
   chart.append(table, addRow, formatRow, toggles, chartFontRow, styleRow);
@@ -196,7 +199,7 @@ export function makeStylePanels(host, { tool, model, selection, html, btn }) {
       fillSel(legend, values(ops, 'diagram.chart.format', 'legend').enum ?? []);
       for (const input of [titleWeight, titlePosition, axisSide, invert, axisScale, tickFormat, lineStyle, gridStyle]) fillSel(input, values(ops, 'diagram.chart.format', input.dataset.param).enum ?? []);
       fillSel(titleColour, values(ops, 'diagram.chart.format', 'titleColour').enum ?? colours);
-      const limit = values(ops, 'diagram.chart.format', 'precision'); if (limit.min !== undefined) precision.min = limit.min; if (limit.max !== undefined) precision.max = limit.max;
+      for (const input of [precision, fontSizeInput, lineWidthInput, markerSize, markerEdge, barWidthInput, pieRadius]) { const limit = values(ops, 'diagram.chart.format', input.dataset.param); if (limit.min !== undefined) input.min = limit.min; if (limit.max !== undefined) input.max = limit.max; }
       fillSel(sort, values(ops, 'diagram.chart.sort', 'order').enum ?? []); fillSel(condTest, values(ops, 'diagram.chart.highlight', 'test').enum ?? []); fillSel(condColour, colours);
     },
     sync() {
