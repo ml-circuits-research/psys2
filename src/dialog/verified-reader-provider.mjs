@@ -6,6 +6,7 @@ import {createCutterInference} from './cutter-inference.mjs';
 import {createKeyReaderInference} from './key-reader-inference.mjs';
 import {createBertSourceOffsetAuthority} from './bert-source-offsets.mjs';
 import {createKeyReaderPipeline} from './key-reader-pipeline.mjs';
+import {BINDING_NODES} from './raw-structural-bridge.mjs';
 
 const hash=x=>typeof x==='string'&&/^[a-f0-9]{64}$/.test(x);
 const object=x=>x!==null&&typeof x==='object'&&!Array.isArray(x);
@@ -94,7 +95,7 @@ export async function createVerifiedReaderProvider({
  if(total>maxTotalBytes)throw Error('artifact-byte-budget');
  const tokenizerJSON=text(files.tokenizer,maxJSONBytes),bindingsJSON=text(files.bindings,maxJSONBytes);
  copyHostData(JSON.parse(tokenizerJSON),{maxBytes:maxJSONBytes});
- copyHostData(JSON.parse(bindingsJSON),{maxBytes:maxJSONBytes});
+ copyHostData(JSON.parse(bindingsJSON),{maxBytes:maxJSONBytes,maxNodes:BINDING_NODES});
  const hostIdentity=copyHostData(runtimeIdentity,{maxBytes:maxJSONBytes}),sessionConstructor=backend.createSession,tensorConstructor=backend.makeTensor;
  // Actual function references are supplied to the host verifier. A caller hash
  // alone never authenticates the implementation, tokenizer factory or context.
@@ -155,7 +156,7 @@ export async function createVerifiedReaderProvider({
    selectionScore:combineModelScores([componentScores.cutter,componentScores['key-reader']])}:null;
  }
  // The authenticated registry and binding table are read on every turn: one frozen snapshot each, shared read-only.
- const registrySnapshot=freezeHostData(JSON.parse(m.configJSON).registry),bindingsSnapshot=freezeHostData(JSON.parse(bindingsJSON));
+ const registrySnapshot=freezeHostData(JSON.parse(m.configJSON).registry),bindingsSnapshot=freezeHostData(JSON.parse(bindingsJSON),{maxNodes:BINDING_NODES});
  const scoredProvider={...provider,registry:()=>registrySnapshot,bindings:()=>bindingsSnapshot,async propose(sourceSop){decisionScores=[];const proposal=await provider.propose(sourceSop);return scoreProposal(proposal);},
   proposeIndependent:sourceSop=>scoreRepeat(provider.proposeIndependent,sourceSop),
   proposeLiteral:sourceSop=>scoreRepeat(provider.proposeLiteral,sourceSop),

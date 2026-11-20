@@ -9,7 +9,7 @@
 # script: none (hand-written)
 # needs: sopworld with std.schema and std.acts (tools/sopworld/VERSION, 0.30.0 or later)
 
-@w.document core.module name=w.document version=2 exports=document exports=chapter exports=section exports=paragraph exports=slide exports=sentence core.source="hand-core 1"
+@w.document core.module name=w.document version=2 exports=document exports=chapter exports=section exports=paragraph exports=slide exports=sentence exports=block exports=item exports=cell exports=mark core.source="hand-core 1"
 @w.document.world std.schema.world name=w.document doc="written documents: chapters, sections, paragraphs, slides and sentences, each sentence with the facts it states" core.source="hand-core 1"
 
 # A document. `title`; `genre` names a genre of k.genres (scientific article, essay, story, report, presentation);
@@ -26,6 +26,8 @@
 # `words` the number of words in the text of the document, counted by the host over its sentences (psys2 Q51: "how many words does the document have?"); the world holds it, it does not count.
 @w.document.document.words core.slot of=w.document.document key=words kind=integer min=0 step=1 core.source="hand-core 1"
 @w.document.document.about core.slot of=w.document.document key=about kind=string core.source="hand-core 1"
+# For an editor (a document tab whose state is a w.document instance): `code` the identifier tools and people use ("text1").
+@w.document.document.code core.slot of=w.document.document key=code kind=atom kind=string core.source="hand-core 1"
 
 # A chapter of a document (a part of a story, the introduction of an article). `title`; `document` refers to its
 # document; `n` its place in the document, from 1; `part` names the part of its genre it realises (k.genres.part:
@@ -77,12 +79,69 @@
 @w.document.sentence.fact core.slot of=w.document.sentence key=fact many=true kind=atom core.source="hand-core 1"
 @w.document.sentence.interest core.slot of=w.document.sentence key=interest kind=number min=0 max=1 core.source="hand-core 1"
 
+# For an editor: a document as one sequence of blocks, as a rich-text editor keeps it (blocks are not split into
+# sentences there). A block: `code` the identifier tools use ("b1"); `document` its document; `n` its place in the
+# document, from 1; `form` what it is (paragraph, heading, quote, list, table; not `kind`, an argument of `make`);
+# `text` the text of a paragraph, heading or quote; `name` a label a person gave it; `level` a heading's level (1 a
+# chapter, 2 a section, 3 to 6 headings inside them); `align` (left, center, right, justify); `style` a list's style
+# (bullet, numbered, task); `header` true when a table's first row is its header; `part` the part of a genre it
+# realises (k.genres.part); `source` (many) the ids of the wires its text states. A chapter or section of the
+# sequence is a heading of level 1 or 2 with the blocks after it, up to the next such heading.
+@w.document.block core.type of=w.document.block extends=std.schema.thing closed=true core.source="hand-core 1"
+@w.document.block.code core.slot of=w.document.block key=code kind=atom kind=string core.source="hand-core 1"
+@w.document.block.document core.slot of=w.document.block key=document required=true type=w.document.document core.source="hand-core 1"
+@w.document.block.n core.slot of=w.document.block key=n required=true kind=integer min=1 step=1 core.source="hand-core 1"
+@w.document.block.form core.slot of=w.document.block key=form enum=paragraph enum=heading enum=quote enum=list enum=table default=paragraph core.source="hand-core 1"
+@w.document.block.text core.slot of=w.document.block key=text kind=string core.source="hand-core 1"
+@w.document.block.name core.slot of=w.document.block key=name kind=string core.source="hand-core 1"
+@w.document.block.level core.slot of=w.document.block key=level kind=integer min=1 max=6 step=1 core.source="hand-core 1"
+@w.document.block.align core.slot of=w.document.block key=align enum=left enum=center enum=right enum=justify default=left core.source="hand-core 1"
+@w.document.block.style core.slot of=w.document.block key=style enum=bullet enum=numbered enum=task core.source="hand-core 1"
+@w.document.block.header core.slot of=w.document.block key=header kind=boolean core.source="hand-core 1"
+@w.document.block.part core.slot of=w.document.block key=part kind=atom kind=string core.source="hand-core 1"
+@w.document.block.source core.slot of=w.document.block key=source many=true kind=atom core.source="hand-core 1"
+
+# An item of a list block: `block` its list, `n` its place, from 1, `text`, `checked` (a task list's item that is done).
+@w.document.item core.type of=w.document.item extends=std.schema.thing closed=true core.source="hand-core 1"
+@w.document.item.block core.slot of=w.document.item key=block required=true type=w.document.block core.source="hand-core 1"
+@w.document.item.n core.slot of=w.document.item key=n required=true kind=integer min=1 step=1 core.source="hand-core 1"
+@w.document.item.text core.slot of=w.document.item key=text kind=string core.source="hand-core 1"
+@w.document.item.checked core.slot of=w.document.item key=checked kind=boolean core.source="hand-core 1"
+
+# A cell of a table block: `block` its table, `row` and `column` from 1, `text`.
+@w.document.cell core.type of=w.document.cell extends=std.schema.thing closed=true core.source="hand-core 1"
+@w.document.cell.block core.slot of=w.document.cell key=block required=true type=w.document.block core.source="hand-core 1"
+@w.document.cell.row core.slot of=w.document.cell key=row required=true kind=integer min=1 step=1 core.source="hand-core 1"
+@w.document.cell.column core.slot of=w.document.cell key=column required=true kind=integer min=1 step=1 core.source="hand-core 1"
+@w.document.cell.text core.slot of=w.document.cell key=text kind=string core.source="hand-core 1"
+
+# A mark over characters of a text: `block` the block it is in, and `item` or `cell` when the text is an item's or a
+# cell's (else the block's own text); `from` and `to` the characters it covers (from 0, `to` not included); `form`
+# what it does (bold, italic, underline, strike, code, highlight, link); `href` where a link goes; `colour` a
+# highlight's colour.
+@w.document.mark core.type of=w.document.mark extends=std.schema.thing closed=true core.source="hand-core 1"
+@w.document.mark.block core.slot of=w.document.mark key=block required=true type=w.document.block core.source="hand-core 1"
+@w.document.mark.item core.slot of=w.document.mark key=item type=w.document.item core.source="hand-core 1"
+@w.document.mark.cell core.slot of=w.document.mark key=cell type=w.document.cell core.source="hand-core 1"
+@w.document.mark.from core.slot of=w.document.mark key=from required=true kind=integer min=0 step=1 core.source="hand-core 1"
+@w.document.mark.to core.slot of=w.document.mark key=to required=true kind=integer min=1 step=1 core.source="hand-core 1"
+@w.document.mark.form core.slot of=w.document.mark key=form required=true enum=bold enum=italic enum=underline enum=strike enum=code enum=highlight enum=link core.source="hand-core 1"
+@w.document.mark.href core.slot of=w.document.mark key=href kind=string core.source="hand-core 1"
+@w.document.mark.colour core.slot of=w.document.mark key=colour kind=atom kind=string core.source="hand-core 1"
+
 # One place for a paragraph and for a sentence: a paragraph is not in a section and a chapter at once, a sentence
 # not in a paragraph and on a slide at once.
 @w.document.one.paragraph w.document.paragraph section=?section chapter=?chapter
 @w.document.one.paragraph.deny core.deny when=$w.document.one.paragraph why="A paragraph is in a section or straight in a chapter, not both." core.source="hand-core 1"
 @w.document.one.sentence w.document.sentence paragraph=?paragraph slide=?slide
 @w.document.one.sentence.deny core.deny when=$w.document.one.sentence why="A sentence is in a paragraph or on a slide, not both." core.source="hand-core 1"
+# For an editor: a mark is in an item's or a cell's text, not both; one thing of each kind per code.
+@w.document.one.mark w.document.mark item=?item cell=?cell
+@w.document.one.mark.deny core.deny when=$w.document.one.mark why="A mark is in an item or in a cell, not both." core.source="hand-core 1"
+@w.document.code.first std.schema.thing kind=?kind code=?code
+@w.document.code.second std.schema.thing kind=?kind code=?code
+@w.document.code.other core.check fn=neq args=$w.document.code.first args=$w.document.code.second
+@w.document.code.unique core.deny when=$w.document.code.first when=$w.document.code.second if=$w.document.code.other why="The code ?code is already used by another ?kind." core.source="hand-core 1"
 
 # The kinds and the acts that apply to them. Parts are linked (connect: a slide to the section it presents) and
 # grouped. At most 50 documents, 2,000 parts of each kind and 20,000 sentences.
@@ -92,11 +151,19 @@
 @w.document.kind.paragraph std.schema.kind of=w.document.paragraph world=w.document acts=make acts=remove acts=change acts=pick acts=ask acts=copy core.source="hand-core 1"
 @w.document.kind.slide std.schema.kind of=w.document.slide world=w.document acts=make acts=remove acts=change acts=connect acts=pick acts=ask acts=copy core.source="hand-core 1"
 @w.document.kind.sentence std.schema.kind of=w.document.sentence world=w.document acts=make acts=remove acts=change acts=pick acts=ask acts=copy core.source="hand-core 1"
+@w.document.kind.block std.schema.kind of=w.document.block world=w.document acts=make acts=remove acts=change acts=pick acts=ask acts=copy core.source="hand-core 1"
+@w.document.kind.item std.schema.kind of=w.document.item world=w.document acts=make acts=remove acts=change acts=pick acts=ask acts=copy core.source="hand-core 1"
+@w.document.kind.cell std.schema.kind of=w.document.cell world=w.document acts=make acts=remove acts=change acts=pick acts=ask core.source="hand-core 1"
+@w.document.kind.mark std.schema.kind of=w.document.mark world=w.document acts=make acts=remove acts=change acts=pick acts=ask core.source="hand-core 1"
 @w.document.limit.document std.schema.limit of=w.document.document max=50 core.source="hand-core 1"
 @w.document.limit.chapter std.schema.limit of=w.document.chapter max=2000 core.source="hand-core 1"
 @w.document.limit.section std.schema.limit of=w.document.section max=2000 core.source="hand-core 1"
 @w.document.limit.paragraph std.schema.limit of=w.document.paragraph max=2000 core.source="hand-core 1"
 @w.document.limit.slide std.schema.limit of=w.document.slide max=2000 core.source="hand-core 1"
 @w.document.limit.sentence std.schema.limit of=w.document.sentence max=20000 core.source="hand-core 1"
+@w.document.limit.block std.schema.limit of=w.document.block max=10000 core.source="hand-core 1"
+@w.document.limit.item std.schema.limit of=w.document.item max=20000 core.source="hand-core 1"
+@w.document.limit.cell std.schema.limit of=w.document.cell max=20000 core.source="hand-core 1"
+@w.document.limit.mark std.schema.limit of=w.document.mark max=20000 core.source="hand-core 1"
 
 # Words: for the world (how a host finds it by name), its kinds and its keys.

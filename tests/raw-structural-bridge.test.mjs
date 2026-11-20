@@ -77,3 +77,34 @@ test('a grounded new-target cardinal span retains count while ordinal or conflic
   assert.ok(r.diagnostics.some(d=>d.reason==='requires-declared-count-projection'));
  }
 });
+// Relative positions, comparatives, degree values and context targets (official-dataset label space).
+const placed={...bindings,kinds:[...bindings.kinds,{area:'toy',type:'item',lemma:'pond',canonical:'fixture.pond',sourceWire:'fixture.pond',...source}],
+ properties:[...bindings.properties,
+  {area:'toy',key:'item.relation',canonical:'fixture.relation.kind',valueKind:'string',sourceWire:'fixture.relation.kind',projection:{kind:'relation',values:{left_of:'left',in:'in'}},...source},
+  {area:'toy',key:'item.anchor',canonical:'fixture.relation.object',valueKind:'string',sourceWire:'fixture.relation.object',projection:{kind:'relation-anchor'},...source},
+  {area:'toy',key:'item.size',canonical:'size',valueKind:'string',sourceWire:'fixture.size',...source}]};
+const relational=(relation,span)=>({span:`make a widget ${span} the pond`,trigger:'make',act:'make',mood:'do',target:{type:'item',mode:'new',kind:'widget',kind_span:'widget'},
+ constraints:[{key:'item.anchor',value:'the pond',value_span:'the pond',operator:'relation',phase:'selector',character:'requirement',polarity:'positive'},
+  {key:'item.relation',value:relation,value_span:span,operator:'relation',phase:'result',character:'requirement',polarity:'positive'}]});
+test('a relation and its anchor mention become one relation constraint whose goal is the declared anchor kind',()=>{
+ for(const [relation,span,expected]of [['left_of','left of','left'],['in','in','in']]){
+  const out=bridgeRawStructure(raw(relational(relation,span)),{bindings:placed,bindingSha256,references:{definite:['the']}});
+  assert.deepEqual(out.diagnostics,[]);const wires=out.decoded.candidates[0].wires;
+  assert.match(wires,new RegExp(`operator=relation polarity=positive relation=${expected} `));assert.match(wires,/@t0_a0 std\.request\.target determiner=definite kind=fixture\.pond mode=existing/);assert.match(wires,/goal=\$t0_a0/);assert.doesNotMatch(wires,/phase=/);
+ }
+ const undeclared=bridgeRawStructure(raw(relational('behind','behind')),{bindings:placed,bindingSha256,references:{definite:['the']}});
+ assert.ok(undeclared.diagnostics.some(d=>d.reason==='undeclared-relation-value'));
+ const unknownAnchor=bridgeRawStructure(raw(relational('in','in')),{bindings:placed,bindingSha256,references:{definite:[]}});
+ assert.ok(unknownAnchor.diagnostics.some(d=>d.reason==='unresolved-anchor-reference'));
+ const lone=relational('in','in');lone.constraints.shift();assert.ok(bridgeRawStructure(raw(lone),{bindings:placed,bindingSha256}).diagnostics.some(d=>d.reason==='unpaired-relation-mention'));
+});
+test('a comparative consumes the copied step word, a degree value is a vocabulary name and a context target takes the resolved kind',()=>{
+ const text='make it bigger',comparative={span:text,trigger:'make',act:'change',mood:'do',target:{type:'item',mode:'existing',fill:'context'},constraints:[{key:'item.size',value:'bigger',value_span:'bigger',operator:'delta',step:'more',phase:'result',character:'requirement',polarity:'positive'}]};
+ const prediction={...raw(comparative),ranges:[{path:['requests','0','constraints','0','value'],range:[8,14]}]},steps=[{concept:'size',step:'more',factor:1.5,declaration:'fixture.more'}];
+ const bare=bridgeRawStructure(prediction,{bindings:placed,bindingSha256,comparatives:steps});assert.deepEqual(bare.diagnostics.map(d=>d.reason).sort(),['context-reference-not-bound','unresolved-canonical-kind-binding']);
+ const bound=bridgeRawStructure(prediction,{bindings:placed,bindingSha256,comparatives:steps,contextTarget:{kind:'fixture.widget',declaration:'observed.object'}});
+ assert.deepEqual(bound.diagnostics,[]);assert.match(bound.decoded.candidates[0].wires,/baseline=before .*operator=factor .*value=1\.5/);assert.match(bound.decoded.candidates[0].wires,/kind=fixture\.widget/);
+ const degree={span:'make a big widget',trigger:'make',act:'make',mood:'do',target:{type:'item',mode:'new',kind:'widget',kind_span:'widget'},constraints:[{key:'item.size',value:'big',value_span:'big',operator:'degree',phase:'result',character:'requirement',polarity:'positive'},condition('cerulean')]};
+ degree.span='make a big cerulean widget';const both=bridgeRawStructure(raw(degree),{bindings:placed,bindingSha256});
+ assert.deepEqual(both.diagnostics,[]);assert.match(both.decoded.candidates[0].wires,/operator=degree .*value=big(\s|$)/);
+});

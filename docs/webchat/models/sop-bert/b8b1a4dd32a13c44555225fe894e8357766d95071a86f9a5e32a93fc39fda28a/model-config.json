@@ -1,0 +1,8161 @@
+{
+  "format": "sop.key-reader/1",
+  "targetFamilies": {
+    "avatar": [
+      "face",
+      "part"
+    ],
+    "calendar": [
+      "calendar",
+      "meeting",
+      "person",
+      "room"
+    ],
+    "diagram": [
+      "chart",
+      "diagram",
+      "group",
+      "link",
+      "node",
+      "page",
+      "point",
+      "series",
+      "sketch"
+    ],
+    "document": [
+      "block",
+      "document",
+      "inline",
+      "section",
+      "text"
+    ],
+    "drawing": [
+      "drawn",
+      "group",
+      "page",
+      "part"
+    ]
+  },
+  "keys": [
+    "avatar.face.base",
+    "avatar.face.characterKind",
+    "avatar.face.duration",
+    "avatar.face.expression",
+    "avatar.face.id",
+    "avatar.face.mode",
+    "avatar.face.name",
+    "avatar.face.preset",
+    "avatar.face.scale",
+    "avatar.part.colour",
+    "avatar.part.id",
+    "avatar.part.ids",
+    "avatar.part.place",
+    "avatar.part.property",
+    "avatar.part.scale",
+    "avatar.part.size",
+    "avatar.part.value",
+    "avatar.part.variant",
+    "calendar.calendar.colour",
+    "calendar.calendar.id",
+    "calendar.calendar.label",
+    "calendar.calendar.name",
+    "calendar.meeting.agenda",
+    "calendar.meeting.calendar",
+    "calendar.meeting.day",
+    "calendar.meeting.duration",
+    "calendar.meeting.end",
+    "calendar.meeting.free",
+    "calendar.meeting.id",
+    "calendar.meeting.ids",
+    "calendar.meeting.length",
+    "calendar.meeting.notes",
+    "calendar.meeting.participants",
+    "calendar.meeting.people",
+    "calendar.meeting.relation",
+    "calendar.meeting.relation_anchor",
+    "calendar.meeting.room",
+    "calendar.meeting.shift",
+    "calendar.meeting.start",
+    "calendar.meeting.time",
+    "calendar.meeting.timezone",
+    "calendar.meeting.title",
+    "calendar.person.id",
+    "calendar.person.label",
+    "calendar.person.name",
+    "calendar.room.capacity",
+    "calendar.room.id",
+    "calendar.room.label",
+    "calendar.room.location",
+    "calendar.room.name",
+    "calendar.room.seats",
+    "conversation.turn.area",
+    "conversation.turn.fragment",
+    "conversation.turn.objection",
+    "conversation.turn.repeat_count",
+    "diagram.chart.colour",
+    "diagram.chart.datasets",
+    "diagram.chart.height",
+    "diagram.chart.horizontal",
+    "diagram.chart.id",
+    "diagram.chart.ids",
+    "diagram.chart.labels",
+    "diagram.chart.legend",
+    "diagram.chart.palette",
+    "diagram.chart.series",
+    "diagram.chart.showLegend",
+    "diagram.chart.showValues",
+    "diagram.chart.show_values",
+    "diagram.chart.sort",
+    "diagram.chart.source",
+    "diagram.chart.stacked",
+    "diagram.chart.title",
+    "diagram.chart.type",
+    "diagram.chart.values",
+    "diagram.chart.width",
+    "diagram.chart.x",
+    "diagram.chart.y",
+    "diagram.diagram.kind",
+    "diagram.diagram.layout",
+    "diagram.group.colour",
+    "diagram.group.id",
+    "diagram.group.ids",
+    "diagram.group.label",
+    "diagram.group.labels",
+    "diagram.group.layout",
+    "diagram.group.name",
+    "diagram.group.scale",
+    "diagram.group.size",
+    "diagram.group.values",
+    "diagram.group.x",
+    "diagram.group.y",
+    "diagram.link.arrow",
+    "diagram.link.colour",
+    "diagram.link.from",
+    "diagram.link.ids",
+    "diagram.link.label",
+    "diagram.link.nodes",
+    "diagram.link.style",
+    "diagram.link.to",
+    "diagram.link.width",
+    "diagram.node.anchor",
+    "diagram.node.at",
+    "diagram.node.colour",
+    "diagram.node.edges",
+    "diagram.node.height",
+    "diagram.node.ids",
+    "diagram.node.kind",
+    "diagram.node.label",
+    "diagram.node.layout",
+    "diagram.node.n",
+    "diagram.node.position",
+    "diagram.node.relation",
+    "diagram.node.shape",
+    "diagram.node.size",
+    "diagram.node.value",
+    "diagram.node.width",
+    "diagram.node.x",
+    "diagram.node.y",
+    "diagram.page.duration",
+    "diagram.page.mode",
+    "diagram.point.chart",
+    "diagram.point.index",
+    "diagram.point.series",
+    "diagram.point.value",
+    "diagram.series.chart",
+    "diagram.series.colour",
+    "diagram.series.index",
+    "diagram.series.label",
+    "diagram.series.values",
+    "diagram.sketch.links",
+    "diagram.sketch.nodes",
+    "document.block.align",
+    "document.block.at",
+    "document.block.attrs",
+    "document.block.checked",
+    "document.block.enabled",
+    "document.block.from",
+    "document.block.header",
+    "document.block.id",
+    "document.block.ids",
+    "document.block.items",
+    "document.block.kind",
+    "document.block.level",
+    "document.block.mark",
+    "document.block.name",
+    "document.block.parent",
+    "document.block.rows",
+    "document.block.style",
+    "document.block.text",
+    "document.block.to",
+    "document.document.blocks",
+    "document.document.chapters",
+    "document.document.genre",
+    "document.document.id",
+    "document.document.property",
+    "document.document.title",
+    "document.document.topic",
+    "document.document.value",
+    "document.document.words",
+    "document.inline.align",
+    "document.inline.enabled",
+    "document.inline.format",
+    "document.inline.from",
+    "document.inline.highlight_colour",
+    "document.inline.items",
+    "document.inline.link_target",
+    "document.inline.list_kind",
+    "document.inline.rows",
+    "document.inline.to",
+    "document.section.after",
+    "document.section.align",
+    "document.section.at",
+    "document.section.attrs",
+    "document.section.content",
+    "document.section.count",
+    "document.section.enabled",
+    "document.section.from",
+    "document.section.id",
+    "document.section.ids",
+    "document.section.kind",
+    "document.section.length",
+    "document.section.level",
+    "document.section.mark",
+    "document.section.name",
+    "document.section.order",
+    "document.section.order_anchor",
+    "document.section.parent",
+    "document.section.role",
+    "document.section.text",
+    "document.section.to",
+    "document.section.words",
+    "document.text.about",
+    "document.text.chapters",
+    "document.text.content",
+    "document.text.genre",
+    "document.text.id",
+    "document.text.length",
+    "document.text.text",
+    "document.text.title",
+    "document.text.tone",
+    "document.text.words",
+    "drawing.drawn.anchor",
+    "drawing.drawn.at",
+    "drawing.drawn.color",
+    "drawing.drawn.colour",
+    "drawing.drawn.count",
+    "drawing.drawn.direction",
+    "drawing.drawn.distance",
+    "drawing.drawn.distanceGrade",
+    "drawing.drawn.height",
+    "drawing.drawn.id",
+    "drawing.drawn.ids",
+    "drawing.drawn.kind",
+    "drawing.drawn.label",
+    "drawing.drawn.name",
+    "drawing.drawn.relation",
+    "drawing.drawn.size",
+    "drawing.drawn.width",
+    "drawing.drawn.x",
+    "drawing.drawn.y",
+    "drawing.group.members",
+    "drawing.group.name",
+    "drawing.page.duration",
+    "drawing.page.mode",
+    "drawing.part.color",
+    "drawing.part.colour",
+    "drawing.part.height",
+    "drawing.part.id",
+    "drawing.part.index",
+    "drawing.part.owner",
+    "drawing.part.width",
+    "drawing.part.x",
+    "drawing.part.y",
+    "request.constraint.character",
+    "request.constraint.concept",
+    "request.constraint.operator",
+    "request.constraint.phase",
+    "request.constraint.polarity",
+    "request.constraint.scope",
+    "request.constraint.step",
+    "request.constraint.variety",
+    "request.logic.group",
+    "request.logic.negated",
+    "request.logic.quantifier",
+    "request.question.ask",
+    "request.question.asked_key",
+    "request.request.act",
+    "request.request.mood",
+    "request.target.count",
+    "request.target.description",
+    "request.target.determiner",
+    "request.target.fill",
+    "request.target.kind",
+    "request.target.mode",
+    "request.target.name",
+    "request.target.ordinal",
+    "request.target.type"
+  ],
+  "registry": {
+    "avatar.face.base": {
+      "concept": "base",
+      "head": "candidate",
+      "src": "Native parameter: avatar.face.compose.base",
+      "values": [
+        "baby",
+        "child",
+        "girl",
+        "boy",
+        "woman",
+        "man",
+        "old woman",
+        "old man",
+        "bearded man",
+        "woman with curly hair",
+        "robot",
+        "alien",
+        "clown",
+        "queen"
+      ],
+      "area": "avatar",
+      "type": "face",
+      "key": "base",
+      "role": "domain"
+    },
+    "avatar.face.characterKind": {
+      "concept": "characterKind",
+      "head": "candidate",
+      "src": "Native parameter: avatar.face.compose.characterKind",
+      "values": [
+        "human",
+        "robot",
+        "alien"
+      ],
+      "area": "avatar",
+      "type": "face",
+      "key": "characterKind",
+      "role": "domain"
+    },
+    "avatar.face.duration": {
+      "concept": "duration",
+      "head": "number",
+      "src": "Native parameter: avatar.ids.show.duration",
+      "area": "avatar",
+      "type": "face",
+      "key": "duration",
+      "role": "domain"
+    },
+    "avatar.face.expression": {
+      "concept": "expression",
+      "head": "class",
+      "src": "actual avatar native capability parameters",
+      "values": [
+        "happy",
+        "sad",
+        "angry",
+        "surprised",
+        "sleepy",
+        "wink",
+        "talking"
+      ],
+      "area": "avatar",
+      "type": "face",
+      "key": "expression",
+      "role": "domain"
+    },
+    "avatar.face.id": {
+      "concept": "id",
+      "head": "candidate",
+      "src": "Native parameter: avatar.face.compose.id",
+      "values": [
+        "face"
+      ],
+      "area": "avatar",
+      "type": "face",
+      "key": "id",
+      "role": "domain"
+    },
+    "avatar.face.mode": {
+      "concept": "mode",
+      "head": "candidate",
+      "src": "Native parameter: avatar.ids.show.mode",
+      "values": [
+        "temporary",
+        "always",
+        "off"
+      ],
+      "area": "avatar",
+      "type": "face",
+      "key": "mode",
+      "role": "domain"
+    },
+    "avatar.face.name": {
+      "concept": "name",
+      "head": "span",
+      "src": "actual avatar native capability parameters",
+      "area": "avatar",
+      "type": "face",
+      "key": "name",
+      "role": "domain"
+    },
+    "avatar.face.preset": {
+      "concept": "preset",
+      "head": "class",
+      "src": "actual avatar native capability parameters",
+      "values": [
+        "baby",
+        "child",
+        "girl",
+        "boy",
+        "woman",
+        "man",
+        "old woman",
+        "old man",
+        "bearded man",
+        "woman with curly hair",
+        "robot",
+        "alien",
+        "clown",
+        "queen"
+      ],
+      "area": "avatar",
+      "type": "face",
+      "key": "preset",
+      "role": "domain"
+    },
+    "avatar.face.scale": {
+      "concept": "scale",
+      "head": "number",
+      "src": "Native parameter: avatar.face.resize.scale",
+      "area": "avatar",
+      "type": "face",
+      "key": "scale",
+      "role": "domain"
+    },
+    "avatar.part.colour": {
+      "concept": "colour",
+      "head": "class",
+      "src": "actual avatar native capability parameters",
+      "values": [
+        "amber",
+        "auburn",
+        "black",
+        "blond",
+        "blue",
+        "brown",
+        "dark brown",
+        "green",
+        "grey",
+        "hazel",
+        "light",
+        "metal grey",
+        "olive",
+        "orange",
+        "pale",
+        "pink",
+        "purple",
+        "red",
+        "tan",
+        "white",
+        "yellow"
+      ],
+      "area": "avatar",
+      "type": "part",
+      "key": "colour",
+      "role": "domain"
+    },
+    "avatar.part.id": {
+      "concept": "id",
+      "head": "candidate",
+      "src": "Native parameter: avatar.part.select.id",
+      "values": [
+        "hair_back",
+        "shoulders",
+        "neck",
+        "ears",
+        "head",
+        "cheeks",
+        "beard",
+        "mouth",
+        "moustache",
+        "nose",
+        "eyes",
+        "eyebrows",
+        "glasses",
+        "hair_front",
+        "earrings",
+        "hat"
+      ],
+      "area": "avatar",
+      "type": "part",
+      "key": "id",
+      "role": "domain"
+    },
+    "avatar.part.ids": {
+      "concept": "reference",
+      "head": "span",
+      "src": "actual avatar native capability parameters",
+      "area": "avatar",
+      "type": "part",
+      "key": "ids",
+      "role": "domain"
+    },
+    "avatar.part.place": {
+      "concept": "place",
+      "head": "class",
+      "src": "actual avatar native capability parameters",
+      "values": [
+        "up",
+        "down",
+        "left",
+        "right"
+      ],
+      "area": "avatar",
+      "type": "part",
+      "key": "place",
+      "role": "domain"
+    },
+    "avatar.part.property": {
+      "concept": "property",
+      "head": "candidate",
+      "src": "Native parameter: avatar.part.feature.property",
+      "values": [
+        "length",
+        "feel",
+        "kind",
+        "age",
+        "size",
+        "shape"
+      ],
+      "area": "avatar",
+      "type": "part",
+      "key": "property",
+      "role": "domain"
+    },
+    "avatar.part.scale": {
+      "concept": "scale",
+      "head": "number",
+      "src": "Native parameter: avatar.part.resize.scale",
+      "area": "avatar",
+      "type": "part",
+      "key": "scale",
+      "role": "domain"
+    },
+    "avatar.part.size": {
+      "concept": "size",
+      "head": "class",
+      "src": "actual avatar native capability parameters",
+      "values": [
+        "tiny",
+        "small",
+        "default",
+        "big",
+        "huge"
+      ],
+      "area": "avatar",
+      "type": "part",
+      "key": "size",
+      "role": "domain"
+    },
+    "avatar.part.value": {
+      "concept": "value",
+      "head": "candidate",
+      "src": "Native parameter: avatar.part.feature.value",
+      "values": [
+        "long",
+        "medium",
+        "straight",
+        "wavy",
+        "curly",
+        "bob",
+        "ponytail",
+        "pigtails",
+        "bun",
+        "afro",
+        "child",
+        "large",
+        "t-shirt",
+        "v-neck",
+        "shirt",
+        "suit",
+        "hoodie",
+        "tank top",
+        "robot",
+        "lab coat",
+        "scrubs",
+        "chef jacket",
+        "apron",
+        "overalls",
+        "safety vest",
+        "uniform",
+        "fire jacket",
+        "sailor collar",
+        "space suit",
+        "robe",
+        "cloak",
+        "cape",
+        "fur-trimmed coat",
+        "football shirt",
+        "waistcoat and bow tie",
+        "boiler suit",
+        "adult",
+        "small",
+        "square",
+        "thin",
+        "narrow",
+        "thick",
+        "wide",
+        "tapered",
+        "necklace",
+        "round",
+        "pointed",
+        "oval",
+        "heart",
+        "box",
+        "blush",
+        "freckles",
+        "dimple",
+        "wrinkles",
+        "scar",
+        "mole",
+        "tear",
+        "old",
+        "short",
+        "bushy",
+        "full beard",
+        "chinstrap",
+        "goatee",
+        "long beard",
+        "soul patch",
+        "sideburns",
+        "stubble",
+        "smiling",
+        "closed",
+        "open",
+        "flat",
+        "sad",
+        "surprised",
+        "smirk",
+        "full lips",
+        "grin",
+        "tongue out",
+        "gritted teeth",
+        "half open",
+        "pressed lips",
+        "teeth on lip",
+        "tongue tip",
+        "handlebar",
+        "walrus",
+        "pencil",
+        "chevron",
+        "button",
+        "dot",
+        "half closed",
+        "lashes",
+        "looking down",
+        "looking up",
+        "looking aside",
+        "arched",
+        "angry",
+        "sunglasses",
+        "cat-eye",
+        "monocle",
+        "visor",
+        "fringe",
+        "side parting",
+        "spikes",
+        "bald on top",
+        "receding",
+        "centre parting",
+        "mohawk",
+        "tuft",
+        "stud",
+        "hoop",
+        "drop",
+        "pearl",
+        "star",
+        "cap",
+        "beanie",
+        "top hat",
+        "crown",
+        "cowboy hat",
+        "party hat",
+        "bow",
+        "antenna",
+        "sun hat",
+        "chef hat",
+        "hard hat",
+        "fire helmet",
+        "police cap",
+        "pilot cap",
+        "nurse cap",
+        "sailor cap",
+        "military helmet",
+        "space helmet",
+        "knight helmet",
+        "pirate hat",
+        "witch hat",
+        "wizard hat",
+        "santa hat",
+        "beret",
+        "fedora",
+        "swimming cap",
+        "wig",
+        "headscarf",
+        "flower wreath"
+      ],
+      "area": "avatar",
+      "type": "part",
+      "key": "value",
+      "role": "domain"
+    },
+    "avatar.part.variant": {
+      "concept": "variant",
+      "head": "class",
+      "src": "actual avatar native capability parameters",
+      "values": [
+        "Santa hat",
+        "afro",
+        "angry",
+        "antenna",
+        "apron",
+        "arched",
+        "bald on top",
+        "beanie",
+        "beret",
+        "big smile",
+        "blush",
+        "bob",
+        "boiler suit",
+        "bolt",
+        "bow",
+        "bow tie",
+        "box",
+        "bun",
+        "bushy",
+        "button",
+        "cap",
+        "cape",
+        "cat-eye",
+        "centre parting",
+        "chef hat",
+        "chef jacket",
+        "chevron",
+        "chinstrap",
+        "cloak",
+        "closed",
+        "cowboy hat",
+        "crown",
+        "curly",
+        "dimple",
+        "dot",
+        "downcast",
+        "drop",
+        "fedora",
+        "fire helmet",
+        "fire jacket",
+        "flower wreath",
+        "football shirt",
+        "freckles",
+        "fringe",
+        "frown",
+        "full",
+        "full lips",
+        "fur coat",
+        "goatee",
+        "grille",
+        "grin",
+        "gritted",
+        "half open",
+        "handlebar",
+        "happy",
+        "hard hat",
+        "headscarf",
+        "heart",
+        "hoodie",
+        "hoop",
+        "judge wig",
+        "knight helmet",
+        "lab coat",
+        "large",
+        "large hoop",
+        "lashes",
+        "lip bite",
+        "long",
+        "long curly",
+        "long sides",
+        "long straight",
+        "long wavy",
+        "looking in",
+        "looking out",
+        "looking up",
+        "medium",
+        "metal plate",
+        "military helmet",
+        "mohawk",
+        "mole",
+        "monocle",
+        "narrow",
+        "necklace",
+        "neutral",
+        "nurse cap",
+        "open",
+        "oval",
+        "overalls",
+        "party hat",
+        "pearl",
+        "pencil",
+        "pigtails",
+        "pilot cap",
+        "pipe",
+        "pirate hat",
+        "pointed",
+        "police cap",
+        "ponytail",
+        "pressed",
+        "raised",
+        "receding",
+        "robe",
+        "round",
+        "round blush",
+        "sad",
+        "safety vest",
+        "sailor cap",
+        "sailor collar",
+        "scar",
+        "scrubs",
+        "shirt",
+        "short",
+        "side parting",
+        "sideburns",
+        "sleepy",
+        "small",
+        "small round",
+        "smile",
+        "smirk",
+        "soul patch",
+        "space helmet",
+        "space suit",
+        "spikes",
+        "square",
+        "star",
+        "straight",
+        "stubble",
+        "stud",
+        "suit",
+        "sun hat",
+        "sunglasses",
+        "surprised",
+        "swimming cap",
+        "t-shirt",
+        "talking",
+        "tank top",
+        "tapered",
+        "tear",
+        "thick",
+        "thick arched",
+        "thin",
+        "tongue out",
+        "tongue tip",
+        "top hat",
+        "tuft",
+        "uniform",
+        "v-neck",
+        "visor",
+        "walrus",
+        "wavy",
+        "wide",
+        "witch hat",
+        "wizard hat",
+        "wrinkles"
+      ],
+      "area": "avatar",
+      "type": "part",
+      "key": "variant",
+      "role": "domain"
+    },
+    "calendar.calendar.colour": {
+      "concept": "colour",
+      "head": "candidate",
+      "src": "calendar.calendar.add/change colour",
+      "area": "calendar",
+      "type": "calendar",
+      "key": "colour",
+      "role": "domain"
+    },
+    "calendar.calendar.id": {
+      "concept": "id",
+      "head": "candidate",
+      "src": "Native parameter: calendar.calendar.add.id",
+      "area": "calendar",
+      "type": "calendar",
+      "key": "id",
+      "role": "domain"
+    },
+    "calendar.calendar.label": {
+      "concept": "label",
+      "head": "candidate",
+      "src": "Native parameter: calendar.calendar.add.label",
+      "area": "calendar",
+      "type": "calendar",
+      "key": "label",
+      "role": "domain"
+    },
+    "calendar.calendar.name": {
+      "concept": "name",
+      "head": "span",
+      "src": "calendar.calendar.add/change label",
+      "area": "calendar",
+      "type": "calendar",
+      "key": "name",
+      "role": "domain"
+    },
+    "calendar.meeting.agenda": {
+      "concept": "literal_text",
+      "head": "span",
+      "src": "notes / agenda",
+      "area": "calendar",
+      "type": "meeting",
+      "key": "agenda",
+      "role": "domain"
+    },
+    "calendar.meeting.calendar": {
+      "concept": "reference",
+      "head": "span",
+      "src": "calendar.meeting.add/change calendar identity",
+      "area": "calendar",
+      "type": "meeting",
+      "key": "calendar",
+      "role": "domain"
+    },
+    "calendar.meeting.day": {
+      "concept": "day",
+      "head": "candidate+span",
+      "src": "s.meet.start part=start (day): today, tomorrow, weekday, date, next week",
+      "area": "calendar",
+      "type": "meeting",
+      "key": "day",
+      "role": "domain"
+    },
+    "calendar.meeting.duration": {
+      "concept": "duration",
+      "head": "number",
+      "src": "Native parameter: calendar.meeting.add.duration",
+      "area": "calendar",
+      "type": "meeting",
+      "key": "duration",
+      "role": "domain"
+    },
+    "calendar.meeting.end": {
+      "concept": "time",
+      "head": "span",
+      "src": "until 5",
+      "area": "calendar",
+      "type": "meeting",
+      "key": "end",
+      "role": "domain"
+    },
+    "calendar.meeting.free": {
+      "concept": "free_search",
+      "head": "class",
+      "src": "book 6.8 / 7.4: nearest free time",
+      "values": [
+        "nearest_free",
+        "first_free",
+        "common_free"
+      ],
+      "area": "calendar",
+      "type": "meeting",
+      "key": "free",
+      "role": "domain"
+    },
+    "calendar.meeting.id": {
+      "concept": "id",
+      "head": "candidate",
+      "src": "Native parameter: calendar.meeting.add.id",
+      "area": "calendar",
+      "type": "meeting",
+      "key": "id",
+      "role": "domain"
+    },
+    "calendar.meeting.ids": {
+      "concept": "ids",
+      "head": "candidate",
+      "src": "Native parameter: calendar.events.remove.ids",
+      "area": "calendar",
+      "type": "meeting",
+      "key": "ids",
+      "role": "domain"
+    },
+    "calendar.meeting.length": {
+      "concept": "duration",
+      "head": "number+class+step",
+      "src": "s.meet.length part=duration",
+      "area": "calendar",
+      "type": "meeting",
+      "key": "length",
+      "role": "domain"
+    },
+    "calendar.meeting.notes": {
+      "concept": "notes",
+      "head": "candidate",
+      "src": "Native parameter: calendar.meeting.add.notes",
+      "area": "calendar",
+      "type": "meeting",
+      "key": "notes",
+      "role": "domain"
+    },
+    "calendar.meeting.participants": {
+      "concept": "participants",
+      "head": "candidate",
+      "src": "Native parameter: calendar.meeting.add.participants",
+      "area": "calendar",
+      "type": "meeting",
+      "key": "participants",
+      "role": "domain"
+    },
+    "calendar.meeting.people": {
+      "concept": "person",
+      "head": "fill+span",
+      "many": true,
+      "src": "s.meet.people role=participant many=true",
+      "area": "calendar",
+      "type": "meeting",
+      "key": "people",
+      "role": "domain"
+    },
+    "calendar.meeting.relation": {
+      "concept": "time_relation",
+      "head": "class",
+      "src": "relative to another meeting",
+      "values": [
+        "before",
+        "after",
+        "same_time",
+        "during",
+        "between",
+        "not_overlapping"
+      ],
+      "area": "calendar",
+      "type": "meeting",
+      "key": "relation",
+      "role": "domain"
+    },
+    "calendar.meeting.relation_anchor": {
+      "concept": "reference",
+      "head": "fill+span",
+      "src": "the other meeting",
+      "area": "calendar",
+      "type": "meeting",
+      "key": "relation_anchor",
+      "role": "domain"
+    },
+    "calendar.meeting.room": {
+      "concept": "reference",
+      "head": "fill+span",
+      "src": "s.meet.room relation=in",
+      "area": "calendar",
+      "type": "meeting",
+      "key": "room",
+      "role": "domain"
+    },
+    "calendar.meeting.shift": {
+      "concept": "delta",
+      "head": "number+class",
+      "src": "move by an amount",
+      "area": "calendar",
+      "type": "meeting",
+      "key": "shift",
+      "role": "domain"
+    },
+    "calendar.meeting.start": {
+      "concept": "start",
+      "head": "number",
+      "src": "Native parameter: calendar.meeting.add.start",
+      "area": "calendar",
+      "type": "meeting",
+      "key": "start",
+      "role": "domain"
+    },
+    "calendar.meeting.time": {
+      "concept": "time",
+      "head": "candidate+span+step",
+      "src": "s.meet.start (clock or region morning/afternoon; step earlier/later)",
+      "area": "calendar",
+      "type": "meeting",
+      "key": "time",
+      "role": "domain"
+    },
+    "calendar.meeting.timezone": {
+      "concept": "timezone",
+      "head": "candidate",
+      "src": "Authored explicit temporal intent; native epoch normalization remains completion",
+      "area": "calendar",
+      "type": "meeting",
+      "key": "timezone",
+      "role": "domain"
+    },
+    "calendar.meeting.title": {
+      "concept": "name",
+      "head": "span",
+      "src": "s.meet.title",
+      "area": "calendar",
+      "type": "meeting",
+      "key": "title",
+      "role": "domain"
+    },
+    "calendar.person.id": {
+      "concept": "id",
+      "head": "candidate",
+      "src": "Native parameter: calendar.person.add.id",
+      "area": "calendar",
+      "type": "person",
+      "key": "id",
+      "role": "domain"
+    },
+    "calendar.person.label": {
+      "concept": "label",
+      "head": "candidate",
+      "src": "Native parameter: calendar.person.add.label",
+      "area": "calendar",
+      "type": "person",
+      "key": "label",
+      "role": "domain"
+    },
+    "calendar.person.name": {
+      "concept": "person",
+      "head": "span",
+      "src": "person name",
+      "area": "calendar",
+      "type": "person",
+      "key": "name",
+      "role": "domain"
+    },
+    "calendar.room.capacity": {
+      "concept": "capacity",
+      "head": "number",
+      "src": "Native parameter: calendar.room.add.capacity",
+      "area": "calendar",
+      "type": "room",
+      "key": "capacity",
+      "role": "domain"
+    },
+    "calendar.room.id": {
+      "concept": "id",
+      "head": "candidate",
+      "src": "Native parameter: calendar.room.add.id",
+      "area": "calendar",
+      "type": "room",
+      "key": "id",
+      "role": "domain"
+    },
+    "calendar.room.label": {
+      "concept": "label",
+      "head": "candidate",
+      "src": "Native parameter: calendar.room.add.label",
+      "area": "calendar",
+      "type": "room",
+      "key": "label",
+      "role": "domain"
+    },
+    "calendar.room.location": {
+      "concept": "place",
+      "head": "span",
+      "src": "calendar.room.add/change location",
+      "area": "calendar",
+      "type": "room",
+      "key": "location",
+      "role": "domain"
+    },
+    "calendar.room.name": {
+      "concept": "name",
+      "head": "span",
+      "src": "room name",
+      "area": "calendar",
+      "type": "room",
+      "key": "name",
+      "role": "domain"
+    },
+    "calendar.room.seats": {
+      "concept": "quantity",
+      "head": "number",
+      "src": "s.room.seats counts=w.person",
+      "area": "calendar",
+      "type": "room",
+      "key": "seats",
+      "role": "domain"
+    },
+    "conversation.turn.area": {
+      "concept": "area",
+      "head": "class",
+      "src": "which area a cross-area request points to (send a chart to the document)",
+      "values": [
+        "drawing",
+        "diagram",
+        "document",
+        "calendar"
+      ],
+      "area": "conversation",
+      "type": "turn",
+      "key": "area",
+      "role": "global"
+    },
+    "conversation.turn.fragment": {
+      "concept": "fragment",
+      "head": "class",
+      "src": "book 6.4: fragments complete the previous request",
+      "values": [
+        "adds",
+        "replaces",
+        "repeats",
+        "more",
+        "less",
+        "confirms",
+        "rejects"
+      ],
+      "area": "conversation",
+      "type": "turn",
+      "key": "fragment",
+      "role": "global"
+    },
+    "conversation.turn.objection": {
+      "concept": "objection",
+      "head": "class",
+      "src": "book 6.11.1 objections about the previous reply",
+      "values": [
+        "wrong_target",
+        "wrong_value",
+        "too_much",
+        "too_little",
+        "missing_part",
+        "unexpected",
+        "general"
+      ],
+      "area": "conversation",
+      "type": "turn",
+      "key": "objection",
+      "role": "global"
+    },
+    "conversation.turn.repeat_count": {
+      "concept": "count",
+      "head": "number",
+      "src": "undo twice, again 3 times",
+      "area": "conversation",
+      "type": "turn",
+      "key": "repeat_count",
+      "role": "global"
+    },
+    "diagram.chart.colour": {
+      "concept": "colour",
+      "head": "candidate",
+      "src": "Native parameter: chart.change.colour",
+      "area": "diagram",
+      "type": "chart",
+      "key": "colour",
+      "role": "domain"
+    },
+    "diagram.chart.datasets": {
+      "concept": "literal_data",
+      "head": "span",
+      "src": "chart.make datasets",
+      "area": "diagram",
+      "type": "chart",
+      "key": "datasets",
+      "role": "domain"
+    },
+    "diagram.chart.height": {
+      "concept": "height",
+      "head": "number",
+      "src": "Native parameter: chart.place.height",
+      "area": "diagram",
+      "type": "chart",
+      "key": "height",
+      "role": "domain"
+    },
+    "diagram.chart.horizontal": {
+      "concept": "toggle",
+      "head": "class",
+      "src": "horizontal",
+      "values": [
+        "on",
+        "off"
+      ],
+      "area": "diagram",
+      "type": "chart",
+      "key": "horizontal",
+      "role": "domain"
+    },
+    "diagram.chart.id": {
+      "concept": "id",
+      "head": "candidate",
+      "src": "Native parameter: diagram.group.chart.id",
+      "area": "diagram",
+      "type": "chart",
+      "key": "id",
+      "role": "domain"
+    },
+    "diagram.chart.ids": {
+      "concept": "ids",
+      "head": "candidate",
+      "src": "Native parameter: chart.remove.ids",
+      "area": "diagram",
+      "type": "chart",
+      "key": "ids",
+      "role": "domain"
+    },
+    "diagram.chart.labels": {
+      "concept": "name",
+      "head": "span",
+      "many": true,
+      "src": "bar/slice/point labels",
+      "area": "diagram",
+      "type": "chart",
+      "key": "labels",
+      "role": "domain"
+    },
+    "diagram.chart.legend": {
+      "concept": "toggle",
+      "head": "class",
+      "src": "chart options legend",
+      "values": [
+        "show",
+        "hide"
+      ],
+      "area": "diagram",
+      "type": "chart",
+      "key": "legend",
+      "role": "domain"
+    },
+    "diagram.chart.palette": {
+      "concept": "colour",
+      "head": "candidate",
+      "src": "palette",
+      "area": "diagram",
+      "type": "chart",
+      "key": "palette",
+      "role": "domain"
+    },
+    "diagram.chart.series": {
+      "concept": "name",
+      "head": "span",
+      "many": true,
+      "src": "series names",
+      "area": "diagram",
+      "type": "chart",
+      "key": "series",
+      "role": "domain"
+    },
+    "diagram.chart.showLegend": {
+      "concept": "showLegend",
+      "head": "candidate",
+      "src": "Native parameter: chart.change.showLegend",
+      "area": "diagram",
+      "type": "chart",
+      "key": "showLegend",
+      "role": "domain"
+    },
+    "diagram.chart.showValues": {
+      "concept": "showValues",
+      "head": "candidate",
+      "src": "Native parameter: chart.change.showValues",
+      "area": "diagram",
+      "type": "chart",
+      "key": "showValues",
+      "role": "domain"
+    },
+    "diagram.chart.show_values": {
+      "concept": "toggle",
+      "head": "class",
+      "src": "showValues",
+      "values": [
+        "show",
+        "hide"
+      ],
+      "area": "diagram",
+      "type": "chart",
+      "key": "show_values",
+      "role": "domain"
+    },
+    "diagram.chart.sort": {
+      "concept": "sort",
+      "head": "class",
+      "src": "sort",
+      "values": [
+        "desc",
+        "asc",
+        "alpha",
+        "given"
+      ],
+      "area": "diagram",
+      "type": "chart",
+      "key": "sort",
+      "role": "domain"
+    },
+    "diagram.chart.source": {
+      "concept": "data_source",
+      "head": "class+span",
+      "src": "chart.fromList/fromHoldings/...; book: meetings per person from the calendar",
+      "values": [
+        "calendar",
+        "document",
+        "list",
+        "prices",
+        "holdings",
+        "typed"
+      ],
+      "area": "diagram",
+      "type": "chart",
+      "key": "source",
+      "role": "domain"
+    },
+    "diagram.chart.stacked": {
+      "concept": "toggle",
+      "head": "class",
+      "src": "stacked",
+      "values": [
+        "on",
+        "off"
+      ],
+      "area": "diagram",
+      "type": "chart",
+      "key": "stacked",
+      "role": "domain"
+    },
+    "diagram.chart.title": {
+      "concept": "name",
+      "head": "span",
+      "src": "chart.make/change title",
+      "area": "diagram",
+      "type": "chart",
+      "key": "title",
+      "role": "domain"
+    },
+    "diagram.chart.type": {
+      "concept": "type",
+      "head": "candidate",
+      "src": "Native parameter: diagram.group.chart.type",
+      "values": [
+        "bar",
+        "line",
+        "pie",
+        "doughnut",
+        "radar",
+        "polarArea",
+        "scatter"
+      ],
+      "area": "diagram",
+      "type": "chart",
+      "key": "type",
+      "role": "domain"
+    },
+    "diagram.chart.values": {
+      "concept": "quantity",
+      "head": "span",
+      "many": true,
+      "src": "chart.setValues",
+      "area": "diagram",
+      "type": "chart",
+      "key": "values",
+      "role": "domain"
+    },
+    "diagram.chart.width": {
+      "concept": "width",
+      "head": "number",
+      "src": "Native parameter: chart.place.width",
+      "area": "diagram",
+      "type": "chart",
+      "key": "width",
+      "role": "domain"
+    },
+    "diagram.chart.x": {
+      "concept": "x",
+      "head": "number",
+      "src": "Native parameter: chart.place.x",
+      "area": "diagram",
+      "type": "chart",
+      "key": "x",
+      "role": "domain"
+    },
+    "diagram.chart.y": {
+      "concept": "y",
+      "head": "number",
+      "src": "Native parameter: chart.place.y",
+      "area": "diagram",
+      "type": "chart",
+      "key": "y",
+      "role": "domain"
+    },
+    "diagram.diagram.kind": {
+      "concept": "diagram_kind",
+      "head": "candidate",
+      "src": "startDiagram kind; charts are a kind of diagram",
+      "values": [
+        "flowchart",
+        "tree",
+        "org_chart",
+        "mind_map",
+        "network",
+        "sequence",
+        "timeline",
+        "venn",
+        "state_machine",
+        "bar_chart",
+        "line_chart",
+        "pie_chart",
+        "doughnut_chart",
+        "scatter_chart",
+        "radar_chart",
+        "area_chart",
+        "table"
+      ],
+      "area": "diagram",
+      "type": "diagram",
+      "key": "kind",
+      "role": "domain"
+    },
+    "diagram.diagram.layout": {
+      "concept": "layout",
+      "head": "class",
+      "src": "arrangeShapes / startDiagram layout",
+      "values": [
+        "tree",
+        "grid",
+        "row",
+        "column",
+        "circle",
+        "radial",
+        "layers"
+      ],
+      "area": "diagram",
+      "type": "diagram",
+      "key": "layout",
+      "role": "domain"
+    },
+    "diagram.group.colour": {
+      "concept": "colour",
+      "head": "candidate",
+      "src": "Native parameter: diagram.group.change.colour",
+      "values": [
+        "red",
+        "orange",
+        "yellow",
+        "gold",
+        "lime",
+        "green",
+        "teal",
+        "cyan",
+        "blue",
+        "navy",
+        "indigo",
+        "purple",
+        "magenta",
+        "pink",
+        "brown",
+        "gray",
+        "black",
+        "white"
+      ],
+      "area": "diagram",
+      "type": "group",
+      "key": "colour",
+      "role": "domain"
+    },
+    "diagram.group.id": {
+      "concept": "id",
+      "head": "candidate",
+      "src": "Native parameter: diagram.group.select.id",
+      "area": "diagram",
+      "type": "group",
+      "key": "id",
+      "role": "domain"
+    },
+    "diagram.group.ids": {
+      "concept": "ids",
+      "head": "candidate",
+      "src": "Native parameter: diagram.group.make.ids",
+      "area": "diagram",
+      "type": "group",
+      "key": "ids",
+      "role": "domain"
+    },
+    "diagram.group.label": {
+      "concept": "label",
+      "head": "candidate",
+      "src": "Native parameter: diagram.group.make.label",
+      "area": "diagram",
+      "type": "group",
+      "key": "label",
+      "role": "domain"
+    },
+    "diagram.group.labels": {
+      "concept": "labels",
+      "head": "candidate",
+      "src": "Native parameter: diagram.group.chart.make.labels",
+      "area": "diagram",
+      "type": "group",
+      "key": "labels",
+      "role": "domain"
+    },
+    "diagram.group.layout": {
+      "concept": "layout",
+      "head": "candidate",
+      "src": "Native parameter: diagram.group.layout.layout",
+      "values": [
+        "free",
+        "tree",
+        "grid",
+        "row",
+        "column",
+        "circle",
+        "radial",
+        "layers",
+        "bar",
+        "line",
+        "pie",
+        "doughnut"
+      ],
+      "area": "diagram",
+      "type": "group",
+      "key": "layout",
+      "role": "domain"
+    },
+    "diagram.group.name": {
+      "concept": "name",
+      "head": "candidate",
+      "src": "Native parameter: diagram.group.make.name",
+      "area": "diagram",
+      "type": "group",
+      "key": "name",
+      "role": "domain"
+    },
+    "diagram.group.scale": {
+      "concept": "scale",
+      "head": "number",
+      "src": "Native parameter: diagram.group.resize.scale",
+      "area": "diagram",
+      "type": "group",
+      "key": "scale",
+      "role": "domain"
+    },
+    "diagram.group.size": {
+      "concept": "size",
+      "head": "candidate",
+      "src": "Native parameter: diagram.group.change.size",
+      "values": [
+        "tiny",
+        "small",
+        "medium",
+        "large",
+        "huge"
+      ],
+      "area": "diagram",
+      "type": "group",
+      "key": "size",
+      "role": "domain"
+    },
+    "diagram.group.values": {
+      "concept": "values",
+      "head": "candidate",
+      "src": "Native parameter: diagram.group.chart.make.values",
+      "area": "diagram",
+      "type": "group",
+      "key": "values",
+      "role": "domain"
+    },
+    "diagram.group.x": {
+      "concept": "x",
+      "head": "number",
+      "src": "Native parameter: diagram.group.place.x",
+      "area": "diagram",
+      "type": "group",
+      "key": "x",
+      "role": "domain"
+    },
+    "diagram.group.y": {
+      "concept": "y",
+      "head": "number",
+      "src": "Native parameter: diagram.group.place.y",
+      "area": "diagram",
+      "type": "group",
+      "key": "y",
+      "role": "domain"
+    },
+    "diagram.link.arrow": {
+      "concept": "arrow",
+      "head": "candidate",
+      "src": "Native parameter: diagram.link.change.arrow",
+      "values": [
+        "forward",
+        "both",
+        "none"
+      ],
+      "area": "diagram",
+      "type": "link",
+      "key": "arrow",
+      "role": "domain"
+    },
+    "diagram.link.colour": {
+      "concept": "colour",
+      "head": "candidate",
+      "src": "Native parameter: diagram.link.change.colour",
+      "values": [
+        "red",
+        "orange",
+        "yellow",
+        "gold",
+        "lime",
+        "green",
+        "teal",
+        "cyan",
+        "blue",
+        "navy",
+        "indigo",
+        "purple",
+        "magenta",
+        "pink",
+        "brown",
+        "gray",
+        "black",
+        "white"
+      ],
+      "area": "diagram",
+      "type": "link",
+      "key": "colour",
+      "role": "domain"
+    },
+    "diagram.link.from": {
+      "concept": "reference",
+      "head": "fill+span",
+      "src": "s.link.from role=source",
+      "area": "diagram",
+      "type": "link",
+      "key": "from",
+      "role": "domain"
+    },
+    "diagram.link.ids": {
+      "concept": "ids",
+      "head": "candidate",
+      "src": "Native parameter: diagram.link.select.ids",
+      "area": "diagram",
+      "type": "link",
+      "key": "ids",
+      "role": "domain"
+    },
+    "diagram.link.label": {
+      "concept": "label",
+      "head": "candidate",
+      "src": "Native parameter: diagram.link.change.label",
+      "area": "diagram",
+      "type": "link",
+      "key": "label",
+      "role": "domain"
+    },
+    "diagram.link.nodes": {
+      "concept": "nodes",
+      "head": "candidate",
+      "src": "Native parameter: diagram.link.select.nodes",
+      "area": "diagram",
+      "type": "link",
+      "key": "nodes",
+      "role": "domain"
+    },
+    "diagram.link.style": {
+      "concept": "style",
+      "head": "candidate",
+      "src": "Native parameter: diagram.link.change.style",
+      "values": [
+        "solid",
+        "dashed",
+        "dotted"
+      ],
+      "area": "diagram",
+      "type": "link",
+      "key": "style",
+      "role": "domain"
+    },
+    "diagram.link.to": {
+      "concept": "reference",
+      "head": "fill+span",
+      "src": "s.link.to role=goal",
+      "area": "diagram",
+      "type": "link",
+      "key": "to",
+      "role": "domain"
+    },
+    "diagram.link.width": {
+      "concept": "width",
+      "head": "number",
+      "src": "Native parameter: diagram.link.change.width",
+      "area": "diagram",
+      "type": "link",
+      "key": "width",
+      "role": "domain"
+    },
+    "diagram.node.anchor": {
+      "concept": "reference",
+      "head": "fill+span",
+      "src": "the anchor node",
+      "area": "diagram",
+      "type": "node",
+      "key": "anchor",
+      "role": "domain"
+    },
+    "diagram.node.at": {
+      "concept": "region",
+      "head": "class",
+      "src": "s.node.at",
+      "values": [
+        "corner",
+        "top",
+        "bottom",
+        "left",
+        "right",
+        "center",
+        "top_left",
+        "top_right",
+        "bottom_left",
+        "bottom_right",
+        "middle",
+        "background",
+        "foreground"
+      ],
+      "area": "diagram",
+      "type": "node",
+      "key": "at",
+      "role": "domain"
+    },
+    "diagram.node.colour": {
+      "concept": "colour",
+      "head": "candidate+step",
+      "src": "s.node.colour",
+      "area": "diagram",
+      "type": "node",
+      "key": "colour",
+      "role": "domain"
+    },
+    "diagram.node.edges": {
+      "concept": "edges",
+      "head": "candidate",
+      "src": "Native parameter: diagram.node.select.edges",
+      "area": "diagram",
+      "type": "node",
+      "key": "edges",
+      "role": "domain"
+    },
+    "diagram.node.height": {
+      "concept": "height",
+      "head": "number",
+      "src": "Native parameter: diagram.node.resize.height",
+      "area": "diagram",
+      "type": "node",
+      "key": "height",
+      "role": "domain"
+    },
+    "diagram.node.ids": {
+      "concept": "ids",
+      "head": "candidate",
+      "src": "Native parameter: diagram.node.change.ids",
+      "area": "diagram",
+      "type": "node",
+      "key": "ids",
+      "role": "domain"
+    },
+    "diagram.node.kind": {
+      "concept": "kind",
+      "head": "candidate",
+      "src": "Native parameter: diagram.node.make.kind",
+      "values": [
+        "circle",
+        "rectangle",
+        "square",
+        "diamond",
+        "ellipse",
+        "triangle",
+        "hexagon",
+        "star",
+        "text"
+      ],
+      "area": "diagram",
+      "type": "node",
+      "key": "kind",
+      "role": "domain"
+    },
+    "diagram.node.label": {
+      "concept": "name",
+      "head": "span",
+      "src": "s.node.label",
+      "area": "diagram",
+      "type": "node",
+      "key": "label",
+      "role": "domain"
+    },
+    "diagram.node.layout": {
+      "concept": "layout",
+      "head": "candidate",
+      "src": "Native parameter: diagram.node.make.layout",
+      "values": [
+        "tree",
+        "grid",
+        "row",
+        "column",
+        "circle",
+        "radial",
+        "layers"
+      ],
+      "area": "diagram",
+      "type": "node",
+      "key": "layout",
+      "role": "domain"
+    },
+    "diagram.node.n": {
+      "concept": "n",
+      "head": "number",
+      "src": "Native parameter: diagram.node.make.n",
+      "area": "diagram",
+      "type": "node",
+      "key": "n",
+      "role": "domain"
+    },
+    "diagram.node.position": {
+      "concept": "spatial_relation",
+      "head": "class",
+      "src": "moveShapes place/anchor",
+      "values": [
+        "in",
+        "on",
+        "under",
+        "above",
+        "below",
+        "next_to",
+        "left_of",
+        "right_of",
+        "between",
+        "behind",
+        "in_front_of",
+        "near",
+        "around",
+        "inside",
+        "outside",
+        "along"
+      ],
+      "area": "diagram",
+      "type": "node",
+      "key": "position",
+      "role": "domain"
+    },
+    "diagram.node.relation": {
+      "concept": "relation",
+      "head": "candidate",
+      "src": "Authored semantic intent; requires world-informed completion",
+      "area": "diagram",
+      "type": "node",
+      "key": "relation",
+      "role": "domain"
+    },
+    "diagram.node.shape": {
+      "concept": "shape",
+      "head": "class+step",
+      "src": "s.node.shape space=shape (step rounder)",
+      "values": [
+        "box",
+        "rounded_box",
+        "circle",
+        "ellipse",
+        "diamond",
+        "hexagon",
+        "triangle",
+        "star",
+        "cylinder",
+        "parallelogram",
+        "cloud",
+        "note",
+        "square",
+        "rectangle"
+      ],
+      "area": "diagram",
+      "type": "node",
+      "key": "shape",
+      "role": "domain"
+    },
+    "diagram.node.size": {
+      "concept": "size",
+      "head": "class+step",
+      "src": "setShapes size",
+      "values": [
+        "tiny",
+        "small",
+        "default",
+        "big",
+        "huge"
+      ],
+      "area": "diagram",
+      "type": "node",
+      "key": "size",
+      "role": "domain"
+    },
+    "diagram.node.value": {
+      "concept": "value",
+      "head": "number",
+      "src": "Native parameter: diagram.node.change.value",
+      "area": "diagram",
+      "type": "node",
+      "key": "value",
+      "role": "domain"
+    },
+    "diagram.node.width": {
+      "concept": "width",
+      "head": "number",
+      "src": "Native parameter: diagram.node.resize.width",
+      "area": "diagram",
+      "type": "node",
+      "key": "width",
+      "role": "domain"
+    },
+    "diagram.node.x": {
+      "concept": "x",
+      "head": "number",
+      "src": "Native parameter: diagram.node.make.x",
+      "area": "diagram",
+      "type": "node",
+      "key": "x",
+      "role": "domain"
+    },
+    "diagram.node.y": {
+      "concept": "y",
+      "head": "number",
+      "src": "Native parameter: diagram.node.make.y",
+      "area": "diagram",
+      "type": "node",
+      "key": "y",
+      "role": "domain"
+    },
+    "diagram.page.duration": {
+      "concept": "duration",
+      "head": "number",
+      "src": "Native parameter: diagram.ids.show.duration",
+      "area": "diagram",
+      "type": "page",
+      "key": "duration",
+      "role": "domain"
+    },
+    "diagram.page.mode": {
+      "concept": "mode",
+      "head": "candidate",
+      "src": "Native parameter: diagram.ids.show.mode",
+      "values": [
+        "temporary",
+        "always",
+        "off"
+      ],
+      "area": "diagram",
+      "type": "page",
+      "key": "mode",
+      "role": "domain"
+    },
+    "diagram.point.chart": {
+      "concept": "chart",
+      "head": "candidate",
+      "src": "Native parameter: chart.point.change.chart",
+      "area": "diagram",
+      "type": "point",
+      "key": "chart",
+      "role": "domain"
+    },
+    "diagram.point.index": {
+      "concept": "index",
+      "head": "number",
+      "src": "Native parameter: chart.point.change.index",
+      "area": "diagram",
+      "type": "point",
+      "key": "index",
+      "role": "domain"
+    },
+    "diagram.point.series": {
+      "concept": "series",
+      "head": "number",
+      "src": "Native parameter: chart.point.change.series",
+      "area": "diagram",
+      "type": "point",
+      "key": "series",
+      "role": "domain"
+    },
+    "diagram.point.value": {
+      "concept": "value",
+      "head": "number",
+      "src": "Native parameter: chart.point.change.value",
+      "area": "diagram",
+      "type": "point",
+      "key": "value",
+      "role": "domain"
+    },
+    "diagram.series.chart": {
+      "concept": "chart",
+      "head": "candidate",
+      "src": "Native parameter: chart.series.add.chart",
+      "area": "diagram",
+      "type": "series",
+      "key": "chart",
+      "role": "domain"
+    },
+    "diagram.series.colour": {
+      "concept": "colour",
+      "head": "candidate",
+      "src": "Native parameter: chart.series.add.colour",
+      "area": "diagram",
+      "type": "series",
+      "key": "colour",
+      "role": "domain"
+    },
+    "diagram.series.index": {
+      "concept": "index",
+      "head": "number",
+      "src": "Native parameter: chart.series.change.index",
+      "area": "diagram",
+      "type": "series",
+      "key": "index",
+      "role": "domain"
+    },
+    "diagram.series.label": {
+      "concept": "label",
+      "head": "candidate",
+      "src": "Native parameter: chart.series.add.label",
+      "area": "diagram",
+      "type": "series",
+      "key": "label",
+      "role": "domain"
+    },
+    "diagram.series.values": {
+      "concept": "values",
+      "head": "candidate",
+      "src": "Native parameter: chart.series.add.values",
+      "area": "diagram",
+      "type": "series",
+      "key": "values",
+      "role": "domain"
+    },
+    "diagram.sketch.links": {
+      "concept": "links",
+      "head": "candidate",
+      "src": "Native parameter: diagram.selection.remove.links",
+      "area": "diagram",
+      "type": "sketch",
+      "key": "links",
+      "role": "domain"
+    },
+    "diagram.sketch.nodes": {
+      "concept": "nodes",
+      "head": "candidate",
+      "src": "Native parameter: diagram.selection.remove.nodes",
+      "area": "diagram",
+      "type": "sketch",
+      "key": "nodes",
+      "role": "domain"
+    },
+    "document.block.align": {
+      "concept": "align",
+      "head": "candidate",
+      "src": "Native parameter: document.block.align.align",
+      "values": [
+        "left",
+        "center",
+        "right",
+        "justify"
+      ],
+      "area": "document",
+      "type": "block",
+      "key": "align",
+      "role": "domain"
+    },
+    "document.block.at": {
+      "concept": "at",
+      "head": "candidate",
+      "src": "Native parameter: document.block.select.at",
+      "area": "document",
+      "type": "block",
+      "key": "at",
+      "role": "domain"
+    },
+    "document.block.attrs": {
+      "concept": "attrs",
+      "head": "candidate",
+      "src": "Native parameter: document.block.mark.attrs",
+      "area": "document",
+      "type": "block",
+      "key": "attrs",
+      "role": "domain"
+    },
+    "document.block.checked": {
+      "concept": "checked",
+      "head": "candidate",
+      "src": "Native parameter: document.list.change.checked",
+      "area": "document",
+      "type": "block",
+      "key": "checked",
+      "role": "domain"
+    },
+    "document.block.enabled": {
+      "concept": "enabled",
+      "head": "candidate",
+      "src": "Native parameter: document.block.mark.enabled",
+      "area": "document",
+      "type": "block",
+      "key": "enabled",
+      "role": "domain"
+    },
+    "document.block.from": {
+      "concept": "from",
+      "head": "number",
+      "src": "Native parameter: document.block.select.from",
+      "area": "document",
+      "type": "block",
+      "key": "from",
+      "role": "domain"
+    },
+    "document.block.header": {
+      "concept": "header",
+      "head": "candidate",
+      "src": "Native parameter: document.table.make.header",
+      "area": "document",
+      "type": "block",
+      "key": "header",
+      "role": "domain"
+    },
+    "document.block.id": {
+      "concept": "id",
+      "head": "candidate",
+      "src": "Native parameter: document.block.select.id",
+      "area": "document",
+      "type": "block",
+      "key": "id",
+      "role": "domain"
+    },
+    "document.block.ids": {
+      "concept": "ids",
+      "head": "candidate",
+      "src": "Native parameter: document.block.reorder.ids",
+      "area": "document",
+      "type": "block",
+      "key": "ids",
+      "role": "domain"
+    },
+    "document.block.items": {
+      "concept": "items",
+      "head": "candidate",
+      "src": "Native parameter: document.list.make.items",
+      "area": "document",
+      "type": "block",
+      "key": "items",
+      "role": "domain"
+    },
+    "document.block.kind": {
+      "concept": "kind",
+      "head": "candidate",
+      "src": "Native parameter: document.block.make.kind",
+      "values": [
+        "paragraph",
+        "heading",
+        "quote"
+      ],
+      "area": "document",
+      "type": "block",
+      "key": "kind",
+      "role": "domain"
+    },
+    "document.block.level": {
+      "concept": "level",
+      "head": "number",
+      "src": "Native parameter: document.block.make.level",
+      "area": "document",
+      "type": "block",
+      "key": "level",
+      "role": "domain"
+    },
+    "document.block.mark": {
+      "concept": "mark",
+      "head": "candidate",
+      "src": "Native parameter: document.block.mark.mark",
+      "values": [
+        "link",
+        "bold",
+        "italic",
+        "underline",
+        "strike",
+        "code",
+        "highlight"
+      ],
+      "area": "document",
+      "type": "block",
+      "key": "mark",
+      "role": "domain"
+    },
+    "document.block.name": {
+      "concept": "name",
+      "head": "candidate",
+      "src": "Native parameter: document.list.make.name",
+      "area": "document",
+      "type": "block",
+      "key": "name",
+      "role": "domain"
+    },
+    "document.block.parent": {
+      "concept": "parent",
+      "head": "candidate",
+      "src": "Native parameter: document.list.make.parent",
+      "area": "document",
+      "type": "block",
+      "key": "parent",
+      "role": "domain"
+    },
+    "document.block.rows": {
+      "concept": "rows",
+      "head": "candidate",
+      "src": "Native parameter: document.table.make.rows",
+      "area": "document",
+      "type": "block",
+      "key": "rows",
+      "role": "domain"
+    },
+    "document.block.style": {
+      "concept": "style",
+      "head": "candidate",
+      "src": "Native parameter: document.list.make.style",
+      "values": [
+        "bullet",
+        "numbered",
+        "task"
+      ],
+      "area": "document",
+      "type": "block",
+      "key": "style",
+      "role": "domain"
+    },
+    "document.block.text": {
+      "concept": "text",
+      "head": "candidate",
+      "src": "Native parameter: document.block.make.text",
+      "area": "document",
+      "type": "block",
+      "key": "text",
+      "role": "domain"
+    },
+    "document.block.to": {
+      "concept": "to",
+      "head": "number",
+      "src": "Native parameter: document.block.select.to",
+      "area": "document",
+      "type": "block",
+      "key": "to",
+      "role": "domain"
+    },
+    "document.document.blocks": {
+      "concept": "blocks",
+      "head": "candidate",
+      "src": "Native parameter: document.write.blocks",
+      "area": "document",
+      "type": "document",
+      "key": "blocks",
+      "role": "domain"
+    },
+    "document.document.chapters": {
+      "concept": "chapters",
+      "head": "number",
+      "src": "Native parameter: document.compose.chapters",
+      "area": "document",
+      "type": "document",
+      "key": "chapters",
+      "role": "domain"
+    },
+    "document.document.genre": {
+      "concept": "genre",
+      "head": "candidate",
+      "src": "Native parameter: document.write.genre",
+      "area": "document",
+      "type": "document",
+      "key": "genre",
+      "role": "domain"
+    },
+    "document.document.id": {
+      "concept": "id",
+      "head": "candidate",
+      "src": "Native parameter: document.title.change.id",
+      "area": "document",
+      "type": "document",
+      "key": "id",
+      "role": "domain"
+    },
+    "document.document.property": {
+      "concept": "property",
+      "head": "candidate",
+      "src": "Native parameter: document.rewrite.property",
+      "values": [
+        "tone",
+        "length"
+      ],
+      "area": "document",
+      "type": "document",
+      "key": "property",
+      "role": "domain"
+    },
+    "document.document.title": {
+      "concept": "title",
+      "head": "candidate",
+      "src": "Native parameter: document.title.change.title",
+      "area": "document",
+      "type": "document",
+      "key": "title",
+      "role": "domain"
+    },
+    "document.document.topic": {
+      "concept": "topic",
+      "head": "candidate",
+      "src": "Native parameter: document.write.topic",
+      "area": "document",
+      "type": "document",
+      "key": "topic",
+      "role": "domain"
+    },
+    "document.document.value": {
+      "concept": "value",
+      "head": "candidate",
+      "src": "Native parameter: document.rewrite.value",
+      "area": "document",
+      "type": "document",
+      "key": "value",
+      "role": "domain"
+    },
+    "document.document.words": {
+      "concept": "words",
+      "head": "number",
+      "src": "Native parameter: document.compose.words",
+      "area": "document",
+      "type": "document",
+      "key": "words",
+      "role": "domain"
+    },
+    "document.inline.align": {
+      "concept": "align",
+      "head": "class",
+      "src": "old align",
+      "values": [
+        "left",
+        "center",
+        "right",
+        "justify"
+      ],
+      "area": "document",
+      "type": "inline",
+      "key": "align",
+      "role": "domain"
+    },
+    "document.inline.enabled": {
+      "concept": "toggle",
+      "head": "class",
+      "src": "actual literal editing parameter",
+      "values": [
+        "on",
+        "off"
+      ],
+      "area": "document",
+      "type": "inline",
+      "key": "enabled",
+      "role": "domain"
+    },
+    "document.inline.format": {
+      "concept": "format",
+      "head": "class",
+      "src": "old style/highlight/link",
+      "values": [
+        "link",
+        "bold",
+        "italic",
+        "underline",
+        "strike",
+        "code",
+        "highlight"
+      ],
+      "area": "document",
+      "type": "inline",
+      "key": "format",
+      "role": "domain"
+    },
+    "document.inline.from": {
+      "concept": "index",
+      "head": "number",
+      "src": "actual literal editing parameter",
+      "area": "document",
+      "type": "inline",
+      "key": "from",
+      "role": "domain"
+    },
+    "document.inline.highlight_colour": {
+      "concept": "colour",
+      "head": "candidate",
+      "src": "actual literal editing parameter",
+      "area": "document",
+      "type": "inline",
+      "key": "highlight_colour",
+      "role": "domain"
+    },
+    "document.inline.items": {
+      "concept": "literal_list",
+      "head": "span",
+      "src": "actual literal editing parameter",
+      "area": "document",
+      "type": "inline",
+      "key": "items",
+      "role": "domain"
+    },
+    "document.inline.link_target": {
+      "concept": "literal_text",
+      "head": "span",
+      "src": "old link",
+      "area": "document",
+      "type": "inline",
+      "key": "link_target",
+      "role": "domain"
+    },
+    "document.inline.list_kind": {
+      "concept": "list_kind",
+      "head": "class",
+      "src": "doc.addList",
+      "values": [
+        "bullet",
+        "numbered",
+        "task"
+      ],
+      "area": "document",
+      "type": "inline",
+      "key": "list_kind",
+      "role": "domain"
+    },
+    "document.inline.rows": {
+      "concept": "literal_table",
+      "head": "span",
+      "src": "actual literal editing parameter",
+      "area": "document",
+      "type": "inline",
+      "key": "rows",
+      "role": "domain"
+    },
+    "document.inline.to": {
+      "concept": "index",
+      "head": "number",
+      "src": "actual literal editing parameter",
+      "area": "document",
+      "type": "inline",
+      "key": "to",
+      "role": "domain"
+    },
+    "document.section.after": {
+      "concept": "after",
+      "head": "candidate",
+      "src": "Native parameter: document.section.make.after",
+      "area": "document",
+      "type": "section",
+      "key": "after",
+      "role": "domain"
+    },
+    "document.section.align": {
+      "concept": "align",
+      "head": "candidate",
+      "src": "Native parameter: document.section.change.align",
+      "values": [
+        "left",
+        "center",
+        "right",
+        "justify"
+      ],
+      "area": "document",
+      "type": "section",
+      "key": "align",
+      "role": "domain"
+    },
+    "document.section.at": {
+      "concept": "at",
+      "head": "candidate",
+      "src": "Native parameter: document.section.select.at",
+      "area": "document",
+      "type": "section",
+      "key": "at",
+      "role": "domain"
+    },
+    "document.section.attrs": {
+      "concept": "attrs",
+      "head": "candidate",
+      "src": "Native parameter: document.section.mark.attrs",
+      "area": "document",
+      "type": "section",
+      "key": "attrs",
+      "role": "domain"
+    },
+    "document.section.content": {
+      "concept": "literal_text",
+      "head": "span",
+      "src": "text the user dictates to insert/replace (doc.addParagraph, doc.dictate)",
+      "area": "document",
+      "type": "section",
+      "key": "content",
+      "role": "domain"
+    },
+    "document.section.count": {
+      "concept": "count",
+      "head": "number",
+      "src": "three paragraphs",
+      "area": "document",
+      "type": "section",
+      "key": "count",
+      "role": "domain"
+    },
+    "document.section.enabled": {
+      "concept": "enabled",
+      "head": "candidate",
+      "src": "Native parameter: document.section.mark.enabled",
+      "area": "document",
+      "type": "section",
+      "key": "enabled",
+      "role": "domain"
+    },
+    "document.section.from": {
+      "concept": "from",
+      "head": "number",
+      "src": "Native parameter: document.section.select.from",
+      "area": "document",
+      "type": "section",
+      "key": "from",
+      "role": "domain"
+    },
+    "document.section.id": {
+      "concept": "id",
+      "head": "candidate",
+      "src": "Native parameter: document.section.select.id",
+      "area": "document",
+      "type": "section",
+      "key": "id",
+      "role": "domain"
+    },
+    "document.section.ids": {
+      "concept": "ids",
+      "head": "candidate",
+      "src": "Native parameter: document.section.remove.ids",
+      "area": "document",
+      "type": "section",
+      "key": "ids",
+      "role": "domain"
+    },
+    "document.section.kind": {
+      "concept": "kind",
+      "head": "candidate",
+      "src": "Native parameter: document.section.change.kind",
+      "values": [
+        "heading"
+      ],
+      "area": "document",
+      "type": "section",
+      "key": "kind",
+      "role": "domain"
+    },
+    "document.section.length": {
+      "concept": "length",
+      "head": "class+step",
+      "src": "s.sec.length",
+      "values": [
+        "very_short",
+        "short",
+        "medium",
+        "long",
+        "very_long"
+      ],
+      "area": "document",
+      "type": "section",
+      "key": "length",
+      "role": "domain"
+    },
+    "document.section.level": {
+      "concept": "heading_level",
+      "head": "class",
+      "src": "old heading level",
+      "values": [
+        "1",
+        "2",
+        "3"
+      ],
+      "area": "document",
+      "type": "section",
+      "key": "level",
+      "role": "domain"
+    },
+    "document.section.mark": {
+      "concept": "mark",
+      "head": "candidate",
+      "src": "Native parameter: document.section.mark.mark",
+      "values": [
+        "link",
+        "bold",
+        "italic",
+        "underline",
+        "strike",
+        "code",
+        "highlight"
+      ],
+      "area": "document",
+      "type": "section",
+      "key": "mark",
+      "role": "domain"
+    },
+    "document.section.name": {
+      "concept": "name",
+      "head": "candidate",
+      "src": "Native parameter: document.section.change.name",
+      "area": "document",
+      "type": "section",
+      "key": "name",
+      "role": "domain"
+    },
+    "document.section.order": {
+      "concept": "order_relation",
+      "head": "class",
+      "src": "s.sec.order",
+      "values": [
+        "before",
+        "after",
+        "first",
+        "last",
+        "top",
+        "bottom",
+        "swap"
+      ],
+      "area": "document",
+      "type": "section",
+      "key": "order",
+      "role": "domain"
+    },
+    "document.section.order_anchor": {
+      "concept": "reference",
+      "head": "fill+span",
+      "src": "the other section",
+      "area": "document",
+      "type": "section",
+      "key": "order_anchor",
+      "role": "domain"
+    },
+    "document.section.parent": {
+      "concept": "parent",
+      "head": "candidate",
+      "src": "Native parameter: document.section.make.parent",
+      "area": "document",
+      "type": "section",
+      "key": "parent",
+      "role": "domain"
+    },
+    "document.section.role": {
+      "concept": "part_kind",
+      "head": "candidate",
+      "src": "s.sec.role",
+      "values": [
+        "greeting",
+        "introduction",
+        "body",
+        "conclusion",
+        "signature",
+        "chapter",
+        "paragraph",
+        "heading",
+        "list",
+        "table",
+        "apology",
+        "explanation",
+        "summary",
+        "closing",
+        "subject",
+        "abstract",
+        "methods",
+        "results",
+        "references",
+        "item"
+      ],
+      "area": "document",
+      "type": "section",
+      "key": "role",
+      "role": "domain"
+    },
+    "document.section.text": {
+      "concept": "text",
+      "head": "candidate",
+      "src": "Native parameter: document.section.change.text",
+      "area": "document",
+      "type": "section",
+      "key": "text",
+      "role": "domain"
+    },
+    "document.section.to": {
+      "concept": "to",
+      "head": "number",
+      "src": "Native parameter: document.section.select.to",
+      "area": "document",
+      "type": "section",
+      "key": "to",
+      "role": "domain"
+    },
+    "document.section.words": {
+      "concept": "measure",
+      "head": "number",
+      "src": "s.sec.length unit=word",
+      "area": "document",
+      "type": "section",
+      "key": "words",
+      "role": "domain"
+    },
+    "document.text.about": {
+      "concept": "topic",
+      "head": "span",
+      "src": "s.text.about",
+      "area": "document",
+      "type": "text",
+      "key": "about",
+      "role": "domain"
+    },
+    "document.text.chapters": {
+      "concept": "count",
+      "head": "number",
+      "src": "writeText chapters / keepChapters",
+      "area": "document",
+      "type": "text",
+      "key": "chapters",
+      "role": "domain"
+    },
+    "document.text.content": {
+      "concept": "literal_text",
+      "head": "span",
+      "src": "document.write blocks: literal paragraph body",
+      "area": "document",
+      "type": "text",
+      "key": "content",
+      "role": "domain"
+    },
+    "document.text.genre": {
+      "concept": "kind",
+      "head": "candidate",
+      "src": "s.text.genre (k.genres)",
+      "values": [
+        "letter",
+        "email",
+        "report",
+        "story",
+        "note",
+        "memo",
+        "essay",
+        "summary",
+        "article",
+        "invitation",
+        "announcement",
+        "speech",
+        "cover_letter",
+        "complaint",
+        "review",
+        "recipe",
+        "list",
+        "minutes",
+        "proposal",
+        "poem",
+        "press_release",
+        "newsletter",
+        "itinerary",
+        "lab_report",
+        "cv"
+      ],
+      "area": "document",
+      "type": "text",
+      "key": "genre",
+      "role": "domain"
+    },
+    "document.text.id": {
+      "concept": "id",
+      "head": "candidate",
+      "src": "Native parameter: document.container.change.id",
+      "area": "document",
+      "type": "text",
+      "key": "id",
+      "role": "domain"
+    },
+    "document.text.length": {
+      "concept": "length",
+      "head": "class+step",
+      "src": "writeText words (region)",
+      "values": [
+        "very_short",
+        "short",
+        "medium",
+        "long",
+        "very_long"
+      ],
+      "area": "document",
+      "type": "text",
+      "key": "length",
+      "role": "domain"
+    },
+    "document.text.text": {
+      "concept": "text",
+      "head": "candidate",
+      "src": "Native parameter: document.container.change.text",
+      "area": "document",
+      "type": "text",
+      "key": "text",
+      "role": "domain"
+    },
+    "document.text.title": {
+      "concept": "name",
+      "head": "span",
+      "src": "s.text.title",
+      "area": "document",
+      "type": "text",
+      "key": "title",
+      "role": "domain"
+    },
+    "document.text.tone": {
+      "concept": "tone",
+      "head": "class+step",
+      "src": "s.text.tone space=tone",
+      "values": [
+        "formal",
+        "informal",
+        "friendly",
+        "warm",
+        "cold",
+        "polite",
+        "firm",
+        "neutral",
+        "enthusiastic",
+        "apologetic",
+        "humorous",
+        "serious",
+        "persuasive",
+        "simple"
+      ],
+      "area": "document",
+      "type": "text",
+      "key": "tone",
+      "role": "domain"
+    },
+    "document.text.words": {
+      "concept": "measure",
+      "head": "number",
+      "src": "writeText words",
+      "area": "document",
+      "type": "text",
+      "key": "words",
+      "role": "domain"
+    },
+    "drawing.drawn.anchor": {
+      "concept": "reference",
+      "head": "fill+span",
+      "src": "the other thing of the relation",
+      "area": "drawing",
+      "type": "drawn",
+      "key": "anchor",
+      "role": "domain"
+    },
+    "drawing.drawn.at": {
+      "concept": "region",
+      "head": "class",
+      "src": "s.drawn.at means=place space=page (regions)",
+      "values": [
+        "corner",
+        "top",
+        "bottom",
+        "left",
+        "right",
+        "center",
+        "top_left",
+        "top_right",
+        "bottom_left",
+        "bottom_right",
+        "middle",
+        "background",
+        "foreground"
+      ],
+      "area": "drawing",
+      "type": "drawn",
+      "key": "at",
+      "role": "domain"
+    },
+    "drawing.drawn.color": {
+      "concept": "color",
+      "head": "candidate",
+      "src": "Native parameter: drawing.object.make.color",
+      "area": "drawing",
+      "type": "drawn",
+      "key": "color",
+      "role": "domain"
+    },
+    "drawing.drawn.colour": {
+      "concept": "colour",
+      "head": "candidate+step",
+      "src": "s.drawn.colour space=colour (k.colours; step darker/lighter)",
+      "area": "drawing",
+      "type": "drawn",
+      "key": "colour",
+      "role": "domain"
+    },
+    "drawing.drawn.count": {
+      "concept": "count",
+      "head": "number",
+      "src": "addThings n",
+      "area": "drawing",
+      "type": "drawn",
+      "key": "count",
+      "role": "domain"
+    },
+    "drawing.drawn.direction": {
+      "concept": "direction",
+      "head": "class",
+      "src": "a move step",
+      "values": [
+        "up",
+        "down",
+        "left",
+        "right",
+        "closer",
+        "apart",
+        "forward",
+        "backward"
+      ],
+      "area": "drawing",
+      "type": "drawn",
+      "key": "direction",
+      "role": "domain"
+    },
+    "drawing.drawn.distance": {
+      "concept": "measure",
+      "head": "number",
+      "src": "move by N",
+      "area": "drawing",
+      "type": "drawn",
+      "key": "distance",
+      "role": "domain"
+    },
+    "drawing.drawn.distanceGrade": {
+      "concept": "distanceGrade",
+      "head": "candidate",
+      "src": "Authored semantic intent; requires world-informed completion",
+      "area": "drawing",
+      "type": "drawn",
+      "key": "distanceGrade",
+      "role": "domain"
+    },
+    "drawing.drawn.height": {
+      "concept": "height",
+      "head": "number",
+      "src": "Native parameter: drawing.object.make.height",
+      "area": "drawing",
+      "type": "drawn",
+      "key": "height",
+      "role": "domain"
+    },
+    "drawing.drawn.id": {
+      "concept": "id",
+      "head": "candidate",
+      "src": "Native parameter: drawing.object.select.id",
+      "area": "drawing",
+      "type": "drawn",
+      "key": "id",
+      "role": "domain"
+    },
+    "drawing.drawn.ids": {
+      "concept": "ids",
+      "head": "candidate",
+      "src": "Native parameter: drawing.object.change.ids",
+      "area": "drawing",
+      "type": "drawn",
+      "key": "ids",
+      "role": "domain"
+    },
+    "drawing.drawn.kind": {
+      "concept": "kind",
+      "head": "candidate",
+      "src": "s.drawn.kind (knowledge kind tree with images)",
+      "area": "drawing",
+      "type": "drawn",
+      "key": "kind",
+      "role": "domain"
+    },
+    "drawing.drawn.label": {
+      "concept": "label",
+      "head": "candidate",
+      "src": "Native parameter: drawing.object.make.label",
+      "area": "drawing",
+      "type": "drawn",
+      "key": "label",
+      "role": "domain"
+    },
+    "drawing.drawn.name": {
+      "concept": "name",
+      "head": "span",
+      "src": "label given by the user",
+      "area": "drawing",
+      "type": "drawn",
+      "key": "name",
+      "role": "domain"
+    },
+    "drawing.drawn.relation": {
+      "concept": "spatial_relation",
+      "head": "class",
+      "src": "s.drawn.in/on + moveThings relation",
+      "values": [
+        "in",
+        "on",
+        "under",
+        "above",
+        "below",
+        "next_to",
+        "left_of",
+        "right_of",
+        "between",
+        "behind",
+        "in_front_of",
+        "near",
+        "around",
+        "inside",
+        "outside",
+        "along"
+      ],
+      "area": "drawing",
+      "type": "drawn",
+      "key": "relation",
+      "role": "domain"
+    },
+    "drawing.drawn.size": {
+      "concept": "size",
+      "head": "number+class+step",
+      "src": "s.drawn.size space=size",
+      "area": "drawing",
+      "type": "drawn",
+      "key": "size",
+      "role": "domain"
+    },
+    "drawing.drawn.width": {
+      "concept": "width",
+      "head": "number",
+      "src": "Native parameter: drawing.object.make.width",
+      "area": "drawing",
+      "type": "drawn",
+      "key": "width",
+      "role": "domain"
+    },
+    "drawing.drawn.x": {
+      "concept": "x",
+      "head": "number",
+      "src": "Native parameter: drawing.object.make.x",
+      "area": "drawing",
+      "type": "drawn",
+      "key": "x",
+      "role": "domain"
+    },
+    "drawing.drawn.y": {
+      "concept": "y",
+      "head": "number",
+      "src": "Native parameter: drawing.object.make.y",
+      "area": "drawing",
+      "type": "drawn",
+      "key": "y",
+      "role": "domain"
+    },
+    "drawing.group.members": {
+      "concept": "reference",
+      "head": "span",
+      "src": "drawing.object.group ids",
+      "area": "drawing",
+      "type": "group",
+      "key": "members",
+      "role": "domain"
+    },
+    "drawing.group.name": {
+      "concept": "name",
+      "head": "span",
+      "src": "drawing.object.group name",
+      "area": "drawing",
+      "type": "group",
+      "key": "name",
+      "role": "domain"
+    },
+    "drawing.page.duration": {
+      "concept": "duration",
+      "head": "number",
+      "src": "Native parameter: drawing.ids.show.duration",
+      "area": "drawing",
+      "type": "page",
+      "key": "duration",
+      "role": "domain"
+    },
+    "drawing.page.mode": {
+      "concept": "mode",
+      "head": "candidate",
+      "src": "Native parameter: drawing.ids.show.mode",
+      "values": [
+        "temporary",
+        "always",
+        "off"
+      ],
+      "area": "drawing",
+      "type": "page",
+      "key": "mode",
+      "role": "domain"
+    },
+    "drawing.part.color": {
+      "concept": "color",
+      "head": "candidate",
+      "src": "Native parameter: drawing.part.change.color",
+      "area": "drawing",
+      "type": "part",
+      "key": "color",
+      "role": "domain"
+    },
+    "drawing.part.colour": {
+      "concept": "colour",
+      "head": "candidate",
+      "src": "native drawing part parameter",
+      "area": "drawing",
+      "type": "part",
+      "key": "colour",
+      "role": "domain"
+    },
+    "drawing.part.height": {
+      "concept": "height",
+      "head": "number",
+      "src": "native drawing part parameter",
+      "area": "drawing",
+      "type": "part",
+      "key": "height",
+      "role": "domain"
+    },
+    "drawing.part.id": {
+      "concept": "id",
+      "head": "candidate",
+      "src": "Native parameter: drawing.part.select.id",
+      "area": "drawing",
+      "type": "part",
+      "key": "id",
+      "role": "domain"
+    },
+    "drawing.part.index": {
+      "concept": "ordinal",
+      "head": "number",
+      "src": "native drawing part parameter",
+      "area": "drawing",
+      "type": "part",
+      "key": "index",
+      "role": "domain"
+    },
+    "drawing.part.owner": {
+      "concept": "reference",
+      "head": "span",
+      "src": "native drawing part parameter",
+      "area": "drawing",
+      "type": "part",
+      "key": "owner",
+      "role": "domain"
+    },
+    "drawing.part.width": {
+      "concept": "width",
+      "head": "number",
+      "src": "native drawing part parameter",
+      "area": "drawing",
+      "type": "part",
+      "key": "width",
+      "role": "domain"
+    },
+    "drawing.part.x": {
+      "concept": "x",
+      "head": "number",
+      "src": "native drawing part parameter",
+      "area": "drawing",
+      "type": "part",
+      "key": "x",
+      "role": "domain"
+    },
+    "drawing.part.y": {
+      "concept": "y",
+      "head": "number",
+      "src": "native drawing part parameter",
+      "area": "drawing",
+      "type": "part",
+      "key": "y",
+      "role": "domain"
+    },
+    "request.constraint.character": {
+      "concept": "character",
+      "head": "class",
+      "src": "std.request.constraint.character",
+      "values": [
+        "requirement",
+        "preference",
+        "assumption"
+      ],
+      "area": "request",
+      "type": "constraint",
+      "key": "character",
+      "role": "metadata"
+    },
+    "request.constraint.concept": {
+      "concept": "concept",
+      "head": "candidate",
+      "src": "std.request.constraint.concept: which (type,key) of the area",
+      "area": "request",
+      "type": "constraint",
+      "key": "concept",
+      "role": "derived"
+    },
+    "request.constraint.operator": {
+      "concept": "operator",
+      "head": "class",
+      "src": "std.request.constraint.operator",
+      "values": [
+        "eq",
+        "less.equal",
+        "greater.equal",
+        "degree",
+        "region",
+        "relation",
+        "same",
+        "occurred",
+        "delta",
+        "factor"
+      ],
+      "area": "request",
+      "type": "constraint",
+      "key": "operator",
+      "role": "metadata"
+    },
+    "request.constraint.phase": {
+      "concept": "phase",
+      "head": "class",
+      "src": "std.request.constraint.phase / selector vs result",
+      "values": [
+        "selector",
+        "result"
+      ],
+      "area": "request",
+      "type": "constraint",
+      "key": "phase",
+      "role": "metadata"
+    },
+    "request.constraint.polarity": {
+      "concept": "polarity",
+      "head": "class",
+      "src": "std.request.constraint.polarity",
+      "values": [
+        "positive",
+        "negative"
+      ],
+      "area": "request",
+      "type": "constraint",
+      "key": "polarity",
+      "role": "metadata"
+    },
+    "request.constraint.scope": {
+      "concept": "scope",
+      "head": "class",
+      "src": "std.request.constraint.scope",
+      "values": [
+        "each",
+        "group"
+      ],
+      "area": "request",
+      "type": "constraint",
+      "key": "scope",
+      "role": "metadata"
+    },
+    "request.constraint.step": {
+      "concept": "step",
+      "head": "step",
+      "src": "degree words: bigger, a bit warmer, much later",
+      "values": [
+        "more",
+        "much_more",
+        "less",
+        "much_less"
+      ],
+      "area": "request",
+      "type": "constraint",
+      "key": "step",
+      "role": "metadata"
+    },
+    "request.constraint.variety": {
+      "concept": "variety",
+      "head": "class",
+      "src": "constraint across members (two different houses, random colours)",
+      "values": [
+        "same",
+        "different",
+        "random",
+        "matching",
+        "alternating"
+      ],
+      "area": "request",
+      "type": "constraint",
+      "key": "variety",
+      "role": "metadata"
+    },
+    "request.logic.group": {
+      "concept": "group.operator",
+      "head": "class",
+      "src": "std.request.group.operator",
+      "values": [
+        "and",
+        "or"
+      ],
+      "area": "request",
+      "type": "logic",
+      "key": "group",
+      "role": "metadata"
+    },
+    "request.logic.negated": {
+      "concept": "not",
+      "head": "span",
+      "src": "std.request.not: words of the negated condition",
+      "area": "request",
+      "type": "logic",
+      "key": "negated",
+      "role": "derived"
+    },
+    "request.logic.quantifier": {
+      "concept": "quant.kind",
+      "head": "class",
+      "src": "std.request.quant.kind",
+      "values": [
+        "all",
+        "any",
+        "each",
+        "none",
+        "both",
+        "some",
+        "other",
+        "every_except"
+      ],
+      "area": "request",
+      "type": "logic",
+      "key": "quantifier",
+      "role": "global"
+    },
+    "request.question.ask": {
+      "concept": "ask",
+      "head": "class",
+      "src": "answer projection; chart computations included",
+      "values": [
+        "what",
+        "which",
+        "count",
+        "exists",
+        "where",
+        "when",
+        "who",
+        "list",
+        "describe",
+        "why",
+        "how",
+        "how_much",
+        "compare",
+        "total",
+        "average",
+        "max",
+        "min",
+        "difference",
+        "percent"
+      ],
+      "area": "request",
+      "type": "question",
+      "key": "ask",
+      "role": "global"
+    },
+    "request.question.asked_key": {
+      "concept": "concept",
+      "head": "candidate",
+      "src": "which key is asked: 'what colour is it' -> colour",
+      "area": "request",
+      "type": "question",
+      "key": "asked_key",
+      "role": "global"
+    },
+    "request.request.act": {
+      "concept": "act",
+      "head": "candidate",
+      "src": "std.request.act (open atom; candidates from w.legend.act)",
+      "values": [
+        "make",
+        "place",
+        "change",
+        "remove",
+        "connect",
+        "disconnect",
+        "group",
+        "ungroup",
+        "copy",
+        "select",
+        "send",
+        "save",
+        "show",
+        "arrange",
+        "undo",
+        "redo",
+        "repeat",
+        "answer",
+        "object",
+        "compute"
+      ],
+      "area": "request",
+      "type": "request",
+      "key": "act",
+      "role": "global"
+    },
+    "request.request.mood": {
+      "concept": "mood",
+      "head": "class",
+      "src": "std.request.mood",
+      "values": [
+        "do",
+        "propose",
+        "check",
+        "ask"
+      ],
+      "area": "request",
+      "type": "request",
+      "key": "mood",
+      "role": "global"
+    },
+    "request.target.count": {
+      "concept": "count",
+      "head": "number",
+      "src": "how many new things / how many selected",
+      "area": "request",
+      "type": "target",
+      "key": "count",
+      "role": "global"
+    },
+    "request.target.description": {
+      "concept": "description",
+      "head": "span",
+      "src": "selector words, e.g. 'the red one'",
+      "area": "request",
+      "type": "target",
+      "key": "description",
+      "role": "global"
+    },
+    "request.target.determiner": {
+      "concept": "determiner",
+      "head": "class",
+      "src": "std.request.target.determiner",
+      "values": [
+        "definite",
+        "indefinite"
+      ],
+      "area": "request",
+      "type": "target",
+      "key": "determiner",
+      "role": "global"
+    },
+    "request.target.fill": {
+      "concept": "target.fill",
+      "head": "class",
+      "src": "how an existing target is given",
+      "values": [
+        "written",
+        "context",
+        "description",
+        "all",
+        "previous_reply",
+        "journal_step"
+      ],
+      "area": "request",
+      "type": "target",
+      "key": "fill",
+      "role": "global"
+    },
+    "request.target.kind": {
+      "concept": "kind",
+      "head": "candidate",
+      "src": "std.request.target.kind (candidates: kinds of the area + knowledge kind tree)",
+      "area": "request",
+      "type": "target",
+      "key": "kind",
+      "role": "global"
+    },
+    "request.target.mode": {
+      "concept": "target.mode",
+      "head": "class",
+      "src": "std.request.target.mode",
+      "values": [
+        "new",
+        "existing",
+        "bound"
+      ],
+      "area": "request",
+      "type": "target",
+      "key": "mode",
+      "role": "global"
+    },
+    "request.target.name": {
+      "concept": "name",
+      "head": "span",
+      "src": "std.request.target.name",
+      "area": "request",
+      "type": "target",
+      "key": "name",
+      "role": "global"
+    },
+    "request.target.ordinal": {
+      "concept": "ordinal",
+      "head": "class",
+      "src": "selector by order or extreme",
+      "values": [
+        "first",
+        "second",
+        "third",
+        "fourth",
+        "fifth",
+        "last",
+        "second_last",
+        "next",
+        "previous",
+        "newest",
+        "oldest",
+        "biggest",
+        "smallest",
+        "top",
+        "bottom",
+        "leftmost",
+        "rightmost"
+      ],
+      "area": "request",
+      "type": "target",
+      "key": "ordinal",
+      "role": "global"
+    },
+    "request.target.type": {
+      "concept": "target.type",
+      "head": "class",
+      "src": "explicit tool-owned request family",
+      "values": [
+        "block",
+        "calendar",
+        "chart",
+        "diagram",
+        "document",
+        "drawn",
+        "face",
+        "group",
+        "inline",
+        "link",
+        "meeting",
+        "node",
+        "page",
+        "part",
+        "person",
+        "point",
+        "room",
+        "section",
+        "series",
+        "sketch",
+        "text"
+      ],
+      "area": "request",
+      "type": "target",
+      "key": "type",
+      "role": "global",
+      "familiesByArea": {
+        "avatar": [
+          "face",
+          "part"
+        ],
+        "calendar": [
+          "calendar",
+          "meeting",
+          "person",
+          "room"
+        ],
+        "diagram": [
+          "chart",
+          "diagram",
+          "group",
+          "link",
+          "node",
+          "page",
+          "point",
+          "series",
+          "sketch"
+        ],
+        "document": [
+          "block",
+          "document",
+          "inline",
+          "section",
+          "text"
+        ],
+        "drawing": [
+          "drawn",
+          "group",
+          "page",
+          "part"
+        ]
+      }
+    }
+  },
+  "banks": {
+    "avatar.face.base": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "baby"
+      },
+      {
+        "state": "value",
+        "value": "child"
+      },
+      {
+        "state": "value",
+        "value": "girl"
+      },
+      {
+        "state": "value",
+        "value": "boy"
+      },
+      {
+        "state": "value",
+        "value": "woman"
+      },
+      {
+        "state": "value",
+        "value": "man"
+      },
+      {
+        "state": "value",
+        "value": "old woman"
+      },
+      {
+        "state": "value",
+        "value": "old man"
+      },
+      {
+        "state": "value",
+        "value": "bearded man"
+      },
+      {
+        "state": "value",
+        "value": "woman with curly hair"
+      },
+      {
+        "state": "value",
+        "value": "robot"
+      },
+      {
+        "state": "value",
+        "value": "alien"
+      },
+      {
+        "state": "value",
+        "value": "clown"
+      },
+      {
+        "state": "value",
+        "value": "queen"
+      }
+    ],
+    "avatar.face.characterKind": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "human"
+      },
+      {
+        "state": "value",
+        "value": "robot"
+      },
+      {
+        "state": "value",
+        "value": "alien"
+      }
+    ],
+    "avatar.face.expression": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "happy"
+      },
+      {
+        "state": "value",
+        "value": "sad"
+      },
+      {
+        "state": "value",
+        "value": "angry"
+      },
+      {
+        "state": "value",
+        "value": "surprised"
+      },
+      {
+        "state": "value",
+        "value": "sleepy"
+      },
+      {
+        "state": "value",
+        "value": "wink"
+      },
+      {
+        "state": "value",
+        "value": "talking"
+      }
+    ],
+    "avatar.face.id": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "face"
+      }
+    ],
+    "avatar.face.mode": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "temporary"
+      },
+      {
+        "state": "value",
+        "value": "always"
+      },
+      {
+        "state": "value",
+        "value": "off"
+      }
+    ],
+    "avatar.face.preset": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "baby"
+      },
+      {
+        "state": "value",
+        "value": "child"
+      },
+      {
+        "state": "value",
+        "value": "girl"
+      },
+      {
+        "state": "value",
+        "value": "boy"
+      },
+      {
+        "state": "value",
+        "value": "woman"
+      },
+      {
+        "state": "value",
+        "value": "man"
+      },
+      {
+        "state": "value",
+        "value": "old woman"
+      },
+      {
+        "state": "value",
+        "value": "old man"
+      },
+      {
+        "state": "value",
+        "value": "bearded man"
+      },
+      {
+        "state": "value",
+        "value": "woman with curly hair"
+      },
+      {
+        "state": "value",
+        "value": "robot"
+      },
+      {
+        "state": "value",
+        "value": "alien"
+      },
+      {
+        "state": "value",
+        "value": "clown"
+      },
+      {
+        "state": "value",
+        "value": "queen"
+      }
+    ],
+    "avatar.part.colour": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "amber"
+      },
+      {
+        "state": "value",
+        "value": "auburn"
+      },
+      {
+        "state": "value",
+        "value": "black"
+      },
+      {
+        "state": "value",
+        "value": "blond"
+      },
+      {
+        "state": "value",
+        "value": "blue"
+      },
+      {
+        "state": "value",
+        "value": "brown"
+      },
+      {
+        "state": "value",
+        "value": "dark brown"
+      },
+      {
+        "state": "value",
+        "value": "green"
+      },
+      {
+        "state": "value",
+        "value": "grey"
+      },
+      {
+        "state": "value",
+        "value": "hazel"
+      },
+      {
+        "state": "value",
+        "value": "light"
+      },
+      {
+        "state": "value",
+        "value": "metal grey"
+      },
+      {
+        "state": "value",
+        "value": "olive"
+      },
+      {
+        "state": "value",
+        "value": "orange"
+      },
+      {
+        "state": "value",
+        "value": "pale"
+      },
+      {
+        "state": "value",
+        "value": "pink"
+      },
+      {
+        "state": "value",
+        "value": "purple"
+      },
+      {
+        "state": "value",
+        "value": "red"
+      },
+      {
+        "state": "value",
+        "value": "tan"
+      },
+      {
+        "state": "value",
+        "value": "white"
+      },
+      {
+        "state": "value",
+        "value": "yellow"
+      }
+    ],
+    "avatar.part.id": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "hair_back"
+      },
+      {
+        "state": "value",
+        "value": "shoulders"
+      },
+      {
+        "state": "value",
+        "value": "neck"
+      },
+      {
+        "state": "value",
+        "value": "ears"
+      },
+      {
+        "state": "value",
+        "value": "head"
+      },
+      {
+        "state": "value",
+        "value": "cheeks"
+      },
+      {
+        "state": "value",
+        "value": "beard"
+      },
+      {
+        "state": "value",
+        "value": "mouth"
+      },
+      {
+        "state": "value",
+        "value": "moustache"
+      },
+      {
+        "state": "value",
+        "value": "nose"
+      },
+      {
+        "state": "value",
+        "value": "eyes"
+      },
+      {
+        "state": "value",
+        "value": "eyebrows"
+      },
+      {
+        "state": "value",
+        "value": "glasses"
+      },
+      {
+        "state": "value",
+        "value": "hair_front"
+      },
+      {
+        "state": "value",
+        "value": "earrings"
+      },
+      {
+        "state": "value",
+        "value": "hat"
+      }
+    ],
+    "avatar.part.place": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "up"
+      },
+      {
+        "state": "value",
+        "value": "down"
+      },
+      {
+        "state": "value",
+        "value": "left"
+      },
+      {
+        "state": "value",
+        "value": "right"
+      }
+    ],
+    "avatar.part.property": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "length"
+      },
+      {
+        "state": "value",
+        "value": "feel"
+      },
+      {
+        "state": "value",
+        "value": "kind"
+      },
+      {
+        "state": "value",
+        "value": "age"
+      },
+      {
+        "state": "value",
+        "value": "size"
+      },
+      {
+        "state": "value",
+        "value": "shape"
+      }
+    ],
+    "avatar.part.size": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "tiny"
+      },
+      {
+        "state": "value",
+        "value": "small"
+      },
+      {
+        "state": "value",
+        "value": "default"
+      },
+      {
+        "state": "value",
+        "value": "big"
+      },
+      {
+        "state": "value",
+        "value": "huge"
+      }
+    ],
+    "avatar.part.value": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "long"
+      },
+      {
+        "state": "value",
+        "value": "medium"
+      },
+      {
+        "state": "value",
+        "value": "straight"
+      },
+      {
+        "state": "value",
+        "value": "wavy"
+      },
+      {
+        "state": "value",
+        "value": "curly"
+      },
+      {
+        "state": "value",
+        "value": "bob"
+      },
+      {
+        "state": "value",
+        "value": "ponytail"
+      },
+      {
+        "state": "value",
+        "value": "pigtails"
+      },
+      {
+        "state": "value",
+        "value": "bun"
+      },
+      {
+        "state": "value",
+        "value": "afro"
+      },
+      {
+        "state": "value",
+        "value": "child"
+      },
+      {
+        "state": "value",
+        "value": "large"
+      },
+      {
+        "state": "value",
+        "value": "t-shirt"
+      },
+      {
+        "state": "value",
+        "value": "v-neck"
+      },
+      {
+        "state": "value",
+        "value": "shirt"
+      },
+      {
+        "state": "value",
+        "value": "suit"
+      },
+      {
+        "state": "value",
+        "value": "hoodie"
+      },
+      {
+        "state": "value",
+        "value": "tank top"
+      },
+      {
+        "state": "value",
+        "value": "robot"
+      },
+      {
+        "state": "value",
+        "value": "lab coat"
+      },
+      {
+        "state": "value",
+        "value": "scrubs"
+      },
+      {
+        "state": "value",
+        "value": "chef jacket"
+      },
+      {
+        "state": "value",
+        "value": "apron"
+      },
+      {
+        "state": "value",
+        "value": "overalls"
+      },
+      {
+        "state": "value",
+        "value": "safety vest"
+      },
+      {
+        "state": "value",
+        "value": "uniform"
+      },
+      {
+        "state": "value",
+        "value": "fire jacket"
+      },
+      {
+        "state": "value",
+        "value": "sailor collar"
+      },
+      {
+        "state": "value",
+        "value": "space suit"
+      },
+      {
+        "state": "value",
+        "value": "robe"
+      },
+      {
+        "state": "value",
+        "value": "cloak"
+      },
+      {
+        "state": "value",
+        "value": "cape"
+      },
+      {
+        "state": "value",
+        "value": "fur-trimmed coat"
+      },
+      {
+        "state": "value",
+        "value": "football shirt"
+      },
+      {
+        "state": "value",
+        "value": "waistcoat and bow tie"
+      },
+      {
+        "state": "value",
+        "value": "boiler suit"
+      },
+      {
+        "state": "value",
+        "value": "adult"
+      },
+      {
+        "state": "value",
+        "value": "small"
+      },
+      {
+        "state": "value",
+        "value": "square"
+      },
+      {
+        "state": "value",
+        "value": "thin"
+      },
+      {
+        "state": "value",
+        "value": "narrow"
+      },
+      {
+        "state": "value",
+        "value": "thick"
+      },
+      {
+        "state": "value",
+        "value": "wide"
+      },
+      {
+        "state": "value",
+        "value": "tapered"
+      },
+      {
+        "state": "value",
+        "value": "necklace"
+      },
+      {
+        "state": "value",
+        "value": "round"
+      },
+      {
+        "state": "value",
+        "value": "pointed"
+      },
+      {
+        "state": "value",
+        "value": "oval"
+      },
+      {
+        "state": "value",
+        "value": "heart"
+      },
+      {
+        "state": "value",
+        "value": "box"
+      },
+      {
+        "state": "value",
+        "value": "blush"
+      },
+      {
+        "state": "value",
+        "value": "freckles"
+      },
+      {
+        "state": "value",
+        "value": "dimple"
+      },
+      {
+        "state": "value",
+        "value": "wrinkles"
+      },
+      {
+        "state": "value",
+        "value": "scar"
+      },
+      {
+        "state": "value",
+        "value": "mole"
+      },
+      {
+        "state": "value",
+        "value": "tear"
+      },
+      {
+        "state": "value",
+        "value": "old"
+      },
+      {
+        "state": "value",
+        "value": "short"
+      },
+      {
+        "state": "value",
+        "value": "bushy"
+      },
+      {
+        "state": "value",
+        "value": "full beard"
+      },
+      {
+        "state": "value",
+        "value": "chinstrap"
+      },
+      {
+        "state": "value",
+        "value": "goatee"
+      },
+      {
+        "state": "value",
+        "value": "long beard"
+      },
+      {
+        "state": "value",
+        "value": "soul patch"
+      },
+      {
+        "state": "value",
+        "value": "sideburns"
+      },
+      {
+        "state": "value",
+        "value": "stubble"
+      },
+      {
+        "state": "value",
+        "value": "smiling"
+      },
+      {
+        "state": "value",
+        "value": "closed"
+      },
+      {
+        "state": "value",
+        "value": "open"
+      },
+      {
+        "state": "value",
+        "value": "flat"
+      },
+      {
+        "state": "value",
+        "value": "sad"
+      },
+      {
+        "state": "value",
+        "value": "surprised"
+      },
+      {
+        "state": "value",
+        "value": "smirk"
+      },
+      {
+        "state": "value",
+        "value": "full lips"
+      },
+      {
+        "state": "value",
+        "value": "grin"
+      },
+      {
+        "state": "value",
+        "value": "tongue out"
+      },
+      {
+        "state": "value",
+        "value": "gritted teeth"
+      },
+      {
+        "state": "value",
+        "value": "half open"
+      },
+      {
+        "state": "value",
+        "value": "pressed lips"
+      },
+      {
+        "state": "value",
+        "value": "teeth on lip"
+      },
+      {
+        "state": "value",
+        "value": "tongue tip"
+      },
+      {
+        "state": "value",
+        "value": "handlebar"
+      },
+      {
+        "state": "value",
+        "value": "walrus"
+      },
+      {
+        "state": "value",
+        "value": "pencil"
+      },
+      {
+        "state": "value",
+        "value": "chevron"
+      },
+      {
+        "state": "value",
+        "value": "button"
+      },
+      {
+        "state": "value",
+        "value": "dot"
+      },
+      {
+        "state": "value",
+        "value": "half closed"
+      },
+      {
+        "state": "value",
+        "value": "lashes"
+      },
+      {
+        "state": "value",
+        "value": "looking down"
+      },
+      {
+        "state": "value",
+        "value": "looking up"
+      },
+      {
+        "state": "value",
+        "value": "looking aside"
+      },
+      {
+        "state": "value",
+        "value": "arched"
+      },
+      {
+        "state": "value",
+        "value": "angry"
+      },
+      {
+        "state": "value",
+        "value": "sunglasses"
+      },
+      {
+        "state": "value",
+        "value": "cat-eye"
+      },
+      {
+        "state": "value",
+        "value": "monocle"
+      },
+      {
+        "state": "value",
+        "value": "visor"
+      },
+      {
+        "state": "value",
+        "value": "fringe"
+      },
+      {
+        "state": "value",
+        "value": "side parting"
+      },
+      {
+        "state": "value",
+        "value": "spikes"
+      },
+      {
+        "state": "value",
+        "value": "bald on top"
+      },
+      {
+        "state": "value",
+        "value": "receding"
+      },
+      {
+        "state": "value",
+        "value": "centre parting"
+      },
+      {
+        "state": "value",
+        "value": "mohawk"
+      },
+      {
+        "state": "value",
+        "value": "tuft"
+      },
+      {
+        "state": "value",
+        "value": "stud"
+      },
+      {
+        "state": "value",
+        "value": "hoop"
+      },
+      {
+        "state": "value",
+        "value": "drop"
+      },
+      {
+        "state": "value",
+        "value": "pearl"
+      },
+      {
+        "state": "value",
+        "value": "star"
+      },
+      {
+        "state": "value",
+        "value": "cap"
+      },
+      {
+        "state": "value",
+        "value": "beanie"
+      },
+      {
+        "state": "value",
+        "value": "top hat"
+      },
+      {
+        "state": "value",
+        "value": "crown"
+      },
+      {
+        "state": "value",
+        "value": "cowboy hat"
+      },
+      {
+        "state": "value",
+        "value": "party hat"
+      },
+      {
+        "state": "value",
+        "value": "bow"
+      },
+      {
+        "state": "value",
+        "value": "antenna"
+      },
+      {
+        "state": "value",
+        "value": "sun hat"
+      },
+      {
+        "state": "value",
+        "value": "chef hat"
+      },
+      {
+        "state": "value",
+        "value": "hard hat"
+      },
+      {
+        "state": "value",
+        "value": "fire helmet"
+      },
+      {
+        "state": "value",
+        "value": "police cap"
+      },
+      {
+        "state": "value",
+        "value": "pilot cap"
+      },
+      {
+        "state": "value",
+        "value": "nurse cap"
+      },
+      {
+        "state": "value",
+        "value": "sailor cap"
+      },
+      {
+        "state": "value",
+        "value": "military helmet"
+      },
+      {
+        "state": "value",
+        "value": "space helmet"
+      },
+      {
+        "state": "value",
+        "value": "knight helmet"
+      },
+      {
+        "state": "value",
+        "value": "pirate hat"
+      },
+      {
+        "state": "value",
+        "value": "witch hat"
+      },
+      {
+        "state": "value",
+        "value": "wizard hat"
+      },
+      {
+        "state": "value",
+        "value": "santa hat"
+      },
+      {
+        "state": "value",
+        "value": "beret"
+      },
+      {
+        "state": "value",
+        "value": "fedora"
+      },
+      {
+        "state": "value",
+        "value": "swimming cap"
+      },
+      {
+        "state": "value",
+        "value": "wig"
+      },
+      {
+        "state": "value",
+        "value": "headscarf"
+      },
+      {
+        "state": "value",
+        "value": "flower wreath"
+      }
+    ],
+    "avatar.part.variant": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "Santa hat"
+      },
+      {
+        "state": "value",
+        "value": "afro"
+      },
+      {
+        "state": "value",
+        "value": "angry"
+      },
+      {
+        "state": "value",
+        "value": "antenna"
+      },
+      {
+        "state": "value",
+        "value": "apron"
+      },
+      {
+        "state": "value",
+        "value": "arched"
+      },
+      {
+        "state": "value",
+        "value": "bald on top"
+      },
+      {
+        "state": "value",
+        "value": "beanie"
+      },
+      {
+        "state": "value",
+        "value": "beret"
+      },
+      {
+        "state": "value",
+        "value": "big smile"
+      },
+      {
+        "state": "value",
+        "value": "blush"
+      },
+      {
+        "state": "value",
+        "value": "bob"
+      },
+      {
+        "state": "value",
+        "value": "boiler suit"
+      },
+      {
+        "state": "value",
+        "value": "bolt"
+      },
+      {
+        "state": "value",
+        "value": "bow"
+      },
+      {
+        "state": "value",
+        "value": "bow tie"
+      },
+      {
+        "state": "value",
+        "value": "box"
+      },
+      {
+        "state": "value",
+        "value": "bun"
+      },
+      {
+        "state": "value",
+        "value": "bushy"
+      },
+      {
+        "state": "value",
+        "value": "button"
+      },
+      {
+        "state": "value",
+        "value": "cap"
+      },
+      {
+        "state": "value",
+        "value": "cape"
+      },
+      {
+        "state": "value",
+        "value": "cat-eye"
+      },
+      {
+        "state": "value",
+        "value": "centre parting"
+      },
+      {
+        "state": "value",
+        "value": "chef hat"
+      },
+      {
+        "state": "value",
+        "value": "chef jacket"
+      },
+      {
+        "state": "value",
+        "value": "chevron"
+      },
+      {
+        "state": "value",
+        "value": "chinstrap"
+      },
+      {
+        "state": "value",
+        "value": "cloak"
+      },
+      {
+        "state": "value",
+        "value": "closed"
+      },
+      {
+        "state": "value",
+        "value": "cowboy hat"
+      },
+      {
+        "state": "value",
+        "value": "crown"
+      },
+      {
+        "state": "value",
+        "value": "curly"
+      },
+      {
+        "state": "value",
+        "value": "dimple"
+      },
+      {
+        "state": "value",
+        "value": "dot"
+      },
+      {
+        "state": "value",
+        "value": "downcast"
+      },
+      {
+        "state": "value",
+        "value": "drop"
+      },
+      {
+        "state": "value",
+        "value": "fedora"
+      },
+      {
+        "state": "value",
+        "value": "fire helmet"
+      },
+      {
+        "state": "value",
+        "value": "fire jacket"
+      },
+      {
+        "state": "value",
+        "value": "flower wreath"
+      },
+      {
+        "state": "value",
+        "value": "football shirt"
+      },
+      {
+        "state": "value",
+        "value": "freckles"
+      },
+      {
+        "state": "value",
+        "value": "fringe"
+      },
+      {
+        "state": "value",
+        "value": "frown"
+      },
+      {
+        "state": "value",
+        "value": "full"
+      },
+      {
+        "state": "value",
+        "value": "full lips"
+      },
+      {
+        "state": "value",
+        "value": "fur coat"
+      },
+      {
+        "state": "value",
+        "value": "goatee"
+      },
+      {
+        "state": "value",
+        "value": "grille"
+      },
+      {
+        "state": "value",
+        "value": "grin"
+      },
+      {
+        "state": "value",
+        "value": "gritted"
+      },
+      {
+        "state": "value",
+        "value": "half open"
+      },
+      {
+        "state": "value",
+        "value": "handlebar"
+      },
+      {
+        "state": "value",
+        "value": "happy"
+      },
+      {
+        "state": "value",
+        "value": "hard hat"
+      },
+      {
+        "state": "value",
+        "value": "headscarf"
+      },
+      {
+        "state": "value",
+        "value": "heart"
+      },
+      {
+        "state": "value",
+        "value": "hoodie"
+      },
+      {
+        "state": "value",
+        "value": "hoop"
+      },
+      {
+        "state": "value",
+        "value": "judge wig"
+      },
+      {
+        "state": "value",
+        "value": "knight helmet"
+      },
+      {
+        "state": "value",
+        "value": "lab coat"
+      },
+      {
+        "state": "value",
+        "value": "large"
+      },
+      {
+        "state": "value",
+        "value": "large hoop"
+      },
+      {
+        "state": "value",
+        "value": "lashes"
+      },
+      {
+        "state": "value",
+        "value": "lip bite"
+      },
+      {
+        "state": "value",
+        "value": "long"
+      },
+      {
+        "state": "value",
+        "value": "long curly"
+      },
+      {
+        "state": "value",
+        "value": "long sides"
+      },
+      {
+        "state": "value",
+        "value": "long straight"
+      },
+      {
+        "state": "value",
+        "value": "long wavy"
+      },
+      {
+        "state": "value",
+        "value": "looking in"
+      },
+      {
+        "state": "value",
+        "value": "looking out"
+      },
+      {
+        "state": "value",
+        "value": "looking up"
+      },
+      {
+        "state": "value",
+        "value": "medium"
+      },
+      {
+        "state": "value",
+        "value": "metal plate"
+      },
+      {
+        "state": "value",
+        "value": "military helmet"
+      },
+      {
+        "state": "value",
+        "value": "mohawk"
+      },
+      {
+        "state": "value",
+        "value": "mole"
+      },
+      {
+        "state": "value",
+        "value": "monocle"
+      },
+      {
+        "state": "value",
+        "value": "narrow"
+      },
+      {
+        "state": "value",
+        "value": "necklace"
+      },
+      {
+        "state": "value",
+        "value": "neutral"
+      },
+      {
+        "state": "value",
+        "value": "nurse cap"
+      },
+      {
+        "state": "value",
+        "value": "open"
+      },
+      {
+        "state": "value",
+        "value": "oval"
+      },
+      {
+        "state": "value",
+        "value": "overalls"
+      },
+      {
+        "state": "value",
+        "value": "party hat"
+      },
+      {
+        "state": "value",
+        "value": "pearl"
+      },
+      {
+        "state": "value",
+        "value": "pencil"
+      },
+      {
+        "state": "value",
+        "value": "pigtails"
+      },
+      {
+        "state": "value",
+        "value": "pilot cap"
+      },
+      {
+        "state": "value",
+        "value": "pipe"
+      },
+      {
+        "state": "value",
+        "value": "pirate hat"
+      },
+      {
+        "state": "value",
+        "value": "pointed"
+      },
+      {
+        "state": "value",
+        "value": "police cap"
+      },
+      {
+        "state": "value",
+        "value": "ponytail"
+      },
+      {
+        "state": "value",
+        "value": "pressed"
+      },
+      {
+        "state": "value",
+        "value": "raised"
+      },
+      {
+        "state": "value",
+        "value": "receding"
+      },
+      {
+        "state": "value",
+        "value": "robe"
+      },
+      {
+        "state": "value",
+        "value": "round"
+      },
+      {
+        "state": "value",
+        "value": "round blush"
+      },
+      {
+        "state": "value",
+        "value": "sad"
+      },
+      {
+        "state": "value",
+        "value": "safety vest"
+      },
+      {
+        "state": "value",
+        "value": "sailor cap"
+      },
+      {
+        "state": "value",
+        "value": "sailor collar"
+      },
+      {
+        "state": "value",
+        "value": "scar"
+      },
+      {
+        "state": "value",
+        "value": "scrubs"
+      },
+      {
+        "state": "value",
+        "value": "shirt"
+      },
+      {
+        "state": "value",
+        "value": "short"
+      },
+      {
+        "state": "value",
+        "value": "side parting"
+      },
+      {
+        "state": "value",
+        "value": "sideburns"
+      },
+      {
+        "state": "value",
+        "value": "sleepy"
+      },
+      {
+        "state": "value",
+        "value": "small"
+      },
+      {
+        "state": "value",
+        "value": "small round"
+      },
+      {
+        "state": "value",
+        "value": "smile"
+      },
+      {
+        "state": "value",
+        "value": "smirk"
+      },
+      {
+        "state": "value",
+        "value": "soul patch"
+      },
+      {
+        "state": "value",
+        "value": "space helmet"
+      },
+      {
+        "state": "value",
+        "value": "space suit"
+      },
+      {
+        "state": "value",
+        "value": "spikes"
+      },
+      {
+        "state": "value",
+        "value": "square"
+      },
+      {
+        "state": "value",
+        "value": "star"
+      },
+      {
+        "state": "value",
+        "value": "straight"
+      },
+      {
+        "state": "value",
+        "value": "stubble"
+      },
+      {
+        "state": "value",
+        "value": "stud"
+      },
+      {
+        "state": "value",
+        "value": "suit"
+      },
+      {
+        "state": "value",
+        "value": "sun hat"
+      },
+      {
+        "state": "value",
+        "value": "sunglasses"
+      },
+      {
+        "state": "value",
+        "value": "surprised"
+      },
+      {
+        "state": "value",
+        "value": "swimming cap"
+      },
+      {
+        "state": "value",
+        "value": "t-shirt"
+      },
+      {
+        "state": "value",
+        "value": "talking"
+      },
+      {
+        "state": "value",
+        "value": "tank top"
+      },
+      {
+        "state": "value",
+        "value": "tapered"
+      },
+      {
+        "state": "value",
+        "value": "tear"
+      },
+      {
+        "state": "value",
+        "value": "thick"
+      },
+      {
+        "state": "value",
+        "value": "thick arched"
+      },
+      {
+        "state": "value",
+        "value": "thin"
+      },
+      {
+        "state": "value",
+        "value": "tongue out"
+      },
+      {
+        "state": "value",
+        "value": "tongue tip"
+      },
+      {
+        "state": "value",
+        "value": "top hat"
+      },
+      {
+        "state": "value",
+        "value": "tuft"
+      },
+      {
+        "state": "value",
+        "value": "uniform"
+      },
+      {
+        "state": "value",
+        "value": "v-neck"
+      },
+      {
+        "state": "value",
+        "value": "visor"
+      },
+      {
+        "state": "value",
+        "value": "walrus"
+      },
+      {
+        "state": "value",
+        "value": "wavy"
+      },
+      {
+        "state": "value",
+        "value": "wide"
+      },
+      {
+        "state": "value",
+        "value": "witch hat"
+      },
+      {
+        "state": "value",
+        "value": "wizard hat"
+      },
+      {
+        "state": "value",
+        "value": "wrinkles"
+      }
+    ],
+    "calendar.meeting.free": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "nearest_free"
+      },
+      {
+        "state": "value",
+        "value": "first_free"
+      },
+      {
+        "state": "value",
+        "value": "common_free"
+      }
+    ],
+    "calendar.meeting.relation": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "before"
+      },
+      {
+        "state": "value",
+        "value": "after"
+      },
+      {
+        "state": "value",
+        "value": "same_time"
+      },
+      {
+        "state": "value",
+        "value": "during"
+      },
+      {
+        "state": "value",
+        "value": "between"
+      },
+      {
+        "state": "value",
+        "value": "not_overlapping"
+      }
+    ],
+    "conversation.turn.area": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "drawing"
+      },
+      {
+        "state": "value",
+        "value": "diagram"
+      },
+      {
+        "state": "value",
+        "value": "document"
+      },
+      {
+        "state": "value",
+        "value": "calendar"
+      }
+    ],
+    "conversation.turn.fragment": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "adds"
+      },
+      {
+        "state": "value",
+        "value": "replaces"
+      },
+      {
+        "state": "value",
+        "value": "repeats"
+      },
+      {
+        "state": "value",
+        "value": "more"
+      },
+      {
+        "state": "value",
+        "value": "less"
+      },
+      {
+        "state": "value",
+        "value": "confirms"
+      },
+      {
+        "state": "value",
+        "value": "rejects"
+      }
+    ],
+    "conversation.turn.objection": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "wrong_target"
+      },
+      {
+        "state": "value",
+        "value": "wrong_value"
+      },
+      {
+        "state": "value",
+        "value": "too_much"
+      },
+      {
+        "state": "value",
+        "value": "too_little"
+      },
+      {
+        "state": "value",
+        "value": "missing_part"
+      },
+      {
+        "state": "value",
+        "value": "unexpected"
+      },
+      {
+        "state": "value",
+        "value": "general"
+      }
+    ],
+    "diagram.chart.horizontal": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "on"
+      },
+      {
+        "state": "value",
+        "value": "off"
+      }
+    ],
+    "diagram.chart.legend": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "show"
+      },
+      {
+        "state": "value",
+        "value": "hide"
+      }
+    ],
+    "diagram.chart.show_values": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "show"
+      },
+      {
+        "state": "value",
+        "value": "hide"
+      }
+    ],
+    "diagram.chart.sort": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "desc"
+      },
+      {
+        "state": "value",
+        "value": "asc"
+      },
+      {
+        "state": "value",
+        "value": "alpha"
+      },
+      {
+        "state": "value",
+        "value": "given"
+      }
+    ],
+    "diagram.chart.source": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "calendar"
+      },
+      {
+        "state": "value",
+        "value": "document"
+      },
+      {
+        "state": "value",
+        "value": "list"
+      },
+      {
+        "state": "value",
+        "value": "prices"
+      },
+      {
+        "state": "value",
+        "value": "holdings"
+      },
+      {
+        "state": "value",
+        "value": "typed"
+      }
+    ],
+    "diagram.chart.stacked": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "on"
+      },
+      {
+        "state": "value",
+        "value": "off"
+      }
+    ],
+    "diagram.chart.type": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "bar"
+      },
+      {
+        "state": "value",
+        "value": "line"
+      },
+      {
+        "state": "value",
+        "value": "pie"
+      },
+      {
+        "state": "value",
+        "value": "doughnut"
+      },
+      {
+        "state": "value",
+        "value": "radar"
+      },
+      {
+        "state": "value",
+        "value": "polarArea"
+      },
+      {
+        "state": "value",
+        "value": "scatter"
+      }
+    ],
+    "diagram.diagram.kind": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "flowchart"
+      },
+      {
+        "state": "value",
+        "value": "tree"
+      },
+      {
+        "state": "value",
+        "value": "org_chart"
+      },
+      {
+        "state": "value",
+        "value": "mind_map"
+      },
+      {
+        "state": "value",
+        "value": "network"
+      },
+      {
+        "state": "value",
+        "value": "sequence"
+      },
+      {
+        "state": "value",
+        "value": "timeline"
+      },
+      {
+        "state": "value",
+        "value": "venn"
+      },
+      {
+        "state": "value",
+        "value": "state_machine"
+      },
+      {
+        "state": "value",
+        "value": "bar_chart"
+      },
+      {
+        "state": "value",
+        "value": "line_chart"
+      },
+      {
+        "state": "value",
+        "value": "pie_chart"
+      },
+      {
+        "state": "value",
+        "value": "doughnut_chart"
+      },
+      {
+        "state": "value",
+        "value": "scatter_chart"
+      },
+      {
+        "state": "value",
+        "value": "radar_chart"
+      },
+      {
+        "state": "value",
+        "value": "area_chart"
+      },
+      {
+        "state": "value",
+        "value": "table"
+      }
+    ],
+    "diagram.diagram.layout": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "tree"
+      },
+      {
+        "state": "value",
+        "value": "grid"
+      },
+      {
+        "state": "value",
+        "value": "row"
+      },
+      {
+        "state": "value",
+        "value": "column"
+      },
+      {
+        "state": "value",
+        "value": "circle"
+      },
+      {
+        "state": "value",
+        "value": "radial"
+      },
+      {
+        "state": "value",
+        "value": "layers"
+      }
+    ],
+    "diagram.group.colour": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "red"
+      },
+      {
+        "state": "value",
+        "value": "orange"
+      },
+      {
+        "state": "value",
+        "value": "yellow"
+      },
+      {
+        "state": "value",
+        "value": "gold"
+      },
+      {
+        "state": "value",
+        "value": "lime"
+      },
+      {
+        "state": "value",
+        "value": "green"
+      },
+      {
+        "state": "value",
+        "value": "teal"
+      },
+      {
+        "state": "value",
+        "value": "cyan"
+      },
+      {
+        "state": "value",
+        "value": "blue"
+      },
+      {
+        "state": "value",
+        "value": "navy"
+      },
+      {
+        "state": "value",
+        "value": "indigo"
+      },
+      {
+        "state": "value",
+        "value": "purple"
+      },
+      {
+        "state": "value",
+        "value": "magenta"
+      },
+      {
+        "state": "value",
+        "value": "pink"
+      },
+      {
+        "state": "value",
+        "value": "brown"
+      },
+      {
+        "state": "value",
+        "value": "gray"
+      },
+      {
+        "state": "value",
+        "value": "black"
+      },
+      {
+        "state": "value",
+        "value": "white"
+      }
+    ],
+    "diagram.group.layout": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "free"
+      },
+      {
+        "state": "value",
+        "value": "tree"
+      },
+      {
+        "state": "value",
+        "value": "grid"
+      },
+      {
+        "state": "value",
+        "value": "row"
+      },
+      {
+        "state": "value",
+        "value": "column"
+      },
+      {
+        "state": "value",
+        "value": "circle"
+      },
+      {
+        "state": "value",
+        "value": "radial"
+      },
+      {
+        "state": "value",
+        "value": "layers"
+      },
+      {
+        "state": "value",
+        "value": "bar"
+      },
+      {
+        "state": "value",
+        "value": "line"
+      },
+      {
+        "state": "value",
+        "value": "pie"
+      },
+      {
+        "state": "value",
+        "value": "doughnut"
+      }
+    ],
+    "diagram.group.size": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "tiny"
+      },
+      {
+        "state": "value",
+        "value": "small"
+      },
+      {
+        "state": "value",
+        "value": "medium"
+      },
+      {
+        "state": "value",
+        "value": "large"
+      },
+      {
+        "state": "value",
+        "value": "huge"
+      }
+    ],
+    "diagram.link.arrow": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "forward"
+      },
+      {
+        "state": "value",
+        "value": "both"
+      },
+      {
+        "state": "value",
+        "value": "none"
+      }
+    ],
+    "diagram.link.colour": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "red"
+      },
+      {
+        "state": "value",
+        "value": "orange"
+      },
+      {
+        "state": "value",
+        "value": "yellow"
+      },
+      {
+        "state": "value",
+        "value": "gold"
+      },
+      {
+        "state": "value",
+        "value": "lime"
+      },
+      {
+        "state": "value",
+        "value": "green"
+      },
+      {
+        "state": "value",
+        "value": "teal"
+      },
+      {
+        "state": "value",
+        "value": "cyan"
+      },
+      {
+        "state": "value",
+        "value": "blue"
+      },
+      {
+        "state": "value",
+        "value": "navy"
+      },
+      {
+        "state": "value",
+        "value": "indigo"
+      },
+      {
+        "state": "value",
+        "value": "purple"
+      },
+      {
+        "state": "value",
+        "value": "magenta"
+      },
+      {
+        "state": "value",
+        "value": "pink"
+      },
+      {
+        "state": "value",
+        "value": "brown"
+      },
+      {
+        "state": "value",
+        "value": "gray"
+      },
+      {
+        "state": "value",
+        "value": "black"
+      },
+      {
+        "state": "value",
+        "value": "white"
+      }
+    ],
+    "diagram.link.style": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "solid"
+      },
+      {
+        "state": "value",
+        "value": "dashed"
+      },
+      {
+        "state": "value",
+        "value": "dotted"
+      }
+    ],
+    "diagram.node.at": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "corner"
+      },
+      {
+        "state": "value",
+        "value": "top"
+      },
+      {
+        "state": "value",
+        "value": "bottom"
+      },
+      {
+        "state": "value",
+        "value": "left"
+      },
+      {
+        "state": "value",
+        "value": "right"
+      },
+      {
+        "state": "value",
+        "value": "center"
+      },
+      {
+        "state": "value",
+        "value": "top_left"
+      },
+      {
+        "state": "value",
+        "value": "top_right"
+      },
+      {
+        "state": "value",
+        "value": "bottom_left"
+      },
+      {
+        "state": "value",
+        "value": "bottom_right"
+      },
+      {
+        "state": "value",
+        "value": "middle"
+      },
+      {
+        "state": "value",
+        "value": "background"
+      },
+      {
+        "state": "value",
+        "value": "foreground"
+      }
+    ],
+    "diagram.node.kind": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "circle"
+      },
+      {
+        "state": "value",
+        "value": "rectangle"
+      },
+      {
+        "state": "value",
+        "value": "square"
+      },
+      {
+        "state": "value",
+        "value": "diamond"
+      },
+      {
+        "state": "value",
+        "value": "ellipse"
+      },
+      {
+        "state": "value",
+        "value": "triangle"
+      },
+      {
+        "state": "value",
+        "value": "hexagon"
+      },
+      {
+        "state": "value",
+        "value": "star"
+      },
+      {
+        "state": "value",
+        "value": "text"
+      }
+    ],
+    "diagram.node.layout": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "tree"
+      },
+      {
+        "state": "value",
+        "value": "grid"
+      },
+      {
+        "state": "value",
+        "value": "row"
+      },
+      {
+        "state": "value",
+        "value": "column"
+      },
+      {
+        "state": "value",
+        "value": "circle"
+      },
+      {
+        "state": "value",
+        "value": "radial"
+      },
+      {
+        "state": "value",
+        "value": "layers"
+      }
+    ],
+    "diagram.node.position": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "in"
+      },
+      {
+        "state": "value",
+        "value": "on"
+      },
+      {
+        "state": "value",
+        "value": "under"
+      },
+      {
+        "state": "value",
+        "value": "above"
+      },
+      {
+        "state": "value",
+        "value": "below"
+      },
+      {
+        "state": "value",
+        "value": "next_to"
+      },
+      {
+        "state": "value",
+        "value": "left_of"
+      },
+      {
+        "state": "value",
+        "value": "right_of"
+      },
+      {
+        "state": "value",
+        "value": "between"
+      },
+      {
+        "state": "value",
+        "value": "behind"
+      },
+      {
+        "state": "value",
+        "value": "in_front_of"
+      },
+      {
+        "state": "value",
+        "value": "near"
+      },
+      {
+        "state": "value",
+        "value": "around"
+      },
+      {
+        "state": "value",
+        "value": "inside"
+      },
+      {
+        "state": "value",
+        "value": "outside"
+      },
+      {
+        "state": "value",
+        "value": "along"
+      }
+    ],
+    "diagram.node.shape": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "box"
+      },
+      {
+        "state": "value",
+        "value": "rounded_box"
+      },
+      {
+        "state": "value",
+        "value": "circle"
+      },
+      {
+        "state": "value",
+        "value": "ellipse"
+      },
+      {
+        "state": "value",
+        "value": "diamond"
+      },
+      {
+        "state": "value",
+        "value": "hexagon"
+      },
+      {
+        "state": "value",
+        "value": "triangle"
+      },
+      {
+        "state": "value",
+        "value": "star"
+      },
+      {
+        "state": "value",
+        "value": "cylinder"
+      },
+      {
+        "state": "value",
+        "value": "parallelogram"
+      },
+      {
+        "state": "value",
+        "value": "cloud"
+      },
+      {
+        "state": "value",
+        "value": "note"
+      },
+      {
+        "state": "value",
+        "value": "square"
+      },
+      {
+        "state": "value",
+        "value": "rectangle"
+      }
+    ],
+    "diagram.node.size": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "tiny"
+      },
+      {
+        "state": "value",
+        "value": "small"
+      },
+      {
+        "state": "value",
+        "value": "default"
+      },
+      {
+        "state": "value",
+        "value": "big"
+      },
+      {
+        "state": "value",
+        "value": "huge"
+      }
+    ],
+    "diagram.page.mode": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "temporary"
+      },
+      {
+        "state": "value",
+        "value": "always"
+      },
+      {
+        "state": "value",
+        "value": "off"
+      }
+    ],
+    "document.block.align": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "left"
+      },
+      {
+        "state": "value",
+        "value": "center"
+      },
+      {
+        "state": "value",
+        "value": "right"
+      },
+      {
+        "state": "value",
+        "value": "justify"
+      }
+    ],
+    "document.block.kind": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "paragraph"
+      },
+      {
+        "state": "value",
+        "value": "heading"
+      },
+      {
+        "state": "value",
+        "value": "quote"
+      }
+    ],
+    "document.block.mark": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "link"
+      },
+      {
+        "state": "value",
+        "value": "bold"
+      },
+      {
+        "state": "value",
+        "value": "italic"
+      },
+      {
+        "state": "value",
+        "value": "underline"
+      },
+      {
+        "state": "value",
+        "value": "strike"
+      },
+      {
+        "state": "value",
+        "value": "code"
+      },
+      {
+        "state": "value",
+        "value": "highlight"
+      }
+    ],
+    "document.block.style": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "bullet"
+      },
+      {
+        "state": "value",
+        "value": "numbered"
+      },
+      {
+        "state": "value",
+        "value": "task"
+      }
+    ],
+    "document.document.property": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "tone"
+      },
+      {
+        "state": "value",
+        "value": "length"
+      }
+    ],
+    "document.inline.align": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "left"
+      },
+      {
+        "state": "value",
+        "value": "center"
+      },
+      {
+        "state": "value",
+        "value": "right"
+      },
+      {
+        "state": "value",
+        "value": "justify"
+      }
+    ],
+    "document.inline.enabled": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "on"
+      },
+      {
+        "state": "value",
+        "value": "off"
+      }
+    ],
+    "document.inline.format": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "link"
+      },
+      {
+        "state": "value",
+        "value": "bold"
+      },
+      {
+        "state": "value",
+        "value": "italic"
+      },
+      {
+        "state": "value",
+        "value": "underline"
+      },
+      {
+        "state": "value",
+        "value": "strike"
+      },
+      {
+        "state": "value",
+        "value": "code"
+      },
+      {
+        "state": "value",
+        "value": "highlight"
+      }
+    ],
+    "document.inline.list_kind": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "bullet"
+      },
+      {
+        "state": "value",
+        "value": "numbered"
+      },
+      {
+        "state": "value",
+        "value": "task"
+      }
+    ],
+    "document.section.align": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "left"
+      },
+      {
+        "state": "value",
+        "value": "center"
+      },
+      {
+        "state": "value",
+        "value": "right"
+      },
+      {
+        "state": "value",
+        "value": "justify"
+      }
+    ],
+    "document.section.kind": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "heading"
+      }
+    ],
+    "document.section.length": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "very_short"
+      },
+      {
+        "state": "value",
+        "value": "short"
+      },
+      {
+        "state": "value",
+        "value": "medium"
+      },
+      {
+        "state": "value",
+        "value": "long"
+      },
+      {
+        "state": "value",
+        "value": "very_long"
+      }
+    ],
+    "document.section.level": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "1"
+      },
+      {
+        "state": "value",
+        "value": "2"
+      },
+      {
+        "state": "value",
+        "value": "3"
+      }
+    ],
+    "document.section.mark": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "link"
+      },
+      {
+        "state": "value",
+        "value": "bold"
+      },
+      {
+        "state": "value",
+        "value": "italic"
+      },
+      {
+        "state": "value",
+        "value": "underline"
+      },
+      {
+        "state": "value",
+        "value": "strike"
+      },
+      {
+        "state": "value",
+        "value": "code"
+      },
+      {
+        "state": "value",
+        "value": "highlight"
+      }
+    ],
+    "document.section.order": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "before"
+      },
+      {
+        "state": "value",
+        "value": "after"
+      },
+      {
+        "state": "value",
+        "value": "first"
+      },
+      {
+        "state": "value",
+        "value": "last"
+      },
+      {
+        "state": "value",
+        "value": "top"
+      },
+      {
+        "state": "value",
+        "value": "bottom"
+      },
+      {
+        "state": "value",
+        "value": "swap"
+      }
+    ],
+    "document.section.role": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "greeting"
+      },
+      {
+        "state": "value",
+        "value": "introduction"
+      },
+      {
+        "state": "value",
+        "value": "body"
+      },
+      {
+        "state": "value",
+        "value": "conclusion"
+      },
+      {
+        "state": "value",
+        "value": "signature"
+      },
+      {
+        "state": "value",
+        "value": "chapter"
+      },
+      {
+        "state": "value",
+        "value": "paragraph"
+      },
+      {
+        "state": "value",
+        "value": "heading"
+      },
+      {
+        "state": "value",
+        "value": "list"
+      },
+      {
+        "state": "value",
+        "value": "table"
+      },
+      {
+        "state": "value",
+        "value": "apology"
+      },
+      {
+        "state": "value",
+        "value": "explanation"
+      },
+      {
+        "state": "value",
+        "value": "summary"
+      },
+      {
+        "state": "value",
+        "value": "closing"
+      },
+      {
+        "state": "value",
+        "value": "subject"
+      },
+      {
+        "state": "value",
+        "value": "abstract"
+      },
+      {
+        "state": "value",
+        "value": "methods"
+      },
+      {
+        "state": "value",
+        "value": "results"
+      },
+      {
+        "state": "value",
+        "value": "references"
+      },
+      {
+        "state": "value",
+        "value": "item"
+      }
+    ],
+    "document.text.genre": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "letter"
+      },
+      {
+        "state": "value",
+        "value": "email"
+      },
+      {
+        "state": "value",
+        "value": "report"
+      },
+      {
+        "state": "value",
+        "value": "story"
+      },
+      {
+        "state": "value",
+        "value": "note"
+      },
+      {
+        "state": "value",
+        "value": "memo"
+      },
+      {
+        "state": "value",
+        "value": "essay"
+      },
+      {
+        "state": "value",
+        "value": "summary"
+      },
+      {
+        "state": "value",
+        "value": "article"
+      },
+      {
+        "state": "value",
+        "value": "invitation"
+      },
+      {
+        "state": "value",
+        "value": "announcement"
+      },
+      {
+        "state": "value",
+        "value": "speech"
+      },
+      {
+        "state": "value",
+        "value": "cover_letter"
+      },
+      {
+        "state": "value",
+        "value": "complaint"
+      },
+      {
+        "state": "value",
+        "value": "review"
+      },
+      {
+        "state": "value",
+        "value": "recipe"
+      },
+      {
+        "state": "value",
+        "value": "list"
+      },
+      {
+        "state": "value",
+        "value": "minutes"
+      },
+      {
+        "state": "value",
+        "value": "proposal"
+      },
+      {
+        "state": "value",
+        "value": "poem"
+      },
+      {
+        "state": "value",
+        "value": "press_release"
+      },
+      {
+        "state": "value",
+        "value": "newsletter"
+      },
+      {
+        "state": "value",
+        "value": "itinerary"
+      },
+      {
+        "state": "value",
+        "value": "lab_report"
+      },
+      {
+        "state": "value",
+        "value": "cv"
+      }
+    ],
+    "document.text.length": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "very_short"
+      },
+      {
+        "state": "value",
+        "value": "short"
+      },
+      {
+        "state": "value",
+        "value": "medium"
+      },
+      {
+        "state": "value",
+        "value": "long"
+      },
+      {
+        "state": "value",
+        "value": "very_long"
+      }
+    ],
+    "document.text.tone": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "formal"
+      },
+      {
+        "state": "value",
+        "value": "informal"
+      },
+      {
+        "state": "value",
+        "value": "friendly"
+      },
+      {
+        "state": "value",
+        "value": "warm"
+      },
+      {
+        "state": "value",
+        "value": "cold"
+      },
+      {
+        "state": "value",
+        "value": "polite"
+      },
+      {
+        "state": "value",
+        "value": "firm"
+      },
+      {
+        "state": "value",
+        "value": "neutral"
+      },
+      {
+        "state": "value",
+        "value": "enthusiastic"
+      },
+      {
+        "state": "value",
+        "value": "apologetic"
+      },
+      {
+        "state": "value",
+        "value": "humorous"
+      },
+      {
+        "state": "value",
+        "value": "serious"
+      },
+      {
+        "state": "value",
+        "value": "persuasive"
+      },
+      {
+        "state": "value",
+        "value": "simple"
+      }
+    ],
+    "drawing.drawn.at": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "corner"
+      },
+      {
+        "state": "value",
+        "value": "top"
+      },
+      {
+        "state": "value",
+        "value": "bottom"
+      },
+      {
+        "state": "value",
+        "value": "left"
+      },
+      {
+        "state": "value",
+        "value": "right"
+      },
+      {
+        "state": "value",
+        "value": "center"
+      },
+      {
+        "state": "value",
+        "value": "top_left"
+      },
+      {
+        "state": "value",
+        "value": "top_right"
+      },
+      {
+        "state": "value",
+        "value": "bottom_left"
+      },
+      {
+        "state": "value",
+        "value": "bottom_right"
+      },
+      {
+        "state": "value",
+        "value": "middle"
+      },
+      {
+        "state": "value",
+        "value": "background"
+      },
+      {
+        "state": "value",
+        "value": "foreground"
+      }
+    ],
+    "drawing.drawn.direction": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "up"
+      },
+      {
+        "state": "value",
+        "value": "down"
+      },
+      {
+        "state": "value",
+        "value": "left"
+      },
+      {
+        "state": "value",
+        "value": "right"
+      },
+      {
+        "state": "value",
+        "value": "closer"
+      },
+      {
+        "state": "value",
+        "value": "apart"
+      },
+      {
+        "state": "value",
+        "value": "forward"
+      },
+      {
+        "state": "value",
+        "value": "backward"
+      }
+    ],
+    "drawing.drawn.relation": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "in"
+      },
+      {
+        "state": "value",
+        "value": "on"
+      },
+      {
+        "state": "value",
+        "value": "under"
+      },
+      {
+        "state": "value",
+        "value": "above"
+      },
+      {
+        "state": "value",
+        "value": "below"
+      },
+      {
+        "state": "value",
+        "value": "next_to"
+      },
+      {
+        "state": "value",
+        "value": "left_of"
+      },
+      {
+        "state": "value",
+        "value": "right_of"
+      },
+      {
+        "state": "value",
+        "value": "between"
+      },
+      {
+        "state": "value",
+        "value": "behind"
+      },
+      {
+        "state": "value",
+        "value": "in_front_of"
+      },
+      {
+        "state": "value",
+        "value": "near"
+      },
+      {
+        "state": "value",
+        "value": "around"
+      },
+      {
+        "state": "value",
+        "value": "inside"
+      },
+      {
+        "state": "value",
+        "value": "outside"
+      },
+      {
+        "state": "value",
+        "value": "along"
+      }
+    ],
+    "drawing.page.mode": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "temporary"
+      },
+      {
+        "state": "value",
+        "value": "always"
+      },
+      {
+        "state": "value",
+        "value": "off"
+      }
+    ],
+    "request.constraint.character": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "requirement"
+      },
+      {
+        "state": "value",
+        "value": "preference"
+      },
+      {
+        "state": "value",
+        "value": "assumption"
+      }
+    ],
+    "request.constraint.operator": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "eq"
+      },
+      {
+        "state": "value",
+        "value": "less.equal"
+      },
+      {
+        "state": "value",
+        "value": "greater.equal"
+      },
+      {
+        "state": "value",
+        "value": "degree"
+      },
+      {
+        "state": "value",
+        "value": "region"
+      },
+      {
+        "state": "value",
+        "value": "relation"
+      },
+      {
+        "state": "value",
+        "value": "same"
+      },
+      {
+        "state": "value",
+        "value": "occurred"
+      },
+      {
+        "state": "value",
+        "value": "delta"
+      },
+      {
+        "state": "value",
+        "value": "factor"
+      }
+    ],
+    "request.constraint.phase": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "selector"
+      },
+      {
+        "state": "value",
+        "value": "result"
+      }
+    ],
+    "request.constraint.polarity": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "positive"
+      },
+      {
+        "state": "value",
+        "value": "negative"
+      }
+    ],
+    "request.constraint.scope": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "each"
+      },
+      {
+        "state": "value",
+        "value": "group"
+      }
+    ],
+    "request.constraint.step": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "more"
+      },
+      {
+        "state": "value",
+        "value": "much_more"
+      },
+      {
+        "state": "value",
+        "value": "less"
+      },
+      {
+        "state": "value",
+        "value": "much_less"
+      }
+    ],
+    "request.constraint.variety": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "same"
+      },
+      {
+        "state": "value",
+        "value": "different"
+      },
+      {
+        "state": "value",
+        "value": "random"
+      },
+      {
+        "state": "value",
+        "value": "matching"
+      },
+      {
+        "state": "value",
+        "value": "alternating"
+      }
+    ],
+    "request.logic.group": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "and"
+      },
+      {
+        "state": "value",
+        "value": "or"
+      }
+    ],
+    "request.logic.quantifier": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "all"
+      },
+      {
+        "state": "value",
+        "value": "any"
+      },
+      {
+        "state": "value",
+        "value": "each"
+      },
+      {
+        "state": "value",
+        "value": "none"
+      },
+      {
+        "state": "value",
+        "value": "both"
+      },
+      {
+        "state": "value",
+        "value": "some"
+      },
+      {
+        "state": "value",
+        "value": "other"
+      },
+      {
+        "state": "value",
+        "value": "every_except"
+      }
+    ],
+    "request.question.ask": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "what"
+      },
+      {
+        "state": "value",
+        "value": "which"
+      },
+      {
+        "state": "value",
+        "value": "count"
+      },
+      {
+        "state": "value",
+        "value": "exists"
+      },
+      {
+        "state": "value",
+        "value": "where"
+      },
+      {
+        "state": "value",
+        "value": "when"
+      },
+      {
+        "state": "value",
+        "value": "who"
+      },
+      {
+        "state": "value",
+        "value": "list"
+      },
+      {
+        "state": "value",
+        "value": "describe"
+      },
+      {
+        "state": "value",
+        "value": "why"
+      },
+      {
+        "state": "value",
+        "value": "how"
+      },
+      {
+        "state": "value",
+        "value": "how_much"
+      },
+      {
+        "state": "value",
+        "value": "compare"
+      },
+      {
+        "state": "value",
+        "value": "total"
+      },
+      {
+        "state": "value",
+        "value": "average"
+      },
+      {
+        "state": "value",
+        "value": "max"
+      },
+      {
+        "state": "value",
+        "value": "min"
+      },
+      {
+        "state": "value",
+        "value": "difference"
+      },
+      {
+        "state": "value",
+        "value": "percent"
+      }
+    ],
+    "request.request.act": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "make"
+      },
+      {
+        "state": "value",
+        "value": "place"
+      },
+      {
+        "state": "value",
+        "value": "change"
+      },
+      {
+        "state": "value",
+        "value": "remove"
+      },
+      {
+        "state": "value",
+        "value": "connect"
+      },
+      {
+        "state": "value",
+        "value": "disconnect"
+      },
+      {
+        "state": "value",
+        "value": "group"
+      },
+      {
+        "state": "value",
+        "value": "ungroup"
+      },
+      {
+        "state": "value",
+        "value": "copy"
+      },
+      {
+        "state": "value",
+        "value": "select"
+      },
+      {
+        "state": "value",
+        "value": "send"
+      },
+      {
+        "state": "value",
+        "value": "save"
+      },
+      {
+        "state": "value",
+        "value": "show"
+      },
+      {
+        "state": "value",
+        "value": "arrange"
+      },
+      {
+        "state": "value",
+        "value": "undo"
+      },
+      {
+        "state": "value",
+        "value": "redo"
+      },
+      {
+        "state": "value",
+        "value": "repeat"
+      },
+      {
+        "state": "value",
+        "value": "answer"
+      },
+      {
+        "state": "value",
+        "value": "object"
+      },
+      {
+        "state": "value",
+        "value": "compute"
+      }
+    ],
+    "request.request.mood": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "do"
+      },
+      {
+        "state": "value",
+        "value": "propose"
+      },
+      {
+        "state": "value",
+        "value": "check"
+      },
+      {
+        "state": "value",
+        "value": "ask"
+      }
+    ],
+    "request.target.determiner": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "definite"
+      },
+      {
+        "state": "value",
+        "value": "indefinite"
+      }
+    ],
+    "request.target.fill": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "written"
+      },
+      {
+        "state": "value",
+        "value": "context"
+      },
+      {
+        "state": "value",
+        "value": "description"
+      },
+      {
+        "state": "value",
+        "value": "all"
+      },
+      {
+        "state": "value",
+        "value": "previous_reply"
+      },
+      {
+        "state": "value",
+        "value": "journal_step"
+      }
+    ],
+    "request.target.mode": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "new"
+      },
+      {
+        "state": "value",
+        "value": "existing"
+      },
+      {
+        "state": "value",
+        "value": "bound"
+      }
+    ],
+    "request.target.ordinal": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "first"
+      },
+      {
+        "state": "value",
+        "value": "second"
+      },
+      {
+        "state": "value",
+        "value": "third"
+      },
+      {
+        "state": "value",
+        "value": "fourth"
+      },
+      {
+        "state": "value",
+        "value": "fifth"
+      },
+      {
+        "state": "value",
+        "value": "last"
+      },
+      {
+        "state": "value",
+        "value": "second_last"
+      },
+      {
+        "state": "value",
+        "value": "next"
+      },
+      {
+        "state": "value",
+        "value": "previous"
+      },
+      {
+        "state": "value",
+        "value": "newest"
+      },
+      {
+        "state": "value",
+        "value": "oldest"
+      },
+      {
+        "state": "value",
+        "value": "biggest"
+      },
+      {
+        "state": "value",
+        "value": "smallest"
+      },
+      {
+        "state": "value",
+        "value": "top"
+      },
+      {
+        "state": "value",
+        "value": "bottom"
+      },
+      {
+        "state": "value",
+        "value": "leftmost"
+      },
+      {
+        "state": "value",
+        "value": "rightmost"
+      }
+    ],
+    "request.target.type": [
+      {
+        "state": "absent"
+      },
+      {
+        "state": "unknown"
+      },
+      {
+        "state": "value",
+        "value": "block"
+      },
+      {
+        "state": "value",
+        "value": "calendar"
+      },
+      {
+        "state": "value",
+        "value": "chart"
+      },
+      {
+        "state": "value",
+        "value": "diagram"
+      },
+      {
+        "state": "value",
+        "value": "document"
+      },
+      {
+        "state": "value",
+        "value": "drawn"
+      },
+      {
+        "state": "value",
+        "value": "face"
+      },
+      {
+        "state": "value",
+        "value": "group"
+      },
+      {
+        "state": "value",
+        "value": "inline"
+      },
+      {
+        "state": "value",
+        "value": "link"
+      },
+      {
+        "state": "value",
+        "value": "meeting"
+      },
+      {
+        "state": "value",
+        "value": "node"
+      },
+      {
+        "state": "value",
+        "value": "page"
+      },
+      {
+        "state": "value",
+        "value": "part"
+      },
+      {
+        "state": "value",
+        "value": "person"
+      },
+      {
+        "state": "value",
+        "value": "point"
+      },
+      {
+        "state": "value",
+        "value": "room"
+      },
+      {
+        "state": "value",
+        "value": "section"
+      },
+      {
+        "state": "value",
+        "value": "series"
+      },
+      {
+        "state": "value",
+        "value": "sketch"
+      },
+      {
+        "state": "value",
+        "value": "text"
+      }
+    ]
+  },
+  "bioKeys": [
+    "avatar.face.base",
+    "avatar.face.characterKind",
+    "avatar.face.duration",
+    "avatar.face.expression",
+    "avatar.face.id",
+    "avatar.face.mode",
+    "avatar.face.name",
+    "avatar.face.preset",
+    "avatar.face.scale",
+    "avatar.part.colour",
+    "avatar.part.id",
+    "avatar.part.ids",
+    "avatar.part.place",
+    "avatar.part.property",
+    "avatar.part.scale",
+    "avatar.part.size",
+    "avatar.part.value",
+    "avatar.part.variant",
+    "calendar.calendar.colour",
+    "calendar.calendar.id",
+    "calendar.calendar.label",
+    "calendar.calendar.name",
+    "calendar.meeting.agenda",
+    "calendar.meeting.calendar",
+    "calendar.meeting.day",
+    "calendar.meeting.duration",
+    "calendar.meeting.end",
+    "calendar.meeting.free",
+    "calendar.meeting.id",
+    "calendar.meeting.ids",
+    "calendar.meeting.length",
+    "calendar.meeting.notes",
+    "calendar.meeting.participants",
+    "calendar.meeting.people",
+    "calendar.meeting.relation",
+    "calendar.meeting.relation_anchor",
+    "calendar.meeting.room",
+    "calendar.meeting.shift",
+    "calendar.meeting.start",
+    "calendar.meeting.time",
+    "calendar.meeting.timezone",
+    "calendar.meeting.title",
+    "calendar.person.id",
+    "calendar.person.label",
+    "calendar.person.name",
+    "calendar.room.capacity",
+    "calendar.room.id",
+    "calendar.room.label",
+    "calendar.room.location",
+    "calendar.room.name",
+    "calendar.room.seats",
+    "conversation.turn.repeat_count",
+    "diagram.chart.colour",
+    "diagram.chart.datasets",
+    "diagram.chart.height",
+    "diagram.chart.horizontal",
+    "diagram.chart.id",
+    "diagram.chart.ids",
+    "diagram.chart.labels",
+    "diagram.chart.legend",
+    "diagram.chart.palette",
+    "diagram.chart.series",
+    "diagram.chart.showLegend",
+    "diagram.chart.showValues",
+    "diagram.chart.show_values",
+    "diagram.chart.sort",
+    "diagram.chart.source",
+    "diagram.chart.stacked",
+    "diagram.chart.title",
+    "diagram.chart.type",
+    "diagram.chart.values",
+    "diagram.chart.width",
+    "diagram.chart.x",
+    "diagram.chart.y",
+    "diagram.diagram.kind",
+    "diagram.diagram.layout",
+    "diagram.group.colour",
+    "diagram.group.id",
+    "diagram.group.ids",
+    "diagram.group.label",
+    "diagram.group.labels",
+    "diagram.group.layout",
+    "diagram.group.name",
+    "diagram.group.scale",
+    "diagram.group.size",
+    "diagram.group.values",
+    "diagram.group.x",
+    "diagram.group.y",
+    "diagram.link.arrow",
+    "diagram.link.colour",
+    "diagram.link.from",
+    "diagram.link.ids",
+    "diagram.link.label",
+    "diagram.link.nodes",
+    "diagram.link.style",
+    "diagram.link.to",
+    "diagram.link.width",
+    "diagram.node.anchor",
+    "diagram.node.at",
+    "diagram.node.colour",
+    "diagram.node.edges",
+    "diagram.node.height",
+    "diagram.node.ids",
+    "diagram.node.kind",
+    "diagram.node.label",
+    "diagram.node.layout",
+    "diagram.node.n",
+    "diagram.node.position",
+    "diagram.node.relation",
+    "diagram.node.shape",
+    "diagram.node.size",
+    "diagram.node.value",
+    "diagram.node.width",
+    "diagram.node.x",
+    "diagram.node.y",
+    "diagram.page.duration",
+    "diagram.page.mode",
+    "diagram.point.chart",
+    "diagram.point.index",
+    "diagram.point.series",
+    "diagram.point.value",
+    "diagram.series.chart",
+    "diagram.series.colour",
+    "diagram.series.index",
+    "diagram.series.label",
+    "diagram.series.values",
+    "diagram.sketch.links",
+    "diagram.sketch.nodes",
+    "document.block.align",
+    "document.block.at",
+    "document.block.attrs",
+    "document.block.checked",
+    "document.block.enabled",
+    "document.block.from",
+    "document.block.header",
+    "document.block.id",
+    "document.block.ids",
+    "document.block.items",
+    "document.block.kind",
+    "document.block.level",
+    "document.block.mark",
+    "document.block.name",
+    "document.block.parent",
+    "document.block.rows",
+    "document.block.style",
+    "document.block.text",
+    "document.block.to",
+    "document.document.blocks",
+    "document.document.chapters",
+    "document.document.genre",
+    "document.document.id",
+    "document.document.property",
+    "document.document.title",
+    "document.document.topic",
+    "document.document.value",
+    "document.document.words",
+    "document.inline.align",
+    "document.inline.enabled",
+    "document.inline.format",
+    "document.inline.from",
+    "document.inline.highlight_colour",
+    "document.inline.items",
+    "document.inline.link_target",
+    "document.inline.list_kind",
+    "document.inline.rows",
+    "document.inline.to",
+    "document.section.after",
+    "document.section.align",
+    "document.section.at",
+    "document.section.attrs",
+    "document.section.content",
+    "document.section.count",
+    "document.section.enabled",
+    "document.section.from",
+    "document.section.id",
+    "document.section.ids",
+    "document.section.kind",
+    "document.section.length",
+    "document.section.level",
+    "document.section.mark",
+    "document.section.name",
+    "document.section.order",
+    "document.section.order_anchor",
+    "document.section.parent",
+    "document.section.role",
+    "document.section.text",
+    "document.section.to",
+    "document.section.words",
+    "document.text.about",
+    "document.text.chapters",
+    "document.text.content",
+    "document.text.genre",
+    "document.text.id",
+    "document.text.length",
+    "document.text.text",
+    "document.text.title",
+    "document.text.tone",
+    "document.text.words",
+    "drawing.drawn.anchor",
+    "drawing.drawn.at",
+    "drawing.drawn.color",
+    "drawing.drawn.colour",
+    "drawing.drawn.count",
+    "drawing.drawn.direction",
+    "drawing.drawn.distance",
+    "drawing.drawn.distanceGrade",
+    "drawing.drawn.height",
+    "drawing.drawn.id",
+    "drawing.drawn.ids",
+    "drawing.drawn.kind",
+    "drawing.drawn.label",
+    "drawing.drawn.name",
+    "drawing.drawn.relation",
+    "drawing.drawn.size",
+    "drawing.drawn.width",
+    "drawing.drawn.x",
+    "drawing.drawn.y",
+    "drawing.group.members",
+    "drawing.group.name",
+    "drawing.page.duration",
+    "drawing.page.mode",
+    "drawing.part.color",
+    "drawing.part.colour",
+    "drawing.part.height",
+    "drawing.part.id",
+    "drawing.part.index",
+    "drawing.part.owner",
+    "drawing.part.width",
+    "drawing.part.x",
+    "drawing.part.y",
+    "request.question.asked_key",
+    "request.request.act",
+    "request.target.count",
+    "request.target.description",
+    "request.target.kind",
+    "request.target.name"
+  ],
+  "metadataKeys": [
+    "request.constraint.character",
+    "request.constraint.operator",
+    "request.constraint.phase",
+    "request.constraint.polarity",
+    "request.constraint.scope",
+    "request.constraint.step",
+    "request.constraint.variety",
+    "request.logic.group"
+  ],
+  "maxLength": 256,
+  "boundary": "Conditional gold-cut training; predicted BIO mentions at runtime; unrepresented normalizations/candidates unresolved. No observed literal vocabulary.",
+  "labelStorage": "int8 CPU; int64 per optimizer batch",
+  "inputPadding": "max_length",
+  "consistencyCoefficient": 0.1,
+  "encoder": "/home/salboaie/work/sopworlds/.session-control/hf-cache/models--distilbert--distilbert-base-uncased/snapshots/12040accade4e8a0f71eabdb258fecc2e7e948be",
+  "encoderFiles": {
+    "model.safetensors": "5e3f1108e3cb34ee048634875d8482665b65ac713291a7e32396fb18f6ff0063",
+    "vocab.txt": "07eced375cec144d27c900241f3e339478dec958f92fddbc551f295c992038a3",
+    "tokenizer.json": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+    "config.json": "69c94b0222d5d1f4b0ad027ca7416cdafb98378cbbb8305d0bf47c9365c60c83",
+    "tokenizer_config.json": "a025160ef0431f1a392f6f050c1310f4c5d9fb6f275932dbccba73c4d214bf10"
+  },
+  "initCheckpointSha256": "20198a4169cefbde1d8f848cb8a4c14f13460ffcacb38a577fca8adbc243aee9",
+  "dataManifestSha256": "ffcf164c802ca6318ec127586d1dca8ab16c5a23885054331151ed45d1d5a1a3",
+  "trainerSha256": "01a03ddceaf3c2cbb75f79bec5e10fcec46d78d0fbee746b44f32846d1cd7a53",
+  "warmstart": {
+    "encoderTensors": 100,
+    "sharedKeys": 94,
+    "newKeys": 163,
+    "classRows": 462
+  },
+  "trainingInputPadding": "dynamic"
+}

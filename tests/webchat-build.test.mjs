@@ -32,7 +32,6 @@ test('webchat build produces a bundle the browser loader can run', async () => {
     const url = (p) => pathToFileURL(path.join(out, p)).href;
     for (const [world, factory, initialize] of [
       ['diagram.sketch', 'createDiagramHost', 'initialDiagramState'],
-      ['docs.editor', 'createDocumentHost', 'initialDocumentState'],
       ['data.charts', 'createChartHost', 'initialChartState'],
     ]) {
       const adapter = await import(url(`worlds/${world}/declared-host.mjs`));
@@ -40,6 +39,12 @@ test('webchat build produces a bundle the browser loader can run', async () => {
       assert.equal(host.observe().complete, true);
       assert.ok(host.bindings().length > 0, 'built native capabilities load with shared dependencies');
     }
+    // The built Documents area starts from its declaration with the offline catalog subset: one empty document.
+    const documents = await import(url('worlds/docs.editor/sop-document.mjs'));
+    const documentState = documents.emptyDocumentArea(), documentHost = await documents.createDocumentArea({ state: documentState, instanceId: 'built-documents' });
+    assert.equal(documentHost.observe().complete, true);
+    assert.ok(documentHost.observe().objects.some((object) => object.sourceType === 'docs.editor.document'));
+    assert.equal(documentHost.bindings().length, 27);
     // The built Calendar area starts from its declaration with the offline catalog subset.
     const calendar = await import(url('worlds/time.calendar/sop-calendar.mjs'));
     const calendarState = calendar.emptyCalendarArea(), calendarHost = await calendar.createCalendarArea({ state: calendarState, instanceId: 'built-calendar' });

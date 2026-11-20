@@ -12,6 +12,8 @@ import {renderPrimitives} from './sop-primitives.mjs';
 const read = (fact, key) => { const raw = fact?.attrs[key]?.[0]; return raw === undefined ? undefined : raw.startsWith('"') ? str(raw) : raw; };
 const all = (fact, key) => (fact?.attrs[key] ?? []).map((raw) => raw.startsWith('"') ? str(raw) : raw);
 const cache = new Map(), resolved = new Map();
+// A declared value with its type: quoted text stays text; true, false and numbers are themselves.
+const typedValue = (raw) => raw.startsWith('"') ? str(raw) : raw === 'true' ? true : raw === 'false' ? false : /^-?\d+(\.\d+)?$/.test(raw) ? Number(raw) : raw;
 
 function declaration(text) {
   const world = new World();
@@ -33,16 +35,22 @@ export async function areaBase({ world, loader, readCatalog }) {
     const lookups = owned('app.area.lookup'), lookupWorlds = [...new Set(lookups.map((lookup) => read(lookup, 'world')))];
     // An area whose rules derive deeply declares its derivation depth (depth=); otherwise the library's default.
     const depth = Number(read(area, 'depth')), options = Number.isSafeInteger(depth) && depth > 0 ? { maxDepth: depth } : {};
+    // An area whose pages hold many derived facts declares its rule-firing budget per derivation (steps=).
+    const steps = Number(read(area, 'steps'));
+    if (Number.isSafeInteger(steps) && steps > 0) options.maxSteps = steps;
     const base = await catalogWorld(readCatalog, { modules: [instance, ...knowledge, ...lookupWorlds], use: ['std.acts', instance, ...knowledge, ...lookupWorlds], options,
       shardsOf: (entry) => knowledge.includes(entry?.id) ? (entry.shards ?? []).map((shard) => typeof shard === 'string' ? shard : shard.path) : [] });
     const actSchema = await loader.readFile('app.project', 'act-schema.sop');
     if (!base.load(actSchema).ok) throw Error('act-schema-refused');
+    // calls=instance: the compiled calls run in a world of the instance schema (and knowledge schemas) without the
+    // area's rules, so an act does not re-derive the area's projection (an area whose rules derive deeply asks for it).
+    const callBase = read(area, 'calls') === 'instance' ? base.fork() : null;
     for (const rules of owned('app.area.rules').sort((a, b) => Number(read(a, 'n')) - Number(read(b, 'n')))) {
       const source = await loader.readFile(world, read(rules, 'file'));
       if (!source || !base.load(source).ok) throw Error('area-rules-refused:' + read(rules, 'file'));
     }
     const kinds = base.ofType('std.schema.kind').map((kind) => read(kind, 'of')).filter((kind) => kind.startsWith(instance + '.'));
-    return { base, area, owned, declarations, kinds, instance, lookups, loadedShards: new Set(), readCatalog };
+    return { base, callBase, area, owned, declarations, kinds, instance, lookups, loadedShards: new Set(), readCatalog };
   })();
   cache.set(world, promise);
   try { const value = await promise; resolved.set(world, value); return value; } catch (error) { cache.delete(world); throw error; }
@@ -113,7 +121,7 @@ export async function createSopArea({ world, loader, readCatalog, state, instanc
   await ensureLookups(declared, state, args);
   // interfaceImports: the native interfaces this one composes (app.native.compose module=...), by module.
   const toolInterface = readNativeToolInterface(interfaceSource, { imports: interfaceImports }).realize(choices(declared));
-  const host = createSopWorldHost({ base: declared.base, kinds: declared.kinds, state, instanceId, scope: read(declared.area, 'scope'), toolInterface, identityRegistry, spatialObservation: read(declared.area, 'spatial') === 'true' });
+  const host = createSopWorldHost({ base: declared.base, callBase: declared.callBase, kinds: declared.kinds, state, instanceId, scope: read(declared.area, 'scope'), toolInterface, identityRegistry, spatialObservation: read(declared.area, 'spatial') === 'true' });
   return host;
 }
 
@@ -169,6 +177,11 @@ export function projectSopArea(world, state, opts = {}) {
       fields: declared.declarations.ofType('app.area.field').filter((field) => field.attrs.control?.[0] === '$' + control.id)
         .sort((a, b) => Number(read(a, 'n')) - Number(read(b, 'n')))
         .map((field) => ({ param: read(field, 'param'), label: read(field, 'label'), input: read(field, 'input'), scale: Number(read(field, 'scale') ?? 1) })),
+      // Arguments a control always sends (app.area.arg): a fixed value, the first or every observed option of a key,
+      // a key of the view's state (read as a number when kind=number), or an empty list; `key` places the value under
+      // that key of an object argument.
+      args: declared.declarations.ofType('app.area.arg').filter((arg) => arg.attrs.control?.[0] === '$' + control.id)
+        .map((arg) => Object.fromEntries(['param', 'key', 'value', 'option', 'options', 'view', 'list', 'kind'].filter((k) => arg.attrs[k]).map((k) => [k, k === 'value' ? typedValue(arg.attrs.value[0]) : read(arg, k)]))),
       available: read(control, 'target') !== 'selected' || (selected !== null && !all(control, 'except').includes(selected) && (when === undefined || (when === 'present') === present)) };
   });
   // The state itself travels with what is derived from it, so a projection canonicalizes back to its state.

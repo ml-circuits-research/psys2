@@ -3,8 +3,8 @@
 // knowledge has that structure; the library's `composeDiagram` / `sampleDiagram` (sopworld 0.112) draw a kind x a topic and lay it out with `arrange`. This file does what a host owes the
 // library: builds the World it reads (the bundled subset of the catalog, `bundled-diagrams.mjs`, with the live catalog laid over it when reachable), reads a request into a kind and a topic
 // (the kinds' words come from the knowledge, not from a list here), tries the candidate topics, and says what was composed in plain words. No template, no sample labels. Browser-safe: no `node:*`.
-import { BUNDLED_DIAGRAMS } from './bundled-diagrams.mjs?v=df368649c6';
-import { BUNDLED_GEO } from './bundled-geo.mjs?v=b64ea3dfd4';
+import { BUNDLED_DIAGRAMS } from './bundled-diagrams.mjs?v=2aca62f8a2';
+import { BUNDLED_GEO } from './bundled-geo.mjs?v=d0864ffbaa';
 
 const budget = { tick: (site, n = 1) => globalThis[Symbol.for('psys2.budget')]?.tick(site, n) };   // the turn's step budget (a no-op outside a turn)
 const words = (s) => String(s ?? '').toLowerCase().match(/[\p{L}\p{N}']+/gu) ?? [];

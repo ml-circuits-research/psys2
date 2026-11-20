@@ -9,7 +9,8 @@ import { executeDeclaredRequest } from '../src/dialog/declared-execution.mjs';
 import { performGesture } from './fixtures/editor-gesture.mjs';
 import { routeNewEngine } from '../src/dialog/reader-routing.mjs';
 import { createDiagramArea as createDiagramHost, emptyDiagramState as initialDiagramState } from '../worlds/diagram.sketch/sop-diagram.mjs';
-import { initialDocumentState } from '../worlds/docs.editor/declared-host.mjs';
+import { emptyDocumentArea as initialDocumentState } from '../worlds/docs.editor/sop-document.mjs';
+import { documentOf } from './document-state.mjs';
 import {emptyCalendarArea,calendarAreaStateWorld} from '../worlds/time.calendar/sop-calendar.mjs';
 import {str as sopText} from '../src/vendor/sopworld/sopworld.mjs';
 const calendarThings=(state,kind)=>calendarAreaStateWorld(state).ofType('w.meetings.'+kind).map(fact=>Object.fromEntries(Object.entries(fact.attrs).map(([key,values])=>[key,values.length===1?(values[0].startsWith('"')?sopText(values[0]):values[0]):values])));
@@ -93,7 +94,7 @@ test('Document overwrite and Calendar coverage policies read declared SOP guards
     graph({ act: 'make', mode: 'new', kind: 'canonical.document', name }), '', { view: 'editor', bindings: editorBindings });
   const inserted = await write('Initial');
   assert.equal(inserted.statuses[0], 'supported', JSON.stringify(inserted.trace));
-  assert.equal(document.title, 'Initial');
+  assert.equal(documentOf(document).title, 'Initial');
   assert.match(inserted.trace.compiledSop, /std\.capability\.list/);
   const before = structuredClone(document);
   const refused = await write('Replacement');

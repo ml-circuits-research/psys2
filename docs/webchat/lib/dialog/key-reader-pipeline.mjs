@@ -1,8 +1,9 @@
 // Source-only two-model proposals. No parser fallback or execution admission.
 import {readReaderSource} from './reader-source.mjs?v=49f139fd1e';
 import {copyHostData,freezeHostData} from '../../worlds/native-tool-host.mjs?v=6e8a05d4e9';
-import {bridgeRawStructure,RAW_STRUCTURAL_FORMAT} from './raw-structural-bridge.mjs?v=18c6368f46';
-import {comparativeSteps} from './comparative-projection.mjs?v=47420ad488';
+import {bridgeRawStructure,RAW_STRUCTURAL_FORMAT,BINDING_NODES} from './raw-structural-bridge.mjs?v=7b3162b44b';
+import {comparativeSteps} from './comparative-projection.mjs?v=11b4faa0f5';
+import {referenceProjection} from './reference-projection.mjs?v=802eafd47a';
 const hash=x=>typeof x==='string'&&/^[a-f0-9]{64}$/.test(x);
 const digest=async x=>Array.from(new Uint8Array(await globalThis.crypto.subtle.digest('SHA-256',new TextEncoder().encode(x))),b=>b.toString(16).padStart(2,'0')).join('');
 const same=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
@@ -12,7 +13,7 @@ export async function createKeyReaderPipeline({cutter,reader,getContext,cutterMo
  if(typeof getContext!=='function'||typeof bindingsJSON!=='string'||bindingsJSON.length>4000000||!hash(bindingsSha256)||![maxText,maxRequests,maxBytes,budget,decoderBudget].every(n=>Number.isSafeInteger(n)&&n>0)||maxRequests>32||maxBytes>4000000)throw Error('invalid-pipeline-options');
  const identities={cutter:modelIdentity(cutterModel),reader:modelIdentity(readerModel)};
  if(await digest(bindingsJSON)!==bindingsSha256)throw Error('binding-hash-mismatch');
- const bindings=freezeHostData(JSON.parse(bindingsJSON),{maxBytes});
+ const bindings=freezeHostData(JSON.parse(bindingsJSON),{maxBytes,maxNodes:BINDING_NODES});
  const pipelineSha256=await digest(JSON.stringify({format:'psys2.key-reader-pipeline/1',...identities,bindingsSha256}));
  const provenance={modelSha256:pipelineSha256,decoderVersion:1,models:identities,bindingsSha256,architecture:'source-cutter/request-key-heads',calibration:null};
  let independentInput=null;
@@ -24,7 +25,12 @@ export async function createKeyReaderPipeline({cutter,reader,getContext,cutterMo
   const copy=x=>copyHostData(x,{maxBytes});
   const closed=(x,keys)=>{if(!x||typeof x!=='object'||Array.isArray(x)||Object.keys(x).some(k=>!keys.includes(k)))throw Error('invalid-provider-envelope');};
   const source=(x,expected)=>{closed(x,['text','unit']);if(x.unit!=='unicode-scalar'||x.text!==expected)throw Error('source-snapshot-mismatch');};
-  const status=(x,path)=>{closed(x.coverage,['complete','truncated']);if(x.coverage.complete!==true||x.coverage.truncated!==false)fail('incomplete-provider-coverage',path);if(!Array.isArray(x.unresolved))throw Error('missing-unresolved-status');for(const issue of x.unresolved){tick();failures.push({reason:'provider-unresolved',path,detail:copy(issue)});}};
+  // A bank value the classifier chose for a span that does not spell it is not refused by the provider: the bridge
+  // admits such a value only through a declared normalization of the binding table (a relation's value table, a
+  // declared value normalization) and reports it as unresolved otherwise.
+  const deferred=issue=>issue?.reason==='normalization-requires-declared-proof';
+  const status=(x,path)=>{closed(x.coverage,['complete','truncated']);if(!Array.isArray(x.unresolved))throw Error('missing-unresolved-status');const own=x.unresolved.filter(issue=>!deferred(issue));
+   if(x.coverage.complete!==true&&(own.length||!x.unresolved.length)||x.coverage.truncated!==false)fail('incomplete-provider-coverage',path);for(const issue of own){tick();failures.push({reason:'provider-unresolved',path,detail:copy(issue)});}};
   try{
    const text=readReaderSource(sourceSop);
    if(text.length>maxText*2)throw Error('invalid-source-text');const chars=Array.from(text);tick(chars.length);if(chars.length>maxText)throw Error('source-size');
@@ -60,7 +66,7 @@ export async function createKeyReaderPipeline({cutter,reader,getContext,cutterMo
    }
    raw={format:RAW_STRUCTURAL_FORMAT,source:{text,unit:'unicode-scalar'},area:context.area,model:{kind:'structural-graph',sha256:pipelineSha256,decoderVersion:1},requestCount:cut.spans.length,requests,ranges,coverage:{complete:failures.length===0,truncated:false},unresolved:copy(failures)};
    if(!recordedContext&&cut.spans.length===1&&context.context?.previous!=null)independentInput={sourceSop,cut,context,profiles:new Set()};
-   const bridge=bridgeRawStructure(raw,{bindings,bindingSha256:bindingsSha256,comparatives:comparativeSteps(),budget,decoderBudget,maxBytes});
+   const bridge=bridgeRawStructure(raw,{bindings,bindingSha256:bindingsSha256,comparatives:comparativeSteps(),references:referenceProjection(),budget,decoderBudget,maxBytes});
    failures.push(...bridge.diagnostics.map(issue=>({reason:issue.reason,path:issue.path})));const decoded=bridge.decoded;failures.push(...(decoded?.issues??[]));
    return {candidates:failures.length?[]:(decoded?.candidates??[]),coverage:{complete:failures.length===0&&decoded?.coverage?.complete===true,graphProposal:decoded?.coverage?.graphProposal===true,executable:false},failures,raw,provenance:copy(provenance),graphConfidence:null,sourceCut,steps,...(observation?{sourceObservation:copy(observation)}:{})};
   }catch(error){fail(String(error?.message??'pipeline-failed'));return {candidates:[],coverage:{complete:false,graphProposal:false,executable:false},failures,raw,provenance:copy(provenance),graphConfidence:null,sourceCut,steps};}

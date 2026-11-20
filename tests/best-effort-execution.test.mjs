@@ -6,7 +6,7 @@ import {NATIVE_AREAS} from '../src/dialog/app-reader-context.mjs';
 import {createDrawingArea,emptyDrawingState} from '../worlds/art.draw/sop-drawing.mjs';
 import {emptyCalendarArea} from '../worlds/time.calendar/sop-calendar.mjs';
 import {emptyDiagramState as initialDiagramState} from '../worlds/diagram.sketch/sop-diagram.mjs';
-import {initialDocumentState} from '../worlds/docs.editor/declared-host.mjs';
+import {emptyDocumentArea as initialDocumentState} from '../worlds/docs.editor/sop-document.mjs';
 import {selectedProbability,binaryDecisionProbability,combineModelScores} from '../src/dialog/model-selection-score.mjs';
 const calendarPolicy=await (await import('node:fs/promises')).readFile(new URL('../worlds/time.calendar/scheduling-policy.sop',import.meta.url),'utf8');
 const text='fixture source';

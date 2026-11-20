@@ -1,0 +1,1243 @@
+# docs.editor act rules (authored). Each native Documents command compiles to std.acts calls on the w.document
+# instance (worlds/sop-world-host.mjs only runs them) or to an explicit refusal. Blocks are addressed by their code
+# (b1, b2 ...), the document by its code (text1), a text container by its native id ["b1","0"]. Removing a block
+# removes its items, cells and marks (std.acts removes what refers to a thing); removing the document removes all.
+# Composing and rewriting free text are refused: this area has no composer and no rewriter (no language model runs
+# here), and no declared deterministic transform does what they ask. Undo and redo belong to the application's
+# journal; observing reads the derived objects; neither compiles to a call.
+@act.t.bnum core.type of=ui.doc.bnum
+@act.t.dnum core.type of=ui.doc.dnum
+@act.t.next core.type of=ui.doc.next
+@act.t.reqat core.type of=ui.doc.reqat
+@act.t.target core.type of=ui.doc.target
+@act.t.rangeok core.type of=ui.doc.rangeok
+@act.t.selop core.type of=ui.doc.selop
+@act.t.markop core.type of=ui.doc.markop
+@act.t.alignop core.type of=ui.doc.alignop
+@act.t.changeop core.type of=ui.doc.changeop
+@act.t.plainmark core.type of=ui.doc.plainmark
+@act.t.attrname core.type of=ui.doc.attrname
+@act.t.blockkey core.type of=ui.doc.blockkey
+@act.t.linkok core.type of=ui.doc.linkok
+@act.t.colourok core.type of=ui.doc.colourok
+@act.t.mergeable core.type of=ui.doc.mergeable
+@act.t.span core.type of=ui.doc.span
+@act.t.union core.type of=ui.doc.union
+@act.t.cutmark core.type of=ui.doc.cutmark
+@act.t.retext core.type of=ui.doc.retext
+@act.t.prefix core.type of=ui.doc.prefix
+@act.t.suffix core.type of=ui.doc.suffix
+@act.t.splice core.type of=ui.doc.splice
+@act.t.count core.type of=ui.doc.count
+@act.t.cutblock core.type of=ui.doc.cutblock
+@act.t.stopper core.type of=ui.doc.stopper
+@act.t.stop core.type of=ui.doc.stop
+@act.t.gmember core.type of=ui.doc.gmember
+@act.t.gsize core.type of=ui.doc.gsize
+@act.t.gpos core.type of=ui.doc.gpos
+@act.t.gpair core.type of=ui.doc.gpair
+@act.t.goffset core.type of=ui.doc.goffset
+@act.t.known core.type of=ui.doc.known
+@act.t.okkind core.type of=ui.doc.okkind
+@act.t.oklevel core.type of=ui.doc.oklevel
+@act.t.prefixblock core.type of=ui.doc.prefixblock
+@act.t.newitem core.type of=ui.doc.newitem
+@act.t.newcell core.type of=ui.doc.newcell
+@act.t.rowlen core.type of=ui.doc.rowlen
+@act.t.clamp core.type of=ui.doc.clamp
+@act.t.total core.type of=ui.doc.total
+@act.t.made core.type of=ui.doc.made
+@act.t.bad core.type of=ui.doc.bad
+
+# ---- Numbers ----
+# The next block code (b<k>), the next document code (text<k>) and the last place in the document's order.
+@a.nb.b w.document.block code=?c
+@a.nb.z core.calc out=?z fn=matches args=?c args="^b(\\d+)$" args=1
+@a.nb.o ui.doc.bnum z=?z
+@act.block.number core.rule when=$a.nb.b with=$a.nb.z then=$a.nb.o
+@a.nb.i ui.doc.bnum z=?z
+@a.nb.out ui.doc.next of=block top=?top
+@act.next.block core.aggregate over=$a.nb.i max=?top args=?z default=0 then=$a.nb.out
+@a.nd.d w.document.document code=?c
+@a.nd.z core.calc out=?z fn=matches args=?c args="^text(\\d+)$" args=1
+@a.nd.o ui.doc.dnum z=?z
+@act.document.number core.rule when=$a.nd.d with=$a.nd.z then=$a.nd.o
+@a.nd.i ui.doc.dnum z=?z
+@a.nd.out ui.doc.next of=document top=?top
+@act.next.document core.aggregate over=$a.nd.i max=?top args=?z default=0 then=$a.nd.out
+@a.nn.b w.document.block n=?n
+@a.nn.out ui.doc.next of=place top=?top
+@act.next.place core.aggregate over=$a.nn.b max=?top args=?n default=0 then=$a.nn.out
+
+# Names of the commands that share rules.
+@selop.block ui.doc.selop operation="document.block.select"
+@selop.section ui.doc.selop operation="document.section.select"
+@markop.block ui.doc.markop operation="document.block.mark"
+@markop.section ui.doc.markop operation="document.section.mark"
+@alignop.block ui.doc.alignop operation="document.block.align"
+@alignop.section ui.doc.alignop operation="document.section.align"
+@changeop.block ui.doc.changeop operation="document.block.change"
+@changeop.section ui.doc.changeop operation="document.section.change"
+@plain.bold ui.doc.plainmark form=bold
+@plain.italic ui.doc.plainmark form=italic
+@plain.underline ui.doc.plainmark form=underline
+@plain.strike ui.doc.plainmark form=strike
+@plain.code ui.doc.plainmark form=code
+@attr.href ui.doc.attrname name="href"
+@attr.color ui.doc.attrname name="color"
+@bkey.kind ui.doc.blockkey name="kind"
+@bkey.text ui.doc.blockkey name="text"
+@bkey.level ui.doc.blockkey name="level"
+@bkey.from ui.doc.blockkey name="from"
+
+# ---- The text a command names: a block's code and `at` ("0", an item's index, "row:column") ----
+# A request's text values are quoted, derived ones are bare: `at` is read through concat, which also makes "0" a number.
+@a.ra.r app.act.request at=?at
+@a.ra.n core.calc out=?an fn=concat args=?at
+@a.ra.o ui.doc.reqat at=?an
+@act.at core.rule when=$a.ra.r with=$a.ra.n then=$a.ra.o
+@a.tg.r app.act.request id=?id
+@a.tg.a ui.doc.reqat at=?at
+@a.tg.bx ui.doc.box id=?cid block=?id at=?at text=?txt thing=?w kind=?k
+@a.tg.o ui.doc.target box=?cid text=?txt thing=?w kind=?k
+@act.target core.rule when=$a.tg.r when=$a.tg.a when=$a.tg.bx then=$a.tg.o
+# A range is good when from <= to and the text has `to` characters.
+@a.rk.r app.act.request from=?f to=?t
+@a.rk.tg ui.doc.target text=?txt
+@a.rk.le core.check fn=lte args=?f args=?t
+@a.rk.pat core.calc out=?pat fn=concat args="^[\\s\\S]{" args=?t args="}"
+@a.rk.fit core.check fn=matches args=?txt args=?pat
+@a.rk.o ui.doc.rangeok ok=true
+@act.range.ok core.rule when=$a.rk.r when=$a.rk.tg if=$a.rk.le with=$a.rk.pat if=$a.rk.fit then=$a.rk.o
+
+# ---- Title ----
+@a.tc.r app.act.request operation="document.title.change" id=?id title=?t
+@a.tc.d w.document.document code=?id
+@a.tc.c app.act.call act=change thing=$a.tc.d attr=title value=?t order=1
+@act.title.change core.rule when=$a.tc.r when=$a.tc.d then=$a.tc.c
+@a.tc.miss app.act.refuse reason=missing-document
+@act.title.missing core.rule when=$a.tc.r not=$a.tc.d then=$a.tc.miss
+
+# ---- Selection: the view's selected block, and a range of its text when to > from ----
+# A block selection (from = to = 0) is taken for any block, also one without a text at `at` (a table).
+@a.sl.r app.act.request operation=?op id=?id from=?f to=?t at=?at
+@a.sl.op ui.doc.selop operation=?op
+@a.sl.b w.document.block code=?id
+@a.sl.ok ui.doc.rangeok ok=true
+@a.sl.v app.act.view key=selected value=?id
+@a.sl.gt core.check fn=gt args=?t args=?f
+@a.sl.eq core.check fn=eq args=?t args=?f
+@a.sl.vf app.act.view key=from value=?f
+@a.sl.vt app.act.view key=to value=?t
+@a.sl.va app.act.view key=at value=?at
+@a.sl.cf app.act.view key=from
+@a.sl.ct app.act.view key=to
+@a.sl.ca app.act.view key=at
+@act.select.range core.rule when=$a.sl.r when=$a.sl.op when=$a.sl.ok if=$a.sl.gt then=$a.sl.v then=$a.sl.vf then=$a.sl.vt then=$a.sl.va
+@act.select.point core.rule when=$a.sl.r when=$a.sl.op when=$a.sl.ok if=$a.sl.eq then=$a.sl.v then=$a.sl.cf then=$a.sl.ct then=$a.sl.ca
+@a.sl.z1 core.check fn=eq args=?f args=0
+@a.sl.z2 core.check fn=eq args=?t args=0
+@act.select.block core.rule when=$a.sl.r when=$a.sl.op when=$a.sl.b not=$a.sl.ok if=$a.sl.z1 if=$a.sl.z2 then=$a.sl.v then=$a.sl.cf then=$a.sl.ct then=$a.sl.ca
+@a.sl.bad.r app.act.request operation=?op from=?f to=?t
+@a.sl.bad app.act.refuse reason=invalid-text-range
+@a.sl.nz core.check fn=gt args=?t args=0
+@act.select.refused core.rule when=$a.sl.bad.r when=$a.sl.op not=$a.sl.ok if=$a.sl.nz then=$a.sl.bad
+@a.sl.nb.r app.act.request operation=?op id=?id
+@act.select.missing core.rule when=$a.sl.nb.r when=$a.sl.op not=$a.sl.b then=$a.sl.bad
+
+# ---- Alignment ----
+@a.al.r app.act.request operation=?op id=?id align=?al
+@a.al.op ui.doc.alignop operation=?op
+@a.al.b w.document.block code=?id
+@a.al.c app.act.call act=change thing=$a.al.b attr=align value=?al order=1
+@act.align core.rule when=$a.al.r when=$a.al.op when=$a.al.b then=$a.al.c
+@a.al.miss app.act.refuse reason=missing-target
+@act.align.missing core.rule when=$a.al.r when=$a.al.op not=$a.al.b then=$a.al.miss
+
+# ---- Changing a block (or a section's heading): text, name, kind, level, alignment ----
+@a.bc.r app.act.request operation=?op id=?id
+@a.bc.op ui.doc.changeop operation=?op
+@a.bc.b w.document.block code=?id form=?f
+@a.bc.miss app.act.refuse reason=missing-target
+@act.change.missing core.rule when=$a.bc.r when=$a.bc.op not=$a.bc.b then=$a.bc.miss
+@a.bc.tx ui.doc.textual code=?id
+@a.bc.np app.act.refuse reason=not-a-plain-text-block
+@a.bc.rt app.act.request text=?anyt
+@a.bc.rk app.act.request kind=?anyk
+@a.bc.rl app.act.request level=?anyl
+@act.change.text.not.plain core.rule when=$a.bc.r when=$a.bc.op when=$a.bc.b when=$a.bc.rt not=$a.bc.tx then=$a.bc.np
+@act.change.kind.not.plain core.rule when=$a.bc.r when=$a.bc.op when=$a.bc.b when=$a.bc.rk not=$a.bc.tx then=$a.bc.np
+@act.change.level.not.plain core.rule when=$a.bc.r when=$a.bc.op when=$a.bc.b when=$a.bc.rl not=$a.bc.tx then=$a.bc.np
+@a.bc.lv.r app.act.request level=?l kind=?k
+@a.bc.lv.k core.check fn=neq args=?k args=heading
+@a.bc.lv.out app.act.refuse reason=unexpected-heading-level
+@act.change.level.kind core.rule when=$a.bc.r when=$a.bc.op when=$a.bc.b when=$a.bc.lv.r if=$a.bc.lv.k then=$a.bc.lv.out
+@a.bc.lf.r app.act.request level=?l
+@a.bc.lf.k core.check fn=neq args=?f args=heading
+@act.change.level.form core.rule when=$a.bc.r when=$a.bc.op when=$a.bc.b when=$a.bc.lf.r not=$a.bc.rk if=$a.bc.lf.k then=$a.bc.lv.out
+@a.bc.name.r app.act.request name=?v
+@a.bc.name.c app.act.call act=change thing=$a.bc.b attr=name value=?v order=1
+@act.change.name core.rule when=$a.bc.r when=$a.bc.op when=$a.bc.b when=$a.bc.name.r then=$a.bc.name.c
+@a.bc.align.r app.act.request align=?v
+@a.bc.align.c app.act.call act=change thing=$a.bc.b attr=align value=?v order=1
+@act.change.align core.rule when=$a.bc.r when=$a.bc.op when=$a.bc.b when=$a.bc.align.r then=$a.bc.align.c
+@a.bc.kind.r app.act.request kind=?v
+@a.bc.kind.c app.act.call act=change thing=$a.bc.b attr=form value=?v order=1
+@act.change.kind core.rule when=$a.bc.r when=$a.bc.op when=$a.bc.b when=$a.bc.kind.r when=$a.bc.tx then=$a.bc.kind.c
+@a.bc.level.r app.act.request level=?v
+@a.bc.level.c app.act.call act=change thing=$a.bc.b attr=level value=?v order=1
+@act.change.level core.rule when=$a.bc.r when=$a.bc.op when=$a.bc.b when=$a.bc.level.r when=$a.bc.tx then=$a.bc.level.c
+# A block that becomes a heading with no level given is a section (level 2), as a new heading of the editor is.
+@a.bc.h2.r app.act.request kind=heading
+@a.bc.h2.k core.check fn=neq args=?f args=heading
+@a.bc.h2.c app.act.call act=change thing=$a.bc.b attr=level value=2 order=1
+@act.change.heading.level core.rule when=$a.bc.r when=$a.bc.op when=$a.bc.b when=$a.bc.h2.r when=$a.bc.tx not=$a.bc.rl if=$a.bc.h2.k then=$a.bc.h2.c
+@a.bc.text.r app.act.request text=?v
+@a.bc.text.bx ui.doc.box id=?cid block=?id text=?old thing=?w kind=text
+@a.bc.text.ne core.check fn=neq args=?old args=?v
+@a.bc.text.c app.act.call act=change thing=$a.bc.b attr=text value=?v order=1
+@a.bc.text.rt ui.doc.retext box=?cid old=?old new=?v
+@act.change.text core.rule when=$a.bc.r when=$a.bc.op when=$a.bc.b when=$a.bc.text.r when=$a.bc.text.bx if=$a.bc.text.ne then=$a.bc.text.c then=$a.bc.text.rt
+
+# ---- Changing the text of one container (a block's text, an item, a cell) by its native id ----
+@a.cc.r app.act.request operation="document.container.change" id=?rid text=?v
+@a.cc.id core.calc out=?cid fn=concat args=?rid
+@a.cc.bx ui.doc.box id=?cid text=?old thing=?w kind=?k
+@a.cc.nt core.check fn=neq args=?k args=title
+@a.cc.ne core.check fn=neq args=?old args=?v
+@a.cc.c app.act.call act=change thing=?w attr=text value=?v order=1
+@a.cc.rt ui.doc.retext box=?cid old=?old new=?v
+@act.container.change core.rule when=$a.cc.r with=$a.cc.id when=$a.cc.bx if=$a.cc.nt if=$a.cc.ne then=$a.cc.c then=$a.cc.rt
+@a.cc.ok.bx ui.doc.box id=?cid kind=?k
+@a.cc.miss app.act.refuse reason=missing-text-container
+@act.container.missing core.rule when=$a.cc.r with=$a.cc.id not=$a.cc.ok.bx then=$a.cc.miss
+@a.cc.ti.bx ui.doc.box id=?cid kind=title
+@act.container.title core.rule when=$a.cc.r with=$a.cc.id when=$a.cc.ti.bx then=$a.cc.miss
+
+# ---- Marks move with a changed text ----
+# The old and new texts share a prefix of p and a suffix of s characters: the part [p, La - s) of the old text was
+# replaced by [p, Lb - s) of the new one. A mark before it stays; after it moves by Lb - La; one that covers it grows
+# or shrinks; one that overlaps it is cut at its edge; one inside it goes. Only a container with marks is measured.
+# Both are found digit by digit, one stage per place, as the lengths are.
+@a.sp.i ui.doc.retext box=?cid old=?a new=?b
+@a.sp.hm ui.doc.hasmarks box=?cid
+@a.sp.ps ui.doc.ps10000 box=?cid a=?a b=?b base=0
+@a.sp.ka core.calc out=?ka fn=concat args=?cid args="|old"
+@a.sp.kb core.calc out=?kb fn=concat args=?cid args="|new"
+@a.sp.la ui.doc.lenof key=?ka text=?a top=10000
+@a.sp.lb ui.doc.lenof key=?kb text=?b top=10000
+@act.splice.start core.rule when=$a.sp.i when=$a.sp.hm with=$a.sp.ka with=$a.sp.kb then=$a.sp.ps then=$a.sp.la then=$a.sp.lb
+@act.t.ps10000 core.type of=ui.doc.ps10000
+@act.t.pk10000 core.type of=ui.doc.pk10000
+@act.t.pb10000 core.type of=ui.doc.pb10000
+@a.pc10000.s ui.doc.ps10000 box=?cid a=?a b=?b base=?base
+@a.pc10000.d ui.doc.digit d=?d
+@a.pc10000.m core.calc out=?m fn=mul args=?d args=10000
+@a.pc10000.c core.calc out=?c fn=add args=?base args=?m
+@a.pc10000.pat core.calc out=?pat fn=concat args="^([\\s\\S]{" args=?c args="})"
+@a.pc10000.pa core.calc out=?pa fn=matches args=?a args=?pat args=1
+@a.pc10000.pb core.calc out=?pb fn=matches args=?b args=?pat args=1
+@a.pc10000.eq core.check fn=eq args=?pa args=?pb
+@a.pc10000.o ui.doc.pk10000 box=?cid d=?d
+@act.prefix.candidate.10000 core.rule when=$a.pc10000.s when=$a.pc10000.d with=$a.pc10000.m with=$a.pc10000.c with=$a.pc10000.pat with=$a.pc10000.pa with=$a.pc10000.pb if=$a.pc10000.eq then=$a.pc10000.o
+@a.pb10000.i ui.doc.pk10000 box=?cid d=?d
+@a.pb10000.o ui.doc.pb10000 box=?cid d=?m
+@act.prefix.best.10000 core.aggregate over=$a.pb10000.i by=?cid max=?m args=?d then=$a.pb10000.o
+@a.pn10000.s ui.doc.ps10000 box=?cid a=?a b=?b base=?base
+@a.pn10000.b ui.doc.pb10000 box=?cid d=?d
+@a.pn10000.m core.calc out=?m fn=mul args=?d args=10000
+@a.pn10000.c core.calc out=?c fn=add args=?base args=?m
+@a.pn10000.o ui.doc.ps1000 box=?cid a=?a b=?b base=?c
+@act.prefix.next.10000 core.rule when=$a.pn10000.s when=$a.pn10000.b with=$a.pn10000.m with=$a.pn10000.c then=$a.pn10000.o
+@act.t.ps1000 core.type of=ui.doc.ps1000
+@act.t.pk1000 core.type of=ui.doc.pk1000
+@act.t.pb1000 core.type of=ui.doc.pb1000
+@a.pc1000.s ui.doc.ps1000 box=?cid a=?a b=?b base=?base
+@a.pc1000.d ui.doc.digit d=?d
+@a.pc1000.m core.calc out=?m fn=mul args=?d args=1000
+@a.pc1000.c core.calc out=?c fn=add args=?base args=?m
+@a.pc1000.pat core.calc out=?pat fn=concat args="^([\\s\\S]{" args=?c args="})"
+@a.pc1000.pa core.calc out=?pa fn=matches args=?a args=?pat args=1
+@a.pc1000.pb core.calc out=?pb fn=matches args=?b args=?pat args=1
+@a.pc1000.eq core.check fn=eq args=?pa args=?pb
+@a.pc1000.o ui.doc.pk1000 box=?cid d=?d
+@act.prefix.candidate.1000 core.rule when=$a.pc1000.s when=$a.pc1000.d with=$a.pc1000.m with=$a.pc1000.c with=$a.pc1000.pat with=$a.pc1000.pa with=$a.pc1000.pb if=$a.pc1000.eq then=$a.pc1000.o
+@a.pb1000.i ui.doc.pk1000 box=?cid d=?d
+@a.pb1000.o ui.doc.pb1000 box=?cid d=?m
+@act.prefix.best.1000 core.aggregate over=$a.pb1000.i by=?cid max=?m args=?d then=$a.pb1000.o
+@a.pn1000.s ui.doc.ps1000 box=?cid a=?a b=?b base=?base
+@a.pn1000.b ui.doc.pb1000 box=?cid d=?d
+@a.pn1000.m core.calc out=?m fn=mul args=?d args=1000
+@a.pn1000.c core.calc out=?c fn=add args=?base args=?m
+@a.pn1000.o ui.doc.ps100 box=?cid a=?a b=?b base=?c
+@act.prefix.next.1000 core.rule when=$a.pn1000.s when=$a.pn1000.b with=$a.pn1000.m with=$a.pn1000.c then=$a.pn1000.o
+@act.t.ps100 core.type of=ui.doc.ps100
+@act.t.pk100 core.type of=ui.doc.pk100
+@act.t.pb100 core.type of=ui.doc.pb100
+@a.pc100.s ui.doc.ps100 box=?cid a=?a b=?b base=?base
+@a.pc100.d ui.doc.digit d=?d
+@a.pc100.m core.calc out=?m fn=mul args=?d args=100
+@a.pc100.c core.calc out=?c fn=add args=?base args=?m
+@a.pc100.pat core.calc out=?pat fn=concat args="^([\\s\\S]{" args=?c args="})"
+@a.pc100.pa core.calc out=?pa fn=matches args=?a args=?pat args=1
+@a.pc100.pb core.calc out=?pb fn=matches args=?b args=?pat args=1
+@a.pc100.eq core.check fn=eq args=?pa args=?pb
+@a.pc100.o ui.doc.pk100 box=?cid d=?d
+@act.prefix.candidate.100 core.rule when=$a.pc100.s when=$a.pc100.d with=$a.pc100.m with=$a.pc100.c with=$a.pc100.pat with=$a.pc100.pa with=$a.pc100.pb if=$a.pc100.eq then=$a.pc100.o
+@a.pb100.i ui.doc.pk100 box=?cid d=?d
+@a.pb100.o ui.doc.pb100 box=?cid d=?m
+@act.prefix.best.100 core.aggregate over=$a.pb100.i by=?cid max=?m args=?d then=$a.pb100.o
+@a.pn100.s ui.doc.ps100 box=?cid a=?a b=?b base=?base
+@a.pn100.b ui.doc.pb100 box=?cid d=?d
+@a.pn100.m core.calc out=?m fn=mul args=?d args=100
+@a.pn100.c core.calc out=?c fn=add args=?base args=?m
+@a.pn100.o ui.doc.ps10 box=?cid a=?a b=?b base=?c
+@act.prefix.next.100 core.rule when=$a.pn100.s when=$a.pn100.b with=$a.pn100.m with=$a.pn100.c then=$a.pn100.o
+@act.t.ps10 core.type of=ui.doc.ps10
+@act.t.pk10 core.type of=ui.doc.pk10
+@act.t.pb10 core.type of=ui.doc.pb10
+@a.pc10.s ui.doc.ps10 box=?cid a=?a b=?b base=?base
+@a.pc10.d ui.doc.digit d=?d
+@a.pc10.m core.calc out=?m fn=mul args=?d args=10
+@a.pc10.c core.calc out=?c fn=add args=?base args=?m
+@a.pc10.pat core.calc out=?pat fn=concat args="^([\\s\\S]{" args=?c args="})"
+@a.pc10.pa core.calc out=?pa fn=matches args=?a args=?pat args=1
+@a.pc10.pb core.calc out=?pb fn=matches args=?b args=?pat args=1
+@a.pc10.eq core.check fn=eq args=?pa args=?pb
+@a.pc10.o ui.doc.pk10 box=?cid d=?d
+@act.prefix.candidate.10 core.rule when=$a.pc10.s when=$a.pc10.d with=$a.pc10.m with=$a.pc10.c with=$a.pc10.pat with=$a.pc10.pa with=$a.pc10.pb if=$a.pc10.eq then=$a.pc10.o
+@a.pb10.i ui.doc.pk10 box=?cid d=?d
+@a.pb10.o ui.doc.pb10 box=?cid d=?m
+@act.prefix.best.10 core.aggregate over=$a.pb10.i by=?cid max=?m args=?d then=$a.pb10.o
+@a.pn10.s ui.doc.ps10 box=?cid a=?a b=?b base=?base
+@a.pn10.b ui.doc.pb10 box=?cid d=?d
+@a.pn10.m core.calc out=?m fn=mul args=?d args=10
+@a.pn10.c core.calc out=?c fn=add args=?base args=?m
+@a.pn10.o ui.doc.ps1 box=?cid a=?a b=?b base=?c
+@act.prefix.next.10 core.rule when=$a.pn10.s when=$a.pn10.b with=$a.pn10.m with=$a.pn10.c then=$a.pn10.o
+@act.t.ps1 core.type of=ui.doc.ps1
+@act.t.pk1 core.type of=ui.doc.pk1
+@act.t.pb1 core.type of=ui.doc.pb1
+@a.pc1.s ui.doc.ps1 box=?cid a=?a b=?b base=?base
+@a.pc1.d ui.doc.digit d=?d
+@a.pc1.m core.calc out=?m fn=mul args=?d args=1
+@a.pc1.c core.calc out=?c fn=add args=?base args=?m
+@a.pc1.pat core.calc out=?pat fn=concat args="^([\\s\\S]{" args=?c args="})"
+@a.pc1.pa core.calc out=?pa fn=matches args=?a args=?pat args=1
+@a.pc1.pb core.calc out=?pb fn=matches args=?b args=?pat args=1
+@a.pc1.eq core.check fn=eq args=?pa args=?pb
+@a.pc1.o ui.doc.pk1 box=?cid d=?d
+@act.prefix.candidate.1 core.rule when=$a.pc1.s when=$a.pc1.d with=$a.pc1.m with=$a.pc1.c with=$a.pc1.pat with=$a.pc1.pa with=$a.pc1.pb if=$a.pc1.eq then=$a.pc1.o
+@a.pb1.i ui.doc.pk1 box=?cid d=?d
+@a.pb1.o ui.doc.pb1 box=?cid d=?m
+@act.prefix.best.1 core.aggregate over=$a.pb1.i by=?cid max=?m args=?d then=$a.pb1.o
+@a.pn1.s ui.doc.ps1 box=?cid a=?a b=?b base=?base
+@a.pn1.b ui.doc.pb1 box=?cid d=?d
+@a.pn1.m core.calc out=?m fn=mul args=?d args=1
+@a.pn1.c core.calc out=?c fn=add args=?base args=?m
+@a.pn1.o ui.doc.prefix box=?cid n=?c
+@act.prefix.done core.rule when=$a.pn1.s when=$a.pn1.b with=$a.pn1.m with=$a.pn1.c then=$a.pn1.o
+@a.ss.i ui.doc.retext box=?cid old=?a new=?b
+@a.ss.p ui.doc.prefix box=?cid n=?p
+@a.ss.ka core.calc out=?ka fn=concat args=?cid args="|old"
+@a.ss.kb core.calc out=?kb fn=concat args=?cid args="|new"
+@a.ss.la ui.doc.len key=?ka n=?la
+@a.ss.lb ui.doc.len key=?kb n=?lb
+@a.ss.mn core.calc out=?mn fn=min args=?la args=?lb
+@a.ss.cap core.calc out=?cap fn=sub args=?mn args=?p
+@a.ss.o ui.doc.ss10000 box=?cid a=?a b=?b cap=?cap base=0
+@act.suffix.start core.rule when=$a.ss.i when=$a.ss.p with=$a.ss.ka with=$a.ss.kb when=$a.ss.la when=$a.ss.lb with=$a.ss.mn with=$a.ss.cap then=$a.ss.o
+@act.t.ss10000 core.type of=ui.doc.ss10000
+@act.t.sk10000 core.type of=ui.doc.sk10000
+@act.t.sb10000 core.type of=ui.doc.sb10000
+@a.sc10000.s ui.doc.ss10000 box=?cid a=?a b=?b cap=?cap base=?base
+@a.sc10000.d ui.doc.digit d=?d
+@a.sc10000.m core.calc out=?m fn=mul args=?d args=10000
+@a.sc10000.c core.calc out=?c fn=add args=?base args=?m
+@a.sc10000.le core.check fn=lte args=?c args=?cap
+@a.sc10000.pat core.calc out=?pat fn=concat args="([\\s\\S]{" args=?c args="})$"
+@a.sc10000.sa core.calc out=?sa fn=matches args=?a args=?pat args=1
+@a.sc10000.sb core.calc out=?sb fn=matches args=?b args=?pat args=1
+@a.sc10000.eq core.check fn=eq args=?sa args=?sb
+@a.sc10000.o ui.doc.sk10000 box=?cid d=?d
+@act.suffix.candidate.10000 core.rule when=$a.sc10000.s when=$a.sc10000.d with=$a.sc10000.m with=$a.sc10000.c if=$a.sc10000.le with=$a.sc10000.pat with=$a.sc10000.sa with=$a.sc10000.sb if=$a.sc10000.eq then=$a.sc10000.o
+@a.sb10000.i ui.doc.sk10000 box=?cid d=?d
+@a.sb10000.o ui.doc.sb10000 box=?cid d=?m
+@act.suffix.best.10000 core.aggregate over=$a.sb10000.i by=?cid max=?m args=?d then=$a.sb10000.o
+@a.sn10000.s ui.doc.ss10000 box=?cid a=?a b=?b cap=?cap base=?base
+@a.sn10000.b ui.doc.sb10000 box=?cid d=?d
+@a.sn10000.m core.calc out=?m fn=mul args=?d args=10000
+@a.sn10000.c core.calc out=?c fn=add args=?base args=?m
+@a.sn10000.o ui.doc.ss1000 box=?cid a=?a b=?b cap=?cap base=?c
+@act.suffix.next.10000 core.rule when=$a.sn10000.s when=$a.sn10000.b with=$a.sn10000.m with=$a.sn10000.c then=$a.sn10000.o
+@act.t.ss1000 core.type of=ui.doc.ss1000
+@act.t.sk1000 core.type of=ui.doc.sk1000
+@act.t.sb1000 core.type of=ui.doc.sb1000
+@a.sc1000.s ui.doc.ss1000 box=?cid a=?a b=?b cap=?cap base=?base
+@a.sc1000.d ui.doc.digit d=?d
+@a.sc1000.m core.calc out=?m fn=mul args=?d args=1000
+@a.sc1000.c core.calc out=?c fn=add args=?base args=?m
+@a.sc1000.le core.check fn=lte args=?c args=?cap
+@a.sc1000.pat core.calc out=?pat fn=concat args="([\\s\\S]{" args=?c args="})$"
+@a.sc1000.sa core.calc out=?sa fn=matches args=?a args=?pat args=1
+@a.sc1000.sb core.calc out=?sb fn=matches args=?b args=?pat args=1
+@a.sc1000.eq core.check fn=eq args=?sa args=?sb
+@a.sc1000.o ui.doc.sk1000 box=?cid d=?d
+@act.suffix.candidate.1000 core.rule when=$a.sc1000.s when=$a.sc1000.d with=$a.sc1000.m with=$a.sc1000.c if=$a.sc1000.le with=$a.sc1000.pat with=$a.sc1000.sa with=$a.sc1000.sb if=$a.sc1000.eq then=$a.sc1000.o
+@a.sb1000.i ui.doc.sk1000 box=?cid d=?d
+@a.sb1000.o ui.doc.sb1000 box=?cid d=?m
+@act.suffix.best.1000 core.aggregate over=$a.sb1000.i by=?cid max=?m args=?d then=$a.sb1000.o
+@a.sn1000.s ui.doc.ss1000 box=?cid a=?a b=?b cap=?cap base=?base
+@a.sn1000.b ui.doc.sb1000 box=?cid d=?d
+@a.sn1000.m core.calc out=?m fn=mul args=?d args=1000
+@a.sn1000.c core.calc out=?c fn=add args=?base args=?m
+@a.sn1000.o ui.doc.ss100 box=?cid a=?a b=?b cap=?cap base=?c
+@act.suffix.next.1000 core.rule when=$a.sn1000.s when=$a.sn1000.b with=$a.sn1000.m with=$a.sn1000.c then=$a.sn1000.o
+@act.t.ss100 core.type of=ui.doc.ss100
+@act.t.sk100 core.type of=ui.doc.sk100
+@act.t.sb100 core.type of=ui.doc.sb100
+@a.sc100.s ui.doc.ss100 box=?cid a=?a b=?b cap=?cap base=?base
+@a.sc100.d ui.doc.digit d=?d
+@a.sc100.m core.calc out=?m fn=mul args=?d args=100
+@a.sc100.c core.calc out=?c fn=add args=?base args=?m
+@a.sc100.le core.check fn=lte args=?c args=?cap
+@a.sc100.pat core.calc out=?pat fn=concat args="([\\s\\S]{" args=?c args="})$"
+@a.sc100.sa core.calc out=?sa fn=matches args=?a args=?pat args=1
+@a.sc100.sb core.calc out=?sb fn=matches args=?b args=?pat args=1
+@a.sc100.eq core.check fn=eq args=?sa args=?sb
+@a.sc100.o ui.doc.sk100 box=?cid d=?d
+@act.suffix.candidate.100 core.rule when=$a.sc100.s when=$a.sc100.d with=$a.sc100.m with=$a.sc100.c if=$a.sc100.le with=$a.sc100.pat with=$a.sc100.sa with=$a.sc100.sb if=$a.sc100.eq then=$a.sc100.o
+@a.sb100.i ui.doc.sk100 box=?cid d=?d
+@a.sb100.o ui.doc.sb100 box=?cid d=?m
+@act.suffix.best.100 core.aggregate over=$a.sb100.i by=?cid max=?m args=?d then=$a.sb100.o
+@a.sn100.s ui.doc.ss100 box=?cid a=?a b=?b cap=?cap base=?base
+@a.sn100.b ui.doc.sb100 box=?cid d=?d
+@a.sn100.m core.calc out=?m fn=mul args=?d args=100
+@a.sn100.c core.calc out=?c fn=add args=?base args=?m
+@a.sn100.o ui.doc.ss10 box=?cid a=?a b=?b cap=?cap base=?c
+@act.suffix.next.100 core.rule when=$a.sn100.s when=$a.sn100.b with=$a.sn100.m with=$a.sn100.c then=$a.sn100.o
+@act.t.ss10 core.type of=ui.doc.ss10
+@act.t.sk10 core.type of=ui.doc.sk10
+@act.t.sb10 core.type of=ui.doc.sb10
+@a.sc10.s ui.doc.ss10 box=?cid a=?a b=?b cap=?cap base=?base
+@a.sc10.d ui.doc.digit d=?d
+@a.sc10.m core.calc out=?m fn=mul args=?d args=10
+@a.sc10.c core.calc out=?c fn=add args=?base args=?m
+@a.sc10.le core.check fn=lte args=?c args=?cap
+@a.sc10.pat core.calc out=?pat fn=concat args="([\\s\\S]{" args=?c args="})$"
+@a.sc10.sa core.calc out=?sa fn=matches args=?a args=?pat args=1
+@a.sc10.sb core.calc out=?sb fn=matches args=?b args=?pat args=1
+@a.sc10.eq core.check fn=eq args=?sa args=?sb
+@a.sc10.o ui.doc.sk10 box=?cid d=?d
+@act.suffix.candidate.10 core.rule when=$a.sc10.s when=$a.sc10.d with=$a.sc10.m with=$a.sc10.c if=$a.sc10.le with=$a.sc10.pat with=$a.sc10.sa with=$a.sc10.sb if=$a.sc10.eq then=$a.sc10.o
+@a.sb10.i ui.doc.sk10 box=?cid d=?d
+@a.sb10.o ui.doc.sb10 box=?cid d=?m
+@act.suffix.best.10 core.aggregate over=$a.sb10.i by=?cid max=?m args=?d then=$a.sb10.o
+@a.sn10.s ui.doc.ss10 box=?cid a=?a b=?b cap=?cap base=?base
+@a.sn10.b ui.doc.sb10 box=?cid d=?d
+@a.sn10.m core.calc out=?m fn=mul args=?d args=10
+@a.sn10.c core.calc out=?c fn=add args=?base args=?m
+@a.sn10.o ui.doc.ss1 box=?cid a=?a b=?b cap=?cap base=?c
+@act.suffix.next.10 core.rule when=$a.sn10.s when=$a.sn10.b with=$a.sn10.m with=$a.sn10.c then=$a.sn10.o
+@act.t.ss1 core.type of=ui.doc.ss1
+@act.t.sk1 core.type of=ui.doc.sk1
+@act.t.sb1 core.type of=ui.doc.sb1
+@a.sc1.s ui.doc.ss1 box=?cid a=?a b=?b cap=?cap base=?base
+@a.sc1.d ui.doc.digit d=?d
+@a.sc1.m core.calc out=?m fn=mul args=?d args=1
+@a.sc1.c core.calc out=?c fn=add args=?base args=?m
+@a.sc1.le core.check fn=lte args=?c args=?cap
+@a.sc1.pat core.calc out=?pat fn=concat args="([\\s\\S]{" args=?c args="})$"
+@a.sc1.sa core.calc out=?sa fn=matches args=?a args=?pat args=1
+@a.sc1.sb core.calc out=?sb fn=matches args=?b args=?pat args=1
+@a.sc1.eq core.check fn=eq args=?sa args=?sb
+@a.sc1.o ui.doc.sk1 box=?cid d=?d
+@act.suffix.candidate.1 core.rule when=$a.sc1.s when=$a.sc1.d with=$a.sc1.m with=$a.sc1.c if=$a.sc1.le with=$a.sc1.pat with=$a.sc1.sa with=$a.sc1.sb if=$a.sc1.eq then=$a.sc1.o
+@a.sb1.i ui.doc.sk1 box=?cid d=?d
+@a.sb1.o ui.doc.sb1 box=?cid d=?m
+@act.suffix.best.1 core.aggregate over=$a.sb1.i by=?cid max=?m args=?d then=$a.sb1.o
+@a.sn1.s ui.doc.ss1 box=?cid a=?a b=?b cap=?cap base=?base
+@a.sn1.b ui.doc.sb1 box=?cid d=?d
+@a.sn1.m core.calc out=?m fn=mul args=?d args=1
+@a.sn1.c core.calc out=?c fn=add args=?base args=?m
+@a.sn1.o ui.doc.suffix box=?cid n=?c
+@act.suffix.done core.rule when=$a.sn1.s when=$a.sn1.b with=$a.sn1.m with=$a.sn1.c then=$a.sn1.o
+@a.sz.p ui.doc.prefix box=?cid n=?p
+@a.sz.s ui.doc.suffix box=?cid n=?s
+@a.sz.ka core.calc out=?ka fn=concat args=?cid args="|old"
+@a.sz.kb core.calc out=?kb fn=concat args=?cid args="|new"
+@a.sz.la ui.doc.len key=?ka n=?la
+@a.sz.lb ui.doc.len key=?kb n=?lb
+@a.sz.q core.calc out=?q fn=sub args=?la args=?s
+@a.sz.e core.calc out=?e fn=sub args=?lb args=?s
+@a.sz.dl core.calc out=?dl fn=sub args=?lb args=?la
+@a.sz.o ui.doc.splice box=?cid from=?p to=?q ins=?e delta=?dl
+@act.splice core.rule when=$a.sz.p when=$a.sz.s with=$a.sz.ka with=$a.sz.kb when=$a.sz.la when=$a.sz.lb with=$a.sz.q with=$a.sz.e with=$a.sz.dl then=$a.sz.o
+@a.sm.sp ui.doc.splice box=?cid from=?p to=?q ins=?e delta=?dl
+@a.sm.mk ui.doc.mk mark=?m box=?cid from=?mf to=?mt
+@a.sm.over core.check fn=gt args=?mt args=?p
+@a.sm.before core.check fn=lt args=?mf args=?q
+@a.sm.f2 core.calc out=?nf fn=add args=?mf args=?dl
+@a.sm.t2 core.calc out=?nt fn=add args=?mt args=?dl
+@a.sm.after core.check fn=gte args=?mf args=?q
+@a.sm.cf app.act.call act=change thing=?m attr=from value=?nf order=2
+@a.sm.ct app.act.call act=change thing=?m attr=to value=?nt order=3
+@act.splice.after core.rule when=$a.sm.sp when=$a.sm.mk if=$a.sm.over if=$a.sm.after with=$a.sm.f2 with=$a.sm.t2 then=$a.sm.cf then=$a.sm.ct
+@a.sm.c1 core.check fn=lte args=?mf args=?p
+@a.sm.c2 core.check fn=gte args=?mt args=?q
+@a.sm.grow core.check fn=gt args=?nt args=?mf
+@a.sm.gone core.check fn=lte args=?nt args=?mf
+@a.sm.rm app.act.call act=remove thing=?m order=2
+@act.splice.cover core.rule when=$a.sm.sp when=$a.sm.mk if=$a.sm.over if=$a.sm.before if=$a.sm.c1 if=$a.sm.c2 with=$a.sm.t2 if=$a.sm.grow then=$a.sm.ct
+@act.splice.cover.gone core.rule when=$a.sm.sp when=$a.sm.mk if=$a.sm.over if=$a.sm.before if=$a.sm.c1 if=$a.sm.c2 with=$a.sm.t2 if=$a.sm.gone then=$a.sm.rm
+@a.sm.l1 core.check fn=lt args=?mf args=?p
+@a.sm.l2 core.check fn=lt args=?mt args=?q
+@a.sm.cl app.act.call act=change thing=?m attr=to value=?p order=3
+@act.splice.left core.rule when=$a.sm.sp when=$a.sm.mk if=$a.sm.over if=$a.sm.before if=$a.sm.l1 if=$a.sm.l2 then=$a.sm.cl
+@a.sm.r1 core.check fn=gt args=?mf args=?p
+@a.sm.r2 core.check fn=gt args=?mt args=?q
+@a.sm.crf app.act.call act=change thing=?m attr=from value=?e order=2
+@act.splice.right core.rule when=$a.sm.sp when=$a.sm.mk if=$a.sm.over if=$a.sm.before if=$a.sm.r1 if=$a.sm.r2 with=$a.sm.t2 then=$a.sm.crf then=$a.sm.ct
+@a.sm.i2 core.check fn=lte args=?mt args=?q
+@act.splice.inside core.rule when=$a.sm.sp when=$a.sm.mk if=$a.sm.over if=$a.sm.before if=$a.sm.r1 if=$a.sm.i2 then=$a.sm.rm
+@a.sm.e1 core.check fn=eq args=?mf args=?p
+@act.splice.inside.start core.rule when=$a.sm.sp when=$a.sm.mk if=$a.sm.over if=$a.sm.before if=$a.sm.e1 if=$a.sm.l2 then=$a.sm.rm
+
+# ---- Marks ----
+# On: marks of the same form that touch the range and say the same (the same colour, the same link) join it into
+# one; a highlight or link that says something else is cut back out of the range. Off: the range is cut out of the
+# marks of that form; what lies outside it stays, with its colour or link.
+@a.mr.r app.act.request operation=?op id=?id from=?f to=?t mark=?fm enabled=?en
+@a.mr.op ui.doc.markop operation=?op
+@a.mr.ok ui.doc.rangeok ok=true
+@a.mr.bad app.act.refuse reason=invalid-text-range
+@act.mark.range core.rule when=$a.mr.r when=$a.mr.op not=$a.mr.ok then=$a.mr.bad
+@a.mr.ge core.check fn=gte args=?f args=?t
+@act.mark.empty core.rule when=$a.mr.r when=$a.mr.op if=$a.mr.ge then=$a.mr.bad
+@a.lk.h app.act.item param="attrs" key="href" value=?h
+@a.lk.k core.check fn=matches args=?h args="^([hH][tT][tT][pP][sS]?:|[mM][aA][iI][lL][tT][oO]:|#)"
+@a.lk.o ui.doc.linkok ok=true
+@act.mark.link.ok core.rule when=$a.lk.h if=$a.lk.k then=$a.lk.o
+@a.lk.r app.act.request mark=link enabled=true
+@a.lk.out app.act.refuse reason=invalid-link
+@act.mark.link.refused core.rule when=$a.mr.r when=$a.mr.op when=$a.lk.r not=$a.lk.o then=$a.lk.out
+@a.hl.c app.act.item param="attrs" key="color" value=?c
+@a.hl.k core.check fn=matches args=?c args="^#[0-9a-fA-F]{6}$"
+@a.hl.o ui.doc.colourok ok=true
+@act.mark.colour.ok core.rule when=$a.hl.c if=$a.hl.k then=$a.hl.o
+@a.hl.r app.act.request mark=highlight enabled=true
+@a.hl.out app.act.refuse reason=invalid-highlight
+@act.mark.highlight.refused core.rule when=$a.mr.r when=$a.mr.op when=$a.hl.r not=$a.hl.o then=$a.hl.out
+@a.ua.i app.act.item param="attrs" key=?k
+@a.ua.n ui.doc.attrname name=?k
+@a.ua.out app.act.refuse reason=unknown-mark-attribute
+@act.mark.attribute.refused core.rule when=$a.mr.r when=$a.mr.op when=$a.ua.i not=$a.ua.n then=$a.ua.out
+
+# What may join the new mark: same form, touching the range, saying the same.
+@a.mj.r app.act.request operation=?op from=?f to=?t mark=?fm enabled=true
+@a.mj.tg ui.doc.target box=?cid
+@a.mj.mk ui.doc.mk mark=?m box=?cid from=?mf to=?mt form=?fm
+@a.mj.t1 core.check fn=lte args=?mf args=?t
+@a.mj.t2 core.check fn=gte args=?mt args=?f
+@a.mj.o ui.doc.mergeable mark=?m from=?mf to=?mt
+@a.mj.pl ui.doc.plainmark form=?fm
+@act.mark.join.plain core.rule when=$a.mj.r when=$a.mr.op when=$a.mr.ok when=$a.mj.tg when=$a.mj.mk when=$a.mj.pl if=$a.mj.t1 if=$a.mj.t2 then=$a.mj.o
+@a.mj.hm ui.doc.mk mark=$a.mj.hw box=?cid from=?mf to=?mt form=highlight
+@a.mj.hw w.document.mark colour=?c
+@a.mj.hr app.act.request mark=highlight
+@a.mj.hc app.act.item param="attrs" key="color" value=?c
+@a.mj.ho ui.doc.mergeable mark=$a.mj.hw from=?mf to=?mt
+@act.mark.join.highlight core.rule when=$a.mj.r when=$a.mr.op when=$a.mr.ok when=$a.mj.tg when=$a.mj.hm when=$a.mj.hw when=$a.mj.hr when=$a.mj.hc if=$a.mj.t1 if=$a.mj.t2 then=$a.mj.ho
+@a.mj.lm ui.doc.mk mark=$a.mj.lw box=?cid from=?mf to=?mt form=link
+@a.mj.lw w.document.mark href=?h
+@a.mj.lr app.act.request mark=link
+@a.mj.lh app.act.item param="attrs" key="href" value=?h
+@a.mj.lo ui.doc.mergeable mark=$a.mj.lw from=?mf to=?mt
+@act.mark.join.link core.rule when=$a.mj.r when=$a.mr.op when=$a.mr.ok when=$a.mj.tg when=$a.mj.lm when=$a.mj.lw when=$a.mj.lr when=$a.mj.lh if=$a.mj.t1 if=$a.mj.t2 then=$a.mj.lo
+# What is cut: marks of the form that overlap the range and do not join (off: all of them).
+@a.mx.r app.act.request operation=?op from=?f to=?t mark=?fm
+@a.mx.mk ui.doc.mk mark=?m box=?cid from=?mf to=?mt form=?fm
+@a.mx.o1 core.check fn=lt args=?mf args=?t
+@a.mx.o2 core.check fn=gt args=?mt args=?f
+@a.mx.j ui.doc.mergeable mark=?m
+@a.mx.on app.act.request enabled=true
+@a.mx.off app.act.request enabled=false
+@a.mx.o ui.doc.cutmark mark=?m from=?mf to=?mt
+@act.mark.cut.on core.rule when=$a.mx.r when=$a.mr.op when=$a.mr.ok when=$a.mj.tg when=$a.mx.mk when=$a.mx.on not=$a.mx.j if=$a.mx.o1 if=$a.mx.o2 then=$a.mx.o
+@act.mark.cut.off core.rule when=$a.mx.r when=$a.mr.op when=$a.mr.ok when=$a.mj.tg when=$a.mx.mk when=$a.mx.off if=$a.mx.o1 if=$a.mx.o2 then=$a.mx.o
+@a.cu.i ui.doc.cutmark mark=$a.cu.w from=?mf to=?mt
+@a.cu.w w.document.mark block=?b form=?fm
+@a.cu.r app.act.request from=?f to=?t
+@a.cu.rm app.act.call act=remove thing=$a.cu.w order=1
+@act.mark.cut core.rule when=$a.cu.i when=$a.cu.w then=$a.cu.rm
+@a.cu.lt core.check fn=lt args=?mf args=?f
+@a.cu.lref core.calc out=?ref fn=concat args="left." args=$a.cu.w
+@a.cu.lmk app.act.call act=make kind=w.document.mark block=?b from=?mf to=?f form=?fm order=2 ref=?ref
+@act.mark.cut.left core.rule when=$a.cu.i when=$a.cu.w when=$a.cu.r if=$a.cu.lt with=$a.cu.lref then=$a.cu.lmk
+@a.cu.gt core.check fn=gt args=?mt args=?t
+@a.cu.rref core.calc out=?ref fn=concat args="right." args=$a.cu.w
+@a.cu.rmk app.act.call act=make kind=w.document.mark block=?b from=?t to=?mt form=?fm order=2 ref=?ref
+@act.mark.cut.right core.rule when=$a.cu.i when=$a.cu.w when=$a.cu.r if=$a.cu.gt with=$a.cu.rref then=$a.cu.rmk
+# A cut piece keeps where the mark was (its item or cell) and what it said (its colour or link).
+@a.cp.r app.act.request from=?f to=?t
+@a.cp.lt core.check fn=lt args=?mf args=?f
+@a.cp.gt core.check fn=gt args=?mt args=?t
+@a.cp.item.i ui.doc.cutmark mark=$a.cp.item.w from=?mf to=?mt
+@a.cp.item.w w.document.mark item=?v
+@a.cp.item.lref core.calc out=?ref fn=concat args="left." args=$a.cp.item.w
+@a.cp.item.rref core.calc out=?ref fn=concat args="right." args=$a.cp.item.w
+@a.cp.item.o app.act.arg call=?ref attr=item value=?v
+@act.mark.piece.left.item core.rule when=$a.cp.item.i when=$a.cp.item.w when=$a.cp.r if=$a.cp.lt with=$a.cp.item.lref then=$a.cp.item.o
+@act.mark.piece.right.item core.rule when=$a.cp.item.i when=$a.cp.item.w when=$a.cp.r if=$a.cp.gt with=$a.cp.item.rref then=$a.cp.item.o
+@a.cp.cell.i ui.doc.cutmark mark=$a.cp.cell.w from=?mf to=?mt
+@a.cp.cell.w w.document.mark cell=?v
+@a.cp.cell.lref core.calc out=?ref fn=concat args="left." args=$a.cp.cell.w
+@a.cp.cell.rref core.calc out=?ref fn=concat args="right." args=$a.cp.cell.w
+@a.cp.cell.o app.act.arg call=?ref attr=cell value=?v
+@act.mark.piece.left.cell core.rule when=$a.cp.cell.i when=$a.cp.cell.w when=$a.cp.r if=$a.cp.lt with=$a.cp.cell.lref then=$a.cp.cell.o
+@act.mark.piece.right.cell core.rule when=$a.cp.cell.i when=$a.cp.cell.w when=$a.cp.r if=$a.cp.gt with=$a.cp.cell.rref then=$a.cp.cell.o
+@a.cp.href.i ui.doc.cutmark mark=$a.cp.href.w from=?mf to=?mt
+@a.cp.href.w w.document.mark href=?v
+@a.cp.href.lref core.calc out=?ref fn=concat args="left." args=$a.cp.href.w
+@a.cp.href.rref core.calc out=?ref fn=concat args="right." args=$a.cp.href.w
+@a.cp.href.o app.act.arg call=?ref attr=href value=?v
+@act.mark.piece.left.href core.rule when=$a.cp.href.i when=$a.cp.href.w when=$a.cp.r if=$a.cp.lt with=$a.cp.href.lref then=$a.cp.href.o
+@act.mark.piece.right.href core.rule when=$a.cp.href.i when=$a.cp.href.w when=$a.cp.r if=$a.cp.gt with=$a.cp.href.rref then=$a.cp.href.o
+@a.cp.colour.i ui.doc.cutmark mark=$a.cp.colour.w from=?mf to=?mt
+@a.cp.colour.w w.document.mark colour=?v
+@a.cp.colour.lref core.calc out=?ref fn=concat args="left." args=$a.cp.colour.w
+@a.cp.colour.rref core.calc out=?ref fn=concat args="right." args=$a.cp.colour.w
+@a.cp.colour.o app.act.arg call=?ref attr=colour value=?v
+@act.mark.piece.left.colour core.rule when=$a.cp.colour.i when=$a.cp.colour.w when=$a.cp.r if=$a.cp.lt with=$a.cp.colour.lref then=$a.cp.colour.o
+@act.mark.piece.right.colour core.rule when=$a.cp.colour.i when=$a.cp.colour.w when=$a.cp.r if=$a.cp.gt with=$a.cp.colour.rref then=$a.cp.colour.o
+
+# The new mark: the range joined with what joins it, in the named block's text, item or cell.
+@a.mn.r app.act.request operation=?op from=?f to=?t enabled=true
+@a.mn.sp ui.doc.span from=?f to=?t
+@act.mark.span core.rule when=$a.mn.r when=$a.mr.op when=$a.mr.ok then=$a.mn.sp
+@a.mn.j ui.doc.mergeable from=?mf to=?mt
+@a.mn.js ui.doc.span from=?mf to=?mt
+@act.mark.span.join core.rule when=$a.mn.j then=$a.mn.js
+@a.mn.jr app.act.call act=remove thing=?m order=1
+@a.mn.jm ui.doc.mergeable mark=?m
+@act.mark.join.remove core.rule when=$a.mn.jm then=$a.mn.jr
+@a.mu.s ui.doc.span from=?f
+@a.mu.lo ui.doc.union key=from v=?lo
+@act.mark.union.from core.aggregate over=$a.mu.s min=?lo args=?f then=$a.mu.lo
+@a.mu.s2 ui.doc.span to=?t
+@a.mu.hi ui.doc.union key=to v=?hi
+@act.mark.union.to core.aggregate over=$a.mu.s2 max=?hi args=?t then=$a.mu.hi
+@a.mm.r app.act.request operation=?op id=?id mark=?fm enabled=true
+@a.mm.b w.document.block code=?id
+@a.mm.lo ui.doc.union key=from v=?lo
+@a.mm.hi ui.doc.union key=to v=?hi
+@a.mm.c app.act.call act=make kind=w.document.mark block=$a.mm.b from=?lo to=?hi form=?fm order=3 ref=new.mark
+@act.mark.make core.rule when=$a.mm.r when=$a.mr.op when=$a.mr.ok when=$a.mm.b when=$a.mm.lo when=$a.mm.hi then=$a.mm.c
+@a.mm.ti ui.doc.target thing=?w kind=item
+@a.mm.ti.o app.act.arg call=new.mark attr=item value=?w
+@act.mark.make.item core.rule when=$a.mm.r when=$a.mr.op when=$a.mr.ok when=$a.mm.ti then=$a.mm.ti.o
+@a.mm.tc ui.doc.target thing=?w kind=cell
+@a.mm.tc.o app.act.arg call=new.mark attr=cell value=?w
+@act.mark.make.cell core.rule when=$a.mm.r when=$a.mr.op when=$a.mr.ok when=$a.mm.tc then=$a.mm.tc.o
+@a.mm.hr app.act.request mark=highlight
+@a.mm.hc app.act.item param="attrs" key="color" value=?c
+@a.mm.hc.o app.act.arg call=new.mark attr=colour value=?c
+@act.mark.make.colour core.rule when=$a.mm.r when=$a.mr.op when=$a.mr.ok when=$a.mm.hr when=$a.mm.hc then=$a.mm.hc.o
+@a.mm.lr app.act.request mark=link
+@a.mm.lh app.act.item param="attrs" key="href" value=?h
+@a.mm.lh.o app.act.arg call=new.mark attr=href value=?h
+@act.mark.make.href core.rule when=$a.mm.r when=$a.mr.op when=$a.mr.ok when=$a.mm.lr when=$a.mm.lh then=$a.mm.lh.o
+
+# ---- Making blocks ----
+# A block goes at the end of the document, or (a section) after the block named by `after`; the blocks after that
+# place move one on. The new block is selected.
+@a.mk.parent.r app.act.request parent=?p
+@a.mk.parent.d w.document.document code=?p
+@a.mk.parent.out app.act.refuse reason=missing-parent-document
+@act.make.parent.missing core.rule when=$a.mk.parent.r not=$a.mk.parent.d then=$a.mk.parent.out
+@a.bm.r app.act.request operation="document.block.make" parent=?p kind=?k text=?t
+@a.bm.d w.document.document code=?p
+@a.bm.nb ui.doc.next of=block top=?top
+@a.bm.np ui.doc.next of=place top=?last
+@a.bm.z core.calc out=?z fn=add args=?top args=1
+@a.bm.code core.calc out=?code fn=concat args=b args=?z
+@a.bm.n core.calc out=?n fn=add args=?last args=1
+@a.bm.c app.act.call act=make kind=w.document.block code=?code document=$a.bm.d n=?n form=?k text=?t order=2 ref=new.block
+@a.bm.v app.act.view key=selected value=?code
+@act.block.make core.rule when=$a.bm.r when=$a.bm.d when=$a.bm.nb when=$a.bm.np with=$a.bm.z with=$a.bm.code with=$a.bm.n then=$a.bm.c then=$a.bm.v
+@a.bm.lv.r app.act.request operation="document.block.make" level=?l kind=?k
+@a.bm.lv.k core.check fn=neq args=?k args=heading
+@a.bm.lv.out app.act.refuse reason=unexpected-heading-level
+@act.block.make.level.refused core.rule when=$a.bm.lv.r if=$a.bm.lv.k then=$a.bm.lv.out
+@a.bm.l.r app.act.request operation="document.block.make" level=?l
+@a.bm.l.o app.act.arg call=new.block attr=level value=?l
+@act.block.make.level core.rule when=$a.bm.l.r then=$a.bm.l.o
+@a.bm.h3.r app.act.request operation="document.block.make" kind=heading
+@a.bm.h3.has app.act.request level=?anyl
+@a.bm.h3.o app.act.arg call=new.block attr=level value=3
+@act.block.make.heading core.rule when=$a.bm.h3.r not=$a.bm.h3.has then=$a.bm.h3.o
+@a.mk.name.r app.act.request parent=?p name=?v
+@a.mk.name.o app.act.arg call=new.block attr=name value=?v
+@act.make.name core.rule when=$a.mk.name.r then=$a.mk.name.o
+
+@a.sm2.r app.act.request operation="document.section.make" parent=?p text=?t level=?l
+@a.sm2.d w.document.document code=?p
+@a.sm2.nb ui.doc.next of=block top=?top
+@a.sm2.z core.calc out=?z fn=add args=?top args=1
+@a.sm2.code core.calc out=?code fn=concat args=b args=?z
+@a.sm2.v app.act.view key=selected value=?code
+@a.sm2.np ui.doc.next of=place top=?last
+@a.sm2.n core.calc out=?n fn=add args=?last args=1
+@a.sm2.c app.act.call act=make kind=w.document.block code=?code document=$a.sm2.d n=?n form=heading level=?l text=?t order=2 ref=new.block
+@a.sm2.after app.act.request after=?anya
+@act.section.make.end core.rule when=$a.sm2.r when=$a.sm2.d when=$a.sm2.nb when=$a.sm2.np not=$a.sm2.after with=$a.sm2.z with=$a.sm2.code with=$a.sm2.n then=$a.sm2.c then=$a.sm2.v
+@a.sm2.ar app.act.request after=?a
+@a.sm2.ab w.document.block code=?a n=?an
+@a.sm2.an core.calc out=?n fn=add args=?an args=1
+@a.sm2.ac app.act.call act=make kind=w.document.block code=?code document=$a.sm2.d n=?n form=heading level=?l text=?t order=2 ref=new.block
+@act.section.make.after core.rule when=$a.sm2.r when=$a.sm2.d when=$a.sm2.nb when=$a.sm2.ar when=$a.sm2.ab with=$a.sm2.z with=$a.sm2.code with=$a.sm2.an then=$a.sm2.ac then=$a.sm2.v
+@a.sm2.sh.b w.document.block n=?bn
+@a.sm2.sh.k core.check fn=gt args=?bn args=?an
+@a.sm2.sh.n core.calc out=?nn fn=add args=?bn args=1
+@a.sm2.sh.c app.act.call act=change thing=$a.sm2.sh.b attr=n value=?nn order=1
+@act.section.make.shift core.rule when=$a.sm2.r when=$a.sm2.d when=$a.sm2.ar when=$a.sm2.ab when=$a.sm2.sh.b if=$a.sm2.sh.k with=$a.sm2.sh.n then=$a.sm2.sh.c
+@a.sm2.miss.b w.document.block code=?a
+@a.sm2.miss app.act.refuse reason=missing-insertion-reference
+@act.section.make.after.missing core.rule when=$a.sm2.r when=$a.sm2.ar not=$a.sm2.miss.b then=$a.sm2.miss
+
+# A list: its items in order (a task list's unchecked); a table: its cells by row and column, all rows as long.
+@a.lm.r app.act.request operation="document.list.make" parent=?p style=?st
+@a.lm.d w.document.document code=?p
+@a.lm.nb ui.doc.next of=block top=?top
+@a.lm.np ui.doc.next of=place top=?last
+@a.lm.z core.calc out=?z fn=add args=?top args=1
+@a.lm.code core.calc out=?code fn=concat args=b args=?z
+@a.lm.n core.calc out=?n fn=add args=?last args=1
+@a.lm.c app.act.call act=make kind=w.document.block code=?code document=$a.lm.d n=?n form=list style=?st order=2 ref=new.block
+@a.lm.v app.act.view key=selected value=?code
+@a.lm.any app.act.item param="items"
+@act.list.make core.rule when=$a.lm.r when=$a.lm.d when=$a.lm.nb when=$a.lm.np when=$a.lm.any with=$a.lm.z with=$a.lm.code with=$a.lm.n then=$a.lm.c then=$a.lm.v
+@a.lm.i app.act.item param="items" n=?k value=?v
+@a.lm.k1 core.calc out=?k1 fn=add args=?k args=1
+@a.lm.ic app.act.call act=make kind=w.document.item block=new.block n=?k1 text=?v order=3
+@a.lm.tc app.act.call act=make kind=w.document.item block=new.block n=?k1 text=?v checked=false order=3
+@a.lm.task app.act.request style=task
+@act.list.make.item core.rule when=$a.lm.r when=$a.lm.d when=$a.lm.i not=$a.lm.task with=$a.lm.k1 then=$a.lm.ic
+@act.list.make.task core.rule when=$a.lm.r when=$a.lm.d when=$a.lm.i when=$a.lm.task with=$a.lm.k1 then=$a.lm.tc
+@a.lm.none app.act.refuse reason=invalid-literal-content
+@act.list.make.empty core.rule when=$a.lm.r not=$a.lm.any then=$a.lm.none
+@a.ic.i app.act.item param="items"
+@a.ic.o ui.doc.count of=items n=?k
+@act.count.items core.aggregate over=$a.ic.i count=?k then=$a.ic.o
+@a.lm.big ui.doc.count of=items n=?k
+@a.lm.bk core.check fn=gt args=?k args=500
+@act.list.make.big core.rule when=$a.lm.r when=$a.lm.big if=$a.lm.bk then=$a.lm.none
+
+@a.tm.r app.act.request operation="document.table.make" parent=?p header=?h
+@a.tm.d w.document.document code=?p
+@a.tm.nb ui.doc.next of=block top=?top
+@a.tm.np ui.doc.next of=place top=?last
+@a.tm.z core.calc out=?z fn=add args=?top args=1
+@a.tm.code core.calc out=?code fn=concat args=b args=?z
+@a.tm.n core.calc out=?n fn=add args=?last args=1
+@a.tm.c app.act.call act=make kind=w.document.block code=?code document=$a.tm.d n=?n form=table header=?h order=2 ref=new.block
+@a.tm.v app.act.view key=selected value=?code
+@a.tm.any app.act.item param="rows" count=?anyc
+@act.table.make core.rule when=$a.tm.r when=$a.tm.d when=$a.tm.nb when=$a.tm.np when=$a.tm.any with=$a.tm.z with=$a.tm.code with=$a.tm.n then=$a.tm.c then=$a.tm.v
+@a.tm.cell app.act.item param="rows" n=?r m=?k value=?v
+@a.tm.r1 core.calc out=?r1 fn=add args=?r args=1
+@a.tm.k1 core.calc out=?k1 fn=add args=?k args=1
+@a.tm.cc app.act.call act=make kind=w.document.cell block=new.block row=?r1 column=?k1 text=?v order=3
+@act.table.make.cell core.rule when=$a.tm.r when=$a.tm.d when=$a.tm.cell with=$a.tm.r1 with=$a.tm.k1 then=$a.tm.cc
+# Rows: present, at most 100, each with 1 to 20 cells, all as long as the first.
+@a.rl.i app.act.item param="rows" n=?r count=?c
+@a.rl.o ui.doc.rowlen row=?r n=?c
+@act.row.length core.rule when=$a.rl.i then=$a.rl.o
+@a.rl.cnt.i app.act.item param="rows" count=?c
+@a.rl.cnt.o ui.doc.count of=rows n=?k
+@act.count.rows core.aggregate over=$a.rl.cnt.i count=?k then=$a.rl.cnt.o
+@a.rv.r app.act.request operation=?op
+@a.rv.op core.check fn=matches args=?op args="^document\\.table\\.(make|change)$"
+@a.rv.out app.act.refuse reason=invalid-table-content
+@a.rv.mk core.check fn=eq args=?op args="document.table.make"
+@a.rv.mkout app.act.refuse reason=invalid-literal-content
+@a.rv.l0 ui.doc.rowlen row=0 n=?c0
+@a.rv.l ui.doc.rowlen n=?c
+@a.rv.ne core.check fn=neq args=?c args=?c0
+@a.rv.bad ui.doc.bad of=rows
+@act.rows.uneven core.rule when=$a.rv.r if=$a.rv.op when=$a.rv.l0 when=$a.rv.l if=$a.rv.ne then=$a.rv.bad
+@a.rv.z core.check fn=lt args=?c0 args=1
+@a.rv.w core.check fn=gt args=?c0 args=20
+@act.rows.narrow core.rule when=$a.rv.r if=$a.rv.op when=$a.rv.l0 if=$a.rv.z then=$a.rv.bad
+@act.rows.wide core.rule when=$a.rv.r if=$a.rv.op when=$a.rv.l0 if=$a.rv.w then=$a.rv.bad
+@a.rv.n ui.doc.count of=rows n=?k
+@a.rv.nk core.check fn=gt args=?k args=100
+@act.rows.many core.rule when=$a.rv.r if=$a.rv.op when=$a.rv.n if=$a.rv.nk then=$a.rv.bad
+@a.rv.b ui.doc.bad of=rows
+@act.table.make.bad core.rule when=$a.rv.r when=$a.rv.b if=$a.rv.mk then=$a.rv.mkout
+@a.rv.chg core.check fn=eq args=?op args="document.table.change"
+@act.table.change.bad core.rule when=$a.rv.r when=$a.rv.b if=$a.rv.chg then=$a.rv.out
+@a.tm.none.r app.act.request operation="document.table.make"
+@act.table.make.empty core.rule when=$a.tm.none.r not=$a.tm.any then=$a.rv.mkout
+
+# ---- Changing a list ----
+@a.lc.r app.act.request operation="document.list.change" id=?id
+@a.lc.b w.document.block code=?id form=list
+@a.lc.miss app.act.refuse reason=missing-list
+@act.list.change.missing core.rule when=$a.lc.r not=$a.lc.b then=$a.lc.miss
+@a.lc.st.r app.act.request style=?st
+@a.lc.st.c app.act.call act=change thing=$a.lc.b attr=style value=?st order=1
+@act.list.change.style core.rule when=$a.lc.r when=$a.lc.b when=$a.lc.st.r then=$a.lc.st.c
+@a.lc.any app.act.item param="items"
+@a.lc.oi w.document.item block=$a.lc.b
+@a.lc.oc ui.doc.count of=old n=?k
+@act.list.change.old.count core.aggregate over=$a.lc.r over=$a.lc.b over=$a.lc.oi count=?k then=$a.lc.oc
+@a.lc.ck app.act.item param="checked"
+@a.lc.cc ui.doc.count of=checked n=?k
+@act.count.checked core.aggregate over=$a.lc.ck count=?k then=$a.lc.cc
+@a.lc.bad app.act.refuse reason=invalid-list-content
+@a.lc.ne.n1 ui.doc.count of=checked n=?a
+@a.lc.ne.n2 ui.doc.count of=items n=?b
+@a.lc.ne.k core.check fn=neq args=?a args=?b
+@act.list.change.checked.items core.rule when=$a.lc.r when=$a.lc.b when=$a.lc.ck when=$a.lc.ne.n1 when=$a.lc.ne.n2 when=$a.lc.any if=$a.lc.ne.k then=$a.lc.bad
+@a.lc.no.n2 ui.doc.count of=old n=?b
+@act.list.change.checked.old core.rule when=$a.lc.r when=$a.lc.b when=$a.lc.ck when=$a.lc.ne.n1 when=$a.lc.no.n2 not=$a.lc.any if=$a.lc.ne.k then=$a.lc.bad
+@a.lc.big core.check fn=gt args=?b args=500
+@act.list.change.big core.rule when=$a.lc.r when=$a.lc.b when=$a.lc.ne.n2 if=$a.lc.big then=$a.lc.bad
+# Items: the same place keeps its item (its text changed), new places are made, places beyond the new list go.
+@a.lc.i app.act.item param="items" n=?k value=?v
+@a.lc.k1 core.calc out=?k1 fn=add args=?k args=1
+@a.lc.old w.document.item block=$a.lc.b n=?k1 text=?ov
+@a.lc.dif core.check fn=neq args=?ov args=?v
+@a.lc.tc app.act.call act=change thing=$a.lc.old attr=text value=?v order=2
+@a.lc.cl ui.doc.clamp item=$a.lc.old text=?v
+@act.list.change.item core.rule when=$a.lc.r when=$a.lc.b when=$a.lc.i with=$a.lc.k1 when=$a.lc.old if=$a.lc.dif then=$a.lc.tc then=$a.lc.cl
+@a.lc.new.o ui.doc.newitem n=?k1 text=?v at=?k
+@a.lc.new.old w.document.item block=$a.lc.b n=?k1
+@act.list.change.new core.rule when=$a.lc.r when=$a.lc.b when=$a.lc.i with=$a.lc.k1 not=$a.lc.new.old then=$a.lc.new.o
+@a.lc.ni ui.doc.newitem n=?k1 text=?v at=?k
+@a.lc.ref core.calc out=?ref fn=concat args="new.item." args=?k1
+@a.lc.nc app.act.call act=make kind=w.document.item block=$a.lc.b n=?k1 text=?v order=3 ref=?ref
+@act.list.change.make core.rule when=$a.lc.r when=$a.lc.b when=$a.lc.ni with=$a.lc.ref then=$a.lc.nc
+@a.lc.gone.i w.document.item block=$a.lc.b n=?n
+@a.lc.gone.c ui.doc.count of=items n=?k
+@a.lc.gone.k core.check fn=gt args=?n args=?k
+@a.lc.gone.rm app.act.call act=remove thing=$a.lc.gone.i order=1
+@act.list.change.remove core.rule when=$a.lc.r when=$a.lc.b when=$a.lc.any when=$a.lc.gone.i when=$a.lc.gone.c if=$a.lc.gone.k then=$a.lc.gone.rm
+# Checked: each place's value, on the item there or the one made; a list that becomes a task list starts unchecked.
+@a.lc.ch app.act.item param="checked" n=?k value=?v
+@a.lc.ch.k1 core.calc out=?k1 fn=add args=?k args=1
+@a.lc.ch.old w.document.item block=$a.lc.b n=?k1
+@a.lc.ch.c app.act.call act=change thing=$a.lc.ch.old attr=checked value=?v order=2
+@act.list.change.checked core.rule when=$a.lc.r when=$a.lc.b when=$a.lc.ch with=$a.lc.ch.k1 when=$a.lc.ch.old then=$a.lc.ch.c
+@a.lc.ch.ni ui.doc.newitem n=?k1
+@a.lc.ch.ref core.calc out=?ref fn=concat args="new.item." args=?k1
+@a.lc.ch.o app.act.arg call=?ref attr=checked value=?v
+@act.list.change.checked.new core.rule when=$a.lc.r when=$a.lc.b when=$a.lc.ch with=$a.lc.ch.k1 when=$a.lc.ch.ni with=$a.lc.ch.ref then=$a.lc.ch.o
+@a.lc.tk.r app.act.request style=task
+@a.lc.tk.i w.document.item block=$a.lc.b
+@a.lc.tk.c app.act.call act=change thing=$a.lc.tk.i attr=checked value=false order=1
+@act.list.change.task core.rule when=$a.lc.r when=$a.lc.b when=$a.lc.tk.r when=$a.lc.tk.i not=$a.lc.ck not=$a.lc.tk.hasc then=$a.lc.tk.c
+@a.lc.tk.hasc ui.doc.known item=$a.lc.tk.i
+@a.lc.tk.f.i w.document.item checked=?anyc
+@a.lc.tk.f.o ui.doc.known item=$a.lc.tk.f.i
+@act.item.checked.known core.rule when=$a.lc.tk.f.i then=$a.lc.tk.f.o
+@a.lc.tn.r app.act.request style=task
+@a.lc.tn.ni ui.doc.newitem n=?k1
+@a.lc.tn.ref core.calc out=?ref fn=concat args="new.item." args=?k1
+@a.lc.tn.o app.act.arg call=?ref attr=checked value=false
+@a.lc.tn.cur w.document.block code=?id style=task
+@act.list.change.task.new core.rule when=$a.lc.r when=$a.lc.b when=$a.lc.tn.r when=$a.lc.tn.ni not=$a.lc.ck with=$a.lc.tn.ref then=$a.lc.tn.o
+@a.lc.tn.ns app.act.request style=?anys
+@act.list.change.task.new.kept core.rule when=$a.lc.r when=$a.lc.b when=$a.lc.tn.cur when=$a.lc.tn.ni not=$a.lc.tn.ns not=$a.lc.ck with=$a.lc.tn.ref then=$a.lc.tn.o
+# A changed item's marks are kept within its new text.
+@a.cl.i ui.doc.clamp item=?iw text=?v
+@a.cl.bx ui.doc.box id=?cid thing=?iw
+@a.cl.hm ui.doc.hasmarks box=?cid
+@a.cl.key core.calc out=?key fn=concat args=?cid args="|new"
+@a.cl.o ui.doc.lenof key=?key text=?v top=10000
+@act.clamp.measure core.rule when=$a.cl.i when=$a.cl.bx when=$a.cl.hm with=$a.cl.key then=$a.cl.o
+@a.cm.i ui.doc.clamp item=?iw
+@a.cm.bx ui.doc.box id=?cid thing=?iw
+@a.cm.key core.calc out=?key fn=concat args=?cid args="|new"
+@a.cm.len ui.doc.len key=?key n=?l
+@a.cm.mk ui.doc.mk mark=?m box=?cid from=?mf to=?mt
+@a.cm.out core.check fn=gte args=?mf args=?l
+@a.cm.rm app.act.call act=remove thing=?m order=2
+@act.clamp.remove core.rule when=$a.cm.i when=$a.cm.bx with=$a.cm.key when=$a.cm.len when=$a.cm.mk if=$a.cm.out then=$a.cm.rm
+@a.cm.in core.check fn=lt args=?mf args=?l
+@a.cm.over core.check fn=gt args=?mt args=?l
+@a.cm.ct app.act.call act=change thing=?m attr=to value=?l order=2
+@act.clamp.cut core.rule when=$a.cm.i when=$a.cm.bx with=$a.cm.key when=$a.cm.len when=$a.cm.mk if=$a.cm.in if=$a.cm.over then=$a.cm.ct
+
+# ---- Changing a table ----
+@a.tb.r app.act.request operation="document.table.change" id=?id
+@a.tb.b w.document.block code=?id form=table
+@a.tb.miss app.act.refuse reason=missing-table
+@act.table.change.missing core.rule when=$a.tb.r not=$a.tb.b then=$a.tb.miss
+@a.tb.h.r app.act.request header=?h
+@a.tb.h.c app.act.call act=change thing=$a.tb.b attr=header value=?h order=1
+@act.table.change.header core.rule when=$a.tb.r when=$a.tb.b when=$a.tb.h.r then=$a.tb.h.c
+@a.tb.any app.act.item param="rows"
+@a.tb.i app.act.item param="rows" n=?r m=?k value=?v
+@a.tb.r1 core.calc out=?r1 fn=add args=?r args=1
+@a.tb.k1 core.calc out=?k1 fn=add args=?k args=1
+@a.tb.old w.document.cell block=$a.tb.b row=?r1 column=?k1 text=?ov
+@a.tb.dif core.check fn=neq args=?ov args=?v
+@a.tb.tc app.act.call act=change thing=$a.tb.old attr=text value=?v order=2
+@a.tb.cl ui.doc.clamp item=$a.tb.old text=?v
+@act.table.change.cell core.rule when=$a.tb.r when=$a.tb.b when=$a.tb.i with=$a.tb.r1 with=$a.tb.k1 when=$a.tb.old if=$a.tb.dif then=$a.tb.tc then=$a.tb.cl
+@a.tb.nold w.document.cell block=$a.tb.b row=?r1 column=?k1
+@a.tb.nc app.act.call act=make kind=w.document.cell block=$a.tb.b row=?r1 column=?k1 text=?v order=3
+@act.table.change.new core.rule when=$a.tb.r when=$a.tb.b when=$a.tb.i with=$a.tb.r1 with=$a.tb.k1 not=$a.tb.nold then=$a.tb.nc
+@a.tb.g.c w.document.cell block=$a.tb.b row=?r1 column=?k1
+@a.tb.g.r0 core.calc out=?r0 fn=sub args=?r1 args=1
+@a.tb.g.k0 core.calc out=?k0 fn=sub args=?k1 args=1
+@a.tb.g.has app.act.item param="rows" n=?r0 m=?k0
+@a.tb.g.rm app.act.call act=remove thing=$a.tb.g.c order=1
+@a.tb.g.ok ui.doc.newcell row=?r1 column=?k1
+@act.table.change.kept core.rule when=$a.tb.r when=$a.tb.b when=$a.tb.any when=$a.tb.g.c with=$a.tb.g.r0 with=$a.tb.g.k0 when=$a.tb.g.has then=$a.tb.g.ok
+@act.table.change.remove core.rule when=$a.tb.r when=$a.tb.b when=$a.tb.any when=$a.tb.g.c not=$a.tb.g.ok then=$a.tb.g.rm
+
+# ---- Writing a document: the old one goes, a new one is made from the blocks given ----
+@a.wr.r app.act.request operation="document.write" title=?t
+@a.wr.old w.document.document
+@a.wr.rm app.act.call act=remove thing=$a.wr.old order=1
+@act.write.remove core.rule when=$a.wr.r when=$a.wr.old then=$a.wr.rm
+@a.wr.nd ui.doc.next of=document top=?top
+@a.wr.z core.calc out=?z fn=add args=?top args=1
+@a.wr.code core.calc out=?code fn=concat args=text args=?z
+@a.wr.c app.act.call act=make kind=w.document.document code=?code title=?t order=2 ref=new.doc
+@a.wr.cs app.act.view key=selected
+@a.wr.cf app.act.view key=from
+@a.wr.ct app.act.view key=to
+@a.wr.ca app.act.view key=at
+@act.write core.rule when=$a.wr.r when=$a.wr.nd with=$a.wr.z with=$a.wr.code then=$a.wr.c then=$a.wr.cs then=$a.wr.cf then=$a.wr.ct then=$a.wr.ca
+@a.wr.g.r app.act.request operation="document.write" genre=?g
+@a.wr.g.o app.act.arg call=new.doc attr=genre value=?g
+@act.write.genre core.rule when=$a.wr.g.r then=$a.wr.g.o
+@a.wr.p.r app.act.request operation="document.write" topic=?g
+@a.wr.p.o app.act.arg call=new.doc attr=topic value=?g
+@act.write.topic core.rule when=$a.wr.p.r then=$a.wr.p.o
+@a.wb.k app.act.item param="blocks" n=?i key="kind" value=?k
+@a.wb.t app.act.item param="blocks" n=?i key="text" value=?bt
+@a.wb.nb ui.doc.next of=block top=?top
+@a.wb.z0 core.calc out=?z0 fn=add args=?top args=1
+@a.wb.z core.calc out=?z fn=add args=?z0 args=?i
+@a.wb.code core.calc out=?code fn=concat args=b args=?z
+@a.wb.n core.calc out=?n fn=add args=?i args=1
+@a.wb.ref core.calc out=?ref fn=concat args="new.block." args=?i
+@a.wb.c app.act.call act=make kind=w.document.block code=?code document=new.doc n=?n form=?k text=?bt order=3 ref=?ref
+@act.write.block core.rule when=$a.wr.r when=$a.wb.k when=$a.wb.t when=$a.wb.nb with=$a.wb.z0 with=$a.wb.z with=$a.wb.code with=$a.wb.n with=$a.wb.ref then=$a.wb.c
+@a.wb.l app.act.item param="blocks" n=?i key="level" value=?l
+@a.wb.l.o app.act.arg call=?ref attr=level value=?l
+@act.write.block.level core.rule when=$a.wr.r when=$a.wb.l with=$a.wb.ref then=$a.wb.l.o
+@a.wb.f app.act.item param="blocks" n=?i key="from" value=?s
+@a.wb.f.o app.act.arg call=?ref attr=source value=?s
+@act.write.block.source core.rule when=$a.wr.r when=$a.wb.f with=$a.wb.ref then=$a.wb.f.o
+# Blocks are paragraphs, headings or quotes with a text (and a heading level from 1 to 6, sources as ids).
+@a.wv.k app.act.item param="blocks" n=?i key=?key
+@a.wv.kn ui.doc.blockkey name=?key
+@a.wv.out app.act.refuse reason=invalid-content
+@act.write.invalid.key core.rule when=$a.wr.r when=$a.wv.k not=$a.wv.kn then=$a.wv.out
+@a.wv.kind app.act.item param="blocks" key="kind" value=?k
+@a.wv.kk core.check fn=matches args=?k args="^(paragraph|heading|quote)$"
+@a.wv.kok ui.doc.okkind kind=?k
+@act.write.kind.ok core.rule when=$a.wr.r when=$a.wv.kind if=$a.wv.kk then=$a.wv.kok
+@a.wv.kok2 ui.doc.okkind kind=?k
+@act.write.invalid.kind core.rule when=$a.wr.r when=$a.wv.kind not=$a.wv.kok2 then=$a.wv.out
+@a.wv.any app.act.item param="blocks" n=?i
+@a.wv.hk app.act.item param="blocks" n=?i key="kind"
+@a.wv.ht app.act.item param="blocks" n=?i key="text"
+@act.write.missing.kind core.rule when=$a.wr.r when=$a.wv.any not=$a.wv.hk then=$a.wv.out
+@act.write.missing.text core.rule when=$a.wr.r when=$a.wv.any not=$a.wv.ht then=$a.wv.out
+@a.wv.lv app.act.item param="blocks" key="level" value=?l
+@a.wv.lk core.check fn=matches args=?l args="^[1-6]$"
+@a.wv.lok ui.doc.oklevel level=?l
+@act.write.level.ok core.rule when=$a.wr.r when=$a.wv.lv if=$a.wv.lk then=$a.wv.lok
+@a.wv.lok2 ui.doc.oklevel level=?l
+@act.write.invalid.level core.rule when=$a.wr.r when=$a.wv.lv not=$a.wv.lok2 then=$a.wv.out
+@a.wv.nest app.act.item param="blocks" n=?i key="from" m=?j
+@a.wv.fm app.act.item param="blocks" n=?i key="from"
+@act.write.invalid.from core.rule when=$a.wr.r when=$a.wv.fm not=$a.wv.nest then=$a.wv.out
+@a.wv.flatv app.act.item param="blocks" n=?i value=?v
+@a.wv.keyed app.act.item param="blocks" n=?i key=?kk
+@act.write.invalid.block core.rule when=$a.wr.r when=$a.wv.flatv not=$a.wv.keyed then=$a.wv.out
+
+# ---- Composing and rewriting: refused (no composer, no rewriter, no language model in this area) ----
+@a.cp2.r app.act.request operation="document.compose"
+@a.cp2.out app.act.refuse reason=missing-knowledge-composer
+@act.compose.refused core.rule when=$a.cp2.r then=$a.cp2.out
+@a.rw.r app.act.request operation="document.rewrite"
+@a.rw.out app.act.refuse reason=missing-knowledge-rewriter
+@act.rewrite.refused core.rule when=$a.rw.r then=$a.rw.out
+
+# ---- Removing blocks ----
+@a.br.r app.act.request operation="document.block.remove"
+@a.br.i app.act.item param="ids" value=?id
+@a.br.b w.document.block code=?id
+@a.br.c app.act.call act=remove thing=$a.br.b order=1
+@act.block.remove core.rule when=$a.br.r when=$a.br.i when=$a.br.b then=$a.br.c
+@a.br.miss app.act.refuse reason=missing-target
+@act.block.remove.missing core.rule when=$a.br.r when=$a.br.i not=$a.br.b then=$a.br.miss
+@a.br.d1 app.act.item param="ids" n=?x value=?id
+@a.br.d2 app.act.item param="ids" n=?y value=?id
+@a.br.dk core.check fn=lt args=?x args=?y
+@act.block.remove.twice core.rule when=$a.br.r when=$a.br.d1 when=$a.br.d2 if=$a.br.dk then=$a.br.miss
+
+# A section goes with what follows it up to the next heading of its level or above.
+@a.sr.r app.act.request operation="document.section.remove"
+@a.sr.i app.act.item param="ids" value=?id
+@a.sr.h ui.doc.head code=?id n=?hn level=?hl
+@a.sr.miss app.act.refuse reason=missing-target
+@a.sr.any app.act.item param="ids"
+@act.section.remove.missing core.rule when=$a.sr.r when=$a.sr.i not=$a.sr.h then=$a.sr.miss
+@act.section.remove.none core.rule when=$a.sr.r not=$a.sr.any then=$a.sr.miss
+@act.section.remove.twice core.rule when=$a.sr.r when=$a.br.d1 when=$a.br.d2 if=$a.br.dk then=$a.sr.miss
+@a.st.h ui.doc.head code=?s n=?sn level=?sl
+@a.st.o w.document.block code=?c form=heading n=?n
+@a.st.l ui.doc.level code=?c level=?l
+@a.st.k1 core.check fn=gt args=?n args=?sn
+@a.st.k2 core.check fn=lte args=?l args=?sl
+@a.st.out ui.doc.stopper head=?s n=?n
+@act.section.stopper core.rule when=$a.sr.r when=$a.st.h when=$a.st.o when=$a.st.l if=$a.st.k1 if=$a.st.k2 then=$a.st.out
+@a.st.m.i ui.doc.stopper head=?s n=?n
+@a.st.m.o ui.doc.stop head=?s n=?m
+@act.section.stop core.aggregate over=$a.st.m.i by=?s min=?m args=?n then=$a.st.m.o
+@a.st.e.h ui.doc.head code=?s
+@a.st.e.has ui.doc.stopper head=?s
+@a.st.e.o ui.doc.stop head=?s n=1000000000
+@act.section.stop.end core.rule when=$a.sr.r when=$a.st.e.h not=$a.st.e.has then=$a.st.e.o
+@a.sc2.i app.act.item param="ids" value=?s
+@a.sc2.h ui.doc.head code=?s n=?sn
+@a.sc2.st ui.doc.stop head=?s n=?e
+@a.sc2.b w.document.block code=?c n=?n
+@a.sc2.k1 core.check fn=gte args=?n args=?sn
+@a.sc2.k2 core.check fn=lt args=?n args=?e
+@a.sc2.o ui.doc.cutblock code=?c
+@act.section.cut core.rule when=$a.sr.r when=$a.sc2.i when=$a.sc2.h when=$a.sc2.st when=$a.sc2.b if=$a.sc2.k1 if=$a.sc2.k2 then=$a.sc2.o
+@a.sc2.cb ui.doc.cutblock code=?c
+@a.sc2.bw w.document.block code=?c
+@a.sc2.rm app.act.call act=remove thing=$a.sc2.bw order=1
+@act.section.remove core.rule when=$a.sc2.cb when=$a.sc2.bw then=$a.sc2.rm
+
+# The document goes with everything in it.
+@a.dr.r app.act.request operation="document.remove"
+@a.dr.d w.document.document
+@a.dr.c app.act.call act=remove thing=$a.dr.d order=1
+@act.document.remove core.rule when=$a.dr.r when=$a.dr.d then=$a.dr.c then=$a.wr.cs then=$a.wr.cf then=$a.wr.ct then=$a.wr.ca
+
+# ---- Reordering ----
+# Blocks: `ids` names every block once, in the new order.
+@a.ro.r app.act.request operation="document.block.reorder"
+@a.ro.i app.act.item param="ids" n=?k value=?id
+@a.ro.b w.document.block code=?id
+@a.ro.k1 core.calc out=?k1 fn=add args=?k args=1
+@a.ro.c app.act.call act=change thing=$a.ro.b attr=n value=?k1 order=1
+@act.block.reorder core.rule when=$a.ro.r when=$a.ro.i when=$a.ro.b with=$a.ro.k1 then=$a.ro.c
+@a.ro.bad app.act.refuse reason=incomplete-block-order
+@act.block.reorder.missing core.rule when=$a.ro.r when=$a.ro.i not=$a.ro.b then=$a.ro.bad
+@act.block.reorder.twice core.rule when=$a.ro.r when=$a.br.d1 when=$a.br.d2 if=$a.br.dk then=$a.ro.bad
+@a.ro.cnt.i app.act.item param="ids"
+@a.ro.cnt.o ui.doc.count of=ids n=?k
+@act.count.ids core.aggregate over=$a.ro.cnt.i count=?k then=$a.ro.cnt.o
+@a.ro.bc.b w.document.block
+@a.ro.bc.o ui.doc.count of=blocks n=?k
+@act.count.blocks core.aggregate over=$a.ro.bc.b count=?k then=$a.ro.bc.o
+@a.ro.n1 ui.doc.count of=ids n=?a
+@a.ro.n2 ui.doc.count of=blocks n=?b
+@a.ro.ne core.check fn=neq args=?a args=?b
+@act.block.reorder.count core.rule when=$a.ro.r when=$a.ro.n1 when=$a.ro.n2 if=$a.ro.ne then=$a.ro.bad
+
+# Sections: `ids` names every section once; each moves with what it holds; what stands before the first section
+# stays first.
+@a.so.r app.act.request operation="document.section.reorder"
+@a.so.bad app.act.refuse reason=incomplete-section-order
+@a.so.i app.act.item param="ids" n=?k value=?id
+@a.so.h ui.doc.head code=?id
+@act.section.reorder.missing core.rule when=$a.so.r when=$a.so.i not=$a.so.h then=$a.so.bad
+@act.section.reorder.twice core.rule when=$a.so.r when=$a.br.d1 when=$a.br.d2 if=$a.br.dk then=$a.so.bad
+@a.so.hc.h ui.doc.head
+@a.so.hc.o ui.doc.count of=heads n=?k
+@act.count.heads core.aggregate over=$a.so.hc.h count=?k then=$a.so.hc.o
+@a.so.n1 ui.doc.count of=ids n=?a
+@a.so.n2 ui.doc.count of=heads n=?b
+@act.section.reorder.count core.rule when=$a.so.r when=$a.so.n1 when=$a.so.n2 if=$a.ro.ne then=$a.so.bad
+@a.so.e.any app.act.item param="ids"
+@a.so.e.h ui.doc.head
+@act.section.reorder.empty core.rule when=$a.so.r not=$a.so.e.any then=$a.so.bad
+@act.section.reorder.none core.rule when=$a.so.r not=$a.so.e.h then=$a.so.bad
+@a.gm.g ui.doc.group block=?c head=?h
+@a.gm.b w.document.block code=?c n=?n
+@a.gm.o ui.doc.gmember block=?c head=?h n=?n
+@act.group.member core.rule when=$a.so.r when=$a.gm.g when=$a.gm.b then=$a.gm.o
+@a.gs.i ui.doc.gmember head=?h
+@a.gs.o ui.doc.gsize head=?h n=?k
+@act.group.size core.aggregate over=$a.gs.i by=?h count=?k then=$a.gs.o
+@a.gp.i app.act.item param="ids" n=?k value=?h
+@a.gp.ok ui.doc.head code=?h
+@a.gp.o ui.doc.gpos head=?h pos=?k
+@act.group.position core.rule when=$a.so.r when=$a.gp.i when=$a.gp.ok then=$a.gp.o
+@a.gq.a ui.doc.gpos head=?ha pos=?pa
+@a.gq.s ui.doc.gsize head=?ha n=?sa
+@a.gq.b ui.doc.gpos head=?hb pos=?pb
+@a.gq.k core.check fn=lt args=?pa args=?pb
+@a.gq.o ui.doc.gpair head=?hb before=?ha n=?sa
+@act.group.pair core.rule when=$a.gq.a when=$a.gq.s when=$a.gq.b if=$a.gq.k then=$a.gq.o
+@a.go.i ui.doc.gpair head=?h n=?s
+@a.go.o ui.doc.goffset head=?h n=?t
+@act.group.offset core.aggregate over=$a.go.i by=?h sum=?t args=?s then=$a.go.o
+@a.go.f.p ui.doc.gpos head=?h pos=0
+@a.go.f.o ui.doc.goffset head=?h n=0
+@act.group.offset.first core.rule when=$a.go.f.p then=$a.go.f.o
+@a.pf2.b w.document.block code=?c n=?n
+@a.pf2.g ui.doc.group block=?c
+@a.pf2.o ui.doc.prefixblock block=?c n=?n
+@act.prefix.block core.rule when=$a.so.r when=$a.pf2.b not=$a.pf2.g then=$a.pf2.o
+@a.pc2.o ui.doc.count of=prefix n=?k
+@a.pc2.i ui.doc.prefixblock block=?c n=?n
+@act.prefix.count core.aggregate over=$a.pc2.i count=?k then=$a.pc2.o
+@a.pr.i ui.doc.prefixblock block=?c n=?n
+@a.pr.r core.rank of=$a.pr.i by=n out=?r
+@a.pr.bw w.document.block code=?c
+@a.pr.c app.act.call act=change thing=$a.pr.bw attr=n value=?r order=1
+@act.prefix.place core.rule when=$a.so.r when=$a.pr.i with=$a.pr.r when=$a.pr.bw then=$a.pr.c
+@a.mv.i ui.doc.gmember block=?c head=?h n=?n
+@a.mv.r core.rank of=$a.mv.i by=n within=?h out=?r
+@a.mv.off ui.doc.goffset head=?h n=?o
+@a.mv.pc ui.doc.count of=prefix n=?p
+@a.mv.a core.calc out=?a fn=add args=?p args=?o
+@a.mv.n core.calc out=?nn fn=add args=?a args=?r
+@a.mv.bw w.document.block code=?c
+@a.mv.c app.act.call act=change thing=$a.mv.bw attr=n value=?nn order=1
+@act.group.place core.rule when=$a.so.r when=$a.mv.i with=$a.mv.r when=$a.mv.off when=$a.mv.pc with=$a.mv.a with=$a.mv.n when=$a.mv.bw then=$a.mv.c
+
+# ---- What a reader observes ----
+# The document: its title, genre, topic and length in words.
+@a.ob.d w.document.document code=?d title=?t
+@a.ob.do app.observe.object id=?d kind=document sourceType=docs.editor.document binding=document title=?t
+@act.observe.document core.rule when=$a.ob.d then=$a.ob.do
+@a.ob.g w.document.document code=?d genre=?g
+@a.ob.go app.observe.input id=?d key=genre value=?g
+@act.observe.genre core.rule when=$a.ob.g then=$a.ob.go
+@a.ob.p w.document.document code=?d topic=?g
+@a.ob.po app.observe.input id=?d key=topic value=?g
+@act.observe.topic core.rule when=$a.ob.p then=$a.ob.po
+@a.ob.w ui.doc.words n=?n
+@a.ob.wt ui.doc.total n=?s
+@act.observe.words.sum core.aggregate over=$a.ob.w sum=?s args=?n then=$a.ob.wt
+@a.ob.wd w.document.document code=?d
+@a.ob.wi ui.doc.total n=?s
+@a.ob.wo app.observe.input id=?d key=length value=?s
+@act.observe.length core.rule when=$a.ob.wd when=$a.ob.wi then=$a.ob.wo
+@a.ob.opt.d app.observe.option id=document value=?d
+@act.observe.option.document core.rule when=$a.ob.wd then=$a.ob.opt.d
+
+# Blocks: a section (a heading of level 1 or 2) or the block's form, where it lies (its section, the chapter of a
+# section, or the document), its place, alignment and whether it is selected; its text, name, level, style, header.
+@a.ob.b w.document.block code=?c form=?f align=?al
+@a.ob.ix ui.doc.index code=?c index=?i
+@a.ob.hd ui.doc.head code=?c
+@a.ob.par ui.doc.parent block=?c parent=?p
+@a.ob.dc w.document.document code=?d
+@a.ob.sel app.area.view key=selected value=?c
+@a.ob.bo.s.p app.observe.object id=?c kind=section sourceType=docs.editor.section binding=document.block in=?p role=member index=?i align=?al form=?f selected=true
+@a.ob.bo.s.n app.observe.object id=?c kind=section sourceType=docs.editor.section binding=document.block in=?p role=member index=?i align=?al form=?f selected=false
+@a.ob.bo.s.dp app.observe.object id=?c kind=section sourceType=docs.editor.section binding=document.block in=?d role=member index=?i align=?al form=?f selected=true
+@a.ob.bo.s.dn app.observe.object id=?c kind=section sourceType=docs.editor.section binding=document.block in=?d role=member index=?i align=?al form=?f selected=false
+@a.ob.bo.b.p app.observe.object id=?c kind=?f sourceType=docs.editor.block binding=document.block in=?p role=member index=?i align=?al form=?f selected=true
+@a.ob.bo.b.n app.observe.object id=?c kind=?f sourceType=docs.editor.block binding=document.block in=?p role=member index=?i align=?al form=?f selected=false
+@a.ob.bo.b.dp app.observe.object id=?c kind=?f sourceType=docs.editor.block binding=document.block in=?d role=member index=?i align=?al form=?f selected=true
+@a.ob.bo.b.dn app.observe.object id=?c kind=?f sourceType=docs.editor.block binding=document.block in=?d role=member index=?i align=?al form=?f selected=false
+@act.observe.section.in.sel core.rule when=$a.ob.b when=$a.ob.ix when=$a.ob.hd when=$a.ob.par when=$a.ob.sel then=$a.ob.bo.s.p
+@act.observe.section.in core.rule when=$a.ob.b when=$a.ob.ix when=$a.ob.hd when=$a.ob.par not=$a.ob.sel then=$a.ob.bo.s.n
+@act.observe.section.top.sel core.rule when=$a.ob.b when=$a.ob.ix when=$a.ob.hd when=$a.ob.dc not=$a.ob.par when=$a.ob.sel then=$a.ob.bo.s.dp
+@act.observe.section.top core.rule when=$a.ob.b when=$a.ob.ix when=$a.ob.hd when=$a.ob.dc not=$a.ob.par not=$a.ob.sel then=$a.ob.bo.s.dn
+@act.observe.block.in.sel core.rule when=$a.ob.b when=$a.ob.ix not=$a.ob.hd when=$a.ob.par when=$a.ob.sel then=$a.ob.bo.b.p
+@act.observe.block.in core.rule when=$a.ob.b when=$a.ob.ix not=$a.ob.hd when=$a.ob.par not=$a.ob.sel then=$a.ob.bo.b.n
+@act.observe.block.top.sel core.rule when=$a.ob.b when=$a.ob.ix not=$a.ob.hd when=$a.ob.dc not=$a.ob.par when=$a.ob.sel then=$a.ob.bo.b.dp
+@act.observe.block.top core.rule when=$a.ob.b when=$a.ob.ix not=$a.ob.hd when=$a.ob.dc not=$a.ob.par not=$a.ob.sel then=$a.ob.bo.b.dn
+@a.oi.text w.document.block code=?c text=?v
+@a.oi.text.tx ui.doc.textual code=?c
+@a.oi.text.o app.observe.input id=?c key=text value=?v
+@act.observe.block.text core.rule when=$a.oi.text when=$a.oi.text.tx then=$a.oi.text.o
+@a.oi.name w.document.block code=?c name=?v
+@a.oi.name.o app.observe.input id=?c key=name value=?v
+@act.observe.block.name core.rule when=$a.oi.name then=$a.oi.name.o
+@a.oi.level ui.doc.level code=?c level=?v
+@a.oi.level.o app.observe.input id=?c key=level value=?v
+@act.observe.block.level core.rule when=$a.oi.level then=$a.oi.level.o
+@a.oi.style w.document.block code=?c form=list style=?v
+@a.oi.style.o app.observe.input id=?c key=style value=?v
+@act.observe.block.style core.rule when=$a.oi.style then=$a.oi.style.o
+@a.oi.header w.document.block code=?c form=table header=?v
+@a.oi.header.o app.observe.input id=?c key=header value=?v
+@act.observe.block.header core.rule when=$a.oi.header then=$a.oi.header.o
+@a.oi.par.b w.document.block code=?c
+@a.oi.par.d w.document.document code=?d
+@a.oi.par.o app.observe.input id=?c key=parent value=?d
+@act.observe.block.parent core.rule when=$a.oi.par.b when=$a.oi.par.d then=$a.oi.par.o
+@a.oi.rs app.area.view key=selected value=?c
+@a.oi.rf app.area.view key=from value=?f
+@a.oi.rt app.area.view key=to value=?t
+@a.oi.ra app.area.view key=at value=?a
+@a.oi.rb w.document.block code=?c
+@a.oi.rf.o app.observe.input id=?c key=selectionFrom value=?fn
+@a.oi.rt.o app.observe.input id=?c key=selectionTo value=?tn
+@a.oi.ra.o app.observe.input id=?c key=selectionAt value=?a
+@a.oi.rf.n core.calc out=?fn fn=matches args=?f args="^\\d+$"
+@a.oi.rt.n core.calc out=?tn fn=matches args=?t args="^\\d+$"
+@act.observe.block.range core.rule when=$a.oi.rs when=$a.oi.rb when=$a.oi.rf when=$a.oi.rt when=$a.oi.ra with=$a.oi.rf.n with=$a.oi.rt.n then=$a.oi.rf.o then=$a.oi.rt.o then=$a.oi.ra.o
+@a.ob.opt.b w.document.block code=?c
+@a.ob.opt.bo app.observe.option id=block value=?c
+@act.observe.option.block core.rule when=$a.ob.opt.b then=$a.ob.opt.bo
+
+# Text containers: a block's own text, each list item and each table cell, under their block.
+@a.oc.bx ui.doc.box id=?cid block=?c at=?at text=?t kind=?k
+@a.oc.nt core.check fn=neq args=?k args=title
+@a.oc.o app.observe.object id=?cid kind=?k sourceType=docs.editor.text binding=document.text in=?c role=?k text=?t at=?at parent=?c
+@act.observe.container core.rule when=$a.oc.bx if=$a.oc.nt then=$a.oc.o
+@a.oc.n.bx ui.doc.box id=?cid block=?c at=?at kind=?k
+@a.oc.n.b w.document.block code=?c form=?f
+@a.oc.n.nm core.calc out=?nm fn=concat args=?f args=" " args=?at
+@a.oc.n.o app.observe.input id=?cid key=name value=?nm
+@act.observe.container.name core.rule when=$a.oc.n.bx when=$a.oc.n.b if=$a.oc.nt with=$a.oc.n.nm then=$a.oc.n.o
+@a.oc.ck.bx ui.doc.box id=?cid thing=$a.oc.ck.i kind=item
+@a.oc.ck.i w.document.item checked=?v
+@a.oc.ck.o app.observe.input id=?cid key=checked value=?v
+@act.observe.item.checked core.rule when=$a.oc.ck.bx when=$a.oc.ck.i then=$a.oc.ck.o
+@a.oc.rc.bx ui.doc.box id=?cid kind=cell row=?r col=?k
+@a.oc.rc.r app.observe.input id=?cid key=row value=?r
+@a.oc.rc.c app.observe.input id=?cid key=column value=?k
+@act.observe.cell.place core.rule when=$a.oc.rc.bx then=$a.oc.rc.r then=$a.oc.rc.c
+
+# Marks, under their block: form, the characters they cover, the text they are in (at), a link's href, a colour.
+@a.om.mk ui.doc.mk mark=$a.om.w box=?cid from=?f to=?t form=?fm
+@a.om.w w.document.mark
+@a.om.bx ui.doc.box id=?cid block=?c at=?at
+@a.om.id core.calc out=?id fn=concat args=?cid args="|" args=?fm args="|" args=?f
+@a.om.o app.observe.object id=?id kind=mark sourceType=docs.editor.mark binding=document.mark in=?c role=mark form=?fm from=?f to=?t at=?at
+@act.observe.mark core.rule when=$a.om.mk when=$a.om.w when=$a.om.bx with=$a.om.id then=$a.om.o
+@a.om.h.mk ui.doc.mk mark=$a.om.h.w box=?cid from=?f form=?fm
+@a.om.h.w w.document.mark href=?v
+@a.om.h.o app.observe.input id=?id key=href value=?v
+@act.observe.mark.href core.rule when=$a.om.h.mk when=$a.om.h.w with=$a.om.id then=$a.om.h.o
+@a.om.c.mk ui.doc.mk mark=$a.om.c.w box=?cid from=?f form=?fm
+@a.om.c.w w.document.mark colour=?v
+@a.om.c.o app.observe.input id=?id key=colour value=?v
+@act.observe.mark.colour core.rule when=$a.om.c.mk when=$a.om.c.w with=$a.om.id then=$a.om.c.o
+
+# The choices the inspector offers.
+@opt.align.left app.observe.option id=align value=left
+@opt.align.center app.observe.option id=align value=center
+@opt.align.right app.observe.option id=align value=right
+@opt.align.justify app.observe.option id=align value=justify
+@opt.kind.paragraph app.observe.option id=kind value=paragraph
+@opt.kind.heading app.observe.option id=kind value=heading
+@opt.kind.quote app.observe.option id=kind value=quote
+@opt.mark.bold app.observe.option id=mark value=bold
+@opt.mark.italic app.observe.option id=mark value=italic
+@opt.mark.underline app.observe.option id=mark value=underline
+@opt.mark.strike app.observe.option id=mark value=strike
+@opt.mark.code app.observe.option id=mark value=code
+@opt.mark.highlight app.observe.option id=mark value=highlight

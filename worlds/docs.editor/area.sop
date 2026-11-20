@@ -1,0 +1,81 @@
+# The Documents tab as a SOP area (read by worlds/sop-area.mjs). The instance is a w.document world in its editor
+# form (a document, its blocks in order, list items, table cells and marks); render-projection.sop sets it as a page
+# and act-rules.sop compiles every native Documents command into std.acts calls (or an explicit refusal) and derives
+# what a reader observes. Lines are wrapped and words counted by derivation chains, so the area asks for a deep
+# derivation budget and rule-firing budget (a long document fires many rules), and its calls run without those rules
+# (calls=instance). A first state holds one empty document,
+# so a paragraph can be added at once.
+@area.types core.type of=app.area
+@area.rules.type core.type of=app.area.rules
+@area.make.type core.type of=app.area.make
+@area.command.type core.type of=app.area.command
+@area.choice.type core.type of=app.area.choice
+@area.constant.type core.type of=app.area.constant
+@area.draw.type core.type of=app.area.draw
+@area.offline.type core.type of=app.area.offline
+@area.control.type core.type of=app.area.control
+@area.field.type core.type of=app.area.field
+@area.arg.type core.type of=app.area.arg
+@area.lookup.type core.type of=app.area.lookup
+
+@document.area app.area world=docs.editor instance=w.document scope="document-and-blocks" frame.w=800 frame.h=600 depth=4096 steps=1000000 calls=instance
+@document.rules.1 app.area.rules area=$document.area file="render-projection.sop" n=1
+@document.rules.2 app.area.rules area=$document.area file="act-rules.sop" n=2
+@document.make app.area.make area=$document.area kind=w.document.document code=text1 title=""
+@document.draw app.area.draw area=$document.area draw=ui.doc.draw fill=ui.doc.fill point=ui.doc.point orient=ui.doc.orient select=slot
+
+# Inspector controls. A control's app.area.arg facts give arguments the view sends with it: a fixed value, the first
+# observed option of a key (option=), every observed option of a key (options=), a key of the view's state (view=;
+# kind=number reads it as a number), or an empty list (list=true); `key` puts the value under that key of an object
+# argument.
+@document.control.select app.area.control area=$document.area n=1 label="Block" operation="document.block.select" param=id options=block
+@document.arg.select.from app.area.arg control=$document.control.select param=from value=0
+@document.arg.select.to app.area.arg control=$document.control.select param=to value=0
+@document.control.title app.area.control area=$document.area n=2 label="Title" operation="document.title.change" options=none
+@document.arg.title.id app.area.arg control=$document.control.title param=id option=document
+@document.field.title app.area.field control=$document.control.title n=1 param=title label="Title" input=text
+@document.control.paragraph app.area.control area=$document.area n=3 label="Add paragraph" operation="document.block.make" options=none
+@document.arg.paragraph.parent app.area.arg control=$document.control.paragraph param=parent option=document
+@document.arg.paragraph.kind app.area.arg control=$document.control.paragraph param=kind value=paragraph
+@document.field.paragraph app.area.field control=$document.control.paragraph n=1 param=text label="Text" input=textarea
+@document.control.chapter app.area.control area=$document.area n=4 label="Add chapter" operation="document.section.make" options=none
+@document.arg.chapter.parent app.area.arg control=$document.control.chapter param=parent option=document
+@document.arg.chapter.level app.area.arg control=$document.control.chapter param=level value=1
+@document.field.chapter app.area.field control=$document.control.chapter n=1 param=text label="Heading" input=text
+@document.control.section app.area.control area=$document.area n=5 label="Add section" operation="document.section.make" options=none
+@document.arg.section.parent app.area.arg control=$document.control.section param=parent option=document
+@document.arg.section.level app.area.arg control=$document.control.section param=level value=2
+@document.field.section app.area.field control=$document.control.section n=1 param=text label="Heading" input=text
+@document.control.list app.area.control area=$document.area n=6 label="Add list" operation="document.list.make" options=none
+@document.arg.list.parent app.area.arg control=$document.control.list param=parent option=document
+@document.arg.list.style app.area.arg control=$document.control.list param=style value=bullet
+@document.field.list app.area.field control=$document.control.list n=1 param=items label="Items (one per line)" input=lines
+@document.control.table app.area.control area=$document.area n=7 label="Add table" operation="document.table.make" options=none
+@document.arg.table.parent app.area.arg control=$document.control.table param=parent option=document
+@document.field.table app.area.field control=$document.control.table n=1 param=rows label="Rows (cells split by |)" input=grid
+@document.control.text app.area.control area=$document.area n=8 label="Edit text" operation="document.block.change" target=selected list=id when=present options=none
+@document.field.text app.area.field control=$document.control.text n=1 param=text label="Text" input=textarea
+@document.control.items app.area.control area=$document.area n=9 label="Edit list items" operation="document.list.change" target=selected list=id when=present options=none
+@document.field.items app.area.field control=$document.control.items n=1 param=items label="Items (one per line)" input=lines
+@document.control.kind app.area.control area=$document.area n=10 label="Block type" operation="document.block.change" param=kind target=selected list=id when=present options=kind
+@document.control.align app.area.control area=$document.area n=11 label="Alignment" operation="document.block.align" param=align target=selected list=id when=present options=align
+@document.control.range app.area.control area=$document.area n=12 label="Select characters" operation="document.block.select" target=selected list=id when=present options=none
+@document.field.range.from app.area.field control=$document.control.range n=1 param=from label="From" input=number
+@document.field.range.to app.area.field control=$document.control.range n=2 param=to label="To" input=number
+@document.control.mark app.area.control area=$document.area n=13 label="Format the selected characters" operation="document.block.mark" param=mark target=selected list=id when=present options=mark
+@document.arg.mark.at app.area.arg control=$document.control.mark param=at view=at
+@document.arg.mark.from app.area.arg control=$document.control.mark param=from view=from kind=number
+@document.arg.mark.to app.area.arg control=$document.control.mark param=to view=to kind=number
+@document.arg.mark.enabled app.area.arg control=$document.control.mark param=enabled value=true
+@document.arg.mark.colour app.area.arg control=$document.control.mark param=attrs key=color value="#fff2a8"
+@document.control.unmark app.area.control area=$document.area n=14 label="Clear a format" operation="document.block.mark" param=mark target=selected list=id when=present options=mark
+@document.arg.unmark.at app.area.arg control=$document.control.unmark param=at view=at
+@document.arg.unmark.from app.area.arg control=$document.control.unmark param=from view=from kind=number
+@document.arg.unmark.to app.area.arg control=$document.control.unmark param=to view=to kind=number
+@document.arg.unmark.enabled app.area.arg control=$document.control.unmark param=enabled value=false
+@document.control.remove app.area.control area=$document.area n=15 label="Delete block" operation="document.block.remove" target=selected list=ids when=present
+@document.control.clear app.area.control area=$document.area n=16 label="Clear document" operation="document.block.remove"
+@document.arg.clear.ids app.area.arg control=$document.control.clear param=ids options=block
+@document.control.new app.area.control area=$document.area n=17 label="New document" operation="document.write" options=none
+@document.arg.new.blocks app.area.arg control=$document.control.new param=blocks list=true
+@document.field.new app.area.field control=$document.control.new n=1 param=title label="Title" input=text

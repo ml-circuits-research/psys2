@@ -1,5 +1,5 @@
 {
- "version": "ef41a334db21",
+ "version": "56d5192153f5",
  "sopworld": "747b51e",
  "worlds": [
   {
@@ -35585,8 +35585,8 @@
     {
      "id": "k.kinds/shards/structures",
      "path": "k.kinds/shards/structures.sop",
-     "wires": 341,
-     "bytes": 62866,
+     "wires": 355,
+     "bytes": 65641,
      "keys": [
       "assigned",
       "assignment",
@@ -35743,11 +35743,22 @@
       "w.dialogue.turn.n",
       "w.dialogue.turn.tab",
       "w.document",
+      "w.document.block",
+      "w.document.block.document",
+      "w.document.block.n",
+      "w.document.cell",
+      "w.document.cell.block",
       "w.document.chapter",
       "w.document.chapter.document",
       "w.document.chapter.n",
       "w.document.chapter.part",
       "w.document.document",
+      "w.document.item",
+      "w.document.item.block",
+      "w.document.item.n",
+      "w.document.mark",
+      "w.document.mark.block",
+      "w.document.mark.form",
       "w.document.paragraph",
       "w.document.paragraph.section",
       "w.document.section",
@@ -95904,8 +95915,8 @@
     {
      "id": "w.lang.ro/shards/words-w.document",
      "path": "w.lang.ro/shards/words-w.document.sop",
-     "wires": 7,
-     "bytes": 1280,
+     "wires": 11,
+     "bytes": 1695,
      "keys": [],
      "sources": [
       "hand-core-1"
@@ -95918,7 +95929,11 @@
       "unknown-word w.lang.ro.word.w.document.section: w.lang.ro.word.w.document.section: means=w.document.section names no action, type, key or value of the matrix",
       "unknown-word w.lang.ro.word.w.document.paragraph: w.lang.ro.word.w.document.paragraph: means=w.document.paragraph names no action, type, key or value of the matrix",
       "unknown-word w.lang.ro.word.w.document.slide: w.lang.ro.word.w.document.slide: means=w.document.slide names no action, type, key or value of the matrix",
-      "unknown-word w.lang.ro.word.w.document.sentence: w.lang.ro.word.w.document.sentence: means=w.document.sentence names no action, type, key or value of the matrix"
+      "unknown-word w.lang.ro.word.w.document.sentence: w.lang.ro.word.w.document.sentence: means=w.document.sentence names no action, type, key or value of the matrix",
+      "unknown-word w.lang.ro.word.w.document.block: w.lang.ro.word.w.document.block: means=w.document.block names no action, type, key or value of the matrix",
+      "unknown-word w.lang.ro.word.w.document.item: w.lang.ro.word.w.document.item: means=w.document.item names no action, type, key or value of the matrix",
+      "unknown-word w.lang.ro.word.w.document.cell: w.lang.ro.word.w.document.cell: means=w.document.cell names no action, type, key or value of the matrix",
+      "unknown-word w.lang.ro.word.w.document.mark: w.lang.ro.word.w.document.mark: means=w.document.mark names no action, type, key or value of the matrix"
      ]
     },
     {
@@ -96805,7 +96820,8 @@
       "language",
       "seed",
       "words",
-      "about"
+      "about",
+      "code"
      ],
      "words": [
       "document",
@@ -96931,10 +96947,115 @@
       "line",
       "lines"
      ]
+    },
+    {
+     "type": "w.document.block",
+     "acts": [
+      "make",
+      "remove",
+      "change",
+      "pick",
+      "ask",
+      "copy"
+     ],
+     "attributes": [
+      "code",
+      "document",
+      "n",
+      "form",
+      "text",
+      "name",
+      "level",
+      "align",
+      "style",
+      "header",
+      "part",
+      "source"
+     ],
+     "words": [
+      "block",
+      "blocks",
+      "paragraph",
+      "heading",
+      "quote",
+      "list",
+      "table"
+     ]
+    },
+    {
+     "type": "w.document.item",
+     "acts": [
+      "make",
+      "remove",
+      "change",
+      "pick",
+      "ask",
+      "copy"
+     ],
+     "attributes": [
+      "block",
+      "n",
+      "text",
+      "checked"
+     ],
+     "words": [
+      "item",
+      "items",
+      "bullet",
+      "task",
+      "entry"
+     ]
+    },
+    {
+     "type": "w.document.cell",
+     "acts": [
+      "make",
+      "remove",
+      "change",
+      "pick",
+      "ask"
+     ],
+     "attributes": [
+      "block",
+      "row",
+      "column",
+      "text"
+     ],
+     "words": [
+      "cell",
+      "cells"
+     ]
+    },
+    {
+     "type": "w.document.mark",
+     "acts": [
+      "make",
+      "remove",
+      "change",
+      "pick",
+      "ask"
+     ],
+     "attributes": [
+      "block",
+      "item",
+      "cell",
+      "from",
+      "to",
+      "form",
+      "href",
+      "colour"
+     ],
+     "words": [
+      "mark",
+      "marks",
+      "format",
+      "formatting",
+      "style"
+     ]
     }
    ],
-   "wires": 57,
-   "bytes": 10593,
+   "wires": 104,
+   "bytes": 17884,
    "sources": [
     "hand-core-1"
    ],

@@ -1,12 +1,17 @@
 // Predicted raw structure -> declared canonical structure. No reader or gold input.
 import {copyHostData,snapshotHostData} from '../../worlds/native-tool-host.mjs?v=6e8a05d4e9';
-import {positiveCardinalProof} from './key-reader-value-proof.mjs?v=1da711100a';
+import {positiveCardinalProof} from './key-reader-value-proof.mjs?v=392a10456c';
 import {decodeModelGraphs} from './model-graph-decoder.mjs?v=0a71cb100d';
 export const RAW_STRUCTURAL_FORMAT='psys2.raw-structural-predictions/1';
+// The node budget of a binding table (every kind of the pinned catalog's drawable providers, with their provenance).
+export const BINDING_NODES=250000;
 const has=(o,k)=>Object.hasOwn(o,k),hash=v=>typeof v==='string'&&/^[a-f0-9]{64}$/.test(v);
 const keys={request:['span','trigger','mood','act','target','constraints','question','turn'],target:['type','mode','fill','determiner','kind','kind_span','name_span','description_span','ordinal','count','count_span','quantifier'],constraint:['key','value','value_span','operator','phase','polarity','character','step','measure','measure_span','unit','anchor_span','anchor_fill','variety','scope','group']};
 // comparatives: the declared factors of comparative steps (comparative-projection.mjs), [{concept,step,factor,declaration}].
-export function bridgeRawStructure(prediction,{bindings,bindingSha256,comparatives=[],budget=200000,maxBytes=4000000,decoderBudget=200000}={}){
+// references.definite: the language world's definite determiners ("the", "that"); a relation anchor phrase is a kind
+// lemma, alone or after one of them. contextTarget: {kind,declaration} — the canonical kind an earlier, observed
+// reference resolution chose for a model-declared context target (fill=context); never derived here.
+export function bridgeRawStructure(prediction,{bindings,bindingSha256,comparatives=[],references={definite:[]},contextTarget=null,budget=200000,maxBytes=4000000,decoderBudget=200000}={}){
  let raw,table,steps=0;const diagnostics=[],projected=[];
  const fail=(reason,path=[])=>{throw {reason,path};};
  const tick=(n=1)=>{steps+=n;if(steps>budget)fail('bridge-budget');};
@@ -20,12 +25,14 @@ export function bridgeRawStructure(prediction,{bindings,bindingSha256,comparativ
  };
  try{
   if(!Number.isSafeInteger(budget)||budget<1||!Number.isSafeInteger(decoderBudget)||decoderBudget<1||!Number.isSafeInteger(maxBytes)||maxBytes<1||maxBytes>4000000)fail('invalid-budget');
-  raw=copyHostData(prediction,{maxBytes});table=snapshotHostData(bindings,{maxBytes});
+  raw=copyHostData(prediction,{maxBytes});table=snapshotHostData(bindings,{maxBytes,maxNodes:BINDING_NODES});
   shape(raw,['format','source','area','model','coverage','requestCount','requests','unresolved','ranges'],[]);
   shape(raw.source,['text','unit'],['source']);shape(raw.coverage,['complete','truncated'],['coverage']);
   if(raw.format!==RAW_STRUCTURAL_FORMAT||raw.source?.unit!=='unicode-scalar'||typeof raw.source.text!=='string'||typeof raw.area!=='string')fail('invalid-raw-envelope');
   if(table.format!=='sop.structural-bindings/1'||!hash(bindingSha256))fail('invalid-binding-snapshot');
   if(!Array.isArray(comparatives)||comparatives.length>256||comparatives.some(r=>!r||!['concept','step','declaration'].every(k=>typeof r[k]==='string'&&r[k])||!(Number.isFinite(r.factor)&&r.factor>0)))fail('invalid-comparative-projection');
+  const definite=references?.definite??[];if(!Array.isArray(definite)||definite.length>64||definite.some(d=>typeof d!=='string'||!d||/\s/.test(d)))fail('invalid-reference-projection');
+  if(contextTarget!==null&&!(contextTarget&&['kind','declaration'].every(k=>typeof contextTarget[k]==='string'&&contextTarget[k])))fail('invalid-context-target');
   if(table.families!==undefined&&(!Array.isArray(table.families)||table.families.length>256))fail('invalid-family-binding-table');
   for(const row of table.families??[]){tick();if(!row||!['area','type','canonical','sourceWire','sourceWorld','moduleVersion'].every(k=>typeof row[k]==='string'&&row[k])||!hash(row.sourceSnapshotSHA)||row.alignment?.kind!=='explicit-raw-family-identity')fail('invalid-family-binding-record');}
   if(!Array.isArray(raw.requests)||raw.requests.length>32||raw.requestCount!==raw.requests.length||!Number.isSafeInteger(raw.requestCount))issue('unresolved-or-overflow-request-count',['requestCount']);
@@ -62,12 +69,15 @@ export function bridgeRawStructure(prediction,{bindings,bindingSha256,comparativ
    if(['new','existing','bound'].includes(target.mode))t.mode=target.mode;else unresolved('missing-target-mode',['targets',tid,'mode']);
    const kind=lookup('kinds',{area:raw.area,type:target.type,lemma:target.kind});
    const family=target.mode!=='bound'&&!has(target,'kind')&&!has(target,'kind_span')&&typeof target.type==='string'?lookup('families',{area:raw.area,type:target.type}):null;
+   const contextual=contextTarget&&target.fill==='context'&&!has(target,'kind')&&!has(target,'kind_span')&&!has(target,'name_span');
    if(kind){t.kind=kind.canonical;anchor(['targets',tid,'kind'],target.kind_span||target.kind,kind.sourceWire,false,['target',target.kind_span?'kind_span':'kind']);}
+   else if(contextual){t.kind=contextTarget.kind;anchor(['targets',tid,'kind'],null,contextTarget.declaration,true);}
    else if(family){t.kind=family.canonical;anchor(['targets',tid,'kind'],null,family.sourceWire,true);}
    else if(target.mode!=='bound')unresolved('unresolved-canonical-kind-binding',['targets',tid,'kind']);
    if(has(target,'name_span')){t.name={kind:'string',value:target.name_span};anchor(['targets',tid,'name'],target.name_span,null,false,['target','name_span']);}
    if(has(target,'determiner'))t.determiner=target.determiner;
-   if(['context','previous_reply','journal_step'].includes(target.fill))unresolved('context-reference-not-bound',['targets',tid]);
+   if(contextual)t.determiner??='definite';
+   else if(['context','previous_reply','journal_step'].includes(target.fill))unresolved('context-reference-not-bound',['targets',tid]);
    else if(target.fill==='all'&&target.mode!=='bound')unresolved('unprojected-population-reference',['targets',tid]);
    else if(target.fill!==undefined&&!['written','description','all'].includes(target.fill))unresolved('unknown-target-fill',['targets',tid]);
    const phase={selector:[],result:[]},conditions=original.constraints??[];if(!Array.isArray(conditions)||conditions.length>256)fail('constraint-budget',basePath);
@@ -82,7 +92,36 @@ export function bridgeRawStructure(prediction,{bindings,bindingSha256,comparativ
    }else if(has(target,'count')||has(target,'count_span'))
     unresolved(has(target,'count')?'requires-declared-count-projection':'unowned-count-span',['targets',tid,'count']);
    if(has(target,'ordinal'))unresolved('requires-declared-ordinal-projection',['targets',tid,'ordinal']);
+   // A relative position is two mentions (the relation and its anchor, README of official-dataset): their declared
+   // binding roles pair them in source order into one relation constraint whose goal is the anchor target.
+   const roleOf=condition=>condition&&typeof condition==='object'?lookup('properties',{area:raw.area,key:condition.key})?.projection?.kind:undefined;
+   const roles=conditions.map(roleOf),relationAt=roles.flatMap((r,i)=>r==='relation'?[i]:[]),anchorAt=roles.flatMap((r,i)=>r==='relation-anchor'?[i]:[]);
+   const paired=new Set();
+   const consume=(ci,field,literal)=>{const p=[...rawPath,'constraints',String(ci),field];if(span&&ranges.has(JSON.stringify(p)))return locate(original.span,literal,span[0],p,span);return null;};
+   if(relationAt.length||anchorAt.length){
+    if(relationAt.length!==anchorAt.length)unresolved('unpaired-relation-mention',['constraints']);
+    else for(const [k,ri]of relationAt.entries()){
+     const ai=anchorAt[k],rc=conditions[ri],ac=conditions[ai],prop=lookup('properties',{area:raw.area,key:rc.key}),cid=`c${index}_${ri}`,aid=`t${index}_a${k}`,path=['constraints',cid];
+     shape(rc,keys.constraint,[...basePath,'constraints',ri]);shape(ac,keys.constraint,[...basePath,'constraints',ai]);paired.add(ri);paired.add(ai);
+     const c={id:cid,target:tid,phase:'result',concept:prop.canonical,operator:'relation',goal:aid};label.constraints.push(c);phase.result.push([cid,c]);
+     for(const field of ['character','polarity'])if(has(rc,field))c[field]=rc[field];else unresolved('missing-annotated-field',[...path,field]);
+     if(rc.operator!=='relation'||ac.operator!=='relation'||rc.polarity!=='positive')unresolved('unsupported-relation-mention',path);
+     const relation=typeof rc.value==='string'&&has(prop.projection.values??{},rc.value)?prop.projection.values[rc.value]:null;
+     anchor([...path,'concept'],rc.value_span,prop.sourceWire,false,['constraints',String(ri),'value_span']);
+     if(relation){c.relation=relation;anchor([...path,'relation'],rc.value_span,prop.sourceWire,false,['constraints',String(ri),'value_span']);}else unresolved('undeclared-relation-value',[...path,'relation']);
+     consume(ri,'value',rc.value);
+     const bounds=span?locate(original.span,rc.value_span,span[0],[...rawPath,'constraints',String(ri),'value_span'],span):null;if(bounds)c.source=bounds;
+     // The anchor phrase names an observed object: a kind lemma of the family, alone or after a definite determiner.
+     const aprop=lookup('properties',{area:raw.area,key:ac.key}),phrase=typeof ac.value_span==='string'?ac.value_span:'',determiner=definite.find(d=>phrase.toLowerCase().startsWith(d.toLowerCase()+' '));
+     const lemma=determiner?phrase.slice(determiner.length+1):phrase,akind=lemma?lookup('kinds',{area:raw.area,type:target.type,lemma}):null;
+     const a={id:aid,mode:'existing'};label.targets.push(a);if(determiner)a.determiner='definite';
+     const outer=span?locate(original.span,phrase,span[0],[...rawPath,'constraints',String(ai),'value_span'],span):null;consume(ai,'value',ac.value);
+     if(akind&&outer){a.kind=akind.canonical;const at=outer[0]+Array.from(phrase).length-Array.from(lemma).length;evidence.push({path:['targets',aid,'kind'],ranges:[[at,outer[1]]],origin:'declaration',declaration:akind.sourceWire});}
+     else unresolved(aprop?'unresolved-anchor-reference':'unresolved-canonical-property-binding',['targets',aid,'kind']);
+    }
+   }
    for(const [ci,condition]of conditions.entries()){
+    if(paired.has(ci))continue;
     tick();shape(condition,keys.constraint,[...basePath,'constraints',ci]);const cid=`c${index}_${ci}`,c={id:cid,target:tid},path=['constraints',cid];label.constraints.push(c);
     for(const field of ['phase','operator','character','polarity'])if(has(condition,field))c[field]=condition[field];else unresolved('missing-annotated-field',[...path,field]);
     if(phase[c.phase])phase[c.phase].push([cid,condition]);
@@ -96,6 +135,8 @@ export function bridgeRawStructure(prediction,{bindings,bindingSha256,comparativ
     if(comparative){
      Object.assign(c,{operator:'factor',baseline:'before',anchor:prop.canonical,value:{kind:'literal',value:String(comparative.factor)}});
      for(const key of ['value','anchor'])anchor([...path,key],condition.value_span,comparative.declaration,true,['constraints',String(ci),'value_span']);
+     // The model's copy of the comparative word is evidence of the step, not a value: it is checked and consumed.
+     consume(ci,'value',condition.value);
     }else if(has(condition,'value')){
      if(['literal','string'].includes(prop?.valueKind)&&typeof condition.value==='string'){
       const supplied=has(condition,'value_span'),literal=supplied?condition.value_span:condition.value;
@@ -104,12 +145,14 @@ export function bridgeRawStructure(prediction,{bindings,bindingSha256,comparativ
        // Explicit model copy pointers may be narrower than the original evidence span.
        const outer=span?(supplied?locate(original.span,literal,span[0],[...rawPath,'constraints',String(ci),'value_span'],span):span):null;
        const copy=outer?locate(original.span,condition.value,span[0],valuePath,outer):null;
-       if(copy){c.value={kind:prop.valueKind,value:condition.value};evidence.push({path:[...path,'value'],ranges:[copy],origin:'text'});}
+       if(copy){c.value={kind:['degree','region'].includes(condition.operator)?'literal':prop.valueKind,value:condition.value};evidence.push({path:[...path,'value'],ranges:[copy],origin:'text'});}
        else unresolved('invalid-source-copy-range',[...path,'value']);
       }else{
        const identity=typeof literal==='string'&&literal.length>0&&literal===condition.value;
        const normalization=identity?null:lookup('valueNormalizations',{area:raw.area,key:condition.key,canonical:prop.canonical,source:literal,value:condition.value,valueKind:prop.valueKind});
-       if(identity||normalization){c.value={kind:prop.valueKind,value:condition.value};anchor([...path,'value'],literal,normalization?.sourceWire??null,false,['constraints',String(ci),supplied?'value_span':'value']);}
+       // The request graph takes a degree or region value as an unquoted vocabulary name (std.request).
+       const kind=['degree','region'].includes(condition.operator)?'literal':prop.valueKind;
+       if(identity||normalization){c.value={kind,value:condition.value};anchor([...path,'value'],literal,normalization?.sourceWire??null,false,['constraints',String(ci),supplied?'value_span':'value']);}
        else unresolved('unresolved-source-value-normalization',[...path,'value']);
       }
      }else unresolved('unresolved-value-representation',[...path,'value']);

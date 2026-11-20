@@ -1,4 +1,4 @@
-# k.kinds/shards/structures: the structures of worlds, for alignment: 8 structures with their roles (direction, cardinality, required) and 6 constraints, and how 28 worlds are each (50 forms, 230 roles cast to their types, keys and acts).
+# k.kinds/shards/structures: the structures of worlds, for alignment: 8 structures with their roles (direction, cardinality, required) and 6 constraints, and how 28 worlds are each (50 forms, 244 roles cast to their types, keys and acts).
 # sources: hand-core 1 (hand-written in this repository: tools/structures-core.mjs)
 # license: CC0-1.0
 # script: tools/structures-core.mjs
@@ -194,11 +194,25 @@
 @k.kinds.cast.w.document.whole_with_parts.part_kind.w_document_chapter_part k.kinds.cast world=w.document structure="whole with parts" role=part_kind filler=w.document.chapter.part as=key core.source="hand-core 1"
 @k.kinds.cast.w.document.whole_with_parts.order.w_document_chapter_n k.kinds.cast world=w.document structure="whole with parts" role=order filler=w.document.chapter.n as=key core.source="hand-core 1"
 @k.kinds.cast.w.document.whole_with_parts.order.w_document_sentence_n k.kinds.cast world=w.document structure="whole with parts" role=order filler=w.document.sentence.n as=key core.source="hand-core 1"
-@k.kinds.form.w.document.sequence k.kinds.form world=w.document structure=sequence about="sentences in the order they are read" core.source="hand-core 1"
+@k.kinds.cast.w.document.whole_with_parts.part.w_document_block k.kinds.cast world=w.document structure="whole with parts" role=part filler=w.document.block as=type core.source="hand-core 1"
+@k.kinds.cast.w.document.whole_with_parts.part.w_document_cell k.kinds.cast world=w.document structure="whole with parts" role=part filler=w.document.cell as=type core.source="hand-core 1"
+@k.kinds.cast.w.document.whole_with_parts.part.w_document_mark k.kinds.cast world=w.document structure="whole with parts" role=part filler=w.document.mark as=type core.source="hand-core 1"
+@k.kinds.cast.w.document.whole_with_parts.part_of.w_document_block_document k.kinds.cast world=w.document structure="whole with parts" role=part_of filler=w.document.block.document as=key core.source="hand-core 1"
+@k.kinds.cast.w.document.whole_with_parts.part_of.w_document_cell_block k.kinds.cast world=w.document structure="whole with parts" role=part_of filler=w.document.cell.block as=key core.source="hand-core 1"
+@k.kinds.cast.w.document.whole_with_parts.part_of.w_document_mark_block k.kinds.cast world=w.document structure="whole with parts" role=part_of filler=w.document.mark.block as=key core.source="hand-core 1"
+@k.kinds.cast.w.document.whole_with_parts.part_kind.w_document_mark_form k.kinds.cast world=w.document structure="whole with parts" role=part_kind filler=w.document.mark.form as=key core.source="hand-core 1"
+@k.kinds.cast.w.document.whole_with_parts.order.w_document_block_n k.kinds.cast world=w.document structure="whole with parts" role=order filler=w.document.block.n as=key core.source="hand-core 1"
+@k.kinds.form.w.document.sequence k.kinds.form world=w.document structure=sequence about="sentences in the order they are read; an editor's blocks in the document, a list block's items" core.source="hand-core 1"
 @k.kinds.cast.w.document.sequence.element.w_document_sentence k.kinds.cast world=w.document structure=sequence role=element filler=w.document.sentence as=type core.source="hand-core 1"
 @k.kinds.cast.w.document.sequence.position.w_document_sentence_n k.kinds.cast world=w.document structure=sequence role=position filler=w.document.sentence.n as=key core.source="hand-core 1"
 @k.kinds.cast.w.document.sequence.sequence.w_document_paragraph k.kinds.cast world=w.document structure=sequence role=sequence filler=w.document.paragraph as=type core.source="hand-core 1"
 @k.kinds.cast.w.document.sequence.element_of.w_document_sentence_paragraph k.kinds.cast world=w.document structure=sequence role=element_of filler=w.document.sentence.paragraph as=key core.source="hand-core 1"
+@k.kinds.cast.w.document.sequence.element.w_document_block k.kinds.cast world=w.document structure=sequence role=element filler=w.document.block as=type core.source="hand-core 1"
+@k.kinds.cast.w.document.sequence.position.w_document_block_n k.kinds.cast world=w.document structure=sequence role=position filler=w.document.block.n as=key core.source="hand-core 1"
+@k.kinds.cast.w.document.sequence.element_of.w_document_block_document k.kinds.cast world=w.document structure=sequence role=element_of filler=w.document.block.document as=key core.source="hand-core 1"
+@k.kinds.cast.w.document.sequence.element.w_document_item k.kinds.cast world=w.document structure=sequence role=element filler=w.document.item as=type core.source="hand-core 1"
+@k.kinds.cast.w.document.sequence.position.w_document_item_n k.kinds.cast world=w.document structure=sequence role=position filler=w.document.item.n as=key core.source="hand-core 1"
+@k.kinds.cast.w.document.sequence.element_of.w_document_item_block k.kinds.cast world=w.document structure=sequence role=element_of filler=w.document.item.block as=key core.source="hand-core 1"
 @k.kinds.form.w.chart.values_by_category k.kinds.form world=w.chart structure="values by category" about="values of series by category in a chart" core.source="hand-core 1"
 @k.kinds.cast.w.chart.values_by_category.value.w_chart_point k.kinds.cast world=w.chart structure="values by category" role=value filler=w.chart.point as=type core.source="hand-core 1"
 @k.kinds.cast.w.chart.values_by_category.category.w_chart_point_category k.kinds.cast world=w.chart structure="values by category" role=category filler=w.chart.point.category as=key core.source="hand-core 1"

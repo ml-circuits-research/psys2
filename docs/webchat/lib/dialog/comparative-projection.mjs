@@ -5,7 +5,7 @@
 // concept or a tool.
 import { World, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=22a3f6e48e';
 import RULES from '../../worlds/app.project/comparative-projection-source.mjs?v=89a6c6106f';
-import SOURCE from './new-engine-source.mjs?v=786dd29259';
+import SOURCE from './new-engine-source.mjs?v=3e5898152f';
 import { executionPolicyWorld } from './execution-policy.mjs?v=e8bfdad087';
 
 let table;

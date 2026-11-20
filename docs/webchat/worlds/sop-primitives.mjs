@@ -23,7 +23,8 @@ const arc = ({ x, y, w, h }, opens = 'up') => ({
 
 // Optional styling a projection may state on a draw fact: outline (a colour drawn around a solid shape), round (the
 // corner radius of a rectangle), stroke (the width of a line or outline), dash (a line's dash pattern, numbers only),
-// anchor (start, middle or end of a text) and font, weight (a text's size and weight).
+// anchor (start, middle or end of a text), font, weight (a text's size and weight), slant (italic), family (mono: a
+// monospaced face) and length (the width a text is set to, so its characters fall where a projection placed them).
 function shapeSvg(box, shape, fill, points, orient, text, style = {}) {
   const width = Number.isFinite(style.stroke) && style.stroke > 0 ? f1(style.stroke) : 2;
   const outline = typeof style.outline === 'string' && /^#[0-9a-fA-F]{3,8}$|^[a-z]+$/.test(style.outline) ? ` stroke="${style.outline}" stroke-width="${width === 2 ? 1.5 : width}"` : '';
@@ -33,6 +34,8 @@ function shapeSvg(box, shape, fill, points, orient, text, style = {}) {
   const round = Number.isFinite(style.round) && style.round > 0 ? ` rx="${f1(style.round)}"` : '';
   const anchor = ['start', 'middle', 'end'].includes(style.anchor) ? ` text-anchor="${style.anchor}"` : '';
   const font = Number.isFinite(style.font) && style.font > 0 ? f1(style.font) : 14, weight = style.weight === 'bold' ? ' font-weight="600"' : '';
+  const slant = style.slant === 'italic' ? ' font-style="italic"' : '', family = style.family === 'mono' ? 'ui-monospace,SFMono-Regular,Menlo,Consolas,&quot;DejaVu Sans Mono&quot;,monospace' : 'system-ui,sans-serif';
+  const length = Number.isFinite(style.length) && style.length > 0 ? ` textLength="${f1(style.length)}" lengthAdjust="spacingAndGlyphs" xml:space="preserve"` : '';
   switch (shape) {
     case 'rectangle': case 'square': return `<rect x="${f1(box.x)}" y="${f1(box.y)}" width="${f1(box.w)}" height="${f1(box.h)}"${round} ${solid}/>`;
     case 'circle': case 'oval': return `<ellipse cx="${f1(box.x + box.w / 2)}" cy="${f1(box.y + box.h / 2)}" rx="${f1(box.w / 2)}" ry="${f1(box.h / 2)}" ${solid}/>`;
@@ -40,7 +43,7 @@ function shapeSvg(box, shape, fill, points, orient, text, style = {}) {
     case 'polygon': return points.length ? `<polygon points="${pts(points)}" ${solid}/>` : '';
     case 'line': return points.length ? `<polyline points="${pts(points)}" ${stroke}/>` : '';
     case 'arc': return `<path d="${arc(box, orient.opens)}" ${stroke}/>`;
-    case 'text': return `<text x="${f1(box.x)}" y="${f1(box.y)}" font-size="${font}"${weight}${anchor} font-family="system-ui,sans-serif" fill="${fill}">${String(text ?? '').replace(/[<>&]/g, (c) => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' })[c])}</text>`;
+    case 'text': return `<text x="${f1(box.x)}" y="${f1(box.y)}" font-size="${font}"${weight}${slant}${anchor}${length} font-family="${family}" fill="${fill}">${String(text ?? '').replace(/[<>&]/g, (c) => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' })[c])}</text>`;
     default: return '';
   }
 }
@@ -76,7 +79,7 @@ export function renderPrimitives(world, types, frame = { w: 100, h: 100 }, opts 
     const move = `translate(${f1(num(fact, 'tx'))} ${f1(num(fact, 'ty'))}) scale(${f1(num(fact, 'scale'))}) translate(${f1(-num(fact, 'cx'))} ${f1(-num(fact, 'cy'))})`;
     const flip = side === 'right' ? `matrix(-1 0 0 1 ${frame.w} 0) ` : '';
     const tag = opts.select && fact.attrs[opts.select] ? ` data-select="${String(val(fact, opts.select)).replace(/[<>&"]/g, '')}"` : '';
-    const style = { outline: val(fact, 'outline'), round: num(fact, 'round'), stroke: num(fact, 'stroke'), dash: val(fact, 'dash'), anchor: val(fact, 'anchor'), font: num(fact, 'font'), weight: val(fact, 'weight') };
+    const style = { outline: val(fact, 'outline'), round: num(fact, 'round'), stroke: num(fact, 'stroke'), dash: val(fact, 'dash'), anchor: val(fact, 'anchor'), font: num(fact, 'font'), weight: val(fact, 'weight'), slant: val(fact, 'slant'), family: val(fact, 'family'), length: num(fact, 'length') };
     return `<g transform="${flip}${move}"${tag}>${shapeSvg(box, shape, fill, line, orients.get(source) ?? {}, val(fact, 'text'), style)}</g>`;
   });
   const size = opts.size ? ` width="${opts.size}" height="${f1((opts.size * frame.h) / frame.w)}"` : '';

@@ -63,11 +63,28 @@ function compile(base, state, operation, args) {
   const world = worldOf(base, state);
   const request = { id: 'act.request', type: 'app.act.request', attrs: { operation: [quote(operation)] } };
   const items = [];
-  for (const [key, value] of Object.entries(args)) {
-    if (Array.isArray(value)) value.forEach((element, index) => items.push({ id: 'act.item.' + items.length, type: 'app.act.item',
-      attrs: { request: ['$act.request'], param: [quote(key)], n: [String(index)], value: [token(element)] } }));
-    else if (value !== undefined && value !== null) request.attrs[key] = [token(value)];
-  }
+  const item = (attrs) => items.push({ id: 'act.item.' + items.length, type: 'app.act.item', attrs: { request: ['$act.request'], ...attrs } });
+  // Structured values as items: an array element by its place (n), an object member by its key (key), an element
+  // of an array inside either by its place there (m); an array element that is itself an array also says its length
+  // (count), so an empty one is seen. Deeper values are not taken.
+  const nested = (attrs, value) => {
+    if (Array.isArray(value)) { value.forEach((element, m) => { if (element !== null && typeof element === 'object') throw Error('nested'); item({ ...attrs, m: [String(m)], value: [token(element)] }); }); return; }
+    if (value !== null && typeof value === 'object') throw Error('nested');
+    item({ ...attrs, value: [token(value)] });
+  };
+  try {
+    for (const [key, value] of Object.entries(args)) {
+      const param = [quote(key)];
+      if (Array.isArray(value)) value.forEach((element, index) => {
+        const at = { param, n: [String(index)] };
+        if (Array.isArray(element)) { item({ ...at, count: [String(element.length)] }); nested(at, element); }
+        else if (element !== null && typeof element === 'object') for (const [k, v] of Object.entries(element)) nested({ ...at, key: [quote(k)] }, v);
+        else item({ ...at, value: [token(element)] });
+      });
+      else if (value !== null && typeof value === 'object') for (const [k, v] of Object.entries(value)) nested({ param, key: [quote(k)] }, v);
+      else if (value !== undefined && value !== null) request.attrs[key] = [token(value)];
+    }
+  } catch { return { world, calls: [], views: [], refusal: 'invalid-request' }; }
   const told = world.tell(serialize([request, ...items]), { factsOnly: true });
   if (!told.ok) return { world, calls: [], views: [], refusal: 'invalid-request' };
   // An optional argument arrives as app.act.arg call=<label> attr=<key> value=<v> and joins the call with that ref.
@@ -116,14 +133,16 @@ function run(base, state, kinds, calls) {
  * base: a World with the instance schema, knowledge, the tab's act rules and observation projection loaded.
  * kinds: the instance kinds kept as state. toolInterface/operations: the declared native interface.
  */
-export function createSopWorldHost({ base, kinds, state, instanceId, scope, toolInterface, operations, spatialObservation = false, ...limits }) {
+export function createSopWorldHost({ base, callBase = null, kinds, state, instanceId, scope, toolInterface, operations, spatialObservation = false, ...limits }) {
+  // callBase: where compiled calls run when the area declares one (its instance schema without the area's rules).
+  const callWorld = callBase ?? base;
   const declared = toolInterface?.bindings ?? operations;
   const handler = (operation) => (ctx, args) => {
     const s = ctx.state, r = (s.runtime ??= { view: {} }), compiled = compile(base, s, operation, args);
     if (compiled.refusal) return { status: 'missing', code: compiled.refusal };
     for (const view of compiled.views) r.view = { ...r.view, [read(view, 'key')]: read(view, 'value') ?? null };
     if (!compiled.calls.length) return { status: 'supported', changed: compiled.views.length ? ['view'] : [] };
-    const result = run(base, s, kinds, compiled.calls);
+    const result = run(callWorld, s, kinds, compiled.calls);
     if (result.refusal) return { status: 'missing', code: result.refusal };
     // What changed: the observed objects that appeared, went or differ (their ids, as tools and focus use them).
     const before = new Map(view(s).map((object) => [object.id, JSON.stringify(object)]));
@@ -172,7 +191,7 @@ export function createSopWorldHost({ base, kinds, state, instanceId, scope, tool
   const measure = (operation, args) => {
     const empty = { sop: '', runtime: { view: {} } }, compiled = compile(base, empty, operation, args);
     if (compiled.refusal || !compiled.calls.length) return null;
-    const result = run(base, empty, kinds, compiled.calls);
+    const result = run(callWorld, empty, kinds, compiled.calls);
     if (result.refusal) return null;
     const [made] = worldOf(base, { sop: result.sop, runtime: empty.runtime }).ofType('app.observe.box');
     if (!made) return null;

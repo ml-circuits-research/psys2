@@ -34,10 +34,26 @@ export function createSopAreaView(container, host = null, { world, view, editor 
     catch (error) { status.textContent = error.message; }
     finally { busy = false; inspector.removeAttribute('aria-busy'); }
   }
+  // A declared argument (projectSopArea controls[].args): a fixed value, the first or every option of a key, a key of
+  // the view's state (sent as a number when the argument says kind=number), or an empty list; `key` puts it under an
+  // object argument.
+  const declaredArg = (arg) => {
+    if (Object.hasOwn(arg, 'value')) return arg.value;
+    if (arg.option) return state?.options?.[arg.option]?.[0];
+    if (arg.options) return [...(state?.options?.[arg.options] ?? [])];
+    if (arg.view) { const v = state?.runtime?.view?.[arg.view]; return v === null || v === undefined ? undefined : arg.kind === 'number' ? Number(v) : v; }
+    if (arg.list === 'true') return [];
+    return undefined;
+  };
   const argsOf = (item, value) => {
     const args = {};
+    for (const arg of item.args ?? []) {
+      const v = declaredArg(arg);
+      if (v === undefined) continue;
+      if (arg.key) (args[arg.param] ??= {})[arg.key] = v; else args[arg.param] = v;
+    }
     // A control that names many (an id list) sends the chosen one as a list of one.
-    if (item.param) args[item.param] = item.many && value !== undefined ? [value] : value;
+    if (item.param && value !== undefined) args[item.param] = item.many ? [value] : value;
     if (item.target === 'selected' && state?.selected) args[item.list ?? 'id'] = item.list === 'ids' ? [state.selected] : state.selected;
     return args;
   };
@@ -45,7 +61,9 @@ export function createSopAreaView(container, host = null, { world, view, editor 
   function formFor(item) {
     const form = el('form', 'p2-area-form', { 'aria-label': item.label }), title = el('div', ''); title.textContent = item.label; form.append(title);
     const inputs = item.fields.map((field) => {
-      const wrap = el('label', ''), input = el('input', '', { 'aria-label': field.label, required: 'true',
+      // textarea: a text of several lines; lines: one list element per line; grid: rows by line, cells split by "|".
+      const area = ['textarea', 'lines', 'grid'].includes(field.input);
+      const wrap = el('label', ''), input = area ? el('textarea', '', { 'aria-label': field.label, rows: '3' }) : el('input', '', { 'aria-label': field.label, required: 'true',
         type: field.input === 'datetime' ? 'datetime-local' : ['minutes', 'number'].includes(field.input) ? 'number' : 'text' });
       if (field.input === 'minutes') input.setAttribute('min', '1');
       wrap.append(document.createTextNode(field.label), input); form.append(wrap);
@@ -57,7 +75,8 @@ export function createSopAreaView(container, host = null, { world, view, editor 
       const args = argsOf(item, item.param === 'id' && item.target === null ? 'item-' + Date.now().toString(36) : undefined);
       for (const [field, input] of inputs) {
         const raw = input.value;
-        args[field.param] = field.input === 'datetime' ? Date.parse(raw + 'Z') : field.input === 'minutes' ? Math.round(Number(raw) * field.scale) : field.input === 'number' ? Number(raw) * field.scale : raw;
+        args[field.param] = field.input === 'datetime' ? Date.parse(raw + 'Z') : field.input === 'minutes' ? Math.round(Number(raw) * field.scale) : field.input === 'number' ? Number(raw) * field.scale
+          : field.input === 'lines' ? raw.split('\n') : field.input === 'grid' ? raw.split('\n').map((row) => row.split('|').map((cell) => cell.trim())) : raw;
       }
       if (item.param && args[item.param] === undefined) delete args[item.param];
       control(item.operation, args);
@@ -101,7 +120,7 @@ export function createSopAreaView(container, host = null, { world, view, editor 
     const id = event.target.closest?.('[data-select]')?.getAttribute('data-select');
     const select = state?.controls?.find((item) => item.param === 'id' && item.target === null)
       ?? state?.controls?.find((item) => item.many && item.param && item.target === null && !item.fields?.length);
-    if (id && select) control(select.operation, select.param === 'id' ? { id } : { [select.param]: [id] });
+    if (id && select) control(select.operation, { ...argsOf({ ...select, param: null }), ...(select.param === 'id' ? { id } : { [select.param]: [id] }) });
   });
   return {
     update(next) { state = next ?? state; draw(); },

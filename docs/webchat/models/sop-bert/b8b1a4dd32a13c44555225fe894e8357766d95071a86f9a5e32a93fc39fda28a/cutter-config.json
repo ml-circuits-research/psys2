@@ -1,0 +1,73 @@
+{
+  "artifactRole": "trained",
+  "autocast": "bfloat16",
+  "batchSize": 16,
+  "classCountsTrainOnly": [
+    129175,
+    46753,
+    370217
+  ],
+  "classWeightsTrainOnly": [
+    1.4093155280304497,
+    3.893832124854733,
+    0.49173412710203296
+  ],
+  "codec": {
+    "format": "sop.request-cutter-codec/1",
+    "input": "source-only",
+    "labels": [
+      "O",
+      "B",
+      "I"
+    ],
+    "spanEnd": "exclusive",
+    "specialAndPadding": "ignored",
+    "transitionPolicy": "illegal-I-after-O-unresolved",
+    "truncation": "unresolved",
+    "unit": "unicode-scalar"
+  },
+  "codecSha256": "64fd854a5711acd8f675c7669e2426b12676b200fa3b1a9da6f67ad60e7f8213",
+  "encoder": "/home/salboaie/work/sopworlds/.session-control/hf-cache/models--distilbert--distilbert-base-uncased/snapshots/12040accade4e8a0f71eabdb258fecc2e7e948be",
+  "encoderFiles": {
+    "config.json": "69c94b0222d5d1f4b0ad027ca7416cdafb98378cbbb8305d0bf47c9365c60c83",
+    "model.safetensors": "5e3f1108e3cb34ee048634875d8482665b65ac713291a7e32396fb18f6ff0063",
+    "tokenizer.json": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+    "tokenizer_config.json": "a025160ef0431f1a392f6f050c1310f4c5d9fb6f275932dbccba73c4d214bf10",
+    "vocab.txt": "07eced375cec144d27c900241f3e339478dec958f92fddbc551f295c992038a3"
+  },
+  "epochs": 3,
+  "executionEligible": false,
+  "format": "sop.request-cutter-model/1",
+  "graphConfidence": null,
+  "inputPadding": "max_length",
+  "lr": 2e-05,
+  "maxLength": 256,
+  "minEpochs": 3,
+  "optimizerInitialization": "fresh-AdamW",
+  "patience": 1,
+  "provenance": {
+    "authoredTrainSupplementCount": 0,
+    "exclusionCount": 4880,
+    "exclusionSha256": "a378caf9304cc04feebe75d5a9b79a7115c164036dfef75cbd376ce092344045",
+    "manifestSha256": "1d24205e5c6bed89dfdf200672567f889f43c94f67af4beb0bbb47fddb47ded4",
+    "outputs": {
+      "calibration": "a66f5ce2fe26b2ea2b38d55b3e9b13ebc2a5ad046263fa1a64b5c5261127a05a",
+      "train": "68a8d3795b7dc7b0f020815bb27476b2781162ce7a74a290a9bd4a95eb1b2b2a"
+    },
+    "sourceCount": 51878,
+    "sourceHashes": {
+      "official.jsonl": "64fa4d6dbf60c0e9b880fb9e57361e2b705bb8876d96dbabab379993894e02e1"
+    },
+    "supervision": "original-request-span-only"
+  },
+  "seed": 20261117,
+  "selectionMetric": "calibration.span.f1",
+  "torch": "2.14.1+cu130",
+  "trainerSha256": "507155965cb278c676a0e5d185d887c9db185fe5a71e640478348d79140136d5",
+  "trainingInputPadding": "dynamic",
+  "transformers": "5.22.2",
+  "warmCheckpointSha256": "85d1d2ee1e03ee22c355077cf6248fba30cb14c2195151deb36f68cffbe758e0",
+  "warmDeploymentManifestSha256": "1139b40bff92d2b19a034164774580a15e28a7063f83c8bee35c19f02add9e6e",
+  "warmManifestSha256": "cd2b02a026f5096fd24a2bf4e197b5478ba765f1a7898b00e0b61fef6e1a73dc",
+  "warmRole": "deployed-cutter-full-weights"
+}

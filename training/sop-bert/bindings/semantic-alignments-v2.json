@@ -1,0 +1,4443 @@
+{
+  "format": "sop.semantic-alignment-catalogue/1",
+  "knowledgePin": "a04fb0d8eca57ca5ecbb0242fa9cd28bb82a9322",
+  "inventory": {
+    "path": "official-dataset/inventory.json",
+    "sha256": "e3c7fbe6eef59087f70e0797b5f959ff5ce42951ed9f5ecb6813b6842c4e11da"
+  },
+  "prompt": {
+    "path": "training/sop-bert/data/haiku-v2/INSTRUCTIONS-v2.md",
+    "sha256": "9b6632f011da5ccc1088aad1377fa63a0ac4a532cdf307006d2cfc2d609212e1"
+  },
+  "authority": "Owner-authorized C1 authorial alignment; complete inventory status, independent from native capability and evaluation rows. v2: re-pinned to the PSys2 catalog pin over the official-dataset inventory (the label space of the deployed reader).",
+  "families": [
+    {
+      "area": "drawing",
+      "type": "drawn",
+      "rawMeaning": "a drawn thing (book 7.1 t.drawn)",
+      "status": "aligned",
+      "canonical": "w.drawing.object",
+      "sourceWire": "w.drawing.object",
+      "authority": "A drawn thing aligns the declared drawing object: a placed k.objects object or basic shape with size, colour and label.",
+      "evidence": {
+        "knowledgePin": "a04fb0d8eca57ca5ecbb0242fa9cd28bb82a9322",
+        "path": "docs/worlds/w.drawing/schema.sop",
+        "sha256": "843a04c73c4f480379e1261aa9f0e5424a84aa86940756d240bc47c399c0e16b",
+        "sourceWire": "w.drawing.object",
+        "sourceWorld": "w.drawing",
+        "moduleVersion": "1",
+        "declaration": "@w.drawing.object core.type of=w.drawing.object extends=std.schema.thing closed=true core.source=\"hand-core 1\""
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "group",
+      "rawMeaning": "exposed native group",
+      "status": "aligned",
+      "canonical": "w.drawing.group",
+      "sourceWire": "w.drawing.group",
+      "authority": "A drawing group aligns the declared group of drawing objects.",
+      "evidence": {
+        "knowledgePin": "a04fb0d8eca57ca5ecbb0242fa9cd28bb82a9322",
+        "path": "docs/worlds/w.drawing/schema.sop",
+        "sha256": "843a04c73c4f480379e1261aa9f0e5424a84aa86940756d240bc47c399c0e16b",
+        "sourceWire": "w.drawing.group",
+        "sourceWorld": "w.drawing",
+        "moduleVersion": "1",
+        "declaration": "@w.drawing.group core.type of=w.drawing.group extends=std.schema.thing closed=true core.source=\"hand-core 1\""
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "page",
+      "rawMeaning": "Native art.draw.page",
+      "status": "aligned",
+      "canonical": "w.picture.picture",
+      "sourceWire": "w.picture.picture",
+      "authority": "Raw drawing-as-a-whole aligns the depicted picture container, not physical-page lexical meaning.",
+      "evidence": {
+        "knowledgePin": "a04fb0d8eca57ca5ecbb0242fa9cd28bb82a9322",
+        "path": "docs/worlds/w.picture/schema.sop",
+        "sha256": "d7c6978141d9b1261130af60395efd0cad83a902cee6216ba5e35f648f7f4f21",
+        "sourceWire": "w.picture.picture",
+        "sourceWorld": "w.picture",
+        "moduleVersion": "1",
+        "declaration": "@w.picture.picture core.type of=w.picture.picture extends=std.schema.thing closed=true core.source=\"hand-core 1\""
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "part",
+      "rawMeaning": "a part of a drawn thing (petal, roof, window, wheel)",
+      "status": "aligned",
+      "canonical": "w.drawing.part",
+      "sourceWire": "w.drawing.part",
+      "authority": "A part of a drawn thing aligns the declared edited part of a drawing object.",
+      "evidence": {
+        "knowledgePin": "a04fb0d8eca57ca5ecbb0242fa9cd28bb82a9322",
+        "path": "docs/worlds/w.drawing/schema.sop",
+        "sha256": "843a04c73c4f480379e1261aa9f0e5424a84aa86940756d240bc47c399c0e16b",
+        "sourceWire": "w.drawing.part",
+        "sourceWorld": "w.drawing",
+        "moduleVersion": "1",
+        "declaration": "@w.drawing.part core.type of=w.drawing.part extends=std.schema.thing closed=true core.source=\"hand-core 1\""
+      }
+    },
+    {
+      "area": "diagram",
+      "type": "chart",
+      "rawMeaning": "chart data and display (old data.charts)",
+      "status": "aligned",
+      "canonical": "w.chart.chart",
+      "sourceWire": "w.chart.chart",
+      "authority": "Raw chart data/display aligns chart as a whole, not a series or point.",
+      "evidence": {
+        "knowledgePin": "a04fb0d8eca57ca5ecbb0242fa9cd28bb82a9322",
+        "path": "docs/worlds/w.chart/schema.sop",
+        "sha256": "7a3e8e921d5d5abdbc5e6d7468fcf46c3317d61f4215525c2279d2205ef27111",
+        "sourceWire": "w.chart.chart",
+        "sourceWorld": "w.chart",
+        "moduleVersion": "1",
+        "declaration": "@w.chart.chart core.type of=w.chart.chart extends=std.schema.thing closed=true core.source=\"hand-core 1\""
+      }
+    },
+    {
+      "area": "diagram",
+      "type": "diagram",
+      "rawMeaning": "a diagram as a whole",
+      "status": "unresolved",
+      "reason": "Inventory explicitly includes charts; chart.chart and diagram.diagram are separate direct thing subclasses."
+    },
+    {
+      "area": "diagram",
+      "type": "group",
+      "rawMeaning": "Native diagram.sketch.group",
+      "status": "aligned",
+      "canonical": "w.diagram.group",
+      "sourceWire": "w.diagram.group",
+      "authority": "The native group of nodes aligns the declared node grouping.",
+      "evidence": {
+        "knowledgePin": "a04fb0d8eca57ca5ecbb0242fa9cd28bb82a9322",
+        "path": "docs/worlds/w.diagram/schema.sop",
+        "sha256": "84b4f1587fe5de1593579dfc4e3f81262ac446e87594fa4ae205a432e1254fec",
+        "sourceWire": "w.diagram.group",
+        "sourceWorld": "w.diagram",
+        "moduleVersion": "1",
+        "declaration": "@w.diagram.group core.type of=w.diagram.group extends=std.schema.thing closed=true core.source=\"hand-core 1\""
+      }
+    },
+    {
+      "area": "diagram",
+      "type": "link",
+      "rawMeaning": "an arrow between nodes (book 7.2 t.link)",
+      "status": "aligned",
+      "canonical": "w.diagram.edge",
+      "sourceWire": "w.diagram.edge",
+      "authority": "Raw arrow between nodes aligns declared edge from/to nodes.",
+      "evidence": {
+        "knowledgePin": "a04fb0d8eca57ca5ecbb0242fa9cd28bb82a9322",
+        "path": "docs/worlds/w.diagram/schema.sop",
+        "sha256": "84b4f1587fe5de1593579dfc4e3f81262ac446e87594fa4ae205a432e1254fec",
+        "sourceWire": "w.diagram.edge",
+        "sourceWorld": "w.diagram",
+        "moduleVersion": "1",
+        "declaration": "@w.diagram.edge core.type of=w.diagram.edge extends=std.schema.thing closed=true core.source=\"hand-core 1\""
+      }
+    },
+    {
+      "area": "diagram",
+      "type": "node",
+      "rawMeaning": "a node / box / bar / slice (book 7.2 t.node)",
+      "status": "unresolved",
+      "reason": "Raw nodes include bars/slices; graph node and chart point are distinct declared classes."
+    },
+    {
+      "area": "diagram",
+      "type": "page",
+      "rawMeaning": "Native diagram.sketch.page",
+      "status": "unresolved",
+      "reason": "No owning family declaration reviewed for this official-dataset family."
+    },
+    {
+      "area": "diagram",
+      "type": "point",
+      "rawMeaning": "Native data.charts.point",
+      "status": "unresolved",
+      "reason": "No owning family declaration reviewed for this official-dataset family."
+    },
+    {
+      "area": "diagram",
+      "type": "series",
+      "rawMeaning": "Native data.charts.series",
+      "status": "unresolved",
+      "reason": "No owning family declaration reviewed for this official-dataset family."
+    },
+    {
+      "area": "diagram",
+      "type": "sketch",
+      "rawMeaning": "Native diagram.sketch",
+      "status": "unresolved",
+      "reason": "No owning family declaration reviewed for this official-dataset family."
+    },
+    {
+      "area": "document",
+      "type": "block",
+      "rawMeaning": "Native docs.editor.block",
+      "status": "unresolved",
+      "reason": "No owning family declaration reviewed for this official-dataset family."
+    },
+    {
+      "area": "document",
+      "type": "document",
+      "rawMeaning": "Native docs.editor.document",
+      "status": "unresolved",
+      "reason": "No owning family declaration reviewed for this official-dataset family."
+    },
+    {
+      "area": "document",
+      "type": "inline",
+      "rawMeaning": "formatting, lists, tasks, tables (old docs.editor)",
+      "status": "unresolved",
+      "reason": "Formatting/list/task/table inventory exceeds source-anchored text span and has distinct owners."
+    },
+    {
+      "area": "document",
+      "type": "section",
+      "rawMeaning": "a part of a document (book 7.3 t.section)",
+      "status": "unresolved",
+      "reason": "Raw part includes chapter/section/paragraph/slide/sentence, with no declared common part superclass."
+    },
+    {
+      "area": "document",
+      "type": "text",
+      "rawMeaning": "a document as a whole (book 7.3 t.text)",
+      "status": "aligned",
+      "canonical": "w.document.document",
+      "sourceWire": "w.document.document",
+      "authority": "Raw document-as-a-whole aligns mutable document, not immutable text source/revision.",
+      "evidence": {
+        "knowledgePin": "a04fb0d8eca57ca5ecbb0242fa9cd28bb82a9322",
+        "path": "docs/worlds/w.document/schema.sop",
+        "sha256": "4532f68d9096b6db1b2396bd0ea5a9600dc96ab76b5f9e4110f3f4319e582f77",
+        "sourceWire": "w.document.document",
+        "sourceWorld": "w.document",
+        "moduleVersion": "2",
+        "declaration": "@w.document.document core.type of=w.document.document extends=std.schema.thing closed=true core.source=\"hand-core 1\""
+      }
+    },
+    {
+      "area": "calendar",
+      "type": "calendar",
+      "rawMeaning": "exposed native calendar",
+      "status": "unresolved",
+      "reason": "No owning family declaration reviewed for this official-dataset family."
+    },
+    {
+      "area": "calendar",
+      "type": "meeting",
+      "rawMeaning": "a meeting (book 7.4 t.meeting)",
+      "status": "aligned",
+      "canonical": "w.calendar.event",
+      "sourceWire": "w.calendar.event",
+      "authority": "Raw meeting is the event family; source word.event explicitly names meeting.",
+      "evidence": {
+        "knowledgePin": "a04fb0d8eca57ca5ecbb0242fa9cd28bb82a9322",
+        "path": "docs/worlds/w.calendar/schema.sop",
+        "sha256": "c9849573da85da02cd2c74eed6fa192344e1508aa05700b57251e8140db6a4e4",
+        "sourceWire": "w.calendar.event",
+        "sourceWorld": "w.calendar",
+        "moduleVersion": "2",
+        "declaration": "@w.calendar.event core.type of=w.calendar.event extends=std.schema.thing closed=true core.source=\"hand-core 1\""
+      }
+    },
+    {
+      "area": "calendar",
+      "type": "person",
+      "rawMeaning": "a participant (w.person)",
+      "status": "aligned",
+      "canonical": "w.person.person",
+      "sourceWire": "w.person.person",
+      "authority": "Raw participant aligns person identity; participation requires a separate relation.",
+      "evidence": {
+        "knowledgePin": "a04fb0d8eca57ca5ecbb0242fa9cd28bb82a9322",
+        "path": "docs/worlds/w.person/schema.sop",
+        "sha256": "173aec25063dc3a6f31b934e5c6bab97c81595cf034e6d45d0b0ced6654b1c5e",
+        "sourceWire": "w.person.person",
+        "sourceWorld": "w.person",
+        "moduleVersion": "1",
+        "declaration": "@w.person.person core.type of=w.person.person extends=std.schema.thing closed=true core.source=\"hand-core 1\""
+      }
+    },
+    {
+      "area": "calendar",
+      "type": "room",
+      "rawMeaning": "a room (book 7.4 t.room)",
+      "status": "aligned",
+      "canonical": "w.room.room",
+      "sourceWire": "w.room.room",
+      "authority": "Raw room aligns room identity; booking availability is not implied.",
+      "evidence": {
+        "knowledgePin": "a04fb0d8eca57ca5ecbb0242fa9cd28bb82a9322",
+        "path": "docs/worlds/w.room/schema.sop",
+        "sha256": "eebff2f6d36c3aec724184282704aa05e42ede66b4c4014ea7e7226442314ca9",
+        "sourceWire": "w.room.room",
+        "sourceWorld": "w.room",
+        "moduleVersion": "1",
+        "declaration": "@w.room.room core.type of=w.room.room extends=std.schema.thing closed=true core.source=\"hand-core 1\""
+      }
+    },
+    {
+      "area": "avatar",
+      "type": "face",
+      "rawMeaning": "exposed native face",
+      "status": "aligned",
+      "canonical": "w.face.face",
+      "sourceWire": "w.face.face",
+      "authority": "The avatar face aligns the declared face instance, not its individual parts (was drawing.face).",
+      "evidence": {
+        "knowledgePin": "a04fb0d8eca57ca5ecbb0242fa9cd28bb82a9322",
+        "path": "docs/worlds/w.face/schema.sop",
+        "sha256": "743cdc05dd6e6186762667af6851676a7e87d4afcb30ccd3c534ae8c70c26c7b",
+        "sourceWire": "w.face.face",
+        "sourceWorld": "w.face",
+        "moduleVersion": "1",
+        "declaration": "@w.face.face core.type of=w.face.face extends=std.schema.thing closed=true core.source=\"hand-core 1\""
+      }
+    },
+    {
+      "area": "avatar",
+      "type": "part",
+      "rawMeaning": "exposed native part",
+      "status": "unresolved",
+      "reason": "No owning family declaration reviewed for this official-dataset family."
+    }
+  ],
+  "properties": [
+    {
+      "area": "drawing",
+      "type": "drawn",
+      "key": "drawn.anchor",
+      "descriptor": {
+        "concept": "reference",
+        "head": "fill+span",
+        "src": "the other thing of the relation"
+      },
+      "status": "aligned",
+      "alignment": {
+        "area": "drawing",
+        "key": "drawn.anchor",
+        "sourceWire": "k.spatial2d.relation.object",
+        "canonical": "k.spatial2d.relation.object",
+        "valueKind": "string",
+        "projection": {
+          "kind": "relation-anchor"
+        }
+      },
+      "evidence": {
+        "knowledgePin": "a04fb0d8eca57ca5ecbb0242fa9cd28bb82a9322",
+        "path": "docs/worlds/k.spatial2d/schema.sop",
+        "sha256": "2717173818f598c8f6bd4c703843f7bff5723563839dbb56bf00221e8faa6798",
+        "sourceWire": "k.spatial2d.relation.object",
+        "sourceWorld": "k.spatial2d",
+        "moduleVersion": "1",
+        "declaration": "@k.spatial2d.relation.object core.slot of=k.spatial2d.relation key=object required=true kind=atom kind=string core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "reference",
+        "source": "definite-reference-phrase",
+        "semanticBoundary": "The phrase is a kind lemma alone or after a definite determiner of the language world; the observed object is chosen by the placement compiler."
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "drawn",
+      "key": "drawn.at",
+      "descriptor": {
+        "concept": "region",
+        "head": "class",
+        "src": "s.drawn.at means=place space=page (regions)",
+        "values": [
+          "corner",
+          "top",
+          "bottom",
+          "left",
+          "right",
+          "center",
+          "top_left",
+          "top_right",
+          "bottom_left",
+          "bottom_right",
+          "middle",
+          "background",
+          "foreground"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    },
+    {
+      "area": "drawing",
+      "type": "drawn",
+      "key": "drawn.color",
+      "descriptor": {
+        "concept": "color",
+        "head": "candidate",
+        "src": "Native parameter: drawing.object.make.color"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "drawing",
+      "type": "drawn",
+      "key": "drawn.colour",
+      "descriptor": {
+        "concept": "colour",
+        "head": "candidate+step",
+        "src": "s.drawn.colour space=colour (k.colours; step darker/lighter)"
+      },
+      "status": "aligned",
+      "alignment": {
+        "area": "drawing",
+        "key": "drawn.colour",
+        "sourceWire": "k.attributes.attribute.colour",
+        "canonical": "colour",
+        "valueKind": "string",
+        "host": "drawing",
+        "operation": "drawing.object.change",
+        "parameter": "color"
+      },
+      "evidence": {
+        "knowledgePin": "a04fb0d8eca57ca5ecbb0242fa9cd28bb82a9322",
+        "path": "docs/worlds/k.attributes/shards/attributes.sop",
+        "sha256": "997c44ffaa9bb05d24bd98e349430780b872c9f4ed9a91ec9e929a316b6197a5",
+        "sourceWire": "k.attributes.attribute.colour",
+        "sourceWorld": "k.attributes",
+        "moduleVersion": "6",
+        "declaration": "@k.attributes.attribute.colour k.attributes.attribute name=colour holds=colour aspect=visual about=\"the colour a thing usually has\" default_type=k.objects.part default_key=colour core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy-or-explicit-source-backed-normalization",
+        "semanticBoundary": "Retains declared property identity and literal evidence only; no native conversion, qualitative threshold, reference binding or effect is asserted."
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "drawn",
+      "key": "drawn.count",
+      "descriptor": {
+        "concept": "count",
+        "head": "number",
+        "src": "addThings n"
+      },
+      "status": "unresolved",
+      "reason": "Missing owning semantic/value contract for numeric, qualitative or relative change; no implicit units or thresholds."
+    },
+    {
+      "area": "drawing",
+      "type": "drawn",
+      "key": "drawn.direction",
+      "descriptor": {
+        "concept": "direction",
+        "head": "class",
+        "src": "a move step",
+        "values": [
+          "up",
+          "down",
+          "left",
+          "right",
+          "closer",
+          "apart",
+          "forward",
+          "backward"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    },
+    {
+      "area": "drawing",
+      "type": "drawn",
+      "key": "drawn.distance",
+      "descriptor": {
+        "concept": "measure",
+        "head": "number",
+        "src": "move by N"
+      },
+      "status": "unresolved",
+      "reason": "Missing owning semantic/value contract for numeric, qualitative or relative change; no implicit units or thresholds."
+    },
+    {
+      "area": "drawing",
+      "type": "drawn",
+      "key": "drawn.distanceGrade",
+      "descriptor": {
+        "concept": "distanceGrade",
+        "head": "candidate",
+        "src": "Authored semantic intent; requires world-informed completion"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "drawing",
+      "type": "drawn",
+      "key": "drawn.height",
+      "descriptor": {
+        "concept": "height",
+        "head": "number",
+        "src": "Native parameter: drawing.object.make.height"
+      },
+      "status": "aligned",
+      "alignment": {
+        "area": "drawing",
+        "key": "drawn.height",
+        "sourceWire": "w.drawing.object.height",
+        "canonical": "w.drawing.object.height",
+        "valueKind": "string",
+        "host": "drawing",
+        "operation": "drawing.object.change",
+        "parameter": "height"
+      },
+      "evidence": {
+        "knowledgePin": "a04fb0d8eca57ca5ecbb0242fa9cd28bb82a9322",
+        "path": "docs/worlds/w.drawing/schema.sop",
+        "sha256": "843a04c73c4f480379e1261aa9f0e5424a84aa86940756d240bc47c399c0e16b",
+        "sourceWire": "w.drawing.object.height",
+        "sourceWorld": "w.drawing",
+        "moduleVersion": "1",
+        "declaration": "@w.drawing.object.height core.slot of=w.drawing.object key=height kind=number min=1 core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy-or-explicit-source-backed-normalization",
+        "semanticBoundary": "Retains declared property identity and literal evidence only; no native conversion, qualitative threshold, reference binding or effect is asserted."
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "drawn",
+      "key": "drawn.id",
+      "descriptor": {
+        "concept": "id",
+        "head": "candidate",
+        "src": "Native parameter: drawing.object.select.id"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "drawing",
+      "type": "drawn",
+      "key": "drawn.ids",
+      "descriptor": {
+        "concept": "ids",
+        "head": "candidate",
+        "src": "Native parameter: drawing.object.change.ids"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "drawing",
+      "type": "drawn",
+      "key": "drawn.kind",
+      "descriptor": {
+        "concept": "kind",
+        "head": "candidate",
+        "src": "s.drawn.kind (knowledge kind tree with images)"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    },
+    {
+      "area": "drawing",
+      "type": "drawn",
+      "key": "drawn.label",
+      "descriptor": {
+        "concept": "label",
+        "head": "candidate",
+        "src": "Native parameter: drawing.object.make.label"
+      },
+      "status": "aligned",
+      "alignment": {
+        "area": "drawing",
+        "key": "drawn.label",
+        "sourceWire": "w.drawing.object.label",
+        "canonical": "w.drawing.object.label",
+        "valueKind": "string",
+        "host": "drawing",
+        "operation": "drawing.object.change",
+        "parameter": "label"
+      },
+      "evidence": {
+        "knowledgePin": "a04fb0d8eca57ca5ecbb0242fa9cd28bb82a9322",
+        "path": "docs/worlds/w.drawing/schema.sop",
+        "sha256": "843a04c73c4f480379e1261aa9f0e5424a84aa86940756d240bc47c399c0e16b",
+        "sourceWire": "w.drawing.object.label",
+        "sourceWorld": "w.drawing",
+        "moduleVersion": "1",
+        "declaration": "@w.drawing.object.label core.slot of=w.drawing.object key=label kind=string core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy-or-explicit-source-backed-normalization",
+        "semanticBoundary": "Retains declared property identity and literal evidence only; no native conversion, qualitative threshold, reference binding or effect is asserted."
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "drawn",
+      "key": "drawn.name",
+      "descriptor": {
+        "concept": "name",
+        "head": "span",
+        "src": "label given by the user"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    },
+    {
+      "area": "drawing",
+      "type": "drawn",
+      "key": "drawn.relation",
+      "descriptor": {
+        "concept": "spatial_relation",
+        "head": "class",
+        "src": "s.drawn.in/on + moveThings relation",
+        "values": [
+          "in",
+          "on",
+          "under",
+          "above",
+          "below",
+          "next_to",
+          "left_of",
+          "right_of",
+          "between",
+          "behind",
+          "in_front_of",
+          "near",
+          "around",
+          "inside",
+          "outside",
+          "along"
+        ]
+      },
+      "status": "aligned",
+      "alignment": {
+        "area": "drawing",
+        "key": "drawn.relation",
+        "sourceWire": "k.spatial2d.relation.kind",
+        "canonical": "k.spatial2d.relation.kind",
+        "valueKind": "string",
+        "projection": {
+          "kind": "relation",
+          "values": {
+            "in": "in",
+            "inside": "in",
+            "on": "on",
+            "above": "above",
+            "below": "below",
+            "near": "near",
+            "next_to": "near",
+            "left_of": "left",
+            "right_of": "right"
+          }
+        }
+      },
+      "evidence": {
+        "knowledgePin": "a04fb0d8eca57ca5ecbb0242fa9cd28bb82a9322",
+        "path": "docs/worlds/k.spatial2d/schema.sop",
+        "sha256": "2717173818f598c8f6bd4c703843f7bff5723563839dbb56bf00221e8faa6798",
+        "sourceWire": "k.spatial2d.relation.kind",
+        "sourceWorld": "k.spatial2d",
+        "moduleVersion": "1",
+        "declaration": "@k.spatial2d.relation.kind core.slot of=k.spatial2d.relation key=kind required=true kind=atom kind=string core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "declared-relation",
+        "source": "explicit-bank-value-normalization",
+        "semanticBoundary": "The bank value maps to a k.spatial2d relation kind the placement policy declares; geometry is solved by the placement compiler."
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "drawn",
+      "key": "drawn.size",
+      "descriptor": {
+        "concept": "size",
+        "head": "number+class+step",
+        "src": "s.drawn.size space=size"
+      },
+      "status": "aligned",
+      "alignment": {
+        "area": "drawing",
+        "key": "drawn.size",
+        "sourceWire": "k.attributes.attribute.size",
+        "canonical": "size",
+        "valueKind": "string",
+        "host": "drawing",
+        "operation": "drawing.object.change",
+        "parameter": "size"
+      },
+      "evidence": {
+        "knowledgePin": "a04fb0d8eca57ca5ecbb0242fa9cd28bb82a9322",
+        "path": "docs/worlds/k.attributes/shards/attributes.sop",
+        "sha256": "997c44ffaa9bb05d24bd98e349430780b872c9f4ed9a91ec9e929a316b6197a5",
+        "sourceWire": "k.attributes.attribute.size",
+        "sourceWorld": "k.attributes",
+        "moduleVersion": "6",
+        "declaration": "@k.attributes.attribute.size k.attributes.attribute name=size holds=size aspect=spatial about=\"how big a thing is next to other things\" default_type=k.scenes.thing default_key=size core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy-or-explicit-source-backed-normalization",
+        "semanticBoundary": "Retains declared property identity and literal evidence only; no native conversion, qualitative threshold, reference binding or effect is asserted."
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "drawn",
+      "key": "drawn.width",
+      "descriptor": {
+        "concept": "width",
+        "head": "number",
+        "src": "Native parameter: drawing.object.make.width"
+      },
+      "status": "aligned",
+      "alignment": {
+        "area": "drawing",
+        "key": "drawn.width",
+        "sourceWire": "w.drawing.object.width",
+        "canonical": "w.drawing.object.width",
+        "valueKind": "string",
+        "host": "drawing",
+        "operation": "drawing.object.change",
+        "parameter": "width"
+      },
+      "evidence": {
+        "knowledgePin": "a04fb0d8eca57ca5ecbb0242fa9cd28bb82a9322",
+        "path": "docs/worlds/w.drawing/schema.sop",
+        "sha256": "843a04c73c4f480379e1261aa9f0e5424a84aa86940756d240bc47c399c0e16b",
+        "sourceWire": "w.drawing.object.width",
+        "sourceWorld": "w.drawing",
+        "moduleVersion": "1",
+        "declaration": "@w.drawing.object.width core.slot of=w.drawing.object key=width kind=number min=1 core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy-or-explicit-source-backed-normalization",
+        "semanticBoundary": "Retains declared property identity and literal evidence only; no native conversion, qualitative threshold, reference binding or effect is asserted."
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "drawn",
+      "key": "drawn.x",
+      "descriptor": {
+        "concept": "x",
+        "head": "number",
+        "src": "Native parameter: drawing.object.make.x"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "drawing",
+      "type": "drawn",
+      "key": "drawn.y",
+      "descriptor": {
+        "concept": "y",
+        "head": "number",
+        "src": "Native parameter: drawing.object.make.y"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "drawing",
+      "type": "group",
+      "key": "group.members",
+      "descriptor": {
+        "concept": "reference",
+        "head": "span",
+        "src": "drawing.object.group ids"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "drawing",
+      "type": "group",
+      "key": "group.name",
+      "descriptor": {
+        "concept": "name",
+        "head": "span",
+        "src": "drawing.object.group name"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "drawing",
+      "type": "page",
+      "key": "page.duration",
+      "descriptor": {
+        "concept": "duration",
+        "head": "number",
+        "src": "Native parameter: drawing.ids.show.duration"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "drawing",
+      "type": "page",
+      "key": "page.mode",
+      "descriptor": {
+        "concept": "mode",
+        "head": "candidate",
+        "src": "Native parameter: drawing.ids.show.mode",
+        "values": [
+          "temporary",
+          "always",
+          "off"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "drawing",
+      "type": "part",
+      "key": "part.color",
+      "descriptor": {
+        "concept": "color",
+        "head": "candidate",
+        "src": "Native parameter: drawing.part.change.color"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "drawing",
+      "type": "part",
+      "key": "part.colour",
+      "descriptor": {
+        "concept": "colour",
+        "head": "candidate",
+        "src": "native drawing part parameter"
+      },
+      "status": "unresolved",
+      "reason": "Missing owning semantic/value contract for numeric, qualitative or relative change; no implicit units or thresholds."
+    },
+    {
+      "area": "drawing",
+      "type": "part",
+      "key": "part.height",
+      "descriptor": {
+        "concept": "height",
+        "head": "number",
+        "src": "native drawing part parameter"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "drawing",
+      "type": "part",
+      "key": "part.id",
+      "descriptor": {
+        "concept": "id",
+        "head": "candidate",
+        "src": "Native parameter: drawing.part.select.id"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "drawing",
+      "type": "part",
+      "key": "part.index",
+      "descriptor": {
+        "concept": "ordinal",
+        "head": "number",
+        "src": "native drawing part parameter"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "drawing",
+      "type": "part",
+      "key": "part.owner",
+      "descriptor": {
+        "concept": "reference",
+        "head": "span",
+        "src": "native drawing part parameter"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "drawing",
+      "type": "part",
+      "key": "part.width",
+      "descriptor": {
+        "concept": "width",
+        "head": "number",
+        "src": "native drawing part parameter"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "drawing",
+      "type": "part",
+      "key": "part.x",
+      "descriptor": {
+        "concept": "x",
+        "head": "number",
+        "src": "native drawing part parameter"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "drawing",
+      "type": "part",
+      "key": "part.y",
+      "descriptor": {
+        "concept": "y",
+        "head": "number",
+        "src": "native drawing part parameter"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "diagram",
+      "type": "chart",
+      "key": "chart.colour",
+      "descriptor": {
+        "concept": "colour",
+        "head": "candidate",
+        "src": "Native parameter: chart.change.colour"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "diagram",
+      "type": "chart",
+      "key": "chart.datasets",
+      "descriptor": {
+        "concept": "literal_data",
+        "head": "span",
+        "src": "chart.make datasets"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "diagram",
+      "type": "chart",
+      "key": "chart.height",
+      "descriptor": {
+        "concept": "height",
+        "head": "number",
+        "src": "Native parameter: chart.place.height"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "diagram",
+      "type": "chart",
+      "key": "chart.horizontal",
+      "descriptor": {
+        "concept": "toggle",
+        "head": "class",
+        "src": "horizontal",
+        "values": [
+          "on",
+          "off"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    },
+    {
+      "area": "diagram",
+      "type": "chart",
+      "key": "chart.id",
+      "descriptor": {
+        "concept": "id",
+        "head": "candidate",
+        "src": "Native parameter: diagram.group.chart.id"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "diagram",
+      "type": "chart",
+      "key": "chart.ids",
+      "descriptor": {
+        "concept": "ids",
+        "head": "candidate",
+        "src": "Native parameter: chart.remove.ids"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "diagram",
+      "type": "chart",
+      "key": "chart.labels",
+      "descriptor": {
+        "concept": "name",
+        "head": "span",
+        "many": true,
+        "src": "bar/slice/point labels"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    },
+    {
+      "area": "diagram",
+      "type": "chart",
+      "key": "chart.legend",
+      "descriptor": {
+        "concept": "toggle",
+        "head": "class",
+        "src": "chart options legend",
+        "values": [
+          "show",
+          "hide"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    },
+    {
+      "area": "diagram",
+      "type": "chart",
+      "key": "chart.palette",
+      "descriptor": {
+        "concept": "colour",
+        "head": "candidate",
+        "src": "palette"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    },
+    {
+      "area": "diagram",
+      "type": "chart",
+      "key": "chart.series",
+      "descriptor": {
+        "concept": "name",
+        "head": "span",
+        "many": true,
+        "src": "series names"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    },
+    {
+      "area": "diagram",
+      "type": "chart",
+      "key": "chart.showLegend",
+      "descriptor": {
+        "concept": "showLegend",
+        "head": "candidate",
+        "src": "Native parameter: chart.change.showLegend"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "diagram",
+      "type": "chart",
+      "key": "chart.showValues",
+      "descriptor": {
+        "concept": "showValues",
+        "head": "candidate",
+        "src": "Native parameter: chart.change.showValues"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "diagram",
+      "type": "chart",
+      "key": "chart.show_values",
+      "descriptor": {
+        "concept": "toggle",
+        "head": "class",
+        "src": "showValues",
+        "values": [
+          "show",
+          "hide"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    },
+    {
+      "area": "diagram",
+      "type": "chart",
+      "key": "chart.sort",
+      "descriptor": {
+        "concept": "sort",
+        "head": "class",
+        "src": "sort",
+        "values": [
+          "desc",
+          "asc",
+          "alpha",
+          "given"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    },
+    {
+      "area": "diagram",
+      "type": "chart",
+      "key": "chart.source",
+      "descriptor": {
+        "concept": "data_source",
+        "head": "class+span",
+        "src": "chart.fromList/fromHoldings/...; book: meetings per person from the calendar",
+        "values": [
+          "calendar",
+          "document",
+          "list",
+          "prices",
+          "holdings",
+          "typed"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    },
+    {
+      "area": "diagram",
+      "type": "chart",
+      "key": "chart.stacked",
+      "descriptor": {
+        "concept": "toggle",
+        "head": "class",
+        "src": "stacked",
+        "values": [
+          "on",
+          "off"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    },
+    {
+      "area": "diagram",
+      "type": "chart",
+      "key": "chart.title",
+      "descriptor": {
+        "concept": "name",
+        "head": "span",
+        "src": "chart.make/change title"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "diagram",
+      "type": "chart",
+      "key": "chart.type",
+      "descriptor": {
+        "concept": "type",
+        "head": "candidate",
+        "src": "Native parameter: diagram.group.chart.type",
+        "values": [
+          "bar",
+          "line",
+          "pie",
+          "doughnut",
+          "radar",
+          "polarArea",
+          "scatter"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "diagram",
+      "type": "chart",
+      "key": "chart.values",
+      "descriptor": {
+        "concept": "quantity",
+        "head": "span",
+        "many": true,
+        "src": "chart.setValues"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    },
+    {
+      "area": "diagram",
+      "type": "chart",
+      "key": "chart.width",
+      "descriptor": {
+        "concept": "width",
+        "head": "number",
+        "src": "Native parameter: chart.place.width"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "diagram",
+      "type": "chart",
+      "key": "chart.x",
+      "descriptor": {
+        "concept": "x",
+        "head": "number",
+        "src": "Native parameter: chart.place.x"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "diagram",
+      "type": "chart",
+      "key": "chart.y",
+      "descriptor": {
+        "concept": "y",
+        "head": "number",
+        "src": "Native parameter: chart.place.y"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "diagram",
+      "type": "diagram",
+      "key": "diagram.kind",
+      "descriptor": {
+        "concept": "diagram_kind",
+        "head": "candidate",
+        "src": "startDiagram kind; charts are a kind of diagram",
+        "values": [
+          "flowchart",
+          "tree",
+          "org_chart",
+          "mind_map",
+          "network",
+          "sequence",
+          "timeline",
+          "venn",
+          "state_machine",
+          "bar_chart",
+          "line_chart",
+          "pie_chart",
+          "doughnut_chart",
+          "scatter_chart",
+          "radar_chart",
+          "area_chart",
+          "table"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    },
+    {
+      "area": "diagram",
+      "type": "diagram",
+      "key": "diagram.layout",
+      "descriptor": {
+        "concept": "layout",
+        "head": "class",
+        "src": "arrangeShapes / startDiagram layout",
+        "values": [
+          "tree",
+          "grid",
+          "row",
+          "column",
+          "circle",
+          "radial",
+          "layers"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "Raw diagram includes charts; graph-diagram-only layout lacks a proven target-kind applicability contract."
+    },
+    {
+      "area": "diagram",
+      "type": "group",
+      "key": "group.colour",
+      "descriptor": {
+        "concept": "colour",
+        "head": "candidate",
+        "src": "Native parameter: diagram.group.change.colour",
+        "values": [
+          "red",
+          "orange",
+          "yellow",
+          "gold",
+          "lime",
+          "green",
+          "teal",
+          "cyan",
+          "blue",
+          "navy",
+          "indigo",
+          "purple",
+          "magenta",
+          "pink",
+          "brown",
+          "gray",
+          "black",
+          "white"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    },
+    {
+      "area": "diagram",
+      "type": "group",
+      "key": "group.id",
+      "descriptor": {
+        "concept": "id",
+        "head": "candidate",
+        "src": "Native parameter: diagram.group.select.id"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "diagram",
+      "type": "group",
+      "key": "group.ids",
+      "descriptor": {
+        "concept": "ids",
+        "head": "candidate",
+        "src": "Native parameter: diagram.group.make.ids"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "diagram",
+      "type": "group",
+      "key": "group.label",
+      "descriptor": {
+        "concept": "label",
+        "head": "candidate",
+        "src": "Native parameter: diagram.group.make.label"
+      },
+      "status": "aligned",
+      "alignment": {
+        "area": "diagram",
+        "key": "group.label",
+        "sourceWire": "w.diagram.group.label",
+        "canonical": "w.diagram.group.label",
+        "valueKind": "string"
+      },
+      "evidence": {
+        "knowledgePin": "a04fb0d8eca57ca5ecbb0242fa9cd28bb82a9322",
+        "path": "docs/worlds/w.diagram/schema.sop",
+        "sha256": "84b4f1587fe5de1593579dfc4e3f81262ac446e87594fa4ae205a432e1254fec",
+        "sourceWire": "w.diagram.group.label",
+        "sourceWorld": "w.diagram",
+        "moduleVersion": "1",
+        "declaration": "@w.diagram.group.label core.slot of=w.diagram.group key=label required=true kind=atom kind=string core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy-or-explicit-source-backed-normalization",
+        "semanticBoundary": "Retains declared property identity and literal evidence only; no native conversion, qualitative threshold, reference binding or effect is asserted."
+      }
+    },
+    {
+      "area": "diagram",
+      "type": "group",
+      "key": "group.labels",
+      "descriptor": {
+        "concept": "labels",
+        "head": "candidate",
+        "src": "Native parameter: diagram.group.chart.make.labels"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "diagram",
+      "type": "group",
+      "key": "group.layout",
+      "descriptor": {
+        "concept": "layout",
+        "head": "candidate",
+        "src": "Native parameter: diagram.group.layout.layout",
+        "values": [
+          "free",
+          "tree",
+          "grid",
+          "row",
+          "column",
+          "circle",
+          "radial",
+          "layers",
+          "bar",
+          "line",
+          "pie",
+          "doughnut"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "diagram",
+      "type": "group",
+      "key": "group.name",
+      "descriptor": {
+        "concept": "name",
+        "head": "candidate",
+        "src": "Native parameter: diagram.group.make.name"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "diagram",
+      "type": "group",
+      "key": "group.scale",
+      "descriptor": {
+        "concept": "scale",
+        "head": "number",
+        "src": "Native parameter: diagram.group.resize.scale"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "diagram",
+      "type": "group",
+      "key": "group.size",
+      "descriptor": {
+        "concept": "size",
+        "head": "candidate",
+        "src": "Native parameter: diagram.group.change.size",
+        "values": [
+          "tiny",
+          "small",
+          "medium",
+          "large",
+          "huge"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "diagram",
+      "type": "group",
+      "key": "group.values",
+      "descriptor": {
+        "concept": "values",
+        "head": "candidate",
+        "src": "Native parameter: diagram.group.chart.make.values"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "diagram",
+      "type": "group",
+      "key": "group.x",
+      "descriptor": {
+        "concept": "x",
+        "head": "number",
+        "src": "Native parameter: diagram.group.place.x"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "diagram",
+      "type": "group",
+      "key": "group.y",
+      "descriptor": {
+        "concept": "y",
+        "head": "number",
+        "src": "Native parameter: diagram.group.place.y"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "diagram",
+      "type": "link",
+      "key": "link.arrow",
+      "descriptor": {
+        "concept": "arrow",
+        "head": "candidate",
+        "src": "Native parameter: diagram.link.change.arrow",
+        "values": [
+          "forward",
+          "both",
+          "none"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    },
+    {
+      "area": "diagram",
+      "type": "link",
+      "key": "link.colour",
+      "descriptor": {
+        "concept": "colour",
+        "head": "candidate",
+        "src": "Native parameter: diagram.link.change.colour",
+        "values": [
+          "red",
+          "orange",
+          "yellow",
+          "gold",
+          "lime",
+          "green",
+          "teal",
+          "cyan",
+          "blue",
+          "navy",
+          "indigo",
+          "purple",
+          "magenta",
+          "pink",
+          "brown",
+          "gray",
+          "black",
+          "white"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    },
+    {
+      "area": "diagram",
+      "type": "link",
+      "key": "link.from",
+      "descriptor": {
+        "concept": "reference",
+        "head": "fill+span",
+        "src": "s.link.from role=source"
+      },
+      "status": "unresolved",
+      "reason": "Endpoint name requires target identity and relation ownership, not a string-to-reference coercion."
+    },
+    {
+      "area": "diagram",
+      "type": "link",
+      "key": "link.ids",
+      "descriptor": {
+        "concept": "ids",
+        "head": "candidate",
+        "src": "Native parameter: diagram.link.select.ids"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "diagram",
+      "type": "link",
+      "key": "link.label",
+      "descriptor": {
+        "concept": "label",
+        "head": "candidate",
+        "src": "Native parameter: diagram.link.change.label"
+      },
+      "status": "aligned",
+      "alignment": {
+        "area": "diagram",
+        "key": "link.label",
+        "sourceWire": "w.diagram.edge.label",
+        "canonical": "w.diagram.edge.label",
+        "valueKind": "string"
+      },
+      "evidence": {
+        "knowledgePin": "a04fb0d8eca57ca5ecbb0242fa9cd28bb82a9322",
+        "path": "docs/worlds/w.diagram/schema.sop",
+        "sha256": "84b4f1587fe5de1593579dfc4e3f81262ac446e87594fa4ae205a432e1254fec",
+        "sourceWire": "w.diagram.edge.label",
+        "sourceWorld": "w.diagram",
+        "moduleVersion": "1",
+        "declaration": "@w.diagram.edge.label core.slot of=w.diagram.edge key=label kind=atom kind=string core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy-or-explicit-source-backed-normalization",
+        "semanticBoundary": "Retains declared property identity and literal evidence only; no native conversion, qualitative threshold, reference binding or effect is asserted."
+      }
+    },
+    {
+      "area": "diagram",
+      "type": "link",
+      "key": "link.nodes",
+      "descriptor": {
+        "concept": "nodes",
+        "head": "candidate",
+        "src": "Native parameter: diagram.link.select.nodes"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "diagram",
+      "type": "link",
+      "key": "link.style",
+      "descriptor": {
+        "concept": "style",
+        "head": "candidate",
+        "src": "Native parameter: diagram.link.change.style",
+        "values": [
+          "solid",
+          "dashed",
+          "dotted"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    },
+    {
+      "area": "diagram",
+      "type": "link",
+      "key": "link.to",
+      "descriptor": {
+        "concept": "reference",
+        "head": "fill+span",
+        "src": "s.link.to role=goal"
+      },
+      "status": "unresolved",
+      "reason": "Endpoint name requires target identity and relation ownership, not a string-to-reference coercion."
+    },
+    {
+      "area": "diagram",
+      "type": "link",
+      "key": "link.width",
+      "descriptor": {
+        "concept": "width",
+        "head": "number",
+        "src": "Native parameter: diagram.link.change.width"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "diagram",
+      "type": "node",
+      "key": "node.anchor",
+      "descriptor": {
+        "concept": "reference",
+        "head": "fill+span",
+        "src": "the anchor node"
+      },
+      "status": "unresolved",
+      "reason": "Missing declared reference-role/identity projection; a label is not an object reference."
+    },
+    {
+      "area": "diagram",
+      "type": "node",
+      "key": "node.at",
+      "descriptor": {
+        "concept": "region",
+        "head": "class",
+        "src": "s.node.at",
+        "values": [
+          "corner",
+          "top",
+          "bottom",
+          "left",
+          "right",
+          "center",
+          "top_left",
+          "top_right",
+          "bottom_left",
+          "bottom_right",
+          "middle",
+          "background",
+          "foreground"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    },
+    {
+      "area": "diagram",
+      "type": "node",
+      "key": "node.colour",
+      "descriptor": {
+        "concept": "colour",
+        "head": "candidate+step",
+        "src": "s.node.colour"
+      },
+      "status": "aligned",
+      "alignment": {
+        "area": "diagram",
+        "key": "node.colour",
+        "sourceWire": "k.attributes.attribute.colour",
+        "canonical": "colour",
+        "valueKind": "string",
+        "host": "diagram",
+        "operation": "diagram.node.change",
+        "parameter": "colour"
+      },
+      "evidence": {
+        "knowledgePin": "a04fb0d8eca57ca5ecbb0242fa9cd28bb82a9322",
+        "path": "docs/worlds/k.attributes/shards/attributes.sop",
+        "sha256": "997c44ffaa9bb05d24bd98e349430780b872c9f4ed9a91ec9e929a316b6197a5",
+        "sourceWire": "k.attributes.attribute.colour",
+        "sourceWorld": "k.attributes",
+        "moduleVersion": "6",
+        "declaration": "@k.attributes.attribute.colour k.attributes.attribute name=colour holds=colour aspect=visual about=\"the colour a thing usually has\" default_type=k.objects.part default_key=colour core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy-or-explicit-source-backed-normalization",
+        "semanticBoundary": "Retains declared property identity and literal evidence only; no native conversion, qualitative threshold, reference binding or effect is asserted."
+      }
+    },
+    {
+      "area": "diagram",
+      "type": "node",
+      "key": "node.edges",
+      "descriptor": {
+        "concept": "edges",
+        "head": "candidate",
+        "src": "Native parameter: diagram.node.select.edges"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "diagram",
+      "type": "node",
+      "key": "node.height",
+      "descriptor": {
+        "concept": "height",
+        "head": "number",
+        "src": "Native parameter: diagram.node.resize.height"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "diagram",
+      "type": "node",
+      "key": "node.ids",
+      "descriptor": {
+        "concept": "ids",
+        "head": "candidate",
+        "src": "Native parameter: diagram.node.change.ids"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "diagram",
+      "type": "node",
+      "key": "node.kind",
+      "descriptor": {
+        "concept": "kind",
+        "head": "candidate",
+        "src": "Native parameter: diagram.node.make.kind",
+        "values": [
+          "circle",
+          "rectangle",
+          "square",
+          "diamond",
+          "ellipse",
+          "triangle",
+          "hexagon",
+          "star",
+          "text"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "diagram",
+      "type": "node",
+      "key": "node.label",
+      "descriptor": {
+        "concept": "name",
+        "head": "span",
+        "src": "s.node.label"
+      },
+      "status": "unresolved",
+      "reason": "Raw node includes chart bars/slices; graph-node-owned label lacks a proven target-kind applicability contract."
+    },
+    {
+      "area": "diagram",
+      "type": "node",
+      "key": "node.layout",
+      "descriptor": {
+        "concept": "layout",
+        "head": "candidate",
+        "src": "Native parameter: diagram.node.make.layout",
+        "values": [
+          "tree",
+          "grid",
+          "row",
+          "column",
+          "circle",
+          "radial",
+          "layers"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "diagram",
+      "type": "node",
+      "key": "node.n",
+      "descriptor": {
+        "concept": "n",
+        "head": "number",
+        "src": "Native parameter: diagram.node.make.n"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "diagram",
+      "type": "node",
+      "key": "node.position",
+      "descriptor": {
+        "concept": "spatial_relation",
+        "head": "class",
+        "src": "moveShapes place/anchor",
+        "values": [
+          "in",
+          "on",
+          "under",
+          "above",
+          "below",
+          "next_to",
+          "left_of",
+          "right_of",
+          "between",
+          "behind",
+          "in_front_of",
+          "near",
+          "around",
+          "inside",
+          "outside",
+          "along"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    },
+    {
+      "area": "diagram",
+      "type": "node",
+      "key": "node.relation",
+      "descriptor": {
+        "concept": "relation",
+        "head": "candidate",
+        "src": "Authored semantic intent; requires world-informed completion"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "diagram",
+      "type": "node",
+      "key": "node.shape",
+      "descriptor": {
+        "concept": "shape",
+        "head": "class+step",
+        "src": "s.node.shape space=shape (step rounder)",
+        "values": [
+          "box",
+          "rounded_box",
+          "circle",
+          "ellipse",
+          "diamond",
+          "hexagon",
+          "triangle",
+          "star",
+          "cylinder",
+          "parallelogram",
+          "cloud",
+          "note",
+          "square",
+          "rectangle"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "Raw node includes chart bars/slices; graph-node-only shape enum is not a whole-family semantic contract."
+    },
+    {
+      "area": "diagram",
+      "type": "node",
+      "key": "node.size",
+      "descriptor": {
+        "concept": "size",
+        "head": "class+step",
+        "src": "setShapes size",
+        "values": [
+          "tiny",
+          "small",
+          "default",
+          "big",
+          "huge"
+        ]
+      },
+      "status": "aligned",
+      "alignment": {
+        "area": "diagram",
+        "key": "node.size",
+        "sourceWire": "k.attributes.attribute.size",
+        "canonical": "size",
+        "valueKind": "string",
+        "host": "diagram",
+        "operation": "diagram.node.change",
+        "parameter": "size"
+      },
+      "evidence": {
+        "knowledgePin": "a04fb0d8eca57ca5ecbb0242fa9cd28bb82a9322",
+        "path": "docs/worlds/k.attributes/shards/attributes.sop",
+        "sha256": "997c44ffaa9bb05d24bd98e349430780b872c9f4ed9a91ec9e929a316b6197a5",
+        "sourceWire": "k.attributes.attribute.size",
+        "sourceWorld": "k.attributes",
+        "moduleVersion": "6",
+        "declaration": "@k.attributes.attribute.size k.attributes.attribute name=size holds=size aspect=spatial about=\"how big a thing is next to other things\" default_type=k.scenes.thing default_key=size core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy-or-explicit-source-backed-normalization",
+        "semanticBoundary": "Retains declared property identity and literal evidence only; no native conversion, qualitative threshold, reference binding or effect is asserted."
+      }
+    },
+    {
+      "area": "diagram",
+      "type": "node",
+      "key": "node.value",
+      "descriptor": {
+        "concept": "value",
+        "head": "number",
+        "src": "Native parameter: diagram.node.change.value"
+      },
+      "status": "unresolved",
+      "reason": "Missing owning semantic/value contract for numeric, qualitative or relative change; no implicit units or thresholds."
+    },
+    {
+      "area": "diagram",
+      "type": "node",
+      "key": "node.width",
+      "descriptor": {
+        "concept": "width",
+        "head": "number",
+        "src": "Native parameter: diagram.node.resize.width"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "diagram",
+      "type": "node",
+      "key": "node.x",
+      "descriptor": {
+        "concept": "x",
+        "head": "number",
+        "src": "Native parameter: diagram.node.make.x"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "diagram",
+      "type": "node",
+      "key": "node.y",
+      "descriptor": {
+        "concept": "y",
+        "head": "number",
+        "src": "Native parameter: diagram.node.make.y"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "diagram",
+      "type": "page",
+      "key": "page.duration",
+      "descriptor": {
+        "concept": "duration",
+        "head": "number",
+        "src": "Native parameter: diagram.ids.show.duration"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "diagram",
+      "type": "page",
+      "key": "page.mode",
+      "descriptor": {
+        "concept": "mode",
+        "head": "candidate",
+        "src": "Native parameter: diagram.ids.show.mode",
+        "values": [
+          "temporary",
+          "always",
+          "off"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "diagram",
+      "type": "point",
+      "key": "point.chart",
+      "descriptor": {
+        "concept": "chart",
+        "head": "candidate",
+        "src": "Native parameter: chart.point.change.chart"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "diagram",
+      "type": "point",
+      "key": "point.index",
+      "descriptor": {
+        "concept": "index",
+        "head": "number",
+        "src": "Native parameter: chart.point.change.index"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "diagram",
+      "type": "point",
+      "key": "point.series",
+      "descriptor": {
+        "concept": "series",
+        "head": "number",
+        "src": "Native parameter: chart.point.change.series"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "diagram",
+      "type": "point",
+      "key": "point.value",
+      "descriptor": {
+        "concept": "value",
+        "head": "number",
+        "src": "Native parameter: chart.point.change.value"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "diagram",
+      "type": "series",
+      "key": "series.chart",
+      "descriptor": {
+        "concept": "chart",
+        "head": "candidate",
+        "src": "Native parameter: chart.series.add.chart"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "diagram",
+      "type": "series",
+      "key": "series.colour",
+      "descriptor": {
+        "concept": "colour",
+        "head": "candidate",
+        "src": "Native parameter: chart.series.add.colour"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "diagram",
+      "type": "series",
+      "key": "series.index",
+      "descriptor": {
+        "concept": "index",
+        "head": "number",
+        "src": "Native parameter: chart.series.change.index"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "diagram",
+      "type": "series",
+      "key": "series.label",
+      "descriptor": {
+        "concept": "label",
+        "head": "candidate",
+        "src": "Native parameter: chart.series.add.label"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "diagram",
+      "type": "series",
+      "key": "series.values",
+      "descriptor": {
+        "concept": "values",
+        "head": "candidate",
+        "src": "Native parameter: chart.series.add.values"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "diagram",
+      "type": "sketch",
+      "key": "sketch.links",
+      "descriptor": {
+        "concept": "links",
+        "head": "candidate",
+        "src": "Native parameter: diagram.selection.remove.links"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "diagram",
+      "type": "sketch",
+      "key": "sketch.nodes",
+      "descriptor": {
+        "concept": "nodes",
+        "head": "candidate",
+        "src": "Native parameter: diagram.selection.remove.nodes"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "document",
+      "type": "block",
+      "key": "block.align",
+      "descriptor": {
+        "concept": "align",
+        "head": "candidate",
+        "src": "Native parameter: document.block.align.align",
+        "values": [
+          "left",
+          "center",
+          "right",
+          "justify"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "document",
+      "type": "block",
+      "key": "block.at",
+      "descriptor": {
+        "concept": "at",
+        "head": "candidate",
+        "src": "Native parameter: document.block.select.at"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "document",
+      "type": "block",
+      "key": "block.attrs",
+      "descriptor": {
+        "concept": "attrs",
+        "head": "candidate",
+        "src": "Native parameter: document.block.mark.attrs"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "document",
+      "type": "block",
+      "key": "block.checked",
+      "descriptor": {
+        "concept": "checked",
+        "head": "candidate",
+        "src": "Native parameter: document.list.change.checked"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "document",
+      "type": "block",
+      "key": "block.enabled",
+      "descriptor": {
+        "concept": "enabled",
+        "head": "candidate",
+        "src": "Native parameter: document.block.mark.enabled"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "document",
+      "type": "block",
+      "key": "block.from",
+      "descriptor": {
+        "concept": "from",
+        "head": "number",
+        "src": "Native parameter: document.block.select.from"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "document",
+      "type": "block",
+      "key": "block.header",
+      "descriptor": {
+        "concept": "header",
+        "head": "candidate",
+        "src": "Native parameter: document.table.make.header"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "document",
+      "type": "block",
+      "key": "block.id",
+      "descriptor": {
+        "concept": "id",
+        "head": "candidate",
+        "src": "Native parameter: document.block.select.id"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "document",
+      "type": "block",
+      "key": "block.ids",
+      "descriptor": {
+        "concept": "ids",
+        "head": "candidate",
+        "src": "Native parameter: document.block.reorder.ids"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "document",
+      "type": "block",
+      "key": "block.items",
+      "descriptor": {
+        "concept": "items",
+        "head": "candidate",
+        "src": "Native parameter: document.list.make.items"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "document",
+      "type": "block",
+      "key": "block.kind",
+      "descriptor": {
+        "concept": "kind",
+        "head": "candidate",
+        "src": "Native parameter: document.block.make.kind",
+        "values": [
+          "paragraph",
+          "heading",
+          "quote"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "document",
+      "type": "block",
+      "key": "block.level",
+      "descriptor": {
+        "concept": "level",
+        "head": "number",
+        "src": "Native parameter: document.block.make.level"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "document",
+      "type": "block",
+      "key": "block.mark",
+      "descriptor": {
+        "concept": "mark",
+        "head": "candidate",
+        "src": "Native parameter: document.block.mark.mark",
+        "values": [
+          "link",
+          "bold",
+          "italic",
+          "underline",
+          "strike",
+          "code",
+          "highlight"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "document",
+      "type": "block",
+      "key": "block.name",
+      "descriptor": {
+        "concept": "name",
+        "head": "candidate",
+        "src": "Native parameter: document.list.make.name"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "document",
+      "type": "block",
+      "key": "block.parent",
+      "descriptor": {
+        "concept": "parent",
+        "head": "candidate",
+        "src": "Native parameter: document.list.make.parent"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "document",
+      "type": "block",
+      "key": "block.rows",
+      "descriptor": {
+        "concept": "rows",
+        "head": "candidate",
+        "src": "Native parameter: document.table.make.rows"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "document",
+      "type": "block",
+      "key": "block.style",
+      "descriptor": {
+        "concept": "style",
+        "head": "candidate",
+        "src": "Native parameter: document.list.make.style",
+        "values": [
+          "bullet",
+          "numbered",
+          "task"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "document",
+      "type": "block",
+      "key": "block.text",
+      "descriptor": {
+        "concept": "text",
+        "head": "candidate",
+        "src": "Native parameter: document.block.make.text"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "document",
+      "type": "block",
+      "key": "block.to",
+      "descriptor": {
+        "concept": "to",
+        "head": "number",
+        "src": "Native parameter: document.block.select.to"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "document",
+      "type": "document",
+      "key": "document.blocks",
+      "descriptor": {
+        "concept": "blocks",
+        "head": "candidate",
+        "src": "Native parameter: document.write.blocks"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "document",
+      "type": "document",
+      "key": "document.chapters",
+      "descriptor": {
+        "concept": "chapters",
+        "head": "number",
+        "src": "Native parameter: document.compose.chapters"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "document",
+      "type": "document",
+      "key": "document.genre",
+      "descriptor": {
+        "concept": "genre",
+        "head": "candidate",
+        "src": "Native parameter: document.write.genre"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "document",
+      "type": "document",
+      "key": "document.id",
+      "descriptor": {
+        "concept": "id",
+        "head": "candidate",
+        "src": "Native parameter: document.title.change.id"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "document",
+      "type": "document",
+      "key": "document.property",
+      "descriptor": {
+        "concept": "property",
+        "head": "candidate",
+        "src": "Native parameter: document.rewrite.property",
+        "values": [
+          "tone",
+          "length"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "document",
+      "type": "document",
+      "key": "document.title",
+      "descriptor": {
+        "concept": "title",
+        "head": "candidate",
+        "src": "Native parameter: document.title.change.title"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "document",
+      "type": "document",
+      "key": "document.topic",
+      "descriptor": {
+        "concept": "topic",
+        "head": "candidate",
+        "src": "Native parameter: document.write.topic"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "document",
+      "type": "document",
+      "key": "document.value",
+      "descriptor": {
+        "concept": "value",
+        "head": "candidate",
+        "src": "Native parameter: document.rewrite.value"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "document",
+      "type": "document",
+      "key": "document.words",
+      "descriptor": {
+        "concept": "words",
+        "head": "number",
+        "src": "Native parameter: document.compose.words"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "document",
+      "type": "inline",
+      "key": "inline.align",
+      "descriptor": {
+        "concept": "align",
+        "head": "class",
+        "src": "old align",
+        "values": [
+          "left",
+          "center",
+          "right",
+          "justify"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    },
+    {
+      "area": "document",
+      "type": "inline",
+      "key": "inline.enabled",
+      "descriptor": {
+        "concept": "toggle",
+        "head": "class",
+        "src": "actual literal editing parameter",
+        "values": [
+          "on",
+          "off"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "document",
+      "type": "inline",
+      "key": "inline.format",
+      "descriptor": {
+        "concept": "format",
+        "head": "class",
+        "src": "old style/highlight/link",
+        "values": [
+          "link",
+          "bold",
+          "italic",
+          "underline",
+          "strike",
+          "code",
+          "highlight"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    },
+    {
+      "area": "document",
+      "type": "inline",
+      "key": "inline.from",
+      "descriptor": {
+        "concept": "index",
+        "head": "number",
+        "src": "actual literal editing parameter"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "document",
+      "type": "inline",
+      "key": "inline.highlight_colour",
+      "descriptor": {
+        "concept": "colour",
+        "head": "candidate",
+        "src": "actual literal editing parameter"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "document",
+      "type": "inline",
+      "key": "inline.items",
+      "descriptor": {
+        "concept": "literal_list",
+        "head": "span",
+        "src": "actual literal editing parameter"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "document",
+      "type": "inline",
+      "key": "inline.link_target",
+      "descriptor": {
+        "concept": "literal_text",
+        "head": "span",
+        "src": "old link"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    },
+    {
+      "area": "document",
+      "type": "inline",
+      "key": "inline.list_kind",
+      "descriptor": {
+        "concept": "list_kind",
+        "head": "class",
+        "src": "doc.addList",
+        "values": [
+          "bullet",
+          "numbered",
+          "task"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    },
+    {
+      "area": "document",
+      "type": "inline",
+      "key": "inline.rows",
+      "descriptor": {
+        "concept": "literal_table",
+        "head": "span",
+        "src": "actual literal editing parameter"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "document",
+      "type": "inline",
+      "key": "inline.to",
+      "descriptor": {
+        "concept": "index",
+        "head": "number",
+        "src": "actual literal editing parameter"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "document",
+      "type": "section",
+      "key": "section.after",
+      "descriptor": {
+        "concept": "after",
+        "head": "candidate",
+        "src": "Native parameter: document.section.make.after"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "document",
+      "type": "section",
+      "key": "section.align",
+      "descriptor": {
+        "concept": "align",
+        "head": "candidate",
+        "src": "Native parameter: document.section.change.align",
+        "values": [
+          "left",
+          "center",
+          "right",
+          "justify"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "document",
+      "type": "section",
+      "key": "section.at",
+      "descriptor": {
+        "concept": "at",
+        "head": "candidate",
+        "src": "Native parameter: document.section.select.at"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "document",
+      "type": "section",
+      "key": "section.attrs",
+      "descriptor": {
+        "concept": "attrs",
+        "head": "candidate",
+        "src": "Native parameter: document.section.mark.attrs"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "document",
+      "type": "section",
+      "key": "section.content",
+      "descriptor": {
+        "concept": "literal_text",
+        "head": "span",
+        "src": "text the user dictates to insert/replace (doc.addParagraph, doc.dictate)"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    },
+    {
+      "area": "document",
+      "type": "section",
+      "key": "section.count",
+      "descriptor": {
+        "concept": "count",
+        "head": "number",
+        "src": "three paragraphs"
+      },
+      "status": "unresolved",
+      "reason": "Missing owning semantic/value contract for numeric, qualitative or relative change; no implicit units or thresholds."
+    },
+    {
+      "area": "document",
+      "type": "section",
+      "key": "section.enabled",
+      "descriptor": {
+        "concept": "enabled",
+        "head": "candidate",
+        "src": "Native parameter: document.section.mark.enabled"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "document",
+      "type": "section",
+      "key": "section.from",
+      "descriptor": {
+        "concept": "from",
+        "head": "number",
+        "src": "Native parameter: document.section.select.from"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "document",
+      "type": "section",
+      "key": "section.id",
+      "descriptor": {
+        "concept": "id",
+        "head": "candidate",
+        "src": "Native parameter: document.section.select.id"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "document",
+      "type": "section",
+      "key": "section.ids",
+      "descriptor": {
+        "concept": "ids",
+        "head": "candidate",
+        "src": "Native parameter: document.section.remove.ids"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "document",
+      "type": "section",
+      "key": "section.kind",
+      "descriptor": {
+        "concept": "kind",
+        "head": "candidate",
+        "src": "Native parameter: document.section.change.kind",
+        "values": [
+          "heading"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "document",
+      "type": "section",
+      "key": "section.length",
+      "descriptor": {
+        "concept": "length",
+        "head": "class+step",
+        "src": "s.sec.length",
+        "values": [
+          "very_short",
+          "short",
+          "medium",
+          "long",
+          "very_long"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "Missing owning semantic/value contract for numeric, qualitative or relative change; no implicit units or thresholds."
+    },
+    {
+      "area": "document",
+      "type": "section",
+      "key": "section.level",
+      "descriptor": {
+        "concept": "heading_level",
+        "head": "class",
+        "src": "old heading level",
+        "values": [
+          "1",
+          "2",
+          "3"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    },
+    {
+      "area": "document",
+      "type": "section",
+      "key": "section.mark",
+      "descriptor": {
+        "concept": "mark",
+        "head": "candidate",
+        "src": "Native parameter: document.section.mark.mark",
+        "values": [
+          "link",
+          "bold",
+          "italic",
+          "underline",
+          "strike",
+          "code",
+          "highlight"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "document",
+      "type": "section",
+      "key": "section.name",
+      "descriptor": {
+        "concept": "name",
+        "head": "candidate",
+        "src": "Native parameter: document.section.change.name"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "document",
+      "type": "section",
+      "key": "section.order",
+      "descriptor": {
+        "concept": "order_relation",
+        "head": "class",
+        "src": "s.sec.order",
+        "values": [
+          "before",
+          "after",
+          "first",
+          "last",
+          "top",
+          "bottom",
+          "swap"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    },
+    {
+      "area": "document",
+      "type": "section",
+      "key": "section.order_anchor",
+      "descriptor": {
+        "concept": "reference",
+        "head": "fill+span",
+        "src": "the other section"
+      },
+      "status": "unresolved",
+      "reason": "Missing declared reference-role/identity projection; a label is not an object reference."
+    },
+    {
+      "area": "document",
+      "type": "section",
+      "key": "section.parent",
+      "descriptor": {
+        "concept": "parent",
+        "head": "candidate",
+        "src": "Native parameter: document.section.make.parent"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "document",
+      "type": "section",
+      "key": "section.role",
+      "descriptor": {
+        "concept": "part_kind",
+        "head": "candidate",
+        "src": "s.sec.role",
+        "values": [
+          "greeting",
+          "introduction",
+          "body",
+          "conclusion",
+          "signature",
+          "chapter",
+          "paragraph",
+          "heading",
+          "list",
+          "table",
+          "apology",
+          "explanation",
+          "summary",
+          "closing",
+          "subject",
+          "abstract",
+          "methods",
+          "results",
+          "references",
+          "item"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    },
+    {
+      "area": "document",
+      "type": "section",
+      "key": "section.text",
+      "descriptor": {
+        "concept": "text",
+        "head": "candidate",
+        "src": "Native parameter: document.section.change.text"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "document",
+      "type": "section",
+      "key": "section.to",
+      "descriptor": {
+        "concept": "to",
+        "head": "number",
+        "src": "Native parameter: document.section.select.to"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "document",
+      "type": "section",
+      "key": "section.words",
+      "descriptor": {
+        "concept": "measure",
+        "head": "number",
+        "src": "s.sec.length unit=word"
+      },
+      "status": "unresolved",
+      "reason": "Missing owning semantic/value contract for numeric, qualitative or relative change; no implicit units or thresholds."
+    },
+    {
+      "area": "document",
+      "type": "text",
+      "key": "text.about",
+      "descriptor": {
+        "concept": "topic",
+        "head": "span",
+        "src": "s.text.about"
+      },
+      "status": "aligned",
+      "alignment": {
+        "area": "document",
+        "key": "text.about",
+        "sourceWire": "w.document.document.topic",
+        "canonical": "w.document.document.topic",
+        "valueKind": "string",
+        "host": "document",
+        "operation": "document.write",
+        "parameter": "topic"
+      },
+      "evidence": {
+        "knowledgePin": "a04fb0d8eca57ca5ecbb0242fa9cd28bb82a9322",
+        "path": "docs/worlds/w.document/schema.sop",
+        "sha256": "4532f68d9096b6db1b2396bd0ea5a9600dc96ab76b5f9e4110f3f4319e582f77",
+        "sourceWire": "w.document.document.topic",
+        "sourceWorld": "w.document",
+        "moduleVersion": "2",
+        "declaration": "@w.document.document.topic core.slot of=w.document.document key=topic kind=atom kind=string core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy-or-explicit-source-backed-normalization",
+        "semanticBoundary": "Retains declared property identity and literal evidence only; no native conversion, qualitative threshold, reference binding or effect is asserted."
+      }
+    },
+    {
+      "area": "document",
+      "type": "text",
+      "key": "text.chapters",
+      "descriptor": {
+        "concept": "count",
+        "head": "number",
+        "src": "writeText chapters / keepChapters"
+      },
+      "status": "unresolved",
+      "reason": "Missing owning semantic/value contract for numeric, qualitative or relative change; no implicit units or thresholds."
+    },
+    {
+      "area": "document",
+      "type": "text",
+      "key": "text.content",
+      "descriptor": {
+        "concept": "literal_text",
+        "head": "span",
+        "src": "document.write blocks: literal paragraph body"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "document",
+      "type": "text",
+      "key": "text.genre",
+      "descriptor": {
+        "concept": "kind",
+        "head": "candidate",
+        "src": "s.text.genre (k.genres)",
+        "values": [
+          "letter",
+          "email",
+          "report",
+          "story",
+          "note",
+          "memo",
+          "essay",
+          "summary",
+          "article",
+          "invitation",
+          "announcement",
+          "speech",
+          "cover_letter",
+          "complaint",
+          "review",
+          "recipe",
+          "list",
+          "minutes",
+          "proposal",
+          "poem",
+          "press_release",
+          "newsletter",
+          "itinerary",
+          "lab_report",
+          "cv"
+        ]
+      },
+      "status": "aligned",
+      "alignment": {
+        "area": "document",
+        "key": "text.genre",
+        "sourceWire": "w.document.document.genre",
+        "canonical": "w.document.document.genre",
+        "valueKind": "string",
+        "host": "document",
+        "operation": "document.write",
+        "parameter": "genre"
+      },
+      "evidence": {
+        "knowledgePin": "a04fb0d8eca57ca5ecbb0242fa9cd28bb82a9322",
+        "path": "docs/worlds/w.document/schema.sop",
+        "sha256": "4532f68d9096b6db1b2396bd0ea5a9600dc96ab76b5f9e4110f3f4319e582f77",
+        "sourceWire": "w.document.document.genre",
+        "sourceWorld": "w.document",
+        "moduleVersion": "2",
+        "declaration": "@w.document.document.genre core.slot of=w.document.document key=genre kind=atom kind=string type=k.genres.genre by=name core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy-or-explicit-source-backed-normalization",
+        "semanticBoundary": "Retains declared property identity and literal evidence only; no native conversion, qualitative threshold, reference binding or effect is asserted."
+      }
+    },
+    {
+      "area": "document",
+      "type": "text",
+      "key": "text.id",
+      "descriptor": {
+        "concept": "id",
+        "head": "candidate",
+        "src": "Native parameter: document.container.change.id"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "document",
+      "type": "text",
+      "key": "text.length",
+      "descriptor": {
+        "concept": "length",
+        "head": "class+step",
+        "src": "writeText words (region)",
+        "values": [
+          "very_short",
+          "short",
+          "medium",
+          "long",
+          "very_long"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "Missing owning semantic/value contract for numeric, qualitative or relative change; no implicit units or thresholds."
+    },
+    {
+      "area": "document",
+      "type": "text",
+      "key": "text.text",
+      "descriptor": {
+        "concept": "text",
+        "head": "candidate",
+        "src": "Native parameter: document.container.change.text"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "document",
+      "type": "text",
+      "key": "text.title",
+      "descriptor": {
+        "concept": "name",
+        "head": "span",
+        "src": "s.text.title"
+      },
+      "status": "aligned",
+      "alignment": {
+        "area": "document",
+        "key": "text.title",
+        "sourceWire": "w.document.document.title",
+        "canonical": "w.document.document.title",
+        "valueKind": "string",
+        "host": "document",
+        "operation": "document.write",
+        "parameter": "title"
+      },
+      "evidence": {
+        "knowledgePin": "a04fb0d8eca57ca5ecbb0242fa9cd28bb82a9322",
+        "path": "docs/worlds/w.document/schema.sop",
+        "sha256": "4532f68d9096b6db1b2396bd0ea5a9600dc96ab76b5f9e4110f3f4319e582f77",
+        "sourceWire": "w.document.document.title",
+        "sourceWorld": "w.document",
+        "moduleVersion": "2",
+        "declaration": "@w.document.document.title core.slot of=w.document.document key=title required=true kind=atom kind=string core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy-or-explicit-source-backed-normalization",
+        "semanticBoundary": "Retains declared property identity and literal evidence only; no native conversion, qualitative threshold, reference binding or effect is asserted."
+      }
+    },
+    {
+      "area": "document",
+      "type": "text",
+      "key": "text.tone",
+      "descriptor": {
+        "concept": "tone",
+        "head": "class+step",
+        "src": "s.text.tone space=tone",
+        "values": [
+          "formal",
+          "informal",
+          "friendly",
+          "warm",
+          "cold",
+          "polite",
+          "firm",
+          "neutral",
+          "enthusiastic",
+          "apologetic",
+          "humorous",
+          "serious",
+          "persuasive",
+          "simple"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "Missing owning semantic/value contract for numeric, qualitative or relative change; no implicit units or thresholds."
+    },
+    {
+      "area": "document",
+      "type": "text",
+      "key": "text.words",
+      "descriptor": {
+        "concept": "measure",
+        "head": "number",
+        "src": "writeText words"
+      },
+      "status": "aligned",
+      "alignment": {
+        "area": "document",
+        "key": "text.words",
+        "sourceWire": "w.document.document.words",
+        "canonical": "w.document.document.words",
+        "valueKind": "literal",
+        "host": "document",
+        "operation": "document.compose",
+        "parameter": "words"
+      },
+      "evidence": {
+        "knowledgePin": "a04fb0d8eca57ca5ecbb0242fa9cd28bb82a9322",
+        "path": "docs/worlds/w.document/schema.sop",
+        "sha256": "4532f68d9096b6db1b2396bd0ea5a9600dc96ab76b5f9e4110f3f4319e582f77",
+        "sourceWire": "w.document.document.words",
+        "sourceWorld": "w.document",
+        "moduleVersion": "2",
+        "declaration": "@w.document.document.words core.slot of=w.document.document key=words kind=integer min=0 step=1 core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "literal",
+        "source": "exact-copy-or-explicit-source-backed-normalization",
+        "semanticBoundary": "Retains declared property identity and literal evidence only; no native conversion, qualitative threshold, reference binding or effect is asserted."
+      }
+    },
+    {
+      "area": "calendar",
+      "type": "calendar",
+      "key": "calendar.colour",
+      "descriptor": {
+        "concept": "colour",
+        "head": "candidate",
+        "src": "calendar.calendar.add/change colour"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "calendar",
+      "type": "calendar",
+      "key": "calendar.id",
+      "descriptor": {
+        "concept": "id",
+        "head": "candidate",
+        "src": "Native parameter: calendar.calendar.add.id"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "calendar",
+      "type": "calendar",
+      "key": "calendar.label",
+      "descriptor": {
+        "concept": "label",
+        "head": "candidate",
+        "src": "Native parameter: calendar.calendar.add.label"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "calendar",
+      "type": "calendar",
+      "key": "calendar.name",
+      "descriptor": {
+        "concept": "name",
+        "head": "span",
+        "src": "calendar.calendar.add/change label"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "calendar",
+      "type": "meeting",
+      "key": "meeting.agenda",
+      "descriptor": {
+        "concept": "literal_text",
+        "head": "span",
+        "src": "notes / agenda"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    },
+    {
+      "area": "calendar",
+      "type": "meeting",
+      "key": "meeting.calendar",
+      "descriptor": {
+        "concept": "reference",
+        "head": "span",
+        "src": "calendar.meeting.add/change calendar identity"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "calendar",
+      "type": "meeting",
+      "key": "meeting.day",
+      "descriptor": {
+        "concept": "day",
+        "head": "candidate+span",
+        "src": "s.meet.start part=start (day): today, tomorrow, weekday, date, next week"
+      },
+      "status": "unresolved",
+      "reason": "Relative/calendar day requires declared date and timezone/context resolution; string is not time.date."
+    },
+    {
+      "area": "calendar",
+      "type": "meeting",
+      "key": "meeting.duration",
+      "descriptor": {
+        "concept": "duration",
+        "head": "number",
+        "src": "Native parameter: calendar.meeting.add.duration"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "calendar",
+      "type": "meeting",
+      "key": "meeting.end",
+      "descriptor": {
+        "concept": "time",
+        "head": "span",
+        "src": "until 5"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    },
+    {
+      "area": "calendar",
+      "type": "meeting",
+      "key": "meeting.free",
+      "descriptor": {
+        "concept": "free_search",
+        "head": "class",
+        "src": "book 6.8 / 7.4: nearest free time",
+        "values": [
+          "nearest_free",
+          "first_free",
+          "common_free"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    },
+    {
+      "area": "calendar",
+      "type": "meeting",
+      "key": "meeting.id",
+      "descriptor": {
+        "concept": "id",
+        "head": "candidate",
+        "src": "Native parameter: calendar.meeting.add.id"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "calendar",
+      "type": "meeting",
+      "key": "meeting.ids",
+      "descriptor": {
+        "concept": "ids",
+        "head": "candidate",
+        "src": "Native parameter: calendar.events.remove.ids"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "calendar",
+      "type": "meeting",
+      "key": "meeting.length",
+      "descriptor": {
+        "concept": "duration",
+        "head": "number+class+step",
+        "src": "s.meet.length part=duration"
+      },
+      "status": "unresolved",
+      "reason": "Duration requires numeric magnitude/unit or declared qualitative/relative interpretation."
+    },
+    {
+      "area": "calendar",
+      "type": "meeting",
+      "key": "meeting.notes",
+      "descriptor": {
+        "concept": "notes",
+        "head": "candidate",
+        "src": "Native parameter: calendar.meeting.add.notes"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "calendar",
+      "type": "meeting",
+      "key": "meeting.participants",
+      "descriptor": {
+        "concept": "participants",
+        "head": "candidate",
+        "src": "Native parameter: calendar.meeting.add.participants"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "calendar",
+      "type": "meeting",
+      "key": "meeting.people",
+      "descriptor": {
+        "concept": "person",
+        "head": "fill+span",
+        "many": true,
+        "src": "s.meet.people role=participant many=true"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    },
+    {
+      "area": "calendar",
+      "type": "meeting",
+      "key": "meeting.relation",
+      "descriptor": {
+        "concept": "time_relation",
+        "head": "class",
+        "src": "relative to another meeting",
+        "values": [
+          "before",
+          "after",
+          "same_time",
+          "during",
+          "between",
+          "not_overlapping"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    },
+    {
+      "area": "calendar",
+      "type": "meeting",
+      "key": "meeting.relation_anchor",
+      "descriptor": {
+        "concept": "reference",
+        "head": "fill+span",
+        "src": "the other meeting"
+      },
+      "status": "unresolved",
+      "reason": "Missing declared reference-role/identity projection; a label is not an object reference."
+    },
+    {
+      "area": "calendar",
+      "type": "meeting",
+      "key": "meeting.room",
+      "descriptor": {
+        "concept": "reference",
+        "head": "fill+span",
+        "src": "s.meet.room relation=in"
+      },
+      "status": "unresolved",
+      "reason": "Missing declared reference-role/identity projection; a label is not an object reference."
+    },
+    {
+      "area": "calendar",
+      "type": "meeting",
+      "key": "meeting.shift",
+      "descriptor": {
+        "concept": "delta",
+        "head": "number+class",
+        "src": "move by an amount"
+      },
+      "status": "unresolved",
+      "reason": "Missing owning semantic/value contract for numeric, qualitative or relative change; no implicit units or thresholds."
+    },
+    {
+      "area": "calendar",
+      "type": "meeting",
+      "key": "meeting.start",
+      "descriptor": {
+        "concept": "start",
+        "head": "number",
+        "src": "Native parameter: calendar.meeting.add.start"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "calendar",
+      "type": "meeting",
+      "key": "meeting.time",
+      "descriptor": {
+        "concept": "time",
+        "head": "candidate+span+step",
+        "src": "s.meet.start (clock or region morning/afternoon; step earlier/later)"
+      },
+      "status": "aligned",
+      "alignment": {
+        "area": "calendar",
+        "key": "meeting.time",
+        "sourceWire": "w.calendar.event.start",
+        "canonical": "w.calendar.event.start",
+        "valueKind": "string",
+        "host": "calendar",
+        "operation": "calendar.meeting.move",
+        "parameter": "start"
+      },
+      "evidence": {
+        "knowledgePin": "a04fb0d8eca57ca5ecbb0242fa9cd28bb82a9322",
+        "path": "docs/worlds/w.calendar/schema.sop",
+        "sha256": "c9849573da85da02cd2c74eed6fa192344e1508aa05700b57251e8140db6a4e4",
+        "sourceWire": "w.calendar.event.start",
+        "sourceWorld": "w.calendar",
+        "moduleVersion": "2",
+        "declaration": "@w.calendar.event.start core.slot of=w.calendar.event key=start kind=time.clock core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy",
+        "semanticBoundary": "The clock phrase is kept as said; converting it to the native start (milliseconds on the meeting day) needs a declared clock resolution that is not published yet."
+      }
+    },
+    {
+      "area": "calendar",
+      "type": "meeting",
+      "key": "meeting.timezone",
+      "descriptor": {
+        "concept": "timezone",
+        "head": "candidate",
+        "src": "Authored explicit temporal intent; native epoch normalization remains completion"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "calendar",
+      "type": "meeting",
+      "key": "meeting.title",
+      "descriptor": {
+        "concept": "name",
+        "head": "span",
+        "src": "s.meet.title"
+      },
+      "status": "aligned",
+      "alignment": {
+        "area": "calendar",
+        "key": "meeting.title",
+        "sourceWire": "w.calendar.event.title",
+        "canonical": "w.calendar.event.title",
+        "valueKind": "string",
+        "host": "calendar",
+        "operation": "calendar.meeting.change",
+        "parameter": "title"
+      },
+      "evidence": {
+        "knowledgePin": "a04fb0d8eca57ca5ecbb0242fa9cd28bb82a9322",
+        "path": "docs/worlds/w.calendar/schema.sop",
+        "sha256": "c9849573da85da02cd2c74eed6fa192344e1508aa05700b57251e8140db6a4e4",
+        "sourceWire": "w.calendar.event.title",
+        "sourceWorld": "w.calendar",
+        "moduleVersion": "2",
+        "declaration": "@w.calendar.event.title core.slot of=w.calendar.event key=title required=true kind=atom kind=string core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy-or-explicit-source-backed-normalization",
+        "semanticBoundary": "Retains declared property identity and literal evidence only; no native conversion, qualitative threshold, reference binding or effect is asserted."
+      }
+    },
+    {
+      "area": "calendar",
+      "type": "person",
+      "key": "person.id",
+      "descriptor": {
+        "concept": "id",
+        "head": "candidate",
+        "src": "Native parameter: calendar.person.add.id"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "calendar",
+      "type": "person",
+      "key": "person.label",
+      "descriptor": {
+        "concept": "label",
+        "head": "candidate",
+        "src": "Native parameter: calendar.person.add.label"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "calendar",
+      "type": "person",
+      "key": "person.name",
+      "descriptor": {
+        "concept": "person",
+        "head": "span",
+        "src": "person name"
+      },
+      "status": "aligned",
+      "alignment": {
+        "area": "calendar",
+        "key": "person.name",
+        "sourceWire": "w.person.person.name",
+        "canonical": "w.person.person.name",
+        "valueKind": "string",
+        "host": "calendar",
+        "operation": "calendar.person.change",
+        "parameter": "label"
+      },
+      "evidence": {
+        "knowledgePin": "a04fb0d8eca57ca5ecbb0242fa9cd28bb82a9322",
+        "path": "docs/worlds/w.person/schema.sop",
+        "sha256": "173aec25063dc3a6f31b934e5c6bab97c81595cf034e6d45d0b0ced6654b1c5e",
+        "sourceWire": "w.person.person.name",
+        "sourceWorld": "w.person",
+        "moduleVersion": "1",
+        "declaration": "@w.person.person.name core.slot of=w.person.person key=name kind=atom kind=string core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy-or-explicit-source-backed-normalization",
+        "semanticBoundary": "Retains declared property identity and literal evidence only; no native conversion, qualitative threshold, reference binding or effect is asserted."
+      }
+    },
+    {
+      "area": "calendar",
+      "type": "room",
+      "key": "room.capacity",
+      "descriptor": {
+        "concept": "capacity",
+        "head": "number",
+        "src": "Native parameter: calendar.room.add.capacity"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "calendar",
+      "type": "room",
+      "key": "room.id",
+      "descriptor": {
+        "concept": "id",
+        "head": "candidate",
+        "src": "Native parameter: calendar.room.add.id"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "calendar",
+      "type": "room",
+      "key": "room.label",
+      "descriptor": {
+        "concept": "label",
+        "head": "candidate",
+        "src": "Native parameter: calendar.room.add.label"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "calendar",
+      "type": "room",
+      "key": "room.location",
+      "descriptor": {
+        "concept": "place",
+        "head": "span",
+        "src": "calendar.room.add/change location"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "calendar",
+      "type": "room",
+      "key": "room.name",
+      "descriptor": {
+        "concept": "name",
+        "head": "span",
+        "src": "room name"
+      },
+      "status": "aligned",
+      "alignment": {
+        "area": "calendar",
+        "key": "room.name",
+        "sourceWire": "w.room.room.name",
+        "canonical": "w.room.room.name",
+        "valueKind": "string"
+      },
+      "evidence": {
+        "knowledgePin": "a04fb0d8eca57ca5ecbb0242fa9cd28bb82a9322",
+        "path": "docs/worlds/w.room/schema.sop",
+        "sha256": "eebff2f6d36c3aec724184282704aa05e42ede66b4c4014ea7e7226442314ca9",
+        "sourceWire": "w.room.room.name",
+        "sourceWorld": "w.room",
+        "moduleVersion": "1",
+        "declaration": "@w.room.room.name core.slot of=w.room.room key=name required=true kind=atom kind=string core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy-or-explicit-source-backed-normalization",
+        "semanticBoundary": "Retains declared property identity and literal evidence only; no native conversion, qualitative threshold, reference binding or effect is asserted."
+      }
+    },
+    {
+      "area": "calendar",
+      "type": "room",
+      "key": "room.seats",
+      "descriptor": {
+        "concept": "quantity",
+        "head": "number",
+        "src": "s.room.seats counts=w.person"
+      },
+      "status": "unresolved",
+      "reason": "Exact integer/nonnegative source conversion and counted-person dimension need a typed value contract."
+    },
+    {
+      "area": "avatar",
+      "type": "face",
+      "key": "face.base",
+      "descriptor": {
+        "concept": "base",
+        "head": "candidate",
+        "src": "Native parameter: avatar.face.compose.base",
+        "values": [
+          "baby",
+          "child",
+          "girl",
+          "boy",
+          "woman",
+          "man",
+          "old woman",
+          "old man",
+          "bearded man",
+          "woman with curly hair",
+          "robot",
+          "alien",
+          "clown",
+          "queen"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "avatar",
+      "type": "face",
+      "key": "face.characterKind",
+      "descriptor": {
+        "concept": "characterKind",
+        "head": "candidate",
+        "src": "Native parameter: avatar.face.compose.characterKind",
+        "values": [
+          "human",
+          "robot",
+          "alien"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "avatar",
+      "type": "face",
+      "key": "face.duration",
+      "descriptor": {
+        "concept": "duration",
+        "head": "number",
+        "src": "Native parameter: avatar.ids.show.duration"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "avatar",
+      "type": "face",
+      "key": "face.expression",
+      "descriptor": {
+        "concept": "expression",
+        "head": "class",
+        "src": "actual avatar native capability parameters",
+        "values": [
+          "happy",
+          "sad",
+          "angry",
+          "surprised",
+          "sleepy",
+          "wink",
+          "talking"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "Missing owning semantic/value contract for numeric, qualitative or relative change; no implicit units or thresholds."
+    },
+    {
+      "area": "avatar",
+      "type": "face",
+      "key": "face.id",
+      "descriptor": {
+        "concept": "id",
+        "head": "candidate",
+        "src": "Native parameter: avatar.face.compose.id",
+        "values": [
+          "face"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "avatar",
+      "type": "face",
+      "key": "face.mode",
+      "descriptor": {
+        "concept": "mode",
+        "head": "candidate",
+        "src": "Native parameter: avatar.ids.show.mode",
+        "values": [
+          "temporary",
+          "always",
+          "off"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "avatar",
+      "type": "face",
+      "key": "face.name",
+      "descriptor": {
+        "concept": "name",
+        "head": "span",
+        "src": "actual avatar native capability parameters"
+      },
+      "status": "aligned",
+      "alignment": {
+        "area": "avatar",
+        "key": "face.name",
+        "sourceWire": "w.face.face.name",
+        "canonical": "w.face.face.name",
+        "valueKind": "string"
+      },
+      "evidence": {
+        "knowledgePin": "a04fb0d8eca57ca5ecbb0242fa9cd28bb82a9322",
+        "path": "docs/worlds/w.face/schema.sop",
+        "sha256": "743cdc05dd6e6186762667af6851676a7e87d4afcb30ccd3c534ae8c70c26c7b",
+        "sourceWire": "w.face.face.name",
+        "sourceWorld": "w.face",
+        "moduleVersion": "1",
+        "declaration": "@w.face.face.name core.slot of=w.face.face key=name kind=atom kind=string core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy-or-explicit-source-backed-normalization",
+        "semanticBoundary": "Retains declared property identity and literal evidence only; no native conversion, qualitative threshold, reference binding or effect is asserted."
+      }
+    },
+    {
+      "area": "avatar",
+      "type": "face",
+      "key": "face.preset",
+      "descriptor": {
+        "concept": "preset",
+        "head": "class",
+        "src": "actual avatar native capability parameters",
+        "values": [
+          "baby",
+          "child",
+          "girl",
+          "boy",
+          "woman",
+          "man",
+          "old woman",
+          "old man",
+          "bearded man",
+          "woman with curly hair",
+          "robot",
+          "alien",
+          "clown",
+          "queen"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    },
+    {
+      "area": "avatar",
+      "type": "face",
+      "key": "face.scale",
+      "descriptor": {
+        "concept": "scale",
+        "head": "number",
+        "src": "Native parameter: avatar.face.resize.scale"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "avatar",
+      "type": "part",
+      "key": "part.colour",
+      "descriptor": {
+        "concept": "colour",
+        "head": "class",
+        "src": "actual avatar native capability parameters",
+        "values": [
+          "amber",
+          "auburn",
+          "black",
+          "blond",
+          "blue",
+          "brown",
+          "dark brown",
+          "green",
+          "grey",
+          "hazel",
+          "light",
+          "metal grey",
+          "olive",
+          "orange",
+          "pale",
+          "pink",
+          "purple",
+          "red",
+          "tan",
+          "white",
+          "yellow"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "Missing owning semantic/value contract for numeric, qualitative or relative change; no implicit units or thresholds."
+    },
+    {
+      "area": "avatar",
+      "type": "part",
+      "key": "part.id",
+      "descriptor": {
+        "concept": "id",
+        "head": "candidate",
+        "src": "Native parameter: avatar.part.select.id",
+        "values": [
+          "hair_back",
+          "shoulders",
+          "neck",
+          "ears",
+          "head",
+          "cheeks",
+          "beard",
+          "mouth",
+          "moustache",
+          "nose",
+          "eyes",
+          "eyebrows",
+          "glasses",
+          "hair_front",
+          "earrings",
+          "hat"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "avatar",
+      "type": "part",
+      "key": "part.ids",
+      "descriptor": {
+        "concept": "reference",
+        "head": "span",
+        "src": "actual avatar native capability parameters"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "avatar",
+      "type": "part",
+      "key": "part.place",
+      "descriptor": {
+        "concept": "place",
+        "head": "class",
+        "src": "actual avatar native capability parameters",
+        "values": [
+          "up",
+          "down",
+          "left",
+          "right"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "avatar",
+      "type": "part",
+      "key": "part.property",
+      "descriptor": {
+        "concept": "property",
+        "head": "candidate",
+        "src": "Native parameter: avatar.part.feature.property",
+        "values": [
+          "length",
+          "feel",
+          "kind",
+          "age",
+          "size",
+          "shape"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "avatar",
+      "type": "part",
+      "key": "part.scale",
+      "descriptor": {
+        "concept": "scale",
+        "head": "number",
+        "src": "Native parameter: avatar.part.resize.scale"
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "avatar",
+      "type": "part",
+      "key": "part.size",
+      "descriptor": {
+        "concept": "size",
+        "head": "class",
+        "src": "actual avatar native capability parameters",
+        "values": [
+          "tiny",
+          "small",
+          "default",
+          "big",
+          "huge"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "Missing owning semantic/value contract for numeric, qualitative or relative change; no implicit units or thresholds."
+    },
+    {
+      "area": "avatar",
+      "type": "part",
+      "key": "part.value",
+      "descriptor": {
+        "concept": "value",
+        "head": "candidate",
+        "src": "Native parameter: avatar.part.feature.value",
+        "values": [
+          "long",
+          "medium",
+          "straight",
+          "wavy",
+          "curly",
+          "bob",
+          "ponytail",
+          "pigtails",
+          "bun",
+          "afro",
+          "child",
+          "large",
+          "t-shirt",
+          "v-neck",
+          "shirt",
+          "suit",
+          "hoodie",
+          "tank top",
+          "robot",
+          "lab coat",
+          "scrubs",
+          "chef jacket",
+          "apron",
+          "overalls",
+          "safety vest",
+          "uniform",
+          "fire jacket",
+          "sailor collar",
+          "space suit",
+          "robe",
+          "cloak",
+          "cape",
+          "fur-trimmed coat",
+          "football shirt",
+          "waistcoat and bow tie",
+          "boiler suit",
+          "adult",
+          "small",
+          "square",
+          "thin",
+          "narrow",
+          "thick",
+          "wide",
+          "tapered",
+          "necklace",
+          "round",
+          "pointed",
+          "oval",
+          "heart",
+          "box",
+          "blush",
+          "freckles",
+          "dimple",
+          "wrinkles",
+          "scar",
+          "mole",
+          "tear",
+          "old",
+          "short",
+          "bushy",
+          "full beard",
+          "chinstrap",
+          "goatee",
+          "long beard",
+          "soul patch",
+          "sideburns",
+          "stubble",
+          "smiling",
+          "closed",
+          "open",
+          "flat",
+          "sad",
+          "surprised",
+          "smirk",
+          "full lips",
+          "grin",
+          "tongue out",
+          "gritted teeth",
+          "half open",
+          "pressed lips",
+          "teeth on lip",
+          "tongue tip",
+          "handlebar",
+          "walrus",
+          "pencil",
+          "chevron",
+          "button",
+          "dot",
+          "half closed",
+          "lashes",
+          "looking down",
+          "looking up",
+          "looking aside",
+          "arched",
+          "angry",
+          "sunglasses",
+          "cat-eye",
+          "monocle",
+          "visor",
+          "fringe",
+          "side parting",
+          "spikes",
+          "bald on top",
+          "receding",
+          "centre parting",
+          "mohawk",
+          "tuft",
+          "stud",
+          "hoop",
+          "drop",
+          "pearl",
+          "star",
+          "cap",
+          "beanie",
+          "top hat",
+          "crown",
+          "cowboy hat",
+          "party hat",
+          "bow",
+          "antenna",
+          "sun hat",
+          "chef hat",
+          "hard hat",
+          "fire helmet",
+          "police cap",
+          "pilot cap",
+          "nurse cap",
+          "sailor cap",
+          "military helmet",
+          "space helmet",
+          "knight helmet",
+          "pirate hat",
+          "witch hat",
+          "wizard hat",
+          "santa hat",
+          "beret",
+          "fedora",
+          "swimming cap",
+          "wig",
+          "headscarf",
+          "flower wreath"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "avatar",
+      "type": "part",
+      "key": "part.variant",
+      "descriptor": {
+        "concept": "variant",
+        "head": "class",
+        "src": "actual avatar native capability parameters",
+        "values": [
+          "Santa hat",
+          "afro",
+          "angry",
+          "antenna",
+          "apron",
+          "arched",
+          "bald on top",
+          "beanie",
+          "beret",
+          "big smile",
+          "blush",
+          "bob",
+          "boiler suit",
+          "bolt",
+          "bow",
+          "bow tie",
+          "box",
+          "bun",
+          "bushy",
+          "button",
+          "cap",
+          "cape",
+          "cat-eye",
+          "centre parting",
+          "chef hat",
+          "chef jacket",
+          "chevron",
+          "chinstrap",
+          "cloak",
+          "closed",
+          "cowboy hat",
+          "crown",
+          "curly",
+          "dimple",
+          "dot",
+          "downcast",
+          "drop",
+          "fedora",
+          "fire helmet",
+          "fire jacket",
+          "flower wreath",
+          "football shirt",
+          "freckles",
+          "fringe",
+          "frown",
+          "full",
+          "full lips",
+          "fur coat",
+          "goatee",
+          "grille",
+          "grin",
+          "gritted",
+          "half open",
+          "handlebar",
+          "happy",
+          "hard hat",
+          "headscarf",
+          "heart",
+          "hoodie",
+          "hoop",
+          "judge wig",
+          "knight helmet",
+          "lab coat",
+          "large",
+          "large hoop",
+          "lashes",
+          "lip bite",
+          "long",
+          "long curly",
+          "long sides",
+          "long straight",
+          "long wavy",
+          "looking in",
+          "looking out",
+          "looking up",
+          "medium",
+          "metal plate",
+          "military helmet",
+          "mohawk",
+          "mole",
+          "monocle",
+          "narrow",
+          "necklace",
+          "neutral",
+          "nurse cap",
+          "open",
+          "oval",
+          "overalls",
+          "party hat",
+          "pearl",
+          "pencil",
+          "pigtails",
+          "pilot cap",
+          "pipe",
+          "pirate hat",
+          "pointed",
+          "police cap",
+          "ponytail",
+          "pressed",
+          "raised",
+          "receding",
+          "robe",
+          "round",
+          "round blush",
+          "sad",
+          "safety vest",
+          "sailor cap",
+          "sailor collar",
+          "scar",
+          "scrubs",
+          "shirt",
+          "short",
+          "side parting",
+          "sideburns",
+          "sleepy",
+          "small",
+          "small round",
+          "smile",
+          "smirk",
+          "soul patch",
+          "space helmet",
+          "space suit",
+          "spikes",
+          "square",
+          "star",
+          "straight",
+          "stubble",
+          "stud",
+          "suit",
+          "sun hat",
+          "sunglasses",
+          "surprised",
+          "swimming cap",
+          "t-shirt",
+          "talking",
+          "tank top",
+          "tapered",
+          "tear",
+          "thick",
+          "thick arched",
+          "thin",
+          "tongue out",
+          "tongue tip",
+          "top hat",
+          "tuft",
+          "uniform",
+          "v-neck",
+          "visor",
+          "walrus",
+          "wavy",
+          "wide",
+          "witch hat",
+          "wizard hat",
+          "wrinkles"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    }
+  ],
+  "sources": [
+    {
+      "path": "docs/worlds/k.attributes/schema.sop",
+      "sha256": "bd616a933829073771df6229b91f437dbefe0fdd5408dcc2396a51b17f18cf6d"
+    },
+    {
+      "path": "docs/worlds/k.attributes/shards/attributes.sop",
+      "sha256": "997c44ffaa9bb05d24bd98e349430780b872c9f4ed9a91ec9e929a316b6197a5"
+    },
+    {
+      "path": "docs/worlds/k.spatial2d/schema.sop",
+      "sha256": "2717173818f598c8f6bd4c703843f7bff5723563839dbb56bf00221e8faa6798"
+    },
+    {
+      "path": "docs/worlds/w.calendar/schema.sop",
+      "sha256": "c9849573da85da02cd2c74eed6fa192344e1508aa05700b57251e8140db6a4e4"
+    },
+    {
+      "path": "docs/worlds/w.chart/schema.sop",
+      "sha256": "7a3e8e921d5d5abdbc5e6d7468fcf46c3317d61f4215525c2279d2205ef27111"
+    },
+    {
+      "path": "docs/worlds/w.diagram/schema.sop",
+      "sha256": "84b4f1587fe5de1593579dfc4e3f81262ac446e87594fa4ae205a432e1254fec"
+    },
+    {
+      "path": "docs/worlds/w.document/schema.sop",
+      "sha256": "4532f68d9096b6db1b2396bd0ea5a9600dc96ab76b5f9e4110f3f4319e582f77"
+    },
+    {
+      "path": "docs/worlds/w.drawing/schema.sop",
+      "sha256": "843a04c73c4f480379e1261aa9f0e5424a84aa86940756d240bc47c399c0e16b"
+    },
+    {
+      "path": "docs/worlds/w.face/schema.sop",
+      "sha256": "743cdc05dd6e6186762667af6851676a7e87d4afcb30ccd3c534ae8c70c26c7b"
+    },
+    {
+      "path": "docs/worlds/w.person/schema.sop",
+      "sha256": "173aec25063dc3a6f31b934e5c6bab97c81595cf034e6d45d0b0ced6654b1c5e"
+    },
+    {
+      "path": "docs/worlds/w.picture/schema.sop",
+      "sha256": "d7c6978141d9b1261130af60395efd0cad83a902cee6216ba5e35f648f7f4f21"
+    },
+    {
+      "path": "docs/worlds/w.room/schema.sop",
+      "sha256": "eebff2f6d36c3aec724184282704aa05e42ede66b4c4014ea7e7226442314ca9"
+    }
+  ],
+  "coverage": {
+    "families": 24,
+    "alignedFamilies": 12,
+    "properties": 229,
+    "alignedProperties": 20
+  }
+}

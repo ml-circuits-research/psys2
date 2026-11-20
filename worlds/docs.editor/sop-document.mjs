@@ -1,0 +1,12 @@
+// SPDX-License-Identifier: AGPL-3.0-only
+// The Documents tab: the generic SOP area adapter over worlds/docs.editor/area.sop. Its state is a w.document
+// instance (a document, its blocks in order, list items, table cells and marks); the area's rules compile every
+// native Documents command and set the page that is drawn and observed.
+import NATIVE_INTERFACE from './native-interface-source.mjs';
+import AREA_SOURCES from './area-sources.mjs';
+import {BUNDLED_AREAS} from '../../src/knowledge/bundled-areas.mjs';
+import {sopAreaAdapter} from '../sop-area-adapter.mjs';
+
+const area = sopAreaAdapter({ world: 'docs.editor', instance: 'w.document', interfaceSource: NATIVE_INTERFACE, sources: AREA_SOURCES, offline: BUNDLED_AREAS['docs.editor'] });
+export const emptyDocumentArea = area.empty, canonicalDocumentArea = area.canonical, createDocumentArea = area.create,
+  projectDocumentArea = area.project, documentAreaStateWorld = area.stateWorld;

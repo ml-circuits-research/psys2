@@ -12,3 +12,7 @@
 @w.lang.ro.word.w.document.paragraph core.word text="paragraf" means=w.document.paragraph core.source="hand-core 1"
 @w.lang.ro.word.w.document.slide core.word text="diapozitiv" means=w.document.slide core.source="hand-core 1"
 @w.lang.ro.word.w.document.sentence core.word text="propoziție" means=w.document.sentence core.source="hand-core 1"
+@w.lang.ro.word.w.document.block core.word text="parte" means=w.document.block core.source="hand-core 1"
+@w.lang.ro.word.w.document.item core.word text="element" means=w.document.item core.source="hand-core 1"
+@w.lang.ro.word.w.document.cell core.word text="loc" means=w.document.cell core.source="hand-core 1"
+@w.lang.ro.word.w.document.mark core.word text="marcaj" means=w.document.mark core.source="hand-core 1"

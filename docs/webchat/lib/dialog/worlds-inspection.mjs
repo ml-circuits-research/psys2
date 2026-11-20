@@ -3,7 +3,7 @@ import {parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=22a3f6e48e'
 import {inspectReaderAdmissionPolicy} from './reader-policy.mjs?v=7e4dd78e81';
 import {inspectReaderContextPolicy} from './reader-context-policy.mjs?v=95bbe7ef31';
 import {describeWorldsNodes} from './worlds-node-metadata.mjs?v=11b6d9d2f3';
-import {CATALOG_WORLD_PURPOSES} from './catalog-world-purpose.mjs?v=81f01a0575';
+import {CATALOG_WORLD_PURPOSES} from './catalog-world-purpose.mjs?v=e85a0d58f7';
 
 export function inspectSchemaSource(source){
  if(typeof source!=='string')return {status:'source not loaded',legends:[],modules:[],types:[],slots:[],tools:[],parameters:[],language:[],documentation:[],languageStatus:'Source has not been read; no language binding is asserted.'};

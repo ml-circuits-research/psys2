@@ -63,12 +63,15 @@ export async function loadActualReplayReader(spec,{factory}={}){
   finally{current=null;busy=false;}
  },async run(session,text,{area,host,previous=null}){
   if(busy)throw Error('concurrent-replay-reader');busy=true;diagnostics.length=0;diagnosticBytes=0;
-  const engine=session.engine??{},old=engine.requestReader,oldAdmission=engine.requestReaderAdmission;session.engine=engine;let proposal=null,error=null;
+  const engine=session.engine??{},old=engine.requestReader,oldAdmission=engine.requestReaderAdmission;session.engine=engine;let error=null;const proposals=[];
   delete engine.requestReaderAdmission;
-  engine.requestReader={...assembled.provider,async propose(sourceSop){proposal=await assembled.provider.propose(sourceSop);return proposal;}};
+  // Routing reads through propose or, for a cut into several requests, proposeRequests: record both.
+  engine.requestReader={...assembled.provider,async propose(sourceSop){const p=await assembled.provider.propose(sourceSop);proposals.push(p);return p;},
+   ...(typeof assembled.provider.proposeRequests==='function'?{async *proposeRequests(sourceSop){for await(const p of assembled.provider.proposeRequests(sourceSop)){proposals.push(p);yield p;}}}:{})};
   try{try{observation=host?.observe()??null;current=observedReaderContext(area,observation,previous);}catch(e){error=String(e.message);current=null;}
    const reply=await routeNewEngine(session,text,{language:'en'});
-   const routing=reply.trace?.readerRouting,operational=routing?.admission?.proposalEligible?{...proposal,candidates:routing.admission.alternatives,coverage:routing.model.coverage,failures:[],interpretation:routing.interpretation??proposal.interpretation}:proposal;
+   const proposal=proposals.length<2?proposals[0]??null:{...proposals[0],candidates:proposals.flatMap(p=>p.candidates??[]),failures:proposals.flatMap(p=>p.failures??[]),parts:proposals};
+   const routing=reply.trace?.readerRouting,operational=routing?.admission?.proposalEligible?{...proposal,candidates:routing.admission.alternatives,coverage:routing.model.coverage,failures:[],interpretation:routing.interpretation??proposal?.interpretation}:proposal;
    return {reply,measurement:{proposal:operational,modelProposal:proposal,diagnostics:[...diagnostics],context:current,observation,contextError:error,semanticCorrectness:null,admissionInstalled:false}};
   }finally{if(old===undefined)delete engine.requestReader;else engine.requestReader=old;if(oldAdmission!==undefined)engine.requestReaderAdmission=oldAdmission;current=null;observation=null;busy=false;}
  }};

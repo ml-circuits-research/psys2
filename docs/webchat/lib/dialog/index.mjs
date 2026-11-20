@@ -12,56 +12,56 @@ import {isAuthoredRequest} from './authored-request-tool.mjs?v=687fe97da8';
  * Without it all input is treated as English.
  */
 import { retiredArea, unavailableAreaReply } from './application-areas.mjs?v=5930d8fe63';
-import { composeReply, sayOf } from './composed-reply.mjs?v=4c71a693a5';
-import { reviewForeign } from './foreign-reading.mjs?v=8008974a7c';
-import { installTextGen } from './textgen.mjs?v=e76cf9cbba';
-import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=bf6db4d4ec';
-import { loadWorlds, tabOfWorld } from '../worlds/index.mjs?v=ac36764447';
-import { validateWorldSet } from '../worlds/validate.mjs?v=d65dbd4637';
-import { defaultRouter, namedWorlds, namingTables, setWorldChooser } from '../formalizer/routing.mjs?v=bf6db4d4ec';
-import { isNumberWord, ordinalWordValue } from '../formalizer/rules/numbers.mjs?v=998b2c2452';
-import { createInterpreter } from '../interpreter/index.mjs?v=9bc180fca4';
-import { createReasoner } from '../reasoner/index.mjs?v=97d331a766';
-import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=2720573649';
-import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=fc825a03e5';
+import { composeReply, sayOf } from './composed-reply.mjs?v=99dbd9b36b';
+import { reviewForeign } from './foreign-reading.mjs?v=0bfcb3e49f';
+import { installTextGen } from './textgen.mjs?v=7af838318d';
+import { precompile as precompileRules, registerClauseStarters } from '../formalizer/rules/index.mjs?v=418c95d61e';
+import { loadWorlds, tabOfWorld } from '../worlds/index.mjs?v=3f8f5c3a76';
+import { validateWorldSet } from '../worlds/validate.mjs?v=f1d487973f';
+import { defaultRouter, namedWorlds, namingTables, setWorldChooser } from '../formalizer/routing.mjs?v=418c95d61e';
+import { isNumberWord, ordinalWordValue } from '../formalizer/rules/numbers.mjs?v=227877dd6e';
+import { createInterpreter } from '../interpreter/index.mjs?v=ef2d4a9e3a';
+import { createReasoner } from '../reasoner/index.mjs?v=ac26310b19';
+import { createRulesFormalizer, createEncoderFormalizer } from '../formalizer/strategy.mjs?v=43983b6fe3';
+import { DEFAULT_NX_STRATEGY, normalizeNxStrategy } from '../formalizer/nx.mjs?v=e9eb8c1c0c';
 import { serialize, makeWire, atom, str } from '../soplang/index.mjs?v=c57881f705';
-import { splitSentences } from '../formalizer/rules/normalize.mjs?v=c9e9aeab45';
-import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=61771a4627';
-import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=e7d917ae1c';
+import { splitSentences } from '../formalizer/rules/normalize.mjs?v=1ad3b17454';
+import { nameCandidates, nameIndex } from '../formalizer/names.mjs?v=ddea022a56';
+import { cleanVoice, garbleCandidates, weakSoundAlikes } from '../formalizer/voice.mjs?v=f828bf8de6';
 import { gatherCandidates, chooseCandidate, englishTest, nearAny } from '../translate/candidates.mjs?v=a7f7eb0703';
 import { machineReads } from '../translate/reading-policy.mjs?v=96bd6cc0e4';   // reviewer 02:30 (Q50): the machine translator does not read the request in a language with a rules translator (data, reversible)
 import { worldThingNames, sessionNames } from '../translate/keep-list.mjs?v=c0baa0b9d0';
-import { langRoNow } from '../translate/frames-ro.mjs?v=770c0e0795';
+import { langRoNow } from '../translate/frames-ro.mjs?v=27ce8e7ac4';
 import { repairInContext } from '../translate/source-repair.mjs?v=db5b883c67';
-import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=bf6db4d4ec';
-import { lexIndex } from '../worlds/lexicon.mjs?v=d42dbfae89';
+import { spellCorrect, spellAlternates, spellCandidates, protectedWordsOf, worldVocabulary, spellVocabulary, restrictedSet, ignorable, isKnownWord, sameWordForm, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=418c95d61e';
+import { lexIndex } from '../worlds/lexicon.mjs?v=0cde64ef80';
 import { perf } from '../formalizer/perf.mjs?v=b90d818bed';
 import { guard, TurnAborted } from '../formalizer/guard.mjs?v=551ea15752';
 import { createBudget, installBudget, releaseBudget, isBudgetExceeded, budget } from './budget.mjs?v=00bce6e369';
-import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs?v=f7262c6e6f';
-import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=d2c14adffc';
-import { checkValues } from './value-check.mjs?v=47bf1f2c0a';
-import { attachValues } from '../knowledge/values.mjs?v=0f40a61dde';
-import { attachOpenWords, ready as openWordsReady } from '../knowledge/open-words.mjs?v=590eb44e43';
-import { attachArrangement } from '../knowledge/arrangement.mjs?v=7185f520ca';
-import { Discourse } from './discourse.mjs?v=2aaf920920';
-import { Dialogue } from './dialogue.mjs?v=c6a6b557d3';
+import { findPartialWindow, changesIntoQuestion } from '../formalizer/partial.mjs?v=7252180cf1';
+import { looseCandidates, BEST_EFFORT_POLICY } from '../formalizer/best-effort.mjs?v=181f0857db';
+import { checkValues } from './value-check.mjs?v=aceb25d00d';
+import { attachValues } from '../knowledge/values.mjs?v=1006259d41';
+import { attachOpenWords, ready as openWordsReady } from '../knowledge/open-words.mjs?v=31bd9818d8';
+import { attachArrangement } from '../knowledge/arrangement.mjs?v=134993a320';
+import { Discourse } from './discourse.mjs?v=eab538d504';
+import { Dialogue } from './dialogue.mjs?v=7c5d4e6ea0';
 import { turnSteps, withDoor } from './steps.mjs?v=1bf5f81c99';
-import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=5a49a6df41';
-import { knowledgeAnswer, knowledgeFallback, preloadThings, prefetchNext, knowledgeOf, within } from './knowledge-lookup.mjs?v=4ecd8f00ff';
-import { personTurn } from './person.mjs?v=3d7e9ae901';
-import { proposeByTypes } from './typed-reader.mjs?v=75f84c720a';
-import { withVariants, anyVoiceOn } from './variants.mjs?v=93cbd3f270';
-import { isIncomplete, completeMode } from '../formalizer/completeness.mjs?v=bf6db4d4ec';
-import { createTypedWorlds } from '../formalizer/typed-world.mjs?v=bf6db4d4ec';
-import { repairFromScene } from './scene-referents.mjs?v=9f0d7182e7';
-import { loadMetaWorlds } from './meta-worlds.mjs?v=55ce02b2e0';
-import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=3161b87f80';
-import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=fe121c6e5a';
+import { createSessionAstra, mirrorFrames } from '../astra/session.mjs?v=001e1dce2b';
+import { knowledgeAnswer, knowledgeFallback, preloadThings, prefetchNext, knowledgeOf, within } from './knowledge-lookup.mjs?v=f54b26af9c';
+import { personTurn } from './person.mjs?v=1d5928bf58';
+import { proposeByTypes } from './typed-reader.mjs?v=2925cf8931';
+import { withVariants, anyVoiceOn } from './variants.mjs?v=38dd11426f';
+import { isIncomplete, completeMode } from '../formalizer/completeness.mjs?v=418c95d61e';
+import { createTypedWorlds } from '../formalizer/typed-world.mjs?v=418c95d61e';
+import { repairFromScene } from './scene-referents.mjs?v=44c7b3bbbd';
+import { loadMetaWorlds } from './meta-worlds.mjs?v=afd79ca3e6';
+import { createSymbolicRouter, normalizeRouting, isSymbolic } from './symbolic-router.mjs?v=9a580eaa62';
+import { reviewSegments, normalizeWorldAware, baseMode, makePicker, reviewBestEffort, explainUnparsed } from './world-aware.mjs?v=fb68ffc513';
 import { recognize } from '../astra/moves.mjs?v=69784e24c4';
 import { panel } from '../astra/where.mjs?v=09b4059350';
 import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=3e29fd91c2';
-import { correctMessage, splitAnswerList } from '../formalizer/rules/expand.mjs?v=4840cc18fc';
+import { correctMessage, splitAnswerList } from '../formalizer/rules/expand.mjs?v=08c4fbfd19';
 
 export { runWorldTests } from './test-runner.mjs?v=635e001b3e';
 
@@ -401,10 +401,10 @@ import { LIMITS } from './time-limits.mjs?v=3dc818f0e6';
 import { languageCommand } from '../translate/language-command.mjs?v=af45c6bf2e';
 import { withSubject, polishReply } from '../translate/register.mjs?v=45588e0a13';
 import { BARE_DONE, NOTHING_CHANGED, contentChanged } from './honest-done.mjs?v=80e9d07ff4';
-import { intentStep, weakReading, cutWorld } from './intent.mjs?v=d905a34321';
+import { intentStep, weakReading, cutWorld } from './intent.mjs?v=6ad5d37d66';
 import { knownEnglishWord } from '../translate/en-ro.mjs?v=cbd133aecd';
 import { proposeReading, negationWords } from './proposer.mjs?v=b3c21ed7d7';
-import { requestLanguage, liveWorld, readTurn, replyOf, stateWorld, worldWholes, typeParents, definiteKind, saysAnything, actOperation, worldWholeOperation, clausesOf, boundTools, goalOf, plainRequest, declarationsOf, isQuestion, madeIn, withSubkindsNegated, unitOfWhole, doorWholes, strongConstraint, madeAgainstSaid } from './request.mjs?v=1882e9e117';
+import { requestLanguage, liveWorld, readTurn, replyOf, stateWorld, worldWholes, typeParents, definiteKind, saysAnything, actOperation, worldWholeOperation, clausesOf, boundTools, goalOf, plainRequest, declarationsOf, isQuestion, madeIn, withSubkindsNegated, unitOfWhole, doorWholes, strongConstraint, madeAgainstSaid } from './request.mjs?v=7d79cd1f4f';
 /** A settled dry-run answer is reused for the same text and session state for this long (ms). */
 export const DRY_CACHE_MS = 5000;
 const stripDetail = (r) => { if (!r || !('detail' in r)) return r; const { detail: _d, ...rest } = r; return rest; };
@@ -1653,7 +1653,7 @@ export class DialogSession {
         }
       }
     }
-    const reply = await (await import('./reader-routing.mjs?v=1e2b851e8b')).routeNewEngine(this, english, { ...opts, language: 'en' });
+    const reply = await (await import('./reader-routing.mjs?v=de4c89ebf6')).routeNewEngine(this, english, { ...opts, language: 'en' });
     reply.trace = { ...reply.trace, english, ...(translation ? { translation } : {}) };
     if (language !== 'en') {
       try {

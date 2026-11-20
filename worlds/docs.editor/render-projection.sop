@@ -1,0 +1,865 @@
+# docs.editor render projection (authored). The Documents tab draws its w.document instance as a page: the title,
+# then the blocks in their order (headings by level, paragraphs, quotes, lists with their items, tables with their
+# cells), each text wrapped into lines and each line cut where a mark starts or ends, so that a mark is drawn as a
+# style (bold, italic, a link's colour and underline, strike, code, highlight). The page is set in a monospaced
+# face: a character is 0.6 of the font size wide, so a mark's place on a line is exact. Nothing here is decided in
+# JavaScript: worlds/sop-primitives.mjs draws the ui.doc.draw facts as they are.
+#
+# Structure shared with act-rules.sop is derived here first: the order of the blocks, the sections (headings of
+# level 1 or 2) and what they hold, the text containers (a block's own text, a list item, a table cell) with the
+# ids the native interface uses for them, and the marks of each container. Lengths of texts and common prefixes are
+# found digit by digit with regular expressions (sopworld has no text-length function): see "Lengths" below.
+@doc.draw.type core.type of=ui.doc.draw
+@doc.fill.type core.type of=ui.doc.fill
+@doc.point.type core.type of=ui.doc.point
+@doc.orient.type core.type of=ui.doc.orient
+@doc.digit.type core.type of=ui.doc.digit
+@doc.place.type core.type of=ui.doc.place
+@doc.lenof.type core.type of=ui.doc.lenof
+@doc.len.type core.type of=ui.doc.len
+@doc.index.type core.type of=ui.doc.index
+@doc.level.type core.type of=ui.doc.level
+@doc.head.type core.type of=ui.doc.head
+@doc.before.type core.type of=ui.doc.before
+@doc.group.type core.type of=ui.doc.group
+@doc.inside.type core.type of=ui.doc.inside
+@doc.chapter.type core.type of=ui.doc.chapter
+@doc.parent.type core.type of=ui.doc.parent
+@doc.textual.type core.type of=ui.doc.textual
+@doc.box.type core.type of=ui.doc.box
+@doc.mk.type core.type of=ui.doc.mk
+@doc.hasmarks.type core.type of=ui.doc.hasmarks
+@doc.font.type core.type of=ui.doc.font
+@doc.bkey.type core.type of=ui.doc.bkey
+@doc.cols.type core.type of=ui.doc.cols
+@doc.style.type core.type of=ui.doc.style
+@doc.wrap.type core.type of=ui.doc.wrap
+@doc.lrest.type core.type of=ui.doc.lrest
+@doc.line.type core.type of=ui.doc.line
+@doc.lines.type core.type of=ui.doc.lines
+@doc.lcount.type core.type of=ui.doc.lcount
+@doc.loff.type core.type of=ui.doc.loff
+@doc.llen.type core.type of=ui.doc.llen
+@doc.word.type core.type of=ui.doc.word
+@doc.words.type core.type of=ui.doc.words
+@doc.bh.type core.type of=ui.doc.bh
+@doc.ih.type core.type of=ui.doc.ih
+@doc.ipair.type core.type of=ui.doc.ipair
+@doc.itop.type core.type of=ui.doc.itop
+@doc.rowh.type core.type of=ui.doc.rowh
+@doc.rpair.type core.type of=ui.doc.rpair
+@doc.rtop.type core.type of=ui.doc.rtop
+@doc.btop.type core.type of=ui.doc.btop
+@doc.top.type core.type of=ui.doc.top
+@doc.titleh.type core.type of=ui.doc.titleh
+@doc.boxtop.type core.type of=ui.doc.boxtop
+@doc.cut.type core.type of=ui.doc.cut
+@doc.cpair.type core.type of=ui.doc.cpair
+@doc.seg.type core.type of=ui.doc.seg
+@doc.segtext.type core.type of=ui.doc.segtext
+@doc.segmark.type core.type of=ui.doc.segmark
+@doc.segbold.type core.type of=ui.doc.segbold
+@doc.segitalic.type core.type of=ui.doc.segitalic
+@doc.segink.type core.type of=ui.doc.segink
+@doc.segx.type core.type of=ui.doc.segx
+@doc.last.type core.type of=ui.doc.last
+@doc.extent.type core.type of=ui.doc.extent
+@doc.bh.list.type core.type of=ui.doc.bh.list
+@doc.rowh.cell.type core.type of=ui.doc.rowh.cell
+@doc.bh.table.type core.type of=ui.doc.bh.table
+@doc.extent.sum.type core.type of=ui.doc.extent.sum
+@doc.done.type core.type of=ui.doc.done
+@doc.inner.type core.type of=ui.doc.inner
+
+# ---- Lengths: the length of a text, digit by digit ----
+# ui.doc.lenof key=K text=T top=P asks for the length of T (up to ten times P minus one); ui.doc.len key=K n=N says
+# it. Each stage (one per place: ten thousands down to units, each with its own facts, as an aggregate may not
+# feed a recursion) keeps the largest digit d for which the text still has base + d*place characters.
+@digit.0 ui.doc.digit d=0
+@digit.1 ui.doc.digit d=1
+@digit.2 ui.doc.digit d=2
+@digit.3 ui.doc.digit d=3
+@digit.4 ui.doc.digit d=4
+@digit.5 ui.doc.digit d=5
+@digit.6 ui.doc.digit d=6
+@digit.7 ui.doc.digit d=7
+@digit.8 ui.doc.digit d=8
+@digit.9 ui.doc.digit d=9
+@place.10000 ui.doc.place p=10000 next=1000
+@place.1000 ui.doc.place p=1000 next=100
+@place.100 ui.doc.place p=100 next=10
+@place.10 ui.doc.place p=10 next=1
+@place.1 ui.doc.place p=1 next=0
+@doc.ls10000.type core.type of=ui.doc.ls10000
+@doc.lk10000.type core.type of=ui.doc.lk10000
+@doc.lb10000.type core.type of=ui.doc.lb10000
+@ln10000.s.i ui.doc.lenof key=?k text=?t top=10000
+@ln10000.s.o ui.doc.ls10000 key=?k text=?t base=0
+@len.start.10000 core.rule when=$ln10000.s.i then=$ln10000.s.o
+@ln10000.c.s ui.doc.ls10000 key=?k text=?t base=?b
+@ln10000.c.d ui.doc.digit d=?d
+@ln10000.c.m core.calc out=?m fn=mul args=?d args=10000
+@ln10000.c.c core.calc out=?c fn=add args=?b args=?m
+@ln10000.c.pat core.calc out=?pat fn=concat args="^[\\s\\S]{" args=?c args="}"
+@ln10000.c.ok core.check fn=matches args=?t args=?pat
+@ln10000.c.o ui.doc.lk10000 key=?k d=?d
+@len.candidate.10000 core.rule when=$ln10000.c.s when=$ln10000.c.d with=$ln10000.c.m with=$ln10000.c.c with=$ln10000.c.pat if=$ln10000.c.ok then=$ln10000.c.o
+@ln10000.b.i ui.doc.lk10000 key=?k d=?d
+@ln10000.b.o ui.doc.lb10000 key=?k d=?m
+@len.best.10000 core.aggregate over=$ln10000.b.i by=?k max=?m args=?d then=$ln10000.b.o
+@ln10000.n.s ui.doc.ls10000 key=?k text=?t base=?b
+@ln10000.n.b ui.doc.lb10000 key=?k d=?d
+@ln10000.n.m core.calc out=?m fn=mul args=?d args=10000
+@ln10000.n.c core.calc out=?c fn=add args=?b args=?m
+@ln10000.n.o ui.doc.ls1000 key=?k text=?t base=?c
+@len.next.10000 core.rule when=$ln10000.n.s when=$ln10000.n.b with=$ln10000.n.m with=$ln10000.n.c then=$ln10000.n.o
+@doc.ls1000.type core.type of=ui.doc.ls1000
+@doc.lk1000.type core.type of=ui.doc.lk1000
+@doc.lb1000.type core.type of=ui.doc.lb1000
+@ln1000.s.i ui.doc.lenof key=?k text=?t top=1000
+@ln1000.s.o ui.doc.ls1000 key=?k text=?t base=0
+@len.start.1000 core.rule when=$ln1000.s.i then=$ln1000.s.o
+@ln1000.c.s ui.doc.ls1000 key=?k text=?t base=?b
+@ln1000.c.d ui.doc.digit d=?d
+@ln1000.c.m core.calc out=?m fn=mul args=?d args=1000
+@ln1000.c.c core.calc out=?c fn=add args=?b args=?m
+@ln1000.c.pat core.calc out=?pat fn=concat args="^[\\s\\S]{" args=?c args="}"
+@ln1000.c.ok core.check fn=matches args=?t args=?pat
+@ln1000.c.o ui.doc.lk1000 key=?k d=?d
+@len.candidate.1000 core.rule when=$ln1000.c.s when=$ln1000.c.d with=$ln1000.c.m with=$ln1000.c.c with=$ln1000.c.pat if=$ln1000.c.ok then=$ln1000.c.o
+@ln1000.b.i ui.doc.lk1000 key=?k d=?d
+@ln1000.b.o ui.doc.lb1000 key=?k d=?m
+@len.best.1000 core.aggregate over=$ln1000.b.i by=?k max=?m args=?d then=$ln1000.b.o
+@ln1000.n.s ui.doc.ls1000 key=?k text=?t base=?b
+@ln1000.n.b ui.doc.lb1000 key=?k d=?d
+@ln1000.n.m core.calc out=?m fn=mul args=?d args=1000
+@ln1000.n.c core.calc out=?c fn=add args=?b args=?m
+@ln1000.n.o ui.doc.ls100 key=?k text=?t base=?c
+@len.next.1000 core.rule when=$ln1000.n.s when=$ln1000.n.b with=$ln1000.n.m with=$ln1000.n.c then=$ln1000.n.o
+@doc.ls100.type core.type of=ui.doc.ls100
+@doc.lk100.type core.type of=ui.doc.lk100
+@doc.lb100.type core.type of=ui.doc.lb100
+@ln100.s.i ui.doc.lenof key=?k text=?t top=100
+@ln100.s.o ui.doc.ls100 key=?k text=?t base=0
+@len.start.100 core.rule when=$ln100.s.i then=$ln100.s.o
+@ln100.c.s ui.doc.ls100 key=?k text=?t base=?b
+@ln100.c.d ui.doc.digit d=?d
+@ln100.c.m core.calc out=?m fn=mul args=?d args=100
+@ln100.c.c core.calc out=?c fn=add args=?b args=?m
+@ln100.c.pat core.calc out=?pat fn=concat args="^[\\s\\S]{" args=?c args="}"
+@ln100.c.ok core.check fn=matches args=?t args=?pat
+@ln100.c.o ui.doc.lk100 key=?k d=?d
+@len.candidate.100 core.rule when=$ln100.c.s when=$ln100.c.d with=$ln100.c.m with=$ln100.c.c with=$ln100.c.pat if=$ln100.c.ok then=$ln100.c.o
+@ln100.b.i ui.doc.lk100 key=?k d=?d
+@ln100.b.o ui.doc.lb100 key=?k d=?m
+@len.best.100 core.aggregate over=$ln100.b.i by=?k max=?m args=?d then=$ln100.b.o
+@ln100.n.s ui.doc.ls100 key=?k text=?t base=?b
+@ln100.n.b ui.doc.lb100 key=?k d=?d
+@ln100.n.m core.calc out=?m fn=mul args=?d args=100
+@ln100.n.c core.calc out=?c fn=add args=?b args=?m
+@ln100.n.o ui.doc.ls10 key=?k text=?t base=?c
+@len.next.100 core.rule when=$ln100.n.s when=$ln100.n.b with=$ln100.n.m with=$ln100.n.c then=$ln100.n.o
+@doc.ls10.type core.type of=ui.doc.ls10
+@doc.lk10.type core.type of=ui.doc.lk10
+@doc.lb10.type core.type of=ui.doc.lb10
+@ln10.s.i ui.doc.lenof key=?k text=?t top=10
+@ln10.s.o ui.doc.ls10 key=?k text=?t base=0
+@len.start.10 core.rule when=$ln10.s.i then=$ln10.s.o
+@ln10.c.s ui.doc.ls10 key=?k text=?t base=?b
+@ln10.c.d ui.doc.digit d=?d
+@ln10.c.m core.calc out=?m fn=mul args=?d args=10
+@ln10.c.c core.calc out=?c fn=add args=?b args=?m
+@ln10.c.pat core.calc out=?pat fn=concat args="^[\\s\\S]{" args=?c args="}"
+@ln10.c.ok core.check fn=matches args=?t args=?pat
+@ln10.c.o ui.doc.lk10 key=?k d=?d
+@len.candidate.10 core.rule when=$ln10.c.s when=$ln10.c.d with=$ln10.c.m with=$ln10.c.c with=$ln10.c.pat if=$ln10.c.ok then=$ln10.c.o
+@ln10.b.i ui.doc.lk10 key=?k d=?d
+@ln10.b.o ui.doc.lb10 key=?k d=?m
+@len.best.10 core.aggregate over=$ln10.b.i by=?k max=?m args=?d then=$ln10.b.o
+@ln10.n.s ui.doc.ls10 key=?k text=?t base=?b
+@ln10.n.b ui.doc.lb10 key=?k d=?d
+@ln10.n.m core.calc out=?m fn=mul args=?d args=10
+@ln10.n.c core.calc out=?c fn=add args=?b args=?m
+@ln10.n.o ui.doc.ls1 key=?k text=?t base=?c
+@len.next.10 core.rule when=$ln10.n.s when=$ln10.n.b with=$ln10.n.m with=$ln10.n.c then=$ln10.n.o
+@doc.ls1.type core.type of=ui.doc.ls1
+@doc.lk1.type core.type of=ui.doc.lk1
+@doc.lb1.type core.type of=ui.doc.lb1
+@ln1.s.i ui.doc.lenof key=?k text=?t top=1
+@ln1.s.o ui.doc.ls1 key=?k text=?t base=0
+@len.start.1 core.rule when=$ln1.s.i then=$ln1.s.o
+@ln1.c.s ui.doc.ls1 key=?k text=?t base=?b
+@ln1.c.d ui.doc.digit d=?d
+@ln1.c.m core.calc out=?m fn=mul args=?d args=1
+@ln1.c.c core.calc out=?c fn=add args=?b args=?m
+@ln1.c.pat core.calc out=?pat fn=concat args="^[\\s\\S]{" args=?c args="}"
+@ln1.c.ok core.check fn=matches args=?t args=?pat
+@ln1.c.o ui.doc.lk1 key=?k d=?d
+@len.candidate.1 core.rule when=$ln1.c.s when=$ln1.c.d with=$ln1.c.m with=$ln1.c.c with=$ln1.c.pat if=$ln1.c.ok then=$ln1.c.o
+@ln1.b.i ui.doc.lk1 key=?k d=?d
+@ln1.b.o ui.doc.lb1 key=?k d=?m
+@len.best.1 core.aggregate over=$ln1.b.i by=?k max=?m args=?d then=$ln1.b.o
+@ln1.n.s ui.doc.ls1 key=?k text=?t base=?b
+@ln1.n.b ui.doc.lb1 key=?k d=?d
+@ln1.n.m core.calc out=?m fn=mul args=?d args=1
+@ln1.n.c core.calc out=?c fn=add args=?b args=?m
+@ln1.n.o ui.doc.len key=?k n=?c
+@len.done core.rule when=$ln1.n.s when=$ln1.n.b with=$ln1.n.m with=$ln1.n.c then=$ln1.n.o
+
+# ---- Structure ----
+# The order of the blocks: index from 0 (the native interface's index) and rank from 1.
+@ix.b w.document.block code=?c n=?n
+@ix.r core.rank of=$ix.b by=n out=?r
+@ix.i core.calc out=?i fn=sub args=?r args=1
+@ix.o ui.doc.index code=?c index=?i rank=?r n=?n
+@doc.block.index core.rule when=$ix.b with=$ix.r with=$ix.i then=$ix.o
+
+# A heading's level (2 when none was given); a section is a heading of level 1 (a chapter) or 2.
+@lv.b w.document.block code=?c form=heading level=?l
+@lv.o ui.doc.level code=?c level=?l
+@doc.level.given core.rule when=$lv.b then=$lv.o
+@lv.d.b w.document.block code=?c form=heading
+@lv.d.has w.document.block code=?c level=?any
+@lv.d.o ui.doc.level code=?c level=2
+@doc.level.default core.rule when=$lv.d.b not=$lv.d.has then=$lv.d.o
+@hd.b w.document.block code=?c form=heading n=?n
+@hd.l ui.doc.level code=?c level=?l
+@hd.k core.check fn=lte args=?l args=2
+@hd.o ui.doc.head code=?c n=?n level=?l
+@doc.section.head core.rule when=$hd.b when=$hd.l if=$hd.k then=$hd.o
+
+# The section a block falls in: the nearest section heading at or before it (a heading is its own group).
+@bf.h ui.doc.head code=?h n=?hn
+@bf.b w.document.block code=?c n=?n
+@bf.k core.check fn=lte args=?hn args=?n
+@bf.o ui.doc.before block=?c head=?h hn=?hn
+@doc.before core.rule when=$bf.h when=$bf.b if=$bf.k then=$bf.o
+@gr.i ui.doc.before block=?c head=?h hn=?hn
+@gr.o ui.doc.group block=?c head=?best
+@doc.group core.aggregate over=$gr.i by=?c argmax=?best args=?hn pick=?h ties=first then=$gr.o
+# What a reader sees a block inside of: a block other than a heading of a section lies in its group's section; a
+# section of level 2 lies in the chapter (level 1) before it; the rest lie in the document.
+@in.g ui.doc.group block=?c head=?h
+@in.k core.check fn=neq args=?c args=?h
+@in.o ui.doc.inside block=?c section=?h
+@doc.inside core.rule when=$in.g if=$in.k then=$in.o
+@ch.h ui.doc.head code=?c n=?n level=2
+@ch.p ui.doc.head code=?p n=?pn level=1
+@ch.k core.check fn=lt args=?pn args=?n
+@ch.o ui.doc.chapter section=?c chapter=?p pn=?pn
+@doc.chapter.before core.rule when=$ch.h when=$ch.p if=$ch.k then=$ch.o
+@cb.i ui.doc.chapter section=?c chapter=?p pn=?pn
+@cb.o ui.doc.parent block=?c parent=?best
+@doc.chapter.parent core.aggregate over=$cb.i by=?c argmax=?best args=?pn pick=?p ties=first then=$cb.o
+@pa.i ui.doc.inside block=?c section=?h
+@pa.hd ui.doc.head code=?c
+@pa.o ui.doc.parent block=?c parent=?h
+@doc.parent.section core.rule when=$pa.i not=$pa.hd then=$pa.o
+
+# Text containers: a paragraph's, heading's or quote's own text (at "0"), a list item (at its index from 0) and a
+# table cell (at "row:column" from 0), each with the id the native interface gives it: ["<block>","<at>"].
+@tx.b w.document.block code=?c form=?f
+@tx.k core.check fn=matches args=?f args="^(paragraph|heading|quote)$"
+@tx.o ui.doc.textual code=?c
+@doc.textual core.rule when=$tx.b if=$tx.k then=$tx.o
+@bx.b w.document.block code=?c text=?t
+@bx.tx ui.doc.textual code=?c
+@bx.id core.calc out=?id fn=concat args="[\"" args=?c args="\",\"0\"]"
+@bx.o ui.doc.box id=?id block=?c at=0 text=?t thing=$bx.b kind=text
+@doc.box.text core.rule when=$bx.b when=$bx.tx with=$bx.id then=$bx.o
+@bi.b w.document.block code=?c form=list
+@bi.i w.document.item block=$bi.b n=?n text=?t
+@bi.at core.calc out=?at fn=sub args=?n args=1
+@bi.id core.calc out=?id fn=concat args="[\"" args=?c args="\",\"" args=?at args="\"]"
+@bi.o ui.doc.box id=?id block=?c at=?at text=?t thing=$bi.i kind=item
+@doc.box.item core.rule when=$bi.b when=$bi.i with=$bi.at with=$bi.id then=$bi.o
+@bc.b w.document.block code=?c form=table
+@bc.c w.document.cell block=$bc.b row=?r column=?k text=?t
+@bc.r0 core.calc out=?r0 fn=sub args=?r args=1
+@bc.k0 core.calc out=?k0 fn=sub args=?k args=1
+@bc.at core.calc out=?at fn=concat args=?r0 args=":" args=?k0
+@bc.id core.calc out=?id fn=concat args="[\"" args=?c args="\",\"" args=?at args="\"]"
+@bc.o ui.doc.box id=?id block=?c at=?at text=?t thing=$bc.c kind=cell row=?r col=?k
+@doc.box.cell core.rule when=$bc.b when=$bc.c with=$bc.r0 with=$bc.k0 with=$bc.at with=$bc.id then=$bc.o
+
+# The marks of each container.
+@mk.in.i w.document.mark item=?i
+@mk.in.c w.document.mark cell=?k
+@mk.in.oi ui.doc.inner mark=$mk.in.i
+@mk.in.oc ui.doc.inner mark=$mk.in.c
+@doc.mark.inner.item core.rule when=$mk.in.i then=$mk.in.oi
+@doc.mark.inner.cell core.rule when=$mk.in.c then=$mk.in.oc
+@mk.m w.document.mark block=?bw from=?f to=?t form=?fm
+@mk.in ui.doc.inner mark=$mk.m
+@mk.bx ui.doc.box id=?id thing=?bw kind=text
+@mk.o ui.doc.mk mark=$mk.m box=?id from=?f to=?t form=?fm
+@doc.mark.text core.rule when=$mk.m when=$mk.bx not=$mk.in then=$mk.o
+@mi.m w.document.mark item=?iw from=?f to=?t form=?fm
+@mi.bx ui.doc.box id=?id thing=?iw kind=item
+@mi.o ui.doc.mk mark=$mi.m box=?id from=?f to=?t form=?fm
+@doc.mark.item core.rule when=$mi.m when=$mi.bx then=$mi.o
+@mc.m w.document.mark cell=?cw from=?f to=?t form=?fm
+@mc.bx ui.doc.box id=?id thing=?cw kind=cell
+@mc.o ui.doc.mk mark=$mc.m box=?id from=?f to=?t form=?fm
+@doc.mark.cell core.rule when=$mc.m when=$mc.bx then=$mc.o
+@hm.i ui.doc.mk box=?id
+@hm.o ui.doc.hasmarks box=?id
+@doc.hasmarks core.rule when=$hm.i then=$hm.o
+
+# ---- Type: a monospaced face; chars is how many characters fit a line of the 704 wide text column ----
+@font.title ui.doc.font key=title size=30 lh=40 chars=39 indent=0 top=0 bottom=18 weight=bold slant=normal ink="#111827"
+@font.heading1 ui.doc.font key=heading1 size=26 lh=34 chars=45 indent=0 top=18 bottom=8 weight=bold slant=normal ink="#111827"
+@font.heading2 ui.doc.font key=heading2 size=22 lh=30 chars=53 indent=0 top=14 bottom=8 weight=bold slant=normal ink="#111827"
+@font.heading3 ui.doc.font key=heading3 size=19 lh=26 chars=61 indent=0 top=10 bottom=6 weight=bold slant=normal ink="#1f2937"
+@font.heading4 ui.doc.font key=heading4 size=17 lh=24 chars=69 indent=0 top=8 bottom=6 weight=bold slant=normal ink="#1f2937"
+@font.heading5 ui.doc.font key=heading5 size=16 lh=22 chars=73 indent=0 top=8 bottom=6 weight=bold slant=normal ink="#1f2937"
+@font.heading6 ui.doc.font key=heading6 size=15 lh=21 chars=78 indent=0 top=8 bottom=6 weight=bold slant=normal ink="#374151"
+@font.paragraph ui.doc.font key=paragraph size=16 lh=24 chars=73 indent=0 top=0 bottom=12 weight=normal slant=normal ink="#1f2937"
+@font.quote ui.doc.font key=quote size=16 lh=24 chars=70 indent=24 top=4 bottom=16 weight=normal slant=italic ink="#4b5563"
+@font.list ui.doc.font key=list size=16 lh=24 chars=70 indent=32 top=0 bottom=12 weight=normal slant=normal ink="#1f2937"
+@font.table ui.doc.font key=table size=14 lh=20 chars=0 indent=0 top=4 bottom=16 weight=normal slant=normal ink="#1f2937"
+@font.header ui.doc.font key=header size=14 lh=20 chars=0 indent=0 top=4 bottom=16 weight=bold slant=normal ink="#111827"
+
+# The type key of a block: a heading's by its level, the others by their form.
+@bk.b w.document.block code=?c form=?f
+@bk.k core.check fn=matches args=?f args="^(paragraph|quote|list|table)$"
+@bk.o ui.doc.bkey code=?c key=?f
+@doc.bkey.form core.rule when=$bk.b if=$bk.k then=$bk.o
+@bk.h.l ui.doc.level code=?c level=?l
+@bk.h.k core.calc out=?k fn=concat args="heading" args=?l
+@bk.h.o ui.doc.bkey code=?c key=?k
+@doc.bkey.heading core.rule when=$bk.h.l with=$bk.h.k then=$bk.h.o
+
+# The style of each container: size, line height, where its lines start (x), how wide they may be (avail), how many
+# characters fit, its weight, slant and ink, and the block's alignment. A table's columns share its width.
+@cl.b w.document.block code=?c form=table
+@cl.c w.document.cell block=$cl.b column=?k
+@cl.o ui.doc.cols block=?c n=?m
+@doc.columns core.aggregate over=$cl.b over=$cl.c by=?c max=?m args=?k then=$cl.o
+@st.bx ui.doc.box id=?id block=?c kind=text
+@st.k ui.doc.bkey code=?c key=?key
+@st.f ui.doc.font key=?key size=?s lh=?lh chars=?n indent=?ind weight=?w slant=?sl ink=?ink
+@st.b w.document.block code=?c align=?al
+@st.x core.calc out=?x fn=add args=48 args=?ind
+@st.aw core.calc out=?aw fn=sub args=704 args=?ind
+@st.o ui.doc.style box=?id block=?c size=?s lh=?lh chars=?n x=?x avail=?aw weight=?w slant=?sl ink=?ink align=?al
+@doc.style.text core.rule when=$st.bx when=$st.k when=$st.f when=$st.b with=$st.x with=$st.aw then=$st.o
+@si.bx ui.doc.box id=?id block=?c kind=item
+@si.f ui.doc.font key=list size=?s lh=?lh chars=?n indent=?ind weight=?w slant=?sl ink=?ink
+@si.b w.document.block code=?c align=?al
+@si.x core.calc out=?x fn=add args=48 args=?ind
+@si.aw core.calc out=?aw fn=sub args=704 args=?ind
+@si.o ui.doc.style box=?id block=?c size=?s lh=?lh chars=?n x=?x avail=?aw weight=?w slant=?sl ink=?ink align=?al
+@doc.style.item core.rule when=$si.bx when=$si.f when=$si.b with=$si.x with=$si.aw then=$si.o
+@sc.bx ui.doc.box id=?id block=?c kind=cell row=?r col=?k
+@sc.b w.document.block code=?c align=?al
+@sc.cols ui.doc.cols block=?c n=?m
+@sc.head w.document.block code=?c header=true
+@sc.f.t ui.doc.font key=table size=?s lh=?lh weight=?w slant=?sl ink=?ink
+@sc.f.h ui.doc.font key=header size=?s lh=?lh weight=?w slant=?sl ink=?ink
+@sc.one core.check fn=eq args=?r args=1
+@sc.gt1 core.check fn=gt args=?r args=1
+@sc.cw core.calc out=?cw fn=div args=704 args=?m
+@sc.k0 core.calc out=?k0 fn=sub args=?k args=1
+@sc.off core.calc out=?off fn=mul args=?k0 args=?cw
+@sc.x0 core.calc out=?x0 fn=add args=48 args=?off
+@sc.x core.calc out=?x fn=add args=?x0 args=8
+@sc.aw core.calc out=?aw fn=sub args=?cw args=16
+@sc.ch.w core.calc out=?chw fn=mul args=?s args=0.6
+@sc.n core.calc out=?n fn=idiv args=?aw args=?chw
+@sc.o ui.doc.style box=?id block=?c size=?s lh=?lh chars=?n x=?x avail=?aw weight=?w slant=?sl ink=?ink align=?al
+@doc.style.cell core.rule when=$sc.bx when=$sc.b when=$sc.cols when=$sc.f.t if=$sc.gt1 with=$sc.cw with=$sc.k0 with=$sc.off with=$sc.x0 with=$sc.x with=$sc.aw with=$sc.ch.w with=$sc.n then=$sc.o
+@doc.style.cell.plain core.rule when=$sc.bx when=$sc.b when=$sc.cols when=$sc.f.t not=$sc.head if=$sc.one with=$sc.cw with=$sc.k0 with=$sc.off with=$sc.x0 with=$sc.x with=$sc.aw with=$sc.ch.w with=$sc.n then=$sc.o
+@doc.style.cell.header core.rule when=$sc.bx when=$sc.b when=$sc.cols when=$sc.f.h when=$sc.head if=$sc.one with=$sc.cw with=$sc.k0 with=$sc.off with=$sc.x0 with=$sc.x with=$sc.aw with=$sc.ch.w with=$sc.n then=$sc.o
+
+# ---- Lines: each container's text wrapped at spaces into lines of at most `chars` characters ----
+# A line ends before a space (the space is not drawn) or at a new line; a word longer than a line is cut. `sep` is
+# how many characters lie between a line and the next (the space or the new line: 1; a cut word: 0).
+@wr.bx ui.doc.box id=?id text=?t
+@wr.st ui.doc.style box=?id chars=?n
+@wr.o ui.doc.wrap box=?id text=?t chars=?n
+@doc.wrap core.rule when=$wr.bx when=$wr.st then=$wr.o
+@wr.s.i ui.doc.wrap box=?id text=?t
+@wr.s.o ui.doc.lrest box=?id k=0 rest=?t
+@doc.wrap.start core.rule when=$wr.s.i then=$wr.s.o
+@wr.r ui.doc.lrest box=?id k=?k rest=?r
+@wr.w ui.doc.wrap box=?id chars=?n
+@wr.ne core.check fn=neq args=?r args=""
+@wr.k1 core.calc out=?k1 fn=add args=?k args=1
+@wr.p.pat core.calc out=?pat fn=concat args="^([^\\n]{0," args=?n args="})(?:\\s|$)([\\s\\S]*)$"
+@wr.p.line core.calc out=?line fn=matches args=?r args=?pat args=1
+@wr.p.rest core.calc out=?rest fn=matches args=?r args=?pat args=2
+@wr.p.ol ui.doc.line box=?id k=?k1 text=?line sep=1
+@wr.p.or ui.doc.lrest box=?id k=?k1 rest=?rest
+@doc.wrap.line core.rule when=$wr.r when=$wr.w if=$wr.ne with=$wr.k1 with=$wr.p.pat with=$wr.p.line with=$wr.p.rest then=$wr.p.ol then=$wr.p.or
+@wr.c.n1 core.calc out=?n1 fn=add args=?n args=1
+@wr.c.long core.calc out=?long fn=concat args="^\\S{" args=?n1 args="}"
+@wr.c.is core.check fn=matches args=?r args=?long
+@wr.c.pat core.calc out=?pat fn=concat args="^([\\s\\S]{" args=?n args="})([\\s\\S]*)$"
+@wr.c.line core.calc out=?line fn=matches args=?r args=?pat args=1
+@wr.c.rest core.calc out=?rest fn=matches args=?r args=?pat args=2
+@wr.c.ol ui.doc.line box=?id k=?k1 text=?line sep=0
+@wr.c.or ui.doc.lrest box=?id k=?k1 rest=?rest
+@doc.wrap.cut core.rule when=$wr.r when=$wr.w if=$wr.ne with=$wr.k1 with=$wr.c.n1 with=$wr.c.long if=$wr.c.is with=$wr.c.pat with=$wr.c.line with=$wr.c.rest then=$wr.c.ol then=$wr.c.or
+
+# How many lines a container takes: at least one (an empty paragraph keeps its place).
+@lc.l ui.doc.line box=?id k=?k
+@lc.o ui.doc.lcount box=?id n=?m
+@doc.line.count core.aggregate over=$lc.l by=?id max=?m args=?k then=$lc.o
+@ls.c ui.doc.lcount box=?id n=?n
+@ls.o ui.doc.lines box=?id n=?n
+@doc.lines core.rule when=$ls.c then=$ls.o
+@ls.e.b ui.doc.box id=?id
+@ls.e.c ui.doc.lcount box=?id
+@ls.e.o ui.doc.lines box=?id n=1
+@doc.lines.empty core.rule when=$ls.e.b not=$ls.e.c then=$ls.e.o
+@la.l ui.doc.lcount box=?id n=?n
+@la.o ui.doc.last box=?id k=?n
+@doc.line.last core.rule when=$la.l then=$la.o
+
+# Each line's length (up to 999) and where it starts in its container's text: where the line before it starts, its
+# length and the separator after it.
+@ll.l ui.doc.line box=?id k=?k text=?t
+@ll.key core.calc out=?key fn=concat args=?id args="#" args=?k
+@ll.o ui.doc.lenof key=?key text=?t top=100
+@doc.line.len.ask core.rule when=$ll.l with=$ll.key then=$ll.o
+@ll.r.l ui.doc.line box=?id k=?k sep=?sep
+@ll.r.key core.calc out=?key fn=concat args=?id args="#" args=?k
+@ll.r.n ui.doc.len key=?key n=?n
+@ll.r.o ui.doc.llen box=?id k=?k n=?n sep=?sep
+@doc.line.len core.rule when=$ll.r.l with=$ll.r.key when=$ll.r.n then=$ll.r.o
+@lo.n.o ui.doc.loff box=?id k=?k o=?o
+@lo.n.l ui.doc.llen box=?id k=?k n=?n sep=?sep
+@lo.n.k1 core.calc out=?k1 fn=add args=?k args=1
+@lo.n.a core.calc out=?a fn=add args=?o args=?n
+@lo.n.b core.calc out=?b fn=add args=?a args=?sep
+@lo.n.next ui.doc.line box=?id k=?k1
+@lo.n.out ui.doc.loff box=?id k=?k1 o=?b
+@doc.line.offset core.rule when=$lo.n.o when=$lo.n.l with=$lo.n.k1 with=$lo.n.a with=$lo.n.b when=$lo.n.next then=$lo.n.out
+@lo.f.l ui.doc.line box=?id k=1
+@lo.f.o ui.doc.loff box=?id k=1 o=0
+@doc.line.offset.first core.rule when=$lo.f.l then=$lo.f.o
+
+# Words: counted on each line (a word runs from a letter or digit through letters, digits, apostrophes and hyphens).
+@wd.l ui.doc.line box=?id k=?k text=?t
+@wd.o ui.doc.word box=?id k=?k w=0 rest=?t
+@doc.word.start core.rule when=$wd.l then=$wd.o
+@wd.s ui.doc.word box=?id k=?k w=?w rest=?r
+@wd.n core.calc out=?n fn=matches args=?r args="^[^\\p{L}\\p{N}]*[\\p{L}\\p{N}][\\p{L}\\p{N}'’-]*([\\s\\S]*)$" args=1
+@wd.w1 core.calc out=?w1 fn=add args=?w args=1
+@wd.so ui.doc.word box=?id k=?k w=?w1 rest=?n
+@doc.word.step core.rule when=$wd.s with=$wd.n with=$wd.w1 then=$wd.so
+@wc.s ui.doc.word box=?id k=?k w=?w
+@wc.o ui.doc.words box=?id k=?k n=?m
+@doc.words.line core.aggregate over=$wc.s by=?id by=?k max=?m args=?w then=$wc.o
+
+# ---- Heights and tops ----
+# A text block: its top and bottom space and its lines. A list: its items, each its lines and 4 more. A table: its
+# rows, each as high as its fullest cell and 16 more.
+@bh.t.bx ui.doc.box id=?id block=?c kind=text
+@bh.t.k ui.doc.bkey code=?c key=?key
+@bh.t.f ui.doc.font key=?key lh=?lh top=?tp bottom=?bt
+@bh.t.n ui.doc.lines box=?id n=?n
+@bh.t.h core.calc out=?h fn=mul args=?n args=?lh
+@bh.t.h1 core.calc out=?h1 fn=add args=?h args=?tp
+@bh.t.h2 core.calc out=?h2 fn=add args=?h1 args=?bt
+@bh.t.o ui.doc.bh block=?c h=?h2
+@doc.height.text core.rule when=$bh.t.bx when=$bh.t.k when=$bh.t.f when=$bh.t.n with=$bh.t.h with=$bh.t.h1 with=$bh.t.h2 then=$bh.t.o
+@ih.bx ui.doc.box id=?id block=?c at=?at kind=item
+@ih.n ui.doc.lines box=?id n=?n
+@ih.h core.calc out=?h fn=mul args=?n args=24
+@ih.h1 core.calc out=?h1 fn=add args=?h args=4
+@ih.o ui.doc.ih block=?c at=?at h=?h1 box=?id
+@doc.height.item core.rule when=$ih.bx when=$ih.n with=$ih.h with=$ih.h1 then=$ih.o
+@ip.a ui.doc.ih block=?c at=?a h=?h
+@ip.b ui.doc.ih block=?c at=?b
+@ip.lt core.check fn=lt args=?a args=?b
+@ip.o ui.doc.ipair block=?c at=?b before=?a h=?h
+@doc.item.pair core.rule when=$ip.a when=$ip.b if=$ip.lt then=$ip.o
+@it.p ui.doc.ipair block=?c at=?b h=?h
+@it.o ui.doc.itop block=?c at=?b y=?s
+@doc.item.top core.aggregate over=$it.p by=?c by=?b sum=?s args=?h then=$it.o
+@it.f.i ui.doc.ih block=?c at=0
+@it.f.o ui.doc.itop block=?c at=0 y=0
+@doc.item.top.first core.rule when=$it.f.i then=$it.f.o
+@bh.l.b w.document.block code=?c form=list
+@bh.l.i ui.doc.ih block=?c h=?h
+@bh.l.sum core.aggregate over=$bh.l.b over=$bh.l.i by=?c sum=?s args=?h then=$bh.l.list
+@bh.l.list ui.doc.bh.list block=?c h=?s
+@bh.l2.i ui.doc.bh.list block=?c h=?s
+@bh.l2.h core.calc out=?h fn=add args=?s args=12
+@bh.l2.o ui.doc.bh block=?c h=?h
+@doc.height.list core.rule when=$bh.l2.i with=$bh.l2.h then=$bh.l2.o
+@bh.le.b w.document.block code=?c form=list
+@bh.le.i ui.doc.ih block=?c
+@bh.le.o ui.doc.bh block=?c h=36
+@doc.height.list.empty core.rule when=$bh.le.b not=$bh.le.i then=$bh.le.o
+@rh.bx ui.doc.box id=?id block=?c kind=cell row=?r
+@rh.n ui.doc.lines box=?id n=?n
+@rh.h core.calc out=?h fn=mul args=?n args=20
+@rh.h1 core.calc out=?h1 fn=add args=?h args=16
+@rh.cell ui.doc.rowh.cell block=?c row=?r h=?h1
+@doc.height.cell core.rule when=$rh.bx when=$rh.n with=$rh.h with=$rh.h1 then=$rh.cell
+@rh.m.i ui.doc.rowh.cell block=?c row=?r h=?h
+@rh.m.o ui.doc.rowh block=?c row=?r h=?m
+@doc.height.row core.aggregate over=$rh.m.i by=?c by=?r max=?m args=?h then=$rh.m.o
+@rp.a ui.doc.rowh block=?c row=?a h=?h
+@rp.b ui.doc.rowh block=?c row=?b
+@rp.lt core.check fn=lt args=?a args=?b
+@rp.o ui.doc.rpair block=?c row=?b before=?a h=?h
+@doc.row.pair core.rule when=$rp.a when=$rp.b if=$rp.lt then=$rp.o
+@rt.p ui.doc.rpair block=?c row=?b h=?h
+@rt.o ui.doc.rtop block=?c row=?b y=?s
+@doc.row.top core.aggregate over=$rt.p by=?c by=?b sum=?s args=?h then=$rt.o
+@rt.f.i ui.doc.rowh block=?c row=1
+@rt.f.o ui.doc.rtop block=?c row=1 y=0
+@doc.row.top.first core.rule when=$rt.f.i then=$rt.f.o
+@bh.tb.b w.document.block code=?c form=table
+@bh.tb.r ui.doc.rowh block=?c h=?h
+@bh.tb.o ui.doc.bh.table block=?c h=?s
+@doc.height.table.rows core.aggregate over=$bh.tb.b over=$bh.tb.r by=?c sum=?s args=?h then=$bh.tb.o
+@bh.tb2.i ui.doc.bh.table block=?c h=?s
+@bh.tb2.h core.calc out=?h fn=add args=?s args=20
+@bh.tb2.o ui.doc.bh block=?c h=?h
+@doc.height.table core.rule when=$bh.tb2.i with=$bh.tb2.h then=$bh.tb2.o
+
+# The title: its lines (one when it is empty: "Untitled document" is shown in grey).
+@ttl.d w.document.document code=?d title=?t
+@ttl.ne core.check fn=neq args=?t args=""
+@ttl.id core.calc out=?id fn=concat args="[\"" args=?d args="\",\"title\"]"
+@ttl.o ui.doc.box id=?id block=?d at=title text=?t thing=$ttl.d kind=title
+@doc.box.title core.rule when=$ttl.d if=$ttl.ne with=$ttl.id then=$ttl.o
+@ttl.s.bx ui.doc.box id=?id kind=title
+@ttl.s.f ui.doc.font key=title size=?s lh=?lh chars=?n weight=?w slant=?sl ink=?ink
+@ttl.s.o ui.doc.style box=?id block=title size=?s lh=?lh chars=?n x=48 avail=704 weight=?w slant=?sl ink=?ink align=left
+@doc.style.title core.rule when=$ttl.s.bx when=$ttl.s.f then=$ttl.s.o
+@th.bx ui.doc.box id=?id kind=title
+@th.n ui.doc.lines box=?id n=?n
+@th.h core.calc out=?h fn=mul args=?n args=40
+@th.h1 core.calc out=?h1 fn=add args=?h args=18
+@th.o ui.doc.titleh h=?h1
+@doc.title.height core.rule when=$th.bx when=$th.n with=$th.h with=$th.h1 then=$th.o
+@th.e.bx ui.doc.box kind=title
+@th.e.z ui.doc.digit d=0
+@th.e.o ui.doc.titleh h=58
+@doc.title.height.empty core.rule when=$th.e.z not=$th.e.bx then=$th.e.o
+
+# Each block's top: the title's height and the heights of the blocks before it (the top and height of the block
+# just before it), from y 40.
+@bt.n.a ui.doc.index code=?a rank=?ra
+@bt.n.y ui.doc.btop block=?a y=?y
+@bt.n.h ui.doc.bh block=?a h=?h
+@bt.n.r core.calc out=?rb fn=add args=?ra args=1
+@bt.n.s core.calc out=?s fn=add args=?y args=?h
+@bt.n.b ui.doc.index code=?b rank=?rb
+@bt.n.o ui.doc.btop block=?b y=?s
+@doc.block.before core.rule when=$bt.n.a when=$bt.n.y when=$bt.n.h with=$bt.n.r with=$bt.n.s when=$bt.n.b then=$bt.n.o
+@bt.f.i ui.doc.index code=?b rank=1
+@bt.f.o ui.doc.btop block=?b y=0
+@doc.block.before.first core.rule when=$bt.f.i then=$bt.f.o
+@tp.b ui.doc.btop block=?b y=?y
+@tp.t ui.doc.titleh h=?th
+@tp.y0 core.calc out=?y0 fn=add args=?y args=?th
+@tp.y core.calc out=?y1 fn=add args=?y0 args=40
+@tp.o ui.doc.top block=?b y=?y1
+@doc.block.top core.rule when=$tp.b when=$tp.t with=$tp.y0 with=$tp.y then=$tp.o
+
+# Each container's top.
+@cy.t.bx ui.doc.box id=?id block=?c kind=text
+@cy.t.k ui.doc.bkey code=?c key=?key
+@cy.t.f ui.doc.font key=?key top=?tp
+@cy.t.top ui.doc.top block=?c y=?y
+@cy.t.y core.calc out=?y1 fn=add args=?y args=?tp
+@cy.t.o ui.doc.boxtop box=?id y=?y1
+@doc.boxtop.text core.rule when=$cy.t.bx when=$cy.t.k when=$cy.t.f when=$cy.t.top with=$cy.t.y then=$cy.t.o
+@cy.i.bx ui.doc.box id=?id block=?c at=?at kind=item
+@cy.i.it ui.doc.itop block=?c at=?at y=?iy
+@cy.i.top ui.doc.top block=?c y=?y
+@cy.i.y core.calc out=?y1 fn=add args=?y args=?iy
+@cy.i.o ui.doc.boxtop box=?id y=?y1
+@doc.boxtop.item core.rule when=$cy.i.bx when=$cy.i.it when=$cy.i.top with=$cy.i.y then=$cy.i.o
+@cy.c.bx ui.doc.box id=?id block=?c kind=cell row=?r
+@cy.c.rt ui.doc.rtop block=?c row=?r y=?ry
+@cy.c.top ui.doc.top block=?c y=?y
+@cy.c.y core.calc out=?y1 fn=add args=?y args=?ry
+@cy.c.y2 core.calc out=?y2 fn=add args=?y1 args=12
+@cy.c.o ui.doc.boxtop box=?id y=?y2
+@doc.boxtop.cell core.rule when=$cy.c.bx when=$cy.c.rt when=$cy.c.top with=$cy.c.y with=$cy.c.y2 then=$cy.c.o
+@cy.ti.bx ui.doc.box id=?id kind=title
+@cy.ti.o ui.doc.boxtop box=?id y=40
+@doc.boxtop.title core.rule when=$cy.ti.bx then=$cy.ti.o
+
+# ---- Segments: each line cut where a mark of its container starts or ends ----
+@ct.a.l ui.doc.llen box=?id k=?k n=?n
+@ct.a.o ui.doc.loff box=?id k=?k o=?o
+@ct.a.e core.calc out=?e fn=add args=?o args=?n
+@ct.a.oo ui.doc.cut box=?id k=?k at=?o
+@ct.a.oe ui.doc.cut box=?id k=?k at=?e
+@doc.cut.ends core.rule when=$ct.a.l when=$ct.a.o with=$ct.a.e then=$ct.a.oo then=$ct.a.oe
+@ct.m.l ui.doc.llen box=?id k=?k n=?n
+@ct.m.o ui.doc.loff box=?id k=?k o=?o
+@ct.m.e core.calc out=?e fn=add args=?o args=?n
+@ct.m.f ui.doc.mk box=?id from=?f
+@ct.m.t ui.doc.mk box=?id to=?f
+@ct.m.in core.check fn=between args=?f args=?o args=?e
+@ct.m.out ui.doc.cut box=?id k=?k at=?f
+@doc.cut.mark.from core.rule when=$ct.m.l when=$ct.m.o with=$ct.m.e when=$ct.m.f if=$ct.m.in then=$ct.m.out
+@doc.cut.mark.to core.rule when=$ct.m.l when=$ct.m.o with=$ct.m.e when=$ct.m.t if=$ct.m.in then=$ct.m.out
+@cp.a ui.doc.cut box=?id k=?k at=?a
+@cp.b ui.doc.cut box=?id k=?k at=?b
+@cp.lt core.check fn=lt args=?a args=?b
+@cp.o ui.doc.cpair box=?id k=?k from=?a to=?b
+@doc.cut.pair core.rule when=$cp.a when=$cp.b if=$cp.lt then=$cp.o
+@sg.p ui.doc.cpair box=?id k=?k from=?a to=?b
+@sg.o ui.doc.seg box=?id k=?k from=?a to=?m
+@doc.segment core.aggregate over=$sg.p by=?id by=?k by=?a min=?m args=?b then=$sg.o
+@sgt.s ui.doc.seg box=?id k=?k from=?a to=?b
+@sgt.l ui.doc.line box=?id k=?k text=?t
+@sgt.lo ui.doc.loff box=?id k=?k o=?o
+@sgt.ra core.calc out=?ra fn=sub args=?a args=?o
+@sgt.n core.calc out=?n fn=sub args=?b args=?a
+@sgt.pat core.calc out=?pat fn=concat args="^[\\s\\S]{" args=?ra args="}([\\s\\S]{" args=?n args="})"
+@sgt.txt core.calc out=?txt fn=matches args=?t args=?pat args=1
+@sgt.sid core.calc out=?sid fn=concat args=?id args="|" args=?k args="|" args=?a
+@sgt.o ui.doc.segtext seg=?sid box=?id k=?k from=?a to=?b n=?n rel=?ra text=?txt
+@doc.segment.text core.rule when=$sgt.s when=$sgt.l when=$sgt.lo with=$sgt.ra with=$sgt.n with=$sgt.pat with=$sgt.txt with=$sgt.sid then=$sgt.o
+
+# The marks over a segment, and the weight, slant and ink they give it.
+@sm.s ui.doc.segtext seg=?sid box=?id from=?a to=?b
+@sm.m ui.doc.mk mark=?m box=?id from=?f to=?t form=?fm
+@sm.k1 core.check fn=lte args=?f args=?a
+@sm.k2 core.check fn=gte args=?t args=?b
+@sm.o ui.doc.segmark seg=?sid form=?fm mark=?m
+@doc.segment.mark core.rule when=$sm.s when=$sm.m if=$sm.k1 if=$sm.k2 then=$sm.o
+@sb.m ui.doc.segmark seg=?sid form=bold
+@sb.o ui.doc.segbold seg=?sid
+@doc.segment.bold core.rule when=$sb.m then=$sb.o
+@sb.s ui.doc.segtext seg=?sid box=?id
+@sb.st ui.doc.style box=?id weight=bold
+@doc.segment.bold.style core.rule when=$sb.s when=$sb.st then=$sb.o
+@sit.m ui.doc.segmark seg=?sid form=italic
+@sit.o ui.doc.segitalic seg=?sid
+@doc.segment.italic core.rule when=$sit.m then=$sit.o
+@sit.s ui.doc.segtext seg=?sid box=?id
+@sit.st ui.doc.style box=?id slant=italic
+@doc.segment.italic.style core.rule when=$sit.s when=$sit.st then=$sit.o
+@sk.l ui.doc.segmark seg=?sid form=link
+@sk.o ui.doc.segink seg=?sid ink="#1d5fbf"
+@doc.segment.ink.link core.rule when=$sk.l then=$sk.o
+@sk.c ui.doc.segmark seg=?sid form=code
+@sk.cl ui.doc.segmark seg=?sid form=link
+@sk.co ui.doc.segink seg=?sid ink="#9a3412"
+@doc.segment.ink.code core.rule when=$sk.c not=$sk.cl then=$sk.co
+@sk.s ui.doc.segtext seg=?sid box=?id
+@sk.st ui.doc.style box=?id ink=?ink
+@sk.n1 ui.doc.segmark seg=?sid form=link
+@sk.n2 ui.doc.segmark seg=?sid form=code
+@sk.so ui.doc.segink seg=?sid ink=?ink
+@doc.segment.ink.style core.rule when=$sk.s when=$sk.st not=$sk.n1 not=$sk.n2 then=$sk.so
+
+# Where a segment starts: the line's start by the alignment, then the characters before it on the line.
+@sx.s ui.doc.segtext seg=?sid box=?id k=?k rel=?ra
+@sx.st ui.doc.style box=?id size=?sz x=?x avail=?aw align=?al
+@sx.ln ui.doc.llen box=?id k=?k n=?n
+@sx.cw core.calc out=?cw fn=mul args=?sz args=0.6
+@sx.lw core.calc out=?lw fn=mul args=?n args=?cw
+@sx.free core.calc out=?free fn=sub args=?aw args=?lw
+@sx.rx core.calc out=?rx fn=mul args=?ra args=?cw
+@sx.left core.check fn=matches args=?al args="^(left|justify)$"
+@sx.lx core.calc out=?px fn=add args=?x args=?rx
+@sx.o ui.doc.segx seg=?sid x=?px
+@doc.segment.x.left core.rule when=$sx.s when=$sx.st when=$sx.ln with=$sx.cw with=$sx.lw with=$sx.free with=$sx.rx if=$sx.left with=$sx.lx then=$sx.o
+@sx.c.k core.check fn=eq args=?al args=center
+@sx.c.h core.calc out=?half fn=div args=?free args=2
+@sx.c.x0 core.calc out=?x0 fn=add args=?x args=?half
+@sx.c.x core.calc out=?px fn=add args=?x0 args=?rx
+@doc.segment.x.center core.rule when=$sx.s when=$sx.st when=$sx.ln with=$sx.cw with=$sx.lw with=$sx.free with=$sx.rx if=$sx.c.k with=$sx.c.h with=$sx.c.x0 with=$sx.c.x then=$sx.o
+@sx.r.k core.check fn=eq args=?al args=right
+@sx.r.x0 core.calc out=?x0 fn=add args=?x args=?free
+@sx.r.x core.calc out=?px fn=add args=?x0 args=?rx
+@doc.segment.x.right core.rule when=$sx.s when=$sx.st when=$sx.ln with=$sx.cw with=$sx.lw with=$sx.free with=$sx.rx if=$sx.r.k with=$sx.r.x0 with=$sx.r.x then=$sx.o
+
+# ---- Drawing (order: 0 page, 1 block backgrounds, 2 highlights, code and cells, 3 text, 4 lines) ----
+@pg.e ui.doc.extent h=?h
+@pg.out ui.doc.draw part=page source=page order=0 z=0 shape=rectangle x=0 y=0 w=800 h=?h cx=0 cy=0 tx=0 ty=0 scale=1 side=left
+@pg.fill ui.doc.fill source=page part=page fill="#ffffff"
+@doc.draw.page core.rule when=$pg.e then=$pg.out then=$pg.fill
+
+# A block's background takes the clicks that select it, and shows the selection.
+@bg.t ui.doc.top block=?c y=?y
+@bg.h ui.doc.bh block=?c h=?h
+@bg.y core.calc out=?y0 fn=sub args=?y args=4
+@bg.src core.calc out=?src fn=concat args=?c args=".bg"
+@bg.out ui.doc.draw part=?src source=?src slot=?c order=1 z=0 shape=rectangle x=36 y=?y0 w=728 h=?h cx=0 cy=0 tx=0 ty=0 scale=1 side=left round=6
+@bg.fill ui.doc.fill source=?src part=?src fill="#ffffff"
+@doc.draw.block core.rule when=$bg.t when=$bg.h with=$bg.y with=$bg.src then=$bg.out then=$bg.fill
+
+# Text: each segment at its place on its line's baseline, as wide as its characters.
+@dt.s ui.doc.segtext seg=?sid box=?id k=?k n=?n text=?t
+@dt.x ui.doc.segx seg=?sid x=?x
+@dt.st ui.doc.style box=?id block=?c size=?sz lh=?lh
+@dt.top ui.doc.boxtop box=?id y=?y
+@dt.ink ui.doc.segink seg=?sid ink=?ink
+@dt.k0 core.calc out=?k0 fn=sub args=?k args=1
+@dt.ly core.calc out=?ly fn=mul args=?k0 args=?lh
+@dt.half core.calc out=?half fn=div args=?lh args=2
+@dt.asc core.calc out=?asc fn=mul args=?sz args=0.35
+@dt.b0 core.calc out=?b0 fn=add args=?y args=?ly
+@dt.b1 core.calc out=?b1 fn=add args=?b0 args=?half
+@dt.by core.calc out=?by fn=add args=?b1 args=?asc
+@dt.cw core.calc out=?cw fn=mul args=?sz args=0.6
+@dt.len core.calc out=?len fn=mul args=?n args=?cw
+@dt.bold ui.doc.segbold seg=?sid
+@dt.ital ui.doc.segitalic seg=?sid
+@dt.o.bi ui.doc.draw part=?sid source=?sid slot=?c order=3 z=0 shape=text text=?t x=?x y=?by w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left font=?sz family=mono length=?len weight=bold slant=italic
+@dt.o.b ui.doc.draw part=?sid source=?sid slot=?c order=3 z=0 shape=text text=?t x=?x y=?by w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left font=?sz family=mono length=?len weight=bold
+@dt.o.i ui.doc.draw part=?sid source=?sid slot=?c order=3 z=0 shape=text text=?t x=?x y=?by w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left font=?sz family=mono length=?len slant=italic
+@dt.o.n ui.doc.draw part=?sid source=?sid slot=?c order=3 z=0 shape=text text=?t x=?x y=?by w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left font=?sz family=mono length=?len
+@dt.fill ui.doc.fill source=?sid part=?sid fill=?ink
+@doc.draw.text.bold.italic core.rule when=$dt.s when=$dt.x when=$dt.st when=$dt.top when=$dt.ink when=$dt.bold when=$dt.ital with=$dt.k0 with=$dt.ly with=$dt.half with=$dt.asc with=$dt.b0 with=$dt.b1 with=$dt.by with=$dt.cw with=$dt.len then=$dt.o.bi then=$dt.fill
+@doc.draw.text.bold core.rule when=$dt.s when=$dt.x when=$dt.st when=$dt.top when=$dt.ink when=$dt.bold not=$dt.ital with=$dt.k0 with=$dt.ly with=$dt.half with=$dt.asc with=$dt.b0 with=$dt.b1 with=$dt.by with=$dt.cw with=$dt.len then=$dt.o.b then=$dt.fill
+@doc.draw.text.italic core.rule when=$dt.s when=$dt.x when=$dt.st when=$dt.top when=$dt.ink when=$dt.ital not=$dt.bold with=$dt.k0 with=$dt.ly with=$dt.half with=$dt.asc with=$dt.b0 with=$dt.b1 with=$dt.by with=$dt.cw with=$dt.len then=$dt.o.i then=$dt.fill
+@doc.draw.text.plain core.rule when=$dt.s when=$dt.x when=$dt.st when=$dt.top when=$dt.ink not=$dt.bold not=$dt.ital with=$dt.k0 with=$dt.ly with=$dt.half with=$dt.asc with=$dt.b0 with=$dt.b1 with=$dt.by with=$dt.cw with=$dt.len then=$dt.o.n then=$dt.fill
+
+# Decorations of a marked segment: a highlight or code background behind it, a line under a link or an underline,
+# a line through a strike.
+@dc.s ui.doc.segtext seg=?sid box=?id k=?k n=?n
+@dc.x ui.doc.segx seg=?sid x=?x
+@dc.st ui.doc.style box=?id block=?c size=?sz lh=?lh
+@dc.top ui.doc.boxtop box=?id y=?y
+@dc.k0 core.calc out=?k0 fn=sub args=?k args=1
+@dc.ly core.calc out=?ly fn=mul args=?k0 args=?lh
+@dc.y0 core.calc out=?y0 fn=add args=?y args=?ly
+@dc.cw core.calc out=?cw fn=mul args=?sz args=0.6
+@dc.w core.calc out=?w fn=mul args=?n args=?cw
+@dc.hm ui.doc.segmark seg=?sid form=highlight mark=$dc.hw
+@dc.hw w.document.mark colour=?col
+@dc.hsrc core.calc out=?src fn=concat args=?sid args=".hl"
+@dc.h.out ui.doc.draw part=?src source=?src slot=?c order=2 z=0 shape=rectangle x=?x y=?y0 w=?w h=?lh cx=0 cy=0 tx=0 ty=0 scale=1 side=left
+@dc.h.fill ui.doc.fill source=?src part=?src fill=?col
+@doc.draw.highlight core.rule when=$dc.s when=$dc.x when=$dc.st when=$dc.top when=$dc.hm when=$dc.hw with=$dc.k0 with=$dc.ly with=$dc.y0 with=$dc.cw with=$dc.w with=$dc.hsrc then=$dc.h.out then=$dc.h.fill
+@dc.cm ui.doc.segmark seg=?sid form=code
+@dc.csrc core.calc out=?src fn=concat args=?sid args=".code"
+@dc.c.out ui.doc.draw part=?src source=?src slot=?c order=2 z=1 shape=rectangle x=?x y=?y0 w=?w h=?lh cx=0 cy=0 tx=0 ty=0 scale=1 side=left round=3
+@dc.c.fill ui.doc.fill source=?src part=?src fill="#eef0f4"
+@doc.draw.code core.rule when=$dc.s when=$dc.x when=$dc.st when=$dc.top when=$dc.cm with=$dc.k0 with=$dc.ly with=$dc.y0 with=$dc.cw with=$dc.w with=$dc.csrc then=$dc.c.out then=$dc.c.fill
+@dl.s ui.doc.segtext seg=?sid box=?id k=?k n=?n
+@dl.x ui.doc.segx seg=?sid x=?x
+@dl.st ui.doc.style box=?id block=?c size=?sz lh=?lh
+@dl.top ui.doc.boxtop box=?id y=?y
+@dl.k0 core.calc out=?k0 fn=sub args=?k args=1
+@dl.ly core.calc out=?ly fn=mul args=?k0 args=?lh
+@dl.y0 core.calc out=?y0 fn=add args=?y args=?ly
+@dl.half core.calc out=?half fn=div args=?lh args=2
+@dl.cw core.calc out=?cw fn=mul args=?sz args=0.6
+@dl.w core.calc out=?w fn=mul args=?n args=?cw
+@dl.x1 core.calc out=?x1 fn=add args=?x args=?w
+@dl.u.d core.calc out=?d fn=mul args=?sz args=0.45
+@dl.u.y1 core.calc out=?y1 fn=add args=?y0 args=?half
+@dl.u.y core.calc out=?ly2 fn=add args=?y1 args=?d
+@dl.u.m ui.doc.segmark seg=?sid form=?fm
+@dl.u.k core.check fn=matches args=?fm args="^(underline|link)$"
+@dl.u.src core.calc out=?src fn=concat args=?sid args=".u"
+@dl.u.out ui.doc.draw part=?src source=?src slot=?c order=4 z=0 shape=line x=0 y=0 w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left stroke=1.2
+@dl.u.p1 ui.doc.point source=?src n=1 x=?x y=?ly2
+@dl.u.p2 ui.doc.point source=?src n=2 x=?x1 y=?ly2
+@dl.ink ui.doc.segink seg=?sid ink=?ink
+@dl.u.fill ui.doc.fill source=?src part=?src fill=?ink
+@doc.draw.underline core.rule when=$dl.s when=$dl.x when=$dl.st when=$dl.top when=$dl.u.m when=$dl.ink if=$dl.u.k with=$dl.k0 with=$dl.ly with=$dl.y0 with=$dl.half with=$dl.cw with=$dl.w with=$dl.x1 with=$dl.u.d with=$dl.u.y1 with=$dl.u.y with=$dl.u.src then=$dl.u.out then=$dl.u.p1 then=$dl.u.p2 then=$dl.u.fill
+@dl.s.m ui.doc.segmark seg=?sid form=strike
+@dl.s.d core.calc out=?d fn=mul args=?sz args=0.05
+@dl.s.y1 core.calc out=?y1 fn=add args=?y0 args=?half
+@dl.s.y core.calc out=?ly2 fn=add args=?y1 args=?d
+@dl.s.src core.calc out=?src fn=concat args=?sid args=".s"
+@dl.s.out ui.doc.draw part=?src source=?src slot=?c order=4 z=0 shape=line x=0 y=0 w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left stroke=1.2
+@dl.s.p1 ui.doc.point source=?src n=1 x=?x y=?ly2
+@dl.s.p2 ui.doc.point source=?src n=2 x=?x1 y=?ly2
+@dl.s.fill ui.doc.fill source=?src part=?src fill=?ink
+@doc.draw.strike core.rule when=$dl.s when=$dl.x when=$dl.st when=$dl.top when=$dl.s.m when=$dl.ink with=$dl.k0 with=$dl.ly with=$dl.y0 with=$dl.half with=$dl.cw with=$dl.w with=$dl.x1 with=$dl.s.d with=$dl.s.y1 with=$dl.s.y with=$dl.s.src then=$dl.s.out then=$dl.s.p1 then=$dl.s.p2 then=$dl.s.fill
+
+# The title when the document has none.
+@ut.d w.document.document title=""
+@ut.out ui.doc.draw part=title.empty source=title.empty order=3 z=0 shape=text text="Untitled document" x=48 y=70 w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left font=30 family=mono weight=bold
+@ut.fill ui.doc.fill source=title.empty part=title.empty fill="#a3abb8"
+@doc.draw.untitled core.rule when=$ut.d then=$ut.out then=$ut.fill
+@ut.n.d w.document.document
+@ut.n.out ui.doc.draw part=title.none source=title.none order=3 z=0 shape=text text="No document" x=48 y=70 w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left font=30 family=mono weight=bold
+@ut.n.fill ui.doc.fill source=title.none part=title.none fill="#a3abb8"
+@ut.n.z ui.doc.digit d=0
+@doc.draw.no.document core.rule when=$ut.n.z not=$ut.n.d then=$ut.n.out then=$ut.n.fill
+
+# A quote's bar beside its text.
+@qb.b w.document.block code=?c form=quote
+@qb.bx ui.doc.box id=?id block=?c kind=text
+@qb.top ui.doc.boxtop box=?id y=?y
+@qb.n ui.doc.lines box=?id n=?n
+@qb.h core.calc out=?h fn=mul args=?n args=24
+@qb.src core.calc out=?src fn=concat args=?c args=".bar"
+@qb.out ui.doc.draw part=?src source=?src slot=?c order=2 z=0 shape=rectangle x=50 y=?y w=4 h=?h cx=0 cy=0 tx=0 ty=0 scale=1 side=left round=2
+@qb.fill ui.doc.fill source=?src part=?src fill="#c3cad6"
+@doc.draw.quote.bar core.rule when=$qb.b when=$qb.bx when=$qb.top when=$qb.n with=$qb.h with=$qb.src then=$qb.out then=$qb.fill
+
+# A list item's marker: a bullet, its number, or a task's box (ticked when done).
+@dn.bx ui.doc.box id=?id thing=$dn.i kind=item
+@dn.i w.document.item checked=true
+@dn.o ui.doc.done box=?id
+@doc.item.done core.rule when=$dn.bx when=$dn.i then=$dn.o
+@lm.bx ui.doc.box id=?id block=?c at=?at kind=item
+@lm.top ui.doc.boxtop box=?id y=?y
+@lm.b0 core.calc out=?b0 fn=add args=?y args=17.6
+@lm.src core.calc out=?src fn=concat args=?id args=".marker"
+@lm.fill ui.doc.fill source=?src part=?src fill="#4b5563"
+@lm.bul w.document.block code=?c style=bullet
+@lm.bul.out ui.doc.draw part=?src source=?src slot=?c order=3 z=0 shape=text text="•" x=58 y=?b0 w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left font=16 family=mono
+@doc.draw.bullet core.rule when=$lm.bx when=$lm.top when=$lm.bul with=$lm.b0 with=$lm.src then=$lm.bul.out then=$lm.fill
+@lm.nos w.document.block code=?c style=?anystyle
+@doc.draw.bullet.default core.rule when=$lm.bx when=$lm.top not=$lm.nos with=$lm.b0 with=$lm.src then=$lm.bul.out then=$lm.fill
+@lm.num w.document.block code=?c style=numbered
+@lm.num.i core.calc out=?i fn=add args=?at args=1
+@lm.num.t core.calc out=?t fn=concat args=?i args="."
+@lm.num.out ui.doc.draw part=?src source=?src slot=?c order=3 z=0 shape=text text=?t x=50 y=?b0 w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left font=16 family=mono
+@doc.draw.number core.rule when=$lm.bx when=$lm.top when=$lm.num with=$lm.b0 with=$lm.src with=$lm.num.i with=$lm.num.t then=$lm.num.out then=$lm.fill
+@lm.task w.document.block code=?c style=task
+@lm.done ui.doc.done box=?id
+@lm.task.on ui.doc.draw part=?src source=?src slot=?c order=3 z=0 shape=text text="☑" x=54 y=?b0 w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left font=16
+@lm.task.off ui.doc.draw part=?src source=?src slot=?c order=3 z=0 shape=text text="☐" x=54 y=?b0 w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left font=16
+@doc.draw.task.done core.rule when=$lm.bx when=$lm.top when=$lm.task when=$lm.done with=$lm.b0 with=$lm.src then=$lm.task.on then=$lm.fill
+@doc.draw.task.open core.rule when=$lm.bx when=$lm.top when=$lm.task not=$lm.done with=$lm.b0 with=$lm.src then=$lm.task.off then=$lm.fill
+
+# A table's cells: an outlined box each, the header row shaded.
+@tc.bx ui.doc.box id=?id block=?c kind=cell row=?r col=?k
+@tc.cols ui.doc.cols block=?c n=?m
+@tc.top ui.doc.top block=?c y=?y
+@tc.rt ui.doc.rtop block=?c row=?r y=?ry
+@tc.rh ui.doc.rowh block=?c row=?r h=?h
+@tc.cw core.calc out=?cw fn=div args=704 args=?m
+@tc.k0 core.calc out=?k0 fn=sub args=?k args=1
+@tc.off core.calc out=?off fn=mul args=?k0 args=?cw
+@tc.x core.calc out=?x fn=add args=48 args=?off
+@tc.y0 core.calc out=?y0 fn=add args=?y args=?ry
+@tc.y core.calc out=?y1 fn=add args=?y0 args=4
+@tc.src core.calc out=?src fn=concat args=?id args=".cell"
+@tc.out ui.doc.draw part=?src source=?src slot=?c order=2 z=0 shape=rectangle x=?x y=?y1 w=?cw h=?h cx=0 cy=0 tx=0 ty=0 scale=1 side=left outline="#b8c0cc"
+@tc.f.p ui.doc.fill source=?src part=?src fill="#ffffff"
+@tc.f.h ui.doc.fill source=?src part=?src fill="#eef1f6"
+@tc.head w.document.block code=?c header=true
+@tc.one core.check fn=eq args=?r args=1
+@tc.gt1 core.check fn=gt args=?r args=1
+@doc.draw.cell.header core.rule when=$tc.bx when=$tc.cols when=$tc.top when=$tc.rt when=$tc.rh when=$tc.head if=$tc.one with=$tc.cw with=$tc.k0 with=$tc.off with=$tc.x with=$tc.y0 with=$tc.y with=$tc.src then=$tc.out then=$tc.f.h
+@doc.draw.cell.first core.rule when=$tc.bx when=$tc.cols when=$tc.top when=$tc.rt when=$tc.rh not=$tc.head if=$tc.one with=$tc.cw with=$tc.k0 with=$tc.off with=$tc.x with=$tc.y0 with=$tc.y with=$tc.src then=$tc.out then=$tc.f.p
+@doc.draw.cell core.rule when=$tc.bx when=$tc.cols when=$tc.top when=$tc.rt when=$tc.rh if=$tc.gt1 with=$tc.cw with=$tc.k0 with=$tc.off with=$tc.x with=$tc.y0 with=$tc.y with=$tc.src then=$tc.out then=$tc.f.p
+
+# ---- The page: as tall as what is on it (at least 600) ----
+@ex.b ui.doc.bh h=?h
+@ex.s ui.doc.extent.sum h=?s
+@doc.extent.sum core.aggregate over=$ex.b sum=?s args=?h then=$ex.s
+@ex.f.s ui.doc.extent.sum h=?s
+@ex.f.t ui.doc.titleh h=?th
+@ex.f.a core.calc out=?a fn=add args=?s args=?th
+@ex.f.b core.calc out=?b fn=add args=?a args=88
+@ex.f.c core.calc out=?c fn=max args=?b args=600
+@ex.f.o ui.doc.extent h=?c
+@doc.extent core.rule when=$ex.f.s when=$ex.f.t with=$ex.f.a with=$ex.f.b with=$ex.f.c then=$ex.f.o
+@fr.e ui.doc.extent h=?h
+@fr.o app.observe.frame id=document.page x0=0 y0=0 x1=800 y1=?h evidence=rectangle
+@doc.frame core.rule when=$fr.e then=$fr.o

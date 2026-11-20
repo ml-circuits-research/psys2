@@ -6,7 +6,7 @@
  * Browser-safe: the language pack is imported lazily, the first time a reply of that language has a frame. Never throws; null = not composed (the caller goes on as before).
  */
 const packs = new Map();
-const OPEN = { ro: () => import('../lang/ro.mjs?v=3a28c8f5ff').then((m) => m.openLangRo()) };
+const OPEN = { ro: () => import('../lang/ro.mjs?v=65fbae123b').then((m) => m.openLangRo()) };
 
 export async function composeReply(say, lang) {
   if (!say?.act || !OPEN[lang]) return null;

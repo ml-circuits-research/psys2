@@ -1,19 +1,20 @@
 // Actual application state only. No request annotations or invented semantic types.
 import {observedReaderContext} from './native-reader-context.mjs?v=8a38092080';
 import {isAuthoredRequest} from './authored-request-tool.mjs?v=687fe97da8';
-import {createDrawingArea,canonicalDrawingArea,projectDrawingArea,drawingAreaStateWorld} from '../../worlds/art.draw/sop-drawing.mjs?v=46e0acdb8a';
-import {createDiagramArea,canonicalDiagramArea,projectDiagramArea,diagramAreaStateWorld} from '../../worlds/diagram.sketch/sop-diagram.mjs?v=a519bf9b6b';
-import {createDocumentHost,DOCUMENT_STATE_INTERFACE} from '../../worlds/docs.editor/declared-host.mjs?v=6cde5cd12c';
-import {createAvatarArea,canonicalAvatarArea,projectAvatarArea,avatarAreaStateWorld} from '../../worlds/ui.avatar/sop-avatar.mjs?v=c9da3e90ec';
-import {createCalendarArea,canonicalCalendarArea,projectCalendarArea,calendarAreaStateWorld} from '../../worlds/time.calendar/sop-calendar.mjs?v=7830c5d287';
+import {createDrawingArea,canonicalDrawingArea,projectDrawingArea,drawingAreaStateWorld} from '../../worlds/art.draw/sop-drawing.mjs?v=fa4824f4b9';
+import {createDiagramArea,canonicalDiagramArea,projectDiagramArea,diagramAreaStateWorld} from '../../worlds/diagram.sketch/sop-diagram.mjs?v=2b2b5bb599';
+import {createDocumentArea,canonicalDocumentArea,projectDocumentArea,documentAreaStateWorld} from '../../worlds/docs.editor/sop-document.mjs?v=40c94dbcaa';
+import {createAvatarArea,canonicalAvatarArea,projectAvatarArea,avatarAreaStateWorld} from '../../worlds/ui.avatar/sop-avatar.mjs?v=554f7b6a9a';
+import {createCalendarArea,canonicalCalendarArea,projectCalendarArea,calendarAreaStateWorld} from '../../worlds/time.calendar/sop-calendar.mjs?v=f811d31bef';
 export const NATIVE_AREAS={
- avatar:{area:'drawing',world:'ui.avatar',create:createAvatarArea,prepare:createAvatarArea,canonicalizeState:canonicalAvatarArea,projectState:projectAvatarArea,
+ avatar:{area:'avatar',world:'ui.avatar',create:createAvatarArea,prepare:createAvatarArea,canonicalizeState:canonicalAvatarArea,projectState:projectAvatarArea,
   stateWorld:avatarAreaStateWorld,separateRuntime:true,historySelection:[['runtime','view','selected']],historyView:[['runtime','view','ids']]},
  draw:{area:'drawing',world:'art.draw',create:createDrawingArea,prepare:createDrawingArea,canonicalizeState:canonicalDrawingArea,projectState:projectDrawingArea,
   stateWorld:drawingAreaStateWorld,separateRuntime:true,historySelection:[['runtime','view','selected'],['runtime','view','part']],historyView:[['runtime','view','ids']]},
  diagram:{area:'diagram',world:'diagram.sketch',create:createDiagramArea,prepare:createDiagramArea,canonicalizeState:canonicalDiagramArea,projectState:projectDiagramArea,
   stateWorld:diagramAreaStateWorld,separateRuntime:true,historySelection:[['runtime','view','selected']],historyView:[['runtime','view','ids']]},
- editor:{area:'document',world:'docs.editor',create:createDocumentHost,...DOCUMENT_STATE_INTERFACE,historySelection:[['selection']]},
+ editor:{area:'document',world:'docs.editor',create:createDocumentArea,prepare:createDocumentArea,canonicalizeState:canonicalDocumentArea,projectState:projectDocumentArea,
+  stateWorld:documentAreaStateWorld,separateRuntime:true,historySelection:[['runtime','view','selected'],['runtime','view','from'],['runtime','view','to'],['runtime','view','at']]},
  calendar:{area:'calendar',world:'time.calendar',create:createCalendarArea,prepare:createCalendarArea,canonicalizeState:canonicalCalendarArea,projectState:projectCalendarArea,
   stateWorld:calendarAreaStateWorld,separateRuntime:true,historySelection:[['runtime','view','selected']]},
 };

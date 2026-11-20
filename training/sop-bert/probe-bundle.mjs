@@ -44,13 +44,13 @@ async function appRun(p){
  appContext=observedReaderContext(p.area,host.observe(),p.context?.previous??null,{compact:true,text:p.text});
  let reply;try{reply=await routeNewEngine(session,p.text,{language:'en'});}finally{appContext=null;}
  const after=host.observe().objects;
- return {seeded:setup.ok,statuses:reply?.statuses,answer:reply?.text??reply?.reply??null,objectsBefore:before,objectsAfter:after.length,placement:reply?.trace?.placement??null,
+ return {seeded:setup.ok,reason:reply?.trace?.reason??null,statuses:reply?.statuses,answer:reply?.text??reply?.reply??null,objectsBefore:before,objectsAfter:after.length,placement:reply?.trace?.placement??null,
   proposal:{candidates:proposals.flatMap(r=>r.candidates??[]),failures:proposals.flatMap(r=>r.failures??[])}};
 }
 for(const line of readFileSync(probes,'utf8').split('\n').filter(Boolean)){
  const p=JSON.parse(line);
- if(runMode){let out;try{const r=await appRun(p);out={text:p.text,area:p.area,previous:p.context?.previous??null,seeded:r.seeded,statuses:r.statuses,answer:r.answer,objectsBefore:r.objectsBefore,objectsAfter:r.objectsAfter,placement:r.placement?String(r.placement).slice(0,600):null,
-   wires:(r.proposal?.candidates??[]).flatMap(c=>c.wires?[c.wires]:c.batch?.entries?.map(e=>e.wires)??[]),failures:(r.proposal?.failures??[]).map(f=>f.reason+(f.path?.length?':'+f.path.join('.'):''))};}
+ if(runMode){let out;try{const r=await appRun(p);out={text:p.text,area:p.area,previous:p.context?.previous??null,seeded:r.seeded,reason:r.reason,statuses:r.statuses,answer:r.answer,objectsBefore:r.objectsBefore,objectsAfter:r.objectsAfter,placement:r.placement?String(r.placement).slice(0,600):null,
+   wires:(r.proposal?.candidates??[]).flatMap(c=>c.wires?[c.wires]:c.batch?.entries?.map(e=>e.wires)??[]),failures:(r.proposal?.failures??[]).map(f=>f.reason+(f.path?.length?':'+f.path.join('.'):'')+(f.detail?' '+JSON.stringify(f.detail):''))};}
   catch(e){out={text:p.text,area:p.area,error:String(e.message),stack:String(e.stack).split("\n").slice(0,6).join(" / ")};}
   process.stdout.write(JSON.stringify(out)+'\n');continue;}
  const {proposal}=await reader.probe(p.text,{area:p.area,context:p.context??{existing:[],previous:null}});

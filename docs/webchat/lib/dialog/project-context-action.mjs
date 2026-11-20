@@ -2,11 +2,14 @@ import { historyHeads } from './history-journal.mjs?v=1c9667c210';
 import {nativeKindCandidates} from './native-binding-candidates.mjs?v=9860e110fe';
 // Bind model-declared context references to actual native objects; never inspect source words.
 import {quote,str} from '../vendor/sopworld/sopworld.mjs?v=22a3f6e48e';
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=cf97438a76';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=88a8f115af';
 import {executionPolicyWorld} from './execution-policy.mjs?v=e8bfdad087';
 import {readReferenceTurn,resolveObservedReference} from './reference-policy.mjs?v=65dd0cf88e';
 import {observeGroundedProjection,projectGroundedRequest} from './grounded-projection.mjs?v=2365ae30e0';
 import {flatRequestProjection} from './request-projection.mjs?v=b78aa0140d';
+import {bridgeRawStructure} from './raw-structural-bridge.mjs?v=7b3162b44b';
+import {comparativeSteps} from './comparative-projection.mjs?v=11b4faa0f5';
+import {referenceProjection} from './reference-projection.mjs?v=802eafd47a';
 export async function projectContextAction(proposal,session,{bindings,registry,view}={}) {
  const raw=proposal?.raw,r=raw?.requests?.[0],area=NATIVE_AREAS[view],readerArea=bindings?.readerAreaByView?.[view]??area?.area;
  if(!area||!bindings||!registry||proposal.coverage?.complete||raw?.requestCount!==1||raw.coverage?.truncated||!r?.target||r.target.kind||r.target.name)return null;
@@ -29,6 +32,16 @@ export async function projectContextAction(proposal,session,{bindings,registry,v
   inherited=prior.results;rewind=last.before;
  }else if(!Array.isArray(r.constraints)||!r.constraints.length)return null;
  const canonical=selected.canonical,values=[];
+ // A reading beyond plain stated values (a comparative step, several results) is projected by the same bridge as any
+ // other reading, with the context target bound to the kind the observed reference resolution chose.
+ if(!other&&r.constraints.some(c=>c.operator!=='eq')){
+  const bindingSha256=proposal.provenance?.bindingsSha256;
+  const bridged=bindingSha256?bridgeRawStructure(raw,{bindings,bindingSha256,comparatives:comparativeSteps(),references:referenceProjection(),contextTarget:{kind:canonical,declaration:selected.object.source}}):null;
+  if(!bridged||bridged.diagnostics.length||bridged.decoded?.candidates?.length!==1||bridged.decoded.issues?.length)return null;
+  const note='I took the reference as the '+selected.object.kind+'.';
+  return {proposal:{...proposal,candidates:bridged.decoded.candidates,coverage:{complete:true,graphProposal:true,executable:false},failures:[],
+   interpretation:{profile:'native-context/1',note,chosen:{id:selected.object.id,kind:selected.object.kind,canonical},alternatives:options.map(o=>({id:o.object.id,kind:o.object.kind,canonical:o.canonical})),unresolved:proposal.failures}},focus:selected.object.id,rewind:null};
+ }
  if(inherited)for(const c of inherited){if(c.operator!=='eq'||c.polarity!=='positive'||c.character!=='requirement'||c.value===null)return null;if(c.tokens.length!==1)return null;values.push({concept:c.concept,token:c.tokens[0],witness:previous.request+':'+c.id});}
  else for(const [index,c]of r.constraints.entries()) {
   if(c.phase!=='result'||c.operator!=='eq'||c.polarity!=='positive'||c.character!=='requirement'||typeof c.value!=='string'||c.value!==c.value_span||Object.keys(c).some(k=>!['key','value','value_span','phase','operator','polarity','character'].includes(k)))return null;

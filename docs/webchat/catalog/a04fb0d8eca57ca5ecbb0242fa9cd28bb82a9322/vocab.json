@@ -2631,6 +2631,7 @@
  "address": [
   "k.words/shards/ad",
   "k.words/shards/frequency-a",
+  "w.document/schema.sop",
   "k.objects/shards/noto-sound-01"
  ],
  "addrest": [
@@ -4457,7 +4458,8 @@
   "k.objects/shards/noto-transport-air-02"
  ],
  "align": [
-  "k.actions/shards/verbs-place"
+  "k.actions/shards/verbs-place",
+  "w.document/schema.sop"
  ],
  "aligned_column": [
   "k.layouts/shards/layouts"
@@ -4467,7 +4469,8 @@
  ],
  "alignment": [
   "k.words/shards/al",
-  "k.words/shards/frequency-a"
+  "k.words/shards/frequency-a",
+  "w.document/schema.sop"
  ],
  "alike": [
   "k.feelings/schema.sop",
@@ -17174,7 +17177,8 @@
   "k.objects/shards/things-3",
   "k.shapes/shards/shapes",
   "k.words/shards/bl",
-  "k.words/shards/frequency-b"
+  "k.words/shards/frequency-b",
+  "w.document/schema.sop"
  ],
  "blockade": [
   "k.words/shards/bl",
@@ -17192,7 +17196,8 @@
   "k.attributes/shards/narration",
   "k.kinds/shards/relations-story",
   "k.procedures/shards/compose",
-  "k.story/schema.sop"
+  "k.story/schema.sop",
+  "w.document/schema.sop"
  ],
  "bloemfontein": [
   "k.geo/shards/africa",
@@ -18042,6 +18047,7 @@
   "k.values/shards/scales",
   "k.words/shards/bo",
   "k.words/shards/frequency-b",
+  "w.document/schema.sop",
   "w.text/schema.sop"
  ],
  "bolder": [
@@ -21311,6 +21317,9 @@
   "k.kinds/shards/head",
   "k.objects/shards/noto-transport-ground-01",
   "k.scenes/shards/things-b"
+ ],
+ "bulleted": [
+  "w.document/schema.sop"
  ],
  "bulletin": [
   "k.words/shards/bu",
@@ -26551,6 +26560,7 @@
   "k.kinds/shards/wordnet-1",
   "k.words/shards/ce",
   "k.words/shards/frequency-c",
+  "w.document/schema.sop",
   "k.objects/shards/noto-phone-01",
   "k.objects/shards/openmoji-technology-02"
  ],
@@ -26595,6 +26605,9 @@
   "k.parts/shards/usual",
   "k.words/shards/ce",
   "k.words/shards/frequency-c"
+ ],
+ "cells": [
+  "w.document/schema.sop"
  ],
  "celsius": [
   "k.units/shards/core"
@@ -26752,6 +26765,9 @@
  ],
  "centre_line": [
   "k.objects/shards/places"
+ ],
+ "centred": [
+  "w.document/schema.sop"
  ],
  "cents": [
   "k.units/schema.sop"
@@ -27727,6 +27743,7 @@
   "k.values/shards/fills",
   "k.words/shards/ch",
   "k.words/shards/frequency-c",
+  "w.document/schema.sop",
   "w.list/schema.sop"
  ],
  "checkerboard": [
@@ -27741,6 +27758,7 @@
  ],
  "checklist": [
   "k.genres/shards/list",
+  "w.document/schema.sop",
   "w.list/schema.sop"
  ],
  "checkmate": [
@@ -31193,6 +31211,7 @@
   "k.words/shards/co-1",
   "k.words/shards/frequency-c",
   "w.diagram/schema.sop",
+  "w.document/schema.sop",
   "w.drawing/schema.sop",
   "w.meetings/schema.sop",
   "w.text/schema.sop"
@@ -31373,6 +31392,9 @@
  "coke": [
   "k.words/shards/co-1",
   "k.words/shards/frequency-c"
+ ],
+ "col": [
+  "w.document/schema.sop"
  ],
  "cola": [
   "k.words/shards/co-1",
@@ -31590,6 +31612,7 @@
   "k.words/shards/frequency-c",
   "w.chart/schema.sop",
   "w.diagram/schema.sop",
+  "w.document/schema.sop",
   "w.face/schema.sop",
   "w.lang.en/shards/hand-grammar",
   "w.map/schema.sop",
@@ -31675,6 +31698,7 @@
   "k.words/shards/frequency-c",
   "w.chart/schema.sop",
   "w.diagram/schema.sop",
+  "w.document/schema.sop",
   "w.drawing/schema.sop",
   "w.face/schema.sop",
   "w.lang.en/shards/hand-grammar",
@@ -31774,7 +31798,8 @@
   "k.values/schema.sop",
   "k.words/shards/co-1",
   "k.words/shards/frequency-c",
-  "w.diagram/schema.sop"
+  "w.diagram/schema.sop",
+  "w.document/schema.sop"
  ],
  "column chart": [
   "k.charts/shards/charts"
@@ -43213,6 +43238,7 @@
   "k.words/shards/do",
   "k.words/shards/frequency-d",
   "w.dialogue/schema.sop",
+  "w.document/schema.sop",
   "w.list/schema.sop",
   "w.request/schema.sop",
   "w.tasks/schema.sop",
@@ -48578,6 +48604,7 @@
   "k.words/shards/frequency-e",
   "w.calendar/schema.sop",
   "w.diagram/schema.sop",
+  "w.document/schema.sop",
   "w.timeline/schema.sop"
  ],
  "end_1": [
@@ -48946,6 +48973,7 @@
  "entry": [
   "k.words/shards/en",
   "k.words/shards/frequency-e",
+  "w.document/schema.sop",
   "w.list/schema.sop"
  ],
  "entryphone": [
@@ -54066,6 +54094,7 @@
  "finished": [
   "k.words/shards/fi",
   "k.words/shards/frequency-f",
+  "w.document/schema.sop",
   "w.list/schema.sop",
   "w.tasks/schema.sop"
  ],
@@ -56344,7 +56373,8 @@
   "k.words/shards/fo",
   "k.words/shards/frequency-f",
   "w.chart/schema.sop",
-  "w.diagram/schema.sop"
+  "w.diagram/schema.sop",
+  "w.document/schema.sop"
  ],
  "formal": [
   "k.attributes/shards/aspects",
@@ -56374,11 +56404,15 @@
  "format": [
   "k.actions/shards/acts",
   "k.words/shards/fo",
-  "k.words/shards/frequency-f"
+  "k.words/shards/frequency-f",
+  "w.document/schema.sop"
  ],
  "formation": [
   "k.words/shards/fo",
   "k.words/shards/frequency-f"
+ ],
+ "formatting": [
+  "w.document/schema.sop"
  ],
  "formatting span": [
   "w.text/schema.sop"
@@ -57564,6 +57598,7 @@
   "k.procedures/schema.sop",
   "w.calendar/schema.sop",
   "w.diagram/schema.sop",
+  "w.document/schema.sop",
   "w.lang.en/shards/closed-classes",
   "w.lang.en/shards/prepositions",
   "w.timeline/schema.sop"
@@ -67467,7 +67502,11 @@
  ],
  "header": [
   "k.kinds/shards/part_of-wordnet-2",
-  "k.objects/shards/noto-office-01"
+  "k.objects/shards/noto-office-01",
+  "w.document/schema.sop"
+ ],
+ "header row": [
+  "w.document/schema.sop"
  ],
  "heading": [
   "k.attributes/shards/narration",
@@ -67476,6 +67515,9 @@
   "k.kinds/shards/relations-genres",
   "k.words/shards/frequency-h",
   "k.words/shards/he",
+  "w.document/schema.sop"
+ ],
+ "heading level": [
   "w.document/schema.sop"
  ],
  "headlight": [
@@ -68781,6 +68823,7 @@
   "k.procedures/shards/from-knowledge",
   "k.words/shards/frequency-h",
   "k.words/shards/hi",
+  "w.document/schema.sop",
   "w.map/schema.sop",
   "w.text/schema.sop"
  ],
@@ -71923,6 +71966,7 @@
   "k.words/shards/id",
   "w.diagram/schema.sop",
   "w.dialogue/schema.sop",
+  "w.document/schema.sop",
   "w.meetings/schema.sop",
   "k.objects/shards/noto-other-object-02"
  ],
@@ -74659,6 +74703,7 @@
  "italic": [
   "k.words/shards/frequency-i",
   "k.words/shards/it",
+  "w.document/schema.sop",
   "w.text/schema.sop"
  ],
  "italy": [
@@ -74690,11 +74735,13 @@
   "k.layouts/shards/layouts",
   "k.words/shards/frequency-i",
   "k.words/shards/it",
+  "w.document/schema.sop",
   "w.drawing/schema.sop",
   "w.list/schema.sop"
  ],
  "items": [
   "k.genres/shards/list",
+  "w.document/schema.sop",
   "w.lang.en/shards/closed-classes",
   "w.lang.en/shards/hand-cues-more",
   "w.list/schema.sop"
@@ -76859,6 +76906,9 @@
  "justification": [
   "k.words/shards/frequency-j",
   "k.words/shards/ju"
+ ],
+ "justified": [
+  "w.document/schema.sop"
  ],
  "justify": [
   "k.words/shards/frequency-j",
@@ -81487,6 +81537,7 @@
   "k.words/shards/la",
   "w.chart/schema.sop",
   "w.diagram/schema.sop",
+  "w.document/schema.sop",
   "w.drawing/schema.sop",
   "w.map/schema.sop",
   "w.meetings/schema.sop",
@@ -84878,6 +84929,7 @@
  "level": [
   "k.words/shards/frequency-l",
   "k.words/shards/le",
+  "w.document/schema.sop",
   "k.objects/shards/noto-music-01"
  ],
  "level slider": [
@@ -85934,6 +85986,7 @@
   "k.words/shards/frequency-l",
   "k.words/shards/li",
   "w.diagram/schema.sop",
+  "w.document/schema.sop",
   "k.objects/shards/noto-office-03"
  ],
  "link target": [
@@ -86176,6 +86229,7 @@
   "k.procedures/shards/tasks",
   "k.words/shards/frequency-l",
   "k.words/shards/li",
+  "w.document/schema.sop",
   "w.list/schema.sop",
   "w.tasks/schema.sop",
   "k.objects/shards/noto-office-02"
@@ -90127,6 +90181,7 @@
   "k.kinds/shards/relations-charts",
   "k.words/shards/frequency-m",
   "k.words/shards/ma",
+  "w.document/schema.sop",
   "w.map/schema.sop",
   "k.objects/shards/noto-book-paper-02",
   "k.people/shards/given-names-m"
@@ -90197,7 +90252,8 @@
  ],
  "marks": [
   "k.words/shards/frequency-m",
-  "k.words/shards/ma"
+  "k.words/shards/ma",
+  "w.document/schema.sop"
  ],
  "markus": [
   "k.people/shards/given-names-m"
@@ -97756,6 +97812,7 @@
   "w.chart/schema.sop",
   "w.diagram/schema.sop",
   "w.dialogue/schema.sop",
+  "w.document/schema.sop",
   "w.drawing/schema.sop",
   "w.face/schema.sop",
   "w.lang.en/shards/hand-grammar",
@@ -100882,7 +100939,8 @@
   "k.interest/shards/features"
  ],
  "numbered": [
-  "k.words/shards/hand"
+  "k.words/shards/hand",
+  "w.document/schema.sop"
  ],
  "numbers": [
   "k.attributes/schema.sop",
@@ -114904,7 +114962,8 @@
  ],
  "quote": [
   "k.words/shards/frequency-q",
-  "k.words/shards/qu"
+  "k.words/shards/qu",
+  "w.document/schema.sop"
  ],
  "qurghonteppa": [
   "k.geo/shards/asia"
@@ -121539,7 +121598,8 @@
   "k.values/schema.sop",
   "k.words/shards/frequency-r",
   "k.words/shards/ro",
-  "w.diagram/schema.sop"
+  "w.diagram/schema.sop",
+  "w.document/schema.sop"
  ],
  "row_line_1": [
   "k.objects/shards/places"
@@ -135202,6 +135262,7 @@
   "k.words/shards/st",
   "w.calendar/schema.sop",
   "w.diagram/schema.sop",
+  "w.document/schema.sop",
   "w.meetings/schema.sop",
   "w.timeline/schema.sop"
  ],
@@ -136693,6 +136754,7 @@
   "k.actions/shards/actions-hands",
   "k.words/shards/frequency-s",
   "k.words/shards/st",
+  "w.document/schema.sop",
   "w.text/schema.sop",
   "k.objects/shards/noto-sport-02"
  ],
@@ -139320,6 +139382,7 @@
   "k.scenes/shards/things-t",
   "k.words/shards/frequency-t",
   "k.words/shards/ta",
+  "w.document/schema.sop",
   "w.seating/schema.sop",
   "k.objects/shards/noto-sport-02"
  ],
@@ -140431,6 +140494,7 @@
   "k.procedures/schema.sop",
   "k.words/shards/frequency-t",
   "k.words/shards/ta",
+  "w.document/schema.sop",
   "w.tasks/schema.sop"
  ],
  "task list": [
@@ -144631,6 +144695,7 @@
   "k.objects/shards/things-2"
  ],
  "ticked": [
+  "w.document/schema.sop",
   "w.list/schema.sop"
  ],
  "ticket": [
@@ -145456,6 +145521,7 @@
   "k.attributes/shards/typical",
   "k.kinds/shards/structures",
   "w.diagram/schema.sop",
+  "w.document/schema.sop",
   "w.lang.en/shards/closed-classes",
   "w.lang.en/shards/prepositions",
   "w.timeline/schema.sop"
@@ -150044,6 +150110,7 @@
   "k.scenes/shards/things-u"
  ],
  "underline": [
+  "w.document/schema.sop",
   "w.text/schema.sop"
  ],
  "undermine": [
@@ -150779,6 +150846,9 @@
  ],
  "urique": [
   "k.geo/shards/north-america"
+ ],
+ "url": [
+  "w.document/schema.sop"
  ],
  "urmas": [
   "k.people/shards/given-names-u"
@@ -153437,6 +153507,21 @@
  "w.document": [
   "k.kinds/shards/structures"
  ],
+ "w.document.block": [
+  "k.kinds/shards/structures"
+ ],
+ "w.document.block.document": [
+  "k.kinds/shards/structures"
+ ],
+ "w.document.block.n": [
+  "k.kinds/shards/structures"
+ ],
+ "w.document.cell": [
+  "k.kinds/shards/structures"
+ ],
+ "w.document.cell.block": [
+  "k.kinds/shards/structures"
+ ],
  "w.document.chapter": [
   "k.kinds/shards/structures"
  ],
@@ -153450,6 +153535,24 @@
   "k.kinds/shards/structures"
  ],
  "w.document.document": [
+  "k.kinds/shards/structures"
+ ],
+ "w.document.item": [
+  "k.kinds/shards/structures"
+ ],
+ "w.document.item.block": [
+  "k.kinds/shards/structures"
+ ],
+ "w.document.item.n": [
+  "k.kinds/shards/structures"
+ ],
+ "w.document.mark": [
+  "k.kinds/shards/structures"
+ ],
+ "w.document.mark.block": [
+  "k.kinds/shards/structures"
+ ],
+ "w.document.mark.form": [
   "k.kinds/shards/structures"
  ],
  "w.document.paragraph": [

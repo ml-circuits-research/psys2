@@ -89,3 +89,11 @@ test('a literal read removes only model examples and history, retaining the auth
  assert.deepEqual(calls.at(-1),['read','set widget 🟦',{area:'toy',context:{existing,previous:null}}]);
  assert.equal(calls.filter(call=>call[0]==='cut').length,1);
 });
+test('a classifier normalization is decided by the bridge under declared bindings, not refused by the provider',async()=>{
+ // The reader chose a bank value its span does not spell: no copy range, one deferred issue. Without a declared
+ // normalization in the bindings the bridge still refuses the value; the provider issue alone does not.
+ const editRead=r=>{const c=r.request.constraints[0];c.value=c.value+'-bank';r.ranges=r.ranges.filter(x=>!(x.path.length===3&&x.path[0]==='constraints'&&x.path[2]==='value'));r.unresolved.push({reason:'normalization-requires-declared-proof',key:'toy.item.tint'});r.coverage.complete=false;};
+ const {pipeline}=await setup({editRead}),out=await pipeline.propose(writeReaderSource('set widget 🟦'));
+ assert.equal(out.candidates.length,0);assert.ok(!out.failures.some(f=>f.reason==='provider-unresolved'||f.reason==='incomplete-provider-coverage'),JSON.stringify(out.failures));
+ assert.ok(out.failures.some(f=>f.reason==='unresolved-source-value-normalization'),JSON.stringify(out.failures));
+});
