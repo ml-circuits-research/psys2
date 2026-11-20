@@ -1,0 +1,38 @@
+# k.styles/shards/materials: 6 fills for materials (bricks, planks, tiles, thatch, cobbles, waves) and 12 materials a drawn
+# thing is made of (wood, glass, metal, brick, stone, thatch, tiles, water, grass, ice, gold, paper): the colour, fill,
+# see-through and shine a picture shows them with; words for the materials.
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@k.styles.fill.bricks k.styles.fill name=bricks about="rows of bricks with mortar between" pattern=bricks gap=12 angle=0 core.source="hand-core 1"
+@k.styles.fill.planks k.styles.fill name=planks about="boards side by side, the grain of wood" pattern=hachure gap=7 angle=0 core.source="hand-core 1"
+@k.styles.fill.tiles k.styles.fill name=tiles about="square tiles in a grid" pattern=cross-hatch gap=14 angle=0 core.source="hand-core 1"
+@k.styles.fill.thatch k.styles.fill name=thatch about="close straw strokes, as on a thatched roof" pattern=hachure gap=4 angle=-75 core.source="hand-core 1"
+@k.styles.fill.cobbles k.styles.fill name=cobbles about="round stones close together" pattern=dots gap=9 core.source="hand-core 1"
+@k.styles.fill.waves k.styles.fill name=waves about="rows of little waves, as on water" pattern=zigzag gap=12 angle=0 core.source="hand-core 1"
+@k.styles.material.wood k.styles.material name=wood about="made of wood: brown boards" colour="sandy brown" fill=planks core.source="hand-core 1"
+@k.styles.material.glass k.styles.material name=glass about="made of glass: pale and see-through" colour="light blue" fill=solid opacity=0.45 core.source="hand-core 1"
+@k.styles.material.metal k.styles.material name=metal about="made of metal: grey, shining" colour=silver fill=gradient gradient=white core.source="hand-core 1"
+@k.styles.material.brick k.styles.material name=brick about="made of bricks" colour=firebrick fill=bricks core.source="hand-core 1"
+@k.styles.material.stone k.styles.material name=stone about="made of stone" colour=grey fill=cobbles core.source="hand-core 1"
+@k.styles.material.thatch k.styles.material name=thatch about="a roof of straw" colour=khaki fill=thatch core.source="hand-core 1"
+@k.styles.material.tiles k.styles.material name=tiles about="covered in tiles" colour=firebrick fill=tiles core.source="hand-core 1"
+@k.styles.material.water k.styles.material name=water about="water: blue with little waves" colour="sky blue" fill=waves core.source="hand-core 1"
+@k.styles.material.grass k.styles.material name=grass about="grass: green strokes" colour=green fill=crayon core.source="hand-core 1"
+@k.styles.material.ice k.styles.material name=ice about="ice: pale and see-through" colour="light blue" fill=solid opacity=0.7 core.source="hand-core 1"
+@k.styles.material.gold k.styles.material name=gold about="gold: shining yellow" colour=gold fill=gradient gradient=white core.source="hand-core 1"
+@k.styles.material.paper k.styles.material name=paper about="paper: plain white" colour=white fill=solid core.source="hand-core 1"
+
+@k.styles.word.material.wood core.word text=wooden text=timber text=wood means=wood of=k.styles.material.name core.source="hand-core 1"
+@k.styles.word.material.glass core.word text=glass text=glassy text=see-through means=glass of=k.styles.material.name core.source="hand-core 1"
+@k.styles.word.material.metal core.word text=metal text=metallic text=steel text=iron means=metal of=k.styles.material.name core.source="hand-core 1"
+@k.styles.word.material.brick core.word text=brick text=bricks text="red brick" means=brick of=k.styles.material.name core.source="hand-core 1"
+@k.styles.word.material.stone core.word text=stone text=stones text=rock text=rocky text=pebbles means=stone of=k.styles.material.name core.source="hand-core 1"
+@k.styles.word.material.thatch core.word text=thatch text=thatched text=straw means=thatch of=k.styles.material.name core.source="hand-core 1"
+@k.styles.word.material.tiles core.word text=tiles text=tiled text="roof tiles" text=slate means=tiles of=k.styles.material.name core.source="hand-core 1"
+@k.styles.word.material.water core.word text=water text=watery text=wet means=water of=k.styles.material.name core.source="hand-core 1"
+@k.styles.word.material.grass core.word text=grass text=grassy text=lawn means=grass of=k.styles.material.name core.source="hand-core 1"
+@k.styles.word.material.ice core.word text=ice text=icy text=frozen means=ice of=k.styles.material.name core.source="hand-core 1"
+@k.styles.word.material.gold core.word text=gold text=golden means=gold of=k.styles.material.name core.source="hand-core 1"
+@k.styles.word.material.paper core.word text=paper text=cardboard means=paper of=k.styles.material.name core.source="hand-core 1"

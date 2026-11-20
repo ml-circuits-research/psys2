@@ -1,0 +1,33 @@
+# k.objects/shards/stand-ins-variants: variants of kinds a drawing names (a storm cloud, a sports car, an oak tree, a brick
+# house): each drawn by the object of its kind, with the colour, the size against its kind and the material that tell it
+# from the kind (psys2 drawn.variant).
+# sources: hand-core 1 (hand-written in this repository)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@k.objects.variant.oak_tree k.objects.stand_in name="oak tree" drawing=tree scale=1.2 core.source="hand-core 1"
+@k.objects.variant.cherry_tree k.objects.stand_in name="cherry tree" drawing=tree colour=pink core.source="hand-core 1"
+@k.objects.variant.apple_tree k.objects.stand_in name="apple tree" drawing=tree core.source="hand-core 1"
+@k.objects.variant.birch_tree k.objects.stand_in name="birch tree" drawing=tree core.source="hand-core 1"
+@k.objects.variant.willow_tree k.objects.stand_in name="willow tree" drawing=tree scale=1.1 core.source="hand-core 1"
+@k.objects.variant.maple_tree k.objects.stand_in name="maple tree" drawing=tree colour=orange core.source="hand-core 1"
+@k.objects.variant.sports_car k.objects.stand_in name="sports car" drawing=car colour=red scale=0.9 core.source="hand-core 1"
+@k.objects.variant.race_car k.objects.stand_in name="race car" drawing=car colour=red scale=0.9 core.source="hand-core 1"
+@k.objects.variant.electric_car k.objects.stand_in name="electric car" drawing=car colour=white core.source="hand-core 1"
+@k.objects.variant.luxury_sedan k.objects.stand_in name="luxury sedan" drawing=car colour=black scale=1.1 core.source="hand-core 1"
+@k.objects.variant.storm_cloud k.objects.stand_in name="storm cloud" drawing=cloud colour="dark grey" scale=1.3 core.source="hand-core 1"
+@k.objects.variant.rain_cloud k.objects.stand_in name="rain cloud" drawing=cloud colour=grey scale=1.2 core.source="hand-core 1"
+@k.objects.variant.thundercloud k.objects.stand_in name=thundercloud drawing=cloud colour="dark grey" scale=1.3 core.source="hand-core 1"
+@k.objects.variant.motorboat k.objects.stand_in name=motorboat drawing=speedboat core.source="hand-core 1"
+@k.objects.variant.fishing_boat k.objects.stand_in name="fishing boat" drawing=boat core.source="hand-core 1"
+@k.objects.variant.sailing_boat k.objects.stand_in name="sailing boat" drawing=sailboat core.source="hand-core 1"
+@k.objects.variant.tabby_cat k.objects.stand_in name="tabby cat" drawing=cat colour=orange core.source="hand-core 1"
+@k.objects.variant.siamese_cat k.objects.stand_in name="siamese cat" drawing=cat colour=beige core.source="hand-core 1"
+@k.objects.variant.ginger_cat k.objects.stand_in name="ginger cat" drawing=cat colour=orange core.source="hand-core 1"
+@k.objects.variant.brick_house k.objects.stand_in name="brick house" drawing=house material=brick core.source="hand-core 1"
+@k.objects.variant.stone_house k.objects.stand_in name="stone house" drawing=house material=stone core.source="hand-core 1"
+@k.objects.variant.wooden_house k.objects.stand_in name="wooden house" drawing=house material=wood core.source="hand-core 1"
+@k.objects.variant.stunt_kite k.objects.stand_in name="stunt kite" drawing=kite core.source="hand-core 1"
+@k.objects.variant.dragon_kite k.objects.stand_in name="dragon kite" drawing=kite colour=red scale=1.2 core.source="hand-core 1"
+@k.objects.variant.setting_sun k.objects.stand_in name="setting sun" drawing=sun colour=orange core.source="hand-core 1"
+@k.objects.variant.puppy_dog k.objects.stand_in name="puppy dog" drawing=dog scale=0.6 core.source="hand-core 1"
