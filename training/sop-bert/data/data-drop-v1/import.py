@@ -32,6 +32,9 @@ spec = importlib.util.spec_from_file_location('official_build', REPO / 'official
 official = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(official)
 INVENTORY = merged_inventory()
+for _area, _types in json.loads((HERE / 'inventory.json').read_text()).items():  # keys only the drops use so far (drawn.facing)
+    for _typ, _definition in _types.items():
+        INVENTORY.setdefault(_area, {}).setdefault(_typ, {'keys': {}})['keys'].update(_definition['keys'])
 INV = official.Inventory(INVENTORY)
 VALIDATOR = official.Validator(INV)
 _, LEMMAS = official.kind_vocabulary()
@@ -104,6 +107,25 @@ def split_merged(needs, text, stats):
     return out
 
 
+FACING_CUE = re.compile(r'\b(facing|faces|face|faced|looking|looks|look|turned|turn|turns|oriented|staring|gazing|glancing|pointed|aimed)\b(?:\W+\w+){0,2}\W+$', re.I)
+MOTION_CUE = re.compile(r'\b(move|moves|moving|drive|drives|driving|run|runs|running|walk|walks|walking|slide|go|goes|going|head|heads|heading|fly|flies|flying|swim|swims|swimming|shift|push|drag|nudge|travel|travels)\b(?:\W+\w+){0,3}\W+$', re.I)
+
+
+def facing_keys(world, q, stats):
+    """A static orientation ("a dog facing left", "turned to the left") is drawn.facing; motion or pointing stays drawn.direction;
+    when the words around the value say neither, the worker's label stays."""
+    if world != 'drawing':
+        return
+    span = q.get('span') or ''
+    for c in q.get('constraints') or []:
+        if c.get('key') != 'drawn.direction' or c.get('value') not in ('left', 'right') or not isinstance(c.get('value_span'), str):
+            continue
+        at = span.find(c['value_span'])
+        before = span[:at] if at >= 0 else ''
+        if FACING_CUE.search(before) and not MOTION_CUE.search(before):
+            c['key'] = 'drawn.facing'; stats['drawn.direction in a static sense (facing/looking/turned) -> drawn.facing'] += 1
+
+
 def needs_to_keys(world, q, needs, stats):
     """Needs whose meaning has a declared key become that constraint (the worker's recurring frames); the rest stay needs."""
     span = q.get('span') or ''
@@ -125,6 +147,8 @@ def needs_to_keys(world, q, needs, stats):
                 c = {'key': 'drawn.kind', 'value': value, 'value_span': surface, 'operator': 'eq', 'phase': 'result'}
         elif world == 'drawing' and frame == 'part.owner' and place(nspan):
             c = {'key': 'part.owner', 'value': nspan, 'value_span': nspan, 'operator': 'eq', 'phase': 'selector'}
+        elif world == 'drawing' and frame == 'drawn.facing' and str(value).lower() in ('left', 'right') and (place(nspan) or place(str(value))):
+            c = {'key': 'drawn.facing', 'value': str(value).lower(), 'value_span': nspan if place(nspan) else str(value), 'operator': 'eq', 'phase': 'result'}
         elif world == 'drawing' and frame == 'drawn.region' and place(nspan):
             c = {'key': 'drawn.at', 'value': value, 'value_span': nspan, 'operator': 'region', 'phase': 'result'}
         if c:
@@ -186,6 +210,7 @@ def normalise(row, stats):
             else:
                 kept.append(c)
         q['constraints'] = kept
+        facing_keys(world, q, stats)
         if moved:
             q['needs'] = (q.get('needs') if isinstance(q.get('needs'), list) else [q['needs']] if q.get('needs') else []) + moved
         t = q.get('target') or {}

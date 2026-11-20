@@ -1,0 +1,10 @@
+{
+ "drawing": {
+  "drawn": {
+   "keys": {
+    "facing": {"head": "class", "concept": "facing", "values": ["left", "right"],
+               "src": "art.draw facing (drawing.object.make / catalog.make / object.change {facing}): the side a drawn thing faces"}
+   }
+  }
+ }
+}

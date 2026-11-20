@@ -2294,6 +2294,15 @@
      "head": "candidate",
      "src": "Authored semantic intent; requires world-informed completion"
     },
+    "facing": {
+     "concept": "facing",
+     "head": "class",
+     "src": "art.draw facing (drawing.object.make / catalog.make / object.change {facing}): the side a drawn thing faces",
+     "values": [
+      "left",
+      "right"
+     ]
+    },
     "height": {
      "concept": "height",
      "head": "number",

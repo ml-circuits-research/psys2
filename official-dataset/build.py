@@ -102,6 +102,8 @@ def build_inventory():
     inventory = union.merge_inventory(inventory, json.loads((DATA / 'ui-features-v1' / 'inventory.json').read_text()))
     # Diagram styles, layout, alignment, connection patterns and the new node/link acts (specs/diagram-capabilities.md).
     inventory = union.merge_inventory(inventory, json.loads((DATA / 'ui-diagram-v2' / 'inventory.json').read_text()))
+    # Keys the data drops use that no other source declares yet (drawn.facing).
+    inventory = union.merge_inventory(inventory, json.loads((DATA / 'data-drop-v1' / 'inventory.json').read_text()))
     shared = union.load_preparer()
     families = shared.target_families(inventory)
     inventory['request']['target']['keys']['type']['values'] = sorted({t for types in families.values() for t in types})
