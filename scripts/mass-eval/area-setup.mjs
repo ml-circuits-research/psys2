@@ -48,7 +48,11 @@ export async function seedContext(world,existing,{knowledge,bindings}={}){
   }
  }else if(world==='diagram'){
   const nodes=[],charts=[],links=[],groups=[],points=[],series=[];
-  for(const item of items){const k=item.kind;(k==='link'||k==='arrow'||k==='edge'?links:k==='chart'?charts:k==='group'?groups:k==='point'?points:k==='series'?series:nodes).push(item);}
+  // A chart named by its kind ("bar chart", "line graph", "pie chart", "scatter plot") is a chart group drawn with the
+  // declared layout its first word names (diagram.group.chart.make layout), else as bars.
+  const chartLayouts=ops.get('diagram.group.chart.make')?.params?.layout?.enum??[];
+  const isChart=k=>k==='chart'||/ (chart|graph|plot)$/.test(String(k));
+  for(const item of items){const k=item.kind;(k==='link'||k==='arrow'||k==='edge'?links:isChart(k)?charts:k==='group'?groups:k==='point'?points:k==='series'?series:nodes).push(item);}
   const nodeKinds=kindEnum('diagram.node.make');
   for(const item of nodes){
    const kind=nodeKinds.includes(item.kind)?item.kind:item.kind==='box'?'rectangle':item.kind==='node'?'rectangle':null;
@@ -59,7 +63,7 @@ export async function seedContext(world,existing,{knowledge,bindings}={}){
   for(const item of links){const n=nativeNodes();if(n.length<2){failures.push({index:item.index,kind:item.kind,reason:'link-needs-two-nodes'});continue;}
    const i=links.indexOf(item)%(n.length-1);note(item,await call('diagram.link.make',{from:n[i],to:n[i+1],...(item.name&&!/^e\d+$/.test(item.name)?{label:item.name}:{})}));}
   const labels=points.length?points.map(p=>p.name):['A','B','C'],values=labels.map((_,i)=>i+1);
-  for(const item of charts){const r=note(item,await call('diagram.group.chart.make',{label:item.name||'Chart',labels,values,layout:'bar'}));
+  for(const item of charts){const first=String(item.kind).split(' ')[0],layout=chartLayouts.includes(first)?first:'bar';const r=note(item,await call('diagram.group.chart.make',{label:item.name||'Chart',labels,values,layout}));
    if(r.ok)for(const p of points)ids.set(p.name,r.created?.[0]?.id);}
   for(const item of [...points,...series])if(!charts.length)failures.push({index:item.index,kind:item.kind,reason:'chart-member-without-chart'});else seeded++;
   for(const item of groups){const n=nativeNodes();if(!n.length){failures.push({index:item.index,kind:item.kind,reason:'group-needs-nodes'});continue;}note(item,await call('diagram.group.make',{name:item.name||'Group',ids:n.slice(0,2)}));}

@@ -168,6 +168,23 @@ def chart_value(frame, value, nspan):
     return (key, v) if key else None
 
 
+_COMPARATIVES = None
+# The chart keys whose values are numbers: a comparative of them ("bigger", "thinner") is a step (operator delta), as the
+# reader writes comparatives everywhere; a word for none of the marker edge is its number 0.
+NUMBER_CHART_KEYS = {'chart.fontSize', 'chart.lineWidth', 'chart.markerSize', 'chart.markerEdge', 'chart.barWidth', 'chart.barHeight', 'chart.pieRadius'}
+
+
+def comparatives():
+    """{word: 'more'|'less'} from the comparatives of k.values at the catalog pin (the site copy), way up or down."""
+    global _COMPARATIVES
+    if _COMPARATIVES is None:
+        pin = re.search(r"commit: '([0-9a-f]{40})'", (REPO / 'src/knowledge/catalog-pin.mjs').read_text()).group(1)
+        text = (REPO / 'docs/webchat/catalog' / pin / 'k.values' / 'shards' / 'scales.sop').read_text()
+        _COMPARATIVES = {m.group(1).strip('"'): ('more' if m.group(2) == 'up' else 'less')
+                         for m in re.finditer(r' k\.values\.comparative text=("[^"]*"|\S+) scale=\S+ way=(up|down) degree=comparative', text)}
+    return _COMPARATIVES
+
+
 def chart_keys(world, q, n, place):
     """Constraints for a chart, title-style, background or page-title need; [] when the need stays."""
     frame, value, nspan = n.get('frame'), n.get('value'), n.get('span')
@@ -194,6 +211,15 @@ def chart_keys(world, q, n, place):
     kv = chart_value(frame, value, nspan)
     if not kv:
         return []
+    if kv[0] in NUMBER_CHART_KEYS:
+        words = re.findall(r'[a-z]+', kv[1])
+        step = next((comparatives()[w] for w in words if w in comparatives()), None)
+        if step:
+            return [{'key': kv[0], 'operator': 'delta', 'step': step, 'value_span': surface, 'phase': 'result'}]
+        if kv[1] in ('off', 'none'):
+            return [{'key': kv[0], 'value': '0', 'value_span': surface, 'operator': 'eq', 'phase': 'result'}]
+        if not re.fullmatch(r'\d+(\.\d+)?', kv[1]):
+            return []   # "medium", "as before": no number and no step; stays a need
     return [{'key': kv[0], 'value': kv[1], 'value_span': surface, 'operator': 'eq', 'phase': 'result'}]
 
 

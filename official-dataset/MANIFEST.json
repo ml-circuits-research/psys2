@@ -687,8 +687,8 @@
       "name": "data-drop-v1",
       "path": "training/sop-bert/data/data-drop-v1/accepted.jsonl",
       "description": "Diagram/Drawing rows of the data-request drops, validated and normalised by data-drop-v1/import.py",
-      "gitCommit": "cb7a7e99229f443b3cc2d80e421af2811735e25a",
-      "sha256": "0e87eb09b42baec5cad84a560c06d39eeacb7e5411d523a3048215fd41a153bc",
+      "gitCommit": "36fabec5aa8fb3a2a9a6c2ffa0c2b7eabd2ab587",
+      "sha256": "68352cf2a11499ea80e4296eaf78db12155319765ed504f719cba88c579bd24d",
       "rowsIn": 16934,
       "rowsKept": 16934,
       "rowsDropped": 0,
@@ -931,32 +931,32 @@
   },
   "files": {
     "STATS.md": {
-      "sha256": "9f22553c724666dae1916534c01098dbaf1e50155485a261a8f63898598697a6",
-      "bytes": 8139
+      "sha256": "1fe4107c0cba97c96291676b209242f5cb77fe46196f7049177d1f1f170fbfe8",
+      "bytes": 8145
     },
     "VALIDATION.md": {
-      "sha256": "78e7f14876586b70a0d4c1b38a302debf64efe5ccea85b8123ca4a09eefff637",
+      "sha256": "4948c7c38137af897352dfd5b7b293c4755dffbdd58cbfdd744c3f78a38894b6",
       "bytes": 13718
     },
     "audit-sample.md": {
-      "sha256": "ad3ac5edb17a2a5ce1549651968036172a26ba6731b309331286dd025801e14c",
-      "bytes": 44413
+      "sha256": "94c12f0c6cb82221810392f194aae8f10f3845be30056cb09d74790095ead0f5",
+      "bytes": 44473
     },
     "dev.jsonl": {
-      "sha256": "cc26e47c9ebf48f82d54e6d07ca08313f3f111a4a2f75403dcddf81f0516e048",
-      "bytes": 4858371
+      "sha256": "833cd24dc0ca6fbea5aac2bfddb544f356ed97354977b204f7030553bb1f486d",
+      "bytes": 4858281
     },
     "inventory.json": {
       "sha256": "a64a0b67273c6ca518e5370586d99786d25959bdc676d3c1669317b3089b3317",
       "bytes": 69236
     },
     "test.jsonl": {
-      "sha256": "9e9b6b799db06f1be0b59e5f1c32ab7eb6a1b63bd31653724fa7aca55d694842",
-      "bytes": 2423805
+      "sha256": "e858c2f2a83e195b8c6550dd0fcee7ae0188c097f357a92bbb11b53dce6ba3b9",
+      "bytes": 2423718
     },
     "train.jsonl.gz": {
-      "sha256": "7e288207a848b046a28a3fdb7881dc2556c614708a200dd0c3ac9835bf6c0904",
-      "bytes": 5065055
+      "sha256": "eff831d46520382eea04ac34abf00d4e14d241f29b11aff516012bbf6dcc63dd",
+      "bytes": 5065137
     }
   },
   "policy": {

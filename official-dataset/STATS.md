@@ -280,7 +280,7 @@
 | diagram.point.value | 559 |
 | document.block.level | 553 |
 | diagram.node.layout | 542 |
-| … 205 more | 28,992 |
+| … 205 more | 28,938 |
 
 ## Style (top 40)
 
