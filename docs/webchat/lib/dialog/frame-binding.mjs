@@ -52,7 +52,9 @@ export function frameTable({ bindings, area, host, roles, amounts = [], comparat
   const byName = new Map(operations.map((op) => [op.name, op]));
   const kinds = (bindings.kinds ?? []).filter((k) => k.area === area && k.nativeFamilyBinding && byName.has(k.nativeFamilyBinding.operation))
     .map((k) => ({ label: k.lemma, canonical: k.canonical, on: byName.get(k.nativeFamilyBinding.operation).on, type: k.type }));
-  const properties = frameConceptRows(bindings, area, roles).filter((r) => byName.size === 0 || operations.some((op) => op.on === r.on));
+  const declared = facts.filter((w) => w.type === 'std.capability.property' && take(w, 'concept') && take(w, 'parameter'))
+    .map((w) => ({ concept: take(w, 'concept'), on: take(w, 'on'), parameter: take(w, 'parameter'), canonical: take(w, 'concept') }));
+  const properties = [...declared, ...frameConceptRows(bindings, area, roles)].filter((r) => byName.size === 0 || operations.some((op) => op.on === r.on));
   // A spatial relation is taken by the placement compiler where the area binds its relation concept (declared, not per tool).
   const relationRow = (bindings.properties ?? []).find((r) => r.area === area && r.rawDescriptor?.concept === 'spatial_relation');
   const relations = relationRow ? [...new Set(kinds.map((k) => k.on))] : [];
@@ -92,6 +94,11 @@ export function compileFrame(frame, table, lib) {
     { dropped: 'placement', entries: without((r) => PLACEMENT_ROLES.has(r.role), 'refused-by-host') },
     { dropped: 'all-but-theme', entries: without((r) => r.role !== 'theme' && r.role !== 'quantity', 'refused-by-host') },
   ];
+  for (const c of binding.clauses) for (const [i, r] of c.resolved.entries()) for (const kind of (r.ambiguous ?? []).slice(1, 4)) {
+    const alt = structuredClone(done);
+    alt.clauses[c.clause].mentions[i].kind = kind;
+    steps.push({ dropped: 'kind:' + kind, entries: lib.frameToRequests(alt, { binding: lib.bindFrame(alt, table), extended: false }).entries });
+  }
   const entries = out.entries.map((e) => ({ ...e, fallbacks: steps.map((s) => ({ dropped: s.dropped, wires: s.entries.find((x) => x.id === e.id)?.wires }))
     .filter((f) => f.wires && f.wires !== e.wires && !(Array.isArray(f.wires) && f.wires.length < 2)).filter((f, i, all) => all.findIndex((g) => String(g.wires) === String(f.wires)) === i) }));
   return { entries, disclosed: out.disclosed, notes: out.notes, binding };

@@ -22,7 +22,11 @@ export function placementSearchProvider({supported=z3Supported}={}) {
  if(!supported()){if(state==='not-loaded')state='unavailable';return undefined;}
  if(!provider){
   const inner=z3Provider({base:Z3_BASE,onLoad:info=>{lastLoad=info;state=info.status==='loaded'?'ready':'unavailable';},onSolve:info=>{lastSolve=info;}});
-  provider=Object.assign(model=>{begin('turn');return inner(model);},{supported:inner.supported,preload:()=>{begin('idle');return inner.preload();}});
+  // Z3 optimises within half of the declared budget; when it cannot finish (timeout) it declines, and the library's internal search answers the same
+  // model with its best result, so a hard soft-constraint optimisation never spends the whole budget for no answer (measured: a three-object group placement
+  // timed out twice at 3 s in Chromium, the internal search answers it in well under a second).
+  provider=Object.assign(model=>{begin('turn');const budget=Number(model?.budget)>0?Math.max(1,Math.ceil(model.budget/2)):model?.budget;
+   return Promise.resolve(inner({...model,budget})).then(answer=>answer?.status==='budget'?null:answer);},{supported:inner.supported,preload:()=>{begin('idle');return inner.preload();}});
  }
  return provider;
 }

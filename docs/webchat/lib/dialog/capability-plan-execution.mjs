@@ -1,5 +1,5 @@
 import { readSceneDefaults } from './scene-placement-defaults.mjs?v=2ae634c0b5';
-import { solveDefaultPlacement, solveGroupPlacement } from './default-placement.mjs?v=41b177d7f8';
+import { solveDefaultPlacement, solveGroupPlacement } from './default-placement.mjs?v=9102a6dd06';
 import { en } from '../lang/en.mjs?v=fcc7af993a';
 import { quote } from '../vendor/sopworld/sopworld.mjs?v=915a9d5c18';
 // SPDX-License-Identifier: AGPL-3.0-only

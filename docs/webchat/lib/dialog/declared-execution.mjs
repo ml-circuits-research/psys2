@@ -1,5 +1,5 @@
 import { readSceneDefaults } from './scene-placement-defaults.mjs?v=2ae634c0b5';
-import { executeSpatialPlacement } from './spatial-placement-execution.mjs?v=c6fa89980e';
+import { executeSpatialPlacement } from './spatial-placement-execution.mjs?v=2fe1d03886';
 import { compareNativeReadings, compileNativeCapability } from './capability-plan-adapter.mjs?v=2ef61a1684';
 import { readDegreeBases } from './degree-bases.mjs?v=ed81fd7916';
 import { NATIVE_AREAS,createAreaHost } from './app-reader-context.mjs?v=4350a070af';
@@ -7,9 +7,9 @@ import { instanceIdFor } from './instance-identity.mjs?v=024ef1ca83';
 import { describeRouteComparison,resolveRequestRoute } from './request-routing-policy.mjs?v=f298c06ae9';
 import { executeHistoryRequest } from './history-execution.mjs?v=7092cf7ba1';
 import { executeNativeQuery } from './native-query-execution.mjs?v=7eec541843';
-import { executeNativeCapability } from './capability-plan-execution.mjs?v=f22db9ce21';
+import { executeNativeCapability } from './capability-plan-execution.mjs?v=04d5bb32b8';
 import { executionValueSource } from './execution-policy.mjs?v=0af0e2a963';
-import { inspectCachedExecutionSource } from './execution-world-inspection.mjs?v=f8b8d381ca';
+import { inspectCachedExecutionSource } from './execution-world-inspection.mjs?v=b512bbde0a';
 import { World, str } from '../vendor/sopworld/sopworld.mjs?v=915a9d5c18';
 import SOURCE from './new-engine-source.mjs?v=fc6b6a1c57';
 let knowledge;

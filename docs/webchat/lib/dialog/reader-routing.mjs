@@ -1,4 +1,4 @@
-import {isScopedRemoval} from './capability-plan-execution.mjs?v=f22db9ce21';
+import {isScopedRemoval} from './capability-plan-execution.mjs?v=04d5bb32b8';
 import {projectRemovalAction} from './project-removal-action.mjs?v=3d29115cca';
 import { captureHistory, recordHistory, restoreHistory } from './history-journal.mjs?v=e0e2a6790c';
 import {projectReaderHeadAlternative} from './reader-head-alternative.mjs?v=7359d34a30';
@@ -8,15 +8,15 @@ import {isAuthoredRequest,readAuthoredRequest} from './authored-request-tool.mjs
 // Model-first proposal routing. Calibration authority belongs to host configuration,
 // never to a model output, evaluation annotation or grammar proposal.
 import {requestCompositionPolicy,scheduleFollowingCut}from './request-composition-policy.mjs?v=a9ade5b7c7';
-import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=f8b8d381ca';
+import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=b512bbde0a';
 import {projectQueryAction,recoverQueryProjection} from './project-query-action.mjs?v=060c721f69';
 import {projectContextAction} from './project-context-action.mjs?v=ef9db7fe4d';
 import {projectCodeReference} from './project-code-reference.mjs?v=db165fa8a7';
 import {projectCreateAction} from './project-create-action.mjs?v=d530231d1d';
 import {assessReaderProposal} from './reader-admission.mjs?v=7537d719a0';
 import {projectQuantities,amountsOf,quantityNote} from './quantity-projection.mjs?v=d03426ef51';
-import {routeCoordination} from './coordination-routing.mjs?v=ff7f05839a';
-import {declaredKnowledge} from './declared-execution.mjs?v=f8b8d381ca';
+import {routeCoordination} from './coordination-routing.mjs?v=672824f3f2';
+import {declaredKnowledge} from './declared-execution.mjs?v=b512bbde0a';
 import {interpretationPolicy,coordinationEligible,comparisonBounds,retryNote} from './interpretation-policy.mjs?v=2b023fe676';
 let amounts;
 // The named amounts of the execution knowledge (k.expect.amount), read once.

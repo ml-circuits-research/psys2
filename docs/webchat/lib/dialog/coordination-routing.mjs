@@ -8,8 +8,8 @@ import {parse,serialize,quote} from '../vendor/sopworld/sopworld.mjs?v=915a9d5c1
 import {writeReaderSource} from './reader-source.mjs?v=cbef78f4a7';
 import {coordinationParts} from './coordination-split.mjs?v=6e35143d5b';
 import {resolveRequestRoute} from './request-routing-policy.mjs?v=f298c06ae9';
-import {compileNativePlan,executeNativeGroup} from './capability-plan-execution.mjs?v=f22db9ce21';
-import {executionKnowledge} from './declared-execution.mjs?v=f8b8d381ca';
+import {compileNativePlan,executeNativeGroup} from './capability-plan-execution.mjs?v=04d5bb32b8';
+import {executionKnowledge} from './declared-execution.mjs?v=b512bbde0a';
 import {recordHistory} from './history-journal.mjs?v=e0e2a6790c';
 import {quantityNote} from './quantity-projection.mjs?v=d03426ef51';
 
