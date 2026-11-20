@@ -1,9 +1,9 @@
 {
   "format": "sop.semantic-alignment-catalogue/1",
-  "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+  "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
   "inventory": {
     "path": "official-dataset/inventory.json",
-    "sha256": "302df46d4c7848cb7bc2c9a7f2da9228edc47200730f69bc88cd324710e5e806"
+    "sha256": "94c30e30ab39b3eca35ae13eed67e859cbb10c5e855b2dc9efcf913f718ab34a"
   },
   "prompt": {
     "path": "training/sop-bert/data/haiku-v2/INSTRUCTIONS-v2.md",
@@ -20,9 +20,9 @@
       "sourceWire": "w.drawing.object",
       "authority": "A drawn thing aligns the declared drawing object: a placed k.objects object or basic shape with size, colour and label.",
       "evidence": {
-        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
         "path": "docs/worlds/w.drawing/schema.sop",
-        "sha256": "700ae643ceb95cb838f129fd6840c4687d2130378245cd2c7dd866add418d6e7",
+        "sha256": "049315a899a10f8c6bfd8dd0341f468d0e8bf0802a3caf5423de710c5185b809",
         "sourceWire": "w.drawing.object",
         "sourceWorld": "w.drawing",
         "moduleVersion": "1",
@@ -38,9 +38,9 @@
       "sourceWire": "w.drawing.group",
       "authority": "A drawing group aligns the declared group of drawing objects.",
       "evidence": {
-        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
         "path": "docs/worlds/w.drawing/schema.sop",
-        "sha256": "700ae643ceb95cb838f129fd6840c4687d2130378245cd2c7dd866add418d6e7",
+        "sha256": "049315a899a10f8c6bfd8dd0341f468d0e8bf0802a3caf5423de710c5185b809",
         "sourceWire": "w.drawing.group",
         "sourceWorld": "w.drawing",
         "moduleVersion": "1",
@@ -56,7 +56,7 @@
       "sourceWire": "w.picture.picture",
       "authority": "Raw drawing-as-a-whole aligns the depicted picture container, not physical-page lexical meaning.",
       "evidence": {
-        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
         "path": "docs/worlds/w.picture/schema.sop",
         "sha256": "d7c6978141d9b1261130af60395efd0cad83a902cee6216ba5e35f648f7f4f21",
         "sourceWire": "w.picture.picture",
@@ -74,9 +74,9 @@
       "sourceWire": "w.drawing.part",
       "authority": "A part of a drawn thing aligns the declared edited part of a drawing object.",
       "evidence": {
-        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
         "path": "docs/worlds/w.drawing/schema.sop",
-        "sha256": "700ae643ceb95cb838f129fd6840c4687d2130378245cd2c7dd866add418d6e7",
+        "sha256": "049315a899a10f8c6bfd8dd0341f468d0e8bf0802a3caf5423de710c5185b809",
         "sourceWire": "w.drawing.part",
         "sourceWorld": "w.drawing",
         "moduleVersion": "1",
@@ -92,7 +92,7 @@
       "sourceWire": "w.chart.chart",
       "authority": "Raw chart data/display aligns chart as a whole, not a series or point.",
       "evidence": {
-        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
         "path": "docs/worlds/w.chart/schema.sop",
         "sha256": "7a3e8e921d5d5abdbc5e6d7468fcf46c3317d61f4215525c2279d2205ef27111",
         "sourceWire": "w.chart.chart",
@@ -110,7 +110,7 @@
       "sourceWire": "w.diagram.diagram",
       "authority": "Owner-authorized (2026-11-20): the Diagram tab observes its one page (id page, kind diagram) as the diagram; page operations (layout, improve, step numbers) act on it.",
       "evidence": {
-        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
         "path": "docs/worlds/w.diagram/schema.sop",
         "sha256": "f785d5f72701bbce0950d9cee884bab2fb4061f14dc3626ee7c27df63c480e05",
         "sourceWire": "w.diagram.diagram",
@@ -128,7 +128,7 @@
       "sourceWire": "w.diagram.group",
       "authority": "The native group of nodes aligns the declared node grouping.",
       "evidence": {
-        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
         "path": "docs/worlds/w.diagram/schema.sop",
         "sha256": "f785d5f72701bbce0950d9cee884bab2fb4061f14dc3626ee7c27df63c480e05",
         "sourceWire": "w.diagram.group",
@@ -146,7 +146,7 @@
       "sourceWire": "w.diagram.edge",
       "authority": "Raw arrow between nodes aligns declared edge from/to nodes.",
       "evidence": {
-        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
         "path": "docs/worlds/w.diagram/schema.sop",
         "sha256": "f785d5f72701bbce0950d9cee884bab2fb4061f14dc3626ee7c27df63c480e05",
         "sourceWire": "w.diagram.edge",
@@ -171,7 +171,7 @@
       "sourceWire": "w.diagram.diagram",
       "authority": "Owner-authorized (2026-11-20): the Diagram tab observes its one page (id page, kind diagram) as the diagram; page operations (layout, improve, step numbers) act on it.",
       "evidence": {
-        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
         "path": "docs/worlds/w.diagram/schema.sop",
         "sha256": "f785d5f72701bbce0950d9cee884bab2fb4061f14dc3626ee7c27df63c480e05",
         "sourceWire": "w.diagram.diagram",
@@ -238,7 +238,7 @@
       "sourceWire": "w.document.document",
       "authority": "Raw document-as-a-whole aligns mutable document, not immutable text source/revision.",
       "evidence": {
-        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
         "path": "docs/worlds/w.document/schema.sop",
         "sha256": "4532f68d9096b6db1b2396bd0ea5a9600dc96ab76b5f9e4110f3f4319e582f77",
         "sourceWire": "w.document.document",
@@ -263,7 +263,7 @@
       "sourceWire": "w.calendar.event",
       "authority": "Raw meeting is the event family; source word.event explicitly names meeting.",
       "evidence": {
-        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
         "path": "docs/worlds/w.calendar/schema.sop",
         "sha256": "c9849573da85da02cd2c74eed6fa192344e1508aa05700b57251e8140db6a4e4",
         "sourceWire": "w.calendar.event",
@@ -281,7 +281,7 @@
       "sourceWire": "w.person.person",
       "authority": "Raw participant aligns person identity; participation requires a separate relation.",
       "evidence": {
-        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
         "path": "docs/worlds/w.person/schema.sop",
         "sha256": "173aec25063dc3a6f31b934e5c6bab97c81595cf034e6d45d0b0ced6654b1c5e",
         "sourceWire": "w.person.person",
@@ -299,7 +299,7 @@
       "sourceWire": "w.room.room",
       "authority": "Raw room aligns room identity; booking availability is not implied.",
       "evidence": {
-        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
         "path": "docs/worlds/w.room/schema.sop",
         "sha256": "eebff2f6d36c3aec724184282704aa05e42ede66b4c4014ea7e7226442314ca9",
         "sourceWire": "w.room.room",
@@ -317,7 +317,7 @@
       "sourceWire": "w.face.face",
       "authority": "The avatar face aligns the declared face instance, not its individual parts (was drawing.face).",
       "evidence": {
-        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
         "path": "docs/worlds/w.face/schema.sop",
         "sha256": "3e5efddafc1681994bea84afd708d9d385f16cdb6d66c1f35c963dea61f12735",
         "sourceWire": "w.face.face",
@@ -335,6 +335,46 @@
     }
   ],
   "properties": [
+    {
+      "area": "drawing",
+      "type": "drawn",
+      "key": "drawn.align",
+      "descriptor": {
+        "concept": "align",
+        "head": "class",
+        "src": "Native parameter: drawing.object.change.align",
+        "values": [
+          "start",
+          "middle",
+          "end"
+        ]
+      },
+      "status": "aligned",
+      "alignment": {
+        "area": "drawing",
+        "key": "drawn.align",
+        "sourceWire": "w.drawing.object.align",
+        "canonical": "w.drawing.object.align",
+        "valueKind": "string",
+        "host": "drawing",
+        "operation": "drawing.object.change",
+        "parameter": "align"
+      },
+      "evidence": {
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
+        "path": "docs/worlds/w.drawing/schema.sop",
+        "sha256": "049315a899a10f8c6bfd8dd0341f468d0e8bf0802a3caf5423de710c5185b809",
+        "sourceWire": "w.drawing.object.align",
+        "sourceWorld": "w.drawing",
+        "moduleVersion": "1",
+        "declaration": "@w.drawing.object.align core.slot of=w.drawing.object key=align enum=start enum=middle enum=end core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy-or-explicit-source-backed-normalization",
+        "semanticBoundary": "Retains declared property identity and literal evidence only; no native conversion, qualitative threshold, reference binding or effect is asserted."
+      }
+    },
     {
       "area": "drawing",
       "type": "drawn",
@@ -356,7 +396,7 @@
         }
       },
       "evidence": {
-        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
         "path": "docs/worlds/k.spatial2d/schema.sop",
         "sha256": "2717173818f598c8f6bd4c703843f7bff5723563839dbb56bf00221e8faa6798",
         "sourceWire": "k.spatial2d.relation.object",
@@ -430,7 +470,7 @@
         "parameter": "color"
       },
       "evidence": {
-        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
         "path": "docs/worlds/k.attributes/shards/attributes.sop",
         "sha256": "997c44ffaa9bb05d24bd98e349430780b872c9f4ed9a91ec9e929a316b6197a5",
         "sourceWire": "k.attributes.attribute.colour",
@@ -462,7 +502,7 @@
         "valueKind": "string"
       },
       "evidence": {
-        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
         "path": "docs/worlds/w.request/schema.sop",
         "sha256": "b752137dadac9c6163fcfba6d40fc28a048010cdf7411e2a5b6ccd7e13b7bc25",
         "sourceWire": "w.request.constraint.number",
@@ -525,6 +565,234 @@
     {
       "area": "drawing",
       "type": "drawn",
+      "key": "drawn.effect",
+      "descriptor": {
+        "concept": "effect",
+        "head": "candidate",
+        "src": "Native parameter: drawing.object.change.effect ; values: k.styles (catalog b89b4541)",
+        "values": [
+          "none",
+          "glow",
+          "neon",
+          "shadow",
+          "long_shadow",
+          "blur",
+          "soft"
+        ]
+      },
+      "status": "aligned",
+      "alignment": {
+        "area": "drawing",
+        "key": "drawn.effect",
+        "sourceWire": "w.drawing.object.effect",
+        "canonical": "w.drawing.object.effect",
+        "valueKind": "string",
+        "host": "drawing",
+        "operation": "drawing.object.change",
+        "parameter": "effect"
+      },
+      "evidence": {
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
+        "path": "docs/worlds/w.drawing/schema.sop",
+        "sha256": "049315a899a10f8c6bfd8dd0341f468d0e8bf0802a3caf5423de710c5185b809",
+        "sourceWire": "w.drawing.object.effect",
+        "sourceWorld": "w.drawing",
+        "moduleVersion": "1",
+        "declaration": "@w.drawing.object.effect core.slot of=w.drawing.object key=effect kind=atom kind=string core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy-or-explicit-source-backed-normalization",
+        "semanticBoundary": "Retains declared property identity and literal evidence only; no native conversion, qualitative threshold, reference binding or effect is asserted."
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "drawn",
+      "key": "drawn.facing",
+      "descriptor": {
+        "concept": "facing",
+        "head": "class",
+        "src": "art.draw facing (drawing.object.make / catalog.make / object.change {facing}): the side a drawn thing faces",
+        "values": [
+          "left",
+          "right"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    },
+    {
+      "area": "drawing",
+      "type": "drawn",
+      "key": "drawn.fill",
+      "descriptor": {
+        "concept": "fill",
+        "head": "candidate",
+        "src": "Native parameter: drawing.object.change.fill ; values: k.styles (catalog b89b4541)",
+        "values": [
+          "solid",
+          "none",
+          "crayon",
+          "striped",
+          "dotted",
+          "checked",
+          "zigzag",
+          "dashed",
+          "gradient"
+        ]
+      },
+      "status": "aligned",
+      "alignment": {
+        "area": "drawing",
+        "key": "drawn.fill",
+        "sourceWire": "w.drawing.object.fill",
+        "canonical": "w.drawing.object.fill",
+        "valueKind": "string",
+        "host": "drawing",
+        "operation": "drawing.object.change",
+        "parameter": "fill"
+      },
+      "evidence": {
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
+        "path": "docs/worlds/w.drawing/schema.sop",
+        "sha256": "049315a899a10f8c6bfd8dd0341f468d0e8bf0802a3caf5423de710c5185b809",
+        "sourceWire": "w.drawing.object.fill",
+        "sourceWorld": "w.drawing",
+        "moduleVersion": "1",
+        "declaration": "@w.drawing.object.fill core.slot of=w.drawing.object key=fill kind=atom kind=string core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy-or-explicit-source-backed-normalization",
+        "semanticBoundary": "Retains declared property identity and literal evidence only; no native conversion, qualitative threshold, reference binding or effect is asserted."
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "drawn",
+      "key": "drawn.font",
+      "descriptor": {
+        "concept": "font",
+        "head": "candidate",
+        "src": "Native parameter: drawing.object.change.font ; values: k.styles (catalog b89b4541)",
+        "values": [
+          "serif",
+          "sans",
+          "handwritten",
+          "comic",
+          "mono",
+          "fancy",
+          "poster",
+          "rounded"
+        ]
+      },
+      "status": "aligned",
+      "alignment": {
+        "area": "drawing",
+        "key": "drawn.font",
+        "sourceWire": "w.drawing.object.font",
+        "canonical": "w.drawing.object.font",
+        "valueKind": "string",
+        "host": "drawing",
+        "operation": "drawing.object.change",
+        "parameter": "font"
+      },
+      "evidence": {
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
+        "path": "docs/worlds/w.drawing/schema.sop",
+        "sha256": "049315a899a10f8c6bfd8dd0341f468d0e8bf0802a3caf5423de710c5185b809",
+        "sourceWire": "w.drawing.object.font",
+        "sourceWorld": "w.drawing",
+        "moduleVersion": "1",
+        "declaration": "@w.drawing.object.font core.slot of=w.drawing.object key=font kind=atom kind=string core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy-or-explicit-source-backed-normalization",
+        "semanticBoundary": "Retains declared property identity and literal evidence only; no native conversion, qualitative threshold, reference binding or effect is asserted."
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "drawn",
+      "key": "drawn.frame",
+      "descriptor": {
+        "concept": "frame",
+        "head": "candidate",
+        "src": "Native parameter: drawing.object.change.frame ; values: k.styles (catalog b89b4541)",
+        "values": [
+          "none",
+          "speech",
+          "thought",
+          "caption",
+          "sign"
+        ]
+      },
+      "status": "aligned",
+      "alignment": {
+        "area": "drawing",
+        "key": "drawn.frame",
+        "sourceWire": "w.drawing.object.frame",
+        "canonical": "w.drawing.object.frame",
+        "valueKind": "string",
+        "host": "drawing",
+        "operation": "drawing.object.change",
+        "parameter": "frame"
+      },
+      "evidence": {
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
+        "path": "docs/worlds/w.drawing/schema.sop",
+        "sha256": "049315a899a10f8c6bfd8dd0341f468d0e8bf0802a3caf5423de710c5185b809",
+        "sourceWire": "w.drawing.object.frame",
+        "sourceWorld": "w.drawing",
+        "moduleVersion": "1",
+        "declaration": "@w.drawing.object.frame core.slot of=w.drawing.object key=frame kind=atom kind=string core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy-or-explicit-source-backed-normalization",
+        "semanticBoundary": "Retains declared property identity and literal evidence only; no native conversion, qualitative threshold, reference binding or effect is asserted."
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "drawn",
+      "key": "drawn.gradient",
+      "descriptor": {
+        "concept": "colour",
+        "head": "candidate",
+        "src": "Native parameter: drawing.object.change.gradient"
+      },
+      "status": "aligned",
+      "alignment": {
+        "area": "drawing",
+        "key": "drawn.gradient",
+        "sourceWire": "w.drawing.object.gradient",
+        "canonical": "w.drawing.object.gradient",
+        "valueKind": "string",
+        "host": "drawing",
+        "operation": "drawing.object.change",
+        "parameter": "gradient"
+      },
+      "evidence": {
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
+        "path": "docs/worlds/w.drawing/schema.sop",
+        "sha256": "049315a899a10f8c6bfd8dd0341f468d0e8bf0802a3caf5423de710c5185b809",
+        "sourceWire": "w.drawing.object.gradient",
+        "sourceWorld": "w.drawing",
+        "moduleVersion": "1",
+        "declaration": "@w.drawing.object.gradient core.slot of=w.drawing.object key=gradient kind=atom kind=string core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy-or-explicit-source-backed-normalization",
+        "semanticBoundary": "Retains declared property identity and literal evidence only; no native conversion, qualitative threshold, reference binding or effect is asserted."
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "drawn",
       "key": "drawn.height",
       "descriptor": {
         "concept": "height",
@@ -543,9 +811,9 @@
         "parameter": "height"
       },
       "evidence": {
-        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
         "path": "docs/worlds/w.drawing/schema.sop",
-        "sha256": "700ae643ceb95cb838f129fd6840c4687d2130378245cd2c7dd866add418d6e7",
+        "sha256": "049315a899a10f8c6bfd8dd0341f468d0e8bf0802a3caf5423de710c5185b809",
         "sourceWire": "w.drawing.object.height",
         "sourceWorld": "w.drawing",
         "moduleVersion": "1",
@@ -614,13 +882,53 @@
         "parameter": "label"
       },
       "evidence": {
-        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
         "path": "docs/worlds/w.drawing/schema.sop",
-        "sha256": "700ae643ceb95cb838f129fd6840c4687d2130378245cd2c7dd866add418d6e7",
+        "sha256": "049315a899a10f8c6bfd8dd0341f468d0e8bf0802a3caf5423de710c5185b809",
         "sourceWire": "w.drawing.object.label",
         "sourceWorld": "w.drawing",
         "moduleVersion": "1",
         "declaration": "@w.drawing.object.label core.slot of=w.drawing.object key=label kind=string core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy-or-explicit-source-backed-normalization",
+        "semanticBoundary": "Retains declared property identity and literal evidence only; no native conversion, qualitative threshold, reference binding or effect is asserted."
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "drawn",
+      "key": "drawn.mirror",
+      "descriptor": {
+        "concept": "mirror",
+        "head": "class",
+        "src": "Native parameter: drawing.object.change.mirror",
+        "values": [
+          "horizontal",
+          "vertical",
+          "none"
+        ]
+      },
+      "status": "aligned",
+      "alignment": {
+        "area": "drawing",
+        "key": "drawn.mirror",
+        "sourceWire": "w.drawing.object.mirror",
+        "canonical": "w.drawing.object.mirror",
+        "valueKind": "string",
+        "host": "drawing",
+        "operation": "drawing.object.change",
+        "parameter": "mirror"
+      },
+      "evidence": {
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
+        "path": "docs/worlds/w.drawing/schema.sop",
+        "sha256": "049315a899a10f8c6bfd8dd0341f468d0e8bf0802a3caf5423de710c5185b809",
+        "sourceWire": "w.drawing.object.mirror",
+        "sourceWorld": "w.drawing",
+        "moduleVersion": "1",
+        "declaration": "@w.drawing.object.mirror core.slot of=w.drawing.object key=mirror enum=none enum=horizontal enum=vertical enum=both core.source=\"hand-core 1\""
       },
       "valueContract": {
         "representation": "string",
@@ -639,6 +947,76 @@
       },
       "status": "unresolved",
       "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    },
+    {
+      "area": "drawing",
+      "type": "drawn",
+      "key": "drawn.opacity",
+      "descriptor": {
+        "concept": "opacity",
+        "head": "number",
+        "src": "Native parameter: drawing.object.change.opacity"
+      },
+      "status": "aligned",
+      "alignment": {
+        "area": "drawing",
+        "key": "drawn.opacity",
+        "sourceWire": "w.drawing.object.opacity",
+        "canonical": "w.drawing.object.opacity",
+        "valueKind": "string",
+        "host": "drawing",
+        "operation": "drawing.object.change",
+        "parameter": "opacity"
+      },
+      "evidence": {
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
+        "path": "docs/worlds/w.drawing/schema.sop",
+        "sha256": "049315a899a10f8c6bfd8dd0341f468d0e8bf0802a3caf5423de710c5185b809",
+        "sourceWire": "w.drawing.object.opacity",
+        "sourceWorld": "w.drawing",
+        "moduleVersion": "1",
+        "declaration": "@w.drawing.object.opacity core.slot of=w.drawing.object key=opacity kind=number min=0 max=1 core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy-or-explicit-source-backed-normalization",
+        "semanticBoundary": "Retains declared property identity and literal evidence only; no native conversion, qualitative threshold, reference binding or effect is asserted."
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "drawn",
+      "key": "drawn.outline",
+      "descriptor": {
+        "concept": "colour",
+        "head": "candidate",
+        "src": "Native parameter: drawing.object.change.outline"
+      },
+      "status": "aligned",
+      "alignment": {
+        "area": "drawing",
+        "key": "drawn.outline",
+        "sourceWire": "w.drawing.object.outline",
+        "canonical": "w.drawing.object.outline",
+        "valueKind": "string",
+        "host": "drawing",
+        "operation": "drawing.object.change",
+        "parameter": "outline"
+      },
+      "evidence": {
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
+        "path": "docs/worlds/w.drawing/schema.sop",
+        "sha256": "049315a899a10f8c6bfd8dd0341f468d0e8bf0802a3caf5423de710c5185b809",
+        "sourceWire": "w.drawing.object.outline",
+        "sourceWorld": "w.drawing",
+        "moduleVersion": "1",
+        "declaration": "@w.drawing.object.outline core.slot of=w.drawing.object key=outline kind=atom kind=string core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy-or-explicit-source-backed-normalization",
+        "semanticBoundary": "Retains declared property identity and literal evidence only; no native conversion, qualitative threshold, reference binding or effect is asserted."
+      }
     },
     {
       "area": "drawing",
@@ -690,7 +1068,7 @@
         }
       },
       "evidence": {
-        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
         "path": "docs/worlds/k.spatial2d/schema.sop",
         "sha256": "2717173818f598c8f6bd4c703843f7bff5723563839dbb56bf00221e8faa6798",
         "sourceWire": "k.spatial2d.relation.kind",
@@ -702,6 +1080,41 @@
         "representation": "declared-relation",
         "source": "explicit-bank-value-normalization",
         "semanticBoundary": "The bank value maps to a k.spatial2d relation kind the placement policy declares; geometry is solved by the placement compiler."
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "drawn",
+      "key": "drawn.rotation",
+      "descriptor": {
+        "concept": "rotation",
+        "head": "number",
+        "src": "Native parameter: drawing.object.change.rotation"
+      },
+      "status": "aligned",
+      "alignment": {
+        "area": "drawing",
+        "key": "drawn.rotation",
+        "sourceWire": "w.drawing.object.rotation",
+        "canonical": "w.drawing.object.rotation",
+        "valueKind": "string",
+        "host": "drawing",
+        "operation": "drawing.object.change",
+        "parameter": "rotation"
+      },
+      "evidence": {
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
+        "path": "docs/worlds/w.drawing/schema.sop",
+        "sha256": "049315a899a10f8c6bfd8dd0341f468d0e8bf0802a3caf5423de710c5185b809",
+        "sourceWire": "w.drawing.object.rotation",
+        "sourceWorld": "w.drawing",
+        "moduleVersion": "1",
+        "declaration": "@w.drawing.object.rotation core.slot of=w.drawing.object key=rotation kind=number min=-360 max=360 core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy-or-explicit-source-backed-normalization",
+        "semanticBoundary": "Retains declared property identity and literal evidence only; no native conversion, qualitative threshold, reference binding or effect is asserted."
       }
     },
     {
@@ -725,13 +1138,218 @@
         "parameter": "size"
       },
       "evidence": {
-        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
         "path": "docs/worlds/k.attributes/shards/attributes.sop",
         "sha256": "997c44ffaa9bb05d24bd98e349430780b872c9f4ed9a91ec9e929a316b6197a5",
         "sourceWire": "k.attributes.attribute.size",
         "sourceWorld": "k.attributes",
         "moduleVersion": "6",
         "declaration": "@k.attributes.attribute.size k.attributes.attribute name=size holds=size aspect=spatial about=\"how big a thing is next to other things\" default_type=k.scenes.thing default_key=size core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy-or-explicit-source-backed-normalization",
+        "semanticBoundary": "Retains declared property identity and literal evidence only; no native conversion, qualitative threshold, reference binding or effect is asserted."
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "drawn",
+      "key": "drawn.skew",
+      "descriptor": {
+        "concept": "skew",
+        "head": "number",
+        "src": "Native parameter: drawing.object.change.skew"
+      },
+      "status": "aligned",
+      "alignment": {
+        "area": "drawing",
+        "key": "drawn.skew",
+        "sourceWire": "w.drawing.object.skew",
+        "canonical": "w.drawing.object.skew",
+        "valueKind": "string",
+        "host": "drawing",
+        "operation": "drawing.object.change",
+        "parameter": "skew"
+      },
+      "evidence": {
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
+        "path": "docs/worlds/w.drawing/schema.sop",
+        "sha256": "049315a899a10f8c6bfd8dd0341f468d0e8bf0802a3caf5423de710c5185b809",
+        "sourceWire": "w.drawing.object.skew",
+        "sourceWorld": "w.drawing",
+        "moduleVersion": "1",
+        "declaration": "@w.drawing.object.skew core.slot of=w.drawing.object key=skew kind=number min=-75 max=75 core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy-or-explicit-source-backed-normalization",
+        "semanticBoundary": "Retains declared property identity and literal evidence only; no native conversion, qualitative threshold, reference binding or effect is asserted."
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "drawn",
+      "key": "drawn.slant",
+      "descriptor": {
+        "concept": "slant",
+        "head": "class",
+        "src": "Native parameter: drawing.object.change.slant",
+        "values": [
+          "normal",
+          "italic"
+        ]
+      },
+      "status": "aligned",
+      "alignment": {
+        "area": "drawing",
+        "key": "drawn.slant",
+        "sourceWire": "w.drawing.object.slant",
+        "canonical": "w.drawing.object.slant",
+        "valueKind": "string",
+        "host": "drawing",
+        "operation": "drawing.object.change",
+        "parameter": "slant"
+      },
+      "evidence": {
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
+        "path": "docs/worlds/w.drawing/schema.sop",
+        "sha256": "049315a899a10f8c6bfd8dd0341f468d0e8bf0802a3caf5423de710c5185b809",
+        "sourceWire": "w.drawing.object.slant",
+        "sourceWorld": "w.drawing",
+        "moduleVersion": "1",
+        "declaration": "@w.drawing.object.slant core.slot of=w.drawing.object key=slant enum=normal enum=italic core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy-or-explicit-source-backed-normalization",
+        "semanticBoundary": "Retains declared property identity and literal evidence only; no native conversion, qualitative threshold, reference binding or effect is asserted."
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "drawn",
+      "key": "drawn.stroke",
+      "descriptor": {
+        "concept": "stroke",
+        "head": "number",
+        "src": "Native parameter: drawing.object.change.stroke"
+      },
+      "status": "aligned",
+      "alignment": {
+        "area": "drawing",
+        "key": "drawn.stroke",
+        "sourceWire": "w.drawing.object.stroke",
+        "canonical": "w.drawing.object.stroke",
+        "valueKind": "string",
+        "host": "drawing",
+        "operation": "drawing.object.change",
+        "parameter": "stroke"
+      },
+      "evidence": {
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
+        "path": "docs/worlds/w.drawing/schema.sop",
+        "sha256": "049315a899a10f8c6bfd8dd0341f468d0e8bf0802a3caf5423de710c5185b809",
+        "sourceWire": "w.drawing.object.stroke",
+        "sourceWorld": "w.drawing",
+        "moduleVersion": "1",
+        "declaration": "@w.drawing.object.stroke core.slot of=w.drawing.object key=stroke kind=number min=0 max=40 core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy-or-explicit-source-backed-normalization",
+        "semanticBoundary": "Retains declared property identity and literal evidence only; no native conversion, qualitative threshold, reference binding or effect is asserted."
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "drawn",
+      "key": "drawn.text",
+      "descriptor": {
+        "concept": "literal_text",
+        "head": "span",
+        "src": "Native parameter: drawing.object.change.text"
+      },
+      "status": "aligned",
+      "alignment": {
+        "area": "drawing",
+        "key": "drawn.text",
+        "sourceWire": "w.drawing.object.text",
+        "canonical": "w.drawing.object.text",
+        "valueKind": "string",
+        "host": "drawing",
+        "operation": "drawing.object.change",
+        "parameter": "text"
+      },
+      "evidence": {
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
+        "path": "docs/worlds/w.drawing/schema.sop",
+        "sha256": "049315a899a10f8c6bfd8dd0341f468d0e8bf0802a3caf5423de710c5185b809",
+        "sourceWire": "w.drawing.object.text",
+        "sourceWorld": "w.drawing",
+        "moduleVersion": "1",
+        "declaration": "@w.drawing.object.text core.slot of=w.drawing.object key=text kind=string core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy-or-explicit-source-backed-normalization",
+        "semanticBoundary": "Retains declared property identity and literal evidence only; no native conversion, qualitative threshold, reference binding or effect is asserted."
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "drawn",
+      "key": "drawn.turn",
+      "descriptor": {
+        "concept": "turn",
+        "head": "candidate+number",
+        "src": "Native parameter: drawing.object.change.turn ; values: k.styles (catalog b89b4541)",
+        "values": [
+          "rotate_right",
+          "rotate_left",
+          "upside_down",
+          "upright",
+          "tilt",
+          "tilt_left",
+          "half",
+          "full"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    },
+    {
+      "area": "drawing",
+      "type": "drawn",
+      "key": "drawn.weight",
+      "descriptor": {
+        "concept": "weight",
+        "head": "class",
+        "src": "Native parameter: drawing.object.change.weight",
+        "values": [
+          "normal",
+          "bold"
+        ]
+      },
+      "status": "aligned",
+      "alignment": {
+        "area": "drawing",
+        "key": "drawn.weight",
+        "sourceWire": "w.drawing.object.weight",
+        "canonical": "w.drawing.object.weight",
+        "valueKind": "string",
+        "host": "drawing",
+        "operation": "drawing.object.change",
+        "parameter": "weight"
+      },
+      "evidence": {
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
+        "path": "docs/worlds/w.drawing/schema.sop",
+        "sha256": "049315a899a10f8c6bfd8dd0341f468d0e8bf0802a3caf5423de710c5185b809",
+        "sourceWire": "w.drawing.object.weight",
+        "sourceWorld": "w.drawing",
+        "moduleVersion": "1",
+        "declaration": "@w.drawing.object.weight core.slot of=w.drawing.object key=weight enum=normal enum=bold core.source=\"hand-core 1\""
       },
       "valueContract": {
         "representation": "string",
@@ -760,9 +1378,9 @@
         "parameter": "width"
       },
       "evidence": {
-        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
         "path": "docs/worlds/w.drawing/schema.sop",
-        "sha256": "700ae643ceb95cb838f129fd6840c4687d2130378245cd2c7dd866add418d6e7",
+        "sha256": "049315a899a10f8c6bfd8dd0341f468d0e8bf0802a3caf5423de710c5185b809",
         "sourceWire": "w.drawing.object.width",
         "sourceWorld": "w.drawing",
         "moduleVersion": "1",
@@ -837,6 +1455,29 @@
     {
       "area": "drawing",
       "type": "page",
+      "key": "page.filter",
+      "descriptor": {
+        "concept": "filter",
+        "head": "candidate",
+        "src": "Native parameter: drawing.page.change.filter ; values: k.styles (catalog b89b4541)",
+        "values": [
+          "none",
+          "sepia",
+          "black_and_white",
+          "night",
+          "sunset",
+          "vintage",
+          "bright",
+          "faded",
+          "dreamy"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    },
+    {
+      "area": "drawing",
+      "type": "page",
       "key": "page.mode",
       "descriptor": {
         "concept": "mode",
@@ -884,13 +1525,57 @@
         "parameter": "color"
       },
       "evidence": {
-        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
         "path": "docs/worlds/k.attributes/shards/attributes.sop",
         "sha256": "997c44ffaa9bb05d24bd98e349430780b872c9f4ed9a91ec9e929a316b6197a5",
         "sourceWire": "k.attributes.attribute.colour",
         "sourceWorld": "k.attributes",
         "moduleVersion": "6",
         "declaration": "@k.attributes.attribute.colour k.attributes.attribute name=colour holds=colour aspect=visual about=\"the colour a thing usually has\" default_type=k.objects.part default_key=colour core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy-or-explicit-source-backed-normalization",
+        "semanticBoundary": "Retains declared property identity and literal evidence only; no native conversion, qualitative threshold, reference binding or effect is asserted."
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "part",
+      "key": "part.effect",
+      "descriptor": {
+        "concept": "effect",
+        "head": "candidate",
+        "src": "Native parameter: drawing.part.change.effect ; values: k.styles (catalog b89b4541)",
+        "values": [
+          "none",
+          "glow",
+          "neon",
+          "shadow",
+          "long_shadow",
+          "blur",
+          "soft"
+        ]
+      },
+      "status": "aligned",
+      "alignment": {
+        "area": "drawing",
+        "key": "part.effect",
+        "sourceWire": "w.drawing.part.effect",
+        "canonical": "w.drawing.part.effect",
+        "valueKind": "string",
+        "host": "drawing",
+        "operation": "drawing.part.change",
+        "parameter": "effect"
+      },
+      "evidence": {
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
+        "path": "docs/worlds/w.drawing/schema.sop",
+        "sha256": "049315a899a10f8c6bfd8dd0341f468d0e8bf0802a3caf5423de710c5185b809",
+        "sourceWire": "w.drawing.part.effect",
+        "sourceWorld": "w.drawing",
+        "moduleVersion": "1",
+        "declaration": "@w.drawing.part.effect core.slot of=w.drawing.part key=effect kind=atom kind=string core.source=\"hand-core 1\""
       },
       "valueContract": {
         "representation": "string",
@@ -937,6 +1622,81 @@
     {
       "area": "drawing",
       "type": "part",
+      "key": "part.mirror",
+      "descriptor": {
+        "concept": "mirror",
+        "head": "class",
+        "src": "Native parameter: drawing.part.change.mirror",
+        "values": [
+          "horizontal",
+          "vertical",
+          "none"
+        ]
+      },
+      "status": "aligned",
+      "alignment": {
+        "area": "drawing",
+        "key": "part.mirror",
+        "sourceWire": "w.drawing.part.mirror",
+        "canonical": "w.drawing.part.mirror",
+        "valueKind": "string",
+        "host": "drawing",
+        "operation": "drawing.part.change",
+        "parameter": "mirror"
+      },
+      "evidence": {
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
+        "path": "docs/worlds/w.drawing/schema.sop",
+        "sha256": "049315a899a10f8c6bfd8dd0341f468d0e8bf0802a3caf5423de710c5185b809",
+        "sourceWire": "w.drawing.part.mirror",
+        "sourceWorld": "w.drawing",
+        "moduleVersion": "1",
+        "declaration": "@w.drawing.part.mirror core.slot of=w.drawing.part key=mirror enum=none enum=horizontal enum=vertical enum=both core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy-or-explicit-source-backed-normalization",
+        "semanticBoundary": "Retains declared property identity and literal evidence only; no native conversion, qualitative threshold, reference binding or effect is asserted."
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "part",
+      "key": "part.opacity",
+      "descriptor": {
+        "concept": "opacity",
+        "head": "number",
+        "src": "Native parameter: drawing.part.change.opacity"
+      },
+      "status": "aligned",
+      "alignment": {
+        "area": "drawing",
+        "key": "part.opacity",
+        "sourceWire": "w.drawing.part.opacity",
+        "canonical": "w.drawing.part.opacity",
+        "valueKind": "string",
+        "host": "drawing",
+        "operation": "drawing.part.change",
+        "parameter": "opacity"
+      },
+      "evidence": {
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
+        "path": "docs/worlds/w.drawing/schema.sop",
+        "sha256": "049315a899a10f8c6bfd8dd0341f468d0e8bf0802a3caf5423de710c5185b809",
+        "sourceWire": "w.drawing.part.opacity",
+        "sourceWorld": "w.drawing",
+        "moduleVersion": "1",
+        "declaration": "@w.drawing.part.opacity core.slot of=w.drawing.part key=opacity kind=number min=0 max=1 core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy-or-explicit-source-backed-normalization",
+        "semanticBoundary": "Retains declared property identity and literal evidence only; no native conversion, qualitative threshold, reference binding or effect is asserted."
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "part",
       "key": "part.owner",
       "descriptor": {
         "concept": "reference",
@@ -945,6 +1705,63 @@
       },
       "status": "unresolved",
       "reason": "No owning semantic declaration reviewed for this official-dataset key."
+    },
+    {
+      "area": "drawing",
+      "type": "part",
+      "key": "part.rotation",
+      "descriptor": {
+        "concept": "rotation",
+        "head": "number",
+        "src": "Native parameter: drawing.part.change.rotation"
+      },
+      "status": "aligned",
+      "alignment": {
+        "area": "drawing",
+        "key": "part.rotation",
+        "sourceWire": "w.drawing.part.rotation",
+        "canonical": "w.drawing.part.rotation",
+        "valueKind": "string",
+        "host": "drawing",
+        "operation": "drawing.part.change",
+        "parameter": "rotation"
+      },
+      "evidence": {
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
+        "path": "docs/worlds/w.drawing/schema.sop",
+        "sha256": "049315a899a10f8c6bfd8dd0341f468d0e8bf0802a3caf5423de710c5185b809",
+        "sourceWire": "w.drawing.part.rotation",
+        "sourceWorld": "w.drawing",
+        "moduleVersion": "1",
+        "declaration": "@w.drawing.part.rotation core.slot of=w.drawing.part key=rotation kind=number min=-360 max=360 core.source=\"hand-core 1\""
+      },
+      "valueContract": {
+        "representation": "string",
+        "source": "exact-copy-or-explicit-source-backed-normalization",
+        "semanticBoundary": "Retains declared property identity and literal evidence only; no native conversion, qualitative threshold, reference binding or effect is asserted."
+      }
+    },
+    {
+      "area": "drawing",
+      "type": "part",
+      "key": "part.turn",
+      "descriptor": {
+        "concept": "turn",
+        "head": "candidate+number",
+        "src": "Native parameter: drawing.part.change.turn ; values: k.styles (catalog b89b4541)",
+        "values": [
+          "rotate_right",
+          "rotate_left",
+          "upside_down",
+          "upright",
+          "tilt",
+          "tilt_left",
+          "half",
+          "full"
+        ]
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
     },
     {
       "area": "drawing",
@@ -1642,7 +2459,7 @@
         "parameter": "label"
       },
       "evidence": {
-        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
         "path": "docs/worlds/w.diagram/schema.sop",
         "sha256": "f785d5f72701bbce0950d9cee884bab2fb4061f14dc3626ee7c27df63c480e05",
         "sourceWire": "w.diagram.group.label",
@@ -1800,7 +2617,7 @@
         "parameter": "arrow"
       },
       "evidence": {
-        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
         "path": "docs/worlds/w.diagram/schema.sop",
         "sha256": "f785d5f72701bbce0950d9cee884bab2fb4061f14dc3626ee7c27df63c480e05",
         "sourceWire": "w.diagram.edge.direction",
@@ -1867,7 +2684,7 @@
         "parameter": "from"
       },
       "evidence": {
-        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
         "path": "docs/worlds/w.diagram/schema.sop",
         "sha256": "f785d5f72701bbce0950d9cee884bab2fb4061f14dc3626ee7c27df63c480e05",
         "sourceWire": "w.diagram.edge.from",
@@ -1914,7 +2731,7 @@
         "parameter": "label"
       },
       "evidence": {
-        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
         "path": "docs/worlds/w.diagram/schema.sop",
         "sha256": "f785d5f72701bbce0950d9cee884bab2fb4061f14dc3626ee7c27df63c480e05",
         "sourceWire": "w.diagram.edge.label",
@@ -2001,7 +2818,7 @@
         "parameter": "style"
       },
       "evidence": {
-        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
         "path": "docs/worlds/w.diagram/schema.sop",
         "sha256": "f785d5f72701bbce0950d9cee884bab2fb4061f14dc3626ee7c27df63c480e05",
         "sourceWire": "w.diagram.edge.style",
@@ -2036,7 +2853,7 @@
         "parameter": "to"
       },
       "evidence": {
-        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
         "path": "docs/worlds/w.diagram/schema.sop",
         "sha256": "f785d5f72701bbce0950d9cee884bab2fb4061f14dc3626ee7c27df63c480e05",
         "sourceWire": "w.diagram.edge.to",
@@ -2071,7 +2888,7 @@
         "parameter": "width"
       },
       "evidence": {
-        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
         "path": "docs/worlds/w.diagram/schema.sop",
         "sha256": "f785d5f72701bbce0950d9cee884bab2fb4061f14dc3626ee7c27df63c480e05",
         "sourceWire": "w.diagram.edge.width",
@@ -2161,7 +2978,7 @@
         "parameter": "colour"
       },
       "evidence": {
-        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
         "path": "docs/worlds/k.attributes/shards/attributes.sop",
         "sha256": "997c44ffaa9bb05d24bd98e349430780b872c9f4ed9a91ec9e929a316b6197a5",
         "sourceWire": "k.attributes.attribute.colour",
@@ -2174,6 +2991,18 @@
         "source": "exact-copy-or-explicit-source-backed-normalization",
         "semanticBoundary": "Retains declared property identity and literal evidence only; no native conversion, qualitative threshold, reference binding or effect is asserted."
       }
+    },
+    {
+      "area": "diagram",
+      "type": "node",
+      "key": "node.corner",
+      "descriptor": {
+        "concept": "corner.radius",
+        "head": "number",
+        "src": "diagram.node.change {corner} 0-40"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
     },
     {
       "area": "diagram",
@@ -2313,7 +3142,7 @@
         "parameter": "kind"
       },
       "evidence": {
-        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
         "path": "docs/worlds/w.diagram/schema.sop",
         "sha256": "f785d5f72701bbce0950d9cee884bab2fb4061f14dc3626ee7c27df63c480e05",
         "sourceWire": "w.diagram.node.shape",
@@ -2348,7 +3177,7 @@
         "parameter": "label"
       },
       "evidence": {
-        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
         "path": "docs/worlds/w.diagram/schema.sop",
         "sha256": "f785d5f72701bbce0950d9cee884bab2fb4061f14dc3626ee7c27df63c480e05",
         "sourceWire": "w.diagram.node.label",
@@ -2401,7 +3230,7 @@
         "valueKind": "string"
       },
       "evidence": {
-        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
         "path": "docs/worlds/w.request/schema.sop",
         "sha256": "b752137dadac9c6163fcfba6d40fc28a048010cdf7411e2a5b6ccd7e13b7bc25",
         "sourceWire": "w.request.constraint.number",
@@ -2414,6 +3243,18 @@
         "source": "exact-copy",
         "semanticBoundary": "The number of new diagram nodes asked for (the native make's count parameter, w.request count `number`): it binds through the declared count port of the make operation only; a non-integer or out-of-range number is refused by the parameter."
       }
+    },
+    {
+      "area": "diagram",
+      "type": "node",
+      "key": "node.opacity",
+      "descriptor": {
+        "concept": "opacity",
+        "head": "number",
+        "src": "diagram.node.change {opacity} 0.1-1"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
     },
     {
       "area": "diagram",
@@ -2496,6 +3337,18 @@
     {
       "area": "diagram",
       "type": "node",
+      "key": "node.rotation",
+      "descriptor": {
+        "concept": "rotation",
+        "head": "number",
+        "src": "diagram.node.change {rotation} degrees (specs/diagram-capabilities.md)"
+      },
+      "status": "unresolved",
+      "reason": "Missing reviewed owning semantic declaration/value contract; raw descriptor prefix or shared concept alone is not an alignment."
+    },
+    {
+      "area": "diagram",
+      "type": "node",
       "key": "node.shape",
       "descriptor": {
         "concept": "shape",
@@ -2538,7 +3391,7 @@
         "parameter": "kind"
       },
       "evidence": {
-        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
         "path": "docs/worlds/w.diagram/schema.sop",
         "sha256": "f785d5f72701bbce0950d9cee884bab2fb4061f14dc3626ee7c27df63c480e05",
         "sourceWire": "w.diagram.node.shape",
@@ -2580,7 +3433,7 @@
         "parameter": "size"
       },
       "evidence": {
-        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
         "path": "docs/worlds/k.attributes/shards/attributes.sop",
         "sha256": "997c44ffaa9bb05d24bd98e349430780b872c9f4ed9a91ec9e929a316b6197a5",
         "sourceWire": "k.attributes.attribute.size",
@@ -2627,7 +3480,7 @@
         "parameter": "value"
       },
       "evidence": {
-        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
         "path": "docs/worlds/w.diagram/schema.sop",
         "sha256": "f785d5f72701bbce0950d9cee884bab2fb4061f14dc3626ee7c27df63c480e05",
         "sourceWire": "w.diagram.node.value",
@@ -3693,7 +4546,7 @@
         "parameter": "topic"
       },
       "evidence": {
-        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
         "path": "docs/worlds/w.document/schema.sop",
         "sha256": "4532f68d9096b6db1b2396bd0ea5a9600dc96ab76b5f9e4110f3f4319e582f77",
         "sourceWire": "w.document.document.topic",
@@ -3779,7 +4632,7 @@
         "parameter": "genre"
       },
       "evidence": {
-        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
         "path": "docs/worlds/w.document/schema.sop",
         "sha256": "4532f68d9096b6db1b2396bd0ea5a9600dc96ab76b5f9e4110f3f4319e582f77",
         "sourceWire": "w.document.document.genre",
@@ -3857,7 +4710,7 @@
         "parameter": "title"
       },
       "evidence": {
-        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
         "path": "docs/worlds/w.document/schema.sop",
         "sha256": "4532f68d9096b6db1b2396bd0ea5a9600dc96ab76b5f9e4110f3f4319e582f77",
         "sourceWire": "w.document.document.title",
@@ -3920,7 +4773,7 @@
         "parameter": "words"
       },
       "evidence": {
-        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
         "path": "docs/worlds/w.document/schema.sop",
         "sha256": "4532f68d9096b6db1b2396bd0ea5a9600dc96ab76b5f9e4110f3f4319e582f77",
         "sourceWire": "w.document.document.words",
@@ -4221,7 +5074,7 @@
         "parameter": "start"
       },
       "evidence": {
-        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
         "path": "docs/worlds/w.calendar/schema.sop",
         "sha256": "c9849573da85da02cd2c74eed6fa192344e1508aa05700b57251e8140db6a4e4",
         "sourceWire": "w.calendar.event.start",
@@ -4268,7 +5121,7 @@
         "parameter": "title"
       },
       "evidence": {
-        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
         "path": "docs/worlds/w.calendar/schema.sop",
         "sha256": "c9849573da85da02cd2c74eed6fa192344e1508aa05700b57251e8140db6a4e4",
         "sourceWire": "w.calendar.event.title",
@@ -4327,7 +5180,7 @@
         "parameter": "label"
       },
       "evidence": {
-        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
         "path": "docs/worlds/w.person/schema.sop",
         "sha256": "173aec25063dc3a6f31b934e5c6bab97c81595cf034e6d45d0b0ced6654b1c5e",
         "sourceWire": "w.person.person.name",
@@ -4407,7 +5260,7 @@
         "valueKind": "string"
       },
       "evidence": {
-        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
         "path": "docs/worlds/w.room/schema.sop",
         "sha256": "eebff2f6d36c3aec724184282704aa05e42ede66b4c4014ea7e7226442314ca9",
         "sourceWire": "w.room.room.name",
@@ -4561,7 +5414,7 @@
         "valueKind": "string"
       },
       "evidence": {
-        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
         "path": "docs/worlds/w.face/schema.sop",
         "sha256": "3e5efddafc1681994bea84afd708d9d385f16cdb6d66c1f35c963dea61f12735",
         "sourceWire": "w.face.face.name",
@@ -4718,7 +5571,7 @@
         "parameter": "length"
       },
       "evidence": {
-        "knowledgePin": "06cf90569f2365a2035a5ca673d362841346e2e7",
+        "knowledgePin": "b89b4541069c2bb28b0b280399d89fbc6031096c",
         "path": "docs/worlds/k.faces/schema.sop",
         "sha256": "769b9c831491f12225c6cc2072ead4d1ef5e77be4e2cb83f942bc0040b583f7b",
         "sourceWire": "k.faces.variant.length",
@@ -5156,7 +6009,7 @@
     },
     {
       "path": "docs/worlds/w.drawing/schema.sop",
-      "sha256": "700ae643ceb95cb838f129fd6840c4687d2130378245cd2c7dd866add418d6e7"
+      "sha256": "049315a899a10f8c6bfd8dd0341f468d0e8bf0802a3caf5423de710c5185b809"
     },
     {
       "path": "docs/worlds/w.face/schema.sop",
@@ -5186,7 +6039,7 @@
   "coverage": {
     "families": 24,
     "alignedFamilies": 14,
-    "properties": 253,
-    "alignedProperties": 33
+    "properties": 279,
+    "alignedProperties": 52
   }
 }
