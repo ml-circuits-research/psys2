@@ -161,7 +161,7 @@ test('malformed input, retired auxiliary APIs and turn errors never enter an old
   Object.assign(session.isession.state, (await setup()).isession.state);
   let oldCalls = 0;
   session._sendRead = session._dryRun = () => { oldCalls++; throw new Error('retired reader invoked'); };
-  engine.interp.observe = () => { oldCalls++; throw new Error('retired reaction invoked'); };
+  assert.equal(engine.interp, undefined, 'the page engine builds no legacy interpreter');
   for (const text of [null, {}, '', '   ', 'x'.repeat(65537), 'not a supported command']) {
     const before = structuredClone(session.isession.state);
     const result = await session.send(text, { engine: 'legacy', request: false });

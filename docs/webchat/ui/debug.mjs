@@ -304,21 +304,15 @@ export function createDebug(host) {
 
   function stateSection() {
     const s = host.session();
-    let now = null, astra = null, focus = null;
+    let now = null;
     try { now = s?.state?.(cur.world) ?? null; } catch { now = null; }
     const changed = lastBefore ? diffPaths(lastBefore?.[cur.world] ?? null, now, '') : new Set();
     const hasDiff = changed.size > 0 && !(changed.size === 1 && changed.has('') && lastBefore?.[cur.world] == null && now == null);
-    try { astra = { discussions: s?.discussions?.({ tab: cur.id }) ?? [], capture: s?.astra?.capture?.() ?? null }; } catch { astra = null; }
-    try { focus = { focus: s?.focus?.() ?? {}, context: s?.context?.() ?? {} }; } catch { focus = null; }
-    const dump = () => ({ world: cur.world, state: now, lastTurnChangedPaths: [...changed], astra, focus });
+    const dump = () => ({ world: cur.world, state: now, lastTurnChangedPaths: [...changed] });
     return [
       h('div', { class: 'p2-dbg-sum', 'data-changed': String(changed.size) }, `State of ${cur.world}${lastBefore ? (hasDiff ? `: ${changed.size} value${changed.size > 1 ? 's' : ''} changed by the last turn (highlighted)` : ': unchanged by the last turn') : ' (no turn recorded yet, so no diff)'}.`),
       toolbar('state', dump),
       sec('World state (JSON)', h('div', { class: 'p2-jtree', 'data-view': 'state' }, jsonTree(now, hasDiff ? changed : new Set(), '', 0))),
-      sec('ASTRA: discussions, instances, focus and entities', astra ? h('div', { class: 'p2-dbg-astra' },
-        kv([['Discussions of this tab', String(astra.discussions.length)], ['Active discussion', astra.capture?.active ?? 'none'], ['Instances', String(astra.capture?.instances?.length ?? 0)], ['Recent worlds', (focus?.context?.recentWorlds ?? []).join(', ') || undefined],
-          ['Focus', focus ? Object.entries(focus.focus).map(([k, v]) => `${k} ${v}`).join(', ') || 'none' : undefined], ['Open tab world', focus?.context?.tabWorld ?? undefined], ['Modal world', focus?.context?.modalWorld ?? undefined]]),
-        h('div', { class: 'p2-jtree', 'data-view': 'astra' }, jsonTree({ discussions: astra.discussions, ...(astra.capture ?? {}) }, new Set(), '', 0))) : h('p', { class: 'p2-muted' }, 'ASTRA is not available.')),
     ];
   }
 
