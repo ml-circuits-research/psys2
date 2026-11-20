@@ -2,79 +2,86 @@
 
 100 rows, stratified by tab and source (fixed hash order). Each row: text, context names, then the labels per request.
 
-1. [avatar · demo-tool-profile · train · avatar.part.change] “please set the "mouth" part using the pressed variant”  — context: Avatar, hair back, shoulders, neck, ears, head
+1. [avatar · data-drop-v1 · train · compound] “My avatar should be a woman with glasses, and also change the avatar's shirt to green.”  — context: My avatar, Man, Woman, Old man, Old woman, Robot
+  - span “My avatar should be a woman with glasses”: **change**/do trigger=“should”; target figure existing possessive fill=context
+  - span “change the avatar's shirt to green”: **change**/do trigger=“change”; target figure existing possessive fill=context
+
+2. [avatar · data-drop-v1 · train · None] “Please make the face a little younger.”  — context: My avatar, Man, Woman, Old man, Old woman, Robot
+  - span “Please make the face a little younger”: **change**/do trigger=“make”; target figure existing possessive fill=context
+
+3. [avatar · demo-tool-profile · train · avatar.part.change] “please set the "mouth" part using the pressed variant”  — context: Avatar, hair back, shoulders, neck, ears, head
   - span “please set the "mouth" part using the pressed variant”: **change**/do trigger=“set”; target part existing definite fill=written
     - part.ids = "mouth" from “"mouth"” [eq, result]
     - part.variant = "pressed" from “pressed” [eq, result]
 
-2. [avatar · demo-tool-profile · train · avatar.part.change] “set the "hat" part to the top hat variant”  — context: Avatar, hair back, shoulders, neck, ears, head
+4. [avatar · demo-tool-profile · train · avatar.part.change] “set the "hat" part to the top hat variant”  — context: Avatar, hair back, shoulders, neck, ears, head
   - span “set the "hat" part to the top hat variant”: **change**/do trigger=“set”; target part existing definite fill=written
     - part.ids = "hat" from “"hat"” [eq, result]
     - part.variant = "top hat" from “top hat” [eq, result]
 
-3. [avatar · main-synthetic · train · avatar.part.add] “add a salor collar back hair”  — context: Avatar, earrings, hair front, eyebrows, eyes, nose
+5. [avatar · main-synthetic · train · avatar.part.add] “add a salor collar back hair”  — context: Avatar, earrings, hair front, eyebrows, eyes, nose
   - span “add a salor collar back hair”: **make**/do trigger=“add”; target part new indefinite
     - part.id = "hair_back" from “back hair” [eq, result]
     - part.variant = "sailor collar" from “salor collar” [eq, result]
 
-4. [avatar · main-synthetic · train · avatar.part.change] “a monocle for me, glasses red”  — context: Avatar, earrings, hair front, eyebrows, eyes, nose
+6. [avatar · main-synthetic · train · avatar.part.change] “a monocle for me, glasses red”  — context: Avatar, earrings, hair front, eyebrows, eyes, nose
   - span “a monocle for me, glasses red”: **change**/do (no trigger); target part existing definite fill=description kind=glasses kind_span=“glasses”
     - part.variant = "monocle" from “monocle” [eq, result]
     - part.colour = "red" from “red” [eq, result]
 
-5. [avatar · ui-comparatives-v1 · train · avatar.part.size.delta] “could you make the head a lot larger”  — context: Avatar, eyes, nose, mouth, ears, eyebrows
+7. [avatar · ui-comparatives-v1 · train · avatar.part.size.delta] “could you make the head a lot larger”  — context: Avatar, eyes, nose, mouth, ears, eyebrows
   - span “could you make the head a lot larger”: **change**/do trigger=“make”; target part existing definite fill=description kind=head kind_span=“head”
     - part.size = "(unlabelled)" from “larger” [delta, result]
 
-6. [avatar · ui-comparatives-v1 · train · avatar.part.size.delta] “please make the mouth a lot tinier”  — context: Avatar, eyes, nose, mouth, ears, eyebrows
+8. [avatar · ui-comparatives-v1 · train · avatar.part.size.delta] “please make the mouth a lot tinier”  — context: Avatar, eyes, nose, mouth, ears, eyebrows
   - span “please make the mouth a lot tinier”: **change**/do trigger=“make”; target part existing definite fill=description kind=mouth kind_span=“mouth”
     - part.size = "(unlabelled)" from “tinier” [delta, result]
 
-7. [avatar · ui-coverage-v2 · train · avatar.face.resize] “scale the character up”  — context: Avatar, fringe, ponytail, eyes, brows, nose
+9. [avatar · ui-coverage-v2 · train · avatar.face.resize] “scale the character up”  — context: Avatar, fringe, ponytail, eyes, brows, nose
   - span “scale the character up”: **change**/do trigger=“scale”; target face existing definite fill=context
     - face.scale = "(unlabelled)" from “up” [delta, result]
 
-8. [avatar · ui-coverage-v2 · train · avatar.part.change] “big lips”  — context: Avatar, fringe, ponytail, eyes, brows, nose
+10. [avatar · ui-coverage-v2 · train · avatar.part.change] “big lips”  — context: Avatar, fringe, ponytail, eyes, brows, nose
   - span “big lips”: **change**/do (no trigger); target part existing definite fill=written name_span=“lips”
     - part.ids = "lips" from “lips” [eq, selector]
     - part.size = "big" from “big” [degree, result]
 
-9. [avatar · ui-features-v1 · train · avatar.part.change] “longer hair”  — context: Avatar, fringe, pigtails, eyes, brows, nose
+11. [avatar · ui-features-v1 · train · avatar.part.change] “longer hair”  — context: Avatar, fringe, pigtails, eyes, brows, nose
   - span “longer hair”: **change**/do (no trigger); target part existing definite fill=description kind=hair kind_span=“hair”
     - part.length = "(unlabelled)" from “longer” [delta, result]
 
-10. [avatar · ui-features-v1 · train · avatar.part.change] “switch her to short hair”  — context: Avatar, fringe, pigtails, eyes, brows, nose
+12. [avatar · ui-features-v1 · train · avatar.part.change] “switch her to short hair”  — context: Avatar, fringe, pigtails, eyes, brows, nose
   - span “switch her to short hair”: **change**/do trigger=“switch”; target part existing definite fill=description kind=hair kind_span=“hair”
     - part.length = "short" from “short” [degree, result]
 
-11. [avatar · ui-human-v1 · train · avatar.part.resize] “make the mouth 1.1”  — context: mouth, earrings, hair front, eyebrows, eyes, nose
+13. [avatar · ui-human-v1 · train · avatar.part.resize] “make the mouth 1.1”  — context: mouth, earrings, hair front, eyebrows, eyes, nose
   - span “make the mouth 1.1”: **change**/do trigger=“make”; target part existing definite fill=description kind=mouth kind_span=“mouth”
     - part.scale = "1.1" from “1.1” [eq, result]
 
-12. [avatar · ui-human-v1 · train · avatar.part.add] “put on a cap”  — context: Avatar, earrings, hair front, eyebrows, eyes, nose
+14. [avatar · ui-human-v1 · train · avatar.part.add] “put on a cap”  — context: Avatar, earrings, hair front, eyebrows, eyes, nose
   - span “put on a cap”: **make**/do trigger=“put”; target part new indefinite
     - part.variant = "cap" from “cap” [eq, result]
 
-13. [avatar · ui-natural-v1 · train · avatar.face.compose] “use the old woman appearance for the avatar”  — context: Avatar, earrings, hair front, eyebrows, eyes, nose
+15. [avatar · ui-natural-v1 · train · avatar.face.compose] “use the old woman appearance for the avatar”  — context: Avatar, earrings, hair front, eyebrows, eyes, nose
   - span “use the old woman appearance for the avatar”: **change**/do trigger=“use”; target face existing definite fill=description kind=avatar kind_span=“avatar”
     - face.base = "old woman" from “old woman” [eq, result]
 
-14. [avatar · ui-natural-v1 · train · avatar.face.expression] “give the avatar a happy look”  — context: Avatar, earrings, hair front, eyebrows, eyes, nose
+16. [avatar · ui-natural-v1 · train · avatar.face.expression] “give the avatar a happy look”  — context: Avatar, earrings, hair front, eyebrows, eyes, nose
   - span “give the avatar a happy look”: **change**/do trigger=“give”; target face existing definite fill=description kind=avatar kind_span=“avatar”
     - face.expression = "happy" from “happy” [eq, result]
 
-15. [calendar · demo-tool-profile · train · None] “Let us which events are on Work 8 on 2026-12-08?. That would help.”  — context: Work 8, Room 8, Review
+17. [calendar · demo-tool-profile · train · None] “Let us which events are on Work 8 on 2026-12-08?. That would help.”  — context: Work 8, Room 8, Review
   - span “which events are on Work 8 on 2026-12-08?”: **answer**/ask trigger=“which”; target meeting existing definite fill=description
     - question {"ask": "list"}
     - meeting.calendar = "Work 8" from “Work 8” [eq, selector]
     - meeting.day = "2026-12-08" from “2026-12-08” [eq, selector]
 
-16. [calendar · demo-tool-profile · train · calendar.meeting.move] “Please, move Review to 2026-12-11 at 11:00 UTC. Thanks!”  — context: Work 3, Library room B, Review
+18. [calendar · demo-tool-profile · train · calendar.meeting.move] “Please, move Review to 2026-12-11 at 11:00 UTC. Thanks!”  — context: Work 3, Library room B, Review
   - span “move Review to 2026-12-11 at 11:00 UTC”: **place**/do trigger=“move”; target meeting existing definite fill=written name_span=“Review”
     - meeting.day = "2026-12-11" from “2026-12-11” [eq, result]
     - meeting.time = "11:00" from “11:00” [eq, result]
 
-17. [calendar · demo-tool-profile · train · None] “Let us add a calendar called Work 1; then schedule Review on Work 1 on 2026-12-05 at 09:00 UTC for 15 minutes. That would help.”  — context: Room 1
+19. [calendar · demo-tool-profile · train · None] “Let us add a calendar called Work 1; then schedule Review on Work 1 on 2026-12-05 at 09:00 UTC for 15 minutes. That would help.”  — context: Room 1
   - span “add a calendar called Work 1”: **make**/do trigger=“add”; target calendar new indefinite
     - calendar.name = "Work 1" from “Work 1” [eq, result]
   - span “schedule Review on Work 1 on 2026-12-05 at 09:00 UTC for 15 minutes”: **make**/do trigger=“schedule”; target meeting new indefinite
@@ -84,31 +91,31 @@
     - meeting.time = "09:00" from “09:00” [eq, result]
     - meeting.length = "15" from “15 minutes” [eq, result]
 
-18. [calendar · main-synthetic · train · calendar.meeting.change] “Room Main is the new home for the Intro meeting, which also takes the name Second”  — context: Intro, Review, Calendar
+20. [calendar · main-synthetic · train · calendar.meeting.change] “Room Main is the new home for the Intro meeting, which also takes the name Second”  — context: Intro, Review, Calendar
   - span “Room Main is the new home for the Intro meeting, which also takes the name Second”: **change**/do trigger=“name”; target meeting existing definite fill=written name_span=“Intro”
     - meeting.id = "Intro" from “Intro” [eq, selector]
     - meeting.title = "Second" from “Second” [eq, result]
 
-19. [calendar · main-synthetic · train · calendar.meeting.change] “Update the Intro meeting to start at 2, run for 3, and list the whole gang as participants.”  — context: Intro, Review, Calendar
+21. [calendar · main-synthetic · train · calendar.meeting.change] “Update the Intro meeting to start at 2, run for 3, and list the whole gang as participants.”  — context: Intro, Review, Calendar
   - span “Update the Intro meeting to start at 2, run for 3, and list the whole gang as participants.”: **change**/do trigger=“Update”; target meeting existing definite fill=written name_span=“Intro”
     - meeting.id = "Intro" from “Intro” [eq, selector]
     - meeting.start = "2" from “2” [eq, result]
     - meeting.length = "3" from “3” [eq, result]
 
-20. [calendar · ui-comparatives-v1 · train · calendar.meeting.length.delta] “Make Review a bit longer.”  — context: Review, Planning, Calendar
+22. [calendar · ui-comparatives-v1 · train · calendar.meeting.length.delta] “Make Review a bit longer.”  — context: Review, Planning, Calendar
   - span “Make Review a bit longer.”: **change**/do trigger=“Make”; target meeting existing definite fill=written name_span=“Review”
     - meeting.ids = "Review" from “Review” [eq, selector]
     - meeting.length = "(unlabelled)" from “longer” [delta, result]
 
-21. [calendar · ui-comparatives-v1 · train · calendar.meeting.length.delta] “I want it shorter”  — context: Review, Planning, Calendar
+23. [calendar · ui-comparatives-v1 · train · calendar.meeting.length.delta] “I want it shorter”  — context: Review, Planning, Calendar
   - span “I want it shorter”: **change**/do trigger=“want”; target meeting existing definite fill=context
     - meeting.length = "(unlabelled)" from “shorter” [delta, result]
 
-22. [calendar · ui-coverage-v2 · train · calendar.person.add] “new person: Dana”  — context: Work, Family, Gym, Ana, Mihai, Lee
+24. [calendar · ui-coverage-v2 · train · calendar.person.add] “new person: Dana”  — context: Work, Family, Gym, Ana, Mihai, Lee
   - span “new person: Dana”: **make**/do (no trigger); target person new indefinite kind=person kind_span=“person”
     - person.name = "Dana" from “Dana” [eq, result]
 
-23. [calendar · ui-coverage-v2 · train · calendar.meeting.add] “book a two hour workshop with Lee and Priya on Friday at 1pm”  — context: Work, Family, Gym, Ana, Mihai, Lee
+25. [calendar · ui-coverage-v2 · train · calendar.meeting.add] “book a two hour workshop with Lee and Priya on Friday at 1pm”  — context: Work, Family, Gym, Ana, Mihai, Lee
   - span “book a two hour workshop with Lee and Priya on Friday at 1pm”: **make**/do trigger=“book”; target meeting new indefinite kind=workshop kind_span=“workshop”
     - meeting.length = "2" from “two hour” [eq, result]
     - meeting.people = "Lee" from “Lee” [eq, result]
@@ -116,57 +123,53 @@
     - meeting.day = "Friday" from “Friday” [eq, result]
     - meeting.time = "1pm" from “1pm” [eq, result]
 
-24. [calendar · ui-human-v1 · dev · calendar.meeting.change] “set review as Weekly review”  — context: Review, Calendar
+26. [calendar · ui-human-v1 · dev · calendar.meeting.change] “set review as Weekly review”  — context: Review, Calendar
   - span “set review as Weekly review”: **change**/do trigger=“set”; target meeting existing definite fill=written name_span=“review”
     - meeting.id = "review" from “review” [eq, selector]
     - meeting.title = "Weekly review" from “Weekly review” [eq, result]
 
-25. [calendar · ui-human-v1 · train · world-informed-completion] “um, extend the event so it's twice as long”  — context: Review, Calendar
+27. [calendar · ui-human-v1 · train · world-informed-completion] “um, extend the event so it's twice as long”  — context: Review, Calendar
   - span “um, extend the event so it's twice as long”: **change**/do trigger=“extend”; target meeting existing definite fill=context
     - meeting.length = "2" from “twice” [factor, result]
 
-26. [calendar · ui-natural-v1 · train · calendar.meeting.remove] “cancel the Review event”  — context: Review, Calendar
+28. [calendar · ui-natural-v1 · train · calendar.meeting.remove] “cancel the Review event”  — context: Review, Calendar
   - span “cancel the Review event”: **remove**/do trigger=“cancel”; target meeting existing definite fill=written name_span=“Review”
     - meeting.id = "Review" from “Review” [eq, selector]
 
-27. [calendar · ui-natural-v1 · train · calendar.events.remove] “take Review out of this calendar”  — context: Review, Calendar
+29. [calendar · ui-natural-v1 · train · calendar.events.remove] “take Review out of this calendar”  — context: Review, Calendar
   - span “take Review out of this calendar”: **remove**/do trigger=“take”; target meeting existing definite fill=written name_span=“Review”
     - meeting.ids = "Review" from “Review” [eq, selector]
 
-28. [calendar · ui-tiers-v1 · train · calendar.meeting.add] “please add the kids' dentist appointment to the Family calendar on Wednesday at 4:30 - it's personal, not for the office”  — context: Work, Family, Gym, Ana, Mihai, Lee
+30. [calendar · ui-tiers-v1 · train · calendar.meeting.add] “please add the kids' dentist appointment to the Family calendar on Wednesday at 4:30 - it's personal, not for the office”  — context: Work, Family, Gym, Ana, Mihai, Lee
   - span “please add the kids' dentist appointment to the Family calendar on Wednesday at 4:30 - it's personal, not for the office”: **make**/do trigger=“add”; target meeting new indefinite kind=dentist appointment kind_span=“dentist appointment”
     - meeting.calendar = "Family" from “Family” [eq, result]
     - meeting.day = "Wednesday" from “Wednesday” [eq, result]
     - meeting.time = "4:30" from “4:30” [eq, result]
 
-29. [calendar · ui-tiers-v1 · train · calendar.meeting.add] “Lee asked to sync on the roadmap - would Monday at 2 suit? If so, put a meeting with him on my Work calendar.”  — context: Work, Family, Gym, Ana, Mihai, Lee
+31. [calendar · ui-tiers-v1 · train · calendar.meeting.add] “Lee asked to sync on the roadmap - would Monday at 2 suit? If so, put a meeting with him on my Work calendar.”  — context: Work, Family, Gym, Ana, Mihai, Lee
   - span “Lee asked to sync on the roadmap - would Monday at 2 suit? If so, put a meeting with him on my Work calendar.”: **make**/do trigger=“put”; target meeting new indefinite kind=meeting kind_span=“meeting”
     - meeting.day = "Monday" from “Monday” [eq, result]
     - meeting.time = "2" from “2” [eq, result]
     - meeting.people = "Lee" from “him” [eq, result]
     - meeting.calendar = "Work" from “Work” [eq, result]
 
-30. [diagram · data-drop-v1 · dev · None] “I want the x axis numbers to the nth on the sensor contour”  — context: Sensor readings by depth
+32. [diagram · data-drop-v1 · dev · None] “I want the x axis numbers to the nth on the sensor contour”  — context: Sensor readings by depth
   - span “I want the x axis numbers to the nth on the sensor contour”: **change**/do trigger=“want”; target chart existing definite fill=context
     - chart.tickFormat = "nth power x" from “to the nth” [eq, result]
 
-31. [diagram · data-drop-v1 · train · None] “how do I get the arrow labels 0.5cm off the line?”  — context: Input, Output, e1
+33. [diagram · data-drop-v1 · train · None] “how do I get the arrow labels 0.5cm off the line?”  — context: Input, Output, e1
   - span “how do I get the arrow labels 0.5cm off the line?”: **change**/do trigger=“do”; target link existing quantified fill=all
 
-32. [diagram · data-drop-v1 · test · None] “did we get all the way back to the beginning”  — context: Hold, Clean, Fill, Seal, Label
+34. [diagram · data-drop-v1 · test · None] “did we get all the way back to the beginning”  — context: Hold, Clean, Fill, Seal, Label
   - span “did we get all the way back to the beginning”: **answer**/ask trigger=“the”; target diagram existing definite fill=context
     - question {"ask": "exists"}
 
-33. [diagram · demo-tool-profile · train · diagram.node.change] “Could you make Pie A purple. I appreciate it.”  — context: Pie A, Slice 1
-  - span “make Pie A purple”: **change**/do trigger=“make”; target node existing definite fill=written name_span=“Pie A”
-    - node.colour = "purple" from “purple” [eq, result]
-
-34. [diagram · demo-tool-profile · train · compound] “Could you create a purple triangle labelled Pricing tiers. I appreciate it.”  — context: Starter
+35. [diagram · demo-tool-profile · train · compound] “Could you create a purple triangle labelled Pricing tiers. I appreciate it.”  — context: Starter
   - span “create a purple triangle labelled Pricing tiers”: **make**/do trigger=“create”; target node new indefinite kind=triangle kind_span=“triangle”
     - node.colour = "purple" from “purple” [eq, result]
     - node.label = "Pricing tiers" from “Pricing tiers” [eq, result]
 
-35. [diagram · demo-tool-profile · train · None] “Could you add a hexagon labelled Study groups; then connect Study groups to maths; then make Study groups blue. I appreciate it.”  — context: maths
+36. [diagram · demo-tool-profile · train · None] “Could you add a hexagon labelled Study groups; then connect Study groups to maths; then make Study groups blue. I appreciate it.”  — context: maths
   - span “add a hexagon labelled Study groups”: **make**/do trigger=“add”; target node new indefinite kind=hexagon kind_span=“hexagon”
     - node.label = "Study groups" from “Study groups” [eq, result]
   - span “connect Study groups to maths”: **connect**/do trigger=“connect”; target link new indefinite
@@ -175,7 +178,7 @@
   - span “make Study groups blue”: **change**/do trigger=“make”; target node existing definite fill=written name_span=“Study groups”
     - node.colour = "blue" from “blue” [eq, result]
 
-36. [diagram · human-adapted-v1-diagram · train · None] “Insert a line chart with following data, 2016 6.7%, 2017 6.9%, 2018 6.6%, 2019 6.1%, 2020 2.3%, 2021 8.1%”  — context: (empty)
+37. [diagram · human-adapted-v1-diagram · train · None] “Insert a line chart with following data, 2016 6.7%, 2017 6.9%, 2018 6.6%, 2019 6.1%, 2020 2.3%, 2021 8.1%”  — context: (empty)
   - span “Insert a line chart with following data, 2016 6.7%, 2017 6.9%, 2018 6.6%, 2019 6.1%, 2020 2.3%, 2021 8.1%”: **make**/do trigger=“Insert”; target chart new indefinite
     - chart.type = "line" from “line chart” [eq, result]
     - chart.labels = "2016" from “2016” [eq, result]
@@ -191,57 +194,53 @@
     - chart.labels = "2021" from “2021” [eq, result]
     - chart.values = "8.1" from “8.1” [eq, result]
 
-37. [diagram · human-adapted-v1-diagram · train · None] “call it Score”  — context: Revenue trend, 2016, 2017, 2018, 2019, Revenue
+38. [diagram · human-adapted-v1-diagram · train · None] “call it Score”  — context: Revenue trend, 2016, 2017, 2018, 2019, Revenue
   - span “call it Score”: **change**/do trigger=“call”; target chart existing definite fill=context
     - chart.title = "Score" from “Score” [eq, result]
 
-38. [diagram · main-synthetic · train · diagram.group.layout] “place a layyers Backup”  — context: Backup, link, Sales, Process
+39. [diagram · main-synthetic · train · diagram.group.layout] “place a layyers Backup”  — context: Backup, link, Sales, Process
   - span “place a layyers Backup”: **arrange**/do trigger=“place”; target group existing definite fill=written name_span=“Backup”
     - group.id = "Backup" from “Backup” [eq, selector]
 
-39. [diagram · main-synthetic · train · diagram.group.place] “place a grooup Review 260, 240”  — context: Review, link, Sales, Process
+40. [diagram · main-synthetic · train · diagram.group.place] “place a grooup Review 260, 240”  — context: Review, link, Sales, Process
   - span “place a grooup Review 260, 240”: **place**/do trigger=“place”; target group existing definite fill=written name_span=“Review”
     - group.id = "Review" from “Review” [eq, selector]
     - group.x = "260" from “260” [eq, result]
     - group.y = "240" from “240” [eq, result]
 
-40. [diagram · ui-comparatives-v1 · train · diagram.node.size.delta] “make Decision much bigger”  — context: Start, Finish, Decision
+41. [diagram · ui-comparatives-v1 · train · diagram.node.size.delta] “make Decision much bigger”  — context: Start, Finish, Decision
   - span “make Decision much bigger”: **change**/do trigger=“make”; target node existing definite fill=written name_span=“Decision”
     - node.ids = "Decision" from “Decision” [eq, selector]
     - node.size = "(unlabelled)" from “bigger” [delta, result]
 
-41. [diagram · ui-comparatives-v1 · train · diagram.node.width.delta] “make the shape way narrower”  — context: Start, Finish, Decision
+42. [diagram · ui-comparatives-v1 · train · diagram.node.width.delta] “make the shape way narrower”  — context: Start, Finish, Decision
   - span “make the shape way narrower”: **change**/do trigger=“make”; target node existing definite fill=description kind=shape kind_span=“shape”
     - node.width = "(unlabelled)" from “narrower” [delta, result]
 
-42. [diagram · ui-coverage-v2 · train · diagram.node.make] “small yellow star”  — context: Start, Approved?, Review, Publish, Done, Note
+43. [diagram · ui-coverage-v2 · train · diagram.node.make] “small yellow star”  — context: Start, Approved?, Review, Publish, Done, Note
   - span “small yellow star”: **make**/do (no trigger); target node new indefinite kind=star kind_span=“star”
     - node.size = "small" from “small” [degree, result]
     - node.colour = "yellow" from “yellow” [eq, result]
 
-43. [diagram · ui-coverage-v2 · train · diagram.group.layout] “arrange the Approval steps group in a column”  — context: Start, Approved?, Review, Publish, Done, Note
+44. [diagram · ui-coverage-v2 · train · diagram.group.layout] “arrange the Approval steps group in a column”  — context: Start, Approved?, Review, Publish, Done, Note
   - span “arrange the Approval steps group in a column”: **arrange**/do trigger=“arrange”; target group existing definite fill=written name_span=“Approval steps”
     - group.id = "Approval steps" from “Approval steps” [eq, selector]
     - group.layout = "column" from “column” [eq, result]
 
-44. [diagram · ui-diagram-v2 · train · diagram.node.remove] “the Build step away”  — context: Database, Payment, Build, e1
+45. [diagram · ui-diagram-v2 · train · diagram.node.remove] “the Build step away”  — context: Database, Payment, Build, e1
   - span “the Build step away”: **remove**/do trigger=“away”; target node existing definite fill=written name_span=“Build”
     - node.ids = "Build" from “Build” [eq, selector]
 
-45. [diagram · ui-diagram-v2 · train · diagram.link.make] “with this onep icked, I need you to connect it to CEO”  — context: n1, Retry, n3, Draft, CEO, e1
+46. [diagram · ui-diagram-v2 · train · diagram.link.make] “with this onep icked, I need you to connect it to CEO”  — context: n1, Retry, n3, Draft, CEO, e1
   - span “with this onep icked, I need you to connect it to CEO”: **connect**/do trigger=“connect”; target link new indefinite
     - link.to = "CEO" from “CEO” [eq, result]
 
-46. [diagram · ui-diagram-v2 · train · diagram.series.make] “could you draw Costs as a second series: 8, 15, 120”  — context: Onboarding, Research, Deploy, Valid?, Quarterly revenue, 2022
+47. [diagram · ui-diagram-v2 · train · diagram.series.make] “could you draw Costs as a second series: 8, 15, 120”  — context: Onboarding, Research, Deploy, Valid?, Quarterly revenue, 2022
   - span “could you draw Costs as a second series: 8, 15, 120”: **make**/do trigger=“draw”; target series new indefinite
     - series.label = "Costs" from “Costs” [eq, result]
     - series.values = "8" from “8” [eq, result]
     - series.values = "15" from “15” [eq, result]
     - series.values = "120" from “120” [eq, result]
-
-47. [diagram · ui-diagram-v2 · train · diagram.chart.make] “just draw a polar area chart of sales by month”  — context: Settings, Done, Marketing, Draft, e1, e2
-  - span “just draw a polar area chart of sales by month”: **make**/do trigger=“draw”; target chart new indefinite
-    - chart.type = "polarArea" from “polar area chart” [eq, result]
 
 48. [diagram · ui-diagram-v2-voice · train · diagram.style.apply] “make it black and white for printing”  — context: Start, Login, Valid?, Dashboard, End, n6
   - span “make it black and white for printing”: **change**/do trigger=“make”; target diagram existing definite fill=context
@@ -396,42 +395,20 @@
     - drawn.anchor = "the stall" from “the stall” [relation, selector]
   - span “a small white apron on the vendor”: **change**/do (no trigger); target part new indefinite kind=apron kind_span=“apron”
     - part.owner = "vendor" from “the vendor” [eq, result]
+    - part.colour = "white" from “white” [eq, result]
 
 75. [drawing · data-drop-v1 · train · None] “turn the scene into a wet and windy evening”  — context: House, Tree, Sun, Lake, Cloud, Boat
   - span “turn the scene into a wet and windy evening”: **change**/do trigger=“turn”; target page existing definite fill=context
 
-76. [drawing · data-drop-v1 · train · compound] “a library in the afternoon with a medium storyteller sitting right on the rug, four small red cushions in a row right on the rug, three small children sitting around the storyteller, and a small white rabbit right next to the storyteller, and keep the people in the foreground from now on”  — context: Rug, Shelf
-  - span “a library in the afternoon”: **change**/do (no trigger); target page existing definite fill=context
-  - span “a medium storyteller sitting right on the rug”: **make**/do (no trigger); target drawn new indefinite kind=storyteller kind_span=“storyteller”
-    - drawn.size = "medium" from “medium” [degree, result]
-    - drawn.relation = "on" from “on the rug” [relation, result]
-    - drawn.pose = "sitting" from “sitting” [eq, result]
-    - drawn.anchor = "the rug" from “the rug” [relation, selector]
-  - span “four small red cushions in a row right on the rug”: **make**/do (no trigger); target drawn new quantified kind=cushion kind_span=“cushions”
-    - drawn.count = "(unlabelled)" from “four” [eq, result]
-    - drawn.size = "small" from “small” [degree, result]
-    - drawn.colour = "red" from “red” [eq, result]
-    - drawn.relation = "on" from “on the rug” [relation, result]
-    - drawn.anchor = "the rug" from “the rug” [relation, selector]
-  - span “three small children sitting around the storyteller”: **make**/do (no trigger); target drawn new quantified kind=child kind_span=“children”
-    - drawn.count = "(unlabelled)" from “three” [eq, result]
-    - drawn.size = "small" from “small” [degree, result]
-    - drawn.relation = "around" from “around the storyteller” [relation, result]
-    - drawn.pose = "sitting" from “sitting” [eq, result]
-    - drawn.anchor = "the storyteller" from “the storyteller” [relation, selector]
-  - span “a small white rabbit right next to the storyteller”: **make**/do (no trigger); target drawn new indefinite kind=rabbit kind_span=“rabbit”
-    - drawn.size = "small" from “small” [degree, result]
-    - drawn.colour = "white" from “white” [eq, result]
-    - drawn.relation = "next to" from “next to the storyteller” [relation, result]
-    - drawn.anchor = "the storyteller" from “the storyteller” [relation, selector]
-  - span “keep the people in the foreground from now on”: **place**/do trigger=“keep”; target group existing definite fill=context
-    - drawn.at = "foreground" from “in the foreground” [region, result]
-    - preference.scope = "from now on" from “from now on” [eq, result]
-
-77. [drawing · data-drop-v1 · train · compound] “make the little car by the gate deep cobalt blue, and give the surface a pearlescent paint look”  — context: House, Tree, Sun, Cloud, Lake, Boat
+76. [drawing · data-drop-v1 · train · compound] “make the little car by the gate deep cobalt blue, and give the surface a pearlescent paint look”  — context: House, Tree, Sun, Cloud, Lake, Boat
   - span “make the little car by the gate deep cobalt blue”: **change**/do trigger=“make”; target drawn existing definite fill=description kind=car kind_span=“car” description_span=“the little car by the gate”
     - drawn.colour = "cobalt" from “deep cobalt blue” [eq, result]
   - span “give the surface a pearlescent paint look”: **change**/do trigger=“give”; target drawn existing definite fill=description kind=surface kind_span=“surface” description_span=“surface”
+
+77. [drawing · data-drop-v1 · train · None] “maybe a little cat could go near the tree, but not so close that the door is blocked.”  — context: House, Tree, Bench, Barn, Well, Fence
+  - span “maybe a little cat could go near the tree, but not so close that the door is blocked.”: **make**/do (no trigger); target drawn new indefinite kind=cat kind_span=“cat”
+    - drawn.relation = "near" from “near” [relation, result]
+    - drawn.anchor = "the tree" from “the tree” [relation, selector]
 
 78. [drawing · demo-tool-profile · train · None] “place duck pond to the left of barn.”  — context: duck pond, barn
   - span “place duck pond to the left of barn”: **place**/do trigger=“place”; target drawn existing definite fill=written name_span=“duck pond”

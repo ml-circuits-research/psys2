@@ -35,7 +35,10 @@ spec.loader.exec_module(official)
 INVENTORY = merged_inventory()
 for _area, _types in json.loads((HERE / 'inventory.json').read_text()).items():  # keys only the drops use so far (drawn.facing)
     for _typ, _definition in _types.items():
-        INVENTORY.setdefault(_area, {}).setdefault(_typ, {'keys': {}})['keys'].update(_definition['keys'])
+        _keys = INVENTORY.setdefault(_area, {}).setdefault(_typ, {'keys': {}})['keys']
+        for _k, _spec in _definition['keys'].items():  # merged as the official build merges: values are added, never replaced
+            _prior = _keys.get(_k) or {}
+            _keys[_k] = {**_prior, **_spec, **({'values': list(dict.fromkeys([*_prior.get('values', []), *_spec.get('values', [])]))} if 'values' in _spec or 'values' in _prior else {})}
 INV = official.Inventory(INVENTORY)
 VALIDATOR = official.Validator(INV)
 _, LEMMAS = official.kind_vocabulary()
@@ -359,6 +362,10 @@ def preference_world(row, stats):
     pref_keys = [str(c.get('value', '')) for q in reqs for c in q.get('constraints') or [] if c.get('key') == 'preference.key']
     if any(k.startswith('face.figure.') for k in keys) or any((q.get('target') or {}).get('type') == 'avatar' for q in reqs) or any(v.startswith('avatar') for v in pref_keys):
         world = 'avatar'
+    elif any((q.get('target') or {}).get('type') in ('diagram', 'node', 'link', 'chart', 'series', 'point', 'sketch') for q in reqs):
+        world = 'diagram'  # a request in the same message acts on a Diagram object
+    elif any((q.get('target') or {}).get('type') in ('drawn', 'part') for q in reqs):
+        world = 'drawing'
     elif any(PREF_DIAGRAM.match(v) for v in pref_keys):
         world = 'diagram'
     elif any(PREF_DRAWING.match(v) for v in pref_keys):
@@ -582,6 +589,32 @@ def residual_marker(batch):
 POPULATION_WORDS = re.compile(r'^(all|every|each|both)\b|\b(everything|all of them)\b', re.I)
 
 
+COLOUR_WORDS = ['red', 'orange', 'yellow', 'gold', 'golden', 'lime', 'green', 'teal', 'cyan', 'blue', 'navy', 'indigo', 'purple', 'violet',
+                'magenta', 'pink', 'brown', 'gray', 'grey', 'black', 'white', 'beige', 'silver', 'turquoise', 'maroon', 'olive', 'crimson',
+                'light blue', 'dark blue', 'light green', 'dark green', 'dark red', 'light grey', 'dark grey', 'sky blue']
+COLOUR_KEY = {('drawing', 'drawn'): 'drawn.colour', ('drawing', 'part'): 'part.colour', ('diagram', 'node'): 'node.colour', ('diagram', 'link'): 'link.colour',
+              ('diagram', 'group'): 'group.colour'}
+COLOUR_BEFORE = re.compile(r'(?<![\w-])(' + '|'.join(sorted((re.escape(c) for c in COLOUR_WORDS), key=len, reverse=True)) + r')\s+(?:[a-z]+\s+)?$', re.I)
+
+
+def colour_label(row, q, t, span, stats):
+    """A colour adjective that directly modifies the target noun ("a red car", "the blue small box") and has no colour label
+    gets one: the colour of a new thing, or the selector of an existing one. Anything else is left alone."""
+    key = COLOUR_KEY.get((row.get('world'), t.get('type')))
+    kind_span = t.get('kind_span')
+    if not key or not isinstance(kind_span, str) or kind_span not in span:
+        return
+    if any(str(c.get('key', '')).endswith(('colour', 'color')) for c in q.get('constraints') or []):
+        return
+    m = COLOUR_BEFORE.search(span[:span.index(kind_span)])
+    if not m:
+        return
+    word = m.group(1)
+    q.setdefault('constraints', []).append({'key': key, 'value': word.lower().replace('grey', 'gray'), 'value_span': word, 'operator': 'eq',
+                                            'phase': 'result' if t.get('mode') == 'new' else 'selector', 'polarity': 'positive', 'character': 'requirement'})
+    stats['colour adjective on the target noun without a colour label -> colour label'] += 1
+
+
 def official_contract(row, stats):
     """The official label contract on every imported row (frozen batches included): an existing target always states how it is
     given (written name or code, kind description, population, the context, a journal step), as the rest of the official data
@@ -602,6 +635,7 @@ def official_contract(row, stats):
             t['fill'] = fill
             stats[f'existing target without fill -> {fill}'] += 1
         span = q.get('span') or ''
+        colour_label(row, q, t, span, stats)
         for c in q.get('constraints') or []:
             if c.get('key') == 'chart.type' and isinstance(c.get('value_span'), str):
                 m = re.search(re.escape(c['value_span']) + r'(\s+(?:chart|graph|plot|diagram))\b', span)
@@ -654,6 +688,11 @@ def main():
             if resigned[name] == 'replace':
                 del frozen[name]
     candidates = sorted(p for p in DROP.iterdir() if p.is_dir() and not p.name.startswith(('_', '.')) and (p.name not in frozen or resigned.get(p.name) == 'residual')) if DROP.exists() else []
+    # Coordinator exception (2026-11-21): the worker signed these batches (DONE markers) but could not move them out of
+    # management/staging/; they are read there, through the same checks, and their feedback says so.
+    STAGED = {'dg-batch-21', 'pref-batch-01', 'dw-batch-19'}
+    staging = DROP.parent / 'staging'
+    candidates += sorted(staging / n for n in STAGED if (staging / n).is_dir() and n not in frozen and not (DROP / n).is_dir())
     batches, waiting = [], {}
     for p in candidates:
         ok, why = signed(p) if len(sys.argv) == 1 else (True, 'dry run')
@@ -739,6 +778,8 @@ def main():
             accepted = [r for r in accepted if r['cohort']['recipeFamily'].split(':')[1] != batch.name]
             summary[batch.name]['held'] = True
         lines = [f'# Import feedback: {batch.name}', '',
+                 *(['Read from management/staging/ under the coordinator\'s exception of 2026-11-21 (signed by the worker, not moved to data-drop/).', '']
+                   if batch.parent.name == 'staging' else []),
                  f'Rows {total}: **accepted {kept}**, rejected {rejected} ({100 * rejected / max(1, total):.1f}%) (importer `psys2/training/sop-bert/data/data-drop-v1/import.py`).'
                  + (' **Batch HELD: more than 5% of its rows were rejected; none of it is imported until a fixed re-signed batch arrives.**' if held else ''),
                  f'Accepted per tab: {dict(per_world)}; per class: {dict(per_class.most_common())}.',
@@ -794,8 +835,16 @@ def main():
         if not r['id'].startswith(b + '-residual-'):
             r['id'] = r['id'].replace(b + '-', b + '-residual-', 1)
     accepted = [r for rows in keep_frozen.values() for r in rows] + residuals + accepted
-    contract = collections.Counter()
-    accepted = [official_contract(r, contract) for r in accepted]
+    contract, per_batch = collections.Counter(), collections.defaultdict(collections.Counter)
+    for r in accepted:
+        official_contract(r, per_batch[r['cohort']['recipeFamily'].split(':')[1]])
+    for name, counts in per_batch.items():
+        contract.update(counts)
+        fb = DROP / name / 'FEEDBACK.md'
+        if fb.exists() and len(sys.argv) == 1:  # the contract applied to every imported row, logged per batch
+            text = fb.read_text().split('\n## Official label contract applied on import')[0].rstrip('\n')
+            fb.write_text(text + '\n\n## Official label contract applied on import (all imported rows of this batch)\n\n'
+                          + ''.join(f'- {k}: {v}\n' for k, v in counts.most_common()))
     ids = collections.Counter(r['id'] for r in accepted)
     if any(n > 1 for n in ids.values()):
         raise SystemExit('duplicate imported row ids: ' + ', '.join(k for k, n in ids.items() if n > 1)[:300])
