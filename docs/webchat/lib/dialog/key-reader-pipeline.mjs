@@ -1,10 +1,10 @@
 // Source-only two-model proposals. No parser fallback or execution admission.
 import {readReaderSource} from './reader-source.mjs?v=314291fa21';
 import {copyHostData,freezeHostData} from '../../worlds/native-tool-host.mjs?v=cfffe619de';
-import {bridgeRawStructure,RAW_STRUCTURAL_FORMAT,BINDING_NODES} from './raw-structural-bridge.mjs?v=c407c8cba0';
-import {comparativeSteps} from './comparative-projection.mjs?v=cee435c315';
-import {referenceProjection} from './reference-projection.mjs?v=c5fe83c15e';
-import {completeBindings} from './declared-bindings.mjs?v=40e07a0a9d';
+import {bridgeRawStructure,RAW_STRUCTURAL_FORMAT,BINDING_NODES} from './raw-structural-bridge.mjs?v=6fda7824b0';
+import {comparativeSteps} from './comparative-projection.mjs?v=ffb26f7b6f';
+import {referenceProjection} from './reference-projection.mjs?v=3083a78a02';
+import {completeBindings} from './declared-bindings.mjs?v=a135750ff1';
 const hash=x=>typeof x==='string'&&/^[a-f0-9]{64}$/.test(x);
 const digest=async x=>Array.from(new Uint8Array(await globalThis.crypto.subtle.digest('SHA-256',new TextEncoder().encode(x))),b=>b.toString(16).padStart(2,'0')).join('');
 const same=(a,b)=>JSON.stringify(a)===JSON.stringify(b);

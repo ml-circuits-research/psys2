@@ -17,14 +17,14 @@
 //  6. a kind named by the modifier of its compound lemmas ("a pie" for "pie chart", "pie graph": the compound's last
 //     word a lemma of its family's own class) is that kind, when every such compound names the same kind.
 import {parse,str} from '../vendor/sopworld/sopworld.mjs?v=47abc4a87a';
-import {interpretationPolicy} from './interpretation-policy.mjs?v=406b065a24';
-import {executionPolicyWorld} from './execution-policy.mjs?v=8ae9db878c';
-import DRAW from '../../worlds/art.draw/native-interface-source.mjs?v=586f322083';
+import {interpretationPolicy} from './interpretation-policy.mjs?v=5757df119a';
+import {executionPolicyWorld} from './execution-policy.mjs?v=352c75cd30';
+import DRAW from '../../worlds/art.draw/native-interface-source.mjs?v=c088b574a5';
 import DIAGRAM from '../../worlds/diagram.sketch/native-interface-source.mjs?v=bf7b6f9ec2';
 import CHARTS from '../../worlds/data.charts/native-interface-source.mjs?v=6c0dc1d746';
 import DOCUMENT from '../../worlds/docs.editor/native-interface-source.mjs?v=e247358200';
 import CALENDAR from '../../worlds/time.calendar/native-interface-source.mjs?v=3945d7d8fa';
-import AVATAR from '../../worlds/ui.avatar/native-interface-source.mjs?v=eacc432785';
+import AVATAR from '../../worlds/ui.avatar/native-interface-source.mjs?v=85fff1b7c4';
 
 const INTERFACES=[['art.draw',DRAW],['diagram.sketch',DIAGRAM],['data.charts',CHARTS],['docs.editor',DOCUMENT],['time.calendar',CALENDAR],['ui.avatar',AVATAR]];
 const digest=async text=>Array.from(new Uint8Array(await globalThis.crypto.subtle.digest('SHA-256',new TextEncoder().encode(text))),b=>b.toString(16).padStart(2,'0')).join('');
@@ -143,11 +143,6 @@ export async function completeBindings(bindings){
    if(args){shared.clear();shared.set('own',{...(own??{operation,sourceType,sourcePath:'worlds/app.project/execution-policy.sop'}),arguments:args});break;}
    shared.set(sourceType+'\0'+operation,own??{operation,sourceType,sourcePath:'worlds/app.project/execution-policy.sop'});
   }
-  // A declared family with no kind rows of its own (a chart point, read as a diagram node) takes the binding the kind
-  // rows of its class share.
-  if(!shared.size&&!(bindings.kinds??[]).some(k=>k.area===f.area&&k.type===f.type))
-   for(const k of bindings.kinds??[])if(k.area===f.area&&k.canonical===f.canonical&&k.nativeFamilyBinding?.operation&&k.nativeFamilyBinding.sourceType)
-    shared.set(k.nativeFamilyBinding.sourceType+'\0'+k.nativeFamilyBinding.operation,k.nativeFamilyBinding);
   if(shared.size!==1)continue;
   const [b]=shared.values();
   const binding={operation:b.operation,sourceType:b.sourceType,exportName:b.exportName,sourcePath:b.sourcePath,sourceSha256:b.sourceSha256,arguments:b.arguments,

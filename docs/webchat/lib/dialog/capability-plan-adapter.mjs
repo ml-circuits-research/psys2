@@ -3,13 +3,13 @@ import { parse, quote, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=
 import { decodeCapabilityCall } from '../vendor/sopworld/capability-call.mjs?v=ed3b773c65';
 import POLICY from '../../worlds/app.project/capability-policy.mjs?v=281892343f';
 import CLOCK from '../../worlds/app.project/clock-projection-source.mjs?v=7d09f121c5';
-import { executionPolicyWorld } from './execution-policy.mjs?v=8ae9db878c';
+import { executionPolicyWorld } from './execution-policy.mjs?v=352c75cd30';
 import { projectionModule } from './composition-knowledge.mjs?v=ec2bbc4afe';
 import { sceneDefaultModule, writeSceneDefaults } from './scene-placement-defaults.mjs?v=e3a0eb43cd';
-import { nativeKindCandidates } from './native-binding-candidates.mjs?v=cf86e6c6ca';
+import { nativeKindCandidates } from './native-binding-candidates.mjs?v=700d8228e2';
 import { observedReaderContext } from './native-reader-context.mjs?v=498064d92a';
 import { budget } from './budget.mjs?v=00bce6e369';
-import { en } from '../lang/en.mjs?v=67053bde71';
+import { en } from '../lang/en.mjs?v=189c882fb6';
 
 const NS = 'std.capability.';
 const take = (wire, key) => str(wire?.attrs[key]?.[0]);

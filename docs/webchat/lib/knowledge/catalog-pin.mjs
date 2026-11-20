@@ -9,7 +9,7 @@
  */
 export const CATALOG_PIN = Object.freeze({
   repo: 'https://github.com/ml-circuits-research/sop-knowledge-worlds',
-  commit: 'b89b4541069c2bb28b0b280399d89fbc6031096c',   // drawing styles in k.styles (typefaces, fills, effects, filters, frames, turns) and posed, styled and written w.drawing objects (e23dcd66, b89b4541), after terrain features from handles and support, surfaces and lights (06cf9056), after the w.diagram editor (page, styles, effects, charts) and k.styles, after people and parts (36cca794) and the diagram node words (7a9ee0c8).
+  commit: '87d8c1e4260513b6dbe0609ff24e81440e621675',   // the drawn person as a posable vector model: skeleton, poses, traits, expressions, garments (8c33bcf8, 87d8c1e4), after chart formatting slots (d94398b5), after drawing styles in k.styles (typefaces, fills, effects, filters, frames, turns) and posed, styled and written w.drawing objects (e23dcd66, b89b4541), after terrain features from handles and support, surfaces and lights (06cf9056), after the w.diagram editor (page, styles, effects, charts) and k.styles, after people and parts (36cca794) and the diagram node words (7a9ee0c8).
   path: 'docs/worlds',
 });
 

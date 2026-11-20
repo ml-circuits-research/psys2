@@ -4,7 +4,7 @@
 // native Documents command and set the page that is drawn and observed.
 import NATIVE_INTERFACE from './native-interface-source.mjs?v=e247358200';
 import AREA_SOURCES from './area-sources.mjs?v=ff53361c08';
-import {BUNDLED_AREAS} from '../../lib/knowledge/bundled-areas.mjs?v=f639f6a52b';
+import {BUNDLED_AREAS} from '../../lib/knowledge/bundled-areas.mjs?v=9759c39928';
 import {sopAreaAdapter} from '../sop-area-adapter.mjs?v=ee3421cbaf';
 
 const area = sopAreaAdapter({ world: 'docs.editor', instance: 'w.document', interfaceSource: NATIVE_INTERFACE, sources: AREA_SOURCES, offline: BUNDLED_AREAS['docs.editor'] });

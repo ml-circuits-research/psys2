@@ -1,18 +1,18 @@
 // Read-only inspection of execution worlds already owned by the application.
 import{parse,serialize,str,version,build}from'../vendor/sopworld/sopworld.mjs?v=47abc4a87a';
-import SOURCE from'./new-engine-source.mjs?v=ab65981151';
-import{CATALOG_PIN}from'../knowledge/catalog-pin.mjs?v=226143b302';
+import SOURCE from'./new-engine-source.mjs?v=343ad5ea0a';
+import{CATALOG_PIN}from'../knowledge/catalog-pin.mjs?v=6842776d07';
 import{inspectRequestRoutingPolicy}from'./request-routing-policy.mjs?v=5d5fe55b11';
 import{inspectHistoryPolicy}from'./history-policy.mjs?v=5b8eee412a';
 import{inspectHistoryJournal}from'./history-journal.mjs?v=5c2f095aac';
-import{inspectExecutionPolicyWorld}from'./execution-policy.mjs?v=8ae9db878c';
+import{inspectExecutionPolicyWorld}from'./execution-policy.mjs?v=352c75cd30';
 import{sceneDefaultInspection}from'./scene-placement-defaults.mjs?v=e3a0eb43cd';
-import{inspectCapabilityPolicy}from'./capability-plan-adapter.mjs?v=635ec158a2';
-import{inspectQueryPolicy}from'./project-query-action.mjs?v=29c0964f1b';
-import{inspectCreationPolicy}from'./project-create-action.mjs?v=cc1b70c523';
-import{inspectConstructorPolicy}from'./native-binding-candidates.mjs?v=cf86e6c6ca';
+import{inspectCapabilityPolicy}from'./capability-plan-adapter.mjs?v=07fc4f4192';
+import{inspectQueryPolicy}from'./project-query-action.mjs?v=c313869ac5';
+import{inspectCreationPolicy}from'./project-create-action.mjs?v=02112a85ee';
+import{inspectConstructorPolicy}from'./native-binding-candidates.mjs?v=700d8228e2';
 import{inspectGroundedProjection}from'./grounded-projection.mjs?v=2e4e5b7af2';
-import{inspectReaderHeadPolicy}from'./reader-head-alternative.mjs?v=e09e891887';
+import{inspectReaderHeadPolicy}from'./reader-head-alternative.mjs?v=8c78d3168f';
 import{inspectReferencePolicy}from'./reference-policy.mjs?v=a1b9acbdc3';
 import{inspectSchemaSource}from'./worlds-inspection.mjs?v=4948505b6a';
 import{inspectRequestCompositionPolicy}from'./request-composition-policy.mjs?v=2142645d32';
@@ -28,7 +28,7 @@ function snapshotText(snapshot){return (snapshot?.log??[]).map((entry,index)=>'#
 /** Projects actual cache accessors and retained journal JSON; performs no reading or reasoning. */
 export async function inspectExecutionWorlds(session){
  const [{inspectDeclaredExecutionSourceWorld},{inspectSpatialPlacementWorld}]=await Promise.all([
-  import('./declared-execution.mjs?v=73006fb19c'),import('./spatial-placement-execution.mjs?v=34dc34f963'),
+  import('./declared-execution.mjs?v=57cff56d85'),import('./spatial-placement-execution.mjs?v=32e9c88ee2'),
  ]);
  const journal=session?.newEngineJournal??[],moduleNames=[...new Set(journal.flatMap(record=>importsOf(record.evidence)))],sources=[['declared-execution','src/dialog/declared-execution.mjs',inspectDeclaredExecutionSourceWorld({moduleNames})]],nodes=[],edges=[];
  const link=(from,to,label)=>edges.push({from,to,label});
