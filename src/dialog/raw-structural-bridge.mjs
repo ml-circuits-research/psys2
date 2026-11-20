@@ -61,11 +61,11 @@ export function bridgeRawStructure(prediction,{bindings,bindingSha256,comparativ
   // A unit word of a value said for a numeric property (sopworld unitConversion): the property's own unit (its declared
   // words: factor 1), a unit of the binding table with a declared conversion to it ({factor}), else true when the word
   // is a unit not converted; its singular and plural are tried too (w.lang.en).
-  const unitWord=prop=>word=>{
+  const unitWord=(prop,inflected=false)=>word=>{
    const lengths=Array.isArray(table.lengthUnits)?table.lengthUnits:[],units=Array.isArray(table.units)?table.units:[];
    const declared=prop.unit?[...lengths.filter(u=>u.unit===prop.unit&&u.words).map(u=>({words:u.words,factor:1})),
     ...lengths.filter(c=>c.canonical&&c.unit===prop.unit&&Number.isFinite(c.factor)).map(c=>({words:units.filter(u=>u.canonical===c.canonical).map(u=>u.lemma),factor:c.factor}))]:[];
-   return unitConversion(word,declared,{forms:w=>[en.singular(w,'lemma'),en.plural(w)],known:w=>!!lookup('units',{lemma:w})});
+   return unitConversion(word,declared,{forms:w=>inflected?[en.singular(w,'lemma'),en.plural(w)]:[],known:w=>!!lookup('units',{lemma:w})});
   };
   const lookup=(family,criteria)=>{
    if(!Array.isArray(table[family]??[]))fail('invalid-binding-family',[family]);const found=[];
@@ -264,7 +264,7 @@ export function bridgeRawStructure(prediction,{bindings,bindingSha256,comparativ
     // declared conversion scales the value (table.lengthUnits, declared-bindings.mjs); either way no unit is left.
     let unitDone=false;
     if(has(condition,'unit')&&prop?.numeric===true&&c.value&&/^[-+]?\d+(\.\d+)?$/.test(String(c.value.value))){
-     const conv=unitWord({...prop,unit:prop.unit??(Array.isArray(table.lengthUnits)?table.lengthUnits.find(u=>u.words)?.unit:undefined)})(String(condition.unit).toLowerCase());
+     const conv=unitWord({...prop,unit:prop.unit??(Array.isArray(table.lengthUnits)?table.lengthUnits.find(u=>u.words)?.unit:undefined)},true)(String(condition.unit).toLowerCase());
      const found=conv&&conv!==true?conv:null;
      if(found){c.value={...c.value,value:String(+(Number(c.value.value)*found.factor).toFixed(6))};unitDone=true;}
     }
