@@ -143,11 +143,6 @@ export async function completeBindings(bindings){
    if(args){shared.clear();shared.set('own',{...(own??{operation,sourceType,sourcePath:'worlds/app.project/execution-policy.sop'}),arguments:args});break;}
    shared.set(sourceType+'\0'+operation,own??{operation,sourceType,sourcePath:'worlds/app.project/execution-policy.sop'});
   }
-  // A declared family with no kind rows of its own (a chart point, read as a diagram node) takes the binding the kind
-  // rows of its class share.
-  if(!shared.size&&!(bindings.kinds??[]).some(k=>k.area===f.area&&k.type===f.type))
-   for(const k of bindings.kinds??[])if(k.area===f.area&&k.canonical===f.canonical&&k.nativeFamilyBinding?.operation&&k.nativeFamilyBinding.sourceType)
-    shared.set(k.nativeFamilyBinding.sourceType+'\0'+k.nativeFamilyBinding.operation,k.nativeFamilyBinding);
   if(shared.size!==1)continue;
   const [b]=shared.values();
   const binding={operation:b.operation,sourceType:b.sourceType,exportName:b.exportName,sourcePath:b.sourcePath,sourceSha256:b.sourceSha256,arguments:b.arguments,
