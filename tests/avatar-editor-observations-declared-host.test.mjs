@@ -25,6 +25,7 @@ const list=v=>v===undefined?[]:[].concat(v);
 async function avatar(){
  const state=await initialSopAreaState(options);
  const host=await createSopArea({...options,state,instanceId:'avatar-editor-'+Math.random().toString(16).slice(2)});
+ host.invoke('@c avatar.face.preset preset=\"girl\"',toolInvocationContext('girl-start',host.observe().version));
  let n=0;
  const run=sop=>host.invoke(sop,toolInvocationContext('editor-'+(n++),host.observe().version));
  const view=()=>projectSopArea('ui.avatar',state);

@@ -5,16 +5,16 @@ import{CATALOG_PIN}from'../knowledge/catalog-pin.mjs?v=226143b302';
 import{inspectRequestRoutingPolicy}from'./request-routing-policy.mjs?v=5d5fe55b11';
 import{inspectHistoryPolicy}from'./history-policy.mjs?v=5b8eee412a';
 import{inspectHistoryJournal}from'./history-journal.mjs?v=5c2f095aac';
-import{inspectExecutionPolicyWorld}from'./execution-policy.mjs?v=7209abb3bf';
+import{inspectExecutionPolicyWorld}from'./execution-policy.mjs?v=8ae9db878c';
 import{sceneDefaultInspection}from'./scene-placement-defaults.mjs?v=e3a0eb43cd';
-import{inspectCapabilityPolicy}from'./capability-plan-adapter.mjs?v=4d58543aee';
-import{inspectQueryPolicy}from'./project-query-action.mjs?v=f73a15217f';
-import{inspectCreationPolicy}from'./project-create-action.mjs?v=d977e158e8';
-import{inspectConstructorPolicy}from'./native-binding-candidates.mjs?v=4478fc55d9';
+import{inspectCapabilityPolicy}from'./capability-plan-adapter.mjs?v=635ec158a2';
+import{inspectQueryPolicy}from'./project-query-action.mjs?v=bd73387bdb';
+import{inspectCreationPolicy}from'./project-create-action.mjs?v=e78cdd03f8';
+import{inspectConstructorPolicy}from'./native-binding-candidates.mjs?v=cf86e6c6ca';
 import{inspectGroundedProjection}from'./grounded-projection.mjs?v=2e4e5b7af2';
-import{inspectReaderHeadPolicy}from'./reader-head-alternative.mjs?v=0f9892845e';
+import{inspectReaderHeadPolicy}from'./reader-head-alternative.mjs?v=e09e891887';
 import{inspectReferencePolicy}from'./reference-policy.mjs?v=a1b9acbdc3';
-import{inspectSchemaSource}from'./worlds-inspection.mjs?v=b49ada03f1';
+import{inspectSchemaSource}from'./worlds-inspection.mjs?v=4948505b6a';
 import{inspectRequestCompositionPolicy}from'./request-composition-policy.mjs?v=2142645d32';
 const clone=value=>structuredClone(value);
 const loggedWires=snapshot=>(snapshot?.log??[]).flatMap(entry=>entry.wires??[]);
@@ -28,7 +28,7 @@ function snapshotText(snapshot){return (snapshot?.log??[]).map((entry,index)=>'#
 /** Projects actual cache accessors and retained journal JSON; performs no reading or reasoning. */
 export async function inspectExecutionWorlds(session){
  const [{inspectDeclaredExecutionSourceWorld},{inspectSpatialPlacementWorld}]=await Promise.all([
-  import('./declared-execution.mjs?v=b5a6a40196'),import('./spatial-placement-execution.mjs?v=6c5802103c'),
+  import('./declared-execution.mjs?v=058585fb4e'),import('./spatial-placement-execution.mjs?v=7a458cc0da'),
  ]);
  const journal=session?.newEngineJournal??[],moduleNames=[...new Set(journal.flatMap(record=>importsOf(record.evidence)))],sources=[['declared-execution','src/dialog/declared-execution.mjs',inspectDeclaredExecutionSourceWorld({moduleNames})]],nodes=[],edges=[];
  const link=(from,to,label)=>edges.push({from,to,label});

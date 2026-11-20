@@ -1,14 +1,14 @@
 import { historyHeads } from './history-journal.mjs?v=5c2f095aac';
-import {nativeKindCandidates} from './native-binding-candidates.mjs?v=4478fc55d9';
+import {nativeKindCandidates} from './native-binding-candidates.mjs?v=cf86e6c6ca';
 // Bind model-declared context references to actual native objects; never inspect source words.
 import {quote,str} from '../vendor/sopworld/sopworld.mjs?v=47abc4a87a';
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=b5088cf061';
-import {executionPolicyWorld} from './execution-policy.mjs?v=7209abb3bf';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=1640424712';
+import {executionPolicyWorld} from './execution-policy.mjs?v=8ae9db878c';
 import {readReferenceTurn,resolveObservedReference} from './reference-policy.mjs?v=a1b9acbdc3';
 import {observeGroundedProjection,projectGroundedRequest} from './grounded-projection.mjs?v=2e4e5b7af2';
 import {flatRequestProjection} from './request-projection.mjs?v=41669048d2';
 import {bridgeRawStructure} from './raw-structural-bridge.mjs?v=c407c8cba0';
-import {comparativeSteps} from './comparative-projection.mjs?v=3f67d76881';
+import {comparativeSteps} from './comparative-projection.mjs?v=cee435c315';
 import {referenceProjection} from './reference-projection.mjs?v=c5fe83c15e';
 export async function projectContextAction(proposal,session,{bindings,registry,view}={}) {
  const raw=proposal?.raw,r=raw?.requests?.[0],area=NATIVE_AREAS[view],readerArea=bindings?.readerAreaByView?.[view]??area?.area;

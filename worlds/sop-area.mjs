@@ -97,6 +97,7 @@ async function ensureLookups(declared, state, args = {}) {
     for (const value of all(lookup, 'value')) values.add(value);
     // What the area offers by name (its declared choices) is drawable before any command names it.
     for (const offered of Object.values(choices(declared))) for (const value of [].concat(offered)) if (typeof value === 'string') values.add(value);
+    if(process.env.DBG)console.log("LOOKUP",read(lookup,"world"),values.size,[...values].slice(0,400).join(","));
     const entry = entries.get(read(lookup, 'world'));
     for (const shard of entry?.shards ?? []) {
       const path = typeof shard === 'string' ? shard : shard.path, keys = typeof shard === 'string' ? [] : shard.keys ?? [];

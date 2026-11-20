@@ -4,10 +4,10 @@
 // reading is re-bridged with the object's own family (a node for n2, a link for e1), its identity restatements
 // (an `ids` selector with the code) dropped, and the object as the declared context target; the reply says how the
 // code was taken. Nothing here inspects words: only the reader's name span and the observed codes.
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=b5088cf061';
-import {nativeKindCandidates} from './native-binding-candidates.mjs?v=4478fc55d9';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=1640424712';
+import {nativeKindCandidates} from './native-binding-candidates.mjs?v=cf86e6c6ca';
 import {bridgeRawStructure} from './raw-structural-bridge.mjs?v=c407c8cba0';
-import {comparativeSteps} from './comparative-projection.mjs?v=3f67d76881';
+import {comparativeSteps} from './comparative-projection.mjs?v=cee435c315';
 import {referenceProjection} from './reference-projection.mjs?v=c5fe83c15e';
 
 // Reader diagnostics that only concern the identity heads the code replaces, or a constraint the reader could not
@@ -30,7 +30,9 @@ export async function projectCodeReference(proposal,session,{bindings,view}={}){
  if(!object)return null;
  // The object's own family: the reader types whose kinds the object's tool family makes; the exact kind name first.
  const mappings=nativeKindCandidates(bindings).filter(m=>m.area===readerArea&&m.nativeFamilyBinding?.sourceType===object.sourceType);
- const types=[...new Set(mappings.map(m=>m.type))];
+ // Kind rows name the family that makes the object; a family identity read as another class (a chart point read as
+ // a diagram node, app.interpret.family) only counts when no kind row does.
+ const own=mappings.filter(m=>!m.familyIdentity),types=[...new Set((own.length?own:mappings).map(m=>m.type))];
  if(types.length!==1)return null;
  const [type]=types,exact=mappings.filter(m=>m.lemma===object.kind),family=bindings.families?.find(f=>f.area===readerArea&&f.type===type);
  const canonical=[...new Set(exact.map(m=>m.canonical))].length===1?exact[0].canonical:family?.canonical;

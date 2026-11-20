@@ -19,12 +19,15 @@ test('the declared area starts from its preset, draws it and changes it through 
  const state=await initialSopAreaState(options);
  const host=await createSopArea({...options,state,instanceId:'avatar-area-test'});
  const ids=()=>host.observe().objects.map(o=>o.id);
- assert.ok(ids().includes('face')&&ids().includes('hair_front'),JSON.stringify(ids()));
- const girl=await renderSopArea(options,state);
- assert.ok((girl.match(/<g /g)??[]).length>20);
- const result=host.invoke('@c avatar.face.preset preset="robot"',toolInvocationContext('robot',host.observe().version));
- assert.equal(result.status,'changed',result.reason);
+ // The declared default figure is the robot (no hair); the girl stays selectable.
+ assert.ok(ids().includes('face')&&ids().includes('antenna')===false&&ids().includes('hat')&&!ids().includes('hair_front'),JSON.stringify(ids()));
  const robot=await renderSopArea(options,state);
+ assert.ok((robot.match(/<g /g)??[]).length>5);
+ const result=host.invoke('@c avatar.face.preset preset="girl"',toolInvocationContext('robot',host.observe().version));
+ assert.equal(result.status,'changed',result.reason);
+ const girl=await renderSopArea(options,state);
  assert.notEqual(robot,girl);
+ assert.ok(ids().includes('hair_front'));
+ assert.equal(host.invoke('@c avatar.figure.default',toolInvocationContext('back',host.observe().version)).status,'changed');
  assert.ok(!ids().includes('hair_front'));
 });

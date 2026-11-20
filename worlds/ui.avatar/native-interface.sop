@@ -167,3 +167,4 @@
 @native.ui.avatar.op.avatar.observe std.capability.operation scope=$native.ui.avatar.scope name="avatar.observe" act=ask on="ui.avatar.face" order=16 eligible=true
 @native.ui.avatar.op.avatar.undo std.capability.operation scope=$native.ui.avatar.scope name="avatar.undo" act=undo on="ui.avatar.face" order=17 eligible=true
 @native.ui.avatar.op.avatar.redo std.capability.operation scope=$native.ui.avatar.scope name="avatar.redo" act=redo on="ui.avatar.face" order=18 eligible=true
+@native.ui.avatar.op.avatar.figure.default std.capability.operation scope=$native.ui.avatar.scope name="avatar.figure.default" act=change on="ui.avatar.face" order=19 eligible=true

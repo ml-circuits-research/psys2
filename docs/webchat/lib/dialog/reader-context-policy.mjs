@@ -2,7 +2,7 @@
 import { World, str } from '../vendor/sopworld/sopworld.mjs?v=47abc4a87a';
 import { compileObservedChoice } from './observed-choice.mjs?v=b2bfd89792';
 import SCHEMA from '../../worlds/app.project/reader-context-schema-source.mjs?v=6a8b32506d';
-import POLICY from '../../worlds/app.project/reader-context-policy-source.mjs?v=5b8658c9c0';
+import POLICY from '../../worlds/app.project/reader-context-policy-source.mjs?v=0a62df627d';
 
 const prefix = 'app.readerContext.';
 const attr = (wire, key) => str(wire.attrs[key]?.[0]);

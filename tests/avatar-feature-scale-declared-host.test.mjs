@@ -15,7 +15,7 @@ import NATIVE_INTERFACE from '../worlds/ui.avatar/native-interface-source.mjs';
 import {bridgeRawStructure,RAW_STRUCTURAL_FORMAT} from '../src/dialog/raw-structural-bridge.mjs';
 import {comparativeSteps} from '../src/dialog/comparative-projection.mjs';
 import {routeNewEngine} from '../src/dialog/reader-routing.mjs';
-import {emptyAvatarState} from '../worlds/ui.avatar/sop-avatar.mjs';
+import {emptyAvatarState,createAvatarArea} from '../worlds/ui.avatar/sop-avatar.mjs';
 import {parse} from '../src/vendor/sopworld/sopworld.mjs';
 
 const K=PINNED_CATALOG;
@@ -28,6 +28,7 @@ const options={world:'ui.avatar',interfaceSource:NATIVE_INTERFACE,
 async function avatar(){
  const state=await initialSopAreaState(options);
  const host=await createSopArea({...options,state,instanceId:'avatar-feature-scale-'+Math.random().toString(16).slice(2)});
+ host.invoke('@c avatar.face.preset preset=\"girl\"',toolInvocationContext('girl-start',host.observe().version));
  let n=0;
  const variant=slot=>host.observe().objects.find(o=>o.id===slot)?.inputs.find(f=>f.key==='variant')?.values[0];
  const length=(ids,value)=>host.invoke(`@c avatar.part.change ids="${ids}" length="${value}"`,toolInvocationContext('length-'+(n++),host.observe().version));
@@ -77,6 +78,8 @@ const bound=bindings.properties.some(p=>p.area==='avatar'&&p.key==='part.length'
 
 test('the reader labels of "make her hair shorter" and "give her long hair" change the hair through the app route',{skip:skip||(bound?false:'deployed bindings without part.length')},async()=>{
  const state={'ui.avatar':emptyAvatarState(),'ui.shell':{activeTab:'avatar'}};
+ // The default figure is the robot; this test is about the girl's hair.
+ {const area=await createAvatarArea({state:state['ui.avatar']});area.invoke('@c avatar.face.preset preset="girl"',toolInvocationContext('girl-start',area.observe().version));}
  let read;
  const session={isession:{state},newEngineJournal:[],engine:{onWorldActivity:()=>{},requestReader:{bindings:()=>bindings,provenance:()=>({modelSha256:'a'.repeat(64),decoderVersion:1}),
   propose:async()=>({coverage:{complete:true,graphProposal:true},candidates:[read],failures:[],selectionScore:{definition:'psys2.model-minimum/1',value:.85}})}}};

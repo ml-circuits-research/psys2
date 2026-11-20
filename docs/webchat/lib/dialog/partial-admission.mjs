@@ -7,9 +7,9 @@
 // word, a sentence, a tool or a world.
 import {bridgeRawStructure,pruneLabel} from './raw-structural-bridge.mjs?v=c407c8cba0';
 import {decodeModelGraphs} from './model-graph-decoder.mjs?v=46bc8261d1';
-import {comparativeSteps} from './comparative-projection.mjs?v=3f67d76881';
+import {comparativeSteps} from './comparative-projection.mjs?v=cee435c315';
 import {referenceProjection} from './reference-projection.mjs?v=c5fe83c15e';
-import {interpretationPolicy} from './interpretation-policy.mjs?v=5757df119a';
+import {interpretationPolicy} from './interpretation-policy.mjs?v=406b065a24';
 
 const scalarsOf=text=>Array.from(text);
 // Adjacent mentions of one target-kind head that only whitespace or a hyphen separates and that together spell a

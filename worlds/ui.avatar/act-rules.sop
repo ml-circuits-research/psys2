@@ -60,6 +60,12 @@
 @ps.chosen.type core.type of=ui.avatar.chosen
 @ps.chosen ui.avatar.chosen preset=?p
 @choose.preset core.rule when=$ps.req then=$ps.chosen
+# The standing preference "avatar.figure" (target=figure): the declared default value is the friendly robot (the girl and every
+# other preset stay selectable). The value lives in the face's base (persisted with the instance); "avatar.figure.default" applies
+# the declared default (the tab's start, and "switch my avatar back to default").
+@ps.default.req app.act.request operation="avatar.figure.default"
+@ps.default.chosen ui.avatar.chosen preset=robot
+@choose.default core.rule when=$ps.default.req then=$ps.default.chosen
 @choose.base core.rule when=$ps.base.req then=$ps.chosen
 # By character kind, one preset: the face keeps its base when that base is of the kind (nothing changes); otherwise
 # the first preset of the kind in the catalog's sequence, in the face's style. A named base wins over the kind.

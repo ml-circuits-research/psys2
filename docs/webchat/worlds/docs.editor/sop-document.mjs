@@ -5,7 +5,7 @@
 import NATIVE_INTERFACE from './native-interface-source.mjs?v=e247358200';
 import AREA_SOURCES from './area-sources.mjs?v=ff53361c08';
 import {BUNDLED_AREAS} from '../../lib/knowledge/bundled-areas.mjs?v=f639f6a52b';
-import {sopAreaAdapter} from '../sop-area-adapter.mjs?v=15cb1a84ad';
+import {sopAreaAdapter} from '../sop-area-adapter.mjs?v=ce0f6408ed';
 
 const area = sopAreaAdapter({ world: 'docs.editor', instance: 'w.document', interfaceSource: NATIVE_INTERFACE, sources: AREA_SOURCES, offline: BUNDLED_AREAS['docs.editor'] });
 export const emptyDocumentArea = area.empty, canonicalDocumentArea = area.canonical, createDocumentArea = area.create,

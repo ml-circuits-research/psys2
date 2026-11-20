@@ -25,8 +25,9 @@ const change={
 const poncho=/points="44,30 56,30 70,66 30,66"/;
 
 test('a garment added to the people\'s knowledge is drawn on a Drawing person and on the Avatar',{skip},async()=>{
- // The Avatar starts as the girl: her body wears the outfit "girl clothes" of her age and sex, now with the poncho.
+ // The Avatar, given the girl preset (the default is the robot): her body wears the outfit "girl clothes" of her age and sex, now with the poncho.
  const avatar=await peopleArea('ui.avatar',{change});
+ assert.equal((await avatar.run('avatar.face.preset',{preset:'girl'})).status,'changed');
  assert.ok(avatar.facts('w.face.top').some(f=>/variant=poncho/.test(f)),avatar.facts('w.face.top').join('\n'));
  assert.match(await avatar.render(),poncho);
  assert.ok(avatar.objects().some(o=>o.id==='top'),'the Avatar observes the body\'s clothes as its parts');

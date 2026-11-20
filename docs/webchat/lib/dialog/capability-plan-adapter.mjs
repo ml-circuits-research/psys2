@@ -1,14 +1,15 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 import { parse, quote, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=47abc4a87a';
 import { decodeCapabilityCall } from '../vendor/sopworld/capability-call.mjs?v=ed3b773c65';
-import POLICY from '../../worlds/app.project/capability-policy.mjs?v=5b78666e16';
+import POLICY from '../../worlds/app.project/capability-policy.mjs?v=281892343f';
 import CLOCK from '../../worlds/app.project/clock-projection-source.mjs?v=7d09f121c5';
-import { executionPolicyWorld } from './execution-policy.mjs?v=7209abb3bf';
+import { executionPolicyWorld } from './execution-policy.mjs?v=8ae9db878c';
 import { projectionModule } from './composition-knowledge.mjs?v=ec2bbc4afe';
 import { sceneDefaultModule, writeSceneDefaults } from './scene-placement-defaults.mjs?v=e3a0eb43cd';
-import { nativeKindCandidates } from './native-binding-candidates.mjs?v=4478fc55d9';
-import { observedReaderContext } from './native-reader-context.mjs?v=5545d96476';
+import { nativeKindCandidates } from './native-binding-candidates.mjs?v=cf86e6c6ca';
+import { observedReaderContext } from './native-reader-context.mjs?v=498064d92a';
 import { budget } from './budget.mjs?v=00bce6e369';
+import { en } from '../lang/en.mjs?v=67053bde71';
 
 const NS = 'std.capability.';
 const take = (wire, key) => str(wire?.attrs[key]?.[0]);
@@ -247,12 +248,44 @@ function declaredActForm(nodes) {
   // `results`: whether the request says what to change (a constraint that is not the target's selector).
   const selectors=new Set(nodes.filter(wire=>wire.type==='std.request.target').flatMap(wire=>values(wire,'selector')));
   const results=nodes.some(wire=>wire.type==='std.request.constraint'&&!selectors.has('$'+wire.id))?'some':'none';
-  const form=executionPolicyWorld().ofType('app.execution.actForm').find(row=>take(row,'act')===act&&take(row,'mode')===take(target,'mode')&&(!row.attrs.results||take(row,'results')===results));
+  const form=executionPolicyWorld().ofType('app.execution.actForm').find(row=>take(row,'act')===act&&take(row,'mode')===take(target,'mode')&&(!row.attrs.results||take(row,'results')===results)&&(!row.attrs.of||values(row,'of').includes(take(target,'kind'))));
   if(!form)return nodes;
   return nodes.map(wire=>wire===request?{...wire,attrs:{...wire.attrs,act:[take(form,'as')]}}:wire);
 }
+// A target named by the same words as its identity selector ("the line e1": name e1, link.ids = e1) is picked by the
+// selector, which matches a code, a name or a kind; the name alone would require an observed name (a line has none).
+function identityNamesToSelectors(nodes, bindings) {
+  const identity = new Set((bindings?.properties || []).filter((row) => identityParameters().has(row.hostBinding?.parameter)).map((row) => row.canonical));
+  const byId = new Map(nodes.map((wire) => [wire.id, wire]));
+  return nodes.map((wire) => {
+    if (wire.type !== 'std.request.target' || take(wire, 'name') === undefined) return wire;
+    const c = byId.get(String(wire.attrs.selector?.[0] ?? '').slice(1));
+    if (!c || c.type !== 'std.request.constraint' || take(c, 'operator') !== 'eq' || take(c, 'polarity') !== 'positive' || !identity.has(take(c, 'concept')) || take(c, 'value') !== take(wire, 'name')) return wire;
+    const { name, ...attrs } = wire.attrs;
+    return { ...wire, attrs };
+  });
+}
+// A list said with the language's coordinators ("Q2 and Sample", "Jan, Feb and Mar") for a property whose parameter
+// takes a list (string-list, number-list) is the list of its conjuncts (w.lang.en coord.sep): the compiler's list
+// codec reads comma-separated items.
+let separators;
+function saidLists(nodes,bindings){
+  const listed=new Set((bindings?.properties??[]).filter(row=>['string-list','number-list'].includes(row.hostBinding?.codec)).map(row=>row.canonical));
+  if(!listed.size)return nodes;
+  separators??=[...en.words('coord.sep','things')].map(word=>/^[\p{L}\p{N}]+$/u.test(word)?'\\s+'+word.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\s+':'\\s*'+word.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\s*');
+  const split=new RegExp('(?:'+separators.join('|')+')+','iu');
+  return nodes.map(wire=>{
+    if(wire.type!=='std.request.constraint'||!listed.has(take(wire,'concept')))return wire;
+    const said=take(wire,'value');
+    if(typeof said!=='string'||/^\s*\[/.test(said))return wire;
+    const items=said.split(split).map(item=>item.trim());
+    if(items.length<2||items.some(item=>!item))return wire;
+    const joined=items.join(', ');
+    return joined===said?wire:{...wire,attrs:{...wire.attrs,value:[quote(joined)]}};
+  });
+}
 export function compileNativeCapability(candidate, context) {
-  const nodes=declaredActForm(parse(candidate.wires)), {world,scope}=compilerWorld(context,nodes);
+  const nodes=saidLists(identityNamesToSelectors(declaredActForm(parse(candidate.wires)),context?.bindings),context?.bindings), {world,scope}=compilerWorld(context,nodes);
   if(!nodes.some(w=>w.type==='std.request'&&w.id===candidate.request))return readPlan(world,'@compile.result std.compile.result status=not-applicable reason=request-root');
   return readPlan(world,world.compileRequest(serialize([...nodes,contextWire('capability.context',candidate.request,scope)])));
 }
@@ -266,7 +299,7 @@ export function compileNativeQuery(sop,context){
 
 /** Keep each proposal's private identifiers distinct while preserving its actual request wires. */
 export function compareNativeReadings(candidates, context) {
-  const graphs=candidates.map(candidate=>parse(candidate.wires));
+  const graphs=candidates.map(candidate=>saidLists(parse(candidate.wires),context.bindings));
   const {world,scope}=compilerWorld(context,graphs.flat());
   const packet=[],requests=new Map(),originals=[],options=[];
   for(const [index,nodes] of graphs.entries()){

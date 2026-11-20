@@ -23,7 +23,8 @@
 @avatar.rules.4 app.area.rules area=$avatar.area world=art.draw file="person-rules.sop" n=4
 @avatar.rules.5 app.area.rules area=$avatar.area file="act-rules.sop" n=5
 @avatar.make app.area.make area=$avatar.area kind=w.face.face name="Avatar" style=plain
-@avatar.start app.area.command area=$avatar.area sop="@start avatar.face.preset preset=\"girl\""
+# The avatar figure is a standing preference whose declared default is the robot (act-rules.sop: avatar.figure.default); the start applies it.
+@avatar.start app.area.command area=$avatar.area sop="@start avatar.figure.default"
 @avatar.offline app.area.offline area=$avatar.area prefix="plain-" prefix="figure-"
 @avatar.draw app.area.draw area=$avatar.area draw=ui.avatar.view fill=ui.avatar.fill point=ui.avatar.point orient=ui.avatar.orient select=slot
 
