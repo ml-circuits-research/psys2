@@ -324,6 +324,45 @@
      "head": "candidate",
      "concept": "colour",
      "src": "chart group formatting in the Diagram tab (worlds/diagram.sketch/chart-format.sop; data drops dg-batch-05 frame chart.titleStyle)"
+    },
+    "errorBars": {
+     "head": "class",
+     "concept": "error.bars",
+     "values": [
+      "show",
+      "hide"
+     ],
+     "src": "error bars of a chart group (chart-format.sop; data drops chart.errorbar)"
+    },
+    "errorCap": {
+     "head": "span",
+     "concept": "error.cap",
+     "src": "the caps of a chart's error bars (data drops chart.errorbar.cap)"
+    },
+    "xAxis": {
+     "head": "class",
+     "concept": "axis.side",
+     "values": [
+      "bottom",
+      "top"
+     ],
+     "src": "the side of the category axis (data drops chart.axis.position x top)"
+    },
+    "at": {
+     "head": "class",
+     "concept": "region",
+     "values": [
+      "left",
+      "right",
+      "top",
+      "bottom",
+      "center",
+      "top_left",
+      "top_right",
+      "bottom_left",
+      "bottom_right"
+     ],
+     "src": "a chart placed by a region of the page (diagram.group.place at; data drops chart.position)"
     }
    }
   },

@@ -782,6 +782,22 @@
   "chart": {
    "doc": "chart data and display (old data.charts)",
    "keys": {
+    "at": {
+     "concept": "region",
+     "head": "class",
+     "src": "a chart placed by a region of the page (diagram.group.place at; data drops chart.position)",
+     "values": [
+      "left",
+      "right",
+      "top",
+      "bottom",
+      "center",
+      "top_left",
+      "top_right",
+      "bottom_left",
+      "bottom_right"
+     ]
+    },
     "axisScale": {
      "concept": "axis.scale",
      "head": "class",
@@ -844,6 +860,20 @@
       "3d",
       "outline"
      ]
+    },
+    "errorBars": {
+     "concept": "error.bars",
+     "head": "class",
+     "src": "error bars of a chart group (chart-format.sop; data drops chart.errorbar)",
+     "values": [
+      "show",
+      "hide"
+     ]
+    },
+    "errorCap": {
+     "concept": "error.cap",
+     "head": "span",
+     "src": "the caps of a chart's error bars (data drops chart.errorbar.cap)"
     },
     "fontSize": {
      "concept": "font.size",
@@ -1106,6 +1136,15 @@
      "concept": "x",
      "head": "number",
      "src": "Native parameter: chart.place.x"
+    },
+    "xAxis": {
+     "concept": "axis.side",
+     "head": "class",
+     "src": "the side of the category axis (data drops chart.axis.position x top)",
+     "values": [
+      "bottom",
+      "top"
+     ]
     },
     "xLabel": {
      "concept": "axis.x.title",
@@ -2714,6 +2753,11 @@
      "concept": "rotation",
      "head": "number",
      "src": "Native parameter: drawing.object.change.rotation"
+    },
+    "seat": {
+     "concept": "seat",
+     "head": "fill+span",
+     "src": "art.draw seat (drawing.object.make / catalog.make / object.change {seat}): the thing a person sits on (a bench, a chair); without one, sitting is on the ground"
     },
     "side": {
      "concept": "side",

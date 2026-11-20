@@ -179,34 +179,7 @@
 {"batch": "dg-batch-05", "text": "carry the same y axis scale change over to the department chart", "frame": "chart.axis.scale", "value": "same", "span": "the same"}
 {"batch": "dg-batch-05", "text": "the profit chart could use the same y axis scale treatment", "frame": "chart.axis.scale", "value": "same", "span": "the same"}
 {"batch": "dg-batch-05", "text": "copy the same axis scales treatment over to the revenue trend", "frame": "chart.axis.scale", "value": "same", "span": "the same"}
-{"batch": "dg-batch-05", "text": "put the x axis on the top", "frame": "chart.axis.position", "value": "x top", "span": "on the top"}
-{"batch": "dg-batch-05", "text": "move the x axis on the top", "frame": "chart.axis.position", "value": "x top", "span": "on the top"}
-{"batch": "dg-batch-05", "text": "x axis on the top", "frame": "chart.axis.position", "value": "x top", "span": "on the top"}
-{"batch": "dg-batch-05", "text": "the x axis should sit on the top", "frame": "chart.axis.position", "value": "x top", "span": "on the top"}
-{"batch": "dg-batch-05", "text": "can you put the x axis on the top?", "frame": "chart.axis.position", "value": "x top", "span": "on the top"}
-{"batch": "dg-batch-05", "text": "could you move the x axis on the top?", "frame": "chart.axis.position", "value": "x top", "span": "on the top"}
-{"batch": "dg-batch-05", "text": "I'd like the x axis on the top", "frame": "chart.axis.position", "value": "x top", "span": "on the top"}
-{"batch": "dg-batch-05", "text": "let's put the x axis on the top", "frame": "chart.axis.position", "value": "x top", "span": "on the top"}
-{"batch": "dg-batch-05", "text": "we need the x axis on the top", "frame": "chart.axis.position", "value": "x top", "span": "on the top"}
-{"batch": "dg-batch-05", "text": "try putting the x axis on the top", "frame": "chart.axis.position", "value": "x top", "span": "on the top"}
-{"batch": "dg-batch-05", "text": "go for the x axis on the top", "frame": "chart.axis.position", "value": "x top", "span": "on the top"}
-{"batch": "dg-batch-05", "text": "how about moving the x axis on the top?", "frame": "chart.axis.position", "value": "x top", "span": "on the top"}
-{"batch": "dg-batch-05", "text": "I showed Monthly profit to the team; they were fine with the numbers but not how it reads at a glance, so as a first fix put the x axis on the top, then we look again next week — while you're at it, show both grid lines", "frame": "chart.axis.position", "value": "x top", "span": "on the top"}
-{"batch": "dg-batch-05", "text": "when the regions dial in tomorrow the first chart they see is Monthly profit, so for their sake put the x axis on the top before the meeting starts; plus drop the legend on the right", "frame": "chart.axis.position", "value": "x top", "span": "on the top"}
-{"batch": "dg-batch-05", "text": "everyone at the stand-up kept saying the numbers were hard to place from the hallway screen; to stop the moaning, put the x axis on the top from here on. and then give it the title Monthly P&L", "frame": "chart.axis.position", "value": "x top", "span": "on the top"}
-{"batch": "dg-batch-05", "text": "drop the x axis on the top — while you're at it, flip the x axis over", "frame": "chart.axis.position", "value": "x top", "span": "on the top"}
-{"batch": "dg-batch-05", "text": "I want the x axis on the top instead; plus drop the legend on the right", "frame": "chart.axis.position", "value": "x top", "span": "on the top"}
-{"batch": "dg-batch-05", "text": "shift the x axis on the top, also show both grid lines", "frame": "chart.axis.position", "value": "x top", "span": "on the top"}
-{"batch": "dg-batch-05", "text": "x axis on the top. title Monthly P&L", "frame": "chart.axis.position", "value": "x top", "span": "on the top"}
-{"batch": "dg-batch-05", "text": "the x axis should sit on the top. show grid lines", "frame": "chart.axis.position", "value": "x top", "span": "on the top"}
-{"batch": "dg-batch-05", "text": "the x axis on the top would read better. legend on the right", "frame": "chart.axis.position", "value": "x top", "span": "on the top"}
 {"batch": "dg-batch-05", "text": "the same treatment for the x axis on the revenue trend", "frame": "chart.axis.position", "value": "same", "span": "the same"}
-{"batch": "dg-batch-05", "text": "while you're there, put the x axis on the top", "frame": "chart.axis.position", "value": "x top", "span": "on the top"}
-{"batch": "dg-batch-05", "text": "and also Monthly profit: x axis on the top", "frame": "chart.axis.position", "value": "x top", "span": "on the top"}
-{"batch": "dg-batch-05", "text": "um, Monthly profit: x axis on the top", "frame": "chart.axis.position", "value": "x top", "span": "on the top"}
-{"batch": "dg-batch-05", "text": "excuse me — drop the x axis on the top", "frame": "chart.axis.position", "value": "x top", "span": "on the top"}
-{"batch": "dg-batch-05", "text": "the x axis onthe top would read better", "frame": "chart.axis.position", "value": "x top", "span": "onthe top"}
-{"batch": "dg-batch-05", "text": "I want the x axis on the toop instead", "frame": "chart.axis.position", "value": "x top", "span": "on the toop"}
 {"batch": "dg-batch-05", "text": "the same y axis treatment on the department chart now", "frame": "chart.axis.position", "value": "same", "span": "the same"}
 {"batch": "dg-batch-05", "text": "pass the same y axis change on to the claims chart", "frame": "chart.axis.position", "value": "same", "span": "the same"}
 {"batch": "dg-batch-05", "text": "do the same on the revenue trend — the online series there as well", "frame": "series.label", "value": "same", "span": "the same"}
@@ -305,149 +278,11 @@
 {"batch": "dg-batch-05", "text": "I'd like the marker interval everyfifth point on the profit chart", "frame": "chart.marker.interval", "value": "every fifth point", "span": "everyfifth point"}
 {"batch": "dg-batch-05", "text": "could you set the marker interval to eviry fifth point?", "frame": "chart.marker.interval", "value": "every fifth point", "span": "eviry fifth point"}
 {"batch": "dg-batch-05", "text": "copy the same marker borders treatment over to the profit chart", "frame": "chart.marker.edge", "value": "same", "span": "the same"}
-{"batch": "dg-batch-05", "text": "show the error bars", "frame": "chart.errorbar", "value": "show", "span": "show the error bars"}
-{"batch": "dg-batch-05", "text": "bring the error bars back", "frame": "chart.errorbar", "value": "show", "span": "bring the error bars back"}
-{"batch": "dg-batch-05", "text": "can you add the error bars?", "frame": "chart.errorbar", "value": "show", "span": "can you add the error bars?"}
-{"batch": "dg-batch-05", "text": "could you turn the error bars on?", "frame": "chart.errorbar", "value": "show", "span": "could you turn the error bars on?"}
-{"batch": "dg-batch-05", "text": "the error bars back on the chart", "frame": "chart.errorbar", "value": "show", "span": "the error bars back on the chart"}
-{"batch": "dg-batch-05", "text": "I'd like the error bars visible again", "frame": "chart.errorbar", "value": "show", "span": "I'd like the error bars visible again"}
-{"batch": "dg-batch-05", "text": "let's have the error bars on it", "frame": "chart.errorbar", "value": "show", "span": "let's have the error bars on it"}
-{"batch": "dg-batch-05", "text": "we want the error bars on the chart", "frame": "chart.errorbar", "value": "show", "span": "we want the error bars on the chart"}
-{"batch": "dg-batch-05", "text": "put the error bars back on the orders chart", "frame": "chart.errorbar", "value": "show", "span": "put the error bars back on the orders chart"}
-{"batch": "dg-batch-05", "text": "display the error bars on the orders chart", "frame": "chart.errorbar", "value": "show", "span": "display the error bars on the orders chart"}
-{"batch": "dg-batch-05", "text": "the chart needs the error bars", "frame": "chart.errorbar", "value": "show", "span": "the chart needs the error bars"}
-{"batch": "dg-batch-05", "text": "try adding the error bars", "frame": "chart.errorbar", "value": "show", "span": "try adding the error bars"}
-{"batch": "dg-batch-05", "text": "I showed Orders by weekday to the team; they were fine with the numbers but not how it reads at a glance, so as a first fix show the error bars, then we look again next week. and then make the font a bit bigger", "frame": "chart.errorbar", "value": "show", "span": "show the error bars"}
-{"batch": "dg-batch-05", "text": "when the regions dial in tomorrow the first chart they see is Orders by weekday, so for their sake show the error bars before the meeting starts, also drop the legend on the right", "frame": "chart.errorbar", "value": "show", "span": "show the error bars"}
-{"batch": "dg-batch-05", "text": "I keep squinting at Orders by weekday whenever I export it for the weekly summary; this week, show the error bars as well, would you. and then put the y axis on the right", "frame": "chart.errorbar", "value": "show", "span": "show the error bars"}
-{"batch": "dg-batch-05", "text": "how about the error bars to guide the eye, and flip the x axis over", "frame": "chart.errorbar", "value": "show", "span": "how about the error bars to guide the eye"}
-{"batch": "dg-batch-05", "text": "do switch the error bars back on — while you're at it, give it the title Orders per day", "frame": "chart.errorbar", "value": "show", "span": "do switch the error bars back on"}
-{"batch": "dg-batch-05", "text": "go with the error bars on this one, and put the y axis on the right", "frame": "chart.errorbar", "value": "show", "span": "go with the error bars on this one"}
-{"batch": "dg-batch-05", "text": "the error bars back on the chart. stack the bars", "frame": "chart.errorbar", "value": "show", "span": "the error bars back on the chart"}
-{"batch": "dg-batch-05", "text": "Orders by weekday: the error bars on again. font bigger", "frame": "chart.errorbar", "value": "show", "span": "Orders by weekday: the error bars on again"}
-{"batch": "dg-batch-05", "text": "the error bars back on the chart. title Orders per day", "frame": "chart.errorbar", "value": "show", "span": "the error bars back on the chart"}
 {"batch": "dg-batch-05", "text": "the same treatment for the error bars on the department chart", "frame": "chart.errorbar", "value": "same", "span": "the same"}
-{"batch": "dg-batch-05", "text": "while you're there, show the error bars", "frame": "chart.errorbar", "value": "show", "span": "show the error bars"}
-{"batch": "dg-batch-05", "text": "and also Orders by weekday: the error bars on again", "frame": "chart.errorbar", "value": "show", "span": "Orders by weekday: the error bars on again"}
-{"batch": "dg-batch-05", "text": "ok — go with the error bars on this one", "frame": "chart.errorbar", "value": "show", "span": "go with the error bars on this one"}
-{"batch": "dg-batch-05", "text": "sorry to nag, but do switch the error bars back on", "frame": "chart.errorbar", "value": "show", "span": "do switch the error bars back on"}
-{"batch": "dg-batch-05", "text": "the errr bars back on the chart", "frame": "chart.errorbar", "value": "show", "span": "the errr bars"}
-{"batch": "dg-batch-05", "text": "can you add the error barrs?", "frame": "chart.errorbar", "value": "show", "span": "can you add"}
-{"batch": "dg-batch-05", "text": "could you turn the eror bars on?", "frame": "chart.errorbar", "value": "show", "span": "could you turn"}
-{"batch": "dg-batch-05", "text": "hide the error bars", "frame": "chart.errorbar", "value": "remove", "span": "hide the error bars"}
-{"batch": "dg-batch-05", "text": "drop the error bars", "frame": "chart.errorbar", "value": "remove", "span": "drop the error bars"}
-{"batch": "dg-batch-05", "text": "clear the error bars off the chart", "frame": "chart.errorbar", "value": "remove", "span": "clear the error bars off the chart"}
-{"batch": "dg-batch-05", "text": "the error bars can go for now", "frame": "chart.errorbar", "value": "remove", "span": "the error bars can go for now"}
-{"batch": "dg-batch-05", "text": "no error bars this time", "frame": "chart.errorbar", "value": "remove", "span": "no error bars this time"}
-{"batch": "dg-batch-05", "text": "can you remove the error bars?", "frame": "chart.errorbar", "value": "remove", "span": "can you remove the error bars?"}
-{"batch": "dg-batch-05", "text": "could you drop the error bars altogether?", "frame": "chart.errorbar", "value": "remove", "span": "could you drop the error bars altogether?"}
-{"batch": "dg-batch-05", "text": "I'd like the chart plain, with no error bars", "frame": "chart.errorbar", "value": "remove", "span": "I'd like the chart plain, with no error bars"}
-{"batch": "dg-batch-05", "text": "let's lose the error bars", "frame": "chart.errorbar", "value": "remove", "span": "let's lose the error bars"}
-{"batch": "dg-batch-05", "text": "we don't want error bars on it", "frame": "chart.errorbar", "value": "remove", "span": "we don't want error bars on it"}
-{"batch": "dg-batch-05", "text": "take the error bars away", "frame": "chart.errorbar", "value": "remove", "span": "take the error bars away"}
-{"batch": "dg-batch-05", "text": "erase the error bars", "frame": "chart.errorbar", "value": "remove", "span": "erase the error bars"}
-{"batch": "dg-batch-05", "text": "I showed Revenue by department to the team; they were fine with the numbers but not how it reads at a glance, so as a first fix hide the error bars, then we look again next week. and then stack the bars by category", "frame": "chart.errorbar", "value": "remove", "span": "hide the error bars"}
-{"batch": "dg-batch-05", "text": "for the management review on Friday I need the department chart readable from the back of the room, so hide the error bars before we send it round, also put the y axis on the right", "frame": "chart.errorbar", "value": "remove", "span": "hide the error bars"}
-{"batch": "dg-batch-05", "text": "when the regions dial in tomorrow the first chart they see is Revenue by department, so for their sake hide the error bars before the meeting starts, could you also flip the x axis over", "frame": "chart.errorbar", "value": "remove", "span": "hide the error bars"}
-{"batch": "dg-batch-05", "text": "go without error bars on the department chart. and then drop the legend on the right", "frame": "chart.errorbar", "value": "remove", "span": "go without error bars on the department chart"}
-{"batch": "dg-batch-05", "text": "the error bars should disappear, could you also put the y axis on the right", "frame": "chart.errorbar", "value": "remove", "span": "the error bars should disappear"}
-{"batch": "dg-batch-05", "text": "turn the error bars off, also flip the x axis over", "frame": "chart.errorbar", "value": "remove", "span": "turn the error bars off"}
-{"batch": "dg-batch-05", "text": "the error bars can go for now. font bigger", "frame": "chart.errorbar", "value": "remove", "span": "the error bars can go for now"}
-{"batch": "dg-batch-05", "text": "no error bars this time. legend on the right", "frame": "chart.errorbar", "value": "remove", "span": "no error bars this time"}
-{"batch": "dg-batch-05", "text": "the error bars should disappear. title Revenue by department", "frame": "chart.errorbar", "value": "remove", "span": "the error bars should disappear"}
 {"batch": "dg-batch-05", "text": "the same goes for the error bars on the sales chart", "frame": "chart.errorbar", "value": "same", "span": "the same"}
-{"batch": "dg-batch-05", "text": "while you're there, hide the error bars", "frame": "chart.errorbar", "value": "remove", "span": "hide the error bars"}
-{"batch": "dg-batch-05", "text": "and also how about removing the error bars entirely?", "frame": "chart.errorbar", "value": "remove", "span": "how about removing the error bars entirely?"}
-{"batch": "dg-batch-05", "text": "excuse me — turn the error bars off", "frame": "chart.errorbar", "value": "remove", "span": "turn the error bars off"}
-{"batch": "dg-batch-05", "text": "ok — switch the error bars off", "frame": "chart.errorbar", "value": "remove", "span": "switch the error bars off"}
-{"batch": "dg-batch-05", "text": "turn the errror bars off", "frame": "chart.errorbar", "value": "remove", "span": "turn the errror"}
-{"batch": "dg-batch-05", "text": "could you drop the erroor bars altogether?", "frame": "chart.errorbar", "value": "remove", "span": "could you drop"}
-{"batch": "dg-batch-05", "text": "make the caps on the error bars bigger", "frame": "chart.errorbar.cap", "value": "bigger", "span": "bigger"}
-{"batch": "dg-batch-05", "text": "caps on the error bars bigger", "frame": "chart.errorbar.cap", "value": "bigger", "span": "bigger"}
-{"batch": "dg-batch-05", "text": "can you make the caps on the error bars bigger?", "frame": "chart.errorbar.cap", "value": "bigger", "span": "bigger"}
-{"batch": "dg-batch-05", "text": "I'd like the caps on the error bars bigger on the orders chart", "frame": "chart.errorbar.cap", "value": "bigger", "span": "bigger"}
-{"batch": "dg-batch-05", "text": "let's do the caps on the error bars bigger on the orders chart", "frame": "chart.errorbar.cap", "value": "bigger", "span": "bigger"}
-{"batch": "dg-batch-05", "text": "the caps on the error bars on Orders by weekday should be bigger", "frame": "chart.errorbar.cap", "value": "bigger", "span": "bigger"}
-{"batch": "dg-batch-05", "text": "try making the caps on the error bars bigger", "frame": "chart.errorbar.cap", "value": "bigger", "span": "bigger"}
-{"batch": "dg-batch-05", "text": "go for bigger caps on the error bars on the orders chart", "frame": "chart.errorbar.cap", "value": "bigger", "span": "bigger"}
-{"batch": "dg-batch-05", "text": "could you set the caps on the error bars to bigger?", "frame": "chart.errorbar.cap", "value": "bigger", "span": "bigger"}
-{"batch": "dg-batch-05", "text": "the caps on the error bars on the orders chart need to be bigger", "frame": "chart.errorbar.cap", "value": "bigger", "span": "bigger"}
-{"batch": "dg-batch-05", "text": "do the caps on the error bars bigger on the orders chart", "frame": "chart.errorbar.cap", "value": "bigger", "span": "bigger"}
-{"batch": "dg-batch-05", "text": "I want the caps on the error bars bigger on the orders chart", "frame": "chart.errorbar.cap", "value": "bigger", "span": "bigger"}
-{"batch": "dg-batch-05", "text": "I keep squinting at Orders by weekday whenever I export it for the weekly summary; this week, make the caps on the error bars bigger as well, would you — while you're at it, make the font a bit bigger", "frame": "chart.errorbar.cap", "value": "bigger", "span": "bigger"}
-{"batch": "dg-batch-05", "text": "for the management review on Friday I need the orders chart readable from the back of the room, so make the caps on the error bars bigger before we send it round, and stack the bars by category", "frame": "chart.errorbar.cap", "value": "bigger", "span": "bigger"}
-{"batch": "dg-batch-05", "text": "when the regions dial in tomorrow the first chart they see is Orders by weekday, so for their sake make the caps on the error bars bigger before the meeting starts, also show both grid lines", "frame": "chart.errorbar.cap", "value": "bigger", "span": "bigger"}
-{"batch": "dg-batch-05", "text": "how about bigger caps on the error bars, could you also make the font a bit bigger", "frame": "chart.errorbar.cap", "value": "bigger", "span": "bigger"}
-{"batch": "dg-batch-05", "text": "set the caps on the error bars bigger, that's the next tweak — while you're at it, give it the title Orders per day", "frame": "chart.errorbar.cap", "value": "bigger", "span": "bigger"}
-{"batch": "dg-batch-05", "text": "keep the caps on the error bars bigger, also stack the bars by category", "frame": "chart.errorbar.cap", "value": "bigger", "span": "bigger"}
-{"batch": "dg-batch-05", "text": "caps on the error bars bigger. stack the bars", "frame": "chart.errorbar.cap", "value": "bigger", "span": "bigger"}
-{"batch": "dg-batch-05", "text": "the caps on the error bars on Orders by weekday should be bigger. legend on the right", "frame": "chart.errorbar.cap", "value": "bigger", "span": "bigger"}
-{"batch": "dg-batch-05", "text": "the one thing missing: caps on the error bars bigger on the orders chart. y axis on the right", "frame": "chart.errorbar.cap", "value": "bigger", "span": "bigger"}
 {"batch": "dg-batch-05", "text": "pass the same caps on the error bars change on to the sales chart", "frame": "chart.errorbar.cap", "value": "same", "span": "the same"}
-{"batch": "dg-batch-05", "text": "while you're there, make the caps on the error bars bigger", "frame": "chart.errorbar.cap", "value": "bigger", "span": "bigger"}
-{"batch": "dg-batch-05", "text": "and also the one thing missing: caps on the error bars bigger on the orders chart", "frame": "chart.errorbar.cap", "value": "bigger", "span": "bigger"}
-{"batch": "dg-batch-05", "text": "excuse me — set the caps on the error bars bigger, that's the next tweak", "frame": "chart.errorbar.cap", "value": "bigger", "span": "bigger"}
-{"batch": "dg-batch-05", "text": "hey — keep the caps on the error bars bigger", "frame": "chart.errorbar.cap", "value": "bigger", "span": "bigger"}
-{"batch": "dg-batch-05", "text": "flip the caps on the error bars over to bigger bigger", "frame": "chart.errorbar.cap", "value": "bigger", "span": "bigger bigger"}
-{"batch": "dg-batch-05", "text": "try making the caps on the error bars biggeer", "frame": "chart.errorbar.cap", "value": "bigger", "span": "biggeer"}
-{"batch": "dg-batch-05", "text": "make the caps on the error bars smaller", "frame": "chart.errorbar.cap", "value": "smaller", "span": "smaller"}
-{"batch": "dg-batch-05", "text": "caps on the error bars smaller", "frame": "chart.errorbar.cap", "value": "smaller", "span": "smaller"}
-{"batch": "dg-batch-05", "text": "can you make the caps on the error bars smaller?", "frame": "chart.errorbar.cap", "value": "smaller", "span": "smaller"}
-{"batch": "dg-batch-05", "text": "I'd like the caps on the error bars smaller on the department chart", "frame": "chart.errorbar.cap", "value": "smaller", "span": "smaller"}
-{"batch": "dg-batch-05", "text": "let's do the caps on the error bars smaller on the department chart", "frame": "chart.errorbar.cap", "value": "smaller", "span": "smaller"}
-{"batch": "dg-batch-05", "text": "the caps on the error bars on Revenue by department should be smaller", "frame": "chart.errorbar.cap", "value": "smaller", "span": "smaller"}
-{"batch": "dg-batch-05", "text": "try making the caps on the error bars smaller", "frame": "chart.errorbar.cap", "value": "smaller", "span": "smaller"}
-{"batch": "dg-batch-05", "text": "go for smaller caps on the error bars on the department chart", "frame": "chart.errorbar.cap", "value": "smaller", "span": "smaller"}
-{"batch": "dg-batch-05", "text": "could you set the caps on the error bars to smaller?", "frame": "chart.errorbar.cap", "value": "smaller", "span": "smaller"}
-{"batch": "dg-batch-05", "text": "the caps on the error bars on the department chart need to be smaller", "frame": "chart.errorbar.cap", "value": "smaller", "span": "smaller"}
-{"batch": "dg-batch-05", "text": "do the caps on the error bars smaller on the department chart", "frame": "chart.errorbar.cap", "value": "smaller", "span": "smaller"}
-{"batch": "dg-batch-05", "text": "I want the caps on the error bars smaller on the department chart", "frame": "chart.errorbar.cap", "value": "smaller", "span": "smaller"}
-{"batch": "dg-batch-05", "text": "for the management review on Friday I need the department chart readable from the back of the room, so make the caps on the error bars smaller before we send it round; plus show both grid lines", "frame": "chart.errorbar.cap", "value": "smaller", "span": "smaller"}
-{"batch": "dg-batch-05", "text": "I keep squinting at Revenue by department whenever I export it for the weekly summary; this week, make the caps on the error bars smaller as well, would you, could you also make the font a bit bigger", "frame": "chart.errorbar.cap", "value": "smaller", "span": "smaller"}
-{"batch": "dg-batch-05", "text": "everyone at the stand-up kept saying the numbers were hard to place from the hallway screen; to stop the moaning, make the caps on the error bars smaller from here on, and put the y axis on the right", "frame": "chart.errorbar.cap", "value": "smaller", "span": "smaller"}
-{"batch": "dg-batch-05", "text": "how about smaller caps on the error bars, could you also give it the title Revenue by department", "frame": "chart.errorbar.cap", "value": "smaller", "span": "smaller"}
-{"batch": "dg-batch-05", "text": "set the caps on the error bars smaller, that's the next tweak, could you also drop the legend on the right", "frame": "chart.errorbar.cap", "value": "smaller", "span": "smaller"}
-{"batch": "dg-batch-05", "text": "keep the caps on the error bars smaller — while you're at it, make the font a bit bigger", "frame": "chart.errorbar.cap", "value": "smaller", "span": "smaller"}
-{"batch": "dg-batch-05", "text": "caps on the error bars smaller. show grid lines", "frame": "chart.errorbar.cap", "value": "smaller", "span": "smaller"}
-{"batch": "dg-batch-05", "text": "the caps on the error bars on Revenue by department should be smaller. flip the x axis", "frame": "chart.errorbar.cap", "value": "smaller", "span": "smaller"}
-{"batch": "dg-batch-05", "text": "the one thing missing: caps on the error bars smaller on the department chart. legend on the right", "frame": "chart.errorbar.cap", "value": "smaller", "span": "smaller"}
-{"batch": "dg-batch-05", "text": "keep the caps on the error bars smaller", "frame": "chart.errorbar.cap", "value": "smaller", "span": "smaller"}
-{"batch": "dg-batch-05", "text": "caps on the error bars smaller again", "frame": "chart.errorbar.cap", "value": "smaller", "span": "smaller"}
-{"batch": "dg-batch-05", "text": "flip the caps on the error bars over to smaller", "frame": "chart.errorbar.cap", "value": "smaller", "span": "smaller"}
 {"batch": "dg-batch-05", "text": "carry the same caps on the error bars change over to the orders chart", "frame": "chart.errorbar.cap", "value": "same", "span": "the same"}
-{"batch": "dg-batch-05", "text": "um, set the caps on the error bars smaller, that's the next tweak", "frame": "chart.errorbar.cap", "value": "smaller", "span": "smaller"}
-{"batch": "dg-batch-05", "text": "ok — Revenue by department: caps on the error bars smaller", "frame": "chart.errorbar.cap", "value": "smaller", "span": "smaller"}
-{"batch": "dg-batch-05", "text": "the one thing missing: caps on the error bars smaller smaller on the department chart", "frame": "chart.errorbar.cap", "value": "smaller", "span": "smaller smaller"}
-{"batch": "dg-batch-05", "text": "the caps on the error bars on Revenue by department should be smller", "frame": "chart.errorbar.cap", "value": "smaller", "span": "smller"}
-{"batch": "dg-batch-05", "text": "keep the caps on the error bars smaler", "frame": "chart.errorbar.cap", "value": "smaller", "span": "smaler"}
-{"batch": "dg-batch-05", "text": "make the caps on the error bars thicker", "frame": "chart.errorbar.cap", "value": "thicker", "span": "thicker"}
-{"batch": "dg-batch-05", "text": "caps on the error bars thicker", "frame": "chart.errorbar.cap", "value": "thicker", "span": "thicker"}
-{"batch": "dg-batch-05", "text": "can you make the caps on the error bars thicker?", "frame": "chart.errorbar.cap", "value": "thicker", "span": "thicker"}
-{"batch": "dg-batch-05", "text": "I'd like the caps on the error bars thicker on the orders chart", "frame": "chart.errorbar.cap", "value": "thicker", "span": "thicker"}
-{"batch": "dg-batch-05", "text": "let's do the caps on the error bars thicker on the orders chart", "frame": "chart.errorbar.cap", "value": "thicker", "span": "thicker"}
-{"batch": "dg-batch-05", "text": "the caps on the error bars on Orders by weekday should be thicker", "frame": "chart.errorbar.cap", "value": "thicker", "span": "thicker"}
-{"batch": "dg-batch-05", "text": "try making the caps on the error bars thicker", "frame": "chart.errorbar.cap", "value": "thicker", "span": "thicker"}
-{"batch": "dg-batch-05", "text": "go for thicker caps on the error bars on the orders chart", "frame": "chart.errorbar.cap", "value": "thicker", "span": "thicker"}
-{"batch": "dg-batch-05", "text": "could you set the caps on the error bars to thicker?", "frame": "chart.errorbar.cap", "value": "thicker", "span": "thicker"}
-{"batch": "dg-batch-05", "text": "the caps on the error bars on the orders chart need to be thicker", "frame": "chart.errorbar.cap", "value": "thicker", "span": "thicker"}
-{"batch": "dg-batch-05", "text": "do the caps on the error bars thicker on the orders chart", "frame": "chart.errorbar.cap", "value": "thicker", "span": "thicker"}
-{"batch": "dg-batch-05", "text": "I want the caps on the error bars thicker on the orders chart", "frame": "chart.errorbar.cap", "value": "thicker", "span": "thicker"}
-{"batch": "dg-batch-05", "text": "the intern assembled the numbers overnight and left the orders chart rough around the edges, so make the caps on the error bars thicker and I will take it from there — while you're at it, put the y axis on the right", "frame": "chart.errorbar.cap", "value": "thicker", "span": "thicker"}
-{"batch": "dg-batch-05", "text": "for the management review on Friday I need the orders chart readable from the back of the room, so make the caps on the error bars thicker before we send it round, could you also drop the legend on the right", "frame": "chart.errorbar.cap", "value": "thicker", "span": "thicker"}
-{"batch": "dg-batch-05", "text": "everyone at the stand-up kept saying the numbers were hard to place from the hallway screen; to stop the moaning, make the caps on the error bars thicker from here on, and give it the title Orders per day", "frame": "chart.errorbar.cap", "value": "thicker", "span": "thicker"}
-{"batch": "dg-batch-05", "text": "how about thicker caps on the error bars; plus drop the legend on the right", "frame": "chart.errorbar.cap", "value": "thicker", "span": "thicker"}
-{"batch": "dg-batch-05", "text": "set the caps on the error bars thicker, that's the next tweak, and put the y axis on the right", "frame": "chart.errorbar.cap", "value": "thicker", "span": "thicker"}
-{"batch": "dg-batch-05", "text": "keep the caps on the error bars thicker, and flip the x axis over", "frame": "chart.errorbar.cap", "value": "thicker", "span": "thicker"}
-{"batch": "dg-batch-05", "text": "caps on the error bars thicker. legend on the right", "frame": "chart.errorbar.cap", "value": "thicker", "span": "thicker"}
-{"batch": "dg-batch-05", "text": "the caps on the error bars on Orders by weekday should be thicker. stack the bars", "frame": "chart.errorbar.cap", "value": "thicker", "span": "thicker"}
-{"batch": "dg-batch-05", "text": "the one thing missing: caps on the error bars thicker on the orders chart. show grid lines", "frame": "chart.errorbar.cap", "value": "thicker", "span": "thicker"}
 {"batch": "dg-batch-05", "text": "the department chart could use the same caps on the error bars treatment", "frame": "chart.errorbar.cap", "value": "same", "span": "the same"}
-{"batch": "dg-batch-05", "text": "while you're there, make the caps on the error bars thicker", "frame": "chart.errorbar.cap", "value": "thicker", "span": "thicker"}
-{"batch": "dg-batch-05", "text": "and also the one thing missing: caps on the error bars thicker on the orders chart", "frame": "chart.errorbar.cap", "value": "thicker", "span": "thicker"}
-{"batch": "dg-batch-05", "text": "excuse me — how about thicker caps on the error bars?", "frame": "chart.errorbar.cap", "value": "thicker", "span": "thicker"}
-{"batch": "dg-batch-05", "text": "ok — the one thing missing: caps on the error bars thicker on the orders chart", "frame": "chart.errorbar.cap", "value": "thicker", "span": "thicker"}
-{"batch": "dg-batch-05", "text": "Orders by weekday: caps on the error bars thickr", "frame": "chart.errorbar.cap", "value": "thicker", "span": "thickr"}
-{"batch": "dg-batch-05", "text": "the caps on the error bars on Orders by weekday should be thicer", "frame": "chart.errorbar.cap", "value": "thicker", "span": "thicer"}
 {"batch": "dg-batch-05", "text": "make the error bars red", "frame": "chart.errorbar.colour", "value": "red", "span": "red"}
 {"batch": "dg-batch-05", "text": "error bars red", "frame": "chart.errorbar.colour", "value": "red", "span": "red"}
 {"batch": "dg-batch-05", "text": "can you make the error bars red?", "frame": "chart.errorbar.colour", "value": "red", "span": "red"}
@@ -1073,34 +908,7 @@
 {"batch": "dg-batch-05", "text": "one more thing: do Sales channels as the name on the legend", "frame": "chart.legend.title", "value": "Sales channels", "span": "Sales channels"}
 {"batch": "dg-batch-05", "text": "could you change the name on the legend to Salis channels?", "frame": "chart.legend.title", "value": "Sales channels", "span": "could you change"}
 {"batch": "dg-batch-05", "text": "I'd like the legend renamed to Seles channels", "frame": "chart.legend.title", "value": "Sales channels", "span": "I'd like the"}
-{"batch": "dg-batch-05", "text": "put the legend in the top right corner", "frame": "chart.legend.position", "value": "top right", "span": "in the top right corner"}
-{"batch": "dg-batch-05", "text": "move the legend in the top right corner", "frame": "chart.legend.position", "value": "top right", "span": "in the top right corner"}
-{"batch": "dg-batch-05", "text": "legend in the top right corner", "frame": "chart.legend.position", "value": "top right", "span": "in the top right corner"}
-{"batch": "dg-batch-05", "text": "the legend should sit in the top right corner", "frame": "chart.legend.position", "value": "top right", "span": "in the top right corner"}
-{"batch": "dg-batch-05", "text": "can you put the legend in the top right corner?", "frame": "chart.legend.position", "value": "top right", "span": "in the top right corner"}
-{"batch": "dg-batch-05", "text": "could you move the legend in the top right corner?", "frame": "chart.legend.position", "value": "top right", "span": "in the top right corner"}
-{"batch": "dg-batch-05", "text": "I'd like the legend in the top right corner", "frame": "chart.legend.position", "value": "top right", "span": "in the top right corner"}
-{"batch": "dg-batch-05", "text": "let's put the legend in the top right corner", "frame": "chart.legend.position", "value": "top right", "span": "in the top right corner"}
-{"batch": "dg-batch-05", "text": "we need the legend in the top right corner", "frame": "chart.legend.position", "value": "top right", "span": "in the top right corner"}
-{"batch": "dg-batch-05", "text": "try placing the legend in the top right corner", "frame": "chart.legend.position", "value": "top right", "span": "in the top right corner"}
-{"batch": "dg-batch-05", "text": "go for the legend in the top right corner", "frame": "chart.legend.position", "value": "top right", "span": "in the top right corner"}
-{"batch": "dg-batch-05", "text": "how about moving the legend in the top right corner?", "frame": "chart.legend.position", "value": "top right", "span": "in the top right corner"}
-{"batch": "dg-batch-05", "text": "I showed Sales by month round the team; they didn't argue with the numbers but not with how it reads at a glance, so as a first pass put the legend in the top right corner, then we revisit next week, could you also show both grid lines", "frame": "chart.legend.position", "value": "top right", "span": "in the top right corner"}
-{"batch": "dg-batch-05", "text": "I keep squinting at Sales by month every time I paste it into the weekly newsletter; this week, put the legend in the top right corner as well, would you, also give it the title Q2 sales", "frame": "chart.legend.position", "value": "top right", "span": "in the top right corner"}
-{"batch": "dg-batch-05", "text": "the junior pulled the figures together overnight and left the sales chart looking unfinished round the edges, so put the legend in the top right corner and I'll take it from there, could you also make the font a bit bigger", "frame": "chart.legend.position", "value": "top right", "span": "in the top right corner"}
-{"batch": "dg-batch-05", "text": "drop the legend in the top right corner, could you also give it the title Q2 sales", "frame": "chart.legend.position", "value": "top right", "span": "in the top right corner"}
-{"batch": "dg-batch-05", "text": "I want the legend in the top right corner instead, could you also show both grid lines", "frame": "chart.legend.position", "value": "top right", "span": "in the top right corner"}
-{"batch": "dg-batch-05", "text": "shift the legend in the top right corner — while you're at it, make the font a bit bigger", "frame": "chart.legend.position", "value": "top right", "span": "in the top right corner"}
-{"batch": "dg-batch-05", "text": "legend in the top right corner. font bigger", "frame": "chart.legend.position", "value": "top right", "span": "in the top right corner"}
-{"batch": "dg-batch-05", "text": "the legend should sit in the top right corner. show grid lines", "frame": "chart.legend.position", "value": "top right", "span": "in the top right corner"}
-{"batch": "dg-batch-05", "text": "the legend in the top right corner would read better. title Q2 sales", "frame": "chart.legend.position", "value": "top right", "span": "in the top right corner"}
 {"batch": "dg-batch-05", "text": "the department chart should match — the same legend too", "frame": "chart.legend.position", "value": "same", "span": "the same"}
-{"batch": "dg-batch-05", "text": "while you're there, put the legend in the top right corner", "frame": "chart.legend.position", "value": "top right", "span": "in the top right corner"}
-{"batch": "dg-batch-05", "text": "and also Sales by month: legend in the top right corner", "frame": "chart.legend.position", "value": "top right", "span": "in the top right corner"}
-{"batch": "dg-batch-05", "text": "one more thing: shift the legend in the top right corner", "frame": "chart.legend.position", "value": "top right", "span": "in the top right corner"}
-{"batch": "dg-batch-05", "text": "um, the legend in the top right corner would read better", "frame": "chart.legend.position", "value": "top right", "span": "in the top right corner"}
-{"batch": "dg-batch-05", "text": "shift the legend in the top write corner", "frame": "chart.legend.position", "value": "top right", "span": "shift the legend"}
-{"batch": "dg-batch-05", "text": "I'd like the legend inthe top right corner", "frame": "chart.legend.position", "value": "top right", "span": "I'd like the"}
 {"batch": "dg-batch-05", "text": "make the legend smaller", "frame": "chart.legend.size", "value": "small", "span": "smaller"}
 {"batch": "dg-batch-05", "text": "legend smaller", "frame": "chart.legend.size", "value": "small", "span": "smaller"}
 {"batch": "dg-batch-05", "text": "can you make the legend smaller?", "frame": "chart.legend.size", "value": "small", "span": "smaller"}

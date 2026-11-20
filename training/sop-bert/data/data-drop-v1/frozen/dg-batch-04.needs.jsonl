@@ -428,84 +428,13 @@
 {"batch": "dg-batch-04", "text": "the chart could go smaller, whatever reads best", "frame": "chart.width", "value": "as reads best", "span": "reads best"}
 {"batch": "dg-batch-04", "text": "sort the chart's size out", "frame": "chart.width", "value": "sorted", "span": "size out"}
 {"batch": "dg-batch-04", "text": "the chart wants trimming to a decent footprint", "frame": "chart.height", "value": "decent", "span": "decent footprint"}
-{"batch": "dg-batch-04", "text": "move the treemap to the center", "frame": "chart.position", "value": "center", "span": "to the center"}
-{"batch": "dg-batch-04", "text": "the treemap goes mid-canvas", "frame": "chart.position", "value": "center", "span": "mid-canvas"}
-{"batch": "dg-batch-04", "text": "let's centre the treemap, please", "frame": "chart.position", "value": "center", "span": "centre"}
-{"batch": "dg-batch-04", "text": "hey, let's centre the treemap, please", "frame": "chart.position", "value": "center", "span": "centre"}
-{"batch": "dg-batch-04", "text": "could you bring the treemap to the middle?", "frame": "chart.position", "value": "center", "span": "to the middle"}
-{"batch": "dg-batch-04", "text": "one move: the treemap, dead center", "frame": "chart.position", "value": "center", "span": "dead center"}
-{"batch": "dg-batch-04", "text": "I'd pull the treemap into the middle of the page", "frame": "chart.position", "value": "center", "span": "the middle of the page"}
-{"batch": "dg-batch-04", "text": "right, the treemap belongs front and center", "frame": "chart.position", "value": "center", "span": "front and center"}
-{"batch": "dg-batch-04", "text": "how about the treemap over to the center?", "frame": "chart.position", "value": "center", "span": "over to the center"}
-{"batch": "dg-batch-04", "text": "nudge the treemap centrally, would you", "frame": "chart.position", "value": "center", "span": "centrally"}
-{"batch": "dg-batch-04", "text": "nudge the treemap centrally, would you, please", "frame": "chart.position", "value": "center", "span": "centrally"}
-{"batch": "dg-batch-04", "text": "the treemap takes the center stage", "frame": "chart.position", "value": "center", "span": "the center stage"}
-{"batch": "dg-batch-04", "text": "budge the treemap to where the eye lands — the center", "frame": "chart.position", "value": "center", "span": "the center"}
-{"batch": "dg-batch-04", "text": "please to move the treemap to the center", "frame": "chart.position", "value": "center", "span": "to the center"}
-{"batch": "dg-batch-04", "text": "move the treemap to the center, and let nothing crowd it there", "frame": "chart.position", "value": "center", "span": "to the center"}
-{"batch": "dg-batch-04", "text": "the treemap slides center-ward; keep to the middle, roughly", "frame": "chart.position", "value": "center", "span": "center-ward"}
-{"batch": "dg-batch-04", "text": "one centered treemap, mid-page, before the headline goes on", "frame": "chart.position", "value": "center", "span": "mid-page"}
-{"batch": "dg-batch-04", "text": "the treemap finds the center as its home, held off the Crush flow", "frame": "chart.position", "value": "center", "span": "the center"}
-{"batch": "dg-batch-04", "text": "shift the treemap center and let its blocks re-settle afterwards", "frame": "chart.position", "value": "center", "span": "center"}
-{"batch": "dg-batch-04", "text": "the treemap wanders; it wants centering, however you read that", "frame": "chart.position", "value": "centered", "span": "centering"}
 {"batch": "dg-batch-04", "text": "the treemap could do with a better spot than the rim", "frame": "chart.position", "value": "a better spot", "span": "a better spot"}
-{"batch": "dg-batch-04", "text": "see to the treemap's position, the page needs its middle", "frame": "chart.position", "value": "middle", "span": "page needs its middle"}
-{"batch": "dg-batch-04", "text": "mvoe the treemap to the center", "frame": "chart.position", "value": "center", "span": "to the center"}
-{"batch": "dg-batch-04", "text": "move the treemap to the cnter", "frame": "chart.position", "value": "center", "span": "move the treemap to the cnter"}
-{"batch": "dg-batch-04", "text": "move the pie chart to the bottom side of the image", "frame": "chart.position", "value": "below the image", "span": "to the bottom side of the image"}
-{"batch": "dg-batch-04", "text": "the pie chart tucks in beneath the image", "frame": "chart.position", "value": "below the image", "span": "the pie chart tucks in beneath the image"}
-{"batch": "dg-batch-04", "text": "hey, the pie chart tucks in beneath the image", "frame": "chart.position", "value": "below the image", "span": "the pie chart tucks in beneath the image"}
-{"batch": "dg-batch-04", "text": "let's take the chart down under the image", "frame": "chart.position", "value": "below the image", "span": "let's take the chart down under the image"}
-{"batch": "dg-batch-04", "text": "could you put the pie chart below the image?", "frame": "chart.position", "value": "below the image", "span": "could you put the pie chart below the image?"}
-{"batch": "dg-batch-04", "text": "one arrangement: chart low, image above — the bottom side of the image for it", "frame": "chart.position", "value": "below the image", "span": "one arrangement: chart low, image above — the bottom side of the image for it"}
-{"batch": "dg-batch-04", "text": "I'd drop the pie chart under the image, its bottom side", "frame": "chart.position", "value": "below the image", "span": "I'd drop the pie chart under the image, its bottom side"}
-{"batch": "dg-batch-04", "text": "right, the chart swings to the bottom side of the image", "frame": "chart.position", "value": "below the image", "span": "to the bottom side of the image"}
-{"batch": "dg-batch-04", "text": "right, the chart swings to the bottom side of the image, please", "frame": "chart.position", "value": "below the image", "span": "to the bottom side of the image"}
-{"batch": "dg-batch-04", "text": "how about the pie chart resting low, below the image?", "frame": "chart.position", "value": "below the image", "span": "how about the pie chart resting low, below the image?"}
-{"batch": "dg-batch-04", "text": "the pie chart lives where the image ends: underneath", "frame": "chart.position", "value": "below the image", "span": "the pie chart lives where the image ends: underneath"}
-{"batch": "dg-batch-04", "text": "slide the chart down until the image sits above it", "frame": "chart.position", "value": "below the image", "span": "slide the chart down until the image sits above it"}
-{"batch": "dg-batch-04", "text": "chart under picture, please: pie to the image's bottom side", "frame": "chart.position", "value": "below the image", "span": "chart under picture, please: pie to the image's bottom side"}
-{"batch": "dg-batch-04", "text": "please to move the pie chart to the bottom side of the image", "frame": "chart.position", "value": "below the image", "span": "to the bottom side of the image"}
-{"batch": "dg-batch-04", "text": "the pie chart settles at the bottom of the image, wedges kept honest as it moves", "frame": "chart.position", "value": "below the image", "span": "the pie chart settles at the bottom of the image, wedges kept honest as it moves"}
-{"batch": "dg-batch-04", "text": "take the chart below the image before the caption goes on", "frame": "chart.position", "value": "below the image", "span": "take the chart below the image before the caption goes on"}
-{"batch": "dg-batch-04", "text": "one tidy grid: image on top, the pie chart at its bottom side, no arguments", "frame": "chart.position", "value": "below the image", "span": "one tidy grid: image on top, the pie chart at its bottom side, no arguments"}
-{"batch": "dg-batch-04", "text": "the chart slides under the image, bottom side, its Ward Pulse label riding along", "frame": "chart.position", "value": "below the image", "span": "under the image, bottom side"}
-{"batch": "dg-batch-04", "text": "park the pie chart low, under the image, clear of the Crush flow", "frame": "chart.position", "value": "below the image", "span": "low, under the image"}
-{"batch": "dg-batch-04", "text": "the chart could sit lower than the image, where it reads best", "frame": "chart.position", "value": "below the image", "span": "lower than the image"}
-{"batch": "dg-batch-04", "text": "sort out which sits under which — chart under image, hmm?", "frame": "chart.position", "value": "beneath the image", "span": "under which"}
-{"batch": "dg-batch-04", "text": "the pie and the image want stacking, chart at the bottom", "frame": "chart.position", "value": "bottom", "span": "stacking, chart at the bottom"}
-{"batch": "dg-batch-04", "text": "move the pie chatr to the bottom side of the image", "frame": "chart.position", "value": "below the image", "span": "to the bottom side of the image"}
-{"batch": "dg-batch-04", "text": "move the pie chart to the botom side of the image", "frame": "chart.position", "value": "below the image", "span": "move the pie chart to the botom side of the image"}
 {"batch": "dg-batch-04", "text": "a line chart, X and Y as ever, entries the usual", "frame": "chart.labels", "value": "the usual", "span": "entries the usual"}
 {"batch": "dg-batch-04", "text": "the normal X-and-Y line chart, numbers house-picked", "frame": "chart.values", "value": "house-picked", "span": "numbers house-picked"}
 {"batch": "dg-batch-04", "text": "the chart could do with a bar-chart look, data as it is", "frame": "chart.type", "value": "bar", "span": "the chart could do with a bar-chart look, data as it is"}
 {"batch": "dg-batch-04", "text": "try it as a bar one, the data staying put", "frame": "chart.type", "value": "bar", "span": "a bar one"}
 {"batch": "dg-batch-04", "text": "see the chart in bars for once", "frame": "chart.type", "value": "bar", "span": "in bars"}
-{"batch": "dg-batch-04", "text": "insert a bar chart, Mark, Dig, Pour, Cure and Open across, 8.4, 4.0, 2.7, 2.3 and 1.7 up, and move it to the left side", "frame": "chart.position", "value": "left", "span": "left"}
-{"batch": "dg-batch-04", "text": "a bar chart — bars of 9.1, 6.4, 5.2, 3.9 and 2.8 for Crush, Press, Age, Blend and Bottle — then off to the left side", "frame": "chart.position", "value": "left", "span": "left"}
-{"batch": "dg-batch-04", "text": "let's build a bar chart of Mark, Dig, Pour, Cure and Open, heights 8.4, 4.0, 2.7, 2.3 and 1.7, and sit it on the left", "frame": "chart.position", "value": "left", "span": "left"}
-{"batch": "dg-batch-04", "text": "could you chart Crush, Press, Age, Blend and Bottle as bars of 9.1, 6.4, 5.2, 3.9 and 2.8, then park the lot left?", "frame": "chart.position", "value": "left", "span": "left"}
-{"batch": "dg-batch-04", "text": "hey, could you chart Crush, Press, Age, Blend and Bottle as bars of 9.1, 6.4, 5.2, 3.9 and 2.8, then park the lot left?", "frame": "chart.position", "value": "left", "span": "left"}
-{"batch": "dg-batch-04", "text": "one go: the bar chart of Mark, Dig, Pour, Cure and Open with 8.4, 4.0, 2.7, 2.3 and 1.7 on top, over on the left", "frame": "chart.position", "value": "left", "span": "left"}
-{"batch": "dg-batch-04", "text": "I'd write the bar chart — Crush, Press, Age, Blend and Bottle at 9.1, 6.4, 5.2, 3.9 and 2.8 — and slide it left after", "frame": "chart.position", "value": "left", "span": "left"}
-{"batch": "dg-batch-04", "text": "right, bar chart for Mark, Dig, Pour, Cure and Open at 8.4, 4.0, 2.7, 2.3 and 1.7; left side, the whole thing", "frame": "chart.position", "value": "left", "span": "left"}
-{"batch": "dg-batch-04", "text": "how about bars for Crush, Press, Age, Blend and Bottle at 9.1, 6.4, 5.2, 3.9 and 2.8, tucked on the left?", "frame": "chart.position", "value": "left", "span": "left"}
-{"batch": "dg-batch-04", "text": "the bar chart takes Mark, Dig, Pour, Cure and Open for its ground and 8.4, 4.0, 2.7, 2.3 and 1.7 for its heights, then a swift move left", "frame": "chart.position", "value": "left", "span": "left"}
-{"batch": "dg-batch-04", "text": "put the bar chart together — Crush, Press, Age, Blend, Bottle against 9.1, 6.4, 5.2, 3.9 and 2.8 — and over it goes, leftward", "frame": "chart.position", "value": "left", "span": "left"}
-{"batch": "dg-batch-04", "text": "put the bar chart together — Crush, Press, Age, Blend, Bottle against 9.1, 6.4, 5.2, 3.9 and 2.8 — and over it goes, leftward, please", "frame": "chart.position", "value": "left", "span": "left"}
-{"batch": "dg-batch-04", "text": "bars for the five — Mark, Dig, Pour, Cure and Open, numbers 8.4, 4.0, 2.7, 2.3 and 1.7 — and the chart waits left", "frame": "chart.position", "value": "left", "span": "left"}
-{"batch": "dg-batch-04", "text": "please to insert a bar chart with Crush, Press, Age, Blend and Bottle at 9.1, 6.4, 5.2, 3.9 and 2.8, and move it to the left side", "frame": "chart.position", "value": "left", "span": "left"}
-{"batch": "dg-batch-04", "text": "insert the bar chart of Mark, Dig, Pour, Cure and Open at 8.4, 4.0, 2.7, 2.3 and 1.7, and left it goes, clean of the Mark flow", "frame": "chart.position", "value": "left", "span": "left"}
-{"batch": "dg-batch-04", "text": "a bar chart built from Crush, Press, Age, Blend and Bottle with 9.1, 6.4, 5.2, 3.9 and 2.8, then walked left with the numbers readable", "frame": "chart.position", "value": "left", "span": "left"}
-{"batch": "dg-batch-04", "text": "one page, one corner: the bar chart of Mark, Dig, Pour, Cure and Open at 8.4, 4.0, 2.7, 2.3 and 1.7 lands on the left", "frame": "chart.position", "value": "left", "span": "left"}
-{"batch": "dg-batch-04", "text": "the cellar tally as a bar chart — Crush, Press, Age, Blend, Bottle against 9.1, 6.4, 5.2, 3.9 and 2.8 — and off to the left side it goes", "frame": "chart.position", "value": "left", "span": "left"}
-{"batch": "dg-batch-04", "text": "draw up the bar chart row by row — Mark, Dig, Pour, Cure and Open against 8.4, 4.0, 2.7, 2.3 and 1.7 — and quarter it left", "frame": "chart.position", "value": "left", "span": "left"}
 {"batch": "dg-batch-04", "text": "a bar chart of the usual marks, and off to the left somewhere", "frame": "chart.labels", "value": "the usual", "span": "the usual marks"}
-{"batch": "dg-batch-04", "text": "a bar chart of the usual marks, and off to the left somewhere", "frame": "chart.position", "value": "left-ish", "span": "to the left somewhere"}
-{"batch": "dg-batch-04", "text": "one bar chart, numbers house-picked, parked left", "frame": "chart.position", "value": "left", "span": "parked left"}
-{"batch": "dg-batch-04", "text": "the standard bar chart, then over on the left like always", "frame": "chart.position", "value": "left", "span": "over on the left"}
-{"batch": "dg-batch-04", "text": "insert a bar chart, Mark, Dig, Pour, Cure and Open across, 8.4, 4.0, 2.7, 2.3 adn 1.7 up, and move it to the left side", "frame": "chart.position", "value": "left", "span": "left"}
-{"batch": "dg-batch-04", "text": "insert a bar chart with the rows Crush, Press, Age, Blend and Bottle and the hights 9.1, 6.4, 5.2, 3.9 and 2.8, bundled left", "frame": "chart.position", "value": "left", "span": "left"}
 {"batch": "dg-batch-04", "text": "add a bar chart with Week one at 20 and Week two at 30, parked on the left side", "frame": "chart.position", "value": "left", "span": "on the left side"}
 {"batch": "dg-batch-04", "text": "a bar chart: Dawn roast 22, Dusk roast 34 — home it on the left", "frame": "chart.position", "value": "left", "span": "a bar chart: Dawn roast 22, Dusk roast 34 — home it on the left"}
 {"batch": "dg-batch-04", "text": "let's bar up Week one at 20 and Week two at 30, left side of the page", "frame": "chart.position", "value": "left", "span": "let's bar up Week one at 20 and Week two at 30, left side of the page"}

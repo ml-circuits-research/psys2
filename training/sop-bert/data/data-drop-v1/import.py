@@ -138,6 +138,7 @@ CHART_FRAMES = {
     'chart.bar.height': 'chart.barHeight', 'chart.bar.gap': 'chart.barGap', 'chart.line.width': 'chart.lineWidth',
     'chart.axis.scale': 'chart.axisScale', 'chart.marker.size': 'chart.markerSize', 'chart.marker.edge': 'chart.markerEdge',
     'chart.pie.radius': 'chart.pieRadius', 'chart.grid.style': 'chart.gridStyle', 'chart.title.position': 'chart.titlePosition',
+    'chart.errorbar': 'chart.errorBars', 'chart.errorbar.cap': 'chart.errorCap', 'chart.legend.position': 'chart.legend', 'chart.position': 'chart.at',
 }
 NUMBER_WORDS = {'whole': 0, 'zero': 0, 'no': 0, 'one': 1, 'two': 2, 'three': 3, 'four': 4}
 
@@ -150,7 +151,18 @@ def chart_value(frame, value, nspan):
     key = CHART_FRAMES.get(frame)
     if frame == 'chart.axis.position':
         side = v.split()[-1]
-        return (key, side) if v.startswith('y') and side in ('left', 'right') else None   # the x axis on top: not declared
+        if v.startswith('x') and side in ('top', 'bottom'):
+            return 'chart.xAxis', side
+        return (key, side) if v.startswith('y') and side in ('left', 'right') else None
+    if frame == 'chart.errorbar':
+        return (key, {'show': 'show', 'remove': 'hide', 'hide': 'hide'}[v]) if v in ('show', 'remove', 'hide') else None
+    if frame == 'chart.legend.position':
+        return (key, v) if v in ('top right', 'right', 'bottom') else None
+    if frame == 'chart.position':
+        words = set(re.findall(r'[a-z]+', v))
+        region = ('center' if words & {'center', 'centre', 'centered', 'middle'} else 'bottom' if words & {'bottom', 'below', 'beneath', 'under'}
+                  else 'top' if words & {'top', 'above'} else 'left' if 'left' in words else 'right' if 'right' in words else None)
+        return (key, region) if region else None
     if frame in ('chart.pie.precision', 'chart.tick.precision'):
         words = re.findall(r'[a-z]+|\d+', v)
         n = next((int(w) if w.isdigit() else NUMBER_WORDS[w] for w in words if w.isdigit() or w in NUMBER_WORDS), None)
@@ -171,7 +183,7 @@ def chart_value(frame, value, nspan):
 _COMPARATIVES = None
 # The chart keys whose values are numbers: a comparative of them ("bigger", "thinner") is a step (operator delta), as the
 # reader writes comparatives everywhere; a word for none of the marker edge is its number 0.
-NUMBER_CHART_KEYS = {'chart.fontSize', 'chart.lineWidth', 'chart.markerSize', 'chart.markerEdge', 'chart.barWidth', 'chart.barHeight', 'chart.pieRadius'}
+NUMBER_CHART_KEYS = {'chart.fontSize', 'chart.lineWidth', 'chart.markerSize', 'chart.markerEdge', 'chart.barWidth', 'chart.barHeight', 'chart.pieRadius', 'chart.errorCap'}
 
 
 def comparatives():
@@ -211,6 +223,8 @@ def chart_keys(world, q, n, place):
     kv = chart_value(frame, value, nspan)
     if not kv:
         return []
+    if kv[0] == 'chart.at' and (q.get('act') not in ('change', 'place') or target.get('mode') == 'new'):
+        return []   # a chart made at a region: its size is not known before it is drawn; stays a need
     if kv[0] in NUMBER_CHART_KEYS:
         words = re.findall(r'[a-z]+', kv[1])
         step = next((comparatives()[w] for w in words if w in comparatives()), None)

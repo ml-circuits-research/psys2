@@ -112,7 +112,7 @@ No issue found.
 
 | issue | rows |
 | --- | ---: |
-| warning:bank-extension-needed | 1,730 |
+| warning:bank-extension-needed | 1,757 |
 | warning:selector-not-in-context | 620 |
 | warning:determiner-kept-open | 409 |
 | warning:value-span-ambiguous | 307 |
@@ -375,7 +375,7 @@ Kept with a warning (not an error; see README):
 
 | warning | rows |
 | --- | ---: |
-| bank-extension-needed | 1,723 |
+| bank-extension-needed | 1,750 |
 | selector-not-in-context | 663 |
 | determiner-kept-open | 409 |
 | value-span-ambiguous | 341 |
