@@ -139,6 +139,9 @@ def check(row, seen, official_seen):
     reqs = row.get('requests')
     if not isinstance(reqs, list):
         return errs + ['requests-missing']
+    # objects made by the same message can be referred to by its later requests ("a lake, a boat on it, a house beside the lake")
+    existing = existing + [{'kind': (q.get('target') or {}).get('kind') or '', 'name': (q.get('target') or {}).get('kind_span') or ''}
+                           for q in reqs if isinstance(q, dict) and (q.get('target') or {}).get('mode') == 'new']
     for q in reqs:
         span = q.get('span')
         if not isinstance(span, str) or span not in text:
