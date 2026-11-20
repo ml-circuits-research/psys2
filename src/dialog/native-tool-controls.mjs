@@ -50,5 +50,5 @@ export async function invokeNativeControl(session,{view,sop}={}){
  }
  if(historyEntry)recordHistory(session,historyEntry);
  const intentRecord={format:'psys2.ui-training-pair/1',id:globalThis.crypto.randomUUID(),at:new Date().toISOString(),view,world:area.world,text:intent.text,wires:intent.wires,intent,tool:interpreted,before:observation,after,verification,outcome:receipt.status};
- return {ok,changed,receipt,intentRecord,message:ok?(changed?'Saved.':'Already up to date.'):(receipt.reason==='calendar-policy-denied'||JSON.stringify(receipt).includes('calendar-policy-denied')?'This time overlaps another booking for that calendar, participant or room.':(JSON.stringify(receipt).includes('missing_resource')?'Remove or reassign this resource’s events first.':`Could not save: ${receipt.reason??receipt.code??'the tool refused this change'}.`))};
+ return {ok,changed,receipt,intentRecord,message:ok?(changed?'Saved.':'Already up to date.'):`Could not save: ${receipt.reason??receipt.code??'the tool refused this change'}.`};
 }
