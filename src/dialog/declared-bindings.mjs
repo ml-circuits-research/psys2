@@ -130,6 +130,9 @@ export async function completeBindings(bindings){
    const at=properties.findIndex(p=>p.area===r.area&&p.key===row.key);
    const declared={area:r.area,...row,...provenance};
    if(at<0)properties.push(declared);else if(!properties[at].projection)properties[at]=declared;
+   // A key the table already pairs keeps its row; the declaration adds relation values it lacks.
+   else if(properties[at].projection.kind==='relation'&&row.projection.kind==='relation')
+    properties[at]={...properties[at],projection:{...properties[at].projection,values:{...row.projection.values,...properties[at].projection.values}}};
   }
  }
  // 3. Declared family readings.

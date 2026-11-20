@@ -57,7 +57,7 @@ export async function executeNativeCapability(session, candidate, options = {}) 
   // One end of a line naming several objects (app.execution.linkPattern): one line per pair of the declared pattern,
   // made together as one undoable group, and said as such.
   if (plan.status !== 'compiled' || plan.skipped?.length) {
-    const expanded = linkPopulationCandidates(candidate, before.objects);
+    const expanded = linkPopulationCandidates(candidate, before.objects, { bindings: options.bindings, area: options.bindings?.readerAreaByView?.[view] ?? area?.area });
     if (expanded) {
       const members = [];
       for (const member of expanded.candidates) {
@@ -68,7 +68,7 @@ export async function executeNativeCapability(session, candidate, options = {}) 
       if (members.length) {
         const result = await executeNativeGroup(session, members, { view, invocation });
         if (result?.statuses?.[0] === 'supported') {
-          const note = `I joined ${expanded.members.join(', ')} with ${members.length} line${members.length > 1 ? 's' : ''} (${expanded.pattern === 'chain' ? 'a chain in reading order' : 'a star from the named one'}).`;
+          const note = `I joined ${expanded.members.join(', ')} with ${members.length} line${members.length > 1 ? 's' : ''} (${{ chain: 'a chain in reading order', star: 'a star from the named one', all: 'every pair', cycle: 'a cycle in reading order' }[expanded.pattern] ?? expanded.pattern}).`;
           result.text = result.text + ' ' + note; result.parts = [{ text: result.text, translate: false }];
           result.trace = { ...result.trace, linkPopulation: { pattern: expanded.pattern, declaration: expanded.declaration, members: expanded.members } };
         }

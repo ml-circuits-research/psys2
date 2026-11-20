@@ -7,6 +7,7 @@
 import {parse,str} from '../vendor/sopworld/sopworld.mjs';
 import {LANG_EN_FACTS} from '../lang/en.facts.generated.mjs';
 import QUERY_POLICY from '../../worlds/app.project/query-reading-policy-source.mjs';
+import {en} from '../lang/en.mjs';
 let table;
 export function referenceProjection(){
  if(table)return table;
@@ -16,6 +17,8 @@ export function referenceProjection(){
   .map(wire=>Object.freeze({head:str(wire.attrs.head[0]),operation:str(wire.attrs.operation[0]),property:str(wire.attrs.property[0])==='true',declaration:wire.id}));
  // The indefinite ones (w.lang.en.det definite=no: "a", "an"): "next to a tree" names a kind as well.
  const indefinite=parse(LANG_EN_FACTS.determiners).filter(wire=>str(wire.attrs.definite?.[0])==='no').map(wire=>str(wire.attrs.text?.[0])).filter(Boolean);
- table=Object.freeze({definite:Object.freeze([...new Set(definite)]),indefinite:Object.freeze([...new Set(indefinite)]),queries:Object.freeze(queries)});
+ // The coordinators of a list of things ("Start and Bake", "the tree and plane"): one anchor phrase naming several.
+ const coordinators=[...en.words('coord.sep','things')].filter(word=>typeof word==='string'&&word.trim());
+ table=Object.freeze({definite:Object.freeze([...new Set(definite)]),indefinite:Object.freeze([...new Set(indefinite)]),coordinators:Object.freeze(coordinators),queries:Object.freeze(queries)});
  return table;
 }

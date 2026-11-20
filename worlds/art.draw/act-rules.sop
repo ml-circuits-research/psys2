@@ -947,6 +947,11 @@
 @obc.pid core.calc out=?pid fn=concat args=?id args="." args=?i
 @obc.out app.observe.input id=?pid key=color value=?f
 @draw.observe.part.colour core.rule when=$obc.kp when=$obc.ix when=$obc.fill with=$obc.pid then=$obc.out
+# An object drawn in parts with no colour of its own is observed with the colours of its parts (the set of part fills):
+# "what colour is the fish?" answers the colours it is drawn in.
+@obc.own w.drawing.object code=?id colour=?anyown
+@obc.whole app.observe.input id=?id key=color value=?f
+@draw.observe.colour.parts core.rule when=$obc.kp when=$obc.ix when=$obc.fill not=$obc.own then=$obc.whole
 
 # Where each drawn part is on the page (its centre, width and height in page units), and the colour an object's
 # colour value paints (its RGB), for an editor; the colour names k.colours knows are the colour options.

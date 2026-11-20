@@ -1,4 +1,4 @@
-import { World, parse } from '../vendor/sopworld/sopworld.mjs?v=b95dcf7c63';
+import { World, parse } from '../vendor/sopworld/sopworld.mjs?v=4cf6e60057';
 import SCHEMA from '../../worlds/app.project/browser-state-schema-source.mjs?v=4a57796ad4';
 import BINDINGS from '../../worlds/app.project/browser-state-bindings-source.mjs?v=53d366b5c4';
 

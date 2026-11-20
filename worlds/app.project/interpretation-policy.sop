@@ -86,3 +86,7 @@
 @interpret.relation.diagram.node.near app.interpret.relationValue of=$interpret.relation.diagram.node value="near" relation=near
 @interpret.relation.diagram.node.after app.interpret.relationValue of=$interpret.relation.diagram.node value="after" relation=next
 @interpret.relation.diagram.node.before app.interpret.relationValue of=$interpret.relation.diagram.node value="before" relation=previous
+@interpret.relation.diagram.node.between app.interpret.relationValue of=$interpret.relation.diagram.node value="between" relation=between
+# The drawing's relation pair (declared by the binding table) also takes "between".
+@interpret.relation.drawing.drawn app.interpret.relation area=drawing key="drawn.relation" anchor="drawn.anchor" like="drawn.relation"
+@interpret.relation.drawing.drawn.between app.interpret.relationValue of=$interpret.relation.drawing.drawn value="between" relation=between

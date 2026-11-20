@@ -5,13 +5,13 @@
 // defaults, admitted act classes, reply wording and the run-time fallback ladder (interpretation-policy.sop), the
 // admission decision (reader-admission-policy.sop) and every binding (the deployed binding table). Nothing here names a
 // word, a sentence, a tool or a world.
-import {bridgeRawStructure,pruneLabel} from './raw-structural-bridge.mjs?v=533fc56018';
-import {decodeModelGraphs} from './model-graph-decoder.mjs?v=b5d3954020';
-import {comparativeSteps} from './comparative-projection.mjs?v=2fca0e24a8';
-import {referenceProjection} from './reference-projection.mjs?v=929831891a';
-import {interpretationPolicy} from './interpretation-policy.mjs?v=f4e999ddda';
-import {executionPolicyWorld} from './execution-policy.mjs?v=a4fd91036a';
-import {str} from '../vendor/sopworld/sopworld.mjs?v=b95dcf7c63';
+import {bridgeRawStructure,pruneLabel} from './raw-structural-bridge.mjs?v=62aa14292b';
+import {decodeModelGraphs} from './model-graph-decoder.mjs?v=cb093fa75d';
+import {comparativeSteps} from './comparative-projection.mjs?v=3e934dfe02';
+import {referenceProjection} from './reference-projection.mjs?v=34cc842417';
+import {interpretationPolicy} from './interpretation-policy.mjs?v=c57edbec02';
+import {executionPolicyWorld} from './execution-policy.mjs?v=b6a1f81181';
+import {str} from '../vendor/sopworld/sopworld.mjs?v=4cf6e60057';
 
 const scalarsOf=text=>Array.from(text);
 // Adjacent mentions of one target-kind head that only whitespace or a hyphen separates and that together spell a
@@ -53,22 +53,27 @@ function populationTheme(raw,bindings){
  let changed=null;
  for(const [index,request] of raw.requests.entries()){
   const target=request?.target;
-  if(!target||target.mode==='bound'||typeof target.kind_span!=='string'||!(target.fill==='all'||target.quantifier==='all'||target.kind_span!==target.kind))continue;
+  // The population phrase: the kind said ("circles"), or the description of a population ("all elements").
+  const phraseOf=target&&(typeof target.kind_span==='string'?'kind_span':(target.fill==='all'||target.quantifier==='all')&&typeof target.description_span==='string'?'description_span':null);
+  // Or no phrase at all when an end of the line is said ("connect the circles" read with the circles as the line's end).
+  const endSaid=(request.constraints??[]).length>0;
+  if(!target||target.mode==='bound'||target.name_span||(!phraseOf&&!endSaid)||phraseOf&&!(target.fill==='all'||target.quantifier==='all'||target.kind_span!==target.kind))continue;
   const form=pol.ofType('app.execution.actForm').find(r=>one(r,'act')===request.act&&one(r,'as')==='make'&&r.attrs.of);if(!form)continue;
   const lineKind=one(form,'of'),line=(bindings.families??[]).find(f=>f.area===raw.area&&f.canonical===lineKind);
   if(!line||line.type===target.type)continue;
   const keyOf=concept=>(bindings.properties??[]).find(p=>p.area===raw.area&&p.canonical===concept)?.key;
   for(const pattern of patterns){
    const ends=[keyOf(one(pattern,'from')),keyOf(one(pattern,'to'))];if(ends.some(k=>!k))continue;
-   const said=(request.constraints??[]).map(c=>c?.key);
-   if(said.some(k=>k&&!ends.includes(k)))continue;
-   const free=ends.find(k=>!said.includes(k));if(!free)continue;
+   const said=(request.constraints??[]).map(c=>c?.key),patternKey=keyOf(one(pattern,'patternConcept'));
+   if(said.some(k=>k&&!ends.includes(k)&&k!==patternKey))continue;
+   const free=ends.find(k=>!said.includes(k));if(phraseOf&&!free)continue;
+   if(!phraseOf&&!said.some(k=>ends.includes(k)))continue;
    const out=changed??=structuredClone(raw),r=out.requests[index],ci=r.constraints?.length??0;
-   r.constraints=[...(r.constraints??[]),{key:free,value:target.kind_span,value_span:target.kind_span,operator:'eq',phase:'result',polarity:'positive',character:'requirement'}];
+   if(phraseOf)r.constraints=[...(r.constraints??[]),{key:free,value:target[phraseOf],value_span:target[phraseOf],operator:'eq',phase:'result',polarity:'positive',character:'requirement'}];
    r.target={type:line.type,mode:'new',determiner:'indefinite'};
-   const span=(out.ranges??[]).find(x=>JSON.stringify(x.path)===JSON.stringify(['requests',String(index),'target','kind_span']));
+   const span=(out.ranges??[]).find(x=>JSON.stringify(x.path)===JSON.stringify(['requests',String(index),'target',phraseOf]));
    out.ranges=(out.ranges??[]).filter(x=>!(x.path[0]==='requests'&&x.path[1]===String(index)&&x.path[2]==='target'));
-   if(span)for(const field of ['value','value_span'])out.ranges.push({path:['requests',String(index),'constraints',String(ci),field],range:[...span.range]});
+   if(span&&phraseOf)for(const field of ['value','value_span'])out.ranges.push({path:['requests',String(index),'constraints',String(ci),field],range:[...span.range]});
    break;
   }
  }

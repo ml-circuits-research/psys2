@@ -1,6 +1,6 @@
-import { captureHistory, initializeHistory, restoreHistory } from './history-journal.mjs?v=625ab5126c';
-import {isAuthoredRequest} from './authored-request-tool.mjs?v=58e7ed30fe';
-import { interpretationPolicy } from './interpretation-policy.mjs?v=f4e999ddda';
+import { captureHistory, initializeHistory, restoreHistory } from './history-journal.mjs?v=a4ae88133a';
+import {isAuthoredRequest} from './authored-request-tool.mjs?v=6526247abe';
+import { interpretationPolicy } from './interpretation-policy.mjs?v=c57edbec02';
 // SPDX-License-Identifier: AGPL-3.0-only
 /**
  * C2 dialog pipeline (spec 06). Browser-safe.
@@ -17,7 +17,7 @@ import { loadWorlds } from '../worlds/index.mjs?v=2dd9004894';
 import { validateWorldSet } from '../worlds/validate.mjs?v=af0869a8e0';
 
 import { createInterpreter } from '../interpreter/index.mjs?v=ff1634cf1b';
-import { createReasoner } from '../reasoner/index.mjs?v=26cc985217';
+import { createReasoner } from '../reasoner/index.mjs?v=f6fbdc2433';
 
 import { serialize } from '../soplang/index.mjs?v=c57881f705';
 
@@ -331,7 +331,7 @@ export class DialogSession {
         }
       }
     }
-    const reply = await (await import('./reader-routing.mjs?v=e306a83e53')).routeNewEngine(this, english, { ...opts, language: 'en' });
+    const reply = await (await import('./reader-routing.mjs?v=d4f16c68e7')).routeNewEngine(this, english, { ...opts, language: 'en' });
     reply.trace = { ...reply.trace, english, ...(translation ? { translation } : {}), ...(detection ? { languageDetection: detection } : {}) };
     if (language !== 'en') {
       try {

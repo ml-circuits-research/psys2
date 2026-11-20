@@ -101,6 +101,9 @@
 @linkPattern.open core.slot of=app.execution.linkPattern key=open kind=atom enum=chain present=true
 @linkPattern.hub core.slot of=app.execution.linkPattern key=hub kind=atom enum=star present=true
 @linkPattern.max core.slot of=app.execution.linkPattern key=max kind=integer min=2 max=16 present=true
+# patternConcept: the concept a request names its pattern by (chain, cycle, star, all: every pair); without it the
+# open and hub patterns above apply.
+@linkPattern.patternConcept core.slot of=app.execution.linkPattern key=patternConcept kind=atom
 # An operation that also answers another act: "improve the layout", "tidy it up" (arrange with nothing more said) is
 # the page's declared best-effort improvement, an operation with no parameters of its own.
 @actOperation.type core.type of=app.execution.actOperation closed=true

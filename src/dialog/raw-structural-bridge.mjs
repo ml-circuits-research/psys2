@@ -120,7 +120,7 @@ export function bridgeRawStructure(prediction,{bindings,bindingSha256,comparativ
    else if((target.fill==='all'||target.quantifier==='all')&&target.mode==='existing'&&original.act!=='make')t.reference='population';
    else if(target.fill==='all'&&target.mode!=='bound')unresolved('unprojected-population-reference',['targets',tid]);
    else if(target.fill!==undefined&&!['written','description','all'].includes(target.fill))unresolved('unknown-target-fill',['targets',tid]);
-   const phase={selector:[],result:[]},anchorOf=new Map();let conditions=original.constraints??[];if(!Array.isArray(conditions)||conditions.length>256)fail('constraint-budget',basePath);
+   const phase={selector:[],result:[]},anchorOf=new Map(),splitParts=new Set();let conditions=original.constraints??[];if(!Array.isArray(conditions)||conditions.length>256)fail('constraint-budget',basePath);
    const cardinal=original.act==='make'&&t.mode==='new'?positiveCardinalProof(target.count_span):null;
    const countRange=cardinal&&(target.count===undefined||target.count===cardinal.value)&&span
     ?locate(original.span,target.count_span,span[0],[...rawPath,'target','count_span'],span):null;
@@ -150,9 +150,23 @@ export function bridgeRawStructure(prediction,{bindings,bindingSha256,comparativ
    const paired=new Set();
    const consume=(ci,field,literal)=>{const p=[...rawPath,'constraints',String(ci),field];if(span&&ranges.has(JSON.stringify(p)))return locate(original.span,literal,span[0],p,span);return null;};
    if(relationAt.length||anchorAt.length){
-    if(relationAt.length!==anchorAt.length)unresolved('unpaired-relation-mention',['constraints']);
-    else for(const [k,ri]of relationAt.entries()){
-     const ai=anchorAt[k],rc=conditions[ri],ac=conditions[ai],prop=lookup('properties',{area:raw.area,key:rc.key}),cid=`c${index}_${ri}`,aid=`t${index}_a${k}`,path=['constraints',cid];
+    // One relation said with several anchors ("between Shipping and Server", "between the tree and the plane") holds
+    // for each of them; an anchor phrase that lists things with the language's coordinators names each of them.
+    if(relationAt.length===1&&anchorAt.length===1){
+     const ac=conditions[anchorAt[0]],phrase=typeof ac?.value_span==='string'?ac.value_span:'';
+     const coords=(references?.coordinators??[]).map(w=>String(w).trim()).filter(Boolean);
+     const parts=coords.length?phrase.split(new RegExp('\\s*(?:'+coords.map(w=>w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|')+')\\s+|\\s*,\\s*','i')).map(x=>x.trim()).filter(Boolean):[phrase];
+     if(parts.length>1){
+      // The whole phrase's predicted ranges are this mention's evidence; each named part is found in the text.
+      const at=anchorAt[0];if(span){locate(original.span,phrase,span[0],[...rawPath,'constraints',String(at),'value_span'],span);consume(at,'value',ac.value);}
+      const first={...ac,value:parts[0],value_span:parts[0]};anchorOf.set(first,at);splitParts.add(first);
+      conditions=conditions.map((c,i)=>i===at?first:c);
+      for(const part of parts.slice(1)){const extra={...ac,value:part,value_span:part};anchorOf.set(extra,anchorAt[0]);splitParts.add(extra);conditions=[...conditions,extra];anchorAt.push(conditions.length-1);}}
+    }
+    const pairs=relationAt.length===anchorAt.length?relationAt.map((ri,k)=>[ri,anchorAt[k]]):relationAt.length===1&&anchorAt.length>1?anchorAt.map(ai=>[relationAt[0],ai]):null;
+    if(!pairs)unresolved('unpaired-relation-mention',['constraints']);
+    else for(const [k,[ri,ai]]of pairs.entries()){
+     const rc=conditions[ri],ac=conditions[ai],prop=lookup('properties',{area:raw.area,key:rc.key}),cid=`c${index}_${ri}${pairs.length>relationAt.length?'_'+k:''}`,aid=`t${index}_a${k}`,path=['constraints',cid];
      shape(rc,keys.constraint,[...basePath,'constraints',ri]);shape(ac,keys.constraint,[...basePath,'constraints',ai]);paired.add(ri);paired.add(ai);
      const c={id:cid,target:tid,phase:'result',concept:prop.canonical,operator:'relation',goal:aid};label.constraints.push(c);phase.result.push([cid,c]);
      for(const field of ['character','polarity'])if(has(rc,field))c[field]=rc[field];else unresolved('missing-annotated-field',[...path,field]);
@@ -166,7 +180,7 @@ export function bridgeRawStructure(prediction,{bindings,bindingSha256,comparativ
      const aprop=lookup('properties',{area:raw.area,key:ac.key}),phrase=typeof ac.value_span==='string'?ac.value_span:'',determiner=definite.find(d=>phrase.toLowerCase().startsWith(d.toLowerCase()+' '))??indefinite.find(d=>phrase.toLowerCase().startsWith(d.toLowerCase()+' '));
      const lemma=determiner?phrase.slice(determiner.length+1):phrase,akind=lemma?lookup('kinds',{area:raw.area,type:target.type,lemma}):null;
      const a={id:aid,mode:'existing'};label.targets.push(a);if(determiner)a.determiner=definite.includes(determiner)?'definite':'indefinite';
-     const outer=span?locate(original.span,phrase,span[0],anchorOf.has(ac)?[...rawPath,'constraints',String(anchorOf.get(ac)),'anchor_span']:[...rawPath,'constraints',String(ai),'value_span'],span):null;if(!anchorOf.has(ac))consume(ai,'value',ac.value);
+     const outer=span?locate(original.span,phrase,span[0],anchorOf.has(ac)?[...rawPath,'constraints',String(anchorOf.get(ac)),splitParts.has(ac)?'part':'anchor_span']:[...rawPath,'constraints',String(ai),'value_span'],span):null;if(!anchorOf.has(ac))consume(ai,'value',ac.value);
      const afamily=!akind&&lemma&&typeof target.type==='string'?lookup('families',{area:raw.area,type:target.type}):null;
      if(akind&&outer){a.kind=akind.canonical;const at=outer[0]+Array.from(phrase).length-Array.from(lemma).length;evidence.push({path:['targets',aid,'kind'],ranges:[[at,outer[1]]],origin:'declaration',declaration:akind.sourceWire});}
      // Otherwise the phrase is the name of an observed member of the family ("to the left of House"), as a target

@@ -13,8 +13,9 @@ const one=(row,key)=>row?.attrs[key]?.length?str(row.attrs[key][0]):undefined;
 let determiners;
 const dets=()=>determiners??=new Set(parse(LANG_EN_FACTS.determiners).map(w=>str(w.attrs.text?.[0]??'')).filter(Boolean).map(t=>t.toLowerCase()));
 
-/** The observed objects a phrase names as a population: its last word's lemma as their kind, two or more of them. */
-function population(phrase,objects,sourceType){
+/** The observed objects a phrase names as a population: its last word's lemma as their kind, or a word of the family's
+ * own class (a hypernym the binding table declares: "elements", "shapes" for every node), two or more of them. */
+function population(phrase,objects,sourceType,hypernyms=new Set()){
  if(typeof phrase!=='string')return null;
  const words=phrase.toLowerCase().split(/\s+/).filter(Boolean);
  while(words.length>1&&dets().has(words[0])){budget.tick('link-population.determiner');words.shift();}
@@ -22,7 +23,8 @@ function population(phrase,objects,sourceType){
  const last=words.at(-1),lemma=en.singular(last,'lemma');
  if(lemma===last)return null;   // a plural names a population; a singular names one object
  const head=[...words.slice(0,-1),lemma].join(' ');
- const found=objects.filter(o=>{budget.tick('link-population.match');return o.sourceType===sourceType&&String(o.kind).toLowerCase()===head;});
+ const every=hypernyms.has(head)||hypernyms.has(last);
+ const found=objects.filter(o=>{budget.tick('link-population.match');return o.sourceType===sourceType&&(every||String(o.kind).toLowerCase()===head);});
  return found.length>=2?found:null;
 }
 const centre=o=>{const v=k=>Number(o.inputs?.find(i=>i.key===k)?.values?.[0]);return {x:v('x'),y:v('y'),h:v('height')||0};};
@@ -34,7 +36,7 @@ function readingOrder(objects){
 }
 
 /** The expanded candidates for a line request whose end names a population, or null. */
-export function linkPopulationCandidates(candidate,objects){
+export function linkPopulationCandidates(candidate,objects,{bindings,area}={}){
  const patterns=executionPolicyWorld().ofType('app.execution.linkPattern');
  if(!patterns.length||!candidate?.wires)return null;
  const refs=new Map(executionPolicyWorld().ofType('app.execution.reference').map(r=>[one(r,'concept'),one(r,'sourceType')]));
@@ -44,12 +46,18 @@ export function linkPopulationCandidates(candidate,objects){
   const ends=[from,to].map(concept=>rows.find(w=>w.type==='std.request.constraint'&&one(w,'concept')===concept&&one(w,'operator')==='eq'&&one(w,'polarity')==='positive'));
   const sourceType=refs.get(from);
   if(!sourceType||refs.get(to)!==sourceType)continue;
-  const groups=ends.map(c=>c?population(one(c,'value'),objects,sourceType):null);
+  // The family's own class words name every member (bindings.kinds rows of the class the source type's family is).
+  const classes=new Set((bindings?.families??[]).filter(f=>f.area===area&&f.nativeFamilyBinding?.sourceType===sourceType).map(f=>f.canonical));
+  const hypernyms=new Set((bindings?.kinds??[]).filter(k=>k.area===area&&classes.has(k.canonical)).map(k=>String(k.lemma).toLowerCase()));
+  const patternConcept=one(pattern,'patternConcept'),named=patternConcept&&rows.find(w=>w.type==='std.request.constraint'&&one(w,'concept')===patternConcept);
+  const groups=ends.map(c=>c?population(one(c,'value'),objects,sourceType,hypernyms):null);
   const at=groups.findIndex(Boolean);if(at<0)continue;
   const members=readingOrder(groups[at]),other=ends[1-at];
   if(groups[1-at])continue;   // two populations: not declared
-  let pairs;
-  if(!other)pairs=members.slice(1).map((o,i)=>[members[i].id,o.id]);
+  let pairs,kind=named?one(named,'value'):null;
+  if(kind==='all'&&!other){pairs=[];for(let i=0;i<members.length;i++)for(let j=i+1;j<members.length;j++){budget.tick('link-population.pairs');pairs.push([members[i].id,members[j].id]);}}
+  else if(kind==='cycle'&&!other)pairs=[...members.slice(1).map((o,i)=>[members[i].id,o.id]),[members.at(-1).id,members[0].id]];
+  else if(!other)pairs=members.slice(1).map((o,i)=>[members[i].id,o.id]);
   else{
    const said=String(one(other,'value')??'').toLowerCase();
    const hub=objects.filter(o=>o.sourceType===sourceType&&(String(o.id).toLowerCase()===said||o.inputs?.some(i=>['label','name'].includes(i.key)&&String(i.values?.[0]??'').replace(/^"|"$/g,'').toLowerCase()===said)));
@@ -58,8 +66,9 @@ export function linkPopulationCandidates(candidate,objects){
   }
   if(pairs.length<1||pairs.length>max)continue;
   const fromRow=ends[0]??ends[1];
-  return {pattern:other?one(pattern,'hub'):one(pattern,'open'),declaration:pattern.id,members:members.map(o=>o.id),candidates:pairs.map(([a,b],k)=>{
-   const out=rows.map(w=>({...w,attrs:{...w.attrs}}));
+  return {pattern:other?one(pattern,'hub'):['all','cycle'].includes(kind)?kind:one(pattern,'open'),declaration:pattern.id,members:members.map(o=>o.id),candidates:pairs.map(([a,b],k)=>{
+   const out=rows.filter(w=>w!==named).map(w=>({...w,attrs:{...w.attrs}}));
+   if(named){const request=out.find(w=>w.type==='std.request');if(request&&String(request.attrs.root?.[0]??'')==='$'+named.id)delete request.attrs.root;}
    const set=(concept,value)=>{let c=out.find(w=>w.type==='std.request.constraint'&&one(w,'concept')===concept);
     if(!c){const request=out.find(w=>w.type==='std.request');if(request)delete request.attrs.root;   // a root naming one end alone would leave the new end outside it
      c={...fromRow,id:fromRow.id+'_'+concept.split('.').pop(),attrs:{...fromRow.attrs,concept:[concept]}};delete c.attrs.source;delete c.attrs['source.start'];delete c.attrs['source.end'];out.push(c);}

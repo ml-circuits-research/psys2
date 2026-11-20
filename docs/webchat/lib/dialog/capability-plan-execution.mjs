@@ -1,17 +1,17 @@
-import { readSceneDefaults } from './scene-placement-defaults.mjs?v=cb0a7e6152';
-import { solveDefaultPlacement, solveGroupPlacement } from './default-placement.mjs?v=9f5d322f7b';
+import { readSceneDefaults } from './scene-placement-defaults.mjs?v=b16bbeacf7';
+import { solveDefaultPlacement, solveGroupPlacement } from './default-placement.mjs?v=d0f4003790';
 import { en } from '../lang/en.mjs?v=63a0a6f36a';
-import { quote } from '../vendor/sopworld/sopworld.mjs?v=b95dcf7c63';
+import { quote } from '../vendor/sopworld/sopworld.mjs?v=4cf6e60057';
 // SPDX-License-Identifier: AGPL-3.0-only
-import { compileNativeCapability } from './capability-plan-adapter.mjs?v=96874f2337';
-import { linkPopulationCandidates } from './link-population.mjs?v=f8286e9be0';
-import { readDegreeBases } from './degree-bases.mjs?v=4485535b81';
-import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=199acfcfe4';
+import { compileNativeCapability } from './capability-plan-adapter.mjs?v=fad13392de';
+import { linkPopulationCandidates } from './link-population.mjs?v=27db27f0ff';
+import { readDegreeBases } from './degree-bases.mjs?v=eaec18197f';
+import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=ebcb420640';
 import { instanceIdFor } from './instance-identity.mjs?v=024ef1ca83';
-import { prepareNativeControlHost } from './native-control-preparation.mjs?v=18d0051d57';
-import { invokeObservedNativeTool } from './native-tool-activity.mjs?v=7e5446cded';
-import { retainPropertyEffect } from './property-effect-evidence.mjs?v=36e5608390';
-import { describeNativeControl, verifyNativeControlEffect } from './native-control-intent.mjs?v=deca7f43ef';
+import { prepareNativeControlHost } from './native-control-preparation.mjs?v=36aab73142';
+import { invokeObservedNativeTool } from './native-tool-activity.mjs?v=9e7d8073a0';
+import { retainPropertyEffect } from './property-effect-evidence.mjs?v=8d51418c76';
+import { describeNativeControl, verifyNativeControlEffect } from './native-control-intent.mjs?v=104720f92e';
 
 function reply(text, supported, trace = {}) {
   return { text, parts: [{ text, translate: false }], statuses: [supported ? 'supported' : 'unsupported'],
@@ -57,7 +57,7 @@ export async function executeNativeCapability(session, candidate, options = {}) 
   // One end of a line naming several objects (app.execution.linkPattern): one line per pair of the declared pattern,
   // made together as one undoable group, and said as such.
   if (plan.status !== 'compiled' || plan.skipped?.length) {
-    const expanded = linkPopulationCandidates(candidate, before.objects);
+    const expanded = linkPopulationCandidates(candidate, before.objects, { bindings: options.bindings, area: options.bindings?.readerAreaByView?.[view] ?? area?.area });
     if (expanded) {
       const members = [];
       for (const member of expanded.candidates) {
@@ -68,7 +68,7 @@ export async function executeNativeCapability(session, candidate, options = {}) 
       if (members.length) {
         const result = await executeNativeGroup(session, members, { view, invocation });
         if (result?.statuses?.[0] === 'supported') {
-          const note = `I joined ${expanded.members.join(', ')} with ${members.length} line${members.length > 1 ? 's' : ''} (${expanded.pattern === 'chain' ? 'a chain in reading order' : 'a star from the named one'}).`;
+          const note = `I joined ${expanded.members.join(', ')} with ${members.length} line${members.length > 1 ? 's' : ''} (${{ chain: 'a chain in reading order', star: 'a star from the named one', all: 'every pair', cycle: 'a cycle in reading order' }[expanded.pattern] ?? expanded.pattern}).`;
           result.text = result.text + ' ' + note; result.parts = [{ text: result.text, translate: false }];
           result.trace = { ...result.trace, linkPopulation: { pattern: expanded.pattern, declaration: expanded.declaration, members: expanded.members } };
         }

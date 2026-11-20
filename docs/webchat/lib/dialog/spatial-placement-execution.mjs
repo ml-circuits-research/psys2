@@ -1,20 +1,20 @@
 // Assemble trusted native observations and dispatch the compiler's SOP call.
-import {World,parse,serialize,str,quote} from '../vendor/sopworld/sopworld.mjs?v=b95dcf7c63';
-import SOURCE from './new-engine-source.mjs?v=5459bbf1ab';
-import {readPlacementProfile,rememberPlacement} from '../../worlds/app.project/spatial-profile.mjs?v=4c7bd21373';
-import {placementInterfaceSop} from '../../worlds/native-spatial-interface.mjs?v=d44294a515';
-import {NATIVE_AREAS,createAreaHost} from './app-reader-context.mjs?v=199acfcfe4';
+import {World,parse,serialize,str,quote} from '../vendor/sopworld/sopworld.mjs?v=4cf6e60057';
+import SOURCE from './new-engine-source.mjs?v=89df1e7c92';
+import {readPlacementProfile,rememberPlacement} from '../../worlds/app.project/spatial-profile.mjs?v=70ad4f2468';
+import {placementInterfaceSop} from '../../worlds/native-spatial-interface.mjs?v=f1f08b66d7';
+import {NATIVE_AREAS,createAreaHost} from './app-reader-context.mjs?v=ebcb420640';
 import {identityRegistryFor,instanceIdFor} from './instance-identity.mjs?v=024ef1ca83';
-import {nativeKindCandidates,nativeCreationCandidates} from './native-binding-candidates.mjs?v=9e204238e4';
-import {invokeObservedNativeTool} from './native-tool-activity.mjs?v=7e5446cded';
-import {describeNativeControl,verifyNativeControlEffect} from './native-control-intent.mjs?v=deca7f43ef';
+import {nativeKindCandidates,nativeCreationCandidates} from './native-binding-candidates.mjs?v=482929beba';
+import {invokeObservedNativeTool} from './native-tool-activity.mjs?v=9e7d8073a0';
+import {describeNativeControl,verifyNativeControlEffect} from './native-control-intent.mjs?v=104720f92e';
 import {placementSearchProvider,z3Status} from './placement-search-provider.mjs?v=0675893eb5';
 import {en} from '../lang/en.mjs?v=63a0a6f36a';
-import {placementHypotheses} from './placement-default-policy.mjs?v=c3a4ae5a0e';
-import {identityConcepts} from './capability-plan-adapter.mjs?v=96874f2337';
-import {executeNativeCapability} from './capability-plan-execution.mjs?v=ec9e1ff99c';
+import {placementHypotheses} from './placement-default-policy.mjs?v=75fb3f0237';
+import {identityConcepts} from './capability-plan-adapter.mjs?v=fad13392de';
+import {executeNativeCapability} from './capability-plan-execution.mjs?v=408a35ba5e';
 import {budget} from './budget.mjs?v=00bce6e369';
-import {executionPolicyWorld} from './execution-policy.mjs?v=a4fd91036a';
+import {executionPolicyWorld} from './execution-policy.mjs?v=b6a1f81181';
 
 const read = (row,key) => row?.attrs[key]?.length===1 ? str(row.attrs[key][0]) : undefined;
 const ref = (row,key) => {
@@ -59,6 +59,24 @@ function identitySelectorsAsNames(wires,identity){
  return drop.size?serialize(rows.filter(row=>!drop.has(row.id))):wires;
 }
 // "after"/"before" in a flow (relation next/previous): the side the observed flow direction gives (app.execution.flow).
+// "between A and B" (relation between, said for each anchor): a side of each, from where the anchors are: across the
+// larger of their horizontal and vertical separations, right of the first and left of the second (or below and above).
+function betweenRelations(wires,spatial,kindRows=[]){
+ const rows=parse(wires),between=rows.filter(w=>w.type==='std.request.constraint'&&read(w,'relation')==='between');
+ if(!between.length)return wires;
+ if(between.length!==2)return wires;
+ const target=id=>rows.find(w=>w.id===id);
+ // An anchor is the one observed object of its name (label, name or code), else of its kind (the kind's lemmas).
+ const boxOf=t=>{const name=read(t,'name'),kind=read(t,'kind'),lemmas=new Set(kindRows.filter(m=>m.canonical===kind&&!m.familyIdentity).map(m=>m.lemma));
+  const ids=spatial.observation.objects.filter(o=>name!==undefined?(o.inputs?.some(i=>['label','name'].includes(i.key)&&str(i.values?.[0]??'')===name)||o.id===name):lemmas.has(o.kind)).map(o=>o.id);
+  const boxes=spatial.boxes.filter(b=>ids.includes(b.entity));return boxes.length===1?boxes[0]:null;};
+ const [a,b]=between.map(c=>boxOf(target(ref(c,'goal'))));
+ if(!a||!b)return wires;
+ const dx=(b.min_x+b.max_x)/2-(a.min_x+a.max_x)/2,dy=(b.min_y+b.max_y)/2-(a.min_y+a.max_y)/2;
+ const [toA,toB]=Math.abs(dx)>=Math.abs(dy)?(dx>=0?['right','left']:['left','right']):(dy>=0?['below','above']:['above','below']);
+ between[0].attrs.relation=[toA];between[1].attrs.relation=[toB];
+ return serialize(rows);
+}
 function flowRelations(wires,observation){
  const rows=parse(wires),flows=executionPolicyWorld().ofType('app.execution.flow');
  const relations=rows.filter(w=>w.type==='std.request.constraint'&&['next','previous'].includes(read(w,'relation')));
@@ -109,7 +127,11 @@ export async function executeSpatialPlacement(session,candidate,options={}) {
   const context=baseWorld()?.fork();
   if(!context)return fail('spatial-world-unavailable');
   const mappings=nativeKindCandidates(bindings).filter(mapping=>mapping.area===areaId&&mapping.nativeFamilyBinding);
-  const native=placementInterfaceSop(host,spatial,mappings,candidate.request,{constructors,concepts});
+  {const placedBetween=betweenRelations(candidate.wires,host.observeSpatial(),nativeKindCandidates(bindings).filter(m=>m.area===areaId));if(placedBetween!==candidate.wires)candidate={...candidate,wires:placedBetween};}
+  // The declared default of a kind argument (std.capability.seed source=value phase=missing on a family's class).
+  const defaults=executionPolicyWorld().ofType('std.capability.seed').filter(w=>read(w,'source')==='value'&&read(w,'phase')==='missing'&&read(w,'kind')&&read(w,'operation'))
+   .map(w=>({canonical:read(w,'kind'),operation:read(w,'operation'),parameter:read(w,'parameter'),value:read(w,'value')}));
+  const native=placementInterfaceSop(host,spatial,mappings,candidate.request,{constructors,concepts,defaults});
   const profile=readPlacementProfile(session,spatial);
   const admitted=context.tell(native.configuration+'\n'+profile,{factsOnly:true});
   if(!admitted.ok)return fail('spatial-context-rejected',{diagnostics:admitted.violations});
