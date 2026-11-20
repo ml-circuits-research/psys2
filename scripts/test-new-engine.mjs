@@ -5,7 +5,7 @@ import { spawnSync } from 'node:child_process';
 const fixed = [
   'drawing-sop-area.test.mjs', 'diagram-sop-area.test.mjs', 'diagram-authority-declared-host.test.mjs', 'request-routing-policy-declared-host.test.mjs', 'live-observed-query-declared-host.test.mjs', 'query-reading-declared-host.test.mjs',
   'demo-composition.test.mjs',
-  'mobile-editors-touch-browser.test.mjs',
+  'mobile-editors-touch-browser.test.mjs', 'diagram-link-edit-browser.test.mjs',
   'world-code-panel.test.mjs',
   'worlds-explorer.test.mjs',
   'knowledge-source-inspection.test.mjs',
