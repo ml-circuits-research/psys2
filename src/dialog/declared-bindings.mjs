@@ -37,11 +37,22 @@ async function nativeParameters(){
  for(const [world,source] of INTERFACES){
   const wires=parse(source),sha=await digest(source),ops=new Map();
   for(const w of wires)if(w.type==='std.capability.operation')ops.set(w.id,{name:one(w,'name'),on:one(w,'on')});
+  // The coordinate unit an operation declares (metadata coordinates={dimension, unit, frame}): its numeric parameters
+  // are lengths in that unit.
+  const byId=new Map(wires.map(w=>[w.id,w])),deref=v=>typeof v==='string'&&v.startsWith('$')?byId.get(v.slice(1)):null;
+  for(const m of wires.filter(w=>w.type==='app.native.metadata')){
+   const op=ops.get(String(m.attrs.operation?.[0]??'').slice(1));if(!op)continue;
+   for(const f of (m.attrs.field??[]).map(deref).filter(Boolean)){
+    if(one(f,'name')!=='coordinates')continue;
+    const record=deref(f.attrs.value?.[0]);
+    for(const e of (record?.attrs.entry??[]).map(deref).filter(Boolean))if(one(e,'name')==='unit')op.unit=one(e,'value');
+   }
+  }
   for(const w of wires){
    if(w.type!=='std.capability.parameter')continue;
    const op=ops.get(String(w.attrs.operation?.[0]??'').slice(1));if(!op)continue;
    const values=(w.attrs.enum??[]).map(str);
-   rows.push({world,sourceSha256:sha,wire:w.id,operation:op.name,sourceType:op.on,parameter:one(w,'name'),kind:one(w,'kind'),enum:one(w,'enumClosed')==='true'&&values.length?values:null});
+   rows.push({world,sourceSha256:sha,wire:w.id,operation:op.name,sourceType:op.on,parameter:one(w,'name'),kind:one(w,'kind'),unit:op.unit,enum:one(w,'enumClosed')==='true'&&values.length?values:null});
   }
  }
  return parameters=rows;
@@ -69,10 +80,13 @@ export async function completeBindings(bindings){
  // 2b. A property whose native parameter is a number on its source type (kind=number|integer) is numeric: the bridge
  // reads the one number its value span spells ("size 45", "two hundred sixty"; specs/semantic-frame.md §5).
  const numericOf=(sourceType,parameter)=>params.some(p=>p.sourceType===sourceType&&p.parameter===parameter&&['number','integer'].includes(p.kind));
+ // The length unit of a numeric parameter (its operation's declared coordinate unit), for a value said with a unit.
+ const unitOf=(sourceType,parameter)=>params.find(p=>p.sourceType===sourceType&&p.parameter===parameter&&['number','integer'].includes(p.kind)&&p.unit)?.unit;
  const properties=(bindings.properties??[]).map(row=>{
   const values=row.hostBinding&&!row.classValues?enumOf(row.hostBinding.sourceType,row.hostBinding.parameter):null;
   const numeric=row.hostBinding&&!values&&!row.classValues&&row.numeric===undefined&&numericOf(row.hostBinding.sourceType,row.hostBinding.parameter);
-  return values||numeric?{...row,...(values?{classValues:values}:{}),...(numeric?{numeric:true}:{})}:row;
+  const unit=numeric&&unitOf(row.hostBinding.sourceType,row.hostBinding.parameter);
+  return values||numeric?{...row,...(values?{classValues:values}:{}),...(numeric?{numeric:true}:{}),...(unit?{unit}:{})}:row;
  });
  // 1. Unbound keys whose family's source type now declares a parameter of the key's own name.
  for(const gap of bindings.coverage??[]){
@@ -170,7 +184,11 @@ export async function completeBindings(bindings){
   added.push({...rows[0],lemma,alignment:{kind:'compound-lemma-modifier',authority:'declared-bindings.mjs completion 6',compound:rows[0].lemma}});
  }
  if(added.length)kinds=[...kinds,...added];
- const table=Object.freeze({...bindings,properties,families,kinds});
+ // Declared length units (execution-policy.sop app.execution.canvasUnit / lengthUnit) for values said with a unit.
+ const pol=executionPolicyWorld(),all=(r,k)=>(r.attrs[k]??[]).map(str);
+ const lengthUnits=[...pol.ofType('app.execution.canvasUnit').map(r=>({unit:one(r,'unit'),words:all(r,'word'),factor:1})),
+  ...pol.ofType('app.execution.lengthUnit').map(r=>({canonical:one(r,'unit'),unit:one(r,'to'),factor:Number(one(r,'factor'))}))];
+ const table=Object.freeze({...bindings,properties,families,kinds,lengthUnits});
  completed.set(bindings,table);
  return table;
 }

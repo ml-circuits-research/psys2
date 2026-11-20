@@ -1,4 +1,4 @@
-@policy.module core.module name=app.execution version=2 imports=std.capability exports=app.execution.values exports=app.execution.observedProperty exports=app.execution.observedMeasure exports=app.execution.observedField exports=app.execution.preview exports=app.execution.comparative exports=app.execution.comparativeFactor exports=app.execution.comparativeStep exports=app.execution.ordinal exports=app.execution.knowledge exports=app.execution.instant exports=app.execution.requestValue exports=app.execution.clockTime exports=app.execution.instantBase exports=app.execution.instantFocus exports=app.execution.actForm exports=app.execution.reference exports=app.execution.actOperation exports=app.execution.kindBinding exports=app.execution.keyBinding exports=app.execution.keyValue
+@policy.module core.module name=app.execution version=2 imports=std.capability exports=app.execution.values exports=app.execution.observedProperty exports=app.execution.observedMeasure exports=app.execution.observedField exports=app.execution.preview exports=app.execution.comparative exports=app.execution.comparativeFactor exports=app.execution.comparativeStep exports=app.execution.ordinal exports=app.execution.knowledge exports=app.execution.instant exports=app.execution.requestValue exports=app.execution.clockTime exports=app.execution.instantBase exports=app.execution.instantFocus exports=app.execution.actForm exports=app.execution.linkPattern exports=app.execution.canvasUnit exports=app.execution.lengthUnit exports=app.execution.reference exports=app.execution.actOperation exports=app.execution.kindBinding exports=app.execution.keyBinding exports=app.execution.keyValue
 @values.type core.type of=app.execution.values closed=true
 @values.concept core.slot of=app.execution.values key=concept kind=atom present=true
 @values.type.slot core.slot of=app.execution.values key=valueType kind=string present=true
@@ -131,3 +131,14 @@
 @keyValue.key core.slot of=app.execution.keyValue key=key kind=string present=true
 @keyValue.said core.slot of=app.execution.keyValue key=said kind=string present=true
 @keyValue.value core.slot of=app.execution.keyValue key=value kind=string present=true
+
+# Lengths said with a unit ("150 pixels wide", "2 cm"): the canvas's own unit (canvas.pixel, the unit the native
+# interfaces declare for coordinates) with its words, and the length units of k.units it converts from (pixels per
+# unit, at the CSS reference of 96 pixels to the inch). A unit without a row is not converted (the value stays unapplied).
+@canvasUnit.type core.type of=app.execution.canvasUnit closed=true
+@canvasUnit.unit core.slot of=app.execution.canvasUnit key=unit kind=string present=true
+@canvasUnit.word core.slot of=app.execution.canvasUnit key=word kind=string many=true present=true
+@lengthUnit.type core.type of=app.execution.lengthUnit closed=true
+@lengthUnit.unit core.slot of=app.execution.lengthUnit key=unit kind=atom present=true
+@lengthUnit.to core.slot of=app.execution.lengthUnit key=to kind=string present=true
+@lengthUnit.factor core.slot of=app.execution.lengthUnit key=factor kind=number present=true

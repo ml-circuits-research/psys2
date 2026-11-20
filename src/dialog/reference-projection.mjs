@@ -14,6 +14,8 @@ export function referenceProjection(){
  const concrete=token=>typeof token==='string'&&!token.startsWith('?')&&!token.startsWith('$');
  const queries=parse(QUERY_POLICY).filter(wire=>wire.type==='app.query.read.head'&&!wire.pattern&&['head','operation','property'].every(key=>concrete(wire.attrs[key]?.[0])))
   .map(wire=>Object.freeze({head:str(wire.attrs.head[0]),operation:str(wire.attrs.operation[0]),property:str(wire.attrs.property[0])==='true',declaration:wire.id}));
- table=Object.freeze({definite:Object.freeze([...new Set(definite)]),queries:Object.freeze(queries)});
+ // The indefinite ones (w.lang.en.det definite=no: "a", "an"): "next to a tree" names a kind as well.
+ const indefinite=parse(LANG_EN_FACTS.determiners).filter(wire=>str(wire.attrs.definite?.[0])==='no').map(wire=>str(wire.attrs.text?.[0])).filter(Boolean);
+ table=Object.freeze({definite:Object.freeze([...new Set(definite)]),indefinite:Object.freeze([...new Set(indefinite)]),queries:Object.freeze(queries)});
  return table;
 }

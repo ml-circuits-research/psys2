@@ -29,7 +29,7 @@ const unavailable=(text,reason)=>({text,parts:[{text,translate:false}],statuses:
 const interpreters=new Map([
   ['query',{run:({session,candidate,options})=>executeNativeQuery(session,candidate.wires,{...options,readKnowledge:source})}],
   ['history',{run:({session,candidate,options})=>executeHistoryRequest(session,candidate,options.view)}],
-  ['spatial',{run:({session,candidate,options})=>executeSpatialPlacement(session,candidate,options)}],
+  ['spatial',{run:({session,candidate,options})=>executeSpatialPlacement(session,candidate,{...options,readKnowledge:source})}],
   ['capability',{run:({session,candidate,options})=>executeNativeCapability(session,candidate,{...options,readKnowledge:source}),compare:compareNativeReadings}],
   ['reject',{run:({route})=>unavailable('I could not apply the requested placement. Nothing changed.',route.reason)}],
 ]);

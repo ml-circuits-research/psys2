@@ -26,3 +26,7 @@
 @place.hypothesis.mode.to core.slot of=app.placement.hypothesis key=mode.to kind=atom present=true
 @place.hypothesis.determiner core.slot of=app.placement.hypothesis key=determiner kind=atom present=true
 @place.hypothesis.determiner.to core.slot of=app.placement.hypothesis key=determiner.to kind=atom present=true
+# role: whose reading is rewritten, the relation's subject (default) or its anchor. An anchor hypothesis makes the
+# anchor first (a new one of its kind, placed by default), then places the subject as asked; it applies only to an
+# anchor named by its kind alone, and the made anchor is undone with the rest when the placement still fails.
+@place.hypothesis.role core.slot of=app.placement.hypothesis key=role kind=atom enum=subject enum=anchor

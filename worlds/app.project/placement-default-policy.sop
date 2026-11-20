@@ -15,3 +15,8 @@
 # "put the sun above the house" with no sun on the page also reads as asking for one, placed as requested: an unnamed,
 # unselected definite subject of the relation is made new (indefinite) and the place request becomes a make.
 @place.hypothesis.create app.placement.hypothesis name=create-absent-target rank=1 when=unbound-target act=place act.to=make mode=existing mode.to=new determiner=definite determiner.to=indefinite
+
+# "draw a house next to a tree" with no tree on the page also reads as asking for both: the tree is drawn first (a new
+# one, placed by default) and the house next to it; disclosed, one undo. Moving an existing thing next to an absent one
+# ("put the house next to a lake") is not declared: it stays refused and said.
+@place.hypothesis.anchor app.placement.hypothesis name=create-absent-anchor rank=2 when=unbound-target act=make act.to=make mode=existing mode.to=new determiner=definite determiner.to=indefinite role=anchor

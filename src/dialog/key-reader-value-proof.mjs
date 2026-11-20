@@ -35,15 +35,20 @@ export function positiveCardinalProof(literal){
  * binding table's unit lemmas; a measure with a unit needs its own projection). Null otherwise.
  */
 export function spelledNumberProof(literal,isUnit=()=>false){
+ // isUnit(word): false/null for no unit, true for a unit that cannot be converted, or {factor} for one that can (the
+ // value is the number times the factor); at most one unit word.
  if(typeof literal!=='string'||!literal.trim())return null;
- const words=literal.toLowerCase().replace(/[,;:!?]+/g,' ').split(/\s+/).filter(Boolean),found=[];
+ const words=literal.toLowerCase().replace(/[,;:!?]+/g,' ').split(/\s+/).filter(Boolean),found=[];let factor=1;
  for(let i=0;i<words.length;i++){
   budget.tick('value-proof.spelled');
   const w=words[i];
   if(/^[-+]?\d+(\.\d+)?$/.test(w)){found.push(Number(w));continue;}
   const run=parseNumberRun(words,i);
   if(run){found.push(run.value);i+=run.length-1;continue;}
-  if(/\d/.test(w)||isUnit(w))return null;
+  if(/\d/.test(w))return null;
+  const unit=isUnit(w);
+  if(unit===true||unit&&factor!==1)return null;
+  if(unit&&typeof unit==='object'&&Number.isFinite(unit.factor))factor=unit.factor;
  }
- return found.length===1&&Number.isFinite(found[0])?{kind:'spelled-number',value:found[0],literal}:null;
+ return found.length===1&&Number.isFinite(found[0])?{kind:'spelled-number',value:+(found[0]*factor).toFixed(6),literal,...(factor!==1?{factor}:{})}:null;
 }

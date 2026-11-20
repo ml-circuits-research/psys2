@@ -195,3 +195,9 @@
 @chart.sample.values std.capability.list member=$chart.sample.1 member=$chart.sample.2 member=$chart.sample.3
 @chart.values std.capability.seed operation="diagram.group.chart.make" parameter="values" source=value value=$chart.sample.values phase=missing order=126 notice="I used sample values; you can change them or undo."
 @chart.labels std.capability.seed operation="diagram.group.chart.make" parameter="labels" source=ordinal.list from="values" phase=missing order=127 notice="I numbered the categories because no labels were supplied."
+
+# The canvas unit and the length units said with a number on Drawing and Diagram (96 pixels to the inch).
+@unit.canvas app.execution.canvasUnit unit="canvas.pixel" word="pixel" word="pixels" word="px"
+@unit.inch app.execution.lengthUnit unit=k.units.unit.inch to="canvas.pixel" factor=96
+@unit.centimetre app.execution.lengthUnit unit=k.units.unit.centimetre to="canvas.pixel" factor=37.7952755906
+@unit.millimetre app.execution.lengthUnit unit=k.units.unit.millimetre to="canvas.pixel" factor=3.77952755906

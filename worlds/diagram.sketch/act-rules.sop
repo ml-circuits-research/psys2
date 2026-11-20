@@ -300,12 +300,21 @@
 @a.pl.grp.out app.act.refuse reason=node-in-group-place-the-group
 @place.node.member core.rule when=$a.pl.r when=$a.it.i when=$a.it.n when=$a.pl.in then=$a.pl.grp.out
 
-# Resize nodes to an exact width and height.
-@a.rs.r app.act.request operation="diagram.node.resize" width=?w height=?h
+# Resize nodes to an exact width, height or both; a side not given keeps its size ("make Checkout 150 pixels wide").
+@a.rs.rw app.act.request operation="diagram.node.resize" width=?w
+@a.rs.rh app.act.request operation="diagram.node.resize" height=?h
 @a.rs.w app.act.call act=change thing=$a.it.n attr=width value=?w order=1
 @a.rs.h app.act.call act=change thing=$a.it.n attr=height value=?h order=2
-@resize.node.w core.rule when=$a.rs.r when=$a.it.i when=$a.it.n then=$a.rs.w
-@resize.node.h core.rule when=$a.rs.r when=$a.it.i when=$a.it.n then=$a.rs.h
+@resize.node.w core.rule when=$a.rs.rw when=$a.it.i when=$a.it.n then=$a.rs.w
+@resize.node.h core.rule when=$a.rs.rh when=$a.it.i when=$a.it.n then=$a.rs.h
+# The side not given keeps the node's drawn size (its box), so the node keeps an explicit width and height together.
+@a.rs.anyw app.act.request operation="diagram.node.resize" width=?anyw
+@a.rs.anyh app.act.request operation="diagram.node.resize" height=?anyh
+@a.rs.box ui.diagram.nbox node=?id w=?bw h=?bh
+@a.rs.kw app.act.call act=change thing=$a.it.n attr=width value=?bw order=1
+@a.rs.kh app.act.call act=change thing=$a.it.n attr=height value=?bh order=2
+@resize.node.keep.w core.rule when=$a.rs.rh when=$a.it.i when=$a.it.n when=$a.rs.box not=$a.rs.anyw then=$a.rs.kw
+@resize.node.keep.h core.rule when=$a.rs.rw when=$a.it.i when=$a.it.n when=$a.rs.box not=$a.rs.anyh then=$a.rs.kh
 
 # Lay nodes out: a tree or layers hands them back to the diagram's layout (unpinned, out of arrangements); a row,
 # column or grid makes them an arrangement (a node already in a framed group is refused); circle and radial make

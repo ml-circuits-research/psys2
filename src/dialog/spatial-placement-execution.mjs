@@ -12,6 +12,8 @@ import {placementSearchProvider,z3Status} from './placement-search-provider.mjs'
 import {en} from '../lang/en.mjs';
 import {placementHypotheses} from './placement-default-policy.mjs';
 import {identityConcepts} from './capability-plan-adapter.mjs';
+import {executeNativeCapability} from './capability-plan-execution.mjs';
+import {budget} from './budget.mjs';
 
 const read = (row,key) => row?.attrs[key]?.length===1 ? str(row.attrs[key][0]) : undefined;
 const ref = (row,key) => {
@@ -55,7 +57,9 @@ function identitySelectorsAsNames(wires,identity){
  }
  return drop.size?serialize(rows.filter(row=>!drop.has(row.id))):wires;
 }
-export async function executeSpatialPlacement(session,candidate,{bindings,view}={}) {
+export async function executeSpatialPlacement(session,candidate,options={}) {
+ budget.tick('spatial-placement.anchor-hypothesis');   // recursion: once, for the anchor hypothesis (options.anchorMade)
+ const {bindings,view}=options;let anchorRule=null;
  const area=NATIVE_AREAS[view],state=area&&session.isession.state[area.world];
  const fail=(reason,details={})=>reply(reason==='stale-observation'
   ?'The scene changed before I could apply the placement.'
@@ -116,6 +120,7 @@ export async function executeSpatialPlacement(session,candidate,{bindings,view}=
   // for its declared reason, and its use is disclosed (and can be undone).
   if(read(proposal,'status')!=='compiled'){
    for(const rule of placementHypotheses().filter(rule=>rule.when===read(proposal,'reason'))){
+    if(rule.role==='anchor'){if(!options.anchorMade&&!anchorRule&&anchorCandidate(candidate,rule))anchorRule=rule;continue;}
     const alternative=rewriteHypothesis(candidate,rule);
     if(!alternative)continue;
     const second=await compile(alternative.wires);
@@ -128,6 +133,25 @@ export async function executeSpatialPlacement(session,candidate,{bindings,view}=
  }catch(error){
   if(error?.name==='BudgetExceeded'||error?.name==='TurnAborted')throw error;
   return fail('spatial-compilation-error',{error:String(error?.message??error),solver});
+ }
+ // The anchor hypothesis: an anchor named by its kind alone that no object on the page is ("a house next to a tree"
+ // with no tree) is drawn first, then the subject is placed as asked; when that still fails, the anchor is undone.
+ if(read(proposal,'status')!=='compiled'&&anchorRule){
+  const made=anchorCandidate(candidate,anchorRule);
+  if(made){
+   const saved=structuredClone(session.isession.state[area.world]);
+   const drawn=await executeNativeCapability(session,made.candidate,{bindings,view,readKnowledge:options.readKnowledge});
+   if(drawn?.statuses?.[0]==='supported'){
+    const placed=await executeSpatialPlacement(session,candidate,{bindings,view,readKnowledge:options.readKnowledge,anchorMade:true});
+    if(placed?.statuses?.[0]==='supported'){
+     const note=' There was no '+made.kind+' on the page, so I drew one first ('+anchorRule.name+').';
+     placed.text=drawn.text.replace(/\s*You can undo this( change)?\.\s*$/,'')+' '+placed.text+note;placed.parts=[{text:placed.text,translate:false}];
+     placed.trace={...placed.trace,anchorHypothesis:{rule:anchorRule.id,made:made.kind}};
+     return placed;
+    }
+   }
+   session.isession.state[area.world]=saved;
+  }
  }
  if(read(proposal,'status')!=='compiled')return fail(read(proposal,'reason')??'spatial-compiler-unavailable',{placement:sop,solver});
  if(session.isession.state[area.world]!==state)return fail('stale-observation',{placement:sop});
@@ -206,6 +230,20 @@ async function executeSpatialGroup(session,{area,host,sop,proposal,candidate,vie
 }
 
 /** A declared alternative reading (app.placement.hypothesis): the request's act and its relation subjects' target mode and determiner rewritten as the rule says. */
+// The make request for a relation's anchor named by its kind alone (no name, no selector, the hypothesis's mode and
+// determiner): a new one of that kind, nothing else said.
+function anchorCandidate(candidate,rule){
+ const nodes=parse(candidate.wires),request=nodes.find(wire=>wire.type==='std.request'&&wire.id===candidate.request);
+ if(read(request,'act')!==rule.act)return null;
+ const goals=new Set(nodes.filter(wire=>wire.type==='std.request.constraint'&&read(wire,'operator')==='relation').map(wire=>ref(wire,'goal')));
+ const anchors=nodes.filter(wire=>wire.type==='std.request.target'&&goals.has(wire.id)&&read(wire,'mode')===rule.mode&&!wire.attrs.name&&!wire.attrs.selector&&read(wire,'kind'));
+ if(anchors.length!==1)return null;   // "next to a tree" or "next to the tree": either way none is on the page
+ const kind=read(anchors[0],'kind'),source=nodes.find(wire=>wire.type==='std.request.source');
+ const wires=[source?serialize([source]):'',`@anchor.request std.request act=make mood=do${source?' source=$'+source.id:''}`,
+  `@anchor.target std.request.target request=$anchor.request mode=${rule['mode.to']} determiner=${rule['determiner.to']} kind=${kind}`].filter(Boolean).join('\n');
+ const label=kind.split('.').pop().replace(/_/g,' ');
+ return {candidate:{request:'anchor.request',wires},kind:label};
+}
 function rewriteHypothesis(candidate,rule){
  const nodes=parse(candidate.wires),request=nodes.find(wire=>wire.type==='std.request'&&wire.id===candidate.request);
  if(read(request,'act')!==rule.act)return null;

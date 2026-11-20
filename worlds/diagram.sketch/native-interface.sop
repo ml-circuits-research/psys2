@@ -98,8 +98,8 @@
 @native.diagram.sketch.op.diagram.node.place.metadata app.native.metadata operation=$native.diagram.sketch.op.diagram.node.place field=$native.diagram.sketch.value.75 field=$native.diagram.sketch.value.81 field=$native.diagram.sketch.reflow.effect
 @native.diagram.sketch.op.diagram.node.resize std.capability.operation scope=$native.diagram.sketch.scope name="diagram.node.resize" act=change on="diagram.sketch.node" order=5 eligible=true
 @native.diagram.sketch.op.diagram.node.resize.param.ids std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.resize name="ids" kind=array required=true
-@native.diagram.sketch.op.diagram.node.resize.param.width std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.resize name="width" kind=number required=true min=8 max=4096
-@native.diagram.sketch.op.diagram.node.resize.param.height std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.resize name="height" kind=number required=true min=8 max=4096
+@native.diagram.sketch.op.diagram.node.resize.param.width std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.resize name="width" kind=number min=8 max=4096
+@native.diagram.sketch.op.diagram.node.resize.param.height std.capability.parameter operation=$native.diagram.sketch.op.diagram.node.resize name="height" kind=number min=8 max=4096
 @native.diagram.sketch.value.87 std.capability.arg name="dimension" value="length"
 @native.diagram.sketch.value.88 std.capability.arg name="unit" value="canvas.pixel"
 @native.diagram.sketch.value.89 std.capability.arg name="frame" value="diagram.canvas"
