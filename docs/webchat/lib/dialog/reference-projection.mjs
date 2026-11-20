@@ -4,7 +4,7 @@
 // relation anchor phrase as a kind lemma; nothing here names a word. With them, the declared question heads
 // (query-reading-policy.sop app.query.read.head: "what" asks the values of a property, "how many" a count) that
 // project an annotated question into a std.request.query.
-import {parse,str} from '../vendor/sopworld/sopworld.mjs?v=4cf6e60057';
+import {parse,str} from '../vendor/sopworld/sopworld.mjs?v=b665fdbe3d';
 import {LANG_EN_FACTS} from '../lang/en.facts.generated.mjs?v=38238d05cf';
 import QUERY_POLICY from '../../worlds/app.project/query-reading-policy-source.mjs?v=cf7b2d9297';
 import {en} from '../lang/en.mjs?v=40d8d7165d';
@@ -19,8 +19,10 @@ export function referenceProjection(){
  const indefinite=parse(LANG_EN_FACTS.determiners).filter(wire=>str(wire.attrs.definite?.[0])==='no').map(wire=>str(wire.attrs.text?.[0])).filter(Boolean);
  // The coordinators of a list of things ("Start and Bake", "the tree and plane"): one anchor phrase naming several.
  const coordinators=[...en.words('coord.sep','things')].filter(word=>typeof word==='string'&&word.trim());
+ // The list marks (w.lang.en.joiner kind=list-or-clause: ","): "the tree, the plane" lists things too.
+ const listMarks=parse(LANG_EN_FACTS.clauses??'').filter(wire=>wire.type==='w.lang.en.joiner'&&String(str(wire.attrs.kind?.[0])).startsWith('list')).map(wire=>str(wire.attrs.text?.[0])).filter(Boolean);
  // The place deictics (w.lang.en.pron deictic=place: "there", "here"): "the tree there" is the tree.
  const deictics=parse(LANG_EN_FACTS.pronouns??'').filter(wire=>str(wire.attrs.deictic?.[0])==='place').map(wire=>str(wire.attrs.text?.[0])).filter(Boolean);
- table=Object.freeze({definite:Object.freeze([...new Set(definite)]),indefinite:Object.freeze([...new Set(indefinite)]),coordinators:Object.freeze(coordinators),deictics:Object.freeze([...new Set(deictics)]),queries:Object.freeze(queries)});
+ table=Object.freeze({definite:Object.freeze([...new Set(definite)]),indefinite:Object.freeze([...new Set(indefinite)]),coordinators:Object.freeze(coordinators),listMarks:Object.freeze(listMarks),deictics:Object.freeze([...new Set(deictics)]),queries:Object.freeze(queries)});
  return table;
 }

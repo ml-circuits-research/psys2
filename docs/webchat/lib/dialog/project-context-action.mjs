@@ -1,35 +1,26 @@
-import { historyHeads } from './history-journal.mjs?v=a4ae88133a';
-import {nativeKindCandidates} from './native-binding-candidates.mjs?v=8423e98bc7';
+import { historyHeads } from './history-journal.mjs?v=aadefe2e4d';
+import {nativeKindCandidates} from './native-binding-candidates.mjs?v=a7b8646a23';
 // Bind model-declared context references to actual native objects; never inspect source words.
-import {quote,str} from '../vendor/sopworld/sopworld.mjs?v=4cf6e60057';
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=01e44f5b60';
-import {executionPolicyWorld} from './execution-policy.mjs?v=fc7a8e4440';
-import {readReferenceTurn,resolveObservedReference} from './reference-policy.mjs?v=1dde2d0d9c';
-import {observeGroundedProjection,projectGroundedRequest} from './grounded-projection.mjs?v=0185c6d256';
-import {flatRequestProjection} from './request-projection.mjs?v=e4dcb8aca9';
-import {bridgeRawStructure} from './raw-structural-bridge.mjs?v=be9cef3635';
-import {comparativeSteps} from './comparative-projection.mjs?v=affa9dae6f';
-import {referenceProjection} from './reference-projection.mjs?v=11a28bb246';
-import {interpretationPolicy} from './interpretation-policy.mjs?v=95c5ac8e35';
-function containerOwned(r,bindings,area){
- const keys=(r.constraints??[]).map(c=>c?.key);
- if(!keys.length||keys.some(k=>typeof k!=='string'))return false;
- const types=new Set(keys.map(k=>k.split('.')[0]));
- if(types.size!==1)return false;
- const [container]=types;
- const host=(bindings.properties??[]).find(p=>p.area===area&&p.key===keys[0])?.hostBinding?.sourceType;
- const member=(bindings.families??[]).find(f=>f.area===area&&f.nativeFamilyBinding?.sourceType===host);
- const own=(bindings.families??[]).find(f=>f.area===area&&f.type===container);
- if(!member||own&&member.canonical===own.canonical)return false;   // a property of the container's own object (the page)
- return (bindings.containment??[]).some(c=>c.area===area&&c.containerType===container&&(c.type===r.target?.type||container===r.target?.type));
-}
+import {quote,str} from '../vendor/sopworld/sopworld.mjs?v=b665fdbe3d';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=85d3e9cbb5';
+import {executionPolicyWorld} from './execution-policy.mjs?v=c5b63898f5';
+import {readReferenceTurn,resolveObservedReference,referencePolicyWorld} from './reference-policy.mjs?v=6d04766720';
+import {observeGroundedProjection,projectGroundedRequest} from './grounded-projection.mjs?v=e9471201da';
+import {flatRequestProjection} from './request-projection.mjs?v=e41fe1fe81';
+import {bridgeRawStructure} from './raw-structural-bridge.mjs?v=e8580d1694';
+import {retargetRule} from './raw-reading-policy.mjs?v=e1715d36d4';
+import {comparativeSteps} from './comparative-projection.mjs?v=674cebc5f1';
+import {referenceProjection} from './reference-projection.mjs?v=8730d4822b';
+import {interpretationPolicy} from './interpretation-policy.mjs?v=67a99d054f';
+// What an act on the referent that says nothing more does (reference-policy.sop app.reference.bare: none | grounded).
+const bareUse=act=>{const row=referencePolicyWorld().ofType('app.reference.bare').find(r=>str(r.attrs.act?.[0])===act);return row?str(row.attrs.use[0]):undefined;};
 export async function projectContextAction(proposal,session,{bindings,registry,view}={}) {
  const raw=proposal?.raw,r=raw?.requests?.[0],area=NATIVE_AREAS[view],readerArea=bindings?.readerAreaByView?.[view]??area?.area;
  if(!area||!bindings||!registry||proposal.coverage?.complete||raw?.requestCount!==1||raw.coverage?.truncated||!r?.target||r.target.kind||r.target.name)return null;
  const route=readReferenceTurn(r);if(!route)return null;
  // Properties of a container said of a reference ("make it pastel") are read as the container's members by the partial
- // reading (partial-admission.mjs containerProperty), not as one observed object.
- if(containerOwned(r,bindings,readerArea))return null;
+ // reading (raw-reading-policy.sop: the rules conclude app.reading.retarget rule=container), not as one observed object.
+ if(retargetRule({...raw,area:readerArea},bindings,0)==='container')return null;
  const native=session.isession.state[area.world];if(!native)return null;
  const host=await area.create({state:native,instanceId:'context-'+globalThis.crypto.randomUUID()});
  const mappings=nativeKindCandidates(bindings).filter(mapping=>mapping.area===readerArea&&mapping.type===r.target.type);
@@ -46,13 +37,13 @@ export async function projectContextAction(proposal,session,{bindings,registry,v
   if(!previous||!last||!Object.keys(last.after).every(key=>JSON.stringify(session.isession.state[key])===JSON.stringify(last.after[key])))return null;
   const prior=flatRequestProjection(previous);if(!prior.ok||prior.request.act!==r.act||prior.targets.length!==1||!prior.results.length)return null;
   inherited=prior.results;rewind=last.before;
- }else if(!Array.isArray(r.constraints)||!r.constraints.length&&r.act==='make')return null;   // an act on the referent may say nothing more ("improve the layout", "trash it", "copy this one")
+ }else if(!Array.isArray(r.constraints)||!r.constraints.length&&bareUse(r.act)==='none')return null;   // an act on the referent may say nothing more ("improve the layout", "trash it", "copy this one")
  const canonical=selected.canonical,values=[];
  // A reading beyond plain stated values (a comparative step, several results, a class value its span only evidences:
  // legend "hide" said as "get rid of the legend"; a selector that picks among the family: "the May value", "the third
  // bar") is projected by the same bridge as any other reading, with the context target bound to the kind the observed
  // reference resolution chose.
- if(!other&&(!r.constraints.length&&r.act!=='arrange'||r.constraints.some(c=>c.operator!=='eq'||c.phase==='selector'||typeof c.value==='string'&&typeof c.value_span==='string'&&c.value!==c.value_span))){
+ if(!other&&(!r.constraints.length&&bareUse(r.act)!=='grounded'||r.constraints.some(c=>c.operator!=='eq'||c.phase==='selector'||typeof c.value==='string'&&typeof c.value_span==='string'&&c.value!==c.value_span))){
   const bindingSha256=proposal.provenance?.bindingsSha256;
   const bridgeOptions={bindings,bindingSha256,comparatives:comparativeSteps(),references:referenceProjection(),contextTarget:{kind:canonical,declaration:selected.object.source}};
   const usable=b=>b&&!b.diagnostics.length&&b.decoded?.candidates?.length===1&&!b.decoded.issues?.length;

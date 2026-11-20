@@ -1,17 +1,18 @@
-import { readSceneDefaults } from './scene-placement-defaults.mjs?v=b16bbeacf7';
-import { solveDefaultPlacement, solveGroupPlacement } from './default-placement.mjs?v=d0f4003790';
+import { readSceneDefaults } from './scene-placement-defaults.mjs?v=bba55caf94';
+import { solveDefaultPlacement, solveGroupPlacement } from './default-placement.mjs?v=e9188a5635';
 import { en } from '../lang/en.mjs?v=40d8d7165d';
-import { quote } from '../vendor/sopworld/sopworld.mjs?v=4cf6e60057';
+import { quote, str } from '../vendor/sopworld/sopworld.mjs?v=b665fdbe3d';
+import { executionPolicyWorld } from './execution-policy.mjs?v=c5b63898f5';
 // SPDX-License-Identifier: AGPL-3.0-only
-import { compileNativeCapability } from './capability-plan-adapter.mjs?v=1b494105bc';
-import { linkPopulationCandidates } from './link-population.mjs?v=cd87f26617';
-import { readDegreeBases } from './degree-bases.mjs?v=eaec18197f';
-import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=01e44f5b60';
+import { compileNativeCapability } from './capability-plan-adapter.mjs?v=9921237814';
+import { linkPopulationCandidates, linkPatternNote } from './link-population.mjs?v=dedf35bf9a';
+import { readDegreeBases } from './degree-bases.mjs?v=b2d0be1edd';
+import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=85d3e9cbb5';
 import { instanceIdFor } from './instance-identity.mjs?v=024ef1ca83';
-import { prepareNativeControlHost } from './native-control-preparation.mjs?v=57a03d2c0f';
-import { invokeObservedNativeTool } from './native-tool-activity.mjs?v=9e7d8073a0';
-import { retainPropertyEffect } from './property-effect-evidence.mjs?v=3a39cd7967';
-import { describeNativeControl, verifyNativeControlEffect } from './native-control-intent.mjs?v=999c87cd52';
+import { prepareNativeControlHost } from './native-control-preparation.mjs?v=9320614605';
+import { invokeObservedNativeTool } from './native-tool-activity.mjs?v=a227d7593e';
+import { retainPropertyEffect } from './property-effect-evidence.mjs?v=07094ccfdf';
+import { describeNativeControl, verifyNativeControlEffect } from './native-control-intent.mjs?v=5540dd7a6d';
 
 function reply(text, supported, trace = {}) {
   return { text, parts: [{ text, translate: false }], statuses: [supported ? 'supported' : 'unsupported'],
@@ -68,7 +69,7 @@ export async function executeNativeCapability(session, candidate, options = {}) 
       if (members.length) {
         const result = await executeNativeGroup(session, members, { view, invocation });
         if (result?.statuses?.[0] === 'supported') {
-          const note = `I joined ${expanded.members.join(', ')} with ${members.length} line${members.length > 1 ? 's' : ''} (${{ chain: 'a chain in reading order', star: 'a star from the named one', all: 'every pair', cycle: 'a cycle in reading order' }[expanded.pattern] ?? expanded.pattern}).`;
+          const note = populationNote('lines', members.length, { members: expanded.members.join(', '), pattern: linkPatternNote(expanded.pattern) });
           result.text = result.text + ' ' + note; result.parts = [{ text: result.text, translate: false }];
           result.trace = { ...result.trace, linkPopulation: { pattern: expanded.pattern, declaration: expanded.declaration, members: expanded.members } };
         }
@@ -170,7 +171,7 @@ async function runNativePlan(session, candidate, { area, nativeState, host, befo
   if (substituted) notes.unshift(substituted.note);
   // A population target (reference=population) seeds every match into the target list: all of them were changed.
   const listed = Object.values(plan.args ?? {}).find((value) => Array.isArray(value) && value.length > 1 && value.every((id) => plan.targets.includes(id)));
-  if (listed) notes.unshift('I applied it to all ' + listed.length + ' matching objects (' + listed.join(', ') + ').');
+  if (listed) notes.unshift(populationNote('targets', listed.length, { members: listed.join(', ') }));
   else if (plan.targets.length > 1) notes.unshift(plan.act === 'remove'
     ? 'More than one matched. I used ' + kind + ' ' + plan.id + '. You can undo this.'
     : 'I used the most recent matching ' + plan.kind + '.');
@@ -191,17 +192,28 @@ async function runNativePlan(session, candidate, { area, nativeState, host, befo
 }
 
 const withArticle = (noun) => (/^[aeiou]/i.test(noun) ? 'an ' : 'a ') + noun;
+const declaredText = (template, values) => String(template ?? '').replace(/\{(\w+)\}/g, (all, name) => values[name] ?? all);
+/** The declared reply words for objects acted on as a population (app.execution.populationNote: one or many). */
+function populationNote(kind, count, values) {
+  const row = executionPolicyWorld().ofType('app.execution.populationNote').find((r) => str(r.attrs.case?.[0]) === kind);
+  const template = row && (count === 1 && row.attrs.one?.length ? row.attrs.one[0] : row?.attrs.many?.[0]);
+  return template ? declaredText(str(template), { ...values, count: String(count) }) : '';
+}
 /**
  * A made object drawn as another kind than the one asked for (a stand-in or the closest drawable relative the area's
  * knowledge gives): it is named after the kind asked for and observed as the kind drawn. The reply keeps the asked kind
  * and says what was drawn; null when the object is drawn as itself.
  */
 export function drawnAs(object, requested) {
-  const raw = object?.inputs?.find((input) => input.key === 'name' && input.values?.length === 1)?.values[0];
+  // The observed field holding the asked name and the reply's words are declared (app.execution.standInNote).
+  const declared = executionPolicyWorld().ofType('app.execution.standInNote')[0];
+  if (!declared) return null;
+  const key = str(declared.attrs.key[0]);
+  const raw = object?.inputs?.find((input) => input.key === key && input.values?.length === 1)?.values[0];
   if (!raw || !requested || !object.kind) return null;
   const name = String(raw).replace(/^"|"$/g, ''), same = (a, b) => String(a).toLowerCase().replace(/_/g, ' ') === String(b).toLowerCase().replace(/_/g, ' ');
   if (!same(name, requested) || same(object.kind, name)) return null;
-  return { kind: name, drawn: object.kind, note: 'There is no drawing of ' + withArticle(name) + ', so I drew ' + withArticle(object.kind) + '.' };
+  return { kind: name, drawn: object.kind, note: declaredText(str(declared.attrs.text[0]), { asked: withArticle(name), drawn: withArticle(object.kind) }) };
 }
 
 /** The declared default placement of a make without coordinates: the solved place and the call that carries it (the plan stays as compiled). */

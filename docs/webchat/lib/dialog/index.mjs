@@ -1,6 +1,6 @@
-import { captureHistory, initializeHistory, restoreHistory } from './history-journal.mjs?v=a4ae88133a';
-import {isAuthoredRequest} from './authored-request-tool.mjs?v=6526247abe';
-import { interpretationPolicy } from './interpretation-policy.mjs?v=95c5ac8e35';
+import { captureHistory, initializeHistory, restoreHistory } from './history-journal.mjs?v=aadefe2e4d';
+import {isAuthoredRequest} from './authored-request-tool.mjs?v=c38bda5155';
+import { interpretationPolicy } from './interpretation-policy.mjs?v=67a99d054f';
 // SPDX-License-Identifier: AGPL-3.0-only
 /**
  * C2 dialog pipeline (spec 06). Browser-safe.
@@ -13,7 +13,7 @@ import { interpretationPolicy } from './interpretation-policy.mjs?v=95c5ac8e35';
  * Without it all input is treated as English.
  */
 
-import { loadWorlds } from '../worlds/index.mjs?v=ae3f0e3e5d';
+import { loadWorlds } from '../worlds/index.mjs?v=0ee50b471e';
 import { validateWorldSet } from '../worlds/validate.mjs?v=af0869a8e0';
 
 
@@ -21,7 +21,7 @@ import { perf } from './stage-perf.mjs?v=8b73796daa';
 import { guard, TurnAborted } from './turn-guard.mjs?v=34ed257fec';
 import { createBudget, installBudget, releaseBudget, isBudgetExceeded, budget } from './budget.mjs?v=00bce6e369';
 
-import { attachValues } from '../knowledge/values.mjs?v=3b49c0cf3a';
+import { attachValues } from '../knowledge/values.mjs?v=1a6f2f3174';
 import { attachArrangement } from '../knowledge/arrangement.mjs?v=a9fda4aab0';
 
 /**
@@ -244,7 +244,7 @@ export class DialogSession {
         }
       }
     }
-    const reply = await (await import('./reader-routing.mjs?v=f3f86b235f')).routeNewEngine(this, english, { ...opts, language: 'en' });
+    const reply = await (await import('./reader-routing.mjs?v=1f50a51d88')).routeNewEngine(this, english, { ...opts, language: 'en' });
     reply.trace = { ...reply.trace, english, ...(translation ? { translation } : {}), ...(detection ? { languageDetection: detection } : {}) };
     if (language !== 'en') {
       try {

@@ -98,21 +98,10 @@ export function colourName(words) {
   return t && state.colours.has(t) ? t : null;
 }
 export const colourHex = (name) => state.colours.get(colourName(name))?.rgb ?? null;
-/** The k.colours name nearest an RGB code ("#ffa500" -> "orange"): an exact code's name, else the nearest core or basic colour by RGB distance; null for anything else. */
-export function nearestColourName(code) {
+/** The k.colours names that name a colour by themselves (core colours and basic colour names) with their RGB codes. */
+export function namedColourCodes() {
   wake();
-  const hex = /^#?([0-9a-f]{6})$/i.exec(String(code ?? '').trim()); if (!hex) return null;
-  const toRgb = (h) => [0, 2, 4].map((i) => parseInt(h.slice(i, i + 2), 16));
-  const want = toRgb(hex[1].toLowerCase());
-  let best = null;
-  for (const c of state.colours.values()) {
-    const m = /^#?([0-9a-f]{6})$/i.exec(String(c.rgb ?? '')); if (!m) continue;
-    if (m[1].toLowerCase() === hex[1].toLowerCase() && (c.core || c.basic === c.name)) return c.name;
-    if (!(c.core || c.basic === c.name)) continue;
-    const got = toRgb(m[1].toLowerCase()), d = got.reduce((sum, v, i) => sum + (v - want[i]) ** 2, 0);
-    if (!best || d < best.d) best = { name: c.name, d };
-  }
-  return best?.name ?? null;
+  return [...state.colours.values()].filter((c) => (c.core || c.basic === c.name) && typeof c.rgb === 'string').map((c) => ({ name: c.name, code: c.rgb }));
 }
 export const basicColour = (name) => state.colours.get(colourName(name))?.basic ?? null;
 export const colourNames = () => [...state.colours.keys()];

@@ -1,7 +1,10 @@
 // Predicted raw structure -> declared canonical structure. No reader or gold input.
-import {copyHostData,snapshotHostData} from '../../worlds/native-tool-host.mjs?v=f5de6de16f';
-import {positiveCardinalProof,spelledNumberProof} from './key-reader-value-proof.mjs?v=ff54404423';
-import {decodeModelGraphs} from './model-graph-decoder.mjs?v=cb093fa75d';
+import {copyHostData,snapshotHostData} from '../../worlds/native-tool-host.mjs?v=2e1dddf8c7';
+import {positiveCardinalProof,spelledNumberProof} from './key-reader-value-proof.mjs?v=8801d67b27';
+import {decodeModelGraphs} from './model-graph-decoder.mjs?v=8f5eac6b37';
+import {unitConversion,stripPhrase,splitPhrase} from '../vendor/sopworld/sopworld.mjs?v=b665fdbe3d';
+import {en} from '../lang/en.mjs?v=40d8d7165d';
+import {populationReference} from './raw-reading-policy.mjs?v=e1715d36d4';
 export const RAW_STRUCTURAL_FORMAT='psys2.raw-structural-predictions/1';
 // The node budget of a binding table (every kind of the pinned catalog's drawable providers, with their provenance).
 export const BINDING_NODES=250000;
@@ -55,14 +58,14 @@ export function bridgeRawStructure(prediction,{bindings,bindingSha256,comparativ
    const key=JSON.stringify(path),range=ranges.get(key);if(!range)return unique(segment,literal,base);usedRanges.add(key);tick(range[1]-range[0]);
    if(typeof literal!=='string'||sourceChars.slice(...range).join('')!==literal||within&&(range[0]<within[0]||range[1]>within[1])){issue('incompatible-predicted-range',path);return null;}return [...range];
   };
-  // A unit word of a value said for a numeric property: the property's own unit (its declared words: factor 1), a unit
-  // of the binding table with a declared conversion to it ({factor}), else true (a unit not converted).
+  // A unit word of a value said for a numeric property (sopworld unitConversion): the property's own unit (its declared
+  // words: factor 1), a unit of the binding table with a declared conversion to it ({factor}), else true when the word
+  // is a unit not converted; its singular and plural are tried too (w.lang.en).
   const unitWord=prop=>word=>{
-   const units=Array.isArray(table.lengthUnits)?table.lengthUnits:[];
-   if(prop.unit&&units.some(u=>u.unit===prop.unit&&u.words?.includes(word)))return {factor:1};
-   const u=lookup('units',{lemma:word});if(!u)return null;
-   const conversion=prop.unit&&units.find(c=>c.canonical===u.canonical&&c.unit===prop.unit&&Number.isFinite(c.factor));
-   return conversion?{factor:conversion.factor}:true;
+   const lengths=Array.isArray(table.lengthUnits)?table.lengthUnits:[],units=Array.isArray(table.units)?table.units:[];
+   const declared=prop.unit?[...lengths.filter(u=>u.unit===prop.unit&&u.words).map(u=>({words:u.words,factor:1})),
+    ...lengths.filter(c=>c.canonical&&c.unit===prop.unit&&Number.isFinite(c.factor)).map(c=>({words:units.filter(u=>u.canonical===c.canonical).map(u=>u.lemma),factor:c.factor}))]:[];
+   return unitConversion(word,declared,{forms:w=>[en.singular(w,'lemma'),en.plural(w)],known:w=>!!lookup('units',{lemma:w})});
   };
   const lookup=(family,criteria)=>{
    if(!Array.isArray(table[family]??[]))fail('invalid-binding-family',[family]);const found=[];
@@ -115,9 +118,8 @@ export function bridgeRawStructure(prediction,{bindings,bindingSha256,comparativ
    if(contextual)t.determiner??='definite';
    else if(['context','previous_reply','journal_step'].includes(target.fill))unresolved('context-reference-not-bound',['targets',tid]);
    // A population reference ("all the boxes", "every node"): every matching member of an existing target (std.request
-   // target reference=population, sopworld 0.241.0); a quantifier over it without a bound variable says the same.
-   // (A make names what it makes: an existing population is not its theme, so the reading stays as it was.)
-   else if((target.fill==='all'||target.quantifier==='all')&&target.mode==='existing'&&original.act!=='make')t.reference='population';
+   // target reference=population, sopworld 0.241.0), as raw-reading-policy.sop app.reading.population concludes.
+   else if(populationReference(original))t.reference='population';
    else if(target.fill==='all'&&target.mode!=='bound')unresolved('unprojected-population-reference',['targets',tid]);
    else if(target.fill!==undefined&&!['written','description','all'].includes(target.fill))unresolved('unknown-target-fill',['targets',tid]);
    const phase={selector:[],result:[]},anchorOf=new Map(),splitParts=new Set();let conditions=original.constraints??[];if(!Array.isArray(conditions)||conditions.length>256)fail('constraint-budget',basePath);
@@ -155,7 +157,7 @@ export function bridgeRawStructure(prediction,{bindings,bindingSha256,comparativ
     if(relationAt.length===1&&anchorAt.length===1){
      const ac=conditions[anchorAt[0]],phrase=typeof ac?.value_span==='string'?ac.value_span:'';
      const coords=(references?.coordinators??[]).map(w=>String(w).trim()).filter(Boolean);
-     const parts=coords.length?phrase.split(new RegExp('\\s*(?:'+coords.map(w=>w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|')+')\\s+|\\s*,\\s*','i')).map(x=>x.trim()).filter(Boolean):[phrase];
+     const parts=coords.length?splitPhrase(phrase,{separators:coords,marks:references?.listMarks??[]}):[phrase];
      if(parts.length>1){
       // The whole phrase's predicted ranges are this mention's evidence; each named part is found in the text.
       const at=anchorAt[0];if(span){locate(original.span,phrase,span[0],[...rawPath,'constraints',String(at),'value_span'],span);consume(at,'value',ac.value);}
@@ -176,12 +178,10 @@ export function bridgeRawStructure(prediction,{bindings,bindingSha256,comparativ
      if(relation){c.relation=relation;anchor([...path,'relation'],rc.value_span,prop.sourceWire,false,['constraints',String(ri),'value_span']);}else unresolved('undeclared-relation-value',[...path,'relation']);
      consume(ri,'value',rc.value);
      const bounds=span?locate(original.span,rc.value_span,span[0],[...rawPath,'constraints',String(ri),'value_span'],span):null;if(bounds)c.source=bounds;
-     // The anchor phrase names an observed object: a kind lemma of the family, alone or after a determiner.
-     const aprop=lookup('properties',{area:raw.area,key:ac.key}),phrase=typeof ac.value_span==='string'?ac.value_span:'',determiner=definite.find(d=>phrase.toLowerCase().startsWith(d.toLowerCase()+' '))??indefinite.find(d=>phrase.toLowerCase().startsWith(d.toLowerCase()+' '));
-     // A place deictic after the noun ("the tree there") points at it: it is not part of the kind or the name.
-     const deictics=(references?.deictics??[]).map(d=>String(d).toLowerCase());
-     let lemma=determiner?phrase.slice(determiner.length+1):phrase;
-     {const parts=lemma.split(/\s+/);if(parts.length>1&&deictics.includes(parts.at(-1).toLowerCase()))lemma=parts.slice(0,-1).join(' ');}
+     // The anchor phrase names an observed object: a kind lemma of the family, alone, after a determiner, or before a
+     // place deictic ("the tree there"); sopworld stripPhrase removes the declared edge words.
+     const aprop=lookup('properties',{area:raw.area,key:ac.key}),phrase=typeof ac.value_span==='string'?ac.value_span:'';
+     const stripped=stripPhrase(phrase,{leading:[...definite,...indefinite],trailing:references?.deictics??[]}),determiner=stripped.leading,lemma=stripped.core;
      const akind=lemma?lookup('kinds',{area:raw.area,type:target.type,lemma}):null;
      const a={id:aid,mode:'existing'};label.targets.push(a);if(determiner)a.determiner=definite.includes(determiner)?'definite':'indefinite';
      const outer=span?locate(original.span,phrase,span[0],anchorOf.has(ac)?[...rawPath,'constraints',String(anchorOf.get(ac)),splitParts.has(ac)?'part':'anchor_span']:[...rawPath,'constraints',String(ai),'value_span'],span):null;if(!anchorOf.has(ac))consume(ai,'value',ac.value);
@@ -255,9 +255,20 @@ export function bridgeRawStructure(prediction,{bindings,bindingSha256,comparativ
     if(!comparative&&!['eq','less.equal','greater.equal','degree','region'].includes(condition.operator))unresolved('requires-operator-reference-projection',path);
     if(['each','group'].includes(condition.scope))c.scope=condition.scope;else if(has(condition,'scope'))unresolved('unknown-condition-scope',[...path,'scope']);
     if(has(condition,'measure_span')&&!has(condition,'measure')&&!has(condition,'unit'))unresolved('unowned-measure-span',[...path,'measure_span']);
-    if(has(condition,'measure')&&condition.measure!==condition.value)unresolved('requires-measure-projection',[...path,'measure']);
+    // The measure the value states (its number) is the value read: "53" of "53 pixels" for a numeric property.
+    const measured=has(condition,'measure')&&c.value&&String(c.value.value)===String(condition.measure).trim();
+    if(measured&&has(condition,'measure_span'))consume(ci,'measure_span',condition.measure_span);
+    if(has(condition,'measure')&&condition.measure!==condition.value&&!measured)unresolved('requires-measure-projection',[...path,'measure']);
     for(const field of ['group','variety','step','anchor_fill','anchor_span'])if(has(condition,field)&&!(field==='step'&&comparative))unresolved(`requires-declared-${field}-projection`,[...path,field]);
-    if(has(condition,'unit')){const unit=lookup('units',{lemma:condition.unit});if(unit){c.unit=unit.canonical;anchor([...path,'unit'],condition.measure_span||condition.value_span,unit.sourceWire,false,['constraints',String(ci),condition.measure_span?'measure_span':'value_span']);}else unresolved('unresolved-unit-binding',[...path,'unit']);}
+    // A unit said for a numeric property with a declared length unit: its own unit (canvas pixels) needs nothing; a
+    // declared conversion scales the value (table.lengthUnits, declared-bindings.mjs); either way no unit is left.
+    let unitDone=false;
+    if(has(condition,'unit')&&prop?.numeric===true&&c.value&&/^[-+]?\d+(\.\d+)?$/.test(String(c.value.value))){
+     const conv=unitWord({...prop,unit:prop.unit??(Array.isArray(table.lengthUnits)?table.lengthUnits.find(u=>u.words)?.unit:undefined)})(String(condition.unit).toLowerCase());
+     const found=conv&&conv!==true?conv:null;
+     if(found){c.value={...c.value,value:String(+(Number(c.value.value)*found.factor).toFixed(6))};unitDone=true;}
+    }
+    if(has(condition,'unit')&&!unitDone){const unit=lookup('units',{lemma:condition.unit});if(unit){c.unit=unit.canonical;anchor([...path,'unit'],condition.measure_span||condition.value_span,unit.sourceWire,false,['constraints',String(ci),condition.measure_span?'measure_span':'value_span']);}else unresolved('unresolved-unit-binding',[...path,'unit']);}
     const bounds=span?locate(original.span,condition.value_span,span[0],[...rawPath,'constraints',String(ci),'value_span'],span):null;if(bounds)c.source=bounds;
    }
    const and=table.projectionPolicy?.unmarkedConditions==='and'&&hash(table.projectionPolicy.sourcePromptSha256);

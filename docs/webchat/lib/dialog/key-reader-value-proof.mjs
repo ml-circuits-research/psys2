@@ -1,6 +1,8 @@
 // Exact declared-value proofs; no language rules or domain vocabulary.
-import {numberValue} from '../knowledge/values.mjs?v=3b49c0cf3a';
-import {parseNumberRun} from '../knowledge/number-run.mjs?v=8d0e973e33';
+import {numberValue} from '../knowledge/values.mjs?v=1a6f2f3174';
+import {cardinalValue} from '../knowledge/number-run.mjs?v=3d945e049a';
+import {readNumberSpan} from '../vendor/sopworld/sopworld.mjs?v=b665fdbe3d';
+import {interpretationPolicy} from './interpretation-policy.mjs?v=67a99d054f';
 import {budget} from './budget.mjs?v=00bce6e369';
 import {selectedProbability} from './model-selection-score.mjs?v=ac3ac10191';
 export function classifierAlternative(bank,logits){
@@ -30,25 +32,11 @@ export function positiveCardinalProof(literal){
 }
 
 /**
- * The one number a value span spells for a numeric property ("size 45" -> 45, "two hundred sixty" -> 260, "-3.5"):
- * digits or a run of declared number words (k.values), the other words being no number and no unit (isUnit: the
- * binding table's unit lemmas; a measure with a unit needs its own projection). Null otherwise.
+ * The one number a value span spells for a numeric property ("size 45" -> 45, "two hundred sixty" -> 260, "2 cm"):
+ * sopworld readNumberSpan over the declared number words (k.values) and number joiners (app.interpret.numberJoiner);
+ * unit(word): null for no unit, true for a unit that cannot be converted, {factor} for one that can. Null otherwise.
  */
-export function spelledNumberProof(literal,isUnit=()=>false){
- // isUnit(word): false/null for no unit, true for a unit that cannot be converted, or {factor} for one that can (the
- // value is the number times the factor); at most one unit word.
- if(typeof literal!=='string'||!literal.trim())return null;
- const words=literal.toLowerCase().replace(/[,;:!?]+/g,' ').split(/\s+/).filter(Boolean),found=[];let factor=1;
- for(let i=0;i<words.length;i++){
-  budget.tick('value-proof.spelled');
-  const w=words[i];
-  if(/^[-+]?\d+(\.\d+)?$/.test(w)){found.push(Number(w));continue;}
-  const run=parseNumberRun(words,i);
-  if(run){found.push(run.value);i+=run.length-1;continue;}
-  if(/\d/.test(w))return null;
-  const unit=isUnit(w);
-  if(unit===true||unit&&factor!==1)return null;
-  if(unit&&typeof unit==='object'&&Number.isFinite(unit.factor))factor=unit.factor;
- }
- return found.length===1&&Number.isFinite(found[0])?{kind:'spelled-number',value:+(found[0]*factor).toFixed(6),literal,...(factor!==1?{factor}:{})}:null;
+export function spelledNumberProof(literal,unit=()=>null){
+ const read=readNumberSpan(literal,{number:cardinalValue,joiners:interpretationPolicy().partial.numberJoiners,unit:w=>unit(w)||null,tick:()=>budget.tick('value-proof.spelled')});
+ return read?{kind:'spelled-number',value:read.value,literal,...(read.factor?{factor:read.factor}:{})}:null;
 }

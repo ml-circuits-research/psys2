@@ -3,9 +3,9 @@
 // context re-readings, the bounds of reading comparison, which readings go to the coordination reader first, and the
 // confidence at which a detected input language replaces the selected one. The routing code reads these facts; it
 // holds no order, bound or threshold of its own.
-import {World,str} from '../vendor/sopworld/sopworld.mjs?v=4cf6e60057';
-import SCHEMA from '../../worlds/app.project/interpretation-schema-source.mjs?v=e68d45b0f3';
-import POLICY from '../../worlds/app.project/interpretation-policy-source.mjs?v=124df3b40f';
+import {World,str} from '../vendor/sopworld/sopworld.mjs?v=b665fdbe3d';
+import SCHEMA from '../../worlds/app.project/interpretation-schema-source.mjs?v=46d6464784';
+import POLICY from '../../worlds/app.project/interpretation-policy-source.mjs?v=14d0a28b2e';
 
 const MODULE='app.interpret';
 let loaded=null,policy=null;
@@ -40,11 +40,19 @@ export function interpretationPolicy(source=POLICY){
  const fallbacks=world.ofType(MODULE+'.fallback').map(row=>({step:one(row,'step'),order:Number(one(row,'order')),text:one(row,'text')})).sort((a,b)=>a.order-b.order);
  if(new Set(fallbacks.map(f=>f.order)).size!==fallbacks.length)throw Error('invalid-interpretation-policy: fallback orders must be distinct');
  const families=world.ofType(MODULE+'.family').map(row=>({area:one(row,'area'),type:one(row,'family'),kind:one(row,'kind')}));
+ const familyOperations=world.ofType(MODULE+'.familyOperation').map(row=>({id:row.id,area:one(row,'area'),type:one(row,'family'),operation:one(row,'operation')}));
+ // The acts whose operation a key bound by its parameter name takes first (app.interpret.parameterAct).
+ const parameterActs=world.ofType(MODULE+'.parameterAct').flatMap(row=>all(row,'act'));
+ // The spelling tolerance of a said kind word (app.interpret.spelling, spellingStep): sopworld readLexicalPhrase's.
+ const numberJoiners=world.ofType(MODULE+'.numberJoiner').map(row=>one(row,'text'));
+ const spell=world.ofType(MODULE+'.spelling')[0];
+ const spelling=spell?{minLength:Number(one(spell,'minLength')),doubled:one(spell,'doubled')==='true',swapped:one(spell,'swapped')==='true',
+  steps:world.ofType(MODULE+'.spellingStep').map(row=>({above:Number(one(row,'above')),edits:Number(one(row,'edits'))})).sort((a,b)=>a.above-b.above)}:null;
  const relations=world.ofType(MODULE+'.relation').map(row=>({id:row.id,area:one(row,'area'),key:one(row,'key'),anchor:one(row,'anchor'),like:one(row,'like'),
   values:Object.fromEntries(world.ofType(MODULE+'.relationValue').filter(v=>v.attrs.of?.[0]==='$'+row.id).map(v=>[one(v,'value'),one(v,'relation')]))}));
  const control={verbs:Object.fromEntries(world.ofType(MODULE+'.controlVerb').map(row=>[one(row,'act'),one(row,'text')])),modifiers:Object.fromEntries(world.ofType(MODULE+'.controlModifier').map(row=>[one(row,'parameter'),one(row,'text')]))};
  if(!control.verbs.other)throw Error('invalid-interpretation-policy: a control verb for act other');
- const result=Object.freeze({retries,notes,compare,coordination,control,language:{id:detect[0].id,minConfidence:Number(one(detect[0],'min.confidence'))},partial:{defaults,drops,fallbacks,families,relations}});
+ const result=Object.freeze({retries,notes,compare,coordination,control,language:{id:detect[0].id,minConfidence:Number(one(detect[0],'min.confidence'))},partial:{defaults,drops,fallbacks,families,relations,familyOperations,parameterActs,spelling,numberJoiners}});
  if(source===POLICY)policy=result;
  return result;
 }

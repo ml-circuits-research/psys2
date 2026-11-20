@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-import { parse, quote, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=4cf6e60057';
+import { parse, quote, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=b665fdbe3d';
 import { decodeCapabilityCall } from '../vendor/sopworld/capability-call.mjs?v=ed3b773c65';
 import POLICY from '../../worlds/app.project/capability-policy.mjs?v=281892343f';
 import CLOCK from '../../worlds/app.project/clock-projection-source.mjs?v=7d09f121c5';
-import { executionPolicyWorld } from './execution-policy.mjs?v=fc7a8e4440';
-import { projectionModule } from './composition-knowledge.mjs?v=5a67855626';
-import { sceneDefaultModule, writeSceneDefaults } from './scene-placement-defaults.mjs?v=b16bbeacf7';
-import { nativeKindCandidates } from './native-binding-candidates.mjs?v=8423e98bc7';
-import { observedReaderContext } from './native-reader-context.mjs?v=551cd52c49';
+import { executionPolicyWorld } from './execution-policy.mjs?v=c5b63898f5';
+import { projectionModule } from './composition-knowledge.mjs?v=8153034f67';
+import { sceneDefaultModule, writeSceneDefaults } from './scene-placement-defaults.mjs?v=bba55caf94';
+import { nativeKindCandidates } from './native-binding-candidates.mjs?v=a7b8646a23';
+import { observedReaderContext } from './native-reader-context.mjs?v=e9c1aa3e8e';
 import { budget } from './budget.mjs?v=00bce6e369';
 import { en } from '../lang/en.mjs?v=40d8d7165d';
 
