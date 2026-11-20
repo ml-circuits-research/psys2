@@ -10,7 +10,7 @@ import {invokeObservedNativeTool} from './native-tool-activity.mjs';
 import {describeNativeControl,verifyNativeControlEffect} from './native-control-intent.mjs';
 import {placementSearchProvider,z3Status} from './placement-search-provider.mjs';
 import {en} from '../lang/en.mjs';
-import {placementHypotheses} from './placement-default-policy.mjs';
+import {placementHypotheses,placementDisclosure} from './placement-default-policy.mjs';
 import {identityConcepts} from './capability-plan-adapter.mjs';
 import {executeNativeCapability,drawnAs} from './capability-plan-execution.mjs';
 import {budget} from './budget.mjs';
@@ -245,7 +245,9 @@ export async function executeSpatialPlacement(session,candidate,options={}) {
  const relation=parse(candidate.wires).find(wire=>wire.type==='std.request.constraint'&&read(wire,'operator')==='relation');
  if(changed)rememberPlacement(session,observed,target.id,anchor,read(relation,'relation'));
  const loose=(proposal.attrs?.relaxed??[]).map(str);
- const note=(participants.size>1&&anchor?' I used '+anchor+' as the anchor.':'')+
+ // A fallback of the placement method (no room on the stated side within the page): its declared disclosure.
+ const fallback=read(proposal,'fallback'),disclosed=fallback?placementDisclosure(fallback,{relation:read(relation,'relation'),anchor,direction:read(winner,'direction')}):'';
+ const note=(participants.size>1&&anchor?' I used '+anchor+' as the anchor.':'')+(disclosed?' '+disclosed:'')+
   (loose.length?' No place keeps it close for every relation, so I placed it as close as the scene allows ('+loose.join(', ')+').':'')+
   (hypotheses?.used==='creating'?' There was no '+target.kind+' on the page, so I drew a new one.':'');
  const message=changed?effect.trim()+note+' You can undo this change.':target.id+' is already'+observedLocation+'.'+note;

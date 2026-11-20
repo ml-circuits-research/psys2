@@ -130,3 +130,19 @@ test('"a boat in the lake" places the boat within the lake, beside what already 
  assert.ok(b.x0>=l.x0&&b.x1<=l.x1&&b.y0>=l.y0&&b.y1<=l.y1,'the boat lies within the lake');
  assert.ok(b.x1<=f.x0||f.x1<=b.x0||b.y1<=f.y0||f.y1<=b.y0,'the boat does not cover the fish');
 });
+
+// An anchor at the page edge leaves no room on the stated side: the placement method's declared fallbacks
+// (spatial-placement.sop fallback=shrink/shift/side) take the closest feasible place and the reply discloses which
+// (placement-default-policy.sop app.placement.disclosure), instead of refusing the request.
+test('"a tree left of the house" with the house at the left edge: the closest place, disclosed',async()=>{
+ const text='Draw a tree to the left of the house.',{s,draw,run}=session(reading(text,'tree',[['left','house']]),text);
+ await draw({kind:'house',x:60,y:500});
+ const reply=await run();
+ assert.equal(reply.statuses[0],'supported',reply.trace.error??reply.trace.reason??reply.text);
+ const result=parse(reply.trace.placement).find(w=>w.type==='std.placement.result');
+ assert.ok(['shrink','shift','side'].includes(str(result.attrs.fallback?.[0]??'')),reply.trace.placement.split('\n')[0]);
+ assert.match(reply.text,/There is no room/);
+ const [house,tree]=objects(s.isession.state['art.draw']),h=box(house),t=box(tree);
+ assert.ok(t.x0>=0,'on the page');
+ assert.ok(t.x1<=h.x0||h.x1<=t.x0||t.y1<=h.y0||h.y1<=t.y0,'not over the house');
+});

@@ -20,3 +20,13 @@
 # one, placed by default) and the house next to it; disclosed, one undo. Moving an existing thing next to an absent one
 # ("put the house next to a lake") is not declared: it stays refused and said.
 @place.hypothesis.anchor app.placement.hypothesis name=create-absent-anchor rank=2 when=unbound-target act=make act.to=make mode=existing mode.to=new determiner=definite determiner.to=indefinite role=anchor
+
+# Disclosure of a placement method fallback (spatial-placement.sop fallback=), in the reply after the effect.
+@place.disclosure.shrink app.placement.disclosure stage=shrink text="There is no room {relation} {anchor} within the page at its full size, so I drew it smaller."
+@place.disclosure.shift app.placement.disclosure stage=shift text="There is no room right {relation} {anchor} within the page, so I placed it as close to that side as the page allows."
+@place.disclosure.side app.placement.disclosure stage=side text="There is no room {relation} {anchor} within the page, so I placed it on its {direction} side instead."
+@place.word.left app.placement.relationWord relation=left text="left of"
+@place.word.right app.placement.relationWord relation=right text="right of"
+@place.word.above app.placement.relationWord relation=above text="above"
+@place.word.below app.placement.relationWord relation=below text="below"
+@place.word.near app.placement.relationWord relation=near text="near"

@@ -19,7 +19,8 @@ function policy(){
  const first=criteria[0];
  const stopAtNoOverlap=!!first&&str(first.attrs.measure[0])==='overlaps'&&str(first.attrs.dir[0])==='min';
  const hypotheses=world.ofType('app.placement.hypothesis').map(row=>Object.fromEntries([['id',row.id],...Object.entries(row.attrs).map(([key,values])=>[key,str(values[0])])])).map(h=>({...h,rank:Number(h.rank)})).sort((a,b)=>a.rank-b.rank);
- return loaded={world,defaults,stopAtNoOverlap,hypotheses};
+ const texts=type=>Object.fromEntries(world.ofType(type).map(row=>[str(row.attrs[type==='app.placement.disclosure'?'stage':'relation'][0]),str(row.attrs.text[0])]));
+ return loaded={world,defaults,stopAtNoOverlap,hypotheses,disclosures:texts('app.placement.disclosure'),relationWords:texts('app.placement.relationWord')};
 }
 
 /** The objective with every missing key filled from the declared defaults, and the list of keys that were filled. */
@@ -39,5 +40,13 @@ export function chooseRegion(candidates){
 
 /** The declared alternative readings of a failed relation placement, by rank. */
 export const placementHypotheses=()=>policy().hypotheses;
+
+/** The declared reply text of a placement method fallback, its {relation}, {anchor} and {direction} filled in; '' when none is declared. */
+export function placementDisclosure(stage,{relation,anchor,direction}={}){
+ const {disclosures,relationWords}=policy(),text=disclosures[stage];
+ if(!text)return '';
+ const values={relation:relationWords[relation]??relation??'',anchor:anchor??'',direction:direction??''};
+ return text.replace(/\{(relation|anchor|direction)\}/g,(_,key)=>values[key]);
+}
 
 export const inspectPlacementDefaultPolicy=()=>({source:'worlds/app.project/placement-default-policy.sop',wires:POLICY,schema:SCHEMA,loaded:!!loaded});

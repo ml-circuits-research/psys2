@@ -7,17 +7,26 @@
 # relations or subjects, a region, a fit or an ambiguous anchor is one problem over all of them.
 # relax=gap: when no place keeps every declared distance (next to a lake and left of a tree far from it), each relation
 # keeps its direction and separation and its distance becomes a soft term; the reply names the relations kept loosely.
-@layout.method std.placement.method search=problem relax=gap directionType=k.spatial2d.direction boxType=k.spatial2d.box relationType=k.spatial2d.relation policyType=k.spatial2d.policy effectiveType=k.spatial2d.effective_policy measurementType=k.spatial2d.measurement peerRelation=independent_peer containRelation=member_of containEvidence=containment gapMetric=near_distance objective=$layout.objective
-@layout.objective std.objective direction=minimise order=lexicographic term=$layout.overlap.term term=$layout.clearance.term term=$layout.order.term
+# fallback (library 0.243.0): when no place on the stated side fits within the page (an anchor at the page edge), the
+# closest feasible place in this order: the new subject drawn smaller at the stated slot (down to 0.6 of its size), the
+# closest place still on the stated side of the anchor's centre (beside it, clear of it), else another side of the
+# anchor (near's sides, by rank). The reply names the one used (placement-default-policy.sop app.placement.disclosure).
+# The near_distance term (priority 0, with overlap) keeps a near subject close: a slot a little crowded beats one
+# pushed far away by water it avoids.
+@layout.method std.placement.method search=problem relax=gap directionType=k.spatial2d.direction boxType=k.spatial2d.box relationType=k.spatial2d.relation policyType=k.spatial2d.policy effectiveType=k.spatial2d.effective_policy measurementType=k.spatial2d.measurement peerRelation=independent_peer containRelation=member_of containEvidence=containment gapMetric=near_distance objective=$layout.objective fallback=shrink fallback=shift fallback=side fallbackDirections=near minShare=0.6
+@layout.objective std.objective direction=minimise order=lexicographic term=$layout.overlap.term term=$layout.distance.term term=$layout.clearance.term term=$layout.order.term
 @layout.overlap std.objective.evaluator normalisation=canvas.pixel.area version=1
 @layout.clearance std.objective.evaluator normalisation=canvas.pixel.length version=1
 @layout.order std.objective.evaluator normalisation=declared.direction.rank version=1
+@layout.distance std.objective.evaluator normalisation=canvas.pixel.length version=1
 @layout.overlap.term std.objective.term evaluator=layout.overlap normalisation=declared.by.evaluator weight=1 priority=0
+@layout.distance.term std.objective.term evaluator=layout.distance normalisation=declared.by.evaluator weight=1 priority=0
 @layout.clearance.term std.objective.term evaluator=layout.clearance normalisation=declared.by.evaluator weight=1 priority=1
 @layout.order.term std.objective.term evaluator=layout.order normalisation=declared.by.evaluator weight=1 priority=2
 @layout.overlap.cost std.placement.cost evaluator=$layout.overlap metric=overlap_area
 @layout.clearance.cost std.placement.cost evaluator=$layout.clearance metric=clearance_deficit
 @layout.order.cost std.placement.cost evaluator=$layout.order metric=rank
+@layout.distance.cost std.placement.cost evaluator=$layout.distance metric=near_distance
 
 # What each relation means as one constraint of a placement problem (std.problem), for requests with several
 # relations or subjects: the library solves every relation, the observed peers and the page together.

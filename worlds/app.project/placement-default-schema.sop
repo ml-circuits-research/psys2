@@ -1,4 +1,4 @@
-@place.default.module core.module name=app.placement version=1 exports=app.placement.default exports=app.placement.hypothesis
+@place.default.module core.module name=app.placement version=1 exports=app.placement.default exports=app.placement.hypothesis exports=app.placement.disclosure exports=app.placement.relationWord
 
 # Application defaults for the default-placement problem: used only for an objective key the area's own
 # app.place.objective does not declare; every key taken from here is reported with the solution (trace: defaulted).
@@ -30,3 +30,13 @@
 # anchor first (a new one of its kind, placed by default), then places the subject as asked; it applies only to an
 # anchor named by its kind alone, and the made anchor is undone with the rest when the placement still fails.
 @place.hypothesis.role core.slot of=app.placement.hypothesis key=role kind=atom enum=subject enum=anchor
+
+# How a placement that used one of the placement method's fallbacks (std.placement.result fallback=: no room on the
+# stated side within the page) is said in the reply: the declared text, with {relation} (the relation's words, below),
+# {anchor} (the anchor's id) and {direction} (the side the chosen place is on) filled in.
+@place.disclosure.type core.type of=app.placement.disclosure closed=true
+@place.disclosure.stage core.slot of=app.placement.disclosure key=stage kind=atom id=true present=true
+@place.disclosure.text core.slot of=app.placement.disclosure key=text kind=string present=true
+@place.relation.word.type core.type of=app.placement.relationWord closed=true
+@place.relation.word.relation core.slot of=app.placement.relationWord key=relation kind=atom id=true present=true
+@place.relation.word.text core.slot of=app.placement.relationWord key=text kind=string present=true
