@@ -1,5 +1,5 @@
 {
- "version": "3cfdff3d847f",
+ "version": "b7f92736007d",
  "sopworld": "747b51e",
  "worlds": [
   {
@@ -97153,8 +97153,8 @@
     {
      "id": "w.lang.ro/shards/words-w.diagram",
      "path": "w.lang.ro/shards/words-w.diagram.sop",
-     "wires": 6,
-     "bytes": 1114,
+     "wires": 8,
+     "bytes": 1322,
      "keys": [],
      "sources": [
       "hand-core-1"
@@ -97166,7 +97166,9 @@
       "unknown-word w.lang.ro.word.w.diagram.node: w.lang.ro.word.w.diagram.node: means=w.diagram.node names no action, type, key or value of the matrix",
       "unknown-word w.lang.ro.word.w.diagram.edge: w.lang.ro.word.w.diagram.edge: means=w.diagram.edge names no action, type, key or value of the matrix",
       "unknown-word w.lang.ro.word.w.diagram.group: w.lang.ro.word.w.diagram.group: means=w.diagram.group names no action, type, key or value of the matrix",
-      "unknown-word w.lang.ro.word.w.diagram.member: w.lang.ro.word.w.diagram.member: means=w.diagram.member names no action, type, key or value of the matrix"
+      "unknown-word w.lang.ro.word.w.diagram.member: w.lang.ro.word.w.diagram.member: means=w.diagram.member names no action, type, key or value of the matrix",
+      "unknown-word w.lang.ro.word.w.diagram.series: w.lang.ro.word.w.diagram.series: means=w.diagram.series names no action, type, key or value of the matrix",
+      "unknown-word w.lang.ro.word.w.diagram.datum: w.lang.ro.word.w.diagram.datum: means=w.diagram.datum names no action, type, key or value of the matrix"
      ]
     },
     {
@@ -97800,7 +97802,8 @@
       "effect",
       "opacity",
       "corner",
-      "rotation"
+      "rotation",
+      "x_value"
      ],
      "words": [
       "node",
@@ -97907,7 +97910,13 @@
       "dimension",
       "measure",
       "aggregate",
-      "sample"
+      "sample",
+      "y_min",
+      "orientation",
+      "stacking",
+      "width",
+      "height",
+      "effect"
      ],
      "words": [
       "group",
@@ -97934,10 +97943,57 @@
       "membership",
       "member"
      ]
+    },
+    {
+     "type": "w.diagram.series",
+     "acts": [
+      "make",
+      "remove",
+      "change",
+      "pick",
+      "ask",
+      "copy"
+     ],
+     "attributes": [
+      "label",
+      "group",
+      "code",
+      "n",
+      "colour"
+     ],
+     "words": [
+      "series",
+      "data series",
+      "dataset",
+      "datasets",
+      "data set"
+     ]
+    },
+    {
+     "type": "w.diagram.datum",
+     "acts": [
+      "make",
+      "remove",
+      "change",
+      "pick",
+      "ask"
+     ],
+     "attributes": [
+      "series",
+      "node",
+      "value",
+      "code"
+     ],
+     "words": [
+      "data point",
+      "data points",
+      "datum",
+      "series value"
+     ]
     }
    ],
-   "wires": 114,
-   "bytes": 21228,
+   "wires": 140,
+   "bytes": 25713,
    "sources": [
     "hand-core-1"
    ],

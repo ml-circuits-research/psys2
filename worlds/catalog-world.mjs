@@ -9,22 +9,22 @@ const MAX_MODULES = 128;
 export async function catalogWorld(readText, { modules, shardsOf = () => [], use = modules, options = {} } = {}) {
   const index = JSON.parse(await readText('index.json'));
   const entries = new Map([...(index.worlds ?? []), ...(index.schemas ?? [])].map((entry) => [entry.id, entry]));
-  // Each wave of schemas (the named modules, then what they depend on) and every named shard is read at once: the
-  // reads are independent, and a catalog served over the network costs one round trip per wave, not one per file.
-  const library = {};
-  let wave = [...new Set(modules)];
-  while (wave.length) {
+  // The modules and everything they depend on are known from the index alone; their schemas and every named shard are
+  // read at once (a catalog served over the network costs one round trip, not one per file or per dependency level).
+  const ids = [];
+  for (let wave = [...new Set(modules)]; wave.length;) {
     for (const id of wave) if (!entries.get(id)?.schema) throw Error('catalog-module-unavailable:' + id);
-    if (Object.keys(library).length + wave.length > MAX_MODULES) throw Error('catalog-module-budget');
-    const texts = await Promise.all(wave.map((id) => readText(entries.get(id).schema)));
-    wave.forEach((id, n) => { library[id] = texts[n]; });
-    wave = [...new Set(wave.flatMap((id) => entries.get(id).depends ?? []))].filter((id) => entries.has(id) && library[id] === undefined);
+    ids.push(...wave);
+    if (ids.length > MAX_MODULES) throw Error('catalog-module-budget');
+    wave = [...new Set(wave.flatMap((id) => entries.get(id).depends ?? []))].filter((id) => entries.has(id) && !ids.includes(id));
   }
+  const paths = modules.flatMap((id) => shardsOf(entries.get(id)));
+  const texts = await Promise.all([...ids.map((id) => entries.get(id).schema), ...paths].map((path) => readText(path)));
+  const library = Object.fromEntries(ids.map((id, n) => [id, texts[n]])), shardTexts = texts.slice(ids.length);
   // options: World options a caller declares (a derivation depth budget), passed through unchanged.
   const world = new World({ ...options, library });
   const loaded = world.load(use.map((id, n) => `@catalog.use.${n} core.use world=${id}`).join('\n'));
   if (!loaded.ok) throw Error('catalog-load-refused');
-  const paths = modules.flatMap((id) => shardsOf(entries.get(id))), shardTexts = await Promise.all(paths.map((path) => readText(path)));
   paths.forEach((path, n) => {
     const told = world.tell(shardTexts[n], { factsOnly: true });
     if (!told.ok) throw Error('catalog-shard-refused:' + path);

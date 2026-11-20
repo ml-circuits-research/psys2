@@ -4,7 +4,7 @@
 // interface. This module only reads that declaration; it holds no knowledge of any tab.
 import {World, parse, str} from '../lib/vendor/sopworld/sopworld.mjs?v=b95dcf7c63';
 import {budget} from '../lib/dialog/budget.mjs?v=00bce6e369';
-import {catalogWorld} from './catalog-world.mjs?v=2908f19e03';
+import {catalogWorld} from './catalog-world.mjs?v=ab3b4430b2';
 import {readNativeToolInterface} from './native-tool-interface.mjs?v=9f683eaf59';
 import {toolInvocationContext} from './native-tool-host.mjs?v=ee2bec37f5';
 import {createSopWorldHost, forgetDerived, initialSopWorldState, worldOf} from './sop-world-host.mjs?v=5b38836899';

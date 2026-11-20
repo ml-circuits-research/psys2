@@ -1,13 +1,13 @@
 # w.diagram: a reusable world: diagrams of nodes, edges and groups (a flowchart of a recipe, the life cycle of a frog
 # as a cycle, a tree of kinds of animals, a Venn diagram of what cats and dogs share, a mind map of a topic). Declared
-# as data in the library's std.schema format; the acts of std.acts drive it; it has no function of its own, and two
-# denies (one code per thing of a kind, one membership per node and group). What each kind of diagram is (its structure, layout, shapes and the knowledge that fills it) is k.diagrams'.
+# as data in the library's std.schema format; the acts of std.acts drive it; it has no function of its own, and three
+# denies (one code per thing of a kind, one membership per node and group, one value per series and category). What each kind of diagram is (its structure, layout, shapes and the knowledge that fills it) is k.diagrams'.
 # sources: hand-core 1 (hand-written in this repository; block "04:40")
 # license: CC0-1.0
 # script: none (hand-written)
 # needs: sopworld with std.schema and std.acts (tools/sopworld/VERSION)
 
-@w.diagram core.module name=w.diagram version=1 exports=diagram exports=node exports=edge exports=group exports=member core.source="hand-core 1"
+@w.diagram core.module name=w.diagram version=1 exports=diagram exports=node exports=edge exports=group exports=member exports=series exports=datum core.source="hand-core 1"
 @w.diagram.world std.schema.world name=w.diagram doc="diagrams of nodes joined by edges, in groups, laid out by the diagram's kind" core.source="hand-core 1"
 
 # A diagram. `title` what it shows; `form` its kind (the names of k.diagrams.kind form=: flowchart, tree, cycle, timeline,
@@ -113,7 +113,7 @@
 @w.diagram.group.code core.slot of=w.diagram.group key=code kind=atom kind=string core.source="hand-core 1"
 @w.diagram.group.n core.slot of=w.diagram.group key=n kind=integer min=1 step=1 core.source="hand-core 1"
 @w.diagram.group.colour core.slot of=w.diagram.group key=colour kind=atom kind=string core.source="hand-core 1"
-@w.diagram.group.layout core.slot of=w.diagram.group key=layout enum=row enum=column enum=grid enum=circle enum=bar enum=line enum=area enum=pie enum=doughnut core.source="hand-core 1"
+@w.diagram.group.layout core.slot of=w.diagram.group key=layout enum=row enum=column enum=grid enum=circle enum=bar enum=line enum=area enum=pie enum=doughnut enum=scatter enum=radar core.source="hand-core 1"
 @w.diagram.group.framed core.slot of=w.diagram.group key=framed kind=boolean core.source="hand-core 1"
 @w.diagram.group.scale core.slot of=w.diagram.group key=scale kind=number min=0.05 max=20 core.source="hand-core 1"
 @w.diagram.group.x core.slot of=w.diagram.group key=x kind=number core.source="hand-core 1"
@@ -162,6 +162,38 @@
 @w.diagram.group.measure core.slot of=w.diagram.group key=measure kind=atom kind=string core.source="hand-core 1"
 @w.diagram.group.aggregate core.slot of=w.diagram.group key=aggregate enum=count enum=sum enum=avg enum=min enum=max core.source="hand-core 1"
 @w.diagram.group.sample core.slot of=w.diagram.group key=sample kind=boolean core.source="hand-core 1"
+# How a chart group is shaped: `y_min` the bottom of its value axis (0 when it has none; a value below it is drawn at
+# the bottom); `orientation` vertical (bars standing on the category axis) or horizontal (bars lying, the categories
+# down the side); `stacking` how its series are set out: none (side by side), stacked (on top of each other), percent
+# (on top of each other as shares of each category's total); `width` and `height` the size of its plot in pixels
+# (the categories' room and the usual plot height when it has none); `effect` a shadow under its frame or a glow round
+# it (none: neither). Layouts scatter (each member a point at its `x_value` and its value) and radar (each member a
+# spoke, its value the distance from the centre).
+@w.diagram.group.y_min core.slot of=w.diagram.group key=y_min kind=number core.source="hand-core 1"
+@w.diagram.group.orientation core.slot of=w.diagram.group key=orientation enum=vertical enum=horizontal core.source="hand-core 1"
+@w.diagram.group.stacking core.slot of=w.diagram.group key=stacking enum=none enum=stacked enum=percent core.source="hand-core 1"
+@w.diagram.group.width core.slot of=w.diagram.group key=width kind=number min=60 max=2000 core.source="hand-core 1"
+@w.diagram.group.height core.slot of=w.diagram.group key=height kind=number min=60 max=2000 core.source="hand-core 1"
+@w.diagram.group.effect core.slot of=w.diagram.group key=effect enum=none enum=shadow enum=glow core.source="hand-core 1"
+# `x_value` the second number a node stands for: the x of a point of a scatter chart (its place among the categories
+# when it has none).
+@w.diagram.node.x_value core.slot of=w.diagram.node key=x_value kind=number core.source="hand-core 1"
+
+# A series of a chart group beyond its first (the members' own values are its first series): `label` its name in the
+# legend, `group` its chart, `code`, `n` its place among the chart's series, `colour`. Its values are its data.
+@w.diagram.series core.type of=w.diagram.series extends=std.schema.thing closed=true core.source="hand-core 1"
+@w.diagram.series.label core.slot of=w.diagram.series key=label required=true kind=atom kind=string core.source="hand-core 1"
+@w.diagram.series.group core.slot of=w.diagram.series key=group required=true type=w.diagram.group core.source="hand-core 1"
+@w.diagram.series.code core.slot of=w.diagram.series key=code kind=atom kind=string core.source="hand-core 1"
+@w.diagram.series.n core.slot of=w.diagram.series key=n kind=integer min=1 step=1 core.source="hand-core 1"
+@w.diagram.series.colour core.slot of=w.diagram.series key=colour kind=atom kind=string core.source="hand-core 1"
+# A value of a series at one category of its chart (a member node of the chart group): `series`, `node`, `value`.
+# Removing the series or the category removes it; one value per series and category.
+@w.diagram.datum core.type of=w.diagram.datum extends=std.schema.thing closed=true core.source="hand-core 1"
+@w.diagram.datum.series core.slot of=w.diagram.datum key=series required=true type=w.diagram.series core.source="hand-core 1"
+@w.diagram.datum.node core.slot of=w.diagram.datum key=node required=true type=w.diagram.node core.source="hand-core 1"
+@w.diagram.datum.value core.slot of=w.diagram.datum key=value required=true kind=number core.source="hand-core 1"
+@w.diagram.datum.code core.slot of=w.diagram.datum key=code kind=atom kind=string core.source="hand-core 1"
 
 # A node's membership in a group as a thing of its own, for an editor: std.acts cannot take a reference away, and
 # removing a group removes the things that refer to it, so a membership that comes and goes is made and removed.
@@ -170,7 +202,7 @@
 @w.diagram.member.group core.slot of=w.diagram.member key=group required=true type=w.diagram.group core.source="hand-core 1"
 @w.diagram.member.node core.slot of=w.diagram.member key=node required=true type=w.diagram.node core.source="hand-core 1"
 
-# One thing of each kind per code; one membership per node and group.
+# One thing of each kind per code; one membership per node and group; one value per series and category.
 @w.diagram.code.first std.schema.thing kind=?kind code=?code
 @w.diagram.code.second std.schema.thing kind=?kind code=?code
 @w.diagram.code.other core.check fn=neq args=$w.diagram.code.first args=$w.diagram.code.second
@@ -179,17 +211,26 @@
 @w.diagram.member.second w.diagram.member group=?g node=?n
 @w.diagram.member.other core.check fn=neq args=$w.diagram.member.first args=$w.diagram.member.second
 @w.diagram.member.unique core.deny when=$w.diagram.member.first when=$w.diagram.member.second if=$w.diagram.member.other why="That node is already in that group." core.source="hand-core 1"
+@w.diagram.datum.first w.diagram.datum series=?s node=?n
+@w.diagram.datum.second w.diagram.datum series=?s node=?n
+@w.diagram.datum.other core.check fn=neq args=$w.diagram.datum.first args=$w.diagram.datum.second
+@w.diagram.datum.unique core.deny when=$w.diagram.datum.first when=$w.diagram.datum.second if=$w.diagram.datum.other why="That series already has a value for that category." core.source="hand-core 1"
 
-# The kinds and the acts that apply to them. At most 20 diagrams, 500 nodes, 1,000 edges, 100 groups and 1,000 memberships.
+# The kinds and the acts that apply to them. At most 20 diagrams, 500 nodes, 1,000 edges, 100 groups, 1,000 memberships,
+# 200 series and 5,000 series values.
 @w.diagram.kind.diagram std.schema.kind of=w.diagram.diagram world=w.diagram acts=make acts=remove acts=change acts=pick acts=ask acts=copy core.source="hand-core 1"
 @w.diagram.kind.node std.schema.kind of=w.diagram.node world=w.diagram acts=make acts=remove acts=change acts=place acts=connect acts=group acts=pick acts=ask acts=copy core.source="hand-core 1"
 @w.diagram.kind.edge std.schema.kind of=w.diagram.edge world=w.diagram acts=make acts=remove acts=change acts=pick acts=ask core.source="hand-core 1"
 @w.diagram.kind.group std.schema.kind of=w.diagram.group world=w.diagram acts=make acts=remove acts=change acts=pick acts=ask acts=copy core.source="hand-core 1"
 @w.diagram.kind.member std.schema.kind of=w.diagram.member world=w.diagram acts=make acts=remove acts=pick acts=ask core.source="hand-core 1"
+@w.diagram.kind.series std.schema.kind of=w.diagram.series world=w.diagram acts=make acts=remove acts=change acts=pick acts=ask acts=copy core.source="hand-core 1"
+@w.diagram.kind.datum std.schema.kind of=w.diagram.datum world=w.diagram acts=make acts=remove acts=change acts=pick acts=ask core.source="hand-core 1"
 @w.diagram.limit.diagram std.schema.limit of=w.diagram.diagram max=20 core.source="hand-core 1"
 @w.diagram.limit.node std.schema.limit of=w.diagram.node max=500 core.source="hand-core 1"
 @w.diagram.limit.edge std.schema.limit of=w.diagram.edge max=1000 core.source="hand-core 1"
 @w.diagram.limit.group std.schema.limit of=w.diagram.group max=100 core.source="hand-core 1"
 @w.diagram.limit.member std.schema.limit of=w.diagram.member max=1000 core.source="hand-core 1"
+@w.diagram.limit.series std.schema.limit of=w.diagram.series max=200 core.source="hand-core 1"
+@w.diagram.limit.datum std.schema.limit of=w.diagram.datum max=5000 core.source="hand-core 1"
 
 # Words: for the world (how a host finds it by name), its kinds and its keys.

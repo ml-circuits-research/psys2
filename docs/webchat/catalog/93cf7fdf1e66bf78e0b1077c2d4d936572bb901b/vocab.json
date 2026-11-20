@@ -40,6 +40,9 @@
   "k.time/shards/clock",
   "k.time/shards/derived"
  ],
+ "100% stacked": [
+  "w.diagram/schema.sop"
+ ],
  "11 am": [
   "k.time/shards/clock",
   "k.time/shards/derived"
@@ -10183,7 +10186,13 @@
  "axis maximum": [
   "w.diagram/schema.sop"
  ],
+ "axis minimum": [
+  "w.diagram/schema.sop"
+ ],
  "axis scale": [
+  "w.diagram/schema.sop"
+ ],
+ "axis start": [
   "w.diagram/schema.sop"
  ],
  "axle": [
@@ -19088,6 +19097,9 @@
  "bottom middle": [
   "k.values/shards/directions"
  ],
+ "bottom of the axis": [
+  "w.diagram/schema.sop"
+ ],
  "bottom right": [
   "k.values/shards/directions"
  ],
@@ -26355,7 +26367,8 @@
   "k.units/shards/measures",
   "k.words/shards/ca",
   "k.words/shards/frequency-c",
-  "w.chart/schema.sop"
+  "w.chart/schema.sop",
+  "w.diagram/schema.sop"
  ],
  "category axis side": [
   "w.diagram/schema.sop"
@@ -27951,6 +27964,7 @@
   "k.words/shards/ch",
   "k.words/shards/frequency-c",
   "w.chart/schema.sop",
+  "w.diagram/schema.sop",
   "k.objects/shards/noto-money-02",
   "k.objects/shards/noto-office-02"
  ],
@@ -27962,6 +27976,9 @@
   "k.attributes/shards/same-c",
   "k.kinds/shards/group-noto",
   "k.objects/shards/noto-office-02"
+ ],
+ "chart height": [
+  "w.diagram/schema.sop"
  ],
  "chart increasing": [
   "k.attributes/shards/drawn-noto",
@@ -27977,6 +27994,9 @@
  ],
  "chart type": [
   "k.charts/schema.sop"
+ ],
+ "chart width": [
+  "w.diagram/schema.sop"
  ],
  "charter": [
   "k.words/shards/ch",
@@ -39857,13 +39877,21 @@
   "w.diagram/schema.sop"
  ],
  "data point": [
-  "w.chart/schema.sop"
+  "w.chart/schema.sop",
+  "w.diagram/schema.sop"
+ ],
+ "data points": [
+  "w.diagram/schema.sop"
  ],
  "data relationship": [
   "k.charts/schema.sop"
  ],
+ "data series": [
+  "w.diagram/schema.sop"
+ ],
  "data set": [
-  "w.chart/schema.sop"
+  "w.chart/schema.sop",
+  "w.diagram/schema.sop"
  ],
  "database": [
   "k.diagrams/shards/diagrams",
@@ -39873,7 +39901,11 @@
   "k.words/shards/frequency-d"
  ],
  "dataset": [
-  "w.chart/schema.sop"
+  "w.chart/schema.sop",
+  "w.diagram/schema.sop"
+ ],
+ "datasets": [
+  "w.diagram/schema.sop"
  ],
  "date": [
   "k.attributes/shards/same-d",
@@ -39903,6 +39935,9 @@
  ],
  "datong": [
   "k.geo/shards/psys2-cities-asia"
+ ],
+ "datum": [
+  "w.diagram/schema.sop"
  ],
  "daud": [
   "k.people/shards/given-names-d"
@@ -54352,7 +54387,8 @@
   "k.kinds/shards/wordnet-2",
   "k.objects/shards/places-2",
   "k.words/shards/fi",
-  "k.words/shards/frequency-f"
+  "k.words/shards/frequency-f",
+  "w.diagram/schema.sop"
  ],
  "figure_slot": [
   "k.attributes/shards/narration",
@@ -55971,7 +56007,8 @@
   "k.objects/shards/things-2",
   "k.objects/shards/things-3",
   "k.words/shards/fl",
-  "k.words/shards/frequency-f"
+  "k.words/shards/frequency-f",
+  "w.diagram/schema.sop"
  ],
  "floor cover": [
   "k.kinds/shards/wordnet-1",
@@ -64144,6 +64181,7 @@
  "graph": [
   "k.kinds/shards/structures",
   "w.chart/schema.sop",
+  "w.diagram/schema.sop",
   "k.objects/shards/noto-money-02",
   "k.objects/shards/noto-office-02"
  ],
@@ -65154,7 +65192,8 @@
   "k.layouts/shards/layouts"
  ],
  "grouped": [
-  "k.attributes/shards/attributes"
+  "k.attributes/shards/attributes",
+  "w.diagram/schema.sop"
  ],
  "grouped bar chart": [
   "k.charts/shards/charts"
@@ -103777,6 +103816,9 @@
   "w.tasks/schema.sop",
   "w.timeline/schema.sop"
  ],
+ "on its side": [
+  "w.diagram/schema.sop"
+ ],
  "on or off": [
   "k.attributes/schema.sop"
  ],
@@ -129267,7 +129309,14 @@
   "k.words/shards/frequency-s",
   "k.words/shards/se",
   "w.chart/schema.sop",
+  "w.diagram/schema.sop",
   "w.lang.en/shards/hand-morphology"
+ ],
+ "series number": [
+  "w.diagram/schema.sop"
+ ],
+ "series value": [
+  "w.diagram/schema.sop"
  ],
  "serif": [
   "k.styles/schema.sop",
@@ -131709,6 +131758,7 @@
  ],
  "side by side": [
   "k.layouts/shards/layouts",
+  "w.diagram/schema.sop",
   "w.lang.en/shards/hand-arrangements"
  ],
  "side chapel": [
@@ -131776,6 +131826,7 @@
   "k.objects/shards/things-2"
  ],
  "sideways": [
+  "w.diagram/schema.sop",
   "w.face/schema.sop"
  ],
  "siding": [
@@ -136882,11 +136933,13 @@
   "k.actions/shards/verbs-group",
   "k.layouts/shards/layouts",
   "k.words/shards/frequency-s",
-  "k.words/shards/st"
+  "k.words/shards/st",
+  "w.diagram/schema.sop"
  ],
  "stacked": [
   "k.attributes/shards/attributes",
   "k.layouts/shards/layouts",
+  "w.diagram/schema.sop",
   "w.lang.en/shards/hand-arrangements"
  ],
  "stacked area chart": [
@@ -136900,6 +136953,9 @@
  ],
  "stacked column chart": [
   "k.charts/shards/charts"
+ ],
+ "stacking": [
+  "w.diagram/schema.sop"
  ],
  "stacks": [
   "k.layouts/shards/layouts",
@@ -161096,7 +161152,13 @@
  "x axis side": [
   "w.diagram/schema.sop"
  ],
+ "x coordinate": [
+  "w.diagram/schema.sop"
+ ],
  "x label": [
+  "w.diagram/schema.sop"
+ ],
+ "x value": [
   "w.diagram/schema.sop"
  ],
  "x-ray": [
@@ -161249,6 +161311,9 @@
   "w.diagram/schema.sop"
  ],
  "y axis maximum": [
+  "w.diagram/schema.sop"
+ ],
+ "y axis minimum": [
   "w.diagram/schema.sop"
  ],
  "y axis side": [

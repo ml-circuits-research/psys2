@@ -3,9 +3,9 @@
 // data.charts operations, which the area's act rules refuse (they are not part of its w.diagram instance).
 import NATIVE_INTERFACE from './native-interface-source.mjs?v=ab0e8095aa';
 import AREA_SOURCES from './area-sources.mjs?v=cf30845bdb';
-import {BUNDLED_AREAS} from '../../lib/knowledge/bundled-areas.mjs?v=a8ac70dc44';
+import {BUNDLED_AREAS} from '../../lib/knowledge/bundled-areas.mjs?v=24b9080de2';
 import {chartToolInterface} from '../data.charts/declared-host.mjs?v=e372c72f84';
-import {sopAreaAdapter} from '../sop-area-adapter.mjs?v=9e71a771d8';
+import {sopAreaAdapter} from '../sop-area-adapter.mjs?v=e5af35262f';
 
 const area = sopAreaAdapter({ world: 'diagram.sketch', instance: ['w.diagram', 'w.preferences'], interfaceSource: NATIVE_INTERFACE, interfaceImports: { 'data.charts': chartToolInterface },
   sources: AREA_SOURCES, offline: BUNDLED_AREAS['diagram.sketch'] });

@@ -31,7 +31,7 @@ const REPLY_OF = {
 const posOf = (cls) => (cls?.startsWith('v.') ? 'verb' : cls?.startsWith('a.') ? 'adj' : 'noun');
 
 export async function openLangRo({ facts = null, unimorph = false, gloss: glossFor = null, local: withLocal = true } = {}) {
-  facts ??= (await import('./ro.facts.generated.mjs?v=0e3659d425')).LANG_RO_FACTS;
+  facts ??= (await import('./ro.facts.generated.mjs?v=1c9a79d1ed')).LANG_RO_FACTS;
   const local = withLocal ? (await import('./ro.local.mjs?v=ed136cd82c')).LANG_RO_LOCAL : { wires: '', dictionary: {} };   // what the catalog lacks yet (questions.md [KNOW]), after the catalog's facts
   // the large dictionary (3,466 lemmas derived from UniMorph, CC BY-SA 3.0, no senses) is a module of its own, loaded only when asked for; for a letter the hand file comes first, then the derived rows
   const extra = unimorph ? (await import('./ro.unimorph.generated.mjs?v=fd204dbae6')).LANG_RO_UNIMORPH : {};

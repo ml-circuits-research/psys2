@@ -11,3 +11,5 @@
 @w.lang.ro.word.w.diagram.edge core.word text="linie" means=w.diagram.edge core.source="hand-core 1"
 @w.lang.ro.word.w.diagram.group core.word text="grup" means=w.diagram.group core.source="hand-core 1"
 @w.lang.ro.word.w.diagram.member core.word text="parte" means=w.diagram.member core.source="hand-core 1"
+@w.lang.ro.word.w.diagram.series core.word text="serie" means=w.diagram.series core.source="hand-core 1"
+@w.lang.ro.word.w.diagram.datum core.word text="punct" means=w.diagram.datum core.source="hand-core 1"

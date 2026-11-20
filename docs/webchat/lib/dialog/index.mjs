@@ -13,11 +13,11 @@ import { interpretationPolicy } from './interpretation-policy.mjs?v=79e47ac3e4';
  * Without it all input is treated as English.
  */
 
-import { loadWorlds } from '../worlds/index.mjs?v=1ca0150fbc';
+import { loadWorlds } from '../worlds/index.mjs?v=e3787ec7fe';
 import { validateWorldSet } from '../worlds/validate.mjs?v=af0869a8e0';
 
-import { createInterpreter } from '../interpreter/index.mjs?v=8d8e8ae056';
-import { createReasoner } from '../reasoner/index.mjs?v=9c776faaf3';
+import { createInterpreter } from '../interpreter/index.mjs?v=6ac609c033';
+import { createReasoner } from '../reasoner/index.mjs?v=dd8ac9004b';
 
 import { serialize } from '../soplang/index.mjs?v=c57881f705';
 
@@ -25,11 +25,11 @@ import { perf } from './stage-perf.mjs?v=8b73796daa';
 import { guard, TurnAborted } from './turn-guard.mjs?v=34ed257fec';
 import { createBudget, installBudget, releaseBudget, isBudgetExceeded, budget } from './budget.mjs?v=00bce6e369';
 
-import { attachValues } from '../knowledge/values.mjs?v=0102c966d3';
-import { attachOpenWords } from '../knowledge/open-words.mjs?v=3573dd741f';
-import { attachArrangement } from '../knowledge/arrangement.mjs?v=dd1b2237dc';
+import { attachValues } from '../knowledge/values.mjs?v=f83cb28715';
+import { attachOpenWords } from '../knowledge/open-words.mjs?v=0e59e1a445';
+import { attachArrangement } from '../knowledge/arrangement.mjs?v=4cbd87ecb5';
 
-import { createSessionAstra } from '../astra/session.mjs?v=7b61f60328';
+import { createSessionAstra } from '../astra/session.mjs?v=cab0b7ddb9';
 
 import { panel } from '../astra/where.mjs?v=09b4059350';
 import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=3e29fd91c2';
@@ -331,7 +331,7 @@ export class DialogSession {
         }
       }
     }
-    const reply = await (await import('./reader-routing.mjs?v=929577fdd7')).routeNewEngine(this, english, { ...opts, language: 'en' });
+    const reply = await (await import('./reader-routing.mjs?v=2ecad33af7')).routeNewEngine(this, english, { ...opts, language: 'en' });
     reply.trace = { ...reply.trace, english, ...(translation ? { translation } : {}), ...(detection ? { languageDetection: detection } : {}) };
     if (language !== 'en') {
       try {

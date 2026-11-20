@@ -4,8 +4,8 @@
 // the request is expanded into one request per line of the declared pattern: a chain in reading order when the other
 // end is not said, a star from the other end when it names one object. Nothing here names a word or a kind.
 import {parse,serialize,str,quote} from '../vendor/sopworld/sopworld.mjs?v=b95dcf7c63';
-import {LANG_EN_FACTS} from '../lang/en.facts.generated.mjs?v=bd66855a30';
-import {en} from '../lang/en.mjs?v=0d85b0a1f8';
+import {LANG_EN_FACTS} from '../lang/en.facts.generated.mjs?v=bcb1d40234';
+import {en} from '../lang/en.mjs?v=26aed8c065';
 import {executionPolicyWorld} from './execution-policy.mjs?v=0660424711';
 import {budget} from './budget.mjs?v=00bce6e369';
 
