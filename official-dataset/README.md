@@ -94,17 +94,26 @@ The reader predicts these fields per request (BIO spans for keys and the trigger
 
 Selector constraints become the target's `selector`; result constraints the request root; `question` a query projection. The bridge binds kinds and properties through `bindings.json`; keys without a published binding, relations/anchors and population targets (`fill=all`) are reported as unresolved by the current bridge. The dataset labels them anyway, because they are the text's meaning; the bridge projection is separate work.
 
-## Split policy
+## Split policy (owner phase rule, 2026-11-20)
 
-- Paraphrase families never cross splits (checked: `leakedFamilies: 0` in MANIFEST). Families come from the source cohorts (`recipeFamily`, seed ids), compound constituents, and identical request texts across sources (union-find).
-- Families are assigned per stratum (tab × operation family × act) in a fixed hash order to the split furthest below its share (80/10/10 by rows), so every tab and act appears in each split.
-- Identical texts (case and space insensitive) are kept once; when sources disagree, the higher-priority source wins (priority order in MANIFEST: executed UI corpora first, main-synthetic last).
+- As much as possible goes into training: rows are split at random by row id (train 94%, dev 4% to monitor training,
+  test 2% kept only for continuity of reports). Families are still computed and stored (`family`) but no longer keep
+  paraphrases out of other splits (MANIFEST reports how many cross); evaluation uses user cases and fresh samples.
+- Duplicates are rows with the same text, context and previous message; the higher-priority source keeps its copy.
 
 ## Balancing
 
-The old corpus and all UI corpora are kept whole (after validation). The main synthetic set is capped: per seed family 40 human-written / 6 mechanical rows (8 / 3 for edits of named objects), and 2,500 rows per operation; human-written variants and hard questions are taken first. In training, ui-natural and ui-human rows are repeated three times (`prepare-official.py --ui-weight`).
+No row is discarded to balance the data. Sources are weighted at training time by `prepare-official.py`
+(`--ui-weight` for the executed UI corpora, `SOURCE_WEIGHTS`: ui-diagram-v2 and data-drop-v1 twice, main-synthetic 0.5).
 
 ## What was fixed and what was dropped
+
+Since 2026-11-20 repairable rows are repaired, not dropped: main-synthetic terse/mechanical edits and edits whose usual target is not
+a written name are converted like human edits (target in focus when no name is written), placeholder values and numbers the text
+does not hold leave only that constraint out, avatar part edits that name a document label get the part word of their variant's
+slot, unplaceable optional span fields are removed, values outside a closed bank stay as open values (`open_value`, the
+bank extension is reported; the trainer drops only their class), determiners stay as written (demonstrative, possessive,
+quantified; the trainer maps them to definite) and `needs` stay in the request. Older notes below describe the earlier policy.
 
 See VALIDATION.md and MANIFEST.json for counts. In short:
 
