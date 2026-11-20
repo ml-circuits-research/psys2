@@ -564,21 +564,28 @@ function make(holder, host) {
     shapeChoices.textContent = '';
     for (const kind of kindsOf()) { const button = el('button', 'dr-act'); button.type = 'button'; button.textContent = String(kind); button.addEventListener('click', () => createObject('drawing.object.make', { kind })); shapeChoices.append(button); }
   }
-  Promise.all([import(VENDOR.href), Promise.resolve(typeof host.tools === 'function' ? host.tools({ view: VIEW }) : null).catch(() => null)]).then(([r, declared]) => {
+  // The page is drawn and usable as soon as the renderer loads (the shapes the chooser offers come from the area's
+  // observed options meanwhile); the declarations refine it when the area is ready. A gesture made before then waits
+  // in the host's queue.
+  import(VENDOR.href).then((r) => {
     if (destroyed) return;
     rough = r.default ?? r.rough;
-    // the declarations of this tab's view (a host that answers for another view is not read)
-    const declaredOps = Array.isArray(declared?.operations) ? declared.operations : [];
-    operations = declaredOps.some((op) => op.id === 'drawing.object.make') ? declaredOps : [];
-    const has = (id) => !operations.length || operations.some((op) => op.id === id);
-    redoButton.disabled = !has('drawing.redo'); undoButton.disabled = !has('drawing.undo');
-    idsDuration = operations.find((op) => op.id === 'drawing.ids.show')?.params?.duration?.default ?? idsDuration;
     fillChooser(); addButton.disabled = false; syncControls();
     renderer = createRenderer(rough); ctx = canvas.getContext('2d'); rc = rough.canvas(canvas);
     sync(); schedule();
   }).catch((e) => {
     console.warn('drawing tab: libraries failed to load', e);
     caption.textContent = 'The drawing libraries could not be loaded. The commands still work.';
+  });
+  Promise.resolve(typeof host.tools === 'function' ? host.tools({ view: VIEW }) : null).catch(() => null).then((declared) => {
+    if (destroyed) return;
+    // the declarations of this tab's view (a host that answers for another view is not read)
+    const declaredOps = Array.isArray(declared?.operations) ? declared.operations : [];
+    operations = declaredOps.some((op) => op.id === 'drawing.object.make') ? declaredOps : [];
+    const has = (id) => !operations.length || operations.some((op) => op.id === id);
+    redoButton.disabled = !has('drawing.redo'); undoButton.disabled = !has('drawing.undo');
+    idsDuration = operations.find((op) => op.id === 'drawing.ids.show')?.params?.duration?.default ?? idsDuration;
+    fillChooser(); syncControls();
   });
 
   api = {

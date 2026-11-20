@@ -134,6 +134,8 @@ const KNOWLEDGE_FETCH_MS = 8000;   // the catalog URL is the pinned one (lib/kno
 async function init(m) {
   if (initialized) throw Error('Engine already initialized.');
   initialized = true;
+  const bootMarks = [], mark = (stage) => bootMarks.push([stage, Math.round(performance.now())]);   // start-up stages (worker clock) for the boot record
+  mark('init');
   Object.assign(ver, m.versions ?? {});
   testHooks = m.testHooks === true;
   settings = { ...(m.settings ?? {}) };
@@ -145,10 +147,16 @@ async function init(m) {
     worldActivity(['execution:placement-geometry'], 'stage', 'Load the placement solver', { operation: 'z3.preload', state: status.state, isolated: status.isolated });
   }).catch(() => {});
   globalThis.__psys2LazyRoEn = true; // prevent eager loading of retired language tables
+  // The modules the start-up awaits one after another are requested together now (one round trip instead of one per
+  // await on a served page); each later import finds its module loaded or loading.
+  for (const rel of ['lib/dialog/budget.mjs', 'lib/dialog/project-world.mjs', 'worlds/app.project/spatial-profile.mjs', 'lib/dialog/instance-identity.mjs', 'lib/dialog/browser-state-input.mjs',
+    'lib/knowledge/facts.mjs', 'lib/loaders/knowledge-source.mjs', 'lib/knowledge/bundled-source.mjs', 'lib/loaders/knowledge-cache.mjs', 'lib/knowledge/catalog-pin.mjs', 'lib/dialog/authored-request-tool.mjs',
+    'lib/dialog/browser-reader-host.mjs', 'lib/dialog/reader-source.mjs']) imp(rel).catch(() => {});
   const [dialog, loadersMod, soplang, g, tl, lang, wlMod, areaMod] = await Promise.all([
     imp('lib/dialog/index.mjs'), imp('lib/loaders/bundle-loader.mjs'), imp('lib/soplang/index.mjs'),
     imp('lib/dialog/turn-guard.mjs'), imp('lib/dialog/time-limits.mjs'), imp('ui/language.mjs'), imp('ui/world-loader.mjs'), imp('lib/dialog/app-reader-context.mjs')]);
   loaders = loadersMod;
+  mark('modules');
   tabWorlds = m.tabWorlds ?? {}; universe = m.onlyWorlds ? new Set(m.onlyWorlds) : null;
   try { const b = await imp('lib/dialog/budget.mjs'); budgetMod.createBudget = b.createBudget ?? null; } catch { budgetMod.createBudget = null; }   // agent B's step budget, when this build has it
   mods = { tl, dialog, guard: g.guard, TurnAborted: g.TurnAborted, soplang, lang, ...areaMod };
@@ -170,6 +178,7 @@ async function init(m) {
   const fetchJson = async (rel, hash) => { const r = await fetch(abs(rel) + (hash ? `?v=${hash}` : ''), { cache: 'default' }); if (!r.ok) throw new Error(`${rel}: HTTP ${r.status}`); return r.json(); };
   worldLoader = wlMod.createWorldLoader({ indexHash: ver['worlds/index.json'], fetchJson, bag: () => new Set() });
   await worldLoader.init();
+  mark('world index');
   const browserState = await imp('lib/dialog/browser-state-input.mjs');
   mods.inspectBrowserStateInput = browserState.inspectBrowserStateInput;
   const enabledTabs = new Set(Object.entries(tabWorlds)
@@ -181,6 +190,7 @@ async function init(m) {
   // start. It starts on the lazy set like English and the rest loads in the background once the reasoner is up; a Romanian message still waits for every world before it is read (send).
   const startIds = [...worldLoader.startIds({ tabWorld: m.tabWorld ?? null, state: m.restoreState, recent: m.restoreMeta?.memory?.recent ?? [] })].filter((id) => allowed(id));
   await worldLoader.bundles(startIds);
+  mark('start worlds');
   for (const id of startIds) loadedIds.add(id);
   const bundle = worldLoader.bundleOf(startIds, absModule);
   const bundleBytes = startIds.reduce((s, id) => s + (worldLoader.info(id)?.bytes ?? 0), 0);
@@ -203,6 +213,7 @@ async function init(m) {
   // A placement event also names the std.problem compiler and, once solved, the provider its result names.
   engine.onWorldActivity=({nodeIds,phase,label,...extra})=>worldActivity(extra.operation==='std.placement'?[...(nodeIds??[]),'component:problem-compiler',...({internal:['provider:internal-search'],z3:['provider:z3']}[extra.provider]??[])]:nodeIds,phase,label,extra);
   evt('boot-step', { id: 'reasoner', op: 'end' });
+  mark('engine');
   // The knowledge catalog (spec 17): the sop-knowledge-worlds copy on GitHub Pages, read lazily (nothing is fetched until a message needs a thing the board or the
   // lexicons do not have), each file bounded by KNOWLEDGE_FETCH_MS (a slow or offline read counts as unreachable and is asked again after a backoff, see facts.mjs).
   engine.onModelTimeout = (info) => evt('model-timeout', info);   // a model call timed out and the rules answered (spec 06): the debug panel says so once and counts
@@ -221,6 +232,7 @@ async function init(m) {
     engine.onNotice = (text) => evt('notice', text);   // "Looking up how a pineapple looks..." while a shard loads
   } catch (e) { console.warn('knowledge catalog not attached', e); }
 
+  mark('knowledge');
   evt('rules-compiled'); // compatibility progress event; no retired rule compilation
   session = engine.createSession({ language: lang.normalize(settings.language) });   // LANG-FIXED: always an explicit 'en' | 'ro', never 'auto'
   applySettings(null);
@@ -229,7 +241,8 @@ async function init(m) {
   // Editor hosts and inspection do not depend on neural session construction.
   mods.isAuthoredRequest=(await imp('lib/dialog/authored-request-tool.mjs')).isAuthoredRequest;
   readerReady=installSopReader(imp);
-  return { stateInputTabs: [...enabledTabs], retiredAreas: worldLoader.index.retiredAreas ?? [], worlds: engine.worlds().map((w) => w.id), known: worldLoader.ids(), worldTabs: Object.fromEntries(worldLoader.ids().map((id) => [id, worldLoader.info(id).tab?.id ?? null]).filter(([, v]) => v)), problems: engine.problems?.() ?? [], state: stateOf(), hasDispatcher: !!dispatcherEnc, hasNormalizer: !!normalizerHost, budget: !!budgetMod.createBudget, reader: readerStatus };
+  mark('session');
+  return { bootMarks, stateInputTabs: [...enabledTabs], retiredAreas: worldLoader.index.retiredAreas ?? [], worlds: engine.worlds().map((w) => w.id), known: worldLoader.ids(), worldTabs: Object.fromEntries(worldLoader.ids().map((id) => [id, worldLoader.info(id).tab?.id ?? null]).filter(([, v]) => v)), problems: engine.problems?.() ?? [], state: stateOf(), hasDispatcher: !!dispatcherEnc, hasNormalizer: !!normalizerHost, budget: !!budgetMod.createBudget, reader: readerStatus };
 }
 
 async function installSopReader(imp){

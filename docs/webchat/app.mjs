@@ -199,19 +199,32 @@ export async function mountPsys2(element, options = {}) {
     }
     if (!tabMade.has(t.id)) tabMade.set(t.id, (async () => {
       const timing=beginTabLoad(t);
+      // The tab's last projected state (kept per build) is shown at once while its area loads: the tab is usable and
+      // not veiled, a gesture waits in the gesture queue, and the area's state replaces the kept one when it is ready.
+      const kept = !options.renderAllTabs && engineClient && globalThis.caches && (states[t.world] === undefined || states[t.world]?.pending) ? await keptView(t.world) : null;
       // the tab's UI is part of the turn that opened it: the host is busy (and a test or a voice turn waits) until it is
-      // there; a tab made out of sight (its world changed) loads without veiling the one in use
-      const veils = view === t.id || !!turn; if (veils) { effectsPending++; updateBusy(); }
+      // there; a tab made out of sight (its world changed) or shown from its kept state loads without veiling
+      const veils = !kept && (view === t.id || !!turn); if (veils) { effectsPending++; updateBusy(); }
+      const createEditor = (st) => {
+        timing.timeline.stage('Create editor');
+        const {holder}=attachWorldViews(t,tabBtns[t.id].panel);
+        panelUI[t.id] = { ui: t.make(holder, hostApi) };
+        timing.timeline.stage('Render instance state');panelUI[t.id].ui.update?.(st);
+        if (view === t.id) panelUI[t.id].ui.show?.();
+      };
       try {
       timing.timeline.stage('Load editor module');await tabPaint();
       if (t.file && !t.make) { const m = (await import(new URL(`ui/tabs/${t.file}`, base).href)).default; Object.assign(t, m); }   // the tab's module loads now (with its world modules); vendor assets load when it makes its UI
-      if (!options.renderAllTabs && engineClient) { try { timing.timeline.stage('Ensure instance world');const r = await engineClient.call('ensure', { worlds: [t.world], why: 'tab',tab:t.id });timing.worker=r?.timings??[]; for (const id of r?.added ?? []) loadedWorlds.add(id); if (r?.state && Object.hasOwn(r.state, t.world)) states[t.world] = r.state[t.world]; } catch (e) { console.warn('could not load the world of the tab', t.world, e); } }
       if (destroyed) return null;
-      timing.timeline.stage('Create editor');await tabPaint();
-      const {holder}=attachWorldViews(t,tabBtns[t.id].panel);
-      panelUI[t.id] = { ui: t.make(holder, hostApi) };
-      timing.timeline.stage('Render instance state');panelUI[t.id].ui.update?.(states[t.world]);
-      if (view === t.id) panelUI[t.id].ui.show?.();
+      if (kept) { await tabPaint(); createEditor(kept); }
+      if (!options.renderAllTabs && engineClient) { try {
+        timing.timeline.stage('Ensure instance world');const seq = stateSeq.get(t.world) ?? 0;
+        const r = await engineClient.call('ensure', { worlds: [t.world], why: 'tab',tab:t.id });timing.worker=r?.timings??[]; for (const id of r?.added ?? []) loadedWorlds.add(id);
+        // a gesture's newer state that arrived meanwhile is kept
+        if (r?.state && Object.hasOwn(r.state, t.world) && (stateSeq.get(t.world) ?? 0) === seq) { states[t.world] = r.state[t.world]; keepView(t.world); if (panelUI[t.id]) panelUI[t.id].ui.update?.(states[t.world]); }
+      } catch (e) { console.warn('could not load the world of the tab', t.world, e); } }
+      if (destroyed) return null;
+      if (!panelUI[t.id]) { await tabPaint(); createEditor(states[t.world]); }
       await finishTabLoad(timing);return panelUI[t.id].ui;
       }catch(error){timing.timeline.finish(error);tabMade.delete(t.id);throw error;} finally { if (veils) { effectsPending = Math.max(0, effectsPending - 1); updateBusy(); } }
     })());
@@ -656,6 +669,16 @@ export async function mountPsys2(element, options = {}) {
   }
   const failInstances=error=>{note('Could not save or open work: '+String(error?.message??error));console.warn('Explicit work file operation failed',error);};
   const renderFailures=new Set();
+  // The last projected state of each tab's world, kept in this browser per build, so a revisit shows it at once.
+  // (Cache Storage, one cache per build: it is written durably and a new build starts empty.)
+  const stateSeq = new Map(), keptTimers = new Map(), KEPT_CACHE = 'psys2-views-' + (globalThis.__psys2Build?.version ?? 'dev'), keptUrl = (world) => new URL('kept-view/' + encodeURIComponent(world) + '.json', location.href).href;
+  async function keptView(world) { try { const hit = await (await caches.open(KEPT_CACHE)).match(keptUrl(world)), view = hit ? await hit.json() : null; return view && !view.pending ? view : null; } catch { return null; } }
+  function keepView(world) {
+    if (!tabDefs.some((t) => t.world === world) || states[world] === undefined || states[world]?.pending) return;   // a projection the area has not made yet is not kept
+    if (!keptTimers.size) caches.keys().then((names) => names.filter((name) => name.startsWith('psys2-views-') && name !== KEPT_CACHE).forEach((name) => caches.delete(name))).catch(() => {});   // an earlier build's views
+    clearTimeout(keptTimers.get(world));
+    keptTimers.set(world, setTimeout(() => { const view = states[world]; if (!view || view.pending) return; caches.open(KEPT_CACHE).then((cache) => cache.put(keptUrl(world), new Response(JSON.stringify(view), { headers: { 'content-type': 'application/json' } }))).catch(() => { /* storage full or blocked: nothing is kept */ }); }, 400));
+  }
   function applyState(snapshot, projection = snapshot) {
     if (!snapshot || typeof snapshot !== 'object') return;
     const changed = [], altered = new Set();
@@ -663,7 +686,9 @@ export async function mountPsys2(element, options = {}) {
       const before = states[id], next = Object.hasOwn(projection, id) ? projection[id] : st;
       // a world whose state really changed (not one that merely loaded, nor the same state sent again) makes its tab
       if (before !== undefined && before !== next && JSON.stringify(before) !== JSON.stringify(next)) altered.add(id);
+      const differs = (altered.has(id) || before === undefined || before?.pending) && next !== undefined && !next?.pending;   // a real projection newer than the one held
       states[id] = next; changed.push(id);
+      if (differs) { stateSeq.set(id, (stateSeq.get(id) ?? 0) + 1); keepView(id); }
     }
     for (const t of tabDefs) if (changed.includes(t.world)) { try{if (panelUI[t.id]) panelUI[t.id].ui.update(states[t.world]); else if (tabKnown.has(t.id) && tabsLive && altered.has(t.world)) makeTab(t);renderFailures.delete(t.id);}catch(error){console.warn('Editor refresh failed',t.id,error);if(!renderFailures.has(t.id))note(`${t.label} could not refresh. World data is preserved.`);renderFailures.add(t.id);} }
     if (changed.includes('ui.avatar')) avatarUI?.update(states['ui.avatar']);
