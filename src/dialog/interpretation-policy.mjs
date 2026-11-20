@@ -35,7 +35,11 @@ export function interpretationPolicy(source=POLICY){
  const detect=world.ofType(MODULE+'.language').filter(row=>one(row,'role')==='detect');
  if(detect.length!==1)throw Error('invalid-interpretation-policy: exactly one language detection rule');
  const notes=Object.fromEntries(world.ofType(MODULE+'.note').map(row=>[dropKey(all(row,'drops')),one(row,'text')]));
- const result=Object.freeze({retries,notes,compare,coordination,language:{id:detect[0].id,minConfidence:Number(one(detect[0],'min.confidence'))}});
+ const defaults=world.ofType(MODULE+'.default').map(row=>({field:one(row,'field'),value:one(row,'value'),...(one(row,'when')?{when:one(row,'when')}:{})}));
+ const drops=Object.fromEntries(world.ofType(MODULE+'.drop').map(row=>[one(row,'reason'),one(row,'text')]));
+ const fallbacks=world.ofType(MODULE+'.fallback').map(row=>({step:one(row,'step'),order:Number(one(row,'order')),text:one(row,'text')})).sort((a,b)=>a.order-b.order);
+ if(new Set(fallbacks.map(f=>f.order)).size!==fallbacks.length)throw Error('invalid-interpretation-policy: fallback orders must be distinct');
+ const result=Object.freeze({retries,notes,compare,coordination,language:{id:detect[0].id,minConfidence:Number(one(detect[0],'min.confidence'))},partial:{defaults,drops,fallbacks}});
  if(source===POLICY)policy=result;
  return result;
 }

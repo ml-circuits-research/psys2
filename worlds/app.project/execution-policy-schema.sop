@@ -1,4 +1,4 @@
-@policy.module core.module name=app.execution version=2 imports=std.capability exports=app.execution.values exports=app.execution.observedProperty exports=app.execution.observedMeasure exports=app.execution.observedField exports=app.execution.preview exports=app.execution.comparative exports=app.execution.comparativeFactor exports=app.execution.comparativeStep exports=app.execution.ordinal exports=app.execution.knowledge exports=app.execution.instant exports=app.execution.requestValue exports=app.execution.clockTime exports=app.execution.instantBase exports=app.execution.instantFocus exports=app.execution.actForm exports=app.execution.reference exports=app.execution.actOperation
+@policy.module core.module name=app.execution version=2 imports=std.capability exports=app.execution.values exports=app.execution.observedProperty exports=app.execution.observedMeasure exports=app.execution.observedField exports=app.execution.preview exports=app.execution.comparative exports=app.execution.comparativeFactor exports=app.execution.comparativeStep exports=app.execution.ordinal exports=app.execution.knowledge exports=app.execution.instant exports=app.execution.requestValue exports=app.execution.clockTime exports=app.execution.instantBase exports=app.execution.instantFocus exports=app.execution.actForm exports=app.execution.reference exports=app.execution.actOperation exports=app.execution.kindBinding
 @values.type core.type of=app.execution.values closed=true
 @values.concept core.slot of=app.execution.values key=concept kind=atom present=true
 @values.type.slot core.slot of=app.execution.values key=valueType kind=string present=true
@@ -94,3 +94,11 @@
 @actOperation.type core.type of=app.execution.actOperation closed=true
 @actOperation.operation core.slot of=app.execution.actOperation key=operation kind=string present=true
 @actOperation.act core.slot of=app.execution.actOperation key=act kind=atom present=true
+# A catalog kind drawn by a native operation with one fixed argument (a chart kind and the chart group's layout), for
+# kinds the deployed binding table names without a native family binding. Every lemma of the kind in the table takes it.
+@kindBinding.type core.type of=app.execution.kindBinding closed=true
+@kindBinding.area core.slot of=app.execution.kindBinding key=area kind=atom present=true
+@kindBinding.kind core.slot of=app.execution.kindBinding key=kind kind=atom present=true
+@kindBinding.operation core.slot of=app.execution.kindBinding key=operation kind=string present=true
+@kindBinding.parameter core.slot of=app.execution.kindBinding key=parameter kind=string present=true
+@kindBinding.value core.slot of=app.execution.kindBinding key=value kind=string present=true

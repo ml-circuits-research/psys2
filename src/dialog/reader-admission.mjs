@@ -61,3 +61,17 @@ export function assessReaderProposal({proposal,text,provenance,admission,area,sc
   return {...scored,assessment,admitted:false,uncertain:false,mode:'closed',reason:'model-admission-policy-unavailable'};
  }
 }
+/** Partial admission (specs/semantic-frame.md §5): the consistent part of a reading the strict path refused. The graph
+ * checks of the complete path still apply; the decision is the reader admission policy's partial rule (no score, no
+ * calibration), so only reversible act classes are admitted. */
+export function assessPartialProposal({proposal,text,provenance}){
+ const {unresolved,...rest}=proposal??{},scored=scoreReaderProposal({...rest,coverage:{complete:true,graphProposal:true,truncated:false},failures:[]},text);
+ if(!scored.eligible)return {...scored,admitted:false,partial:true,assessment:null};
+ const evidence=['@proposal app.reader.evidence act='+scored.act,'calibration.configured=false','calibration.admitted=false','score.available=false',
+  'model.identity.present='+hash(provenance?.modelSha256),'uncertain=true','partial=true'];
+ try{
+  const decisionSop=compileReaderAdmission(evidence.join(' '));
+  const [{attrs}]=parse(decisionSop);
+  return {...scored,assessment:null,decisionSop,partial:true,admitted:attrs.admitted[0]==='true',uncertain:true,mode:str(attrs.mode[0]),reason:str(attrs.reason[0])};
+ }catch{return {...scored,assessment:null,partial:true,admitted:false,uncertain:false,mode:'closed',reason:'model-admission-policy-unavailable'};}
+}

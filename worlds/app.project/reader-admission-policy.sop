@@ -28,6 +28,22 @@
 @reader.scopedRemoval app.reader.evidence act=remove scoped.removal=true
 @reader.permit.scopedRemoval core.rule when=$reader.scopedRemoval when=$reader.unconfigured then=$reader.best.effort
 
+# Partial admission (interpretation-policy.sop app.interpret.partial; specs/semantic-frame.md §5): the consistent part
+# of an incompletely bound reading is applied best-effort for a reversible act class, disclosed and undoable. It
+# carries no selection score, so the complete-reading rules above never also approve it.
+@reader.partial app.reader.evidence partial=true calibration.configured=false score.available=false model.identity.present=true
+@reader.partial.approval app.reader.approval mode=partial-best-effort reason=partial-model-proposal uncertain=true
+@reader.permit.partial core.rule when=$reader.class when=$reader.bootstrap when=$reader.partial then=$reader.partial.approval
+
+# A configured calibration that this reading does not meet no longer closes the gate for a reversible act: the reading
+# is applied as best effort with an uncertainty note and its alternatives kept (owner, Review29).
+@reader.unmet app.reader.evidence calibration.configured=true calibration.admitted=false model.identity.present=true
+@reader.unmet.approval app.reader.approval mode=calibration-unmet-best-effort reason=best-effort-below-calibration uncertain=true
+@reader.permit.unmet core.rule when=$reader.class when=$reader.bootstrap when=$reader.unmet then=$reader.unmet.approval
+# The same when the calibration is met only under an error limit above the act class's own limit.
+@reader.over core.check fn=gt args=?error args=?limit
+@reader.permit.over core.rule when=$reader.class when=$reader.limit when=$reader.bootstrap when=$reader.calibration if=$reader.over then=$reader.unmet.approval
+
 @reader.approved app.reader.approval mode=?mode reason=?reason uncertain=?uncertain
 @reader.applied app.reader.decision admitted=true mode=?mode reason=?reason uncertain=?uncertain
 @reader.closed app.reader.decision admitted=false mode=closed reason=model-calibration-gate-closed uncertain=false

@@ -1,4 +1,4 @@
-@interpret.module core.module name=app.interpret version=1 exports=app.interpret.retry exports=app.interpret.compare exports=app.interpret.coordination exports=app.interpret.language exports=app.interpret.note
+@interpret.module core.module name=app.interpret version=1 exports=app.interpret.retry exports=app.interpret.compare exports=app.interpret.coordination exports=app.interpret.language exports=app.interpret.note exports=app.interpret.default exports=app.interpret.drop exports=app.interpret.fallback
 
 # A re-reading of the same text under a reduced context, tried in order while the reading stays incomplete.
 @interpret.retry.type core.type of=app.interpret.retry closed=true
@@ -30,3 +30,20 @@
 @interpret.language.type core.type of=app.interpret.language closed=true
 @interpret.language.role core.slot of=app.interpret.language key=role kind=atom id=true enum=detect present=true
 @interpret.language.min core.slot of=app.interpret.language key=min.confidence kind=number min=0 max=1 present=true
+
+# The default of a request field the reader left out, optionally only under a condition on the request.
+@interpret.default.type core.type of=app.interpret.default closed=true
+@interpret.default.field core.slot of=app.interpret.default key=field kind=atom enum=act enum=mood enum=mode enum=phase enum=operator enum=character enum=polarity present=true
+@interpret.default.when core.slot of=app.interpret.default key=when kind=atom
+@interpret.default.value core.slot of=app.interpret.default key=value kind=atom present=true
+
+# How the reply names a dropped role, per bridge reason (a reason with no row is named by the generic row).
+@interpret.drop.type core.type of=app.interpret.drop closed=true
+@interpret.drop.reason core.slot of=app.interpret.drop key=reason kind=atom id=true present=true
+@interpret.drop.text core.slot of=app.interpret.drop key=text kind=string present=true
+
+# The ordered run-time fallbacks when the host refuses an admitted partial reading; each names what it drops.
+@interpret.fallback.type core.type of=app.interpret.fallback closed=true
+@interpret.fallback.step core.slot of=app.interpret.fallback key=step kind=atom id=true enum=split enum=without-placement enum=theme-only present=true
+@interpret.fallback.order core.slot of=app.interpret.fallback key=order kind=integer min=1 present=true
+@interpret.fallback.text core.slot of=app.interpret.fallback key=text kind=string present=true

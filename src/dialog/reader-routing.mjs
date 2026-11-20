@@ -13,7 +13,8 @@ import {projectQueryAction,recoverQueryProjection} from './project-query-action.
 import {projectContextAction} from './project-context-action.mjs';
 import {projectCodeReference} from './project-code-reference.mjs';
 import {projectCreateAction} from './project-create-action.mjs';
-import {assessReaderProposal} from './reader-admission.mjs';
+import {assessReaderProposal,assessPartialProposal} from './reader-admission.mjs';
+import {bestPartialReading,fallbackLadder,partialNote} from './partial-admission.mjs';
 import {projectQuantities,amountsOf,quantityNote} from './quantity-projection.mjs';
 import {routeCoordination} from './coordination-routing.mjs';
 import {declaredKnowledge} from './declared-execution.mjs';
@@ -73,6 +74,44 @@ async function dispatchRequest(session,candidate,text,options,bindings,contextPr
  if(changed.length)recordHistory(session,{area,before:Object.fromEntries(changed.map(key=>[key,before[key]])),
   after:Object.fromEntries(changed.map(key=>[key,structuredClone(session.isession.state[key])])),reading:candidate,alternatives});
  return result;
+}
+
+// Partial admission (specs/semantic-frame.md §5): run the admitted partial reading; when the editor refuses it, the
+// declared fallback ladder (split, without placement, theme only) in order. A step that changed nothing is rolled
+// back; the steps that ran are one undo group. The reply names every dropped role.
+async function dispatchPartial(session,plan,text,options,bindings,refused=null){
+ const area=options.view??session.isession.state['ui.shell']?.activeTab;
+ const before=structuredClone(session.isession.state),journal=captureHistory(session,false);
+ const rollback=()=>{if(!restoreHistory(session,journal,{},false))throw Error('invalid-partial-history-checkpoint');Object.assign(session.isession.state,structuredClone(before));};
+ const supported=r=>r?.statuses?.includes('supported');
+ // refused: the editor's reply to a complete reading it could not apply; the ladder starts from there.
+ const first=refused??await dispatchRequest(session,plan.decision.candidate,text,options,bindings,null,null,plan.decision.alternatives);
+ let result=first,step=null,disclosed=[...plan.reading.disclosed],readings=[plan.decision.candidate];
+ if(!supported(first)){
+  rollback();result=null;
+  for(const option of fallbackLadder(plan.reading.packet)){
+   const replies=[];
+   for(const candidate of option.candidates){const reply=await dispatchRequest(session,candidate,text,options,bindings);replies.push(reply);if(!supported(reply))break;}
+   if(!supported(replies[0])){rollback();continue;}
+   step=option;readings=option.candidates.slice(0,replies.length);
+   disclosed.push(...option.dropped);if(replies.length<option.candidates.length||!supported(replies.at(-1)))disclosed.push(...(option.followDropped??[]));
+   const done=replies.filter(supported);
+   result={...replies[0],text:done.map(r=>r.text).join(' '),effects:done.flatMap(r=>r.effects??[]),statuses:['supported']};
+   break;
+  }
+ }
+ if(!result)return {result:first,trace:{mode:plan.decision.mode,disclosed,defaulted:plan.reading.defaulted,applied:false}};
+ const changed=Object.keys(session.isession.state).filter(key=>JSON.stringify(before[key])!==JSON.stringify(session.isession.state[key]));
+ if(changed.length&&readings.length>1){
+  if(!restoreHistory(session,journal,{},false))throw Error('invalid-partial-history-checkpoint');
+  recordHistory(session,{area,before:Object.fromEntries(changed.map(key=>[key,before[key]])),after:Object.fromEntries(changed.map(key=>[key,structuredClone(session.isession.state[key])])),
+   reading:readings.at(-1),readings,alternatives:plan.decision.alternatives??[]});
+ }
+ const note=[step?.text,partialNote(disclosed)].filter(Boolean).join(' ');
+ if(note){result.text+=' '+note;result.parts=[{text:result.text,translate:false}];}
+ const trace={mode:plan.decision.mode,disclosed,defaulted:plan.reading.defaulted,joinedKind:plan.reading.joined,step:step?.step??null,readings,applied:true};
+ result.trace={...result.trace,partialAdmission:trace};
+ return {result,trace,candidate:readings.at(-1)};
 }
 
 /** The model only sees utterance text. No expected annotations or grammar graphs. */
@@ -260,13 +299,43 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
    if(note){result.text+=' '+note;result.parts=[{text:result.text,translate:false}];}
   }
  }
+ // A reading the strict path refused executes in its consistent part when the declared policy admits it.
+ let partialTrace=null,partialDecision=null;
+ // A complete reading the editor refused (a placement with other properties, an anchor that is not there) runs the
+ // same declared fallback ladder; history and state of the refused attempt are already restored by dispatch.
+ if(eligible&&result&&!result.statuses?.includes('supported')&&!result.trace?.history&&!result.trace?.readOnly&&!contextProjection&&bindings&&provenance?.bindingsSha256){
+  try{
+   const reading=bestPartialReading([proposal],{bindings,bindingSha256:provenance.bindingsSha256});
+   if(reading?.packet&&fallbackLadder(reading.packet).length){
+    const ran=await dispatchPartial(session,{reading,decision:{...decision,candidate}},text,options,bindings,result);
+    if(ran.trace.applied){partialTrace=ran.trace;partialDecision=decision;result=ran.result;candidate=ran.candidate;}
+   }
+  }catch(error){partialTrace={error:String(error?.message??error)};}
+ }
+ if(!eligible&&!contextProjection&&bindings&&provenance?.bindingsSha256&&!(options.language&&options.language!=='en')){
+  try{
+   let reading=bestPartialReading([proposal,...readings],{bindings,bindingSha256:provenance.bindingsSha256});
+   if(reading?.refused){partialTrace={applied:false,refused:reading.refused};reading=null;}
+   const decided=reading&&assessPartialProposal({proposal:reading.proposal,text,provenance});
+   if(decided&&!decided.admitted)partialTrace={applied:false,mode:decided.mode,reason:decided.reason};
+   if(decided?.decisionSop)observe(session,{nodeIds:['component:request-admission','knowledge:reader-admission-policy','component:library'],phase:'stage',operation:'app.reader.admission',label:'Admit the consistent part of the reading',wires:decided.decisionSop});
+   if(decided?.admitted){
+    partialDecision=decided;
+    const ran=await dispatchPartial(session,{reading,decision:decided},text,options,bindings);
+    partialTrace=ran.trace;
+    if(ran.trace.applied){result=ran.result;candidate=ran.candidate;}
+    else if(ran.result?.text&&ran.result.trace?.reason!=='no-declared-action'){result=ran.result;const note=partialNote(ran.trace.disclosed);if(note){result.text+=' '+note;result.parts=[{text:result.text,translate:false}];}}
+   }
+  }catch(error){partialTrace={error:String(error?.message??error)};}
+ }
  if(result&&contextRetry?.used&&result.statuses?.includes('supported')){
   if(contextRetry.dropped?.length)result.text+=' I did not apply '+quoted(contextRetry.dropped)+'.';
   const note=retryNote(contextRetry.used,new Set(contextRetry.attempts.map(attempt=>attempt.profile)));
   if(note)result.text+=' '+note;result.parts=[{text:result.text,translate:false}];
  }
  result??={text:message,parts:[{text:message,translate:false}],statuses:['unsupported'],answers:[],segments:[],state:{},effects:[],newEngine:true,trace:{legacy:false,engine:'new',reason:options.language&&options.language!=='en'?'language':'reading'}};
- return {...result,trace:{...result.trace,...(eligible?{reading:candidate}:{}),...(comparison?{readingComparison:comparison.sop}:{}),readerRouting:{primary:'sop-bert',selected:eligible?'sop-bert':null,reason,
+ const partialApplied=!!partialTrace?.applied;
+ return {...result,trace:{...result.trace,...(eligible||partialApplied?{reading:candidate}:{}),...(comparison?{readingComparison:comparison.sop}:{}),...(partialTrace?{partialAdmission:partialTrace,...(partialApplied?{partial:true}:{})}:{}),readerRouting:{primary:'sop-bert',selected:eligible||partialApplied?'sop-bert':null,reason:partialApplied?partialDecision.reason:reason,
   admission:{mode:decision.mode??null,uncertain:!!provenAlternative||(decision.uncertain??false),alternatives:decision.alternatives??[],scoreDefinition:decision.scoreDefinition,score:decision.score,proposalEligible:decision.eligible,assessment:decision.assessment,decisionSop:decision.decisionSop??null},
   interpretation:proposal?.interpretation??null,unresolved:preservedProviderTrace?proposal.interpretation.unresolved:(proposal?.failures??[]),...(contextRetry?{contextRetry}:{}),...(projectionErrors.length?{projectionErrors}:{}),...(coordinationError?{coordinationError}:{}),proposalCandidates:providerCandidates,rawReading:proposal?.raw?.requests??null,model:{provenance,coverage:(preservedProviderTrace?providerCoverage:proposal?.coverage)??null,candidates:preservedProviderTrace?providerCandidates.length:(proposal?.candidates?.length??0),eligible:!!eligible}}}};
 }

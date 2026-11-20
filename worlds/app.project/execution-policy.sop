@@ -42,3 +42,26 @@
 # layout", "tidy it up") it is the page's declared improvement (diagram.layout.improve), disclosed and undoable.
 @act.arrange app.execution.actForm act=arrange mode=existing as=change results=some
 @arrange.improve app.execution.actOperation operation="diagram.layout.improve" act=arrange
+# Charts in the Diagram tab are chart groups (diagram.group.chart.make). Each chart kind of the catalog (k.charts.kind)
+# is drawn with the chart layout of its form; a chart named only as "a chart" or "a graph" (w.chart.chart) is a bar
+# chart. Kinds with no native layout (scatter plot, dot plot) stay unbound and are reported as such.
+@chart.kind.chart app.execution.kindBinding area=diagram kind=w.chart.chart operation="diagram.group.chart.make" parameter="layout" value="bar"
+@chart.kind.bar app.execution.kindBinding area=diagram kind=k.charts.kind.bar_chart operation="diagram.group.chart.make" parameter="layout" value="bar"
+@chart.kind.grouped app.execution.kindBinding area=diagram kind=k.charts.kind.grouped_bar_chart operation="diagram.group.chart.make" parameter="layout" value="bar"
+@chart.kind.stacked app.execution.kindBinding area=diagram kind=k.charts.kind.stacked_bar_chart operation="diagram.group.chart.make" parameter="layout" value="bar"
+@chart.kind.histogram app.execution.kindBinding area=diagram kind=k.charts.kind.histogram operation="diagram.group.chart.make" parameter="layout" value="bar"
+@chart.kind.line app.execution.kindBinding area=diagram kind=k.charts.kind.line_chart operation="diagram.group.chart.make" parameter="layout" value="line"
+@chart.kind.area app.execution.kindBinding area=diagram kind=k.charts.kind.area_chart operation="diagram.group.chart.make" parameter="layout" value="area"
+@chart.kind.pie app.execution.kindBinding area=diagram kind=k.charts.kind.pie_chart operation="diagram.group.chart.make" parameter="layout" value="pie"
+# A chart asked for without data starts from three sample categories, which the reply names; the data can then be
+# edited ("set A to 5") or the chart undone.
+@chart.sample.a std.capability.item index=0 value="A"
+@chart.sample.b std.capability.item index=1 value="B"
+@chart.sample.c std.capability.item index=2 value="C"
+@chart.sample.labels std.capability.list member=$chart.sample.a member=$chart.sample.b member=$chart.sample.c
+@chart.sample.1 std.capability.item index=0 value=3
+@chart.sample.2 std.capability.item index=1 value=5
+@chart.sample.3 std.capability.item index=2 value=2
+@chart.sample.values std.capability.list member=$chart.sample.1 member=$chart.sample.2 member=$chart.sample.3
+@chart.labels std.capability.seed operation="diagram.group.chart.make" parameter="labels" source=value value=$chart.sample.labels phase=missing order=126 notice="I used sample data; you can change it or undo."
+@chart.values std.capability.seed operation="diagram.group.chart.make" parameter="values" source=value value=$chart.sample.values phase=missing order=127

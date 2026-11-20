@@ -108,3 +108,16 @@ test('a comparative consumes the copied step word, a degree value is a vocabular
  degree.span='make a big cerulean widget';const both=bridgeRawStructure(raw(degree),{bindings:placed,bindingSha256});
  assert.deepEqual(both.diagnostics,[]);assert.match(both.decoded.candidates[0].wires,/operator=degree .*value=big(\s|$)/);
 });
+test('partial mode drops and discloses an unbound role, defaults missing fields, and keeps an unbound theme fatal',()=>{
+ const defaults=[{field:'mood',value:'do'},{field:'act',when:'target.new',value:'make'},{field:'phase',value:'result'},{field:'operator',value:'eq'},{field:'character',value:'requirement'},{field:'polarity',value:'positive'}];
+ const unbound={...sample(),span:'set widget cerulean shiny',constraints:[condition('cerulean'),{...condition('shiny'),key:'item.unknown'}]};
+ assert.equal(bridge(raw(unbound)).decoded.candidates.length,0);
+ const partial=bridgeRawStructure({...raw(unbound),coverage:{complete:false,truncated:false},unresolved:[{reason:'presence-span-inconsistent'}]},{bindings,bindingSha256,partial:{defaults}});
+ assert.deepEqual(partial.diagnostics,[]);assert.equal(partial.decoded.candidates.length,1,JSON.stringify(partial.decoded.issues));
+ assert.deepEqual(partial.disclosed.map(d=>[d.reason,d.text]),[['unresolved-canonical-property-binding','shiny']]);
+ assert.equal(partial.decoded.candidates[0].wires.split('std.request.constraint').length-1,1);
+ const missing=bridgeRawStructure(raw({...sample(),constraints:[{key:'item.tint',value:'cerulean',value_span:'cerulean'}]}),{bindings,bindingSha256,partial:{defaults}});
+ assert.equal(missing.decoded.candidates.length,1,JSON.stringify(missing.decoded.issues));assert.deepEqual(missing.defaulted.map(d=>d.field).sort(),['character','operator','phase','polarity']);
+ const theme=bridgeRawStructure(raw({...sample(),target:{type:'item',mode:'existing',kind:'gadget',kind_span:'widget'}}),{bindings,bindingSha256,partial:{defaults}});
+ assert.ok(theme.diagnostics.some(d=>d.reason==='unresolved-canonical-kind-binding'));assert.equal(theme.decoded.candidates.length,0);
+});
