@@ -56,7 +56,7 @@ test('the comparative factors are one step of the catalog scale, read from knowl
  const other=comparativeSteps({knowledge:{ofType:type=>type==='k.expect.scale'?rows:[]}});
  assert.deepEqual(other.filter(row=>row.concept==='size').map(({step,factor})=>[step,factor]).sort(),[['less',0.8],['more',1.25]]);
  // Each concept the policy measures on that scale (size, a drawn width or height) takes the same steps.
- assert.deepEqual([...new Set(other.filter(row=>!row.ordinal).map(row=>row.concept))].sort(),['diagram.sketch.group.barWidth','diagram.sketch.group.fontSize','diagram.sketch.group.lineWidth','diagram.sketch.group.markerEdge','diagram.sketch.group.markerSize','diagram.sketch.group.pieRadius','size','w.drawing.object.height','w.drawing.object.width']);
+ assert.deepEqual([...new Set(other.filter(row=>!row.ordinal).map(row=>row.concept))].sort(),['diagram.sketch.group.barWidth','diagram.sketch.group.fontSize','diagram.sketch.group.height','diagram.sketch.group.lineWidth','diagram.sketch.group.markerEdge','diagram.sketch.group.markerSize','diagram.sketch.group.pieRadius','diagram.sketch.group.width','size','w.drawing.object.height','w.drawing.object.width']);
 });
 
 test('the bridge projects a comparative step onto a factor of the value the target has now',()=>{

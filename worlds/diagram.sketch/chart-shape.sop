@@ -1,0 +1,274 @@
+# diagram.sketch chart shape (authored): the room a chart group's plot takes, its value axis floor, bars lying on their
+# side, several series per chart (side by side, stacked, as shares), and the scatter and radar layouts. Each is a slot
+# of the catalog's w.diagram.group (y_min, orientation, stacking, width, height, effect, layout scatter|radar) or a
+# w.diagram.series with its w.diagram.datum values; render-projection.sop, ring-projection.sop and chart-format.sop read
+# the resolved geometry (ui.diagram.cgeo: the room of one category, the plot's length along the values and the offsets
+# below it), so a plot sized by hand moves its bars, labels, baseline, gridlines and axis numbers with it.
+@shp.cgeo.type core.type of=ui.diagram.cgeo
+@shp.chor.type core.type of=ui.diagram.chor
+@shp.caxes.type core.type of=ui.diagram.caxes
+@shp.csize.type core.type of=ui.diagram.csize
+@shp.cacross.type core.type of=ui.diagram.cacross
+@shp.calong.type core.type of=ui.diagram.calong
+@shp.cfloor.type core.type of=ui.diagram.cfloor
+@shp.cfoot.type core.type of=ui.diagram.cfoot
+
+# ---- The plot's room ----
+# A bar chart whose orientation is horizontal lays its bars on their side: the categories down the side, the values
+# along. Its categories take the room across (width when standing, height when lying), the values the room along.
+@shp.hz.g w.diagram.group code=?g layout=bar orientation=horizontal
+@shp.hz.out ui.diagram.chor group=?g
+@chart.orientation.horizontal core.rule when=$shp.hz.g then=$shp.hz.out
+@shp.ax.c ui.diagram.chart group=?g
+@shp.ax.h ui.diagram.chor group=?g
+@shp.ax.v ui.diagram.caxes group=?g across=width along=height
+@shp.ax.l ui.diagram.caxes group=?g across=height along=width
+@chart.axes.standing core.rule when=$shp.ax.c not=$shp.ax.h then=$shp.ax.v
+@chart.axes.lying core.rule when=$shp.ax.c when=$shp.ax.h then=$shp.ax.l
+# A size set by hand (width, height in pixels: the plot's own room).
+@shp.sz.w w.diagram.group code=?g width=?v
+@shp.sz.wo ui.diagram.csize group=?g dim=width v=?v
+@chart.size.width core.rule when=$shp.sz.w then=$shp.sz.wo
+@shp.sz.h w.diagram.group code=?g height=?v
+@shp.sz.ho ui.diagram.csize group=?g dim=height v=?v
+@chart.size.height core.rule when=$shp.sz.h then=$shp.sz.ho
+# Across: the room of one category, the size set by hand shared by the categories, else 56 each.
+@shp.ac.a ui.diagram.caxes group=?g across=?ad
+@shp.ac.n ui.diagram.gstat group=?g key=count value=?n
+@shp.ac.s ui.diagram.csize group=?g dim=?ad v=?av
+@shp.ac.any ui.diagram.csize group=?g dim=?ad v=?anyav
+@shp.ac.d core.calc out=?cw fn=div args=?av args=?n
+@shp.ac.out ui.diagram.cacross group=?g cw=?cw total=?av
+@chart.across.set core.rule when=$shp.ac.a when=$shp.ac.n when=$shp.ac.s with=$shp.ac.d then=$shp.ac.out
+@shp.ac.t core.calc out=?tt fn=mul args=?n args=56
+@shp.ac.out0 ui.diagram.cacross group=?g cw=56 total=?tt
+@chart.across.usual core.rule when=$shp.ac.a when=$shp.ac.n not=$shp.ac.any with=$shp.ac.t then=$shp.ac.out0
+# Along: the plot's length along the values, the size set by hand, else 160.
+@shp.al.a ui.diagram.caxes group=?g along=?ld
+@shp.al.s ui.diagram.csize group=?g dim=?ld v=?lv
+@shp.al.any ui.diagram.csize group=?g dim=?ld v=?anylv
+@shp.al.out ui.diagram.calong group=?g ph=?lv
+@chart.along.set core.rule when=$shp.al.a when=$shp.al.s then=$shp.al.out
+@shp.al.out0 ui.diagram.calong group=?g ph=160
+@chart.along.usual core.rule when=$shp.al.a not=$shp.al.any then=$shp.al.out0
+# The geometry: cw a category's room and hw its half; ph the plot's length; base the baseline under the plot's top
+# (ph + 10), lab the category labels' line (ph + 28), cell the height of a standing chart's cells (ph + 36).
+@shp.g.a ui.diagram.cacross group=?g cw=?cw total=?tt
+@shp.g.l ui.diagram.calong group=?g ph=?ph
+@shp.g.hw core.calc out=?hw fn=div args=?cw args=2
+@shp.g.b core.calc out=?b fn=add args=?ph args=10
+@shp.g.lab core.calc out=?lab fn=add args=?ph args=28
+@shp.g.cell core.calc out=?cell fn=add args=?ph args=36
+@shp.g.out ui.diagram.cgeo group=?g cw=?cw hw=?hw ph=?ph base=?b lab=?lab cell=?cell total=?tt
+@chart.geometry core.rule when=$shp.g.a when=$shp.g.l with=$shp.g.hw with=$shp.g.b with=$shp.g.lab with=$shp.g.cell then=$shp.g.out
+# The x axis title's line under the plot's top: under the category labels of a standing chart, under the last
+# category of a lying one.
+@shp.ft.g ui.diagram.cgeo group=?g ph=?ph total=?tt
+@shp.ft.h ui.diagram.chor group=?g
+@shp.ft.v core.calc out=?fy fn=add args=?ph args=44
+@shp.ft.l core.calc out=?fl fn=add args=?tt args=24
+@shp.ft.ov ui.diagram.cfoot group=?g y=?fy
+@shp.ft.ol ui.diagram.cfoot group=?g y=?fl
+@chart.foot.standing core.rule when=$shp.ft.g not=$shp.ft.h with=$shp.ft.v then=$shp.ft.ov
+@chart.foot.lying core.rule when=$shp.ft.g when=$shp.ft.h with=$shp.ft.l then=$shp.ft.ol
+# A lying chart's cells: one column as wide as the labels, the plot and the values; a row per category.
+@shp.lc.g ui.diagram.cgeo group=?g cw=?cw ph=?ph
+@shp.lc.h ui.diagram.chor group=?g
+@shp.lc.n ui.diagram.gstat group=?g key=count value=?n
+@shp.lc.w core.calc out=?w fn=add args=?ph args=130
+@shp.lc.out ui.diagram.gcell group=?g cols=1 rows=?n cw=?w ch=?cw
+@chart.cell.lying core.rule when=$shp.lc.g when=$shp.lc.h when=$shp.lc.n with=$shp.lc.w then=$shp.lc.out
+
+# ---- The value axis floor: y_min, else 0 ----
+@shp.fl.c ui.diagram.chart group=?g
+@shp.fl.o w.diagram.group code=?g y_min=?lo
+@shp.fl.any w.diagram.group code=?g y_min=?anylo
+@shp.fl.out ui.diagram.cfloor group=?g value=?lo
+@shp.fl.out0 ui.diagram.cfloor group=?g value=0
+@chart.floor.set core.rule when=$shp.fl.c when=$shp.fl.o then=$shp.fl.out
+@chart.floor.zero core.rule when=$shp.fl.c not=$shp.fl.any then=$shp.fl.out0
+
+# ---- Bars on their side ----
+# Each bar starts at the baseline right of the labels (80 in from the frame's padding) and is as long as its share of
+# the value axis (at least 4); it is centred on its category's row, as thick as a standing bar is wide.
+@shp.hb.p ui.diagram.mpos node=?c group=?g row=?row
+@shp.hb.h ui.diagram.chor group=?g
+@shp.hb.gb ui.diagram.ubox unit=?g x0=?gx y0=?gy
+@shp.hb.pad ui.diagram.gpad group=?g pad=?pad top=?top
+@shp.hb.geo ui.diagram.cgeo group=?g cw=?cw hw=?hw ph=?ph
+@shp.hb.fr ui.diagram.cfrac node=?c f=?f
+@shp.hb.bh ui.diagram.bhalf group=?g h=?bh
+@shp.hb.x1 core.calc out=?xa fn=add args=?gx args=?pad
+@shp.hb.x0 core.calc out=?x0 fn=add args=?xa args=80
+@shp.hb.l1 core.calc out=?l1 fn=mul args=?f args=?ph
+@shp.hb.l2 core.calc out=?l2 fn=min args=?l1 args=?ph
+@shp.hb.l core.calc out=?l fn=max args=?l2 args=4
+@shp.hb.xe core.calc out=?xe fn=add args=?x0 args=?l
+@shp.hb.r core.calc out=?r fn=mul args=?row args=?cw
+@shp.hb.t core.calc out=?t fn=add args=?gy args=?top
+@shp.hb.cy1 core.calc out=?cy1 fn=add args=?t args=?r
+@shp.hb.cy core.calc out=?cy fn=add args=?cy1 args=?hw
+@shp.hb.y0 core.calc out=?y0 fn=sub args=?cy args=?bh
+@shp.hb.y1 core.calc out=?y1 fn=add args=?cy args=?bh
+@shp.hb.hl core.calc out=?hl fn=div args=?l args=2
+@shp.hb.cx core.calc out=?cx fn=add args=?x0 args=?hl
+@shp.hb.th core.calc out=?th fn=mul args=?bh args=2
+@shp.hb.out ui.diagram.nbox node=?c x0=?x0 y0=?y0 x1=?xe y1=?y1 cx=?cx cy=?cy w=?l h=?th
+@chart.bar.lying core.rule when=$shp.hb.p when=$shp.hb.h when=$shp.hb.gb when=$shp.hb.pad when=$shp.hb.geo when=$shp.hb.fr when=$shp.hb.bh with=$shp.hb.x1 with=$shp.hb.x0 with=$shp.hb.l1 with=$shp.hb.l2 with=$shp.hb.l with=$shp.hb.xe with=$shp.hb.r with=$shp.hb.t with=$shp.hb.cy1 with=$shp.hb.cy with=$shp.hb.y0 with=$shp.hb.y1 with=$shp.hb.hl with=$shp.hb.cx with=$shp.hb.th then=$shp.hb.out
+# Its label left of the baseline (right-aligned), its value right of the bar's end.
+@shp.hl.m ui.diagram.chartmember node=?c group=?g
+@shp.hl.h ui.diagram.chor group=?g
+@shp.hl.n w.diagram.node code=?c label=?t
+@shp.hl.b ui.diagram.nbox node=?c x0=?x0 x1=?xe cy=?cy
+@shp.hl.fs ui.diagram.cfmt group=?g slot=font_size v=?fs
+@shp.hl.s core.calc out=?src fn=concat args=?c args=".label"
+@shp.hl.x core.calc out=?lx fn=sub args=?x0 args=6
+@shp.hl.y core.calc out=?ly fn=add args=?cy args=4
+@shp.hl.out ui.diagram.draw part=?c source=?src slot=?c order=4 z=0 shape=text text=?t x=?lx y=?ly w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left anchor=end font=?fs
+@shp.hl.fill ui.diagram.fill source=?src part=?c fill="#1f2933"
+@chart.label.lying core.rule when=$shp.hl.m when=$shp.hl.h when=$shp.hl.n when=$shp.hl.b when=$shp.hl.fs with=$shp.hl.s with=$shp.hl.x with=$shp.hl.y then=$shp.hl.out
+@chart.label.lying.fill core.rule when=$shp.hl.m when=$shp.hl.h when=$shp.hl.n when=$shp.hl.b with=$shp.hl.s then=$shp.hl.fill
+@shp.hv.m ui.diagram.chartmember node=?c group=?g
+@shp.hv.h ui.diagram.chor group=?g
+@shp.hv.off w.diagram.group code=?g value_labels=false
+@shp.hv.n ui.diagram.vtext node=?c text=?v
+@shp.hv.b ui.diagram.nbox node=?c x1=?xe cy=?cy
+@shp.hv.fs ui.diagram.cfmt group=?g slot=font_size v=?fs
+@shp.hv.f core.calc out=?f fn=sub args=?fs args=1
+@shp.hv.s core.calc out=?src fn=concat args=?c args=".value"
+@shp.hv.x core.calc out=?vx fn=add args=?xe args=6
+@shp.hv.y core.calc out=?vy fn=add args=?cy args=4
+@shp.hv.out ui.diagram.draw part=?c source=?src slot=?c order=4 z=0 shape=text text=?v x=?vx y=?vy w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left anchor=start font=?f
+@shp.hv.fill ui.diagram.fill source=?src part=?c fill="#52606d"
+@chart.value.lying core.rule when=$shp.hv.m when=$shp.hv.h when=$shp.hv.n when=$shp.hv.b when=$shp.hv.fs not=$shp.hv.off with=$shp.hv.f with=$shp.hv.s with=$shp.hv.x with=$shp.hv.y then=$shp.hv.out
+@chart.value.lying.fill core.rule when=$shp.hv.m when=$shp.hv.h when=$shp.hv.n when=$shp.hv.b not=$shp.hv.off with=$shp.hv.s then=$shp.hv.fill
+# The baseline down the left of the bars; gridlines across the plot at each quarter of its length.
+@shp.hs.h ui.diagram.chor group=?g
+@shp.hs.gb ui.diagram.ubox unit=?g x0=?gx y0=?gy
+@shp.hs.pad ui.diagram.gpad group=?g pad=?pad top=?top
+@shp.hs.geo ui.diagram.cgeo group=?g ph=?ph total=?tt
+@shp.hs.x1 core.calc out=?xa fn=add args=?gx args=?pad
+@shp.hs.x0 core.calc out=?x0 fn=add args=?xa args=80
+@shp.hs.t core.calc out=?t fn=add args=?gy args=?top
+@shp.hs.e core.calc out=?e fn=add args=?t args=?tt
+@shp.hs.s core.calc out=?src fn=concat args=?g args=".base"
+@shp.hs.p1 ui.diagram.point source=?src n=1 x=?x0 y=?t
+@shp.hs.p2 ui.diagram.point source=?src n=2 x=?x0 y=?e
+@shp.hs.d ui.diagram.draw part=?g source=?src slot=?g order=2 z=0 shape=line x=0 y=0 w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left stroke=1
+@shp.hs.f ui.diagram.fill source=?src part=?g fill="#7b8794"
+@chart.base.lying.1 core.rule when=$shp.hs.h when=$shp.hs.gb when=$shp.hs.pad when=$shp.hs.geo with=$shp.hs.x1 with=$shp.hs.x0 with=$shp.hs.t with=$shp.hs.e with=$shp.hs.s then=$shp.hs.p1
+@chart.base.lying.2 core.rule when=$shp.hs.h when=$shp.hs.gb when=$shp.hs.pad when=$shp.hs.geo with=$shp.hs.x1 with=$shp.hs.x0 with=$shp.hs.t with=$shp.hs.e with=$shp.hs.s then=$shp.hs.p2
+@chart.base.lying.draw core.rule when=$shp.hs.h when=$shp.hs.gb with=$shp.hs.s then=$shp.hs.d
+@chart.base.lying.fill core.rule when=$shp.hs.h when=$shp.hs.gb with=$shp.hs.s then=$shp.hs.f
+@shp.hg.h ui.diagram.chor group=?g
+@shp.hg.on w.diagram.group code=?g gridlines=true
+@shp.hg.q ui.diagram.quarter k=?k
+@shp.hg.gb ui.diagram.ubox unit=?g x0=?gx y0=?gy
+@shp.hg.pad ui.diagram.gpad group=?g pad=?pad top=?top
+@shp.hg.geo ui.diagram.cgeo group=?g ph=?ph total=?tt
+@shp.hg.xa core.calc out=?xa fn=add args=?gx args=?pad
+@shp.hg.x0 core.calc out=?x0 fn=add args=?xa args=80
+@shp.hg.d1 core.calc out=?d1 fn=mul args=?k args=?ph
+@shp.hg.d core.calc out=?d fn=div args=?d1 args=4
+@shp.hg.x core.calc out=?x fn=add args=?x0 args=?d
+@shp.hg.t core.calc out=?t fn=add args=?gy args=?top
+@shp.hg.e core.calc out=?e fn=add args=?t args=?tt
+@shp.hg.s core.calc out=?src fn=concat args=?g args=".grid." args=?k
+@shp.hg.p1 ui.diagram.point source=?src n=1 x=?x y=?t
+@shp.hg.p2 ui.diagram.point source=?src n=2 x=?x y=?e
+@shp.hg.gs ui.diagram.cfmt group=?g slot=grid_style v=?gs
+@shp.hg.gd ui.diagram.gdash style=?gs dash=?gdash
+@shp.hg.solid core.check fn=eq args=?gs args=solid
+@shp.hg.dd ui.diagram.draw part=?g source=?src slot=?g order=2 z=0 shape=line x=0 y=0 w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left stroke=1 dash=?gdash
+@shp.hg.ds ui.diagram.draw part=?g source=?src slot=?g order=2 z=0 shape=line x=0 y=0 w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left stroke=1
+@shp.hg.f ui.diagram.fill source=?src part=?g fill="#c3cbd5"
+@chart.grid.lying.1 core.rule when=$shp.hg.h when=$shp.hg.on when=$shp.hg.q when=$shp.hg.gb when=$shp.hg.pad when=$shp.hg.geo with=$shp.hg.xa with=$shp.hg.x0 with=$shp.hg.d1 with=$shp.hg.d with=$shp.hg.x with=$shp.hg.t with=$shp.hg.e with=$shp.hg.s then=$shp.hg.p1
+@chart.grid.lying.2 core.rule when=$shp.hg.h when=$shp.hg.on when=$shp.hg.q when=$shp.hg.gb when=$shp.hg.pad when=$shp.hg.geo with=$shp.hg.xa with=$shp.hg.x0 with=$shp.hg.d1 with=$shp.hg.d with=$shp.hg.x with=$shp.hg.t with=$shp.hg.e with=$shp.hg.s then=$shp.hg.p2
+@chart.grid.lying.draw core.rule when=$shp.hg.h when=$shp.hg.on when=$shp.hg.q when=$shp.hg.gb when=$shp.hg.gs when=$shp.hg.gd with=$shp.hg.s then=$shp.hg.dd
+@chart.grid.lying.draw.solid core.rule when=$shp.hg.h when=$shp.hg.on when=$shp.hg.q when=$shp.hg.gb when=$shp.hg.gs if=$shp.hg.solid with=$shp.hg.s then=$shp.hg.ds
+@chart.grid.lying.fill core.rule when=$shp.hg.h when=$shp.hg.on when=$shp.hg.q when=$shp.hg.gb with=$shp.hg.s then=$shp.hg.f
+# The value axis numbers of a lying chart under its plot, at its floor and at each quarter.
+@shp.ht.h ui.diagram.chor group=?g
+@shp.ht.ax ui.diagram.yaxis group=?g
+@shp.ht.t ui.diagram.tickv group=?g k=?k v=?v
+@shp.ht.n ui.diagram.ntext group=?g v=?v text=?txt
+@shp.ht.gb ui.diagram.ubox unit=?g x0=?gx y0=?gy
+@shp.ht.pad ui.diagram.gpad group=?g pad=?pad top=?top
+@shp.ht.geo ui.diagram.cgeo group=?g ph=?ph total=?tt
+@shp.ht.fs ui.diagram.cfmt group=?g slot=font_size v=?fs
+@shp.ht.f core.calc out=?f fn=sub args=?fs args=1
+@shp.ht.xa core.calc out=?xa fn=add args=?gx args=?pad
+@shp.ht.x0 core.calc out=?x0 fn=add args=?xa args=80
+@shp.ht.d1 core.calc out=?d1 fn=mul args=?k args=?ph
+@shp.ht.d core.calc out=?d fn=div args=?d1 args=4
+@shp.ht.x core.calc out=?x fn=add args=?x0 args=?d
+@shp.ht.t1 core.calc out=?t1 fn=add args=?gy args=?top
+@shp.ht.y1 core.calc out=?y1 fn=add args=?t1 args=?tt
+@shp.ht.y core.calc out=?y fn=add args=?y1 args=14
+@shp.ht.s core.calc out=?src fn=concat args=?g args=".tick." args=?k
+@shp.ht.out ui.diagram.draw part=?g source=?src slot=?g order=4 z=0 shape=text text=?txt x=?x y=?y w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left anchor=middle font=?f
+@shp.ht.fill ui.diagram.fill source=?src part=?g fill="#52606d"
+@chart.tick.lying core.rule when=$shp.ht.h when=$shp.ht.ax when=$shp.ht.t when=$shp.ht.n when=$shp.ht.gb when=$shp.ht.pad when=$shp.ht.geo when=$shp.ht.fs with=$shp.ht.f with=$shp.ht.xa with=$shp.ht.x0 with=$shp.ht.d1 with=$shp.ht.d with=$shp.ht.x with=$shp.ht.t1 with=$shp.ht.y1 with=$shp.ht.y with=$shp.ht.s then=$shp.ht.out
+@chart.tick.lying.fill core.rule when=$shp.ht.h when=$shp.ht.ax when=$shp.ht.t when=$shp.ht.n with=$shp.ht.s then=$shp.ht.fill
+# The value axis numbers of a lying chart: its floor and each quarter up to its top (no axis line of their own).
+@shp.lt.h ui.diagram.chor group=?g
+@shp.lt.ax ui.diagram.yaxis group=?g
+@shp.lt.k ui.diagram.tickk k=?k
+@shp.lt.s ui.diagram.cscale group=?g value=?mx
+@shp.lt.lo ui.diagram.cfloor group=?g value=?lo
+@shp.lt.log w.diagram.group code=?g axis_scale=log
+@shp.lt.r core.calc out=?rg fn=sub args=?mx args=?lo
+@shp.lt.v1 core.calc out=?v1 fn=mul args=?rg args=?k
+@shp.lt.v2 core.calc out=?v2 fn=div args=?v1 args=4
+@shp.lt.v core.calc out=?v fn=add args=?lo args=?v2
+@shp.lt.out ui.diagram.tickv group=?g k=?k v=?v y=0
+@chart.ticks.lying core.rule when=$shp.lt.h when=$shp.lt.ax when=$shp.lt.k when=$shp.lt.s when=$shp.lt.lo not=$shp.lt.log with=$shp.lt.r with=$shp.lt.v1 with=$shp.lt.v2 with=$shp.lt.v then=$shp.lt.out
+
+# ---- Setting the shape (diagram.chart.format): the generic property table of chart-format.sop ----
+# orientation, stacking and effect are named values; width and height numbers within their limits (a comparative is the
+# execution policy's step from the observed size); y_min (yMin) any number, like y_max.
+@shp.p.or ui.diagram.cprop slot=orientation param=orientation kind=enum base=vertical primary=true measure=false
+@shp.p.st ui.diagram.cprop slot=stacking param=stacking kind=enum base=none primary=true measure=false
+@shp.p.ef ui.diagram.cprop slot=effect param=effect kind=enum base=none primary=true measure=false
+@shp.p.w ui.diagram.cprop slot=width param=width kind=number base=320 min=60 max=2000 inverse=false primary=false
+@shp.p.h ui.diagram.cprop slot=height param=height kind=number base=160 min=60 max=2000 inverse=false primary=false
+@shp.o1 w.diagram.group code=?g orientation=?v
+@shp.o1.o ui.diagram.cown group=?g slot=orientation v=?v
+@chart.own.orientation core.rule when=$shp.o1 then=$shp.o1.o
+@shp.o2 w.diagram.group code=?g stacking=?v
+@shp.o2.o ui.diagram.cown group=?g slot=stacking v=?v
+@chart.own.stacking core.rule when=$shp.o2 then=$shp.o2.o
+@shp.o3 w.diagram.group code=?g effect=?v
+@shp.o3.o ui.diagram.cown group=?g slot=effect v=?v
+@chart.own.effect core.rule when=$shp.o3 then=$shp.o3.o
+@shp.q1 app.act.request operation="diagram.chart.format" orientation=?v
+@shp.q1.o ui.diagram.cset param=orientation said=?v
+@chart.say.orientation core.rule when=$shp.q1 then=$shp.q1.o
+@shp.q2 app.act.request operation="diagram.chart.format" stacking=?v
+@shp.q2.o ui.diagram.cset param=stacking said=?v
+@chart.say.stacking core.rule when=$shp.q2 then=$shp.q2.o
+@shp.q3 app.act.request operation="diagram.chart.format" effect=?v
+@shp.q3.o ui.diagram.cset param=effect said=?v
+@chart.say.effect core.rule when=$shp.q3 then=$shp.q3.o
+@shp.q4 app.act.request operation="diagram.chart.format" width=?v
+@shp.q4.o ui.diagram.cset param=width said=?v
+@chart.say.width core.rule when=$shp.q4 then=$shp.q4.o
+@shp.q5 app.act.request operation="diagram.chart.format" height=?v
+@shp.q5.o ui.diagram.cset param=height said=?v
+@chart.say.height core.rule when=$shp.q5 then=$shp.q5.o
+# The plot's size is observed as drawn (its own or the usual room): the measure a comparative steps from.
+@shp.ow.a ui.diagram.caxes group=?g across=?ad along=?ld
+@shp.ow.c ui.diagram.cacross group=?g total=?tt
+@shp.ow.l ui.diagram.calong group=?g ph=?ph
+@shp.ow.u ui.diagram.unit unit=?g kind=group
+@shp.ow.o1 app.observe.input id=?g key=?ad value=?tt
+@shp.ow.o2 app.observe.input id=?g key=?ld value=?ph
+@observe.chart.across core.rule when=$shp.ow.a when=$shp.ow.c when=$shp.ow.u then=$shp.ow.o1
+@observe.chart.along core.rule when=$shp.ow.a when=$shp.ow.l when=$shp.ow.u then=$shp.ow.o2
+@shp.ym.r app.act.request operation="diagram.chart.format" id=?g yMin=?v
+@shp.ym.g w.diagram.group code=?g
+@shp.ym.c app.act.call act=change thing=$shp.ym.g attr=y_min value=?v order=1
+@tool.chart.format.ymin core.rule when=$shp.ym.r when=$shp.ym.g then=$shp.ym.c
+@shp.ym.o w.diagram.group code=?id y_min=?v
+@shp.ym.oo app.observe.input id=?id key=yMin value=?v
+@observe.chart.ymin core.rule when=$shp.ym.o then=$shp.ym.oo

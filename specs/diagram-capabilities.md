@@ -156,15 +156,26 @@ log → log), `chart.tickFormat` (powers of ten → power, magnitudes → magnit
 dash_dot), `chart.gridStyle` → `diagram.chart.format`; `chart.dimension`, `chart.measure`, `chart.aggregate`,
 `chart.top`, `chart.above`, `chart.below` → `diagram.group.chart.make`; `diagram.background`, `page.background`,
 `page.title` → `diagram.page.change`.
-`chart.min`, `chart.horizontal`, `chart.stacked`, `chart.width`/`height` and `chart.effect` stay unbound and are
-disclosed: the catalog's `w.diagram.group` (closed, hand-core) has no slot for a value axis minimum, a bar
-orientation, stacking or a chart size, so no rule can keep them (needs catalog slots in sop-knowledge-worlds).
+A chart's shape (chart-shape.sop; catalog 93cf7fdf slots of `w.diagram.group`): `diagram.chart.format` takes `yMin`
+(`y_min`: the value axis floor; bars and axis numbers are measured from it), `orientation` (vertical, horizontal: bars
+lying on their side, categories down the side, labels left, values right, gridlines and axis numbers along the bottom;
+line, area and pie charts keep their form), `stacking` (none, stacked, percent: how the chart's series are set out),
+`width` and `height` (60-2000 px: the plot's own room; a standing chart shares its width among its categories, a lying
+one takes its width as the length of its bars; observed as drawn, so "wider", "taller" step the scale of size from the
+drawn size) and `effect` (none, shadow, glow on the chart's frame). The chart geometry (a category's room, the plot's
+length, the baseline, label and title lines) is one derived fact (`ui.diagram.cgeo`) that the bars, lines, areas,
+labels, gridlines and axis numbers read. Reader keys: `chart.min` → `yMin`, `chart.horizontal` → `orientation` (on,
+true → horizontal; off, false → vertical), `chart.stacked` → `stacking` (stacked, on → stacked; off, grouped → none;
+percent, 100% → percent), `chart.width`/`chart.height` → `width`/`height`, `chart.effect` → `effect` (shadow, glow,
+none, off). Not applied and disclosed: effects the chart has no drawing for (gradient, 3d), sizes said in inches or
+centimetres (the gold value keeps the number only; a unit-aware length reading is missing), an axis range said as one
+span ("from 0 to 10": both keys carry the whole span).
 
 Not yet (each needs a rule set or a mechanism, listed honestly; from the owner's request and
 management/data-drop/pilot/FEATURE-REQUESTS.md B1-B12):
 - several series per chart (grouped and stacked bars, several lines, series rename/recolour/reorder/merge, a second
   value axis): needs `w.diagram.series` and `w.diagram.datum` facts and grouped/stacked placement rules;
-- horizontal bars, tick density, trend lines and moving averages (least-squares sums in rules), callout annotations;
+- tick density, trend lines and moving averages (least-squares sums in rules), callout annotations;
 - error bars and their caps (needs an error value per category: `w.diagram.node` has none), colour bars, panels,
   marker shapes and marker intervals, legend position for bar and line charts (a single series has no legend),
   the x axis on top, a chart's place on the page by region ("on the left", "below the image"), bins (a histogram
@@ -175,7 +186,8 @@ management/data-drop/pilot/FEATURE-REQUESTS.md B1-B12):
 - organic (force) layout through std.problem/Z3 (see Status);
 - batch formatting across several pages (one page per area today); "center the flow on the page" (the page is
   sized to the drawing).
-Chart effects use the node effects (shadow, glow, opacity, corner, rotation).
+Chart effects: the chart's frame takes `effect` (shadow, glow); its bars take the node effects (shadow, glow, opacity,
+corner, rotation).
 
 ## Page and history
 

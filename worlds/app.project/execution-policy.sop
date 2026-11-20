@@ -183,6 +183,40 @@
 @chart.key.chart_top app.execution.keyBinding area=diagram key="chart.top" operation="diagram.group.chart.make" parameter="top"
 @chart.key.chart_above app.execution.keyBinding area=diagram key="chart.above" operation="diagram.group.chart.make" parameter="above"
 @chart.key.chart_below app.execution.keyBinding area=diagram key="chart.below" operation="diagram.group.chart.make" parameter="below"
+# A chart's shape (worlds/diagram.sketch/chart-shape.sop): the axis minimum is the value axis floor; bars "horizontal"
+# lie on their side (off: they stand); "stacked" sets the series on top of each other (off: side by side; percent: as
+# shares); the chart's width and height size its plot in pixels; a shadow or a glow round its frame. An effect the
+# chart has no drawing for (a gradient, 3d) has no declared counterpart and is reported as not applied.
+@chart.key.chart_min app.execution.keyBinding area=diagram key="chart.min" operation="diagram.chart.format" parameter="yMin"
+@chart.key.chart_horizontal app.execution.keyBinding area=diagram key="chart.horizontal" operation="diagram.chart.format" parameter="orientation"
+@chart.key.chart_horizontal.on app.execution.keyValue area=diagram key="chart.horizontal" said="on" value="horizontal"
+@chart.key.chart_horizontal.true app.execution.keyValue area=diagram key="chart.horizontal" said="true" value="horizontal"
+@chart.key.chart_horizontal.horizontal app.execution.keyValue area=diagram key="chart.horizontal" said="horizontal" value="horizontal"
+@chart.key.chart_horizontal.off app.execution.keyValue area=diagram key="chart.horizontal" said="off" value="vertical"
+@chart.key.chart_horizontal.false app.execution.keyValue area=diagram key="chart.horizontal" said="false" value="vertical"
+@chart.key.chart_horizontal.vertical app.execution.keyValue area=diagram key="chart.horizontal" said="vertical" value="vertical"
+@chart.key.chart_stacked app.execution.keyBinding area=diagram key="chart.stacked" operation="diagram.chart.format" parameter="stacking"
+@chart.key.chart_stacked.stacked app.execution.keyValue area=diagram key="chart.stacked" said="stacked" value="stacked"
+@chart.key.chart_stacked.on app.execution.keyValue area=diagram key="chart.stacked" said="on" value="stacked"
+@chart.key.chart_stacked.true app.execution.keyValue area=diagram key="chart.stacked" said="true" value="stacked"
+@chart.key.chart_stacked.off app.execution.keyValue area=diagram key="chart.stacked" said="off" value="none"
+@chart.key.chart_stacked.false app.execution.keyValue area=diagram key="chart.stacked" said="false" value="none"
+@chart.key.chart_stacked.grouped app.execution.keyValue area=diagram key="chart.stacked" said="grouped" value="none"
+@chart.key.chart_stacked.percent app.execution.keyValue area=diagram key="chart.stacked" said="percent" value="percent"
+@chart.key.chart_stacked.hundred app.execution.keyValue area=diagram key="chart.stacked" said="100%" value="percent"
+@chart.key.chart_width app.execution.keyBinding area=diagram key="chart.width" operation="diagram.chart.format" parameter="width"
+@chart.key.chart_height app.execution.keyBinding area=diagram key="chart.height" operation="diagram.chart.format" parameter="height"
+@chart.key.chart_effect app.execution.keyBinding area=diagram key="chart.effect" operation="diagram.chart.format" parameter="effect"
+@chart.key.chart_effect.shadow app.execution.keyValue area=diagram key="chart.effect" said="shadow" value="shadow"
+@chart.key.chart_effect.glow app.execution.keyValue area=diagram key="chart.effect" said="glow" value="glow"
+@chart.key.chart_effect.none app.execution.keyValue area=diagram key="chart.effect" said="none" value="none"
+@chart.key.chart_effect.off app.execution.keyValue area=diagram key="chart.effect" said="off" value="none"
+# A comparative of a chart's size ("make the chart wider", "taller") is one step of the scale of size from the size the
+# plot is observed with (its own or the usual room).
+@chart.width.values app.execution.values concept=diagram.sketch.group.width valueType="k.expect.scale" nameKey="step" valueKey="size_factor" codec=degree
+@chart.width.measure app.execution.observedMeasure concept=diagram.sketch.group.width sourceType="diagram.sketch.group" parameter="width" binding="diagram.group.width" order=16
+@chart.height.values app.execution.values concept=diagram.sketch.group.height valueType="k.expect.scale" nameKey="step" valueKey="size_factor" codec=degree
+@chart.height.measure app.execution.observedMeasure concept=diagram.sketch.group.height sourceType="diagram.sketch.group" parameter="height" binding="diagram.group.height" order=17
 @chart.key.diagram_background app.execution.keyBinding area=diagram key="diagram.background" operation="diagram.page.change" parameter="background"
 @chart.key.page_background app.execution.keyBinding area=diagram key="page.background" operation="diagram.page.change" parameter="background"
 @chart.key.page_title app.execution.keyBinding area=diagram key="page.title" operation="diagram.page.change" parameter="title"

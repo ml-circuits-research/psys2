@@ -22,8 +22,13 @@ test('chart keys bind to the chart group operations with declared values',async(
  assert.equal(row('chart.sort').hostBinding.operation,'diagram.chart.sort');
  assert.equal(row('chart.max').numeric,true);
  assert.equal(row('point.chart').hostBinding.parameter,'id');
- // No declared counterpart: the key stays unbound and the reply discloses it.
- assert.equal(row('chart.horizontal'),undefined);
+ // The chart's shape (chart-shape.sop): bars lying on their side, series stacked, the axis floor.
+ assert.equal(row('chart.horizontal').hostBinding.parameter,'orientation');
+ assert.deepEqual(row('chart.horizontal').valueMap.find(v=>v.said==='on'),{said:'on',value:'horizontal'});
+ assert.deepEqual(row('chart.stacked').valueMap.find(v=>v.said==='off'),{said:'off',value:'none'});
+ assert.equal(row('chart.min').numeric,true);
+ // No declared counterpart (a gradient, 3d): the said value is not mapped and the reply discloses it.
+ assert.equal(row('chart.effect').valueMap.some(v=>v.said==='gradient'),false);
 });
 
 test('a said legend value reaches the chart format tool as its declared parameter value',async()=>{

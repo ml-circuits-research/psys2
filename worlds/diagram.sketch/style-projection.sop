@@ -197,7 +197,15 @@
 @sf.lc ui.diagram.pagecol key=frameline rgb=?lc
 @sf.out ui.diagram.draw part=?g source=?g slot=?g order=1 z=0 shape=rectangle x=?x y=?y w=?w h=?h cx=0 cy=0 tx=0 ty=0 scale=1 side=left outline=?lc round=10
 @sf.fill ui.diagram.fill source=?g part=?g fill=?fc
-@st.draw.group core.rule when=$sf.u when=$sf.b when=$sf.lc not=$sf.nf then=$sf.out
+@sf.ef w.diagram.group code=?g effect=?ef
+@sf.efn core.check fn=neq args=?ef args=none
+@st.draw.group core.rule when=$sf.u when=$sf.b when=$sf.lc not=$sf.nf not=$sf.ef then=$sf.out
+@sf.oute ui.diagram.draw part=?g source=?g slot=?g order=1 z=0 shape=rectangle x=?x y=?y w=?w h=?h cx=0 cy=0 tx=0 ty=0 scale=1 side=left outline=?lc round=10 effect=?ef
+@sf.outn ui.diagram.draw part=?g source=?g slot=?g order=1 z=0 shape=rectangle x=?x y=?y w=?w h=?h cx=0 cy=0 tx=0 ty=0 scale=1 side=left outline=?lc round=10
+# A group with an effect (a chart's shadow or glow, chart-shape.sop) draws its frame with it; none: without.
+@st.draw.group.effect core.rule when=$sf.u when=$sf.b when=$sf.lc not=$sf.nf when=$sf.ef if=$sf.efn then=$sf.oute
+@sf.efz w.diagram.group code=?g effect=none
+@st.draw.group.noeffect core.rule when=$sf.u when=$sf.b when=$sf.lc not=$sf.nf when=$sf.efz then=$sf.outn
 @st.fill.group core.rule when=$sf.u when=$sf.b when=$sf.fc not=$sf.nf then=$sf.fill
 # The label: at the top left of the band (top: centred; bottom: under the members), one size above the group's font,
 # bold unless the group says normal, in the page's frame text colour or the group's title colour (chart-format.sop).

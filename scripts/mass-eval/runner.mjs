@@ -10,6 +10,8 @@ import {NATIVE_AREAS} from '../../src/dialog/app-reader-context.mjs';
 import {observedReaderContext} from '../../src/dialog/native-reader-context.mjs';
 import {routeNewEngine} from '../../src/dialog/reader-routing.mjs';
 import {createFacts} from '../../src/knowledge/facts.mjs';
+import {CATALOG_PIN} from '../../src/knowledge/catalog-pin.mjs';
+import {pinnedCatalog} from '../lib/catalog-pin.mjs';
 import {createKnowledgeSource} from '../../src/loaders/knowledge-source.mjs';
 import {createGoldProvider,trainerRequest,goldCut} from './gold-reader.mjs';
 import {createSetupCache,TAB} from './area-setup.mjs';
@@ -20,9 +22,12 @@ export const DEPLOYMENT=JSON.parse(readFileSync(path.join(WEBCHAT,'models/sop-be
 export const BUNDLE=path.join(WEBCHAT,DEPLOYMENT.artifactBase);
 export const DEFAULT_RUNTIME_ROOT=path.resolve(ROOT,'../.session-control/diagram-vss-demo/training/laptop/node_modules');
 
+// The catalog at the pin (src/knowledge/catalog-pin.mjs): the site's copy when the webchat build has made it, else the
+// local checkout of the pinned commit (scripts/lib/catalog-pin.mjs), so the areas load the schemas the code is built on.
 function siteKnowledge(){
- const root=path.join(WEBCHAT,'catalog'),commit=existsSync(root)?readdirSync(root).find(n=>/^[0-9a-f]{40}$/.test(n)):null;
- return commit?createFacts({source:createKnowledgeSource(path.join(root,commit))}):null;
+ const root=path.join(WEBCHAT,'catalog');
+ if(existsSync(path.join(root,CATALOG_PIN.commit)))return createFacts({source:createKnowledgeSource(path.join(root,CATALOG_PIN.commit))});
+ return createFacts({source:createKnowledgeSource(pinnedCatalog().dir)});
 }
 
 /** The deployed reader through the verified provider (same assembly as training/sop-bert/probe-bundle.mjs). */

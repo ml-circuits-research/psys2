@@ -403,6 +403,14 @@
 @native.diagram.sketch.op.diagram.chart.format.param.tickFormat std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="tickFormat" kind=string enum="plain" enum="magnitude" enum="power" enumClosed=true
 @native.diagram.sketch.op.diagram.chart.format.param.lineStyle std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="lineStyle" kind=string enum="solid" enum="dashed" enum="dotted" enum="dash_dot" enumClosed=true
 @native.diagram.sketch.op.diagram.chart.format.param.gridStyle std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="gridStyle" kind=string enum="solid" enum="dashed" enum="dotted" enumClosed=true
+# A chart's shape (chart-shape.sop): the bottom of its value axis, bars standing or lying, its series side by side,
+# stacked or as shares, its plot's size in pixels, a shadow or a glow round its frame.
+@native.diagram.sketch.op.diagram.chart.format.param.yMin std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="yMin" kind=number
+@native.diagram.sketch.op.diagram.chart.format.param.orientation std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="orientation" kind=string enum="vertical" enum="horizontal" enumClosed=true
+@native.diagram.sketch.op.diagram.chart.format.param.stacking std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="stacking" kind=string enum="none" enum="stacked" enum="percent" enumClosed=true
+@native.diagram.sketch.op.diagram.chart.format.param.width std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="width" kind=number min=60 max=2000
+@native.diagram.sketch.op.diagram.chart.format.param.height std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="height" kind=number min=60 max=2000
+@native.diagram.sketch.op.diagram.chart.format.param.effect std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.format name="effect" kind=string enum="none" enum="shadow" enum="glow" enumClosed=true
 # A chart asked for by its dimension and measure (act-rules.sop): the categories' dimension, what the values measure, how
 # they are aggregated; only the largest `top` categories, or those above or below a value.
 @native.diagram.sketch.op.diagram.group.chart.make.param.dimension std.capability.parameter operation=$native.diagram.sketch.op.diagram.group.chart.make name="dimension" kind=string

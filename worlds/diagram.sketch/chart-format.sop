@@ -327,9 +327,13 @@
 @cfx.fr.v w.diagram.node code=?c value=?v
 @cfx.fr.mx ui.diagram.cscale group=?g value=?mx
 @cfx.fr.log w.diagram.group code=?g axis_scale=log
-@cfx.fr.f core.calc out=?f fn=div args=?v args=?mx
+@cfx.fr.lo ui.diagram.cfloor group=?g value=?lo
+@cfx.fr.d core.calc out=?dv fn=sub args=?v args=?lo
+@cfx.fr.r core.calc out=?rg fn=sub args=?mx args=?lo
+@cfx.fr.rp core.check fn=gt args=?rg args=0
+@cfx.fr.f core.calc out=?f fn=div args=?dv args=?rg
 @cfx.fr.out ui.diagram.cfrac node=?c f=?f
-@chart.share.linear core.rule when=$cfx.fr.ch when=$cfx.fr.i when=$cfx.fr.v when=$cfx.fr.mx not=$cfx.fr.log with=$cfx.fr.f then=$cfx.fr.out
+@chart.share.linear core.rule when=$cfx.fr.ch when=$cfx.fr.i when=$cfx.fr.v when=$cfx.fr.mx when=$cfx.fr.lo not=$cfx.fr.log with=$cfx.fr.d with=$cfx.fr.r if=$cfx.fr.rp with=$cfx.fr.f then=$cfx.fr.out
 @cfx.fr.lv ui.diagram.lg v=?v l=?lv
 @cfx.fr.lm ui.diagram.lg v=?mx l=?lm
 @cfx.fr.lpos core.check fn=gt args=?lm args=0
@@ -362,13 +366,15 @@
 @cfx.ap.xr2 core.calc out=?xr2 fn=sub args=?xr1 args=?pad
 @cfx.ap.xr core.calc out=?xr fn=add args=?xr2 args=6
 @cfx.ap.b1 core.calc out=?b1 fn=add args=?y args=?top
-@cfx.ap.base core.calc out=?base fn=add args=?b1 args=170
-@cfx.ap.out.l ui.diagram.axpos group=?g x=?xl base=?base iy=?iy anchor=end dx=-5
-@cfx.ap.out.r ui.diagram.axpos group=?g x=?xr base=?base iy=?iy anchor=start dx=5
-@chart.axis.left core.rule when=$cfx.ap.a when=$cfx.ap.b when=$cfx.ap.p when=$cfx.ap.d if=$cfx.ap.l with=$cfx.ap.xl1 with=$cfx.ap.xl with=$cfx.ap.b1 with=$cfx.ap.base then=$cfx.ap.out.l
-@chart.axis.right core.rule when=$cfx.ap.a when=$cfx.ap.b when=$cfx.ap.p when=$cfx.ap.d if=$cfx.ap.r with=$cfx.ap.xr1 with=$cfx.ap.xr2 with=$cfx.ap.xr with=$cfx.ap.b1 with=$cfx.ap.base then=$cfx.ap.out.r
-@cfx.al.a ui.diagram.axpos group=?g x=?x base=?base
-@cfx.al.t core.calc out=?t fn=sub args=?base args=160
+@cfx.ap.geo ui.diagram.cgeo group=?g ph=?ph base=?bo
+@cfx.ap.hz ui.diagram.chor group=?g
+@cfx.ap.base core.calc out=?base fn=add args=?b1 args=?bo
+@cfx.ap.out.l ui.diagram.axpos group=?g x=?xl base=?base iy=?iy anchor=end dx=-5 ph=?ph
+@cfx.ap.out.r ui.diagram.axpos group=?g x=?xr base=?base iy=?iy anchor=start dx=5 ph=?ph
+@chart.axis.left core.rule when=$cfx.ap.a when=$cfx.ap.b when=$cfx.ap.p when=$cfx.ap.d when=$cfx.ap.geo not=$cfx.ap.hz if=$cfx.ap.l with=$cfx.ap.xl1 with=$cfx.ap.xl with=$cfx.ap.b1 with=$cfx.ap.base then=$cfx.ap.out.l
+@chart.axis.right core.rule when=$cfx.ap.a when=$cfx.ap.b when=$cfx.ap.p when=$cfx.ap.d when=$cfx.ap.geo not=$cfx.ap.hz if=$cfx.ap.r with=$cfx.ap.xr1 with=$cfx.ap.xr2 with=$cfx.ap.xr with=$cfx.ap.b1 with=$cfx.ap.base then=$cfx.ap.out.r
+@cfx.al.a ui.diagram.axpos group=?g x=?x base=?base ph=?ph
+@cfx.al.t core.calc out=?t fn=sub args=?base args=?ph
 @cfx.al.s core.calc out=?src fn=concat args=?g args=".yaxis"
 @cfx.al.p1 ui.diagram.point source=?src n=1 x=?x y=?base
 @cfx.al.p2 ui.diagram.point source=?src n=2 x=?x y=?t
@@ -379,22 +385,26 @@
 @chart.axis.line.draw core.rule when=$cfx.al.a with=$cfx.al.s then=$cfx.al.d
 @chart.axis.line.fill core.rule when=$cfx.al.a with=$cfx.al.s then=$cfx.al.f
 # The numbers of a linear axis: at its foot and at each quarter of its top.
-@cfx.tl.a ui.diagram.axpos group=?g base=?base iy=?iy
+@cfx.tl.a ui.diagram.axpos group=?g base=?base iy=?iy ph=?ph
 @cfx.tl.lin w.diagram.group code=?g axis_scale=log
 @cfx.tl.k ui.diagram.tickk k=?k
 @cfx.tl.s ui.diagram.cscale group=?g value=?mx
-@cfx.tl.v1 core.calc out=?v1 fn=mul args=?mx args=?k
-@cfx.tl.v core.calc out=?v fn=div args=?v1 args=4
-@cfx.tl.dy core.calc out=?dy fn=mul args=?k args=40
+@cfx.tl.lo ui.diagram.cfloor group=?g value=?lo
+@cfx.tl.r core.calc out=?rg fn=sub args=?mx args=?lo
+@cfx.tl.v1 core.calc out=?v1 fn=mul args=?rg args=?k
+@cfx.tl.v2 core.calc out=?v2 fn=div args=?v1 args=4
+@cfx.tl.v core.calc out=?v fn=add args=?lo args=?v2
+@cfx.tl.dy1 core.calc out=?dy1 fn=mul args=?k args=?ph
+@cfx.tl.dy core.calc out=?dy fn=div args=?dy1 args=4
 @cfx.tl.y1 core.calc out=?y1 fn=sub args=?base args=?dy
 @cfx.tl.e1 core.calc out=?e1 fn=mul args=?dy args=2
-@cfx.tl.e2 core.calc out=?e2 fn=sub args=?e1 args=160
+@cfx.tl.e2 core.calc out=?e2 fn=sub args=?e1 args=?ph
 @cfx.tl.e3 core.calc out=?e3 fn=mul args=?e2 args=?iy
 @cfx.tl.y core.calc out=?ty fn=add args=?y1 args=?e3
 @cfx.tl.out ui.diagram.tickv group=?g k=?k v=?v y=?ty
-@chart.ticks.linear core.rule when=$cfx.tl.a when=$cfx.tl.k when=$cfx.tl.s not=$cfx.tl.lin with=$cfx.tl.v1 with=$cfx.tl.v with=$cfx.tl.dy with=$cfx.tl.y1 with=$cfx.tl.e1 with=$cfx.tl.e2 with=$cfx.tl.e3 with=$cfx.tl.y then=$cfx.tl.out
+@chart.ticks.linear core.rule when=$cfx.tl.a when=$cfx.tl.k when=$cfx.tl.s when=$cfx.tl.lo not=$cfx.tl.lin with=$cfx.tl.r with=$cfx.tl.v1 with=$cfx.tl.v2 with=$cfx.tl.v with=$cfx.tl.dy1 with=$cfx.tl.dy with=$cfx.tl.y1 with=$cfx.tl.e1 with=$cfx.tl.e2 with=$cfx.tl.e3 with=$cfx.tl.y then=$cfx.tl.out
 # The numbers of a log axis: each power of ten up to its top, where its logarithm falls.
-@cfx.tg.a ui.diagram.axpos group=?g base=?base iy=?iy
+@cfx.tg.a ui.diagram.axpos group=?g base=?base iy=?iy ph=?ph
 @cfx.tg.log w.diagram.group code=?g axis_scale=log
 @cfx.tg.s ui.diagram.cscale group=?g value=?mx
 @cfx.tg.lm ui.diagram.lg v=?mx l=?lm
@@ -402,10 +412,10 @@
 @cfx.tg.p ui.diagram.pow10 e=?e p=?p
 @cfx.tg.le core.check fn=lte args=?p args=?mx
 @cfx.tg.f core.calc out=?f fn=div args=?e args=?lm
-@cfx.tg.dy core.calc out=?dy fn=mul args=?f args=160
+@cfx.tg.dy core.calc out=?dy fn=mul args=?f args=?ph
 @cfx.tg.y1 core.calc out=?y1 fn=sub args=?base args=?dy
 @cfx.tg.e1 core.calc out=?e1 fn=mul args=?dy args=2
-@cfx.tg.e2 core.calc out=?e2 fn=sub args=?e1 args=160
+@cfx.tg.e2 core.calc out=?e2 fn=sub args=?e1 args=?ph
 @cfx.tg.e3 core.calc out=?e3 fn=mul args=?e2 args=?iy
 @cfx.tg.y core.calc out=?ty fn=add args=?y1 args=?e3
 @cfx.tg.out ui.diagram.tickv group=?g k=?e v=?p y=?ty
@@ -492,16 +502,19 @@
 @cfx.vt.o2 ui.diagram.vtext node=?c text=?v
 @chart.value.text.precision core.rule when=$cfx.vt.i when=$cfx.vt.v when=$cfx.vt.p with=$cfx.vt.r then=$cfx.vt.o1
 @chart.value.text core.rule when=$cfx.vt.i when=$cfx.vt.v not=$cfx.vt.anyp then=$cfx.vt.o2
-# A bar's half width: its share of the category's room (56 wide), else 18.
+# A bar's half width: its share of the category's room (chart-shape.sop ui.diagram.cgeo, 56 wide unless sized), else 18 of 28.
 @cfx.bh.type core.type of=ui.diagram.bhalf
 @cfx.bh.ch ui.diagram.chart group=?g
 @cfx.bh.o ui.diagram.cown group=?g slot=bar_width v=?bw
 @cfx.bh.any ui.diagram.cown group=?g slot=bar_width v=?anybw
-@cfx.bh.h core.calc out=?h fn=mul args=?bw args=28
+@cfx.bh.geo ui.diagram.cgeo group=?g hw=?hw
+@cfx.bh.h core.calc out=?h fn=mul args=?bw args=?hw
 @cfx.bh.out ui.diagram.bhalf group=?g h=?h
-@cfx.bh.d ui.diagram.bhalf group=?g h=18
-@chart.bar.half core.rule when=$cfx.bh.ch when=$cfx.bh.o with=$cfx.bh.h then=$cfx.bh.out
-@chart.bar.half.default core.rule when=$cfx.bh.ch not=$cfx.bh.any then=$cfx.bh.d
+@cfx.bh.h9 core.calc out=?h9 fn=mul args=?hw args=9
+@cfx.bh.h0 core.calc out=?h0 fn=div args=?h9 args=14
+@cfx.bh.d ui.diagram.bhalf group=?g h=?h0
+@chart.bar.half core.rule when=$cfx.bh.ch when=$cfx.bh.o when=$cfx.bh.geo with=$cfx.bh.h then=$cfx.bh.out
+@chart.bar.half.default core.rule when=$cfx.bh.ch not=$cfx.bh.any when=$cfx.bh.geo with=$cfx.bh.h9 with=$cfx.bh.h0 then=$cfx.bh.d
 # A gridline's dashes: fine dashes when the chart names no style.
 @cfx.gd.type core.type of=ui.diagram.gdash
 @cfx.gd.fine ui.diagram.gdash style=fine dash="3 3"

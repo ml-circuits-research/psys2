@@ -29,6 +29,7 @@
 @diagram.rules.6 app.area.rules area=$diagram.area file="act-tools.sop" n=6
 @diagram.rules.7 app.area.rules area=$diagram.area file="chart-format.sop" n=7
 @diagram.rules.10 app.area.rules area=$diagram.area file="link-geometry.sop" n=10
+@diagram.rules.11 app.area.rules area=$diagram.area file="chart-shape.sop" n=11
 # k.charts: the typical categories of a dimension (a chart asked for by its dimension alone); k.values: the comparatives
 # ("bigger", "thinner") a chart's numeric formatting moves along.
 @diagram.subset.charts app.area.subset area=$diagram.area world=k.charts prefix="categories" strict=true
