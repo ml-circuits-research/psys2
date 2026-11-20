@@ -4,7 +4,7 @@
 # script: none (hand-written)
 # needs: pinned sopworld std.schema/std.acts; no new runtime capability
 
-@w.drawing core.module name=w.drawing version=1 exports=object exports=group exports=part core.source="hand-core 1"
+@w.drawing core.module name=w.drawing version=1 exports=object exports=group exports=part exports=page core.source="hand-core 1"
 @w.drawing.world std.schema.world name=w.drawing doc="a drawing of placed objects with sizes, colours, labels, groups and edited parts" core.source="hand-core 1"
 
 # An object on the page. `code` is the identifier tools and people use ("o1"); `drawing` names a k.objects object or a
@@ -28,12 +28,41 @@
 @w.drawing.object.z core.slot of=w.drawing.object key=z kind=integer core.source="hand-core 1"
 @w.drawing.object.look core.slot of=w.drawing.object key=look type=w.face.face many=true core.source="hand-core 1"
 @w.drawing.object.seed core.slot of=w.drawing.object key=seed kind=integer core.source="hand-core 1"
+# How an object is posed and styled. `rotation`: degrees clockwise about its centre (0 upright, 180 upside down);
+# `mirror`: horizontal (its left and right swapped: it faces the other way), vertical (top and bottom swapped), both,
+# or none; `skew`: degrees its top leans to the right (negative: to the left); `opacity`: 0 (invisible) to 1 (solid);
+# `effect`: the k.styles.effect it is drawn with (a glow, a drop shadow, a blur); `fill`: the k.styles.fill its
+# colour is laid in (solid, striped, dotted, a gradient) and `gradient` the colour a gradient ends in; `outline`: the
+# colour of its outline and `stroke` the outline's width in page units.
+@w.drawing.object.rotation core.slot of=w.drawing.object key=rotation kind=number min=-360 max=360 core.source="hand-core 1"
+@w.drawing.object.mirror core.slot of=w.drawing.object key=mirror enum=none enum=horizontal enum=vertical enum=both core.source="hand-core 1"
+@w.drawing.object.skew core.slot of=w.drawing.object key=skew kind=number min=-75 max=75 core.source="hand-core 1"
+@w.drawing.object.opacity core.slot of=w.drawing.object key=opacity kind=number min=0 max=1 core.source="hand-core 1"
+@w.drawing.object.effect core.slot of=w.drawing.object key=effect kind=atom kind=string core.source="hand-core 1"
+@w.drawing.object.fill core.slot of=w.drawing.object key=fill kind=atom kind=string core.source="hand-core 1"
+@w.drawing.object.gradient core.slot of=w.drawing.object key=gradient kind=atom kind=string core.source="hand-core 1"
+@w.drawing.object.outline core.slot of=w.drawing.object key=outline kind=atom kind=string core.source="hand-core 1"
+@w.drawing.object.stroke core.slot of=w.drawing.object key=stroke kind=number min=0 max=40 core.source="hand-core 1"
+# Writing on the page (an object whose `drawing` is text): `text` the words written; `font` the k.styles.font they are
+# set in; `weight` normal or bold; `slant` normal or italic; `align` where the words sit on the object's centre (start:
+# they begin there, middle: centred, end: they end there); `frame` the k.styles.frame drawn round them (a speech bubble,
+# a caption box). Its `size` is its larger extent, as for every object; its letters are its `height` over 1.3 tall
+# and its words are stretched to its `width`; `colour` paints them.
+@w.drawing.object.text core.slot of=w.drawing.object key=text kind=string core.source="hand-core 1"
+@w.drawing.object.font core.slot of=w.drawing.object key=font kind=atom kind=string core.source="hand-core 1"
+@w.drawing.object.weight core.slot of=w.drawing.object key=weight enum=normal enum=bold core.source="hand-core 1"
+@w.drawing.object.slant core.slot of=w.drawing.object key=slant enum=normal enum=italic core.source="hand-core 1"
+@w.drawing.object.align core.slot of=w.drawing.object key=align enum=start enum=middle enum=end core.source="hand-core 1"
+@w.drawing.object.frame core.slot of=w.drawing.object key=frame kind=atom kind=string core.source="hand-core 1"
 
 # A group keeps objects together under one code.
 @w.drawing.group core.type of=w.drawing.group extends=std.schema.thing closed=true core.source="hand-core 1"
 @w.drawing.group.code core.slot of=w.drawing.group key=code required=true kind=atom kind=string core.source="hand-core 1"
 @w.drawing.group.member core.slot of=w.drawing.group key=member type=w.drawing.object many=true core.source="hand-core 1"
 @w.drawing.group.label core.slot of=w.drawing.group key=label kind=string core.source="hand-core 1"
+# A group turned or mirrored as a whole, about the middle of the box its members fill (as an object is).
+@w.drawing.group.rotation core.slot of=w.drawing.group key=rotation kind=number min=-360 max=360 core.source="hand-core 1"
+@w.drawing.group.mirror core.slot of=w.drawing.group key=mirror enum=none enum=horizontal enum=vertical enum=both core.source="hand-core 1"
 
 # An edited part of an object: the part at `index` (in the order its kind draws them) recoloured, moved,
 # resized, reshaped or removed. `shape` draws the part with another outline in its box: a basic shape of k.shapes
@@ -52,6 +81,17 @@
 @w.drawing.part.shape core.slot of=w.drawing.part key=shape kind=atom kind=string core.source="hand-core 1"
 @w.drawing.part.drawing core.slot of=w.drawing.part key=drawing kind=atom kind=string core.source="hand-core 1"
 @w.drawing.part.anchor core.slot of=w.drawing.part key=anchor kind=atom kind=string core.source="hand-core 1"
+# A part turned, mirrored, faded or drawn with an effect about its own centre (as an object is).
+@w.drawing.part.rotation core.slot of=w.drawing.part key=rotation kind=number min=-360 max=360 core.source="hand-core 1"
+@w.drawing.part.mirror core.slot of=w.drawing.part key=mirror enum=none enum=horizontal enum=vertical enum=both core.source="hand-core 1"
+@w.drawing.part.opacity core.slot of=w.drawing.part key=opacity kind=number min=0 max=1 core.source="hand-core 1"
+@w.drawing.part.effect core.slot of=w.drawing.part key=effect kind=atom kind=string core.source="hand-core 1"
+
+# The page as a whole: `filter` the k.styles.filter the whole picture is shown through (sepia, black and white, a
+# night or sunset tint). `code` names it (one page: "page").
+@w.drawing.page core.type of=w.drawing.page extends=std.schema.thing closed=true core.source="hand-core 1"
+@w.drawing.page.code core.slot of=w.drawing.page key=code required=true kind=atom kind=string core.source="hand-core 1"
+@w.drawing.page.filter core.slot of=w.drawing.page key=filter kind=atom kind=string core.source="hand-core 1"
 
 # One thing of each kind per code; one edit per part of an object.
 @w.drawing.code.first std.schema.thing kind=?kind code=?code
@@ -66,4 +106,5 @@
 @w.drawing.kind.object std.schema.kind of=w.drawing.object world=w.drawing acts=make acts=remove acts=change acts=place acts=pick acts=ask acts=group core.source="hand-core 1"
 @w.drawing.kind.group std.schema.kind of=w.drawing.group world=w.drawing acts=make acts=remove acts=change acts=pick acts=ask core.source="hand-core 1"
 @w.drawing.kind.part std.schema.kind of=w.drawing.part world=w.drawing acts=make acts=remove acts=change core.source="hand-core 1"
+@w.drawing.kind.page std.schema.kind of=w.drawing.page world=w.drawing acts=make acts=remove acts=change core.source="hand-core 1"
 @w.drawing.limit.object std.schema.limit of=w.drawing.object max=2000 core.source="hand-core 1"

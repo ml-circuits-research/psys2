@@ -24,3 +24,17 @@
 @k.styles.word.key.role.text core.word text=text means=k.styles.role.text core.source="hand-core 1"
 @k.styles.word.key.swatch.n core.word text=n means=k.styles.swatch.n core.source="hand-core 1"
 @k.styles.word.key.swatch.colour core.word text=colour means=k.styles.swatch.colour core.source="hand-core 1"
+
+# The words of the drawing styles: typefaces, fills, effects, filters, frames and turns.
+@k.styles.word.font core.word text=font text=fonts text=typeface text=lettering text=letters means=k.styles.font core.source="hand-core 1"
+@k.styles.word.fill core.word text=fill text=pattern text=texture means=k.styles.fill core.source="hand-core 1"
+@k.styles.word.effect core.word text=effect text=effects means=k.styles.effect core.source="hand-core 1"
+@k.styles.word.filter core.word text=filter text=filters text="photo filter" means=k.styles.filter core.source="hand-core 1"
+@k.styles.word.frame core.word text=frame text=bubble text=box means=k.styles.frame core.source="hand-core 1"
+@k.styles.word.turn core.word text=turn text=rotation text=tilt means=k.styles.turn core.source="hand-core 1"
+@k.styles.word.font.name core.word text=serif text=sans text=sans-serif text=plain text=handwritten text=handwriting text="hand written" text=comic text=cartoon text=mono text=monospace text=typewriter text=code text=fancy text=script text=cursive text=calligraphy text=poster text=headline text=rounded text=round means=k.styles.font.name core.source="hand-core 1"
+@k.styles.word.fill.name core.word text=solid text=plain text=none text=empty text=hollow text=crayon text=striped text=stripes text=stripy text=dotted text=dots text=spotty text=spotted text="polka dots" text=checked text=checks text=checkered text=zigzag text=dashed text=gradient text=fade text=fading text=ombre means=k.styles.fill.name core.source="hand-core 1"
+@k.styles.word.effect.name core.word text=glow text=glowing text=shine text=shiny text=neon text=shadow text="drop shadow" text="long shadow" text=blur text=blurry text=blurred text="out of focus" text=soft text="soft edges" means=k.styles.effect.name core.source="hand-core 1"
+@k.styles.word.filter.name core.word text=sepia text="old photo" text="black and white" text=greyscale text=grayscale text=night text="night time" text=sunset text=evening text="golden hour" text=vintage text=retro text=bright text=brighter text=faded text=washed-out text=dreamy text=none text=original means=k.styles.filter.name core.source="hand-core 1"
+@k.styles.word.frame.name core.word text=speech text="speech bubble" text="talking bubble" text=thought text="thought bubble" text=caption text="caption box" text=sign text=signboard means=k.styles.frame.name core.source="hand-core 1"
+@k.styles.word.turn.name core.word text="rotate right" text=clockwise text="quarter turn" text="rotate left" text=anticlockwise text=counterclockwise text="upside down" text=upright text="right way up" text="a bit" text=tilt text=tilted text=slightly text="half turn" text="full turn" text="all the way round" means=k.styles.turn.name core.source="hand-core 1"

@@ -9,7 +9,7 @@
  */
 export const CATALOG_PIN = Object.freeze({
   repo: 'https://github.com/ml-circuits-research/sop-knowledge-worlds',
-  commit: '06cf90569f2365a2035a5ca673d362841346e2e7',   // terrain features from handles and support, surfaces and lights (06cf9056), after the w.diagram editor (page, styles, effects, charts) and k.styles, after people and parts (36cca794) and the diagram node words (7a9ee0c8).
+  commit: 'b89b4541069c2bb28b0b280399d89fbc6031096c',   // drawing styles in k.styles (typefaces, fills, effects, filters, frames, turns) and posed, styled and written w.drawing objects (e23dcd66, b89b4541), after terrain features from handles and support, surfaces and lights (06cf9056), after the w.diagram editor (page, styles, effects, charts) and k.styles, after people and parts (36cca794) and the diagram node words (7a9ee0c8).
   path: 'docs/worlds',
 });
 

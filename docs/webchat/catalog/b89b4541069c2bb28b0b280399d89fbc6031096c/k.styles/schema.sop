@@ -1,0 +1,112 @@
+# k.styles: named visual styles for pictures made of shapes and lines (a diagram, a chart, a drawing): colour themes;
+# the typefaces words are set in, the ways a colour is laid in a shape (stripes, dots, a gradient), the effects a shape
+# is drawn with (a glow, a drop shadow, a blur), the filters a whole picture is shown through (sepia, black and white,
+# a night tint), the frames drawn round words (a speech bubble, a caption box) and the named turns of a shape (upside
+# down, a quarter turn);
+# with a fill, an outline, a text colour, a line colour, a background and a frame colour, the colours a theme gives the
+# shapes of one role, and each theme's palette in order (a colour for each level, group or category). A host applies a
+# theme by copying its colours onto the things it names, and colours categories by the palette in order.
+# sources: hand-core 1 (the schema and the facts, hand-written in this repository; palettes after common practice in
+# visualisation: categorical palettes of distinct hues, light tints for pastel, light lines on a dark ground)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@k.styles core.module name=k.styles version=1 exports=theme exports=role exports=swatch exports=font exports=fill exports=effect exports=filter exports=frame exports=turn core.source="hand-core 1"
+
+# A theme. `name`; `about` in words; `fill` the colour inside a shape; `outline` its border; `text` the colour of
+# labels; `edge` the colour of lines and arrows; `background` the page; `group` the inside of a frame around several
+# shapes; `weight` of labels (normal, bold); `width` of lines and outlines in pixels. Colours are #rrggbb values.
+@k.styles.theme core.type of=k.styles.theme shared=true closed=true core.source="hand-core 1"
+@k.styles.theme.name core.slot of=k.styles.theme key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.styles.theme.about core.slot of=k.styles.theme key=about required=true kind=string core.source="hand-core 1"
+@k.styles.theme.fill core.slot of=k.styles.theme key=fill required=true kind=string core.source="hand-core 1"
+@k.styles.theme.outline core.slot of=k.styles.theme key=outline required=true kind=string core.source="hand-core 1"
+@k.styles.theme.text core.slot of=k.styles.theme key=text required=true kind=string core.source="hand-core 1"
+@k.styles.theme.edge core.slot of=k.styles.theme key=edge required=true kind=string core.source="hand-core 1"
+@k.styles.theme.background core.slot of=k.styles.theme key=background required=true kind=string core.source="hand-core 1"
+@k.styles.theme.group core.slot of=k.styles.theme key=group required=true kind=string core.source="hand-core 1"
+@k.styles.theme.weight core.slot of=k.styles.theme key=weight enum=normal enum=bold default=normal core.source="hand-core 1"
+@k.styles.theme.width core.slot of=k.styles.theme key=width kind=number min=0.5 max=12 core.source="hand-core 1"
+
+# The colours a theme gives the shapes of one role (`role` a role of a diagram's node: start, end, process, decision,
+# data, document, subprocess, database ...): `fill`, `outline`, `text`.
+@k.styles.role core.type of=k.styles.role shared=true closed=true core.source="hand-core 1"
+@k.styles.role.theme core.slot of=k.styles.role key=theme id=true required=true kind=atom kind=string type=k.styles.theme by=name core.source="hand-core 1"
+@k.styles.role.role core.slot of=k.styles.role key=role id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.styles.role.fill core.slot of=k.styles.role key=fill required=true kind=string core.source="hand-core 1"
+@k.styles.role.outline core.slot of=k.styles.role key=outline kind=string core.source="hand-core 1"
+@k.styles.role.text core.slot of=k.styles.role key=text kind=string core.source="hand-core 1"
+
+# A theme's palette: the colour at place `n` (from 1), used in order for levels, groups, categories and slices.
+@k.styles.swatch core.type of=k.styles.swatch shared=true closed=true core.source="hand-core 1"
+@k.styles.swatch.theme core.slot of=k.styles.swatch key=theme id=true required=true kind=atom kind=string type=k.styles.theme by=name core.source="hand-core 1"
+@k.styles.swatch.n core.slot of=k.styles.swatch key=n id=true required=true kind=integer min=1 step=1 core.source="hand-core 1"
+@k.styles.swatch.colour core.slot of=k.styles.swatch key=colour required=true kind=string core.source="hand-core 1"
+
+# A typeface words are set in. `name`; `about` in words; `face` the typeface a host uses when it has it; `generic` the
+# family it falls back to (the families every renderer knows: serif, sans-serif, monospace, cursive, fantasy).
+@k.styles.font core.type of=k.styles.font shared=true closed=true core.source="hand-core 1"
+@k.styles.font.name core.slot of=k.styles.font key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.styles.font.about core.slot of=k.styles.font key=about required=true kind=string core.source="hand-core 1"
+@k.styles.font.face core.slot of=k.styles.font key=face required=true kind=string core.source="hand-core 1"
+@k.styles.font.generic core.slot of=k.styles.font key=generic required=true enum=serif enum=sans-serif enum=monospace enum=cursive enum=fantasy core.source="hand-core 1"
+
+# A way a colour is laid in a shape. `pattern`: solid (one even colour), none (only the outline), hachure (parallel
+# strokes: stripes), dots, cross-hatch (strokes both ways: checks), zigzag, dashed, or gradient (the colour fading into
+# a second one); `gap` between strokes or dots and `angle` of the strokes in degrees, where the pattern has them.
+@k.styles.fill core.type of=k.styles.fill shared=true closed=true core.source="hand-core 1"
+@k.styles.fill.name core.slot of=k.styles.fill key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.styles.fill.about core.slot of=k.styles.fill key=about required=true kind=string core.source="hand-core 1"
+@k.styles.fill.pattern core.slot of=k.styles.fill key=pattern required=true enum=solid enum=none enum=hachure enum=dots enum=cross-hatch enum=zigzag enum=dashed enum=gradient core.source="hand-core 1"
+@k.styles.fill.gap core.slot of=k.styles.fill key=gap kind=number min=1 max=60 core.source="hand-core 1"
+@k.styles.fill.angle core.slot of=k.styles.fill key=angle kind=number min=-180 max=180 core.source="hand-core 1"
+
+# An effect a shape is drawn with. `kind`: glow (a halo round it), shadow (a soft shadow cast beside it), blur (its
+# edges and inside softened) or none (drawn plain); `radius` how far the halo, shadow or blur spreads, `dx` and `dy` how far a shadow falls
+# (right and down), `colour` of a halo or shadow (#rrggbb; without it a glow takes the shape's own colour) and
+# `strength` from 0 (none) to 1 (full).
+@k.styles.effect core.type of=k.styles.effect shared=true closed=true core.source="hand-core 1"
+@k.styles.effect.name core.slot of=k.styles.effect key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.styles.effect.about core.slot of=k.styles.effect key=about required=true kind=string core.source="hand-core 1"
+@k.styles.effect.kind core.slot of=k.styles.effect key=kind required=true enum=none enum=glow enum=shadow enum=blur core.source="hand-core 1"
+@k.styles.effect.radius core.slot of=k.styles.effect key=radius required=true kind=number min=0 max=60 core.source="hand-core 1"
+@k.styles.effect.dx core.slot of=k.styles.effect key=dx kind=number min=-60 max=60 core.source="hand-core 1"
+@k.styles.effect.dy core.slot of=k.styles.effect key=dy kind=number min=-60 max=60 core.source="hand-core 1"
+@k.styles.effect.colour core.slot of=k.styles.effect key=colour kind=string core.source="hand-core 1"
+@k.styles.effect.strength core.slot of=k.styles.effect key=strength kind=number min=0 max=1 core.source="hand-core 1"
+
+# A filter a whole picture is shown through: the amounts of the standard picture filters it applies (`sepia`,
+# `grayscale` and `invert` from 0 to 1; `brightness`, `contrast` and `saturate` as factors, 1 leaving the picture as it
+# is; `hue` a turn of every colour in degrees; `blur` in page units) and a `tint` colour (#rrggbb) laid over it at
+# `tint_amount` (0 to 1).
+@k.styles.filter core.type of=k.styles.filter shared=true closed=true core.source="hand-core 1"
+@k.styles.filter.name core.slot of=k.styles.filter key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.styles.filter.about core.slot of=k.styles.filter key=about required=true kind=string core.source="hand-core 1"
+@k.styles.filter.sepia core.slot of=k.styles.filter key=sepia kind=number min=0 max=1 core.source="hand-core 1"
+@k.styles.filter.grayscale core.slot of=k.styles.filter key=grayscale kind=number min=0 max=1 core.source="hand-core 1"
+@k.styles.filter.invert core.slot of=k.styles.filter key=invert kind=number min=0 max=1 core.source="hand-core 1"
+@k.styles.filter.brightness core.slot of=k.styles.filter key=brightness kind=number min=0 max=3 core.source="hand-core 1"
+@k.styles.filter.contrast core.slot of=k.styles.filter key=contrast kind=number min=0 max=3 core.source="hand-core 1"
+@k.styles.filter.saturate core.slot of=k.styles.filter key=saturate kind=number min=0 max=3 core.source="hand-core 1"
+@k.styles.filter.hue core.slot of=k.styles.filter key=hue kind=number min=-360 max=360 core.source="hand-core 1"
+@k.styles.filter.blur core.slot of=k.styles.filter key=blur kind=number min=0 max=20 core.source="hand-core 1"
+@k.styles.filter.tint core.slot of=k.styles.filter key=tint kind=string core.source="hand-core 1"
+@k.styles.filter.tint_amount core.slot of=k.styles.filter key=tint_amount kind=number min=0 max=1 core.source="hand-core 1"
+
+# A frame drawn round words. `shape`: rectangle, rounded (a rectangle with round corners) or oval; `tail`: true when it
+# points at who says or thinks the words (a speech or thought bubble); `fill` and `outline` its colours (#rrggbb).
+@k.styles.frame core.type of=k.styles.frame shared=true closed=true core.source="hand-core 1"
+@k.styles.frame.name core.slot of=k.styles.frame key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.styles.frame.about core.slot of=k.styles.frame key=about required=true kind=string core.source="hand-core 1"
+@k.styles.frame.shape core.slot of=k.styles.frame key=shape required=true enum=rectangle enum=rounded enum=oval core.source="hand-core 1"
+@k.styles.frame.tail core.slot of=k.styles.frame key=tail kind=boolean core.source="hand-core 1"
+@k.styles.frame.fill core.slot of=k.styles.frame key=fill required=true kind=string core.source="hand-core 1"
+@k.styles.frame.outline core.slot of=k.styles.frame key=outline required=true kind=string core.source="hand-core 1"
+
+# A named turn of a shape: `by` degrees clockwise more than it is turned now (negative: anticlockwise), or `to` the
+# turn it ends at (0 upright, 180 upside down). One of the two.
+@k.styles.turn core.type of=k.styles.turn shared=true closed=true core.source="hand-core 1"
+@k.styles.turn.name core.slot of=k.styles.turn key=name id=true required=true kind=atom kind=string core.source="hand-core 1"
+@k.styles.turn.about core.slot of=k.styles.turn key=about required=true kind=string core.source="hand-core 1"
+@k.styles.turn.by core.slot of=k.styles.turn key=by kind=number min=-360 max=360 core.source="hand-core 1"
+@k.styles.turn.to core.slot of=k.styles.turn key=to kind=number min=-360 max=360 core.source="hand-core 1"

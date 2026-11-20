@@ -214,6 +214,7 @@
   "k.music/shards/chords"
  ],
  "a bit": [
+  "k.styles/schema.sop",
   "k.values/shards/scales"
  ],
  "a chart of the things there": [
@@ -4464,7 +4465,8 @@
  ],
  "align": [
   "k.actions/shards/verbs-place",
-  "w.document/schema.sop"
+  "w.document/schema.sop",
+  "w.drawing/schema.sop"
  ],
  "aligned_column": [
   "k.layouts/shards/layouts"
@@ -4475,7 +4477,8 @@
  "alignment": [
   "k.words/shards/al",
   "k.words/shards/frequency-a",
-  "w.document/schema.sop"
+  "w.document/schema.sop",
+  "w.drawing/schema.sop"
  ],
  "alike": [
   "k.feelings/schema.sop",
@@ -4548,6 +4551,9 @@
  "all the items": [
   "w.lang.en/shards/closed-classes",
   "w.lang.en/shards/hand-cues-more"
+ ],
+ "all the way round": [
+  "k.styles/schema.sop"
  ],
  "all together": [
   "w.lang.en/shards/arithmetic"
@@ -6158,11 +6164,15 @@
   "k.kinds/shards/wordnet-2"
  ],
  "angle": [
+  "k.attributes/shards/narration",
   "k.charts/shards/charts",
+  "k.kinds/shards/relations-styles",
   "k.units/shards/core",
+  "k.units/shards/measures",
   "k.words/shards/an",
   "k.words/shards/frequency-a",
   "w.diagram/schema.sop",
+  "w.drawing/schema.sop",
   "k.objects/shards/noto-office-03"
  ],
  "angler": [
@@ -6795,6 +6805,7 @@
   "k.words/shards/frequency-a"
  ],
  "anticlockwise": [
+  "k.styles/schema.sop",
   "k.values/shards/directions",
   "w.lang.en/shards/hand-arrangements"
  ],
@@ -16825,6 +16836,9 @@
  "black volta": [
   "k.geo/shards/africa"
  ],
+ "black_and_white": [
+  "k.styles/shards/drawing"
+ ],
  "black_paint": [
   "k.objects/shards/mulberry-art-making-01"
  ],
@@ -17574,8 +17588,19 @@
   "k.words/shards/frequency-b"
  ],
  "blur": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-styles",
+  "k.styles/schema.sop",
+  "k.styles/shards/drawing",
+  "k.units/shards/measures",
   "k.words/shards/bl",
   "k.words/shards/frequency-b"
+ ],
+ "blurred": [
+  "k.styles/schema.sop"
+ ],
+ "blurry": [
+  "k.styles/schema.sop"
  ],
  "blush": [
   "k.faces/shards/plain-cheeks",
@@ -18113,6 +18138,7 @@
   "k.words/shards/frequency-b",
   "w.diagram/schema.sop",
   "w.document/schema.sop",
+  "w.drawing/schema.sop",
   "w.text/schema.sop"
  ],
  "bolder": [
@@ -18651,7 +18677,8 @@
   "k.objects/shards/things-3",
   "k.words/shards/bo",
   "k.words/shards/frequency-b",
-  "w.diagram/schema.sop"
+  "w.diagram/schema.sop",
+  "w.drawing/schema.sop"
  ],
  "borderline": [
   "k.words/shards/bo",
@@ -19369,6 +19396,7 @@
   "k.parts/shards/m",
   "k.scenes/shards/things-b",
   "k.shapes/shards/shapes",
+  "k.styles/schema.sop",
   "k.units/shards/measures",
   "k.words/shards/bo",
   "k.words/shards/frequency-b",
@@ -20229,6 +20257,7 @@
  ],
  "bright": [
   "k.styles/schema.sop",
+  "k.styles/shards/drawing",
   "k.values/shards/psys2",
   "k.words/shards/br",
   "k.words/shards/frequency-b",
@@ -20241,8 +20270,14 @@
   "k.words/shards/br",
   "k.words/shards/frequency-b"
  ],
+ "brighter": [
+  "k.styles/schema.sop"
+ ],
  "brightness": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-styles",
   "k.kinds/shards/wordnet-1",
+  "k.units/shards/measures",
   "k.values/shards/scales"
  ],
  "brighton": [
@@ -20811,9 +20846,11 @@
  "bubble": [
   "k.objects/shards/land-2",
   "k.objects/shards/things-3",
+  "k.styles/schema.sop",
   "k.words/shards/bu",
   "k.words/shards/frequency-b",
   "w.diagram/schema.sop",
+  "w.drawing/schema.sop",
   "k.objects/shards/noto-drink-03",
   "k.objects/shards/noto-household-03"
  ],
@@ -22273,7 +22310,9 @@
   "k.kinds/shards/relations-diagrams",
   "k.kinds/shards/relations-kinds",
   "k.kinds/shards/relations-procedures",
+  "k.kinds/shards/relations-styles",
   "k.procedures/schema.sop",
+  "k.units/shards/measures",
   "k.words/shards/by",
   "k.words/shards/frequency-b",
   "w.calendar/schema.sop",
@@ -24090,6 +24129,9 @@
   "k.words/shards/ca",
   "k.words/shards/frequency-c"
  ],
+ "calligraphy": [
+  "k.styles/schema.sop"
+ ],
  "calling": [
   "k.words/shards/ca",
   "k.words/shards/frequency-c"
@@ -25041,7 +25083,13 @@
   "k.words/shards/frequency-c"
  ],
  "caption": [
-  "k.layouts/shards/joins"
+  "k.layouts/shards/joins",
+  "k.styles/schema.sop",
+  "k.styles/shards/drawing",
+  "w.drawing/schema.sop"
+ ],
+ "caption box": [
+  "k.styles/schema.sop"
  ],
  "captive": [
   "k.words/shards/ca",
@@ -25710,6 +25758,7 @@
   "k.words/shards/frequency-c"
  ],
  "cartoon": [
+  "k.styles/schema.sop",
   "k.words/shards/ca",
   "k.words/shards/frequency-c"
  ],
@@ -26755,7 +26804,8 @@
  "centered": [
   "k.attributes/shards/narration",
   "k.kinds/shards/relations-objects",
-  "k.objects/schema.sop"
+  "k.objects/schema.sop",
+  "w.drawing/schema.sop"
  ],
  "centigrade": [
   "k.units/shards/core"
@@ -26862,7 +26912,8 @@
   "k.objects/shards/places"
  ],
  "centred": [
-  "w.document/schema.sop"
+  "w.document/schema.sop",
+  "w.drawing/schema.sop"
  ],
  "cents": [
   "k.units/schema.sop"
@@ -27836,6 +27887,8 @@
   "k.words/shards/frequency-c"
  ],
  "checked": [
+  "k.styles/schema.sop",
+  "k.styles/shards/drawing",
   "k.values/shards/fills",
   "k.words/shards/ch",
   "k.words/shards/frequency-c",
@@ -27846,6 +27899,7 @@
   "k.layouts/shards/layouts"
  ],
  "checkered": [
+  "k.styles/schema.sop",
   "k.values/shards/fills"
  ],
  "checkers": [
@@ -27866,6 +27920,7 @@
   "k.words/shards/frequency-c"
  ],
  "checks": [
+  "k.styles/schema.sop",
   "k.values/shards/fills"
  ],
  "checkup": [
@@ -30459,6 +30514,7 @@
   "k.words/shards/frequency-c"
  ],
  "clockwise": [
+  "k.styles/schema.sop",
   "k.values/shards/directions",
   "w.lang.en/shards/hand-arrangements"
  ],
@@ -31321,6 +31377,7 @@
   "k.attributes/shards/narration",
   "k.geo/schema.sop",
   "k.kinds/shards/relations-geo",
+  "k.styles/schema.sop",
   "k.words/shards/co-1",
   "k.words/shards/frequency-c",
   "w.diagram/schema.sop",
@@ -32131,6 +32188,8 @@
   "k.objects/shards/noto-clothing-04"
  ],
  "comic": [
+  "k.styles/schema.sop",
+  "k.styles/shards/drawing",
   "k.words/shards/co-1",
   "k.words/shards/frequency-c",
   "k.objects/shards/noto-light-video-02",
@@ -33602,6 +33661,9 @@
   "k.words/shards/frequency-c"
  ],
  "contrast": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-styles",
+  "k.units/shards/measures",
   "k.words/shards/co-2",
   "k.words/shards/frequency-c"
  ],
@@ -34730,6 +34792,7 @@
   "k.procedures/shards/compose"
  ],
  "counterclockwise": [
+  "k.styles/schema.sop",
   "k.values/shards/directions",
   "w.lang.en/shards/hand-arrangements"
  ],
@@ -35449,6 +35512,8 @@
   "k.objects/shards/noto-writing-01",
   "k.parts/shards/usual",
   "k.scenes/shards/things-c",
+  "k.styles/schema.sop",
+  "k.styles/shards/drawing",
   "k.words/shards/cr",
   "k.words/shards/frequency-c"
  ],
@@ -36847,6 +36912,9 @@
  "curse": [
   "k.words/shards/cu",
   "k.words/shards/frequency-c"
+ ],
+ "cursive": [
+  "k.styles/schema.sop"
  ],
  "curst": [
   "k.words/shards/cu"
@@ -39458,6 +39526,8 @@
   "k.words/shards/frequency-d"
  ],
  "dashed": [
+  "k.styles/schema.sop",
+  "k.styles/shards/drawing",
   "w.diagram/schema.sop"
  ],
  "dashes": [
@@ -43788,9 +43858,12 @@
   "k.faces/shards/plain-hat"
  ],
  "dots": [
-  "k.shapes/shards/shapes"
+  "k.shapes/shards/shapes",
+  "k.styles/schema.sop"
  ],
  "dotted": [
+  "k.styles/schema.sop",
+  "k.styles/shards/drawing",
   "k.values/shards/fills",
   "w.diagram/schema.sop"
  ],
@@ -44263,6 +44336,10 @@
   "k.objects/shards/noto-sky-weather-01",
   "k.objects/shards/noto-sky-weather-02"
  ],
+ "dreamy": [
+  "k.styles/schema.sop",
+  "k.styles/shards/drawing"
+ ],
  "dredge": [
   "k.kinds/shards/part_of-wordnet-1",
   "k.kinds/shards/part_of-wordnet-2",
@@ -44601,6 +44678,7 @@
   "k.objects/shards/noto-medical-01"
  ],
  "drop shadow": [
+  "k.styles/schema.sop",
   "w.diagram/schema.sop"
  ],
  "drop, cover and hold on": [
@@ -45227,6 +45305,16 @@
  ],
  "dwindle": [
   "k.actions/shards/actions-body-social-nature"
+ ],
+ "dx": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-styles",
+  "k.units/shards/measures"
+ ],
+ "dy": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-styles",
+  "k.units/shards/measures"
  ],
  "dyaul island": [
   "k.geo/shards/islands-oceania"
@@ -47205,6 +47293,7 @@
   "k.words/shards/ed",
   "k.words/shards/frequency-e",
   "w.diagram/schema.sop",
+  "w.drawing/schema.sop",
   "k.objects/shards/noto-office-03"
  ],
  "edge tool": [
@@ -47422,10 +47511,13 @@
  ],
  "effect": [
   "k.procedures/schema.sop",
+  "k.styles/schema.sop",
+  "k.units/shards/measures",
   "k.words/shards/ef",
   "k.words/shards/frequency-e",
   "w.diagram/schema.sop",
-  "w.dialogue/schema.sop"
+  "w.dialogue/schema.sop",
+  "w.drawing/schema.sop"
  ],
  "effective spatial policy": [
   "k.spatial2d/schema.sop"
@@ -47435,6 +47527,7 @@
  ],
  "effects": [
   "k.procedures/schema.sop",
+  "k.styles/schema.sop",
   "k.words/shards/ef",
   "k.words/shards/frequency-e"
  ],
@@ -48698,6 +48791,7 @@
  ],
  "empty": [
   "k.actions/shards/actions-hands",
+  "k.styles/schema.sop",
   "k.values/shards/fills",
   "k.words/shards/em",
   "k.words/shards/frequency-e",
@@ -50056,6 +50150,7 @@
  ],
  "evening": [
   "k.attributes/shards/same-e",
+  "k.styles/schema.sop",
   "k.time/shards/clock",
   "k.time/shards/derived",
   "k.words/shards/ev",
@@ -52203,6 +52298,7 @@
   "k.kinds/shards/part_of-wordnet-2",
   "k.kinds/shards/relations-people",
   "k.kinds/shards/relations-shapes",
+  "k.kinds/shards/relations-styles",
   "k.kinds/shards/relations-wearables",
   "k.kinds/shards/wordnet-1",
   "k.layouts/shards/joins",
@@ -52289,6 +52385,7 @@
   "k.kinds/shards/part_of-wordnet-2",
   "k.words/shards/fa",
   "k.words/shards/frequency-f",
+  "w.drawing/schema.sop",
   "k.objects/shards/noto-book-paper-02"
  ],
  "fact": [
@@ -52342,13 +52439,17 @@
   "k.words/shards/frequency-f"
  ],
  "fade": [
+  "k.styles/schema.sop",
   "k.words/shards/fa",
   "k.words/shards/frequency-f"
  ],
  "faded": [
+  "k.styles/schema.sop",
+  "k.styles/shards/drawing",
   "w.diagram/schema.sop"
  ],
  "fading": [
+  "k.styles/schema.sop",
   "k.words/shards/fa",
   "k.words/shards/frequency-f"
  ],
@@ -52656,6 +52757,8 @@
   "k.words/shards/frequency-f"
  ],
  "fancy": [
+  "k.styles/schema.sop",
+  "k.styles/shards/drawing",
   "k.words/shards/fa",
   "k.words/shards/frequency-f",
   "k.objects/shards/noto-clothing-02",
@@ -54011,9 +54114,11 @@
   "k.attributes/shards/narration",
   "k.kinds/shards/relations-styles",
   "k.styles/schema.sop",
+  "k.units/shards/measures",
   "k.values/schema.sop",
   "k.words/shards/fi",
-  "k.words/shards/frequency-f"
+  "k.words/shards/frequency-f",
+  "w.drawing/schema.sop"
  ],
  "fill up": [
   "k.actions/shards/actions-hands"
@@ -54108,8 +54213,11 @@
  "filter": [
   "k.kinds/shards/part_of-wordnet-2",
   "k.objects/shards/things-3",
+  "k.styles/schema.sop",
+  "k.units/shards/measures",
   "k.words/shards/fi",
-  "k.words/shards/frequency-f"
+  "k.words/shards/frequency-f",
+  "w.drawing/schema.sop"
  ],
  "filter paper": [
   "k.attributes/shards/drawn-mulberry",
@@ -54117,6 +54225,9 @@
   "k.kinds/shards/group-mulberry",
   "k.objects/shards/mulberry-science-01",
   "k.scenes/shards/things-f"
+ ],
+ "filters": [
+  "k.styles/schema.sop"
  ],
  "filth": [
   "k.words/shards/fi",
@@ -55423,6 +55534,7 @@
   "k.actions/shards/verbs-change",
   "k.words/shards/fl",
   "k.words/shards/frequency-f",
+  "w.drawing/schema.sop",
   "k.objects/shards/noto-clothing-04"
  ],
  "flip over": [
@@ -55430,6 +55542,9 @@
  ],
  "flip-flops": [
   "k.wearables/shards/wearables"
+ ],
+ "flipped": [
+  "w.drawing/schema.sop"
  ],
  "flipper": [
   "k.attributes/shards/numbers-a-f",
@@ -56084,8 +56199,10 @@
   "k.words/shards/frequency-f"
  ],
  "font": [
+  "k.styles/schema.sop",
   "k.words/shards/fo",
-  "k.words/shards/frequency-f"
+  "k.words/shards/frequency-f",
+  "w.drawing/schema.sop"
  ],
  "font color": [
   "w.diagram/schema.sop"
@@ -56098,6 +56215,9 @@
  ],
  "font weight": [
   "w.diagram/schema.sop"
+ ],
+ "fonts": [
+  "k.styles/schema.sop"
  ],
  "food": [
   "k.animals/schema.sop",
@@ -57104,10 +57224,12 @@
   "k.parts/shards/f",
   "k.scenes/shards/things-f",
   "k.spatial2d/schema.sop",
+  "k.styles/schema.sop",
   "k.units/schema.sop",
   "k.units/shards/measures",
   "k.words/shards/fr",
   "k.words/shards/frequency-f",
+  "w.drawing/schema.sop",
   "w.lang.en/schema.sop",
   "k.objects/shards/noto-arts-crafts-01",
   "k.objects/shards/noto-household-01",
@@ -58299,6 +58421,7 @@
  ],
  "full": [
   "k.faces/shards/plain-beard",
+  "k.styles/shards/drawing",
   "k.values/shards/fills",
   "k.words/shards/frequency-f",
   "k.words/shards/fu",
@@ -58327,6 +58450,7 @@
   "k.scenes/shards/things-f"
  ],
  "full turn": [
+  "k.styles/schema.sop",
   "k.units/shards/core"
  ],
  "full turns": [
@@ -60355,7 +60479,10 @@
   "k.words/shards/ga"
  ],
  "gap": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-styles",
   "k.objects/shards/animals-2",
+  "k.units/shards/measures",
   "k.words/shards/frequency-g",
   "k.words/shards/ga",
   "w.diagram/schema.sop"
@@ -61240,6 +61367,10 @@
   "k.parts/shards/d",
   "k.words/shards/frequency-g",
   "k.words/shards/ge"
+ ],
+ "generic": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-styles"
  ],
  "generosity": [
   "k.words/shards/frequency-g",
@@ -62368,12 +62499,15 @@
   "k.actions/shards/actions-body-social-nature",
   "k.objects/shards/noto-food-sweet-01",
   "k.objects/shards/noto-light-video-02",
+  "k.styles/schema.sop",
+  "k.styles/shards/drawing",
   "k.words/shards/frequency-g",
   "k.words/shards/gl",
   "w.diagram/schema.sop",
   "k.objects/shards/noto-sky-weather-03"
  ],
  "glowing": [
+  "k.styles/schema.sop",
   "k.words/shards/frequency-g",
   "k.words/shards/gl",
   "k.objects/shards/noto-sky-weather-03"
@@ -62722,6 +62856,9 @@
  ],
  "golden hinde": [
   "k.geo/shards/north-america"
+ ],
+ "golden hour": [
+  "k.styles/schema.sop"
  ],
  "goldenrod": [
   "k.colours/shards/colours-css"
@@ -63150,6 +63287,11 @@
  "grade": [
   "k.words/shards/frequency-g",
   "k.words/shards/gr"
+ ],
+ "gradient": [
+  "k.styles/schema.sop",
+  "k.styles/shards/drawing",
+  "w.drawing/schema.sop"
  ],
  "graduate": [
   "k.words/shards/frequency-g",
@@ -63755,7 +63897,10 @@
   "k.colours/shards/colours"
  ],
  "grayscale": [
-  "k.styles/schema.sop"
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-styles",
+  "k.styles/schema.sop",
+  "k.units/shards/measures"
  ],
  "graz": [
   "k.geo/shards/europe"
@@ -66133,6 +66278,7 @@
   "k.words/shards/ha"
  ],
  "half": [
+  "k.styles/shards/drawing",
   "k.values/shards/sets",
   "k.words/shards/frequency-h",
   "k.words/shards/ha",
@@ -66192,6 +66338,9 @@
  ],
  "half the": [
   "k.values/shards/sets"
+ ],
+ "half turn": [
+  "k.styles/schema.sop"
  ],
  "half way tree": [
   "k.geo/shards/north-america"
@@ -66597,6 +66746,9 @@
  "hand washing": [
   "k.procedures/shards/everyday"
  ],
+ "hand written": [
+  "k.styles/schema.sop"
+ ],
  "handan": [
   "k.geo/shards/psys2-cities-asia"
  ],
@@ -66827,8 +66979,13 @@
   "k.kinds/shards/kind"
  ],
  "handwriting": [
+  "k.styles/schema.sop",
   "k.words/shards/frequency-h",
   "k.words/shards/ha"
+ ],
+ "handwritten": [
+  "k.styles/schema.sop",
+  "k.styles/shards/drawing"
  ],
  "handy": [
   "k.words/shards/frequency-h",
@@ -67847,6 +68004,7 @@
   "k.parts/shards/names"
  ],
  "headline": [
+  "k.styles/schema.sop",
   "k.words/shards/frequency-h",
   "k.words/shards/he",
   "w.document/schema.sop"
@@ -69930,6 +70088,7 @@
  "hollow": [
   "k.layouts/shards/anchors",
   "k.objects/shards/things-2",
+  "k.styles/schema.sop",
   "k.values/shards/fills",
   "k.words/shards/frequency-h",
   "k.words/shards/ho"
@@ -71471,6 +71630,11 @@
  ],
  "hudson strait": [
   "k.geo/shards/seas"
+ ],
+ "hue": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-styles",
+  "k.units/shards/measures"
  ],
  "huf": [
   "k.units/shards/currencies",
@@ -74344,7 +74508,10 @@
   "k.words/shards/in"
  ],
  "invert": [
-  "k.actions/shards/verbs-change"
+  "k.actions/shards/verbs-change",
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-styles",
+  "k.units/shards/measures"
  ],
  "invertebrate": [
   "k.kinds/shards/group-mulberry",
@@ -75053,7 +75220,11 @@
   "k.words/shards/frequency-i",
   "k.words/shards/it",
   "w.document/schema.sop",
+  "w.drawing/schema.sop",
   "w.text/schema.sop"
+ ],
+ "italics": [
+  "w.drawing/schema.sop"
  ],
  "italy": [
   "k.attributes/shards/same-i",
@@ -78345,6 +78516,26 @@
  "k.styles": [
   "k.units/shards/measures"
  ],
+ "k.styles.effect": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-styles"
+ ],
+ "k.styles.fill": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-styles"
+ ],
+ "k.styles.filter": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-styles"
+ ],
+ "k.styles.font": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-styles"
+ ],
+ "k.styles.frame": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-styles"
+ ],
  "k.styles.role": [
   "k.attributes/shards/narration",
   "k.kinds/shards/relations-styles"
@@ -78354,6 +78545,10 @@
   "k.kinds/shards/relations-styles"
  ],
  "k.styles.theme": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-styles"
+ ],
+ "k.styles.turn": [
   "k.attributes/shards/narration",
   "k.kinds/shards/relations-styles"
  ],
@@ -80341,6 +80536,7 @@
   "k.kinds/shards/relations-shapes",
   "k.kinds/shards/relations-space",
   "k.kinds/shards/relations-spatial2d",
+  "k.kinds/shards/relations-styles",
   "k.kinds/shards/relations-wearables",
   "k.layouts/schema.sop",
   "k.motion/schema.sop",
@@ -83718,7 +83914,8 @@
  ],
  "lean": [
   "k.words/shards/frequency-l",
-  "k.words/shards/le"
+  "k.words/shards/le",
+  "w.drawing/schema.sop"
  ],
  "leander": [
   "k.people/shards/given-names-l"
@@ -85353,8 +85550,13 @@
   "k.objects/shards/mulberry-building-structure-01",
   "k.objects/shards/structures"
  ],
+ "lettering": [
+  "k.styles/schema.sop",
+  "w.drawing/schema.sop"
+ ],
  "letters": [
   "k.genres/shards/letter",
+  "k.styles/schema.sop",
   "k.units/shards/measures",
   "k.words/shards/frequency-l",
   "k.words/shards/le"
@@ -86369,6 +86571,9 @@
  ],
  "line plot": [
   "k.charts/shards/charts"
+ ],
+ "line thickness": [
+  "w.drawing/schema.sop"
  ],
  "line up": [
   "k.actions/shards/verbs-place"
@@ -87482,6 +87687,9 @@
   "k.objects/shards/mulberry-clothes-general-03",
   "k.scenes/shards/things-l"
  ],
+ "long shadow": [
+  "k.styles/schema.sop"
+ ],
  "long sides": [
   "k.faces/shards/plain-hair-front"
  ],
@@ -87493,6 +87701,9 @@
  ],
  "long_sentence": [
   "k.interest/shards/features"
+ ],
+ "long_shadow": [
+  "k.styles/shards/drawing"
  ],
  "longer": [
   "k.values/shards/scales",
@@ -94458,6 +94669,7 @@
   "k.shapes/shards/shapes",
   "k.words/shards/frequency-m",
   "k.words/shards/mi",
+  "w.drawing/schema.sop",
   "k.objects/shards/noto-game-02"
  ],
  "mirror ball": [
@@ -94467,6 +94679,9 @@
   "k.kinds/shards/head",
   "k.objects/shards/noto-game-02",
   "k.scenes/shards/things-m"
+ ],
+ "mirrored": [
+  "w.drawing/schema.sop"
  ],
  "miscarriage": [
   "k.words/shards/frequency-m",
@@ -95363,6 +95578,8 @@
   "k.animals/shards/mammals"
  ],
  "mono": [
+  "k.styles/schema.sop",
+  "k.styles/shards/drawing",
   "k.words/shards/frequency-m",
   "k.words/shards/mo"
  ],
@@ -95393,6 +95610,9 @@
   "k.objects/shards/noto-transport-ground-02",
   "k.scenes/shards/things-m",
   "k.objects/shards/noto-transport-ground-01"
+ ],
+ "monospace": [
+  "k.styles/schema.sop"
  ],
  "monotreme": [
   "k.kinds/shards/wordnet-1",
@@ -99298,6 +99518,8 @@
   "k.geo/shards/islands-oceania"
  ],
  "neon": [
+  "k.styles/schema.sop",
+  "k.styles/shards/drawing",
   "k.words/shards/frequency-n",
   "k.words/shards/ne"
  ],
@@ -99907,6 +100129,7 @@
   "k.colours/shards/colours",
   "k.scenes/shards/scenes-other",
   "k.styles/schema.sop",
+  "k.styles/shards/drawing",
   "k.time/shards/clock",
   "k.time/shards/derived",
   "k.words/shards/frequency-n",
@@ -99928,7 +100151,8 @@
   "k.scenes/shards/scenes-other"
  ],
  "night time": [
-  "k.scenes/shards/scenes-other"
+  "k.scenes/shards/scenes-other",
+  "k.styles/schema.sop"
  ],
  "night with stars": [
   "k.attributes/shards/drawn-noto",
@@ -100382,6 +100606,8 @@
   "k.words/shards/no"
  ],
  "none": [
+  "k.styles/schema.sop",
+  "k.styles/shards/drawing",
   "k.values/shards/scales",
   "k.values/shards/sets",
   "k.words/shards/frequency-n",
@@ -102515,6 +102741,9 @@
  "old man clothes": [
   "k.faces/shards/figure-presets"
  ],
+ "old photo": [
+  "k.styles/schema.sop"
+ ],
  "old value": [
   "k.actions/shards/acts"
  ],
@@ -102703,6 +102932,9 @@
  ],
  "omar": [
   "k.people/shards/given-names-o"
+ ],
+ "ombre": [
+  "k.styles/schema.sop"
  ],
  "omdurman": [
   "k.geo/shards/africa"
@@ -103072,7 +103304,8 @@
   "k.objects/shards/noto-drink-02"
  ],
  "opacity": [
-  "w.diagram/schema.sop"
+  "w.diagram/schema.sop",
+  "w.drawing/schema.sop"
  ],
  "open": [
   "k.actions/shards/actions-hands",
@@ -103738,6 +103971,7 @@
   "w.request/schema.sop"
  ],
  "original": [
+  "k.styles/schema.sop",
   "k.words/shards/frequency-o",
   "k.words/shards/or",
   "w.request/schema.sop"
@@ -104074,6 +104308,9 @@
   "w.lang.en/shards/closed-classes",
   "w.lang.en/shards/hand-joins"
  ],
+ "out of focus": [
+  "k.styles/schema.sop"
+ ],
  "outbox": [
   "k.objects/shards/noto-mail-01"
  ],
@@ -104200,6 +104437,9 @@
   "k.genres/shards/moves",
   "k.genres/shards/presentation",
   "k.genres/shards/scientific-article"
+ ],
+ "outline width": [
+  "w.drawing/schema.sop"
  ],
  "outline_point": [
   "k.units/shards/measures"
@@ -104896,6 +105136,7 @@
   "k.words/shards/pa",
   "w.diagram/schema.sop",
   "w.dialogue/schema.sop",
+  "w.drawing/schema.sop",
   "k.objects/shards/noto-book-paper-02"
  ],
  "page facing up": [
@@ -106725,11 +106966,15 @@
   "k.words/shards/pa"
  ],
  "pattern": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-styles",
   "k.objects/shards/things-2",
   "k.objects/shards/things-3",
+  "k.styles/schema.sop",
   "k.values/schema.sop",
   "k.words/shards/frequency-p",
-  "k.words/shards/pa"
+  "k.words/shards/pa",
+  "w.drawing/schema.sop"
  ],
  "patty": [
   "k.words/shards/frequency-p",
@@ -108677,6 +108922,10 @@
   "k.objects/shards/noto-light-video-01",
   "k.objects/shards/openmoji-objects-01"
  ],
+ "photo filter": [
+  "k.styles/schema.sop",
+  "w.drawing/schema.sop"
+ ],
  "photocopier": [
   "k.attributes/shards/drawn-mulberry",
   "k.attributes/shards/same-p",
@@ -110466,6 +110715,7 @@
   "k.kinds/shards/relations-units",
   "k.motion/shards/mouth",
   "k.parts/schema.sop",
+  "k.styles/schema.sop",
   "k.units/schema.sop",
   "k.words/shards/frequency-p",
   "k.words/shards/pl"
@@ -111699,6 +111949,7 @@
   "k.values/shards/fills"
  ],
  "polka dots": [
+  "k.styles/schema.sop",
   "k.values/shards/fills"
  ],
  "poll": [
@@ -112510,6 +112761,8 @@
   "k.words/shards/po"
  ],
  "poster": [
+  "k.styles/schema.sop",
+  "k.styles/shards/drawing",
   "k.words/shards/frequency-p",
   "k.words/shards/po"
  ],
@@ -115313,6 +115566,9 @@
   "k.time/schema.sop",
   "k.time/shards/clock-words"
  ],
+ "quarter turn": [
+  "k.styles/schema.sop"
+ ],
  "quarterback": [
   "k.words/shards/frequency-q",
   "k.words/shards/qu"
@@ -115832,6 +116088,9 @@
   "k.food/shards/vegetables"
  ],
  "radius": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-styles",
+  "k.units/shards/measures",
   "k.words/shards/frequency-r",
   "k.words/shards/ra",
   "w.diagram/schema.sop",
@@ -119129,6 +119388,7 @@
   "k.words/shards/re"
  ],
  "retro": [
+  "k.styles/schema.sop",
   "k.words/shards/frequency-r",
   "k.words/shards/re"
  ],
@@ -119770,6 +120030,9 @@
  ],
  "right to left": [
   "w.lang.en/shards/hand-arrangements"
+ ],
+ "right way up": [
+  "k.styles/schema.sop"
  ],
  "right-hand side": [
   "k.values/shards/directions"
@@ -122162,13 +122425,27 @@
   "k.words/shards/ro",
   "w.diagram/schema.sop"
  ],
+ "rotate left": [
+  "k.styles/schema.sop"
+ ],
+ "rotate right": [
+  "k.styles/schema.sop"
+ ],
+ "rotate_left": [
+  "k.styles/shards/drawing"
+ ],
+ "rotate_right": [
+  "k.styles/shards/drawing"
+ ],
  "rotated": [
   "w.diagram/schema.sop"
  ],
  "rotation": [
+  "k.styles/schema.sop",
   "k.words/shards/frequency-r",
   "k.words/shards/ro",
-  "w.diagram/schema.sop"
+  "w.diagram/schema.sop",
+  "w.drawing/schema.sop"
  ],
  "rote island": [
   "k.geo/shards/islands-asia"
@@ -122223,6 +122500,7 @@
   "k.layouts/shards/layouts",
   "k.shapes/schema.sop",
   "k.shapes/shards/shapes",
+  "k.styles/schema.sop",
   "k.time/schema.sop",
   "k.words/shards/frequency-r",
   "k.words/shards/ro",
@@ -122255,7 +122533,9 @@
  ],
  "rounded": [
   "k.motion/shards/mouth",
-  "k.shapes/schema.sop"
+  "k.shapes/schema.sop",
+  "k.styles/schema.sop",
+  "k.styles/shards/drawing"
  ],
  "rounded corners": [
   "w.diagram/schema.sop"
@@ -124322,6 +124602,13 @@
  "sanna": [
   "k.people/shards/given-names-s"
  ],
+ "sans": [
+  "k.styles/schema.sop",
+  "k.styles/shards/drawing"
+ ],
+ "sans-serif": [
+  "k.styles/schema.sop"
+ ],
  "santa": [
   "k.attributes/shards/same-s",
   "k.geo/shards/south-america",
@@ -124655,6 +124942,11 @@
  ],
  "satu mare": [
   "k.geo/shards/psys2-cities-europe"
+ ],
+ "saturate": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-styles",
+  "k.units/shards/measures"
  ],
  "saturation": [
   "k.attributes/shards/narration",
@@ -126692,6 +126984,7 @@
   "k.actions/shards/verbs-make"
  ],
  "script": [
+  "k.styles/schema.sop",
   "k.words/shards/frequency-s",
   "k.words/shards/sc"
  ],
@@ -127410,6 +127703,9 @@
   "k.scenes/shards/scenes-town",
   "k.scenes/shards/things-s"
  ],
+ "see-through": [
+  "w.drawing/schema.sop"
+ ],
  "seeb": [
   "k.geo/shards/asia"
  ],
@@ -127918,6 +128214,13 @@
   "k.words/shards/frequency-s",
   "k.words/shards/se"
  ],
+ "sepia": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-styles",
+  "k.styles/schema.sop",
+  "k.styles/shards/drawing",
+  "k.units/shards/measures"
+ ],
  "sepideh": [
   "k.people/shards/given-names-s"
  ],
@@ -128012,6 +128315,10 @@
   "k.words/shards/se",
   "w.chart/schema.sop",
   "w.lang.en/shards/hand-morphology"
+ ],
+ "serif": [
+  "k.styles/schema.sop",
+  "k.styles/shards/drawing"
  ],
  "serious": [
   "k.words/shards/frequency-s",
@@ -128541,6 +128848,8 @@
   "k.faces/shards/plain-beard",
   "k.objects/shards/mulberry-plants-and-trees-04",
   "k.objects/shards/things-3",
+  "k.styles/schema.sop",
+  "k.styles/shards/drawing",
   "k.words/shards/frequency-s",
   "k.words/shards/sh",
   "w.diagram/schema.sop"
@@ -128734,6 +129043,7 @@
   "k.kinds/shards/relations-interest",
   "k.kinds/shards/relations-layouts",
   "k.kinds/shards/relations-objects",
+  "k.kinds/shards/relations-styles",
   "k.kinds/shards/wordnet-1",
   "k.kinds/shards/wordnet-2",
   "k.layouts/schema.sop",
@@ -129286,6 +129596,7 @@
   "k.objects/shards/things-3",
   "k.parts/shards/names",
   "k.parts/shards/psys2",
+  "k.styles/schema.sop",
   "k.words/shards/frequency-s",
   "k.words/shards/sh",
   "k.objects/shards/noto-sky-weather-02"
@@ -129313,6 +129624,7 @@
   "k.scenes/shards/things-s"
  ],
  "shiny": [
+  "k.styles/schema.sop",
   "k.objects/shards/noto-clothing-06"
  ],
  "ship": [
@@ -130605,6 +130917,8 @@
   "k.objects/shards/noto-transport-ground-06",
   "k.objects/shards/places",
   "k.objects/shards/places-2",
+  "k.styles/schema.sop",
+  "k.styles/shards/drawing",
   "k.units/schema.sop",
   "k.words/shards/frequency-s",
   "k.words/shards/si",
@@ -130661,7 +130975,8 @@
  ],
  "signboard": [
   "k.kinds/shards/wordnet-1",
-  "k.kinds/shards/wordnet-2"
+  "k.kinds/shards/wordnet-2",
+  "k.styles/schema.sop"
  ],
  "signe": [
   "k.people/shards/given-names-s"
@@ -131462,6 +131777,9 @@
   "k.words/shards/sk",
   "w.drawing/schema.sop"
  ],
+ "skew": [
+  "w.drawing/schema.sop"
+ ],
  "skewer": [
   "k.kinds/shards/part_of",
   "k.objects/shards/noto-food-asian-02"
@@ -131756,6 +132074,12 @@
   "k.words/schema.sop",
   "k.words/shards/frequency-s",
   "k.words/shards/sl"
+ ],
+ "slant": [
+  "w.drawing/schema.sop"
+ ],
+ "slanted": [
+  "w.drawing/schema.sop"
  ],
  "slanted rectangle": [
   "k.shapes/shards/shapes"
@@ -132105,6 +132429,7 @@
   "k.words/shards/sl"
  ],
  "slightly": [
+  "k.styles/schema.sop",
   "k.values/shards/scales"
  ],
  "slim": [
@@ -133143,6 +133468,7 @@
   "k.kinds/shards/relations-procedures",
   "k.procedures/schema.sop",
   "k.styles/schema.sop",
+  "k.styles/shards/drawing",
   "k.values/shards/psys2",
   "k.values/shards/scales",
   "k.words/shards/frequency-s",
@@ -133153,6 +133479,9 @@
  ],
  "soft drink": [
   "k.kinds/shards/wordnet-2"
+ ],
+ "soft edges": [
+  "k.styles/schema.sop"
  ],
  "soft ice cream": [
   "k.attributes/shards/drawn-noto",
@@ -133308,6 +133637,8 @@
   "k.kinds/shards/wordnet-1",
   "k.kinds/shards/wordnet-2",
   "k.shapes/schema.sop",
+  "k.styles/schema.sop",
+  "k.styles/shards/drawing",
   "k.values/shards/fills",
   "k.words/shards/frequency-s",
   "k.words/shards/so",
@@ -134386,8 +134717,14 @@
   "k.objects/shards/noto-household-01"
  ],
  "speech": [
+  "k.styles/schema.sop",
+  "k.styles/shards/drawing",
   "k.words/shards/frequency-s",
   "k.words/shards/sp"
+ ],
+ "speech bubble": [
+  "k.styles/schema.sop",
+  "w.drawing/schema.sop"
  ],
  "speed": [
   "k.attributes/schema.sop",
@@ -135023,9 +135360,11 @@
   "k.objects/shards/noto-animal-mammal-05"
  ],
  "spotted": [
+  "k.styles/schema.sop",
   "k.values/shards/fills"
  ],
  "spotty": [
+  "k.styles/schema.sop",
   "k.values/shards/fills"
  ],
  "spouse": [
@@ -137556,7 +137895,9 @@
  "strength": [
   "k.attributes/shards/narration",
   "k.kinds/shards/relations-story",
+  "k.kinds/shards/relations-styles",
   "k.story/schema.sop",
+  "k.units/shards/measures",
   "k.words/shards/frequency-s",
   "k.words/shards/st"
  ],
@@ -137745,6 +138086,8 @@
   "k.objects/shards/things-3"
  ],
  "striped": [
+  "k.styles/schema.sop",
+  "k.styles/shards/drawing",
   "k.values/shards/fills"
  ],
  "stripes": [
@@ -137752,6 +138095,7 @@
   "k.objects/shards/more",
   "k.parts/shards/names",
   "k.parts/shards/psys2",
+  "k.styles/schema.sop",
   "k.values/shards/fills",
   "k.words/shards/frequency-s",
   "k.words/shards/st"
@@ -137765,6 +138109,7 @@
   "k.words/shards/st"
  ],
  "stripy": [
+  "k.styles/schema.sop",
   "k.values/shards/fills"
  ],
  "strive": [
@@ -138756,6 +139101,7 @@
   "k.kinds/shards/wordnet-2",
   "k.objects/shards/noto-place-other-02",
   "k.styles/schema.sop",
+  "k.styles/shards/drawing",
   "k.styles/shards/themes",
   "k.words/shards/frequency-s",
   "k.words/shards/su",
@@ -140523,9 +140869,11 @@
   "k.geo/shards/asia"
  ],
  "tail": [
+  "k.attributes/shards/narration",
   "k.faces/shards/plain-hair-back",
   "k.kinds/shards/part_of",
   "k.kinds/shards/part_of-wordnet-3",
+  "k.kinds/shards/relations-styles",
   "k.layouts/shards/joins",
   "k.objects/shards/animals",
   "k.objects/shards/animals-2",
@@ -140856,6 +141204,9 @@
   "k.faces/shards/presets",
   "k.words/shards/frequency-t",
   "k.words/shards/ta"
+ ],
+ "talking bubble": [
+  "k.styles/schema.sop"
  ],
  "talks": [
   "k.words/shards/frequency-t",
@@ -142601,6 +142952,7 @@
   "w.diagram/schema.sop",
   "w.dialogue/schema.sop",
   "w.document/schema.sop",
+  "w.drawing/schema.sop",
   "w.list/schema.sop",
   "w.request/schema.sop",
   "w.tasks/schema.sop",
@@ -142646,8 +142998,10 @@
  ],
  "texture": [
   "k.charts/shards/charts",
+  "k.styles/schema.sop",
   "k.words/shards/frequency-t",
-  "k.words/shards/te"
+  "k.words/shards/te",
+  "w.drawing/schema.sop"
  ],
  "th": [
   "k.words/shards/frequency-t",
@@ -143157,7 +143511,8 @@
  ],
  "thickness": [
   "k.values/shards/scales",
-  "w.diagram/schema.sop"
+  "w.diagram/schema.sop",
+  "w.drawing/schema.sop"
  ],
  "thief": [
   "k.kinds/shards/wordnet-2",
@@ -145265,8 +145620,13 @@
   "k.words/shards/th"
  ],
  "thought": [
+  "k.styles/schema.sop",
+  "k.styles/shards/drawing",
   "k.words/shards/frequency-t",
   "k.words/shards/th"
+ ],
+ "thought bubble": [
+  "k.styles/schema.sop"
  ],
  "thousand": [
   "k.words/shards/frequency-t",
@@ -145887,11 +146247,18 @@
  ],
  "tilt": [
   "k.actions/shards/verbs-change",
+  "k.styles/schema.sop",
+  "k.styles/shards/drawing",
   "k.words/shards/frequency-t",
   "k.words/shards/ti",
-  "w.diagram/schema.sop"
+  "w.diagram/schema.sop",
+  "w.drawing/schema.sop"
+ ],
+ "tilt_left": [
+  "k.styles/shards/drawing"
  ],
  "tilted": [
+  "k.styles/schema.sop",
   "k.objects/shards/noto-light-video-02"
  ],
  "tim": [
@@ -146244,7 +146611,13 @@
   "k.actions/shards/verbs-change",
   "k.attributes/shards/narration",
   "k.faces/schema.sop",
-  "k.kinds/shards/relations-faces"
+  "k.kinds/shards/relations-faces",
+  "k.kinds/shards/relations-styles"
+ ],
+ "tint_amount": [
+  "k.attributes/shards/narration",
+  "k.kinds/shards/relations-styles",
+  "k.units/shards/measures"
  ],
  "tiny": [
   "k.expect/schema.sop",
@@ -146397,6 +146770,7 @@
   "w.chart/schema.sop",
   "w.diagram/schema.sop",
   "w.document/schema.sop",
+  "w.drawing/schema.sop",
   "w.list/schema.sop",
   "w.meetings/schema.sop",
   "w.timeline/schema.sop"
@@ -146450,6 +146824,7 @@
   "k.attributes/shards/narration",
   "k.attributes/shards/typical",
   "k.kinds/shards/relations-layouts",
+  "k.kinds/shards/relations-styles",
   "k.kinds/shards/structures",
   "k.layouts/schema.sop",
   "k.units/shards/measures",
@@ -148546,10 +148921,12 @@
   "k.words/shards/tr"
  ],
  "transparency": [
-  "w.diagram/schema.sop"
+  "w.diagram/schema.sop",
+  "w.drawing/schema.sop"
  ],
  "transparent": [
   "w.diagram/schema.sop",
+  "w.drawing/schema.sop",
   "k.objects/shards/noto-household-01"
  ],
  "transplant": [
@@ -150043,11 +150420,14 @@
   "k.actions/shards/actions-move",
   "k.actions/shards/verbs-change",
   "k.space/schema.sop",
+  "k.styles/schema.sop",
   "k.units/shards/core",
+  "k.units/shards/measures",
   "k.words/shards/frequency-t",
   "k.words/shards/tu",
   "w.diagram/schema.sop",
   "w.dialogue/schema.sop",
+  "w.drawing/schema.sop",
   "w.request/schema.sop",
   "k.objects/shards/noto-transport-ground-06"
  ],
@@ -150540,6 +150920,10 @@
  "type of text": [
   "k.genres/schema.sop"
  ],
+ "typeface": [
+  "k.styles/schema.sop",
+  "w.drawing/schema.sop"
+ ],
  "typewriter": [
   "k.attributes/shards/drawn-hand",
   "k.attributes/shards/numbers-p-z",
@@ -150554,6 +150938,7 @@
   "k.objects/shards/things-3",
   "k.parts/shards/t",
   "k.scenes/shards/things-t",
+  "k.styles/schema.sop",
   "k.words/shards/frequency-t",
   "k.words/shards/ty"
  ],
@@ -151717,6 +152102,8 @@
   "k.geo/shards/europe"
  ],
  "upright": [
+  "k.styles/schema.sop",
+  "k.styles/shards/drawing",
   "k.words/shards/frequency-u",
   "k.words/shards/up"
  ],
@@ -151736,6 +152123,12 @@
  "upside": [
   "k.words/shards/frequency-u",
   "k.words/shards/up"
+ ],
+ "upside down": [
+  "k.styles/schema.sop"
+ ],
+ "upside_down": [
+  "k.styles/shards/drawing"
  ],
  "upstairs": [
   "k.kinds/shards/part_of-wordnet-3",
@@ -153692,6 +154085,8 @@
  ],
  "vintage": [
   "k.kinds/shards/sensitive",
+  "k.styles/schema.sop",
+  "k.styles/shards/drawing",
   "k.words/shards/frequency-v",
   "k.words/shards/vi"
  ],
@@ -155644,6 +156039,9 @@
  "washboard": [
   "k.kinds/shards/part_of-wordnet-3"
  ],
+ "washed-out": [
+  "k.styles/schema.sop"
+ ],
  "washer": [
   "k.words/shards/frequency-w",
   "k.words/shards/wa"
@@ -156432,6 +156830,7 @@
   "k.words/shards/frequency-w",
   "k.words/shards/we",
   "w.diagram/schema.sop",
+  "w.drawing/schema.sop",
   "w.lang.en/shards/hand-grammar",
   "k.objects/shards/noto-tool-03",
   "k.objects/shards/openmoji-healthcare-04"
@@ -157425,6 +157824,9 @@
   "k.procedures/shards/from-knowledge",
   "k.words/shards/frequency-w",
   "k.words/shards/wh"
+ ],
+ "whole picture": [
+  "w.drawing/schema.sop"
  ],
  "whole step": [
   "k.music/shards/notes"
@@ -158885,6 +159287,7 @@
   "k.words/shards/frequency-w",
   "k.words/shards/wo",
   "w.document/schema.sop",
+  "w.drawing/schema.sop",
   "w.request/schema.sop"
  ],
  "words left": [
@@ -159345,6 +159748,7 @@
  "writing": [
   "k.words/shards/frequency-w",
   "k.words/shards/wr",
+  "w.drawing/schema.sop",
   "k.objects/shards/noto-book-paper-01"
  ],
  "writing board": [
@@ -160675,6 +161079,8 @@
   "k.attributes/shards/same-z",
   "k.kinds/shards/wordnet-2",
   "k.shapes/shards/shapes",
+  "k.styles/schema.sop",
+  "k.styles/shards/drawing",
   "k.words/shards/frequency-z",
   "k.words/shards/zi"
  ],

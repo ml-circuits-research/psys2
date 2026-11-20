@@ -1,0 +1,56 @@
+# k.styles/shards/drawing: 8 typefaces, 9 fills, 7 effects (none among them), 9 picture filters, 5 frames round words and 8 named turns for pictures.
+# sources: hand-core 1 (hand-written in this repository; typefaces after the common web-safe faces and the generic CSS families, filter amounts after the standard picture filters)
+# license: CC0-1.0
+# script: none (hand-written)
+
+@k.styles.font.serif k.styles.font name=serif about="a classic book face with small strokes at the ends of the letters" face="Georgia" generic=serif core.source="hand-core 1"
+@k.styles.font.sans k.styles.font name=sans about="a plain clean face without end strokes" face="Helvetica" generic=sans-serif core.source="hand-core 1"
+@k.styles.font.handwritten k.styles.font name=handwritten about="letters that look written by hand" face="Segoe Print" generic=cursive core.source="hand-core 1"
+@k.styles.font.comic k.styles.font name=comic about="round, friendly comic-book letters" face="Comic Sans MS" generic=cursive core.source="hand-core 1"
+@k.styles.font.mono k.styles.font name=mono about="a typewriter face where every letter is as wide as the others" face="Courier New" generic=monospace core.source="hand-core 1"
+@k.styles.font.fancy k.styles.font name=fancy about="flowing joined-up script letters" face="Brush Script MT" generic=cursive core.source="hand-core 1"
+@k.styles.font.poster k.styles.font name=poster about="tall heavy letters for a title or a poster" face="Impact" generic=fantasy core.source="hand-core 1"
+@k.styles.font.rounded k.styles.font name=rounded about="soft rounded letters" face="Trebuchet MS" generic=sans-serif core.source="hand-core 1"
+
+@k.styles.fill.solid k.styles.fill name=solid about="one even colour" pattern=solid core.source="hand-core 1"
+@k.styles.fill.none k.styles.fill name=none about="no colour inside: only the outline" pattern=none core.source="hand-core 1"
+@k.styles.fill.crayon k.styles.fill name=crayon about="strokes of colour over a light wash, as a crayon lays it" pattern=hachure gap=6 angle=-38 core.source="hand-core 1"
+@k.styles.fill.striped k.styles.fill name=striped about="stripes of the colour" pattern=hachure gap=12 angle=-45 core.source="hand-core 1"
+@k.styles.fill.dotted k.styles.fill name=dotted about="dots of the colour" pattern=dots gap=10 core.source="hand-core 1"
+@k.styles.fill.checked k.styles.fill name=checked about="strokes crossing both ways, like a check" pattern=cross-hatch gap=12 angle=-45 core.source="hand-core 1"
+@k.styles.fill.zigzag k.styles.fill name=zigzag about="zigzag strokes" pattern=zigzag gap=10 angle=-45 core.source="hand-core 1"
+@k.styles.fill.dashed k.styles.fill name=dashed about="short dashes of the colour" pattern=dashed gap=9 angle=-45 core.source="hand-core 1"
+@k.styles.fill.gradient k.styles.fill name=gradient about="the colour fading into a second one from top to bottom" pattern=gradient angle=90 core.source="hand-core 1"
+
+@k.styles.effect.none k.styles.effect name=none about="drawn plain, with no effect" kind=none radius=0 core.source="hand-core 1"
+@k.styles.effect.glow k.styles.effect name=glow about="a soft halo of light round it" kind=glow radius=10 strength=0.9 core.source="hand-core 1"
+@k.styles.effect.neon k.styles.effect name=neon about="a bright green neon halo" kind=glow radius=16 colour="#39ff14" strength=1 core.source="hand-core 1"
+@k.styles.effect.shadow k.styles.effect name=shadow about="a soft drop shadow below and to the right" kind=shadow radius=5 dx=6 dy=7 colour="#000000" strength=0.4 core.source="hand-core 1"
+@k.styles.effect.long_shadow k.styles.effect name=long_shadow about="a long sharp shadow" kind=shadow radius=1 dx=14 dy=14 colour="#000000" strength=0.3 core.source="hand-core 1"
+@k.styles.effect.blur k.styles.effect name=blur about="softened all over, out of focus" kind=blur radius=3 core.source="hand-core 1"
+@k.styles.effect.soft k.styles.effect name=soft about="soft edges" kind=blur radius=1.2 core.source="hand-core 1"
+
+@k.styles.filter.none k.styles.filter name=none about="the picture as drawn" core.source="hand-core 1"
+@k.styles.filter.sepia k.styles.filter name=sepia about="the brown tones of an old photograph" sepia=1 contrast=1.05 core.source="hand-core 1"
+@k.styles.filter.black_and_white k.styles.filter name=black_and_white about="black, white and greys only" grayscale=1 contrast=1.1 core.source="hand-core 1"
+@k.styles.filter.night k.styles.filter name=night about="dark and blue, as at night" brightness=0.55 saturate=0.7 tint="#0b1a4a" tint_amount=0.35 core.source="hand-core 1"
+@k.styles.filter.sunset k.styles.filter name=sunset about="warm orange evening light" saturate=1.25 tint="#ff7a2f" tint_amount=0.22 core.source="hand-core 1"
+@k.styles.filter.vintage k.styles.filter name=vintage about="faded warm colours" sepia=0.45 contrast=0.9 saturate=0.85 core.source="hand-core 1"
+@k.styles.filter.bright k.styles.filter name=bright about="lighter and more colourful" brightness=1.2 saturate=1.3 core.source="hand-core 1"
+@k.styles.filter.faded k.styles.filter name=faded about="pale washed-out colours" brightness=1.1 contrast=0.75 saturate=0.6 core.source="hand-core 1"
+@k.styles.filter.dreamy k.styles.filter name=dreamy about="soft and slightly blurred, a little brighter" brightness=1.08 blur=1.2 saturate=1.1 core.source="hand-core 1"
+
+@k.styles.frame.none k.styles.frame name=none about="no frame" shape=rectangle fill="#ffffff" outline="#ffffff" core.source="hand-core 1"
+@k.styles.frame.speech k.styles.frame name=speech about="a speech bubble pointing at who says the words" shape=rounded tail=true fill="#ffffff" outline="#333333" core.source="hand-core 1"
+@k.styles.frame.thought k.styles.frame name=thought about="a round thought bubble" shape=oval tail=true fill="#ffffff" outline="#555555" core.source="hand-core 1"
+@k.styles.frame.caption k.styles.frame name=caption about="a caption box" shape=rectangle fill="#fff8dc" outline="#8a7650" core.source="hand-core 1"
+@k.styles.frame.sign k.styles.frame name=sign about="a wooden sign board" shape=rectangle fill="#e8c48a" outline="#7a5225" core.source="hand-core 1"
+
+@k.styles.turn.rotate_right k.styles.turn name=rotate_right about="a quarter turn clockwise" by=90 core.source="hand-core 1"
+@k.styles.turn.rotate_left k.styles.turn name=rotate_left about="a quarter turn anticlockwise" by=-90 core.source="hand-core 1"
+@k.styles.turn.upside_down k.styles.turn name=upside_down about="turned upside down" to=180 core.source="hand-core 1"
+@k.styles.turn.upright k.styles.turn name=upright about="turned back upright" to=0 core.source="hand-core 1"
+@k.styles.turn.tilt k.styles.turn name=tilt about="a bit clockwise" by=15 core.source="hand-core 1"
+@k.styles.turn.tilt_left k.styles.turn name=tilt_left about="a bit anticlockwise" by=-15 core.source="hand-core 1"
+@k.styles.turn.half k.styles.turn name=half about="half a turn" by=180 core.source="hand-core 1"
+@k.styles.turn.full k.styles.turn name=full about="all the way round" by=360 core.source="hand-core 1"
