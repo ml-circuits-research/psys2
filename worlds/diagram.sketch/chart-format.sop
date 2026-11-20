@@ -19,23 +19,23 @@
 @cfx.cmore.type core.type of=ui.diagram.cmore
 
 # ---- The properties: slot, parameter, kind, the usual value, limits; primary=false: another parameter of the slot ----
-@cfx.p.font ui.diagram.cprop slot=font_size param=fontSize kind=number base=12 min=6 max=40 inverse=false primary=true
-@cfx.p.lw ui.diagram.cprop slot=line_width param=lineWidth kind=number base=2 min=0.5 max=12 inverse=false primary=true
-@cfx.p.ms ui.diagram.cprop slot=marker_size param=markerSize kind=number base=12 min=2 max=40 inverse=false primary=true
-@cfx.p.me ui.diagram.cprop slot=marker_edge param=markerEdge kind=number base=1.5 min=0 max=8 inverse=false primary=true
-@cfx.p.bw ui.diagram.cprop slot=bar_width param=barWidth kind=number base=0.64 min=0.1 max=1 inverse=false primary=true
+@cfx.p.font ui.diagram.cprop slot=font_size param=fontSize kind=number base=12 min=6 max=40 inverse=false primary=true measure=true
+@cfx.p.lw ui.diagram.cprop slot=line_width param=lineWidth kind=number base=2 min=0.5 max=12 inverse=false primary=true measure=true
+@cfx.p.ms ui.diagram.cprop slot=marker_size param=markerSize kind=number base=12 min=2 max=40 inverse=false primary=true measure=true
+@cfx.p.me ui.diagram.cprop slot=marker_edge param=markerEdge kind=number base=1.5 min=0 max=8 inverse=false primary=true measure=true
+@cfx.p.bw ui.diagram.cprop slot=bar_width param=barWidth kind=number base=0.64 min=0.1 max=1 inverse=false primary=true measure=true
 @cfx.p.bg ui.diagram.cprop slot=bar_width param=barGap kind=number base=0.64 min=0.1 max=1 inverse=true primary=false
-@cfx.p.pr ui.diagram.cprop slot=pie_radius param=pieRadius kind=number base=90 min=30 max=300 inverse=false primary=true
-@cfx.p.prec ui.diagram.cprop slot=precision param=precision kind=number base=0 min=0 max=4 inverse=false primary=true
-@cfx.p.tw ui.diagram.cprop slot=title_weight param=titleWeight kind=enum base=bold primary=true
-@cfx.p.tc ui.diagram.cprop slot=title_colour param=titleColour kind=enum base=none primary=true
-@cfx.p.tp ui.diagram.cprop slot=title_position param=titlePosition kind=enum base=top_left primary=true
-@cfx.p.ya ui.diagram.cprop slot=y_axis param=axisSide kind=enum base=none primary=true
-@cfx.p.inv ui.diagram.cprop slot=invert param=invert kind=enum base=none primary=true
-@cfx.p.as ui.diagram.cprop slot=axis_scale param=axisScale kind=enum base=linear primary=true
-@cfx.p.tf ui.diagram.cprop slot=tick_format param=tickFormat kind=enum base=plain primary=true
-@cfx.p.ls ui.diagram.cprop slot=line_style param=lineStyle kind=enum base=solid primary=true
-@cfx.p.gs ui.diagram.cprop slot=grid_style param=gridStyle kind=enum base=fine primary=true
+@cfx.p.pr ui.diagram.cprop slot=pie_radius param=pieRadius kind=number base=90 min=30 max=300 inverse=false primary=true measure=true
+@cfx.p.prec ui.diagram.cprop slot=precision param=precision kind=number base=0 min=0 max=4 inverse=false primary=true measure=false
+@cfx.p.tw ui.diagram.cprop slot=title_weight param=titleWeight kind=enum base=bold primary=true measure=false
+@cfx.p.tc ui.diagram.cprop slot=title_colour param=titleColour kind=enum base=none primary=true measure=false
+@cfx.p.tp ui.diagram.cprop slot=title_position param=titlePosition kind=enum base=top_left primary=true measure=false
+@cfx.p.ya ui.diagram.cprop slot=y_axis param=axisSide kind=enum base=none primary=true measure=false
+@cfx.p.inv ui.diagram.cprop slot=invert param=invert kind=enum base=none primary=true measure=false
+@cfx.p.as ui.diagram.cprop slot=axis_scale param=axisScale kind=enum base=linear primary=true measure=false
+@cfx.p.tf ui.diagram.cprop slot=tick_format param=tickFormat kind=enum base=plain primary=true measure=false
+@cfx.p.ls ui.diagram.cprop slot=line_style param=lineStyle kind=enum base=solid primary=true measure=false
+@cfx.p.gs ui.diagram.cprop slot=grid_style param=gridStyle kind=enum base=fine primary=true measure=false
 # One step up or down: a quarter more, a fifth less (an inverse property the other way round).
 @cfx.step.up ui.diagram.cstep way=up inverse=false factor=1.25
 @cfx.step.down ui.diagram.cstep way=down inverse=false factor=0.8
@@ -120,14 +120,14 @@
 @cfx.f.any ui.diagram.cown group=?g slot=?s v=?anyv
 @cfx.f.bo ui.diagram.cfmt group=?g slot=?s v=?b
 @chart.cfmt.base core.rule when=$cfx.f.g when=$cfx.f.p not=$cfx.f.any then=$cfx.f.bo
-# Observed under its parameter's name: a number property as it is drawn (its own value or the usual one: the measure a
-# comparative steps from), a named property when the chart has one.
+# Observed under its parameter's name: a measured property (measure=true) as it is drawn (its own value or the usual
+# one: the measure a comparative steps from), the others when the chart has them.
 @cfx.ob.o ui.diagram.cown group=?g slot=?s v=?v
-@cfx.ob.p ui.diagram.cprop slot=?s param=?p kind=enum primary=true
+@cfx.ob.p ui.diagram.cprop slot=?s param=?p primary=true measure=false
 @cfx.ob.out app.observe.input id=?g key=?p value=?v
 @observe.chart.format core.rule when=$cfx.ob.o when=$cfx.ob.p then=$cfx.ob.out
 @cfx.ob.f ui.diagram.cfmt group=?g slot=?s v=?v
-@cfx.ob.n ui.diagram.cprop slot=?s param=?p kind=number primary=true
+@cfx.ob.n ui.diagram.cprop slot=?s param=?p primary=true measure=true
 @cfx.ob.u ui.diagram.unit unit=?g kind=group
 @observe.chart.format.number core.rule when=$cfx.ob.f when=$cfx.ob.n when=$cfx.ob.u then=$cfx.ob.out
 # The title colour is looked up (render-projection.sop: ui.diagram.rgb).

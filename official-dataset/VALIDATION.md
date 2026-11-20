@@ -119,8 +119,8 @@ No issue found.
 | trigger-not-in-span-removed | 288 |
 | warning:target-kind_span-ambiguous | 127 |
 | constraint-with-span-outside-request-removed | 93 |
-| warning:numeric-value-not-in-surface | 61 |
 | warning:target-kind-without-source-span | 39 |
+| warning:numeric-value-not-in-surface | 27 |
 | warning:target-count_span-ambiguous | 13 |
 | warning:target-description_span-ambiguous | 11 |
 | warning:target-name_span-ambiguous | 5 |
@@ -380,9 +380,9 @@ Kept with a warning (not an error; see README):
 | determiner-kept-open | 409 |
 | value-span-ambiguous | 341 |
 | target-kind_span-ambiguous | 127 |
-| numeric-value-not-in-surface | 61 |
 | target-kind-without-source-span | 39 |
 | selector-with-empty-context | 31 |
+| numeric-value-not-in-surface | 27 |
 | target-count_span-ambiguous | 13 |
 | target-description_span-ambiguous | 11 |
 | target-name_span-ambiguous | 5 |

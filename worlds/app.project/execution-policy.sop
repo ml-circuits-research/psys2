@@ -139,6 +139,12 @@
 @chart.key.chart_barGap app.execution.keyBinding area=diagram key="chart.barGap" operation="diagram.chart.format" parameter="barGap"
 @chart.key.chart_pieRadius app.execution.keyBinding area=diagram key="chart.pieRadius" operation="diagram.chart.format" parameter="pieRadius"
 @chart.key.chart_precision app.execution.keyBinding area=diagram key="chart.precision" operation="diagram.chart.format" parameter="precision"
+# The decimals are said in words ("whole numbers", "one decimal place"): the drops write the number of decimals as the value.
+@chart.key.chart_precision.d0 app.execution.keyValue area=diagram key="chart.precision" said="0" value="0"
+@chart.key.chart_precision.d1 app.execution.keyValue area=diagram key="chart.precision" said="1" value="1"
+@chart.key.chart_precision.d2 app.execution.keyValue area=diagram key="chart.precision" said="2" value="2"
+@chart.key.chart_precision.d3 app.execution.keyValue area=diagram key="chart.precision" said="3" value="3"
+@chart.key.chart_precision.d4 app.execution.keyValue area=diagram key="chart.precision" said="4" value="4"
 @chart.key.chart_titleColour app.execution.keyBinding area=diagram key="chart.titleColour" operation="diagram.chart.format" parameter="titleColour"
 @chart.key.chart_barHeight app.execution.keyBinding area=diagram key="chart.barHeight" operation="diagram.chart.format" parameter="barWidth"
 @chart.key.chart_axisSide app.execution.keyBinding area=diagram key="chart.axisSide" operation="diagram.chart.format" parameter="axisSide"

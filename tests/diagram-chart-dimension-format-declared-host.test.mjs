@@ -130,7 +130,7 @@ test('the data drops\' chart keys bind to the chart group, the chart make and th
  assert.deepEqual(row('chart.invert').valueMap.find(v=>v.said==='off'),{said:'off',value:'none'});
  assert.deepEqual(row('chart.tickFormat').valueMap.find(v=>v.said==='powers of ten'),{said:'powers of ten',value:'power'});
  assert.deepEqual(row('chart.axisSide').classValues,['left','right']);
- assert.equal(row('chart.precision').numeric,true);
+ assert.deepEqual(row('chart.precision').valueMap.find(v=>v.said==='1'),{said:'1',value:1},'the number of decimals said in words, written as the value');
 });
 
 test('a reading of "put the y axis on the right" compiles to the chart format tool with the declared value',async()=>{

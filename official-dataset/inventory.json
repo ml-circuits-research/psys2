@@ -970,8 +970,15 @@
     },
     "precision": {
      "concept": "precision",
-     "head": "number",
-     "src": "chart group formatting in the Diagram tab (worlds/diagram.sketch/chart-format.sop; data drops dg-batch-05 frame chart.pie.precision, chart.tick.precision)"
+     "head": "class",
+     "src": "chart group formatting in the Diagram tab (worlds/diagram.sketch/chart-format.sop; data drops dg-batch-05 frame chart.pie.precision, chart.tick.precision); the number of decimals, said in words",
+     "values": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4"
+     ]
     },
     "series": {
      "concept": "name",
@@ -2412,6 +2419,16 @@
       "foreground"
      ]
     },
+    "behind": {
+     "concept": "occluder",
+     "head": "fill+span",
+     "src": "art.draw behind (make / catalog.make / object.change {behind}): the thing in front that partly hides this one (occlusion-rules.sop)"
+    },
+    "cause": {
+     "concept": "cause",
+     "head": "fill+span",
+     "src": "art.draw cause (make / catalog.make / object.change / person.expression {cause}): the thing an expression is about (happy because ...)"
+    },
     "color": {
      "concept": "color",
      "head": "candidate",
@@ -2554,6 +2571,20 @@
       "sign"
      ]
     },
+    "grade": {
+     "concept": "distance grade",
+     "head": "class",
+     "src": "art.draw grade (make / catalog.make / object.change {grade}): a distance named without a number",
+     "values": [
+      "a bit",
+      "a little",
+      "slightly",
+      "close",
+      "some way",
+      "far",
+      "far away"
+     ]
+    },
     "gradient": {
      "concept": "colour",
      "head": "candidate",
@@ -2563,6 +2594,16 @@
      "concept": "height",
      "head": "number",
      "src": "Native parameter: drawing.object.make.height"
+    },
+    "hidden": {
+     "concept": "hidden share",
+     "head": "number",
+     "src": "art.draw hidden (make / catalog.make / object.change {hidden}): the share hidden behind the thing in front (0.5 half)"
+    },
+    "holds": {
+     "concept": "held thing",
+     "head": "candidate",
+     "src": "art.draw holds (drawing.object.make / catalog.make {holds}): a k.objects kind the person made holds in the hand of its pose"
     },
     "id": {
      "concept": "id",
@@ -2584,6 +2625,11 @@
      "head": "candidate",
      "src": "Native parameter: drawing.object.make.label"
     },
+    "material": {
+     "concept": "material",
+     "head": "candidate",
+     "src": "art.draw material (make / catalog.make / object.change / part.change {material}): a k.styles material or one of its words (wooden, glass, brick)"
+    },
     "mirror": {
      "concept": "mirror",
      "head": "class",
@@ -2598,6 +2644,16 @@
      "concept": "name",
      "head": "span",
      "src": "label given by the user"
+    },
+    "near": {
+     "concept": "reference",
+     "head": "fill+span",
+     "src": "art.draw near (make / catalog.make / object.change {near}): the thing a measured gap is taken from"
+    },
+    "offset": {
+     "concept": "measured distance",
+     "head": "number",
+     "src": "art.draw offset (make / catalog.make / object.change {offset}): a measured gap from an edge (edge) or a thing (near, side), in unit"
     },
     "opacity": {
      "concept": "opacity",
@@ -2658,6 +2714,18 @@
      "concept": "rotation",
      "head": "number",
      "src": "Native parameter: drawing.object.change.rotation"
+    },
+    "side": {
+     "concept": "side",
+     "head": "class",
+     "src": "art.draw side (make / catalog.make / object.change {side}): where a thing peeks out from behind (left, right, top) or lies from a thing it is measured from (left, right, above, below)",
+     "values": [
+      "left",
+      "right",
+      "top",
+      "above",
+      "below"
+     ]
     },
     "size": {
      "concept": "size",
@@ -2731,6 +2799,16 @@
       "half",
       "full"
      ]
+    },
+    "unit": {
+     "concept": "length unit",
+     "head": "candidate",
+     "src": "art.draw unit (make / catalog.make / object.change {unit}): a k.units length or one of its words (inch, hand-width, finger-width); page units when absent"
+    },
+    "variant": {
+     "concept": "kind variant",
+     "head": "candidate",
+     "src": "art.draw variant (object.change {variant}): a k.objects stand-in variant (a sports car) or another kind the thing becomes"
     },
     "wear": {
      "concept": "garment",

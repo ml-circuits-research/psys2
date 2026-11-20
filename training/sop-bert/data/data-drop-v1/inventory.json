@@ -221,9 +221,16 @@
      "src": "chart group formatting in the Diagram tab (worlds/diagram.sketch/chart-format.sop; data drops dg-batch-05 frame chart.line.style)"
     },
     "precision": {
-     "head": "number",
+     "head": "class",
      "concept": "precision",
-     "src": "chart group formatting in the Diagram tab (worlds/diagram.sketch/chart-format.sop; data drops dg-batch-05 frame chart.pie.precision, chart.tick.precision)"
+     "values": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4"
+     ],
+     "src": "chart group formatting in the Diagram tab (worlds/diagram.sketch/chart-format.sop; data drops dg-batch-05 frame chart.pie.precision, chart.tick.precision); the number of decimals, said in words"
     },
     "tickFormat": {
      "head": "class",

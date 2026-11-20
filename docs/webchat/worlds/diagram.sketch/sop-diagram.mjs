@@ -2,7 +2,7 @@
 // The Diagram tab: the generic SOP area adapter over worlds/diagram.sketch/area.sop. Its interface composes the
 // data.charts operations, which the area's act rules refuse (they are not part of its w.diagram instance).
 import NATIVE_INTERFACE from './native-interface-source.mjs?v=ab0e8095aa';
-import AREA_SOURCES from './area-sources.mjs?v=87d66d9033';
+import AREA_SOURCES from './area-sources.mjs?v=cf30845bdb';
 import {BUNDLED_AREAS} from '../../lib/knowledge/bundled-areas.mjs?v=a8ac70dc44';
 import {chartToolInterface} from '../data.charts/declared-host.mjs?v=e372c72f84';
 import {sopAreaAdapter} from '../sop-area-adapter.mjs?v=9e71a771d8';
