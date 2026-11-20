@@ -2,7 +2,8 @@
 """Import the Diagram/Drawing data drops (management/data-drop/<batch>/*.jsonl, format of
 management/DATA-REQUEST-diagram-drawing.md) into this folder for official-dataset/build.py.
 
-Per batch: normalise the few request-format differences to the trainer's label inventory (act ask -> answer, operator count -> eq on
+A batch is imported only when its DONE marker file exists and matches its files (see signed()); imported batches are
+frozen (frozen/<batch>.jsonl) and never re-read. Per batch: normalise the few request-format differences to the trainer's label inventory (act ask -> answer, operator count -> eq on
 node.n / drawn.count; determiners and `needs` are kept as written),
 validate every row (world, request fields, label banks and keys of the merged inventory, verbatim spans, references present
 in context.existing, official Validator and row conversions, duplicates against the official dataset and earlier drops) and
@@ -281,21 +282,41 @@ def check(row, seen, official_seen):
     return ['official:' + (x if x.startswith(('unregistered-key', 'act-not', 'target-type', 'question-ask', 'operator', 'character', 'phase')) else x.split(':')[0]) for x in e]
 
 
-QUESTIONS = REPO.parent / 'management' / 'questions.md'
 FROZEN = HERE / 'frozen'  # batches already consumed (imported once; their folders are never re-read): pilot, dg-batch-01 phase A
 
 
-def done_batches():
-    """A batch is imported only after the worker's DONE-<batch> entry in management/questions.md (management/staging/ is never read)."""
-    text = QUESTIONS.read_text() if QUESTIONS.exists() else ''
-    return set(re.findall(r'DONE-([A-Za-z0-9_.-]+)', text))
+def signed(batch):
+    """A batch is imported only when the worker's DONE marker file (written last) exists in data-drop/<batch>/ and every
+    data file it lists exists with the listed row count; the batch's .jsonl files must all be listed. management/staging/
+    is never read. Returns (ok, reason)."""
+    marker = batch / 'DONE'
+    if not marker.is_file():
+        return False, 'no DONE marker'
+    text = marker.read_text()
+    listed = dict.fromkeys(re.findall(r'([\w.-]+\.jsonl)', text))
+    if not listed:
+        return False, 'DONE marker lists no .jsonl file'
+    present = {p.name for p in batch.glob('*.jsonl')}
+    if set(listed) != present:
+        return False, f'DONE lists {sorted(listed)} but the folder holds {sorted(present)}'
+    for name in listed:
+        rows = sum(1 for line in (batch / name).read_text().splitlines() if line.strip())
+        m = re.search(re.escape(name) + r'\D{0,40}?(\d[\d,]*)', text)
+        if m and int(m.group(1).replace(',', '')) != rows:
+            return False, f'{name}: DONE says {m.group(1)} rows, the file has {rows}'
+    return True, 'signed'
 
 
 def main():
     frozen = {p.stem: [json.loads(l) for l in p.read_text().splitlines() if l.strip()] for p in sorted(FROZEN.glob('*.jsonl')) if not p.name.endswith('.needs.jsonl')}
-    done = done_batches()
-    consumed = {'pilot', 'dg-batch-01'}  # imported before the DONE protocol; only their top-level files as imported then (parts/ never)
-    batches = sorted(p for p in DROP.iterdir() if p.is_dir() and p.name not in frozen and (p.name in done or p.name in consumed or len(sys.argv) > 1)) if DROP.exists() else []
+    candidates = sorted(p for p in DROP.iterdir() if p.is_dir() and not p.name.startswith(('_', '.')) and p.name not in frozen) if DROP.exists() else []
+    batches, waiting = [], {}
+    for p in candidates:
+        ok, why = signed(p) if len(sys.argv) == 1 else (True, 'dry run')
+        if ok:
+            batches.append(p)
+        else:
+            waiting[p.name] = why
     official_seen = set()  # owner decision 2026-11-20: rows are never rejected for being in the official dataset or a benchmark; the build keeps one copy of identical texts
     seen, accepted, needs_all, needs_count = set(), [], collections.defaultdict(list), collections.Counter()
     summary = {}
@@ -411,6 +432,7 @@ def main():
         return
     accepted = [r for rows in frozen.values() for r in rows] + accepted
     summary.update({name: {'frozen': len(rows)} for name, rows in frozen.items()})
+    summary.update({name: {'waiting': why} for name, why in waiting.items()})
     (HERE / 'accepted.jsonl').write_text(''.join(json.dumps(r, ensure_ascii=False) + '\n' for r in accepted))
     every = [json.loads(l) for p in sorted(FROZEN.glob('*.needs.jsonl')) for l in p.read_text().splitlines() if l.strip()]
     if every:
