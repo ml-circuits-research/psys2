@@ -39,7 +39,11 @@ function factWriter() {
   return { write, value, wires };
 }
 
-function interfaceFacts({ area, view, bindings, host, observation, focus, targetUnique, unapplied, readKnowledge, sceneDefaults, previews = [] }, concepts, said = []) {
+let identityNames;
+const identityParameters = () => identityNames ??= new Set(parse(POLICY).filter((wire) => wire.type === NS + 'seed' &&
+  ['target.list', 'target.id'].includes(take(wire, 'source'))).map((wire) => take(wire, 'parameter')));
+
+function interfaceFacts({ area, view, bindings, host, observation, focus, targetUnique, unapplied, readKnowledge, sceneDefaults, previews = [] }, concepts, said = [], selectors = new Set()) {
   const { write, value, wires } = factWriter();
   const scope = write(NS + 'scope', {
     instance: quote(observation.instanceId), version: quote(observation.version), population: typeof observation.scope==='string' ? quote(observation.scope) : undefined,
@@ -80,12 +84,22 @@ function interfaceFacts({ area, view, bindings, host, observation, focus, target
       .map(([name]) => operation.on + '\0' + name)));
   const codecs = { 'number-list': 'number.list', 'string-list': 'string.list' };
   let propertyOrder = Math.max(-1, ...[...observed, ...measures].map((row) => Number(take(row, 'order')))) + 1;
+  // A selector on a parameter the policy fills with the target's own identity (std.capability.seed
+  // source=target.list|target.id: "ids", "id") names the object itself ("the Plan label", "node n1"): its concept is
+  // a reference concept of its source type (by code, name or kind), observed on each object as the object's code.
+  const identities = new Map();
   for (const row of bindings.properties || []) {
     const binding = row.hostBinding;
     if (row.area !== readerArea || !sourceTypes.has(binding?.sourceType)) continue;
+    const identity = selectors.has(row.canonical) && identityParameters().has(binding.parameter);
+    const observedAs = identity ? 'identity:' + binding.sourceType + '.' + binding.parameter : binding.id;
+    if (identity && !identities.has(row.canonical + '\0' + binding.sourceType)) {
+      identities.set(row.canonical + '\0' + binding.sourceType, { sourceType: binding.sourceType, binding: observedAs, key: binding.parameter });
+      write('app.execution.reference', { concept: row.canonical, sourceType: quote(binding.sourceType) });
+    }
     write(NS + 'property', { scope, concept: row.canonical, on: quote(binding.sourceType), parameter: quote(binding.parameter),
-      binding: binding.id ? quote(binding.id) : undefined,
-      codec: codecs[binding.codec] || (references.has(row.canonical) || take(valueMappings.get(row.canonical), 'codec') === 'lookup' && !named.has(binding.sourceType + '\0' + binding.parameter) ? 'lookup' : undefined), order: String(propertyOrder++) });
+      binding: observedAs ? quote(observedAs) : undefined,
+      codec: identity ? 'lookup' : codecs[binding.codec] || (references.has(row.canonical) || take(valueMappings.get(row.canonical), 'codec') === 'lookup' && !named.has(binding.sourceType + '\0' + binding.parameter) ? 'lookup' : undefined), order: String(propertyOrder++) });
   }
   // The single-valued observations of the objects a preview of a compiled call creates (degree-bases.mjs).
   for (const { operation, kind, objects } of previews) for (const object of objects) for (const field of object.inputs ?? []) {
@@ -110,6 +124,8 @@ function interfaceFacts({ area, view, bindings, host, observation, focus, target
       on: quote(object.sourceType), kind: quote(object.kind), name: names[order]?.name === undefined ? undefined : quote(names[order].name),
       order: String(order),
     });
+    for (const identity of identities.values()) if (identity.sourceType === object.sourceType)
+      write(NS + 'field', { object: id, binding: quote(identity.binding), key: quote(identity.key), value: quote(String(object.id)) });
     for (const field of object.inputs) {
       if (field.source !== object.source || field.sourceType !== object.sourceType ||
           field.version !== observation.version || object.version !== observation.version) continue;
@@ -196,8 +212,10 @@ function compilerWorld(context, nodes) {
   const targets = new Map(nodes.filter(wire => wire.type === 'std.request.target').map(wire => ['$' + wire.id, take(wire, 'mode')]));
   const said = constraints.map(wire => ({ concept: take(wire, 'concept'), label: take(wire, 'value'), mode: targets.get(wire.attrs.target?.[0]) }))
     .filter(row => typeof row.label === 'string' && ['new', 'existing'].includes(row.mode));
+  const selectorIds = new Set(nodes.filter(wire => wire.type === 'std.request.target').flatMap(wire => values(wire, 'selector')));
+  const selectors = new Set(constraints.filter(wire => selectorIds.has('$' + wire.id)).map(wire => take(wire, 'concept')));
   const compose = sceneDefaults => {
-    const {wires,scope}=interfaceFacts({...context,sceneDefaults},concepts,said);
+    const {wires,scope}=interfaceFacts({...context,sceneDefaults},concepts,said,selectors);
     const world=declarations.fork();
     return world.tell(serialize(wires),{factsOnly:true}).ok ? {world,scope} : null;
   };

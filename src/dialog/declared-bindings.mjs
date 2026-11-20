@@ -1,13 +1,14 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // The deployed binding table completed from the live declarations (specs/semantic-frame.md §5, partial admission).
 // The table is exported once with the reader; the authored native interfaces and interpretation policy keep changing.
-// Three completions, each by a rule the export itself uses or by a declared row, never by a word or a key name:
+// Four completions, each by a rule the export itself uses or by a declared row, never by a word or a key name:
 //  1. a key the table left unbound for want of a native parameter ("no-native-parameter") binds to the parameter of
 //     the same name that its family's source type now declares (the export's own native-parameter rule);
 //  2. a property bound to a native parameter with a closed value list takes the reader's class value from that list,
 //     the mention being its evidence (classValues, read by the bridge);
 //  3. a family the table leaves unresolved reads as the class declared for it (interpretation-policy.sop
 //     app.interpret.family), with the provenance of that class's own kind row.
+//  4. a family without a native family binding takes the one its own kind rows share (a target named without a kind word).
 import {parse,str} from '../vendor/sopworld/sopworld.mjs';
 import {interpretationPolicy} from './interpretation-policy.mjs';
 import DRAW from '../../worlds/art.draw/native-interface-source.mjs';
@@ -71,6 +72,19 @@ export async function completeBindings(bindings){
   if(!kind)continue;
   families.push({area:f.area,type:f.type,canonical:kind.canonical,sourceWire:kind.sourceWire,sourceWorld:kind.sourceWorld,moduleVersion:kind.moduleVersion,sourceSnapshotSHA:kind.sourceSnapshotSHA,
    alignment:{kind:'explicit-raw-family-identity',authority:'interpretation-policy.sop app.interpret.family'}});
+ }
+ // 4. A family named without a kind word ("make the flower green", "rename Start") denotes any object of its source
+ // type: a family without a native family binding takes the one binding its own kind rows share (the export's family
+ // rule, applied to families that also have kind words), so an existing target matches by name or label.
+ for(const [index,f] of families.entries()){
+  if(f.nativeFamilyBinding)continue;
+  const shared=new Map();
+  for(const k of bindings.kinds??[])if(k.area===f.area&&k.type===f.type&&k.nativeFamilyBinding?.operation&&k.nativeFamilyBinding.sourceType&&!k.nativeFamilyBinding.arguments)
+   shared.set(k.nativeFamilyBinding.sourceType+'\0'+k.nativeFamilyBinding.operation,k.nativeFamilyBinding);
+  if(shared.size!==1)continue;
+  const [b]=shared.values();
+  families[index]={...f,nativeFamilyBinding:{operation:b.operation,sourceType:b.sourceType,exportName:b.exportName,sourcePath:b.sourcePath,sourceSha256:b.sourceSha256,
+   boundary:'Family eligibility only (declared-bindings.mjs: the binding its kind rows share).'}};
  }
  const table=Object.freeze({...bindings,properties,families});
  completed.set(bindings,table);
