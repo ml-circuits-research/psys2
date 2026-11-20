@@ -1,12 +1,12 @@
 # Statistics
 
-91,257 messages; train 85,750, dev 3,682, test 1,825.
+93,538 messages; train 87,887, dev 3,777, test 1,874.
 
 ## Tab (world) × split
 
 | world | train | dev | test | total |
 | --- | ---: | ---: | ---: | ---: |
-| drawing | 32,538 | 1,426 | 700 | 34,664 |
+| drawing | 34,675 | 1,521 | 749 | 36,945 |
 | diagram | 25,062 | 1,039 | 534 | 26,635 |
 | document | 11,568 | 498 | 242 | 12,308 |
 | avatar | 8,904 | 368 | 190 | 9,462 |
@@ -19,10 +19,10 @@
 | demo-tool-profile | 33,297 |
 | main-synthetic | 26,362 |
 | ui-diagram-v2 | 7,873 |
-| ui-relations-v1 | 6,743 |
+| ui-relations-v1 | 6,744 |
+| data-drop-v1 | 5,815 |
 | ui-human-v1 | 5,001 |
 | ui-coverage-v2 | 3,775 |
-| data-drop-v1 | 3,535 |
 | ui-natural-v1 | 1,788 |
 | ui-comparatives-v1 | 940 |
 | human-adapted-v1-drawing | 670 |
@@ -36,9 +36,9 @@
 
 | requests | rows |
 | --- | ---: |
-| 1 | 83,951 |
-| 2 | 5,912 |
-| 3 | 680 |
+| 1 | 86,035 |
+| 2 | 6,106 |
+| 3 | 683 |
 | 0 | 660 |
 | 4 | 39 |
 | 5 | 11 |
@@ -49,13 +49,13 @@
 
 | act | rows |
 | --- | ---: |
-| make | 45,999 |
-| change | 27,824 |
+| make | 46,627 |
+| change | 29,234 |
 | answer | 6,718 |
-| place | 5,829 |
+| place | 5,849 |
 | connect | 3,290 |
-| remove | 2,852 |
-| arrange | 1,952 |
+| remove | 3,216 |
+| arrange | 2,011 |
 | select | 1,705 |
 | group | 639 |
 | undo | 357 |
@@ -72,7 +72,7 @@
 
 | world.type | rows |
 | --- | ---: |
-| drawing.drawn | 35,079 |
+| drawing.drawn | 36,873 |
 | diagram.node | 14,272 |
 | avatar.part | 8,337 |
 | calendar.meeting | 7,432 |
@@ -82,14 +82,14 @@
 | document.text | 3,168 |
 | document.block | 2,720 |
 | diagram.group | 2,083 |
+| drawing.part | 1,610 |
 | calendar.calendar | 1,370 |
 | avatar.face | 1,169 |
 | diagram.diagram | 1,137 |
-| drawing.part | 978 |
 | diagram.point | 752 |
 | diagram.sketch | 665 |
+| drawing.page | 386 |
 | diagram.series | 348 |
-| drawing.page | 331 |
 | diagram.page | 297 |
 | calendar.room | 283 |
 | document.document | 249 |
@@ -101,11 +101,11 @@
 
 | operation | rows |
 | --- | ---: |
-| drawing.object.make | 19,790 |
-| none | 17,991 |
+| none | 20,074 |
+| drawing.object.make | 19,791 |
 | avatar.part.change | 5,727 |
 | drawing.object.change | 4,155 |
-| compound | 3,138 |
+| compound | 3,335 |
 | document.block.change | 3,113 |
 | diagram.node.change | 2,963 |
 | calendar.meeting.add | 2,305 |
@@ -167,34 +167,53 @@
 
 | relation | rows |
 | --- | ---: |
-| below | 3,370 |
+| below | 3,371 |
 | left_of | 1,717 |
-| in | 1,271 |
-| near | 926 |
+| in | 1,298 |
+| near | 944 |
 | right_of | 876 |
-| above | 772 |
-| on | 352 |
+| above | 784 |
+| on | 407 |
 | next_to | 64 |
-| left of | 28 |
-| between | 20 |
+| by | 45 |
+| left of | 34 |
+| next to | 30 |
+| between | 21 |
+| behind | 19 |
 | in_front_of | 17 |
-| next to | 13 |
-| behind | 11 |
-| beside | 5 |
-| along | 2 |
+| along | 15 |
+| beside | 14 |
+| off | 8 |
+| under | 7 |
+| out of | 7 |
+| over | 6 |
+| close to | 4 |
+| to | 4 |
+| right of | 4 |
+| from | 3 |
 | inside | 2 |
 | outside | 2 |
+| in front of | 2 |
+| up to | 2 |
+| at | 2 |
+| near side of | 2 |
 | around | 1 |
-| under | 1 |
+| round | 1 |
+| past | 1 |
+| other side of | 1 |
+| away from | 1 |
+| in towards | 1 |
+| for | 1 |
+| into | 1 |
 
 ## Constraint keys (top 60)
 
 | key | rows |
 | --- | ---: |
-| drawing.drawn.anchor | 9,454 |
-| drawing.drawn.relation | 9,438 |
+| drawing.drawn.anchor | 9,723 |
+| drawing.drawn.relation | 9,707 |
 | avatar.part.variant | 7,039 |
-| drawing.drawn.colour | 6,019 |
+| drawing.drawn.colour | 6,140 |
 | calendar.meeting.day | 5,802 |
 | document.section.content | 5,429 |
 | diagram.node.colour | 5,172 |
@@ -206,8 +225,8 @@
 | diagram.link.to | 3,575 |
 | diagram.link.from | 3,515 |
 | calendar.meeting.calendar | 3,465 |
+| drawing.drawn.size | 3,026 |
 | diagram.node.ids | 2,951 |
-| drawing.drawn.size | 2,921 |
 | avatar.part.size | 2,821 |
 | avatar.part.colour | 2,339 |
 | diagram.chart.labels | 2,182 |
@@ -218,7 +237,7 @@
 | diagram.link.ids | 1,329 |
 | diagram.chart.values | 1,247 |
 | diagram.chart.type | 1,243 |
-| drawing.drawn.width | 1,238 |
+| drawing.drawn.width | 1,239 |
 | calendar.calendar.name | 1,180 |
 | diagram.node.size | 1,132 |
 | document.text.about | 1,101 |
@@ -228,7 +247,7 @@
 | calendar.meeting.id | 1,038 |
 | calendar.meeting.room | 1,007 |
 | document.text.content | 961 |
-| drawing.drawn.height | 940 |
+| drawing.drawn.height | 942 |
 | avatar.part.ids | 809 |
 | document.section.id | 779 |
 | diagram.node.n | 741 |
@@ -251,7 +270,7 @@
 | diagram.node.y | 449 |
 | diagram.link.label | 422 |
 | document.block.items | 419 |
-| … 157 more | 19,404 |
+| … 157 more | 19,662 |
 
 ## Style (top 40)
 
@@ -260,12 +279,12 @@
 | haiku-v2 | 17,506 |
 | haiku-v1 | 14,706 |
 | mechanical | 10,291 |
-| relation-natural | 6,743 |
+| relation-natural | 6,744 |
 | mechanical-trigger | 5,111 |
 | mechanical-typo | 4,789 |
+| drop-equivalent | 3,471 |
 | human-equivalent | 2,904 |
 | human-simplified | 2,397 |
-| drop-equivalent | 2,132 |
 | direct | 1,770 |
 | coverage-equivalent | 1,570 |
 | diagram-equivalent | 1,569 |
@@ -273,16 +292,17 @@
 | coverage-simplified | 1,439 |
 | diagram-simplified | 1,359 |
 | diagram-complex | 1,316 |
+| drop-complex | 1,166 |
 | mechanical-orphan | 1,127 |
 | coverage-complex | 1,107 |
 | demo-tool-profile | 1,085 |
 | human-adapted | 1,077 |
 | mechanical-simplified | 968 |
 | comparative-natural | 940 |
-| drop-complex | 734 |
+| drop-simplified | 728 |
 | mechanical-question | 686 |
-| drop-simplified | 432 |
 | diagram-equivalent-typo | 426 |
+| drop-robustness | 426 |
 | diagram-equivalent-asr | 351 |
 | diagram-complex-typo | 348 |
 | diagram-complex-asr | 312 |
@@ -292,16 +312,15 @@
 | human-syn | 272 |
 | mechanical-numberwords | 250 |
 | diagram-equivalent-filler | 231 |
-| drop-robustness | 219 |
 | diagram-equivalent-polite | 216 |
 | diagram-simplified-filler | 214 |
 | structural-fill | 203 |
 | diagram-complex-nospace | 196 |
-| … 36 more | 1,844 |
+| … 36 more | 1,850 |
 
 ## Text length
 
 | measure | min | median | p90 | max |
 | --- | ---: | ---: | ---: | ---: |
-| characters | 2 | 39 | 88 | 268 |
+| characters | 2 | 39 | 87 | 268 |
 | words | 1 | 8 | 16 | 50 |

@@ -95,6 +95,13 @@ def normalise(row, stats):
         moved = []
         kept = []
         for c in q.get('constraints') or []:
+            if isinstance(c, dict) and c.get('operator') == 'count':
+                stats['operator count -> eq'] += 1
+                c['operator'] = 'eq'
+                if world == 'diagram' and c.get('key') in ('node.count', 'node.n'):
+                    c['key'] = 'node.n'
+                if c.get('value') is not None and not re.fullmatch(r'\d+(\.\d+)?', str(c['value'])):
+                    c.pop('value', None); c['qualitative'] = True; stats['vague quantity kept as a mention without value'] += 1
             if isinstance(c, dict) and c.get('key') == 'node.rotate':
                 c['key'] = 'node.rotation'; stats['node.rotate -> node.rotation (declared parameter name)'] += 1
             typ, _, name = str(c.get('key', '')).partition('.') if isinstance(c, dict) else ('', '', '')

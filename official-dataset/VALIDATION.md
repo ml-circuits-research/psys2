@@ -100,17 +100,18 @@ No issue found.
 | warning:value-span-ambiguous | 2 |
 | warning:target-description_span-ambiguous | 1 |
 
-### data-drop-v1 (2,987 rows)
+### data-drop-v1 (4,786 rows)
 
 | issue | rows |
 | --- | ---: |
-| warning:selector-not-in-context | 373 |
-| warning:bank-extension-needed | 132 |
-| warning:determiner-kept-open | 24 |
+| warning:selector-not-in-context | 467 |
+| warning:bank-extension-needed | 236 |
+| warning:determiner-kept-open | 219 |
+| warning:target-kind_span-ambiguous | 78 |
+| warning:value-span-ambiguous | 15 |
 | trigger-not-in-span-removed | 15 |
-| warning:value-span-ambiguous | 12 |
-| warning:numeric-value-not-in-surface | 6 |
-| warning:target-kind_span-ambiguous | 5 |
+| warning:numeric-value-not-in-surface | 11 |
+| warning:target-kind-without-source-span | 4 |
 | warning:target-name_span-ambiguous | 2 |
 
 ### human-adapted-v1-diagram (538 rows)
@@ -330,28 +331,29 @@ Kept with a warning (not an error; see README):
 | value-span-ambiguous | 2 |
 | target-description_span-ambiguous | 1 |
 
-### data-drop-v1: 2,987 in, 2,987 kept
+### data-drop-v1: 4,786 in, 4,786 kept
 
 Fixed or converted:
 
 | fix | rows |
 | --- | ---: |
-| anchor-span-as-anchor-mention | 99 |
+| anchor-span-as-anchor-mention | 317 |
+| comparative-as-delta-step | 38 |
 | diagram-new-node-count-as-node.n | 24 |
 | trigger-not-in-span-removed | 15 |
-| comparative-as-delta-step | 3 |
 
 Kept with a warning (not an error; see README):
 
 | warning | rows |
 | --- | ---: |
-| selector-not-in-context | 374 |
-| bank-extension-needed | 132 |
+| selector-not-in-context | 483 |
+| bank-extension-needed | 236 |
+| determiner-kept-open | 219 |
+| target-kind_span-ambiguous | 78 |
 | selector-with-empty-context | 31 |
-| value-span-ambiguous | 24 |
-| determiner-kept-open | 24 |
-| numeric-value-not-in-surface | 6 |
-| target-kind_span-ambiguous | 5 |
+| value-span-ambiguous | 27 |
+| numeric-value-not-in-surface | 11 |
+| target-kind-without-source-span | 4 |
 | target-name_span-ambiguous | 2 |
 
 ### human-adapted-v1-diagram: 538 in, 538 kept
@@ -461,5 +463,5 @@ Kept with a warning (not an error; see README):
 ## Final check of the written splits
 
 - unresolved errors: **0**
-- families present in more than one split: **2448**
+- families present in more than one split: **2509**
 - label conflicts between identical texts, resolved by source priority: {'main-synthetic<-main-synthetic': 4}

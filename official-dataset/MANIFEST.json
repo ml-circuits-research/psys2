@@ -671,15 +671,15 @@
       "name": "data-drop-v1",
       "path": "training/sop-bert/data/data-drop-v1/accepted.jsonl",
       "description": "Diagram/Drawing rows of the data-request drops, validated and normalised by data-drop-v1/import.py",
-      "gitCommit": "49ad0c942fe29bea5679caa545f754d913bad476",
-      "sha256": "0d4451002dd7a0db2cbee4928cdabad0f05d5173a50cd9bcf5e9eb489f5aa3ff",
-      "rowsIn": 2987,
-      "rowsKept": 2987,
+      "gitCommit": "f7877e4a3d2ac629dfd9bb0a585acc6c6333652c",
+      "sha256": "775357a9fe96c943c09066696eb427c1933373b1cf7ee0a634858f240ddf97a6",
+      "rowsIn": 4786,
+      "rowsKept": 4786,
       "rowsDropped": 0,
       "dropReasons": {},
       "fixes": {
-        "anchor-span-as-anchor-mention": 99,
-        "comparative-as-delta-step": 3,
+        "anchor-span-as-anchor-mention": 317,
+        "comparative-as-delta-step": 38,
         "diagram-new-node-count-as-node.n": 24,
         "trigger-not-in-span-removed": 15
       }
@@ -875,12 +875,12 @@
     }
   ],
   "splits": {
-    "train": 85750,
-    "dev": 3682,
-    "test": 1825
+    "train": 87887,
+    "dev": 3777,
+    "test": 1874
   },
-  "families": 25840,
-  "leakedFamilies": 2448,
+  "families": 25918,
+  "leakedFamilies": 2509,
   "labelConflictsResolvedByPriority": {
     "main-synthetic<-main-synthetic": 4
   },
@@ -889,22 +889,22 @@
     "ui-human-v1": 717,
     "ui-coverage-v2": 595,
     "ui-tiers-v1": 3,
-    "ui-relations-v1": 1369,
+    "ui-relations-v1": 1370,
     "ui-comparatives-v1": 154,
     "ui-features-v1": 66,
     "ui-diagram-v2": 1197,
     "ui-diagram-v2-voice": 14,
     "ui-quantities-v1": 42,
     "human-adapted-v1-drawing": 112,
-    "data-drop-v1": 548,
+    "data-drop-v1": 1029,
     "human-adapted-v1-diagram": 72,
     "main-synthetic": 5108
   },
   "nonReaderLabelFieldsRemoved": {
-    "raw_value": 73,
+    "raw_value": 108,
     "anchor_fill": 8151,
     "anchor_span": 437,
-    "qualitative": 466,
+    "qualitative": 470,
     "mention": 157,
     "anchor_kind": 5374
   },
@@ -914,32 +914,32 @@
   },
   "files": {
     "STATS.md": {
-      "sha256": "e0d89c75bc3e8f531f17373339542aaf0f7ac279dda0519ec07e62a8dca44ece",
-      "bytes": 7575
+      "sha256": "152eb0e86d0d8d1884db72df7af4bae6ae27efa79a7fd74967ad9c71d322427b",
+      "bytes": 7597
     },
     "VALIDATION.md": {
-      "sha256": "0cec7a99d0ea0cb85d9cdff16009c3d481d123bf86bac8ed8adba9ead78d9bba",
-      "bytes": 12400
+      "sha256": "3bfd9680767fa38da1440d8be9cc5ea4d6748d4466f7df3bc7f593a44ddf0d51",
+      "bytes": 12756
     },
     "audit-sample.md": {
-      "sha256": "fd53dc7b822b3cf359a91b8b87aa65c8c74dfc1140e22adda6475900682419c6",
-      "bytes": 44497
+      "sha256": "c24b0547bb870e17a59af68b251a08ab1c0d968eb9638551ad57f10e3a73ea03",
+      "bytes": 44364
     },
     "dev.jsonl": {
-      "sha256": "23f3450a25b31d6693aa53dbc70d5e328b3ca979623f4dedb1ba3d81429fda72",
-      "bytes": 4070507
+      "sha256": "e2090427943d03a8b4d86b658129269cf64d762d15851c3489555cad3c6e1480",
+      "bytes": 4163333
     },
     "inventory.json": {
       "sha256": "daa582e2cab47bf73b374b7c5a3d702b51da90429e3e42fc08f6fe3e9a4a5293",
       "bytes": 56402
     },
     "test.jsonl": {
-      "sha256": "34b6768fc77f265b3a4bcab0ec3861a0e6e68ebea062986dff4ba01e442010bd",
-      "bytes": 2020044
+      "sha256": "8b3750da60b709ea17e251866a23bf6ccc7fcd5c0dc86d222328497a231a2191",
+      "bytes": 2067791
     },
     "train.jsonl.gz": {
-      "sha256": "9ab9ab2a2555e5c701faee2197f7abe733f41da85ed3108bdf36b091c04687bb",
-      "bytes": 4384358
+      "sha256": "5589ae3209266fe71a4401894742b177fccc812e60cb45a03fb668b7101245c4",
+      "bytes": 4486346
     }
   },
   "policy": {
