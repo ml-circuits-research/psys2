@@ -1,2 +1,2 @@
 // Native initial state only; no legacy grammar executor.
-export{emptyAvatarState as initialState}from"./sop-avatar.mjs?v=d78d390714";
+export{emptyAvatarState as initialState}from"./sop-avatar.mjs?v=a80a34fd2f";
