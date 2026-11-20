@@ -271,6 +271,51 @@ def anchors_fix(row, stats, inv):
     return row
 
 
+DETERMINERS = ('the', 'this', 'that', 'these', 'those')
+
+
+def kind_vocabulary():
+    """Kind words the runtime grounds (the deployed reader bindings: published k.* kinds and their core.word texts)."""
+    deployment = json.loads((REPO / 'docs/webchat/models/sop-bert/deployment.json').read_text())
+    path = REPO / 'docs/webchat' / (deployment['artifactBase'] + deployment['bindingsArtifact']['path'])
+    lemmas = collections.defaultdict(set)
+    for k in json.loads(path.read_text())['kinds']:
+        lemmas[k['area']].add(k['lemma'].lower())
+    return path, lemmas
+
+
+def definite_description_fix(row, stats, lemmas):
+    """"the house" is a definite description: the target is described by its kind, not named. The name label and the
+    identity selector that repeats the same phrase become target kind/kind_span. Proper names stay names."""
+    kinds = {str(e.get('kind', '')).lower().replace('_', ' ') for e in (row['context'] or {}).get('existing', [])} | lemmas.get(row['world'], set())
+    for q in row['requests']:
+        t = q.get('target') or {}
+        name = t.get('name_span')
+        if not name or t.get('mode') != 'existing' or 'kind' in t:
+            continue
+        words = name.split()
+        if words[0].lower() in DETERMINERS and len(words) > 1:
+            noun = ' '.join(words[1:])
+        else:
+            noun = name
+            at = q['span'].find(name)
+            before = q['span'][:at].split()[-1:] if at > 0 else []
+            if not before or before[0].lower() not in DETERMINERS:
+                continue
+        if not noun[:1].islower() or noun.lower() not in kinds:
+            continue
+        selectors = [c for c in q.get('constraints') or [] if c.get('phase') == 'selector' and c['key'].split('.')[-1] in ('id', 'ids')]
+        if len(selectors) > 1 or (selectors and selectors[0]['value_span'] not in (name, noun)):
+            continue
+        if q['span'].count(noun) != 1:
+            continue
+        q['constraints'] = [c for c in q.get('constraints') or [] if c not in selectors]
+        del t['name_span']
+        t.update({'kind': noun, 'kind_span': noun, 'fill': 'description', 'determiner': 'definite'})
+        stats['definite-description-name-to-kind'] += 1
+    return row
+
+
 def qualitative_fix(row, stats):
     """A vague value has no gold canonical value: keep its source phrase as the BIO mention, no class/value label."""
     for q in row['requests']:
@@ -829,6 +874,7 @@ def main():
     selector_keys = {op: v.most_common(1)[0][0] for op, v in selvotes.items()}
     verbs = verb_lexicon([r for n in ('ui-natural-v1', 'ui-human-v1', 'demo-tool-profile') for r in raw[n]])
     ms = MainSynthetic(inv, verbs, templates, contexts, avatar_part_words(), attested, selector_keys)
+    kind_path, kind_lemmas = kind_vocabulary()
 
     extras = MainSyntheticFiles(raw['main-synthetic'])
     ms.compound_seeds, ms.seed_ops = extras.compound_seeds, extras.seed_ops
@@ -852,6 +898,7 @@ def main():
                 row = anchors_fix(ui_row(name, r, i), fixes[name], inv)
                 if name == 'ui-human-v1':
                     row = qualitative_fix(row, fixes[name])
+            row = definite_description_fix(row, fixes[name], kind_lemmas)
             e, w, f = validator.check(row)
             for x in f:
                 fixes[name][x] += 1
@@ -929,6 +976,32 @@ def main():
             record['rewrite'] = row['rewrite']
         outputs[record['split']].append(record)
 
+    # Previous-message invariance: a quarter of the single-turn rows also appear with an unrelated previous message of
+    # the same tab and split; the labels come from the text only, so they are unchanged.
+    augmented = collections.Counter()
+    for split in list(outputs):
+        pool = collections.defaultdict(list)
+        for r in outputs[split]:
+            pool[r['world']].append(r['text'])
+        extra = []
+        for r in outputs[split]:
+            if r['source'] == 'demo-tool-profile' or r['context'].get('previous') is not None or not r['requests']:
+                continue
+            if any((q.get('target') or {}).get('fill') in ('journal_step', 'context', 'previous_reply') for q in r['requests']):
+                continue
+            if int(sha('prev:' + r['id']), 16) % 4:
+                continue
+            texts = pool[r['world']]
+            prev = texts[int(sha('pick:' + r['id']), 16) % len(texts)]
+            if prev == r['text']:
+                continue
+            copyrow = copy.deepcopy(r)
+            copyrow['id'] += ':with-previous'
+            copyrow['context']['previous'] = prev
+            copyrow['augmentation'] = 'previous-message-invariance'
+            extra.append(copyrow); augmented[r['source']] += 1
+        outputs[split].extend(extra)
+
     # Final validation of the written rows: zero errors is a build requirement.
     final_errors = collections.Counter()
     for split, rows in outputs.items():
@@ -945,7 +1018,7 @@ def main():
 
     write_outputs(outputs, inventory)
     in_counts = {name: len(rows) for name, rows in raw.items()}
-    kept_counts = collections.Counter(r['source'] for rows in outputs.values() for r in rows)
+    kept_counts = collections.Counter(r['source'] for rows in outputs.values() for r in rows if not r.get('augmentation'))
     for name, path, desc in SOURCES:
         manifest_sources.append({'name': name, 'path': str(path.relative_to(REPO)), 'description': desc, 'gitCommit': git_commit(path),
                                  'sha256': sha(path.read_bytes()), 'rowsIn': in_counts[name], 'rowsKept': kept_counts[name],
@@ -960,7 +1033,8 @@ def main():
     manifest = {'format': 'psys2.official-reader-dataset/1', 'mainSyntheticFiles': ms_files, 'builder': 'official-dataset/build.py', 'builderSha256': sha(Path(__file__).read_bytes()),
                 'sources': manifest_sources, 'vocabularyInputs': vocab,
                 'splits': {s: len(outputs[s]) for s, _ in SPLIT_SHARES}, 'families': len(groups), 'leakedFamilies': leaked,
-                'labelConflictsResolvedByPriority': dict(conflicts), 'files': files,
+                'labelConflictsResolvedByPriority': dict(conflicts), 'previousMessageAugmentation': dict(augmented),
+                'kindVocabulary': {'path': str(kind_path.relative_to(REPO)), 'sha256': sha(kind_path.read_bytes())}, 'files': files,
                 'policy': {'priority': [s[0] for s in SOURCES], 'splitShares': dict(SPLIT_SHARES), 'mainSyntheticCapPerOperation': MS_CAP_PER_OPERATION,
                            'mainSyntheticCapPerFamily': MS_CAP_PER_FAMILY, 'mainSyntheticEditCapPerFamily': MS_EDIT_CAP_PER_FAMILY,
                            'mainSyntheticHumanCapPerFamily': MS_HUMAN_CAP_PER_FAMILY, 'mainSyntheticHumanEditCapPerFamily': MS_HUMAN_EDIT_CAP_PER_FAMILY}}

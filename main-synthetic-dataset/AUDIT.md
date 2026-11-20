@@ -19,3 +19,9 @@ Checked with a script over `examples.jsonl` (26,243 records). The integrity chec
 ## Documentation
 
 The README's totals (26,144; calendar 1,402) disagree with `report.json` and `matrix.md` (26,243; calendar 615). Regenerate the README from the report.
+
+## Re-validation and use (2026-11-20, official-dataset)
+
+`official-dataset/build.py` re-checked every row and generator file; the measured counts are in `official-dataset/VALIDATION.md` and, per file (seeds, variants, mech-variants), in `official-dataset/MANIFEST.json` (`mainSyntheticFiles`). Confirmed: the trigger is not a text span in 14,832 of 26,314 requests; 8,120 avatar part selectors are document labels; context is empty in every row; spans are offset arrays. Also found: 21,426 constraint keys outside the reader inventory (`doc.*`, `calendar.*`, `drawn.kind`, `*.operation`), 10,375 target types outside their area (`object`), 1,863 placeholder values for colour/size/kind keys, 293 numbers that disagree with their text (`x=260` for "400, 30"), 173 avatar slot ids written in the text.
+
+Kept after conversion (about 4,900 rows, capped): questions including all non-avatar hard questions, creation requests with kind vocabulary, avatar presets, attested avatar part additions (slot id replaced by its w.face word), and human-written edits of named objects with a fixture context. Almost every variant file row is already in `examples.jsonl`; the few that are not are assembled from their seed when an assembled sibling exists.

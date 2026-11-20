@@ -32,6 +32,7 @@ Each line is one message a person types in one tab, with the labels of every req
 | `operation` | the editor operation the seed was written for (provenance, not a model input) |
 | `style` | how the text was produced (`natural-direct`, `human-equivalent`, `human-tangle`, `relation-natural`, `haiku-v2`, `mechanical-trigger`, …) |
 | `phase` | `direct` or `world-inference` (old corpus) |
+| `augmentation` | present only on the previous-message copies (see below) |
 | `rewrite` | present only when the build changed the text (main-synthetic avatar slot ids replaced by the w.face word; see MANIFEST) |
 
 A request:
@@ -111,6 +112,8 @@ See VALIDATION.md and MANIFEST.json for counts. In short:
 - **ui-natural-v1 / ui-human-v1**: values outside a class bank (`face.id=avatar`, `centred`, `justified`, `briefly`) and vague values keep their phrase as a mention without a class label; rows whose measure/anchor phrase is not in the request are dropped.
 - **ui-relations-v1 and relation rows of other sources**: the anchor phrase becomes the anchor mention; `left`/`right` use the bank's `left_of`/`right_of`.
 - **demo-tool-profile**: exact duplicate texts removed; identical texts with different labels resolved by keeping the first.
+- **all sources, definite descriptions**: "make the house blue" was labelled with `name_span: "the house"` plus an id selector repeating the phrase. A definite description is not a name: when the phrase is a determiner plus a kind word (a kind of the context or a kind the runtime grounds, from the deployed bindings) and not capitalised, the target becomes `kind`/`kind_span` "house", `fill: description`, and the repeated selector is removed. Proper names ("Review", "The Fox Who Lost His Tail") stay names; phrases that occur twice in one request stay as they were (ambiguous).
+- **previous-message invariance**: a quarter of the single-turn rows (UI corpora and main-synthetic) also appear with an unrelated previous message of the same tab and split (`augmentation: previous-message-invariance`, labels unchanged), so the reader does not copy heads from the previous turn. Drawing creation is never labelled as a `page` target (checked: 0 rows).
 
 Warnings in VALIDATION.md (`selector-not-in-context`, ambiguous spans) are not errors: compact runtime context lists kinds and names, not ids such as "o1" or "b2", and the preparer masks an ambiguous span rather than guessing.
 

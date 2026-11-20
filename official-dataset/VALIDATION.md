@@ -75,6 +75,7 @@ Fixed or converted:
 
 | fix | rows |
 | --- | ---: |
+| definite-description-name-to-kind | 224 |
 | class-value-outside-bank-unlabelled | 88 |
 | anchor-span-as-anchor-mention | 3 |
 
@@ -82,7 +83,7 @@ Kept with a warning (not an error; see README):
 
 | warning | rows |
 | --- | ---: |
-| selector-not-in-context | 144 |
+| selector-not-in-context | 136 |
 | value-span-ambiguous | 45 |
 | target-name_span-ambiguous | 19 |
 
@@ -92,6 +93,7 @@ Fixed or converted:
 
 | fix | rows |
 | --- | ---: |
+| definite-description-name-to-kind | 504 |
 | class-value-outside-bank-unlabelled | 330 |
 | qualitative-value-unlabelled | 329 |
 | anchor-span-as-anchor-mention | 60 |
@@ -108,7 +110,7 @@ Kept with a warning (not an error; see README):
 
 | warning | rows |
 | --- | ---: |
-| selector-not-in-context | 1,198 |
+| selector-not-in-context | 1,119 |
 | value-span-ambiguous | 303 |
 | target-name_span-ambiguous | 131 |
 
@@ -128,13 +130,14 @@ Fixed or converted:
 | fix | rows |
 | --- | ---: |
 | anchor-span-as-anchor-mention | 2,274 |
+| definite-description-name-to-kind | 2 |
 
 Dropped:
 
 | reason | rows |
 | --- | ---: |
-| dropped:duplicate-text | 9,371 |
-| dropped:conflicting-label-for-identical-text | 103 |
+| dropped:duplicate-text | 9,365 |
+| dropped:conflicting-label-for-identical-text | 109 |
 
 Kept with a warning (not an error; see README):
 
@@ -158,6 +161,7 @@ Fixed or converted:
 | converted:drawn | 414 |
 | converted:avatar | 266 |
 | converted:node | 206 |
+| definite-description-name-to-kind | 99 |
 | converted:block | 98 |
 | converted:meeting | 86 |
 | converted:compound | 32 |
@@ -210,4 +214,4 @@ Kept with a warning (not an error; see README):
 
 - unresolved errors: **0**
 - families present in more than one split: **0**
-- label conflicts between identical texts, resolved by source priority: {'demo-tool-profile<-demo-tool-profile': 103}
+- label conflicts between identical texts, resolved by source priority: {'ui-natural-v1<-demo-tool-profile': 5, 'ui-human-v1<-demo-tool-profile': 1, 'demo-tool-profile<-demo-tool-profile': 103}
