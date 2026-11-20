@@ -81,7 +81,9 @@ test('reattach, re-side, free, bend and draw connections with the mouse in the D
   const free=await screen(900,620);
   await drag(await centre('#dg [data-end-link="e1"][data-end="to"]'),free);
   assert.equal((await inputs('e1')).toFree,true,'a free end');
-  assert.match(await lastText(),/^Detach "e1" the end "to", leaving it at x \d+, y \d+\.$/);
+  assert.ok((await ev(`dg.calls.map(c=>c.text)`)).some(t=>/^Detach "e1" the end "to", leaving it at x \d+, y \d+\.$/.test(t)));
+  assert.equal((await ends()).e1[1]??null,null,'a free end has no node');
+  assert.ok(await ev(`!!document.querySelector('#dg [data-end-link="e1"][data-end="to"].free')`),'the link stays selected, its free end marked');
   await shot('4-free-end');
   // Draw a new line from the bottom port of Test to the top port of Check, with the toolbar's line type (curved).
   await ev(`(()=>{const s=document.querySelector('#dg [aria-label="Line route"]');s.value='curved';s.dispatchEvent(new Event('change',{bubbles:true}));})()`);
@@ -98,11 +100,19 @@ test('reattach, re-side, free, bend and draw connections with the mouse in the D
   assert.equal(await lastText(),'Draw a link from "Test", to "Check", from the side "bottom", to the side "top", drawn "curved".');
   // Released over empty space, a drawn line makes nothing.
   const count=Object.keys(await ends()).length;
-  await mouse('mouseMoved',hover,0);await wait(200);
+  b=await box('n2');await mouse('mouseMoved',await screen((b.x0+b.x1)/2,(b.y0+b.y1)/2),0);await wait(200);
   await drag(await centre('#dg .dg-ports [data-port-node="n2"][data-port-side="right"]'),await screen(980,120));
   assert.equal(Object.keys(await ends()).length,count);
   await tool('diagram.link.select',{ids:[made[0]]});await wait(300);
   await shot('6-drawn-curved-link');
+  // Dragging a node: the links at it follow while it moves (a dashed line to its new place), and are routed on the drop.
+  await tool('diagram.node.select',{ids:[]});await wait(300);
+  b=await box('n4');const from=await screen((b.x0+b.x1)/2,(b.y0+b.y1)/2),to={x:from.x+160,y:from.y+60};
+  await mouse('mousePressed',from);for(let i=1;i<=6;i++){await mouse('mouseMoved',{x:from.x+(to.x-from.x)*i/6,y:from.y+(to.y-from.y)*i/6});await wait(30);}
+  assert.ok(await ev(`!!document.querySelector('#dg .dg-follow')`),'the link follows the dragged node');
+  await shot('7-link-follows-drag');
+  await mouse('mouseReleased',to,0);await settle();
+  assert.ok(await ev(`!document.querySelector('#dg .dg-follow')`));
   // Every gesture went through the declared tools; none was refused.
   assert.ok((await ev('dg.calls.every(c=>c.ok)')),'every gesture applied');
  }finally{await browser?.close?.();server.close();}

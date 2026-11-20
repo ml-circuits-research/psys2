@@ -15,7 +15,7 @@ async function area() {
  return {state,host,run,ok,view:()=>projectDiagramArea(state)};
 }
 const ends=(state)=>{const w=diagramAreaStateWorld(state),code=(ref)=>w.get(ref.slice(1)).attrs.code[0];
- return Object.fromEntries(w.ofType('w.diagram.edge').map(e=>[e.attrs.code[0],[code(e.attrs.from[0]),code(e.attrs.to[0])]]));};
+ return Object.fromEntries(w.ofType('w.diagram.edge').map(e=>[e.attrs.code[0],[e.attrs.from?code(e.attrs.from[0]):null,e.attrs.to?code(e.attrs.to[0]):null]]));};
 const line=(view,id)=>{const m=view.svg.match(new RegExp(`data-select="${id}"><polyline points="([^"]+)"`));return m?m[1].split(' ').map(p=>p.split(',').map(Number)):null;};
 const near=(a,b,tol=0.6)=>Math.abs(a-b)<=tol;
 const sidePoint=(box,side)=>({top:[(box.x0+box.x1)/2,box.y0],bottom:[(box.x0+box.x1)/2,box.y1],left:[box.x0,(box.y0+box.y1)/2],right:[box.x1,(box.y0+box.y1)/2]})[side];
@@ -43,8 +43,8 @@ test('an end moves to another node and to another side of a node; the line leave
  assert.equal(ends(state).e1[right==='from'?0:1],'n1');
 });
 
-test('a free end, its reattachment, and the endpoint relations a reader observes',async()=>{
- const {state,ok,host,view}=await area();
+test('a free end has no node: its reattachment, and the endpoint relations a reader observes',async()=>{
+ const {state,ok,run,host,view}=await area();
  ok('diagram.node.make kind="rectangle" label="Start"');ok('diagram.node.make kind="rectangle" label="Done"');
  ok('diagram.link.make from="n1" to="n2"');
  const endpoint=()=>host.observeSpatial().relations.some(r=>r.subject==='e1'&&r.object==='n1'&&r.kind==='endpoint_of');
@@ -54,14 +54,16 @@ test('a free end, its reattachment, and the endpoint relations a reader observes
  let v=view();
  assert.equal(v.inputs.e1.fromFree,true);
  const p=line(v,'e1')[0];assert.deepEqual(p,[v.inputs.e1.fromX,v.inputs.e1.fromY],'the line starts at the free point');
- const box=v.boxes.n1;assert.ok(p[1]<box.y0||p[1]>box.y1||p[0]<box.x0||p[0]>box.x1,'outside the node it was detached from');
+ assert.deepEqual(ends(state).e1,[null,'n2'],'the link has no node at its start any more');
+ assert.equal(v.objects.find(o=>o.id==='e1').from,undefined,'a reader sees no node at its start');
  assert.ok(!endpoint(),'a free end is no endpoint of Start');
  // A drop on empty space leaves the end free at the drop point; a drop on a node attaches it again.
  ok('diagram.link.detach ids="e1" end="to" x=640 y=520');
  v=view();assert.deepEqual(line(v,'e1').at(-1),[640,520]);assert.equal(v.inputs.e1.toFree,true);
  ok('diagram.link.attach ids="e1" end="from" node="n2" side="bottom"');
  v=view();assert.equal(v.inputs.e1.fromFree,undefined);assert.deepEqual(line(v,'e1')[0],sidePoint(v.boxes.n2,'bottom'));
- assert.deepEqual(ends(state).e1,['n2','n2']);
+ assert.deepEqual(ends(state).e1,['n2',null]);
+ assert.equal(run('diagram.link.detach ids="e1" end="to"').reason,'already-free','a free end without a new point stays');
 });
 
 test('bends: added where said, moved, removed one by one or all; each routing style passes them',async()=>{
@@ -151,4 +153,54 @@ test('each link gesture is the declared tool command and reads back as its sente
  const label=await gesture('diagram.link.change',{ids:['e1'],labelPosition:0.4});
  assert.equal(label.text,'Update "e1" with the label at 0.4.');assert.equal(label.verification.status,'verified');
  assert.equal((await gesture('diagram.link.bend.remove',{ids:['e1']})).text,'Straighten "e1".');
+});
+
+const crosses=(pts,box)=>pts.slice(1).some((q,i)=>{const p=pts[i],lo=(a,b)=>Math.min(a,b),hi=(a,b)=>Math.max(a,b);
+ return near(p[1],q[1])?(p[1]>box.y0&&p[1]<box.y1&&lo(p[0],q[0])<box.x1&&hi(p[0],q[0])>box.x0):(p[0]>box.x0&&p[0]<box.x1&&lo(p[1],q[1])<box.y1&&hi(p[1],q[1])>box.y0);});
+const inside=(pts,box,m=0)=>pts.some(([x,y])=>x>box.x0-m&&x<box.x1+m&&y>box.y0-m&&y<box.y1+m);
+
+test('routes keep off other nodes; links between the same nodes fan out',async()=>{
+ const {ok,view}=await area();
+ for(const label of ['A','B','C','D'])ok(`diagram.node.make kind="rectangle" label="${label}"`);
+ ok('diagram.layout layout="row" route="orthogonal"');
+ ok('diagram.link.make from="n1" to="n3"');ok('diagram.link.make from="n1" to="n4" route="curved"');
+ let v=view();
+ assert.ok(!crosses(line(v,'e1'),v.boxes.n2),'the orthogonal link from A to C goes round B');
+ const curve=line(v,'e2');assert.ok(!inside(curve,v.boxes.n2)&&!inside(curve,v.boxes.n3),'the curve from A to D bows clear of B and C');
+ ok('diagram.link.make from="n1" to="n2"');ok('diagram.link.make from="n2" to="n1"');
+ v=view();
+ const there=line(v,'e3'),back=line(v,'e4');
+ // Each runs along its own height between A and B (14 apart), not on top of the other.
+ const level=(pts)=>pts.find((p,i)=>i&&near(p[1],pts[i-1][1])&&p[0]>v.boxes.n1.x1&&p[0]<v.boxes.n2.x0)?.[1]??pts[0][1];
+ assert.ok(Math.abs(level(there)-level(back))>=10,'the two links fan out: '+level(there)+' / '+level(back));
+});
+
+test('named ports: a decision has yes, no and else; a database a lid; unknown names are refused',async()=>{
+ const {ok,run,view}=await area();
+ ok('diagram.node.make kind="diamond" label="Ok?"');ok('diagram.node.make kind="cylinder" label="Db"');ok('diagram.node.make kind="rectangle" label="Fix"');
+ ok('diagram.link.make from="n1" to="n2" fromPort="yes" toPort="lid"');
+ let v=view();
+ assert.equal(v.inputs.e1.fromSide,'bottom');assert.equal(v.inputs.e1.fromPort,'yes');assert.equal(v.inputs.e1.toSide,'top');
+ assert.deepEqual(line(v,'e1')[0],sidePoint(v.boxes.n1,'bottom'));
+ assert.ok([].concat(v.inputs.n1.ports).includes('no:right'),'the decision observes its named ports');
+ ok('diagram.link.make from="n1" to="n3"');
+ ok('diagram.link.attach ids="e2" end="start" node="n1" port="no"');
+ v=view();assert.equal(v.inputs.e2.fromSide,'right');assert.deepEqual(line(v,'e2')[0],sidePoint(v.boxes.n1,'right'));
+ assert.equal(run('diagram.link.attach ids="e2" end="end" node="n3" port="lid"').reason,'no-such-port','a rectangle has no lid');
+ assert.equal(run('diagram.link.change ids="e1" toPort="yes"').reason,'no-such-port');
+});
+
+test('moving the nodes at both ends moves the link\'s bends; reversing a link with a free end keeps it free at the other end',async()=>{
+ const {state,ok,view}=await area();
+ ok('diagram.node.make kind="rectangle" label="A" x=200 y=200');ok('diagram.node.make kind="rectangle" label="B" x=500 y=200');
+ ok('diagram.link.make from="n1" to="n2"');ok('diagram.link.bend.add ids="e1" x=350 y=100');
+ ok('diagram.node.place ids="n1" ids="n2" x=350 y=300');
+ assert.equal(view().inputs.e1.bends,'1 350 200','the bend moved with both nodes (down 100)');
+ ok('diagram.node.place ids="n1" x=200 y=420');
+ assert.equal(view().inputs.e1.bends,'1 350 200','moving one end leaves the bend');
+ ok('diagram.link.detach ids="e1" end="to" x=700 y=500');
+ ok('diagram.link.reverse ids="e1"');
+ const v=view();assert.deepEqual(ends(state).e1,[null,'n1']);assert.equal(v.inputs.e1.fromFree,true);
+ assert.deepEqual([v.inputs.e1.fromX,v.inputs.e1.fromY],[700,500]);assert.equal(v.inputs.e1.bends,'1 350 200');
+ assert.deepEqual(line(v,'e1')[0],[700,500]);
 });

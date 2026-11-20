@@ -8,7 +8,10 @@
 @lk.dgl.edge.to_side core.slot of=w.diagram.edge key=diagram.sketch.to_side kind=atom enum=auto enum=top enum=right enum=bottom enum=left enum=centre
 @lk.dgl.edge.head core.slot of=w.diagram.edge key=diagram.sketch.head kind=atom enum=arrow enum=open enum=diamond enum=circle enum=none
 @lk.dgl.edge.tail core.slot of=w.diagram.edge key=diagram.sketch.tail kind=atom enum=arrow enum=open enum=diamond enum=circle enum=none
+@lk.dgl.edge.from_port core.slot of=w.diagram.edge key=diagram.sketch.from_port kind=atom
+@lk.dgl.edge.to_port core.slot of=w.diagram.edge key=diagram.sketch.to_port kind=atom
 @lk.dgl.edge.label_at core.slot of=w.diagram.edge key=diagram.sketch.label_at kind=number min=0 max=1
+# from_free and to_free: no longer used (a free end has no node: link-geometry.sop); kept so older states still load.
 @lk.dgl.edge.from_free core.slot of=w.diagram.edge key=diagram.sketch.from_free kind=boolean
 @lk.dgl.edge.from_x core.slot of=w.diagram.edge key=diagram.sketch.from_x kind=number
 @lk.dgl.edge.from_y core.slot of=w.diagram.edge key=diagram.sketch.from_y kind=number

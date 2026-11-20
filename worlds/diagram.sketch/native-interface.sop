@@ -467,6 +467,11 @@
 @native.diagram.sketch.op.diagram.link.attach.param.end std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.attach name="end" kind=string enum="from" enum="to" enum="start" enum="end" enum="source" enum="target" enum="tail" enum="head" enum="left" enum="right" enum="top" enum="bottom" enum="upper" enum="lower" enumClosed=true
 @native.diagram.sketch.op.diagram.link.attach.param.at std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.attach name="at" kind=string
 @native.diagram.sketch.op.diagram.link.attach.param.side std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.attach name="side" kind=string enum="auto" enum="top" enum="right" enum="bottom" enum="left" enum="centre" enumClosed=true
+@native.diagram.sketch.op.diagram.link.attach.param.port std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.attach name="port" kind=string
+@native.diagram.sketch.op.diagram.link.change.param.fromPort std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.change name="fromPort" kind=string
+@native.diagram.sketch.op.diagram.link.change.param.toPort std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.change name="toPort" kind=string
+@native.diagram.sketch.op.diagram.link.make.param.fromPort std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.make name="fromPort" kind=string
+@native.diagram.sketch.op.diagram.link.make.param.toPort std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.make name="toPort" kind=string
 @native.diagram.sketch.op.diagram.link.detach std.capability.operation scope=$native.diagram.sketch.scope name="diagram.link.detach" act=change on="diagram.sketch.link" order=62 eligible=true
 @native.diagram.sketch.op.diagram.link.detach.param.ids std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.detach name="ids" kind=array required=true
 @native.diagram.sketch.op.diagram.link.detach.param.end std.capability.parameter operation=$native.diagram.sketch.op.diagram.link.detach name="end" kind=string enum="from" enum="to" enum="start" enum="end" enum="source" enum="target" enum="tail" enum="head" enum="left" enum="right" enum="top" enum="bottom" enum="upper" enum="lower" enumClosed=true

@@ -43,6 +43,8 @@ const STYLE = `
 .dg-marquee { fill:rgba(53,106,195,.08);stroke:#356ac3;stroke-width:1;pointer-events:none; }
 .dg-svg .dg-port { fill:#fff;stroke:var(--dg-accent);stroke-width:1.5;cursor:crosshair;pointer-events:all; }
 .dg-svg .dg-port.snap { fill:var(--dg-accent); }
+.dg-svg .dg-portname { fill:var(--dg-accent);font:600 11px system-ui,sans-serif;pointer-events:none; }
+.dg-svg .dg-follow { fill:none;stroke:var(--dg-accent);stroke-width:2;stroke-dasharray:5 4;opacity:.8;pointer-events:none; }
 .dg-svg .dg-target { fill:none;stroke:#2f9e44;stroke-width:3;opacity:.8;pointer-events:none; }
 .dg-svg .dg-end { fill:#fff;stroke:var(--dg-accent);stroke-width:2;cursor:move;pointer-events:all; }
 .dg-svg .dg-end.free { fill:#ffd166; }
@@ -92,7 +94,9 @@ function modelOf(state) {
   const node = new Map(), link = new Map(), group = new Map(), inputs = state?.inputs ?? {}, boxes = state?.boxes ?? {};
   for (const object of state?.objects ?? []) {
     const input = inputs[object.id] ?? {}, id = object.id, selected = object.selected === 'true' || object.selected === true;
-    if (object.binding === 'diagram.node') node.set(id, { id, kind: object.kind, x: Number(object.x), y: Number(object.y), w: Number(object.width), h: Number(object.height), box: boxes[id] ?? null, label: input.label, colour: input.colour, size: input.size, value: input.value, group: input.group, outline: input.outline, textColour: input.textColour, fontSize: input.fontSize, fontWeight: input.fontWeight, effect: input.effect, opacity: input.opacity, corner: input.corner, rotation: input.rotation, role: input.role, selected });
+    if (object.binding === 'diagram.node') node.set(id, { id, kind: object.kind, x: Number(object.x), y: Number(object.y), w: Number(object.width), h: Number(object.height), box: boxes[id] ?? null, label: input.label, colour: input.colour, size: input.size, value: input.value, group: input.group, outline: input.outline, textColour: input.textColour, fontSize: input.fontSize, fontWeight: input.fontWeight, effect: input.effect, opacity: input.opacity, corner: input.corner, rotation: input.rotation, role: input.role,
+      // The named ports its shape has ("name:side": a decision's yes, no and else; every shape's in and out).
+      ports: [].concat(input.ports ?? []).map((entry) => String(entry).split(':')).filter((pair) => pair.length === 2), selected });
     else if (object.binding === 'diagram.link') link.set(id, { id, from: object.from, to: object.to, label: input.label, colour: input.colour, style: input.style, arrow: input.arrow, width: input.width, route: input.route, way: input.way,
       fromSide: input.fromSide, toSide: input.toSide, head: input.head, tail: input.tail, labelPosition: input.labelPosition, fromFree: input.fromFree === true, toFree: input.toFree === true,
       // Each bend is observed as "k x y" (k: its place along the link from 1).
@@ -319,7 +323,11 @@ function make(holder, host) {
     const node = m.node.get(id); if (!node?.box) return;
     const upp = unitsPerPixel();
     if (snap !== null) sv('rect', { class: 'dg-target', x: node.box.x0 - 5, y: node.box.y0 - 5, width: node.box.x1 - node.box.x0 + 10, height: node.box.y1 - node.box.y0 + 10, rx: 8 }, portLayer);
-    for (const [portSide, x, y] of portsOf(node)) sv('circle', { class: 'dg-port' + (snap === portSide ? ' snap' : ''), 'data-port-node': id, 'data-port-side': portSide, cx: x, cy: y, r: (snap === portSide ? 7.5 : 5.5) * upp, 'aria-label': 'Connect from the ' + portSide + ' of ' + id }, portLayer);
+    for (const [portSide, x, y] of portsOf(node)) {
+      const names = node.ports.filter(([, side]) => side === portSide).map(([name]) => name), shown = names.filter((name) => !['in', 'out'].includes(name));
+      sv('circle', { class: 'dg-port' + (snap === portSide ? ' snap' : ''), 'data-port-node': id, 'data-port-side': portSide, cx: x, cy: y, r: (snap === portSide ? 7.5 : 5.5) * upp, 'aria-label': 'Connect from the ' + portSide + (names.length ? ' (' + names.join(', ') + ')' : '') + ' of ' + id }, portLayer);
+      if (shown.length) { const label = sv('text', { class: 'dg-portname', x: x + 9 * upp, y: y - 7 * upp, 'font-size': 11 * upp }, portLayer); label.textContent = shown.join(', '); }
+    }
   }
   const hidePorts = () => { if (hovered !== null || portLayer.firstChild) { portLayer.replaceChildren(); hovered = null; } };
   // What is under the pointer while a line is drawn or an end is moved: a node and, near one of its ports, that side.
@@ -403,12 +411,20 @@ function make(holder, host) {
     zv.k = Math.abs(k2 - 1) < 1e-9 ? 1 : k2; zv.dx = nc.x - (vbBase.x + vbBase.w / 2); zv.dy = nc.y - (vbBase.y + vbBase.h / 2);
     applyZoom(); paintOverlay();
   }
+  function linksFollowing(moved) {
+    const set = new Set(moved), whole = [], half = [];
+    for (const link of m.link.values()) {
+      const a = set.has(link.from), b = set.has(link.to), points = routeOf(link.id); if (!points.length || (!a && !b)) continue;
+      if (a && b) whole.push(link.id); else half.push({ id: link.id, fixed: a ? points.at(-1) : points[0], moving: a ? points[0] : points.at(-1) });
+    }
+    return { whole, half };
+  }
   const svgPt = (ev) => { const p = svg.createSVGPoint(); p.x = ev.clientX; p.y = ev.clientY; const matrix = svg.getScreenCTM(); return matrix ? p.matrixTransform(matrix.inverse()) : { x: ev.clientX, y: ev.clientY }; };
   const nodeAt = (ev) => { const id = idAt(document.elementFromPoint(ev.clientX, ev.clientY)); return m.node.has(id) ? id : null; };
 
   // ---- gestures: tap to select, drag to move, handles to resize and connect, a rectangle to select several ----
   const ptrs = new Map(); let pan = null, pinch = null;
-  const cancelDrag = () => { pan?.preview?.remove(); pan?.marquee?.remove(); pan?.wire?.remove(); hidePorts(); if (pan?.moved) { shownSvg = null; redraw(); } pan = null; svg.classList.remove('panning'); };
+  const cancelDrag = () => { pan?.preview?.remove(); pan?.marquee?.remove(); pan?.wire?.remove(); hidePorts(); for (const half of pan?.object?.links?.half ?? []) half.line?.remove(); if (pan?.moved) { shownSvg = null; redraw(); } pan = null; svg.classList.remove('panning'); };
   svg.addEventListener('pointerdown', (event) => {
     ptrs.set(event.pointerId, { x: event.clientX, y: event.clientY });
     if (ptrs.size === 1) suppressClick = false;   // a new gesture: the click a drag or pinch left behind is gone
@@ -482,7 +498,15 @@ function make(holder, host) {
       pan.wire.setAttribute('x2', point.x); pan.wire.setAttribute('y2', point.y); return;
     }
     if (object) {
-      for (const id of object.move) for (const element of elementsOf(id)) { element.dataset.base ??= element.getAttribute('transform') ?? ''; element.setAttribute('transform', `translate(${dx} ${dy}) ${element.dataset.base}`); }
+      // The links follow: a link with both ends moved moves as one; a link with one end moved is drawn, while dragged,
+      // from its other end to the moved one (the rules route it on the drop).
+      object.links ??= linksFollowing(object.move);
+      for (const id of [...object.move, ...object.links.whole]) for (const element of elementsOf(id)) { element.dataset.base ??= element.getAttribute('transform') ?? ''; element.setAttribute('transform', `translate(${dx} ${dy}) ${element.dataset.base}`); }
+      for (const half of object.links.half) {
+        for (const element of elementsOf(half.id)) element.style.opacity = '0.2';
+        half.line ??= sv('line', { class: 'dg-follow' }, overlay.parentNode);
+        for (const [key, value] of Object.entries({ x1: half.fixed[0], y1: half.fixed[1], x2: half.moving[0] + dx, y2: half.moving[1] + dy })) half.line.setAttribute(key, value);
+      }
       overlay.setAttribute('transform', `translate(${dx} ${dy})`);
       return;
     }
@@ -494,6 +518,7 @@ function make(holder, host) {
     if (ptrs.size < 2 && pinch) pinch = null;
     if (pan?.id !== event.pointerId) return;
     const drag = pan; pan = null; svg.classList.remove('panning'); overlay.removeAttribute('transform');
+    for (const half of drag.object?.links?.half ?? []) { half.line?.remove(); for (const element of elementsOf(half.id)) element.style.opacity = ''; }
     drag.preview?.remove(); drag.wire?.remove(); drag.marquee?.remove();
     if (!drag.moved) return;
     suppressClick = true;   // the click that ends a drag selects nothing
@@ -519,7 +544,8 @@ function make(holder, host) {
     if (object.kind === 'end') {
       const target = snapAt(event);
       if (target) toolCall('diagram.link.attach', { ids: [object.id], end: object.end, node: target.node, ...(target.side ? { side: target.side } : {}) });
-      else toolCall('diagram.link.detach', { ids: [object.id], end: object.end, ...round(svgPt(event)) });
+      // The end stays free where it was dropped; the link stays selected (it is made again without that end).
+      else toolCall('diagram.link.detach', { ids: [object.id], end: object.end, ...round(svgPt(event)) }).then((reply) => { if (reply?.ok && m.link.has(object.id) && !sel.links.includes(object.id)) select({ links: [object.id] }); });
       return;
     }
     if (object.kind === 'bend') { toolCall('diagram.link.bend.move', { ids: [object.id], bend: object.bend, ...round(svgPt(event)) }); return; }
