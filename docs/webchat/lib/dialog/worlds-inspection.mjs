@@ -3,9 +3,9 @@ import {parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=4cf6e60057'
 import {inspectReaderAdmissionPolicy} from './reader-policy.mjs?v=9daedbfaab';
 import {inspectReaderContextPolicy} from './reader-context-policy.mjs?v=811e5362fc';
 import {describeWorldsNodes} from './worlds-node-metadata.mjs?v=c606798b5f';
-import {CATALOG_WORLD_PURPOSES} from './catalog-world-purpose.mjs?v=640731b79b';
+import {CATALOG_WORLD_PURPOSES} from './catalog-world-purpose.mjs?v=c58476005c';
 import {describePlacementSearch} from './placement-search-inspection.mjs?v=fe18d841ef';
-import {RUNTIME_COMPONENTS,componentAudit,auditRuntimeComponents} from './runtime-component-registry.mjs?v=07751d6e29';
+import {RUNTIME_COMPONENTS,componentAudit,auditRuntimeComponents} from './runtime-component-registry.mjs?v=9df6529317';
 
 export function inspectSchemaSource(source){
  if(typeof source!=='string')return {status:'source not loaded',legends:[],modules:[],types:[],slots:[],tools:[],parameters:[],language:[],documentation:[],languageStatus:'Source has not been read; no language binding is asserted.'};

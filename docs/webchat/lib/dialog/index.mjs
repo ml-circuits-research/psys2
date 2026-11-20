@@ -13,11 +13,11 @@ import { interpretationPolicy } from './interpretation-policy.mjs?v=c57edbec02';
  * Without it all input is treated as English.
  */
 
-import { loadWorlds } from '../worlds/index.mjs?v=2dd9004894';
+import { loadWorlds } from '../worlds/index.mjs?v=67bd2197e4';
 import { validateWorldSet } from '../worlds/validate.mjs?v=af0869a8e0';
 
-import { createInterpreter } from '../interpreter/index.mjs?v=ff1634cf1b';
-import { createReasoner } from '../reasoner/index.mjs?v=f6fbdc2433';
+import { createInterpreter } from '../interpreter/index.mjs?v=a1e2a965bb';
+import { createReasoner } from '../reasoner/index.mjs?v=cc49f708a7';
 
 import { serialize } from '../soplang/index.mjs?v=c57881f705';
 
@@ -25,11 +25,11 @@ import { perf } from './stage-perf.mjs?v=8b73796daa';
 import { guard, TurnAborted } from './turn-guard.mjs?v=34ed257fec';
 import { createBudget, installBudget, releaseBudget, isBudgetExceeded, budget } from './budget.mjs?v=00bce6e369';
 
-import { attachValues } from '../knowledge/values.mjs?v=eb7e1d77ed';
-import { attachOpenWords } from '../knowledge/open-words.mjs?v=5d3a747ae6';
+import { attachValues } from '../knowledge/values.mjs?v=3842436585';
+import { attachOpenWords } from '../knowledge/open-words.mjs?v=975d9a5f53';
 import { attachArrangement } from '../knowledge/arrangement.mjs?v=1d6de960e8';
 
-import { createSessionAstra } from '../astra/session.mjs?v=277a87afb5';
+import { createSessionAstra } from '../astra/session.mjs?v=dbb06dc449';
 
 import { panel } from '../astra/where.mjs?v=09b4059350';
 import { snapshot as astraSnapshot, restore as astraRestore } from '../astra/persist.mjs?v=3e29fd91c2';
@@ -331,7 +331,7 @@ export class DialogSession {
         }
       }
     }
-    const reply = await (await import('./reader-routing.mjs?v=d4f16c68e7')).routeNewEngine(this, english, { ...opts, language: 'en' });
+    const reply = await (await import('./reader-routing.mjs?v=838671a339')).routeNewEngine(this, english, { ...opts, language: 'en' });
     reply.trace = { ...reply.trace, english, ...(translation ? { translation } : {}), ...(detection ? { languageDetection: detection } : {}) };
     if (language !== 'en') {
       try {

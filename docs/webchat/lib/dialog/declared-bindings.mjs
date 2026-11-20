@@ -17,14 +17,18 @@
 //     A family whose class was published after the export (no kind row) reads as the class a declared kind binding
 //     makes, takes that binding's operation as its family binding, and its keys left unbound for want of a source type
 //     bind to the parameters of their names on that source type (3b, 4b, 4c);
+//  7. a family picked by its members' place (execution-policy.sop app.execution.position: "the third bar") gets its
+//     position key, bound to the observed place of its source type, with the ordinal words of k.values as its values;
 //  6. a kind named by the modifier of its compound lemmas ("a pie" for "pie chart", "pie graph": the compound's last
 //     word a lemma of its family's own class) is that kind, when every such compound names the same kind.
 import {parse,str} from '../vendor/sopworld/sopworld.mjs?v=4cf6e60057';
 import {interpretationPolicy} from './interpretation-policy.mjs?v=c57edbec02';
-import {executionPolicyWorld} from './execution-policy.mjs?v=b6a1f81181';
-import EXECUTION_POLICY from '../../worlds/app.project/execution-policy-source.mjs?v=7659fc810e';
+import {executionPolicyWorld} from './execution-policy.mjs?v=abb458111b';
+import {declaredValueRows} from './declared-value-readings.mjs?v=8be9a63a44';
+import {numberWords,numberInfo} from '../knowledge/values.mjs?v=3842436585';
+import EXECUTION_POLICY from '../../worlds/app.project/execution-policy-source.mjs?v=b5a27440da';
 import DRAW from '../../worlds/art.draw/native-interface-source.mjs?v=afabeecb4f';
-import DIAGRAM from '../../worlds/diagram.sketch/native-interface-source.mjs?v=7fa8628bee';
+import DIAGRAM from '../../worlds/diagram.sketch/native-interface-source.mjs?v=2d66a430be';
 import CHARTS from '../../worlds/data.charts/native-interface-source.mjs?v=6c0dc1d746';
 import DOCUMENT from '../../worlds/docs.editor/native-interface-source.mjs?v=e247358200';
 import CALENDAR from '../../worlds/time.calendar/native-interface-source.mjs?v=3945d7d8fa';
@@ -195,6 +199,22 @@ export async function completeBindings(bindings){
    hostBinding:{id:p.operation,sourceType,key:parameter,operation:p.operation,parameter},...(p.enum?{classValues:p.enum}:{}),...(!p.enum&&numericOf(sourceType,parameter)?{numeric:true}:{}),
    alignment:{kind:'native-parameter-by-name',authority:'declared-bindings.mjs: the export rule over the live native interface and the declared family'}});
  }
+ // 7. Declared positions: the key of a member's place, observed on its source type, takes the ordinal numbers.
+ const valueNormalizations=[...(bindings.valueNormalizations??[])];
+ const policySha=await digest(EXECUTION_POLICY);
+ for(const row of declaredValueRows().positions){
+  if(properties.some(p=>p.area===row.area&&p.key===row.key&&p.alignment?.kind!=='declared-position'))continue;
+  const parameter=row.binding.split('.').at(-1),canonical=row.sourceType+'.'+parameter;
+  const provenance={sourceWire:'app.execution.position:'+row.key,sourceSnapshotSHA:policySha,sourceWorld:'app.project',moduleVersion:'1'};
+  properties.push({area:row.area,key:row.key,valueKind:'string',canonical,...provenance,numeric:true,
+   hostBinding:{id:row.binding,sourceType:row.sourceType,key:parameter,parameter},
+   alignment:{kind:'declared-position',authority:'execution-policy.sop app.execution.position'}});
+  numberInfo('first','ordinal');   // loads k.values before its words are listed
+  for(const word of numberWords('ordinal')){
+   const n=numberInfo(word,'ordinal')?.value;if(!Number.isSafeInteger(n)||n<1)continue;
+   valueNormalizations.push({area:row.area,key:row.key,canonical,source:word,value:String(n),valueKind:'string',...provenance});
+  }
+ }
  // 6. Kind modifiers of compound lemmas ("pie" of "pie chart" where "chart" names the family's own class).
  let kinds=bindings.kinds??[];
  const modifiers=new Map();
@@ -220,7 +240,7 @@ export async function completeBindings(bindings){
  const pol=executionPolicyWorld(),all=(r,k)=>(r.attrs[k]??[]).map(str);
  const lengthUnits=[...pol.ofType('app.execution.canvasUnit').map(r=>({unit:one(r,'unit'),words:all(r,'word'),factor:1})),
   ...pol.ofType('app.execution.lengthUnit').map(r=>({canonical:one(r,'unit'),unit:one(r,'to'),factor:Number(one(r,'factor'))}))];
- const table=Object.freeze({...bindings,properties,families,kinds,lengthUnits});
+ const table=Object.freeze({...bindings,properties,families,kinds,lengthUnits,valueNormalizations});
  completed.set(bindings,table);
  return table;
 }

@@ -4,7 +4,7 @@
  * Syntax elements: word, [a|b|c], [a|b]?, {name:class}, {name:class?}, ...
  * Slot classes: number, ordinal, word, words, noun, <lexicon id>, agent, unit.
  */
-import { isFillerWord } from './normalize.mjs?v=67e6e3d757';
+import { isFillerWord } from './normalize.mjs?v=1687741661';
 import { budget } from '../../dialog/budget.mjs?v=00bce6e369';
 import { en } from '../../lang/en.mjs?v=63a0a6f36a';
 

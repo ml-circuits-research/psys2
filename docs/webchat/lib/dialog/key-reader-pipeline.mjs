@@ -1,11 +1,12 @@
 // Source-only two-model proposals. No parser fallback or execution admission.
 import {readReaderSource} from './reader-source.mjs?v=f45ef03d74';
 import {copyHostData,freezeHostData} from '../../worlds/native-tool-host.mjs?v=f5de6de16f';
-import {bridgeRawStructure,RAW_STRUCTURAL_FORMAT,BINDING_NODES} from './raw-structural-bridge.mjs?v=62aa14292b';
-import {comparativeSteps} from './comparative-projection.mjs?v=3e934dfe02';
+import {bridgeRawStructure,RAW_STRUCTURAL_FORMAT,BINDING_NODES} from './raw-structural-bridge.mjs?v=a153420f34';
+import {comparativeSteps} from './comparative-projection.mjs?v=0bc6334942';
 import {referenceProjection} from './reference-projection.mjs?v=34cc842417';
-import {completeBindings} from './declared-bindings.mjs?v=0d84363f13';
-import {declaredRawReadings} from './partial-admission.mjs?v=6e65a3e76c';
+import {completeBindings} from './declared-bindings.mjs?v=d30400d034';
+import {declaredRawReadings} from './partial-admission.mjs?v=eadf37012a';
+import {declaredValueReadings} from './declared-value-readings.mjs?v=8be9a63a44';
 const hash=x=>typeof x==='string'&&/^[a-f0-9]{64}$/.test(x);
 const digest=async x=>Array.from(new Uint8Array(await globalThis.crypto.subtle.digest('SHA-256',new TextEncoder().encode(x))),b=>b.toString(16).padStart(2,'0')).join('');
 const same=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
@@ -74,7 +75,8 @@ export async function createKeyReaderPipeline({cutter,reader,getContext,cutterMo
    if(!recordedContext&&cut.spans.length===1&&(context.context?.previous!=null||context.context?.existing?.length>0))independentInput={sourceSop,cut,context,profiles:new Set()};
    // The declared raw readings (partial-admission.mjs: a container's property, a population joined by lines) hold for a
    // complete reading too.
-   raw=declaredRawReadings(raw,live);
+   // The declared readings of said values (declared-value-readings.mjs: amounts, ranges, positions) likewise.
+   raw=declaredValueReadings(declaredRawReadings(raw,live));
    const bridge=bridgeRawStructure(raw,{bindings:live,bindingSha256:bindingsSha256,comparatives:comparativeSteps(),references:referenceProjection(),budget,decoderBudget,maxBytes});
    failures.push(...bridge.diagnostics.map(issue=>({reason:issue.reason,path:issue.path})));const decoded=bridge.decoded;failures.push(...(decoded?.issues??[]));
    return {candidates:failures.length?[]:(decoded?.candidates??[]),coverage:{complete:failures.length===0&&decoded?.coverage?.complete===true,graphProposal:decoded?.coverage?.graphProposal===true,executable:false},failures,raw,provenance:copy(provenance),graphConfidence:null,sourceCut,steps,...(observation?{sourceObservation:copy(observation)}:{})};

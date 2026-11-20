@@ -3,10 +3,10 @@ import {combineModelScores} from './model-selection-score.mjs?v=ac3ac10191';
 // Verify artifact bytes, then assemble actual injected neural sessions. No admission.
 import {copyHostData,freezeHostData} from '../../worlds/native-tool-host.mjs?v=f5de6de16f';
 import {createCutterInference} from './cutter-inference.mjs?v=17016704da';
-import {createKeyReaderInference} from './key-reader-inference.mjs?v=281ceeb40e';
+import {createKeyReaderInference} from './key-reader-inference.mjs?v=d7b767c5da';
 import {createBertSourceOffsetAuthority} from './bert-source-offsets.mjs?v=d88d1e36fe';
-import {createKeyReaderPipeline} from './key-reader-pipeline.mjs?v=71b015fa56';
-import {BINDING_NODES} from './raw-structural-bridge.mjs?v=62aa14292b';
+import {createKeyReaderPipeline} from './key-reader-pipeline.mjs?v=80f43fbc03';
+import {BINDING_NODES} from './raw-structural-bridge.mjs?v=a153420f34';
 
 const hash=x=>typeof x==='string'&&/^[a-f0-9]{64}$/.test(x);
 const object=x=>x!==null&&typeof x==='object'&&!Array.isArray(x);

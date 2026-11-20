@@ -9,7 +9,7 @@
 import { parse, get, getAll } from '../soplang/index.mjs?v=c57881f705';
 import { Legends } from '../legends/index.mjs?v=45bd60c654';
 import { readDescriptionWires, slotDeclarations } from './describe.mjs?v=06c346ca73';
-import { lexIndex } from './lexicon.mjs?v=390800af2e';
+import { lexIndex } from './lexicon.mjs?v=c6013b1743';
 import { budget } from '../dialog/budget.mjs?v=00bce6e369';
 
 const FILES = ['world.sop', 'legend.sop', 'lexicon.sop', 'patterns.sop', 'operations.sop', 'kb.sop', 'templates.sop', 'tests.sop'];
@@ -388,10 +388,5 @@ function expandShapes(set, patterns) {
   }
 }
 
-/**
- * Tabs of worlds that declare none in their manifest: the Documents tab is built into the page and the shell (worlds/ui.shell/ops.mjs `TABS.editor`).
- * The one table the engine, the discourse, ASTRA and the page's worker read (architecture review 2026-11-15, A1; it goes when docs.editor declares `tab=editor`).
- */
-export const BUILTIN_TAB = Object.freeze({ 'docs.editor': 'editor' });
-/** The tab id of a world of `set`: its manifest's `tab=`, else the built-in table; null for a world with no tab. */
-export const tabOfWorld = (set, id) => set?.get?.(id)?.tab?.id ?? BUILTIN_TAB[id] ?? null;
+/** The tab id of a world of `set`: its manifest's `tab=` (docs.editor declares `tab=editor` like every editor); null for a world with no tab. */
+export const tabOfWorld = (set, id) => set?.get?.(id)?.tab?.id ?? null;

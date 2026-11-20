@@ -1,15 +1,16 @@
 import { historyHeads } from './history-journal.mjs?v=a4ae88133a';
-import {nativeKindCandidates} from './native-binding-candidates.mjs?v=482929beba';
+import {nativeKindCandidates} from './native-binding-candidates.mjs?v=23ab5f219d';
 // Bind model-declared context references to actual native objects; never inspect source words.
 import {quote,str} from '../vendor/sopworld/sopworld.mjs?v=4cf6e60057';
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=ebcb420640';
-import {executionPolicyWorld} from './execution-policy.mjs?v=b6a1f81181';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=c6f234c44e';
+import {executionPolicyWorld} from './execution-policy.mjs?v=abb458111b';
 import {readReferenceTurn,resolveObservedReference} from './reference-policy.mjs?v=38f7ce71a7';
 import {observeGroundedProjection,projectGroundedRequest} from './grounded-projection.mjs?v=0185c6d256';
 import {flatRequestProjection} from './request-projection.mjs?v=e4dcb8aca9';
-import {bridgeRawStructure} from './raw-structural-bridge.mjs?v=62aa14292b';
-import {comparativeSteps} from './comparative-projection.mjs?v=3e934dfe02';
+import {bridgeRawStructure} from './raw-structural-bridge.mjs?v=a153420f34';
+import {comparativeSteps} from './comparative-projection.mjs?v=0bc6334942';
 import {referenceProjection} from './reference-projection.mjs?v=34cc842417';
+import {interpretationPolicy} from './interpretation-policy.mjs?v=c57edbec02';
 function containerOwned(r,bindings,area){
  const keys=(r.constraints??[]).map(c=>c?.key);
  if(!keys.length||keys.some(k=>typeof k!=='string'))return false;
@@ -48,12 +49,18 @@ export async function projectContextAction(proposal,session,{bindings,registry,v
  }else if(!Array.isArray(r.constraints)||!r.constraints.length&&r.act!=='arrange')return null;   // an arrangement may say nothing more ("improve the layout")
  const canonical=selected.canonical,values=[];
  // A reading beyond plain stated values (a comparative step, several results, a class value its span only evidences:
- // legend "hide" said as "get rid of the legend") is projected by the same bridge as any other reading, with the
- // context target bound to the kind the observed reference resolution chose.
- if(!other&&r.constraints.some(c=>c.operator!=='eq'||typeof c.value==='string'&&typeof c.value_span==='string'&&c.value!==c.value_span)){
+ // legend "hide" said as "get rid of the legend"; a selector that picks among the family: "the May value", "the third
+ // bar") is projected by the same bridge as any other reading, with the context target bound to the kind the observed
+ // reference resolution chose.
+ if(!other&&r.constraints.some(c=>c.operator!=='eq'||c.phase==='selector'||typeof c.value==='string'&&typeof c.value_span==='string'&&c.value!==c.value_span)){
   const bindingSha256=proposal.provenance?.bindingsSha256;
-  const bridged=bindingSha256?bridgeRawStructure(raw,{bindings,bindingSha256,comparatives:comparativeSteps(),references:referenceProjection(),contextTarget:{kind:canonical,declaration:selected.object.source}}):null;
-  if(!bridged||bridged.diagnostics.length||bridged.decoded?.candidates?.length!==1||bridged.decoded.issues?.length)return null;
+  const bridgeOptions={bindings,bindingSha256,comparatives:comparativeSteps(),references:referenceProjection(),contextTarget:{kind:canonical,declaration:selected.object.source}};
+  const usable=b=>b&&!b.diagnostics.length&&b.decoded?.candidates?.length===1&&!b.decoded.issues?.length;
+  let bridged=bindingSha256?bridgeRawStructure(raw,bridgeOptions):null;
+  // A reading the strict bridge refuses only for what the declared partial defaults supply (an act without its own
+  // trigger words is anchored on the request: "bars narrower") is bridged with those defaults, when nothing is dropped.
+  if(bindingSha256&&!usable(bridged)){const lenient=bridgeRawStructure(raw,{...bridgeOptions,partial:{defaults:interpretationPolicy().partial.defaults}});if(usable(lenient)&&!lenient.disclosed?.length)bridged=lenient;}
+  if(!usable(bridged))return null;
   const note='I took the reference as the '+selected.object.kind+'.';
   return {proposal:{...proposal,candidates:bridged.decoded.candidates,coverage:{complete:true,graphProposal:true,executable:false},failures:[],
    interpretation:{profile:'native-context/1',note,chosen:{id:selected.object.id,kind:selected.object.kind,canonical},alternatives:options.map(o=>({id:o.object.id,kind:o.object.kind,canonical:o.canonical})),unresolved:proposal.failures}},focus:selected.object.id,rewind:null};
