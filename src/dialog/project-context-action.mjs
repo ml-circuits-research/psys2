@@ -46,13 +46,13 @@ export async function projectContextAction(proposal,session,{bindings,registry,v
   if(!previous||!last||!Object.keys(last.after).every(key=>JSON.stringify(session.isession.state[key])===JSON.stringify(last.after[key])))return null;
   const prior=flatRequestProjection(previous);if(!prior.ok||prior.request.act!==r.act||prior.targets.length!==1||!prior.results.length)return null;
   inherited=prior.results;rewind=last.before;
- }else if(!Array.isArray(r.constraints)||!r.constraints.length&&r.act!=='arrange')return null;   // an arrangement may say nothing more ("improve the layout")
+ }else if(!Array.isArray(r.constraints)||!r.constraints.length&&r.act==='make')return null;   // an act on the referent may say nothing more ("improve the layout", "trash it", "copy this one")
  const canonical=selected.canonical,values=[];
  // A reading beyond plain stated values (a comparative step, several results, a class value its span only evidences:
  // legend "hide" said as "get rid of the legend"; a selector that picks among the family: "the May value", "the third
  // bar") is projected by the same bridge as any other reading, with the context target bound to the kind the observed
  // reference resolution chose.
- if(!other&&r.constraints.some(c=>c.operator!=='eq'||c.phase==='selector'||typeof c.value==='string'&&typeof c.value_span==='string'&&c.value!==c.value_span)){
+ if(!other&&(!r.constraints.length&&r.act!=='arrange'||r.constraints.some(c=>c.operator!=='eq'||c.phase==='selector'||typeof c.value==='string'&&typeof c.value_span==='string'&&c.value!==c.value_span))){
   const bindingSha256=proposal.provenance?.bindingsSha256;
   const bridgeOptions={bindings,bindingSha256,comparatives:comparativeSteps(),references:referenceProjection(),contextTarget:{kind:canonical,declaration:selected.object.source}};
   const usable=b=>b&&!b.diagnostics.length&&b.decoded?.candidates?.length===1&&!b.decoded.issues?.length;

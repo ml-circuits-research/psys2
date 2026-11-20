@@ -11,6 +11,16 @@
 @result.other app.reference.resolution turn=?turn policy=app.other values=previous
 @route.focus core.rule when=$read.focus not=$read.other then=$result.focus
 @route.arrange core.rule when=$read.arrange then=$result.focus
+# The other acts on an existing referent ("trash it", "copy this one", "move it next to Orange", "pick that one"): the
+# same salience (the focus: the object last made, selected or acted on, else the most recent).
+@read.acts app.reference.reading turn=?turn act=?refact mood="do" fill="context" mode="existing"
+@read.acts.which app.reference.act act=?refact
+@route.acts core.rule when=$read.acts when=$read.acts.which then=$result.focus
+@ref.act.remove app.reference.act act="remove"
+@ref.act.copy app.reference.act act="copy"
+@ref.act.place app.reference.act act="place"
+@ref.act.pick app.reference.act act="pick"
+@ref.act.select app.reference.act act="select"
 @route.other core.rule when=$read.other then=$result.other
 
 # An exact kind or a matching family binds a live object to a reader meaning.

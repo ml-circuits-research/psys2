@@ -1,4 +1,4 @@
-@ref.module core.module name=app.reference exports=app.reference.reading exports=app.reference.resolution exports=app.reference.object exports=app.reference.mapping exports=app.reference.match
+@ref.module core.module name=app.reference exports=app.reference.reading exports=app.reference.resolution exports=app.reference.object exports=app.reference.mapping exports=app.reference.match exports=app.reference.act
 @ref.reading core.type of=app.reference.reading closed=true
 @ref.reading.turn core.slot of=app.reference.reading key=turn kind=string present=true
 @ref.reading.act core.slot of=app.reference.reading key=act kind=string present=true
@@ -24,3 +24,7 @@
 @ref.match.id core.slot of=app.reference.match key=id kind=string present=true
 @ref.match.canonical core.slot of=app.reference.match key=canonical kind=string present=true
 @ref.match.exact core.slot of=app.reference.match key=exact kind=boolean present=true
+
+# An act whose context reference resolves through the focus (reference-policy.sop).
+@ref.act core.type of=app.reference.act closed=true
+@ref.act.act core.slot of=app.reference.act key=act kind=string present=true
