@@ -671,16 +671,17 @@
       "name": "data-drop-v1",
       "path": "training/sop-bert/data/data-drop-v1/accepted.jsonl",
       "description": "Diagram/Drawing rows of the data-request drops, validated and normalised by data-drop-v1/import.py",
-      "gitCommit": "87628304c048eb576e7f685fdc2879287053bcc2",
-      "sha256": "bd9b934f4fa1999c7e9346cea451dae6a9069fbc32d829d7c1fd476e6e97758e",
-      "rowsIn": 8446,
-      "rowsKept": 8446,
+      "gitCommit": "2a14bbdb26a9a1c1819c714217d4d33c4441f8e7",
+      "sha256": "e5a005231928cc5adb3d62dc66b3e90bd7c59db9bc297047cf69ca7241780168",
+      "rowsIn": 16933,
+      "rowsKept": 16933,
       "rowsDropped": 0,
       "dropReasons": {},
       "fixes": {
-        "anchor-span-as-anchor-mention": 682,
-        "comparative-as-delta-step": 68,
-        "trigger-not-in-span-removed": 60
+        "anchor-span-as-anchor-mention": 1290,
+        "comparative-as-delta-step": 79,
+        "constraint-with-span-outside-request-removed": 93,
+        "trigger-not-in-span-removed": 288
       }
     },
     {
@@ -874,12 +875,12 @@
     }
   ],
   "splits": {
-    "train": 92057,
-    "dev": 3963,
-    "test": 1972
+    "train": 101788,
+    "dev": 4368,
+    "test": 2180
   },
-  "families": 26049,
-  "leakedFamilies": 2609,
+  "families": 26197,
+  "leakedFamilies": 2723,
   "labelConflictsResolvedByPriority": {
     "main-synthetic<-main-synthetic": 4
   },
@@ -895,50 +896,50 @@
     "ui-diagram-v2-voice": 14,
     "ui-quantities-v1": 42,
     "human-adapted-v1-drawing": 112,
-    "data-drop-v1": 1823,
+    "data-drop-v1": 3679,
     "human-adapted-v1-diagram": 72,
-    "main-synthetic": 5106
+    "main-synthetic": 5107
   },
   "nonReaderLabelFieldsRemoved": {
-    "raw_value": 138,
+    "raw_value": 149,
     "anchor_fill": 8151,
     "anchor_span": 437,
-    "qualitative": 583,
+    "qualitative": 682,
     "mention": 158,
     "anchor_kind": 5374
   },
   "kindVocabulary": {
-    "path": "docs/webchat/models/sop-bert/2794fa0577a4aee72ae1cc4ea5bcc29983743e2746b3c48aa8782c617c98361f/bindings.json",
+    "path": "docs/webchat/models/sop-bert/466b941f927e7b06bb379c762c734c1ff69a24160bf2b454ca2e5bd69ca10e9a/bindings.json",
     "sha256": "ba26132ebb8aace1f19a9a563b98d6459a7a9f43cd52c96b5fb100c0593ddbad"
   },
   "files": {
     "STATS.md": {
-      "sha256": "0d2e301ffca3d5c5b4daa0938f9fa6d7f5f8cd818f643d61ed1ddfadf00a846b",
-      "bytes": 7933
+      "sha256": "c4a0c549491296f34b5f9f93dc0df3734bfbf9095ccd22f240a68e8a3b2ddb81",
+      "bytes": 7938
     },
     "VALIDATION.md": {
-      "sha256": "13b288acdcd9ce22ced68b481e3c4d141f8b375e6811a98d740d4f21bc1ea1b7",
-      "bytes": 12800
+      "sha256": "a86c1b5f745c1e81f2c486fddd50c6233ee4f02d4fa0777f45fdf1f466eadffe",
+      "bytes": 12892
     },
     "audit-sample.md": {
-      "sha256": "af63983e1318327a5e362f0eac6eb9a5c6af6d631b2ee506d29eb6aaf95d3856",
-      "bytes": 44407
+      "sha256": "82e8f364e64c968907fbcda0da0fe62f7e91a1abe9064ae618372dce7a39f350",
+      "bytes": 44450
     },
     "dev.jsonl": {
-      "sha256": "1b86ac340fea77e54d3943aa879db0012b111c07fd42f307404c33120afe7357",
-      "bytes": 4326771
+      "sha256": "110ece7c54e9764622f5a66c3451a405845f8722eb9ac2a97e3ad9fee74678db",
+      "bytes": 4755953
     },
     "inventory.json": {
       "sha256": "daa582e2cab47bf73b374b7c5a3d702b51da90429e3e42fc08f6fe3e9a4a5293",
       "bytes": 56402
     },
     "test.jsonl": {
-      "sha256": "ca3b859e8f57a4e4829d4f56dc21e45afe219764e1f1226a6302f7db957d51e1",
-      "bytes": 2156354
+      "sha256": "cff278de9bfdff35f12aad5e399989a6297d09b5bc5c7c81aebad4fe111dadda",
+      "bytes": 2365943
     },
     "train.jsonl.gz": {
-      "sha256": "2519413078e327d251b26c8fb3929cacf30124f2ed7f9d2c9246cc02bb592dd1",
-      "bytes": 4539934
+      "sha256": "39ce326920e1b4faf55c4f2f61880c4a260ced1d0199e5c0caaa2724a1a426a1",
+      "bytes": 5004362
     }
   },
   "policy": {
