@@ -143,14 +143,23 @@ The reader's chart keys reach these operations through declared key alignments (
 `chart.show_values`/`showValues` → `valueLabels`, `chart.legend`/`showLegend` → `legend` (show → right, hide → none,
 right, bottom), `chart.max` → `yMax`, `chart.sort` → `diagram.chart.sort order` (desc, asc, alpha), `chart.type` →
 `layout`, `chart.palette` → `palette` (pastel, monochrome, sunset, dark, forest, ocean, classic, vivid; warm → sunset,
-cool → ocean, rainbow and default → vivid), `chart.id` and `point.chart` → the group's `id` (the chart named).
+cool → ocean, rainbow and default → vivid), `chart.id` → the group's `id` (the chart named).
 `chart.title` → the group's `label` (the label a new chart is made with; `diagram.chart.format` takes `label` too),
 `chart.values` → `values` read as numbers; a list said with coordinators ("Q2 and Sample") is split into its items.
 A chart made with values only numbers its categories ("1", "2"); one made without values starts from the sample values
 3, 5, 2, which the reply names. (Sample categories named "A", "B", "C" made the reader read the article of a later
-"add a pie chart" as the node named A.) A chart point named without a kind word ("set March to 40", "add September
-with 58") stays unbound: it needs a chart-point class in the binding table and a declared verification of the bars a
-value change re-lays out.
+"add a pie chart" as the node named A.) A chart point ("set March to 40", "add September with 58", "remove Tue") is a category of a chart: its members are
+observed as `diagram.sketch.point` objects (label, value, colour, the chart's code and title; free nodes stay
+`diagram.sketch.node`), named by their label. `diagram.chart.point.add` (`chart` by code or title, else the chart made
+last; `label`; `value`), `diagram.chart.point.change` (`ids`; `value`, `label`, `colour`; a free node is refused
+[missing-point]) and `diagram.chart.point.remove` (`ids`). Their effect scope declares the reflow of the other points
+(x, y, width, height), the same mechanism as the node operations, so a value change that re-lays out the other bars
+verifies. The reader's point family reads as `w.diagram.datum` (a value of a chart at a category; the members' values
+are the first series), `point.value` → the point's value, `point.chart` → the chart (observed on each point as its
+chart's title, so "in Revenue, set December to 44" picks the point), `chart.labels` as a point's category label.
+Not yet: a point picked by its position ("the sixth month", target ordinals), a value changed by an amount ("bump Thu
+up by 70": an additive delta), a category renamed by the same key as its selector ("relabel Pears to Thu"), points of
+a series beyond the first (`point.series`).
 The data drops' chart frames (management/data-drop dg-batch-01..05 `needs`) are declared as reader keys for v9 and
 bound the same way: `chart.fontSize`, `chart.lineWidth`, `chart.markerSize`, `chart.markerEdge`, `chart.barWidth`,
 `chart.barHeight` (→ `barWidth`), `chart.barGap` (words), with comparatives labelled as steps (operator delta) for the number keys, `chart.pieRadius`, `chart.precision`, `chart.titleWeight`,

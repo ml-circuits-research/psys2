@@ -305,16 +305,20 @@
 @shp.nx.so ui.diagram.next of=series top=?top
 @next.series core.aggregate over=$shp.nx.s max=?top args=?z default=0 then=$shp.nx.so
 # The chart a series command names: by code or title; none named, the chart made last.
-@shp.sc.r app.act.request operation="diagram.chart.series.add" chart=?c
+@shp.chartop.type core.type of=ui.diagram.chartop
+@shp.chartop.series ui.diagram.chartop op="diagram.chart.series.add"
+@shp.chartop.point ui.diagram.chartop op="diagram.chart.point.add"
+@shp.sc.op ui.diagram.chartop op=?op
+@shp.sc.r app.act.request operation=?op chart=?c
 @shp.sc.gc w.diagram.group code=?c
 @shp.sc.ch ui.diagram.chart group=?c
 @shp.sc.out ui.diagram.schart group=?c
-@series.chart.code core.rule when=$shp.sc.r when=$shp.sc.gc when=$shp.sc.ch then=$shp.sc.out
+@series.chart.code core.rule when=$shp.sc.op when=$shp.sc.r when=$shp.sc.gc when=$shp.sc.ch then=$shp.sc.out
 @shp.sc.gl w.diagram.group code=?g label=?c
 @shp.sc.chl ui.diagram.chart group=?g
 @shp.sc.outl ui.diagram.schart group=?g
-@series.chart.title core.rule when=$shp.sc.r when=$shp.sc.gl when=$shp.sc.chl then=$shp.sc.outl
-@shp.sc.r0 app.act.request operation="diagram.chart.series.add"
+@series.chart.title core.rule when=$shp.sc.op when=$shp.sc.r when=$shp.sc.gl when=$shp.sc.chl then=$shp.sc.outl
+@shp.sc.r0 app.act.request operation=?op
 @shp.sc.anyc app.act.request chart=?anyc
 @shp.sc.cg ui.diagram.chart group=?g
 @shp.sc.gn w.diagram.group code=?g n=?gn
@@ -322,10 +326,10 @@
 @shp.clast.type core.type of=ui.diagram.clast
 @series.chart.newest core.aggregate over=$shp.sc.cg over=$shp.sc.gn max=?ln args=?gn then=$shp.sc.last
 @shp.sc.is core.check fn=eq args=?gn args=?ln
-@series.chart.last core.rule when=$shp.sc.r0 not=$shp.sc.anyc when=$shp.sc.cg when=$shp.sc.gn when=$shp.sc.last if=$shp.sc.is then=$shp.sc.outl
+@series.chart.last core.rule when=$shp.sc.op when=$shp.sc.r0 not=$shp.sc.anyc when=$shp.sc.cg when=$shp.sc.gn when=$shp.sc.last if=$shp.sc.is then=$shp.sc.outl
 @shp.sc.anyg ui.diagram.schart group=?anyg
 @shp.sc.miss app.act.refuse reason=missing-chart
-@series.chart.missing core.rule when=$shp.sc.r0 not=$shp.sc.anyg then=$shp.sc.miss
+@series.chart.missing core.rule when=$shp.sc.op when=$shp.sc.r0 not=$shp.sc.anyg then=$shp.sc.miss
 # The series and its values.
 @shp.sa.r app.act.request operation="diagram.chart.series.add" label=?l
 @shp.sa.c ui.diagram.schart group=?g
@@ -661,3 +665,61 @@
 @shp.lf.out1 ui.diagram.legend node=?key x=?x y=?y text="Series 1" fill=?rgb
 @chart.legend.first core.rule when=$shp.lf.n when=$shp.lf.m when=$shp.lf.st when=$shp.lf.gb when=$shp.lf.pad when=$shp.lf.geo not=$shp.lf.hz when=$shp.lf.ms with=$shp.lf.x with=$shp.lf.y1 with=$shp.lf.y2 with=$shp.lf.y with=$shp.lf.key then=$shp.lf.out
 @chart.legend.first.unnamed core.rule when=$shp.lf.n when=$shp.lf.m when=$shp.lf.st when=$shp.lf.gb when=$shp.lf.pad when=$shp.lf.geo not=$shp.lf.hz not=$shp.lf.anyms with=$shp.lf.x with=$shp.lf.y1 with=$shp.lf.y2 with=$shp.lf.y with=$shp.lf.key then=$shp.lf.out1
+
+# ---- Chart points: a category of a chart (a member node of a bar, line, area, pie or doughnut chart) as its value ----
+# A point is observed as diagram.sketch.point (its label, value, colour, chart code and title). diagram.chart.point.add
+# adds a category with its value at the end of the chart named (else the chart made last); change sets its value,
+# label or colour; remove removes it. When a value changes, the chart's other bars or slices lay themselves out again
+# (the declared reflow of x, y, width and height, native-interface.sop): the verification reads that as declared.
+@shp.cpoint.type core.type of=ui.diagram.cpoint
+@shp.cp.m ui.diagram.chartmember node=?c group=?g
+@shp.cp.out ui.diagram.cpoint node=?c group=?g
+@chart.point.bar core.rule when=$shp.cp.m then=$shp.cp.out
+@shp.cp.s ui.diagram.slicemember node=?c group=?g
+@chart.point.slice core.rule when=$shp.cp.s then=$shp.cp.out
+@shp.op.p ui.diagram.cpoint node=?id group=?g
+@shp.op.n w.diagram.node code=?id
+@shp.op.b ui.diagram.nbox node=?id cx=?x cy=?y w=?w h=?h
+@shp.op.gl w.diagram.group code=?g label=?gl
+@shp.op.out app.observe.object id=?id kind=point sourceType=diagram.sketch.point binding=diagram.point x=?x y=?y width=?w height=?h selected=false
+@observe.point core.rule when=$shp.op.p when=$shp.op.n when=$shp.op.b then=$shp.op.out
+@shp.op.co app.observe.input id=?id key=chart value=?gl
+@observe.point.chart core.rule when=$shp.op.p when=$shp.op.gl then=$shp.op.co
+@shp.pa.r app.act.request operation="diagram.chart.point.add" label=?l value=?v
+@shp.pa.c ui.diagram.schart group=?g
+@shp.pa.g w.diagram.group code=?g
+@shp.pa.nx ui.diagram.next of=node top=?top
+@shp.pa.z core.calc out=?z fn=add args=?top args=1
+@shp.pa.code core.calc out=?code fn=concat args=n args=?z
+@shp.pa.mk app.act.call act=make kind=w.diagram.node code=?code shape=rectangle label=?l value=?v n=?z order=1 ref=chart.point
+@shp.pa.mem app.act.call act=make kind=w.diagram.member group=$shp.pa.g node=chart.point order=2
+@chart.point.add core.rule when=$shp.pa.r when=$shp.pa.c when=$shp.pa.g when=$shp.pa.nx with=$shp.pa.z with=$shp.pa.code then=$shp.pa.mk
+@chart.point.add.member core.rule when=$shp.pa.r when=$shp.pa.c when=$shp.pa.g then=$shp.pa.mem
+@shp.pc2.i app.act.item param="ids" value=?id
+@shp.pc2.n w.diagram.node code=?id
+@shp.pc2.p ui.diagram.cpoint node=?id
+@shp.pc2.op ui.diagram.pointop operation=?op
+@shp.pointop.type core.type of=ui.diagram.pointop
+@shp.pointop.change ui.diagram.pointop operation="diagram.chart.point.change"
+@shp.pointop.remove ui.diagram.pointop operation="diagram.chart.point.remove"
+@shp.pc2.r app.act.request operation=?op
+@shp.pc2.miss app.act.refuse reason=missing-point
+@chart.point.missing core.rule when=$shp.pc2.r when=$shp.pc2.op when=$shp.pc2.i not=$shp.pc2.p then=$shp.pc2.miss
+@shp.pc2.v app.act.request operation="diagram.chart.point.change" value=?v
+@shp.pc2.vc app.act.call act=change thing=$shp.pc2.n attr=value value=?v order=1
+@chart.point.value core.rule when=$shp.pc2.v when=$shp.pc2.i when=$shp.pc2.n when=$shp.pc2.p then=$shp.pc2.vc
+@shp.pc2.l app.act.request operation="diagram.chart.point.change" label=?l
+@shp.pc2.lc app.act.call act=change thing=$shp.pc2.n attr=label value=?l order=1
+@chart.point.label core.rule when=$shp.pc2.l when=$shp.pc2.i when=$shp.pc2.n when=$shp.pc2.p then=$shp.pc2.lc
+@shp.pc2.c app.act.request operation="diagram.chart.point.change" colour=?col
+@shp.pc2.cc app.act.call act=change thing=$shp.pc2.n attr=colour value=?col order=1
+@chart.point.colour core.rule when=$shp.pc2.c when=$shp.pc2.i when=$shp.pc2.n when=$shp.pc2.p then=$shp.pc2.cc
+@shp.pc2.cr app.act.request operation="diagram.chart.point.change"
+@shp.pc2.n1 app.act.request value=?n1
+@shp.pc2.n2 app.act.request label=?n2
+@shp.pc2.n3 app.act.request colour=?n3
+@shp.pc2.none app.act.refuse reason=missing-property
+@chart.point.change.none core.rule when=$shp.pc2.cr not=$shp.pc2.n1 not=$shp.pc2.n2 not=$shp.pc2.n3 then=$shp.pc2.none
+@shp.pc2.rr app.act.request operation="diagram.chart.point.remove"
+@shp.pc2.rc app.act.call act=remove thing=$shp.pc2.n order=1
+@chart.point.remove core.rule when=$shp.pc2.rr when=$shp.pc2.i when=$shp.pc2.n when=$shp.pc2.p then=$shp.pc2.rc

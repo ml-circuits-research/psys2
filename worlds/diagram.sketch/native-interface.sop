@@ -433,6 +433,35 @@
 @native.diagram.sketch.op.diagram.chart.series.change.param.colour.source.enum app.native.parameter parameter=$native.diagram.sketch.op.diagram.chart.series.change.param.colour field=enum input=$native.diagram.sketch.input.diagram.colours
 @native.diagram.sketch.op.diagram.chart.series.remove std.capability.operation scope=$native.diagram.sketch.scope name="diagram.chart.series.remove" act=remove on="diagram.sketch.series" order=54 eligible=true
 @native.diagram.sketch.op.diagram.chart.series.remove.param.id std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.series.remove name="id" kind=string required=true
+# A chart point (chart-shape.sop): a category of a chart as its value ("set March to 40", "add September with 58"):
+# added at the end of the chart named (its code or title; the chart made last when none is named), its value, label or
+# colour changed, removed. When a value changes or a category comes or goes, the chart's other points lay themselves
+# out again: they may change only x, y, width and height (effectScope reflow), a declared dependent layout.
+@native.diagram.sketch.op.diagram.chart.point.add std.capability.operation scope=$native.diagram.sketch.scope name="diagram.chart.point.add" act=make on="diagram.sketch.point" order=55 eligible=true
+@native.diagram.sketch.op.diagram.chart.point.add.param.chart std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.point.add name="chart" kind=string
+@native.diagram.sketch.op.diagram.chart.point.add.param.label std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.point.add name="label" kind=string required=true
+@native.diagram.sketch.op.diagram.chart.point.add.param.value std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.point.add name="value" kind=number required=true
+@native.diagram.sketch.op.diagram.chart.point.change std.capability.operation scope=$native.diagram.sketch.scope name="diagram.chart.point.change" act=change on="diagram.sketch.point" order=56 eligible=true
+@native.diagram.sketch.op.diagram.chart.point.change.param.ids std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.point.change name="ids" kind=array required=true
+@native.diagram.sketch.op.diagram.chart.point.change.param.value std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.point.change name="value" kind=number
+@native.diagram.sketch.op.diagram.chart.point.change.param.label std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.point.change name="label" kind=string
+@native.diagram.sketch.op.diagram.chart.point.change.param.colour std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.point.change name="colour" kind=string
+@native.diagram.sketch.op.diagram.chart.point.change.param.colour.source.enum app.native.parameter parameter=$native.diagram.sketch.op.diagram.chart.point.change.param.colour field=enum input=$native.diagram.sketch.input.diagram.colours
+@native.diagram.sketch.op.diagram.chart.point.remove std.capability.operation scope=$native.diagram.sketch.scope name="diagram.chart.point.remove" act=remove on="diagram.sketch.point" order=57 eligible=true
+@native.diagram.sketch.op.diagram.chart.point.remove.param.ids std.capability.parameter operation=$native.diagram.sketch.op.diagram.chart.point.remove name="ids" kind=array required=true
+@native.diagram.sketch.preflow.x std.capability.item index=0 value="x"
+@native.diagram.sketch.preflow.y std.capability.item index=1 value="y"
+@native.diagram.sketch.preflow.w std.capability.item index=2 value="width"
+@native.diagram.sketch.preflow.h std.capability.item index=3 value="height"
+@native.diagram.sketch.preflow.list std.capability.list member=$native.diagram.sketch.preflow.x member=$native.diagram.sketch.preflow.y member=$native.diagram.sketch.preflow.w member=$native.diagram.sketch.preflow.h
+@native.diagram.sketch.preflow.keys std.capability.arg name="keys" value=$native.diagram.sketch.preflow.list
+@native.diagram.sketch.preflow.record std.capability.record entry=$native.diagram.sketch.preflow.keys
+@native.diagram.sketch.preflow.arg std.capability.arg name="reflow" value=$native.diagram.sketch.preflow.record
+@native.diagram.sketch.preflow.scope std.capability.record entry=$native.diagram.sketch.preflow.arg
+@native.diagram.sketch.preflow.effect std.capability.arg name="effectScope" value=$native.diagram.sketch.preflow.scope
+@native.diagram.sketch.op.diagram.chart.point.add.metadata app.native.metadata operation=$native.diagram.sketch.op.diagram.chart.point.add field=$native.diagram.sketch.preflow.effect
+@native.diagram.sketch.op.diagram.chart.point.change.metadata app.native.metadata operation=$native.diagram.sketch.op.diagram.chart.point.change field=$native.diagram.sketch.preflow.effect
+@native.diagram.sketch.op.diagram.chart.point.remove.metadata app.native.metadata operation=$native.diagram.sketch.op.diagram.chart.point.remove field=$native.diagram.sketch.preflow.effect
 # A chart asked for by its dimension and measure (act-rules.sop): the categories' dimension, what the values measure, how
 # they are aggregated; only the largest `top` categories, or those above or below a value.
 @native.diagram.sketch.op.diagram.group.chart.make.param.dimension std.capability.parameter operation=$native.diagram.sketch.op.diagram.group.chart.make name="dimension" kind=string

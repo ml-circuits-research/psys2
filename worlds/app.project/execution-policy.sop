@@ -112,7 +112,6 @@
 # A chart's title is its group's label: the label a new chart is made with, the label a format or a change sets.
 @chart.key.title app.execution.keyBinding area=diagram key="chart.title" operation="diagram.group.chart.make" parameter="label"
 @chart.key.id app.execution.keyBinding area=diagram key="chart.id" operation="diagram.chart.format" parameter="id"
-@chart.key.point app.execution.keyBinding area=diagram key="point.chart" operation="diagram.chart.value" parameter="id"
 # The chart formatting and the chart-by-dimension keys (the data drops' chart frames, declared for reader v9) bind to
 # the chart group's own parameters (worlds/diagram.sketch/chart-format.sop, act-rules.sop): a number property takes the
 # said number or the word that moves it (bigger, thinner, medium); named properties their closed values, with the said
@@ -238,6 +237,14 @@
 @series.key.chart app.execution.keyBinding area=diagram key="series.chart" operation="diagram.chart.series.add" parameter="chart"
 # A series named by its label ("make the Target series gray") is picked by the label it is observed with.
 @series.label.observed app.execution.observedMeasure concept=diagram.sketch.series.label sourceType="diagram.sketch.series" parameter="label" binding="diagram.series.label" order=18
+# A chart point (worlds/diagram.sketch/chart-shape.sop) is made by diagram.chart.point.add and changed and removed by
+# its point operations; its value is a number; the chart it lies in is named by its title (point.chart), and the
+# category it is (chart.labels) is the label it is observed with, so "in Revenue, set March to 40" picks the point.
+@point.kind app.execution.kindBinding area=diagram kind=w.diagram.datum operation="diagram.chart.point.add"
+@point.key.value app.execution.keyBinding area=diagram key="point.value" operation="diagram.chart.point.change" parameter="value"
+@chart.key.point app.execution.keyBinding area=diagram key="point.chart" operation="diagram.chart.point.add" parameter="chart"
+@point.chart.observed app.execution.observedMeasure concept=diagram.sketch.point.chart sourceType="diagram.sketch.point" parameter="chart" binding="diagram.point.chart" order=19
+@point.label.observed app.execution.observedMeasure concept=diagram.sketch.group.labels sourceType="diagram.sketch.point" parameter="label" binding="diagram.point.label" order=20
 @chart.key.diagram_background app.execution.keyBinding area=diagram key="diagram.background" operation="diagram.page.change" parameter="background"
 @chart.key.page_background app.execution.keyBinding area=diagram key="page.background" operation="diagram.page.change" parameter="background"
 @chart.key.page_title app.execution.keyBinding area=diagram key="page.title" operation="diagram.page.change" parameter="title"

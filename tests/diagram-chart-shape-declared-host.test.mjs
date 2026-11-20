@@ -73,3 +73,21 @@ test('series of a chart: made on the chart made last with values by category, si
  ok('diagram.chart.series.remove id="s1"');
  assert.equal(host.observe().objects.filter(o=>o.sourceType==='diagram.sketch.series').length,0);
 });
+
+test('chart points: a category observed as a point, added to the chart made last, its value changed with the other bars re-laid out as declared, removed',async()=>{
+ const {ok,run,host,view}=await area();
+ ok(MAKE);ok('diagram.node.make kind="circle" label="Free"');
+ const points=()=>host.observe().objects.filter(o=>o.sourceType==='diagram.sketch.point');
+ assert.deepEqual(points().map(o=>o.id).sort(),['n1','n2','n3'],'the categories are points; a free node stays a node');
+ assert.ok(points().every(o=>o.inputs.some(i=>i.key==='chart'&&i.values[0]==='"Sales"')),'each point knows its chart by title');
+ ok('diagram.chart.point.add label="Apr" value=4');
+ assert.equal(view().inputs.n5.label,'Apr');assert.equal(view().inputs.n5.group,'g1');
+ ok('diagram.chart.point.change ids="n2" value=10');
+ assert.equal(Math.round(rect(view().svg,'n2').h),160);assert.equal(Math.round(rect(view().svg,'n1').h),48,'Jan (3) re-laid out against the new top (10)');
+ assert.equal(run('diagram.chart.point.change ids="n4" value=1').reason,'missing-point','a free node is not a chart point');
+ ok('diagram.chart.point.remove ids="n1"');
+ assert.equal(points().length,3);
+ // The verification reads the other bars' new heights as the declared reflow of the operation.
+ const op=host.bindings().find(o=>o.id==='diagram.chart.point.change');
+ assert.deepEqual(op.effectScope.reflow.keys,['x','y','width','height']);
+});

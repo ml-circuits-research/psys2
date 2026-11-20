@@ -64,6 +64,10 @@
 # A series of a chart ("add a series named Budget with 40 and 41", "rename the series Costs") is a w.diagram.series of
 # its chart group (worlds/diagram.sketch/chart-shape.sop), a class published after the binding table was exported.
 @interpret.family.diagram.series app.interpret.family area=diagram family=series kind=w.diagram.series
+# A chart point ("set March to 40", "add September with 58", "remove February") is a value of a chart at one of its
+# categories: the catalog's w.diagram.datum (a series' value at a category; the members' own values are the first
+# series), drawn and observed as a chart point (chart-shape.sop diagram.sketch.point).
+@interpret.family.diagram.point app.interpret.family area=diagram family=point kind=w.diagram.datum
 
 # Diagram nodes placed relative to another node ("put Review below Draft", "a box called Deliver under Bake"): the
 # node.position / node.anchor pair reads as the drawing's relation pair does (like= names the area key whose canonical

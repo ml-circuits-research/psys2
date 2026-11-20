@@ -21,7 +21,7 @@ test('chart keys bind to the chart group operations with declared values',async(
  assert.deepEqual(row('chart.legend').valueMap.find(v=>v.said==='hide'),{said:'hide',value:'none'});
  assert.equal(row('chart.sort').hostBinding.operation,'diagram.chart.sort');
  assert.equal(row('chart.max').numeric,true);
- assert.equal(row('point.chart').hostBinding.parameter,'id');
+ assert.equal(row('point.chart').hostBinding.parameter,'chart');assert.equal(row('point.value').hostBinding.operation,'diagram.chart.point.change');
  // The chart's shape (chart-shape.sop): bars lying on their side, series stacked, the axis floor.
  assert.equal(row('chart.horizontal').hostBinding.parameter,'orientation');
  assert.deepEqual(row('chart.horizontal').valueMap.find(v=>v.said==='on'),{said:'on',value:'horizontal'});

@@ -881,8 +881,10 @@
 @a.ob.sel ui.diagram.picked id=?id
 @a.ob.out app.observe.object id=?id kind=?k sourceType=diagram.sketch.node binding=diagram.node x=?x y=?y width=?w height=?h selected=false
 @a.ob.out.sel app.observe.object id=?id kind=?k sourceType=diagram.sketch.node binding=diagram.node x=?x y=?y width=?w height=?h selected=true
-@observe.node core.rule when=$a.ob.n when=$a.ob.b not=$a.ob.sel then=$a.ob.out
-@observe.node.selected core.rule when=$a.ob.n when=$a.ob.b when=$a.ob.sel then=$a.ob.out.sel
+# A category of a chart is observed as a chart point (chart-shape.sop), not as a free node.
+@a.ob.cp ui.diagram.cpoint node=?id
+@observe.node core.rule when=$a.ob.n when=$a.ob.b not=$a.ob.sel not=$a.ob.cp then=$a.ob.out
+@observe.node.selected core.rule when=$a.ob.n when=$a.ob.b when=$a.ob.sel not=$a.ob.cp then=$a.ob.out.sel
 @a.oi.label w.diagram.node code=?id label=?v
 @a.oi.label.o app.observe.input id=?id key=label value=?v
 @observe.node.label core.rule when=$a.oi.label then=$a.oi.label.o
