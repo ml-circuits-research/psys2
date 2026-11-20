@@ -319,3 +319,45 @@
 # Flipping a drawn thing turns it to look the other way (worlds/art.draw/act-rules.sop: its facing becomes the opposite side).
 @native.art.draw.op.drawing.object.flip std.capability.operation scope=$native.art.draw.scope name="drawing.object.flip" act=change on="art.draw.object" order=24 eligible=true
 @native.art.draw.op.drawing.object.flip.param.ids std.capability.parameter operation=$native.art.draw.op.drawing.object.flip name="ids" kind=array required=true
+# Poses, styles and writing (worlds/art.draw/style-rules.sop; the named looks are k.styles facts): a turn to an angle
+# (rotation, degrees clockwise) or by one (turn: degrees or a k.styles turn: upside_down, rotate_right, tilt), a mirror
+# (horizontal or vertical: mirrored again it is back; none: as drawn), a lean (skew), an opacity, an effect, a fill, an
+# outline colour and width, a gradient colour; the words of a text and their typeface, weight, slant, alignment and frame.
+@native.art.draw.op.drawing.object.change.param.rotation std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="rotation" kind=number min=-360 max=360
+@native.art.draw.op.drawing.object.change.param.turn std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="turn" kind=string
+@native.art.draw.op.drawing.object.change.param.mirror std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="mirror" kind=string enum="horizontal" enum="vertical" enum="none" enumClosed=true
+@native.art.draw.op.drawing.object.change.param.skew std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="skew" kind=number min=-75 max=75
+@native.art.draw.op.drawing.object.change.param.opacity std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="opacity" kind=number min=0 max=1
+@native.art.draw.op.drawing.object.change.param.effect std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="effect" kind=string
+@native.art.draw.op.drawing.object.change.param.fill std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="fill" kind=string
+@native.art.draw.op.drawing.object.change.param.gradient std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="gradient" kind=string
+@native.art.draw.op.drawing.object.change.param.outline std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="outline" kind=string
+@native.art.draw.op.drawing.object.change.param.stroke std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="stroke" kind=number min=0 max=40
+@native.art.draw.op.drawing.object.change.param.text std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="text" kind=string
+@native.art.draw.op.drawing.object.change.param.font std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="font" kind=string
+@native.art.draw.op.drawing.object.change.param.weight std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="weight" kind=string enum="normal" enum="bold" enumClosed=true
+@native.art.draw.op.drawing.object.change.param.slant std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="slant" kind=string enum="normal" enum="italic" enumClosed=true
+@native.art.draw.op.drawing.object.change.param.align std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="align" kind=string enum="start" enum="middle" enum="end" enumClosed=true
+@native.art.draw.op.drawing.object.change.param.frame std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="frame" kind=string
+@native.art.draw.op.drawing.object.make.param.text std.capability.parameter operation=$native.art.draw.op.drawing.object.make name="text" kind=string
+@native.art.draw.op.drawing.object.make.param.font std.capability.parameter operation=$native.art.draw.op.drawing.object.make name="font" kind=string
+@native.art.draw.op.drawing.object.make.param.weight std.capability.parameter operation=$native.art.draw.op.drawing.object.make name="weight" kind=string enum="normal" enum="bold" enumClosed=true
+@native.art.draw.op.drawing.object.make.param.slant std.capability.parameter operation=$native.art.draw.op.drawing.object.make name="slant" kind=string enum="normal" enum="italic" enumClosed=true
+@native.art.draw.op.drawing.object.make.param.align std.capability.parameter operation=$native.art.draw.op.drawing.object.make name="align" kind=string enum="start" enum="middle" enum="end" enumClosed=true
+@native.art.draw.op.drawing.object.make.param.frame std.capability.parameter operation=$native.art.draw.op.drawing.object.make name="frame" kind=string
+@native.art.draw.op.drawing.object.make.param.rotation std.capability.parameter operation=$native.art.draw.op.drawing.object.make name="rotation" kind=number min=-360 max=360
+@native.art.draw.op.drawing.object.make.param.opacity std.capability.parameter operation=$native.art.draw.op.drawing.object.make name="opacity" kind=number min=0 max=1
+@native.art.draw.op.drawing.object.make.param.effect std.capability.parameter operation=$native.art.draw.op.drawing.object.make name="effect" kind=string
+@native.art.draw.op.drawing.object.make.param.fill std.capability.parameter operation=$native.art.draw.op.drawing.object.make name="fill" kind=string
+@native.art.draw.op.drawing.part.change.param.rotation std.capability.parameter operation=$native.art.draw.op.drawing.part.change name="rotation" kind=number min=-360 max=360
+@native.art.draw.op.drawing.part.change.param.turn std.capability.parameter operation=$native.art.draw.op.drawing.part.change name="turn" kind=string
+@native.art.draw.op.drawing.part.change.param.mirror std.capability.parameter operation=$native.art.draw.op.drawing.part.change name="mirror" kind=string enum="horizontal" enum="vertical" enum="none" enumClosed=true
+@native.art.draw.op.drawing.part.change.param.opacity std.capability.parameter operation=$native.art.draw.op.drawing.part.change name="opacity" kind=number min=0 max=1
+@native.art.draw.op.drawing.part.change.param.effect std.capability.parameter operation=$native.art.draw.op.drawing.part.change name="effect" kind=string
+# The whole picture shown through a filter (k.styles.filter: sepia, black_and_white, night, sunset ... none).
+@native.art.draw.op.drawing.page.change std.capability.operation scope=$native.art.draw.scope name="drawing.page.change" act=change on="art.draw.page" order=25 eligible=true
+@native.art.draw.op.drawing.page.change.param.filter std.capability.parameter operation=$native.art.draw.op.drawing.page.change name="filter" kind=string required=true
+@native.art.draw.page.effect.projection std.capability.arg name="projection" value="composite"
+@native.art.draw.page.effect.record std.capability.record entry=$native.art.draw.page.effect.projection
+@native.art.draw.page.effect std.capability.arg name="effectScope" value=$native.art.draw.page.effect.record
+@native.art.draw.op.drawing.page.change.metadata app.native.metadata operation=$native.art.draw.op.drawing.page.change field=$native.art.draw.page.effect

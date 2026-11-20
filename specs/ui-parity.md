@@ -93,6 +93,11 @@ New: a Length select (`avatar.part.change {ids, length}`) from the change comman
 | Inspector: "Add part" text and button (a part by its word: hat, t-shirt, eyes, chimney) | one object selected | new | `drawing.part.add {id, kind}` | new |
 | Inspector: "Different look" | a person selected | new | `drawing.person.vary {id}` | new |
 | Inspector: "Emotion" (k.faces expressions) and "Traits: <age>, <sex>" (observed inputs `age`, `sex`) | a person, or a thing that can show a face (observed `faceable`), selected | new | `drawing.person.expression {id, expression}` | new |
+| Inspector: "Turn (degrees)", buttons ↺ 15°, ↻ 15°, ↻ 90°, "Upside down", "Flip ⇆", "Flip ⇅" (specs/drawing-transforms-text-effects.md) | 1+ selected (a group turns as a whole) | new | `drawing.object.change {ids, rotation}` / `{ids, turn: tilt_left, tilt, rotate_right, upside_down}` / `{ids, mirror}` | new |
+| Inspector: "Lean (degrees)", "Opacity", "Effect", "Fill", "Gradient to", "Outline colour", "Outline width" (k.styles names from observed options) | 1+ selected | new | `drawing.object.change {ids, skew \| opacity \| effect \| fill \| gradient \| outline \| stroke}` | new |
+| Inspector: "Text", "Font", "Bold", "Italic", "Align", "Frame" | a text object selected | new | `drawing.object.change {ids, text \| font \| weight \| slant \| align \| frame}` | new |
+| Inspector: "Part turn (degrees)", "Part opacity", "Part effect", "Flip part ⇆" | a part selected | new | `drawing.part.change {id, index, rotation \| opacity \| effect \| mirror}` | new |
+| Toolbar: "Add text", "Filter" (k.styles filters) | always | new | `drawing.object.make {kind: 'text', text}`; `drawing.page.change {filter}` | new |
 
 ## Diagram
 

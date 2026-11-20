@@ -1,0 +1,249 @@
+# art.draw style projection (authored): how an object, a group or a part is posed and styled, and the filter the whole
+# picture is shown through (w.drawing rotation, mirror, skew, opacity, effect, fill, gradient, outline, stroke; text,
+# font, weight, slant, align, frame; w.drawing.page filter), as facts the primitive renderer applies
+# (worlds/sop-primitives.mjs): ui.draw.pose (a turn, a lean and a mirror about a centre, in page units), ui.draw.style
+# (an opacity, an effect, a fill pattern, an outline, a typeface) and ui.draw.filter (the picture filters and a tint).
+# Effects, fills, typefaces, filters and frames are looked up by name in k.styles; nothing here names a kind of thing.
+@sty.pose.type core.type of=ui.draw.pose
+@sty.style.type core.type of=ui.draw.style
+@sty.filter.type core.type of=ui.draw.filter
+@sty.memberbox.type core.type of=ui.draw.memberbox
+@sty.groupside.type core.type of=ui.draw.groupside
+@sty.textobj.type core.type of=ui.draw.textobj
+
+# An object turned, leaning or mirrored: about its centre, the turn outside the lean, the lean outside the mirror. Its
+# ground shadow (perspective-rules.sop: the draw named <code>~shadow) stays on the ground as it is.
+@sty.gs.g ui.draw.ground object=?id
+@sty.gs.src core.calc out=?src fn=concat args=?id args="~shadow"
+@sty.gs.out ui.draw.style source=?src part=?src pose=none
+@sty.pose.ground.shadow core.rule when=$sty.gs.g with=$sty.gs.src then=$sty.gs.out
+@sty.ro.o w.drawing.object code=?id x=?x y=?y rotation=?r
+@sty.ro.out ui.draw.pose slot=?id x=?x y=?y rotate=?r n=2
+@sty.pose.rotation core.rule when=$sty.ro.o then=$sty.ro.out
+@sty.sk.o w.drawing.object code=?id x=?x y=?y skew=?k
+@sty.sk.out ui.draw.pose slot=?id x=?x y=?y skew=?k n=3
+@sty.pose.skew core.rule when=$sty.sk.o then=$sty.sk.out
+@sty.mi.o w.drawing.object code=?id x=?x y=?y mirror=?m
+@sty.mi.out ui.draw.pose slot=?id x=?x y=?y mirror=?m n=4
+@sty.pose.mirror core.rule when=$sty.mi.o then=$sty.mi.out
+
+# A group turned or mirrored as a whole: every member about the middle of the box the members fill, outside the
+# member's own pose.
+@sty.gb.mo w.drawing.object code=?mc x=?x y=?y
+@sty.gb.g w.drawing.group code=?g member=$sty.gb.mo
+@sty.gb.ext ui.draw.extent object=?mc w=?w h=?h
+@sty.gb.hw core.calc out=?hw fn=div args=?w args=2
+@sty.gb.hh core.calc out=?hh fn=div args=?h args=2
+@sty.gb.x0 core.calc out=?x0 fn=sub args=?x args=?hw
+@sty.gb.y0 core.calc out=?y0 fn=sub args=?y args=?hh
+@sty.gb.x1 core.calc out=?x1 fn=add args=?x args=?hw
+@sty.gb.y1 core.calc out=?y1 fn=add args=?y args=?hh
+@sty.gb.out ui.draw.memberbox group=?g member=?mc x0=?x0 y0=?y0 x1=?x1 y1=?y1
+@sty.group.memberbox core.rule when=$sty.gb.mo when=$sty.gb.g when=$sty.gb.ext with=$sty.gb.hw with=$sty.gb.hh with=$sty.gb.x0 with=$sty.gb.y0 with=$sty.gb.x1 with=$sty.gb.y1 then=$sty.gb.out
+@sty.gs.x0 ui.draw.memberbox group=?g x0=?a
+@sty.gs.y0 ui.draw.memberbox group=?g y0=?a
+@sty.gs.x1 ui.draw.memberbox group=?g x1=?a
+@sty.gs.y1 ui.draw.memberbox group=?g y1=?a
+@sty.gs.x0.o ui.draw.groupside group=?g side=x0 v=?v
+@sty.gs.y0.o ui.draw.groupside group=?g side=y0 v=?v
+@sty.gs.x1.o ui.draw.groupside group=?g side=x1 v=?v
+@sty.gs.y1.o ui.draw.groupside group=?g side=y1 v=?v
+@sty.group.x0 core.aggregate over=$sty.gs.x0 by=?g min=?v args=?a then=$sty.gs.x0.o
+@sty.group.y0 core.aggregate over=$sty.gs.y0 by=?g min=?v args=?a then=$sty.gs.y0.o
+@sty.group.x1 core.aggregate over=$sty.gs.x1 by=?g max=?v args=?a then=$sty.gs.x1.o
+@sty.group.y1 core.aggregate over=$sty.gs.y1 by=?g max=?v args=?a then=$sty.gs.y1.o
+@sty.gp.mo w.drawing.object code=?mc
+@sty.gp.ax0 ui.draw.groupside group=?g side=x0 v=?gx0
+@sty.gp.ay0 ui.draw.groupside group=?g side=y0 v=?gy0
+@sty.gp.ax1 ui.draw.groupside group=?g side=x1 v=?gx1
+@sty.gp.ay1 ui.draw.groupside group=?g side=y1 v=?gy1
+@sty.gp.sx core.calc out=?sx fn=add args=?gx0 args=?gx1
+@sty.gp.sy core.calc out=?sy fn=add args=?gy0 args=?gy1
+@sty.gp.cx core.calc out=?cx fn=div args=?sx args=2
+@sty.gp.cy core.calc out=?cy fn=div args=?sy args=2
+@sty.gp.rg w.drawing.group code=?g member=$sty.gp.mo rotation=?r
+@sty.gp.rout ui.draw.pose slot=?mc x=?cx y=?cy rotate=?r n=1
+@sty.pose.group.rotation core.rule when=$sty.gp.mo when=$sty.gp.rg when=$sty.gp.ax0 when=$sty.gp.ay0 when=$sty.gp.ax1 when=$sty.gp.ay1 with=$sty.gp.sx with=$sty.gp.sy with=$sty.gp.cx with=$sty.gp.cy then=$sty.gp.rout
+@sty.gp.mg w.drawing.group code=?g member=$sty.gp.mo mirror=?m
+@sty.gp.mout ui.draw.pose slot=?mc x=?cx y=?cy mirror=?m n=1.5
+@sty.pose.group.mirror core.rule when=$sty.gp.mo when=$sty.gp.mg when=$sty.gp.ax0 when=$sty.gp.ay0 when=$sty.gp.ax1 when=$sty.gp.ay1 with=$sty.gp.sx with=$sty.gp.sy with=$sty.gp.cx with=$sty.gp.cy then=$sty.gp.mout
+
+# A part of an object's drawing turned or mirrored about its own centre, where it is drawn on the page (inside the
+# object's own pose); a part faded or drawn with an effect.
+@sty.pp.o w.drawing.object code=?id x=?x y=?y
+@sty.pp.g ui.draw.partgeo object=?id source=?src index=?i ex=?ex ey=?ey
+@sty.pp.ext ui.draw.extent object=?id w=?ow h=?oh
+@sty.pp.sx core.calc out=?sx fn=div args=?ow args=100
+@sty.pp.sy core.calc out=?sy fn=div args=?oh args=100
+@sty.pp.ux core.calc out=?ux fn=sub args=?ex args=50
+@sty.pp.uy core.calc out=?uy fn=sub args=?ey args=50
+@sty.pp.vx core.calc out=?vx fn=mul args=?ux args=?sx
+@sty.pp.vy core.calc out=?vy fn=mul args=?uy args=?sy
+@sty.pp.px core.calc out=?px fn=add args=?x args=?vx
+@sty.pp.py core.calc out=?py fn=add args=?y args=?vy
+@sty.pp.r w.drawing.part object=$sty.pp.o index=?i rotation=?r
+@sty.pp.rout ui.draw.pose source=?src part=?id x=?px y=?py rotate=?r n=6
+@sty.pose.part.rotation core.rule when=$sty.pp.o when=$sty.pp.g when=$sty.pp.r when=$sty.pp.ext with=$sty.pp.sx with=$sty.pp.sy with=$sty.pp.ux with=$sty.pp.uy with=$sty.pp.vx with=$sty.pp.vy with=$sty.pp.px with=$sty.pp.py then=$sty.pp.rout
+@sty.pp.m w.drawing.part object=$sty.pp.o index=?i mirror=?m
+@sty.pp.mout ui.draw.pose source=?src part=?id x=?px y=?py mirror=?m n=7
+@sty.pose.part.mirror core.rule when=$sty.pp.o when=$sty.pp.g when=$sty.pp.m when=$sty.pp.ext with=$sty.pp.sx with=$sty.pp.sy with=$sty.pp.ux with=$sty.pp.uy with=$sty.pp.vx with=$sty.pp.vy with=$sty.pp.px with=$sty.pp.py then=$sty.pp.mout
+@sty.pf.o w.drawing.object code=?id
+@sty.pf.ix ui.draw.index object=?id source=?src index=?i
+@sty.pf.op w.drawing.part object=$sty.pf.o index=?i opacity=?v
+@sty.pf.op.out ui.draw.style source=?src part=?id opacity=?v
+@sty.style.part.opacity core.rule when=$sty.pf.o when=$sty.pf.ix when=$sty.pf.op then=$sty.pf.op.out
+@sty.pf.ef w.drawing.part object=$sty.pf.o index=?i effect=?e
+@sty.pf.k k.styles.effect name=?e kind=?k radius=?r
+@sty.pf.ef.out ui.draw.style source=?src part=?id effect=?k radius=?r
+@sty.style.part.effect core.rule when=$sty.pf.o when=$sty.pf.ix when=$sty.pf.ef when=$sty.pf.k then=$sty.pf.ef.out
+
+# Styles of an object: its opacity, its effect (k.styles.effect: kind, spread, offsets, colour, strength), its fill
+# (k.styles.fill: pattern, gap, angle; a gradient to its gradient colour), its outline colour and width.
+@sty.op.o w.drawing.object code=?id opacity=?v
+@sty.op.out ui.draw.style slot=?id opacity=?v
+@sty.style.opacity core.rule when=$sty.op.o then=$sty.op.out
+@sty.ef.o w.drawing.object code=?id effect=?e
+@sty.ef.k k.styles.effect name=?e kind=?k radius=?r
+@sty.ef.out ui.draw.style slot=?id effect=?k radius=?r
+@sty.style.effect core.rule when=$sty.ef.o when=$sty.ef.k then=$sty.ef.out
+@sty.ef.dx k.styles.effect name=?e dx=?v
+@sty.ef.dx.out ui.draw.style slot=?id dx=?v
+@sty.style.effect.dx core.rule when=$sty.ef.o when=$sty.ef.dx then=$sty.ef.dx.out
+@sty.ef.dy k.styles.effect name=?e dy=?v
+@sty.ef.dy.out ui.draw.style slot=?id dy=?v
+@sty.style.effect.dy core.rule when=$sty.ef.o when=$sty.ef.dy then=$sty.ef.dy.out
+@sty.ef.c k.styles.effect name=?e colour=?v
+@sty.ef.c.out ui.draw.style slot=?id colour=?v
+@sty.style.effect.colour core.rule when=$sty.ef.o when=$sty.ef.c then=$sty.ef.c.out
+@sty.ef.s k.styles.effect name=?e strength=?v
+@sty.ef.s.out ui.draw.style slot=?id strength=?v
+@sty.style.effect.strength core.rule when=$sty.ef.o when=$sty.ef.s then=$sty.ef.s.out
+@sty.fi.o w.drawing.object code=?id fill=?f
+@sty.fi.k k.styles.fill name=?f pattern=?p
+@sty.fi.out ui.draw.style slot=?id pattern=?p
+@sty.style.fill core.rule when=$sty.fi.o when=$sty.fi.k then=$sty.fi.out
+@sty.fi.gap k.styles.fill name=?f gap=?v
+@sty.fi.gap.out ui.draw.style slot=?id gap=?v
+@sty.style.fill.gap core.rule when=$sty.fi.o when=$sty.fi.gap then=$sty.fi.gap.out
+@sty.fi.angle k.styles.fill name=?f angle=?v
+@sty.fi.angle.out ui.draw.style slot=?id angle=?v
+@sty.style.fill.angle core.rule when=$sty.fi.o when=$sty.fi.angle then=$sty.fi.angle.out
+@sty.gr.o w.drawing.object code=?id gradient=?c
+@sty.gr.rgb ui.draw.rgb colour=?c rgb=?rgb
+@sty.gr.out ui.draw.style slot=?id gradient=?rgb
+@sty.style.gradient core.rule when=$sty.gr.o when=$sty.gr.rgb then=$sty.gr.out
+@sty.ol.o w.drawing.object code=?id outline=?c
+@sty.ol.rgb ui.draw.rgb colour=?c rgb=?rgb
+@sty.ol.out ui.draw.style slot=?id outline=?rgb
+@sty.style.outline core.rule when=$sty.ol.o when=$sty.ol.rgb then=$sty.ol.out
+@sty.st.o w.drawing.object code=?id stroke=?v
+@sty.st.out ui.draw.style slot=?id stroke=?v
+@sty.style.stroke core.rule when=$sty.st.o then=$sty.st.out
+# An #rrggbb value given as a gradient or an outline colour is its own RGB (as an object's colour is).
+@sty.hex.c core.check fn=matches args=?c args="^#[0-9a-fA-F]{6}$"
+@sty.hex.out ui.draw.rgb colour=?c rgb=?c
+@sty.hex.gr w.drawing.object gradient=?c
+@sty.colour.hex.gradient core.rule when=$sty.hex.gr if=$sty.hex.c then=$sty.hex.out
+@sty.hex.ol w.drawing.object outline=?c
+@sty.colour.hex.outline core.rule when=$sty.hex.ol if=$sty.hex.c then=$sty.hex.out
+
+# Writing (an object drawn as text): its words at its centre, the height of its letters its size, set in its font
+# (k.styles.font: face and generic family), weight and slant, aligned as it says (centred by default), in its colour
+# (dark ink by default). Its box (its width and height, set when it is written: style-rules.sop) gives its letters
+# their height (the box's height over 1.3) and the width its words are stretched to.
+@sty.tx.o w.drawing.object code=?id drawing=text
+@sty.tx.out ui.draw.textobj object=?id
+@sty.text.object core.rule when=$sty.tx.o then=$sty.tx.out
+@sty.td.o w.drawing.object code=?id drawing=text text=?t x=?x y=?y z=?layer
+@sty.td.ext ui.draw.extent object=?id w=?w h=?h
+@sty.td.f core.calc out=?f fn=div args=?h args=1.3
+@sty.td.k core.calc out=?k fn=mul args=?f args=0.35
+@sty.td.y core.calc out=?ty fn=add args=?y args=?k
+@sty.td.out ui.draw.draw part=?id source=?id slot=?id order=?layer z=1 shape=text text=?t x=?x y=?ty w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left font=?f anchor=middle length=?w
+@sty.text.draw core.rule when=$sty.td.o when=$sty.td.ext with=$sty.td.f with=$sty.td.k with=$sty.td.y then=$sty.td.out
+@sty.tf.o w.drawing.object code=?id drawing=text font=?f
+@sty.tf.k k.styles.font name=?f face=?face generic=?g
+@sty.tf.out ui.draw.style slot=?id face=?face generic=?g
+@sty.style.text.font core.rule when=$sty.tf.o when=$sty.tf.k then=$sty.tf.out
+@sty.tb.o w.drawing.object code=?id drawing=text weight=?v
+@sty.tb.out ui.draw.style slot=?id weight=?v
+@sty.style.text.weight core.rule when=$sty.tb.o then=$sty.tb.out
+@sty.ti.o w.drawing.object code=?id drawing=text slant=?v
+@sty.ti.out ui.draw.style slot=?id slant=?v
+@sty.style.text.slant core.rule when=$sty.ti.o then=$sty.ti.out
+@sty.ta.o w.drawing.object code=?id drawing=text align=?v
+@sty.ta.out ui.draw.style slot=?id anchor=?v
+@sty.style.text.align core.rule when=$sty.ta.o then=$sty.ta.out
+@sty.ink.o w.drawing.object code=?id drawing=text
+@sty.ink.c w.drawing.object code=?id colour=?any
+@sty.ink.out ui.draw.colour source=?id part=?id fill="#1f2933"
+@sty.text.ink core.rule when=$sty.ink.o not=$sty.ink.c then=$sty.ink.out
+# The frame round writing (k.styles.frame): a box of its shape behind the words, a little larger than they are, in
+# its colours; a frame with a tail points down from its lower left towards who says the words.
+@sty.fr.o w.drawing.object code=?id drawing=text x=?x y=?y z=?layer frame=?f
+@sty.fr.k k.styles.frame name=?f shape=?shape fill=?fill outline=?ol
+@sty.fr.prim ui.draw.frameshape frame=?shape shape=?prim round=?kr
+@sty.fr.ext ui.draw.extent object=?id w=?w h=?h
+@sty.fr.pad core.calc out=?pw fn=mul args=?w args=1.18
+@sty.fr.padh core.calc out=?ph fn=mul args=?h args=1.5
+@sty.fr.hw core.calc out=?hw fn=div args=?pw args=2
+@sty.fr.hh core.calc out=?hh fn=div args=?ph args=2
+@sty.fr.bx core.calc out=?bx fn=sub args=?x args=?hw
+@sty.fr.by core.calc out=?by fn=sub args=?y args=?hh
+@sty.fr.src core.calc out=?src fn=concat args=?id args=".frame"
+@sty.fr.out ui.draw.draw part=?id source=?src slot=?id order=?layer z=0 shape=?prim x=?bx y=?by w=?pw h=?ph cx=0 cy=0 tx=0 ty=0 scale=1 side=left outline=?ol round=?rr
+@sty.fr.r core.calc out=?rr fn=mul args=?ph args=?kr
+@sty.fr.fill ui.draw.colour source=?src part=?id fill=?fill
+@sty.text.frame core.rule when=$sty.fr.o when=$sty.fr.k when=$sty.fr.prim when=$sty.fr.ext with=$sty.fr.pad with=$sty.fr.padh with=$sty.fr.hw with=$sty.fr.hh with=$sty.fr.bx with=$sty.fr.by with=$sty.fr.src with=$sty.fr.r then=$sty.fr.out
+@sty.text.frame.fill core.rule when=$sty.fr.o when=$sty.fr.k when=$sty.fr.prim when=$sty.fr.ext with=$sty.fr.src then=$sty.fr.fill
+@sty.ft.o w.drawing.object code=?id drawing=text x=?x y=?y z=?layer frame=?f
+@sty.ft.k k.styles.frame name=?f tail=true fill=?fill outline=?ol
+@sty.ft.ext ui.draw.extent object=?id w=?w h=?h
+@sty.ft.q core.calc out=?q fn=mul args=?w args=0.3
+@sty.ft.ax core.calc out=?ax fn=sub args=?x args=?q
+@sty.ft.d core.calc out=?d fn=mul args=?h args=0.7
+@sty.ft.ay core.calc out=?ay fn=add args=?y args=?d
+@sty.ft.tw core.calc out=?tw fn=mul args=?h args=0.9
+@sty.ft.th core.calc out=?th fn=mul args=?h args=0.9
+@sty.ft.src core.calc out=?src fn=concat args=?id args=".tail"
+@sty.ft.out ui.draw.draw part=?id source=?src slot=?id order=?layer z=0.5 shape=triangle x=?ax y=?ay w=?tw h=?th cx=0 cy=0 tx=0 ty=0 scale=1 side=left outline=?ol
+@sty.ft.fill ui.draw.colour source=?src part=?id fill=?fill
+@sty.ft.orient ui.draw.orient source=?src pointing=down
+@sty.text.frame.tail core.rule when=$sty.ft.o when=$sty.ft.k when=$sty.ft.ext with=$sty.ft.q with=$sty.ft.ax with=$sty.ft.d with=$sty.ft.ay with=$sty.ft.tw with=$sty.ft.th with=$sty.ft.src then=$sty.ft.out
+@sty.text.frame.tail.fill core.rule when=$sty.ft.o when=$sty.ft.k when=$sty.ft.ext with=$sty.ft.src then=$sty.ft.fill
+@sty.text.frame.tail.orient core.rule when=$sty.ft.o when=$sty.ft.k when=$sty.ft.ext with=$sty.ft.src then=$sty.ft.orient
+@sty.frameshape.type core.type of=ui.draw.frameshape
+@sty.frameshape.rectangle ui.draw.frameshape frame=rectangle shape=rectangle round=0
+@sty.frameshape.rounded ui.draw.frameshape frame=rounded shape=rectangle round=0.3
+@sty.frameshape.oval ui.draw.frameshape frame=oval shape=oval round=0
+
+# The whole picture through its filter (k.styles.filter): one fact per picture filter it applies, and its tint.
+@sty.pf.page w.drawing.page filter=?f
+@sty.fl.sepia k.styles.filter name=?f sepia=?v
+@sty.fl.sepia.out ui.draw.filter fn=sepia v=?v
+@sty.filter.sepia core.rule when=$sty.pf.page when=$sty.fl.sepia then=$sty.fl.sepia.out
+@sty.fl.grayscale k.styles.filter name=?f grayscale=?v
+@sty.fl.grayscale.out ui.draw.filter fn=grayscale v=?v
+@sty.filter.grayscale core.rule when=$sty.pf.page when=$sty.fl.grayscale then=$sty.fl.grayscale.out
+@sty.fl.invert k.styles.filter name=?f invert=?v
+@sty.fl.invert.out ui.draw.filter fn=invert v=?v
+@sty.filter.invert core.rule when=$sty.pf.page when=$sty.fl.invert then=$sty.fl.invert.out
+@sty.fl.brightness k.styles.filter name=?f brightness=?v
+@sty.fl.brightness.out ui.draw.filter fn=brightness v=?v
+@sty.filter.brightness core.rule when=$sty.pf.page when=$sty.fl.brightness then=$sty.fl.brightness.out
+@sty.fl.contrast k.styles.filter name=?f contrast=?v
+@sty.fl.contrast.out ui.draw.filter fn=contrast v=?v
+@sty.filter.contrast core.rule when=$sty.pf.page when=$sty.fl.contrast then=$sty.fl.contrast.out
+@sty.fl.saturate k.styles.filter name=?f saturate=?v
+@sty.fl.saturate.out ui.draw.filter fn=saturate v=?v
+@sty.filter.saturate core.rule when=$sty.pf.page when=$sty.fl.saturate then=$sty.fl.saturate.out
+@sty.fl.hue k.styles.filter name=?f hue=?v
+@sty.fl.hue.out ui.draw.filter fn=hue v=?v
+@sty.filter.hue core.rule when=$sty.pf.page when=$sty.fl.hue then=$sty.fl.hue.out
+@sty.fl.blur k.styles.filter name=?f blur=?v
+@sty.fl.blur.out ui.draw.filter fn=blur v=?v
+@sty.filter.blur core.rule when=$sty.pf.page when=$sty.fl.blur then=$sty.fl.blur.out
+@sty.fl.tint k.styles.filter name=?f tint=?c tint_amount=?a
+@sty.fl.tint.out ui.draw.filter fn=tint v=?c amount=?a
+@sty.filter.tint core.rule when=$sty.pf.page when=$sty.fl.tint then=$sty.fl.tint.out
+

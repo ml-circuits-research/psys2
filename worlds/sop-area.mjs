@@ -188,7 +188,7 @@ export function observationSupport(world, state) {
 
 function drawTypes(declared) {
   const [draw] = declared.owned('app.area.draw');
-  return { types: Object.fromEntries(['draw', 'fill', 'point', 'orient', 'layer'].map((k) => [k, read(draw, k)]).filter(([, v]) => v !== undefined)), select: read(draw, 'select'),
+  return { types: Object.fromEntries(['draw', 'fill', 'point', 'orient', 'layer', 'pose', 'style', 'filter'].map((k) => [k, read(draw, k)]).filter(([, v]) => v !== undefined)), select: read(draw, 'select'),
     frame: { w: Number(read(declared.area, 'frame.w')), h: Number(read(declared.area, 'frame.h')) } };
 }
 

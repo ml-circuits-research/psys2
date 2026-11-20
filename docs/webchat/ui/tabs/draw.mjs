@@ -15,7 +15,7 @@ const CSS = `
 .dr-add-chooser{position:absolute;max-width:calc(100% - 16px);z-index:20;width:280px;max-height:65%;overflow:auto;padding:12px;box-sizing:border-box;background:#fff;border:1px solid #bbc7d5;border-radius:7px;box-shadow:0 7px 24px #24344733;display:grid;gap:8px}.dr-add-chooser label{display:grid;gap:5px}.dr-shape-choices{display:flex;gap:5px;flex-wrap:wrap}.dr-toolbar,.dr-actions{display:flex;gap:6px;align-items:center;flex-wrap:wrap}.dr-toolbar{padding:4px 0}.dr-toolbar label{display:flex;align-items:center;gap:6px}
 .dr-workspace{display:grid;grid-template-columns:minmax(0,1fr) 264px;gap:8px;flex:1;min-height:0}.dr-board{position:relative;width:100%;height:100%;min-width:0;border:1px solid #d5dae0;background:#f7f8fa;border-radius:6px;box-sizing:border-box;overflow:hidden}.dr-paper{position:relative;width:100%;height:100%;min-height:320px;touch-action:none}.dr-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;outline:none}.dr-canvas:focus-visible{box-shadow:inset 0 0 0 2px #356ac3}.dr-inspector{overflow:auto;min-width:0;background:#fff;border:1px solid #d5dae0;border-radius:6px;padding:12px;box-sizing:border-box;display:flex;flex-direction:column;gap:12px}.dr-inspector h3{font-size:13px;margin:0 0 8px}.dr-editor{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.dr-editor label{display:grid;gap:4px;min-width:0;font-size:12px;color:#536171}.dr-editor label:has(select[multiple]),.dr-editor label:has(input[type=search]),.dr-editor label:has(input[aria-label="Label"]){grid-column:1/-1}
 .dr-root input,.dr-root select{font:13px system-ui;border:1px solid #d5dae0;background:#fff;color:#263646;border-radius:5px;padding:7px;min-width:0;max-width:100%;box-sizing:border-box}.dr-editor input,.dr-editor select{width:100%}.dr-act{font:600 12px system-ui;border:1px solid #d5dae0;border-radius:5px;background:#fff;color:#263646;min-height:32px;padding:6px 10px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:5px}.dr-act:hover{background:#f0f4fa}.dr-act[aria-pressed=true]{background:#e9f0fd;border-color:#356ac3;color:#2359a9}.dr-act:disabled{opacity:.45;cursor:default}.dr-act svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2}
-.dr-hint{position:absolute;inset:0;display:grid;place-content:center;pointer-events:none;text-align:center;padding:30px;color:#788491;font:14px system-ui}.dr-hint b{font-size:19px;font-weight:500;display:block;margin-bottom:8px}.dr-caption{margin:0;font-size:12px;color:#66717e;min-height:18px}.dr-root [hidden]{display:none!important}.dr-empty-selection{color:#788491;line-height:1.6}.dr-selection-heading{grid-column:1/-1;margin:0;font-size:13px}
+.dr-pose,.dr-textbar{grid-column:1/-1}.dr-pose .dr-act,.dr-textbar .dr-act{min-height:28px;padding:4px 8px}.dr-hint{position:absolute;inset:0;display:grid;place-content:center;pointer-events:none;text-align:center;padding:30px;color:#788491;font:14px system-ui}.dr-hint b{font-size:19px;font-weight:500;display:block;margin-bottom:8px}.dr-caption{margin:0;font-size:12px;color:#66717e;min-height:18px}.dr-root [hidden]{display:none!important}.dr-empty-selection{color:#788491;line-height:1.6}.dr-selection-heading{grid-column:1/-1;margin:0;font-size:13px}
 @media(max-width:700px){.dr-root{height:auto;min-height:0}.dr-workspace{display:flex;flex-direction:column;flex:none}.dr-board{height:360px;min-height:280px}.dr-paper{min-height:280px}.dr-inspector{overflow:visible}.dr-act{min-height:44px}.dr-root input,.dr-root select{font-size:16px}.dr-add-chooser{max-height:min(65dvh,420px)}}
 @container(max-width:640px){.dr-workspace{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(320px,55vh) auto}.dr-inspector{overflow:visible}.dr-editor{grid-template-columns:repeat(auto-fit,minmax(130px,1fr))}}
 `;
@@ -148,6 +148,38 @@ function make(holder, host) {
   });
   colourInput.addEventListener('change', () => { const ids = selectedIds(); if (ids.length) tool('drawing.object.change', { ids, color: colourInput.value }); });
   colourChoice.addEventListener('change', () => { const ids = selectedIds(); if (ids.length && colourChoice.value !== '__custom') tool('drawing.object.change', { ids, color: colourChoice.value || null }); });
+  // Poses and styles (worlds/art.draw/style-rules.sop; names from the area's options, k.styles): a turn to an angle or by
+  // one, a mirror, a lean, an opacity, an effect, a fill (a gradient's second colour), an outline; for writing its words,
+  // typeface, bold, italic, alignment and frame. A group turns and mirrors as a whole (its own id); the other styles go
+  // to the selected objects.
+  const poseIds = () => { const o = focus(); return o?.binding === 'drawing.group' ? [o.id] : selectedIds(); };
+  const styleTool = (args) => { const ids = selectedIds(); if (ids.length) tool('drawing.object.change', { ids, ...args }); };
+  const poseTool = (args) => { const ids = poseIds(); if (ids.length) tool('drawing.object.change', { ids, ...args }); };
+  const rotationInput = control('Turn (degrees)', 'number'); rotationInput.step = '1'; rotationInput.min = '-360'; rotationInput.max = '360';
+  rotationInput.addEventListener('change', () => { const v = Number(rotationInput.value); if (Number.isFinite(v)) poseTool({ rotation: ((v % 360) + 360) % 360 }); });
+  const poseBar = el('div', 'dr-actions dr-pose'); editor.append(poseBar);
+  const poseButton = (label, title, args) => { const b = el('button', 'dr-act', label); b.type = 'button'; b.title = title; b.setAttribute('aria-label', title); b.addEventListener('click', () => poseTool(args)); poseBar.append(b); return b; };
+  poseButton('↺ 15°', 'Turn a bit anticlockwise', { turn: 'tilt_left' }); poseButton('↻ 15°', 'Turn a bit clockwise', { turn: 'tilt' }); poseButton('↻ 90°', 'Quarter turn clockwise', { turn: 'rotate_right' });
+  poseButton('Upside down', 'Turn upside down', { turn: 'upside_down' }); poseButton('Flip ⇆', 'Mirror left to right', { mirror: 'horizontal' }); poseButton('Flip ⇅', 'Mirror top to bottom', { mirror: 'vertical' });
+  const skewInput = control('Lean (degrees)', 'number'); skewInput.step = '1'; skewInput.min = '-75'; skewInput.max = '75';
+  skewInput.addEventListener('change', () => { const v = Number(skewInput.value); if (Number.isFinite(v)) styleTool({ skew: Math.max(-75, Math.min(75, v)) }); });
+  const opacityInput = control('Opacity', 'range'); opacityInput.min = '0.05'; opacityInput.max = '1'; opacityInput.step = '0.05';
+  opacityInput.addEventListener('change', () => styleTool({ opacity: Number(opacityInput.value) }));
+  const effectChoice = control('Effect', 'select'); effectChoice.addEventListener('change', () => { if (effectChoice.value) styleTool({ effect: effectChoice.value }); });
+  const fillChoice = control('Fill', 'select'); fillChoice.addEventListener('change', () => { if (fillChoice.value) styleTool({ fill: fillChoice.value }); });
+  const gradientInput = control('Gradient to', 'color'); gradientInput.addEventListener('change', () => styleTool({ gradient: gradientInput.value }));
+  const outlineInput = control('Outline colour', 'color'); outlineInput.addEventListener('change', () => styleTool({ outline: outlineInput.value }));
+  const strokeInput = control('Outline width', 'number'); strokeInput.min = '0'; strokeInput.max = '40'; strokeInput.step = '0.5';
+  strokeInput.addEventListener('change', () => { const v = Number(strokeInput.value); if (Number.isFinite(v) && v >= 0) styleTool({ stroke: v }); });
+  const textInput = control('Text'); textInput.addEventListener('change', () => { const o = focus(); if (o?.binding === 'drawing.object' && textInput.value.trim()) tool('drawing.object.change', { ids: [o.id], text: textInput.value }); });
+  textInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); textInput.blur(); canvas.focus(); } });
+  const fontChoice = control('Font', 'select'); fontChoice.addEventListener('change', () => { if (fontChoice.value) styleTool({ font: fontChoice.value }); });
+  const textBar = el('div', 'dr-actions dr-textbar'); editor.append(textBar);
+  const toggleButton = (label, key, on, off) => { const b = el('button', 'dr-act', label); b.type = 'button'; b.setAttribute('aria-pressed', 'false'); b.addEventListener('click', () => styleTool({ [key]: b.getAttribute('aria-pressed') === 'true' ? off : on })); textBar.append(b); return b; };
+  const boldButton = toggleButton('Bold', 'weight', 'bold', 'normal'), italicButton = toggleButton('Italic', 'slant', 'italic', 'normal');
+  const alignChoice = control('Align', 'select'); for (const [v, t] of [['start', 'Start'], ['middle', 'Centre'], ['end', 'End']]) { const o = el('option'); o.value = v; o.textContent = t; alignChoice.append(o); }
+  alignChoice.addEventListener('change', () => styleTool({ align: alignChoice.value }));
+  const frameChoice = control('Frame', 'select'); frameChoice.addEventListener('change', () => { if (frameChoice.value) styleTool({ frame: frameChoice.value }); });
   const act = (label, icon, callback) => { const b = el('button', 'dr-act', `${ICON[icon] ?? ''}<span>${label}</span>`); b.type = 'button'; b.addEventListener('click', callback); actions.append(b); return b; };
   const removeButton = act('Delete selection', '', () => { const ids = selectedIds(); if (ids.length) tool('drawing.object.remove', { ids }); }); editor.append(removeButton);
   const undoButton = act('Undo', 'undo', () => tool('drawing.undo'));
@@ -187,7 +219,12 @@ function make(holder, host) {
   chooser.addEventListener('keydown', (e) => { if (e.key === 'Escape') { e.preventDefault(); closeChooser(); canvas.focus(); } });
   const multiButton = el('button', 'dr-act', 'Select multiple'); multiButton.type = 'button'; multiButton.setAttribute('aria-pressed', 'false');
   multiButton.addEventListener('click', () => { multiSelect = !multiSelect; multiButton.setAttribute('aria-pressed', String(multiSelect)); caption.textContent = multiSelect ? 'Tap objects to add or remove them from the selection.' : 'Tap an object to select or move it.'; });
-  toolbar.append(addButton, multiButton, actions);
+  // Writing on the page (a text object) and the filter the whole picture is shown through (k.styles.filter).
+  const addTextButton = el('button', 'dr-act', 'Add text'); addTextButton.type = 'button';
+  addTextButton.addEventListener('click', async () => { const r = await tool('drawing.object.make', { kind: 'text', text: 'Text' }); if (r?.ok !== false) setTimeout(() => { textInput.focus(); textInput.select(); }, 60); });
+  const filterLabel = el('label'), filterChoice = el('select'); filterChoice.setAttribute('aria-label', 'Picture filter'); filterLabel.append(document.createTextNode('Filter'), filterChoice);
+  filterChoice.addEventListener('change', () => { if (filterChoice.value) tool('drawing.page.change', { filter: filterChoice.value }); });
+  toolbar.append(addButton, addTextButton, multiButton, filterLabel, actions);
   const memberChoice = control('Group member', 'select'); memberChoice.addEventListener('change', () => { if (memberChoice.value) select([memberChoice.value]); });
   const partChoice = control('Object part', 'select'), partX = control('Part X', 'number'), partY = control('Part Y', 'number'), partWidth = control('Part width', 'number'), partHeight = control('Part height', 'number'), partColour = control('Part colour', 'color');
   partChoice.addEventListener('change', () => { const o = focus(); if (o) tool(partChoice.value === '' ? 'drawing.object.select' : 'drawing.part.select', partChoice.value === '' ? { id: o.id } : { id: o.id, index: Number(partChoice.value) }); });
@@ -195,7 +232,14 @@ function make(holder, host) {
   partX.addEventListener('change', movePart); partY.addEventListener('change', movePart);
   for (const [inputEl, key] of [[partWidth, 'width'], [partHeight, 'height']]) { inputEl.min = '.01'; inputEl.step = '1'; inputEl.addEventListener('change', () => { const p = currentPart(), value = Number(inputEl.value); if (p && Number.isFinite(value) && value > 0) tool('drawing.part.change', { id: p.object, index: p.index, [key]: value }); }); }
   partColour.addEventListener('change', () => { const p = currentPart(); if (p) tool('drawing.part.change', { id: p.object, index: p.index, color: partColour.value }); });
+  // A part turned, mirrored, faded or given an effect about its own centre.
+  const partRotation = control('Part turn (degrees)', 'number'); partRotation.step = '1';
+  partRotation.addEventListener('change', () => { const p = currentPart(), v = Number(partRotation.value); if (p && Number.isFinite(v)) tool('drawing.part.change', { id: p.object, index: p.index, rotation: ((v % 360) + 360) % 360 }); });
+  const partOpacity = control('Part opacity', 'range'); partOpacity.min = '0.05'; partOpacity.max = '1'; partOpacity.step = '0.05';
+  partOpacity.addEventListener('change', () => { const p = currentPart(); if (p) tool('drawing.part.change', { id: p.object, index: p.index, opacity: Number(partOpacity.value) }); });
+  const partEffect = control('Part effect', 'select'); partEffect.addEventListener('change', () => { const p = currentPart(); if (p && partEffect.value) tool('drawing.part.change', { id: p.object, index: p.index, effect: partEffect.value }); });
   const partAction = (label, operation) => { const b = el('button', 'dr-act', label); b.type = 'button'; b.addEventListener('click', () => { const p = currentPart(); if (p) tool(operation, { id: p.object, index: p.index }); }); editor.append(b); return b; };
+  const flipPart = el('button', 'dr-act', 'Flip part ⇆'); flipPart.type = 'button'; flipPart.addEventListener('click', () => { const p = currentPart(); if (p) tool('drawing.part.change', { id: p.object, index: p.index, mirror: 'horizontal' }); }); editor.append(flipPart);
   const extractPart = partAction('Extract part', 'drawing.part.extract'), deletePart = partAction('Delete part', 'drawing.part.remove');
   // People and parts (worlds/art.draw/act-rules.sop): a look part (a person's hair, hat, clothes; eyes put on the sun)
   // takes another variant of its slot; a part of the drawing takes another outline; a part is added to the object by
@@ -254,6 +298,28 @@ function make(holder, host) {
     if (part) { partX.value = part.x.toFixed(1); partY.value = part.y.toFixed(1); partWidth.value = part.width.toFixed(1); partHeight.value = part.height.toFixed(1); partColour.value = isHex(part.color) ? part.color.toLowerCase() : '#9aa5b1'; }
     idInput.value = object?.id ?? ''; if (document.activeElement !== nameInput) nameInput.value = object ? input(object.id, 'label') ?? input(object.id, 'name') ?? '' : ''; sizeInput.value = object?.size ?? '';
     const b = selectionBounds(ids); widthInput.value = b ? Number(b.w.toFixed(2)) : ''; heightInput.value = b ? Number(b.h.toFixed(2)) : '';
+    // poses and styles: shown for a selection (a group turns and mirrors as a whole); writing controls for a text object
+    const fillOptions = (select, key, placeholder, current) => { const names = [...(state.options?.[key] ?? [])].map(String).sort(); if (select.dataset.names !== names.join('|')) { select.dataset.names = names.join('|'); select.textContent = ''; select.append(option('', placeholder)); for (const n of names) select.append(option(n, n.replace(/_/g, ' '))); } select.value = current && names.includes(String(current)) ? String(current) : ''; };
+    const one = object ?? (ids.length === 1 ? byId(ids[0]) : null), isText = !!object && (object.kind === 'text' || input(object.id, 'text') !== undefined);
+    for (const inputEl of [rotationInput, poseBar]) visible(inputEl, !!ids.length && !part);
+    for (const inputEl of [skewInput, opacityInput, effectChoice, fillChoice, outlineInput, strokeInput]) visible(inputEl, !!ids.length && !part);
+    const poseOf = group ? o.id : one?.id;
+    if (document.activeElement !== rotationInput) rotationInput.value = poseOf ? Number(input(poseOf, 'rotation') ?? 0) : '';
+    if (document.activeElement !== skewInput) skewInput.value = one ? Number(input(one.id, 'skew') ?? 0) : '';
+    opacityInput.value = one ? Number(input(one.id, 'opacity') ?? 1) : 1;
+    fillOptions(effectChoice, 'effect', 'Effect…', one && input(one.id, 'effect')); fillOptions(fillChoice, 'pattern', 'Fill…', one && input(one.id, 'pattern'));
+    visible(gradientInput, !!ids.length && !part && (one ? input(one.id, 'pattern') === 'gradient' : false)); gradientInput.value = isHex(one && input(one.id, 'gradient')) ? input(one.id, 'gradient').toLowerCase() : '#ffffff';
+    outlineInput.value = isHex(one && input(one.id, 'outline')) ? input(one.id, 'outline').toLowerCase() : '#3a3040'; if (document.activeElement !== strokeInput) strokeInput.value = one && input(one.id, 'stroke') !== undefined ? Number(input(one.id, 'stroke')) : '';
+    for (const inputEl of [textInput, fontChoice, textBar, alignChoice, frameChoice]) visible(inputEl, isText && !multi);
+    if (isText) {
+      if (document.activeElement !== textInput) textInput.value = String(input(object.id, 'text') ?? '');
+      fillOptions(fontChoice, 'font', 'Font…', input(object.id, 'font')); fillOptions(frameChoice, 'frame', 'Frame…', input(object.id, 'frame'));
+      boldButton.setAttribute('aria-pressed', String(input(object.id, 'weight') === 'bold')); italicButton.setAttribute('aria-pressed', String(input(object.id, 'slant') === 'italic'));
+      alignChoice.value = String(input(object.id, 'align') ?? 'middle');
+    }
+    for (const inputEl of [partRotation, partOpacity, partEffect, flipPart]) { visible(inputEl, !!part && !multi); inputEl.disabled = !part; }
+    if (part) { if (document.activeElement !== partRotation) partRotation.value = Number(input(part.id, 'rotation') ?? 0); partOpacity.value = Number(input(part.id, 'opacity') ?? 1); fillOptions(partEffect, 'effect', 'Effect…', input(part.id, 'effect')); }
+    fillOptions(filterChoice, 'filter', 'Filter…', input('page', 'filter')); filterLabel.hidden = !(state.options?.filter ?? []).length;
     // the colour the object is painted with: its stored colour's RGB, else the colour of its largest part as drawn
     const target = object ?? (ids.length === 1 ? byId(ids[0]) : null), stored = target ? input(target.id, 'color') : null;
     const largest = target ? partsOf(target.id).map((p) => ({ c: input(p.id, 'color'), a: num(input(p.id, 'width')) * num(input(p.id, 'height')) })).filter((p) => isHex(p.c)).sort((a, b) => b.a - a.a)[0]?.c : null;
@@ -333,6 +399,7 @@ function make(holder, host) {
     const scale = Math.min(canvas.width / frame.w, canvas.height / frame.h), ox = (canvas.width - frame.w * scale) / 2, oy = (canvas.height - frame.h * scale) / 2;
     ctx.setTransform(scale, 0, 0, scale, ox, oy);
     ctx.fillStyle = PAPER; ctx.fillRect(0, 0, frame.w, frame.h);
+    renderer.beginFrame(ctx, frame);
     const order = [...new Set([...items.map((it) => it.id), ...shown.keys()])];
     for (const id of order) {
       const s = shown.get(id), own = s?.dying ? s.items : items.filter((it) => it.id === id);
@@ -348,6 +415,7 @@ function make(holder, host) {
       for (const it of own) renderer.drawItem(ctx, rc, it, scaleBox, s?.alpha ?? 1);
       ctx.restore();
     }
+    renderer.endFrame(ctx, frame);
     const part = currentPart();
     let b = selectionBounds();
     if (b && drag?.moved && drag.kind !== 'part') { const a = transformArgs(drag); b = { x0: a.x, y0: a.y, x1: a.x + a.width, y1: a.y + a.height, w: a.width, h: a.height }; }
@@ -485,7 +553,7 @@ function make(holder, host) {
       state = { objects: [], inputs: {}, boxes: {}, options: {}, ...next, runtime: next.runtime ?? { view: {} } };
       parser ??= new DOMParser();
       ({ items, frame } = readProjection(state.svg ?? '', parser));
-      if (state.frame?.w > 0 && state.frame?.h > 0) frame = state.frame;
+      if (state.frame?.w > 0 && state.frame?.h > 0) frame = { ...state.frame, ...(frame.filter ? { filter: frame.filter } : {}), ...(frame.tint ? { tint: frame.tint } : {}) };
       // The selection: the view's selected id, or the several the UI selected together (the view keeps the last).
       const vs = view().selected ?? null;
       if (vs !== lastViewSelected) sel = pendingSel?.includes(vs) ? pendingSel : vs ? [vs] : [];
@@ -508,7 +576,7 @@ function make(holder, host) {
       else {
         const off = document.createElement('canvas'); off.width = frame.w * 2; off.height = frame.h * 2;
         const octx = off.getContext('2d'), orc = rough.canvas(off); octx.setTransform(2, 0, 0, 2, 0, 0); octx.fillStyle = PAPER; octx.fillRect(0, 0, frame.w, frame.h);
-        for (const it of items) renderer.drawItem(octx, orc, it, scaleOf(it.id));
+        renderer.beginFrame(octx, frame); for (const it of items) renderer.drawItem(octx, orc, it, scaleOf(it.id)); renderer.endFrame(octx, frame);
         blob = await new Promise((res) => off.toBlob(res, 'image/png'));
       }
       const url = URL.createObjectURL(blob), a = document.createElement('a');

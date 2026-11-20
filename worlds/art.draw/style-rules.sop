@@ -1,0 +1,471 @@
+# art.draw style act rules (authored): turning, mirroring, leaning, fading and styling objects, groups and parts, writing
+# on the page, and the filter of the whole picture. Each native argument compiles to std.acts calls on the w.drawing
+# instance (style-projection.sop draws the result). Named effects, fills, typefaces, frames, filters and turns are
+# k.styles facts; a name k.styles does not have is refused.
+@stx.mirrorstep.type core.type of=ui.draw.mirrorstep
+@stx.turned.type core.type of=ui.draw.turned
+@stx.textsize.type core.type of=ui.draw.textsize
+@stx.reqchars.type core.type of=ui.draw.reqchars
+@stx.reqcount.type core.type of=ui.draw.reqcount
+
+# The objects a change lists (ids) and the groups among them.
+@stx.item app.act.item param="ids" value=?id
+@stx.thing w.drawing.object code=?id
+@stx.group w.drawing.group code=?id
+
+# Plain values: an absolute turn, a lean, an opacity, an outline colour and width, a gradient colour, the words of a
+# text and their weight, slant and alignment.
+@stx.rot.req app.act.request operation="drawing.object.change" rotation=?v
+@stx.rot.call app.act.call act=change thing=$stx.thing attr=rotation value=?v order=1
+@stx.change.rotation core.rule when=$stx.rot.req when=$stx.item when=$stx.thing then=$stx.rot.call
+@stx.rot.gcall app.act.call act=change thing=$stx.group attr=rotation value=?v order=1
+@stx.change.group.rotation core.rule when=$stx.rot.req when=$stx.item when=$stx.group then=$stx.rot.gcall
+@stx.skew.req app.act.request operation="drawing.object.change" skew=?v
+@stx.skew.call app.act.call act=change thing=$stx.thing attr=skew value=?v order=1
+@stx.change.skew core.rule when=$stx.skew.req when=$stx.item when=$stx.thing then=$stx.skew.call
+@stx.op.req app.act.request operation="drawing.object.change" opacity=?v
+@stx.op.call app.act.call act=change thing=$stx.thing attr=opacity value=?v order=1
+@stx.change.opacity core.rule when=$stx.op.req when=$stx.item when=$stx.thing then=$stx.op.call
+@stx.ol.req app.act.request operation="drawing.object.change" outline=?v
+@stx.ol.call app.act.call act=change thing=$stx.thing attr=outline value=?v order=1
+@stx.change.outline core.rule when=$stx.ol.req when=$stx.item when=$stx.thing then=$stx.ol.call
+@stx.st.req app.act.request operation="drawing.object.change" stroke=?v
+@stx.st.call app.act.call act=change thing=$stx.thing attr=stroke value=?v order=1
+@stx.change.stroke core.rule when=$stx.st.req when=$stx.item when=$stx.thing then=$stx.st.call
+@stx.gr.req app.act.request operation="drawing.object.change" gradient=?v
+@stx.gr.call app.act.call act=change thing=$stx.thing attr=gradient value=?v order=1
+@stx.change.gradient core.rule when=$stx.gr.req when=$stx.item when=$stx.thing then=$stx.gr.call
+@stx.wt.req app.act.request operation="drawing.object.change" weight=?v
+@stx.wt.call app.act.call act=change thing=$stx.thing attr=weight value=?v order=1
+@stx.change.weight core.rule when=$stx.wt.req when=$stx.item when=$stx.thing then=$stx.wt.call
+@stx.sl.req app.act.request operation="drawing.object.change" slant=?v
+@stx.sl.call app.act.call act=change thing=$stx.thing attr=slant value=?v order=1
+@stx.change.slant core.rule when=$stx.sl.req when=$stx.item when=$stx.thing then=$stx.sl.call
+@stx.al.req app.act.request operation="drawing.object.change" align=?v
+@stx.al.call app.act.call act=change thing=$stx.thing attr=align value=?v order=1
+@stx.change.align core.rule when=$stx.al.req when=$stx.item when=$stx.thing then=$stx.al.call
+
+# Named looks: an effect, a fill, a typeface and a frame k.styles has; another name is refused.
+@stx.ef.req app.act.request operation="drawing.object.change" effect=?v
+@stx.ef.k k.styles.effect name=?v
+@stx.ef.call app.act.call act=change thing=$stx.thing attr=effect value=?v order=1
+@stx.change.effect core.rule when=$stx.ef.req when=$stx.ef.k when=$stx.item when=$stx.thing then=$stx.ef.call
+@stx.ef.no app.act.refuse reason=effect-not-declared
+@stx.change.effect.unknown core.rule when=$stx.ef.req not=$stx.ef.k then=$stx.ef.no
+@stx.fi.req app.act.request operation="drawing.object.change" fill=?v
+@stx.fi.k k.styles.fill name=?v
+@stx.fi.call app.act.call act=change thing=$stx.thing attr=fill value=?v order=1
+@stx.change.fill core.rule when=$stx.fi.req when=$stx.fi.k when=$stx.item when=$stx.thing then=$stx.fi.call
+@stx.fi.no app.act.refuse reason=fill-not-declared
+@stx.change.fill.unknown core.rule when=$stx.fi.req not=$stx.fi.k then=$stx.fi.no
+@stx.fo.req app.act.request operation="drawing.object.change" font=?v
+@stx.fo.k k.styles.font name=?v
+@stx.fo.call app.act.call act=change thing=$stx.thing attr=font value=?v order=1
+@stx.change.font core.rule when=$stx.fo.req when=$stx.fo.k when=$stx.item when=$stx.thing then=$stx.fo.call
+@stx.fo.no app.act.refuse reason=font-not-declared
+@stx.change.font.unknown core.rule when=$stx.fo.req not=$stx.fo.k then=$stx.fo.no
+@stx.fr.req app.act.request operation="drawing.object.change" frame=?v
+@stx.fr.k k.styles.frame name=?v
+@stx.fr.call app.act.call act=change thing=$stx.thing attr=frame value=?v order=1
+@stx.change.frame core.rule when=$stx.fr.req when=$stx.fr.k when=$stx.item when=$stx.thing then=$stx.fr.call
+@stx.fr.no app.act.refuse reason=frame-not-declared
+@stx.change.frame.unknown core.rule when=$stx.fr.req not=$stx.fr.k then=$stx.fr.no
+
+# A relative turn (turn=): a number of degrees clockwise (negative: anticlockwise), or a named turn of k.styles that
+# turns by its degrees or to its end; the turn kept is between 0 and 360.
+@stx.tn.req app.act.request operation="drawing.object.change" turn=?v
+@stx.tn.num core.check fn=matches args=?v args="^-?[0-9]+([.][0-9]+)?$"
+@stx.tn.val core.calc out=?b fn=matches args=?v args="^-?[0-9]+([.][0-9]+)?$"
+@stx.tn.by.o ui.draw.turned by=?b
+@stx.turn.number core.rule when=$stx.tn.req if=$stx.tn.num with=$stx.tn.val then=$stx.tn.by.o
+@stx.tn.kby k.styles.turn name=?v by=?b
+@stx.tn.kby.o ui.draw.turned by=?b
+@stx.turn.named.by core.rule when=$stx.tn.req when=$stx.tn.kby then=$stx.tn.kby.o
+@stx.tn.kto k.styles.turn name=?v to=?t
+@stx.tn.kto.o ui.draw.turned to=?t
+@stx.turn.named.to core.rule when=$stx.tn.req when=$stx.tn.kto then=$stx.tn.kto.o
+@stx.tn.known k.styles.turn name=?v
+@stx.tn.no app.act.refuse reason=turn-not-declared
+@stx.tn.word core.check fn=matches args=?v args="^(?!-?[0-9]+([.][0-9]+)?$)"
+@stx.turn.unknown core.rule when=$stx.tn.req not=$stx.tn.known if=$stx.tn.word then=$stx.tn.no
+@stx.tb.t ui.draw.turned by=?b
+@stx.tb.has w.drawing.object code=?id rotation=?r
+@stx.tb.sum core.calc out=?s fn=add args=?r args=?b
+@stx.tb.m core.calc out=?m fn=mod args=?s args=360
+@stx.tb.call app.act.call act=change thing=$stx.thing attr=rotation value=?m order=1
+@stx.turn.by.turned core.rule when=$stx.tn.req when=$stx.tb.t when=$stx.item when=$stx.thing when=$stx.tb.has with=$stx.tb.sum with=$stx.tb.m then=$stx.tb.call
+@stx.tb.no w.drawing.object code=?id rotation=?any
+@stx.tb.m0 core.calc out=?m fn=mod args=?b args=360
+@stx.turn.by.upright core.rule when=$stx.tn.req when=$stx.tb.t when=$stx.item when=$stx.thing not=$stx.tb.no with=$stx.tb.m0 then=$stx.tb.call
+@stx.tt.t ui.draw.turned to=?t
+@stx.tt.call app.act.call act=change thing=$stx.thing attr=rotation value=?t order=1
+@stx.turn.to core.rule when=$stx.tn.req when=$stx.tt.t when=$stx.item when=$stx.thing then=$stx.tt.call
+# A group turns as a whole about the middle of its members' box.
+@stx.gtb.has w.drawing.group code=?id rotation=?r
+@stx.gtb.call app.act.call act=change thing=$stx.group attr=rotation value=?m order=1
+@stx.turn.group.by.turned core.rule when=$stx.tn.req when=$stx.tb.t when=$stx.item when=$stx.group when=$stx.gtb.has with=$stx.tb.sum with=$stx.tb.m then=$stx.gtb.call
+@stx.gtb.no w.drawing.group code=?id rotation=?any
+@stx.turn.group.by.upright core.rule when=$stx.tn.req when=$stx.tb.t when=$stx.item when=$stx.group not=$stx.gtb.no with=$stx.tb.m0 then=$stx.gtb.call
+@stx.gtt.call app.act.call act=change thing=$stx.group attr=rotation value=?t order=1
+@stx.turn.group.to core.rule when=$stx.tn.req when=$stx.tt.t when=$stx.item when=$stx.group then=$stx.gtt.call
+
+# A mirror (mirror=horizontal or vertical) flips the listed objects or groups that way: mirrored again, they are back
+# as they were; mirror=none puts them back as drawn.
+@stx.ms.none.h ui.draw.mirrorstep from=none by=horizontal to=horizontal
+@stx.ms.none.v ui.draw.mirrorstep from=none by=vertical to=vertical
+@stx.ms.h.h ui.draw.mirrorstep from=horizontal by=horizontal to=none
+@stx.ms.h.v ui.draw.mirrorstep from=horizontal by=vertical to=both
+@stx.ms.v.h ui.draw.mirrorstep from=vertical by=horizontal to=both
+@stx.ms.v.v ui.draw.mirrorstep from=vertical by=vertical to=none
+@stx.ms.b.h ui.draw.mirrorstep from=both by=horizontal to=vertical
+@stx.ms.b.v ui.draw.mirrorstep from=both by=vertical to=horizontal
+@stx.ms.any.n1 ui.draw.mirrorstep from=none by=none to=none
+@stx.ms.any.n2 ui.draw.mirrorstep from=horizontal by=none to=none
+@stx.ms.any.n3 ui.draw.mirrorstep from=vertical by=none to=none
+@stx.ms.any.n4 ui.draw.mirrorstep from=both by=none to=none
+@stx.mi.req app.act.request operation="drawing.object.change" mirror=?by
+@stx.mi.has w.drawing.object code=?id mirror=?from
+@stx.mi.step ui.draw.mirrorstep from=?from by=?by to=?to
+@stx.mi.call app.act.call act=change thing=$stx.thing attr=mirror value=?to order=1
+@stx.mirror.again core.rule when=$stx.mi.req when=$stx.item when=$stx.thing when=$stx.mi.has when=$stx.mi.step then=$stx.mi.call
+@stx.mi.no w.drawing.object code=?id mirror=?any
+@stx.mi.first ui.draw.mirrorstep from=none by=?by to=?to
+@stx.mirror.first core.rule when=$stx.mi.req when=$stx.item when=$stx.thing not=$stx.mi.no when=$stx.mi.first then=$stx.mi.call
+@stx.gmi.has w.drawing.group code=?id mirror=?from
+@stx.gmi.call app.act.call act=change thing=$stx.group attr=mirror value=?to order=1
+@stx.mirror.group.again core.rule when=$stx.mi.req when=$stx.item when=$stx.group when=$stx.gmi.has when=$stx.mi.step then=$stx.gmi.call
+@stx.gmi.no w.drawing.group code=?id mirror=?any
+@stx.mirror.group.first core.rule when=$stx.mi.req when=$stx.item when=$stx.group not=$stx.gmi.no when=$stx.mi.first then=$stx.gmi.call
+
+# The words of a text (text=), and its box: as wide as its characters at its letter height (0.56 of it each) and 1.3
+# letter heights tall; its letter height is its height over 1.3. New words keep the letter height and change the width.
+@stx.rc.req app.act.request text=?t
+@stx.rc.n ui.draw.textlen n=?n
+@stx.rc.p core.calc out=?p fn=concat args="^[^]{" args=?n args="}"
+@stx.rc.check core.check fn=matches args=?t args=?p
+@stx.rc.out ui.draw.reqchars n=?n
+@stx.text.request.chars core.rule when=$stx.rc.req when=$stx.rc.n with=$stx.rc.p if=$stx.rc.check then=$stx.rc.out
+@stx.rcn.c ui.draw.reqchars n=?n
+@stx.rcn.out ui.draw.reqcount n=?best
+@stx.text.request.count core.aggregate over=$stx.rcn.c max=?best args=?n then=$stx.rcn.out
+@stx.tx.req app.act.request operation="drawing.object.change" text=?v
+@stx.tx.call app.act.call act=change thing=$stx.thing attr=text value=?v order=1
+@stx.change.text core.rule when=$stx.tx.req when=$stx.item when=$stx.thing then=$stx.tx.call
+@stx.txw.o w.drawing.object code=?id drawing=text height=?h
+@stx.txw.n ui.draw.reqcount n=?n
+@stx.txw.lh core.calc out=?lh fn=div args=?h args=1.3
+@stx.txw.k core.calc out=?k fn=mul args=?lh args=0.56
+@stx.txw.w core.calc out=?w fn=mul args=?k args=?n
+@stx.txw.call app.act.call act=change thing=$stx.thing attr=width value=?w order=2
+@stx.change.text.width core.rule when=$stx.tx.req when=$stx.item when=$stx.thing when=$stx.txw.o when=$stx.txw.n with=$stx.txw.lh with=$stx.txw.k with=$stx.txw.w then=$stx.txw.call
+# A text made bigger or smaller (size=) keeps its proportions: its box scales with its size.
+@stx.ts.req app.act.request operation="drawing.object.change" size=?v
+@stx.ts.o w.drawing.object code=?id drawing=text size=?s width=?w height=?h
+@stx.ts.k core.calc out=?k fn=div args=?v args=?s
+@stx.ts.nw core.calc out=?nw fn=mul args=?w args=?k
+@stx.ts.nh core.calc out=?nh fn=mul args=?h args=?k
+@stx.ts.cw app.act.call act=change thing=$stx.thing attr=width value=?nw order=2
+@stx.ts.ch app.act.call act=change thing=$stx.thing attr=height value=?nh order=3
+@stx.change.text.size.width core.rule when=$stx.ts.req when=$stx.item when=$stx.thing when=$stx.ts.o with=$stx.ts.k with=$stx.ts.nw then=$stx.ts.cw
+@stx.change.text.size.height core.rule when=$stx.ts.req when=$stx.item when=$stx.thing when=$stx.ts.o with=$stx.ts.k with=$stx.ts.nh then=$stx.ts.ch
+
+# Writing made on the page (drawing.object.make kind=text): its words (or "Text"). Its size is its larger extent, as
+# for every object: the width of its words at a letter height of 44 unless a size is asked for; its height is 1.3
+# letter heights. Its typeface, weight, slant, alignment and frame as given.
+@stx.kind.text ui.draw.kind drawing=text
+@stx.mk.sub ui.draw.subject kind=text
+@stx.mk.cnt ui.draw.reqcount n=?n
+@stx.mk.sw core.calc out=?sw fn=mul args=24.64 args=?n
+@stx.mk.size.o ui.draw.sizing rank=1 size=?sw
+@stx.size.text core.rule when=$stx.mk.sub when=$stx.mk.cnt with=$stx.mk.sw then=$stx.mk.size.o
+@stx.mk.anyn ui.draw.reqcount n=?anyn
+@stx.mk.size.d ui.draw.sizing rank=1 size=98.56
+@stx.size.text.default core.rule when=$stx.mk.sub not=$stx.mk.anyn then=$stx.mk.size.d
+@stx.mk.req app.act.request operation="drawing.object.make" kind=text
+@stx.mk.words app.act.request operation="drawing.object.make" text=?t
+@stx.mk.t ui.draw.target size=?s
+@stx.mk.n ui.draw.reqcount n=?n
+@stx.mk.k core.calc out=?k fn=mul args=0.56 args=?n
+@stx.mk.s2 core.calc out=?s2 fn=mul args=?s args=1.3
+@stx.mk.h core.calc out=?h fn=div args=?s2 args=?k
+@stx.mk.text.arg app.act.arg call=new.object attr=text value=?t
+@stx.make.text.words core.rule when=$stx.mk.req when=$stx.mk.words then=$stx.mk.text.arg
+@stx.mk.dflt.arg app.act.arg call=new.object attr=text value="Text"
+@stx.make.text.default core.rule when=$stx.mk.req not=$stx.mk.words then=$stx.mk.dflt.arg
+@stx.mk.w.arg app.act.arg call=new.object attr=width value=?s
+@stx.mk.h.arg app.act.arg call=new.object attr=height value=?h
+@stx.mk.asked.w app.act.request operation="drawing.object.make" width=?aw
+@stx.mk.asked.h app.act.request operation="drawing.object.make" height=?ah
+@stx.make.text.width core.rule when=$stx.mk.req when=$stx.mk.t not=$stx.mk.asked.w then=$stx.mk.w.arg
+@stx.make.text.height core.rule when=$stx.mk.req when=$stx.mk.words when=$stx.mk.t when=$stx.mk.n not=$stx.mk.asked.h with=$stx.mk.k with=$stx.mk.s2 with=$stx.mk.h then=$stx.mk.h.arg
+@stx.mk.dh core.calc out=?dh fn=div args=?s2 args=2.24
+@stx.mk.dh.arg app.act.arg call=new.object attr=height value=?dh
+@stx.make.text.height.default core.rule when=$stx.mk.req not=$stx.mk.words when=$stx.mk.t not=$stx.mk.asked.h with=$stx.mk.s2 with=$stx.mk.dh then=$stx.mk.dh.arg
+@stx.mk.font.req app.act.request operation="drawing.object.make" font=?v
+@stx.mk.font.k k.styles.font name=?v
+@stx.mk.font.arg app.act.arg call=new.object attr=font value=?v
+@stx.make.font core.rule when=$stx.mk.font.req when=$stx.mk.font.k then=$stx.mk.font.arg
+@stx.make.font.unknown core.rule when=$stx.mk.font.req not=$stx.mk.font.k then=$stx.fo.no
+@stx.mk.frame.req app.act.request operation="drawing.object.make" frame=?v
+@stx.mk.frame.k k.styles.frame name=?v
+@stx.mk.frame.arg app.act.arg call=new.object attr=frame value=?v
+@stx.make.frame core.rule when=$stx.mk.frame.req when=$stx.mk.frame.k then=$stx.mk.frame.arg
+@stx.make.frame.unknown core.rule when=$stx.mk.frame.req not=$stx.mk.frame.k then=$stx.fr.no
+@stx.mk.wt.req app.act.request operation="drawing.object.make" weight=?v
+@stx.mk.wt.arg app.act.arg call=new.object attr=weight value=?v
+@stx.make.weight core.rule when=$stx.mk.wt.req then=$stx.mk.wt.arg
+@stx.mk.sl.req app.act.request operation="drawing.object.make" slant=?v
+@stx.mk.sl.arg app.act.arg call=new.object attr=slant value=?v
+@stx.make.slant core.rule when=$stx.mk.sl.req then=$stx.mk.sl.arg
+@stx.mk.al.req app.act.request operation="drawing.object.make" align=?v
+@stx.mk.al.arg app.act.arg call=new.object attr=align value=?v
+@stx.make.align core.rule when=$stx.mk.al.req then=$stx.mk.al.arg
+# Any new object may be made turned, faded or styled at once.
+@stx.mk.rot.req app.act.request operation="drawing.object.make" rotation=?v
+@stx.mk.rot.arg app.act.arg call=new.object attr=rotation value=?v
+@stx.make.rotation core.rule when=$stx.mk.rot.req then=$stx.mk.rot.arg
+@stx.mk.op.req app.act.request operation="drawing.object.make" opacity=?v
+@stx.mk.op.arg app.act.arg call=new.object attr=opacity value=?v
+@stx.make.opacity core.rule when=$stx.mk.op.req then=$stx.mk.op.arg
+@stx.mk.ef.req app.act.request operation="drawing.object.make" effect=?v
+@stx.mk.ef.k k.styles.effect name=?v
+@stx.mk.ef.arg app.act.arg call=new.object attr=effect value=?v
+@stx.make.effect core.rule when=$stx.mk.ef.req when=$stx.mk.ef.k then=$stx.mk.ef.arg
+@stx.make.effect.unknown core.rule when=$stx.mk.ef.req not=$stx.mk.ef.k then=$stx.ef.no
+@stx.mk.fi.req app.act.request operation="drawing.object.make" fill=?v
+@stx.mk.fi.k k.styles.fill name=?v
+@stx.mk.fi.arg app.act.arg call=new.object attr=fill value=?v
+@stx.make.fill core.rule when=$stx.mk.fi.req when=$stx.mk.fi.k then=$stx.mk.fi.arg
+@stx.make.fill.unknown core.rule when=$stx.mk.fi.req not=$stx.mk.fi.k then=$stx.fi.no
+
+# A part turned (rotation= or turn=), mirrored, faded or given an effect: a new edit of the part, or a change of its edit.
+@stx.p.obj w.drawing.object code=?id
+@stx.p.edit w.drawing.part object=$stx.p.obj index=?i
+@stx.p.any w.drawing.part object=$stx.p.obj index=?i
+@stx.p.look ui.draw.lookpart object=?id index=?i
+@stx.pr.req app.act.request operation="drawing.part.change" id=?id index=?i rotation=?v
+@stx.pr.new app.act.call act=make kind=w.drawing.part object=$stx.p.obj index=?i rotation=?v order=1
+@stx.pr.chg app.act.call act=change thing=$stx.p.edit attr=rotation value=?v order=1
+@stx.part.rotation.new core.rule when=$stx.pr.req when=$stx.p.obj not=$stx.p.any not=$stx.p.look then=$stx.pr.new
+@stx.part.rotation.change core.rule when=$stx.pr.req when=$stx.p.obj when=$stx.p.edit then=$stx.pr.chg
+@stx.pt.req app.act.request operation="drawing.part.change" id=?id index=?i turn=?v
+@stx.pt.num core.check fn=matches args=?v args="^-?[0-9]+([.][0-9]+)?$"
+@stx.pt.val core.calc out=?b fn=matches args=?v args="^-?[0-9]+([.][0-9]+)?$"
+@stx.pt.by.o ui.draw.turned part=?i by=?b
+@stx.part.turn.number core.rule when=$stx.pt.req if=$stx.pt.num with=$stx.pt.val then=$stx.pt.by.o
+@stx.pt.kby k.styles.turn name=?v by=?b
+@stx.pt.kby.o ui.draw.turned part=?i by=?b
+@stx.part.turn.named.by core.rule when=$stx.pt.req when=$stx.pt.kby then=$stx.pt.kby.o
+@stx.pt.kto k.styles.turn name=?v to=?t
+@stx.pt.kto.o ui.draw.turned part=?i to=?t
+@stx.part.turn.named.to core.rule when=$stx.pt.req when=$stx.pt.kto then=$stx.pt.kto.o
+@stx.pt.tb ui.draw.turned part=?i by=?b
+@stx.pt.has w.drawing.part object=$stx.p.obj index=?i rotation=?r
+@stx.pt.sum core.calc out=?s fn=add args=?r args=?b
+@stx.pt.m core.calc out=?m fn=mod args=?s args=360
+@stx.pt.m0 core.calc out=?m fn=mod args=?b args=360
+@stx.pt.chg app.act.call act=change thing=$stx.pt.has attr=rotation value=?m order=1
+@stx.part.turn.by.turned core.rule when=$stx.pt.req when=$stx.pt.tb when=$stx.p.obj when=$stx.pt.has with=$stx.pt.sum with=$stx.pt.m then=$stx.pt.chg
+@stx.pt.norot w.drawing.part object=$stx.p.obj index=?i rotation=?any
+@stx.pt.chg0 app.act.call act=change thing=$stx.p.edit attr=rotation value=?m order=1
+@stx.part.turn.by.edited core.rule when=$stx.pt.req when=$stx.pt.tb when=$stx.p.obj when=$stx.p.edit not=$stx.pt.norot with=$stx.pt.m0 then=$stx.pt.chg0
+@stx.pt.new app.act.call act=make kind=w.drawing.part object=$stx.p.obj index=?i rotation=?m order=1
+@stx.part.turn.by.new core.rule when=$stx.pt.req when=$stx.pt.tb when=$stx.p.obj not=$stx.p.any not=$stx.p.look with=$stx.pt.m0 then=$stx.pt.new
+@stx.pt.tt ui.draw.turned part=?i to=?t
+@stx.pt.tnew app.act.call act=make kind=w.drawing.part object=$stx.p.obj index=?i rotation=?t order=1
+@stx.pt.tchg app.act.call act=change thing=$stx.p.edit attr=rotation value=?t order=1
+@stx.part.turn.to.new core.rule when=$stx.pt.req when=$stx.pt.tt when=$stx.p.obj not=$stx.p.any not=$stx.p.look then=$stx.pt.tnew
+@stx.part.turn.to.change core.rule when=$stx.pt.req when=$stx.pt.tt when=$stx.p.obj when=$stx.p.edit then=$stx.pt.tchg
+@stx.pm.req app.act.request operation="drawing.part.change" id=?id index=?i mirror=?by
+@stx.pm.has w.drawing.part object=$stx.p.obj index=?i mirror=?from
+@stx.pm.step ui.draw.mirrorstep from=?from by=?by to=?to
+@stx.pm.chg app.act.call act=change thing=$stx.pm.has attr=mirror value=?to order=1
+@stx.part.mirror.again core.rule when=$stx.pm.req when=$stx.p.obj when=$stx.pm.has when=$stx.pm.step then=$stx.pm.chg
+@stx.pm.nomi w.drawing.part object=$stx.p.obj index=?i mirror=?any
+@stx.pm.first ui.draw.mirrorstep from=none by=?by to=?to
+@stx.pm.chg0 app.act.call act=change thing=$stx.p.edit attr=mirror value=?to order=1
+@stx.part.mirror.edited core.rule when=$stx.pm.req when=$stx.p.obj when=$stx.p.edit not=$stx.pm.nomi when=$stx.pm.first then=$stx.pm.chg0
+@stx.pm.new app.act.call act=make kind=w.drawing.part object=$stx.p.obj index=?i mirror=?to order=1
+@stx.part.mirror.new core.rule when=$stx.pm.req when=$stx.p.obj not=$stx.p.any not=$stx.p.look when=$stx.pm.first then=$stx.pm.new
+@stx.po.req app.act.request operation="drawing.part.change" id=?id index=?i opacity=?v
+@stx.po.new app.act.call act=make kind=w.drawing.part object=$stx.p.obj index=?i opacity=?v order=1
+@stx.po.chg app.act.call act=change thing=$stx.p.edit attr=opacity value=?v order=1
+@stx.part.opacity.new core.rule when=$stx.po.req when=$stx.p.obj not=$stx.p.any not=$stx.p.look then=$stx.po.new
+@stx.part.opacity.change core.rule when=$stx.po.req when=$stx.p.obj when=$stx.p.edit then=$stx.po.chg
+@stx.pe.req app.act.request operation="drawing.part.change" id=?id index=?i effect=?v
+@stx.pe.k k.styles.effect name=?v
+@stx.pe.new app.act.call act=make kind=w.drawing.part object=$stx.p.obj index=?i effect=?v order=1
+@stx.pe.chg app.act.call act=change thing=$stx.p.edit attr=effect value=?v order=1
+@stx.part.effect.new core.rule when=$stx.pe.req when=$stx.pe.k when=$stx.p.obj not=$stx.p.any not=$stx.p.look then=$stx.pe.new
+@stx.part.effect.change core.rule when=$stx.pe.req when=$stx.pe.k when=$stx.p.obj when=$stx.p.edit then=$stx.pe.chg
+@stx.part.effect.unknown core.rule when=$stx.pe.req not=$stx.pe.k then=$stx.ef.no
+
+# The whole picture through a filter (drawing.page.change filter=): the page's filter, the page made when it has none.
+@stx.pg.req app.act.request operation="drawing.page.change" filter=?v
+@stx.pg.k k.styles.filter name=?v
+@stx.pg.page w.drawing.page code=page
+@stx.pg.new app.act.call act=make kind=w.drawing.page code=page filter=?v order=1
+@stx.pg.chg app.act.call act=change thing=$stx.pg.page attr=filter value=?v order=1
+@stx.page.filter.new core.rule when=$stx.pg.req when=$stx.pg.k not=$stx.pg.page then=$stx.pg.new
+@stx.page.filter.change core.rule when=$stx.pg.req when=$stx.pg.k when=$stx.pg.page then=$stx.pg.chg
+@stx.pg.no app.act.refuse reason=filter-not-declared
+@stx.page.filter.unknown core.rule when=$stx.pg.req not=$stx.pg.k then=$stx.pg.no
+@stx.pg.obs app.observe.input id=page key=filter value=?v
+@stx.pg.with w.drawing.page code=page filter=?v
+@stx.observe.page.filter core.rule when=$stx.pg.with then=$stx.pg.obs
+
+# What an editor shows and offers: each object's turn, mirror, lean, opacity, effect, fill, outline and words and
+# typeface; the names of the effects, fills, typefaces, frames, filters and turns k.styles has.
+@stx.ob.rot w.drawing.object code=?id rotation=?v
+@stx.ob.rot.o app.observe.input id=?id key=rotation value=?v
+@stx.observe.rotation core.rule when=$stx.ob.rot then=$stx.ob.rot.o
+@stx.ob.mi w.drawing.object code=?id mirror=?v
+@stx.ob.mi.o app.observe.input id=?id key=mirror value=?v
+@stx.observe.mirror core.rule when=$stx.ob.mi then=$stx.ob.mi.o
+@stx.ob.sk w.drawing.object code=?id skew=?v
+@stx.ob.sk.o app.observe.input id=?id key=skew value=?v
+@stx.observe.skew core.rule when=$stx.ob.sk then=$stx.ob.sk.o
+@stx.ob.op w.drawing.object code=?id opacity=?v
+@stx.ob.op.o app.observe.input id=?id key=opacity value=?v
+@stx.observe.opacity core.rule when=$stx.ob.op then=$stx.ob.op.o
+@stx.ob.ef w.drawing.object code=?id effect=?v
+@stx.ob.ef.o app.observe.input id=?id key=effect value=?v
+@stx.observe.effect core.rule when=$stx.ob.ef then=$stx.ob.ef.o
+@stx.ob.fi w.drawing.object code=?id fill=?v
+@stx.ob.fi.o app.observe.input id=?id key=pattern value=?v
+@stx.observe.fill core.rule when=$stx.ob.fi then=$stx.ob.fi.o
+@stx.ob.ol w.drawing.object code=?id outline=?v
+@stx.ob.ol.o app.observe.input id=?id key=outline value=?v
+@stx.observe.outline core.rule when=$stx.ob.ol then=$stx.ob.ol.o
+@stx.ob.st w.drawing.object code=?id stroke=?v
+@stx.ob.st.o app.observe.input id=?id key=stroke value=?v
+@stx.observe.stroke core.rule when=$stx.ob.st then=$stx.ob.st.o
+@stx.ob.gr w.drawing.object code=?id gradient=?v
+@stx.ob.gr.o app.observe.input id=?id key=gradient value=?v
+@stx.observe.gradient core.rule when=$stx.ob.gr then=$stx.ob.gr.o
+@stx.ob.tx w.drawing.object code=?id text=?v
+@stx.ob.tx.o app.observe.input id=?id key=text value=?v
+@stx.observe.text core.rule when=$stx.ob.tx then=$stx.ob.tx.o
+@stx.ob.fo w.drawing.object code=?id font=?v
+@stx.ob.fo.o app.observe.input id=?id key=font value=?v
+@stx.observe.font core.rule when=$stx.ob.fo then=$stx.ob.fo.o
+@stx.ob.wt w.drawing.object code=?id weight=?v
+@stx.ob.wt.o app.observe.input id=?id key=weight value=?v
+@stx.observe.weight core.rule when=$stx.ob.wt then=$stx.ob.wt.o
+@stx.ob.sl w.drawing.object code=?id slant=?v
+@stx.ob.sl.o app.observe.input id=?id key=slant value=?v
+@stx.observe.slant core.rule when=$stx.ob.sl then=$stx.ob.sl.o
+@stx.ob.al w.drawing.object code=?id align=?v
+@stx.ob.al.o app.observe.input id=?id key=align value=?v
+@stx.observe.align core.rule when=$stx.ob.al then=$stx.ob.al.o
+@stx.ob.fr w.drawing.object code=?id frame=?v
+@stx.ob.fr.o app.observe.input id=?id key=frame value=?v
+@stx.observe.frame core.rule when=$stx.ob.fr then=$stx.ob.fr.o
+@stx.ob.gro w.drawing.group code=?id rotation=?v
+@stx.ob.gro.o app.observe.input id=?id key=rotation value=?v
+@stx.observe.group.rotation core.rule when=$stx.ob.gro then=$stx.ob.gro.o
+@stx.ob.gmi w.drawing.group code=?id mirror=?v
+@stx.ob.gmi.o app.observe.input id=?id key=mirror value=?v
+@stx.observe.group.mirror core.rule when=$stx.ob.gmi then=$stx.ob.gmi.o
+@stx.ob.po w.drawing.object code=?id
+@stx.ob.pp w.drawing.part object=$stx.ob.po index=?i rotation=?v
+@stx.ob.pid core.calc out=?pid fn=concat args=?id args="." args=?i
+@stx.ob.pp.o app.observe.input id=?pid key=rotation value=?v
+@stx.observe.part.rotation core.rule when=$stx.ob.po when=$stx.ob.pp with=$stx.ob.pid then=$stx.ob.pp.o
+@stx.ob.ppo w.drawing.part object=$stx.ob.po index=?i opacity=?v
+@stx.ob.ppo.o app.observe.input id=?pid key=opacity value=?v
+@stx.observe.part.opacity core.rule when=$stx.ob.po when=$stx.ob.ppo with=$stx.ob.pid then=$stx.ob.ppo.o
+@stx.ob.ppe w.drawing.part object=$stx.ob.po index=?i effect=?v
+@stx.ob.ppe.o app.observe.input id=?pid key=effect value=?v
+@stx.observe.part.effect core.rule when=$stx.ob.po when=$stx.ob.ppe with=$stx.ob.pid then=$stx.ob.ppe.o
+@stx.opt.ef k.styles.effect name=?v
+@stx.opt.ef.o app.observe.option id=effect value=?v
+@stx.option.effect core.rule when=$stx.opt.ef then=$stx.opt.ef.o
+@stx.opt.fi k.styles.fill name=?v
+@stx.opt.fi.o app.observe.option id=pattern value=?v
+@stx.option.fill core.rule when=$stx.opt.fi then=$stx.opt.fi.o
+@stx.opt.fo k.styles.font name=?v
+@stx.opt.fo.o app.observe.option id=font value=?v
+@stx.option.font core.rule when=$stx.opt.fo then=$stx.opt.fo.o
+@stx.opt.fr k.styles.frame name=?v
+@stx.opt.fr.o app.observe.option id=frame value=?v
+@stx.option.frame core.rule when=$stx.opt.fr then=$stx.opt.fr.o
+@stx.opt.fl k.styles.filter name=?v
+@stx.opt.fl.o app.observe.option id=filter value=?v
+@stx.option.filter core.rule when=$stx.opt.fl then=$stx.opt.fl.o
+@stx.opt.tn k.styles.turn name=?v
+@stx.opt.tn.o app.observe.option id=turn value=?v
+@stx.option.turn core.rule when=$stx.opt.tn then=$stx.opt.tn.o
+
+# The lengths a text is measured against (ui.draw.reqchars: its words have at least n characters), one character at a
+# time up to 60, then by tens and twenties up to 200.
+@stx.textlen.type core.type of=ui.draw.textlen
+@stx.len.1 ui.draw.textlen n=1
+@stx.len.2 ui.draw.textlen n=2
+@stx.len.3 ui.draw.textlen n=3
+@stx.len.4 ui.draw.textlen n=4
+@stx.len.5 ui.draw.textlen n=5
+@stx.len.6 ui.draw.textlen n=6
+@stx.len.7 ui.draw.textlen n=7
+@stx.len.8 ui.draw.textlen n=8
+@stx.len.9 ui.draw.textlen n=9
+@stx.len.10 ui.draw.textlen n=10
+@stx.len.11 ui.draw.textlen n=11
+@stx.len.12 ui.draw.textlen n=12
+@stx.len.13 ui.draw.textlen n=13
+@stx.len.14 ui.draw.textlen n=14
+@stx.len.15 ui.draw.textlen n=15
+@stx.len.16 ui.draw.textlen n=16
+@stx.len.17 ui.draw.textlen n=17
+@stx.len.18 ui.draw.textlen n=18
+@stx.len.19 ui.draw.textlen n=19
+@stx.len.20 ui.draw.textlen n=20
+@stx.len.21 ui.draw.textlen n=21
+@stx.len.22 ui.draw.textlen n=22
+@stx.len.23 ui.draw.textlen n=23
+@stx.len.24 ui.draw.textlen n=24
+@stx.len.25 ui.draw.textlen n=25
+@stx.len.26 ui.draw.textlen n=26
+@stx.len.27 ui.draw.textlen n=27
+@stx.len.28 ui.draw.textlen n=28
+@stx.len.29 ui.draw.textlen n=29
+@stx.len.30 ui.draw.textlen n=30
+@stx.len.31 ui.draw.textlen n=31
+@stx.len.32 ui.draw.textlen n=32
+@stx.len.33 ui.draw.textlen n=33
+@stx.len.34 ui.draw.textlen n=34
+@stx.len.35 ui.draw.textlen n=35
+@stx.len.36 ui.draw.textlen n=36
+@stx.len.37 ui.draw.textlen n=37
+@stx.len.38 ui.draw.textlen n=38
+@stx.len.39 ui.draw.textlen n=39
+@stx.len.40 ui.draw.textlen n=40
+@stx.len.41 ui.draw.textlen n=41
+@stx.len.42 ui.draw.textlen n=42
+@stx.len.43 ui.draw.textlen n=43
+@stx.len.44 ui.draw.textlen n=44
+@stx.len.45 ui.draw.textlen n=45
+@stx.len.46 ui.draw.textlen n=46
+@stx.len.47 ui.draw.textlen n=47
+@stx.len.48 ui.draw.textlen n=48
+@stx.len.49 ui.draw.textlen n=49
+@stx.len.50 ui.draw.textlen n=50
+@stx.len.51 ui.draw.textlen n=51
+@stx.len.52 ui.draw.textlen n=52
+@stx.len.53 ui.draw.textlen n=53
+@stx.len.54 ui.draw.textlen n=54
+@stx.len.55 ui.draw.textlen n=55
+@stx.len.56 ui.draw.textlen n=56
+@stx.len.57 ui.draw.textlen n=57
+@stx.len.58 ui.draw.textlen n=58
+@stx.len.59 ui.draw.textlen n=59
+@stx.len.60 ui.draw.textlen n=60
+@stx.len.70 ui.draw.textlen n=70
+@stx.len.80 ui.draw.textlen n=80
+@stx.len.90 ui.draw.textlen n=90
+@stx.len.100 ui.draw.textlen n=100
+@stx.len.120 ui.draw.textlen n=120
+@stx.len.140 ui.draw.textlen n=140
+@stx.len.160 ui.draw.textlen n=160
+@stx.len.180 ui.draw.textlen n=180
+@stx.len.200 ui.draw.textlen n=200
