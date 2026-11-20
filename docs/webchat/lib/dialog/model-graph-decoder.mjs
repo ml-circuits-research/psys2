@@ -1,6 +1,6 @@
 // Explicit neural structure -> published request graphs. No reading or execution.
-import {serializeRequestGraph,inspectRequest,prepareRequestBatch} from '../vendor/sopworld/sopworld.mjs?v=89bc36f54c';
-import {copyHostData} from '../../worlds/native-tool-host.mjs?v=f4cf384e76';
+import {serializeRequestGraph,inspectRequest,prepareRequestBatch} from '../vendor/sopworld/sopworld.mjs?v=b95dcf7c63';
+import {copyHostData} from '../../worlds/native-tool-host.mjs?v=ee2bec37f5';
 export const STRUCTURAL_PREDICTIONS_FORMAT='psys2.structural-predictions/1';
 const plain=v=>v!==null&&typeof v==='object'&&!Array.isArray(v);
 const nonempty=v=>typeof v==='string'&&v.length>0;
@@ -61,9 +61,9 @@ export function decodeModelGraphs(prediction,{budget:stepLimit=200000,maxBytes=4
      const targetNodes=new Map(),constraints=new Map();
      const add=(node)=>{tick();if(nodes.length>=maxNodes)fail('node-budget',base);nodes.push(node);return node;};
      for(const t of list(r.targets,[...base,'targets'])){
-      record(t,['id','mode','kind','name','determiner','selector'],['targets']);const tid=id(t.id,['targets','id']),attrs={request:[ref(request)],mode:[atom(t.mode,['targets',tid,'mode'])]};
+      record(t,['id','mode','kind','name','determiner','selector','reference'],['targets']);const tid=id(t.id,['targets','id']),attrs={request:[ref(request)],mode:[atom(t.mode,['targets',tid,'mode'])]};
       for(const key of ['kind','name'])if(t[key]!==undefined)attrs[key]=[anchored(t[key],['targets',tid,key])];
-      if(t.determiner!==undefined)attrs.determiner=[atom(t.determiner,['targets',tid,'determiner'])];if(t.selector!==undefined)attrs.selector=[ref(id(t.selector,['targets',tid,'selector']))];
+      if(t.determiner!==undefined)attrs.determiner=[atom(t.determiner,['targets',tid,'determiner'])];if(t.reference!==undefined)attrs.reference=[atom(t.reference,['targets',tid,'reference'])];if(t.selector!==undefined)attrs.selector=[ref(id(t.selector,['targets',tid,'selector']))];
       if(targetNodes.has(tid))fail('duplicate-target',['targets',tid]);targetNodes.set(tid,add({id:tid,type:'std.request.target',attrs}));
      }
      const attachSource=(node,value,path)=>{if(value===undefined)return;const v=range(value,path,span);node.attrs.source=[ref(source)];node.attrs['source.start']=[literal(String(v[0]))];node.attrs['source.end']=[literal(String(v[1]))];};

@@ -20,7 +20,7 @@ import { numberWords, numberValue } from '../knowledge/values.mjs?v=0102c966d3';
 import { ACT_VERBS } from '../../worlds/acts/verbs.generated.mjs?v=8fbdca66b6';
 import { personView } from './person-view.mjs?v=ceeabdb255';
 import { guard } from './turn-guard.mjs?v=34ed257fec';
-import { within, TIMED_OUT } from './knowledge-lookup.mjs?v=f5bf5c6e8f';
+import { within, TIMED_OUT } from './knowledge-lookup.mjs?v=b6069c50c4';
 
 export { personView };
 

@@ -1,9 +1,9 @@
 // One versioned eligibility/score protocol shared by C1 measurement and C2 routing.
 // The score selects the entire complete/unique cohort; it is not confidence.
-import {serializeRequestGraph,parse,str,assessSelectiveCalibration} from '../vendor/sopworld/sopworld.mjs?v=89bc36f54c';
-import {copyHostData} from '../../worlds/native-tool-host.mjs?v=f4cf384e76';
+import {serializeRequestGraph,parse,str,assessSelectiveCalibration} from '../vendor/sopworld/sopworld.mjs?v=b95dcf7c63';
+import {copyHostData} from '../../worlds/native-tool-host.mjs?v=ee2bec37f5';
 import {MODEL_SELECTION_SCORE} from './model-selection-score.mjs?v=ac3ac10191';
-import {compileReaderAdmission} from './reader-policy.mjs?v=44e4345ccb';
+import {compileReaderAdmission} from './reader-policy.mjs?v=24813d2a09';
 export const READER_SCORE_DEFINITION=MODEL_SELECTION_SCORE;
 export const READER_RUNTIME_IDENTITY_FIELDS=Object.freeze(['appBuildSha256','readerSha256','pipelineSha256','packetAdapterSha256','graphDecoderSha256','bindingsSha256','executorSha256','backendSha256','contextSerializationSha256']);
 const hash=x=>typeof x==='string'&&/^[a-f0-9]{64}$/.test(x);

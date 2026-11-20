@@ -1,6 +1,6 @@
 // Compile the declared reader projection once, independently of scene size.
-import { World, str } from '../vendor/sopworld/sopworld.mjs?v=89bc36f54c';
-import { compileObservedChoice } from './observed-choice.mjs?v=5541de0b77';
+import { World, str } from '../vendor/sopworld/sopworld.mjs?v=b95dcf7c63';
+import { compileObservedChoice } from './observed-choice.mjs?v=11aaa0e0a4';
 import SCHEMA from '../../worlds/app.project/reader-context-schema-source.mjs?v=6a8b32506d';
 import POLICY from '../../worlds/app.project/reader-context-policy-source.mjs?v=0a62df627d';
 

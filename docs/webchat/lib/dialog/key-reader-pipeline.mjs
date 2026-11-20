@@ -1,10 +1,11 @@
 // Source-only two-model proposals. No parser fallback or execution admission.
-import {readReaderSource} from './reader-source.mjs?v=0f83fb98b0';
-import {copyHostData,freezeHostData} from '../../worlds/native-tool-host.mjs?v=f4cf384e76';
-import {bridgeRawStructure,RAW_STRUCTURAL_FORMAT,BINDING_NODES} from './raw-structural-bridge.mjs?v=b53327a3cc';
-import {comparativeSteps} from './comparative-projection.mjs?v=5075a6e401';
-import {referenceProjection} from './reference-projection.mjs?v=594b9ab71a';
-import {completeBindings} from './declared-bindings.mjs?v=7ce50ca0ee';
+import {readReaderSource} from './reader-source.mjs?v=3b2ee005a0';
+import {copyHostData,freezeHostData} from '../../worlds/native-tool-host.mjs?v=ee2bec37f5';
+import {bridgeRawStructure,RAW_STRUCTURAL_FORMAT,BINDING_NODES} from './raw-structural-bridge.mjs?v=e5de801d01';
+import {comparativeSteps} from './comparative-projection.mjs?v=6c49f07130';
+import {referenceProjection} from './reference-projection.mjs?v=5f75fd080e';
+import {completeBindings} from './declared-bindings.mjs?v=f42a350db5';
+import {declaredRawReadings} from './partial-admission.mjs?v=d2e2e1a7ec';
 const hash=x=>typeof x==='string'&&/^[a-f0-9]{64}$/.test(x);
 const digest=async x=>Array.from(new Uint8Array(await globalThis.crypto.subtle.digest('SHA-256',new TextEncoder().encode(x))),b=>b.toString(16).padStart(2,'0')).join('');
 const same=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
@@ -71,6 +72,9 @@ export async function createKeyReaderPipeline({cutter,reader,getContext,cutterMo
    raw={format:RAW_STRUCTURAL_FORMAT,source:{text,unit:'unicode-scalar'},area:context.area,model:{kind:'structural-graph',sha256:pipelineSha256,decoderVersion:1},requestCount:cut.spans.length,requests,ranges,coverage:{complete:failures.length===0,truncated:false},unresolved:copy(failures)};
    // Both priors (the previous message, the observed objects) leave a re-reading hypothesis without them, also on a first turn.
    if(!recordedContext&&cut.spans.length===1&&(context.context?.previous!=null||context.context?.existing?.length>0))independentInput={sourceSop,cut,context,profiles:new Set()};
+   // The declared raw readings (partial-admission.mjs: a container's property, a population joined by lines) hold for a
+   // complete reading too.
+   raw=declaredRawReadings(raw,live);
    const bridge=bridgeRawStructure(raw,{bindings:live,bindingSha256:bindingsSha256,comparatives:comparativeSteps(),references:referenceProjection(),budget,decoderBudget,maxBytes});
    failures.push(...bridge.diagnostics.map(issue=>({reason:issue.reason,path:issue.path})));const decoded=bridge.decoded;failures.push(...(decoded?.issues??[]));
    return {candidates:failures.length?[]:(decoded?.candidates??[]),coverage:{complete:failures.length===0&&decoded?.coverage?.complete===true,graphProposal:decoded?.coverage?.graphProposal===true,executable:false},failures,raw,provenance:copy(provenance),graphConfidence:null,sourceCut,steps,...(observation?{sourceObservation:copy(observation)}:{})};

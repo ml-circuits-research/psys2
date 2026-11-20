@@ -1,16 +1,17 @@
-import { readSceneDefaults } from './scene-placement-defaults.mjs?v=93c18c1cf7';
-import { solveDefaultPlacement, solveGroupPlacement } from './default-placement.mjs?v=f00220a00e';
+import { readSceneDefaults } from './scene-placement-defaults.mjs?v=cb0a7e6152';
+import { solveDefaultPlacement, solveGroupPlacement } from './default-placement.mjs?v=14caaa980c';
 import { en } from '../lang/en.mjs?v=0d85b0a1f8';
-import { quote } from '../vendor/sopworld/sopworld.mjs?v=89bc36f54c';
+import { quote } from '../vendor/sopworld/sopworld.mjs?v=b95dcf7c63';
 // SPDX-License-Identifier: AGPL-3.0-only
-import { compileNativeCapability } from './capability-plan-adapter.mjs?v=d9a1ad2be6';
-import { readDegreeBases } from './degree-bases.mjs?v=9542d910b9';
-import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=2203f6e9a4';
+import { compileNativeCapability } from './capability-plan-adapter.mjs?v=bd4098c011';
+import { linkPopulationCandidates } from './link-population.mjs?v=6ce884ef39';
+import { readDegreeBases } from './degree-bases.mjs?v=4485535b81';
+import { createAreaHost, NATIVE_AREAS } from './app-reader-context.mjs?v=37b76d21b1';
 import { instanceIdFor } from './instance-identity.mjs?v=024ef1ca83';
-import { prepareNativeControlHost } from './native-control-preparation.mjs?v=d6a6f1d1e9';
-import { invokeObservedNativeTool } from './native-tool-activity.mjs?v=6dc953485d';
-import { retainPropertyEffect } from './property-effect-evidence.mjs?v=6ebc82a99c';
-import { describeNativeControl, verifyNativeControlEffect } from './native-control-intent.mjs?v=408c51044a';
+import { prepareNativeControlHost } from './native-control-preparation.mjs?v=3157608274';
+import { invokeObservedNativeTool } from './native-tool-activity.mjs?v=7e5446cded';
+import { retainPropertyEffect } from './property-effect-evidence.mjs?v=2e55448ffa';
+import { describeNativeControl, verifyNativeControlEffect } from './native-control-intent.mjs?v=deca7f43ef';
 
 function reply(text, supported, trace = {}) {
   return { text, parts: [{ text, translate: false }], statuses: [supported ? 'supported' : 'unsupported'],
@@ -53,6 +54,28 @@ export async function executeNativeCapability(session, candidate, options = {}) 
   const compiled = await compileNativePlan(session, candidate, options);
   if (!compiled) return null;
   const { area, nativeState, host, before, plan } = compiled;
+  // One end of a line naming several objects (app.execution.linkPattern): one line per pair of the declared pattern,
+  // made together as one undoable group, and said as such.
+  if (plan.status !== 'compiled' || plan.skipped?.length) {
+    const expanded = linkPopulationCandidates(candidate, before.objects);
+    if (expanded) {
+      const members = [];
+      for (const member of expanded.candidates) {
+        const one = await compileNativePlan(session, member, options);
+        if (!one || one.plan.status !== 'compiled' || one.plan.skipped?.length) { members.length = 0; break; }
+        members.push({ candidate: member, plan: one.plan });
+      }
+      if (members.length) {
+        const result = await executeNativeGroup(session, members, { view, invocation });
+        if (result?.statuses?.[0] === 'supported') {
+          const note = `I joined ${expanded.members.join(', ')} with ${members.length} line${members.length > 1 ? 's' : ''} (${expanded.pattern === 'chain' ? 'a chain in reading order' : 'a star from the named one'}).`;
+          result.text = result.text + ' ' + note; result.parts = [{ text: result.text, translate: false }];
+          result.trace = { ...result.trace, linkPopulation: { pattern: expanded.pattern, declaration: expanded.declaration, members: expanded.members } };
+        }
+        return result;
+      }
+    }
+  }
   if (plan.status === 'not-applicable') return null;
   if (plan.status !== 'compiled') return refusal(plan, candidate);
   // A count the family declares repeatable: that many objects, placed together in one problem.
@@ -143,7 +166,10 @@ async function runNativePlan(session, candidate, { area, nativeState, host, befo
   session.newEngineFocus = { ...session.newEngineFocus, [view]: nextFocus ?? null };
   const kind = object?.kind ?? plan.kind;
   const notes = [...plan.notes];
-  if (plan.targets.length > 1) notes.unshift(plan.act === 'remove'
+  // A population target (reference=population) seeds every match into the target list: all of them were changed.
+  const listed = Object.values(plan.args ?? {}).find((value) => Array.isArray(value) && value.length > 1 && value.every((id) => plan.targets.includes(id)));
+  if (listed) notes.unshift('I applied it to all ' + listed.length + ' matching objects (' + listed.join(', ') + ').');
+  else if (plan.targets.length > 1) notes.unshift(plan.act === 'remove'
     ? 'More than one matched. I used ' + kind + ' ' + plan.id + '. You can undo this.'
     : 'I used the most recent matching ' + plan.kind + '.');
   if (plan.skipped.length) notes.push('I could not apply ' + plan.skipped.join(', ') + '.');

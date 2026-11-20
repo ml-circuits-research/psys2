@@ -1,5 +1,5 @@
 // Encode grounded evidence and detach the standard graph derived by the SOP rules.
-import { World, inspectRequest, quote, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=89bc36f54c';
+import { World, inspectRequest, quote, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=b95dcf7c63';
 import SCHEMA from '../../worlds/app.project/grounded-projection-schema-source.mjs?v=b6d275f29d';
 import POLICY from '../../worlds/app.project/grounded-projection-source.mjs?v=a8931ac5e0';
 

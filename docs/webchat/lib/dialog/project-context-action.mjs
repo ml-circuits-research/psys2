@@ -1,19 +1,30 @@
-import { historyHeads } from './history-journal.mjs?v=30b388914e';
-import {nativeKindCandidates} from './native-binding-candidates.mjs?v=45e9aa397b';
+import { historyHeads } from './history-journal.mjs?v=625ab5126c';
+import {nativeKindCandidates} from './native-binding-candidates.mjs?v=07470ca611';
 // Bind model-declared context references to actual native objects; never inspect source words.
-import {quote,str} from '../vendor/sopworld/sopworld.mjs?v=89bc36f54c';
-import {NATIVE_AREAS} from './app-reader-context.mjs?v=2203f6e9a4';
-import {executionPolicyWorld} from './execution-policy.mjs?v=b54a652c72';
-import {readReferenceTurn,resolveObservedReference} from './reference-policy.mjs?v=b4fe6b039e';
-import {observeGroundedProjection,projectGroundedRequest} from './grounded-projection.mjs?v=570ba068f9';
-import {flatRequestProjection} from './request-projection.mjs?v=b9b7b8beeb';
-import {bridgeRawStructure} from './raw-structural-bridge.mjs?v=b53327a3cc';
-import {comparativeSteps} from './comparative-projection.mjs?v=5075a6e401';
-import {referenceProjection} from './reference-projection.mjs?v=594b9ab71a';
+import {quote,str} from '../vendor/sopworld/sopworld.mjs?v=b95dcf7c63';
+import {NATIVE_AREAS} from './app-reader-context.mjs?v=37b76d21b1';
+import {executionPolicyWorld} from './execution-policy.mjs?v=48c965e897';
+import {readReferenceTurn,resolveObservedReference} from './reference-policy.mjs?v=5ce85437a2';
+import {observeGroundedProjection,projectGroundedRequest} from './grounded-projection.mjs?v=86c8217b5b';
+import {flatRequestProjection} from './request-projection.mjs?v=0979cdfd23';
+import {bridgeRawStructure} from './raw-structural-bridge.mjs?v=e5de801d01';
+import {comparativeSteps} from './comparative-projection.mjs?v=6c49f07130';
+import {referenceProjection} from './reference-projection.mjs?v=5f75fd080e';
+function containerOwned(r,bindings,area){
+ const keys=(r.constraints??[]).map(c=>c?.key);
+ if(!keys.length||keys.some(k=>typeof k!=='string'))return false;
+ const types=new Set(keys.map(k=>k.split('.')[0]));
+ if(types.size!==1)return false;
+ const [container]=types;
+ return (bindings.containment??[]).some(c=>c.area===area&&c.containerType===container&&(c.type===r.target?.type||container===r.target?.type));
+}
 export async function projectContextAction(proposal,session,{bindings,registry,view}={}) {
  const raw=proposal?.raw,r=raw?.requests?.[0],area=NATIVE_AREAS[view],readerArea=bindings?.readerAreaByView?.[view]??area?.area;
  if(!area||!bindings||!registry||proposal.coverage?.complete||raw?.requestCount!==1||raw.coverage?.truncated||!r?.target||r.target.kind||r.target.name)return null;
  const route=readReferenceTurn(r);if(!route)return null;
+ // Properties of a container said of a reference ("make it pastel") are read as the container's members by the partial
+ // reading (partial-admission.mjs containerProperty), not as one observed object.
+ if(containerOwned(r,bindings,readerArea))return null;
  const native=session.isession.state[area.world];if(!native)return null;
  const host=await area.create({state:native,instanceId:'context-'+globalThis.crypto.randomUUID()});
  const mappings=nativeKindCandidates(bindings).filter(mapping=>mapping.area===readerArea&&mapping.type===r.target.type);

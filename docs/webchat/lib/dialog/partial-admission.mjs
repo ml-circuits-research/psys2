@@ -5,11 +5,13 @@
 // defaults, admitted act classes, reply wording and the run-time fallback ladder (interpretation-policy.sop), the
 // admission decision (reader-admission-policy.sop) and every binding (the deployed binding table). Nothing here names a
 // word, a sentence, a tool or a world.
-import {bridgeRawStructure,pruneLabel} from './raw-structural-bridge.mjs?v=b53327a3cc';
-import {decodeModelGraphs} from './model-graph-decoder.mjs?v=4bd37879a0';
-import {comparativeSteps} from './comparative-projection.mjs?v=5075a6e401';
-import {referenceProjection} from './reference-projection.mjs?v=594b9ab71a';
-import {interpretationPolicy} from './interpretation-policy.mjs?v=85c9c86a48';
+import {bridgeRawStructure,pruneLabel} from './raw-structural-bridge.mjs?v=e5de801d01';
+import {decodeModelGraphs} from './model-graph-decoder.mjs?v=b5d3954020';
+import {comparativeSteps} from './comparative-projection.mjs?v=6c49f07130';
+import {referenceProjection} from './reference-projection.mjs?v=5f75fd080e';
+import {interpretationPolicy} from './interpretation-policy.mjs?v=79e47ac3e4';
+import {executionPolicyWorld} from './execution-policy.mjs?v=48c965e897';
+import {str} from '../vendor/sopworld/sopworld.mjs?v=b95dcf7c63';
 
 const scalarsOf=text=>Array.from(text);
 // Adjacent mentions of one target-kind head that only whitespace or a hyphen separates and that together spell a
@@ -41,11 +43,72 @@ function joinKindMentions(raw,failures,bindings,cuts){
 }
 
 /** The partial reading of one proposal; {refused} with the remaining diagnostics when no request keeps its action and theme. */
+// A joining act read with the joined population as its theme ("connect all the circles", "connect C to all circles":
+// a node target of a plural kind or a population) is the joining line made between them: the act's declared form
+// (app.execution.actForm of=<line kind>) names the line's family, the line pattern (app.execution.linkPattern) its two
+// ends; the population phrase becomes the first unsaid end (link-population.mjs expands it into the pattern's lines).
+function populationTheme(raw,bindings){
+ const pol=executionPolicyWorld(),one=(r,k)=>r.attrs[k]?.length?str(r.attrs[k][0]):undefined;
+ const patterns=pol.ofType('app.execution.linkPattern');if(!patterns.length)return raw;
+ let changed=null;
+ for(const [index,request] of raw.requests.entries()){
+  const target=request?.target;
+  if(!target||target.mode==='bound'||typeof target.kind_span!=='string'||!(target.fill==='all'||target.quantifier==='all'||target.kind_span!==target.kind))continue;
+  const form=pol.ofType('app.execution.actForm').find(r=>one(r,'act')===request.act&&one(r,'as')==='make'&&r.attrs.of);if(!form)continue;
+  const lineKind=one(form,'of'),line=(bindings.families??[]).find(f=>f.area===raw.area&&f.canonical===lineKind);
+  if(!line||line.type===target.type)continue;
+  const keyOf=concept=>(bindings.properties??[]).find(p=>p.area===raw.area&&p.canonical===concept)?.key;
+  for(const pattern of patterns){
+   const ends=[keyOf(one(pattern,'from')),keyOf(one(pattern,'to'))];if(ends.some(k=>!k))continue;
+   const said=(request.constraints??[]).map(c=>c?.key);
+   if(said.some(k=>k&&!ends.includes(k)))continue;
+   const free=ends.find(k=>!said.includes(k));if(!free)continue;
+   const out=changed??=structuredClone(raw),r=out.requests[index],ci=r.constraints?.length??0;
+   r.constraints=[...(r.constraints??[]),{key:free,value:target.kind_span,value_span:target.kind_span,operator:'eq',phase:'result',polarity:'positive',character:'requirement'}];
+   r.target={type:line.type,mode:'new',determiner:'indefinite'};
+   const span=(out.ranges??[]).find(x=>JSON.stringify(x.path)===JSON.stringify(['requests',String(index),'target','kind_span']));
+   out.ranges=(out.ranges??[]).filter(x=>!(x.path[0]==='requests'&&x.path[1]===String(index)&&x.path[2]==='target'));
+   if(span)for(const field of ['value','value_span'])out.ranges.push({path:['requests',String(index),'constraints',String(ci),field],range:[...span.range]});
+   break;
+  }
+ }
+ return changed??raw;
+}
+// A property of a container ("make it pastel": diagram.theme; "colour each level differently": diagram.by) that its
+// binding applies through an operation on the container's members (the property's native source type is the member
+// family's) is said of the whole container: the target is every member (a population of the member family), whatever
+// reference the reader gave ("it", "the diagram", a node). The containment is the binding table's declared slot.
+function containerProperty(raw,bindings){
+ let changed=null;
+ for(const [index,request] of raw.requests.entries()){
+  const target=request?.target,keys=(request?.constraints??[]).map(c=>c?.key);
+  if(!target||target.mode==='new'||target.mode==='bound'||target.name_span||!keys.length||keys.some(k=>typeof k!=='string'))continue;
+  const types=new Set(keys.map(k=>k.split('.')[0]));if(types.size!==1)continue;
+  const [container]=types;
+  const hosts=new Set(keys.map(k=>(bindings.properties??[]).find(p=>p.area===raw.area&&p.key===k)?.hostBinding?.sourceType));
+  if(hosts.size!==1||hosts.has(undefined))continue;
+  const [sourceType]=hosts;
+  const member=(bindings.families??[]).find(f=>f.area===raw.area&&f.nativeFamilyBinding?.sourceType===sourceType&&
+   (bindings.containment??[]).some(c=>c.area===raw.area&&c.type===f.type&&c.containerType===container));
+  if(!member||member.type===container)continue;
+  if(target.type===member.type&&target.fill!=='context'&&!target.kind_span===false)continue;   // a said member kind keeps its reading
+  const out=changed??=structuredClone(raw);
+  out.requests[index].target={type:member.type,mode:'existing',determiner:'definite',fill:'all'};
+  out.ranges=(out.ranges??[]).filter(x=>!(x.path[0]==='requests'&&x.path[1]===String(index)&&x.path[2]==='target'));
+ }
+ return changed??raw;
+}
+/** The declared raw readings (a population joined by lines, a container's property) applied to a raw reading. */
+export function declaredRawReadings(raw,bindings){
+ if(!raw||!bindings||!Array.isArray(raw.requests))return raw;
+ return containerProperty(populationTheme(raw,bindings),bindings);
+}
 export function partialReading(proposal,{bindings,bindingSha256}){
  const raw=proposal?.raw;
  if(!raw||!bindings||!bindingSha256||!Array.isArray(raw.requests)||!raw.requests.length)return null;
  const policy=interpretationPolicy().partial;
- const {raw:repaired,skipped}=joinKindMentions(raw,proposal.failures,bindings,proposal.sourceCut?.spans);
+ const {raw:joined,skipped}=joinKindMentions(raw,proposal.failures,bindings,proposal.sourceCut?.spans);
+ const repaired=declaredRawReadings(joined,bindings);
  const bridge=bridgeRawStructure(repaired,{bindings,bindingSha256,comparatives:comparativeSteps(),references:referenceProjection(),partial:{defaults:policy.defaults}});
  const candidates=bridge.decoded?.candidates??[];
  if(bridge.diagnostics.length||!candidates.length||bridge.decoded?.issues?.length)return {refused:[...bridge.diagnostics,...(bridge.decoded?.issues??[])].map(d=>d.reason+(d.path?.length?':'+d.path.join('.'):''))};

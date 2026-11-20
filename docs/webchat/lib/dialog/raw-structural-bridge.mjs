@@ -1,7 +1,7 @@
 // Predicted raw structure -> declared canonical structure. No reader or gold input.
-import {copyHostData,snapshotHostData} from '../../worlds/native-tool-host.mjs?v=f4cf384e76';
+import {copyHostData,snapshotHostData} from '../../worlds/native-tool-host.mjs?v=ee2bec37f5';
 import {positiveCardinalProof,spelledNumberProof} from './key-reader-value-proof.mjs?v=2c6e07ddb9';
-import {decodeModelGraphs} from './model-graph-decoder.mjs?v=4bd37879a0';
+import {decodeModelGraphs} from './model-graph-decoder.mjs?v=b5d3954020';
 export const RAW_STRUCTURAL_FORMAT='psys2.raw-structural-predictions/1';
 // The node budget of a binding table (every kind of the pinned catalog's drawable providers, with their provenance).
 export const BINDING_NODES=250000;
@@ -104,6 +104,9 @@ export function bridgeRawStructure(prediction,{bindings,bindingSha256,comparativ
    if(has(target,'determiner'))t.determiner=target.determiner;
    if(contextual)t.determiner??='definite';
    else if(['context','previous_reply','journal_step'].includes(target.fill))unresolved('context-reference-not-bound',['targets',tid]);
+   // A population reference ("all the boxes", "every node"): every matching member of an existing target (std.request
+   // target reference=population, sopworld 0.241.0); a quantifier over it without a bound variable says the same.
+   else if((target.fill==='all'||target.quantifier==='all'&&target.mode==='existing')&&target.mode==='existing')t.reference='population';
    else if(target.fill==='all'&&target.mode!=='bound')unresolved('unprojected-population-reference',['targets',tid]);
    else if(target.fill!==undefined&&!['written','description','all'].includes(target.fill))unresolved('unknown-target-fill',['targets',tid]);
    const phase={selector:[],result:[]},anchorOf=new Map();let conditions=original.constraints??[];if(!Array.isArray(conditions)||conditions.length>256)fail('constraint-budget',basePath);
@@ -253,7 +256,7 @@ export function bridgeRawStructure(prediction,{bindings,bindingSha256,comparativ
     const members=phase.result.map(([id])=>id);let body=members.length===1?members[0]:null;
     if(!body&&and){body=`g${index}_body`; (label.groups??=[]).push({id:body,operator:'and',members});}
     if(body){const id=`collection${index}`,collection={id,mode:'existing'};for(const f of ['kind','name','determiner'])if(has(t,f)){collection[f]=t[f];delete t[f];}for(const e of evidence)if(e.path[0]==='targets'&&e.path[1]===tid)e.path[1]=id;if(!has(collection,'kind'))unresolved('unresolved-canonical-kind-binding',['targets',id,'kind']);label.targets.push(collection);const qid=`q${index}`;label.quants=[{id:qid,kind:quant,target:id,bind:tid,body}];label.root=qid;}else unresolved('quantifier-body-closure-not-projected',['quants']);
-   }else if(t.mode==='bound'||quant!==undefined)unresolved('quantifier-binder-not-projected',['targets',tid]);
+   }else if(t.mode==='bound'||quant!==undefined&&t.reference!=='population')unresolved('quantifier-binder-not-projected',['targets',tid]);
    if(partial&&diagnostics.length>start){
     const own=diagnostics.splice(start);
     diagnostics.push(...dropUnbound(label,own,{index,original,conditions,tid,span,mentionOf:literal=>typeof literal==='string'&&literal?literal:null,disclosed}));
