@@ -14,7 +14,7 @@ export function outcomeOf(reply) {
   if (!handled.length && !supported.length) return 'not-understood';
   if (!supported.length) return /\?\s*$/.test(text.trim()) ? 'question-back' : 'refused';
   if (supported.every((a) => /\balready\b/i.test(String(a.text ?? '')))) return 'already';
-  const changed = Object.keys(reply?.state ?? {}).some((k) => k !== 'session.things' && k !== 'ui.help') || (reply?.effects ?? []).length > 0;
+  const changed = Object.keys(reply?.state ?? {}).length > 0 || (reply?.effects ?? []).length > 0;
   if (!changed && segs.some((s) => s.isQuestion)) return 'answer';
   return 'done';
 }
@@ -67,15 +67,14 @@ export function taughtText(wire) {
   return [name, ...rest].filter(Boolean).join(': ') || m[1];
 }
 
-const SHARED = { 'session.things': 'things of the session', 'ui.shell': 'the app (tabs, voice)', 'ui.help': 'help', 'kids.common': 'small talk' };
 const LAST = (a, k = 6) => a.slice(-k).reverse();
 
 /**
  * The summary. `turns`: turn records, oldest first; `states`: the world states (talk topics, session.things learned); `labelOf(id)`: a readable name of a world (optional).
  * Returns { sections: [{ id, title, lines: [{ text, n?, world? }] }], worlds: [ids], taught: [texts] }; every section's lines are newest first.
  */
-export function summarize({ turns = [], states = {}, labelOf = (id) => SHARED[id] ?? id } = {}) {
-  const label = (id) => { const l = labelOf(id) || SHARED[id]; return l && l !== id ? `${l} (${id})` : id; };
+export function summarize({ turns = [], states = {}, labelOf = (id) => id } = {}) {
+  const label = (id) => { const l = labelOf(id); return l && l !== id ? `${l} (${id})` : id; };
   // worlds used: one line each, the one used last first; what it was used for = the user's last words to it
   const byWorld = new Map();
   for (const t of turns) for (const w of t.worlds) { const e = byWorld.get(w) ?? { count: 0, last: null }; e.count++; e.last = t; byWorld.set(w, e); }
