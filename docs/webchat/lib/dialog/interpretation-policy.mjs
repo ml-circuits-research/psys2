@@ -5,7 +5,7 @@
 // holds no order, bound or threshold of its own.
 import {World,str} from '../vendor/sopworld/sopworld.mjs?v=b95dcf7c63';
 import SCHEMA from '../../worlds/app.project/interpretation-schema-source.mjs?v=b701881cd4';
-import POLICY from '../../worlds/app.project/interpretation-policy-source.mjs?v=600b9a3cef';
+import POLICY from '../../worlds/app.project/interpretation-policy-source.mjs?v=0ea43c9d3e';
 
 const MODULE='app.interpret';
 let loaded=null,policy=null;

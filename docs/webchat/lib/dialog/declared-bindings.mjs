@@ -17,9 +17,9 @@
 //  6. a kind named by the modifier of its compound lemmas ("a pie" for "pie chart", "pie graph": the compound's last
 //     word a lemma of its family's own class) is that kind, when every such compound names the same kind.
 import {parse,str} from '../vendor/sopworld/sopworld.mjs?v=b95dcf7c63';
-import {interpretationPolicy} from './interpretation-policy.mjs?v=79e47ac3e4';
-import {executionPolicyWorld} from './execution-policy.mjs?v=1e15657c3e';
-import DRAW from '../../worlds/art.draw/native-interface-source.mjs?v=e3ecef4ac1';
+import {interpretationPolicy} from './interpretation-policy.mjs?v=f4e999ddda';
+import {executionPolicyWorld} from './execution-policy.mjs?v=52a52e9ec3';
+import DRAW from '../../worlds/art.draw/native-interface-source.mjs?v=afabeecb4f';
 import DIAGRAM from '../../worlds/diagram.sketch/native-interface-source.mjs?v=faacd6758b';
 import CHARTS from '../../worlds/data.charts/native-interface-source.mjs?v=6c0dc1d746';
 import DOCUMENT from '../../worlds/docs.editor/native-interface-source.mjs?v=e247358200';

@@ -9,9 +9,9 @@
  *   (no veto hook: an action on a referent that must exist in the world - delete, move, color, connect, select - is refused in the world's plain words whatever the catalog knows; a hit never replaces that refusal with a gloss)
  * The catalog is `engine.knowledge` (`createEngine({ options: { knowledge } })`); without it every function here does nothing and the dialog is as it was.
  */
-import { leftOut, requestOf } from './world-aware.mjs?v=8ffea3aed3';
+import { leftOut, requestOf } from './world-aware.mjs?v=5b5f51c6f4';
 import { planHostOf } from '../plan/host.mjs?v=9787a8167b';
-import { diagramHostOf } from '../knowledge/diagram-world.mjs?v=3b49368f63';
+import { diagramHostOf } from '../knowledge/diagram-world.mjs?v=e3789d9d65';
 import { guard } from './turn-guard.mjs?v=34ed257fec';
 
 const clock = () => globalThis.performance?.now?.() ?? Date.now();

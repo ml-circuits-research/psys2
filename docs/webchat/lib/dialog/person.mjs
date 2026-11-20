@@ -14,13 +14,13 @@
  *   personTurn(dialog, english)   -> null (not about the person) | { reply, status, info: { kind: 'person', frame }, segment }
  *   personView(state)             -> { name, age, occupation, language: [], relatives: [{ relation, count }], likes: [{ thing, type }], dislikes: [...] } of a session.things state
  */
-import { BUNDLED_PERSON } from '../knowledge/bundled-person.mjs?v=010ab32292';
-import { en } from '../lang/en.mjs?v=26aed8c065';
-import { numberWords, numberValue } from '../knowledge/values.mjs?v=f83cb28715';
+import { BUNDLED_PERSON } from '../knowledge/bundled-person.mjs?v=b568d10349';
+import { en } from '../lang/en.mjs?v=3eccaf3ffb';
+import { numberWords, numberValue } from '../knowledge/values.mjs?v=e497011f72';
 import { ACT_VERBS } from '../../worlds/acts/verbs.generated.mjs?v=8fbdca66b6';
 import { personView } from './person-view.mjs?v=ceeabdb255';
 import { guard } from './turn-guard.mjs?v=34ed257fec';
-import { within, TIMED_OUT } from './knowledge-lookup.mjs?v=71c2107577';
+import { within, TIMED_OUT } from './knowledge-lookup.mjs?v=97946b0a3b';
 
 export { personView };
 
