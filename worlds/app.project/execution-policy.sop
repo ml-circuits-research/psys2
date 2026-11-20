@@ -9,3 +9,16 @@
 @drawing.colour app.execution.observedProperty concept=colour sourceType="art.draw.object" parameter="color" binding="drawing.object.color" format=rgb codec=lookup order=0
 @size app.execution.values concept=size valueType="k.expect.scale" nameKey="step" valueKey="size_factor" codec=degree
 @drawing.size app.execution.observedMeasure concept=size sourceType="art.draw.object" parameter="size" binding="drawing.object.size" order=1
+# A side of a drawn object (its width, its height) is a measure on the same scale of size: a comparative of it
+# ("wider", "taller") scales the side the object has now (comparative-projection.sop) and leaves the other.
+@width app.execution.values concept=w.drawing.object.width valueType="k.expect.scale" nameKey="step" valueKey="size_factor" codec=degree
+@drawing.width app.execution.observedMeasure concept=w.drawing.object.width sourceType="art.draw.object" parameter="width" binding="drawing.object.width" order=2
+@height app.execution.values concept=w.drawing.object.height valueType="k.expect.scale" nameKey="step" valueKey="size_factor" codec=degree
+@drawing.height app.execution.observedMeasure concept=w.drawing.object.height sourceType="art.draw.object" parameter="height" binding="drawing.object.height" order=3
+# A meeting's start is an instant (milliseconds since the Unix epoch) and the calendar keeps its clock in UTC
+# (its frame is unix, its views say UTC). A clock time said for it ("3pm", "15:00", "noon", "half past 3 pm")
+# is read with the clock knowledge of k.time (hours by name and by the 12-hour clock, clock phrases) and placed on
+# the meeting's own day (clock-projection.sop).
+@start app.execution.values concept=w.calendar.event.start valueType="k.time.hour" nameKey="name" valueKey="n" codec=lookup
+@start.phrases app.execution.knowledge concept=w.calendar.event.start valueType="k.time.clock_phrase"
+@start.instant app.execution.instant concept=w.calendar.event.start sourceType="time.calendar.meeting" binding="calendar.meeting.start" zoneOffset=0

@@ -176,7 +176,7 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
   }
  }
  if(result&&contextRetry?.used&&result.statuses?.includes('supported')){
-  result.text+=contextRetry.used==='literal'?' I read this message on its own, without the previous one or the objects on the page.':' I read this message on its own, without the previous one.';result.parts=[{text:result.text,translate:false}];
+  result.text+=contextRetry.used!=='literal'?' I read this message on its own, without the previous one.':contextRetry.attempts.some(attempt=>attempt.profile==='independent')?' I read this message on its own, without the previous one or the objects on the page.':' I read this message on its own, without the objects on the page.';result.parts=[{text:result.text,translate:false}];
  }
  result??={text:message,parts:[{text:message,translate:false}],statuses:['unsupported'],answers:[],segments:[],state:{},effects:[],newEngine:true,trace:{legacy:false,engine:'new',reason:options.language&&options.language!=='en'?'language':'reading'}};
  return {...result,trace:{...result.trace,...(eligible?{reading:candidate}:{}),...(comparison?{readingComparison:comparison.sop}:{}),readerRouting:{primary:'sop-bert',selected:eligible?'sop-bert':null,reason,

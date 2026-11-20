@@ -1,7 +1,9 @@
 // Read-only presentation of the exact instance archive and its owned object facts.
-import{parse,serialize,str,readInstanceState}from'../vendor/sopworld/sopworld.mjs?v=22a3f6e48e';
+import{parse,serialize,str,readInstanceState}from'../vendor/sopworld/sopworld.mjs?v=5221d62911';
 import{createBudget}from'./budget.mjs?v=00bce6e369';
-export function inspectInstanceRecord(record,{observation=null,semanticWires=null,identityKey='id',interfaceTypeKey=null,observationOnlyTypes=[]}={}){
+// observedSupport: per observed object id, the instance facts its observation was derived from (the derivation's own
+// record). It binds an object that no fact names by identity; it is never inferred from matching values.
+export function inspectInstanceRecord(record,{observation=null,semanticWires=null,identityKey='id',interfaceTypeKey=null,observationOnlyTypes=[],observedSupport=null}={}){
  const archive=readInstanceState(record.wires),nodes=parse(record.wires),byId=new Map(nodes.map(n=>[n.id,n])),order=new Map(nodes.map((n,i)=>[n.id,i])),byNative=new Map(archive.objects.map(o=>[o.id,o]));
  const descriptors=nodes.filter(n=>n.type==='std.instance.object'),facts=new Set(descriptors.map(n=>str(n.attrs.fact[0]).slice(1)));
  const observed=new Map((observation?.objects??[]).map(o=>[o.id,o]));
@@ -22,11 +24,13 @@ export function inspectInstanceRecord(record,{observation=null,semanticWires=nul
   if(identity.size!==boundFacts.length)throw Error('canonical-object-identity-ambiguous');
   const facts=new Set([...identity.values()].map(node=>node.id));
   for(const object of objects){const fact=identity.get(object.id);
-   if(!fact&&observationOnlyTypes.includes(object.type)){object.factSource='tool observation';continue;}
-   object.factSource='instance';
-   if(!fact||(interfaceTypeKey?str(fact.attrs[interfaceTypeKey]?.[0]):fact.type)!==object.type)throw Error('canonical-object-identity-mismatch');const ids=new Set(),pending=[fact.id];
-   while(pending.length){budget.tick('instance-inspection.canonical-references');const id=pending.pop();if(ids.has(id))continue;const node=semanticById.get(id);if(!node)throw Error('canonical-dangling-reference');ids.add(id);for(const values of Object.values(node.attrs))for(const value of values)if(value[0]==='$'&&(!facts.has(value.slice(1))||value.slice(1)===fact.id))pending.push(value.slice(1));}
-   object.factId=fact.id;object.wires=serialize(semanticNodes.filter(node=>ids.has(node.id)));
+   const derived=fact?[]:(observedSupport?.[object.id]??[]).filter(id=>semanticById.has(id));
+   if(!fact&&!derived.length&&observationOnlyTypes.includes(object.type)){object.factSource='tool observation';continue;}
+   if(!fact&&!derived.length)throw Error('canonical-object-identity-mismatch');
+   if(fact&&(interfaceTypeKey?str(fact.attrs[interfaceTypeKey]?.[0]):fact.type)!==object.type)throw Error('canonical-object-identity-mismatch');
+   const roots=fact?[fact.id]:derived,ids=new Set(),pending=[...roots];object.factSource=fact?'instance':'instance (derived observation)';
+   while(pending.length){budget.tick('instance-inspection.canonical-references');const id=pending.pop();if(ids.has(id))continue;const node=semanticById.get(id);if(!node)throw Error('canonical-dangling-reference');ids.add(id);for(const values of Object.values(node.attrs))for(const value of values)if(value[0]==='$'&&(!facts.has(value.slice(1))||roots.includes(value.slice(1))))pending.push(value.slice(1));}
+   object.factId=roots.join(' ');object.wires=serialize(semanticNodes.filter(node=>ids.has(node.id)));
   }
  }
  return {world:archive.world,instanceId:archive.instanceId,revision:archive.revision,schemaVersion:archive.schemaVersion,metadata:archive.metadata??{},wires:semanticWires??record.wires,objects};

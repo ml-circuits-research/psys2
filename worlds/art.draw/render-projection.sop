@@ -16,6 +16,20 @@
 @d.form.type core.type of=ui.draw.form
 @d.shape.type core.type of=ui.draw.shape
 @d.kind.type core.type of=ui.draw.kind
+@d.extent.type core.type of=ui.draw.extent
+
+# The box an object fills: its width and height where it has them, else its size on that side (a square box).
+@ext.o w.drawing.object code=?id size=?s
+@ext.w w.drawing.object code=?id width=?w
+@ext.h w.drawing.object code=?id height=?h
+@ext.wh.o ui.draw.extent object=?id w=?w h=?h
+@ext.ws.o ui.draw.extent object=?id w=?w h=?s
+@ext.sh.o ui.draw.extent object=?id w=?s h=?h
+@ext.ss.o ui.draw.extent object=?id w=?s h=?s
+@extent.both core.rule when=$ext.o when=$ext.w when=$ext.h then=$ext.wh.o
+@extent.width core.rule when=$ext.o when=$ext.w not=$ext.h then=$ext.ws.o
+@extent.height core.rule when=$ext.o not=$ext.w when=$ext.h then=$ext.sh.o
+@extent.size core.rule when=$ext.o not=$ext.w not=$ext.h then=$ext.ss.o
 
 # Basic shapes: one primitive filling the object's box.
 @shape.circle ui.draw.shape drawing=circle shape=circle
@@ -41,7 +55,7 @@
 @form.parent.o ui.draw.form object=?id form=?p
 @form.inherited core.rule when=$form.o when=$form.parent when=$form.parent.obj not=$form.own then=$form.parent.o
 
-# Parts of the form, scaled about the object's centre: the 0..100 frame maps onto the object's size. A part's
+# Parts of the form, scaled about the object's centre: the 0..100 frame maps onto the object's box (its extent). A part's
 # index is its place in the drawing's layer order (from 0), the index part edits name; a removed part is not drawn.
 @ix.o w.drawing.object code=?id
 @ix.f ui.draw.form object=?id form=?k
@@ -56,8 +70,11 @@
 @pr.ix ui.draw.index object=?id source=$pr.kp index=?i
 @pr.removed w.drawing.part object=$pr.o index=?i removed=true
 @pr.k core.calc out=?scale fn=div args=?s args=100
-@pr.out ui.draw.draw part=?id source=$pr.kp slot=?id order=?layer z=?pz shape=?shape x=?px y=?py w=?pw h=?ph cx=50 cy=50 tx=?x ty=?y scale=?scale side=left
-@project.parts core.rule when=$pr.o when=$pr.f when=$pr.kp when=$pr.ix not=$pr.removed with=$pr.k then=$pr.out
+@pr.ext ui.draw.extent object=?id w=?ow h=?oh
+@pr.sx core.calc out=?sx fn=div args=?ow args=100
+@pr.sy core.calc out=?sy fn=div args=?oh args=100
+@pr.out ui.draw.draw part=?id source=$pr.kp slot=?id order=?layer z=?pz shape=?shape x=?px y=?py w=?pw h=?ph cx=50 cy=50 tx=?x ty=?y scale=?scale sx=?sx sy=?sy side=left
+@project.parts core.rule when=$pr.o when=$pr.f when=$pr.kp when=$pr.ix not=$pr.removed when=$pr.ext with=$pr.k with=$pr.sx with=$pr.sy then=$pr.out
 @pp.draw ui.draw.draw source=?src
 @pp.k k.objects.point part=?src n=?n x=?x y=?y
 @pp.o ui.draw.point source=?src n=?n x=?x y=?y
@@ -71,8 +88,11 @@
 @ps.o w.drawing.object code=?id drawing=?k x=?x y=?y size=?s z=?layer
 @ps.shape ui.draw.shape drawing=?k shape=?shape
 @ps.k core.calc out=?scale fn=div args=?s args=100
-@ps.out ui.draw.draw part=?id source=?id slot=?id order=?layer z=0 shape=?shape x=0 y=0 w=100 h=100 cx=50 cy=50 tx=?x ty=?y scale=?scale side=left
-@project.shape core.rule when=$ps.o when=$ps.shape with=$ps.k then=$ps.out
+@ps.ext ui.draw.extent object=?id w=?ow h=?oh
+@ps.sx core.calc out=?sx fn=div args=?ow args=100
+@ps.sy core.calc out=?sy fn=div args=?oh args=100
+@ps.out ui.draw.draw part=?id source=?id slot=?id order=?layer z=0 shape=?shape x=0 y=0 w=100 h=100 cx=50 cy=50 tx=?x ty=?y scale=?scale sx=?sx sy=?sy side=left
+@project.shape core.rule when=$ps.o when=$ps.shape when=$ps.ext with=$ps.k with=$ps.sx with=$ps.sy then=$ps.out
 
 # A colour value is a k.colours name or an #rrggbb value, which is its own RGB.
 @rgb.name k.colours.colour name=?c rgb=?rgb

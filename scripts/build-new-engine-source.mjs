@@ -13,6 +13,7 @@ const read=file=>readFileSync(path.join(dir,file),'utf8');
 const library=Object.fromEntries(entries.map(entry=>[entry.id,read(entry.schema)]));
 const valueTypes=[...new Set([
  ...executionPolicyWorld().ofType('app.execution.values').map(row=>str(row.attrs.valueType[0])),
+ ...executionPolicyWorld().ofType('app.execution.knowledge').map(row=>str(row.attrs.valueType[0])),
 ])].sort();
 const world=new World({library}),sources=[],seen=new Set(),owners=[];
 const record=(file,owner,role)=>{

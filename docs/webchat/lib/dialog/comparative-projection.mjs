@@ -3,10 +3,10 @@
 // (worlds/app.project/comparative-projection.sop) from the execution policy's value sources and the catalog's scale
 // in the execution knowledge context. The raw-structure bridge reads the table; nothing here names a word, a
 // concept or a tool.
-import { World, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=22a3f6e48e';
+import { World, serialize, str } from '../vendor/sopworld/sopworld.mjs?v=5221d62911';
 import RULES from '../../worlds/app.project/comparative-projection-source.mjs?v=89a6c6106f';
-import SOURCE from './new-engine-source.mjs?v=3e5898152f';
-import { executionPolicyWorld } from './execution-policy.mjs?v=e8bfdad087';
+import SOURCE from './new-engine-source.mjs?v=ff3610e673';
+import { executionPolicyWorld } from './execution-policy.mjs?v=99cfae12cb';
 
 let table;
 

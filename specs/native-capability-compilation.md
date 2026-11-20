@@ -43,9 +43,26 @@ derives `app.execution.comparativeFactor concept step factor` for each concept w
 and its factor is that step's `size_factor` over the default's (currently more 1.4, less 0.7). The raw-structure
 bridge turns such a condition into `operator=factor baseline=before anchor=<concept> value=<factor>`, the library's
 change relative to the observed value; a step on a concept without a declared scale, or a step with a measured
-amount (`measure`, `unit`), stays an unresolved decision. Open: an absolute degree on an existing target
+amount (`measure`, `unit`), stays an unresolved decision. A drawn object's width and height are such concepts too
+(`w.drawing.object.width|height`, declared in `execution-policy.sop` with their observed measures): the Drawing
+area observes both sides of every object's box (its own width or height, else its size; `ui.draw.extent` in
+`worlds/art.draw/render-projection.sop`, which also renders the box with separate horizontal and vertical scales),
+so "make the box wider" scales the width the object has now and leaves its height. Open: an absolute degree on an existing target
 ("make the house big") still multiplies the observed value, because the library's degree base for a selected
 target is its observed value; it should use the kind's base (a library change).
+
+A clock time said for an instant ("move the meeting to 3pm") compiles through the same lookup values. The
+execution policy declares the concept's values (`app.execution.values codec=lookup`, here `k.time.hour`), the further
+knowledge they are read with (`app.execution.knowledge`: `k.time.clock_phrase`) and that the concept is an instant
+(`app.execution.instant concept sourceType binding zoneOffset`: milliseconds since the Unix epoch on objects of that
+source type, the observed field holding an object's instant now, the area's clock offset from UTC in minutes; the
+calendar keeps UTC). The compiler adds each value the request says for a concept with declared values as
+`app.execution.requestValue scope concept label mode` (the mode of its target), and the declared projection
+(`worlds/app.project/clock-projection.sop`) reads the label with the clock knowledge only (hours by name and by the
+12-hour clock, the 24 hours by number, a clock phrase before an hour), takes the day of the target's own instant
+(the focused object's, else that of each observed object of the type; the scope's clock for a new object) and
+derives `std.capability.value concept label value=<instant>`. A label that names no instant or more than one
+("25:00", "half past 3" without am or pm, objects on different days) stays an unresolved value; nothing guesses.
 
 ## Authority for a native interface
 

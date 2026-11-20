@@ -17,7 +17,7 @@ import { formalize as rulesFormalize } from '../formalizer/rules/index.mjs?v=418
 import { buildWires, SEGMENT_SLOT } from '../formalizer/rules/emit.mjs?v=8e51d17dc1';
 import { lexIndex } from '../worlds/lexicon.mjs?v=0cde64ef80';
 import { worldVocabulary, FUNCTION_WORDS } from '../formalizer/spell.mjs?v=418c95d61e';
-import { FILLER } from './world-aware.mjs?v=fb68ffc513';
+import { FILLER } from './world-aware.mjs?v=600e702b16';
 import { budget } from './budget.mjs?v=00bce6e369';
 import { isIncomplete, completeMode } from '../formalizer/completeness.mjs?v=418c95d61e';
 

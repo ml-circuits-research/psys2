@@ -1,6 +1,6 @@
-import {invokeToolCommand} from './native-control-intent.mjs?v=c87cb9905f';
+import {invokeToolCommand} from './native-control-intent.mjs?v=fa577c754c';
 // Host orchestration only: semantic projections belong to area declarations.
-import { prepareRequestBatch, requestBatchFrontier, parse } from '../vendor/sopworld/sopworld.mjs?v=22a3f6e48e';
+import { prepareRequestBatch, requestBatchFrontier, parse } from '../vendor/sopworld/sopworld.mjs?v=5221d62911';
 
 /** All request graphs are validated before the first resolver or native invocation. */
 export async function dispatchDeclaredBatch(batch, { resolve, invocation, budget } = {}) {

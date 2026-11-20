@@ -4,6 +4,7 @@ import{NATIVE_AREAS,createAreaHost}from'./app-reader-context.mjs';
 import{nativeObservationObjects,compareInstanceObjects}from'./instance-facts.mjs';
 import{instanceIdFor}from'./instance-identity.mjs';
 import{copyHostData}from'../../worlds/native-tool-host.mjs';
+import{peekAreaBase,observationSupport}from'../../worlds/sop-area.mjs';
 import{CATALOG_PIN}from'../knowledge/catalog-pin.mjs';
 export const NATIVE_INSTANCE_SCHEMA='psys2.native-instance/1';
 const RUNTIME_SCHEMA='psys2.native-runtime/1';
@@ -19,16 +20,24 @@ function runtimeFromArchive(record,area){
 }
 
 /** Observe a compact semantic World without serializing native render caches or undo history.
- * Optional native interface metadata reuses this same host and observation for inspection. */
-export async function observeNativeInstanceWorlds(session,{worlds=[...byWorld.keys()],includeHostInterface=false,prepareKnowledge=true}={}){
+ * Optional native interface metadata reuses this same host and observation for inspection.
+ * prepareKnowledge=false is read-only inspection: an area whose base this session has not prepared gets no host
+ * (creating one would read its knowledge and start its state); its record holds the instance facts it has.
+ * includeSupport adds, per observed object, the state facts its observation was derived from. */
+export async function observeNativeInstanceWorlds(session,{worlds=[...byWorld.keys()],includeHostInterface=false,includeSupport=false,prepareKnowledge=true}={}){
  session.nativeInstanceRevisions??={};session.nativeInstanceSnapshots??={};session.instanceWorlds??={};const records=[];
  for(const world of [...new Set(worlds)]){
   const area=byWorld.get(world),state=session.isession.state[world];if(!area||!state)continue;
+  if(!prepareKnowledge&&area.stateWorld&&!peekAreaBase(world)){
+   const instanceId=instanceIdFor(session,world),revision=session.nativeInstanceRevisions[world]??0,semantic=area.stateWorld(state);
+   records.push({world,instanceId,revision,wires:serialize([...semantic.wires.values()]),carrier:serializeInstanceState({instanceId,world,schemaVersion:NATIVE_INSTANCE_SCHEMA,revision,objects:[],projection:null}),observation:null,prepared:false,authoritative:true,schema:area.stateSchema??null});
+   continue;
+  }
   const instanceId=instanceIdFor(session,world),host=await create(session,area,state,instanceId,prepareKnowledge),observation=host.observe(),objects=nativeObservationObjects(observation),canonical=JSON.stringify({objects,projection:state}),prior=session.nativeInstanceSnapshots[world];
   if(prior!==undefined&&prior!==canonical)session.nativeInstanceRevisions[world]=(session.nativeInstanceRevisions[world]??0)+1;
   const revision=session.nativeInstanceRevisions[world]??0,carrier=serializeInstanceState({instanceId,world,schemaVersion:NATIVE_INSTANCE_SCHEMA,revision,objects,projection:null});
   const semantic=area.stateWorld?area.stateWorld(state):instanceStateWorld(carrier);session.instanceWorlds[world]=semantic;session.nativeInstanceSnapshots[world]=canonical;
-  records.push({world,instanceId,revision,wires:serialize([...semantic.wires.values()]),carrier,observation,authoritative:!!area.stateWorld,schema:area.stateSchema??null,...(includeHostInterface?{nativeInterface:{operations:host.bindings(),capabilities:host.capabilities?.()??null}}:{})});
+  records.push({world,instanceId,revision,wires:serialize([...semantic.wires.values()]),carrier,observation,prepared:true,authoritative:!!area.stateWorld,schema:area.stateSchema??null,...(includeSupport?{observationSupport:observationSupport(world,state)}:{}),...(includeHostInterface?{nativeInterface:{operations:host.bindings(),capabilities:host.capabilities?.()??null}}:{})});
  }
  return records;
 }

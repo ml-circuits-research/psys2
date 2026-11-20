@@ -155,7 +155,7 @@ export async function mountPsys2(element, options = {}) {
   const worldViews=new Map(),worldActivityListeners=new Set(),worldActivity=[];
   let worldsExplorer=null,worldsRefreshTimer=null,worldsLoadInFlight=null;
   const scheduleWorldsRefresh=()=>{clearTimeout(worldsRefreshTimer);worldsRefreshTimer=setTimeout(()=>{if(view==='worlds')void worldsExplorer?.refresh();},350);};
-  const emitWorldActivity=event=>{worldActivity.push(event);if(worldActivity.length>300)worldActivity.shift();for(const fn of worldActivityListeners)fn(event);if(event.operation!=='worldsInspection'&&['end','error'].includes(event.phase)&&event.nodeIds?.some(id=>/^(interpreter:|world:|component:)/.test(id))&&view==='worlds')scheduleWorldsRefresh();};
+  const emitWorldActivity=event=>{worldActivity.push(event);if(worldActivity.length>300)worldActivity.shift();for(const fn of worldActivityListeners)fn(event);if(event.operation!=='worldsInspection'&&event.purpose!=='suggestion probe'&&['end','error'].includes(event.phase)&&event.nodeIds?.some(id=>/^(interpreter:|world:|component:)/.test(id))&&view==='worlds')scheduleWorldsRefresh();};
   function makeWorldsTab(t){
     const explorer=createWorldsExplorer({load:()=>{
       if(worldsLoadInFlight)return worldsLoadInFlight;

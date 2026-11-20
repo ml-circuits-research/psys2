@@ -16,7 +16,7 @@ When the reader's structure for a single `make` request is incomplete, `src/dial
 
 ## Reader context as a prior
 
-The reader sees the previous message and the observed objects. When the reading conditioned on them stays unusable after the projections above, `src/dialog/reader-routing.mjs` asks the provider for the same text read without the previous message (`proposeIndependent`), then also without the observed objects (`proposeLiteral`), and routes the first usable reading. Every attempt is kept in `readerRouting.contextRetry` and a supported reply says the message was read on its own. A turn without effect leaves the area state, undo history and last action unchanged.
+The reader sees the previous message and the observed objects. When the reading conditioned on them stays unusable after the projections above, `src/dialog/reader-routing.mjs` asks the provider for the same text read without the previous message (`proposeIndependent`), then also without the observed objects (`proposeLiteral`), and routes the first usable reading. A re-reading is offered only when it drops something: on the first turn of a session there is no previous message, so only the reading without the observed objects is tried (the same sentence is therefore read alike on the first and on a later turn); with no observed objects only the reading without the previous message is tried. Every attempt is kept in `readerRouting.contextRetry` and a supported reply says the message was read on its own and what it was read without. A turn without effect leaves the area state, undo history and last action unchanged.
 
 ## Operational execution policy
 

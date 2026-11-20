@@ -1,18 +1,18 @@
-import {isScopedRemoval} from './capability-plan-execution.mjs?v=26300484d7';
-import {projectRemovalAction} from './project-removal-action.mjs?v=73e3762e91';
-import { captureHistory, recordHistory, restoreHistory } from './history-journal.mjs?v=1c9667c210';
-import {projectReaderHeadAlternative} from './reader-head-alternative.mjs?v=f2e615f1b1';
-import {parse} from '../vendor/sopworld/sopworld.mjs?v=22a3f6e48e';
-import {writeReaderSource} from './reader-source.mjs?v=49f139fd1e';
-import {isAuthoredRequest,readAuthoredRequest} from './authored-request-tool.mjs?v=687fe97da8';
+import {isScopedRemoval} from './capability-plan-execution.mjs?v=ee80f3203e';
+import {projectRemovalAction} from './project-removal-action.mjs?v=e25d945994';
+import { captureHistory, recordHistory, restoreHistory } from './history-journal.mjs?v=f8f136a1bb';
+import {projectReaderHeadAlternative} from './reader-head-alternative.mjs?v=644a5a4c39';
+import {parse} from '../vendor/sopworld/sopworld.mjs?v=5221d62911';
+import {writeReaderSource} from './reader-source.mjs?v=f5f7a86d5f';
+import {isAuthoredRequest,readAuthoredRequest} from './authored-request-tool.mjs?v=b52476cf73';
 // Model-first proposal routing. Calibration authority belongs to host configuration,
 // never to a model output, evaluation annotation or grammar proposal.
-import {requestCompositionPolicy,scheduleFollowingCut}from './request-composition-policy.mjs?v=db2fa3dca9';
-import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=0df57b00f8';
-import {projectQueryAction,recoverQueryProjection} from './project-query-action.mjs?v=e93012abd4';
-import {projectContextAction} from './project-context-action.mjs?v=35c1e2e2e8';
-import {projectCreateAction} from './project-create-action.mjs?v=14a3b32337';
-import {assessReaderProposal} from './reader-admission.mjs?v=21740eba78';
+import {requestCompositionPolicy,scheduleFollowingCut}from './request-composition-policy.mjs?v=6be706e489';
+import {executeDeclaredRequest,compareDeclaredReadings} from './declared-execution.mjs?v=e20d6bd1de';
+import {projectQueryAction,recoverQueryProjection} from './project-query-action.mjs?v=f222fff74e';
+import {projectContextAction} from './project-context-action.mjs?v=7693eb2a0e';
+import {projectCreateAction} from './project-create-action.mjs?v=1407b589cf';
+import {assessReaderProposal} from './reader-admission.mjs?v=e7ef9dc220';
 const unavailable=reason=>({candidates:[],coverage:{complete:false,executable:false,graphProposal:false},failures:[{reason}]});
 const noDeclaredAction = () => {
  const text='I could not identify an action to apply. Nothing changed.';
@@ -176,7 +176,7 @@ async function routeReaderProposal(session,text,options={},suppliedProposal){
   }
  }
  if(result&&contextRetry?.used&&result.statuses?.includes('supported')){
-  result.text+=contextRetry.used==='literal'?' I read this message on its own, without the previous one or the objects on the page.':' I read this message on its own, without the previous one.';result.parts=[{text:result.text,translate:false}];
+  result.text+=contextRetry.used!=='literal'?' I read this message on its own, without the previous one.':contextRetry.attempts.some(attempt=>attempt.profile==='independent')?' I read this message on its own, without the previous one or the objects on the page.':' I read this message on its own, without the objects on the page.';result.parts=[{text:result.text,translate:false}];
  }
  result??={text:message,parts:[{text:message,translate:false}],statuses:['unsupported'],answers:[],segments:[],state:{},effects:[],newEngine:true,trace:{legacy:false,engine:'new',reason:options.language&&options.language!=='en'?'language':'reading'}};
  return {...result,trace:{...result.trace,...(eligible?{reading:candidate}:{}),...(comparison?{readingComparison:comparison.sop}:{}),readerRouting:{primary:'sop-bert',selected:eligible?'sop-bert':null,reason,

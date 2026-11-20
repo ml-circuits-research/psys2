@@ -1,13 +1,13 @@
 // Assemble trusted native observations and dispatch the compiler's SOP call.
-import {World,parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=22a3f6e48e';
-import SOURCE from './new-engine-source.mjs?v=3e5898152f';
-import {readPlacementProfile,rememberPlacement} from '../../worlds/app.project/spatial-profile.mjs?v=faff70a3b7';
-import {placementInterfaceSop} from '../../worlds/native-spatial-interface.mjs?v=fac6aac97f';
-import {NATIVE_AREAS,createAreaHost} from './app-reader-context.mjs?v=88a8f115af';
+import {World,parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=5221d62911';
+import SOURCE from './new-engine-source.mjs?v=ff3610e673';
+import {readPlacementProfile,rememberPlacement} from '../../worlds/app.project/spatial-profile.mjs?v=e21507370c';
+import {placementInterfaceSop} from '../../worlds/native-spatial-interface.mjs?v=fcd7c60e58';
+import {NATIVE_AREAS,createAreaHost} from './app-reader-context.mjs?v=c12a1b8eb7';
 import {identityRegistryFor,instanceIdFor} from './instance-identity.mjs?v=024ef1ca83';
-import {nativeKindCandidates} from './native-binding-candidates.mjs?v=9860e110fe';
-import {invokeObservedNativeTool} from './native-tool-activity.mjs?v=aceeb4a2c7';
-import {describeNativeControl,verifyNativeControlEffect} from './native-control-intent.mjs?v=c87cb9905f';
+import {nativeKindCandidates,nativeCreationCandidates} from './native-binding-candidates.mjs?v=a1e925e0c7';
+import {invokeObservedNativeTool} from './native-tool-activity.mjs?v=31d2f5a090';
+import {describeNativeControl,verifyNativeControlEffect} from './native-control-intent.mjs?v=fa577c754c';
 import {placementSearchProvider,placementSearchStatus} from './placement-search-provider.mjs?v=6dc0cd0da0';
 
 const read = (row,key) => row?.attrs[key]?.length===1 ? str(row.attrs[key][0]) : undefined;
@@ -45,18 +45,34 @@ export async function executeSpatialPlacement(session,candidate,{bindings,view}=
   :'I could not apply the requested placement. Nothing changed.',false,{reason,reading:candidate,...details});
  if(!state||!bindings)return fail('spatial-instance-unavailable');
  const started=performance.now();
- let host,spatial,sop,proposal;
+ let host,spatial,sop,proposal,hypotheses=null;
  try{
-  host=await createAreaHost(area,{state,instanceId:instanceIdFor(session,area.world),identityRegistry:identityRegistryFor(session,area.world),loader:session.engine?.loader,knowledge:session.engine?.knowledge});
+  const hostOptions={state,instanceId:instanceIdFor(session,area.world),identityRegistry:identityRegistryFor(session,area.world),loader:session.engine?.loader,knowledge:session.engine?.knowledge};
+  host=await createAreaHost(area,hostOptions);
   if(!host.observeSpatial)return fail('spatial-observation-unavailable');
+  const areaId=bindings.readerAreaByView?.[view]??area.area;
+  const concepts=new Set(parse(candidate.wires).filter(wire=>wire.type==='std.request.target').map(wire=>read(wire,'kind')).filter(Boolean));
+  const constructors=nativeCreationCandidates(bindings,host.bindings(),areaId).filter(pair=>pair.mapping.area===areaId&&concepts.has(pair.mapping.canonical));
+  // A constructor that reads declared knowledge for its kind argument (a catalog drawing by name) gets it loaded for
+  // the request's kinds first, the way a UI control's preparation does, so their extents can be measured.
+  const lookups={};
+  for(const {mapping,operation} of constructors){
+   const key=operation.spatial?.kindKey,inputs=(operation.knowledgeInputs??[]).filter(input=>input.argument===key);
+   if(!key||!inputs.length)continue;
+   (lookups[key]??=[]).push(mapping.lemma);
+   for(const input of inputs){
+    try{await session.engine?.knowledge?.[input.load]?.call(session.engine.knowledge,mapping.lemma);}
+    catch(error){if(error?.name==='BudgetExceeded'||error?.name==='TurnAborted')throw error;}
+   }
+  }
+  if(Object.keys(lookups).length)host=await createAreaHost(area,{...hostOptions,args:lookups});
   spatial=host.observeSpatial();
   const {observation,revision,frame,scope,unknown,occupants}=spatial;
   if(unknown.some(entity=>occupants.includes(entity)))return fail('unknown-peer-geometry',{unknown});
   const context=baseWorld()?.fork();
   if(!context)return fail('spatial-world-unavailable');
-  const areaId=bindings.readerAreaByView?.[view]??area.area;
   const mappings=nativeKindCandidates(bindings).filter(mapping=>mapping.area===areaId&&mapping.nativeFamilyBinding);
-  const native=placementInterfaceSop(host,spatial,mappings,candidate.request);
+  const native=placementInterfaceSop(host,spatial,mappings,candidate.request,{constructors,concepts});
   const profile=readPlacementProfile(session,spatial);
   const admitted=context.tell(native.configuration+'\n'+profile,{factsOnly:true});
   if(!admitted.ok)return fail('spatial-context-rejected',{diagnostics:admitted.violations});
@@ -64,8 +80,20 @@ export async function executeSpatialPlacement(session,candidate,{bindings,view}=
   // Z3 solves the placement problem where the page can run it (loaded on the first one); otherwise the call
   // stays synchronous with the library's internal search.
   const provider=placementSearchProvider();
-  sop=provider?await context.compileRequest(candidate.wires+'\n'+native.context,{provider}):context.compileRequest(candidate.wires+'\n'+native.context);
-  proposal=parse(sop).find(wire=>['std.placement.result','std.compile.result'].includes(wire.type));
+  const compile=async wires=>{
+   const out=provider?await context.compileRequest(wires+'\n'+native.context,{provider}):context.compileRequest(wires+'\n'+native.context);
+   return {sop:out,proposal:parse(out).find(wire=>['std.placement.result','std.compile.result'].includes(wire.type))};
+  };
+  ({sop,proposal}=await compile(candidate.wires));
+  // Ranked hypotheses: a definite description that names no object on the page ("put the sun above the house" with
+  // no sun) also reads as asking for one, placed as requested. The reading as given ranks first; the creating one is
+  // tried only when the given one has no target, and its use is disclosed (and can be undone).
+  const creating=read(proposal,'status')!=='compiled'&&read(proposal,'reason')==='unbound-target'?creationHypothesis(candidate):null;
+  if(creating){
+   const second=await compile(creating.wires);
+   hypotheses={given:{reason:read(proposal,'reason'),placement:sop},creating:{status:read(second.proposal,'status'),reason:read(second.proposal,'reason')}};
+   if(read(second.proposal,'status')==='compiled'){({sop,proposal}=second);candidate=creating;hypotheses.used='creating';}
+  }
   activity(session,area,{phase:'end',label:'Compiled placement from observed geometry',durationMs:performance.now()-started,status:read(proposal,'status'),
    provider:read(proposal,'provider'),search:provider?placementSearchStatus():undefined,sop});
  }catch(error){
@@ -90,7 +118,8 @@ export async function executeSpatialPlacement(session,candidate,{bindings,view}=
   Number.isFinite(wanted)&&Math.abs(wanted-bounds[key])<=1e-9*Math.max(1,Math.abs(wanted)));
  activity(session,area,{phase:'end',label:'Observe placement effect',status:geometryVerified?'verified':'mismatch',
   sop,receipt:{operation:receipt.operation,beforeVersion:receipt.beforeVersion,afterVersion:receipt.afterVersion},bounds,geometryVerified,verification});
- const trace={assessment:receipt.status,receipt,reading:candidate,placement:sop,effectVerification:verification,observedBounds:bounds,geometryVerified,controlIntent:result.sop};
+ const trace={assessment:receipt.status,receipt,reading:candidate,placement:sop,effectVerification:verification,observedBounds:bounds,geometryVerified,controlIntent:result.sop,
+  ...(hypotheses?{hypotheses,uncertainty:hypotheses.used?['created-absent-target']:[]}:{})};
  const changed=receipt.status==='changed',worldState={[area.world]:structuredClone(state)},effects=changed?[{operation:operation.id}]:[];
  const observedLocation=bounds?' at ('+((bounds.min_x+bounds.max_x)/2)+', '+((bounds.min_y+bounds.max_y)/2)+')':'';
  const effect=target?(operation.act==='make'?'Created ':'Moved ')+target.kind+' '+target.id+observedLocation+'. ':'';
@@ -103,9 +132,24 @@ export async function executeSpatialPlacement(session,candidate,{bindings,view}=
  const anchor=read(winner,'anchor');
  const relation=parse(candidate.wires).find(wire=>wire.type==='std.request.constraint'&&read(wire,'operator')==='relation');
  if(changed)rememberPlacement(session,observed,target.id,anchor,read(relation,'relation'));
- const note=participants.size>1&&anchor?' I used '+anchor+' as the anchor.':'';
+ const loose=(proposal.attrs?.relaxed??[]).map(str);
+ const note=(participants.size>1&&anchor?' I used '+anchor+' as the anchor.':'')+
+  (loose.length?' No place keeps it close for every relation, so I placed it as close as the scene allows ('+loose.join(', ')+').':'')+
+  (hypotheses?.used==='creating'?' There was no '+target.kind+' on the page, so I drew a new one.':'');
  const message=changed?effect.trim()+note+' You can undo this change.':target.id+' is already'+observedLocation+'.'+note;
  return reply(message,true,trace,worldState,effects);
+}
+
+/** The reading that creates each definite subject of a relation instead of moving one (act place -> make). */
+function creationHypothesis(candidate){
+ const nodes=parse(candidate.wires),request=nodes.find(wire=>wire.type==='std.request'&&wire.id===candidate.request);
+ if(read(request,'act')!=='place')return null;
+ const subjects=new Set(nodes.filter(wire=>wire.type==='std.request.constraint'&&read(wire,'operator')==='relation').map(wire=>ref(wire,'target')));
+ const moved=nodes.filter(wire=>wire.type==='std.request.target'&&subjects.has(wire.id)&&read(wire,'mode')==='existing'&&read(wire,'determiner')==='definite'&&!wire.attrs.name&&!wire.attrs.selector);
+ if(!moved.length)return null;
+ const rewritten=nodes.map(wire=>wire===request?{...wire,attrs:{...wire.attrs,act:['make']}}:
+  moved.includes(wire)?{...wire,attrs:{...wire.attrs,mode:['new'],determiner:['indefinite']}}:wire);
+ return {...candidate,wires:serialize(rewritten),hypothesis:'create-absent-target'};
 }
 
 const winningBounds=winner=>[['min_x','minX'],['min_y','minY'],['max_x','maxX'],['max_y','maxY']].map(([key,attribute])=>[key,Number(read(winner,attribute))]);

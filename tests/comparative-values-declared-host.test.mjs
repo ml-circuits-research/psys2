@@ -54,7 +54,9 @@ test('the comparative factors are one step of the catalog scale, read from knowl
   '@u k.expect.scale step=big order=4 count_factor=1 size_factor=2.5 extent=0.7 about="u"',
   '@l k.expect.scale step=small order=2 count_factor=1 size_factor=1.6 extent=0.3 about="l"'].join('\n'));
  const other=comparativeSteps({knowledge:{ofType:type=>type==='k.expect.scale'?rows:[]}});
- assert.deepEqual(other.map(({step,factor})=>[step,factor]).sort(),[['less',0.8],['more',1.25]]);
+ assert.deepEqual(other.filter(row=>row.concept==='size').map(({step,factor})=>[step,factor]).sort(),[['less',0.8],['more',1.25]]);
+ // Each concept the policy measures on that scale (size, a drawn width or height) takes the same steps.
+ assert.deepEqual([...new Set(other.map(row=>row.concept))].sort(),['size','w.drawing.object.height','w.drawing.object.width']);
 });
 
 test('the bridge projects a comparative step onto a factor of the value the target has now',()=>{

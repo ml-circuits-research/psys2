@@ -76,7 +76,7 @@ export function renderPrimitives(world, types, frame = { w: 100, h: 100 }, opts 
     const fill = val(fills.get(source + '|' + part)?.[0] ?? { attrs: { fill: ['grey'] } }, 'fill');
     const box = { x: num(fact, 'x'), y: num(fact, 'y'), w: num(fact, 'w'), h: num(fact, 'h') };
     const shape = val(fact, 'shape'), line = (points.get(source) ?? []).sort((a, b) => a[0] - b[0]).map(([, x, y]) => [x, y]);
-    const move = `translate(${f1(num(fact, 'tx'))} ${f1(num(fact, 'ty'))}) scale(${f1(num(fact, 'scale'))}) translate(${f1(-num(fact, 'cx'))} ${f1(-num(fact, 'cy'))})`;
+    const move = `translate(${f1(num(fact, 'tx'))} ${f1(num(fact, 'ty'))}) scale(${fact.attrs.sx && fact.attrs.sy ? f1(num(fact, 'sx')) + ' ' + f1(num(fact, 'sy')) : f1(num(fact, 'scale'))}) translate(${f1(-num(fact, 'cx'))} ${f1(-num(fact, 'cy'))})`;
     const flip = side === 'right' ? `matrix(-1 0 0 1 ${frame.w} 0) ` : '';
     const tag = opts.select && fact.attrs[opts.select] ? ` data-select="${String(val(fact, opts.select)).replace(/[<>&"]/g, '')}"` : '';
     const style = { outline: val(fact, 'outline'), round: num(fact, 'round'), stroke: num(fact, 'stroke'), dash: val(fact, 'dash'), anchor: val(fact, 'anchor'), font: num(fact, 'font'), weight: val(fact, 'weight'), slant: val(fact, 'slant'), family: val(fact, 'family'), length: num(fact, 'length') };

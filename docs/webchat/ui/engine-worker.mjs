@@ -24,9 +24,10 @@ globalThis.__psys2Url = vurl;   // for ui/ort-host.mjs and the hosts (they resol
 
 const post = (m, t) => postMessage(m, t ?? []);
 const evt = (name, data) => post({ type: 'evt', name, data });
-const activityLog=[];let activitySequence=0,executionRequestId=null;
+const activityLog=[];let activitySequence=0,executionRequestId=null,sampleActivityId=null;
 const requestActivities=new Map();
-function worldActivity(nodeIds,phase,label,extra={}){const event={id:++activitySequence,nodeIds,phase,label,time:Date.now(),...(executionRequestId==null?{}:{requestId:executionRequestId}),...extra};requestActivities.get(event.requestId)?.push(event);activityLog.push(event);if(activityLog.length>200)activityLog.shift();evt('world-activity',event);}
+// A suggestion probe runs on a cloned host: its events are attributed to the probe, never to the actual state or a turn.
+function worldActivity(nodeIds,phase,label,extra={}){const probe=executionRequestId==null&&sampleActivityId!=null&&extra.requestId==null;const event={id:++activitySequence,nodeIds,phase,label,time:Date.now(),...(executionRequestId==null?{}:{requestId:executionRequestId}),...(probe?{requestId:'sample:'+sampleActivityId,purpose:'suggestion probe'}:{}),...extra};requestActivities.get(event.requestId)?.push(event);activityLog.push(event);if(activityLog.length>300)activityLog.shift();evt('world-activity',event);}
 // Only instrumented RPC boundaries are timed; these events do not infer inner reasoning.
 function loadProgress(message,operation){
  const timings=[];let current=null,started=0;
@@ -424,7 +425,7 @@ const handlers = {
   },
   async worldsInspection(m) {
     const progress=loadProgress(m,'worldsInspection');try{progress.stage('Wait for active action');
-    while(turnRunning())await sleep(20);
+    await finishSuggestionProbe();while(turnRunning())await sleep(20);
     progress.stage('Read catalog index for inspection');
     if(!knowledgeReadFiles.has('index.json'))await knowledgeInspectionSource?.text('index.json',{purpose:'inspection',requestId:m.id});
     progress.stage('Load inspection modules');canonicalizeSessionStates();
@@ -433,7 +434,7 @@ const handlers = {
     progress.stage('Observe live instance facts');
     const instances=await observeNativeInstanceWorlds(session,{worlds:available.map(([,area])=>area.world),includeHostInterface:true,prepareKnowledge:false});
     progress.stage('Describe observed adapter interfaces');
-    const viewByWorld=new Map(available.map(([view,area])=>[area.world,view])),hosts=instances.map(record=>({view:viewByWorld.get(record.world),world:record.world,observation:record.observation,...record.nativeInterface}));
+    const viewByWorld=new Map(available.map(([view,area])=>[area.world,view])),hosts=instances.filter(record=>record.nativeInterface).map(record=>({view:viewByWorld.get(record.world),world:record.world,observation:record.observation,...record.nativeInterface}));
     const {serialize,version,build,SCHEMA_TYPES,STAGES,TURN_STAGES}=await import(vurl('lib/vendor/sopworld/sopworld.mjs'));
     const instanceCaches=Object.entries(session.instanceWorlds??{}).map(([world,cache])=>({world,wireCount:cache.wires?.size??0,wires:serialize([...(cache.wires?.values?.()??[])])}));
     progress.stage('Describe runtime packages');
@@ -459,10 +460,10 @@ const handlers = {
     if(!area)throw Error('Unknown inspected instance world.');
     await ensureWorlds([m.world],'inspecting SOP world');
     const {observeNativeInstanceWorlds}=await import(vurl('lib/dialog/instance-persistence.mjs'));
-    const record=(await observeNativeInstanceWorlds(session,{worlds:[m.world],prepareKnowledge:false}))[0];
+    const record=(await observeNativeInstanceWorlds(session,{worlds:[m.world],prepareKnowledge:false,includeSupport:true}))[0];
     if(!record)throw Error('Instance state unavailable.');
     const {inspectInstanceRecord}=await import(vurl('lib/dialog/instance-inspection.mjs'));
-    const data=inspectInstanceRecord({...record,wires:record.carrier},{observation:record.observation,...(record.authoritative?{semanticWires:record.wires,interfaceTypeKey:area.stateInterfaceTypeKey??null,observationOnlyTypes:area.observationOnlyTypes??[]}:{})});
+    const data=inspectInstanceRecord({...record,wires:record.carrier},{observation:record.observation,...(record.authoritative?{semanticWires:record.wires,interfaceTypeKey:area.stateInterfaceTypeKey??null,observationOnlyTypes:area.observationOnlyTypes??[],observedSupport:record.observationSupport??null}:{})});
     return {...data,wires:record.wires,archiveWires:record.carrier};
   },
   async instanceFacts(m) {
@@ -539,6 +540,7 @@ const handlers = {
   async prepare() { await waitForSopReader();return {available:readerStatus.state==='ready',reader:readerStatus}; },
   async sample(m) {
     if (samplerRun || foregroundWaiting || turnRunning() || warming) return { items: [], available: true, reason: 'busy' };
+    sampleActivityId = m.id;
     const run = (async () => {
       const [{NATIVE_AREAS},{createNativeRequestSampler}] = await Promise.all([import(vurl('lib/dialog/app-reader-context.mjs')),import(vurl('lib/dialog/native-request-sampler.mjs'))]);
       const view = m.tab ?? session.isession.state['ui.shell']?.activeTab, area = NATIVE_AREAS[view];
@@ -556,7 +558,7 @@ const handlers = {
       return result;
     })();
     samplerRun = run;
-    try { return await run; } finally { if (samplerRun === run) samplerRun = null; }
+    try { return await run; } finally { if (samplerRun === run) samplerRun = null; if (sampleActivityId === m.id) sampleActivityId = null; }
   },
   async warm() { return null; },
   /** The page needs a world now (its tab opens, the user names it): loads it and answers which worlds are loaded. */

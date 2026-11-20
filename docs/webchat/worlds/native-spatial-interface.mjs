@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Bind native observations and concrete renderer capabilities to the SOP interface.
-import {quote,str} from '../lib/vendor/sopworld/sopworld.mjs?v=22a3f6e48e';
+import {quote,str} from '../lib/vendor/sopworld/sopworld.mjs?v=5221d62911';
 
 const atom = /^[A-Za-z_][A-Za-z0-9_.-]*$/;
 export const spatialWire = (id,type,fields) => '@'+id+' '+type+' '+Object.entries(fields).flatMap(([key,value])=>
@@ -46,8 +46,22 @@ function nativeGeometryWires(spatial,mappings,operations) {
  return {wires:rows,bounds:names.get(spatial.bounds)};
 }
 
-function nativeCapabilityWires(host,operations,mappings,frame) {
+function nativeCapabilityWires(host,operations,mappings,frame,{constructors=[],concepts=null}={}) {
  const rows=[],seen=new Set(),measurements=new Map();
+ // One measured kind per act and concept: the first tool in declared order whose constructor can draw one of its
+ // names (the compiler takes a single kind row for a subject).
+ const placed=new Set();
+ // The constructors a mapping may use: the operation its family names, and those the constructor policy pairs
+ // with it (a catalog tool that takes any known name, for a kind the family tool does not list).
+ const paired=new Map();
+ for(const {mapping,operation} of constructors)(paired.get(mapping)??paired.set(mapping,[]).get(mapping)).push(operation);
+ const constructorsOf=mapping=>[...new Set([operations.find(op=>op.id===mapping.nativeFamilyBinding.operation),...(paired.get(mapping)??[])])]
+  .filter(Boolean).map(constructor=>{
+   const own=constructor.id===mapping.nativeFamilyBinding.operation,parameter=constructor.params?.[constructor.spatial?.kindKey];
+   // An enumerated kind argument admits only its members; an open one only through the policy's pairing.
+   const admitted=parameter&&(parameter.enum?parameter.enum.includes(mapping.lemma):(paired.get(mapping)??[]).includes(constructor));
+   return admitted?{constructor,args:own?{...mapping.nativeFamilyBinding.arguments}:{}}:null;
+  }).filter(Boolean);
  for(const [index,operation] of operations.entries()){
   const capability=operation.spatial;
   if(capability?.frame!==frame||operation.requires?.length)continue;
@@ -56,35 +70,40 @@ function nativeCapabilityWires(host,operations,mappings,frame) {
   const sizeKey=operation.act==='make'&&atom.test(capability.sizeKey??'')?capability.sizeKey:undefined;
   rows.push(row(tool,'std.placement.tool',{act:operation.act,operation:operation.id,kindKey,xKey,yKey,idsKey,sizeKey,originX:.5,originY:.5}));
   for(const mapping of mappings){
-   const constructor=operations.find(op=>op.id===mapping.nativeFamilyBinding.operation);
-   if(!constructor?.spatial||constructor.on!==operation.on||operation.act==='make'&&constructor.id!==operation.id||
-    mapping.familyIdentity||!atom.test(mapping.canonical)||!atom.test(mapping.lemma))continue;
-   const args={...mapping.nativeFamilyBinding.arguments},nativeKey=constructor.spatial.kindKey;
-   if(!constructor.params[nativeKey]?.enum?.includes(mapping.lemma))continue;
-   args[nativeKey]=mapping.lemma;
-   if(Object.keys(args).some(key=>[xKey,yKey].includes(key)||!['string','number','boolean'].includes(typeof args[key])))continue;
-   const material=JSON.stringify([constructor.id,args]),key=JSON.stringify([operation.id,mapping.canonical,mapping.lemma,material]);
-   if(seen.has(key))continue;
-   seen.add(key);
-   if(!measurements.has(material)){
-    const command=row('measure',constructor.id,Object.fromEntries(Object.entries(args).map(([key,value])=>[key,scalar(value)])));
-    measurements.set(material,host.measureSpatial(command));
+   if(concepts&&!concepts.has(mapping.canonical)||placed.has(operation.act+' '+mapping.canonical))continue;
+   if(mapping.familyIdentity||!atom.test(mapping.canonical)||!atom.test(mapping.lemma))continue;
+   for(const {constructor,args:own} of constructorsOf(mapping)){
+    if(!constructor.spatial||constructor.on!==operation.on||operation.act==='make'&&constructor.id!==operation.id)continue;
+    const args={...own},nativeKey=constructor.spatial.kindKey;
+    args[nativeKey]=mapping.lemma;
+    if(Object.keys(args).some(key=>[xKey,yKey].includes(key)||!['string','number','boolean'].includes(typeof args[key])))continue;
+    const material=JSON.stringify([constructor.id,args]),key=JSON.stringify([operation.id,mapping.canonical,mapping.lemma,material]);
+    if(seen.has(key))continue;
+    seen.add(key);
+    if(!measurements.has(material)){
+     const command=row('measure',constructor.id,Object.fromEntries(Object.entries(args).map(([key,value])=>[key,scalar(value)])));
+     measurements.set(material,host.measureSpatial(command));
+    }
+    const extent=measurements.get(material);
+    if(!extent||!(extent.width>0)||!(extent.height>0))continue;
+    const kind='native.spatial.kind.'+rows.length;
+    const {width,height,originX,originY}=extent;
+    rows.push(row(kind,'std.placement.kind',{binding:'$'+tool,concept:mapping.canonical,native:mapping.lemma,width,height,originX,originY}));
+    for(const [key,value] of Object.entries(args))if(operation.act==='make'&&key!==kindKey)rows.push(row('native.spatial.argument.'+rows.length,'std.placement.argument',{binding:'$'+kind,key,value:scalar(value)}));
+    placed.add(operation.act+' '+mapping.canonical);
+    break;
    }
-   const extent=measurements.get(material);
-   if(!extent||!(extent.width>0)||!(extent.height>0))continue;
-   const kind='native.spatial.kind.'+rows.length;
-   const {width,height,originX,originY}=extent;
-   rows.push(row(kind,'std.placement.kind',{binding:'$'+tool,concept:mapping.canonical,native:mapping.lemma,width,height,originX,originY}));
-   for(const [key,value] of Object.entries(args))if(operation.act==='make'&&key!==kindKey)rows.push(row('native.spatial.argument.'+rows.length,'std.placement.argument',{binding:'$'+kind,key,value:scalar(value)}));
   }
  }
  return rows;
 }
 
-export function placementInterfaceSop(host,spatial,mappings,requestId) {
+// constructors: the policy's constructor pairs ({mapping, operation}); concepts: the kinds the request names, the
+// only ones whose extents are measured (a catalog tool admits thousands of names).
+export function placementInterfaceSop(host,spatial,mappings,requestId,{constructors,concepts}={}) {
  const {observation,revision,frame,scope,container}=spatial,operations=host.bindings();
  const {wires,bounds}=nativeGeometryWires(spatial,mappings,operations);
- const configuration=[...wires,...nativeCapabilityWires(host,operations,mappings,frame)].join('\n');
+ const configuration=[...wires,...nativeCapabilityWires(host,operations,mappings,frame,{constructors,concepts})].join('\n');
  const context=row('native.spatial.context','std.placement.context',{
   request:'$'+requestId,instance:quote(observation.instanceId),revision:quote(revision),
   frame:quote(frame),scope:quote(scope),container:quote(container),bounds:bounds?'$'+bounds:undefined,

@@ -64,7 +64,15 @@
 @native.art.draw.value.60 std.capability.item index=0 value=$native.art.draw.value.59
 @native.art.draw.value.61 std.capability.list member=$native.art.draw.value.60
 @native.art.draw.value.62 std.capability.arg name="knowledgeInputs" value=$native.art.draw.value.61
-@native.art.draw.op.drawing.catalog.make.metadata app.native.metadata operation=$native.art.draw.op.drawing.catalog.make field=$native.art.draw.value.62
+# A catalog drawing is placed like a drawn kind: the same frame, coordinates and size, its catalog name as the kind.
+@native.art.draw.catalog.spatial.frame std.capability.arg name="frame" value="drawing.canvas"
+@native.art.draw.catalog.spatial.kind std.capability.arg name="kindKey" value="name"
+@native.art.draw.catalog.spatial.x std.capability.arg name="xKey" value="x"
+@native.art.draw.catalog.spatial.y std.capability.arg name="yKey" value="y"
+@native.art.draw.catalog.spatial.size std.capability.arg name="sizeKey" value="size"
+@native.art.draw.catalog.spatial.record std.capability.record entry=$native.art.draw.catalog.spatial.frame entry=$native.art.draw.catalog.spatial.kind entry=$native.art.draw.catalog.spatial.x entry=$native.art.draw.catalog.spatial.y entry=$native.art.draw.catalog.spatial.size
+@native.art.draw.catalog.spatial std.capability.arg name="spatial" value=$native.art.draw.catalog.spatial.record
+@native.art.draw.op.drawing.catalog.make.metadata app.native.metadata operation=$native.art.draw.op.drawing.catalog.make field=$native.art.draw.value.62 field=$native.art.draw.catalog.spatial
 @native.art.draw.op.drawing.object.change std.capability.operation scope=$native.art.draw.scope name="drawing.object.change" act=change on="art.draw.object" order=2 eligible=true
 @native.art.draw.op.drawing.object.change.param.ids std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="ids" kind=array required=true
 @native.art.draw.op.drawing.object.change.param.name std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="name" kind=string

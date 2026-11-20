@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Drawing authority consists of owned board, object and vector SOP facts.
-import { toolInstanceStateCodec } from '../tool-instance-state.mjs?v=e33372ff43';
+import { toolInstanceStateCodec } from '../tool-instance-state.mjs?v=eae28f64a1';
 import authoredSchema from './state-schema-source.mjs?v=9b442dbc4b';
-import { copyHostData } from '../native-tool-host.mjs?v=6e8a05d4e9';
+import { copyHostData } from '../native-tool-host.mjs?v=fc9d28ffde';
 import { initialState } from './board.mjs?v=e8b4238595';
 
 export const DRAWING_STATE_SCHEMA=authoredSchema;

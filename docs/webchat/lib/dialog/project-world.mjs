@@ -1,7 +1,7 @@
 // Operational application registry: tab-to-domain resolution reads declared SOP facts.
-import{World,quote,str,serialize}from'../vendor/sopworld/sopworld.mjs?v=22a3f6e48e';
+import{World,quote,str,serialize}from'../vendor/sopworld/sopworld.mjs?v=5221d62911';
 import schema from'../../worlds/app.project/schema-source.mjs?v=1e120a8446';
-import{inspectSchemaSource}from'./worlds-inspection.mjs?v=63678934ef';
+import{inspectSchemaSource}from'./worlds-inspection.mjs?v=d6b44a7dcc';
 const factId=value=>'project.u'+Array.from(new TextEncoder().encode(value),byte=>byte.toString(16).padStart(2,'0')).join('');
 export function createProjectWorld({areas=[],instances=[]}={}){
  const world=new World(),instanceByWorld=new Map(instances.map(record=>[record.world,record])),lines=[],domains=[];

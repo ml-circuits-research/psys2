@@ -529,12 +529,13 @@
 @ob.in.colour w.drawing.object code=?id colour=?v
 @ob.in.colour.o app.observe.input id=?id key=color value=?v
 @draw.observe.colour core.rule when=$ob.in.colour then=$ob.in.colour.o
-@ob.in.width w.drawing.object code=?id width=?v
-@ob.in.width.o app.observe.input id=?id key=width value=?v
-@draw.observe.width core.rule when=$ob.in.width then=$ob.in.width.o
-@ob.in.height w.drawing.object code=?id height=?v
-@ob.in.height.o app.observe.input id=?id key=height value=?v
-@draw.observe.height core.rule when=$ob.in.height then=$ob.in.height.o
+# Width and height are observed for every object: the sides of the box it is drawn in (its own width or height,
+# else its size), so a comparative of either side ("wider") has the value the object has now.
+@ob.in.extent ui.draw.extent object=?id w=?w h=?h
+@ob.in.width.o app.observe.input id=?id key=width value=?w
+@ob.in.height.o app.observe.input id=?id key=height value=?h
+@draw.observe.width core.rule when=$ob.in.extent then=$ob.in.width.o
+@draw.observe.height core.rule when=$ob.in.extent then=$ob.in.height.o
 # Each drawn part of an object is observed under it (id <code>.<index>, its k.objects name as kind), so a reader can
 # name "the roof" of the house; a removed part is not observed.
 @obp.o w.drawing.object code=?id
@@ -546,14 +547,16 @@
 @draw.observe.part core.rule when=$obp.o when=$obp.kp when=$obp.ix not=$obp.removed with=$obp.pid then=$obp.out
 @ob.member.type core.type of=app.observe.member
 @sp.frame app.observe.frame id=drawing.canvas x0=0 y0=0 x1=1000 y1=700 evidence=rectangle
-@sp.o w.drawing.object code=?id x=?x y=?y size=?s
-@sp.h core.calc out=?h fn=div args=?s args=2
-@sp.x0 core.calc out=?x0 fn=sub args=?x args=?h
-@sp.y0 core.calc out=?y0 fn=sub args=?y args=?h
-@sp.x1 core.calc out=?x1 fn=add args=?x args=?h
-@sp.y1 core.calc out=?y1 fn=add args=?y args=?h
+@sp.o w.drawing.object code=?id x=?x y=?y
+@sp.ext ui.draw.extent object=?id w=?w h=?h
+@sp.hw core.calc out=?hw fn=div args=?w args=2
+@sp.hh core.calc out=?hh fn=div args=?h args=2
+@sp.x0 core.calc out=?x0 fn=sub args=?x args=?hw
+@sp.y0 core.calc out=?y0 fn=sub args=?y args=?hh
+@sp.x1 core.calc out=?x1 fn=add args=?x args=?hw
+@sp.y1 core.calc out=?y1 fn=add args=?y args=?hh
 @sp.box app.observe.box id=?id x0=?x0 y0=?y0 x1=?x1 y1=?y1 occupant=true
-@spatial.box core.rule when=$sp.o with=$sp.h with=$sp.x0 with=$sp.y0 with=$sp.x1 with=$sp.y1 then=$sp.box
+@spatial.box core.rule when=$sp.o when=$sp.ext with=$sp.hw with=$sp.hh with=$sp.x0 with=$sp.y0 with=$sp.x1 with=$sp.y1 then=$sp.box
 # Where other things go on each object (its k.layouts anchors: the water of a lake, the surface of a table), in page
 # units, with the kinds each holds: placement puts "a boat in the lake" into the water, "a cup on the table" on it.
 @rg.o w.drawing.object code=?id drawing=?k x=?x y=?y size=?s

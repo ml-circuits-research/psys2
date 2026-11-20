@@ -5,8 +5,8 @@
 //  3. this interpreter runs the calls through the library's generic acts (World.act) and keeps the resulting
 //     instance facts and the view keys as the tool state. Undo and redo belong to the application's journal.
 // The objects a reader observes come from app.observe.object facts the same rules derive.
-import {parse, quote, serialize, str} from '../lib/vendor/sopworld/sopworld.mjs?v=22a3f6e48e';
-import {createNativeToolHost, nativeToken} from './native-tool-host.mjs?v=6e8a05d4e9';
+import {parse, quote, serialize, str} from '../lib/vendor/sopworld/sopworld.mjs?v=5221d62911';
+import {createNativeToolHost, nativeToken} from './native-tool-host.mjs?v=fc9d28ffde';
 
 const CALLS = 512;
 const atom = /^[A-Za-z_][A-Za-z0-9_.-]*$/;

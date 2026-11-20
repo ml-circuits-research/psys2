@@ -65,7 +65,8 @@ export async function createKeyReaderPipeline({cutter,reader,getContext,cutterMo
     if(!suppliedSpan)ranges.push({path:['requests',String(index),'span'],range:[start,end]});
    }
    raw={format:RAW_STRUCTURAL_FORMAT,source:{text,unit:'unicode-scalar'},area:context.area,model:{kind:'structural-graph',sha256:pipelineSha256,decoderVersion:1},requestCount:cut.spans.length,requests,ranges,coverage:{complete:failures.length===0,truncated:false},unresolved:copy(failures)};
-   if(!recordedContext&&cut.spans.length===1&&context.context?.previous!=null)independentInput={sourceSop,cut,context,profiles:new Set()};
+   // Both priors (the previous message, the observed objects) leave a re-reading hypothesis without them, also on a first turn.
+   if(!recordedContext&&cut.spans.length===1&&(context.context?.previous!=null||context.context?.existing?.length>0))independentInput={sourceSop,cut,context,profiles:new Set()};
    const bridge=bridgeRawStructure(raw,{bindings,bindingSha256:bindingsSha256,comparatives:comparativeSteps(),references:referenceProjection(),budget,decoderBudget,maxBytes});
    failures.push(...bridge.diagnostics.map(issue=>({reason:issue.reason,path:issue.path})));const decoded=bridge.decoded;failures.push(...(decoded?.issues??[]));
    return {candidates:failures.length?[]:(decoded?.candidates??[]),coverage:{complete:failures.length===0&&decoded?.coverage?.complete===true,graphProposal:decoded?.coverage?.graphProposal===true,executable:false},failures,raw,provenance:copy(provenance),graphConfidence:null,sourceCut,steps,...(observation?{sourceObservation:copy(observation)}:{})};
@@ -75,6 +76,8 @@ export async function createKeyReaderPipeline({cutter,reader,getContext,cutterMo
   const input=independentInput;
   if(input?.sourceSop!==sourceSop){independentInput=null;return null;}
   if(input.profiles.has(profile))return null;
+  // A re-reading identical to one already made (no previous message to drop; no observed objects to drop) is not repeated.
+  if(profile==='independent'?input.context.context.previous==null:!(input.context.context.existing?.length>0))return null;
   input.profiles.add(profile);
   const context={...input.context.context,previous:null};
   if(profile==='literal')context.existing=[];

@@ -1,7 +1,7 @@
 // Read-only architecture projection of the runtime registry. No inferred execution links.
-import {parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=22a3f6e48e';
-import {inspectReaderAdmissionPolicy} from './reader-policy.mjs?v=7e4dd78e81';
-import {inspectReaderContextPolicy} from './reader-context-policy.mjs?v=95bbe7ef31';
+import {parse,serialize,str} from '../vendor/sopworld/sopworld.mjs?v=5221d62911';
+import {inspectReaderAdmissionPolicy} from './reader-policy.mjs?v=1602ea4159';
+import {inspectReaderContextPolicy} from './reader-context-policy.mjs?v=b6b936b681';
 import {describeWorldsNodes} from './worlds-node-metadata.mjs?v=11b6d9d2f3';
 import {CATALOG_WORLD_PURPOSES} from './catalog-world-purpose.mjs?v=e85a0d58f7';
 
@@ -53,7 +53,7 @@ export function inspectWorldsRuntime({index={},bundle={worlds:{}},loaded=[],inst
  }
 
  for(const record of instances){
-  nodes.push({id:'instance:'+record.world,label:record.world+' world instance',kind:'instance',implementation:record.authoritative?'Authoritative SOP Lang World':'SOP Lang World observed from native adapter',description:record.authoritative?'Actual operational domain state. Tools decode temporary native data from these exact SOP facts and commit only validated SOP results; there is no parallel native row store.':'Actual semantic World held in session.instanceWorlds: domain facts and explicit references, excluding native history, renderer projection and archive descriptors. The native adapter still owns additional semantic state; this observation is not yet the operational authority.',wires:record.wires,details:{instanceId:record.instanceId,revision:record.revision,world:record.world,storage:'session.instanceWorlds',authority:record.authoritative?'operational':'observation',...(record.authoritative&&Object.hasOwn(nativeStates,record.world)?{nativeCarrier:nativeStates[record.world]}:{}),cachedWorld:instanceCaches.find(cache=>cache.world===record.world)??null}});
+  nodes.push({id:'instance:'+record.world,label:record.world+' world instance',kind:'instance',implementation:record.authoritative?'Authoritative SOP Lang World':'SOP Lang World observed from native adapter',description:record.authoritative?'Actual operational domain state. Tools decode temporary native data from these exact SOP facts and commit only validated SOP results; there is no parallel native row store.':'Actual semantic World held in session.instanceWorlds: domain facts and explicit references, excluding native history, renderer projection and archive descriptors. The native adapter still owns additional semantic state; this observation is not yet the operational authority.',wires:record.wires,details:{instanceId:record.instanceId,revision:record.revision,world:record.world,storage:'session.instanceWorlds',authority:record.authoritative?'operational':'observation',...(record.prepared===false?{observation:'Area not prepared in this session: no tool host was created and no knowledge was read for inspection. These are the instance facts it holds.'}:{}),...(record.authoritative&&Object.hasOwn(nativeStates,record.world)?{nativeCarrier:nativeStates[record.world]}:{}),cachedWorld:instanceCaches.find(cache=>cache.world===record.world)??null}});
   link('instance:'+record.world,'world:'+record.world,'associated application world');
   if(schemaWorlds.has(record.world))link('instance:'+record.world,schemaWorlds.get(record.world),'declared schema world');
   if(!record.authoritative&&Object.hasOwn(nativeStates,record.world))link('native:'+record.world,'instance:'+record.world,'supplies observed facts');

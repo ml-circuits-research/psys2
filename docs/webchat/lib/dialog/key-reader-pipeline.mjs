@@ -1,9 +1,9 @@
 // Source-only two-model proposals. No parser fallback or execution admission.
-import {readReaderSource} from './reader-source.mjs?v=49f139fd1e';
-import {copyHostData,freezeHostData} from '../../worlds/native-tool-host.mjs?v=6e8a05d4e9';
-import {bridgeRawStructure,RAW_STRUCTURAL_FORMAT,BINDING_NODES} from './raw-structural-bridge.mjs?v=7b3162b44b';
-import {comparativeSteps} from './comparative-projection.mjs?v=11b4faa0f5';
-import {referenceProjection} from './reference-projection.mjs?v=802eafd47a';
+import {readReaderSource} from './reader-source.mjs?v=f5f7a86d5f';
+import {copyHostData,freezeHostData} from '../../worlds/native-tool-host.mjs?v=fc9d28ffde';
+import {bridgeRawStructure,RAW_STRUCTURAL_FORMAT,BINDING_NODES} from './raw-structural-bridge.mjs?v=41291ce74e';
+import {comparativeSteps} from './comparative-projection.mjs?v=12ce920a63';
+import {referenceProjection} from './reference-projection.mjs?v=1ef2b08b41';
 const hash=x=>typeof x==='string'&&/^[a-f0-9]{64}$/.test(x);
 const digest=async x=>Array.from(new Uint8Array(await globalThis.crypto.subtle.digest('SHA-256',new TextEncoder().encode(x))),b=>b.toString(16).padStart(2,'0')).join('');
 const same=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
@@ -65,7 +65,8 @@ export async function createKeyReaderPipeline({cutter,reader,getContext,cutterMo
     if(!suppliedSpan)ranges.push({path:['requests',String(index),'span'],range:[start,end]});
    }
    raw={format:RAW_STRUCTURAL_FORMAT,source:{text,unit:'unicode-scalar'},area:context.area,model:{kind:'structural-graph',sha256:pipelineSha256,decoderVersion:1},requestCount:cut.spans.length,requests,ranges,coverage:{complete:failures.length===0,truncated:false},unresolved:copy(failures)};
-   if(!recordedContext&&cut.spans.length===1&&context.context?.previous!=null)independentInput={sourceSop,cut,context,profiles:new Set()};
+   // Both priors (the previous message, the observed objects) leave a re-reading hypothesis without them, also on a first turn.
+   if(!recordedContext&&cut.spans.length===1&&(context.context?.previous!=null||context.context?.existing?.length>0))independentInput={sourceSop,cut,context,profiles:new Set()};
    const bridge=bridgeRawStructure(raw,{bindings,bindingSha256:bindingsSha256,comparatives:comparativeSteps(),references:referenceProjection(),budget,decoderBudget,maxBytes});
    failures.push(...bridge.diagnostics.map(issue=>({reason:issue.reason,path:issue.path})));const decoded=bridge.decoded;failures.push(...(decoded?.issues??[]));
    return {candidates:failures.length?[]:(decoded?.candidates??[]),coverage:{complete:failures.length===0&&decoded?.coverage?.complete===true,graphProposal:decoded?.coverage?.graphProposal===true,executable:false},failures,raw,provenance:copy(provenance),graphConfidence:null,sourceCut,steps,...(observation?{sourceObservation:copy(observation)}:{})};
@@ -75,6 +76,8 @@ export async function createKeyReaderPipeline({cutter,reader,getContext,cutterMo
   const input=independentInput;
   if(input?.sourceSop!==sourceSop){independentInput=null;return null;}
   if(input.profiles.has(profile))return null;
+  // A re-reading identical to one already made (no previous message to drop; no observed objects to drop) is not repeated.
+  if(profile==='independent'?input.context.context.previous==null:!(input.context.context.existing?.length>0))return null;
   input.profiles.add(profile);
   const context={...input.context.context,previous:null};
   if(profile==='literal')context.existing=[];

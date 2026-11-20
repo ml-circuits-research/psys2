@@ -2,6 +2,7 @@
 import { parse, quote, serialize, str } from '../vendor/sopworld/sopworld.mjs';
 import { decodeCapabilityCall } from '../vendor/sopworld/capability-call.mjs';
 import POLICY from '../../worlds/app.project/capability-policy.mjs';
+import CLOCK from '../../worlds/app.project/clock-projection-source.mjs';
 import { executionPolicyWorld } from './execution-policy.mjs';
 import { projectionModule } from './composition-knowledge.mjs';
 import { sceneDefaultModule, writeSceneDefaults } from './scene-placement-defaults.mjs';
@@ -38,7 +39,7 @@ function factWriter() {
   return { write, value, wires };
 }
 
-function interfaceFacts({ area, view, bindings, host, observation, focus, targetUnique, unapplied, readKnowledge, sceneDefaults, previews = [] }, concepts) {
+function interfaceFacts({ area, view, bindings, host, observation, focus, targetUnique, unapplied, readKnowledge, sceneDefaults, previews = [] }, concepts, said = []) {
   const { write, value, wires } = factWriter();
   const scope = write(NS + 'scope', {
     instance: quote(observation.instanceId), version: quote(observation.version), population: typeof observation.scope==='string' ? quote(observation.scope) : undefined,
@@ -52,12 +53,17 @@ function interfaceFacts({ area, view, bindings, host, observation, focus, target
   const sourceTypes = new Set(admitted.map((wire) => take(wire, 'on')));
   writeSceneDefaults(sceneDefaults,host,scope,operations,write,wires);
   const readerArea = bindings.readerAreaByView?.[view] ?? area.area;
-  for (const row of nativeKindCandidates(bindings)) {
+  // A kind whose own source name is aligned (whole-source-family) is named by it; its word forms (plurals,
+  // synonyms joined through source words) are the reader's surface, not further native names.
+  const kindRows = nativeKindCandidates(bindings).filter((row) => row.area === readerArea);
+  const ownNamed = new Set(kindRows.filter((row) => row.alignment?.kind === 'whole-source-family').map((row) => row.canonical));
+  for (const row of kindRows) {
     const binding = row.nativeFamilyBinding;
-    if (row.area !== readerArea || !binding || !operations.has(binding.operation)) continue;
+    if (!binding || !operations.has(binding.operation)) continue;
+    if (row.alignment?.kind === 'source-word-value-join' && ownNamed.has(row.canonical)) continue;
     const args = Object.entries(binding.arguments || {}).map(([name, datum]) =>
       write(NS + 'arg', { name: quote(name), value: value(datum) }));
-    write(NS + 'target', { scope, canonical: row.canonical, label: quote(row.lemma), operation: operations.get(binding.operation), argument: args });
+    write(NS + 'target', { scope, canonical: row.canonical, label: quote(row.lemma), operation: operations.get(binding.operation), argument: args, family: row.familyIdentity ? 'true' : undefined });
   }
 
   const executionPolicy = executionPolicyWorld();
@@ -82,7 +88,13 @@ function interfaceFacts({ area, view, bindings, host, observation, focus, target
 
   const knowledgeTypes = new Set([...valueMappings].filter(([concept]) => concepts.has(concept))
     .map(([, mapping]) => take(mapping, 'valueType')));
+  for (const row of executionPolicy.ofType('app.execution.knowledge'))
+    if (concepts.has(take(row, 'concept'))) knowledgeTypes.add(take(row, 'valueType'));
   for (const type of knowledgeTypes) wires.push(...readKnowledge().ofType(type));
+  // The values the request says for concepts with declared values, as said: declared rules may project them
+  // (clock-projection.sop: a clock time for an instant).
+  for (const { concept, label, mode } of said)
+    if (valueMappings.has(concept)) write('app.execution.requestValue', { scope, concept, label: quote(label), mode });
 
   const names = observedReaderContext(area.area, observation).context.existing;
   for (const [order, object] of observation.objects.entries()) {
@@ -166,12 +178,17 @@ function compilerWorld(context, nodes) {
     const world = executionPolicyWorld().fork();
     if (!world.use('std.interpret').ok) throw Error('capability-contract-unavailable');
     world.load(POLICY);
+    world.load(CLOCK);
     world.load(sceneDefaultModule.policy);
     declarations = world;
   }
-  const concepts = new Set(nodes.filter(wire => wire.type === 'std.request.constraint').map(wire => take(wire, 'concept')));
+  const constraints = nodes.filter(wire => wire.type === 'std.request.constraint');
+  const concepts = new Set(constraints.map(wire => take(wire, 'concept')));
+  const targets = new Map(nodes.filter(wire => wire.type === 'std.request.target').map(wire => ['$' + wire.id, take(wire, 'mode')]));
+  const said = constraints.map(wire => ({ concept: take(wire, 'concept'), label: take(wire, 'value'), mode: targets.get(wire.attrs.target?.[0]) }))
+    .filter(row => typeof row.label === 'string' && ['new', 'existing'].includes(row.mode));
   const compose = sceneDefaults => {
-    const {wires,scope}=interfaceFacts({...context,sceneDefaults},concepts);
+    const {wires,scope}=interfaceFacts({...context,sceneDefaults},concepts,said);
     const world=declarations.fork();
     return world.tell(serialize(wires),{factsOnly:true}).ok ? {world,scope} : null;
   };

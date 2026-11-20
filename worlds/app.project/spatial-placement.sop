@@ -1,6 +1,8 @@
 # The editor applies the catalog's shared geometric policies.
 # Rank AABB overlap before clearance shortfall and declared direction order.
-@layout.method std.placement.method directionType=k.spatial2d.direction boxType=k.spatial2d.box relationType=k.spatial2d.relation policyType=k.spatial2d.policy effectiveType=k.spatial2d.effective_policy measurementType=k.spatial2d.measurement peerRelation=independent_peer containRelation=member_of containEvidence=containment gapMetric=near_distance objective=$layout.objective
+# relax=gap: when no place keeps every declared distance (next to a lake and left of a tree far from it), each relation
+# keeps its direction and separation and its distance becomes a soft term; the reply names the relations kept loosely.
+@layout.method std.placement.method relax=gap directionType=k.spatial2d.direction boxType=k.spatial2d.box relationType=k.spatial2d.relation policyType=k.spatial2d.policy effectiveType=k.spatial2d.effective_policy measurementType=k.spatial2d.measurement peerRelation=independent_peer containRelation=member_of containEvidence=containment gapMetric=near_distance objective=$layout.objective
 @layout.objective std.objective direction=minimise order=lexicographic term=$layout.overlap.term term=$layout.clearance.term term=$layout.order.term
 @layout.overlap std.objective.evaluator normalisation=canvas.pixel.area version=1
 @layout.clearance std.objective.evaluator normalisation=canvas.pixel.length version=1

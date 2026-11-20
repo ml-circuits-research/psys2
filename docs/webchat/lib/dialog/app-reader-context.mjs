@@ -1,11 +1,11 @@
 // Actual application state only. No request annotations or invented semantic types.
-import {observedReaderContext} from './native-reader-context.mjs?v=8a38092080';
-import {isAuthoredRequest} from './authored-request-tool.mjs?v=687fe97da8';
-import {createDrawingArea,canonicalDrawingArea,projectDrawingArea,drawingAreaStateWorld} from '../../worlds/art.draw/sop-drawing.mjs?v=fa4824f4b9';
-import {createDiagramArea,canonicalDiagramArea,projectDiagramArea,diagramAreaStateWorld} from '../../worlds/diagram.sketch/sop-diagram.mjs?v=2b2b5bb599';
-import {createDocumentArea,canonicalDocumentArea,projectDocumentArea,documentAreaStateWorld} from '../../worlds/docs.editor/sop-document.mjs?v=40c94dbcaa';
-import {createAvatarArea,canonicalAvatarArea,projectAvatarArea,avatarAreaStateWorld} from '../../worlds/ui.avatar/sop-avatar.mjs?v=554f7b6a9a';
-import {createCalendarArea,canonicalCalendarArea,projectCalendarArea,calendarAreaStateWorld} from '../../worlds/time.calendar/sop-calendar.mjs?v=f811d31bef';
+import {observedReaderContext} from './native-reader-context.mjs?v=eb98b919f9';
+import {isAuthoredRequest} from './authored-request-tool.mjs?v=b52476cf73';
+import {createDrawingArea,canonicalDrawingArea,projectDrawingArea,drawingAreaStateWorld} from '../../worlds/art.draw/sop-drawing.mjs?v=dad95e8c30';
+import {createDiagramArea,canonicalDiagramArea,projectDiagramArea,diagramAreaStateWorld} from '../../worlds/diagram.sketch/sop-diagram.mjs?v=e2d934ced4';
+import {createDocumentArea,canonicalDocumentArea,projectDocumentArea,documentAreaStateWorld} from '../../worlds/docs.editor/sop-document.mjs?v=3a78f23d58';
+import {createAvatarArea,canonicalAvatarArea,projectAvatarArea,avatarAreaStateWorld} from '../../worlds/ui.avatar/sop-avatar.mjs?v=dd2d2bf939';
+import {createCalendarArea,canonicalCalendarArea,projectCalendarArea,calendarAreaStateWorld} from '../../worlds/time.calendar/sop-calendar.mjs?v=33e0d3ec07';
 export const NATIVE_AREAS={
  avatar:{area:'avatar',world:'ui.avatar',create:createAvatarArea,prepare:createAvatarArea,canonicalizeState:canonicalAvatarArea,projectState:projectAvatarArea,
   stateWorld:avatarAreaStateWorld,separateRuntime:true,historySelection:[['runtime','view','selected']],historyView:[['runtime','view','ids']]},

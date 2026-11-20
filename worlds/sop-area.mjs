@@ -2,7 +2,8 @@
 // A tab defined by its area.sop: which catalog modules form its instance and knowledge, which rule files
 // compile its commands and project its drawing, the things it starts with and the open choices of its native
 // interface. This module only reads that declaration; it holds no knowledge of any tab.
-import {World, str} from '../src/vendor/sopworld/sopworld.mjs';
+import {World, parse, str} from '../src/vendor/sopworld/sopworld.mjs';
+import {budget} from '../src/dialog/budget.mjs';
 import {catalogWorld} from './catalog-world.mjs';
 import {readNativeToolInterface} from './native-tool-interface.mjs';
 import {toolInvocationContext} from './native-tool-host.mjs';
@@ -118,6 +119,9 @@ function choices({ base, owned }) {
 
 export async function createSopArea({ world, loader, readCatalog, state, instanceId, identityRegistry, interfaceSource, interfaceImports = {}, args }) {
   const declared = await areaBase({ world, loader, readCatalog });
+  // The base is shared per world; a catalog reader that arrives after it was built (the application's catalog after
+  // the offline subset) serves later lookups, with its own index.
+  if (readCatalog && declared.readCatalog !== readCatalog) { declared.readCatalog = readCatalog; declared.index = undefined; declared.shardTexts = undefined; }
   await ensureLookups(declared, state, args);
   // interfaceImports: the native interfaces this one composes (app.native.compose module=...), by module.
   const toolInterface = readNativeToolInterface(interfaceSource, { imports: interfaceImports }).realize(choices(declared));
@@ -149,6 +153,30 @@ function frameOf(live, frame) {
 
 /** The area's base once loaded (synchronous readers: a state projection for the view). */
 export const peekAreaBase = (world) => resolved.get(world);
+
+/**
+ * For each observed object (app.observe.object id), the state facts its observation was derived from, read from the
+ * derivation's own record (each derived fact's supporting facts). Null before the base is loaded.
+ */
+export function observationSupport(world, state) {
+  const declared = resolved.get(world);
+  if (!declared) return null;
+  state = { sop: state?.sop ?? '', runtime: state?.runtime ?? { view: {} } };
+  const live = worldOf(declared.base, state), told = new Set(parse(state.sop).map((fact) => fact.id)), support = {};
+  for (const fact of live.ofType('app.observe.object')) {
+    const found = new Set(), seen = new Set(), pending = [fact.id];
+    while (pending.length) {
+      budget.tick('sop-area.observationSupport');
+      const id = pending.pop();
+      if (seen.has(id)) continue;
+      seen.add(id);
+      if (told.has(id)) found.add(id); else for (const from of live.wires.get(id)?.meta?.from ?? []) pending.push(from);
+    }
+    const list = (support[read(fact, 'id')] ??= []);
+    for (const id of found) if (!list.includes(id)) list.push(id);
+  }
+  return support;
+}
 
 function drawTypes(declared) {
   const [draw] = declared.owned('app.area.draw');

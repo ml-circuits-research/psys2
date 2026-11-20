@@ -20,9 +20,11 @@ test('k.interest inspection reads only its actual published schema and declared 
  const base=new URL('../docs/webchat/catalog/'+CATALOG_PIN.commit+'/',import.meta.url),catalog=JSON.parse(await readFile(new URL('index.json',base),'utf8')),world=catalog.worlds.find(world=>world.id==='k.interest'),paths=[world.schema,...world.shards.map(shard=>shard.path)],reads=[];
  const result=await inspectCatalogSources({nodeId:'knowledge-world:k.interest',index:catalog,readText:async path=>{reads.push(path);return readFile(new URL(path,base),'utf8');}});assert.deepEqual(reads,paths);assert.equal(result.status,'loaded');assert.equal(result.sources.length,paths.length);for(const source of result.sources)assert.equal(source.text,await readFile(new URL(source.path,base),'utf8'));assert.ok(result.sources.every(source=>source.path.startsWith('k.interest/')&&source.language==='sop'&&source.purpose==='inspection'));
 });
-test('read-only instance inspection observes the SOP avatar area like a prepared host',async()=>{
+test('read-only instance inspection leaves an unprepared SOP avatar area unprepared and observes a prepared one like its host',async()=>{
  const [{NATIVE_AREAS,createAreaHost},{observeNativeInstanceWorlds},{emptyAvatarState}]=await Promise.all([import('../src/dialog/app-reader-context.mjs'),import('../src/dialog/instance-persistence.mjs'),import('../worlds/ui.avatar/sop-avatar.mjs')]);
  const knowledge={},state=emptyAvatarState(),session={isession:{state:{'ui.avatar':state}},engine:{knowledge}};
- const inspected=await observeNativeInstanceWorlds(session,{worlds:['ui.avatar'],includeHostInterface:true,prepareKnowledge:false});assert.equal(inspected.length,1);assert.ok(inspected[0].observation.objects.some(object=>object.sourceType==='ui.avatar.face'));
- const prepared=await createAreaHost(NATIVE_AREAS.avatar,{state,instanceId:inspected[0].observation.instanceId,knowledge});assert.deepEqual(prepared.observe().objects,inspected[0].observation.objects);assert.deepEqual(prepared.bindings(),inspected[0].nativeInterface.operations);
+ const [unprepared]=await observeNativeInstanceWorlds(session,{worlds:['ui.avatar'],includeHostInterface:true,prepareKnowledge:false});assert.equal(unprepared.prepared,false);assert.equal(unprepared.observation,null);assert.equal(typeof unprepared.wires,'string','the record still carries its (here empty) instance facts');
+ const prepared=await createAreaHost(NATIVE_AREAS.avatar,{state,instanceId:unprepared.instanceId,knowledge});
+ const inspected=await observeNativeInstanceWorlds(session,{worlds:['ui.avatar'],includeHostInterface:true,prepareKnowledge:false});assert.equal(inspected.length,1);assert.equal(inspected[0].prepared,true);assert.ok(inspected[0].observation.objects.some(object=>object.sourceType==='ui.avatar.face'));
+ assert.deepEqual(prepared.observe().objects,inspected[0].observation.objects);assert.deepEqual(prepared.bindings(),inspected[0].nativeInterface.operations);
 });

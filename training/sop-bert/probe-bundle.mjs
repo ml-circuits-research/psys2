@@ -24,7 +24,17 @@ const {routeNewEngine}=await import('../../src/dialog/reader-routing.mjs');
 let assembled=null,appContext=null;
 const reader=await loadActualReplayReader(spec,{factory:async options=>{const inner=options.getContext;assembled=await createVerifiedReaderProvider({...options,getContext:(...a)=>appContext??inner(...a)});return assembled;}});
 const runMode=process.argv.includes('--run');
-// --run: the whole app route (routeNewEngine) against a real editor host seeded with the probe's context objects.
+// --run: the whole app route (routeNewEngine) against a real editor host seeded with the probe's context objects,
+// with the page's knowledge: the site catalog the build pins (docs/webchat/catalog/<commit>), as the browser reads it.
+let catalogKnowledge;
+async function siteKnowledge(){
+ if(catalogKnowledge!==undefined)return catalogKnowledge;
+ const {readdirSync,existsSync}=await import('node:fs');
+ const root=new URL('../../docs/webchat/catalog/',import.meta.url).pathname,commit=existsSync(root)?readdirSync(root).find(name=>/^[0-9a-f]{40}$/.test(name)):null;
+ if(!commit)return catalogKnowledge=null;
+ const {createFacts}=await import('../../src/knowledge/facts.mjs'),{createKnowledgeSource}=await import('../../src/loaders/knowledge-source.mjs');
+ return catalogKnowledge=createFacts({source:createKnowledgeSource(root+commit)});
+}
 async function appRun(p){
  const {NATIVE_AREAS}=await import('../../src/dialog/app-reader-context.mjs');
  const {seedFunctionalContext}=await import('../../scripts/functional-context-seeding.mjs');
@@ -34,12 +44,13 @@ async function appRun(p){
   diagram:async()=>(await import('../../worlds/diagram.sketch/sop-diagram.mjs')).emptyDiagramState(),calendar:async()=>{const m=await import('../../worlds/time.calendar/sop-calendar.mjs');return m.emptyCalendarArea();}};
  const defaults=empties[tab]?await empties[tab]():undefined;
  if(defaults)state[area.world]=defaults;state['ui.shell']={activeTab:tab};
- const host=await area.create({state:state[area.world],instanceId:'probe-'+Math.random().toString(16).slice(2)});
+ const knowledge=await siteKnowledge();
+ const host=await area.create({state:state[area.world],instanceId:'probe-'+Math.random().toString(16).slice(2),...(knowledge?{knowledge}:{})});
  const setup=await seedFunctionalContext({context:{existing:p.context?.existing??[]},host,kindMappings:FUNCTIONAL_NATIVE_BINDINGS[p.area]??[],invocationPrefix:'probe'});
  const session={isession:{state},newEngineJournal:[]};
  const before=host.observe().objects.length;
  const proposals=[];
- session.engine={requestReader:{...assembled.provider,async propose(sop){const r=await assembled.provider.propose(sop);proposals.push(r);return r;},
+ session.engine={...(knowledge?{knowledge}:{}),requestReader:{...assembled.provider,async propose(sop){const r=await assembled.provider.propose(sop);proposals.push(r);return r;},
   async *proposeRequests(sop){for await(const r of assembled.provider.proposeRequests(sop)){proposals.push(r);yield r;}}}};
  appContext=observedReaderContext(p.area,host.observe(),p.context?.previous??null,{compact:true,text:p.text});
  let reply;try{reply=await routeNewEngine(session,p.text,{language:'en'});}finally{appContext=null;}

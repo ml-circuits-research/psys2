@@ -1,4 +1,4 @@
-@policy.module core.module name=app.execution version=2 imports=std.capability exports=app.execution.values exports=app.execution.observedProperty exports=app.execution.observedMeasure exports=app.execution.observedField exports=app.execution.preview exports=app.execution.comparative exports=app.execution.comparativeFactor
+@policy.module core.module name=app.execution version=2 imports=std.capability exports=app.execution.values exports=app.execution.observedProperty exports=app.execution.observedMeasure exports=app.execution.observedField exports=app.execution.preview exports=app.execution.comparative exports=app.execution.comparativeFactor exports=app.execution.knowledge exports=app.execution.instant exports=app.execution.requestValue exports=app.execution.clockTime exports=app.execution.instantBase exports=app.execution.instantFocus
 @values.type core.type of=app.execution.values closed=true
 @values.concept core.slot of=app.execution.values key=concept kind=atom present=true
 @values.type.slot core.slot of=app.execution.values key=valueType kind=string present=true
@@ -38,3 +38,32 @@
 @comparativeFactor.concept core.slot of=app.execution.comparativeFactor key=concept kind=atom present=true
 @comparativeFactor.step core.slot of=app.execution.comparativeFactor key=step kind=atom present=true
 @comparativeFactor.value core.slot of=app.execution.comparativeFactor key=factor kind=number present=true
+# Further knowledge a concept's values are resolved with (beside its app.execution.values type).
+@knowledge.type core.type of=app.execution.knowledge closed=true
+@knowledge.concept core.slot of=app.execution.knowledge key=concept kind=atom present=true
+@knowledge.valueType core.slot of=app.execution.knowledge key=valueType kind=string present=true
+# A concept whose values are instants (milliseconds since the Unix epoch) on objects of `sourceType`: `binding` is
+# the observed field that holds the object's instant now, `zoneOffset` the area's clock offset from UTC in minutes.
+@instant.type core.type of=app.execution.instant closed=true
+@instant.concept core.slot of=app.execution.instant key=concept kind=atom present=true
+@instant.on core.slot of=app.execution.instant key=sourceType kind=string present=true
+@instant.binding core.slot of=app.execution.instant key=binding kind=string present=true
+@instant.zone core.slot of=app.execution.instant key=zoneOffset kind=integer min=-720 max=840 present=true
+# A value the request gives for a concept with declared values, as said, with the mode of its target.
+@requestValue.type core.type of=app.execution.requestValue closed=true
+@requestValue.scope core.slot of=app.execution.requestValue key=scope kind=ref to=std.capability.scope present=true
+@requestValue.concept core.slot of=app.execution.requestValue key=concept kind=atom present=true
+@requestValue.label core.slot of=app.execution.requestValue key=label kind=string present=true
+@requestValue.mode core.slot of=app.execution.requestValue key=mode kind=atom enum=new enum=existing present=true
+# A said clock time as minutes after the start of the day (negative before it), and the instant whose day it
+# is said on (the focused or observed object's instant, else the scope's clock).
+@clockTime.type core.type of=app.execution.clockTime closed=true
+@clockTime.label core.slot of=app.execution.clockTime key=label kind=string present=true
+@clockTime.minute core.slot of=app.execution.clockTime key=minute kind=number present=true
+@instantBase.type core.type of=app.execution.instantBase closed=true
+@instantBase.scope core.slot of=app.execution.instantBase key=scope kind=ref to=std.capability.scope present=true
+@instantBase.concept core.slot of=app.execution.instantBase key=concept kind=atom present=true
+@instantBase.value core.slot of=app.execution.instantBase key=value kind=number present=true
+@instantFocus.type core.type of=app.execution.instantFocus closed=true
+@instantFocus.scope core.slot of=app.execution.instantFocus key=scope kind=ref to=std.capability.scope present=true
+@instantFocus.concept core.slot of=app.execution.instantFocus key=concept kind=atom present=true

@@ -18,6 +18,7 @@ for (const [source, module] of [
   ['execution-policy.sop', 'execution-policy-source.mjs'],
   ['execution-policy-schema.sop', 'execution-policy-schema-source.mjs'],
   ['comparative-projection.sop', 'comparative-projection-source.mjs'],
+  ['clock-projection.sop', 'clock-projection-source.mjs'],
   ['history-policy.sop', 'history-policy-source.mjs'],
   ['history-schema.sop', 'history-schema-source.mjs'],
   ['browser-state-schema.sop', 'browser-state-schema-source.mjs'],

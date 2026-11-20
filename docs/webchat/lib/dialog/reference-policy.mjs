@@ -1,7 +1,7 @@
-import {World,serialize,quote,str} from '../vendor/sopworld/sopworld.mjs?v=22a3f6e48e';
+import {World,serialize,quote,str} from '../vendor/sopworld/sopworld.mjs?v=5221d62911';
 import SCHEMA from '../../worlds/app.project/reference-schema-source.mjs?v=2286fb5492';
 import POLICY from '../../worlds/app.project/reference-policy-source.mjs?v=9015721cee';
-import {compileObservedChoice} from './observed-choice.mjs?v=b79a522fdb';
+import {compileObservedChoice} from './observed-choice.mjs?v=f384b209af';
 
 let base;
 export function referencePolicyWorld() {
