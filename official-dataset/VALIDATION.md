@@ -99,11 +99,11 @@ No issue found.
 | warning:value-span-ambiguous | 2 |
 | warning:target-description_span-ambiguous | 1 |
 
-### data-drop-v1 (16,933 rows)
+### data-drop-v1 (16,934 rows)
 
 | issue | rows |
 | --- | ---: |
-| warning:bank-extension-needed | 1,729 |
+| warning:bank-extension-needed | 1,730 |
 | warning:selector-not-in-context | 620 |
 | warning:determiner-kept-open | 409 |
 | trigger-not-in-span-removed | 288 |
@@ -332,13 +332,13 @@ Kept with a warning (not an error; see README):
 | value-span-ambiguous | 2 |
 | target-description_span-ambiguous | 1 |
 
-### data-drop-v1: 16,933 in, 16,933 kept
+### data-drop-v1: 16,934 in, 16,934 kept
 
 Fixed or converted:
 
 | fix | rows |
 | --- | ---: |
-| anchor-span-as-anchor-mention | 1,290 |
+| anchor-span-as-anchor-mention | 1,291 |
 | trigger-not-in-span-removed | 288 |
 | constraint-with-span-outside-request-removed | 93 |
 | comparative-as-delta-step | 79 |
@@ -347,7 +347,7 @@ Kept with a warning (not an error; see README):
 
 | warning | rows |
 | --- | ---: |
-| bank-extension-needed | 1,722 |
+| bank-extension-needed | 1,723 |
 | selector-not-in-context | 663 |
 | determiner-kept-open | 409 |
 | value-span-ambiguous | 319 |

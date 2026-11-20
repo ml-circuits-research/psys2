@@ -479,7 +479,7 @@
     }
   ],
   "builder": "official-dataset/build.py",
-  "builderSha256": "5f7a06db5cb6b3fa52e4fddf37efb46267bdc85c73fd2f232cd0848342a651ac",
+  "builderSha256": "d3732b399768ae94faba71bd0430eebec950dafdcf69548b65c3ddb5a150656d",
   "sources": [
     {
       "name": "ui-natural-v1",
@@ -672,13 +672,13 @@
       "path": "training/sop-bert/data/data-drop-v1/accepted.jsonl",
       "description": "Diagram/Drawing rows of the data-request drops, validated and normalised by data-drop-v1/import.py",
       "gitCommit": "2a14bbdb26a9a1c1819c714217d4d33c4441f8e7",
-      "sha256": "e5a005231928cc5adb3d62dc66b3e90bd7c59db9bc297047cf69ca7241780168",
-      "rowsIn": 16933,
-      "rowsKept": 16933,
+      "sha256": "babd6333378bdab4cde60aa5c2ba03a5d2090c1d238271950f43a0df14cf23d4",
+      "rowsIn": 16934,
+      "rowsKept": 16934,
       "rowsDropped": 0,
       "dropReasons": {},
       "fixes": {
-        "anchor-span-as-anchor-mention": 1290,
+        "anchor-span-as-anchor-mention": 1291,
         "comparative-as-delta-step": 79,
         "constraint-with-span-outside-request-removed": 93,
         "trigger-not-in-span-removed": 288
@@ -875,7 +875,7 @@
     }
   ],
   "splits": {
-    "train": 101788,
+    "train": 101790,
     "dev": 4368,
     "test": 2180
   },
@@ -898,7 +898,7 @@
     "human-adapted-v1-drawing": 112,
     "data-drop-v1": 3679,
     "human-adapted-v1-diagram": 72,
-    "main-synthetic": 5107
+    "main-synthetic": 5108
   },
   "nonReaderLabelFieldsRemoved": {
     "raw_value": 149,
@@ -914,32 +914,32 @@
   },
   "files": {
     "STATS.md": {
-      "sha256": "c4a0c549491296f34b5f9f93dc0df3734bfbf9095ccd22f240a68e8a3b2ddb81",
-      "bytes": 7938
+      "sha256": "94bb625e193468c51e29de96102ed3f5dd45cebe4423ba54a5763c4a7a710d35",
+      "bytes": 8101
     },
     "VALIDATION.md": {
-      "sha256": "a86c1b5f745c1e81f2c486fddd50c6233ee4f02d4fa0777f45fdf1f466eadffe",
-      "bytes": 12892
+      "sha256": "dfa1574c5dcdf8a1a41ba75651035208685c8a2464ed22b54a58b952c607d120",
+      "bytes": 13019
     },
     "audit-sample.md": {
-      "sha256": "82e8f364e64c968907fbcda0da0fe62f7e91a1abe9064ae618372dce7a39f350",
-      "bytes": 44450
+      "sha256": "5e8de0d63bff8de8c838e3beb172529c2706f8cdff76801304d88888713655d7",
+      "bytes": 44259
     },
     "dev.jsonl": {
-      "sha256": "110ece7c54e9764622f5a66c3451a405845f8722eb9ac2a97e3ad9fee74678db",
-      "bytes": 4755953
+      "sha256": "5977bdad51fae890a157077977e9cd7cb5aa9f8fceb7779b4deb42258d04057e",
+      "bytes": 4754650
     },
     "inventory.json": {
-      "sha256": "daa582e2cab47bf73b374b7c5a3d702b51da90429e3e42fc08f6fe3e9a4a5293",
-      "bytes": 56402
+      "sha256": "014aa89451c7e8683dfe3af6f256b7e57de2cd8b00955404d8a506c63d234513",
+      "bytes": 56648
     },
     "test.jsonl": {
-      "sha256": "cff278de9bfdff35f12aad5e399989a6297d09b5bc5c7c81aebad4fe111dadda",
-      "bytes": 2365943
+      "sha256": "9f2ce31c06d39adc61957b50146e5b22d6d747cea6bca0de78577273a8c5c1d5",
+      "bytes": 2365530
     },
     "train.jsonl.gz": {
-      "sha256": "39ce326920e1b4faf55c4f2f61880c4a260ced1d0199e5c0caaa2724a1a426a1",
-      "bytes": 5004362
+      "sha256": "e1fde1fe5620f520b34c9222f3b7757276d31ad9306a034bff18df80b86277e3",
+      "bytes": 5004825
     }
   },
   "policy": {
