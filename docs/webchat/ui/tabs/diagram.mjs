@@ -83,7 +83,7 @@ const STYLE = `
 .dg-group-members { display:flex;flex-wrap:wrap;gap:6px; }
 .dg-empty-selection { font-size:13px;line-height:1.6;color:var(--dg-faint); }
 @media(max-width:700px){.dg-root{height:auto;min-height:0}.dg-workspace{display:flex;flex-direction:column;flex:none;min-height:0}.dg-board{height:340px;min-height:260px}.dg-inspector{overflow:visible}.dg-btn{min-height:44px;height:auto;padding:10px}.dg-root input,.dg-root select,.dg-root textarea{font-size:16px}}
-@media(max-width:700px),(max-height:500px){.dg-tools,.dg-pagebar{flex-wrap:nowrap;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin;padding-bottom:6px}.dg-tools>*,.dg-pagebar>*{flex:none}.dg-pagebar label{white-space:nowrap}.dg-spacer{display:none}.dg-line-form{position:fixed;left:8px;right:8px;top:auto;bottom:max(12px,env(safe-area-inset-bottom));z-index:1150}.dg-node-chooser{position:fixed;top:auto;bottom:12px;left:8px;width:auto;right:8px;max-width:none;max-height:60dvh;z-index:1150}}
+@media(max-width:700px),(max-height:500px){.dg-root{height:auto;min-height:0}.dg-workspace{flex:none}.dg-tools,.dg-pagebar{flex-wrap:nowrap;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin;padding-bottom:6px}.dg-tools>*,.dg-pagebar>*{flex:none}.dg-pagebar label{white-space:nowrap}.dg-spacer{display:none}.dg-line-form{position:fixed;left:8px;right:8px;top:auto;bottom:max(12px,env(safe-area-inset-bottom));z-index:1150}.dg-node-chooser{position:fixed;top:auto;bottom:12px;left:8px;width:auto;right:8px;max-width:none;max-height:60dvh;z-index:1150}}
 @container (max-width:700px) { .dg-workspace { grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(350px,55vh) auto; } .dg-inspector { max-height:none;overflow:visible; } }
 `;
 function ensureCss() {
@@ -221,7 +221,7 @@ function make(holder, host) {
   // A selection made on the board (or a chart being made) opens the inspector as a bottom sheet on a phone.
   let sheetWanted = false, chartOpen = false;
   const hasSelection = () => !!(sel.nodes.length || sel.links.length || sel.group);
-  const sheet = mountInspectorSheet(workspace, inspector, { label: 'Inspector', isOpen: () => sheetWanted && (chartOpen || hasSelection()), reveal: board, close: () => { sheetWanted = false; chartOpen = false; if (hasSelection()) select({}); } });
+  const sheet = mountInspectorSheet(workspace, inspector, { label: 'Inspector', isOpen: () => sheetWanted && (chartOpen || hasSelection()), reveal: () => { const id = sel.nodes[0] ?? sel.links[0] ?? sel.group, e = id && svg.querySelector(`[data-select="${CSS.escape(id)}"]`); return e ? e.getBoundingClientRect() : null; }, close: () => { sheetWanted = false; chartOpen = false; if (hasSelection()) select({}); } });
 
   // ---- selection: kept here, sent with the declared select commands ----
   const select = (next) => {
