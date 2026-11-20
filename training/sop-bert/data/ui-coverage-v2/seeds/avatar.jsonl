@@ -1,0 +1,415 @@
+{"case":"avatar.face.compose:base","tier":"equivalent","text":"rebuild the avatar from the old man base","trigger":"rebuild","target":{"kind":"avatar"},"c":[["face.base","old man"]]}
+{"case":"avatar.face.compose:base","tier":"equivalent","text":"compose her as a queen","trigger":"compose","c":[["face.base","queen"]]}
+{"case":"avatar.face.compose:base","tier":"equivalent","text":"start over with the bearded man as the base","trigger":"start over","c":[["face.base","bearded man"]]}
+{"case":"avatar.face.compose:base","tier":"equivalent","text":"recompose the character on the woman with curly hair base","trigger":"recompose","c":[["face.base","woman with curly hair"]]}
+{"case":"avatar.face.compose:base","tier":"equivalent","text":"Compose a fresh character using the alien base.","trigger":"Compose","c":[["face.base","alien"]]}
+{"case":"avatar.face.compose:base","tier":"complex","text":"the kids want a circus theme today, so recompose the avatar as a clown, please","trigger":"recompose","target":{"kind":"avatar"},"c":[["face.base","clown"]]}
+{"case":"avatar.face.compose:base","tier":"complex","text":"ok so let's build her up from the old woman base, but keep her human","trigger":"build","c":[["face.base","old woman"],["face.characterKind","human"]]}
+{"case":"avatar.face.compose:base","tier":"complex","text":"Could you compose a character for the school poster? Start from the boy base.","trigger":"compose","c":[["face.base","boy"]]}
+{"case":"avatar.face.compose:base","tier":"complex","text":"our engineering club needs a mascot, so I'd like the avatar recomposed from the robot base","trigger":"recomposed","target":{"kind":"avatar"},"c":[["face.base","robot"]]}
+{"case":"avatar.face.compose:base","tier":"simplified","text":"turn her into a little girl","trigger":"turn","c":[["face.base","girl"]]}
+{"case":"avatar.face.compose:base","tier":"simplified","text":"rebuild it as a grown man","trigger":"rebuild","c":[["face.base","man"]]}
+{"case":"avatar.face.compose:base","tier":"simplified","text":"child base for the avatar, thanks","target":{"kind":"avatar"},"c":[["face.base","child"]]}
+{"case":"avatar.face.compose:base","tier":"simplified","text":"go with the baby base this time","trigger":"go with","c":[["face.base","baby"]]}
+{"case":"avatar.face.compose:base","tier":"simplified","text":"compose something royal","trigger":"compose","c":[["face.base","something royal","?"]]}
+{"case":"avatar.face.compose:base","tier":"simplified","text":"recompose her as a woman","trigger":"recompose","c":[["face.base","woman"]]}
+{"case":"avatar.face.compose:kind","tier":"equivalent","text":"make the character kind robot","trigger":"make","c":[["face.characterKind","robot"]]}
+{"case":"avatar.face.compose:kind","tier":"equivalent","text":"compose an alien character instead","trigger":"compose","c":[["face.characterKind","alien"]]}
+{"case":"avatar.face.compose:kind","tier":"equivalent","text":"switch the avatar's character type to human","trigger":"switch","c":[["face.characterKind","human"]]}
+{"case":"avatar.face.compose:kind","tier":"equivalent","text":"Recompose the avatar as a robot, keeping the man base.","trigger":"Recompose","target":{"kind":"avatar"},"c":[["face.characterKind","robot"],["face.base","man"]]}
+{"case":"avatar.face.compose:kind","tier":"complex","text":"she looks too mechanical; recompose her as a human on the woman base","trigger":"recompose","c":[["face.characterKind","human"],["face.base","woman"]]}
+{"case":"avatar.face.compose:kind","tier":"complex","text":"for the sci-fi slide, could you compose the avatar as an alien kind of character?","trigger":"compose","target":{"kind":"avatar"},"c":[["face.characterKind","alien"]]}
+{"case":"avatar.face.compose:kind","tier":"complex","text":"I know queens are human by default, but compose her as an alien queen anyway","trigger":"compose","c":[["face.characterKind","alien"],["face.base","queen"]]}
+{"case":"avatar.face.compose:kind","tier":"simplified","text":"robot kind please, rebuild it","trigger":"rebuild","c":[["face.characterKind","robot"]]}
+{"case":"avatar.face.compose:kind","tier":"simplified","text":"make her human again","trigger":"make","c":[["face.characterKind","human"]]}
+{"case":"avatar.face.compose:kind","tier":"simplified","text":"alien kind, any base is fine","c":[["face.characterKind","alien"]]}
+{"case":"avatar.face.compose:kind","tier":"simplified","text":"less human, more machine","c":[["face.characterKind","more machine","robot"]]}
+{"case":"avatar.face.preset:preset","tier":"equivalent","text":"pick the old woman preset","trigger":"pick","c":[["face.preset","old woman"]]}
+{"case":"avatar.face.preset:preset","tier":"equivalent","text":"set Composition to clown","trigger":"set","c":[["face.preset","clown"]]}
+{"case":"avatar.face.preset:preset","tier":"equivalent","text":"choose the bearded man look for the avatar","trigger":"choose","target":{"kind":"avatar"},"c":[["face.preset","bearded man"]]}
+{"case":"avatar.face.preset:preset","tier":"equivalent","text":"switch the appearance to the robot preset","trigger":"switch","c":[["face.preset","robot"]]}
+{"case":"avatar.face.preset:preset","tier":"equivalent","text":"In the Composition menu, select girl.","trigger":"select","c":[["face.preset","girl"]]}
+{"case":"avatar.face.preset:preset","tier":"equivalent","text":"apply the woman with curly hair preset","trigger":"apply","c":[["face.preset","woman with curly hair"]]}
+{"case":"avatar.face.preset:preset","tier":"equivalent","text":"load the alien appearance onto the avatar","trigger":"load","target":{"kind":"avatar"},"c":[["face.preset","alien"]]}
+{"case":"avatar.face.preset:preset","tier":"complex","text":"I'm making a royal-themed birthday card, so load the queen preset onto the avatar","trigger":"load","target":{"kind":"avatar"},"c":[["face.preset","queen"]]}
+{"case":"avatar.face.preset:preset","tier":"complex","text":"hmm, the baby preset might be too cute, but let's try it for now","trigger":"try","c":[["face.preset","baby"]]}
+{"case":"avatar.face.preset:preset","tier":"complex","text":"Grandpa will see this, so could you pick the old man look rather than the young one?","trigger":"pick","c":[["face.preset","old man"]]}
+{"case":"avatar.face.preset:preset","tier":"complex","text":"the lesson is about jobs for kids - use the child preset and we can dress her up later","trigger":"use","c":[["face.preset","child"]]}
+{"case":"avatar.face.preset:preset","tier":"complex","text":"while you're at it, change the Composition to boy","trigger":"change","c":[["face.preset","boy"]]}
+{"case":"avatar.face.preset:preset","tier":"simplified","text":"the man appearance","c":[["face.preset","man"]]}
+{"case":"avatar.face.preset:preset","tier":"simplified","text":"use the woman preset","trigger":"use","c":[["face.preset","woman"]]}
+{"case":"avatar.face.preset:preset","tier":"simplified","text":"a clown look would be fun","c":[["face.preset","clown"]]}
+{"case":"avatar.face.preset:preset","tier":"simplified","text":"go for a bearded man","trigger":"go for","c":[["face.preset","bearded man"]]}
+{"case":"avatar.face.preset:preset","tier":"simplified","text":"something old for the Composition","c":[["face.preset","something old","?"]]}
+{"case":"avatar.face.preset:preset","tier":"simplified","text":"presets: robot one","c":[["face.preset","robot"]]}
+{"case":"avatar.face.expression:expression","tier":"equivalent","text":"make her look suprised","trigger":"make","c":[["face.expression","suprised","surprised"]]}
+{"case":"avatar.face.expression:expression","tier":"equivalent","text":"set the Emotion to sad","trigger":"set","c":[["face.expression","sad"]]}
+{"case":"avatar.face.expression:expression","tier":"equivalent","text":"give the avatar a grumpy expression","trigger":"give","target":{"kind":"avatar"},"c":[["face.expression","grumpy","angry"]]}
+{"case":"avatar.face.expression:expression","tier":"equivalent","text":"switch his mood to sleepy","trigger":"switch","c":[["face.expression","sleepy"]]}
+{"case":"avatar.face.expression:expression","tier":"equivalent","text":"Change the emotion so she's smiling.","trigger":"Change","c":[["face.expression","smiling","happy"]]}
+{"case":"avatar.face.expression:expression","tier":"equivalent","text":"the avatar should be talking","trigger":"should be","target":{"kind":"avatar"},"c":[["face.expression","talking"]]}
+{"case":"avatar.face.expression:expression","tier":"complex","text":"she's supposed to be telling a story, so switch her to the talking expression","trigger":"switch","c":[["face.expression","talking"]]}
+{"case":"avatar.face.expression:expression","tier":"complex","text":"could you make him wink at the viewer? it's for a joke slide","trigger":"make","c":[["face.expression","wink"]]}
+{"case":"avatar.face.expression:expression","tier":"complex","text":"The news in this panel is bad, so the avatar ought to look sad rather than neutral.","trigger":"look","target":{"kind":"avatar"},"c":[["face.expression","sad"]]}
+{"case":"avatar.face.expression:expression","tier":"complex","text":"when the alarm goes off in the story she should look shocked - set that emotion please","trigger":"set","c":[["face.expression","shocked","surprised"]]}
+{"case":"avatar.face.expression:expression","tier":"complex","text":"pick the winking emotion and keep everything else as it is","trigger":"pick","c":[["face.expression","winking","wink"]]}
+{"case":"avatar.face.expression:expression","tier":"simplified","text":"she should look happier","trigger":"look","c":[["face.expression","happier","happy","delta"]]}
+{"case":"avatar.face.expression:expression","tier":"simplified","text":"sleepier, please","c":[["face.expression","sleepier","sleepy","delta"]]}
+{"case":"avatar.face.expression:expression","tier":"simplified","text":"make the face tired","trigger":"make","c":[["face.expression","tired","sleepy"]]}
+{"case":"avatar.face.expression:expression","tier":"simplified","text":"a bit cross","c":[["face.expression","cross","angry"]]}
+{"case":"avatar.face.expression:expression","tier":"simplified","text":"cheerful face","c":[["face.expression","cheerful","happy"]]}
+{"case":"avatar.face.expression:expression","tier":"simplified","text":"angrier","c":[["face.expression","angrier","angry","delta"]]}
+{"case":"avatar.face.expression:expression","tier":"simplified","text":"more surprised look","c":[["face.expression","more surprised","surprised","delta"]]}
+{"case":"avatar.face.name:core","tier":"equivalent","text":"name the avatar Mira","trigger":"name","target":{"kind":"avatar"},"c":[["face.name","Mira"]]}
+{"case":"avatar.face.name:core","tier":"equivalent","text":"call her Captain Zog","trigger":"call","c":[["face.name","Captain Zog"]]}
+{"case":"avatar.face.name:core","tier":"equivalent","text":"rename the avatar to Granny Rose","trigger":"rename","target":{"kind":"avatar"},"c":[["face.name","Granny Rose"]]}
+{"case":"avatar.face.name:core","tier":"equivalent","text":"Her name should be Tomasz.","trigger":"should be","c":[["face.name","Tomasz"]]}
+{"case":"avatar.face.name:core","tier":"complex","text":"the kids voted, so her name is now Pip - please update it","trigger":"update","c":[["face.name","Pip"]]}
+{"case":"avatar.face.name:core","tier":"complex","text":"can you label this character Doctor Ada so I can tell my versions apart?","trigger":"label","c":[["face.name","Doctor Ada"]]}
+{"case":"avatar.face.name:core","tier":"complex","text":"He's our new support bot. Give him the name Sparky.","trigger":"Give","c":[["face.name","Sparky"]]}
+{"case":"avatar.face.name:core","tier":"simplified","text":"call it Bolt","trigger":"call","c":[["face.name","Bolt"]]}
+{"case":"avatar.face.name:core","tier":"simplified","text":"name: Luna","c":[["face.name","Luna"]]}
+{"case":"avatar.face.name:core","tier":"simplified","text":"rename to Mr Whiskers","trigger":"rename","c":[["face.name","Mr Whiskers"]]}
+{"case":"avatar.face.select:core","tier":"equivalent","text":"select the avatar in its entirety","trigger":"select","target":{"kind":"avatar"}}
+{"case":"avatar.face.select:core","tier":"equivalent","text":"highlight the avatar as a whole","trigger":"highlight","target":{"kind":"avatar"}}
+{"case":"avatar.face.select:core","tier":"equivalent","text":"pick the entire character, not a single part","trigger":"pick"}
+{"case":"avatar.face.select:core","tier":"complex","text":"before I resize anything, grab the whole avatar for me","trigger":"grab","target":{"kind":"avatar"}}
+{"case":"avatar.face.select:core","tier":"complex","text":"I want to work on her as a whole, so select all of her instead of the fringe","trigger":"select"}
+{"case":"avatar.face.select:core","tier":"simplified","text":"select her","trigger":"select"}
+{"case":"avatar.face.select:core","tier":"simplified","text":"the avatar, selected please","trigger":"selected","target":{"kind":"avatar"}}
+{"case":"avatar.face.select:core","tier":"simplified","text":"choose the character","trigger":"choose"}
+{"case":"avatar.ids.show:temporary","tier":"equivalent","text":"show the part lables for a moment","trigger":"show","c":[["face.mode","for a moment","temporary"]]}
+{"case":"avatar.ids.show:temporary","tier":"equivalent","text":"flash the object IDs briefly","trigger":"flash","c":[["face.mode","briefly","temporary"]]}
+{"case":"avatar.ids.show:temporary","tier":"equivalent","text":"set Object IDs to temporary","trigger":"set","c":[["face.mode","temporary"]]}
+{"case":"avatar.ids.show:temporary","tier":"equivalent","text":"display the part names temporarily","trigger":"display","c":[["face.mode","temporarily","temporary"]]}
+{"case":"avatar.ids.show:temporary","tier":"equivalent","text":"give me a quick look at the part labels","trigger":"give","c":[["face.mode","quick look","temporary"]]}
+{"case":"avatar.ids.show:temporary","tier":"equivalent","text":"Briefly overlay the names of the parts on the face.","trigger":"overlay","c":[["face.mode","Briefly","temporary"]]}
+{"case":"avatar.ids.show:temporary","tier":"equivalent","text":"pop up the IDs for a sec and then hide them again","trigger":"pop up","c":[["face.mode","for a sec and then hide them again","temporary"]]}
+{"case":"avatar.ids.show:temporary","tier":"equivalent","text":"could you show the object IDs just for a little while?","trigger":"show","c":[["face.mode","for a little while","temporary"]]}
+{"case":"avatar.ids.show:temporary","tier":"complex","text":"I can't tell which bit is the cheeks, so flash the part labels briefly","trigger":"flash","c":[["face.mode","briefly","temporary"]]}
+{"case":"avatar.ids.show:temporary","tier":"complex","text":"before I pick a part, show me the IDs for a moment - I don't want them to stay up","trigger":"show","c":[["face.mode","for a moment","temporary"]]}
+{"case":"avatar.ids.show:temporary","tier":"complex","text":"Hmm, which one is the moustache? Briefly label every part, please.","trigger":"label","c":[["face.mode","Briefly","temporary"]]}
+{"case":"avatar.ids.show:temporary","tier":"complex","text":"ok so, temporary labels on the parts, so I can see what's what","c":[["face.mode","temporary"]]}
+{"case":"avatar.ids.show:temporary","tier":"complex","text":"I'd like the part names to appear for a short time, then go away on their own","trigger":"appear","c":[["face.mode","for a short time, then go away on their own","temporary"]]}
+{"case":"avatar.ids.show:temporary","tier":"complex","text":"Quick check: flash the labels so I know what the neck and the shoulders are called.","trigger":"flash","c":[["face.mode","flash","temporary"]]}
+{"case":"avatar.ids.show:temporary","tier":"simplified","text":"peek at the part labels","trigger":"peek","c":[["face.mode","peek","temporary"]]}
+{"case":"avatar.ids.show:temporary","tier":"simplified","text":"show IDs","trigger":"show"}
+{"case":"avatar.ids.show:temporary","tier":"simplified","text":"what are the parts called? flash them","trigger":"flash","c":[["face.mode","flash","temporary"]]}
+{"case":"avatar.ids.show:temporary","tier":"simplified","text":"labels on for a bit","c":[["face.mode","for a bit","temporary"]]}
+{"case":"avatar.ids.show:temporary","tier":"simplified","text":"quick ID overlay","c":[["face.mode","quick","temporary"]]}
+{"case":"avatar.ids.show:temporary","tier":"simplified","text":"tag the parts for a second","trigger":"tag","c":[["face.mode","for a second","temporary"]]}
+{"case":"avatar.ids.show:temporary","tier":"simplified","text":"show me the part names","trigger":"show"}
+{"case":"avatar.ids.show:temporary","tier":"simplified","text":"brief labels pls","c":[["face.mode","brief","temporary"]]}
+{"case":"avatar.ids.show:duration","tier":"equivalent","text":"show the part labels for 10 seconds","trigger":"show","c":[["face.duration","10 seconds"]]}
+{"case":"avatar.ids.show:duration","tier":"equivalent","text":"display the object IDs for five seconds","trigger":"display","c":[["face.duration","five seconds"]]}
+{"case":"avatar.ids.show:duration","tier":"equivalent","text":"Flash the IDs for 3 seconds.","trigger":"Flash","c":[["face.duration","3 seconds"],["face.mode","Flash","temporary"]]}
+{"case":"avatar.ids.show:duration","tier":"complex","text":"I need time to read them, so keep the part names up for 20 seconds and then hide them","trigger":"keep","c":[["face.duration","20 seconds"]]}
+{"case":"avatar.ids.show:duration","tier":"complex","text":"the default flash is too short for me - show the labels for eight seconds this time","trigger":"show","c":[["face.duration","eight seconds"]]}
+{"case":"avatar.ids.show:duration","tier":"simplified","text":"IDs for 15 seconds","c":[["face.duration","15 seconds"]]}
+{"case":"avatar.ids.show:duration","tier":"simplified","text":"labels, 6 seconds","c":[["face.duration","6 seconds"]]}
+{"case":"avatar.ids.show:duration","tier":"simplified","text":"show the tags a bit longer than usual","trigger":"show","c":[["face.duration","a bit longer than usual","?"]]}
+{"case":"avatar.ids.show:duration","tier":"simplified","text":"part names for thirty seconds","c":[["face.duration","thirty seconds"]]}
+{"case":"avatar.ids.show:always","tier":"equivalent","text":"keep the part labels visible","trigger":"keep","c":[["face.mode","visible","always"]]}
+{"case":"avatar.ids.show:always","tier":"equivalent","text":"set Object IDs to always","trigger":"set","c":[["face.mode","always"]]}
+{"case":"avatar.ids.show:always","tier":"equivalent","text":"always show the object IDs","trigger":"show","c":[["face.mode","always"]]}
+{"case":"avatar.ids.show:always","tier":"equivalent","text":"leave the part names on permanently","trigger":"leave","c":[["face.mode","permanently","always"]]}
+{"case":"avatar.ids.show:always","tier":"equivalent","text":"Pin the ID labels so they stay on the face.","trigger":"Pin","c":[["face.mode","stay on","always"]]}
+{"case":"avatar.ids.show:always","tier":"equivalent","text":"turn on the part labels and keep them on","trigger":"turn on","c":[["face.mode","keep them on","always"]]}
+{"case":"avatar.ids.show:always","tier":"equivalent","text":"show the IDs all the time","trigger":"show","c":[["face.mode","all the time","always"]]}
+{"case":"avatar.ids.show:always","tier":"equivalent","text":"can the part tags stay up until I say otherwise?","trigger":"stay up","c":[["face.mode","until I say otherwise","always"]]}
+{"case":"avatar.ids.show:always","tier":"complex","text":"I'm editing a lot of parts, so keep the object IDs on screen the whole time","trigger":"keep","c":[["face.mode","the whole time","always"]]}
+{"case":"avatar.ids.show:always","tier":"complex","text":"the labels vanish too fast; make them stay on permanently","trigger":"make","c":[["face.mode","permanently","always"]]}
+{"case":"avatar.ids.show:always","tier":"complex","text":"While I teach the class the face parts, please leave the names showing all the time.","trigger":"leave","c":[["face.mode","all the time","always"]]}
+{"case":"avatar.ids.show:always","tier":"complex","text":"ok so I keep forgetting which bit is which - switch the ID overlay to always","trigger":"switch","c":[["face.mode","always"]]}
+{"case":"avatar.ids.show:always","tier":"complex","text":"I'd rather the part labels didn't disappear at all, so leave them up","trigger":"leave","c":[["face.mode","didn't disappear at all","always"]]}
+{"case":"avatar.ids.show:always","tier":"complex","text":"Could you keep the ID tags visible for the rest of this session? I'm recording a tutorial.","trigger":"keep","c":[["face.mode","for the rest of this session","always"]]}
+{"case":"avatar.ids.show:always","tier":"simplified","text":"labels always on","c":[["face.mode","always on","always"]]}
+{"case":"avatar.ids.show:always","tier":"simplified","text":"keep showing the IDs","trigger":"keep showing"}
+{"case":"avatar.ids.show:always","tier":"simplified","text":"IDs: always","c":[["face.mode","always"]]}
+{"case":"avatar.ids.show:always","tier":"simplified","text":"permanent part labels","c":[["face.mode","permanent","always"]]}
+{"case":"avatar.ids.show:always","tier":"simplified","text":"don't hide the part names","trigger":"hide","c":[["face.mode","don't hide","always"]]}
+{"case":"avatar.ids.show:always","tier":"simplified","text":"leave the tags up","trigger":"leave","c":[["face.mode","leave the tags up","always"]]}
+{"case":"avatar.ids.show:always","tier":"simplified","text":"sticky ID labels","c":[["face.mode","sticky","always"]]}
+{"case":"avatar.ids.show:always","tier":"simplified","text":"part names stay visible","trigger":"stay","c":[["face.mode","stay visible","always"]]}
+{"case":"avatar.ids.show:off","tier":"simplified","text":"hide the part labels","trigger":"hide","c":[["face.mode","hide","off"]]}
+{"case":"avatar.ids.show:off","tier":"equivalent","text":"turn off the object IDs","trigger":"turn off","c":[["face.mode","turn off","off"]]}
+{"case":"avatar.ids.show:off","tier":"equivalent","text":"set Object IDs to off","trigger":"set","c":[["face.mode","off"]]}
+{"case":"avatar.ids.show:off","tier":"equivalent","text":"remove the ID overlay from the face","trigger":"remove","c":[["face.mode","remove","off"]]}
+{"case":"avatar.ids.show:off","tier":"equivalent","text":"stop showing the part names","trigger":"stop showing","c":[["face.mode","stop showing","off"]]}
+{"case":"avatar.ids.show:off","tier":"equivalent","text":"Switch the part tags off.","trigger":"Switch","c":[["face.mode","off"]]}
+{"case":"avatar.ids.show:off","tier":"equivalent","text":"get rid of the labels on the parts","trigger":"get rid of","c":[["face.mode","get rid of","off"]]}
+{"case":"avatar.ids.show:off","tier":"equivalent","text":"can you clear the object IDs off the avatar?","trigger":"clear","c":[["face.mode","clear","off"]]}
+{"case":"avatar.ids.show:off","tier":"equivalent","text":"I don't want the ID labels anymore","trigger":"don't want","c":[["face.mode","don't want","off"]]}
+{"case":"avatar.ids.show:off","tier":"complex","text":"the labels are covering her eyes, so turn the IDs off please","trigger":"turn","c":[["face.mode","off"]]}
+{"case":"avatar.ids.show:off","tier":"complex","text":"I'm about to take a screenshot - hide every part label first","trigger":"hide","c":[["face.mode","hide","off"]]}
+{"case":"avatar.ids.show:off","tier":"complex","text":"Okay, I know which part is which now. You can switch off the object IDs.","trigger":"switch off","c":[["face.mode","switch off","off"]]}
+{"case":"avatar.ids.show:off","tier":"complex","text":"I left the labels on always earlier; please turn them off now that im done","trigger":"turn","c":[["face.mode","off"]]}
+{"case":"avatar.ids.show:off","tier":"complex","text":"the tags make the face look cluttered, could you take them down?","trigger":"take them down","c":[["face.mode","take them down","off"]]}
+{"case":"avatar.ids.show:off","tier":"complex","text":"while you're at it, kill the ID overlay, it's distracting","trigger":"kill","c":[["face.mode","kill","off"]]}
+{"case":"avatar.ids.show:off","tier":"simplified","text":"no more labels","c":[["face.mode","no more","off"]]}
+{"case":"avatar.ids.show:off","tier":"simplified","text":"IDs off","c":[["face.mode","off"]]}
+{"case":"avatar.ids.show:off","tier":"simplified","text":"hide the tags","trigger":"hide","c":[["face.mode","hide","off"]]}
+{"case":"avatar.ids.show:off","tier":"simplified","text":"labels gone please","c":[["face.mode","gone","off"]]}
+{"case":"avatar.ids.show:off","tier":"simplified","text":"lose the part names","trigger":"lose","c":[["face.mode","lose","off"]]}
+{"case":"avatar.ids.show:off","tier":"simplified","text":"overlay off","c":[["face.mode","off"]]}
+{"case":"avatar.ids.show:off","tier":"simplified","text":"enough with the IDs","c":[["face.mode","enough with","off"]]}
+{"case":"avatar.part.select:core","tier":"equivalent","text":"select the fringe","trigger":"select","target":{"name":"the fringe"}}
+{"case":"avatar.part.select:core","tier":"equivalent","text":"highlight her eyebrows","trigger":"highlight","target":{"name":"her eyebrows"}}
+{"case":"avatar.part.select:core","tier":"equivalent","text":"In the Selection menu, choose the glasses.","trigger":"choose","target":{"name":"the glasses"}}
+{"case":"avatar.part.select:core","tier":"equivalent","text":"pick the moustache so I can edit it","trigger":"pick","target":{"name":"the moustache"}}
+{"case":"avatar.part.select:core","tier":"complex","text":"I want to recolour her top next, so select the shirt first","trigger":"select","target":{"name":"the shirt"}}
+{"case":"avatar.part.select:core","tier":"complex","text":"which part is the ponytail? select it so I can see it","trigger":"select","target":{"name":"the ponytail"}}
+{"case":"avatar.part.select:core","tier":"complex","text":"ok so now grab the earrings, I'll change them in a second","trigger":"grab","target":{"name":"the earrings"}}
+{"case":"avatar.part.select:core","tier":"simplified","text":"the nose, please","target":{"name":"the nose"}}
+{"case":"avatar.part.select:core","tier":"simplified","text":"select his beard","trigger":"select","target":{"name":"his beard"}}
+{"case":"avatar.part.select:core","tier":"simplified","text":"now the lips","target":{"name":"the lips"}}
+{"case":"avatar.face.resize:scale-number","tier":"equivalent","text":"scale the avatar to 1.3","trigger":"scale","target":{"kind":"avatar"},"c":[["face.scale","1.3"]]}
+{"case":"avatar.face.resize:scale-number","tier":"equivalent","text":"set the face scale to 0.8","trigger":"set","c":[["face.scale","0.8"]]}
+{"case":"avatar.face.resize:scale-number","tier":"equivalent","text":"Resize the whole avatar to 1.5 times its normal size.","trigger":"Resize","target":{"kind":"avatar"},"c":[["face.scale","1.5 times"]]}
+{"case":"avatar.face.resize:scale-number","tier":"equivalent","text":"shrink her to a scale of 0.7","trigger":"shrink","c":[["face.scale","0.7"]]}
+{"case":"avatar.face.resize:scale-number","tier":"complex","text":"the avatar is overlapping the caption, so scale it down to 0.9","trigger":"scale","target":{"kind":"avatar"},"c":[["face.scale","0.9"]]}
+{"case":"avatar.face.resize:scale-number","tier":"complex","text":"For the profile picture I need the whole face larger - make the scale 1.4, not more.","trigger":"make","c":[["face.scale","1.4"]]}
+{"case":"avatar.face.resize:scale-number","tier":"simplified","text":"scale 1.2","c":[["face.scale","1.2"]]}
+{"case":"avatar.face.resize:scale-number","tier":"simplified","text":"whole face at 0.6, the smallest","c":[["face.scale","0.6"]]}
+{"case":"avatar.face.resize:scale-number","tier":"simplified","text":"size her at 1.1","trigger":"size","c":[["face.scale","1.1"]]}
+{"case":"avatar.face.resize:scale-relative","tier":"equivalent","text":"make the whole avatar 20 percent bigger","trigger":"make","target":{"kind":"avatar"},"c":[["face.scale","20 percent bigger","20","delta"]]}
+{"case":"avatar.face.resize:scale-relative","tier":"equivalent","text":"shrink the avatar by 10 percent","trigger":"shrink","target":{"kind":"avatar"},"c":[["face.scale","by 10 percent","10","delta"]]}
+{"case":"avatar.face.resize:scale-relative","tier":"equivalent","text":"enlarge her whole face by 15%","trigger":"enlarge","c":[["face.scale","by 15%","15","delta"]]}
+{"case":"avatar.face.resize:scale-relative","tier":"equivalent","text":"Make the entire character 25 percent smaller.","trigger":"Make","c":[["face.scale","25 percent smaller","25","delta"]]}
+{"case":"avatar.face.resize:scale-relative","tier":"equivalent","text":"grow the avatar by 8 percent","trigger":"grow","target":{"kind":"avatar"},"c":[["face.scale","by 8 percent","8","delta"]]}
+{"case":"avatar.face.resize:scale-relative","tier":"equivalent","text":"scale her up by 30 percent","trigger":"scale","c":[["face.scale","up by 30 percent","30","delta"]]}
+{"case":"avatar.face.resize:scale-relative","tier":"equivalent","text":"can you make the avatar 5 percent larger?","trigger":"make","target":{"kind":"avatar"},"c":[["face.scale","5 percent larger","5","delta"]]}
+{"case":"avatar.face.resize:scale-relative","tier":"equivalent","text":"reduce the size of the whole face by twenty percent","trigger":"reduce","c":[["face.scale","by twenty percent","20","delta"]]}
+{"case":"avatar.face.resize:scale-relative","tier":"complex","text":"the avatar barely fits in the frame, so shrink it by about 15 percent","trigger":"shrink","target":{"kind":"avatar"},"c":[["face.scale","by about 15 percent","15","delta"]]}
+{"case":"avatar.face.resize:scale-relative","tier":"complex","text":"She looks tiny on the slide. Could you make her 20 percent bigger overall?","trigger":"make","c":[["face.scale","20 percent bigger","20","delta"]]}
+{"case":"avatar.face.resize:scale-relative","tier":"complex","text":"if there's room, enlarge the avatar by another 10 percent","trigger":"enlarge","target":{"kind":"avatar"},"c":[["face.scale","by another 10 percent","10","delta"]]}
+{"case":"avatar.face.resize:scale-relative","tier":"complex","text":"hmm, too big after the last change - make the whole face 10% smaller again","trigger":"make","c":[["face.scale","10% smaller","10","delta"]]}
+{"case":"avatar.face.resize:scale-relative","tier":"complex","text":"I'd like the character a little larger, maybe 12 percent, so the hat isn't cut off","trigger":"larger","c":[["face.scale","a little larger, maybe 12 percent","12","delta"]]}
+{"case":"avatar.face.resize:scale-relative","tier":"complex","text":"ok so scale the avatar down a notch and then I'll check the caption","trigger":"scale","target":{"kind":"avatar"},"c":[["face.scale","down a notch","?","delta"]]}
+{"case":"avatar.face.resize:scale-relative","tier":"simplified","text":"make the whole face a bit bigger","trigger":"make","c":[["face.scale","a bit bigger","?","delta"]]}
+{"case":"avatar.face.resize:scale-relative","tier":"simplified","text":"shrink the avatar a little","trigger":"shrink","target":{"kind":"avatar"},"c":[["face.scale","a little","?","delta"]]}
+{"case":"avatar.face.resize:scale-relative","tier":"simplified","text":"bigger avatar overall","target":{"kind":"avatar"},"c":[["face.scale","bigger","?","delta"]]}
+{"case":"avatar.face.resize:scale-relative","tier":"simplified","text":"zoom her in slightly","trigger":"zoom","c":[["face.scale","in slightly","?","delta"]]}
+{"case":"avatar.face.resize:scale-relative","tier":"simplified","text":"the whole thing smaller","c":[["face.scale","smaller","?","delta"]]}
+{"case":"avatar.face.resize:scale-relative","tier":"simplified","text":"scale the character up","trigger":"scale","c":[["face.scale","up","?","delta"]]}
+{"case":"avatar.face.resize:scale-relative","tier":"simplified","text":"a touch smaller overall, please","c":[["face.scale","a touch smaller","?","delta"]]}
+{"case":"avatar.face.resize:scale-relative","tier":"simplified","text":"enlarge the avatar a tad","trigger":"enlarge","target":{"kind":"avatar"},"c":[["face.scale","a tad","?","delta"]]}
+{"case":"avatar.part.resize:scale-number","tier":"equivalent","text":"scale the nose to 0.8","trigger":"scale","target":{"name":"the nose"},"c":[["part.scale","0.8"]]}
+{"case":"avatar.part.resize:scale-number","tier":"equivalent","text":"set the scale of her ears to 1.2","trigger":"set","target":{"name":"her ears"},"c":[["part.scale","1.2"]]}
+{"case":"avatar.part.resize:scale-number","tier":"equivalent","text":"Resize the glasses to 1.3.","trigger":"Resize","target":{"name":"the glasses"},"c":[["part.scale","1.3"]]}
+{"case":"avatar.part.resize:scale-number","tier":"equivalent","text":"make the moustache 1.4 times its size","trigger":"make","target":{"name":"the moustache"},"c":[["part.scale","1.4 times"]]}
+{"case":"avatar.part.resize:scale-number","tier":"complex","text":"her bangs are covering the brows, so scale the fringe down to 0.9","trigger":"scale","target":{"name":"the fringe"},"c":[["part.scale","0.9"]]}
+{"case":"avatar.part.resize:scale-number","tier":"complex","text":"The cap looks huge on him. Could you set it to a scale of 0.7?","trigger":"set","target":{"ctx":true},"c":[["part.scale","0.7"]]}
+{"case":"avatar.part.resize:scale-number","tier":"simplified","text":"lips at 1.1","target":{"name":"lips"},"c":[["part.scale","1.1"]]}
+{"case":"avatar.part.resize:scale-number","tier":"simplified","text":"eyes 1.25","target":{"name":"eyes"},"c":[["part.scale","1.25"]]}
+{"case":"avatar.part.resize:scale-number","tier":"simplified","text":"scale it to 0.6","trigger":"scale","target":{"ctx":true},"c":[["part.scale","0.6"]]}
+{"case":"avatar.part.resize:scale-relative","tier":"equivalent","text":"make her ears 15 percent smaller","trigger":"make","target":{"name":"her ears"},"c":[["part.scale","15 percent smaller","15","delta"]]}
+{"case":"avatar.part.resize:scale-relative","tier":"equivalent","text":"enlarge the eyes by 10 percent","trigger":"enlarge","target":{"name":"the eyes"},"c":[["part.scale","by 10 percent","10","delta"]]}
+{"case":"avatar.part.resize:scale-relative","tier":"equivalent","text":"shrink the nose by 20%","trigger":"shrink","target":{"name":"the nose"},"c":[["part.scale","by 20%","20","delta"]]}
+{"case":"avatar.part.resize:scale-relative","tier":"equivalent","text":"Scale the glasses up by 25 percent.","trigger":"Scale","target":{"name":"the glasses"},"c":[["part.scale","up by 25 percent","25","delta"]]}
+{"case":"avatar.part.resize:scale-relative","tier":"equivalent","text":"make his moustache thirty percent bigger","trigger":"make","target":{"name":"his moustache"},"c":[["part.scale","thirty percent bigger","30","delta"]]}
+{"case":"avatar.part.resize:scale-relative","tier":"equivalent","text":"reduce the size of the cap by 10 percent","trigger":"reduce","target":{"name":"the cap"},"c":[["part.scale","by 10 percent","10","delta"]]}
+{"case":"avatar.part.resize:scale-relative","tier":"equivalent","text":"grow the earrings 5 percent","trigger":"grow","target":{"name":"the earrings"},"c":[["part.scale","5 percent","5","delta"]]}
+{"case":"avatar.part.resize:scale-relative","tier":"equivalent","text":"could you make the lips 12 percent larger?","trigger":"make","target":{"name":"the lips"},"c":[["part.scale","12 percent larger","12","delta"]]}
+{"case":"avatar.part.resize:scale-relative","tier":"complex","text":"the nose looks a bit big for a baby face, so shrink it by about 15 percent","trigger":"shrink","target":{"name":"the nose"},"c":[["part.scale","by about 15 percent","15","delta"]]}
+{"case":"avatar.part.resize:scale-relative","tier":"complex","text":"Her eyes are hard to see at this size. Make them 20 percent bigger, please.","trigger":"Make","target":{"name":"Her eyes"},"c":[["part.scale","20 percent bigger","20","delta"]]}
+{"case":"avatar.part.resize:scale-relative","tier":"complex","text":"if the brows still look thin after that, enlarge them by another 10 percent","trigger":"enlarge","target":{"name":"the brows"},"c":[["part.scale","by another 10 percent","10","delta"]]}
+{"case":"avatar.part.resize:scale-relative","tier":"complex","text":"ok so the ponytail is way too big now - scale it down by a quarter","trigger":"scale","target":{"name":"the ponytail"},"c":[["part.scale","down by a quarter","25","delta"]]}
+{"case":"avatar.part.resize:scale-relative","tier":"complex","text":"I'd like the ears a little smaller, maybe 8 percent, so they don't stick out","trigger":"smaller","target":{"name":"the ears"},"c":[["part.scale","a little smaller, maybe 8 percent","8","delta"]]}
+{"case":"avatar.part.resize:scale-relative","tier":"complex","text":"keep the shape but make the beard 10% bigger, it looks patchy","trigger":"make","target":{"name":"the beard"},"c":[["part.scale","10% bigger","10","delta"]]}
+{"case":"avatar.part.resize:scale-relative","tier":"simplified","text":"shrink the nose a step","trigger":"shrink","target":{"name":"the nose"},"c":[["part.scale","a step","?","delta"]]}
+{"case":"avatar.part.resize:scale-relative","tier":"simplified","text":"blow the eyes up a bit","trigger":"blow","target":{"name":"the eyes"},"c":[["part.scale","up a bit","?","delta"]]}
+{"case":"avatar.part.resize:scale-relative","tier":"simplified","text":"shrink her specs a bit","trigger":"shrink","target":{"name":"her specs"},"c":[["part.scale","a bit","?","delta"]]}
+{"case":"avatar.part.resize:scale-relative","tier":"simplified","text":"scale the mouth up slightly","trigger":"scale","target":{"name":"the mouth"},"c":[["part.scale","up slightly","?","delta"]]}
+{"case":"avatar.part.resize:scale-relative","tier":"simplified","text":"shrink the hat a touch","trigger":"shrink","target":{"name":"the hat"},"c":[["part.scale","a touch","?","delta"]]}
+{"case":"avatar.part.resize:scale-relative","tier":"simplified","text":"enlarge it a little","trigger":"enlarge","target":{"ctx":true},"c":[["part.scale","a little","?","delta"]]}
+{"case":"avatar.part.resize:scale-relative","tier":"simplified","text":"scale down the earrings a bit","trigger":"scale","target":{"name":"the earrings"},"c":[["part.scale","down","?","delta"]]}
+{"case":"avatar.part.resize:scale-relative","tier":"simplified","text":"grow the freckles slightly","trigger":"grow","target":{"name":"the freckles"},"c":[["part.scale","slightly","?","delta"]]}
+{"case":"avatar.part.add:variant","tier":"equivalent","text":"put a top hat on her","trigger":"put","c":[["part.variant","top hat"]],"ctx":[{"kind":"avatar","name":"Avatar"},{"kind":"hair","name":"fringe"},{"kind":"eyes","name":"eyes"},{"kind":"eyebrows","name":"brows"},{"kind":"nose","name":"nose"},{"kind":"mouth","name":"lips"},{"kind":"ears","name":"ears"},{"kind":"head","name":"head"},{"kind":"neck","name":"neck"},{"kind":"shoulders","name":"shirt"}]}
+{"case":"avatar.part.add:variant","tier":"equivalent","text":"add sunglasses","trigger":"add","c":[["part.variant","sunglasses"]],"ctx":[{"kind":"avatar","name":"Avatar"},{"kind":"hair","name":"fringe"},{"kind":"eyes","name":"eyes"},{"kind":"eyebrows","name":"brows"},{"kind":"nose","name":"nose"},{"kind":"mouth","name":"lips"},{"kind":"ears","name":"ears"},{"kind":"head","name":"head"},{"kind":"neck","name":"neck"},{"kind":"shoulders","name":"shirt"}]}
+{"case":"avatar.part.add:variant","tier":"equivalent","text":"give him a goatee","trigger":"give","c":[["part.variant","goatee"]],"ctx":[{"kind":"avatar","name":"Avatar"},{"kind":"hair","name":"fringe"},{"kind":"eyes","name":"eyes"},{"kind":"eyebrows","name":"brows"},{"kind":"nose","name":"nose"},{"kind":"mouth","name":"lips"},{"kind":"ears","name":"ears"},{"kind":"head","name":"head"},{"kind":"neck","name":"neck"},{"kind":"shoulders","name":"shirt"}]}
+{"case":"avatar.part.add:variant","tier":"equivalent","text":"From the Add menu, pick freckles.","trigger":"pick","c":[["part.variant","freckles"]],"ctx":[{"kind":"avatar","name":"Avatar"},{"kind":"hair","name":"fringe"},{"kind":"eyes","name":"eyes"},{"kind":"eyebrows","name":"brows"},{"kind":"nose","name":"nose"},{"kind":"mouth","name":"lips"},{"kind":"ears","name":"ears"},{"kind":"head","name":"head"},{"kind":"neck","name":"neck"},{"kind":"shoulders","name":"shirt"}]}
+{"case":"avatar.part.add:variant","tier":"complex","text":"it's a winter scene, so she needs a beanie - add one please","trigger":"add","c":[["part.variant","beanie"]],"ctx":[{"kind":"avatar","name":"Avatar"},{"kind":"hair","name":"fringe"},{"kind":"eyes","name":"eyes"},{"kind":"eyebrows","name":"brows"},{"kind":"nose","name":"nose"},{"kind":"mouth","name":"lips"},{"kind":"ears","name":"ears"},{"kind":"head","name":"head"},{"kind":"neck","name":"neck"},{"kind":"shoulders","name":"shirt"}]}
+{"case":"avatar.part.add:variant","tier":"complex","text":"He's a detective in this story; could you give him a monocle?","trigger":"give","c":[["part.variant","monocle"]],"ctx":[{"kind":"avatar","name":"Avatar"},{"kind":"hair","name":"fringe"},{"kind":"eyes","name":"eyes"},{"kind":"eyebrows","name":"brows"},{"kind":"nose","name":"nose"},{"kind":"mouth","name":"lips"},{"kind":"ears","name":"ears"},{"kind":"head","name":"head"},{"kind":"neck","name":"neck"},{"kind":"shoulders","name":"shirt"}]}
+{"case":"avatar.part.add:variant","tier":"complex","text":"while you're at it, add a handlebar moustache, it suits the old man","trigger":"add","c":[["part.variant","handlebar"]],"ctx":[{"kind":"avatar","name":"Avatar"},{"kind":"hair","name":"fringe"},{"kind":"eyes","name":"eyes"},{"kind":"eyebrows","name":"brows"},{"kind":"nose","name":"nose"},{"kind":"mouth","name":"lips"},{"kind":"ears","name":"ears"},{"kind":"head","name":"head"},{"kind":"neck","name":"neck"},{"kind":"shoulders","name":"shirt"}]}
+{"case":"avatar.part.add:variant","tier":"simplified","text":"give her a hat","trigger":"give","c":[["part.id","hat","hat"]],"ctx":[{"kind":"avatar","name":"Avatar"},{"kind":"hair","name":"fringe"},{"kind":"eyes","name":"eyes"},{"kind":"eyebrows","name":"brows"},{"kind":"nose","name":"nose"},{"kind":"mouth","name":"lips"},{"kind":"ears","name":"ears"},{"kind":"head","name":"head"},{"kind":"neck","name":"neck"},{"kind":"shoulders","name":"shirt"}],"complete":["the hat variant is chosen to suit the current preset (e.g. a crown for the queen, a cap for the boy)"]}
+{"case":"avatar.part.add:variant","tier":"simplified","text":"a crown for the queen","c":[["part.variant","crown"]],"ctx":[{"kind":"avatar","name":"Avatar"},{"kind":"hair","name":"fringe"},{"kind":"eyes","name":"eyes"},{"kind":"eyebrows","name":"brows"},{"kind":"nose","name":"nose"},{"kind":"mouth","name":"lips"},{"kind":"ears","name":"ears"},{"kind":"head","name":"head"},{"kind":"neck","name":"neck"},{"kind":"shoulders","name":"shirt"}]}
+{"case":"avatar.part.add:variant","tier":"simplified","text":"add earrings too","trigger":"add","c":[["part.id","earrings","earrings"]],"ctx":[{"kind":"avatar","name":"Avatar"},{"kind":"hair","name":"fringe"},{"kind":"eyes","name":"eyes"},{"kind":"eyebrows","name":"brows"},{"kind":"nose","name":"nose"},{"kind":"mouth","name":"lips"},{"kind":"ears","name":"ears"},{"kind":"head","name":"head"},{"kind":"neck","name":"neck"},{"kind":"shoulders","name":"shirt"}],"complete":["the earring variant is chosen to suit the preset and the hair"]}
+{"case":"avatar.part.add:variant","tier":"simplified","text":"some blush on her","c":[["part.variant","blush"]],"ctx":[{"kind":"avatar","name":"Avatar"},{"kind":"hair","name":"fringe"},{"kind":"eyes","name":"eyes"},{"kind":"eyebrows","name":"brows"},{"kind":"nose","name":"nose"},{"kind":"mouth","name":"lips"},{"kind":"ears","name":"ears"},{"kind":"head","name":"head"},{"kind":"neck","name":"neck"},{"kind":"shoulders","name":"shirt"}]}
+{"case":"avatar.part.add:slot","tier":"equivalent","text":"add hoop earrings","trigger":"add","c":[["part.variant","hoop"],["part.id","earrings","earrings"]],"ctx":[{"kind":"avatar","name":"Avatar"},{"kind":"hair","name":"fringe"},{"kind":"eyes","name":"eyes"},{"kind":"eyebrows","name":"brows"},{"kind":"nose","name":"nose"},{"kind":"mouth","name":"lips"},{"kind":"ears","name":"ears"},{"kind":"head","name":"head"},{"kind":"neck","name":"neck"},{"kind":"shoulders","name":"shirt"}]}
+{"case":"avatar.part.add:slot","tier":"equivalent","text":"add freckles to her cheeks","trigger":"add","c":[["part.variant","freckles"],["part.id","cheeks","cheeks"]],"ctx":[{"kind":"avatar","name":"Avatar"},{"kind":"hair","name":"fringe"},{"kind":"eyes","name":"eyes"},{"kind":"eyebrows","name":"brows"},{"kind":"nose","name":"nose"},{"kind":"mouth","name":"lips"},{"kind":"ears","name":"ears"},{"kind":"head","name":"head"},{"kind":"neck","name":"neck"},{"kind":"shoulders","name":"shirt"}]}
+{"case":"avatar.part.add:slot","tier":"equivalent","text":"put her back hair up in a bun","trigger":"put","c":[["part.id","back hair","hair_back"],["part.variant","bun"]],"ctx":[{"kind":"avatar","name":"Avatar"},{"kind":"hair","name":"fringe"},{"kind":"eyes","name":"eyes"},{"kind":"eyebrows","name":"brows"},{"kind":"nose","name":"nose"},{"kind":"mouth","name":"lips"},{"kind":"ears","name":"ears"},{"kind":"head","name":"head"},{"kind":"neck","name":"neck"},{"kind":"shoulders","name":"shirt"}]}
+{"case":"avatar.part.add:slot","tier":"equivalent","text":"Give him a pencil moustache.","trigger":"Give","c":[["part.variant","pencil"],["part.id","moustache","moustache"]],"ctx":[{"kind":"avatar","name":"Avatar"},{"kind":"hair","name":"fringe"},{"kind":"eyes","name":"eyes"},{"kind":"eyebrows","name":"brows"},{"kind":"nose","name":"nose"},{"kind":"mouth","name":"lips"},{"kind":"ears","name":"ears"},{"kind":"head","name":"head"},{"kind":"neck","name":"neck"},{"kind":"shoulders","name":"shirt"}]}
+{"case":"avatar.part.add:slot","tier":"equivalent","text":"for the glasses, add cat-eye ones","trigger":"add","c":[["part.id","glasses","glasses"],["part.variant","cat-eye"]],"ctx":[{"kind":"avatar","name":"Avatar"},{"kind":"hair","name":"fringe"},{"kind":"eyes","name":"eyes"},{"kind":"eyebrows","name":"brows"},{"kind":"nose","name":"nose"},{"kind":"mouth","name":"lips"},{"kind":"ears","name":"ears"},{"kind":"head","name":"head"},{"kind":"neck","name":"neck"},{"kind":"shoulders","name":"shirt"}]}
+{"case":"avatar.part.add:slot","tier":"complex","text":"she's a chef in this comic, so for headwear add a chef hat","trigger":"add","c":[["part.id","headwear","hat"],["part.variant","chef hat"]],"ctx":[{"kind":"avatar","name":"Avatar"},{"kind":"hair","name":"fringe"},{"kind":"eyes","name":"eyes"},{"kind":"eyebrows","name":"brows"},{"kind":"nose","name":"nose"},{"kind":"mouth","name":"lips"},{"kind":"ears","name":"ears"},{"kind":"head","name":"head"},{"kind":"neck","name":"neck"},{"kind":"shoulders","name":"shirt"}]}
+{"case":"avatar.part.add:slot","tier":"complex","text":"He looks too clean-shaven for a pirate. Add some stubble as his beard, please.","trigger":"Add","c":[["part.variant","stubble"],["part.id","beard","beard"]],"ctx":[{"kind":"avatar","name":"Avatar"},{"kind":"hair","name":"fringe"},{"kind":"eyes","name":"eyes"},{"kind":"eyebrows","name":"brows"},{"kind":"nose","name":"nose"},{"kind":"mouth","name":"lips"},{"kind":"ears","name":"ears"},{"kind":"head","name":"head"},{"kind":"neck","name":"neck"},{"kind":"shoulders","name":"shirt"}]}
+{"case":"avatar.part.add:slot","tier":"complex","text":"tie her long hair into pigtails - it's for a school photo theme","trigger":"tie","c":[["part.id","long hair","hair_back"],["part.variant","pigtails"]],"ctx":[{"kind":"avatar","name":"Avatar"},{"kind":"hair","name":"fringe"},{"kind":"eyes","name":"eyes"},{"kind":"eyebrows","name":"brows"},{"kind":"nose","name":"nose"},{"kind":"mouth","name":"lips"},{"kind":"ears","name":"ears"},{"kind":"head","name":"head"},{"kind":"neck","name":"neck"},{"kind":"shoulders","name":"shirt"}]}
+{"case":"avatar.part.add:slot","tier":"simplified","text":"pearl earrings","c":[["part.variant","pearl"],["part.id","earrings","earrings"]],"ctx":[{"kind":"avatar","name":"Avatar"},{"kind":"hair","name":"fringe"},{"kind":"eyes","name":"eyes"},{"kind":"eyebrows","name":"brows"},{"kind":"nose","name":"nose"},{"kind":"mouth","name":"lips"},{"kind":"ears","name":"ears"},{"kind":"head","name":"head"},{"kind":"neck","name":"neck"},{"kind":"shoulders","name":"shirt"}]}
+{"case":"avatar.part.add:slot","tier":"simplified","text":"a walrus mustache","c":[["part.variant","walrus"],["part.id","mustache","moustache"]],"ctx":[{"kind":"avatar","name":"Avatar"},{"kind":"hair","name":"fringe"},{"kind":"eyes","name":"eyes"},{"kind":"eyebrows","name":"brows"},{"kind":"nose","name":"nose"},{"kind":"mouth","name":"lips"},{"kind":"ears","name":"ears"},{"kind":"head","name":"head"},{"kind":"neck","name":"neck"},{"kind":"shoulders","name":"shirt"}]}
+{"case":"avatar.part.add:slot","tier":"simplified","text":"clothes: lab coat","c":[["part.id","clothes","shoulders"],["part.variant","lab coat"]],"ctx":[{"kind":"avatar","name":"Avatar"},{"kind":"hair","name":"fringe"},{"kind":"eyes","name":"eyes"},{"kind":"eyebrows","name":"brows"},{"kind":"nose","name":"nose"},{"kind":"mouth","name":"lips"},{"kind":"ears","name":"ears"},{"kind":"head","name":"head"},{"kind":"neck","name":"neck"},{"kind":"shoulders","name":"shirt"}]}
+{"case":"avatar.part.change:variant","tier":"equivalent","text":"switch her glasses to sunglasses","trigger":"switch","target":{"name":"her glasses"},"c":[["part.variant","sunglasses"]]}
+{"case":"avatar.part.change:variant","tier":"equivalent","text":"change the cap to a beanie","trigger":"change","target":{"name":"the cap"},"c":[["part.variant","beanie"]]}
+{"case":"avatar.part.change:variant","tier":"equivalent","text":"Set the Look of the moustache to walrus.","trigger":"Set","target":{"name":"the moustache"},"c":[["part.variant","walrus"]]}
+{"case":"avatar.part.change:variant","tier":"equivalent","text":"swap his stubble for a goatee","trigger":"swap","target":{"name":"his stubble"},"c":[["part.variant","goatee"]]}
+{"case":"avatar.part.change:variant","tier":"complex","text":"the hoops feel too big for a child, so change her earrings to studs","trigger":"change","target":{"name":"her earrings"},"c":[["part.variant","studs","stud"]]}
+{"case":"avatar.part.change:variant","tier":"complex","text":"For the knight theme, could you turn the cap into a knight helmet?","trigger":"turn","target":{"name":"the cap"},"c":[["part.variant","knight helmet"]]}
+{"case":"avatar.part.change:variant","tier":"complex","text":"ok so the shirt doesn't fit the doctor idea; make her top a lab coat instead","trigger":"make","target":{"name":"her top"},"c":[["part.variant","lab coat"]]}
+{"case":"avatar.part.change:variant","tier":"simplified","text":"make the ponytail a bun","trigger":"make","target":{"name":"the ponytail"},"c":[["part.variant","bun"]]}
+{"case":"avatar.part.change:variant","tier":"simplified","text":"spikes for the fringe","target":{"name":"the fringe"},"c":[["part.variant","spikes"]]}
+{"case":"avatar.part.change:variant","tier":"simplified","text":"a different look for her glasses","target":{"name":"her glasses"},"c":[["part.variant","different","?"]]}
+{"case":"avatar.part.change:variant","tier":"simplified","text":"hoodie instead","target":{"ctx":true},"c":[["part.variant","hoodie"]]}
+{"case":"avatar.part.change:colour","tier":"equivalent","text":"dye her bangs purple","trigger":"dye","target":{"name":"her bangs"},"c":[["part.colour","purple"]]}
+{"case":"avatar.part.change:colour","tier":"equivalent","text":"make the eyes a hazel shade","trigger":"make","target":{"name":"the eyes"},"c":[["part.colour","hazel"]]}
+{"case":"avatar.part.change:colour","tier":"equivalent","text":"colour the shirt dark brown","trigger":"colour","target":{"name":"the shirt"},"c":[["part.colour","dark brown"]]}
+{"case":"avatar.part.change:colour","tier":"equivalent","text":"Change the cap colour to red.","trigger":"Change","target":{"name":"the cap"},"c":[["part.colour","red"]]}
+{"case":"avatar.part.change:colour","tier":"equivalent","text":"set the Colour of her ponytail to auburn","trigger":"set","target":{"name":"her ponytail"},"c":[["part.colour","auburn"]]}
+{"case":"avatar.part.change:colour","tier":"equivalent","text":"turn his beard gray","trigger":"turn","target":{"name":"his beard"},"c":[["part.colour","gray","grey"]]}
+{"case":"avatar.part.change:colour","tier":"equivalent","text":"I'd like her hair blonde","target":{"name":"her hair"},"c":[["part.colour","blonde","blond"]]}
+{"case":"avatar.part.change:colour","tier":"complex","text":"he's supposed to be older, so make his moustache white","trigger":"make","target":{"name":"his moustache"},"c":[["part.colour","white"]]}
+{"case":"avatar.part.change:colour","tier":"complex","text":"The robot's glasses should look metallic - set them to metal grey, please.","trigger":"set","target":{"name":"glasses"},"c":[["part.colour","metal grey"]]}
+{"case":"avatar.part.change:colour","tier":"complex","text":"while you're at it, recolor her top in olive to match the background","trigger":"recolor","target":{"name":"her top"},"c":[["part.colour","olive"]]}
+{"case":"avatar.part.change:colour","tier":"complex","text":"in the photo her eyes look brownish, so change them to brown here too","trigger":"change","target":{"name":"her eyes"},"c":[["part.colour","brown"]]}
+{"case":"avatar.part.change:colour","tier":"simplified","text":"pink brows","target":{"name":"brows"},"c":[["part.colour","pink"]]}
+{"case":"avatar.part.change:colour","tier":"simplified","text":"make the earrings yellow","trigger":"make","target":{"name":"the earrings"},"c":[["part.colour","yellow"]]}
+{"case":"avatar.part.change:colour","tier":"simplified","text":"blue eyes please","target":{"name":"eyes"},"c":[["part.colour","blue"]]}
+{"case":"avatar.part.change:colour","tier":"simplified","text":"make it orange","trigger":"make","target":{"ctx":true},"c":[["part.colour","orange"]]}
+{"case":"avatar.part.change:colour","tier":"simplified","text":"darker hair","target":{"name":"hair"},"c":[["part.colour","darker","?","delta"]]}
+{"case":"avatar.part.change:colour","tier":"simplified","text":"green specs","target":{"name":"specs"},"c":[["part.colour","green"]]}
+{"case":"avatar.part.change:colour","tier":"simplified","text":"black ponytail","target":{"name":"ponytail"},"c":[["part.colour","black"]]}
+{"case":"avatar.part.change:colour","tier":"simplified","text":"tan shirt","target":{"name":"shirt"},"c":[["part.colour","tan"]]}
+{"case":"avatar.part.change:size","tier":"equivalent","text":"make the nose tiny","trigger":"make","target":{"name":"the nose"},"c":[["part.size","tiny"]]}
+{"case":"avatar.part.change:size","tier":"equivalent","text":"set the ears to the big size","trigger":"set","target":{"name":"the ears"},"c":[["part.size","big"]]}
+{"case":"avatar.part.change:size","tier":"equivalent","text":"In the Size menu, set the glasses to huge.","trigger":"set","target":{"name":"the glasses"},"c":[["part.size","huge"]]}
+{"case":"avatar.part.change:size","tier":"equivalent","text":"put the eyes back to the default size","trigger":"put","target":{"name":"the eyes"},"c":[["part.size","default"]]}
+{"case":"avatar.part.change:size","tier":"complex","text":"her mouth is a bit much, so set it to small in the Size menu","trigger":"set","target":{"name":"her mouth"},"c":[["part.size","small"]]}
+{"case":"avatar.part.change:size","tier":"complex","text":"For the cartoon look I want enormous eyes - pick huge for them.","trigger":"pick","target":{"name":"eyes"},"c":[["part.size","huge"]]}
+{"case":"avatar.part.change:size","tier":"simplified","text":"bigger ears","target":{"name":"ears"},"c":[["part.size","bigger","big","delta"]]}
+{"case":"avatar.part.change:size","tier":"simplified","text":"make the earrings small","trigger":"make","target":{"name":"the earrings"},"c":[["part.size","small"]]}
+{"case":"avatar.part.change:size","tier":"simplified","text":"a tiny moustache","target":{"name":"moustache"},"c":[["part.size","tiny"]]}
+{"case":"avatar.part.change:size","tier":"simplified","text":"normal size for the hat","target":{"name":"the hat"},"c":[["part.size","normal","default"]]}
+{"case":"avatar.part.change:size","tier":"simplified","text":"make the nose smaller","trigger":"make","target":{"name":"the nose"},"c":[["part.size","smaller","small","delta"]]}
+{"case":"avatar.part.change:size","tier":"simplified","text":"big lips","target":{"name":"lips"},"c":[["part.size","big"]]}
+{"case":"avatar.part.feature:core","tier":"equivalent","text":"make her hair curly","trigger":"make","target":{"name":"her hair"},"c":[["part.value","curly"]]}
+{"case":"avatar.part.feature:core","tier":"equivalent","text":"change the length of the ponytail to long","trigger":"change","target":{"name":"the ponytail"},"c":[["part.property","length"],["part.value","long"]]}
+{"case":"avatar.part.feature:core","tier":"equivalent","text":"give her mouth a smiling feel","trigger":"give","target":{"name":"her mouth"},"c":[["part.value","smiling"],["part.property","feel"]]}
+{"case":"avatar.part.feature:core","tier":"equivalent","text":"Make his nose shape pointed.","trigger":"Make","target":{"name":"his nose"},"c":[["part.property","shape"],["part.value","pointed"]]}
+{"case":"avatar.part.feature:core","tier":"equivalent","text":"set the kind of her top to a hoodie","trigger":"set","target":{"name":"her top"},"c":[["part.property","kind"],["part.value","hoodie"]]}
+{"case":"avatar.part.feature:core","tier":"complex","text":"she's meant to look older, so set the age of her head to old","trigger":"set","target":{"name":"her head"},"c":[["part.property","age"],["part.value","old"]]}
+{"case":"avatar.part.feature:core","tier":"complex","text":"The brows look too thin for a man. Make them thick, please.","trigger":"Make","target":{"name":"The brows"},"c":[["part.value","thick"]]}
+{"case":"avatar.part.feature:core","tier":"complex","text":"she got a perm, so her fringe needs to be wavy now","trigger":"needs to be","target":{"name":"her fringe"},"c":[["part.value","wavy"]]}
+{"case":"avatar.part.feature:core","tier":"simplified","text":"round head","target":{"name":"head"},"c":[["part.value","round"]]}
+{"case":"avatar.part.feature:core","tier":"simplified","text":"bushy brows","target":{"name":"brows"},"c":[["part.value","bushy"]]}
+{"case":"avatar.part.feature:core","tier":"simplified","text":"make her lips full","trigger":"make","target":{"name":"her lips"},"c":[["part.value","full","full lips"]]}
+{"case":"avatar.part.feature:core","tier":"simplified","text":"wider neck","target":{"name":"neck"},"c":[["part.value","wider","wide"]]}
+{"case":"avatar.part.move:place","tier":"equivalent","text":"move her eyebrows higher","trigger":"move","target":{"name":"her eyebrows"},"c":[["part.place","higher","up"]]}
+{"case":"avatar.part.move:place","tier":"equivalent","text":"shift the nose to the left","trigger":"shift","target":{"name":"the nose"},"c":[["part.place","left"]]}
+{"case":"avatar.part.move:place","tier":"equivalent","text":"lower the glasses a bit","trigger":"lower","target":{"name":"the glasses"},"c":[["part.place","lower","down"]]}
+{"case":"avatar.part.move:place","tier":"equivalent","text":"Nudge the cap to the right.","trigger":"Nudge","target":{"name":"the cap"},"c":[["part.place","right"]]}
+{"case":"avatar.part.move:place","tier":"complex","text":"the glasses sit on her forehead, so move them down a step","trigger":"move","target":{"name":"the glasses"},"c":[["part.place","down"]]}
+{"case":"avatar.part.move:place","tier":"complex","text":"the mouth is almost touching the chin; could you raise it a little?","trigger":"raise","target":{"name":"the mouth"},"c":[["part.place","raise","up"]]}
+{"case":"avatar.part.move:place","tier":"complex","text":"ok so the earrings are off-centre, push them to the left","trigger":"push","target":{"name":"the earrings"},"c":[["part.place","left"]]}
+{"case":"avatar.part.move:place","tier":"simplified","text":"brows up","target":{"name":"brows"},"c":[["part.place","up"]]}
+{"case":"avatar.part.move:place","tier":"simplified","text":"moustache down a little","target":{"name":"moustache"},"c":[["part.place","down"]]}
+{"case":"avatar.part.move:place","tier":"simplified","text":"move it right","trigger":"move","target":{"ctx":true},"c":[["part.place","right"]]}
+{"case":"avatar.part.remove:core","tier":"equivalent","text":"take of her glasses","trigger":"take of","target":{"name":"her glasses"}}
+{"case":"avatar.part.remove:core","tier":"equivalent","text":"remove the moustache","trigger":"remove","target":{"name":"the moustache"}}
+{"case":"avatar.part.remove:core","tier":"equivalent","text":"Delete the earrings.","trigger":"Delete","target":{"name":"the earrings"}}
+{"case":"avatar.part.remove:core","tier":"complex","text":"he's supposed to be a baby, so get rid of the stubble","trigger":"get rid of","target":{"name":"the stubble"}}
+{"case":"avatar.part.remove:core","tier":"complex","text":"it's an indoor scene - could you remove her cap?","trigger":"remove","target":{"name":"her cap"}}
+{"case":"avatar.part.remove:core","tier":"complex","text":"I changed my mind about the freckles; please take them away","trigger":"take them away","target":{"name":"the freckles"}}
+{"case":"avatar.part.remove:core","tier":"simplified","text":"no hat","target":{"name":"hat"}}
+{"case":"avatar.part.remove:core","tier":"simplified","text":"lose the specs","trigger":"lose","target":{"name":"the specs"}}
+{"case":"avatar.part.remove:core","tier":"simplified","text":"delete that","trigger":"delete","target":{"ctx":true}}
+{"case":"avatar.parts.remove:core","tier":"equivalent","text":"remove the glasses and the cap","trigger":"remove","target":{"refs":["the glasses","the cap"]}}
+{"case":"avatar.parts.remove:core","tier":"equivalent","text":"delete both the earrings and the moustache","trigger":"delete","target":{"refs":["the earrings","the moustache"]}}
+{"case":"avatar.parts.remove:core","tier":"equivalent","text":"Take off his hat, glasses and beard.","trigger":"Take off","target":{"refs":["hat","glasses","beard"]}}
+{"case":"avatar.parts.remove:core","tier":"complex","text":"for the passport photo, get rid of her sunglasses and her earrings","trigger":"get rid of","target":{"refs":["her sunglasses","her earrings"]}}
+{"case":"avatar.parts.remove:core","tier":"complex","text":"He shaved this morning, so delete the beard and the moustache.","trigger":"delete","target":{"refs":["the beard","the moustache"]}}
+{"case":"avatar.parts.remove:core","tier":"simplified","text":"no cap, no earrings","target":{"refs":["cap","earrings"]}}
+{"case":"avatar.parts.remove:core","tier":"simplified","text":"drop the freckles and the specs","trigger":"drop","target":{"refs":["the freckles","the specs"]}}
+{"case":"avatar.parts.remove:core","tier":"simplified","text":"remove ponytail and fringe","trigger":"remove","target":{"refs":["ponytail","fringe"]}}
+{"case":"avatar.parts.remove:core","tier":"simplified","text":"bin the hat and the hoops","trigger":"bin","target":{"refs":["the hat","the hoops"]}}
+{"case":"avatar.clear:core","tier":"equivalent","text":"remove all the parts","trigger":"remove","target":{"all":"all the parts"}}
+{"case":"avatar.clear:core","tier":"equivalent","text":"clear everything off the avatar","trigger":"clear","target":{"all":"everything"}}
+{"case":"avatar.clear:core","tier":"equivalent","text":"delete every part of the face","trigger":"delete","target":{"all":"every part"}}
+{"case":"avatar.clear:core","tier":"equivalent","text":"Wipe all of her features.","trigger":"Wipe","target":{"all":"all of her features"}}
+{"case":"avatar.clear:core","tier":"equivalent","text":"take off all the parts at once","trigger":"take off","target":{"all":"all the parts"}}
+{"case":"avatar.clear:core","tier":"equivalent","text":"strip the avatar of every part","trigger":"strip","target":{"all":"every part"}}
+{"case":"avatar.clear:core","tier":"equivalent","text":"could you clear all parts from the face?","trigger":"clear","target":{"all":"all parts"}}
+{"case":"avatar.clear:core","tier":"equivalent","text":"erase everything on the avatar","trigger":"erase","target":{"all":"everything"}}
+{"case":"avatar.clear:core","tier":"complex","text":"I want to build her from scratch, so remove every single part first","trigger":"remove","target":{"all":"every single part"}}
+{"case":"avatar.clear:core","tier":"complex","text":"This face is a mess. Just clear all the parts and I'll start over.","trigger":"clear","target":{"all":"all the parts"}}
+{"case":"avatar.clear:core","tier":"complex","text":"before we try the robot again, delete everything on the avatar","trigger":"delete","target":{"all":"everything"}}
+{"case":"avatar.clear:core","tier":"complex","text":"ok so none of these parts work - wipe them all","trigger":"wipe","target":{"all":"them all"}}
+{"case":"avatar.clear:core","tier":"complex","text":"I'd like a blank avatar, could you take every part away?","trigger":"take","target":{"all":"every part"}}
+{"case":"avatar.clear:core","tier":"complex","text":"the kids want to draw their own, so please clear out all the face parts","trigger":"clear out","target":{"all":"all the face parts"}}
+{"case":"avatar.clear:core","tier":"simplified","text":"clear it all","trigger":"clear","target":{"all":"it all"}}
+{"case":"avatar.clear:core","tier":"simplified","text":"wipe the avatar clean","trigger":"wipe"}
+{"case":"avatar.clear:core","tier":"simplified","text":"remove everything","trigger":"remove","target":{"all":"everything"}}
+{"case":"avatar.clear:core","tier":"simplified","text":"blank face please"}
+{"case":"avatar.clear:core","tier":"simplified","text":"all parts gone","target":{"all":"all parts"}}
+{"case":"avatar.clear:core","tier":"simplified","text":"start from an empty face","trigger":"start"}
+{"case":"avatar.clear:core","tier":"simplified","text":"nuke all the parts","trigger":"nuke","target":{"all":"all the parts"}}
+{"case":"avatar.clear:core","tier":"simplified","text":"empty the avatar out","trigger":"empty"}
+{"case":"avatar.observe:describe","tier":"equivalent","text":"describe the avatar","trigger":"describe","target":{"kind":"avatar"},"q":"describe"}
+{"case":"avatar.observe:describe","tier":"equivalent","text":"what does she look like right now?","trigger":"look like","q":"describe"}
+{"case":"avatar.observe:describe","tier":"equivalent","text":"Tell me which parts the face has.","trigger":"Tell","q":"describe"}
+{"case":"avatar.observe:describe","tier":"complex","text":"I can't see the screen well, so describe the avatar for me, part by part","trigger":"describe","target":{"kind":"avatar"},"q":"describe"}
+{"case":"avatar.observe:describe","tier":"complex","text":"before I change anything, what is he wearing and what colour is his hair?","trigger":"what","q":"describe"}
+{"case":"avatar.observe:describe","tier":"simplified","text":"what's on the face?","trigger":"what's","q":"describe"}
+{"case":"avatar.observe:describe","tier":"simplified","text":"list her parts","trigger":"list","q":"describe"}
+{"case":"avatar.observe:describe","tier":"simplified","text":"current look?","q":"describe"}
+{"case":"avatar.observe:describe","tier":"simplified","text":"what colour are her eyes?","trigger":"what","target":{"name":"her eyes","nosel":true},"q":"describe"}
+{"case":"avatar.observe:exists","tier":"equivalent","text":"does she have glasses?","trigger":"have","target":{"name":"glasses","nosel":true},"q":"exists"}
+{"case":"avatar.observe:exists","tier":"equivalent","text":"is he wearing a hat?","trigger":"wearing","target":{"name":"hat","nosel":true},"q":"exists"}
+{"case":"avatar.observe:exists","tier":"equivalent","text":"Does the avatar have earrings on?","trigger":"have","target":{"name":"earrings","nosel":true},"q":"exists"}
+{"case":"avatar.observe:exists","tier":"equivalent","text":"has he got a beard?","trigger":"got","target":{"name":"beard","nosel":true},"q":"exists"}
+{"case":"avatar.observe:exists","tier":"equivalent","text":"is there a moustache on the face?","trigger":"is there","target":{"name":"moustache","nosel":true},"q":"exists"}
+{"case":"avatar.observe:exists","tier":"equivalent","text":"does she have freckles?","trigger":"have","target":{"name":"freckles","nosel":true},"q":"exists"}
+{"case":"avatar.observe:exists","tier":"equivalent","text":"are there any eyebrows on her?","trigger":"are there","target":{"name":"eyebrows","nosel":true},"q":"exists"}
+{"case":"avatar.observe:exists","tier":"equivalent","text":"Is she wearing a ponytail?","trigger":"wearing","target":{"name":"ponytail","nosel":true},"q":"exists"}
+{"case":"avatar.observe:exists","tier":"complex","text":"I thought I removed the specs earlier - are they still on her?","trigger":"are","target":{"name":"the specs","nosel":true},"q":"exists"}
+{"case":"avatar.observe:exists","tier":"complex","text":"before I add a crown, does she already have a hat of some kind?","trigger":"have","target":{"name":"a hat","nosel":true},"q":"exists"}
+{"case":"avatar.observe:exists","tier":"complex","text":"The neck looked missing in the export. Is there a neck on the avatar?","trigger":"Is there","target":{"name":"a neck","nosel":true},"q":"exists"}
+{"case":"avatar.observe:exists","tier":"complex","text":"quick question: does he still have stubble, or did the reset take it away?","trigger":"have","target":{"name":"stubble","nosel":true},"q":"exists"}
+{"case":"avatar.observe:exists","tier":"complex","text":"if she has earrings, I'll leave them; does she?","trigger":"has","target":{"name":"earrings","nosel":true},"q":"exists"}
+{"case":"avatar.observe:exists","tier":"complex","text":"I can't tell at this zoom - is there a fringe on her or just the bun?","trigger":"is there","target":{"name":"a fringe","nosel":true},"q":"exists"}
+{"case":"avatar.observe:exists","tier":"simplified","text":"glasses on?","target":{"name":"glasses","nosel":true},"q":"exists"}
+{"case":"avatar.observe:exists","tier":"simplified","text":"any hat?","target":{"name":"hat","nosel":true},"q":"exists"}
+{"case":"avatar.observe:exists","tier":"simplified","text":"got ears?","trigger":"got","target":{"name":"ears","nosel":true},"q":"exists"}
+{"case":"avatar.observe:exists","tier":"simplified","text":"beard or clean-shaven?","target":{"name":"beard","nosel":true},"q":"exists"}
+{"case":"avatar.observe:exists","tier":"simplified","text":"is the cap still there","trigger":"is","target":{"name":"the cap","nosel":true},"q":"exists"}
+{"case":"avatar.observe:exists","tier":"simplified","text":"does she have a top on","trigger":"have","target":{"name":"a top","nosel":true},"q":"exists"}
+{"case":"avatar.observe:exists","tier":"simplified","text":"any blush on her cheeks?","target":{"name":"blush","nosel":true},"q":"exists"}
+{"case":"avatar.observe:exists","tier":"simplified","text":"moustache there?","target":{"name":"moustache","nosel":true},"q":"exists"}
+{"case":"avatar.undo:core","tier":"equivalent","text":"undo the most recent change to the avatar","trigger":"undo"}
+{"case":"avatar.undo:core","tier":"equivalent","text":"revert my last edit to the face","trigger":"revert"}
+{"case":"avatar.undo:core","tier":"equivalent","text":"Take back that change.","trigger":"Take back"}
+{"case":"avatar.undo:core","tier":"complex","text":"oops, the new hair looks awful - undo that","trigger":"undo"}
+{"case":"avatar.undo:core","tier":"complex","text":"I didn't mean to delete the glasses; can you step back one change?","trigger":"step back"}
+{"case":"avatar.undo:core","tier":"simplified","text":"undo please","trigger":"undo"}
+{"case":"avatar.undo:core","tier":"simplified","text":"go back one","trigger":"go back"}
+{"case":"avatar.undo:core","tier":"simplified","text":"nope, revert","trigger":"revert"}
+{"case":"avatar.redo:core","tier":"equivalent","text":"redo the last avatar change","trigger":"redo"}
+{"case":"avatar.redo:core","tier":"equivalent","text":"reapply the edit I just undid","trigger":"reapply"}
+{"case":"avatar.redo:core","tier":"equivalent","text":"Bring back the change you undid.","trigger":"Bring back"}
+{"case":"avatar.redo:core","tier":"complex","text":"actually the sunglasses were fine - redo that change","trigger":"redo"}
+{"case":"avatar.redo:core","tier":"complex","text":"I undid too far; could you go forward one step on the face?","trigger":"go forward"}
+{"case":"avatar.redo:core","tier":"simplified","text":"redo please","trigger":"redo"}
+{"case":"avatar.redo:core","tier":"simplified","text":"put it back again","trigger":"put it back"}
+{"case":"avatar.redo:core","tier":"simplified","text":"redo it","trigger":"redo"}
+{"case":"avatar.part.change:colour","tier":"complex","text":"dye the ponytail blond and swap the cap for a beret","trigger":"dye","target":{"name":"the ponytail"},"c":[["part.colour","blond"]],"span":"dye the ponytail blond","also":[{"op":"avatar.part.change","span":"swap the cap for a beret","trigger":"swap","target":{"name":"the cap"},"c":[["part.variant","beret"]]}]}
+{"case":"avatar.face.expression:expression","tier":"complex","text":"make her look happy, then show the part labels for a moment","trigger":"make","c":[["face.expression","happy"]],"span":"make her look happy","also":[{"op":"avatar.ids.show","span":"show the part labels for a moment","trigger":"show","c":[["face.mode","for a moment","temporary"]]}]}
+{"case":"avatar.ids.show:off","tier":"complex","text":"hide the IDs again and select the nose for me","trigger":"hide","c":[["face.mode","hide","off"]],"span":"hide the IDs again","also":[{"op":"avatar.part.select","span":"select the nose for me","trigger":"select","target":{"name":"the nose"}}]}
+{"case":"avatar.part.move:place","tier":"complex","text":"move the glasses up a bit, then make them bigger","trigger":"move","target":{"name":"the glasses"},"c":[["part.place","up"]],"span":"move the glasses up a bit","also":[{"op":"avatar.part.change","span":"then make them bigger","trigger":"make","target":{"ctx":true},"c":[["part.size","bigger","big","delta"]]}]}
+{"case":"avatar.parts.remove:core","tier":"complex","text":"remove the cap and the earrings, then give her a crown","trigger":"remove","target":{"refs":["the cap","the earrings"]},"span":"remove the cap and the earrings","also":[{"op":"avatar.part.add","span":"give her a crown","trigger":"give","c":[["part.variant","crown"]]}]}
+{"case":"avatar.face.preset:preset","tier":"complex","text":"pick the queen preset and name her Maud","trigger":"pick","c":[["face.preset","queen"]],"span":"pick the queen preset","also":[{"op":"avatar.face.name","span":"name her Maud","trigger":"name","c":[["face.name","Maud"]]}]}
+{"case":"avatar.clear:core","tier":"complex","text":"clear all the parts and then switch to the robot preset","trigger":"clear","target":{"all":"all the parts"},"span":"clear all the parts","also":[{"op":"avatar.face.preset","span":"switch to the robot preset","trigger":"switch","c":[["face.preset","robot"]]}]}
+{"case":"avatar.observe:exists","tier":"complex","text":"does she have earrings? if not, add some hoops","trigger":"have","target":{"name":"earrings","nosel":true},"q":"exists","span":"does she have earrings?","also":[{"op":"avatar.part.add","span":"add some hoops","trigger":"add","c":[["part.variant","hoops","hoop"]]}]}
+{"case":"avatar.face.resize:scale-relative","tier":"complex","text":"make the avatar 10 percent smaller and keep the IDs visible","trigger":"make","target":{"kind":"avatar"},"c":[["face.scale","10 percent smaller","10","delta"]],"span":"make the avatar 10 percent smaller","also":[{"op":"avatar.ids.show","span":"keep the IDs visible","trigger":"keep","c":[["face.mode","visible","always"]]}]}
+{"case":"avatar.part.feature:core","tier":"complex","text":"make his beard bushy and colour it grey","trigger":"make","target":{"name":"his beard"},"c":[["part.value","bushy"]],"span":"make his beard bushy","also":[{"op":"avatar.part.change","span":"colour it grey","trigger":"colour","target":{"ctx":true},"c":[["part.colour","grey"]]}]}
+{"case":"avatar.undo:core","tier":"complex","text":"undo that and make the nose small instead","trigger":"undo","span":"undo that","also":[{"op":"avatar.part.change","span":"make the nose small instead","trigger":"make","target":{"name":"the nose"},"c":[["part.size","small"]]}]}
+{"case":"avatar.part.select:core","tier":"complex","text":"select the hoop earrings and turn them gold - well, yellow","trigger":"select","target":{"name":"the hoop earrings"},"span":"select the hoop earrings","also":[{"op":"avatar.part.change","span":"turn them gold - well, yellow","trigger":"turn","target":{"ctx":true},"c":[["part.colour","yellow"]]}]}
+{"case":"avatar.part.change:colour","tier":"equivalent","text":"give her eyes an amber colour","trigger":"give","target":{"name":"her eyes"},"c":[["part.colour","amber"]]}
+{"case":"avatar.part.change:colour","tier":"complex","text":"She's playing a ghost in the school play, so make her head pale.","trigger":"make","target":{"name":"her head"},"c":[["part.colour","pale"]]}
+{"case":"avatar.part.change:colour","tier":"simplified","text":"light brows, not dark","target":{"name":"brows"},"c":[["part.colour","light"]]}

@@ -1,0 +1,651 @@
+{"case":"drawing.object.make:kind-only","tier":"equivalent","text":"please draw a rainbow for me","trigger":"draw","target":{"kind":"rainbow"}}
+{"case":"drawing.object.make:kind-only","tier":"equivalent","text":"could you put a star on the page?","trigger":"put","target":{"kind":"star"}}
+{"case":"drawing.object.make:kind-only","tier":"equivalent","text":"I want you to sketch a heart","trigger":"sketch","target":{"kind":"heart"}}
+{"case":"drawing.object.make:kind-only","tier":"complex","text":"my nephew loves space, so could you draw a rocket for him?","trigger":"draw","target":{"kind":"rocket"}}
+{"case":"drawing.object.make:kind-only","tier":"complex","text":"before we do anything else, create a triangle","trigger":"create","target":{"kind":"triangle"}}
+{"case":"drawing.object.make:kind-only","tier":"simplified","text":"add a boat as well","trigger":"add","target":{"kind":"boat"},"complete":["a boat goes on the water: put it on the lake"]}
+{"case":"drawing.object.make:kind-only","tier":"simplified","text":"put a bird in","trigger":"put","target":{"kind":"bird"},"complete":["a bird belongs in the sky: place it in the upper part of the page"]}
+{"case":"drawing.object.make:kind-only","tier":"simplified","text":"a fish please","target":{"kind":"fish"},"complete":["a fish lives in water: put it in the lake"]}
+{"case":"drawing.object.make:kind-only","tier":"simplified","text":"now add a person","trigger":"add","target":{"kind":"person"},"complete":["a person stands on the ground, e.g. by the house or the road"]}
+{"case":"drawing.object.make:color","tier":"equivalent","text":"draw a purple circle","trigger":"draw","target":{"kind":"circle"},"c":[["drawn.color","purple"]]}
+{"case":"drawing.object.make:color","tier":"equivalent","text":"add a yellow balloon","trigger":"add","target":{"kind":"balloon"},"c":[["drawn.color","yellow"]]}
+{"case":"drawing.object.make:color","tier":"equivalent","text":"can you make a green triangle?","trigger":"make","target":{"kind":"triangle"},"c":[["drawn.color","green"]]}
+{"case":"drawing.object.make:color","tier":"equivalent","text":"create a heart and colour it pink","trigger":"create","target":{"kind":"heart"},"c":[["drawn.color","pink"]]}
+{"case":"drawing.object.make:color","tier":"complex","text":"the kids asked for a dog; draw it in brown if you can","trigger":"draw","target":{"kind":"dog"},"c":[["drawn.color","brown"]]}
+{"case":"drawing.object.make:color","tier":"complex","text":"since it's night in my picture, draw a silver moon","trigger":"draw","target":{"kind":"moon"},"c":[["drawn.color","silver"]]}
+{"case":"drawing.object.make:color","tier":"simplified","text":"a blue car","target":{"kind":"car"},"c":[["drawn.color","blue"]],"complete":["a car goes on the road"]}
+{"case":"drawing.object.make:color","tier":"simplified","text":"red flower please","target":{"kind":"flower"},"c":[["drawn.color","red"]]}
+{"case":"drawing.object.make:color","tier":"simplified","text":"draw a reddish cloud","trigger":"draw","target":{"kind":"cloud"},"c":[["drawn.color","reddish","?"]]}
+{"case":"drawing.object.make:size-number","tier":"equivalent","text":"draw a circle of size 60","trigger":"draw","target":{"kind":"circle"},"c":[["drawn.size","size 60"]]}
+{"case":"drawing.object.make:size-number","tier":"equivalent","text":"add a square, size 120","trigger":"add","target":{"kind":"square"},"c":[["drawn.size","size 120"]]}
+{"case":"drawing.object.make:size-number","tier":"equivalent","text":"make a star with size 45","trigger":"make","target":{"kind":"star"},"c":[["drawn.size","size 45"]]}
+{"case":"drawing.object.make:size-number","tier":"equivalent","text":"please create a sun that is 90 in size","trigger":"create","target":{"kind":"sun"},"c":[["drawn.size","90"]]}
+{"case":"drawing.object.make:size-number","tier":"complex","text":"draw me a moon for the night sky, size 30 should be fine","trigger":"draw","target":{"kind":"moon"},"c":[["drawn.size","size 30"]]}
+{"case":"drawing.object.make:size-number","tier":"complex","text":"draw a cat at size 35, it has to fit under the tree","trigger":"draw","target":{"kind":"cat"},"c":[["drawn.size","size 35"]]}
+{"case":"drawing.object.make:size-number","tier":"simplified","text":"balloon, size 25","target":{"kind":"balloon"},"c":[["drawn.size","size 25"]]}
+{"case":"drawing.object.make:size-number","tier":"simplified","text":"a size 70 hill","target":{"kind":"hill"},"c":[["drawn.size","size 70"]]}
+{"case":"drawing.object.make:size-number","tier":"simplified","text":"add a fish sized 20","trigger":"add","target":{"kind":"fish"},"c":[["drawn.size","sized 20"]],"complete":["a fish lives in water: put it in the lake"]}
+{"case":"drawing.object.make:size-degree","tier":"simplified","text":"add a little boat","trigger":"add","target":{"kind":"boat"},"c":[["drawn.size","little","small","degree"]],"complete":["a boat goes on the water (k.scenes place=water): put it on the lake"]}
+{"case":"drawing.object.make:size-degree","tier":"equivalent","text":"please draw a huge mountain","trigger":"draw","target":{"kind":"mountain"},"c":[["drawn.size","huge","huge","degree"]]}
+{"case":"drawing.object.make:size-degree","tier":"equivalent","text":"could you add a tiny bird?","trigger":"add","target":{"kind":"bird"},"c":[["drawn.size","tiny","tiny","degree"]]}
+{"case":"drawing.object.make:size-degree","tier":"equivalent","text":"create a large lake","trigger":"create","target":{"kind":"lake"},"c":[["drawn.size","large","big","degree"]]}
+{"case":"drawing.object.make:size-degree","tier":"equivalent","text":"make a small square","trigger":"make","target":{"kind":"square"},"c":[["drawn.size","small","small","degree"]]}
+{"case":"drawing.object.make:size-degree","tier":"complex","text":"the scene needs something dramatic, so draw an enormous sun","trigger":"draw","target":{"kind":"sun"},"c":[["drawn.size","enormous","huge","degree"]]}
+{"case":"drawing.object.make:size-degree","tier":"complex","text":"a rocket would be fun to add; make it a small one though","trigger":"add","target":{"kind":"rocket"},"c":[["drawn.size","small","small","degree"]]}
+{"case":"drawing.object.make:size-degree","tier":"simplified","text":"a giant tree","target":{"kind":"tree"},"c":[["drawn.size","giant","huge","degree"]]}
+{"case":"drawing.object.make:size-degree","tier":"simplified","text":"draw a little house","trigger":"draw","target":{"kind":"house"},"c":[["drawn.size","little","small","degree"]],"complete":["size from the comparison class: a small house relative to the other houses and the page"]}
+{"case":"drawing.object.make:size-degree","tier":"simplified","text":"tiny heart","target":{"kind":"heart"},"c":[["drawn.size","tiny","tiny","degree"]]}
+{"case":"drawing.object.make:size-degree","tier":"simplified","text":"a big fat cloud","target":{"kind":"cloud"},"c":[["drawn.size","big","big","degree"]]}
+{"case":"drawing.object.make:position","tier":"equivalent","text":"draw a circle at 200, 150","trigger":"draw","target":{"kind":"circle"},"c":[["drawn.x","200"],["drawn.y","150"]]}
+{"case":"drawing.object.make:position","tier":"equivalent","text":"add a tree at x 80 and y 300","trigger":"add","target":{"kind":"tree"},"c":[["drawn.x","x 80"],["drawn.y","y 300"]]}
+{"case":"drawing.object.make:position","tier":"equivalent","text":"put a star at position 420, 60","trigger":"put","target":{"kind":"star"},"c":[["drawn.x","420"],["drawn.y","60"]]}
+{"case":"drawing.object.make:position","tier":"equivalent","text":"create a flower at coordinates 150, 380","trigger":"create","target":{"kind":"flower"},"c":[["drawn.x","150"],["drawn.y","380"]]}
+{"case":"drawing.object.make:position","tier":"complex","text":"there's space on the left, so place a dog at 90, 340","trigger":"place","target":{"kind":"dog"},"c":[["drawn.x","90"],["drawn.y","340"]]}
+{"case":"drawing.object.make:position","tier":"complex","text":"I measured it: the balloon should go at x 310, y 90. Draw it there please","trigger":"Draw","target":{"kind":"balloon"},"c":[["drawn.x","x 310"],["drawn.y","y 90"]]}
+{"case":"drawing.object.make:position","tier":"simplified","text":"cat at 250, 330","target":{"kind":"cat"},"c":[["drawn.x","250"],["drawn.y","330"]]}
+{"case":"drawing.object.make:position","tier":"simplified","text":"a sun at 500, 50","target":{"kind":"sun"},"c":[["drawn.x","500"],["drawn.y","50"]]}
+{"case":"drawing.object.make:position","tier":"simplified","text":"add a road at y 400","trigger":"add","target":{"kind":"road"},"c":[["drawn.y","y 400"]]}
+{"case":"drawing.object.make:region","tier":"equivalent","text":"draw a sun in the top left corner","trigger":"draw","target":{"kind":"sun"},"c":[["drawn.at","top left corner","top_left","region"]]}
+{"case":"drawing.object.make:region","tier":"equivalent","text":"put a house in the middle of the page","trigger":"put","target":{"kind":"house"},"c":[["drawn.at","middle","middle","region"]]}
+{"case":"drawing.object.make:region","tier":"equivalent","text":"add a field at the bottom","trigger":"add","target":{"kind":"field"},"c":[["drawn.at","bottom","bottom","region"]]}
+{"case":"drawing.object.make:region","tier":"equivalent","text":"create a moon in the top right","trigger":"create","target":{"kind":"moon"},"c":[["drawn.at","top right","top_right","region"]]}
+{"case":"drawing.object.make:region","tier":"equivalent","text":"draw a lake in the centre","trigger":"draw","target":{"kind":"lake"},"c":[["drawn.at","centre","center","region"]]}
+{"case":"drawing.object.make:region","tier":"complex","text":"I want some depth, so put a mountain in the background","trigger":"put","target":{"kind":"mountain"},"c":[["drawn.at","background","background","region"]]}
+{"case":"drawing.object.make:region","tier":"complex","text":"this side looks bare, so add a tree on the left please","trigger":"add","target":{"kind":"tree"},"c":[["drawn.at","left","left","region"]]}
+{"case":"drawing.object.make:region","tier":"simplified","text":"a rainbow at the top","target":{"kind":"rainbow"},"c":[["drawn.at","top","top","region"]]}
+{"case":"drawing.object.make:region","tier":"simplified","text":"star in the corner","target":{"kind":"star"},"c":[["drawn.at","corner","corner","region"]]}
+{"case":"drawing.object.make:region","tier":"simplified","text":"flower in the foreground","target":{"kind":"flower"},"c":[["drawn.at","foreground","foreground","region"]]}
+{"case":"drawing.object.make:region","tier":"simplified","text":"car bottom right","target":{"kind":"car"},"c":[["drawn.at","bottom right","bottom_right","region"]]}
+{"case":"drawing.object.make:dimensions","tier":"equivalent","text":"draw a rectangle 200 wide and 80 tall","trigger":"draw","target":{"kind":"rectangle"},"c":[["drawn.width","200 wide"],["drawn.height","80 tall"]]}
+{"case":"drawing.object.make:dimensions","tier":"equivalent","text":"add an oval with width 120 and height 60","trigger":"add","target":{"kind":"oval"},"c":[["drawn.width","width 120"],["drawn.height","height 60"]]}
+{"case":"drawing.object.make:dimensions","tier":"equivalent","text":"create a field 300 across and 90 high","trigger":"create","target":{"kind":"field"},"c":[["drawn.width","300 across"],["drawn.height","90 high"]]}
+{"case":"drawing.object.make:dimensions","tier":"equivalent","text":"make a patch that is 140 by 70","trigger":"make","target":{"kind":"patch"},"c":[["drawn.width","140"],["drawn.height","70"]]}
+{"case":"drawing.object.make:dimensions","tier":"complex","text":"I need a banner shape: draw a rectangle, width 360, height 50","trigger":"draw","target":{"kind":"rectangle"},"c":[["drawn.width","width 360"],["drawn.height","height 50"]]}
+{"case":"drawing.object.make:dimensions","tier":"complex","text":"add a lake about 220 wide and 90 deep, it should look like a pond","trigger":"add","target":{"kind":"lake"},"c":[["drawn.width","220 wide"],["drawn.height","90 deep"]]}
+{"case":"drawing.object.make:dimensions","tier":"simplified","text":"rectangle 100 by 40","target":{"kind":"rectangle"},"c":[["drawn.width","100"],["drawn.height","40"]]}
+{"case":"drawing.object.make:dimensions","tier":"simplified","text":"an oval, 80 wide","target":{"kind":"oval"},"c":[["drawn.width","80 wide"]]}
+{"case":"drawing.object.make:dimensions","tier":"simplified","text":"a 160 x 120 rectangle","target":{"kind":"rectangle"},"c":[["drawn.width","160"],["drawn.height","120"]]}
+{"case":"drawing.object.make:label","tier":"equivalent","text":"draw a house labelled Home","trigger":"draw","target":{"kind":"house"},"c":[["drawn.label","Home"]]}
+{"case":"drawing.object.make:label","tier":"equivalent","text":"add a star with the label \"Winner\"","trigger":"add","target":{"kind":"star"},"c":[["drawn.label","Winner"]]}
+{"case":"drawing.object.make:label","tier":"equivalent","text":"create an arrow and label it EXIT","trigger":"create","target":{"kind":"arrow"},"c":[["drawn.label","EXIT"]]}
+{"case":"drawing.object.make:label","tier":"equivalent","text":"put a circle that says Start","trigger":"put","target":{"kind":"circle"},"c":[["drawn.label","Start"]]}
+{"case":"drawing.object.make:label","tier":"complex","text":"for the map, draw a lake and write Blue Lagoon on it","trigger":"draw","target":{"kind":"lake"},"c":[["drawn.label","Blue Lagoon"]]}
+{"case":"drawing.object.make:label","tier":"complex","text":"add a car, and could it carry the label Taxi?","trigger":"add","target":{"kind":"car"},"c":[["drawn.label","Taxi"]]}
+{"case":"drawing.object.make:label","tier":"simplified","text":"rectangle labeled Shop","target":{"kind":"rectangle"},"c":[["drawn.label","Shop"]]}
+{"case":"drawing.object.make:label","tier":"simplified","text":"a heart saying Mum","target":{"kind":"heart"},"c":[["drawn.label","Mum"]]}
+{"case":"drawing.object.make:label","tier":"simplified","text":"arrow with label \"this way\"","target":{"kind":"arrow"},"c":[["drawn.label","this way"]]}
+{"case":"drawing.object.make:name","tier":"equivalent","text":"draw a dog and call it Rex","trigger":"draw","target":{"kind":"dog"},"c":[["drawn.name","Rex"]]}
+{"case":"drawing.object.make:name","tier":"equivalent","text":"add a tree named Big Willow","trigger":"add","target":{"kind":"tree"},"c":[["drawn.name","Big Willow"]]}
+{"case":"drawing.object.make:name","tier":"equivalent","text":"create a cloud called Fluffy","trigger":"create","target":{"kind":"cloud"},"c":[["drawn.name","Fluffy"]]}
+{"case":"drawing.object.make:name","tier":"equivalent","text":"make a person whose name is Anna","trigger":"make","target":{"kind":"person"},"c":[["drawn.name","Anna"]]}
+{"case":"drawing.object.make:name","tier":"complex","text":"my daughter wants a cat, please draw one and name it Mittens","trigger":"draw","target":{"kind":"cat"},"c":[["drawn.name","Mittens"]]}
+{"case":"drawing.object.make:name","tier":"complex","text":"we'll refer to it later, so add a boat named Sea Breeze","trigger":"add","target":{"kind":"boat"},"c":[["drawn.name","Sea Breeze"]]}
+{"case":"drawing.object.make:name","tier":"simplified","text":"a fish called Nemo","target":{"kind":"fish"},"c":[["drawn.name","Nemo"]]}
+{"case":"drawing.object.make:name","tier":"simplified","text":"bird named Tweety","target":{"kind":"bird"},"c":[["drawn.name","Tweety"]]}
+{"case":"drawing.object.make:name","tier":"simplified","text":"new circle, name it Ball","target":{"kind":"circle"},"c":[["drawn.name","Ball"]]}
+{"case":"drawing.object.make:relation","tier":"equivalent","text":"draw a tree next to the house","trigger":"draw","target":{"kind":"tree"},"c":[["drawn.relation","next to","next_to",{"op":"relation","anchor":"the house"}]]}
+{"case":"drawing.object.make:relation","tier":"equivalent","text":"put a duck-shaped boat on the lake","trigger":"put","target":{"kind":"boat"},"c":[["drawn.relation","on","on",{"op":"relation","anchor":"the lake"}]]}
+{"case":"drawing.object.make:relation","tier":"equivalent","text":"add a cloud above the mountain","trigger":"add","target":{"kind":"cloud"},"c":[["drawn.relation","above","above",{"op":"relation","anchor":"the mountain"}]]}
+{"case":"drawing.object.make:relation","tier":"equivalent","text":"draw a dog in front of the house","trigger":"draw","target":{"kind":"dog"},"c":[["drawn.relation","in front of","in_front_of",{"op":"relation","anchor":"the house"}]]}
+{"case":"drawing.object.make:relation","tier":"equivalent","text":"draw a flower between the house and the old oak","trigger":"draw","target":{"kind":"flower"},"c":[["drawn.relation","between","between",{"op":"relation","anchor":"the house and the old oak"}]]}
+{"case":"drawing.object.make:relation","tier":"complex","text":"the road looks empty, so add a car along the road","trigger":"add","target":{"kind":"car"},"c":[["drawn.relation","along","along",{"op":"relation","anchor":"the road"}]]}
+{"case":"drawing.object.make:relation","tier":"complex","text":"the sun is too bright; put a cloud right below the sun","trigger":"put","target":{"kind":"cloud"},"c":[["drawn.relation","right below","below",{"op":"relation","anchor":"the sun"}]]}
+{"case":"drawing.object.make:relation","tier":"simplified","text":"a fish in the lake","target":{"kind":"fish"},"c":[["drawn.relation","in","in",{"op":"relation","anchor":"the lake"}]]}
+{"case":"drawing.object.make:relation","tier":"simplified","text":"bird near the old oak","target":{"kind":"bird"},"c":[["drawn.relation","near","near",{"op":"relation","anchor":"the old oak"}]]}
+{"case":"drawing.object.make:relation","tier":"simplified","text":"flowers around the house","target":{"kind":"flowers","lemma":"flower"},"c":[["drawn.relation","around","around",{"op":"relation","anchor":"the house"}]]}
+{"case":"drawing.object.make:multi","tier":"equivalent","text":"draw a big red balloon in the top left","trigger":"draw","target":{"kind":"balloon"},"c":[["drawn.size","big","big","degree"],["drawn.color","red"],["drawn.at","top left","top_left","region"]]}
+{"case":"drawing.object.make:multi","tier":"equivalent","text":"add a blue car at 300, 420","trigger":"add","target":{"kind":"car"},"c":[["drawn.color","blue"],["drawn.x","300"],["drawn.y","420"]]}
+{"case":"drawing.object.make:multi","tier":"equivalent","text":"create a green field 400 wide and 100 tall","trigger":"create","target":{"kind":"field"},"c":[["drawn.color","green"],["drawn.width","400 wide"],["drawn.height","100 tall"]]}
+{"case":"drawing.object.make:multi","tier":"equivalent","text":"make an orange triangle labelled Warning","trigger":"make","target":{"kind":"triangle"},"c":[["drawn.color","orange"],["drawn.label","Warning"]]}
+{"case":"drawing.object.make:multi","tier":"complex","text":"I'd like a small yellow star next to the cloud, it's for the evening version","trigger":"like","target":{"kind":"star"},"c":[["drawn.size","small","small","degree"],["drawn.color","yellow"],["drawn.relation","next to","next_to",{"op":"relation","anchor":"the cloud"}]]}
+{"case":"drawing.object.make:multi","tier":"complex","text":"draw a house named Cottage, and make it brown please","trigger":"draw","target":{"kind":"house"},"c":[["drawn.name","Cottage"],["drawn.color","brown"]]}
+{"case":"drawing.object.make:multi","tier":"simplified","text":"white cloud, size 50","target":{"kind":"cloud"},"c":[["drawn.color","white"],["drawn.size","size 50"]]}
+{"case":"drawing.object.make:multi","tier":"simplified","text":"black cat, top right","target":{"kind":"cat"},"c":[["drawn.color","black"],["drawn.at","top right","top_right","region"]]}
+{"case":"drawing.object.make:multi","tier":"simplified","text":"a tiny pink heart","target":{"kind":"heart"},"c":[["drawn.size","tiny","tiny","degree"],["drawn.color","pink"]]}
+{"case":"drawing.catalog.make:kind-only","tier":"equivalent","text":"draw a bicycle for me please","trigger":"draw","target":{"kind":"bicycle"}}
+{"case":"drawing.catalog.make:kind-only","tier":"equivalent","text":"add a windmill to the picture","trigger":"add","target":{"kind":"windmill"}}
+{"case":"drawing.catalog.make:kind-only","tier":"equivalent","text":"can you put a tent in the scene?","trigger":"put","target":{"kind":"tent"}}
+{"case":"drawing.catalog.make:kind-only","tier":"equivalent","text":"insert a chair","trigger":"insert","target":{"kind":"chair"}}
+{"case":"drawing.catalog.make:kind-only","tier":"complex","text":"it's supposed to be a park, so add a bench","trigger":"add","target":{"kind":"bench"},"complete":["a bench stands on the ground near the road or a tree"]}
+{"case":"drawing.catalog.make:kind-only","tier":"complex","text":"my son wants a castle in his picture; could you draw one?","trigger":"draw","target":{"kind":"castle"}}
+{"case":"drawing.catalog.make:kind-only","tier":"simplified","text":"a horse too","target":{"kind":"horse"},"complete":["a horse stands on the ground, e.g. in a field"]}
+{"case":"drawing.catalog.make:kind-only","tier":"simplified","text":"lamp post please","target":{"kind":"lamp post"},"complete":["a lamp post stands beside the road"]}
+{"case":"drawing.catalog.make:kind-only","tier":"simplified","text":"and a man as well","target":{"kind":"man"}}
+{"case":"drawing.catalog.make:position","tier":"equivalent","text":"draw a bicycle at 220, 410","trigger":"draw","target":{"kind":"bicycle"},"c":[["drawn.x","220"],["drawn.y","410"]]}
+{"case":"drawing.catalog.make:position","tier":"equivalent","text":"add a lighthouse at x 520 and y 140","trigger":"add","target":{"kind":"lighthouse"},"c":[["drawn.x","x 520"],["drawn.y","y 140"]]}
+{"case":"drawing.catalog.make:position","tier":"equivalent","text":"put a giraffe at position 130, 260","trigger":"put","target":{"kind":"giraffe"},"c":[["drawn.x","130"],["drawn.y","260"]]}
+{"case":"drawing.catalog.make:position","tier":"equivalent","text":"place a bus at 250, 380","trigger":"place","target":{"kind":"bus"},"c":[["drawn.x","250"],["drawn.y","380"]]}
+{"case":"drawing.catalog.make:position","tier":"complex","text":"I left space at 380, 300 for a bench, can you draw it there?","trigger":"draw","target":{"kind":"bench"},"c":[["drawn.x","380"],["drawn.y","300"]]}
+{"case":"drawing.catalog.make:position","tier":"complex","text":"the snowman goes at x 90, y 350 - please add it","trigger":"add","target":{"kind":"snowman"},"c":[["drawn.x","x 90"],["drawn.y","y 350"]]}
+{"case":"drawing.catalog.make:position","tier":"simplified","text":"tent at 450, 330","target":{"kind":"tent"},"c":[["drawn.x","450"],["drawn.y","330"]]}
+{"case":"drawing.catalog.make:position","tier":"simplified","text":"a chair at 60, 420","target":{"kind":"chair"},"c":[["drawn.x","60"],["drawn.y","420"]]}
+{"case":"drawing.catalog.make:position","tier":"simplified","text":"windmill, x 600 y 200","target":{"kind":"windmill"},"c":[["drawn.x","x 600"],["drawn.y","y 200"]]}
+{"case":"drawing.catalog.make:size","tier":"equivalent","text":"draw a big castle","trigger":"draw","target":{"kind":"castle"},"c":[["drawn.size","big","big","degree"]]}
+{"case":"drawing.catalog.make:size","tier":"equivalent","text":"add a bench of size 40","trigger":"add","target":{"kind":"bench"},"c":[["drawn.size","size 40"]]}
+{"case":"drawing.catalog.make:size","tier":"equivalent","text":"create a tiny umbrella","trigger":"create","target":{"kind":"umbrella"},"c":[["drawn.size","tiny","tiny","degree"]]}
+{"case":"drawing.catalog.make:size","tier":"equivalent","text":"please draw a huge bridge","trigger":"draw","target":{"kind":"bridge"},"c":[["drawn.size","huge","huge","degree"]]}
+{"case":"drawing.catalog.make:size","tier":"complex","text":"it is meant to look far away, so draw a small horse","trigger":"draw","target":{"kind":"horse"},"c":[["drawn.size","small","small","degree"]]}
+{"case":"drawing.catalog.make:size","tier":"complex","text":"can you draw a kite? size 25 is enough","trigger":"draw","target":{"kind":"kite"},"c":[["drawn.size","size 25"]]}
+{"case":"drawing.catalog.make:size","tier":"simplified","text":"giant windmill","target":{"kind":"windmill"},"c":[["drawn.size","giant","huge","degree"]]}
+{"case":"drawing.catalog.make:size","tier":"simplified","text":"a little tent","target":{"kind":"tent"},"c":[["drawn.size","little","small","degree"]]}
+{"case":"drawing.catalog.make:size","tier":"simplified","text":"lamp post, size 90","target":{"kind":"lamp post"},"c":[["drawn.size","size 90"]]}
+{"case":"drawing.object.change:color","tier":"equivalent","text":"paint the red car green","trigger":"paint","target":{"name":"red car"},"c":[["drawn.color","green"]]}
+{"case":"drawing.object.change:color","tier":"equivalent","text":"change the colour of the house to blue","trigger":"change","target":{"kind":"house"},"c":[["drawn.color","blue"]]}
+{"case":"drawing.object.change:color","tier":"equivalent","text":"colour the cloud grey","trigger":"colour","target":{"kind":"cloud"},"c":[["drawn.color","grey"]]}
+{"case":"drawing.object.change:color","tier":"equivalent","text":"can you turn the lake turquoise?","trigger":"turn","target":{"kind":"lake"},"c":[["drawn.color","turquoise"]]}
+{"case":"drawing.object.change:color","tier":"complex","text":"the sun looks pale, make it orange instead","trigger":"make","target":{"kind":"sun"},"c":[["drawn.color","orange"]]}
+{"case":"drawing.object.change:color","tier":"complex","text":"I don't like the mountain in brown. Could you color it purple?","trigger":"color","target":{"kind":"mountain"},"c":[["drawn.color","purple"]]}
+{"case":"drawing.object.change:color","tier":"simplified","text":"sailboat in white","target":{"name":"sailboat"},"c":[["drawn.color","white"]]}
+{"case":"drawing.object.change:color","tier":"simplified","text":"the road should be dark grey","target":{"kind":"road"},"c":[["drawn.color","dark grey"]]}
+{"case":"drawing.object.change:color","tier":"simplified","text":"make the cloud pinkish","trigger":"make","target":{"kind":"cloud"},"c":[["drawn.color","pinkish","?"]]}
+{"case":"drawing.object.change:size-number","tier":"equivalent","text":"set the size of the sun to 80","trigger":"set","target":{"kind":"sun"},"c":[["drawn.size","80"]]}
+{"case":"drawing.object.change:size-number","tier":"equivalent","text":"change the size of the old oak to 140","trigger":"change","target":{"name":"old oak"},"c":[["drawn.size","140"]]}
+{"case":"drawing.object.change:size-number","tier":"equivalent","text":"make the cloud size 55","trigger":"make","target":{"kind":"cloud"},"c":[["drawn.size","size 55"]]}
+{"case":"drawing.object.change:size-number","tier":"equivalent","text":"resize the boat to 70","trigger":"resize","target":{"kind":"boat"},"c":[["drawn.size","70"]]}
+{"case":"drawing.object.change:size-number","tier":"complex","text":"the house is too dominant; set its size to 100","trigger":"set","target":{"kind":"house"},"c":[["drawn.size","100"]]}
+{"case":"drawing.object.change:size-number","tier":"complex","text":"make the mountain size 200 so it fills the background, if possible","trigger":"make","target":{"kind":"mountain"},"c":[["drawn.size","size 200"]]}
+{"case":"drawing.object.change:size-number","tier":"simplified","text":"car to size 60","target":{"kind":"car"},"c":[["drawn.size","size 60"]]}
+{"case":"drawing.object.change:size-number","tier":"simplified","text":"lake, size 250","target":{"kind":"lake"},"c":[["drawn.size","size 250"]]}
+{"case":"drawing.object.change:size-number","tier":"simplified","text":"sailboat at size 45","target":{"name":"sailboat"},"c":[["drawn.size","size 45"]]}
+{"case":"drawing.object.change:size-relative","tier":"simplified","text":"make that one bigger","trigger":"make","target":{"ctx":true},"c":[["drawn.size","bigger","big","delta"]]}
+{"case":"drawing.object.change:size-relative","tier":"equivalent","text":"can you make the old oak a bit larger?","trigger":"make","target":{"name":"old oak"},"c":[["drawn.size","a bit larger","big","delta"]]}
+{"case":"drawing.object.change:size-relative","tier":"equivalent","text":"make the house a little smaller","trigger":"make","target":{"kind":"house"},"c":[["drawn.size","a little smaller","small","delta"]]}
+{"case":"drawing.object.change:size-relative","tier":"equivalent","text":"please make the lake larger","trigger":"make","target":{"kind":"lake"},"c":[["drawn.size","larger","big","delta"]]}
+{"case":"drawing.object.change:size-relative","tier":"complex","text":"the sun is way too big compared to the house, make it smaller","trigger":"make","target":{"kind":"sun"},"c":[["drawn.size","smaller","small","delta"]]}
+{"case":"drawing.object.change:size-relative","tier":"complex","text":"the car looks tiny next to the road. Could you make it a lot bigger?","trigger":"make","target":{"kind":"car"},"c":[["drawn.size","a lot bigger","big","delta"]]}
+{"case":"drawing.object.change:size-relative","tier":"simplified","text":"bigger sun","target":{"kind":"sun"},"c":[["drawn.size","bigger","big","delta"]]}
+{"case":"drawing.object.change:size-relative","tier":"simplified","text":"boat smaller please","target":{"kind":"boat"},"c":[["drawn.size","smaller","small","delta"]]}
+{"case":"drawing.object.change:size-relative","tier":"simplified","text":"a little bigger, the mountain","target":{"kind":"mountain"},"c":[["drawn.size","a little bigger","big","delta"]]}
+{"case":"drawing.object.change:dimensions","tier":"equivalent","text":"make the house 160 wide and 120 tall","trigger":"make","target":{"kind":"house"},"c":[["drawn.width","160 wide"],["drawn.height","120 tall"]]}
+{"case":"drawing.object.change:dimensions","tier":"equivalent","text":"set the width of the lake to 300 and its height to 90","trigger":"set","target":{"kind":"lake"},"c":[["drawn.width","300"],["drawn.height","90"]]}
+{"case":"drawing.object.change:dimensions","tier":"equivalent","text":"change the road to 500 wide by 40 high","trigger":"change","target":{"kind":"road"},"c":[["drawn.width","500 wide"],["drawn.height","40 high"]]}
+{"case":"drawing.object.change:dimensions","tier":"complex","text":"the cloud is squashed; make it 140 wide and 70 tall instead","trigger":"make","target":{"kind":"cloud"},"c":[["drawn.width","140 wide"],["drawn.height","70 tall"]]}
+{"case":"drawing.object.change:dimensions","tier":"complex","text":"resize the sailboat to width 90 and height 110 for the poster","trigger":"resize","target":{"name":"sailboat"},"c":[["drawn.width","width 90"],["drawn.height","height 110"]]}
+{"case":"drawing.object.change:dimensions","tier":"simplified","text":"mountain 300 by 200","target":{"kind":"mountain"},"c":[["drawn.width","300"],["drawn.height","200"]]}
+{"case":"drawing.object.change:dimensions","tier":"simplified","text":"house: width 180","target":{"kind":"house"},"c":[["drawn.width","width 180"]]}
+{"case":"drawing.object.change:dimensions","tier":"simplified","text":"sun 90 wide, 95 tall","target":{"kind":"sun"},"c":[["drawn.width","90 wide"],["drawn.height","95 tall"]]}
+{"case":"drawing.object.change:position","tier":"equivalent","text":"set the position of the sun to 450, 60","trigger":"set","target":{"kind":"sun"},"c":[["drawn.x","450"],["drawn.y","60"]]}
+{"case":"drawing.object.change:position","tier":"equivalent","text":"change the coordinates of the cloud to x 300, y 70","trigger":"change","target":{"kind":"cloud"},"c":[["drawn.x","x 300"],["drawn.y","y 70"]]}
+{"case":"drawing.object.change:position","tier":"equivalent","text":"update the house position: x 120, y 280","trigger":"update","target":{"kind":"house"},"c":[["drawn.x","x 120"],["drawn.y","y 280"]]}
+{"case":"drawing.object.change:position","tier":"complex","text":"the car is in the wrong spot; set its x to 340 and its y to 410","trigger":"set","target":{"kind":"car"},"c":[["drawn.x","340"],["drawn.y","410"]]}
+{"case":"drawing.object.change:position","tier":"complex","text":"can you change where the boat sits? x 260, y 330 would be right","trigger":"change","target":{"kind":"boat"},"c":[["drawn.x","x 260"],["drawn.y","y 330"]]}
+{"case":"drawing.object.change:position","tier":"simplified","text":"lake position 200, 380","target":{"kind":"lake"},"c":[["drawn.x","200"],["drawn.y","380"]]}
+{"case":"drawing.object.change:position","tier":"simplified","text":"old oak x 70","target":{"name":"old oak"},"c":[["drawn.x","x 70"]]}
+{"case":"drawing.object.change:position","tier":"simplified","text":"sun coordinates 520, 40","target":{"kind":"sun"},"c":[["drawn.x","520"],["drawn.y","40"]]}
+{"case":"drawing.object.change:label","tier":"equivalent","text":"change the label on the house to Home Sweet Home","trigger":"change","target":{"kind":"house"},"c":[["drawn.label","Home Sweet Home"]]}
+{"case":"drawing.object.change:label","tier":"equivalent","text":"label the car Taxi","trigger":"label","target":{"kind":"car"},"c":[["drawn.label","Taxi"]]}
+{"case":"drawing.object.change:label","tier":"equivalent","text":"relabel the lake as Crystal Water","trigger":"relabel","target":{"kind":"lake"},"c":[["drawn.label","Crystal Water"]]}
+{"case":"drawing.object.change:label","tier":"complex","text":"the sign on the boat is wrong; please make it say Lucky Star","trigger":"make","target":{"kind":"boat"},"c":[["drawn.label","Lucky Star"]]}
+{"case":"drawing.object.change:label","tier":"complex","text":"the label of the old oak is confusing. Change it to Ancient Oak","trigger":"Change","target":{"name":"old oak"},"c":[["drawn.label","Ancient Oak"]]}
+{"case":"drawing.object.change:label","tier":"simplified","text":"cloud label: Rainy","target":{"kind":"cloud"},"c":[["drawn.label","Rainy"]]}
+{"case":"drawing.object.change:label","tier":"simplified","text":"mountain labelled Everest","target":{"kind":"mountain"},"c":[["drawn.label","Everest"]]}
+{"case":"drawing.object.change:label","tier":"simplified","text":"the sun should read Morning","target":{"kind":"sun"},"c":[["drawn.label","Morning"]]}
+{"case":"drawing.object.change:name","tier":"equivalent","text":"rename the red car to Speedy","trigger":"rename","target":{"name":"red car"},"c":[["drawn.name","Speedy"]]}
+{"case":"drawing.object.change:name","tier":"equivalent","text":"call the old oak Grandpa Tree from now on","trigger":"call","target":{"name":"old oak"},"c":[["drawn.name","Grandpa Tree"]]}
+{"case":"drawing.object.change:name","tier":"equivalent","text":"change the name of the lake to Silver Pond","trigger":"change","target":{"kind":"lake"},"c":[["drawn.name","Silver Pond"]]}
+{"case":"drawing.object.change:name","tier":"equivalent","text":"can you rename the mountain as Mount Bold?","trigger":"rename","target":{"kind":"mountain"},"c":[["drawn.name","Mount Bold"]]}
+{"case":"drawing.object.change:name","tier":"equivalent","text":"give the house the name Villa Rosa","trigger":"give","target":{"kind":"house"},"c":[["drawn.name","Villa Rosa"]]}
+{"case":"drawing.object.change:name","tier":"equivalent","text":"I'd like the sailboat to be called Wanderer","trigger":"called","target":{"name":"sailboat"},"c":[["drawn.name","Wanderer"]]}
+{"case":"drawing.object.change:name","tier":"equivalent","text":"set the name of the gold star to Polaris","trigger":"set","target":{"name":"gold star"},"c":[["drawn.name","Polaris"]],"ctx":"drawing.shapes"}
+{"case":"drawing.object.change:name","tier":"equivalent","text":"the heart should be renamed Valentine","trigger":"renamed","target":{"kind":"heart"},"c":[["drawn.name","Valentine"]],"ctx":"drawing.shapes"}
+{"case":"drawing.object.change:name","tier":"complex","text":"there are two houses now, so rename the barn to Hay Store to keep them apart","trigger":"rename","target":{"name":"barn"},"c":[["drawn.name","Hay Store"]],"ctx":"drawing.groups"}
+{"case":"drawing.object.change:name","tier":"complex","text":"ok so the dog needs a proper name; let's call him Biscuit","trigger":"call","target":{"kind":"dog"},"c":[["drawn.name","Biscuit"]],"ctx":"drawing.groups"}
+{"case":"drawing.object.change:name","tier":"complex","text":"it is actually morning in my story, so please rename the sun Dawn","trigger":"rename","target":{"kind":"sun"},"c":[["drawn.name","Dawn"]]}
+{"case":"drawing.object.change:name","tier":"complex","text":"if it isn't too much trouble, could the road be renamed Main Street?","trigger":"renamed","target":{"kind":"road"},"c":[["drawn.name","Main Street"]]}
+{"case":"drawing.object.change:name","tier":"complex","text":"rename the apple tree to Orchard and the wheat field to Golden Acre","trigger":"rename","target":{"name":"apple tree"},"c":[["drawn.name","Orchard"]],"ctx":"drawing.groups","span":"rename the apple tree to Orchard","also":[{"op":"drawing.object.change","span":"the wheat field to Golden Acre","target":{"name":"wheat field"},"c":[["drawn.name","Golden Acre"]]}]}
+{"case":"drawing.object.change:name","tier":"complex","text":"while you're at it, name the square Block A","trigger":"name","target":{"kind":"square"},"c":[["drawn.name","Block A"]],"ctx":"drawing.shapes"}
+{"case":"drawing.object.change:name","tier":"complex","text":"I keep confusing the two buildings. The farmhouse should be called Main House.","trigger":"called","target":{"name":"farmhouse"},"c":[["drawn.name","Main House"]],"ctx":"drawing.groups"}
+{"case":"drawing.object.change:name","tier":"simplified","text":"rename car to Zoom","trigger":"rename","target":{"kind":"car"},"c":[["drawn.name","Zoom"]]}
+{"case":"drawing.object.change:name","tier":"simplified","text":"lake name: Mirror Pond","target":{"kind":"lake"},"c":[["drawn.name","Mirror Pond"]]}
+{"case":"drawing.object.change:name","tier":"simplified","text":"call it Bubbles","trigger":"call","target":{"ctx":true},"c":[["drawn.name","Bubbles"]]}
+{"case":"drawing.object.change:name","tier":"simplified","text":"name the boat Nautilus","trigger":"name","target":{"kind":"boat"},"c":[["drawn.name","Nautilus"]]}
+{"case":"drawing.object.change:name","tier":"simplified","text":"triangle should be Pyramid","target":{"kind":"triangle"},"c":[["drawn.name","Pyramid"]],"ctx":"drawing.shapes"}
+{"case":"drawing.object.change:name","tier":"simplified","text":"rename this one Sunny","trigger":"rename","target":{"ctx":true},"c":[["drawn.name","Sunny"]]}
+{"case":"drawing.object.change:name","tier":"simplified","text":"new name for the mountain: Ben Nevis","target":{"kind":"mountain"},"c":[["drawn.name","Ben Nevis"]]}
+{"case":"drawing.object.change:name","tier":"simplified","text":"rename it something fun","trigger":"rename","target":{"ctx":true},"c":[["drawn.name","something fun","?"]]}
+{"case":"drawing.object.change:name","tier":"simplified","text":"the oak is Sir Oakley now","target":{"name":"oak"},"c":[["drawn.name","Sir Oakley"]]}
+{"case":"drawing.object.change:multi","tier":"equivalent","text":"make the house red and bigger","trigger":"make","target":{"kind":"house"},"c":[["drawn.color","red"],["drawn.size","bigger","big","delta"]]}
+{"case":"drawing.object.change:multi","tier":"equivalent","text":"change the cloud to grey and set it at 300, 80","trigger":"change","target":{"kind":"cloud"},"c":[["drawn.color","grey"],["drawn.x","300"],["drawn.y","80"]]}
+{"case":"drawing.object.change:multi","tier":"equivalent","text":"set the sun to orange with size 70","trigger":"set","target":{"kind":"sun"},"c":[["drawn.color","orange"],["drawn.size","size 70"]]}
+{"case":"drawing.object.change:multi","tier":"equivalent","text":"give the cloud the label Rain and make it dark grey","trigger":"give","target":{"kind":"cloud"},"c":[["drawn.label","Rain"],["drawn.color","dark grey"]]}
+{"case":"drawing.object.change:multi","tier":"complex","text":"the boat is hard to see; make it white and label it Ferry","trigger":"make","target":{"kind":"boat"},"c":[["drawn.color","white"],["drawn.label","Ferry"]]}
+{"case":"drawing.object.change:multi","tier":"complex","text":"please rename the red car to Rocket and make it a bit smaller","trigger":"rename","target":{"name":"red car"},"c":[["drawn.name","Rocket"],["drawn.size","a bit smaller","small","delta"]]}
+{"case":"drawing.object.change:multi","tier":"simplified","text":"lake darker blue, 300 wide","target":{"kind":"lake"},"c":[["drawn.color","darker blue","?"],["drawn.width","300 wide"]]}
+{"case":"drawing.object.change:multi","tier":"simplified","text":"tree: green, size 150","target":{"kind":"tree"},"c":[["drawn.color","green"],["drawn.size","size 150"]]}
+{"case":"drawing.object.change:multi","tier":"simplified","text":"mountain purple and smaller","target":{"kind":"mountain"},"c":[["drawn.color","purple"],["drawn.size","smaller","small","delta"]]}
+{"case":"drawing.object.change:selected","tier":"equivalent","text":"make the selected one blue","trigger":"make","target":{"ctx":true},"c":[["drawn.color","blue"]]}
+{"case":"drawing.object.change:selected","tier":"equivalent","text":"change the colour of the selection to yellow","trigger":"change","target":{"ctx":true},"c":[["drawn.color","yellow"]]}
+{"case":"drawing.object.change:selected","tier":"equivalent","text":"resize this to 90","trigger":"resize","target":{"ctx":true},"c":[["drawn.size","90"]]}
+{"case":"drawing.object.change:selected","tier":"complex","text":"that shape I just picked, can you make it smaller?","trigger":"make","target":{"ctx":true},"c":[["drawn.size","smaller","small","delta"]]}
+{"case":"drawing.object.change:selected","tier":"complex","text":"with it still selected, label it Exit","trigger":"label","target":{"ctx":true},"c":[["drawn.label","Exit"]]}
+{"case":"drawing.object.change:selected","tier":"simplified","text":"this one green","target":{"ctx":true},"c":[["drawn.color","green"]]}
+{"case":"drawing.object.change:selected","tier":"simplified","text":"selected: bigger","target":{"ctx":true},"c":[["drawn.size","bigger","big","delta"]]}
+{"case":"drawing.object.change:selected","tier":"simplified","text":"rename the selected object to Hub","trigger":"rename","target":{"ctx":true},"c":[["drawn.name","Hub"]]}
+{"case":"drawing.object.place:position","tier":"equivalent","text":"move the house to 100, 200","trigger":"move","target":{"kind":"house"},"c":[["drawn.x","100"],["drawn.y","200"]]}
+{"case":"drawing.object.place:position","tier":"equivalent","text":"drag the sun to x 480 y 50","trigger":"drag","target":{"kind":"sun"},"c":[["drawn.x","x 480"],["drawn.y","y 50"]]}
+{"case":"drawing.object.place:position","tier":"equivalent","text":"please put the car at 260, 410","trigger":"put","target":{"kind":"car"},"c":[["drawn.x","260"],["drawn.y","410"]]}
+{"case":"drawing.object.place:position","tier":"equivalent","text":"reposition the cloud at x 330 and y 90","trigger":"reposition","target":{"kind":"cloud"},"c":[["drawn.x","x 330"],["drawn.y","y 90"]]}
+{"case":"drawing.object.place:position","tier":"complex","text":"the boat drifted onto land, move it back to 210, 360","trigger":"move","target":{"kind":"boat"},"c":[["drawn.x","210"],["drawn.y","360"]]}
+{"case":"drawing.object.place:position","tier":"complex","text":"use the Move control to send the old oak to x 150, y 220","trigger":"send","target":{"name":"old oak"},"c":[["drawn.x","x 150"],["drawn.y","y 220"]]}
+{"case":"drawing.object.place:position","tier":"simplified","text":"lake to 240, 390","target":{"kind":"lake"},"c":[["drawn.x","240"],["drawn.y","390"]]}
+{"case":"drawing.object.place:position","tier":"simplified","text":"sun: x 520, y 30","target":{"kind":"sun"},"c":[["drawn.x","x 520"],["drawn.y","y 30"]]}
+{"case":"drawing.object.place:position","tier":"simplified","text":"move mountain to 400, 180","trigger":"move","target":{"kind":"mountain"},"c":[["drawn.x","400"],["drawn.y","180"]]}
+{"case":"drawing.object.place:direction","tier":"equivalent","text":"move the car to the left","trigger":"move","target":{"kind":"car"},"c":[["drawn.direction","left"]]}
+{"case":"drawing.object.place:direction","tier":"equivalent","text":"shift the cloud up by 40","trigger":"shift","target":{"kind":"cloud"},"c":[["drawn.direction","up"],["drawn.distance","by 40"]]}
+{"case":"drawing.object.place:direction","tier":"equivalent","text":"nudge the boat right a little","trigger":"nudge","target":{"kind":"boat"},"c":[["drawn.direction","right"],["drawn.distance","a little","?"]]}
+{"case":"drawing.object.place:direction","tier":"equivalent","text":"move the sun down 25 pixels","trigger":"move","target":{"kind":"sun"},"c":[["drawn.direction","down"],["drawn.distance","25 pixels"]]}
+{"case":"drawing.object.place:direction","tier":"complex","text":"the house and the old oak are overlapping; move them apart","trigger":"move","target":{"refs":["house","old oak"]},"c":[["drawn.direction","apart"]]}
+{"case":"drawing.object.place:direction","tier":"complex","text":"the car is hidden behind the house, bring it forward","trigger":"bring","target":{"kind":"car"},"c":[["drawn.direction","forward"]]}
+{"case":"drawing.object.place:direction","tier":"simplified","text":"move the car left a bit","trigger":"move","target":{"kind":"car"},"c":[["drawn.direction","left"],["drawn.distance","a bit","?"]]}
+{"case":"drawing.object.place:direction","tier":"simplified","text":"cloud higher","target":{"kind":"cloud"},"c":[["drawn.direction","higher","up"]]}
+{"case":"drawing.object.place:direction","tier":"simplified","text":"sailboat and cloud closer together","target":{"refs":["sailboat","cloud"]},"c":[["drawn.direction","closer"]]}
+{"case":"drawing.object.place:direction","tier":"simplified","text":"send the mountain backward","trigger":"send","target":{"kind":"mountain"},"c":[["drawn.direction","backward"]]}
+{"case":"drawing.object.place:region","tier":"complex","text":"the sun looks odd in the middle, move it to the top right corner and then make it yellow","trigger":"move","target":{"ctx":true},"c":[["drawn.at","top right corner","top_right","region"]],"span":"move it to the top right corner","also":[{"op":"drawing.object.change","span":"make it yellow","trigger":"make","target":{"ctx":true},"c":[["drawn.color","yellow"]]}]}
+{"case":"drawing.object.place:region","tier":"equivalent","text":"move the sun to the top left corner","trigger":"move","target":{"kind":"sun"},"c":[["drawn.at","top left corner","top_left","region"]]}
+{"case":"drawing.object.place:region","tier":"equivalent","text":"put the house in the middle","trigger":"put","target":{"kind":"house"},"c":[["drawn.at","middle","middle","region"]]}
+{"case":"drawing.object.place:region","tier":"equivalent","text":"place the car at the bottom of the page","trigger":"place","target":{"kind":"car"},"c":[["drawn.at","bottom","bottom","region"]]}
+{"case":"drawing.object.place:region","tier":"equivalent","text":"shift the cloud to the top","trigger":"shift","target":{"kind":"cloud"},"c":[["drawn.at","top","top","region"]]}
+{"case":"drawing.object.place:region","tier":"equivalent","text":"move the old oak over to the right side","trigger":"move","target":{"name":"old oak"},"c":[["drawn.at","right side","right","region"]]}
+{"case":"drawing.object.place:region","tier":"equivalent","text":"send the mountain to the background","trigger":"send","target":{"kind":"mountain"},"c":[["drawn.at","background","background","region"]]}
+{"case":"drawing.object.place:region","tier":"equivalent","text":"bring the boat to the foreground","trigger":"bring","target":{"kind":"boat"},"c":[["drawn.at","foreground","foreground","region"]]}
+{"case":"drawing.object.place:region","tier":"equivalent","text":"drag the lake into the centre of the drawing","trigger":"drag","target":{"kind":"lake"},"c":[["drawn.at","centre","center","region"]]}
+{"case":"drawing.object.place:region","tier":"equivalent","text":"can you move the road to the bottom left?","trigger":"move","target":{"kind":"road"},"c":[["drawn.at","bottom left","bottom_left","region"]]}
+{"case":"drawing.object.place:region","tier":"complex","text":"the sun shouldn't sit so low; drag it into the top right","trigger":"drag","target":{"kind":"sun"},"c":[["drawn.at","top right","top_right","region"]]}
+{"case":"drawing.object.place:region","tier":"complex","text":"the mountain should be behind everything else, so push it to the background","trigger":"push","target":{"kind":"mountain"},"c":[["drawn.at","background","background","region"]]}
+{"case":"drawing.object.place:region","tier":"complex","text":"I want the car to be the first thing people see, put it in the foreground","trigger":"put","target":{"kind":"car"},"c":[["drawn.at","foreground","foreground","region"]]}
+{"case":"drawing.object.place:region","tier":"complex","text":"move the cloud into the corner, then make it a bit smaller","trigger":"move","target":{"kind":"cloud"},"c":[["drawn.at","corner","corner","region"]],"span":"move the cloud into the corner","also":[{"op":"drawing.object.change","span":"make it a bit smaller","trigger":"make","target":{"ctx":true},"c":[["drawn.size","a bit smaller","small","delta"]]}]}
+{"case":"drawing.object.place:region","tier":"complex","text":"since the lake is too central, could you shift it to the left side?","trigger":"shift","target":{"kind":"lake"},"c":[["drawn.at","left side","left","region"]]}
+{"case":"drawing.object.place:region","tier":"complex","text":"if there's room, the house would look better at the bottom right","target":{"kind":"house"},"c":[["drawn.at","bottom right","bottom_right","region"]]}
+{"case":"drawing.object.place:region","tier":"simplified","text":"sun top left","target":{"kind":"sun"},"c":[["drawn.at","top left","top_left","region"]]}
+{"case":"drawing.object.place:region","tier":"simplified","text":"house to the center","target":{"kind":"house"},"c":[["drawn.at","center","center","region"]]}
+{"case":"drawing.object.place:region","tier":"simplified","text":"cloud to the top please","target":{"kind":"cloud"},"c":[["drawn.at","top","top","region"]]}
+{"case":"drawing.object.place:region","tier":"simplified","text":"boat in the corner","target":{"kind":"boat"},"c":[["drawn.at","corner","corner","region"]]}
+{"case":"drawing.object.place:region","tier":"simplified","text":"move the car somewhere lower","trigger":"move","target":{"kind":"car"},"c":[["drawn.at","somewhere lower","?","region"]]}
+{"case":"drawing.object.place:region","tier":"simplified","text":"mountain in the back","target":{"kind":"mountain"},"c":[["drawn.at","back","background","region"]]}
+{"case":"drawing.object.place:region","tier":"simplified","text":"the tree goes on the left","target":{"kind":"tree"},"c":[["drawn.at","left","left","region"]]}
+{"case":"drawing.object.place:region","tier":"simplified","text":"put the lake at the bottom","trigger":"put","target":{"kind":"lake"},"c":[["drawn.at","bottom","bottom","region"]]}
+{"case":"drawing.object.place:region","tier":"simplified","text":"the road to the bottom right","target":{"kind":"road"},"c":[["drawn.at","bottom right","bottom_right","region"]]}
+{"case":"drawing.object.place:relation","tier":"equivalent","text":"move the car next to the house","trigger":"move","target":{"kind":"car"},"c":[["drawn.relation","next to","next_to",{"op":"relation","anchor":"the house"}]]}
+{"case":"drawing.object.place:relation","tier":"equivalent","text":"put the boat on the lake","trigger":"put","target":{"kind":"boat"},"c":[["drawn.relation","on","on",{"op":"relation","anchor":"the lake"}]]}
+{"case":"drawing.object.place:relation","tier":"equivalent","text":"place the cloud above the mountain","trigger":"place","target":{"kind":"cloud"},"c":[["drawn.relation","above","above",{"op":"relation","anchor":"the mountain"}]]}
+{"case":"drawing.object.place:relation","tier":"equivalent","text":"move the sun behind the mountain","trigger":"move","target":{"kind":"sun"},"c":[["drawn.relation","behind","behind",{"op":"relation","anchor":"the mountain"}]]}
+{"case":"drawing.object.place:relation","tier":"complex","text":"the old oak is too far away; put it near the house","trigger":"put","target":{"name":"old oak"},"c":[["drawn.relation","near","near",{"op":"relation","anchor":"the house"}]]}
+{"case":"drawing.object.place:relation","tier":"complex","text":"make it look parked: move the red car in front of the house","trigger":"move","target":{"name":"red car"},"c":[["drawn.relation","in front of","in_front_of",{"op":"relation","anchor":"the house"}]]}
+{"case":"drawing.object.place:relation","tier":"simplified","text":"sun to the left of the cloud","target":{"kind":"sun"},"c":[["drawn.relation","to the left of","left_of",{"op":"relation","anchor":"the cloud"}]]}
+{"case":"drawing.object.place:relation","tier":"simplified","text":"car along the road","target":{"kind":"car"},"c":[["drawn.relation","along","along",{"op":"relation","anchor":"the road"}]]}
+{"case":"drawing.object.place:relation","tier":"simplified","text":"tree right of the house","target":{"kind":"tree"},"c":[["drawn.relation","right of","right_of",{"op":"relation","anchor":"the house"}]]}
+{"case":"drawing.object.place:selected","tier":"equivalent","text":"move the selected object to 300, 200","trigger":"move","target":{"ctx":true},"c":[["drawn.x","300"],["drawn.y","200"]]}
+{"case":"drawing.object.place:selected","tier":"equivalent","text":"move this to the top right","trigger":"move","target":{"ctx":true},"c":[["drawn.at","top right","top_right","region"]]}
+{"case":"drawing.object.place:selected","tier":"equivalent","text":"drag the selected shape below the cloud","trigger":"drag","target":{"ctx":true},"c":[["drawn.relation","below","below",{"op":"relation","anchor":"the cloud"}]]}
+{"case":"drawing.object.place:selected","tier":"complex","text":"the one I just selected should go next to the lake","target":{"ctx":true},"c":[["drawn.relation","next to","next_to",{"op":"relation","anchor":"the lake"}]]}
+{"case":"drawing.object.place:selected","tier":"complex","text":"move the selection to x 120, y 340 using the move fields","trigger":"move","target":{"ctx":true},"c":[["drawn.x","x 120"],["drawn.y","y 340"]]}
+{"case":"drawing.object.place:selected","tier":"simplified","text":"this one left a bit","target":{"ctx":true},"c":[["drawn.direction","left"],["drawn.distance","a bit","?"]]}
+{"case":"drawing.object.place:selected","tier":"simplified","text":"move it up some more","trigger":"move","target":{"ctx":true},"c":[["drawn.direction","up"]]}
+{"case":"drawing.object.place:selected","tier":"simplified","text":"selected to the corner","target":{"ctx":true},"c":[["drawn.at","corner","corner","region"]]}
+{"case":"drawing.object.select:core","tier":"equivalent","text":"select the house please","trigger":"select","target":{"kind":"house"}}
+{"case":"drawing.object.select:core","tier":"equivalent","text":"pick the red car in the selection dropdown","trigger":"pick","target":{"name":"red car"}}
+{"case":"drawing.object.select:core","tier":"equivalent","text":"choose the old oak","trigger":"choose","target":{"name":"old oak"}}
+{"case":"drawing.object.select:core","tier":"equivalent","text":"highlight the sailboat","trigger":"highlight","target":{"name":"sailboat"}}
+{"case":"drawing.object.select:core","tier":"complex","text":"I want to edit the lake next, so select it","trigger":"select","target":{"kind":"lake"}}
+{"case":"drawing.object.select:core","tier":"complex","text":"from the dropdown up top, choose the mountain","trigger":"choose","target":{"kind":"mountain"}}
+{"case":"drawing.object.select:core","tier":"simplified","text":"select sun","trigger":"select","target":{"kind":"sun"}}
+{"case":"drawing.object.select:core","tier":"simplified","text":"the cloud, select it","trigger":"select","target":{"kind":"cloud"}}
+{"case":"drawing.object.select:core","tier":"simplified","text":"pick road","trigger":"pick","target":{"kind":"road"}}
+{"case":"drawing.objects.select:core","tier":"equivalent","text":"select the house and the old oak","trigger":"select","target":{"refs":["house","old oak"]}}
+{"case":"drawing.objects.select:core","tier":"equivalent","text":"pick both the sun and the cloud","trigger":"pick","target":{"refs":["sun","cloud"]}}
+{"case":"drawing.objects.select:core","tier":"equivalent","text":"choose the lake, the sailboat and the road","trigger":"choose","target":{"refs":["lake","sailboat","road"]}}
+{"case":"drawing.objects.select:core","tier":"complex","text":"I want to move these together, so select the red car and the road","trigger":"select","target":{"refs":["red car","road"]}}
+{"case":"drawing.objects.select:core","tier":"complex","text":"please select the circle and the square; I'll recolour them next","trigger":"select","target":{"refs":["circle","square"]},"ctx":"drawing.shapes"}
+{"case":"drawing.objects.select:core","tier":"simplified","text":"select sun + cloud","trigger":"select","target":{"refs":["sun","cloud"]}}
+{"case":"drawing.objects.select:core","tier":"simplified","text":"both the barn and farmhouse, select","trigger":"select","target":{"refs":["barn","farmhouse"]},"ctx":"drawing.groups"}
+{"case":"drawing.objects.select:core","tier":"simplified","text":"grab the mountain and the lake","trigger":"grab","target":{"refs":["mountain","lake"]}}
+{"case":"drawing.objects.transform:core","tier":"equivalent","text":"make the house and the old oak 120 wide and 150 tall","trigger":"make","target":{"refs":["house","old oak"]},"c":[["drawn.width","120 wide"],["drawn.height","150 tall"]]}
+{"case":"drawing.objects.transform:core","tier":"equivalent","text":"resize the circle and the square to width 80, height 80","trigger":"resize","target":{"refs":["circle","square"]},"c":[["drawn.width","width 80"],["drawn.height","height 80"]],"ctx":"drawing.shapes"}
+{"case":"drawing.objects.transform:core","tier":"equivalent","text":"set the sun and the cloud to 90 by 60","trigger":"set","target":{"refs":["sun","cloud"]},"c":[["drawn.width","90"],["drawn.height","60"]]}
+{"case":"drawing.objects.transform:core","tier":"equivalent","text":"change the barn and the farmhouse to 200 wide, 140 high","trigger":"change","target":{"refs":["barn","farmhouse"]},"c":[["drawn.width","200 wide"],["drawn.height","140 high"]],"ctx":"drawing.groups"}
+{"case":"drawing.objects.transform:core","tier":"equivalent","text":"give the triangle and the heart a width of 70 and a height of 65","trigger":"give","target":{"refs":["triangle","heart"]},"c":[["drawn.width","width of 70"],["drawn.height","height of 65"]],"ctx":"drawing.shapes"}
+{"case":"drawing.objects.transform:core","tier":"equivalent","text":"scale the red car and the sailboat to 110 across and 55 tall","trigger":"scale","target":{"refs":["red car","sailboat"]},"c":[["drawn.width","110 across"],["drawn.height","55 tall"]]}
+{"case":"drawing.objects.transform:core","tier":"equivalent","text":"please make both the gold star and the heart 50 wide and 45 high","trigger":"make","target":{"refs":["gold star","heart"]},"c":[["drawn.width","50 wide"],["drawn.height","45 high"]],"ctx":"drawing.shapes"}
+{"case":"drawing.objects.transform:core","tier":"equivalent","text":"both the mountain and the old oak should be width 250, height 300","target":{"refs":["mountain","old oak"]},"c":[["drawn.width","width 250"],["drawn.height","height 300"]]}
+{"case":"drawing.objects.transform:core","tier":"equivalent","text":"resize the apple tree and the dog to 60 by 90","trigger":"resize","target":{"refs":["apple tree","dog"]},"c":[["drawn.width","60"],["drawn.height","90"]],"ctx":"drawing.groups"}
+{"case":"drawing.objects.transform:core","tier":"complex","text":"the two buildings look mismatched; make the farmhouse and the barn both 180 wide and 130 tall","trigger":"make","target":{"refs":["farmhouse","barn"]},"c":[["drawn.width","180 wide"],["drawn.height","130 tall"]],"ctx":"drawing.groups"}
+{"case":"drawing.objects.transform:core","tier":"complex","text":"for symmetry, could you set the circle and the square to width 100 and height 100?","trigger":"set","target":{"refs":["circle","square"]},"c":[["drawn.width","width 100"],["drawn.height","height 100"]],"ctx":"drawing.shapes"}
+{"case":"drawing.objects.transform:core","tier":"complex","text":"I've been fiddling with the sun and the cloud; they should both end up 75 wide and 70 tall","target":{"refs":["sun","cloud"]},"c":[["drawn.width","75 wide"],["drawn.height","70 tall"]]}
+{"case":"drawing.objects.transform:core","tier":"complex","text":"if you can, stretch the lake and the road to 450 wide while keeping them 60 high","trigger":"stretch","target":{"refs":["lake","road"]},"c":[["drawn.width","450 wide"],["drawn.height","60 high"]]}
+{"case":"drawing.objects.transform:core","tier":"complex","text":"the triangle and the star look tiny. Resize both to 120 wide and 110 tall, please.","trigger":"Resize","target":{"refs":["triangle","star"]},"c":[["drawn.width","120 wide"],["drawn.height","110 tall"]],"ctx":"drawing.shapes"}
+{"case":"drawing.objects.transform:core","tier":"complex","text":"make the red car and the sailboat 130 wide and 70 tall, and then move the car to the bottom","trigger":"make","target":{"refs":["red car","sailboat"]},"c":[["drawn.width","130 wide"],["drawn.height","70 tall"]],"span":"make the red car and the sailboat 130 wide and 70 tall","also":[{"op":"drawing.object.place","span":"move the car to the bottom","trigger":"move","target":{"kind":"car"},"c":[["drawn.at","bottom","bottom","region"]]}]}
+{"case":"drawing.objects.transform:core","tier":"complex","text":"the barn and the wheat field are out of proportion, so set them to 260 by 120","trigger":"set","target":{"refs":["barn","wheat field"]},"c":[["drawn.width","260"],["drawn.height","120"]],"ctx":"drawing.groups"}
+{"case":"drawing.objects.transform:core","tier":"simplified","text":"house and tree: 100 by 140","target":{"refs":["house","tree"]},"c":[["drawn.width","100"],["drawn.height","140"]]}
+{"case":"drawing.objects.transform:core","tier":"simplified","text":"sun and cloud 80 wide, 50 tall","target":{"refs":["sun","cloud"]},"c":[["drawn.width","80 wide"],["drawn.height","50 tall"]]}
+{"case":"drawing.objects.transform:core","tier":"simplified","text":"circle + square, width 60 height 60","target":{"refs":["circle","square"]},"c":[["drawn.width","width 60"],["drawn.height","height 60"]],"ctx":"drawing.shapes"}
+{"case":"drawing.objects.transform:core","tier":"simplified","text":"resize the car and the boat, 90 wide","trigger":"resize","target":{"refs":["car","boat"]},"c":[["drawn.width","90 wide"]]}
+{"case":"drawing.objects.transform:core","tier":"simplified","text":"barn and farmhouse both 150 tall","target":{"refs":["barn","farmhouse"]},"c":[["drawn.height","150 tall"]],"ctx":"drawing.groups"}
+{"case":"drawing.objects.transform:core","tier":"simplified","text":"lake and mountain to 320 x 210","target":{"refs":["lake","mountain"]},"c":[["drawn.width","320"],["drawn.height","210"]]}
+{"case":"drawing.objects.transform:core","tier":"simplified","text":"triangle, heart: 55 by 50","target":{"refs":["triangle","heart"]},"c":[["drawn.width","55"],["drawn.height","50"]],"ctx":"drawing.shapes"}
+{"case":"drawing.objects.transform:core","tier":"simplified","text":"star and circle 70 wide 70 tall","target":{"refs":["star","circle"]},"c":[["drawn.width","70 wide"],["drawn.height","70 tall"]],"ctx":"drawing.shapes"}
+{"case":"drawing.objects.transform:core","tier":"simplified","text":"the oak and the road, 140 by 30","target":{"refs":["oak","road"]},"c":[["drawn.width","140"],["drawn.height","30"]]}
+{"case":"drawing.object.remove:core","tier":"equivalent","text":"delete the cloud please","trigger":"delete","target":{"kind":"cloud"}}
+{"case":"drawing.object.remove:core","tier":"equivalent","text":"remove the red car","trigger":"remove","target":{"name":"red car"}}
+{"case":"drawing.object.remove:core","tier":"equivalent","text":"get rid of the old oak","trigger":"get rid of","target":{"name":"old oak"}}
+{"case":"drawing.object.remove:core","tier":"equivalent","text":"erase the mountain from the picture","trigger":"erase","target":{"kind":"mountain"}}
+{"case":"drawing.object.remove:core","tier":"complex","text":"the sailboat doesn't fit the scene anymore, so delete it","trigger":"delete","target":{"name":"sailboat"}}
+{"case":"drawing.object.remove:core","tier":"complex","text":"I changed my mind about the road; please take it out","trigger":"take","target":{"kind":"road"}}
+{"case":"drawing.object.remove:core","tier":"simplified","text":"no more sun","target":{"kind":"sun"}}
+{"case":"drawing.object.remove:core","tier":"simplified","text":"lake, delete","trigger":"delete","target":{"kind":"lake"}}
+{"case":"drawing.object.remove:core","tier":"simplified","text":"bin the house","trigger":"bin","target":{"kind":"house"}}
+{"case":"drawing.object.remove:selected","tier":"equivalent","text":"delete the selected one","trigger":"delete","target":{"ctx":true}}
+{"case":"drawing.object.remove:selected","tier":"equivalent","text":"remove this one from the drawing","trigger":"remove","target":{"ctx":true}}
+{"case":"drawing.object.remove:selected","tier":"equivalent","text":"get rid of the selected object","trigger":"get rid of","target":{"ctx":true}}
+{"case":"drawing.object.remove:selected","tier":"equivalent","text":"erase the selection","trigger":"erase","target":{"ctx":true}}
+{"case":"drawing.object.remove:selected","tier":"equivalent","text":"please delete whatever is selected","trigger":"delete","target":{"ctx":true}}
+{"case":"drawing.object.remove:selected","tier":"equivalent","text":"press delete on the selection","trigger":"delete","target":{"ctx":true}}
+{"case":"drawing.object.remove:selected","tier":"equivalent","text":"throw away the shape I selected","trigger":"throw away","target":{"ctx":true}}
+{"case":"drawing.object.remove:selected","tier":"equivalent","text":"remove the currently selected item","trigger":"remove","target":{"ctx":true}}
+{"case":"drawing.object.remove:selected","tier":"equivalent","text":"can you delete that one?","trigger":"delete","target":{"ctx":true}}
+{"case":"drawing.object.remove:selected","tier":"complex","text":"this one is a mistake, delete it","trigger":"delete","target":{"ctx":true}}
+{"case":"drawing.object.remove:selected","tier":"complex","text":"I picked the wrong thing earlier, but now the right one is selected - remove it","trigger":"remove","target":{"ctx":true}}
+{"case":"drawing.object.remove:selected","tier":"complex","text":"ok so that selected cloud is ugly, get rid of it","trigger":"get rid of","target":{"ctx":true}}
+{"case":"drawing.object.remove:selected","tier":"complex","text":"delete the selection and then add a tree there","trigger":"delete","target":{"ctx":true},"span":"delete the selection","also":[{"op":"drawing.object.make","span":"add a tree there","trigger":"add","target":{"kind":"tree"}}]}
+{"case":"drawing.object.remove:selected","tier":"complex","text":"if nothing else depends on it, please remove what I've selected","trigger":"remove","target":{"ctx":true}}
+{"case":"drawing.object.remove:selected","tier":"complex","text":"hmm, the thing I just clicked shouldn't be there; could you erase it?","trigger":"erase","target":{"ctx":true}}
+{"case":"drawing.object.remove:selected","tier":"complex","text":"that selected one has to go, it's covering the house","trigger":"has to go","target":{"ctx":true}}
+{"case":"drawing.object.remove:selected","tier":"simplified","text":"delete it, thanks","trigger":"delete","target":{"ctx":true}}
+{"case":"drawing.object.remove:selected","tier":"simplified","text":"remove selected","trigger":"remove","target":{"ctx":true}}
+{"case":"drawing.object.remove:selected","tier":"simplified","text":"trash this one","trigger":"trash","target":{"ctx":true}}
+{"case":"drawing.object.remove:selected","tier":"simplified","text":"kill the selected shape","trigger":"kill","target":{"ctx":true}}
+{"case":"drawing.object.remove:selected","tier":"simplified","text":"delete selection","trigger":"delete","target":{"ctx":true}}
+{"case":"drawing.object.remove:selected","tier":"simplified","text":"bin it","trigger":"bin","target":{"ctx":true}}
+{"case":"drawing.object.remove:selected","tier":"simplified","text":"erase that","trigger":"erase","target":{"ctx":true}}
+{"case":"drawing.object.remove:selected","tier":"simplified","text":"get rid of this thing","trigger":"get rid of","target":{"ctx":true}}
+{"case":"drawing.object.remove:selected","tier":"simplified","text":"lose this one","trigger":"lose","target":{"ctx":true}}
+{"case":"drawing.page.clear:core","tier":"equivalent","text":"clear the whole drawing please","trigger":"clear"}
+{"case":"drawing.page.clear:core","tier":"equivalent","text":"erase everything on the page","trigger":"erase"}
+{"case":"drawing.page.clear:core","tier":"equivalent","text":"wipe the canvas clean","trigger":"wipe"}
+{"case":"drawing.page.clear:core","tier":"equivalent","text":"remove all objects from the picture","trigger":"remove"}
+{"case":"drawing.page.clear:core","tier":"complex","text":"let's start over; clear the drawing","trigger":"clear"}
+{"case":"drawing.page.clear:core","tier":"complex","text":"this is a mess, could you hit Clear drawing and give me an empty page?","trigger":"Clear"}
+{"case":"drawing.page.clear:core","tier":"simplified","text":"blank page please"}
+{"case":"drawing.page.clear:core","tier":"simplified","text":"wipe it all","trigger":"wipe"}
+{"case":"drawing.page.clear:core","tier":"simplified","text":"clear everything here","trigger":"clear"}
+{"case":"drawing.undo:core","tier":"equivalent","text":"undo my last step","trigger":"undo"}
+{"case":"drawing.undo:core","tier":"equivalent","text":"take back the last action","trigger":"take back"}
+{"case":"drawing.undo:core","tier":"equivalent","text":"please revert what you just did","trigger":"revert"}
+{"case":"drawing.undo:core","tier":"equivalent","text":"go back one step","trigger":"go back"}
+{"case":"drawing.undo:core","tier":"complex","text":"oops, that wasn't what I wanted - undo it","trigger":"undo"}
+{"case":"drawing.undo:core","tier":"complex","text":"the colour change looks wrong, can you undo it?","trigger":"undo"}
+{"case":"drawing.undo:core","tier":"simplified","text":"back one step"}
+{"case":"drawing.undo:core","tier":"simplified","text":"ctrl z that","trigger":"ctrl z"}
+{"case":"drawing.undo:core","tier":"simplified","text":"undo the move","trigger":"undo"}
+{"case":"drawing.redo:core","tier":"equivalent","text":"redo what I undid","trigger":"redo"}
+{"case":"drawing.redo:core","tier":"equivalent","text":"redo the last undone step","trigger":"redo"}
+{"case":"drawing.redo:core","tier":"equivalent","text":"bring back the change I just undid","trigger":"bring back"}
+{"case":"drawing.redo:core","tier":"equivalent","text":"restore what the undo removed","trigger":"restore"}
+{"case":"drawing.redo:core","tier":"complex","text":"actually the undo was a mistake, redo it","trigger":"redo"}
+{"case":"drawing.redo:core","tier":"complex","text":"hmm, I preferred it before I undid it; please redo","trigger":"redo"}
+{"case":"drawing.redo:core","tier":"simplified","text":"redo that one","trigger":"redo"}
+{"case":"drawing.redo:core","tier":"simplified","text":"redo, please, the last one","trigger":"redo"}
+{"case":"drawing.redo:core","tier":"simplified","text":"reverse that undo","trigger":"reverse"}
+{"case":"drawing.ids.show:temporary","tier":"equivalent","text":"show the object IDs for a moment","trigger":"show","c":[["page.mode","for a moment","temporary"]]}
+{"case":"drawing.ids.show:temporary","tier":"equivalent","text":"briefly display the IDs of the objects","trigger":"display","c":[["page.mode","briefly","temporary"]]}
+{"case":"drawing.ids.show:temporary","tier":"equivalent","text":"flash the ID labels quickly","trigger":"flash","c":[["page.mode","quickly","temporary"]]}
+{"case":"drawing.ids.show:temporary","tier":"equivalent","text":"can you show me the object numbers for a second?","trigger":"show","c":[["page.mode","for a second","temporary"]]}
+{"case":"drawing.ids.show:temporary","tier":"equivalent","text":"put the identifiers up temporarily","trigger":"put","c":[["page.mode","temporarily","temporary"]]}
+{"case":"drawing.ids.show:temporary","tier":"equivalent","text":"show the IDs just for a bit","trigger":"show","c":[["page.mode","for a bit","temporary"]]}
+{"case":"drawing.ids.show:temporary","tier":"equivalent","text":"give me a quick look at the object IDs","trigger":"give","c":[["page.mode","quick look","temporary"]]}
+{"case":"drawing.ids.show:temporary","tier":"equivalent","text":"reveal the ID tags for a short while","trigger":"reveal","c":[["page.mode","for a short while","temporary"]]}
+{"case":"drawing.ids.show:temporary","tier":"complex","text":"I need to know what each thing is called, so show the IDs briefly","trigger":"show","c":[["page.mode","briefly","temporary"]]}
+{"case":"drawing.ids.show:temporary","tier":"complex","text":"before I pick something, could you flash the object IDs for a moment?","trigger":"flash","c":[["page.mode","for a moment","temporary"]]}
+{"case":"drawing.ids.show:temporary","tier":"complex","text":"which one is which? show the IDs for a little while and then hide them again","trigger":"show","c":[["page.mode","for a little while","temporary"]]}
+{"case":"drawing.ids.show:temporary","tier":"complex","text":"I'm getting lost in this picture - pop up the object labels for a sec, please","trigger":"pop up","c":[["page.mode","for a sec","temporary"]]}
+{"case":"drawing.ids.show:temporary","tier":"complex","text":"show the IDs for a moment so I can find the boat, then select the boat","trigger":"show","c":[["page.mode","for a moment","temporary"]],"span":"show the IDs for a moment so I can find the boat","also":[{"op":"drawing.object.select","span":"select the boat","trigger":"select","target":{"kind":"boat"}}]}
+{"case":"drawing.ids.show:temporary","tier":"complex","text":"my eyes can't tell the shapes apart; display their IDs temporarily","trigger":"display","c":[["page.mode","temporarily","temporary"]]}
+{"case":"drawing.ids.show:temporary","tier":"simplified","text":"IDs for a moment","c":[["page.mode","for a moment","temporary"]]}
+{"case":"drawing.ids.show:temporary","tier":"simplified","text":"show the IDs","trigger":"show"}
+{"case":"drawing.ids.show:temporary","tier":"simplified","text":"quick peek at the IDs","c":[["page.mode","quick peek","temporary"]]}
+{"case":"drawing.ids.show:temporary","tier":"simplified","text":"flash the numbers","trigger":"flash"}
+{"case":"drawing.ids.show:temporary","tier":"simplified","text":"object IDs, briefly","c":[["page.mode","briefly","temporary"]]}
+{"case":"drawing.ids.show:temporary","tier":"simplified","text":"show ids quickly","trigger":"show","c":[["page.mode","quickly","temporary"]]}
+{"case":"drawing.ids.show:temporary","tier":"simplified","text":"let me see the IDs","trigger":"see"}
+{"case":"drawing.ids.show:temporary","tier":"simplified","text":"display object identifiers","trigger":"display"}
+{"case":"drawing.ids.show:temporary","tier":"simplified","text":"what are the IDs? show them shortly","trigger":"show","c":[["page.mode","shortly","temporary"]]}
+{"case":"drawing.ids.show:duration","tier":"equivalent","text":"show the object IDs for 6 seconds","trigger":"show","c":[["page.duration","for 6 seconds"]]}
+{"case":"drawing.ids.show:duration","tier":"equivalent","text":"display the IDs for ten seconds","trigger":"display","c":[["page.duration","ten seconds"]]}
+{"case":"drawing.ids.show:duration","tier":"equivalent","text":"flash the identifiers for 3 seconds","trigger":"flash","c":[["page.duration","3 seconds"]]}
+{"case":"drawing.ids.show:duration","tier":"complex","text":"I'm slow at reading, so keep the IDs up for 15 seconds before hiding them","trigger":"keep","c":[["page.duration","15 seconds"]]}
+{"case":"drawing.ids.show:duration","tier":"complex","text":"could you show the object numbers for about 8 seconds? that should be enough","trigger":"show","c":[["page.duration","about 8 seconds"]]}
+{"case":"drawing.ids.show:duration","tier":"simplified","text":"IDs for 5 seconds","c":[["page.duration","5 seconds"]]}
+{"case":"drawing.ids.show:duration","tier":"simplified","text":"show ids 20 sec","trigger":"show","c":[["page.duration","20 sec"]]}
+{"case":"drawing.ids.show:duration","tier":"simplified","text":"object labels, two seconds","c":[["page.duration","two seconds"]]}
+{"case":"drawing.ids.show:duration","tier":"simplified","text":"IDs up for 30 secs","c":[["page.duration","30 secs"]]}
+{"case":"drawing.ids.show:always","tier":"equivalent","text":"keep the object IDs on screen","trigger":"keep","c":[["page.mode","on screen","always"]]}
+{"case":"drawing.ids.show:always","tier":"equivalent","text":"show the IDs permanently","trigger":"show","c":[["page.mode","permanently","always"]]}
+{"case":"drawing.ids.show:always","tier":"equivalent","text":"leave the object IDs visible all the time","trigger":"leave","c":[["page.mode","all the time","always"]]}
+{"case":"drawing.ids.show:always","tier":"equivalent","text":"always display the ID labels","trigger":"display","c":[["page.mode","always","always"]]}
+{"case":"drawing.ids.show:always","tier":"equivalent","text":"turn on the object IDs and keep them showing","trigger":"turn on","c":[["page.mode","keep them showing","always"]]}
+{"case":"drawing.ids.show:always","tier":"equivalent","text":"please show the identifiers until I say otherwise","trigger":"show","c":[["page.mode","until I say otherwise","always"]]}
+{"case":"drawing.ids.show:always","tier":"equivalent","text":"pin the object numbers so they stay visible","trigger":"pin","c":[["page.mode","stay visible","always"]]}
+{"case":"drawing.ids.show:always","tier":"equivalent","text":"make the IDs stay on for good","trigger":"make","c":[["page.mode","for good","always"]]}
+{"case":"drawing.ids.show:always","tier":"complex","text":"I'm going to be selecting lots of things, so keep the IDs visible the whole time","trigger":"keep","c":[["page.mode","the whole time","always"]]}
+{"case":"drawing.ids.show:always","tier":"complex","text":"the overlay keeps vanishing; can the object IDs stay on permanently?","trigger":"stay on","c":[["page.mode","permanently","always"]]}
+{"case":"drawing.ids.show:always","tier":"complex","text":"while I work on the farm, leave the ID labels showing constantly","trigger":"leave","c":[["page.mode","constantly","always"]],"ctx":"drawing.groups"}
+{"case":"drawing.ids.show:always","tier":"complex","text":"don't hide the IDs after a few seconds - I want them displayed all the time","trigger":"displayed","c":[["page.mode","all the time","always"]]}
+{"case":"drawing.ids.show:always","tier":"complex","text":"show the object IDs and keep them up, then I'll tell you which ones to delete","trigger":"show","c":[["page.mode","keep them up","always"]],"span":"show the object IDs and keep them up"}
+{"case":"drawing.ids.show:always","tier":"complex","text":"it would help a lot if the identifiers were always on","c":[["page.mode","always on","always"]]}
+{"case":"drawing.ids.show:always","tier":"simplified","text":"IDs always on","c":[["page.mode","always on","always"]]}
+{"case":"drawing.ids.show:always","tier":"simplified","text":"keep showing ids","trigger":"keep","c":[["page.mode","keep showing","always"]]}
+{"case":"drawing.ids.show:always","tier":"simplified","text":"permanent IDs please","c":[["page.mode","permanent","always"]]}
+{"case":"drawing.ids.show:always","tier":"simplified","text":"leave the numbers up","trigger":"leave","c":[["page.mode","up","always"]]}
+{"case":"drawing.ids.show:always","tier":"simplified","text":"ID labels on for good","c":[["page.mode","for good","always"]]}
+{"case":"drawing.ids.show:always","tier":"simplified","text":"show IDs, don't hide them","trigger":"show","c":[["page.mode","don't hide them","always"]]}
+{"case":"drawing.ids.show:always","tier":"simplified","text":"always show the object identifiers","trigger":"show","c":[["page.mode","always","always"]]}
+{"case":"drawing.ids.show:always","tier":"simplified","text":"IDs stay","trigger":"stay","c":[["page.mode","stay","always"]]}
+{"case":"drawing.ids.show:off","tier":"equivalent","text":"turn off the object IDs","trigger":"turn off","c":[["page.mode","off","off"]]}
+{"case":"drawing.ids.show:off","tier":"equivalent","text":"hide the IDs","trigger":"hide","c":[["page.mode","hide","off"]]}
+{"case":"drawing.ids.show:off","tier":"equivalent","text":"switch the ID labels off","trigger":"switch","c":[["page.mode","off","off"]]}
+{"case":"drawing.ids.show:off","tier":"equivalent","text":"please stop showing the object numbers","trigger":"stop showing","c":[["page.mode","stop showing","off"]]}
+{"case":"drawing.ids.show:off","tier":"equivalent","text":"remove the ID overlay from the drawing","trigger":"remove","c":[["page.mode","remove","off"]]}
+{"case":"drawing.ids.show:off","tier":"equivalent","text":"can you get rid of the identifiers on screen?","trigger":"get rid of","c":[["page.mode","get rid of","off"]]}
+{"case":"drawing.ids.show:off","tier":"equivalent","text":"make the IDs disappear","trigger":"disappear","c":[["page.mode","disappear","off"]]}
+{"case":"drawing.ids.show:off","tier":"equivalent","text":"no more object IDs, please","c":[["page.mode","no more","off"]]}
+{"case":"drawing.ids.show:off","tier":"complex","text":"I'm done picking things, so hide the IDs now","trigger":"hide","c":[["page.mode","hide","off"]]}
+{"case":"drawing.ids.show:off","tier":"complex","text":"the labels are cluttering the picture; turn the IDs off","trigger":"turn","c":[["page.mode","off","off"]]}
+{"case":"drawing.ids.show:off","tier":"complex","text":"I want to see the drawing clean again, could you switch off the object numbers?","trigger":"switch off","c":[["page.mode","switch off","off"]]}
+{"case":"drawing.ids.show:off","tier":"complex","text":"thanks, that helped. Now please hide the identifiers.","trigger":"hide","c":[["page.mode","hide","off"]]}
+{"case":"drawing.ids.show:off","tier":"complex","text":"turn the IDs off and then make the sun bigger","trigger":"turn","c":[["page.mode","off","off"]],"span":"turn the IDs off","also":[{"op":"drawing.object.change","span":"make the sun bigger","trigger":"make","target":{"kind":"sun"},"c":[["drawn.size","bigger","big","delta"]]}]}
+{"case":"drawing.ids.show:off","tier":"complex","text":"if the IDs are still showing, stop displaying them","trigger":"stop displaying","c":[["page.mode","stop displaying","off"]]}
+{"case":"drawing.ids.show:off","tier":"complex","text":"I'm taking a screenshot for my teacher, so the object IDs need to go away","trigger":"go away","c":[["page.mode","go away","off"]]}
+{"case":"drawing.ids.show:off","tier":"simplified","text":"IDs off","c":[["page.mode","off","off"]]}
+{"case":"drawing.ids.show:off","tier":"simplified","text":"hide ids please","trigger":"hide","c":[["page.mode","hide","off"]]}
+{"case":"drawing.ids.show:off","tier":"simplified","text":"no IDs","c":[["page.mode","no","off"]]}
+{"case":"drawing.ids.show:off","tier":"simplified","text":"kill the ID overlay","trigger":"kill","c":[["page.mode","kill","off"]]}
+{"case":"drawing.ids.show:off","tier":"simplified","text":"numbers off","c":[["page.mode","off","off"]]}
+{"case":"drawing.ids.show:off","tier":"simplified","text":"hide the labels on the objects","trigger":"hide","c":[["page.mode","hide","off"]]}
+{"case":"drawing.ids.show:off","tier":"simplified","text":"stop the IDs","trigger":"stop","c":[["page.mode","stop","off"]]}
+{"case":"drawing.ids.show:off","tier":"simplified","text":"turn ID display off","trigger":"turn","c":[["page.mode","off","off"]]}
+{"case":"drawing.observe:count","tier":"equivalent","text":"how many clouds have I drawn so far?","trigger":"how many","target":{"kind":"clouds","lemma":"cloud"},"q":"count"}
+{"case":"drawing.observe:count","tier":"equivalent","text":"count the trees in the picture","trigger":"count","target":{"kind":"trees","lemma":"tree"},"q":"count"}
+{"case":"drawing.observe:count","tier":"equivalent","text":"how many objects are on the page?","trigger":"how many","q":"count"}
+{"case":"drawing.observe:count","tier":"equivalent","text":"what's the number of houses in the drawing?","trigger":"number of","target":{"kind":"houses","lemma":"house"},"q":"count","ctx":"drawing.groups"}
+{"case":"drawing.observe:count","tier":"complex","text":"I think I added too many stars, how many are there now?","trigger":"how many","target":{"kind":"stars","lemma":"star"},"q":"count","ctx":[{"kind":"star","name":"Star"},{"kind":"star","name":"Small star"},{"kind":"star","name":"Gold star"},{"kind":"moon","name":"Moon"}]}
+{"case":"drawing.observe:count","tier":"complex","text":"for my caption, can you tell me how many things are in the scene?","trigger":"how many","q":"count"}
+{"case":"drawing.observe:count","tier":"simplified","text":"number of shapes?","trigger":"number of","q":"count","ctx":"drawing.shapes"}
+{"case":"drawing.observe:count","tier":"simplified","text":"how many cars","trigger":"how many","target":{"kind":"cars","lemma":"car"},"q":"count"}
+{"case":"drawing.observe:count","tier":"simplified","text":"count the birds","trigger":"count","target":{"kind":"birds","lemma":"bird"},"q":"count","ctx":[{"kind":"bird","name":"Bird"},{"kind":"bird","name":"Seagull"},{"kind":"tree","name":"Tree"}]}
+{"case":"drawing.observe:describe","tier":"equivalent","text":"describe the drawing","trigger":"describe","q":"describe"}
+{"case":"drawing.observe:describe","tier":"equivalent","text":"what's in the picture right now?","trigger":"what's in","q":"describe"}
+{"case":"drawing.observe:describe","tier":"equivalent","text":"tell me what is on the page","trigger":"tell me","q":"describe"}
+{"case":"drawing.observe:describe","tier":"equivalent","text":"can you describe the lake?","trigger":"describe","target":{"kind":"lake"},"q":"describe"}
+{"case":"drawing.observe:describe","tier":"complex","text":"I can't see the screen well; could you describe what I've drawn so far?","trigger":"describe","q":"describe"}
+{"case":"drawing.observe:describe","tier":"complex","text":"before I add more, give me a quick summary of the scene","trigger":"give","q":"describe"}
+{"case":"drawing.observe:describe","tier":"simplified","text":"what do we have?","trigger":"what do we have","q":"describe"}
+{"case":"drawing.observe:describe","tier":"simplified","text":"describe the house","trigger":"describe","target":{"kind":"house"},"q":"describe"}
+{"case":"drawing.observe:describe","tier":"simplified","text":"what's on the canvas","trigger":"what's on","q":"describe"}
+{"case":"drawing.observe:exists","tier":"equivalent","text":"is there a boat in the picture?","trigger":"is there","target":{"kind":"boat"},"q":"exists"}
+{"case":"drawing.observe:exists","tier":"equivalent","text":"have I drawn a sun yet?","trigger":"have I drawn","target":{"kind":"sun"},"q":"exists"}
+{"case":"drawing.observe:exists","tier":"equivalent","text":"does the drawing have a tree?","trigger":"does","target":{"kind":"tree"},"q":"exists"}
+{"case":"drawing.observe:exists","tier":"equivalent","text":"is there any car on the road?","trigger":"is there","target":{"kind":"car"},"q":"exists"}
+{"case":"drawing.observe:exists","tier":"complex","text":"I can't remember if I added a cloud; is there one?","trigger":"is there","target":{"kind":"cloud"},"q":"exists"}
+{"case":"drawing.observe:exists","tier":"complex","text":"before I draw another peak, check whether there's already a mountain","trigger":"check","target":{"kind":"mountain"},"q":"exists"}
+{"case":"drawing.observe:exists","tier":"simplified","text":"any dog?","target":{"kind":"dog"},"q":"exists","ctx":"drawing.groups"}
+{"case":"drawing.observe:exists","tier":"simplified","text":"got a lake?","trigger":"got","target":{"kind":"lake"},"q":"exists"}
+{"case":"drawing.observe:exists","tier":"simplified","text":"is there a star","trigger":"is there","target":{"kind":"star"},"q":"exists","ctx":"drawing.shapes"}
+{"case":"drawing.object.parts:core","tier":"equivalent","text":"what parts does the house have?","trigger":"what parts","target":{"kind":"house"},"ctx":"drawing.parts"}
+{"case":"drawing.object.parts:core","tier":"equivalent","text":"list the parts of the red car","trigger":"list","target":{"name":"red car"},"ctx":"drawing.parts"}
+{"case":"drawing.object.parts:core","tier":"equivalent","text":"describe the parts of the old oak","trigger":"describe","target":{"name":"old oak"},"ctx":"drawing.parts"}
+{"case":"drawing.object.parts:core","tier":"equivalent","text":"what is the house made of?","trigger":"made of","target":{"kind":"house"},"ctx":"drawing.parts"}
+{"case":"drawing.object.parts:core","tier":"complex","text":"I want to recolour some pieces of the car; which parts does it have?","trigger":"which parts","target":{"kind":"car"},"ctx":"drawing.parts"}
+{"case":"drawing.object.parts:core","tier":"complex","text":"before I edit the tree, tell me what parts it's made up of","trigger":"tell me","target":{"kind":"tree"},"ctx":"drawing.parts"}
+{"case":"drawing.object.parts:core","tier":"simplified","text":"parts of the house?","target":{"kind":"house"},"ctx":"drawing.parts"}
+{"case":"drawing.object.parts:core","tier":"simplified","text":"car parts","target":{"kind":"car"},"ctx":"drawing.parts"}
+{"case":"drawing.object.parts:core","tier":"simplified","text":"what's the oak built from","trigger":"built from","target":{"name":"oak"},"ctx":"drawing.parts"}
+{"case":"drawing.part.select:by-name","tier":"equivalent","text":"select the roof of the house","trigger":"select","target":{"name":"roof"},"c":[["part.id","the house","the house","sel"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.select:by-name","tier":"equivalent","text":"select the chimney on the house","trigger":"select","target":{"name":"chimney","nosel":true},"c":[["part.id","the house","the house","sel"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.select:by-name","tier":"equivalent","text":"pick the door of the house","trigger":"pick","target":{"name":"door","nosel":true},"c":[["part.id","the house","the house","sel"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.select:by-name","tier":"equivalent","text":"choose the front wheel of the red car","trigger":"choose","target":{"name":"front wheel","nosel":true},"c":[["part.id","the red car","the red car","sel"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.select:by-name","tier":"equivalent","text":"select the trunk of the old oak","trigger":"select","target":{"name":"trunk","nosel":true},"c":[["part.id","the old oak","the old oak","sel"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.select:by-name","tier":"equivalent","text":"highlight the leaves of the tree","trigger":"highlight","target":{"name":"leaves","nosel":true},"c":[["part.id","the tree","the tree","sel"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.select:by-name","tier":"equivalent","text":"select the window in the house","trigger":"select","target":{"name":"window","nosel":true},"c":[["part.id","the house","the house","sel"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.select:by-name","tier":"equivalent","text":"click on the sail of the boat","trigger":"click","target":{"name":"sail","nosel":true},"c":[["part.id","the boat","the boat","sel"]],"ctx":[{"kind":"boat","name":"Sailboat"},{"kind":"sail","name":"sail of the boat"},{"kind":"mast","name":"mast of the boat"},{"kind":"hull","name":"hull of the boat"},{"kind":"lake","name":"Lake"}]}
+{"case":"drawing.part.select:by-name","tier":"equivalent","text":"please select the stem of the flower","trigger":"select","target":{"name":"stem","nosel":true},"c":[["part.id","the flower","the flower","sel"]],"ctx":[{"kind":"flower","name":"Flower"},{"kind":"stem","name":"stem of the flower"},{"kind":"petal","name":"petals of the flower"},{"kind":"leaf","name":"leaf of the flower"}]}
+{"case":"drawing.part.select:by-name","tier":"complex","text":"I want to recolour just one piece: select the door of the house first","trigger":"select","target":{"name":"door","nosel":true},"c":[["part.id","the house","the house","sel"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.select:by-name","tier":"complex","text":"the chimney looks off; select it on the house so I can fix it","trigger":"select","target":{"name":"chimney","nosel":true},"c":[["part.id","the house","the house","sel"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.select:by-name","tier":"complex","text":"on the red car, please select the front wheel","trigger":"select","target":{"name":"front wheel","nosel":true},"c":[["part.id","the red car","the red car","sel"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.select:by-name","tier":"complex","text":"could you pick out the trunk of the old oak? I want to make it thicker","trigger":"pick out","target":{"name":"trunk","nosel":true},"c":[["part.id","the old oak","the old oak","sel"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.select:by-name","tier":"complex","text":"select the mast of the sailboat, the tall pole in the middle","trigger":"select","target":{"name":"mast","nosel":true},"c":[["part.id","the sailboat","the sailboat","sel"]],"ctx":[{"kind":"boat","name":"Sailboat"},{"kind":"sail","name":"sail of the boat"},{"kind":"mast","name":"mast of the boat"},{"kind":"hull","name":"hull of the boat"},{"kind":"lake","name":"Lake"}]}
+{"case":"drawing.part.select:by-name","tier":"complex","text":"in the person I drew, select the left arm","trigger":"select","target":{"name":"left arm","nosel":true},"c":[["part.id","the person","the person","sel"]],"ctx":[{"kind":"person","name":"Person"},{"kind":"head","name":"head of the person"},{"kind":"arm","name":"left arm of the person"},{"kind":"arm","name":"right arm of the person"},{"kind":"leg","name":"legs of the person"}]}
+{"case":"drawing.part.select:by-name","tier":"complex","text":"the petals need work, so go ahead and select them on the flower","trigger":"select","target":{"name":"petals","nosel":true},"c":[["part.id","the flower","the flower","sel"]],"ctx":[{"kind":"flower","name":"Flower"},{"kind":"stem","name":"stem of the flower"},{"kind":"petal","name":"petals of the flower"},{"kind":"leaf","name":"leaf of the flower"}]}
+{"case":"drawing.part.select:by-name","tier":"simplified","text":"house roof, select","trigger":"select","target":{"name":"roof","nosel":true},"c":[["part.id","house","house","sel"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.select:by-name","tier":"simplified","text":"the door on the house","target":{"name":"door","nosel":true},"c":[["part.id","the house","the house","sel"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.select:by-name","tier":"simplified","text":"car wheel","target":{"name":"wheel","nosel":true},"c":[["part.id","car","car","sel"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.select:by-name","tier":"simplified","text":"select the leaves","trigger":"select","target":{"name":"leaves","nosel":true},"ctx":"drawing.parts"}
+{"case":"drawing.part.select:by-name","tier":"simplified","text":"pick the chimney","trigger":"pick","target":{"name":"chimney","nosel":true},"ctx":"drawing.parts"}
+{"case":"drawing.part.select:by-name","tier":"simplified","text":"the tree trunk, please","target":{"name":"trunk","nosel":true},"c":[["part.id","tree","tree","sel"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.select:by-name","tier":"simplified","text":"sail of the boat","target":{"name":"sail","nosel":true},"c":[["part.id","the boat","the boat","sel"]],"ctx":[{"kind":"boat","name":"Sailboat"},{"kind":"sail","name":"sail of the boat"},{"kind":"mast","name":"mast of the boat"},{"kind":"hull","name":"hull of the boat"},{"kind":"lake","name":"Lake"}]}
+{"case":"drawing.part.select:by-name","tier":"simplified","text":"window of the house","target":{"name":"window","nosel":true},"c":[["part.id","the house","the house","sel"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.select:by-name","tier":"simplified","text":"select the head","trigger":"select","target":{"name":"head","nosel":true},"ctx":[{"kind":"person","name":"Person"},{"kind":"head","name":"head of the person"},{"kind":"arm","name":"left arm of the person"},{"kind":"arm","name":"right arm of the person"},{"kind":"leg","name":"legs of the person"}]}
+{"case":"drawing.part.select:by-index","tier":"equivalent","text":"select part 2 of the house","trigger":"select","c":[["part.index","part 2"],["part.id","the house","the house","sel"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.select:by-index","tier":"equivalent","text":"pick part number 3 on the red car","trigger":"pick","c":[["part.index","part number 3"],["part.id","the red car","the red car","sel"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.select:by-index","tier":"equivalent","text":"choose part 4 of the old oak","trigger":"choose","c":[["part.index","part 4"],["part.id","the old oak","the old oak","sel"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.select:by-index","tier":"complex","text":"the house has several parts; select part 2 for me","trigger":"select","c":[["part.id","the house","the house","sel"],["part.index","part 2"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.select:by-index","tier":"complex","text":"I counted the pieces of the car, please select part 5","trigger":"select","c":[["part.id","the car","the car","sel"],["part.index","part 5"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.select:by-index","tier":"simplified","text":"house, part 3","c":[["part.id","house","house","sel"],["part.index","part 3"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.select:by-index","tier":"simplified","text":"part 1 of the tree","c":[["part.index","part 1"],["part.id","the tree","the tree","sel"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.select:by-index","tier":"simplified","text":"select part two of the car","trigger":"select","c":[["part.index","part two"],["part.id","the car","the car","sel"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.select:by-index","tier":"equivalent","text":"select part number 2 of the flower","trigger":"select","c":[["part.index","part number 2"],["part.id","the flower","the flower","sel"]],"ctx":[{"kind":"flower","name":"Flower"},{"kind":"stem","name":"stem of the flower"},{"kind":"petal","name":"petals of the flower"},{"kind":"leaf","name":"leaf of the flower"}]}
+{"case":"drawing.part.change:color","tier":"equivalent","text":"make the roof of the house red","trigger":"make","target":{"name":"roof","nosel":true},"c":[["part.id","the house","the house","sel"],["part.color","red"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.change:color","tier":"equivalent","text":"colour the door of the house brown","trigger":"colour","target":{"name":"door","nosel":true},"c":[["part.id","the house","the house","sel"],["part.color","brown"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.change:color","tier":"equivalent","text":"paint the front wheel of the red car black","trigger":"paint","target":{"name":"front wheel","nosel":true},"c":[["part.id","the red car","the red car","sel"],["part.color","black"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.change:color","tier":"complex","text":"the leaves of the old oak should be autumn orange; can you change that?","trigger":"change","target":{"name":"leaves","nosel":true},"c":[["part.id","the old oak","the old oak","sel"],["part.color","autumn orange"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.change:color","tier":"complex","text":"the house looks plain, so paint the chimney grey","trigger":"paint","target":{"name":"chimney","nosel":true},"c":[["part.id","the house","the house","sel"],["part.color","grey"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.change:color","tier":"simplified","text":"first part of the car blue","target":{"ordinal":"first"},"c":[["part.id","the car","the car","sel"],["part.color","blue"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.change:color","tier":"simplified","text":"trunk darker brown","target":{"name":"trunk","nosel":true},"c":[["part.color","darker brown","?"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.change:color","tier":"simplified","text":"part 2 of the house yellow","c":[["part.index","part 2"],["part.id","the house","the house","sel"],["part.color","yellow"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.change:color","tier":"equivalent","text":"change the petals of the flower to pink","trigger":"change","target":{"name":"petals","nosel":true},"c":[["part.id","the flower","the flower","sel"],["part.color","pink"]],"ctx":[{"kind":"flower","name":"Flower"},{"kind":"stem","name":"stem of the flower"},{"kind":"petal","name":"petals of the flower"},{"kind":"leaf","name":"leaf of the flower"}]}
+{"case":"drawing.part.change:dimensions","tier":"equivalent","text":"make the door of the house 30 wide and 50 tall","trigger":"make","target":{"name":"door","nosel":true},"c":[["part.id","the house","the house","sel"],["part.width","30 wide"],["part.height","50 tall"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.change:dimensions","tier":"equivalent","text":"resize the chimney on the house to width 20, height 45","trigger":"resize","target":{"name":"chimney","nosel":true},"c":[["part.id","the house","the house","sel"],["part.width","width 20"],["part.height","height 45"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.change:dimensions","tier":"equivalent","text":"set the trunk of the old oak to 25 by 90","trigger":"set","target":{"name":"trunk","nosel":true},"c":[["part.id","the old oak","the old oak","sel"],["part.width","25"],["part.height","90"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.change:dimensions","tier":"complex","text":"the window of the house is too narrow; make it 40 wide and 35 high","trigger":"make","target":{"name":"window","nosel":true},"c":[["part.id","the house","the house","sel"],["part.width","40 wide"],["part.height","35 high"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.change:dimensions","tier":"complex","text":"for the cartoon look, give the front wheel of the red car a width of 36 and a height of 36","trigger":"give","target":{"name":"front wheel","nosel":true},"c":[["part.id","the red car","the red car","sel"],["part.width","width of 36"],["part.height","height of 36"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.change:dimensions","tier":"simplified","text":"roof of the house 160 wide","target":{"name":"roof","nosel":true},"c":[["part.id","the house","the house","sel"],["part.width","160 wide"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.change:dimensions","tier":"simplified","text":"second part of the tree: 80 by 120","target":{"ordinal":"second"},"c":[["part.id","the tree","the tree","sel"],["part.width","80"],["part.height","120"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.change:dimensions","tier":"simplified","text":"part 3 of the car, height 25","c":[["part.index","part 3"],["part.id","the car","the car","sel"],["part.height","height 25"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.change:dimensions","tier":"equivalent","text":"change the sail of the boat to 60 wide and 85 tall","trigger":"change","target":{"name":"sail","nosel":true},"c":[["part.id","the boat","the boat","sel"],["part.width","60 wide"],["part.height","85 tall"]],"ctx":[{"kind":"boat","name":"Sailboat"},{"kind":"sail","name":"sail of the boat"},{"kind":"mast","name":"mast of the boat"},{"kind":"hull","name":"hull of the boat"},{"kind":"lake","name":"Lake"}]}
+{"case":"drawing.part.place:position","tier":"equivalent","text":"move the chimney of the house to 210, 95","trigger":"move","target":{"name":"chimney","nosel":true},"c":[["part.id","the house","the house","sel"],["part.x","210"],["part.y","95"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.place:position","tier":"equivalent","text":"put the door of the house at x 180, y 260","trigger":"put","target":{"name":"door","nosel":true},"c":[["part.id","the house","the house","sel"],["part.x","x 180"],["part.y","y 260"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.place:position","tier":"equivalent","text":"shift the window of the house to 150, 220","trigger":"shift","target":{"name":"window","nosel":true},"c":[["part.id","the house","the house","sel"],["part.x","150"],["part.y","220"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.place:position","tier":"complex","text":"the front wheel of the red car slipped; move it back to x 320, y 430","trigger":"move","target":{"name":"front wheel","nosel":true},"c":[["part.id","the red car","the red car","sel"],["part.x","x 320"],["part.y","y 430"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.place:position","tier":"complex","text":"the leaves of the old oak float too high, please place them at 90, 240","trigger":"place","target":{"name":"leaves","nosel":true},"c":[["part.id","the old oak","the old oak","sel"],["part.x","90"],["part.y","240"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.place:position","tier":"simplified","text":"chimney to 230, 90","target":{"name":"chimney","nosel":true},"c":[["part.x","230"],["part.y","90"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.place:position","tier":"simplified","text":"part 2 of the house at 160, 210","c":[["part.index","part 2"],["part.id","the house","the house","sel"],["part.x","160"],["part.y","210"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.place:position","tier":"simplified","text":"first part of the car to x 300 y 440","target":{"ordinal":"first"},"c":[["part.id","the car","the car","sel"],["part.x","x 300"],["part.y","y 440"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.place:position","tier":"equivalent","text":"drag the head of the person to 410, 170","trigger":"drag","target":{"name":"head","nosel":true},"c":[["part.id","the person","the person","sel"],["part.x","410"],["part.y","170"]],"ctx":[{"kind":"person","name":"Person"},{"kind":"head","name":"head of the person"},{"kind":"arm","name":"left arm of the person"},{"kind":"arm","name":"right arm of the person"},{"kind":"leg","name":"legs of the person"}]}
+{"case":"drawing.part.remove:core","tier":"equivalent","text":"remove the chimney from the house","trigger":"remove","target":{"name":"chimney","nosel":true},"c":[["part.id","the house","the house","sel"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.remove:core","tier":"equivalent","text":"delete the front wheel of the red car","trigger":"delete","target":{"name":"front wheel","nosel":true},"c":[["part.id","the red car","the red car","sel"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.remove:core","tier":"equivalent","text":"take the door off the house","trigger":"take","target":{"name":"door","nosel":true},"c":[["part.id","the house","the house","sel"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.remove:core","tier":"complex","text":"the window of the house looks wrong; please get rid of it","trigger":"get rid of","target":{"name":"window","nosel":true},"c":[["part.id","the house","the house","sel"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.remove:core","tier":"complex","text":"I want a winter look, so delete the leaves of the old oak","trigger":"delete","target":{"name":"leaves","nosel":true},"c":[["part.id","the old oak","the old oak","sel"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.remove:core","tier":"simplified","text":"no chimney on the house","target":{"name":"chimney","nosel":true},"c":[["part.id","the house","the house","sel"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.remove:core","tier":"simplified","text":"remove part 3 of the car","trigger":"remove","c":[["part.index","part 3"],["part.id","the car","the car","sel"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.remove:core","tier":"simplified","text":"delete the last part of the house","trigger":"delete","target":{"ordinal":"last"},"c":[["part.id","the house","the house","sel"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.remove:core","tier":"equivalent","text":"erase the mast from the sailboat","trigger":"erase","target":{"name":"mast","nosel":true},"c":[["part.id","the sailboat","the sailboat","sel"]],"ctx":[{"kind":"boat","name":"Sailboat"},{"kind":"sail","name":"sail of the boat"},{"kind":"mast","name":"mast of the boat"},{"kind":"hull","name":"hull of the boat"},{"kind":"lake","name":"Lake"}]}
+{"case":"drawing.part.extract:core","tier":"equivalent","text":"take the roof off the house and make it a separate object","trigger":"take","target":{"name":"roof","nosel":true},"c":[["part.id","the house","the house","sel"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.extract:core","tier":"equivalent","text":"detach the front wheel of the red car","trigger":"detach","target":{"name":"front wheel","nosel":true},"c":[["part.id","the red car","the red car","sel"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.extract:core","tier":"equivalent","text":"pull the chimney out of the house as its own shape","trigger":"pull","target":{"name":"chimney","nosel":true},"c":[["part.id","the house","the house","sel"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.extract:core","tier":"equivalent","text":"separate the trunk from the old oak","trigger":"separate","target":{"name":"trunk","nosel":true},"c":[["part.id","the old oak","the old oak","sel"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.extract:core","tier":"complex","text":"I want to move the door independently, so split it out of the house","trigger":"split","target":{"name":"door","nosel":true},"c":[["part.id","the house","the house","sel"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.extract:core","tier":"complex","text":"could you extract the leaves of the old oak into their own object?","trigger":"extract","target":{"name":"leaves","nosel":true},"c":[["part.id","the old oak","the old oak","sel"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.extract:core","tier":"simplified","text":"detach part 2 of the house","trigger":"detach","c":[["part.index","part 2"],["part.id","the house","the house","sel"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.extract:core","tier":"simplified","text":"split off the first part of the car","trigger":"split off","target":{"ordinal":"first"},"c":[["part.id","the car","the car","sel"]],"ctx":"drawing.parts"}
+{"case":"drawing.part.extract:core","tier":"simplified","text":"sail of the boat as its own object","target":{"name":"sail","nosel":true},"c":[["part.id","the boat","the boat","sel"]],"ctx":[{"kind":"boat","name":"Sailboat"},{"kind":"sail","name":"sail of the boat"},{"kind":"mast","name":"mast of the boat"},{"kind":"hull","name":"hull of the boat"},{"kind":"lake","name":"Lake"}]}
+{"case":"drawing.object.group:core","tier":"equivalent","text":"group the house and the old oak","trigger":"group","target":{"refs":["house","old oak"]}}
+{"case":"drawing.object.group:core","tier":"equivalent","text":"put the sun and the cloud in a group","trigger":"put","target":{"refs":["sun","cloud"]}}
+{"case":"drawing.object.group:core","tier":"equivalent","text":"group together the farmhouse, the barn and the apple tree","trigger":"group","target":{"refs":["farmhouse","barn","apple tree"]},"ctx":"drawing.groups"}
+{"case":"drawing.object.group:core","tier":"equivalent","text":"combine the red car and the road into one group","trigger":"combine","target":{"refs":["red car","road"]}}
+{"case":"drawing.object.group:core","tier":"equivalent","text":"make a group out of the circle and the square","trigger":"make","target":{"refs":["circle","square"]},"ctx":"drawing.shapes"}
+{"case":"drawing.object.group:core","tier":"equivalent","text":"can you group the lake and the sailboat?","trigger":"group","target":{"refs":["lake","sailboat"]}}
+{"case":"drawing.object.group:core","tier":"equivalent","text":"join the triangle and the heart into a group","trigger":"join","target":{"refs":["triangle","heart"]},"ctx":"drawing.shapes"}
+{"case":"drawing.object.group:core","tier":"equivalent","text":"bundle the mountain and the cloud together","trigger":"bundle","target":{"refs":["mountain","cloud"]}}
+{"case":"drawing.object.group:core","tier":"equivalent","text":"group the dog with the barn","trigger":"group","target":{"refs":["dog","barn"]},"ctx":"drawing.groups"}
+{"case":"drawing.object.group:core","tier":"complex","text":"I want to move them as one, so group the house and the red car together","trigger":"group","target":{"refs":["house","red car"]}}
+{"case":"drawing.object.group:core","tier":"complex","text":"the boat and the lake belong together; could you group them?","trigger":"group","target":{"refs":["boat","lake"]}}
+{"case":"drawing.object.group:core","tier":"complex","text":"group the circle and the triangle so I can move them at once","trigger":"group","target":{"refs":["circle","triangle"]},"ctx":"drawing.shapes"}
+{"case":"drawing.object.group:core","tier":"complex","text":"the wheat field, the barn and the dog make up the farmyard, so put them in one group","trigger":"put","target":{"refs":["wheat field","barn","dog"]},"ctx":"drawing.groups"}
+{"case":"drawing.object.group:core","tier":"complex","text":"group the sun and the cloud, and then make the cloud grey","trigger":"group","target":{"refs":["sun","cloud"]},"span":"group the sun and the cloud","also":[{"op":"drawing.object.change","span":"make the cloud grey","trigger":"make","target":{"kind":"cloud"},"c":[["drawn.color","grey"]]}]}
+{"case":"drawing.object.group:core","tier":"complex","text":"if it's not too much bother, group the gold star with the heart","trigger":"group","target":{"refs":["gold star","heart"]},"ctx":"drawing.shapes"}
+{"case":"drawing.object.group:core","tier":"complex","text":"everything on the right side - the road and the red car - should be one group","target":{"refs":["road","red car"]}}
+{"case":"drawing.object.group:core","tier":"simplified","text":"group house + tree","trigger":"group","target":{"refs":["house","tree"]}}
+{"case":"drawing.object.group:core","tier":"simplified","text":"sun and cloud, grouped","trigger":"grouped","target":{"refs":["sun","cloud"]}}
+{"case":"drawing.object.group:core","tier":"simplified","text":"group circle, square","trigger":"group","target":{"refs":["circle","square"]},"ctx":"drawing.shapes"}
+{"case":"drawing.object.group:core","tier":"simplified","text":"barn and dog in a group","target":{"refs":["barn","dog"]},"ctx":"drawing.groups"}
+{"case":"drawing.object.group:core","tier":"simplified","text":"group the car and road","trigger":"group","target":{"refs":["car","road"]}}
+{"case":"drawing.object.group:core","tier":"simplified","text":"lake + boat: group","trigger":"group","target":{"refs":["lake","boat"]}}
+{"case":"drawing.object.group:core","tier":"simplified","text":"group these two: heart and triangle","trigger":"group","target":{"refs":["heart","triangle"]},"ctx":"drawing.shapes"}
+{"case":"drawing.object.group:core","tier":"simplified","text":"mountain with cloud, group them","trigger":"group","target":{"refs":["mountain","cloud"]}}
+{"case":"drawing.object.group:core","tier":"simplified","text":"group the farmhouse and the field","trigger":"group","target":{"refs":["farmhouse","field"]},"ctx":"drawing.groups"}
+{"case":"drawing.object.group:label","tier":"equivalent","text":"group the house and the old oak and label the group Home","trigger":"group","target":{"refs":["house","old oak"]},"c":[["drawn.label","Home"]]}
+{"case":"drawing.object.group:label","tier":"equivalent","text":"put the sun and the cloud in a group labelled Sky","trigger":"put","target":{"refs":["sun","cloud"]},"c":[["drawn.label","Sky"]]}
+{"case":"drawing.object.group:label","tier":"equivalent","text":"group the barn and the farmhouse with the label Buildings","trigger":"group","target":{"refs":["barn","farmhouse"]},"c":[["drawn.label","Buildings"]],"ctx":"drawing.groups"}
+{"case":"drawing.object.group:label","tier":"equivalent","text":"make a group of the circle and the square labeled Shapes","trigger":"make","target":{"refs":["circle","square"]},"c":[["drawn.label","Shapes"]],"ctx":"drawing.shapes"}
+{"case":"drawing.object.group:label","tier":"equivalent","text":"group the lake and the sailboat, label: Harbour","trigger":"group","target":{"refs":["lake","sailboat"]},"c":[["drawn.label","Harbour"]]}
+{"case":"drawing.object.group:label","tier":"equivalent","text":"combine the red car and the road into a group that says Traffic","trigger":"combine","target":{"refs":["red car","road"]},"c":[["drawn.label","Traffic"]]}
+{"case":"drawing.object.group:label","tier":"equivalent","text":"group the triangle and the heart and write Favourites on the group","trigger":"group","target":{"refs":["triangle","heart"]},"c":[["drawn.label","Favourites"]],"ctx":"drawing.shapes"}
+{"case":"drawing.object.group:label","tier":"equivalent","text":"join the apple tree and the wheat field in a group with the label Orchard Area","trigger":"join","target":{"refs":["apple tree","wheat field"]},"c":[["drawn.label","Orchard Area"]],"ctx":"drawing.groups"}
+{"case":"drawing.object.group:label","tier":"complex","text":"for the legend, group the mountain and the cloud and give the group the label Highlands","trigger":"group","target":{"refs":["mountain","cloud"]},"c":[["drawn.label","Highlands"]]}
+{"case":"drawing.object.group:label","tier":"complex","text":"I'm making a map key: group the house and the road, and the label should read Town","trigger":"group","target":{"refs":["house","road"]},"c":[["drawn.label","Town"]]}
+{"case":"drawing.object.group:label","tier":"complex","text":"the dog and the barn go together, so group them and label them Farmyard","trigger":"group","target":{"refs":["dog","barn"]},"c":[["drawn.label","Farmyard"]],"ctx":"drawing.groups"}
+{"case":"drawing.object.group:label","tier":"complex","text":"could you group the gold star and the heart? Label the group Awards, please","trigger":"group","target":{"refs":["gold star","heart"]},"c":[["drawn.label","Awards"]],"ctx":"drawing.shapes"}
+{"case":"drawing.object.group:label","tier":"complex","text":"group the sun and the cloud with the label Daylight, then move them to the top","trigger":"group","target":{"refs":["sun","cloud"]},"c":[["drawn.label","Daylight"]],"span":"group the sun and the cloud with the label Daylight","also":[{"op":"drawing.object.place","span":"move them to the top","trigger":"move","target":{"ctx":true},"c":[["drawn.at","top","top","region"]]}]}
+{"case":"drawing.object.group:label","tier":"complex","text":"if possible, put the farmhouse, the barn and the dog in one group and label it Smith Farm","trigger":"put","target":{"refs":["farmhouse","barn","dog"]},"c":[["drawn.label","Smith Farm"]],"ctx":"drawing.groups"}
+{"case":"drawing.object.group:label","tier":"simplified","text":"group house+tree, label Garden","trigger":"group","target":{"refs":["house","tree"]},"c":[["drawn.label","Garden"]]}
+{"case":"drawing.object.group:label","tier":"simplified","text":"sun and cloud, group label Daytime","target":{"refs":["sun","cloud"]},"c":[["drawn.label","Daytime"]]}
+{"case":"drawing.object.group:label","tier":"simplified","text":"group circle and square, label Basics","trigger":"group","target":{"refs":["circle","square"]},"c":[["drawn.label","Basics"]],"ctx":"drawing.shapes"}
+{"case":"drawing.object.group:label","tier":"simplified","text":"barn + farmhouse, labelled Farm Buildings","target":{"refs":["barn","farmhouse"]},"c":[["drawn.label","Farm Buildings"]],"ctx":"drawing.groups"}
+{"case":"drawing.object.group:label","tier":"simplified","text":"group lake and boat with label Marina","trigger":"group","target":{"refs":["lake","boat"]},"c":[["drawn.label","Marina"]]}
+{"case":"drawing.object.group:label","tier":"simplified","text":"triangle and heart group labeled Love","target":{"refs":["triangle","heart"]},"c":[["drawn.label","Love"]],"ctx":"drawing.shapes"}
+{"case":"drawing.object.group:label","tier":"simplified","text":"group the car and road, label it Commute","trigger":"group","target":{"refs":["car","road"]},"c":[["drawn.label","Commute"]]}
+{"case":"drawing.object.group:label","tier":"simplified","text":"group mountain + cloud and label it something fitting","trigger":"group","target":{"refs":["mountain","cloud"]},"c":[["drawn.label","something fitting","?"]]}
+{"case":"drawing.object.group:label","tier":"simplified","text":"dog and apple tree, group, label Shade","trigger":"group","target":{"refs":["dog","apple tree"]},"c":[["drawn.label","Shade"]],"ctx":"drawing.groups"}
+{"case":"drawing.object.group:name","tier":"equivalent","text":"group the house and the old oak and call the group Homestead","trigger":"group","target":{"refs":["house","old oak"]},"c":[["drawn.name","Homestead"]]}
+{"case":"drawing.object.group:name","tier":"equivalent","text":"make a group named Sky Pair from the sun and the cloud","trigger":"make","target":{"refs":["sun","cloud"]},"c":[["drawn.name","Sky Pair"]]}
+{"case":"drawing.object.group:name","tier":"equivalent","text":"group the circle and the square under the name Pair","trigger":"group","target":{"refs":["circle","square"]},"c":[["drawn.name","Pair"]],"ctx":"drawing.shapes"}
+{"case":"drawing.object.group:name","tier":"complex","text":"group the barn and the farmhouse; I'll refer to the group as Buildings later","trigger":"group","target":{"refs":["barn","farmhouse"]},"c":[["drawn.name","Buildings"]],"ctx":"drawing.groups"}
+{"case":"drawing.object.group:name","tier":"complex","text":"please group the red car and the road, and name it Street Scene","trigger":"group","target":{"refs":["red car","road"]},"c":[["drawn.name","Street Scene"]]}
+{"case":"drawing.object.group:name","tier":"simplified","text":"group lake + boat as Harbour","trigger":"group","target":{"refs":["lake","boat"]},"c":[["drawn.name","Harbour"]]}
+{"case":"drawing.object.group:name","tier":"simplified","text":"sun and cloud, group called Weather","target":{"refs":["sun","cloud"]},"c":[["drawn.name","Weather"]]}
+{"case":"drawing.object.group:name","tier":"simplified","text":"group triangle and heart, name it Duo","trigger":"group","target":{"refs":["triangle","heart"]},"c":[["drawn.name","Duo"]],"ctx":"drawing.shapes"}
+{"case":"drawing.object.group:name","tier":"simplified","text":"group the dog and the barn, any name","trigger":"group","target":{"refs":["dog","barn"]},"c":[["drawn.name","any name","?"]],"ctx":"drawing.groups"}
+{"case":"drawing.object.ungroup:core","tier":"equivalent","text":"ungroup the farm","trigger":"ungroup","target":{"name":"farm"},"ctx":"drawing.groups"}
+{"case":"drawing.object.ungroup:core","tier":"equivalent","text":"break up the Farm group","trigger":"break up","target":{"name":"Farm"},"ctx":"drawing.groups"}
+{"case":"drawing.object.ungroup:core","tier":"equivalent","text":"split the farm group into its pieces","trigger":"split","target":{"name":"farm"},"ctx":"drawing.groups"}
+{"case":"drawing.object.ungroup:core","tier":"equivalent","text":"could the Farm be ungrouped?","trigger":"ungrouped","target":{"name":"Farm"},"ctx":"drawing.groups"}
+{"case":"drawing.object.ungroup:core","tier":"complex","text":"I need to move the dog on its own, so ungroup the farm first","trigger":"ungroup","target":{"name":"farm"},"ctx":"drawing.groups"}
+{"case":"drawing.object.ungroup:core","tier":"complex","text":"the Sky group was a mistake; please dissolve it","trigger":"dissolve","target":{"name":"Sky"},"ctx":[{"kind":"group","name":"Sky"},{"kind":"sun","name":"Sun"},{"kind":"cloud","name":"Cloud"}]}
+{"case":"drawing.object.ungroup:core","tier":"simplified","text":"ungroup this group","trigger":"ungroup","target":{"ctx":true},"ctx":"drawing.groups"}
+{"case":"drawing.object.ungroup:core","tier":"simplified","text":"farm ungroup","trigger":"ungroup","target":{"name":"farm"},"ctx":"drawing.groups"}
+{"case":"drawing.object.ungroup:core","tier":"simplified","text":"unbundle the Harbour group","trigger":"unbundle","target":{"name":"Harbour"},"ctx":[{"kind":"group","name":"Harbour"},{"kind":"lake","name":"Lake"},{"kind":"boat","name":"Sailboat"}]}
+{"case":"drawing.object.make:kind-only","tier":"equivalent","text":"draw a straight line","trigger":"draw","target":{"kind":"line"}}
+{"case":"drawing.object.make:relation","tier":"equivalent","text":"draw a river below the mountain","trigger":"draw","target":{"kind":"river"},"c":[["drawn.relation","below","below",{"op":"relation","anchor":"the mountain"}]]}
+{"case":"drawing.object.make:relation","tier":"simplified","text":"a cat under the old oak","target":{"kind":"cat"},"c":[["drawn.relation","under","under",{"op":"relation","anchor":"the old oak"}]]}
+{"case":"drawing.object.make:relation","tier":"complex","text":"the circle looks empty, so draw a small star inside the circle","trigger":"draw","target":{"kind":"star"},"c":[["drawn.size","small","small","degree"],["drawn.relation","inside","inside",{"op":"relation","anchor":"the circle"}]],"ctx":"drawing.shapes"}
+{"case":"drawing.object.place:relation","tier":"equivalent","text":"move the dog outside the barn","trigger":"move","target":{"kind":"dog"},"c":[["drawn.relation","outside","outside",{"op":"relation","anchor":"the barn"}]],"ctx":"drawing.groups"}
+{"case":"drawing.object.make:dimensions","tier":"equivalent","text":"add a river 500 wide and 40 high","trigger":"add","target":{"kind":"river"},"c":[["drawn.width","500 wide"],["drawn.height","40 high"]]}
