@@ -368,8 +368,8 @@
     "worlds/words/ed.json": "6b969840b04e8c56",
     "worlds/words.bloom.json": "0710f3899a6043f6"
   },
-  "builtAt": "2026-11-20T15:16:32.381Z",
-  "commit": "117f4bfd0",
+  "builtAt": "2026-11-20T15:17:16.505Z",
+  "commit": "4eabaa419",
   "catalog": "87d8c1e4260513b6dbe0609ff24e81440e621675",
   "assets": {
     "app.mjs": "45f9d984f1",
