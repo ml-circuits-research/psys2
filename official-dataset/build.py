@@ -33,8 +33,10 @@ SOURCES = [
     ('ui-natural-v1', DATA / 'ui-natural-v1' / 'authored.jsonl', 'C1 commands executed through the editors (natural, synonym, elliptical, omission)'),
     ('ui-human-v1', DATA / 'ui-human-v1' / 'examples.jsonl', 'human paraphrases (equivalent/complex/simplified) of executed ui-natural seeds'),
     ('ui-coverage-v2', DATA / 'ui-coverage-v2' / 'examples.jsonl', 'case coverage of every tab operation, at least 20 rows per case (build.py)'),
+    ('ui-tiers-v1', DATA / 'ui-tiers-v1' / 'examples.jsonl', 'tier and near-miss supplements of ui-coverage-v2 cases (build.py)'),
     ('ui-relations-v1', DATA / 'ui-relations-v1' / 'examples.jsonl', 'relative-position placement requests (generate.py)'),
     ('ui-comparatives-v1', DATA / 'ui-comparatives-v1' / 'examples.jsonl', 'comparative changes of existing objects (generate.py)'),
+    ('ui-features-v1', DATA / 'ui-features-v1' / 'examples.jsonl', 'avatar part features: length (absolute and comparative) and feel (generate.py)'),
     ('demo-tool-profile', DATA / 'demo-tool-profile' / 'active.jsonl.gz', 'the corpus of the deployed reader: haiku-v1/v2 authored data plus demo tool supplements'),
     ('main-synthetic', REPO / 'main-synthetic-dataset' / 'examples.jsonl', 'owner synthetic set (generate-reader-datasets skill); converted, mostly dropped'),
 ]
@@ -87,6 +89,8 @@ def build_inventory():
     old = json.loads((DATA / 'demo-tool-profile' / 'inventory.json').read_text())
     new = json.loads((DATA / 'ui-natural-v1' / 'inventory.json').read_text())
     inventory = union.merge_inventory(old, new)
+    # Declared avatar part features with their own key (part.length, values read from the catalog by generate.py).
+    inventory = union.merge_inventory(inventory, json.loads((DATA / 'ui-features-v1' / 'inventory.json').read_text()))
     shared = union.load_preparer()
     families = shared.target_families(inventory)
     inventory['request']['target']['keys']['type']['values'] = sorted({t for types in families.values() for t in types})
@@ -274,6 +278,8 @@ def anchors_fix(row, stats, inv):
 
 
 DETERMINERS = ('the', 'this', 'that', 'these', 'those')
+# A possessive before a kind word is a definite description too ("her hair", "his nose": the avatar's own part).
+POSSESSIVES = ('her', 'his', 'its', 'their', 'my', 'your', 'our')
 
 
 def kind_vocabulary():
@@ -296,7 +302,7 @@ def definite_description_fix(row, stats, lemmas):
         if not name or t.get('mode') != 'existing' or 'kind' in t:
             continue
         words = name.split()
-        if words[0].lower() in DETERMINERS and len(words) > 1:
+        if words[0].lower() in DETERMINERS + POSSESSIVES and len(words) > 1:
             noun = ' '.join(words[1:])
         else:
             noun = name
@@ -357,11 +363,31 @@ ACT_BY_OPERATION = {'diagram.link.make': ('link', 'connect'), 'diagram.node.layo
 KEY_RENAMES = {('calendar', 'meeting.duration'): 'meeting.length', ('drawing', 'drawn.color'): 'drawn.colour', ('drawing', 'part.color'): 'part.colour'}
 
 
+def length_steps():
+    """The ordered feature `length` of avatar parts: its steps as the catalog's k.values scale declares them."""
+    text = (KNOWLEDGE / 'k.values' / 'shards' / 'scales.sop').read_text()
+    return {m.group(1) for m in re.finditer(r'k\.values\.step scale=length name=(\w+) rank=\d+', text)}
+
+
+LENGTH_STEPS = length_steps()
+
+
 def harmonise(row, stats):
     for c in (c for q in row['requests'] for c in q.get('constraints') or []):
         new = KEY_RENAMES.get((row['world'], c['key']))
         if new:
             stats[f'key-{c["key"]}-as-{new}'] += 1; c['key'] = new
+    # A part length said as a feature value ("long", property "length") is the ordinal key part.length (ui-features-v1).
+    if row['world'] == 'avatar':
+        for q in row['requests']:
+            cs = q.get('constraints') or []
+            values = [c for c in cs if c['key'] == 'part.value' and c.get('value') in LENGTH_STEPS]
+            prop = [c for c in cs if c['key'] == 'part.property' and c.get('value') in (None, 'length')]
+            if values and all(c.get('value') in (None, 'length') for c in cs if c['key'] == 'part.property'):
+                for c in values:
+                    c['key'] = 'part.length'; c['operator'] = 'degree'
+                q['constraints'] = [c for c in cs if c not in prop]
+                stats['avatar-length-value-as-part.length'] += len(values)
     if len(row['requests']) != 1:
         return row
     q = row['requests'][0]

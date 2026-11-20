@@ -163,6 +163,16 @@
      "head": "span",
      "src": "actual avatar native capability parameters"
     },
+    "length": {
+     "concept": "length",
+     "head": "class",
+     "src": "k.faces.variant.length on the k.values scale length (catalog)",
+     "values": [
+      "short",
+      "medium",
+      "long"
+     ]
+    },
     "place": {
      "concept": "place",
      "head": "class",

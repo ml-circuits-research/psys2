@@ -46,6 +46,12 @@ Issue counts on the untouched source rows (per request or constraint where the i
 | warning:target-kind_span-ambiguous | 11 |
 | warning:numeric-value-not-in-surface | 6 |
 
+### ui-tiers-v1 (23 rows)
+
+| issue | rows |
+| --- | ---: |
+| warning:selector-not-in-context | 3 |
+
 ### ui-relations-v1 (5,374 rows)
 
 | issue | rows |
@@ -54,6 +60,10 @@ Issue counts on the untouched source rows (per request or constraint where the i
 | warning:value-span-ambiguous | 2 |
 
 ### ui-comparatives-v1 (786 rows)
+
+No issue found.
+
+### ui-features-v1 (249 rows)
 
 No issue found.
 
@@ -90,10 +100,10 @@ Fixed or converted:
 
 | fix | rows |
 | --- | ---: |
-| definite-description-name-to-kind | 224 |
+| definite-description-name-to-kind | 280 |
 | key-drawn.color-as-drawn.colour | 137 |
 | absolute-degree-word-as-degree | 95 |
-| class-value-outside-bank-unlabelled | 88 |
+| class-value-outside-bank-unlabelled | 32 |
 | key-meeting.duration-as-meeting.length | 18 |
 | act-arrange-for-diagram.group.layout | 17 |
 | key-part.color-as-part.colour | 9 |
@@ -120,9 +130,9 @@ Fixed or converted:
 
 | fix | rows |
 | --- | ---: |
-| definite-description-name-to-kind | 504 |
-| class-value-outside-bank-unlabelled | 330 |
+| definite-description-name-to-kind | 683 |
 | qualitative-value-unlabelled | 329 |
+| class-value-outside-bank-unlabelled | 151 |
 | absolute-degree-word-as-degree | 110 |
 | key-drawn.color-as-drawn.colour | 95 |
 | comparative-as-delta-step | 61 |
@@ -159,22 +169,37 @@ Fixed or converted:
 
 | fix | rows |
 | --- | ---: |
-| definite-description-name-to-kind | 66 |
+| definite-description-name-to-kind | 121 |
 | comparative-as-delta-step | 55 |
 | absolute-degree-word-as-degree | 50 |
 | key-drawn.color-as-drawn.colour | 40 |
 | anchor-span-as-anchor-mention | 26 |
 | key-part.color-as-part.colour | 9 |
+| avatar-length-value-as-part.length | 1 |
 
 Kept with a warning (not an error; see README):
 
 | warning | rows |
 | --- | ---: |
-| selector-not-in-context | 95 |
+| selector-not-in-context | 89 |
 | value-span-ambiguous | 57 |
 | target-name_span-ambiguous | 28 |
 | target-kind_span-ambiguous | 11 |
 | numeric-value-not-in-surface | 6 |
+
+### ui-tiers-v1: 23 in, 23 kept
+
+Fixed or converted:
+
+| fix | rows |
+| --- | ---: |
+| comparative-as-delta-step | 2 |
+
+Kept with a warning (not an error; see README):
+
+| warning | rows |
+| --- | ---: |
+| selector-not-in-context | 3 |
 
 ### ui-relations-v1: 5,374 in, 5,374 kept
 
@@ -192,6 +217,15 @@ Kept with a warning (not an error; see README):
 | value-span-ambiguous | 2 |
 
 ### ui-comparatives-v1: 786 in, 786 kept
+
+### ui-features-v1: 249 in, 247 kept
+
+Dropped:
+
+| reason | rows |
+| --- | ---: |
+| dropped:duplicate-text | 1 |
+| dropped:conflicting-label-for-identical-text | 1 |
 
 ### demo-tool-profile: 36,999 in, 27,525 kept
 
@@ -233,7 +267,7 @@ Fixed or converted:
 | converted:avatar | 266 |
 | converted:node | 206 |
 | absolute-degree-word-as-degree | 171 |
-| definite-description-name-to-kind | 99 |
+| definite-description-name-to-kind | 115 |
 | converted:block | 98 |
 | converted:meeting | 86 |
 | converted:compound | 32 |
@@ -287,4 +321,4 @@ Kept with a warning (not an error; see README):
 
 - unresolved errors: **0**
 - families present in more than one split: **0**
-- label conflicts between identical texts, resolved by source priority: {'ui-natural-v1<-demo-tool-profile': 5, 'ui-human-v1<-demo-tool-profile': 1, 'demo-tool-profile<-demo-tool-profile': 103}
+- label conflicts between identical texts, resolved by source priority: {'ui-human-v1<-ui-features-v1': 1, 'ui-natural-v1<-demo-tool-profile': 5, 'ui-human-v1<-demo-tool-profile': 1, 'demo-tool-profile<-demo-tool-profile': 103}

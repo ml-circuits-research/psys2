@@ -544,7 +544,7 @@
     }
   ],
   "builder": "official-dataset/build.py",
-  "builderSha256": "82b35a164ef9cd85b8a9443b3c75e065720b52a649f2e7674f902b673d4642cb",
+  "builderSha256": "6ba178d513b3ee8de582252ceee11463272dca073f482e4e90490f2350c367ba",
   "sources": [
     {
       "name": "ui-natural-v1",
@@ -565,9 +565,9 @@
         "act-remove-for-diagram.selection.remove": 5,
         "act-ungroup-for-diagram.group.ungroup": 5,
         "anchor-span-as-anchor-mention": 3,
-        "class-value-outside-bank-unlabelled": 88,
+        "class-value-outside-bank-unlabelled": 32,
         "comparative-as-delta-step": 3,
-        "definite-description-name-to-kind": 224,
+        "definite-description-name-to-kind": 280,
         "key-drawn.color-as-drawn.colour": 137,
         "key-meeting.duration-as-meeting.length": 18,
         "key-part.color-as-part.colour": 9,
@@ -597,9 +597,9 @@
         "act-remove-for-diagram.selection.remove": 45,
         "act-ungroup-for-diagram.group.ungroup": 23,
         "anchor-span-as-anchor-mention": 60,
-        "class-value-outside-bank-unlabelled": 330,
+        "class-value-outside-bank-unlabelled": 151,
         "comparative-as-delta-step": 61,
-        "definite-description-name-to-kind": 504,
+        "definite-description-name-to-kind": 683,
         "key-drawn.color-as-drawn.colour": 95,
         "key-meeting.duration-as-meeting.length": 40,
         "key-part.color-as-part.colour": 41,
@@ -620,10 +620,25 @@
       "fixes": {
         "absolute-degree-word-as-degree": 50,
         "anchor-span-as-anchor-mention": 26,
+        "avatar-length-value-as-part.length": 1,
         "comparative-as-delta-step": 55,
-        "definite-description-name-to-kind": 66,
+        "definite-description-name-to-kind": 121,
         "key-drawn.color-as-drawn.colour": 40,
         "key-part.color-as-part.colour": 9
+      }
+    },
+    {
+      "name": "ui-tiers-v1",
+      "path": "training/sop-bert/data/ui-tiers-v1/examples.jsonl",
+      "description": "tier and near-miss supplements of ui-coverage-v2 cases (build.py)",
+      "gitCommit": null,
+      "sha256": "e21a7e63df4b075d2faf78d7c558360d3034c715fdbd302568c5a035ef3cb17f",
+      "rowsIn": 23,
+      "rowsKept": 23,
+      "rowsDropped": 0,
+      "dropReasons": {},
+      "fixes": {
+        "comparative-as-delta-step": 2
       }
     },
     {
@@ -651,6 +666,21 @@
       "rowsKept": 786,
       "rowsDropped": 0,
       "dropReasons": {},
+      "fixes": {}
+    },
+    {
+      "name": "ui-features-v1",
+      "path": "training/sop-bert/data/ui-features-v1/examples.jsonl",
+      "description": "avatar part features: length (absolute and comparative) and feel (generate.py)",
+      "gitCommit": null,
+      "sha256": "1a9ff4f740f9471565967189550ae3205dacd5bd9c74054fdf3d9ec7d7e42635",
+      "rowsIn": 249,
+      "rowsKept": 247,
+      "rowsDropped": 2,
+      "dropReasons": {
+        "dropped:conflicting-label-for-identical-text": 1,
+        "dropped:duplicate-text": 1
+      },
       "fixes": {}
     },
     {
@@ -725,7 +755,7 @@
         "converted:drawn": 414,
         "converted:meeting": 86,
         "converted:node": 206,
-        "definite-description-name-to-kind": 99,
+        "definite-description-name-to-kind": 115,
         "key-drawn.color-as-drawn.colour": 7,
         "trigger-removed-no-verb-in-text": 3828,
         "trigger-replaced-by-verb-span": 7364
@@ -835,13 +865,14 @@
     }
   ],
   "splits": {
-    "train": 41870,
-    "dev": 5128,
-    "test": 4880
+    "train": 42115,
+    "dev": 5102,
+    "test": 5001
   },
-  "families": 23299,
+  "families": 23340,
   "leakedFamilies": 0,
   "labelConflictsResolvedByPriority": {
+    "ui-human-v1<-ui-features-v1": 1,
     "ui-natural-v1<-demo-tool-profile": 5,
     "ui-human-v1<-demo-tool-profile": 1,
     "demo-tool-profile<-demo-tool-profile": 103
@@ -850,50 +881,52 @@
     "ui-natural-v1": 314,
     "ui-human-v1": 716,
     "ui-coverage-v2": 595,
+    "ui-tiers-v1": 3,
     "ui-relations-v1": 1370,
     "ui-comparatives-v1": 154,
-    "main-synthetic": 1213
+    "ui-features-v1": 66,
+    "main-synthetic": 1214
   },
   "nonReaderLabelFieldsRemoved": {
-    "raw_value": 485,
+    "raw_value": 250,
     "anchor_fill": 8125,
     "anchor_span": 437,
-    "qualitative": 426,
-    "mention": 29,
+    "qualitative": 430,
+    "mention": 32,
     "anchor_kind": 5374
   },
   "kindVocabulary": {
-    "path": "docs/webchat/models/sop-bert/1139b40bff92d2b19a034164774580a15e28a7063f83c8bee35c19f02add9e6e/bindings.json",
-    "sha256": "589a96e458038e9987f3c0c47c2245e7a4ea73d1ab91d9fe05d7e5d1452ba14b"
+    "path": "docs/webchat/models/sop-bert/b8b1a4dd32a13c44555225fe894e8357766d95071a86f9a5e32a93fc39fda28a/bindings.json",
+    "sha256": "13f0fe92e4ca33a12bada238ba32614fae941682734f2d96d001cfb207dde995"
   },
   "files": {
     "STATS.md": {
-      "sha256": "6c30bc586ee5dbc36e60ddb8321bcb020a0de0248d69c3fa39f07b253df8b5b7",
-      "bytes": 6737
+      "sha256": "df342d92423020dad62a217f1bbe184585933008ceba440c6fb9d78c470cb57d",
+      "bytes": 6759
     },
     "VALIDATION.md": {
-      "sha256": "87d342c92a38557267de01ba13e5a89a18f732670325a77820da0cd9902c700c",
-      "bytes": 9110
+      "sha256": "6d23507dba629ab9d1bd40099b8b22e47768fe83e9bc80d1fe15f6a2cd603fcd",
+      "bytes": 9403
     },
     "audit-sample.md": {
-      "sha256": "09fac5f70a63007076527e1d02f641fab652e7cab65cabf386b15c2ff5b4ba19",
-      "bytes": 44206
+      "sha256": "5f6ed925023780ab651d118be77f7c1a9c5cd1422d412c7367eaa7cadb022984",
+      "bytes": 43712
     },
     "dev.jsonl": {
-      "sha256": "52799e25acfa090bde9c90eaa30abd7efbe79a9d1256ff70e20fd260c9acabf5",
-      "bytes": 5530908
+      "sha256": "a67cb95772fa7437452d92565e6322b7f21208e6aec68cc8209cdc7c5f091ec7",
+      "bytes": 5459906
     },
     "inventory.json": {
-      "sha256": "e3c7fbe6eef59087f70e0797b5f959ff5ce42951ed9f5ecb6813b6842c4e11da",
-      "bytes": 50976
+      "sha256": "da8966e3e1b1da1e64241a67659a2b7847afaf29291a494c9ae0b08946b66f7e",
+      "bytes": 51192
     },
     "test.jsonl": {
-      "sha256": "fd4475261b1195293fbb58ce6dd05ca9aa89608955abfa0396aa3d4f8bf664f9",
-      "bytes": 5267500
+      "sha256": "bf0dd0637ff1da2aa288bbb30d46caac9f3c1d601f2d1878b88cbc19f7c7cc20",
+      "bytes": 5450287
     },
     "train.jsonl.gz": {
-      "sha256": "a87c381ff03466416a045eb1d56ea95f2b23c161c6759ed6014c9b14d615c3f5",
-      "bytes": 2175408
+      "sha256": "6bfde700618c54bc00e0edd61c8596167475c3aff66a2f83e613e939b9feb87a",
+      "bytes": 2187024
     }
   },
   "policy": {
@@ -901,8 +934,10 @@
       "ui-natural-v1",
       "ui-human-v1",
       "ui-coverage-v2",
+      "ui-tiers-v1",
       "ui-relations-v1",
       "ui-comparatives-v1",
+      "ui-features-v1",
       "demo-tool-profile",
       "main-synthetic"
     ],

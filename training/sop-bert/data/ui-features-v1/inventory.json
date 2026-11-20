@@ -1,0 +1,18 @@
+{
+ "avatar": {
+  "part": {
+   "keys": {
+    "length": {
+     "head": "class",
+     "concept": "length",
+     "values": [
+      "short",
+      "medium",
+      "long"
+     ],
+     "src": "k.faces.variant.length on the k.values scale length (catalog)"
+    }
+   }
+  }
+ }
+}

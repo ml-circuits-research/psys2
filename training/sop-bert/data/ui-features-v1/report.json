@@ -1,0 +1,55 @@
+{
+ "rows": 249,
+ "cases": {
+  "avatar.part.length:shorter": {
+   "equivalent": 12,
+   "complex": 7,
+   "simplified": 7
+  },
+  "avatar.part.length:longer": {
+   "equivalent": 12,
+   "complex": 7,
+   "simplified": 7
+  },
+  "avatar.part.length:long": {
+   "equivalent": 12,
+   "complex": 7,
+   "simplified": 7
+  },
+  "avatar.part.length:short": {
+   "equivalent": 12,
+   "complex": 7,
+   "simplified": 7
+  },
+  "avatar.part.length:medium": {
+   "equivalent": 10,
+   "complex": 7,
+   "simplified": 7
+  },
+  "avatar.part.length:beard": {
+   "equivalent": 11,
+   "complex": 7,
+   "simplified": 7
+  },
+  "avatar.part.value:curly": {
+   "equivalent": 10,
+   "complex": 7,
+   "simplified": 7
+  },
+  "avatar.part.value:straight": {
+   "equivalent": 10,
+   "complex": 7,
+   "simplified": 7
+  },
+  "avatar.part.value:wavy": {
+   "equivalent": 10,
+   "complex": 7,
+   "simplified": 7
+  },
+  "avatar.part.value:brows": {
+   "equivalent": 10,
+   "complex": 7,
+   "simplified": 7
+  }
+ }
+}

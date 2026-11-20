@@ -1,16 +1,16 @@
 # Statistics
 
-51,878 messages; train 41,870, dev 5,128, test 4,880.
+52,218 messages; train 42,115, dev 5,102, test 5,001.
 
 ## Tab (world) × split
 
 | world | train | dev | test | total |
 | --- | ---: | ---: | ---: | ---: |
-| drawing | 18,531 | 2,266 | 2,256 | 23,053 |
-| diagram | 9,751 | 1,308 | 1,094 | 12,153 |
-| document | 7,475 | 869 | 891 | 9,235 |
-| calendar | 3,783 | 405 | 392 | 4,580 |
-| avatar | 2,330 | 280 | 247 | 2,857 |
+| drawing | 18,517 | 2,269 | 2,271 | 23,057 |
+| diagram | 9,748 | 1,268 | 1,144 | 12,160 |
+| document | 7,486 | 866 | 890 | 9,242 |
+| calendar | 3,798 | 391 | 399 | 4,588 |
+| avatar | 2,566 | 308 | 297 | 3,171 |
 
 ## Source
 
@@ -18,17 +18,19 @@
 | --- | ---: |
 | demo-tool-profile | 27,525 |
 | ui-relations-v1 | 6,744 |
-| main-synthetic | 6,141 |
+| main-synthetic | 6,142 |
 | ui-human-v1 | 4,965 |
 | ui-coverage-v2 | 3,775 |
 | ui-natural-v1 | 1,788 |
 | ui-comparatives-v1 | 940 |
+| ui-features-v1 | 313 |
+| ui-tiers-v1 | 26 |
 
 ## Requests per message
 
 | requests | rows |
 | --- | ---: |
-| 1 | 45,524 |
+| 1 | 45,864 |
 | 2 | 5,065 |
 | 0 | 657 |
 | 3 | 583 |
@@ -41,8 +43,8 @@
 
 | act | rows |
 | --- | ---: |
-| make | 29,790 |
-| change | 13,906 |
+| make | 29,804 |
+| change | 14,232 |
 | place | 4,574 |
 | answer | 3,161 |
 | connect | 2,482 |
@@ -61,19 +63,19 @@
 | drawing.drawn | 23,627 |
 | diagram.node | 7,844 |
 | document.section | 6,635 |
-| calendar.meeting | 3,866 |
+| calendar.meeting | 3,874 |
 | diagram.link | 2,976 |
-| diagram.chart | 2,252 |
-| document.text | 2,239 |
-| avatar.part | 1,820 |
-| document.block | 1,261 |
+| diagram.chart | 2,255 |
+| document.text | 2,242 |
+| avatar.part | 2,133 |
+| document.block | 1,265 |
 | calendar.calendar | 1,115 |
-| avatar.face | 1,081 |
-| diagram.group | 813 |
+| avatar.face | 1,082 |
+| diagram.group | 817 |
 | drawing.part | 647 |
 | calendar.room | 283 |
 | diagram.sketch | 268 |
-| drawing.page | 213 |
+| drawing.page | 217 |
 | document.document | 210 |
 | document.inline | 136 |
 | diagram.page | 120 |
@@ -91,13 +93,13 @@
 | document.block.change | 2,564 |
 | compound | 2,380 |
 | diagram.node.change | 1,881 |
-| calendar.meeting.add | 1,298 |
+| calendar.meeting.add | 1,306 |
 | drawing.catalog.make | 1,281 |
-| document.write | 1,006 |
+| document.write | 1,009 |
 | chart.make | 936 |
+| avatar.part.change | 800 |
 | diagram.node.make | 711 |
 | calendar.meeting.move | 658 |
-| avatar.part.change | 605 |
 | diagram.link.make | 545 |
 | drawing.object.place | 459 |
 | avatar.part.add | 445 |
@@ -106,16 +108,17 @@
 | document.block.make | 374 |
 | diagram.link.change | 346 |
 | chart.change | 302 |
-| avatar.face.preset | 297 |
+| avatar.face.preset | 298 |
 | document.section.remove | 265 |
 | drawing.part.change | 226 |
 | calendar.meeting.change | 217 |
 | node.observe | 214 |
+| avatar.part.feature | 199 |
 | drawing.drawn.size.delta | 185 |
 | drawing.drawn.height.delta | 181 |
-| drawing.ids.show | 172 |
+| drawing.ids.show | 176 |
 | drawing.object.group | 169 |
-| document.block.mark | 161 |
+| document.block.mark | 165 |
 | avatar.face.compose | 161 |
 | document.section.change | 150 |
 | calendar.room.add | 148 |
@@ -124,11 +127,11 @@
 | document.section.make | 138 |
 | diagram.node.select | 134 |
 | avatar.part.size.delta | 131 |
+| diagram.group.resize | 126 |
 | document.block.select | 125 |
 | calendar.calendar.add | 125 |
 | avatar.ids.show | 124 |
 | drawing.part.place | 122 |
-| diagram.group.resize | 122 |
 | drawing.part.select | 117 |
 | diagram.ids.show | 117 |
 | document.list.make | 117 |
@@ -144,8 +147,7 @@
 | block.observe | 98 |
 | avatar.part.resize | 97 |
 | avatar.face.resize | 96 |
-| drawing.part.remove | 95 |
-| … 71 more | 3,998 |
+| … 71 more | 4,015 |
 
 ## Relation
 
@@ -179,31 +181,30 @@
 | diagram.node.colour | 4,208 |
 | diagram.node.label | 4,149 |
 | drawing.drawn.name | 3,550 |
-| calendar.meeting.day | 3,174 |
-| calendar.meeting.time | 2,925 |
+| calendar.meeting.day | 3,182 |
+| calendar.meeting.time | 2,933 |
 | diagram.link.to | 2,675 |
 | diagram.link.from | 2,624 |
 | calendar.meeting.title | 2,308 |
 | calendar.meeting.length | 2,198 |
 | drawing.drawn.size | 1,837 |
-| calendar.meeting.calendar | 1,352 |
+| calendar.meeting.calendar | 1,356 |
 | drawing.drawn.ids | 1,132 |
 | document.text.about | 1,098 |
 | document.text.words | 1,041 |
-| document.text.title | 1,030 |
-| calendar.meeting.room | 1,002 |
+| document.text.title | 1,032 |
+| calendar.meeting.room | 1,006 |
 | calendar.calendar.name | 968 |
-| document.text.content | 958 |
-| diagram.chart.title | 945 |
+| document.text.content | 961 |
+| diagram.chart.title | 948 |
 | diagram.chart.labels | 936 |
 | diagram.chart.values | 866 |
-| avatar.part.ids | 864 |
 | avatar.part.variant | 843 |
+| avatar.part.ids | 798 |
 | drawing.drawn.width | 735 |
 | diagram.node.ids | 726 |
 | drawing.drawn.height | 646 |
-| avatar.face.id | 566 |
-| diagram.group.id | 530 |
+| diagram.group.id | 534 |
 | calendar.meeting.id | 501 |
 | document.block.rows | 475 |
 | document.section.order | 472 |
@@ -213,26 +214,27 @@
 | drawing.drawn.label | 446 |
 | drawing.part.index | 411 |
 | drawing.part.id | 359 |
-| document.block.id | 326 |
+| document.block.id | 329 |
 | avatar.part.size | 321 |
-| avatar.face.preset | 299 |
+| avatar.face.preset | 300 |
 | diagram.link.ids | 298 |
 | avatar.part.id | 293 |
-| document.block.text | 282 |
+| document.block.text | 286 |
 | diagram.node.x | 275 |
 | document.section.id | 275 |
 | document.block.items | 270 |
 | diagram.node.y | 268 |
+| avatar.face.id | 267 |
 | diagram.chart.sort | 255 |
 | document.section.text | 250 |
 | document.block.name | 225 |
 | diagram.node.n | 215 |
 | diagram.group.ids | 214 |
 | diagram.group.label | 201 |
+| avatar.part.value | 198 |
+| avatar.part.length | 197 |
 | diagram.group.labels | 187 |
-| diagram.group.values | 187 |
-| diagram.node.layout | 178 |
-| … 113 more | 8,164 |
+| … 114 more | 8,474 |
 
 ## Style (top 40)
 
@@ -244,14 +246,14 @@
 | human-equivalent | 2,337 |
 | human-simplified | 1,825 |
 | direct | 1,770 |
+| coverage-equivalent | 1,568 |
 | mechanical-trigger | 1,538 |
-| coverage-equivalent | 1,423 |
-| coverage-simplified | 1,347 |
+| coverage-simplified | 1,439 |
 | mechanical | 1,241 |
 | human-complex | 1,182 |
+| coverage-complex | 1,107 |
 | demo-tool-profile | 1,079 |
 | mechanical-orphan | 1,079 |
-| coverage-complex | 1,005 |
 | comparative-natural | 940 |
 | mechanical-typo | 764 |
 | mechanical-question | 506 |
@@ -260,9 +262,9 @@
 | human-mislead | 101 |
 | human-reorder | 48 |
 | mechanical-numberwords | 46 |
+| human-typo | 44 |
 | mechanical-orphan2 | 44 |
 | mechanical-simplified | 44 |
-| human-typo | 43 |
 | human-syn | 41 |
 | human-compound | 19 |
 | human-preference | 19 |

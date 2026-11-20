@@ -18,7 +18,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 OFFICIAL = ROOT.parents[1] / 'official-dataset'
-UI_SOURCES = {'ui-natural-v1', 'ui-human-v1'}  # executed UI recipes and their paraphrases; generated relations are already numerous
+UI_SOURCES = {'ui-natural-v1', 'ui-human-v1', 'ui-features-v1'}  # executed UI recipes and their paraphrases, and the small avatar feature corpus; generated relations are already numerous
 
 
 def sha(path):
