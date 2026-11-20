@@ -46,7 +46,8 @@
 @arrange.improve app.execution.actOperation operation="diagram.layout.improve" act=arrange
 # Charts in the Diagram tab are chart groups (diagram.group.chart.make). Each chart kind of the catalog (k.charts.kind)
 # is drawn with the chart layout of its form; a chart named only as "a chart" or "a graph" (w.chart.chart) is a bar
-# chart. Kinds with no native layout (scatter plot, dot plot) stay unbound and are reported as such.
+# chart. A scatter plot and a dot plot are drawn as scatter charts (chart-shape.sop: points at their x values, else at
+# their places); a radar chart has no kind in the catalog's chart kinds and is reached by its layout (chart.type).
 @chart.kind.chart app.execution.kindBinding area=diagram kind=w.chart.chart operation="diagram.group.chart.make" parameter="layout" value="bar"
 @chart.kind.bar app.execution.kindBinding area=diagram kind=k.charts.kind.bar_chart operation="diagram.group.chart.make" parameter="layout" value="bar"
 @chart.kind.grouped app.execution.kindBinding area=diagram kind=k.charts.kind.grouped_bar_chart operation="diagram.group.chart.make" parameter="layout" value="bar"
@@ -55,6 +56,8 @@
 @chart.kind.line app.execution.kindBinding area=diagram kind=k.charts.kind.line_chart operation="diagram.group.chart.make" parameter="layout" value="line"
 @chart.kind.area app.execution.kindBinding area=diagram kind=k.charts.kind.area_chart operation="diagram.group.chart.make" parameter="layout" value="area"
 @chart.kind.pie app.execution.kindBinding area=diagram kind=k.charts.kind.pie_chart operation="diagram.group.chart.make" parameter="layout" value="pie"
+@chart.kind.scatter app.execution.kindBinding area=diagram kind=k.charts.kind.scatter_plot operation="diagram.group.chart.make" parameter="layout" value="scatter"
+@chart.kind.dot app.execution.kindBinding area=diagram kind=k.charts.kind.dot_plot operation="diagram.group.chart.make" parameter="layout" value="scatter"
 # The reader's chart keys name the chart group's formatting by other names (app.execution.keyBinding): the grid is
 # the group's gridlines, the shown values its value labels, the scale's top its yMax, the order its sort, the type its
 # layout, the palette the colours of its categories, and the chart a point lies in the group's id. Each said value of

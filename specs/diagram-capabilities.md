@@ -199,6 +199,18 @@ declared kind binding, and its keys bind to the parameters of their names), `ser
 as the chart. Not yet: lying charts and pies draw only the first series; a series picked by its position ("the second
 series": `series.index`), series reorder and merge, a second value axis.
 
+Scatter and radar (chart-shape.sop; catalog layouts `scatter`, `radar` of `w.diagram.group`): `diagram.group.chart.make`,
+`diagram.chart.format` and `diagram.group.layout` take them. A scatter chart shares the value axis, floor, gridlines,
+baseline and labels of bar and line charts; each member is a point (the chart's marker size) at its `x_value` spread
+over the plot's width, else at its place among the categories, with no line between the points. A radar chart draws a
+spoke per member (the first straight up, then clockwise), each value's distance its share of the axis from the floor
+(`y_min`) to the top (`y_max`, else the largest value of the members and the series), the points joined round and
+filled lightly, a shape per series in its colour, rings at each quarter, the labels beyond the spokes' ends (anchored by
+side); its radius is the chart's `pieRadius` (90). Kind bindings: `k.charts.kind.scatter_plot` and `dot_plot` draw a
+scatter chart; the reader's `chart.type` takes scatter and radar (the catalog's chart kinds have no radar kind, so "a
+radar chart" as a kind word stays unbound until the binding table is exported again). Not yet: x-axis numbers of a
+scatter chart (its x values are written by its category labels), a radar legend and its value axis numbers.
+
 Not yet (each needs a rule set or a mechanism, listed honestly; from the owner's request and
 management/data-drop/pilot/FEATURE-REQUESTS.md B1-B12):
 - tick density, trend lines and moving averages (least-squares sums in rules), callout annotations;

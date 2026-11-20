@@ -311,16 +311,16 @@
 @shp.sc.op ui.diagram.chartop op=?op
 @shp.sc.r app.act.request operation=?op chart=?c
 @shp.sc.gc w.diagram.group code=?c
-@shp.sc.ch ui.diagram.chart group=?c
+@shp.sc.ch ui.diagram.anychart group=?c
 @shp.sc.out ui.diagram.schart group=?c
 @series.chart.code core.rule when=$shp.sc.op when=$shp.sc.r when=$shp.sc.gc when=$shp.sc.ch then=$shp.sc.out
 @shp.sc.gl w.diagram.group code=?g label=?c
-@shp.sc.chl ui.diagram.chart group=?g
+@shp.sc.chl ui.diagram.anychart group=?g
 @shp.sc.outl ui.diagram.schart group=?g
 @series.chart.title core.rule when=$shp.sc.op when=$shp.sc.r when=$shp.sc.gl when=$shp.sc.chl then=$shp.sc.outl
 @shp.sc.r0 app.act.request operation=?op
 @shp.sc.anyc app.act.request chart=?anyc
-@shp.sc.cg ui.diagram.chart group=?g
+@shp.sc.cg ui.diagram.anychart group=?g
 @shp.sc.gn w.diagram.group code=?g n=?gn
 @shp.sc.last ui.diagram.clast n=?ln
 @shp.clast.type core.type of=ui.diagram.clast
@@ -343,14 +343,14 @@
 @shp.sa.cola app.act.arg call=new.series attr=colour value=?col
 @series.add.colour core.rule when=$shp.sa.r when=$shp.sa.c when=$shp.sa.col then=$shp.sa.cola
 @shp.sa.vi app.act.item param="values" n=?i value=?v
-@shp.sa.mp ui.diagram.mpos node=?m group=?g pos=?p
+@shp.sa.mp ui.diagram.cpos node=?m group=?g pos=?p
 @shp.sa.mn w.diagram.node code=?m
 @shp.sa.i1 core.calc out=?i1 fn=add args=?i args=1
 @shp.sa.at core.check fn=eq args=?p args=?i1
 @shp.sa.dcode core.calc out=?dcode fn=concat args=?code args="." args=?i1
 @shp.sa.dmk app.act.call act=make kind=w.diagram.datum code=?dcode series=new.series node=$shp.sa.mn value=?v order=2
 @series.add.value core.rule when=$shp.sa.r when=$shp.sa.c when=$shp.sa.g when=$shp.sa.nx with=$shp.sa.z with=$shp.sa.code when=$shp.sa.vi with=$shp.sa.i1 when=$shp.sa.mp if=$shp.sa.at when=$shp.sa.mn with=$shp.sa.dcode then=$shp.sa.dmk
-@shp.sa.anyp ui.diagram.mpos node=?anym group=?g pos=?i1
+@shp.sa.anyp ui.diagram.cpos node=?anym group=?g pos=?i1
 @shp.sa.over app.act.refuse reason=invalid-chart-data
 @series.add.overflow core.rule when=$shp.sa.r when=$shp.sa.c when=$shp.sa.vi with=$shp.sa.i1 not=$shp.sa.anyp then=$shp.sa.over
 # Changing a series: its name, its colour, its values (by category in order; a category without one takes one).
@@ -368,7 +368,7 @@
 @series.change.colour core.rule when=$shp.se.r when=$shp.se.s when=$shp.se.g when=$shp.se.c then=$shp.se.cc
 @shp.se.vi app.act.item param="values" n=?i value=?v
 @shp.se.i1 core.calc out=?i1 fn=add args=?i args=1
-@shp.se.mp ui.diagram.mpos node=?m group=?g pos=?i1
+@shp.se.mp ui.diagram.cpos node=?m group=?g pos=?i1
 @shp.se.mn w.diagram.node code=?m
 @shp.se.d w.diagram.datum series=$shp.se.s node=$shp.se.mn
 @shp.se.dc app.act.call act=change thing=$shp.se.d attr=value value=?v order=1
@@ -376,7 +376,7 @@
 @shp.se.dcode core.calc out=?dcode fn=concat args=?s args="." args=?i1
 @shp.se.dmk app.act.call act=make kind=w.diagram.datum code=?dcode series=$shp.se.s node=$shp.se.mn value=?v order=1
 @series.change.value.new core.rule when=$shp.se.r when=$shp.se.s when=$shp.se.g when=$shp.se.vi with=$shp.se.i1 when=$shp.se.mp when=$shp.se.mn not=$shp.se.d with=$shp.se.dcode then=$shp.se.dmk
-@shp.se.anyp ui.diagram.mpos node=?anym group=?g pos=?i1
+@shp.se.anyp ui.diagram.cpos node=?anym group=?g pos=?i1
 @series.change.overflow core.rule when=$shp.se.r when=$shp.se.s when=$shp.se.g when=$shp.se.vi with=$shp.se.i1 not=$shp.se.anyp then=$shp.sa.over
 @shp.se.n1 app.act.request label=?n1
 @shp.se.n2 app.act.request colour=?n2
@@ -414,7 +414,7 @@
 @shp.dp.s w.diagram.series code=?s
 @shp.dp.n w.diagram.node code=?c
 @shp.dp.r ui.diagram.srank series=?s group=?g r=?r
-@shp.dp.m ui.diagram.mpos node=?c group=?g pos=?p
+@shp.dp.m ui.diagram.cpos node=?c group=?g pos=?p
 @shp.dp.out ui.diagram.dpos datum=?d series=?s node=?c group=?g r=?r pos=?p v=?v
 @series.value.place core.rule when=$shp.dp.d when=$shp.dp.s when=$shp.dp.n when=$shp.dp.r when=$shp.dp.m then=$shp.dp.out
 @shp.st.c ui.diagram.chart group=?g
@@ -508,7 +508,8 @@
 @shp.cx.x1 core.calc out=?x1 fn=add args=?a args=?b
 @shp.cx.x core.calc out=?x fn=add args=?x1 args=?hw
 @shp.cx.out ui.diagram.catx node=?c x=?x
-@chart.category.centre core.rule when=$shp.cx.p when=$shp.cx.cc when=$shp.cx.gb when=$shp.cx.pad when=$shp.cx.geo not=$shp.cx.hz with=$shp.cx.a with=$shp.cx.b with=$shp.cx.x1 with=$shp.cx.x then=$shp.cx.out
+@shp.cx.sc ui.diagram.chart group=?g form=scatter
+@chart.category.centre core.rule when=$shp.cx.p when=$shp.cx.cc when=$shp.cx.gb when=$shp.cx.pad when=$shp.cx.geo not=$shp.cx.hz not=$shp.cx.sc with=$shp.cx.a with=$shp.cx.b with=$shp.cx.x1 with=$shp.cx.x then=$shp.cx.out
 # Each value's segment along the value axis (from, to) and its centre across: side by side from the floor, in its slot;
 # stacked between the running totals; as shares between the running totals over the category's total.
 @shp.sg.d ui.diagram.dpos datum=?d node=?c group=?g r=?r v=?v
@@ -723,3 +724,298 @@
 @shp.pc2.rr app.act.request operation="diagram.chart.point.remove"
 @shp.pc2.rc app.act.call act=remove thing=$shp.pc2.n order=1
 @chart.point.remove core.rule when=$shp.pc2.rr when=$shp.pc2.i when=$shp.pc2.n when=$shp.pc2.p then=$shp.pc2.rc
+
+# ---- Scatter: each member a point at its x_value (its place among the categories when it has none) and its value ----
+# A scatter chart is a chart (ui.diagram.chart form=scatter): it shares the value axis, the floor, the gridlines, the
+# baseline and the labels of bar and line charts; its x positions are its members' x values spread over the plot's
+# width (from the smallest to the largest), its points as large as the chart's marker size, no line between them.
+@shp.sx.g w.diagram.group code=?g layout=scatter
+@shp.sx.out ui.diagram.chart group=?g form=scatter
+@chart.scatter core.rule when=$shp.sx.g then=$shp.sx.out
+@shp.xv.type core.type of=ui.diagram.xv
+@shp.xr.type core.type of=ui.diagram.xr
+@shp.xv.p ui.diagram.mpos node=?c group=?g pos=?p
+@shp.xv.c ui.diagram.chart group=?g form=scatter
+@shp.xv.own w.diagram.node code=?c x_value=?x
+@shp.xv.any w.diagram.node code=?c x_value=?anyx
+@shp.xv.o ui.diagram.xv node=?c group=?g x=?x
+@shp.xv.op ui.diagram.xv node=?c group=?g x=?p
+@chart.scatter.x core.rule when=$shp.xv.p when=$shp.xv.c when=$shp.xv.own then=$shp.xv.o
+@chart.scatter.x.place core.rule when=$shp.xv.p when=$shp.xv.c not=$shp.xv.any then=$shp.xv.op
+@shp.xr.v ui.diagram.xv group=?g x=?x
+@shp.xmin.type core.type of=ui.diagram.xmin
+@shp.xmax.type core.type of=ui.diagram.xmax
+@shp.xr.mn ui.diagram.xmin group=?g v=?mn
+@shp.xr.mx ui.diagram.xmax group=?g v=?mx
+@chart.scatter.xmin core.aggregate over=$shp.xr.v by=?g min=?mn args=?x then=$shp.xr.mn
+@chart.scatter.xmax core.aggregate over=$shp.xr.v by=?g max=?mx args=?x then=$shp.xr.mx
+@shp.xc.v ui.diagram.xv node=?c group=?g x=?x
+@shp.xc.mn ui.diagram.xmin group=?g v=?mn
+@shp.xc.mx ui.diagram.xmax group=?g v=?mx
+@shp.xc.gb ui.diagram.ubox unit=?g x0=?gx
+@shp.xc.pad ui.diagram.gpad group=?g pad=?pad
+@shp.xc.geo ui.diagram.cgeo group=?g cw=?cw hw=?hw total=?tt
+@shp.xc.rg core.calc out=?rg fn=sub args=?mx args=?mn
+@shp.xc.span core.check fn=gt args=?rg args=0
+@shp.xc.flat core.check fn=lte args=?rg args=0
+@shp.xc.w core.calc out=?w fn=sub args=?tt args=?cw
+@shp.xc.d core.calc out=?d fn=sub args=?x args=?mn
+@shp.xc.f core.calc out=?f fn=div args=?d args=?rg
+@shp.xc.fw core.calc out=?fw fn=mul args=?f args=?w
+@shp.xc.b core.calc out=?b fn=add args=?gx args=?pad
+@shp.xc.b2 core.calc out=?b2 fn=add args=?b args=?hw
+@shp.xc.x core.calc out=?px fn=add args=?b2 args=?fw
+@shp.xc.out ui.diagram.catx node=?c x=?px
+@chart.scatter.centre core.rule when=$shp.xc.v when=$shp.xc.mn when=$shp.xc.mx when=$shp.xc.gb when=$shp.xc.pad when=$shp.xc.geo with=$shp.xc.rg if=$shp.xc.span with=$shp.xc.w with=$shp.xc.d with=$shp.xc.f with=$shp.xc.fw with=$shp.xc.b with=$shp.xc.b2 with=$shp.xc.x then=$shp.xc.out
+@shp.xc.h core.calc out=?h2 fn=div args=?tt args=2
+@shp.xc.xm core.calc out=?xm fn=add args=?b args=?h2
+@shp.xc.outm ui.diagram.catx node=?c x=?xm
+@chart.scatter.centre.flat core.rule when=$shp.xc.v when=$shp.xc.mn when=$shp.xc.mx when=$shp.xc.gb when=$shp.xc.pad when=$shp.xc.geo with=$shp.xc.rg if=$shp.xc.flat with=$shp.xc.b with=$shp.xc.h with=$shp.xc.xm then=$shp.xc.outm
+@shp.sp.c ui.diagram.chart group=?g form=scatter
+@shp.sp.p ui.diagram.mpos node=?c group=?g
+@shp.sp.x ui.diagram.catx node=?c x=?cx
+@shp.sp.gb ui.diagram.ubox unit=?g y0=?gy
+@shp.sp.pad ui.diagram.gpad group=?g top=?top
+@shp.sp.geo ui.diagram.cgeo group=?g ph=?ph base=?bo
+@shp.sp.fr ui.diagram.cfrac node=?c f=?f
+@shp.sp.ms ui.diagram.cfmt group=?g slot=marker_size v=?ms
+@shp.sp.f1 core.calc out=?f1 fn=clamp args=?f args=0 args=1
+@shp.sp.b1 core.calc out=?b1 fn=add args=?gy args=?top
+@shp.sp.base core.calc out=?base fn=add args=?b1 args=?bo
+@shp.sp.y1 core.calc out=?y1 fn=mul args=?f1 args=?ph
+@shp.sp.cy core.calc out=?cy fn=sub args=?base args=?y1
+@shp.sp.mh core.calc out=?mh fn=div args=?ms args=2
+@shp.sp.x0 core.calc out=?x0 fn=sub args=?cx args=?mh
+@shp.sp.x1 core.calc out=?x1 fn=add args=?cx args=?mh
+@shp.sp.y0 core.calc out=?y0 fn=sub args=?cy args=?mh
+@shp.sp.y2 core.calc out=?y2 fn=add args=?cy args=?mh
+@shp.sp.out ui.diagram.nbox node=?c x0=?x0 y0=?y0 x1=?x1 y1=?y2 cx=?cx cy=?cy w=?ms h=?ms
+@chart.scatter.point core.rule when=$shp.sp.c when=$shp.sp.p when=$shp.sp.x when=$shp.sp.gb when=$shp.sp.pad when=$shp.sp.geo when=$shp.sp.fr when=$shp.sp.ms with=$shp.sp.f1 with=$shp.sp.b1 with=$shp.sp.base with=$shp.sp.y1 with=$shp.sp.cy with=$shp.sp.mh with=$shp.sp.x0 with=$shp.sp.x1 with=$shp.sp.y0 with=$shp.sp.y2 then=$shp.sp.out
+@shp.sk.c ui.diagram.chart group=?g form=scatter
+@shp.sk.k ui.diagram.gstat group=?g key=count value=?n
+@shp.sk.out ui.diagram.gcols group=?g cols=?n
+@chart.scatter.columns core.rule when=$shp.sk.c when=$shp.sk.k then=$shp.sk.out
+
+# ---- Radar: each member a spoke from the centre, its value the distance from it (its share of the axis from the floor
+# to the top), the points joined round and filled lightly; rings at each quarter; each label beyond its spoke's end.
+# Its radius is the chart's pie radius (90 unless set). A series draws its own shape over the same spokes. ----
+@shp.rd.type core.type of=ui.diagram.radar
+@shp.rpt.type core.type of=ui.diagram.rpt
+@shp.rmax.type core.type of=ui.diagram.rmax
+@shp.rc.type core.type of=ui.diagram.rcentre
+@shp.rd.g w.diagram.group code=?g layout=radar
+@shp.rd.r ui.diagram.cfmt group=?g slot=pie_radius v=?r
+@shp.rd.out ui.diagram.radar group=?g r=?r
+@chart.radar core.rule when=$shp.rd.g when=$shp.rd.r then=$shp.rd.out
+@shp.ru.u ui.diagram.unit unit=?g kind=group
+@shp.ru.r ui.diagram.radar group=?g r=?r
+@shp.ru.p ui.diagram.gpad group=?g pad=?pad top=?top
+@shp.ru.d core.calc out=?d fn=mul args=?r args=2
+@shp.ru.w1 core.calc out=?w1 fn=add args=?d args=150
+@shp.ru.p2 core.calc out=?p2 fn=mul args=?pad args=2
+@shp.ru.w core.calc out=?w fn=add args=?w1 args=?p2
+@shp.ru.h1 core.calc out=?h1 fn=add args=?d args=50
+@shp.ru.h2 core.calc out=?h2 fn=add args=?h1 args=?top
+@shp.ru.h core.calc out=?h fn=add args=?h2 args=?pad
+@shp.ru.out ui.diagram.udim unit=?g w=?w h=?h
+@chart.radar.size core.rule when=$shp.ru.u when=$shp.ru.r when=$shp.ru.p with=$shp.ru.d with=$shp.ru.w1 with=$shp.ru.p2 with=$shp.ru.w with=$shp.ru.h1 with=$shp.ru.h2 with=$shp.ru.h then=$shp.ru.out
+@shp.rcn.r ui.diagram.radar group=?g r=?r
+@shp.rcn.b ui.diagram.ubox unit=?g x0=?gx y0=?gy w=?w
+@shp.rcn.p ui.diagram.gpad group=?g top=?top
+@shp.rcn.hw core.calc out=?hw fn=div args=?w args=2
+@shp.rcn.x core.calc out=?cx fn=add args=?gx args=?hw
+@shp.rcn.y1 core.calc out=?y1 fn=add args=?gy args=?top
+@shp.rcn.y2 core.calc out=?y2 fn=add args=?y1 args=25
+@shp.rcn.y core.calc out=?cy fn=add args=?y2 args=?r
+@shp.rcn.out ui.diagram.rcentre group=?g x=?cx y=?cy
+@chart.radar.centre core.rule when=$shp.rcn.r when=$shp.rcn.b when=$shp.rcn.p with=$shp.rcn.hw with=$shp.rcn.x with=$shp.rcn.y1 with=$shp.rcn.y2 with=$shp.rcn.y then=$shp.rcn.out
+# The axis top: y_max, else the largest value of the members and the series; the floor: y_min, else 0.
+@shp.rx.r ui.diagram.radar group=?g
+@shp.rx.i ui.diagram.inside group=?g node=?c
+@shp.rx.v w.diagram.node code=?c value=?v
+@shp.rx.o ui.diagram.rcand group=?g v=?v
+@shp.rcand.type core.type of=ui.diagram.rcand
+@chart.radar.top.member core.rule when=$shp.rx.r when=$shp.rx.i when=$shp.rx.v then=$shp.rx.o
+@shp.rx.d ui.diagram.dpos group=?g v=?dv
+@shp.rx.od ui.diagram.rcand group=?g v=?dv
+@chart.radar.top.series core.rule when=$shp.rx.r when=$shp.rx.d then=$shp.rx.od
+@shp.rx.c ui.diagram.rcand group=?g v=?v
+@shp.rx.m ui.diagram.rcmax group=?g v=?m
+@shp.rcmax.type core.type of=ui.diagram.rcmax
+@chart.radar.largest core.aggregate over=$shp.rx.c by=?g max=?m args=?v then=$shp.rx.m
+@shp.rt.m ui.diagram.rcmax group=?g v=?m
+@shp.rt.ym w.diagram.group code=?g y_max=?ym
+@shp.rt.any w.diagram.group code=?g y_max=?anyym
+@shp.rt.lo w.diagram.group code=?g y_min=?lo
+@shp.rt.anylo w.diagram.group code=?g y_min=?anylo
+@shp.rt.o1 ui.diagram.rmax group=?g top=?ym lo=?lo
+@shp.rt.o2 ui.diagram.rmax group=?g top=?ym lo=0
+@shp.rt.o3 ui.diagram.rmax group=?g top=?m lo=?lo
+@shp.rt.o4 ui.diagram.rmax group=?g top=?m lo=0
+@chart.radar.scale.both core.rule when=$shp.rt.m when=$shp.rt.ym when=$shp.rt.lo then=$shp.rt.o1
+@chart.radar.scale.top core.rule when=$shp.rt.m when=$shp.rt.ym not=$shp.rt.anylo then=$shp.rt.o2
+@chart.radar.scale.floor core.rule when=$shp.rt.m not=$shp.rt.any when=$shp.rt.lo then=$shp.rt.o3
+@chart.radar.scale core.rule when=$shp.rt.m not=$shp.rt.any not=$shp.rt.anylo then=$shp.rt.o4
+# Each member's spoke: its angle (the first straight up, then clockwise) and the share of its value.
+@shp.rp.i ui.diagram.inside group=?g node=?c order=?o
+@shp.rp.r ui.diagram.radar group=?g
+@shp.rp.rk core.rank of=$shp.rp.i by=order within=?g out=?k
+@shp.rp.n ui.diagram.gstat group=?g key=count value=?n
+@shp.rp.k0 core.calc out=?k0 fn=sub args=?k args=1
+@shp.rp.a1 core.calc out=?a1 fn=mul args=?k0 args=360
+@shp.rp.a2 core.calc out=?a2 fn=div args=?a1 args=?n
+@shp.rp.a3 core.calc out=?a3 fn=add args=?a2 args=270
+@shp.rp.a core.calc out=?deg fn=mod args=?a3 args=360
+@shp.rp.ang ui.diagram.angle deg=?deg
+@shp.rp.out ui.diagram.rspoke node=?c group=?g deg=?deg k=?k
+@shp.rspoke.type core.type of=ui.diagram.rspoke
+@chart.radar.spoke core.rule when=$shp.rp.i when=$shp.rp.r with=$shp.rp.rk when=$shp.rp.n with=$shp.rp.k0 with=$shp.rp.a1 with=$shp.rp.a2 with=$shp.rp.a3 with=$shp.rp.a then=$shp.rp.out
+@chart.radar.angle core.rule when=$shp.rp.i when=$shp.rp.r with=$shp.rp.rk when=$shp.rp.n with=$shp.rp.k0 with=$shp.rp.a1 with=$shp.rp.a2 with=$shp.rp.a3 with=$shp.rp.a then=$shp.rp.ang
+# A value's point on its spoke (the members' own, and each series' value at that category).
+@shp.rv.s ui.diagram.rspoke node=?c group=?g deg=?deg k=?k
+@shp.rv.v w.diagram.node code=?c value=?v
+@shp.rv.out ui.diagram.rval node=?c group=?g src=?g deg=?deg k=?k v=?v
+@shp.rval.type core.type of=ui.diagram.rval
+@chart.radar.value core.rule when=$shp.rv.s when=$shp.rv.v then=$shp.rv.out
+@shp.rv.d ui.diagram.dpos node=?c series=?s v=?dv
+@shp.rv.od ui.diagram.rval node=?c group=?g src=?s deg=?deg k=?k v=?dv
+@chart.radar.value.series core.rule when=$shp.rv.s when=$shp.rv.d then=$shp.rv.od
+@shp.rq.v ui.diagram.rval node=?c group=?g src=?src deg=?deg k=?k v=?v
+@shp.rq.m ui.diagram.rmax group=?g top=?mx lo=?lo
+@shp.rq.r ui.diagram.radar group=?g r=?r
+@shp.rq.cn ui.diagram.rcentre group=?g x=?cx y=?cy
+@shp.rq.t ui.diagram.trig deg=?deg s=?s c=?co
+@shp.rq.rg core.calc out=?rg fn=sub args=?mx args=?lo
+@shp.rq.pos core.check fn=gt args=?rg args=0
+@shp.rq.f1 core.calc out=?f1 fn=sub args=?v args=?lo
+@shp.rq.f2 core.calc out=?f2 fn=div args=?f1 args=?rg
+@shp.rq.f core.calc out=?f fn=clamp args=?f2 args=0 args=1
+@shp.rq.d core.calc out=?d fn=mul args=?f args=?r
+@shp.rq.dx core.calc out=?dx fn=mul args=?d args=?co
+@shp.rq.dy core.calc out=?dy fn=mul args=?d args=?s
+@shp.rq.x core.calc out=?px fn=add args=?cx args=?dx
+@shp.rq.y core.calc out=?py fn=add args=?cy args=?dy
+@shp.rq.out ui.diagram.rpt node=?c src=?src k=?k x=?px y=?py
+@chart.radar.point core.rule when=$shp.rq.v when=$shp.rq.m when=$shp.rq.r when=$shp.rq.cn when=$shp.rq.t with=$shp.rq.rg if=$shp.rq.pos with=$shp.rq.f1 with=$shp.rq.f2 with=$shp.rq.f with=$shp.rq.d with=$shp.rq.dx with=$shp.rq.dy with=$shp.rq.x with=$shp.rq.y then=$shp.rq.out
+# The members' own points are their boxes (drawn as their shapes, as large as the marker size, 8 unless set).
+@shp.rb.p ui.diagram.rpt node=?c src=?g x=?px y=?py
+@shp.rb.r ui.diagram.radar group=?g
+@shp.rb.x0 core.calc out=?x0 fn=sub args=?px args=4
+@shp.rb.x1 core.calc out=?x1 fn=add args=?px args=4
+@shp.rb.y0 core.calc out=?y0 fn=sub args=?py args=4
+@shp.rb.y1 core.calc out=?y1 fn=add args=?py args=4
+@shp.rb.out ui.diagram.nbox node=?c x0=?x0 y0=?y0 x1=?x1 y1=?y1 cx=?px cy=?py w=8 h=8
+@chart.radar.box core.rule when=$shp.rb.p when=$shp.rb.r with=$shp.rb.x0 with=$shp.rb.x1 with=$shp.rb.y0 with=$shp.rb.y1 then=$shp.rb.out
+# Each shape: its points in order round the spokes, closed, filled lightly (the members' in blue, a series in its colour).
+@shp.rs.p ui.diagram.rpt node=?c src=?src k=?k x=?px y=?py
+@shp.rs.s core.calc out=?ss fn=concat args=?src args=".radar"
+@shp.rs.pt ui.diagram.point source=?ss n=?k x=?px y=?py
+@chart.radar.shape.point core.rule when=$shp.rs.p with=$shp.rs.s then=$shp.rs.pt
+@shp.rs.g ui.diagram.radar group=?g
+@shp.rs.gs core.calc out=?gs fn=concat args=?g args=".radar"
+@shp.rs.gd ui.diagram.draw part=?g source=?gs slot=?g order=2 z=0 shape=polygon x=0 y=0 w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left opacity=0.35
+@shp.rs.gf ui.diagram.fill source=?gs part=?g fill="#1d6fe8"
+@chart.radar.shape.draw core.rule when=$shp.rs.g with=$shp.rs.gs then=$shp.rs.gd
+@chart.radar.shape.fill core.rule when=$shp.rs.g with=$shp.rs.gs then=$shp.rs.gf
+@shp.rs.sr ui.diagram.srank series=?s group=?g
+@shp.rs.sg ui.diagram.radar group=?g
+@shp.rs.col ui.diagram.scol series=?s rgb=?rgb
+@shp.rs.ssrc core.calc out=?sss fn=concat args=?s args=".radar"
+@shp.rs.sd ui.diagram.draw part=?s source=?sss slot=?g order=2 z=1 shape=polygon x=0 y=0 w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left opacity=0.35
+@shp.rs.sf ui.diagram.fill source=?sss part=?s fill=?rgb
+@chart.radar.series.draw core.rule when=$shp.rs.sr when=$shp.rs.sg with=$shp.rs.ssrc then=$shp.rs.sd
+@chart.radar.series.fill core.rule when=$shp.rs.sr when=$shp.rs.sg when=$shp.rs.col with=$shp.rs.ssrc then=$shp.rs.sf
+# The spokes and the rings at each quarter, and each category's label beyond its spoke's end.
+@shp.rw.s ui.diagram.rspoke node=?c group=?g deg=?deg k=?k
+@shp.rw.r ui.diagram.radar group=?g r=?r
+@shp.rw.cn ui.diagram.rcentre group=?g x=?cx y=?cy
+@shp.rw.t ui.diagram.trig deg=?deg s=?s c=?co
+@shp.rw.dx core.calc out=?dx fn=mul args=?r args=?co
+@shp.rw.dy core.calc out=?dy fn=mul args=?r args=?s
+@shp.rw.ex core.calc out=?ex fn=add args=?cx args=?dx
+@shp.rw.ey core.calc out=?ey fn=add args=?cy args=?dy
+@shp.rw.src core.calc out=?src fn=concat args=?c args=".spoke"
+@shp.rw.p1 ui.diagram.point source=?src n=1 x=?cx y=?cy
+@shp.rw.p2 ui.diagram.point source=?src n=2 x=?ex y=?ey
+@shp.rw.d ui.diagram.draw part=?g source=?src slot=?g order=2 z=0 shape=line x=0 y=0 w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left stroke=1
+@shp.rw.f ui.diagram.fill source=?src part=?g fill="#c3cbd5"
+@chart.radar.spoke.1 core.rule when=$shp.rw.s when=$shp.rw.r when=$shp.rw.cn when=$shp.rw.t with=$shp.rw.dx with=$shp.rw.dy with=$shp.rw.ex with=$shp.rw.ey with=$shp.rw.src then=$shp.rw.p1
+@chart.radar.spoke.2 core.rule when=$shp.rw.s when=$shp.rw.r when=$shp.rw.cn when=$shp.rw.t with=$shp.rw.dx with=$shp.rw.dy with=$shp.rw.ex with=$shp.rw.ey with=$shp.rw.src then=$shp.rw.p2
+@chart.radar.spoke.draw core.rule when=$shp.rw.s when=$shp.rw.r with=$shp.rw.src then=$shp.rw.d
+@chart.radar.spoke.fill core.rule when=$shp.rw.s when=$shp.rw.r with=$shp.rw.src then=$shp.rw.f
+@shp.rn.s ui.diagram.rspoke node=?c group=?g deg=?deg k=?k
+@shp.rn.q ui.diagram.quarter k=?q
+@shp.rn.r ui.diagram.radar group=?g r=?r
+@shp.rn.cn ui.diagram.rcentre group=?g x=?cx y=?cy
+@shp.rn.t ui.diagram.trig deg=?deg s=?s c=?co
+@shp.rn.d1 core.calc out=?d1 fn=mul args=?r args=?q
+@shp.rn.d core.calc out=?d fn=div args=?d1 args=4
+@shp.rn.dx core.calc out=?dx fn=mul args=?d args=?co
+@shp.rn.dy core.calc out=?dy fn=mul args=?d args=?s
+@shp.rn.x core.calc out=?px fn=add args=?cx args=?dx
+@shp.rn.y core.calc out=?py fn=add args=?cy args=?dy
+@shp.rn.src core.calc out=?src fn=concat args=?g args=".ring." args=?q
+@shp.rn.pt ui.diagram.point source=?src n=?k x=?px y=?py
+@chart.radar.ring.point core.rule when=$shp.rn.s when=$shp.rn.q when=$shp.rn.r when=$shp.rn.cn when=$shp.rn.t with=$shp.rn.d1 with=$shp.rn.d with=$shp.rn.dx with=$shp.rn.dy with=$shp.rn.x with=$shp.rn.y with=$shp.rn.src then=$shp.rn.pt
+# The ring closes: the first spoke's point again at its end.
+@shp.rn.first core.check fn=eq args=?k args=1
+@shp.rn.close ui.diagram.point source=?src n=999 x=?px y=?py
+@chart.radar.ring.close core.rule when=$shp.rn.s when=$shp.rn.q when=$shp.rn.r when=$shp.rn.cn when=$shp.rn.t if=$shp.rn.first with=$shp.rn.d1 with=$shp.rn.d with=$shp.rn.dx with=$shp.rn.dy with=$shp.rn.x with=$shp.rn.y with=$shp.rn.src then=$shp.rn.close
+@shp.rn.g ui.diagram.radar group=?g
+@shp.rn.gq ui.diagram.quarter k=?q
+@shp.rn.gsrc core.calc out=?gsrc fn=concat args=?g args=".ring." args=?q
+@shp.rn.dd ui.diagram.draw part=?g source=?gsrc slot=?g order=2 z=0 shape=line x=0 y=0 w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left stroke=1
+@shp.rn.df ui.diagram.fill source=?gsrc part=?g fill="#c3cbd5"
+@chart.radar.ring.draw core.rule when=$shp.rn.g when=$shp.rn.gq with=$shp.rn.gsrc then=$shp.rn.dd
+@chart.radar.ring.fill core.rule when=$shp.rn.g when=$shp.rn.gq with=$shp.rn.gsrc then=$shp.rn.df
+@shp.rl.s ui.diagram.rspoke node=?c group=?g deg=?deg
+@shp.rl.n w.diagram.node code=?c label=?t
+@shp.rl.r ui.diagram.radar group=?g r=?r
+@shp.rl.cn ui.diagram.rcentre group=?g x=?cx y=?cy
+@shp.rl.t ui.diagram.trig deg=?deg s=?s c=?co
+@shp.rl.fs ui.diagram.cfmt group=?g slot=font_size v=?fs
+@shp.rl.rr core.calc out=?rr fn=add args=?r args=10
+@shp.rl.dx core.calc out=?dx fn=mul args=?rr args=?co
+@shp.rl.dy core.calc out=?dy fn=mul args=?rr args=?s
+@shp.rl.x core.calc out=?lx fn=add args=?cx args=?dx
+@shp.rl.y1 core.calc out=?ly1 fn=add args=?cy args=?dy
+@shp.rl.y core.calc out=?ly fn=add args=?ly1 args=4
+@shp.rl.src core.calc out=?src fn=concat args=?c args=".label"
+# A label right of the centre starts at its spoke's end, one left of it ends there, one above or below is centred.
+@shp.rl.ranchor.type core.type of=ui.diagram.ranchor
+@shp.rl.ak.t ui.diagram.trig deg=?deg c=?co
+@shp.rl.ak.r core.check fn=gt args=?co args=0.3
+@shp.rl.ak.l core.check fn=lt args=?co args=-0.3
+@shp.rl.ak.m core.check fn=between args=?co args=-0.3 args=0.3
+@shp.rl.ak.or ui.diagram.ranchor deg=?deg anchor=start
+@shp.rl.ak.ol ui.diagram.ranchor deg=?deg anchor=end
+@shp.rl.ak.om ui.diagram.ranchor deg=?deg anchor=middle
+@shp.rl.ak.s ui.diagram.rspoke deg=?deg
+@chart.radar.anchor.right core.rule when=$shp.rl.ak.s when=$shp.rl.ak.t if=$shp.rl.ak.r then=$shp.rl.ak.or
+@chart.radar.anchor.left core.rule when=$shp.rl.ak.s when=$shp.rl.ak.t if=$shp.rl.ak.l then=$shp.rl.ak.ol
+@chart.radar.anchor.middle core.rule when=$shp.rl.ak.s when=$shp.rl.ak.t if=$shp.rl.ak.m then=$shp.rl.ak.om
+@shp.rl.an ui.diagram.ranchor deg=?deg anchor=?an
+@shp.rl.out ui.diagram.draw part=?c source=?src slot=?c order=4 z=0 shape=text text=?t x=?lx y=?ly w=0 h=0 cx=0 cy=0 tx=0 ty=0 scale=1 side=left anchor=?an font=?fs
+@shp.rl.fill ui.diagram.fill source=?src part=?c fill="#1f2933"
+@chart.radar.label core.rule when=$shp.rl.s when=$shp.rl.n when=$shp.rl.r when=$shp.rl.cn when=$shp.rl.t when=$shp.rl.fs when=$shp.rl.an with=$shp.rl.rr with=$shp.rl.dx with=$shp.rl.dy with=$shp.rl.x with=$shp.rl.y1 with=$shp.rl.y with=$shp.rl.src then=$shp.rl.out
+@chart.radar.label.fill core.rule when=$shp.rl.s when=$shp.rl.n with=$shp.rl.src then=$shp.rl.fill
+# A radar's members are chart members: their values are written by their points, their labels at the spokes' ends.
+@shp.rpm.s ui.diagram.rspoke node=?c group=?g
+@shp.rpm.out ui.diagram.chartmember node=?c group=?g
+@chart.member.radar core.rule when=$shp.rpm.s then=$shp.rpm.out
+# A category's place in its chart (by the order the members were made), for every kind of chart.
+@shp.cpos.type core.type of=ui.diagram.cpos
+@shp.cps.i ui.diagram.inside group=?g node=?c order=?o
+@shp.cps.c ui.diagram.anychart group=?g
+@shp.cps.rk core.rank of=$shp.cps.i by=order within=?g out=?p
+@shp.cps.out ui.diagram.cpos node=?c group=?g pos=?p
+@chart.category.place core.rule when=$shp.cps.i when=$shp.cps.c with=$shp.cps.rk then=$shp.cps.out
+# Every kind of chart (bars, lines, scatter, slices, radar) is a chart a series or a point command can name.
+@shp.anychart.type core.type of=ui.diagram.anychart
+@shp.ac2.c ui.diagram.chart group=?g
+@shp.ac2.out ui.diagram.anychart group=?g
+@chart.any.plot core.rule when=$shp.ac2.c then=$shp.ac2.out
+@shp.ac2.p ui.diagram.pie group=?g
+@chart.any.pie core.rule when=$shp.ac2.p then=$shp.ac2.out
+@shp.ac2.r ui.diagram.radar group=?g
+@chart.any.radar core.rule when=$shp.ac2.r then=$shp.ac2.out

@@ -91,3 +91,18 @@ test('chart points: a category observed as a point, added to the chart made last
  const op=host.bindings().find(o=>o.id==='diagram.chart.point.change');
  assert.deepEqual(op.effectScope.reflow.keys,['x','y','width','height']);
 });
+
+test('scatter and radar layouts: points at their x values and values; spokes, rings and a shape per series',async()=>{
+ const {ok,view,host}=await area();
+ ok('diagram.group.chart.make label="Fit" layout="scatter" labels="a" labels="b" labels="c" values=10 values=40 values=20');
+ const a=rect(view().svg,'n1'),b=rect(view().svg,'n2'),c=rect(view().svg,'n3');
+ assert.ok(a.x<b.x&&b.x<c.x,'without x values the points keep their places');assert.ok(b.y<c.y&&c.y<a.y,'higher values stand higher');
+ assert.ok(!/<polyline[^>]*stroke="#1d6fe8"/.test(view().svg),'no line joins the points');
+ ok('diagram.group.chart.make label="Skills" layout="radar" labels="Speed" labels="Power" labels="Range" values=4 values=8 values=2');
+ const v=view().svg;
+ assert.ok(texts(v).some(t=>t.text==='Speed')&&texts(v).some(t=>t.text==='Range'),'each category labelled at its spoke');
+ assert.ok(/<polygon points="[^"]+" fill="#1d6fe8" opacity="0.35"/.test(v),'the values joined round as a light shape');
+ ok('diagram.chart.series.add chart="Skills" label="Rival" values=5 values=5 values=5');
+ assert.equal((view().svg.match(/opacity="0.35"/g)??[]).length,2,'a shape per series');
+ assert.ok(host.observe().objects.filter(o=>o.sourceType==='diagram.sketch.point').length>=6,'the categories of both charts are points');
+});

@@ -555,13 +555,13 @@
 # Lay a group out: row, column, grid, circle, or its members' values as a bar, line, pie or doughnut chart (every
 # member needs a value). Free, tree, layers and radial layouts of a group are not declared here.
 @a.gl.r app.act.request operation="diagram.group.layout" layout=?l
-@a.gl.ok core.check fn=matches args=?l args="^(row|column|grid|circle|bar|line|area|pie|doughnut)$"
+@a.gl.ok core.check fn=matches args=?l args="^(row|column|grid|circle|bar|line|area|pie|doughnut|scatter|radar)$"
 @a.gl.c app.act.call act=change thing=$a.ig.g attr=layout value=?l order=1
 @group.layout core.rule when=$a.gl.r when=$a.ig.r when=$a.ig.g if=$a.gl.ok then=$a.gl.c
 @a.gl.no core.check fn=matches args=?l args="^(free|tree|layers|radial)$"
 @a.gl.no.out app.act.refuse reason=group-layout-not-declared
 @group.layout.refused core.rule when=$a.gl.r if=$a.gl.no then=$a.gl.no.out
-@a.gl.chart core.check fn=matches args=?l args="^(bar|line|area|pie|doughnut)$"
+@a.gl.chart core.check fn=matches args=?l args="^(bar|line|area|pie|doughnut|scatter|radar)$"
 @a.gl.nv w.diagram.node code=?mid value=?anyv
 @a.gl.nv.out app.act.refuse reason=explicit-numeric-values-required
 @group.layout.values core.rule when=$a.gl.r when=$a.ig.r when=$a.ig.g when=$a.ig.m when=$a.ig.n not=$a.gl.nv if=$a.gl.chart then=$a.gl.nv.out
@@ -590,7 +590,7 @@
 # A chart group: one rectangle node per label with its value, in a framed group laid out as a chart. The
 # labels and values must pair up; pie and doughnut charts draw the values as slices.
 @a.cg.r app.act.request operation="diagram.group.chart.make" label=?label layout=?l
-@a.cg.ok core.check fn=matches args=?l args="^(bar|line|area|pie|doughnut)$"
+@a.cg.ok core.check fn=matches args=?l args="^(bar|line|area|pie|doughnut|scatter|radar)$"
 @a.cg.gnx ui.diagram.next of=group top=?gtop
 @a.cg.gz core.calc out=?gz fn=add args=?gtop args=1
 @a.cg.gcode core.calc out=?gcode fn=concat args=g args=?gz
