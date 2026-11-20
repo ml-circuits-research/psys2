@@ -90,7 +90,8 @@ async function ensureLookups(declared, state, args = {}) {
   declared.index ??= JSON.parse(await declared.readCatalog('index.json'));
   const entries = new Map([...(declared.index.worlds ?? []), ...(declared.index.schemas ?? [])].map((entry) => [entry.id, entry]));
   const live = state?.sop ? worldOf(declared.base, state) : null;
-  for (const lookup of declared.lookups) {
+  // The values each lookup selects by: an instance key, named command arguments, fixed values and the declared choices.
+  const valuesOf = (lookup) => {
     const values = new Set();
     const [from, key] = [read(lookup, 'from'), read(lookup, 'key')];
     if (live && from && key) for (const fact of live.ofType(from)) for (const raw of fact.attrs[key] ?? []) values.add(raw.startsWith('"') ? str(raw) : raw);
@@ -99,11 +100,19 @@ async function ensureLookups(declared, state, args = {}) {
     for (const value of all(lookup, 'value')) values.add(value);
     // What the area offers by name (its declared choices) is drawable before any command names it.
     for (const offered of Object.values(choices(declared))) for (const value of [].concat(offered)) if (typeof value === 'string') values.add(value);
+    return values;
+  };
+  const candidates = (lookup, values) => (entries.get(read(lookup, 'world'))?.shards ?? []).filter((shard) => typeof shard !== 'string' && (shard.keys ?? []).some((k) => values.has(k)))
+    .map((shard) => shard.path).filter((path) => !declared.loadedShards.has(path));
+  // Every lookup's candidate shards are read at once (one round trip for all of them), then told lookup by lookup.
+  declared.shardTexts ??= new Map();
+  const wanted = [...new Set(declared.lookups.flatMap((lookup) => candidates(lookup, valuesOf(lookup))))].filter((path) => !declared.shardTexts.has(path));
+  (await Promise.all(wanted.map((path) => declared.readCatalog(path)))).forEach((text, n) => declared.shardTexts.set(wanted[n], text));
+  for (const lookup of declared.lookups) {
+    const values = valuesOf(lookup);
     const entry = entries.get(read(lookup, 'world'));
-    // The candidate shards (index keys naming a looked-up value) are read at once, then told in index order.
-    const paths = (entry?.shards ?? []).filter((shard) => typeof shard !== 'string' && (shard.keys ?? []).some((k) => values.has(k)))
-      .map((shard) => shard.path).filter((path) => !declared.loadedShards.has(path));
-    declared.shardTexts ??= new Map();
+    // The candidate shards (index keys naming a looked-up value), told in index order; one a told shard made a candidate is read now.
+    const paths = candidates(lookup, values);
     const missing = paths.filter((path) => !declared.shardTexts.has(path)), texts = await Promise.all(missing.map((path) => declared.readCatalog(path)));
     missing.forEach((path, n) => declared.shardTexts.set(path, texts[n]));
     for (const path of paths) {
