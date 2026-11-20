@@ -385,6 +385,8 @@
 @native.art.draw.op.drawing.object.change.param.pose std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="pose" kind=string
 @native.art.draw.op.drawing.object.change.param.expression std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="expression" kind=string
 @native.art.draw.op.drawing.object.change.param.trait std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="trait" kind=string
+# A thing a person puts on (figure-rules.sop: a k.wearables thing by its name or one of its words).
+@native.art.draw.op.drawing.object.change.param.wear std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="wear" kind=string
 @native.art.draw.op.drawing.object.change.param.edge std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="edge" kind=string enum="left" enum="right" enum="top" enum="bottom" enumClosed=true
 @native.art.draw.op.drawing.object.change.param.cut std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="cut" kind=number min=0 max=0.9
 @native.art.draw.op.drawing.object.change.param.behind std.capability.parameter operation=$native.art.draw.op.drawing.object.change name="behind" kind=string

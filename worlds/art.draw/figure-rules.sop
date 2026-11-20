@@ -64,6 +64,19 @@
 @fgx.o w.drawing.object code=?id look=$fgx.face
 @fgx.out app.observe.input id=?id key=expression value=?e
 @figure.observe.expression core.rule when=$fgx.face when=$fgx.head when=$fgx.o then=$fgx.out
+# Every object is observed with the things it wears (k.wearables): a part of its look of the slot and variant a
+# wearable is drawn with, on the figure (figure_slot, figure) or on the head (face_slot, face).
+@fgw.face w.face.face style=?st
+@fgw.o w.drawing.object code=?id look=$fgw.face
+@fgw.part w.face.part kind=?kind face=$fgw.face variant=?v
+@fgw.slot w.face.slot part=?kind slot=?s
+@fgw.frame k.faces.frame style=?st
+@fgw.fig k.wearables.wearable name=?w figure_slot=?s figure=?v
+@fgw.out app.observe.input id=?id key=wear value=?w
+@figure.observe.wear.figure core.rule when=$fgw.face when=$fgw.frame when=$fgw.o when=$fgw.part when=$fgw.slot when=$fgw.fig then=$fgw.out
+@fgw.head ui.look.head face=$fgw.face
+@fgw.fc k.wearables.wearable name=?w face_slot=?s face=?v
+@figure.observe.wear.face core.rule when=$fgw.face when=$fgw.head when=$fgw.o when=$fgw.part when=$fgw.slot when=$fgw.fc then=$fgw.out
 # What an editor offers: the poses of the figure style.
 @fgu.p.k k.faces.pose name=?p style=figure
 @fgu.p.o app.observe.option id=pose value=?p
@@ -120,6 +133,20 @@
 @fgn.t.word core.word text=?w means=?t of=k.faces.trait.name
 @fgn.t.word.o ui.draw.traitname word=?w trait=?t
 @name.trait.word core.rule when=$fgn.t.req not=$fgn.t.own when=$fgn.t.word then=$fgn.t.word.o
+# A thing worn is named by its own name or by one of its words (core.word ... of=k.wearables.wearable.name: "spectacles"
+# for glasses).
+@fgn.w.type core.type of=ui.draw.wearname
+@fgn.w.req app.act.request wear=?w
+@fgn.w.own k.wearables.wearable name=?w
+@fgn.w.own.o ui.draw.wearname word=?w wear=?w
+@name.wear.own core.rule when=$fgn.w.req when=$fgn.w.own then=$fgn.w.own.o
+@fgn.w.word core.word text=?w means=?n of=k.wearables.wearable.name
+@fgn.w.word.k k.wearables.wearable name=?n
+@fgn.w.word.o ui.draw.wearname word=?w wear=?n
+@name.wear.word core.rule when=$fgn.w.req not=$fgn.w.own when=$fgn.w.word when=$fgn.w.word.k then=$fgn.w.word.o
+@fgn.w.none ui.draw.wearname word=?w
+@fgn.w.refuse app.act.refuse reason=garment-not-known
+@wear.name.unknown core.rule when=$fgn.w.req not=$fgn.w.none then=$fgn.w.refuse
 @fgn.p.none ui.draw.posename word=?w
 @fgn.p.refuse app.act.refuse reason=pose-not-known
 @pose.unknown core.rule when=$fgn.p.req not=$fgn.p.none then=$fgn.p.refuse
@@ -163,7 +190,7 @@
 @make.person.trait.part core.rule when=$fgm.make when=$fgm.fg when=$fgm.tr when=$fgm.tr.add when=$fgm.tr.kind then=$fgm.tr.add.call
 @make.person.trait.part.catalog core.rule when=$fgm.cat when=$fgm.fg when=$fgm.tr when=$fgm.tr.add when=$fgm.tr.kind then=$fgm.tr.add.call
 # Things worn: on the face (a hat, glasses) or on the figure (a jacket, a scarf), by k.wearables.
-@fgm.wear.req app.act.request wear=?w
+@fgm.wear.req ui.draw.wearname wear=?w
 @fgm.wear.f k.wearables.wearable name=?w face_slot=?s face=?v
 @fgm.wear.fk w.face.slot slot=?s part=?kind
 @fgm.wear.f.omit ui.person.omit face=new.face slot=?s
@@ -251,6 +278,22 @@
 @fgc.nohead.has ui.draw.haslook object=?id style=plain
 @fgc.nohead.refuse app.act.refuse reason=trait-needs-a-person
 @change.trait.noperson core.rule when=$fgc.chg when=$fgc.tr.req when=$fgc.item when=$fgc.nf.o not=$fgc.nohead.has then=$fgc.nohead.refuse
+
+# drawing.object.change with wear: each listed person puts the thing on (by its name or one of its words): the part of
+# the slot and variant it is drawn with, on each look of the person whose style has that slot (the figure for a
+# jacket, the head for glasses, both for a cape); a part of that slot already there takes the new variant.
+@fgc.wear.n ui.draw.wearname wear=?w
+@fgc.wear.face w.face.face style=?st
+@fgc.wear.o w.drawing.object code=?id look=$fgc.wear.face
+@fgc.wear.ks k.faces.slot style=?st name=?s
+@fgc.wear.f k.wearables.wearable name=?w face_slot=?s face=?v
+@fgc.wear.add ui.face.add face=$fgc.wear.face slot=?s variant=?v
+@change.person.wear.face core.rule when=$fgc.chg when=$fgc.item when=$fgc.wear.n when=$fgc.wear.face when=$fgc.wear.o when=$fgc.wear.f when=$fgc.wear.ks then=$fgc.wear.add
+@fgc.wear.b k.wearables.wearable name=?w figure_slot=?s figure=?v
+@change.person.wear.body core.rule when=$fgc.chg when=$fgc.item when=$fgc.wear.n when=$fgc.wear.face when=$fgc.wear.o when=$fgc.wear.b when=$fgc.wear.ks then=$fgc.wear.add
+@change.person.wear.undrawable core.rule when=$fgc.chg when=$fgc.wear.n not=$fgm.wear.any.f not=$fgm.wear.any.b then=$fgm.wear.refuse
+@fgc.wear.req app.act.request wear=?anyw
+@change.wear.noperson core.rule when=$fgc.chg when=$fgc.wear.req when=$fgc.item when=$fgc.nf.o not=$fgc.nohead.has then=$fgm.nofig.refuse
 
 # --- Holding a thing ------------------------------------------------------------------------------------------------
 # drawing.person.hold (id: the person; kind: what it holds): a new thing of that kind is made in the person's hand

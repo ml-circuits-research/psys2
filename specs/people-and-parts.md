@@ -42,12 +42,17 @@ a group of editable parts. The Avatar is a particular case of a drawn person: on
 - `worlds/art.draw/figure-rules.sop`: a posed figure draws each part with a bone turned about its joint and its parent's
   joint (`ui.draw.pose source part x y rotate n`, mirrored with the object's facing); names by name or word (an
   expression also by a k.feelings feeling); make/catalog make with `pose`, `expression`, `trait`, `wear` (a thing worn or
-  a trait part replaces the preset's part of its slot: `ui.person.omit`); `drawing.object.change` with `pose`,
-  `expression`, `trait`; `drawing.person.pose {id, pose}`; `drawing.person.hold {id, kind | thing}` (a new thing of the
+  a trait part replaces the preset's part of its slot: `ui.person.omit`; a thing worn by its name or one of its words,
+  `core.word of=k.wearables.wearable.name`: "spectacles" for glasses, `ui.draw.wearname`); `drawing.object.change` with
+  `pose`, `expression`, `trait`, `wear` (each listed person puts the thing on: the part of the slot and variant it is
+  drawn with on each of its looks whose style has that slot; a part of that slot takes the new variant);
+  `drawing.part.add` also takes a wearable by one of its words; `drawing.person.pose {id, pose}`; `drawing.person.hold {id, kind | thing}` (a new thing of the
   kind, a third of the person's size, at the hand of its pose; a standing person takes `holding`); refusals
   pose-not-known, pose-needs-a-body, expression-not-known, expression-needs-a-face, trait-not-known,
-  trait-needs-a-person, garment-not-drawable, hold-needs-a-person. Observed: `pose` (standing when none), `expression`;
-  options `pose`, `trait`, `garment`.
+  trait-needs-a-person, garment-not-known, garment-not-drawable, garment-needs-a-person, hold-needs-a-person. Observed:
+  `pose` (standing when none), `expression`, `wear` (every k.wearables thing whose slot and variant a part of the
+  person's looks has, the preset's clothes included; things drawn alike, a jumper, a sweatshirt and a hoodie, are all
+  listed: the drawing does not tell them apart); options `pose`, `trait`, `garment`.
 - Avatar (shared view): `ui.avatar/view-projection.sop` turns the figure's limbs in the face frame
   (`ui.avatar.viewpose`); `avatar.face.pose {pose}`; the inspector's "Pose" control.
 

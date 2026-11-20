@@ -168,3 +168,17 @@ test('behind: the cat is covered by the tree\'s trunk, the tree drawn over it; n
  changed(await t.run('drawing.object.make',{kind:'house'}));
  assert.ok(fact('o3'),'the next object takes the next code');
 });
+
+test('things worn are observed; a person puts one on by name or word through a change; unknown and undrawable refuse',{skip},async()=>{
+ const t=await peopleArea('art.draw');
+ const worn=()=>(person(t).inputs.find(i=>i.key==='wear')?.values??[]).map(v=>JSON.parse(v));
+ changed(await t.run('drawing.catalog.make',{name:'girl',wear:'spectacles'}));
+ assert.ok(worn().includes('glasses'),'"spectacles" is a word of the wearable glasses, observed as worn');
+ changed(await t.run('drawing.object.change',{ids:'o1',wear:'cape'}));
+ assert.ok(worn().includes('cape'),'the cape put on an existing person');
+ changed(await t.run('drawing.object.change',{ids:'o1',wear:'shades'}));
+ assert.ok(worn().includes('sunglasses')&&!worn().includes('glasses'),'the sunglasses take the glasses slot');
+ assert.equal((await t.run('drawing.object.change',{ids:'o1',wear:'levitator'})).reason,'garment-not-known');
+ changed(await t.run('drawing.object.make',{kind:'house'}));
+ assert.equal((await t.run('drawing.object.change',{ids:'o2',wear:'scarf'})).reason,'garment-needs-a-person');
+});

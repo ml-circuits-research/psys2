@@ -1162,7 +1162,7 @@
 
 # Add a part to an object by the word for it (drawing.part.add kind=: "a hat", "eyes", "a red t-shirt", "the chimney"):
 # the slot a part name draws (k.parts.name slot), the slot and variant a wearable is shown with (k.wearables face or
-# figure), a variant named by its kind (k.faces.variant kind: a cap) or a slot by its own name. It is added to the
+# figure; a wearable named by one of its words too), a variant named by its kind (k.faces.variant kind: a cap) or a slot by its own name. It is added to the
 # object's look of the style that has the slot (a part of that kind already there takes the new variant); a thing with
 # no face yet that has a part bearing one (the sun's disc) is given a face for it. Without a variant: the variant the
 # word names, else the first of the slot. A part of the drawing itself that was removed is put back.
@@ -1183,6 +1183,12 @@
 @add.slot.wear.face core.rule when=$pd.req when=$pd.wf then=$pd.slotv.o
 @pd.wb k.wearables.wearable name=?w figure_slot=?slot figure=?v
 @add.slot.wear.body core.rule when=$pd.req when=$pd.wb then=$pd.slotv.o
+@pd.ww core.word text=?w means=?n of=k.wearables.wearable.name
+@pd.wwf k.wearables.wearable name=?n face_slot=?slot face=?v
+@pd.wname k.wearables.wearable name=?w
+@add.slot.wear.face.word core.rule when=$pd.req not=$pd.wname when=$pd.ww when=$pd.wwf then=$pd.slotv.o
+@pd.wwb k.wearables.wearable name=?n figure_slot=?slot figure=?v
+@add.slot.wear.body.word core.rule when=$pd.req not=$pd.wname when=$pd.ww when=$pd.wwb then=$pd.slotv.o
 @pd.vk k.faces.variant kind=?w slot=?slot name=?v style=?vs
 @pd.vk.o ui.draw.addslot slot=?slot variant=?v style=?vs
 @add.slot.variant core.rule when=$pd.req when=$pd.vk then=$pd.vk.o
